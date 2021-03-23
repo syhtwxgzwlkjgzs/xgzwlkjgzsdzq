@@ -1,0 +1,80 @@
+{
+  "name": "discuz-app-mini",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Discuz! Q Mini",
+  "templateInfo": {
+    "name": "mobx",
+    "typescript": false,
+    "css": "sass"
+  },
+  "scripts": {
+    "lint:fix": "eslint --ext .js,.ts,.tsx,.jsx ./ --max-warnings 0 --fix",
+    "lintcss:fix": "stylelint src/**/*.{scss}",
+    "dev:weapp": "cross-env NODE_ENV=devlopment dzq dev -p mini --type weapp",
+    "build:weapp": "cross-env NODE_ENV=production dzq build -p mini --type weapp"
+  },
+  "browserslist": [
+    "last 3 versions",
+    "Android >= 4.1",
+    "ios >= 8"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/runtime": "7.7.7",
+    "@tarojs/components": "3.1.1",
+    "@tarojs/react": "3.1.1",
+    "@tarojs/runtime": "3.1.1",
+    "@tarojs/taro": "3.1.1",
+    "mobx": "4.15.4",
+    "mobx-react": "6.1.8",
+    "react-dom": "16.10.0",
+    "react": "16.10.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.8.0",
+    "@commitlint/cli": "12.0.1",
+    "@commitlint/config-conventional": "12.0.1",
+    "@tarojs/cli": "3.1.1",
+    "@tarojs/mini-runner": "3.1.1",
+    "@tarojs/webpack-runner": "3.1.1",
+    "@types/react": "16.0.0",
+    "@types/webpack-env": "1.13.6",
+    "babel-preset-taro": "3.1.1",
+    "commitizen": "4.2.3",
+    "cross-env": "^7.0.3",
+    "eslint": "6.8.0",
+    "eslint-config-prettier": "8.1.0",
+    "eslint-config-taro": "3.1.1",
+    "eslint-config-tencent": "1.0.0",
+    "eslint-plugin-import": "2.12.0",
+    "eslint-plugin-prettier": "3.3.1",
+    "eslint-plugin-react": "7.8.2",
+    "eslint-plugin-react-hooks": "1.6.1",
+    "prettier": "2.2.1",
+    "stylelint": "9.3.0",
+    "stylelint-config-prettier": "8.0.2",
+    "stylelint-config-rational-order": "0.1.2",
+    "stylelint-config-standard": "21.0.0",
+    "stylelint-prettier": "1.2.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,vue,tsx,jsx}": [
+      "npm run lint",
+      "git add"
+    ]
+  }
+}

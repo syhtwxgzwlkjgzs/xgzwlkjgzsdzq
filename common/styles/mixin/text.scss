@@ -1,0 +1,19 @@
+/**
+ * 单行省略号
+ */
+@mixin text-ellipsis() {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/**
+ * 实现多行文本省略
+ */
+@mixin lamp-clamp($line) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: box;
+  -webkit-line-clamp: $line;
+  word-break: break-all;
+}
