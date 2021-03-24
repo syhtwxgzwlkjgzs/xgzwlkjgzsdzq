@@ -1,8 +1,6 @@
 import { observable } from 'mobx';
-
 class IndexStore {
-  // 文章种类
-  @observable categories = [];
+  @observable categories = null;
 }
 
 export default IndexStore;

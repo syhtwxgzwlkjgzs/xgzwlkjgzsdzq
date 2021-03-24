@@ -1,17 +1,14 @@
 import { observable } from 'mobx';
-import { ENV_CONFIG } from '@common/constants/site';
 
-export default class SiteStore {
-  constructor(props) {
-    const { webConfig, platform } = props;
-    this.webConfig = webConfig;
-    this.platform = platform;
+class SiteStore {
+  constructor(props = {}) {
+    this.envConfig = props.envConfig;
+    this.webConfig = props.webConfig;
+    this.platform = props.platform;
   }
-
-  // 环境配置
-  envConfig = ENV_CONFIG;
-  // web 配置
-  @observable webConfig = {};
-  // 平台
-  @observable platform = null;
+  envConfig = {}
+  @observable webConfig = {}
+  @observable platform = null
 }
+
+export default SiteStore;

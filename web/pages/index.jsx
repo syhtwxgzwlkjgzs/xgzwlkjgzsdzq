@@ -11,6 +11,7 @@ class Index extends React.Component {
   constructor(props) {
     super(props);
     const { server_index, index } = this.props;
+    console.log(index.setCategories);
     // 初始化数据到store中
     server_index.categories && index.setCategories(server_index.categories);
   }

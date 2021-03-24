@@ -16,7 +16,7 @@ class DzqApp extends App {
     //   method: 'GET'
     // });
     // console.log(siteConfig);
-    console.log(appContext?.ctx?.pathname);
+    // console.log(appContext?.ctx?.pathname);
     let platform;
     if (isServer()) {
       const { ctx } = appContext;

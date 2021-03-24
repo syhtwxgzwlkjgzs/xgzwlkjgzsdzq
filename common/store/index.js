@@ -1,29 +1,41 @@
 import { useStaticRendering } from 'mobx-react';
-import SiteStore from './site';
-import app from './app';
-import index from './index';
-import isServerFn from '@common/utils/is-server';
+import SiteStore from './site/action';
+import IndexStore from './index/action';
+import UserStore from './user/action';
 
-const isServer = isServerFn();
+import initEnvConfig from '@common/config';
+
+const isServer = typeof window === 'undefined';
 useStaticRendering(isServer);
 
 let store = null;
+const ENV_CONFIG = initEnvConfig();
 
 export default function initializeStore(initProps = {}) {
-  const { site } = initProps;
 
-  const initStore = {
-    site: new SiteStore({
-      ...site,
-    }),
-    app,
-    index,
-  };
+  const {site} = initProps;
   if (isServer) {
-    return initStore;
+    return {
+      site: new SiteStore({
+        envConfig: ENV_CONFIG,
+        webConfig: null,
+        ...site
+      }),
+      index: new IndexStore(),
+      user: new UserStore()
+    };
   }
   if (store === null) {
-    store = initStore;
+    store = {
+      site: new SiteStore({
+        envConfig: ENV_CONFIG,
+        webConfig: null,
+        ...site
+      }),
+      index: new IndexStore(),
+      user: new UserStore()
+    };
   }
+
   return store;
 }

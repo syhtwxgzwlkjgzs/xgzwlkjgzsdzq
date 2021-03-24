@@ -2,12 +2,12 @@
   "presets": ["next/babel"],
   "plugins": [
     [
-      "@babel/plugin-proposal-decorators", // 兼容装饰器
+      "@babel/plugin-proposal-decorators",
       { "legacy": true }
     ],
     [
-      "@babel/plugin-proposal-class-properties", // 针对class中的static做处理
-      { "loose": true } // 不使用defineProperty来对static赋值，而是使用默认赋值方式
+      "@babel/plugin-proposal-class-properties",
+      { "loose": true }
     ]
   ]
 }
