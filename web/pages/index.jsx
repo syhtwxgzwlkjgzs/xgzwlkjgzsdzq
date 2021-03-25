@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/index/h5';
 import IndexPCPage from '@layout/index/pc';
-import api from '@server/api';
+import {readCategories} from '@server';
 
 @inject('site')
 @inject('index')
@@ -11,7 +11,6 @@ class Index extends React.Component {
   constructor(props) {
     super(props);
     const { server_index, index } = this.props;
-    console.log(index.setCategories);
     // 初始化数据到store中
     server_index.categories && index.setCategories(server_index.categories);
   }
@@ -20,7 +19,7 @@ class Index extends React.Component {
     const { server_index, index } = this.props;
     // 当服务器无法获取数据时，触发浏览器渲染
     if (!server_index.categories) {
-      const categories = await api.readCategories();
+      const categories = await readCategories({});
       index.setCategories(categories.data);
     }
   }
@@ -37,9 +36,9 @@ class Index extends React.Component {
 
 export default Index;
 
-export async function getServerSideProps() {
+export async function getServerSideProps(ctx) {
   // 获取分类数据
-  const categories = await api.readCategories();
+  const categories = await readCategories({}, ctx);
   return {
     props: {
       server_index: {
