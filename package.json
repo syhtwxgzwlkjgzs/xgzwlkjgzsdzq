@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "ins": "npm install && cd ./mini && npm install && cd ../web && npm install",
-    "dev:web": "cd ./web &&  npm link @discuz/cli && npm run dev",
-    "dev:mini": "cd ./mini && npm link @discuz/cli && npm run dev:weapp",
+    "dev:web": "cd ./web &&  npm link @discuz/cli && npm link @discuz/sdk && npm run dev",
+    "dev:mini": "cd ./mini && npm link @discuz/cli && npm link @discuz/sdk && npm run dev:weapp",
+    "lint:js:fix": "eslint --ext .js,.ts,.tsx,.jsx ./ --max-warnings 0 --fix",
     "lint:js": "eslint --ext .js,.ts,.tsx,.jsx ./ --max-warnings 0",
     "lint:css": "stylelint **/*.scss --fix",
     "lint": "npm run lint:js && npm run lint:css"

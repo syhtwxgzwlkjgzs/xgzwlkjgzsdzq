@@ -12,17 +12,16 @@ let store = null;
 const ENV_CONFIG = initEnvConfig();
 
 export default function initializeStore(initProps = {}) {
-
-  const {site} = initProps;
+  const { site } = initProps;
   if (isServer) {
     return {
       site: new SiteStore({
         envConfig: ENV_CONFIG,
         webConfig: null,
-        ...site
+        ...site,
       }),
       index: new IndexStore(),
-      user: new UserStore()
+      user: new UserStore(),
     };
   }
   if (store === null) {
@@ -30,10 +29,10 @@ export default function initializeStore(initProps = {}) {
       site: new SiteStore({
         envConfig: ENV_CONFIG,
         webConfig: null,
-        ...site
+        ...site,
       }),
       index: new IndexStore(),
-      user: new UserStore()
+      user: new UserStore(),
     };
   }
 

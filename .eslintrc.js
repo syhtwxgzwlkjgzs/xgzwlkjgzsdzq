@@ -6,6 +6,9 @@ module.exports = {
     jest: true,
   },
   extends: 'tencent',
+  rules: {
+    'no-useless-constructor': 0,
+  },
   globals: {
     DISCUZ_ENV: true,
     uni: true,
