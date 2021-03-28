@@ -5,7 +5,7 @@
 
 ```bash
 # 安装依赖
-$ npm run ins
+$ npm install
 
 # web 端本地开发
 $ npm run dev:web
