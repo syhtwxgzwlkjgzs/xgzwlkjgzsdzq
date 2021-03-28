@@ -32,13 +32,42 @@ $ npm run dev:mini
 | | |- index              # 页面的状态管理
 | | |- ...
 | |- styles           # 样式
+| | |- mixin              # mixin
+| | |- theme              # 主题
+| | |- pages              # 页面样式
+| | | |- index
+| | | | |- h5.scss
+| | | | |- pc.scss
+| | | |- ...
+| | |- var.scss
 | |- utils            # 工具库
 |- mini               # 小程序项目
+| |- src                # 小程序源代码
+| | |- components
+| | |- pages            # 页面
+| | | |- ...
+| | |- styles           # 样式
+| |- app.config.js      #
+| |- app.jsx            # 入口文件
+| |- app.scss           # 入口样式
 |- web                # web 项目
+| |- layout             # 页面布局
+| |- pages              # 页面
+| | |- ...
+| | |- _app.jsx         # 入口
+| |- styles             # 样式
 ```
 
 ## 开发规范
 
 1. [命名规范](./docs/naming.md)
-
-TODO: 待补充
+2. 共用部分说明：
+- 数据状态管理（`common/store`）：`mini`（小程序）和 `web`（Web 端：H5 | PC）公有一套数据状态。
+- 服务请求（`common/server`）
+- 常量（`common/constants`）
+- 样式（`common/styles`）
+  - 共用样式：mixin、变量、主题等
+  - 页面样式（PC和移动端在样式上会有差别，所以写样式的时候注意区别以及共用的部分）：
+    - 1）移动端：h5 和小程序共用
+    - 2）PC
+- 工具函数（`common/utils`）
