@@ -2,10 +2,6 @@ module.exports = {
   env: {
     NODE_ENV: '"production"',
   },
-  defineConstants: {
-    ENV_HOST: '"https://discuz.com"',
-    ENV_VERSION: '"v2.3.210322"'
-  },
   terser: {
     enable: true,
     config: {
@@ -67,13 +63,6 @@ module.exports = {
           },
         },
       });
-
-      chain.plugin('defineDZQ')
-        .use(webpack.DefinePlugin, [
-          {
-            'process.env.DISCUZ_ENV': JSON.stringify('mini')
-          }
-        ])
     },
     commonChunks: ['runtime', 'vendors', 'taro', 'common'],
   },

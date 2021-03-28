@@ -40,27 +40,12 @@ const config = {
       ],
     },
     webpackChain(chain, webpack) {
-      chain.merge({
-        module: {
-          rule: {
-            myloader: {
-              test: /\.(tsx|ts|js|mjs|jsx)$/,
-              include: [
-                new RegExp(path.resolve(__dirname, '../../common')),
-              ],
-              use: [{
-                loader: 'babel-loader',
-                options: {
-                  configFile: path.resolve(__dirname, '../babel.config.js'),
-                }
-              }]
-            }
+      chain.plugin('defineDZQ')
+        .use(webpack.DefinePlugin, [
+          {
+            'process.env.DISCUZ_ENV': JSON.stringify('mini')
           }
-        }
-      });
-    },
-    sassLoaderOption: {
-
+        ]);
     },
     postcss: {
       pxtransform: {
