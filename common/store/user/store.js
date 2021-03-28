@@ -1,9 +1,5 @@
 // import { observable } from 'mobx';
 
-class UserStore {
-  constructor(props = {}) {
-    super(props);
-  }
-}
+class UserStore {}
 
 export default UserStore;

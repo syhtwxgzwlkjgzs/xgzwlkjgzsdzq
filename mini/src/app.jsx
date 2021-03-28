@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Provider } from 'mobx-react';
-import appStore from '@common/store';
+import initializeStore from '@common/store';
 import './app.scss';
 
-const store = appStore();
+const store = initializeStore();
+console.log(store);
 class App extends Component {
   componentDidMount() {}
 

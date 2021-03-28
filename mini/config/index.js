@@ -1,7 +1,7 @@
 const path = require('path');
 
 const config = {
-  projectName: './template/taro-default',
+  projectName: 'discuz-app-mini',
   date: '2021-2-19',
   // https://taro-docs.jd.com/taro/docs/size
   designWidth: 375,
@@ -24,7 +24,7 @@ const config = {
     '@store': path.resolve(__dirname, '..', 'src/store'),
     '@styles': path.resolve(__dirname, '..', 'src/styles'),
     '@config': path.resolve(__dirname, '..', 'config'),
-    '@common': path.resolve(__dirname, '../..', 'common'),
+    '@common': path.resolve(__dirname, '../../common'),
   },
   copy: {
     patterns: [
@@ -34,6 +34,34 @@ const config = {
   },
   framework: 'react',
   mini: {
+    compile: {
+      include: [
+        path.resolve(__dirname, '../../common'),
+      ],
+    },
+    webpackChain(chain, webpack) {
+      chain.merge({
+        module: {
+          rule: {
+            myloader: {
+              test: /\.(tsx|ts|js|mjs|jsx)$/,
+              include: [
+                new RegExp(path.resolve(__dirname, '../../common')),
+              ],
+              use: [{
+                loader: 'babel-loader',
+                options: {
+                  configFile: path.resolve(__dirname, '../babel.config.js'),
+                }
+              }]
+            }
+          }
+        }
+      });
+    },
+    sassLoaderOption: {
+
+    },
     postcss: {
       pxtransform: {
         enable: true,
