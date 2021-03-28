@@ -7,7 +7,7 @@ class SiteStore {
     this.platform = props.platform;
   }
   envConfig = {}
-  @observable webConfig = {}
+  @observable webConfig = null
   @observable platform = null
 }
 

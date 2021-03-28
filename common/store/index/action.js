@@ -1,8 +1,8 @@
 import { action } from 'mobx';
 import IndexStore from './store';
 class IndexAction extends IndexStore {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
   }
 
   @action
