@@ -15,9 +15,8 @@ export default function setAuthorization(config) {
     if (process.env.DISCUZ_ENV === 'web') {
       const cookieData = formatCookie(document.cookie);
       token = cookieData.access_token || undefined;
-      // 小程序
     } else {
-
+      // TODO: 小程序登录态处理
     }
   }
 

@@ -2,6 +2,7 @@
  * 入口配置文件：https://taro-docs.jd.com/taro/docs/next/tutorial/
  */
 export default {
+  // TODO: 分包处理
   // 首页和详情页在主包
   pages: [
     'pages/index/index',
