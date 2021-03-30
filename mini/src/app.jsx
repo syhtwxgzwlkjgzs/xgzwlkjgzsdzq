@@ -4,7 +4,7 @@ import initializeStore from '@common/store';
 import './app.scss';
 
 const store = initializeStore();
-console.log(store);
+
 class App extends Component {
   componentDidMount() {}
 
