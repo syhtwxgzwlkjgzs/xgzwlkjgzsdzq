@@ -1,6 +1,7 @@
-const nextConfig = require('@discuz/cli/config/next');
+const nextConfig = require('@discuzq/cli/config/next');
 const includeFile = require('./build/include');
 const alias = require('./build/alias');
+
 // module.exports = nextConfig((config) => {
 //   config.webpack = (conf) => {
 //     let nextConfig = conf;

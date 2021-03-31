@@ -1,9 +1,11 @@
 /**
  * 针对给出的请求实例进行本地化配置
  */
-import { apiIns } from '@discuz/sdk/src/api';
+import { apiIns } from '@discuzq/sdk/src/api';
 import typeofFn from '@common/utils/typeof';
 import setAuthorization from '@common/utils/set-authorization';
+import setUserAgent from '@common/utils/set-user-agent';
+
 const api = apiIns({
   baseURL: 'https://newdiscuz-dev.dnspod.dev',
   timeout: 1000,
@@ -13,6 +15,7 @@ const { http } = api;
 
 // 处理数据异常，当数据为空对象或空数组，都将统一返回null
 function reasetData(data) {
+  if (!data) return null;
   if (typeofFn.isArray(data)) {
     if (data.length === 0) {
       return null;
@@ -24,11 +27,16 @@ function reasetData(data) {
 
 // 请求拦截
 http.interceptors.request.use(
+  // 设置userAgent
+
   // 设置请求头
-  config => setAuthorization(config),
+  config => {
+    config = setUserAgent(config);
+    return setAuthorization(config);
+  },
   (error) => {
     // 对请求错误做些什么
-    console.error(error);
+    // console.error(error);
     return {
       code: -1,
       data: null,
@@ -42,11 +50,11 @@ http.interceptors.response.use((res) => {
   const { data } = res;
   return {
     code: data.Code,
-    data: data.Code === 0 ? reasetData(data.Data) : null,
+    data: reasetData(data.Data),
     msg: data.Message,
   };
 }, (err) => {
-  console.error(err);
+  // console.error(err);
   return {
     code: -1,
     data: null,

@@ -9,6 +9,16 @@ class SiteAction extends SiteStore {
   setSiteConfig(config) {
     this.webConfig = config;
   }
+
+  @action
+  setCloseSiteConfig(config) {
+    this.closeSiteConfig = config;
+  }
+
+  @action.bound
+  changeTheme(theme) {
+    this.theme = theme;
+  }
 }
 
 export default SiteAction;
