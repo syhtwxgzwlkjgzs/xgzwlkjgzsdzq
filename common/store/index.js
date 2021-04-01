@@ -4,22 +4,20 @@ import isServer from '@common/utils/is-server';
 import SiteStore from './site/action';
 import IndexStore from './index/action';
 import UserStore from './user/action';
-import AppStore from './app/action';
 
 useStaticRendering(isServer());
 
 let store = null;
 
 export default function initializeStore(initProps = {}) {
-  const { site, index, user } = initProps;
+  const { site = {}, user= {} } = initProps;
   if (isServer()) {
     return {
       site: new SiteStore({
         envConfig: ENV_CONFIG,
         ...site,
       }),
-      app: new AppStore(),
-      index: new IndexStore(index),
+      index: new IndexStore(),
       user: new UserStore(user),
     };
   }
@@ -29,8 +27,7 @@ export default function initializeStore(initProps = {}) {
         envConfig: ENV_CONFIG,
         ...site,
       }),
-      app: new AppStore(),
-      index: new IndexStore(index),
+      index: new IndexStore(),
       user: new UserStore(user),
     };
   }

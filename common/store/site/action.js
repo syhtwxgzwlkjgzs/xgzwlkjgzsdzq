@@ -6,6 +6,11 @@ class SiteAction extends SiteStore {
   }
 
   @action
+  setPlatform(platform) {
+    this.platform = platform;
+  }
+
+  @action
   setSiteConfig(config) {
     this.webConfig = config;
   }
