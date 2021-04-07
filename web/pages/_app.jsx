@@ -24,34 +24,34 @@ class DzqApp extends App {
   //       platform = getPlatform(headers['user-agent']);
         
   //       // 获取站点信息
-  //       // siteConfig = await readForum({
-  //       //   headers: {
-  //       //     'user-agent': headers['user-agent']
-  //       //   }
-  //       // }, ctx);
+  //       siteConfig = await readForum({
+  //         headers: {
+  //           'user-agent': headers['user-agent']
+  //         }
+  //       }, ctx);
 
-  //       // site = { 
-  //       //   platform,
-  //       //   webConfig: siteConfig && siteConfig.data || null,
-  //       // };
+  //       site = { 
+  //         platform,
+  //         webConfig: siteConfig && siteConfig.data || null,
+  //       };
 
-  //       // // 当站点信息获取成功，进行当前用户信息查询
-  //       // if ( siteConfig && siteConfig.code === 0 && siteConfig?.data?.user?.userId) {
-  //       //   userInfo = await readUser({
-  //       //     params:{pid: siteConfig.data.user.userId},
-  //       //     headers: {
-  //       //       'user-agent': headers['user-agent']
-  //       //     }
-  //       //   });
-  //       // }
+  //       // 当站点信息获取成功，进行当前用户信息查询
+  //       if ( siteConfig && siteConfig.code === 0 && siteConfig?.data?.user?.userId) {
+  //         userInfo = await readUser({
+  //           params:{pid: siteConfig.data.user.userId},
+  //           headers: {
+  //             'user-agent': headers['user-agent']
+  //           }
+  //         });
+  //       }
 
   //     }
-  //     // appStore = initializeStore({
-  //     //     site,
-  //     //     user: {
-  //     //       userInfo: (userInfo && userInfo.code === 0) ? userInfo.data : null
-  //     //     }
-  //     // });
+  //     appStore = initializeStore({
+  //         site,
+  //         user: {
+  //           userInfo: (userInfo && userInfo.code === 0) ? userInfo.data : null
+  //         }
+  //     });
   //     appContext.ctx.appStore = appStore;
 
   //     return {
@@ -69,7 +69,7 @@ class DzqApp extends App {
     //   siteStatus: 'noraml',
     //   csrChance: props.initialAppStore.site.webConfig ? false : true
     // };
-    // 全局数据获取
+    // // 全局数据获取
     // this.appStore = isServer() ? props.initialAppStore : initializeStore(props.initialAppStore);
     this.appStore = initializeStore();
   }

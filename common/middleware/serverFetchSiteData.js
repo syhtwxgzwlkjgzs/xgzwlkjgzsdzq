@@ -2,13 +2,11 @@ import {readForum, readUser} from '@server';
 import getPlatform from '@common/utils/get-platform';
 
 export default async function initSiteData(ctx) {
-    return null;
     try {
         let platform = 'pc';
         let siteConfig;
         let userInfo;
         let server_site;
-        
         const { headers } = ctx.req;
         platform = getPlatform(headers['user-agent']);
             
@@ -40,6 +38,7 @@ export default async function initSiteData(ctx) {
             }
         }
     } catch (err) {
+      console.log(err);
         return {};
     }
     

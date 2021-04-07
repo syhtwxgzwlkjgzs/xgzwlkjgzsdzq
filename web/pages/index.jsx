@@ -5,26 +5,35 @@ import IndexPCPage from '@layout/index/pc';
 import { readCategories } from '@server';
 
 import compose from '@common/utils/compose';
-
 import clientFetchSiteData from '@common/middleware/clientFetchSiteData';
 import serverFetchSiteData from '@common/middleware/serverFetchSiteData';
+import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
 @inject('site')
 @inject('index')
 @observer
 class Index extends React.Component {
+
+  static async getInitialProps(ctx) {
+    const categories = await readCategories({}, ctx);
+    return {
+      server_index: {
+        categories: categories.data
+      }
+    }
+  }
+
   constructor(props) {
     super(props);
-    console.log(props);
     const { server_index, index } = this.props;
     // 初始化数据到store中
-    server_index.categories && index.setCategories(server_index.categories);
+    server_index && server_index.categories && index.setCategories(server_index.categories);
   }
 
   async componentDidMount() {
     const { server_index, index } = this.props;
     // 当服务器无法获取数据时，触发浏览器渲染
-    if (!server_index.categories) {
+    if (!index.categories && (!server_index || !server_index.categories)) {
       const categories = await readCategories({});
       index.setCategories(categories.data);
     }
@@ -33,46 +42,46 @@ class Index extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
-    if (platform === 'h5') {
-      return <IndexH5Page/>;
+    if (platform === 'pc') {
+      return <IndexPCPage/>;
     }
-    return <IndexPCPage/>;
+    return <IndexH5Page/>;
   }
 }
 
-export default clientFetchSiteData(Index);
+export default HOCFetchSiteData(Index);
+// export default clientFetchSiteData(Index);
 
-export const getServerSideProps = (ctx) => compose([serverFetchSiteData, async (ctx, data) => {
-  // 获取分类数据
-  const categories = await readCategories({}, ctx);
-  return {
-    props: {
-      ...data,
-      server_index: {
-        categories: categories.data,
-      },
-    },
-    // redirect: {
-    //   destination: '/close',
-    //   permanent: false,
-    // },
-  };
-}], ctx);
-
-// export const getServerSideProps = (ctx) => serverInitSiteData(ctx, async (ctx, siteData) => {
+// export const getServerSideProps = (ctx) => compose([serverFetchSiteData, async (ctx, data) => {
 //   // 获取分类数据
-  // const categories = await readCategories({}, ctx);
-  // return {
-  //   props: {
-  //     ...siteData,
-  //     server_index: {
-  //       categories: categories.data,
-  //     },
-  //   },
-  //   redirect: {
-  //     destination: '/close',
-  //     permanent: false,
-  //   },
-  // };
-// })
+//   const categories = await readCategories({}, ctx);
+//   return {
+//     props: {
+//       ...data,
+//       server_index: {
+//         categories: categories.data,
+//       },
+//     },
+//     // redirect: {
+//     //   destination: '/close',
+//     //   permanent: false,
+//     // },
+//   };
+// }], ctx);
+
+// export const getServerSideProps = async (ctx) => {
+//   // 获取分类数据
+//   const categories = await readCategories({}, ctx);
+//   return {
+//     props: {
+//       server_index: {
+//         categories: categories.data,
+//       },
+//     },
+//     // redirect: {
+//     //   destination: '/close',
+//     //   permanent: false,
+//     // },
+//   };
+// }
 

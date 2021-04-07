@@ -1,3 +1,3 @@
 module.exports = {
-  baseURL: 'https://discuz.chat',
+  baseURL: 'https://newdiscuz-dev.dnspod.dev',
 };

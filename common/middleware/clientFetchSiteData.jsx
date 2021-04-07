@@ -3,6 +3,8 @@ import { inject, observer } from 'mobx-react';
 import {readForum, readUser} from '@server';
 import getPlatform from '@common/utils/get-platform';
 import router from 'next/router'
+import isServer from '@common/utils/is-server';
+
 export default function clientFetchSiteData(Component, option) {
     
     @inject('site')
@@ -11,12 +13,11 @@ export default function clientFetchSiteData(Component, option) {
         constructor(props) {
             super(props);
             const { server_user, server_site, user, site } = props;
-
+            console.log(server_site)
             server_site && server_site.platform && site.setPlatform(server_site.platform);
             server_site && server_site.webConfig && site.setSiteConfig(server_site.webConfig);
-
+        
             server_user && server_user.userInfo && user.setUserInfo(server_user.userInfo);
-
             this.state = {
                 isNoSiteData: !server_site
             };
@@ -46,6 +47,7 @@ export default function clientFetchSiteData(Component, option) {
 
         // 检查是否满足渲染挑战
         isPass() {
+            debugger
             const { site } = this.props;
             if ( site && site.webConfig ) {
                 this.setState({

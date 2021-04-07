@@ -16,6 +16,7 @@ class IndexH5Page extends React.Component {
           index.categories ? index.categories.map((item, index) => <h1 key={index}>{item.name}</h1>) : null
         }
 
+        <Link href='/my/profile'>我的资料</Link>
         <Link href='/detail'>detauil</Link>
         <Link href='/user'>user</Link>
       </div>
