@@ -7,11 +7,11 @@ class SiteStore {
     this.webConfig = props.webConfig;
     this.platform = props.platform;
   }
-  envConfig = {};
+  envConfig = {}
   @observable webConfig = null;
   @observable platform = null;
   @observable closeSiteConfig = null;
-  @observable theme = APP_THEME.light;
+  @observable theme = 'light';
 }
 
 export default SiteStore;

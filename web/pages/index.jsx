@@ -5,6 +5,7 @@ import IndexPCPage from '@layout/index/pc';
 import { readCategories } from '@server';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCWithLogin from '@common/middleware/HOCWithLogin';
 
 @inject('site')
 @inject('index')
@@ -45,5 +46,4 @@ class Index extends React.Component {
   }
 }
 
-// eslint-disable-next-line new-cap
-export default HOCFetchSiteData(Index);
+export default HOCFetchSiteData(HOCWithLogin(Index));

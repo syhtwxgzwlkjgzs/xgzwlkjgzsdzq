@@ -2,10 +2,11 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import Link from 'next/link';
 import { Button } from '@discuzq/design';
+import '@discuzq/design/styles/index.scss';
 
 @inject('site')
-@inject('index')
 @inject('user')
+@inject('index')
 @observer
 class IndexH5Page extends React.Component {
   render() {
@@ -20,7 +21,7 @@ class IndexH5Page extends React.Component {
         <Link href='/my/profile'>我的资料</Link>
         <Link href='/detail'>detauil</Link>
         <Link href='/user'>user</Link>
-        <Button>jjj</Button>
+        <Button>Fuck</Button>
       </div>
     );
   }

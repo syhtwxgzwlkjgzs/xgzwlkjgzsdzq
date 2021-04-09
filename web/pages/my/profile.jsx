@@ -1,6 +1,9 @@
 import React from 'react';
 import styles from './index.module.scss';
 
+import compose from '@common/utils/compose';
+
+
 class Profile extends React.Component {
   render() {
     return (

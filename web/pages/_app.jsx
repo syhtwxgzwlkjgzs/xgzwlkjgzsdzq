@@ -11,7 +11,6 @@ class DzqApp extends App {
   }
 
   render() {
-    // todo 路由鉴权
     const { Component, pageProps } = this.props;
     return (
       <Provider {...this.appStore}>

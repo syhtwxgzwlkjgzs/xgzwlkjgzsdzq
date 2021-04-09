@@ -6,7 +6,8 @@
     "dev": "cross-env DEBUG=dzq_error NODE_ENV=development dzq dev -port 9527",
     "build": "cross-env DEBUG=dzq_error NODE_ENV=production dzq build",
     "static": "cross-env DEBUG=dzq_error NODE_ENV=production dzq build -s",
-    "start": "cross-env DEBUG=dzq_error NODE_ENV=production dzq start -H 127.0.0.1 -port 9527"
+    "start": "cross-env DEBUG=dzq_error NODE_ENV=production dzq start -H 127.0.0.1 -port 9527",
+    "start:static": "cross-env DEBUG=dzq_error NODE_ENV=production dzq start -H 127.0.0.1 -port 9527 --no-ssr"
   },
   "dependencies": {
     "create-next-app": "10.0.6",

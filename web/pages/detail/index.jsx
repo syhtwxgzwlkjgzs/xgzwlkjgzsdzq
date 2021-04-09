@@ -1,8 +1,9 @@
 import React from 'react';
 import styles from './index.module.scss';
 export default class Detail extends React.Component {
-  static async getInitialProps() {
-    console.log(33333);
+
+
+  static async getInitialProps(ctx) {
     return {
 
     };

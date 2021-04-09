@@ -1,13 +1,22 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import isServer from '@common/utils/is-server';
+import Router from '@common/utils/web-router';
+
+import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
 @inject('site')
 @observer
-class Close extends React.Component {
+class CloseSite extends React.Component {
+
   render() {
     const { site } = this.props;
-    const { closeSiteConfig } = site;
-    console.log(closeSiteConfig);
+    const {closeSiteConfig} = site;
+
+    if ( !isServer() && !closeSiteConfig ) {
+      Router.redirect('/');
+    }
+
     return (
       <div className='index'>
         <h1>关闭站点</h1>
@@ -17,4 +26,4 @@ class Close extends React.Component {
   }
 }
 
-export default Close;
+export default HOCFetchSiteData(CloseSite);
