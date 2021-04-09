@@ -1,7 +1,9 @@
 # Discuz! Q 项目
 
 ## 使用
-> 说明：目前 `@discuz/cli` 安装没有发布包，所以本地测试的时候，`discuz-core`项目中的 `discuz-cli` 目录下面使用 `npm link` 进行关联
+> 说明：
+> 1. 目前 `@discuzq/cli` 安装没有发布包，所以本地测试的时候，`discuz-core` 项目中的 `discuz-cli` 目录下面使用 `npm link` 进行关联
+> 2. 目前 `@discuzq/sdk` 安装没有发布包，所以本地测试的时候，`discuz-core` 项目中的 `discuz-sdk` 目录下面使用 `npm link` 进行关联
 
 ```bash
 # 安装依赖
@@ -24,7 +26,7 @@ $ npm run dev:mini
 | | |- prod.js            # 生产环境配置文件
 | |- constants        # 常量
 | | |- site.js            # 项目构建时通过 defineConstants 定义的变量存放在此处
-| | |- app.js             # 项目中
+| | |- ...             # 项目中
 | |- server           # 请求
 | |- store            # 数据状态管理
 | | |- app                # 项目的全局状态管理，比如：主题、页面状态等

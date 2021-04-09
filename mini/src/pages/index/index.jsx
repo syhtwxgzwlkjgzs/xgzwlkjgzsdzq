@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { View, Button, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import ThemePage from '@components/theme-page';
-import { APP_THEME } from '@common/constants/app';
+import { APP_THEME } from '@common/constants/site';
 import './index.scss';
 
-@inject('app')
 @inject('site')
 @observer
 class Index extends Component {
@@ -20,8 +19,7 @@ class Index extends Component {
   componentDidHide() { }
 
   render() {
-    const { envConfig } = this.props.site;
-    const { theme, changeTheme } = this.props.app;
+    const { envConfig, theme, changeTheme } = this.props.site;
     return (
       <ThemePage>
         <View className='index'>

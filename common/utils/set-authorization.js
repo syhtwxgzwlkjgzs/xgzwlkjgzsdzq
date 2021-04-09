@@ -19,10 +19,10 @@ export default function setAuthorization(config) {
   } else {
     // web端
     if (process.env.DISCUZ_ENV === 'web') {
-        token = locals.get(ACCESS_TOKEN_NAME);
+      token = locals.get(ACCESS_TOKEN_NAME);
     } else {
-        // 小程序登录态处理
-        token = locals.get(ACCESS_TOKEN_NAME);
+      // 小程序登录态处理
+      token = locals.get(ACCESS_TOKEN_NAME);
     }
   }
 

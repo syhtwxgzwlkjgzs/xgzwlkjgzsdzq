@@ -1,9 +1,7 @@
 import { observable } from 'mobx';
 class IndexStore {
-  constructor(props = {}) {
-    
-  }
-  
+  constructor() {}
+
   @observable categories = null;
 }
 

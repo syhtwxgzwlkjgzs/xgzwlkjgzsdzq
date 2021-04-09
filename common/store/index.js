@@ -10,7 +10,7 @@ useStaticRendering(isServer());
 let store = null;
 
 export default function initializeStore(initProps = {}) {
-  const { site = {}, user= {} } = initProps;
+  const { site = {}, user = {} } = initProps;
   if (isServer()) {
     return {
       site: new SiteStore({

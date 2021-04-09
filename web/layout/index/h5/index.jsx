@@ -8,7 +8,7 @@ import Link from 'next/link';
 @observer
 class IndexH5Page extends React.Component {
   render() {
-    const { index, user, site } = this.props;
+    const { index, user } = this.props;
     return (
       <div>
         { user.userInfo && <h1>{user.userInfo.username}</h1> }

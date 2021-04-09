@@ -1,14 +1,12 @@
 import React from 'react';
-import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
-import router from 'next/router'
 
 @inject('site')
-export default class Close extends React.Component {
-
+@observer
+class Close extends React.Component {
   render() {
     const { site } = this.props;
-    const {closeSiteConfig} = site;
+    const { closeSiteConfig } = site;
     console.log(closeSiteConfig);
     return (
       <div className='index'>
@@ -18,3 +16,5 @@ export default class Close extends React.Component {
     );
   }
 }
+
+export default Close;

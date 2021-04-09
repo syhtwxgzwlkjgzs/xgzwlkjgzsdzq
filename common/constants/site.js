@@ -5,3 +5,9 @@
 import initEnvConfig from '@common/config';
 // 环境配置
 export const ENV_CONFIG = initEnvConfig();
+
+// 应用主题
+export const APP_THEME = {
+  light: 'light',
+  dark: 'dark',
+};

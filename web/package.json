@@ -25,6 +25,7 @@
     "@babel/plugin-proposal-decorators": "7.12.13",
     "@types/react": "17.0.3",
     "autoprefixer": "9.7.4",
+    "babel-loader": "^8.2.2",
     "cross-env": "7.0.3",
     "css-loader": "1.0.0",
     "extracted-loader": "1.0.7",

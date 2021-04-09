@@ -4,36 +4,32 @@ import IndexH5Page from '@layout/index/h5';
 import IndexPCPage from '@layout/index/pc';
 import { readCategories } from '@server';
 
-import compose from '@common/utils/compose';
-import clientFetchSiteData from '@common/middleware/clientFetchSiteData';
-import serverFetchSiteData from '@common/middleware/serverFetchSiteData';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
 @inject('site')
 @inject('index')
 @observer
 class Index extends React.Component {
-
   static async getInitialProps(ctx) {
     const categories = await readCategories({}, ctx);
     return {
-      server_index: {
-        categories: categories.data
-      }
-    }
+      serverIndex: {
+        categories: categories.data,
+      },
+    };
   }
 
   constructor(props) {
     super(props);
-    const { server_index, index } = this.props;
+    const { serverIndex, index } = this.props;
     // 初始化数据到store中
-    server_index && server_index.categories && index.setCategories(server_index.categories);
+    serverIndex && serverIndex.categories && index.setCategories(serverIndex.categories);
   }
 
   async componentDidMount() {
-    const { server_index, index } = this.props;
+    const { serverIndex, index } = this.props;
     // 当服务器无法获取数据时，触发浏览器渲染
-    if (!index.categories && (!server_index || !server_index.categories)) {
+    if (!index.categories && (!serverIndex || !serverIndex.categories)) {
       const categories = await readCategories({});
       index.setCategories(categories.data);
     }
@@ -49,6 +45,7 @@ class Index extends React.Component {
   }
 }
 
+// eslint-disable-next-line new-cap
 export default HOCFetchSiteData(Index);
 // export default clientFetchSiteData(Index);
 
@@ -58,7 +55,7 @@ export default HOCFetchSiteData(Index);
 //   return {
 //     props: {
 //       ...data,
-//       server_index: {
+//       serverIndex: {
 //         categories: categories.data,
 //       },
 //     },
@@ -74,7 +71,7 @@ export default HOCFetchSiteData(Index);
 //   const categories = await readCategories({}, ctx);
 //   return {
 //     props: {
-//       server_index: {
+//       serverIndex: {
 //         categories: categories.data,
 //       },
 //     },

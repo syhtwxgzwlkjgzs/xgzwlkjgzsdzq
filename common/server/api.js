@@ -28,9 +28,9 @@ function reasetData(data) {
 // 请求拦截
 http.interceptors.request.use(
   // 设置userAgent
-
   // 设置请求头
-  config => {
+  (config) => {
+    // eslint-disable-next-line no-param-reassign
     config = setUserAgent(config);
     return setAuthorization(config);
   },

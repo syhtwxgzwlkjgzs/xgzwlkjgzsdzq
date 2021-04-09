@@ -8,6 +8,7 @@ module.exports = {
   extends: 'tencent',
   rules: {
     'no-useless-constructor': 0,
+    'no-underscore-dangle': 0,
   },
   globals: {
     DISCUZ_ENV: true,

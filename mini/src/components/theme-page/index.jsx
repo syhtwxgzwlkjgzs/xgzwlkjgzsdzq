@@ -3,12 +3,12 @@ import { observer, inject } from 'mobx-react';
 import { View } from '@tarojs/components';
 import './index.scss';
 
-export default inject('app')(observer((props) => {
-  const { children, app } = props;
+export default inject('site')(observer((props) => {
+  const { children, site } = props;
 
 
   return (
-    <View className={`dzq-page dzq-theme-${app.theme}`}>
+    <View className={`dzq-page dzq-theme-${site.theme}`}>
       {children}
     </View>
   );
