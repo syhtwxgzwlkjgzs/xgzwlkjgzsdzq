@@ -4,6 +4,7 @@
 > 说明：
 > 1. 目前 `@discuzq/cli` 安装没有发布包，所以本地测试的时候，`discuz-core` 项目中的 `discuz-cli` 目录下面使用 `npm link` 进行关联
 > 2. 目前 `@discuzq/sdk` 安装没有发布包，所以本地测试的时候，`discuz-core` 项目中的 `discuz-sdk` 目录下面使用 `npm link` 进行关联
+> 3. 目前 `@discuzq/design` 安装没有发布包，所以本地测试的时候，`discuz-core` 项目中的 `discuz-design` 目录下面使用 `npm link` 进行关联
 
 ```bash
 # 安装依赖

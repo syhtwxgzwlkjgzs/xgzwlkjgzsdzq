@@ -25,6 +25,7 @@ const config = {
     '@styles': path.resolve(__dirname, '..', 'src/styles'),
     '@config': path.resolve(__dirname, '..', 'config'),
     '@common': path.resolve(__dirname, '../../common'),
+    'regenerator-runtime': path.resolve(__dirname, '../node_modules', 'regenerator-runtime'),
   },
   copy: {
     patterns: [

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Button, Text } from '@tarojs/components';
+import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
+import { Button } from '@discuzq/design';
 import ThemePage from '@components/theme-page';
 import { APP_THEME } from '@common/constants/site';
 import styles from './index.module.scss';

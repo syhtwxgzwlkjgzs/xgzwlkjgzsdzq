@@ -1,6 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import Link from 'next/link';
+import { Button } from '@discuzq/design';
 
 @inject('site')
 @inject('index')
@@ -19,6 +20,7 @@ class IndexH5Page extends React.Component {
         <Link href='/my/profile'>我的资料</Link>
         <Link href='/detail'>detauil</Link>
         <Link href='/user'>user</Link>
+        <Button>jjj</Button>
       </div>
     );
   }
