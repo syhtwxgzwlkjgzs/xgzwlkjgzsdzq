@@ -47,38 +47,3 @@ class Index extends React.Component {
 
 // eslint-disable-next-line new-cap
 export default HOCFetchSiteData(Index);
-// export default clientFetchSiteData(Index);
-
-// export const getServerSideProps = (ctx) => compose([serverFetchSiteData, async (ctx, data) => {
-//   // 获取分类数据
-//   const categories = await readCategories({}, ctx);
-//   return {
-//     props: {
-//       ...data,
-//       serverIndex: {
-//         categories: categories.data,
-//       },
-//     },
-//     // redirect: {
-//     //   destination: '/close',
-//     //   permanent: false,
-//     // },
-//   };
-// }], ctx);
-
-// export const getServerSideProps = async (ctx) => {
-//   // 获取分类数据
-//   const categories = await readCategories({}, ctx);
-//   return {
-//     props: {
-//       serverIndex: {
-//         categories: categories.data,
-//       },
-//     },
-//     // redirect: {
-//     //   destination: '/close',
-//     //   permanent: false,
-//     // },
-//   };
-// }
-
