@@ -7,7 +7,9 @@ class SiteAction extends SiteStore {
 
   @action
   setPlatform(platform) {
-    this.platform = platform;
+    if (platform !== this.platform) {
+      this.platform = platform;
+    }
   }
 
   @action

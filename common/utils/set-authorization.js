@@ -2,11 +2,8 @@
 /* eslint-disable no-param-reassign */
 import isServer from './is-server';
 import formatCookie from '@common/utils/format-cookie';
-import LocalBridge from '@discuzq/sdk/src/localstorage';
-// 兼容旧项目中的一些信息获取
-const ACCESS_TOKEN_NAME = 'access_token';
-const localBridgeOptions = { prefix: '' };
-const locals = new LocalBridge(localBridgeOptions);
+import locals from '@common/utils/local-bridge';
+import constants from '@common/constants';
 
 export default function setAuthorization(config) {
   let token;
@@ -19,10 +16,10 @@ export default function setAuthorization(config) {
   } else {
     // web端
     if (process.env.DISCUZ_ENV === 'web') {
-      token = locals.get(ACCESS_TOKEN_NAME);
+      token = locals.get(constants.ACCESS_TOKEN_NAME);
     } else {
       // 小程序登录态处理
-      token = locals.get(ACCESS_TOKEN_NAME);
+      token = locals.get(constants.ACCESS_TOKEN_NAME);
     }
   }
 

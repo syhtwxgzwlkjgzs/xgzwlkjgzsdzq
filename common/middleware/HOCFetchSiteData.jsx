@@ -6,6 +6,8 @@ import getPlatform from '@common/utils/get-platform';
 import {readForum, readUser} from '@server';
 import Router from '@common/utils/web-router';
 import { withRouter } from 'next/router';
+import clearLoginStatus from '@common/utils/clear-login-status';
+import reload from '@common/utils/reload';
 
 // 获取全站数据
 export default function HOCFetchSiteData(Component) {
@@ -93,16 +95,18 @@ export default function HOCFetchSiteData(Component) {
             const { serverUser, serverSite, user, site } = this.props;
             let siteConfig;
             let loginStatus = false;
+
+            // 设置平台标识
+            site.setPlatform(getPlatform(window.navigator.userAgent));
+
+
             if ( isNoSiteData ) {
                 siteConfig = serverSite && serverSite.webConfig ? serverSite.webConfig : null;
-                if ( !serverSite || !serverSite.platform ) {
-                    site.setPlatform(getPlatform(window.navigator.userAgent));
-                }
-
                 if ( !serverSite || !serverSite.webConfig ) {
                     const result = await readForum({});
                     result.data && site.setSiteConfig(result.data);
-                    result.code === -3005 && site.setCloseSiteConfig(result.data);
+                    // 设置全局状态
+                    this.setAppCommonStatus(result);
                     siteConfig = result.data || null;
                 }   
             } else {
@@ -127,6 +131,18 @@ export default function HOCFetchSiteData(Component) {
             user.updateLoginStatus(loginStatus);
             this.isPass();
         }
+
+        setAppCommonStatus(result) {
+            console.log(reload)
+            switch(result.code) {
+                case -3005: site.setCloseSiteConfig(result.data);
+                break;
+                case -4002: 
+                    clearLoginStatus();
+                    reload();
+                break;
+            }
+        }   
 
         // 检查是否满足渲染挑战
         isPass() {
