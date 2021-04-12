@@ -4,6 +4,7 @@ import isServer from '@common/utils/is-server';
 import SiteStore from './site/action';
 import IndexStore from './index/action';
 import UserStore from './user/action';
+import ThreadStore from './thread/action';
 
 useStaticRendering(isServer());
 
@@ -19,6 +20,7 @@ export default function initializeStore(initProps = {}) {
       }),
       index: new IndexStore(),
       user: new UserStore(user),
+      thread: new ThreadStore(),
     };
   }
   if (store === null) {
@@ -29,6 +31,7 @@ export default function initializeStore(initProps = {}) {
       }),
       index: new IndexStore(),
       user: new UserStore(user),
+      thread: new ThreadStore(),
     };
   }
 

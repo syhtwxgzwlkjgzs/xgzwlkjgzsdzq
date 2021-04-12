@@ -11,7 +11,7 @@ class SiteStore {
   @observable webConfig = null;
   @observable platform = null;
   @observable closeSiteConfig = null;
-  @observable theme = 'light';
+  @observable theme = APP_THEME.light;
 }
 
 export default SiteStore;

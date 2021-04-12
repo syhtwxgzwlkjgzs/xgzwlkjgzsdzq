@@ -15,4 +15,5 @@ class Login extends React.Component {
   }
 }
 
+// eslint-disable-next-line new-cap
 export default HOCFetchSiteData(HOCWithNoLogin(Login));
