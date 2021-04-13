@@ -9,7 +9,7 @@ import styles from './index.module.scss';
  * @prop {string | number} received 红包帖子：已领取数量 , 赏金帖子：已发放多少元
  */
 
-const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0, className: _className = '' }) => {
+const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0 }) => {
   let texts = {};
   let className = '';
 
@@ -37,7 +37,7 @@ const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0, classNa
   }
 
   return (
-    <div className={`${styles.container} ${className} ${_className}`}>
+    <div className={`${styles.container} ${className}`}>
       <img className={styles.icon} />
       <div className={styles.remaining}>{texts.remaining}</div>
       <div className={styles.received}>{texts.received}</div>
