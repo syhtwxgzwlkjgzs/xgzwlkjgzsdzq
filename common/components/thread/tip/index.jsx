@@ -1,15 +1,29 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { ThreadCommonContext } from '../utils';
+import PopupList from '../popup-list';
+import styles from './index.module.scss';
 
-const Index = () => {
+const Index = ({ imgs = [
+    'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
+    'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png'
+] }) => {
     const { dispatch } = useContext(ThreadCommonContext)
+    const [visible, setVisible] = useState(false)
 
     const onClick = () => {
-        dispatch('test', 1)
+        setVisible(true)
     }
 
     return (
-        <div onClick={onClick}>点赞、打赏</div>
+        <>
+            <div className={styles.wrapper} onClick={onClick} style={{width: imgs.length === 1 ? '0.24rem' : '0.44rem'}}>
+                {
+                    imgs.map((item, index) => <img className={index === 1 ? styles.img : styles.imgAfter} src={item} key={index} />)
+                }
+            </div>
+            
+            <PopupList visible={visible} onHidden={() => setVisible(false)} />
+        </>
     )
 }
 

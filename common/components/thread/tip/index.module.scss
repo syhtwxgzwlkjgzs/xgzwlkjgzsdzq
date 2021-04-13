@@ -1,0 +1,17 @@
+.wrapper {
+  position: relative;
+  max-width: 0.44rem;
+  .img {
+    border-radius: 0.12rem;
+    border: #fff solid 0.01rem;
+    width: 0.24rem;
+  }
+  .imgAfter {
+    position: absolute;
+    z-index: -1;
+    border-radius: 0.12rem;
+    right: -0.01rem;
+    top: 0;
+    width: 0.24rem;
+  }
+}
