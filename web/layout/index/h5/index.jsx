@@ -2,8 +2,9 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import Link from 'next/link';
 import { Button } from '@discuzq/design';
-import '@discuzq/design/styles/index.scss';
 import ThreadCommon from '@common/components/thread';
+import styles from './index.module.scss';
+import '@discuzq/design/styles/index.scss';
 
 @inject('site')
 @inject('user')
@@ -18,11 +19,12 @@ class IndexH5Page extends React.Component {
         {
           index.categories ? index.categories.map((item, index) => <h1 key={index}>{item.name}</h1>) : null
         }
-        <ThreadCommon />
+        <p className={styles.text}>test</p>
         <Link href='/my/profile'>我的资料</Link>
         <Link href='/detail'>detauil</Link>
         <Link href='/user'>user</Link>
         <Button>Fuck</Button>
+        <ThreadCommon />
       </div>
     );
   }

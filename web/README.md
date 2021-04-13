@@ -16,6 +16,9 @@ npm run static
 
 // 运行SSR服务
 npm run start
+
+// 运行CSR服务
+npm run start:static
 ```
 
 构建命令中，输出的构建后文件会固定以`package.json`的`name`属性作为文件名。
@@ -95,29 +98,34 @@ export default Index;
 在`pages`文件中，只编写页面路由级别的页面代码，以及数据获取，具体的布局和交互组件，应该通过编写在`layout`中实现。
 
 ```jsx
-import React from 'react';
-import { inject, observer } from 'mobx-react';
-import IndexH5Page from '@layout/index/h5';
-import IndexPCPage from '@layout/index/pc';
-import { readCategories } from '@server';
-
 @inject('site')
 @inject('index')
 @observer
 class Index extends React.Component {
 
-  constructor(props) {
-    super(props);
-    const { server_index, index } = this.props;
-    // 初始化数据到store中
-    server_index.categories && index.setCategories(server_index.categories);
+  // 服务器获取数据
+  static async getInitialProps(ctx) {
+    const categories = await readCategories({}, ctx);
+    return {
+      serverIndex: {
+        categories: categories.data,
+      },
+    };
   }
 
+  constructor(props) {
+    super(props);
+    const { serverIndex, index } = this.props;
+    // 初始化数据到store中
+    serverIndex && serverIndex.categories && index.setCategories(serverIndex.categories);
+  }
+
+
   async componentDidMount() {
-    const { server_index, index } = this.props;
+    const { serverIndex, index } = this.props;
     // 当服务器无法获取数据时，触发浏览器渲染
-    if ( !server_index.categories ) {
-      const categories = await readCategories();
+    if (!index.categories && (!serverIndex || !serverIndex.categories)) {
+      const categories = await readCategories({});
       index.setCategories(categories.data);
     }
   }
@@ -125,31 +133,15 @@ class Index extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
-    // 判断是移动端还是pc端，将使用不用布局组件进行渲染
-    if ( platform === 'h5' ) {
-      return <IndexH5Page/>;
-    } else {
+    // 根据平台决定使用哪个view层
+    if (platform === 'pc') {
       return <IndexPCPage/>;
     }
+    return <IndexH5Page/>;
   }
 }
 
 export default Index;
-
-// SSR获取数据，提供给服务器渲染
-export async function getServerSideProps(context) {
-  // 获取分类数据
-  const categories = await readCategories();
-  return {
-    props: {
-      // 规范的命令，如果绑定的store名称为index，那么SSR返回的应该为server_index
-      // 其他参数应该与浏览器渲染传入的变量名称保持一致
-      server_index: {
-        categories: categories.data
-      }
-    },
-  }
-}
 
 ```
 
@@ -175,7 +167,14 @@ export async function getServerSideProps(context) {
 - 屏幕宽度大于750px，将使用统一使用750作为基数计算。
 - 屏幕范围在320px~750px之间，包含（320和750），将会自动等比缩放。
 
-在开发过程中，将直接计算`100/x`等于实际`rem`单位。例如：设计稿10px，那么相当于`100/10=.1rem`。
+在开发过程中，引入rem函数进行单位换算。
+```scss
+@import '@common/styles/fn/rem.scss';
+.text {
+    font-size: rem(30);
+    color: red;
+}
+```
 
 ## 样式编写
 
@@ -185,14 +184,14 @@ export async function getServerSideProps(context) {
 
 dzq-cli将为开发者提供快速引用指定目录的方式。
 
-- @component
-- @layout
-- @utils
-- @pages
-- @store
-- @config
-- @server
-
+- @components->web目录下的components文件
+- @layout->web目录下的layout文件
+- @utils->web目录下的utils文件
+- @pages->web目录下的pages文件
+- @config->web目录下的config文件
+- @common->web目录以外的common目录
+- @store->web目录以外的common目录下的store文件
+- @server->web目录以外的common目录下的server文件
 
 ```js
 import IndexH5Page from '@layout/index/h5';

@@ -13,9 +13,11 @@ class DzqApp extends App {
   render() {
     const { Component, pageProps } = this.props;
     return (
-      <Provider {...this.appStore}>
-        <Component {...pageProps} />
-      </Provider>
+      <div data-dzq-theme='light'>
+        <Provider {...this.appStore}>
+          <Component {...pageProps} />
+        </Provider>
+      </div>
     );
   }
 }
