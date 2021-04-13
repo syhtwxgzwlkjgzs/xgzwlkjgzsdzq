@@ -1,0 +1,156 @@
+.indexImage {
+  .imageBox {
+    .oneImage {
+      width: 3.43rem;
+      height: 260px;
+      margin: 0 auto;
+      .oneImages {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .twoImage {
+      width: 3.43rem;
+      height: 260px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-around;
+      .twoImages {
+        display: block;
+        width: 1.7rem;
+      }
+    }
+    .threeImage {
+      display: flex;
+      width: 3.43rem;
+      height: 260px;
+      margin: 0 auto;
+      flex-wrap:wrap;
+      .threeImageTop {
+        width: 3.43rem;
+        height: 128px;
+        .threeImageTopImg {
+          display: block;
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .threeImageLower {
+        width: 3.43rem;
+        height: 126px;
+        display: flex;
+        justify-content: space-around;
+        .threeImageLowerImg {
+          width: 1.7rem;
+          height: 126px;
+        }
+      }
+    }
+    .fourImage {
+      display: flex;
+      width: 3.43rem;
+      height: 260px;
+      margin: 0 auto;
+      overflow: hidden;
+      justify-content: space-around;
+      .fourImagesTop {
+        width: 2.1rem;
+        height: 260px;
+        .topImg {
+          display: block;
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .fourImagesLower {
+        width: 1.29rem;
+        height: 260px;
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: space-around;
+        .lowerImg {
+          display: block;
+          width: 100%;
+          height: 84px;
+        }
+      }
+    }
+    .fiveImage {
+      display: flex;
+      width: 3.43rem;
+      height: 260px;
+      margin: 0 auto;
+      flex-wrap:wrap;
+      .fiveImageTop {
+        width: 100%;
+        height: 126px;
+        display: flex;
+        justify-content: space-around;
+        .fiveImageTopImg {
+          display: block;
+          width: 1.69rem;
+          height: 126px;
+        }
+      }
+      .fiveImageLower {
+        width: 100%;
+        height: 111px;
+        display: flex;
+        justify-content: space-around;
+        .fiveImageLowerImg {
+          display: block;
+          width: 1.11rem;
+          height: 111px;
+        }
+      }
+    }
+    .moreImage {
+      display: flex;
+      width: 3.43rem;
+      height: 260px;
+      margin: 0 auto;
+      flex-wrap:wrap;
+      .moreImageTop {
+        width: 100%;
+        height: 126px;
+        display: flex;
+        justify-content: space-around;
+        .moreImageTopImg {
+          display: block;
+          width: 1.69rem;
+          height: 126px;
+        }
+      }
+      .moreImageLower {
+        width: 100%;
+        height: 111px;
+        display: flex;
+        justify-content: space-around;
+        .moreImageLowers {
+          width: 1.11rem;
+          height: 111px;
+          position: relative;
+          .moreImageLowerImg {
+            display: block;
+            width: 100%;
+            height: 100%;
+          }
+          .modalBox {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #666;
+            opacity: 0.5;
+            top: 0;
+            text-align: center;
+            line-height: 111px;
+            .imgSpan {
+              font-size: 0.2rem;
+              color: #fff;
+            }
+          }
+        }
+      }
+    }
+  }
+}
