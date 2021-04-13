@@ -1,18 +1,16 @@
 import React from 'react';
-import LoginH5Page from '@layout/user/h5/Login';
+import SuppleMentaryH5Page from '@layout/user/h5/supple-mentary';
 import { inject } from 'mobx-react';
-
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-import HOCWithNoLogin from '@common/middleware/HOCWithNoLogin';
 
 @inject('site')
-class Login extends React.Component {
+class SuppleMentary extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
-    return platform === 'h5' ? <LoginH5Page /> : <></>;
+    return platform === 'h5' ? <SuppleMentaryH5Page /> : <></>;
   }
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(HOCWithNoLogin(Login));
+export default HOCFetchSiteData(SuppleMentary);

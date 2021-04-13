@@ -1,0 +1,59 @@
+@mixin title {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 30px;
+  text-align: left;
+  color: #0b0b37;
+}
+@mixin banner {
+  height: 140px;
+  text-align: center;
+  background-color: #2469f6;
+  img {
+    margin-top: 67px;
+  }
+}
+@mixin input {
+  width: 327px;
+  input {
+    width: 327px;
+    height: 68px;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid #eee;
+  }
+}
+@mixin passwordInput {
+  div{
+    top: 15px;
+  }
+}
+@mixin button {
+  width: 327px;
+  height: 42px;
+  margin-top: 32px;
+}
+@mixin functionalRegion {
+  margin-top: 16px;
+  text-align: center;
+  .clickBtn{
+    color: #2469f6;
+    cursor: pointer;
+  }
+}
+@mixin otherLoginText {
+  text-align: center;
+  line-height: 26px;
+  font-weight: normal;
+  color: #c5c6ca;
+}
+@mixin otherLoginBtn {
+  border-radius: 50%;
+  border: 1px solid #eee;
+  margin: 0 16px;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  display: inline-block;
+  text-align: center;
+}

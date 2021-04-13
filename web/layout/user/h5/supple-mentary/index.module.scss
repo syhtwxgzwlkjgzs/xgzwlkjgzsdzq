@@ -1,0 +1,66 @@
+@import '../../../../../common/styles/mixin/login.scss';
+.content {
+  padding: 0 24px;
+}
+.button{
+  @include button;
+  margin-top: 16px;
+}
+@mixin paddingBottom {
+  padding-bottom: 16px;
+}
+.title{
+  font-size: 14px;
+  line-height: 26px;
+  text-align: left;
+  color: #4f5a70;
+}
+.input{
+  @include paddingBottom;
+  margin-top: 8px;
+  input {
+    width: 327px;
+  }
+}
+.imgUpload{
+  @include paddingBottom;
+}
+.imgUpload-dom{
+  width: 100px;
+  height: 100px;
+  border-radius: 5px;
+  background: #f6f7f9;
+  border: 1px solid #eee;
+  text-align: center;
+  line-height: 100px;
+  font-size: 20px;
+  color: #999;
+}
+.attachmentsUpload{
+  @include paddingBottom;
+  float: left;
+  width: 100%;
+}
+.attachmentsUpload-left{
+  display: inline-block;
+  font-size: 14px;
+  line-height: 26px;
+  text-align: left;
+  color: #4f5a70;
+}
+.attachmentsUpload-right{
+  display: inline-block;
+  font-size: 14px;
+  line-height: 24px;
+  color: #0b0b37;
+  float: right;
+}
+.textarea{
+  @include paddingBottom;
+}
+.radio{
+  @include paddingBottom;
+}
+.checkbox{
+  @include paddingBottom;
+}
