@@ -1,0 +1,34 @@
+.container {
+  width: 100%;
+  padding: 0.16rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  .image {
+    flex: none;
+    width: 0.82rem;
+    height: 0.82rem;
+    object-fit: cover;
+  }
+  .content {
+    flex: 1;
+    margin-left: 0.16rem;
+    .title {
+      font-weight: normal;
+      font-size: 0.14rem;
+      line-height: 0.24rem;
+      text-align: left;
+      color: #515a6e;
+      height: 0.44rem;
+      overflow: hidden;
+    }
+    .amount {
+      margin-top: 0.08rem;
+      font-weight: normal;
+      font-size: 0.2rem;
+      line-height: 0.3rem;
+      text-align: left;
+      color: #e02433;
+    }
+  }
+}
