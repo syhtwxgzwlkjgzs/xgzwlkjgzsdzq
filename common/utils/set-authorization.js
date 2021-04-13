@@ -9,10 +9,12 @@ export default function setAuthorization(config) {
   let token;
   if (isServer() && config.__context) {
     const { headers } = config.__context.req;
-    const { cookie } = headers;
+    const { cookie } = headers
     const cookieData = formatCookie(cookie);
-    token = cookieData.access_token || undefined;
-    delete config.__context;
+    if (cookieData) {
+      token = cookieData.access_token || undefined;
+      delete config.__context;
+    }
   } else {
     // web端
     if (process.env.DISCUZ_ENV === 'web') {
