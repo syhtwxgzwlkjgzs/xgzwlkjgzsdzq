@@ -1,0 +1,27 @@
+.container {
+    height: 104px;
+    border-radius: 5px;
+    background: #fef9ec;
+    display: flex;
+    align-items: center;
+    font-family: PingFangSC-Regular;
+    .money {
+      flex: 0 0 68px;
+      height: 104px;
+      border-radius: 5px 0px 0px 5px;
+      background: #e4414e;
+    }
+    .content {
+      height: 71px;
+      border-radius: 5px 0px 0px 5px;
+      padding: 10px 16px;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 26px;
+      color: #0b0b37;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+    }
+}
