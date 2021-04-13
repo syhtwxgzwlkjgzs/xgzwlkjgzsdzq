@@ -40,14 +40,6 @@ const config = {
         path.resolve(__dirname, '../../common'),
       ],
     },
-    webpackChain(chain, webpack) {
-      chain.plugin('defineDZQ')
-        .use(webpack.DefinePlugin, [
-          {
-            'process.env.DISCUZ_ENV': JSON.stringify('mini')
-          }
-        ]);
-    },
     postcss: {
       pxtransform: {
         enable: true,

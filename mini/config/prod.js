@@ -28,6 +28,12 @@ module.exports = {
     // 分包优化的打包需要结合 webpackChain 和 addChunkPages
     // 具体请看：https://taro-docs.jd.com/taro/docs/next/taro-in-miniapp/#%E5%AF%B9-taro-%E9%A1%B9%E7%9B%AE%E7%9A%84%E9%83%A8%E5%88%86%E9%A1%B5%E9%9D%A2%E5%88%86%E5%8C%85
     webpackChain(chain, webpack) {
+      chain.plugin()
+      .use(webpack.DefinePlugin, [
+        {
+          'process.env.DISCUZ_ENV': JSON.stringify('mini')
+        }
+    ]);
       chain.merge({
         // 可以进行打包优化分包
         optimization: {
