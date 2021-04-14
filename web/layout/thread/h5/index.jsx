@@ -1,7 +1,8 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import createService from '@common/service/thread';
+import createThreadService from '@common/service/thread';
+import createCommentService from '@common/service/comment';
 import layout from './layout.module.scss';
 import comment from './comment.module.scss';
 import topic from './topic.module.scss';
@@ -13,15 +14,20 @@ import topic from './topic.module.scss';
 class ThreadH5Page extends React.Component {
   constructor(props) {
     super(props);
-    this.service = createService(props);
+    this.service = {
+      thread: createThreadService(props),
+      comment: createCommentService(props),
+    };
   }
 
   async onCollectionClick() {
     const id = this.props.thread?.threadData?.thread?.id;
-    const { success, msg } = await this.service.collect(id);
-    if (success) {
-      console.log(msg);
-    }
+    const params = {
+      id,
+      isFavorite: this.props.thread?.threadData?.isFavorite,
+    };
+    const { success, msg } = await this.service.thread.updateFavorite(params);
+    console.log(success, msg);
   }
 
   onBackClick() {
