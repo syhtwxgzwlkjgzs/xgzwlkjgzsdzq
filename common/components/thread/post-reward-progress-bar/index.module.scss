@@ -1,55 +1,60 @@
+@import '@common/styles/variable/index.scss';
+@import '@common/styles/fn/rem.scss';
+
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-  height: 1.5rem;
-  width: 1.5rem;
+  height: rem(150);
+  width: rem(150);
   .progress {
     position: absolute;
-    height: 1.5rem;
-    width: 1.5rem;
+    top: rem(-5);
+    left: rem(-5);
+    height: rem(150);
+    width: rem(150);
   }
   .remaining {
-    margin-top: 0.08rem;
+    margin-top: rem(8);
     font-weight: 600;
-    font-size: 0.16rem;
-    line-height: 0.24rem;
+    font-size: rem($font-size-middle);
+    line-height: rem($font-line-height-primary);
     text-align: left;
-    color: #0b0b37;
+    color: var(--color-text-primary);
     .count {
       font-size: inherit;
       color: #e02433;
     }
   }
   .received {
-    margin-top: 0.04rem;
+    margin-top: rem(4);
     font-weight: normal;
-    font-size: 0.12rem;
-    line-height: 0.17rem;
+    font-size: rem($font-size-label);
+    line-height: rem(17);
     color: #4f5a70;
   }
   .receive {
-    margin-top: 0.04rem;
+    margin-top: rem($padding-1n);
     font-weight: normal;
-    font-size: 0.12rem;
-    line-height: 0.17rem;
+    font-size: rem($font-size-label);
+    line-height: rem(17);
     text-align: left;
     color: #8490a8;
   }
   &.redPack {
     .icon {
-      margin-top: 0.27rem;
-      width: 0.15rem;
-      height: 0.2rem;
+      margin-top: rem(27);
+      width: rem(15);
+      height: rem(20);
       background-color: #e02433;
     }
   }
   &.bounty {
     .icon {
-      margin-top: 0.4rem;
-      width: 0.2rem;
-      height: 0.2rem;
+      margin-top: rem(40);
+      width: rem(20);
+      height: rem(20);
       background-color: #ffc300;
     }
   }
