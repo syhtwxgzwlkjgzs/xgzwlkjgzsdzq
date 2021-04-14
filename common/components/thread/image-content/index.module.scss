@@ -1,0 +1,129 @@
+@import '@common/styles/fn/rem.scss';
+.indexImage {
+  .imageBox {
+    width: 100%;
+  }
+}
+.oneImage {
+  width: rem(343);
+  height: rem(260);
+  margin: 0 auto;
+  .oneImages {
+    width: 100%;
+    height: 100%;
+  }
+}
+.twoImage {
+  width: rem(343);
+  height: rem(260);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+  .twoImages {
+    display: block;
+    width: rem(170);
+  }
+}
+.threeImage {
+  display: flex;
+  width: rem(343);
+  height: rem(260);
+  margin: 0 auto;
+  flex-wrap:wrap;
+  .threeImageTop {
+    width: rem(343);
+    height: rem(128);
+    .threeImageTopImg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .threeImageLower {
+    width: rem(343);
+    height: rem(126);
+    display: flex;
+    justify-content: space-around;
+    .threeImageLowerImg {
+      width: rem(170);
+      height: rem(126);
+    }
+  }
+}
+.fourImage {
+  display: flex;
+  width: rem(343);
+  height: rem(260);
+  margin: 0 auto;
+  overflow: hidden;
+  justify-content: space-around;
+  .fourImagesTop {
+    width: rem(210);
+    height: rem(260);
+    .topImg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .fourImagesLower {
+    width: rem(129);
+    height: rem(260);
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-around;
+    .lowerImg {
+      display: block;
+      width: 100%;
+      height: rem(84);
+    }
+  }
+}
+.moreImage {
+  display: flex;
+  width: rem(343);
+  height: rem(260);
+  margin: 0 auto;
+  flex-wrap:wrap;
+  .moreImageTop {
+    width: 100%;
+    height: rem(126);
+    display: flex;
+    justify-content: space-around;
+    .moreImageTopImg {
+      display: block;
+      width: rem(169);
+      height: rem(126);
+    }
+  }
+  .moreImageLower {
+    width: 100%;
+    height: rem(111);
+    display: flex;
+    justify-content: space-around;
+    .moreImageLowers {
+      width: rem(111);
+      height: rem(111);
+      position: relative;
+      .moreImageLowerImg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      .modalBox {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #666;
+        opacity: 0.5;
+        top: 0;
+        text-align: center;
+        line-height: rem(111);
+        .imgSpan {
+          font-size: rem(20);
+          color: #fff;
+        }
+      }
+    }
+  }
+}

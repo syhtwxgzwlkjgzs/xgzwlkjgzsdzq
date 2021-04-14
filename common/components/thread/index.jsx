@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { ThreadCommonContext } from './utils';
 import Tip from './tip';
-import ImageContent from './imageContent';
+import ImageContent from './image-content';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
