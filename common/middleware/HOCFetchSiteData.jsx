@@ -34,7 +34,6 @@ export default function HOCFetchSiteData(Component) {
                 
                     // 获取站点信息
                     siteConfig = await readForum({}, ctx);
-
                     serverSite = { 
                         platform,
                         closeSite: siteConfig.code === -3005 ? siteConfig.data : null,
@@ -133,7 +132,6 @@ export default function HOCFetchSiteData(Component) {
         }
 
         setAppCommonStatus(result) {
-            console.log(reload)
             switch(result.code) {
                 case -3005: site.setCloseSiteConfig(result.data);
                 break;

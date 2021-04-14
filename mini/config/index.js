@@ -17,14 +17,17 @@ const config = {
   defineConstants: {
   },
   alias: {
-    '@constants': path.resolve(__dirname, '..', 'src/constants'),
-    '@components': path.resolve(__dirname, '..', 'src/components'),
-    '@utils': path.resolve(__dirname, '..', 'src/utils'),
-    '@pages': path.resolve(__dirname, '..', 'src/pages'),
-    '@store': path.resolve(__dirname, '..', 'src/store'),
-    '@styles': path.resolve(__dirname, '..', 'src/styles'),
-    '@config': path.resolve(__dirname, '..', 'config'),
+    '@components': path.resolve(__dirname, '../src/components'),
+    '@layout': path.resolve(__dirname, '../src/layout'),
+    '@utils': path.resolve(__dirname, '../src/utils'),
+    '@pages': path.resolve(__dirname, '../src/pages'),
+    '@config': path.resolve(__dirname, '../src/config'),
+    '@styles': path.resolve(__dirname, '../src/styles'),
+    // 公共目录
     '@common': path.resolve(__dirname, '../../common'),
+    '@server': path.resolve(__dirname, '../../common/server'),
+    '@store': path.resolve(__dirname, '../../common/server'),
+    '@constants': path.resolve(__dirname, '../src/constants'),
     'regenerator-runtime': path.resolve(__dirname, '../node_modules', 'regenerator-runtime'),
   },
   copy: {

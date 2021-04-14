@@ -92,3 +92,4 @@ $ npm run build:weapp
 ## 依赖
 - [Taro 3](http://taro-docs.jd.com/taro/docs/README)
 - [MobX 4](https://cn.mobx.js.org/)
+

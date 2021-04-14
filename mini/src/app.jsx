@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
-import { Provider } from 'mobx-react';
+import { inject, observer, Provider } from 'mobx-react';
 import initializeStore from '@common/store';
+import {readForum, readUser} from '@server';
 import './app.scss';
 
-const store = initializeStore();
-
 class App extends Component {
-  componentDidMount() {}
+
+  store = initializeStore();
+
+  async componentDidMount() {
+    const siteConfig = await readForum({});
+    console.log(siteConfig);
+  }
 
   /**
    * 在小程序环境中对应 app 的 onLaunch
@@ -56,7 +61,7 @@ class App extends Component {
 
   render() {
     return (
-      <Provider {...store}>
+      <Provider {...this.store}>
         {/* this.props.children 就是要渲染的页面 */}
         {this.props.children}
       </Provider>

@@ -198,3 +198,17 @@ import IndexH5Page from '@layout/index/h5';
 import IndexPCPage from '@layout/index/pc';
 import { readCategories } from '@server';
 ```
+
+## 目录规范
+- 文件使用`-`进行分割，例如:is-login
+- 变量名称统一使用小驼峰命名
+- 组件名称必须使用大驼峰命名
+
+## 组件规范
+- 必须有一个组件目录，如header目录
+- 目录下必须有index.jsx
+- 目录下必须有index.module.scss
+- 如果文件有私有组件，都统一存放在组件目录的components目录下，对应私有组件的目录规范参考组件规范
+
+
+## 验收标准
