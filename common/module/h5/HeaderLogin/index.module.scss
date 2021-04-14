@@ -1,5 +1,10 @@
 @import '@common/styles/mixin/login.scss';
+@import '@common/styles/fn/rem.scss';
 
 .banner {
   @include banner;
+  img {
+    width: rem(222);
+    height: rem(38);
+  }
 }

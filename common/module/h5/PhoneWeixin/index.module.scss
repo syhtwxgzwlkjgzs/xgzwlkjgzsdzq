@@ -1,15 +1,16 @@
 @import '../../../styles/mixin/login.scss';
+@import '@common/styles/fn/rem.scss';
 .container{
-  height: 126px;
+  height: rem(126);
   background: #fff;
   text-align: center;
-  padding-top: 40px;
+  padding-top: rem(40);
   .log{
-    height: 24px;
+    height: rem(24);
     text-align: center;
   }
   .button {
     @include button;
-    margin-top: 20px; 
+    margin-top: rem(20); 
   }
 }

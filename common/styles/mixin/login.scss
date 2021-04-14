@@ -1,40 +1,40 @@
+@import '@common/styles/fn/rem.scss';
 @mixin title {
   font-weight: 600;
-  font-size: 20px;
-  line-height: 30px;
+  font-size: rem(20);
+  line-height: rem(30);
   text-align: left;
   color: #0b0b37;
 }
 @mixin banner {
-  height: 140px;
+  height: rem(140);
   text-align: center;
   background-color: #2469f6;
   img {
-    margin-top: 67px;
+    margin-top: rem(67);
   }
 }
 @mixin input {
-  width: 327px;
-  input {
-    width: 327px;
-    height: 68px;
+  width: rem(327);
+  :global(.dzq-input__inner) {
+    height: rem(68);
     border: none;
     border-radius: 0;
-    border-bottom: 1px solid #eee;
+    border-bottom: rem(1) solid #eee;
   }
 }
 @mixin passwordInput {
   div{
-    top: 15px;
+    top: rem(15);
   }
 }
 @mixin button {
-  width: 327px;
-  height: 42px;
-  margin-top: 32px;
+  width: rem(327);
+  height: rem(42);
+  margin-top: rem(32);
 }
 @mixin functionalRegion {
-  margin-top: 16px;
+  margin-top: rem(16);
   text-align: center;
   .clickBtn{
     color: #2469f6;
@@ -42,18 +42,31 @@
   }
 }
 @mixin otherLoginText {
+  font-size: rem(12);
   text-align: center;
-  line-height: 26px;
+  line-height: rem(26);
   font-weight: normal;
   color: #c5c6ca;
 }
 @mixin otherLoginBtn {
   border-radius: 50%;
-  border: 1px solid #eee;
-  margin: 0 16px;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
+  border: rem(1) solid #eee;
+  margin: 0 rem(16);
+  width: rem(40);
+  height: rem(40);
+  line-height: rem(40);
   display: inline-block;
   text-align: center;
+}
+@mixin titleTips {
+  font-size: rem(16);
+  margin: rem(32) 0;
+  line-height: rem(30);
+  text-align: left;
+  color: #0b0b37;
+  img {
+    width: rem(30);
+    height: rem(30);
+    margin: 0 rem(8);
+  }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import { Input, Button } from '@discuzq/design';
+import { Button } from '@discuzq/design';
 import '@discuzq/design/styles/index.scss';
 import layout from './index.module.scss';
 import PhoneInput from '@common/module/h5/PhoneInput/index';
