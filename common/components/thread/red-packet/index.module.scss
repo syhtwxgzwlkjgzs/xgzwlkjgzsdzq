@@ -1,0 +1,29 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.container {
+    height: rem(104);
+    border-radius: rem($border-radius-small);
+    background: #fef9ec;
+    display: flex;
+    align-items: center;
+    .money {
+      flex: 0 0 rem(68);
+      height: rem(104);
+      border-radius: rem($border-radius-small) 0 0 rem($border-radius-small);
+      background: #e4414e;
+    }
+    .content {
+      height: rem(71);
+      border-radius: rem($border-radius-small) 0 0 rem($border-radius-small);
+      padding: rem($padding-10) rem($padding-4n);
+      font-weight: normal;
+      font-size: rem($font-size-middle);
+      line-height: rem($font-line-height-middle);
+      color: #0b0b37;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+}
