@@ -1,7 +1,7 @@
 /**
  * 针对给出的请求实例进行本地化配置
  */
-import { apiIns } from '@discuzq/sdk/src/api';
+import { apiIns } from '@discuzq/sdk/dist/api';
 import typeofFn from '@common/utils/typeof';
 import setAuthorization from '@common/utils/set-authorization';
 import setUserAgent from '@common/utils/set-user-agent';
@@ -36,7 +36,7 @@ http.interceptors.request.use(
   },
   (error) => {
     // 对请求错误做些什么
-    console.error(error);
+    console.error('request',error);
     return {
       code: -1,
       data: null,
@@ -54,7 +54,8 @@ http.interceptors.response.use((res) => {
     msg: data.Message,
   };
 }, (err) => {
-  console.error(err);
+  console.error('response',err.stack);
+  console.error('response',err.message);
   return {
     code: -1,
     data: null,

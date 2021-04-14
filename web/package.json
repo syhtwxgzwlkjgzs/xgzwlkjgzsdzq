@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "classnames": "2.3.1",
+    "@discuzq/design": "0.0.1-alpha.3",
+    "@discuzq/sdk": "0.0.1-alpha.0",
     "create-next-app": "10.0.6",
     "eslint": "7.19.0",
     "mobx": "4.15.7",
@@ -26,6 +28,7 @@
     "@babel/core": "7.11.1",
     "@babel/plugin-proposal-class-properties": "7.12.13",
     "@babel/plugin-proposal-decorators": "7.12.13",
+    "@discuzq/cli": "0.0.1-alpha.2",
     "@types/react": "17.0.3",
     "autoprefixer": "9.7.4",
     "babel-loader": "^8.2.2",
