@@ -1,0 +1,6 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.page {
+  padding: rem($padding-4n);
+}
