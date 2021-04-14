@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { Progress } from '@discuzq/design';
 
 import styles from './index.module.scss';
 
@@ -10,8 +11,10 @@ import styles from './index.module.scss';
  */
 
 const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0 }) => {
+  const percent = useMemo(() => (received > 0 ? (received / (received + remaining)) * 100 : 0), [remaining, received]);
   let texts = {};
   let className = '';
+  let progressTheme = '';
 
   if (type === POST_TYPE.RED_PACK) {
     texts = {
@@ -24,6 +27,7 @@ const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0 }) => {
       receive: '评论领红包',
     };
     className = styles.redPack;
+    progressTheme = 'danger';
   } else if (type === POST_TYPE.BOUNTY) {
     texts = {
       remaining: (
@@ -34,10 +38,19 @@ const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0 }) => {
       received: `已发放${received}元`,
     };
     className = styles.bounty;
+    progressTheme = 'default';
   }
 
   return (
     <div className={`${styles.container} ${className}`}>
+      <Progress
+        type="circle"
+        percent={percent}
+        className={styles.progress}
+        theme={progressTheme}
+        lineWidth={12}
+        isShowText={false}
+      />
       <img className={styles.icon} />
       <div className={styles.remaining}>{texts.remaining}</div>
       <div className={styles.received}>{texts.received}</div>
