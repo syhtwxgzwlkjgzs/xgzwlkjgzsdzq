@@ -13,7 +13,7 @@ const TrendingTopics = ({ data }) => {
   const router = useRouter();
 
   const onShowMore = useCallback(() => {
-    // router.push('/')
+    router.push('/search-result-topic');
   }, [router]);
   return (
     <>

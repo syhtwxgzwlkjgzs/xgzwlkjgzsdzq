@@ -14,8 +14,9 @@ const ActiveUsers = ({ data }) => {
   const router = useRouter();
 
   const onShowMore = useCallback(() => {
-    // router.push('/')
+    router.push('/search-result-user');
   }, [router]);
+
   return (
     <>
       <SectionTitle title="活跃用户" onShowMore={onShowMore} />
