@@ -31,13 +31,15 @@
 }
 
 .time {
+  margin-right: rem($margin-10);
   font-size: rem($font-size-label);
 }
 
 .location {
-  margin-left: rem($margin-10);
+  margin-right: rem($margin-10);
   display: flex;
   align-items: center;
+  
   span {
     margin-left: rem($margin-1n);
     font-size: rem($font-size-label);
@@ -45,7 +47,7 @@
 }
 
 .view {
-  margin-left: rem($margin-10);
+  margin-right: rem($margin-10);
   display: flex;
   align-items: center;
 
