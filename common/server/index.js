@@ -3,4 +3,7 @@ export { default as readUser } from './readUser';
 export { default as readForum } from './readForum';
 export { default as readThreadDetail } from './readThreadDetail';
 export { default as updateThreads } from './updateThreads';
+export { default as readCommentList } from './readCommentList';
+export { default as readReplyList } from './readReplyList';
+export { default as createPosts } from './createPosts';
 export { default as default } from './api';

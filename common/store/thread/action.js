@@ -12,8 +12,13 @@ class ThreadAction extends ThreadStore {
   }
 
   @action
-  setThreadFavorite() {
-    this.threadData.isFavorite = !this.threadData.isFavorite;
+  setThreadDetailField(key, data) {
+    this.threadData[key] = data;
+  }
+
+  @action
+  setCommentList(list = []) {
+    this.commentList = list;
   }
 }
 
