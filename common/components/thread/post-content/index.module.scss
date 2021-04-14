@@ -1,0 +1,42 @@
+.container {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 0.24rem;
+  font-size: 0.16rem !important;
+  color: #000;
+  max-width: 5.85rem;
+  margin-top: 0.03rem;
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: 0.16rem !important;
+  }
+  img {
+    max-width: 100%;
+    max-height: 2rem;
+    overflow: hidden;
+  }
+  /*
+  :global(.qq-emotion) {
+    height: 22px;
+    vertical-align: middle;
+    margin-top: -2px;
+  }
+  @media screen and (max-width: 1005px) {
+    max-height: 80px;
+    line-height: 20px;
+    max-width: 410px;
+    :global(.qq-emotion) {
+      height: 20px;
+      margin-top: -1px;
+    }
+  }
+  */
+}
