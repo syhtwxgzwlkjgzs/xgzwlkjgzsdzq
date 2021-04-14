@@ -10,7 +10,7 @@
     display: flex;
     .numText {
       line-height: rem(24);
-      font-size: rem(12);
+      font-size: rem($font-size-label);
       color: #8490A8;
       margin-left: rem(4);
     }
@@ -19,13 +19,13 @@
     display: flex;
     .division {
       line-height: rem(24);
-      font-size: rem(12);
+      font-size: rem($font-size-label);
       color: #8490A8;
       margin: 0 rem(4);
     }
     .commentNum {
       line-height: rem(24);
-      font-size: rem(12);
+      font-size: rem($font-size-label);
       color: #8490A8;
     }
   }
