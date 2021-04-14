@@ -1,7 +1,7 @@
 /**
  * 针对给出的请求实例进行本地化配置
  */
-import { apiIns } from '@discuzq/sdk/src/api';
+import { apiIns } from '@discuzq/sdk/dist/api';
 import typeofFn from '@common/utils/typeof';
 import setAuthorization from '@common/utils/set-authorization';
 import setUserAgent from '@common/utils/set-user-agent';
