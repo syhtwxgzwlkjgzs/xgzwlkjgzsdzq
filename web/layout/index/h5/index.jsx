@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { Button } from '@discuzq/design';
 import ThreadCommon from '@common/components/thread';
 import styles from './index.module.scss';
-console.log(process.env.DISCUZ_ENV)
 
 @inject('site')
 @inject('user')
