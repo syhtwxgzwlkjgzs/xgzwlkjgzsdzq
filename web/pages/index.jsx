@@ -39,6 +39,7 @@ class Index extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
+
     if (platform === 'pc') {
       return <IndexPCPage/>;
     }

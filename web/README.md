@@ -180,6 +180,22 @@ export default Index;
 
 所有页面的样式文件，必须以`xxx.module.scss`进行编写。Discuz!Q作为一个SPA应用，将使用`SCSS Module`来实现样式作用域保护。
 
+### 颜色
+所有的验收单位必须使用符合当前theme的颜色标准
+
+### 尺寸
+所有尺寸必须使用common中定义的scss变量进行使用
+
+示例
+```scss
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.text {
+    font-size: rem($font-size-label);
+    color: var(--color-error);
+}
+```
+
 ## 引用规则
 
 dzq-cli将为开发者提供快速引用指定目录的方式。
@@ -212,3 +228,15 @@ import { readCategories } from '@server';
 
 
 ## 验收标准
+
+所有页面开发完成必须通过以下测试：
+
+### SSR测试
+- 运行`npm run build`
+- 运行`npm run start`
+- 正常运行所有功能
+
+### CSR测试
+- 运行`npm run static`;
+- 运行`npm run start:static`;
+- 正常运行所有功能
