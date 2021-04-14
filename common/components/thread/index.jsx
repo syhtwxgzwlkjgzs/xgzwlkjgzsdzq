@@ -61,15 +61,14 @@ class Index extends React.Component {
                 <div className={styles.bottom}>
                     <BottomShare />
                 </div>
-
             </div>
     )
 
     render() {
       return (
-            <ThreadCommonContext.Provider value={{ dispatch: this.dispatch }}>
-                {this.renderThread()}
-            </ThreadCommonContext.Provider>
+        <ThreadCommonContext.Provider value={{ dispatch: this.dispatch }}>
+            {this.renderThread()}
+        </ThreadCommonContext.Provider>
       );
     }
 }

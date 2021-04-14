@@ -11,9 +11,9 @@ import Tip from '../tip';
  */
 const Index = ({ userImas = {}, wholeNum = 11, comment = 1, sharing = 0, datas = [] }) => <div className={style.user}>
     <div className={style.userImg}>
-      <dev className={style.portrait}>
+      <div className={style.portrait}>
         <Tip imgs={datas}></Tip>
-      </dev>
+      </div>
       <p className={style.numText}>
         {wholeNum}
       </p>
