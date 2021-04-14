@@ -1,0 +1,63 @@
+@import '@common/styles/mixin/text.scss';
+.container {
+  font-family: "PingFang SC";
+  .box {
+    height: 104px;
+    border-radius: 5px;
+    background: #fef9ec;
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    .money {
+      flex: 0 0 94px;
+      height: 104px;
+      border-radius: 5px 0px 0px 5px;
+      background: #e4414e;
+      font-family: PingFangSC-Semibold;
+      font-weight: normal;
+      font-size: 20px;
+      line-height: 104px;
+      color: #fff;
+      text-align: center;
+    }
+    .content {
+      height: 104px;
+      border-radius: 5px 0px 0px 5px;
+      padding: 10px 16px;
+      box-sizing: border-box;
+      .title {
+        width: 100%;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 29.67px;
+        height: 29.67px;
+        color: #0b0b37;
+        overflow: hidden;
+      }
+      .avatar {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #727170;
+      }
+      .username {
+        color: #2469F6;
+      }
+      .text {
+        height: 48px;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 26px;
+        color: #0b0b37;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+      }
+    }
+  }
+}
+.button {
+  width: 100%;
+  height: 36px;
+}
