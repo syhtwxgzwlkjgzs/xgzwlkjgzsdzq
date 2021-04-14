@@ -1,10 +1,13 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
+import { Button } from '@discuzq/design';
 import createService from '@common/service/thread';
 import layout from './layout.module.scss';
 import comment from './comment.module.scss';
 import topic from './topic.module.scss';
+
+import UserInfo from '@common/components/UserInfo/web/index';
 
 @inject('site')
 @inject('user')
@@ -14,11 +17,22 @@ class ThreadH5Page extends React.Component {
   constructor(props) {
     super(props);
     this.service = createService(props);
+
+    this.state = {
+      loading: false,
+    };
   }
 
   async onCollectionClick() {
+    if (this.state.loading) return;
+    this.setState({
+      loading: true,
+    });
     const id = this.props.thread?.threadData?.thread?.id;
     const { success, msg } = await this.service.collect(id);
+    this.setState({
+      loading: false,
+    });
     if (success) {
       console.log(msg);
     }
@@ -31,6 +45,14 @@ class ThreadH5Page extends React.Component {
   render() {
     const { thread } = this.props;
 
+    const userInfoProps = {
+      name: thread?.threadData?.author?.username || '',
+      avatar: thread?.threadData?.author?.avatar || '',
+      time: '5分钟前',
+      location: '腾讯大厦',
+      view: '98',
+    };
+
     return (
       <div className={layout.container}>
         <div className={layout.header}>
@@ -41,7 +63,7 @@ class ThreadH5Page extends React.Component {
         <div className={layout.body}>
           <div className={`${layout.top} ${topic.container}`}>
             <div className={topic.header}>
-              作者：{thread?.threadData?.author?.username}
+              <UserInfo {...userInfoProps}></UserInfo>
             </div>
             <div className={topic.body}>
               {thread?.threadData?.thread.postContent}
@@ -66,9 +88,9 @@ class ThreadH5Page extends React.Component {
 
         {/* 底部操作 */}
         <div className={layout.footer}>
-          <button type="primary" onClick={() => this.onCollectionClick()}>
+          <Button type="primary" loading={this.state.loading} onClick={() => this.onCollectionClick()}>
             {thread?.threadData?.isFavorite ? '取消收藏' : '收藏'}
-          </button>
+          </Button>
         </div>
       </div>
     );
