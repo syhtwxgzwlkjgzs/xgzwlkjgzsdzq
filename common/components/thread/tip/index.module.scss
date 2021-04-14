@@ -1,17 +1,20 @@
-.wrapper {
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.container {
   position: relative;
-  max-width: 0.44rem;
+  max-width: rem(44);
   .img {
-    border-radius: 0.12rem;
-    border: #fff solid 0.01rem;
-    width: 0.24rem;
+    border-radius: rem(12);
+    border: var(--color-white) solid rem(1);
+    width: rem(24);
   }
   .imgAfter {
     position: absolute;
     z-index: -1;
-    border-radius: 0.12rem;
-    right: -0.01rem;
+    border-radius: rem(12);
+    right: -rem(1);
     top: 0;
-    width: 0.24rem;
+    width: rem(24);
   }
 }
