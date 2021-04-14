@@ -26,8 +26,8 @@
     }
     .icon {
       position: absolute;
-      bottom: -rem(5);
-      right: -rem(5);
+      bottom: rem(-5);
+      right: rem(-5);
       border-radius: rem($border-radius-big);
       height: rem(20);
       width: rem(20);
