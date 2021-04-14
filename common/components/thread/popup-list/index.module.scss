@@ -1,0 +1,55 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.list {
+  overflow-y: auto;
+  max-height: 80vh;
+  min-height: 40vh;
+}
+.listItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: rem($padding-2n) rem($padding-4n);
+  .wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .header {
+    position: relative;
+    margin-right: rem(12);
+    .img {
+      width: rem(38);
+      border-radius: rem(19);
+    }
+    .icon {
+      position: absolute;
+      bottom: rem(-5);
+      right: rem(-5);
+      border-radius: rem($border-radius-big);
+      height: rem(20);
+      width: rem(20);
+      border: var(--color-white) solid rem(1);
+      text-align: center;
+      line-height: rem(20);
+      color: var(--color-white);
+    }
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    font-size: rem($font-size-primary);
+    .title {
+      color: #0b0b37;
+      line-height: rem(18);
+    }
+    .subTitle {
+      color: var(--color-text-secondary);
+      line-height: rem(18);
+
+    }
+  }
+}

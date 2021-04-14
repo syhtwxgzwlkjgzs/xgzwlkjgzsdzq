@@ -1,0 +1,23 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.container {
+  box-sizing: border-box;
+  padding: rem($padding-4n);
+  .header {
+    padding-bottom: rem(24);
+    padding-top: rem(16);
+  }
+  .content {
+    >* {
+      padding-bottom: 20px;
+    }
+  }
+  .bottom {
+    height: rem(52);
+    display: flex;
+    align-items: center;
+    border-top: var(--border-line-color) solid rem(1);
+    margin-top: rem(12);
+  }
+  
+}
