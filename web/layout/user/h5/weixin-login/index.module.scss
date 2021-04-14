@@ -1,23 +1,31 @@
 @import '@common/styles/mixin/login.scss';
+@import '@common/styles/fn/rem.scss';
 .container {
   height: 100vh;
+  .input {
+    @include input;
+    @include passwordInput;
+  }
 }
 .banner {
   @include banner;
 }
 .content {
-  padding: 48px 24px;
+  padding: rem(48) rem(24);
+  .button {
+    @include button;
+  }
   .title {
     @include title;
   }
   .otherLogin-title {
     @include otherLoginText;
-    margin-top: 80px;
-    font-size: 14px;
+    margin-top: rem(80);
+    font-size: rem(14);
   }
   .otherLogin-button{
     text-align: center;
-    margin: 16px;
+    margin: rem(16);
   }
   .otherLogin-button-weixin {
     @include otherLoginBtn;
@@ -25,10 +33,20 @@
   .otherLogin-button-user {
     @include otherLoginBtn;
   }
-  .otherLogin-tips{
+  .otherLogin-outer__tips{
     @include otherLoginText;
-    font-size: 12px;
-    margin-top: 32px;
+    margin-top: rem(32);
+  }
+  .otherLogin-within__tips{
+    @include otherLoginText;
+    margin-top: rem(180);
+  }
+  .functionalRegion {
+    @include functionalRegion;
+  }
+  .tips{
+    @include titleTips;
+    margin-bottom: 0; 
   }
 }
  

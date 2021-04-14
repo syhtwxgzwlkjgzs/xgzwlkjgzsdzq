@@ -1,4 +1,5 @@
 @import '../../../styles/mixin/login.scss';
+@import '@common/styles/fn/rem.scss';
 .input {
   @include input;
 }
@@ -6,24 +7,24 @@
   position: relative;
 }
 .sendCaptcha {
-  width: 94px;
-  height: 36px;
+  width: rem(94);
+  height: rem(36);
   position: absolute;
   right: 0;
-  bottom: 8px;
+  bottom: rem(8);
   text-align: center;
-  line-height: 36px;
-  border-radius: 5px;
+  line-height: rem(36);
+  border-radius: rem(5);
   color: #fff;
-  font-size: 14px;
+  font-size: rem(14);
   background: #2469f6; 
 }
 .captchaInput{
-  margin-top: 32px;
+  margin-top: rem(32);
   .captchaInput-title {
     font-weight: normal;
-    font-size: 14px;
-    line-height: 24px;
+    font-size: rem(14);
+    line-height: rem(24);
     text-align: left;
     color: #8590a6;
   }
@@ -34,16 +35,16 @@
 .captchaInput-input {
   text-align: center;
   display: inline-block;
-  font-size: 14px;
-  height: 52px;
-  width: 40px;
-  margin-right: 16px;
+  font-size: rem(14);
+  height: rem(52);
+  width: rem(40);
+  margin-right: rem(16);
   input {
-    line-height: 52px;
-    height: 52px;
-    width: 40px;
+    line-height: rem(52);
+    height: rem(52);
+    width: rem(40);
     border: none;
     border-radius: 0;
-    border-bottom: 1px solid #eee;
+    border-bottom: rem(1) solid #eee;
   }
 }

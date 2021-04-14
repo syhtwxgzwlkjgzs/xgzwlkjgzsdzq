@@ -1,12 +1,14 @@
-@import '../../../../../common/styles/mixin/login.scss';
+@import '@common/styles/mixin/login.scss';
+@import '@common/styles/fn/rem.scss';
 .container {
   height: 100vh;
 }
 .banner {
   @include banner;
 }
+
 .content {
-  padding: 48px 24px;
+  padding: rem(48) rem(24);
   .title {
     @include title;
   }
@@ -22,12 +24,12 @@
   }
   .otherLogin-title {
     @include otherLoginText;
-    margin-top: 123px;
-    font-size: 14px;
+    margin-top: rem(123);
+    font-size: rem(14);
   }
   .otherLogin-button{
     text-align: center;
-    margin: 16px;
+    margin: rem(16);
   }
   .otherLogin-button-weixin {
     @include otherLoginBtn;
@@ -37,8 +39,7 @@
   }
   .otherLogin-tips{
     @include otherLoginText;
-    font-size: 12px;
-    margin-top: 32px;
+    margin-top: rem(32);
   }
 }
  

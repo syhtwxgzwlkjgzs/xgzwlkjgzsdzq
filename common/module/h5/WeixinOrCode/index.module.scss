@@ -1,18 +1,19 @@
+@import '@common/styles/fn/rem.scss';
 .orCode{
-  width: 327px;
-  height: 290px;
-  margin-top: 10px;
+  width: rem(327);
+  height: rem(290);
+  margin-top: rem(10);
   background: #eee;
   position: relative;
   text-align: center;
   .orCode__img {
-    margin-top: 40px;
-    width: 150px;
-    height: 150px;
+    margin-top: rem(40);
+    width: rem(150);
+    height: rem(150);
     display: inline-block;
   }
   .orCode__text {
-    padding: 40px 20px 0;
+    padding: rem(40) rem(20) 0;
     text-align: left;
   }
 }
