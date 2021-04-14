@@ -1,42 +1,87 @@
+
+@import '@common/styles/variable/index.scss';
+@import '@common/styles/fn/rem.scss';
 .container {
+  width: 100%;
   position: relative;
-  display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  line-height: 0.24rem;
-  font-size: 0.16rem !important;
-  color: #000;
-  max-width: 5.85rem;
-  margin-top: 0.03rem;
-  p,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-size: 0.16rem !important;
-  }
-  img {
-    max-width: 100%;
-    max-height: 2rem;
-    overflow: hidden;
-  }
-  /*
+  .content {
+    position: relative;
+    display: inline-block;
+    line-height: rem($font-line-height-middle);
+    font-size: rem($font-size-middle) !important;
+    color: #0b0b37;
+    margin-top: rem($padding-1n);
+    word-break: break-all;
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-size: rem($font-size-middle) !important;
+    }
+    img {
+      max-width: 100%;
+      max-height: rem(2);
+      overflow: hidden;
+    }
+    /*
   :global(.qq-emotion) {
-    height: 22px;
-    vertical-align: middle;
-    margin-top: -2px;
+    height: rem(20);
+    margin-top: rem(-1);
+  } 
+  */
   }
-  @media screen and (max-width: 1005px) {
-    max-height: 80px;
-    line-height: 20px;
-    max-width: 410px;
-    :global(.qq-emotion) {
-      height: 20px;
-      margin-top: -1px;
+  .hideCover {
+    position: relative;
+    overflow: hidden;
+    max-height: rem(150);
+    &:after {
+      position: absolute;
+      display: block;
+      left: 0;
+      bottom: 0;
+      content: '';
+      width: 100%;
+      height: 100px;
+      background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
     }
   }
-  */
+  .showMore {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-weight: normal;
+    font-size: rem($font-size-primary);
+    line-height: rem($font-line-height-primary);
+    color: #0466ff;
+    .icon {
+      margin-left: rem(9);
+      transform: rotateZ(90deg);
+    }
+  }
+  .payInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .hidePercent {
+      font-weight: normal;
+      font-size: rem($font-size-primary);
+      line-height: rem($font-line-height-primary);
+      text-align: left;
+      color: #0466ff;
+    }
+    .payButton {
+      margin-top: rem($padding-4n);
+      line-height: rem(16.8);
+    }
+    .payButtonIcon {
+      margin-right: rem($padding-2n);
+      width: rem(13.93);
+      height: rem(16.62);
+      background-color: white;
+    }
+  }
 }
