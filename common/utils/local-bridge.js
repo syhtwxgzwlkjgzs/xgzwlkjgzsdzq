@@ -1,4 +1,4 @@
-import LocalBridge from '@discuzq/sdk/src/localstorage';
+import LocalBridge from '@discuzq/sdk/dist/localstorage';
 const localBridgeOptions = { prefix: '' };
 const locals = new LocalBridge(localBridgeOptions);
 
