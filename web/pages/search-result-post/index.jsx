@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import IndexH5Page from '@layout/search-result/h5';
-import IndexPCPage from '@layout/search-result/pc';
+import IndexH5Page from '@layout/search-result-post/h5';
+import IndexPCPage from '@layout/search-result-post/pc';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
