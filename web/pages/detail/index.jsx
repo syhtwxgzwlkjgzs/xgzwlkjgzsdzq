@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './index.module.scss';
 // import { Icon } from '@discuzq/design';
-import '@discuzq/design/styles/index.scss';
+// import '@discuzq/design/styles/index.scss';
 import CommentList from './components/comment-list/index';
 import readThreadDetail from '../../../common/server/readThreadDetail';
 export default class Detail extends React.Component {

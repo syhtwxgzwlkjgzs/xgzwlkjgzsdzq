@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './index.module.scss';
 import { Avatar } from '@discuzq/design';
-import '@discuzq/design/styles/index.scss';
+// import '@discuzq/design/styles/index.scss';
 
 export default class CommentList extends React.Component {
   static async getInitialProps() {
