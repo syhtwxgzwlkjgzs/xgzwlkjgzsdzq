@@ -3,6 +3,12 @@ import { Tabs, Button, Icon, Popup } from '@discuzq/design';
 import data from './data';
 import styles from './index.module.scss';
 
+/**
+ * 帖子点赞、打赏点击之后的弹出视图
+ * @prop {string}  visible 视图是否显示
+ * @prop {string}  onHidden 关闭视图的回调
+ */
+
 const Index = ({ visible = false, onHidden = () => {} }) => {
   const tabList = useRef([
     {
