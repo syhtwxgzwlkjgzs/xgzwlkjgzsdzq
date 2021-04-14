@@ -1,0 +1,5 @@
+@import '@common/styles/mixin/login.scss';
+
+.banner {
+  @include banner;
+}

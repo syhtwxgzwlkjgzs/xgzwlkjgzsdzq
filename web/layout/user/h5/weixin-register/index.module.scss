@@ -1,0 +1,23 @@
+@import '@common/styles/mixin/login.scss';
+.container {
+  height: 100vh;
+}
+.content {
+  padding: 48px 24px;
+  .title {
+    @include title;
+  }
+  .tips{
+    font-size: 16px;
+    margin: 32px 0;
+    line-height: 30px;
+    text-align: left;
+    color: #0b0b37;
+    img {
+      width: 30px;
+      height: 30px;
+      margin: 0 8px;
+    }
+  }
+}
+ 

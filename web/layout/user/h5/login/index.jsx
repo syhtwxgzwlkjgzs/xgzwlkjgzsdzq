@@ -5,6 +5,7 @@ import { Input, Button } from '@discuzq/design';
 import '@discuzq/design/styles/index.scss';
 import layout from './index.module.scss';
 import PhoneWeixin from '@common/module/h5/PhoneWeixin/index';
+import HeaderLogin from '@common/module/h5/HeaderLogin';
 
 
 @inject('site')
@@ -26,9 +27,7 @@ class LoginH5Page extends React.Component {
   render() {
     return (
         <div className={layout.container}>
-            <div className={layout.banner}>
-              <img src="https://main.qcloudimg.com/raw/ba94091fa7557eb8bed849ce577ea160.png" alt=""/>
-            </div>
+            <HeaderLogin/>
             <div className={layout.content}>
                 <div className={layout.title}>用户名登录</div>
                 {/* 输入框 start */}
@@ -58,9 +57,7 @@ class LoginH5Page extends React.Component {
                 <div className={layout['otherLogin-title']}>其他登录方式</div>
                 <div className={layout['otherLogin-button']}>
                     <span onClick={() => {
-                      this.setState({
-                        visible: true,
-                      });
+                      this.props.router.push('weixin-login');
                     }} className={layout['otherLogin-button-weixin']}>
                       <img src="/login-weixin.png" alt=""/>
                     </span>
