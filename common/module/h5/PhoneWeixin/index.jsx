@@ -1,7 +1,7 @@
 import React from 'react';
 import layout from './index.module.scss';
 import { Popup, Button } from '@discuzq/design';
-import '@discuzq/design/styles/index.scss';
+import '@discuzq/design/dist/styles/index.scss';
 
 
 class PhoneInput extends React.Component {
