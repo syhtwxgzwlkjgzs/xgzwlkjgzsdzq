@@ -15,7 +15,7 @@ import '@discuzq/design/styles/index.scss';
 @observer
 class SearchH5Page extends React.Component {
   onSearch = () => {
-    // this.props.router.push('/search-result');
+    this.props.router.push('/search-result');
   };
   onCancel = () => {
     this.props.router.back();
