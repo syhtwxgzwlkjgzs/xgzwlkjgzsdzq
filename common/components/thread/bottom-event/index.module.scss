@@ -1,0 +1,32 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.user {
+  width: rem(343);
+  // height: rem(24);
+  margin: 0 auto;
+  display: flex;
+  justify-content:space-between;
+  .userImg {
+    display: flex;
+    .numText {
+      line-height: rem(24);
+      font-size: rem($font-size-label);
+      color: #8490A8;
+      margin-left: rem(4);
+    }
+  }
+  .commentSharing {
+    display: flex;
+    .division {
+      line-height: rem(24);
+      font-size: rem($font-size-label);
+      color: #8490A8;
+      margin: 0 rem(4);
+    }
+    .commentNum {
+      line-height: rem(24);
+      font-size: rem($font-size-label);
+      color: #8490A8;
+    }
+  }
+}
