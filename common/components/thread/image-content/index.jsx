@@ -22,14 +22,14 @@ const Index = ({imgData = []}) => {
   }
   // 三张图片时
   const ThreeExhibition = () => {
-    let sun = imgData;
-    sun.splice(0,1);
+    let imgList = imgData;
+    imgList.splice(0,1);
     return <div className={img.threeImage}>
       <div className={img.threeImageTop}>
         <img className={img.threeImageTopImg} src={imgData[0].src} alt=""/>
       </div>
       <div className={img.threeImageLower}>
-        {sun.map((item, index) => {
+        {imgList.map((item, index) => {
           return <img key={index} className={img.threeImageLowerImg} src={item.src} alt=""/>
         })}
       </div>
@@ -37,13 +37,13 @@ const Index = ({imgData = []}) => {
   }
   // 四张图片时
   const FourExhibition = () => {
-    let numData = imgData.slice(1, 4);
+    let imgList = imgData.slice(1, 4);
     return  <div className={img.fourImage}>
       <div className={img.fourImagesTop}>
         <img className={img.topImg} src={imgData[0].src} alt=""/>
       </div>
       <div className={img.fourImagesLower}>
-        {numData.map((item, index) => {
+        {imgList.map((item, index) => {
           return <div key={index}>
             <img className={img.lowerImg} src={item.src} alt=""/>
           </div>
@@ -53,13 +53,13 @@ const Index = ({imgData = []}) => {
   }
   // 五张以及五张以上图片时
   const FiveExhibition = () => {
-    const Image = imgData.slice(0, 2);
+    const imgList = imgData.slice(0, 2);
     let numContent = 0;
     const MoreImage = () => {
       if (imgData.length === 5) {
-        const Images = imgData.slice(2, 5);
+        const sliceImg = imgData.slice(2, 5);
         return <div className={img.moreImageLower}>
-          { Images.map((item, index)=> {
+          { sliceImg.map((item, index)=> {
             return <div key={index} className={img.moreImageLowers}>
               <img className={img.moreImageLowerImg} src={item.src} alt=""/>
             </div>
@@ -88,7 +88,7 @@ const Index = ({imgData = []}) => {
     }
     return <div className={img.moreImage}>
       <div className={img.moreImageTop}>
-        {Image.map((item, index) => {
+        {imgList.map((item, index) => {
           return <img key={index} className={img.moreImageTopImg} src={item.src} alt=""/>
         })}
       </div>
