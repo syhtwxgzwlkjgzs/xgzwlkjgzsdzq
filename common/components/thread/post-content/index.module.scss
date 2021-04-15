@@ -1,0 +1,88 @@
+
+@import '@common/styles/variable/index.scss';
+@import '@common/styles/fn/rem.scss';
+
+.container {
+  width: 100%;
+  position: relative;
+  .content {
+    position: relative;
+    display: inline-block;
+    line-height: rem($font-line-height-middle);
+    font-size: rem($font-size-middle) !important;
+    color: #0b0b37;
+    margin-top: rem($padding-1n);
+    word-break: break-all;
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-size: rem($font-size-middle) !important;
+    }
+    img {
+      max-width: 100%;
+      max-height: rem(2);
+      overflow: hidden;
+    }
+    /*
+  :global(.qq-emotion) {
+    height: rem(20);
+    margin-top: rem(-1);
+  } 
+  */
+  }
+  .hideCover {
+    position: relative;
+    overflow: hidden;
+    max-height: rem(165);
+    &:after {
+      position: absolute;
+      display: block;
+      left: 0;
+      bottom: 0;
+      content: '';
+      width: 100%;
+      height: rem(165);
+      background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+    }
+  }
+  .showMore {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-weight: normal;
+    font-size: rem($font-size-primary);
+    line-height: rem($font-line-height-primary);
+    color: #0466ff;
+    .icon {
+      margin-left: rem(9);
+      transform: rotateZ(90deg);
+    }
+  }
+  .payInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .hidePercent {
+      font-weight: normal;
+      font-size: rem($font-size-primary);
+      line-height: rem($font-line-height-primary);
+      text-align: left;
+      color: #0466ff;
+    }
+    .payButton {
+      margin-top: rem($padding-4n);
+      line-height: rem(16.8);
+    }
+    .payButtonIcon {
+      margin-right: rem($padding-2n);
+      width: rem(13.93);
+      height: rem(16.62);
+      background-color: white;
+    }
+  }
+}
