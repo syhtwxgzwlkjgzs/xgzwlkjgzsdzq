@@ -64,4 +64,10 @@ export default {
       size: '10KB',
     },
   ],
+  audio: {
+    src: 'https://demo.dj63.com//2016/CLUB商业/club中文/20140101/夏日香气_主题曲_左右为难_电视剧歌曲_韩语.mp3',
+  },
+  video: {
+    src: 'https://mat1.gtimg.com/bbs/qqnewslite/20191024/mp4/pandastar-v.mp4',
+  },
 };
