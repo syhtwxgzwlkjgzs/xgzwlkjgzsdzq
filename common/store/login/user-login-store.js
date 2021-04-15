@@ -1,5 +1,7 @@
 import { observable, action } from 'mobx';
 import { usernameLogin } from '@server';
+import { get } from '../../utils/get';
+import setAccessToken from '../../utils/set-access-token';
 
 export default class UserLoginStore {
   @observable username = '';
@@ -19,13 +21,17 @@ export default class UserLoginStore {
     try {
       const loginResp = await usernameLogin({
         timeout: 3000,
-        url: 'https://discuz-dev.dnspod.dev/apiv3/users/username.login',
         data: {
           username: this.username,
           password: this.password,
         },
       });
       if (loginResp.code === 0) {
+        const accessToken = get(loginResp, 'data.accessToken', '');
+        // 种下 access_token
+        setAccessToken({
+          accessToken
+        })
         return loginResp.data;
       }
       throw {

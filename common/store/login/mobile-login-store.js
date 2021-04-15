@@ -81,7 +81,6 @@ export default class mobileLoginStore {
         try {
             const smsResp = await smsSend({
                 timeout: 3000,
-                url: 'https://discuz-dev.dnspod.dev/apiv3/users/sms.send',
                 data: {
                     mobile: this.mobile,
                     type: 'login',
@@ -124,7 +123,6 @@ export default class mobileLoginStore {
         try {
             const smsLoginResp = await smsLogin({
                 timeout: 3000,
-                url: 'https://discuz-dev.dnspod.dev/apiv3/users/sms.login',
                 data: {
                     mobile: this.mobile,
                     code: this.code

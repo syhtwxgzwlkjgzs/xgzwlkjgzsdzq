@@ -35,7 +35,6 @@ export default class UserRegisterStore {
     try {
       const registerResp = await usernameRegister({
         timeout: 3000,
-        url: 'https://discuz-dev.dnspod.dev/apiv3/users/username.register',
         data: {
           username: this.username,
           password: this.password,
