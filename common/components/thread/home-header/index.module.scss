@@ -1,0 +1,43 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/var.scss';
+@import '@common/styles/variable/index.scss';
+.container {
+  overflow: hidden;
+  height: rem(165);
+  // background: var(--color-primary);
+  position: relative;
+  .logoBox {
+    margin-top: rem(57.8);
+    max-height: rem(40);
+    overflow: hidden;
+    .logo {
+      display: block;
+      max-height: rem(40);
+      margin: 0 auto;
+    }
+  }
+  .siteInfo {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 rem($padding-10);
+    box-sizing: border-box;
+    position: absolute;
+    bottom: rem($font-line-height-middle);
+    .text {
+      font-size: rem($font-size-middle);
+      color: var( --color-white);
+      opacity: 0.5;
+    }
+    .content {
+      font-size: rem($font-size-middle);
+      color: var( --color-white);
+      padding-left: rem($padding-2n);
+    }
+    .shareIcon {
+      display: inline-block;
+      opacity: 0.5;
+      padding-right: rem($padding-2n);
+    }
+  }
+}
