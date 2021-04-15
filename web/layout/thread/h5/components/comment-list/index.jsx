@@ -18,17 +18,20 @@ export default class CommentList extends React.Component {
       console.log('回复');
     }
   }
+  handleLogClick = () => {
+    console.log(this.props);
+  }
 
   render() {
     return (
-      <div className={styles.commentList}>
+      <div className={styles.commentList} onClick={() => this.handleLogClick()}>
         <div className={styles.commentListAvatar}>
-          <Avatar image={this.props.data.avatar} circle={true}></Avatar>
+          <Avatar image={this.props.data.user.avatar} circle={true}></Avatar>
         </div>
         <div className={styles.commentListContent}>
           <div className={styles.commentListContentText}>
             <div className={styles.commentListName}>
-              {this.props.data.userName}
+              {this.props.data.user.username}
             </div>
             <div className={styles.commentListText}>
               {this.props.data.content}

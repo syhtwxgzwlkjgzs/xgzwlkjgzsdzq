@@ -1,13 +1,34 @@
 .container {
   background: #f5f7f8;
-  height: 1000px;
 }
 
 .header {
-  height: 54px;
+  height: 50px;
+  padding: 0 16px;
+  display: flex;
+  justify-content: space-between;
+  font-family: "PingFang SC";
+  font-weight: normal;
   background: #fff;
+  border-bottom: 1px solid #eee;
+  .number {
+    font-size: 16px;
+    line-height: 26px;
+    text-align: left;
+    color: #0b0b37;
+    line-height: 50px;
+  }
+  .sort {
+    font-size: 14px;
+    line-height: 50px;
+    text-align: left;
+    color: #8590a6;
+  }
 }
 
 .body {
-  min-height: 258px;
+  background: #fff;
+  .commentItems {
+    padding: 0 16px;
+  }
 }

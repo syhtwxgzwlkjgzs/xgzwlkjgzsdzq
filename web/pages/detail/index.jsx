@@ -94,36 +94,6 @@ export default class Detail extends React.Component {
     return (
       <div className={styles.index}>
         <div className={styles.content}>内容</div>
-        <div className={styles.comment}>
-          <div className={styles.commentHeader}>
-            <div className={styles.commentNum}>
-              共{1}条评论
-            </div>
-            <div className={styles.commentSort} onClick={this.commentSort}>
-              {
-                this.state.commentSort ? '评论从旧到新' : '评论从新到旧'
-              }
-            </div>
-          </div>
-          <div className={styles.commentItems}>
-            {
-              this.state.commentData.map((val, index) => <CommentList data={val} key={index}></CommentList>)
-            }
-          </div>
-        </div>
-        <div className={styles.detailFooter}>
-          <div className={styles.createComment}>
-            <p className={styles.createCommentText} onClick={this.createComment}>
-              写评论
-            </p>
-          </div>
-          <div className={styles.detailIcon}>
-            {/* <Icon name={'comment'}></Icon> */}
-            <div className={styles.footerIcon} onClick={() => this.footerIconClick('0')}>图标1</div>
-            <div className={styles.footerIcon} onClick={() => this.footerIconClick('1')}>图标2</div>
-            <div className={styles.footerIcon} onClick={() => this.footerIconClick('2')}>图标3</div>
-          </div>
-        </div>
       </div>
     );
   }

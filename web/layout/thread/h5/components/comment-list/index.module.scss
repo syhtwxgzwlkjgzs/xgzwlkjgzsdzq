@@ -1,13 +1,13 @@
 .commentList {
     display: flex;
-    margin-top: 11px;
+    padding-top: 10px;
     .commentListAvatar {
         margin-right: 11px;
     }
     .commentListContent {
+        width: 100%;
         .commentListContentText {
             padding: 8px;
-            width: calc(100% - 16px);
             border-radius: 5px;
             background: #f5f7f8;
             .commentListName {
