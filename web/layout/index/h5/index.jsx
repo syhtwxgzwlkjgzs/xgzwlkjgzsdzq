@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import Link from 'next/link';
 import { Button } from '@discuzq/design';
-import ThreadCommon from '@common/components/thread';
+import ThreadContent from '@common/components/thread';
 import styles from './index.module.scss';
 
 @inject('site')
@@ -23,7 +23,7 @@ class IndexH5Page extends React.Component {
         <Link href='/detail'>detauil</Link>
         <Link href='/user'>user</Link>
         <Button>Fuck</Button>
-        <ThreadCommon />
+        <ThreadContent />
       </div>
     );
   }
