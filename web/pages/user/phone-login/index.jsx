@@ -6,7 +6,15 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 import HOCWithNoLogin from '@common/middleware/HOCWithNoLogin';
 
 @inject('site')
+@inject('mobileLogin')
 class LoginPhone extends React.Component {
+  async componentDidMount() {
+    try {
+      await this.props.mobileLogin.login();
+    } catch (e) {
+      console.log(e)
+    }
+  }
   render() {
     const { site } = this.props;
     const { platform } = site;

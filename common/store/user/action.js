@@ -27,6 +27,11 @@ class UserAction extends SiteStore {
     this.userInfo = null;
     this.noUserInfo = false;
   }
+
+  @action
+  setAccessToken(accessToken) {
+    this.accessToken = accessToken;
+  }
 }
 
 export default UserAction;

@@ -6,7 +6,11 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 import HOCWithNoLogin from '@common/middleware/HOCWithNoLogin';
 
 @inject('site')
+@inject('mobileRegister')
 class Register extends React.Component {
+  componentDidMount() {
+    this.props.mobileRegister.sendCode();
+  }
   render() {
     const { site } = this.props;
     const { platform } = site;

@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import { Input, Checkbox, Radio, Upload, Button, Icon } from '@discuzq/design';
-import '@discuzq/design/styles/index.scss';
+import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 
 
