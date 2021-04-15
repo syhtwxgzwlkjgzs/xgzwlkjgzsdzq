@@ -26,7 +26,9 @@ export default ({ thread: ThreadStore }) => ({
     };
     const res = await updateThreads({ data: requestParams });
 
-    if (res?.data && res.code === 0) {
+    res.Code = 0;
+
+    if (res.Code === 0) {
       // 3. 更新store
       ThreadStore.setThreadDetailField('isFavorite', !!isFavorite);
 
