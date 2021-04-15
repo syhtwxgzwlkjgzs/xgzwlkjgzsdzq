@@ -12,7 +12,7 @@ import RewardQuestion from './reward-question';
 import VideoPlay from './video-play';
 import BottomEvent from './bottom-event';
 import UserInfo from './user-info';
-import BottomShare from './bottom-share';
+import AttachmentView from './attachment-view';
 import dataSource from './data';
 import styles from './index.module.scss';
 
@@ -56,6 +56,7 @@ class Index extends React.Component {
               title={dataSource.goods.title}
           />
           <AudioPlay />
+          <AttachmentView attachments={dataSource.attachments} />
       </div>
     )
 

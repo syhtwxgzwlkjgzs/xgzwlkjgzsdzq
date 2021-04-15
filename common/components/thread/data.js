@@ -52,4 +52,16 @@ export default {
     comment: 5,
     sharing: 5,
   },
+  attachments: [
+    {
+      type: 'doc',
+      name: '重构文档',
+      size: '10KB',
+    },
+    {
+      type: 'doc',
+      name: '重构文档',
+      size: '10KB',
+    },
+  ],
 };
