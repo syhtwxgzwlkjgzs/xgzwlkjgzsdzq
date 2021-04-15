@@ -1,0 +1,28 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.list {
+  width: 100%;
+  .item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 rem($padding-4n);
+    height: rem(36);
+    border-bottom: 1px solid var(--border-line-color);
+    .prefix {
+      font-size: rem($font-size-primary);
+      line-height: rem($font-line-height-primary);
+      color: var(--color-text-secondary);
+      margin-right: rem($padding-4n);
+      word-break: keep-all;
+    }
+    .title {
+      font-size: rem($font-size-primary);
+      line-height: rem($font-line-height-primary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}
