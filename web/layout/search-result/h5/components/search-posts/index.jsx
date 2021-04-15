@@ -5,10 +5,11 @@ import { Post } from '../../../../../components/search-result-item';
 import styles from './index.module.scss';
 
 /**
- * 热门内容
+ * 帖子搜索结果
  * @prop {object[]} data 帖子数据
+ * @prop {function} onItemClick 帖子点击事件
  */
-const PopularContents = ({ data, onItemClick }) => (
+const SearchPosts = ({ data, onItemClick }) => (
   <div className={styles.list}>
     {data.map((item, index, arr) => (
       <Post key={index} data={item} onClick={onItemClick} divider={index !== arr.length - 1} />
@@ -16,4 +17,4 @@ const PopularContents = ({ data, onItemClick }) => (
   </div>
 );
 
-export default React.memo(PopularContents);
+export default React.memo(SearchPosts);

@@ -5,14 +5,12 @@ import styles from './index.module.scss';
 
 /**
  * 栏目头部
- * @prop {string} icon 图标url
  * @prop {string} title 标题
  * @prop {function} onShowMore 查看更多事件
  */
-const TrendingTopics = ({ icon, title, onShowMore }) => (
+const TrendingTopics = ({  title, onShowMore }) => (
   <div className={styles.container}>
     <div className={styles.left}>
-      <img src={icon} />
       <div className={styles.title}>{title}</div>
     </div>
     <div className={styles.right}>
