@@ -1,0 +1,12 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.list {
+  height: 100%;
+  min-height: 500px;
+}
+:global {
+  .dzq-pull-refresh__loading {
+    font-size: rem($font-size-primary);
+  }
+}
