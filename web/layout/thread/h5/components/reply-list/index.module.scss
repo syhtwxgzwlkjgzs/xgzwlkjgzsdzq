@@ -1,0 +1,67 @@
+.replyList {
+    display: flex;
+    padding-top: 10px;
+    .replyListAvatar {
+        margin-right: 11px;
+    }
+    .replyListContent {
+        width: 100%;
+        .replyListContentText {
+            padding: 8px;
+            border-radius: 5px;
+            background: #f5f7f8;
+            .replyListName {
+                font-family: 'PingFangSC-Semibold';
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 17.8px;
+                text-align: left;
+                color: #0b0b37;
+            }
+            .replyListText {
+                font-family: 'PingFang SC';
+                font-weight: normal;
+                font-size: 16px;
+                line-height: 26px;
+                text-align: left;
+                color: #0b0b37;
+                .replyedUserName {
+                    font-family: 'PingFangSC-Semibold';
+                    font-weight: normal;
+                    font-size: 14px;
+                    line-height: 17.8px;
+                    text-align: left;
+                    color: #2469f6;
+                }
+                .replyedAvatar {
+                    display: inline-block;
+                    margin-right: 6px;
+                    position: relative;
+                    top: 6px;
+                }
+            }
+        }
+        .replyListFooter {
+            display: flex;
+            font-family: 'PingFangSC-Regular';
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 16.8px;
+            text-align: left;
+            color: #8590a6;
+            margin-top: 8px;
+            .replyTime {
+                flex: 1;
+            }
+            .replyLiked {
+                flex: 1;
+            }
+            .replyReply {
+                flex: 1;
+            }
+            .replyDelete {
+                flex: 1;
+            }
+        }
+    }
+}
