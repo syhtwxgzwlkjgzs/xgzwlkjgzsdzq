@@ -1,10 +1,9 @@
-@import '@common/styles/fn/rem.scss';
 @import '@common/styles/var.scss';
+@import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 .container {
   overflow: hidden;
   height: rem(165);
-  // background: var(--color-primary);
   position: relative;
   .logoBox {
     margin-top: rem(57.8);
