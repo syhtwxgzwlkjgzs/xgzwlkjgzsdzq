@@ -16,19 +16,19 @@ import '@discuzq/design/dist/styles/index.scss';
 @observer
 class SearchH5Page extends React.Component {
   onSearch = (keyword) => {
-    this.props.router.push(`/search-result?keyword=${keyword || ''}`);
+    this.props.router.push(`/search/result?keyword=${keyword || ''}`);
   };
 
   redirectToSearchResultPost = () => {
-    this.props.router.push('/search-result-post');
+    this.props.router.push('/search/result-post');
   };
 
   redirectToSearchResultUser = () => {
-    this.props.router.push('/search-result-user');
+    this.props.router.push('/search/result-user');
   };
 
   redirectToSearchResultTopic = () => {
-    this.props.router.push('/search-result-topic');
+    this.props.router.push('/search/result-topic');
   };
   onUserClick = data => console.log('user click', data);
   onTopicClick = data => console.log('topic click', data);
