@@ -2,4 +2,8 @@ export { default as readCategories } from './readCategories';
 export { default as readUser } from './readUser';
 export { default as readForum } from './readForum';
 export { default as readThreadDetail } from './readThreadDetail';
+export { default as usernameLogin } from './usernameLogin';
+export { default as usernameRegister } from './usernameRegister';
+export { default as smsSend } from './smsSend';
+export { default as smsLogin } from './smsLogin';
 export { default as default } from './api';

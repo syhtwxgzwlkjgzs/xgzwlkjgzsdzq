@@ -24,6 +24,36 @@ class LoginH5Page extends React.Component {
       visible: false,
     });
   };
+
+  handleUsernameChange = (e) => {
+    this.props.userLogin.username = e.target.value;
+  }
+
+  handlePasswordChange = (e) => {
+    this.props.userLogin.password = e.target.value;
+  }
+
+  handleLoginButtonClick = async () => {
+    try {
+      const loginData = await this.props.userLogin.login();
+      Toast.success({
+        content: '登录成功',
+        hasMask: false,
+        duration: 1000
+      })
+      // FIXME: Toast 暂时不支持回调能力
+      setTimeout(() => {
+        
+      }, 1000);
+    } catch (e) {
+      Toast.error({
+        content: e.Message,
+        hasMask: false,
+        duration: 1000
+      }) 
+    }
+  }
+
   render() {
     return (
       <div className={layout.container}>
@@ -35,9 +65,7 @@ class LoginH5Page extends React.Component {
             className={layout.input}
             value={this.props.userLogin.username}
             placeholder="输入您的用户名"
-            onChange={(e) => {
-              this.props.userLogin.username = e.target.value;
-            }}
+            onChange={this.handleUsernameChange}
           />
           <Input
             clearable={false}
@@ -45,27 +73,14 @@ class LoginH5Page extends React.Component {
             mode="password"
             value={this.props.userLogin.password}
             placeholder="输入您的登录密码"
-            onChange={(e) => {
-              this.props.userLogin.password = e.target.value;
-            }}
+            onChange={this.handlePasswordChange}
           />
           {/* 输入框 end */}
           {/* 登录按钮 start */}
           <Button
             className={layout.button}
             type="primary"
-            onClick={async () => {
-              console.log('login');
-              try {
-                await this.props.userLogin.login();
-              } catch (e) {
-                Toast.error({
-                  content: e.Message,
-                  hasMask: false,
-                  duration: 1000
-                }) 
-              }
-            }}
+            onClick={this.handleLoginButtonClick}
           >
             登录
           </Button>
