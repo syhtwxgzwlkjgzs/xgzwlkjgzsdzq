@@ -7,10 +7,7 @@ import styles from './index.module.scss';
  * @prop {string}    imgs 头像数据数组
  */
 
-const Index = ({ imgs = [
-  'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
-  'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
-] }) => {
+const Index = ({ imgs = [] }) => {
   const [visible, setVisible] = useState(false);
 
   const onClick = () => {

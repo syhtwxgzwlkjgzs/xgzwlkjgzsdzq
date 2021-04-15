@@ -44,9 +44,24 @@ export default {
     avatar: 'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
   },
   bottomEvent: {
-    datas: [
+    userImgs: [
       'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
       'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
     ],
+    wholeNum: 10,
+    comment: 5,
+    sharing: 5,
   },
+  attachments: [
+    {
+      type: 'doc',
+      name: '重构文档',
+      size: '10KB',
+    },
+    {
+      type: 'doc',
+      name: '重构文档',
+      size: '10KB',
+    },
+  ],
 };

@@ -37,7 +37,7 @@
   .hideCover {
     position: relative;
     overflow: hidden;
-    max-height: rem(158);
+    max-height: rem(165);
     &:after {
       position: absolute;
       display: block;
@@ -45,7 +45,7 @@
       bottom: 0;
       content: '';
       width: 100%;
-      height: rem(158);
+      height: rem(165);
       background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
     }
   }

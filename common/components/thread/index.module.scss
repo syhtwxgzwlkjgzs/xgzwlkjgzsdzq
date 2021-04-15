@@ -9,7 +9,7 @@
   }
   .content {
     >* {
-      padding-bottom: 20px;
+      margin-bottom: rem(16);
     }
   }
   .bottom {
@@ -19,5 +19,16 @@
     border-top: var(--border-line-color) solid rem(1);
     margin-top: rem(12);
   }
-  
+  .button {
+    width: 100%;
+    height: rem(36);
+    font-size: rem($font-size-primary);
+    line-height: rem(36);
+    padding: 0;
+    margin-bottom: rem(16);
+    .icon {
+      font-size: rem($font-size-primary);
+      margin-right: rem($margin-10);
+    }
+  }
 }
