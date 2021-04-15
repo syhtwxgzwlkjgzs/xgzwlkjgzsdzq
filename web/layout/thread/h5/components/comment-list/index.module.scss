@@ -1,53 +1,78 @@
 .commentList {
-    display: flex;
-    padding-top: 10px;
-    .commentListAvatar {
-        margin-right: 11px;
-    }
-    .commentListContent {
-        width: 100%;
-        .commentListContentText {
-            padding: 8px;
-            border-radius: 5px;
-            background: #f5f7f8;
-            .commentListName {
-                font-family: "PingFangSC-Semibold";
-                font-weight: normal;
-                font-size: 14px;
-                line-height: 17.8px;
-                text-align: left;
-                color: #b0b0c7;
-            }
-            .commentListText {
-                font-family: "PingFang SC";
-                font-weight: normal;
-                font-size: 16px;
-                line-height: 26px;
+    .header {
+        .showGet {
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px 0 0 0;
+            .icon {
+                font-size: 12px;
                 text-align: left;
                 color: #0b0b37;
             }
-        }
-        .commentListFooter {
-            .commentBtn {
-                display: flex;
-                font-family: PingFangSC-Regular;
+            .showMoneyNum {
+                font-family: 'PingFangSC-Regular';
                 font-weight: normal;
-                font-size: 14px;
-                line-height: 16.8px;
+                font-size: 12px;
                 text-align: left;
-                color: #8590a6;
-                margin-top: 8px;
-                .commentTime {
-                    flex: 1;
+                color: #0b0b37;
+                margin-left: 10px;
+                .moneyNumber {
+                    color: #f61f40;
                 }
-                .commentLiked {
-                    flex: 1;
+            }
+        }
+    }
+    .content {
+        display: flex;
+        padding-top: 10px;
+        .commentListAvatar {
+            margin-right: 11px;
+        }
+        .commentListContent {
+            width: 100%;
+            .commentListContentText {
+                padding: 8px;
+                border-radius: 5px;
+                background: #f5f7f8;
+                .commentListName {
+                    font-family: "PingFangSC-Semibold";
+                    font-weight: normal;
+                    font-size: 14px;
+                    line-height: 17.8px;
+                    text-align: left;
+                    color: #b0b0c7;
                 }
-                .commentReply {
-                    flex: 1;
+                .commentListText {
+                    font-family: "PingFang SC";
+                    font-weight: normal;
+                    font-size: 16px;
+                    line-height: 26px;
+                    text-align: left;
+                    color: #0b0b37;
                 }
-                .commentDelete {
-                    flex: 1;
+            }
+            .commentListFooter {
+                .commentBtn {
+                    display: flex;
+                    font-family: PingFangSC-Regular;
+                    font-weight: normal;
+                    font-size: 14px;
+                    line-height: 16.8px;
+                    text-align: left;
+                    color: #8590a6;
+                    margin-top: 8px;
+                    .commentTime {
+                        flex: 1;
+                    }
+                    .commentLiked {
+                        flex: 1;
+                    }
+                    .commentReply {
+                        flex: 1;
+                    }
+                    .commentDelete {
+                        flex: 1;
+                    }
                 }
             }
         }
