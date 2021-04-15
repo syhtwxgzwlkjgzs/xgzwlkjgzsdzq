@@ -8,11 +8,16 @@
   flex-direction: row;
   justify-content: space-between;
   box-sizing: border-box;
+  border-radius: rem(5);
+  background: var(--background-color-text);
   .image {
     flex: none;
     width: rem(82);
     height: rem(82);
     object-fit: cover;
+    &.empty{
+      background-color: var(--mask-background-color);
+    }
   }
   .content {
     flex: 1;
