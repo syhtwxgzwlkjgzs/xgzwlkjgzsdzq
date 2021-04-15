@@ -1,0 +1,30 @@
+@import '@common/styles/variable/index.scss';
+@import '@common/styles/fn/rem.scss';
+
+.container {
+  background: var(--color-white);
+}
+
+.main {
+  background: var(--color-white);
+  padding: rem($margin-4n);
+}
+
+.button {
+  width: 100%;
+}
+
+.input {
+  margin-bottom: rem($margin-4n);
+  width: 100%;
+}
+
+.upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  span {
+    margin-top: rem($margin-1n);
+  }
+}
