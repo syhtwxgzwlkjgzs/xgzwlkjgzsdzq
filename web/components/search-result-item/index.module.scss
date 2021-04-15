@@ -1,2 +1,42 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
+
+
+/* topic */
+.topic {
+  padding: rem($padding-2n) rem($padding-4n);
+  border-bottom: 1px solid var(--border-line-color);
+  &:first-child {
+    padding-top: 0;
+  }
+  &:last-child {
+    border-bottom: 0;
+  }
+  .title {
+    font-size: rem($font-size-middle);
+    line-height: rem($font-line-height-primary);
+    font-weight: var(--font-weight-bold);
+  }
+  .content {
+    font-size: rem($font-size-primary);
+    line-height: rem($font-line-height-small);
+    margin-top: 0 rem($padding-2n);
+  }
+  .tags {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 0 rem($padding-2n);
+    .tag {
+      font-size: rem($font-size-label);
+      line-height: rem($font-line-height-small);
+      margin-right: rem($padding-2n);
+      color: var(--color-text-secondary);
+    }
+  }
+}
+  
+.hr {
+  height: rem(10);
+  background-color: var(--background-color);
+}

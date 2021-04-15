@@ -4,9 +4,18 @@
 .page {
   padding-top: rem($padding-4n);
 }
+.searchInput {
+  padding: 0 rem($padding-4n);
+}
 .section {
   padding: rem($padding-4n);
-  padding-top: 0;
+  padding-top: rem($padding-2n);
+  &.searchPosts{
+    padding-bottom: 0;
+  }
+  &.searchTopics{
+    padding-bottom: 0;
+  }
 }
 .hr {
   height: rem(10);
