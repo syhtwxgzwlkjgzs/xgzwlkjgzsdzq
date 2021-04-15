@@ -1,0 +1,76 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.list {
+  padding: rem($padding-4n) 0;
+  padding-bottom: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  .item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 50%;
+    font-size: rem($font-size-primary);
+    margin-bottom: rem(12);
+    .index {
+      font-size: inherit;
+      line-height: rem($font-line-height-primary);
+      margin-right: rem($padding-2n);
+      width: rem(14);
+      text-align: center;
+    }
+    .text {
+      font-size: inherit;
+      line-height: rem($font-line-height-primary);
+      width: rem(140);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  .footerItem {
+    margin-bottom: 0;
+  }
+}
+
+.itemIndex1 {
+  color: var(--color-error);
+}
+.itemIndex2 {
+  color: var(--color-error);
+  opacity: 0.8;
+}
+.itemIndex3 {
+  color: var(--color-error);
+  opacity: 0.6;
+}
+.itemIndex4 {
+  color: var(--color-error);
+  opacity: 0.5;
+}
+.itemIndex5 {
+  color: #ffc300;
+}
+.itemIndex6 {
+  color: #ffc300;
+  opacity: 0.8;
+}
+.itemIndex7 {
+  color: #ffc300;
+  opacity: 0.6;
+}
+.itemIndex8 {
+  color: #ffc300;
+  opacity: 0.5;
+}
+.itemIndex9 {
+  color: #ffc300;
+  opacity: 0.4;
+}
+.itemIndex10 {
+  color: #ffc300;
+  opacity: 0.3;
+}
