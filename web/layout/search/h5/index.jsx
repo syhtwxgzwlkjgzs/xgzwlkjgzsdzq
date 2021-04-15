@@ -4,12 +4,13 @@ import { withRouter } from 'next/router';
 
 // import SearchInput from '@components/search-input';
 import SearchInput from '.././../../components/search-input';
+import SectionTitle from './components/section-title';
 import TrendingTopics from './components/trending-topics';
 import ActiveUsers from './components/active-users';
 import PopularContents from './components/popular-contents';
 
 import styles from './index.module.scss';
-import '@discuzq/design/styles/index.scss';
+import '@discuzq/design/dist/styles/index.scss';
 
 @inject('site')
 @observer
@@ -17,6 +18,19 @@ class SearchH5Page extends React.Component {
   onSearch = () => {
     this.props.router.push('/search-result');
   };
+
+  redirectToSearchResultPost = () => {
+    this.props.router.push('/search-result-post');
+  };
+
+  redirectToSearchResultUser = () => {
+    this.props.router.push('/search-result-user');
+  };
+
+  redirectToSearchResultTopic = () => {
+    this.props.router.push('/search-result-topic');
+  };
+
   onCancel = () => {
     this.props.router.back();
   };
@@ -26,16 +40,19 @@ class SearchH5Page extends React.Component {
       <div className={styles.page}>
         <div className={styles.section}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} />
+          <SectionTitle title="潮流话题" onShowMore={this.redirectToSearchResultTopic} />
           <TrendingTopics data={TrendingTopicsData} />
         </div>
         <div className={styles.hr} />
         <div className={styles.section}>
+          <SectionTitle title="活跃用户" onShowMore={this.redirectToSearchResultUser} />
           <ActiveUsers data={ActiveUsersData} />
         </div>
         <div className={styles.hr} />
         <div className={styles.section}>
-          <PopularContents data={[]} />
+          <SectionTitle title="热门内容" onShowMore={this.redirectToSearchResultPost} />
         </div>
+        <PopularContents data={Array(1).fill('')} />
       </div>
     );
   }

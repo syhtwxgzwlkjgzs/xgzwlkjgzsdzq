@@ -9,19 +9,19 @@ import styles from './index.module.scss';
  * @prop {string} title 标题
  * @prop {function} onShowMore 查看更多事件
  */
-const TrendingTopics = ({ icon, title, onShowMore }) => {
-  return (
-    <div className={styles.container}>
-      <div className={styles.left}>
-        <img />
-        <div className={styles.title}>{title}</div>
-      </div>
-      <div className={styles.right}>
-        <div onClick={onShowMore} className={styles.more}>更多</div>
-        {/* <Icon name="RightOutlined" size={7} /> */}
-      </div>
+const TrendingTopics = ({ icon, title, onShowMore }) => (
+  <div className={styles.container}>
+    <div className={styles.left}>
+      <img src={icon} />
+      <div className={styles.title}>{title}</div>
     </div>
-  );
-};
+    <div className={styles.right}>
+      <div onClick={onShowMore} className={styles.more}>
+        更多
+      </div>
+      <Icon name="RightOutlined" size={7} />
+    </div>
+  </div>
+);
 
 export default React.memo(TrendingTopics);

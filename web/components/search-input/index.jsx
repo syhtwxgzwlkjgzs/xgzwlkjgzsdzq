@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input } from '@discuzq/design';
+import { Input, Icon } from '@discuzq/design';
 
 import styles from './index.module.scss';
 
@@ -10,14 +10,13 @@ import styles from './index.module.scss';
  * @prop {function} onCancel 取消事件
  */
 
-const SearchInput = ({ onSearch, onCancel  }) => {
+const SearchInput = ({ onSearch, onCancel }) => {
   const [value, setValue] = React.useState('');
 
   return (
     <div className={styles.container}>
       <div className={styles.inputWrapper}>
-        {/* <Icon name="SearchOutlined" size={16} /> 使用报错*/}
-        <div className={styles.icon}></div>
+        <Icon name="SearchOutlined" size={16} />
         <Input
           clearable={true}
           value={value}
@@ -27,7 +26,7 @@ const SearchInput = ({ onSearch, onCancel  }) => {
         />
       </div>
       <div className={styles.cancel} onClick={onCancel}>
-         取消
+        取消
       </div>
     </div>
   );
