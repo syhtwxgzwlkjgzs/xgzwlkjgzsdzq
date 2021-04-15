@@ -1,0 +1,23 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.page {
+  padding-top: rem($padding-4n);
+}
+.searchInput {
+  padding: 0 rem($padding-4n);
+}
+.section {
+  padding: rem($padding-4n);
+  padding-top: rem($padding-2n);
+  &.searchPosts{
+    padding-bottom: 0;
+  }
+  &.searchTopics{
+    padding-bottom: 0;
+  }
+}
+.hr {
+  height: rem(10);
+  background-color: var(--background-color);
+}
