@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import ThreadPostStore from './store';
-import { readEmoji, readFollow, readProcutAnalysis } from '@common/server';
+import { readEmoji, readFollow, readProcutAnalysis, readTopics } from '@common/server';
 import { LOADING_TOTAL_TYPE } from '@common/constants/thread-post';
 
 class ThreadPostAction extends ThreadPostStore {
@@ -36,6 +36,7 @@ class ThreadPostAction extends ThreadPostStore {
         type: 1,
         ...filter,
       },
+      page,
     };
     this.setLoadingStatus(LOADING_TOTAL_TYPE.follow, true);
     // TODO: 待sdk更新后在去掉 isValidate
@@ -62,6 +63,25 @@ class ThreadPostAction extends ThreadPostStore {
     const { code, data = {} } = ret;
     if (code === 0) this.setProduct(data);
     this.setLoadingStatus(LOADING_TOTAL_TYPE.product, false);
+    return ret;
+  }
+
+  @action.bound
+  async fetchTopic(options = {}) {
+    this.setLoadingStatus(LOADING_TOTAL_TYPE.topic, true);
+    const params = {
+      page: 1,
+      perPage: 20,
+      ...options,
+    };
+    const ret = await readTopics({ params });
+    const { code, data } = ret;
+    const { pageData = [] } = data || {};
+    if (code === 0) {
+      if (params.page === 1) this.setTopic(pageData);
+      else this.appendTopic(pageData);
+    }
+    this.setLoadingStatus(LOADING_TOTAL_TYPE.topic, false);
     return ret;
   }
 
@@ -93,6 +113,18 @@ class ThreadPostAction extends ThreadPostStore {
   @action.bound
   setProduct(data) {
     this.product = data;
+  }
+
+  // 设置话题列表
+  @action.bound
+  setTopic(data) {
+    this.topics = data;
+  }
+
+  // 附加话题列表
+  @action.bound
+  appendTopic(data) {
+    this.topics = [...this.topics, ...data];
   }
 }
 
