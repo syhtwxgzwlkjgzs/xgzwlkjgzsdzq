@@ -26,9 +26,9 @@
     text-align: center;
     line-height: rem(36);
     border-radius: rem(5);
-    color: #fff;
+    color: var(--color-white);
     font-size: rem(14);
-    background: #2469f6; 
+    background: var(--color-primary); 
   }
   .captchaInput{
     margin-top: rem(32);
@@ -37,7 +37,7 @@
       font-size: rem(14);
       line-height: rem(24);
       text-align: left;
-      color: #8590a6;
+      color: var(--color-text-secondary);
     }
     .captchaInput-input:last-child{
       margin-right: 0;

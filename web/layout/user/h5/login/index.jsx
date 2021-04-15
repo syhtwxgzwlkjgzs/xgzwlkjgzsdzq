@@ -4,7 +4,6 @@ import { withRouter } from 'next/router';
 import { Input, Button } from '@discuzq/design';
 import '@discuzq/design/styles/index.scss';
 import layout from './index.module.scss';
-import PhoneWeixin from '@common/module/h5/PhoneWeixin/index';
 import HeaderLogin from '@common/module/h5/HeaderLogin';
 
 
@@ -16,13 +15,7 @@ class LoginH5Page extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: false,
     };
-  }
-  setVisible = () => {
-    this.setState({
-      visible: false,
-    });
   }
   render() {
     return (
@@ -69,7 +62,6 @@ class LoginH5Page extends React.Component {
                 </div>
                 <div className={layout['otherLogin-tips']}>注册登录即表示您同意《注册协议》《隐私协议》</div>
             </div>
-            <PhoneWeixin visible={ this.state.visible } close={this.setVisible} />
         </div>
     );
   }

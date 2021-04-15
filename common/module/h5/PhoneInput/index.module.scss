@@ -1,10 +1,10 @@
 @import '../../../styles/mixin/login.scss';
 @import '@common/styles/fn/rem.scss';
-.input {
-  @include input;
-}
 .phoneInput {
   position: relative;
+  .input {
+    @include input;
+  }
 }
 .sendCaptcha {
   width: rem(94);
@@ -15,9 +15,9 @@
   text-align: center;
   line-height: rem(36);
   border-radius: rem(5);
-  color: #fff;
+  color: var(--color-white);
   font-size: rem(14);
-  background: #2469f6; 
+  background: var(--color-primary); 
 }
 .captchaInput{
   margin-top: rem(32);
@@ -26,25 +26,9 @@
     font-size: rem(14);
     line-height: rem(24);
     text-align: left;
-    color: #8590a6;
+    color: var(--color-text-secondary);
   }
   .captchaInput-input:last-child{
     margin-right: 0;
-  }
-}
-.captchaInput-input {
-  text-align: center;
-  display: inline-block;
-  font-size: rem(14);
-  height: rem(52);
-  width: rem(40);
-  margin-right: rem(16);
-  input {
-    line-height: rem(52);
-    height: rem(52);
-    width: rem(40);
-    border: none;
-    border-radius: 0;
-    border-bottom: rem(1) solid #eee;
   }
 }

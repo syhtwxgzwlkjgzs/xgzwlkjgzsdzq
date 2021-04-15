@@ -18,7 +18,7 @@ class WeixinOuter extends React.Component {
             <div className={layout.content}>
                 <div className={layout.title}>微信登录</div>
                 {/* 二维码 start */}
-                <WeiXinOrCode orCodeImg='/login-ORcode.png' orCodeTips='长按保存二维码，并在微信中识别此二维码，即可完成登录'/>
+                <WeiXinOrCode orCodeImg='' orCodeTips='长按保存二维码，并在微信中识别此二维码，即可完成登录'/>
                 {/* 二维码 end */}
                 <div className={layout['otherLogin-title']}>其他登录方式</div>
                 <div className={layout['otherLogin-button']}>

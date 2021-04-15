@@ -30,12 +30,12 @@
   width: rem(100);
   height: rem(100);
   border-radius: rem(5);
-  background: #f6f7f9;
+  background: var(--background-color);
   border: rem(1) solid #eee;
   text-align: center;
   line-height: rem(100);
   font-size: rem(20);
-  color: #999;
+  color: var(--color-text-secondary);
 }
 .attachmentsUpload{
   @include paddingBottom;
@@ -53,7 +53,7 @@
   display: inline-block;
   font-size: rem(14);
   line-height: rem(24);
-  color: #0b0b37;
+  color: var(--color-text-primary);
   float: right;
 }
 .textarea{
