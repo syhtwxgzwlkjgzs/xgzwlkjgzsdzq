@@ -24,7 +24,8 @@ const Index = ({ type = POST_TYPE.UNPAID, width = 0, height = 0, coverUrl, url, 
         <div className={styles.container}>
             {
                 type === POST_TYPE.UNPAID ? (
-                    <Video
+                    <Video 
+                        className={styles.videoBox}
                         onReady={onReady}
                         onPlay={(e) => {
                         console.log('play', e);
@@ -55,8 +56,8 @@ const Index = ({ type = POST_TYPE.UNPAID, width = 0, height = 0, coverUrl, url, 
                         console.log('error', e);
                         }}
                         src={url}
-                        width={width}
-                        height={height}
+                        width={width || '343'}
+                        height={height || '224'}
                         poster={coverUrl}
                         duration={time}
                     />
