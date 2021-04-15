@@ -8,10 +8,11 @@ import styles from './index.module.scss';
  * @prop {function} onSearch 搜索事件
  *    @param {string} value 搜索字符串
  * @prop {function} onCancel 取消事件
+ * @prop {string} defaultValue 默认值
  */
 
-const SearchInput = ({ onSearch, onCancel }) => {
-  const [value, setValue] = React.useState('');
+const SearchInput = ({ onSearch, onCancel, defaultValue = '' }) => {
+  const [value, setValue] = React.useState(defaultValue);
 
   return (
     <div className={styles.container}>

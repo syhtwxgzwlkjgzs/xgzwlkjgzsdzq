@@ -1,0 +1,14 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.page {
+  padding-top: rem($padding-4n);
+}
+.section {
+  padding: rem($padding-4n);
+  padding-top: 0;
+}
+.hr {
+  height: rem(10);
+  background-color: var(--background-color);
+}
