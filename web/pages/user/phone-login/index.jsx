@@ -12,7 +12,7 @@ class LoginPhone extends React.Component {
     try {
       await this.props.mobileLogin.login();
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   }
   render() {

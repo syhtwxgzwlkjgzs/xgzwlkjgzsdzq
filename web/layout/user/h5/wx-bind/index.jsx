@@ -4,13 +4,11 @@ import { withRouter } from 'next/router';
 import layout from './index.module.scss';
 import WeiXinOrCode from '@common/module/h5/WeixinOrCode';
 import HeaderLogin from '@common/module/h5/HeaderLogin';
-
-
 @inject('site')
 @inject('user')
 @inject('thread')
 @observer
-class WeixinOuter extends React.Component {
+class WeixinBindH5Page extends React.Component {
   render() {
     return (
       <div className={layout.container}>
@@ -30,4 +28,4 @@ class WeixinOuter extends React.Component {
   }
 }
 
-export default withRouter(WeixinOuter);
+export default withRouter(WeixinBindH5Page);

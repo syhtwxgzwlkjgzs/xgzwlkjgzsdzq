@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './index.module.scss';
 import { Input, Button } from '@discuzq/design';
-import '@discuzq/design/styles/index.scss';
+import '@discuzq/design/dist/styles/index.scss';
 import HeaderLogin from '@common/module/h5/HeaderLogin';
 
 
@@ -11,7 +11,7 @@ import HeaderLogin from '@common/module/h5/HeaderLogin';
 @inject('user')
 @inject('thread')
 @observer
-class WeixinWithin extends React.Component {
+class WXBindUsernameH5page extends React.Component {
   render() {
     return (
         <div className={layout.container}>
@@ -52,4 +52,4 @@ class WeixinWithin extends React.Component {
   }
 }
 
-export default withRouter(WeixinWithin);
+export default withRouter(WXBindUsernameH5page);

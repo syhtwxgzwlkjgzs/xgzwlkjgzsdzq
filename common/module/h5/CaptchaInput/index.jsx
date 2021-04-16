@@ -1,16 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import layout from './index.module.scss';
 import { Input } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 
 let inputIndex = null;
 
-function CaptchaInput(props) {
-  const { inputCallback } = props;
-  const [value, setValue] = useState(['', '', '', '', '', '']);
-  const [inputRef, setInputRef] = useState(['', '', '', '', '', '']);
+class CaptchaInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: ['', '', '', '', '', ''],
+      inputRef: ['', '', '', '', '', ''],
+    };
+  }
 
-  function focusInput(index, eve) {
+  // 点击输入框聚焦到最前端未填写的地方
+  focusInput = (index, eve) => {
+    const { value, inputRef } = this.state;
     if (index === inputIndex) {
       return;
     }
@@ -25,7 +31,9 @@ function CaptchaInput(props) {
   }
 
   // 输入事件
-  function setChange(index, e) {
+  setChange = (index, e) => {
+    const { inputCallback } = this.props;
+    const { value } = this.state;
     const val = e.target.value;
     const v = [...value];
     if (val.length === 2) {
@@ -33,26 +41,29 @@ function CaptchaInput(props) {
     } else {
       v[index] = val;
     }
-    setValue(v);
+    this.setState({
+      value: v,
+    });
     inputCallback(v.join(''));
     if (val === '') {
-      lastFocus(e, index);
+      this.lastFocus(e, index);
       return;
     }
-    nextFocus(e, index + val.length - 1);
+    this.nextFocus(e, index + val.length - 1);
   }
 
   // 删除事件
-  function setBackspace(index, e) {
+  setBackspace = (index, e) => {
     const val = e.target.value;
     if (val === '') {
-      lastFocus(e, index);
+      this.lastFocus(e, index);
     }
   }
 
 
   // 切换到上一个输入框获取焦点
-  function lastFocus(e, index) {
+  lastFocus = (e, index) => {
+    const { inputRef } = this.state;
     e.target.blur();
     if (index > 0) {
       inputIndex = index - 1;
@@ -61,7 +72,8 @@ function CaptchaInput(props) {
   }
 
   // 切换到下一个输入框获取焦点
-  function nextFocus(e, index) {
+  nextFocus = (e, index) => {
+    const { inputRef } = this.state;
     e.target.blur();
     if (index < 5) {
       inputIndex = index + 1;
@@ -70,28 +82,33 @@ function CaptchaInput(props) {
   }
 
   // 设置对应下标的输入框获取焦点
-  function getInputDom(e, index) {
+  getInputDom = (e, index) => {
+    const { inputRef } = this.state;
     const i = inputRef;
     i[index] = e;
-    setInputRef(i);
+    this.setState({
+      inputRef: i,
+    });
   }
 
-  return (
-    <div className={layout.container}>
-      {
-        value.map((item, index) => (<Input key={index} value={item} onChange={(e) => {
-          setChange(index, e);
-        }} className={layout['captchaInput-input']} onFocus={(e) => {
-          focusInput(index, e);
-        }} maxLength={2} onBackspace={(e) => {
-          setBackspace(index, e);
-        }} useRef={(e) => {
-          getInputDom(e, index);
-        }} />))
-      }
-
-    </div>
-  );
+  render() {
+    const { value } = this.state;
+    return (
+        <div className={layout.container}>
+          {
+            value.map((item, index) => (<Input key={index} value={item} onChange={(e) => {
+              this.setChange(index, e);
+            }} className={layout['captchaInput-input']} onFocus={(e) => {
+              this.focusInput(index, e);
+            }} maxLength={2} onBackspace={(e) => {
+              this.setBackspace(index, e);
+            }} useRef={(e) => {
+              this.getInputDom(e, index);
+            }} />))
+          }
+        </div>
+    );
+  }
 }
 
 export default CaptchaInput;

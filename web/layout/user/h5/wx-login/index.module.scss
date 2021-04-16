@@ -7,9 +7,6 @@
     @include passwordInput;
   }
 }
-.banner {
-  @include banner;
-}
 .content {
   padding: rem(48) rem(24);
   .button {
@@ -40,13 +37,6 @@
   .otherLogin-within__tips{
     @include otherLoginText;
     margin-top: rem(180);
-  }
-  .functionalRegion {
-    @include functionalRegion;
-  }
-  .tips{
-    @include titleTips;
-    margin-bottom: 0; 
   }
 }
  
