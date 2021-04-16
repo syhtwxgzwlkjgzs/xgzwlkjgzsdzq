@@ -1,9 +1,10 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import Link from 'next/link';
-import { Button } from '@discuzq/design';
-import ThreadContent from '@common/components/thread';
+import { Button, Upload } from '@discuzq/design';
+import ThreadContent from '@components/thread';
 import styles from './index.module.scss';
+
 
 @inject('site')
 @inject('user')

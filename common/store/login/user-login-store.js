@@ -8,7 +8,7 @@ export default class UserLoginStore {
   @observable password = '';
 
   @action
-  async login() {
+  login = async () => {
 
     // 信息需要填写完整
     if (!this.username || !this.password) {

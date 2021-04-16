@@ -16,7 +16,7 @@ export default class UserRegisterStore {
   }
 
   @action
-  async register() {
+  register = async () => {
     // 信息需要填写完整
     if (this.isInfoNotCpl()) {
       throw {

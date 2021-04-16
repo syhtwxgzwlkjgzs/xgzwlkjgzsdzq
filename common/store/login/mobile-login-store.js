@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import { smsSend, smsLogin } from '@server';
 
 export const MOBILE_LOGIN_STORE_ERRORS = {
@@ -31,12 +31,22 @@ export default class mobileLoginStore {
     @observable code = '';
     @observable codeTimeout = null;
 
-    verifyMobile() {
+    // 验证码是否符合格式要求
+    @computed get isInvalidCode() {
+        return this.code.length === 6;
+    }
+
+    // 是否信息填写完毕
+    @computed get isInfoComplete() {
+        return this.code && this.mobile;
+    }
+
+    verifyMobile = () => {
         const MOBILE_REGEXP = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
         return MOBILE_REGEXP.test(this.mobile)
     }
 
-    beforeSendVerify() {
+    beforeSendVerify = () => {
         // 倒计时未结束前，不能再次发送
         if (this.codeTimeout) {
             throw MOBILE_LOGIN_STORE_ERRORS.VERIFY_TIME_ERROR;
@@ -54,7 +64,7 @@ export default class mobileLoginStore {
     }
 
     // 倒计时
-    setCounter(sec) {
+    setCounter = (sec) => {
         this.codeTimeout = sec;
         // 总定时器，到时间清除 counter
         this.codeTimmer = setTimeout(() => {
@@ -74,7 +84,7 @@ export default class mobileLoginStore {
     }
 
     @action
-    async sendCode() {
+    sendCode = async () => {
         // 发送前校验
         this.beforeSendVerify();
 
@@ -106,7 +116,7 @@ export default class mobileLoginStore {
 
     }
 
-    beforeLoginVerify() {
+    beforeLoginVerify = () => {
         if (!this.mobile) {
             throw MOBILE_LOGIN_STORE_ERRORS.NO_MOBILE_ERROR
         }
@@ -117,7 +127,7 @@ export default class mobileLoginStore {
     }
 
     @action 
-    async login() {
+    login = async () => {
         this.beforeLoginVerify();
 
         try {

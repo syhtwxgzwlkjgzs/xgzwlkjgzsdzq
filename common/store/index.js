@@ -5,6 +5,8 @@ import SiteStore from './site/action';
 import IndexStore from './index/action';
 import UserStore from './user/action';
 import ThreadStore from './thread/action';
+import CommentStore from './comment/action';
+import ThreadPostStore from './thread/post/action';
 import UserLoginStore from './login/user-login-store';
 import UserRegisterStore from './login/user-register-store';
 import MobileLoginStore from './login/mobile-login-store';
@@ -27,6 +29,8 @@ export default function initializeStore(initProps = {}) {
       userLogin: new UserLoginStore(),
       userRegister: new UserRegisterStore(),
       mobileLoginStore: new MobileLoginStore(),
+      comment: new CommentStore(),
+      threadPost: new ThreadPostStore(),
       h5QrCode: new H5QrCode(),
     };
   }
@@ -42,6 +46,8 @@ export default function initializeStore(initProps = {}) {
       userLogin: new UserLoginStore(),
       userRegister: new UserRegisterStore(),
       mobileLogin: new MobileLoginStore(),
+      comment: new CommentStore(),
+      threadPost: new ThreadPostStore(),
       h5QrCode: new H5QrCode(),
     };
   }
