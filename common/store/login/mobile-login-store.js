@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import { smsSend, smsLogin } from '@server';
 
 export const MOBILE_LOGIN_STORE_ERRORS = {
@@ -30,6 +30,16 @@ export default class mobileLoginStore {
     @observable mobile = '';
     @observable code = '';
     @observable codeTimeout = null;
+
+    // 验证码是否符合格式要求
+    @computed get isInvalidCode() {
+        return this.code.length === 6;
+    }
+
+    // 是否信息填写完毕
+    @computed get isInfoComplete() {
+        return this.code && this.mobile;
+    }
 
     verifyMobile = () => {
         const MOBILE_REGEXP = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
