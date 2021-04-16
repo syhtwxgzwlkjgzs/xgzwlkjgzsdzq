@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { Icon } from '@discuzq/design';
 
 import ThreadContent from '@common/components/thread';
 
@@ -14,7 +15,18 @@ export const User = ({ data, onClick }) => {
     onClick && onClick(data);
   }, [data, onClick]);
 
-  return <div onClick={click}>User</div>;
+  return (
+    <div onClick={click} className={styles.user}>
+      <div className={styles.left}>
+        <img className={`${styles.image} ${!data.image ? styles.empty : ''}`} src={data.image} />
+        <div className={styles.name}>{data.name || '暂无内容'}</div>
+      </div>
+      <div className={styles.right}>
+        <div className={styles.group}>{data.group || '暂无内容'}</div>
+        <Icon name="RightOutlined" size={12} />
+      </div>
+    </div>
+  );
 };
 
 /**
@@ -50,11 +62,11 @@ export const Topic = ({ data, onClick }) => {
 // }, [data, onClick]);
 
 // TODO: 帖子如何点击待处理 click
-export const Post = ({ divider }) => (
-  <>
+export const Post = ({ divider, ...props }) => (
+  <div {...props}>
     <div>
       <ThreadContent />
     </div>
     {divider && <div className={styles.hr} />}
-  </>
+  </div>
 );

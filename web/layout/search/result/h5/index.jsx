@@ -68,15 +68,15 @@ class SearchResultH5Page extends React.Component {
         </div>
         <div className={styles.section}>
           <SectionTitle title="用户" onShowMore={this.redirectToSearchResultUser} />
-          <SearchUsers data={SearchUsersData} onItemClick={this.onUserClick} />
         </div>
+        <SearchUsers data={SearchUsersData} onItemClick={this.onUserClick} />
         <div className={styles.hr}></div>
-        <div className={`${styles.section} ${styles.searchPosts}`}>
+        <div className={styles.section}>
           <SectionTitle title="主题" onShowMore={this.redirectToSearchResultPost} />
         </div>
         <SearchPosts data={Array(2).fill('')} onItemClick={this.onPostClick} />
         <div className={styles.hr}></div>
-        <div className={`${styles.section} ${styles.searchTopics}`}>
+        <div className={styles.section}>
           <SectionTitle title="话题" onShowMore={this.redirectToSearchResultTopic} />
         </div>
         <SearchTopics data={SearchTopicsData} onItemClick={this.onTopicClick} />
@@ -84,7 +84,7 @@ class SearchResultH5Page extends React.Component {
     );
   }
 }
-const SearchUsersData = ['user1', 'user2'];
+const SearchUsersData = [{ name: 'user1' }, { name: 'user1' }];
 const SearchTopicsData = [
   { title: '#dasda#1', content: '#dasda#', hotCount: 2, contentCount: 3 },
   { title: '#dasda#2', content: '#dasda#', hotCount: 2, contentCount: 3 },
