@@ -3,12 +3,11 @@
  */
 import React, { memo, useState, useEffect, useCallback } from 'react';
 import { Input } from '@discuzq/design';
-import '@discuzq/design/styles/index.scss';
-
 import styles from './index.module.scss';
+
 import PropTypes from 'prop-types';
 
-const PostTitle = ({ title, placeholder, isDisplay, onChange }) => {
+const Title = ({ title, placeholder, isDisplay, onChange }) => {
   // state 标题值
   const [titleVal, setTitleVal] = useState('');
 
@@ -23,25 +22,17 @@ const PostTitle = ({ title, placeholder, isDisplay, onChange }) => {
     onChange && onChange(titleVal);
   }, [titleVal]);
 
-  // handle
-  const updateTitleVal = useCallback((e) => {
-    // 更新titleVal
-    setTitleVal(e.target.value);
-  });
-
   return (
     <Input
       className={`${styles.title} ${isDisplay ? styles['is-display'] : ''}`}
       value={titleVal}
       placeholder={placeholder}
-      onChange={(e) => {
-        updateTitleVal(e);
-      }}
+      onChange={e => setTitleVal(e.target.value)}
     />
   );
 };
 
-PostTitle.propTypes = {
+Title.propTypes = {
   title: PropTypes.string,
   isDisplay: PropTypes.bool,
   placeholder: PropTypes.string,
@@ -49,10 +40,10 @@ PostTitle.propTypes = {
 };
 
 // 设置props默认类型
-PostTitle.defaultProps = {
+Title.defaultProps = {
   title: '',
   isDisplay: false,
   placeholder: '标题(可选)',
 };
 
-export default memo(PostTitle);
+export default memo(Title);
