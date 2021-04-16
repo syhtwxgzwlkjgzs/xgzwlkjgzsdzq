@@ -10,16 +10,16 @@ import topic from './topic.module.scss';
 import CommentList from './components/comment-list/index';
 
 import { Icon, Input, Badge, Toast } from '@discuzq/design';
-import UserInfo from '@common/components/thread/user-info';
+import UserInfo from '@components/thread/user-info';
 
 import InputPopup from './components/input-popup';
-import ImageContent from '@common/components/thread/image-content';
-import AudioPlay from '@common/components/thread/audio-play';
-import PostContent from '@common/components/thread/post-content';
-import ProductItem from '@common/components/thread/product-item';
-import VideoPlay from '@common/components/thread/video-play';
-import BottomEvent from '@common/components/thread/bottom-event';
-import PostRewardProgressBar, { POST_TYPE } from '@common/components/thread/post-reward-progress-bar';
+import ImageContent from '@components/thread/image-content';
+import AudioPlay from '@components/thread/audio-play';
+import PostContent from '@components/thread/post-content';
+import ProductItem from '@components/thread/product-item';
+import VideoPlay from '@components/thread/video-play';
+import BottomEvent from '@components/thread/bottom-event';
+import PostRewardProgressBar, { POST_TYPE } from '@components/thread/post-reward-progress-bar';
 
 
 @inject('site')

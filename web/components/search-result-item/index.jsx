@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 
-import ThreadContent from '@common/components/thread';
+import ThreadContent from '@components/thread';
 
 import styles from './index.module.scss';
 
