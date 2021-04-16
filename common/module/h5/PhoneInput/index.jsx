@@ -1,10 +1,23 @@
 import React, { Fragment } from 'react';
 import layout from './index.module.scss';
 import { Input } from '@discuzq/design';
-import '@discuzq/design/styles/index.scss';
+import '@discuzq/design/dist/styles/index.scss';
+import CaptchaInput from '@common/module/h5/CaptchaInput';
 
 
 class PhoneInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputValue: '', // 验证码
+    };
+  }
+  setCaptcha = (val) => {
+    this.setState({
+      inputValue: val,
+    });
+  }
+
   render() {
     return (
       <Fragment>
@@ -21,27 +34,8 @@ class PhoneInput extends React.Component {
         {/* 验证码 start */}
         <div className={layout.captchaInput}>
           <div className={layout['captchaInput-title']}>短信验证码</div>
-          <div>
-            <Input className={layout['captchaInput-input']} value='' maxLength={1} onChange={(e) => {
-              console.log(e.target.value);
-            }} />
-            <Input className={layout['captchaInput-input']} value='' maxLength={1} onChange={(e) => {
-              console.log(e.target.value);
-            }} />
-            <Input className={layout['captchaInput-input']} value='' maxLength={1} onChange={(e) => {
-              console.log(e.target.value);
-            }} />
-            <Input className={layout['captchaInput-input']} value='' maxLength={1} onChange={(e) => {
-              console.log(e.target.value);
-            }} />
-            <Input className={layout['captchaInput-input']} value='' maxLength={1} onChange={(e) => {
-              console.log(e.target.value);
-            }} />
-            <Input className={layout['captchaInput-input']} value='' maxLength={1} onChange={(e) => {
-              console.log(e.target.value);
-            }} />
-          </div>
-        </div>
+            <CaptchaInput inputCallback={this.setCaptcha} />
+         </div>
         {/* 验证码 end */}
       </Fragment>
     );

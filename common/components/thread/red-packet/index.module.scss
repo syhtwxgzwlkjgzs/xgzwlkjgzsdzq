@@ -1,0 +1,39 @@
+@import '@common/styles/var.scss';
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.container {
+    border-radius: rem($border-radius-small);
+    background: var(--color-warn5);
+    display: flex;
+    align-items: center;
+    .money {
+      flex: 0 0 rem(68);
+      height: 100%;
+      border-radius: rem($border-radius-small) 0 0 rem($border-radius-small);
+      background: #e4414e;
+    }
+    .title {
+      font-size: rem($font-size-middle);
+      line-height: rem($font-line-height-small);
+      height: rem($font-line-height-small);
+      overflow: hidden;
+      color: var(--color-text-primary);
+      margin-bottom: rem($margin-10);
+    }
+    .content {
+      height: 100%;
+      box-sizing: border-box;
+      padding: rem($padding-10) rem($padding-4n);
+    }
+    .text {
+      color: var(--color-text-primary);
+      font-size: rem($font-size-middle);
+      line-height: rem($font-line-height-middle);
+      height: rem(72);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+}

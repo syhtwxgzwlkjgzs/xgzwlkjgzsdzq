@@ -7,4 +7,5 @@ export { default as usernameRegister } from './usernameRegister';
 export { default as genH5Qrcode } from './genH5Qrcode';
 export { default as smsSend } from './smsSend';
 export { default as smsLogin } from './smsLogin';
+export { default as readStickList } from './readStickList';
 export { default as default } from './api';

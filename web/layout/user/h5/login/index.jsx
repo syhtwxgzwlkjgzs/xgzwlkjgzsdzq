@@ -4,7 +4,6 @@ import { withRouter } from 'next/router';
 import { Input, Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
-import PhoneWeixin from '@common/module/h5/PhoneWeixin/index';
 import HeaderLogin from '@common/module/h5/HeaderLogin';
 
 @inject('site')
@@ -16,7 +15,6 @@ class LoginH5Page extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: false,
     };
   }
   setVisible = () => {
@@ -39,18 +37,18 @@ class LoginH5Page extends React.Component {
       Toast.success({
         content: '登录成功',
         hasMask: false,
-        duration: 1000
-      })
+        duration: 1000,
+      });
       // FIXME: Toast 暂时不支持回调能力
       setTimeout(() => {
-        
+
       }, 1000);
     } catch (e) {
       Toast.error({
         content: e.Message,
         hasMask: false,
-        duration: 1000
-      }) 
+        duration: 1000,
+      });
     }
   }
 
@@ -125,7 +123,6 @@ class LoginH5Page extends React.Component {
           </div>
           <div className={layout['otherLogin-tips']}>注册登录即表示您同意《注册协议》《隐私协议》</div>
         </div>
-        <PhoneWeixin visible={this.state.visible} close={this.setVisible} />
       </div>
     );
   }

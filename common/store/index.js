@@ -5,11 +5,10 @@ import SiteStore from './site/action';
 import IndexStore from './index/action';
 import UserStore from './user/action';
 import ThreadStore from './thread/action';
-import UserLoginStore from './login/userLoginStore';
-import UserRegisterStore from './login/userRegisterStore';
-import MobileLoginStore from './login/mobileLoginStore';
+import UserLoginStore from './login/user-login-store';
+import UserRegisterStore from './login/user-register-store';
+import MobileLoginStore from './login/mobile-login-store';
 import H5QrCode from './login/h5QrCode';
-
 useStaticRendering(isServer());
 
 let store = null;
