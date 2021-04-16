@@ -2,12 +2,6 @@ import {useCallback} from 'react';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import Router from '@common/utils/web-router';
-const React1 = require('react');
-
-// Add this in your component file
-require('react-dom');
-const  React2 = require('react');
-console.log(React1 === React2);
 export default function Header() {
 
     // todo
