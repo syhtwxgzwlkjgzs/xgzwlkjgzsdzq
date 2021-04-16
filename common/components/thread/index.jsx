@@ -15,6 +15,7 @@ import UserInfo from './user-info';
 import AttachmentView from './attachment-view';
 import dataSource from './data';
 import styles from './index.module.scss';
+import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
 @inject('site')
 @inject('index')
@@ -123,5 +124,6 @@ Index.propTypes = {
   money: PropTypes.string, // 付费金额
 };
 
+// TODO 此处若是删除HOCFetchSiteData会有hook报错，后期解决
 // eslint-disable-next-line new-cap
-export default withRouter(Index);
+export default withRouter(HOCFetchSiteData(Index));
