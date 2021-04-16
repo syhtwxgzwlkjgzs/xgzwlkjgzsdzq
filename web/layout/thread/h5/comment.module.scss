@@ -1,13 +1,35 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
 .container {
-  background: #f5f7f8;
-  height: 1000px;
+  background: var(--background-color);
 }
 
 .header {
-  height: 54px;
-  background: #fff;
+  height: rem(50);
+  padding: 0 rem($padding-4n);
+  display: flex;
+  justify-content: space-between;
+  font-family: 'PingFang SC';
+  font-weight: normal;
+  background: var(--color-white);
+  border-bottom: rem(1) solid var(--border-line-color);
+  .number {
+    font-size: rem($font-size-middle);
+    text-align: left;
+    color: var(--color-text-primary);
+    line-height: rem(50);
+  }
+  .sort {
+    font-size: rem($font-size-middle);
+    line-height: rem(50);
+    text-align: left;
+    color: var(--color-text-secondary);
+  }
 }
 
 .body {
-  min-height: 258px;
+  background: var(--color-white);
+  .commentItems {
+    padding: 0 rem($padding-4n);
+  }
 }

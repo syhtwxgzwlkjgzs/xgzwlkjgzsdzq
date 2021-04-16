@@ -1,0 +1,22 @@
+@import '@common/styles/fn/rem.scss';
+
+.dzq-tools-category {
+  display: flex;
+  align-items: center;
+  &__text {
+    display: inline-block;
+    margin: 0 rem(8) 0 rem(6);
+    font-size: var(--font-size-label);
+    color: #4f5a70;
+  }
+  &__tag {
+    display: inline-block;
+    height: 25px;
+    line-height: 25px;
+    padding: 0 rem(4);
+    font-size: var(--font-size-label);
+    border-radius: 5px;
+    color: #4f5a70;
+    background-color: #f0f1f3;
+  }
+}

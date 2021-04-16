@@ -5,6 +5,8 @@ import SiteStore from './site/action';
 import IndexStore from './index/action';
 import UserStore from './user/action';
 import ThreadStore from './thread/action';
+import CommentStore from './comment/action';
+import ThreadPostStore from './thread/post/action';
 
 useStaticRendering(isServer());
 
@@ -21,6 +23,8 @@ export default function initializeStore(initProps = {}) {
       index: new IndexStore(),
       user: new UserStore(user),
       thread: new ThreadStore(),
+      comment: new CommentStore(),
+      threadPost: new ThreadPostStore(),
     };
   }
   if (store === null) {
@@ -32,6 +36,8 @@ export default function initializeStore(initProps = {}) {
       index: new IndexStore(),
       user: new UserStore(user),
       thread: new ThreadStore(),
+      comment: new CommentStore(),
+      threadPost: new ThreadPostStore(),
     };
   }
 

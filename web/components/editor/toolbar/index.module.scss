@@ -1,0 +1,80 @@
+@import '@common/styles/fn/rem.scss';
+
+$margin16: rem(16);
+
+.dvditor-toolbar {
+  position: relative;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--background-color);
+  &__left {
+    margin-left: $margin16;
+    font-size: var(--font-size-primary);
+  }
+  &__right {
+    margin-right: $margin16;
+    font-size: var(--font-size-primary);
+    color: var(--color-primary);
+  }
+  &__item {
+    position: relative;
+    margin-right: rem(24);
+    display: inline-flex;
+    font-size: var(--font-size-primary);
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.dvditor-attachment-toolbar {
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--font-size-label);
+  background-color: var(--color-white);
+  border-top: 1px solid rgba($color: #eee, $alpha: 0.75);
+  border-bottom: 1px solid rgba($color: #eee, $alpha: 0.75);
+  &__left {
+    margin-left: $margin16;
+    font-size: var(--font-size-label);
+  }
+  &__right {
+    margin-right: $margin16;
+    &.show {
+      width: rem(36);
+      margin-right: 0;
+      text-align: right;
+      border-left: 1px solid rgba($color: #eee, $alpha: 0.75);;
+    }
+  }
+  &__inner {
+    margin: 0 $margin16;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    border-radius: 5px;
+    box-shadow: 0 0 8px #f2f3f5;
+  }
+  &__item {
+    margin-left: rem(16);
+  }
+}
+
+.dvditor-seletion-toolbar {
+  margin: 0 $margin16;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  &__item {
+    margin-right: rem(24);
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
