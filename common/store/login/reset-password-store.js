@@ -1,36 +1,41 @@
-import { observable, action } from 'mobx';
-import { smsSend, smsLogin } from '@server';
+import { observable, action, computed } from 'mobx';
+import { smsVerify, smsSend } from '@server';
+import { get } from '../../utils/get';
 
-export const MOBILE_LOGIN_STORE_ERRORS = {
+export const RESET_PASSWORD_STORE_ERRORS = {
+    NETWORK_ERROR: {
+        Code: 'rps_9999',
+        Message: '网络错误'
+    },
     MOBILE_VERIFY_ERROR: {
-        Code: 'mbl_0002',
+        Code: 'rps_0002',
         Message: '请填写正确的手机号'
     },
     VERIFY_TIME_ERROR: {
-        Code: 'mbl_0001',
+        Code: 'rps_0001',
         Message: '请等待倒计时结束后再发送短信'
     },
     NO_MOBILE_ERROR: {
-        Code: 'mbl_0000',
+        Code: 'rps_0000',
         Message: '请填写手机号',
     },
-    NETWORK_ERROR: {
-        Code: 'mbl_9999',
-        Message: '网络错误'
-    },
     NO_VERIFY_CODE: {
-        Code: 'mbl_0003',
+        Code: 'rps_0003',
         Message: '验证码缺失'
     }
 }
 
-export default class mobileLoginStore {
+export default class resetPasswordStore {
     codeTimmer = null;
 
+    @observable username = '';
     @observable mobile = '';
     @observable code = '';
-    @observable codeTimeout = null;
 
+    @observable newPassword = '';
+    @observable newPasswordRepeat = '';
+    @observable codeTimeout = null;
+    
     verifyMobile = () => {
         const MOBILE_REGEXP = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
         return MOBILE_REGEXP.test(this.mobile)
@@ -39,17 +44,17 @@ export default class mobileLoginStore {
     beforeSendVerify = () => {
         // 倒计时未结束前，不能再次发送
         if (this.codeTimeout) {
-            throw MOBILE_LOGIN_STORE_ERRORS.VERIFY_TIME_ERROR;
+            throw RESET_PASSWORD_STORE_ERRORS.VERIFY_TIME_ERROR;
         }
 
         // 信息需要填写完整
         if (!this.mobile) {
-            throw MOBILE_LOGIN_STORE_ERRORS.NO_MOBILE_ERROR;
+            throw RESET_PASSWORD_STORE_ERRORS.NO_MOBILE_ERROR;
         }
 
         // 检验手机号是否合法
         if (!this.verifyMobile()) {
-            throw MOBILE_LOGIN_STORE_ERRORS.MOBILE_VERIFY_ERROR;
+            throw RESET_PASSWORD_STORE_ERRORS.MOBILE_VERIFY_ERROR;
         }
     }
 
@@ -83,7 +88,7 @@ export default class mobileLoginStore {
                 timeout: 3000,
                 data: {
                     mobile: this.mobile,
-                    type: 'login',
+                    type: 'reset_pwd',
                 },
             });
             if (smsResp.code === 0) {
@@ -99,50 +104,43 @@ export default class mobileLoginStore {
                 throw error;
             }
             throw {
-                ...MOBILE_LOGIN_STORE_ERRORS.NETWORK_ERROR,
+                ...RESET_PASSWORD_STORE_ERRORS.NETWORK_ERROR,
                 error,
             };
         }
 
     }
 
-    beforeLoginVerify = () => {
-        if (!this.mobile) {
-            throw MOBILE_LOGIN_STORE_ERRORS.NO_MOBILE_ERROR
+    @action
+    verifyUser = async () => {
+        if (!this.username) {
+            throw {
+
+            }
         }
-
-        if (!this.code) {
-            throw MOBILE_LOGIN_STORE_ERRORS.NO_VERIFY_CODE
-        }
-    }
-
-    @action 
-    login = async () => {
-        this.beforeLoginVerify();
-
         try {
-            const smsLoginResp = await smsLogin({
+            const verifyResp = await smsVerify({
                 timeout: 3000,
                 data: {
                     mobile: this.mobile,
                     code: this.code
-                },
-            });
-            if (smsLoginResp.code === 0) {
-                return smsLoginResp.data;
+                }
+            })
+            if (verifyResp.code === 0) {
+                return get(verifyResp, 'data.username', '') === this.username;
             }
             throw {
-                Code: smsLoginResp.code,
-                Message: smsLoginResp.msg,
+                Code: verifyResp.code,
+                Message: verifyResp.msg,
             };
         } catch (error) {
             if (error.Code) {
                 throw error;
             }
             throw {
-                ...MOBILE_LOGIN_STORE_ERRORS.NETWORK_ERROR,
-                error,
-            };
+                ...RESET_PASSWORD_STORE_ERRORS.NETWORK_ERROR,
+                error
+            }
         }
     }
 }
