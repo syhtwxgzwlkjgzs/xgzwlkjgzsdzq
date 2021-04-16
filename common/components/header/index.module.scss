@@ -1,0 +1,37 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.header{
+    height: rem(44);
+    display: block;
+    .headerContent{
+        display: flex;
+        padding: rem($padding-2n);
+        box-sizing: border-box;
+        background: var(--color-white);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: rem(44);
+        border-bottom: 1px solid var(--border-line-color);
+        .left{
+            width: 50%;
+            display: block;
+            font-size: rem($font-size-middle);
+            color: var(--color-text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .right{
+            width: 50%;
+            display: block;
+            display: flex;
+            align-items: center;
+            justify-content:flex-end;
+            &>div{
+                margin: 0 rem($margin-2n);
+            }
+        }
+    }
+}

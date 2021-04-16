@@ -14,19 +14,19 @@ const Index = ({ visible = false, onHidden = () => {} }) => {
     {
       id: '0',
       label: '全部',
-      badge: '0',
+      badge: '10',
       icon: 'succuss',
     },
     {
       id: '1',
       label: '点赞',
-      badge: '0',
+      badge: '10',
       icon: 'succuss',
     },
     {
       id: '2',
       label: '打赏',
-      badge: '0',
+      badge: '10',
       icon: 'succuss',
     },
   ]);

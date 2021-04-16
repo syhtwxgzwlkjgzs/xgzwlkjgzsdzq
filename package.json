@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "preinstall": "cd ./mini && npm install && cd ../web && npm install",
-    "dev:web": "cd ./web &&  npm link @discuzq/cli && npm link @discuzq/sdk && npm link @discuzq/design && npm run dev",
+    "dev:web": "cd ./web && npm run dev",
     "dev:mini": "cd ./mini && npm link @discuzq/cli && npm link @discuzq/sdk && npm link @discuzq/design && npm run dev:weapp",
     "lint:js:fix": "eslint --ext .js,.ts,.tsx,.jsx ./ --max-warnings 0 --fix",
     "lint:js": "eslint --ext .js,.ts,.tsx,.jsx ./ --max-warnings 0",

@@ -9,29 +9,27 @@ import { Audio, Button } from '@discuzq/design';
  * @prop {string} url 音频地址
  */
 
-
-
 const Index = ({ type = POST_TYPE.UNPAID, money = 0, url }) => {
-    const onPlay = () => {
-        console.log('正在播放');
-    };
-    return (
-        <div className={styles.container}>
-            {
-                type === POST_TYPE.UNPAID ? (
-                    <Audio src={url} onPlay={onPlay} />
-                ) : (
-                    <div className={styles.payButton}>
-                        <Button className={styles.button} type="primary"><span className={styles.icon}>$</span>支付{money}元查看语音</Button>
-                    </div>
-                )
-            }
-        </div>
-    )
-}
+  const onPlay = () => {
+    console.log('正在播放');
+  };
+  return (
+    <div className={styles.container}>
+        {
+            type === POST_TYPE.UNPAID ? (
+                <Audio src={url} onPlay={onPlay} />
+            ) : (
+                <div className={styles.payButton}>
+                    <Button className={styles.button} type="primary"><span className={styles.icon}>$</span>支付{money}元查看语音</Button>
+                </div>
+            )
+        }
+    </div>
+  );
+};
 export const POST_TYPE = {
-    UNPAID: 0,
-    PAID: 1,
+  UNPAID: 0,
+  PAID: 1,
 };
 
-export default React.memo(Index) 
+export default React.memo(Index);

@@ -44,9 +44,30 @@ export default {
     avatar: 'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
   },
   bottomEvent: {
-    datas: [
+    userImgs: [
       'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
       'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
     ],
+    wholeNum: 10,
+    comment: 5,
+    sharing: 5,
+  },
+  attachments: [
+    {
+      type: 'doc',
+      name: '重构文档',
+      size: '10KB',
+    },
+    {
+      type: 'doc',
+      name: '重构文档',
+      size: '10KB',
+    },
+  ],
+  audio: {
+    src: 'https://demo.dj63.com//2016/CLUB商业/club中文/20140101/夏日香气_主题曲_左右为难_电视剧歌曲_韩语.mp3',
+  },
+  video: {
+    src: 'https://mat1.gtimg.com/bbs/qqnewslite/20191024/mp4/pandastar-v.mp4',
   },
 };
