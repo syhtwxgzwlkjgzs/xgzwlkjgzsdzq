@@ -16,7 +16,7 @@ export default class nicknameBindStore {
   @observable nickname = '';
 
   @action
-  async bindNickname() {
+  bindNickname = async () => {
       if (!this.nickname) {
         throw NICKNAME_BIND_STORE_ERRORS.NO_NICKNAME_ERROR;
       }

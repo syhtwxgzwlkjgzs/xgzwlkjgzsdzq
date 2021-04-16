@@ -31,12 +31,12 @@ export default class mobileBindStore {
     @observable code = '';
     @observable codeTimeout = null;
 
-    verifyMobile() {
+    verifyMobile = () => {
         const MOBILE_REGEXP = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
         return MOBILE_REGEXP.test(this.mobile)
     }
 
-    beforeSendVerify() {
+    beforeSendVerify = () => {
         // 倒计时未结束前，不能再次发送
         if (this.codeTimeout) {
             throw MOBILE_BIND_STORE_ERRORS.VERIFY_TIME_ERROR;
@@ -54,7 +54,7 @@ export default class mobileBindStore {
     }
 
     // 倒计时
-    setCounter(sec) {
+    setCounter = (sec) => {
         this.codeTimeout = sec;
         // 总定时器，到时间清除 counter
         this.codeTimmer = setTimeout(() => {
@@ -74,7 +74,7 @@ export default class mobileBindStore {
     }
 
     @action
-    async sendCode() {
+    sendCode = async () => {
         // 发送前校验
         this.beforeSendVerify();
 
@@ -117,7 +117,7 @@ export default class mobileBindStore {
     }
 
     @action 
-    async bind() {
+    bind = () => {
         this.beforeBindVerify();
 
         try {
