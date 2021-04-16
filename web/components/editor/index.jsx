@@ -4,10 +4,15 @@
  */
 import React from 'react';
 import Vditor from 'vditor';
-import { DefaultToolbar, AttachmentToolbar } from './toolbar';
+import { AttachmentToolbar } from './toolbar';
+import { Icon } from '@discuzq/design';
+import Emoji from './emoji';
 import classNames from 'classnames';
 import 'vditor/src/assets/scss/index.scss';
 import './index.scss';
+import styles from './toolbar/index.module.scss';
+import { defaultIcon } from './const';
+
 
 class DVditor extends React.Component {
   vditorId = 'dzq-vditor';
@@ -16,7 +21,10 @@ class DVditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      range: null,
       isFocus: false,
+      currentAction: '',
+      emojiShow: false,
     };
   }
 
@@ -38,7 +46,8 @@ class DVditor extends React.Component {
         // 编辑器异步渲染完成后的回调方法
         after() {},
         focus() {
-          that.setState({ isFocus: true });
+          const range = that.getEditorRange();
+          that.setState({ isFocus: true, range });
         },
         blur() {
           that.setState({ isFocus: false });
@@ -65,13 +74,69 @@ class DVditor extends React.Component {
     );
   }
 
+  handleDefaultClick(name) {
+    this.setState({ currentAction: name, emojiShow: name === 'UserOutlined' });
+  }
+
+  handleEmojiClick = (emoji) => {
+    const { code } = emoji;
+    this.setCurrentPositon();
+    this.vditor.insertValue(code);
+    this.setState({ emojiShow: false, currentAction: '' });
+  };
+
+  // TODO: 这里有点问题
+  getEditorRange = () => {
+    let range;
+    // const { vditor } = this.vditor;
+    // const mode = vditor[vditor.currentMode];
+    const selection = window.getSelection();
+    if (selection.rangeCount > 0) return selection.getRangeAt(0);
+    // if (mode.range) return mode.range;
+    // const { element } = mode;
+    // element.focus();
+    // // eslint-disable-next-line prefer-const
+    // range = element.ownerDocument.createRange();
+    // range.setStart(element, 0);
+    // range.collapse(true);
+    return range;
+  }
+
+  setCurrentPositon = () => {
+    const { range } = this.state;
+    // https://developer.mozilla.org/zh-CN/docs/Web/API/Selection
+    const selection = window.getSelection();
+    // 将所有的区域都从选区中移除。
+    selection.removeAllRanges();
+    // 一个区域（Range）对象将被加入选区。
+    selection.addRange(range);
+  };
+
   render() {
-    const { isFocus } = this.state;
+    const { isFocus, currentAction, emojiShow } = this.state;
+    const { emojis } = this.props;
+
     return (
       <>
         <div id={this.vditorId} className={classNames('dvditor', { 'no-focus': !isFocus })}></div>
         <AttachmentToolbar />
-        <DefaultToolbar />
+        {/* 默认的操作栏 */}
+        <div className={styles['dvditor-toolbar']}>
+          <div className={styles['dvditor-toolbar__left']}>
+            {defaultIcon.map(item => (
+                <Icon key={item.name}
+                  onClick={this.handleDefaultClick.bind(this, item.name)}
+                  className={styles['dvditor-toolbar__item']}
+                  name={item.name}
+                  color={item.name === currentAction && item.active}
+                  size="20">
+                </Icon>
+            ))}
+          </div>
+          <div className={styles['dvditor-toolbar__right']}>发布</div>
+          {/* 表情 */}
+          <Emoji show={emojiShow} emojis={emojis} onClick={this.handleEmojiClick} />
+        </div>
       </>
     );
   }
