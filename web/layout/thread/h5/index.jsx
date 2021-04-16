@@ -278,9 +278,6 @@ class ThreadH5Page extends React.Component {
     // 当内容加载完成后，获取评论区所在的位置
     this.position = this.commentRef?.current?.offsetTop;
   }
-  componentDidMount() {
-    console.log('讲过啦');
-  }
 
   componentDidUpdate() {
     // 当内容加载完成后，获取评论区所在的位置
