@@ -8,7 +8,7 @@ import ThreadStore from './thread/action';
 import UserLoginStore from './login/user-login-store';
 import UserRegisterStore from './login/user-register-store';
 import MobileLoginStore from './login/mobile-login-store';
-import H5QrCode from './login/h5QrCode';
+import H5QrCode from './login/h5-qrcode';
 useStaticRendering(isServer());
 
 let store = null;
