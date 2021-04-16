@@ -1,4 +1,4 @@
-@import '../../../../../common/styles/mixin/login.scss';
+@import '@common/styles/mixin/login.scss';
 @import '@common/styles/fn/rem.scss';
 .container {
   height: 100vh;
@@ -18,12 +18,9 @@
   .button {
     @include button;
   }
-  .functionalRegion {
-    @include functionalRegion;
-  }
-  .otherLogin-tips{
-    @include otherLoginText;
-    margin-top: rem(131);
+  .tips{
+    @include titleTips;
+    margin-bottom: 0; 
   }
 }
  

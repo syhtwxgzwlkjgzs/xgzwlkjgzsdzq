@@ -1,17 +1,17 @@
 import React from 'react';
-import LoginWeixinH5Page from '@layout/user/h5/weixin-login';
+import WXLoginH5Page from '@layout/user/h5/wx-login';
 import { inject } from 'mobx-react';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
 @inject('site')
-class LoginWeixin extends React.Component {
+class WXLogin extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
-    return platform === 'h5' ? <LoginWeixinH5Page /> : <></>;
+    return platform === 'h5' ? <WXLoginH5Page /> : <></>;
   }
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(LoginWeixin);
+export default HOCFetchSiteData(WXLogin);
