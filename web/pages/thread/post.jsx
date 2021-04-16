@@ -9,19 +9,15 @@ import DVditor from '@components/editor';
 @observer
 class ThreadCreate extends React.Component {
   componentDidMount() {
-    const { fetchEmoji, fetchFollow, fetchProductAnalysis, fetchTopic } = this.props.threadPost;
+    const { fetchEmoji } = this.props.threadPost;
     fetchEmoji();
-    fetchFollow();
-    fetchProductAnalysis({ address: 'https://item.jd.com/31932516081.html' });
-    fetchTopic();
   }
 
   render() {
-    const { topics  } = this.props.threadPost;
-    console.log(topics);
+    const { threadPost  } = this.props;
     return (
       <>
-        <DVditor />
+        <DVditor emojis={threadPost.emojis} />
       </>
     );
   }
