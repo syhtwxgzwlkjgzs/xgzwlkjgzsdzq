@@ -1,8 +1,10 @@
 @import '@common/styles/variable/index.scss';
 @import '@common/styles/fn/rem.scss';
 
-.input {
-  width: rem(176);
+.inputClick {
+  .input {
+    width: rem(176);
+  }
 }
 
 .icon {
