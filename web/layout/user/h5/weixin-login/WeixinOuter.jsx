@@ -8,9 +8,14 @@ import HeaderLogin from '@common/module/h5/HeaderLogin';
 
 @inject('site')
 @inject('user')
-@inject('thread')
+@inject('h5QrCode')
 @observer
 class WeixinOuter extends React.Component {
+  async componentDidMount() {
+    await this.props.h5QrCode.generate({ params: { type: 'mobile_browser_login', redirectUri: `${this.props.site}/user/weixin-register` } });
+    console.log(this.props.site);
+  }
+
   render() {
     return (
         <div className={layout.container}>
@@ -18,7 +23,7 @@ class WeixinOuter extends React.Component {
             <div className={layout.content}>
                 <div className={layout.title}>微信登录</div>
                 {/* 二维码 start */}
-                <WeiXinOrCode orCodeImg='/login-ORcode.png' orCodeTips='长按保存二维码，并在微信中识别此二维码，即可完成登录'/>
+                <WeiXinOrCode orCodeImg={this.props.h5QrCode.qrCode} orCodeTips='长按保存二维码，并在微信中识别此二维码，即可完成登录'/>
                 {/* 二维码 end */}
                 <div className={layout['otherLogin-title']}>其他登录方式</div>
                 <div className={layout['otherLogin-button']}>
