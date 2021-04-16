@@ -48,4 +48,4 @@ class Index extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(HOCWithLogin(Index));
+export default HOCFetchSiteData(Index);
