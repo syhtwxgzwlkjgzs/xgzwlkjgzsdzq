@@ -4,25 +4,37 @@ import { Avatar } from '@discuzq/design';
 // import '@discuzq/design/styles/index.scss';
 
 export default class ReplyList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLiked: this.props.data.isLiked,
+      likeCount: this.props.data.likeCount,
+      likeClick: this.props.likeClick(),
+      replyClick: this.props.replyClick(),
+      deleteClick: this.props.deleteClick(),
+    };
+  }
   static async getInitialProps() {
     return {
 
     };
   }
-  // 点赞和回复
-  handleClik = (type) => {
-    console.log(type);
-    if (type === '1') {
-      console.log('点赞');
-    } else if (type === '2') {
-      console.log('回复');
-    } else {
-      console.log('删除');
-    }
-  }
   // 跳转至评论详情
   toCommentDetail() {
     console.log('跳至评论详情');
+  }
+  likeClick() {
+    this.setState({
+      likeCount: !this.state.isLiked ? this.state.likeCount + 1 : this.state.likeCount - 1,
+      isLiked: !this.state.isLiked,
+    });
+    this.state.likeClick('2');
+  }
+  replyClick() {
+    this.state.replyClick('2');
+  }
+  deleteClick() {
+    this.state.deleteClick('2');
   }
 
   render() {
@@ -48,11 +60,17 @@ export default class ReplyList extends React.Component {
           </div>
           <div className={styles.replyListFooter}>
             <div className={styles.replyTime}>{3}分钟</div>
-            <div className={styles.replyLiked} onClick={this.props.avatarClick('2')}>
-                赞{this.props.data.likeCount === 0 ? '' : this.props.data.likeCount}
+            <div className={this.state.isLiked ? styles.replyLike : styles.replyLiked}>
+              <span onClick={() => this.likeClick()}>
+                赞{this.state.likeCount === 0 ? '' : this.state.likeCount}
+              </span>
             </div>
-            <div className={styles.replyReply} onClick={this.props.replyClick('2')}>回复</div>
-            <div className={styles.replyDelete} onClick={() => this.handleClik('3')}>删除</div>
+            <div className={styles.replyReply}>
+              <span onClick={() => this.replyClick('2')}>回复</span>
+            </div>
+            <div className={styles.replyDelete}>
+              <span onClick={() => this.deleteClick('2')}>删除</span>
+            </div>
           </div>
         </div>
       </div>
