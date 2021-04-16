@@ -16,9 +16,8 @@ export default class CommentList extends React.Component {
   }
   // 点赞和回复
   handleClik = (type) => {
-    console.log(type);
     if (type === '1') {
-      console.log('点赞');
+      this.props.avatarClick('1');
     } else if (type === '2') {
       console.log('回复');
     } else {
@@ -53,7 +52,7 @@ export default class CommentList extends React.Component {
           }
         </div>
         <div className={styles.content}>
-          <div className={styles.commentListAvatar}>
+          <div className={styles.commentListAvatar} onClick={this.props.avatarClick('1')}>
             <Avatar image={this.props.data.user.avatar} circle={true}></Avatar>
           </div>
           <div className={styles.commentListContent}>
@@ -68,16 +67,23 @@ export default class CommentList extends React.Component {
             <div className={styles.commentListFooter}>
               <div className={styles.commentBtn}>
                 <div className={styles.commentTime}>{13}分钟</div>
-                <div className={styles.commentLiked} onClick={() => this.handleClik('1')}>
+                <div className={styles.commentLiked} onClick={this.props.avatarClick('1')}>
                   赞{this.props.data.likeCount === 0 ? '' : this.props.data.likeCount}
                 </div>
-                <div className={styles.commentReply} onClick={() => this.handleClik('2')}>回复</div>
+                <div className={styles.commentReply} onClick={this.props.replyClick('1')}>回复</div>
                 <div className={styles.commentDelete} onClick={() => this.handleClik('3')}>删除</div>
               </div>
               <div className={styles.ReplyList}>
                 {/* <ReplyList data={this.props.data.lastThreeComments}></ReplyList> */}
                 {
-                  this.props.data.lastThreeComments.map((val, index) => <ReplyList data={val} key={index}></ReplyList>)
+                  this.props.data.lastThreeComments
+                    .map((val, index) => <ReplyList
+                                            data={val}
+                                            key={index}
+                                            avatarClick={this.props.avatarClick}
+                                            likeClick={this.props.likeClick}
+                                            replyClick={this.props.replyClick}>
+                                          </ReplyList>)
                 }
               </div>
             </div>
