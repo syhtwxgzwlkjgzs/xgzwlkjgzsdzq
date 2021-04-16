@@ -30,7 +30,7 @@ class LoginPhoneH5Page extends React.Component {
                 <div className={layout['otherLogin-title']}>其他登录方式</div>
                 <div className={layout['otherLogin-button']}>
                   <span onClick={() => {
-                    this.props.router.push('weixin-login');
+                    this.props.router.push('wx-login');
                   }} className={layout['otherLogin-button-weixin']}>
                     <img src="/login-weixin.png" alt=""/>
                   </span>
