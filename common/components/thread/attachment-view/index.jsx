@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
-import { extensionList } from './utils';
+import { extensionList, noop } from '../utils';
 
 /**
  * 附件
@@ -9,7 +9,7 @@ import { extensionList } from './utils';
  * @prop {Boolean} isHidden 是否隐藏删除按钮
  */
 
-const Index = ({ attachments = [], isHidden = true }) => (
+const Index = ({ attachments = [], isHidden = true, onClick = noop }) => (
     <div>
         {
           attachments.map((item, index) => {
@@ -19,7 +19,7 @@ const Index = ({ attachments = [], isHidden = true }) => (
               ? extension.toUpperCase()
               : 'UNKNOWN';
             return (
-              <div className={styles.container} key={index}>
+              <div className={styles.container} key={index} onClick={onClick}>
                 <div>
                   {/* TODO 此处逻辑接口确定之后再改 */}
                   <Icon name={type && 'PaperClipOutlined'} />
