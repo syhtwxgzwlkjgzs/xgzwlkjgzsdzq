@@ -1,6 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { smsVerify, smsSend } from '@server';
-import { get } from '../../utils/get';
+import { smsResetPwd, smsSend } from '@server';
 
 export const RESET_PASSWORD_STORE_ERRORS = {
     NETWORK_ERROR: {
@@ -28,14 +27,31 @@ export const RESET_PASSWORD_STORE_ERRORS = {
 export default class resetPasswordStore {
     codeTimmer = null;
 
-    @observable username = '';
     @observable mobile = '';
     @observable code = '';
 
     @observable newPassword = '';
     @observable newPasswordRepeat = '';
     @observable codeTimeout = null;
-    
+
+
+    // 验证码是否符合格式要求
+    @computed get isInvalidCode() {
+        return this.code.length === 6;
+    }
+
+    // 是否信息填写完毕
+    @computed get isInfoComplete() {
+        return (
+            this.code &&
+            this.mobile &&
+            this.newPassword &&
+            this.newPasswordRepeat &&
+            // 新旧密码需要相同
+            this.newPasswordRepeat === this.newPassword
+        );
+    }
+
     verifyMobile = () => {
         const MOBILE_REGEXP = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
         return MOBILE_REGEXP.test(this.mobile)
@@ -112,26 +128,22 @@ export default class resetPasswordStore {
     }
 
     @action
-    verifyUser = async () => {
-        if (!this.username) {
-            throw {
-
-            }
-        }
+    resetPassword = async () => {
         try {
-            const verifyResp = await smsVerify({
+            const resetPwdResp = await smsResetPwd({
                 timeout: 3000,
                 data: {
                     mobile: this.mobile,
+                    password: this.newPassword,
                     code: this.code
                 }
             })
-            if (verifyResp.code === 0) {
-                return get(verifyResp, 'data.username', '') === this.username;
+            if (resetPwdResp.code === 0) {
+                return resetPwdResp.data;
             }
             throw {
-                Code: verifyResp.code,
-                Message: verifyResp.msg,
+                Code: resetPwdResp.code,
+                Message: resetPwdResp.msg,
             };
         } catch (error) {
             if (error.Code) {
@@ -139,8 +151,8 @@ export default class resetPasswordStore {
             }
             throw {
                 ...RESET_PASSWORD_STORE_ERRORS.NETWORK_ERROR,
-                error
-            }
+                error,
+            };
         }
     }
 }
