@@ -2,6 +2,17 @@ import { createContext } from 'react';
 
 export const ThreadCommonContext = createContext();
 
+export const noop = () => {};
+
+export const extensionList = [
+  '7Z',
+  'AI', 'APK',
+  'CAD', 'CDR',
+  'DOC', 'DOCX',
+  'EPS', 'EXE', 'IPA',
+  'MP3', 'MP4', 'PDF', 'PPT', 'PSD', 'RAR', 'TXT', 'XLS', 'XLSX', 'ZIP', 'JPG', 'WAV',
+];
+
 /* dispatch 类型常量 */
 export const ON_LIKE = 'ON_LIKE'; // 点赞事件
 export const ON_SHARE = 'ON_LIKE'; // 分享事件

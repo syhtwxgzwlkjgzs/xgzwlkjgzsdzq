@@ -10,7 +10,7 @@
       .imagesBox1 {
         width: 100%;
         height: 100%;
-        object-fit:cover;
+        object-fit: cover;
       }
     }
     .images2 {
@@ -22,7 +22,7 @@
       .imagesBox2 {
         display: block;
         width: rem(170);
-        object-fit:cover;
+        object-fit: cover;
       }
     }
     .images3 {
@@ -30,7 +30,7 @@
       width: rem(343);
       height: rem(260);
       margin: 0 auto;
-      flex-wrap:wrap;
+      flex-wrap: wrap;
       .imagesTop3 {
         width: rem(343);
         height: rem(128);
@@ -38,7 +38,7 @@
           display: block;
           width: 100%;
           height: 100%;
-          object-fit:cover;
+          object-fit: cover;
         }
       }
       .imagesBotom3 {
@@ -54,7 +54,7 @@
             display: block;
             width: 100%;
             height: 100%;
-            object-fit:cover;
+            object-fit: cover;
           }
         }
       }
@@ -73,7 +73,7 @@
           display: block;
           width: 100%;
           height: 100%;
-          object-fit:cover;
+          object-fit: cover;
         }
       }
       .imagesBotom4 {
@@ -89,7 +89,7 @@
             display: block;
             width: 100%;
             height: 100%;
-            object-fit:cover;
+            object-fit: cover;
           }
         }
       }
@@ -99,7 +99,7 @@
       width: rem(343);
       height: rem(260);
       margin: 0 auto;
-      flex-wrap:wrap;
+      flex-wrap: wrap;
       .imagesTop5 {
         width: 100%;
         height: rem(126);
@@ -109,7 +109,7 @@
           display: block;
           width: rem(169);
           height: rem(126);
-          object-fit:cover;
+          object-fit: cover;
         }
       }
       .imagesBotom5 {
@@ -125,7 +125,7 @@
             display: block;
             width: 100%;
             height: 100%;
-            object-fit:cover;
+            object-fit: cover;
           }
           .modalBox {
             position: absolute;

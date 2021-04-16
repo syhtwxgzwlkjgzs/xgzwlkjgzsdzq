@@ -9,8 +9,22 @@
     padding-top: rem(16);
   }
   .content {
+    position: relative;
     >* {
-      margin-bottom: rem(16);
+      margin-top: rem(16);
+    }
+
+    .cover {
+      position: absolute;
+      right: 0;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      background-color: #111;
+      background-color: rgba($color: #000, $alpha: 0.5);
+      z-index: 10;
+      display: flex;
+      align-items: center;
     }
   }
   .bottom {
