@@ -46,7 +46,7 @@ class Index extends React.Component {
     renderThreadContent = () => (
       <div className={styles.content}>
           <PostContent content={dataSource.content} />
-          <VideoPlay width={200} height={200} />
+          <VideoPlay width={378} height={224} url={dataSource.video.src} />
           <ImageContent imgData={dataSource.imgData} />
           <RewardQuestion content={dataSource.rewardQuestion.content} money={dataSource.rewardQuestion.money} />
           <RedPacket content={dataSource.redPacket.content} />
@@ -55,7 +55,7 @@ class Index extends React.Component {
               amount={dataSource.goods.amount}
               title={dataSource.goods.title}
           />
-          <AudioPlay />
+          <AudioPlay url={dataSource.audio.src} />
           <AttachmentView attachments={dataSource.attachments} />
       </div>
     )
