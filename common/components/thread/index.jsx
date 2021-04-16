@@ -16,8 +16,6 @@ import AttachmentView from './attachment-view';
 import dataSource from './data';
 import styles from './index.module.scss';
 
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-
 @inject('site')
 @inject('index')
 @observer
