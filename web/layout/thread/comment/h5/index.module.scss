@@ -1,0 +1,37 @@
+.index {
+    padding: 0 16px;
+    .header {
+        height: 50px;
+        display: flex;
+        justify-content: flex-end;
+        .show {
+            .showGet {
+                display: flex;
+                justify-content: flex-end;
+                .icon {
+                    color: red;
+                    line-height: 50px;
+                }
+                .showMoneyNum {
+                    font-family: PingFangSC-Regular;
+                    font-weight: normal;
+                    font-size: 12px;
+                    line-height: 50px;
+                    text-align: left;
+                    color: #0b0b37;
+                    margin-left: 10px;
+                    .moneyNumber {
+                        color: #f61f40;
+                    }
+                }
+            }
+        }
+        .more {
+            line-height: 50px;
+            margin-left: 20px;
+        }
+    }
+    .content {
+        
+    }
+}
