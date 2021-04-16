@@ -1,6 +1,9 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 
+.container {
+  overflow: hidden;
+}
 .list {
   height: 100%;
   min-height: 500px;
