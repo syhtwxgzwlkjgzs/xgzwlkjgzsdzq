@@ -8,6 +8,7 @@ import ThreadStore from './thread/action';
 import UserLoginStore from './login/userLoginStore';
 import UserRegisterStore from './login/userRegisterStore';
 import MobileLoginStore from './login/mobileLoginStore';
+import H5QrCode from './login/h5QrCode';
 
 useStaticRendering(isServer());
 
@@ -26,7 +27,8 @@ export default function initializeStore(initProps = {}) {
       thread: new ThreadStore(),
       userLogin: new UserLoginStore(),
       userRegister: new UserRegisterStore(),
-      mobileLoginStore: new MobileLoginStore()
+      mobileLoginStore: new MobileLoginStore(),
+      h5QrCode: new H5QrCode(),
     };
   }
   if (store === null) {
@@ -40,7 +42,8 @@ export default function initializeStore(initProps = {}) {
       thread: new ThreadStore(),
       userLogin: new UserLoginStore(),
       userRegister: new UserRegisterStore(),
-      mobileLogin: new MobileLoginStore()
+      mobileLogin: new MobileLoginStore(),
+      h5QrCode: new H5QrCode(),
     };
   }
 

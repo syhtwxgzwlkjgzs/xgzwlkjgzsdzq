@@ -19,7 +19,7 @@ export default class UserLoginStore {
     try {
       const loginResp = await usernameLogin({
         timeout: 3000,
-        url: 'https://discuz-dev.dnspod.dev/apiv3/users/username.login',
+        url: 'https://discuz3-dev.dnspod.dev/apiv3/users/username.login',
         data: {
           username: this.username,
           password: this.password,
