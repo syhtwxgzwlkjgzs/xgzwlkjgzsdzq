@@ -8,4 +8,9 @@
 .icon {
   // FIXME: 这里写rem(--margin-6n)好像不生效，后面再处理
   margin-left: rem(24);
+  display: inline-block;
+
+  :first-child {
+    margin-left: 0;
+  }
 }

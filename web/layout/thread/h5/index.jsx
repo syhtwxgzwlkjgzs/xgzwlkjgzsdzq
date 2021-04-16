@@ -34,7 +34,7 @@ class ThreadH5Page extends React.Component {
       comment: createCommentService(props),
     };
     this.state = {
-      showCommentInput: true,
+      showCommentInput: false,
       commentSort: true,
       commentData: [
         {
@@ -295,9 +295,42 @@ class ThreadH5Page extends React.Component {
         RequestTime: '2021-03-29 20:05:50',
       },
     };
+
+    // 滚动定位相关属性
+    this.threadBodyRef = React.createRef();
+    this.commentRef = React.createRef();
+    this.position = 0;
+    this.nextPosition = 0;
+    this.flag = true;
   }
 
-  // 点击收藏
+  // TODO:增加节流处理
+  handleOnScroll() {
+    if (this.flag) {
+      this.nextPosition = this.threadBodyRef?.current?.scrollTop || 0;
+    }
+  }
+
+  componentDidMount() {
+    // 当内容加载完成后，获取评论区所在的位置
+    this.position = this.commentRef?.current?.offsetTop;
+  }
+
+  componentDidUpdate() {
+    // 当内容加载完成后，获取评论区所在的位置
+    if (this.props.thread.isReady) {
+      this.position = this.commentRef?.current?.offsetTop;
+    }
+  }
+
+  // 点击信息icon
+  onMessageClick() {
+    const position = this.flag ? this.position : this.nextPosition;
+    this.flag = !this.flag;
+    this.threadBodyRef.current.scrollTo(0, position);
+  }
+
+  // 点击收藏icon
   async onCollectionClick() {
     const id = this.props.thread?.threadData?.id;
     const params = {
@@ -345,7 +378,7 @@ class ThreadH5Page extends React.Component {
         </div>
 
         {/* 帖子展示 */}
-        <div className={layout.body}>
+        <div className={layout.body} ref={this.threadBodyRef} onScrollCapture={() => this.handleOnScroll()}>
           {
             thread.isReady
               ? <div className={`${layout.top} ${topic.container}`}>
@@ -366,8 +399,8 @@ class ThreadH5Page extends React.Component {
                     title={thread.threadData?.goods?.title}
                   />
                   <AudioPlay />
-                  <PostRewardProgressBar remaining={5} received={5}/>
-                  <PostRewardProgressBar type={POST_TYPE.BOUNTY} remaining={2} received={5}/>
+                  <PostRewardProgressBar remaining={5} received={5} />
+                  <PostRewardProgressBar type={POST_TYPE.BOUNTY} remaining={2} received={5} />
                   <BottomEvent datas={thread.threadData.bottomEvent.datas} />
                 </div>
               </div>
@@ -375,7 +408,7 @@ class ThreadH5Page extends React.Component {
           }
 
           {/* 评论 */}
-          <div className={`${layout.bottom} ${comment.container}`}>
+          <div className={`${layout.bottom} ${comment.container}`} ref={this.commentRef}>
             <div className={comment.header}>
               <div className={comment.number}>
                 共{1}条评论
@@ -415,9 +448,14 @@ class ThreadH5Page extends React.Component {
 
           {/* 操作区 */}
           <div className={footer.operate}>
-            <Badge info="99+">
-              <Icon className={footer.icon} size='20' name='MessageOutlined'></Icon>
-            </Badge>
+            <div className={footer.icon} onClick={() => this.onMessageClick()}>
+              <Badge info="99+">
+                <Icon
+                  size='20'
+                  name='MessageOutlined'>
+                </Icon>
+              </Badge>
+            </div>
             <Icon
               color={this.props.thread?.isFavorite ? 'blue' : ''}
               className={footer.icon}
