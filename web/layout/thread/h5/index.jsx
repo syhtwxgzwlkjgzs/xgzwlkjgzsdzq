@@ -34,45 +34,8 @@ class ThreadH5Page extends React.Component {
       comment: createCommentService(props),
     };
     this.state = {
-      showCommentInput: true,
+      showCommentInput: false,
       commentSort: true,
-      commentData: [
-        {
-          userName: '张三',
-          content: '内容你内容内容内容你内容内容内',
-          avatar: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201705%2F13%2F20170513155641_wCyQ2.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1620980557&t=dce708a36610fb346866dc45ed90bba7',
-        },
-        {
-          userName: '张三',
-          content: '内容你内容内容内容你内容内容内',
-          avatar: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201705%2F13%2F20170513155641_wCyQ2.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1620980557&t=dce708a36610fb346866dc45ed90bba7',
-        },
-        {
-          userName: '张三',
-          content: '内容你内容内容内容你内容内容内',
-          avatar: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201705%2F13%2F20170513155641_wCyQ2.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1620980557&t=dce708a36610fb346866dc45ed90bba7',
-        },
-        {
-          userName: '张三',
-          content: '内容你内容内容内容你内容内容内',
-          avatar: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201705%2F13%2F20170513155641_wCyQ2.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1620980557&t=dce708a36610fb346866dc45ed90bba7',
-        },
-        {
-          userName: '张三',
-          content: '内容你内容内容内容你内容内容内',
-          avatar: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201705%2F13%2F20170513155641_wCyQ2.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1620980557&t=dce708a36610fb346866dc45ed90bba7',
-        },
-        {
-          userName: '张三',
-          content: '内容你内容内容内容你内容内容内',
-          avatar: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201705%2F13%2F20170513155641_wCyQ2.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1620980557&t=dce708a36610fb346866dc45ed90bba7',
-        },
-        {
-          userName: '张三',
-          content: '内容你内容内容内容你内容内容内',
-          avatar: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201705%2F13%2F20170513155641_wCyQ2.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1620980557&t=dce708a36610fb346866dc45ed90bba7',
-        },
-      ],
       commentDatas: {
         Code: 0,
         Message: '接口调用成功',
@@ -296,6 +259,9 @@ class ThreadH5Page extends React.Component {
       },
     };
   }
+  componentDidMount() {
+    console.log('讲过啦');
+  }
 
   // 点击收藏
   async onCollectionClick() {
@@ -317,6 +283,10 @@ class ThreadH5Page extends React.Component {
       content: msg,
     });
   }
+  // 加载评论列表
+  async loadCommentList() {
+    console.log('加载评论列表数据');
+  }
 
   onInputClick() {
     this.setState({
@@ -329,6 +299,52 @@ class ThreadH5Page extends React.Component {
     this.setState({
       commentSort: !this.state.commentSort,
     });
+  }
+  // 头像点击
+  avatarClick(type) {
+    if (type === '1') {
+      Toast.success({
+        content: '帖子评论的头像',
+      });
+    } else if (type === '2') {
+      Toast.success({
+        content: '评论回复头像',
+      });
+    } else {
+      Toast.success({
+        content: '评论回复对象的头像',
+      });
+    }
+  }
+  // 点赞
+  likeClick(type) {
+    if (type === '1') {
+      Toast.success({
+        content: '帖子评论的点赞',
+      });
+    } else {
+      Toast.success({
+        content: '评论回复的点赞',
+      });
+    }
+  }
+  // 回复
+  replyClick(type) {
+    if (type === '1') {
+      this.onInputClick();
+      Toast.success({
+        content: '帖子评论的回复',
+      });
+    } else {
+      this.onInputClick();
+      Toast.success({
+        content: '评论回复的回复',
+      });
+    }
+  }
+  // 触底事件
+  onScrollBottom(e) {
+    console.log('触底啦', e);
   }
 
   onBackClick() {
@@ -389,22 +405,29 @@ class ThreadH5Page extends React.Component {
             <div className={comment.body}>
               <div className={comment.commentItems}>
                 {
-                  // this.state.commentData.map((val, index) => <CommentList data={val} key={index}></CommentList>)
+                  this.state.commentDatas.Data.pageData
+                    .map((val, index) => <CommentList
+                      data={val}
+                      key={index}
+                      avatarClick={type => this.avatarClick.bind(this, type)}
+                      likeClick={type => this.likeClick.bind(this, type)}
+                      replyClick={type => this.replyClick.bind(this, type)}>
+                    </CommentList>)
                 }
-                <CommentList data={this.state.commentDatas.Data.pageData[0]}></CommentList>
               </div>
             </div>
           </div>
         </div>
-
         {/* 底部操作 */}
         <div className={layout.footer}>
           {/* 评论区触发 */}
-          <Input
-            className={footer.input}
-            placeholder="写评论"
-            disabled={true}>
-          </Input>
+          <div className={footer.inputClick} onClick={() => this.onInputClick()}>
+            <Input
+              className={footer.input}
+              placeholder="写评论"
+              disabled={true}>
+            </Input>
+          </div>
 
           {/* 评论弹层 */}
           <InputPopup
@@ -426,12 +449,11 @@ class ThreadH5Page extends React.Component {
               name='HeartOutlined'>
             </Icon>
             <Icon
-              onClick={() => this.onInputClick()}
               className={footer.icon}
               size='20'
               name='ShareAltOutlined'>
             </Icon>
-          </div>
+        </div>
         </div>
       </div>
     );

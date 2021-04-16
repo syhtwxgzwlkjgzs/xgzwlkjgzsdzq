@@ -1,34 +1,35 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
 .container {
-  background: #f5f7f8;
+  background: var(--background-color);
 }
 
 .header {
-  height: 50px;
-  padding: 0 16px;
+  height: rem(50);
+  padding: 0 rem($padding-4n);
   display: flex;
   justify-content: space-between;
   font-family: 'PingFang SC';
   font-weight: normal;
-  background: #fff;
-  border-bottom: 1px solid #eee;
+  background: var(--color-white);
+  border-bottom: rem(1) solid var(--border-line-color);
   .number {
-    font-size: 16px;
-    line-height: 26px;
+    font-size: rem($font-size-middle);
     text-align: left;
-    color: #0b0b37;
-    line-height: 50px;
+    color: var(--color-text-primary);
+    line-height: rem(50);
   }
   .sort {
-    font-size: 14px;
-    line-height: 50px;
+    font-size: rem($font-size-middle);
+    line-height: rem(50);
     text-align: left;
-    color: #8590a6;
+    color: var(--color-text-secondary);
   }
 }
 
 .body {
-  background: #fff;
+  background: var(--color-white);
   .commentItems {
-    padding: 0 16px;
+    padding: 0 rem($padding-4n);
   }
 }

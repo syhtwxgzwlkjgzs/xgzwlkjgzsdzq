@@ -1,55 +1,57 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
 .replyList {
     display: flex;
-    padding-top: 10px;
+    padding-top: rem(padding-10);
     .replyListAvatar {
-        margin-right: 11px;
+        margin-right: rem($margin-10);
     }
     .replyListContent {
         width: 100%;
         .replyListContentText {
-            padding: 8px;
-            border-radius: 5px;
+            padding: rem($padding-2n);;
+            border-radius: rem($border-radius-small);
             background: #f5f7f8;
             .replyListName {
                 font-family: 'PingFangSC-Semibold';
                 font-weight: normal;
-                font-size: 14px;
-                line-height: 17.8px;
+                font-size: rem($font-size-primary);
+                line-height: rem(18);
                 text-align: left;
-                color: #0b0b37;
+                color: var(--color-text-primary);
             }
             .replyListText {
                 font-family: 'PingFang SC';
                 font-weight: normal;
-                font-size: 16px;
-                line-height: 26px;
+                font-size: rem($font-size-middle);
+                line-height: rem($font-line-height-middle);
                 text-align: left;
-                color: #0b0b37;
+                color: var(--color-text-primary);
                 .replyedUserName {
                     font-family: 'PingFangSC-Semibold';
                     font-weight: normal;
-                    font-size: 14px;
-                    line-height: 17.8px;
+                    font-size: rem($font-size-primary);
+                    line-height: rem(18);
                     text-align: left;
-                    color: #2469f6;
+                    color: var(--color-primary);
                 }
                 .replyedAvatar {
                     display: inline-block;
-                    margin-right: 6px;
+                    margin-right: rem($margin-2n);
                     position: relative;
-                    top: 6px;
+                    top: rem(6);
                 }
             }
         }
         .replyListFooter {
+            height: rem(26);
             display: flex;
             font-family: 'PingFangSC-Regular';
             font-weight: normal;
-            font-size: 14px;
-            line-height: 16.8px;
+            font-size: rem($font-size-primary);
+            line-height: rem($font-line-height-middle);
             text-align: left;
-            color: #8590a6;
-            margin-top: 8px;
+            color: var(--color-text-secondary);
             .replyTime {
                 flex: 1;
             }
