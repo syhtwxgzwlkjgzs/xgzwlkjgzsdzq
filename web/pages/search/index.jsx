@@ -5,7 +5,6 @@ import IndexPCPage from '@layout/search/pc';
 import { readTopicsList } from '@server';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-import HOCWithLogin from '@common/middleware/HOCWithLogin';
 
 @inject('site')
 @inject('index')
@@ -42,9 +41,10 @@ class Index extends React.Component {
     const { platform } = site;
 
     if (platform === 'pc') {
-      return <IndexPCPage/>;
+      return <IndexPCPage />;
     }
-    return <IndexH5Page/>;
+
+    return <IndexH5Page />;
   }
 }
 

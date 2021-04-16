@@ -5,7 +5,7 @@ import IndexPCPage from '@layout/index/pc';
 import { readStickList, readCategories } from '@server';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-import HOCWithLogin from '@common/middleware/HOCWithLogin';
+// import HOCWithLogin from '@common/middleware/HOCWithLogin';
 
 @inject('site')
 @inject('index')
