@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import styles from './index.module.scss';
 import { Button } from '@discuzq/design';
+import { noop } from '../utils';
 
 /**
  * 悬赏问答
@@ -9,10 +10,11 @@ import { Button } from '@discuzq/design';
  * @prop {string} title 悬赏名称
  * @prop {string} avatar 用户头像
  * @prop {string} username 用户名称
+ * @prop {string} onClick 点击事件
  * @prop {string} content 悬赏问答内容
  */
 
-const Index = ({ type = POST_TYPE.NO_ANSWER, money = 0, title, avatar, username, content }) => {
+const Index = ({ type = POST_TYPE.NO_ANSWER, money = 0, title, avatar, username, content, onClick = noop }) => {
   const texts = useMemo(() => {
     if (type === POST_TYPE.NO_ANSWER) {
       return title;
@@ -25,7 +27,7 @@ const Index = ({ type = POST_TYPE.NO_ANSWER, money = 0, title, avatar, username,
   }, [type]);
 
   return (
-        <div className={styles.container}>
+        <div className={styles.container} onClick={onClick}>
             <div className={styles.box}>
                 <div className={styles.money}>￥{money}</div>
                 <div className={styles.content}>
