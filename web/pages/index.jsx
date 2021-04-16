@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/index/h5';
 import IndexPCPage from '@layout/index/pc';
-import { readCategories } from '@server';
+import { readStickList, readCategories } from '@server';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 import HOCWithLogin from '@common/middleware/HOCWithLogin';
@@ -13,9 +13,11 @@ import HOCWithLogin from '@common/middleware/HOCWithLogin';
 class Index extends React.Component {
   static async getInitialProps(ctx) {
     const categories = await readCategories({}, ctx);
+    const sticks = await readStickList({}, ctx);
     return {
       serverIndex: {
-        categories: categories.data,
+        categories: categories.Data,
+        sticks: sticks.Data,
       },
     };
   }
@@ -25,6 +27,7 @@ class Index extends React.Component {
     const { serverIndex, index } = this.props;
     // 初始化数据到store中
     serverIndex && serverIndex.categories && index.setCategories(serverIndex.categories);
+    serverIndex && serverIndex.sticks && index.setSticks(serverIndex.sticks);
   }
 
   async componentDidMount() {
@@ -32,7 +35,10 @@ class Index extends React.Component {
     // 当服务器无法获取数据时，触发浏览器渲染
     if (!index.categories && (!serverIndex || !serverIndex.categories)) {
       const categories = await readCategories({});
-      index.setCategories(categories.data);
+      const sticks = await readStickList({});
+
+      index.setCategories(categories.Data);
+      index.setSticks(sticks.Data);
     }
   }
 
