@@ -1,0 +1,50 @@
+.wrapper {
+  height: 100px;
+  font-size: 20px;
+  margin-top: 16px;
+  .attachment-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 52px;
+    margin: 0 16px 8px;
+    padding: 0 8px;
+    background: #f5f7f8;
+    border-radius: 5px;
+    .icon {
+      padding: 16px 8px;
+    }
+    .content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      .name {
+        font-size: 14px;
+        line-height: 18px;
+        text-align: left;
+        color: #0b0b37;
+      }
+      .size {
+        margin-left: 8px;
+        font-size: 12px;
+        color: #4f5a70;
+      }
+    }
+  }
+
+  .add-box {
+    height: 52px;
+    margin: 0 16px;
+    font-size: 14px;
+    color: #8490a8;
+    text-align: center;
+    line-height: 52px;
+    background: #f5f7f8;
+    border-radius: 5px;
+    :global {
+      .dzq-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+}
