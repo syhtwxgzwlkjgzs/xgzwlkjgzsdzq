@@ -28,6 +28,7 @@ const List = ({
   const [height, setHeight] = useState(0);
   const emptyFunction = useCallback(() => {}, []);
   const renderDiv = useCallback(() => <div />, []);
+  const composeClassName = `${styles.container} ${containerClassName || styles.list}`;
 
   useEffect(() => {
     const el = listRef.current;
@@ -38,7 +39,7 @@ const List = ({
   }, [listRef.current]);
 
   return (
-    <div className={styles.list || containerClassName} ref={listRef}>
+    <div className={composeClassName} ref={listRef}>
       <PullDownRefresh onRefresh={onRefresh} isFinished={!refreshing} height={height}>
         <ScrollView
           height={height}
