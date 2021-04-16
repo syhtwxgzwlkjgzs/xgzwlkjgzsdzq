@@ -38,7 +38,7 @@ class DVditor extends React.Component {
     this.vditor = new Vditor(
       this.vditorId,
       {
-        height: 214,
+        height: 178,
         placeholder: '请填写您的发布内容…',
         // 编辑器初始化值
         value: '',
@@ -80,7 +80,7 @@ class DVditor extends React.Component {
 
   handleEmojiClick = (emoji) => {
     const { code } = emoji;
-    this.setCurrentPositon();
+    // this.setCurrentPositon();
     this.vditor.insertValue(code);
     this.setState({ emojiShow: false, currentAction: '' });
   };
@@ -119,6 +119,7 @@ class DVditor extends React.Component {
     return (
       <>
         <div id={this.vditorId} className={classNames('dvditor', { 'no-focus': !isFocus })}></div>
+        {isFocus && <div className="dvditor__placeholder"></div>}
         <AttachmentToolbar />
         {/* 默认的操作栏 */}
         <div className={styles['dvditor-toolbar']}>

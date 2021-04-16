@@ -2,10 +2,11 @@
 @import '@common/styles/index.scss';
 
 .dvditor {
-  position: relative;
+  // position: relative;
   border: none;
   .vditor-ir pre.vditor-reset,
   .vditor-wysiwyg pre.vditor-reset {
+    height: 178px;
     padding: rem(16) !important;
     font-size: var(--font-size-middle);
     color: var(--color-text-primary);
@@ -52,6 +53,7 @@
   .vditor-toolbar {
     position: absolute;
     width: 100%;
+    padding: 0 !important;
     height: 36px;
     left: 0;
     top: 177px;
@@ -72,6 +74,10 @@
     .vditor-toolbar {
       display: none !important;
     }
+  }
+  &__placeholder {
+    height: 36px;
+    width: 100%;
   }
 }
 
