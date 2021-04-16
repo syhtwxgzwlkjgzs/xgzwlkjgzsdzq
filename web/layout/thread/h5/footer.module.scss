@@ -1,3 +1,4 @@
+@import '@common/styles/variable/index.scss';
 @import '@common/styles/fn/rem.scss';
 
 .input {
@@ -5,5 +6,6 @@
 }
 
 .icon {
+  // FIXME: 这里写rem(--margin-6n)好像不生效，后面再处理
   margin-left: rem(24);
 }

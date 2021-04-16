@@ -13,6 +13,14 @@ import { Icon, Input, Badge, Toast } from '@discuzq/design';
 import UserInfo from '@common/components/thread/user-info';
 
 import InputPopup from './components/input-popup';
+import ImageContent from '@common/components/thread/image-content';
+import AudioPlay from '@common/components/thread/audio-play';
+import PostContent from '@common/components/thread/post-content';
+import ProductItem from '@common/components/thread/product-item';
+import RedPacket from '@common/components/thread/red-packet';
+import RewardQuestion from '@common/components/thread/reward-question';
+import VideoPlay from '@common/components/thread/video-play';
+import BottomEvent from '@common/components/thread/bottom-event';
 
 @inject('site')
 @inject('user')
@@ -291,7 +299,7 @@ class ThreadH5Page extends React.Component {
 
   // 点击收藏
   async onCollectionClick() {
-    const id = this.props.thread?.threadData?.thread?.id;
+    const id = this.props.thread?.threadData?.id;
     const params = {
       id,
       isFavorite: !this.props.thread?.isFavorite,
@@ -338,22 +346,36 @@ class ThreadH5Page extends React.Component {
 
         {/* 帖子展示 */}
         <div className={layout.body}>
-          <div className={`${layout.top} ${topic.container}`}>
-            <div className={topic.header}>
-              <UserInfo
-                name={thread?.threadData?.author?.username || ''}
-                avatar={thread?.threadData?.author?.avatar || ''}>
-              </UserInfo>
-            </div>
-            <div className={topic.body}>
-              {thread?.threadData?.thread.postContent}
-
-              {(thread?.threadData?.images || [])
-                .map(image => image.url
-                  && <img key={image.id} className={topic.image} src={image.url} alt={image.fileName} />)
-              }
-            </div>
-          </div>
+          {
+            thread.isReady
+              ? <div className={`${layout.top} ${topic.container}`}>
+                <div className={topic.header}>
+                  <UserInfo
+                    name={thread?.threadData?.userInfo?.name || ''}
+                    avatar={thread?.threadData?.userInfo?.avatar || ''}
+                    time='3分钟前'>
+                  </UserInfo>
+                </div>
+                <div className={topic.body}>
+                  <PostContent content={thread?.threadData?.content} />
+                  <VideoPlay width={400} height={200} />
+                  <ImageContent imgData={thread?.threadData?.imgData} />
+                  <RewardQuestion
+                    content={thread.threadData?.rewardQuestion?.content}
+                    money={thread.threadData?.rewardQuestion?.money}
+                  />
+                  <RedPacket content={thread.threadData?.redPacket?.content} />
+                  <ProductItem
+                    image={thread.threadData?.goods?.image}
+                    amount={thread.threadData?.goods?.amount}
+                    title={thread.threadData?.goods?.title}
+                  />
+                  <AudioPlay />
+                  <BottomEvent datas={thread.threadData.bottomEvent.datas} />
+                </div>
+              </div>
+              : '加载中'
+          }
 
           {/* 评论 */}
           <div className={`${layout.bottom} ${comment.container}`}>

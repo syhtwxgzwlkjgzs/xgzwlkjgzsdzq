@@ -1,15 +1,22 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
 .container {
-  background: #fff;
-  padding: 16px;
+  background: var(--color-white);
+  padding: rem($padding-4n);
 }
 
 .header {
-  height: 54px;
-  background: #fff;
+  height: rem(54);
+  background: var(--color-white);
 }
 
 .body {
-  margin-top: 24px;
+  margin-top: rem($margin-4n);
+
+  >* {
+    margin-bottom: rem($margin-5n);
+  }
 }
 
 .image {
