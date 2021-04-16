@@ -4,9 +4,7 @@ import Image from 'next/image';
 import { Input, Button } from '@discuzq/design';
 import styles from './index.module.scss';
 
-import { readGoodsAnalysis } from '@server';
-
-const ParseGoods = () => {
+const ProductSelect = () => {
   // state data
   const [link, setLink] = useState('');
   const goodImages = [
@@ -53,19 +51,8 @@ const ParseGoods = () => {
       return;
     }
 
-    // 2 有链接，post链接
-    const params = { address: link };
-    readGoodsAnalysis({ data: params }).then((res) => {
-      if (res.data) {
-        // 成功：跳转发布页,按首次发帖 或 再编辑携带不同的查询参数
-        console.log('商品解析成功', res);
-        router.push('/thread/posts');
-      } else {
-        // 失败,清空link
-        console.log('商品链接无效', res);
-        setLink('');
-      }
-    });
+    // 2 有链接，发起请求解析商品
+    console.log('商品解析...');
   };
 
   return (
@@ -95,4 +82,4 @@ const ParseGoods = () => {
   );
 };
 
-export default memo(ParseGoods);
+export default memo(ProductSelect);
