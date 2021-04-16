@@ -17,10 +17,10 @@ import ImageContent from '@common/components/thread/image-content';
 import AudioPlay from '@common/components/thread/audio-play';
 import PostContent from '@common/components/thread/post-content';
 import ProductItem from '@common/components/thread/product-item';
-import RedPacket from '@common/components/thread/red-packet';
-import RewardQuestion from '@common/components/thread/reward-question';
 import VideoPlay from '@common/components/thread/video-play';
 import BottomEvent from '@common/components/thread/bottom-event';
+import PostRewardProgressBar, { POST_TYPE } from '@common/components/thread/post-reward-progress-bar';
+
 
 @inject('site')
 @inject('user')
@@ -360,17 +360,14 @@ class ThreadH5Page extends React.Component {
                   <PostContent content={thread?.threadData?.content} />
                   <VideoPlay width={400} height={200} />
                   <ImageContent imgData={thread?.threadData?.imgData} />
-                  <RewardQuestion
-                    content={thread.threadData?.rewardQuestion?.content}
-                    money={thread.threadData?.rewardQuestion?.money}
-                  />
-                  <RedPacket content={thread.threadData?.redPacket?.content} />
                   <ProductItem
                     image={thread.threadData?.goods?.image}
                     amount={thread.threadData?.goods?.amount}
                     title={thread.threadData?.goods?.title}
                   />
                   <AudioPlay />
+                  <PostRewardProgressBar remaining={5} received={5}/>
+                  <PostRewardProgressBar type={POST_TYPE.BOUNTY} remaining={2} received={5}/>
                   <BottomEvent datas={thread.threadData.bottomEvent.datas} />
                 </div>
               </div>
