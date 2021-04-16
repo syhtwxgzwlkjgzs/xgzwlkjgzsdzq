@@ -10,6 +10,7 @@ module.exports = {
         ignoreTypes: ['page', 'checkbox', 'scroll-view'],
       },
     ],
+    'selector-no-qualifying-type': null,
     // 不要使用已被 autoprefixer 支持的浏览器前缀
     'media-feature-name-no-vendor-prefix': true,
     'at-rule-no-vendor-prefix': true,

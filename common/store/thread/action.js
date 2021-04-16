@@ -1,6 +1,8 @@
 import { action } from 'mobx';
 import ThreadStore from './store';
 
+import MockThreadData from './data';
+
 class ThreadAction extends ThreadStore {
   constructor(props) {
     super(props);
@@ -8,12 +10,18 @@ class ThreadAction extends ThreadStore {
 
   @action
   setThreadData(data) {
-    this.threadData = data;
+    // this.threadData = data;
+    this.threadData = MockThreadData.thread;
   }
 
   @action
-  setThreadFavorite() {
-    this.threadData.isFavorite = !this.threadData.isFavorite;
+  setThreadDetailField(key, data) {
+    this.threadData[key] = data;
+  }
+
+  @action
+  setCommentList(list = []) {
+    this.commentList = list;
   }
 }
 

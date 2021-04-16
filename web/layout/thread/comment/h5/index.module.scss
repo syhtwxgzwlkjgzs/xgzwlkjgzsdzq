@@ -1,0 +1,38 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.index {
+    padding: 0 rem($padding-4n);
+    .header {
+        height: rem(50);
+        display: flex;
+        justify-content: flex-end;
+        .show {
+            .showGet {
+                display: flex;
+                justify-content: flex-end;
+                .icon {
+                    line-height: rem(50);
+                }
+                .showMoneyNum {
+                    font-family: PingFangSC-Regular;
+                    font-weight: normal;
+                    font-size: var($font-size-label);
+                    line-height: rem(50);
+                    text-align: left;
+                    color: var(--color-text-primary);
+                    margin-left: rem($margin-2n);
+                    .moneyNumber {
+                        color: #f61f40;
+                    }
+                }
+            }
+        }
+        .more {
+            line-height: rem(50);
+            margin-left: rem($margin-5n);
+        }
+    }
+    .content {
+        
+    }
+}

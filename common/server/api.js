@@ -36,7 +36,7 @@ http.interceptors.request.use(
   },
   (error) => {
     // 对请求错误做些什么
-    console.error('request',error);
+    console.error('request', error);
     return {
       code: -1,
       data: null,
@@ -54,8 +54,8 @@ http.interceptors.response.use((res) => {
     msg: data.Message,
   };
 }, (err) => {
-  console.error('response',err.stack);
-  console.error('response',err.message);
+  console.error('response', err.stack);
+  console.error('response', err.message);
   return {
     code: -1,
     data: null,

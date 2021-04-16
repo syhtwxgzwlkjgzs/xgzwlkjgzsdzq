@@ -5,6 +5,8 @@ import SiteStore from './site/action';
 import IndexStore from './index/action';
 import UserStore from './user/action';
 import ThreadStore from './thread/action';
+import CommentStore from './comment/action';
+import ThreadPostStore from './thread/post/action';
 
 import UserLoginStore from './login/user-login-store';
 import UserRegisterStore from './login/user-register-store';
@@ -27,7 +29,9 @@ export default function initializeStore(initProps = {}) {
       thread: new ThreadStore(),
       userLogin: new UserLoginStore(),
       userRegister: new UserRegisterStore(),
-      mobileLoginStore: new MobileLoginStore()
+      mobileLoginStore: new MobileLoginStore(),
+      comment: new CommentStore(),
+      threadPost: new ThreadPostStore(),
     };
   }
   if (store === null) {
@@ -41,7 +45,9 @@ export default function initializeStore(initProps = {}) {
       thread: new ThreadStore(),
       userLogin: new UserLoginStore(),
       userRegister: new UserRegisterStore(),
-      mobileLogin: new MobileLoginStore()
+      mobileLogin: new MobileLoginStore(),
+      comment: new CommentStore(),
+      threadPost: new ThreadPostStore(),
     };
   }
 
