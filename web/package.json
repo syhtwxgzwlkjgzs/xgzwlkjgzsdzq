@@ -10,9 +10,10 @@
     "start:static": "cross-env DEBUG=dzq_error NODE_ENV=production dzq start -H 127.0.0.1 -port 9527 --no-ssr"
   },
   "dependencies": {
+    "@discuzq/design": "0.0.1-alpha.11",
+    "@discuzq/sdk": "0.0.1-alpha.11",
+    "babel-plugin-import": "^1.13.3",
     "classnames": "2.3.1",
-    "@discuzq/design": "0.0.1-alpha.7",
-    "@discuzq/sdk": "0.0.1-alpha.7",
     "create-next-app": "10.0.6",
     "eslint": "7.19.0",
     "mobx": "4.15.7",
@@ -24,13 +25,14 @@
     "swiper": "6.5.6",
     "url": "0.11.0",
     "vditor": "3.8.4",
-    "xss": "1.0.8"
+    "xss": "1.0.8",
+    "zzc-design-mobile": "^3.6.2"
   },
   "devDependencies": {
     "@babel/core": "7.11.1",
     "@babel/plugin-proposal-class-properties": "7.12.13",
     "@babel/plugin-proposal-decorators": "7.12.13",
-    "@discuzq/cli": "0.0.1-alpha.7",
+    "@discuzq/cli": "0.0.1-alpha.11",
     "@types/react": "17.0.3",
     "autoprefixer": "9.7.4",
     "babel-loader": "^8.2.2",

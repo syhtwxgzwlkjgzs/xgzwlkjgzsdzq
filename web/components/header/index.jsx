@@ -18,9 +18,9 @@ export default function Header() {
             <div className={styles.headerContent}>
                 <div onClick={gobackClickHandle} className={styles.left}>返回</div>
                 <div className={styles.right}>
-                    <Icon onClick={() => {iconClickHandle('home')}} name="HomeOutlined" color="red" size={24} />
-                    <Icon onClick={() => {iconClickHandle('msg')}} name="MessageOutlined" color="red" size={24} />
-                    <Icon onClick={() => {iconClickHandle('user')}} name="UserOutlined" color="red" size={24} />
+                    <Icon onClick={() => {iconClickHandle('home')}} name="HomeOutlined" color="#C4C9D6" size={20} />
+                    <Icon onClick={() => {iconClickHandle('msg')}} name="MessageOutlined" color="#C4C9D6" size={20} />
+                    <Icon onClick={() => {iconClickHandle('user')}} name="UserOutlined" color="#C4C9D6" size={20} />
                 </div>
             </div>
         </duv>
