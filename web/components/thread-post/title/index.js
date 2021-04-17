@@ -1,7 +1,7 @@
 /**
  * 发帖页标题
  */
-import React, { memo, useState, useEffect, useCallback } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import { Input } from '@discuzq/design';
 import styles from './index.module.scss';
 

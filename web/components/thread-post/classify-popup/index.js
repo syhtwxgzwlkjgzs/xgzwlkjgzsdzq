@@ -1,25 +1,24 @@
 /**
  * 分类弹出层
  */
-import React, { memo } from 'react'; //性能优化的
-import { Popup } from '@discuzq/design'; //原来就有的封装
-import styles from './index.module.scss'; //私有样式
-import PropTypes from 'prop-types'; //类型拦截
-import { Button } from '@discuzq/design';
+import React, { memo } from 'react'; // 性能优化的
+import { Popup, Button } from '@discuzq/design'; // 原来就有的封装
+import styles from './index.module.scss'; // 私有样式
+import PropTypes from 'prop-types'; // 类型拦截
 
 const ClassifyPopup = ({ list, visible, onClick, arrchildren }) => {
   const handlePopup = (item) => {
     onClick(item);
-  }; //自己定义用来调用传进来的方法的
+  }; // 自己定义用来调用传进来的方法的
 
   return (
     <Popup
       className={styles.tan}
-      position="bottom" //从哪个地方弹出 'bottom' | 'top' | 'center';
-      maskClosable={true} //点击遮罩层是否关闭弹出层，但好像没什么用
-      visible={visible} //是否显示弹出层
+      position="bottom" // 从哪个地方弹出 'bottom' | 'top' | 'center';
+      maskClosable={true} // 点击遮罩层是否关闭弹出层，但好像没什么用
+      visible={visible} // 是否显示弹出层
       onClose={() => {
-        //遮罩层点击关闭回调,传一个'取消'，可自定义更改
+        // 遮罩层点击关闭回调,传一个'取消'，可自定义更改
         handlePopup('取消');
       }}
     >
@@ -27,8 +26,7 @@ const ClassifyPopup = ({ list, visible, onClick, arrchildren }) => {
       <div className="box-popup">
         <p className='box-text'>选择分类</p>
         <h2>
-          {list.map((item, index) => {
-            return (
+          {list.map((item, index) => (
               <Button
                 key={index}
                 type
@@ -38,12 +36,10 @@ const ClassifyPopup = ({ list, visible, onClick, arrchildren }) => {
               >
                 {item}
               </Button>
-            );
-          })}
+          ))}
         </h2>
         <h2>
-          {arrchildren.map((item, index) => {
-            return (
+          {arrchildren.map((item, index) => (
               <Button
                 key={index}
                 type
@@ -53,8 +49,7 @@ const ClassifyPopup = ({ list, visible, onClick, arrchildren }) => {
               >
                 {item}
               </Button>
-            );
-          })}
+          ))}
         </h2>
         {/* 取消按钮 */}
         <h3
@@ -70,10 +65,10 @@ const ClassifyPopup = ({ list, visible, onClick, arrchildren }) => {
 };
 
 ClassifyPopup.propTypes = {
-  list: PropTypes.array.isRequired,//限定list的类型为Array,且是必传的
-  visible: PropTypes.bool.isRequired, //限定visible的类型为bool,且是必传的
-  onClick: PropTypes.func, //限定onClick的类型为functon,且是必传的
-  arrchildren: PropTypes.array, //限定arrchildren的类型为Array
+  list: PropTypes.array.isRequired, // 限定list的类型为Array,且是必传的
+  visible: PropTypes.bool.isRequired, // 限定visible的类型为bool,且是必传的
+  onClick: PropTypes.func, // 限定onClick的类型为functon,且是必传的
+  arrchildren: PropTypes.array, // 限定arrchildren的类型为Array
 };
 
 // 设置props默认类型
