@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Avatar } from '@discuzq/design';
+import Avatar from '@components/avatar';
 
 import styles from './index.module.scss';
 
@@ -40,7 +40,7 @@ const User = ({ data, onClick }) => {
 
   return (
     <div className={styles.item} onClick={click}>
-      <Avatar className={styles.avatar} size="large" circle={true} image={data.avatar} />
+      <Avatar className={styles.avatar} image={data.avatar} name={data.username} />
       <div className={styles.name}>{data.username || ''}</div>
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { Button, Icon } from '@discuzq/design';
+import Avatar from '../../avatar';
 import { noop } from '../utils';
 import styles from './index.module.scss';
 
@@ -13,26 +14,11 @@ import styles from './index.module.scss';
  * @prop {string}  onClick 点击事件
  */
 
-const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noop  }) => {
-  const imgLabel = useMemo(() => {
-    // 头像默认占位图为username首字
-    if (!imgSrc && imgSrc === '') {
-      return title.substr(0, 1);
-    }
-    return '';
-  }, [imgSrc]);
-
-  return (
+const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noop  }) => (
     <div className={styles.listItem} key={index} onClick={onClick}>
       <div className={styles.wrapper}>
           <div className={styles.header}>
-              {
-                imgSrc ? (
-                  <img className={styles.img} src={imgSrc}></img>
-                ) : (
-                  <span className={styles.img}>{imgLabel}</span>
-                )
-              }
+              <Avatar className={styles.img} image={imgSrc} name={title} />
               {
                 icon && (
                   <div className={styles.icon} style={{ backgroundColor: index % 2 === 0 ? '#e02433' : '#ffc300' }}>
@@ -59,7 +45,6 @@ const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noo
         )
       }
     </div>
-  );
-};
+);
 
 export default React.memo(Index);
