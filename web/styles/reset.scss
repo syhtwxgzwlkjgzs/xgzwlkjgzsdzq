@@ -4,6 +4,10 @@
 */
 /* stylelint-disable */
 html,
+body {
+  font-size: .12rem;
+  font-weight: 400;
+}
 body,
 div,
 span,
@@ -87,8 +91,6 @@ video {
   margin: 0;
   padding: 0;
   border: 0;
-  font-size: .12rem;
-  font-weight: 400;
   vertical-align: baseline;
 }
 
