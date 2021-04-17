@@ -1,4 +1,5 @@
 import api from '../api';
+import typeofFn from '@common/utils/typeof';
 
 /**
  * 附件、图片等上传接口 [先放到这里]
@@ -13,7 +14,7 @@ import api from '../api';
  * formData.append('type', 1);
  * const ret = await createAttachment(formData); // 在 async 方法中
  */
-export default async function createAttachment(params, progress) {
+export default async function createAttachment(params, progress = () => {}) {
   const res = await api.http({
     url: '/apiv3/attachments',
     method: 'post',
@@ -21,7 +22,7 @@ export default async function createAttachment(params, progress) {
       return data;
     }],
     onUploadProgress: (progressEvent) => {
-      progress(progressEvent);
+      if (typeofFn.isFunction(progress)) progress(progressEvent);
     },
     headers: {
       'Content-Type': 'multipart/form-data',
