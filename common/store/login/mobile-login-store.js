@@ -52,6 +52,10 @@ export const MOBILE_LOGIN_STORE_ERRORS = {
     Code: 'mbl_0010',
     Message: '审核忽略',
   },
+  NEED_BIND_WECHAT: {
+    Code: 8000,
+    Message: '需要绑定微信',
+  },
 };
 
 const USER_STATUS_MAP = {
@@ -60,6 +64,8 @@ const USER_STATUS_MAP = {
   3: MOBILE_LOGIN_STORE_ERRORS.REVIEW_REJECT,
   4: MOBILE_LOGIN_STORE_ERRORS.REVIEW_IGNORE,
 };
+
+const NEED_BIND_TOKEN_FLAG = 8000;
 
 export default class mobileLoginStore {
     codeTimmer = null;
@@ -210,6 +216,7 @@ export default class mobileLoginStore {
             code: this.code,
           },
         });
+
         if (smsLoginResp.code === 0) {
           const accessToken = get(smsLoginResp, 'data.accessToken', '');
           // 种下 access_token
@@ -222,6 +229,14 @@ export default class mobileLoginStore {
 
           return smsLoginResp.data;
         }
+
+        if (smsLoginResp.code === NEED_BIND_TOKEN_FLAG) {
+          throw {
+            ...MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT,
+            sessionToken: get(smsLoginResp, 'data.sessionToken'),
+          };
+        }
+
         throw {
           Code: smsLoginResp.code,
           Message: smsLoginResp.msg,

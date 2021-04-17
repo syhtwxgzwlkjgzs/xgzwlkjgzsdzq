@@ -4,6 +4,7 @@ import { withRouter } from 'next/router';
 import layout from './index.module.scss';
 import WeiXinOrCode from '@common/module/h5/WeixinOrCode';
 import HeaderLogin from '@common/module/h5/HeaderLogin';
+
 @inject('site')
 @inject('user')
 @inject('h5QrCode')

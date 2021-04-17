@@ -56,6 +56,11 @@ class LoginPhoneH5Page extends React.Component {
         return;
       }
 
+      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT.Code) {
+        this.props.router.push(`/user/wx-bind?session_token=${e.sessionToken}`);
+        return;
+      }
+
       Toast.error({
         content: e.Message,
         hasMask: false,
