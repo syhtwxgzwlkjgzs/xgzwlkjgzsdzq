@@ -25,6 +25,9 @@ import Tip from '@common/components/thread/tip';
 // 帖子内容
 function RenderThreadContent(props) {
   const { store: threadStore } = props;
+  const onMoreClick = () => {
+    props.fun.moreClick();
+  };
 
   return (
     <div className={`${layout.top} ${topic.container}`}>
@@ -34,6 +37,11 @@ function RenderThreadContent(props) {
           avatar={threadStore?.threadData?.userInfo?.avatar || ''}
           time='3分钟前'>
         </UserInfo>
+        <Icon
+          size='20'
+          name='ShareAltOutlined'
+          onClick={onMoreClick}>
+        </Icon>
       </div>
       <div className={topic.body}>
         <PostContent content={threadStore?.threadData?.content} />
@@ -306,10 +314,34 @@ class ThreadH5Page extends React.Component {
   onMoreClick() {
     console.log('更多');
   }
+  // 创建评论
+  async onPublishClick(val) {
+    this.setState({ showCommentInput: false });
+    console.log('创建评论', val);
+    const id = this.props.thread?.threadData?.id;
+    const params = {
+      id,
+      content: val,
+      attachments: [],
+    };
+    const { success, msg } = await this.service.thread.createComment(params);
+    this.setState({
+      isCommentLoading: false,
+    });
+    if (success) {
+      return;
+    }
+    Toast.error({
+      content: msg,
+    });
+  }
 
   render() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady } = threadStore;
+    const fun = {
+      moreClick: this.onMoreClick,
+    };
 
     return (
       <div className={layout.container}>
@@ -320,7 +352,7 @@ class ThreadH5Page extends React.Component {
         <div className={layout.body} ref={this.threadBodyRef} onScrollCapture={() => this.handleOnScroll()}>
           {/* 帖子内容 */}
           {
-            isReady ? <RenderThreadContent store={threadStore}></RenderThreadContent> : '加载中'
+            isReady ? <RenderThreadContent store={threadStore} fun={fun}></RenderThreadContent> : '加载中'
           }
 
           {/* 评论列表 */}
@@ -353,7 +385,7 @@ class ThreadH5Page extends React.Component {
           <InputPopup
             visible={this.state.showCommentInput}
             onClose={() => this.setState({ showCommentInput: false })}
-            onSubmit={value => this.setState({ showCommentInput: false })}>
+            onSubmit={value => this.onPublishClick(value)}>
           </InputPopup>
 
           {/* 操作区 */}

@@ -1,25 +1,26 @@
 import React from 'react';
+import { withRouter } from 'next/router';
 import styles from './index.module.scss';
 import { Avatar } from '@discuzq/design';
 // import '@discuzq/design/styles/index.scss';
 import ReplyList from '../reply-list/index';
 
-export default class CommentList extends React.Component {
+class CommentList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isShowReward: false, // 是否展示获得多少悬赏金
       isShowRedPacket: false, // 是否展示获得多少红包
+      isShowAdopt: false, // 是否展示采纳按钮
+      isShowOne: this.props.isShowOne || false, // 是否只显示一条评论回复
       isLiked: this.props.data.isLiked,
       likeCount: this.props.data.likeCount,
       likeClick: this.props.likeClick(),
       replyClick: this.props.replyClick(),
       deleteClick: this.props.deleteClick(),
     };
-    this.needReply = this.props.data.lastThreeComments, // 评论的回复
-    this.replyNumber = this.props.data.lastThreeComments.length - 1, // 评论的回复
-    this.isShowOne = this.props.isShowOne || false,
-    this.isShowAdopt = true;// 是否展示采纳按钮
+    this.needReply = this.props.data.lastThreeComments;// 评论的回复
+    this.replyNumber = this.props.data.lastThreeComments.length - 1; // 评论的回复
   }
   componentDidMount() {
     // this.loadCommentList();
@@ -30,21 +31,26 @@ export default class CommentList extends React.Component {
 
     };
   }
-  toCommentDetail() {
-    console.log('跳至评论详情');
+  toCommentDetail = () => {
+    if (this.state.isShowOne) {
+      this.props.router.push('/thread/comment/1');
+    }
   }
   // 处理评论的回复只显示一条
   showOne() {
-    console.log('this.isShowOne', this.isShowOne);
-    if (this.isShowOne) {
+    console.log('this.isShowOne', this.state.isShowOne);
+    if (this.state.isShowOne) {
       this.needReply = [];
       this.needReply.push(this.props.data.lastThreeComments[0]);
     }
   }
   likeClick() {
     this.setState({
-      likeCount: !this.state.isLiked ? this.state.likeCount + 1 : this.state.likeCount - 1,
       isLiked: !this.state.isLiked,
+    }, () => {
+      this.setState({
+        likeCount: this.state.isLiked ? this.state.likeCount + 1 : this.state.likeCount - 1,
+      });
     });
     this.state.likeClick('1');
   }
@@ -53,6 +59,9 @@ export default class CommentList extends React.Component {
   }
   deleteClick() {
     this.state.deleteClick('1');
+  }
+  adoptClick() {
+    console.log('点击采纳');
   }
 
   render() {
@@ -104,14 +113,19 @@ export default class CommentList extends React.Component {
                   <span onClick={() => this.deleteClick()}>删除</span>
                 </div>
                 {
-                  this.isShowAdopt
+                  this.state.isShowAdopt
                     ? <div className={styles.commentAdopt}>
-                        <span onClick={() => this.deleteClick()}>采纳</span>
+                        <span onClick={() => this.adoptClick()}>采纳</span>
                       </div> : ''
                 }
               </div>
               {
-                this.replyNumber > 0 && this.isShowOne ? <div className={styles.moreReply}>查看之前{this.replyNumber}条回复...</div> : ''
+                this.replyNumber > 0 && this.state.isShowOne
+                  ? <div
+                      className={styles.moreReply}
+                      onClick={() => this.toCommentDetail()}>
+                        查看之前{this.replyNumber}条回复...
+                    </div> : ''
               }
               <div className={styles.ReplyList}>
                 {
@@ -122,7 +136,8 @@ export default class CommentList extends React.Component {
                                             avatarClick={this.props.avatarClick}
                                             likeClick={this.props.likeClick}
                                             replyClick={this.props.replyClick}
-                                            deleteClick={this.props.deleteClick}>
+                                            deleteClick={this.props.deleteClick}
+                                            toCommentDetail={this.toCommentDetail}>
                                           </ReplyList>)
                 }
               </div>
@@ -133,3 +148,5 @@ export default class CommentList extends React.Component {
     );
   }
 }
+
+export default withRouter(CommentList);
