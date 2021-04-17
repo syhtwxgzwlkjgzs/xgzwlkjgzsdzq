@@ -7,36 +7,7 @@ import { Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { THREAD_TYPE } from '@common/constants/thread-post';
-
-// TODO: icon 待更换
-const attachIcon = [
-  {
-    name: 'PictureOutlinedBig',
-    active: '#2469f6',
-    type: THREAD_TYPE.image,
-  },
-  {
-    name: 'VideoOutlined',
-    active: 'red',
-    type: THREAD_TYPE.video,
-  },
-  {
-    name: 'MicroOutlined',
-    active: 'green',
-    type: THREAD_TYPE.voice,
-  },
-  {
-    name: 'ShopOutlined',
-    active: '#2469f6',
-    type: THREAD_TYPE.goods,
-  },
-  {
-    name: 'QuestionOutlined',
-    active: '#2469f6',
-    type: THREAD_TYPE.reward,
-  },
-];
+import { attachIcon } from '../const';
 
 class AttachmentToolbar extends React.Component {
   constructor(props) {
