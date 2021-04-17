@@ -9,7 +9,6 @@ export default class UserLoginStore {
 
   @action
   login = async () => {
-
     // 信息需要填写完整
     if (!this.username || !this.password) {
       throw {
@@ -31,8 +30,8 @@ export default class UserLoginStore {
         const accessToken = get(loginResp, 'data.accessToken', '');
         // 种下 access_token
         setAccessToken({
-          accessToken
-        })
+          accessToken,
+        });
         return loginResp.data;
       }
       throw {
@@ -49,6 +48,5 @@ export default class UserLoginStore {
         error,
       };
     }
-
   }
 }

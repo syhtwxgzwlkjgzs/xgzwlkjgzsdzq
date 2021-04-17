@@ -31,7 +31,7 @@ class SiteStore {
   @computed get isMiniProgramOpen() {
     return Boolean(get(this.webConfig, 'setSite,passport.miniprogramClose', true));
   }
-  // 公众平台是否开启´
+  // 公众平台是否开启
   @computed get isOpenPlatformOpen() {
     return Boolean(get(this.webConfig, 'setSite.passport.oplatformClose', true));
   }

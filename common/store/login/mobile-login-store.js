@@ -24,10 +24,41 @@ export const MOBILE_LOGIN_STORE_ERRORS = {
     Code: 'mbl_0003',
     Message: '验证码缺失',
   },
-  NEET_BIND_USERNAME: {
+  NEED_BIND_USERNAME: {
     Code: 'mbl_0004',
     Message: '需要补充昵称',
   },
+  NEED_COMPLETE_REQUIRED_INFO: {
+    Code: 'mbl_0005',
+    Message: '需要补充附加信息',
+  },
+  NEED_ALL_INFO: {
+    Code: 'mbl_0006',
+    Message: '需要补充昵称和附加信息',
+  },
+  BAND_USER: {
+    Code: 'mbl_0007',
+    Message: '用户被禁用',
+  },
+  REVIEWING: {
+    Code: 'mbl_0008',
+    Message: '审核中',
+  },
+  REVIEW_REJECT: {
+    Code: 'mbl_0009',
+    Message: '审核拒绝',
+  },
+  REVIEW_IGNORE: {
+    Code: 'mbl_0010',
+    Message: '审核忽略',
+  },
+};
+
+const USER_STATUS_MAP = {
+  1: MOBILE_LOGIN_STORE_ERRORS.BAND_USER,
+  2: MOBILE_LOGIN_STORE_ERRORS.REVIEWING,
+  3: MOBILE_LOGIN_STORE_ERRORS.REVIEW_REJECT,
+  4: MOBILE_LOGIN_STORE_ERRORS.REVIEW_IGNORE,
 };
 
 export default class mobileLoginStore {
@@ -130,6 +161,36 @@ export default class mobileLoginStore {
       }
     }
 
+    checkCompleteUserInfo = (smsLoginResp) => {
+      // 如果没有填写昵称，抛出需要填写昵称的状态码
+      const isMissNickname = get(smsLoginResp, 'isMissNickname', false);
+      const isMissRequireInfo = get(smsLoginResp, 'userStatus') === 10;
+
+      if (isMissRequireInfo && isMissNickname) {
+        throw MOBILE_LOGIN_STORE_ERRORS.NEED_ALL_INFO;
+      }
+
+      if (isMissRequireInfo) {
+        throw MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO;
+      }
+
+      if (isMissNickname) {
+        throw MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME;
+      }
+    }
+
+    /**
+     * 检查用户状态，用来跳转状态页面
+     * @param {*} smsLoginResp
+     */
+    checkUserStatus = (smsLoginResp) => {
+      const userStatus = get(smsLoginResp, 'userStatus');
+      if (USER_STATUS_MAP[userStatus]) {
+        throw USER_STATUS_MAP[userStatus];
+      }
+      return;
+    }
+
     @action
     login = async () => {
       this.beforeLoginVerify();
@@ -149,10 +210,8 @@ export default class mobileLoginStore {
             accessToken,
           });
 
-          // 如果没有填写昵称，抛出需要填写昵称的状态码
-          if (get(smsLoginResp, 'isMissRequireInfo', false)) {
-            throw MOBILE_LOGIN_STORE_ERRORS.NEET_BIND_USERNAME;
-          }
+          this.checkCompleteUserInfo(smsLoginResp);
+          this.checkUserStatus(smsLoginResp);
 
           return smsLoginResp.data;
         }
@@ -170,4 +229,12 @@ export default class mobileLoginStore {
         };
       }
     }
+
+  // /**
+  //  * 微信外浏览器登录（微信模式下）
+  //  */
+  // @action
+  // mobileBrowserWechatLogin() {
+
+  // }
 }

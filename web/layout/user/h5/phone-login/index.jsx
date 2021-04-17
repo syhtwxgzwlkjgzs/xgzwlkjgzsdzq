@@ -6,6 +6,7 @@ import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import PhoneInput from '@common/module/h5/PhoneInput/index';
 import HeaderLogin from '@common/module/h5/HeaderLogin';
+import MOBILE_LOGIN_STORE_ERRORS from '@common/store/login/mobile-login-store';
 
 
 @inject('site')
@@ -21,13 +22,11 @@ class LoginPhoneH5Page extends React.Component {
 
   handlePhoneNumCallback = (phoneNum) => {
     const { mobileLogin } = this.props;
-    console.log(phoneNum);
     mobileLogin.mobile = phoneNum;
   }
 
   handlePhoneCodeCallback = (code) => {
     const { mobileLogin } = this.props;
-    console.log(code);
     mobileLogin.code = code;
   }
 
@@ -40,6 +39,18 @@ class LoginPhoneH5Page extends React.Component {
         duration: 1000,
       });
     } catch (e) {
+      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME.code) {
+        console.log('need to bind nick name');
+      }
+
+      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.code) {
+
+      }
+
+      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_ALL_INFO.code) {
+
+      }
+
       Toast.error({
         content: e.Message,
         hasMask: false,

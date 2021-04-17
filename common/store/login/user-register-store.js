@@ -30,8 +30,8 @@ export default class UserRegisterStore {
     if (!this.isPasswordSame()) {
       throw {
         Code: 'reg_0001',
-        Message: '两次输入的密码不一致'
-      }
+        Message: '两次输入的密码不一致',
+      };
     }
 
     try {
@@ -41,15 +41,15 @@ export default class UserRegisterStore {
           username: this.username,
           password: this.password,
           nickname: this.nickname,
-          passwordConfirmation: this.passwordConfirmation
+          passwordConfirmation: this.passwordConfirmation,
         },
       });
       if (registerResp.code === 0) {
         const accessToken = get(registerResp, 'accessToken');
         // 注册成功后，默认登录
         setAccessToken({
-          accessToken
-        })
+          accessToken,
+        });
         return registerResp.data;
       }
       throw {
@@ -66,6 +66,5 @@ export default class UserRegisterStore {
         error,
       };
     }
-
   }
 }
