@@ -34,6 +34,15 @@ class Index extends React.Component {
       const categories = await readCategories({});
       index.setCategories(categories.data);
     }
+
+    // 如果还没有获取用户名登录入口是否展示接口，那么请求来赋予初始值
+    if (this.props.site.isUserLoginVisible === null) {
+      try {
+        this.props.site.getUserLoginEntryStatus();
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
 
   render() {

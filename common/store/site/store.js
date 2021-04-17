@@ -1,5 +1,12 @@
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 import { APP_THEME } from '@common/constants/site';
+import { get } from '../../utils/get';
+
+const WECHAT_ENV_MAP = {
+  MINI: 'miniProgram',
+  OPEN: 'openPlatform',
+  NONE: 'none'
+}
 
 class SiteStore {
   constructor(props = {}) {
@@ -7,11 +14,39 @@ class SiteStore {
     this.webConfig = props.webConfig;
     this.platform = props.platform;
   }
-  envConfig = {}
+
+  envConfig = {};
   @observable webConfig = null;
   @observable platform = null;
   @observable closeSiteConfig = null;
   @observable theme = APP_THEME.light;
+
+  @observable isUserLoginVisible = null;
+
+  @computed get smsOpen() {
+    return get(this.webConfig, 'setSite.qcloud.qcloudSms', false);
+  }
+
+  // FIXME: 以下两个接口，后台的字段是相反的语义，实际表意是 *****Open 的意思，需要推动后台改动
+  @computed get miniProgramOpen() {
+    return Boolean(get(this.webConfig, 'setSite,passport.miniprogramClose', true));
+  }
+
+  @computed get openPlatformOpen() {
+    return Boolean(get(this.webConfig, 'setSite.passport.oplatformClose', true));
+  }
+
+  @computed get wechatEnv() {
+    if (this.miniProgramOpen) {
+      return WECHAT_ENV_MAP.MINI;
+    }
+
+    if (this.openPlatformOpen) {
+      return WECHAT_ENV_MAP.OPEN;
+    }
+
+    return WECHAT_ENV_MAP.NONE;
+  }
 }
 
 export default SiteStore;
