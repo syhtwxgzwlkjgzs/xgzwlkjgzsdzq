@@ -169,10 +169,6 @@ export default class mobileLoginStore {
           ...MOBILE_LOGIN_STORE_ERRORS.NETWORK_ERROR,
           error,
         };
-        throw {
-          ...MOBILE_LOGIN_STORE_ERRORS.NETWORK_ERROR,
-          error,
-        };
       }
     }
 }
