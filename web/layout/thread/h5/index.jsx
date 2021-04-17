@@ -303,6 +303,9 @@ class ThreadH5Page extends React.Component {
   onBackClick() {
     this.props.router.push('/');
   }
+  onMoreClick() {
+    console.log('更多');
+  }
 
   render() {
     const { thread: threadStore } = this.props;

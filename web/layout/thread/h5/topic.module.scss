@@ -9,6 +9,8 @@
 .header {
   // height: rem(54);
   background: var(--color-white);
+  display: flex;
+  justify-content: space-between;
 }
 
 .body {

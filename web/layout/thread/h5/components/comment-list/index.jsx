@@ -12,11 +12,14 @@ export default class CommentList extends React.Component {
       isShowRedPacket: false, // 是否展示获得多少红包
       isLiked: this.props.data.isLiked,
       likeCount: this.props.data.likeCount,
-      isShowOne: this.props.isShowOne,
       likeClick: this.props.likeClick(),
       replyClick: this.props.replyClick(),
       deleteClick: this.props.deleteClick(),
     };
+    this.needReply = this.props.data.lastThreeComments, // 评论的回复
+    this.replyNumber = this.props.data.lastThreeComments.length - 1, // 评论的回复
+    this.isShowOne = this.props.isShowOne || false,
+    this.isShowAdopt = true;// 是否展示采纳按钮
   }
   componentDidMount() {
     // this.loadCommentList();
@@ -32,7 +35,11 @@ export default class CommentList extends React.Component {
   }
   // 处理评论的回复只显示一条
   showOne() {
-    console.log(this.state.isShowOne);
+    console.log('this.isShowOne', this.isShowOne);
+    if (this.isShowOne) {
+      this.needReply = [];
+      this.needReply.push(this.props.data.lastThreeComments[0]);
+    }
   }
   likeClick() {
     this.setState({
@@ -96,11 +103,19 @@ export default class CommentList extends React.Component {
                 <div className={styles.commentDelete}>
                   <span onClick={() => this.deleteClick()}>删除</span>
                 </div>
-              </div>
-              <div className={styles.ReplyList}>
-                {/* <ReplyList data={this.props.data.lastThreeComments}></ReplyList> */}
                 {
-                  this.props.data.lastThreeComments
+                  this.isShowAdopt
+                    ? <div className={styles.commentAdopt}>
+                        <span onClick={() => this.deleteClick()}>采纳</span>
+                      </div> : ''
+                }
+              </div>
+              {
+                this.replyNumber > 0 && this.isShowOne ? <div className={styles.moreReply}>查看之前{this.replyNumber}条回复...</div> : ''
+              }
+              <div className={styles.ReplyList}>
+                {
+                  this.needReply
                     .map((val, index) => <ReplyList
                                             data={val}
                                             key={index}
