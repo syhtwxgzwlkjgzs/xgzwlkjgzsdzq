@@ -20,3 +20,4 @@ export { default as readProcutAnalysis } from './thread-post/read-product-analys
 export { default as readTopics } from './thread-post/read-topic';
 export { default as smsVerify } from './smsVerify';
 export { default as smsResetPwd } from './smsResetPassword';
+export { default as createAttachment } from './thread-post/create-attachment';
