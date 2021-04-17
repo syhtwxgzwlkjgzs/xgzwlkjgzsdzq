@@ -1,5 +1,7 @@
 import { observable, action } from 'mobx';
 import { usernameRegister } from '@server';
+import { get } from '../../utils/get';
+import setAccessToken from '../../utils/set-access-token';
 
 export default class UserRegisterStore {
   @observable username = '';
@@ -43,6 +45,11 @@ export default class UserRegisterStore {
         },
       });
       if (registerResp.code === 0) {
+        const accessToken = get(registerResp, 'accessToken');
+        // 注册成功后，默认登录
+        setAccessToken({
+          accessToken
+        })
         return registerResp.data;
       }
       throw {
