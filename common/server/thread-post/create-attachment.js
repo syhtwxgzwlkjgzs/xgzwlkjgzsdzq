@@ -13,13 +13,16 @@ import api from '../api';
  * formData.append('type', 1);
  * const ret = await createAttachment(formData); // 在 async 方法中
  */
-export default async function createAttachment(params) {
+export default async function createAttachment(params, progress) {
   const res = await api.http({
     url: '/apiv3/attachments',
     method: 'post',
     transformRequest: [function (data) {
       return data;
     }],
+    onUploadProgress: (progressEvent) => {
+      progress(progressEvent);
+    },
     headers: {
       'Content-Type': 'multipart/form-data',
     },
