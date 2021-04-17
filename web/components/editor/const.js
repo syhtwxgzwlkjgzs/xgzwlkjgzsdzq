@@ -5,6 +5,7 @@ export const defaultIcon = [
   {
     name: 'UserOutlined', // emoji
     active: '#2469f6',
+    id: 'emoji',
   },
   {
     name: 'MessageDoubleOutlined', // @
