@@ -117,7 +117,7 @@ export default class mobileBindStore {
     }
 
     @action 
-    bind = () => {
+    bind = async () => {
         this.beforeBindVerify();
 
         try {

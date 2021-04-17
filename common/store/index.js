@@ -12,6 +12,7 @@ import UserRegisterStore from './login/user-register-store';
 import MobileLoginStore from './login/mobile-login-store';
 import NicknameBindStore from './login/nickname-bind-store';
 import SupplementaryStore from './login/supplementary-store';
+import MobileBindStore from './login/mobile-bind-store';
 import H5QrCode from './login/h5-qrcode';
 useStaticRendering(isServer());
 
@@ -33,6 +34,7 @@ export default function initializeStore(initProps = {}) {
       mobileLogin: new MobileLoginStore(),
       nicknameBind: new NicknameBindStore(),
       supplementary: new SupplementaryStore(),
+      mobileBind: new MobileBindStore(),
       comment: new CommentStore(),
       threadPost: new ThreadPostStore(),
       h5QrCode: new H5QrCode(),
@@ -52,6 +54,7 @@ export default function initializeStore(initProps = {}) {
       mobileLogin: new MobileLoginStore(),
       nicknameBind: new NicknameBindStore(),
       supplementary: new SupplementaryStore(),
+      mobileBind: new MobileBindStore(),
       comment: new CommentStore(),
       threadPost: new ThreadPostStore(),
       h5QrCode: new H5QrCode(),
