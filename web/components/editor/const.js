@@ -1,3 +1,5 @@
+import { THREAD_TYPE } from '@common/constants/thread-post';
+
 /**
  * 默认的操作栏 icon，TODO: 待更新
  */
@@ -26,5 +28,34 @@ export const defaultIcon = [
   {
     name: 'DoubleRightOutlined', // 付费
     active: '#2469f6',
+  },
+];
+
+// TODO: icon 待更换
+export const attachIcon = [
+  {
+    name: 'PictureOutlinedBig',
+    active: '#2469f6',
+    type: THREAD_TYPE.image,
+  },
+  {
+    name: 'VideoOutlined',
+    active: 'red',
+    type: THREAD_TYPE.video,
+  },
+  {
+    name: 'MicroOutlined',
+    active: 'green',
+    type: THREAD_TYPE.voice,
+  },
+  {
+    name: 'ShopOutlined',
+    active: '#2469f6',
+    type: THREAD_TYPE.goods,
+  },
+  {
+    name: 'QuestionOutlined',
+    active: '#2469f6',
+    type: THREAD_TYPE.reward,
   },
 ];
