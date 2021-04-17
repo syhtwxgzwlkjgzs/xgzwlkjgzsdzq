@@ -6,7 +6,7 @@ import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import PhoneInput from '@common/module/h5/PhoneInput/index';
 import HeaderLogin from '@common/module/h5/HeaderLogin';
-import MOBILE_LOGIN_STORE_ERRORS from '@common/store/login/mobile-login-store';
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 
 
 @inject('site')
@@ -32,23 +32,28 @@ class LoginPhoneH5Page extends React.Component {
 
   handleLoginButtonClick = async () => {
     try {
-      const loginData = await this.props.mobileLogin.login();
+      await this.props.mobileLogin.login();
       Toast.success({
         content: '登录成功',
         hasMask: false,
         duration: 1000,
       });
+      // 暂不实现
+      setTimeout(() => {}, 1000);
     } catch (e) {
-      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME.code) {
-        console.log('need to bind nick name');
+      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME.Code) {
+        this.props.router.push('/user/bind-nickname');
+        return;
       }
 
-      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.code) {
-
+      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        this.props.router.push('/user/supplementary');
+        return;
       }
 
-      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_ALL_INFO.code) {
-
+      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_ALL_INFO.Code) {
+        this.props.router.push('/user/bind-nickname');
+        return;
       }
 
       Toast.error({

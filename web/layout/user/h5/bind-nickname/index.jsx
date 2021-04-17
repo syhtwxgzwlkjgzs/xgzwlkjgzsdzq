@@ -10,6 +10,7 @@ import HeaderLogin from '@common/module/h5/HeaderLogin';
 @inject('site')
 @inject('user')
 @inject('thread')
+@inject('mobileLogin')
 @inject('nicknameBind')
 @observer
 class BindNicknameH5Page extends React.Component {
@@ -20,6 +21,12 @@ class BindNicknameH5Page extends React.Component {
   handleBindButtonClick = async () => {
     try {
       const bindData = await this.props.nicknameBind.bindNickname();
+      this.props.mobileLogin.needToSetNickname = false;
+      Toast.success({
+        content: '昵称设置成功',
+        hasMask: false,
+        duration: 1000,
+      });
     } catch (e) {
       Toast.error({
         content: e.Message,

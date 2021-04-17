@@ -68,6 +68,9 @@ export default class mobileLoginStore {
     @observable code = '';
     @observable codeTimeout = null;
 
+    @observable needToSetNickname = false;
+    @observable needToCompleteExtraInfo = false;
+
     // 验证码是否符合格式要求
     @computed get isInvalidCode() {
       return this.code.length === 6;
@@ -163,18 +166,22 @@ export default class mobileLoginStore {
 
     checkCompleteUserInfo = (smsLoginResp) => {
       // 如果没有填写昵称，抛出需要填写昵称的状态码
-      const isMissNickname = get(smsLoginResp, 'isMissNickname', false);
-      const isMissRequireInfo = get(smsLoginResp, 'userStatus') === 10;
+      const isMissNickname = get(smsLoginResp, 'data.isMissNickname', false);
+      const isMissRequireInfo = get(smsLoginResp, 'data.userStatus') === 10;
 
       if (isMissRequireInfo && isMissNickname) {
+        this.needToCompleteExtraInfo = true;
+        this.needToSetNickname = true;
         throw MOBILE_LOGIN_STORE_ERRORS.NEED_ALL_INFO;
       }
 
       if (isMissRequireInfo) {
+        this.needToCompleteExtraInfo = true;
         throw MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO;
       }
 
       if (isMissNickname) {
+        this.needToSetNickname = true;
         throw MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME;
       }
     }
@@ -229,12 +236,4 @@ export default class mobileLoginStore {
         };
       }
     }
-
-  // /**
-  //  * 微信外浏览器登录（微信模式下）
-  //  */
-  // @action
-  // mobileBrowserWechatLogin() {
-
-  // }
 }
