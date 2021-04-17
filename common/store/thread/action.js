@@ -20,8 +20,9 @@ class ThreadAction extends ThreadStore {
   }
 
   @action
-  setCommentList(list = []) {
-    this.commentList = list;
+  setCommentListData(data) {
+    // this.commentListData = data;
+    this.commentListData = MockThreadData.comment;
   }
 }
 

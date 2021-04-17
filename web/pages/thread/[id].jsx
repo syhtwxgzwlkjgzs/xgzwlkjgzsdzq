@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'next/router';
 import { inject } from 'mobx-react';
-import { readThreadDetail } from '@server';
+import { readThreadDetail, readCommentList } from '@server';
 import ThreadH5Page from '@layout/thread/h5';
 import ThreadPCPage from '@layout/thread/pc';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
@@ -15,14 +15,20 @@ class Detail extends React.Component {
       return {
         props: {
           serverThread: null,
+          commentList: null,
         },
       };
     }
     // 获取分类数据
     const res = await readThreadDetail({ params: { pid: id } });
+
+    // 获取评论列表
+    const commentRes = await readCommentList({ params: {} });
+
     return {
       props: {
         serverThread: res.data,
+        commentList: commentRes.data,
       },
     };
   }
@@ -40,6 +46,9 @@ class Detail extends React.Component {
     if (!this.props.serverThread && id) {
       const res = await readThreadDetail({ params: { pid: Number(id) } });
       this.props.thread.setThreadData(res.data);
+
+      const commentRes = await readCommentList({ params: { pid: Number(id) } });
+      this.props.thread.setCommentListData(commentRes.data);
     }
   }
 
