@@ -9,7 +9,7 @@ import footer from './footer.module.scss';
 import topic from './topic.module.scss';
 import CommentList from './components/comment-list/index';
 
-import { Icon, Input, Badge, Toast } from '@discuzq/design';
+import { Icon, Input, Badge, Toast, Tag } from '@discuzq/design';
 import UserInfo from '@common/components/thread/user-info';
 
 import InputPopup from './components/input-popup';
@@ -19,6 +19,7 @@ import PostContent from '@common/components/thread/post-content';
 import ProductItem from '@common/components/thread/product-item';
 import VideoPlay from '@common/components/thread/video-play';
 import PostRewardProgressBar, { POST_TYPE } from '@common/components/thread/post-reward-progress-bar';
+import Tip from '@common/components/thread/tip';
 
 
 // 帖子内容
@@ -44,14 +45,29 @@ function RenderThreadContent(props) {
           title={threadStore?.threadData?.goods?.title}
         />
         <AudioPlay />
+
+        <Tag>使用交流</Tag>
+
+
         <PostRewardProgressBar remaining={5} received={5} />
         <PostRewardProgressBar type={POST_TYPE.BOUNTY} remaining={2} received={5} />
+      </div>
+      <div className={topic.footer}>
+        <div className={topic.thumbs}>
+          <Icon name='LikeOutlined'></Icon>
+          1660万
+          <Tip imgs={threadStore?.threadData?.userImgs}></Tip>
+        </div>
+        <span>
+          800次分享
+        </span>
       </div>
     </div>
   );
 }
 
 // 评论列表
+@observer
 class RenderCommentList extends React.Component {
   constructor(props) {
     super(props);
@@ -59,9 +75,6 @@ class RenderCommentList extends React.Component {
     this.state = {
       showCommentInput: false, // 是否弹出评论框
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
-
-      parPage: 10,
-      page: 1, // 页码
     };
   }
 
@@ -129,12 +142,13 @@ class RenderCommentList extends React.Component {
 
   render() {
     const { totalPage, commentList } = this.props.store;
+
     return (
       <Fragment>
         <div className={comment.header}>
           <div className={comment.number}>
             共{totalPage}条评论
-              </div>
+          </div>
           <div className={comment.sort} onClick={() => this.onSortClick()}>
             {
               this.state.commentSort ? '评论从旧到新' : '评论从新到旧'
@@ -184,7 +198,11 @@ class ThreadH5Page extends React.Component {
     };
     this.state = {
       showCommentInput: false, // 是否弹出评论框
+      isCommentLoading: false, // 列表loading
     };
+
+    this.parPage = 10;
+    this.page = 1; // 页码
 
     // 滚动定位相关属性
     this.threadBodyRef = React.createRef();
@@ -196,6 +214,15 @@ class ThreadH5Page extends React.Component {
 
   // TODO:增加节流处理
   handleOnScroll() {
+    // 加载评论列表
+    const scrollDistance = this.threadBodyRef?.current?.scrollTop;
+    const offsetHeight = this.threadBodyRef?.current.offsetHeight;
+    const scrollHeight = this.threadBodyRef?.current.scrollHeight;
+    if (scrollDistance + offsetHeight >= scrollHeight) {
+      this.page = this.page + 1;
+      this.loadCommentList();
+    }
+
     if (this.flag) {
       this.nextPosition = this.threadBodyRef?.current?.scrollTop || 0;
     }
@@ -242,22 +269,24 @@ class ThreadH5Page extends React.Component {
   }
   // 加载评论列表
   async loadCommentList() {
+    if (this.state.isCommentLoading || this.isCommentReady) return;
+    this.setState({
+      isCommentLoading: true,
+    });
     console.log('加载评论列表数据');
     const id = this.props.thread?.threadData?.id;
-    // const id = 1;
     const params = {
       id,
-      page: this.state.page,
-      parPage: this.state.parPage,
+      page: this.page,
+      parPage: this.parPage,
       sort: this.state.commentSort ? 'createdAt' : '-createdAt',
     };
-    const res = await this.service.thread.loadCommentList(params);
-    console.log(res);
+
     const { success, msg } = await this.service.thread.loadCommentList(params);
+    this.setState({
+      isCommentLoading: false,
+    });
     if (success) {
-      Toast.success({
-        content: '操作成功',
-      });
       return;
     }
     Toast.error({
@@ -285,21 +314,28 @@ class ThreadH5Page extends React.Component {
           <span onClick={() => this.onBackClick()}>返回</span>
         </div>
 
-        {/* 帖子展示 */}
         <div className={layout.body} ref={this.threadBodyRef} onScrollCapture={() => this.handleOnScroll()}>
+          {/* 帖子内容 */}
           {
             isReady ? <RenderThreadContent store={threadStore}></RenderThreadContent> : '加载中'
           }
 
-          {/* 评论 */}
+          {/* 评论列表 */}
           <div className={`${layout.bottom} ${comment.container}`} ref={this.commentRef}>
             {
-              isCommentReady ? <RenderCommentList store={threadStore}></RenderCommentList> : '加载中'
+              isCommentReady
+                ? (
+                  <Fragment>
+                    <RenderCommentList store={threadStore}></RenderCommentList>
+                    {this.state.isCommentLoading && <p>请求数据中</p>}
+                  </Fragment>
+                )
+                : '加载中'
             }
           </div>
         </div>
 
-        {/* 底部操作 */}
+        {/* 底部操作栏 */}
         <div className={layout.footer}>
           {/* 评论区触发 */}
           <div className={footer.inputClick} onClick={() => this.onInputClick()}>

@@ -28,7 +28,7 @@ class Detail extends React.Component {
     return {
       props: {
         serverThread: res.data,
-        commentList: commentRes.data,
+        commentList: commentRes.data || [],
       },
     };
   }
@@ -48,7 +48,8 @@ class Detail extends React.Component {
       this.props.thread.setThreadData(res.data);
 
       const commentRes = await readCommentList({ params: { pid: Number(id) } });
-      this.props.thread.setCommentListData(commentRes.data);
+      this.props.thread.setCommentList(commentRes.data.pageData);
+      this.props.thread.setTotalpage(commentRes.data.totalPage);
     }
   }
 

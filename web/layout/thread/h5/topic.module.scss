@@ -7,7 +7,7 @@
 }
 
 .header {
-  height: rem(54);
+  // height: rem(54);
   background: var(--color-white);
 }
 
@@ -21,4 +21,18 @@
 
 .image {
   width: 100%;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--color-text-secondary);
+  font-size: rem($font-size-primary);
+}
+
+.thumbs {
+  display: flex;
+  align-items: center;
+  font-size: rem($font-size-primary);
 }
