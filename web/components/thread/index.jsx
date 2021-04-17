@@ -51,7 +51,7 @@ class Index extends React.Component {
     }
 
     // 帖子属性内容
-    renderThreadContent = () => (
+    renderThreadContent = data => (
       <div className={styles.wrapper}>
           <PostContent content={dataSource.content} onPay={this.onPay} />
           <div className={styles.content}>
@@ -87,18 +87,20 @@ class Index extends React.Component {
     )
 
     render() {
-      const { money = '0' } = this.props;
+      const { money = '0', data } = this.props;
+      const { user, position, likeReward } = data;
+
       return (
         <div className={styles.container}>
           <div className={styles.header}>
               <UserInfo
-                  name={dataSource.userInfo.name}
-                  avatar={dataSource.userInfo.avatar}
-                  location={dataSource.userInfo.location}
+                  name={user.userName}
+                  avatar={user.avatar}
+                  location={position.address}
               />
           </div>
 
-          {this.renderThreadContent()}
+          {this.renderThreadContent(data)}
 
           {money !== '0' && <Button className={styles.button} type="primary" onClick={this.onPay}>
             <span className={styles.icon}>$</span>
@@ -106,10 +108,10 @@ class Index extends React.Component {
           </Button>}
 
           <BottomEvent
-            userImgs={dataSource.bottomEvent.userImgs}
-            wholeNum={dataSource.bottomEvent.wholeNum}
+            userImgs={likeReward.users}
+            wholeNum={likeReward.likePayCount}
             comment={dataSource.bottomEvent.comment}
-            sharing={dataSource.bottomEvent.sharing}
+            sharing={likeReward.shareCount}
             onShare={this.onShare}
             onComment={this.onComment}
             onPraise={this.onPraise}
