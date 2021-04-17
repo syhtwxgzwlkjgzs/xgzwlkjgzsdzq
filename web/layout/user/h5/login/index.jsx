@@ -12,17 +12,6 @@ import HeaderLogin from '@common/module/h5/HeaderLogin';
 @inject('userLogin')
 @observer
 class LoginH5Page extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
-  setVisible = () => {
-    this.setState({
-      visible: false,
-    });
-  };
-
   handleUsernameChange = (e) => {
     this.props.userLogin.username = e.target.value;
   }

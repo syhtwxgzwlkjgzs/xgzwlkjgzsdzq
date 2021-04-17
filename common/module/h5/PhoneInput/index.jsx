@@ -9,26 +9,40 @@ class PhoneInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      phoneNum: '', // 手机号
       inputValue: '', // 验证码
     };
   }
-  setCaptcha = (val) => {
+
+  setCaptcha = (code) => {
+    const { phoneCodeCallback = () => {} } = this.props;
     this.setState({
-      inputValue: val,
+      inputValue: code,
     });
+    phoneCodeCallback(code);
+  }
+  setPhoneNum = (e) => {
+    const { phoneNumCallback = () => {} } = this.props;
+    const val = e.target.value;
+    this.setState({
+      phoneNum: val,
+    });
+    phoneNumCallback(val);
   }
 
   render() {
+    const { phoneNum } = this.state;
+    const { codeTimeout, sendCodeCallback = () => {} } = this.props;
     return (
       <Fragment>
         {/* 手机号输入 start */}
         <div className={layout.phoneInput}>
-          <Input className={layout.input} value='' placeholder="请输入手机号码" onChange={(e) => {
-            console.log(e.target.value);
-          }} />
-          <div className={layout.sendCaptcha} onChange={() => {
-            console.log('发送验证码');
-          }}>发送验证码</div>
+          <Input mode='number' className={layout.input} value={phoneNum} placeholder="请输入手机号码" onChange={this.setPhoneNum} />
+          {
+            codeTimeout
+              ? <div className={layout.countDown } >{codeTimeout}</div>
+              : <div className={layout.sendCaptcha} onClick={sendCodeCallback}>发送验证码</div>
+          }
         </div>
         {/* 手机号输入 end */}
         {/* 验证码 start */}

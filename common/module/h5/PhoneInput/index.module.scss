@@ -6,7 +6,7 @@
     @include input;
   }
 }
-.sendCaptcha {
+@mixin captchaBtn {
   width: rem(94);
   height: rem(36);
   position: absolute;
@@ -17,7 +17,14 @@
   border-radius: rem(5);
   color: var(--color-white);
   font-size: rem(14);
+}
+.sendCaptcha {
+  @include captchaBtn;
   background: var(--color-primary); 
+}
+.countDown {
+  @include captchaBtn;
+  background: var(--border-line-color); 
 }
 .captchaInput{
   margin-top: rem(32);

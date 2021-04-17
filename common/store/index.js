@@ -29,7 +29,7 @@ export default function initializeStore(initProps = {}) {
       thread: new ThreadStore(),
       userLogin: new UserLoginStore(),
       userRegister: new UserRegisterStore(),
-      mobileLoginStore: new MobileLoginStore(),
+      mobileLogin: new MobileLoginStore(),
       comment: new CommentStore(),
       threadPost: new ThreadPostStore(),
     };
