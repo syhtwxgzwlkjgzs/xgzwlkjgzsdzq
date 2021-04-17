@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Post } from '../../../../../components/search-result-item';
+import ThreadContent from '@components/thread';
 
 import styles from './index.module.scss';
 
@@ -10,9 +10,12 @@ import styles from './index.module.scss';
  */
 const PopularContents = ({ data, onItemClick }) => (
   <div className={styles.list}>
-    {data.map((item, index, arr) => (
+    {
+      data.map((item, index) => <ThreadContent data={item} key={index} />)
+    }
+    {/* {data.map((item, index, arr) => (
       <Post key={index} data={item} onClick={onItemClick} divider={index !== arr.length - 1} />
-    ))}
+    ))} */}
   </div>
 );
 

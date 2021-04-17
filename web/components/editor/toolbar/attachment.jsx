@@ -6,30 +6,8 @@ import ToolsCategory from '../tools/category';
 import { Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 import classNames from 'classnames';
-
-// TODO: icon 待更换
-const attachIcon = [
-  {
-    name: 'PictureOutlinedBig',
-    active: '#2469f6',
-  },
-  {
-    name: 'VideoOutlined',
-    active: 'red',
-  },
-  {
-    name: 'MicroOutlined',
-    active: 'green',
-  },
-  {
-    name: 'ShopOutlined',
-    active: '#2469f6',
-  },
-  {
-    name: 'QuestionOutlined',
-    active: '#2469f6',
-  },
-];
+import PropTypes from 'prop-types';
+import { attachIcon } from '../const';
 
 class AttachmentToolbar extends React.Component {
   constructor(props) {
@@ -41,11 +19,12 @@ class AttachmentToolbar extends React.Component {
   }
 
   handleCategoryClick = () => {
-    console.log('category');
+    this.props.onCategoryClick();
   };
 
-  handleAttachClick(name) {
-    this.setState({ currentAction: name });
+  handleAttachClick(item) {
+    this.setState({ currentAction: item.name });
+    this.props.onAttachClick(item);
   }
 
   handleToggle = () => {
@@ -70,7 +49,7 @@ class AttachmentToolbar extends React.Component {
           <div className={styles['dvditor-attachment-toolbar__inner']}>
             <div className={styles['dvditor-attachment-toolbar__left']}>
               {attachIcon.map(item => <Icon key={item.name}
-                onClick={this.handleAttachClick.bind(this, item.name)}
+                onClick={this.handleAttachClick.bind(this, item)}
                 className={styles['dvditor-attachment-toolbar__item']}
                 name={item.name}
                 color={item.name === currentAction && item.active}
@@ -85,5 +64,10 @@ class AttachmentToolbar extends React.Component {
     );
   }
 }
+
+AttachmentToolbar.propTypes = {
+  onCategoryClick: PropTypes.func,
+  onAttachClick: PropTypes.func,
+};
 
 export default AttachmentToolbar;
