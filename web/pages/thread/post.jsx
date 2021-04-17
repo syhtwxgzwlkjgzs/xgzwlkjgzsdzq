@@ -34,6 +34,14 @@ class ThreadCreate extends React.Component {
     this.setState({ emojiShow: false, emoji });
   };
 
+  handleCategoryClick = () => {
+    console.log('category click');
+  };
+
+  handleAttachClick(item) {
+    console.log(item);
+  }
+
   render() {
     const { threadPost } = this.props;
     const { emojiShow, emoji } = this.state;
@@ -41,7 +49,7 @@ class ThreadCreate extends React.Component {
       <>
         <DVditor emoji={emoji} />
         {/* 调整了一下结构，因为这里的工具栏需要固定 */}
-        <AttachmentToolbar />
+        <AttachmentToolbar onCategoryClick={this.handleCategoryClick} onAttachClick={this.handleAttachClick} />
         {/* 默认的操作栏 */}
         <DefaultToolbar onClick={this.handleDefaultToolbarClick}>
           {/* 表情 */}
