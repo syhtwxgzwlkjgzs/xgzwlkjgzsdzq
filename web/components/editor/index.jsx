@@ -4,15 +4,9 @@
  */
 import React from 'react';
 import Vditor from 'vditor';
-import { AttachmentToolbar } from './toolbar';
-import { Icon } from '@discuzq/design';
-import Emoji from './emoji';
 import classNames from 'classnames';
 import 'vditor/src/assets/scss/index.scss';
 import './index.scss';
-import styles from './toolbar/index.module.scss';
-import { defaultIcon } from './const';
-
 
 class DVditor extends React.Component {
   vditorId = 'dzq-vditor';
@@ -23,13 +17,18 @@ class DVditor extends React.Component {
     this.state = {
       range: null,
       isFocus: false,
-      currentAction: '',
-      emojiShow: false,
     };
   }
 
   componentDidMount() {
     this.initVditor();
+  }
+
+  componentDidUpdate(props) {
+    if (props !== this.props) {
+      const { emoji } = this.props;
+      if (emoji.code) this.vditor.insertValue(emoji.code);
+    }
   }
 
   initVditor() {
@@ -74,17 +73,6 @@ class DVditor extends React.Component {
     );
   }
 
-  handleDefaultClick(name) {
-    this.setState({ currentAction: name, emojiShow: name === 'UserOutlined' });
-  }
-
-  handleEmojiClick = (emoji) => {
-    const { code } = emoji;
-    // this.setCurrentPositon();
-    this.vditor.insertValue(code);
-    this.setState({ emojiShow: false, currentAction: '' });
-  };
-
   // TODO: 这里有点问题
   getEditorRange = () => {
     let range;
@@ -113,31 +101,12 @@ class DVditor extends React.Component {
   };
 
   render() {
-    const { isFocus, currentAction, emojiShow } = this.state;
-    const { emojis } = this.props;
+    const { isFocus } = this.state;
 
     return (
       <>
         <div id={this.vditorId} className={classNames('dvditor', { 'no-focus': !isFocus })}></div>
         {isFocus && <div className="dvditor__placeholder"></div>}
-        <AttachmentToolbar />
-        {/* 默认的操作栏 */}
-        <div className={styles['dvditor-toolbar']}>
-          <div className={styles['dvditor-toolbar__left']}>
-            {defaultIcon.map(item => (
-                <Icon key={item.name}
-                  onClick={this.handleDefaultClick.bind(this, item.name)}
-                  className={styles['dvditor-toolbar__item']}
-                  name={item.name}
-                  color={item.name === currentAction && item.active}
-                  size="20">
-                </Icon>
-            ))}
-          </div>
-          <div className={styles['dvditor-toolbar__right']}>发布</div>
-          {/* 表情 */}
-          <Emoji show={emojiShow} emojis={emojis} onClick={this.handleEmojiClick} />
-        </div>
       </>
     );
   }
