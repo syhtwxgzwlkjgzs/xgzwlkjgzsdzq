@@ -7,7 +7,7 @@ import setAuthorization from '@common/utils/set-authorization';
 import setUserAgent from '@common/utils/set-user-agent';
 
 const api = apiIns({
-  baseURL: 'https://discuzv3-dev.dnspod.dev/',
+  baseURL: COMMOM_BASE_URL,
   timeout: 1000,
 });
 

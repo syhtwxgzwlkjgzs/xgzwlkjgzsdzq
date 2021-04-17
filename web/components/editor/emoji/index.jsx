@@ -45,7 +45,11 @@ export default function Emoji(props) {
             return <img className={styles['dzq-emoji__icon']}
               key={emojis[curIndex].code}
               src={formatEmojiUrl(emojis[curIndex].url)}
-              onClick={() => onClick(emojis[curIndex])}
+              onClick={(e) => {
+                e.stopPropagation();
+                setVisible(false);
+                onClick(emojis[curIndex]);
+              }}
             />;
           })}
           </SwiperSlide>
