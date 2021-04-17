@@ -34,8 +34,12 @@ class ThreadH5Page extends React.Component {
       comment: createCommentService(props),
     };
     this.state = {
-      showCommentInput: false,
-      commentSort: true,
+      showCommentInput: false, // 是否弹出评论框
+      commentSort: true, // ture 评论从旧到新 false 评论从新到旧
+      isFinished: true, // 判断当前的刷新是否完成
+      parPage: 10,
+      page: 1, // 页码
+      isLiked: false, // 是否点赞
       commentDatas: {
         Code: 0,
         Message: '接口调用成功',
@@ -52,7 +56,7 @@ class ThreadH5Page extends React.Component {
               content: '1',
               contentHtml: '<p>1</p>',
               replyCount: 4,
-              likeCount: 2,
+              likeCount: 5,
               createdAt: '2021-01-12 15:58:36',
               updatedAt: '2021-02-12 14:01:23',
               isFirst: false,
@@ -105,7 +109,7 @@ class ThreadH5Page extends React.Component {
               summaryText: '1',
               isDeleted: false,
               redPacketAmount: 0,
-              isLiked: true,
+              isLiked: false,
               likedAt: '2021-03-15 17:25:09',
               lastThreeComments: [
                 {
@@ -116,7 +120,7 @@ class ThreadH5Page extends React.Component {
                   replyUserId: 1,
                   commentPostId: null,
                   commentUserId: null,
-                  content: '1-回复4',
+                  content: '多来点内容多来点内容多来点内容多来点内容多来点内容1-回复4',
                   contentHtml: '<p>1-回复4</p>',
                   replyCount: 0,
                   likCount: 0,
@@ -316,6 +320,26 @@ class ThreadH5Page extends React.Component {
   // 加载评论列表
   async loadCommentList() {
     console.log('加载评论列表数据');
+    const id = this.props.thread?.threadData?.id;
+    // const id = 1;
+    const params = {
+      id,
+      page: this.state.page,
+      parPage: this.state.parPage,
+      sort: this.state.commentSort ? 'createdAt' : '-createdAt',
+    };
+    const res = await this.service.thread.loadCommentList(params);
+    console.log(res);
+    const { success, msg } = await this.service.thread.loadCommentList(params);
+    if (success) {
+      Toast.success({
+        content: '操作成功',
+      });
+      return;
+    }
+    Toast.error({
+      content: msg,
+    });
   }
 
   onInputClick() {
@@ -332,6 +356,7 @@ class ThreadH5Page extends React.Component {
   }
   // 头像点击
   avatarClick(type) {
+    console.log(1, this.props.thread);
     if (type === '1') {
       Toast.success({
         content: '帖子评论的头像',
@@ -358,25 +383,27 @@ class ThreadH5Page extends React.Component {
       });
     }
   }
+  // 删除
+  deleteClick(type) {
+    console.log(2, this.props.thread);
+    if (type === '1') {
+      Toast.success({
+        content: '帖子评论的删除',
+      });
+    } else {
+      Toast.success({
+        content: '评论回复的删除',
+      });
+    }
+  }
   // 回复
   replyClick(type) {
     if (type === '1') {
       this.onInputClick();
-      Toast.success({
-        content: '帖子评论的回复',
-      });
     } else {
       this.onInputClick();
-      Toast.success({
-        content: '评论回复的回复',
-      });
     }
   }
-  // 触底事件
-  onScrollBottom(e) {
-    console.log('触底啦', e);
-  }
-
   onBackClick() {
     this.props.router.push('/');
   }
@@ -441,7 +468,9 @@ class ThreadH5Page extends React.Component {
                       key={index}
                       avatarClick={type => this.avatarClick.bind(this, type)}
                       likeClick={type => this.likeClick.bind(this, type)}
-                      replyClick={type => this.replyClick.bind(this, type)}>
+                      replyClick={type => this.replyClick.bind(this, type)}
+                      deleteClick={type => this.deleteClick.bind(this, type)}
+                      isShowOne={true}>
                     </CommentList>)
                 }
               </div>
