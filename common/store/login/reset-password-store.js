@@ -1,6 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { smsVerify, smsSend } from '@server';
-import { get } from '../../utils/get';
+import { smsResetPwd, smsSend } from '@server';
 
 export const RESET_PASSWORD_STORE_ERRORS = {
     NETWORK_ERROR: {
@@ -22,20 +21,53 @@ export const RESET_PASSWORD_STORE_ERRORS = {
     NO_VERIFY_CODE: {
         Code: 'rps_0003',
         Message: '验证码缺失'
+    },
+    NO_PASSWORD: {
+        Code: 'rps_0004',
+        Message: '请填写密码'
+    },
+    NO_PASSWORD_REPEAT: {
+        Code: 'rps_0005',
+        Message: '请填写重新输入密码字段'
+    },
+    NO_PASSWORD_EQUAL: {
+        Code: 'rps_0006',
+        Message: '两次输入的密码不一致'
     }
 }
 
 export default class resetPasswordStore {
     codeTimmer = null;
 
-    @observable username = '';
     @observable mobile = '';
     @observable code = '';
 
     @observable newPassword = '';
     @observable newPasswordRepeat = '';
     @observable codeTimeout = null;
-    
+
+
+    // 验证码是否符合格式要求
+    @computed get isInvalidCode() {
+        return this.code.length === 6;
+    }
+
+    // 是否信息填写完毕
+    @computed get isInfoComplete() {
+        return (
+            this.code &&
+            this.mobile &&
+            this.newPassword &&
+            this.newPasswordRepeat &&
+            // 新旧密码需要相同
+            this.newPasswordRepeat === this.newPassword
+        );
+    }
+
+    @computed get passwordEqual() {
+        return this.newPasswordRepeat === this.newPassword;
+    }
+
     verifyMobile = () => {
         const MOBILE_REGEXP = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
         return MOBILE_REGEXP.test(this.mobile)
@@ -55,6 +87,24 @@ export default class resetPasswordStore {
         // 检验手机号是否合法
         if (!this.verifyMobile()) {
             throw RESET_PASSWORD_STORE_ERRORS.MOBILE_VERIFY_ERROR;
+        }
+    }
+
+    beforeResetPwdVerify = () => {
+        if (!this.newPassword) {
+            throw RESET_PASSWORD_STORE_ERRORS.NO_PASSWORD;
+        }
+
+        if (!this.newPasswordRepeat) {
+            throw RESET_PASSWORD_STORE_ERRORS.NO_PASSWORD_REPEAT;
+        }
+
+        if (!this.code) {
+            throw RESET_PASSWORD_STORE_ERRORS.NO_VERIFY_CODE;
+        }
+
+        if (!this.passwordEqual) {
+            throw RESET_PASSWORD_STORE_ERRORS.NO_PASSWORD_EQUAL;
         }
     }
 
@@ -112,26 +162,24 @@ export default class resetPasswordStore {
     }
 
     @action
-    verifyUser = async () => {
-        if (!this.username) {
-            throw {
-
-            }
-        }
+    resetPassword = async () => {
+        this.beforeResetPwdVerify();
+        
         try {
-            const verifyResp = await smsVerify({
+            const resetPwdResp = await smsResetPwd({
                 timeout: 3000,
                 data: {
                     mobile: this.mobile,
+                    password: this.newPassword,
                     code: this.code
                 }
             })
-            if (verifyResp.code === 0) {
-                return get(verifyResp, 'data.username', '') === this.username;
+            if (resetPwdResp.code === 0) {
+                return resetPwdResp.data;
             }
             throw {
-                Code: verifyResp.code,
-                Message: verifyResp.msg,
+                Code: resetPwdResp.code,
+                Message: resetPwdResp.msg,
             };
         } catch (error) {
             if (error.Code) {
@@ -139,8 +187,8 @@ export default class resetPasswordStore {
             }
             throw {
                 ...RESET_PASSWORD_STORE_ERRORS.NETWORK_ERROR,
-                error
-            }
+                error,
+            };
         }
     }
 }

@@ -10,7 +10,7 @@ import layout from './index.module.scss';
 @inject('user')
 @inject('thread')
 @observer
-class SuppleMentaryH5Page extends React.Component {
+class SupplementaryH5Page extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -122,4 +122,4 @@ class SuppleMentaryH5Page extends React.Component {
   }
 }
 
-export default withRouter(SuppleMentaryH5Page);
+export default withRouter(SupplementaryH5Page);

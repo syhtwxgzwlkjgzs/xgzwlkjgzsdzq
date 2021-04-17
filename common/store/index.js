@@ -7,11 +7,10 @@ import UserStore from './user/action';
 import ThreadStore from './thread/action';
 import CommentStore from './comment/action';
 import ThreadPostStore from './thread/post/action';
-
 import UserLoginStore from './login/user-login-store';
 import UserRegisterStore from './login/user-register-store';
 import MobileLoginStore from './login/mobile-login-store';
-
+import H5QrCode from './login/h5-qrcode';
 useStaticRendering(isServer());
 
 let store = null;
@@ -32,6 +31,7 @@ export default function initializeStore(initProps = {}) {
       mobileLogin: new MobileLoginStore(),
       comment: new CommentStore(),
       threadPost: new ThreadPostStore(),
+      h5QrCode: new H5QrCode(),
     };
   }
   if (store === null) {
@@ -48,6 +48,7 @@ export default function initializeStore(initProps = {}) {
       mobileLogin: new MobileLoginStore(),
       comment: new CommentStore(),
       threadPost: new ThreadPostStore(),
+      h5QrCode: new H5QrCode(),
     };
   }
 

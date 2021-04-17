@@ -95,7 +95,7 @@ class LoginH5Page extends React.Component {
           <div className={layout['otherLogin-button']}>
             <span
               onClick={() => {
-                this.props.router.push('weixin-login');
+                this.props.router.push('wx-login');
               }}
               className={layout['otherLogin-button-weixin']}
             >

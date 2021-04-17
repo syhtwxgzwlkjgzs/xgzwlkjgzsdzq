@@ -6,9 +6,13 @@ import WeiXinOrCode from '@common/module/h5/WeixinOrCode';
 import HeaderLogin from '@common/module/h5/HeaderLogin';
 @inject('site')
 @inject('user')
-@inject('thread')
+@inject('h5QrCode')
 @observer
 class WeixinBindH5Page extends React.Component {
+  async componentDidMount() {
+    await this.props.h5QrCode.generate({ params: { type: 'mobile_browser_login', redirectUri: `${this.props.site}/user/weixin-register` } });
+  }
+
   render() {
     return (
       <div className={layout.container}>
@@ -17,10 +21,11 @@ class WeixinBindH5Page extends React.Component {
               <div className={layout.title}>绑定微信号</div>
               <div className={layout.tips}>
               <img src="/user.png" alt=""/>
+              {/* todo 小虫替换为用户名*/}
               小虫，请绑定您的微信
               </div>
               {/* 二维码 start */}
-              <WeiXinOrCode orCodeImg='/login-ORcode.png' orCodeTips='长按保存二维码，并在微信中识别此二维码，即可绑定微信，并继续访问'/>
+              <WeiXinOrCode orCodeImg={this.props.h5QrCode.qrCode} orCodeTips='长按保存二维码，并在微信中识别此二维码，即可绑定微信，并继续访问'/>
               {/* 二维码 end */}
           </div>
       </div>
