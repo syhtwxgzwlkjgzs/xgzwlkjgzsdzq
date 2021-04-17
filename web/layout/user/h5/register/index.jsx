@@ -1,7 +1,7 @@
-import React from 'react';
+     import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import { Input, Button } from '@discuzq/design';
+import { Input, Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import HeaderLogin from '@common/module/h5/HeaderLogin';
@@ -31,8 +31,26 @@ class LoginH5Page extends React.Component {
           <Input clearable={false} className={layout.input} value={this.props.userRegister.nickname} placeholder="输入您的昵称" onChange={(e) => {
             this.props.userRegister.nickname = e.target.value;
           }} />
-          <Button className={layout.button} type="primary" onClick={() => {
-            this.props.userRegister.register();
+          <Button className={layout.button} type="primary" onClick={async () => {
+            try {
+              await this.props.userRegister.register();
+              // const loginData = await this.props.userLogin.login();
+              Toast.success({
+                content: '注册成功',
+                hasMask: false,
+                duration: 1000,
+              });
+              // FIXME: Toast 暂时不支持回调能力
+              setTimeout(() => {
+                this.props.router.push('supplementary');
+              }, 1000);
+            } catch (e) {
+              Toast.error({
+                content: e.Message,
+                hasMask: false,
+                duration: 1000,
+              });
+            }
           }}>
             注册
                 </Button>

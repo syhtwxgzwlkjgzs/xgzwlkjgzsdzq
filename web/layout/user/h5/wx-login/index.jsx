@@ -11,8 +11,8 @@ import HeaderLogin from '@common/module/h5/HeaderLogin';
 @observer
 class WXLoginH5Page extends React.Component {
   async componentDidMount() {
-    await this.props.h5QrCode.generate({ params: { type: 'mobile_browser_login', redirectUri: `${this.props.site}/user/weixin-register` } });
-    console.log(this.props.site);
+    await this.props.h5QrCode.generate({ params: { type: 'mobile_browser_login',
+      redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.baseURL}/user/wx-select`)}`}});
   }
 
   render() {
