@@ -21,6 +21,18 @@ export const RESET_PASSWORD_STORE_ERRORS = {
     NO_VERIFY_CODE: {
         Code: 'rps_0003',
         Message: '验证码缺失'
+    },
+    NO_PASSWORD: {
+        Code: 'rps_0004',
+        Message: '请填写密码'
+    },
+    NO_PASSWORD_REPEAT: {
+        Code: 'rps_0005',
+        Message: '请填写重新输入密码字段'
+    },
+    NO_PASSWORD_EQUAL: {
+        Code: 'rps_0006',
+        Message: '两次输入的密码不一致'
     }
 }
 
@@ -52,6 +64,10 @@ export default class resetPasswordStore {
         );
     }
 
+    @computed get passwordEqual() {
+        return this.newPasswordRepeat === this.newPassword;
+    }
+
     verifyMobile = () => {
         const MOBILE_REGEXP = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
         return MOBILE_REGEXP.test(this.mobile)
@@ -71,6 +87,24 @@ export default class resetPasswordStore {
         // 检验手机号是否合法
         if (!this.verifyMobile()) {
             throw RESET_PASSWORD_STORE_ERRORS.MOBILE_VERIFY_ERROR;
+        }
+    }
+
+    beforeResetPwdVerify = () => {
+        if (!this.newPassword) {
+            throw RESET_PASSWORD_STORE_ERRORS.NO_PASSWORD;
+        }
+
+        if (!this.newPasswordRepeat) {
+            throw RESET_PASSWORD_STORE_ERRORS.NO_PASSWORD_REPEAT;
+        }
+
+        if (!this.code) {
+            throw RESET_PASSWORD_STORE_ERRORS.NO_VERIFY_CODE;
+        }
+
+        if (!this.passwordEqual) {
+            throw RESET_PASSWORD_STORE_ERRORS.NO_PASSWORD_EQUAL;
         }
     }
 
@@ -129,6 +163,8 @@ export default class resetPasswordStore {
 
     @action
     resetPassword = async () => {
+        this.beforeResetPwdVerify();
+        
         try {
             const resetPwdResp = await smsResetPwd({
                 timeout: 3000,
