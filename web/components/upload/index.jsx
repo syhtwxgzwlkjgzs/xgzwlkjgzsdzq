@@ -36,13 +36,11 @@ export default function DzqUpload(props) {
       updater(list);
     });
     if (ret.code === 0) {
-      file.status = 'success';
       onSuccess(ret, file);
     } else {
-      file.status = 'error';
       onFail(ret, file);
+      return null;
     }
-    updater(list);
     onComplete(ret, file);
     return ret;
   };
