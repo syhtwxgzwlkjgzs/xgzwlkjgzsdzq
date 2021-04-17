@@ -1,0 +1,62 @@
+:global {
+  .dzq-card__body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  //   .dzq-checkbox.dzq-checkbox--radio{
+  //     border-radius: 0% !important;
+  //   }
+  .dzq-input {
+    display: inline-block;
+    width: 40px;
+  }
+  .dzq-input__inner {
+    border: none;
+    padding: 0;
+    text-align: center;
+  }
+  .SetNumberOfPraise {
+    margin-left: 265px;
+    text-align: center;
+    background-color: white;
+    margin-top: 6px;
+    border-bottom: 1px solid #eee;
+  }
+  .bigbox_bottom {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    width: 94%;
+    height: 53px;
+    margin-right: 3%;
+    margin-left: 3%;
+    line-height: 53px;
+    justify-content: space-between;
+    text-align: center;
+    .buttomone {
+      text-align: center;
+      width: 166px;
+      height: 44px;
+      color: #333;
+      background: #eee;
+      border: none;
+      &:hover {
+        background-color: #2469f6;
+        color: white;
+      }
+    }
+    .buttomtwo {
+      text-align: center;
+      width: 166px;
+      height: 44px;
+      color: #333;
+      background: #eee;
+      border: none;
+      &:hover {
+        background-color: #2469f6;
+        color: white;
+      }
+    }
+  }
+}
