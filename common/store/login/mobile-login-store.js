@@ -23,6 +23,10 @@ export const MOBILE_LOGIN_STORE_ERRORS = {
     NO_VERIFY_CODE: {
         Code: 'mbl_0003',
         Message: '验证码缺失'
+    },
+    NEET_BIND_USERNAME: {
+        Code: 'mbl_0004',
+        Message: '需要补充昵称'
     }
 }
 
@@ -146,6 +150,12 @@ export default class mobileLoginStore {
                 setAccessToken({
                     accessToken
                 })
+
+                // 如果没有填写昵称，抛出需要填写昵称的状态码
+                if (get(smsLoginResp, 'isMissRequireInfo', false)) {
+                    throw MOBILE_LOGIN_STORE_ERRORS.NEET_BIND_USERNAME;
+                }
+
                 return smsLoginResp.data;
             }
             throw {
