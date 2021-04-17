@@ -12,3 +12,4 @@ export { default as readEmoji } from './thread-post/read-emoji';
 export { default as readFollow } from './thread-post/read-follow';
 export { default as readProcutAnalysis } from './thread-post/read-product-analysis';
 export { default as readTopics } from './thread-post/read-topic';
+export { default as createAttachment } from './thread-post/create-attachment';

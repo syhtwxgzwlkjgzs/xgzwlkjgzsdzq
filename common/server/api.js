@@ -7,7 +7,8 @@ import setAuthorization from '@common/utils/set-authorization';
 import setUserAgent from '@common/utils/set-user-agent';
 
 const api = apiIns({
-  baseURL: 'https://newdiscuz-dev.dnspod.dev',
+  // 联调环境的请求域名，如果有问题在群里抛出
+  baseURL: 'https://discuzv3-dev.dnspod.dev',
   timeout: 1000,
 });
 
