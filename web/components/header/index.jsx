@@ -1,28 +1,26 @@
-import {useCallback} from 'react';
-import styles from './index.module.scss';
-import { Icon } from '@discuzq/design';
-import Router from '@common/utils/web-router';
-export default function Header() {
+import React from 'react';
+import { inject, observer } from 'mobx-react';
+import H5Header from './h5';
+import PCHeader from './pc';
 
-    // todo
-    const iconClickHandle = useCallback((type) => {
-        console.log(type);
-    }, []);
+@inject('site')
+@observer
+class Header extends React.Component{
+    constructor(props) {
+        super(props);
+    }
 
-    const gobackClickHandle = useCallback(() => {
-        Router.back();
-    }, []);
+    render() {
 
-    return (
-        <duv className={styles.header}>
-            <div className={styles.headerContent}>
-                <div onClick={gobackClickHandle} className={styles.left}>返回</div>
-                <div className={styles.right}>
-                    <Icon onClick={() => {iconClickHandle('home')}} name="HomeOutlined" color="#C4C9D6" size={20} />
-                    <Icon onClick={() => {iconClickHandle('msg')}} name="MessageOutlined" color="#C4C9D6" size={20} />
-                    <Icon onClick={() => {iconClickHandle('user')}} name="UserOutlined" color="#C4C9D6" size={20} />
-                </div>
-            </div>
-        </duv>
-    )
-}
+        const {site} = this.props;
+        const {platform} = site;
+
+        if ( platform === 'pc' ) {
+            return <PCHeader/>;
+        }else {
+            return <H5Header/>;
+        }
+    }
+} 
+
+export default Header;
