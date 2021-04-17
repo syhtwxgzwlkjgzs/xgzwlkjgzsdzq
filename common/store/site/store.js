@@ -5,8 +5,8 @@ import { get } from '../../utils/get';
 const WECHAT_ENV_MAP = {
   MINI: 'miniProgram',
   OPEN: 'openPlatform',
-  NONE: 'none'
-}
+  NONE: 'none',
+};
 
 class SiteStore {
   constructor(props = {}) {
@@ -23,25 +23,25 @@ class SiteStore {
 
   @observable isUserLoginVisible = null;
 
-  @computed get smsOpen() {
+  @computed get isSmsOpen() {
     return get(this.webConfig, 'setSite.qcloud.qcloudSms', false);
   }
 
   // FIXME: 以下两个接口，后台的字段是相反的语义，实际表意是 *****Open 的意思，需要推动后台改动
-  @computed get miniProgramOpen() {
+  @computed get isMiniProgramOpen() {
     return Boolean(get(this.webConfig, 'setSite,passport.miniprogramClose', true));
   }
-
-  @computed get openPlatformOpen() {
+  // 公众平台是否开启´
+  @computed get isOpenPlatformOpen() {
     return Boolean(get(this.webConfig, 'setSite.passport.oplatformClose', true));
   }
 
   @computed get wechatEnv() {
-    if (this.miniProgramOpen) {
+    if (this.isMiniProgramOpen) {
       return WECHAT_ENV_MAP.MINI;
     }
 
-    if (this.openPlatformOpen) {
+    if (this.isOpenPlatformOpen) {
       return WECHAT_ENV_MAP.OPEN;
     }
 
