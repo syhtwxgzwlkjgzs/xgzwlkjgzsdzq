@@ -93,7 +93,6 @@ export default class mobileLoginStore {
     sendCode = async () => {
       // 发送前校验
       this.beforeSendVerify();
-
       try {
         const smsResp = await smsSend({
           timeout: 3000,
@@ -165,10 +164,6 @@ export default class mobileLoginStore {
         if (error.Code) {
           throw error;
         }
-        throw {
-          ...MOBILE_LOGIN_STORE_ERRORS.NETWORK_ERROR,
-          error,
-        };
         throw {
           ...MOBILE_LOGIN_STORE_ERRORS.NETWORK_ERROR,
           error,
