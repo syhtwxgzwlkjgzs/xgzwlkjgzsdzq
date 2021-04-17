@@ -4,31 +4,31 @@ import { get } from '../../utils/get';
 import setAccessToken from '../../utils/set-access-token';
 
 export const MOBILE_LOGIN_STORE_ERRORS = {
-    MOBILE_VERIFY_ERROR: {
-        Code: 'mbl_0002',
-        Message: '请填写正确的手机号'
-    },
-    VERIFY_TIME_ERROR: {
-        Code: 'mbl_0001',
-        Message: '请等待倒计时结束后再发送短信'
-    },
-    NO_MOBILE_ERROR: {
-        Code: 'mbl_0000',
-        Message: '请填写手机号',
-    },
-    NETWORK_ERROR: {
-        Code: 'mbl_9999',
-        Message: '网络错误'
-    },
-    NO_VERIFY_CODE: {
-        Code: 'mbl_0003',
-        Message: '验证码缺失'
-    },
-    NEET_BIND_USERNAME: {
-        Code: 'mbl_0004',
-        Message: '需要补充昵称'
-    }
-}
+  MOBILE_VERIFY_ERROR: {
+    Code: 'mbl_0002',
+    Message: '请填写正确的手机号',
+  },
+  VERIFY_TIME_ERROR: {
+    Code: 'mbl_0001',
+    Message: '请等待倒计时结束后再发送短信',
+  },
+  NO_MOBILE_ERROR: {
+    Code: 'mbl_0000',
+    Message: '请填写手机号',
+  },
+  NETWORK_ERROR: {
+    Code: 'mbl_9999',
+    Message: '网络错误',
+  },
+  NO_VERIFY_CODE: {
+    Code: 'mbl_0003',
+    Message: '验证码缺失',
+  },
+  NEET_BIND_USERNAME: {
+    Code: 'mbl_0004',
+    Message: '需要补充昵称',
+  },
+};
 
 export default class mobileLoginStore {
     codeTimmer = null;
@@ -133,43 +133,42 @@ export default class mobileLoginStore {
 
     @action
     login = async () => {
-        this.beforeLoginVerify();
+      this.beforeLoginVerify();
 
-        try {
-            const smsLoginResp = await smsLogin({
-                timeout: 3000,
-                data: {
-                    mobile: this.mobile,
-                    code: this.code
-                },
-            });
-            if (smsLoginResp.code === 0) {
-                const accessToken = get(smsLoginResp, 'data.accessToken', '');
-                // 种下 access_token
-                setAccessToken({
-                    accessToken
-                })
+      try {
+        const smsLoginResp = await smsLogin({
+          timeout: 3000,
+          data: {
+            mobile: this.mobile,
+            code: this.code,
+          },
+        });
+        if (smsLoginResp.code === 0) {
+          const accessToken = get(smsLoginResp, 'data.accessToken', '');
+          // 种下 access_token
+          setAccessToken({
+            accessToken,
+          });
 
-                // 如果没有填写昵称，抛出需要填写昵称的状态码
-                if (get(smsLoginResp, 'isMissRequireInfo', false)) {
-                    throw MOBILE_LOGIN_STORE_ERRORS.NEET_BIND_USERNAME;
-                }
+          // 如果没有填写昵称，抛出需要填写昵称的状态码
+          if (get(smsLoginResp, 'isMissRequireInfo', false)) {
+            throw MOBILE_LOGIN_STORE_ERRORS.NEET_BIND_USERNAME;
+          }
 
-                return smsLoginResp.data;
-            }
-            throw {
-                Code: smsLoginResp.code,
-                Message: smsLoginResp.msg,
-            };
-        } catch (error) {
-            if (error.Code) {
-                throw error;
-            }
-            throw {
-                ...MOBILE_LOGIN_STORE_ERRORS.NETWORK_ERROR,
-                error,
-            };
+          return smsLoginResp.data;
         }
+        throw {
+          Code: smsLoginResp.code,
+          Message: smsLoginResp.msg,
+        };
+      } catch (error) {
+        if (error.Code) {
+          throw error;
+        }
+        throw {
+          ...MOBILE_LOGIN_STORE_ERRORS.NETWORK_ERROR,
+          error,
+        };
         throw {
           ...MOBILE_LOGIN_STORE_ERRORS.NETWORK_ERROR,
           error,
