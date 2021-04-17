@@ -10,7 +10,13 @@ class WeixinOrCode extends React.Component {
     const { orCodeImg, orCodeTips } = this.props;
     return (
       <div className={layout.orCode}>
-        <img className={layout.orCode__img} src={orCodeImg} alt=""/>
+        <div className={layout.orCode__img}>
+          {
+            orCodeImg
+              ? <img src={orCodeImg} alt=""/>
+              : <></>
+          }
+        </div>
         <p className={layout.orCode__text}>{orCodeTips}</p>
       </div>
     );

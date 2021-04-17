@@ -9,7 +9,7 @@ class HeaderLogin extends React.Component {
   render() {
     return (
       <div className={layout.banner}>
-        <img src="https://main.qcloudimg.com/raw/ba94091fa7557eb8bed849ce577ea160.png" alt=""/>
+        <img src="/admin-logo-x2.png" alt=""/>
       </div>
     );
   }
