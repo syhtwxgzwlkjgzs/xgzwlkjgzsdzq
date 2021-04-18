@@ -9,6 +9,7 @@ import { AttachmentToolbar, DefaultToolbar } from '@components/editor/toolbar';
 import Emoji from '@components/editor/emoji';
 import ImageUpload from '@components/thread-post/image-upload';
 import { THREAD_TYPE } from '@common/constants/thread-post';
+import { Video } from '@discuzq/design';
 
 @inject('threadPost')
 @observer
@@ -20,6 +21,7 @@ class ThreadCreate extends React.Component {
       emoji: {},
       imageUploadShow: false,
       imageCurrentData: {},
+      videoFile: {},
     };
   }
   componentDidMount() {
@@ -65,10 +67,30 @@ class ThreadCreate extends React.Component {
     this.setState({ imageCurrentData });
   }
 
+  handleUploadChange = (fileList, item) => {
+    console.log(fileList, item);
+  }
+
+  handleUploadComplete = (ret, file, item) => {
+    // 上传视频没有通
+    console.log(ret, file, item);
+    this.setState({ videoFile: file.originFileObj });
+  }
+
+  onReady = (player) => {
+    const { videoFile } = this.state;
+    const opt = {
+      src: videoFile.thumbUrl,
+      type: videoFile.type,
+    };
+    player && player.src(opt);
+  };
+
   render() {
     const { threadPost } = this.props;
-    const { emojiShow, emoji, imageUploadShow, imageCurrentData } = this.state;
+    const { emojiShow, emoji, imageUploadShow, imageCurrentData, videoFile } = this.state;
     const images = Object.keys(imageCurrentData);
+
     return (
       <>
         <DVditor emoji={emoji} />
@@ -78,10 +100,15 @@ class ThreadCreate extends React.Component {
             onComplete={this.handleImageUploadComplete}
           />
         )}
+        {(videoFile && videoFile.thumbUrl) && (
+          <Video className="dzq-post-video" src={videoFile.thumbUrl} onReady={this.onReady} />
+        )}
         {/* 调整了一下结构，因为这里的工具栏需要固定 */}
         <AttachmentToolbar
           onCategoryClick={this.handleCategoryClick}
           onAttachClick={this.handleAttachClick}
+          onUploadChange={this.handleUploadChange}
+          onUploadComplete={this.handleUploadComplete}
         />
         {/* 默认的操作栏 */}
         <DefaultToolbar onClick={this.handleDefaultToolbarClick}>

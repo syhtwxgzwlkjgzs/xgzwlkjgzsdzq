@@ -1,4 +1,4 @@
-import { THREAD_TYPE, ACCEPT_IMAGE_TYPES, ACCEPT_VIDOE_TYPES } from '@common/constants/thread-post';
+import { THREAD_TYPE, ACCEPT_VIDEO_TYPES, ATTACHMENT_TYPE } from '@common/constants/thread-post';
 
 /**
  * 默认的操作栏 icon，TODO: 待更新
@@ -37,9 +37,6 @@ export const attachIcon = [
     name: 'PictureOutlinedBig',
     active: '#2469f6',
     type: THREAD_TYPE.image,
-    isUpload: true,
-    limit: 9,
-    accept: ACCEPT_IMAGE_TYPES.join(','),
   },
   {
     name: 'VideoOutlined',
@@ -47,7 +44,10 @@ export const attachIcon = [
     type: THREAD_TYPE.video,
     isUpload: true,
     limit: 1,
-    accept: ACCEPT_VIDOE_TYPES.join(','),
+    accept: ACCEPT_VIDEO_TYPES.join(','),
+    data: {
+      type: ATTACHMENT_TYPE.video,
+    },
   },
   {
     name: 'MicroOutlined',

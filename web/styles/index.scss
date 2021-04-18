@@ -1,3 +1,12 @@
 @import '@common/styles/index.scss';
 @import './reset.scss';
-@import '@discuzq/design/dist/styles/index.scss'
+@import '@discuzq/design/dist/styles/index.scss';
+
+.dzq-post-video {
+  padding: rem(16);
+  width: 100%;
+  div[data-vjs-player=true] { /* stylelint-disable-line */
+    width: 100% !important;
+    height: rem(150);
+  }
+}

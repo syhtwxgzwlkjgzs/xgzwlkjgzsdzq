@@ -55,7 +55,7 @@ export const ACCEPT_IMAGE_TYPES = [
   'image/*',
 ];
 
-export const ACCEPT_VIDOE_TYPES = [
+export const ACCEPT_VIDEO_TYPES = [
   'video/mp4',
   'video/x-m4v',
   'video/*',

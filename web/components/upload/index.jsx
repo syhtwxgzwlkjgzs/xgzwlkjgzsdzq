@@ -20,6 +20,7 @@ export default function DzqUpload(props) {
     onFail,
     onComplete,
     data,
+    accept,
   } = props;
   const multiple = limit > 1;
 
@@ -66,6 +67,7 @@ export default function DzqUpload(props) {
           onChange(fileList);
         }}
         customRequest={post}
+        accept={accept}
       >
         {!isCustomUploadIcon && (
           <Button type='text' className={classNames(styles['flex-column-center'], styles['text-grey'])}>
