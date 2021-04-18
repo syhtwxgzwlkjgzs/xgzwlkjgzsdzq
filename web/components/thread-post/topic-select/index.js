@@ -86,7 +86,7 @@ class TopicSelect extends Component {
       >
         <div className={styles['item-left']}>
           <div className={styles.name}>#{item.content}#</div>
-          {item.recommended > -1 &&
+          {item.recommended === 1 &&
             <div className={styles.recommend}>
               <Icon name="LikeOutlined" size={20} color='#1878f3' />
             </div>
