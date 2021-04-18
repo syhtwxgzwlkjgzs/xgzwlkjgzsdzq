@@ -45,8 +45,11 @@ export default function DzqUpload(props) {
     return ret;
   };
 
+  // TODO: 因为上传组件不支持传class和style，所以在外面增加了一层dom
+  const className = isCustomUploadIcon ? 'dzq-custom-upload' : '';
+
   return (
-    <>
+    <div className={className}>
       <Upload
         listType={listType}
         fileList={fileList}
@@ -72,7 +75,7 @@ export default function DzqUpload(props) {
         )}
         {isCustomUploadIcon && children}
       </Upload>
-    </>
+    </div>
   );
 }
 

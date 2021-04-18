@@ -27,7 +27,10 @@ class DVditor extends React.Component {
   componentDidUpdate(props) {
     if (props !== this.props) {
       const { emoji } = this.props;
-      if (emoji.code) this.vditor.insertValue(emoji.code);
+      if (emoji.code) {
+        const value = `![${emoji.code}](${emoji.url})`;
+        this.vditor.insertValue(value);
+      }
     }
   }
 

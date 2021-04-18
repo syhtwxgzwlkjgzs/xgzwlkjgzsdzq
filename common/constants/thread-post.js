@@ -37,3 +37,26 @@ export const THREAD_TYPE = {
   file: 110, // 附件
   qaImage: 111, // 问答图片
 };
+
+// 图片类型
+// https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types
+export const ACCEPT_IMAGE_TYPES = [
+  'image/apng',
+  'image/bmp',
+  'image/gif',
+  'image/jpeg',
+  'image/pjpeg',
+  'image/png',
+  'image/svg+xml',
+  'image/tiff',
+  'image/webp',
+  'image/x-icon',
+  'image/vnd.microsoft.icon',
+  'image/*',
+];
+
+export const ACCEPT_VIDOE_TYPES = [
+  'video/mp4',
+  'video/x-m4v',
+  'video/*',
+];
