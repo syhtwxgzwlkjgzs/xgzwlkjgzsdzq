@@ -79,6 +79,7 @@ class ThreadCreate extends React.Component {
 
   onReady = (player) => {
     const { videoFile } = this.state;
+    // 兼容本地视频的显示
     const opt = {
       src: videoFile.thumbUrl,
       type: videoFile.type,
