@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Tabs, Button, Icon, Popup } from '@discuzq/design';
+import UserItem from '../user-item';
 import data from './data';
 import styles from './index.module.scss';
 
@@ -39,29 +40,13 @@ const Index = ({ visible = false, onHidden = () => {} }) => {
     }, 1000);
   }, []);
 
-  const renderListItem = (item, index) => (
-    <div className={styles.listItem} key={index}>
-        <div className={styles.wrapper}>
-            <div className={styles.header}>
-                <img className={styles.img} src={item.img}></img>
-                <div className={styles.icon} style={{ backgroundColor: index % 2 === 0 ? '#e02433' : '#ffc300' }}>
-                    <Icon name={item.icon} />
-                </div>
-            </div>
-
-            <div className={styles.content}>
-                <span className={styles.title}>{item.name}</span>
-                <span className={styles.subTitle}>{item.time}</span>
-            </div>
-        </div>
-
-        <Button type="primary">查看主页</Button>
-    </div>
-  );
-
   const renderList = () => (
     <div className={styles.list}>
-        {dataSource.map((item, index) => renderListItem(item, index))}
+        {
+          dataSource.map((item, index) => (
+            <UserItem key={index} imgSrc={item.img} title={item.name} subTitle={item.time} />
+          ))
+        }
     </div>
   );
 

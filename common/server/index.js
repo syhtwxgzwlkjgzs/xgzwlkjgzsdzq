@@ -7,6 +7,7 @@ export { default as readCommentList } from './readCommentList';
 export { default as readReplyList } from './readReplyList';
 export { default as createPosts } from './createPosts';
 export { default as readStickList } from './readStickList';
+export { default as readTopicsList } from './readTopicsList';
 export { default as default } from './api';
 export { default as readEmoji } from './thread-post/read-emoji';
 export { default as readFollow } from './thread-post/read-follow';

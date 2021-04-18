@@ -8,6 +8,7 @@ import SearchUsers from './components/search-users';
 import styles from './index.module.scss';
 
 @inject('site')
+@inject('search')
 @observer
 class SearchResultUserH5Page extends React.Component {
   constructor(props) {
@@ -38,18 +39,18 @@ class SearchResultUserH5Page extends React.Component {
 
   render() {
     const { keyword } = this.state;
+    const { users } = this.props.search;
+    const { pageData } = users || { pageData: [] };
 
     return (
       <div className={styles.page}>
         <div className={styles.searchInput}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
         </div>
-        <SearchUsers data={SearchUsersData} onItemClick={this.onUserClick} />
+        <SearchUsers data={pageData} onItemClick={this.onUserClick} />
       </div>
     );
   }
 }
-
-const SearchUsersData = ['user1', 'user2'];
 
 export default withRouter(SearchResultUserH5Page);
