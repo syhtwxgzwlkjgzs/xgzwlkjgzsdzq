@@ -10,6 +10,7 @@ import Emoji from '@components/editor/emoji';
 import ImageUpload from '@components/thread-post/image-upload';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 import { Video } from '@discuzq/design';
+import styles from './post.module.scss';
 
 @inject('threadPost')
 @observer
@@ -94,16 +95,18 @@ class ThreadCreate extends React.Component {
 
     return (
       <>
-        <DVditor emoji={emoji} />
-        {(imageUploadShow || images.length > 0) && (
-          <ImageUpload
-            onChange={this.handleImageUploadChange}
-            onComplete={this.handleImageUploadComplete}
-          />
-        )}
-        {(videoFile && videoFile.thumbUrl) && (
-          <Video className="dzq-post-video" src={videoFile.thumbUrl} onReady={this.onReady} />
-        )}
+        <div className={styles.post}>
+          <DVditor emoji={emoji} />
+          {(imageUploadShow || images.length > 0) && (
+            <ImageUpload
+              onChange={this.handleImageUploadChange}
+              onComplete={this.handleImageUploadComplete}
+            />
+          )}
+          {(videoFile && videoFile.thumbUrl) && (
+            <Video className="dzq-post-video" src={videoFile.thumbUrl} onReady={this.onReady} />
+          )}
+        </div>
         {/* 调整了一下结构，因为这里的工具栏需要固定 */}
         <AttachmentToolbar
           onCategoryClick={this.handleCategoryClick}

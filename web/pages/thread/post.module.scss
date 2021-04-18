@@ -1,0 +1,5 @@
+@import '@common/styles/index.scss';
+.post {
+  max-height: rem(300);
+  overflow-y: scroll;
+}
