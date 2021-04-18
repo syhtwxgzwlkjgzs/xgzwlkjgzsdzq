@@ -138,7 +138,7 @@ class TopicSelect extends Component {
               rowHeight={54}
               rowRenderer={this.renderItem.bind(this)}
               onScrollTop={this.onScrollTop.bind(this)}
-              onScrollBottom={this.onScrollBottom.bind()}
+              onScrollBottom={this.onScrollBottom.bind(this)}
               onPullingUp={() => Promise.reject()}
               isRowLoaded={() => true}
             />
