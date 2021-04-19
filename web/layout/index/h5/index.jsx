@@ -30,47 +30,51 @@ class IndexH5Page extends React.Component {
     }
     const { index, user } = this.props;
     const { sticks, threads, categories } = index;
-    const HeaterContent = () => {
+    const HeaderContent = () => {
         return (
-          <dev>
+          <>
             <HomeHeader/>
-            <FilterModalPopup visible={visible} onClose={onClose} filterData={filterData}></FilterModalPopup>
-            <Tabs
-              scrollable={true}
-              type={'primary'}
-              tabBarExtraContent={
-                <div
-                  style={{
-                    width: 70,
-                    height: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Button onClick={searchClick}>更多</Button>
-                </div>
-            }
-            >
-                {categories.map((item, index) => (
-                <Tabs.TabPanel key={index} id={item.pid} label={item.name}>
-                </Tabs.TabPanel>
-                ))}
-            </Tabs>
-            <TopNew data={sticks}/>
-          </dev>
+            <div className={styles.homeContent}>
+              <Tabs
+                scrollable={true}
+                type={'primary'}
+                tabBarExtraContent={
+                  <div
+                    style={{
+                      width: 70,
+                      height: '100%',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Button onClick={searchClick}>更多</Button>
+                    <FilterModalPopup visible={visible} onClose={onClose} filterData={filterData}></FilterModalPopup>
+                  </div>
+              }
+              >
+                  {categories.map((item, index) => (
+                  <Tabs.TabPanel key={index} id={item.pid} label={item.name}>
+                  </Tabs.TabPanel>
+                  ))}
+              </Tabs>
+            </div>
+            <div className={styles.homeContent}>
+              <TopNew data={sticks}/>
+            </div>
+          </>
         )
     }
     const renderItem = (dataList, rowData) => {
       return (
         <div>
-          { dataList.index === 0 && <HeaterContent />}
+          { dataList.index === 0 && <HeaderContent />}
           <ThreadContent data={dataList.data[dataList.index]}/>
         </div>
       )
     }
     return (
-      <div>
+      <div className={styles.homeBox}>
         { threads.pageData.length > 0 ?
         <List
           onRefresh={this.onRefresh}
@@ -78,7 +82,7 @@ class IndexH5Page extends React.Component {
           data={threads.pageData}
           renderItem={renderItem}
         /> :
-        <HeaterContent />
+        <HeaderContent />
        }
       </div>
     );
