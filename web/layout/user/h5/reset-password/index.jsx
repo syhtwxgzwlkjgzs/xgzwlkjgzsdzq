@@ -64,6 +64,8 @@ class ResetPasswordH5Page extends React.Component {
         <div className={layout.content}>
           <div className={layout.title}>找回/重设密码</div>
           <PhoneInput
+            phoneNum={this.props.resetPassword.mobile}
+            captcha={this.props.resetPassword.code}
             phoneNumCallback={this.handlePhoneNumCallback}
             phoneCodeCallback={this.handlePhoneCodeCallback}
             sendCodeCallback={this.handleSendCodeButtonClick}

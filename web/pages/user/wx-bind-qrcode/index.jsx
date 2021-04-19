@@ -1,5 +1,5 @@
 import React from 'react';
-import WeixinBindQrCodePage from '@layout/user/h5/wx-bind';
+import WeixinBindQrCodePage from '@layout/user/h5/wx-bind-qrcode';
 import { inject } from 'mobx-react';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';

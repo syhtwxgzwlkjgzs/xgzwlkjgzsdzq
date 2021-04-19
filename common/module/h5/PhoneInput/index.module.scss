@@ -24,6 +24,7 @@
 }
 .countDown {
   @include captchaBtn;
+  color: #b5b5b5;
   background: var(--border-line-color); 
 }
 .captchaInput{

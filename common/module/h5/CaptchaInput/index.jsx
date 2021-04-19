@@ -9,14 +9,23 @@ class CaptchaInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: ['', '', '', '', '', ''],
       inputRef: ['', '', '', '', '', ''],
     };
   }
 
+  getValue = () => {
+    const value = ['', '', '', '', '', ''];
+    const { captcha = '' } = this.props;
+    captcha.split('').map((item, index) => {
+      value[index] = item;
+    });
+    return value;
+  }
+
   // 点击输入框聚焦到最前端未填写的地方
   focusInput = (index, eve) => {
-    const { value, inputRef } = this.state;
+    const value = this.getValue();
+    const { inputRef } = this.state;
     if (index === inputIndex) {
       return;
     }
@@ -33,7 +42,7 @@ class CaptchaInput extends React.Component {
   // 输入事件
   setChange = (index, e) => {
     const { inputCallback } = this.props;
-    const { value } = this.state;
+    const value = this.getValue();
     const val = e.target.value;
     const v = [...value];
     if (val.length === 2) {
@@ -41,9 +50,6 @@ class CaptchaInput extends React.Component {
     } else {
       v[index] = val;
     }
-    this.setState({
-      value: v,
-    });
     inputCallback(v.join(''));
     if (val === '') {
       this.lastFocus(e, index);
@@ -92,11 +98,11 @@ class CaptchaInput extends React.Component {
   }
 
   render() {
-    const { value } = this.state;
+    const value = this.getValue();
     return (
         <div className={layout.container}>
           {
-            value.map((item, index) => (<Input key={index} value={item} onChange={(e) => {
+            value.map((item, index) => (<Input key={index} value={value[index]} onChange={(e) => {
               this.setChange(index, e);
             }} className={layout['captchaInput-input']} onFocus={(e) => {
               this.focusInput(index, e);
