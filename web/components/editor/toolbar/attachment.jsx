@@ -89,7 +89,7 @@ class AttachmentToolbar extends React.Component {
       const formData = new FormData();
       formData.append('file', file.originFileObj);
       Object.keys((item.data || [])).forEach((elem) => {
-        formData.append(elem, item.data[item]);
+        formData.append(elem, item.data[elem]);
       });
       const ret = await createAttachment(formData);
       this.props.onUploadComplete(ret, file, item);
