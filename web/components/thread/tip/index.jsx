@@ -19,7 +19,7 @@ const Index = ({ imgs = [] }) => {
         <div className={styles.container} onClick={onClick} style={{ width: imgs.length === 1 ? '0.24rem' : '0.44rem' }}>
             {
                 imgs.filter((_, index) => index < 2).map((item, index) => (
-                    <img className={index === 1 ? styles.img : styles.imgAfter} src={item} key={index} />
+                    <img className={index === 0 ? styles.img : styles.imgAfter} src={item} key={index} />
                 ))
             }
         </div>

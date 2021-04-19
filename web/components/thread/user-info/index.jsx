@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
-import { Avatar, Icon } from '@discuzq/design';
+import { Icon } from '@discuzq/design';
 import styles from './index.module.scss';
+import Avatar from '@components/avatar';
 
 export default function UserInfo(props) {
+    console.log(props.avatar)
   return <div className={styles.contianer}>
         <Avatar className={styles.avatar} circle={true} image={props.avatar} onClick={() => props.onClick()}></Avatar>
         <div className={styles.right}>

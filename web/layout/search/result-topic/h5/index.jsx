@@ -7,7 +7,7 @@ import SearchTopics from './components/search-topics';
 
 import styles from './index.module.scss';
 
-@inject('site')
+@inject('search')
 @observer
 class SearchResultTopicH5Page extends React.Component {
   constructor(props) {
@@ -38,22 +38,18 @@ class SearchResultTopicH5Page extends React.Component {
 
   render() {
     const { keyword } = this.state;
+    const { topics } = this.props.search;
+    const { pageData } = topics || { pageData: [] };
 
     return (
       <div className={styles.page}>
         <div className={styles.searchInput}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
         </div>
-        <SearchTopics data={SearchTopicsData} onItemClick={this.onTopicClick} />
+        <SearchTopics data={pageData} onItemClick={this.onTopicClick} />
       </div>
     );
   }
 }
-
-const SearchTopicsData = [
-  { title: '#dasda#1', content: '#dasda#', hotCount: 2, contentCount: 3 },
-  { title: '#dasda#2', content: '#dasda#', hotCount: 2, contentCount: 3 },
-];
-
 
 export default withRouter(SearchResultTopicH5Page);

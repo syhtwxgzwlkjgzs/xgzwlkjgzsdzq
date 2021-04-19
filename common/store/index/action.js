@@ -9,6 +9,16 @@ class IndexAction extends IndexStore {
   setCategories(data) {
     this.categories = data;
   }
+
+  @action
+  setSticks(data) {
+    this.sticks = data;
+  }
+
+  @action
+  setThreads(data) {
+    this.threads = data;
+  }
 }
 
 export default IndexAction;
