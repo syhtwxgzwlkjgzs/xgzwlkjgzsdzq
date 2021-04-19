@@ -23,7 +23,9 @@ class MyDocument extends Document {
             remCalc();
             window.addEventListener('resize', remCalc);
           }, 0);
-        ` }}/>
+        ` }} />
+        {/* <!--腾讯地图定位组件--> */}
+        <script async src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
         <Head/>
         <body>
           <Main />
