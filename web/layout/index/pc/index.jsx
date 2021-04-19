@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import Header from '@components/header';
 import { Button, Upload } from '@discuzq/design';
+import ThreadContent from '@components/thread';
 
 @inject('site')
 @inject('user')
@@ -19,8 +20,9 @@ class IndexPCPage extends React.Component {
           index.categories ? index.categories.map((item, index) => <h1 key={index}>{item.name}</h1>) : null
         }
         <p className={styles.text}>test</p>
-       
+
         <Button>Fuck</Button>
+        <ThreadContent />
       </div>
     );
   }
