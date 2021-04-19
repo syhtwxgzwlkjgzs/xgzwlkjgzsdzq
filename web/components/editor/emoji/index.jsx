@@ -9,12 +9,6 @@ SwiperCore.use([Pagination]);
 
 const onePageCount = 35;
 
-// TODO: 暂时这么处理，后台应该返回完整的链接
-const formatEmojiUrl = (url) => {
-  if (/(http|https)/.test(url)) return url;
-  return `https://newdiscuz-dev.dnspod.dev/${url}`;
-};
-
 export default function Emoji(props) {
   const { emojis = [], onClick, show } = props;
   const [visible, setVisible] = useState(false);
@@ -44,7 +38,7 @@ export default function Emoji(props) {
             if (curIndex + 1 > emojis.length) return null;
             return <img className={styles['dzq-emoji__icon']}
               key={emojis[curIndex].code}
-              src={formatEmojiUrl(emojis[curIndex].url)}
+              src={emojis[curIndex].url}
               onClick={(e) => {
                 e.stopPropagation();
                 setVisible(false);
