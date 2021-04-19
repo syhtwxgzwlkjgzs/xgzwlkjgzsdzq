@@ -16,6 +16,9 @@
     &:focus {
       background-color: var(--color-white);
     }
+    img[alt$=":emoji"] {
+      width: 30px;
+    }
   }
   .vditor-ir {
     p,

@@ -49,7 +49,7 @@ export default function DVditor(props) {
 
   useEffect(() => {
     if (emoji && emoji.code) {
-      const value = `![${emoji.code}](${emoji.url})`;
+      const value = `![${emoji.code}emoji](${emoji.url})`;
       vditor.insertValue(value);
     }
   }, [emoji]);
