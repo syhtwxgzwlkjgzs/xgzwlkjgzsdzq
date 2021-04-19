@@ -62,10 +62,7 @@ class ResetPasswordH5Page extends React.Component {
       <div className={layout.container}>
         <HeaderLogin />
         <div className={layout.content}>
-          <div className={layout.title}>设置新密码</div>
-          {/* <div className={layout.tips}>
-            手机号验证通过，请设置您的新密码
-          </div> */}
+          <div className={layout.title}>找回/重设密码</div>
           <PhoneInput
             phoneNumCallback={this.handlePhoneNumCallback}
             phoneCodeCallback={this.handlePhoneCodeCallback}

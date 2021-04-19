@@ -12,6 +12,7 @@ import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-sto
 @inject('site')
 @inject('user')
 @inject('thread')
+@inject('commonLogin')
 @inject('mobileLogin')
 @observer
 class LoginPhoneH5Page extends React.Component {
@@ -39,25 +40,41 @@ class LoginPhoneH5Page extends React.Component {
         duration: 1000,
       });
       // 暂不实现
-      setTimeout(() => {}, 1000);
+      setTimeout(() => {
+        this.props.router.push('/index');
+      }, 1000);
     } catch (e) {
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME.Code) {
+        this.props.commonLogin.needToSetNickname = true;
         this.props.router.push('/user/bind-nickname');
         return;
       }
 
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        this.props.commonLogin.needToCompleteExtraInfo = true;
         this.props.router.push('/user/supplementary');
         return;
       }
 
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_ALL_INFO.Code) {
-        this.props.router.push('/user/bind-nickname');
+        this.props.commonLogin.needToSetNickname = true;
+        this.props.commonLogin.needToCompleteExtraInfo = true;
+        this.props.router.push('/user/bind-nickname', {
+          query: {
+            needToCompleteExtraInfo: true,
+          },
+        });
         return;
       }
 
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT.Code) {
-        this.props.router.push(`/user/wx-bind?session_token=${e.sessionToken}`);
+        this.props.commonLogin.needToBindWechat = true;
+        this.props.commonLogin.sessionToken = e.sessionToken;
+        this.props.router.push('/user/wx-bind', {
+          query: {
+            session_token: e.sessionToken,
+          },
+        });
         return;
       }
 
@@ -71,7 +88,7 @@ class LoginPhoneH5Page extends React.Component {
 
   handleSendCodeButtonClick = async () => {
     try {
-      const sendCodeData = await this.props.mobileLogin.sendCode();
+      await this.props.mobileLogin.sendCode();
     } catch (e) {
       Toast.error({
         content: e.Message,
