@@ -12,8 +12,6 @@ import { Icon, Button } from '@discuzq/design';
  * @prop {number} isSecondLevelActive 二级分类选中index
  */
 
-
-
 const Index = ({
   title, 
   optionData = [],
@@ -23,25 +21,25 @@ const Index = ({
   isSecondLevelActive = 0
 }) => {
   return (
-    <div className={styles.section}>
-        <div className={styles.title}>{title}</div>
-        {/* 一级分类 */}
-        <ul className={`${styles.itemWrap} ${styles.itemDetail}`}>
-            {
-                optionData.map((item, index) => {
-                  return <li className={!item.selected ? '' : styles.active } key={index}
-                  onClick={firstLevelClick}>{item.label}</li>
-                })
-            }
-        </ul>
-        <ul className={`${styles.itemWrap} ${styles.secondLevel}`}>
-            {
-                secondData.map((item, index) => {
-                    return <li className={isSecondLevelActive == index ? styles.active : null } key={index} onClick={secondLevelClick}>{item.label}</li>
-                })
-            }
-        </ul>
-    </div>
+  <div className={styles.section}>
+    <div className={styles.title}>{title}</div>
+    {/* 一级分类 */}
+    <ul className={`${styles.itemWrap} ${styles.itemDetail}`}>
+      {
+        optionData.map((item, index) => {
+          return <li className={!item.selected ? '' : styles.active } key={index}
+          onClick={firstLevelClick}>{item.label}</li>
+        })
+      }
+    </ul>
+    <ul className={`${styles.itemWrap} ${styles.secondLevel}`}>
+      {
+        secondData.map((item, index) => {
+          return <li className={isSecondLevelActive == index ? styles.active : null } key={index} onClick={secondLevelClick}>{item.label}</li>
+        })
+      }
+    </ul>
+  </div>
   )
 }
 

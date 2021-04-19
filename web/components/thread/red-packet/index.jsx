@@ -15,11 +15,11 @@ const Index = ({ type = POST_TYPE.REDPACKET, title, content, onClick = noop }) =
     if (type === POST_TYPE.REDPACKET) {
       return {
         themeContent: (
-            <>
-                <div className={styles.content}>
-                <div className={styles.text}>{content || '暂无内容'}</div>
-                </div>
-            </>
+          <>
+            <div className={styles.content}>
+            <div className={styles.text}>{content || '暂无内容'}</div>
+            </div>
+          </>
         ),
         conHeight: {
           height: '103px',
@@ -29,10 +29,10 @@ const Index = ({ type = POST_TYPE.REDPACKET, title, content, onClick = noop }) =
     return {
       themeContent: (
         <>
-            <div className={styles.content}>
-                <div className={styles.title}>{title || '图文帖子'}</div>
-                <div className={styles.text}>{content || '暂无内容'}</div>
-            </div>
+          <div className={styles.content}>
+              <div className={styles.title}>{title || '图文帖子'}</div>
+              <div className={styles.text}>{content || '暂无内容'}</div>
+          </div>
         </>
       ),
       conHeight: {
@@ -42,10 +42,10 @@ const Index = ({ type = POST_TYPE.REDPACKET, title, content, onClick = noop }) =
   }, [type]);
 
   return (
-        <div className={styles.container} style={texts.conHeight} onClick={onClick}>
-            <div className={styles.money}></div>
-            {texts.themeContent}
-        </div>
+    <div className={styles.container} style={texts.conHeight} onClick={onClick}>
+      <div className={styles.money}></div>
+      {texts.themeContent}
+    </div>
   );
 };
 export const POST_TYPE = {
