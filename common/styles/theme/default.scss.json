@@ -80,7 +80,7 @@
 
     "--zindex-normal": "0",
     "--zindex-backtotop": "1000",
-    "--zindex-tooltip": "1200",
+    "--zindex-too0p": "1200",
     "--zindex-popup": "1400",
     "--zindex-dialog": "1600",
     "--zindex-toast": "1800",

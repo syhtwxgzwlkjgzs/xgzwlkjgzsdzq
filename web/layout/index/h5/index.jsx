@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { inject, observer } from 'mobx-react';
 import Link from 'next/link';
-import { Button } from '@discuzq/design';
-import ThreadContent from '@common/components/thread';
+import { Button, Upload, Tabs, Popup } from '@discuzq/design';
+import ThreadContent from '@components/thread';
+import HomeHeader from '@components/thread/home-header';
 import styles from './index.module.scss';
+import List from './components/list';
+import TopNew from './components/top-news';
+import FilterModalPopup from './components/filter-modal-popup';
+import filterData from './data';
 
 @inject('site')
 @inject('user')
@@ -11,22 +16,72 @@ import styles from './index.module.scss';
 @observer
 class IndexH5Page extends React.Component {
   render() {
+    const visible = false;
+    // const [visible, setVisible] = useState(false);
+
+    // 点击更多弹出筛选
+    const searchClick = () => {
+    //   setVisible(true);
+    
+    }
+    // 关闭筛选框
+    const onClose = () => {
+    //   setVisible(false);
+    }
     const { index, user } = this.props;
+    const { sticks, threads, categories } = index;
+    const HeaterContent = () => {
+        return (
+          <dev>
+            <HomeHeader/>
+            <FilterModalPopup visible={visible} onClose={onClose} filterData={filterData}></FilterModalPopup>
+            <Tabs
+              scrollable={true}
+              type={'primary'}
+              tabBarExtraContent={
+                <div
+                  style={{
+                    width: 70,
+                    height: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Button onClick={searchClick}>更多</Button>
+                </div>
+            }
+            >
+                {categories.map((item, index) => (
+                <Tabs.TabPanel key={index} id={item.pid} label={item.name}>
+                </Tabs.TabPanel>
+                ))}
+            </Tabs>
+            <TopNew data={sticks}/>
+          </dev>
+        )
+    }
+    const renderItem = (dataList, rowData) => {
+      return (
+        <div>
+          { dataList.index === 0 && <HeaterContent />}
+          <ThreadContent data={dataList.data[dataList.index]}/>
+        </div>
+      )
+    }
     return (
       <div>
-        { user.userInfo && <h1>{user.userInfo.username}</h1> }
-        {
-          index.categories ? index.categories.map((item, index) => <h1 key={index}>{item.name}</h1>) : null
-        }
-        <p className={styles.text}>test</p>
-        <Link href='/my/profile'>我的资料</Link>
-        <Link href='/detail'>detauil</Link>
-        <Link href='/user'>user</Link>
-        <Button>Fuck</Button>
-        <ThreadContent />
+        { threads.pageData.length > 0 ?
+        <List
+          onRefresh={this.onRefresh}
+          refreshing={false}
+          data={threads.pageData}
+          renderItem={renderItem}
+        /> :
+        <HeaterContent />
+       }
       </div>
     );
   }
 }
-
 export default IndexH5Page;

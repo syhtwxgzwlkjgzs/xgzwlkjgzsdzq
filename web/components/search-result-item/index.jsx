@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react';
 import { Icon } from '@discuzq/design';
 
-import ThreadContent from '@common/components/thread';
-
+import ThreadContent from '@components/thread';
 import styles from './index.module.scss';
 
 /**
@@ -41,11 +40,11 @@ export const Topic = ({ data, onClick }) => {
 
   return (
     <div className={styles.topic} onClick={click}>
-      <div className={styles.title}>{data.title || '暂无内容'}</div>
+      <div className={styles.title}>{data.content || '暂无内容'}</div>
       <div className={styles.content}>{data.content || ''}</div>
       <div className={styles.tags}>
-        <div className={styles.tag}>热度{data.hotCount || 0}</div>
-        <div className={styles.tag}>内容{data.contentCount || 0}</div>
+        <div className={styles.tag}>热度{data.viewCount || 0}</div>
+        <div className={styles.tag}>内容{data.threadCount || 0}</div>
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ import SearchUsers from './components/search-users';
 import styles from './index.module.scss';
 
 @inject('site')
+@inject('search')
 @observer
 class SearchResultUserH5Page extends React.Component {
   constructor(props) {

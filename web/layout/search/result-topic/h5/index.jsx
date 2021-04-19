@@ -7,7 +7,7 @@ import SearchTopics from './components/search-topics';
 
 import styles from './index.module.scss';
 
-@inject('site')
+@inject('search')
 @observer
 class SearchResultTopicH5Page extends React.Component {
   constructor(props) {
