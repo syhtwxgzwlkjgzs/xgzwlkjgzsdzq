@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { createRef } from 'react';
 import { PullDownRefresh, ScrollView } from '@discuzq/design';
 
 import styles from './index.module.scss';
@@ -14,51 +14,74 @@ import styles from './index.module.scss';
  *  @param {{index:number, data: Data}} args 参数
  * ...props 其他ScrollView props
  */
-const List = ({
-  onRefresh,
-  refreshing,
-  chlidren,
-  data = [],
-  renderItem,
-  onScrollBottom,
-  containerClassName,
-  loadMoreRows,
-  ...props
-}) => {
-  const listRef = useRef();
-  const [height, setHeight] = useState(0);
-  const emptyFunction = useCallback(() => {}, []);
-  const renderDiv = useCallback(() => <div />, []);
-  const composeClassName = `${styles.container} ${containerClassName || styles.list}`;
+class List extends React.PureComponent {
+  state = {
+    height: 0,
+  };
+  listRef = createRef();
+  loadHeightCount = 0; // 防止ssr获取dom节点高度失败问题，最多重新获取2次
 
-  useEffect(() => {
-    const el = listRef.current;
+  componentDidMount() {
+    this.loadHeight();
+  }
 
-    if (el) {
-      setHeight(el.clientHeight);
+  loadHeight = () => {
+    const el = this.listRef.current;
+    if (el && el.clientHeight) {
+      this.setState({
+        height: el.clientHeight,
+      });
+    } else if (this.loadHeightCount < 2) {
+      setTimeout(() => {
+        this.loadHeight();
+      }, 100);
     }
-  }, [listRef.current]);
+    this.loadHeightCount += 1;
+  };
 
-  return (
-    <div className={composeClassName} ref={listRef}>
-      <PullDownRefresh onRefresh={onRefresh} isFinished={!refreshing} height={height}>
-        <ScrollView
-          height={height}
-          rowCount={data.length}
-          rowData={data}
-          rowRenderer={renderItem || renderDiv}
-          renderBottom={renderDiv}
-          isRowLoaded={emptyFunction}
-          onPullingUp={emptyFunction}
-          loadMoreRows={loadMoreRows}
-          onScrollBottom={onScrollBottom}
-          {...props}
-        >
-          {chlidren}
-        </ScrollView>
-      </PullDownRefresh>
-    </div>
-  );
-};
+  emptyFunction() {}
 
-export default React.memo(List);
+  renderDiv() {
+    return <div />;
+  }
+
+  render() {
+    const {
+      onRefresh,
+      refreshing,
+      chlidren,
+      data = [],
+      renderItem,
+      onScrollBottom,
+      containerClassName,
+      ...props
+    } = this.props;
+    const { height } = this.state;
+    const { emptyFunction, renderDiv } = this;
+    const composeClassName = `${styles.container} ${containerClassName || styles.list}`;
+
+    return (
+      <div className={composeClassName} ref={this.listRef}>
+        {!!height && (
+          <PullDownRefresh onRefresh={onRefresh} isFinished={!refreshing} height={height}>
+            <ScrollView
+              height={height}
+              rowCount={data.length}
+              rowData={data}
+              rowRenderer={renderItem || renderDiv}
+              renderBottom={renderDiv}
+              isRowLoaded={emptyFunction}
+              onPullingUp={emptyFunction}
+              onScrollBottom={onScrollBottom}
+              {...props}
+            >
+              {chlidren}
+            </ScrollView>
+          </PullDownRefresh>
+        )}
+      </div>
+    );
+  }
+}
+
+export default List;
