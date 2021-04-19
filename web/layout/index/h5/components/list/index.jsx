@@ -41,22 +41,24 @@ const List = ({
 
   return (
     <div className={composeClassName} ref={listRef}>
-      <PullDownRefresh onRefresh={onRefresh} isFinished={!refreshing} height={height}>
-        <ScrollView
-          height={height}
-          rowCount={data.length}
-          rowData={data}
-          rowRenderer={renderItem || renderDiv}
-          renderBottom={renderDiv}
-          isRowLoaded={emptyFunction}
-          onPullingUp={emptyFunction}
-          loadMoreRows={loadMoreRows}
-          onScrollBottom={onScrollBottom}
-          {...props}
-        >
-          {chlidren}
-        </ScrollView>
-      </PullDownRefresh>
+      <div>
+        <PullDownRefresh onRefresh={onRefresh} isFinished={!refreshing} height={height}>
+          <ScrollView
+            height={height}
+            rowCount={data.length}
+            rowData={data}
+            rowRenderer={renderItem || renderDiv}
+            renderBottom={renderDiv}
+            isRowLoaded={emptyFunction}
+            onPullingUp={emptyFunction}
+            loadMoreRows={loadMoreRows}
+            onScrollBottom={onScrollBottom}
+            {...props}
+          >
+            {chlidren}
+          </ScrollView>
+        </PullDownRefresh>
+      </div>
     </div>
   );
 };
