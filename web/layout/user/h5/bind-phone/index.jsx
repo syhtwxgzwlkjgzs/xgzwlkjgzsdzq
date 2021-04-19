@@ -64,6 +64,8 @@ class BindPhoneH5Page extends React.Component {
             请绑定您的手机号
           </div>
           <PhoneInput
+            phoneNum={mobileBind.mobile}
+            captcha={mobileBind.code}
             phoneNumCallback={this.handlePhoneNumCallback}
             phoneCodeCallback={this.handlePhoneCodeCallback}
             sendCodeCallback={this.handleSendCodeButtonClick}

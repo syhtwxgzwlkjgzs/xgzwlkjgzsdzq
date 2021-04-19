@@ -106,6 +106,8 @@ class LoginPhoneH5Page extends React.Component {
             <div className={layout.content}>
                 <div className={layout.title}>手机号码登录/注册</div>
                 <PhoneInput
+                  phoneNum={mobileLogin.mobile}
+                  captcha={mobileLogin.code}
                   phoneNumCallback={this.handlePhoneNumCallback}
                   phoneCodeCallback={this.handlePhoneCodeCallback}
                   sendCodeCallback={this.handleSendCodeButtonClick}

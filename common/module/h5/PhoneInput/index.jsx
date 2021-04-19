@@ -9,30 +9,21 @@ class PhoneInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      phoneNum: '', // 手机号
-      inputValue: '', // 验证码
     };
   }
 
   setCaptcha = (code) => {
     const { phoneCodeCallback = () => {} } = this.props;
-    this.setState({
-      inputValue: code,
-    });
     phoneCodeCallback(code);
   }
   setPhoneNum = (e) => {
     const { phoneNumCallback = () => {} } = this.props;
     const val = e.target.value;
-    this.setState({
-      phoneNum: val,
-    });
     phoneNumCallback(val);
   }
 
   render() {
-    const { phoneNum } = this.state;
-    const { codeTimeout, sendCodeCallback = () => {} } = this.props;
+    const { phoneNum, captcha, codeTimeout, sendCodeCallback = () => {} } = this.props;
     return (
       <Fragment>
         {/* 手机号输入 start */}
@@ -40,7 +31,7 @@ class PhoneInput extends React.Component {
           <Input mode='number' className={layout.input} value={phoneNum} placeholder="请输入手机号码" onChange={this.setPhoneNum} />
           {
             codeTimeout
-              ? <div className={layout.countDown } >{codeTimeout}</div>
+              ? <div className={layout.countDown } >{codeTimeout}秒后再发送</div>
               : <div className={layout.sendCaptcha} onClick={sendCodeCallback}>发送验证码</div>
           }
         </div>
@@ -48,7 +39,7 @@ class PhoneInput extends React.Component {
         {/* 验证码 start */}
         <div className={layout.captchaInput}>
           <div className={layout['captchaInput-title']}>短信验证码</div>
-            <CaptchaInput inputCallback={this.setCaptcha} />
+            <CaptchaInput captcha={captcha} inputCallback={this.setCaptcha} />
          </div>
         {/* 验证码 end */}
       </Fragment>
