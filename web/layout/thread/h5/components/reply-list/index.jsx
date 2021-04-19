@@ -8,7 +8,7 @@ export default class ReplyList extends React.Component {
     super(props);
     this.state = {
       isLiked: this.props.data.isLiked,
-      likeCount: this.props.data.likeCount,
+      likCount: this.props.data.likCount,
       likeClick: this.props.likeClick(),
       replyClick: this.props.replyClick(),
       deleteClick: this.props.deleteClick(),
@@ -25,8 +25,11 @@ export default class ReplyList extends React.Component {
   }
   likeClick() {
     this.setState({
-      likeCount: !this.state.isLiked ? this.state.likeCount + 1 : this.state.likeCount - 1,
       isLiked: !this.state.isLiked,
+    }, () => {
+      this.setState({
+        likCount: this.state.isLiked ? this.state.likCount + 1 : this.state.likCount - 1,
+      });
     });
     this.state.likeClick('2');
   }
@@ -49,20 +52,25 @@ export default class ReplyList extends React.Component {
               {this.props.data.user.username}
             </div>
             <div className={styles.replyListText}>
-                <div className={styles.replyedAvatar} onClick={this.props.avatarClick('3')}>
-                    <Avatar image={this.props.data.user.avatar} circle={true} size={'small'}></Avatar>
-                </div>
-                <span className={styles.replyedUserName}>
-                  {this.props.data.replyUser.username}
-                </span>
-                <span onClick={() => this.toCommentDetail()}>{this.props.data.content}</span>
+              {
+                this.props.data.commentUserId
+                  ? <div className={styles.commentUser}>
+                    <div className={styles.replyedAvatar} onClick={this.props.avatarClick('3')}>
+                        <Avatar image={this.props.data.user.avatar} circle={true} size={'small'}></Avatar>
+                    </div>
+                    <span className={styles.replyedUserName}>
+                      {this.props.data.replyUser.username}
+                    </span>
+                  </div> : ''
+              }
+                <span onClick={() => this.props.toCommentDetail()}>{this.props.data.content}</span>
             </div>
           </div>
           <div className={styles.replyListFooter}>
             <div className={styles.replyTime}>{3}分钟</div>
             <div className={this.state.isLiked ? styles.replyLike : styles.replyLiked}>
               <span onClick={() => this.likeClick()}>
-                赞{this.state.likeCount === 0 ? '' : this.state.likeCount}
+                赞{this.state.likCount === 0 ? '' : this.state.likCount}
               </span>
             </div>
             <div className={styles.replyReply}>

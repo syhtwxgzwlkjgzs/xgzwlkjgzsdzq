@@ -14,7 +14,6 @@ import InputPopup from '../../h5/components/input-popup';
 class CommentH5Page extends React.Component {
   constructor(props) {
     super(props);
-    this.bodyRef = React.createRef();
     this.state = {
       isShowReward: false, // 是否展示获得多少悬赏金
       isShowRedPacket: true, // 是否展示获得多少红包
@@ -499,15 +498,6 @@ class CommentH5Page extends React.Component {
   onMoreClick() {
     console.log('点击了更多');
   }
-  // 触底事件
-  onScrollBottom() {
-    console.log('滚动啦');
-    if ((this.bodyRef.current.scrollHeight - this.bodyRef.current.clientHeight) <= this.bodyRef.current.scrollTop) {
-      Toast.success({
-        content: '加载更多...',
-      });
-    }
-  }
   // 头像点击
   avatarClick(type) {
     if (type === '1') {
@@ -564,52 +554,46 @@ class CommentH5Page extends React.Component {
   render() {
     return (
       <div className={styles.index}>
-        <div
-          className={styles.scroll}
-          ref={this.bodyRef}
-          onScroll={() => this.onScrollBottom()}
-        >
-          <div className={styles.header}>
-            <div className={styles.show}>
-              {
-                this.state.isShowReward
-                  ? <div className={styles.showGet}>
-                      <div className={styles.icon}>悬赏图标</div>
-                      <div className={styles.showMoneyNum}>
-                        获得<span className={styles.moneyNumber}>5.20</span>元悬赏金
-                      </div>
-                    </div> : ''
-              }
-              {
-                this.state.isShowRedPacket
-                  ? <div className={styles.showGet}>
-                      <div className={styles.icon}>红包图标</div>
-                      <div className={styles.showMoneyNum}>
-                        获得<span className={styles.moneyNumber}>5.20</span>元红包
-                      </div>
-                    </div> : ''
-              }
-            </div>
-            {/* 先用这个icon暂代 */}
-            <Icon
-              onClick={() => this.onMoreClick()}
-              className={styles.more}
-              size='20'
-              name='ShareAltOutlined'>
-            </Icon>
+        <div className={styles.header}>
+          <div className={styles.show}>
+            {
+              this.state.isShowReward
+                ? <div className={styles.showGet}>
+                    <div className={styles.icon}>悬赏图标</div>
+                    <div className={styles.showMoneyNum}>
+                      获得<span className={styles.moneyNumber}>5.20</span>元悬赏金
+                    </div>
+                  </div> : ''
+            }
+            {
+              this.state.isShowRedPacket
+                ? <div className={styles.showGet}>
+                    <div className={styles.icon}>红包图标</div>
+                    <div className={styles.showMoneyNum}>
+                      获得<span className={styles.moneyNumber}>5.20</span>元红包
+                    </div>
+                  </div> : ''
+            }
           </div>
-          {/* 内容 */}
-          <div className={styles.content}>
-            <CommentList
-              data={this.state.commentData}
-              avatarClick={type => this.avatarClick.bind(this, type)}
-              likeClick={type => this.likeClick.bind(this, type)}
-              replyClick={type => this.replyClick.bind(this, type)}
-              deleteClick={type => this.deleteClick.bind(this, type)}>
-            </CommentList>
-          </div>
-          <div className={styles.footer}>
-          </div>
+          {/* 先用这个icon暂代 */}
+          <Icon
+            onClick={() => this.onMoreClick()}
+            className={styles.more}
+            size='20'
+            name='ShareAltOutlined'>
+          </Icon>
+        </div>
+        {/* 内容 */}
+        <div className={styles.content}>
+          <CommentList
+            data={this.state.commentData}
+            avatarClick={type => this.avatarClick.bind(this, type)}
+            likeClick={type => this.likeClick.bind(this, type)}
+            replyClick={type => this.replyClick.bind(this, type)}
+            deleteClick={type => this.deleteClick.bind(this, type)}>
+          </CommentList>
+        </div>
+        <div className={styles.footer}>
           {/* 评论弹层 */}
           <InputPopup
             visible={this.state.showCommentInput}
@@ -617,7 +601,7 @@ class CommentH5Page extends React.Component {
             onSubmit={value => this.setState({ showCommentInput: false })}>
           </InputPopup>
         </div>
-      </div>
+        </div>
     );
   }
 }
