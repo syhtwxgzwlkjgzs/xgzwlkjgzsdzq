@@ -2,7 +2,8 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 
-import SearchInput from '.././../../../components/search-input';
+import Header from '@components/header';
+import SearchInput from '@components/search-input';
 import SearchPosts from './components/search-posts';
 
 import styles from './index.module.scss';
@@ -63,6 +64,7 @@ class SearchResultPostH5Page extends React.Component {
 
     return (
       <div className={styles.page}>
+        <Header />
         <div className={styles.searchInput}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
         </div>

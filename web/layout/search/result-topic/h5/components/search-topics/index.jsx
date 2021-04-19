@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 
-import { Topic } from '../../../../../../components/search-result-item';
+import { Topic } from '@components/search-result-item';
 import List from '../list';
 
 import styles from './index.module.scss';

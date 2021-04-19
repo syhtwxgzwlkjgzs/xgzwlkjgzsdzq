@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
-
-import { User } from '../../../../../../components/search-result-item';
+import UserItem from '@components/thread/user-item';
 import List from '../list';
 
 import styles from './index.module.scss';
@@ -15,7 +14,18 @@ import styles from './index.module.scss';
  */
 const SearchUsers = ({ data = [], refreshing, onRefresh, onFetchMore, onItemClick }) => {
   const renderItem = useCallback(
-    ({ data: _data, index }) => <User key={index} data={_data[index]} onClick={onItemClick} />,
+    ({ data: _data, index }) => {
+      const item = _data[index];
+      return (
+        <UserItem
+        key={index}
+        title={item.username}
+        imgSrc={item.avatar}
+        label={item.groupName}
+        onClick={onItemClick}
+      />
+      );
+    },
     [onItemClick],
   );
 

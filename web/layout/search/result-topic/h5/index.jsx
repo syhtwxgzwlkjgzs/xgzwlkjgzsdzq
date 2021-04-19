@@ -4,6 +4,7 @@ import { withRouter } from 'next/router';
 
 import SearchInput from '.././../../../components/search-input';
 import SearchTopics from './components/search-topics';
+import Header from '@components/header';
 
 import styles from './index.module.scss';
 
@@ -61,14 +62,17 @@ class SearchResultTopicH5Page extends React.Component {
   onTopicClick = data => console.log('topic click', data);
 
   render() {
-    const { keyword, data, refreshing } = this.state;
+    const { keyword, refreshing } = this.state;
+    const { topics } = this.props.search;
+    const { pageData } = topics || { pageData: [] };
     return (
       <div className={styles.page}>
+        <Header />
         <div className={styles.searchInput}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
         </div>
         <SearchTopics
-          data={data}
+          data={pageData}
           refreshing={refreshing}
           onRefresh={this.refreshData}
           onFetchMore={this.fetchMoreData}
@@ -79,13 +83,6 @@ class SearchResultTopicH5Page extends React.Component {
   }
 }
 
-const getData = (number, keyword, prevLen = 0) => Array(number)
-  .fill('')
-  .map((v, index) => ({
-    title: `#test-${prevLen + index + 1}#`,
-    content: `#${keyword}#`,
-    hotCount: 2,
-    contentCount: 3,
-  }));
+const getData = () => [];
 
 export default withRouter(SearchResultTopicH5Page);

@@ -4,6 +4,7 @@ import { withRouter } from 'next/router';
 
 import SearchInput from '.././../../../components/search-input';
 import SearchUsers from './components/search-users';
+import Header from '@components/header';
 
 import styles from './index.module.scss';
 
@@ -63,15 +64,17 @@ class SearchResultUserH5Page extends React.Component {
   onUserClick = data => console.log('user click', data);
 
   render() {
-    const { keyword, data, refreshing } = this.state;
-
+    const { keyword, refreshing } = this.state;
+    const { users } = this.props.search;
+    const { pageData } = users || { pageData: [] };
     return (
       <div className={styles.page}>
+        <Header />
         <div className={styles.searchInput}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
         </div>
         <SearchUsers
-          data={data}
+          data={pageData}
           refreshing={refreshing}
           onRefresh={this.refreshData}
           onFetchMore={this.fetchMoreData}
@@ -82,12 +85,6 @@ class SearchResultUserH5Page extends React.Component {
   }
 }
 
-const getData = (number, keyword, prevLen = 0) => Array(number)
-  .fill('')
-  .map((v, index) => ({
-    name: `user-${keyword || ''}-${prevLen + index + 1}`,
-    image: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1611688293,2175392062&fm=26&gp=0.jpg',
-    group: '测试组',
-  }));
+const getData = () => [];
 
 export default withRouter(SearchResultUserH5Page);

@@ -1,32 +1,7 @@
 import React, { useCallback } from 'react';
-import { Icon } from '@discuzq/design';
 
 import ThreadContent from '@components/thread';
 import styles from './index.module.scss';
-
-/**
- * 用户组件
- * @prop {object} data 用户数据
- * @prop {function} onClick 用户点击事件
- */
-export const User = ({ data, onClick }) => {
-  const click = useCallback(() => {
-    onClick && onClick(data);
-  }, [data, onClick]);
-
-  return (
-    <div onClick={click} className={styles.user}>
-      <div className={styles.left}>
-        <img className={`${styles.image} ${!data.image ? styles.empty : ''}`} src={data.image} />
-        <div className={styles.name}>{data.name || '暂无内容'}</div>
-      </div>
-      <div className={styles.right}>
-        <div className={styles.group}>{data.group || '暂无内容'}</div>
-        <Icon name="RightOutlined" size={12} />
-      </div>
-    </div>
-  );
-};
 
 /**
  * 话题组件
