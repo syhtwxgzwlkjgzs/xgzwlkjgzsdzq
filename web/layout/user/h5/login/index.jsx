@@ -38,7 +38,7 @@ class LoginH5Page extends React.Component {
     } catch (e) {
       if (e.Code === NEED_BIND_WEIXIN_FLAG) {
         this.props.commonLogin.needToBindWechat = true;
-        this.props.router.push(`/user/wx-bind?sessionToken=${e.sessionToken}`);
+        this.props.router.push(`/user/wx-bind-qrcode?sessionToken=${e.sessionToken}`);
         return;
       }
 
