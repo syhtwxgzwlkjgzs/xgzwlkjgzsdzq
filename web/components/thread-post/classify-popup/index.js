@@ -15,14 +15,15 @@ const ClassifyPopup = (props) => {
   const [categoryChildren, setCategoryChildren] = useState([]);
   const [selected, setSelected] = useState({});
   const [selectedChild, setSelectedChild] = useState({});
+  const { length } = category;
   const handleClose = () => {
     setVisible(false);
   };
   const handleClick = (item) => {
     setSelected(item);
+    if (item.children && !item.children.length) handleClose();
   };
   const handleChildClick = (item) => {
-    onChange(selected, item);
     setSelectedChild(item);
     handleClose();
   };
@@ -31,11 +32,9 @@ const ClassifyPopup = (props) => {
     if (item.children && typeofFn.isArray(item.children.slice()) && item.children.length > 0) {
       setCategoryChildren(item.children);
       setSelectedChild(item.children[0]);
-      onChange(item, item.children[0]);
     } else {
       setCategoryChildren([]);
       setSelectedChild({});
-      onChange(item, {});
     }
   };
 
@@ -48,10 +47,14 @@ const ClassifyPopup = (props) => {
   }, [visible]);
 
   useEffect(() => {
-    if (!category) return;
+    if (!category || selected.pid) return;
     const item = category[0] || [];
     setSelected(item);
-  }, [category]);
+  }, [length]);
+
+  useEffect(() => {
+    onChange(selected, selectedChild);
+  }, [selected, selectedChild]);
 
   useEffect(() => {
     setChildren(selected);
