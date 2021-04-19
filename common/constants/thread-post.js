@@ -14,8 +14,8 @@ export const LOADING_TOTAL_TYPE = {
 export const ATTACHMENT_TYPE = {
   file: 0, // 附件
   image: 1, // 图片
-  audio: 2, // 语音
-  video: 3, // 视频
+  audio: 1, // 语音
+  video: 1, // 视频
   message: 4, // 消息图片
   answer: 5, // 文档图片
 };
