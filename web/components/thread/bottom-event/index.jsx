@@ -24,7 +24,7 @@ const Index = ({
 }) => {
   const postList = [
     {
-      icom: 'LikeOutlined',
+      icon: 'LikeOutlined',
       name: '赞',
       event: onPraise,
     },
