@@ -22,7 +22,7 @@ class TopicSelect extends Component {
       pageSize: 20,
       meta: {},
       loadingText: 'loading',
-    }
+    };
     this.timer = null;
   }
 
@@ -30,12 +30,12 @@ class TopicSelect extends Component {
   async componentDidMount() {
     const { fetchTopic } = this.props.threadPost;
     await fetchTopic();
-    this.setState({ pageNum: this.state.pageNum + 1 })
+    this.setState({ pageNum: this.state.pageNum + 1 });
   }
 
   // 更新搜索关键字
   updateKeywords(e) {
-    this.setState({ keywords: e.target.value }, this.searchInput)
+    this.setState({ keywords: e.target.value }, this.searchInput);
   }
 
   // 搜索话题
@@ -53,8 +53,8 @@ class TopicSelect extends Component {
       page: this.state.pageNum,
       perPage: this.state.pageSize,
       filter: {
-        recommended: 1
-      }
+        recommended: 1,
+      },
     };
     if (this.state.keywords) {
       params.filter.content = this.state.keywords;
@@ -62,11 +62,11 @@ class TopicSelect extends Component {
     // 2 发起请求
     await fetchTopic(params);
     // 3 更新页码
-    this.setState({ pageNum: this.state.pageNum + 1 })
+    this.setState({ pageNum: this.state.pageNum + 1 });
   }
 
   onScrollBottom() {
-    console.log('bottom')
+    console.log('bottom');
     // 忽略页码为1时的触底
     if (this.state.pageNum === 1) return;
     this.loadTopics();
@@ -76,31 +76,38 @@ class TopicSelect extends Component {
     console.log('top');
   }
 
+  handleItemClick = (item) => {
+    const { keywords } = this.state;
+    let val = keywords;
+    if (item.content) val = item.content;
+    this.props.clickTopic(`#${val}#`);
+    this.props.cancelTopic();
+  }
+
   renderItem({ data = [], index }) {
     const item = data[index] || {};
     return (
       <div
         key={item.id}
         className={styles['topic-item']}
-        onClick={() => this.props.clickTopic(`#${item.content}#`)}
+        onClick={() => this.handleItemClick(item)}
       >
         <div className={styles['item-left']}>
           <div className={styles.name}>#{item.content}#</div>
-          {item.recommended === 1 &&
-            <div className={styles.recommend}>
+          {item.recommended === 1
+            && <div className={styles.recommend}>
               <Icon name="LikeOutlined" size={20} color='#1878f3' />
             </div>
           }
         </div>
         <div className={styles['item-right']}>{item.viewCount}热度</div>
       </div>
-    )
+    );
   }
 
   render() {
-    const { visible = false, threadPost, clickTopic, cancelTopic } = this.props;
+    const { visible = false, threadPost, cancelTopic } = this.props;
     const { topics = [] } = threadPost;
-    const topicList = topics.map(item => item.topic) || [];
 
     return (
       <Popup
@@ -113,16 +120,16 @@ class TopicSelect extends Component {
             value={this.state.keywords}
             icon="SearchOutlined"
             placeholder='搜索话题'
-            onChange={(e) => this.updateKeywords(e)}
+            onChange={e => this.updateKeywords(e)}
           />
 
           {/* 话题列表 */}
           <div className={styles['topic-wrap']}>
             {/* 新话题 */}
-            {this.state.keywords &&
-              <div
+            {this.state.keywords
+              && <div
                 className={styles['topic-item']}
-                onClick={() => clickTopic(`#${this.state.keywords}#`)}
+                onClick={this.handleItemClick}
               >
                 <div className={styles['item-left']}>
                   <div className={styles.name}>#{this.state.keywords}#</div>
@@ -133,8 +140,8 @@ class TopicSelect extends Component {
             {/* 搜索列表 */}
             <ScrollView
               width='100%'
-              rowCount={topicList.length}
-              rowData={topicList}
+              rowCount={topics.length}
+              rowData={topics}
               rowHeight={54}
               rowRenderer={this.renderItem.bind(this)}
               onScrollTop={this.onScrollTop.bind(this)}
@@ -150,7 +157,7 @@ class TopicSelect extends Component {
           </div>
         </div >
       </Popup>
-    )
+    );
   }
 }
 
@@ -158,6 +165,6 @@ TopicSelect.propTypes = {
   visible: PropTypes.bool.isRequired,
   clickTopic: PropTypes.func.isRequired,
   cancelTopic: PropTypes.func.isRequired,
-}
+};
 
 export default TopicSelect;

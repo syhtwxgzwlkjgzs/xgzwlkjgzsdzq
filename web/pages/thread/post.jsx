@@ -18,6 +18,7 @@ import { createThread } from '@common/server';
 import Title from '@components/thread-post/title';
 import Position from '@components/thread-post/position';
 import AtSelect from '@components/thread-post/at-select';
+import TopicSelect from '@components/thread-post/topic-select';
 import { withRouter } from 'next/router';
 
 @inject('threadPost')
@@ -44,6 +45,8 @@ class ThreadCreate extends React.Component {
       contentIndexed: [],
       atListShow: false,
       atList: [],
+      topicShow: false,
+      topic: '',
     };
   }
   componentDidMount() {
@@ -68,6 +71,9 @@ class ThreadCreate extends React.Component {
     }
     if (item.id === defaultOperation.at) {
       this.setState({ atListShow: true });
+    }
+    if (item.id === defaultOperation.topic) {
+      this.setState({ topicShow: true });
     }
   };
 
@@ -167,6 +173,8 @@ class ThreadCreate extends React.Component {
       categoryChoose,
       atListShow,
       atList,
+      topicShow,
+      topic,
     } = this.state;
     const images = Object.keys(imageCurrentData);
     const category = (index.categories && index.categories.slice()) || [];
@@ -178,6 +186,7 @@ class ThreadCreate extends React.Component {
           <DVditor
             emoji={emoji}
             atList={atList}
+            topic={topic}
             onChange={this.handleVditorChange}
           />
           {(imageUploadShow || images.length > 0) && (
@@ -214,6 +223,11 @@ class ThreadCreate extends React.Component {
           }}
         />
         <AtSelect visible={atListShow} getAtList={this.handleAtListChange} onCancel={this.handleAtListCancel} />
+        <TopicSelect
+          visible={topicShow}
+          cancelTopic={() => this.setState({ topicShow: false })}
+          clickTopic={val => this.setState({ topic: val })}
+        />
       </>
     );
   }

@@ -9,7 +9,7 @@ import 'vditor/src/assets/scss/index.scss';
 import './index.scss';
 
 export default function DVditor(props) {
-  const { onChange, emoji, atList } = props;
+  const { onChange, emoji, atList, topic } = props;
   const vditorId = 'dzq-vditor';
 
   const [isFocus, setIsFocus] = useState(false);
@@ -63,6 +63,10 @@ export default function DVditor(props) {
       vditor.insertValue(users.join(' '));
     }
   }, [atList]);
+
+  useEffect(() => {
+    if (topic) vditor.insertValue(`${topic} `);
+  }, [topic]);
 
   function initVditor() {
     // https://ld246.com/article/1549638745630#options
