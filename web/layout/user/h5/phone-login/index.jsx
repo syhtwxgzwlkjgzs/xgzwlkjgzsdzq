@@ -66,7 +66,7 @@ class LoginPhoneH5Page extends React.Component {
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT.Code) {
         this.props.commonLogin.needToBindWechat = true;
         this.props.commonLogin.sessionToken = e.sessionToken;
-        this.props.router.push(`/user/wx-bind-qrcode?session_token=${e.sessionToken}`);
+        this.props.router.push(`/user/wx-bind-qrcode?session_token=${e.sessionToken}&loginType=phone`);
         return;
       }
 
