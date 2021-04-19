@@ -22,8 +22,9 @@ const ClassifyPopup = (props) => {
     setSelected(item);
   };
   const handleChildClick = (item) => {
-    setSelectedChild(item);
     onChange(selected, item);
+    setSelectedChild(item);
+    handleClose();
   };
 
   const setChildren = (item) => {
