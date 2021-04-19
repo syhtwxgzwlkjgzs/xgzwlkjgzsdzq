@@ -1,11 +1,13 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 .index {
-    padding: 0 rem($padding-4n);
+    height: 100vh;
+    width: 100vw;
     .header {
         height: rem(50);
         display: flex;
         justify-content: flex-end;
+        padding: 0 rem($padding-4n);
         .show {
             .showGet {
                 display: flex;
@@ -14,7 +16,7 @@
                     line-height: rem(50);
                 }
                 .showMoneyNum {
-                    font-family: PingFangSC-Regular;
+                    font-family: 'PingFangSC-Regular';
                     font-weight: normal;
                     font-size: var($font-size-label);
                     line-height: rem(50);
@@ -33,6 +35,10 @@
         }
     }
     .content {
-        
+        padding: 0 rem($padding-4n);
     }
+    .footer {
+
+    }
+
 }

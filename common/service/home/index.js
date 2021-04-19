@@ -7,8 +7,6 @@ export default props => ({
    * @returns {object} 处理结果
    */
   async collect(categoryId) {
-    
-
     try {
       // 2. 请求接口
       const params = {
@@ -20,7 +18,7 @@ export default props => ({
         // 3. 更新store
         // const { thread } = props;
         // thread.setThreadFavorite(true);
-        debugger
+        debugger;
 
         // 4. 返回成功
         return {

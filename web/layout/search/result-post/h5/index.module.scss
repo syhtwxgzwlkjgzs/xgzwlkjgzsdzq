@@ -2,8 +2,12 @@
 @import '@common/styles/variable/index.scss';
 
 .page {
-  padding-top: rem($padding-4n);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 .searchInput {
-  padding: 0 rem($padding-4n);
+  padding: rem($padding-4n);
 }

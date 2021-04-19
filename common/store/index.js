@@ -16,6 +16,8 @@ import MobileBindStore from './login/mobile-bind-store';
 import ResetPasswordStore from './login/reset-password-store';
 import CommonLoginStore from './login/common-login-store';
 import H5QrCode from './login/h5-qrcode';
+import SearchStore from './search/action';
+
 useStaticRendering(isServer());
 
 let store = null;
@@ -42,6 +44,7 @@ export default function initializeStore(initProps = {}) {
       h5QrCode: new H5QrCode(),
       resetPassword: new ResetPasswordStore(),
       commonLogin: new CommonLoginStore(),
+      search: new SearchStore(),
     };
   }
   if (store === null) {
@@ -64,6 +67,7 @@ export default function initializeStore(initProps = {}) {
       h5QrCode: new H5QrCode(),
       resetPassword: new ResetPasswordStore(),
       commonLogin: new CommonLoginStore(),
+      search: new SearchStore(),
     };
   }
 
