@@ -1,11 +1,11 @@
 export { default as readCategories } from './readCategories';
 export { default as readUser } from './readUser';
 export { default as readForum } from './readForum';
-export { default as readThreadDetail } from './readThreadDetail';
-export { default as updateThreads } from './updateThreads';
-export { default as readCommentList } from './readCommentList';
-export { default as readReplyList } from './readReplyList';
-export { default as createPosts } from './createPosts';
+export { default as readThreadDetail } from './thread/readThreadDetail';
+export { default as updateThreads } from './thread/updateThreads';
+export { default as readCommentList } from './thread/readCommentList';
+export { default as readReplyList } from './thread/readReplyList';
+export { default as createPosts } from './thread/createPosts';
 export { default as readStickList } from './readStickList';
 export { default as readTopicsList } from './readTopicsList';
 export { default as default } from './api';
