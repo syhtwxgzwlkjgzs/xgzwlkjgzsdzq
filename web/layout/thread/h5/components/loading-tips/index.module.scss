@@ -1,0 +1,12 @@
+@import '@common/styles/variable/index.scss';
+@import '@common/styles/fn/rem.scss';
+
+.container {
+  background: var(--color-white);
+  text-align: center;
+  padding: rem($padding-4n) 0;
+}
+
+.init {
+  padding: rem($padding-6n) 0;
+}

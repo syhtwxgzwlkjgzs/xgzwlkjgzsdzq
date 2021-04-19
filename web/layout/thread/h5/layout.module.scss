@@ -28,8 +28,7 @@
   overflow-y: auto;
 
   .bottom {
-    // FIXME: rem(--margin-10)不生效，后面再处理
-    margin-top: rem(10);
+    margin-top: rem($margin-10);
   }
 }
 

@@ -1,5 +1,16 @@
 import { updateThreads, readCommentList, createPosts } from '@server';
 
+// 适配器
+function commentListAdapter(list = []) {
+  list.forEach((item) => {
+    const { lastThreeComments } = item;
+    if (lastThreeComments?.length > 1) {
+      item.lastThreeComments = [lastThreeComments[0]];
+    }
+  });
+  return list;
+}
+
 export default ({ thread: ThreadStore }) => ({
   /**
    * 帖子收藏
@@ -269,7 +280,6 @@ export default ({ thread: ThreadStore }) => ({
    */
   async loadCommentList(params) {
     const { id, page = 1, perPage = 10, sort = 'createdAt' } = params;
-
     if (!id) {
       return {
         msg: '帖子id不存在',
@@ -278,19 +288,22 @@ export default ({ thread: ThreadStore }) => ({
     }
 
     const requestParams = {
-      filter: { thread: id },
+      filter: {
+        thread: Number(id),
+      },
       sort,
       page,
       perPage,
     };
 
-    const res = await readCommentList({ data: requestParams });
-    console.log(res.data.pageData);
+    const res = await readCommentList({ params: requestParams });
+
     if (res?.data?.pageData) {
-      const { commentList } = ThreadStore;
+      let { commentList } = ThreadStore;
 
-      page === 1 ? res?.data?.pageData || [] : commentList.push(...(res?.data?.pageData || []));
+      page === 1 ? (commentList = res?.data?.pageData || []) : commentList.push(...(res?.data?.pageData || []));
 
+      ThreadStore.setCommentList(commentListAdapter(commentList));
 
       return {
         msg: '操作成功',

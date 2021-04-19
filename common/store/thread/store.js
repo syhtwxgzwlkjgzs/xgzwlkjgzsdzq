@@ -22,6 +22,11 @@ class ThreadStore {
   @computed get isFavorite() {
     return !!this.threadData?.isFavorite;
   }
+
+  // 是否还有更多
+  @computed get isNoMore() {
+    return this.commentList?.length >= this.totalPage;
+  }
 }
 
 export default ThreadStore;

@@ -8,6 +8,7 @@ class ThreadAction extends ThreadStore {
   @action
   setThreadData(data) {
     this.threadData = data;
+    this.threadData.id = data.threadId;
   }
 
   @action
@@ -21,7 +22,7 @@ class ThreadAction extends ThreadStore {
   }
 
   @action
-  setTotalpage(data) {
+  setTotalCount(data) {
     this.totalPage = data;
   }
 }

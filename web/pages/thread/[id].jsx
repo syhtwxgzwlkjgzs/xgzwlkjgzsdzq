@@ -45,11 +45,20 @@ class Detail extends React.Component {
     const { id } = this.props.router.query;
     if (!this.props.serverThread && id) {
       const res = await readThreadDetail({ params: { pid: Number(id) } });
-      this.props.thread.setThreadData(res.data);
+      if (res.code === 0) {
+        this.props.thread.setThreadData(res.data);
+      }
 
-      const commentRes = await readCommentList({ params: { pid: Number(id) } });
-      this.props.thread.setCommentList(commentRes.data.pageData);
-      this.props.thread.setTotalpage(commentRes.data.totalPage);
+      const commentRes = await readCommentList({ params: {
+        filter: {
+          thread: Number(id),
+        },
+      },
+      });
+      if (commentRes.code === 0) {
+        this.props.thread.setCommentList(commentRes.data?.pageData);
+        this.props.thread.setTotalCount(commentRes.data?.totalCount);
+      }
     }
   }
 
