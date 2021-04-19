@@ -285,12 +285,12 @@ export default ({ thread: ThreadStore }) => ({
     };
 
     const res = await readCommentList({ data: requestParams });
-
+    console.log(res.data.pageData);
     if (res?.data?.pageData) {
-      let { commentList } = ThreadStore;
-      commentList = page === 1 ? res?.data?.pageData || [] : commentList.concat(res?.data?.pageData);
+      const { commentList } = ThreadStore;
 
-      this.props.thread.setCommentList(commentList);
+      page === 1 ? res?.data?.pageData || [] : commentList.push(...(res?.data?.pageData || []));
+
 
       return {
         msg: '操作成功',
