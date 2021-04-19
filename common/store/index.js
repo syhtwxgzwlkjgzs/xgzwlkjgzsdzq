@@ -13,6 +13,8 @@ import MobileLoginStore from './login/mobile-login-store';
 import NicknameBindStore from './login/nickname-bind-store';
 import SupplementaryStore from './login/supplementary-store';
 import MobileBindStore from './login/mobile-bind-store';
+import ResetPasswordStore from './login/reset-password-store';
+import CommonLoginStore from './login/common-login-store';
 import H5QrCode from './login/h5-qrcode';
 useStaticRendering(isServer());
 
@@ -38,6 +40,8 @@ export default function initializeStore(initProps = {}) {
       comment: new CommentStore(),
       threadPost: new ThreadPostStore(),
       h5QrCode: new H5QrCode(),
+      resetPassword: new ResetPasswordStore(),
+      commonLogin: new CommonLoginStore(),
     };
   }
   if (store === null) {
@@ -58,6 +62,8 @@ export default function initializeStore(initProps = {}) {
       comment: new CommentStore(),
       threadPost: new ThreadPostStore(),
       h5QrCode: new H5QrCode(),
+      resetPassword: new ResetPasswordStore(),
+      commonLogin: new CommonLoginStore(),
     };
   }
 
