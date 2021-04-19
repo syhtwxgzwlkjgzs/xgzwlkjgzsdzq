@@ -1,8 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
-import Header from '@components/header';
-import { Button, Upload } from '@discuzq/design';
+import BaseLayout from '@components/base-layout';
 import ThreadContent from '@components/thread';
 
 @inject('site')
@@ -14,15 +13,12 @@ class IndexPCPage extends React.Component {
     const { index, user, site } = this.props;
     return (
       <div>
-        <Header/>
-        { user.userInfo && <h1>{user.userInfo.username}</h1> }
-        {
-          index.categories ? index.categories.map((item, index) => <h1 key={index}>{item.name}</h1>) : null
-        }
-        <p className={styles.text}>test</p>
-
-        <Button>Fuck</Button>
-        <ThreadContent />
+        <BaseLayout
+          left={() => <div>左边</div>}
+          right={() => <div>右边</div>}
+        >
+          {() => <ThreadContent />}
+        </BaseLayout>
       </div>
     );
   }
