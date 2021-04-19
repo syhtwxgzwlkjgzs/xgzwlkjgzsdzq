@@ -33,21 +33,21 @@ class LoginH5Page extends React.Component {
       // FIXME: Toast 暂时不支持回调能力
       setTimeout(() => {
         this.props.router.push('/index');
+        return;
       }, 1000);
     } catch (e) {
       if (e.Code === NEED_BIND_WEIXIN_FLAG) {
         this.props.commonLogin.needToBindWechat = true;
-        this.props.router.push('/user/wx-bind', {
-          query: {
-            session_token: e.sessionToken,
-          },
-        });
+        this.props.router.push(`/user/wx-bind?sessionToken=${e.sessionToken}`);
+        return;
       }
 
       if (e.Code === NEED_BIND_PHONE_FLAG) {
         this.props.commonLogin.needToBindPhone = true;
-        this.props.router.push('/user/reset-password');
+        this.props.router.push('/user/bind-phone');
+        return;
       }
+
       Toast.error({
         content: e.Message,
         hasMask: false,

@@ -59,22 +59,14 @@ class LoginPhoneH5Page extends React.Component {
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_ALL_INFO.Code) {
         this.props.commonLogin.needToSetNickname = true;
         this.props.commonLogin.needToCompleteExtraInfo = true;
-        this.props.router.push('/user/bind-nickname', {
-          query: {
-            needToCompleteExtraInfo: true,
-          },
-        });
+        this.props.router.push('/user/bind-nickname?needToCompleteExtraInfo=true');
         return;
       }
 
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT.Code) {
         this.props.commonLogin.needToBindWechat = true;
         this.props.commonLogin.sessionToken = e.sessionToken;
-        this.props.router.push('/user/wx-bind', {
-          query: {
-            session_token: e.sessionToken,
-          },
-        });
+        this.props.router.push(`/user/wx-bind?session_token=${e.sessionToken}`);
         return;
       }
 

@@ -27,20 +27,27 @@ export default class UserLoginStore {
         data: {
           username: this.username,
           password: this.password,
+          type: 'mobilebrowser_username_login',
         },
       });
-      if (loginResp.code === 0) {
+
+      if (loginResp.code === 0
+          || loginResp.code === NEED_BIND_PHONE_FLAG
+          || loginResp.code === NEED_BIND_WEIXIN_FLAG) {
         const accessToken = get(loginResp, 'data.accessToken', '');
         // 种下 access_token
         setAccessToken({
           accessToken,
         });
+      }
+
+      if (loginResp.code === 0) {
         return loginResp.data;
       }
 
       if (loginResp.code === NEED_BIND_PHONE_FLAG) {
         throw {
-          Code: 9090,
+          Code: NEED_BIND_PHONE_FLAG,
           Message: '需要绑定手机号',
         };
       }
@@ -61,6 +68,7 @@ export default class UserLoginStore {
       if (error.Code) {
         throw error;
       }
+
       throw {
         Code: 'ulg_9999',
         Message: '网络错误',
