@@ -12,6 +12,7 @@ import CommentList from './components/comment-list/index';
 import { Icon, Input, Badge, Toast, Tag } from '@discuzq/design';
 import UserInfo from '@components/thread/user-info';
 
+import MorePopup from './components/more-popup';
 import InputPopup from './components/input-popup';
 import ImageContent from '@components/thread/image-content';
 import AudioPlay from '@components/thread/audio-play';
@@ -158,6 +159,11 @@ class RenderCommentList extends React.Component {
             共{totalPage}条评论
           </div>
           <div className={comment.sort} onClick={() => this.onSortClick()}>
+            <Icon
+              size='14'
+              name='SortOutlined'>
+            </Icon>
+            <span className={comment.sortText}></span>
             {
               this.state.commentSort ? '评论从旧到新' : '评论从新到旧'
             }
@@ -206,7 +212,9 @@ class ThreadH5Page extends React.Component {
     };
     this.state = {
       showCommentInput: false, // 是否弹出评论框
+      showMorePopup: false, // 是否弹出更多框
       isCommentLoading: false, // 列表loading
+      text: false, // 临时用的
     };
 
     this.parPage = 10;
@@ -311,8 +319,66 @@ class ThreadH5Page extends React.Component {
   onBackClick() {
     this.props.router.push('/');
   }
-  onMoreClick() {
+  // 点击更多icon
+  onMoreClick = () => {
     console.log('更多');
+    // this.setState({
+    //   text: !this.state.text,
+    // });
+    this.setState({ showMorePopup: true });
+  }
+  onOperClick = (type) => {
+    // 1 置顶  2 加精  3 删除  4 举报
+    this.setState({ showMorePopup: false });
+    if (type === '1') {
+      this.updateSticky();
+    } else if (type === '2') {
+      this.updateEssence();
+    } else if (type === '3') {
+      console.log('删除');
+    } else {
+      console.log('举报');
+    }
+  }
+  // 点击置顶
+  async updateSticky() {
+    const id = this.props.thread?.threadData?.id;
+    const params = {
+      id,
+      isSticky: !this.props.thread?.isSticky,
+    };
+    const { success, msg } = await this.service.thread.updateSticky(params);
+
+    if (success) {
+      Toast.success({
+        content: '操作成功',
+      });
+      return;
+    }
+
+    Toast.error({
+      content: msg,
+    });
+  }
+  // 点击加精
+  async updateEssence() {
+    const id = this.props.thread?.threadData?.id;
+    const params = {
+      id,
+      isEssence: !this.props.thread?.isEssence,
+    };
+    const { success, msg } = await this.service.thread.updateEssence(params);
+
+    if (success) {
+      Toast.success({
+        content: '操作成功',
+      });
+      return;
+    }
+
+    Toast.error({
+      content: msg,
+    });
   }
   // 创建评论
   async onPublishClick(val) {
@@ -387,6 +453,13 @@ class ThreadH5Page extends React.Component {
             onClose={() => this.setState({ showCommentInput: false })}
             onSubmit={value => this.onPublishClick(value)}>
           </InputPopup>
+          {/* 更多弹层 */}
+          <MorePopup
+            visible={this.state.showMorePopup}
+            onClose={() => this.setState({ showMorePopup: false })}
+            onSubmit={() => this.setState({ showMorePopup: false })}
+            onOperClick={type => this.onOperClick(type)}>
+          </MorePopup>
 
           {/* 操作区 */}
           <div className={footer.operate}>
