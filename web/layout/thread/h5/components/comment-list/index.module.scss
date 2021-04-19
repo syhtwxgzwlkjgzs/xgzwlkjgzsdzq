@@ -69,12 +69,30 @@
                     .commentLiked {
                         flex: 1;
                     }
+                    .commentLike {
+                        flex: 1;
+                        color: var(--color-primary);
+                    }
                     .commentReply {
                         flex: 1;
                     }
                     .commentDelete {
                         flex: 1;
                     }
+                    .commentAdopt {
+                        flex: 1;
+                    }
+                }
+                .moreReply {
+                    height: rem(26);
+                    font-family: 'PingFang SC';
+                    font-weight: 600;
+                    font-size: var($font-size-primary);
+                    // line-height: var($font-line-height-middle);
+                    line-height: rem(26);
+                    text-align: left;
+                    color: var(--color-text-primary);
+                    padding: rem(8) 0;
                 }
             }
         }
