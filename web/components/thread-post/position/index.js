@@ -30,7 +30,7 @@ const Position = (props) => {
   }, [query]);
 
   useEffect(() => {
-    onChange(currentPosition);
+    if (currentPosition.address !== position.address) onChange(currentPosition);
   }, [currentPosition]);
 
   // handle
