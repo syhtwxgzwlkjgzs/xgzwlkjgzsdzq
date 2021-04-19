@@ -1,5 +1,6 @@
 /**
  * 创建帖子页面
+ * TODO: 将发帖的 state 存放到 store？待定
  */
 import React from 'react';
 import { inject, observer } from 'mobx-react';
@@ -31,18 +32,18 @@ class ThreadCreate extends React.Component {
       emojiShow: false,
       emoji: {},
       imageUploadShow: false,
-      imageCurrentData: {},
-      videoFile: {},
+      imageCurrentData: {}, // 上传成功的图片
+      videoFile: {}, // 上传功能的视频
       categoryChooseShow: false,
       categoryChoose: {
         parent: {},
         child: {},
       },
-      title: '',
-      categoryId: 0,
-      position: {},
-      contentText: '',
-      contentIndexed: [],
+      title: '', // 标题
+      categoryId: 0, // 列表
+      position: {}, // 位置
+      contentText: '', // 发帖内容
+      contentIndexed: {}, // 插件信息
       atListShow: false,
       atList: [],
       topicShow: false,
@@ -137,6 +138,28 @@ class ThreadCreate extends React.Component {
     this.setState({ atListShow: false });
   }
 
+  // 暂时在这里处理，后期如果有多个穿插的时候再做其它处理
+  formatContextIndex() {
+    const { imageCurrentData, videoFile } = this.state;
+    console.log(imageCurrentData, videoFile);
+    const imageIds = Object.values(imageCurrentData).map(item => item.id);
+    const videoId = videoFile.id;
+    const contentIndex = {};
+    if (imageIds.length > 0) {
+      contentIndex[THREAD_TYPE.image] = {
+        tomId: THREAD_TYPE.image,
+        body: { imageIds },
+      };
+    }
+    if (videoId) {
+      contentIndex[THREAD_TYPE.video] = {
+        tomId: THREAD_TYPE.video,
+        body: { videoId },
+      };
+    }
+    return contentIndex;
+  }
+
   submit = async () => {
     const { title, categoryId, position, contentText } = this.state;
     const params = {
@@ -146,6 +169,8 @@ class ThreadCreate extends React.Component {
         text: contentText,
       },
     };
+    const contentIndex = this.formatContextIndex();
+    if (Object.keys(contentIndex)) params.content.indexed = contentIndex;
     if (position.address) params.position = position;
     const ret = await createThread(params);
     console.log(ret);
@@ -222,12 +247,20 @@ class ThreadCreate extends React.Component {
             this.setState({ categoryChoose: { parent, child }, categoryId: child.pid || parent.pid });
           }}
         />
-        <AtSelect visible={atListShow} getAtList={this.handleAtListChange} onCancel={this.handleAtListCancel} />
-        <TopicSelect
-          visible={topicShow}
-          cancelTopic={() => this.setState({ topicShow: false })}
-          clickTopic={val => this.setState({ topic: val })}
-        />
+        {atListShow && (
+          <AtSelect
+            visible={atListShow}
+            getAtList={this.handleAtListChange}
+            onCancel={this.handleAtListCancel}
+          />
+        )}
+        {topicShow && (
+          <TopicSelect
+            visible={topicShow}
+            cancelTopic={() => this.setState({ topicShow: false })}
+            clickTopic={val => this.setState({ topic: val })}
+          />
+        )}
       </>
     );
   }
