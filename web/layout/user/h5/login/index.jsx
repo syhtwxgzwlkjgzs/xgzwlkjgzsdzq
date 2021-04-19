@@ -24,7 +24,7 @@ class LoginH5Page extends React.Component {
 
   handleLoginButtonClick = async () => {
     try {
-      const loginData = await this.props.userLogin.login();
+      await this.props.userLogin.login();
       Toast.success({
         content: '登录成功',
         hasMask: false,
@@ -37,10 +37,16 @@ class LoginH5Page extends React.Component {
     } catch (e) {
       if (e.Code === NEED_BIND_WEIXIN_FLAG) {
         this.props.commonLogin.needToBindWechat = true;
+        this.props.router.push('/user/wx-bind', {
+          query: {
+            session_token: e.sessionToken,
+          },
+        });
       }
 
       if (e.Code === NEED_BIND_PHONE_FLAG) {
         this.props.commonLogin.needToBindPhone = true;
+        this.props.router.push('/user/reset-password');
       }
       Toast.error({
         content: e.Message,
@@ -97,7 +103,7 @@ class LoginH5Page extends React.Component {
                 this.props.router.push('reset-password');
               }}
             >
-              找回/重设密码
+              找回密码
             </span>
           </div>
           <div className={layout['otherLogin-title']}>其他登录方式</div>

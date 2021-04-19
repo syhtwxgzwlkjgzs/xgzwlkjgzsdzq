@@ -5,6 +5,7 @@ export default class commonLoginStore {
     @observable needToSetNickname = false;
     @observable needToCompleteExtraInfo = false;
     @observable needToBindPhone = false;
+    @observable needToBindWechat = false;
     @observable sessionToken = '';
 
     @action

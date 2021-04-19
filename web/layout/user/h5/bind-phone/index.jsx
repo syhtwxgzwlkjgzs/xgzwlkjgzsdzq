@@ -16,19 +16,17 @@ import PhoneInput from '@common/module/h5/PhoneInput/index';
 class BindPhoneH5Page extends React.Component {
   handlePhoneNumCallback = (phoneNum) => {
     const { mobileBind } = this.props;
-    console.log(phoneNum);
     mobileBind.mobile = phoneNum;
   }
 
   handlePhoneCodeCallback = (code) => {
     const { mobileBind } = this.props;
-    console.log(code);
     mobileBind.code = code;
   }
 
   handleBindButtonClick = async () => {
     try {
-      const bindData = await this.props.mobileBind.bind();
+      await this.props.mobileBind.bind();
       Toast.success({
         content: '登录成功',
         hasMask: false,
@@ -45,7 +43,7 @@ class BindPhoneH5Page extends React.Component {
 
   handleSendCodeButtonClick = async () => {
     try {
-      const sendCodeData = await this.props.mobileBind.sendCode();
+      await this.props.mobileBind.sendCode();
     } catch (e) {
       Toast.error({
         content: e.Message,
