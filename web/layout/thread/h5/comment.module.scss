@@ -24,6 +24,9 @@
     line-height: rem(50);
     text-align: left;
     color: var(--color-text-secondary);
+    .sortText {
+      padding-left: rem(4);
+    }
   }
 }
 
