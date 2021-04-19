@@ -5,11 +5,13 @@ import { Input, Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import HeaderLogin from '@common/module/h5/HeaderLogin';
+import { NEED_BIND_WEIXIN_FLAG, NEED_BIND_PHONE_FLAG } from '@common/store/login/user-login-store';
 
 @inject('site')
 @inject('user')
 @inject('thread')
 @inject('userLogin')
+@inject('commonLogin')
 @observer
 class LoginH5Page extends React.Component {
   handleUsernameChange = (e) => {
@@ -30,9 +32,16 @@ class LoginH5Page extends React.Component {
       });
       // FIXME: Toast 暂时不支持回调能力
       setTimeout(() => {
-
+        this.props.router.push('/index');
       }, 1000);
     } catch (e) {
+      if (e.Code === NEED_BIND_WEIXIN_FLAG) {
+        this.props.commonLogin.needToBindWechat = true;
+      }
+
+      if (e.Code === NEED_BIND_PHONE_FLAG) {
+        this.props.commonLogin.needToBindPhone = true;
+      }
       Toast.error({
         content: e.Message,
         hasMask: false,
@@ -85,10 +94,10 @@ class LoginH5Page extends React.Component {
             <span
               className={layout.clickBtn}
               onClick={() => {
-                console.log('找回');
+                this.props.router.push('reset-password');
               }}
             >
-              找回
+              找回/重设密码
             </span>
           </div>
           <div className={layout['otherLogin-title']}>其他登录方式</div>

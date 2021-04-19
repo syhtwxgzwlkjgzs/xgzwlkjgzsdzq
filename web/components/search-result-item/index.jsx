@@ -36,11 +36,11 @@ export const Topic = ({ data, onClick }) => {
 // }, [data, onClick]);
 
 // TODO: 帖子如何点击待处理 click
-export const Post = ({ divider }) => (
-  <>
+export const Post = ({ divider, ...props }) => (
+  <div {...props}>
     <div>
       <ThreadContent />
     </div>
     {divider && <div className={styles.hr} />}
-  </>
+  </div>
 );

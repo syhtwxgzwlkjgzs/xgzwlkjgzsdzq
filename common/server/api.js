@@ -8,7 +8,7 @@ import setUserAgent from '@common/utils/set-user-agent';
 import { ENV_CONFIG } from '@common/constants/site';
 
 const api = apiIns({
-  baseURL: 'https://discuzv3-dev.dnspod.dev',
+  baseURL: ENV_CONFIG.COMMOM_BASE_URL,
   timeout: 1000,
 });
 

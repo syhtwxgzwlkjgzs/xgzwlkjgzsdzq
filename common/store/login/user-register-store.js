@@ -45,7 +45,7 @@ export default class UserRegisterStore {
         },
       });
       if (registerResp.code === 0) {
-        const accessToken = get(registerResp, 'accessToken');
+        const accessToken = get(registerResp, 'data.accessToken');
         // 注册成功后，默认登录
         setAccessToken({
           accessToken,

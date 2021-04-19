@@ -15,4 +15,4 @@ class Register extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(HOCWithNoLogin(Register));
+export default HOCFetchSiteData((Register));

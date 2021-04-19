@@ -24,16 +24,16 @@ class SiteStore {
   @observable isUserLoginVisible = null;
 
   @computed get isSmsOpen() {
-    return get(this.webConfig, 'setSite.qcloud.qcloudSms', false);
+    return get(this.webConfig, 'qcloud.qcloudSms', false);
   }
 
   // FIXME: 以下两个接口，后台的字段是相反的语义，实际表意是 *****Open 的意思，需要推动后台改动
   @computed get isMiniProgramOpen() {
-    return Boolean(get(this.webConfig, 'setSite,passport.miniprogramClose', true));
+    return Boolean(get(this.webConfig, 'passport.miniprogramClose', true));
   }
   // 公众平台是否开启
   @computed get isOpenPlatformOpen() {
-    return Boolean(get(this.webConfig, 'setSite.passport.oplatformClose', true));
+    return Boolean(get(this.webConfig, 'passport.oplatformClose', true));
   }
 
   @computed get wechatEnv() {

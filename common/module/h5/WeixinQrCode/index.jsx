@@ -1,7 +1,7 @@
 import React from 'react';
 import layout from './index.module.scss';
 
-class WeixinOrCode extends React.Component {
+class WeixinQrCode extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -23,4 +23,4 @@ class WeixinOrCode extends React.Component {
   }
 }
 
-export default WeixinOrCode;
+export default WeixinQrCode;
