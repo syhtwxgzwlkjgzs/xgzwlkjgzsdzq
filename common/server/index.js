@@ -24,3 +24,4 @@ export { default as smsResetPwd } from './smsResetPassword';
 export { default as createAttachment } from './thread-post/create-attachment';
 export { default as readUserLoginDisplay } from './readUserLoginDisplay';
 export { default as smsBind } from './smsBind';
+export { default as h5WechatCodeLogin } from './login/h5WechatCodeLogin';
