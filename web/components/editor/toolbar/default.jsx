@@ -1,19 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Icon } from '@discuzq/design';
 import styles from './index.module.scss';
+import { defaultIcon } from '../const';
 
-const toolbar = ['emojii', '@', '#', '附件', '红包', '付费'];
+export default function DefaultToolbar(props) {
+  const { children, onClick } = props;
+  const [currentAction, setCurrentAction] = useState('');
 
-class DefaultToolbar extends React.Component {
-  render() {
-    return (
-      <div className={styles['dvditor-toolbar']}>
-        <div className={styles['dvditor-toolbar__left']}>
-          {toolbar.map(item => <div key={item} className={styles['dvditor-toolbar__item']}>{item}</div>)}
-        </div>
-        <div className={styles['dvditor-toolbar__right']}>发布</div>
+  return (
+    <div className={styles['dvditor-toolbar']}>
+      <div className={styles['dvditor-toolbar__left']}>
+        {defaultIcon.map(item => (
+          <Icon key={item.name}
+            onClick={() => {
+              setCurrentAction(item.name);
+              onClick(item);
+            }}
+            className={styles['dvditor-toolbar__item']}
+            name={item.name}
+            color={item.name === currentAction && item.active}
+            size="20">
+          </Icon>
+        ))}
       </div>
-    );
-  }
+      <div className={styles['dvditor-toolbar__right']}>发布</div>
+      {/* 表情 */}
+      {children}
+    </div>
+  );
 }
-
-export default DefaultToolbar;

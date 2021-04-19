@@ -1,0 +1,16 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.noImageAvatar {
+    width: rem(38);
+    height: rem(38);
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    p{
+        color: var(--color-primary10);
+        font-size: rem($font-size-large);
+    }
+}

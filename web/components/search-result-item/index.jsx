@@ -1,21 +1,7 @@
 import React, { useCallback } from 'react';
 
-import ThreadContent from '@common/components/thread';
-
+import ThreadContent from '@components/thread';
 import styles from './index.module.scss';
-
-/**
- * 用户组件
- * @prop {object} data 用户数据
- * @prop {function} onClick 用户点击事件
- */
-export const User = ({ data, onClick }) => {
-  const click = useCallback(() => {
-    onClick && onClick(data);
-  }, [data, onClick]);
-
-  return <div onClick={click}>User</div>;
-};
 
 /**
  * 话题组件
@@ -29,11 +15,11 @@ export const Topic = ({ data, onClick }) => {
 
   return (
     <div className={styles.topic} onClick={click}>
-      <div className={styles.title}>{data.title || '暂无内容'}</div>
+      <div className={styles.title}>{data.content || '暂无内容'}</div>
       <div className={styles.content}>{data.content || ''}</div>
       <div className={styles.tags}>
-        <div className={styles.tag}>热度{data.hotCount || 0}</div>
-        <div className={styles.tag}>内容{data.contentCount || 0}</div>
+        <div className={styles.tag}>热度{data.viewCount || 0}</div>
+        <div className={styles.tag}>内容{data.threadCount || 0}</div>
       </div>
     </div>
   );

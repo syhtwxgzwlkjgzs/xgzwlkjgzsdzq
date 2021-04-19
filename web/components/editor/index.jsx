@@ -4,7 +4,6 @@
  */
 import React from 'react';
 import Vditor from 'vditor';
-import { DefaultToolbar, AttachmentToolbar } from './toolbar';
 import classNames from 'classnames';
 import 'vditor/src/assets/scss/index.scss';
 import './index.scss';
@@ -16,6 +15,7 @@ class DVditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      range: null,
       isFocus: false,
     };
   }
@@ -24,13 +24,20 @@ class DVditor extends React.Component {
     this.initVditor();
   }
 
+  componentDidUpdate(props) {
+    if (props !== this.props) {
+      const { emoji } = this.props;
+      if (emoji.code) this.vditor.insertValue(emoji.code);
+    }
+  }
+
   initVditor() {
     const that = this;
     // https://ld246.com/article/1549638745630#options
     this.vditor = new Vditor(
       this.vditorId,
       {
-        height: 214,
+        height: 178,
         placeholder: '请填写您的发布内容…',
         // 编辑器初始化值
         value: '',
@@ -38,7 +45,8 @@ class DVditor extends React.Component {
         // 编辑器异步渲染完成后的回调方法
         after() {},
         focus() {
-          that.setState({ isFocus: true });
+          const range = that.getEditorRange();
+          that.setState({ isFocus: true, range });
         },
         blur() {
           that.setState({ isFocus: false });
@@ -65,13 +73,40 @@ class DVditor extends React.Component {
     );
   }
 
+  // TODO: 这里有点问题
+  getEditorRange = () => {
+    let range;
+    // const { vditor } = this.vditor;
+    // const mode = vditor[vditor.currentMode];
+    const selection = window.getSelection();
+    if (selection.rangeCount > 0) return selection.getRangeAt(0);
+    // if (mode.range) return mode.range;
+    // const { element } = mode;
+    // element.focus();
+    // // eslint-disable-next-line prefer-const
+    // range = element.ownerDocument.createRange();
+    // range.setStart(element, 0);
+    // range.collapse(true);
+    return range;
+  }
+
+  setCurrentPositon = () => {
+    const { range } = this.state;
+    // https://developer.mozilla.org/zh-CN/docs/Web/API/Selection
+    const selection = window.getSelection();
+    // 将所有的区域都从选区中移除。
+    selection.removeAllRanges();
+    // 一个区域（Range）对象将被加入选区。
+    selection.addRange(range);
+  };
+
   render() {
     const { isFocus } = this.state;
+
     return (
       <>
         <div id={this.vditorId} className={classNames('dvditor', { 'no-focus': !isFocus })}></div>
-        <AttachmentToolbar />
-        <DefaultToolbar />
+        {isFocus && <div className="dvditor__placeholder"></div>}
       </>
     );
   }

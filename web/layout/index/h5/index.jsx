@@ -2,9 +2,9 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import Link from 'next/link';
 import { Button, Upload } from '@discuzq/design';
-import ThreadContent from '@common/components/thread';
+import ThreadContent from '@components/thread';
 import styles from './index.module.scss';
-
+import Header from '@components/header';
 
 @inject('site')
 @inject('user')
@@ -12,9 +12,11 @@ import styles from './index.module.scss';
 @observer
 class IndexH5Page extends React.Component {
   render() {
+
     const { index, user } = this.props;
     return (
       <div>
+        <Header/>
         { user.userInfo && <h1>{user.userInfo.username}</h1> }
         {
           index.categories ? index.categories.map((item, index) => <h1 key={index}>{item.name}</h1>) : null
