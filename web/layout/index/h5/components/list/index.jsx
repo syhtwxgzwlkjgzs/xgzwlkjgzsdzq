@@ -22,7 +22,6 @@ const List = ({
   renderItem,
   onScrollBottom,
   containerClassName,
-  loadMoreRows,
   ...props
 }) => {
   const listRef = useRef();
@@ -50,7 +49,6 @@ const List = ({
           renderBottom={renderDiv}
           isRowLoaded={emptyFunction}
           onPullingUp={emptyFunction}
-          loadMoreRows={loadMoreRows}
           onScrollBottom={onScrollBottom}
           {...props}
         >
