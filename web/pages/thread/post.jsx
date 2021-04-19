@@ -13,6 +13,10 @@ import { THREAD_TYPE } from '@common/constants/thread-post';
 import { Video } from '@discuzq/design';
 import ClassifyPopup from '@components/thread-post/classify-popup';
 import styles from './post.module.scss';
+import { createThread } from '@common/server';
+import Title from '@components/thread-post/title';
+import Position from '@components/thread-post/position';
+import { withRouter } from 'next/router';
 
 @inject('threadPost')
 @inject('index')
@@ -31,12 +35,17 @@ class ThreadCreate extends React.Component {
         parent: {},
         child: {},
       },
+      title: '',
+      categoryId: 0,
+      position: {},
+      contentText: '',
+      contentIndexed: [],
     };
   }
   componentDidMount() {
     this.fetchCategories();
-    const { fetchEmoji } = this.props.threadPost;
-    fetchEmoji();
+    const { fetchEmoji, emojis } = this.props.threadPost;
+    if (emojis.length === 0) fetchEmoji();
   }
 
   fetchCategories() {
@@ -94,6 +103,31 @@ class ThreadCreate extends React.Component {
     this.setState({ videoFile: file.originFileObj });
   }
 
+  handleVditorChange = (vditor) => {
+    if (vditor) {
+      const htmlString = vditor.getHTML();
+      this.setState({ contentText: htmlString });
+    }
+  };
+
+  handleTitleChange = (title) => {
+    this.setState({ title });
+  };
+
+  submit = async () => {
+    const { title, categoryId, position, contentText } = this.state;
+    const params = {
+      title,
+      categoryId,
+      content: {
+        text: contentText,
+      },
+    };
+    if (position.address) params.position = position;
+    const ret = await createThread(params);
+    console.log(ret);
+  };
+
   onReady = (player) => {
     const { videoFile } = this.state;
     // 兼容本地视频的显示
@@ -116,11 +150,13 @@ class ThreadCreate extends React.Component {
       categoryChoose,
     } = this.state;
     const images = Object.keys(imageCurrentData);
+    const category = (index.categories && index.categories.slice()) || [];
 
     return (
       <>
         <div className={styles.post}>
-          <DVditor emoji={emoji} />
+          <Title onChange={this.handleTitleChange} />
+          <DVditor emoji={emoji} onChange={this.handleVditorChange} />
           {(imageUploadShow || images.length > 0) && (
             <ImageUpload
               onChange={this.handleImageUploadChange}
@@ -131,6 +167,9 @@ class ThreadCreate extends React.Component {
             <Video className="dzq-post-video" src={videoFile.thumbUrl} onReady={this.onReady} />
           )}
         </div>
+        <div className={styles['position-box']}>
+          <Position onChange={position => this.setState({ position })} />
+        </div>
         {/* 调整了一下结构，因为这里的工具栏需要固定 */}
         <AttachmentToolbar
           onAttachClick={this.handleAttachClick}
@@ -139,16 +178,16 @@ class ThreadCreate extends React.Component {
           category={<ToolsCategory categoryChoose={categoryChoose} onClick={this.handleCategoryClick} />}
         />
         {/* 默认的操作栏 */}
-        <DefaultToolbar onClick={this.handleDefaultToolbarClick}>
+        <DefaultToolbar onClick={this.handleDefaultToolbarClick} onSubmit={this.submit}>
           {/* 表情 */}
           <Emoji show={emojiShow} emojis={threadPost.emojis} onClick={this.handleEmojiClick} />
         </DefaultToolbar>
         <ClassifyPopup
           show={categoryChooseShow}
-          category={(index.categories || [])}
+          category={category}
           onVisibleChange={val => this.setState({ categoryChooseShow: val })}
           onChange={(parent, child) => {
-            this.setState({ categoryChoose: { parent, child } });
+            this.setState({ categoryChoose: { parent, child }, categoryId: child.pid || parent.pid });
           }}
         />
       </>
@@ -156,4 +195,4 @@ class ThreadCreate extends React.Component {
   }
 }
 
-export default ThreadCreate;
+export default withRouter(ThreadCreate);
