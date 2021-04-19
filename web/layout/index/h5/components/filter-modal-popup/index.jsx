@@ -13,12 +13,13 @@ import FilterModalSection from '@components/thread/filter-modal-section';
  * @prop {boolean} ifShowCancel 是否显示取消按钮
  * @prop {string} confirmText 确认按钮文本
  * @prop {string} cancelText 取消按钮文本
+ * @prop {number} isSecondLevelActive 二级分类选中index
  * @prop {function} firstLevelClick 一级分类点击事件
  * @prop {function} secondLevelClick 二级分类点击事件
  * @prop {function} onSearch 搜索点击事件 
  * @prop {function} onClose 关闭搜索弹框
  */
-const InputPop = (props) => {
+const FilterModalPopup = (props) => {
   const {
     visible = false,
     filterData = [],
@@ -28,13 +29,12 @@ const InputPop = (props) => {
     ifShowCancel = true,
     confirmText,
     cancelText,
+    isSecondLevelActive = 0,
     firstLevelClick = () => {},
     secondLevelClick  = ()=> {},
     onSearch = () => {},
     onClose  = ()=> {},
   } = props;
-  const isSecondLevelActive = 0;
-  console.log(visible);
   return (
     <Popup
       position="top"
@@ -78,4 +78,4 @@ const InputPop = (props) => {
     </Popup>);
 };
 
-export default InputPop;
+export default FilterModalPopup;
