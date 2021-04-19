@@ -9,7 +9,7 @@ import HeaderLogin from '@common/module/h5/HeaderLogin';
 @inject('user')
 @inject('h5QrCode')
 @observer
-class WeixinBindH5Page extends React.Component {
+class WeixinBindQrCodePage extends React.Component {
   async componentDidMount() {
     const { sessionToken }  = this.props.router.query;
     await this.props.h5QrCode.generate({ params:
@@ -39,4 +39,4 @@ class WeixinBindH5Page extends React.Component {
   }
 }
 
-export default withRouter(WeixinBindH5Page);
+export default withRouter(WeixinBindQrCodePage);
