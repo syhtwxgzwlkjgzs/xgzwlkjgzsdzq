@@ -6,13 +6,16 @@ import { inject, observer } from 'mobx-react';
 import DVditor from '@components/editor';
 // import Upload from '@components/upload';
 import { AttachmentToolbar, DefaultToolbar } from '@components/editor/toolbar';
+import ToolsCategory from '@components/editor/tools/category';
 import Emoji from '@components/editor/emoji';
 import ImageUpload from '@components/thread-post/image-upload';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 import { Video } from '@discuzq/design';
+import ClassifyPopup from '@components/thread-post/classify-popup';
 import styles from './post.module.scss';
 
 @inject('threadPost')
+@inject('index')
 @observer
 class ThreadCreate extends React.Component {
   constructor(props) {
@@ -23,11 +26,24 @@ class ThreadCreate extends React.Component {
       imageUploadShow: false,
       imageCurrentData: {},
       videoFile: {},
+      categoryChooseShow: false,
+      categoryChoose: {
+        parent: {},
+        child: {},
+      },
     };
   }
   componentDidMount() {
+    this.fetchCategories();
     const { fetchEmoji } = this.props.threadPost;
     fetchEmoji();
+  }
+
+  fetchCategories() {
+    const { index } = this.props;
+    if (!index.categories) {
+      index.fetchCategory();
+    }
   }
 
   handleDefaultToolbarClick = (item) => {
@@ -42,7 +58,7 @@ class ThreadCreate extends React.Component {
   };
 
   handleCategoryClick = () => {
-    console.log('category click');
+    this.setState({ categoryChooseShow: true });
   };
 
   handleAttachClick = (item) => {
@@ -89,8 +105,16 @@ class ThreadCreate extends React.Component {
   };
 
   render() {
-    const { threadPost } = this.props;
-    const { emojiShow, emoji, imageUploadShow, imageCurrentData, videoFile } = this.state;
+    const { threadPost, index } = this.props;
+    const {
+      emojiShow,
+      emoji,
+      imageUploadShow,
+      imageCurrentData,
+      videoFile,
+      categoryChooseShow,
+      categoryChoose,
+    } = this.state;
     const images = Object.keys(imageCurrentData);
 
     return (
@@ -109,16 +133,24 @@ class ThreadCreate extends React.Component {
         </div>
         {/* 调整了一下结构，因为这里的工具栏需要固定 */}
         <AttachmentToolbar
-          onCategoryClick={this.handleCategoryClick}
           onAttachClick={this.handleAttachClick}
           onUploadChange={this.handleUploadChange}
           onUploadComplete={this.handleUploadComplete}
+          category={<ToolsCategory categoryChoose={categoryChoose} onClick={this.handleCategoryClick} />}
         />
         {/* 默认的操作栏 */}
         <DefaultToolbar onClick={this.handleDefaultToolbarClick}>
           {/* 表情 */}
           <Emoji show={emojiShow} emojis={threadPost.emojis} onClick={this.handleEmojiClick} />
         </DefaultToolbar>
+        <ClassifyPopup
+          show={categoryChooseShow}
+          category={(index.categories || [])}
+          onVisibleChange={val => this.setState({ categoryChooseShow: val })}
+          onChange={(parent, child) => {
+            this.setState({ categoryChoose: { parent, child } });
+          }}
+        />
       </>
     );
   }

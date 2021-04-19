@@ -2,7 +2,6 @@
  * 附件操作栏比如：图片上传、视频上传、语音上传等
  */
 import React from 'react';
-import ToolsCategory from '../tools/category';
 import { Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 import classNames from 'classnames';
@@ -56,10 +55,6 @@ class AttachmentToolbar extends React.Component {
   }
 
   inputRef = React.createRef(null);
-
-  handleCategoryClick = () => {
-    this.props.onCategoryClick();
-  };
 
   handleAttachClick(item) {
     this.setState({ currentAction: item.name });
@@ -115,7 +110,7 @@ class AttachmentToolbar extends React.Component {
         {!showAll && (
           <>
             <div className={styles['dvditor-attachment-toolbar__left']}>
-              <ToolsCategory onClick={this.handleCategoryClick} />
+              {this.props.category}
             </div>
             <div className={styles['dvditor-attachment-toolbar__right']}>
               <Icon name="PictureOutlinedBig" size="20" onClick={this.handleToggle} />
@@ -167,8 +162,8 @@ class AttachmentToolbar extends React.Component {
 }
 
 AttachmentToolbar.propTypes = {
-  onCategoryClick: PropTypes.func,
   onAttachClick: PropTypes.func,
+  category: PropTypes.element,
 };
 
 export default AttachmentToolbar;
