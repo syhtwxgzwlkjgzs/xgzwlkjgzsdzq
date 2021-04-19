@@ -10,12 +10,14 @@ import ToolsCategory from '@components/editor/tools/category';
 import Emoji from '@components/editor/emoji';
 import ImageUpload from '@components/thread-post/image-upload';
 import { THREAD_TYPE } from '@common/constants/thread-post';
+import { defaultOperation } from '@components/editor/const';
 import { Video } from '@discuzq/design';
 import ClassifyPopup from '@components/thread-post/classify-popup';
 import styles from './post.module.scss';
 import { createThread } from '@common/server';
 import Title from '@components/thread-post/title';
 import Position from '@components/thread-post/position';
+import AtSelect from '@components/thread-post/at-select';
 import { withRouter } from 'next/router';
 
 @inject('threadPost')
@@ -40,6 +42,8 @@ class ThreadCreate extends React.Component {
       position: {},
       contentText: '',
       contentIndexed: [],
+      atListShow: false,
+      atList: [],
     };
   }
   componentDidMount() {
@@ -56,10 +60,15 @@ class ThreadCreate extends React.Component {
   }
 
   handleDefaultToolbarClick = (item) => {
-    this.setState({
-      emojiShow: item.id === 'emoji',
-      emoji: {},
-    });
+    if (item.id === defaultOperation.emoji) {
+      this.setState({
+        emojiShow: item.id === 'emoji',
+        emoji: {},
+      });
+    }
+    if (item.id === defaultOperation.at) {
+      this.setState({ atListShow: true });
+    }
   };
 
   handleEmojiClick = (emoji) => {
@@ -114,6 +123,14 @@ class ThreadCreate extends React.Component {
     this.setState({ title });
   };
 
+  handleAtListChange = (atList) => {
+    this.setState({ atList });
+  }
+
+  handleAtListCancel = () => {
+    this.setState({ atListShow: false });
+  }
+
   submit = async () => {
     const { title, categoryId, position, contentText } = this.state;
     const params = {
@@ -148,6 +165,8 @@ class ThreadCreate extends React.Component {
       videoFile,
       categoryChooseShow,
       categoryChoose,
+      atListShow,
+      atList,
     } = this.state;
     const images = Object.keys(imageCurrentData);
     const category = (index.categories && index.categories.slice()) || [];
@@ -156,7 +175,11 @@ class ThreadCreate extends React.Component {
       <>
         <div className={styles.post}>
           <Title onChange={this.handleTitleChange} />
-          <DVditor emoji={emoji} onChange={this.handleVditorChange} />
+          <DVditor
+            emoji={emoji}
+            atList={atList}
+            onChange={this.handleVditorChange}
+          />
           {(imageUploadShow || images.length > 0) && (
             <ImageUpload
               onChange={this.handleImageUploadChange}
@@ -190,6 +213,7 @@ class ThreadCreate extends React.Component {
             this.setState({ categoryChoose: { parent, child }, categoryId: child.pid || parent.pid });
           }}
         />
+        <AtSelect visible={atListShow} getAtList={this.handleAtListChange} onCancel={this.handleAtListCancel} />
       </>
     );
   }

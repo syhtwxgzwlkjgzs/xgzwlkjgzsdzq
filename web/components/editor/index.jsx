@@ -9,7 +9,7 @@ import 'vditor/src/assets/scss/index.scss';
 import './index.scss';
 
 export default function DVditor(props) {
-  const { onChange, emoji } = props;
+  const { onChange, emoji, atList } = props;
   const vditorId = 'dzq-vditor';
 
   const [isFocus, setIsFocus] = useState(false);
@@ -53,6 +53,16 @@ export default function DVditor(props) {
       vditor.insertValue(value);
     }
   }, [emoji]);
+
+  useEffect(() => {
+    const users = atList.map((item) => {
+      if (item.user) return `@${item.user.userName}`;
+      return '';
+    });
+    if (users.length) {
+      vditor.insertValue(users.join(' '));
+    }
+  }, [atList]);
 
   function initVditor() {
     // https://ld246.com/article/1549638745630#options

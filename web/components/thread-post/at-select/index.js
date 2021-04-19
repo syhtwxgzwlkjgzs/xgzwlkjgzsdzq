@@ -11,23 +11,51 @@
 import React, { Component } from 'react';
 import { Popup, Input, Checkbox, Button, ScrollView } from '@discuzq/design';
 import styles from './index.module.scss';
-
+import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 
+@inject('threadPost')
+@observer
 class AtSelect extends Component {
   constructor(props) {
     super(props);
     this.state = {
       keywords: '', // 搜索关键字
       checkUser: [], // 当前选择的at人
-    }
+      page: 1,
+      perPage: 10,
+      finish: false,
+    };
     this.timer = null;
+  }
+
+  componentDidMount() {
+    this.fetchFollow();
+  }
+
+  async fetchFollow() {
+    const { threadPost } = this.props;
+    const { page, perPage, keywords } = this.state;
+    if ((page - 1) * perPage > threadPost.follows.length) {
+      this.setState({ finish: true });
+      return;
+    }
+    const params = { page, perPage };
+    if (keywords) {
+      params.filter = {};
+      params.filter.userName = keywords;
+      params.filter.type = 0;
+    }
+    const ret = await threadPost.fetchFollow(params);
+    if (ret.code === 0) {
+      this.setState({ page: page + 1 });
+    }
   }
 
   // 更新搜索关键字,搜索用户
   updateKeywords(e) {
-    const keywords = e.target.value
-    this.setState({ keywords });
+    const keywords = e.target.value;
+    this.setState({ keywords, page: 1 });
     this.searchInput(keywords);
   }
 
@@ -36,23 +64,26 @@ class AtSelect extends Component {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
       this.props.onSearch(keywords);
+      this.fetchFollow();
     }, 300);
   }
 
   onScrollTop() {
-    console.log('top');
     this.props.onScrollTop();
   }
 
   onScrollBottom() {
-    console.log('bottom')
     this.props.onScrollBottom();
+    this.fetchFollow();
   }
 
   // 确认选择
   submitSelect() {
-    if (this.state.checkUser.length === 0) { return }
-    this.props.getAtList(this.state.checkUser)
+    if (this.state.checkUser.length === 0) {
+      return;
+    }
+    this.props.getAtList(this.state.checkUser);
+    this.props.onCancel();
   }
 
   renderItem(info) {
@@ -70,16 +101,16 @@ class AtSelect extends Component {
         </div>
         <Checkbox name={item}></Checkbox>
       </div>
-    )
+    );
   }
 
+  handleCancel = () => {
+    this.props.onCancel();
+  };
+
   render() {
-    const {
-      data,
-      visible,
-      onCancel,
-      getAtList,
-    } = this.props;
+    const { visible, threadPost } = this.props;
+    const data = threadPost.follows || [];
 
     return (
       <Popup
@@ -93,13 +124,13 @@ class AtSelect extends Component {
             value={this.state.keywords}
             icon="SearchOutlined"
             placeholder='搜索用户'
-            onChange={(e) => this.updateKeywords(e)}
+            onChange={e => this.updateKeywords(e)}
           />
 
           {/* 选择列表 */}
           <Checkbox.Group
             value={this.state.checkUser}
-            onChange={(val) => this.setState({ checkUser: val })}
+            onChange={val => this.setState({ checkUser: val })}
           >
             <div className={styles['at-wrap']}>
               <ScrollView
@@ -112,13 +143,14 @@ class AtSelect extends Component {
                 onScrollBottom={this.onScrollBottom.bind(this)}
                 onPullingUp={() => Promise.reject()}
                 isRowLoaded={() => true}
+                lowerThreshold={100}
               />
             </div>
           </Checkbox.Group>
 
           {/* 取消按钮 */}
           <div className={styles.btn}>
-            <Button className='btn-cancel' onClick={onCancel}>取消</Button>
+            <Button onClick={this.handleCancel}>取消</Button>
             <Button
               className={this.state.checkUser.length > 0 ? 'is-selected' : 'not-selected'}
               onClick={() => this.submitSelect()}
@@ -128,7 +160,7 @@ class AtSelect extends Component {
           </div>
         </div >
       </Popup>
-    )
+    );
   }
 }
 
@@ -140,16 +172,16 @@ AtSelect.propTypes = {
   getAtList: PropTypes.func.isRequired,
   onScrollTop: PropTypes.func,
   onScrollBottom: PropTypes.func,
-}
+};
 
 AtSelect.defaultProps = {
   data: [],
   visible: false,
-  onSearch: () => { console.log('@组件未添加取消事件') },
-  onCancel: () => { console.log('@组件未添加取消事件') },
-  getAtList: () => { console.log('@组件未添加已选列表处理事件') },
-  onScrollTop: () => { console.log('@组件未添加触顶事件') },
-  onScrollBottom: () => { console.log('@组件未添加触底事件') },
-}
+  onSearch: () => {},
+  onCancel: () => {},
+  getAtList: () => {},
+  onScrollTop: () => {},
+  onScrollBottom: () => {},
+};
 
 export default AtSelect;
