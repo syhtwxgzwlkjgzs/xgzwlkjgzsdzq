@@ -5,6 +5,7 @@ import { apiIns } from '@discuzq/sdk/dist/api';
 import typeofFn from '@common/utils/typeof';
 import setAuthorization from '@common/utils/set-authorization';
 import setUserAgent from '@common/utils/set-user-agent';
+import { ENV_CONFIG } from '@common/constants/site';
 
 const api = apiIns({
   baseURL: 'https://discuzv3-dev.dnspod.dev',

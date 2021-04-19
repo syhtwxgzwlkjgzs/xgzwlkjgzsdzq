@@ -29,13 +29,13 @@ const Index = ({ imgData = [] }) => {
         <div className={img[`images${imgData.length > 5 ? 5 : imgData.length}`]}>
           <div className={img[`imagesTop${imgData.length > 5 ? 5 : imgData.length}`]}>
             {imageList.map((item, index) => (
-                <img key={index} className={img[`imagesTopData${imgData.length > 5 ? 5 : imgData.length}`]} src={item.src} alt="" mode="aspectFill"/>
+                <img key={index} className={img[`imagesTopData${imgData.length > 5 ? 5 : imgData.length}`]} src={item.thumbUrl} alt="" mode="aspectFill"/>
             ))}
           </div>
           <div className={img[`imagesBotom${imgData.length > 5 ? 5 : imgData.length}`]}>
             {otherImage.map((item, index) => (
                 <div key={index} className={img[`imagesBotomData${imgData.length > 5 ? 5 : imgData.length}`]}>
-                  <img className={img[`imagesBotomDataPath${imgData.length > 5 ? 5 : imgData.length}`]} src={item.src} alt=""/>
+                  <img className={img[`imagesBotomDataPath${imgData.length > 5 ? 5 : imgData.length}`]} src={item.thumbUrl} alt=""/>
                   {imgData.length > 5 && index === 2 && <div className={img.modalBox}><span className={img.imgSpan}>{`+${numContent}`}</span></div>}
                 </div>
             ))}

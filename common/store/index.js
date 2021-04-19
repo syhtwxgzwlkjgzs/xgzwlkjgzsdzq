@@ -14,6 +14,8 @@ import NicknameBindStore from './login/nickname-bind-store';
 import SupplementaryStore from './login/supplementary-store';
 import MobileBindStore from './login/mobile-bind-store';
 import H5QrCode from './login/h5-qrcode';
+import SearchStore from './search/action';
+
 useStaticRendering(isServer());
 
 let store = null;
@@ -38,6 +40,7 @@ export default function initializeStore(initProps = {}) {
       comment: new CommentStore(),
       threadPost: new ThreadPostStore(),
       h5QrCode: new H5QrCode(),
+      search: new SearchStore(),
     };
   }
   if (store === null) {
@@ -58,6 +61,7 @@ export default function initializeStore(initProps = {}) {
       comment: new CommentStore(),
       threadPost: new ThreadPostStore(),
       h5QrCode: new H5QrCode(),
+      search: new SearchStore(),
     };
   }
 

@@ -27,19 +27,22 @@
         line-height: rem($font-line-height-middle);
         text-align: left;
         color: var(--color-text-primary);
-        .replyedUserName {
-          font-family: 'PingFangSC-Semibold';
-          font-weight: normal;
-          font-size: rem($font-size-primary);
-          line-height: rem(18);
-          text-align: left;
-          color: var(--color-primary);
-        }
-        .replyedAvatar {
+        .commentUser {
           display: inline-block;
-          margin-right: rem($margin-2n);
-          position: relative;
-          top: rem(6);
+          .replyedUserName {
+            font-family: 'PingFangSC-Semibold';
+            font-weight: normal;
+            font-size: rem($font-size-primary);
+            line-height: rem(18);
+            text-align: left;
+            color: var(--color-primary);
+          }
+          .replyedAvatar {
+            display: inline-block;
+            margin-right: rem($margin-2n);
+            position: relative;
+            top: rem(6);
+          }
         }
       }
     }
@@ -57,6 +60,10 @@
       }
       .replyLiked {
         flex: 1;
+      }
+      .replyLike {
+        flex: 1;
+        color: var(--color-primary);
       }
       .replyReply {
         flex: 1;

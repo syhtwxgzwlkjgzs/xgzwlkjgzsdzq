@@ -8,12 +8,13 @@ import styles from './index.module.scss';
  * @prop {function} onItemClick 话题点击事件
  */
 const TrendingTopics = ({ data, onItemClick }) => (
-  <div className={styles.list}>
-    {data.map((text, index, arr) => (
-      <Topic key={index} index={index} data={text} onClick={onItemClick} footer={arr.length - index < 3} />
+    <div className={styles.list}>
+    {data.map((item, index, arr) => (
+      <Topic key={index} index={index} data={item} onClick={onItemClick} footer={arr.length - index < 3} />
     ))}
   </div>
 );
+
 
 /**
  * 话题组件
@@ -30,7 +31,7 @@ const Topic = ({ data, onClick, index, footer }) => {
   return (
     <div className={`${styles.item} ${footer ? styles.footerItem : ''}`} onClick={click}>
       <span className={`${styles.index} ${styles[`itemIndex${index + 1}`]}`}>{index + 1}</span>
-      <span className={styles.text}>{data}</span>
+      <span className={styles.text}>{data.content}</span>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Topic } from '../../../../../../components/search-result-item';
+import { Topic } from '@components/search-result-item';
 
 import styles from './index.module.scss';
 
