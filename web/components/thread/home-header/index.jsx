@@ -26,28 +26,27 @@ const Index = ({ bgHeadFullImg, bgColor, headImg, userNum = 0, themeNum = 0 }) =
 
   return (
     <div className={styles.container} style={bgHeader}>
-        <div className={styles.logoBox}>
-            <img
-                className={styles.logo}
-                mode="aspectFit"
-                src={headImg ? headImg : logoImg}
-                lazy-load
-            />
-        </div>
-        <ul className={styles.siteInfo}>
-            <li>
-                <span className={styles.text}>成员</span>
-                <span className={styles.content}>{userNum}</span>
-            </li>
-            <li>
-                <span className={styles.text}>内容</span>
-                <span className={styles.content}>{themeNum}</span>
-            </li>
-            <li>
-                <Icon className={styles.shareIcon} color="#fff" name="ShareAltOutlined"/>
-                <span className={styles.text}>分享</span>
-            </li>
-        </ul>
+      <div className={styles.logoBox}>
+        <img
+            className={styles.logo}
+            mode="aspectFit"
+            src={headImg ? headImg : logoImg}
+        />
+      </div>
+      <ul className={styles.siteInfo}>
+        <li>
+          <span className={styles.text}>成员</span>
+          <span className={styles.content}>{userNum}</span>
+        </li>
+        <li>
+          <span className={styles.text}>内容</span>
+          <span className={styles.content}>{themeNum}</span>
+        </li>
+        <li>
+          <Icon className={styles.shareIcon} color="#fff" name="ShareAltOutlined"/>
+          <span className={styles.text}>分享</span>
+        </li>
+      </ul>
     </div>
   );
 };
