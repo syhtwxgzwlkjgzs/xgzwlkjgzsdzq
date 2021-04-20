@@ -4,11 +4,13 @@ import Link from 'next/link';
 import { Button, Upload, Tabs, Popup } from '@discuzq/design';
 import ThreadContent from '@components/thread';
 import HomeHeader from '@components/thread/home-header';
+import NoData from '@components/no-data';
 import styles from './index.module.scss';
 import List from './components/list';
 import TopNew from './components/top-news';
 import FilterModalPopup from './components/filter-modal-popup';
 import filterData from './data';
+import Tabbar from './components/tabbar';
 
 @inject('site')
 @inject('user')
@@ -29,10 +31,10 @@ class IndexH5Page extends React.Component {
     });
   }
   render() {
+    console.log(this.state);
     const { index, user } = this.props;
     const { sticks, threads, categories } = index;
-    const HeaderContent = () => {
-        return (
+    const HeaderContent = () => (
           <>
             <HomeHeader/>
             <div className={styles.homeContent}>
@@ -50,7 +52,6 @@ class IndexH5Page extends React.Component {
                     }}
                   >
                     <Button onClick={this.searchClick}>更多</Button>
-                    <FilterModalPopup visible={this.state.visible} onClose={this.onClose} filterData={filterData}></FilterModalPopup>
                   </div>
               }
               >
@@ -64,27 +65,31 @@ class IndexH5Page extends React.Component {
               <TopNew data={sticks}/>
             </div>
           </>
-        )
-    }
-    const renderItem = (dataList, rowData) => {
-      return (
+    );
+    const renderItem = (dataList, rowData) => (
         <div>
           { dataList.index === 0 && <HeaderContent />}
           <ThreadContent data={dataList.data[dataList.index]}/>
         </div>
-      )
-    }
-    return (
-      <div className={styles.homeBox}>
-        { threads.pageData.length > 0 ?
-        <List
+    );
+    const renderList = data => (
+      data?.length
+        ? <List
           onRefresh={this.onRefresh}
           refreshing={false}
           data={threads.pageData}
           renderItem={renderItem}
-        /> :
-        <HeaderContent />
-       }
+        />
+        : <NoData />
+    );
+    return (
+      <div className={styles.homeBox}>
+        { threads?.pageData?.length > 0
+          ? renderList(threads?.pageData)
+          : <HeaderContent />
+        }
+       <FilterModalPopup visible={this.state.visible} onClose={this.onClose} filterData={filterData}></FilterModalPopup>
+       <Tabbar />
       </div>
     );
   }

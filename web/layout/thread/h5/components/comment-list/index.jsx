@@ -10,7 +10,7 @@ class CommentList extends React.Component {
     super(props);
     this.state = {
       isShowReward: false, // 是否展示获得多少悬赏金
-      isShowRedPacket: false, // 是否展示获得多少红包
+      isShowRedPacket: true, // 是否展示获得多少红包
       isShowAdopt: false, // 是否展示采纳按钮
       isShowOne: this.props.isShowOne || false, // 是否只显示一条评论回复
       isLiked: this.props.data.isLiked,
@@ -20,7 +20,7 @@ class CommentList extends React.Component {
       deleteClick: this.props.deleteClick(),
     };
     this.needReply = this.props.data.lastThreeComments;// 评论的回复
-    this.replyNumber = this.props.data.lastThreeComments.length - 1; // 评论的回复
+    this.replyNumber = this.props.data.replyCount - 1; // 评论的回复
   }
   componentDidMount() {
     // this.loadCommentList();
@@ -32,8 +32,8 @@ class CommentList extends React.Component {
     };
   }
   toCommentDetail = () => {
-    if (this.state.isShowOne) {
-      this.props.router.push('/thread/comment/1');
+    if (this.state.isShowOne && this.props?.data?.id) {
+      this.props.router.push(`/thread/comment/${this.props?.data?.id}`);
     }
   }
   // 处理评论的回复只显示一条
@@ -41,7 +41,7 @@ class CommentList extends React.Component {
     console.log('this.isShowOne', this.state.isShowOne);
     if (this.state.isShowOne) {
       this.needReply = [];
-      this.needReply.push(this.props.data.lastThreeComments[0]);
+      this.props.data?.lastThreeComments?.length && this.needReply.push(this.props.data.lastThreeComments[0]);
     }
   }
   likeClick() {
@@ -68,24 +68,28 @@ class CommentList extends React.Component {
     return (
       <div className={styles.commentList}>
         <div className={styles.header}>
-          {
-            this.state.isShowReward
-              ? <div className={styles.showGet}>
-                  <div className={styles.icon}>图标</div>
-                  <div className={styles.showMoneyNum}>
-                    获得<span className={styles.moneyNumber}>{6}</span>元悬赏金
-                  </div>
-                </div> : ''
-          }
-          {
-            this.state.isShowRedPacket
-              ? <div className={styles.showGet}>
-                  <div className={styles.icon}>图标</div>
-                  <div className={styles.showMoneyNum}>
-                    获得<span className={styles.moneyNumber}>{6}</span>元红包
-                  </div>
-                </div> : ''
-          }
+            <div className={styles.showGet}>
+            <div className={styles.extra}>
+              {/* <div className={styles.revise}>编辑</div> */}
+              <div className={styles.revise} onClick={() => this.deleteClick()}>删除</div>
+            </div>
+              {
+                this.state.isShowReward
+                  ? <div>
+                      <div className={styles.showMoneyNum}>
+                        获得<span className={styles.moneyNumber}>{6}</span>元悬赏金
+                      </div>
+                    </div> : ''
+              }
+              {
+                this.state.isShowRedPacket
+                  ? <div>
+                      <div className={styles.showMoneyNum}>
+                        获得<span className={styles.moneyNumber}>{6}</span>元红包
+                      </div>
+                    </div> : ''
+              }
+          </div>
         </div>
         <div className={styles.content}>
           <div className={styles.commentListAvatar} onClick={this.props.avatarClick('1')}>
@@ -102,15 +106,13 @@ class CommentList extends React.Component {
             </div>
             <div className={styles.commentListFooter}>
               <div className={styles.commentBtn}>
-                <div className={styles.commentTime}>{13}分钟</div>
+                <div className={styles.commentTime}>{this.props.data.createdAt.split(' ')[1]}</div>
+                <div className={styles.extraBottom}>
                 <div className={this.state.isLiked ? styles.commentLike : styles.commentLiked}>
                     <span onClick={() => this.likeClick()}>赞{this.state.likeCount > 0 ? this.state.likeCount : ''}</span>
                 </div>
                 <div className={styles.commentReply}>
                   <span onClick={() => this.replyClick()}>回复</span>
-                </div>
-                <div className={styles.commentDelete}>
-                  <span onClick={() => this.deleteClick()}>删除</span>
                 </div>
                 {
                   this.state.isShowAdopt
@@ -118,6 +120,7 @@ class CommentList extends React.Component {
                         <span onClick={() => this.adoptClick()}>采纳</span>
                       </div> : ''
                 }
+              </div>
               </div>
               {
                 this.replyNumber > 0 && this.state.isShowOne

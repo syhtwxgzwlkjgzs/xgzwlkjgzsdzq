@@ -13,7 +13,10 @@ const InputPop = (props) => {
     if (typeof onSubmit === 'function') {
       try {
         setLoading(true);
-        await onSubmit(value);
+        const success = await onSubmit(value);
+        if (success) {
+          setValue('');
+        }
       } catch (error) {
         console.log(error);
       } finally {
@@ -39,14 +42,14 @@ const InputPop = (props) => {
             onChange={e => setValue(e.target.value)}
             placeholder='请输入内容'>
           </Textarea>
-          <Upload listType='card'>
+          {/* <Upload listType='card'>
             <Button loading={loading} type='text' className={styles.upload}>
               <Icon name="PlusOutlined" size={20}></Icon>
               <span>上传附件</span>
             </Button>
-          </Upload>
+          </Upload> */}
         </div>
-        <Button onClick={onSubmitClick} className={styles.button} type='primary' size='large'>发布</Button>
+        <Button loading={loading} onClick={onSubmitClick} className={styles.button} type='primary' size='large'>发布</Button>
       </div>
     </Popup>);
 };
