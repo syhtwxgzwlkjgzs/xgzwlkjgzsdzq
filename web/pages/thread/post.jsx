@@ -22,6 +22,7 @@ import AtSelect from '@components/thread-post/at-select';
 import TopicSelect from '@components/thread-post/topic-select';
 import RedpacketSelect from '@components/thread-post/redpacket-select';
 import { withRouter } from 'next/router';
+import classNames from 'classnames';
 
 @inject('threadPost')
 @inject('index')
@@ -51,6 +52,7 @@ class ThreadCreate extends React.Component {
       topic: '',
       redpacketSelectShow: false,
       redpacketSelectData: {},
+      isVditorFocus: false,
     };
   }
   componentDidMount() {
@@ -194,6 +196,12 @@ class ThreadCreate extends React.Component {
     player && player.src(opt);
   };
 
+  getBottomBarStyle = () => {
+    const { isVditorFocus } = this.state;
+    const position = isVditorFocus ? styles['post-bottombar-absolute'] : styles['post-bottombar-fixed'];
+    return classNames(styles['post-bottombar'], position);
+  }
+
   render() {
     const { threadPost, index } = this.props;
     const {
@@ -222,6 +230,8 @@ class ThreadCreate extends React.Component {
             atList={atList}
             topic={topic}
             onChange={this.handleVditorChange}
+            onFocus={() => this.setState({ isVditorFocus: true })}
+            onBlur={() => this.setState({ isVditorFocus: false })}
           />
           {(imageUploadShow || images.length > 0) && (
             <ImageUpload
@@ -233,21 +243,23 @@ class ThreadCreate extends React.Component {
             <Video className="dzq-post-video" src={videoFile.thumbUrl} onReady={this.onReady} />
           )}
         </div>
-        <div className={styles['position-box']}>
-          <Position onChange={position => this.setState({ position })} />
+        <div className={this.getBottomBarStyle()}>
+          <div className={styles['position-box']}>
+            <Position onChange={position => this.setState({ position })} />
+          </div>
+          {/* 调整了一下结构，因为这里的工具栏需要固定 */}
+          <AttachmentToolbar
+            onAttachClick={this.handleAttachClick}
+            onUploadChange={this.handleUploadChange}
+            onUploadComplete={this.handleUploadComplete}
+            category={<ToolsCategory categoryChoose={categoryChoose} onClick={this.handleCategoryClick} />}
+          />
+          {/* 默认的操作栏 */}
+          <DefaultToolbar onClick={this.handleDefaultToolbarClick} onSubmit={this.submit}>
+            {/* 表情 */}
+            <Emoji show={emojiShow} emojis={threadPost.emojis} onClick={this.handleEmojiClick} />
+          </DefaultToolbar>
         </div>
-        {/* 调整了一下结构，因为这里的工具栏需要固定 */}
-        <AttachmentToolbar
-          onAttachClick={this.handleAttachClick}
-          onUploadChange={this.handleUploadChange}
-          onUploadComplete={this.handleUploadComplete}
-          category={<ToolsCategory categoryChoose={categoryChoose} onClick={this.handleCategoryClick} />}
-        />
-        {/* 默认的操作栏 */}
-        <DefaultToolbar onClick={this.handleDefaultToolbarClick} onSubmit={this.submit}>
-          {/* 表情 */}
-          <Emoji show={emojiShow} emojis={threadPost.emojis} onClick={this.handleEmojiClick} />
-        </DefaultToolbar>
         <ClassifyPopup
           show={categoryChooseShow}
           category={category}

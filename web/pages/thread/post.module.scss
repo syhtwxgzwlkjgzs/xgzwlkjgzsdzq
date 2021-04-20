@@ -1,7 +1,28 @@
 @import '@common/styles/index.scss';
 .post {
-  max-height: 350px;
+  // height: calc(100vh - 134px);
   overflow-y: scroll;
+}
+@supports (bottom: constant(safe-area-inset-bottom)) or (bottom: env(safe-area-inset-bottom)) {
+  height: calc(100vh - 134px - constant(safe-area-inset-bottom));
+  height: calc(100vh - 134px - env(safe-area-inset-bottom));
+  padding-bottom: constant(safe-area-inset-bottom);
+  /* 兼容 iOS < 11.2 */
+  padding-bottom: env(safe-area-inset-bottom);
+  /* 兼容 iOS >= 11.2 */
+}
+.post-bottombar {
+  // bottom: 0;
+  // left: 0;
+  width: 100%;
+  background-color: #fff;
+}
+.post-bottombar-fixed {
+  // position: fixed;
+}
+.post-bottombar-absolute {
+  // position: absolute;
+  // bottom: auto;
 }
 .position-box {
   display: flex;
