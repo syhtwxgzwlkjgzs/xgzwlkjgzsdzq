@@ -10,7 +10,7 @@ class CommentList extends React.Component {
     super(props);
     this.state = {
       isShowReward: false, // 是否展示获得多少悬赏金
-      isShowRedPacket: false, // 是否展示获得多少红包
+      isShowRedPacket: true, // 是否展示获得多少红包
       isShowAdopt: false, // 是否展示采纳按钮
       isShowOne: this.props.isShowOne || false, // 是否只显示一条评论回复
       isLiked: this.props.data.isLiked,
@@ -68,24 +68,25 @@ class CommentList extends React.Component {
     return (
       <div className={styles.commentList}>
         <div className={styles.header}>
-          {
-            this.state.isShowReward
-              ? <div className={styles.showGet}>
-                  <div className={styles.icon}>图标</div>
-                  <div className={styles.showMoneyNum}>
-                    获得<span className={styles.moneyNumber}>{6}</span>元悬赏金
-                  </div>
-                </div> : ''
-          }
-          {
-            this.state.isShowRedPacket
-              ? <div className={styles.showGet}>
-                  <div className={styles.icon}>图标</div>
-                  <div className={styles.showMoneyNum}>
-                    获得<span className={styles.moneyNumber}>{6}</span>元红包
-                  </div>
-                </div> : ''
-          }
+            <div className={styles.showGet}>
+              <div className={styles.revise}>管理</div>
+              {
+                this.state.isShowReward
+                  ? <div>
+                      <div className={styles.showMoneyNum}>
+                        获得<span className={styles.moneyNumber}>{6}</span>元悬赏金
+                      </div>
+                    </div> : ''
+              }
+              {
+                this.state.isShowRedPacket
+                  ? <div>
+                      <div className={styles.showMoneyNum}>
+                        获得<span className={styles.moneyNumber}>{6}</span>元红包
+                      </div>
+                    </div> : ''
+              }
+          </div>
         </div>
         <div className={styles.content}>
           <div className={styles.commentListAvatar} onClick={this.props.avatarClick('1')}>

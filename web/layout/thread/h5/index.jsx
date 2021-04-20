@@ -14,6 +14,8 @@ import LoadingTips from './components/loading-tips';
 import { Icon, Input, Badge, Toast, Tag, Button } from '@discuzq/design';
 import UserInfo from '@components/thread/user-info';
 
+import ShowTop from './components/show-top';
+import DeletePopup from './components/delete-popup';
 import MorePopup from './components/more-popup';
 import InputPopup from './components/input-popup';
 import ImageContent from '@components/thread/image-content';
@@ -232,22 +234,22 @@ class RenderCommentList extends React.Component {
           </div>
         </div>
         <div className={comment.body}>
-          <div className={comment.commentItems}>
             {
               commentList
                 .map((val, index) => (
-                  <CommentList
-                    data={val}
-                    key={val.id}
-                    avatarClick={type => this.avatarClick.bind(this, type)}
-                    likeClick={type => this.likeClick.bind(this, type)}
-                    replyClick={type => this.replyClick.bind(this, type)}
-                    deleteClick={type => this.deleteClick.bind(this, type)}
-                    isShowOne={true}>
-                  </CommentList>
+                  <div className={comment.commentItems} key={index}>
+                    <CommentList
+                      data={val}
+                      key={val.id}
+                      avatarClick={type => this.avatarClick.bind(this, type)}
+                      likeClick={type => this.likeClick.bind(this, type)}
+                      replyClick={type => this.replyClick.bind(this, type)}
+                      deleteClick={type => this.deleteClick.bind(this, type)}
+                      isShowOne={true}>
+                    </CommentList>
+                  </div>
                 ))
             }
-          </div>
         </div>
 
         {/* 评论弹层 */}
@@ -273,10 +275,12 @@ class ThreadH5Page extends React.Component {
       comment: createCommentService(props),
     };
     this.state = {
+      showDeletePopup: false, // 是否弹出删除弹框
       showCommentInput: false, // 是否弹出评论框
       showMorePopup: false, // 是否弹出更多框
       isCommentLoading: false, // 列表loading
-      text: false, // 临时用的
+      setTop: false, // 置顶
+      showContent: '',
     };
 
     this.perPage = 5;
@@ -414,14 +418,24 @@ class ThreadH5Page extends React.Component {
     } else if (type === '2') {
       this.updateEssence();
     } else if (type === '3') {
-      console.log('删除');
+      this.setState({ showDeletePopup: true });
     } else {
       console.log('举报');
     }
   }
-
-  // 点击置顶
+  // 置顶提示
+  setTopState(isSticky) {
+    this.setState({
+      showContent: isSticky,
+      setTop: !this.state.setTop,
+    });
+    setTimeout(() => {
+      this.setState({ setTop: !this.state.setTop });
+    }, 2000);
+  }
+  // 置顶接口
   async updateSticky() {
+    this.setTopState(false);
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
@@ -441,7 +455,7 @@ class ThreadH5Page extends React.Component {
     });
   }
 
-  // 点击加精
+  // 加精接口
   async updateEssence() {
     const id = this.props.thread?.threadData?.id;
     const params = {
@@ -460,6 +474,30 @@ class ThreadH5Page extends React.Component {
     Toast.error({
       content: msg,
     });
+  }
+  // 帖子删除接口
+  async delete() {
+    this.setState({ showDeletePopup: false });
+    const id = this.props.thread?.threadData?.id;
+    const params = {
+      id,
+    };
+    const { success, msg } = await this.service.thread.updateEssence(params);
+
+    if (success) {
+      Toast.success({
+        content: '操作成功',
+      });
+      return;
+    }
+
+    Toast.error({
+      content: msg,
+    });
+  }
+  onBtnClick() {
+    this.delete();
+    this.setState({ showDeletePopup: false });
   }
 
   // 创建评论
@@ -500,6 +538,10 @@ class ThreadH5Page extends React.Component {
         </div>
 
         <div className={layout.body} ref={this.threadBodyRef} onScrollCapture={() => this.handleOnScroll()}>
+          <ShowTop
+            showContent={this.state.showContent}
+            setTop={this.state.setTop}>
+          </ShowTop>
           {/* 帖子内容 */}
           {
             isReady ? <RenderThreadContent store={threadStore} fun={fun}></RenderThreadContent> : <LoadingTips type='init'></LoadingTips>
@@ -545,7 +587,12 @@ class ThreadH5Page extends React.Component {
             onSubmit={() => this.setState({ showMorePopup: false })}
             onOperClick={type => this.onOperClick(type)}>
           </MorePopup>
-
+          {/* 删除弹层 */}
+          <DeletePopup
+            visible={this.state.showDeletePopup}
+            onClose={() => this.setState({ showDeletePopup: false })}
+            onBtnClick={type => this.onBtnClick(type)}>
+          </DeletePopup>
           {/* 操作区 */}
           <div className={footer.operate}>
             <div className={footer.icon} onClick={() => this.onMessageClick()}>
