@@ -11,7 +11,7 @@ import HeaderLogin from '@common/module/h5/HeaderLogin';
 @inject('thread')
 @inject('userRegister')
 @observer
-class LoginH5Page extends React.Component {
+class RegisterH5Page extends React.Component {
   handleRegister = async () => {
     try {
       await this.props.userRegister.register();
@@ -97,4 +97,4 @@ class LoginH5Page extends React.Component {
   }
 }
 
-export default withRouter(LoginH5Page);
+export default withRouter(RegisterH5Page);

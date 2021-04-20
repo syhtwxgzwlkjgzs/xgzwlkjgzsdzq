@@ -36,7 +36,7 @@ class SiteAction extends SiteStore {
      * 获取是否展示用户名登录入口
      */
     try {
-      const readResp = await readUserLoginDisplay({})
+      const readResp = await readUserLoginDisplay({});
       if (get(readResp, 'code') === 0) {
         this.isUserLoginVisible = true;
       } else {
@@ -54,7 +54,6 @@ class SiteAction extends SiteStore {
       };
     }
   }
-
 }
 
 export default SiteAction;
