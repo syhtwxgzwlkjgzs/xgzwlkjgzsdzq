@@ -8,6 +8,7 @@ import SectionTitle from './components/section-title';
 import TrendingTopics from './components/trending-topics';
 import ActiveUsers from './components/active-users';
 import PopularContents from './components/popular-contents';
+import Header from '@components/header';
 
 import styles from './index.module.scss';
 import '@discuzq/design/dist/styles/index.scss';
@@ -44,8 +45,10 @@ class SearchH5Page extends React.Component {
     const { pageData: topicsPageData } = indexTopics;
     const { pageData: usersPageData } = indexUsers;
     const { pageData: threadsPageData } = indexThreads;
+
     return (
       <div className={styles.page}>
+        <Header />
         <div className={styles.section}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} />
           <SectionTitle title="潮流话题" onShowMore={this.redirectToSearchResultTopic} />

@@ -10,12 +10,7 @@
 .section {
   padding: rem($padding-4n);
   padding-top: rem($padding-2n);
-  &.searchPosts{
-    padding-bottom: 0;
-  }
-  &.searchTopics{
-    padding-bottom: 0;
-  }
+  padding-bottom: 0;
 }
 .hr {
   height: rem(10);

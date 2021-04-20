@@ -8,7 +8,7 @@ const Index = ({ imgData = [] }) => {
       }
       return (
         <div className={img[`images${imgData.length}`]}>
-          {imgData.map((item, index) => <img key={index} className={img[`imagesBox${imgData.length}`]} src={item.src}></img>)}
+          {imgData.map((item, index) => <img key={index} className={img[`imagesBox${imgData.length}`]} src={item.thumbUrl}></img>)}
         </div>
       );
     }
