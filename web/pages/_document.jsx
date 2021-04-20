@@ -10,6 +10,7 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="cn">
+        <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" name="viewport"/>
         <script dangerouslySetInnerHTML={{ __html: `
           setTimeout(function() {
             function remCalc (){
@@ -23,7 +24,9 @@ class MyDocument extends Document {
             remCalc();
             window.addEventListener('resize', remCalc);
           }, 0);
-        ` }}/>
+        ` }} />
+        {/* <!--腾讯地图定位组件--> */}
+        <script async src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
         <Head/>
         <body>
           <Main />

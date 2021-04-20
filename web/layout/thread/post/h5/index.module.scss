@@ -1,0 +1,63 @@
+@import '@common/styles/index.scss';
+.post {
+  // height: calc(100vh - 134px);
+  max-height: 350px;
+  overflow-y: scroll;
+}
+@supports (bottom: constant(safe-area-inset-bottom)) or (bottom: env(safe-area-inset-bottom)) {
+  height: calc(100vh - 134px - constant(safe-area-inset-bottom));
+  height: calc(100vh - 134px - env(safe-area-inset-bottom));
+  padding-bottom: constant(safe-area-inset-bottom);
+  /* 兼容 iOS < 11.2 */
+  padding-bottom: env(safe-area-inset-bottom);
+  /* 兼容 iOS >= 11.2 */
+}
+.post-bottombar {
+  // bottom: 0;
+  // left: 0;
+  width: 100%;
+  background-color: #fff;
+}
+.post-bottombar-fixed {
+  // position: fixed;
+}
+.post-bottombar-absolute {
+  // position: absolute;
+  // bottom: auto;
+}
+.position-box {
+  display: flex;
+  height: 45px;
+  padding: 0 rem(16);
+  align-items: center;
+  :global { /* stylelint-disable-line */
+    .dzq-tag {
+      display: flex;
+      font-size: var(--font-size-label);
+      border-radius: 5px;
+      background-color: #e8f0fe;;
+      border-color: #e8f0fe;
+      align-items: center;
+    }
+    .dzq-tag-text {
+      display: inline-block;
+      max-width: rem(280);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}
+
+.reward-qa-box {
+  border-top: 1px solid #eee;
+  &-content {
+    display: flex;
+    align-items: center;
+    height: 25px;
+    margin: rem(12) rem(16);
+    padding: rem(4) rem(8);
+    border-radius: 5px;
+    background: #f0f1f3;
+  }
+}

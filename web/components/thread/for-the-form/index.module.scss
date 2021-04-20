@@ -1,0 +1,64 @@
+.rewards {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #fff;
+}
+:global {
+  .dzq-card__body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  //   .dzq-checkbox.dzq-checkbox--radio{
+  //     border-radius: 0% !important;
+  //   }
+  .dzq-input {
+    display: inline-block;
+    width: 40px;
+  }
+  .dzq-input__inner {
+    border: none;
+    padding: 0;
+    text-align: center;
+  }
+}
+
+.btn {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  width: 94%;
+  height: 53px;
+  margin-right: 3%;
+  margin-left: 3%;
+  line-height: 53px;
+  justify-content: space-between;
+  text-align: center;
+  .btn-one {
+    text-align: center;
+    width: 166px;
+    height: 44px;
+    color: #333;
+    background: #eee;
+    border: none;
+    &:hover {
+      background-color: #2469f6;
+      color: white;
+    }
+  }
+  .btn-two {
+    text-align: center;
+    width: 166px;
+    height: 44px;
+    color: #333;
+    background: #eee;
+    border: none;
+    &:hover {
+      background-color: #2469f6;
+      color: white;
+    }
+  }
+}

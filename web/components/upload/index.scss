@@ -3,6 +3,16 @@
 $background-color: #f5f7f8;
 $width: rem(169);
 
+.dzq-custom-upload {
+  display: inline-block;
+  .dzq-upload {
+    display: inline-block;
+    padding: 0;
+  }
+  .dzq-upload-list-list__item {
+    display: none;
+  }
+}
 .dzq-upload {
   width: auto;
   padding: rem(16);
