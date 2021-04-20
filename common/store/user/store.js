@@ -7,6 +7,7 @@ class UserStore {
   @observable userInfo = null;
   @observable loginStatus = 'padding';
   @observable accessToken = null;
+  @observable weixinNickName = null;
 }
 
 export default UserStore;
