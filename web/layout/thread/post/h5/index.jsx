@@ -299,37 +299,6 @@ class ThreadCreate extends React.Component {
     const category = (index.categories && index.categories.slice()) || [];
     const { value, times } = rewardQaData;
 
-    // 因为编辑器的数据暂时保存在state，跳转新路由会使数据丢失，所以先这样渲染商品选择页面，此时商品选择页面左上角的返回按钮或移动端滑动返回不可用，待优化
-    if (productSelectShow) {
-      return <ProductSelect onAnalyseSuccess={(data) => {
-        this.setState({
-          productSelectShow: false,
-          productShow: true,
-          productData: data,
-        });
-      }} />;
-    }
-    // 悬赏问答设置页面，同上
-    if (rewardQaShow) {
-      return (
-        <ForTheForm
-          confirm={(data) => {
-            this.setState({
-              rewardQaData: data,
-              rewardQaShow: false,
-            });
-          }}
-          cancel={() => {
-            this.setState({
-              rewardQaShow: false,
-            });
-          }}
-          data={rewardQaData}
-        />
-      );
-    }
-
-
     return (
       <>
         <div className={styles.post}>
@@ -435,6 +404,35 @@ class ThreadCreate extends React.Component {
             visible={redpacketSelectShow}
             cancel={() => this.setState({ redpacketSelectShow: false })}
             confirm={data => console.log(data)}
+          />
+        )}
+        {/* 因为编辑器的数据暂时保存在state，跳转新路由会使数据丢失，所以先这样渲染商品选择页面，此时商品选择页面左上角的返回按钮或移动端滑动返回不可用，待优化 */}
+        {productSelectShow && (
+          <ProductSelect onAnalyseSuccess={
+            (data) => {
+              this.setState({
+                productSelectShow: false,
+                productShow: true,
+                productData: data,
+              });
+            }}
+          />
+        )}
+        {/* 悬赏问答设置页面，同上 */}
+        {rewardQaShow && (
+          <ForTheForm
+            confirm={(data) => {
+              this.setState({
+                rewardQaData: data,
+                rewardQaShow: false,
+              });
+            }}
+            cancel={() => {
+              this.setState({
+                rewardQaShow: false,
+              });
+            }}
+            data={rewardQaData}
           />
         )}
       </>

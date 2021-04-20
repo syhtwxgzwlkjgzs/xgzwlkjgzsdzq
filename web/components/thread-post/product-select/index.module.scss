@@ -1,5 +1,10 @@
 .parse-goods-box {
-  margin: var(--margin-4n);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  padding: var(--margin-4n);
   font-family: 'PingFang SC';
   color: var(--color-text-primary);
   background-color: #fff;
