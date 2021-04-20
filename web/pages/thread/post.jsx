@@ -20,6 +20,7 @@ import Title from '@components/thread-post/title';
 import Position from '@components/thread-post/position';
 import AtSelect from '@components/thread-post/at-select';
 import TopicSelect from '@components/thread-post/topic-select';
+import RedpacketSelect from '@components/thread-post/redpacket-select';
 import { withRouter } from 'next/router';
 
 @inject('threadPost')
@@ -48,6 +49,8 @@ class ThreadCreate extends React.Component {
       atList: [],
       topicShow: false,
       topic: '',
+      redpacketSelectShow: false,
+      redpacketSelectData: {},
     };
   }
   componentDidMount() {
@@ -75,6 +78,10 @@ class ThreadCreate extends React.Component {
     }
     if (item.id === defaultOperation.topic) {
       this.setState({ topicShow: true });
+    }
+    // TODO: 待聪华更新好之后再联调
+    if (item.id === defaultOperation.redpacket) {
+      this.setState({ redpacketSelectShow: true });
     }
     this.setState({ emojiShow: item.id === defaultOperation.emoji });
   };
@@ -201,6 +208,7 @@ class ThreadCreate extends React.Component {
       atList,
       topicShow,
       topic,
+      redpacketSelectShow,
     } = this.state;
     const images = Object.keys(imageCurrentData);
     const category = (index.categories && index.categories.slice()) || [];
@@ -260,6 +268,13 @@ class ThreadCreate extends React.Component {
             visible={topicShow}
             cancelTopic={() => this.setState({ topicShow: false })}
             clickTopic={val => this.setState({ topic: val })}
+          />
+        )}
+        {redpacketSelectShow && (
+          <RedpacketSelect
+            visible={redpacketSelectShow}
+            cancel={() => this.setState({ redpacketSelectShow: false })}
+            confirm={data => console.log(data)}
           />
         )}
       </>
