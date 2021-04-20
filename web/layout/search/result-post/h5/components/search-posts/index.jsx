@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 
-import { Post } from '../../../../../../components/search-result-item';
+import ThreadContent from '@components/thread';
 import List from '../list';
 
 import styles from './index.module.scss';
@@ -13,10 +13,14 @@ import styles from './index.module.scss';
  * @prop {function} onFetchMore 上拉加载
  * @prop {boolean} refreshing  刷新中
  */
+// TODO 之后通过样式去掉div
 const SearchPosts = ({ data, refreshing, onRefresh, onFetchMore, onItemClick }) => {
   const renderItem = useCallback(
     ({ data: _data, index }) => (
-      <Post key={index} data={_data[index]} onClick={onItemClick} divider={index !== _data.length - 1} />
+      <div key={index}>
+        <ThreadContent data={_data[index]} onClick={onItemClick} />
+        {index !== data.length - 1 && <div className={styles.hr} />}
+      </div>
     ),
     [onItemClick],
   );

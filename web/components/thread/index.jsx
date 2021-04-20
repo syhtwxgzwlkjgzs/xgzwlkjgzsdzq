@@ -13,9 +13,8 @@ import VideoPlay from './video-play';
 import BottomEvent from './bottom-event';
 import UserInfo from './user-info';
 import AttachmentView from './attachment-view';
-import dataSource from './data';
+import NoData from '../no-data';
 import styles from './index.module.scss';
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
 @inject('site')
 @inject('index')
@@ -30,24 +29,53 @@ class Index extends React.Component {
       console.log(type);
     }
 
-    onShare = () => {
+    onShare = (e) => {
+      e.stopPropagation();
+
       console.log('分享');
     }
 
-    onComment = () => {
-      this.props.router.push('/thread/9060');
+    onComment = (e) => {
+      e.stopPropagation();
+
+      const { data = {} } = this.props;
+      const { threadId = '' } = data;
+      if (threadId !== '') {
+        this.props.router.push(`/thread/${threadId}`);
+      } else {
+        console.log('帖子不存在');
+      }
     }
 
-    onPraise = () => {
+    onPraise = (e) => {
+      e.stopPropagation();
       console.log('点赞');
     }
 
-    onPay = () => {
+    onPay = (e) => {
+      e.stopPropagation();
+
       if (this.props.payType === '0') {
         return;
       }
 
       console.log('发起支付流程');
+    }
+
+    onClick = () => {
+      const { data = {} } = this.props;
+      const { threadId = '' } = data;
+      if (threadId !== '') {
+        this.props.router.push(`/thread/${threadId}`);
+      } else {
+        console.log('帖子不存在');
+      }
+
+      // 执行外部传进来的点击事件
+      const { onClick } = this.props;
+      if (typeof(onClick) === 'function') {
+        onClick(data);
+      }
     }
 
     // 处理附件的数据
@@ -128,11 +156,16 @@ class Index extends React.Component {
     }
 
     render() {
-      const { money = '0', data = dataSource } = this.props;
-      const { title, user = {}, position = {}, likeReward = {}, content = {} } = data;
+      const { money = '0', data } = this.props;
+
+      if (!data) {
+        return <NoData />;
+      }
+
+      const { title = '', user = {}, position = {}, likeReward = {}, content = {} } = data || {};
 
       return (
-        <div className={styles.container}>
+        <div className={styles.container} onClick={this.onClick}>
           <div className={styles.header}>
               <UserInfo
                   name={user.userName}
