@@ -32,8 +32,8 @@ class CommentList extends React.Component {
     };
   }
   toCommentDetail = () => {
-    if (this.state.isShowOne) {
-      this.props.router.push('/thread/comment/1');
+    if (this.state.isShowOne && this.props?.data?.id) {
+      this.props.router.push(`/thread/comment/${this.props?.data?.id}`);
     }
   }
   // 处理评论的回复只显示一条
@@ -69,7 +69,10 @@ class CommentList extends React.Component {
       <div className={styles.commentList}>
         <div className={styles.header}>
             <div className={styles.showGet}>
-              <div className={styles.revise}>管理</div>
+            <div className={styles.extra}>
+              {/* <div className={styles.revise}>编辑</div> */}
+              <div className={styles.revise} onClick={() => this.deleteClick()}>删除</div>
+            </div>
               {
                 this.state.isShowReward
                   ? <div>
@@ -104,14 +107,12 @@ class CommentList extends React.Component {
             <div className={styles.commentListFooter}>
               <div className={styles.commentBtn}>
                 <div className={styles.commentTime}>{this.props.data.createdAt.split(' ')[1]}</div>
+                <div className={styles.extraBottom}>
                 <div className={this.state.isLiked ? styles.commentLike : styles.commentLiked}>
                     <span onClick={() => this.likeClick()}>赞{this.state.likeCount > 0 ? this.state.likeCount : ''}</span>
                 </div>
                 <div className={styles.commentReply}>
                   <span onClick={() => this.replyClick()}>回复</span>
-                </div>
-                <div className={styles.commentDelete}>
-                  <span onClick={() => this.deleteClick()}>删除</span>
                 </div>
                 {
                   this.state.isShowAdopt
@@ -119,6 +120,7 @@ class CommentList extends React.Component {
                         <span onClick={() => this.adoptClick()}>采纳</span>
                       </div> : ''
                 }
+              </div>
               </div>
               {
                 this.replyNumber > 0 && this.state.isShowOne
