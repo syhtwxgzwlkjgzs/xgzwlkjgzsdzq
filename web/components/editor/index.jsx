@@ -9,7 +9,7 @@ import 'vditor/src/assets/scss/index.scss';
 import './index.scss';
 
 export default function DVditor(props) {
-  const { onChange, emoji, atList, topic } = props;
+  const { onChange, emoji, atList, topic, onFocus, onBlur } = props;
   const vditorId = 'dzq-vditor';
 
   const [isFocus, setIsFocus] = useState(false);
@@ -83,6 +83,7 @@ export default function DVditor(props) {
         focus: () => {
           const range = getEditorRange();
           setIsFocus(true);
+          onFocus();
           setRange(range);
         },
         input: () => {
@@ -90,6 +91,7 @@ export default function DVditor(props) {
         },
         blur: () => {
           onChange(editor);
+          onBlur();
           setIsFocus(false);
         },
         // 编辑器中选中文字后触发，PC才有效果
