@@ -4,7 +4,7 @@ import { withRouter } from 'next/router';
 import { Input, Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
-import HeaderLogin from '@common/module/h5/HeaderLogin';
+import HeaderLogin from '../../../../components/login/h5/header-login';
 import { NEED_BIND_WEIXIN_FLAG, NEED_BIND_PHONE_FLAG } from '@common/store/login/user-login-store';
 
 @inject('site')

@@ -2,8 +2,8 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './index.module.scss';
-import WeixinQrCode from '@common/module/h5/WeixinQrCode';
-import HeaderLogin from '@common/module/h5/HeaderLogin';
+import WeixinQrCode from '../../../../components/login/h5/wx-qr-code';
+import HeaderLogin from '../../../../components/login/h5/header-login';
 
 @inject('site')
 @inject('user')

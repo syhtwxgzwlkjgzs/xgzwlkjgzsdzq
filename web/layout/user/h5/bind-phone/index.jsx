@@ -4,8 +4,8 @@ import { withRouter } from 'next/router';
 import { Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
-import HeaderLogin from '@common/module/h5/HeaderLogin';
-import PhoneInput from '@common/module/h5/PhoneInput/index';
+import HeaderLogin from '../../../../components/login/h5/header-login';
+import PhoneInput from '../../../../components/login/h5/phone-input';
 
 
 @inject('site')
