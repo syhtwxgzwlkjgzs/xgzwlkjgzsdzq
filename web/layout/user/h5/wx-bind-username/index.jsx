@@ -12,6 +12,14 @@ import HeaderLogin from '@common/module/h5/HeaderLogin';
 @inject('thread')
 @observer
 class WXBindUsernameH5page extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: '',
+      password: '',
+      sessionToken: '',
+    };
+  }
   render() {
     return (
         <div className={layout.container}>
