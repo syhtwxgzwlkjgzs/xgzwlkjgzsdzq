@@ -1,16 +1,22 @@
+@import '@common/styles/index.scss';
+
 .title {
-  width: 3.43rem;
-  margin: 10px auto;
+  display: flex !important;
+  width: rem(343);
+  height: 52px;
+  padding: 0 rem(16);
   border: none;
   border-bottom: var(--border-border);
+  align-items: center;
 
-  :global {
+  :global { /* stylelint-disable-line*/
     .dzq-input__inner {
       padding: 8px 0;
-      font-size: 20px;
-      line-height: 22px;
+      font-size: var(--font-size-large);
+      line-height: var(--font-line-height-small);
       border: none;
-      color: #0B0B37;
+      color: var(--color-text-primary);
+      text-align: left !important;
     }
   }
 }

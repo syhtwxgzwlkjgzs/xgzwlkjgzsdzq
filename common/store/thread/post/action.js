@@ -43,10 +43,10 @@ class ThreadPostAction extends ThreadPostStore {
     const ret = await readFollow({ params, isValidate: false });
     this.setLoadingStatus(LOADING_TOTAL_TYPE.follow, false);
     const { code, data } = ret;
-    const { pageData = [] } = data || {};
+    const { pageData } = data || {};
     if (code === 0) {
-      if (page === 1) this.setFollow(pageData);
-      else this.appendFollow(pageData);
+      if (page === 1) this.setFollow(pageData || []);
+      else this.appendFollow(pageData || []);
     }
     return ret;
   }
@@ -78,8 +78,8 @@ class ThreadPostAction extends ThreadPostStore {
     const { code, data } = ret;
     const { pageData = [] } = data || {};
     if (code === 0) {
-      if (params.page === 1) this.setTopic(pageData);
-      else this.appendTopic(pageData);
+      if (params.page === 1) this.setTopic(pageData || []);
+      else this.appendTopic(pageData || []);
     }
     this.setLoadingStatus(LOADING_TOTAL_TYPE.topic, false);
     return ret;
@@ -100,7 +100,7 @@ class ThreadPostAction extends ThreadPostStore {
   // 设置关注
   @action.bound
   setFollow(data) {
-    this.follows = data;
+    this.follows = data || [];
   }
 
   // 附加关注

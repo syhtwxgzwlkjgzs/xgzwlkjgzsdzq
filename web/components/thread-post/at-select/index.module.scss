@@ -1,0 +1,141 @@
+@mixin single-line() {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.popup {
+  :global {
+    .dzq-popup__overlay {
+      background-color: #fff;
+    }
+  }
+}
+
+.wrapper {
+  position: relative;
+  height: 100vh;
+
+  :global {
+    .dzq-input {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 10px 20px;
+      .dzq-input__inner {
+        height: 40px;
+        padding-left: 35px;
+        padding-right: 5px;
+        font-size: 16px;
+        color: #0b0b37;
+        background: #f6f6f6;
+        border: none;
+      }
+      .dzq-input__icon {
+        left: 20px;
+        top: 50%;
+        margin-top: -18px;
+        color: var(--color-disabled2) !important;
+      }
+    }
+  }
+
+  .at-wrap {
+    height: calc(100vh - 135px);
+  }
+
+  .at-item {
+    display: flex;
+    height: 50px;
+    padding: 0 20px;
+
+    .avatar {
+      width: 35px;
+      height: 35px;
+      .image {
+        width: 100%;
+        height: 100%;
+        margin-top: 8px;
+        border-radius: 50%;
+      }
+    }
+
+    .info {
+      flex: 1;
+      margin: 0 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      color: #777;
+      border-bottom: var(--border-border);
+      .username {
+        max-width: 170px;
+        @include single-line();
+      }
+      .group {
+        max-width: 80px;
+        @include single-line();
+      }
+    }
+
+    :global {
+      .dzq-checkbox-wrap {
+        margin: 0;
+        padding: 13px 0;
+        -webkit-tap-highlight-color: transparent;
+        .dzq-checkbox {
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          &::after {
+            border-radius: 50%;
+          }
+        }
+        &.is-checked {
+          .dzq-checkbox {
+            background-color: #1878f3;
+          }
+          .dzq-icon {
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+
+  .btn {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 20px;
+    background: #fff;
+    :global {
+      .dzq-button {
+        width: 48%;
+        height: 35px;
+        font-size: 14px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 2px;
+        transition: all 0.3s;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .btn-cancel {
+        color: #aaa;
+        background: #f9fafc;
+      }
+
+      .not-selected {
+        color: #7d7979;
+        background-color: #fff;
+      }
+      .is-selected {
+        color: #fff;
+        background-color: #1878f3;
+      }
+    }
+  }
+}

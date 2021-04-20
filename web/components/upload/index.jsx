@@ -20,6 +20,7 @@ export default function DzqUpload(props) {
     onFail,
     onComplete,
     data,
+    accept,
   } = props;
   const multiple = limit > 1;
 
@@ -45,8 +46,11 @@ export default function DzqUpload(props) {
     return ret;
   };
 
+  // TODO: 因为上传组件不支持传class和style，所以在外面增加了一层dom
+  const className = isCustomUploadIcon ? 'dzq-custom-upload' : '';
+
   return (
-    <>
+    <div className={className}>
       <Upload
         listType={listType}
         fileList={fileList}
@@ -63,6 +67,7 @@ export default function DzqUpload(props) {
           onChange(fileList);
         }}
         customRequest={post}
+        accept={accept}
       >
         {!isCustomUploadIcon && (
           <Button type='text' className={classNames(styles['flex-column-center'], styles['text-grey'])}>
@@ -72,7 +77,7 @@ export default function DzqUpload(props) {
         )}
         {isCustomUploadIcon && children}
       </Upload>
-    </>
+    </div>
   );
 }
 

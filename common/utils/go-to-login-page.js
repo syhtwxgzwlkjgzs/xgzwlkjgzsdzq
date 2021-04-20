@@ -1,5 +1,5 @@
 /**
- * 跳转到首页，携带参数
+ * 跳转到登录页，可携带参数
  * 默认跳转回调用页面
  * 参数通nextjs router对象
  * 具体见：https://nextjs.org/docs/api-reference/next/router#router-object
