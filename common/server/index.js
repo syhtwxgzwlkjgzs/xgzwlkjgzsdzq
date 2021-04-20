@@ -6,6 +6,7 @@ export { default as updateThreads } from './thread/updateThreads';
 export { default as readCommentList } from './thread/readCommentList';
 export { default as readReplyList } from './thread/readReplyList';
 export { default as createPosts } from './thread/createPosts';
+export { default as updateComment } from './thread/updateComment';
 export { default as readStickList } from './readStickList';
 export { default as readTopicsList } from './search/readTopicsList';
 export { default as readUsersList } from './search/readUsersList';

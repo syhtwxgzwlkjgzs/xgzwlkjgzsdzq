@@ -221,7 +221,7 @@ export default ({ thread: ThreadStore }) => ({
   async pay() {},
 
   /**
-   * 帖子收藏
+   * 帖子删除
    * @param { number } * id 帖子id
    * @returns {object} 处理结果
    */
