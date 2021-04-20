@@ -4,7 +4,7 @@ export default {
     code: 0,
     message: '接口调用成功',
     data: {
-      threadId: 8849,
+      threadId: 57,
       textCover: false,
       userId: 30,
       categoryId: 12,

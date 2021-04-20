@@ -66,7 +66,7 @@ function RenderThreadContent(props) {
           name={threadStore?.threadData?.user?.userName || ''}
           avatar={threadStore?.threadData?.user?.avatar || ''}
           location='腾讯大厦'
-          view='68'
+          view={threadStore?.threadData?.viewCount || ''}
           time='3分钟前'>
         </UserInfo>
         <div>
@@ -169,8 +169,13 @@ class RenderCommentList extends React.Component {
     }
   }
   // 点赞
-  likeClick(type) {
+  async likeClick(type) {
     if (type === '1') {
+      const params = {
+        id: 1,
+        liked: true,
+      };
+      await this.service.comment.updateLiked(params);
       Toast.success({
         content: '帖子评论的点赞',
       });
@@ -208,12 +213,12 @@ class RenderCommentList extends React.Component {
   }
 
   render() {
-    const { totalPage, commentList } = this.props.store;
+    const { totalCount, commentList } = this.props.store;
     return (
       <Fragment>
         <div className={comment.header}>
           <div className={comment.number}>
-            共{totalPage}条评论
+            共{totalCount}条评论
           </div>
           <div className={comment.sort} onClick={() => this.onSortClick()}>
             <Icon
@@ -374,9 +379,8 @@ class ThreadH5Page extends React.Component {
   }
 
   // 列表排序
-  onSortChange(flag) {
-    console.log('flag', flag);
-    this.commentSort = flag;
+  onSortChange(isCreateAt) {
+    this.commentSort = isCreateAt;
     this.page = 1;
     this.loadCommentList();
   }
@@ -460,20 +464,22 @@ class ThreadH5Page extends React.Component {
 
   // 创建评论
   async onPublishClick(val) {
-    this.setState({ showCommentInput: false });
-    console.log('创建评论', val);
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
       content: val,
-      attachments: [],
+      sort: this.commentSort, // 目前的排序
+      isNoMore: this.state.isNoMore,
     };
-    const { success, msg } = await this.service.thread.createComment(params);
-    this.setState({
-      isCommentLoading: false,
-    });
+    const { success, msg } = await this.service.comment.createComment(params);
     if (success) {
-      return;
+      Toast.success({
+        content: '评论成功',
+      });
+      this.setState({
+        showCommentInput: false,
+      });
+      return true;
     }
     Toast.error({
       content: msg,
@@ -482,7 +488,7 @@ class ThreadH5Page extends React.Component {
 
   render() {
     const { thread: threadStore } = this.props;
-    const { isReady, isCommentReady, isNoMore, totalPage } = threadStore;
+    const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
     const fun = {
       moreClick: this.onMoreClick,
     };
@@ -507,7 +513,7 @@ class ThreadH5Page extends React.Component {
                   <Fragment>
                     <RenderCommentList store={threadStore} sort={flag => this.onSortChange(flag)}></RenderCommentList>
                     {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
-                    {isNoMore && <NoMore empty={totalPage === 0}></NoMore>}
+                    {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
                   </Fragment>
                 )
                 : <LoadingTips type='init'></LoadingTips>
@@ -543,7 +549,7 @@ class ThreadH5Page extends React.Component {
           {/* 操作区 */}
           <div className={footer.operate}>
             <div className={footer.icon} onClick={() => this.onMessageClick()}>
-              <Badge info={ totalPage > 99 ? '99+' : `${totalPage || 0}`}>
+              <Badge info={ totalCount > 99 ? '99+' : `${totalCount || '0'}`}>
                 <Icon
                   size='20'
                   name='MessageOutlined'>

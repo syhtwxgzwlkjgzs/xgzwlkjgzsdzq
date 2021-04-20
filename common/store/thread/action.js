@@ -34,7 +34,7 @@ class ThreadAction extends ThreadStore {
 
   @action
   setTotalCount(data) {
-    this.totalPage = data;
+    this.totalCount = data;
   }
 }
 

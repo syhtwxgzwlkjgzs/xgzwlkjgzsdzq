@@ -1,4 +1,5 @@
-import { updateThreads, readCommentList, createPosts } from '@server';
+import { updateThreads, readCommentList } from '@server';
+
 
 // 适配器
 function commentListAdapter(list = []) {
@@ -44,50 +45,6 @@ export default ({ thread: ThreadStore }) => ({
       ThreadStore.setThreadDetailField('isFavorite', !!isFavorite);
 
       // 4. 返回成功
-      return {
-        msg: '操作成功',
-        success: true,
-      };
-    }
-
-    return {
-      msg: res.msg,
-      success: false,
-    };
-  },
-
-  /**
-   * 创建评论
-   * @param {object} params * 参数
-   * @param {number} params.id * 帖子id
-   * @param {string} params.content * 评论内容
-   * @param {array} params.attachments 附件内容
-   * @returns {object} 处理结果
-   */
-  async createComment(params) {
-    const { id, content, attachments } = params;
-    if (!id || !content) {
-      return {
-        msg: '参数不完整',
-        success: false,
-      };
-    }
-
-    const requestParams = {
-      id,
-      content,
-      attachments,
-    };
-
-    const res = await createPosts({ data: requestParams });
-
-    if (res?.data?.Data) {
-      const { commentList } = ThreadStore;
-
-      commentList.unshift(res?.data?.Data);
-
-      ThreadStore.setCommentList(commentList);
-
       return {
         msg: '操作成功',
         success: true,
@@ -257,17 +214,6 @@ export default ({ thread: ThreadStore }) => ({
       success: false,
     };
   },
-
-  /**
-   * 回复评论
-   * @param {object} params * 参数
-   * @param {number} params.id * 帖子id
-   * @param {number} params.id * 帖子id
-   * @param {string} params.content * 评论内容
-   * @param {array} params.attachments 附件内容
-   * @returns {object} 处理结果
-   */
-  async replyComment(params) {},
 
   /**
    * 加载评论列表
