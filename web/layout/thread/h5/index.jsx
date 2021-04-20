@@ -113,11 +113,16 @@ function RenderThreadContent(props) {
 
         <Tag>使用交流</Tag>
 
-        <div className={topic.reward}>
-          {/* 红包 */}
-          {parseContent.RED_PACKET && <PostRewardProgressBar remaining={parseContent.RED_PACKET.number} received={1} />}
-          {/* 打赏 */}
-          {parseContent.REWARD && <PostRewardProgressBar type={POST_TYPE.BOUNTY} remaining={2} received={5} />}
+        {(parseContent.RED_PACKET || parseContent.REWARD)
+          && <div className={topic.reward}>
+            {/* 红包 */}
+            {parseContent.RED_PACKET && <PostRewardProgressBar remaining={parseContent.RED_PACKET.number} received={1} />}
+            {/* 打赏 */}
+            {parseContent.REWARD && <PostRewardProgressBar type={POST_TYPE.BOUNTY} remaining={2} received={5} />}
+          </div>}
+
+        <div style={{ textAlign: 'center' }}>
+          <Button className={topic.rewardButton} type='primary' size='large'>打赏</Button>
         </div>
         {/* 附件 */}
       </div>
@@ -234,22 +239,22 @@ class RenderCommentList extends React.Component {
           </div>
         </div>
         <div className={comment.body}>
-            {
-              commentList
-                .map((val, index) => (
-                  <div className={comment.commentItems} key={index}>
-                    <CommentList
-                      data={val}
-                      key={val.id}
-                      avatarClick={type => this.avatarClick.bind(this, type)}
-                      likeClick={type => this.likeClick.bind(this, type)}
-                      replyClick={type => this.replyClick.bind(this, type)}
-                      deleteClick={type => this.deleteClick.bind(this, type)}
-                      isShowOne={true}>
-                    </CommentList>
-                  </div>
-                ))
-            }
+          {
+            commentList
+              .map((val, index) => (
+                <div className={comment.commentItems} key={index}>
+                  <CommentList
+                    data={val}
+                    key={val.id}
+                    avatarClick={type => this.avatarClick.bind(this, type)}
+                    likeClick={type => this.likeClick.bind(this, type)}
+                    replyClick={type => this.replyClick.bind(this, type)}
+                    deleteClick={type => this.deleteClick.bind(this, type)}
+                    isShowOne={true}>
+                  </CommentList>
+                </div>
+              ))
+          }
         </div>
 
         {/* 评论弹层 */}
@@ -596,7 +601,7 @@ class ThreadH5Page extends React.Component {
           {/* 操作区 */}
           <div className={footer.operate}>
             <div className={footer.icon} onClick={() => this.onMessageClick()}>
-              <Badge info={ totalCount > 99 ? '99+' : `${totalCount || '0'}`}>
+              <Badge info={totalCount > 99 ? '99+' : `${totalCount || '0'}`}>
                 <Icon
                   size='20'
                   name='MessageOutlined'>
