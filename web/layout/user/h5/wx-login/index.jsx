@@ -12,7 +12,7 @@ import HeaderLogin from '@common/module/h5/HeaderLogin';
 class WXLoginH5Page extends React.Component {
   async componentDidMount() {
     await this.props.h5QrCode.generate({ params: { type: 'mobile_browser_login',
-      redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-select`)}`}});
+      redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`)}`}});
   }
 
   render() {
