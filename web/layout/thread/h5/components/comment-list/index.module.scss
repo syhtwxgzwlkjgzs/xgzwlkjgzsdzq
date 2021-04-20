@@ -2,19 +2,30 @@
 @import '@common/styles/variable/index.scss';
 .commentList {
     .header {
+        padding: rem(10) 0 0 0;
+        display: flex;
+        justify-content: flex-end;
+        .headerRigth {
+            
+        }
         .showGet {
+            width: rem(290);
+            // background: red;
             display: flex;
-            justify-content: flex-end;
-            padding: rem(10) 0 0 0;
-            .icon {
-                font-size: rem($font-size-label);
+            justify-content: space-between;
+            .revise {
+                font-family: 'PingFangSC-Regular';
+                font-weight: normal;
+                font-size: rem($font-size-primary);
+                line-height: rem($font-line-height-middle);
                 text-align: left;
-                color: var(--color-text-primary);
+                color: var(--color-text-secondary);
             }
             .showMoneyNum {
                 font-family: 'PingFangSC-Regular';
                 font-weight: normal;
                 font-size: rem($font-size-label);
+                line-height: rem($font-line-height-middle);
                 text-align: left;
                 color: var(--color-text-primary);
                 margin-left: rem($margin-10);
@@ -63,6 +74,7 @@
                     line-height: rem($font-line-height-middle);
                     text-align: left;
                     color: var(--color-text-secondary);
+                    padding-top: rem($padding-2n);
                     .commentTime {
                         flex: 1;
                     }

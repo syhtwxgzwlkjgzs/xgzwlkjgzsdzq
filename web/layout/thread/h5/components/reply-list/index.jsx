@@ -76,9 +76,6 @@ export default class ReplyList extends React.Component {
             <div className={styles.replyReply}>
               <span onClick={() => this.replyClick('2')}>回复</span>
             </div>
-            <div className={styles.replyDelete}>
-              <span onClick={() => this.deleteClick('2')}>删除</span>
-            </div>
           </div>
         </div>
       </div>
