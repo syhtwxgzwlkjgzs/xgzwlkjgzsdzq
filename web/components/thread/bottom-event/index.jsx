@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styles from './Index.module.scss';
 import Tip from '../tip';
 import { Icon } from '@discuzq/design';
@@ -18,17 +18,23 @@ const Index = ({
   wholeNum = 0,
   comment = 0,
   sharing = 0,
+  isLiked = false,
   onShare = () => {},
   onComment = () => {},
   onPraise = () => {},
 }) => {
-  const postList = [
-    {
-      icon: 'LikeOutlined',
+  const postList = useMemo(() => {
+    const praise = isLiked ? {
+      icon: 'HeartOutlined',
       name: '赞',
       event: onPraise,
-    },
-    {
+    } : {
+      icon: 'LikeOutlined',
+      name: '取消',
+      event: onPraise,
+    };
+
+    return [praise, {
       icon: 'MessageOutlined',
       name: '评论',
       event: onComment,
@@ -37,8 +43,8 @@ const Index = ({
       icon: 'ShareAltOutlined',
       name: '分享',
       event: onShare,
-    },
-  ];
+    }];
+  }, [isLiked]);
 
   return (
     <div>

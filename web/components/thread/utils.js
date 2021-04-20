@@ -27,4 +27,5 @@ export const ON_PAY_IMAGE = 'ON_PAY_IMAGE'; // 图片付费事件
 
 export const updateThreadInfo = async ({ pid, data } = {}) => {
   const res = await updatePosts({ data: { pid, data } });
+  debugger;
 };

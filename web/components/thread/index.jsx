@@ -44,7 +44,7 @@ class Index extends React.Component {
       e.stopPropagation();
       const { data = {} } = this.props;
       const { threadId = '' } = data;
-      updateThreadInfo({ pid: threadId, data: 1 });
+      updateThreadInfo({ pid: threadId, data: { attachments: { isLiked: true } } });
     }
     // 支付
     onPay = (e) => {
@@ -157,7 +157,7 @@ class Index extends React.Component {
         return <NoData />;
       }
 
-      const { title = '', user = {}, position = {}, likeReward = {}, payType } = data || {};
+      const { title = '', user = {}, position = {}, likeReward = {}, payType, viewCount } = data || {};
 
       return (
         <div className={styles.container} onClick={this.onClick}>
@@ -166,6 +166,7 @@ class Index extends React.Component {
                   name={user.userName}
                   avatar={user.avatar}
                   location={position.address}
+                  view={`${viewCount}`}
               />
           </div>
 
