@@ -149,7 +149,10 @@ class RenderCommentList extends React.Component {
     this.state = {
       showCommentInput: false, // 是否弹出评论框
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
+      showDeletePopup: false, // 是否弹出删除弹框
     };
+
+    this.comment = null;
   }
 
   // 评论列表排序
@@ -202,29 +205,31 @@ class RenderCommentList extends React.Component {
   }
   // 删除
   async deleteClick(type, data) {
-    if (!data.id) return;
-
-    const params = {
-      id: data.id,
-      isLiked: !data.isLiked,
-    };
-    const { success, msg } = await this.props.service.comment.updateLiked(params);
-    if (!success) {
-      Toast.error({
-        content: msg,
-      });
-    }
-
-    // if (type === '1') {
-    //   Toast.success({
-    //     content: '帖子评论的删除',
-    //   });
-    // } else {
-    //   Toast.success({
-    //     content: '评论回复的删除',
-    //   });
-    // }
+    this.comment = data;
+    this.setState({
+      showDeletePopup: true,
+    });
   }
+
+  // 删除
+  async deleteComment() {
+    if (!this.comment.id) return;
+
+    const { success, msg } = await this.props.service.comment.delete(this.comment.id);
+    this.setState({
+      showDeletePopup: false,
+    });
+    if (success) {
+      Toast.success({
+        content: '删除成功',
+      });
+      return;
+    }
+    Toast.error({
+      content: msg,
+    });
+  }
+
   // 回复
   replyClick(type) {
     if (type === '1') {
@@ -270,7 +275,7 @@ class RenderCommentList extends React.Component {
                     avatarClick={type => this.avatarClick.bind(this, type)}
                     likeClick={type => this.likeClick.bind(this, type, val)}
                     replyClick={type => this.replyClick.bind(this, type)}
-                    deleteClick={type => this.deleteClick.bind(this, type)}
+                    deleteClick={type => this.deleteClick.bind(this, type, val)}
                     isShowOne={true}>
                   </CommentList>
                 </div>
@@ -284,6 +289,12 @@ class RenderCommentList extends React.Component {
           onClose={() => this.setState({ showCommentInput: false })}
           onSubmit={value => this.setState({ showCommentInput: false })}>
         </InputPopup>
+        {/* 删除弹层 */}
+        <DeletePopup
+          visible={this.state.showDeletePopup}
+          onClose={() => this.setState({ showDeletePopup: false })}
+          onBtnClick={() => this.deleteComment()}>
+        </DeletePopup>
       </Fragment>
     );
   }
@@ -580,7 +591,7 @@ class ThreadH5Page extends React.Component {
               isCommentReady
                 ? (
                   <Fragment>
-                    <RenderCommentList store={ threadStore } service={this.service} sort={flag => this.onSortChange(flag)}></RenderCommentList>
+                    <RenderCommentList store={threadStore} service={this.service} sort={flag => this.onSortChange(flag)}></RenderCommentList>
                     {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
                     {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
                   </Fragment>
