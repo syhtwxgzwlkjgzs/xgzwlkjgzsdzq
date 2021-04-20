@@ -13,7 +13,10 @@ const InputPop = (props) => {
     if (typeof onSubmit === 'function') {
       try {
         setLoading(true);
-        await onSubmit(value);
+        const success = await onSubmit(value);
+        if (success) {
+          setValue('');
+        }
       } catch (error) {
         console.log(error);
       } finally {

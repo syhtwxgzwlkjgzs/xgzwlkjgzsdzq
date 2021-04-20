@@ -20,7 +20,7 @@ class CommentList extends React.Component {
       deleteClick: this.props.deleteClick(),
     };
     this.needReply = this.props.data.lastThreeComments;// 评论的回复
-    this.replyNumber = this.props.data.lastThreeComments.length - 1; // 评论的回复
+    this.replyNumber = this.props.data.replyCount - 1; // 评论的回复
   }
   componentDidMount() {
     // this.loadCommentList();
@@ -41,7 +41,7 @@ class CommentList extends React.Component {
     console.log('this.isShowOne', this.state.isShowOne);
     if (this.state.isShowOne) {
       this.needReply = [];
-      this.needReply.push(this.props.data.lastThreeComments[0]);
+      this.props.data?.lastThreeComments?.length && this.needReply.push(this.props.data.lastThreeComments[0]);
     }
   }
   likeClick() {
@@ -102,7 +102,7 @@ class CommentList extends React.Component {
             </div>
             <div className={styles.commentListFooter}>
               <div className={styles.commentBtn}>
-                <div className={styles.commentTime}>{13}分钟</div>
+                <div className={styles.commentTime}>{this.props.data.createdAt.split(' ')[1]}</div>
                 <div className={this.state.isLiked ? styles.commentLike : styles.commentLiked}>
                     <span onClick={() => this.likeClick()}>赞{this.state.likeCount > 0 ? this.state.likeCount : ''}</span>
                 </div>
