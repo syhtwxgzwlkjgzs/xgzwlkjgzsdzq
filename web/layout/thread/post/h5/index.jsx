@@ -207,7 +207,7 @@ class ThreadCreate extends React.Component {
   formatContextIndex() {
     const { imageCurrentData, videoFile, fileCurrentData, productData } = this.state;
     const imageIds = Object.values(imageCurrentData).map(item => item.id);
-    const fileIds = Object.values(fileCurrentData).map(item => item.id);
+    const docIds = Object.values(fileCurrentData).map(item => item.id);
     const videoId = videoFile.id;
     const contentIndex = {};
     if (imageIds.length > 0) {
@@ -222,16 +222,16 @@ class ThreadCreate extends React.Component {
         body: { videoId },
       };
     }
-    if (fileIds.length > 0) {
+    if (docIds.length > 0) {
       contentIndex[THREAD_TYPE.file] = {
         tomId: THREAD_TYPE.file,
-        body: { fileIds },
+        body: { docIds },
       };
     }
     if (productData.id) {
       contentIndex[THREAD_TYPE.goods] = {
         tomId: THREAD_TYPE.goods,
-        body: { goodId: productData.id },
+        body: { ...productData },
       };
     }
     return contentIndex;

@@ -32,10 +32,10 @@ export const THREAD_TYPE = {
   qa: 105, // 问答
   redPacket: 106, // 红包
   reward: 107, // 悬赏
-  vote: 108, // 投票
-  queue: 109, // 排队接龙
-  file: 110, // 附件
-  qaImage: 111, // 问答图片
+  // vote: 108, // 投票
+  // queue: 109, // 排队接龙
+  file: 108, // 附件
+  // qaImage: 111, // 问答图片
 };
 
 // 图片类型
