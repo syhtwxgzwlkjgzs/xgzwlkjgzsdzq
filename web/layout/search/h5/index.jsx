@@ -45,6 +45,7 @@ class SearchH5Page extends React.Component {
     const { pageData: topicsPageData } = indexTopics;
     const { pageData: usersPageData } = indexUsers;
     const { pageData: threadsPageData } = indexThreads;
+
     return (
       <div className={styles.page}>
         <Header />
