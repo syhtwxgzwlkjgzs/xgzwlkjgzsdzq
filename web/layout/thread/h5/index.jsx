@@ -145,7 +145,7 @@ function RenderThreadContent(props) {
 class RenderCommentList extends React.Component {
   constructor(props) {
     super(props);
-
+    this.service = this.props.service,
     this.state = {
       showCommentInput: false, // 是否弹出评论框
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
@@ -191,17 +191,13 @@ class RenderCommentList extends React.Component {
       Toast.error({
         content: msg,
       });
+      this.getCommentDetail();
+      return;
     }
 
-    // if (type === '1') {
-    //   Toast.loading({
-    //     content: '帖子评论的点赞',
-    //   });
-    // } else {
-    //   Toast.success({
-    //     content: '评论回复的点赞',
-    //   });
-    // }
+    Toast.error({
+      content: msg,
+    });
   }
   // 删除
   async deleteClick(type, data) {
@@ -229,19 +225,31 @@ class RenderCommentList extends React.Component {
       content: msg,
     });
   }
+  // 创建回复评论+回复回复接口
+  async createReply(val) {
+    this.setState({ showCommentInput: false });
+    const id = this.props.store.thread?.threadData?.id;
+    const params = {
+      id, // 帖子id
+      content: val, // 评论内容
+      commentId: 0, // 评论id
+      replyId: 0, // 回复id
+      isComment: false, // 是否楼中楼
+      commentPostId: [], // 评论回复ID
+      commentUserId: [], // 评论回复用户ID
+      attachments: [], // 附件内容
+    };
+    const { success, msg } = await this.service.comment.createReply(params);
 
-  // 回复
-  replyClick(type) {
-    if (type === '1') {
-      this.onInputClick();
-    } else {
-      this.onInputClick();
+    if (success) {
+      Toast.success({
+        content: '操作成功',
+      });
+      return;
     }
-  }
 
-  onInputClick() {
-    this.setState({
-      showCommentInput: true,
+    Toast.error({
+      content: msg,
     });
   }
 
@@ -287,7 +295,7 @@ class RenderCommentList extends React.Component {
         <InputPopup
           visible={this.state.showCommentInput}
           onClose={() => this.setState({ showCommentInput: false })}
-          onSubmit={value => this.setState({ showCommentInput: false })}>
+          onSubmit={value => this.createReply(value)}>
         </InputPopup>
         {/* 删除弹层 */}
         <DeletePopup
@@ -353,6 +361,7 @@ class ThreadH5Page extends React.Component {
   componentDidMount() {
     // 当内容加载完成后，获取评论区所在的位置
     this.position = this.commentRef?.current?.offsetTop - 50;
+    console.log(this.props);
   }
 
   componentDidUpdate() {
@@ -540,12 +549,15 @@ class ThreadH5Page extends React.Component {
 
   // 创建评论
   async onPublishClick(val) {
+    console.log(val);
+    this.setState({ showCommentInput: false });
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
       content: val,
       sort: this.commentSort, // 目前的排序
-      isNoMore: this.state.isNoMore,
+      isNoMore: false,
+      attachments: [],
     };
     const { success, msg } = await this.service.comment.createComment(params);
     if (success) {
@@ -591,7 +603,11 @@ class ThreadH5Page extends React.Component {
               isCommentReady
                 ? (
                   <Fragment>
-                    <RenderCommentList store={threadStore} service={this.service} sort={flag => this.onSortChange(flag)}></RenderCommentList>
+                    <RenderCommentList
+                      store={threadStore}
+                      service={this.service}
+                      sort={flag => this.onSortChange(flag)}>
+                    </RenderCommentList>
                     {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
                     {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
                   </Fragment>
