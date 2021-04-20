@@ -25,6 +25,8 @@ import Position from '@components/thread-post/position';
 import AtSelect from '@components/thread-post/at-select';
 import TopicSelect from '@components/thread-post/topic-select';
 import RedpacketSelect from '@components/thread-post/redpacket-select';
+import PostPopup from '@components/thread-post/post-popup';
+import AllPostPaid from '@components/thread/all-post-paid';
 import { withRouter } from 'next/router';
 import classNames from 'classnames';
 
@@ -75,6 +77,10 @@ class ThreadCreate extends React.Component {
       rewardQaShow: false,
       // 悬赏问答页面数据
       rewardQaData: {},
+      payShow: false,
+      paySelectText: ['帖子付费', '附件付费'],
+      curPaySelect: '',
+      payData: {},
     };
   }
   componentDidMount() {
@@ -106,6 +112,9 @@ class ThreadCreate extends React.Component {
     // TODO: 待聪华更新好之后再联调
     if (item.id === defaultOperation.redpacket) {
       this.setState({ redpacketSelectShow: true });
+    }
+    if (item.id === defaultOperation.pay) {
+      this.setState({ payShow: true });
     }
     this.setState({ emojiShow: item.id === defaultOperation.emoji });
 
@@ -268,7 +277,7 @@ class ThreadCreate extends React.Component {
   }
 
   submit = async () => {
-    const { title, categoryId, position, contentText } = this.state;
+    const { title, categoryId, position, contentText, payData } = this.state;
     if (!contentText) {
       Toast.info({ content: '请填写您要发布的内容' });
       return;
@@ -282,6 +291,11 @@ class ThreadCreate extends React.Component {
     };
     const contentIndex = this.formatContextIndex();
     if (Object.keys(contentIndex)) params.content.indexed = contentIndex;
+    if (payData.value && payData.num) {
+      params.price = payData.value;
+      params.freeWords = payData.num;
+    }
+    if (payData.value && !payData.num) params.attachmentPrice = payData.value;
     if (position.address) params.position = position;
     Toast.loading({ content: '创建中...' });
     const ret = await createThread(params);
@@ -473,6 +487,25 @@ class ThreadCreate extends React.Component {
               });
             }}
             data={rewardQaData}
+          />
+        )}
+        {this.state.payShow && (
+          <PostPopup
+            visible={this.state.payShow}
+            list={this.state.paySelectText}
+            onClick={val => this.setState({ curPaySelect: val })}
+            cancel={() => this.setState({ payShow: false })}
+          />
+        )}
+        {this.state.curPaySelect && (
+          <AllPostPaid
+            exhibition={this.state.curPaySelect}
+            cancle={() => {
+              this.setState({ curPaySelect: '' });
+            }}
+            confirm={(data) => {
+              this.setState({ payData: data });
+            }}
           />
         )}
       </>
