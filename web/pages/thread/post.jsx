@@ -66,7 +66,7 @@ class ThreadCreate extends React.Component {
   handleDefaultToolbarClick = (item) => {
     if (item.id === defaultOperation.emoji) {
       this.setState({
-        emojiShow: item.id === 'emoji',
+        emojiShow: true,
         emoji: {},
       });
     }
@@ -76,6 +76,7 @@ class ThreadCreate extends React.Component {
     if (item.id === defaultOperation.topic) {
       this.setState({ topicShow: true });
     }
+    this.setState({ emojiShow: false });
   };
 
   handleEmojiClick = (emoji) => {
