@@ -2,8 +2,9 @@
 @import '@common/styles/variable/index.scss';
 .container {
   box-sizing: border-box;
-  padding: rem($padding-4n);
+  padding: 0 rem($padding-4n);
   padding-bottom: 0;
+  background: #fff;
   .title {
     font-size: rem($font-size-middle);
     line-height: rem(26);
