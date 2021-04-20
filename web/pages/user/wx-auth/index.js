@@ -25,10 +25,9 @@ class WeixinAuth extends React.Component {
         },
       });
       // 落地页开关打开
-      if (res.code === -NEED_BIND_OR_REGISTER_USER) {
-        const sessionToken = get(res, 'data.sessionToken');
-        const accessToken = get(res, 'data.accessToken');
-        this.props.user.nickname = get(res, 'data.nickname');
+      if (res.code === NEED_BIND_OR_REGISTER_USER) {
+        const { sessionToken, accessToken, nickname } = res.data;
+        this.props.user.nickname = nickname;
         // 注册成功后，默认登录
         setAccessToken({
           accessToken,
