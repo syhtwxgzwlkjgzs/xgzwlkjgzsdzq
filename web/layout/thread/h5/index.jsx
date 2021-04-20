@@ -147,6 +147,7 @@ class RenderCommentList extends React.Component {
     super(props);
     this.service = this.props.service,
     this.state = {
+      createReplyParams: {},
       showCommentInput: false, // 是否弹出评论框
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
@@ -179,7 +180,7 @@ class RenderCommentList extends React.Component {
     }
   }
   // 点赞
-  async likeClick(type, data) {
+  async likeClick(data) {
     if (!data.id) return;
 
     const params = {
@@ -225,20 +226,30 @@ class RenderCommentList extends React.Component {
       content: msg,
     });
   }
-  // 创建回复评论+回复回复接口
-  async createReply(val) {
-    this.setState({ showCommentInput: false });
+  replyClick(commentData, replyData) {
+    console.log(commentData, replyData);
     const id = this.props.store.thread?.threadData?.id;
     const params = {
       id, // 帖子id
-      content: val, // 评论内容
-      commentId: 0, // 评论id
-      replyId: 0, // 回复id
-      isComment: false, // 是否楼中楼
+      content: '', // 评论内容
+      commentId: commentData.id, // 评论id
+      replyId: replyData?.id, // 回复id
+      isComment: replyData !== undefined, // 是否楼中楼
       commentPostId: [], // 评论回复ID
       commentUserId: [], // 评论回复用户ID
       attachments: [], // 附件内容
     };
+    this.setState({
+      createReplyParams: params,
+      showCommentInput: true,
+    });
+  }
+  // 创建回复评论+回复回复接口
+  async createReply(val) {
+    this.setState({ showCommentInput: false });
+    const params = this.state.createReplyParams;
+    params.content = val;
+    console.log('参数', params);
     const { success, msg } = await this.service.comment.createReply(params);
 
     if (success) {
@@ -281,9 +292,9 @@ class RenderCommentList extends React.Component {
                     data={val}
                     key={val.id}
                     avatarClick={type => this.avatarClick.bind(this, type)}
-                    likeClick={type => this.likeClick.bind(this, type, val)}
-                    replyClick={type => this.replyClick.bind(this, type)}
-                    deleteClick={type => this.deleteClick.bind(this, type, val)}
+                    likeClick={() => this.likeClick.bind(this, val)}
+                    replyClick={type => this.replyClick.bind(this, val, type)}
+                    deleteClick={type => this.deleteClick.bind(this, type)}
                     isShowOne={true}>
                   </CommentList>
                 </div>
