@@ -9,7 +9,7 @@ import { ENV_CONFIG } from '@common/constants/site';
 
 const api = apiIns({
   baseURL: ENV_CONFIG.COMMOM_BASE_URL,
-  timeout: 1000,
+  timeout: 2000,
 });
 
 const { http } = api;
