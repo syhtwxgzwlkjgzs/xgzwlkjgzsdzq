@@ -1,6 +1,6 @@
 /**
- * 发帖页标题
- * 新引入组件需要   import DatePicker from 'react-mobile-datepicker';
+ * 时间选择器
+ * 新引入组件需要  npm i react-mobile-datepicker  然后  import DatePicker from 'react-mobile-datepicker';
  * 详细参数参考  https://www.npmjs.com/package/react-mobile-datepicker#dateconfig
  */
 import React, { memo, useState, useEffect, useCallback } from 'react';

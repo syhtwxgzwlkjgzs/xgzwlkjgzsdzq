@@ -6,7 +6,7 @@ import { Card, Button, Input, Slider, Popup } from '@discuzq/design'; //原来�
 import styles from './index.module.scss'; //私有样式
 import PropTypes from 'prop-types'; //类型拦截
 
-const AllPostPaid = ({ visible, confirm, cancle, data }) => {
+const AllPostPaid = ({ visible, confirm, cancle, data, exhibition }) => {
   const [value, setValue] = useState(1);//支付的金额数量
   const [num, setNum] = useState(0);//可免费查看数量的百分比数字
   useEffect(() => {//重显的逻辑
@@ -25,12 +25,15 @@ const AllPostPaid = ({ visible, confirm, cancle, data }) => {
       setNum(e)
     }, 500)
   }
-//当点击确定是把参数返回去
+  //当点击确定是把参数返回去
   const redbagconfirm = () => {
-    confirm({
-      value,
-      num,
-    });
+    exhibition === 'A' ?
+      confirm({
+        value,
+        num,
+      }) : confirm({
+        value,
+      })
   };
 
   return (
@@ -39,8 +42,37 @@ const AllPostPaid = ({ visible, confirm, cancle, data }) => {
       visible={visible}
     >
       <div className={styles['redpacket-box']}>
-        <Card>
-          <div> 支付金额 </div>
+        {exhibition === 'A' ? <div>
+          <div className={styles['line-box']}>
+            <div> 支付金额 </div>
+            <div>
+              <Input
+                mode="number"
+                value={value}
+                placeholder="金额"
+                onChange={(e) => setValue(+e.target.value)}
+                onEnter={(e) => { }}
+                onFocus={(e) => { }}
+                onBlur={(e) => { }}
+              />
+            元
+          </div>
+          </div>
+          <div className={styles.toview}>
+            <div className={styles.toviewone}> 免费查看字数 </div>
+            <div>
+              <div>
+                <Slider
+                  value={num}
+                  defaultValue={num}
+                  formatter={(value) => `${value} %`}
+                  onChange={(e) => debounce(e)}
+                />
+              </div>
+            </div>
+          </div>
+        </div> : <div className={styles['line-box']}>
+          <div> 附件内容查看价格 </div>
           <div>
             <Input
               mode="number"
@@ -53,20 +85,7 @@ const AllPostPaid = ({ visible, confirm, cancle, data }) => {
             />
             元
           </div>
-        </Card>
-        <div className={styles.toview}>
-          <div className={styles.toviewone}> 免费查看字数 </div>
-          <div>
-            <div>
-              <Slider
-                value={num}
-                defaultValue={num}
-                formatter={(value) => `${value} %`}
-                onChange={(e) => debounce(e)}
-              />
-            </div>
-          </div>
-        </div>
+        </div>}
         <div className={styles.btn}>
           <Button type="large" className={styles['btn-one']} onClick={() => cancle()}>取消</Button>
           <Button type="large" className={styles['btn-two']} onClick={redbagconfirm}>确定</Button>
@@ -91,6 +110,7 @@ AllPostPaid.defaultProps = {
   visible: false,//是否显示
   data: { value: 3, num: 20 },//假设有数据返回重显
   cancle: () => console.log('cancle'),//点击取消的事件
+  exhibition: 'A', //传A就展示第一个，传其他就展示第二个
 };
 
 export default memo(AllPostPaid);

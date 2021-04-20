@@ -1,12 +1,4 @@
 :global {
-  .dzq-card__body {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  //   .dzq-checkbox.dzq-checkbox--radio{
-  //     border-radius: 0% !important;
-  //   }
   .dzq-input {
     display: inline-block;
     width: 40px;
@@ -27,6 +19,16 @@
 }
 .redpacket-box {
   height: 100vh;
+  .line-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 16px;
+    margin-right: 16px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    font-size: 14px;
+  }
 }
 .btn {
   position: absolute;
@@ -34,8 +36,10 @@
   display: flex;
   width: 94%;
   height: 53px;
-  margin-right: 3%;
-  margin-left: 3%;
+  border-top: 1px solid #eee;
+  padding-top: 8px;
+  padding-right: 3%;
+  padding-left: 3%;
   line-height: 53px;
   justify-content: space-between;
   text-align: center;
