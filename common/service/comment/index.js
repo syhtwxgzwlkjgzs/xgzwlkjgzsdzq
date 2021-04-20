@@ -178,20 +178,26 @@ export default ({ comment: CommentStore, thread: ThreadStore }) => ({
     }
     const requestParams = {
       pid: commentId,
-      isDeleted: 1,
+      data: {
+        attributes: {
+          isDeleted: 1,
+        },
+      },
     };
 
     const res = await updateComment({ data: requestParams });
     if (res.code === 0) {
       // 更新评论列表
-      const { commentList } = ThreadStore;
+      const { commentList, totalCount } = ThreadStore;
       if (commentList?.length) {
         const index = commentList.findIndex(comment => commentId === comment.id);
         commentList.splice(index, 1);
+        const newTotalCount = totalCount - 1;
+        ThreadStore.setTotalCount(newTotalCount);
       }
 
       return {
-        success: false,
+        success: true,
         msg: '删除成功',
       };
     }
