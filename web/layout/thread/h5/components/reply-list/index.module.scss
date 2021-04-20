@@ -55,6 +55,7 @@
       line-height: rem($font-line-height-middle);
       text-align: left;
       color: var(--color-text-secondary);
+      padding-top: rem($padding-2n);
       .replyTime {
         flex: 1;
       }
