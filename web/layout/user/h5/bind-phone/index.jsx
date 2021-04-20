@@ -32,6 +32,9 @@ class BindPhoneH5Page extends React.Component {
         hasMask: false,
         duration: 1000,
       });
+      setTimeout(() => {
+        this.props.router.push('/index');
+      }, 1000);
     } catch (e) {
       Toast.error({
         content: e.Message,

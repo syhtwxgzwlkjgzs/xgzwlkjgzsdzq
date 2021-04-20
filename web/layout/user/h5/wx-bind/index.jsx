@@ -2,41 +2,73 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './index.module.scss';
-import WeixinQrCode from '@common/module/h5/WeixinQrCode';
 import HeaderLogin from '@common/module/h5/HeaderLogin';
+import { Button, Toast } from '../../../../../../discuz-core/packages/discuz-design';
+import { h5WechatCodeBind } from '@server';
 
 @inject('site')
 @inject('user')
 @inject('h5QrCode')
 @observer
-class WeixinBindQrCodePage extends React.Component {
-  async componentDidMount() {
-    const { sessionToken }  = this.props.router.query;
-    await this.props.h5QrCode.generate({ params:
-        {
-          sessionToken,
-          type: 'mobile_browser_bind',
-          redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-select`)}` } });
-  }
-
+class WeixinBindH5Page extends React.Component {
   render() {
+    const { sessionToken, loginType, code, sessionId }  = this.props.router.query;
     return (
       <div className={layout.container}>
-          <HeaderLogin/>
-          <div className={layout.content}>
-              <div className={layout.title}>绑定微信号</div>
-              <div className={layout.tips}>
-              <img src="/user.png" alt=""/>
-              {/* todo 小虫替换为用户名*/}
-              小虫，请绑定您的微信
-              </div>
-              {/* 二维码 start */}
-              <WeixinQrCode orCodeImg={this.props.h5QrCode.qrCode} orCodeTips='长按保存二维码，并在微信中识别此二维码，即可绑定微信，并继续访问'/>
-              {/* 二维码 end */}
+        <HeaderLogin/>
+        <div className={layout.content}>
+          <div className={layout.title}>绑定微信号</div>
+          <div className={layout.tips}>
+            <img src="/user.png" alt=""/>
+            {/* todo 小虫替换为用户名*/}
+            小虫，请绑定您的微信
           </div>
+          <Button
+            className={layout.button}
+            type="primary"
+            onClick={() => this.bind({
+              params: { sessionToken, code, sessionId },
+            })}
+          >
+            绑定微信，并继续访问
+          </Button>
+        </div>
       </div>
     );
   }
+
+  bind = async (opts) => {
+    try {
+      console.log(opts.params.sessionToken);
+      const res = await h5WechatCodeBind({
+        timeout: 3000,
+        ...opts,
+      });
+      if (res.code === 0) {
+        Toast.success({
+          content: '绑定成功',
+        });
+        await this.props.router.push('/');
+        return;
+      }
+      throw {
+        Code: res.code,
+        Message: res.msg,
+      };
+    } catch (error) {
+      if (error.Code) {
+        Toast.error({
+          content: error.Message,
+        });
+        return;
+      }
+      throw {
+        Code: 'ulg_9999',
+        Message: '网络错误',
+        error,
+      };
+    }
+  }
 }
 
-export default withRouter(WeixinBindQrCodePage);
+export default withRouter(WeixinBindH5Page);
