@@ -207,7 +207,15 @@ class ThreadCreate extends React.Component {
 
   // 暂时在这里处理，后期如果有多个穿插的时候再做其它处理
   formatContextIndex() {
-    const { imageCurrentData, videoFile, fileCurrentData, productData, audioData, redpacketSelectData, rewardQaData } = this.state;
+    const {
+      imageCurrentData,
+      videoFile,
+      fileCurrentData,
+      productData,
+      audioData,
+      redpacketSelectData,
+      rewardQaData,
+    } = this.state;
     const imageIds = Object.values(imageCurrentData).map(item => item.id);
     const docIds = Object.values(fileCurrentData).map(item => item.id);
     const videoId = videoFile.id;
