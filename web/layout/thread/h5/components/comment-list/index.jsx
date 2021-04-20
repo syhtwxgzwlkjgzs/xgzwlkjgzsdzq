@@ -138,7 +138,7 @@ class CommentList extends React.Component {
                                             key={index}
                                             avatarClick={this.props.avatarClick}
                                             likeClick={this.props.likeClick}
-                                            replyClick={this.props.replyClick}
+                                            replyClick={() => this.props.replyClick(val)}
                                             deleteClick={this.props.deleteClick}
                                             toCommentDetail={this.toCommentDetail}>
                                           </ReplyList>)
