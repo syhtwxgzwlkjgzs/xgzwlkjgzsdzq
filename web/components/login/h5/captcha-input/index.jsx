@@ -102,7 +102,7 @@ class CaptchaInput extends React.Component {
     return (
         <div className={layout.container}>
           {
-            value.map((item, index) => (<Input key={index} value={value[index]} onChange={(e) => {
+            value.map((item, index) => (<Input mode='number' key={index} value={value[index]} onChange={(e) => {
               this.setChange(index, e);
             }} className={layout['captchaInput-input']} onFocus={(e) => {
               this.focusInput(index, e);

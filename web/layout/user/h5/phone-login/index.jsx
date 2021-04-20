@@ -4,8 +4,8 @@ import { withRouter } from 'next/router';
 import { Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
-import PhoneInput from '../../../../components/login/phone-input';
-import HeaderLogin from '../../../../components/login/header-login';
+import PhoneInput from '../../../../components/login/h5/phone-input';
+import HeaderLogin from '../../../../components/login/h5/header-login';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 import { BAND_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/common-login-store';
 
