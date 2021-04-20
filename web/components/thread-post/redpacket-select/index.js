@@ -5,28 +5,28 @@
  * @prop {cancle} object 取消事件
  * @prop {confirm} object 确认事件，输出红包对象
  */
-import React, { memo, useState, useEffect } from 'react'; //性能优化的
-import { Popup, Card, Radio, Button, Input } from '@discuzq/design'; //原来就有的封装
-import styles from './index.module.scss'; //私有样式
+import React, { memo, useState, useEffect } from 'react'; // 性能优化的
+import { Popup, Card, Radio, Button, Input } from '@discuzq/design'; // 原来就有的封装
+import styles from './index.module.scss'; // 私有样式
 
-import PropTypes from 'prop-types'; //类型拦截
+import PropTypes from 'prop-types'; // 类型拦截
 
 const RedpacketSelect = ({ visible, data, cancle, confirm }) => {
   const [rule, setRule] = useState(1); // 0-定额 1-随机
   const [mold, setmold] = useState(0); // 0-回复 1-集赞
   const [money, setMoney] = useState(0); // 金额
   const [num, setNum] = useState(1); // 红包个数
-  const [likenum, setLikenum] = useState(1); //集赞数
+  const [likenum, setLikenum] = useState(1); // 集赞数
 
   useEffect(() => {
-    if (data != undefined && Object.keys(data).length > 0) {
+    if (data !== undefined && Object.keys(data).length > 0) {
       setRule(data.rule);
-      setmold(data.mold)
-      setMoney(data.money)
-      setNum(data.num)
-      setLikenum(data.likenum)
+      setmold(data.mold);
+      setMoney(data.money);
+      setNum(data.num);
+      setLikenum(data.likenum);
     }
-  }, [])
+  }, []);
 
   const selectRedpacket = () => {
     // 校验红包选择情况
@@ -66,10 +66,7 @@ const RedpacketSelect = ({ visible, data, cancle, confirm }) => {
             <Input
               mode="number"
               value={money}
-              onChange={(e) => setMoney(+e.target.value)}
-              onEnter={(e) => { }}
-              onFocus={(e) => { }}
-              onBlur={(e) => { }}
+              onChange={e => setMoney(+e.target.value)}
             />
             元
         </div>
@@ -82,10 +79,7 @@ const RedpacketSelect = ({ visible, data, cancle, confirm }) => {
               mode="number"
               value={num}
               placeholder="个数"
-              onChange={(e) => setNum(+e.target.value)}
-              onEnter={(e) => { }}
-              onFocus={(e) => { }}
-              onBlur={(e) => { }}
+              onChange={e => setNum(+e.target.value)}
             />
             个
         </div>
@@ -106,15 +100,12 @@ const RedpacketSelect = ({ visible, data, cancle, confirm }) => {
           </div>
         </Card>
         {/* 集赞数 */}
-        {mold === 1 &&
-          <div className={styles.likenum}>
+        {mold === 1
+          && <div className={styles.likenum}>
             <Input
               mode="number"
               value={likenum}
-              onChange={(e) => setLikenum(+e.target.value)}
-              onEnter={(e) => { }}
-              onFocus={(e) => { }}
-              onBlur={(e) => { }}
+              onChange={e => setLikenum(+e.target.value)}
             />
             个
           </div>
@@ -132,9 +123,9 @@ const RedpacketSelect = ({ visible, data, cancle, confirm }) => {
 };
 
 RedpacketSelect.propTypes = {
-  visible: PropTypes.bool.isRequired,//限定visible的类型为bool,且是必传的
-  cancle: PropTypes.func.isRequired, //限定cancle的类型为functon,且是必传的
-  confirm: PropTypes.func.isRequired, //限定confirm的类型为functon,且是必传的
+  visible: PropTypes.bool.isRequired, // 限定visible的类型为bool,且是必传的
+  cancel: PropTypes.func.isRequired, // 限定cancle的类型为functon,且是必传的
+  confirm: PropTypes.func.isRequired, // 限定confirm的类型为functon,且是必传的
 };
 
 // 设置props默认类型
