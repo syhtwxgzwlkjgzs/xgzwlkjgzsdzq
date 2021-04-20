@@ -14,8 +14,8 @@ export const LOADING_TOTAL_TYPE = {
 export const ATTACHMENT_TYPE = {
   file: 0, // 附件
   image: 1, // 图片
-  audio: 2, // 语音
-  video: 3, // 视频
+  audio: 1, // 语音
+  video: 1, // 视频
   message: 4, // 消息图片
   answer: 5, // 文档图片
 };
@@ -37,3 +37,26 @@ export const THREAD_TYPE = {
   file: 110, // 附件
   qaImage: 111, // 问答图片
 };
+
+// 图片类型
+// https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types
+export const ACCEPT_IMAGE_TYPES = [
+  'image/apng',
+  'image/bmp',
+  'image/gif',
+  'image/jpeg',
+  'image/pjpeg',
+  'image/png',
+  'image/svg+xml',
+  'image/tiff',
+  'image/webp',
+  'image/x-icon',
+  'image/vnd.microsoft.icon',
+  'image/*',
+];
+
+export const ACCEPT_VIDEO_TYPES = [
+  'video/mp4',
+  'video/x-m4v',
+  'video/*',
+];
