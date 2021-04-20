@@ -205,8 +205,7 @@ class ThreadCreate extends React.Component {
 
   // 暂时在这里处理，后期如果有多个穿插的时候再做其它处理
   formatContextIndex() {
-    const { imageCurrentData, videoFile, fileCurrentData } = this.state;
-    console.log(imageCurrentData, videoFile);
+    const { imageCurrentData, videoFile, fileCurrentData, productData } = this.state;
     const imageIds = Object.values(imageCurrentData).map(item => item.id);
     const fileIds = Object.values(fileCurrentData).map(item => item.id);
     const videoId = videoFile.id;
@@ -227,6 +226,12 @@ class ThreadCreate extends React.Component {
       contentIndex[THREAD_TYPE.file] = {
         tomId: THREAD_TYPE.file,
         body: { fileIds },
+      };
+    }
+    if (productData.id) {
+      contentIndex[THREAD_TYPE.goods] = {
+        tomId: THREAD_TYPE.goods,
+        body: { goodId: productData.id },
       };
     }
     return contentIndex;
