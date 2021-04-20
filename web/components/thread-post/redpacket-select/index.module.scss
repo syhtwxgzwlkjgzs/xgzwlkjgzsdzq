@@ -1,46 +1,12 @@
-:global {
-  .dzq-popup {
-    height: 100vh;
-    .dzq-popup__overlay {
-      background-color: #fff;
-      z-index: 1000;
-    }
-  }
-
-  .dzq-card__body {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .dzq-checkbox-wrap {
-    -webkit-tap-highlight-color: transparent;
-    .dzq-checkbox {
-      border: 1px solid #eee;
-      border-radius: 5px !important;
-      &:after {
-        border: none !important;
-      }
-    }
-    .dzq-checkbox__label.is-checked {
-      color: #0b0b37;
-    }
-  }
-
-  .dzq-input {
-    display: inline-block;
-    margin-right: 3px;
-    width: 80px;
-    .dzq-input__inner {
-      border: none;
-      padding: 0;
-      text-align: right;
-      padding-right: 4px;
-    }
-  }
-}
+@import '@common/styles/index.scss';
 
 .redpacket-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
   height: 100vh;
+  background-color: #fff;
   .line-box {
     display: flex;
     justify-content: space-between;
@@ -52,50 +18,59 @@
     border-bottom: 1px solid #eee;
     font-size: 14px;
   }
+  :global {
+    .dzq-card__body {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .dzq-checkbox-wrap {
+      -webkit-tap-highlight-color: transparent;
+      .dzq-checkbox {
+        border: 1px solid #eee;
+        border-radius: 5px !important;
+        &:after {
+          border: none !important;
+        }
+      }
+      .dzq-checkbox__label.is-checked {
+        color: #0b0b37;
+      }
+    }
+
+    .dzq-input {
+      display: inline-block;
+      margin-right: 3px;
+      width: rem(80);
+      .dzq-input__inner {
+        border: none;
+        padding: 0;
+        text-align: right;
+        padding-right: 4px;
+      }
+    }
+  }
 }
 
 .likenum {
-  margin-left: 265px;
-  text-align: center;
-  background-color: white;
-  margin-top: 6px;
-  border-bottom: 1px solid #eee;
+  padding: 0 rem(16);
+  display: flex;
+  flex-direction: row-reverse;
 }
 .btn {
   position: absolute;
   bottom: 0;
   display: flex;
-  width: 94%;
-  height: 53px;
+  width: rem(343);
+  height: 52px;
   border-top: 1px solid #eee;
-  padding-top: 8px;
-  padding-right: 3%;
-  padding-left: 3%;
-  line-height: 53px;
+  padding: 0 rem(16);
   justify-content: space-between;
-  text-align: center;
-  .btn-one {
-    text-align: center;
-    width: 166px;
-    height: 44px;
-    color: #333;
-    background: #eee;
-    border: none;
-    &:hover {
-      background-color: #2469f6;
-      color: white;
-    }
-  }
-  .btn-two {
-    text-align: center;
-    width: 166px;
-    height: 44px;
-    color: #333;
-    background: #eee;
-    border: none;
-    &:hover {
-      background-color: #2469f6;
-      color: white;
+  align-items: center;
+  :global {
+    .dzq-button {
+      width: rem(166);
+      height: 42px;
     }
   }
 }

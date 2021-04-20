@@ -207,7 +207,7 @@ class ThreadCreate extends React.Component {
 
   // 暂时在这里处理，后期如果有多个穿插的时候再做其它处理
   formatContextIndex() {
-    const { imageCurrentData, videoFile, fileCurrentData, productData, audioData } = this.state;
+    const { imageCurrentData, videoFile, fileCurrentData, productData, audioData, redpacketSelectData } = this.state;
     const imageIds = Object.values(imageCurrentData).map(item => item.id);
     const docIds = Object.values(fileCurrentData).map(item => item.id);
     const videoId = videoFile.id;
@@ -240,6 +240,13 @@ class ThreadCreate extends React.Component {
       contentIndex[THREAD_TYPE.voice] = {
         tomId: THREAD_TYPE.voice,
         body: { audioId: audioData.id },
+      };
+    }
+    // TODO:需要支付，缺少 orderId
+    if (redpacketSelectData.price) {
+      contentIndex[THREAD_TYPE.redPacket] = {
+        tomId: THREAD_TYPE.redPacket,
+        body: { ...redpacketSelectData },
       };
     }
     return contentIndex;
@@ -417,11 +424,11 @@ class ThreadCreate extends React.Component {
             clickTopic={val => this.setState({ topic: val })}
           />
         )}
+        {/* 插入红包 */}
         {redpacketSelectShow && (
           <RedpacketSelect
-            visible={redpacketSelectShow}
             cancel={() => this.setState({ redpacketSelectShow: false })}
-            confirm={data => console.log(data)}
+            confirm={data => this.setState({ redpacketSelectData: data })}
           />
         )}
         {/* 因为编辑器的数据暂时保存在state，跳转新路由会使数据丢失，所以先这样渲染商品选择页面，此时商品选择页面左上角的返回按钮或移动端滑动返回不可用，待优化 */}
