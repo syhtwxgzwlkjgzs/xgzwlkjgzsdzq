@@ -2,10 +2,10 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './index.module.scss';
-import { Input, Button, Toast } from '@discuzq/design';
+import { Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import HeaderLogin from '@common/module/h5/HeaderLogin';
-import { h5WechatCodeLogin } from '@server';
+import { usernameAutoBind } from '@server';
 
 
 @inject('site')
@@ -16,18 +16,18 @@ class WXSelectH5Page extends React.Component {
   render() {
     // console.log(this.props);
     const { router } = this.props;
-    const { code, sessionId, sessionToken, state } = router.query;
+    const { code, sessionId, sessionToken,nickname } = router.query;
     console.log(code, sessionId, sessionToken);
     return (
       <div className={layout.container}>
         <div>
-          {code}
+          code:{code}
         </div>
         <div>
-          {sessionId}
+          sid: {sessionId}
         </div>
         <div>
-        {sessionToken}
+        sst:{sessionToken}
         </div>
           <HeaderLogin/>
           <div className={layout.content}>
@@ -35,23 +35,19 @@ class WXSelectH5Page extends React.Component {
               <div className={layout.tips}>
               微信用户
               <img src="/user.png" alt=""/>
-              小虫，请选择您要进行的操作
+                {nickname}，请选择您要进行的操作
               </div>
               <Button className={layout.button} type="primary" onClick={async () => {
                 try {
-                  const res = await h5WechatCodeLogin({
+                  const res = await usernameAutoBind({
                     timeout: 10000,
                     params: {
-                      code,
-                      sessionId,
                       sessionToken,
-                      state,
                     } });
                   Toast.success({
                     content: res.code + res.msg,
                   });
                   if (res.code === 0) {
-                    this.qrCode = res.data.base64Img;
                     return;
                   }
                   throw {
