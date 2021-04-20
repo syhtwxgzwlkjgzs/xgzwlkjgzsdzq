@@ -176,33 +176,54 @@ class RenderCommentList extends React.Component {
     }
   }
   // 点赞
-  async likeClick(type) {
-    if (type === '1') {
-      const params = {
-        id: 1,
-        liked: true,
-      };
-      await this.service.comment.updateLiked(params);
-      Toast.success({
-        content: '帖子评论的点赞',
-      });
-    } else {
-      Toast.success({
-        content: '评论回复的点赞',
+  async likeClick(type, data) {
+    if (!data.id) return;
+
+    const params = {
+      id: data.id,
+      isLiked: !data.isLiked,
+    };
+    const { success, msg } = await this.props.service.comment.updateLiked(params);
+    if (!success) {
+      Toast.error({
+        content: msg,
       });
     }
+
+    // if (type === '1') {
+    //   Toast.loading({
+    //     content: '帖子评论的点赞',
+    //   });
+    // } else {
+    //   Toast.success({
+    //     content: '评论回复的点赞',
+    //   });
+    // }
   }
   // 删除
-  deleteClick(type) {
-    if (type === '1') {
-      Toast.success({
-        content: '帖子评论的删除',
-      });
-    } else {
-      Toast.success({
-        content: '评论回复的删除',
+  async deleteClick(type, data) {
+    if (!data.id) return;
+
+    const params = {
+      id: data.id,
+      isLiked: !data.isLiked,
+    };
+    const { success, msg } = await this.props.service.comment.updateLiked(params);
+    if (!success) {
+      Toast.error({
+        content: msg,
       });
     }
+
+    // if (type === '1') {
+    //   Toast.success({
+    //     content: '帖子评论的删除',
+    //   });
+    // } else {
+    //   Toast.success({
+    //     content: '评论回复的删除',
+    //   });
+    // }
   }
   // 回复
   replyClick(type) {
@@ -247,7 +268,7 @@ class RenderCommentList extends React.Component {
                     data={val}
                     key={val.id}
                     avatarClick={type => this.avatarClick.bind(this, type)}
-                    likeClick={type => this.likeClick.bind(this, type)}
+                    likeClick={type => this.likeClick.bind(this, type, val)}
                     replyClick={type => this.replyClick.bind(this, type)}
                     deleteClick={type => this.deleteClick.bind(this, type)}
                     isShowOne={true}>
@@ -271,6 +292,7 @@ class RenderCommentList extends React.Component {
 @inject('site')
 @inject('user')
 @inject('thread')
+@inject('comment')
 @observer
 class ThreadH5Page extends React.Component {
   constructor(props) {
@@ -372,7 +394,7 @@ class ThreadH5Page extends React.Component {
       id,
       page: this.page,
       perPage: this.perPage,
-      sort: this.commentSort ? 'createdAt' : '-createdAt',
+      sort: this.commentSort ? '-createdAt' : 'createdAt',
     };
 
     const { success, msg } = await this.service.thread.loadCommentList(params);
@@ -558,7 +580,7 @@ class ThreadH5Page extends React.Component {
               isCommentReady
                 ? (
                   <Fragment>
-                    <RenderCommentList store={threadStore} sort={flag => this.onSortChange(flag)}></RenderCommentList>
+                    <RenderCommentList store={ threadStore } service={this.service} sort={flag => this.onSortChange(flag)}></RenderCommentList>
                     {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
                     {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
                   </Fragment>

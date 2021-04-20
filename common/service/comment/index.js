@@ -137,12 +137,17 @@ export default ({ comment: CommentStore, thread: ThreadStore }) => ({
 
     const requestParams = {
       pid: id,
-      isLiked: !!isLiked,
+      data: {
+        attributes: {
+          isLiked,
+        },
+      },
     };
     const res = await updateComment({ data: requestParams });
 
     if (res?.data && res.code === 0) {
-      CommentStore.setCommentDetailField('isLiked', !!isLiked);
+      // TODO:是否还要更新评论详情页
+      // CommentStore && CommentStore.setCommentDetailField('isLiked', !!isLiked);
 
       // 更新评论列表的单项
       ThreadStore.setCommentListDetailField(id, 'isLiked', !!isLiked);
