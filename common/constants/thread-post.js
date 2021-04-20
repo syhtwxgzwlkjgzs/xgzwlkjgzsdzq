@@ -66,5 +66,9 @@ export const ACCEPT_FILE_TYPES = [
   '.zip',
   '.doc',
   '.ppt',
-  '.pdf'
-]
+  '.pdf',
+  '.docx',
+  '.xls',
+  '.rar',
+  '.txt',
+];

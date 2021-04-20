@@ -39,6 +39,7 @@ class ThreadCreate extends React.Component {
       emoji: {},
       imageUploadShow: false,
       imageCurrentData: {}, // 上传成功的图片
+      fileCurrentData: {}, // 上传成功的附件
       videoFile: {}, // 上传功能的视频
       categoryChooseShow: false,
       categoryChoose: {
@@ -151,21 +152,25 @@ class ThreadCreate extends React.Component {
     else this.setState({ rewardQaShow: false });
   };
 
-  handleImageUploadChange = (fileList) => {
-    const { imageCurrentData } = this.state;
+  handleUploadChange = (fileList, type) => {
+    const { imageCurrentData, fileCurrentData } = this.state;
     const changeData = {};
     (fileList || []).map((item) => {
-      if (imageCurrentData[item.uid]) changeData[item.uid] = imageCurrentData[item.uid];
+      let tmp = imageCurrentData[item.uid];
+      if (type === THREAD_TYPE.file) tmp = fileCurrentData[item.uid];
+      if (tmp) changeData[item.uid] = tmp;
       return item;
     });
-    this.setState({ imageCurrentData: changeData });
+    if (type === THREAD_TYPE.image) this.setState({ imageCurrentData: changeData });
+    if (type === THREAD_TYPE.file) this.setState({ fileCurrentData: changeData });
   };
 
-  handleImageUploadComplete = (ret, file) => {
+  handleUploadComplete = (ret, file, type) => {
     const { uid } = file;
     const { data } = ret;
-    const { imageCurrentData } = this.state;
-    imageCurrentData[uid] = data;
+    const { imageCurrentData, fileCurrentData } = this.state;
+    if (type === THREAD_TYPE.image) imageCurrentData[uid] = data;
+    if (type === THREAD_TYPE.file) fileCurrentData[uid] = data;
     this.setState({ imageCurrentData });
   }
 
@@ -173,7 +178,7 @@ class ThreadCreate extends React.Component {
     console.log(fileList, item);
   }
 
-  handleUploadComplete = (ret, file, item) => {
+  handleVideoUploadComplete = (ret, file, item) => {
     // 上传视频没有通
     console.log(ret, file, item);
     this.setState({ videoFile: file.originFileObj });
@@ -200,9 +205,10 @@ class ThreadCreate extends React.Component {
 
   // 暂时在这里处理，后期如果有多个穿插的时候再做其它处理
   formatContextIndex() {
-    const { imageCurrentData, videoFile } = this.state;
+    const { imageCurrentData, videoFile, fileCurrentData } = this.state;
     console.log(imageCurrentData, videoFile);
     const imageIds = Object.values(imageCurrentData).map(item => item.id);
+    const fileIds = Object.values(fileCurrentData).map(item => item.id);
     const videoId = videoFile.id;
     const contentIndex = {};
     if (imageIds.length > 0) {
@@ -215,6 +221,12 @@ class ThreadCreate extends React.Component {
       contentIndex[THREAD_TYPE.video] = {
         tomId: THREAD_TYPE.video,
         body: { videoId },
+      };
+    }
+    if (fileIds.length > 0) {
+      contentIndex[THREAD_TYPE.file] = {
+        tomId: THREAD_TYPE.file,
+        body: { fileIds },
       };
     }
     return contentIndex;
@@ -275,8 +287,10 @@ class ThreadCreate extends React.Component {
       audioSrc,
       rewardQaShow,
       rewardQaData,
+      fileCurrentData,
     } = this.state;
     const images = Object.keys(imageCurrentData);
+    const files = Object.keys(fileCurrentData);
     const category = (index.categories && index.categories.slice()) || [];
     const { value, times } = rewardQaData;
 
@@ -333,8 +347,8 @@ class ThreadCreate extends React.Component {
           {(Boolean(audioSrc)) && (<Audio src={audioSrc} />)}
           {(imageUploadShow || images.length > 0) && (
             <ImageUpload
-              onChange={this.handleImageUploadChange}
-              onComplete={this.handleImageUploadComplete}
+              onChange={fileList => this.handleUploadChange(fileList, THREAD_TYPE.image)}
+              onComplete={(ret, file) => this.handleUploadComplete(ret, file, THREAD_TYPE.image)}
             />
           )}
 
@@ -344,10 +358,10 @@ class ThreadCreate extends React.Component {
           )}
 
           {/* 附件上传组件 */}
-          {(fileUploadShow) && (
+          {(fileUploadShow || files.length > 0) && (
             <FileUpload
-              onChange={this.handleImageUploadChange}
-              onComplete={this.handleImageUploadComplete}
+              onChange={fileList => this.handleUploadChange(fileList, THREAD_TYPE.file)}
+              onComplete={(ret, file) => this.handleUploadComplete(ret, file, THREAD_TYPE.file)}
             />
           )}
 
@@ -380,7 +394,7 @@ class ThreadCreate extends React.Component {
           <AttachmentToolbar
             onAttachClick={this.handleAttachClick}
             onUploadChange={this.handleUploadChange}
-            onUploadComplete={this.handleUploadComplete}
+            onUploadComplete={this.handleVideoUploadComplete}
             category={<ToolsCategory categoryChoose={categoryChoose} onClick={this.handleCategoryClick} />}
           />
           {/* 默认的操作栏 */}
