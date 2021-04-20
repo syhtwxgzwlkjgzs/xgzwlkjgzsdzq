@@ -207,7 +207,7 @@ class ThreadCreate extends React.Component {
 
   // 暂时在这里处理，后期如果有多个穿插的时候再做其它处理
   formatContextIndex() {
-    const { imageCurrentData, videoFile, fileCurrentData, productData, audioData, redpacketSelectData } = this.state;
+    const { imageCurrentData, videoFile, fileCurrentData, productData, audioData, redpacketSelectData, rewardQaData } = this.state;
     const imageIds = Object.values(imageCurrentData).map(item => item.id);
     const docIds = Object.values(fileCurrentData).map(item => item.id);
     const videoId = videoFile.id;
@@ -247,6 +247,13 @@ class ThreadCreate extends React.Component {
       contentIndex[THREAD_TYPE.redPacket] = {
         tomId: THREAD_TYPE.redPacket,
         body: { ...redpacketSelectData },
+      };
+    }
+    // TODO:需要支付，缺少 orderId
+    if (rewardQaData.times) {
+      contentIndex[THREAD_TYPE.qa] = {
+        tomId: THREAD_TYPE.qa,
+        body: { expiredAt: rewardQaData.times, price: rewardQaData.value, type: 0 },
       };
     }
     return contentIndex;
