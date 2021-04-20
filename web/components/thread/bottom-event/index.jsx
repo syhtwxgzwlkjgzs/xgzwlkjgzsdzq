@@ -24,7 +24,7 @@ const Index = ({
 }) => {
   const postList = [
     {
-      icom: 'LikeOutlined',
+      icon: 'LikeOutlined',
       name: '赞',
       event: onPraise,
     },
@@ -41,21 +41,21 @@ const Index = ({
   ];
 
   return (
-    <div >
+    <div>
       <div className={styles.user}>
-      <div className={styles.userImg}>
-        <div className={styles.portrait}>
-          <Tip imgs={userImgs}></Tip>
+        {userImgs.length !== 0 && <div className={styles.userImg}>
+          <div className={styles.portrait}>
+            <Tip imgs={userImgs}></Tip>
+          </div>
+          <p className={styles.numText}>
+            {wholeNum}
+          </p>
+        </div>}
+        <div className={styles.commentSharing}>
+          {comment > 0 && <p className={styles.commentNum}>{`${comment}条评论`}</p>}
+          {comment > 0 && sharing > 0 && <p className={styles.division}>·</p>}
+          {sharing > 0 && <p className={styles.commentNum}>{`${sharing}次分享`}</p>}
         </div>
-        <p className={styles.numText}>
-          {wholeNum}
-        </p>
-      </div>
-      <div className={styles.commentSharing}>
-        {comment > 0 && <p className={styles.commentNum}>{`${comment}条评论`}</p>}
-        {comment > 0 && sharing > 0 && <p className={styles.division}>·</p>}
-        {sharing > 0 && <p className={styles.commentNum}>{`${sharing}次分享`}</p>}
-      </div>
       </div>
 
 

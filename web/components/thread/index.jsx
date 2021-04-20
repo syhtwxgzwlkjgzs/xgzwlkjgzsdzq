@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { withRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { Button } from '@discuzq/design';
@@ -50,55 +50,100 @@ class Index extends React.Component {
       console.log('发起支付流程');
     }
 
-    // 帖子属性内容
-    renderThreadContent = () => (
-      <div className={styles.wrapper}>
-          <PostContent content={dataSource.content} onPay={this.onPay} />
-          <div className={styles.content}>
-            <VideoPlay width={378} height={224} url={dataSource.video.src} />
-            <ImageContent imgData={dataSource.imgData} />
-            <RewardQuestion
-              content={dataSource.rewardQuestion.content}
-              money={dataSource.rewardQuestion.money}
-              onClick={this.onPay}
-            />
-            <RedPacket content={dataSource.redPacket.content} onClick={this.onPay} />
-            <ProductItem
-                image={dataSource.goods.image}
-                amount={dataSource.goods.amount}
-                title={dataSource.goods.title}
-            />
-            <AudioPlay url={dataSource.audio.src} />
-            <AttachmentView attachments={dataSource.attachments} onClick={this.onPay} />
+    // 处理附件的数据
+    handleAttachmentData = (data) => {
+      const newData = { text: data.text };
+      const values = Object.values(data.indexes || {});
+      values.forEach((item) => {
+        const { tomId } = item;
+        if (tomId === '101') { // 图片
+          newData.imageData = item.body;
+        } else if (tomId === '102') { // 音频
+          newData.audioData = item.body;
+        } else if (tomId === '103') { // 视频
+          newData.videoData = item.body;
+        } else if (tomId === '104') { // 商品
+          newData.goodsData = item.body;
+        } else if (tomId === '105') { // 问答
+          newData.qaData = item.body;
+        } else if (tomId === '106') { // 红包
+          newData.redPacketData = item.body;
+        } else if (tomId === '107') { // 悬赏
+          newData.rewardData = item.body;
+        } else if (tomId === '108') { // 附件
+          newData.fileData = item.body;
+        }
+      });
 
-            {/* 附件付费蒙层 */}
-            {
-              this.props.payType === '2' && (
-                <div className={styles.cover}>
-                  <Button className={styles.button} type="primary" onClick={this.onPay}>
-                    <span className={styles.icon}>$</span>
-                    支付{this.props.money}元查看附件内容
-                  </Button>
-                </div>
-              )
-            }
-          </div>
-      </div>
-    )
+      return newData;
+    }
+
+    // 帖子属性内容
+    renderThreadContent = (data) => {
+      const {
+        text,
+        imageData,
+        audioData,
+        videoData,
+        goodsData,
+        redPacketData,
+        rewardData,
+        fileData,
+      } = this.handleAttachmentData(data);
+
+      return (
+        <div className={styles.wrapper}>
+            {text && <PostContent content={text} onPay={this.onPay} />}
+            <div className={styles.content}>
+              {videoData && <VideoPlay width={378} height={224} url={videoData.mediaUrl} />}
+              {imageData && <ImageContent imgData={imageData} />}
+              {rewardData && <RewardQuestion
+                content={rewardData.content || ''}
+                money={rewardData.money}
+                onClick={this.onPay}
+              />}
+              {redPacketData && <RedPacket content={redPacketData.content || ''} onClick={this.onPay} />}
+              {goodsData && <ProductItem
+                  image={goodsData.imagePath}
+                  amount={goodsData.price}
+                  title={goodsData.title}
+              />}
+              {/* {audioData && <AudioPlay url={dataSource.audio.src} />} */}
+              {fileData && <AttachmentView attachments={fileData} onClick={this.onPay} />}
+
+              {/* 附件付费蒙层 */}
+              {
+                this.props.payType === '2' && (
+                  <div className={styles.cover}>
+                    <Button className={styles.button} type="primary" onClick={this.onPay}>
+                      <span className={styles.icon}>$</span>
+                      支付{this.props.money}元查看附件内容
+                    </Button>
+                  </div>
+                )
+              }
+            </div>
+        </div>
+      );
+    }
 
     render() {
-      const { money = '0' } = this.props;
+      const { money = '0', data = dataSource } = this.props;
+      const { title, user = {}, position = {}, likeReward = {}, content = {} } = data;
+
       return (
         <div className={styles.container}>
           <div className={styles.header}>
               <UserInfo
-                  name={dataSource.userInfo.name}
-                  avatar={dataSource.userInfo.avatar}
-                  location={dataSource.userInfo.location}
+                  name={user.userName}
+                  avatar={user.avatar}
+                  location={position.address}
               />
           </div>
 
-          {this.renderThreadContent()}
+          {title && <div className={styles.title}>{title}</div>}
+
+          {this.renderThreadContent(content)}
 
           {money !== '0' && <Button className={styles.button} type="primary" onClick={this.onPay}>
             <span className={styles.icon}>$</span>
@@ -106,10 +151,10 @@ class Index extends React.Component {
           </Button>}
 
           <BottomEvent
-            userImgs={dataSource.bottomEvent.userImgs}
-            wholeNum={dataSource.bottomEvent.wholeNum}
-            comment={dataSource.bottomEvent.comment}
-            sharing={dataSource.bottomEvent.sharing}
+            userImgs={likeReward.users}
+            wholeNum={likeReward.likePayCount}
+            comment={likeReward.comment || 0}
+            sharing={likeReward.shareCount}
             onShare={this.onShare}
             onComment={this.onComment}
             onPraise={this.onPraise}
@@ -124,6 +169,5 @@ Index.propTypes = {
   money: PropTypes.string, // 付费金额
 };
 
-// TODO 此处若是删除HOCFetchSiteData会有hook报错，后期解决
 // eslint-disable-next-line new-cap
-export default withRouter(HOCFetchSiteData(Index));
+export default withRouter(Index);

@@ -1,17 +1,64 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 
-
+/* user */
+.user {
+  height: rem(70);
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-line-color);
+  margin: 0 rem($padding-4n);
+  .left {
+    width: 65%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .right {
+    width: 30%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .image {
+    flex: none;
+    width: rem(38);
+    height: rem(38);
+    object-fit: cover;
+    margin-right: rem($padding-2n);
+    border-radius: 50%;
+    &.empty {
+      background-color: var(--mask-background-color);
+    }
+  }
+  .name {
+    flex: 1;
+    font-size: rem($font-size-primary);
+    line-height: rem($font-line-height-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+  }
+  .group {
+    flex: 1;
+    font-size: rem($font-size-label);
+    line-height: rem($font-line-height-primary);
+    color: var(--color-text-secondary);
+    margin-right: rem($padding-2n);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: right;
+  }
+}
 /* topic */
 .topic {
   padding: rem($padding-2n) rem($padding-4n);
   border-bottom: 1px solid var(--border-line-color);
-  &:first-child {
-    padding-top: 0;
-  }
-  &:last-child {
-    border-bottom: 0;
-  }
   .title {
     font-size: rem($font-size-middle);
     line-height: rem($font-line-height-primary);
@@ -35,7 +82,7 @@
     }
   }
 }
-  
+
 .hr {
   height: rem(10);
   background-color: var(--background-color);

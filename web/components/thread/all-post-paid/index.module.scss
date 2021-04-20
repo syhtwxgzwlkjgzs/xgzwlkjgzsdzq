@@ -1,0 +1,66 @@
+:global {
+  .dzq-card__body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  //   .dzq-checkbox.dzq-checkbox--radio{
+  //     border-radius: 0% !important;
+  //   }
+  .dzq-input {
+    display: inline-block;
+    width: 40px;
+  }
+  .dzq-input__inner {
+    border: none;
+    padding: 0;
+    text-align: center;
+  }
+}
+.toview {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  .toviewone{
+    height: 33px;
+  }
+}
+.redpacket-box {
+  height: 100vh;
+}
+.btn {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  width: 94%;
+  height: 53px;
+  margin-right: 3%;
+  margin-left: 3%;
+  line-height: 53px;
+  justify-content: space-between;
+  text-align: center;
+  .btn-one {
+    text-align: center;
+    width: 166px;
+    height: 44px;
+    color: #333;
+    background: #eee;
+    border: none;
+    &:hover {
+      background-color: #2469f6;
+      color: white;
+    }
+  }
+  .btn-two {
+    text-align: center;
+    width: 166px;
+    height: 44px;
+    color: #333;
+    background: #eee;
+    border: none;
+    &:hover {
+      background-color: #2469f6;
+      color: white;
+    }
+  }
+}

@@ -1,33 +1,92 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { inject, observer } from 'mobx-react';
 import Link from 'next/link';
-import { Button, Upload } from '@discuzq/design';
+import { Button, Upload, Tabs, Popup } from '@discuzq/design';
 import ThreadContent from '@components/thread';
+import HomeHeader from '@components/thread/home-header';
 import styles from './index.module.scss';
-
+import List from './components/list';
+import TopNew from './components/top-news';
+import FilterModalPopup from './components/filter-modal-popup';
+import filterData from './data';
 
 @inject('site')
 @inject('user')
 @inject('index')
 @observer
 class IndexH5Page extends React.Component {
+  state = { visible: false };
+  // 点击更多弹出筛选
+  searchClick = () => {
+    this.setState({
+      visible: true,
+    });
+  }
+  // 关闭筛选框
+  onClose = () => {
+    this.setState({
+      visible: false,
+    });
+  }
   render() {
     const { index, user } = this.props;
+    const { sticks, threads, categories } = index;
+    const HeaderContent = () => {
+        return (
+          <>
+            <HomeHeader/>
+            <div className={styles.homeContent}>
+              <Tabs
+                scrollable={true}
+                type={'primary'}
+                tabBarExtraContent={
+                  <div
+                    style={{
+                      width: 70,
+                      height: '100%',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Button onClick={this.searchClick}>更多</Button>
+                    <FilterModalPopup visible={this.state.visible} onClose={this.onClose} filterData={filterData}></FilterModalPopup>
+                  </div>
+              }
+              >
+                  {categories.map((item, index) => (
+                  <Tabs.TabPanel key={index} id={item.pid} label={item.name}>
+                  </Tabs.TabPanel>
+                  ))}
+              </Tabs>
+            </div>
+            <div className={styles.homeContent}>
+              <TopNew data={sticks}/>
+            </div>
+          </>
+        )
+    }
+    const renderItem = (dataList, rowData) => {
+      return (
+        <div>
+          { dataList.index === 0 && <HeaderContent />}
+          <ThreadContent data={dataList.data[dataList.index]}/>
+        </div>
+      )
+    }
     return (
-      <div>
-        { user.userInfo && <h1>{user.userInfo.username}</h1> }
-        {
-          index.categories ? index.categories.map((item, index) => <h1 key={index}>{item.name}</h1>) : null
-        }
-        <p className={styles.text}>test</p>
-        <Link href='/my/profile'>我的资料</Link>
-        <Link href='/detail'>detauil</Link>
-        <Link href='/user'>user</Link>
-        <Button>Fuck</Button>
-        <ThreadContent />
+      <div className={styles.homeBox}>
+        { threads.pageData.length > 0 ?
+        <List
+          onRefresh={this.onRefresh}
+          refreshing={false}
+          data={threads.pageData}
+          renderItem={renderItem}
+        /> :
+        <HeaderContent />
+       }
       </div>
     );
   }
 }
-
 export default IndexH5Page;

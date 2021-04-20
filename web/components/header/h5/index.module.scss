@@ -5,7 +5,7 @@
     display: block;
     .headerContent{
         display: flex;
-        padding: rem($padding-2n);
+        padding: rem($padding-2n) rem($padding-4n);
         box-sizing: border-box;
         background: var(--color-white);
         position: fixed;
@@ -14,6 +14,7 @@
         width: 100%;
         height: rem(44);
         border-bottom: 1px solid var(--border-line-color);
+        z-index: var(--zindex-too0p);
         .left{
             width: 50%;
             display: block;

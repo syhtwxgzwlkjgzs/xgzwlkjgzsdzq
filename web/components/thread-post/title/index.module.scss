@@ -1,0 +1,26 @@
+@import '@common/styles/index.scss';
+
+.title {
+  display: flex !important;
+  width: rem(343);
+  height: 52px;
+  padding: 0 rem(16);
+  border: none;
+  border-bottom: var(--border-border);
+  align-items: center;
+
+  :global { /* stylelint-disable-line*/
+    .dzq-input__inner {
+      padding: 8px 0;
+      font-size: var(--font-size-large);
+      line-height: var(--font-line-height-small);
+      border: none;
+      color: var(--color-text-primary);
+      text-align: left !important;
+    }
+  }
+}
+
+.is-display{
+  display: none;
+}

@@ -1,0 +1,28 @@
+@import '@common/styles/index.scss';
+.post {
+  max-height: 350px;
+  overflow-y: scroll;
+}
+.position-box {
+  display: flex;
+  height: 45px;
+  padding: 0 rem(16);
+  align-items: center;
+  :global { /* stylelint-disable-line */
+    .dzq-tag {
+      display: flex;
+      font-size: var(--font-size-label);
+      border-radius: 5px;
+      background-color: #e8f0fe;;
+      border-color: #e8f0fe;
+      align-items: center;
+    }
+    .dzq-tag-text {
+      display: inline-block;
+      max-width: rem(280);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}

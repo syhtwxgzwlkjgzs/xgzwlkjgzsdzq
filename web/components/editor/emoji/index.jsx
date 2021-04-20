@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import SwiperCore, { Pagination } from 'swiper';
-import 'swiper/swiper.scss';
-import 'swiper/components/pagination/pagination.scss';
+import Carousel from 'react-multi-carousel';
+// import 'react-multi-carousel/lib/styles.css';
 import styles from './index.module.scss';
 
-SwiperCore.use([Pagination]);
+// SwiperCore.use([Pagination]);
 
 const onePageCount = 35;
-
-// TODO: 暂时这么处理，后台应该返回完整的链接
-const formatEmojiUrl = (url) => {
-  if (/(http|https)/.test(url)) return url;
-  return `https://newdiscuz-dev.dnspod.dev/${url}`;
-};
 
 export default function Emoji(props) {
   const { emojis = [], onClick, show } = props;
@@ -30,26 +22,43 @@ export default function Emoji(props) {
   }, [show]);
 
   if (!visible) return null;
+
+  const responsive = {mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1,
+    slidesToSlide: 1 // optional, default to 1.
+  }};
   return (
-    <Swiper
-      spaceBetween={50}
-      slidesPerView={1}
-      pagination={{ type: 'bullets' }}
-      className={styles['dzq-emoji']}
+    <Carousel
+      /*
+      swipeable={false}
+      draggable={false}
+      */
+      draggable={true}
+      showDots={true}
+      responsive={responsive}
+      deviceType="mobile"
+      ssr={true}
+      infinite={false}
+      containerClass={`first-carousel-container container ${styles['dzq-emoji']}`}
     >
       {page.map((item, index) => (
-          <SwiperSlide className={styles['dzq-emoji__slide']} key={index}>
+        <div className={styles['dzq-emoji__slide']} key={index}>
           {pageCount.map((elem, key) => {
             const curIndex = (index * onePageCount) + key;
             if (curIndex + 1 > emojis.length) return null;
             return <img className={styles['dzq-emoji__icon']}
               key={emojis[curIndex].code}
-              src={formatEmojiUrl(emojis[curIndex].url)}
-              onClick={() => onClick(emojis[curIndex])}
+              src={emojis[curIndex].url}
+              onClick={(e) => {
+                e.stopPropagation();
+                setVisible(false);
+                onClick(emojis[curIndex]);
+              }}
             />;
           })}
-          </SwiperSlide>
+        </div>
       ))}
-    </Swiper>
+    </Carousel>
   );
 }
