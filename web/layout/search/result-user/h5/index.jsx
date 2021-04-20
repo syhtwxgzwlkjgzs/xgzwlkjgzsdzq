@@ -4,6 +4,7 @@ import { withRouter } from 'next/router';
 
 import SearchInput from '.././../../../components/search-input';
 import SearchUsers from './components/search-users';
+import Header from '@components/header';
 
 import styles from './index.module.scss';
 
@@ -17,40 +18,73 @@ class SearchResultUserH5Page extends React.Component {
     const keyword = this.props.router.query.keyword || '';
 
     this.state = {
+      data: getData(15, keyword),
       keyword,
+      refreshing: false,
     };
-
-    // 进入页面时搜索
-    this.searchData(keyword);
   }
 
+  // data
+  refreshData = () => {
+    const { keyword } = this.state;
+
+    this.setState((prevState) => {
+      if (prevState.refreshing) {
+        return prevState;
+      }
+      setTimeout(() => {
+        this.setState({
+          data: getData(15, keyword),
+          refreshing: false,
+        });
+      }, 1000);
+      return { refreshing: true };
+    });
+  };
+
+  fetchMoreData = () => {
+    const { keyword } = this.state;
+    setTimeout(() => {
+      this.setState(({ data }) => ({
+        data: data.concat(getData(15, keyword, data.length)),
+      }));
+    }, 1000);
+  };
+
+  // event
   onCancel = () => {
     this.props.router.back();
   };
 
-  searchData = keyword => console.log('search', keyword);
-
   onSearch = (keyword) => {
     this.setState({ keyword });
-    this.searchData(keyword);
+    this.refreshData(keyword);
   };
 
   onUserClick = data => console.log('user click', data);
 
   render() {
-    const { keyword } = this.state;
+    const { keyword, refreshing } = this.state;
     const { users } = this.props.search;
     const { pageData } = users || { pageData: [] };
-
     return (
       <div className={styles.page}>
+        <Header />
         <div className={styles.searchInput}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
         </div>
-        <SearchUsers data={pageData} onItemClick={this.onUserClick} />
+        <SearchUsers
+          data={pageData}
+          refreshing={refreshing}
+          onRefresh={this.refreshData}
+          onFetchMore={this.fetchMoreData}
+          onItemClick={this.onUserClick}
+        />
       </div>
     );
   }
 }
+
+const getData = () => [];
 
 export default withRouter(SearchResultUserH5Page);

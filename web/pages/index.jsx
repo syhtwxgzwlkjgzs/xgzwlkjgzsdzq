@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/index/h5';
 import IndexPCPage from '@layout/index/pc';
 import { readStickList, readCategories } from '@server';
+import { sticks, categories, threads } from './data';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 // import HOCWithLogin from '@common/middleware/HOCWithLogin';
@@ -11,36 +12,39 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @inject('index')
 @observer
 class Index extends React.Component {
-  static async getInitialProps(ctx) {
-    const categories = await readCategories({}, ctx);
-    const sticks = await readStickList({}, ctx);
-    return {
-      serverIndex: {
-        categories: categories.Data,
-        sticks: sticks.Data,
-      },
-    };
-  }
+  // static async getInitialProps(ctx) {
+  //   const categories = await readCategories({}, ctx);
+  //   const sticks = await readStickList({}, ctx);
+  //   return {
+  //     serverIndex: {
+  //       categories: categories.Data,
+  //       sticks: sticks.Data,
+  //     },
+  //   };
+  // }
 
   constructor(props) {
     super(props);
     const { serverIndex, index } = this.props;
     // 初始化数据到store中
-    serverIndex && serverIndex.categories && index.setCategories(serverIndex.categories);
-    serverIndex && serverIndex.sticks && index.setSticks(serverIndex.sticks);
+    // serverIndex && serverIndex.categories && index.setCategories(serverIndex.categories);
+    // serverIndex && serverIndex.sticks && index.setSticks(serverIndex.sticks);
+    index.setCategories(categories);
+    index.setSticks(sticks);
+    index.setThreads(threads);
   }
 
-  async componentDidMount() {
-    const { serverIndex, index } = this.props;
-    // 当服务器无法获取数据时，触发浏览器渲染
-    if (!index.categories && (!serverIndex || !serverIndex.categories)) {
-      const categories = await readCategories({});
-      const sticks = await readStickList({});
+  // async componentDidMount() {
+  //   const { serverIndex, index } = this.props;
+  //   // 当服务器无法获取数据时，触发浏览器渲染
+  //   if (!index.categories && (!serverIndex || !serverIndex.categories)) {
+  //     const categories = await readCategories({});
+  //     const sticks = await readStickList({});
 
-      index.setCategories(categories.Data);
-      index.setSticks(sticks.Data);
-    }
-  }
+  //     index.setCategories(categories.Data);
+  //     index.setSticks(sticks.Data);
+  //   }
+  // }
 
   render() {
     const { site } = this.props;
