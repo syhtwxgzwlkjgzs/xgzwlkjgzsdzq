@@ -2,6 +2,7 @@ import { observable, action, computed } from 'mobx';
 import { smsSend, smsLogin } from '@server';
 import { get } from '../../utils/get';
 import setAccessToken from '../../utils/set-access-token';
+import { BAND_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/common-login-store';
 
 export const MOBILE_LOGIN_STORE_ERRORS = {
   MOBILE_VERIFY_ERROR: {
@@ -36,33 +37,10 @@ export const MOBILE_LOGIN_STORE_ERRORS = {
     Code: 'mbl_0006',
     Message: '需要补充昵称和附加信息',
   },
-  BAND_USER: {
-    Code: 'mbl_0007',
-    Message: '用户被禁用',
-  },
-  REVIEWING: {
-    Code: 'mbl_0008',
-    Message: '审核中',
-  },
-  REVIEW_REJECT: {
-    Code: 'mbl_0009',
-    Message: '审核拒绝',
-  },
-  REVIEW_IGNORE: {
-    Code: 'mbl_0010',
-    Message: '审核忽略',
-  },
   NEED_BIND_WECHAT: {
     Code: 8000,
     Message: '需要绑定微信',
   },
-};
-
-const USER_STATUS_MAP = {
-  1: MOBILE_LOGIN_STORE_ERRORS.BAND_USER,
-  2: MOBILE_LOGIN_STORE_ERRORS.REVIEWING,
-  3: MOBILE_LOGIN_STORE_ERRORS.REVIEW_REJECT,
-  4: MOBILE_LOGIN_STORE_ERRORS.REVIEW_IGNORE,
 };
 
 const NEED_BIND_TOKEN_FLAG = 8000;
@@ -193,13 +171,17 @@ export default class mobileLoginStore {
     }
 
     /**
-     * 检查用户状态，用来跳转状态页面
+     * 检查用户是否处于审核状态，用来跳转状态页面
      * @param {*} smsLoginResp
      */
     checkUserStatus = (smsLoginResp) => {
-      const userStatus = get(smsLoginResp, 'userStatus');
-      if (USER_STATUS_MAP[userStatus]) {
-        throw USER_STATUS_MAP[userStatus];
+      const rejectReason = get(smsLoginResp, 'data.rejectReason', '');
+      const status = get(smsLoginResp, 'data.userStatus', 0);
+      if (status ===  REVIEWING) {
+        throw {
+          Code: status,
+          Message: rejectReason,
+        };
       }
       return;
     }
@@ -235,6 +217,13 @@ export default class mobileLoginStore {
           throw {
             ...MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT,
             sessionToken: get(smsLoginResp, 'data.sessionToken'),
+          };
+        }
+
+        if (smsLoginResp.code === BAND_USER || smsLoginResp.code === REVIEW_REJECT) {
+          throw {
+            Code: smsLoginResp.code,
+            Message: get(smsLoginResp, 'data.rejectReason', ''),
           };
         }
 

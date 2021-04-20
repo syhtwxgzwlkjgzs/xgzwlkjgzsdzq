@@ -4,9 +4,11 @@ import { withRouter } from 'next/router';
 import { Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
-import PhoneInput from '@common/module/h5/PhoneInput/index';
-import HeaderLogin from '@common/module/h5/HeaderLogin';
-import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
+import PhoneInput from '../../../../components/login/phone-input';
+import HeaderLogin from '../../../../components/login/header-login';
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
+import { BAND_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/common-login-store';
+
 
 @inject('site')
 @inject('user')
@@ -66,6 +68,13 @@ class LoginPhoneH5Page extends React.Component {
         this.props.commonLogin.needToBindWechat = true;
         this.props.commonLogin.sessionToken = e.sessionToken;
         this.props.router.push(`/user/wx-bind-qrcode?session_token=${e.sessionToken}&loginType=phone`);
+        return;
+      }
+
+      // 跳转状态页
+      if (e.Code === BAND_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
+        this.props.commonLogin.setStatusMessage(e.Code, e.Message);
+        this.props.router.push('/user/status');
         return;
       }
 
