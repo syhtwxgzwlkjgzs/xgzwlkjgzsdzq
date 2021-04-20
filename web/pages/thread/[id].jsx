@@ -44,7 +44,7 @@ class Detail extends React.Component {
   async componentDidMount() {
     const { id } = this.props.router.query;
     if (!this.props.serverThread && id) {
-      const res = await readThreadDetail({ params: { pid: Number(id) } });
+      const res = await readThreadDetail({ params: { threadId: Number(id) } });
       if (res.code === 0) {
         this.props.thread.setThreadData(res.data);
       }
@@ -66,11 +66,9 @@ class Detail extends React.Component {
     const { site } = this.props;
     const { platform } = site;
     console.log(platform);
-    // return platform === 'h5' ? <ThreadH5Page /> : <ThreadPCPage />;
-    return platform === 'h5' ? <ThreadH5Page /> : <ThreadH5Page />;
+    return platform === 'h5' ? <ThreadH5Page /> : <ThreadPCPage />;
   }
 }
 
 // eslint-disable-next-line new-cap
-// export default withRouter(HOCFetchSiteData(Detail));
-export default withRouter((Detail));
+export default withRouter(HOCFetchSiteData(Detail));

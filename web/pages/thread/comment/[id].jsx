@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'next/router';
 import { inject } from 'mobx-react';
-import { readThreadDetail } from '@server';
+import { readCommentDetail } from '@server';
 import CommentH5Page from '@layout/thread/comment/h5';
 import CommentPCPage from '@layout/thread/comment/pc';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
@@ -19,7 +19,7 @@ class CommentDetail extends React.Component {
       };
     }
     // 获取评论数据
-    const res = await readThreadDetail({ params: { pid: id } });
+    const res = await readCommentDetail({ params: { pid: id } });
     return {
       props: {
         serverData: res.data,
@@ -38,7 +38,7 @@ class CommentDetail extends React.Component {
   async componentDidMount() {
     const { id } = this.props.router.query;
     if (!this.props.serverData && id) {
-      const res = await readThreadDetail({ params: { pid: Number(id) } });
+      const res = await readCommentDetail({ params: { pid: Number(id) } });
       this.props.comment.setCommentDetail(res.data);
     }
   }
@@ -46,10 +46,9 @@ class CommentDetail extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
-    return platform === 'h5' ? <CommentH5Page /> : <CommentH5Page />;
+    return platform === 'h5' ? <CommentH5Page /> : <CommentPCPage />;
   }
 }
 
 // eslint-disable-next-line new-cap
-// export default withRouter(HOCFetchSiteData(CommentDetail));
-export default withRouter((CommentDetail));
+export default withRouter(HOCFetchSiteData(CommentDetail));
