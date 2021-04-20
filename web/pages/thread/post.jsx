@@ -8,12 +8,17 @@ import DVditor from '@components/editor';
 // import Upload from '@components/upload';
 import { AttachmentToolbar, DefaultToolbar } from '@components/editor/toolbar';
 import ToolsCategory from '@components/editor/tools/category';
-import Emoji from '@components/editor/emoji';
+// import Emoji from '@components/editor/emoji';
 import ImageUpload from '@components/thread-post/image-upload';
-import { THREAD_TYPE } from '@common/constants/thread-post';
 import { defaultOperation } from '@components/editor/const';
-import { Video } from '@discuzq/design';
+import FileUpload from '@components/thread-post/file-upload';
+import { THREAD_TYPE, ATTACHMENT_TYPE } from '@common/constants/thread-post';
+import { createAttachment } from '@common/server';
+import { Video, Audio, AudioRecord } from '@discuzq/design';
 import ClassifyPopup from '@components/thread-post/classify-popup';
+import ProductSelect from '@components/thread-post/product-select';
+import Product from '@components/thread-post/product';
+import ForTheForm from '@components/thread/for-the-form';
 import styles from './post.module.scss';
 import { createThread } from '@common/server';
 import Title from '@components/thread-post/title';
@@ -21,7 +26,6 @@ import Position from '@components/thread-post/position';
 import AtSelect from '@components/thread-post/at-select';
 import TopicSelect from '@components/thread-post/topic-select';
 import { withRouter } from 'next/router';
-
 @inject('threadPost')
 @inject('index')
 @observer
@@ -48,6 +52,23 @@ class ThreadCreate extends React.Component {
       atList: [],
       topicShow: false,
       topic: '',
+      contentIndexed: [],
+      // 显示上传附件交互
+      fileUploadShow: false,
+      // 显示商品链接解析组件
+      productSelectShow: false,
+      // 解析完后显示商品信息
+      productShow: false,
+      // 商品信息
+      productData: {},
+      // 显示录音模块交互
+      audioRecordShow: false,
+      // 语音贴上传成功的语音地址
+      audioSrc: '',
+      // 显示悬赏问答属性设置页面
+      rewardQaShow: false,
+      // 悬赏问答页面数据
+      rewardQaData: {}
     };
   }
   componentDidMount() {
@@ -77,7 +98,28 @@ class ThreadCreate extends React.Component {
       this.setState({ topicShow: true });
     }
     this.setState({ emojiShow: item.id === defaultOperation.emoji });
+
+    if (item.id === defaultOperation.attach) this.setState({ fileUploadShow: true });
+    else this.setState({ fileUploadShow: false });
   };
+
+  // 处理录音完毕后的音频上传
+  handleAudioUpload = async (blob) => {
+    const formData = new FormData();
+    formData.append('file', blob);
+    formData.append('type', ATTACHMENT_TYPE.audio);
+    const res = await createAttachment(formData);
+    const {code, data} = res;
+    if (code === 0) {
+      // 拼接不是很对，联调时和后台对一下，先本地模拟一下
+      // const audioSrc = `/${data.file_path}${data.attachment}`;
+      const audioSrc = window.URL.createObjectURL(blob);
+      this.setState({
+        audioSrc,
+        audioRecordShow: false
+      });
+    }
+  }
 
   handleEmojiClick = (emoji) => {
     this.setState({ emojiShow: false, emoji });
@@ -90,6 +132,15 @@ class ThreadCreate extends React.Component {
   handleAttachClick = (item) => {
     if (item.type === THREAD_TYPE.image) this.setState({ imageUploadShow: true });
     else this.setState({ imageUploadShow: false });
+
+    if (item.type === THREAD_TYPE.goods) this.setState({ productSelectShow: true });
+    else this.setState({ productSelectShow: false });
+
+    if (item.type === THREAD_TYPE.voice) this.setState({ audioRecordShow: true });
+    else this.setState({ audioRecordShow: false });
+
+    if (item.type === THREAD_TYPE.reward) this.setState({ rewardQaShow: true });
+    else this.setState({ rewardQaShow: false });
   };
 
   handleImageUploadChange = (fileList) => {
@@ -201,9 +252,49 @@ class ThreadCreate extends React.Component {
       atList,
       topicShow,
       topic,
+      fileUploadShow,
+      productSelectShow,
+      productShow,
+      productData,
+      audioRecordShow,
+      audioSrc,
+      rewardQaShow,
+      rewardQaData,
     } = this.state;
     const images = Object.keys(imageCurrentData);
     const category = (index.categories && index.categories.slice()) || [];
+    const { value, times } = rewardQaData;
+
+    // 因为编辑器的数据暂时保存在state，跳转新路由会使数据丢失，所以先这样渲染商品选择页面，此时商品选择页面左上角的返回按钮或移动端滑动返回不可用，待优化
+    if (productSelectShow) {
+      return <ProductSelect onAnalyseSuccess={(data) => {
+        this.setState({
+          productSelectShow: false,
+          productShow: true,
+          productData: data
+        });
+      }} />;
+    }
+    // 悬赏问答设置页面，同上
+    if (rewardQaShow) {
+      return (
+        <ForTheForm
+          confirm={(data) => {
+            this.setState({
+              rewardQaData: data,
+              rewardQaShow: false
+            });
+          }}
+          cancel={() => {
+            this.setState({
+              rewardQaShow: false
+            });
+          }}
+          data={rewardQaData}
+        />
+      );
+    }
+
 
     return (
       <>
@@ -215,19 +306,58 @@ class ThreadCreate extends React.Component {
             topic={topic}
             onChange={this.handleVditorChange}
           />
+
+          {/* 录音组件 */}
+          {(audioRecordShow) && (<AudioRecord handleAudioBlob={(blob) => {
+            this.handleAudioUpload(blob);
+          }} />)}
+
+          {/* 语音组件 */}
+          {(Boolean(audioSrc)) && (<Audio src={audioSrc} />)}
           {(imageUploadShow || images.length > 0) && (
             <ImageUpload
               onChange={this.handleImageUploadChange}
               onComplete={this.handleImageUploadComplete}
             />
           )}
+
+          {/* 视频组件 */}
           {(videoFile && videoFile.thumbUrl) && (
             <Video className="dzq-post-video" src={videoFile.thumbUrl} onReady={this.onReady} />
+          )}
+
+          {/* 附件上传组件 */}
+          {(fileUploadShow) && (
+            <FileUpload
+              onChange={this.handleImageUploadChange}
+              onComplete={this.handleImageUploadComplete}
+            />
+          )}
+
+          {/* 商品组件 */}
+          {(productShow) && (
+            <Product
+              good={productData}
+              onDelete={() => {
+                this.setState({
+                  productShow: false,
+                  productData: {}
+                });
+              }}
+            />
           )}
         </div>
         <div className={styles['position-box']}>
           <Position onChange={position => this.setState({ position })} />
         </div>
+
+        {/* 悬赏问答内容标识 */}
+        {(value && times) && (
+          <div className={styles['reward-qa-box']}>
+            <div className={styles['reward-qa-box-content']} onClick={() => {this.setState({ rewardQaShow: true });}}>{`悬赏金额${rewardQaData.value}元\\结束时间${rewardQaData.times}`}</div>
+          </div>
+        )}
+
         {/* 调整了一下结构，因为这里的工具栏需要固定 */}
         <AttachmentToolbar
           onAttachClick={this.handleAttachClick}
@@ -238,7 +368,7 @@ class ThreadCreate extends React.Component {
         {/* 默认的操作栏 */}
         <DefaultToolbar onClick={this.handleDefaultToolbarClick} onSubmit={this.submit}>
           {/* 表情 */}
-          <Emoji show={emojiShow} emojis={threadPost.emojis} onClick={this.handleEmojiClick} />
+          {/* <Emoji show={emojiShow} emojis={threadPost.emojis} onClick={this.handleEmojiClick} /> */}
         </DefaultToolbar>
         <ClassifyPopup
           show={categoryChooseShow}

@@ -26,3 +26,16 @@
     }
   }
 }
+
+.reward-qa-box {
+  border-top: 1px solid #EEEEEE;
+  &-content {
+    display: flex;
+    align-items: center;
+    height: 25px;
+    margin: rem(12) rem(16);
+    padding: rem(4) rem(8);
+    border-radius: 5px;
+    background: #F0F1F3;
+  }
+}

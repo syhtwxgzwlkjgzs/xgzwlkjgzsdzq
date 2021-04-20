@@ -60,3 +60,11 @@ export const ACCEPT_VIDEO_TYPES = [
   'video/x-m4v',
   'video/*',
 ];
+
+// 附件类型
+export const ACCEPT_FILE_TYPES = [
+  '.zip',
+  '.doc',
+  '.ppt',
+  '.pdf'
+]

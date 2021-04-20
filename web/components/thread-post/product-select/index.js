@@ -2,9 +2,10 @@ import React, { memo, useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { Input, Button } from '@discuzq/design';
+import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 
-const ProductSelect = () => {
+const ProductSelect = (props) => {
   // state data
   const [link, setLink] = useState('');
   const goodImages = [
@@ -40,11 +41,8 @@ const ProductSelect = () => {
     },
   ];
 
-  // hook
-  const router = useRouter();
-
   // handle
-  const parseLink = () => {
+  const parseLink = async () => {
     // 1 没有链接给予提示
     if (link === '') {
       console.log('商品链接不能为空');
@@ -52,7 +50,12 @@ const ProductSelect = () => {
     }
 
     // 2 有链接，发起请求解析商品
-    console.log('商品解析...');
+    const { onAnalyseSuccess, threadPost } = props;
+    const res = await threadPost.fetchProductAnalysis({address: link});
+    const { code, data = {} } = res;
+    if (code === 0) {
+      onAnalyseSuccess(data);
+    }
   };
 
   return (
@@ -82,4 +85,4 @@ const ProductSelect = () => {
   );
 };
 
-export default memo(ProductSelect);
+export default inject('threadPost')(observer(memo(ProductSelect)));
