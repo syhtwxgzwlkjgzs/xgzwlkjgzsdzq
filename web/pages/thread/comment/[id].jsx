@@ -46,9 +46,10 @@ class CommentDetail extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
-    return platform === 'h5' ? <CommentH5Page /> : <CommentPCPage />;
+    return platform === 'h5' ? <CommentH5Page /> : <CommentH5Page />;
   }
 }
 
 // eslint-disable-next-line new-cap
-export default withRouter(HOCFetchSiteData(CommentDetail));
+// export default withRouter(HOCFetchSiteData(CommentDetail));
+export default withRouter((CommentDetail));
