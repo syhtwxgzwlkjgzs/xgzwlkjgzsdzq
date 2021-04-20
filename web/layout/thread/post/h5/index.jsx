@@ -14,7 +14,7 @@ import { defaultOperation } from '@components/editor/const';
 import FileUpload from '@components/thread-post/file-upload';
 import { THREAD_TYPE, ATTACHMENT_TYPE } from '@common/constants/thread-post';
 import { createAttachment, createThread } from '@common/server';
-import { Video, Audio, AudioRecord } from '@discuzq/design';
+import { Video, Audio, AudioRecord, Toast } from '@discuzq/design';
 import ClassifyPopup from '@components/thread-post/classify-popup';
 import ProductSelect from '@components/thread-post/product-select';
 import Product from '@components/thread-post/product';
@@ -239,6 +239,10 @@ class ThreadCreate extends React.Component {
 
   submit = async () => {
     const { title, categoryId, position, contentText } = this.state;
+    if (!contentText) {
+      Toast.info({ content: '请填写您要发布的内容' });
+      return;
+    }
     const params = {
       title,
       categoryId,
@@ -249,8 +253,14 @@ class ThreadCreate extends React.Component {
     const contentIndex = this.formatContextIndex();
     if (Object.keys(contentIndex)) params.content.indexed = contentIndex;
     if (position.address) params.position = position;
+    Toast.loading({ content: '创建中...' });
     const ret = await createThread(params);
-    console.log(ret);
+    const { code, data, msg } = ret;
+    if (code === 0) {
+      this.props.router.replace(`/thread/${data.threadId}`);
+    } else {
+      Toast.error({ content: msg });
+    }
   };
 
   onReady = (player) => {
