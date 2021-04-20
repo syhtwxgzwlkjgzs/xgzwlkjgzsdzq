@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Button, Upload, Tabs, Popup } from '@discuzq/design';
 import ThreadContent from '@components/thread';
 import HomeHeader from '@components/thread/home-header';
+import NoData from '@components/no-data';
 import styles from './index.module.scss';
 import List from './components/list';
 import TopNew from './components/top-news';
@@ -71,17 +72,22 @@ class IndexH5Page extends React.Component {
           <ThreadContent data={dataList.data[dataList.index]}/>
         </div>
     );
-    return (
-      <div className={styles.homeBox}>
-        { threads.pageData.length > 0
-          ? <List
+    const renderList = data => (
+      data?.length
+        ? <List
           onRefresh={this.onRefresh}
           refreshing={false}
           data={threads.pageData}
           renderItem={renderItem}
         />
+        : <NoData />
+    );
+    return (
+      <div className={styles.homeBox}>
+        { threads?.pageData?.length > 0
+          ? renderList(threads?.pageData)
           : <HeaderContent />
-       }
+        }
        <FilterModalPopup visible={this.state.visible} onClose={this.onClose} filterData={filterData}></FilterModalPopup>
        <Tabbar />
       </div>

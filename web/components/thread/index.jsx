@@ -15,26 +15,19 @@ import UserInfo from './user-info';
 import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
+import { updateThreadInfo } from './utils';
 
 @inject('site')
 @inject('index')
 @observer
 class Index extends React.Component {
-    static defaultProps = {
-      money: '0',
-      payType: '0', // 0： 免费
-    };
-
-    dispatch = (type, data) => {
-      console.log(type);
-    }
-
+    // 分享
     onShare = (e) => {
       e.stopPropagation();
 
       console.log('分享');
     }
-
+    // 评论
     onComment = (e) => {
       e.stopPropagation();
 
@@ -46,12 +39,14 @@ class Index extends React.Component {
         console.log('帖子不存在');
       }
     }
-
+    // 点赞
     onPraise = (e) => {
       e.stopPropagation();
-      console.log('点赞');
+      const { data = {} } = this.props;
+      const { threadId = '' } = data;
+      updateThreadInfo({ pid: threadId, data: 1 });
     }
-
+    // 支付
     onPay = (e) => {
       e.stopPropagation();
 
@@ -107,7 +102,7 @@ class Index extends React.Component {
     }
 
     // 帖子属性内容
-    renderThreadContent = (data) => {
+    renderThreadContent = ({ content: data, payType } = {}) => {
       const {
         text,
         imageData,
@@ -141,7 +136,7 @@ class Index extends React.Component {
 
               {/* 附件付费蒙层 */}
               {
-                this.props.payType === '2' && (
+                payType === 2 && (
                   <div className={styles.cover}>
                     <Button className={styles.button} type="primary" onClick={this.onPay}>
                       <span className={styles.icon}>$</span>
@@ -162,7 +157,7 @@ class Index extends React.Component {
         return <NoData />;
       }
 
-      const { title = '', user = {}, position = {}, likeReward = {}, content = {} } = data || {};
+      const { title = '', user = {}, position = {}, likeReward = {}, payType } = data || {};
 
       return (
         <div className={styles.container} onClick={this.onClick}>
@@ -176,18 +171,18 @@ class Index extends React.Component {
 
           {title && <div className={styles.title}>{title}</div>}
 
-          {this.renderThreadContent(content)}
+          {this.renderThreadContent(data)}
 
-          {money !== '0' && <Button className={styles.button} type="primary" onClick={this.onPay}>
+          {payType === 1 && <Button className={styles.button} type="primary" onClick={this.onPay}>
             <span className={styles.icon}>$</span>
             支付{money}元查看剩余内容
           </Button>}
 
           <BottomEvent
             userImgs={likeReward.users}
-            wholeNum={likeReward.likePayCount}
-            comment={likeReward.comment || 0}
-            sharing={likeReward.shareCount}
+            wholeNum={likeReward.likePayCount || 0}
+            comment={likeReward.postCount || 0}
+            sharing={likeReward.shareCount || 0}
             onShare={this.onShare}
             onComment={this.onComment}
             onPraise={this.onPraise}
@@ -196,11 +191,6 @@ class Index extends React.Component {
       );
     }
 }
-
-Index.propTypes = {
-  payType: PropTypes.string, // 付费类型 0：免费 1：全贴付费 2：附件付费
-  money: PropTypes.string, // 付费金额
-};
 
 // eslint-disable-next-line new-cap
 export default withRouter(Index);
