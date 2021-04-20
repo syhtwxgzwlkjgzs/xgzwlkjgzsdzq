@@ -70,6 +70,7 @@ class ThreadCreate extends React.Component {
       audioRecordShow: false,
       // 语音贴上传成功的语音地址
       audioSrc: '',
+      audioData: {},
       // 显示悬赏问答属性设置页面
       rewardQaShow: false,
       // 悬赏问答页面数据
@@ -118,7 +119,7 @@ class ThreadCreate extends React.Component {
     formData.append('file', blob);
     formData.append('type', ATTACHMENT_TYPE.audio);
     const res = await createAttachment(formData);
-    const { code } = res;
+    const { code, data } = res;
     if (code === 0) {
       // 拼接不是很对，联调时和后台对一下，先本地模拟一下
       // const audioSrc = `/${data.file_path}${data.attachment}`;
@@ -126,6 +127,7 @@ class ThreadCreate extends React.Component {
       this.setState({
         audioSrc,
         audioRecordShow: false,
+        audioData: data,
       });
     }
   }
@@ -205,7 +207,7 @@ class ThreadCreate extends React.Component {
 
   // 暂时在这里处理，后期如果有多个穿插的时候再做其它处理
   formatContextIndex() {
-    const { imageCurrentData, videoFile, fileCurrentData, productData } = this.state;
+    const { imageCurrentData, videoFile, fileCurrentData, productData, audioData } = this.state;
     const imageIds = Object.values(imageCurrentData).map(item => item.id);
     const docIds = Object.values(fileCurrentData).map(item => item.id);
     const videoId = videoFile.id;
@@ -232,6 +234,12 @@ class ThreadCreate extends React.Component {
       contentIndex[THREAD_TYPE.goods] = {
         tomId: THREAD_TYPE.goods,
         body: { ...productData },
+      };
+    }
+    if (audioData.id) {
+      contentIndex[THREAD_TYPE.voice] = {
+        tomId: THREAD_TYPE.voice,
+        body: { audioId: audioData.id },
       };
     }
     return contentIndex;
