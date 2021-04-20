@@ -1,0 +1,27 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--color-text-secondary);
+  padding: rem($padding-4n);
+  font-size: rem($font-size-primary);
+  .icon {
+    color: var(--color-disabled4);
+  }
+}
+.cancel {
+  margin-left: rem($padding-4n);
+  font-size: var(--font-size-primary);
+  line-height: var(--font-line-height-primary);
+  color: var(--color-text-secondary);
+  word-break: keep-all;
+}

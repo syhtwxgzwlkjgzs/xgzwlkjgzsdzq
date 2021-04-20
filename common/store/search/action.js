@@ -34,6 +34,21 @@ class SearchAction extends SearchStore {
   setThreads(data) {
     this.threads = data;
   }
+
+  @action
+  setSearchTopics(data) {
+    this.searchTopics = data;
+  }
+
+  @action
+  setSearchUsers(data) {
+    this.searchUsers = data;
+  }
+
+  @action
+  setSearchThreads(data) {
+    this.searchThreads = data;
+  }
 }
 
 export default SearchAction;

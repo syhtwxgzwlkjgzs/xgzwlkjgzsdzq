@@ -2,7 +2,8 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 
-import SearchInput from '.././../../../components/search-input';
+import SearchInput from '@components/search-input';
+import NoData from '@components/no-data';
 import SearchUsers from './components/search-users';
 import Header from '@components/header';
 
@@ -18,7 +19,6 @@ class SearchResultUserH5Page extends React.Component {
     const keyword = this.props.router.query.keyword || '';
 
     this.state = {
-      data: getData(15, keyword),
       keyword,
       refreshing: false,
     };
@@ -26,29 +26,15 @@ class SearchResultUserH5Page extends React.Component {
 
   // data
   refreshData = () => {
+    const { dispatch } = this.props;
     const { keyword } = this.state;
-
-    this.setState((prevState) => {
-      if (prevState.refreshing) {
-        return prevState;
-      }
-      setTimeout(() => {
-        this.setState({
-          data: getData(15, keyword),
-          refreshing: false,
-        });
-      }, 1000);
-      return { refreshing: true };
-    });
+    dispatch('refresh', keyword);
   };
 
   fetchMoreData = () => {
+    const { dispatch } = this.props;
     const { keyword } = this.state;
-    setTimeout(() => {
-      this.setState(({ data }) => ({
-        data: data.concat(getData(15, keyword, data.length)),
-      }));
-    }, 1000);
+    dispatch('moreData', keyword);
   };
 
   // event
@@ -57,8 +43,9 @@ class SearchResultUserH5Page extends React.Component {
   };
 
   onSearch = (keyword) => {
-    this.setState({ keyword });
-    this.refreshData(keyword);
+    this.setState({ keyword }, () => {
+      this.refreshData();
+    });
   };
 
   onUserClick = data => console.log('user click', data);
@@ -73,18 +60,20 @@ class SearchResultUserH5Page extends React.Component {
         <div className={styles.searchInput}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
         </div>
-        <SearchUsers
-          data={pageData}
-          refreshing={refreshing}
-          onRefresh={this.refreshData}
-          onFetchMore={this.fetchMoreData}
-          onItemClick={this.onUserClick}
-        />
+        {
+          pageData && pageData.length
+            ? <SearchUsers
+                data={pageData}
+                refreshing={refreshing}
+                onRefresh={this.refreshData}
+                onFetchMore={this.fetchMoreData}
+                onItemClick={this.onUserClick}
+              />
+            : <NoData />
+        }
       </div>
     );
   }
 }
-
-const getData = () => [];
 
 export default withRouter(SearchResultUserH5Page);

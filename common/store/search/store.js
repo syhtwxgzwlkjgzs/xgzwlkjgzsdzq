@@ -9,6 +9,11 @@ class SearchStore {
   @observable topics = { pageData: [] }
   @observable users = { pageData: [] }
   @observable threads = { pageData: [] }
+
+  // 搜索页
+  @observable searchTopics = { pageData: [] }
+  @observable searchUsers = { pageData: [] }
+  @observable searchThreads = { pageData: [] }
 }
 
 export default SearchStore;
