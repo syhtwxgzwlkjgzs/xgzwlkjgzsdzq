@@ -1,0 +1,36 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.footer {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: var(--color-white);
+  z-index: 100;
+  box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.05);
+  .item {
+    flex: 1;
+    text-align: center;
+    padding-top: 8px;
+    color: #333;
+  }
+  .active {
+    color: #1878f3;
+    font-weight: bold;
+  }
+  .text {
+    font-size: 15px;
+    padding: 2px 0 10px;
+  }
+  .addIcon {
+    height: 40px;
+    line-height: 40px;
+    width: 40px;
+    background: #1878f3;
+    text-align: center;
+    margin-top: 6px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+}

@@ -9,6 +9,7 @@ import List from './components/list';
 import TopNew from './components/top-news';
 import FilterModalPopup from './components/filter-modal-popup';
 import filterData from './data';
+import Tabbar from './components/tabbar';
 
 @inject('site')
 @inject('user')
@@ -22,16 +23,15 @@ class IndexH5Page extends React.Component {
     // 点击更多弹出筛选
     const searchClick = () => {
     //   setVisible(true);
-    
-    }
+
+    };
     // 关闭筛选框
     const onClose = () => {
     //   setVisible(false);
-    }
+    };
     const { index, user } = this.props;
     const { sticks, threads, categories } = index;
-    const HeaterContent = () => {
-        return (
+    const HeaterContent = () => (
           <dev>
             <HomeHeader/>
             <FilterModalPopup visible={visible} onClose={onClose} filterData={filterData}></FilterModalPopup>
@@ -59,27 +59,25 @@ class IndexH5Page extends React.Component {
             </Tabs>
             <TopNew data={sticks}/>
           </dev>
-        )
-    }
-    const renderItem = (dataList, rowData) => {
-      return (
+    );
+    const renderItem = (dataList, rowData) => (
         <div>
           { dataList.index === 0 && <HeaterContent />}
           <ThreadContent data={dataList.data[dataList.index]}/>
         </div>
-      )
-    }
+    );
     return (
       <div>
-        { threads.pageData.length > 0 ?
-        <List
+        { threads.pageData.length > 0
+          ? <List
           onRefresh={this.onRefresh}
           refreshing={false}
           data={threads.pageData}
           renderItem={renderItem}
-        /> :
-        <HeaterContent />
+        />
+          : <HeaterContent />
        }
+       <Tabbar />
       </div>
     );
   }
