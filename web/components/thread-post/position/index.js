@@ -1,10 +1,16 @@
 /**
  * 发帖-选择位置
+ * @prop {object} position 输入位置对象
+ * @prop {string} key 腾讯位置服务key值
+ * @prop {object} router 当前路由对象
+ * @prop {function} onChange 监听位置改变事件
  */
 import React, { memo, useState, useEffect } from 'react';
-import { Tag, Toast } from '@discuzq/design';
-import PropTypes from 'prop-types';
 import { withRouter } from 'next/router';
+import { Tag, Icon, Toast } from '@discuzq/design';
+import './index.module.scss';
+
+import PropTypes from 'prop-types';
 
 const Position = (props) => {
   const { position, key, router, onChange } = props;
@@ -71,25 +77,25 @@ const Position = (props) => {
   };
 
   return (
-    <>
-      <Tag
-        type="primary"
-        closeable
-        size="md"
-        onClick={choosePosition}
-        onClose={
-          () => setCurrentPosition({ location: '添加位置' })
-        }
-      >
-        {currentPosition.location}
-      </Tag>
-    </>
+    <Tag
+      type="primary"
+      closeable
+      size="md"
+      onClick={choosePosition}
+      onClose={
+        () => setCurrentPosition({ location: '添加位置' })
+      }
+    >
+      <Icon name="EyeOutlined" color="#2469F6" size={12} />
+      {currentPosition.location}
+    </Tag>
   );
 };
 
 Position.propTypes = {
   position: PropTypes.object,
   key: PropTypes.string,
+  onChange: PropTypes.func
 };
 
 Position.defaultProps = {
@@ -101,6 +107,7 @@ Position.defaultProps = {
   },
   // TODO: 待改成从 forum 中取
   key: 'FF7BZ-27T3X-C574Z-73YBG-FGAJ2-4CF7I',
+  onChange: () => {}
 };
 
 export default memo(withRouter(Position));
