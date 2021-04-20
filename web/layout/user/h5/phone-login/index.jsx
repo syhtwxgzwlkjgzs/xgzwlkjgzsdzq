@@ -6,8 +6,7 @@ import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import PhoneInput from '@common/module/h5/PhoneInput/index';
 import HeaderLogin from '@common/module/h5/HeaderLogin';
-import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
-
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 
 @inject('site')
 @inject('user')
@@ -24,12 +23,12 @@ class LoginPhoneH5Page extends React.Component {
   handlePhoneNumCallback = (phoneNum) => {
     const { mobileLogin } = this.props;
     mobileLogin.mobile = phoneNum;
-  }
+  };
 
   handlePhoneCodeCallback = (code) => {
     const { mobileLogin } = this.props;
     mobileLogin.code = code;
-  }
+  };
 
   handleLoginButtonClick = async () => {
     try {
@@ -76,7 +75,7 @@ class LoginPhoneH5Page extends React.Component {
         duration: 1000,
       });
     }
-  }
+  };
 
   handleSendCodeButtonClick = async () => {
     try {
@@ -88,44 +87,61 @@ class LoginPhoneH5Page extends React.Component {
         duration: 1000,
       });
     }
-  }
+  };
 
   render() {
     const { mobileLogin } = this.props;
+    const isAnotherLoginWayAvaliable = this.props.site.wechatEnv !== 'none' || this.props.site.isUserLoginVisible;
+
     return (
-        <div className={layout.container}>
-            <HeaderLogin/>
-            <div className={layout.content}>
-                <div className={layout.title}>手机号码登录/注册</div>
-                <PhoneInput
-                  phoneNum={mobileLogin.mobile}
-                  captcha={mobileLogin.code}
-                  phoneNumCallback={this.handlePhoneNumCallback}
-                  phoneCodeCallback={this.handlePhoneCodeCallback}
-                  sendCodeCallback={this.handleSendCodeButtonClick}
-                  codeTimeout={mobileLogin.codeTimeout}
-                />
-                {/* 登录按钮 start */}
-                <Button disabled={!mobileLogin.isInvalidCode} className={layout.button} type="primary" onClick={this.handleLoginButtonClick}>
-                  登录
-                </Button>
-                {/* 登录按钮 end */}
-                <div className={layout['otherLogin-title']}>其他登录方式</div>
-                <div className={layout['otherLogin-button']}>
-                  <span onClick={() => {
-                    this.props.router.push('wx-login');
-                  }} className={layout['otherLogin-button-weixin']}>
-                    <img src="/login-weixin.png" alt=""/>
-                  </span>
-                  <span onClick={() => {
-                    this.props.router.push('login');
-                  }} className={layout['otherLogin-button-user']}>
-                    <img src='/login-user.png' alt=""/>
-                  </span>
-                </div>
-                <div className={layout['otherLogin-tips']}>注册登录即表示您同意《注册协议》《隐私协议》</div>
-            </div>
+      <div className={layout.container}>
+        <HeaderLogin />
+        <div className={layout.content}>
+          <div className={layout.title}>手机号码登录/注册</div>
+          <PhoneInput
+            phoneNum={mobileLogin.mobile}
+            captcha={mobileLogin.code}
+            phoneNumCallback={this.handlePhoneNumCallback}
+            phoneCodeCallback={this.handlePhoneCodeCallback}
+            sendCodeCallback={this.handleSendCodeButtonClick}
+            codeTimeout={mobileLogin.codeTimeout}
+          />
+          {/* 登录按钮 start */}
+          <Button
+            disabled={!mobileLogin.isInvalidCode}
+            className={layout.button}
+            type="primary"
+            onClick={this.handleLoginButtonClick}
+          >
+            登录
+          </Button>
+          {/* 登录按钮 end */}
+          {isAnotherLoginWayAvaliable && <div className={layout['otherLogin-title']}>其他登录方式</div>}
+          <div className={layout['otherLogin-button']}>
+            {this.props.site.wechatEnv !== 'none' && (
+              <span
+                onClick={() => {
+                  this.props.router.push('wx-login');
+                }}
+                className={layout['otherLogin-button-weixin']}
+              >
+                <img src="/login-weixin.png" alt="" />
+              </span>
+            )}
+            {this.props.site.isUserLoginVisible && (
+              <span
+                onClick={() => {
+                  this.props.router.push('login');
+                }}
+                className={layout['otherLogin-button-user']}
+              >
+                <img src="/login-user.png" alt="" />
+              </span>
+            )}
+          </div>
+          <div className={layout['otherLogin-tips']}>注册登录即表示您同意《注册协议》《隐私协议》</div>
         </div>
+      </div>
     );
   }
 }

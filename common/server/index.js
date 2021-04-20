@@ -13,7 +13,7 @@ export { default as readReplyList } from './readReplyList';
 export { default as createPosts } from './createPosts';
 export { default as readStickList } from './readStickList';
 export { default as setNickname } from './setNickname';
-export { default as readTopicsList } from './readTopicsList';
+export { default as readTopicsList } from './search/readTopicsList';
 export { default as readUsersList } from './search/readUsersList';
 export { default as readThreadList } from './readThreadList';
 export { default as default } from './api';

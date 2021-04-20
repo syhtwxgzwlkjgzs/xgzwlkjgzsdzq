@@ -214,6 +214,7 @@ export default class mobileLoginStore {
           data: {
             mobile: this.mobile,
             code: this.code,
+            type: 'mobilebrowser_sms_login',
           },
         });
 
