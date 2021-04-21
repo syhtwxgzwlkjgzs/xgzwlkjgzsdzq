@@ -59,6 +59,9 @@ class IndexPCPage extends React.Component {
                 <div className={styles.themeItem}>
                   <IndexContent/>
                 </div>
+                <div className={styles.themeItem}>
+                  <IndexContent/>
+                </div>
               </div>
             </div>
           }

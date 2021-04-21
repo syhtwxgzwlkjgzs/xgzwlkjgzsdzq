@@ -78,7 +78,7 @@ class Index extends React.Component {
     }
 
     // 帖子属性内容
-    renderThreadContent = (data) => {
+    renderThreadContent = (data, platform) => {
       const {
         text,
         imageData,
@@ -100,8 +100,9 @@ class Index extends React.Component {
                 content={rewardData.content || ''}
                 money={rewardData.money}
                 onClick={this.onPay}
+                platform={platform}
               />}
-              {redPacketData && <RedPacket content={redPacketData.content || ''} onClick={this.onPay} />}
+              {redPacketData && <RedPacket content={redPacketData.content || ''} onClick={this.onPay} platform={platform}/>}
               {goodsData && <ProductItem
                   image={goodsData.imagePath}
                   amount={goodsData.price}
@@ -127,9 +128,9 @@ class Index extends React.Component {
     }
 
     render() {
-      const { money = '0', data = dataSource } = this.props;
-      const { title, user = {}, position = {}, likeReward = {}, content = {} } = data;
-
+      const { money = '0', data = dataSource, site } = this.props;
+      const { title, user = {}, position = {}, likeReward = {}, content = {} } = data
+      const { platform } = site;
       return (
         <div className={styles.container}>
           <div className={styles.header}>
@@ -142,7 +143,7 @@ class Index extends React.Component {
 
           {title && <div className={styles.title}>{title}</div>}
 
-          {this.renderThreadContent(content)}
+          {this.renderThreadContent(content, platform)}
 
           {money !== '0' && <Button className={styles.button} type="primary" onClick={this.onPay}>
             <span className={styles.icon}>$</span>
