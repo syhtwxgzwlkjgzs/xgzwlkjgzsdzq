@@ -91,7 +91,7 @@ class ThreadCreate extends React.Component {
 
   fetchCategories() {
     const { index } = this.props;
-    if (!index.categories) {
+    if (!index.categories || (index.categories && index.categories.length === 0)) {
       index.fetchCategory();
     }
   }
