@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Topic } from '../../../../../../components/search-result-item';
+import { Topic } from '@components/search-result-item';
 
 import styles from './index.module.scss';
 
@@ -11,7 +11,7 @@ import styles from './index.module.scss';
  */
 const SearchTopics = ({ data = [], onItemClick }) => (
   <div className={styles.list}>
-    {data.map((item, index) => (
+    {data && data.map((item, index) => (
       <Topic key={index} data={item} onClick={onItemClick} />
     ))}
   </div>

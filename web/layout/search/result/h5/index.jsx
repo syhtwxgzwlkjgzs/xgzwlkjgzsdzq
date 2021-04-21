@@ -3,15 +3,18 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 
 // import SearchInput from '@components/search-input';
-import SearchInput from '.././../../../components/search-input';
+import SearchInput from '@components/search-input';
 import SectionTitle from './components/section-title';
 import SearchPosts from './components/search-posts';
 import SearchTopics from './components/search-topics';
 import SearchUsers from './components/search-users';
+import NoData from '@components/no-data';
+
 
 import styles from './index.module.scss';
 
 @inject('site')
+@inject('search')
 @observer
 class SearchResultH5Page extends React.Component {
   constructor(props) {
@@ -43,13 +46,17 @@ class SearchResultH5Page extends React.Component {
     this.props.router.back();
   };
 
-  searchData = keyword => console.log('search', keyword);
+  searchData = (keyword) => {
+    const { dispatch } = this.props;
+    dispatch('search', keyword);
+  };
 
   onSearch = (keyword) => {
     // query 更新
     this.props.router.replace(`/search/result?keyword=${keyword}`);
-    this.setState({ keyword });
-    this.searchData(keyword);
+    this.setState({ keyword }, () => {
+      this.searchData(keyword);
+    });
   };
 
   onUserClick = data => console.log('user click', data);
@@ -60,6 +67,10 @@ class SearchResultH5Page extends React.Component {
 
   render() {
     const { keyword } = this.state;
+    const { searchTopics, searchUsers, searchThreads } = this.props.search;
+    const { pageData: topicsPageData = [] } = searchTopics;
+    const { pageData: usersPageData = [] } = searchUsers;
+    const { pageData: threadsPageData = [] } = searchThreads;
 
     return (
       <div className={styles.page}>
@@ -69,25 +80,35 @@ class SearchResultH5Page extends React.Component {
         <div className={styles.section}>
           <SectionTitle title="用户" onShowMore={this.redirectToSearchResultUser} />
         </div>
-        <SearchUsers data={SearchUsersData} onItemClick={this.onUserClick} />
+        {
+          usersPageData && usersPageData.length
+            ? <SearchUsers data={usersPageData} onItemClick={this.onUserClick} />
+            : <NoData />
+        }
+
         <div className={styles.hr}></div>
         <div className={styles.section}>
           <SectionTitle title="主题" onShowMore={this.redirectToSearchResultPost} />
         </div>
-        <SearchPosts data={Array(2).fill('')} onItemClick={this.onPostClick} />
+        {
+          threadsPageData && threadsPageData.length
+            ? <SearchPosts data={threadsPageData} onItemClick={this.onPostClick} />
+            : <NoData />
+        }
+
         <div className={styles.hr}></div>
         <div className={styles.section}>
           <SectionTitle title="话题" onShowMore={this.redirectToSearchResultTopic} />
         </div>
-        <SearchTopics data={SearchTopicsData} onItemClick={this.onTopicClick} />
+        {
+          topicsPageData && topicsPageData.length
+            ? <SearchTopics data={topicsPageData} onItemClick={this.onTopicClick} />
+            : <NoData />
+        }
+
       </div>
     );
   }
 }
-const SearchUsersData = [{ name: 'user1' }, { name: 'user1' }];
-const SearchTopicsData = [
-  { title: '#dasda#1', content: '#dasda#', hotCount: 2, contentCount: 3 },
-  { title: '#dasda#2', content: '#dasda#', hotCount: 2, contentCount: 3 },
-];
 
 export default withRouter(SearchResultH5Page);

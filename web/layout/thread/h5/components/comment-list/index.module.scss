@@ -1,100 +1,129 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 .commentList {
-    .header {
-        .showGet {
-            display: flex;
-            justify-content: flex-end;
-            padding: rem(10) 0 0 0;
-            .icon {
-                font-size: rem($font-size-label);
-                text-align: left;
-                color: var(--color-text-primary);
-            }
-            .showMoneyNum {
-                font-family: 'PingFangSC-Regular';
-                font-weight: normal;
-                font-size: rem($font-size-label);
-                text-align: left;
-                color: var(--color-text-primary);
-                margin-left: rem($margin-10);
-                .moneyNumber {
-                    color: #f61f40;
-                }
-            }
-        }
+  .header {
+    padding: rem(10) 0 0 0;
+    display: flex;
+    justify-content: flex-end;
+    .headerRigth {
+            
     }
-    .content {
-        display: flex;
-        padding-top: rem($padding-10);
-        .commentListAvatar {
-            margin-right: rem($margin-10);
+    .showGet {
+      width: rem(290);
+      // background: red;
+      display: flex;
+      justify-content: space-between;
+
+      .revise {
+        font-family: 'PingFangSC-Regular';
+        font-weight: normal;
+        font-size: rem($font-size-primary);
+        line-height: rem($font-line-height-middle);
+        text-align: left;
+        color: var(--color-text-secondary);
+      }
+      .showMoneyNum {
+        font-family: 'PingFangSC-Regular';
+        font-weight: normal;
+        font-size: rem($font-size-label);
+        line-height: rem($font-line-height-middle);
+        text-align: left;
+        color: var(--color-text-primary);
+        margin-left: rem($margin-10);
+        .moneyNumber {
+          color: #f61f40;
         }
-        .commentListContent {
-            width: 100%;
-            .commentListContentText {
-                padding: rem($padding-2n);
-                border-radius: rem($border-radius-small);
-                background: var(--background-color);
-                .commentListName {
-                    font-family: "PingFangSC-Semibold";
-                    font-weight: normal;
-                    font-size: rem($font-size-primary);
-                    line-height: rem(18);
-                    text-align: left;
-                    color: var(--color-text-primary);
-                }
-                .commentListText {
-                    font-family: "PingFang SC";
-                    font-weight: normal;
-                    font-size: rem($font-size-middle);
-                    line-height: rem($font-line-height-middle);
-                    text-align: left;
-                    color: var(--color-text-primary);
-                }
-            }
-            .commentListFooter {
-                .commentBtn {
-                    height: rem(26);
-                    display: flex;
-                    font-family: 'PingFangSC-Regular';
-                    font-weight: normal;
-                    font-size: rem($font-size-primary);
-                    line-height: rem($font-line-height-middle);
-                    text-align: left;
-                    color: var(--color-text-secondary);
-                    .commentTime {
-                        flex: 1;
-                    }
-                    .commentLiked {
-                        flex: 1;
-                    }
-                    .commentLike {
-                        flex: 1;
-                        color: var(--color-primary);
-                    }
-                    .commentReply {
-                        flex: 1;
-                    }
-                    .commentDelete {
-                        flex: 1;
-                    }
-                    .commentAdopt {
-                        flex: 1;
-                    }
-                }
-                .moreReply {
-                    height: rem(26);
-                    font-family: 'PingFang SC';
-                    font-weight: 600;
-                    font-size: var($font-size-primary);
-                    // line-height: var($font-line-height-middle);
-                    line-height: rem(26);
-                    text-align: left;
-                    color: var(--color-text-primary);
-                    padding: rem(8) 0;
-                }
-            }
-        }
+      }
     }
+  }
+  .content {
+    display: flex;
+    padding-top: rem($padding-10);
+    .commentListAvatar {
+      margin-right: rem($margin-10);
+    }
+    .commentListContent {
+      width: 100%;
+      .commentListContentText {
+        padding: rem($padding-2n);
+        border-radius: rem($border-radius-small);
+        background: var(--background-color);
+        .commentListName {
+          font-family: 'PingFangSC-Semibold';
+          font-weight: normal;
+          font-size: rem($font-size-primary);
+          line-height: rem(18);
+          text-align: left;
+          color: var(--color-text-primary);
+        }
+        .commentListText {
+          font-family: 'PingFang SC';
+          font-weight: normal;
+          font-size: rem($font-size-middle);
+          line-height: rem($font-line-height-middle);
+          text-align: left;
+          color: var(--color-text-primary);
+        }
+      }
+      .commentListFooter {
+        .commentBtn {
+          height: rem(26);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-size: rem($font-size-primary);
+          line-height: rem($font-line-height-middle);
+          text-align: left;
+          color: var(--color-text-secondary);
+          padding-top: rem($padding-2n);
+          .commentTime {
+            // flex: 1;
+          }
+          .commentLiked {
+            // flex: 1;
+          }
+          .commentLike {
+            // flex: 1;
+            color: var(--color-primary);
+          }
+          .commentReply {
+            // flex: 1;
+          }
+          .commentDelete {
+            // flex: 1;
+          }
+          .commentAdopt {
+            // flex: 1;
+          }
+        }
+        .moreReply {
+          height: rem(26);
+          font-family: 'PingFang SC';
+          font-weight: 600;
+          font-size: var($font-size-primary);
+          // line-height: var($font-line-height-middle);
+          line-height: rem(26);
+          text-align: left;
+          color: var(--color-text-primary);
+          padding: rem(8) 0;
+        }
+      }
+    }
+  }
+  .extra {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    > div {
+      margin-right: rem(8);
+    }
+  }
+  .extraBottom {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    > div {
+      margin-left: rem(24);
+    }
+  }
 }

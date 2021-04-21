@@ -2,11 +2,11 @@ import { observable } from 'mobx';
 class IndexStore {
   constructor() {}
 
-  @observable categories = null;
+  @observable categories = [];
 
   @observable sticks = [];
 
-  @observable threads = [];
+  @observable threads = {};
 }
 
 export default IndexStore;

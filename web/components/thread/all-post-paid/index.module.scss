@@ -1,22 +1,4 @@
-:global {
-  .dzq-card__body {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  //   .dzq-checkbox.dzq-checkbox--radio{
-  //     border-radius: 0% !important;
-  //   }
-  .dzq-input {
-    display: inline-block;
-    width: 40px;
-  }
-  .dzq-input__inner {
-    border: none;
-    padding: 0;
-    text-align: center;
-  }
-}
+@import '@common/styles/index.scss';
 .toview {
   display: flex;
   flex-direction: column;
@@ -26,41 +8,48 @@
   }
 }
 .redpacket-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
   height: 100vh;
+  background-color: #fff;
+  .line-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 16px;
+    margin-right: 16px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    font-size: 14px;
+  }
+  :global {
+    .dzq-input {
+      display: inline-block;
+      width: 40px;
+    }
+    .dzq-input__inner {
+      border: none;
+      padding: 0;
+      text-align: center;
+    }
+  }
 }
 .btn {
   position: absolute;
   bottom: 0;
   display: flex;
-  width: 94%;
-  height: 53px;
-  margin-right: 3%;
-  margin-left: 3%;
-  line-height: 53px;
+  width: rem(343);
+  height: 52px;
+  border-top: 1px solid #eee;
+  padding: 0 rem(16);
   justify-content: space-between;
-  text-align: center;
-  .btn-one {
-    text-align: center;
-    width: 166px;
-    height: 44px;
-    color: #333;
-    background: #eee;
-    border: none;
-    &:hover {
-      background-color: #2469f6;
-      color: white;
-    }
-  }
-  .btn-two {
-    text-align: center;
-    width: 166px;
-    height: 44px;
-    color: #333;
-    background: #eee;
-    border: none;
-    &:hover {
-      background-color: #2469f6;
-      color: white;
+  align-items: center;
+  :global {
+    .dzq-button {
+      width: rem(166);
+      height: 42px;
     }
   }
 }

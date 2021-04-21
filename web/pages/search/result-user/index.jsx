@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/search/result-user/h5';
 import IndexPCPage from '@layout/search/result-user/pc';
+import { getUsersList } from '@common/service/search';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
@@ -9,45 +10,57 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @inject('search')
 @observer
 class Index extends React.Component {
+  // static async getInitialProps(ctx) {
+  //   const { res } = await getUsersList({}, ctx);
+
+  //   return {
+  //     serverSearch: {
+  //       topics: res,
+  //     },
+  //   };
+  // }
+
+  page = 1;
+  perPage = 10;
+
   constructor(props) {
     super(props);
+    const { serverSearch, search } = this.props;
+    // 初始化数据到store中
+    serverSearch && serverSearch.users && search.setUsers(serverSearch.users);
+  }
+
+  async componentDidMount() {
+    const { search, serverSearch, router } = this.props;
+    const { keyword = '' } = router.query;
+    // 当服务器无法获取数据时，触发浏览器渲染
+    const isBool = !search.users && (!serverSearch || !serverSearch.users);
+
+    if (!isBool) {
+      const { res } = await getUsersList({ search: keyword });
+      this.page += 1;
+      search.setUsers(res);
+    }
+  }
+
+  dispatch = async (type, data) => {
     const { search } = this.props;
-    search.setUsers({
-      pageData: [
-        {
-          pid: 1,
-          username: 'admin',
-          avatar: '',
-          groupName: '',
-        },
-        {
-          pid: 2,
-          username: 'cjw',
-          avatar: '',
-          groupName: '普通会员',
-        },
-        {
-          pid: 3,
-          username: 'cjw11',
-          avatar: '',
-          groupName: '普通会员',
-        },
-        {
-          pid: 4,
-          username: 'cjw22',
-          avatar: '',
-          groupName: '普通会员',
-        },
-      ],
-      currentPage: 1,
-      perPage: 20,
-      firstPageUrl: 'https://discuz.dnspod.dev/apiv3/users.list?filter[username]=&page=1',
-      nextPageUrl: 'https://discuz.dnspod.dev/apiv3/users.list?filter[username]=&page=2',
-      prePageUrl: 'https://discuz.dnspod.dev/apiv3/users.list?filter[username]=&page=1',
-      pageLength: 4,
-      totalCount: 4,
-      totalPage: 1,
-    });
+
+    if (type === 'refresh') {
+      const { res } = await getUsersList({ search: data, perPage: this.perPage });
+      this.page = 2;
+      search.setUsers(res);
+    } else if (type === 'moreData') {
+      const { users } = search;
+      const { pageData } = users || { pageData: [] };
+      const { res } = await getUsersList({ search: data, perPage: this.perPage, page: this.page });
+
+      if (res?.pageData?.length) {
+        this.page += 1;
+        res.pageData.unshift(...pageData);
+        search.setUsers(res);
+      }
+    }
   }
 
   render() {
@@ -58,7 +71,7 @@ class Index extends React.Component {
       return <IndexPCPage />;
     }
 
-    return <IndexH5Page />;
+    return <IndexH5Page dispatch={this.dispatch} />;
   }
 }
 

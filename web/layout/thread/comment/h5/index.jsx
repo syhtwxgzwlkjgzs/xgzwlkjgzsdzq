@@ -10,6 +10,7 @@ import InputPopup from '../../h5/components/input-popup';
 
 @inject('site')
 @inject('user')
+@inject('comment')
 @observer
 class CommentH5Page extends React.Component {
   constructor(props) {
