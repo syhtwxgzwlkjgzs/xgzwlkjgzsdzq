@@ -6,6 +6,7 @@ import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import HeaderLogin from '../../../../components/login/h5/header-login';
 import { NEED_BIND_WEIXIN_FLAG, NEED_BIND_PHONE_FLAG } from '@common/store/login/user-login-store';
+import { BAND_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 
 @inject('site')
 @inject('user')
@@ -34,6 +35,13 @@ class LoginH5Page extends React.Component {
     if (e.Code === NEED_BIND_PHONE_FLAG) {
       this.props.commonLogin.needToBindPhone = true;
       this.props.router.push('/user/bind-phone');
+      return;
+    }
+
+    // 跳转状态页
+    if (e.Code === BAND_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
+      this.props.commonLogin.setStatusMessage(e.Code, e.Message);
+      this.props.router.push('/user/status');
       return;
     }
 
