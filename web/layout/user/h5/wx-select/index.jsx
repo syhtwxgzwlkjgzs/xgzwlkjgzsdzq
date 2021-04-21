@@ -16,8 +16,7 @@ class WXSelectH5Page extends React.Component {
   render() {
     // console.log(this.props);
     const { router } = this.props;
-    const { code, sessionId, sessionToken,nickname } = router.query;
-    console.log(code, sessionId, sessionToken);
+    const { code, sessionId, sessionToken, nickname } = router.query;
     return (
       <div className={layout.container}>
         <div>
@@ -69,7 +68,7 @@ class WXSelectH5Page extends React.Component {
               </Button>
               <Button className={layout.button} type="primary" onClick={() => {
                 console.log('使用用户名密码登录，并绑定微信');
-                router.push('wx-bind-username');
+                router.push({ pathname: 'wx-bind-username', query: { sessionToken } });
               }}>
                 使用用户名密码登录，并绑定微信
               </Button>

@@ -10,6 +10,7 @@ export const NEED_BIND_PHONE_FLAG = 8001;
 export default class UserLoginStore {
   @observable username = '';
   @observable password = '';
+  @observable sessionToken = '';
 
   /**
    * 检查用户是否处于审核状态，用来跳转状态页面
@@ -24,7 +25,6 @@ export default class UserLoginStore {
         Message: rejectReason,
       };
     }
-    return;
   }
 
 
@@ -39,14 +39,19 @@ export default class UserLoginStore {
     }
 
     try {
+      const data =  {
+        username: this.username,
+        password: this.password,
+        // type: 'mobilebrowser_username_login',
+      };
+
+      if (this.sessionToken) {
+        data.sessionToken = this.sessionToken;
+      }
       const loginResp = await usernameLogin({
         timeout: 3000,
         url: 'https://discuzv3-dev.dnspod.dev/apiv3/users/username.login',
-        data: {
-          username: this.username,
-          password: this.password,
-          type: 'mobilebrowser_username_login',
-        },
+        data,
       });
 
       if (loginResp.code === 0
