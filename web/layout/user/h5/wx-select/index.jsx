@@ -16,7 +16,6 @@ class WXSelectH5Page extends React.Component {
     // console.log(this.props);
     const { router } = this.props;
     const { code, sessionId, sessionToken, nickname } = router.query;
-    console.log(code, sessionId, sessionToken);
     return (
       <div className={layout.container}>
         <div>code:{code}</div>

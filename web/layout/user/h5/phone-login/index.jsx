@@ -140,7 +140,7 @@ class LoginPhoneH5Page extends React.Component {
             {this.props.site.isUserLoginVisible && (
               <span
                 onClick={() => {
-                  this.props.router.push('login');
+                  this.props.router.push('username-login');
                 }}
                 className={layout['otherLogin-button-user']}
               >

@@ -21,7 +21,7 @@ class IndexH5Page extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: false
+      visible: false,
     };
     this.renderItem = this.renderItem.bind(this);
   }
@@ -104,7 +104,7 @@ class IndexH5Page extends React.Component {
   render() {
     const { index } = this.props;
     const { threads } = index;
-    
+
     return (
       <div className={styles.homeBox}>
         { threads?.pageData?.length > 0
