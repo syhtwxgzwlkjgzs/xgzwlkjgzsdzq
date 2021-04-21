@@ -12,7 +12,7 @@ import { h5WechatCodeBind } from '@server';
 @observer
 class WeixinBindH5Page extends React.Component {
   render() {
-    const { sessionToken, loginType, code, sessionId, state }  = this.props.router.query;
+    const { sessionToken, loginType, code, sessionId, state, nickname }  = this.props.router.query;
     return (
       <div className={layout.container}>
         <HeaderLogin/>
@@ -21,7 +21,7 @@ class WeixinBindH5Page extends React.Component {
           <div className={layout.tips}>
             <img src="/user.png" alt=""/>
             {/* todo 小虫替换为用户名*/}
-            小虫，请绑定您的微信
+            {nickname ? `${nickname}，` : ''}请绑定您的微信
           </div>
           <Button
             className={layout.button}

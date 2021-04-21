@@ -12,11 +12,11 @@ const NEED_BIND_OR_REGISTER_USER = -7016;
 class WeixinAuth extends React.Component {
   async componentDidMount() {
     const { router } = this.props;
-    const { code, sessionId, sessionToken, state, action } = router.query;
+    const { code, sessionId, sessionToken, state, action, nickname } = router.query;
 
     // 如果要进行绑定逻辑，跳转绑定相关的页面
     if (action === 'wx-bind') {
-      router.push(`/user/wx-bind?code=${code}&sessionId=${sessionId}&sessionToken=${sessionToken}&state=${state}`);
+      router.push(`/user/wx-bind?code=${code}&sessionId=${sessionId}&sessionToken=${sessionToken}&state=${state}$nickname=${nickname}`);
       return;
     }
 
@@ -45,7 +45,7 @@ class WeixinAuth extends React.Component {
 
       if (res.code === 0) {
         const accessToken = get(res, 'data.accessToken');
-        console.log('acctoken:',accessToken);
+        console.log('acctoken:', accessToken);
         // 注册成功后，默认登录
         setAccessToken({
           accessToken,

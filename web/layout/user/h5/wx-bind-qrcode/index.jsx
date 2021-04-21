@@ -11,10 +11,11 @@ import HeaderLogin from '../../../../components/login/h5/header-login';
 @observer
 class WeixinBindQrCodePage extends React.Component {
   async componentDidMount() {
-    const { sessionToken, loginType } = this.props.router.query;
+    const { sessionToken, loginType, nickname } = this.props.router.query;
     await this.props.h5QrCode.generate({
       params: {
         sessionToken,
+        nickname,
         type: 'mobile_browser_bind',
         redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth?loginType=${loginType}&action=wx-bind`)}`,
       },
