@@ -64,20 +64,21 @@ const checkCompleteUserInfo = (resp) => {
  */
 const checkUserStatus = (resp) => {
   if (resp.code === 0 || resp.code === BANNED_USER || resp.code === REVIEW_REJECT) {
-    let code = resp.code;
+    let { code } = resp;
 
     const status = get(resp, 'data.userStatus', 0);
     if (code === 0 && status ===  REVIEWING) {
       code = status;
     }
 
-    if(code){
+    if (code) {
       const rejectReason = get(resp, 'data.rejectReason', '');
       throw {
         Code: code,
         Message: rejectReason,
       };
     }
-}
+  }
+};
 
 export { throwFormattedError, networkRequestCatcher, checkCompleteUserInfo, checkUserStatus };
