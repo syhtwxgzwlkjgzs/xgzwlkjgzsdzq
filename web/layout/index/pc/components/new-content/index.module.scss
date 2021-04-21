@@ -1,0 +1,23 @@
+@import '@common/styles/var.scss';
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.container {
+  width: 100%;
+  height: rem(36);
+  line-height: rem(36);
+  border-radius: rem($border-radius-small);
+  background: var(--color-primary10);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .text {
+    font-size: rem($font-size-primary);
+    color: #0065ff;
+    margin-right: rem($margin-2n);
+  }
+  .refreshBtn {
+    font-size: 14px;
+    color: #90b2f8;
+    margin-right: rem(9.5);
+  }
+}
