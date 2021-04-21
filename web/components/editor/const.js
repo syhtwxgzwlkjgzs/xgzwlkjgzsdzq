@@ -14,17 +14,17 @@ export const defaultOperation = {
  */
 export const defaultIcon = [
   {
-    name: 'UserOutlined', // emoji
+    name: 'SmilingFaceOutlined', // emoji
     active: '#2469f6',
     id: defaultOperation.emoji,
   },
   {
-    name: 'MessageDoubleOutlined', // @
+    name: 'AtOutlined', // @
     active: 'red',
     id: defaultOperation.at,
   },
   {
-    name: 'PauseOutlined', // #
+    name: 'SharpOutlined', // #
     active: 'green',
     id: defaultOperation.topic,
   },
@@ -34,12 +34,12 @@ export const defaultIcon = [
     id: defaultOperation.attach,
   },
   {
-    name: 'MailOutlined', // 红包
+    name: 'WalletOutlined', // 红包
     active: '#2469f6',
     id: defaultOperation.redpacket,
   },
   {
-    name: 'DoubleRightOutlined', // 付费
+    name: 'DollarLOutlined', // 付费
     active: '#2469f6',
     id: defaultOperation.pay,
   },
@@ -69,7 +69,7 @@ export const attachIcon = [
     type: THREAD_TYPE.voice,
   },
   {
-    name: 'ShopOutlined',
+    name: 'ShoppingCartOutlined',
     active: '#2469f6',
     type: THREAD_TYPE.goods,
   },

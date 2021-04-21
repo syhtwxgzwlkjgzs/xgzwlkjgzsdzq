@@ -10,25 +10,13 @@ import { usernameAutoBind } from '@server';
 
 @inject('site')
 @inject('user')
-@inject('thread')
 @observer
 class WXSelectH5Page extends React.Component {
   render() {
-    // console.log(this.props);
     const { router } = this.props;
-    const { code, sessionId, sessionToken,nickname } = router.query;
-    console.log(code, sessionId, sessionToken);
+    const { sessionToken, nickname } = router.query;
     return (
       <div className={layout.container}>
-        <div>
-          code:{code}
-        </div>
-        <div>
-          sid: {sessionId}
-        </div>
-        <div>
-        sst:{sessionToken}
-        </div>
           <HeaderLogin/>
           <div className={layout.content}>
               <div className={layout.title}>绑定微信号</div>
@@ -43,7 +31,8 @@ class WXSelectH5Page extends React.Component {
                     timeout: 10000,
                     params: {
                       sessionToken,
-                    } });
+                    },
+                  });
                   Toast.success({
                     content: res.code + res.msg,
                   });
@@ -68,14 +57,12 @@ class WXSelectH5Page extends React.Component {
                 微信登录
               </Button>
               <Button className={layout.button} type="primary" onClick={() => {
-                console.log('使用用户名密码登录，并绑定微信');
-                router.push('wx-bind-username');
+                router.push({ pathname: 'wx-bind-username', query: { sessionToken } });
               }}>
                 使用用户名密码登录，并绑定微信
               </Button>
               <Button className={layout.button} type="primary" onClick={() => {
-                router.push('wx-bind-phone');
-                console.log('使用手机号登录，并绑定微信');
+                router.push({ pathname: 'wx-bind-phone', query: { sessionToken } });
               }}>
                 使用手机号登录，并绑定微信
               </Button>

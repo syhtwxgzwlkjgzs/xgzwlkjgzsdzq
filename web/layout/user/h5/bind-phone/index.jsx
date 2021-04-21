@@ -26,7 +26,9 @@ class BindPhoneH5Page extends React.Component {
 
   handleBindButtonClick = async () => {
     try {
-      await this.props.mobileBind.bind();
+      const { query } = this.props.router;
+      const { sessionToken } = query;
+      await this.props.mobileBind.bind(sessionToken);
       Toast.success({
         content: '登录成功',
         hasMask: false,
