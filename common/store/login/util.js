@@ -63,22 +63,21 @@ const checkCompleteUserInfo = (resp) => {
  * @param {*} resp
  */
 const checkUserStatus = (resp) => {
-  if (resp.code === 0) {
-    const rejectReason = get(resp, 'data.rejectReason', '');
+  if (resp.code === 0 || resp.code === BANNED_USER || resp.code === REVIEW_REJECT) {
+    let { code } = resp;
+
     const status = get(resp, 'data.userStatus', 0);
-    if (status ===  REVIEWING) {
+    if (code === 0 && status ===  REVIEWING) {
+      code = status;
+    }
+
+    if (code) {
+      const rejectReason = get(resp, 'data.rejectReason', '');
       throw {
-        Code: status,
+        Code: code,
         Message: rejectReason,
       };
     }
-  }
-
-  if (resp.code === BANNED_USER || resp.code === REVIEW_REJECT) {
-    throw {
-      Code: resp.code,
-      Message: get(resp, 'data.rejectReason', ''),
-    };
   }
 };
 
