@@ -24,12 +24,18 @@
     line-height: rem(50);
     text-align: left;
     color: var(--color-text-secondary);
+    .sortText {
+      padding-left: rem(4);
+    }
   }
 }
 
 .body {
   background: var(--color-white);
+  
   .commentItems {
-    padding: 0 rem($padding-4n);
+    padding: 0 rem($padding-4n) rem($padding-2n) rem($padding-4n);
+    border-bottom: solid rem(1) #eee;
+
   }
 }

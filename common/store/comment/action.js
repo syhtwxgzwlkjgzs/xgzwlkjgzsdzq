@@ -12,8 +12,8 @@ class CommentAction extends CommentStore {
   }
 
   @action
-  setReplyList(list = []) {
-    this.replyList = list;
+  addReplyToList(data) {
+    (this.commentDetail.commentPosts || []).push(data);
   }
 }
 

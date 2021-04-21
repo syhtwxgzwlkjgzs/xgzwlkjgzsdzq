@@ -1,0 +1,31 @@
+@import '@common/styles/variable/index.scss';
+@import '@common/styles/fn/rem.scss';
+
+.container {
+  background: var(--color-white);
+  margin-bottom: -16px;
+  .more {
+    height: rem(100);
+    background: var(--background-color);
+    display: flex;
+    justify-content: center;
+    .moreItem {
+      margin: rem($padding-4n);
+      .icon {
+        width: rem(50);
+        height: rem(50);
+        text-align: center;
+        line-height: rem(50);
+        background: var(--color-white);
+      }
+      .text {
+        padding: rem($padding-1n) 0;
+        text-align: center;
+      }
+    }
+  }
+}
+
+.button {
+  width: 100%;
+}

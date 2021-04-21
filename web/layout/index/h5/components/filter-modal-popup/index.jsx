@@ -35,11 +35,14 @@ const FilterModalPopup = (props) => {
     onSearch = () => {},
     onClose  = ()=> {},
   } = props;
+
+  console.log(filterData);
   return (
     <Popup
-      position="top"
+      position="bottom"
       visible={visible}
       onClose={onClose}
+      containerClassName={styles.popup}
     >
       <div className={styles.container}>
         {
