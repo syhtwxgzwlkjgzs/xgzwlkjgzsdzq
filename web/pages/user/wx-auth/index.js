@@ -22,8 +22,9 @@ class WeixinAuth extends React.Component {
 
     try {
       const res = await h5WechatCodeLogin({
-        timeout: 10000,
         method: 'GET',
+        url: 'apiv3/users/wechat/h5.login',
+        timeout: 10000,
         params: {
           code,
           sessionId,
@@ -37,7 +38,7 @@ class WeixinAuth extends React.Component {
         const { sessionToken, accessToken, nickname } = res.data;
         this.props.user.nickname = nickname;
         // 注册成功后，默认登录
-        setAccessToken({
+        accessToken && setAccessToken({
           accessToken,
         });
         router.push({ pathname: 'wx-select', query: { sessionToken, nickname } });
