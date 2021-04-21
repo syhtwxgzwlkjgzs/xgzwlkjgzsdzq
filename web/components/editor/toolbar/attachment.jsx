@@ -2,12 +2,14 @@
  * 附件操作栏比如：图片上传、视频上传、语音上传等
  */
 import React from 'react';
-import { Icon } from '@discuzq/design';
+import { Icon, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { attachIcon } from '../const';
-import { createAttachment } from '@common/server';
+import { createAttachment, readYundianboSignature } from '@common/server';
+import { THREAD_TYPE } from '@common/constants/thread-post';
+
 
 // TODO: upload 待单独独立出来
 function fileToObject(file) {
@@ -46,6 +48,8 @@ function getObjectURL(file) {
 }
 
 class AttachmentToolbar extends React.Component {
+  static file = null;
+  static toastInstance = null;
   constructor(props) {
     super(props);
     this.state = {
@@ -69,26 +73,63 @@ class AttachmentToolbar extends React.Component {
     this.inputRef.current.click();
   };
 
-  uploadFiles = (files, item = {}) => {
-    let cloneList = [...files];
+  getYundianboSignature = async () => {
+    const res = await readYundianboSignature();
+    const { code, data } = res;
+    return code === 0 ? data.token : '';
+  }
 
-    cloneList = cloneList.map((file, index) => {
-      file.thumbUrl = getObjectURL(file);
-      file.uid = file.uid ?? `${index}__${uuid()}`;
-      return fileToObject(file);
-    });
-
-    this.props.onUploadChange(cloneList, item);
-
-    cloneList.forEach(async (file) => {
-      const formData = new FormData();
-      formData.append('file', file.originFileObj);
-      Object.keys((item.data || [])).forEach((elem) => {
-        formData.append(elem, item.data[elem]);
+  uploadFiles = async (files, item = {}) => {
+    const { onUploadComplete } = this.props;
+    if (item.type === THREAD_TYPE.video) {
+      this.file = files[0];
+      // 云点播上传视频：https://cloud.tencent.com/document/product/266/9239
+      const TcVod = (await import('vod-js-sdk-v6')).default;
+      new TcVod({
+        getSignature: this.getYundianboSignature
+      })
+      // 开始上传
+      .upload({ mediaFile: this.file })
+      .on('media_progress', (info) => {
+        this.toastInstance = Toast.loading({
+          content: '上传中...',
+          duration: 0
+        })
+      })
+      .done()
+      // 上传完成
+      .then((res) => {
+        onUploadComplete(res, this.file, item);
+        this.toastInstance?.destroy();
+      })
+      // 上传异常
+      .catch((err) => {
+        console.log(err);
       });
-      const ret = await createAttachment(formData);
-      this.props.onUploadComplete(ret, file, item);
-    });
+
+    } else {
+
+      // 其他类型上传
+      let cloneList = [...files];
+
+      cloneList = cloneList.map((file, index) => {
+        file.thumbUrl = getObjectURL(file);
+        file.uid = file.uid ?? `${index}__${uuid()}`;
+        return fileToObject(file);
+      });
+
+      // this.props.onUploadChange(cloneList, item);
+
+      cloneList.forEach(async (file) => {
+        const formData = new FormData();
+        formData.append('file', file.originFileObj);
+        Object.keys((item.data || [])).forEach((elem) => {
+          formData.append(elem, item.data[elem]);
+        });
+        const ret = await createAttachment(formData);
+        this.props.onUploadComplete(ret, file, item);
+      });
+    }
   }
 
   handleChange = (e, item) => {
