@@ -23,7 +23,14 @@ export default function DefaultToolbar(props) {
           </Icon>
         ))}
       </div>
-      <div className={styles['dvditor-toolbar__right']} onClick={onSubmit}>发布</div>
+      <div className={styles['dvditor-toolbar__right']}
+        onClick={() => {
+          onSubmit();
+          setCurrentAction('');
+        }}
+      >
+        发布
+      </div>
       {/* 表情 */}
       {children}
     </div>
