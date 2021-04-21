@@ -73,7 +73,7 @@ export default ({ comment: CommentStore, thread: ThreadStore }) => ({
    * @returns {object} 处理结果
    */
   async createReply(params) {
-    const { id, commentId, replyId, content, isComment, attachments } = params;
+    const { id, commentId, replyId, commentPostId, content, isComment, attachments } = params;
     if (!id || !content || !replyId || !commentId) {
       return {
         msg: '参数不完整',
@@ -87,6 +87,7 @@ export default ({ comment: CommentStore, thread: ThreadStore }) => ({
       content: xss(content),
       isComment,
       attachments,
+      commentPostId,
     };
 
     const res = await createPosts({ data: requestParams });

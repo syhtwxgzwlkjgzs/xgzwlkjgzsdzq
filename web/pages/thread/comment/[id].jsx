@@ -36,7 +36,12 @@ class CommentDetail extends React.Component {
   }
 
   async componentDidMount() {
-    const { id } = this.props.router.query;
+    const { id, threadId } = this.props.router.query;
+
+    if (threadId) {
+      this.props.comment.setThreadId(threadId);
+    }
+
     if (!this.props.serverData && id) {
       const res = await readCommentDetail({ params: { pid: Number(id) } });
       this.props.comment.setCommentDetail(res.data);
