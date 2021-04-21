@@ -3,27 +3,43 @@
 .indexWrap {
   background: #f5f7f8;
   width: 100%;
+  .indexLeft {
+    width: 100%;
+    // padding: 0px 10px;
+    // background: #fff;
+  }
+  .indexRight {
+    width: 100%;
+  }
   .indexContent {
     width: 100%;
-    overflow: hidden;
+    .contnetTop {
+      width: 100%;
+      background: var(--color-white);
+      box-sizing: border-box;
+    }
   }
   .topBox {
-    border-bottom: 1px solid #eee;
-  }
-  .contnetTop {
-    width: 100%;
-    overflow: hidden;
-    // padding: 0 rem(24);
-    background: var(--color-white);
     position: relative;
     .PostTheme {
       position: absolute;
-      right: 0;
+      right: rem(24);
       top: 10px;
     }
   }
+  .TopNewsBox {
+    padding: rem(10) 0;
+    margin: 0 rem(24);
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+  }
+  .topNewContent {
+    padding: rem(10) 0;
+    margin: 0 rem(24);
+  }
   .themeBox {
     overflow: hidden;
+    margin-top: rem(20);
     .themeItem {
       margin-bottom: 10px;
     }
