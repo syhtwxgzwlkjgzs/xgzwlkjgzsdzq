@@ -1,6 +1,4 @@
 import React, { memo, useState } from 'react';
-import { useRouter } from 'next/router';
-import Image from 'next/image';
 import { Input, Button } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
@@ -51,7 +49,7 @@ const ProductSelect = (props) => {
 
     // 2 有链接，发起请求解析商品
     const { onAnalyseSuccess, threadPost } = props;
-    const res = await threadPost.fetchProductAnalysis({address: link});
+    const res = await threadPost.fetchProductAnalysis({ address: link });
     const { code, data = {} } = res;
     if (code === 0) {
       onAnalyseSuccess(data);
@@ -62,9 +60,9 @@ const ProductSelect = (props) => {
     <div className={styles['parse-goods-box']}>
       <div className={styles['parse-goods-title']}>现支持以下商品链接</div>
       <div className={styles['parse-goods-image']}>
-        {goodImages.map((item) => (
+        {goodImages.map(item => (
           <div className={styles['image-item']} key={item.name}>
-            <Image src={item.src} alt={item.name} width={item.width} height={item.height} />
+            <img src={item.src} alt={item.name} width={item.width} height={item.height} />
             <span className={styles['image-text']}>{item.name}</span>
           </div>
         ))}
@@ -74,7 +72,7 @@ const ProductSelect = (props) => {
         placeholder="请粘贴\输入商品链接"
         maxLength={49999}
         rows={8}
-        onChange={(e) => setLink(e.target.value)}
+        onChange={e => setLink(e.target.value)}
       />
       <div className={styles['parse-goods-btn']}>
         <Button type="primary" onClick={parseLink}>

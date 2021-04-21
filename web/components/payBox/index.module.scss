@@ -1,0 +1,65 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.payBox{
+  background: var(--color-white);
+
+  .title{
+    text-align: center;
+    padding: rem($padding-4n) 0;
+    p{
+      font-size: rem($font-size-large);
+    }
+  }
+  .list{
+    margin-top: rem($margin-2n);
+    .listItem{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: rem($padding-2n) rem($padding-4n);
+        .left{
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          width: 50%;
+          .icon{
+            margin-right: rem($margin-2n);
+          }
+          .text{
+            font-size: rem($font-size-primary);
+            color: var(--color-text-primary)
+          }
+        }
+        .right{
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          width: 50%;
+          .subText{
+            font-size: rem($font-size-label);
+            color: var(--color-text-secondary);
+            margin-right: rem($margin-2n);
+          }
+        }
+    }
+  }
+  .tips{
+    padding: rem($padding-2n) 0;
+    text-align: center;
+    font-size: rem($font-size-primary);
+    color: var(--color-text-secondary);
+  }
+
+  .btnBox{
+    margin-top: rem($margin-2n);
+    background: var(--background-color);
+    .btn{
+      height: rem(50);
+      &:not(:first-child) {
+        margin-top: rem($margin-2n);
+      }
+    }
+  }
+}
+
