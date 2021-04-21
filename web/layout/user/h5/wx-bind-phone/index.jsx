@@ -69,7 +69,12 @@ class WXBindPhoneH5Page extends React.Component {
                 await wxPhoneBind.loginAndBind(sessionToken);
                 Toast.success({
                   content: '登录成功',
+                  duration: 1000,
                 });
+
+                setTimeout(() => {
+                  this.props.router.push('/index');
+                }, 1000);
               } catch (error) {
                 Toast.error({
                   content: error.Message,
