@@ -44,8 +44,9 @@ const typeMap = {
   111: 'QA_IMAGE',
 };
 
+
 // 帖子内容
-function RenderThreadContent(props) {
+const RenderThreadContent = observer((props) => {
   const { store: threadStore } = props;
   const { text, indexes } = threadStore?.threadData?.content || {};
 
@@ -149,7 +150,7 @@ function RenderThreadContent(props) {
       </div>
     </div>
   );
-}
+});
 
 // 评论列表
 @observer
