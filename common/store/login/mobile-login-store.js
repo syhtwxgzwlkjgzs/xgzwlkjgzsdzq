@@ -2,7 +2,7 @@ import { observable, action, computed } from 'mobx';
 import { smsSend, smsLogin } from '@server';
 import { get } from '../../utils/get';
 import setAccessToken from '../../utils/set-access-token';
-import { BAND_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/common-login-store';
+import { checkUserStatus } from '@common/store/login/util';
 
 export const MOBILE_LOGIN_STORE_ERRORS = {
   MOBILE_VERIFY_ERROR: {
@@ -170,22 +170,6 @@ export default class mobileLoginStore {
       }
     }
 
-    /**
-     * 检查用户是否处于审核状态，用来跳转状态页面
-     * @param {*} smsLoginResp
-     */
-    checkUserStatus = (smsLoginResp) => {
-      const rejectReason = get(smsLoginResp, 'data.rejectReason', '');
-      const status = get(smsLoginResp, 'data.userStatus', 0);
-      if (status ===  REVIEWING) {
-        throw {
-          Code: status,
-          Message: rejectReason,
-        };
-      }
-      return;
-    }
-
     @action
     login = async () => {
       this.beforeLoginVerify();
@@ -199,6 +183,7 @@ export default class mobileLoginStore {
             type: 'mobilebrowser_sms_login',
           },
         });
+        checkUserStatus(smsLoginResp);
 
         if (smsLoginResp.code === 0) {
           const accessToken = get(smsLoginResp, 'data.accessToken', '');
@@ -208,7 +193,6 @@ export default class mobileLoginStore {
           });
 
           this.checkCompleteUserInfo(smsLoginResp);
-          this.checkUserStatus(smsLoginResp);
 
           return smsLoginResp.data;
         }
@@ -217,13 +201,6 @@ export default class mobileLoginStore {
           throw {
             ...MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT,
             sessionToken: get(smsLoginResp, 'data.sessionToken'),
-          };
-        }
-
-        if (smsLoginResp.code === BAND_USER || smsLoginResp.code === REVIEW_REJECT) {
-          throw {
-            Code: smsLoginResp.code,
-            Message: get(smsLoginResp, 'data.rejectReason', ''),
           };
         }
 

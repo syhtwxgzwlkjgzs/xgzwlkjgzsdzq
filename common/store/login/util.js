@@ -13,34 +13,15 @@ export const COMMON_LOGIN_STORE_ERRORS = {
     Code: 'common_0003',
     Message: '需要补充昵称和附加信息',
   },
-  BAND_USER: {
-    Code: 'common_0004',
-    Message: '用户被禁用',
-  },
-  REVIEWING: {
-    Code: 'common_0005',
-    Message: '审核中',
-  },
-  REVIEW_REJECT: {
-    Code: 'common_0006',
-    Message: '审核拒绝',
-  },
-  REVIEW_IGNORE: {
-    Code: 'common_0007',
-    Message: '审核忽略',
-  },
   NEED_BIND_WECHAT: {
     Code: 8000,
     Message: '需要绑定微信',
   },
 };
 
-const USER_STATUS_MAP = {
-  1: COMMON_LOGIN_STORE_ERRORS.BAND_USER,
-  2: COMMON_LOGIN_STORE_ERRORS.REVIEWING,
-  3: COMMON_LOGIN_STORE_ERRORS.REVIEW_REJECT,
-  4: COMMON_LOGIN_STORE_ERRORS.REVIEW_IGNORE,
-};
+export const BAND_USER = -4009; // 禁用
+export const REVIEWING = 2; // 审核
+export const REVIEW_REJECT = -4007; // 审核拒绝
 
 const throwFormattedError = (error) => {
   if (error.code) {
@@ -78,15 +59,27 @@ const checkCompleteUserInfo = (resp) => {
 };
 
 /**
-* 检查用户状态，用来跳转状态页面
-* @param {*} smsLoginResp
-*/
-const checkUserStatus = (smsLoginResp) => {
-  const userStatus = get(smsLoginResp, 'userStatus');
-  if (USER_STATUS_MAP[userStatus]) {
-    throw USER_STATUS_MAP[userStatus];
+ * 检查用户是否处于需要调整状态页
+ * @param {*} resp
+ */
+const checkUserStatus = (resp) => {
+  if (resp.code === 0) {
+    const rejectReason = get(resp, 'data.rejectReason', '');
+    const status = get(resp, 'data.userStatus', 0);
+    if (status ===  REVIEWING) {
+      throw {
+        Code: status,
+        Message: rejectReason,
+      };
+    }
   }
-  return;
+
+  if (resp.code === BAND_USER || resp.code === REVIEW_REJECT) {
+    throw {
+      Code: resp.code,
+      Message: get(resp, 'data.rejectReason', ''),
+    };
+  }
 };
 
 export { throwFormattedError, networkRequestCatcher, checkCompleteUserInfo, checkUserStatus };
