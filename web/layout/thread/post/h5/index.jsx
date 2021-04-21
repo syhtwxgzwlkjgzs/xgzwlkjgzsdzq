@@ -29,6 +29,7 @@ import PostPopup from '@components/thread-post/post-popup';
 import AllPostPaid from '@components/thread/all-post-paid';
 import { withRouter } from 'next/router';
 import classNames from 'classnames';
+import { getVisualViewpost } from '@common/utils/get-client-height';
 
 @inject('threadPost')
 @inject('index')
@@ -81,6 +82,7 @@ class ThreadCreate extends React.Component {
       paySelectText: ['帖子付费', '附件付费'],
       curPaySelect: '',
       payData: {},
+      height: 0,
     };
   }
   componentDidMount() {
@@ -317,10 +319,11 @@ class ThreadCreate extends React.Component {
     player && player.src(opt);
   };
 
-  getBottomBarStyle = () => {
-    const { isVditorFocus } = this.state;
-    const position = isVditorFocus ? styles['post-bottombar-absolute'] : styles['post-bottombar-fixed'];
-    return classNames(styles['post-bottombar'], position);
+  getHeight = () => {
+    const timer = setTimeout(() => {
+      if (timer) clearTimeout(timer);
+      this.setState({ height: getVisualViewpost() });
+    }, 300);
   }
 
   render() {
@@ -347,23 +350,35 @@ class ThreadCreate extends React.Component {
       rewardQaShow,
       rewardQaData,
       fileCurrentData,
+      height,
     } = this.state;
     const images = Object.keys(imageCurrentData);
     const files = Object.keys(fileCurrentData);
     const category = (index.categories && index.categories.slice()) || [];
     const { value, times } = rewardQaData;
+    let style = {};
+    if (height) style = { height: `${height}px` };
+    console.log(height, style);
 
     return (
-      <>
-        <div className={styles.post}>
-          <Title onChange={this.handleTitleChange} />
+      <div className={styles.post} style={style}>
+        <div className={styles['post-inner']}>
+          <Title
+            onChange={this.handleTitleChange}
+            onFocus={this.getHeight}
+          />
           <DVditor
             emoji={emoji}
             atList={atList}
             topic={topic}
             onChange={this.handleVditorChange}
-            onFocus={() => this.setState({ isVditorFocus: true })}
-            onBlur={() => this.setState({ isVditorFocus: false })}
+            onFocus={() => {
+              this.getHeight();
+              this.setState({ isVditorFocus: true });
+            }}
+            onBlur={() => {
+              this.setState({ isVditorFocus: false });
+            }}
           />
 
           {/* 录音组件 */}
@@ -405,8 +420,6 @@ class ThreadCreate extends React.Component {
               }}
             />
           )}
-        </div>
-        <div className={this.getBottomBarStyle()}>
           <div className={styles['position-box']}>
             <Position onChange={position => this.setState({ position })} />
           </div>
@@ -418,6 +431,8 @@ class ThreadCreate extends React.Component {
               }}>{`悬赏金额${rewardQaData.value}元\\结束时间${rewardQaData.times}`}</div>
             </div>
           )}
+        </div>
+        <div className={classNames(styles['post-bottombar'], styles['post-bottombar-fixed'])}>
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar
             onAttachClick={this.handleAttachClick}
@@ -508,7 +523,7 @@ class ThreadCreate extends React.Component {
             }}
           />
         )}
-      </>
+      </div>
     );
   }
 }
