@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import styles from './Index.module.scss';
+import styles from './index.module.scss';
 import Tip from '../tip';
 import { Icon } from '@discuzq/design';
 
