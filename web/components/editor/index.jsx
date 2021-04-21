@@ -100,10 +100,16 @@ export default function DVditor(props) {
         toolbar: [
           {
             name: 'bold',
-            icon: 'B',
+            icon: '<div class="dzq-icon dzq-icon-MakeSthOutlined" style="font-size:16px"></div>',
           },
-          'italic',
-          'strike',
+          {
+            name: 'italic',
+            icon: '<div class="dzq-icon dzq-icon-BiasOutlined" style="font-size:16px"></div>',
+          },
+          {
+            name: 'strike',
+            // icon: '<div class="dzq-icon dzq-icon-BiasOutlined" style="font-size:16px"></div>',
+          },
         ],
         toolbarConfig: {
           hide: false,
