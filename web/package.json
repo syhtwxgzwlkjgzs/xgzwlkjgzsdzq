@@ -27,6 +27,7 @@
     "recorder-core": "^1.1.21021500",
     "url": "0.11.0",
     "vditor": "3.8.4",
+    "vod-js-sdk-v6": "^1.4.11",
     "xss": "1.0.8"
   },
   "devDependencies": {
