@@ -5,6 +5,7 @@ class CommentStore {
     this.commentDetail = props?.comment;
   }
   @observable commentDetail = null; // 评论信息
+  @observable threadId = null; // 评论信息
 
   // 回复列表
   @computed get replyList() {

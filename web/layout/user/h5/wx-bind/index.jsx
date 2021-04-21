@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './index.module.scss';
 import HeaderLogin from '../../../../components/login/h5/header-login';
-import { Button, Toast } from '../../../../../../discuz-core/packages/discuz-design';
+import { Button, Toast } from '@discuzq/design';
 import { h5WechatCodeBind } from '@server';
 
 @inject('site')

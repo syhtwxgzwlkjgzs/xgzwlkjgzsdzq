@@ -31,7 +31,7 @@ class WXSelectH5Page extends React.Component {
                     timeout: 10000,
                     params: {
                       sessionToken,
-                    }
+                    },
                   });
                   Toast.success({
                     content: res.code + res.msg,

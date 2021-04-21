@@ -25,7 +25,7 @@ export default function H5Header() {
                 }} name="MessageOutlined" color="#C4C9D6" size={20} />
                 <Icon onClick={() => {
                   iconClickHandle('user');
-                }} name="UserOutlined" color="#C4C9D6" size={20} />
+                }} name="ProfessionOutlined" color="#C4C9D6" size={20} />
             </div>
         </div>
     </div>

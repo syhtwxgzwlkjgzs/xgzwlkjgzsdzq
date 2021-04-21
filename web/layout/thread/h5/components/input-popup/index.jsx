@@ -4,7 +4,7 @@ import { Icon, Popup, Textarea, Upload, Button } from '@discuzq/design';
 import styles from './index.module.scss';
 
 const InputPop = (props) => {
-  const { visible, onSubmit, onClose } = props;
+  const { visible, onSubmit, onClose, inputText = '请输入内容' } = props;
 
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
@@ -40,7 +40,7 @@ const InputPop = (props) => {
             showLimit={true}
             value={value}
             onChange={e => setValue(e.target.value)}
-            placeholder='请输入内容'>
+            placeholder={inputText}>
           </Textarea>
           {/* <Upload listType='card'>
             <Button loading={loading} type='text' className={styles.upload}>
