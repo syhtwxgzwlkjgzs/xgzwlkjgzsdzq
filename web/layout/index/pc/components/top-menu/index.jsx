@@ -86,12 +86,12 @@ const NewContent = (showSort = false) => {
   return (
     <div className={styles.container}>
       {/* 菜单 */}
-      <Menu mode="horizontal" menuTrigger="hover" className='filterMenu'>
+      <Menu mode="horizontal" menuTrigger="click" className='filterMenu'>
         {
           filterData.map((item, index) => {
             return (
               item.children ?
-                <Menu.SubMenu key={index} index={index} title={title(item.label)} className='filterItem'>
+                <Menu.SubMenu key={index} index={index} title={title(item.label)}>
                   {
                     item.children.map((secondItem, secondIndex) => { 
                       return (<Menu.Item divided={secondItem.divided} key={secondIndex} index={secondIndex}>{secondItem.label}</Menu.Item>)
@@ -103,8 +103,6 @@ const NewContent = (showSort = false) => {
           })
         }
       </Menu>
-      {/* 发布
-      <Button type="primary" className={styles.publishBtn}>发布</Button> */}
     </div>
   );
 };
