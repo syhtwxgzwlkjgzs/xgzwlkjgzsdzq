@@ -13,7 +13,12 @@ class CommentAction extends CommentStore {
 
   @action
   addReplyToList(data) {
-    (this.commentDetail.commentPosts || []).push(data);
+    (this.commentDetail?.commentPosts || []).push(data);
+  }
+
+  @action
+  setThreadId(id) {
+    this.threadId = id;
   }
 }
 
