@@ -4,20 +4,11 @@ import api from '../api';
  * @param {object} params
  * @returns object
  */
-// export default async function readLikedUsers(params) {
-//   const res = await api.http({
-//     url: '/apiv3/likedusers',
-//     method: 'GET',
-//     data: params,
-//   });
-//   return res;
-// }
-
 export default async function readLikedUsers(opts, ctx = null) {
   try {
     const { params = {}, data = {}, ...others } = opts;
     const options = {
-      url: '/apiv3/likedusers', // 请求地址
+      url: '/api/thread.likedusers.v3', // 请求地址
       method: 'GET',
       params,
       data,

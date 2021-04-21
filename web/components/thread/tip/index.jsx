@@ -10,7 +10,9 @@ import styles from './index.module.scss';
 const Index = ({ imgs = [] }) => {
   const [visible, setVisible] = useState(false);
 
-  const onClick = () => {
+  const onClick = (e) => {
+    e.stopPropagation();
+
     setVisible(true);
   };
 

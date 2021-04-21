@@ -14,6 +14,7 @@ export { default as readCategories } from './home/readCategories';
 export { default as readThreadList } from './home/readThreadList';
 export { default as readStickList } from './home/readStickList';
 export { default as updatePosts } from './home/updatePosts';
+export { default as createThreadShare } from './home/createThreadShare';
 export { default as readLikedUsers } from './home/readLikedUsers';
 export { default as default } from './api';
 export { default as readEmoji } from './thread-post/read-emoji';

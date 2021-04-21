@@ -102,7 +102,7 @@ class Index extends React.Component {
     }
 
     // 帖子属性内容
-    renderThreadContent = ({ content: data, payType } = {}) => {
+    renderThreadContent = ({ content: data, attachmentPrice, payType } = {}) => {
       const {
         text,
         imageData,
@@ -140,7 +140,7 @@ class Index extends React.Component {
                   <div className={styles.cover}>
                     <Button className={styles.button} type="primary" onClick={this.onPay}>
                       <span className={styles.icon}>$</span>
-                      支付{this.props.money}元查看附件内容
+                      支付{attachmentPrice}元查看附件内容
                     </Button>
                   </div>
                 )
@@ -151,13 +151,13 @@ class Index extends React.Component {
     }
 
     render() {
-      const { money = '0', data } = this.props;
+      const { data } = this.props;
 
       if (!data) {
         return <NoData />;
       }
 
-      const { title = '', user = {}, position = {}, likeReward = {}, payType, viewCount } = data || {};
+      const { title = '', user = {}, position = {}, likeReward = {}, payType, viewCount, price } = data || {};
 
       return (
         <div className={styles.container} onClick={this.onClick}>
@@ -176,7 +176,7 @@ class Index extends React.Component {
 
           {payType === 1 && <Button className={styles.button} type="primary" onClick={this.onPay}>
             <span className={styles.icon}>$</span>
-            支付{money}元查看剩余内容
+            支付{price}元查看剩余内容
           </Button>}
 
           <BottomEvent
