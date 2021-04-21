@@ -38,26 +38,34 @@ class IndexH5Page extends React.Component {
       visible: false,
     });
   }
-
-  renderHeaderContent() {
-    const { index } = this.props;
-    const { sticks, categories } = index;
-    return (
-      <div>
-        <HomeHeader/>
-        <div className={styles.homeContent}>
-          <Tabs
-            scrollable={true}
-            type={'primary'}
-            tabBarExtraContent={
-              <div
-                style={{
-                  width: 70,
-                  height: '100%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
+  // 筛选数据
+  screenClick = (classification, topicType, parameter) => {
+    console.log(classification, topicType, parameter, '筛选值');
+  }
+  render() {
+    console.log(this.state);
+    const { index, user } = this.props;
+    const { sticks, threads, categories } = index;
+    const HeaderContent = () => (
+          <>
+            <HomeHeader/>
+            <div className={styles.homeContent}>
+              <Tabs
+                scrollable={true}
+                type={'primary'}
+                tabBarExtraContent={
+                  <div
+                    style={{
+                      width: 70,
+                      height: '100%',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Button onClick={this.searchClick}>更多</Button>
+                  </div>
+              }
               >
                 <Button onClick={this.searchClick}>更多</Button>
               </div>
@@ -96,23 +104,10 @@ class IndexH5Page extends React.Component {
           data={threads.pageData}
           renderItem={this.renderItem}
         />
-        : <NoData />
-    );
-  }
-
-
-  render() {
-    const { index } = this.props;
-    const { threads } = index;
-    
-    return (
-      <div className={styles.homeBox}>
-        { threads?.pageData?.length > 0
-          ? this.renderList(threads?.pageData)
-          : this.renderHeaderContent()
-        }
-       <FilterModalPopup visible={this.state.visible} onClose={this.onClose} filterData={filterData}></FilterModalPopup>
-       <Tabbar/>
+          : <HeaderContent />
+       }
+       <FilterModalPopup parent={this} visible={this.state.visible} onClose={this.onClose} filterData={filterData}></FilterModalPopup>
+       <Tabbar />
       </div>
     );
   }
