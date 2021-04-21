@@ -12,7 +12,7 @@ import { h5WechatCodeBind } from '@server';
 @observer
 class WeixinBindH5Page extends React.Component {
   render() {
-    const { sessionToken, loginType, code, sessionId }  = this.props.router.query;
+    const { sessionToken, loginType, code, sessionId, state }  = this.props.router.query;
     return (
       <div className={layout.container}>
         <HeaderLogin/>
@@ -27,7 +27,7 @@ class WeixinBindH5Page extends React.Component {
             className={layout.button}
             type="primary"
             onClick={() => this.bind({
-              params: { sessionToken, code, sessionId },
+              params: { sessionToken, code, sessionId, type: 'h5', state },
             })}
           >
             绑定微信，并继续访问
@@ -39,8 +39,9 @@ class WeixinBindH5Page extends React.Component {
 
   bind = async (opts) => {
     try {
-      console.log(opts.params.sessionToken);
       const res = await h5WechatCodeBind({
+        url: '/apiv3/users/wechat/h5.bind',
+        method: 'GET',
         timeout: 3000,
         ...opts,
       });
