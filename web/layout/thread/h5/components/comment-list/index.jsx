@@ -19,9 +19,7 @@ class CommentList extends React.Component {
     this.needReply = this.props.data.lastThreeComments;// 评论的回复
     this.replyNumber = this.props.data.replyCount - 1; // 评论的回复
   }
-  componentDidMount() {
-    this.showOne();
-  }
+
   static async getInitialProps() {
     return {
 
@@ -30,13 +28,6 @@ class CommentList extends React.Component {
   toCommentDetail = () => {
     if (this.state.isShowOne) {
       typeof this.props.onCommentClick === 'function' && this.props.onCommentClick();
-    }
-  }
-  // 处理评论的回复只显示一条
-  showOne() {
-    if (this.state.isShowOne) {
-      this.needReply = [];
-      this.props.data?.lastThreeComments?.length && this.needReply.push(this.props.data.lastThreeComments[0]);
     }
   }
 
@@ -165,21 +156,33 @@ class CommentList extends React.Component {
                     查看之前{this.replyNumber}条回复...
                     </div> : ''
               }
-              <div className={styles.ReplyList}>
-                {
-                  (this.needReply || [])
-                    .map((val, index) => (
-                      <ReplyList
-                        data={val}
-                        key={val.id || index}
-                        avatarClick={() => this.reployAvatarClick(val)}
-                        likeClick={() => this.replyLikeClick(val)}
-                        replyClick={() => this.replyReplyClick(val)}
+              {
+                this.needReply?.length
+                && <div className={styles.ReplyList}>
+                  {
+                    this.state.isShowOne
+                      ? <ReplyList
+                        data={this.needReply[0]}
+                        key={this.needReply[0].id}
+                        avatarClick={() => this.reployAvatarClick(this.needReply[0])}
+                        likeClick={() => this.replyLikeClick(this.needReply[0])}
+                        replyClick={() => this.replyReplyClick(this.needReply[0])}
                         toCommentDetail={() => this.toCommentDetail()}>
                       </ReplyList>
-                    ))
-                }
-              </div>
+                      : (this.needReply || [])
+                        .map((val, index) => (
+                          <ReplyList
+                            data={val}
+                            key={val.id || index}
+                            avatarClick={() => this.reployAvatarClick(val)}
+                            likeClick={() => this.replyLikeClick(val)}
+                            replyClick={() => this.replyReplyClick(val)}
+                            toCommentDetail={() => this.toCommentDetail()}>
+                          </ReplyList>
+                        ))
+                  }
+                </div>
+              }
             </div>
           </div>
         </div>
