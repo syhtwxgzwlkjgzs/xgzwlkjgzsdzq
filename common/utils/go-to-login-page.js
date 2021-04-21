@@ -6,7 +6,7 @@
  */
 
 import Router from '@common/utils/web-router';
-import isWeiXin from './is-wechat-browser';
+import browser from './browser';
 import config from '../config/index';
 
 function getWeiXinLoginPath(redirectPath) {
@@ -25,7 +25,7 @@ function getH5LoginPath(redirectPath) {
 export default function goToLoginPage(options) {
   // 默认跳转路径
   const { pathname, search: query, hash } = window.location;
-  const loginPath = isWeiXin() ? getWeiXinLoginPath(pathname) : getH5LoginPath(pathname);
+  const loginPath = browser.env('weixin') ? getWeiXinLoginPath(pathname) : getH5LoginPath(pathname);
   Router.push({
     pathname: loginPath,
     query,
