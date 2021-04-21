@@ -10,6 +10,7 @@ import topic from './topic.module.scss';
 import CommentList from './components/comment-list/index';
 import NoMore from './components/no-more';
 import LoadingTips from './components/loading-tips';
+import { formatDate } from '@common/utils/format-date';
 
 import { Icon, Input, Badge, Toast, Tag, Button } from '@discuzq/design';
 import UserInfo from '@components/thread/user-info';
@@ -77,7 +78,7 @@ const RenderThreadContent = observer((props) => {
           avatar={threadStore?.threadData?.user?.avatar || ''}
           location={threadStore?.threadData?.position.location || ''}
           view={`${threadStore?.threadData?.viewCount}` || ''}
-          time='3分钟前'>
+          time={`${formatDate(threadStore?.threadData?.createdAt, 'yyyy-MM-dd')}` || ''}>
         </UserInfo>
         <div>
           {threadStore?.threadData?.isEssence && <Tag type='primary'>精华</Tag>}
@@ -634,7 +635,7 @@ class ThreadH5Page extends React.Component {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
-      isLiked: !this.props.thread?.isLiked,
+      isLiked: !this.props.thread?.threadData?.isLiked,
     };
     const { success, msg } = await this.service.thread.updateLiked(params);
 
