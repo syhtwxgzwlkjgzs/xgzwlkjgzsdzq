@@ -22,6 +22,8 @@ class WeixinAuth extends React.Component {
 
     try {
       const res = await h5WechatCodeLogin({
+        method: 'GET',
+        url: 'apiv3/users/wechat/h5.login',
         timeout: 10000,
         params: {
           code,
