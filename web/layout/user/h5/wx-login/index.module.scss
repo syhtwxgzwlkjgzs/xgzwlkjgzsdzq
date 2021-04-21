@@ -1,0 +1,42 @@
+@import '@common/styles/mixin/login.scss';
+@import '@common/styles/fn/rem.scss';
+.container {
+  height: 100vh;
+  .input {
+    @include input;
+    @include passwordInput;
+  }
+}
+.content {
+  padding: rem(48) rem(24);
+  .button {
+    @include button;
+  }
+  .title {
+    @include title;
+  }
+  .otherLogin-title {
+    @include otherLoginText;
+    margin-top: rem(80);
+    font-size: rem(14);
+  }
+  .otherLogin-button{
+    text-align: center;
+    margin: rem(16);
+  }
+  .otherLogin-button-weixin {
+    @include otherLoginBtn;
+  }
+  .otherLogin-button-user {
+    @include otherLoginBtn;
+  }
+  .otherLogin-outer__tips{
+    @include otherLoginText;
+    margin-top: rem(32);
+  }
+  .otherLogin-within__tips{
+    @include otherLoginText;
+    margin-top: rem(180);
+  }
+}
+ 
