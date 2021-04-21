@@ -1,173 +1,216 @@
 export default [
   {
       "title": "版块",
+      "type": 1,
       "data": [
-          {
-              "label": "所有",
-              "value": -1,
-              "selected": true
-          },
-          {
-              "label": "官方动态11",
-              "value": 1,
-              "selected": false,
-              "searchIds": 1
-          },
-          {
-              "label": "牛奶",
-              "value": [
-                  30,
-                  31,
-                  48
-              ],
-              "selected": false,
-              "searchIds": null
-          },
-          {
-              "label": "lala",
-              "value": [
-                  32,
-                  33
-              ],
-              "selected": false,
-              "searchIds": null
-          },
-          {
-              "label": "测试接口",
-              "value": 53,
-              "selected": false,
-              "searchIds": 53
-          },
-          {
-              "label": "地球",
-              "value": [
-                  14,
-                  20,
-                  19
-              ],
-              "selected": false,
-              "searchIds": null
-          },
-          {
-              "label": "火星",
-              "value": [
-                  15,
-                  21
-              ],
-              "selected": false,
-              "searchIds": null
-          },
-          {
-              "label": "太阳",
-              "value": [
-                  16,
-                  22,
-                  24,
-                  25
-              ],
-              "selected": false,
-              "searchIds": null
-          },
-          {
-              "label": "木星",
-              "value": [
-                  17,
-                  26
-              ],
-              "selected": false,
-              "searchIds": null
-          },
-          {
-              "label": "土星",
-              "value": [
-                  18,
-                  27,
-                  28,
-                  29,
-                  34,
-                  35,
-                  36,
-                  37,
-                  38,
-                  39,
-                  40,
-                  41,
-                  42,
-                  43,
-                  44
-              ],
-              "selected": false,
-              "searchIds": null
-          },
-          {
-              "label": "文字贴",
-              "value": 45,
-              "selected": false,
-              "searchIds": 45
-          },
-          {
-              "label": "长文红包帖",
-              "value": 46,
-              "selected": false,
-              "searchIds": 46
-          },
-          {
-              "label": "草稿箱",
-              "value": 47,
-              "selected": false,
-              "searchIds": 47
-          },
-          {
-              "label": "sun",
-              "value": [
-                  49,
-                  50
-              ],
-              "selected": false,
-              "searchIds": null
-          }
+        {
+          pid: 1,
+          name: '北京市',
+          description: '北京市',
+          icon: '',
+          sort: 0,
+          property: 0,
+          threadCount: 31,
+          parentid: 0,
+          canCreateThread: true,
+          searchIds: [
+            1,
+            5,
+            6,
+            7,
+            8,
+          ],
+          children: [
+            {
+              pid: 5,
+              name: '东城区',
+              description: '东城区',
+              icon: '',
+              sort: 1,
+              property: 0,
+              threadCount: 7,
+              parentid: 1,
+              canCreateThread: false,
+              searchIds: 5,
+            },
+            {
+              pid: 6,
+              name: '西城区',
+              description: '西城区',
+              icon: '',
+              sort: 2,
+              property: 0,
+              threadCount: 14,
+              parentid: 1,
+              canCreateThread: false,
+              searchIds: 6,
+            },
+            {
+              pid: 7,
+              name: '海淀区',
+              description: '海淀区',
+              icon: '',
+              sort: 3,
+              property: 0,
+              threadCount: 5,
+              parentid: 1,
+              canCreateThread: true,
+              searchIds: 7,
+            },
+            {
+              pid: 8,
+              name: '朝阳区',
+              description: '朝阳区',
+              icon: '',
+              sort: 4,
+              property: 0,
+              threadCount: 5,
+              parentid: 1,
+              canCreateThread: false,
+              searchIds: 8,
+            },
+          ],
+        },
+        {
+          pid: 2,
+          name: '广州市',
+          description: '广州市1',
+          icon: '',
+          sort: 1,
+          property: 0,
+          threadCount: 11,
+          parentid: 0,
+          canCreateThread: false,
+          searchIds: [
+            2,
+            9,
+            10,
+          ],
+          children: [
+            {
+              pid: 9,
+              name: 'aaa',
+              description: 'aaaaaaaaa',
+              icon: '',
+              sort: 1,
+              property: 0,
+              threadCount: 0,
+              parentid: 2,
+              canCreateThread: false,
+              searchIds: 9,
+            },
+            {
+              pid: 10,
+              name: 'bbb',
+              description: 'bbbbbbbb',
+              icon: '',
+              sort: 2,
+              property: 0,
+              threadCount: 0,
+              parentid: 2,
+              canCreateThread: false,
+              searchIds: 10,
+            },
+          ],
+        },
+        {
+          pid: 3,
+          name: '深圳市',
+          description: '深圳市1',
+          icon: '',
+          sort: 2,
+          property: 0,
+          threadCount: 9,
+          parentid: 0,
+          canCreateThread: false,
+          searchIds: [
+            3,
+            11,
+            12,
+          ],
+          children: [
+            {
+              pid: 11,
+              name: '龙华区',
+              description: '龙华区龙华区龙华区',
+              icon: '',
+              sort: 1,
+              property: 0,
+              threadCount: 2,
+              parentid: 3,
+              canCreateThread: false,
+              searchIds: 11,
+            },
+            {
+              pid: 12,
+              name: '南山区',
+              description: '南山区南山区南山区南山区',
+              icon: '',
+              sort: 2,
+              property: 0,
+              threadCount: 0,
+              parentid: 3,
+              canCreateThread: false,
+              searchIds: 12,
+            },
+          ],
+        },
+        {
+          pid: 4,
+          name: '上海市',
+          description: '上海市1',
+          icon: '',
+          sort: 3,
+          property: 0,
+          threadCount: 6,
+          parentid: 0,
+          canCreateThread: false,
+          searchIds: 4,
+          children: [],
+        },
       ]
   },
   {
       "title": "类型",
+      "type": 2,
       "data": [
           {
-              "label": "所有",
+              "name": "所有",
               "value": "",
               "selected": true
           },
           {
-              "label": "文本",
+              "name": "文本",
               "value": "0",
               "selected": false
           },
           {
-              "label": "帖子",
+              "name": "帖子",
               "value": "1",
               "selected": false
           },
           {
-              "label": "视频",
+              "name": "视频",
               "value": "2",
               "selected": false
           },
           {
-              "label": "图片",
+              "name": "图片",
               "value": "3",
               "selected": false
           },
           {
-              "label": "语音",
+              "name": "语音",
               "value": "4",
               "selected": false
           },
           {
-              "label": "问答",
+              "name": "问答",
               "value": "5",
               "selected": false
           },
           {
-              "label": "商品",
+              "name": "商品",
               "value": "6",
               "selected": false
           }
@@ -175,19 +218,20 @@ export default [
   },
   {
       "title": "筛选",
+      "type": 3,
       "data": [
           {
-              "label": "所有",
+              "name": "所有",
               "value": "",
               "selected": true
           },
           {
-              "label": "精华",
+              "name": "精华",
               "value": "1",
               "selected": false
           },
           {
-              "label": "已关注",
+              "name": "已关注",
               "value": "2",
               "selected": false
           }

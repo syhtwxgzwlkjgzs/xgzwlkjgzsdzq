@@ -29,6 +29,10 @@ class IndexH5Page extends React.Component {
       visible: false,
     });
   }
+  // 筛选数据
+  screenClick = (classification, topicType, parameter) => {
+    console.log(classification, topicType, parameter, '筛选值');
+  }
   render() {
     console.log(this.state);
     const { index, user } = this.props;
@@ -82,7 +86,7 @@ class IndexH5Page extends React.Component {
         />
           : <HeaderContent />
        }
-       <FilterModalPopup visible={this.state.visible} onClose={this.onClose} filterData={filterData}></FilterModalPopup>
+       <FilterModalPopup parent={this} visible={this.state.visible} onClose={this.onClose} filterData={filterData}></FilterModalPopup>
        <Tabbar />
       </div>
     );
