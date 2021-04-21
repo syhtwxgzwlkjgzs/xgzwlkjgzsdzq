@@ -34,16 +34,18 @@ export default ({ comment: CommentStore, thread: ThreadStore }) => ({
 
       const newTotalCount = totalCount + 1;
       ThreadStore.setTotalCount(newTotalCount);
+      const newData = res.data;
+      newData.lastThreeComments = [];
 
       // 头部添加评论
       if (sort === false) {
-        commentList.unshift(res.data);
+        commentList.unshift(newData);
         ThreadStore.setCommentList(commentList);
       }
 
       // 尾部添加评论
       if (sort === true && isNoMore === false) {
-        commentList.push(res.data);
+        commentList.push(newData);
         ThreadStore.setCommentList(commentList);
       }
 
@@ -100,7 +102,7 @@ export default ({ comment: CommentStore, thread: ThreadStore }) => ({
         commentList.forEach((comment) => {
           if (commentId === comment.id) {
             comment.replyCount = comment.replyCount + 1;
-            comment.lastThreeComments = [res.data];
+            comment.lastThreeComments.splice(0, 1, res.data);
           }
         });
       }
