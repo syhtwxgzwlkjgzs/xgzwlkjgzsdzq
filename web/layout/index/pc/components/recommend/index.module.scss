@@ -1,0 +1,118 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.recommend {
+  font-family: "PingFang SC";
+  background: #fff;
+  padding: rem(16);
+  padding-bottom: 0;
+  .recommendContent {
+    font-weight: 600;
+    font-size: rem($font-size-large);
+    line-height: 28px;
+    color: #0b0b37;
+    margin-bottom: rem(16);
+  }
+}
+.recommendBox {
+  width: 100%;
+  height: rem(82);
+  border-top: rem(1) solid #EEEEEE;
+  .recommendTitle {
+    display: flex;
+    margin-top: rem(16);
+    .recommendSort {
+      margin-right: rem(8);
+      font-weight: normal;
+      font-size: rem($font-size-primary);
+      line-height: 24px;
+      color: #e02433;
+    }
+    .recommenText {
+      width: rem(272);
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 24px;
+      color: #0b0b37;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  .browse {
+    width: 100%;
+    display: flex;
+    margin-top: rem(8);
+    justify-content: space-between;
+    .browseBox {
+      font-weight: normal;
+      font-size: rem($font-size-label);
+      line-height: rem(26);
+      color: #8490a8;
+      .browseIcon {
+        margin-right: rem(4);
+      }
+    }
+    .browseButtom {
+      display: flex;
+      .browseSurplus {
+        font-weight: normal;
+        font-size: rem($font-size-label);
+        line-height: rem(24);
+        color: #0b0b37;
+        .surNumber {
+          color: #E02433;
+        }
+      }
+      .browseCategory {
+        display: flex;
+        p {
+          width: rem(40);
+          height: rem(21);
+          margin-left: rem(8);
+          border-radius: rem(5);
+          font-family: "PingFangSC-Regular";
+          font-weight: normal;
+          font-size: rem($font-size-label);
+          line-height: rem(21);
+          text-align: center;
+        }
+        .categoryText {
+          color: #3ac15f;
+          background: transparent;
+          border: rem(1) solid #3ac15f;
+        }
+        .categoryEssence {
+          color: #2469F6;
+          background: transparent;
+          border: rem(1) solid #2469F6;
+        }
+        .categoryRed {
+          color: #E02433;
+          background: transparent;
+          border: rem(1) solid #E02433;
+        }
+        .categoryReward {
+          color: #FFC300;
+          background: transparent;
+          border: rem(1) solid #FFC300;
+        }
+      }
+    }
+  }
+}
+.recommendSwitch {
+  width: 100%;
+  height: rem(52);
+  border-top: rem(1) solid #EEEEEE;
+  .switchBox {
+    width: rem(66);
+    margin: rem(16) auto 0;
+    font-weight: normal;
+    font-size: rem($font-size-primary);
+    line-height: rem(24);
+    color: #4f5a70;
+    .switchIcon {
+      margin-right: rem(8);
+    }
+  }
+}
