@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { User } from '../../../../../../components/search-result-item';
+import UserItem from '@components/thread/user-item';
 
 import styles from './index.module.scss';
 
@@ -12,7 +12,7 @@ import styles from './index.module.scss';
 const SearchUsers = ({ data = [], onItemClick }) => (
   <div className={styles.list}>
     {data.map((item, index) => (
-      <User key={index} data={item} onClick={onItemClick} />
+      <UserItem key={index} imgSrc={item.avatar} title={item.username} label={item.groupName} onClick={onItemClick} />
     ))}
   </div>
 );

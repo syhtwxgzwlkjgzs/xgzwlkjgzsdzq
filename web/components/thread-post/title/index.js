@@ -1,5 +1,9 @@
 /**
  * 发帖页标题
+ * @prop {string} title 输入标题值
+ * @prop {string} placeholder
+ * @prop {boolean} isDisplay 是否显示标题
+ * @prop {function} onChange change事件，输出当前标题值
  */
 import React, { memo, useState, useEffect } from 'react';
 import { Input } from '@discuzq/design';
@@ -14,12 +18,12 @@ const Title = ({ title, placeholder, isDisplay, onChange }) => {
   // hooks
   useEffect(() => {
     // 设置标题回显
-    setTitleVal(title);
+    title && setTitleVal(title);
   }, []);
 
   useEffect(() => {
     // 监听titleVal
-    onChange && onChange(titleVal);
+    onChange(titleVal);
   }, [titleVal]);
 
   return (
@@ -44,6 +48,7 @@ Title.defaultProps = {
   title: '',
   isDisplay: false,
   placeholder: '标题(可选)',
+  onChange: () => {}
 };
 
 export default memo(Title);

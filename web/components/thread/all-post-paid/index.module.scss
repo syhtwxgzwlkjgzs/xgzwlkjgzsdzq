@@ -1,0 +1,55 @@
+@import '@common/styles/index.scss';
+.toview {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  .toviewone{
+    height: 33px;
+  }
+}
+.redpacket-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #fff;
+  .line-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 16px;
+    margin-right: 16px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    font-size: 14px;
+  }
+  :global {
+    .dzq-input {
+      display: inline-block;
+      width: 40px;
+    }
+    .dzq-input__inner {
+      border: none;
+      padding: 0;
+      text-align: center;
+    }
+  }
+}
+.btn {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  width: rem(343);
+  height: 52px;
+  border-top: 1px solid #eee;
+  padding: 0 rem(16);
+  justify-content: space-between;
+  align-items: center;
+  :global {
+    .dzq-button {
+      width: rem(166);
+      height: 42px;
+    }
+  }
+}

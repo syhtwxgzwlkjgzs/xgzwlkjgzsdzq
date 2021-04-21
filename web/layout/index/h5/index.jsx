@@ -4,19 +4,28 @@ import Link from 'next/link';
 import { Button, Upload, Tabs, Popup } from '@discuzq/design';
 import ThreadContent from '@components/thread';
 import HomeHeader from '@components/thread/home-header';
+import NoData from '@components/no-data';
 import styles from './index.module.scss';
 import List from './components/list';
 import TopNew from './components/top-news';
 import FilterModalPopup from './components/filter-modal-popup';
 import filterData from './data';
 import Tabbar from './components/tabbar';
+// import PayBox from '@components/payBox';
 
 @inject('site')
 @inject('user')
 @inject('index')
 @observer
 class IndexH5Page extends React.Component {
-  state = { visible: false };
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false
+    };
+    this.renderItem = this.renderItem.bind(this);
+  }
+
   // 点击更多弹出筛选
   searchClick = () => {
     this.setState({
@@ -58,31 +67,42 @@ class IndexH5Page extends React.Component {
                   </div>
               }
               >
-                  {categories.map((item, index) => (
-                  <Tabs.TabPanel key={index} id={item.pid} label={item.name}>
-                  </Tabs.TabPanel>
-                  ))}
-              </Tabs>
-            </div>
-            <div className={styles.homeContent}>
-              <TopNew data={sticks}/>
-            </div>
-          </>
-    );
-    const renderItem = (dataList, rowData) => (
-        <div>
-          { dataList.index === 0 && <HeaderContent />}
-          <ThreadContent data={dataList.data[dataList.index]}/>
+                <Button onClick={this.searchClick}>更多</Button>
+              </div>
+          }
+          >
+              {categories.map((item, index) => (
+              <Tabs.TabPanel key={index} id={item.pid} label={item.name}>
+              </Tabs.TabPanel>
+              ))}
+          </Tabs>
         </div>
+        <div className={styles.homeContent}>
+          <TopNew data={sticks}/>
+        </div>
+      </div>
     );
+  }
+
+  renderItem(dataList, rowData) {
     return (
-      <div className={styles.homeBox}>
-        { threads.pageData.length > 0
-          ? <List
+      <div>
+        { dataList.index === 0 && this.renderHeaderContent()}
+        <ThreadContent data={dataList.data[dataList.index]}/>
+      </div>
+    );
+  }
+
+  renderList(data) {
+    const { index } = this.props;
+    const { threads } = index;
+    return (
+      data?.length
+        ? <List
           onRefresh={this.onRefresh}
           refreshing={false}
           data={threads.pageData}
-          renderItem={renderItem}
+          renderItem={this.renderItem}
         />
           : <HeaderContent />
        }

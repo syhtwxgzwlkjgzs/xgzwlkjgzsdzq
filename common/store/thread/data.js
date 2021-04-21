@@ -1,68 +1,271 @@
 export default {
   // 帖子
   thread: {
+    code: 0,
+    message: '接口调用成功',
     data: {
-      id: 9060,
-      content:
-      '随着现象级应用作为引爆点，以及人工智能的底层算法深度学习在同一时期取得巨大突破之后，以2010为分界点，整个语音江湖开始变得热闹。概括起来，有这么三件事。第一，引爆行业。在看到这一趋势后以2010为分界点，整个语音江湖开始变得热闹…',
-      imgData: [
-        {
-          src:
-          'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
-        },
-        {
-          src:
-          'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
-        },
-        {
-          src:
-          'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
-        },
-        {
-          src:
-          'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
-        },
-        {
-          src:
-          'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
-        },
-        {
-          src:
-          'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
-        },
-        {
-          src:
-          'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
-        },
-        {
-          src:
-          'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
-        },
-      ],
-      goods: {
-        image:
-        'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
-        title: '测试商品',
-        amount: '50',
+      threadId: 57,
+      textCover: false,
+      userId: 30,
+      categoryId: 12,
+      title: '荣耀Play4T手机 【华为手机 店内可选】 极光色 全网通 (6+128G)888',
+      price: '0.00',
+      attachmentPrice: '0.00',
+      isEssence: false,
+      user: {
+        userId: 30,
+        userName: 'a46',
+        avatar: 'http://dev.discuz.com/storage/avatars/000/00/00/30.png?1618384809',
+        threadCount: 30,
+        followCount: 0,
+        fansCount: 0,
+        likedCount: 8,
+        questionCount: 0,
+        isRealName: false,
+        joinedAt: '2021-04-01 11:21:26',
       },
-      redPacket: {
-        content: 'NBA看了近年来的CBA比赛，经常会出现一些类比NBA球员的号，比如“国产库里”等等。近年来的…',
+      group: {
+        groupId: 16,
+        groupName: '入门会员',
+        groupIcon: '',
+        isDisplay: true,
       },
-      rewardQuestion: {
-        content: '测试悬赏',
-        money: '10',
+      likeReward: {
+        users: [
+          {
+            userId: 30,
+            userName: 'a46',
+            avatar: 'http://dev.discuz.com/storage/avatars/000/00/00/30.png?1618384809',
+            threadCount: 30,
+            followCount: 0,
+            fansCount: 0,
+            likedCount: 8,
+            questionCount: 0,
+            isRealName: false,
+            joinedAt: '2021-04-01 11:21:26',
+          },
+          {
+            userId: 30,
+            userName: 'a46',
+            avatar: 'http://dev.discuz.com/storage/avatars/000/00/00/30.png?1618384809',
+            threadCount: 30,
+            followCount: 0,
+            fansCount: 0,
+            likedCount: 8,
+            questionCount: 0,
+            isRealName: false,
+            joinedAt: '2021-04-01 11:21:26',
+          },
+        ],
+        likePayCount: 0,
+        shareCount: 100,
       },
-      userInfo: {
-        name: '测试',
-        location: '金茂大厦',
-        avatar:
-        'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
+      position: {
+        longitude: '0.0000000',
+        latitude: '0.0000000',
+        address: '',
+        location: '',
       },
-      userImgs: [
-        'https://gameplus-platform.cdn.bcebos.com/gameplus-platform/upload/file/img/6cf049a661ee8b72a828c951cd96bc20/6cf049a661ee8b72a828c951cd96bc20.png',
-      ],
-
-      isFavorite: false,
+      content: {
+        text: '去年11月以来，中国海关总署宣布，因从澳大利亚多地进口的原木中检出检疫性有害生物，根据相关法律暂停',
+        indexes: {
+          $0: {
+            tomId: '101',
+            operation: 'select',
+            body: [
+              {
+                id: 178,
+                order: 0,
+                type: 1,
+                typeId: 133,
+                isRemote: false,
+                isApproved: 1,
+                url:
+                  'http://dev.discuz.com/storage/attachments/2021/04/16/5if1DvaxNUwTsqTfv2lbgDSp4BLMYZeb1sjHu0Cv.jpg',
+                attachment: '5if1DvaxNUwTsqTfv2lbgDSp4BLMYZeb1sjHu0Cv.jpg',
+                extension: 'jpg',
+                fileName: '12.jpg',
+                filePath: 'public/attachments/2021/04/16/',
+                fileSize: 55544,
+                fileType: 'image/jpeg',
+                thumbUrl:
+                  'http://dev.discuz.com/storage/attachments/2021/04/16/5if1DvaxNUwTsqTfv2lbgDSp4BLMYZeb1sjHu0Cv_thumb.jpg',
+              },
+              {
+                id: 179,
+                order: 0,
+                type: 1,
+                typeId: 133,
+                isRemote: false,
+                isApproved: 1,
+                url:
+                  'http://dev.discuz.com/storage/attachments/2021/04/16/8oX57hoIjprerYtThvPGi21J84VOJfSiayG2eXm2.jpg',
+                attachment: '8oX57hoIjprerYtThvPGi21J84VOJfSiayG2eXm2.jpg',
+                extension: 'jpg',
+                fileName: '14.jpg',
+                filePath: 'public/attachments/2021/04/16/',
+                fileSize: 28693,
+                fileType: 'image/jpeg',
+                thumbUrl:
+                  'http://dev.discuz.com/storage/attachments/2021/04/16/8oX57hoIjprerYtThvPGi21J84VOJfSiayG2eXm2_thumb.jpg',
+              },
+              {
+                id: 180,
+                order: 0,
+                type: 1,
+                typeId: 133,
+                isRemote: false,
+                isApproved: 1,
+                url:
+                  'http://dev.discuz.com/storage/attachments/2021/04/16/FnQZpHaGiAv0OFiUp2FMD3DimFyADFgg3w7Mkx7l.jpg',
+                attachment: 'FnQZpHaGiAv0OFiUp2FMD3DimFyADFgg3w7Mkx7l.jpg',
+                extension: 'jpg',
+                fileName: '13.jpg',
+                filePath: 'public/attachments/2021/04/16/',
+                fileSize: 13760,
+                fileType: 'image/jpeg',
+                thumbUrl:
+                  'http://dev.discuz.com/storage/attachments/2021/04/16/FnQZpHaGiAv0OFiUp2FMD3DimFyADFgg3w7Mkx7l_thumb.jpg',
+              },
+              {
+                id: 181,
+                order: 0,
+                type: 1,
+                typeId: 133,
+                isRemote: false,
+                isApproved: 1,
+                url:
+                  'http://dev.discuz.com/storage/attachments/2021/04/16/GBN7Rzl2jvSuGqQ6hKhC1ZcuxSz9rnnebAcvbRnQ.jpg',
+                attachment: 'GBN7Rzl2jvSuGqQ6hKhC1ZcuxSz9rnnebAcvbRnQ.jpg',
+                extension: 'jpg',
+                fileName: '15.jpg',
+                filePath: 'public/attachments/2021/04/16/',
+                fileSize: 37923,
+                fileType: 'image/jpeg',
+                thumbUrl:
+                  'http://dev.discuz.com/storage/attachments/2021/04/16/GBN7Rzl2jvSuGqQ6hKhC1ZcuxSz9rnnebAcvbRnQ_thumb.jpg',
+              },
+            ],
+            threadId: 123,
+          },
+          $2: {
+            tomId: '102',
+            operation: 'select',
+            body: {
+              fileName: '6431_20210326145913.mp3',
+              height: 0,
+              width: 0,
+              duration: '0.00',
+              mediaUrl:
+                'http://1500003868.vod2.myqcloud.com/6c9938c1vodcq1500003868/53f676885285890816022158715/h3WwJ20JpZcA.mp3',
+              coverUrl: '',
+              id: 7,
+            },
+            threadId: 123,
+          },
+          $3: {
+            tomId: '103',
+            operation: 'select',
+            body: {
+              fileName: '流火行者 2021-01-01 10.18.38.mp4',
+              height: 634,
+              width: 360,
+              duration: '7.81',
+              mediaUrl:
+                'http://1500003868.vod2.myqcloud.com/43832669vodtranscq1500003868/3731d4935285890814874837502/v.f100010.mp4',
+              coverUrl:
+                'http://1500003868.vod2.myqcloud.com/43832669vodtranscq1500003868/3731d4935285890814874837502/animatedGraphics/v.f20000.gif',
+              id: 6,
+            },
+            threadId: 123,
+          },
+          $4: {
+            tomId: '104',
+            operation: 'select',
+            body: {
+              userId: 30,
+              platformId: '625',
+              title:
+                '卓真 全网通平板电脑11.6英寸10G+128G安卓手机5G学生平板二合一科大讯飞语音学习机Y105 香槟金【10G+128G】+3年质保 全网通+WIFI版',
+              imagePath:
+                'https://m.360buyimg.com/mobilecms/s750x750_jfs/t1/170438/16/18737/492481/607836ffE979ae457/4568e0cda3b32d79.jpg!q80.dpg',
+              price: '939.00',
+              type: 2,
+              typeName: '京东',
+              readyContent: 'https://item.jd.com/69777843625.html',
+              detailCcontent: 'https://item.m.jd.com/product/69777843625.html',
+            },
+            threadId: 123,
+          },
+          $5: {
+            tomId: '108',
+            operation: 'select',
+            body: [
+              {
+                id: 182,
+                order: 0,
+                type: 0,
+                typeId: 161,
+                isRemote: false,
+                isApproved: 1,
+                url:
+                  'http://dev.discuz.com/storage/attachments/2021/04/16/NUoV6UX8zcWcutGvOWOMfEJUqa3xT5CYQ4ROoHNM.zip',
+                attachment: 'NUoV6UX8zcWcutGvOWOMfEJUqa3xT5CYQ4ROoHNM.zip',
+                extension: 'zip',
+                fileName: 'error.zip',
+                filePath: 'public/attachments/2021/04/16/',
+                fileSize: 231882,
+                fileType: 'application/zip',
+              },
+              {
+                id: 183,
+                order: 0,
+                type: 0,
+                typeId: 161,
+                isRemote: false,
+                isApproved: 1,
+                url:
+                  'http://dev.discuz.com/storage/attachments/2021/04/16/8yTmqkDw0hZUfO06MCvTxXWWBJ7fuRUmnoLnAhtR.zip',
+                attachment: '8yTmqkDw0hZUfO06MCvTxXWWBJ7fuRUmnoLnAhtR.zip',
+                extension: 'zip',
+                fileName: '0000.zip',
+                filePath: 'public/attachments/2021/04/16/',
+                fileSize: 2006583,
+                fileType: 'application/zip',
+              },
+            ],
+            threadId: 123,
+          },
+          $6: {
+            tomId: '106',
+            operation: 'select',
+            body: {
+              condition: 0,
+              likenum: 0,
+              number: 1,
+              rule: 1,
+              orderId: '2021041515112056504810',
+              price: 1,
+              content: '红包帖',
+            },
+            threadId: 123,
+          },
+          $7: {
+            tomId: '107',
+            operation: 'select',
+            body: {
+              condition: 0,
+              likenum: 0,
+              number: 1,
+              rule: 1,
+              orderId: '2021041515112056504810',
+              price: 1,
+              content: '悬赏帖',
+            },
+            threadId: 123,
+          },
+        },
+      },
     },
   },
 
@@ -103,7 +306,7 @@ export default {
             id: 1,
             username: 'admin',
             avatar:
-            'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201705%2F13%2F20170513155641_wCyQ2.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1620980557&t=dce708a36610fb346866dc45ed90bba7',
+              'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201705%2F13%2F20170513155641_wCyQ2.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1620980557&t=dce708a36610fb346866dc45ed90bba7',
             realname: '',
             groups: [
               {
@@ -129,7 +332,8 @@ export default {
               filePath: 'public/attachments/2021/03/01/',
               fileSize: 481902,
               fileType: 'image/jpeg',
-              thumbUrl: 'http://dzqfn.l.com/storage/attachments/2021/03/01/smmtFw27HmhpLszqQLBLsHKDWMEk3BCru03MFn1I.jpg',
+              thumbUrl:
+                'http://dzqfn.l.com/storage/attachments/2021/03/01/smmtFw27HmhpLszqQLBLsHKDWMEk3BCru03MFn1I.jpg',
             },
           ],
           likeState: {
@@ -179,96 +383,6 @@ export default {
               canLike: true,
               summary: '<p>1-回复4</p>',
               summaryText: '1-回复4',
-              isDeleted: false,
-              replyUser: {
-                id: 1,
-                username: 'admin',
-                avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-                realname: '',
-                isReal: false,
-              },
-              isLiked: false,
-              commentUser: null,
-            },
-            {
-              id: 19,
-              userId: 1,
-              threadId: 2,
-              replyPostId: 3,
-              replyUserId: 1,
-              commentPostId: null,
-              commentUserId: null,
-              content: '1-回复3',
-              contentHtml: '<p>1-回复3</p>',
-              replyCount: 0,
-              likeCount: 0,
-              createdAt: '2021-02-24 17:38:22',
-              updatedAt: '2021-02-12 14:01:23',
-              isFirst: false,
-              isComment: true,
-              isApproved: 1,
-              rewards: 0,
-              canApprove: false,
-              canDelete: false,
-              canHide: false,
-              canEdit: false,
-              user: {
-                id: 1,
-                username: 'admin',
-                avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-                realname: '',
-                isReal: false,
-              },
-              images: [],
-              likeState: null,
-              canLike: true,
-              summary: '<p>1-回复3</p>',
-              summaryText: '1-回复3',
-              isDeleted: false,
-              replyUser: {
-                id: 1,
-                username: 'admin',
-                avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-                realname: '',
-                isReal: false,
-              },
-              isLiked: false,
-              commentUser: null,
-            },
-            {
-              id: 18,
-              userId: 1,
-              threadId: 2,
-              replyPostId: 3,
-              replyUserId: 1,
-              commentPostId: null,
-              commentUserId: null,
-              content: '1-回复2',
-              contentHtml: '<p>1-回复2</p>',
-              replyCount: 0,
-              likeCount: 0,
-              createdAt: '2021-02-24 17:38:15',
-              updatedAt: '2021-02-12 14:01:23',
-              isFirst: false,
-              isComment: true,
-              isApproved: 1,
-              rewards: 0,
-              canApprove: false,
-              canDelete: false,
-              canHide: false,
-              canEdit: false,
-              user: {
-                id: 1,
-                username: 'admin',
-                avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-                realname: '',
-                isReal: false,
-              },
-              images: [],
-              likeState: null,
-              canLike: true,
-              summary: '<p>1-回复2</p>',
-              summaryText: '1-回复2',
               isDeleted: false,
               replyUser: {
                 id: 1,

@@ -54,6 +54,7 @@ class List extends React.PureComponent {
       renderItem,
       onScrollBottom,
       containerClassName,
+      onPullingUp,
       ...props
     } = this.props;
     const { height } = this.state;
@@ -71,7 +72,7 @@ class List extends React.PureComponent {
               rowRenderer={renderItem || renderDiv}
               renderBottom={renderDiv}
               isRowLoaded={emptyFunction}
-              onPullingUp={emptyFunction}
+              onPullingUp={onPullingUp}
               onScrollBottom={onScrollBottom}
               {...props}
             >

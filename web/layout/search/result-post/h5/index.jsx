@@ -3,12 +3,14 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 
 import Header from '@components/header';
+import NoData from '@components/no-data';
 import SearchInput from '@components/search-input';
 import SearchPosts from './components/search-posts';
 
 import styles from './index.module.scss';
 
 @inject('site')
+@inject('search')
 @observer
 class SearchResultPostH5Page extends React.Component {
   constructor(props) {
@@ -17,7 +19,6 @@ class SearchResultPostH5Page extends React.Component {
     const keyword = this.props.router.query.keyword || '';
 
     this.state = {
-      data: getData(2),
       keyword,
       refreshing: false,
     };
@@ -25,27 +26,15 @@ class SearchResultPostH5Page extends React.Component {
 
   // data
   refreshData = () => {
-    this.setState((prevState) => {
-      if (prevState.refreshing) {
-        return prevState;
-      }
-      setTimeout(() => {
-        this.setState(() => ({
-          data: getData(2),
-          refreshing: false,
-        }));
-      }, 1000);
-      return { refreshing: true };
-    });
+    const { dispatch } = this.props;
+    const { keyword } = this.state;
+    dispatch('refresh', keyword);
   };
 
   fetchMoreData = () => {
-    // const { keyword } = this.state;
-    setTimeout(() => {
-      this.setState(({ data }) => ({
-        data: data.concat(getData(2)),
-      }));
-    }, 1000);
+    const { dispatch } = this.props;
+    const { keyword } = this.state;
+    dispatch('more', keyword);
   };
 
   // event
@@ -54,13 +43,19 @@ class SearchResultPostH5Page extends React.Component {
   };
 
   onSearch = (keyword) => {
-    this.setState({ keyword }, () => this.refreshData());
+    this.setState({ keyword }, () => {
+      this.refreshData();
+    });
   };
 
-  onPostClick = data => console.log('post click', data);
+  onPostClick = (data) => {
+    this.props.router.push('/thread/9060');
+  };
 
   render() {
-    const { keyword, data, refreshing } = this.state;
+    const { keyword, refreshing } = this.state;
+    const { threads } = this.props.search;
+    const { pageData } = threads || { pageData: [] };
 
     return (
       <div className={styles.page}>
@@ -68,18 +63,20 @@ class SearchResultPostH5Page extends React.Component {
         <div className={styles.searchInput}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
         </div>
-        <SearchPosts
-          data={data}
-          refreshing={refreshing}
-          onRefresh={this.refreshData}
-          onFetchMore={this.fetchMoreData}
-          onItemClick={this.onPostClick}
-        />
+        {
+          pageData && pageData.length
+            ? <SearchPosts
+                data={pageData}
+                refreshing={refreshing}
+                onRefresh={this.refreshData}
+                onFetchMore={this.fetchMoreData}
+                onItemClick={this.onPostClick}
+              />
+            : <NoData />
+        }
       </div>
     );
   }
 }
-
-const getData = number => Array(number).fill('');
 
 export default withRouter(SearchResultPostH5Page);

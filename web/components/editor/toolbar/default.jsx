@@ -4,7 +4,7 @@ import styles from './index.module.scss';
 import { defaultIcon } from '../const';
 
 export default function DefaultToolbar(props) {
-  const { children, onClick } = props;
+  const { children, onClick, onSubmit } = props;
   const [currentAction, setCurrentAction] = useState('');
 
   return (
@@ -23,7 +23,7 @@ export default function DefaultToolbar(props) {
           </Icon>
         ))}
       </div>
-      <div className={styles['dvditor-toolbar__right']}>发布</div>
+      <div className={styles['dvditor-toolbar__right']} onClick={onSubmit}>发布</div>
       {/* 表情 */}
       {children}
     </div>

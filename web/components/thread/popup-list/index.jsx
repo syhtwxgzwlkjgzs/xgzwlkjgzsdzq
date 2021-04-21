@@ -3,6 +3,7 @@ import { Tabs, Button, Icon, Popup } from '@discuzq/design';
 import UserItem from '../user-item';
 import data from './data';
 import styles from './index.module.scss';
+import { readLikedUsers } from '@common/server';
 
 /**
  * 帖子点赞、打赏点击之后的弹出视图
@@ -35,10 +36,16 @@ const Index = ({ visible = false, onHidden = () => {} }) => {
   const [dataSource, setDataSource] = useState([]);
 
   useEffect(() => {
+    loadData();
     setTimeout(() => {
       setDataSource(data);
     }, 1000);
   }, []);
+
+  const loadData = async () => {
+    const res = await readLikedUsers({ params: { threadId: '61', postId: '', type: 0 } });
+    debugger;
+  };
 
   const renderList = () => (
     <div className={styles.list}>
