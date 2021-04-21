@@ -1,7 +1,33 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
-.text {
-    font-size: rem($font-size-label);
-    color: var(--color-error);
+.indexWrap {
+  background: #f5f7f8;
+  width: 100%;
+  .indexContent {
+    width: 100%;
+    overflow: hidden;
+  }
+  .topBox {
+    border-bottom: 1px solid #eee;
+  }
+  .contnetTop {
+    width: 100%;
+    overflow: hidden;
+    // padding: 0 rem(24);
+    background: var(--color-white);
+    position: relative;
+    .PostTheme {
+      position: absolute;
+      right: 0;
+      top: 10px;
+    }
+  }
+  .themeBox {
+    overflow: hidden;
+    .themeItem {
+      margin-bottom: 10px;
+    }
+  }
 }
+
   
