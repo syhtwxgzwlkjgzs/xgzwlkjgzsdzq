@@ -185,14 +185,20 @@ class ThreadCreate extends React.Component {
     this.setState({ imageCurrentData });
   }
 
-  handleUploadChange = (fileList, item) => {
-    console.log(fileList, item);
-  }
+  // handleUploadChange = (fileList, item) => {
+  //   console.log(fileList, item);
+  // }
 
-  handleVideoUploadComplete = (ret, file, item) => {
-    // 上传视频没有通
-    console.log(ret, file, item);
-    this.setState({ videoFile: file.originFileObj });
+  handleVideoUploadComplete = (ret, file) => {
+    // 上传视频
+    const { fileId: id, video } = ret;
+    this.setState({
+      videoFile: {
+        id,
+        thumbUrl: video.url,
+        type: file.type,
+      },
+    });
   }
 
   handleVditorChange = (vditor) => {
@@ -421,7 +427,7 @@ class ThreadCreate extends React.Component {
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar
             onAttachClick={this.handleAttachClick}
-            onUploadChange={this.handleUploadChange}
+            // onUploadChange={this.handleUploadChange}
             onUploadComplete={this.handleVideoUploadComplete}
             category={<ToolsCategory categoryChoose={categoryChoose} onClick={this.handleCategoryClick} />}
           />

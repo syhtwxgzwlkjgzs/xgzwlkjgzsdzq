@@ -21,3 +21,4 @@ export { default as readProcutAnalysis } from './thread-post/read-product-analys
 export { default as readTopics } from './thread-post/read-topic';
 export { default as createAttachment } from './thread-post/create-attachment';
 export { default as createThread } from './thread-post/create-thread';
+export { default as readYundianboSignature } from './thread-post/read-yundianbo-signature';
