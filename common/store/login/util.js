@@ -19,7 +19,7 @@ export const COMMON_LOGIN_STORE_ERRORS = {
   },
 };
 
-export const BAND_USER = -4009; // 禁用
+export const BANNED_USER = -4009; // 禁用
 export const REVIEWING = 2; // 审核
 export const REVIEW_REJECT = -4007; // 审核拒绝
 
@@ -74,7 +74,7 @@ const checkUserStatus = (resp) => {
     }
   }
 
-  if (resp.code === BAND_USER || resp.code === REVIEW_REJECT) {
+  if (resp.code === BANNED_USER || resp.code === REVIEW_REJECT) {
     throw {
       Code: resp.code,
       Message: get(resp, 'data.rejectReason', ''),

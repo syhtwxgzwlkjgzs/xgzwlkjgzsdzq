@@ -2,7 +2,7 @@ import { observable, action, computed } from 'mobx';
 import { smsSend, smsLogin } from '@server';
 import { get } from '../../utils/get';
 import setAccessToken from '../../utils/set-access-token';
-import { BAND_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/common-login-store';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 
 export const WX_PHONE_BIND_STORE_ERROR = {
   MOBILE_VERIFY_ERROR: {
@@ -208,7 +208,7 @@ export default class wxPhoneBindStore {
           return smsLoginResp.data;
         }
 
-        if (smsLoginResp.code === BAND_USER || smsLoginResp.code === REVIEW_REJECT) {
+        if (smsLoginResp.code === BANNED_USER || smsLoginResp.code === REVIEW_REJECT) {
           throw {
             Code: smsLoginResp.code,
             Message: get(smsLoginResp, 'data.rejectReason', ''),
