@@ -28,8 +28,8 @@ import RedpacketSelect from '@components/thread-post/redpacket-select';
 import PostPopup from '@components/thread-post/post-popup';
 import AllPostPaid from '@components/thread/all-post-paid';
 import { withRouter } from 'next/router';
-import classNames from 'classnames';
 import { getVisualViewpost } from '@common/utils/get-client-height';
+import throttle from '@common/utils/thottle';
 
 @inject('threadPost')
 @inject('index')
@@ -82,13 +82,17 @@ class ThreadCreate extends React.Component {
       paySelectText: ['帖子付费', '附件付费'],
       curPaySelect: '',
       payData: {},
-      height: 0,
     };
   }
   componentDidMount() {
     this.fetchCategories();
     const { fetchEmoji, emojis } = this.props.threadPost;
     if (emojis.length === 0) fetchEmoji();
+    window.addEventListener('scroll', throttle(this.handler, 50));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handler);
   }
 
   fetchCategories() {
@@ -319,11 +323,37 @@ class ThreadCreate extends React.Component {
     player && player.src(opt);
   };
 
-  getHeight = () => {
+  handler = () => {
+    this.setBottomBarStyle(window.scrollY);
+  }
+
+  // 设置底部bar的样式
+  setBottomBarStyle = (y = 0) => {
+    const height = getVisualViewpost();
+    const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
+    const postBottombar = document.querySelector('#post-bottombar');
+    const position = document.querySelector('#post-position');
+    position.style.display = 'none';
+    postBottombar.style.top = `${height - 90 + y}px`;
+    vditorToolbar.style.position = 'fixed';
+    vditorToolbar.style.top = `${height - 130 + y}px`;
+  }
+  setBottomFixed = () => {
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
-      this.setState({ height: getVisualViewpost() });
-    }, 300);
+      this.setBottomBarStyle(0);
+    }, 150);
+  }
+  clearBottomFixed = () => {
+    const timer = setTimeout(() => {
+      if (timer) clearTimeout(timer);
+      const height = getVisualViewpost();
+      const postBottombar = document.querySelector('#post-bottombar');
+      const position = document.querySelector('#post-position');
+      position.style.display = 'flex';
+      postBottombar.style.top = `${height - 134}px`;
+      document.body.style.height = '100%';
+    }, 100);
   }
 
   render() {
@@ -350,22 +380,19 @@ class ThreadCreate extends React.Component {
       rewardQaShow,
       rewardQaData,
       fileCurrentData,
-      height,
     } = this.state;
     const images = Object.keys(imageCurrentData);
     const files = Object.keys(fileCurrentData);
     const category = (index.categories && index.categories.slice()) || [];
     const { value, times } = rewardQaData;
-    let style = {};
-    if (height) style = { height: `${height}px` };
-    console.log(height, style);
 
     return (
-      <div className={styles.post} style={style}>
+      <>
         <div className={styles['post-inner']}>
           <Title
             onChange={this.handleTitleChange}
-            onFocus={this.getHeight}
+            onFocus={this.setBottomFixed}
+            onBlur={this.clearBottomFixed}
           />
           <DVditor
             emoji={emoji}
@@ -373,11 +400,12 @@ class ThreadCreate extends React.Component {
             topic={topic}
             onChange={this.handleVditorChange}
             onFocus={() => {
-              this.getHeight();
+              this.setBottomFixed();
               this.setState({ isVditorFocus: true });
             }}
             onBlur={() => {
               this.setState({ isVditorFocus: false });
+              this.clearBottomFixed();
             }}
           />
 
@@ -420,9 +448,6 @@ class ThreadCreate extends React.Component {
               }}
             />
           )}
-          <div className={styles['position-box']}>
-            <Position onChange={position => this.setState({ position })} />
-          </div>
           {/* 悬赏问答内容标识 */}
           {(value && times) && (
             <div className={styles['reward-qa-box']}>
@@ -432,7 +457,10 @@ class ThreadCreate extends React.Component {
             </div>
           )}
         </div>
-        <div className={classNames(styles['post-bottombar'], styles['post-bottombar-fixed'])}>
+        <div id="post-bottombar" className={styles['post-bottombar']}>
+          <div id="post-position" className={styles['position-box']}>
+            <Position onChange={position => this.setState({ position })} />
+          </div>
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar
             onAttachClick={this.handleAttachClick}
@@ -523,7 +551,7 @@ class ThreadCreate extends React.Component {
             }}
           />
         )}
-      </div>
+      </>
     );
   }
 }

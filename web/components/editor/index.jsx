@@ -100,7 +100,6 @@ export default function DVditor(props) {
         toolbar: [
           {
             name: 'bold',
-            icon: 'B',
           },
           'italic',
           'strike',

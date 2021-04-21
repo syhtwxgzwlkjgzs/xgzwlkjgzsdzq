@@ -33,7 +33,7 @@ const Title = ({ title, placeholder, isDisplay, onChange,  onFocus, onBlur }) =>
       placeholder={placeholder}
       onChange={e => setTitleVal(e.target.value)}
       onFocus={onFocus}
-      onBlue={onBlur}
+      onBlur={onBlur}
     />
   );
 };
