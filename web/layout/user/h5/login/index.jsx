@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import '@discuzq/design/dist/styles/index.scss';
-import { BAND_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/common-login-store';
+import { BAND_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 
 @inject('site')
 @inject('commonLogin')
@@ -26,10 +26,11 @@ class Login extends React.Component {
 
     // 跳转状态页
     if (
-      this.props.site.statusCode === BAND_USER
-      || this.props.site.statusCode === REVIEWING
-      || this.props.site.statusCode === REVIEW_REJECT
+      this.props.commonLogin.statusCode === BAND_USER
+      || this.props.commonLogin.statusCode === REVIEWING
+      || this.props.commonLogin.statusCode === REVIEW_REJECT
     ) {
+      this.props.commonLogin.setStatusMessage(this.props.commonLogin.statusCode);
       this.props.router.push('/user/status');
       return;
     }

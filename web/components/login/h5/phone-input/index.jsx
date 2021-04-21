@@ -1,15 +1,10 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import layout from './index.module.scss';
 import { Input } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import CaptchaInput from '../captcha-input';
 
 class PhoneInput extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
   setCaptcha = (code) => {
     const { phoneCodeCallback = () => {} } = this.props;
     phoneCodeCallback(code);

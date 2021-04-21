@@ -2,7 +2,8 @@ import { observable, action } from 'mobx';
 import { usernameLogin } from '@server';
 import { get } from '../../utils/get';
 import setAccessToken from '../../utils/set-access-token';
-import { BAND_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/common-login-store';
+import { checkUserStatus } from '@common/store/login/util';
+
 
 export const NEED_BIND_WEIXIN_FLAG = 8000;
 export const NEED_BIND_PHONE_FLAG = 8001;
@@ -16,17 +17,6 @@ export default class UserLoginStore {
    * 检查用户是否处于审核状态，用来跳转状态页面
    * @param {*} smsLoginResp
    */
-  checkUserStatus = (smsLoginResp) => {
-    const rejectReason = get(smsLoginResp, 'data.rejectReason', '');
-    const status = get(smsLoginResp, 'data.userStatus', 0);
-    if (status ===  REVIEWING) {
-      throw {
-        Code: status,
-        Message: rejectReason,
-      };
-    }
-  }
-
 
   @action
   login = async () => {
@@ -50,9 +40,9 @@ export default class UserLoginStore {
       }
       const loginResp = await usernameLogin({
         timeout: 3000,
-        url: 'https://discuzv3-dev.dnspod.dev/apiv3/users/username.login',
         data,
       });
+      checkUserStatus(loginResp);
 
       if (loginResp.code === 0
           || loginResp.code === NEED_BIND_PHONE_FLAG
@@ -62,7 +52,6 @@ export default class UserLoginStore {
         setAccessToken({
           accessToken,
         });
-        this.checkUserStatus(loginResp);
       }
 
       if (loginResp.code === 0) {
@@ -81,13 +70,6 @@ export default class UserLoginStore {
           Code: 8000,
           Message: '需要绑定微信',
           sessionToken: get(loginResp, 'data.sessionToken'),
-        };
-      }
-
-      if (loginResp.code === BAND_USER || loginResp.code === REVIEW_REJECT) {
-        throw {
-          Code: loginResp.code,
-          Message: get(loginResp, 'Data.rejectReason', ''),
         };
       }
 
