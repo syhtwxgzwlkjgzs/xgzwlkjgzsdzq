@@ -15,6 +15,7 @@ export default function UserInfo(props) {
         </Avatar>
         <div className={styles.right}>
             <span className={styles.name}>{props.name}</span>
+            <span>{props.groupName}</span>
             <div className={styles.meta}>
                 {
                     props.time && <span className={styles.time}>{props.time}</span>

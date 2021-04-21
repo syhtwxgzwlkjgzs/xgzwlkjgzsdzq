@@ -13,11 +13,6 @@ export default class UserLoginStore {
   @observable password = '';
   @observable sessionToken = '';
 
-  /**
-   * 检查用户是否处于审核状态，用来跳转状态页面
-   * @param {*} smsLoginResp
-   */
-
   @action
   login = async () => {
     // 信息需要填写完整
