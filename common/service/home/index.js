@@ -7,7 +7,21 @@ import { readCategories, readStickList, readThreadList, readLikedUsers } from '.
 export const getFirstData = async () => {
   const perPage = 10;
 
-  const promise1 = readCategories();
+  // const categories = await readCategories();
+  // const { pid, name } = categories?.data[0] || {};
+
+  // // 拼接首页列表接口字段
+  // const dic = {
+  //   filter: {
+  //     categoryids: [pid],
+  //   },
+  //   sequence: name.indexOf('默认') !== -1 ? 1 : 0,
+  // };
+
+  // const promise1 = readStickList({ params: { categoryIds: [pid] } });
+  // const promise2 = readThreadList({ params: { ...dic, perPage } });
+
+  const promise1 = await readCategories();
   const promise2 = readStickList();
   const promise3 = readThreadList({ params: { perPage } });
 
@@ -21,7 +35,10 @@ export const getFirstData = async () => {
     if (index === 2) {
       return code === 0 ? data : {};
     }
-    return code === 0 ? (data || []) : {};
+    if (index === 0) {
+      return code === 0 ? ([{ name: '所有', pid: '', children: [] }, ...data] || []) : [];
+    }
+    return code === 0 ? (data || []) : [];
   });
 
   return {
@@ -35,9 +52,9 @@ export const getFirstData = async () => {
  * @param {object} filter * 列表接口的过滤项
  * @returns {object} 处理结果
  */
-export const getThreadList = async ({ categoryIds = '', filter = {}, perPage = 10, page = 1 } = {}) => {
-  const promise1 = readThreadList({ params: { perPage, page, filter } });
-  const promise2 = readStickList({ params: { categoryIds } });
+export const getThreadList = async ({ filter = {}, sequence = 0, perPage = 10, page = 1 } = {}) => {
+  const promise1 = readThreadList({ params: { perPage, page, filter, sequence } });
+  const promise2 = readStickList({ params: { categoryIds: filter?.categoryids } });
   const promise = [promise1];
   if (page === 1) {
     promise.push(promise2);

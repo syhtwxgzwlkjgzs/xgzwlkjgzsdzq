@@ -1,5 +1,6 @@
 import { createContext } from 'react';
-import { updatePosts } from '@server';
+import { updatePosts, createThreadShare } from '@server';
+
 
 export const ThreadCommonContext = createContext();
 
@@ -25,7 +26,15 @@ export const ON_PAY_ATTACHMENT = 'ON_PAY_ATTACHMENT'; // 附件付费事件
 export const ON_PAY_CONTENT = 'ON_PAY_CONTENT'; // 文字付费事件
 export const ON_PAY_IMAGE = 'ON_PAY_IMAGE'; // 图片付费事件
 
-export const updateThreadInfo = async ({ pid, data } = {}) => {
-  const res = await updatePosts({ data: { pid, data } });
-  debugger;
+// 点赞
+export const updateThreadInfo = async ({ pid, id, data: att } = {}) => {
+  const res = await updatePosts({ data: { pid, id, data: att } });
+  console.log('点赞接口调用成功', res);
+};
+
+
+// 分享
+export const updateThreadShare = async ({ threadId } = {}) => {
+  const res = await createThreadShare({ data: { threadId } });
+  console.log('分享接口调用成功', res);
 };

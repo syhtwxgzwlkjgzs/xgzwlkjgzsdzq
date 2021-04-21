@@ -15,7 +15,7 @@ import UserInfo from './user-info';
 import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
-import { updateThreadInfo } from './utils';
+import { updateThreadInfo, updateThreadShare } from './utils';
 
 @inject('site')
 @inject('index')
@@ -24,8 +24,9 @@ class Index extends React.Component {
     // 分享
     onShare = (e) => {
       e.stopPropagation();
-
-      console.log('分享');
+      const { data = {} } = this.props;
+      const { threadId = '' } = data;
+      updateThreadShare({ threadId });
     }
     // 评论
     onComment = (e) => {
@@ -43,8 +44,8 @@ class Index extends React.Component {
     onPraise = (e) => {
       e.stopPropagation();
       const { data = {} } = this.props;
-      const { threadId = '' } = data;
-      updateThreadInfo({ pid: threadId, data: { attachments: { isLiked: true } } });
+      const { threadId = '', isLike, postId } = data;
+      updateThreadInfo({ pid: postId, id: threadId, data: { attachments: { isLiked: !isLike } } });
     }
     // 支付
     onPay = (e) => {
@@ -157,7 +158,7 @@ class Index extends React.Component {
         return <NoData />;
       }
 
-      const { title = '', user = {}, position = {}, likeReward = {}, payType, viewCount, price } = data || {};
+      const { title = '', user = {}, position = {}, likeReward = {}, payType, viewCount, price, group, createdAt, isLike, postId, threadId } = data || {};
 
       return (
         <div className={styles.container} onClick={this.onClick}>
@@ -167,6 +168,8 @@ class Index extends React.Component {
                   avatar={user.avatar}
                   location={position.address}
                   view={`${viewCount}`}
+                  groupName={group?.groupName}
+                  time={createdAt}
               />
           </div>
 
@@ -187,6 +190,8 @@ class Index extends React.Component {
             onShare={this.onShare}
             onComment={this.onComment}
             onPraise={this.onPraise}
+            isLiked={isLike}
+            tipData={{ postId, threadId }}
           />
         </div>
       );

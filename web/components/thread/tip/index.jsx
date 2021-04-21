@@ -7,7 +7,7 @@ import styles from './index.module.scss';
  * @prop {string}    imgs 头像数据数组
  */
 
-const Index = ({ imgs = [] }) => {
+const Index = ({ imgs = [], tipData }) => {
   const [visible, setVisible] = useState(false);
 
   const onClick = (e) => {
@@ -26,7 +26,7 @@ const Index = ({ imgs = [] }) => {
             }
         </div>
 
-        <PopupList visible={visible} onHidden={() => setVisible(false)} />
+        <PopupList tipData={tipData} visible={visible} onHidden={() => setVisible(false)} />
     </>
   );
 };

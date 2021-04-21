@@ -19,6 +19,7 @@ const Index = ({
   comment = 0,
   sharing = 0,
   isLiked = false,
+  tipData,
   onShare = () => {},
   onComment = () => {},
   onPraise = () => {},
@@ -51,7 +52,7 @@ const Index = ({
       <div className={styles.user}>
         {userImgs.length !== 0 && <div className={styles.userImg}>
           <div className={styles.portrait}>
-            <Tip imgs={userImgs}></Tip>
+            <Tip tipData={tipData} imgs={userImgs}></Tip>
           </div>
           <p className={styles.numText}>
             {wholeNum}
