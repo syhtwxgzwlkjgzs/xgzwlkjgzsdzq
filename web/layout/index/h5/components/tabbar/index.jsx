@@ -7,7 +7,7 @@ const Tabbar = (props) => {
   const [tabs, setTabs] = useState([
     { icon: 'HomeOutlined', text: '首页', active: true, router: '/index' },
     { icon: 'FindOutlined', text: '发现', active: false, router: '/search' },
-    { icon: 'PlusOutlined' },
+    { icon: 'PlusOutlined', 'router': '/thread/post' },
     { icon: 'MessageOutlined', text: '消息', active: false, router: '/' },
     { icon: 'ProfessionOutlined', text: '我', active: false, router: '/my' },
   ]);
@@ -30,7 +30,7 @@ const Tabbar = (props) => {
             <div className={styles.text}>{i.text}</div>
           </div>
       ) : (
-          <div key={idx} style={{ flex: 1, textAlign: 'center' }}>
+          <div key={idx} style={{ flex: 1, textAlign: 'center' }} onClick={() => handleClick(i, idx)}>
             <div className={styles.addIcon}>
               <Icon name={i.icon} size={24} color="#fff" />
             </div>

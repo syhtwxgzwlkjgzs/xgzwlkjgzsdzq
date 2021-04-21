@@ -15,6 +15,7 @@ import SupplementaryStore from './login/supplementary-store';
 import MobileBindStore from './login/mobile-bind-store';
 import ResetPasswordStore from './login/reset-password-store';
 import CommonLoginStore from './login/common-login-store';
+import WxPhoneBindStore from './login/wx-phone-bind-store';
 import H5QrCode from './login/h5-qrcode';
 import SearchStore from './search/action';
 
@@ -45,6 +46,7 @@ export default function initializeStore(initProps = {}) {
       resetPassword: new ResetPasswordStore(),
       commonLogin: new CommonLoginStore(),
       search: new SearchStore(),
+      wxPhoneBind: new WxPhoneBindStore(),
     };
   }
   if (store === null) {
@@ -68,6 +70,7 @@ export default function initializeStore(initProps = {}) {
       resetPassword: new ResetPasswordStore(),
       commonLogin: new CommonLoginStore(),
       search: new SearchStore(),
+      wxPhoneBind: new WxPhoneBindStore(),
     };
   }
 

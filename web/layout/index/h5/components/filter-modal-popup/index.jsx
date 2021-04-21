@@ -16,69 +16,99 @@ import FilterModalSection from '@components/thread/filter-modal-section';
  * @prop {number} isSecondLevelActive 二级分类选中index
  * @prop {function} firstLevelClick 一级分类点击事件
  * @prop {function} secondLevelClick 二级分类点击事件
- * @prop {function} onSearch 搜索点击事件 
+ * @prop {function} onSearch 搜索点击事件
  * @prop {function} onClose 关闭搜索弹框
  */
-const FilterModalPopup = (props) => {
-  const {
-    visible = false,
-    filterData = [],
-    categoriesData = [],
-    ifShowConfirm = true,
-    ifShowSearch = true,
-    ifShowCancel = true,
-    confirmText,
-    cancelText,
-    isSecondLevelActive = 0,
-    firstLevelClick = () => {},
-    secondLevelClick  = ()=> {},
-    onSearch = () => {},
-    onClose  = ()=> {},
-  } = props;
-
-  console.log(filterData);
-  return (
-    <Popup
-      position="bottom"
-      visible={visible}
-      onClose={onClose}
-      containerClassName={styles.popup}
-    >
-      <div className={styles.container}>
-        {
-          ifShowSearch ?
-            <div className={styles.search}>
-              <Icon name="SearchOutlined" color="#8490A8" size={20} />
-            </div>
-          : ''
-        }
-        <div className={styles.content}>
+class FilterModalPopup extends React.Component {
+  state={
+    classification: 1,
+    topicType: 1,
+    parameter: 1,
+  }
+  filterEvents = (type, data) => {
+    if (type === 1) {
+      this.setState({
+        classification: data,
+      });
+    }
+    if (type === 2) {
+      this.setState({
+        topicType: data,
+      });
+    }
+    if (type === 3) {
+      this.setState({
+        parameter: data,
+      });
+    }
+  }
+  onSearch = () => {
+    const { onClickFilter } = this.props;
+    if (typeof(onClickFilter) === 'function') {
+      onClickFilter(this.state.classification, this.state.topicType, this.state.parameter);
+    }
+    this.props.onClose();
+  }
+  render() {
+    const {
+      visible = false,
+      filterData = [],
+      ifShowConfirm = true,
+      ifShowSearch = true,
+      ifShowCancel = true,
+      confirmText,
+      cancelText,
+      firstLevelClick = () => {},
+      secondLevelClick  = () => {},
+      onClose  = () => {},
+    } = this.props;
+    return (
+      <Popup
+        position="bottom"
+        visible={visible}
+        onClose={onClose}
+      >
+        <div className={styles.container}>
           {
-            filterData.map((item, index) => {
-                return <FilterModalSection key={index} title={item.title} optionData={item.data} firstLevelClick={firstLevelClick} secondLevelClick={secondLevelClick} isSecondLevelActive={isSecondLevelActive}></FilterModalSection>
-            })
+            ifShowSearch
+              ? <div className={styles.search}>
+                <Icon name="SearchOutlined" color="#8490A8" size={20} />
+              </div>
+              : ''
+          }
+          <div className={styles.content}>
+            {
+              filterData.map((item, index) => <FilterModalSection
+                    key={index}
+                    parent={this}
+                    type={item.type}
+                    title={item.title}
+                    optionData={item.data}
+                    firstLevelClick={firstLevelClick}
+                    secondLevelClick={secondLevelClick}
+                  ></FilterModalSection>)
+            }
+          </div>
+          {
+            ifShowConfirm || ifShowCancel
+              ? (<div className={styles.footer}>
+                {
+                  ifShowConfirm
+                    ? <Button className={styles.confirmBtn} type="primary" onClick={this.onSearch}>{confirmText || '筛选'}</Button>
+                    : ''
+                }
+                {
+                  ifShowCancel
+                    ? <div className={styles.cancelBtn} onClick={onClose}>
+                      {cancelText || '取消'}
+                    </div>
+                    : ''
+                }
+              </div>)
+              : ''
           }
         </div>
-        {
-          ifShowConfirm || ifShowCancel ?
-            (<div className={styles.footer}>
-              {
-                ifShowConfirm ?
-                  <Button className={styles.confirmBtn} type="primary" onClick={onSearch}>{confirmText || '筛选'}</Button>
-                  : ''
-              }
-              {
-                ifShowCancel ?
-                  <div className={styles.cancelBtn} onClick={onClose}>
-                    {cancelText || '取消'}
-                  </div>
-                : ''
-              }
-            </div>)
-            : ''
-        }
-      </div>
-    </Popup>);
-};
-
-export default FilterModalPopup;
+      </Popup>);
+  }
+}
+export default  React.memo(FilterModalPopup);

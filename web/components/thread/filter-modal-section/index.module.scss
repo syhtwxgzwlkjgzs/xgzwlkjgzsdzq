@@ -2,6 +2,7 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 .section {
+  margin: 0 auto;
   .title {
     font-weight: bold;
     font-size: rem($font-size-middle);

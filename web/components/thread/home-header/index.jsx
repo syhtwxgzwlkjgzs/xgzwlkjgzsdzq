@@ -12,7 +12,7 @@ import { Icon } from '@discuzq/design';
  */
 
 const Index = ({ bgHeadFullImg, bgColor, headImg, userNum = 0, themeNum = 0 }) => {
-  const logoImg = 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fcdn.duitang.com%2Fuploads%2Fitem%2F201408%2F30%2F20140830180834_XuWYJ.png&refer=http%3A%2F%2Fcdn.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1620908425&t=673ddda42973b103faf179fc02818b41';
+  const logoImg = '/admin-logo-x2.png';
 
   const bgHeader = useMemo(() => {
     if (bgHeadFullImg) {

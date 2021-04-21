@@ -15,7 +15,7 @@ import UserInfo from './user-info';
 import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
-import { updateThreadInfo } from './utils';
+import { updateThreadInfo, updateThreadShare } from './utils';
 
 @inject('site')
 @inject('index')
@@ -24,8 +24,9 @@ class Index extends React.Component {
     // 分享
     onShare = (e) => {
       e.stopPropagation();
-
-      console.log('分享');
+      const { data = {} } = this.props;
+      const { threadId = '' } = data;
+      updateThreadShare({ threadId });
     }
     // 评论
     onComment = (e) => {
@@ -43,8 +44,8 @@ class Index extends React.Component {
     onPraise = (e) => {
       e.stopPropagation();
       const { data = {} } = this.props;
-      const { threadId = '' } = data;
-      updateThreadInfo({ pid: threadId, data: 1 });
+      const { threadId = '', isLike, postId } = data;
+      updateThreadInfo({ pid: postId, id: threadId, data: { attachments: { isLiked: !isLike } } });
     }
     // 支付
     onPay = (e) => {
@@ -102,7 +103,7 @@ class Index extends React.Component {
     }
 
     // 帖子属性内容
-    renderThreadContent = ({ content: data, payType } = {}) => {
+    renderThreadContent = ({ content: data, attachmentPrice, payType } = {}) => {
       const {
         text,
         imageData,
@@ -140,7 +141,7 @@ class Index extends React.Component {
                   <div className={styles.cover}>
                     <Button className={styles.button} type="primary" onClick={this.onPay}>
                       <span className={styles.icon}>$</span>
-                      支付{this.props.money}元查看附件内容
+                      支付{attachmentPrice}元查看附件内容
                     </Button>
                   </div>
                 )
@@ -151,13 +152,13 @@ class Index extends React.Component {
     }
 
     render() {
-      const { money = '0', data } = this.props;
+      const { data } = this.props;
 
       if (!data) {
         return <NoData />;
       }
 
-      const { title = '', user = {}, position = {}, likeReward = {}, payType } = data || {};
+      const { title = '', user = {}, position = {}, likeReward = {}, payType, viewCount, price, group, createdAt, isLike, postId, threadId } = data || {};
 
       return (
         <div className={styles.container} onClick={this.onClick}>
@@ -166,6 +167,9 @@ class Index extends React.Component {
                   name={user.userName}
                   avatar={user.avatar}
                   location={position.address}
+                  view={`${viewCount}`}
+                  groupName={group?.groupName}
+                  time={createdAt}
               />
           </div>
 
@@ -175,7 +179,7 @@ class Index extends React.Component {
 
           {payType === 1 && <Button className={styles.button} type="primary" onClick={this.onPay}>
             <span className={styles.icon}>$</span>
-            支付{money}元查看剩余内容
+            支付{price}元查看剩余内容
           </Button>}
 
           <BottomEvent
@@ -186,6 +190,8 @@ class Index extends React.Component {
             onShare={this.onShare}
             onComment={this.onComment}
             onPraise={this.onPraise}
+            isLiked={isLike}
+            tipData={{ postId, threadId }}
           />
         </div>
       );
