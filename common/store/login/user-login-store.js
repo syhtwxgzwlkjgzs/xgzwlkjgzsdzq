@@ -27,7 +27,7 @@ export default class UserLoginStore {
       const data =  {
         username: this.username,
         password: this.password,
-        // type: 'mobilebrowser_username_login',
+        type: 'mobilebrowser_username_login',
       };
 
       if (this.sessionToken) {
