@@ -7,7 +7,7 @@ import layout from './index.module.scss';
 import PhoneInput from '../../../../components/login/h5/phone-input';
 import HeaderLogin from '../../../../components/login/h5/header-login';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
-import { BAND_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/common-login-store';
+import { BAND_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 
 
 @inject('site')
@@ -17,11 +17,6 @@ import { BAND_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/common-
 @inject('mobileLogin')
 @observer
 class LoginPhoneH5Page extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
   handlePhoneNumCallback = (phoneNum) => {
     const { mobileLogin } = this.props;
     mobileLogin.mobile = phoneNum;
@@ -140,7 +135,7 @@ class LoginPhoneH5Page extends React.Component {
             {this.props.site.isUserLoginVisible && (
               <span
                 onClick={() => {
-                  this.props.router.push('login');
+                  this.props.router.push('username-login');
                 }}
                 className={layout['otherLogin-button-user']}
               >

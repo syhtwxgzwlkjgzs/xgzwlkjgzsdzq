@@ -5,7 +5,6 @@ import { Button, Input, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import HeaderLogin from '../../../../components/login/h5/header-login';
-import getQueryString from '@common/utils/get-query-string';
 
 @inject('site')
 @inject('user')
@@ -29,7 +28,10 @@ class BindNicknameH5Page extends React.Component {
       });
 
       setTimeout(() => {
-        const needToCompleteExtraInfo = this.props.commonLogin.needToCompleteExtraInfo || getQueryString('needToCompleteExtraInfo');
+        const { router } = this.props;
+        const { needToCompleteExtraInfo: isNeedToCompleteExtraInfo } = router.query;
+
+        const needToCompleteExtraInfo = this.props.commonLogin.needToCompleteExtraInfo || isNeedToCompleteExtraInfo;
         if (needToCompleteExtraInfo) {
           this.props.router.push('/user/supplementary');
           return;

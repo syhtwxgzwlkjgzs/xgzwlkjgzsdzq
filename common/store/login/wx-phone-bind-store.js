@@ -2,50 +2,44 @@ import { observable, action, computed } from 'mobx';
 import { smsSend, smsLogin } from '@server';
 import { get } from '../../utils/get';
 import setAccessToken from '../../utils/set-access-token';
-import { checkUserStatus } from '@common/store/login/util';
+import { BAND_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 
-export const MOBILE_LOGIN_STORE_ERRORS = {
+export const WX_PHONE_BIND_STORE_ERROR = {
   MOBILE_VERIFY_ERROR: {
-    Code: 'mbl_0002',
+    Code: 'wpb_0002',
     Message: '请填写正确的手机号',
   },
   VERIFY_TIME_ERROR: {
-    Code: 'mbl_0001',
+    Code: 'wpb_0001',
     Message: '请等待倒计时结束后再发送短信',
   },
   NO_MOBILE_ERROR: {
-    Code: 'mbl_0000',
+    Code: 'wpb_0000',
     Message: '请填写手机号',
   },
   NETWORK_ERROR: {
-    Code: 'mbl_9999',
+    Code: 'wpb_9999',
     Message: '网络错误',
   },
   NO_VERIFY_CODE: {
-    Code: 'mbl_0003',
+    Code: 'wpb_0003',
     Message: '验证码缺失',
   },
   NEED_BIND_USERNAME: {
-    Code: 'mbl_0004',
+    Code: 'wpb_0004',
     Message: '需要补充昵称',
   },
   NEED_COMPLETE_REQUIRED_INFO: {
-    Code: 'mbl_0005',
+    Code: 'wpb_0005',
     Message: '需要补充附加信息',
   },
   NEED_ALL_INFO: {
-    Code: 'mbl_0006',
+    Code: 'wpb_0006',
     Message: '需要补充昵称和附加信息',
-  },
-  NEED_BIND_WECHAT: {
-    Code: 8000,
-    Message: '需要绑定微信',
   },
 };
 
-const NEED_BIND_TOKEN_FLAG = 8000;
-
-export default class mobileLoginStore {
+export default class wxPhoneBindStore {
     codeTimmer = null;
 
     @observable mobile = '';
@@ -73,17 +67,17 @@ export default class mobileLoginStore {
     beforeSendVerify = () => {
       // 倒计时未结束前，不能再次发送
       if (this.codeTimeout) {
-        throw MOBILE_LOGIN_STORE_ERRORS.VERIFY_TIME_ERROR;
+        throw WX_PHONE_BIND_STORE_ERROR.VERIFY_TIME_ERROR;
       }
 
       // 信息需要填写完整
       if (!this.mobile) {
-        throw MOBILE_LOGIN_STORE_ERRORS.NO_MOBILE_ERROR;
+        throw WX_PHONE_BIND_STORE_ERROR.NO_MOBILE_ERROR;
       }
 
       // 检验手机号是否合法
       if (!this.verifyMobile()) {
-        throw MOBILE_LOGIN_STORE_ERRORS.MOBILE_VERIFY_ERROR;
+        throw WX_PHONE_BIND_STORE_ERROR.MOBILE_VERIFY_ERROR;
       }
     }
 
@@ -132,7 +126,7 @@ export default class mobileLoginStore {
           throw error;
         }
         throw {
-          ...MOBILE_LOGIN_STORE_ERRORS.NETWORK_ERROR,
+          ...WX_PHONE_BIND_STORE_ERROR.NETWORK_ERROR,
           error,
         };
       }
@@ -140,11 +134,11 @@ export default class mobileLoginStore {
 
     beforeLoginVerify = () => {
       if (!this.mobile) {
-        throw MOBILE_LOGIN_STORE_ERRORS.NO_MOBILE_ERROR;
+        throw WX_PHONE_BIND_STORE_ERROR.NO_MOBILE_ERROR;
       }
 
       if (!this.code) {
-        throw MOBILE_LOGIN_STORE_ERRORS.NO_VERIFY_CODE;
+        throw WX_PHONE_BIND_STORE_ERROR.NO_VERIFY_CODE;
       }
     }
 
@@ -156,34 +150,50 @@ export default class mobileLoginStore {
       if (isMissRequireInfo && isMissNickname) {
         this.needToCompleteExtraInfo = true;
         this.needToSetNickname = true;
-        throw MOBILE_LOGIN_STORE_ERRORS.NEED_ALL_INFO;
+        throw WX_PHONE_BIND_STORE_ERROR.NEED_ALL_INFO;
       }
 
       if (isMissRequireInfo) {
         this.needToCompleteExtraInfo = true;
-        throw MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO;
+        throw WX_PHONE_BIND_STORE_ERROR.NEED_COMPLETE_REQUIRED_INFO;
       }
 
       if (isMissNickname) {
         this.needToSetNickname = true;
-        throw MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME;
+        throw WX_PHONE_BIND_STORE_ERROR.NEED_BIND_USERNAME;
       }
     }
 
+    /**
+     * 检查用户是否处于审核状态，用来跳转状态页面
+     * @param {*} smsLoginResp
+     */
+    checkUserStatus = (smsLoginResp) => {
+      const rejectReason = get(smsLoginResp, 'data.rejectReason', '');
+      const status = get(smsLoginResp, 'data.userStatus', 0);
+      if (status ===  REVIEWING) {
+        throw {
+          Code: status,
+          Message: rejectReason,
+        };
+      }
+      return;
+    }
+
     @action
-    login = async () => {
+    loginAndBind = async (sessionToken) => {
       this.beforeLoginVerify();
 
       try {
         const smsLoginResp = await smsLogin({
+          url: 'apiv3/users/wechat/transition/sms.bind',
           timeout: 3000,
           data: {
             mobile: this.mobile,
             code: this.code,
-            type: 'mobilebrowser_sms_login',
+            sessionToken,
           },
         });
-        checkUserStatus(smsLoginResp);
 
         if (smsLoginResp.code === 0) {
           const accessToken = get(smsLoginResp, 'data.accessToken', '');
@@ -193,14 +203,15 @@ export default class mobileLoginStore {
           });
 
           this.checkCompleteUserInfo(smsLoginResp);
+          this.checkUserStatus(smsLoginResp);
 
           return smsLoginResp.data;
         }
 
-        if (smsLoginResp.code === NEED_BIND_TOKEN_FLAG) {
+        if (smsLoginResp.code === BAND_USER || smsLoginResp.code === REVIEW_REJECT) {
           throw {
-            ...MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT,
-            sessionToken: get(smsLoginResp, 'data.sessionToken'),
+            Code: smsLoginResp.code,
+            Message: get(smsLoginResp, 'data.rejectReason', ''),
           };
         }
 
@@ -213,7 +224,7 @@ export default class mobileLoginStore {
           throw error;
         }
         throw {
-          ...MOBILE_LOGIN_STORE_ERRORS.NETWORK_ERROR,
+          ...WX_PHONE_BIND_STORE_ERROR.NETWORK_ERROR,
           error,
         };
       }
