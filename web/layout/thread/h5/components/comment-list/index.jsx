@@ -1,5 +1,4 @@
 import React from 'react';
-import { withRouter } from 'next/router';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import ReplyList from '../reply-list/index';
@@ -29,8 +28,8 @@ class CommentList extends React.Component {
     };
   }
   toCommentDetail = () => {
-    if (this.state.isShowOne && this.props?.data?.id) {
-      this.props.router.push(`/thread/comment/${this.props?.data?.id}`);
+    if (this.state.isShowOne) {
+      typeof this.props.onCommentClick === 'function' && this.props.onCommentClick();
     }
   }
   // 处理评论的回复只显示一条
@@ -189,4 +188,4 @@ class CommentList extends React.Component {
   }
 }
 
-export default withRouter(CommentList);
+export default CommentList;
