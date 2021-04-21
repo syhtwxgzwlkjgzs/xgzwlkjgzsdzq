@@ -34,7 +34,7 @@ class LoginH5Page extends React.Component {
     // 手机号绑定 flag
     if (e.Code === NEED_BIND_PHONE_FLAG) {
       this.props.commonLogin.needToBindPhone = true;
-      this.props.router.push('/user/bind-phone');
+      this.props.router.push(`/user/bind-phone?sessionToken=${e.sessionToken}`);
       return;
     }
 

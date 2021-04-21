@@ -2,7 +2,7 @@ import { observable, action, computed } from 'mobx';
 import { smsSend, smsLogin } from '@server';
 import { get } from '../../utils/get';
 import setAccessToken from '../../utils/set-access-token';
-import { BAND_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/common-login-store';
+import { BAND_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 
 export const WX_PHONE_BIND_STORE_ERROR = {
   MOBILE_VERIFY_ERROR: {
