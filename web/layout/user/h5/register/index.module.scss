@@ -1,0 +1,29 @@
+@import '../../../../../common/styles/mixin/login.scss';
+@import '@common/styles/fn/rem.scss';
+.container {
+  height: 100vh;
+}
+.banner {
+  @include banner;
+}
+.content {
+  padding: rem(48) rem(24);
+  .title {
+    @include title;
+  }
+  .input {
+    @include input;
+    @include passwordInput;
+  }
+  .button {
+    @include button;
+  }
+  .functionalRegion {
+    @include functionalRegion;
+  }
+  .otherLogin-tips{
+    @include otherLoginText;
+    margin-top: rem(131);
+  }
+}
+ 

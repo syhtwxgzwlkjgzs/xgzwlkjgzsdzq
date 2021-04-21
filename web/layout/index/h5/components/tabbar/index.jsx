@@ -9,7 +9,7 @@ const Tabbar = (props) => {
     { icon: 'FindOutlined', text: '发现', active: false, router: '/search' },
     { icon: 'PlusOutlined' },
     { icon: 'MessageOutlined', text: '消息', active: false, router: '/' },
-    { icon: 'ProfessionOutlined', text: '我', active: false, router: '/my/profile' },
+    { icon: 'ProfessionOutlined', text: '我', active: false, router: '/my' },
   ]);
 
   const handleClick = (i, idx) => {
