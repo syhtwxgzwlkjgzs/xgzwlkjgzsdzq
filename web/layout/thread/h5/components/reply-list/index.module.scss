@@ -33,13 +33,14 @@
             font-family: 'PingFangSC-Semibold';
             font-weight: normal;
             font-size: rem($font-size-primary);
+            margin-right: rem($margin-2n);
             line-height: rem(18);
             text-align: left;
             color: var(--color-primary);
           }
           .replyedAvatar {
             display: inline-block;
-            margin-right: rem($margin-2n);
+            margin-right: rem($margin-1n);
             position: relative;
             top: rem(6);
           }

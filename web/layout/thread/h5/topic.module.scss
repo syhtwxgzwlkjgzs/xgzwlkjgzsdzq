@@ -53,3 +53,35 @@
   align-items: center;
   font-size: rem($font-size-primary);
 }
+
+.buyBtn {
+  margin-top: rem($margin-4n);
+  width: 100%;
+  height: rem(36);
+}
+
+.tag {
+  display: inline-block;
+  color: var(--color-text-regular);
+  background: var(--background-color);
+  font-size: rem($font-size-label);
+  padding: rem($padding-2n) rem($padding-1n);
+  border-radius: rem($border-radius-small);
+}
+
+.liked {
+  display: flex;
+  align-items: center;
+
+  span {
+    margin-left: rem(8);
+  }
+}
+
+.isLiked {
+  color: var(--color-primary);
+}
+
+.likeReward {
+  margin-left: rem(16);
+}
