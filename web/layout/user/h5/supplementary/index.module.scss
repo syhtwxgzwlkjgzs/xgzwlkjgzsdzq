@@ -1,0 +1,67 @@
+@import '../../../../../common/styles/mixin/login.scss';
+@import '@common/styles/fn/rem.scss';
+.content {
+  padding: 0 rem(24);
+}
+.button{
+  @include button;
+  margin-top: rem(16);
+}
+@mixin paddingBottom {
+  padding-bottom: rem(16);
+}
+.title{
+  font-size: rem(14);
+  line-height: rem(26);
+  text-align: left;
+  color: #4f5a70;
+}
+.input{
+  @include paddingBottom;
+  margin-top: rem(8);
+  input {
+    width: rem(327);
+  }
+}
+.imgUpload{
+  @include paddingBottom;
+}
+.imgUpload-dom{
+  width: rem(100);
+  height: rem(100);
+  border-radius: rem(5);
+  background: var(--background-color);
+  border: rem(1) solid #eee;
+  text-align: center;
+  line-height: rem(100);
+  font-size: rem(20);
+  color: var(--color-text-secondary);
+}
+.attachmentsUpload{
+  @include paddingBottom;
+  float: left;
+  width: 100%;
+}
+.attachmentsUpload-left{
+  display: inline-block;
+  font-size: rem(14);
+  line-height: rem(26);
+  text-align: left;
+  color: #4f5a70;
+}
+.attachmentsUpload-right{
+  display: inline-block;
+  font-size: rem(14);
+  line-height: rem(24);
+  color: var(--color-text-primary);
+  float: right;
+}
+.textarea{
+  @include paddingBottom;
+}
+.radio{
+  @include paddingBottom;
+}
+.checkbox{
+  @include paddingBottom;
+}
