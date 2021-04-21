@@ -23,7 +23,7 @@ class RegisterH5Page extends React.Component {
       // FIXME: Toast 暂时不支持回调能力
       // TODO: 完善这里的路由跳转逻辑
       setTimeout(() => {
-        this.props.router.push('supplementary');
+        this.props.router.push('/index');
       }, 1000);
     } catch (e) {
       Toast.error({

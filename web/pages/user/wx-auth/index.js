@@ -12,11 +12,18 @@ const NEED_BIND_OR_REGISTER_USER = -7016;
 class WeixinAuth extends React.Component {
   async componentDidMount() {
     const { router } = this.props;
-    const { code, sessionId, sessionToken, state } = router.query;
-    console.log(router.query);
+    const { code, sessionId, sessionToken, state, action } = router.query;
+
+    // 如果要进行绑定逻辑，跳转绑定相关的页面
+    if (action === 'wx-bind') {
+      router.push(`/user/wx-bind?code=${code}&sessionId=${sessionId}&sessionToken=${sessionToken}`);
+      return;
+    }
+
     try {
       const res = await h5WechatCodeLogin({
         timeout: 10000,
+        method: 'GET',
         params: {
           code,
           sessionId,
@@ -24,6 +31,7 @@ class WeixinAuth extends React.Component {
           state,
         },
       });
+
       // 落地页开关打开
       if (res.code === NEED_BIND_OR_REGISTER_USER) {
         const { sessionToken, accessToken, nickname } = res.data;

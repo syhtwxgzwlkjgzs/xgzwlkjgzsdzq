@@ -5,6 +5,7 @@ import '@discuzq/design/dist/styles/index.scss';
 import { BAND_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/common-login-store';
 
 @inject('site')
+@inject('commonLogin')
 @observer
 class Login extends React.Component {
   componentDidMount() {
@@ -22,9 +23,13 @@ class Login extends React.Component {
       this.props.router.replace('/user/phone-login');
       return;
     }
+
     // 跳转状态页
-    if (e.Code === BAND_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
-      this.props.commonLogin.setStatusMessage(e.Code, e.Message);
+    if (
+      this.props.site.statusCode === BAND_USER
+      || this.props.site.statusCode === REVIEWING
+      || this.props.site.statusCode === REVIEW_REJECT
+    ) {
       this.props.router.push('/user/status');
       return;
     }

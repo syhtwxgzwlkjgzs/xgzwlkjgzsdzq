@@ -20,7 +20,7 @@ class CaptchaInput extends React.Component {
       value[index] = item;
     });
     return value;
-  }
+  };
 
   // 点击输入框聚焦到最前端未填写的地方
   focusInput = (index, eve) => {
@@ -37,7 +37,7 @@ class CaptchaInput extends React.Component {
         break;
       }
     }
-  }
+  };
 
   // 输入事件
   setChange = (index, e) => {
@@ -56,7 +56,7 @@ class CaptchaInput extends React.Component {
       return;
     }
     this.nextFocus(e, index + val.length - 1);
-  }
+  };
 
   // 删除事件
   setBackspace = (index, e) => {
@@ -64,8 +64,7 @@ class CaptchaInput extends React.Component {
     if (val === '') {
       this.lastFocus(e, index);
     }
-  }
-
+  };
 
   // 切换到上一个输入框获取焦点
   lastFocus = (e, index) => {
@@ -75,7 +74,7 @@ class CaptchaInput extends React.Component {
       inputIndex = index - 1;
       inputRef[index - 1].focus();
     }
-  }
+  };
 
   // 切换到下一个输入框获取焦点
   nextFocus = (e, index) => {
@@ -85,7 +84,7 @@ class CaptchaInput extends React.Component {
       inputIndex = index + 1;
       inputRef[index + 1].focus();
     }
-  }
+  };
 
   // 设置对应下标的输入框获取焦点
   getInputDom = (e, index) => {
@@ -95,24 +94,34 @@ class CaptchaInput extends React.Component {
     this.setState({
       inputRef: i,
     });
-  }
+  };
 
   render() {
     const value = this.getValue();
     return (
-        <div className={layout.container}>
-          {
-            value.map((item, index) => (<Input mode='number' key={index} value={value[index]} onChange={(e) => {
+      <div className={layout.container}>
+        {value.map((item, index) => (
+          <Input
+            mode="number"
+            key={index}
+            value={value[index]}
+            onChange={(e) => {
               this.setChange(index, e);
-            }} className={layout['captchaInput-input']} onFocus={(e) => {
+            }}
+            className={layout['captchaInput-input']}
+            onFocus={(e) => {
               this.focusInput(index, e);
-            }} maxLength={2} onBackspace={(e) => {
+            }}
+            maxLength={2}
+            onBackspace={(e) => {
               this.setBackspace(index, e);
-            }} useRef={(e) => {
+            }}
+            useRef={(e) => {
               this.getInputDom(e, index);
-            }} />))
-          }
-        </div>
+            }}
+          />
+        ))}
+      </div>
     );
   }
 }

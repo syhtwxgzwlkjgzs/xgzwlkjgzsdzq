@@ -19,6 +19,8 @@ export default class commonLoginStore {
     @observable sessionToken = '';
     @observable statusMessage = '';
 
+    @observable statusCode = null;
+
     @action
     setSessionToken(sessionToken) {
       this.sessionToken = sessionToken;
@@ -27,6 +29,7 @@ export default class commonLoginStore {
     @action
     setStatusMessage(code, cause = '') {
       const causeMes = cause ? `，原因：${cause}` : '';
+      this.statusCode = code;
       this.statusMessage = `${USER_STATUS_MAP[code]}${causeMes}`;
     }
 }
