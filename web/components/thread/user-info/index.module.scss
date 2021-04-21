@@ -19,9 +19,13 @@
 }
 
 .name {
-  color: #0b0b37;
+  color: var(--color-text-primary);
   font-size: rem($font-size-primary);
   font-weight: bold;
+  max-width: rem(100);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .meta {
@@ -43,6 +47,10 @@
   span {
     margin-left: rem($margin-1n);
     font-size: rem($font-size-label);
+    max-width: rem(100);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
