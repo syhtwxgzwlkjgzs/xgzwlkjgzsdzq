@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './index.module.scss';
-import Avatar from '@components/avatar';
-import { diffDate } from '@common/utils/diff-date';
+import { Avatar, Icon } from '@discuzq/design';
+// import '@discuzq/design/styles/index.scss';
 
 export default class ReplyList extends React.Component {
   constructor(props) {
@@ -9,6 +9,9 @@ export default class ReplyList extends React.Component {
     this.state = {
       isLiked: this.props.data.isLiked,
       likeCount: this.props.data.likeCount,
+      likeClick: this.props.likeClick(),
+      replyClick: this.props.replyClick(),
+      deleteClick: this.props.deleteClick(),
     };
   }
   static async getInitialProps() {
@@ -20,7 +23,6 @@ export default class ReplyList extends React.Component {
   toCommentDetail() {
     console.log('跳至评论详情');
   }
-
   likeClick() {
     this.setState({
       isLiked: !this.state.isLiked,
@@ -29,42 +31,35 @@ export default class ReplyList extends React.Component {
         likeCount: this.state.isLiked ? this.state.likeCount + 1 : this.state.likeCount - 1,
       });
     });
-    typeof this.props.likeClick === 'function' && this.props.likeClick();
+    this.state.likeClick('2');
   }
   replyClick() {
-    typeof this.props.replyClick === 'function' && this.props.replyClick();
+    this.state.replyClick('2');
+  }
+  deleteClick() {
+    this.state.deleteClick('2');
   }
 
   render() {
     return (
       <div className={styles.replyList}>
         <div className={styles.replyListAvatar} onClick={this.props.avatarClick('2')}>
-          <Avatar
-            image={this.props.data.user.avatar}
-            name={this.props.data.user.username || this.props.data.user.userName || ''}
-            circle={true}
-            size='small'>
-          </Avatar>
+          <Avatar image={this.props.data.user.avatar} circle={true} size={'small'}></Avatar>
         </div>
         <div className={styles.replyListContent}>
           <div className={styles.replyListContentText}>
             <div className={styles.replyListName}>
-              {this.props.data.user.username || this.props.data.user.userName}
+              {this.props.data.user.username}
             </div>
             <div className={styles.replyListText}>
               {
                 this.props.data.commentUserId
                   ? <div className={styles.commentUser}>
                     <div className={styles.replyedAvatar} onClick={this.props.avatarClick('3')}>
-                      <Avatar
-                        image={this.props.data.user.avatar}
-                        name={this.props.data.user.username || this.props.data.user.userName || ''}
-                        circle={true}
-                        size='small'>
-                      </Avatar>
+                      <Avatar image={this.props.data.user.avatar} circle={true} size={'small'}></Avatar>
                     </div>
                     <span className={styles.replyedUserName}>
-                      {this.props.data.replyUser.username || this.props.data.replyUser.userName }
+                      {this.props.data.replyUser.username}
                     </span>
                   </div> : ''
               }
@@ -72,15 +67,25 @@ export default class ReplyList extends React.Component {
             </div>
           </div>
           <div className={styles.replyListFooter}>
-            <div className={styles.replyTime}>{diffDate(this.props.data.createdAt)}</div>
+            <div className={styles.replyTime}>{this.props.data.createdAt.split(' ')[1]}</div>
             <div className={styles.extraBottom}>
               <div className={this.state.isLiked ? styles.replyLike : styles.replyLiked}>
+                <Icon
+                  name='LikeOutlined'
+                  size='16'
+                  className={styles.btnIcon}>
+                </Icon>
                 <span onClick={() => this.likeClick()}>
                   赞{this.state.likeCount === 0 ? '' : this.state.likeCount}
                 </span>
               </div>
               <div className={styles.replyReply}>
-                <span onClick={() => this.replyClick()}>回复</span>
+                  <Icon
+                    name='MessageOutlined'
+                    size='16'
+                    className={styles.btnIcon}>
+                  </Icon>
+                <span onClick={() => this.replyClick('2')}>回复</span>
               </div>
             </div>
           </div>

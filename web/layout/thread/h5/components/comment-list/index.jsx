@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import ReplyList from '../reply-list/index';
-import { formatDate } from '@common/utils/format-date';
+import { diffDate } from '@common/utils/diff-date';
 
 class CommentList extends React.Component {
   constructor(props) {
@@ -132,7 +132,7 @@ class CommentList extends React.Component {
             </div>
             <div className={styles.commentListFooter}>
               <div className={styles.commentBtn}>
-                <div className={styles.commentTime}>{formatDate(this.props.data.createdAt, 'yyyy-MM-dd hh:mm')}</div>
+                <div className={styles.commentTime}>{diffDate(this.props.data.createdAt)}</div>
                 <div className={styles.extraBottom}>
                   <div className={this.state.isLiked ? styles.commentLike : styles.commentLiked}>
                     <span onClick={() => this.likeClick()}>赞{this.state.likeCount > 0 ? this.state.likeCount : ''}</span>
@@ -157,7 +157,7 @@ class CommentList extends React.Component {
                     </div> : ''
               }
               {
-                this.needReply?.length
+                this.needReply?.length > 0
                 && <div className={styles.ReplyList}>
                   {
                     this.state.isShowOne
