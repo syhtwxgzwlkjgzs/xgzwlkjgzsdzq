@@ -11,7 +11,7 @@ import styles from './index.module.scss';
 const PopularContents = ({ data, onItemClick }) => (
   <div className={styles.list}>
     {
-      data.map((item, index) => <ThreadContent data={item} key={index} />)
+      data.map((item, index) => <ThreadContent className={styles.bottom} data={item} key={index} />)
     }
     {/* {data.map((item, index, arr) => (
       <Post key={index} data={item} onClick={onItemClick} divider={index !== arr.length - 1} />

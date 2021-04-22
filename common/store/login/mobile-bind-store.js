@@ -1,5 +1,8 @@
 import { observable, action } from 'mobx';
 import { smsBind, smsSend } from '@server';
+import { get } from '../../utils/get';
+import setAccessToken from '../../utils/set-access-token';
+import { checkUserStatus } from '@common/store/login/util';
 
 export const MOBILE_BIND_STORE_ERRORS = {
   MOBILE_VERIFY_ERROR: {
@@ -128,7 +131,14 @@ export default class mobileBindStore {
             sessionToken,
           },
         });
+        checkUserStatus(smsLoginResp);
         if (smsLoginResp.code === 0) {
+          const accessToken = get(smsLoginResp, 'data.accessToken', '');
+          // TODO: 中间状态处理
+          // 种下 access_token
+          setAccessToken({
+            accessToken,
+          });
           return smsLoginResp.data;
         }
         throw {

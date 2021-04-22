@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
-import { Button, Icon } from '@discuzq/design';
+import { Button, Icon, RichText } from '@discuzq/design';
 
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
@@ -77,7 +77,9 @@ const Index = ({
         className={`${styles.contentWrapper} ${showHideCover ? styles.hideCover : ''}`}
         onClick={!showMore ? onShowMore : onRedirectToDetail}
       >
-        <div className={styles.content} dangerouslySetInnerHTML={{ __html: filterContent }} />
+        <div className={styles.content}>
+          <RichText html={filterContent} />
+        </div>
       </div>
       {!loading && useShowMore && !showMore && (
         <div className={styles.showMore} onClick={onShowMore}>
