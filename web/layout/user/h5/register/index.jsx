@@ -5,7 +5,7 @@ import { Input, Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import HeaderLogin from '../../../../components/login/h5/header-login';
-
+import { get } from '@common/utils/get';
 @inject('site')
 @inject('user')
 @inject('thread')
@@ -14,7 +14,9 @@ import HeaderLogin from '../../../../components/login/h5/header-login';
 class RegisterH5Page extends React.Component {
   handleRegister = async () => {
     try {
-      await this.props.userRegister.register();
+      const resp = await this.props.userRegister.register();
+      const uid = get(resp, 'uid', '');
+      this.props.user.updateUserInfo(uid);
       Toast.success({
         content: '注册成功',
         hasMask: false,

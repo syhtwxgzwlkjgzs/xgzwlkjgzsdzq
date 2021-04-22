@@ -6,6 +6,7 @@ import { Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import HeaderLogin from '../../../../components/login/h5/header-login';
 import PhoneInput from '../../../../components/login/h5/phone-input';
+import { get } from '@common/utils/get';
 
 @inject('site')
 @inject('user')
@@ -65,7 +66,9 @@ class WXBindPhoneH5Page extends React.Component {
             type="primary"
             onClick={async () => {
               try {
-                await wxPhoneBind.loginAndBind(sessionToken);
+                const resp = await wxPhoneBind.loginAndBind(sessionToken);
+                const uid = get(resp, 'uid', '');
+                this.props.user.updateUserInfo(uid);
                 Toast.success({
                   content: '登录成功',
                   duration: 1000,

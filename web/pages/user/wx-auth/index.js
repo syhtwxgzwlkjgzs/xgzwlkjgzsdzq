@@ -4,7 +4,7 @@ import { inject } from 'mobx-react';
 import { Input, Button, Toast } from '@discuzq/design';
 import { h5WechatCodeLogin } from '@server';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-import { get } from '../../../../common/utils/get';
+import { get } from '@common/utils/get';
 import setAccessToken from '../../../../common/utils/set-access-token';
 const NEED_BIND_OR_REGISTER_USER = -7016;
 @inject('site')
@@ -33,23 +33,25 @@ class WeixinAuth extends React.Component {
 
       // 落地页开关打开
       if (res.code === NEED_BIND_OR_REGISTER_USER) {
-        const { sessionToken, accessToken, nickname } = res.data;
+        const { sessionToken, accessToken, nickname, uid } = res.data;
         this.props.user.nickname = nickname;
         // 注册成功后，默认登录
         setAccessToken({
           accessToken,
         });
+        this.props.user.updateUserInfo(uid);
         router.push({ pathname: 'wx-select', query: { sessionToken, nickname } });
         return;
       }
 
       if (res.code === 0) {
         const accessToken = get(res, 'data.accessToken');
-        console.log('acctoken:', accessToken);
+        const uid = get(res, 'data.uid');
         // 注册成功后，默认登录
         setAccessToken({
           accessToken,
         });
+        this.props.user.updateUserInfo(uid);
         // todo push中间页面
         router.push({ pathname: '/' });
         return;

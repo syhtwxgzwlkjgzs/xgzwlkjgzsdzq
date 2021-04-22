@@ -8,6 +8,7 @@ import PhoneInput from '../../../../components/login/h5/phone-input';
 import HeaderLogin from '../../../../components/login/h5/header-login';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import { get } from '@common/utils/get';
 
 
 @inject('site')
@@ -29,7 +30,9 @@ class LoginPhoneH5Page extends React.Component {
 
   handleLoginButtonClick = async () => {
     try {
-      await this.props.mobileLogin.login();
+      const resp = await this.props.mobileLogin.login();
+      const uid = get(resp, 'uid', '');
+      this.props.user.updateUserInfo(uid);
       Toast.success({
         content: '登录成功',
         hasMask: false,

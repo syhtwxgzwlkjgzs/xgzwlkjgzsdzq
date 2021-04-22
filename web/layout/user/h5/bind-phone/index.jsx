@@ -6,7 +6,7 @@ import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import HeaderLogin from '../../../../components/login/h5/header-login';
 import PhoneInput from '../../../../components/login/h5/phone-input';
-import { get } from '../../../../../common/utils/get';
+import { get } from '@common/utils/get';
 
 
 @inject('site')

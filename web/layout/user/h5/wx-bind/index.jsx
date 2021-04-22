@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './index.module.scss';
 import HeaderLogin from '../../../../components/login/h5/header-login';
-import { get } from '../../../../../common/utils/get';
+import { get } from '@common/utils/get';
 import setAccessToken from '../../../../../common/utils/set-access-token';
 import { Button, Toast } from '@discuzq/design';
 import { h5WechatCodeBind } from '@server';
@@ -51,10 +51,12 @@ class WeixinBindH5Page extends React.Component {
         });
 
         const accessToken = get(res, 'data.accessToken', '');
+        const uid = get(res, 'data.uid', '');
         // 种下 access_token
         setAccessToken({
           accessToken,
         });
+        this.props.user.updateUserInfo(uid);
 
         // TODO: 需要对中间状态进行处理
 
