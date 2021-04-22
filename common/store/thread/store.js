@@ -23,6 +23,11 @@ class ThreadStore {
     return !!this.threadData?.isFavorite;
   }
 
+  // 是否加精
+  @computed get isEssence() {
+    return !!this.threadData?.displayTag?.isEssence;
+  }
+
   // 是否还有更多
   @computed get isNoMore() {
     return this.commentList?.length >= this.totalCount;

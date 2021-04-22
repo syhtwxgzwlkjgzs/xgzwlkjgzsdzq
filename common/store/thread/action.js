@@ -12,6 +12,16 @@ class ThreadAction extends ThreadStore {
   }
 
   @action
+  setThreadDetailLikePayCount(data) {
+    this.threadData.likeReward.likePayCount = data;
+  }
+
+  @action
+  setThreadDetailEssence(data) {
+    this.threadData.displayTag.isEssence = data;
+  }
+
+  @action
   setThreadDetailField(key, data) {
     this.threadData[key] = data;
   }

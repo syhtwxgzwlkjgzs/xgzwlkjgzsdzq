@@ -89,7 +89,7 @@ class CommentList extends React.Component {
           <div className={styles.showGet}>
             {!this.state.isHideEdit
               && <div className={styles.extra}>
-                {/* <div className={styles.revise} onClick={() => this.editClick()}>编辑</div> */}
+                <div className={styles.revise} onClick={() => this.editClick()}>编辑</div>
                 <div className={styles.revise} onClick={() => this.deleteClick()}>删除</div>
               </div>
             }

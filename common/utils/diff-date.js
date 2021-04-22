@@ -12,8 +12,6 @@ export const diffDate = function (time, referenceTime) {
   const diffHours = Math.floor(diffSenconds / 3600);
   const diffDays = Math.floor(diffSenconds / 86400);
 
-  console.log(diffSenconds, diffMinutes, diffHours);
-
   if (diffDays === 0 && diffHours === 0 && diffMinutes === 0) {
     return `${diffSenconds}秒前`;
   }
