@@ -42,7 +42,7 @@ class IndexH5Page extends React.Component {
     });
   }
 
-  onClickTab = (id) => {
+  onClickTab = (id = '') => {
     const { dispatch = () => {} } = this.props;
     dispatch('click-filter', { categoryids: [id] });
 
@@ -95,27 +95,31 @@ class IndexH5Page extends React.Component {
           themeNum={countThreads}
         />
         <div className={styles.homeContent}>
-          <Tabs
-            scrollable
-            type='primary'
-            onActive={this.onClickTab}
-            activeId={currentIndex}
-            tabBarExtraContent={
-              <div onClick={this.searchClick} className={styles.tabIcon}>
-                <Icon name="SecondaryMenuOutlined" />
-              </div>
-            }
-          >
-            {
-              categories.map((item, index) => (
-                <Tabs.TabPanel
-                  key={index}
-                  id={item.pid}
-                  label={item.name}
-                />
-              ))
-            }
-          </Tabs>
+          {
+            categories && (
+              <Tabs
+                scrollable
+                type='primary'
+                onActive={this.onClickTab}
+                activeId={currentIndex}
+                tabBarExtraContent={
+                  <div onClick={this.searchClick} className={styles.tabIcon}>
+                    <Icon name="SecondaryMenuOutlined" />
+                  </div>
+                }
+              >
+                {
+                  categories?.map((item, index) => (
+                    <Tabs.TabPanel
+                      key={index}
+                      id={item.pid}
+                      label={item.name}
+                    />
+                  ))
+                }
+              </Tabs>
+            )
+          }
         </div>
         <div className={styles.homeContent}>
           <TopNew data={sticks}/>

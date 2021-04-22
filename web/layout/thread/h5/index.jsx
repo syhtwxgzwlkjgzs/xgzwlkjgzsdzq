@@ -409,8 +409,8 @@ class ThreadH5Page extends React.Component {
   handleOnScroll() {
     // 加载评论列表
     const scrollDistance = this.threadBodyRef?.current?.scrollTop;
-    const offsetHeight = this.threadBodyRef?.current.offsetHeight;
-    const scrollHeight = this.threadBodyRef?.current.scrollHeight;
+    const offsetHeight = this.threadBodyRef?.current?.offsetHeight;
+    const scrollHeight = this.threadBodyRef?.current?.scrollHeight;
     const { isCommentReady, isNoMore } = this.props.thread;
     if (scrollDistance + offsetHeight >= scrollHeight && !this.state.isCommentLoading && isCommentReady && !isNoMore) {
       this.page = this.page + 1;
@@ -759,7 +759,7 @@ class ThreadH5Page extends React.Component {
         <div className={layout.footer}>
           {/* 评论区触发 */}
           <div className={footer.inputClick} onClick={() => this.onInputClick()}>
-            <Input className={footer.input} placeholder="写评论" disabled={true}></Input>
+            <Input className={footer.input} placeholder="写评论" disabled={true} icon='EditOutlined'></Input>
           </div>
 
           {/* 评论弹层 */}
