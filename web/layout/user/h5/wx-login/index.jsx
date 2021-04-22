@@ -4,6 +4,7 @@ import { withRouter } from 'next/router';
 import layout from './index.module.scss';
 import WeixinQrCode from '../../../../components/login/h5/wx-qr-code';
 import HeaderLogin from '../../../../components/login/h5/header-login';
+import hocWeixin from './HOCWeixin';
 
 @inject('site')
 @inject('user')
@@ -11,8 +12,12 @@ import HeaderLogin from '../../../../components/login/h5/header-login';
 @observer
 class WXLoginH5Page extends React.Component {
   async componentDidMount() {
-    await this.props.h5QrCode.generate({ params: { type: 'mobile_browser_login',
-      redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`)}`}});
+    await this.props.h5QrCode.generate({
+      params: {
+        type: 'mobile_browser_login',
+        redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`)}`,
+      },
+    });
   }
 
   render() {
@@ -58,4 +63,4 @@ class WXLoginH5Page extends React.Component {
   }
 }
 
-export default withRouter(WXLoginH5Page);
+export default hocWeixin(withRouter(WXLoginH5Page));

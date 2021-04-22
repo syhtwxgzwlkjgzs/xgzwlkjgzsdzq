@@ -54,7 +54,7 @@ class AttachmentToolbar extends React.Component {
     super(props);
     this.state = {
       showAll: false,
-      currentAction: 'PictureOutlinedBig',
+      currentAction: '',
     };
   }
 
@@ -154,7 +154,7 @@ class AttachmentToolbar extends React.Component {
               {this.props.category}
             </div>
             <div className={styles['dvditor-attachment-toolbar__right']}>
-              <Icon name="PictureOutlinedBig" size="20" onClick={this.handleToggle} />
+              <Icon name="MoreBOutlined" size="20" onClick={this.handleToggle} />
             </div>
           </>
         )}
@@ -193,7 +193,7 @@ class AttachmentToolbar extends React.Component {
               })}
             </div>
             <div className={classNames(styles['dvditor-attachment-toolbar__right'], styles.show)}>
-              <Icon name="PhoneOutlined" size="20" onClick={this.handleToggle} />
+              <Icon name="MoreBOutlined" size="20" onClick={this.handleToggle} />
             </div>
           </div>
         )}

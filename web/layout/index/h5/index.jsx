@@ -8,9 +8,8 @@ import NoData from '@components/no-data';
 import styles from './index.module.scss';
 import List from './components/list';
 import TopNew from './components/top-news';
-import FilterModalPopup from './components/filter-modal-popup';
-import filterData from './data';
 import Tabbar from './components/tabbar';
+import FilterView from './components/filter-view';
 // import PayBox from '@components/payBox';
 
 @inject('site')
@@ -21,7 +20,9 @@ class IndexH5Page extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: false
+      visible: false,
+      filter: {},
+      currentIndex: '',
     };
     this.renderItem = this.renderItem.bind(this);
   }
@@ -39,16 +40,56 @@ class IndexH5Page extends React.Component {
     });
   }
 
+  onClickTab = (id) => {
+    const { dispatch = () => {} } = this.props;
+    dispatch('', { categoryids: [id] });
+
+    this.setState({
+      filter: {
+        categoryids: [id],
+      },
+      currentIndex: id,
+      visible: false,
+    });
+  }
+
+  // 筛选弹框点击筛选按钮后的回调：categoryids-版块 types-类型 essence-筛选
+  onClickFilter = ({ categoryids, types, essence, sequence }) => {
+    const { dispatch = () => {} } = this.props;
+
+    dispatch('', { categoryids, types, essence, sequence });
+    this.setState({
+      filter: {
+        categoryids,
+        types,
+        essence,
+      },
+      currentIndex: categoryids[0],
+      visible: false,
+    });
+  }
+
   renderHeaderContent() {
-    const { index } = this.props;
+    const { index, site } = this.props;
+
     const { sticks, categories } = index;
+
+    const { siteBackgroundImage, siteLogo } = site?.webConfig?.setSite;
+    const { countUsers, countThreads } = site?.webConfig?.other;
     return (
       <div>
-        <HomeHeader/>
+        <HomeHeader
+          bgHeadFullImg={siteBackgroundImage}
+          headImg={siteLogo}
+          userNum={countUsers}
+          themeNum={countThreads}
+        />
         <div className={styles.homeContent}>
           <Tabs
             scrollable={true}
             type={'primary'}
+            onActive={this.onClickTab}
+            activeId={this.state.currentIndex}
             tabBarExtraContent={
               <div
                 style={{
@@ -64,8 +105,11 @@ class IndexH5Page extends React.Component {
           }
           >
               {categories.map((item, index) => (
-              <Tabs.TabPanel key={index} id={item.pid} label={item.name}>
-              </Tabs.TabPanel>
+              <Tabs.TabPanel
+                key={index}
+                id={item.pid}
+                label={item.name}
+               />
               ))}
           </Tabs>
         </div>
@@ -100,18 +144,34 @@ class IndexH5Page extends React.Component {
     );
   }
 
+  // 没有帖子列表数据时的默认展示
+  renderNoData = () => (
+    <>
+      {this.renderHeaderContent()}
+      <NoData />
+    </>
+  )
+
 
   render() {
     const { index } = this.props;
-    const { threads } = index;
-    
+    const { filter } = this.state;
+    const { threads, categories } = index;
+
     return (
       <div className={styles.homeBox}>
         { threads?.pageData?.length > 0
           ? this.renderList(threads?.pageData)
-          : this.renderHeaderContent()
+          : this.renderNoData()
         }
-       <FilterModalPopup visible={this.state.visible} onClose={this.onClose} filterData={filterData}></FilterModalPopup>
+
+        <FilterView
+          data={categories}
+          current={filter}
+          onCancel={this.onClose}
+          visible={this.state.visible}
+          onSubmit={this.onClickFilter}
+        />
        <Tabbar/>
       </div>
     );

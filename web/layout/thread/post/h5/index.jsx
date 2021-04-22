@@ -28,7 +28,8 @@ import RedpacketSelect from '@components/thread-post/redpacket-select';
 import PostPopup from '@components/thread-post/post-popup';
 import AllPostPaid from '@components/thread/all-post-paid';
 import { withRouter } from 'next/router';
-import classNames from 'classnames';
+import { getVisualViewpost } from '@common/utils/get-client-height';
+import throttle from '@common/utils/thottle';
 
 @inject('threadPost')
 @inject('index')
@@ -87,6 +88,11 @@ class ThreadCreate extends React.Component {
     this.fetchCategories();
     const { fetchEmoji, emojis } = this.props.threadPost;
     if (emojis.length === 0) fetchEmoji();
+    window.addEventListener('scroll', throttle(this.handler, 50));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handler);
   }
 
   fetchCategories() {
@@ -323,10 +329,37 @@ class ThreadCreate extends React.Component {
     player && player.src(opt);
   };
 
-  getBottomBarStyle = () => {
-    const { isVditorFocus } = this.state;
-    const position = isVditorFocus ? styles['post-bottombar-absolute'] : styles['post-bottombar-fixed'];
-    return classNames(styles['post-bottombar'], position);
+  handler = () => {
+    this.setBottomBarStyle(window.scrollY);
+  }
+
+  // 设置底部bar的样式
+  setBottomBarStyle = (y = 0) => {
+    const height = getVisualViewpost();
+    const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
+    const postBottombar = document.querySelector('#post-bottombar');
+    const position = document.querySelector('#post-position');
+    position.style.display = 'none';
+    postBottombar.style.top = `${height - 90 + y}px`;
+    vditorToolbar.style.position = 'fixed';
+    vditorToolbar.style.top = `${height - 130 + y}px`;
+  }
+  setBottomFixed = () => {
+    const timer = setTimeout(() => {
+      if (timer) clearTimeout(timer);
+      this.setBottomBarStyle(0);
+    }, 150);
+  }
+  clearBottomFixed = () => {
+    const timer = setTimeout(() => {
+      if (timer) clearTimeout(timer);
+      const height = getVisualViewpost();
+      const postBottombar = document.querySelector('#post-bottombar');
+      const position = document.querySelector('#post-position');
+      position.style.display = 'flex';
+      postBottombar.style.top = `${height - 134}px`;
+      document.body.style.height = '100%';
+    }, 100);
   }
 
   render() {
@@ -361,15 +394,25 @@ class ThreadCreate extends React.Component {
 
     return (
       <>
-        <div className={styles.post}>
-          <Title onChange={this.handleTitleChange} />
+        <div className={styles['post-inner']}>
+          <Title
+            onChange={this.handleTitleChange}
+            onFocus={this.setBottomFixed}
+            onBlur={this.clearBottomFixed}
+          />
           <DVditor
             emoji={emoji}
             atList={atList}
             topic={topic}
             onChange={this.handleVditorChange}
-            onFocus={() => this.setState({ isVditorFocus: true })}
-            onBlur={() => this.setState({ isVditorFocus: false })}
+            onFocus={() => {
+              this.setBottomFixed();
+              this.setState({ isVditorFocus: true });
+            }}
+            onBlur={() => {
+              this.setState({ isVditorFocus: false });
+              this.clearBottomFixed();
+            }}
           />
 
           {/* 录音组件 */}
@@ -411,11 +454,6 @@ class ThreadCreate extends React.Component {
               }}
             />
           )}
-        </div>
-        <div className={this.getBottomBarStyle()}>
-          <div className={styles['position-box']}>
-            <Position onChange={position => this.setState({ position })} />
-          </div>
           {/* 悬赏问答内容标识 */}
           {(value && times) && (
             <div className={styles['reward-qa-box']}>
@@ -424,6 +462,11 @@ class ThreadCreate extends React.Component {
               }}>{`悬赏金额${rewardQaData.value}元\\结束时间${rewardQaData.times}`}</div>
             </div>
           )}
+        </div>
+        <div id="post-bottombar" className={styles['post-bottombar']}>
+          <div id="post-position" className={styles['position-box']}>
+            <Position onChange={position => this.setState({ position })} />
+          </div>
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar
             onAttachClick={this.handleAttachClick}

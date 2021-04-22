@@ -116,7 +116,7 @@ export default class mobileBindStore {
     }
 
     @action
-    bind = async () => {
+    bind = async (sessionToken) => {
       this.beforeBindVerify();
 
       try {
@@ -125,6 +125,7 @@ export default class mobileBindStore {
           data: {
             mobile: this.mobile,
             code: this.code,
+            sessionToken,
           },
         });
         if (smsLoginResp.code === 0) {

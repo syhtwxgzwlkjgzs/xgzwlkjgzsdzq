@@ -11,7 +11,7 @@ import styles from './index.module.scss';
 
 import PropTypes from 'prop-types';
 
-const Title = ({ title, placeholder, isDisplay, onChange }) => {
+const Title = ({ title, placeholder, isDisplay, onChange,  onFocus, onBlur }) => {
   // state 标题值
   const [titleVal, setTitleVal] = useState('');
 
@@ -32,6 +32,8 @@ const Title = ({ title, placeholder, isDisplay, onChange }) => {
       value={titleVal}
       placeholder={placeholder}
       onChange={e => setTitleVal(e.target.value)}
+      onFocus={onFocus}
+      onBlur={onBlur}
     />
   );
 };
@@ -41,6 +43,8 @@ Title.propTypes = {
   isDisplay: PropTypes.bool,
   placeholder: PropTypes.string,
   onChange: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
 };
 
 // 设置props默认类型
@@ -48,7 +52,9 @@ Title.defaultProps = {
   title: '',
   isDisplay: false,
   placeholder: '标题(可选)',
-  onChange: () => {}
+  onChange: () => { },
+  onFocus: () => { },
+  onBlur: () => { },
 };
 
 export default memo(Title);
