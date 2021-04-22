@@ -47,6 +47,7 @@ export default class UserRegisterStore {
       if (registerResp.code === 0) {
         const accessToken = get(registerResp, 'data.accessToken');
         // 注册成功后，默认登录
+        // TODO: 中间状态处理？ 确认下
         setAccessToken({
           accessToken,
         });

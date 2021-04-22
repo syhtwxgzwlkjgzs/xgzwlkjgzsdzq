@@ -71,6 +71,8 @@ class WXBindPhoneH5Page extends React.Component {
                   duration: 1000,
                 });
 
+                // TODO: 需要对中间状态进行处理
+
                 setTimeout(() => {
                   router.push('/index');
                 }, 1000);

@@ -132,6 +132,7 @@ export default class mobileBindStore {
         });
         if (smsLoginResp.code === 0) {
           const accessToken = get(smsLoginResp, 'data.accessToken', '');
+          // TODO: 中间状态处理
           // 种下 access_token
           setAccessToken({
             accessToken,

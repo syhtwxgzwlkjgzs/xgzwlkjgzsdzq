@@ -173,6 +173,7 @@ export default class resetPasswordStore {
             code: this.code,
           },
         });
+        // TODO: 中间状态处理？待确认 & 需要确认下是否返回登录态
         if (resetPwdResp.code === 0) {
           return resetPwdResp.data;
         }

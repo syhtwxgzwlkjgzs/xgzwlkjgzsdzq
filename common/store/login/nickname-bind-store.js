@@ -28,6 +28,7 @@ export default class nicknameBindStore {
           nickname: this.nickname,
         },
       });
+      // TODO: 中间状态处理? 需要确认返回接口信息，是否包含登录态?
       if (setResp.code === 0) {
         return setResp.data;
       }
