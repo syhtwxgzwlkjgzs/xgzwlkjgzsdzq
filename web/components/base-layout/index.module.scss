@@ -1,13 +1,5 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 .content {
-  width: 100%;
   padding: rem($padding-5n) 0;
-  display: flex;
-  justify-content: center;
-  .contentBox {
-    width: rem(1200);
-    display: flex;
-    justify-content: space-between;
-  }
 }

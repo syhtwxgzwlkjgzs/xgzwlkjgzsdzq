@@ -5,14 +5,17 @@
   width: 100%;
   .indexLeft {
     width: 100%;
-    // padding: 0px 10px;
-    // background: #fff;
+    display: flex;
+    justify-content: flex-end;
+    .indexLeftBox {
+      width: rem(260);
+    }
   }
   .indexRight {
-    width: 100%;
+    width: rem(286);
   }
   .indexContent {
-    width: 100%;
+    width: rem(652);
     .contnetTop {
       width: 100%;
       background: var(--color-white);
@@ -21,6 +24,7 @@
   }
   .topBox {
     position: relative;
+    padding-left: rem(8);
     .PostTheme {
       position: absolute;
       right: rem(24);

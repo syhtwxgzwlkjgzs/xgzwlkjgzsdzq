@@ -29,21 +29,19 @@ const BaseLayout = (props) => {
     <React.Fragment>
         {(header && header({ ...props })) || <Header />}
 
-        <div className={styles.content}>
-          <Row justify="center" className={styles.contentBox}>
-              <Col span={2} style={{ padding: '10px 10px 10px 0'}}>
-                  {left && left({ ...props })}
-              </Col>
-              <Col span={7}>
-                  {children && children({ ...props })}
-              </Col>
-              <Col span={3} style={{ padding: '10px 0px 10px 10px'}}>
-                  {right && right({ ...props })}
-              </Col>
-          </Row>
-        </div>
+        <Row justify="center" gutter={20} className={styles.content}>
+            <Col>
+                {left && left({ ...props })}
+            </Col>
+            <Col>
+                {children && children({ ...props })}
+            </Col>
+            <Col>
+                {right && right({ ...props })}
+            </Col>
+        </Row>
 
-        {}
+        {footer && footer({ ...props })}
     </React.Fragment>
   );
 };
