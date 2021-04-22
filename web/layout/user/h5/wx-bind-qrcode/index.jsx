@@ -11,10 +11,11 @@ import HeaderLogin from '../../../../components/login/h5/header-login';
 @observer
 class WeixinBindQrCodePage extends React.Component {
   async componentDidMount() {
-    const { sessionToken, loginType } = this.props.router.query;
+    const { sessionToken, loginType, nickname } = this.props.router.query;
     await this.props.h5QrCode.generate({
       params: {
         sessionToken,
+        nickname,
         type: 'mobile_browser_bind',
         redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth?loginType=${loginType}&action=wx-bind`)}`,
       },
@@ -22,15 +23,15 @@ class WeixinBindQrCodePage extends React.Component {
   }
 
   render() {
+    const { nickname } = this.props.router.query;
     return (
       <div className={layout.container}>
         <HeaderLogin />
         <div className={layout.content}>
           <div className={layout.title}>绑定微信号</div>
           <div className={layout.tips}>
-            <img src="/user.png" alt="" />
             {/* todo 小虫替换为用户名*/}
-            小虫，请绑定您的微信
+            {nickname ? `${nickname}，` : ''}请绑定您的微信
           </div>
           {/* 二维码 start */}
           <WeixinQrCode

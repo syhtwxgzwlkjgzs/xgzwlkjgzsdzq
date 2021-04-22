@@ -53,7 +53,6 @@ class WXBindUsernameH5page extends React.Component {
                 <div className={layout.title}>用户名登录，并绑定微信账号</div>
                 <div className={layout.tips}>
                   hi， 微信用户
-                  <img src="/user.png" alt=""/>
                   小虫<br/>
                   请您登录，即可完成微信号和用户名的绑定
                 </div>
