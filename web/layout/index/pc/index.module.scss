@@ -24,28 +24,28 @@
   }
   .topBox {
     position: relative;
-    padding-left: rem(8);
+    padding-left: rem($margin-2n);
     .PostTheme {
       position: absolute;
-      right: rem(24);
-      top: 10px;
+      right: rem($padding-6n);
+      top: rem($padding-10);
     }
   }
   .TopNewsBox {
-    padding: rem(10) 0;
-    margin: 0 rem(24);
+    padding: rem($padding-10) 0;
+    margin: 0 rem($margin-6n);
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
   }
   .topNewContent {
-    padding: rem(10) 0;
-    margin: 0 rem(24);
+    padding: rem($padding-10) 0;
+    margin: 0 rem($margin-6n);
   }
   .themeBox {
     overflow: hidden;
-    margin-top: rem(20);
+    margin-top: rem($margin-5n);
     .themeItem {
-      margin-bottom: 10px;
+      margin-bottom: rem($margin-10);
     }
   }
 }

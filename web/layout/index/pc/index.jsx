@@ -10,7 +10,7 @@ import Navigation from './components/navigation';
 import QcCode from './components/qcCode';
 import Recommend from './components/recommend';
 import IndexContent from './components/index-content'
-import themeData from './data';
+import Copyright from './components/copyright';
 @inject('site')
 @inject('user')
 @inject('index')
@@ -35,12 +35,13 @@ class IndexPCPage extends React.Component {
             </div>}
           right={() => <div className={styles.indexRight}>
             <QcCode />
-            <div style={{marginTop: '20px'}}>
+            <div style={{margin: '20px 0'}}>
               <Recommend
                 changeBatch={this.changeBatch}
                 recommendDetails={this.recommendDetails}
               />
             </div>
+            <Copyright/>
           </div>}
         >
           {
@@ -60,13 +61,6 @@ class IndexPCPage extends React.Component {
                 </div>
               </div>
               <div className={styles.themeBox}>
-                {/* {
-                  themeData.map((item, index) => { 
-                    <div className={styles.themeItem} key={index}>
-                      <IndexContent data={item}/>
-                    </div>
-                  })
-                } */}
                 <div className={styles.themeItem}>
                   <IndexContent/>
                 </div>
