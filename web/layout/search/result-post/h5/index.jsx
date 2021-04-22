@@ -5,7 +5,8 @@ import { withRouter } from 'next/router';
 import Header from '@components/header';
 import NoData from '@components/no-data';
 import SearchInput from '@components/search-input';
-import SearchPosts from './components/search-posts';
+import List from '@components/list';
+import ThreadContent from '@components/thread';
 
 import styles from './index.module.scss';
 
@@ -34,7 +35,7 @@ class SearchResultPostH5Page extends React.Component {
   fetchMoreData = () => {
     const { dispatch } = this.props;
     const { keyword } = this.state;
-    dispatch('more', keyword);
+    return dispatch('moreData', keyword);
   };
 
   // event
@@ -48,14 +49,12 @@ class SearchResultPostH5Page extends React.Component {
     });
   };
 
-  onPostClick = (data) => {
-    this.props.router.push('/thread/9060');
-  };
+  onPostClick = (data) => {};
 
   render() {
     const { keyword, refreshing } = this.state;
     const { threads } = this.props.search;
-    const { pageData } = threads || { pageData: [] };
+    const { pageData, currentPage, totalPage } = threads || { pageData: [] };
 
     return (
       <div className={styles.page}>
@@ -65,13 +64,19 @@ class SearchResultPostH5Page extends React.Component {
         </div>
         {
           pageData && pageData.length
-            ? <SearchPosts
-                data={pageData}
-                refreshing={refreshing}
-                onRefresh={this.refreshData}
-                onFetchMore={this.fetchMoreData}
-                onItemClick={this.onPostClick}
-              />
+            ? (
+              <List
+                className={styles.list}
+                onRefresh={this.fetchMoreData}
+                noMore={currentPage >= totalPage}
+              >
+                {
+                  pageData?.map((item, index) => (
+                    <ThreadContent className={styles.listItem} key={index} data={item} />
+                  ))
+                }
+              </List>
+            )
             : <NoData />
         }
       </div>
