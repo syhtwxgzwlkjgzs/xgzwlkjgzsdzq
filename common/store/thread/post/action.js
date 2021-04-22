@@ -13,7 +13,7 @@ class ThreadPostAction extends ThreadPostStore {
     // this.setLoadingStatus(LOADING_TOTAL_TYPE.emoji, true);
     const ret = await createThread(this.postData);
     // this.setLoadingStatus(LOADING_TOTAL_TYPE.emoji, false);
-    const { code, data = [] } = ret;
+    // const { code, data = [] } = ret;
     // 相关数据处理待实际调用时修改
     // let emojis = [];
     // if (code === 0) emojis = data.map(item => ({ code: item.code, url: item.url }));
@@ -57,8 +57,7 @@ class ThreadPostAction extends ThreadPostStore {
       page,
     };
     this.setLoadingStatus(LOADING_TOTAL_TYPE.follow, true);
-    // TODO: 待sdk更新后在去掉 isValidate
-    const ret = await readFollow({ params, isValidate: false });
+    const ret = await readFollow({ params });
     this.setLoadingStatus(LOADING_TOTAL_TYPE.follow, false);
     const { code, data } = ret;
     const { pageData } = data || {};
@@ -148,7 +147,12 @@ class ThreadPostAction extends ThreadPostStore {
   // 同步发帖数据到store
   @action.bound
   setPostData(data) {
-    this.postData = {...this.postData, ...data};
+    this.postData = { ...this.postData, ...data };
+  }
+
+  @action
+  setCategorySeleted(data) {
+    this.categorySeleted = data || { parent: {}, child: {} };
   }
 }
 
