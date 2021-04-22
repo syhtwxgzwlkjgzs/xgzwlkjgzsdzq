@@ -16,7 +16,7 @@ class WeixinAuth extends React.Component {
 
     // 如果要进行绑定逻辑，跳转绑定相关的页面
     if (action === 'wx-bind') {
-      router.push(`/user/wx-bind?code=${code}&sessionId=${sessionId}&sessionToken=${sessionToken}&state=${state}$nickname=${nickname}`);
+      router.push(`/user/wx-bind?code=${code}&sessionId=${sessionId}&sessionToken=${sessionToken}&state=${state}&nickname=${nickname}`);
       return;
     }
 

@@ -21,9 +21,7 @@ class WXSelectH5Page extends React.Component {
           <div className={layout.content}>
               <div className={layout.title}>绑定微信号</div>
               <div className={layout.tips}>
-              微信用户
-              <img src="/user.png" alt=""/>
-                {nickname}，请选择您要进行的操作
+              微信用户 {nickname}，请选择您要进行的操作
               </div>
               <Button className={layout.button} type="primary" onClick={async () => {
                 try {
@@ -57,12 +55,12 @@ class WXSelectH5Page extends React.Component {
                 微信登录
               </Button>
               <Button className={layout.button} type="primary" onClick={() => {
-                router.push({ pathname: 'wx-bind-username', query: { sessionToken } });
+                router.push({ pathname: 'wx-bind-username', query: { sessionToken, nickname } });
               }}>
                 使用用户名密码登录，并绑定微信
               </Button>
               <Button className={layout.button} type="primary" onClick={() => {
-                router.push({ pathname: 'wx-bind-phone', query: { sessionToken } });
+                router.push({ pathname: 'wx-bind-phone', query: { sessionToken, nickname } });
               }}>
                 使用手机号登录，并绑定微信
               </Button>
