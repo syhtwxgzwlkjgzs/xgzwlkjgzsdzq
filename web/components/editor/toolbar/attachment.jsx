@@ -6,7 +6,7 @@ import { Icon, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { attachIcon } from '../const';
+import { attachIcon } from '@common/constants/const';
 import { createAttachment, readYundianboSignature } from '@common/server';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 
