@@ -94,10 +94,10 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
           }
         </div>
         {
-          contents[first] && contents[first].children?.length ? (
+          contents[first]?.children?.length ? (
             <div className={`${styles.wrapper} ${styles.childrenWrapper}`}>
               {
-                contents[first] && contents[first].children && contents[first].children.map((item, index) => (
+                contents[first].children.map((item, index) => (
                   <span className={`${firstChildren === item.pid ? styles.childrenActive : ''} ${styles.span}`} key={`${index}-${index}`} onClick={() => onClickSecond(item.pid, type)}>{item.name}</span>
                 ))
               }
