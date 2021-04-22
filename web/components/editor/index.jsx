@@ -9,7 +9,7 @@ import 'vditor/src/assets/scss/index.scss';
 import './index.scss';
 
 export default function DVditor(props) {
-  const { onChange, emoji, atList, topic, onFocus, onBlur } = props;
+  const { onChange, emoji, atList, topic, onFocus, onBlur, value } = props;
   const vditorId = 'dzq-vditor';
 
   const [isFocus, setIsFocus] = useState(false);
@@ -76,7 +76,7 @@ export default function DVditor(props) {
         height: 178,
         placeholder: '请填写您的发布内容…',
         // 编辑器初始化值
-        value: '',
+        value,
         cache: { enable: false },
         // 编辑器异步渲染完成后的回调方法
         after: () => {},
