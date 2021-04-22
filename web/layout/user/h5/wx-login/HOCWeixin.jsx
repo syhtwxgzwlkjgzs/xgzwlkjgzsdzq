@@ -21,7 +21,7 @@ export default function HOCWeixin(Component) {
     }
 
     render() {
-      return this.state.isWeixin ? <Component {...this.props} /> : <div>Loading</div>;
+      return this.state.isWeixin ? <div>Loading</div> : <Component {...this.props} /> ;
     }
   }
 
