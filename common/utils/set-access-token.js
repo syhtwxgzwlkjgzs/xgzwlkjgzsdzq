@@ -9,7 +9,7 @@ export const setCookie = (name, value, exdays) => {
     const expires = `expires=${d.toGMTString()}`;
     cookie = `${cookie} ${expires}`;
   }
-  document.cookie = cookie;
+  document.cookie += cookie;
 };
 
 export const getCookie = (cname) => {
@@ -30,6 +30,7 @@ const setAccessToken = ({
   if (!accessToken) return;
   const expireSeconds = 30 * 24 * 60 * 60 * 1000;
   setCookie(constants.ACCESS_TOKEN_NAME, accessToken, 30);
+  // setCookie('rtess', accessToken, 30);
   locals.set(constants.ACCESS_TOKEN_NAME, accessToken, expireSeconds);
 };
 
