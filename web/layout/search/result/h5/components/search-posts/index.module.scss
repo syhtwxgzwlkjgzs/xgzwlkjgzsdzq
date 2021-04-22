@@ -2,4 +2,8 @@
 @import '@common/styles/variable/index.scss';
 .list {
   width: 100%;
+  background-color: var(--background-color);
+  .listItem {
+    margin-bottom: rem(10);
+  }
 }

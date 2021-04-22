@@ -94,36 +94,32 @@ class IndexH5Page extends React.Component {
           userNum={countUsers}
           themeNum={countThreads}
         />
-        <div className={styles.homeContent}>
-          {
-            categories && (
-              <Tabs
-                scrollable
-                type='primary'
-                onActive={this.onClickTab}
-                activeId={currentIndex}
-                tabBarExtraContent={
-                  <div onClick={this.searchClick} className={styles.tabIcon}>
-                    <Icon name="SecondaryMenuOutlined" />
-                  </div>
-                }
-              >
-                {
-                  categories?.map((item, index) => (
-                    <Tabs.TabPanel
-                      key={index}
-                      id={item.pid}
-                      label={item.name}
-                    />
-                  ))
-                }
-              </Tabs>
-            )
-          }
-        </div>
-        <div className={styles.homeContent}>
+        {categories && categories.length > 0 && <div className={styles.homeContent}>
+          <Tabs
+            scrollable
+            type='primary'
+            onActive={this.onClickTab}
+            activeId={currentIndex}
+            tabBarExtraContent={
+              <div onClick={this.searchClick} className={styles.tabIcon}>
+                <Icon name="SecondaryMenuOutlined" />
+              </div>
+            }
+          >
+            {
+              categories.map((item, index) => (
+                <Tabs.TabPanel
+                  key={index}
+                  id={item.pid}
+                  label={item.name}
+                />
+              ))
+            }
+          </Tabs>
+        </div>}
+        {sticks && sticks.length > 0 && <div className={styles.homeContent}>
           <TopNew data={sticks}/>
-        </div>
+        </div>}
       </div>
     );
   }
