@@ -38,7 +38,7 @@ class Index extends React.Component {
 
   async componentDidMount() {
     const { serverIndex, index } = this.props;
-
+    
     // 当服务器无法获取数据时，触发浏览器渲染
     const isBool1 = !index.categories && (!serverIndex || !serverIndex.categories);
     const isBool2 = !index.sticks && (!serverIndex || !serverIndex.sticks);
