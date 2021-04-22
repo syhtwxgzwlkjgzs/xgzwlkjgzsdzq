@@ -42,7 +42,7 @@ class WXLoginH5Page extends React.Component {
                 }}
                 className={layout['otherLogin-button-weixin']}
               >
-                <img src="/login-user.png" alt="" />
+                <img src="//dzq-img/login-/dzq-img/user.png" alt="" />
               </span>
             )}
             {this.props.site.isSmsOpen && (
@@ -52,7 +52,7 @@ class WXLoginH5Page extends React.Component {
                 }}
                 className={layout['otherLogin-button-user']}
               >
-                <img src="/login-phone.png" alt="" />
+                <img src="//dzq-img/login-phone.png" alt="" />
               </span>
             )}
           </div>

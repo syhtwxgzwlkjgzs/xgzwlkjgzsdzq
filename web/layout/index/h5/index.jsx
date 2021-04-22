@@ -25,6 +25,10 @@ class IndexH5Page extends React.Component {
     this.renderItem = this.renderItem.bind(this);
   }
 
+  componentDidMount() {
+    console.log(this.props.user);
+  }
+
   // 点击更多弹出筛选
   searchClick = () => {
     this.setState({

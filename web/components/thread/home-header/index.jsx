@@ -12,7 +12,7 @@ import { Icon } from '@discuzq/design';
  */
 
 const Index = ({ bgHeadFullImg, bgColor, headImg, userNum = 0, themeNum = 0 }) => {
-  const logoImg = '/admin-logo-x2.png';
+  const logoImg = '/dzq-img/admin-logo-x2.png';
 
   const bgHeader = useMemo(() => {
     if (bgHeadFullImg) {
