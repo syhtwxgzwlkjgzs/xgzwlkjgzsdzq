@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx';
 import { setNickname } from '@server';
+import { checkUserStatus } from '@common/store/login/util';
 
 export const NICKNAME_BIND_STORE_ERRORS = {
   NO_NICKNAME_ERROR: {
@@ -28,7 +29,7 @@ export default class nicknameBindStore {
           nickname: this.nickname,
         },
       });
-      // TODO: 中间状态处理? 需要确认返回接口信息，是否包含登录态?
+      checkUserStatus(setResp);
       if (setResp.code === 0) {
         return setResp.data;
       }

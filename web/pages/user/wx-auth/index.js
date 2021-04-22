@@ -6,9 +6,11 @@ import { h5WechatCodeLogin } from '@server';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 import { get } from '@common/utils/get';
 import setAccessToken from '../../../../common/utils/set-access-token';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
 const NEED_BIND_OR_REGISTER_USER = -7016;
 @inject('site')
 @inject('user')
+@inject('commonLogin')
 class WeixinAuth extends React.Component {
   async componentDidMount() {
     const { router } = this.props;
@@ -30,6 +32,7 @@ class WeixinAuth extends React.Component {
           state,
         },
       });
+      checkUserStatus(res);
 
       // 落地页开关打开
       if (res.code === NEED_BIND_OR_REGISTER_USER) {
@@ -52,7 +55,6 @@ class WeixinAuth extends React.Component {
           accessToken,
         });
         this.props.user.updateUserInfo(uid);
-        // todo push中间页面
         router.push({ pathname: '/' });
         return;
       }
@@ -62,6 +64,12 @@ class WeixinAuth extends React.Component {
         Message: res.msg,
       };
     } catch (error) {
+      // 跳转状态页
+      if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
+        this.props.commonLogin.setStatusMessage(error.Code, error.Message);
+        this.props.router.push('/user/status');
+        return;
+      }
       if (error.Code) {
         Toast.error({
           content: error.Message,

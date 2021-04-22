@@ -7,10 +7,12 @@ import '@discuzq/design/dist/styles/index.scss';
 import HeaderLogin from '../../../../components/login/h5/header-login';
 import { get } from '@common/utils/get';
 import setAccessToken from '../../../../../common/utils/set-access-token';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
 import { usernameAutoBind } from '@server';
 
 @inject('site')
 @inject('user')
+@inject('commonLogin')
 @observer
 class WXSelectH5Page extends React.Component {
   render() {
@@ -33,6 +35,7 @@ class WXSelectH5Page extends React.Component {
                     sessionToken,
                   },
                 });
+                checkUserStatus(res);
                 Toast.success({
                   content: res.code + res.msg,
                 });
@@ -45,7 +48,6 @@ class WXSelectH5Page extends React.Component {
                   });
                   this.props.user.updateUserInfo(uid);
                   this.props.router.push('/index');
-                  // TODO: 处理中间状态
                   return;
                 }
                 throw {
@@ -53,6 +55,12 @@ class WXSelectH5Page extends React.Component {
                   Message: res.msg,
                 };
               } catch (error) {
+                // 跳转状态页
+                if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
+                  this.props.commonLogin.setStatusMessage(error.Code, error.Message);
+                  this.props.router.push('/user/status');
+                  return;
+                }
                 if (error.Code) {
                   throw error;
                 }

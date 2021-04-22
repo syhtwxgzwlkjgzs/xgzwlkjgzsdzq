@@ -7,10 +7,12 @@ import { get } from '@common/utils/get';
 import setAccessToken from '../../../../../common/utils/set-access-token';
 import { Button, Toast } from '@discuzq/design';
 import { h5WechatCodeBind } from '@server';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
 
 @inject('site')
 @inject('user')
 @inject('h5QrCode')
+@inject('commonLogin')
 @observer
 class WeixinBindH5Page extends React.Component {
   render() {
@@ -45,6 +47,7 @@ class WeixinBindH5Page extends React.Component {
         timeout: 3000,
         ...opts,
       });
+      checkUserStatus(res);
       if (res.code === 0) {
         Toast.success({
           content: '绑定成功',
@@ -58,8 +61,6 @@ class WeixinBindH5Page extends React.Component {
         });
         this.props.user.updateUserInfo(uid);
 
-        // TODO: 需要对中间状态进行处理
-
         await this.props.router.push('/');
         return;
       }
@@ -68,6 +69,12 @@ class WeixinBindH5Page extends React.Component {
         Message: res.msg,
       };
     } catch (error) {
+      // 跳转状态页
+      if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
+        this.props.commonLogin.setStatusMessage(error.Code, error.Message);
+        this.props.router.push('/user/status');
+        return;
+      }
       if (error.Code) {
         Toast.error({
           content: error.Message,
