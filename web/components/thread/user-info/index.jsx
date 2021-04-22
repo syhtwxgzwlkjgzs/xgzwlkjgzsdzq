@@ -3,6 +3,7 @@ import { Icon, Tag } from '@discuzq/design';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import React from 'react';
+import { diffDate } from '@common/utils/diff-date';
 
 UserInfo.propTypes = {
   name: PropTypes.string.isRequired, // 用户名称
@@ -34,10 +35,10 @@ export default function UserInfo(props) {
           {props.groupName && <span className={styles.groupName}>{props.groupName}</span>}
         </div>
         <div className={styles.meta}>
-          {props.time && <span className={styles.time}>{props.time}</span>}
+          {props.time && <span className={styles.time}>{diffDate(props.time)}</span>}
           {props.location && (
             <div className={styles.location}>
-              <Icon name="FindOutlined"></Icon>
+              <Icon name="PositionOutlined"></Icon>
               <span>{props.location}</span>
             </div>
           )}
