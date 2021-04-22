@@ -29,7 +29,6 @@ class WeixinBindQrCodePage extends React.Component {
         <div className={layout.content}>
           <div className={layout.title}>绑定微信号</div>
           <div className={layout.tips}>
-            {/* todo 小虫替换为用户名*/}
             {nickname ? `${nickname}，` : ''}请绑定您的微信
           </div>
           {/* 二维码 start */}
