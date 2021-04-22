@@ -6,6 +6,7 @@ import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import HeaderLogin from '../../../../components/login/h5/header-login';
 import PhoneInput from '../../../../components/login/h5/phone-input';
+import { get } from '../../../../../common/utils/get';
 
 
 @inject('site')
@@ -28,7 +29,9 @@ class BindPhoneH5Page extends React.Component {
     try {
       const { query } = this.props.router;
       const { sessionToken } = query;
-      await this.props.mobileBind.bind(sessionToken);
+      const resp = await this.props.mobileBind.bind(sessionToken);
+      const uid = get(resp, 'uid', '');
+      this.props.user.updateUserInfo(uid);
       Toast.success({
         content: '登录成功',
         hasMask: false,
