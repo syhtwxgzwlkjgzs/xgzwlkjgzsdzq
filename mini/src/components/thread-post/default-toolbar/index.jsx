@@ -1,6 +1,6 @@
 
 /**
- * 发帖页底部分类、图片等工具栏
+ * 发帖页底部表情、话题、发布等工具栏
  */
 import React, { useState } from 'react';
 import { observer, inject } from 'mobx-react';
@@ -16,13 +16,16 @@ export default inject('site', 'threadPost')(observer((props) => {
   const [currentTool, setCurrentTool] = useState({});
 
 
-  // 插件icon元素
+  // 工具栏icon元素
   const plus = defaultIcon.map((item, index) => {
     return (
       <Icon
         key={index}
         className={styles['plus-icon']}
-        onClick={() => {setCurrentTool(item);}}
+        onClick={() => {
+          setCurrentTool(item);
+          // 处理该工具对应的逻辑
+        }}
         name={item.name}
         color={item.id === currentTool.id && item.active}
         size='20'

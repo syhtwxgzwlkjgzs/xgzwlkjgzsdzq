@@ -25,7 +25,10 @@ export default inject('site', 'threadPost')(observer((props) => {
       <Icon
         key={index}
         className={styles['plus-icon']}
-        onClick={() => {setCurrentPlus(item)}}
+        onClick={() => {
+          setCurrentPlus(item);
+          // 处理该图标对应的逻辑
+        }}
         name={item.name}
         color={item.name === currentPlus.name && item.active}
         size='20'

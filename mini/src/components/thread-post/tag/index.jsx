@@ -5,10 +5,25 @@
 import React from 'react';
 import { Text } from '@tarojs/components';
 import styles from './index.module.scss';
+import PropTypes from 'prop-types';
 
-export default (props) => {
+const Tag = (props) => {
   const { content, clickCb = () => {} } = props;
   return (
     <Text className={styles['content']} onClick={() => {clickCb();}}>{content}</Text>
   );
 };
+
+Tag.propTypes = {
+  /**
+   * tag中展示的内容，必传
+   */
+  content: PropTypes.string.isRequired,
+  /**
+   * 点击tag的回调
+   */
+   clickCb: PropTypes.func,
+};
+
+
+export default Tag;
