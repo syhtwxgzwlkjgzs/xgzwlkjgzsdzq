@@ -5,8 +5,7 @@ import filterData from './data';
 
 import styles from './index.module.scss';
 
-// TODO 优化交互传值
-const Index = ({ visible, data: tmpData, current, onSubmit = noop, onCancel = noop }) => {
+const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel = noop }) => {
   const [first, setFirst] = useState('');
   const [firstChildren, setFirstChildren] = useState();
   const [second, setSecond] = useState('');
@@ -48,26 +47,14 @@ const Index = ({ visible, data: tmpData, current, onSubmit = noop, onCancel = no
 
   // 结果数据处理
   const handleSubmit = () => {
-    // const [data1, data2, data3] = data;
-    // let sequence = 0;
+    let sequence = 0;
+    tmpData.forEach((item) => {
+      if (item.pid === first && item.name.indexOf('默认分类') !== -1) {
+        sequence = 1;
+      }
+    });
 
-    // const firstInfo = data1?.data[first];
-
-    // if (firstInfo.name.indexOf('默认') !== -1) {
-    //   sequence = 1;
-    // }
-
-    // const categoryids = [firstInfo.pid];
-    // const firstChildrenPid = (
-    //   firstChildren && data1?.data[first].children && data1?.data[first].children[firstChildren].pid
-    // );
-    // if (firstChildren) {
-    //   categoryids.push(firstChildrenPid);
-    // }
-
-    // const types = data2?.data[second].pid;
-    // const essence = data3?.data[third].pid;
-    const params = { categoryids: [first, firstChildren], types: second, essence: third, sequence: 0 };
+    const params = { categoryids: [first, firstChildren], types: second, essence: third, sequence };
 
     onSubmit(params);
   };

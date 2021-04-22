@@ -45,7 +45,7 @@ class Index extends React.Component {
       e.stopPropagation();
       const { data = {} } = this.props;
       const { threadId = '', isLike, postId } = data;
-      updateThreadInfo({ pid: postId, id: threadId, data: { attachments: { isLiked: !isLike } } });
+      updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } });
     }
     // 支付
     onPay = (e) => {
@@ -119,7 +119,14 @@ class Index extends React.Component {
         <div className={styles.wrapper}>
             {text && <PostContent content={text} onPay={this.onPay} />}
             <div className={styles.content}>
-              {videoData && <VideoPlay width={378} height={224} url={videoData.mediaUrl} />}
+              {videoData && (
+                <VideoPlay
+                  width={378}
+                  height={224}
+                  url={videoData.mediaUrl}
+                  coverUrl={videoData.coverUrl}
+                />
+              )}
               {imageData && <ImageContent imgData={imageData} />}
               {rewardData && <RewardQuestion
                 content={rewardData.content || ''}
@@ -132,7 +139,7 @@ class Index extends React.Component {
                   amount={goodsData.price}
                   title={goodsData.title}
               />}
-              {/* {audioData && <AudioPlay url={dataSource.audio.src} />} */}
+              {audioData && <AudioPlay url={audioData.mediaUrl} />}
               {fileData && <AttachmentView attachments={fileData} onClick={this.onPay} />}
 
               {/* 附件付费蒙层 */}
@@ -152,16 +159,32 @@ class Index extends React.Component {
     }
 
     render() {
-      const { data } = this.props;
+      const { data, className = '' } = this.props;
 
       if (!data) {
         return <NoData />;
       }
 
-      const { title = '', user = {}, position = {}, likeReward = {}, payType, viewCount, price, group, createdAt, isLike, postId, threadId } = data || {};
+      const {
+        title = '',
+        user = {},
+        position = {},
+        likeReward = {},
+        payType,
+        viewCount,
+        price,
+        group,
+        createdAt,
+        isLike,
+        postId,
+        threadId,
+        displayTag,
+      } = data || {};
+
+      const { isEssence, isPrice, isRedPack, isReward } = displayTag;
 
       return (
-        <div className={styles.container} onClick={this.onClick}>
+        <div className={`${styles.container} ${className}`} onClick={this.onClick}>
           <div className={styles.header}>
               <UserInfo
                   name={user.userName}
@@ -170,6 +193,10 @@ class Index extends React.Component {
                   view={`${viewCount}`}
                   groupName={group?.groupName}
                   time={createdAt}
+                  isEssence={isEssence}
+                  isPrice={isPrice}
+                  isRed={isRedPack}
+                  isReward={isReward}
               />
           </div>
 
