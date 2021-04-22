@@ -52,7 +52,7 @@ class SearchH5Page extends React.Component {
         <Header />
         <div className={styles.section}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} />
-          <SectionTitle title="潮流话题" onShowMore={this.redirectToSearchResultTopic} />
+          <SectionTitle icon={{type: 1, name: 'StrongSharpOutlined'}} title="潮流话题" onShowMore={this.redirectToSearchResultTopic} />
           {
             topicsPageData && topicsPageData.length
               ? <TrendingTopics data={topicsPageData} onItemClick={this.onTopicClick} />
@@ -61,7 +61,7 @@ class SearchH5Page extends React.Component {
         </div>
         <div className={styles.hr} />
         <div className={styles.section}>
-          <SectionTitle title="活跃用户" onShowMore={this.redirectToSearchResultUser} />
+          <SectionTitle icon={{type: 2, name: 'MemberOutlined'}} title="活跃用户" onShowMore={this.redirectToSearchResultUser} />
           {
             usersPageData && usersPageData.length
               ? <ActiveUsers data={usersPageData} onItemClick={this.onUserClick} />
@@ -70,7 +70,7 @@ class SearchH5Page extends React.Component {
         </div>
         <div className={styles.hr} />
         <div className={`${styles.section} ${styles.popularContents}`}>
-          <SectionTitle title="热门内容" onShowMore={this.redirectToSearchResultPost} />
+          <SectionTitle icon={{type: 3, name: 'HotOutlined'}} title="热门内容" onShowMore={this.redirectToSearchResultPost} />
         </div>
         {
           threadsPageData && threadsPageData.length
