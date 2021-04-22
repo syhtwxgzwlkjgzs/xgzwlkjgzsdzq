@@ -18,11 +18,15 @@ const Index = ({ imgs = [], tipData = {} }) => {
     setVisible(true);
   };
 
+  const onHidden = () => {
+    setVisible(false);
+  };
+
   return (
     <>
         <div className={styles.container} onClick={onClick} style={{ width: imgs.length === 1 ? '0.24rem' : '0.44rem' }}>
             {
-                [...imgs, ...imgs].filter((_, index) => index < 2).map((item, index) => (
+                imgs.filter((_, index) => index < 2).map((item, index) => (
                   <div key={index} className={index === 0 ? styles.img : styles.imgAfter}>
                     <Avatar
                       imgSrc={item.avatar}
@@ -34,7 +38,7 @@ const Index = ({ imgs = [], tipData = {} }) => {
             }
         </div>
 
-        <PopupList tipData={tipData} visible={visible} onHidden={() => setVisible(false)} />
+        <PopupList tipData={tipData} visible={visible} onHidden={onHidden} />
     </>
   );
 };
