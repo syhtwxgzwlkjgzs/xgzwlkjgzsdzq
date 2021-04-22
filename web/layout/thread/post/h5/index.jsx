@@ -30,6 +30,7 @@ import AllPostPaid from '@components/thread/all-post-paid';
 import { withRouter } from 'next/router';
 import { getVisualViewpost } from '@common/utils/get-client-height';
 import throttle from '@common/utils/thottle';
+import Header from '@components/header';
 
 @inject('threadPost')
 @inject('index')
@@ -394,6 +395,7 @@ class ThreadCreate extends React.Component {
 
     return (
       <>
+        <Header />
         <div className={styles['post-inner']}>
           <Title
             onChange={this.handleTitleChange}
