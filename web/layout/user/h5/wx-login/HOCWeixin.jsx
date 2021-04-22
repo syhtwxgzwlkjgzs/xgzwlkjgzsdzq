@@ -8,16 +8,20 @@ export default function HOCWeixin(Component) {
   class HOCWeixinComponent extends React.Component {
     constructor(props) {
       super(props);
+      this.state = {
+        isWeiXin: false,
+      };
       if (isServer()) return;
       // 如果在微信环境内，则直接拉起登录
       if (isWeiXin()) {
+        this.state.isWeiXin = true;
         const redirectEncodeUrl = encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`);
         window.location.href = `https://discuzv3-dev.dnspod.dev/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
       }
     }
 
     render() {
-      return <Component {...this.props} />;
+      return this.state.isWeixin ? <Component {...this.props} /> : <div>Loading</div>;
     }
   }
 
