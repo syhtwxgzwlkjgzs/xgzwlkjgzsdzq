@@ -11,7 +11,7 @@ import NoData from '@components/no-data';
  * @prop {string}  onHidden 关闭视图的回调
  */
 
-const Index = ({ visible = false, onHidden = () => {}, tipData }) => {
+const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
   const tabList = useRef([
     {
       id: '0',
@@ -48,7 +48,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData }) => {
   }, [visible]);
 
   const loadData = async () => {
-    const { postId, threadId } = tipData;
+    const { postId = '', threadId = '' } = tipData;
     const res = await getLikedUsers({ threadId, postId, isAll: true });
     setDataSource(res[0]?.list || []);
     setDataSource1(res[1]?.list || []);
