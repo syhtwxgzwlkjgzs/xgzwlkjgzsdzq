@@ -2,6 +2,7 @@
 @import '@common/styles/variable/index.scss';
 
 .contianer {
+  position: relative;
   display: flex;
 }
 
@@ -11,6 +12,7 @@
 }
 
 .right {
+  flex: 1;
   margin-left: rem($margin-2n);
   display: flex;
   align-items: flex-start;
@@ -28,10 +30,21 @@
   text-overflow: ellipsis;
 }
 
+.groupName {
+  color: var(--color-text-secondary);
+  font-size: rem($font-size-label);
+  margin-left: rem($margin-2n);
+  max-width: rem(100);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .meta {
   color: var(--color-text-secondary);
   display: flex;
   align-items: center;
+  font-size: rem($font-size-label);
 }
 
 .time {
@@ -62,5 +75,16 @@
   span {
     margin-left: rem($margin-1n);
     font-size: rem($font-size-label);
+  }
+}
+
+.tags {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+
+  >div {
+    margin-left: rem(8);
   }
 }
