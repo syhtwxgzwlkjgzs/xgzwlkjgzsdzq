@@ -45,7 +45,7 @@ class Index extends React.Component {
       e.stopPropagation();
       const { data = {} } = this.props;
       const { threadId = '', isLike, postId } = data;
-      updateThreadInfo({ pid: postId, id: threadId, data: { attachments: { isLiked: !isLike } } });
+      updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } });
     }
     // 支付
     onPay = (e) => {
@@ -152,7 +152,7 @@ class Index extends React.Component {
     }
 
     render() {
-      const { data } = this.props;
+      const { data, className = '' } = this.props;
 
       if (!data) {
         return <NoData />;
@@ -161,7 +161,7 @@ class Index extends React.Component {
       const { title = '', user = {}, position = {}, likeReward = {}, payType, viewCount, price, group, createdAt, isLike, postId, threadId } = data || {};
 
       return (
-        <div className={styles.container} onClick={this.onClick}>
+        <div className={`${styles.container} ${className}`} onClick={this.onClick}>
           <div className={styles.header}>
               <UserInfo
                   name={user.userName}
