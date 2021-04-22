@@ -10,9 +10,8 @@ import topic from './topic.module.scss';
 import CommentList from './components/comment-list/index';
 import NoMore from './components/no-more';
 import LoadingTips from './components/loading-tips';
-import { formatDate } from '@common/utils/format-date';
 
-import { Icon, Input, Badge, Toast, Tag, Button } from '@discuzq/design';
+import { Icon, Input, Badge, Toast, Button } from '@discuzq/design';
 import UserInfo from '@components/thread/user-info';
 import Header from '@components/header';
 
@@ -28,7 +27,7 @@ import VideoPlay from '@components/thread/video-play';
 import PostRewardProgressBar, { POST_TYPE } from '@components/thread/post-reward-progress-bar';
 import Tip from '@components/thread/tip';
 import AttachmentView from '@components/thread/attachment-view';
-
+import throttle from '@common/utils/thottle';
 import classnames from 'classnames';
 
 const typeMap = {
@@ -59,7 +58,6 @@ const RenderThreadContent = observer((props) => {
       }
     });
   }
-  console.log(parseContent);
 
   const onMoreClick = () => {
     props.fun.moreClick();
@@ -67,6 +65,10 @@ const RenderThreadContent = observer((props) => {
 
   const onLikeClick = () => {
     typeof props.onLikeClick === 'function' && props.onLikeClick();
+  };
+
+  const onBuyClick = (url) => {
+    url && window.open(url);
   };
 
   return (
@@ -108,7 +110,11 @@ const RenderThreadContent = observer((props) => {
               amount={parseContent.GOODS.price}
               title={parseContent.GOODS.title}
             />
-            <Button className={topic.buyBtn} type="primary">
+            <Button
+              className={topic.buyBtn}
+              type="primary"
+              onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
+            >
               购买商品
             </Button>
           </div>
@@ -139,11 +145,11 @@ const RenderThreadContent = observer((props) => {
       <div className={topic.footer}>
         <div className={topic.thumbs}>
           <div
-            className={classnames(topic.liked, threadStore?.threadData?.isLiked && topic.isLiked)}
+            className={classnames(topic.liked, threadStore?.threadData?.isLike && topic.isLiked)}
             onClick={onLikeClick}
           >
             <Icon name="LikeOutlined"></Icon>
-            <span>1660万</span>
+            <span>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
           </div>
           <Tip style={topic.likeReward} imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
         </div>
@@ -283,7 +289,6 @@ class RenderCommentList extends React.Component {
       params.commentId = this.commentData.id;
     }
 
-    console.log('参数', params);
     const { success, msg } = await this.service.comment.createReply(params);
 
     if (success) {
@@ -300,6 +305,11 @@ class RenderCommentList extends React.Component {
     Toast.error({
       content: msg,
     });
+  }
+
+  // 点击编辑
+  editClick(comment) {
+    typeof this.props.onEditClick === 'function' && this.props.onEditClick(comment);
   }
 
   onCommentClick(data) {
@@ -329,6 +339,7 @@ class RenderCommentList extends React.Component {
                 likeClick={() => this.likeClick(val)}
                 replyClick={() => this.replyClick(val)}
                 deleteClick={() => this.deleteClick(val)}
+                editClick={() => this.editClick(val)}
                 replyLikeClick={reploy => this.replyLikeClick(reploy, val)}
                 replyReplyClick={reploy => this.replyReplyClick(reploy, val)}
                 onCommentClick={() => this.onCommentClick(val)}
@@ -376,6 +387,7 @@ class ThreadH5Page extends React.Component {
       isCommentLoading: false, // 列表loading
       setTop: false, // 置顶
       showContent: '',
+      inputValue: '', // 评论内容
     };
 
     this.perPage = 5;
@@ -388,14 +400,17 @@ class ThreadH5Page extends React.Component {
     this.position = 0;
     this.nextPosition = 0;
     this.flag = true;
+
+    // 修改评论数据
+    this.comment = null;
   }
 
-  // 滚动事件  TODO:增加节流处理
+  // 滚动事件
   handleOnScroll() {
     // 加载评论列表
     const scrollDistance = this.threadBodyRef?.current?.scrollTop;
-    const offsetHeight = this.threadBodyRef?.current.offsetHeight;
-    const scrollHeight = this.threadBodyRef?.current.scrollHeight;
+    const offsetHeight = this.threadBodyRef?.current?.offsetHeight;
+    const scrollHeight = this.threadBodyRef?.current?.scrollHeight;
     const { isCommentReady, isNoMore } = this.props.thread;
     if (scrollDistance + offsetHeight >= scrollHeight && !this.state.isCommentLoading && isCommentReady && !isNoMore) {
       this.page = this.page + 1;
@@ -432,6 +447,7 @@ class ThreadH5Page extends React.Component {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
+      pid: this.props.thread?.threadData?.postId,
       isFavorite: !this.props.thread?.isFavorite,
     };
     const { success, msg } = await this.service.thread.updateFavorite(params);
@@ -514,6 +530,7 @@ class ThreadH5Page extends React.Component {
       console.log('举报');
     }
   };
+
   // 置顶提示
   setTopState(isSticky) {
     this.setState({
@@ -524,20 +541,19 @@ class ThreadH5Page extends React.Component {
       this.setState({ setTop: !this.state.setTop });
     }, 2000);
   }
+
   // 置顶接口
   async updateSticky() {
-    this.setTopState(false);
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
+      pid: this.props.thread?.threadData?.postId,
       isSticky: !this.props.thread?.isSticky,
     };
     const { success, msg } = await this.service.thread.updateSticky(params);
 
     if (success) {
-      Toast.success({
-        content: '操作成功',
-      });
+      this.setTopState(true);
       return;
     }
 
@@ -551,6 +567,7 @@ class ThreadH5Page extends React.Component {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
+      pid: this.props.thread?.threadData?.postId,
       isEssence: !this.props.thread?.isEssence,
     };
     const { success, msg } = await this.service.thread.updateEssence(params);
@@ -571,15 +588,19 @@ class ThreadH5Page extends React.Component {
   async delete() {
     this.setState({ showDeletePopup: false });
     const id = this.props.thread?.threadData?.id;
-    const params = {
-      id,
-    };
-    const { success, msg } = await this.service.thread.updateEssence(params);
+    const pid = this.props.thread?.threadData?.postId;
+
+    const { success, msg } = await this.service.thread.delete(id, pid);
 
     if (success) {
       Toast.success({
-        content: '操作成功',
+        content: '删除成功',
       });
+
+      setTimeout(() => {
+        this.props.router.push('/');
+      }, 500);
+
       return;
     }
 
@@ -593,10 +614,13 @@ class ThreadH5Page extends React.Component {
     this.setState({ showDeletePopup: false });
   }
 
+  // 点击发布按钮
+  onPublishClick(val) {
+    this.comment ? this.updateComment(val) : this.createComment(val);
+  }
+
   // 创建评论
-  async onPublishClick(val) {
-    console.log(val);
-    this.setState({ showCommentInput: false });
+  async createComment(val) {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
@@ -620,25 +644,65 @@ class ThreadH5Page extends React.Component {
     });
   }
 
+  // 更新评论
+  async updateComment(val) {
+    if (!this.comment) return;
+
+    const id = this.props.thread?.threadData?.id;
+    const params = {
+      id,
+      pid: this.comment.id,
+      content: val,
+      attachments: [],
+    };
+    const { success, msg } = await this.service.comment.updateComment(params);
+    if (success) {
+      Toast.success({
+        content: '修改成功',
+      });
+      this.setState({
+        showCommentInput: false,
+        inputValue: '',
+      });
+      return true;
+    }
+    Toast.error({
+      content: msg,
+    });
+  }
+
+  // 点击编辑评论
+  onEditClick(comment) {
+    this.comment = comment;
+    this.setState({
+      inputValue: comment.content,
+      showCommentInput: true,
+    });
+  }
+
+  // 弹出框关闭
+  onClose() {
+    this.setState({
+      showCommentInput: false,
+    });
+    this.comment = null;
+  }
+
   // 点赞
   async onLikeClick() {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
-      isLiked: !this.props.thread?.threadData?.isLiked,
+      pid: this.props.thread?.threadData?.postId,
+      isLiked: !this.props.thread?.threadData?.isLike,
     };
     const { success, msg } = await this.service.thread.updateLiked(params);
 
-    if (success) {
-      Toast.success({
-        content: '操作成功',
+    if (!success) {
+      Toast.error({
+        content: msg,
       });
-      return;
     }
-
-    Toast.error({
-      content: msg,
-    });
   }
 
   render() {
@@ -654,7 +718,11 @@ class ThreadH5Page extends React.Component {
           <Header></Header>
         </div>
 
-        <div className={layout.body} ref={this.threadBodyRef} onScrollCapture={() => this.handleOnScroll()}>
+        <div
+          className={layout.body}
+          ref={this.threadBodyRef}
+          onScrollCapture={() => throttle(this.handleOnScroll(), 500)}
+        >
           <ShowTop showContent={this.state.showContent} setTop={this.state.setTop}></ShowTop>
           {/* 帖子内容 */}
           {isReady ? (
@@ -676,7 +744,8 @@ class ThreadH5Page extends React.Component {
                   store={threadStore}
                   service={this.service}
                   sort={flag => this.onSortChange(flag)}
-                ></RenderCommentList>
+                  onEditClick={comment => this.onEditClick(comment)}>
+                </RenderCommentList>
                 {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
                 {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
               </Fragment>
@@ -690,13 +759,14 @@ class ThreadH5Page extends React.Component {
         <div className={layout.footer}>
           {/* 评论区触发 */}
           <div className={footer.inputClick} onClick={() => this.onInputClick()}>
-            <Input className={footer.input} placeholder="写评论" disabled={true}></Input>
+            <Input className={footer.input} placeholder="写评论" disabled={true} icon='EditOutlined'></Input>
           </div>
 
           {/* 评论弹层 */}
           <InputPopup
             visible={this.state.showCommentInput}
-            onClose={() => this.setState({ showCommentInput: false })}
+            onClose={() => this.onClose()}
+            initValue={this.state.inputValue}
             onSubmit={value => this.onPublishClick(value)}
           ></InputPopup>
           {/* 更多弹层 */}
@@ -715,9 +785,14 @@ class ThreadH5Page extends React.Component {
           {/* 操作区 */}
           <div className={footer.operate}>
             <div className={footer.icon} onClick={() => this.onMessageClick()}>
-              <Badge info={totalCount > 99 ? '99+' : `${totalCount || '0'}`}>
-                <Icon size="20" name="MessageOutlined"></Icon>
-              </Badge>
+              {totalCount > 0
+                ? (
+                  <Badge info={totalCount > 99 ? '99+' : `${totalCount || '0'}`}>
+                    <Icon size="20" name="MessageOutlined"></Icon>
+                  </Badge>
+                )
+                : <Icon size="20" name="MessageOutlined"></Icon>
+              }
             </div>
             <Icon
               color={this.props.thread?.isFavorite ? 'blue' : ''}

@@ -55,6 +55,8 @@ export default function HOCFetchSiteData(Component) {
 
           return {
             ...__props,
+            // serverSite: {},
+            // serverUser: {},
             serverSite,
             serverUser: {
               userInfo: userData,

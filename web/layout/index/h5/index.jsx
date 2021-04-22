@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { inject, observer } from 'mobx-react';
-import Link from 'next/link';
-import { Button, Upload, Tabs, Popup } from '@discuzq/design';
+import { Icon, Tabs } from '@discuzq/design';
 import ThreadContent from '@components/thread';
 import HomeHeader from '@components/thread/home-header';
 import NoData from '@components/no-data';
@@ -10,7 +9,6 @@ import List from './components/list';
 import TopNew from './components/top-news';
 import Tabbar from './components/tabbar';
 import FilterView from './components/filter-view';
-// import PayBox from '@components/payBox';
 
 @inject('site')
 @inject('user')
@@ -27,6 +25,10 @@ class IndexH5Page extends React.Component {
     this.renderItem = this.renderItem.bind(this);
   }
 
+  componentDidMount() {
+    console.log(this.props.user);
+  }
+
   // 点击更多弹出筛选
   searchClick = () => {
     this.setState({
@@ -40,9 +42,9 @@ class IndexH5Page extends React.Component {
     });
   }
 
-  onClickTab = (id) => {
+  onClickTab = (id = '') => {
     const { dispatch = () => {} } = this.props;
-    dispatch('', { categoryids: [id] });
+    dispatch('click-filter', { categoryids: [id] });
 
     this.setState({
       filter: {
@@ -69,13 +71,21 @@ class IndexH5Page extends React.Component {
     });
   }
 
-  renderHeaderContent() {
-    const { index, site } = this.props;
+  // 上拉加载更多
+  onPullingUp = () => {
+    const { dispatch = () => {} } = this.props;
+    const { filter } = this.state;
+    return dispatch('moreData', filter);
+  }
 
-    const { sticks, categories } = index;
+  renderHeaderContent = () => {
+    const { index, site } = this.props;
+    const { currentIndex } = this.state;
+    const { sticks = [], categories = [] } = index;
 
     const { siteBackgroundImage, siteLogo } = site?.webConfig?.setSite;
     const { countUsers, countThreads } = site?.webConfig?.other;
+
     return (
       <div>
         <HomeHeader
@@ -85,33 +95,31 @@ class IndexH5Page extends React.Component {
           themeNum={countThreads}
         />
         <div className={styles.homeContent}>
-          <Tabs
-            scrollable={true}
-            type={'primary'}
-            onActive={this.onClickTab}
-            activeId={this.state.currentIndex}
-            tabBarExtraContent={
-              <div
-                style={{
-                  width: 70,
-                  height: '100%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
+          {
+            categories && (
+              <Tabs
+                scrollable
+                type='primary'
+                onActive={this.onClickTab}
+                activeId={currentIndex}
+                tabBarExtraContent={
+                  <div onClick={this.searchClick} className={styles.tabIcon}>
+                    <Icon name="SecondaryMenuOutlined" />
+                  </div>
+                }
               >
-                <Button onClick={this.searchClick}>更多</Button>
-              </div>
+                {
+                  categories?.map((item, index) => (
+                    <Tabs.TabPanel
+                      key={index}
+                      id={item.pid}
+                      label={item.name}
+                    />
+                  ))
+                }
+              </Tabs>
+            )
           }
-          >
-              {categories.map((item, index) => (
-              <Tabs.TabPanel
-                key={index}
-                id={item.pid}
-                label={item.name}
-               />
-              ))}
-          </Tabs>
         </div>
         <div className={styles.homeContent}>
           <TopNew data={sticks}/>
@@ -120,29 +128,12 @@ class IndexH5Page extends React.Component {
     );
   }
 
-  renderItem(dataList, rowData) {
-    return (
-      <div>
-        { dataList.index === 0 && this.renderHeaderContent()}
-        <ThreadContent data={dataList.data[dataList.index]}/>
-      </div>
-    );
-  }
-
-  renderList(data) {
-    const { index } = this.props;
-    const { threads } = index;
-    return (
-      data?.length
-        ? <List
-          onRefresh={this.onRefresh}
-          refreshing={false}
-          data={threads.pageData}
-          renderItem={this.renderItem}
-        />
-        : <NoData />
-    );
-  }
+  renderItem = ({ index, data }) => (
+    <div key={index}>
+      { index === 0 && this.renderHeaderContent()}
+      <ThreadContent data={data[index]} className={styles.listItem} />
+    </div>
+  )
 
   // 没有帖子列表数据时的默认展示
   renderNoData = () => (
@@ -156,12 +147,23 @@ class IndexH5Page extends React.Component {
   render() {
     const { index } = this.props;
     const { filter } = this.state;
-    const { threads, categories } = index;
+    const { threads = {}, categories = [] } = index;
+    const { currentPage, totalPage, pageData } = threads || {};
 
     return (
-      <div className={styles.homeBox}>
-        { threads?.pageData?.length > 0
-          ? this.renderList(threads?.pageData)
+      <div className={styles.container}>
+        { pageData?.length > 0
+          ? (
+            <List
+              className={styles.list}
+              onRefresh={this.onRefresh}
+              refreshing={false}
+              data={pageData}
+              renderItem={this.renderItem}
+              onPullingUp={this.onPullingUp}
+              noMore={currentPage >= totalPage}
+            />
+          )
           : this.renderNoData()
         }
 
@@ -172,7 +174,8 @@ class IndexH5Page extends React.Component {
           visible={this.state.visible}
           onSubmit={this.onClickFilter}
         />
-       <Tabbar/>
+
+       <Tabbar placeholder />
       </div>
     );
   }

@@ -18,6 +18,7 @@ class UserAction extends SiteStore {
     }
   }
 
+  // 登录后获取新的用户信息
   @action
   async updateUserInfo(id) {
     const userInfo = await readUser({params:{pid: id}});
@@ -40,6 +41,12 @@ class UserAction extends SiteStore {
   @action
   setAccessToken(accessToken) {
     this.accessToken = accessToken;
+  }
+
+  // 判断用户是否登录
+  @action
+  isLogin() {
+    return this.userInfo && this.userInfo.id;
   }
 }
 

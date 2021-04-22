@@ -16,7 +16,6 @@ import { noop } from '../utils';
  */
 
 
-
 const Index = ({
   type = POST_TYPE.UNPAID,
   width = 0,
@@ -25,7 +24,7 @@ const Index = ({
   url,
   time,
   money = 0,
-  goCheckVideo = noop
+  goCheckVideo = noop,
 }) => {
   let player = null;
   const onReady = (ins) => {
@@ -33,36 +32,36 @@ const Index = ({
   };
   return (
     <div className={styles.container}>
-      <Video 
+      <Video
         className={styles.videoBox}
         onReady={onReady}
         onPlay={(e) => {
-        console.log('play', e);
+        // console.log('play', e);
         }}
         onPause={(e) => {
-        console.log('pause', e);
+        // console.log('pause', e);
         }}
         onEnded={(e) => {
-        console.log('ended', e);
+        // console.log('ended', e);
         }}
-        onTimeUpdate={(e) => {
-        console.log('timeupdate', e);
-        return 1;
-        }}
+        onTimeUpdate={e =>
+        // console.log('timeupdate', e);
+          1
+        }
         onFullscreenChange={(e) => {
-        console.log('fullscreenchange', e);
+        // console.log('fullscreenchange', e);
         }}
         onProgress={(e) => {
-        console.log('progress', e);
+        // console.log('progress', e);
         }}
         onLoadedMetaData={(e) => {
-        console.log('loadmetadata', e);
+        // console.log('loadmetadata', e);
         }}
         onWaiting={(e) => {
-        console.log('waiting', e);
+        // console.log('waiting', e);
         }}
         onError={(e) => {
-        console.log('error', e);
+        // console.log('error', e);
         }}
         src={url}
         width={width || '343'}
@@ -72,15 +71,15 @@ const Index = ({
       />
       {/* 视频蒙层 已付费时隐藏 未付费时显示 */}
       {
-        type === POST_TYPE.UNPAID &&
-        <div className={styles.payBox} onClick={goCheckVideo}></div>
+        type === POST_TYPE.UNPAID
+        && <div className={styles.payBox} onClick={goCheckVideo}></div>
       }
     </div>
-  )
-}
+  );
+};
 export const POST_TYPE = {
   UNPAID: 0,
   PAID: 1,
 };
 
-export default React.memo(Index) 
+export default React.memo(Index);

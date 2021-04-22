@@ -22,7 +22,7 @@ class WXSelectH5Page extends React.Component {
               <div className={layout.title}>绑定微信号</div>
               <div className={layout.tips}>
               微信用户
-              <img src="/user.png" alt=""/>
+              <img src="//dzq-img/user.png" alt=""/>
                 {nickname}，请选择您要进行的操作
               </div>
               <Button className={layout.button} type="primary" onClick={async () => {
