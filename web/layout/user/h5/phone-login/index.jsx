@@ -132,7 +132,7 @@ class LoginPhoneH5Page extends React.Component {
                 }}
                 className={layout['otherLogin-button-weixin']}
               >
-                <img src="/login-weixin.png" alt="" />
+                <img src="//dzq-img/login-weixin.png" alt="" />
               </span>
             )}
             {this.props.site.isUserLoginVisible && (
@@ -142,7 +142,7 @@ class LoginPhoneH5Page extends React.Component {
                 }}
                 className={layout['otherLogin-button-user']}
               >
-                <img src="/login-user.png" alt="" />
+                <img src="//dzq-img/login-/dzq-img/user.png" alt="" />
               </span>
             )}
           </div>

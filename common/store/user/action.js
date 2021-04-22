@@ -42,6 +42,12 @@ class UserAction extends SiteStore {
   setAccessToken(accessToken) {
     this.accessToken = accessToken;
   }
+
+  // 判断用户是否登录
+  @action
+  isLogin() {
+    return this.userInfo && this.userInfo.id;
+  }
 }
 
 export default UserAction;

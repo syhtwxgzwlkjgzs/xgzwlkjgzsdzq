@@ -53,7 +53,16 @@ export const getFirstData = async () => {
  * @returns {object} 处理结果
  */
 export const getThreadList = async ({ filter = {}, sequence = 0, perPage = 10, page = 1 } = {}) => {
-  const promise1 = readThreadList({ params: { perPage, page, filter, sequence } });
+  // 过滤空字符串
+  const newFilter = filter;
+  if (filter.categoryids) {
+    const newCategoryIds = filter.categoryids.filter(item => item);
+    if (!newCategoryIds.length) {
+      delete newFilter.categoryids;
+    }
+  }
+
+  const promise1 = readThreadList({ params: { perPage, page, filter: newFilter, sequence } });
   const promise2 = readStickList({ params: { categoryIds: filter?.categoryids } });
   const promise = [promise1];
   if (page === 1) {
@@ -78,7 +87,7 @@ export const getThreadList = async ({ filter = {}, sequence = 0, perPage = 10, p
  * @param {array} threadId *
  * @param {object} postId *
  * @param {object} type *
- * @param {object} isAll *
+ * @param {object} isAll * 是否加载全部、点赞、打赏三页的数据
  * @returns {object} 处理结果
  */
 export const getLikedUsers = async ({ threadId = '', postId = '', type = '', perPage = 10, page = 1, isAll = false } = {}) => {

@@ -38,47 +38,46 @@ class WXBindUsernameH5page extends React.Component {
         duration: 1000,
       });
     }
-  }
+  };
   render() {
     const { userLogin, router } = this.props;
+    const { nickname } = router.query;
     userLogin.sessionToken = router.query.sessionToken;
     return (
       <div className={layout.container}>
-        <HeaderLogin/>
+        <HeaderLogin />
         <div className={layout.content}>
           <div className={layout.title}>用户名登录，并绑定微信账号</div>
           <div className={layout.tips}>
-            hi， 微信用户
-            <img src="/user.png" alt=""/>
-            小虫<br/>
+            hi， 微信用户 {nickname}
+            <br />
             请您登录，即可完成微信号和用户名的绑定
           </div>
           {/* 输入框 start */}
-          <Input className={layout.input} value={this.userLogin.username}
-                 placeholder="输入您的用户名"
-                 onChange={(e) => {
-                   userLogin.username = e.target.value;
-                 }}
+          <Input
+            className={layout.input}
+            value={userLogin.username}
+            placeholder="输入您的用户名"
+            onChange={(e) => {
+              userLogin.username = e.target.value;
+            }}
           />
-          <Input clearable={false} className={layout.input} mode="password"
-                 value={userLogin.password}
-                 placeholder="输入您的登录密码"
-                 onChange={(e) => {
-                   userLogin.password = e.target.value;
-                 }}/>
+          <Input
+            clearable={false}
+            className={layout.input}
+            mode="password"
+            value={userLogin.password}
+            placeholder="输入您的登录密码"
+            onChange={(e) => {
+              userLogin.password = e.target.value;
+            }}
+          />
           {/* 输入框 end */}
           {/* 登录按钮 start */}
           <Button className={layout.button} type="primary" onClick={this.handleLoginButtonClick}>
             登录并绑定
           </Button>
           {/* 登录按钮 end */}
-          <div className={layout.functionalRegion}>
-            <span> 没有账号? </span>
-            <span className={layout.clickBtn} onClick={() => {
-              this.props.router.push('login');
-            }} >创建新账号</span>
-          </div>
-          <div className={layout['otherLogin-within__tips']}>注册登录即表示您同意《注册协议》《隐私协议》</div>
         </div>
       </div>
     );

@@ -45,6 +45,7 @@ class IndexAction extends IndexStore {
    * @param {number} threadId 帖子id
    * @param {object}  obj 更新数据
    * @param {boolean} obj.isLike 是否更新点赞 
+   * @param {boolean} obj.isPost 是否更新评论数
    * @returns 
    */
   @action
@@ -52,10 +53,19 @@ class IndexAction extends IndexStore {
     const targetThread = this.findAssignThread(threadId);
     if ( !targetThread ) return;
     const { index, data } = targetThread;
-    const { isLike } = obj;
+
+    // 更新点赞
+    const { isLike, isPost } = obj;
     if ( !typeofFn.isUndefined(isLike) && !typeofFn.isNull(isLike) ) {
       data.isLike = isLike;
+      data.likeReward.likePayCount = isLike ? data.likeReward.likePayCount + 1 : data.likeReward.likePayCount0 - 1;
     }
+
+    // 更新评论
+    if (!typeofFn.isUndefined(isPost) && !typeofFn.isNull(isPost)) {
+      data.likeReward.postCount = isPost ? data.likeReward.postCount + 1 : data.likeReward.postCount - 1;
+    }
+
     if ( this.threads && this.threads.pageData ) {
       this.threads.pageData[index] = data;
     }
