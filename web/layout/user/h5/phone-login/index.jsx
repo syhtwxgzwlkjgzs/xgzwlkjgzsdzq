@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import { Button, Toast } from '@discuzq/design';
+import { Button, Toast, Icon } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import PhoneInput from '../../../../components/login/h5/phone-input';
@@ -132,7 +132,7 @@ class LoginPhoneH5Page extends React.Component {
                 }}
                 className={layout['otherLogin-button-weixin']}
               >
-                <img src="//dzq-img/login-weixin.png" alt="" />
+                <Icon name='WechatOutlined' color='#04C160'/>
               </span>
             )}
             {this.props.site.isUserLoginVisible && (
@@ -142,7 +142,7 @@ class LoginPhoneH5Page extends React.Component {
                 }}
                 className={layout['otherLogin-button-user']}
               >
-                <img src="//dzq-img/login-/dzq-img/user.png" alt="" />
+                <Icon name='UserOutlined' color='#4084FF'/>
               </span>
             )}
           </div>

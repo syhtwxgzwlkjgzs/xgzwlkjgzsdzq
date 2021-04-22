@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import { Input, Button, Toast } from '@discuzq/design';
+import { Input, Button, Toast, Icon } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import HeaderLogin from '../../../../components/login/h5/header-login';
@@ -133,7 +133,7 @@ class LoginH5Page extends React.Component {
                 }}
                 className={layout['otherLogin-button-weixin']}
               >
-                <img src="//dzq-img/login-weixin.png" alt="" />
+                <Icon name='WechatOutlined' color='#04C160'/>
               </span>
             )}
             {this.props.site.isSmsOpen && (
@@ -143,7 +143,7 @@ class LoginH5Page extends React.Component {
                 }}
                 className={layout['otherLogin-button-phone']}
               >
-                <img src="//dzq-img/login-phone.png" alt="" />
+              <Icon name='PhoneOutlined' color='#FFC300'/>
               </span>
             )}
           </div>
