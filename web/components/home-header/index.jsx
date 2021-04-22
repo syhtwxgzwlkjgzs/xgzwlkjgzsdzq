@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
+import Router from '@common/utils/web-router';
 
 /**
  * 帖子头部
@@ -35,6 +36,14 @@ class HomeHeader extends React.Component {
 
     return (
       <div className={styles.container} style={this.getBgHeaderStyle(siteBackgroundImage, bgColor)}>
+        {hideInfo && <div className={styles.topBar}>
+          <div></div>
+          <div>
+            <Icon onClick={() => {
+              Router.redirect('/')
+            }} name="HomeOutlined" color="#fff" size={20} />
+          </div>
+        </div>}
         <div className={styles.logoBox}>
           <img
               className={styles.logo}
