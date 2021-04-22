@@ -18,6 +18,7 @@ class UserAction extends SiteStore {
     }
   }
 
+  // 登录后获取新的用户信息
   @action
   async updateUserInfo(id) {
     console.log('updateUserInfo');

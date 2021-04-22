@@ -62,7 +62,7 @@ class LoginH5Page extends React.Component {
       });
       // FIXME: Toast 暂时不支持回调能力
       setTimeout(() => {
-        this.props.router.push('/index');
+        this.props.router.push('/');
         return;
       }, 1000);
     } catch (e) {
