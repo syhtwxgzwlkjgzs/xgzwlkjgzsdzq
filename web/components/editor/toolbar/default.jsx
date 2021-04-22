@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Icon } from '@discuzq/design';
 import styles from './index.module.scss';
-import { defaultIcon } from '../const';
+import { defaultIcon } from '@common/constants/const';
 
 export default function DefaultToolbar(props) {
   const { children, onClick, onSubmit } = props;
