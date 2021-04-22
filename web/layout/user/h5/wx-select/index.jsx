@@ -4,7 +4,7 @@ import { withRouter } from 'next/router';
 import layout from './index.module.scss';
 import { Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
-import HeaderLogin from '../../../../components/login/h5/header-login';
+import HomeHeader from '@components/home-header';
 import { get } from '@common/utils/get';
 import setAccessToken from '../../../../../common/utils/set-access-token';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
@@ -20,7 +20,7 @@ class WXSelectH5Page extends React.Component {
     const { sessionToken, nickname } = router.query;
     return (
       <div className={layout.container}>
-        <HeaderLogin />
+        <HomeHeader hideInfo/>
         <div className={layout.content}>
           <div className={layout.title}>绑定微信号</div>
           <div className={layout.tips}>微信用户 {nickname}，请选择您要进行的操作</div>
