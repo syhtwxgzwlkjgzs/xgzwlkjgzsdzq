@@ -10,7 +10,7 @@ import List from './components/list';
 import TopNew from './components/top-news';
 import Tabbar from './components/tabbar';
 import FilterView from './components/filter-view';
-// import PayBox from '@components/payBox';
+import PayBox from '@components/payBox';
 
 @inject('site')
 @inject('user')
@@ -173,6 +173,7 @@ class IndexH5Page extends React.Component {
           onSubmit={this.onClickFilter}
         />
        <Tabbar/>
+       <PayBox />
       </div>
     );
   }
