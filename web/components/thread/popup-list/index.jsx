@@ -97,17 +97,19 @@ const Index = ({ visible = false, onHidden = () => {}, tipData }) => {
 
     return (
       <>
-        data && data.length ?
-        (
-          <div className={styles.list}>
-            {
-              data.map((item, index) => (
-                <UserItem key={index} imgSrc={item.avatar} title={item.nickname} subTitle={item.time} />
-              ))
-            }
-          </div>
-        )
-        : <NoData />
+        {
+          data && data.length
+            ? (
+            <div className={styles.list}>
+              {
+                data.map((item, index) => (
+                  <UserItem key={index} imgSrc={item.avatar} title={item.nickname} subTitle={item.time} />
+                ))
+              }
+            </div>
+            )
+            : <NoData />
+          }
       </>
 
     );

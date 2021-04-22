@@ -78,18 +78,6 @@ class WXBindUsernameH5page extends React.Component {
             登录并绑定
           </Button>
           {/* 登录按钮 end */}
-          <div className={layout.functionalRegion}>
-            <span> 没有账号? </span>
-            <span
-              className={layout.clickBtn}
-              onClick={() => {
-                this.props.router.push('login');
-              }}
-            >
-              创建新账号
-            </span>
-          </div>
-          <div className={layout['otherLogin-within__tips']}>注册登录即表示您同意《注册协议》《隐私协议》</div>
         </div>
       </div>
     );
