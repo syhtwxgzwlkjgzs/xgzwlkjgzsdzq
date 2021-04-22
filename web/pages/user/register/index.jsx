@@ -4,6 +4,7 @@ import { inject } from 'mobx-react';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 import HOCWithNoLogin from '@common/middleware/HOCWithNoLogin';
+import HOCLoginMode from '@common/middleware/HOCLoginMode';
 
 @inject('site')
 class Register extends React.Component {
@@ -15,4 +16,4 @@ class Register extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(Register);
+export default HOCFetchSiteData(HOCLoginMode('user')(Register));

@@ -8,10 +8,10 @@ class ThreadPostAction extends ThreadPostStore {
    * 发帖
    */
   @action.bound
-  async createThread() {
+  async createThread(params) {
     // 待更换为全局loading?
     // this.setLoadingStatus(LOADING_TOTAL_TYPE.emoji, true);
-    const ret = await createThread(this.postData);
+    const ret = await createThread(params);
     // this.setLoadingStatus(LOADING_TOTAL_TYPE.emoji, false);
     // const { code, data = [] } = ret;
     // 相关数据处理待实际调用时修改

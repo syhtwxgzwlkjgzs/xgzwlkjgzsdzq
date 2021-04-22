@@ -1,20 +1,84 @@
 import { action } from 'mobx';
 import IndexStore from './store';
-import { readCategories } from '@server';
+import { readCategories, readStickList, readThreadList } from '@server';
 import typeofFn from '@common/utils/typeof';
+
 class IndexAction extends IndexStore {
   constructor(props) {
     super(props);
   }
 
-  async fetchCategory() {
-    const ret = await readCategories();
-    const { code, data } = ret;
-    this.setCategories(data || []);
-    if (code === 0) return data;
-    return [];
+  /**
+   * 触发筛选数据
+   * @param {*} param0
+   */
+  @action
+  async screenData({ filter = {}, sequence = 0, perPage = 10, page = 1 } = {}) {
+    this.threads = null;
+    this.sticks = null;
+    this.getRreadStickList();
+    this.getReadThreadList({ filter, sequence, perPage, page });
   }
 
+  /**
+   * 获取帖子数据
+   * @returns
+   */
+  @action
+  async getReadThreadList({ filter = {}, sequence = 0, perPage = 10, page = 1 } = {}) {
+    // 过滤空字符串
+    const newFilter = filter;
+    if (filter.categoryids) {
+      const newCategoryIds = filter.categoryids.filter(item => item);
+      if (!newCategoryIds.length) {
+        delete newFilter.categoryids;
+      }
+    }
+
+    const result = await readThreadList({ params: { perPage, page, filter: newFilter, sequence } });
+    if (result.code === 0 && result.data) {
+      if (this.threads && result.data.pageData) {
+        this.threads.pageData.push(...result.data.pageData);
+        const newPageData = this.threads.pageData.slice();
+        this.setThreads({ ...result.data, pageData: newPageData });
+      } else {
+        // 首次加载
+        this.setThreads(result.data);
+      }
+      return result.data;
+    }
+    return null;
+  }
+
+  /**
+   * 获取分类数据
+   * @returns
+   */
+  @action
+  async getReadCategories() {
+    const result = await readCategories();
+    if (result.code === 0 && result.data) {
+      this.setCategories(result.data);
+      return this.categories;
+    }
+    return null;
+  }
+
+  /**
+   * 获取置顶数据
+   * @returns
+   */
+  @action
+  async getRreadStickList() {
+    const result = await readStickList();
+    if (result.code === 0 && result.data) {
+      this.setSticks(result.data);
+      return this.sticks;
+    }
+    return null;
+  }
+
+  // 获取指定的帖子数据
   findAssignThread(threadId) {
     const { pageData = [] } = this.threads;
     for (let i = 0; i < pageData.length; i++)  {
@@ -25,6 +89,10 @@ class IndexAction extends IndexStore {
     return null;
   }
 
+  /**
+   * 写入分类数据
+   * @param {Object} data
+   */
   @action
   setCategories(data) {
     this.categories = data;
@@ -60,11 +128,18 @@ class IndexAction extends IndexStore {
     return { parent, child };
   }
 
+  /* 写入置顶数据
+   * @param {Object} data
+   */
   @action
   setSticks(data) {
     this.sticks = data;
   }
 
+  /**
+   * 写入帖子数据
+   * @param {Object} data
+   */
   @action
   setThreads(data) {
     this.threads = data;

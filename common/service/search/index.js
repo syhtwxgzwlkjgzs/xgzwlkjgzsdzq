@@ -68,7 +68,7 @@ export const getUsersList = async ({ search = '', perPage = 10, page = 1  } = {}
  * @returns {object} 处理结果
  */
 export const getThreadList = async ({ search = '', perPage = 10, page = 1 } = {}) => {
-  const threads = await readThreadList({ params: { filter: { sequence: '1', filter: { sort: '3', search } }, perPage, page } });
+  const threads = await readThreadList({ params: { filter: { sequence: '0', filter: { sort: '3', search } }, perPage, page } });
 
   return {
     res: threads.data || {},

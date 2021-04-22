@@ -5,6 +5,7 @@ import { Button, Input, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import HeaderLogin from '../../../../components/login/h5/header-login';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 
 @inject('site')
 @inject('user')
@@ -40,6 +41,12 @@ class BindNicknameH5Page extends React.Component {
         this.props.router.push('/index');
       }, 1000);
     } catch (e) {
+      // 跳转状态页
+      if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
+        this.props.commonLogin.setStatusMessage(e.Code, e.Message);
+        this.props.router.push('/user/status');
+        return;
+      }
       Toast.error({
         content: e.Message,
         hasMask: false,

@@ -9,7 +9,7 @@ import { AttachmentToolbar, DefaultToolbar } from '@components/editor/toolbar';
 import ToolsCategory from '@components/editor/tools/category';
 import Emoji from '@components/editor/emoji';
 import ImageUpload from '@components/thread-post/image-upload';
-import { defaultOperation } from '@components/editor/const';
+import { defaultOperation } from '@common/constants/const';
 import FileUpload from '@components/thread-post/file-upload';
 import { THREAD_TYPE, ATTACHMENT_TYPE } from '@common/constants/thread-post';
 import { createAttachment } from '@common/server';
@@ -89,7 +89,7 @@ class ThreadCreate extends React.Component {
   fetchCategories() {
     const { index } = this.props;
     if (!index.categories || (index.categories && index.categories.length === 0)) {
-      index.fetchCategory();
+      index.getReadCategories();
     }
   }
 
@@ -211,6 +211,7 @@ class ThreadCreate extends React.Component {
   }
 
   // 暂时在这里处理，后期如果有多个穿插的时候再做其它处理
+  // TODO: 这个可以放到 action 里面
   formatContextIndex() {
     const { postData } = this.props.threadPost;
     const { images, video, files, product, audio, redpacket, rewardQa } = postData;

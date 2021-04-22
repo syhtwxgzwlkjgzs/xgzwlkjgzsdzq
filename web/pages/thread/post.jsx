@@ -21,4 +21,4 @@ class Index extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default Index;
+export default HOCFetchSiteData(Index);

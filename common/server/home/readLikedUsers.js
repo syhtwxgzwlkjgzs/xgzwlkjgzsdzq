@@ -8,7 +8,7 @@ export default async function readLikedUsers(opts, ctx = null) {
   try {
     const { params = {}, data = {}, ...others } = opts;
     const options = {
-      url: '/api/thread.likedusers.v3', // 请求地址
+      url: '/apiv3/thread.likedusers', // 请求地址
       method: 'GET',
       params,
       data,

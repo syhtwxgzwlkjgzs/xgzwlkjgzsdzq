@@ -10,15 +10,15 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @inject('search')
 @observer
 class Index extends React.Component {
-  // static async getInitialProps(ctx) {
-  //   const { res } = await getUsersList({}, ctx);
+  static async getInitialProps(ctx) {
+    const { res } = await getUsersList({}, ctx);
 
-  //   return {
-  //     serverSearch: {
-  //       topics: res,
-  //     },
-  //   };
-  // }
+    return {
+      serverSearch: {
+        users: res,
+      },
+    };
+  }
 
   page = 1;
   perPage = 10;
@@ -60,6 +60,8 @@ class Index extends React.Component {
         res.pageData.unshift(...pageData);
         search.setUsers(res);
       }
+
+      return;
     }
   }
 

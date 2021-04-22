@@ -1,13 +1,14 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import { Button, Toast } from '@discuzq/design';
+import { Button, Toast, Icon } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import PhoneInput from '../../../../components/login/h5/phone-input';
 import HeaderLogin from '../../../../components/login/h5/header-login';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import { get } from '@common/utils/get';
 
 
 @inject('site')
@@ -29,7 +30,9 @@ class LoginPhoneH5Page extends React.Component {
 
   handleLoginButtonClick = async () => {
     try {
-      await this.props.mobileLogin.login();
+      const resp = await this.props.mobileLogin.login();
+      const uid = get(resp, 'uid', '');
+      this.props.user.updateUserInfo(uid);
       Toast.success({
         content: '登录成功',
         hasMask: false,
@@ -62,7 +65,7 @@ class LoginPhoneH5Page extends React.Component {
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT.Code) {
         this.props.commonLogin.needToBindWechat = true;
         this.props.commonLogin.sessionToken = e.sessionToken;
-        this.props.router.push(`/user/wx-bind-qrcode?sessionToken=${e.sessionToken}&loginType=phone`);
+        this.props.router.push(`/user/wx-bind-qrcode?sessionToken=${e.sessionToken}&loginType=phone&nickname=${e.nickname}`);
         return;
       }
 
@@ -129,7 +132,7 @@ class LoginPhoneH5Page extends React.Component {
                 }}
                 className={layout['otherLogin-button-weixin']}
               >
-                <img src="//dzq-img/login-weixin.png" alt="" />
+                <Icon name='WechatOutlined' color='#04C160'/>
               </span>
             )}
             {this.props.site.isUserLoginVisible && (
@@ -139,7 +142,7 @@ class LoginPhoneH5Page extends React.Component {
                 }}
                 className={layout['otherLogin-button-user']}
               >
-                <img src="//dzq-img/login-/dzq-img/user.png" alt="" />
+                <Icon name='UserOutlined' color='#4084FF'/>
               </span>
             )}
           </div>
