@@ -5,3 +5,7 @@
 @import '@discuzq/design/dist/components/audio/styles/index.scss';
 @import '@discuzq/design/dist/components/button/styles/index.scss';
 @import '@discuzq/design/dist/components/icon/styles/index.scss';
+
+page {
+  font-family: var(--font-family);
+}
