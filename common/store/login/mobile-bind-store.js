@@ -1,5 +1,7 @@
 import { observable, action } from 'mobx';
 import { smsBind, smsSend } from '@server';
+import { get } from '../../utils/get';
+import setAccessToken from '../../utils/set-access-token';
 
 export const MOBILE_BIND_STORE_ERRORS = {
   MOBILE_VERIFY_ERROR: {
@@ -129,6 +131,11 @@ export default class mobileBindStore {
           },
         });
         if (smsLoginResp.code === 0) {
+          const accessToken = get(smsLoginResp, 'data.accessToken', '');
+          // 种下 access_token
+          setAccessToken({
+            accessToken,
+          });
           return smsLoginResp.data;
         }
         throw {
