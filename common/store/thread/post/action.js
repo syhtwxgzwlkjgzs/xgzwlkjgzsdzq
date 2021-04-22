@@ -1,9 +1,27 @@
 import { action } from 'mobx';
 import ThreadPostStore from './store';
-import { readEmoji, readFollow, readProcutAnalysis, readTopics } from '@common/server';
+import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread } from '@common/server';
 import { LOADING_TOTAL_TYPE } from '@common/constants/thread-post';
 
 class ThreadPostAction extends ThreadPostStore {
+  /**
+   * 发帖
+   */
+  @action.bound
+  async createThread() {
+    // 待更换为全局loading?
+    // this.setLoadingStatus(LOADING_TOTAL_TYPE.emoji, true);
+    const ret = await createThread(this.postData);
+    // this.setLoadingStatus(LOADING_TOTAL_TYPE.emoji, false);
+    const { code, data = [] } = ret;
+    // 相关数据处理待实际调用时修改
+    // let emojis = [];
+    // if (code === 0) emojis = data.map(item => ({ code: item.code, url: item.url }));
+    // this.setEmoji(emojis);
+    return ret;
+  }
+
+
   /**
    * 获取所有表情
    */
@@ -43,10 +61,10 @@ class ThreadPostAction extends ThreadPostStore {
     const ret = await readFollow({ params, isValidate: false });
     this.setLoadingStatus(LOADING_TOTAL_TYPE.follow, false);
     const { code, data } = ret;
-    const { pageData = [] } = data || {};
+    const { pageData } = data || {};
     if (code === 0) {
-      if (page === 1) this.setFollow(pageData);
-      else this.appendFollow(pageData);
+      if (page === 1) this.setFollow(pageData || []);
+      else this.appendFollow(pageData || []);
     }
     return ret;
   }
@@ -78,8 +96,8 @@ class ThreadPostAction extends ThreadPostStore {
     const { code, data } = ret;
     const { pageData = [] } = data || {};
     if (code === 0) {
-      if (params.page === 1) this.setTopic(pageData);
-      else this.appendTopic(pageData);
+      if (params.page === 1) this.setTopic(pageData || []);
+      else this.appendTopic(pageData || []);
     }
     this.setLoadingStatus(LOADING_TOTAL_TYPE.topic, false);
     return ret;
@@ -100,7 +118,7 @@ class ThreadPostAction extends ThreadPostStore {
   // 设置关注
   @action.bound
   setFollow(data) {
-    this.follows = data;
+    this.follows = data || [];
   }
 
   // 附加关注
@@ -125,6 +143,12 @@ class ThreadPostAction extends ThreadPostStore {
   @action.bound
   appendTopic(data) {
     this.topics = [...this.topics, ...data];
+  }
+
+  // 同步发帖数据到store
+  @action.bound
+  setPostData(data) {
+    this.postData = {...this.postData, ...data};
   }
 }
 

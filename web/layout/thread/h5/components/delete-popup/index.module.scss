@@ -1,0 +1,53 @@
+@import '@common/styles/variable/index.scss';
+@import '@common/styles/fn/rem.scss';
+
+.container {
+  width: rem(245);
+  height: rem(125);
+  border-radius: rem(5);
+  background: var(--color-white);
+  margin: 0 auto;
+  .deleteTips {
+    font-family: 'PingFang SC';
+    color: var(--color-text-primary);
+    border-bottom: solid rem(1) #eee;
+    .tips {
+      width: 100%;
+      font-weight: 600;
+      font-size: rem(16);
+      line-height: rem(20);
+      text-align: center;
+      padding-top: rem(20);
+    }
+    .content {
+      width: 100%;
+      font-weight: normal;
+      font-size: rem(14);
+      line-height: rem($font-line-height-middle);
+      text-align: center;
+      padding: rem(10) 0;
+    }
+  }
+  .btn {
+    display: flex;
+    font-family: 'PingFang SC';
+    font-weight: normal;
+    font-size: rem(16);
+    line-height: rem(36);
+    text-align: center;
+    .close { 
+      width: 50%;
+      color: #8490a8;
+      border-right: solid rem(1) #eee;
+    }
+    .ok {
+      // text-align: center;
+      width: 50%;
+      color: var(--color-primary);
+    }
+  }
+}
+
+.button {
+  width: 100%;
+}

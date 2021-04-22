@@ -1,33 +1,47 @@
-import { THREAD_TYPE } from '@common/constants/thread-post';
+import { THREAD_TYPE, ACCEPT_VIDEO_TYPES, ATTACHMENT_TYPE } from '@common/constants/thread-post';
+
+export const defaultOperation = {
+  emoji: 'emoji',
+  at: 'at',
+  topic: 'topic',
+  attach: 'attach',
+  redpacket: 'redpacket',
+  pay: 'pay',
+};
 
 /**
  * 默认的操作栏 icon，TODO: 待更新
  */
 export const defaultIcon = [
   {
-    name: 'UserOutlined', // emoji
+    name: 'SmilingFaceOutlined', // emoji
     active: '#2469f6',
-    id: 'emoji',
+    id: defaultOperation.emoji,
   },
   {
-    name: 'MessageDoubleOutlined', // @
+    name: 'AtOutlined', // @
     active: 'red',
+    id: defaultOperation.at,
   },
   {
-    name: 'PauseOutlined', // #
+    name: 'SharpOutlined', // #
     active: 'green',
+    id: defaultOperation.topic,
   },
   {
     name: 'PaperClipOutlined', // 附件
     active: '#2469f6',
+    id: defaultOperation.attach,
   },
   {
-    name: 'MailOutlined', // 红包
+    name: 'WalletOutlined', // 红包
     active: '#2469f6',
+    id: defaultOperation.redpacket,
   },
   {
-    name: 'DoubleRightOutlined', // 付费
+    name: 'DollarLOutlined', // 付费
     active: '#2469f6',
+    id: defaultOperation.pay,
   },
 ];
 
@@ -42,6 +56,12 @@ export const attachIcon = [
     name: 'VideoOutlined',
     active: 'red',
     type: THREAD_TYPE.video,
+    isUpload: true,
+    limit: 1,
+    accept: ACCEPT_VIDEO_TYPES.join(','),
+    data: {
+      type: ATTACHMENT_TYPE.video,
+    },
   },
   {
     name: 'MicroOutlined',
@@ -49,7 +69,7 @@ export const attachIcon = [
     type: THREAD_TYPE.voice,
   },
   {
-    name: 'ShopOutlined',
+    name: 'ShoppingCartOutlined',
     active: '#2469f6',
     type: THREAD_TYPE.goods,
   },

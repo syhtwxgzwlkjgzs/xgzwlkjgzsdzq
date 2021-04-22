@@ -8,6 +8,17 @@ class ThreadAction extends ThreadStore {
   @action
   setThreadData(data) {
     this.threadData = data;
+    this.threadData.id = data.threadId;
+  }
+
+  @action
+  setThreadDetailLikePayCount(data) {
+    this.threadData.likeReward.likePayCount = data;
+  }
+
+  @action
+  setThreadDetailEssence(data) {
+    this.threadData.displayTag.isEssence = data;
   }
 
   @action
@@ -21,8 +32,19 @@ class ThreadAction extends ThreadStore {
   }
 
   @action
-  setTotalpage(data) {
-    this.totalPage = data;
+  setCommentListDetailField(commentId, key, value) {
+    if (this.commentList?.length) {
+      this.commentList.forEach((comment) => {
+        if (comment.id === commentId) {
+          comment[key] = value;
+        }
+      });
+    }
+  }
+
+  @action
+  setTotalCount(data) {
+    this.totalCount = data;
   }
 }
 

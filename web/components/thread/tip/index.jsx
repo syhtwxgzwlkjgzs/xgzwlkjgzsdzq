@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import PopupList from '../popup-list';
+import Avatar from '../../avatar';
+
 import styles from './index.module.scss';
 
 /**
@@ -7,10 +9,12 @@ import styles from './index.module.scss';
  * @prop {string}    imgs 头像数据数组
  */
 
-const Index = ({ imgs = [] }) => {
+const Index = ({ imgs = [], tipData = {} }) => {
   const [visible, setVisible] = useState(false);
 
-  const onClick = () => {
+  const onClick = (e) => {
+    e.stopPropagation();
+
     setVisible(true);
   };
 
@@ -18,13 +22,19 @@ const Index = ({ imgs = [] }) => {
     <>
         <div className={styles.container} onClick={onClick} style={{ width: imgs.length === 1 ? '0.24rem' : '0.44rem' }}>
             {
-                imgs.filter((_, index) => index < 2).map((item, index) => (
-                    <img className={index === 0 ? styles.img : styles.imgAfter} src={item} key={index} />
+                [...imgs, ...imgs].filter((_, index) => index < 2).map((item, index) => (
+                  <div key={index} className={index === 0 ? styles.img : styles.imgAfter}>
+                    <Avatar
+                      imgSrc={item.avatar}
+                      name={item.userName}
+                      size='small'
+                    />
+                  </div>
                 ))
             }
         </div>
 
-        <PopupList visible={visible} onHidden={() => setVisible(false)} />
+        <PopupList tipData={tipData} visible={visible} onHidden={() => setVisible(false)} />
     </>
   );
 };

@@ -30,6 +30,11 @@ class ThreadPostStore {
     [LOADING_TOTAL_TYPE.emoji]: false,
     [LOADING_TOTAL_TYPE.follow]: false,
   };
+
+  /**
+   * 发帖相关数据
+   */
+  @observable postData = {}
 }
 
 export default ThreadPostStore;

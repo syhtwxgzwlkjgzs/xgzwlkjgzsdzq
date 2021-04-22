@@ -15,26 +15,20 @@ import UserInfo from './user-info';
 import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
+import { updateThreadInfo, updateThreadShare } from './utils';
 
 @inject('site')
 @inject('index')
 @observer
 class Index extends React.Component {
-    static defaultProps = {
-      money: '0',
-      payType: '0', // 0： 免费
-    };
-
-    dispatch = (type, data) => {
-      console.log(type);
-    }
-
+    // 分享
     onShare = (e) => {
       e.stopPropagation();
-
-      console.log('分享');
+      const { data = {} } = this.props;
+      const { threadId = '' } = data;
+      updateThreadShare({ threadId });
     }
-
+    // 评论
     onComment = (e) => {
       e.stopPropagation();
 
@@ -46,12 +40,14 @@ class Index extends React.Component {
         console.log('帖子不存在');
       }
     }
-
+    // 点赞
     onPraise = (e) => {
       e.stopPropagation();
-      console.log('点赞');
+      const { data = {} } = this.props;
+      const { threadId = '', isLike, postId } = data;
+      updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } });
     }
-
+    // 支付
     onPay = (e) => {
       e.stopPropagation();
 
@@ -107,7 +103,7 @@ class Index extends React.Component {
     }
 
     // 帖子属性内容
-    renderThreadContent = (data) => {
+    renderThreadContent = ({ content: data, attachmentPrice, payType } = {}) => {
       const {
         text,
         imageData,
@@ -123,7 +119,14 @@ class Index extends React.Component {
         <div className={styles.wrapper}>
             {text && <PostContent content={text} onPay={this.onPay} />}
             <div className={styles.content}>
-              {videoData && <VideoPlay width={378} height={224} url={videoData.mediaUrl} />}
+              {videoData && (
+                <VideoPlay
+                  width={378}
+                  height={224}
+                  url={videoData.mediaUrl}
+                  coverUrl={videoData.coverUrl}
+                />
+              )}
               {imageData && <ImageContent imgData={imageData} />}
               {rewardData && <RewardQuestion
                 content={rewardData.content || ''}
@@ -136,16 +139,16 @@ class Index extends React.Component {
                   amount={goodsData.price}
                   title={goodsData.title}
               />}
-              {/* {audioData && <AudioPlay url={dataSource.audio.src} />} */}
+              {audioData && <AudioPlay url={audioData.mediaUrl} />}
               {fileData && <AttachmentView attachments={fileData} onClick={this.onPay} />}
 
               {/* 附件付费蒙层 */}
               {
-                this.props.payType === '2' && (
+                payType === 2 && (
                   <div className={styles.cover}>
                     <Button className={styles.button} type="primary" onClick={this.onPay}>
                       <span className={styles.icon}>$</span>
-                      支付{this.props.money}元查看附件内容
+                      支付{attachmentPrice}元查看附件内容
                     </Button>
                   </div>
                 )
@@ -156,51 +159,71 @@ class Index extends React.Component {
     }
 
     render() {
-      const { money = '0', data } = this.props;
+      const { data, className = '' } = this.props;
 
       if (!data) {
         return <NoData />;
       }
 
-      const { title = '', user = {}, position = {}, likeReward = {}, content = {} } = data || {};
+      const {
+        title = '',
+        user = {},
+        position = {},
+        likeReward = {},
+        payType,
+        viewCount,
+        price,
+        group,
+        createdAt,
+        isLike,
+        postId,
+        threadId,
+        displayTag,
+      } = data || {};
+
+      const { isEssence, isPrice, isRedPack, isReward } = displayTag;
 
       return (
-        <div className={styles.container} onClick={this.onClick}>
+        <div className={`${styles.container} ${className}`} onClick={this.onClick}>
           <div className={styles.header}>
               <UserInfo
                   name={user.userName}
                   avatar={user.avatar}
                   location={position.address}
+                  view={`${viewCount}`}
+                  groupName={group?.groupName}
+                  time={createdAt}
+                  isEssence={isEssence}
+                  isPrice={isPrice}
+                  isRed={isRedPack}
+                  isReward={isReward}
               />
           </div>
 
           {title && <div className={styles.title}>{title}</div>}
 
-          {this.renderThreadContent(content)}
+          {this.renderThreadContent(data)}
 
-          {money !== '0' && <Button className={styles.button} type="primary" onClick={this.onPay}>
+          {payType === 1 && <Button className={styles.button} type="primary" onClick={this.onPay}>
             <span className={styles.icon}>$</span>
-            支付{money}元查看剩余内容
+            支付{price}元查看剩余内容
           </Button>}
 
           <BottomEvent
             userImgs={likeReward.users}
-            wholeNum={likeReward.likePayCount}
-            comment={likeReward.comment || 0}
-            sharing={likeReward.shareCount}
+            wholeNum={likeReward.likePayCount || 0}
+            comment={likeReward.postCount || 0}
+            sharing={likeReward.shareCount || 0}
             onShare={this.onShare}
             onComment={this.onComment}
             onPraise={this.onPraise}
+            isLiked={isLike}
+            tipData={{ postId, threadId }}
           />
         </div>
       );
     }
 }
-
-Index.propTypes = {
-  payType: PropTypes.string, // 付费类型 0：免费 1：全贴付费 2：附件付费
-  money: PropTypes.string, // 付费金额
-};
 
 // eslint-disable-next-line new-cap
 export default withRouter(Index);
