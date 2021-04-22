@@ -19,7 +19,7 @@ class WeixinBindH5Page extends React.Component {
         <div className={layout.content}>
           <div className={layout.title}>绑定微信号</div>
           <div className={layout.tips}>
-            <img src="/user.png" alt=""/>
+            <img src="//dzq-img/user.png" alt=""/>
             {/* todo 小虫替换为用户名*/}
             小虫，请绑定您的微信
           </div>

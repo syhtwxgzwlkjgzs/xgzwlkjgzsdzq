@@ -4,12 +4,13 @@
 .setTop {
   width: rem(375);
   height: rem(52);
-  background: #d7f3df;
+  background: var(--color-success4);
   position: absolute;
   text-align: center;
   line-height: rem(52);
-  color: #3ac15f;
+  color: var(--color-success);
   display: none;
+  z-index: var(--zindex-popup);
   .setTopIcon {
     display: inline-block;
     width: rem(20);
@@ -17,7 +18,7 @@
     border-radius: 50%;
     line-height: rem(20);
     color: var(--color-white);
-    background: #3ac15f;
+    background: var(--color-success);
     margin-right: rem($margin-2n);
   }
 }

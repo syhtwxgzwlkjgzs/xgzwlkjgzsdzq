@@ -9,7 +9,7 @@ class HeaderLogin extends React.Component {
   render() {
     return (
       <div className={layout.banner}>
-        <img src="/admin-logo-x2.png" alt=""/>
+        <img src="/dzq-img/admin-logo-x2.png" alt=""/>
       </div>
     );
   }

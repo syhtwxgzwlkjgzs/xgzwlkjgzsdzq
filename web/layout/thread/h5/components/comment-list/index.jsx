@@ -17,7 +17,6 @@ class CommentList extends React.Component {
       likeCount: this.props.data.likeCount,
     };
     this.needReply = this.props.data.lastThreeComments;// 评论的回复
-    this.replyNumber = this.props.data.replyCount - 1; // 评论的回复
   }
 
   static async getInitialProps() {
@@ -89,7 +88,7 @@ class CommentList extends React.Component {
           <div className={styles.showGet}>
             {!this.state.isHideEdit
               && <div className={styles.extra}>
-                {/* <div className={styles.revise} onClick={() => this.editClick()}>编辑</div> */}
+                <div className={styles.revise} onClick={() => this.editClick()}>编辑</div>
                 <div className={styles.revise} onClick={() => this.deleteClick()}>删除</div>
               </div>
             }
@@ -149,11 +148,11 @@ class CommentList extends React.Component {
                 </div>
               </div>
               {
-                this.replyNumber > 0 && this.state.isShowOne
+                this.props.data?.replyCount - 1 > 0 && this.state.isShowOne
                   ? <div
                     className={styles.moreReply}
                     onClick={() => this.toCommentDetail()}>
-                    查看之前{this.replyNumber}条回复...
+                    查看之前{this.props.data?.replyCount - 1}条回复...
                     </div> : ''
               }
               {

@@ -1,4 +1,4 @@
-import { readCommentDetail, updateComment, createPosts } from '@server';
+import { readCommentDetail, updateComment, createPosts, updatePosts } from '@server';
 import xss from '@common/utils/xss';
 
 export default ({ comment: CommentStore, thread: ThreadStore }) => ({
@@ -60,6 +60,60 @@ export default ({ comment: CommentStore, thread: ThreadStore }) => ({
       success: false,
     };
   },
+
+  /**
+   * 修改评论
+   * @param {object} params * 参数
+   * @param {number} params.id * 帖子id
+   * @param {number} params.pid * 评论id
+   * @param {string} params.content * 评论内容
+   * @param {array} params.attachments 附件内容
+   * @returns {object} 处理结果
+   */
+  async updateComment(params) {
+    const { id, pid, content, attachments } = params;
+    if (!id || !content || !pid) {
+      return {
+        msg: '参数不完整',
+        success: false,
+      };
+    }
+
+    const requestParams = {
+      id,
+      pid,
+      data: {
+        attributes: {
+          content: xss(content),
+          attachments,
+        },
+      },
+    };
+
+    const res = await updatePosts({ data: requestParams });
+
+    if (res.code === 0 && res?.data?.content) {
+      const { commentList } = ThreadStore;
+
+      // 更新列表中的评论
+      (commentList || []).forEach((comment) => {
+        if (comment.id === pid) {
+          comment.content = res.data.content;
+        }
+      });
+
+      return {
+        msg: '评论成功',
+        success: true,
+      };
+    }
+
+    return {
+      msg: res.msg,
+      success: false,
+    };
+  },
+
 
   /**
    * 创建回复：回复评论 + 回复回复
