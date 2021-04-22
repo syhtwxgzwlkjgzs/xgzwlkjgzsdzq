@@ -20,7 +20,7 @@ class IndexPCPage extends React.Component {
         }
         <p className={styles.text}>test</p>
        
-        <Button>Fuck</Button>
+        <Button>123</Button>
       </div>
     );
   }
