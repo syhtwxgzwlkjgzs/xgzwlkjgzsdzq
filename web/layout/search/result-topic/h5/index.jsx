@@ -4,8 +4,10 @@ import { withRouter } from 'next/router';
 
 import SearchInput from '@components/search-input';
 import NoData from '@components/no-data';
+import List from '@components/list';
 import SearchTopics from './components/search-topics';
 import Header from '@components/header';
+import { Topic } from '@components/search-result-item';
 
 import styles from './index.module.scss';
 
@@ -33,7 +35,7 @@ class SearchResultTopicH5Page extends React.Component {
   fetchMoreData = () => {
     const { dispatch } = this.props;
     const { keyword } = this.state;
-    dispatch('more', keyword);
+    return dispatch('moreData', keyword);
   };
 
   // event
@@ -50,9 +52,9 @@ class SearchResultTopicH5Page extends React.Component {
   onTopicClick = data => console.log('topic click', data);
 
   render() {
-    const { keyword, refreshing } = this.state;
+    const { keyword } = this.state;
     const { topics } = this.props.search;
-    const { pageData } = topics || { pageData: [] };
+    const { pageData = [], currentPage, totalPage } = topics || { pageData: [] };
 
     return (
       <div className={styles.page}>
@@ -61,17 +63,22 @@ class SearchResultTopicH5Page extends React.Component {
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
         </div>
         {
-          pageData && pageData.length
-            ? <SearchTopics
-                data={pageData}
-                refreshing={refreshing}
-                onRefresh={this.refreshData}
-                onFetchMore={this.fetchMoreData}
-                onItemClick={this.onTopicClick}
-              />
+          pageData && pageData?.length
+            ? (
+              <List
+                className={styles.list}
+                onRefresh={this.fetchMoreData}
+                noMore={currentPage >= totalPage}
+              >
+                {
+                  pageData?.map((item, index) => (
+                    <Topic key={index} data={item} onClick={this.onTopicClick} />
+                  ))
+                }
+              </List>
+            )
             : <NoData />
         }
-
       </div>
     );
   }
