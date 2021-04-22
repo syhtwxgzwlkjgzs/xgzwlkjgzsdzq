@@ -13,7 +13,7 @@ const TopNews = ({ data = [], router }) => {
   };
   return (
   <div className={styles.list}>
-    {data.map((item, index) => (
+    {data?.map((item, index) => (
       <div key={index} className={styles.item} onClick={() => onClick(item)}>
         <div className={styles.prefix}>{item.prefix || '置顶'}</div>
         <div className={styles.title}>{item.title}</div>
