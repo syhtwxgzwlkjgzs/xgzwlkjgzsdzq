@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import styles from './Index.module.scss';
+import styles from './index.module.scss';
 import Tip from '../tip';
 import { Icon } from '@discuzq/design';
 
@@ -50,14 +50,14 @@ const Index = ({
   return (
     <div>
       <div className={styles.user}>
-        {userImgs.length !== 0 && <div className={styles.userImg}>
+        {userImgs.length !== 0 ? <div className={styles.userImg}>
           <div className={styles.portrait}>
             <Tip tipData={tipData} imgs={userImgs}></Tip>
           </div>
           <p className={styles.numText}>
             {wholeNum}
           </p>
-        </div>}
+        </div> : <div></div>}
         <div className={styles.commentSharing}>
           {comment > 0 && <p className={styles.commentNum}>{`${comment}条评论`}</p>}
           {comment > 0 && sharing > 0 && <p className={styles.division}>·</p>}

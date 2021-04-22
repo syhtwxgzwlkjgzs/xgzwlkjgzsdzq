@@ -4,24 +4,20 @@ import { withRouter } from 'next/router';
 import layout from './index.module.scss';
 import WeixinQrCode from '../../../../components/login/h5/wx-qr-code';
 import HeaderLogin from '../../../../components/login/h5/header-login';
-import isWeiXin from '@common/utils/is-weixin';
+import hocWeixin from './HOCWeixin';
 
 @inject('site')
 @inject('user')
 @inject('h5QrCode')
 @observer
 class WXLoginH5Page extends React.Component {
-  constructor(props) {
-    super(props);
-    // 如果在微信环境内，则直接拉起登录
-    if (isWeiXin()) {
-      window.location.href = `${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`;
-    }
-  }
-
   async componentDidMount() {
-    await this.props.h5QrCode.generate({ params: { type: 'mobile_browser_login',
-      redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`)}` } });
+    await this.props.h5QrCode.generate({
+      params: {
+        type: 'mobile_browser_login',
+        redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`)}`,
+      },
+    });
   }
 
   render() {
@@ -46,7 +42,7 @@ class WXLoginH5Page extends React.Component {
                 }}
                 className={layout['otherLogin-button-weixin']}
               >
-                <img src="/login-user.png" alt="" />
+                <img src="//dzq-img/login-/dzq-img/user.png" alt="" />
               </span>
             )}
             {this.props.site.isSmsOpen && (
@@ -56,7 +52,7 @@ class WXLoginH5Page extends React.Component {
                 }}
                 className={layout['otherLogin-button-user']}
               >
-                <img src="/login-phone.png" alt="" />
+                <img src="//dzq-img/login-phone.png" alt="" />
               </span>
             )}
           </div>
@@ -67,4 +63,4 @@ class WXLoginH5Page extends React.Component {
   }
 }
 
-export default withRouter(WXLoginH5Page);
+export default hocWeixin(withRouter(WXLoginH5Page));

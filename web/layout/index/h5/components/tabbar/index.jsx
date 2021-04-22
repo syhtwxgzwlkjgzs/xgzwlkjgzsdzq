@@ -3,11 +3,16 @@ import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import { withRouter } from 'next/router';
 
-const Tabbar = (props) => {
+/**
+ * tabbar组件
+ * @prop {boolean} placeholder 固定在底部时，是否在标签位置生成一个等高的占位元素
+ */
+
+const TabBar = ({ router, fixed = true, placeholder = false }) => {
   const [tabs, setTabs] = useState([
     { icon: 'HomeOutlined', text: '首页', active: true, router: '/index' },
     { icon: 'FindOutlined', text: '发现', active: false, router: '/search' },
-    { icon: 'PlusOutlined', 'router': '/thread/post' },
+    { icon: 'PlusOutlined', router: '/thread/post' },
     { icon: 'MessageOutlined', text: '消息', active: false, router: '/' },
     { icon: 'ProfessionOutlined', text: '我', active: false, router: '/my' },
   ]);
@@ -19,11 +24,12 @@ const Tabbar = (props) => {
       temp[idx].active = true;
       setTabs(temp);
     }
-    props.router.push(i.router);
+    router.push(i.router);
   };
 
   return (
-    <div className={styles.footer}>
+    <>
+    <div className={styles.footer} style={{ position: fixed ? 'fixed' : '' }}>
       {tabs.map((i, idx) => (i.text ? (
           <div key={idx} className={styles.item + (i.active ? ` ${styles.active}` : '')} onClick={() => handleClick(i, idx)}>
             <Icon name={i.icon} size={20} />
@@ -37,7 +43,13 @@ const Tabbar = (props) => {
           </div>
       )))}
     </div>
+    {
+      fixed && placeholder && (
+        <div className={styles.placeholder} />
+      )
+    }
+    </>
   );
 };
 
-export default withRouter(Tabbar);
+export default withRouter(TabBar);

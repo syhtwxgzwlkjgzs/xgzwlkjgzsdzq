@@ -62,7 +62,7 @@ class LoginH5Page extends React.Component {
       });
       // FIXME: Toast 暂时不支持回调能力
       setTimeout(() => {
-        this.props.router.push('/index');
+        this.props.router.push('/');
         return;
       }, 1000);
     } catch (e) {
@@ -130,7 +130,7 @@ class LoginH5Page extends React.Component {
                 }}
                 className={layout['otherLogin-button-weixin']}
               >
-                <img src="/login-weixin.png" alt="" />
+                <img src="//dzq-img/login-weixin.png" alt="" />
               </span>
             )}
             {this.props.site.isSmsOpen && (
@@ -140,7 +140,7 @@ class LoginH5Page extends React.Component {
                 }}
                 className={layout['otherLogin-button-phone']}
               >
-                <img src="/login-phone.png" alt="" />
+                <img src="//dzq-img/login-phone.png" alt="" />
               </span>
             )}
           </div>

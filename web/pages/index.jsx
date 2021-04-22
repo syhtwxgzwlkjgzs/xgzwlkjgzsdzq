@@ -3,6 +3,8 @@ import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/index/h5';
 import IndexPCPage from '@layout/index/pc';
 import { getThreadList, getFirstData } from '@common/service/home';
+import { readThreadList } from '@server';
+
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 // import HOCWithLogin from '@common/middleware/HOCWithLogin';
@@ -12,9 +14,10 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @inject('user')
 @observer
 class Index extends React.Component {
+  page = 2;
+  prePage = 10;
   static async getInitialProps(ctx) {
     const { res } = await getFirstData({}, ctx);
-
     return {
       serverIndex: {
         categories: res[0] || [],
@@ -35,7 +38,7 @@ class Index extends React.Component {
 
   async componentDidMount() {
     const { serverIndex, index } = this.props;
-
+    
     // 当服务器无法获取数据时，触发浏览器渲染
     const isBool1 = !index.categories && (!serverIndex || !serverIndex.categories);
     const isBool2 = !index.sticks && (!serverIndex || !serverIndex.sticks);
@@ -50,13 +53,29 @@ class Index extends React.Component {
     }
   }
 
-  dispatch = async (type, data = '') => {
+  dispatch = async (type, data = {}) => {
     const { index } = this.props;
+    const { threads } = index;
     const { categoryids, types, essence, sequence } = data;
 
-    const { res } = await getThreadList({ filter: { categoryids, types, essence }, sequence });
-    index.setSticks(res[1] || []);
-    index.setThreads(res[0] || {});
+    if (type === 'click-filter') {
+      const { res } = await getThreadList({ filter: { categoryids, types, essence }, sequence });
+      this.page = 2;
+      index.setSticks(res[1] || []);
+      index.setThreads(res[0] || {});
+    } else if (type === 'moreData') {
+      const { data } = await readThreadList({ params: {
+        perPage: this.prePage, page: this.page, filter: { categoryids, types, essence }, sequence,
+      } });
+
+      if (data?.pageData?.length) {
+        this.page += 1;
+        data.pageData.unshift(...(threads?.pageData || []));
+        index.setThreads(data || {});
+      }
+
+      return;
+    }
   }
 
   render() {

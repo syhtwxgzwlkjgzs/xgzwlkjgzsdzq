@@ -1,5 +1,4 @@
-import { updateThreads, readCommentList } from '@server';
-
+import { updatePosts, readCommentList } from '@server';
 
 // 适配器
 function commentListAdapter(list = []) {
@@ -20,27 +19,27 @@ export default ({ thread: ThreadStore }) => ({
    * @returns {object} 处理结果
    */
   async updateFavorite(params) {
-    const { id, isFavorite } = params;
-
-    // 1. 验证参数
-    if (!id) {
+    const { id, pid, isFavorite } = params;
+    if (!id || !pid) {
       return {
-        msg: '帖子id不存在',
+        msg: '参数不完整',
         success: false,
       };
     }
 
-    // 2. 请求接口
     const requestParams = {
       id,
-      isFavorite: !!isFavorite,
-      isDraft: 0,
+      pid,
+      data: {
+        attributes: {
+          isFavorite: !!isFavorite,
+        },
+      },
     };
-    const res = await updateThreads({ data: requestParams });
 
-    res.Code = 0;
+    const res = await updatePosts({ data: requestParams });
 
-    if (res.Code === 0) {
+    if (res.code === 0) {
       // 3. 更新store
       ThreadStore.setThreadDetailField('isFavorite', !!isFavorite);
 
@@ -61,27 +60,33 @@ export default ({ thread: ThreadStore }) => ({
    * 帖子点赞
    * @param {object} parmas * 参数
    * @param {number} parmas.id * 帖子id
+   * @param {number} parmas.pid * 帖子评论od
    * @param {boolean} params.isLiked 是否点赞
    * @returns {object} 处理结果
    */
   async updateLiked(params) {
-    const { id, isLiked } = params;
-    if (!id) {
+    const { id, pid, isLiked } = params;
+    if (!id || !pid) {
       return {
-        msg: '帖子id不存在',
+        msg: '参数不完整',
         success: false,
       };
     }
 
     const requestParams = {
       id,
-      isLiked: !!isLiked,
-      isDraft: 0,
+      pid,
+      data: {
+        attributes: {
+          isLiked: !!isLiked,
+        },
+      },
     };
-    const res = await updateThreads({ data: requestParams });
+    const res = await updatePosts({ data: requestParams });
 
     if (res?.data && res.code === 0) {
-      ThreadStore.setThreadDetailField('isLiked', !!isLiked);
+      ThreadStore.setThreadDetailField('isLike', !!isLiked);
+      ThreadStore.setThreadDetailLikePayCount(res.data.likeCount);
 
       return {
         msg: '操作成功',
@@ -99,24 +104,29 @@ export default ({ thread: ThreadStore }) => ({
    * 帖子置顶
    * @param {object} parmas * 参数
    * @param {number} parmas.id * 帖子id
+   * @param {number} parmas.pid * 帖子评论id
    * @param {boolean} params.isSticky 是否置顶
    * @returns {object} 处理结果
    */
   async updateSticky(params) {
-    const { id, isSticky } = params;
-    if (!id) {
+    const { id, pid, isSticky } = params;
+    if (!id || !pid) {
       return {
-        msg: '帖子id不存在',
+        msg: '参数不完整',
         success: false,
       };
     }
 
     const requestParams = {
       id,
-      isSticky: !!isSticky,
-      isDraft: 0,
+      pid,
+      data: {
+        attributes: {
+          isSticky: !!isSticky,
+        },
+      },
     };
-    const res = await updateThreads({ data: requestParams });
+    const res = await updatePosts({ data: requestParams });
 
     if (res?.data && res.code === 0) {
       ThreadStore.setThreadDetailField('isSticky', !!isSticky);
@@ -141,23 +151,28 @@ export default ({ thread: ThreadStore }) => ({
    * @returns {object} 处理结果
    */
   async updateEssence(params) {
-    const { id, isEssence } = params;
-    if (!id) {
+    const { id, pid, isEssence } = params;
+    if (!id || !pid) {
       return {
-        msg: '帖子id不存在',
+        msg: '参数不完整',
         success: false,
       };
     }
 
     const requestParams = {
       id,
-      isEssence: !!isEssence,
-      isDraft: 0,
+      pid,
+      data: {
+        attributes: {
+          isEssence: !!isEssence,
+        },
+      },
     };
-    const res = await updateThreads({ data: requestParams });
+
+    const res = await updatePosts({ data: requestParams });
 
     if (res?.data && res.code === 0) {
-      ThreadStore.setThreadDetailField('isEssence', !!isEssence);
+      ThreadStore.setThreadDetailEssence(!!isEssence);
 
       return {
         msg: '操作成功',
@@ -182,21 +197,24 @@ export default ({ thread: ThreadStore }) => ({
    * @param { number } * id 帖子id
    * @returns {object} 处理结果
    */
-  async delete(id) {
-    // 1. 验证参数
-    if (!id) {
+  async delete(id, pid) {
+    if (!id || !pid) {
       return {
-        msg: '帖子id不存在',
+        msg: '参数不完整',
         success: false,
       };
     }
 
     const requestParams = {
       id,
-      isDelete: 1,
-      isDraft: 0,
+      pid,
+      data: {
+        attributes: {
+          isDeleted: 1,
+        },
+      },
     };
-    const res = await updateThreads({ data: requestParams });
+    const res = await updatePosts({ data: requestParams });
 
     if (res?.data && res.code === 0) {
       ThreadStore.setThreadDetailField('isDelete', 1);

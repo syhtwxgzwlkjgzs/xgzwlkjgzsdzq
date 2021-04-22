@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Button, Icon } from '@discuzq/design';
 import Avatar from '../../avatar';
 import { noop } from '../utils';

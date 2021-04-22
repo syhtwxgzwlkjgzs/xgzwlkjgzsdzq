@@ -10,9 +10,8 @@ import topic from './topic.module.scss';
 import CommentList from './components/comment-list/index';
 import NoMore from './components/no-more';
 import LoadingTips from './components/loading-tips';
-import { formatDate } from '@common/utils/format-date';
 
-import { Icon, Input, Badge, Toast, Tag, Button } from '@discuzq/design';
+import { Icon, Input, Badge, Toast, Button } from '@discuzq/design';
 import UserInfo from '@components/thread/user-info';
 import Header from '@components/header';
 
@@ -28,7 +27,7 @@ import VideoPlay from '@components/thread/video-play';
 import PostRewardProgressBar, { POST_TYPE } from '@components/thread/post-reward-progress-bar';
 import Tip from '@components/thread/tip';
 import AttachmentView from '@components/thread/attachment-view';
-
+import throttle from '@common/utils/thottle';
 import classnames from 'classnames';
 
 const typeMap = {
@@ -45,7 +44,6 @@ const typeMap = {
   111: 'QA_IMAGE',
 };
 
-
 // 帖子内容
 const RenderThreadContent = observer((props) => {
   const { store: threadStore } = props;
@@ -60,7 +58,6 @@ const RenderThreadContent = observer((props) => {
       }
     });
   }
-  console.log(parseContent);
 
   const onMoreClick = () => {
     props.fun.moreClick();
@@ -70,51 +67,58 @@ const RenderThreadContent = observer((props) => {
     typeof props.onLikeClick === 'function' && props.onLikeClick();
   };
 
+  const onBuyClick = (url) => {
+    url && window.open(url);
+  };
+
   return (
     <div className={`${layout.top} ${topic.container}`}>
       <div className={topic.header}>
-        <UserInfo
-          name={threadStore?.threadData?.user?.userName || ''}
-          avatar={threadStore?.threadData?.user?.avatar || ''}
-          location={threadStore?.threadData?.position.location || ''}
-          view={`${threadStore?.threadData?.viewCount}` || ''}
-          time={`${formatDate(threadStore?.threadData?.createdAt, 'yyyy-MM-dd')}` || ''}>
-        </UserInfo>
-        <div>
-          {threadStore?.threadData?.isEssence && <Tag type='primary'>精华</Tag>}
-          <Icon
-            size='20'
-            name='ShareAltOutlined'
-            onClick={onMoreClick}>
-          </Icon>
+        <div className={topic.userInfo}>
+          <UserInfo
+            name={threadStore?.threadData?.user?.userName || ''}
+            avatar={threadStore?.threadData?.user?.avatar || ''}
+            location={threadStore?.threadData?.position.location || ''}
+            view={`${threadStore?.threadData?.viewCount}` || ''}
+            time={`${threadStore?.threadData?.createdAt}` || ''}
+            isEssence={threadStore?.threadData?.isEssence}
+          ></UserInfo>
+        </div>
+        <div className={topic.more} onClick={onMoreClick}>
+          <Icon size="20" color="#8590A6" name="MoreVOutlined"></Icon>
         </div>
       </div>
       <div className={topic.body}>
         {/* 文字 */}
         {text && <PostContent content={text || ''} />}
         {/* 视频 */}
-        {
-          parseContent.VIDEO
-          && <VideoPlay
+        {parseContent.VIDEO && (
+          <VideoPlay
             url={parseContent.VIDEO.mediaUrl}
             coverUrl={parseContent.VIDEO.coverUrl}
             width={400}
-            height={200} />
-        }
+            height={200}
+          />
+        )}
         {/* 图片 */}
         {parseContent.IMAGE && <ImageContent imgData={parseContent.IMAGE} />}
         {/* 商品 */}
-        {
-          parseContent.GOODS
-          && <div>
+        {parseContent.GOODS && (
+          <div>
             <ProductItem
               image={parseContent.GOODS.imagePath}
               amount={parseContent.GOODS.price}
               title={parseContent.GOODS.title}
             />
-            <Button className={topic.buyBtn} type='primary'>购买商品</Button>
+            <Button
+              className={topic.buyBtn}
+              type="primary"
+              onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
+            >
+              购买商品
+            </Button>
           </div>
-        }
+        )}
         {/* 音频 */}
         {parseContent.VOICE && <AudioPlay />}
         {/* 附件 */}
@@ -122,13 +126,16 @@ const RenderThreadContent = observer((props) => {
 
         <div className={topic.tag}>使用交流</div>
 
-        {(parseContent.RED_PACKET || parseContent.REWARD)
-          && <div className={topic.reward}>
+        {(parseContent.RED_PACKET || parseContent.REWARD) && (
+          <div className={topic.reward}>
             {/* 红包 */}
-            {parseContent.RED_PACKET && <PostRewardProgressBar remaining={parseContent.RED_PACKET.number} received={1} />}
+            {parseContent.RED_PACKET && (
+              <PostRewardProgressBar remaining={parseContent.RED_PACKET.number} received={1} />
+            )}
             {/* 打赏 */}
             {parseContent.REWARD && <PostRewardProgressBar type={POST_TYPE.BOUNTY} remaining={2} received={5} />}
-          </div>}
+          </div>
+        )}
 
         {/* <div style={{ textAlign: 'center' }}>
           <Button className={topic.rewardButton} type='primary' size='large'>打赏</Button>
@@ -138,16 +145,15 @@ const RenderThreadContent = observer((props) => {
       <div className={topic.footer}>
         <div className={topic.thumbs}>
           <div
-            className={classnames(topic.liked, threadStore?.threadData?.isLiked && topic.isLiked)}
-            onClick={onLikeClick}>
-            <Icon name='LikeOutlined'></Icon>
-            <span>1660万</span>
+            className={classnames(topic.liked, threadStore?.threadData?.isLike && topic.isLiked)}
+            onClick={onLikeClick}
+          >
+            <Icon name="LikeOutlined"></Icon>
+            <span>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
           </div>
           <Tip style={topic.likeReward} imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
         </div>
-        <span>
-          {threadStore?.threadData?.likeReward?.shareCount || 0}次分享
-        </span>
+        <span>{threadStore?.threadData?.likeReward?.shareCount || 0}次分享</span>
       </div>
     </div>
   );
@@ -158,13 +164,13 @@ const RenderThreadContent = observer((props) => {
 class RenderCommentList extends React.Component {
   constructor(props) {
     super(props);
-    this.service = this.props.service,
-    this.state = {
+    (this.service = this.props.service),
+    (this.state = {
       showCommentInput: false, // 是否弹出评论框
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
       inputText: '请输入内容', // 默认回复框placeholder内容
-    };
+    });
 
     this.commentData = null;
     this.replyData = null;
@@ -176,7 +182,7 @@ class RenderCommentList extends React.Component {
       commentSort: !this.state.commentSort,
     });
     typeof this.props.sort === 'function' && this.props.sort(!this.state.commentSort);
-  }
+  };
 
   // 点击评论的赞
   async likeClick(data) {
@@ -283,7 +289,6 @@ class RenderCommentList extends React.Component {
       params.commentId = this.commentData.id;
     }
 
-    console.log('参数', params);
     const { success, msg } = await this.service.comment.createReply(params);
 
     if (success) {
@@ -302,6 +307,11 @@ class RenderCommentList extends React.Component {
     });
   }
 
+  // 点击编辑
+  editClick(comment) {
+    typeof this.props.onEditClick === 'function' && this.props.onEditClick(comment);
+  }
+
   onCommentClick(data) {
     if (data.id && this.props.store?.threadData?.id) {
       this.props.router.push(`/thread/comment/${data.id}?threadId=${this.props.store?.threadData?.id}`);
@@ -313,39 +323,30 @@ class RenderCommentList extends React.Component {
     return (
       <Fragment>
         <div className={comment.header}>
-          <div className={comment.number}>
-            共{totalCount}条评论
-          </div>
+          <div className={comment.number}>共{totalCount}条评论</div>
           <div className={comment.sort} onClick={() => this.onSortClick()}>
-            <Icon
-              size='16'
-              name='SortOutlined'>
-            </Icon>
+            <Icon size="16" name="SortOutlined"></Icon>
             <span className={comment.sortText}></span>
-            {
-              this.state.commentSort ? '评论从旧到新' : '评论从新到旧'
-            }
+            {this.state.commentSort ? '评论从旧到新' : '评论从新到旧'}
           </div>
         </div>
         <div className={comment.body}>
-          {
-            commentList
-              .map((val, index) => (
-                <div className={comment.commentItems} key={val.id || index}>
-                  <CommentList
-                    data={val}
-                    key={val.id}
-                    likeClick={() => this.likeClick(val)}
-                    replyClick={() => this.replyClick(val)}
-                    deleteClick={() => this.deleteClick(val)}
-                    replyLikeClick={reploy => this.replyLikeClick(reploy, val)}
-                    replyReplyClick={reploy => this.replyReplyClick(reploy, val)}
-                    onCommentClick={() => this.onCommentClick(val)}
-                    isShowOne={true}>
-                  </CommentList>
-                </div>
-              ))
-          }
+          {commentList.map((val, index) => (
+            <div className={comment.commentItems} key={val.id || index}>
+              <CommentList
+                data={val}
+                key={val.id}
+                likeClick={() => this.likeClick(val)}
+                replyClick={() => this.replyClick(val)}
+                deleteClick={() => this.deleteClick(val)}
+                editClick={() => this.editClick(val)}
+                replyLikeClick={reploy => this.replyLikeClick(reploy, val)}
+                replyReplyClick={reploy => this.replyReplyClick(reploy, val)}
+                onCommentClick={() => this.onCommentClick(val)}
+                isShowOne={true}
+              ></CommentList>
+            </div>
+          ))}
         </div>
 
         {/* 评论弹层 */}
@@ -353,15 +354,15 @@ class RenderCommentList extends React.Component {
           visible={this.state.showCommentInput}
           inputText={this.state.inputText}
           onClose={() => this.setState({ showCommentInput: false })}
-          onSubmit={value => this.createReply(value)}>
-        </InputPopup>
+          onSubmit={value => this.createReply(value)}
+        ></InputPopup>
 
         {/* 删除弹层 */}
         <DeletePopup
           visible={this.state.showDeletePopup}
           onClose={() => this.setState({ showDeletePopup: false })}
-          onBtnClick={() => this.deleteComment()}>
-        </DeletePopup>
+          onBtnClick={() => this.deleteComment()}
+        ></DeletePopup>
       </Fragment>
     );
   }
@@ -386,6 +387,7 @@ class ThreadH5Page extends React.Component {
       isCommentLoading: false, // 列表loading
       setTop: false, // 置顶
       showContent: '',
+      inputValue: '', // 评论内容
     };
 
     this.perPage = 5;
@@ -398,14 +400,17 @@ class ThreadH5Page extends React.Component {
     this.position = 0;
     this.nextPosition = 0;
     this.flag = true;
+
+    // 修改评论数据
+    this.comment = null;
   }
 
-  // 滚动事件  TODO:增加节流处理
+  // 滚动事件
   handleOnScroll() {
     // 加载评论列表
     const scrollDistance = this.threadBodyRef?.current?.scrollTop;
-    const offsetHeight = this.threadBodyRef?.current.offsetHeight;
-    const scrollHeight = this.threadBodyRef?.current.scrollHeight;
+    const offsetHeight = this.threadBodyRef?.current?.offsetHeight;
+    const scrollHeight = this.threadBodyRef?.current?.scrollHeight;
     const { isCommentReady, isNoMore } = this.props.thread;
     if (scrollDistance + offsetHeight >= scrollHeight && !this.state.isCommentLoading && isCommentReady && !isNoMore) {
       this.page = this.page + 1;
@@ -442,6 +447,7 @@ class ThreadH5Page extends React.Component {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
+      pid: this.props.thread?.threadData?.postId,
       isFavorite: !this.props.thread?.isFavorite,
     };
     const { success, msg } = await this.service.thread.updateFavorite(params);
@@ -509,7 +515,7 @@ class ThreadH5Page extends React.Component {
     //   text: !this.state.text,
     // });
     this.setState({ showMorePopup: true });
-  }
+  };
 
   onOperClick = (type) => {
     // 1 置顶  2 加精  3 删除  4 举报
@@ -523,7 +529,8 @@ class ThreadH5Page extends React.Component {
     } else {
       console.log('举报');
     }
-  }
+  };
+
   // 置顶提示
   setTopState(isSticky) {
     this.setState({
@@ -534,20 +541,19 @@ class ThreadH5Page extends React.Component {
       this.setState({ setTop: !this.state.setTop });
     }, 2000);
   }
+
   // 置顶接口
   async updateSticky() {
-    this.setTopState(false);
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
+      pid: this.props.thread?.threadData?.postId,
       isSticky: !this.props.thread?.isSticky,
     };
     const { success, msg } = await this.service.thread.updateSticky(params);
 
     if (success) {
-      Toast.success({
-        content: '操作成功',
-      });
+      this.setTopState(true);
       return;
     }
 
@@ -561,6 +567,7 @@ class ThreadH5Page extends React.Component {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
+      pid: this.props.thread?.threadData?.postId,
       isEssence: !this.props.thread?.isEssence,
     };
     const { success, msg } = await this.service.thread.updateEssence(params);
@@ -581,15 +588,19 @@ class ThreadH5Page extends React.Component {
   async delete() {
     this.setState({ showDeletePopup: false });
     const id = this.props.thread?.threadData?.id;
-    const params = {
-      id,
-    };
-    const { success, msg } = await this.service.thread.updateEssence(params);
+    const pid = this.props.thread?.threadData?.postId;
+
+    const { success, msg } = await this.service.thread.delete(id, pid);
 
     if (success) {
       Toast.success({
-        content: '操作成功',
+        content: '删除成功',
       });
+
+      setTimeout(() => {
+        this.props.router.push('/');
+      }, 500);
+
       return;
     }
 
@@ -603,10 +614,13 @@ class ThreadH5Page extends React.Component {
     this.setState({ showDeletePopup: false });
   }
 
+  // 点击发布按钮
+  onPublishClick(val) {
+    this.comment ? this.updateComment(val) : this.createComment(val);
+  }
+
   // 创建评论
-  async onPublishClick(val) {
-    console.log(val);
-    this.setState({ showCommentInput: false });
+  async createComment(val) {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
@@ -630,25 +644,65 @@ class ThreadH5Page extends React.Component {
     });
   }
 
+  // 更新评论
+  async updateComment(val) {
+    if (!this.comment) return;
+
+    const id = this.props.thread?.threadData?.id;
+    const params = {
+      id,
+      pid: this.comment.id,
+      content: val,
+      attachments: [],
+    };
+    const { success, msg } = await this.service.comment.updateComment(params);
+    if (success) {
+      Toast.success({
+        content: '修改成功',
+      });
+      this.setState({
+        showCommentInput: false,
+        inputValue: '',
+      });
+      return true;
+    }
+    Toast.error({
+      content: msg,
+    });
+  }
+
+  // 点击编辑评论
+  onEditClick(comment) {
+    this.comment = comment;
+    this.setState({
+      inputValue: comment.content,
+      showCommentInput: true,
+    });
+  }
+
+  // 弹出框关闭
+  onClose() {
+    this.setState({
+      showCommentInput: false,
+    });
+    this.comment = null;
+  }
+
   // 点赞
   async onLikeClick() {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
-      isLiked: !this.props.thread?.threadData?.isLiked,
+      pid: this.props.thread?.threadData?.postId,
+      isLiked: !this.props.thread?.threadData?.isLike,
     };
     const { success, msg } = await this.service.thread.updateLiked(params);
 
-    if (success) {
-      Toast.success({
-        content: '操作成功',
+    if (!success) {
+      Toast.error({
+        content: msg,
       });
-      return;
     }
-
-    Toast.error({
-      content: msg,
-    });
   }
 
   render() {
@@ -664,40 +718,40 @@ class ThreadH5Page extends React.Component {
           <Header></Header>
         </div>
 
-        <div className={layout.body} ref={this.threadBodyRef} onScrollCapture={() => this.handleOnScroll()}>
-          <ShowTop
-            showContent={this.state.showContent}
-            setTop={this.state.setTop}>
-          </ShowTop>
+        <div
+          className={layout.body}
+          ref={this.threadBodyRef}
+          onScrollCapture={() => throttle(this.handleOnScroll(), 500)}
+        >
+          <ShowTop showContent={this.state.showContent} setTop={this.state.setTop}></ShowTop>
           {/* 帖子内容 */}
-          {
-            isReady
-              ? <RenderThreadContent
-                store={threadStore}
-                fun={fun}
-                onLikeClick={() => this.onLikeClick()}>
-              </RenderThreadContent>
-              : <LoadingTips type='init'></LoadingTips>
-          }
+          {isReady ? (
+            <RenderThreadContent
+              store={threadStore}
+              fun={fun}
+              onLikeClick={() => this.onLikeClick()}
+            ></RenderThreadContent>
+          ) : (
+            <LoadingTips type="init"></LoadingTips>
+          )}
 
           {/* 评论列表 */}
           <div className={`${layout.bottom} ${comment.container}`} ref={this.commentDataRef}>
-            {
-              isCommentReady
-                ? (
-                  <Fragment>
-                    <RenderCommentList
-                      router={this.props.router}
-                      store={threadStore}
-                      service={this.service}
-                      sort={flag => this.onSortChange(flag)}>
-                    </RenderCommentList>
-                    {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
-                    {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
-                  </Fragment>
-                )
-                : <LoadingTips type='init'></LoadingTips>
-            }
+            {isCommentReady ? (
+              <Fragment>
+                <RenderCommentList
+                  router={this.props.router}
+                  store={threadStore}
+                  service={this.service}
+                  sort={flag => this.onSortChange(flag)}
+                  onEditClick={comment => this.onEditClick(comment)}>
+                </RenderCommentList>
+                {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
+                {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
+              </Fragment>
+            ) : (
+              <LoadingTips type="init"></LoadingTips>
+            )}
           </div>
         </div>
 
@@ -705,54 +759,49 @@ class ThreadH5Page extends React.Component {
         <div className={layout.footer}>
           {/* 评论区触发 */}
           <div className={footer.inputClick} onClick={() => this.onInputClick()}>
-            <Input
-              className={footer.input}
-              placeholder="写评论"
-              disabled={true}>
-            </Input>
+            <Input className={footer.input} placeholder="写评论" disabled={true} icon='EditOutlined'></Input>
           </div>
 
           {/* 评论弹层 */}
           <InputPopup
             visible={this.state.showCommentInput}
-            onClose={() => this.setState({ showCommentInput: false })}
-            onSubmit={value => this.onPublishClick(value)}>
-          </InputPopup>
+            onClose={() => this.onClose()}
+            initValue={this.state.inputValue}
+            onSubmit={value => this.onPublishClick(value)}
+          ></InputPopup>
           {/* 更多弹层 */}
           <MorePopup
             visible={this.state.showMorePopup}
             onClose={() => this.setState({ showMorePopup: false })}
             onSubmit={() => this.setState({ showMorePopup: false })}
-            onOperClick={type => this.onOperClick(type)}>
-          </MorePopup>
+            onOperClick={type => this.onOperClick(type)}
+          ></MorePopup>
           {/* 删除弹层 */}
           <DeletePopup
             visible={this.state.showDeletePopup}
             onClose={() => this.setState({ showDeletePopup: false })}
-            onBtnClick={type => this.onBtnClick(type)}>
-          </DeletePopup>
+            onBtnClick={type => this.onBtnClick(type)}
+          ></DeletePopup>
           {/* 操作区 */}
           <div className={footer.operate}>
             <div className={footer.icon} onClick={() => this.onMessageClick()}>
-              <Badge info={totalCount > 99 ? '99+' : `${totalCount || '0'}`}>
-                <Icon
-                  size='20'
-                  name='MessageOutlined'>
-                </Icon>
-              </Badge>
+              {totalCount > 0
+                ? (
+                  <Badge info={totalCount > 99 ? '99+' : `${totalCount || '0'}`}>
+                    <Icon size="20" name="MessageOutlined"></Icon>
+                  </Badge>
+                )
+                : <Icon size="20" name="MessageOutlined"></Icon>
+              }
             </div>
             <Icon
               color={this.props.thread?.isFavorite ? 'blue' : ''}
               className={footer.icon}
               onClick={() => this.onCollectionClick()}
-              size='20'
-              name='HeartOutlined'>
-            </Icon>
-            <Icon
-              className={footer.icon}
-              size='20'
-              name='ShareAltOutlined'>
-            </Icon>
+              size="20"
+              name="CollectOutlined"
+            ></Icon>
+            <Icon className={footer.icon} size="20" name="ShareAltOutlined"></Icon>
           </div>
         </div>
       </div>

@@ -93,7 +93,7 @@ class AtSelect extends Component {
     return (
       <div className={styles['at-item']}>
         <div className={styles.avatar}>
-          <img className={styles.image} src={item?.user?.avatarUrl || '/noavatar.gif'} alt="" />
+          <img className={styles.image} src={item?.user?.avatarUrl || '//dzq-img/noavatar.gif'} alt="" />
         </div>
         <div className={styles.info}>
           <div className={styles.username}>{item?.user?.userName}</div>

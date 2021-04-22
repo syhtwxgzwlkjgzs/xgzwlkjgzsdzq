@@ -11,16 +11,21 @@
     justify-content: center;
     .moreItem {
       margin: rem($padding-4n);
+
       .icon {
         width: rem(50);
         height: rem(50);
         text-align: center;
         line-height: rem(50);
         background: var(--color-white);
+        border-radius: 5px;
+        color: var(--color-text-regular);
       }
+
       .text {
-        padding: rem($padding-1n) 0;
+        padding: rem($padding-2n) 0;
         text-align: center;
+        color: var(--color-text-secondary);
       }
     }
   }

@@ -3,11 +3,11 @@
 
 .footer {
   display: flex;
-  position: fixed;
+  // position: fixed;
+  height: rem(55);
   bottom: 0;
   width: 100%;
   background: var(--color-white);
-  z-index: 100;
   box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.05);
   .item {
     flex: 1;
@@ -33,4 +33,9 @@
     border-radius: 50%;
     display: inline-block;
   }
+}
+
+.placeholder {
+  width: 100%;
+  height: rem(55);
 }

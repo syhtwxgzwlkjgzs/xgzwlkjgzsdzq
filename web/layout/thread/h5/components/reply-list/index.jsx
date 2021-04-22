@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
-import { formatDate } from '@common/utils/format-date';
+import { diffDate } from '@common/utils/diff-date';
 
 export default class ReplyList extends React.Component {
   constructor(props) {
@@ -72,7 +72,7 @@ export default class ReplyList extends React.Component {
             </div>
           </div>
           <div className={styles.replyListFooter}>
-            <div className={styles.replyTime}>{formatDate(this.props.data.createdAt, 'yyyy-MM-dd hh:mm')}</div>
+            <div className={styles.replyTime}>{diffDate(this.props.data.createdAt)}</div>
             <div className={styles.extraBottom}>
               <div className={this.state.isLiked ? styles.replyLike : styles.replyLiked}>
                 <span onClick={() => this.likeClick()}>

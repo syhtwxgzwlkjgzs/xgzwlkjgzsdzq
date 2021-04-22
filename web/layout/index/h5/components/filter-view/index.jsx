@@ -1,19 +1,36 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Popup } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
+import filterData from './data';
 
 import styles from './index.module.scss';
 
-const Index = ({ visible, data, onSubmit = noop, onCancel = noop }) => {
-  const [first, setFirst] = useState(0);
+const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel = noop }) => {
+  const [first, setFirst] = useState('');
   const [firstChildren, setFirstChildren] = useState();
+  const [second, setSecond] = useState('');
+  const [third, setThird] = useState('0');
 
-  const [second, setSecond] = useState(0);
-  const [third, setThird] = useState(0);
+  const data = useMemo(() => {
+    const newData = filterData;
+    newData[0].data = tmpData;
+    return newData;
+  }, [tmpData]);
 
+  useEffect(() => {
+    const { categoryids = [], types, essence } = current || {};
+
+    setFirst(categoryids[0] || '');
+    setFirstChildren(categoryids[1] || '');
+    setSecond(types || '');
+    setThird(essence || '0');
+  }, [current, visible]);
+
+  // 点击一级菜单
   const onClickFirst = (index, type) => {
     if (type === 1) {
       setFirst(index);
+      setFirstChildren('');
     } else if (type === 2) {
       setSecond(index);
     } else {
@@ -21,40 +38,32 @@ const Index = ({ visible, data, onSubmit = noop, onCancel = noop }) => {
     }
   };
 
+  // 点击二级菜单
   const onClickSecond = (index, type) => {
     if (type === 1) {
       setFirstChildren(index);
     }
   };
 
+  // 结果数据处理
   const handleSubmit = () => {
-    // 结果数据处理
-    const [data1, data2, data3] = data;
     let sequence = 0;
+    tmpData.forEach((item) => {
+      if (item.pid === first && item.name.indexOf('默认分类') !== -1) {
+        sequence = 1;
+      }
+    });
 
-    const firstInfo = data1?.data[first];
+    const params = { categoryids: [first, firstChildren], types: second, essence: third, sequence };
 
-    if (firstInfo.name.indexOf('默认') !== -1) {
-      sequence = 1;
-    }
-
-    const categoryids = [firstInfo.pid];
-    const firstChildrenPid = (
-      firstChildren && data1?.data[first].children && data1?.data[first].children[firstChildren].pid
-    );
-    if (firstChildren) {
-      categoryids.push(firstChildrenPid);
-    }
-
-    const types = data2?.data[second].pid;
-    const essence = data3?.data[third].pid;
-    onSubmit({ categoryids, types, essence, sequence });
+    onSubmit(params);
   };
 
   const handleCancel = () => {
     onCancel();
   };
 
+  // 创建选项
   const renderContent = (dataSource, key) => {
     const { type, data: contents, title } = dataSource;
     let tip = first;
@@ -70,27 +79,31 @@ const Index = ({ visible, data, onSubmit = noop, onCancel = noop }) => {
 
     return (
       <div key={key}>
-        <div>{title}</div>
+        <div className={styles.title}>{title}</div>
         <div className={styles.wrapper}>
           {
             contents.map((item, index) => (
               <span
-                className={`${tip === index ? styles.active : ''} ${styles.span}`}
+                className={`${tip === item.pid ? styles.active : ''} ${styles.span}`}
                 key={index}
-                onClick={() => onClickFirst(index, type)}
+                onClick={() => onClickFirst(item.pid, type)}
               >
                 {item.name}
               </span>
             ))
           }
         </div>
-        <div className={`${styles.wrapper} ${styles.childrenWrapper}`}>
-          {
-            contents[first] && contents[first].children && contents[first].children.map((item, index) => (
-              <span className={`${firstChildren === index ? styles.childrenActive : ''} ${styles.span}`} key={`${index}-${index}`} onClick={() => onClickSecond(index, type)}>{item.name}</span>
-            ))
-          }
-        </div>
+        {
+          contents[first]?.children?.length ? (
+            <div className={`${styles.wrapper} ${styles.childrenWrapper}`}>
+              {
+                contents[first].children.map((item, index) => (
+                  <span className={`${firstChildren === item.pid ? styles.childrenActive : ''} ${styles.span}`} key={`${index}-${index}`} onClick={() => onClickSecond(item.pid, type)}>{item.name}</span>
+                ))
+              }
+            </div>
+          ) : null
+        }
       </div>
     );
   };
@@ -103,13 +116,14 @@ const Index = ({ visible, data, onSubmit = noop, onCancel = noop }) => {
       onClose={handleCancel}
     >
       <div className={styles.container}>
-        <div>头</div>
         { data && data.map((item, index) => renderContent(item, index)) }
-        <div className={styles.footer}>
-          <Button className={styles.button} onClick={handleSubmit} full type="primary">筛 选</Button>
-          <Button onClick={handleCancel} full>取 消</Button>
-        </div>
       </div>
+      <div className={styles.footer}>
+          <Button className={styles.button} onClick={handleSubmit} type="primary">筛 选</Button>
+          <div className={styles.footerBtn} onClick={handleCancel}>
+            取 消
+          </div>
+        </div>
     </Popup>
   );
 };

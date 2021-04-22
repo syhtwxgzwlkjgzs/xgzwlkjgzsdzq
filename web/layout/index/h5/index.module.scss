@@ -1,13 +1,29 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 .text {
-    font-size: rem($font-size-label);
-    color: var(--color-error);
+  font-size: rem($font-size-label);
+  color: var(--color-error);
 }
-.homeBox {
-  background: #EFF1F3;
-}
-.homeContent {
-  background: #fff;
-  margin-bottom: rem(10);
+.container {
+  background: #eff1f3;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  .homeContent {
+    background: #fff;
+    margin-bottom: rem(10);
+  }
+  .list {
+    flex: 1;
+  }
+  .tabIcon {
+    width: rem(50);
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .listItem {
+    margin-bottom: rem(10);
+  }
 }

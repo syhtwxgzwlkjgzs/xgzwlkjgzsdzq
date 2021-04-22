@@ -3,7 +3,7 @@ export { default as readUser } from './readUser';
 export { default as readForum } from './readForum';
 export { default as usernameLogin } from './usernameLogin';
 export { default as usernameRegister } from './usernameRegister';
-export { default as genH5Qrcode } from './genH5Qrcode';
+export { default as genH5Qrcode } from './genH5QrCode';
 export { default as smsSend } from './smsSend';
 export { default as smsLogin } from './smsLogin';
 export { default as readThreadDetail } from './thread/readThreadDetail';
