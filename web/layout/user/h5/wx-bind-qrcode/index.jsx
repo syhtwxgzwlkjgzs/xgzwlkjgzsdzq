@@ -15,9 +15,8 @@ class WeixinBindQrCodePage extends React.Component {
     await this.props.h5QrCode.generate({
       params: {
         sessionToken,
-        nickname,
         type: 'mobile_browser_bind',
-        redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth?loginType=${loginType}&action=wx-bind`)}`,
+        redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth?loginType=${loginType}&action=wx-bind&nickname=${nickname}`)}`,
       },
     });
   }

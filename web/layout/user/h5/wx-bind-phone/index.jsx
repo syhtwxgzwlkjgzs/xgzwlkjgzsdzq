@@ -37,6 +37,7 @@ class WXBindPhoneH5Page extends React.Component {
 
   render() {
     const { wxPhoneBind, router } = this.props;
+    const { sessionToken, nickname } = router.query;
     return (
       <div className={layout.container}>
         <HeaderLogin />
@@ -44,7 +45,7 @@ class WXBindPhoneH5Page extends React.Component {
           <div className={layout.title}>手机号登陆，并绑定微信账号</div>
           <div className={layout.tips}>
             hi， 微信用户
-            小虫
+            {nickname}
             <br />
             请您登录，即可完成微信号和手机号的绑定
           </div>
@@ -63,7 +64,6 @@ class WXBindPhoneH5Page extends React.Component {
             className={layout.button}
             type="primary"
             onClick={async () => {
-              const { sessionToken } = router.query;
               try {
                 await wxPhoneBind.loginAndBind(sessionToken);
                 Toast.success({
@@ -72,7 +72,7 @@ class WXBindPhoneH5Page extends React.Component {
                 });
 
                 setTimeout(() => {
-                  this.props.router.push('/index');
+                  router.push('/index');
                 }, 1000);
               } catch (error) {
                 Toast.error({
