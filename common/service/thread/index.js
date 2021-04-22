@@ -19,27 +19,27 @@ export default ({ thread: ThreadStore }) => ({
    * @returns {object} 处理结果
    */
   async updateFavorite(params) {
-    const { id, isFavorite } = params;
-
-    // 1. 验证参数
-    if (!id) {
+    const { id, pid, isFavorite } = params;
+    if (!id || !pid) {
       return {
-        msg: '帖子id不存在',
+        msg: '参数不完整',
         success: false,
       };
     }
 
-    // 2. 请求接口
     const requestParams = {
       id,
-      isFavorite: !!isFavorite,
-      isDraft: 0,
+      pid,
+      data: {
+        attributes: {
+          isFavorite: !!isFavorite,
+        },
+      },
     };
-    const res = await updateThreads({ data: requestParams });
 
-    res.Code = 0;
+    const res = await updatePosts({ data: requestParams });
 
-    if (res.Code === 0) {
+    if (res.code === 0) {
       // 3. 更新store
       ThreadStore.setThreadDetailField('isFavorite', !!isFavorite);
 
