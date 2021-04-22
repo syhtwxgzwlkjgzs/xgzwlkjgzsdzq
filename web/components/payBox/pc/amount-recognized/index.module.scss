@@ -1,0 +1,31 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+// 外部容器
+.amountWrapper {
+  background: var(--color-white);
+  height: rem(280);
+  width: rem(450);
+  font-size: rem($font-size-large);
+  padding: rem($padding-4n);
+  overflow-y: auto;
+  .amountSubmit {
+    margin-top: rem($margin-5n);
+    text-align: right;
+    font-size: rem($font-size-middle);
+    >span {
+      margin-right: rem($margin-4n);
+    }
+  }
+  .amountCloseBtn {
+    position: absolute;
+    right: rem(30);
+    top: rem(30);
+    cursor: pointer;
+    color: var(--color-disabled);
+    text-shadow: 0 -1 0 0;
+    &:hover {
+      color: var(--color-info);
+    }
+  }
+}

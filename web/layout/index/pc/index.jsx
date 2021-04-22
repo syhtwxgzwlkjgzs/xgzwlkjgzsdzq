@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import Header from '@components/header';
 import { Button, Upload } from '@discuzq/design';
+import PayBox from '@components/payBox';
 
 @inject('site')
 @inject('user')
@@ -21,6 +22,7 @@ class IndexPCPage extends React.Component {
         <p className={styles.text}>test</p>
        
         <Button>Fuck</Button>
+        <PayBox />
       </div>
     );
   }

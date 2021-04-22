@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Popup, Icon, Button, Checkbox } from '@discuzq/design';
 import styles from './index.module.scss';
+import CommonAccountContent from '../../components/common-account-content'
 
 export default class AmountRecognized extends Component {
   constructor(props) {
@@ -61,34 +62,14 @@ export default class AmountRecognized extends Component {
 
   render() {
     const { currentPaymentObj = {} } = this.state;
-		const { trade_type,goods_name,is_anonymous,pay_money } = currentPaymentObj
     return (
       <Popup position="bottom" maskClosable={true} visible={this.state.isShow}>
         <div className={styles.amountWrapper}>
-          {/* 标题 */}
-          <div className={styles.amountTitle}>确认金额</div>
-          {/* 内容区域 */}
-          <div className={styles.amountContent}>
-            <div className={styles.acExplain}>
-              <span className={styles.acExplain_label}>交易类型</span>{' '}
-              <span className={styles.acExplain_value}>{this.renderDiffTradeType(trade_type)}</span>
-            </div>
-            <div className={styles.acExplain}>
-              <span className={styles.acExplain_label}>商品名称</span>{' '}
-              <span className={styles.acExplain_value}>{goods_name}</span>
-            </div>
-            <div className={styles.acExplain}>
-              <span className={styles.acExplain_label}>支付金额</span>
-              <span>￥{pay_money}</span>
-            </div>
-            <div className={styles.acExplain}>
-              <Checkbox checked={is_anonymous == '1'} /> 隐藏我的付费信息
-            </div>
-          </div>
+          <CommonAccountContent currentPaymentObj={currentPaymentObj}/>
           {/* 按钮区域-提交内容 */}
           <div className={styles.amountSubmit}>
-            <Button onClick ={this.goToThePayConfirmPage} size="large" className={styles.asBtn} full>
-              支付 ￥{pay_money}
+            <Button type="primary" onClick ={this.goToThePayConfirmPage} size="large" className={styles.asBtn} full>
+              支付 ￥...
             </Button>
           </div>
         </div>
