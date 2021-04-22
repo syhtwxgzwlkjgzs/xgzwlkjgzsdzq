@@ -5,6 +5,8 @@ import layout from './index.module.scss';
 import { Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import HeaderLogin from '../../../../components/login/h5/header-login';
+import { get } from '../../../../../common/utils/get';
+import setAccessToken from '../../../../../common/utils/set-access-token';
 import { usernameAutoBind } from '@server';
 
 
@@ -35,6 +37,15 @@ class WXSelectH5Page extends React.Component {
                     content: res.code + res.msg,
                   });
                   if (res.code === 0) {
+                    const accessToken = get(res, 'data.accessToken', '');
+                    // 种下 access_token
+                    setAccessToken({
+                      accessToken,
+                    });
+
+                    this.props.router.push('/index');
+
+                    // TODO: 处理中间状态
                     return;
                   }
                   throw {

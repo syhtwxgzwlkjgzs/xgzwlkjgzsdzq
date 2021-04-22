@@ -21,7 +21,6 @@ class UserAction extends SiteStore {
   // 登录后获取新的用户信息
   @action
   async updateUserInfo(id) {
-    console.log('updateUserInfo');
     const userInfo = await readUser({ params: { pid: id } });
     userInfo.data && this.setUserInfo(userInfo.data);
     return userInfo.code === 0 && userInfo.data;
