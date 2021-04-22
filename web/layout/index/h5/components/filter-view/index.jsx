@@ -5,7 +5,7 @@ import filterData from './data';
 
 import styles from './index.module.scss';
 
-const Index = ({ visible, data: tmpData, current, onSubmit = noop, onCancel = noop }) => {
+const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel = noop }) => {
   const [first, setFirst] = useState('');
   const [firstChildren, setFirstChildren] = useState();
   const [second, setSecond] = useState('');

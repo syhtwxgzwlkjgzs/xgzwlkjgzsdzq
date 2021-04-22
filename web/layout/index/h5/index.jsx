@@ -77,7 +77,7 @@ class IndexH5Page extends React.Component {
   renderHeaderContent = () => {
     const { index, site } = this.props;
     const { currentIndex } = this.state;
-    const { sticks, categories } = index;
+    const { sticks = [], categories = [] } = index;
 
     const { siteBackgroundImage, siteLogo } = site?.webConfig?.setSite;
     const { countUsers, countThreads } = site?.webConfig?.other;
@@ -139,8 +139,8 @@ class IndexH5Page extends React.Component {
   render() {
     const { index } = this.props;
     const { filter } = this.state;
-    const { threads, categories } = index;
-    const { currentPage, totalPage, pageData } = threads;
+    const { threads = {}, categories = [] } = index;
+    const { currentPage, totalPage, pageData } = threads || {};
 
     return (
       <div className={styles.container}>
