@@ -1,0 +1,26 @@
+@import '@common/styles/index.scss';
+
+.container {
+  margin-top: 8px;
+  background: #fff;
+
+  .container-inner {
+    padding: 8px 0;
+    margin: 0 16px;
+    border-bottom: 1px solid var(--border-line-color);
+
+    .title {
+      width: 100%;
+      border: none;
+      font-size: 20px;
+      color: var(--color-text-primary);
+      line-height: 22px;
+      text-align: left;
+      border: none;
+    }
+  }
+}
+
+.is-display {
+  display: none;
+}
