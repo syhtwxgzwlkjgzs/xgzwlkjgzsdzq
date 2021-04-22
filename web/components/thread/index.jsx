@@ -187,16 +187,16 @@ class Index extends React.Component {
         <div className={`${styles.container} ${className}`} onClick={this.onClick}>
           <div className={styles.header}>
               <UserInfo
-                  name={user.userName}
-                  avatar={user.avatar}
-                  location={position.address}
-                  view={`${viewCount}`}
-                  groupName={group?.groupName}
-                  time={createdAt}
-                  isEssence={isEssence}
-                  isPrice={isPrice}
-                  isRed={isRedPack}
-                  isReward={isReward}
+                name={user.userName}
+                avatar={user.avatar}
+                location={position.address}
+                view={`${viewCount}`}
+                groupName={group?.groupName}
+                time={createdAt}
+                isEssence={isEssence}
+                isPrice={isPrice}
+                isRed={isRedPack}
+                isReward={isReward}
               />
           </div>
 
