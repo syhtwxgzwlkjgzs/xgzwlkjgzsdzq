@@ -65,6 +65,7 @@ export default class UserLoginStore {
           Code: 8000,
           Message: '需要绑定微信',
           sessionToken: get(loginResp, 'data.sessionToken'),
+          nickname: get(loginResp, 'data.nickname'),
         };
       }
 

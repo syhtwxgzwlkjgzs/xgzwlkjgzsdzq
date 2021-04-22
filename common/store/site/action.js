@@ -37,9 +37,15 @@ class SiteAction extends SiteStore {
      */
     try {
       const readResp = await readUserLoginDisplay({});
+
       if (get(readResp, 'code') === 0) {
         this.isUserLoginVisible = true;
       } else {
+        // 如果没开短信，也没配微信，用户名接口默认返回 true
+        if (!this.isSmsOpen && this.wechatEnv === 'none') {
+          this.isUserLoginVisible = true;
+          return;
+        }
         this.isUserLoginVisible = false;
       }
     } catch (error) {
