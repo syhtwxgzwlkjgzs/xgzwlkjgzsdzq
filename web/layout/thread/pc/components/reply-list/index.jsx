@@ -7,6 +7,7 @@ export default class ReplyList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isPostDetail: this.props.isPostDetail,
       isLiked: this.props.data.isLiked,
       likeCount: this.props.data.likeCount,
       likeClick: this.props.likeClick(),
@@ -31,7 +32,7 @@ export default class ReplyList extends React.Component {
         likeCount: this.state.isLiked ? this.state.likeCount + 1 : this.state.likeCount - 1,
       });
     });
-    this.state.likeClick('2');
+    this.state.likeClick();
   }
   replyClick() {
     this.state.replyClick('2');
@@ -87,6 +88,17 @@ export default class ReplyList extends React.Component {
                   </Icon>
                 <span onClick={() => this.replyClick('2')}>回复</span>
               </div>
+              {
+                this.state.isPostDetail ? ''
+                  : <div className={styles.replyDelete}>
+                    <Icon
+                      name='MessageOutlined'
+                      size='16'
+                      className={styles.btnIcon}>
+                    </Icon>
+                  <span onClick={() => this.deleteClick('2')}>删除</span>
+                </div>
+              }
             </div>
           </div>
         </div>
