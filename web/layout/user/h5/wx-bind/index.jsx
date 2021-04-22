@@ -57,6 +57,8 @@ class WeixinBindH5Page extends React.Component {
           accessToken,
         });
 
+        // TODO: 需要对中间状态进行处理
+
         await this.props.router.push('/');
         return;
       }
