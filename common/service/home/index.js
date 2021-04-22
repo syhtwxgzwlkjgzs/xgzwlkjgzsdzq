@@ -36,7 +36,7 @@ export const getFirstData = async () => {
       return code === 0 ? data : {};
     }
     if (index === 0) {
-      return code === 0 ? ([{ name: '所有', pid: '', children: [] }, ...data] || []) : [];
+      return code === 0 ? ([{ name: '全部', pid: '', children: [] }, ...data] || []) : [];
     }
     return code === 0 ? (data || []) : [];
   });

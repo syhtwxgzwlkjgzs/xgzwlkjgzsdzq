@@ -8,8 +8,6 @@ import NoData from '@components/no-data';
 import styles from './index.module.scss';
 import List from './components/list';
 import TopNew from './components/top-news';
-import FilterModalPopup from './components/filter-modal-popup';
-import filterData from './data';
 import Tabbar from './components/tabbar';
 import FilterView from './components/filter-view';
 // import PayBox from '@components/payBox';
@@ -42,8 +40,17 @@ class IndexH5Page extends React.Component {
     });
   }
 
-  onClickTab = () => {
-    debugger;
+  onClickTab = (id) => {
+    const { dispatch = () => {} } = this.props;
+    dispatch('', { categoryids: [id] });
+
+    this.setState({
+      filter: {
+        categoryids: [id],
+      },
+      currentIndex: id,
+      visible: false,
+    });
   }
 
   // 筛选弹框点击筛选按钮后的回调：categoryids-版块 types-类型 essence-筛选
@@ -57,7 +64,7 @@ class IndexH5Page extends React.Component {
         types,
         essence,
       },
-      currentIndex: `${categoryids[0]}`,
+      currentIndex: categoryids[0],
       visible: false,
     });
   }
@@ -81,6 +88,8 @@ class IndexH5Page extends React.Component {
           <Tabs
             scrollable={true}
             type={'primary'}
+            onActive={this.onClickTab}
+            activeId={this.state.currentIndex}
             tabBarExtraContent={
               <div
                 style={{
@@ -100,8 +109,6 @@ class IndexH5Page extends React.Component {
                 key={index}
                 id={item.pid}
                 label={item.name}
-                activeId={this.state.currentIndex}
-                onActive={this.onClickTab}
                />
               ))}
           </Tabs>
@@ -148,9 +155,8 @@ class IndexH5Page extends React.Component {
 
   render() {
     const { index } = this.props;
+    const { filter } = this.state;
     const { threads, categories } = index;
-    const filters = filterData;
-    filters[0].data = categories;
 
     return (
       <div className={styles.homeBox}>
@@ -159,7 +165,13 @@ class IndexH5Page extends React.Component {
           : this.renderNoData()
         }
 
-        <FilterView data={filters} onCancel={this.onClose} visible={this.state.visible} onSubmit={this.onClickFilter} />
+        <FilterView
+          data={categories}
+          current={filter}
+          onCancel={this.onClose}
+          visible={this.state.visible}
+          onSubmit={this.onClickFilter}
+        />
        <Tabbar/>
       </div>
     );
