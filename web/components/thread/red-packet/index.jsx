@@ -7,10 +7,12 @@ import { noop } from '../utils';
  * @prop {POST_TYPE} type 类型 0：红包帖 1：图文帖子
  * @prop {string} title 图文帖标题
  * @prop {string} content 红包内容
- * @prop {string} onClick 点击事件
+ * @prop {function} onClick 点击事件
+ * @prop {string} platform 编译环境
  */
 
-const Index = ({ type = POST_TYPE.REDPACKET, title, content, onClick = noop }) => {
+const Index = ({ type = POST_TYPE.REDPACKET, title, platform, content, onClick = noop }) => {
+ 
   const texts = useMemo(() => {
     if (type === POST_TYPE.REDPACKET) {
       return {
@@ -29,10 +31,10 @@ const Index = ({ type = POST_TYPE.REDPACKET, title, content, onClick = noop }) =
     return {
       themeContent: (
         <>
-            <div className={styles.content}>
-                <div className={styles.title}>{title || '图文帖子'}</div>
-                <div className={styles.text}>{content || '暂无内容'}</div>
-            </div>
+          <div className={styles.content}>
+              <div className={styles.title}>{title || '图文帖子'}</div>
+              <div className={styles.text}>{content || '暂无内容'}</div>
+          </div>
         </>
       ),
       conHeight: {
@@ -40,12 +42,20 @@ const Index = ({ type = POST_TYPE.REDPACKET, title, content, onClick = noop }) =
       },
     };
   }, [type]);
-
   return (
-        <div className={styles.container} style={texts.conHeight} onClick={onClick}>
-            <div className={styles.money}></div>
-            {texts.themeContent}
-        </div>
+    platform === 'pc' ?
+    <div className={styles.redpackBox} onClick={onClick}>
+      <div className={styles.money}>
+        <img className={styles.bgImg} src='redpacket.png'/>
+      </div>
+    </div>
+    :
+    <div className={styles.container} style={texts.conHeight} onClick={onClick}>
+      <div className={styles.money}>
+        <img className={styles.bgImg} src='redpacket.png'/>
+      </div>
+      {texts.themeContent}
+    </div>
   );
 };
 export const POST_TYPE = {
