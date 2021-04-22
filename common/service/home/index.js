@@ -1,4 +1,4 @@
-import { readCategories, readStickList, readThreadList, readLikedUsers } from '../../server';
+import { readCategories, readStickList, readThreadList, readLikedUsers } from '@server';
 
 /**
    *  首页列表第一次进入时的数据

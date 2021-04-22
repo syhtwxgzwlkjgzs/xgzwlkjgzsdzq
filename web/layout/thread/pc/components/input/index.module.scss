@@ -1,0 +1,47 @@
+@import '@common/styles/variable/index.scss';
+@import '@common/styles/fn/rem.scss';
+
+.container {
+  background: var(--color-white);
+}
+
+.main {
+  // background: var(--background-color);
+  // padding: rem($margin-4n);
+}
+
+
+.input {
+  background: #f5f7f8;
+  width: 100%;
+}
+
+.upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  span {
+    margin-top: rem($margin-1n);
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  .linkBtn {
+    display: flex;
+    color: #8a95ac;
+    .btnIcon {
+      line-height: rem(52);
+      padding: 0 rem($padding-2n);
+    }
+  }
+  .button {
+    width: rem(100);
+    height: rem(36);
+    border-radius: rem($border-radius-small);
+    background: var(--color-primary);
+    margin: rem($margin-2n) rem($margin-4n);
+  }
+}
