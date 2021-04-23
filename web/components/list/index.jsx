@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Spin } from '@discuzq/design';
-import { noop } from '../thread/utils';
 
 import styles from './index.module.scss';
 
@@ -10,9 +9,10 @@ import styles from './index.module.scss';
  * @prop {function} className 容器样式
  * @param {string} noMore 无更多数据
  * @prop {function} onRefresh 触底触发事件，需返回promise
+ * @prop {function} allowRefresh 是否启用上拉刷新
  */
 
-const List = ({ height, className = '', children, noMore = false, onRefresh }) => {
+const List = ({ height, className = '', children, noMore = false, onRefresh, allowRefresh = true }) => {
   const listWrapper = useRef(null);
   const isLoading = useRef(false);
   const [loadText, setLoadText] = useState('加载中...');
@@ -40,7 +40,7 @@ const List = ({ height, className = '', children, noMore = false, onRefresh }) =
   };
 
   const onTouchMove = throttle(() => {
-    if (!listWrapper || !listWrapper.current) {
+    if (!listWrapper || !listWrapper.current || !allowRefresh) {
       return;
     }
     const { clientHeight } = listWrapper.current;
@@ -78,10 +78,12 @@ const List = ({ height, className = '', children, noMore = false, onRefresh }) =
         onScroll={onTouchMove}
       >
         {children}
-        <div className={styles.footer}>
-          { loadText === '加载中...' && <Spin className={styles.spin} type="spinner" /> }
-          { loadText }
-        </div>
+        {allowRefresh && (
+              <div className={styles.footer}>
+                { loadText === '加载中...' && <Spin className={styles.spin} type="spinner" /> }
+                { loadText }
+              </div>
+        )}
       </div>
     </div>
   );
