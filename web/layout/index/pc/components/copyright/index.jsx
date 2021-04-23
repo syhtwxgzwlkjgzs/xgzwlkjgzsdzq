@@ -14,5 +14,4 @@ const Index = ({copyright, record}) => {
     </div>
   );
 };
-
-export default Index;
+export default React.memo(Index);

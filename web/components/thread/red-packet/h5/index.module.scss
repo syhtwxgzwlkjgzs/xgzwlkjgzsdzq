@@ -41,20 +41,3 @@
       -webkit-box-orient: vertical;
     }
 }
-.redpackBox {
-  display: flex;
-  justify-content: center;
-  .money {
-    width: rem(248);
-    height: rem(240);
-    border-radius: rem($border-radius-small);
-    background: var(--color-warn5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .bgImg {
-      width: rem(120);
-      height: rem(161);
-    }
-  }
-}

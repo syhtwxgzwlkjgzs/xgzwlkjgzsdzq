@@ -14,4 +14,4 @@ const Index = (img) => {
     </div>
   )
 }
-export default Index
+export default React.memo(Index)

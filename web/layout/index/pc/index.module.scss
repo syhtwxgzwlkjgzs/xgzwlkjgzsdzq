@@ -15,7 +15,8 @@
     width: rem(286);
   }
   .indexContent {
-    width: rem(652);
+    width: 100%;
+    min-width: rem(652);
     .contnetTop {
       width: 100%;
       background: var(--color-white);
