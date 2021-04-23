@@ -65,8 +65,9 @@ class LoginH5Page extends React.Component {
         duration: 1000,
       });
       // FIXME: Toast 暂时不支持回调能力
+      // FIXME: 使用 window 跳转用来解决，获取 forum 在登录前后不同的问题，后续需要修改 store 完成
       setTimeout(() => {
-        this.props.router.push('/');
+        window.location.href = '/index';
         return;
       }, 1000);
     } catch (e) {

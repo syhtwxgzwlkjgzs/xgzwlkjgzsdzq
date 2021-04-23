@@ -19,7 +19,7 @@ class WeixinBindH5Page extends React.Component {
     const { sessionToken, loginType, code, sessionId, state, nickname }  = this.props.router.query;
     return (
       <div className={layout.container}>
-        <HeaderLogin/>
+        <HomeHeader hideinfo/>
         <div className={layout.content}>
           <div className={layout.title}>绑定微信号</div>
           <div className={layout.tips}>
@@ -61,7 +61,7 @@ class WeixinBindH5Page extends React.Component {
         });
         this.props.user.updateUserInfo(uid);
 
-        await this.props.router.push('/');
+        window.location.href = '/index';
         return;
       }
       throw {
