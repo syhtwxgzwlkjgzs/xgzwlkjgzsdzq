@@ -210,80 +210,15 @@ class ThreadCreate extends React.Component {
     this.setState({ atListShow: false });
   }
 
-  // 暂时在这里处理，后期如果有多个穿插的时候再做其它处理
-  // TODO: 这个可以放到 action 里面
-  formatContextIndex() {
-    const { postData } = this.props.threadPost;
-    const { images, video, files, product, audio, redpacket, rewardQa } = postData;
-    const imageIds = Object.values(images).map(item => item.id);
-    const docIds = Object.values(files).map(item => item.id);
-    const contentIndex = {};
-    if (imageIds.length > 0) {
-      contentIndex[THREAD_TYPE.image] = {
-        tomId: THREAD_TYPE.image,
-        body: { imageIds },
-      };
-    }
-    if (video.id) {
-      contentIndex[THREAD_TYPE.video] = {
-        tomId: THREAD_TYPE.video,
-        body: { videoId: video.id },
-      };
-    }
-    if (docIds.length > 0) {
-      contentIndex[THREAD_TYPE.file] = {
-        tomId: THREAD_TYPE.file,
-        body: { docIds },
-      };
-    }
-    if (product.id) {
-      contentIndex[THREAD_TYPE.goods] = {
-        tomId: THREAD_TYPE.goods,
-        body: { ...product },
-      };
-    }
-    if (audio.id) {
-      contentIndex[THREAD_TYPE.voice] = {
-        tomId: THREAD_TYPE.voice,
-        body: { audioId: audio.id },
-      };
-    }
-    // TODO:需要支付，缺少 orderId
-    if (redpacket.price) {
-      contentIndex[THREAD_TYPE.redPacket] = {
-        tomId: THREAD_TYPE.redPacket,
-        body: { ...redpacket },
-      };
-    }
-    // TODO:需要支付，缺少 orderId
-    if (rewardQa.times) {
-      contentIndex[THREAD_TYPE.qa] = {
-        tomId: THREAD_TYPE.qa,
-        body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0 },
-      };
-    }
-    return contentIndex;
-  }
-
   submit = async () => {
     const { postData } = this.props.threadPost;
     if (!postData.contentText) {
       Toast.info({ content: '请填写您要发布的内容' });
       return;
     }
-    const params = {
-      title: postData.title,
-      categoryId: postData.categoryId,
-      content: {
-        text: postData.contentText,
-      },
-    };
-    const contentIndex = this.formatContextIndex();
-    if (Object.keys(contentIndex)) params.content.indexes = contentIndex;
-    if (postData.position.address) params.position = postData.position;
     Toast.loading({ content: '创建中...' });
     const { threadPost, thread } = this.props;
-    const ret = await threadPost.createThread(params);
+    const ret = await threadPost.createThread();
     const { code, data, msg } = ret;
     if (code === 0) {
       thread.setThreadData(data);
