@@ -2,7 +2,7 @@
 /**
  * 发帖页底部分类、图片等工具栏
  */
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { observer, inject } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
@@ -10,8 +10,8 @@ import { Icon } from '@discuzq/design';
 import { attachIcon } from '@common/constants/const';
 import Tag from '@components/thread-post/tag';
 
-export default inject('site', 'threadPost')(observer((props) => {
-  const { site, threadPost } = props;
+const Index = inject('site', 'threadPost')(observer((props) => {
+  const { site, threadPost, clickCb } = props;
   console.log(site, threadPost);
 
   // 控制插件icon的显示/隐藏
@@ -27,7 +27,7 @@ export default inject('site', 'threadPost')(observer((props) => {
         className={styles['plus-icon']}
         onClick={() => {
           setCurrentPlus(item);
-          // 处理该图标对应的逻辑
+          clickCb(item);
         }}
         name={item.name}
         color={item.name === currentPlus.name && item.active}
@@ -59,3 +59,5 @@ export default inject('site', 'threadPost')(observer((props) => {
     </View>
   );
 }));
+
+export default memo(Index);

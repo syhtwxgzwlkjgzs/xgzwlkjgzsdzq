@@ -2,11 +2,7 @@ import React, { Component } from 'react';
 import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import ThemePage from '@components/theme-page';
-import Title from '@components/thread-post/title';
-import TextArea from '@components/thread-post/content';
-import CategoryToolbar from '@components/thread-post/category-toolbar';
-import DefaultToolbar from '@components/thread-post/default-toolbar';
-import Tag from '@components/thread-post/tag';
+import { PlusinToolbar, DefaultToolbar, GeneralUpload, Tag, Title, Content } from '@components/thread-post';
 import styles from './index.module.scss';
 
 @inject('site')
@@ -50,6 +46,12 @@ class Index extends Component {
     }
   }
 
+  // 点击插入图片、视频、语音等插件时调用
+  onPluginClick(item) {
+    const { type } = item;
+    console.log(item);
+  }
+
   render() {
     const { envConfig, theme, changeTheme } = this.props.site;
     const { postData } = this.props.threadPost;
@@ -60,20 +62,30 @@ class Index extends Component {
 
     return (
       <ThemePage>
+        {/* 文本框区域，inclue标题、帖子文字内容等 */}
         <View>
           <Title title={title} show={isShowTitle} onInput={this.onTitleInput} />
-          <TextArea
+          <Content
             value={postData.content}
             onChange={this.onContentChange}
             onFocus={this.onContentFocus}
           />
         </View>
+
+        {/* 插件区域、include图片、附件、语音等 */}
+        <View className={styles['plusin-area']}>
+          <GeneralUpload />
+
+
+        </View>
+
+        {/* 工具栏区域、include各种插件触发图标、发布等 */}
         <View className={styles['toolbar']}>
           <View className={styles['tag-toolbar']}>
             <Tag content='随机红包\总金额80元\20个' />
             <Tag content='悬赏金额10元' />
           </View>
-          <CategoryToolbar />
+          <PlusinToolbar clickCb={this.onPluginClick} />
           <DefaultToolbar />
         </View>
       </ThemePage >

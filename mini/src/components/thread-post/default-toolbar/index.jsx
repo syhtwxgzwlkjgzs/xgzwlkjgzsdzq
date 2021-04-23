@@ -2,14 +2,14 @@
 /**
  * 发帖页底部表情、话题、发布等工具栏
  */
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { observer, inject } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import { defaultIcon } from '@common/constants/const';
 
-export default inject('site', 'threadPost')(observer((props) => {
+const Index = inject('site', 'threadPost')(observer((props) => {
   const { site, threadPost } = props;
   console.log(site, threadPost);
 
@@ -40,3 +40,5 @@ export default inject('site', 'threadPost')(observer((props) => {
     </View>
   );
 }));
+
+export default memo(Index);
