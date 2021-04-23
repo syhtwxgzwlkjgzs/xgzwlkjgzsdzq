@@ -1,5 +1,6 @@
 import React, { createRef } from 'react';
 import { PullDownRefresh, ScrollView } from '@discuzq/design';
+import BaseList from '@components/list';
 
 import styles from './index.module.scss';
 
@@ -54,32 +55,38 @@ class List extends React.PureComponent {
       renderItem,
       onScrollBottom,
       containerClassName,
-      ...props
+      onPullingUp,
+      noMore,
     } = this.props;
     const { height } = this.state;
     const { emptyFunction, renderDiv } = this;
     const composeClassName = `${styles.container} ${containerClassName || styles.list}`;
 
+    // return (
+    //   <div className={composeClassName} ref={this.listRef}>
+    //     {!!height && (
+    //       <PullDownRefresh onRefresh={onRefresh} isFinished={!refreshing} height={height}>
+    //         <ScrollView
+    //           height={height}
+    //           rowCount={data.length}
+    //           rowData={data}
+    //           rowRenderer={renderItem || renderDiv}
+    //           renderBottom={renderDiv}
+    //           isRowLoaded={emptyFunction}
+    //           onPullingUp={emptyFunction}
+    //           onScrollBottom={onScrollBottom}
+    //           {...props}
+    //         >
+    //           {chlidren}
+    //         </ScrollView>
+    //       </PullDownRefresh>
+    //     )}
+    //   </div>
+    // );
     return (
-      <div className={composeClassName} ref={this.listRef}>
-        {!!height && (
-          <PullDownRefresh onRefresh={onRefresh} isFinished={!refreshing} height={height}>
-            <ScrollView
-              height={height}
-              rowCount={data.length}
-              rowData={data}
-              rowRenderer={renderItem || renderDiv}
-              renderBottom={renderDiv}
-              isRowLoaded={emptyFunction}
-              onPullingUp={emptyFunction}
-              onScrollBottom={onScrollBottom}
-              {...props}
-            >
-              {chlidren}
-            </ScrollView>
-          </PullDownRefresh>
-        )}
-      </div>
+      <BaseList className={composeClassName} onRefresh={onPullingUp} noMore={noMore}>
+        {data && data.map((_, index) => renderItem({ data, index })) }
+      </BaseList>
     );
   }
 }

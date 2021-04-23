@@ -1,5 +1,5 @@
-import React from 'react';
-import styles from './Index.module.scss';
+import React, { useMemo } from 'react';
+import styles from './index.module.scss';
 import Tip from '../tip';
 import { Icon } from '@discuzq/design';
 
@@ -18,17 +18,24 @@ const Index = ({
   wholeNum = 0,
   comment = 0,
   sharing = 0,
+  isLiked = false,
+  tipData,
   onShare = () => {},
   onComment = () => {},
   onPraise = () => {},
 }) => {
-  const postList = [
-    {
+  const postList = useMemo(() => {
+    const praise = !isLiked ? {
       icon: 'LikeOutlined',
       name: '赞',
       event: onPraise,
-    },
-    {
+    } : {
+      icon: 'LikeOutlined',
+      name: '取消',
+      event: onPraise,
+    };
+
+    return [praise, {
       icon: 'MessageOutlined',
       name: '评论',
       event: onComment,
@@ -37,20 +44,20 @@ const Index = ({
       icon: 'ShareAltOutlined',
       name: '分享',
       event: onShare,
-    },
-  ];
+    }];
+  }, [isLiked]);
 
   return (
     <div>
       <div className={styles.user}>
-        {userImgs.length !== 0 && <div className={styles.userImg}>
+        {userImgs.length !== 0 ? <div className={styles.userImg}>
           <div className={styles.portrait}>
-            <Tip imgs={userImgs}></Tip>
+            <Tip tipData={tipData} imgs={userImgs}></Tip>
           </div>
           <p className={styles.numText}>
             {wholeNum}
           </p>
-        </div>}
+        </div> : <div></div>}
         <div className={styles.commentSharing}>
           {comment > 0 && <p className={styles.commentNum}>{`${comment}条评论`}</p>}
           {comment > 0 && sharing > 0 && <p className={styles.division}>·</p>}
@@ -63,7 +70,7 @@ const Index = ({
         {
           postList.map((item, index) => (
               <div key={index} className={styles.fabulous} onClick={item.event}>
-                <Icon className={styles.icon} name={item.icon} size={14}></Icon>
+                <Icon className={styles.icon} name={item.icon} size={14} color={`${item.name === '取消' ? '#f6c443' : ''}`}></Icon>
                 <span className={styles.fabulousPost}>{item.name}</span>
               </div>
           ))

@@ -3,12 +3,13 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 
 // import SearchInput from '@components/search-input';
-import SearchInput from '.././../../components/search-input';
+import SearchInput from '@components/search-input';
 import SectionTitle from './components/section-title';
 import TrendingTopics from './components/trending-topics';
 import ActiveUsers from './components/active-users';
 import PopularContents from './components/popular-contents';
 import Header from '@components/header';
+import NoData from '@components/no-data';
 
 import styles from './index.module.scss';
 import '@discuzq/design/dist/styles/index.scss';
@@ -45,24 +46,37 @@ class SearchH5Page extends React.Component {
     const { pageData: topicsPageData } = indexTopics;
     const { pageData: usersPageData } = indexUsers;
     const { pageData: threadsPageData } = indexThreads;
+
     return (
       <div className={styles.page}>
         <Header />
         <div className={styles.section}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} />
-          <SectionTitle title="潮流话题" onShowMore={this.redirectToSearchResultTopic} />
-          <TrendingTopics data={topicsPageData} onItemClick={this.onTopicClick} />
+          <SectionTitle icon={{ type: 1, name: 'StrongSharpOutlined' }} title="潮流话题" onShowMore={this.redirectToSearchResultTopic} />
+          {
+            topicsPageData && topicsPageData.length
+              ? <TrendingTopics data={topicsPageData} onItemClick={this.onTopicClick} />
+              : <NoData />
+          }
         </div>
         <div className={styles.hr} />
         <div className={styles.section}>
-          <SectionTitle title="活跃用户" onShowMore={this.redirectToSearchResultUser} />
-          <ActiveUsers data={usersPageData} onItemClick={this.onUserClick} />
+          <SectionTitle icon={{ type: 2, name: 'MemberOutlined' }} title="活跃用户" onShowMore={this.redirectToSearchResultUser} />
+          {
+            usersPageData && usersPageData.length
+              ? <ActiveUsers data={usersPageData} onItemClick={this.onUserClick} />
+              : <NoData />
+          }
         </div>
         <div className={styles.hr} />
         <div className={`${styles.section} ${styles.popularContents}`}>
-          <SectionTitle title="热门内容" onShowMore={this.redirectToSearchResultPost} />
+          <SectionTitle icon={{ type: 3, name: 'HotOutlined' }} title="热门内容" onShowMore={this.redirectToSearchResultPost} />
         </div>
-        <PopularContents data={threadsPageData} onItemClick={this.onPostClick} />
+        {
+          threadsPageData && threadsPageData.length
+            ? <PopularContents data={threadsPageData} onItemClick={this.onPostClick} />
+            : <NoData />
+        }
       </div>
     );
   }

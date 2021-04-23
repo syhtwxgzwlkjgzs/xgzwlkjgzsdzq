@@ -25,10 +25,10 @@ const SearchTopics = ({ data = [], refreshing, onRefresh, onFetchMore, onItemCli
       data={data}
       refreshing={refreshing}
       onRefresh={onRefresh}
-      onScrollBottom={onFetchMore}
+      onPullingUp={onFetchMore}
       renderItem={renderItem}
     />
   );
 };
 
-export default React.memo(SearchTopics);
+export default SearchTopics;

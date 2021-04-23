@@ -20,10 +20,19 @@ class Detail extends React.Component {
       };
     }
     // 获取分类数据
-    const res = await readThreadDetail({ params: { pid: id } });
+    const res = await readThreadDetail({ params: { threadId: Number(id) } });
 
     // 获取评论列表
-    const commentRes = await readCommentList({ params: {} });
+    const commentRes = await readCommentList({
+      params: {
+        filter: {
+          thread: Number(id),
+        },
+        sort: '-createdAt',
+        page: 1,
+        perPage: 5,
+      },
+    });
 
     return {
       props: {
@@ -44,12 +53,25 @@ class Detail extends React.Component {
   async componentDidMount() {
     const { id } = this.props.router.query;
     if (!this.props.serverThread && id) {
-      const res = await readThreadDetail({ params: { pid: Number(id) } });
-      this.props.thread.setThreadData(res.data);
+      const res = await readThreadDetail({ params: { threadId: Number(id) } });
+      if (res.code === 0) {
+        this.props.thread.setThreadData(res.data);
+      }
 
-      const commentRes = await readCommentList({ params: { pid: Number(id) } });
-      this.props.thread.setCommentList(commentRes.data.pageData);
-      this.props.thread.setTotalpage(commentRes.data.totalPage);
+      const commentRes = await readCommentList({
+        params: {
+          filter: {
+            thread: Number(id),
+          },
+          sort: '-createdAt',
+          page: 1,
+          perPage: 5,
+        },
+      });
+      if (commentRes.code === 0) {
+        this.props.thread.setCommentList(commentRes.data?.pageData);
+        this.props.thread.setTotalCount(commentRes.data?.totalCount);
+      }
     }
   }
 

@@ -13,6 +13,18 @@
   justify-content: space-between;
 }
 
+.userInfo {
+  flex: 1;
+}
+
+.more {
+  padding-left: rem($padding-2n);
+}
+
+.essence {
+  margin-right: rem($margin-2n);
+}
+
 .body {
   margin-top: rem($margin-4n);
 
@@ -23,6 +35,17 @@
 
 .image {
   width: 100%;
+}
+
+.reward {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rewardButton {
+  margin: 0 auto;
+  width: rem(156);
 }
 
 .footer {
@@ -37,4 +60,36 @@
   display: flex;
   align-items: center;
   font-size: rem($font-size-primary);
+}
+
+.buyBtn {
+  margin-top: rem($margin-4n);
+  width: 100%;
+  height: rem(36);
+}
+
+.tag {
+  display: inline-block;
+  color: var(--color-text-regular);
+  background: var(--background-color);
+  font-size: rem($font-size-label);
+  padding: rem($padding-2n) rem($padding-1n);
+  border-radius: rem($border-radius-small);
+}
+
+.liked {
+  display: flex;
+  align-items: center;
+
+  span {
+    margin-left: rem(8);
+  }
+}
+
+.isLiked {
+  color: var(--color-primary);
+}
+
+.likeReward {
+  margin-left: rem(16);
 }

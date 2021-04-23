@@ -32,10 +32,10 @@ const SearchUsers = ({ data = [], refreshing, onRefresh, onFetchMore, onItemClic
   return (
     <List
       containerClassName={styles.list}
+      onPullingUp={onFetchMore}
       data={data}
       refreshing={refreshing}
       onRefresh={onRefresh}
-      onScrollBottom={onFetchMore}
       renderItem={renderItem}
     />
   );

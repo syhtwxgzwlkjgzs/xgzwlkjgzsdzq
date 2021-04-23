@@ -5,10 +5,9 @@ import styles from './index.module.scss';
 
 import PropTypes from 'prop-types';
 
-function ShowGood({ good, clear }) {
+function ShowGood({ good, onDelete }) {
   return (
     <>
-      <p className={styles.title}>{good.title}</p>
       <div className={styles.content}>
         <div className={styles['content-left']}>
           <img className={styles.image} src={good.imagePath} alt={good.title} />
@@ -16,7 +15,7 @@ function ShowGood({ good, clear }) {
         <div className={styles['content-right']}>
           <p className={styles['content-title']}>{good.title}</p>
           <span className={styles['content-price']}>￥{good.price}</span>
-          <div className={styles['delete-icon']} onClick={clear}>
+          <div className={styles['delete-icon']} onClick={onDelete}>
             <Icon name="CloseCircleOutlined" size={20} color="#8490a8" />
           </div>
         </div>

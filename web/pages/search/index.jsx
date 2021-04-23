@@ -2,8 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/search/h5';
 import IndexPCPage from '@layout/search/pc';
-import { readTopicsList } from '@server';
-import threadData from './data';
+import { getSearchData } from '@common/service/search';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 import SearchAction from '../../../common/store/search/action';
@@ -12,99 +11,42 @@ import SearchAction from '../../../common/store/search/action';
 @inject('search')
 @observer
 class Index extends React.Component {
-  // static async getInitialProps(ctx) {
-  //   const topics = await readTopicsList({}, ctx);
-  //   return {
-  //     serverSearch: {
-  //       topics: topics.Data,
-  //     },
-  //   };
-  // }
+  static async getInitialProps(ctx) {
+    const { res } = await getSearchData({}, ctx);
+
+    return {
+      serverSearch: {
+        indexTopics: res[0],
+        indexUsers: res[1],
+        indexThreads: res[2],
+      },
+    };
+  }
 
   constructor(props) {
     super(props);
-    const { search } = this.props;
+    const { serverSearch, search } = this.props;
     // 初始化数据到store中
-    // serverSearch && serverSearch.topics && search.setTopics(serverSearch.topics);
-
-    search.setIndexTopics({
-      pageData: [
-        {
-          pid: 3,
-          userId: 2,
-          content: '话题3',
-          viewCount: 11,
-          threadCount: 1,
-          threads: [],
-        },
-        {
-          pid: 4,
-          userId: 2,
-          content: '话题4',
-          viewCount: 11,
-          threadCount: 1,
-          threads: [],
-        },
-      ],
-      currentPage: 1,
-      perPage: 20,
-      firstPageUrl: 'https://discuzv3-dev.dnspod.dev/apiv3/topics.list?filter[hot]=1&page=1',
-      nextPageUrl: 'https://discuzv3-dev.dnspod.dev/apiv3/topics.list?filter[hot]=1&page=2',
-      prePageUrl: 'https://discuzv3-dev.dnspod.dev/apiv3/topics.list?filter[hot]=1&page=1',
-      pageLength: 3,
-      totalCount: 3,
-      totalPage: 1,
-    });
-
-    search.setIndexUsers({
-      pageData: [
-        {
-          pid: 1,
-          username: 'admin',
-          avatar: '',
-          groupName: '',
-        },
-        {
-          pid: 2,
-          username: 'cjw',
-          avatar: '',
-          groupName: '普通会员',
-        },
-        {
-          pid: 3,
-          username: 'cjw11',
-          avatar: '',
-          groupName: '普通会员',
-        },
-        {
-          pid: 4,
-          username: 'cjw22',
-          avatar: '',
-          groupName: '普通会员',
-        },
-      ],
-      currentPage: 1,
-      perPage: 20,
-      firstPageUrl: 'https://discuz.dnspod.dev/apiv3/users.list?filter[username]=&page=1',
-      nextPageUrl: 'https://discuz.dnspod.dev/apiv3/users.list?filter[username]=&page=2',
-      prePageUrl: 'https://discuz.dnspod.dev/apiv3/users.list?filter[username]=&page=1',
-      pageLength: 4,
-      totalCount: 4,
-      totalPage: 1,
-    });
-
-    search.setIndexThreads(threadData);
+    serverSearch && serverSearch.indexTopics && search.setIndexTopics(serverSearch.indexTopics);
+    serverSearch && serverSearch.indexUsers && search.setIndexUsers(serverSearch.indexUsers);
+    serverSearch && serverSearch.indexThreads && search.setIndexThreads(serverSearch.indexThreads);
   }
 
-  // async componentDidMount() {
-  //   const { serverSearch, index } = this.props;
-  //   // 当服务器无法获取数据时，触发浏览器渲染
-  //   if (!index.topics && (!serverSearch || !serverSearch.topics)) {
-  //     const topics = await readTopicsList({});
+  async componentDidMount() {
+    const { search, serverSearch } = this.props;
+    // 当服务器无法获取数据时，触发浏览器渲染
+    const isBool1 = !search.indexTopics && (!serverSearch || !serverSearch.indexTopics);
+    const isBool2 = !search.indexUsers && (!serverSearch || !serverSearch.indexUsers);
+    const isBool3 = !search.indexThreads && (!serverSearch || !serverSearch.indexThreads);
 
-  //     index.setTopics(topics.Data);
-  //   }
-  // }
+    if (!isBool1 && !isBool2 && !isBool3) {
+      const { res } = await getSearchData();
+
+      search.setIndexTopics(res[0]);
+      search.setIndexUsers(res[1]);
+      search.setIndexThreads(res[2]);
+    }
+  }
 
   render() {
     const { site } = this.props;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Post } from '../../../../../../components/search-result-item';
+import ThreadContent from '@components/thread';
 
 import styles from './index.module.scss';
 
@@ -11,8 +11,8 @@ import styles from './index.module.scss';
  */
 const SearchPosts = ({ data, onItemClick }) => (
   <div className={styles.list}>
-    {data.map((item, index, arr) => (
-      <Post key={index} data={item} onClick={onItemClick} divider={index !== arr.length - 1} />
+    {data.map((item, index) => (
+        <ThreadContent key={index} className={styles.listItem} data={item} onClick={onItemClick} />
     ))}
   </div>
 );

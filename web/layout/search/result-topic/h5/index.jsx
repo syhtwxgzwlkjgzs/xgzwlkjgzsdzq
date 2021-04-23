@@ -2,9 +2,12 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 
-import SearchInput from '.././../../../components/search-input';
+import SearchInput from '@components/search-input';
+import NoData from '@components/no-data';
+import List from '@components/list';
 import SearchTopics from './components/search-topics';
 import Header from '@components/header';
+import { Topic } from '@components/search-result-item';
 
 import styles from './index.module.scss';
 
@@ -17,36 +20,22 @@ class SearchResultTopicH5Page extends React.Component {
     const keyword = this.props.router.query.keyword || '';
 
     this.state = {
-      data: getData(12, keyword),
       keyword,
       refreshing: false,
     };
   }
+
   // data
   refreshData = () => {
+    const { dispatch } = this.props;
     const { keyword } = this.state;
-
-    this.setState((prevState) => {
-      if (prevState.refreshing) {
-        return prevState;
-      }
-      setTimeout(() => {
-        this.setState({
-          data: getData(12, keyword),
-          refreshing: false,
-        });
-      }, 1000);
-      return { refreshing: true };
-    });
+    dispatch('refresh', keyword);
   };
 
   fetchMoreData = () => {
+    const { dispatch } = this.props;
     const { keyword } = this.state;
-    setTimeout(() => {
-      this.setState(({ data }) => ({
-        data: data.concat(getData(12, keyword, data.length)),
-      }));
-    }, 1000);
+    return dispatch('moreData', keyword);
   };
 
   // event
@@ -55,34 +44,44 @@ class SearchResultTopicH5Page extends React.Component {
   };
 
   onSearch = (keyword) => {
-    this.setState({ keyword });
-    this.refreshData(keyword);
+    this.setState({ keyword }, () => {
+      this.refreshData();
+    });
   };
 
   onTopicClick = data => console.log('topic click', data);
 
   render() {
-    const { keyword, refreshing } = this.state;
+    const { keyword } = this.state;
     const { topics } = this.props.search;
-    const { pageData } = topics || { pageData: [] };
+    const { pageData = [], currentPage, totalPage } = topics || { pageData: [] };
+
     return (
       <div className={styles.page}>
         <Header />
         <div className={styles.searchInput}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
         </div>
-        <SearchTopics
-          data={pageData}
-          refreshing={refreshing}
-          onRefresh={this.refreshData}
-          onFetchMore={this.fetchMoreData}
-          onItemClick={this.onTopicClick}
-        />
+        {
+          pageData && pageData?.length
+            ? (
+              <List
+                className={styles.list}
+                onRefresh={this.fetchMoreData}
+                noMore={currentPage >= totalPage}
+              >
+                {
+                  pageData?.map((item, index) => (
+                    <Topic key={index} data={item} onClick={this.onTopicClick} />
+                  ))
+                }
+              </List>
+            )
+            : <NoData />
+        }
       </div>
     );
   }
 }
-
-const getData = () => [];
 
 export default withRouter(SearchResultTopicH5Page);

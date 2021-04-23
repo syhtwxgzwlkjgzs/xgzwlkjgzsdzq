@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/search/result-topic/h5';
 import IndexPCPage from '@layout/search/result-topic/pc';
+import { getTopicsList } from '@common/service/search';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
@@ -9,37 +10,57 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @inject('search')
 @observer
 class Index extends React.Component {
+  static async getInitialProps(ctx) {
+    const { res } = await getTopicsList({}, ctx);
+
+    return {
+      serverSearch: {
+        topics: res,
+      },
+    };
+  }
+
+  page = 1;
+  perPage = 10;
+
   constructor(props) {
     super(props);
+    const { serverSearch, search } = this.props;
+    // 初始化数据到store中
+    serverSearch && serverSearch.topics && search.setTopics(serverSearch.topics);
+  }
+
+  async componentDidMount() {
+    const { search, serverSearch, router } = this.props;
+    const { keyword = '' } = router.query;
+    // 当服务器无法获取数据时，触发浏览器渲染
+    const isBool = !search.topics && (!serverSearch || !serverSearch.topics);
+
+    if (!isBool) {
+      const { res } = await getTopicsList({ search: keyword });
+      this.page += 1;
+      search.setTopics(res);
+    }
+  }
+
+  dispatch = async (type, data) => {
     const { search } = this.props;
-    search.setTopics({
-      pageData: [
-        {
-          pid: 3,
-          userId: 2,
-          content: '话题3',
-          viewCount: 11,
-          threadCount: 1,
-          threads: [],
-        },
-        {
-          pid: 4,
-          userId: 2,
-          content: '话题4',
-          viewCount: 11,
-          threadCount: 1,
-          threads: [],
-        },
-      ],
-      currentPage: 1,
-      perPage: 20,
-      firstPageUrl: 'https://discuzv3-dev.dnspod.dev/apiv3/topics.list?filter[hot]=1&page=1',
-      nextPageUrl: 'https://discuzv3-dev.dnspod.dev/apiv3/topics.list?filter[hot]=1&page=2',
-      prePageUrl: 'https://discuzv3-dev.dnspod.dev/apiv3/topics.list?filter[hot]=1&page=1',
-      pageLength: 3,
-      totalCount: 3,
-      totalPage: 1,
-    });
+
+    if (type === 'refresh') {
+      const { res } = await getTopicsList({ search: data, perPage: this.perPage });
+      this.page = 2;
+      search.setTopics(res);
+    } else if (type === 'moreData') {
+      const { topics } = search;
+      const { pageData } = topics || { pageData: [] };
+      const { res } = await getTopicsList({ search: data, perPage: this.perPage, page: this.page });
+      if (res?.pageData?.length) {
+        this.page += 1;
+        res.pageData.unshift(...pageData);
+        search.setUsers(res);
+      }
+      return;
+    }
   }
 
   render() {
@@ -50,7 +71,7 @@ class Index extends React.Component {
       return <IndexPCPage />;
     }
 
-    return <IndexH5Page />;
+    return <IndexH5Page dispatch={this.dispatch} />;
   }
 }
 
