@@ -44,10 +44,10 @@ class HomeHeader extends React.Component {
   getSiteInfo() {
     const { site } = this.props;
     const siteData = site.webConfig;
-    if ( siteData && siteData.setSite && siteData.setSite.other ) {
+    if ( siteData && siteData.other ) {
       return {
-        countUsers: siteData.setSite.other.countUsers, 
-        countThreads: siteData.setSite.other.countThreads
+        countUsers: siteData.other.countUsers, 
+        countThreads: siteData.other.countThreads
       }
     }
     return {
