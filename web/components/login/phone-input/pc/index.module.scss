@@ -1,0 +1,39 @@
+@import '@common/styles/mixin/login.scss';
+@import '@common/styles/fn/rem.scss';
+@mixin captchaBtn {
+  position: absolute;
+  right: 8px;
+  bottom: 0;
+  text-align: center;
+  line-height: rem(36);
+  border-radius: rem(5);
+  font-size: 14px;
+  color: #8590a6;
+  cursor: pointer;
+  padding-right: 8px;
+}
+.tips {
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 24px;
+  text-align: left;
+  color: #4f5a70;
+  padding-bottom: 8px;
+}
+.phoneInput {
+  margin-bottom: 24px;
+}
+.input {
+  width: 300px;
+}
+.sendCaptcha {
+  @include captchaBtn;
+}
+.countDown {
+  @include captchaBtn;
+  color: #b5b5b5;
+}
+.captchaInput{
+  position: relative;
+  margin-bottom: 24px;
+}

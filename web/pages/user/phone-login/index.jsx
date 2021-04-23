@@ -10,7 +10,7 @@ class LoginPhone extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
-    return platform === 'h5' ? <LoginPhoneH5Page /> : <></>;
+    return <LoginPhoneH5Page />;
   }
 }
 

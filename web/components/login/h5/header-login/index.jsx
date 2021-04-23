@@ -5,17 +5,19 @@ import { inject } from 'mobx-react';
 
 @inject('site')
 class HeaderLogin extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
+    const { site } = this.props;
+    const { platform } = site;
     return (
       <>
         <Header/>
-        <div className={layout.banner}>
-          <img src={this.props.site.siteIconSrc} alt=""/>
-        </div>
+        {
+          platform === 'h5'
+            ? <div className={layout.banner}>
+               <img src={this.props.site.siteIconSrc} alt=""/>
+            </div>
+            : <></>
+        }
       </>
     );
   }
