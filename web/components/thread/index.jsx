@@ -15,7 +15,7 @@ import UserInfo from './user-info';
 import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
-import { updateThreadInfo, updateThreadShare, filterClickClassName, handleAttachmentData, noop } from './utils';
+import { filterClickClassName, handleAttachmentData, noop } from './utils';
 
 @inject('site')
 @inject('index')

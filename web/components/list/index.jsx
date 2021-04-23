@@ -13,7 +13,7 @@ import styles from './index.module.scss';
  */
 
 const List = ({ height, className = '', children, noMore = false, onRefresh }) => {
-  const listWrapper = useRef();
+  const listWrapper = useRef(null);
   const isLoading = useRef(false);
   const [loadText, setLoadText] = useState('加载中...');
 
@@ -23,6 +23,10 @@ const List = ({ height, className = '', children, noMore = false, onRefresh }) =
       isLoading.current = true;
     }
   }, [noMore]);
+
+  useEffect(() => {
+    onTouchMove();
+  }, []);
 
   const throttle = (fn, delay) => {
     let timer = null;
@@ -36,6 +40,9 @@ const List = ({ height, className = '', children, noMore = false, onRefresh }) =
   };
 
   const onTouchMove = throttle(() => {
+    if (!listWrapper || !listWrapper.current) {
+      return;
+    }
     const { clientHeight } = listWrapper.current;
     const { scrollHeight } = listWrapper.current;
     const { scrollTop } = listWrapper.current;
