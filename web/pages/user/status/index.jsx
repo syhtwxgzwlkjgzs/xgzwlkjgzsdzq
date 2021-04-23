@@ -7,9 +7,7 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @inject('site')
 class Status extends React.Component {
   render() {
-    const { site } = this.props;
-    const { platform } = site;
-    return platform === 'h5' ? <StatusH5Page /> : <></>;
+    return <StatusH5Page/>;
   }
 }
 
