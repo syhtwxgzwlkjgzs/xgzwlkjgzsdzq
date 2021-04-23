@@ -76,7 +76,7 @@ export default class ReplyList extends React.Component {
             <div className={styles.extraBottom}>
               <div className={this.state.isLiked ? styles.replyLike : styles.replyLiked}>
                 <span onClick={() => this.likeClick()}>
-                  赞{this.state.likeCount === 0 ? '' : this.state.likeCount}
+                  赞&nbsp;{this.state.likeCount === 0 ? '' : this.state.likeCount}
                 </span>
               </div>
               <div className={styles.replyReply}>

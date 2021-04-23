@@ -151,7 +151,9 @@ const RenderThreadContent = observer((props) => {
             <Icon name="LikeOutlined"></Icon>
             <span>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
           </div>
-          <Tip style={topic.likeReward} imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
+          <div className={topic.likeReward} >
+            <Tip imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
+          </div>
         </div>
         <span>{threadStore?.threadData?.likeReward?.shareCount || 0}次分享</span>
       </div>
@@ -325,9 +327,10 @@ class RenderCommentList extends React.Component {
         <div className={comment.header}>
           <div className={comment.number}>共{totalCount}条评论</div>
           <div className={comment.sort} onClick={() => this.onSortClick()}>
-            <Icon size="16" name="SortOutlined"></Icon>
-            <span className={comment.sortText}></span>
-            {this.state.commentSort ? '评论从旧到新' : '评论从新到旧'}
+            <Icon className={comment.sortIcon} name="SortOutlined"></Icon>
+            <span className={comment.sortText}>
+              {this.state.commentSort ? '评论从旧到新' : '评论从新到旧'}
+            </span>
           </div>
         </div>
         <div className={comment.body}>

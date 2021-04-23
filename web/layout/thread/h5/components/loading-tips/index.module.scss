@@ -8,5 +8,19 @@
 }
 
 .init {
-  padding: rem($padding-6n) 0;
+  font-size: rem($font-size-primary);
+
+  * {
+    // TODO: 替换token
+    color: #c4c9d6;
+  }
+}
+
+.loadMore {
+  font-size: rem($font-size-label);
+
+  * {
+    // TODO:
+    color: #c4c9d6;
+  }
 }
