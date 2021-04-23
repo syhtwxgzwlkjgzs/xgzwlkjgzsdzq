@@ -1,37 +1,29 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 .commentList {
+  padding: rem($padding-4n);
   .header {
-    padding: rem(10) 0 0 0;
     display: flex;
     justify-content: flex-end;
-    .headerRigth {
-            
-    }
+
     .showGet {
-      width: rem(290);
-      // background: red;
+      width: 100%;
+      padding-left: rem(48);
       display: flex;
       justify-content: space-between;
 
       .revise {
-        font-family: 'PingFangSC-Regular';
-        font-weight: normal;
         font-size: rem($font-size-primary);
-        line-height: rem($font-line-height-middle);
         text-align: left;
         color: var(--color-text-secondary);
       }
       .showMoneyNum {
-        font-family: 'PingFangSC-Regular';
-        font-weight: normal;
         font-size: rem($font-size-label);
-        line-height: rem($font-line-height-middle);
         text-align: left;
         color: var(--color-text-primary);
         margin-left: rem($margin-10);
         .moneyNumber {
-          color: #f61f40;
+          color: var(--color-error);
         }
       }
     }
@@ -47,18 +39,15 @@
       .commentListContentText {
         padding: rem($padding-2n);
         border-radius: rem($border-radius-small);
-        background: #f5f7f8;
+        background: var(--comment-box-bg-color);
         .commentListName {
-          font-family: 'PingFangSC-Semibold';
-          font-weight: normal;
+          font-weight: var(--font-weight-regular);
           font-size: rem($font-size-primary);
           line-height: rem(18);
           text-align: left;
           color: var(--color-text-primary);
         }
         .commentListText {
-          font-family: 'PingFang SC';
-          font-weight: normal;
           font-size: rem($font-size-middle);
           line-height: rem($font-line-height-middle);
           text-align: left;
@@ -67,12 +56,10 @@
       }
       .commentListFooter {
         .commentBtn {
-          height: rem(26);
           display: flex;
           align-items: center;
           justify-content: space-between;
           font-size: rem($font-size-primary);
-          line-height: rem($font-line-height-middle);
           text-align: left;
           color: var(--color-text-secondary);
           padding-top: rem($padding-2n);
@@ -97,15 +84,11 @@
           }
         }
         .moreReply {
-          height: rem(26);
-          font-family: 'PingFang SC';
-          font-weight: 600;
+          font-weight: var(--font-weight-regular);
           font-size: var($font-size-primary);
-          // line-height: var($font-line-height-middle);
-          line-height: rem(26);
           text-align: left;
           color: var(--color-text-primary);
-          padding: rem(8) 0;
+          padding-top: rem($padding-4n); 
         }
       }
     }
@@ -115,7 +98,7 @@
     align-items: center;
     justify-content: flex-start;
     > div {
-      margin-right: rem(8);
+      margin-right: rem($margin-2n);
     }
   }
   .extraBottom {

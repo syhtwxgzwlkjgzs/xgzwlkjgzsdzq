@@ -71,8 +71,6 @@ export default class PayBox extends React.Component {
         const { visible = true, onClose = () => {}  } = this.props;
         const { user, site } = this.props;
         const { payConfig } = this.state;
-        console.log(user);
-        console.log(site);
         return (
             <Popup
                 position="bottom"

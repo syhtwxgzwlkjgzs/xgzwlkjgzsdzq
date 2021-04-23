@@ -19,9 +19,12 @@ class HomeHeader extends React.Component {
 
   logoImg = '/dzq-img/admin-logo-x2.png';
 
-  getBgHeaderStyle(bgHeadFullImg, bgColor) {
-    if (bgHeadFullImg) {
-      return { backgroundImage: `url(${bgHeadFullImg})` };
+  getBgHeaderStyle( bgColor) {
+    const { site } = this.props;
+    const siteData = site.webConfig;
+
+    if (siteData && siteData.setSite && siteData.setSite.bgHeadFullImg) {
+      return { backgroundImage: `url(${siteData.bgHeadFullImg})` };
     }
     return (bgColor
       ? { background: bgColor }
@@ -29,13 +32,37 @@ class HomeHeader extends React.Component {
     );
   }
 
+  getLogo() {
+    const { site } = this.props;
+    const siteData = site.webConfig;
+    if (siteData && siteData.setSite && siteData.setSite.siteLogo) {
+      return siteData.siteLogo;
+    }
+    return this.logoImg;
+  }
+
+  getSiteInfo() {
+    const { site } = this.props;
+    const siteData = site.webConfig;
+    if ( siteData && siteData.setSite && siteData.setSite.other ) {
+      return {
+        countUsers: siteData.setSite.other.countUsers, 
+        countThreads: siteData.setSite.other.countThreads
+      }
+    }
+    return {
+      countUsers: 0, 
+      countThreads: 0
+    }
+  }
+
+
   render() {
-    const { bgColor, hideInfo = false, site } = this.props;
-    const { siteBackgroundImage, siteLogo } = site?.webConfig?.setSite;
-    const { countUsers, countThreads } = site?.webConfig?.other;
+    const { bgColor, hideInfo = false } = this.props;
+    const { countUsers, countThreads } = this.getSiteInfo();
 
     return (
-      <div className={styles.container} style={this.getBgHeaderStyle(siteBackgroundImage, bgColor)}>
+      <div className={styles.container} style={this.getBgHeaderStyle(bgColor)}>
         {hideInfo && <div className={styles.topBar}>
           <div></div>
           <div>
@@ -48,7 +75,7 @@ class HomeHeader extends React.Component {
           <img
               className={styles.logo}
               mode="aspectFit"
-              src={siteLogo ? siteLogo : this.logoImg}
+              src={this.getLogo()}
           />
         </div>
         {!hideInfo && <ul className={styles.siteInfo}>

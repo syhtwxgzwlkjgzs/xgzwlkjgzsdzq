@@ -5,12 +5,13 @@
   background: var(--color-white);
 
   .more {
-    height: rem(100);
     background: var(--background-color);
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    padding: 0 rem($padding-4n);
     .moreItem {
-      margin: rem($padding-4n);
+      margin: rem($padding-4n) rem($padding-4n) 0 rem($padding-4n);
 
       .icon {
         width: rem(50);
@@ -18,7 +19,7 @@
         text-align: center;
         line-height: rem(50);
         background: var(--color-white);
-        border-radius: 5px;
+        border-radius: var(--border-radius-small);
         color: var(--color-text-regular);
       }
 

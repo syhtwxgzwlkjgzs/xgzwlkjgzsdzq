@@ -91,7 +91,11 @@ class ThreadCreate extends React.Component {
     const { query } = this.props.router;
     if (query && query.id) {
       const id = Number(query.id);
-      const ret = await thread.fetchThreadDetail(id);
+      let ret = {};
+      if (id === thread.threadData.id && thread.threadData) {
+        ret.data = thread.threadData;
+        ret.code = 0;
+      } else ret = await thread.fetchThreadDetail(id);
       const { categoryId } = ret.data;
       const categorySelected = index.getCategorySelectById(categoryId);
       if (ret.code === 0) {

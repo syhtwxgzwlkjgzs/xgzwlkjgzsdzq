@@ -4,8 +4,9 @@ import { withRouter } from 'next/router';
 import { Button, Toast, Icon } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
-import PhoneInput from '../../../../components/login/h5/phone-input';
+import PhoneInput from '../../../../components/login/phone-input';
 import HomeHeader from '@components/home-header';
+import Header from '@components/header';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
@@ -97,14 +98,23 @@ class LoginPhoneH5Page extends React.Component {
   };
 
   render() {
-    const { mobileLogin } = this.props;
+    const { mobileLogin, site } = this.props;
+    const { platform } = site;
     const isAnotherLoginWayAvaliable = this.props.site.wechatEnv !== 'none' || this.props.site.isUserLoginVisible;
 
     return (
-      <div className={layout.container}>
-        <HomeHeader hideInfo/>
-        <div className={layout.content}>
-          <div className={layout.title}>手机号码登录/注册</div>
+      <div className={platform === 'h5' ? layout.container : layout.pc_container}>
+        {
+          platform === 'h5'
+            ? <HomeHeader hideInfo/>
+            : <Header/>
+        }
+        <div className={platform === 'h5' ? layout.content : layout.pc_content}>
+          {
+            platform === 'h5'
+              ? <div className={layout.title}>手机号码登录/注册</div>
+              : <div className={layout.pc_title}>欢迎登录Discuz! Q</div>
+          }
           <PhoneInput
             phoneNum={mobileLogin.mobile}
             captcha={mobileLogin.code}
@@ -116,21 +126,21 @@ class LoginPhoneH5Page extends React.Component {
           {/* 登录按钮 start */}
           <Button
             disabled={!mobileLogin.isInvalidCode}
-            className={layout.button}
+            className={platform === 'h5' ? layout.button : layout.pc_button}
             type="primary"
             onClick={this.handleLoginButtonClick}
           >
             登录
           </Button>
           {/* 登录按钮 end */}
-          {isAnotherLoginWayAvaliable && <div className={layout['otherLogin-title']}>其他登录方式</div>}
-          <div className={layout['otherLogin-button']}>
+          {isAnotherLoginWayAvaliable && <div className={platform === 'h5' ? layout['otherLogin-title'] : layout.pc_otherLogin_title}>其他登录方式</div>}
+          <div className={platform === 'h5' ? layout['otherLogin-button'] : layout.pc_otherLogin_button}>
             {this.props.site.wechatEnv !== 'none' && (
               <span
                 onClick={() => {
                   this.props.router.push('wx-login');
                 }}
-                className={layout['otherLogin-button-weixin']}
+                className={platform === 'h5' ? layout['otherLogin-button-weixin'] : layout.button_left}
               >
                 <Icon name='WechatOutlined' color='#04C160'/>
               </span>
@@ -140,13 +150,13 @@ class LoginPhoneH5Page extends React.Component {
                 onClick={() => {
                   this.props.router.push('username-login');
                 }}
-                className={layout['otherLogin-button-user']}
+                className={platform === 'h5' ? layout['otherLogin-button-user'] : layout.button_right}
               >
                 <Icon name='UserOutlined' color='#4084FF'/>
               </span>
             )}
           </div>
-          <div className={layout['otherLogin-tips']}>注册登录即表示您同意《注册协议》《隐私协议》</div>
+          <div className={platform === 'h5' ? layout['otherLogin-tips'] : layout.pc_otherLogin_tips} >注册登录即表示您同意《注册协议》《隐私协议》</div>
         </div>
       </div>
     );

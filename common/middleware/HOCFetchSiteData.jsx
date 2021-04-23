@@ -29,7 +29,6 @@ export default function HOCFetchSiteData(Component) {
           if (isServer()) {
             const { headers } = ctx.req;
             platform = getPlatform(headers['user-agent']);
-
             // 获取站点信息
             siteConfig = await readForum({}, ctx);
             serverSite = {
@@ -184,7 +183,6 @@ export default function HOCFetchSiteData(Component) {
 
       render() {
         const { isNoSiteData } = this.state;
-
         if (isNoSiteData) {
           return <h1>loading</h1>;
         }

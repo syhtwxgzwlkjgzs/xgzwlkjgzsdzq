@@ -6,10 +6,11 @@ import typeofFn from '@common/utils/typeof';
 import setAuthorization from '@common/utils/set-authorization';
 import setUserAgent from '@common/utils/set-user-agent';
 import { ENV_CONFIG } from '@common/constants/site';
+import isServer from '@common/utils/is-server';
 
 const api = apiIns({
   baseURL: ENV_CONFIG.COMMOM_BASE_URL,
-  timeout: 2000,
+  timeout: isServer() ? 2000 : 0,
 });
 
 const { http } = api;
@@ -33,7 +34,8 @@ http.interceptors.request.use(
   (config) => {
     // eslint-disable-next-line no-param-reassign
     config = setUserAgent(config);
-    return setAuthorization(config);
+    const requestData = setAuthorization(config);
+    return requestData;
   },
   (error) => {
     // 对请求错误做些什么
