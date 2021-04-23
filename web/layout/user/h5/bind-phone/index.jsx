@@ -4,14 +4,17 @@ import { withRouter } from 'next/router';
 import { Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
-import HeaderLogin from '../../../../components/login/h5/header-login';
+import HomeHeader from '@components/home-header';
 import PhoneInput from '../../../../components/login/h5/phone-input';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import { get } from '@common/utils/get';
 
 
 @inject('site')
 @inject('user')
 @inject('thread')
 @inject('mobileBind')
+@inject('commonLogin')
 @observer
 class BindPhoneH5Page extends React.Component {
   handlePhoneNumCallback = (phoneNum) => {
@@ -28,7 +31,9 @@ class BindPhoneH5Page extends React.Component {
     try {
       const { query } = this.props.router;
       const { sessionToken } = query;
-      await this.props.mobileBind.bind(sessionToken);
+      const resp = await this.props.mobileBind.bind(sessionToken);
+      const uid = get(resp, 'uid', '');
+      this.props.user.updateUserInfo(uid);
       Toast.success({
         content: '登录成功',
         hasMask: false,
@@ -38,6 +43,12 @@ class BindPhoneH5Page extends React.Component {
         this.props.router.push('/index');
       }, 1000);
     } catch (e) {
+      // 跳转状态页
+      if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
+        this.props.commonLogin.setStatusMessage(e.Code, e.Message);
+        this.props.router.push('/user/status');
+        return;
+      }
       Toast.error({
         content: e.Message,
         hasMask: false,
@@ -62,7 +73,7 @@ class BindPhoneH5Page extends React.Component {
     const { mobileBind } = this.props;
     return (
       <div className={layout.container}>
-        <HeaderLogin />
+        <HomeHeader hideInfo/>
         <div className={layout.content}>
           <div className={layout.title}>绑定手机号</div>
           <div className={layout.tips}>

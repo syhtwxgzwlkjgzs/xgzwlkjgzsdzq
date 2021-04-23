@@ -3,6 +3,7 @@ import WXLoginH5Page from '@layout/user/h5/wx-login';
 import { inject } from 'mobx-react';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCLoginMode from '@common/middleware/HOCLoginMode';
 
 @inject('site')
 class WXLogin extends React.Component {
@@ -14,4 +15,4 @@ class WXLogin extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(WXLogin);
+export default HOCFetchSiteData(HOCLoginMode('weixin')(WXLogin));

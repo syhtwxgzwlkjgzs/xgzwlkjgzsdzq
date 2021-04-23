@@ -2,6 +2,7 @@ import React from 'react';
 import WXBindPhoneH5Page from '@layout/user/h5/wx-bind-phone';
 import { inject } from 'mobx-react';
 
+import HOCLoginMode from '@common/middleware/HOCLoginMode';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
 @inject('site')
@@ -14,4 +15,4 @@ class WXBindPhone extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(WXBindPhone);
+export default HOCFetchSiteData(HOCLoginMode('weixin')(WXBindPhone));

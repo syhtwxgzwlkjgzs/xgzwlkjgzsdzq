@@ -2,8 +2,10 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './index.module.scss';
+import { Icon } from '@discuzq/design';
+import '@discuzq/design/dist/styles/index.scss';
 import WeixinQrCode from '../../../../components/login/h5/wx-qr-code';
-import HeaderLogin from '../../../../components/login/h5/header-login';
+import HomeHeader from '@components/home-header';
 import hocWeixin from './HOCWeixin';
 
 @inject('site')
@@ -24,7 +26,7 @@ class WXLoginH5Page extends React.Component {
     const isAnotherLoginWayAvaliable = this.props.site.isSmsOpen || this.props.site.isUserLoginVisible;
     return (
       <div className={layout.container}>
-        <HeaderLogin />
+        <HomeHeader hideInfo/>
         <div className={layout.content}>
           <div className={layout.title}>微信登录</div>
           {/* 二维码 start */}
@@ -42,7 +44,7 @@ class WXLoginH5Page extends React.Component {
                 }}
                 className={layout['otherLogin-button-weixin']}
               >
-                <img src="//dzq-img/login-/dzq-img/user.png" alt="" />
+                <Icon name='UserOutlined' color='#4084FF'/>
               </span>
             )}
             {this.props.site.isSmsOpen && (
@@ -52,7 +54,7 @@ class WXLoginH5Page extends React.Component {
                 }}
                 className={layout['otherLogin-button-user']}
               >
-                <img src="//dzq-img/login-phone.png" alt="" />
+                <Icon name='PhoneOutlined' color='#FFC300'/>
               </span>
             )}
           </div>

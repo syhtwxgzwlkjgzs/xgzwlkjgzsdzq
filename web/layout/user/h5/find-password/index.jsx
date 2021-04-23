@@ -4,7 +4,7 @@ import { withRouter } from 'next/router';
 import { Button, Input } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
-import HeaderLogin from '../../../../components/login/h5/header-login';
+import HomeHeader from '@components/home-header';
 import PhoneInput from '../../../../components/login/h5/phone-input';
 
 
@@ -24,7 +24,7 @@ class FindPasswordH5Page extends React.Component {
     const { username } = this.state;
     return (
       <div className={layout.container}>
-        <HeaderLogin />
+        <HomeHeader hideInfo/>
         <div className={layout.content}>
           <div className={layout.title}>找回密码</div>
           <Input

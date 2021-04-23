@@ -4,17 +4,21 @@ import { withRouter } from 'next/router';
 import { Input, Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
-import HeaderLogin from '../../../../components/login/h5/header-login';
-
+import HomeHeader from '@components/home-header';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import { get } from '@common/utils/get';
 @inject('site')
 @inject('user')
 @inject('thread')
 @inject('userRegister')
+@inject('commonLogin')
 @observer
 class RegisterH5Page extends React.Component {
   handleRegister = async () => {
     try {
-      await this.props.userRegister.register();
+      const resp = await this.props.userRegister.register();
+      const uid = get(resp, 'uid', '');
+      this.props.user.updateUserInfo(uid);
       Toast.success({
         content: '注册成功',
         hasMask: false,
@@ -26,6 +30,13 @@ class RegisterH5Page extends React.Component {
         this.props.router.push('/index');
       }, 1000);
     } catch (e) {
+      // 跳转状态页
+      if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
+        this.props.commonLogin.setStatusMessage(e.Code, e.Message);
+        this.props.router.push('/user/status');
+        return;
+      }
+
       Toast.error({
         content: e.Message,
         hasMask: false,
@@ -36,7 +47,7 @@ class RegisterH5Page extends React.Component {
   render() {
     return (
       <div className={layout.container}>
-        <HeaderLogin />
+        <HomeHeader hideInfo/>
         <div className={layout.content}>
           <div className={layout.title}>用户名注册</div>
           <Input
