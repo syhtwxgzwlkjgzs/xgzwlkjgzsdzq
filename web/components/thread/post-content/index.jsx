@@ -48,11 +48,12 @@ const Index = ({
   // 是否显示遮罩 是付费内容并且隐藏内容百分比大于0 或 显示查看更多并且查看更多状态为false 则显示遮罩
   const showHideCover = !loading ? (isPayContent && hidePercent > 0) || (useShowMore && !showMore) : false;
 
-  const onShowMore = useCallback(() => {
+  const onShowMore = useCallback((e) => {
     if (contentTooLong) {
       // 内容过长直接跳转到详情页面
       onRedirectToDetail && onRedirectToDetail();
     } else {
+      e.stopPropagation();
       setShowMore(true);
     }
   }, [contentTooLong]);
