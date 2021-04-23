@@ -11,24 +11,26 @@ export default class AmountRecognized extends Component {
     super(props);
     this.state = {
       isShow: false,
-      currentPaymentObj: {
-        trade_type: '1', // 交易类型 1|2|3 帖子|打赏|付费加入
-        goods_name: '帖子标题', // 商品名称
-        pay_money: '9.90', // 支付金额
-        is_anonymous: '1', // 是否匿名
-      },
-      // {
-      //   trade_type: '2',
-      //   goods_name: '打赏的内容', // 商品名称
-      //   pay_money: '19.90', // 支付金额
-      //   is_anonymous: '0', // 是否匿名
-      // },
-      // {
-      //   trade_type: '3',
-      //   goods_name: '付费加入...', // 商品名称
-      //   pay_money: '19.90', // 支付金额
-      //   is_anonymous: '0', // 是否匿名
-      // },
+      currentPaymentData: [
+        {
+          trade_type: '1', // 交易类型 1|2|3 帖子|打赏|付费加入
+          goods_name: '帖子标题', // 商品名称
+          pay_money: '9.90', // 支付金额
+          is_anonymous: '1', // 是否匿名
+        },
+        {
+          trade_type: '2',
+          goods_name: '打赏的内容', // 商品名称
+          pay_money: '19.90', // 支付金额
+          is_anonymous: '0', // 是否匿名
+        },
+        {
+          trade_type: '3',
+          goods_name: '付费加入...', // 商品名称
+          pay_money: '19.90', // 支付金额
+          is_anonymous: '0', // 是否匿名
+        }
+      ],
     };
   }
 
@@ -54,7 +56,7 @@ export default class AmountRecognized extends Component {
   goToThePayConfirmPage = () => {};
 
   render() {
-    const { currentPaymentObj = {} } = this.state;
+    const { currentPaymentData = [] } = this.state;
     return (
       <Popup
         position="bottom"
@@ -65,7 +67,7 @@ export default class AmountRecognized extends Component {
         }}
       >
         <div className={styles.amountWrapper}>
-          <CommonAccountContent currentPaymentObj={currentPaymentObj} />
+          <CommonAccountContent currentPaymentData={currentPaymentData} />
           {/* 按钮区域-提交内容 */}
           <div className={styles.amountSubmit}>
             <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.asBtn} full>

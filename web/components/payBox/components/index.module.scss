@@ -18,6 +18,7 @@
     display: flex;
     align-items: center;
     line-height: rem($font-line-height-large);
+    margin: rem($margin-2n) 0;
   }
   // 交易类型label提示
   .acExplain_label{
@@ -29,5 +30,8 @@
   .acExplain_value {
     flex-wrap: nowrap;
     @include text-ellipsis();
+  }
+  .acExplain_hr {
+    color: var(--color-disabled5);
   }
 }

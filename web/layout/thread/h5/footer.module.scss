@@ -8,8 +8,7 @@
 }
 
 .icon {
-  // FIXME: 这里写rem(--margin-6n)好像不生效，后面再处理
-  margin-left: rem(24);
+  margin-left: rem($margin-6n);
   display: inline-block;
 
   :first-child {

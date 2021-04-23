@@ -4,11 +4,11 @@
 // 外部容器
 .amountWrapper {
   background: var(--color-white);
-  height: rem(280);
-  width: rem(450);
+  min-height: rem(280);
+  width: rem(500);
   font-size: rem($font-size-large);
   padding: rem($padding-4n);
-  overflow-y: auto;
+  // overflow-y: auto;
   .amountSubmit {
     margin-top: rem($margin-5n);
     text-align: right;
@@ -27,5 +27,8 @@
     &:hover {
       color: var(--color-info);
     }
+  }
+  .acExplain_hr {
+    color: var(--color-disabled5);
   }
 }

@@ -2,7 +2,7 @@
 @import '@common/styles/variable/index.scss';
 .replyList {
   display: flex;
-  padding-top: rem($padding-10);
+  padding-top: rem($padding-4n);
   .replyListAvatar {
     margin-right: rem($margin-10);
   }
@@ -11,18 +11,16 @@
     .replyListContentText {
       padding: rem($padding-2n);;
       border-radius: rem($border-radius-small);
+      // TODO:
       background: #f5f7f8;
       .replyListName {
-        font-family: 'PingFangSC-Semibold';
-        font-weight: normal;
+        font-weight: var(--font-weight-regular);
         font-size: rem($font-size-primary);
         line-height: rem(18);
         text-align: left;
         color: var(--color-text-primary);
       }
       .replyListText {
-        font-family: 'PingFang SC';
-        font-weight: normal;
         font-size: rem($font-size-middle);
         line-height: rem($font-line-height-middle);
         text-align: left;
@@ -30,8 +28,7 @@
         .commentUser {
           display: inline-block;
           .replyedUserName {
-            font-family: 'PingFangSC-Semibold';
-            font-weight: normal;
+            font-weight: var(--font-weight-regular);
             font-size: rem($font-size-primary);
             margin-right: rem($margin-2n);
             line-height: rem(18);
@@ -48,12 +45,10 @@
       }
     }
     .replyListFooter {
-      height: rem(26);
       display: flex;
       align-items: center;
       justify-content: space-between;
       font-size: rem($font-size-primary);
-      line-height: rem($font-line-height-middle);
       text-align: left;
       color: var(--color-text-secondary);
       padding-top: rem($padding-2n);
