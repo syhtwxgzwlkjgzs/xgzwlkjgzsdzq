@@ -2,6 +2,8 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/search/result-post/h5';
 import IndexPCPage from '@layout/search/result-post/pc';
+import { readThreadList } from '@server';
+import { Toast } from '@discuzq/design';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
@@ -9,15 +11,16 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @inject('search')
 @observer
 class Index extends React.Component {
-  // static async getInitialProps(ctx) {
-  //   const { res } = await getThreadList({}, ctx);
+  static async getInitialProps(ctx) {
+    const search = ctx?.query?.keyword || '';
+    const result = await readThreadList({ params: { filter: { sequence: '0', filter: { sort: '3', search } } } }, ctx);
 
-  //   return {
-  //     serverSearch: {
-  //       threads: res,
-  //     },
-  //   };
-  // }
+    return {
+      serverSearch: {
+        threads: result?.data,
+      },
+    };
+  }
 
   page = 1;
   perPage = 10;
@@ -30,14 +33,21 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
-    const { search, serverSearch, router } = this.props;
+    const { search, router } = this.props;
     const { keyword = '' } = router.query;
     // 当服务器无法获取数据时，触发浏览器渲染
-    const isBool = !search.threads && (!serverSearch || !serverSearch.threads);
+    const hasThreads = !!search.threads;
 
-    if (!isBool) {
+    if (!hasThreads) {
+      this.toastInstance = Toast.loading({
+        content: '加载中...',
+        duration: 0,
+      });
+
+      this.page = 1;
       await search.getThreadList({ search: keyword });
-      this.page += 1;
+
+      this.toastInstance?.destroy();
     }
   }
 
@@ -45,18 +55,13 @@ class Index extends React.Component {
     const { search } = this.props;
 
     if (type === 'refresh') {
-      await search.getThreadList({ search: data, perPage: this.perPage });
-      this.page = 2;
+      this.page = 1;
     } else if (type === 'moreData') {
-      if (this.page === 1) {
-        this.page = 2;
-      }
-      const { res } = await search.getThreadList({ search: data, perPage: this.perPage, page: this.page });
-      if (res?.pageData?.length) {
-        this.page += 1;
-      }
-      return;
+      this.page += 1;
     }
+
+    await search.getThreadList({ search: data, perPage: this.perPage, page: this.page });
+    return;
   }
 
   render() {

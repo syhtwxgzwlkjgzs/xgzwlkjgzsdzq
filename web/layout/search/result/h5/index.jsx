@@ -69,9 +69,9 @@ class SearchResultH5Page extends React.Component {
   render() {
     const { keyword } = this.state;
     const { searchTopics, searchUsers, searchThreads } = this.props.search;
-    const { pageData: topicsPageData = [] } = searchTopics;
-    const { pageData: usersPageData = [] } = searchUsers;
-    const { pageData: threadsPageData = [] } = searchThreads;
+    const { pageData: topicsPageData = [] } = searchTopics || {};
+    const { pageData: usersPageData = [] } = searchUsers || {};
+    const { pageData: threadsPageData = [] } = searchThreads || {};
 
     return (
       <List className={styles.page} allowRefresh={false}>
@@ -82,7 +82,7 @@ class SearchResultH5Page extends React.Component {
           <SectionTitle title="用户" onShowMore={this.redirectToSearchResultUser} />
         </div>
         {
-          usersPageData && usersPageData.length
+          usersPageData?.length
             ? <SearchUsers data={usersPageData} onItemClick={this.onUserClick} />
             : <NoData />
         }
@@ -92,7 +92,7 @@ class SearchResultH5Page extends React.Component {
           <SectionTitle title="主题" onShowMore={this.redirectToSearchResultPost} />
         </div>
         {
-          threadsPageData && threadsPageData.length
+          threadsPageData?.length
             ? <SearchPosts data={threadsPageData} onItemClick={this.onPostClick} />
             : <NoData />
         }
@@ -102,7 +102,7 @@ class SearchResultH5Page extends React.Component {
           <SectionTitle title="话题" onShowMore={this.redirectToSearchResultTopic} />
         </div>
         {
-          topicsPageData && topicsPageData.length
+          topicsPageData?.length
             ? <SearchTopics data={topicsPageData} onItemClick={this.onTopicClick} />
             : <NoData />
         }

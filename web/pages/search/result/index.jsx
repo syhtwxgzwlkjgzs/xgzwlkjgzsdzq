@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/search/result/h5';
 import IndexPCPage from '@layout/search/result/pc';
 import { readUsersList, readTopicsList, readThreadList } from '@server';
-
+import { Toast } from '@discuzq/design';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
@@ -19,15 +19,15 @@ class Index extends React.Component {
       content: search,
     };
 
-    const topics = await readTopicsList({ params: { filter: topicFilter } }, ctx);
-    const users = await readUsersList({ params: { filter: { username: search } } }, ctx);
-    const threads = await readThreadList({ params: { filter: { sort: '3', search } } }, ctx);
+    const topics = await readTopicsList({ params: { filter: topicFilter, perPage: 3 } }, ctx);
+    const users = await readUsersList({ params: { filter: { username: search }, perPage: 3 } }, ctx);
+    const threads = await readThreadList({ params: { filter: { sort: '3', search }, perPage: 3 } }, ctx);
 
     return {
       serverSearch: {
-        indexTopics: topics && topics.code === 0 ? topics.data : { pageData: [] },
-        indexUsers: users && users.code === 0 ? users.data : { pageData: [] },
-        indexThreads: threads && threads.code === 0 ? threads.data : { pageData: [] },
+        searchTopics: topics?.data,
+        searchUsers: users?.data,
+        searchThreads: threads?.data,
       },
     };
   }
@@ -44,18 +44,28 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
-    const { search, serverSearch, router } = this.props;
-    const { keyword = '' } = router.query;
+    const { search, router } = this.props;
+    const { keyword = '' } = router?.query;
 
     // 当服务器无法获取数据时，触发浏览器渲染
-    // TODO 待调整接口判断请求
-    const isBool1 = !search.searchTopics && (!serverSearch || !serverSearch.searchTopics);
-    const isBool2 = !search.searchUsers && (!serverSearch || !serverSearch.searchUsers);
-    const isBool3 = !search.searchThreads && (!serverSearch || !serverSearch.searchThreads);
+    const hasSearchTopics = !!search.searchTopics;
+    const hasSearchUsers = !!search.searchUsers;
+    const hasSearchThreads = !!search.searchThreads;
 
-    if (!isBool1 && !isBool2 && !isBool3) {
-      search.getSearchData({ search: keyword, type: 1 });
-    }
+    this.toastInstance = Toast.loading({
+      content: '加载中...',
+      duration: 0,
+    });
+
+    await search.getSearchData({
+      hasTopics: hasSearchTopics,
+      hasUsers: hasSearchUsers,
+      hasThreads: hasSearchThreads,
+      search: keyword,
+      type: 1,
+    });
+
+    this.toastInstance?.destroy();
   }
 
   dispatch = async (type, data = '') => {

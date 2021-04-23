@@ -3,9 +3,9 @@ import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/search/h5';
 import IndexPCPage from '@layout/search/pc';
 import { readUsersList, readTopicsList, readThreadList } from '@server';
+import { Toast } from '@discuzq/design';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-import SearchAction from '../../../common/store/search/action';
 
 @inject('site')
 @inject('search')
@@ -18,9 +18,9 @@ class Index extends React.Component {
 
     return {
       serverSearch: {
-        indexTopics: topics && topics.code === 0 ? topics.data : { pageData: [] },
-        indexUsers: users && users.code === 0 ? users.data : { pageData: [] },
-        indexThreads: threads && threads.code === 0 ? threads.data : { pageData: [] },
+        indexTopics: topics?.data,
+        indexUsers: users?.data,
+        indexThreads: threads?.data,
       },
     };
   }
@@ -35,15 +35,18 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
-    const { search, serverSearch } = this.props;
+    const { search } = this.props;
     // 当服务器无法获取数据时，触发浏览器渲染
-    const isBool1 = !search.indexTopics && (!serverSearch || !serverSearch.indexTopics);
-    const isBool2 = !search.indexUsers && (!serverSearch || !serverSearch.indexUsers);
-    const isBool3 = !search.indexThreads && (!serverSearch || !serverSearch.indexThreads);
+    const hasIndexTopics = !!search.indexTopics;
+    const hasIndexUsers = !!search.indexUsers;
+    const hasIndexThreads = !!search.indexThreads;
 
-    if (!isBool1 && !isBool2 && !isBool3) {
-      search.getSearchData();
-    }
+    this.toastInstance = Toast.loading({
+      content: '加载中...',
+      duration: 0,
+    });
+    await search.getSearchData({ hasTopics: hasIndexTopics, hasUsers: hasIndexUsers, hasThreads: hasIndexThreads });
+    this.toastInstance?.destroy();
   }
 
   render() {

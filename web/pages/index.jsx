@@ -38,7 +38,7 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
-    const { serverIndex, index } = this.props;
+    const { index } = this.props;
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasCategoriesData = !!index.categories;
     const hasSticksData = !!index.sticks;
@@ -57,7 +57,6 @@ class Index extends React.Component {
 
   dispatch = async (type, data = {}) => {
     const { index } = this.props;
-    const { threads } = index;
     const { categoryids, types, essence, sequence } = data;
 
     if (type === 'click-filter') {

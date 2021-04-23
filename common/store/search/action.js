@@ -59,7 +59,15 @@ class SearchAction extends SearchStore {
    * @returns {object} 处理结果
    */
   @action
-  async getSearchData({ type = 0, search, perPage = 10 } = {}) {
+  async getSearchData({
+    type = 0,
+    search,
+    perPage = 10,
+    hasTopics = false,
+    hasUsers = false,
+    hasThreads = false,
+  } = {}) {
+    let newPerPage = perPage;
     const topicFilter = {
       hot: search !== '' ? 0 : 1,
       content: search,
@@ -67,12 +75,18 @@ class SearchAction extends SearchStore {
 
     // 如果存在search字段，说明是在结果页发起的网络请求，此时只需要后台返回三条数据
     if (search || search === '') {
-      perPage = 3;
+      newPerPage = 3;
     }
 
-    const promise1 = readTopicsList({ params: { filter: topicFilter, perPage, page: 1 } });
-    const promise2 = readUsersList({ params: { filter: { username: search }, perPage, page: 1 } });
-    const promise3 = readThreadList({ params: { filter: { filter: { sort: '3', search } }, perPage } });
+    const promise1 = !hasTopics
+      ? readTopicsList({ params: { filter: topicFilter, perPage: newPerPage, page: 1 } })
+      : {};
+    const promise2 = !hasUsers
+      ? readUsersList({ params: { filter: { username: search }, perPage: newPerPage, page: 1 } })
+      : {};
+    const promise3 = !hasThreads
+      ? readThreadList({ params: { filter: { filter: { sort: '3', search } }, perPage: newPerPage, page: 1 } })
+      : {};
     const promise = [promise1, promise2, promise3];
 
     let res = await Promise.allSettled(promise);
@@ -84,13 +98,13 @@ class SearchAction extends SearchStore {
     });
 
     if (type === 0) {
-      this.setIndexTopics(res[0]);
-      this.setIndexUsers(res[1]);
-      this.setIndexThreads(res[2]);
+      !hasTopics && this.setIndexTopics(res[0]);
+      !hasUsers && this.setIndexUsers(res[1]);
+      !hasThreads && this.setIndexThreads(res[2]);
     } else if (type === 1) {
-      this.setSearchTopics(res[0]);
-      this.setSearchUsers(res[1]);
-      this.setSearchThreads(res[2]);
+      !hasTopics && this.setSearchTopics(res[0]);
+      !hasUsers && this.setSearchUsers(res[1]);
+      !hasThreads && this.setSearchThreads(res[2]);
     }
 
     return {
@@ -109,11 +123,21 @@ class SearchAction extends SearchStore {
       hot: 0,
       content: search,
     };
-    const topics = await readTopicsList({ params: { filter: topicFilter, perPage, page } });
+    const result = await readTopicsList({ params: { filter: topicFilter, perPage, page } });
 
-    return {
-      res: topics.data || {},
-    };
+    if (result.code === 0 && result.data) {
+      if (this.topics && result.data.pageData && page !== 1) {
+        this.topics.pageData.push(...result.data.pageData);
+        const newPageData = this.topics.pageData.slice();
+        this.setTopics({ ...result.data, pageData: newPageData });
+      } else {
+        // 首次加载，先置空，是为了列表回到顶部
+        this.setTopics({ pageData: [] });
+        this.setTopics(result.data);
+      }
+      return result.data;
+    }
+    return null;
   };
 
   /**
@@ -123,10 +147,21 @@ class SearchAction extends SearchStore {
    */
   @action
   async getUsersList({ search = '', perPage = 10, page = 1  } = {}) {
-    const users = await readUsersList({ params: { filter: { username: search }, perPage, page } });
-    return {
-      res: users.data || {},
-    };
+    const result = await readUsersList({ params: { filter: { username: search }, perPage, page } });
+
+    if (result.code === 0 && result.data) {
+      if (this.users && result.data.pageData && page !== 1) {
+        this.users.pageData.push(...result.data.pageData);
+        const newPageData = this.users.pageData.slice();
+        this.setUsers({ ...result.data, pageData: newPageData });
+      } else {
+        // 首次加载，先置空，是为了列表回到顶部
+        this.setUsers({ pageData: [] });
+        this.setUsers(result.data);
+      }
+      return result.data;
+    }
+    return null;
   };
 
   /**
@@ -136,23 +171,21 @@ class SearchAction extends SearchStore {
  */
  @action
   async getThreadList({ search = '', perPage = 10, page = 1 } = {}) {
-    const threads = await readThreadList({ params: { filter: { sequence: '0', filter: { sort: '3', search } }, perPage, page } });
+    const result = await readThreadList({ params: { filter: { sequence: '0', filter: { sort: '3', search } }, perPage, page } });
 
-    const res = threads?.data || {};
-
-    if (page === 1) {
-      this.setThreads(res);
-    } else {
-      if (res?.pageData?.length) {
-        this.page += 1;
-        res.pageData.unshift(...(this.topics?.pageData || []));
-        this.setThreads(res);
+    if (result.code === 0 && result.data) {
+      if (this.threads && result.data.pageData && page !== 1) {
+        this.threads.pageData.push(...result.data.pageData);
+        const newPageData = this.threads.pageData.slice();
+        this.setThreads({ ...result.data, pageData: newPageData });
+      } else {
+        // 首次加载，先置空，是为了列表回到顶部
+        this.setThreads({ pageData: [] });
+        this.setThreads(result.data);
       }
+      return result.data;
     }
-
-    return {
-      res,
-    };
+    return null;
   };
 }
 
