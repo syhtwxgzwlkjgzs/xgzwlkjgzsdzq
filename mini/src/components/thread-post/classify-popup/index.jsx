@@ -10,7 +10,7 @@ import { View } from '@tarojs/components';
 import { Popup, Button } from '@discuzq/design';
 import styles from './index.module.scss';
 
-import PropTypes from 'prop-types'; 
+import PropTypes from 'prop-types';
 import typeofFn from '@common/utils/typeof';
 
 const ClassifyPopup = (props) => {

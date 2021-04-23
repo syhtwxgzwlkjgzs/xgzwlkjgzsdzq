@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import ThemePage from '@components/theme-page';
-import { PlusinToolbar, DefaultToolbar, GeneralUpload, Tag, Title, Content } from '@components/thread-post';
+import { PlusinToolbar, DefaultToolbar, GeneralUpload, Tag, Title, Content, ClassifyPopup } from '@components/thread-post';
 import styles from './index.module.scss';
 
 @inject('index')
@@ -80,7 +80,6 @@ class Index extends Component {
       showClassifyPopup,
       uploadType,
     } = this.state;
-
     return (
       <ThemePage>
         {/* 文本框区域，inclue标题、帖子文字内容等 */}
