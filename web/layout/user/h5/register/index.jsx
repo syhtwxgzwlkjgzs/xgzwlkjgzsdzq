@@ -45,13 +45,15 @@ class RegisterH5Page extends React.Component {
     }
   };
   render() {
+    const { site } = this.props;
+    const { platform } = site;
     return (
-      <div className={layout.container}>
+      <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         <HeaderLogin />
-        <div className={layout.content}>
-          <div className={layout.title}>用户名注册</div>
+        <div className={platform === 'h5' ? layout.content : layout.pc_content}>
+          <div className={platform === 'h5' ? layout.title : layout.pc_title}>用户名注册</div>
           <Input
-            className={layout.input}
+            className={platform === 'h5' ? layout.input : layout.pc_input}
             value={this.props.userRegister.username}
             placeholder="输入您的用户名"
             onChange={(e) => {
@@ -60,7 +62,7 @@ class RegisterH5Page extends React.Component {
           />
           <Input
             clearable={false}
-            className={layout.input}
+            className={platform === 'h5' ? layout.input : layout.pc_input}
             mode="password"
             value={this.props.userRegister.password}
             placeholder="输入您的登录密码"
@@ -70,7 +72,7 @@ class RegisterH5Page extends React.Component {
           />
           <Input
             clearable={false}
-            className={layout.input}
+            className={platform === 'h5' ? layout.input : layout.pc_input}
             mode="password"
             value={this.props.userRegister.passwordConfirmation}
             placeholder="确认密码"
@@ -80,17 +82,17 @@ class RegisterH5Page extends React.Component {
           />
           <Input
             clearable={false}
-            className={layout.input}
+            className={platform === 'h5' ? layout.input : layout.pc_input}
             value={this.props.userRegister.nickname}
             placeholder="输入您的昵称"
             onChange={(e) => {
               this.props.userRegister.nickname = e.target.value;
             }}
           />
-          <Button className={layout.button} type="primary" onClick={this.handleRegister}>
+          <Button className={platform === 'h5' ? layout.button : layout.pc_button} type="primary" onClick={this.handleRegister}>
             注册
           </Button>
-          <div className={layout.functionalRegion}>
+          <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
             <span> 已有账号? </span>
             <span
               className={layout.clickBtn}
@@ -101,7 +103,7 @@ class RegisterH5Page extends React.Component {
               登录
             </span>
           </div>
-          <div className={layout['otherLogin-tips']}>注册登录即表示您同意《注册协议》《隐私协议》</div>
+          <div className={platform === 'h5' ? layout['otherLogin-tips'] : layout.pc_otherLogin_tips}>注册登录即表示您同意《注册协议》《隐私协议》</div>
         </div>
       </div>
     );

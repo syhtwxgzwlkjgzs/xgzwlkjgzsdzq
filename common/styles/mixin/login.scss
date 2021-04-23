@@ -105,3 +105,11 @@
   text-align: center;
 }
 
+@mixin pc_functionalRegion {
+  margin-top: 16px;
+  text-align: center;
+  .clickBtn{
+    color: var(--color-primary);
+    cursor: pointer;
+  }
+}

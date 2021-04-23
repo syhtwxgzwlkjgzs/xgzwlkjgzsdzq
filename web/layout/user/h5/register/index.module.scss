@@ -1,12 +1,14 @@
 @import '../../../../../common/styles/mixin/login.scss';
 @import '@common/styles/fn/rem.scss';
 .container {
+  background: #fff;
   height: 100vh;
 }
 .banner {
   @include banner;
 }
 .content {
+  background: #fff;
   padding: rem(48) rem(24);
   .title {
     @include title;
@@ -26,4 +28,42 @@
     margin-top: rem(131);
   }
 }
- 
+
+// ------------------PC
+body{
+  background: #f4f5f6;
+}
+
+.pc_container {
+  @include pc_content;
+}
+.pc_content {
+  width: 300px;
+  margin: 80px auto 0;
+  .pc_title {
+    font-family: 'PingFang SC';
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 30px;
+    color: #0b0b37;
+    text-align: center;
+    padding-bottom: 32px;
+  }
+  .pc_input {
+    width: 300px;
+    margin-bottom: 24px;
+  }
+  .pc_button {
+    @include pc_button;
+  }
+  .pc_functionalRegion {
+    @include pc_functionalRegion;
+  }
+  .pc_otherLogin_title {
+    @include pc_otherLoginText;
+    font-size: 14px;
+  }
+  .pc_otherLogin_tips{
+    @include pc_otherLoginText;
+  }
+}
