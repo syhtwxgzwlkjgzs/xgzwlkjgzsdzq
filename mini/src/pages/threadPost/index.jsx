@@ -16,6 +16,8 @@ class Index extends Component {
       postType: 'post', // 发布类型 post-首次发帖，edit-再次编辑，draft-草稿
       title: '',
       isShowTitle: true, // 默认显示标题
+
+      uploadType: 0
     }
   }
   componentWillMount() { }
@@ -47,10 +49,10 @@ class Index extends Component {
     }
   }
 
-  // 点击插入图片、视频、语音等插件时调用
-  onPluginClick(item) {
-    const { type } = item;
-    console.log(item);
+  handlePlusinClick(item) {
+    this.setState({
+      uploadType: item.type
+    });
   }
 
   render() {
@@ -58,7 +60,8 @@ class Index extends Component {
     const { postData } = this.props.threadPost;
     const {
       title,
-      isShowTitle
+      isShowTitle,
+      uploadType
     } = this.state;
 
     return (
@@ -76,21 +79,7 @@ class Index extends Component {
         {/* 插件区域、include图片、附件、语音等 */}
         <View className={styles['plusin']}>
 
-          <GeneralUpload  />
-
-
-
-
-          {/* <Attachment type='upload' />
-          <Attachment type='show' /> */}
-
-          {/* <Units type='atta' />
-          <Units type='atta-upload' />
-          <Units type='img' />
-          <Units type='img-upload' />
-          <Units type='video' /> */}
-
-
+          <GeneralUpload type={uploadType} />
 
         </View>
 
@@ -100,8 +89,12 @@ class Index extends Component {
             <Tag content='随机红包\总金额80元\20个' />
             <Tag content='悬赏金额10元' />
           </View>
-          <PlusinToolbar clickCb={this.onPluginClick} />
-          <DefaultToolbar />
+          <PlusinToolbar clickCb={(item) => {
+            this.handlePlusinClick(item);
+          }} />
+          <DefaultToolbar clickCb={(item) => {
+            this.handlePlusinClick(item);
+          }} />
         </View>
       </ThemePage >
     );

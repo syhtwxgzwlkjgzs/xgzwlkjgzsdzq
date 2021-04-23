@@ -9,11 +9,8 @@ import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import { defaultIcon } from '@common/constants/const';
 
-const Index = inject('site', 'threadPost')(observer((props) => {
-  const { site, threadPost } = props;
-
+const Index = inject('site', 'threadPost')(observer(({ clickCb }) => {
   const [currentTool, setCurrentTool] = useState({});
-
 
   // 工具栏icon元素
   const plus = defaultIcon.map((item, index) => {
@@ -23,7 +20,7 @@ const Index = inject('site', 'threadPost')(observer((props) => {
         className={styles['plus-icon']}
         onClick={() => {
           setCurrentTool(item);
-          // 处理该工具对应的逻辑
+          clickCb(item);
         }}
         name={item.name}
         color={item.id === currentTool.id && item.active}
