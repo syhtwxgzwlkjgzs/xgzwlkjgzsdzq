@@ -9,7 +9,7 @@
  import { Icon } from '@discuzq/design';
 
 const Index = (props) => {
-  const { type = 'upload', filename, size, src, className, onUpload } = props;
+  const { type = 'upload', filename, size, src, className, onUpload, onDelete } = props;
 
   // 图片展示
   const img = (
@@ -20,7 +20,7 @@ const Index = (props) => {
           urls: [src]
         })
       }} />
-      <View className={styles['delete']}>
+      <View className={styles['delete']} onClick={onDelete}>
         <Icon name='PaperClipOutlined' size={16} />
       </View>
     </View>
@@ -41,7 +41,7 @@ const Index = (props) => {
         <Text className={styles['name']}>{filename}</Text>
         <Text className={styles['size']}>{size}</Text>
       </View>
-      <Icon name='MailOutlined' size={16} />
+      <Icon name='MailOutlined' size={16} onClick={onDelete} />
     </View>
   );
 
