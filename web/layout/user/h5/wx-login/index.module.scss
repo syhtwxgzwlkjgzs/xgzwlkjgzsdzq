@@ -41,8 +41,8 @@
 }
 
 // ------------------PC
-body{
-  background: #f4f5f6;
+.pc_body_background{
+  @include pc_body_background;
 }
 
 .pc_container {

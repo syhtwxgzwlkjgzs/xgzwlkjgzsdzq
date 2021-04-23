@@ -74,6 +74,7 @@ class BindPhoneH5Page extends React.Component {
     const { mobileBind, site } = this.props;
     const { platform } = site;
     return (
+      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
@@ -102,6 +103,7 @@ class BindPhoneH5Page extends React.Component {
             }} >退出登录</span>
           </div>
         </div>
+      </div>
       </div>
     );
   }

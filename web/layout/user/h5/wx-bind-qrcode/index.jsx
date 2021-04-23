@@ -4,6 +4,7 @@ import { withRouter } from 'next/router';
 import layout from './index.module.scss';
 import WeixinQrCode from '../../../../components/login/h5/wx-qr-code';
 import HomeHeader from '@components/home-header';
+import Header from '@components/header';
 
 @inject('site')
 @inject('user')
@@ -22,22 +23,30 @@ class WeixinBindQrCodePage extends React.Component {
   }
 
   render() {
+    const { site } = this.props;
+    const { platform } = site;
     const { nickname } = this.props.router.query;
     return (
-      <div className={layout.container}>
-        <HomeHeader hideInfo/>
-        <div className={layout.content}>
-          <div className={layout.title}>绑定微信号</div>
-          <div className={layout.tips}>
+      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
+      <div className={platform === 'h5' ? layout.container : layout.pc_container}>
+        {
+          platform === 'h5'
+            ? <HomeHeader hideInfo/>
+            : <Header/>
+        }
+        <div className={platform === 'h5' ? layout.content : layout.pc_content}>
+          <div className={platform === 'h5' ? layout.title : layout.pc_title}>绑定微信号</div>
+          <div className={platform === 'h5' ? layout.tips : layout.pc_tips}>
             {nickname ? `${nickname}，` : ''}请绑定您的微信
           </div>
           {/* 二维码 start */}
           <WeixinQrCode
             orCodeImg={this.props.h5QrCode.qrCode}
-            orCodeTips="长按保存二维码，并在微信中识别此二维码，即可绑定微信，并继续访问"
+            orCodeTips={platform === 'h5' ? '长按保存二维码，并在微信中识别此二维码，即可完成登录' : '请使用微信，扫码登录'}
           />
           {/* 二维码 end */}
         </div>
+      </div>
       </div>
     );
   }

@@ -18,6 +18,7 @@ class StatusH5Page extends React.Component {
     const { commonLogin, site } = this.props;
     const { platform } = site;
     return (
+      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
@@ -37,6 +38,7 @@ class StatusH5Page extends React.Component {
             退出登录
           </Button>
         </div>
+      </div>
       </div>
     );
   }

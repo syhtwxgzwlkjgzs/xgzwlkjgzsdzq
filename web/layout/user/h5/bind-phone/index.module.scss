@@ -1,14 +1,12 @@
 @import '@common/styles/mixin/login.scss';
 @import '@common/styles/fn/rem.scss';
 .container {
-  background: #fff;
   height: 100vh;
 }
 .banner {
   @include banner;
 }
 .content {
-  background: #fff;
   padding: rem(48) rem(24);
   .title {
     @include title;
@@ -21,13 +19,13 @@
   }
   .tips{
     @include titleTips;
-    margin-bottom: 0; 
+    margin-bottom: 0;
   }
 }
 
 // ------------------PC
-body{
-  background: #f4f5f6;
+.pc_body_background{
+  @include pc_body_background;
 }
 
 .pc_container {

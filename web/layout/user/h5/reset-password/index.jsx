@@ -63,6 +63,7 @@ class ResetPasswordH5Page extends React.Component {
     const { site } = this.props;
     const { platform } = site;
     return (
+      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
@@ -109,6 +110,7 @@ class ResetPasswordH5Page extends React.Component {
             下一步
           </Button>
         </div>
+      </div>
       </div>
     );
   }

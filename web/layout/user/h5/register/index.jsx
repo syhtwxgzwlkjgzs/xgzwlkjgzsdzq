@@ -49,6 +49,7 @@ class RegisterH5Page extends React.Component {
     const { site } = this.props;
     const { platform } = site;
     return (
+      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
@@ -110,6 +111,7 @@ class RegisterH5Page extends React.Component {
           </div>
           <div className={platform === 'h5' ? layout['otherLogin-tips'] : layout.pc_otherLogin_tips}>注册登录即表示您同意《注册协议》《隐私协议》</div>
         </div>
+      </div>
       </div>
     );
   }

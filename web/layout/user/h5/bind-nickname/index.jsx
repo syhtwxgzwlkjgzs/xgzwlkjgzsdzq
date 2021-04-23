@@ -60,6 +60,7 @@ class BindNicknameH5Page extends React.Component {
     const { site, nicknameBind } = this.props;
     const { platform } = site;
     return (
+      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
@@ -87,6 +88,7 @@ class BindNicknameH5Page extends React.Component {
             </span>
           </div>
         </div>
+      </div>
       </div>
     );
   }

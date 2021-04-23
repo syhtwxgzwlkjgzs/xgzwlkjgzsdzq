@@ -1,14 +1,12 @@
 @import '@common/styles/mixin/login.scss';
 @import '@common/styles/fn/rem.scss';
 .container {
-  background: #fff;
   height: 100vh;
 }
 .banner {
   @include banner;
 }
 .content {
-  background: #fff;
   padding: rem(48) rem(24);
   .button {
     @include button;
