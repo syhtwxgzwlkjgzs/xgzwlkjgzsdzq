@@ -11,7 +11,7 @@ import { attachIcon } from '@common/constants/const';
 import Tag from '@components/thread-post/tag';
 
 export default inject('site', 'threadPost')(observer((props) => {
-  const { site, threadPost } = props;
+  const { site, threadPost, onCategoryClick } = props;
   console.log(site, threadPost);
 
   // 控制插件icon的显示/隐藏
@@ -39,7 +39,12 @@ export default inject('site', 'threadPost')(observer((props) => {
   // 分类元素
   const category = (
     <>
-      <Icon name="SettingOutlined" size='20' className={styles['icon']} />
+      <Icon
+        name="SettingOutlined"
+        size='20'
+        className={styles['icon']}
+        onClick={onCategoryClick}
+      />
       <Text>分类</Text>
       <Tag content='使用交流\DZQ使用' clickCb={() => {
         // 处理分类弹框等逻辑

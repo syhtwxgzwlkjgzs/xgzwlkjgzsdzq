@@ -150,9 +150,9 @@ class ThreadPostAction extends ThreadPostStore {
     this.postData = { ...this.postData, ...data };
   }
 
-  @action
-  setCategorySeleted(data) {
-    this.categorySeleted = data || { parent: {}, child: {} };
+  @action.bound
+  setCategorySelected(data) {
+    this.categorySelected = data || { parent: {}, child: {} };
   }
 }
 
