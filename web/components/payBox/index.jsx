@@ -1,3 +1,4 @@
+// @ts-check
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import EventEmitter from 'eventemitter3';
@@ -18,21 +19,39 @@ export default class PayBox extends Component {
     payBoxEmitter.on('createPayBox', this.createPayBox);
   }
 
-  createPayBox(options) {
+  createPayBox = async (options) => {
     this.props.payBox.options = {
-      ...options,
-      visible: true
+      ...options
     };
-  }
-  
+    this.props.payBox.visible = true;
+    await this.props.payBox.createOrder();
+  };
+
   render() {
-    console.log(this.props.payBox)
+    console.log(this.props.payBox);
     const { platform } = this.props.site;
     if (platform === 'pc') {
       return <PCPayBox />;
     }
-    return <H5PayBox options={this.props.payBox.options}/>;
+    return <H5PayBox options={this.props.payBox.options} />;
   }
 }
 
 PayBox.createPayBox = (options) => payBoxEmitter.emit('createPayBox', options);
+
+/**
+ * 订单生成函数
+ * @param {{
+ *  amount: number;
+ *  redAmount: number;
+ *  rewardAmount: number;
+ *  isAnonymous: number;
+ *  type: number;
+ *  threadId: number;
+ *  groupId: number;
+ *  payeeId: number;
+ * }} orderOptions
+ */
+PayBox.orderBuilder = (orderOptions) => {
+  return orderOptions;
+};
