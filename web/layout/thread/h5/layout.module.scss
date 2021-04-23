@@ -8,8 +8,7 @@
   width: 100vw;
   align-items: flex-start;
   justify-content: flex-start;
-  // TODO:更换token
-  background: #f4f6f7;
+  background: var(--comment-content-bg-color);
 }
 
 .header {

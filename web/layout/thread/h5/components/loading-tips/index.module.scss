@@ -11,8 +11,7 @@
   font-size: rem($font-size-primary);
 
   * {
-    // TODO: 替换token
-    color: #c4c9d6;
+    color: var(--loading-font-color);
   }
 }
 
@@ -20,7 +19,6 @@
   font-size: rem($font-size-label);
 
   * {
-    // TODO:
-    color: #c4c9d6;
+    color: var(--loading-font-color);
   }
 }
