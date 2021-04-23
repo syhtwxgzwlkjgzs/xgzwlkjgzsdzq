@@ -4,7 +4,7 @@ import { withRouter } from 'next/router';
 import { Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
-import HeaderLogin from '../../../../components/login/h5/header-login';
+import HomeHeader from '@components/home-header';
 import PhoneInput from '../../../../components/login/h5/phone-input';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
@@ -73,7 +73,7 @@ class BindPhoneH5Page extends React.Component {
     const { mobileBind } = this.props;
     return (
       <div className={layout.container}>
-        <HeaderLogin />
+        <HomeHeader hideInfo/>
         <div className={layout.content}>
           <div className={layout.title}>绑定手机号</div>
           <div className={layout.tips}>

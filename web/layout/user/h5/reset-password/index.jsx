@@ -5,7 +5,7 @@ import { Button, Input, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import PhoneInput from '../../../../components/login/h5/phone-input';
-import HeaderLogin from '../../../../components/login/h5/header-login';
+import HomeHeader from '@components/home-header';
 
 
 @inject('site')
@@ -61,7 +61,7 @@ class ResetPasswordH5Page extends React.Component {
   render() {
     return (
       <div className={layout.container}>
-        <HeaderLogin />
+        <HomeHeader hideInfo/>
         <div className={layout.content}>
           <div className={layout.title}>找回/重设密码</div>
           <PhoneInput

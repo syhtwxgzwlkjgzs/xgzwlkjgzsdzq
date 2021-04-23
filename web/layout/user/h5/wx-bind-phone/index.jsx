@@ -4,7 +4,7 @@ import { withRouter } from 'next/router';
 import layout from './index.module.scss';
 import { Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
-import HeaderLogin from '../../../../components/login/h5/header-login';
+import HomeHeader from '@components/home-header';
 import PhoneInput from '../../../../components/login/h5/phone-input';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
@@ -70,7 +70,7 @@ class WXBindPhoneH5Page extends React.Component {
     const { nickname } = router.query;
     return (
       <div className={layout.container}>
-        <HeaderLogin />
+        <HomeHeader hideInfo/>
         <div className={layout.content}>
           <div className={layout.title}>手机号登陆，并绑定微信账号</div>
           <div className={layout.tips}>

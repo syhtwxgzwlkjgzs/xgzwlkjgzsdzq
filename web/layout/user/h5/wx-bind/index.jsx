@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './index.module.scss';
-import HeaderLogin from '../../../../components/login/h5/header-login';
+import HomeHeader from '@components/home-header';
 import { get } from '@common/utils/get';
 import setAccessToken from '../../../../../common/utils/set-access-token';
 import { Button, Toast } from '@discuzq/design';

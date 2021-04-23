@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
-import { Button, Icon } from '@discuzq/design';
+import { Button, Icon, RichText } from '@discuzq/design';
 
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
@@ -48,11 +48,12 @@ const Index = ({
   // 是否显示遮罩 是付费内容并且隐藏内容百分比大于0 或 显示查看更多并且查看更多状态为false 则显示遮罩
   const showHideCover = !loading ? (isPayContent && hidePercent > 0) || (useShowMore && !showMore) : false;
 
-  const onShowMore = useCallback(() => {
+  const onShowMore = useCallback((e) => {
     if (contentTooLong) {
       // 内容过长直接跳转到详情页面
       onRedirectToDetail && onRedirectToDetail();
     } else {
+      e.stopPropagation();
       setShowMore(true);
     }
   }, [contentTooLong]);
@@ -77,7 +78,9 @@ const Index = ({
         className={`${styles.contentWrapper} ${showHideCover ? styles.hideCover : ''}`}
         onClick={!showMore ? onShowMore : onRedirectToDetail}
       >
-        <div className={styles.content} dangerouslySetInnerHTML={{ __html: filterContent }} />
+        <div className={styles.content}>
+          <RichText html={filterContent} />
+        </div>
       </div>
       {!loading && useShowMore && !showMore && (
         <div className={styles.showMore} onClick={onShowMore}>

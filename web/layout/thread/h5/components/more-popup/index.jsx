@@ -34,7 +34,7 @@ const InputPop = (props) => {
             <div className={styles.text}>举报</div>
           </div> */}
         </div>
-        <Button onClick={onSubmit} className={styles.button} type="primary" size="large">
+        <Button full={true} onClick={onSubmit} className={styles.button} type="primary" size="large">
           取消
         </Button>
       </div>

@@ -4,7 +4,7 @@ import { withRouter } from 'next/router';
 import { Input, Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
-import HeaderLogin from '../../../../components/login/h5/header-login';
+import HomeHeader from '@components/home-header';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 @inject('site')
@@ -49,7 +49,7 @@ class RegisterH5Page extends React.Component {
     const { platform } = site;
     return (
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
-        <HeaderLogin />
+        <HomeHeader hideInfo/>
         <div className={platform === 'h5' ? layout.content : layout.pc_content}>
           <div className={platform === 'h5' ? layout.title : layout.pc_title}>用户名注册</div>
           <Input
