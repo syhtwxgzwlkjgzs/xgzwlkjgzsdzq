@@ -18,11 +18,11 @@ class Index extends React.Component {
   static async getInitialProps(ctx) {
     const categories = await readCategories({}, ctx);
     const sticks = await readStickList({}, ctx);
-    const threads = await readThreadList({params: {filter: {}, sequence: 0, perPage: 10, page: 1}}, ctx);
+    const threads = await readThreadList({ params: { filter: {}, sequence: 0, perPage: 10, page: 1 } }, ctx);
 
     return {
       serverIndex: {
-        categories: categories && categories.code === 0 ? categories.data : null,
+        categories: categories && categories.code === 0 ? [{ name: '全部', pid: '', children: [] }, ...categories.data] : null,
         sticks: sticks && sticks.code === 0 ? sticks.data : null,
         threads: threads && threads.code === 0 ? threads.data : null,
       },
@@ -45,16 +45,15 @@ class Index extends React.Component {
     const hasSticksData = !!index.sticks;
     const hasThreadsData = !!index.threads;
 
-    if ( !hasCategoriesData ) {
+    if (!hasCategoriesData) {
       this.props.index.getReadCategories();
     }
-    if ( !hasSticksData ) {
+    if (!hasSticksData) {
       this.props.index.getRreadStickList();
     }
-    if ( !hasThreadsData ) {
+    if (!hasThreadsData) {
       this.props.index.getReadThreadList();
     }
-
   }
 
   dispatch = async (type, data = {}) => {
@@ -68,12 +67,12 @@ class Index extends React.Component {
     } else if (type === 'moreData') {
       this.page += 1;
       await index.getReadThreadList({
-        perPage: this.prePage, 
-        page: this.page, 
-        filter: { categoryids, types, essence }, 
+        perPage: this.prePage,
+        page: this.page,
+        filter: { categoryids, types, essence },
         sequence,
       });
-      
+
       return;
     }
   }
