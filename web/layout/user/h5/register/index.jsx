@@ -55,7 +55,6 @@ class RegisterH5Page extends React.Component {
             ? <HomeHeader hideInfo/>
             : <Header/>
         }
-        <HomeHeader hideInfo/>
         <div className={platform === 'h5' ? layout.content : layout.pc_content}>
           <div className={platform === 'h5' ? layout.title : layout.pc_title}>用户名注册</div>
           <Input

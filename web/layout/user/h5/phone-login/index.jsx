@@ -110,11 +110,7 @@ class LoginPhoneH5Page extends React.Component {
             : <Header/>
         }
         <div className={platform === 'h5' ? layout.content : layout.pc_content}>
-          {
-            platform === 'h5'
-              ? <div className={layout.title}>手机号码登录/注册</div>
-              : <div className={layout.pc_title}>欢迎登录Discuz! Q</div>
-          }
+          <div className={platform === 'h5' ? layout.title : layout.pc_title}>手机号码登录/注册</div>
           <PhoneInput
             phoneNum={mobileLogin.mobile}
             captcha={mobileLogin.code}
