@@ -40,7 +40,7 @@ class BindPhoneH5Page extends React.Component {
         duration: 1000,
       });
       setTimeout(() => {
-        this.props.router.push('/index');
+        window.location.href = '/index';
       }, 1000);
     } catch (e) {
       // 跳转状态页
