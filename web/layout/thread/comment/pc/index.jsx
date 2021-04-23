@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import createCommentService from '@common/service/comment';
 
 import AuthorInfo from '../../pc/components/author-info/index';
 import CommentList from '../../pc/components/comment-list/index';
@@ -18,7 +17,6 @@ import { Icon, Toast  } from '@discuzq/design';
 class RenderReplyList extends React.Component {
   constructor(props) {
     super(props);
-    this.service = this.props.service,
     this.state = {
       isShowReward: false, // 是否展示获得多少悬赏金
       isShowRedPacket: true, // 是否展示获得多少红包
@@ -74,7 +72,7 @@ class RenderReplyList extends React.Component {
      pid,
      isLiked: liked,
    };
-   const { success, msg } = await this.props.service.comment.updateLiked(params);
+   const { success, msg } = await this.props.service.comment.updateLiked(params, this.props.thread);
    if (!success) {
      Toast.error({
        content: msg,
@@ -99,7 +97,7 @@ class RenderReplyList extends React.Component {
  async deleteComment() {
    if (!this.comment.id) return;
 
-   const { success, msg } = await this.props.service.comment.delete(this.comment.id);
+   const { success, msg } = await this.props.service.comment.delete(this.comment.id, this.props.thread);
    this.setState({
      showDeletePopup: false,
    });
@@ -137,7 +135,7 @@ class RenderReplyList extends React.Component {
    const params = this.state.createReplyParams;
    params.content = val;
    console.log('参数', params);
-   const { success, msg } = await this.service.comment.createReply(params);
+   const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
 
    if (success) {
      Toast.success({
@@ -163,7 +161,7 @@ class RenderReplyList extends React.Component {
      isNoMore: false,
      attachments: [],
    };
-   const { success, msg } = await this.service.comment.createComment(params);
+   const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
    if (success) {
      Toast.success({
        content: '评论成功',
@@ -211,9 +209,7 @@ class RenderReplyList extends React.Component {
 class CommentPCPage extends React.Component {
   constructor(props) {
     super(props);
-    this.service = {
-      comment: createCommentService(props),
-    };
+
     this.state = {
       isCommentLoading: false, // 列表loading
       commentData: {
@@ -706,8 +702,7 @@ class CommentPCPage extends React.Component {
               <RenderReplyList
                 totalCount={111}
                 commentData={this.state.commentData}
-                // store={threadStore}
-                service={this.service}>
+              >
               </RenderReplyList>
             </Fragment>
           </div>

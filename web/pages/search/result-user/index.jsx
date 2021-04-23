@@ -53,6 +53,9 @@ class Index extends React.Component {
     } else if (type === 'moreData') {
       const { users } = search;
       const { pageData } = users || { pageData: [] };
+      if (this.page === 1) {
+        this.page = 2;
+      }
       const { res } = await getUsersList({ search: data, perPage: this.perPage, page: this.page });
 
       if (res?.pageData?.length) {

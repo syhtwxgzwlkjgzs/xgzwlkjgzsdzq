@@ -11,7 +11,7 @@
     .replyListContentText {
       padding: rem($padding-2n);;
       border-radius: rem($border-radius-small);
-      background: #f5f7f8;
+      background: var(--comment-box-bg-color);
       .replyListName {
         font-family: 'PingFangSC-Semibold';
         font-weight: normal;

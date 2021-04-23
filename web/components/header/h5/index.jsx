@@ -5,7 +5,14 @@ import Router from '@common/utils/web-router';
 export default function H5Header() {
   // todo
   const iconClickHandle = useCallback((type) => {
-    console.log(type);
+    switch(type) {
+      case 'home': Router.push('/');
+      break;
+      case 'msg': Router.push('/my/notice');
+      break;
+      case 'user': Router.push('/my');
+      break
+    }
   }, []);
 
   const gobackClickHandle = useCallback(() => {

@@ -52,6 +52,9 @@ class Index extends React.Component {
       this.page = 2;
       search.setThreads(res);
     } else if (type === 'moreData') {
+      if (this.page === 1) {
+        this.page = 2;
+      }
       const { threads } = search;
       const { pageData } = threads || { pageData: [] };
       const { res } = await getThreadList({ search: data, perPage: this.perPage, page: this.page });

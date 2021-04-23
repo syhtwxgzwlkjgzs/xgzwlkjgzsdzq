@@ -1,15 +1,13 @@
 import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import createThreadService from '@common/service/thread';
-import createCommentService from '@common/service/comment';
 
 import RecommendContent from './components/recommend-content/index';
 import AuthorInfo from './components/author-info/index';
 import CommentList from './components/comment-list/index';
 import Input from './components/input/index';
 import LoadingTips from './components/loading-tips';
-import { Icon, Toast, Tag, Button  } from '@discuzq/design';
+import { Icon, Toast, Tag, Button } from '@discuzq/design';
 import UserInfo from '@components/thread/user-info';
 
 import layout from './layout.module.scss';
@@ -172,7 +170,6 @@ function RenderThreadContent(props) {
 class RenderCommentList extends React.Component {
   constructor(props) {
     super(props);
-    this.service = this.props.service,
     this.state = {
       isShowReward: false, // 是否展示获得多少悬赏金
       isShowRedPacket: true, // 是否展示获得多少红包
@@ -180,212 +177,212 @@ class RenderCommentList extends React.Component {
     };
   }
 
- // 评论列表排序
- onSortClick = () => {
-   this.setState({
-     commentSort: !this.state.commentSort,
-   });
-   typeof this.props.sort === 'function' && this.props.sort(!this.state.commentSort);
- }
- // 头像点击
- avatarClick(type) {
-   if (type === '1') {
-     Toast.success({
-       content: '帖子评论的头像',
-     });
-   } else if (type === '2') {
-     Toast.success({
-       content: '评论回复头像',
-     });
-   } else {
-     Toast.success({
-       content: '评论回复对象的头像',
-     });
-   }
- }
- // 点赞
- async likeClick(commentData, replyData) {
-   console.log(commentData, replyData);
-   let pid = '';
-   let liked = '';
-   if (replyData) {
-     const { id, isLiked } = replyData;
-     pid = id;
-     liked = !isLiked;
-   } else {
-     const { id, isLiked } = commentData;
-     pid = id;
-     liked = !isLiked;
-   }
-   if (pid) return;
+  // 评论列表排序
+  onSortClick = () => {
+    this.setState({
+      commentSort: !this.state.commentSort,
+    });
+    typeof this.props.sort === 'function' && this.props.sort(!this.state.commentSort);
+  }
+  // 头像点击
+  avatarClick(type) {
+    if (type === '1') {
+      Toast.success({
+        content: '帖子评论的头像',
+      });
+    } else if (type === '2') {
+      Toast.success({
+        content: '评论回复头像',
+      });
+    } else {
+      Toast.success({
+        content: '评论回复对象的头像',
+      });
+    }
+  }
+  // 点赞
+  async likeClick(commentData, replyData) {
+    console.log(commentData, replyData);
+    let pid = '';
+    let liked = '';
+    if (replyData) {
+      const { id, isLiked } = replyData;
+      pid = id;
+      liked = !isLiked;
+    } else {
+      const { id, isLiked } = commentData;
+      pid = id;
+      liked = !isLiked;
+    }
+    if (pid) return;
 
-   const params = {
-     pid,
-     isLiked: liked,
-   };
-   const { success, msg } = await this.props.service.comment.updateLiked(params);
-   if (!success) {
-     Toast.error({
-       content: msg,
-     });
-     this.getCommentDetail();
-     return;
-   }
+    const params = {
+      pid,
+      isLiked: liked,
+    };
+    const { success, msg } = await this.props.service.comment.updateLiked(params, this.props.thread);
+    if (!success) {
+      Toast.error({
+        content: msg,
+      });
+      this.getCommentDetail();
+      return;
+    }
 
-   Toast.error({
-     content: msg,
-   });
- }
- // 删除
- async deleteClick(type, data) {
-   this.comment = data;
-   this.setState({
-     showDeletePopup: true,
-   });
- }
+    Toast.error({
+      content: msg,
+    });
+  }
+  // 删除
+  async deleteClick(type, data) {
+    this.comment = data;
+    this.setState({
+      showDeletePopup: true,
+    });
+  }
 
- // 删除
- async deleteComment() {
-   if (!this.comment.id) return;
+  // 删除
+  async deleteComment() {
+    if (!this.comment.id) return;
 
-   const { success, msg } = await this.props.service.comment.delete(this.comment.id);
-   this.setState({
-     showDeletePopup: false,
-   });
-   if (success) {
-     Toast.success({
-       content: '删除成功',
-     });
-     return;
-   }
-   Toast.error({
-     content: msg,
-   });
- }
- replyClick(commentData, replyData) {
-   console.log(commentData, replyData);
-   const id = this.props.store.thread?.threadData?.id;
-   const params = {
-     id, // 帖子id
-     content: '', // 评论内容
-     commentId: commentData.id, // 评论id
-     replyId: replyData?.id, // 回复id
-     isComment: replyData !== undefined, // 是否楼中楼
-     commentPostId: [], // 评论回复ID
-     commentUserId: [], // 评论回复用户ID
-     attachments: [], // 附件内容
-   };
-   this.setState({
-     createReplyParams: params,
-   });
- }
- // 创建回复评论+回复回复接口
- async createReply(val) {
-   console.log(val);
-   this.setState({ showCommentInput: false });
-   const params = this.state.createReplyParams;
-   params.content = val;
-   console.log('参数', params);
-   const { success, msg } = await this.service.comment.createReply(params);
+    const { success, msg } = await this.props.service.comment.delete(this.comment.id, this.props.thread);
+    this.setState({
+      showDeletePopup: false,
+    });
+    if (success) {
+      Toast.success({
+        content: '删除成功',
+      });
+      return;
+    }
+    Toast.error({
+      content: msg,
+    });
+  }
+  replyClick(commentData, replyData) {
+    console.log(commentData, replyData);
+    const id = this.props.store.thread?.threadData?.id;
+    const params = {
+      id, // 帖子id
+      content: '', // 评论内容
+      commentId: commentData.id, // 评论id
+      replyId: replyData?.id, // 回复id
+      isComment: replyData !== undefined, // 是否楼中楼
+      commentPostId: [], // 评论回复ID
+      commentUserId: [], // 评论回复用户ID
+      attachments: [], // 附件内容
+    };
+    this.setState({
+      createReplyParams: params,
+    });
+  }
+  // 创建回复评论+回复回复接口
+  async createReply(val) {
+    console.log(val);
+    this.setState({ showCommentInput: false });
+    const params = this.state.createReplyParams;
+    params.content = val;
+    console.log('参数', params);
+    const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
 
-   if (success) {
-     Toast.success({
-       content: '操作成功',
-     });
-     return;
-   }
+    if (success) {
+      Toast.success({
+        content: '操作成功',
+      });
+      return;
+    }
 
-   Toast.error({
-     content: msg,
-   });
- }
+    Toast.error({
+      content: msg,
+    });
+  }
 
- // 创建帖子评论
- async onPublishClick(val) {
-   console.log(val);
-   this.setState({ showCommentInput: false });
-   const id = this.props.thread?.threadData?.id;
-   const params = {
-     id,
-     content: val,
-     sort: this.commentSort, // 目前的排序
-     isNoMore: false,
-     attachments: [],
-   };
-   const { success, msg } = await this.service.comment.createComment(params);
-   if (success) {
-     Toast.success({
-       content: '评论成功',
-     });
-     this.setState({
-       showCommentInput: false,
-     });
-     return true;
-   }
-   Toast.error({
-     content: msg,
-   });
- }
+  // 创建帖子评论
+  async onPublishClick(val) {
+    console.log(val);
+    this.setState({ showCommentInput: false });
+    const id = this.props.thread?.threadData?.id;
+    const params = {
+      id,
+      content: val,
+      sort: this.commentSort, // 目前的排序
+      isNoMore: false,
+      attachments: [],
+    };
+    const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
+    if (success) {
+      Toast.success({
+        content: '评论成功',
+      });
+      this.setState({
+        showCommentInput: false,
+      });
+      return true;
+    }
+    Toast.error({
+      content: msg,
+    });
+  }
 
- render() {
-   const { totalCount, commentList } = this.props.store;
-   return (
+  render() {
+    const { totalCount, commentList } = this.props.store;
+    return (
       <Fragment>
-          <div className={comment.header}>
-                <div className={comment.number}>
-                  共{totalCount}条评论
+        <div className={comment.header}>
+          <div className={comment.number}>
+            共{totalCount}条评论
                 </div>
-                <div className={comment.sort} onClick={() => this.onSortClick()}>
-                  <Icon
-                    size='14'
-                    name='SortOutlined'>
-                  </Icon>
-                  <span className={comment.sortText}></span>
-                  {
-                    this.state.commentSort ? '评论从旧到新' : '评论从新到旧'
-                  }
+          <div className={comment.sort} onClick={() => this.onSortClick()}>
+            <Icon
+              size='14'
+              name='SortOutlined'>
+            </Icon>
+            <span className={comment.sortText}></span>
+            {
+              this.state.commentSort ? '评论从旧到新' : '评论从新到旧'
+            }
+          </div>
+        </div>
+        <div className={comment.input}>
+          <Input onSubmit={value => this.onPublishClick(value)}></Input>
+        </div>
+        <div className={comment.body}>
+          {
+            commentList && commentList
+              .map((val, index) => (
+                <div className={comment.commentItems} key={index}>
+                  <CommentList
+                    data={val}
+                    key={val.id}
+                    avatarClick={type => this.avatarClick.bind(this, type)}
+                    likeClick={type => this.likeClick.bind(this, val, type)}
+                    replyClick={type => this.replyClick.bind(this, val, type)}
+                    deleteClick={() => this.deleteClick.bind(this, val)}
+                    isPostDetail={true}>
+                  </CommentList>
                 </div>
-              </div>
-              <div className={comment.input}>
-                <Input onSubmit={value => this.onPublishClick(value)}></Input>
-              </div>
-              <div className={comment.body}>
-                {
-                  commentList && commentList
-                    .map((val, index) => (
-                      <div className={comment.commentItems} key={index}>
-                        <CommentList
-                          data={val}
-                          key={val.id}
-                          avatarClick={type => this.avatarClick.bind(this, type)}
-                          likeClick={type => this.likeClick.bind(this, val, type)}
-                          replyClick={type => this.replyClick.bind(this, val, type)}
-                          deleteClick={() => this.deleteClick.bind(this, val)}
-                          isPostDetail={true}>
-                        </CommentList>
-                      </div>
-                    ))
-                }
-              </div>
+              ))
+          }
+        </div>
       </Fragment>
-   );
- }
+    );
+  }
 }
 
 @inject('site')
 @inject('user')
 @inject('thread')
+@inject('comment')
 @observer
 class ThreadPCPage extends React.Component {
   constructor(props) {
     super(props);
-    this.service = {
-      thread: createThreadService(props),
-      comment: createCommentService(props),
-    };
     this.state = {
       isCommentLoading: false, // 列表loading
     };
+    this.props.comment.injectStore && this.props.comment.injectStore({
+      thread: this.props.thread,
+    });
   }
 
 
@@ -399,28 +396,27 @@ class ThreadPCPage extends React.Component {
           {/* 左边内容和评论 */}
           <div className={layout.bodyLeft}>
             <div className={topic.container}>
-            {/* 帖子内容 */}
-            {
-              isReady ? <RenderThreadContent store={threadStore}></RenderThreadContent> : <LoadingTips type='init'></LoadingTips>
-            }
+              {/* 帖子内容 */}
+              {
+                isReady ? <RenderThreadContent store={threadStore}></RenderThreadContent> : <LoadingTips type='init'></LoadingTips>
+              }
             </div>
 
             {/* 回复详情内容 */}
             <div className={comment.container}>
-            {
-              isCommentReady
-                ? (
-                <Fragment>
-                  <RenderCommentList
-                    totalCount={totalCount}
-                    store={threadStore}
-                    service={this.service}
-                    sort={flag => this.onSortChange(flag)}>
-                  </RenderCommentList>
-                </Fragment>
-                )
-                : <LoadingTips type='init'></LoadingTips>
-            }
+              {
+                isCommentReady
+                  ? (
+                    <Fragment>
+                      <RenderCommentList
+                        totalCount={totalCount}
+                        store={threadStore}
+                        sort={flag => this.onSortChange(flag)}>
+                      </RenderCommentList>
+                    </Fragment>
+                  )
+                  : <LoadingTips type='init'></LoadingTips>
+              }
 
             </div>
           </div>

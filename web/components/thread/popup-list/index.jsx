@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Tabs, Popup } from '@discuzq/design';
 import UserItem from '../user-item';
 import styles from './index.module.scss';
 import { getLikedUsers } from '@common/service/home';
 import NoData from '@components/no-data';
+import List from '../../list';
 
 /**
  * 帖子点赞、打赏点击之后的弹出视图
@@ -12,34 +13,13 @@ import NoData from '@components/no-data';
  */
 
 const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
-  const tabList = useRef([
-    {
-      id: '0',
-      label: '全部',
-      badge: '10',
-      icon: 'succuss',
-    },
-    {
-      id: '1',
-      label: '点赞',
-      badge: '10',
-      icon: 'succuss',
-    },
-    {
-      id: '2',
-      label: '打赏',
-      badge: '10',
-      icon: 'succuss',
-    },
-  ]);
-
   const allPageNum = useRef(1);
   const likePageNum = useRef(1);
-  const rewardPageNum = useRef(1);
+  const tipPageNum = useRef(1);
 
-  const [dataSource, setDataSource] = useState([]);
-  const [dataSource1, setDataSource1] = useState([]);
-  const [dataSource2, setDataSource2] = useState([]);
+  const [all, setAll] = useState({});
+  const [likes, setLikes] = useState({});
+  const [tips, setTips] = useState({});
 
   useEffect(() => {
     if (visible) {
@@ -49,72 +29,52 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
 
   const loadData = async () => {
     const { postId = '', threadId = '' } = tipData;
-    const res = await getLikedUsers({ threadId, postId, isAll: true });
-    setDataSource(res[0]?.list || []);
-    setDataSource1(res[1]?.list || []);
-    setDataSource2(res[2]?.list || []);
+    const { res } = await getLikedUsers({ threadId, postId, isAll: true });
+
+    setAll(res[0] || {});
+    setLikes(res[1] || {});
+    setTips(res[2] || {});
   };
 
-  const singleloadData = async (page = 1, type = 1) => {
-    const { data } = await getLikedUsers({ threadId: '61', postId: '0', page, type });
-
-    const { list = [] } = data || {};
+  const singleLoadData = async (page = 1, type = 1) => {
+    const { postId = '', threadId = '' } = tipData;
+    const { res } = await getLikedUsers({ threadId, postId, page, type });
+    const data = res?.data || {};
 
     if (type === 0) {
       allPageNum.current += 1;
-      if (page === 1) {
-        setDataSource(list);
-      } else {
-        setDataSource([...dataSource, ...list]);
+      if (page !== 1) {
+        data?.pageData?.list.unshift(all?.pageData?.list || []);
       }
+      setAll(data);
     } else if (type === 1) {
       likePageNum.current += 1;
-      if (page === 1) {
-        setDataSource1(list);
-      } else {
-        setDataSource([...dataSource1, ...list]);
+      if (page !== 1) {
+        data?.pageData?.list.unshift(likes?.pageData?.list || []);
       }
+      setLikes(data);
     } else if (type === 2) {
-      rewardPageNum.current += 1;
-      if (page === 1) {
-        setDataSource2(list);
-      } else {
-        setDataSource([...dataSource2, ...list]);
+      tipPageNum.current += 1;
+      if (page !== 1) {
+        data?.pageData?.list.unshift(tips?.pageData?.list || []);
       }
+      setTips(data);
     }
   };
 
-  const renderList = useCallback((id) => {
-    if (!visible) {
-      return null;
-    }
-    let data = dataSource;
-    if (id === '1') {
-      data = dataSource1;
-    } else if (id === '2') {
-      data = dataSource2;
-    }
+  const renderList = (data) => {
+    const { pageData, currentPage = 0, totalPage = 0 } = data;
 
     return (
-      <>
+      <List className={styles.list} onRefresh={singleLoadData} noMore={currentPage === totalPage}>
         {
-          data && data.length
-            ? (
-            <div className={styles.list}>
-              {
-                data.map((item, index) => (
-                  <UserItem key={index} imgSrc={item.avatar} title={item.nickname} subTitle={item.time} />
-                ))
-              }
-            </div>
-            )
-            : <NoData />
-          }
-      </>
-
+          pageData?.list?.map((item, index) => (
+            <UserItem key={index} imgSrc={item.avatar} title={item.username} subTitle={item.passedAt} />
+          ))
+        }
+      </List>
     );
-  }, [visible]) ;
-
+  };
 
   return (
     <Popup
@@ -123,11 +83,17 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
         onClose={onHidden}
     >
         <Tabs>
-            {tabList.current.map(item => (
-                <Tabs.TabPanel key={item.id} id={item.id} label={item.label} badge={item.badge} icon={item.icon}>
-                {renderList(item.id)}
-                </Tabs.TabPanel>
-            ))}
+          <Tabs.TabPanel key='1-1' id={0} label='全部'>
+            {all?.pageData?.list?.length ? renderList(all) : <NoData />}
+          </Tabs.TabPanel>
+
+          <Tabs.TabPanel key='1-3' id={1} label='点赞'>
+            {likes?.pageData?.list?.length ? renderList(likes) : <NoData />}
+          </Tabs.TabPanel>
+
+          <Tabs.TabPanel key='1-2' id={2} label='打赏'>
+            {tips?.pageData?.list?.length ? renderList(tips) : <NoData />}
+          </Tabs.TabPanel>
         </Tabs>
     </Popup>
   );

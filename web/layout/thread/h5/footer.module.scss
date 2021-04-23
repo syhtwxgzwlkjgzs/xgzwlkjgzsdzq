@@ -11,6 +11,9 @@
   margin-left: rem($margin-6n);
   display: inline-block;
 
+  // TODO:暂未提供token
+  color: #8490a8;
+
   :first-child {
     margin-left: 0;
   }

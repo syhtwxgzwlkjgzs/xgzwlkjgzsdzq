@@ -23,7 +23,7 @@ class Index extends React.Component {
 
     return {
       serverIndex: {
-        categories: categories && categories.code === 0 ? categories.data : null,
+        categories: categories && categories.code === 0 ? [{ name: '全部', pid: '', children: [] }, ...categories.data] : null,
         sticks: sticks && sticks.code === 0 ? sticks.data : null,
         threads: threads && threads.code === 0 ? threads.data : null,
       },
