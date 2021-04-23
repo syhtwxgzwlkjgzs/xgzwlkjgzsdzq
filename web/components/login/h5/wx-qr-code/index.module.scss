@@ -22,3 +22,27 @@
     text-align: left;
   }
 }
+
+// ----------------------PC
+.pc_orCode {
+  width: 198px;
+  text-align: center;
+  margin: 0 auto;
+  .pc_orCode__img {
+    width: 198px;
+    height: 198px;
+    text-align: center;
+    img {
+      width: 100%;
+      height: 100%;
+      display: inline-block;
+    }
+  }
+  .pc_orCode__text {
+    padding-top: 29px;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 26px;
+    color: #0b0b37;
+  }
+}
