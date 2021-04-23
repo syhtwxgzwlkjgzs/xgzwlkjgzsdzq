@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { smsSend, smsLogin } from '@server';
+import { smsSend, transitionSmsBind } from '@server';
 import { get } from '../../utils/get';
 import setAccessToken from '../../utils/set-access-token';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
@@ -185,7 +185,7 @@ export default class wxPhoneBindStore {
       this.beforeLoginVerify();
 
       try {
-        const smsLoginResp = await smsLogin({
+        const smsLoginResp = await transitionSmsBind({
           url: 'apiv3/users/wechat/transition/sms.bind',
           timeout: 3000,
           data: {

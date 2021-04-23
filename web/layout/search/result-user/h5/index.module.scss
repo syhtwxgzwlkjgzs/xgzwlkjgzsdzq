@@ -8,6 +8,9 @@
   flex-direction: column;
   box-sizing: border-box;
   overflow: hidden;
+  .list {
+    flex: 1;
+  }
 }
 .searchInput {
   padding: 0 rem($padding-4n);

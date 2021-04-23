@@ -5,6 +5,20 @@
   overflow: hidden;
   height: rem(165);
   position: relative;
+  .topBar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: rem($padding-4n);
+    box-sizing: border-box;
+    .goback{
+      transform: rotate(180deg);
+    }
+  }
   .logoBox {
     margin-top: rem(57.8);
     max-height: rem(40);

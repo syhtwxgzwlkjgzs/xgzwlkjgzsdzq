@@ -201,6 +201,7 @@ export default class mobileLoginStore {
           throw {
             ...MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT,
             sessionToken: get(smsLoginResp, 'data.sessionToken'),
+            nickname: get(smsLoginResp, 'data.nickname'),
           };
         }
 

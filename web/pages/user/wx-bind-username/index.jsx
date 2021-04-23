@@ -3,6 +3,7 @@ import WXBindUsernameH5Page from '@layout/user/h5/wx-bind-username';
 import { inject } from 'mobx-react';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCLoginMode from '@common/middleware/HOCLoginMode';
 
 @inject('site')
 class WXBindUsername extends React.Component {
@@ -14,4 +15,4 @@ class WXBindUsername extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(WXBindUsername);
+export default HOCFetchSiteData(HOCLoginMode('weixin')(WXBindUsername));
