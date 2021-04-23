@@ -5,7 +5,7 @@ import layout from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import WeixinQrCode from '../../../../components/login/h5/wx-qr-code';
-import HeaderLogin from '../../../../components/login/h5/header-login';
+import HomeHeader from '@components/home-header';
 import hocWeixin from './HOCWeixin';
 
 @inject('site')
@@ -26,7 +26,7 @@ class WXLoginH5Page extends React.Component {
     const isAnotherLoginWayAvaliable = this.props.site.isSmsOpen || this.props.site.isUserLoginVisible;
     return (
       <div className={layout.container}>
-        <HeaderLogin />
+        <HomeHeader hideInfo/>
         <div className={layout.content}>
           <div className={layout.title}>微信登录</div>
           {/* 二维码 start */}

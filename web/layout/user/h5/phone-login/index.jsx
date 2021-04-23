@@ -4,8 +4,8 @@ import { withRouter } from 'next/router';
 import { Button, Toast, Icon } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
-import PhoneInput from '../../../../components/login/phone-input';
-import HeaderLogin from '../../../../components/login/h5/header-login';
+import PhoneInput from '../../../../components/login/h5/phone-input';
+import HomeHeader from '@components/home-header';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
@@ -102,14 +102,10 @@ class LoginPhoneH5Page extends React.Component {
     const isAnotherLoginWayAvaliable = this.props.site.wechatEnv !== 'none' || this.props.site.isUserLoginVisible;
 
     return (
-      <div className={platform === 'h5' ? layout.container : layout.pc_container}>
-        <HeaderLogin />
-        <div className={platform === 'h5' ? layout.content : layout.pc_content}>
-          {
-            platform === 'h5'
-              ? <div className={layout.title}>手机号码登录/注册</div>
-              : <div className={layout.pc_title}>欢迎登录Discuz! Q</div>
-          }
+      <div className={layout.container}>
+        <HomeHeader hideInfo/>
+        <div className={layout.content}>
+          <div className={layout.title}>手机号码登录/注册</div>
           <PhoneInput
             phoneNum={mobileLogin.mobile}
             captcha={mobileLogin.code}

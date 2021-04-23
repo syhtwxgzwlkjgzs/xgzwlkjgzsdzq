@@ -5,7 +5,6 @@ import styles from './index.module.scss';
 import CommentList from '../../h5/components/comment-list/index';
 import Header from '@components/header';
 import { Icon, Toast } from '@discuzq/design';
-import createCommentService from '@common/service/comment';
 import InputPopup from '../../h5/components/input-popup';
 
 @inject('site')
@@ -16,9 +15,6 @@ import InputPopup from '../../h5/components/input-popup';
 class CommentH5Page extends React.Component {
   constructor(props) {
     super(props);
-    this.service = {
-      comment: createCommentService(props),
-    };
 
     this.state = {
       showCommentInput: false, // 是否弹出评论框
@@ -43,7 +39,7 @@ class CommentH5Page extends React.Component {
       id: data.id,
       isLiked: !data.isLiked,
     };
-    const { success, msg } = await this.service.comment.updateLiked(params);
+    const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
     if (!success) {
       Toast.error({
         content: msg,
@@ -59,7 +55,7 @@ class CommentH5Page extends React.Component {
       id: reply.id,
       isLiked: !reply.isLiked,
     };
-    const { success, msg } = await this.service.comment.updateLiked(params);
+    const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
     if (!success) {
       Toast.error({
         content: msg,
@@ -79,7 +75,7 @@ class CommentH5Page extends React.Component {
   async deleteComment() {
     if (!this.commentData.id) return;
 
-    const { success, msg } = await this.service.comment.delete(this.commentData.id);
+    const { success, msg } = await this.props.comment.delete(this.commentData.id, this.props.thread);
     this.setState({
       showDeletePopup: false,
     });
@@ -140,7 +136,7 @@ class CommentH5Page extends React.Component {
       params.commentId = this.commentData.id;
     }
 
-    const { success, msg } = await this.service.comment.createReply(params);
+    const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
 
     if (success) {
       this.setState({

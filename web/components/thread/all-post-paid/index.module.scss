@@ -27,12 +27,13 @@
   :global {
     .dzq-input {
       display: inline-block;
-      width: 40px;
+      width: 100px;
+      text-align: right;
     }
     .dzq-input__inner {
       border: none;
-      padding: 0;
-      text-align: center;
+      padding-right: 5px;
+      text-align: right;
     }
   }
 }

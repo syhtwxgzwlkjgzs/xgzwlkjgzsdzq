@@ -7,9 +7,9 @@ body {
 }
 .post-inner {
   position: absolute;
-  top: 0;
+  top: rem(44);
   width: 100%;
-  height: calc(100vh - 134px);
+  height: calc(100vh - 134px - 0.44rem);
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
 }

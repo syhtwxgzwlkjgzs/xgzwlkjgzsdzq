@@ -61,7 +61,7 @@ class SearchH5Page extends React.Component {
         </div>
         <div className={styles.hr} />
         <div className={styles.section}>
-          <SectionTitle icon={{ type: 2, name: 'ProfessionOutlined' }} title="活跃用户" onShowMore={this.redirectToSearchResultUser} />
+          <SectionTitle icon={{ type: 2, name: 'MemberOutlined' }} title="活跃用户" onShowMore={this.redirectToSearchResultUser} />
           {
             usersPageData && usersPageData.length
               ? <ActiveUsers data={usersPageData} onItemClick={this.onUserClick} />

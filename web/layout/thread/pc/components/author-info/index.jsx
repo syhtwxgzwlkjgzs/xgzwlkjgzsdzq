@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Avatar, Icon } from '@discuzq/design';
+import { Avatar, Icon, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 
 class AuthorInfo extends React.Component {
@@ -20,10 +20,14 @@ class AuthorInfo extends React.Component {
   }
 
   onFollowClick() {
-    console.log('点击关注');
+    Toast.success({
+      content: '点关注',
+    });
   }
   onprivateLetter() {
-    console.log('点击发私信');
+    Toast.success({
+      content: '发私信',
+    });
   }
 
   render() {

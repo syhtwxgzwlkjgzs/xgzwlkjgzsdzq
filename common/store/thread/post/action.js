@@ -1,7 +1,7 @@
 import { action } from 'mobx';
 import ThreadPostStore from './store';
 import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread } from '@common/server';
-import { LOADING_TOTAL_TYPE } from '@common/constants/thread-post';
+import { LOADING_TOTAL_TYPE, THREAD_TYPE } from '@common/constants/thread-post';
 
 class ThreadPostAction extends ThreadPostStore {
   /**
@@ -11,9 +11,10 @@ class ThreadPostAction extends ThreadPostStore {
   async createThread() {
     // 待更换为全局loading?
     // this.setLoadingStatus(LOADING_TOTAL_TYPE.emoji, true);
-    const ret = await createThread(this.postData);
+    const params = this.getCreateThreadParams();
+    const ret = await createThread(params);
     // this.setLoadingStatus(LOADING_TOTAL_TYPE.emoji, false);
-    const { code, data = [] } = ret;
+    // const { code, data = [] } = ret;
     // 相关数据处理待实际调用时修改
     // let emojis = [];
     // if (code === 0) emojis = data.map(item => ({ code: item.code, url: item.url }));
@@ -57,8 +58,7 @@ class ThreadPostAction extends ThreadPostStore {
       page,
     };
     this.setLoadingStatus(LOADING_TOTAL_TYPE.follow, true);
-    // TODO: 待sdk更新后在去掉 isValidate
-    const ret = await readFollow({ params, isValidate: false });
+    const ret = await readFollow({ params });
     this.setLoadingStatus(LOADING_TOTAL_TYPE.follow, false);
     const { code, data } = ret;
     const { pageData } = data || {};
@@ -148,7 +148,92 @@ class ThreadPostAction extends ThreadPostStore {
   // 同步发帖数据到store
   @action.bound
   setPostData(data) {
-    this.postData = {...this.postData, ...data};
+    this.postData = { ...this.postData, ...data };
+  }
+
+  @action
+  setCategorySeleted(data) {
+    this.categorySeleted = data || { parent: {}, child: {} };
+  }
+
+  /**
+   * 获取格式化之后的插件对象信息，包括语音等
+   */
+  @action
+  gettContentIndexes() {
+    const { images, video, files, product, audio, redpacket, rewardQa } = this.postData;
+    const imageIds = Object.values(images).map(item => item.id);
+    const docIds = Object.values(files).map(item => item.id);
+    const contentIndexes = {};
+    if (imageIds.length > 0) {
+      contentIndexes[THREAD_TYPE.image] = {
+        tomId: THREAD_TYPE.image,
+        body: { imageIds },
+      };
+    }
+    if (video.id) {
+      contentIndexes[THREAD_TYPE.video] = {
+        tomId: THREAD_TYPE.video,
+        body: { videoId: video.id },
+      };
+    }
+    if (docIds.length > 0) {
+      contentIndexes[THREAD_TYPE.file] = {
+        tomId: THREAD_TYPE.file,
+        body: { docIds },
+      };
+    }
+    if (product.id) {
+      contentIndexes[THREAD_TYPE.goods] = {
+        tomId: THREAD_TYPE.goods,
+        body: { ...product },
+      };
+    }
+    if (audio.id) {
+      contentIndexes[THREAD_TYPE.voice] = {
+        tomId: THREAD_TYPE.voice,
+        body: { audioId: audio.id },
+      };
+    }
+    // TODO:需要支付，缺少 orderId
+    if (redpacket.price) {
+      contentIndexes[THREAD_TYPE.redPacket] = {
+        tomId: THREAD_TYPE.redPacket,
+        body: { ...redpacket },
+      };
+    }
+    // TODO:需要支付，缺少 orderId
+    if (rewardQa.times) {
+      contentIndexes[THREAD_TYPE.qa] = {
+        tomId: THREAD_TYPE.qa,
+        body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0 },
+      };
+    }
+    return contentIndexes;
+  }
+
+  /**
+   * 获取发帖时需要的参数
+   */
+  @action
+  getCreateThreadParams() {
+    const { title, categoryId, contentText, position, price, attachmentPrice, freeWords } = this.postData;
+    const params = {
+      title, categoryId, content: {
+        text: contentText,
+      },
+    };
+    if (position.address) params.position = position;
+    if (!!price) {
+      params.price = price;
+      params.freeWords = freeWords;
+    }
+    if (!!attachmentPrice) params.attachmentPrice = attachmentPrice;
+    if (this.postData.draft) params.draft = this.postData.draft;
+    if (this.postData.anonymous) params.anonymous = this.postData.anonymous;
+    const contentIndexes = this.gettContentIndexes();
+    if (Object.keys(contentIndexes).length > 0) params.content.indexes = contentIndexes;
+    return params;
   }
 }
 

@@ -74,6 +74,7 @@ export default class UserLoginStore {
         Message: loginResp.msg,
       };
     } catch (error) {
+      console.log(error);
       if (error.Code) {
         throw error;
       }

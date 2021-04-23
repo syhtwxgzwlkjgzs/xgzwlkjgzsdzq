@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'next/router';
 import styles from './index.module.scss';
-import { Avatar, Icon } from '@discuzq/design';
+import { Avatar, Icon, Toast } from '@discuzq/design';
 // import '@discuzq/design/styles/index.scss';
 import ReplyList from '../reply-list/index';
 
@@ -12,7 +12,7 @@ class CommentList extends React.Component {
       isShowReward: false, // 是否展示获得多少悬赏金
       isShowRedPacket: true, // 是否展示获得多少红包
       isShowAdopt: true, // 是否展示采纳按钮
-      isShowOne: this.props.isShowOne || false, // 是否只显示一条评论回复
+      isPostDetail: this.props.isPostDetail || false, // 是否只显示一条评论回复
       isLiked: this.props.data.isLiked,
       likeCount: this.props.data.likeCount,
       likeClick: this.props.likeClick(),
@@ -32,14 +32,14 @@ class CommentList extends React.Component {
     };
   }
   toCommentDetail = () => {
-    if (this.state.isShowOne && this.props?.data?.id) {
+    if (this.state.isPostDetail && this.props?.data?.id) {
       this.props.router.push(`/thread/comment/${this.props?.data?.id}`);
     }
   }
   // 处理评论的回复只显示一条
   showOne() {
-    console.log('this.isShowOne', this.state.isShowOne);
-    if (this.state.isShowOne) {
+    console.log('this.isPostDetail', this.state.isPostDetail);
+    if (this.state.isPostDetail) {
       this.needReply = [];
       this.props.data?.lastThreeComments?.length && this.needReply.push(this.props.data.lastThreeComments[0]);
     }
@@ -63,16 +63,43 @@ class CommentList extends React.Component {
   adoptClick() {
     console.log('点击采纳');
   }
+  // 返回上一页
+  onBackClick() {
+    Toast.success({
+      content: '返回上一页',
+    });
+  }
 
   render() {
     return (
       <div className={styles.commentList}>
         <div className={styles.header}>
-            <div className={styles.showGet}>
+          {
+            this.state.isPostDetail ? <div></div>
+              : <div className={styles.back} onClick={() => this.onBackClick()}>
+                <Icon
+                  name='WarnOutlined'
+                  size='16'
+                  className={styles.backIcon}>
+                </Icon>
+                <span>返回</span>
+              </div>
+          }
+          <div className={`${styles.showGet} ${this.state.isPostDetail ? '' : styles.padding}`}>
             <div className={styles.extra}>
               {/* <div className={styles.revise}>编辑</div> */}
-              <div className={styles.revise} onClick={() => this.deleteClick()}>删除</div>
             </div>
+              {
+                this.state.isPostDetail
+                  ? <div className={styles.delete}>
+                    <Icon
+                      name='WarnOutlined'
+                      size='16'
+                      className={styles.deleteIcon}>
+                    </Icon>
+                    <span onClick={() => this.deleteClick()}>删除</span>
+                  </div> : ''
+              }
               {
                 this.state.isShowReward
                   ? <div>
@@ -88,6 +115,17 @@ class CommentList extends React.Component {
                         获得<span className={styles.moneyNumber}>{6}</span>元红包
                       </div>
                     </div> : ''
+              }
+              {
+                this.state.isPostDetail
+                  ? '' : <div className={styles.delete}>
+                    <Icon
+                      name='WarnOutlined'
+                      size='16'
+                      className={styles.deleteIcon}>
+                    </Icon>
+                    <span onClick={() => this.deleteClick()}>删除</span>
+                  </div>
               }
           </div>
         </div>
@@ -105,48 +143,52 @@ class CommentList extends React.Component {
               </div>
             </div>
             <div className={styles.commentListFooter}>
-              <div className={styles.commentBtn}>
-                <div className={styles.commentTime}>{this.props.data.createdAt.split(' ')[1]}</div>
-                <div className={styles.extraBottom}>
-                <div className={this.state.isLiked ? styles.commentLike : styles.commentLiked}>
-                  <Icon
-                    name='LikeOutlined'
-                    size='16'
-                    className={styles.btnIcon}>
-                  </Icon>
-                  <span onClick={() => this.likeClick()}>赞{this.state.likeCount > 0 ? this.state.likeCount : ''}</span>
-                </div>
-                <div className={styles.commentReply}>
-                  <Icon
-                    name='MessageOutlined'
-                    size='16'
-                    className={styles.btnIcon}>
-                  </Icon>
-                  <span onClick={() => this.replyClick()}>回复</span>
-                </div>
-                {
-                  this.state.isShowAdopt
-                    ? <div className={styles.commentAdopt}>
-                        <Icon
-                          name='WarnOutlined'
-                          size='16'
-                          className={styles.btnIcon}>
-                        </Icon>
-                        <span onClick={() => this.adoptClick()}>采纳</span>
-                      </div> : ''
-                }
-                <div className={styles.commentReply}>
-                  <Icon
-                    name='WarnOutlined'
-                    size='16'
-                    className={styles.btnIcon}>
-                  </Icon>
-                  <span onClick={() => this.replyClick()}>举报</span>
-                </div>
-              </div>
-              </div>
               {
-                this.replyNumber > 0 && this.state.isShowOne
+                this.state.isPostDetail
+                  ? <div className={styles.commentBtn}>
+                  <div className={styles.commentTime}>{this.props.data.createdAt.split(' ')[1]}</div>
+                  <div className={styles.extraBottom}>
+                  <div className={this.state.isLiked ? styles.commentLike : styles.commentLiked}>
+                    <Icon
+                      name='LikeOutlined'
+                      size='16'
+                      className={styles.btnIcon}>
+                    </Icon>
+                    <span onClick={() => this.likeClick()}>赞{this.state.likeCount > 0 ? this.state.likeCount : ''}</span>
+                  </div>
+                  <div className={styles.commentReply}>
+                    <Icon
+                      name='MessageOutlined'
+                      size='16'
+                      className={styles.btnIcon}>
+                    </Icon>
+                    <span onClick={() => this.replyClick()}>回复</span>
+                  </div>
+                  {
+                    this.state.isShowAdopt
+                      ? <div className={styles.commentAdopt}>
+                          <Icon
+                            name='WarnOutlined'
+                            size='16'
+                            className={styles.btnIcon}>
+                          </Icon>
+                          <span onClick={() => this.adoptClick()}>采纳</span>
+                        </div> : ''
+                  }
+                  <div className={styles.commentReply}>
+                    <Icon
+                      name='WarnOutlined'
+                      size='16'
+                      className={styles.btnIcon}>
+                    </Icon>
+                    <span onClick={() => this.replyClick()}>举报</span>
+                  </div>
+                </div>
+                </div>
+                  : <div className={styles.line}></div>
+              }
+              {
+                this.replyNumber > 0 && this.state.isPostDetail
                   ? <div
                       className={styles.moreReply}
                       onClick={() => this.toCommentDetail()}>
@@ -163,7 +205,8 @@ class CommentList extends React.Component {
                                             likeClick={() => this.props.likeClick(val)}
                                             replyClick={() => this.props.replyClick(val)}
                                             deleteClick={this.props.deleteClick}
-                                            toCommentDetail={this.toCommentDetail}>
+                                            toCommentDetail={this.toCommentDetail}
+                                            isPostDetail={this.state.isPostDetail}>
                                           </ReplyList>)
                 }
               </div>
