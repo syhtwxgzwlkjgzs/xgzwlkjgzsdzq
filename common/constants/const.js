@@ -32,6 +32,7 @@ export const defaultIcon = [
     name: 'PaperClipOutlined', // 附件
     active: '#2469f6',
     id: defaultOperation.attach,
+    type: THREAD_TYPE.file
   },
   {
     name: 'WalletOutlined', // 红包

@@ -2,19 +2,15 @@
 /**
  * 发帖页底部表情、话题、发布等工具栏
  */
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { observer, inject } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import { defaultIcon } from '@common/constants/const';
 
-export default inject('site', 'threadPost')(observer((props) => {
-  const { site, threadPost } = props;
-  console.log(site, threadPost);
-
+const Index = inject('site', 'threadPost')(observer(({ clickCb }) => {
   const [currentTool, setCurrentTool] = useState({});
-
 
   // 工具栏icon元素
   const plus = defaultIcon.map((item, index) => {
@@ -24,7 +20,7 @@ export default inject('site', 'threadPost')(observer((props) => {
         className={styles['plus-icon']}
         onClick={() => {
           setCurrentTool(item);
-          // 处理该工具对应的逻辑
+          clickCb(item);
         }}
         name={item.name}
         color={item.id === currentTool.id && item.active}
@@ -40,3 +36,5 @@ export default inject('site', 'threadPost')(observer((props) => {
     </View>
   );
 }));
+
+export default memo(Index);

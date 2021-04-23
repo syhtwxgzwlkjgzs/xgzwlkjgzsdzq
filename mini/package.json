@@ -13,7 +13,8 @@
     "lintcss:fix": "stylelint src/**/*.{scss}",
     "dev:weapp": "cross-env NODE_ENV=development dzq dev -p mini --type weapp",
     "build:weapp": "cross-env NODE_ENV=production dzq build -p mini --type weapp",
-    "dev": "taro build --type weapp --watch"
+    "dev": "taro build --type weapp --watch",
+    "build": "taro build --type weapp"
   },
   "browserslist": [
     "last 3 versions",
