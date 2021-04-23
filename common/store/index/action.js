@@ -80,13 +80,15 @@ class IndexAction extends IndexStore {
 
   // 获取指定的帖子数据
   findAssignThread(threadId) {
-    const { pageData = [] } = this.threads;
-    for (let i = 0; i < pageData.length; i++)  {
-      if (pageData[i].threadId === threadId) {
-        return { index: i, data: pageData[i] };
+    if (this.threads) {
+      const { pageData = [] } = this.threads;
+      for (let i = 0; i < pageData.length; i++)  {
+        if (pageData[i].threadId === threadId) {
+          return { index: i, data: pageData[i] };
+        }
       }
+      return null;
     }
-    return null;
   }
 
   /**

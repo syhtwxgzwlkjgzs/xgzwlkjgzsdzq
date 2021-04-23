@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './layout.module.scss';
@@ -43,16 +43,10 @@ const typeMap = {
 };
 
 // 帖子内容
-const RenderThreadContent = (props) => {
+const RenderThreadContent = observer((props) => {
   const { store: threadStore } = props;
   const { text, indexes } = threadStore?.threadData?.content || {};
-
   const isEssence = threadStore?.threadData?.displayTag?.isEssence || false;
-  const [essence, setEssence] = useState(isEssence);
-
-  useEffect(() => {
-    setEssence(isEssence);
-  }, [isEssence]);
 
   const parseContent = {};
   if (indexes && Object.keys(indexes)) {
@@ -86,7 +80,7 @@ const RenderThreadContent = (props) => {
             location={threadStore?.threadData?.position.location || ''}
             view={`${threadStore?.threadData?.viewCount}` || ''}
             time={`${threadStore?.threadData?.createdAt}` || ''}
-            isEssence={essence}
+            isEssence={isEssence}
           ></UserInfo>
         </div>
         <div className={topic.more} onClick={onMoreClick}>
@@ -167,7 +161,7 @@ const RenderThreadContent = (props) => {
       </div>
     </div>
   );
-};
+});
 
 // 评论列表
 @inject('thread')
