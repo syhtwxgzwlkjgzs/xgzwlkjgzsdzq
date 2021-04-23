@@ -13,12 +13,7 @@
   padding-right: 8px;
 }
 .tips {
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 24px;
-  text-align: left;
-  color: #4f5a70;
-  padding-bottom: 8px;
+  @include pc_tips;
 }
 .phoneInput {
   margin-bottom: 24px;
