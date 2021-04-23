@@ -42,10 +42,6 @@ class ThreadCreate extends React.Component {
       emoji: {},
       imageUploadShow: false,
       categoryChooseShow: false,
-      categoryChoose: {
-        parent: {},
-        child: {},
-      },
       atListShow: false,
       atList: [],
       topicShow: false,
@@ -70,9 +66,9 @@ class ThreadCreate extends React.Component {
     };
   }
   componentDidMount() {
-    this.fetchCategories();
     const { fetchEmoji, emojis } = this.props.threadPost;
     if (emojis.length === 0) fetchEmoji();
+    this.fetchCategories();
     window.addEventListener('scroll', throttle(this.handler, 50));
   }
 
@@ -85,10 +81,29 @@ class ThreadCreate extends React.Component {
     threadPost.setPostData(data);
   }
 
-  fetchCategories() {
-    const { index } = this.props;
-    if (!index.categories || (index.categories && index.categories.length === 0)) {
-      index.getReadCategories();
+  async fetchCategories() {
+    const { index, thread, threadPost } = this.props;
+    let { categories } = index;
+    if (!categories || (categories && categories.length === 0)) {
+      categories = await index.getReadCategories();
+    }
+    // 如果是编辑操作，需要获取链接中的帖子id，通过帖子id获取帖子详情信息
+    const { query } = this.props.router;
+    if (query && query.id) {
+      const id = Number(query.id);
+      let ret = {};
+      if (id === thread.threadData.id && thread.threadData) {
+        ret.data = thread.threadData;
+        ret.code = 0;
+      } else ret = await thread.fetchThreadDetail(id);
+      const { categoryId } = ret.data;
+      const categorySelected = index.getCategorySelectById(categoryId);
+      if (ret.code === 0) {
+        threadPost.setCategorySelected(categorySelected);
+        threadPost.formatThreadDetailToPostData(ret.data);
+      } else {
+        Toast.error({ content: ret.msg });
+      }
     }
   }
 
@@ -369,9 +384,10 @@ class ThreadCreate extends React.Component {
           }} />)}
 
           {/* 语音组件 */}
-          {(Boolean(postData.audioSrc)) && (<Audio src={postData.audioSrc} />)}
+          {(Boolean(postData.audio.mediaUrl)) && (<Audio src={postData.audio.mediaUrl} />)}
           {(this.state.imageUploadShow || Object.keys(postData.images).length > 0) && (
             <ImageUpload
+              fileList={Object.values(postData.images)}
               onChange={fileList => this.handleUploadChange(fileList, THREAD_TYPE.image)}
               onComplete={(ret, file) => this.handleUploadComplete(ret, file, THREAD_TYPE.image)}
             />
@@ -384,6 +400,7 @@ class ThreadCreate extends React.Component {
           {/* 附件上传组件 */}
           {(this.state.fileUploadShow || Object.keys(postData.files).length > 0) && (
             <FileUpload
+              fileList={Object.values(postData.files)}
               onChange={fileList => this.handleUploadChange(fileList, THREAD_TYPE.file)}
               onComplete={(ret, file) => this.handleUploadComplete(ret, file, THREAD_TYPE.file)}
             />
@@ -424,7 +441,7 @@ class ThreadCreate extends React.Component {
             onAttachClick={this.handleAttachClick}
             // onUploadChange={this.handleUploadChange}
             onUploadComplete={this.handleVideoUploadComplete}
-            category={<ToolsCategory categoryChoose={threadPost.categorySeleted} onClick={this.handleCategoryClick} />}
+            category={<ToolsCategory categoryChoose={threadPost.categorySelected} onClick={this.handleCategoryClick} />}
           />
           {/* 默认的操作栏 */}
           <DefaultToolbar onClick={this.handleDefaultToolbarClick} onSubmit={this.submit}>
@@ -436,10 +453,11 @@ class ThreadCreate extends React.Component {
         <ClassifyPopup
           show={categoryChooseShow}
           category={category}
+          categorySelected={threadPost.categorySelected}
           onVisibleChange={val => this.setState({ categoryChooseShow: val })}
           onChange={(parent, child) => {
             this.setPostData({ categoryId: child.pid || parent.pid });
-            threadPost.setCategorySeleted({ parent, child });
+            threadPost.setCategorySelected({ parent, child });
           }}
         />
         {/* 插入 at 关注的人 */}
