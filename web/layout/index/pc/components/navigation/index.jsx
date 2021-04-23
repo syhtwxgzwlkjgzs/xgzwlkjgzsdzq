@@ -16,7 +16,7 @@ const Index = () => {
     return (
       <Menu>
         <Menu.Item index="3">{title('全部')}</Menu.Item>
-        {categories.map((item, index) => {
+        {categories?.map((item, index) => {
           if (item.children && item.children.length > 0) {
             return (
               <Menu.SubMenu index={index} title={title(item.name)}>
@@ -42,4 +42,4 @@ const Index = () => {
     </Card>
   )
 }
-export default Index
+export default React.memo(Index)

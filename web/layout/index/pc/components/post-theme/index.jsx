@@ -5,16 +5,17 @@ import postData from './data';
 
 /**
  * 发布按钮
- * @prop {number} showSort 是否只能排序
  */
 const PostTheme = () => {
 
   const menu = () => {
     return <Dropdown.Menu>
       {
-        postData.map((item, index) => { 
+        postData?.map((item, index) => { 
           return (
-            item.isShow && <Dropdown.Item key={item.type} id={index} style={{ padding: '12px 0'}} divided={item.divided}>{item.label}</Dropdown.Item>
+            item.isShow && (
+              <Dropdown.Item key={item.type} id={index} style={{ padding: '12px 0'}} divided={item.divided}>{item.label}</Dropdown.Item>
+            )
           )
         })
       }
@@ -31,7 +32,6 @@ const PostTheme = () => {
       style={{ display: 'inline-block' }}
       menu={menu()}
       placement="left"
-      hideOnClick={true}
       trigger="click"
       arrow={false}
       onChange={onChange}
@@ -45,4 +45,4 @@ const PostTheme = () => {
   );
 };
 
-export default PostTheme;
+export default React.memo(PostTheme);
