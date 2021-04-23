@@ -43,7 +43,7 @@ const User = ({ data, onClick }) => {
 
   return (
     <div className={styles.item} onClick={click}>
-      <Avatar className={styles.avatar} image={data.avatar} name={data.username} />
+      <Avatar image={data.avatar} name={data.username} />
       <div className={styles.name}>{data.username || ''}</div>
     </div>
   );

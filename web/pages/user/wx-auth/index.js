@@ -4,6 +4,7 @@ import { inject } from 'mobx-react';
 import { Input, Button, Toast } from '@discuzq/design';
 import { h5WechatCodeLogin } from '@server';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCLoginMode from '@common/middleware/HOCLoginMode';
 import { get } from '@common/utils/get';
 import setAccessToken from '../../../../common/utils/set-access-token';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
@@ -90,4 +91,4 @@ class WeixinAuth extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(WeixinAuth);
+export default HOCFetchSiteData(HOCLoginMode('weixin')(WeixinAuth));

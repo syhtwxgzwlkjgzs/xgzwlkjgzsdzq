@@ -12,7 +12,9 @@ import styles from './index.module.scss';
 const TrendingTopics = ({ icon, title, onShowMore }) => (
   <div className={styles.container}>
     <div className={styles.left}>
-      <img src={icon} />
+      <div className={styles.leftBox}>
+        <Icon className={styles[`icon${icon.type}`]} name={icon.name} size={16} />
+      </div>
       <div className={styles.title}>{title}</div>
     </div>
     <div className={styles.right}>

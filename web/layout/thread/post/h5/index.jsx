@@ -10,7 +10,7 @@ import { AttachmentToolbar, DefaultToolbar } from '@components/editor/toolbar';
 import ToolsCategory from '@components/editor/tools/category';
 import Emoji from '@components/editor/emoji';
 import ImageUpload from '@components/thread-post/image-upload';
-import { defaultOperation } from '@components/editor/const';
+import { defaultOperation } from '@common/constants/const';
 import FileUpload from '@components/thread-post/file-upload';
 import { THREAD_TYPE, ATTACHMENT_TYPE } from '@common/constants/thread-post';
 import { createAttachment, createThread } from '@common/server';

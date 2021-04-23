@@ -10,6 +10,16 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @inject('search')
 @observer
 class Index extends React.Component {
+  static async getInitialProps(ctx) {
+    const { res } = await getThreadList({}, ctx);
+
+    return {
+      serverSearch: {
+        threads: res,
+      },
+    };
+  }
+
   page = 1;
   perPage = 10;
 
@@ -45,11 +55,13 @@ class Index extends React.Component {
       const { threads } = search;
       const { pageData } = threads || { pageData: [] };
       const { res } = await getThreadList({ search: data, perPage: this.perPage, page: this.page });
+
       if (res?.pageData?.length) {
         this.page += 1;
         res.pageData.unshift(...pageData);
-        search.setUsers(res);
+        search.setThreads(res);
       }
+      return;
     }
   }
 
