@@ -134,7 +134,9 @@ class CommentList extends React.Component {
                 <div className={styles.commentTime}>{diffDate(this.props.data.createdAt)}</div>
                 <div className={styles.extraBottom}>
                   <div className={this.state.isLiked ? styles.commentLike : styles.commentLiked}>
-                    <span onClick={() => this.likeClick()}>赞{this.state.likeCount > 0 ? this.state.likeCount : ''}</span>
+                    <span onClick={() => this.likeClick()}>
+                      赞&nbsp;{this.state.likeCount > 0 ? this.state.likeCount : ''}
+                    </span>
                   </div>
                   <div className={styles.commentReply}>
                     <span onClick={() => this.replyClick()}>回复</span>
@@ -157,7 +159,7 @@ class CommentList extends React.Component {
               }
               {
                 this.needReply?.length > 0
-                && <div className={styles.ReplyList}>
+                && <div className={styles.replyList}>
                   {
                     this.state.isShowOne
                       ? <ReplyList
