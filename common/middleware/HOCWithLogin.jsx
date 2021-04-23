@@ -42,7 +42,6 @@ export default function HOCWithLogin(Component) {
 
     componentDidMount() {
       const { user } = this.props;
-      console.log('componentDidMount',user.loginStatus)
       if (!user.loginStatus) {
         Router.redirect('/user/login');
       }
@@ -50,7 +49,6 @@ export default function HOCWithLogin(Component) {
 
     componentDidUpdate() {
       const { user } = this.props;
-      console.log('componentDidUpdate', user.loginStatus)
 
       if (!user.loginStatus) {
         Router.redirect('/user/login');
