@@ -29,6 +29,7 @@ import { withRouter } from 'next/router';
 import { getVisualViewpost } from '@common/utils/get-client-height';
 import throttle from '@common/utils/thottle';
 import Header from '@components/header';
+import * as localData from '../common';
 
 @inject('threadPost')
 @inject('index')
@@ -66,14 +67,30 @@ class ThreadCreate extends React.Component {
     };
   }
   componentDidMount() {
-    const { fetchEmoji, emojis } = this.props.threadPost;
-    if (emojis.length === 0) fetchEmoji();
-    this.fetchCategories();
+    // 如果本地缓存有数据，这个目前主要用于定位跳出的情况
+    const postData = this.getPostDataFromLocal();
+    const { category, emoji } = localData.getCategoryEmoji() || {};
+    if (postData) {
+      this.props.index.setCategories(category);
+      this.props.threadPost.setEmoji(emoji);
+      if (postData.categoryId) this.setCategory(postData.categoryId);
+      this.setPostData({ ...postData, position: this.props.threadPost.postData.position });
+    } else {
+      const { fetchEmoji, emojis } = this.props.threadPost;
+      if (emojis.length === 0) fetchEmoji();
+      this.fetchCategories();
+    }
     window.addEventListener('scroll', throttle(this.handler, 50));
   }
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handler);
+  }
+
+  getPostDataFromLocal() {
+    const postData = localData.getThreadPostDataLocal();
+    localData.removeThreadPostDataLocal();
+    return postData;
   }
 
   setPostData(data) {
@@ -92,19 +109,23 @@ class ThreadCreate extends React.Component {
     if (query && query.id) {
       const id = Number(query.id);
       let ret = {};
-      if (id === thread.threadData.id && thread.threadData) {
+      if (id === (thread.threadData && thread.threadData.id) && thread.threadData) {
         ret.data = thread.threadData;
         ret.code = 0;
       } else ret = await thread.fetchThreadDetail(id);
       const { categoryId } = ret.data;
-      const categorySelected = index.getCategorySelectById(categoryId);
+      this.setCategory(categoryId);
       if (ret.code === 0) {
-        threadPost.setCategorySelected(categorySelected);
         threadPost.formatThreadDetailToPostData(ret.data);
       } else {
         Toast.error({ content: ret.msg });
       }
     }
+  }
+
+  setCategory(categoryId) {
+    const categorySelected = this.props.index.getCategorySelectById(categoryId);
+    this.props.threadPost.setCategorySelected(categorySelected);
   }
 
   handleDefaultToolbarClick = (item) => {
@@ -434,7 +455,13 @@ class ThreadCreate extends React.Component {
         </div>
         <div id="post-bottombar" className={styles['post-bottombar']}>
           <div id="post-position" className={styles['position-box']}>
-            <Position onChange={position => this.setPostData({ position })} />
+            <Position
+              position={postData.position}
+              onClick={() => {
+                localData.setThreadPostDataLocal(postData);
+                localData.setCategoryEmoji({ category, emoji: threadPost.emojis });
+              }}
+              onChange={position => this.setPostData({ position })} />
           </div>
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar

@@ -69,7 +69,12 @@ export default function DVditor(props) {
   }, [topic]);
 
   useEffect(() => {
-    if (vditor && vditor.getValue() === '\n' && vditor.getValue() !== value) vditor.insertValue(value);
+    const timer = setTimeout(() => {
+      clearTimeout(timer);
+      if (vditor && vditor.getValue() === '\n' && vditor.getValue() !== value) {
+        vditor.insertValue(vditor.html2md(value));
+      }
+    }, 500);
   }, [value]);
 
   function initVditor() {
