@@ -121,3 +121,14 @@
   color: #4f5a70;
   padding-bottom: 8px;
 }
+@mixin pc_titleTips {
+  font-size: 16px;
+  line-height: 30px;
+  text-align: left;
+  color: var(--color-text-primary);
+  img {
+    width: 30px;
+    height: 30px;
+    margin: 0 8px;
+  }
+}

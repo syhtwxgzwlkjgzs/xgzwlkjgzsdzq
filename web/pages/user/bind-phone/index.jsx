@@ -8,9 +8,7 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @inject('site')
 class BindPhone extends React.Component {
   render() {
-    const { site } = this.props;
-    const { platform } = site;
-    return platform === 'h5' ? <BindPhoneH5Page /> : <></>;
+    return <BindPhoneH5Page />;
   }
 }
 
