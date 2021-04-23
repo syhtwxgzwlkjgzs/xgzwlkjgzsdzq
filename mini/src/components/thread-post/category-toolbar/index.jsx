@@ -7,7 +7,8 @@ import { observer, inject } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
-import { attachIcon } from '@common/constants//const';
+import { attachIcon } from '@common/constants/const';
+import Tag from '@components/thread-post/tag';
 
 export default inject('site', 'threadPost')(observer((props) => {
   const { site, threadPost } = props;
@@ -24,7 +25,10 @@ export default inject('site', 'threadPost')(observer((props) => {
       <Icon
         key={index}
         className={styles['plus-icon']}
-        onClick={() => {setCurrentPlus(item)}}
+        onClick={() => {
+          setCurrentPlus(item);
+          // 处理该图标对应的逻辑
+        }}
         name={item.name}
         color={item.name === currentPlus.name && item.active}
         size='20'
@@ -37,7 +41,9 @@ export default inject('site', 'threadPost')(observer((props) => {
     <>
       <Icon name="SettingOutlined" size='20' className={styles['icon']} />
       <Text>分类</Text>
-      <Text className={styles['content']}>使用交流\DZQ使用</Text>
+      <Tag content='使用交流\DZQ使用' clickCb={() => {
+        // 处理分类弹框等逻辑
+      }} />
     </>
   );
 
@@ -47,7 +53,7 @@ export default inject('site', 'threadPost')(observer((props) => {
         { plusShow ? plus : category }
       </View>
       <View onClick={() => {setPlusShow(!plusShow);}}>
-        { (!plusShow) && (<Icon name="PictureOutlinedBig" size='20' />) }
+        { (!plusShow) && (<Icon name={currentPlus.name || 'PictureOutlinedBig'} size='20' />) }
         <Icon name="MoreBOutlined" size='20' />
       </View>
     </View>

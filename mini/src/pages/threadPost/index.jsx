@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
-
 import ThemePage from '@components/theme-page';
 import Title from '@components/thread-post/title';
 import TextArea from '@components/thread-post/content';
 import CategoryToolbar from '@components/thread-post/category-toolbar';
-import { APP_THEME } from '@common/constants/site';
+import DefaultToolbar from '@components/thread-post/default-toolbar';
+import Tag from '@components/thread-post/tag';
 import styles from './index.module.scss';
 
 @inject('site')
@@ -67,10 +67,14 @@ class Index extends Component {
             onChange={this.onContentChange}
             onFocus={this.onContentFocus}
           />
-          {/* <Text className={styles.text}>{envConfig.baseURL}</Text>
-          <View className={styles.text}>这是发帖页</View> */}
+        </View>
+        <View className={styles['toolbar']}>
+          <View className={styles['tag-toolbar']}>
+            <Tag content='随机红包\总金额80元\20个' />
+            <Tag content='悬赏金额10元' />
+          </View>
           <CategoryToolbar />
-
+          <DefaultToolbar />
         </View>
       </ThemePage >
     );

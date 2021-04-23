@@ -1,4 +1,26 @@
-.text {
-  color: var(--color-text-primary);
-  background-color: var(--background-color);
+page {
+  font-family: var(--font-family);
+  background-color: var(--color-white);
+
+  .text {
+    color: var(--color-text-primary);
+    background-color: var(--background-color);
+  }
+
+  .toolbar {
+    border-top: 1px solid var(--border-line-color);
+
+
+    .tag-toolbar {
+      height: 45px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      background: var(--color-white);
+      margin-top: 20px;
+    }
+  }
 }
+
+
+
