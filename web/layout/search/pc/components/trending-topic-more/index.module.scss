@@ -3,22 +3,22 @@
 
 .list {
   width: 100%;
-  padding: rem(24) 0;
+  padding: rem($padding-6n) 0;
   .item {
     display: flex;
     margin-bottom: rem(22);
     .img {
       width: rem(116);
       height: rem(116);
-      background: #eee;
+      background: var(--border-line-color);
     }
     .content {
-      padding: rem(4) rem(24) 0;
+      padding: rem($padding-1n) rem($padding-6n) 0;
     }
     .title {
-      font-size: rem(16);
-      line-height: rem(26.25);
-      color: #0b0b37;
+      font-size: rem($font-size-middle);
+      line-height: rem($font-line-height-middle);
+      color: var(--color-text-primary);
       font-weight: 700;
       overflow: hidden;
       text-overflow:ellipsis;
@@ -26,21 +26,21 @@
     }
     .num {
       display: flex;
-      font-size: rem(12);
-      line-height: rem(16.8);
-      color: #8590a6;
-      margin: rem(8) 0;
+      font-size: rem($font-size-label);
+      line-height: rem($padding-4n);
+      color: var(--color-text-secondary);
+      margin: rem($margin-2n) 0;
       .numItem {
-        margin-right: rem(12);
+        margin-right: rem($font-size-label);
       }
       .numIcon {
-        margin-right: rem(4);
+        margin-right: rem($margin-1n);
       }
     }
     .text {
-      font-size: 16px;
-      line-height: 26px;
-      color: #0b0b37;
+      font-size: rem($font-size-middle);
+      line-height: rem($font-line-height-middle);
+      color: var(--color-text-primary);
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
