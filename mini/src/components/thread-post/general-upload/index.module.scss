@@ -1,11 +1,8 @@
-.container {
-  height: 45px;
-  padding: 0 16px;
+.img-container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: var(--font-size-label);
-  border-top: 1px solid var(--border-line-color);
-  border-bottom: 1px solid var(--border-line-color);
-  background: var(--color-white);
+  flex-wrap: wrap;
+
+  .margin {
+    margin-right: 5px;
+  }
 }

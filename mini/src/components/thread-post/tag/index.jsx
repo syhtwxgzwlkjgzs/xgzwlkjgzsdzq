@@ -13,7 +13,7 @@ const Index = (props) => {
   );
 };
 
-Tag.propTypes = {
+Index.propTypes = {
   /**
    * tag中展示的内容，必传
    */

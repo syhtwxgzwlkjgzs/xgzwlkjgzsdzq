@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import ThemePage from '@components/theme-page';
+import { Attachment, Units } from '@components/common';
 import { PlusinToolbar, DefaultToolbar, GeneralUpload, Tag, Title, Content } from '@components/thread-post';
 import styles from './index.module.scss';
 
@@ -73,8 +74,22 @@ class Index extends Component {
         </View>
 
         {/* 插件区域、include图片、附件、语音等 */}
-        <View className={styles['plusin-area']}>
-          <GeneralUpload />
+        <View className={styles['plusin']}>
+
+          <GeneralUpload  />
+
+
+
+
+          {/* <Attachment type='upload' />
+          <Attachment type='show' /> */}
+
+          {/* <Units type='atta' />
+          <Units type='atta-upload' />
+          <Units type='img' />
+          <Units type='img-upload' />
+          <Units type='video' /> */}
+
 
 
         </View>

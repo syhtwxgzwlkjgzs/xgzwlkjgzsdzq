@@ -11,7 +11,6 @@ import { defaultIcon } from '@common/constants/const';
 
 const Index = inject('site', 'threadPost')(observer((props) => {
   const { site, threadPost } = props;
-  console.log(site, threadPost);
 
   const [currentTool, setCurrentTool] = useState({});
 

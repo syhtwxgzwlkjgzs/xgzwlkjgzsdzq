@@ -12,7 +12,6 @@ import Tag from '@components/thread-post/tag';
 
 const Index = inject('site', 'threadPost')(observer((props) => {
   const { site, threadPost, clickCb } = props;
-  console.log(site, threadPost);
 
   // 控制插件icon的显示/隐藏
   const [plusShow, setPlusShow] = useState(false);
