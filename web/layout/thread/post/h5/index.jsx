@@ -1,6 +1,5 @@
 /**
  * 创建帖子页面
- * TODO: 将发帖的 state 存放到 store？待定
  */
 import React from 'react';
 import { inject, observer } from 'mobx-react';
@@ -30,6 +29,7 @@ import { withRouter } from 'next/router';
 import { getVisualViewpost } from '@common/utils/get-client-height';
 import throttle from '@common/utils/thottle';
 import Header from '@components/header';
+import * as localData from '../common';
 
 @inject('threadPost')
 @inject('index')
@@ -43,10 +43,6 @@ class ThreadCreate extends React.Component {
       emoji: {},
       imageUploadShow: false,
       categoryChooseShow: false,
-      categoryChoose: {
-        parent: {},
-        child: {},
-      },
       atListShow: false,
       atList: [],
       topicShow: false,
@@ -71,9 +67,19 @@ class ThreadCreate extends React.Component {
     };
   }
   componentDidMount() {
-    this.fetchCategories();
-    const { fetchEmoji, emojis } = this.props.threadPost;
-    if (emojis.length === 0) fetchEmoji();
+    // 如果本地缓存有数据，这个目前主要用于定位跳出的情况
+    const postData = this.getPostDataFromLocal();
+    const { category, emoji } = localData.getCategoryEmoji() || {};
+    if (postData) {
+      this.props.index.setCategories(category);
+      this.props.threadPost.setEmoji(emoji);
+      if (postData.categoryId) this.setCategory(postData.categoryId);
+      this.setPostData({ ...postData, position: this.props.threadPost.postData.position });
+    } else {
+      const { fetchEmoji, emojis } = this.props.threadPost;
+      if (emojis.length === 0) fetchEmoji();
+      this.fetchCategories();
+    }
     window.addEventListener('scroll', throttle(this.handler, 50));
   }
 
@@ -81,16 +87,45 @@ class ThreadCreate extends React.Component {
     window.removeEventListener('scroll', this.handler);
   }
 
+  getPostDataFromLocal() {
+    const postData = localData.getThreadPostDataLocal();
+    localData.removeThreadPostDataLocal();
+    return postData;
+  }
+
   setPostData(data) {
     const { threadPost } = this.props;
     threadPost.setPostData(data);
   }
 
-  fetchCategories() {
-    const { index } = this.props;
-    if (!index.categories || (index.categories && index.categories.length === 0)) {
-      index.getReadCategories();
+  async fetchCategories() {
+    const { index, thread, threadPost } = this.props;
+    let { categories } = index;
+    if (!categories || (categories && categories.length === 0)) {
+      categories = await index.getReadCategories();
     }
+    // 如果是编辑操作，需要获取链接中的帖子id，通过帖子id获取帖子详情信息
+    const { query } = this.props.router;
+    if (query && query.id) {
+      const id = Number(query.id);
+      let ret = {};
+      if (id === (thread.threadData && thread.threadData.id) && thread.threadData) {
+        ret.data = thread.threadData;
+        ret.code = 0;
+      } else ret = await thread.fetchThreadDetail(id);
+      const { categoryId } = ret.data;
+      this.setCategory(categoryId);
+      if (ret.code === 0) {
+        threadPost.formatThreadDetailToPostData(ret.data);
+      } else {
+        Toast.error({ content: ret.msg });
+      }
+    }
+  }
+
+  setCategory(categoryId) {
+    const categorySelected = this.props.index.getCategorySelectById(categoryId);
+    this.props.threadPost.setCategorySelected(categorySelected);
   }
 
   handleDefaultToolbarClick = (item) => {
@@ -210,80 +245,15 @@ class ThreadCreate extends React.Component {
     this.setState({ atListShow: false });
   }
 
-  // 暂时在这里处理，后期如果有多个穿插的时候再做其它处理
-  // TODO: 这个可以放到 action 里面
-  formatContextIndex() {
-    const { postData } = this.props.threadPost;
-    const { images, video, files, product, audio, redpacket, rewardQa } = postData;
-    const imageIds = Object.values(images).map(item => item.id);
-    const docIds = Object.values(files).map(item => item.id);
-    const contentIndex = {};
-    if (imageIds.length > 0) {
-      contentIndex[THREAD_TYPE.image] = {
-        tomId: THREAD_TYPE.image,
-        body: { imageIds },
-      };
-    }
-    if (video.id) {
-      contentIndex[THREAD_TYPE.video] = {
-        tomId: THREAD_TYPE.video,
-        body: { videoId: video.id },
-      };
-    }
-    if (docIds.length > 0) {
-      contentIndex[THREAD_TYPE.file] = {
-        tomId: THREAD_TYPE.file,
-        body: { docIds },
-      };
-    }
-    if (product.id) {
-      contentIndex[THREAD_TYPE.goods] = {
-        tomId: THREAD_TYPE.goods,
-        body: { ...product },
-      };
-    }
-    if (audio.id) {
-      contentIndex[THREAD_TYPE.voice] = {
-        tomId: THREAD_TYPE.voice,
-        body: { audioId: audio.id },
-      };
-    }
-    // TODO:需要支付，缺少 orderId
-    if (redpacket.price) {
-      contentIndex[THREAD_TYPE.redPacket] = {
-        tomId: THREAD_TYPE.redPacket,
-        body: { ...redpacket },
-      };
-    }
-    // TODO:需要支付，缺少 orderId
-    if (rewardQa.times) {
-      contentIndex[THREAD_TYPE.qa] = {
-        tomId: THREAD_TYPE.qa,
-        body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0 },
-      };
-    }
-    return contentIndex;
-  }
-
   submit = async () => {
     const { postData } = this.props.threadPost;
     if (!postData.contentText) {
       Toast.info({ content: '请填写您要发布的内容' });
       return;
     }
-    const params = {
-      title: postData.title,
-      categoryId: postData.categoryId,
-      content: {
-        text: postData.contentText,
-      },
-    };
-    const contentIndex = this.formatContextIndex();
-    if (Object.keys(contentIndex)) params.content.indexes = contentIndex;
-    if (postData.position.address) params.position = postData.position;
     Toast.loading({ content: '创建中...' });
     const { threadPost, thread } = this.props;
-    const ret = await threadPost.createThread(params);
+    const ret = await threadPost.createThread();
     const { code, data, msg } = ret;
     if (code === 0) {
       thread.setThreadData(data);
@@ -435,9 +405,10 @@ class ThreadCreate extends React.Component {
           }} />)}
 
           {/* 语音组件 */}
-          {(Boolean(postData.audioSrc)) && (<Audio src={postData.audioSrc} />)}
+          {(Boolean(postData.audio.mediaUrl)) && (<Audio src={postData.audio.mediaUrl} />)}
           {(this.state.imageUploadShow || Object.keys(postData.images).length > 0) && (
             <ImageUpload
+              fileList={Object.values(postData.images)}
               onChange={fileList => this.handleUploadChange(fileList, THREAD_TYPE.image)}
               onComplete={(ret, file) => this.handleUploadComplete(ret, file, THREAD_TYPE.image)}
             />
@@ -450,6 +421,7 @@ class ThreadCreate extends React.Component {
           {/* 附件上传组件 */}
           {(this.state.fileUploadShow || Object.keys(postData.files).length > 0) && (
             <FileUpload
+              fileList={Object.values(postData.files)}
               onChange={fileList => this.handleUploadChange(fileList, THREAD_TYPE.file)}
               onComplete={(ret, file) => this.handleUploadComplete(ret, file, THREAD_TYPE.file)}
             />
@@ -483,14 +455,20 @@ class ThreadCreate extends React.Component {
         </div>
         <div id="post-bottombar" className={styles['post-bottombar']}>
           <div id="post-position" className={styles['position-box']}>
-            <Position onChange={position => this.setPostData({ position })} />
+            <Position
+              position={postData.position}
+              onClick={() => {
+                localData.setThreadPostDataLocal(postData);
+                localData.setCategoryEmoji({ category, emoji: threadPost.emojis });
+              }}
+              onChange={position => this.setPostData({ position })} />
           </div>
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar
             onAttachClick={this.handleAttachClick}
             // onUploadChange={this.handleUploadChange}
             onUploadComplete={this.handleVideoUploadComplete}
-            category={<ToolsCategory categoryChoose={threadPost.categorySeleted} onClick={this.handleCategoryClick} />}
+            category={<ToolsCategory categoryChoose={threadPost.categorySelected} onClick={this.handleCategoryClick} />}
           />
           {/* 默认的操作栏 */}
           <DefaultToolbar onClick={this.handleDefaultToolbarClick} onSubmit={this.submit}>
@@ -502,10 +480,11 @@ class ThreadCreate extends React.Component {
         <ClassifyPopup
           show={categoryChooseShow}
           category={category}
+          categorySelected={threadPost.categorySelected}
           onVisibleChange={val => this.setState({ categoryChooseShow: val })}
           onChange={(parent, child) => {
             this.setPostData({ categoryId: child.pid || parent.pid });
-            threadPost.setCategorySeleted({ parent, child });
+            threadPost.setCategorySelected({ parent, child });
           }}
         />
         {/* 插入 at 关注的人 */}

@@ -1,559 +1,423 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'next/router';
 
+import RecommendContent from './components/recommend-content/index';
 import AuthorInfo from './components/author-info/index';
 import CommentList from './components/comment-list/index';
 import Input from './components/input/index';
-import { Icon, Toast } from '@discuzq/design';
+import LoadingTips from './components/loading-tips';
+import { Icon, Toast, Tag, Button } from '@discuzq/design';
+import UserInfo from '@components/thread/user-info';
 
 import layout from './layout.module.scss';
 import topic from './topic.module.scss';
 import comment from './comment.module.scss';
 
-@inject('site')
-@inject('user')
-@inject('thread')
+import ImageContent from '@components/thread/image-content';
+import AudioPlay from '@components/thread/audio-play';
+import PostContent from '@components/thread/post-content';
+import ProductItem from '@components/thread/product-item';
+import VideoPlay from '@components/thread/video-play';
+import PostRewardProgressBar, { POST_TYPE } from '@components/thread/post-reward-progress-bar';
+import Tip from '@components/thread/tip';
+import AttachmentView from '@components/thread/attachment-view';
+
+const typeMap = {
+  101: 'IMAGE',
+  102: 'VOICE',
+  103: 'VIDEO',
+  104: 'GOODS',
+  105: 'QA',
+  106: 'RED_PACKET',
+  107: 'REWARD',
+  108: 'VOTE',
+  109: 'QUEUE',
+  110: 'FILE',
+  111: 'QA_IMAGE',
+};
+
+
+// 帖子内容
+function RenderThreadContent(props) {
+  const { store: threadStore } = props;
+  const { text, indexes } = threadStore?.threadData?.content || {};
+
+  const parseContent = {};
+  if (indexes && Object.keys(indexes)) {
+    Object.entries(indexes).forEach(([, value]) => {
+      if (value) {
+        const { tomId, body } = value;
+        parseContent[typeMap[tomId]] = body;
+      }
+    });
+  }
+  console.log(parseContent);
+
+  const onManageClick = () => {
+    Toast.success({
+      content: '管理',
+    });
+  };
+  const onRepoRrtClick = () => {
+    Toast.success({
+      content: '举报',
+    });
+  };
+
+  return (
+    <div className={`${layout.top}`}>
+      <div className={topic.header}>
+        <UserInfo
+          name={threadStore?.threadData?.user?.userName || ''}
+          avatar={threadStore?.threadData?.user?.avatar || ''}
+          location='腾讯大厦'
+          view={threadStore?.threadData?.viewCount || ''}
+          time='3分钟前'>
+        </UserInfo>
+        <div>
+          {threadStore?.threadData?.isEssence && <Tag type='primary'>精华</Tag>}
+          <div className={topic.headerRigth}>
+            <div className={topic.manage}>
+              <div onClick={onManageClick}>
+                <Icon
+                  size='18'
+                  className={topic.icon}
+                  name='ShareAltOutlined'>
+                </Icon>
+                <span>管理</span>
+              </div>
+            </div>
+            <div className={topic.report}>
+              <div onClick={onRepoRrtClick}>
+                <Icon
+                  size='18'
+                  className={topic.icon}
+                  name='WarnOutlined'>
+                </Icon>
+                <span>举报</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className={topic.body}>
+        {/* 文字 */}
+        {text && <PostContent content={text || ''} />}
+        {/* 视频 */}
+        {
+          parseContent.VIDEO
+          && <VideoPlay
+            url={parseContent.VIDEO.mediaUrl}
+            coverUrl={parseContent.VIDEO.coverUrl}
+            width={400}
+            height={200} />
+        }
+        {/* 图片 */}
+        {parseContent.IMAGE && <ImageContent imgData={parseContent.IMAGE} />}
+        {/* 商品 */}
+        {
+          parseContent.GOODS
+          && <div>
+            <ProductItem
+              image={parseContent.GOODS.imagePath}
+              amount={parseContent.GOODS.price}
+              title={parseContent.GOODS.title}
+            />
+            <Button style={{ width: '100%' }} type='primary'>购买商品</Button>
+          </div>
+        }
+        {/* 音频 */}
+        {parseContent.VOICE && <AudioPlay />}
+        {/* 附件 */}
+        {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
+
+        <Tag>使用交流</Tag>
+
+        {(parseContent.RED_PACKET || parseContent.REWARD)
+          && <div className={topic.reward}>
+            {/* 红包 */}
+            {
+              parseContent.RED_PACKET
+              && <PostRewardProgressBar remaining={parseContent.RED_PACKET.number} received={1} />
+            }
+            {/* 打赏 */}
+            {parseContent.REWARD && <PostRewardProgressBar type={POST_TYPE.BOUNTY} remaining={2} received={5} />}
+          </div>}
+
+        <div style={{ textAlign: 'center' }}>
+          <Button className={topic.rewardButton} type='primary' size='large'>打赏</Button>
+        </div>
+        {/* 附件 */}
+      </div>
+      <div className={topic.footer}>
+        <div className={topic.thumbs}>
+          <Icon name='LikeOutlined'></Icon>
+          1660万
+          <Tip imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
+        </div>
+        <div className={topic.Collection}>收藏</div>
+        <span>
+          {threadStore?.threadData?.likeReward?.shareCount || 0}次分享
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// 评论列表
 @observer
-class ThreadPCPage extends React.Component {
+class RenderCommentList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isShowReward: false, // 是否展示获得多少悬赏金
       isShowRedPacket: true, // 是否展示获得多少红包
-      showCommentInput: false, // 是否弹出评论框
-      commentData: [{
-        id: 3,
-        userId: 1,
-        threadId: 2,
-        replyPostId: null,
-        replyUserId: null,
-        commentPostId: null,
-        commentUserId: null,
-        content: '1',
-        contentHtml: '<p>1</p>',
-        replyCount: 4,
-        likeCount: 2,
-        createdAt: '2021-01-12 15:58:36',
-        updatedAt: '2021-02-12 14:01:23',
-        isFirst: false,
-        isComment: false,
-        isApproved: 1,
-        rewards: 0,
-        canApprove: false,
-        canDelete: false,
-        canHide: false,
-        canEdit: false,
-        user: {
-          id: 1,
-          username: 'admin',
-          avatar: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201705%2F13%2F20170513155641_wCyQ2.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1620980557&t=dce708a36610fb346866dc45ed90bba7',
-          realname: '',
-          groups: [
-            {
-              id: 1,
-              name: '管理员',
-              isDisplay: false,
-            },
-          ],
-          isReal: false,
-        },
-        images: [
-          {
-            id: 1,
-            order: 0,
-            type: 1,
-            type_id: 3,
-            isRemote: false,
-            isApproved: 1,
-            url: 'http://dzqfn.l.com/storage/attachments/2021/03/01/smmtFw27HmhpLszqQLBLsHKDWMEk3BCru03MFn1I.jpg',
-            attachment: 'smmtFw27HmhpLszqQLBLsHKDWMEk3BCru03MFn1I.jpg',
-            extension: 'jpg',
-            fileName: 'wallhaven-0jq7pq.jpg',
-            filePath: 'public/attachments/2021/03/01/',
-            fileSize: 481902,
-            fileType: 'image/jpeg',
-            thumbUrl: 'http://dzqfn.l.com/storage/attachments/2021/03/01/smmtFw27HmhpLszqQLBLsHKDWMEk3BCru03MFn1I.jpg',
-          },
-        ],
-        likeState: {
-          post_id: 3,
-          user_id: 2,
-          created_at: '2021-03-15T09:25:09.000000Z',
-        },
-        canLike: true,
-        summary: '<p>1</p>',
-        summaryText: '1',
-        isDeleted: false,
-        redPacketAmount: 0,
-        isLiked: true,
-        likedAt: '2021-03-15 17:25:09',
-        lastThreeComments: [
-          {
-            id: 20,
-            userId: 1,
-            threadId: 2,
-            replyPostId: 3,
-            replyUserId: 1,
-            commentPostId: null,
-            commentUserId: null,
-            content: '1-回复4',
-            contentHtml: '<p>1-回复4</p>',
-            replyCount: 0,
-            likeCount: 0,
-            createdAt: '2021-02-24 17:38:27',
-            updatedAt: '2021-02-12 14:01:23',
-            isFirst: false,
-            isComment: true,
-            isApproved: 1,
-            rewards: 0,
-            canApprove: false,
-            canDelete: false,
-            canHide: false,
-            canEdit: false,
-            user: {
-              id: 1,
-              username: 'admin',
-              avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-              realname: '',
-              isReal: false,
-            },
-            images: [],
-            likeState: null,
-            canLike: true,
-            summary: '<p>1-回复4</p>',
-            summaryText: '1-回复4',
-            isDeleted: false,
-            replyUser: {
-              id: 1,
-              username: 'admin',
-              avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-              realname: '',
-              isReal: false,
-            },
-            isLiked: false,
-            commentUser: null,
-          },
-          {
-            id: 19,
-            userId: 1,
-            threadId: 2,
-            replyPostId: 3,
-            replyUserId: 1,
-            commentPostId: null,
-            commentUserId: null,
-            content: '1-回复3',
-            contentHtml: '<p>1-回复3</p>',
-            replyCount: 0,
-            likeCount: 0,
-            createdAt: '2021-02-24 17:38:22',
-            updatedAt: '2021-02-12 14:01:23',
-            isFirst: false,
-            isComment: true,
-            isApproved: 1,
-            rewards: 0,
-            canApprove: false,
-            canDelete: false,
-            canHide: false,
-            canEdit: false,
-            user: {
-              id: 1,
-              username: 'admin',
-              avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-              realname: '',
-              isReal: false,
-            },
-            images: [],
-            likeState: null,
-            canLike: true,
-            summary: '<p>1-回复3</p>',
-            summaryText: '1-回复3',
-            isDeleted: false,
-            replyUser: {
-              id: 1,
-              username: 'admin',
-              avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-              realname: '',
-              isReal: false,
-            },
-            isLiked: false,
-            commentUser: null,
-          },
-          {
-            id: 20,
-            userId: 1,
-            threadId: 2,
-            replyPostId: 3,
-            replyUserId: 1,
-            commentPostId: null,
-            commentUserId: null,
-            content: '1-回复4',
-            contentHtml: '<p>1-回复4</p>',
-            replyCount: 0,
-            likeCount: 0,
-            createdAt: '2021-02-24 17:38:27',
-            updatedAt: '2021-02-12 14:01:23',
-            isFirst: false,
-            isComment: true,
-            isApproved: 1,
-            rewards: 0,
-            canApprove: false,
-            canDelete: false,
-            canHide: false,
-            canEdit: false,
-            user: {
-              id: 1,
-              username: 'admin',
-              avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-              realname: '',
-              isReal: false,
-            },
-            images: [],
-            likeState: null,
-            canLike: true,
-            summary: '<p>1-回复4</p>',
-            summaryText: '1-回复4',
-            isDeleted: false,
-            replyUser: {
-              id: 1,
-              username: 'admin',
-              avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-              realname: '',
-              isReal: false,
-            },
-            isLiked: false,
-            commentUser: null,
-          },
-          {
-            id: 20,
-            userId: 1,
-            threadId: 2,
-            replyPostId: 3,
-            replyUserId: 1,
-            commentPostId: null,
-            commentUserId: null,
-            content: '1-回复4',
-            contentHtml: '<p>1-回复4</p>',
-            replyCount: 0,
-            likeCount: 0,
-            createdAt: '2021-02-24 17:38:27',
-            updatedAt: '2021-02-12 14:01:23',
-            isFirst: false,
-            isComment: true,
-            isApproved: 1,
-            rewards: 0,
-            canApprove: false,
-            canDelete: false,
-            canHide: false,
-            canEdit: false,
-            user: {
-              id: 1,
-              username: 'admin',
-              avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-              realname: '',
-              isReal: false,
-            },
-            images: [],
-            likeState: null,
-            canLike: true,
-            summary: '<p>1-回复4</p>',
-            summaryText: '1-回复4',
-            isDeleted: false,
-            replyUser: {
-              id: 1,
-              username: 'admin',
-              avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-              realname: '',
-              isReal: false,
-            },
-            isLiked: false,
-            commentUser: null,
-          },
-          {
-            id: 19,
-            userId: 1,
-            threadId: 2,
-            replyPostId: 3,
-            replyUserId: 1,
-            commentPostId: null,
-            commentUserId: null,
-            content: '1-回复3',
-            contentHtml: '<p>1-回复3</p>',
-            replyCount: 0,
-            likeCount: 0,
-            createdAt: '2021-02-24 17:38:22',
-            updatedAt: '2021-02-12 14:01:23',
-            isFirst: false,
-            isComment: true,
-            isApproved: 1,
-            rewards: 0,
-            canApprove: false,
-            canDelete: false,
-            canHide: false,
-            canEdit: false,
-            user: {
-              id: 1,
-              username: 'admin',
-              avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-              realname: '',
-              isReal: false,
-            },
-            images: [],
-            likeState: null,
-            canLike: true,
-            summary: '<p>1-回复3</p>',
-            summaryText: '1-回复3',
-            isDeleted: false,
-            replyUser: {
-              id: 1,
-              username: 'admin',
-              avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-              realname: '',
-              isReal: false,
-            },
-            isLiked: false,
-            commentUser: null,
-          },
-          {
-            id: 20,
-            userId: 1,
-            threadId: 2,
-            replyPostId: 3,
-            replyUserId: 1,
-            commentPostId: null,
-            commentUserId: null,
-            content: '1-回复4',
-            contentHtml: '<p>1-回复4</p>',
-            replyCount: 0,
-            likeCount: 0,
-            createdAt: '2021-02-24 17:38:27',
-            updatedAt: '2021-02-12 14:01:23',
-            isFirst: false,
-            isComment: true,
-            isApproved: 1,
-            rewards: 0,
-            canApprove: false,
-            canDelete: false,
-            canHide: false,
-            canEdit: false,
-            user: {
-              id: 1,
-              username: 'admin',
-              avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-              realname: '',
-              isReal: false,
-            },
-            images: [],
-            likeState: null,
-            canLike: true,
-            summary: '<p>1-回复4</p>',
-            summaryText: '1-回复4',
-            isDeleted: false,
-            replyUser: {
-              id: 1,
-              username: 'admin',
-              avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-              realname: '',
-              isReal: false,
-            },
-            isLiked: false,
-            commentUser: null,
-          },
-          {
-            id: 20,
-            userId: 1,
-            threadId: 2,
-            replyPostId: 3,
-            replyUserId: 1,
-            commentPostId: null,
-            commentUserId: null,
-            content: '1-回复4',
-            contentHtml: '<p>1-回复4</p>',
-            replyCount: 0,
-            likeCount: 0,
-            createdAt: '2021-02-24 17:38:27',
-            updatedAt: '2021-02-12 14:01:23',
-            isFirst: false,
-            isComment: true,
-            isApproved: 1,
-            rewards: 0,
-            canApprove: false,
-            canDelete: false,
-            canHide: false,
-            canEdit: false,
-            user: {
-              id: 1,
-              username: 'admin',
-              avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-              realname: '',
-              isReal: false,
-            },
-            images: [],
-            likeState: null,
-            canLike: true,
-            summary: '<p>1-回复4</p>',
-            summaryText: '1-回复4',
-            isDeleted: false,
-            replyUser: {
-              id: 1,
-              username: 'admin',
-              avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-              realname: '',
-              isReal: false,
-            },
-            isLiked: false,
-            commentUser: null,
-          },
-          {
-            id: 19,
-            userId: 1,
-            threadId: 2,
-            replyPostId: 3,
-            replyUserId: 1,
-            commentPostId: null,
-            commentUserId: null,
-            content: '1-回复3',
-            contentHtml: '<p>1-回复3</p>',
-            replyCount: 0,
-            likeCount: 0,
-            createdAt: '2021-02-24 17:38:22',
-            updatedAt: '2021-02-12 14:01:23',
-            isFirst: false,
-            isComment: true,
-            isApproved: 1,
-            rewards: 0,
-            canApprove: false,
-            canDelete: false,
-            canHide: false,
-            canEdit: false,
-            user: {
-              id: 1,
-              username: 'admin',
-              avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-              realname: '',
-              isReal: false,
-            },
-            images: [],
-            likeState: null,
-            canLike: true,
-            summary: '<p>1-回复3</p>',
-            summaryText: '1-回复3',
-            isDeleted: false,
-            replyUser: {
-              id: 1,
-              username: 'admin',
-              avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-              realname: '',
-              isReal: false,
-            },
-            isLiked: false,
-            commentUser: null,
-          },
-          {
-            id: 20,
-            userId: 1,
-            threadId: 2,
-            replyPostId: 3,
-            replyUserId: 1,
-            commentPostId: null,
-            commentUserId: null,
-            content: '1-回复4',
-            contentHtml: '<p>1-回复4</p>',
-            replyCount: 0,
-            likeCount: 0,
-            createdAt: '2021-02-24 17:38:27',
-            updatedAt: '2021-02-12 14:01:23',
-            isFirst: false,
-            isComment: true,
-            isApproved: 1,
-            rewards: 0,
-            canApprove: false,
-            canDelete: false,
-            canHide: false,
-            canEdit: false,
-            user: {
-              id: 1,
-              username: 'admin',
-              avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-              realname: '',
-              isReal: false,
-            },
-            images: [],
-            likeState: null,
-            canLike: true,
-            summary: '<p>1-回复4</p>',
-            summaryText: '1-回复4',
-            isDeleted: false,
-            replyUser: {
-              id: 1,
-              username: 'admin',
-              avatar: 'http://dzqfn.l.com/storage/avatars/000/00/00/01.png?1617019550',
-              realname: '',
-              isReal: false,
-            },
-            isLiked: false,
-            commentUser: null,
-          },
-        ],
-      }],
+      createReplyParams: {},
     };
   }
+
+  // 评论列表排序
+  onSortClick = () => {
+    this.setState({
+      commentSort: !this.state.commentSort,
+    });
+    typeof this.props.sort === 'function' && this.props.sort(!this.state.commentSort);
+  }
+  // 头像点击
   avatarClick(type) {
-    console.log(type);
+    if (type === '1') {
+      Toast.success({
+        content: '帖子评论的头像',
+      });
+    } else if (type === '2') {
+      Toast.success({
+        content: '评论回复头像',
+      });
+    } else {
+      Toast.success({
+        content: '评论回复对象的头像',
+      });
+    }
   }
-  likeClick(val, type) {
-    console.log(val, type);
+  // 点赞
+  async likeClick(commentData, replyData) {
+    console.log(commentData, replyData);
+    let pid = '';
+    let liked = '';
+    if (replyData) {
+      const { id, isLiked } = replyData;
+      pid = id;
+      liked = !isLiked;
+    } else {
+      const { id, isLiked } = commentData;
+      pid = id;
+      liked = !isLiked;
+    }
+    if (pid) return;
+
+    const params = {
+      pid,
+      isLiked: liked,
+    };
+    const { success, msg } = await this.props.service.comment.updateLiked(params, this.props.thread);
+    if (!success) {
+      Toast.error({
+        content: msg,
+      });
+      this.getCommentDetail();
+      return;
+    }
+
+    Toast.error({
+      content: msg,
+    });
   }
-  replyClick(val, type) {
-    console.log(val, type);
+  // 删除
+  async deleteClick(type, data) {
+    this.comment = data;
+    this.setState({
+      showDeletePopup: true,
+    });
   }
-  deleteClick(val) {
+
+  // 删除
+  async deleteComment() {
+    if (!this.comment.id) return;
+
+    const { success, msg } = await this.props.service.comment.delete(this.comment.id, this.props.thread);
+    this.setState({
+      showDeletePopup: false,
+    });
+    if (success) {
+      Toast.success({
+        content: '删除成功',
+      });
+      return;
+    }
+    Toast.error({
+      content: msg,
+    });
+  }
+  replyClick(commentData, replyData) {
+    console.log(commentData, replyData);
+    const id = this.props.store.thread?.threadData?.id;
+    const params = {
+      id, // 帖子id
+      content: '', // 评论内容
+      commentId: commentData.id, // 评论id
+      replyId: replyData?.id, // 回复id
+      isComment: replyData !== undefined, // 是否楼中楼
+      commentPostId: [], // 评论回复ID
+      commentUserId: [], // 评论回复用户ID
+      attachments: [], // 附件内容
+    };
+    this.setState({
+      createReplyParams: params,
+    });
+  }
+  // 创建回复评论+回复回复接口
+  async createReply(val) {
     console.log(val);
+    this.setState({ showCommentInput: false });
+    const params = this.state.createReplyParams;
+    params.content = val;
+    console.log('参数', params);
+    const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
+
+    if (success) {
+      Toast.success({
+        content: '操作成功',
+      });
+      return;
+    }
+
+    Toast.error({
+      content: msg,
+    });
   }
+
+  // 创建帖子评论
+  async onPublishClick(val) {
+    console.log(val);
+    this.setState({ showCommentInput: false });
+    const id = this.props.thread?.threadData?.id;
+    const params = {
+      id,
+      content: val,
+      sort: this.commentSort, // 目前的排序
+      isNoMore: false,
+      attachments: [],
+    };
+    const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
+    if (success) {
+      Toast.success({
+        content: '评论成功',
+      });
+      this.setState({
+        showCommentInput: false,
+      });
+      return true;
+    }
+    Toast.error({
+      content: msg,
+    });
+  }
+
   render() {
+    const { totalCount, commentList } = this.props.store;
+    return (
+      <Fragment>
+        <div className={comment.header}>
+          <div className={comment.number}>
+            共{totalCount}条评论
+                </div>
+          <div className={comment.sort} onClick={() => this.onSortClick()}>
+            <Icon
+              size='14'
+              name='SortOutlined'>
+            </Icon>
+            <span className={comment.sortText}></span>
+            {
+              this.state.commentSort ? '评论从旧到新' : '评论从新到旧'
+            }
+          </div>
+        </div>
+        <div className={comment.input}>
+          <Input onSubmit={value => this.onPublishClick(value)}></Input>
+        </div>
+        <div className={comment.body}>
+          {
+            commentList && commentList
+              .map((val, index) => (
+                <div className={comment.commentItems} key={index}>
+                  <CommentList
+                    data={val}
+                    key={val.id}
+                    avatarClick={type => this.avatarClick.bind(this, type)}
+                    likeClick={type => this.likeClick.bind(this, val, type)}
+                    replyClick={type => this.replyClick.bind(this, val, type)}
+                    deleteClick={() => this.deleteClick.bind(this, val)}
+                    isPostDetail={true}>
+                  </CommentList>
+                </div>
+              ))
+          }
+        </div>
+      </Fragment>
+    );
+  }
+}
+
+@inject('site')
+@inject('user')
+@inject('thread')
+@inject('comment')
+@observer
+class ThreadPCPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isCommentLoading: false, // 列表loading
+    };
+    this.props.comment.injectStore && this.props.comment.injectStore({
+      thread: this.props.thread,
+    });
+  }
+
+
+  render() {
+    const { thread: threadStore } = this.props;
+    const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
     return (
       <div className={layout.container}>
         <div className={layout.header}>头部</div>
         <div className={layout.body}>
           {/* 左边内容和评论 */}
           <div className={layout.bodyLeft}>
-            <div className={topic.container}>帖子内容</div>
+            <div className={topic.container}>
+              {/* 帖子内容 */}
+              {
+                isReady ? <RenderThreadContent store={threadStore}></RenderThreadContent> : <LoadingTips type='init'></LoadingTips>
+              }
+            </div>
+
+            {/* 回复详情内容 */}
             <div className={comment.container}>
-              <div className={comment.header}>
-                <div className={comment.number}>
-                  共{13}条评论
-                </div>
-                <div className={comment.sort} onClick={() => this.onSortClick()}>
-                  <Icon
-                    size='14'
-                    name='SortOutlined'>
-                  </Icon>
-                  <span className={comment.sortText}></span>
-                  {
-                    this.state.commentSort ? '评论从旧到新' : '评论从新到旧'
-                  }
-                </div>
-              </div>
-              <div className={comment.input}>
-                <Input></Input>
-              </div>
-              <div className={comment.body}>
-                {
-                  this.state.commentData
-                    .map((val, index) => (
-                      <div className={comment.commentItems} key={index}>
-                        <CommentList
-                          data={val}
-                          key={val.id}
-                          avatarClick={type => this.avatarClick.bind(this, type)}
-                          likeClick={type => this.likeClick.bind(this, val, type)}
-                          replyClick={type => this.replyClick.bind(this, val, type)}
-                          deleteClick={() => this.deleteClick.bind(this, val)}
-                          isShowOne={true}>
-                        </CommentList>
-                      </div>
-                    ))
-                }
-              </div>
+              {
+                isCommentReady
+                  ? (
+                    <Fragment>
+                      <RenderCommentList
+                        totalCount={totalCount}
+                        store={threadStore}
+                        sort={flag => this.onSortChange(flag)}>
+                      </RenderCommentList>
+                    </Fragment>
+                  )
+                  : <LoadingTips type='init'></LoadingTips>
+              }
+
             </div>
           </div>
           {/* 右边信息 */}
@@ -561,7 +425,9 @@ class ThreadPCPage extends React.Component {
             <div className={layout.authorInfo}>
               <AuthorInfo></AuthorInfo>
             </div>
-            <div className={layout.recommend}>推荐</div>
+            <div className={layout.recommend}>
+              <RecommendContent></RecommendContent>
+            </div>
           </div>
         </div>
       </div>
@@ -569,4 +435,4 @@ class ThreadPCPage extends React.Component {
   }
 }
 
-export default ThreadPCPage;
+export default withRouter(ThreadPCPage);

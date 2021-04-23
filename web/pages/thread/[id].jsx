@@ -11,6 +11,7 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 class Detail extends React.Component {
   static async getInitialProps(ctx) {
     const id = ctx?.query?.id;
+
     if (!id) {
       return {
         props: {
@@ -52,6 +53,15 @@ class Detail extends React.Component {
 
   async componentDidMount() {
     const { id } = this.props.router.query;
+
+    // 判断缓存
+    const oldId = `${this.props?.thread?.threadData?.threadId}`;
+    if (id === oldId) {
+      return;
+    }
+    this.props.thread.reset();
+
+
     if (!this.props.serverThread && id) {
       const res = await readThreadDetail({ params: { threadId: Number(id) } });
       if (res.code === 0) {
@@ -78,7 +88,6 @@ class Detail extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
-    console.log(platform);
     return platform === 'h5' ? <ThreadH5Page /> : <ThreadPCPage />;
   }
 }

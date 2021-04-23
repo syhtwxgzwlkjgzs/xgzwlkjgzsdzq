@@ -49,6 +49,7 @@ export default function HOCWithLogin(Component) {
 
     componentDidUpdate() {
       const { user } = this.props;
+
       if (!user.loginStatus) {
         Router.redirect('/user/login');
       }

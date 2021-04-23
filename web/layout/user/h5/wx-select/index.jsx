@@ -47,7 +47,7 @@ class WXSelectH5Page extends React.Component {
                     accessToken,
                   });
                   this.props.user.updateUserInfo(uid);
-                  this.props.router.push('/index');
+                  window.location.href = '/index';
                   return;
                 }
                 throw {

@@ -70,3 +70,54 @@
     margin: 0 rem(8);
   }
 }
+
+// ------------PC;
+
+@mixin pc_container {
+  width: 1100px;
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 0 0 8px rgba(241, 243, 244, 0.16);
+  margin: 81px auto 0;
+  text-align: center;
+  padding-bottom: 30px;
+}
+@mixin pc_button {
+  width: 300px;
+  height: 36px;
+}
+@mixin pc_otherLoginText {
+  margin-top: 32px;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 26px;
+  color: #c5c6ca;
+}
+
+@mixin pc_otherLoginBtn {
+  border-radius: 50%;
+  border: 1px solid #eee;
+  margin: 0 16px;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  display: inline-block;
+  text-align: center;
+}
+
+@mixin pc_functionalRegion {
+  margin-top: 16px;
+  text-align: center;
+  .clickBtn{
+    color: var(--color-primary);
+    cursor: pointer;
+  }
+}
+@mixin pc_tips {
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 24px;
+  text-align: left;
+  color: #4f5a70;
+  padding-bottom: 8px;
+}

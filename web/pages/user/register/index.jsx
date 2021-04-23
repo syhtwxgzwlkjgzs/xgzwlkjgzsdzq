@@ -9,9 +9,7 @@ import HOCLoginMode from '@common/middleware/HOCLoginMode';
 @inject('site')
 class Register extends React.Component {
   render() {
-    const { site } = this.props;
-    const { platform } = site;
-    return platform === 'h5' ? <RegisterH5Page /> : <></>;
+    return <RegisterH5Page />;
   }
 }
 

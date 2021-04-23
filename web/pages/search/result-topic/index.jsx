@@ -51,6 +51,9 @@ class Index extends React.Component {
       this.page = 2;
       search.setTopics(res);
     } else if (type === 'moreData') {
+      if (this.page === 1) {
+        this.page = 2;
+      }
       const { topics } = search;
       const { pageData } = topics || { pageData: [] };
       const { res } = await getTopicsList({ search: data, perPage: this.perPage, page: this.page });

@@ -9,7 +9,7 @@ import { extensionList, noop } from '../utils';
  * @prop {Boolean} isHidden 是否隐藏删除按钮
  */
 
-const Index = ({ attachments = [], isHidden = true, onClick = noop }) => {
+const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noop }) => {
   // 处理文件大小的显示
   const handleFileSize = (fileSize) => {
     if (fileSize > 1000000) {
@@ -31,7 +31,7 @@ const Index = ({ attachments = [], isHidden = true, onClick = noop }) => {
               ? extension.toUpperCase()
               : 'UNKNOWN';
             return (
-              <div className={styles.container} key={index} onClick={onClick}>
+              <div className={styles.container} key={index} onClick={onClick} >
                 <div>
                   {/* TODO 此处逻辑接口确定之后再改 */}
                   <Icon name={type && 'PaperClipOutlined'} />
@@ -40,6 +40,8 @@ const Index = ({ attachments = [], isHidden = true, onClick = noop }) => {
                 </div>
 
                 {!isHidden && <Icon name="CloseOutlined" />}
+
+                {!isPay && <a href={item.url} className={styles.a}></a>}
               </div>
             );
           })

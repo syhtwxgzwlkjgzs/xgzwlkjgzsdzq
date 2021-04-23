@@ -6,7 +6,6 @@ import { Icon } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import WeixinQrCode from '../../../../components/login/h5/wx-qr-code';
 import HomeHeader from '@components/home-header';
-import hocWeixin from './HOCWeixin';
 
 @inject('site')
 @inject('user')
@@ -65,4 +64,4 @@ class WXLoginH5Page extends React.Component {
   }
 }
 
-export default hocWeixin(withRouter(WXLoginH5Page));
+export default withRouter(WXLoginH5Page);

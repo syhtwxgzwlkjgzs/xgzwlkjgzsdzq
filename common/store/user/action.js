@@ -30,6 +30,7 @@ class UserAction extends SiteStore {
   @action
   updateLoginStatus(isLogin) {
     this.loginStatus = isLogin;
+    console.log(this.loginStatus);
   }
 
   @action

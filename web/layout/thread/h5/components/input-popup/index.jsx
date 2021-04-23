@@ -53,7 +53,7 @@ const InputPop = (props) => {
             </Button>
           </Upload> */}
         </div>
-        <Button loading={loading} onClick={onSubmitClick} className={styles.button} type='primary' size='large'>发布</Button>
+        <Button full={true} loading={loading} onClick={onSubmitClick} className={styles.button} type='primary' size='large'>发布</Button>
       </div>
     </Popup>);
 };
