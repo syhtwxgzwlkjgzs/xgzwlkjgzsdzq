@@ -2,7 +2,7 @@
 /**
  * 发帖页底部分类、图片等工具栏
  */
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { observer, inject } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
@@ -18,6 +18,14 @@ export default inject('site', 'threadPost')(observer((props) => {
   const [plusShow, setPlusShow] = useState(false);
   // 设置当前选中的插件
   const [currentPlus, setCurrentPlus] = useState({});
+
+  const content = useCallback(
+    () => {
+      const { parent, child } = threadPost.categorySelected;
+      return `${parent.name || ''}${child.name ? ` \\ ${child.name}` : ''}`;
+    },
+    [threadPost.categorySelected],
+  )
 
   // 插件icon元素
   const plus = attachIcon.map((item, index) => {
@@ -46,7 +54,7 @@ export default inject('site', 'threadPost')(observer((props) => {
         onClick={onCategoryClick}
       />
       <Text>分类</Text>
-      <Tag content='使用交流\DZQ使用' clickCb={() => {
+      <Tag content={content() || '选择分类(必选)'} clickCb={() => {
         // 处理分类弹框等逻辑
       }} />
     </>
