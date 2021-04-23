@@ -4,7 +4,7 @@ import { withRouter } from 'next/router';
 import layout from './index.module.scss';
 import { Input, Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
-import HeaderLogin from '../../../../components/login/h5/header-login';
+import HomeHeader from '@components/home-header';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 
 @inject('site')
@@ -45,7 +45,7 @@ class WXBindUsernameH5page extends React.Component {
     userLogin.sessionToken = router.query.sessionToken;
     return (
       <div className={layout.container}>
-        <HeaderLogin />
+        <HomeHeader hideInfo/>
         <div className={layout.content}>
           <div className={layout.title}>用户名登录，并绑定微信账号</div>
           <div className={layout.tips}>

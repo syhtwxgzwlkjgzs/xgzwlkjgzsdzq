@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './index.module.scss';
 import WeixinQrCode from '../../../../components/login/h5/wx-qr-code';
-import HeaderLogin from '../../../../components/login/h5/header-login';
+import HomeHeader from '@components/home-header';
 
 @inject('site')
 @inject('user')
@@ -25,7 +25,7 @@ class WeixinBindQrCodePage extends React.Component {
     const { nickname } = this.props.router.query;
     return (
       <div className={layout.container}>
-        <HeaderLogin />
+        <HomeHeader hideInfo/>
         <div className={layout.content}>
           <div className={layout.title}>绑定微信号</div>
           <div className={layout.tips}>

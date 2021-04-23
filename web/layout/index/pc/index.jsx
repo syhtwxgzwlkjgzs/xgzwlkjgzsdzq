@@ -22,6 +22,7 @@ class IndexPCPage extends React.Component {
         <p className={styles.text}>test</p>
 
         <Button>123</Button>
+        <PayBox />
       </div>
     );
   }

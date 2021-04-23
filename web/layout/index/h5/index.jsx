@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Icon, Tabs } from '@discuzq/design';
 import ThreadContent from '@components/thread';
-import HomeHeader from '@components/thread/home-header';
+import HomeHeader from '@components/home-header';
 import NoData from '@components/no-data';
 import styles from './index.module.scss';
 import List from './components/list';
@@ -80,21 +80,13 @@ class IndexH5Page extends React.Component {
   }
 
   renderHeaderContent = () => {
-    const { index, site } = this.props;
+    const { index } = this.props;
     const { currentIndex } = this.state;
     const { sticks = [], categories = [] } = index;
 
-    const { siteBackgroundImage, siteLogo } = site?.webConfig?.setSite;
-    const { countUsers, countThreads } = site?.webConfig?.other;
-
     return (
       <div>
-        <HomeHeader
-          bgHeadFullImg={siteBackgroundImage}
-          headImg={siteLogo}
-          userNum={countUsers}
-          themeNum={countThreads}
-        />
+        <HomeHeader/>
         {categories && categories.length > 0 && <div className={styles.homeContent}>
           <Tabs
             scrollable
