@@ -1,0 +1,36 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.list {
+  width: 100%;
+  .item {
+    display: flex;
+    padding: rem(16) 0;
+    border-bottom: 1px solid #eee;
+    &:last-child {
+      border-bottom: none;
+    }
+    .content {
+      .name {
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: rem($font-size-primary);
+        line-height: rem(20);
+        color: #0b0b37;
+        font-weight: 700;
+      }
+      .groupName {
+        font-size: rem(14);
+        line-height: rem(22);
+        color: #8490a8;
+      }
+    }
+    .avatar {
+      width: rem(38);
+      height: rem(38);
+      margin-right: rem(16);
+    }
+  }
+}
