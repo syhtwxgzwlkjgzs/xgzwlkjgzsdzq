@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import { Popup, Icon, Button, Checkbox } from '@discuzq/design';
 import styles from './index.module.scss';
-import CommonAccountContent from '../../components/common-account-content'
+import CommonAccountContent from '../../components/common-account-content';
 
+@inject('payBox')
+@observer
 export default class AmountRecognized extends Component {
   constructor(props) {
     super(props);
@@ -29,14 +32,6 @@ export default class AmountRecognized extends Component {
     };
   }
 
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({
-        isShow: true,
-      });
-    }, 1000);
-  }
-
   renderDiffTradeType = (type) => {
     let value = '';
     switch (type) {
@@ -56,19 +51,24 @@ export default class AmountRecognized extends Component {
   };
 
   // 点击支付去到
-  goToThePayConfirmPage = () => {
-
-  }
+  goToThePayConfirmPage = () => {};
 
   render() {
     const { currentPaymentObj = {} } = this.state;
     return (
-      <Popup position="bottom" maskClosable={true} visible={this.state.isShow}>
+      <Popup
+        position="bottom"
+        maskClosable={true}
+        visible={this.props.payBox.options.visible}
+        onClose={() => {
+          this.props.payBox.options.visible = false;
+        }}
+      >
         <div className={styles.amountWrapper}>
-          <CommonAccountContent currentPaymentObj={currentPaymentObj}/>
+          <CommonAccountContent currentPaymentObj={currentPaymentObj} />
           {/* 按钮区域-提交内容 */}
           <div className={styles.amountSubmit}>
-            <Button type="primary" onClick ={this.goToThePayConfirmPage} size="large" className={styles.asBtn} full>
+            <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.asBtn} full>
               支付 ￥...
             </Button>
           </div>
