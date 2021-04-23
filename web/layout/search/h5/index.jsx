@@ -4,6 +4,7 @@ import { withRouter } from 'next/router';
 
 // import SearchInput from '@components/search-input';
 import SearchInput from '@components/search-input';
+import List from '@components/list';
 import SectionTitle from './components/section-title';
 import TrendingTopics from './components/trending-topics';
 import ActiveUsers from './components/active-users';
@@ -48,7 +49,7 @@ class SearchH5Page extends React.Component {
     const { pageData: threadsPageData } = indexThreads;
 
     return (
-      <div className={styles.page}>
+      <List className={styles.page} allowRefresh={false}>
         <Header />
         <div className={styles.section}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} />
@@ -77,7 +78,7 @@ class SearchH5Page extends React.Component {
             ? <PopularContents data={threadsPageData} onItemClick={this.onPostClick} />
             : <NoData />
         }
-      </div>
+      </List>
     );
   }
 }
