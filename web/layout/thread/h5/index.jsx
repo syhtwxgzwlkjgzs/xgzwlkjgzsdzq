@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './layout.module.scss';
@@ -43,9 +43,16 @@ const typeMap = {
 };
 
 // 帖子内容
-const RenderThreadContent = observer((props) => {
+const RenderThreadContent = (props) => {
   const { store: threadStore } = props;
   const { text, indexes } = threadStore?.threadData?.content || {};
+
+  const isEssence = threadStore?.threadData?.displayTag?.isEssence || false;
+  const [essence, setEssence] = useState(isEssence);
+
+  useEffect(() => {
+    setEssence(isEssence);
+  }, [isEssence]);
 
   const parseContent = {};
   if (indexes && Object.keys(indexes)) {
@@ -79,7 +86,7 @@ const RenderThreadContent = observer((props) => {
             location={threadStore?.threadData?.position.location || ''}
             view={`${threadStore?.threadData?.viewCount}` || ''}
             time={`${threadStore?.threadData?.createdAt}` || ''}
-            isEssence={threadStore?.threadData?.isEssence}
+            isEssence={essence}
           ></UserInfo>
         </div>
         <div className={topic.more} onClick={onMoreClick}>
@@ -118,7 +125,7 @@ const RenderThreadContent = observer((props) => {
           </div>
         )}
         {/* 音频 */}
-        {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl}/>}
+        {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
         {/* 附件 */}
         {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
 
@@ -160,7 +167,7 @@ const RenderThreadContent = observer((props) => {
       </div>
     </div>
   );
-});
+};
 
 // 评论列表
 @inject('thread')
@@ -530,21 +537,27 @@ class ThreadH5Page extends React.Component {
   onOperClick = (type) => {
     // 1 置顶  2 加精  3 删除  4 举报
     this.setState({ showMorePopup: false });
-    if (type === '1') {
-      this.updateSticky();
-    } else if (type === '2') {
+
+    // 举报
+    if (type === 'stick') {
+      this.updateStick();
+    }
+
+    // 加精
+    if (type === 'essence') {
       this.updateEssence();
-    } else if (type === '3') {
-      this.setState({ showDeletePopup: true });
-    } else {
-      console.log('举报');
+    }
+
+    // 删除
+    if (type === 'delete') {
+      this.delete();
     }
   };
 
   // 置顶提示
-  setTopState(isSticky) {
+  setTopState(isStick) {
     this.setState({
-      showContent: isSticky,
+      showContent: isStick,
       setTop: !this.state.setTop,
     });
     setTimeout(() => {
@@ -553,14 +566,14 @@ class ThreadH5Page extends React.Component {
   }
 
   // 置顶接口
-  async updateSticky() {
+  async updateStick() {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
       pid: this.props.thread?.threadData?.postId,
-      isSticky: !this.props.thread?.isSticky,
+      isStick: !this.props.thread?.threadData?.isStick,
     };
-    const { success, msg } = await this.props.thread.updateSticky(params);
+    const { success, msg } = await this.props.thread.updateStick(params);
 
     if (success) {
       this.setTopState(true);
@@ -578,7 +591,7 @@ class ThreadH5Page extends React.Component {
     const params = {
       id,
       pid: this.props.thread?.threadData?.postId,
-      isEssence: !this.props.thread?.isEssence,
+      isEssence: !this.props.thread?.threadData?.displayTag?.isEssence,
     };
     const { success, msg } = await this.props.thread.updateEssence(params);
 
@@ -600,7 +613,7 @@ class ThreadH5Page extends React.Component {
     const id = this.props.thread?.threadData?.id;
     const pid = this.props.thread?.threadData?.postId;
 
-    const { success, msg } = await this.props.thread.delete(id, pid);
+    const { success, msg } = await this.props.thread.delete(id, pid, this.props.index);
 
     if (success) {
       Toast.success({
@@ -717,10 +730,23 @@ class ThreadH5Page extends React.Component {
   }
 
   render() {
-    const { thread: threadStore, comment: commentStore } = this.props;
+    const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
     const fun = {
       moreClick: this.onMoreClick,
+    };
+
+    // 更多弹窗权限
+    const morePermissions = {
+      canEdit: threadStore?.threadData?.ability?.canEdit,
+      canDelete: threadStore?.threadData?.ability?.canDelete,
+      canEssence: threadStore?.threadData?.ability?.canEssence,
+      canStick: threadStore?.threadData?.ability?.canStick,
+    };
+    // 更多弹窗界面
+    const moreStatuses = {
+      isEssence: threadStore?.threadData?.displayTag?.isEssence,
+      isStick: threadStore?.threadData?.isStick,
     };
 
     return (
@@ -780,6 +806,8 @@ class ThreadH5Page extends React.Component {
           ></InputPopup>
           {/* 更多弹层 */}
           <MorePopup
+            permissions={morePermissions}
+            statuses={moreStatuses}
             visible={this.state.showMorePopup}
             onClose={() => this.setState({ showMorePopup: false })}
             onSubmit={() => this.setState({ showMorePopup: false })}
