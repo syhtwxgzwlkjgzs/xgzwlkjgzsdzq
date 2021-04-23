@@ -58,7 +58,8 @@ class IndexAction extends IndexStore {
   async getReadCategories() {
     const result = await readCategories();
     if (result.code === 0 && result.data) {
-      this.setCategories(result.data);
+      const data = [{ name: '全部', pid: '', children: [] }, ...result.data];
+      this.setCategories(data);
       return this.categories;
     }
     return null;

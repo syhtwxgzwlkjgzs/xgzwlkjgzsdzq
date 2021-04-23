@@ -1,8 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import { ImagePreviewer } from '@discuzq/design';
+import { noop } from '../utils';
 import img from './index.module.scss';
 
-const Index = ({ imgData = [] }) => {
+const Index = ({ imgData = [], onClickMore = noop }) => {
   const [visible, setVisible] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
 
@@ -57,7 +58,11 @@ const Index = ({ imgData = [] }) => {
             {otherImage.map((item, index) => (
                 <div key={index} className={img[`imagesBotomData${imgData.length > 5 ? 5 : imgData.length}`]}>
                   <img className={img[`imagesBotomDataPath${imgData.length > 5 ? 5 : imgData.length}`]} src={item.thumbUrl} alt="" onClick={() => onClick(item.id)} />
-                  {imgData.length > 5 && index === 2 && <div className={img.modalBox}><span className={img.imgSpan}>{`+${numContent}`}</span></div>}
+                  {imgData.length > 5 && index === 2 && (
+                    <div className={img.modalBox} onClick={onClickMore}>
+                      <span className={img.imgSpan}>{`+${numContent}`}</span>
+                    </div>
+                  )}
                 </div>
             ))}
           </div>
