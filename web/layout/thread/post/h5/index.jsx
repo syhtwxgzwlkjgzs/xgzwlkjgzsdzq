@@ -1,6 +1,5 @@
 /**
  * 创建帖子页面
- * TODO: 将发帖的 state 存放到 store？待定
  */
 import React from 'react';
 import { inject, observer } from 'mobx-react';
