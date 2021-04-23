@@ -1,8 +1,6 @@
 import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import createThreadService from '@common/service/thread';
-import createCommentService from '@common/service/comment';
 import layout from './layout.module.scss';
 import comment from './comment.module.scss';
 import footer from './footer.module.scss';
@@ -120,7 +118,7 @@ const RenderThreadContent = observer((props) => {
           </div>
         )}
         {/* 音频 */}
-        {parseContent.VOICE && <AudioPlay />}
+        {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl}/>}
         {/* 附件 */}
         {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
 
@@ -155,24 +153,28 @@ const RenderThreadContent = observer((props) => {
             <Tip imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
           </div>
         </div>
-        <span>{threadStore?.threadData?.likeReward?.shareCount || 0}次分享</span>
+        {
+          threadStore?.threadData?.likeReward?.shareCount > 0
+          && <span>{threadStore?.threadData?.likeReward?.shareCount}次分享</span>
+        }
       </div>
     </div>
   );
 });
 
 // 评论列表
+@inject('thread')
+@inject('comment')
 @observer
 class RenderCommentList extends React.Component {
   constructor(props) {
     super(props);
-    (this.service = this.props.service),
-    (this.state = {
+    this.state = {
       showCommentInput: false, // 是否弹出评论框
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
       inputText: '请输入内容', // 默认回复框placeholder内容
-    });
+    };
 
     this.commentData = null;
     this.replyData = null;
@@ -194,7 +196,7 @@ class RenderCommentList extends React.Component {
       id: data.id,
       isLiked: !data.isLiked,
     };
-    const { success, msg } = await this.props.service.comment.updateLiked(params);
+    const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
     if (!success) {
       Toast.error({
         content: msg,
@@ -210,7 +212,7 @@ class RenderCommentList extends React.Component {
       id: reply.id,
       isLiked: !reply.isLiked,
     };
-    const { success, msg } = await this.props.service.comment.updateLiked(params);
+    const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
     if (!success) {
       Toast.error({
         content: msg,
@@ -230,7 +232,7 @@ class RenderCommentList extends React.Component {
   async deleteComment() {
     if (!this.commentData.id) return;
 
-    const { success, msg } = await this.props.service.comment.delete(this.commentData.id);
+    const { success, msg } = await this.props.comment.delete(this.commentData.id, this.props.thread);
     this.setState({
       showDeletePopup: false,
     });
@@ -249,9 +251,10 @@ class RenderCommentList extends React.Component {
   replyClick(comment) {
     this.commentData = comment;
     this.replyData = null;
+    const userName = comment?.user?.username || comment?.user?.userName;
     this.setState({
       showCommentInput: true,
-      inputText: comment?.user?.username ? `回复${comment.user.username}` : '请输入内容',
+      inputText: userName ? `回复${userName}` : '请输入内容',
     });
   }
 
@@ -260,16 +263,17 @@ class RenderCommentList extends React.Component {
     this.commentData = null;
     this.replyData = reply;
     this.replyData.commentId = comment.id;
-    console.log(reply);
+    const userName = reply?.user?.username || reply?.user?.userName;
+
     this.setState({
       showCommentInput: true,
-      inputText: reply?.user?.username ? `回复${reply.user.username}` : '请输入内容',
+      inputText: userName ? `回复${userName}` : '请输入内容',
     });
   }
 
   // 创建回复评论+回复回复接口
   async createReply(val) {
-    const id = this.props.store?.threadData?.id;
+    const id = this.props.thread?.threadData?.id;
     if (!id) return;
 
     const params = {
@@ -291,17 +295,17 @@ class RenderCommentList extends React.Component {
       params.commentId = this.commentData.id;
     }
 
-    const { success, msg } = await this.service.comment.createReply(params);
+    const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
 
     if (success) {
       this.setState({
         showCommentInput: false,
-        inputText: '请输入内容',
+        inputValue: '',
       });
       Toast.success({
         content: '回复成功',
       });
-      return;
+      return true;
     }
 
     Toast.error({
@@ -315,13 +319,13 @@ class RenderCommentList extends React.Component {
   }
 
   onCommentClick(data) {
-    if (data.id && this.props.store?.threadData?.id) {
-      this.props.router.push(`/thread/comment/${data.id}?threadId=${this.props.store?.threadData?.id}`);
+    if (data.id && this.props.thread?.threadData?.id) {
+      this.props.router.push(`/thread/comment/${data.id}?threadId=${this.props.thread?.threadData?.id}`);
     }
   }
 
   render() {
-    const { totalCount, commentList } = this.props.store;
+    const { totalCount, commentList } = this.props.thread;
     return (
       <Fragment>
         <div className={comment.header}>
@@ -375,14 +379,12 @@ class RenderCommentList extends React.Component {
 @inject('user')
 @inject('thread')
 @inject('comment')
+@inject('index')
 @observer
 class ThreadH5Page extends React.Component {
   constructor(props) {
     super(props);
-    this.service = {
-      thread: createThreadService(props),
-      comment: createCommentService(props),
-    };
+
     this.state = {
       showDeletePopup: false, // 是否弹出删除弹框
       showCommentInput: false, // 是否弹出评论框
@@ -438,6 +440,11 @@ class ThreadH5Page extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    // 清空数据
+    // this.props?.thread && this.props.thread.reset();
+  }
+
   // 点击信息icon
   onMessageClick() {
     const position = this.flag ? this.position : this.nextPosition;
@@ -453,7 +460,7 @@ class ThreadH5Page extends React.Component {
       pid: this.props.thread?.threadData?.postId,
       isFavorite: !this.props.thread?.isFavorite,
     };
-    const { success, msg } = await this.service.thread.updateFavorite(params);
+    const { success, msg } = await this.props.thread.updateFavorite(params);
 
     if (success) {
       Toast.success({
@@ -485,7 +492,7 @@ class ThreadH5Page extends React.Component {
       sort: this.commentDataSort ? '-createdAt' : 'createdAt',
     };
 
-    const { success, msg } = await this.service.thread.loadCommentList(params);
+    const { success, msg } = await this.props.thread.loadCommentList(params);
     this.setState({
       isCommentLoading: false,
     });
@@ -553,7 +560,7 @@ class ThreadH5Page extends React.Component {
       pid: this.props.thread?.threadData?.postId,
       isSticky: !this.props.thread?.isSticky,
     };
-    const { success, msg } = await this.service.thread.updateSticky(params);
+    const { success, msg } = await this.props.thread.updateSticky(params);
 
     if (success) {
       this.setTopState(true);
@@ -573,7 +580,7 @@ class ThreadH5Page extends React.Component {
       pid: this.props.thread?.threadData?.postId,
       isEssence: !this.props.thread?.isEssence,
     };
-    const { success, msg } = await this.service.thread.updateEssence(params);
+    const { success, msg } = await this.props.thread.updateEssence(params);
 
     if (success) {
       Toast.success({
@@ -593,7 +600,7 @@ class ThreadH5Page extends React.Component {
     const id = this.props.thread?.threadData?.id;
     const pid = this.props.thread?.threadData?.postId;
 
-    const { success, msg } = await this.service.thread.delete(id, pid);
+    const { success, msg } = await this.props.thread.delete(id, pid);
 
     if (success) {
       Toast.success({
@@ -632,13 +639,14 @@ class ThreadH5Page extends React.Component {
       isNoMore: false,
       attachments: [],
     };
-    const { success, msg } = await this.service.comment.createComment(params);
+    const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
       Toast.success({
         content: '评论成功',
       });
       this.setState({
         showCommentInput: false,
+        inputValue: '',
       });
       return true;
     }
@@ -658,7 +666,7 @@ class ThreadH5Page extends React.Component {
       content: val,
       attachments: [],
     };
-    const { success, msg } = await this.service.comment.updateComment(params);
+    const { success, msg } = await this.props.comment.updateComment(params, this.props.thread);
     if (success) {
       Toast.success({
         content: '修改成功',
@@ -699,7 +707,7 @@ class ThreadH5Page extends React.Component {
       pid: this.props.thread?.threadData?.postId,
       isLiked: !this.props.thread?.threadData?.isLike,
     };
-    const { success, msg } = await this.service.thread.updateLiked(params);
+    const { success, msg } = await this.props.thread.updateLiked(params, this.props.index);
 
     if (!success) {
       Toast.error({
@@ -709,7 +717,7 @@ class ThreadH5Page extends React.Component {
   }
 
   render() {
-    const { thread: threadStore } = this.props;
+    const { thread: threadStore, comment: commentStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
     const fun = {
       moreClick: this.onMoreClick,
@@ -744,8 +752,6 @@ class ThreadH5Page extends React.Component {
               <Fragment>
                 <RenderCommentList
                   router={this.props.router}
-                  store={threadStore}
-                  service={this.service}
                   sort={flag => this.onSortChange(flag)}
                   onEditClick={comment => this.onEditClick(comment)}>
                 </RenderCommentList>
