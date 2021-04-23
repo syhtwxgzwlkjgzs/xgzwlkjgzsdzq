@@ -102,7 +102,12 @@ class Index extends React.Component {
                   isPay={payType !== 0}
                 />
               )}
-              {imageData && <ImageContent imgData={imageData} isPay={payType !== 0} onPay={this.onPay} />}
+              {imageData && <ImageContent
+                imgData={imageData}
+                isPay={payType !== 0}
+                onPay={this.onPay}
+                onClickMore={this.onClick}
+              />}
               {rewardData && <RewardQuestion
                 content={rewardData.content || ''}
                 money={rewardData.money}
@@ -120,7 +125,7 @@ class Index extends React.Component {
               {/* 付费蒙层 */}
               {
                 payType !== 0 && (
-                  <div className={styles.cover} onClick={this.onPay}>
+                  <div className={styles.cover} onClick={payType === 1 ? this.onClick : this.onPay}>
                     {
                       payType === 2 ? (
                         <Button className={styles.button} type="primary" onClick={this.onPay}>

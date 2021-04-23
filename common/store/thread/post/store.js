@@ -54,7 +54,7 @@ class ThreadPostStore {
   }
 
   @observable
-  categorySeleted = { // 选中的帖子类别
+  categorySelected = { // 选中的帖子类别
     parent: {}, // 选中的帖子父类
     child: {}, // 选中的帖子子类
   };

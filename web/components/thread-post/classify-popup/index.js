@@ -10,7 +10,7 @@ import typeofFn from '@common/utils/typeof';
 import classNames from 'classnames';
 
 const ClassifyPopup = (props) => {
-  const { show, onVisibleChange, category = [], onChange } = props;
+  const { show, onVisibleChange, category = [], onChange, categorySelected } = props;
   const [visible, setVisible] = useState(false);
   const [categoryChildren, setCategoryChildren] = useState([]);
   const [selected, setSelected] = useState({});
@@ -77,7 +77,10 @@ const ClassifyPopup = (props) => {
           {(category || []).map(item => (
               <Button
                 key={item.pid}
-                className={classNames({ active: selected.pid === item.pid  })}
+                className={classNames({
+                  active:
+                    ((categorySelected.parent && categorySelected.parent.pid) || selected.pid) === item.pid,
+                })}
                 onClick={() => {
                   handleClick(item);
                 }}
@@ -91,7 +94,9 @@ const ClassifyPopup = (props) => {
             {(categoryChildren || []).map(item => (
               <Button
                 key={item.pid}
-                className={classNames({ active: selectedChild.pid === item.pid  })}
+                className={classNames({
+                  active: (categorySelected.child && categorySelected.child.pid) === item.pid,
+                })}
                 onClick={() => {
                   handleChildClick(item);
                 }}

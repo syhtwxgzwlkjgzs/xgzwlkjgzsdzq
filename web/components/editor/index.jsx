@@ -68,6 +68,10 @@ export default function DVditor(props) {
     if (topic) vditor.insertValue(`${topic} `);
   }, [topic]);
 
+  useEffect(() => {
+    if (vditor && vditor.getValue() === '\n' && vditor.getValue() !== value) vditor.insertValue(value);
+  }, [value]);
+
   function initVditor() {
     // https://ld246.com/article/1549638745630#options
     const editor = new Vditor(

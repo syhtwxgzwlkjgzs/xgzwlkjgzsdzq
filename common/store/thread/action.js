@@ -1,10 +1,24 @@
 import { action } from 'mobx';
 import ThreadStore from './store';
-import { updatePosts, readCommentList } from '@server';
+import { updatePosts, readCommentList, readThreadDetail } from '@server';
 
 class ThreadAction extends ThreadStore {
   constructor(props) {
     super(props);
+  }
+
+  /**
+   * 获取帖子详细信息
+   * @param {number} id 帖子id
+   * @returns 帖子详细信息
+   */
+  @action
+  async fetchThreadDetail(id) {
+    const params = { threadId: id };
+    const ret = await readThreadDetail({ params });
+    const { code, data } = ret;
+    if (code === 0) this.setThreadData(data);
+    return ret;
   }
 
   @action
@@ -155,12 +169,12 @@ class ThreadAction extends ThreadStore {
    * @param {object} parmas * 参数
    * @param {number} parmas.id * 帖子id
    * @param {number} parmas.pid * 帖子评论id
-   * @param {boolean} params.isSticky 是否置顶
+   * @param {boolean} params.isStick 是否置顶
    * @returns {object} 处理结果
    */
   @action
-  async updateSticky(params) {
-    const { id, pid, isSticky } = params;
+  async updateStick(params) {
+    const { id, pid, isStick } = params;
     if (!id || !pid) {
       return {
         msg: '参数不完整',
@@ -173,14 +187,14 @@ class ThreadAction extends ThreadStore {
       pid,
       data: {
         attributes: {
-          isSticky: !!isSticky,
+          isStick: !!isStick,
         },
       },
     };
     const res = await updatePosts({ data: requestParams });
 
     if (res?.data && res.code === 0) {
-      this.setThreadDetailField('isSticky', !!isSticky);
+      this.setThreadDetailField('isStick', !!isStick);
 
       return {
         msg: '操作成功',
@@ -250,7 +264,7 @@ class ThreadAction extends ThreadStore {
    * @returns {object} 处理结果
    */
   @action
-  async delete(id, pid) {
+  async delete(id, pid, IndexStore) {
     if (!id || !pid) {
       return {
         msg: '参数不完整',
@@ -273,6 +287,7 @@ class ThreadAction extends ThreadStore {
       this.setThreadDetailField('isDelete', 1);
 
       // TODO: 删除帖子列表中的数据
+      // IndexStore
 
       return {
         msg: '操作成功',

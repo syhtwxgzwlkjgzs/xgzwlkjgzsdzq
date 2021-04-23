@@ -58,7 +58,8 @@ class IndexAction extends IndexStore {
   async getReadCategories() {
     const result = await readCategories();
     if (result.code === 0 && result.data) {
-      this.setCategories(result.data);
+      const data = [{ name: '全部', pid: '', children: [] }, ...result.data];
+      this.setCategories(data);
       return this.categories;
     }
     return null;
@@ -80,13 +81,15 @@ class IndexAction extends IndexStore {
 
   // 获取指定的帖子数据
   findAssignThread(threadId) {
-    const { pageData = [] } = this.threads;
-    for (let i = 0; i < pageData.length; i++)  {
-      if (pageData[i].threadId === threadId) {
-        return { index: i, data: pageData[i] };
+    if (this.threads) {
+      const { pageData = [] } = this.threads;
+      for (let i = 0; i < pageData.length; i++)  {
+        if (pageData[i].threadId === threadId) {
+          return { index: i, data: pageData[i] };
+        }
       }
+      return null;
     }
-    return null;
   }
 
   /**
