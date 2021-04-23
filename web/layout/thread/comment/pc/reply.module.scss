@@ -1,0 +1,13 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.container {
+  padding: 0 rem($font-line-height-primary);
+  background: #fff;
+}
+  
+  .body {
+    .commentItems {
+    padding-bottom: rem($padding-5n);
+    border-bottom: solid rem(1) #eee;
+  }
+}

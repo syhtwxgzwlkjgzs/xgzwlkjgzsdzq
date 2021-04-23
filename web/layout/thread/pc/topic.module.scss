@@ -1,8 +1,77 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
+
 .container {
-  width: 100%;
-  height: rem(597);
+  width: calc(100% - rem(32));
+  // height: rem(597);
   background: #fff;
+  padding: rem($padding-4n);
   margin-bottom: rem(20);
+}
+
+.header {
+  // height: rem(54);
+  background: var(--color-white);
+  display: flex;
+  justify-content: space-between;
+  .headerRigth {
+    display: flex;
+    font-family: PingFangSC-Regular;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: left;
+    color: #8490a8;
+    .manage {
+      margin-left: rem($margin-4n);
+    }
+    .report {
+      margin-left: rem($margin-4n);
+    }
+    .icon {
+      margin-right: rem($margin-2n);
+      margin-top: rem(-2);
+    }
+  }
+}
+
+.essence {
+  margin-right: rem($margin-2n);
+}
+
+.body {
+  margin-top: rem($margin-4n);
+
+  >* {
+    margin-bottom: rem($margin-5n);
+  }
+}
+
+.image {
+  width: 100%;
+}
+
+.reward {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rewardButton {
+  margin: 0 auto;
+  width: rem(156);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--color-text-secondary);
+  font-size: rem($font-size-primary);
+}
+
+.thumbs {
+  display: flex;
+  align-items: center;
+  font-size: rem($font-size-primary);
 }
