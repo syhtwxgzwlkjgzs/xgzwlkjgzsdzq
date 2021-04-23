@@ -2,6 +2,7 @@ import React from 'react';
 import WeixinBindH5Page from '@layout/user/h5/wx-bind';
 import { inject } from 'mobx-react';
 
+import HOCLoginMode from '@common/middleware/HOCLoginMode';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
 @inject('site')
@@ -14,4 +15,4 @@ class WeixinBind extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(WeixinBind);
+export default HOCFetchSiteData(HOCLoginMode('weixin')(WeixinBind));

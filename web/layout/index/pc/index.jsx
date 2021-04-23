@@ -20,9 +20,8 @@ class IndexPCPage extends React.Component {
           index.categories ? index.categories.map((item, index) => <h1 key={index}>{item.name}</h1>) : null
         }
         <p className={styles.text}>test</p>
-       
-        <Button>Fuck</Button>
-        <PayBox />
+
+        <Button>123</Button>
       </div>
     );
   }

@@ -6,11 +6,14 @@ import { Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import HeaderLogin from '../../../../components/login/h5/header-login';
 import PhoneInput from '../../../../components/login/h5/phone-input';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import { get } from '@common/utils/get';
 
 @inject('site')
 @inject('user')
 @inject('thread')
 @inject('wxPhoneBind')
+@inject('commonLogin')
 @observer
 class WXBindPhoneH5Page extends React.Component {
   handlePhoneNumCallback = (phoneNum) => {
@@ -34,9 +37,37 @@ class WXBindPhoneH5Page extends React.Component {
       });
     }
   };
+  handleBindButtonClick = async () => {
+    const { wxPhoneBind, router } = this.props;
+    const { sessionToken } = router.query;
+    try {
+      const resp = await wxPhoneBind.loginAndBind(sessionToken);
+      const uid = get(resp, 'uid', '');
+      this.props.user.updateUserInfo(uid);
+      Toast.success({
+        content: '登录成功',
+        duration: 1000,
+      });
+
+      setTimeout(() => {
+        router.push('/index');
+      }, 1000);
+    } catch (error) {
+      // 跳转状态页
+      if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
+        this.props.commonLogin.setStatusMessage(error.Code, error.Message);
+        this.props.router.push('/user/status');
+        return;
+      }
+      Toast.error({
+        content: error.Message,
+      });
+    }
+  }
 
   render() {
     const { wxPhoneBind, router } = this.props;
+    const { nickname } = router.query;
     return (
       <div className={layout.container}>
         <HeaderLogin />
@@ -44,8 +75,7 @@ class WXBindPhoneH5Page extends React.Component {
           <div className={layout.title}>手机号登陆，并绑定微信账号</div>
           <div className={layout.tips}>
             hi， 微信用户
-            <img src="//dzq-img/user.png" alt="" />
-            小虫
+            {nickname}
             <br />
             请您登录，即可完成微信号和手机号的绑定
           </div>
@@ -63,24 +93,7 @@ class WXBindPhoneH5Page extends React.Component {
           <Button
             className={layout.button}
             type="primary"
-            onClick={async () => {
-              const { sessionToken } = router.query;
-              try {
-                await wxPhoneBind.loginAndBind(sessionToken);
-                Toast.success({
-                  content: '登录成功',
-                  duration: 1000,
-                });
-
-                setTimeout(() => {
-                  this.props.router.push('/index');
-                }, 1000);
-              } catch (error) {
-                Toast.error({
-                  content: error.Message,
-                });
-              }
-            }}
+            onClick={this.handleBindButtonClick}
           >
             登录并绑定
           </Button>

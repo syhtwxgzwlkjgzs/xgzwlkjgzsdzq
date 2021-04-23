@@ -1,6 +1,9 @@
 import React from 'react';
 import layout from './index.module.scss';
+import Header from '../../../header/index';
+import { inject } from 'mobx-react';
 
+@inject('site')
 class HeaderLogin extends React.Component {
   constructor(props) {
     super(props);
@@ -8,9 +11,12 @@ class HeaderLogin extends React.Component {
 
   render() {
     return (
-      <div className={layout.banner}>
-        <img src="/dzq-img/admin-logo-x2.png" alt=""/>
-      </div>
+      <>
+        <Header/>
+        <div className={layout.banner}>
+          <img src={this.props.site.siteIconSrc} alt=""/>
+        </div>
+      </>
     );
   }
 }

@@ -36,6 +36,11 @@ class SiteStore {
     return Boolean(get(this.webConfig, 'passport.oplatformClose', true));
   }
 
+  // 站点 icon 路径
+  @computed get siteIconSrc() {
+    return get(this.webConfig, 'setSite.siteLogo');
+  }
+
   @computed get wechatEnv() {
     if (this.isMiniProgramOpen) {
       return WECHAT_ENV_MAP.MINI;
