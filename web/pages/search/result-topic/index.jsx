@@ -2,7 +2,6 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/search/result-topic/h5';
 import IndexPCPage from '@layout/search/result-topic/pc';
-import { getTopicsList } from '@common/service/search';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
@@ -10,15 +9,15 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @inject('search')
 @observer
 class Index extends React.Component {
-  static async getInitialProps(ctx) {
-    const { res } = await getTopicsList({}, ctx);
+  // static async getInitialProps(ctx) {
+  //   const { res } = await getTopicsList({}, ctx);
 
-    return {
-      serverSearch: {
-        topics: res,
-      },
-    };
-  }
+  //   return {
+  //     serverSearch: {
+  //       topics: res,
+  //     },
+  //   };
+  // }
 
   page = 1;
   perPage = 10;
@@ -37,7 +36,7 @@ class Index extends React.Component {
     const isBool = !search.topics && (!serverSearch || !serverSearch.topics);
 
     if (!isBool) {
-      const { res } = await getTopicsList({ search: keyword });
+      const { res } = await search.getTopicsList({ search: keyword });
       this.page += 1;
       search.setTopics(res);
     }
@@ -47,7 +46,7 @@ class Index extends React.Component {
     const { search } = this.props;
 
     if (type === 'refresh') {
-      const { res } = await getTopicsList({ search: data, perPage: this.perPage });
+      const { res } = await search.getTopicsList({ search: data, perPage: this.perPage });
       this.page = 2;
       search.setTopics(res);
     } else if (type === 'moreData') {
@@ -56,7 +55,7 @@ class Index extends React.Component {
       }
       const { topics } = search;
       const { pageData } = topics || { pageData: [] };
-      const { res } = await getTopicsList({ search: data, perPage: this.perPage, page: this.page });
+      const { res } = await search.getTopicsList({ search: data, perPage: this.perPage, page: this.page });
       if (res?.pageData?.length) {
         this.page += 1;
         res.pageData.unshift(...pageData);

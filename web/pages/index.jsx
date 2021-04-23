@@ -2,7 +2,6 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/index/h5';
 import IndexPCPage from '@layout/index/pc';
-import { getThreadList, getFirstData } from '@common/service/home';
 import { readCategories, readStickList, readThreadList } from '@server';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';

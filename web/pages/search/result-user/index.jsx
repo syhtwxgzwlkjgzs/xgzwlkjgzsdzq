@@ -2,7 +2,6 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/search/result-user/h5';
 import IndexPCPage from '@layout/search/result-user/pc';
-import { getUsersList } from '@common/service/search';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
@@ -10,15 +9,15 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @inject('search')
 @observer
 class Index extends React.Component {
-  static async getInitialProps(ctx) {
-    const { res } = await getUsersList({}, ctx);
+  // static async getInitialProps(ctx) {
+  //   const { res } = await getUsersList({}, ctx);
 
-    return {
-      serverSearch: {
-        users: res,
-      },
-    };
-  }
+  //   return {
+  //     serverSearch: {
+  //       users: res,
+  //     },
+  //   };
+  // }
 
   page = 1;
   perPage = 10;
@@ -37,7 +36,7 @@ class Index extends React.Component {
     const isBool = !search.users && (!serverSearch || !serverSearch.users);
 
     if (!isBool) {
-      const { res } = await getUsersList({ search: keyword });
+      const { res } = await search.getUsersList({ search: keyword });
       this.page += 1;
       search.setUsers(res);
     }
@@ -47,7 +46,7 @@ class Index extends React.Component {
     const { search } = this.props;
 
     if (type === 'refresh') {
-      const { res } = await getUsersList({ search: data, perPage: this.perPage });
+      const { res } = await search.getUsersList({ search: data, perPage: this.perPage });
       this.page = 2;
       search.setUsers(res);
     } else if (type === 'moreData') {
@@ -56,7 +55,7 @@ class Index extends React.Component {
       if (this.page === 1) {
         this.page = 2;
       }
-      const { res } = await getUsersList({ search: data, perPage: this.perPage, page: this.page });
+      const { res } = await search.getUsersList({ search: data, perPage: this.perPage, page: this.page });
 
       if (res?.pageData?.length) {
         this.page += 1;

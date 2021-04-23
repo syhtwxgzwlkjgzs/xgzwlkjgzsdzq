@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/search/h5';
 import IndexPCPage from '@layout/search/pc';
-import { getSearchData } from '@common/service/search';
+import { readUsersList, readTopicsList, readThreadList } from '@server';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 import SearchAction from '../../../common/store/search/action';
@@ -12,13 +12,15 @@ import SearchAction from '../../../common/store/search/action';
 @observer
 class Index extends React.Component {
   static async getInitialProps(ctx) {
-    const { res } = await getSearchData({}, ctx);
+    const topics = await readTopicsList({ params: { filter: { hot: 1 } } }, ctx);
+    const users = await readUsersList({}, ctx);
+    const threads = await readThreadList({ params: { filter: { sort: '3' } } }, ctx);
 
     return {
       serverSearch: {
-        indexTopics: res[0],
-        indexUsers: res[1],
-        indexThreads: res[2],
+        indexTopics: topics && topics.code === 0 ? topics.data : { pageData: [] },
+        indexUsers: users && users.code === 0 ? users.data : { pageData: [] },
+        indexThreads: threads && threads.code === 0 ? threads.data : { pageData: [] },
       },
     };
   }
@@ -40,11 +42,7 @@ class Index extends React.Component {
     const isBool3 = !search.indexThreads && (!serverSearch || !serverSearch.indexThreads);
 
     if (!isBool1 && !isBool2 && !isBool3) {
-      const { res } = await getSearchData();
-
-      search.setIndexTopics(res[0]);
-      search.setIndexUsers(res[1]);
-      search.setIndexThreads(res[2]);
+      search.getSearchData();
     }
   }
 
