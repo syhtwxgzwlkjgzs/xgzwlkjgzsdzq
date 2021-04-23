@@ -86,7 +86,7 @@ const Position = (props) => {
         () => setCurrentPosition({ location: '添加位置' })
       }
     >
-      <Icon name="EyeOutlined" color="#2469F6" size={12} />
+      <Icon name="PositionOutlined" color="#2469F6" size={12} />
       {currentPosition.location}
     </Tag>
   );
@@ -95,7 +95,7 @@ const Position = (props) => {
 Position.propTypes = {
   position: PropTypes.object,
   key: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
 };
 
 Position.defaultProps = {
@@ -107,7 +107,7 @@ Position.defaultProps = {
   },
   // TODO: 待改成从 forum 中取
   key: 'FF7BZ-27T3X-C574Z-73YBG-FGAJ2-4CF7I',
-  onChange: () => {}
+  onChange: () => {},
 };
 
 export default memo(withRouter(Position));
