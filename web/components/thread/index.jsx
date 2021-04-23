@@ -26,7 +26,7 @@ class Index extends React.Component {
       e.stopPropagation();
       const { data = {} } = this.props;
       const { threadId = '' } = data;
-      updateThreadShare({ threadId });
+      this.props.index.updateThreadShare({ threadId });
     }
     // 评论
     onComment = (e) => {
@@ -45,7 +45,7 @@ class Index extends React.Component {
       e.stopPropagation();
       const { data = {} } = this.props;
       const { threadId = '', isLike, postId } = data;
-      updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } });
+      this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } });
     }
     // 支付
     onPay = (e) => {

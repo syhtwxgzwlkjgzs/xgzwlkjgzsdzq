@@ -1,9 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { ImagePreviewer } from '@discuzq/design';
-import { noop } from '../utils';
 import img from './index.module.scss';
 
-const Index = ({ imgData = [], onClickMore = noop }) => {
+const Index = ({ imgData = [] }) => {
   const [visible, setVisible] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
 
@@ -15,6 +14,15 @@ const Index = ({ imgData = [], onClickMore = noop }) => {
         setDefaultImg(item.url);
       }
     });
+    setTimeout(() => {
+      setVisible(true);
+    }, 0);
+  };
+
+  const onClickMore = (e) => {
+    e.stopPropagation();
+
+    setDefaultImg(imgData[0].url);
     setTimeout(() => {
       setVisible(true);
     }, 0);

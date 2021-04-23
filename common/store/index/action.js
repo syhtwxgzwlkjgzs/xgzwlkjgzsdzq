@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import IndexStore from './store';
-import { readCategories, readStickList, readThreadList } from '@server';
+import { readCategories, readStickList, readThreadList, updatePosts, createThreadShare } from '@server';
 import typeofFn from '@common/utils/typeof';
 
 class IndexAction extends IndexStore {
@@ -191,6 +191,30 @@ class IndexAction extends IndexStore {
       this.threads.pageData = this.threads.pageData.slice();
     }
   }
+
+  /**
+   * 点赞
+   * @param {string | number} pid 评论id
+   * @param {string | number} id 帖子id
+   * @param {string | number} data 附件信息
+   */
+  @action
+  async updateThreadInfo({ pid, id, data = {} } = {}) {
+    const result = await updatePosts({ data: { pid, id, data } });
+    if (result.code === 0 && result.data) {
+      const { isLiked } = result.data;
+      this.updateAssignThreadInfo(id, { isLike: isLiked });
+    }
+  };
+
+  /**
+   * 分享
+   * @param {string | number} threadId 帖子id
+   */
+  @action
+  async updateThreadShare({ threadId } = {}) {
+    await createThreadShare({ data: { threadId } });
+  };
 }
 
 export default IndexAction;
