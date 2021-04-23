@@ -10,6 +10,7 @@ class UserAction extends SiteStore {
   // 写入用户数据
   @action
   setUserInfo(data) {
+    debugger
     this.userInfo = data;
     if (data && data.id) {
       this.updateLoginStatus(true);
