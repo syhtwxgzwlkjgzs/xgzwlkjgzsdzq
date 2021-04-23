@@ -27,29 +27,42 @@ export default class CommonAccountContent extends Component {
   };
 
   render() {
-    const { currentPaymentObj = {}, isNotShowTitle, titleName } = this.props;
-    const { trade_type, goods_name, is_anonymous, pay_money } = currentPaymentObj;
+    const { currentPaymentData = [], isNotShowTitle, titleName } = this.props;
     return (
       <>
         {/* 标题 */}
         {!isNotShowTitle && <div className={styles.amountTitle}>{titleName}</div>}
         {/* 主要内容区域 */}
         <div className={styles.amountContent}>
-          <div className={styles.acExplain}>
-            <span className={styles.acExplain_label}>交易类型</span>{' '}
-            <span className={styles.acExplain_value}>{this.renderDiffTradeType(trade_type)}</span>
-          </div>
-          <div className={styles.acExplain}>
-            <span className={styles.acExplain_label}>商品名称</span>{' '}
-            <span className={styles.acExplain_value}>{goods_name}</span>
-          </div>
-          <div className={styles.acExplain}>
-            <span className={styles.acExplain_label}>支付金额</span>
-            <span>￥{pay_money}</span>
-          </div>
-          <div className={styles.acExplain}>
-            <Checkbox checked={is_anonymous == '1'} /> 隐藏我的付费信息
-          </div>
+          {currentPaymentData &&
+            !!currentPaymentData.length &&
+            currentPaymentData.map((item, index) => {
+              let is_show_hr = currentPaymentData.length > 0 && index != currentPaymentData.length - 1;
+              return (
+                <>
+                  <div className={styles.acExplain}>
+                    <span className={styles.acExplain_label}>交易类型</span>{' '}
+                    <span className={styles.acExplain_value}>{this.renderDiffTradeType(item.trade_type)}</span>
+                  </div>
+                  <div className={styles.acExplain}>
+                    <span className={styles.acExplain_label}>商品名称</span>{' '}
+                    <span className={styles.acExplain_value}>{item.goods_name}</span>
+                  </div>
+                  <div className={styles.acExplain}>
+                    <span className={styles.acExplain_label}>支付金额</span>
+                    <span>￥{item.pay_money}</span>
+                  </div>
+                  <div className={styles.acExplain}>
+                    <Checkbox checked={item.is_anonymous == '1'} /> 隐藏我的付费信息
+                  </div>
+                  {is_show_hr && (
+                    <div>
+                      <hr className={styles.acExplain_hr}/>
+                    </div>
+                  )}
+                </>
+              );
+            })}
         </div>
       </>
     );
@@ -57,7 +70,7 @@ export default class CommonAccountContent extends Component {
 }
 
 CommonAccountContent.defaultProps = {
-  currentPaymentObj: {}, // 当前支付对象
+  currentPaymentData: [], // 当前支付对象
   isNotShowTitle: false, // 是否不显示title标题
   titleName: '确认金额', // 默认交易金额title标题名称
 };
