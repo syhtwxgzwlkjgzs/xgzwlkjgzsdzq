@@ -13,6 +13,7 @@ export { default as readReplyList } from './thread/readReplyList';
 export { default as createPosts } from './thread/createPosts';
 export { default as updateComment } from './thread/updateComment';
 export { default as readCommentDetail } from './thread/readCommentDetail';
+export { default as operateThread } from './thread/operateThread';
 export { default as readTopicsList } from './search/readTopicsList';
 export { default as readUsersList } from './search/readUsersList';
 export { default as readCategories } from './home/readCategories';
