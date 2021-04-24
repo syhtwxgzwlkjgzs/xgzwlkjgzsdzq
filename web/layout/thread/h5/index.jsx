@@ -458,7 +458,6 @@ class ThreadH5Page extends React.Component {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
-      pid: this.props.thread?.threadData?.postId,
       isFavorite: !this.props.thread?.isFavorite,
     };
     const { success, msg } = await this.props.thread.updateFavorite(params);
@@ -544,7 +543,7 @@ class ThreadH5Page extends React.Component {
 
     // 删除
     if (type === 'delete') {
-      this.delete();
+      this.setState({ showDeletePopup: true });
     }
   };
 
@@ -564,7 +563,6 @@ class ThreadH5Page extends React.Component {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
-      pid: this.props.thread?.threadData?.postId,
       isStick: !this.props.thread?.threadData?.isStick,
     };
     const { success, msg } = await this.props.thread.updateStick(params);
@@ -584,7 +582,6 @@ class ThreadH5Page extends React.Component {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
-      pid: this.props.thread?.threadData?.postId,
       isEssence: !this.props.thread?.threadData?.displayTag?.isEssence,
     };
     const { success, msg } = await this.props.thread.updateEssence(params);
@@ -605,18 +602,17 @@ class ThreadH5Page extends React.Component {
   async delete() {
     this.setState({ showDeletePopup: false });
     const id = this.props.thread?.threadData?.id;
-    const pid = this.props.thread?.threadData?.postId;
 
-    const { success, msg } = await this.props.thread.delete(id, pid, this.props.index);
+    const { success, msg } = await this.props.thread.delete(id, this.props.index);
 
     if (success) {
       Toast.success({
-        content: '删除成功',
+        content: '删除成功，即将跳转至首页',
       });
 
       setTimeout(() => {
         this.props.router.push('/');
-      }, 500);
+      }, 1000);
 
       return;
     }
