@@ -7,13 +7,14 @@
   height: calc(100vh - 134px - 0.44rem);
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+  background-color: var(--color-white);
 }
 .post-bottombar {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #fff;
+  background-color: var(--color-white);
 }
 @supports (bottom: constant(safe-area-inset-bottom)) or (bottom: env(safe-area-inset-bottom)) {
   .post-inner {
