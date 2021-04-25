@@ -50,6 +50,9 @@
     strong {
       font-weight: bolder;
     }
+    .vditor-panel {
+      display: none !important;
+    }
   }
   .vditor-toolbar--hide {
     display: none;
