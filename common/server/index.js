@@ -39,3 +39,4 @@ export { default as createThread } from './thread-post/create-thread';
 export { default as readYundianboSignature } from './thread-post/read-yundianbo-signature';
 export { default as setNickname } from './setNickname';
 export { default as transitionSmsBind } from './transitionSmsBind';
+export { default as updateThread } from './thread-post/update-thread';

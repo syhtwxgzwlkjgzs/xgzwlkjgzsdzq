@@ -8,7 +8,7 @@
   padding: 0 rem($padding-4n);
   height: rem(52);
   border-radius: 5px;
-  background: #f5f7f8;
+  background: var(--background-color-text);
   margin-bottom: rem(8);
 
   .size {
@@ -17,7 +17,7 @@
   }
   .content {
     margin: 0 rem(8);
-    color: #0b0b37;
+    color: var(--color-text-primary);
     font-size: rem($font-size-primary);
   }
   .a {

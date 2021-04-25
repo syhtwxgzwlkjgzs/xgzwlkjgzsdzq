@@ -1,5 +1,4 @@
 import { createContext } from 'react';
-import { updatePosts, createThreadShare } from '@server';
 
 
 export const ThreadCommonContext = createContext();
@@ -13,6 +12,9 @@ export const filterClickClassName = (dom) => {
   // const whitelist = [];
   const { className = '', localName = '' } = dom;
   const blacklistFilter = blacklistClass.filter(item => className.indexOf(item) !== -1);
+  if (blacklistFilter.length && blacklistHTML.indexOf(localName) !== -1) { // TODO 点击头像暂时跳转帖子详情
+    return true;
+  }
   if (blacklistFilter.length || blacklistHTML.indexOf(localName) !== -1) {
     return false;
   }
