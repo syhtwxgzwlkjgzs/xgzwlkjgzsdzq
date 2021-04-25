@@ -2,42 +2,11 @@ import React, { memo, useState } from 'react';
 import { Input, Button, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
+import { goodImages } from '@common/constants/const';
 
 const ProductSelect = (props) => {
   // state data
   const [link, setLink] = useState('');
-  const goodImages = [
-    {
-      src: '/dzq-img/jingdong.svg',
-      name: '京东',
-      width: 20,
-      height: 20,
-    },
-    {
-      src: '/dzq-img/taobao.svg',
-      name: '淘宝',
-      width: 20,
-      height: 20,
-    },
-    {
-      src: '/dzq-img/tmall.svg',
-      name: '天猫',
-      width: 20,
-      height: 20,
-    },
-    {
-      src: '/dzq-img/pinduoduo.svg',
-      name: '拼多多',
-      width: 20,
-      height: 20,
-    },
-    {
-      src: '/dzq-img/youzan.svg',
-      name: '有赞',
-      width: 20,
-      height: 20,
-    },
-  ];
 
   // handle
   const parseLink = async () => {

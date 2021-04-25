@@ -1,6 +1,6 @@
 
 /**
- * 通用上传组件、支持图片、附件、视频等的上传和展示
+ * 通用上传组件、支持图片、附件等的上传和展示
  */
 import React, { useState } from 'react';
 import Taro from '@tarojs/taro';

@@ -95,3 +95,52 @@
     width: 100%;
   }
 }
+
+.product {
+  height: 114px;
+  padding: 10px;
+  border-radius: 5px;
+  background: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .image {
+    width: 82px;
+    height: 82px;
+    // margin-right: 16px;
+  }
+  .content {
+    width: 225px;
+
+    .desc {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      font-size: 14px;
+      line-height: 24px;
+      text-align: left;
+      color: #515a6e;
+      margin-bottom: 8px;
+    }
+
+    .opera {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .price {
+        font-size: 20px;
+        line-height: 30px;
+        text-align: left;
+        color: #e02433;
+      }
+    }
+  }
+}
+
+.video {
+  margin-top: 8px;
+  width: 100%;
+}
