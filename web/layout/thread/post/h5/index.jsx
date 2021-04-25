@@ -179,10 +179,10 @@ class ThreadCreate extends React.Component {
 
   handleVideoUploadComplete = (ret, file) => {
     // 上传视频
-    const { fileId: id, video } = ret;
+    const { fileId, video } = ret;
     this.setPostData({
-      videoFile: {
-        id,
+      video: {
+        id: fileId,
         thumbUrl: video.url,
         type: file.type,
       },
