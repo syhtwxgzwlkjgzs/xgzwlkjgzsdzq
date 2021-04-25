@@ -47,7 +47,7 @@ class UserAction extends SiteStore {
   // 判断用户是否登录
   @action
   isLogin() {
-    return this.userInfo && this.userInfo.id;
+    return !!this.userInfo && !!this.userInfo.id;
   }
 }
 

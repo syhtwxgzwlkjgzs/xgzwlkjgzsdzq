@@ -19,6 +19,7 @@ import { filterClickClassName, handleAttachmentData, noop } from './utils';
 
 @inject('site')
 @inject('index')
+@inject('user')
 @observer
 class Index extends React.Component {
     // 分享
@@ -35,6 +36,12 @@ class Index extends React.Component {
     onComment = (e) => {
       e.stopPropagation();
 
+      // 对没有登录的先做
+      if (!this.props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        return;
+      }
+
       const { data = {} } = this.props;
       const { threadId = '' } = data;
       if (threadId !== '') {
@@ -46,6 +53,12 @@ class Index extends React.Component {
     // 点赞
     onPraise = (e) => {
       e.stopPropagation();
+
+      // 对没有登录的先做
+      if (!this.props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        return;
+      }
       const { data = {} } = this.props;
       const { threadId = '', isLike, postId } = data;
       this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } });
@@ -53,6 +66,12 @@ class Index extends React.Component {
     // 支付
     onPay = (e) => {
       e.stopPropagation();
+
+      // 对没有登录的先做
+      if (!this.props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        return;
+      }
 
       if (this.props.payType === '0') {
         return;

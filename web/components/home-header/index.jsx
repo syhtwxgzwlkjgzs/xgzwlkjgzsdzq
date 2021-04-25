@@ -87,7 +87,7 @@ class HomeHeader extends React.Component {
           <div></div>
           <div>
             <Icon onClick={() => {
-              Router.redirect('/');
+              Router.redirect({url:'/'});
             }} name="HomeOutlined" color="#fff" size={20} />
           </div>
         </div>}
