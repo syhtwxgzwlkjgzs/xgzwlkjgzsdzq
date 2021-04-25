@@ -46,6 +46,10 @@ const typeMap = {
 const RenderThreadContent = observer((props) => {
   const { store: threadStore } = props;
   const { text, indexes } = threadStore?.threadData?.content || {};
+  const tipData = {
+    postId: threadStore?.threadData?.postId,
+    threadId: threadStore?.threadData?.threadId,
+  };
   // 是否合法
   const isApproved = threadStore?.threadData?.isApproved || 0;
   const isEssence = threadStore?.threadData?.displayTag?.isEssence || false;
@@ -157,7 +161,7 @@ const RenderThreadContent = observer((props) => {
             <span>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
           </div>
           <div className={topic.likeReward} >
-            <Tip imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
+            <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
           </div>
         </div>
         {
