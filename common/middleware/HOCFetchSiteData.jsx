@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import isServer from '@common/utils/is-server';
 import getPlatform from '@common/utils/get-platform';
 import { readForum, readUser } from '@server';
-import Router from '@common/utils/web-router';
+import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import reload from '@common/utils/reload';
@@ -161,11 +161,11 @@ export default function HOCFetchSiteData(Component) {
           });
           // 关闭站点
           if (router.asPath !== '/close' && site.closeSiteConfig) {
-            Router.redirect('/close');
+            Router.redirect({url:'/close'});
           }
         } else {
           // 重定向到错误页面
-          Router.redirect('/500');
+          Router.redirect({url: '/500'});
         }
       }
 
