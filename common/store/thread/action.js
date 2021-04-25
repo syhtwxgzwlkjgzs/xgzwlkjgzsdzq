@@ -324,7 +324,7 @@ class ThreadAction extends ThreadStore {
    */
   @action
   async loadCommentList(params) {
-    const { id, page = 1, perPage = 10, sort = 'createdAt' } = params;
+    const { id, page = 1, perPage = 5, sort = '-createdAt' } = params;
     if (!id) {
       return {
         msg: '帖子id不存在',
@@ -343,7 +343,7 @@ class ThreadAction extends ThreadStore {
 
     const res = await readCommentList({ params: requestParams });
 
-    if (res?.data?.pageData) {
+    if (res.code === 0 && res?.data?.pageData) {
       let { commentList } = this;
 
       page === 1 ? (commentList = res?.data?.pageData || []) : commentList.push(...(res?.data?.pageData || []));
