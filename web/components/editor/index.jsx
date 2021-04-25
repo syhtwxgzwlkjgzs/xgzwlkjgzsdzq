@@ -24,6 +24,7 @@ export default function DVditor(props) {
     // const { vditor } = this.vditor;
     // const mode = vditor[vditor.currentMode];
     const selection = window.getSelection();
+    console.log(selection.rangeCount);
     if (selection.rangeCount > 0) return selection.getRangeAt(0);
     // if (mode.range) return mode.range;
     // const { element } = mode;
@@ -140,6 +141,9 @@ export default function DVditor(props) {
             setContentCount(count);
           },
           type: 'markdown',
+        },
+        outline: {
+          enable: false,
         },
       },
     );
