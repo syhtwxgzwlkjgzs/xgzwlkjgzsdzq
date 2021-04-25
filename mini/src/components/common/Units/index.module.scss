@@ -1,0 +1,97 @@
+@mixin img {
+  height: 169px;
+  width: 169px;
+  border-radius: 5px;
+  background: #f5f7f8;
+  display: flex;
+  align-items: center;
+}
+
+@mixin atta {
+  height: 52px;
+  border-radius: 5px;
+  background: #f5f7f8;
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.upload-atta {
+  @include atta;
+  justify-content: center;
+  color: #8490a8;
+
+  .text {
+    line-height: 52px;
+    margin-left: 8px;
+    font-size: var(--font-size-primary);
+  }
+}
+
+.upload-img {
+  @include img;
+  justify-content: center;
+  flex-direction: column;
+  color: #8490a8;
+
+  .text {
+    margin-top: 8px;
+    font-size: var(--font-size-primary);
+  }
+}
+
+.atta {
+  @include atta;
+  justify-content: space-between;
+  padding: 0 16px;
+
+  .left {
+    display: flex;
+    align-items: center;
+    width: 90%;
+  }
+
+  .name {
+    line-height: 52px;
+    color: #0b0b37;
+    margin-left: 8px;
+    font-size: var(--font-size-primary);
+    display: inline-block;
+    white-space: nowrap;
+    width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .size {
+    line-height: 52px;
+    color: #4f5a70;
+    margin-left: 8px;
+    font-size: var(--font-size-label);
+  }
+}
+
+.img {
+  @include img;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  position: relative;
+  overflow: hidden;
+
+  Image {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .delete {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 40px;
+    bottom: 0;
+    width: 100%;
+  }
+}

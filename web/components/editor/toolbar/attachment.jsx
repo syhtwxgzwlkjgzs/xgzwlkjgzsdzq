@@ -61,8 +61,9 @@ class AttachmentToolbar extends React.Component {
   inputRef = React.createRef(null);
 
   handleAttachClick(item) {
-    this.setState({ currentAction: item.name });
+    this.setState({ currentAction: item.type });
     this.props.onAttachClick(item);
+    this.setState({ showAll: false });
   }
 
   handleToggle = () => {
@@ -86,29 +87,27 @@ class AttachmentToolbar extends React.Component {
       // 云点播上传视频：https://cloud.tencent.com/document/product/266/9239
       const TcVod = (await import('vod-js-sdk-v6')).default;
       new TcVod({
-        getSignature: this.getYundianboSignature
+        getSignature: this.getYundianboSignature,
       })
       // 开始上传
-      .upload({ mediaFile: this.file })
-      .on('media_progress', (info) => {
-        this.toastInstance = Toast.loading({
-          content: '上传中...',
-          duration: 0
+        .upload({ mediaFile: this.file })
+        .on('media_progress', () => {
+          this.toastInstance = Toast.loading({
+            content: '上传中...',
+            duration: 0,
+          });
         })
-      })
-      .done()
+        .done()
       // 上传完成
-      .then((res) => {
-        onUploadComplete(res, this.file, item);
-        this.toastInstance?.destroy();
-      })
+        .then((res) => {
+          onUploadComplete(res, this.file, item);
+          this.toastInstance?.destroy();
+        })
       // 上传异常
-      .catch((err) => {
-        console.log(err);
-      });
-
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
-
       // 其他类型上传
       let cloneList = [...files];
 
@@ -167,7 +166,7 @@ class AttachmentToolbar extends React.Component {
                     onClick={this.handleAttachClick.bind(this, item)}
                     className={styles['dvditor-attachment-toolbar__item']}
                     name={item.name}
-                    color={item.name === currentAction && item.active}
+                    color={item.type === currentAction && item.active}
                     size="20" />;
                 }
                 return (
@@ -176,7 +175,7 @@ class AttachmentToolbar extends React.Component {
                       onClick={this.handleAttachClick.bind(this, item)}
                       className={styles['dvditor-attachment-toolbar__item']}
                       name={item.name}
-                      color={item.name === currentAction && item.active}
+                      color={item.type === currentAction && item.active}
                       size="20" />
                     <input
                       style={{ display: 'none' }}
