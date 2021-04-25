@@ -7,6 +7,8 @@ import { PlusinToolbar, DefaultToolbar, GeneralUpload, Tag, Title, Content, Clas
 import { Units } from '@components/common';
 import styles from './index.module.scss';
 import { THREAD_TYPE } from '@common/constants/thread-post';
+import { readYundianboSignature } from '@common/server';
+import VodUploader from 'vod-wx-sdk-v2';
 
 @inject('index')
 @inject('site')
@@ -20,7 +22,7 @@ class Index extends Component {
       title: '',
       isShowTitle: true, // 默认显示标题
       showClassifyPopup: false, // 切换分类弹框show
-      uploadType: 0,
+      operationType: 0,
     }
   }
   componentWillMount() { }
@@ -69,7 +71,7 @@ class Index extends Component {
 
   handlePlusinClick(item) {
     this.setState({
-      uploadType: item.type
+      operationType: item.type
     });
 
     switch (item.type) {
@@ -84,7 +86,55 @@ class Index extends Component {
           url: '/pages/threadPost/selectProduct'
         });
         break;
+      case THREAD_TYPE.video:
+        this.handleVideoUpload();
+        break;
     }
+  }
+
+  getYundianboSignature = async (fn) => {
+    const res = await readYundianboSignature();
+    const { code, data } = res;
+    const signature = code === 0 ? data.token : '';
+    fn(signature);
+  }
+
+  // 执行视频上传
+  handleVideoUpload = () => {
+    const { setPostData } = this.props.threadPost;
+    Taro.chooseVideo({
+      success: (file) => {
+        Taro.showLoading({
+          title: '上传中',
+        });
+        // 执行云点播相关的上传工作
+        VodUploader.start({
+          // 必填，把 wx.chooseVideo 回调的参数(file)传进来
+          mediaFile: file,
+          // 必填，获取签名的函数
+          getSignature: this.getYundianboSignature,
+          // 上传中回调，获取上传进度等信息
+          progress: function(result) {
+            console.log('progress');
+            console.log(result);
+          },
+          // 上传完成回调，获取上传后的视频 URL 等信息
+          finish: function(result) {
+            Taro.hideLoading();
+            setPostData({
+              video: result
+            });
+            console.log('finish');
+            console.log(result);
+          },
+          // 上传错误回调，处理异常
+          error: function(result) {
+            console.log('error');
+            console.log(result);
+          },
+        });
+      }
+    });
   }
 
   rewardContent = () => { // 悬赏内容
@@ -96,11 +146,12 @@ class Index extends Component {
     const { categories } = this.props.index;
     const { envConfig, theme, changeTheme } = this.props.site;
     const { postData } = this.props.threadPost;
+    const { video } = postData;
     const {
       title,
       isShowTitle,
       showClassifyPopup,
-      uploadType,
+      operationType,
     } = this.state;
 
     return (
@@ -118,9 +169,11 @@ class Index extends Component {
         {/* 插件区域、include图片、附件、语音等 */}
         <View className={styles['plusin']}>
 
-          <GeneralUpload type={uploadType} />
+          <GeneralUpload type={operationType} />
 
           <Units type='product' productSrc={'https://img20.360buyimg.com/ceco/s700x700_jfs/t1/153702/29/15780/81514/601663b6E0eb5908f/3cb05e84fe495b03.jpg!q70.jpg'} productDesc={'又帅又痞 设计师日本纯钛眼镜框超轻近视男款复古镜架可配有度数，天天佩戴，应每日清洗镜架及镜片！不用时应先清洁再收纳！'} productPrice={564.99} onDelete={() => {}} />
+
+          {video.videoUrl && <Units type='video' src={video.videoUrl} />}
 
         </View>
 

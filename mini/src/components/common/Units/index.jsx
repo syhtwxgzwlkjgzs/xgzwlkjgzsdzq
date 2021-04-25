@@ -28,9 +28,7 @@ const Index = (props) => {
 
   // 视频展示
   const video = (
-    <View className={styles['video']}>
-      <Video src={src} />
-    </View>
+    <Video src={src} className={styles['video']} />
   );
 
   // 附件展示
