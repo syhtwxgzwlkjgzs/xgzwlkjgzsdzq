@@ -7,7 +7,7 @@ export const noop = () => {};
 
 // 过滤点击事件
 export const filterClickClassName = (dom) => {
-  const blacklistClass = ['dzq-popup__overlay', 'dzq-audio', 'dzq-avatar', 'dzq-tabs'];
+  const blacklistClass = ['dzq-popup__overlay', 'dzq-audio', 'dzq-avatar', 'dzq-tabs', 'dzq-icon', 'disable-click'];
   const blacklistHTML = ['img'];
   // const whitelist = [];
   const { className = '', localName = '' } = dom;

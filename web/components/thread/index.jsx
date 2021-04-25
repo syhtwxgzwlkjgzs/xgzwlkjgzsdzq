@@ -26,17 +26,23 @@ class Index extends React.Component {
     onShare = (e) => {
       e.stopPropagation();
 
+      // 对没有登录的先登录
+      if (!this.props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        return;
+      }
+
       Toast.info({ content: '分享链接已复制成功' });
 
-      const { title = '' } = this.props.data || {};
+      const { title = '', threadId = '' } = this.props.data || {};
       h5Share(title);
-      // this.props.index.updateThreadShare({ threadId });
+      this.props.index.updateThreadShare({ threadId });
     }
     // 评论
     onComment = (e) => {
       e.stopPropagation();
 
-      // 对没有登录的先做
+      // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
         return;
@@ -54,7 +60,7 @@ class Index extends React.Component {
     onPraise = (e) => {
       e.stopPropagation();
 
-      // 对没有登录的先做
+      // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
         return;
