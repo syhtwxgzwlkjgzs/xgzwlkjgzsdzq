@@ -8,6 +8,10 @@ export default {
     'pages/index/index',
     'pages/threadPost/index',
     'pages/threadPost/selectReward',
+    'pages/user/wx-select/index',
+    'pages/user/wx-bind-username/index',
+    'pages/user/wx-bind-phone/index',
+    'pages/user/status/index',
   ],
   // 其它在子包。更新的时候负责人需要注意一下分包之后的打包优化配置
   // subPackages: [],

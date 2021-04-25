@@ -35,8 +35,8 @@ class Index extends Component {
             })
           }}>去发帖的按钮</Button>
           <Audio src='https://demo.dj63.com//2016/CLUB商业/club中文/20140101/夏日香气_主题曲_左右为难_电视剧歌曲_韩语.mp3'></Audio>
-          <Icon name="LoadingOutlined" size={'large'} />
-          <Icon name="UserOutlined" size={'small'} />
+          <Icon name="LoadingOutlined" size="large" />
+          <Icon name="UserOutlined" size="small" />
           <Icon name="UserOutlined" />
         </View>
       </ThemePage>
