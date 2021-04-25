@@ -266,7 +266,6 @@ class ThreadCreate extends React.Component {
       if (!position) return;
       position.style.display = 'flex';
       postBottombar.style.top = `${height - 134}px`;
-      document.body.style.height = '100%';
     }, 100);
   }
 
