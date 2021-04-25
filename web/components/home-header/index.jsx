@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
-import Router from '@common/utils/web-router';
+import Router from '@discuzq/sdk/dist/router';
 
 /**
  * 帖子头部
@@ -67,7 +67,7 @@ class HomeHeader extends React.Component {
           <div></div>
           <div>
             <Icon onClick={() => {
-              Router.redirect('/')
+              Router.redirect({url:'/'})
             }} name="HomeOutlined" color="#fff" size={20} />
           </div>
         </div>}

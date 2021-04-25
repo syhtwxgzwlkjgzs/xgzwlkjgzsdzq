@@ -5,13 +5,13 @@ import HOCWithLogin from '@common/middleware/HOCWithLogin';
 import Header from '@components/header';
 import { Button } from '@discuzq/design';
 import clearLoginStatus from '@common/utils/clear-login-status'; 
-import Router from '@common/utils/web-router';
+import Router from '@discuzq/sdk/dist/router';
 
 class MyCenter extends React.Component {
 
   loginOut() {
     clearLoginStatus();
-    Router.replace('/');
+    Router.replace({url: '/'});
   }
 
   render() {
