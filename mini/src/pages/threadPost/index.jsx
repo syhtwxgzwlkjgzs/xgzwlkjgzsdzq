@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import ThemePage from '@components/theme-page';
@@ -68,6 +69,24 @@ class Index extends Component {
     this.setState({
       uploadType: item.type
     });
+
+    switch (item.type) {
+      //  其它类型可依次补充
+      case 107:
+        this.toSelectReward();
+        break;
+    }
+  }
+
+  toSelectReward = () => { // 跳转悬赏选择页
+    Taro.navigateTo({
+      url: '/pages/threadPost/selectReward'
+    })
+  }
+
+  rewardContent = () => { // 悬赏内容
+    const { rewardQa: { price, expiredAt } } = this.props.threadPost.postData;
+    return (price && expiredAt) ? `悬赏金额${price}元\\结束时间${expiredAt}` : ''
   }
 
   render() {
@@ -80,6 +99,7 @@ class Index extends Component {
       showClassifyPopup,
       uploadType,
     } = this.state;
+
     return (
       <ThemePage>
         {/* 文本框区域，inclue标题、帖子文字内容等 */}
@@ -103,7 +123,10 @@ class Index extends Component {
         <View className={styles['toolbar']}>
           <View className={styles['tag-toolbar']}>
             <Tag content='随机红包\总金额80元\20个' />
-            <Tag content='悬赏金额10元' />
+            <Tag
+              content={this.rewardContent()}
+              clickCb={this.toSelectReward}
+            />
           </View>
           <PlusinToolbar
             clickCb={(item) => {
