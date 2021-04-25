@@ -13,9 +13,9 @@ import Router from '@common/utils/web-router';
  @inject('site')
  @observer
 class HomeHeader extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+   constructor(props) {
+     super(props);
+   }
 
   logoImg = '/dzq-img/admin-logo-x2.png';
 
@@ -31,7 +31,7 @@ class HomeHeader extends React.Component {
 
   render() {
     const { bgColor, hideInfo = false, site } = this.props;
-    const { siteBackgroundImage, siteLogo } = site?.webConfig?.setSite;
+    const { siteBackgroundImage, siteLogo } = site?.webConfig?.setSite || {};
     const { countUsers, countThreads } = site?.webConfig?.other;
 
     return (
@@ -40,7 +40,7 @@ class HomeHeader extends React.Component {
           <div></div>
           <div>
             <Icon onClick={() => {
-              Router.redirect('/')
+              Router.redirect('/');
             }} name="HomeOutlined" color="#fff" size={20} />
           </div>
         </div>}
@@ -68,6 +68,6 @@ class HomeHeader extends React.Component {
       </div>
     );
   }
-}
+ }
 
 export default HomeHeader;

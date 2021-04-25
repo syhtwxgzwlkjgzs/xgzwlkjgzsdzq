@@ -11,6 +11,7 @@ const payBoxEmitter = new PayBoxEmitter();
 
 @inject('site')
 @inject('payBox')
+@inject('user')
 @observer
 export default class PayBox extends Component {
   constructor(props) {
@@ -25,6 +26,8 @@ export default class PayBox extends Component {
     };
     this.props.payBox.visible = true;
     await this.props.payBox.createOrder();
+    await this.props.payBox.getWalletInfo();
+    console.log(this.props.user)
   };
 
   render() {

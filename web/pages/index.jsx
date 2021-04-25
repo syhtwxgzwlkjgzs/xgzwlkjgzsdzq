@@ -41,10 +41,10 @@ class Index extends React.Component {
 
   async componentDidMount() {
     const orderOptions = PayBox.orderBuilder({
-      amount: 10,
+      amount: 1,
       type: 3,
-      threadId: 92,
-      payeeId: 19,
+      threadId: 98,
+      payeeId: 59,
     });
     PayBox.createPayBox(orderOptions);
     const { serverIndex, index } = this.props;
