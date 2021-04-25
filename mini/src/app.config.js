@@ -7,6 +7,7 @@ export default {
   pages: [
     'pages/index/index',
     'pages/threadPost/index',
+    'pages/threadPost/selectRedpacket',
     'pages/threadPost/selectReward',
     'pages/threadPost/selectProduct',
   ],

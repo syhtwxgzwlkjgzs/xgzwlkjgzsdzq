@@ -89,6 +89,11 @@ class Index extends Component {
       case THREAD_TYPE.video:
         this.handleVideoUpload();
         break;
+      case 106:
+        Taro.navigateTo({
+          url: '/pages/threadPost/selectRedpacket'
+        });
+        break;
     }
   }
 
@@ -137,16 +142,16 @@ class Index extends Component {
     });
   }
 
-  rewardContent = () => { // 悬赏内容
-    const { rewardQa: { price, expiredAt } } = this.props.threadPost.postData;
-    return (price && expiredAt) ? `悬赏金额${price}元\\结束时间${expiredAt}` : ''
+  redpacketContent = () => { // 悬赏文本展示
+    const { redpacket: { rule, orderPrice, number } } = this.props.threadPost.postData;
+    return `${rule === 1 ? '随机红包' : '定额红包'}\\总金额 ${orderPrice}元\\${number}个`
   }
 
   render() {
     const { categories } = this.props.index;
     const { envConfig, theme, changeTheme } = this.props.site;
     const { postData } = this.props.threadPost;
-    const { video } = postData;
+    const { rewardQa, redpacket, video } = postData; // 悬赏信息
     const {
       title,
       isShowTitle,
@@ -180,11 +185,20 @@ class Index extends Component {
         {/* 工具栏区域、include各种插件触发图标、发布等 */}
         <View className={styles['toolbar']}>
           <View className={styles['tag-toolbar']}>
-            <Tag content='随机红包\总金额80元\20个' />
-            <Tag
-              content={this.rewardContent()}
-              clickCb={this.toSelectReward}
-            />
+            {/* 红包tag */}
+            {redpacket.money &&
+              <Tag
+                content={this.redpacketContent()}
+                clickCb={this.toSelectRedpacket}
+              />
+            }
+            {/* 悬赏tag */}
+            {rewardQa.price &&
+              <Tag
+                content={`悬赏金额${rewardQa.price}元\\结束时间${rewardQa.expiredAt}`}
+                clickCb={this.toSelectReward}
+              />
+            }
           </View>
           <PlusinToolbar
             clickCb={(item) => {
