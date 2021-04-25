@@ -4,6 +4,7 @@ import UserItem from '../user-item';
 import styles from './index.module.scss';
 import { getLikedUsers } from './http';
 import NoData from '@components/no-data';
+import { readLikedUsers } from '@server';
 import List from '../../list';
 
 /**
