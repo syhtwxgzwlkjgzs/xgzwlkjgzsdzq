@@ -33,6 +33,13 @@ function HOCLoginMode(mode) {
             this.props.router.replace('/user/login');
           }
         }
+
+        // 用户名注册模式下，使用此模式的页面限定只能在用户名模式中开启
+        if (mode === 'register') {
+          if (currentMode !== 'user') {
+            this.props.router.replace('/user/register');
+          }
+        }
       }
 
       getCurrentMode = () => {

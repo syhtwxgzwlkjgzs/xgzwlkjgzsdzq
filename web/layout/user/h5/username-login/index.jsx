@@ -123,16 +123,18 @@ class LoginH5Page extends React.Component {
                 注册用户
               </span>
             )}
-            <span> 忘记密码? </span>
             {this.props.site.isSmsOpen && (
-              <span
-                className={layout.clickBtn}
-                onClick={() => {
-                  this.props.router.push('reset-password');
-                }}
-              >
-                找回密码
-              </span>
+              <>
+                <span> 忘记密码? </span>
+                <span
+                  className={layout.clickBtn}
+                  onClick={() => {
+                    this.props.router.push('reset-password');
+                  }}
+                >
+                  找回密码
+                </span>
+              </>
             )}
           </div>
           {isAnotherLoginWayAvailable && <div className={platform === 'h5' ? layout['otherLogin-title'] : layout.pc_otherLogin_title}>其他登录方式</div>}
