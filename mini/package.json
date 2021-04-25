@@ -13,7 +13,8 @@
     "lintcss:fix": "stylelint src/**/*.{scss}",
     "dev:weapp": "cross-env NODE_ENV=development dzq dev -p mini --type weapp",
     "build:weapp": "cross-env NODE_ENV=production dzq build -p mini --type weapp",
-    "dev": "taro build --type weapp --watch"
+    "dev": "taro build --type weapp --watch",
+    "build": "taro build --type weapp"
   },
   "browserslist": [
     "last 3 versions",
@@ -34,7 +35,8 @@
     "mobx": "4.15.4",
     "mobx-react": "6.1.8",
     "react": "17.0.1",
-    "react-dom": "17.0.1"
+    "react-dom": "17.0.1",
+    "xss": "^1.0.8"
   },
   "devDependencies": {
     "@babel/core": "7.8.0",

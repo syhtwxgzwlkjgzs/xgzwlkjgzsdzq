@@ -1,7 +1,6 @@
 import React from 'react';
 import { withRouter } from 'next/router';
-import PropTypes from 'prop-types';
-import { Button } from '@discuzq/design';
+import { Button, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import ImageContent from './image-content';
 import AudioPlay from './audio-play';
@@ -24,9 +23,12 @@ class Index extends React.Component {
     // 分享
     onShare = (e) => {
       e.stopPropagation();
-      const { data = {} } = this.props;
-      const { threadId = '' } = data;
-      this.props.index.updateThreadShare({ threadId });
+
+      Toast.info({ content: '分享链接已复制成功' });
+
+      // const { threadId = '', title = '' } = this.props.data || {};
+      // h5Share(title)
+      // this.props.index.updateThreadShare({ threadId });
     }
     // 评论
     onComment = (e) => {

@@ -41,9 +41,10 @@ const Index = ({
   };
   // 过滤内容
   const filterContent = useMemo(() => {
-    const _content = content ? xss(s9e.parse(content)) : '暂无内容';
+    let newContent = content ? s9e.parse(content) : '暂无内容';
+    newContent = xss(newContent);
 
-    return !loading ? _content : '内容加载中';
+    return !loading ? newContent : '内容加载中';
   }, [content, loading]);
   // 是否显示遮罩 是付费内容并且隐藏内容百分比大于0 或 显示查看更多并且查看更多状态为false 则显示遮罩
   const showHideCover = !loading ? (isPayContent && hidePercent > 0) || (useShowMore && !showMore) : false;

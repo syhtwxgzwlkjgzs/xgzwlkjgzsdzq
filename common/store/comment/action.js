@@ -49,7 +49,7 @@ class CommentAction extends CommentStore {
       attachments,
     };
 
-    const res = await createPosts({ params: requestParams });
+    const res = await createPosts({ data: requestParams });
 
     if (res.code === 0 && res?.data?.id) {
       const { commentList, totalCount } = ThreadStore;
