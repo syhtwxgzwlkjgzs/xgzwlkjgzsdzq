@@ -25,14 +25,9 @@ export default class PayBox extends Component {
       ...options
     };
     this.props.payBox.visible = true;
-    await this.props.payBox.createOrder();
-    await this.props.payBox.getWalletInfo();
-    await this.props.payBox.setPayPassword();
-    console.log(this.props.user)
   };
 
   render() {
-    console.log(this.props.payBox);
     const { platform } = this.props.site;
     if (platform === 'pc') {
       return <PCPayBox />;

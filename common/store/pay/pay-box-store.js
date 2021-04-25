@@ -1,6 +1,7 @@
 import { observable, computed, action } from 'mobx';
 import { get } from '../../utils/get';
 import { createOrders, createPayOrder, readOrderDetail, readWalletUser, updateUsersUpdate } from '@server';
+import isWeixin from '../../utils/is-weixin';
 
 export const STEP_MAP = {
   SURE: 'sure', // 订单确认阶段
@@ -30,6 +31,15 @@ export const PAY_MENT_MAP = {
   WX_OFFICAL: 12,
   WX_MINI_PROGRAM: 13,
   WALLET: 20,
+};
+
+// 订单状态映射表
+export const ORDER_STATUS_MAP = {
+  PENDING_PAY: 0,
+  PAID: 1,
+  CANCEL_PAY: 2,
+  FAIL_PAY: 3,
+  OUT_DATE_PAY: 4,
 };
 
 export const listenWXJsBridgeAndExecCallback = (callback) => {
@@ -130,9 +140,10 @@ class PayBoxStore {
   @action
   createOrder = async () => {
     try {
+      const data = JSON.parse(JSON.stringify(this.options));
       const createRes = await createOrders({
         timeout: 3000,
-        data: this.options,
+        data,
       });
       if (get(createRes, 'code') === 0) {
         this.step = STEP_MAP.PAYWAY;
@@ -206,6 +217,13 @@ class PayBoxStore {
   @action
   wechatPayOrder = async () => {
     try {
+      if (!isWeixin()) {
+        // is not in weixin, just throw tips error
+        throw {
+          Code: '',
+          Message: '微信外浏览器无法拉起付款',
+        };
+      }
       const payRes = await createPayOrder({
         data: {
           orderSn: this.orderSn,
@@ -214,7 +232,10 @@ class PayBoxStore {
       });
       if (payRes.code === 0) {
         listenWXJsBridgeAndExecCallback(() => {
-          this.onBridgeReady(get(payRes, 'data.wechat_js'));
+          this.onBridgeReady(get(payRes, 'data.wechatPayResult.wechatJs'));
+          this.timer = setInterval(() => {
+            this.getOrderDetail();
+          }, 1000);
         });
       }
     } catch (error) {
@@ -251,6 +272,48 @@ class PayBoxStore {
           orderSn: this.orderSn,
         },
       });
+
+      const orderStatus = get(orderInfo, 'data.status');
+
+      if (orderStatus === ORDER_STATUS_MAP.PENDING_PAY) {
+        return;
+      }
+
+      clearInterval(this.timer);
+      this.timer = null;
+
+      if (orderStatus === ORDER_STATUS_MAP.PAID) {
+        // success
+        if (this.options.success) {
+          this.options.success(this.orderInfo);
+        }
+
+        if (this.options.complete) {
+          this.options.complete(this.orderInfo);
+        }
+      }
+
+      if (orderStatus === ORDER_STATUS_MAP.OUT_DATE_PAY) {
+        // outdate
+        if (this.options.failed) {
+          this.options.failed(this.orderInfo);
+        }
+
+        if (this.options.complete) {
+          this.options.complete(this.orderInfo);
+        }
+      }
+
+      if (orderStatus === ORDER_STATUS_MAP.FAIL_PAY) {
+        // paid failed
+        if (this.options.failed) {
+          this.options.failed(this.orderInfo);
+        }
+
+        if (this.options.complete) {
+          this.options.complete(this.orderInfo);
+        }
+      }
     } catch (error) {
       console.log(error);
     }
