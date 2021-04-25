@@ -31,6 +31,7 @@ body {
   height: 45px;
   padding: 0 rem(16);
   align-items: center;
+  justify-content: space-between;
   :global { /* stylelint-disable-line */
     .dzq-tag {
       display: flex;
@@ -47,6 +48,10 @@ body {
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+  }
+  .post-counter {
+    font-size: var(--font-size-label);
+    color: var(--color-text-placeholder);
   }
 }
 

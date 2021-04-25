@@ -31,6 +31,8 @@ import throttle from '@common/utils/thottle';
 import Header from '@components/header';
 import * as localData from '../common';
 
+const maxCount = 5000;
+
 @inject('threadPost')
 @inject('index')
 @inject('thread')
@@ -55,6 +57,7 @@ class ThreadCreate extends React.Component {
       audioSrc: '',
       paySelectText: ['帖子付费', '附件付费'],
       curPaySelect: '',
+      count: 0,
     };
   }
   componentDidMount() {
@@ -203,6 +206,10 @@ class ThreadCreate extends React.Component {
       Toast.info({ content: '请填写您要发布的内容' });
       return;
     }
+    if (this.state.count > maxCount) {
+      Toast.info({ content: `输入的内容不能超过${maxCount}字` });
+      return;
+    }
     Toast.loading({ content: '创建中...' });
     const { threadPost, thread } = this.props;
     const threadId = this.props.router.query.id || '';
@@ -341,6 +348,7 @@ class ThreadCreate extends React.Component {
               this.setState({ isVditorFocus: false });
               this.clearBottomFixed();
             }}
+            onCountChange={count => this.setState({ count })}
           />
 
           {/* 录音组件 */}
@@ -406,6 +414,7 @@ class ThreadCreate extends React.Component {
                 localData.setCategoryEmoji({ category, emoji: threadPost.emojis });
               }}
               onChange={position => this.setPostData({ position })} />
+            <div className={styles['post-counter']}>还能输入{maxCount - this.state.count}个字</div>
           </div>
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar
