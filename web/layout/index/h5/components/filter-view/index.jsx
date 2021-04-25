@@ -21,9 +21,12 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
     const { categoryids = [], types, essence } = current || {};
 
     setFirst(categoryids[0] || '');
-    setFirstChildren(categoryids[1] || '');
     setSecond(types || '');
     setThird(essence || '0');
+
+    if (categoryids[1]) {
+      setFirstChildren(categoryids[1]);
+    }
   }, [current, visible]);
 
   // 点击一级菜单
@@ -54,7 +57,12 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
       }
     });
 
-    const params = { categoryids: [first, firstChildren], types: second, essence: third, sequence };
+    const categoryids = [first];
+    if (firstChildren) {
+      categoryids.push(firstChildren);
+    }
+
+    const params = { categoryids, types: second, essence: third, sequence };
 
     onSubmit(params);
   };

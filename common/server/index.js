@@ -13,6 +13,7 @@ export { default as readReplyList } from './thread/readReplyList';
 export { default as createPosts } from './thread/createPosts';
 export { default as updateComment } from './thread/updateComment';
 export { default as readCommentDetail } from './thread/readCommentDetail';
+export { default as operateThread } from './thread/operateThread';
 export { default as readTopicsList } from './search/readTopicsList';
 export { default as readUsersList } from './search/readUsersList';
 export { default as readCategories } from './home/readCategories';
@@ -39,3 +40,4 @@ export { default as readYundianboSignature } from './thread-post/read-yundianbo-
 export { default as setNickname } from './setNickname';
 export { default as transitionSmsBind } from './transitionSmsBind';
 export { default as createOrders } from './pay/createOrders';
+export { default as updateThread } from './thread-post/update-thread';

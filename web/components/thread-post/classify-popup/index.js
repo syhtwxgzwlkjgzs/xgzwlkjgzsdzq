@@ -1,6 +1,5 @@
 /**
  * 分类弹出层
- * TODO: 传入选中的分类逻辑待处理
  */
 import React, { memo, useState, useEffect } from 'react'; // 性能优化的
 import { Popup, Button } from '@discuzq/design'; // 原来就有的封装

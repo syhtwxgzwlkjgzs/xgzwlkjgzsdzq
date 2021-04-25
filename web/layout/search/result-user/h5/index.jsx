@@ -52,9 +52,9 @@ class SearchResultUserH5Page extends React.Component {
   onUserClick = data => console.log('user click', data);
 
   render() {
-    const { keyword, refreshing } = this.state;
+    const { keyword } = this.state;
     const { users } = this.props.search;
-    const { pageData, currentPage, totalPage } = users || { pageData: [] };
+    const { pageData = [], currentPage, totalPage } = users || { pageData: [] };
 
     return (
       <div className={styles.page}>
@@ -63,7 +63,7 @@ class SearchResultUserH5Page extends React.Component {
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
         </div>
         {
-          pageData && pageData.length
+          pageData?.length
             ? (
               <List
                 className={styles.list}

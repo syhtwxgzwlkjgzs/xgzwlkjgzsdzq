@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Tabs, Popup } from '@discuzq/design';
 import UserItem from '../user-item';
 import styles from './index.module.scss';
-import { getLikedUsers } from '@common/service/home';
+import { getLikedUsers } from './http';
 import NoData from '@components/no-data';
+import { readLikedUsers } from '@server';
 import List from '../../list';
 
 /**

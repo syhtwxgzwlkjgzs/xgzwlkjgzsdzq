@@ -60,7 +60,7 @@ class IndexH5Page extends React.Component {
   onClickFilter = ({ categoryids, types, essence, sequence }) => {
     const { dispatch = () => {} } = this.props;
 
-    dispatch('', { categoryids, types, essence, sequence });
+    dispatch('click-filter', { categoryids, types, essence, sequence });
     this.setState({
       filter: {
         categoryids,
