@@ -10,7 +10,6 @@ class App extends Component {
 
   async componentDidMount() {
     const siteConfig = await readForum({});
-    console.log(siteConfig);
   }
 
   /**
@@ -27,7 +26,6 @@ class App extends Component {
    * 注意：options 参数的字段在不同小程序中可能存在差异。所以具体使用的时候请看相关小程序的文档
    */
   onLaunch(options) {
-    console.log(options);
   }
 
   /**
@@ -38,7 +36,6 @@ class App extends Component {
    * @param {string} options.appURL 展现时的调起协议，仅当 entryType 值为 schema 时存在
    */
   componentDidShow(options) {
-    console.log('show', options);
   }
 
   /**

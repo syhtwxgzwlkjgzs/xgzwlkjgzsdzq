@@ -23,10 +23,7 @@ class RenderReplyList extends React.Component {
       createReplyParams: {},
       commentData: [this.props.commentData],
     };
-  }
-
-  componentDidMount() {
-    console.log('看看RenderReplyList有啥', this.props);
+    this.commentId = '';
   }
 
  // 评论列表排序
@@ -53,24 +50,13 @@ class RenderReplyList extends React.Component {
    }
  }
  // 点赞
- async likeClick(commentData, replyData) {
-   console.log(commentData, replyData);
-   let pid = '';
-   let liked = '';
-   if (replyData) {
-     const { id, isLiked } = replyData;
-     pid = id;
-     liked = !isLiked;
-   } else {
-     const { id, isLiked } = commentData;
-     pid = id;
-     liked = !isLiked;
-   }
-   if (pid) return;
+ async likeClick(data) {
+   console.log(data);
+   if (data.id) return;
 
    const params = {
-     pid,
-     isLiked: liked,
+     id: data.id,
+     isLiked: !data.isLiked,
    };
    const { success, msg } = await this.props.service.comment.updateLiked(params, this.props.thread);
    if (!success) {
@@ -86,8 +72,8 @@ class RenderReplyList extends React.Component {
    });
  }
  // 删除
- async deleteClick(type, data) {
-   this.comment = data;
+ async deleteClick(data) {
+   this.commentId = data;
    this.setState({
      showDeletePopup: true,
    });
@@ -95,7 +81,7 @@ class RenderReplyList extends React.Component {
 
  // 删除
  async deleteComment() {
-   if (!this.comment.id) return;
+   if (!this.comment) return;
 
    const { success, msg } = await this.props.service.comment.delete(this.comment.id, this.props.thread);
    this.setState({
@@ -189,10 +175,11 @@ class RenderReplyList extends React.Component {
                   <CommentList
                     data={val}
                     key={val.id}
-                    avatarClick={type => this.avatarClick.bind(this, type)}
-                    likeClick={type => this.likeClick.bind(this, val, type)}
-                    replyClick={type => this.replyClick.bind(this, val, type)}
-                    deleteClick={() => this.deleteClick.bind(this, val)}
+                    avatarClick={type => this.avatarClick(type)}
+                    likeClick={data => this.likeClick(data)}
+                    replyClick={data => this.replyClick(data)}
+                    deleteClick={data => this.deleteClick(data)}
+                    createReply={data => this.createReply(data)}
                     isPostDetail={false}>
                   </CommentList>
                 </div>

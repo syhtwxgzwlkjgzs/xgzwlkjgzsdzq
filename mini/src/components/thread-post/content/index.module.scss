@@ -1,0 +1,37 @@
+@import '@common/styles/index.scss';
+
+.container {
+  background: #fff;
+  .container-inner {
+    padding: 8px 16px;
+  }
+
+  :global {
+    .dzq-textarea {
+      width: 100%;
+      border: none;
+
+      .dzq-textarea__inner {
+        padding: 0;
+        font-size: 16px;
+        color: var(--color-text-primary);
+        line-height: 26px;
+        text-align: left;
+        resize: none;
+      }
+
+      .textarea-placeholder {
+        font-size: 16px;
+        color: #c5c6ca;
+      }
+    }
+  }
+
+  .content-length {
+    height: 20px;
+    line-height: 22px;
+    font-size: 12px;
+    color: #c5c6ca;
+    text-align: right;
+  }
+}

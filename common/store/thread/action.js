@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import ThreadStore from './store';
-import { updatePosts, operateThread, readCommentList, readThreadDetail } from '@server';
+import { updatePosts, operateThread, readCommentList, readThreadDetail, shareThread } from '@server';
 
 class ThreadAction extends ThreadStore {
   constructor(props) {
@@ -267,6 +267,39 @@ class ThreadAction extends ThreadStore {
 
       // TODO: 删除帖子列表中的数据
       // IndexStore
+
+      return {
+        msg: '操作成功',
+        success: true,
+      };
+    }
+
+    return {
+      msg: res.msg,
+      success: false,
+    };
+  }
+
+  /**
+   * 分享
+   * @param {number} threadId 帖子id
+   */
+  @action
+  async shareThread(threadId) {
+    if (!threadId) {
+      return {
+        msg: '参数不完整',
+        success: false,
+      };
+    }
+
+    const requestParams = {
+      threadId,
+    };
+    const res = await shareThread({ data: requestParams });
+
+    if (res.code === 0) {
+      this.threadData.likeReward.shareCount = this.threadData?.likeReward?.shareCount - 0 + 1;
 
       return {
         msg: '操作成功',

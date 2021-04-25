@@ -55,7 +55,7 @@ class IndexAction extends IndexStore {
    * 获取分类数据
    * @returns
    */
-  @action
+  @action.bound
   async getReadCategories() {
     const result = await readCategories();
     if (result.code === 0 && result.data) {
@@ -97,7 +97,7 @@ class IndexAction extends IndexStore {
    * 写入分类数据
    * @param {Object} data
    */
-  @action
+  @action.bound
   setCategories(data) {
     this.categories = data;
   }
