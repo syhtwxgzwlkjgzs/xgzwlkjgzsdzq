@@ -113,9 +113,9 @@ class ThreadCreate extends React.Component {
         ret.data = thread.threadData;
         ret.code = 0;
       } else ret = await thread.fetchThreadDetail(id);
-      const { categoryId } = ret.data;
-      this.setCategory(categoryId);
       if (ret.code === 0) {
+        const { categoryId } = ret.data;
+        this.setCategory(categoryId);
         threadPost.formatThreadDetailToPostData(ret.data);
       } else {
         Toast.error({ content: ret.msg });
@@ -253,7 +253,10 @@ class ThreadCreate extends React.Component {
     }
     Toast.loading({ content: '创建中...' });
     const { threadPost, thread } = this.props;
-    const ret = await threadPost.createThread();
+    const threadId = this.props.router.query.id || '';
+    let ret = {};
+    if (threadId) ret = await threadPost.updateThread(threadId);
+    else ret = await threadPost.createThread();
     const { code, data, msg } = ret;
     if (code === 0) {
       thread.setThreadData(data);
