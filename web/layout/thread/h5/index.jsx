@@ -27,6 +27,7 @@ import Tip from '@components/thread/tip';
 import AttachmentView from '@components/thread/attachment-view';
 import throttle from '@common/utils/thottle';
 import classnames from 'classnames';
+import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 
 const typeMap = {
   101: 'IMAGE',
@@ -417,7 +418,7 @@ class ThreadH5Page extends React.Component {
       isCommentLoading: false, // 列表loading
       setTop: false, // 置顶
       showContent: '',
-      inputValue: '', // 评论内容
+      // inputValue: '', // 评论内容
     };
 
     this.perPage = 5;
@@ -750,20 +751,20 @@ class ThreadH5Page extends React.Component {
 
   // 分享
   async onShareClick() {
-    const id = this.props.thread?.threadData?.id;
+    Toast.info({ content: '分享链接已复制成功' });
 
-    const { success, msg } = await this.props.thread.shareThread(id);
+    const { title = '' } = this.props.thread?.threadData || {};
+    h5Share(title);
 
-    if (success) {
-      Toast.success({
-        content: '分享成功',
-      });
-      return;
-    }
+    // const id = this.props.thread?.threadData?.id;
 
-    Toast.error({
-      content: msg,
-    });
+    // const { success, msg } = await this.props.thread.shareThread(id);
+
+    // if (!success) {
+    //   Toast.error({
+    //     content: msg,
+    //   });
+    // }
   }
 
   render() {
