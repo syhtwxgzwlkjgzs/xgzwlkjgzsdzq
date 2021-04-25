@@ -11,10 +11,10 @@ page {
   .toolbar {
     border-top: 1px solid var(--border-line-color);
     .tag-toolbar {
-      height: 45px;
       padding: 0 16px;
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       background: var(--color-white);
     }
   }

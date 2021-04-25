@@ -45,11 +45,22 @@
   justify-content: space-between;
   padding: 0 16px;
 
+  .left {
+    display: flex;
+    align-items: center;
+    width: 90%;
+  }
+
   .name {
     line-height: 52px;
     color: #0b0b37;
     margin-left: 8px;
     font-size: var(--font-size-primary);
+    display: inline-block;
+    white-space: nowrap;
+    width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .size {
