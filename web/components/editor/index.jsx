@@ -68,6 +68,15 @@ export default function DVditor(props) {
     if (topic) vditor.insertValue(`${topic} `);
   }, [topic]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      clearTimeout(timer);
+      if (vditor && vditor.getValue() === '\n' && vditor.getValue() !== value) {
+        vditor.insertValue(vditor.html2md(value));
+      }
+    }, 500);
+  }, [value]);
+
   function initVditor() {
     // https://ld246.com/article/1549638745630#options
     const editor = new Vditor(

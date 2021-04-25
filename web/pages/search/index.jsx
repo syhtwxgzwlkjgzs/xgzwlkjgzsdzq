@@ -2,23 +2,25 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/search/h5';
 import IndexPCPage from '@layout/search/pc';
-import { getSearchData } from '@common/service/search';
+import { readUsersList, readTopicsList, readThreadList } from '@server';
+import { Toast } from '@discuzq/design';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-import SearchAction from '../../../common/store/search/action';
 
 @inject('site')
 @inject('search')
 @observer
 class Index extends React.Component {
   static async getInitialProps(ctx) {
-    const { res } = await getSearchData({}, ctx);
+    const topics = await readTopicsList({ params: { filter: { hot: 1 } } }, ctx);
+    const users = await readUsersList({}, ctx);
+    const threads = await readThreadList({ params: { filter: { sort: '3' } } }, ctx);
 
     return {
       serverSearch: {
-        indexTopics: res[0],
-        indexUsers: res[1],
-        indexThreads: res[2],
+        indexTopics: topics?.data,
+        indexUsers: users?.data,
+        indexThreads: threads?.data,
       },
     };
   }
@@ -33,19 +35,18 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
-    const { search, serverSearch } = this.props;
+    const { search } = this.props;
     // 当服务器无法获取数据时，触发浏览器渲染
-    const isBool1 = !search.indexTopics && (!serverSearch || !serverSearch.indexTopics);
-    const isBool2 = !search.indexUsers && (!serverSearch || !serverSearch.indexUsers);
-    const isBool3 = !search.indexThreads && (!serverSearch || !serverSearch.indexThreads);
+    const hasIndexTopics = !!search.indexTopics;
+    const hasIndexUsers = !!search.indexUsers;
+    const hasIndexThreads = !!search.indexThreads;
 
-    if (!isBool1 && !isBool2 && !isBool3) {
-      const { res } = await getSearchData();
-
-      search.setIndexTopics(res[0]);
-      search.setIndexUsers(res[1]);
-      search.setIndexThreads(res[2]);
-    }
+    this.toastInstance = Toast.loading({
+      content: '加载中...',
+      duration: 0,
+    });
+    await search.getSearchData({ hasTopics: hasIndexTopics, hasUsers: hasIndexUsers, hasThreads: hasIndexThreads });
+    this.toastInstance?.destroy();
   }
 
   render() {

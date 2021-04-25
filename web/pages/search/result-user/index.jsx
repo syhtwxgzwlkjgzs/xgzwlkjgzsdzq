@@ -2,7 +2,8 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/search/result-user/h5';
 import IndexPCPage from '@layout/search/result-user/pc';
-import { getUsersList } from '@common/service/search';
+import { readUsersList } from '@server';
+import { Toast } from '@discuzq/design';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
@@ -11,11 +12,12 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @observer
 class Index extends React.Component {
   static async getInitialProps(ctx) {
-    const { res } = await getUsersList({}, ctx);
+    const search = ctx?.query?.keyword || '';
+    const result = await readUsersList({ params: { filter: { username: search } } });
 
     return {
       serverSearch: {
-        users: res,
+        users: result?.data,
       },
     };
   }
@@ -31,15 +33,21 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
-    const { search, serverSearch, router } = this.props;
+    const { search, router } = this.props;
     const { keyword = '' } = router.query;
     // 当服务器无法获取数据时，触发浏览器渲染
-    const isBool = !search.users && (!serverSearch || !serverSearch.users);
+    const hasUsers = !!search.users;
 
-    if (!isBool) {
-      const { res } = await getUsersList({ search: keyword });
-      this.page += 1;
-      search.setUsers(res);
+    if (!hasUsers) {
+      this.toastInstance = Toast.loading({
+        content: '加载中...',
+        duration: 0,
+      });
+
+      this.page = 1;
+      await search.getUsersList({ search: keyword });
+
+      this.toastInstance?.destroy();
     }
   }
 
@@ -47,22 +55,13 @@ class Index extends React.Component {
     const { search } = this.props;
 
     if (type === 'refresh') {
-      const { res } = await getUsersList({ search: data, perPage: this.perPage });
-      this.page = 2;
-      search.setUsers(res);
+      this.page = 1;
     } else if (type === 'moreData') {
-      const { users } = search;
-      const { pageData } = users || { pageData: [] };
-      const { res } = await getUsersList({ search: data, perPage: this.perPage, page: this.page });
-
-      if (res?.pageData?.length) {
-        this.page += 1;
-        res.pageData.unshift(...pageData);
-        search.setUsers(res);
-      }
-
-      return;
+      this.page += 1;
     }
+
+    await search.getUsersList({ search: data, perPage: this.perPage, page: this.page });
+    return;
   }
 
   render() {

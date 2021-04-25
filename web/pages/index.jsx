@@ -2,7 +2,6 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/index/h5';
 import IndexPCPage from '@layout/index/pc';
-import { getThreadList, getFirstData } from '@common/service/home';
 import { readCategories, readStickList, readThreadList } from '@server';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
@@ -18,11 +17,11 @@ class Index extends React.Component {
   static async getInitialProps(ctx) {
     const categories = await readCategories({}, ctx);
     const sticks = await readStickList({}, ctx);
-    const threads = await readThreadList({params: {filter: {}, sequence: 0, perPage: 10, page: 1}}, ctx);
+    const threads = await readThreadList({ params: { filter: {}, sequence: 0, perPage: 10, page: 1 } }, ctx);
 
     return {
       serverIndex: {
-        categories: categories && categories.code === 0 ? categories.data : null,
+        categories: categories && categories.code === 0 ? [{ name: '全部', pid: '', children: [] }, ...categories.data] : null,
         sticks: sticks && sticks.code === 0 ? sticks.data : null,
         threads: threads && threads.code === 0 ? threads.data : null,
       },
@@ -39,27 +38,25 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
-    const { serverIndex, index } = this.props;
+    const { index } = this.props;
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasCategoriesData = !!index.categories;
     const hasSticksData = !!index.sticks;
     const hasThreadsData = !!index.threads;
 
-    if ( !hasCategoriesData ) {
+    if (!hasCategoriesData) {
       this.props.index.getReadCategories();
     }
-    if ( !hasSticksData ) {
+    if (!hasSticksData) {
       this.props.index.getRreadStickList();
     }
-    if ( !hasThreadsData ) {
+    if (!hasThreadsData) {
       this.props.index.getReadThreadList();
     }
-
   }
 
   dispatch = async (type, data = {}) => {
     const { index } = this.props;
-    const { threads } = index;
     const { categoryids, types, essence, sequence } = data;
 
     if (type === 'click-filter') {
@@ -68,12 +65,12 @@ class Index extends React.Component {
     } else if (type === 'moreData') {
       this.page += 1;
       await index.getReadThreadList({
-        perPage: this.prePage, 
-        page: this.page, 
-        filter: { categoryids, types, essence }, 
+        perPage: this.prePage,
+        page: this.page,
+        filter: { categoryids, types, essence },
         sequence,
       });
-      
+
       return;
     }
   }

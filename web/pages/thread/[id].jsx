@@ -88,7 +88,6 @@ class Detail extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
-    console.log(platform);
     return platform === 'h5' ? <ThreadH5Page /> : <ThreadPCPage />;
   }
 }

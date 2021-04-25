@@ -2,7 +2,8 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/search/result/h5';
 import IndexPCPage from '@layout/search/result/pc';
-import { getSearchData } from '@common/service/search';
+import { readUsersList, readTopicsList, readThreadList } from '@server';
+import { Toast } from '@discuzq/design';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
@@ -10,17 +11,26 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @inject('search')
 @observer
 class Index extends React.Component {
-  // static async getInitialProps(ctx) {
-  //   const { res } = await getSearchData({}, ctx);
+  static async getInitialProps(ctx) {
+    const search = ctx?.query?.keyword || '';
 
-  //   return {
-  //     serverSearch: {
-  //       indexTopics: res[0],
-  //       indexUsers: res[1],
-  //       indexThreads: res[2],
-  //     },
-  //   };
-  // }
+    const topicFilter = {
+      hot: search !== '' ? 0 : 1,
+      content: search,
+    };
+
+    const topics = await readTopicsList({ params: { filter: topicFilter, perPage: 3 } }, ctx);
+    const users = await readUsersList({ params: { filter: { username: search }, perPage: 3 } }, ctx);
+    const threads = await readThreadList({ params: { filter: { sort: '3', search }, perPage: 3 } }, ctx);
+
+    return {
+      serverSearch: {
+        searchTopics: topics?.data,
+        searchUsers: users?.data,
+        searchThreads: threads?.data,
+      },
+    };
+  }
 
   constructor(props) {
     super(props);
@@ -34,31 +44,34 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
-    const { search, serverSearch, router } = this.props;
-    const { keyword = '' } = router.query;
+    const { search, router } = this.props;
+    const { keyword = '' } = router?.query;
 
     // 当服务器无法获取数据时，触发浏览器渲染
-    const isBool1 = !search.searchTopics && (!serverSearch || !serverSearch.searchTopics);
-    const isBool2 = !search.searchUsers && (!serverSearch || !serverSearch.searchUsers);
-    const isBool3 = !search.searchThreads && (!serverSearch || !serverSearch.searchThreads);
+    const hasSearchTopics = !!search.searchTopics;
+    const hasSearchUsers = !!search.searchUsers;
+    const hasSearchThreads = !!search.searchThreads;
 
-    if (!isBool1 && !isBool2 && !isBool3) {
-      const { res } = await getSearchData({ search: keyword });
+    this.toastInstance = Toast.loading({
+      content: '加载中...',
+      duration: 0,
+    });
 
-      search.setSearchTopics(res[0]);
-      search.setSearchUsers(res[1]);
-      search.setSearchThreads(res[2]);
-    }
+    await search.getSearchData({
+      hasTopics: hasSearchTopics,
+      hasUsers: hasSearchUsers,
+      hasThreads: hasSearchThreads,
+      search: keyword,
+      type: 1,
+    });
+
+    this.toastInstance?.destroy();
   }
 
   dispatch = async (type, data = '') => {
     const { search } = this.props;
 
-    const { res } = await getSearchData({ search: data });
-
-    search.setSearchTopics(res[0]);
-    search.setSearchUsers(res[1]);
-    search.setSearchThreads(res[2]);
+    search.getSearchData({ search: data, type: 1 });
   }
 
   render() {

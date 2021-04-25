@@ -1,10 +1,24 @@
 import { action } from 'mobx';
 import ThreadStore from './store';
-import { updatePosts, readCommentList } from '@server';
+import { updatePosts, operateThread, readCommentList, readThreadDetail } from '@server';
 
 class ThreadAction extends ThreadStore {
   constructor(props) {
     super(props);
+  }
+
+  /**
+   * 获取帖子详细信息
+   * @param {number} id 帖子id
+   * @returns 帖子详细信息
+   */
+  @action
+  async fetchThreadDetail(id) {
+    const params = { threadId: id };
+    const ret = await readThreadDetail({ params });
+    const { code, data } = ret;
+    if (code === 0) this.setThreadData(data);
+    return ret;
   }
 
   @action
@@ -63,8 +77,8 @@ class ThreadAction extends ThreadStore {
    * @returns {object} 处理结果
    */
   async updateFavorite(params) {
-    const { id, pid, isFavorite } = params;
-    if (!id || !pid) {
+    const { id, isFavorite } = params;
+    if (!id) {
       return {
         msg: '参数不完整',
         success: false,
@@ -73,15 +87,10 @@ class ThreadAction extends ThreadStore {
 
     const requestParams = {
       id,
-      pid,
-      data: {
-        attributes: {
-          isFavorite: !!isFavorite,
-        },
-      },
+      isFavorite: !!isFavorite,
     };
 
-    const res = await updatePosts({ data: requestParams });
+    const res = await operateThread({ data: requestParams });
 
     if (res.code === 0) {
       // 3. 更新store
@@ -154,14 +163,13 @@ class ThreadAction extends ThreadStore {
    * 帖子置顶
    * @param {object} parmas * 参数
    * @param {number} parmas.id * 帖子id
-   * @param {number} parmas.pid * 帖子评论id
-   * @param {boolean} params.isSticky 是否置顶
+   * @param {boolean} params.isStick 是否置顶
    * @returns {object} 处理结果
    */
   @action
-  async updateSticky(params) {
-    const { id, pid, isSticky } = params;
-    if (!id || !pid) {
+  async updateStick(params) {
+    const { id, isStick } = params;
+    if (!id) {
       return {
         msg: '参数不完整',
         success: false,
@@ -170,17 +178,12 @@ class ThreadAction extends ThreadStore {
 
     const requestParams = {
       id,
-      pid,
-      data: {
-        attributes: {
-          isSticky: !!isSticky,
-        },
-      },
+      isSticky: !!isStick,
     };
-    const res = await updatePosts({ data: requestParams });
+    const res = await operateThread({ data: requestParams });
 
     if (res?.data && res.code === 0) {
-      this.setThreadDetailField('isSticky', !!isSticky);
+      this.setThreadDetailField('isStick', !!isStick);
 
       return {
         msg: '操作成功',
@@ -203,8 +206,8 @@ class ThreadAction extends ThreadStore {
    */
   @action
   async updateEssence(params) {
-    const { id, pid, isEssence } = params;
-    if (!id || !pid) {
+    const { id, isEssence } = params;
+    if (!id) {
       return {
         msg: '参数不完整',
         success: false,
@@ -213,15 +216,10 @@ class ThreadAction extends ThreadStore {
 
     const requestParams = {
       id,
-      pid,
-      data: {
-        attributes: {
-          isEssence: !!isEssence,
-        },
-      },
+      isEssence: !!isEssence,
     };
 
-    const res = await updatePosts({ data: requestParams });
+    const res = await operateThread({ data: requestParams });
 
     if (res?.data && res.code === 0) {
       this.setThreadDetailEssence(!!isEssence);
@@ -250,7 +248,7 @@ class ThreadAction extends ThreadStore {
    * @returns {object} 处理结果
    */
   @action
-  async delete(id, pid) {
+  async delete(id, pid, IndexStore) {
     if (!id || !pid) {
       return {
         msg: '参数不完整',
@@ -260,19 +258,15 @@ class ThreadAction extends ThreadStore {
 
     const requestParams = {
       id,
-      pid,
-      data: {
-        attributes: {
-          isDeleted: 1,
-        },
-      },
+      isDeleted: 1,
     };
-    const res = await updatePosts({ data: requestParams });
+    const res = await operateThread({ data: requestParams });
 
     if (res?.data && res.code === 0) {
       this.setThreadDetailField('isDelete', 1);
 
       // TODO: 删除帖子列表中的数据
+      // IndexStore
 
       return {
         msg: '操作成功',

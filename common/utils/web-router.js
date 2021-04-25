@@ -28,7 +28,7 @@ class WebRouter {
       ops.res.writeHead(ops.status || 302, { Location: url });
       ops.res.end();
     } else {
-      this.push(url, '', {});
+      this.replace(url, '', {});
     }
   }
 }

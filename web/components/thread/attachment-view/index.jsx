@@ -41,7 +41,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
 
                 {!isHidden && <Icon name="CloseOutlined" />}
 
-                {isPay && <a href={item.url} className={styles.a}></a>}
+                {!isPay && <a href={item.url} className={styles.a}></a>}
               </div>
             );
           })
