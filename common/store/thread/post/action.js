@@ -281,7 +281,8 @@ class ThreadPostAction extends ThreadPostStore {
       };
     });
     this.setPostData({
-      title,
+      // 标题去掉富文本
+      title: title.replace(/<[^<>]+>/g, ''),
       categoryId,
       price,
       attachmentPrice,

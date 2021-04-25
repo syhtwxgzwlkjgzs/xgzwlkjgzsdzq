@@ -4,8 +4,6 @@ import styles from './index.module.scss';
 import { Icon, Input, Button } from '@discuzq/design';
 import Avatar from '@components/avatar';
 
-import Router from '@common/utils/web-router';
-
 @inject('site')
 @inject('user')
 @observer

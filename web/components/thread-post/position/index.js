@@ -8,7 +8,7 @@
 import React, { memo, useState, useEffect } from 'react';
 import { withRouter } from 'next/router';
 import { Tag, Icon, Toast } from '@discuzq/design';
-import './index.module.scss';
+import styles from './index.module.scss';
 
 import PropTypes from 'prop-types';
 
@@ -87,6 +87,7 @@ const Position = (props) => {
       onClose={
         () => setCurrentPosition({ location: '添加位置' })
       }
+      className={styles.tag}
     >
       <Icon name="PositionOutlined" color="#2469F6" size={12} />
       {currentPosition.location || '添加位置'}

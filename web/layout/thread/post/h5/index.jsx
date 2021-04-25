@@ -31,6 +31,8 @@ import throttle from '@common/utils/thottle';
 import Header from '@components/header';
 import * as localData from '../common';
 
+const maxCount = 5000;
+
 @inject('threadPost')
 @inject('index')
 @inject('thread')
@@ -55,6 +57,7 @@ class ThreadCreate extends React.Component {
       audioSrc: '',
       paySelectText: ['帖子付费', '附件付费'],
       curPaySelect: '',
+      count: 0,
     };
   }
   componentDidMount() {
@@ -203,6 +206,10 @@ class ThreadCreate extends React.Component {
       Toast.info({ content: '请填写您要发布的内容' });
       return;
     }
+    if (this.state.count > maxCount) {
+      Toast.info({ content: `输入的内容不能超过${maxCount}字` });
+      return;
+    }
     Toast.loading({ content: '创建中...' });
     const { threadPost, thread } = this.props;
     const threadId = this.props.router.query.id || '';
@@ -259,7 +266,6 @@ class ThreadCreate extends React.Component {
       if (!position) return;
       position.style.display = 'flex';
       postBottombar.style.top = `${height - 134}px`;
-      document.body.style.height = '100%';
     }, 100);
   }
 
@@ -321,12 +327,15 @@ class ThreadCreate extends React.Component {
       <>
         <Header />
         <div className={styles['post-inner']}>
+          {/* 标题 */}
           <Title
             title={postData.title}
             onChange={title => this.setPostData({ title })}
             onFocus={this.setBottomFixed}
             onBlur={this.clearBottomFixed}
+            autofocus
           />
+          {/* 编辑器 */}
           <DVditor
             value={postData.contentText}
             emoji={emoji}
@@ -341,6 +350,7 @@ class ThreadCreate extends React.Component {
               this.setState({ isVditorFocus: false });
               this.clearBottomFixed();
             }}
+            onCountChange={count => this.setState({ count })}
           />
 
           {/* 录音组件 */}
@@ -398,6 +408,7 @@ class ThreadCreate extends React.Component {
           )}
         </div>
         <div id="post-bottombar" className={styles['post-bottombar']}>
+          {/* 插入位置 */}
           <div id="post-position" className={styles['position-box']}>
             <Position
               position={postData.position}
@@ -406,6 +417,7 @@ class ThreadCreate extends React.Component {
                 localData.setCategoryEmoji({ category, emoji: threadPost.emojis });
               }}
               onChange={position => this.setPostData({ position })} />
+            <div className={styles['post-counter']}>还能输入{maxCount - this.state.count}个字</div>
           </div>
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar

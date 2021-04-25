@@ -9,12 +9,13 @@ import 'vditor/src/assets/scss/index.scss';
 import './index.scss';
 
 export default function DVditor(props) {
-  const { onChange, emoji, atList, topic, onFocus, onBlur, value } = props;
+  const { onChange, emoji, atList, topic, onFocus, onBlur, value, onCountChange } = props;
   const vditorId = 'dzq-vditor';
 
   const [isFocus, setIsFocus] = useState(false);
   const [vditor, setVditor] = useState(null);
   const [range, setRange] = useState(null);
+  const [contentCount, setContentCount] = useState(0);
 
 
   // TODO: 这里有点问题
@@ -23,6 +24,7 @@ export default function DVditor(props) {
     // const { vditor } = this.vditor;
     // const mode = vditor[vditor.currentMode];
     const selection = window.getSelection();
+    console.log(selection.rangeCount);
     if (selection.rangeCount > 0) return selection.getRangeAt(0);
     // if (mode.range) return mode.range;
     // const { element } = mode;
@@ -40,7 +42,7 @@ export default function DVditor(props) {
     // 将所有的区域都从选区中移除。
     selection.removeAllRanges();
     // 一个区域（Range）对象将被加入选区。
-    selection.addRange(range);
+    if (range) selection.addRange(range);
   };
 
   useEffect(() => {
@@ -74,9 +76,13 @@ export default function DVditor(props) {
   }, [topic]);
 
   useEffect(() => {
+    onCountChange(contentCount);
+  }, [contentCount]);
+
+  useEffect(() => {
     const timer = setTimeout(() => {
       clearTimeout(timer);
-      if (vditor && vditor.getValue() === '\n' && vditor.getValue() !== value) {
+      if (vditor && vditor.getValue && vditor.getValue() === '\n' && vditor.getValue() !== value) {
         vditor.insertValue(vditor.html2md(value));
       }
     }, 500);
@@ -131,6 +137,13 @@ export default function DVditor(props) {
         },
         counter: {
           enable: true,
+          after(count) {
+            setContentCount(count);
+          },
+          type: 'markdown',
+        },
+        outline: {
+          enable: false,
         },
       },
     );

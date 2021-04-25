@@ -1,7 +1,6 @@
 import React from 'react';
 import { withRouter } from 'next/router';
-import PropTypes from 'prop-types';
-import { Button } from '@discuzq/design';
+import { Button, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import ImageContent from './image-content';
 import AudioPlay from './audio-play';
@@ -15,6 +14,7 @@ import UserInfo from './user-info';
 import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
+import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import { filterClickClassName, handleAttachmentData, noop } from './utils';
 
 @inject('site')
@@ -24,9 +24,12 @@ class Index extends React.Component {
     // 分享
     onShare = (e) => {
       e.stopPropagation();
-      const { data = {} } = this.props;
-      const { threadId = '' } = data;
-      this.props.index.updateThreadShare({ threadId });
+
+      Toast.info({ content: '分享链接已复制成功' });
+
+      const { title = '' } = this.props.data || {};
+      h5Share(title);
+      // this.props.index.updateThreadShare({ threadId });
     }
     // 评论
     onComment = (e) => {

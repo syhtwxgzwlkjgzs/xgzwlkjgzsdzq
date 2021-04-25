@@ -13,7 +13,7 @@ import styles from './index.module.scss';
  * @prop {string} btnText 自定义刷新按钮文字
  */
 
-const NoData = ({ text = '暂无数据', icon = '', onClick = noop, isShowBtn = false, btnText = '点击刷新' }) => {
+const NoData = ({ className = '', text = '暂无数据', icon = '', onClick = noop, isShowBtn = false, btnText = '点击刷新' }) => {
   // 为了防止已进入页面，就出现暂无数据
   const [isHidden, setIsHidden] = useState(true);
   useEffect(() => {
@@ -28,7 +28,7 @@ const NoData = ({ text = '暂无数据', icon = '', onClick = noop, isShowBtn = 
   }, []);
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${className}`}>
       <div className={styles.wrapper}>
         {icon && <Icon name={icon} size={48} className={styles.icon} />}
         {!isHidden && <span>{text}</span>}
