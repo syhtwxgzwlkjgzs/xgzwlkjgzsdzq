@@ -93,6 +93,7 @@ export default function DVditor(props) {
     const editor = new Vditor(
       vditorId,
       {
+        mode: 'wysiwyg',
         height: 178,
         placeholder: '请填写您的发布内容…',
         // 编辑器初始化值
