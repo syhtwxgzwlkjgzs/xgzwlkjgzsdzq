@@ -3,7 +3,7 @@ import { Button, Icon, RichText } from '@discuzq/design';
 
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
-
+console.log(xss)
 import styles from './index.module.scss';
 
 /**
