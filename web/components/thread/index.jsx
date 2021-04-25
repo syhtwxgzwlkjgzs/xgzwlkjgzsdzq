@@ -1,7 +1,6 @@
 import React from 'react';
 import { withRouter } from 'next/router';
-import PropTypes from 'prop-types';
-import { Button } from '@discuzq/design';
+import { Button, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import ImageContent from './image-content';
 import AudioPlay from './audio-play';
@@ -15,22 +14,33 @@ import UserInfo from './user-info';
 import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
+import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import { filterClickClassName, handleAttachmentData, noop } from './utils';
 
 @inject('site')
 @inject('index')
+@inject('user')
 @observer
 class Index extends React.Component {
     // 分享
     onShare = (e) => {
       e.stopPropagation();
-      const { data = {} } = this.props;
-      const { threadId = '' } = data;
-      this.props.index.updateThreadShare({ threadId });
+
+      Toast.info({ content: '分享链接已复制成功' });
+
+      const { title = '' } = this.props.data || {};
+      h5Share(title);
+      // this.props.index.updateThreadShare({ threadId });
     }
     // 评论
     onComment = (e) => {
       e.stopPropagation();
+
+      // 对没有登录的先做
+      if (!this.props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        return;
+      }
 
       const { data = {} } = this.props;
       const { threadId = '' } = data;
@@ -43,6 +53,12 @@ class Index extends React.Component {
     // 点赞
     onPraise = (e) => {
       e.stopPropagation();
+
+      // 对没有登录的先做
+      if (!this.props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        return;
+      }
       const { data = {} } = this.props;
       const { threadId = '', isLike, postId } = data;
       this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } });
@@ -50,6 +66,12 @@ class Index extends React.Component {
     // 支付
     onPay = (e) => {
       e.stopPropagation();
+
+      // 对没有登录的先做
+      if (!this.props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        return;
+      }
 
       if (this.props.payType === '0') {
         return;

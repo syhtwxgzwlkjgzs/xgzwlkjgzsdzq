@@ -92,3 +92,11 @@
 .likeReward {
   margin-left: rem($margin-4n);
 }
+
+.examine {
+  padding: rem(8) 0;
+  background: var(--color-error);
+  color: var(--color-white);
+  text-align: center;
+  font-size: rem(14);
+}

@@ -3,18 +3,33 @@
 
 .container {
   background: var(--color-white);
+  border: var(--border-border);
 }
 
 .main {
   // background: var(--background-color);
   // padding: rem($margin-4n);
+  :global{
+    .dzq-textarea {
+      border: 1px solid #eee;
+      .dzq-textarea__inner{
+        background: #f5f7f8;
+        resize: none;
+      }
+    }
+  }
 }
 
 
 .input {
   width: 100%;
+  background: #f5f7f8;
+}
+.heightMiddle {
   height: rem(116);
-  background: var(--comment-box-bg-color);
+}
+.heightLabel {
+  height: rem(76);
 }
 
 .upload {

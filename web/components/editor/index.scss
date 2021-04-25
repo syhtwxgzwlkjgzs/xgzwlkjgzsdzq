@@ -4,6 +4,7 @@
 .dvditor {
   position: relative;
   border: none;
+  background-color: var(--color-white);
   .vditor-ir pre.vditor-reset,
   .vditor-wysiwyg pre.vditor-reset {
     height: 178px;
@@ -48,6 +49,9 @@
     }
     strong {
       font-weight: bolder;
+    }
+    .vditor-panel {
+      display: none !important;
     }
   }
   .vditor-toolbar--hide {

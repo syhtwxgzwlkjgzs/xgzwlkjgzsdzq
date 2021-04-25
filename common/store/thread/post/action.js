@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import ThreadPostStore from './store';
-import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread } from '@common/server';
+import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread, updateThread } from '@common/server';
 import { LOADING_TOTAL_TYPE, THREAD_TYPE } from '@common/constants/thread-post';
 
 class ThreadPostAction extends ThreadPostStore {
@@ -9,19 +9,21 @@ class ThreadPostAction extends ThreadPostStore {
    */
   @action.bound
   async createThread() {
-    // 待更换为全局loading?
-    // this.setLoadingStatus(LOADING_TOTAL_TYPE.emoji, true);
     const params = this.getCreateThreadParams();
     const ret = await createThread(params);
-    // this.setLoadingStatus(LOADING_TOTAL_TYPE.emoji, false);
-    // const { code, data = [] } = ret;
-    // 相关数据处理待实际调用时修改
-    // let emojis = [];
-    // if (code === 0) emojis = data.map(item => ({ code: item.code, url: item.url }));
-    // this.setEmoji(emojis);
     return ret;
   }
 
+  /**
+   * 更新帖子
+   * @param {number} id 帖子id
+   */
+  @action.bound
+  async updateThread(id) {
+    const params = this.getCreateThreadParams();
+    const ret = await updateThread({ ...params, threadId: Number(id) });
+    return ret;
+  }
 
   /**
    * 获取所有表情
@@ -279,7 +281,8 @@ class ThreadPostAction extends ThreadPostStore {
       };
     });
     this.setPostData({
-      title,
+      // 标题去掉富文本
+      title: title.replace(/<[^<>]+>/g, ''),
       categoryId,
       price,
       attachmentPrice,

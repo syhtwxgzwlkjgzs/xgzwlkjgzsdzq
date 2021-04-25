@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import ThreadStore from './store';
-import { updatePosts, readCommentList, readThreadDetail } from '@server';
+import { updatePosts, operateThread, readCommentList, readThreadDetail, shareThread } from '@server';
 
 class ThreadAction extends ThreadStore {
   constructor(props) {
@@ -77,8 +77,8 @@ class ThreadAction extends ThreadStore {
    * @returns {object} 处理结果
    */
   async updateFavorite(params) {
-    const { id, pid, isFavorite } = params;
-    if (!id || !pid) {
+    const { id, isFavorite } = params;
+    if (!id) {
       return {
         msg: '参数不完整',
         success: false,
@@ -87,15 +87,10 @@ class ThreadAction extends ThreadStore {
 
     const requestParams = {
       id,
-      pid,
-      data: {
-        attributes: {
-          isFavorite: !!isFavorite,
-        },
-      },
+      isFavorite: !!isFavorite,
     };
 
-    const res = await updatePosts({ data: requestParams });
+    const res = await operateThread({ data: requestParams });
 
     if (res.code === 0) {
       // 3. 更新store
@@ -168,14 +163,13 @@ class ThreadAction extends ThreadStore {
    * 帖子置顶
    * @param {object} parmas * 参数
    * @param {number} parmas.id * 帖子id
-   * @param {number} parmas.pid * 帖子评论id
    * @param {boolean} params.isStick 是否置顶
    * @returns {object} 处理结果
    */
   @action
   async updateStick(params) {
-    const { id, pid, isStick } = params;
-    if (!id || !pid) {
+    const { id, isStick } = params;
+    if (!id) {
       return {
         msg: '参数不完整',
         success: false,
@@ -184,14 +178,9 @@ class ThreadAction extends ThreadStore {
 
     const requestParams = {
       id,
-      pid,
-      data: {
-        attributes: {
-          isStick: !!isStick,
-        },
-      },
+      isSticky: !!isStick,
     };
-    const res = await updatePosts({ data: requestParams });
+    const res = await operateThread({ data: requestParams });
 
     if (res?.data && res.code === 0) {
       this.setThreadDetailField('isStick', !!isStick);
@@ -217,8 +206,8 @@ class ThreadAction extends ThreadStore {
    */
   @action
   async updateEssence(params) {
-    const { id, pid, isEssence } = params;
-    if (!id || !pid) {
+    const { id, isEssence } = params;
+    if (!id) {
       return {
         msg: '参数不完整',
         success: false,
@@ -227,15 +216,10 @@ class ThreadAction extends ThreadStore {
 
     const requestParams = {
       id,
-      pid,
-      data: {
-        attributes: {
-          isEssence: !!isEssence,
-        },
-      },
+      isEssence: !!isEssence,
     };
 
-    const res = await updatePosts({ data: requestParams });
+    const res = await operateThread({ data: requestParams });
 
     if (res?.data && res.code === 0) {
       this.setThreadDetailEssence(!!isEssence);
@@ -274,20 +258,48 @@ class ThreadAction extends ThreadStore {
 
     const requestParams = {
       id,
-      pid,
-      data: {
-        attributes: {
-          isDeleted: 1,
-        },
-      },
+      isDeleted: 1,
     };
-    const res = await updatePosts({ data: requestParams });
+    const res = await operateThread({ data: requestParams });
 
     if (res?.data && res.code === 0) {
       this.setThreadDetailField('isDelete', 1);
 
       // TODO: 删除帖子列表中的数据
       // IndexStore
+
+      return {
+        msg: '操作成功',
+        success: true,
+      };
+    }
+
+    return {
+      msg: res.msg,
+      success: false,
+    };
+  }
+
+  /**
+   * 分享
+   * @param {number} threadId 帖子id
+   */
+  @action
+  async shareThread(threadId) {
+    if (!threadId) {
+      return {
+        msg: '参数不完整',
+        success: false,
+      };
+    }
+
+    const requestParams = {
+      threadId,
+    };
+    const res = await shareThread({ data: requestParams });
+
+    if (res.code === 0) {
+      this.threadData.likeReward.shareCount = this.threadData?.likeReward?.shareCount - 0 + 1;
 
       return {
         msg: '操作成功',
@@ -312,7 +324,7 @@ class ThreadAction extends ThreadStore {
    */
   @action
   async loadCommentList(params) {
-    const { id, page = 1, perPage = 10, sort = 'createdAt' } = params;
+    const { id, page = 1, perPage = 5, sort = '-createdAt' } = params;
     if (!id) {
       return {
         msg: '帖子id不存在',
@@ -331,12 +343,13 @@ class ThreadAction extends ThreadStore {
 
     const res = await readCommentList({ params: requestParams });
 
-    if (res?.data?.pageData) {
+    if (res.code === 0 && res?.data?.pageData) {
       let { commentList } = this;
 
       page === 1 ? (commentList = res?.data?.pageData || []) : commentList.push(...(res?.data?.pageData || []));
 
       this.setCommentList(this.commentListAdapter(commentList));
+      this.setTotalCount(res?.data?.totalCount || 0);
 
       return {
         msg: '操作成功',

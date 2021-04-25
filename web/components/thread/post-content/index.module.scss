@@ -10,7 +10,7 @@
     display: inline-block;
     line-height: rem($font-line-height-middle);
     font-size: rem($font-size-middle) !important;
-    color: #0b0b37;
+    color: var( --color-text-primary);
     margin-top: rem($padding-1n);
     word-break: break-all;
     p,
@@ -57,7 +57,7 @@
     font-weight: normal;
     font-size: rem($font-size-primary);
     line-height: rem($font-line-height-primary);
-    color: #0466ff;
+    color: var(--color-primary);
     .icon {
       margin-left: rem(9);
       transform: rotateZ(90deg);
@@ -72,7 +72,7 @@
       font-size: rem($font-size-primary);
       line-height: rem($font-line-height-primary);
       text-align: left;
-      color: #0466ff;
+      color: var(--color-primary);;
     }
     .payButton {
       margin-top: rem($padding-4n);
@@ -82,7 +82,7 @@
       margin-right: rem($padding-2n);
       width: rem(13.93);
       height: rem(16.62);
-      background-color: white;
+      background-color: var(--color-white);
     }
   }
 }

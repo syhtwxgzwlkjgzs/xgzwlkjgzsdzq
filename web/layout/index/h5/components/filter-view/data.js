@@ -13,10 +13,6 @@ export default [
         pid: '',
       },
       {
-        name: '文本',
-        pid: '100',
-      },
-      {
         name: '视频',
         pid: '103',
       },

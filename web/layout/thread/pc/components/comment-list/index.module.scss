@@ -122,6 +122,9 @@
             // flex: 1;
           }
         }
+        .input {
+          margin-top: rem($padding-2n);
+        }
         .moreReply {
           height: rem(26);
           font-family: 'PingFang SC';

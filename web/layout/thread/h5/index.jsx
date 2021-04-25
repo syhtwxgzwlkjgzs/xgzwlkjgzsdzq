@@ -46,6 +46,12 @@ const typeMap = {
 const RenderThreadContent = observer((props) => {
   const { store: threadStore } = props;
   const { text, indexes } = threadStore?.threadData?.content || {};
+  const tipData = {
+    postId: threadStore?.threadData?.postId,
+    threadId: threadStore?.threadData?.threadId,
+  };
+  // 是否合法
+  const isApproved = threadStore?.threadData?.isApproved || 0;
   const isEssence = threadStore?.threadData?.displayTag?.isEssence || false;
 
   const parseContent = {};
@@ -87,60 +93,64 @@ const RenderThreadContent = observer((props) => {
           <Icon size="20" color="#8590A6" name="MoreVOutlined"></Icon>
         </div>
       </div>
-      <div className={topic.body}>
-        {/* 文字 */}
-        {text && <PostContent content={text || ''} />}
-        {/* 视频 */}
-        {parseContent.VIDEO && (
-          <VideoPlay
-            url={parseContent.VIDEO.mediaUrl}
-            coverUrl={parseContent.VIDEO.coverUrl}
-            width={400}
-            height={200}
-          />
-        )}
-        {/* 图片 */}
-        {parseContent.IMAGE && <ImageContent imgData={parseContent.IMAGE} />}
-        {/* 商品 */}
-        {parseContent.GOODS && (
-          <div>
-            <ProductItem
-              image={parseContent.GOODS.imagePath}
-              amount={parseContent.GOODS.price}
-              title={parseContent.GOODS.title}
+
+      {
+        isApproved === 1
+        && <div className={topic.body}>
+          {/* 文字 */}
+          {text && <PostContent content={text || ''} />}
+          {/* 视频 */}
+          {parseContent.VIDEO && (
+            <VideoPlay
+              url={parseContent.VIDEO.mediaUrl}
+              coverUrl={parseContent.VIDEO.coverUrl}
+              width={400}
+              height={200}
             />
-            <Button
-              className={topic.buyBtn}
-              type="primary"
-              onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
-            >
-              购买商品
+          )}
+          {/* 图片 */}
+          {parseContent.IMAGE && <ImageContent imgData={parseContent.IMAGE} />}
+          {/* 商品 */}
+          {parseContent.GOODS && (
+            <div>
+              <ProductItem
+                image={parseContent.GOODS.imagePath}
+                amount={parseContent.GOODS.price}
+                title={parseContent.GOODS.title}
+              />
+              <Button
+                className={topic.buyBtn}
+                type="primary"
+                onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
+              >
+                购买商品
             </Button>
-          </div>
-        )}
-        {/* 音频 */}
-        {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
-        {/* 附件 */}
-        {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
+            </div>
+          )}
+          {/* 音频 */}
+          {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
+          {/* 附件 */}
+          {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
 
-        <div className={topic.tag}>使用交流</div>
+          <div className={topic.tag}>使用交流</div>
 
-        {(parseContent.RED_PACKET || parseContent.REWARD) && (
-          <div className={topic.reward}>
-            {/* 红包 */}
-            {parseContent.RED_PACKET && (
-              <PostRewardProgressBar remaining={parseContent.RED_PACKET.number} received={1} />
-            )}
-            {/* 打赏 */}
-            {parseContent.REWARD && <PostRewardProgressBar type={POST_TYPE.BOUNTY} remaining={2} received={5} />}
-          </div>
-        )}
+          {(parseContent.RED_PACKET || parseContent.REWARD) && (
+            <div className={topic.reward}>
+              {/* 红包 */}
+              {parseContent.RED_PACKET && (
+                <PostRewardProgressBar remaining={parseContent.RED_PACKET.number} received={1} />
+              )}
+              {/* 打赏 */}
+              {parseContent.REWARD && <PostRewardProgressBar type={POST_TYPE.BOUNTY} remaining={2} received={5} />}
+            </div>
+          )}
 
-        {/* <div style={{ textAlign: 'center' }}>
+          {/* <div style={{ textAlign: 'center' }}>
           <Button className={topic.rewardButton} type='primary' size='large'>打赏</Button>
         </div> */}
-        {/* 附件 */}
-      </div>
+          {/* 附件 */}
+        </div>
+      }
       <div className={topic.footer}>
         <div className={topic.thumbs}>
           <div
@@ -151,7 +161,7 @@ const RenderThreadContent = observer((props) => {
             <span>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
           </div>
           <div className={topic.likeReward} >
-            <Tip imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
+            <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
           </div>
         </div>
         {
@@ -431,7 +441,6 @@ class ThreadH5Page extends React.Component {
   componentDidMount() {
     // 当内容加载完成后，获取评论区所在的位置
     this.position = this.commentDataRef?.current?.offsetTop - 50;
-    console.log(this.props);
   }
 
   componentDidUpdate() {
@@ -458,7 +467,6 @@ class ThreadH5Page extends React.Component {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
-      pid: this.props.thread?.threadData?.postId,
       isFavorite: !this.props.thread?.isFavorite,
     };
     const { success, msg } = await this.props.thread.updateFavorite(params);
@@ -544,7 +552,13 @@ class ThreadH5Page extends React.Component {
 
     // 删除
     if (type === 'delete') {
-      this.delete();
+      this.setState({ showDeletePopup: true });
+    }
+
+    // 编辑
+    if (type === 'edit') {
+      if (!this.props.thread?.threadData?.id) return;
+      this.props.router.push(`/thread/post?id=${this.props.thread?.threadData?.id}`);
     }
   };
 
@@ -564,7 +578,6 @@ class ThreadH5Page extends React.Component {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
-      pid: this.props.thread?.threadData?.postId,
       isStick: !this.props.thread?.threadData?.isStick,
     };
     const { success, msg } = await this.props.thread.updateStick(params);
@@ -584,7 +597,6 @@ class ThreadH5Page extends React.Component {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
-      pid: this.props.thread?.threadData?.postId,
       isEssence: !this.props.thread?.threadData?.displayTag?.isEssence,
     };
     const { success, msg } = await this.props.thread.updateEssence(params);
@@ -605,18 +617,17 @@ class ThreadH5Page extends React.Component {
   async delete() {
     this.setState({ showDeletePopup: false });
     const id = this.props.thread?.threadData?.id;
-    const pid = this.props.thread?.threadData?.postId;
 
-    const { success, msg } = await this.props.thread.delete(id, pid, this.props.index);
+    const { success, msg } = await this.props.thread.delete(id, this.props.index);
 
     if (success) {
       Toast.success({
-        content: '删除成功',
+        content: '删除成功，即将跳转至首页',
       });
 
       setTimeout(() => {
         this.props.router.push('/');
-      }, 500);
+      }, 1000);
 
       return;
     }
@@ -723,6 +734,24 @@ class ThreadH5Page extends React.Component {
     }
   }
 
+  // 分享
+  async onShareClick() {
+    const id = this.props.thread?.threadData?.id;
+
+    const { success, msg } = await this.props.thread.shareThread(id);
+
+    if (success) {
+      Toast.success({
+        content: '分享成功',
+      });
+      return;
+    }
+
+    Toast.error({
+      content: msg,
+    });
+  }
+
   render() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
@@ -743,10 +772,18 @@ class ThreadH5Page extends React.Component {
       isStick: threadStore?.threadData?.isStick,
     };
 
+    const isApproved = threadStore?.threadData?.isApproved || 0;
+
     return (
       <div className={layout.container}>
         <div className={layout.header}>
           <Header></Header>
+          {
+            isReady && isApproved !== 1
+            && <div className={topic.examine}>
+              内容正在审核中，审核通过后才能正常显示！
+            </div>
+          }
         </div>
 
         <div
@@ -832,7 +869,7 @@ class ThreadH5Page extends React.Component {
               size="20"
               name="CollectOutlined"
             ></Icon>
-            <Icon className={footer.icon} size="20" name="ShareAltOutlined"></Icon>
+            <Icon onClick={() => this.onShareClick()} className={footer.icon} size="20" name="ShareAltOutlined"></Icon>
           </div>
         </div>
       </div>

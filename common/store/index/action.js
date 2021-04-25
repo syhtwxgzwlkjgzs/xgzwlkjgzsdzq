@@ -16,7 +16,8 @@ class IndexAction extends IndexStore {
   async screenData({ filter = {}, sequence = 0, perPage = 10, page = 1 } = {}) {
     this.threads = null;
     this.sticks = null;
-    this.getRreadStickList();
+
+    this.getRreadStickList(filter.categoryids);
     this.getReadThreadList({ filter, sequence, perPage, page });
   }
 
@@ -37,7 +38,7 @@ class IndexAction extends IndexStore {
 
     const result = await readThreadList({ params: { perPage, page, filter: newFilter, sequence } });
     if (result.code === 0 && result.data) {
-      if (this.threads && result.data.pageData) {
+      if (this.threads && result.data.pageData && page !== 1) {
         this.threads.pageData.push(...result.data.pageData);
         const newPageData = this.threads.pageData.slice();
         this.setThreads({ ...result.data, pageData: newPageData });
@@ -58,7 +59,7 @@ class IndexAction extends IndexStore {
   async getReadCategories() {
     const result = await readCategories();
     if (result.code === 0 && result.data) {
-      const data = [{ name: '全部', pid: '', children: [] }, ...result.data];
+      const data = [...result.data];
       this.setCategories(data);
       return this.categories;
     }
@@ -70,8 +71,8 @@ class IndexAction extends IndexStore {
    * @returns
    */
   @action
-  async getRreadStickList() {
-    const result = await readStickList();
+  async getRreadStickList(categoryIds = []) {
+    const result = await readStickList({ params: { categoryIds } });
     if (result.code === 0 && result.data) {
       this.setSticks(result.data);
       return this.sticks;

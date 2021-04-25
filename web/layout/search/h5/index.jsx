@@ -44,9 +44,9 @@ class SearchH5Page extends React.Component {
 
   render() {
     const { indexTopics, indexUsers, indexThreads } = this.props.search;
-    const { pageData: topicsPageData } = indexTopics;
-    const { pageData: usersPageData } = indexUsers;
-    const { pageData: threadsPageData } = indexThreads;
+    const { pageData: topicsPageData = [] } = indexTopics || {};
+    const { pageData: usersPageData = [] } = indexUsers || {};
+    const { pageData: threadsPageData = [] } = indexThreads || {};
 
     return (
       <List className={styles.page} allowRefresh={false}>
@@ -55,7 +55,7 @@ class SearchH5Page extends React.Component {
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} />
           <SectionTitle icon={{ type: 1, name: 'StrongSharpOutlined' }} title="潮流话题" onShowMore={this.redirectToSearchResultTopic} />
           {
-            topicsPageData && topicsPageData.length
+            topicsPageData?.length
               ? <TrendingTopics data={topicsPageData} onItemClick={this.onTopicClick} />
               : <NoData />
           }
@@ -64,7 +64,7 @@ class SearchH5Page extends React.Component {
         <div className={styles.section}>
           <SectionTitle icon={{ type: 2, name: 'MemberOutlined' }} title="活跃用户" onShowMore={this.redirectToSearchResultUser} />
           {
-            usersPageData && usersPageData.length
+            usersPageData?.length
               ? <ActiveUsers data={usersPageData} onItemClick={this.onUserClick} />
               : <NoData />
           }
@@ -74,7 +74,7 @@ class SearchH5Page extends React.Component {
           <SectionTitle icon={{ type: 3, name: 'HotOutlined' }} title="热门内容" onShowMore={this.redirectToSearchResultPost} />
         </div>
         {
-          threadsPageData && threadsPageData.length
+          threadsPageData?.length
             ? <PopularContents data={threadsPageData} onItemClick={this.onPostClick} />
             : <NoData />
         }

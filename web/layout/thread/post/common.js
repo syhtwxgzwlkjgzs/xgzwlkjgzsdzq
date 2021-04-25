@@ -29,6 +29,6 @@ export const setCategoryEmoji = (data) => {
 
 export const getCategoryEmoji = () => locals.get(categoryEmoji);
 
-export const removeCategory = () => {
+export const removeCategoryEmoji = () => {
   locals.remove(categoryEmoji);
 };
