@@ -1,0 +1,49 @@
+@import '@common/styles/variable/index.scss';
+@import '@common/styles/mixin/index.scss';
+
+// 外部容器
+.amountWrapper {
+  background: var(--color-white);
+  height: 240px;
+  font-size: 20px;
+  padding: 16px;
+  overflow-y: auto;
+  padding-bottom: 24px;
+}
+
+// 金额确认标题
+.amountTitle {
+  font-weight: bold;
+}
+// 金额确认主要内容
+.amountContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 16px 0;
+  font-size: 16px;
+  // 交易内容item
+  .acExplain {
+    display: flex;
+    align-items: center;
+    line-height: 30px;
+    margin: 8px 0;
+    display: inline-block;
+  }
+  // 交易类型label提示
+  .acExplain_label{
+    color: var(--color-disabled);
+    margin-right: 16px;
+    flex-shrink: 0;
+  }
+  // 交易内容value
+  .acExplain_value {
+    flex-wrap: nowrap;
+    @include text-ellipsis();
+  }
+  .acExplain_hr {
+    width: 100%;
+    height: 1px;
+    background-color: var(--color-disabled5);
+  }
+}
