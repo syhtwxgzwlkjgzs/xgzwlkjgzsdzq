@@ -3,7 +3,7 @@ import styles from './index.module.scss';
 import { Icon, Toast } from '@discuzq/design';
 import getApi from '@discuzq/sdk/dist/utils/platform-api';
 import { inject, observer } from 'mobx-react';
-import Router from '@common/utils/web-router';
+import Router from '@discuzq/sdk/dist/router';
 import SharePopup from '../thread/share-popup';
 
 /**
