@@ -81,15 +81,27 @@ class CommentList extends React.Component {
     typeof this.props.reployAvatarClick === 'function' && this.props.reployAvatarClick(data);
   }
 
+  generatePermissions(data = {}) {
+    return {
+      canApprove: data.canApprove || false,
+      canDelete: data.canDelete || false,
+      canEdit: data.canEdit || false,
+      canHide: data.canLike || false,
+      canLike: data.canLike || false,
+    };
+  }
+
   render() {
+    const { canDelete, canEdit, canLike } = this.generatePermissions(this.props.data);
+
     return (
       <div className={styles.commentList}>
         <div className={styles.header}>
           <div className={styles.showGet}>
             {!this.state.isHideEdit
               && <div className={styles.extra}>
-                <div className={styles.revise} onClick={() => this.editClick()}>编辑</div>
-                <div className={styles.revise} onClick={() => this.deleteClick()}>删除</div>
+                {canEdit && <div className={styles.revise} onClick={() => this.editClick()}>编辑</div>}
+                {canDelete && <div className={styles.revise} onClick={() => this.deleteClick()}>删除</div>}
               </div>
             }
             {
@@ -134,7 +146,7 @@ class CommentList extends React.Component {
                 <div className={styles.commentTime}>{diffDate(this.props.data.createdAt)}</div>
                 <div className={styles.extraBottom}>
                   <div className={this.state.isLiked ? styles.commentLike : styles.commentLiked}>
-                    <span onClick={() => this.likeClick()}>
+                    <span onClick={() => this.likeClick(canLike)}>
                       赞&nbsp;{this.state.likeCount > 0 ? this.state.likeCount : ''}
                     </span>
                   </div>

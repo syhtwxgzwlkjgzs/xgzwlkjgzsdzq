@@ -35,7 +35,19 @@ export default class ReplyList extends React.Component {
     typeof this.props.replyClick === 'function' && this.props.replyClick();
   }
 
+  generatePermissions(data = {}) {
+    return {
+      canApprove: data.canApprove || false,
+      canDelete: data.canDelete || false,
+      canEdit: data.canEdit || false,
+      canHide: data.canLike || false,
+      canLike: data.canLike || false,
+    };
+  }
+
   render() {
+    const { canLike } = this.generatePermissions(this.props.data);
+
     return (
       <div className={styles.replyList}>
         <div className={styles.replyListAvatar} onClick={this.props.avatarClick('2')}>
@@ -64,7 +76,7 @@ export default class ReplyList extends React.Component {
                       </Avatar>
                     </div>
                     <span className={styles.replyedUserName}>
-                      {this.props.data.replyUser.username || this.props.data.replyUser.userName }
+                      {this.props.data.replyUser.username || this.props.data.replyUser.userName}
                     </span>
                   </div> : ''
               }
@@ -75,7 +87,7 @@ export default class ReplyList extends React.Component {
             <div className={styles.replyTime}>{diffDate(this.props.data.createdAt)}</div>
             <div className={styles.extraBottom}>
               <div className={this.state.isLiked ? styles.replyLike : styles.replyLiked}>
-                <span onClick={() => this.likeClick()}>
+                <span onClick={() => this.likeClick(canLike)}>
                   赞&nbsp;{this.state.likeCount === 0 ? '' : this.state.likeCount}
                 </span>
               </div>
