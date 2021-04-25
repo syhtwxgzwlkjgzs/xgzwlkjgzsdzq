@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
-import { View, Text } from '@tarojs/components';
+import { View } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import ThemePage from '@components/theme-page';
 import { PlusinToolbar, DefaultToolbar, GeneralUpload, Tag, Title, Content, ClassifyPopup } from '@components/thread-post';
 import styles from './index.module.scss';
+import { THREAD_TYPE } from '@common/constants/thread-post';
 
 @inject('index')
 @inject('site')
@@ -72,16 +73,17 @@ class Index extends Component {
 
     switch (item.type) {
       //  其它类型可依次补充
-      case 107:
-        this.toSelectReward();
+      case THREAD_TYPE.reward:
+        Taro.navigateTo({
+          url: '/pages/threadPost/selectReward'
+        });
+        break;
+      case THREAD_TYPE.goods:
+        Taro.navigateTo({
+          url: '/pages/threadPost/selectProduct'
+        });
         break;
     }
-  }
-
-  toSelectReward = () => { // 跳转悬赏选择页
-    Taro.navigateTo({
-      url: '/pages/threadPost/selectReward'
-    })
   }
 
   rewardContent = () => { // 悬赏内容

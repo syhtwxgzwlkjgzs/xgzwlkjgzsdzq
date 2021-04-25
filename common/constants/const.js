@@ -1,5 +1,39 @@
 import { THREAD_TYPE, ACCEPT_VIDEO_TYPES, ATTACHMENT_TYPE } from '@common/constants/thread-post';
 
+// 商品链接分析页的图标
+export const goodImages = [
+  {
+    src: '/dzq-img/jingdong.svg',
+    name: '京东',
+    width: 20,
+    height: 20,
+  },
+  {
+    src: '/dzq-img/taobao.svg',
+    name: '淘宝',
+    width: 20,
+    height: 20,
+  },
+  {
+    src: '/dzq-img/tmall.svg',
+    name: '天猫',
+    width: 20,
+    height: 20,
+  },
+  {
+    src: '/dzq-img/pinduoduo.svg',
+    name: '拼多多',
+    width: 20,
+    height: 20,
+  },
+  {
+    src: '/dzq-img/youzan.svg',
+    name: '有赞',
+    width: 20,
+    height: 20,
+  },
+];
+
 export const defaultOperation = {
   emoji: 'emoji',
   at: 'at',

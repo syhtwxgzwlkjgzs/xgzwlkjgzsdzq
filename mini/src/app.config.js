@@ -8,6 +8,7 @@ export default {
     'pages/index/index',
     'pages/threadPost/index',
     'pages/threadPost/selectReward',
+    'pages/threadPost/selectProduct',
   ],
   // 其它在子包。更新的时候负责人需要注意一下分包之后的打包优化配置
   // subPackages: [],
