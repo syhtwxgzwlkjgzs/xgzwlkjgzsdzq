@@ -9,52 +9,53 @@ export const defaultOperation = {
   pay: 'pay',
 };
 
+const activeColor = '#2469f6';
+
 /**
  * 默认的操作栏 icon，TODO: 待更新
  */
 export const defaultIcon = [
   {
     name: 'SmilingFaceOutlined', // emoji
-    active: '#2469f6',
+    active: activeColor,
     id: defaultOperation.emoji,
   },
   {
     name: 'AtOutlined', // @
-    active: 'red',
+    active: activeColor,
     id: defaultOperation.at,
   },
   {
     name: 'SharpOutlined', // #
-    active: 'green',
+    active: activeColor,
     id: defaultOperation.topic,
   },
   {
     name: 'PaperClipOutlined', // 附件
-    active: '#2469f6',
+    active: activeColor,
     id: defaultOperation.attach,
   },
   {
     name: 'WalletOutlined', // 红包
-    active: '#2469f6',
+    active: activeColor,
     id: defaultOperation.redpacket,
   },
   {
     name: 'DollarLOutlined', // 付费
-    active: '#2469f6',
+    active: activeColor,
     id: defaultOperation.pay,
   },
 ];
 
-// TODO: icon 待更换
 export const attachIcon = [
   {
     name: 'PictureOutlinedBig',
-    active: '#2469f6',
+    active: activeColor,
     type: THREAD_TYPE.image,
   },
   {
     name: 'VideoOutlined',
-    active: 'red',
+    active: activeColor,
     type: THREAD_TYPE.video,
     isUpload: true,
     limit: 1,
@@ -65,17 +66,17 @@ export const attachIcon = [
   },
   {
     name: 'MicroOutlined',
-    active: 'green',
+    active: activeColor,
     type: THREAD_TYPE.voice,
   },
   {
     name: 'ShoppingCartOutlined',
-    active: '#2469f6',
+    active: activeColor,
     type: THREAD_TYPE.goods,
   },
   {
     name: 'QuestionOutlined',
-    active: '#2469f6',
+    active: activeColor,
     type: THREAD_TYPE.reward,
   },
 ];
