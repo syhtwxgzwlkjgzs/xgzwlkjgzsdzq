@@ -2,16 +2,16 @@
 @import '@common/styles/variable/index.scss';
 
 .list {
-  padding: rem(16) 0 rem(24);
+  padding: rem($padding-4n) 0 rem($padding-6n);
   .item {
     width: 100%;
-    margin-bottom: rem(16);
+    margin-bottom: rem($margin-4n);
     height: 82px;
-    border-radius: 5px;
+    border-radius: rem($border-radius-small);
     background: #f5f7f8;
     display: flex;
     align-items: center;
-    padding: rem(16) rem(24);
+    padding: rem($padding-4n) rem($padding-6n);
     box-sizing: border-box;
     &:last-child {
       margin-bottom: 0;
@@ -19,30 +19,30 @@
     .content {
       width: 100%;
       height: 100%;
-      padding-left: rem(16);
+      padding-left: rem($padding-4n);
     }
     .top {
-      margin-bottom: rem(8);
+      margin-bottom: rem($margin-2n);
       .name {
         font-weight: 700;
-        font-size: rem(16);
-        line-height: rem(17.8);
+        font-size: rem($font-size-middle);
+        line-height: rem(18);
         color: #0b0b37;
-        margin-right: rem(8);
+        margin-right: rem($margin-2n);
       }
       .group {
-        font-size: rem(14);
-        line-height: rem(22);
+        font-size: rem($font-size-primary);
+        line-height: rem($font-line-height-small);
         color: #8490a8;
       }
     }
     .num {
       display: flex;
       .numItem {
-        font-size: rem(14);
-        line-height: rem(22);
-        color: #2469f6;
-        padding: 0 rem(8);
+        font-size: rem($font-size-primary);
+        line-height: rem($font-line-height-small);
+        color: var(--color-primary);
+        padding: 0 rem($padding-2n);
         &:first-child {
           padding-left: 0;
         }
@@ -52,15 +52,15 @@
       }
       .numTitle {
         color: #4F5A70;
-        margin-right: rem(8);
+        margin-right: rem($margin-2n);
       }
     }
     .button {
-      padding: rem(8) rem(36);
-      font-size: rem(14);
+      padding: rem($padding-2n) rem($padding-4n);
+      font-size: rem($font-size-primary);
       line-height: rem(18);
       .addIcon {
-        margin-right: rem(8);
+        margin-right: rem($margin-2n);
       }
     }
   }

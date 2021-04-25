@@ -10,7 +10,7 @@ import styles from './index.module.scss';
  */
 const ActiveUsers = ({ data, onItemClick }) => (
   <div className={styles.list}>
-    {data.map((item, index, arr) => (
+    {data?.map((item, index) => (
       <User key={index} data={item} onClick={onItemClick} />
     ))}
   </div>

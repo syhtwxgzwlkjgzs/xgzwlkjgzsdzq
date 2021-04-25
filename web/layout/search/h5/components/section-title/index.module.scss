@@ -35,6 +35,7 @@
   color: var(--color-text-primary);
 }
 .more {
+  cursor: pointer;
   font-size: rem($font-size-primary);
   line-height: rem($font-line-height-middle);
   text-align: left;

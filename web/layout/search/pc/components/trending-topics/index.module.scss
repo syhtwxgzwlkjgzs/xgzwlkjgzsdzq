@@ -9,8 +9,8 @@
     font-size: rem($font-size-primary);
     line-height: rem(54);
     height: rem(54);
-    border-bottom: 1px solid #eee;
-    &:last-child{
+    border-bottom: 1px solid var(--border-line-color);
+    &:last-child {
       border-bottom: none;
     }
     .index {

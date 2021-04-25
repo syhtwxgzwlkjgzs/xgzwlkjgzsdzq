@@ -11,27 +11,38 @@ import { withRouter } from 'next/router';
 @inject('site')
 @observer
 class SearchResultTopicPCPage extends React.Component {
+  redirectToSearchResultUser = () => {
+    this.props.router.push('/search/result-user');
+  };
   onTopicClick = data => console.log('topic click', data);
+  renderRight = () => {
+    return (
+      <div className={styles.searchRight}>
+        <div className={styles.section}>
+          <SectionTitle title="活跃用户" onShowMore={this.redirectToSearchResultUser}/>
+          <ActiveUsers data={userData} onItemClick={this.onUserClick}/>
+        </div>
+      </div>
+    )
+  }
+  renderContent = () => {
+    return (
+      <div className={styles.searchContent}>
+        <div className={styles.section}>
+          <SectionTitle title="潮流话题" isShowMore={false}/>
+          <TrendingTopicMore data={topicData} onItemClick={this.onTopicClick}/>
+        </div>
+      </div>
+    )
+  }
   render() {
     return (
       <div className={styles.searchWrap}>
         <BaseLayout
           left={() => <div></div>}
-          right={() => <div className={styles.searchRight}>
-              <div className={styles.section}>
-                <SectionTitle title="活跃用户"/>
-                <ActiveUsers data={userData} onItemClick={this.onUserClick}/>
-              </div>
-          </div>}
+          right={ this.renderRight }
         >
-          {
-            () => <div className={styles.searchContent}>
-              <div className={styles.section}>
-                <SectionTitle title="潮流话题" isShowMore={false}/>
-                <TrendingTopicMore data={topicData} onItemClick={this.onTopicClick}/>
-              </div>
-            </div>
-          }
+          { this.renderContent }
         </BaseLayout>
       </div>
     );

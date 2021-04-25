@@ -10,22 +10,24 @@ import { withRouter } from 'next/router';
 @observer
 class SearchResultPostH5Page extends React.Component {
   onPostClick = data => console.log('post click', data);
+  renderContent = () => {
+    return (
+      <div className={styles.searchContent}>
+        <div className={styles.section}>
+          <SectionTitle title="热门内容" isShowMore={false}/>
+          <PopularContents data={contentData} onItemClick={this.onPostClick}/>
+        </div>
+      </div>
+    )
+  } 
   render() {
     return (
       <div className={styles.searchWrap}>
         <BaseLayout
           left={() => <div></div>}
-          right={() => <div className={styles.searchRight}>
-          </div>}
+          right={() => <div></div>}
         >
-          {
-            () => <div className={styles.searchContent}>
-              <div className={styles.section}>
-                <SectionTitle title="热门内容" isShowMore={false}/>
-                <PopularContents data={contentData} onItemClick={this.onPostClick}/>
-              </div>
-            </div>
-          }
+          { this.renderContent }
         </BaseLayout>
       </div>
     );

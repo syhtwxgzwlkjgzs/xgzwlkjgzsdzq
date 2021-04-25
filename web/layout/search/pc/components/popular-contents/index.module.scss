@@ -1,6 +1,8 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
 .list {
   width: 100%;
 }
 .item {
-  margin-bottom: rem(10);
+  margin-bottom: rem($margin-10);
 }
