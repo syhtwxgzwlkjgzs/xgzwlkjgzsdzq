@@ -207,7 +207,14 @@ class RenderCommentList extends React.Component {
       id: data.id,
       isLiked: !data.isLiked,
     };
-    const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
+    const { success, msg } = await this.props.comment.updateLiked(params);
+
+    if (success) {
+      this.props.thread.setCommentListDetailField(data.id, 'isLiked', params.isLiked);
+      const likeCount = params.isLiked ? data.likeCount + 1 : data.likeCount - 1;
+      this.props.thread.setCommentListDetailField(data.id, 'likeCount', likeCount);
+    }
+
     if (!success) {
       Toast.error({
         content: msg,
@@ -216,14 +223,21 @@ class RenderCommentList extends React.Component {
   }
 
   // 点击回复的赞
-  async replyLikeClick(reply) {
+  async replyLikeClick(reply, comment) {
     if (!reply.id) return;
 
     const params = {
       id: reply.id,
       isLiked: !reply.isLiked,
     };
-    const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
+    const { success, msg } = await this.props.comment.updateLiked(params);
+
+    if (success) {
+      this.props.thread.setReplyListDetailField(comment.id, reply.id, 'isLiked', params.isLiked);
+      const likeCount = params.isLiked ? reply.likeCount + 1 : reply.likeCount - 1;
+      this.props.thread.setReplyListDetailField(comment.id, reply.id, 'likeCount', likeCount);
+    }
+
     if (!success) {
       Toast.error({
         content: msg,
