@@ -68,7 +68,7 @@ class WeixinAuth extends React.Component {
       // 跳转状态页
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
-        this.props.router.push('/user/status');
+        this.props.router.push(`/user/status?statusCode=${error.Code}&statusMsg=${error.Message}`);
         return;
       }
       if (error.Code) {

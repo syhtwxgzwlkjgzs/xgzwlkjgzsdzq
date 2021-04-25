@@ -15,8 +15,10 @@ import Header from '@components/header';
 @observer
 class StatusH5Page extends React.Component {
   render() {
-    const { commonLogin, site } = this.props;
+    const { commonLogin, site, router } = this.props;
     const { platform } = site;
+    const { statusCode, statusMsg } = router.query;
+    console.log(statusCode, `statusMsg:${statusMsg}`);
     return (
       <div className={platform === 'h5' ? '' : layout.pc_body_background}>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
@@ -30,10 +32,13 @@ class StatusH5Page extends React.Component {
             <img className={layout.icon__img} src='https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fcdn.duitang.com%2Fuploads%2Fitem%2F201408%2F30%2F20140830180834_XuWYJ.png&refer=http%3A%2F%2Fcdn.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1620908425&t=673ddda42973b103faf179fc02818b41' alt=""/>
           </div>
           <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
-              <span>{commonLogin.statusMessage}</span>
+              <span>
+                { commonLogin.statusMessage || commonLogin.setStatusMessage(statusCode, statusMsg) }
+              </span>
           </div>
           <Button className={platform === 'h5' ? layout.button : layout.pc_button } type="primary" onClick={() => {
             console.log('退出登录');
+            router.push('login');
           }}>
             退出登录
           </Button>
