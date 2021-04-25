@@ -40,24 +40,19 @@ class ThreadCreate extends React.Component {
     super(props);
     this.state = {
       emoji: {},
-      imageUploadShow: false,
+      // 分类选择显示状态
       categoryChooseShow: false,
       atList: [],
       topic: '',
       isVditorFocus: false,
       // 当前默认工具栏的操作 @common/constants/const defaultOperation
       currentDefaultOperation: '',
-      // 显示商品链接解析组件
-      productSelectShow: false,
+      // 当前附件工具栏的操作显示交互状态
+      currentAttachOperation: false,
       // 解析完后显示商品信息
       productShow: false,
-      // 显示录音模块交互
-      audioRecordShow: false,
       // 语音贴上传成功的语音地址
       audioSrc: '',
-      // 显示悬赏问答属性设置页面
-      rewardQaShow: false,
-      payShow: false,
       paySelectText: ['帖子付费', '附件付费'],
       curPaySelect: '',
     };
@@ -69,6 +64,7 @@ class ThreadCreate extends React.Component {
     if (postData) {
       this.props.index.setCategories(category);
       this.props.threadPost.setEmoji(emoji);
+      localData.removeCategoryEmoji();
       if (postData.categoryId) this.setCategory(postData.categoryId);
       this.setPostData({ ...postData, position: this.props.threadPost.postData.position });
     } else {
@@ -76,7 +72,7 @@ class ThreadCreate extends React.Component {
       if (emojis.length === 0) fetchEmoji();
       this.fetchCategories();
     }
-    window.addEventListener('scroll', throttle(this.handler, 50));
+    window.addEventListener('scroll', this.handler);
   }
 
   componentWillUnmount() {
@@ -137,7 +133,6 @@ class ThreadCreate extends React.Component {
       const audioSrc = window.URL.createObjectURL(blob);
       this.setState({
         audioSrc,
-        audioRecordShow: false,
       });
       this.setPostData({ audio: data, audioSrc });
     }
@@ -152,17 +147,7 @@ class ThreadCreate extends React.Component {
   };
 
   handleAttachClick = (item) => {
-    if (item.type === THREAD_TYPE.image) this.setState({ imageUploadShow: true });
-    else this.setState({ imageUploadShow: false });
-
-    if (item.type === THREAD_TYPE.goods) this.setState({ productSelectShow: true });
-    else this.setState({ productSelectShow: false });
-
-    if (item.type === THREAD_TYPE.voice) this.setState({ audioRecordShow: true });
-    else this.setState({ audioRecordShow: false });
-
-    if (item.type === THREAD_TYPE.reward) this.setState({ rewardQaShow: true });
-    else this.setState({ rewardQaShow: false });
+    this.setState({ currentAttachOperation: item.type });
   };
 
   handleUploadChange = (fileList, type) => {
@@ -244,7 +229,7 @@ class ThreadCreate extends React.Component {
   };
 
   handler = () => {
-    this.setBottomBarStyle(window.scrollY);
+    throttle(this.setBottomBarStyle(window.scrollY), 50);
   }
 
   // 设置底部bar的样式
@@ -281,39 +266,31 @@ class ThreadCreate extends React.Component {
   render() {
     const { threadPost, index } = this.props;
     const { postData } = threadPost;
-    const {
-      categoryChooseShow,
-      rewardQaShow,
-      productSelectShow,
-      emoji,
-      topic,
-      atList,
-      currentDefaultOperation,
-    } = this.state;
+    const { emoji, topic, atList, currentDefaultOperation, currentAttachOperation, categoryChooseShow } = this.state;
     const category = (index.categories && index.categories.slice()) || [];
     // 悬赏问答
-    if (rewardQaShow) return (
+    if (currentAttachOperation === THREAD_TYPE.reward) return (
       <ForTheForm
         confirm={(data) => {
           this.setPostData({ rewardQa: data });
-          this.setState({ rewardQaShow: false });
+          this.setState({ currentAttachOperation: false });
         }}
         cancel={() => {
           this.setState({
-            rewardQaShow: false,
+            currentAttachOperation: false,
           });
         }}
         data={postData.rewardQa}
       />
     );
     // 插入商品
-    if (productSelectShow) return (
+    if (currentAttachOperation === THREAD_TYPE.goods) return (
       <ProductSelect onAnalyseSuccess={
         (data) => {
-          this.setState({ productSelectShow: false });
+          this.setState({ currentAttachOperation: false });
           this.setPostData({ product: data });
         }}
-        cancel={() => this.setState({ productSelectShow: false })}
+        cancel={() => this.setState({ currentAttachOperation: false })}
       />
     );
     // 插入红包
@@ -367,13 +344,13 @@ class ThreadCreate extends React.Component {
           />
 
           {/* 录音组件 */}
-          {(this.state.audioRecordShow) && (<AudioRecord handleAudioBlob={(blob) => {
+          {(currentAttachOperation === THREAD_TYPE.voice) && (<AudioRecord handleAudioBlob={(blob) => {
             this.handleAudioUpload(blob);
           }} />)}
 
           {/* 语音组件 */}
           {(Boolean(postData.audio.mediaUrl)) && (<Audio src={postData.audio.mediaUrl} />)}
-          {(this.state.imageUploadShow || Object.keys(postData.images).length > 0) && (
+          {(currentAttachOperation === THREAD_TYPE.image || Object.keys(postData.images).length > 0) && (
             <ImageUpload
               fileList={Object.values(postData.images)}
               onChange={fileList => this.handleUploadChange(fileList, THREAD_TYPE.image)}

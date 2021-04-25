@@ -14,7 +14,7 @@ export default function DVditor(props) {
 
   const [isFocus, setIsFocus] = useState(false);
   const [vditor, setVditor] = useState(null);
-  const [, setRange] = useState(null);
+  const [range, setRange] = useState(null);
 
 
   // TODO: 这里有点问题
@@ -34,14 +34,14 @@ export default function DVditor(props) {
     return range;
   };
 
-  // const setCurrentPositon = () => {
-  //   // https://developer.mozilla.org/zh-CN/docs/Web/API/Selection
-  //   const selection = window.getSelection();
-  //   // 将所有的区域都从选区中移除。
-  //   selection.removeAllRanges();
-  //   // 一个区域（Range）对象将被加入选区。
-  //   selection.addRange(range);
-  // };
+  const setCurrentPositon = () => {
+    // https://developer.mozilla.org/zh-CN/docs/Web/API/Selection
+    const selection = window.getSelection();
+    // 将所有的区域都从选区中移除。
+    selection.removeAllRanges();
+    // 一个区域（Range）对象将被加入选区。
+    selection.addRange(range);
+  };
 
   useEffect(() => {
     initVditor();
@@ -49,6 +49,7 @@ export default function DVditor(props) {
 
   useEffect(() => {
     if (emoji && emoji.code) {
+      setCurrentPositon();
       const value = `![${emoji.code}emoji](${emoji.url})`;
       vditor.insertValue(value);
     }
@@ -60,12 +61,16 @@ export default function DVditor(props) {
       return '';
     });
     if (users.length) {
+      setCurrentPositon();
       vditor.insertValue(users.join(' '));
     }
   }, [atList]);
 
   useEffect(() => {
-    if (topic) vditor.insertValue(`${topic} `);
+    if (topic) {
+      setCurrentPositon();
+      vditor.insertValue(`${topic} `);
+    }
   }, [topic]);
 
   useEffect(() => {
@@ -90,15 +95,15 @@ export default function DVditor(props) {
         // 编辑器异步渲染完成后的回调方法
         after: () => {},
         focus: () => {
-          const range = getEditorRange();
           setIsFocus(true);
           onFocus();
-          setRange(range);
         },
         input: () => {
           onChange(editor);
         },
         blur: () => {
+          const range = getEditorRange();
+          setRange(range);
           onChange(editor);
           onBlur();
           setIsFocus(false);
