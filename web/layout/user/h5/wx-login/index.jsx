@@ -4,7 +4,7 @@ import { withRouter } from 'next/router';
 import layout from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
-import WeixinQrCode from '../../../../components/login/h5/wx-qr-code';
+import WeixinQrCode from '@components/login/wx-qr-code';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 

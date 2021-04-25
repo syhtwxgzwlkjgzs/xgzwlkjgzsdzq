@@ -5,7 +5,7 @@ import layout from './index.module.scss';
 import { Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
-import PhoneInput from '../../../../components/login/h5/phone-input';
+import PhoneInput from '@components/login/phone-input';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 

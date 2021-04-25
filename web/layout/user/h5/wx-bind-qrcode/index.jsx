@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './index.module.scss';
-import WeixinQrCode from '../../../../components/login/h5/wx-qr-code';
+import WeixinQrCode from '@components/login/wx-qr-code';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 
