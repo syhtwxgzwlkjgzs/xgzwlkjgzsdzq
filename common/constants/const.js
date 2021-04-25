@@ -38,6 +38,7 @@ export const defaultIcon = [
     name: 'WalletOutlined', // 红包
     active: '#2469f6',
     id: defaultOperation.redpacket,
+    type: THREAD_TYPE.redPacket
   },
   {
     name: 'DollarLOutlined', // 付费
