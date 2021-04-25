@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import createCommentService from '@common/service/comment';
 
 import AuthorInfo from '../../pc/components/author-info/index';
 import CommentList from '../../pc/components/comment-list/index';
@@ -18,17 +17,13 @@ import { Icon, Toast  } from '@discuzq/design';
 class RenderReplyList extends React.Component {
   constructor(props) {
     super(props);
-    this.service = this.props.service,
     this.state = {
       isShowReward: false, // 是否展示获得多少悬赏金
       isShowRedPacket: true, // 是否展示获得多少红包
       createReplyParams: {},
       commentData: [this.props.commentData],
     };
-  }
-
-  componentDidMount() {
-    console.log('看看RenderReplyList有啥', this.props);
+    this.commentId = '';
   }
 
  // 评论列表排序
@@ -55,26 +50,15 @@ class RenderReplyList extends React.Component {
    }
  }
  // 点赞
- async likeClick(commentData, replyData) {
-   console.log(commentData, replyData);
-   let pid = '';
-   let liked = '';
-   if (replyData) {
-     const { id, isLiked } = replyData;
-     pid = id;
-     liked = !isLiked;
-   } else {
-     const { id, isLiked } = commentData;
-     pid = id;
-     liked = !isLiked;
-   }
-   if (pid) return;
+ async likeClick(data) {
+   console.log(data);
+   if (data.id) return;
 
    const params = {
-     pid,
-     isLiked: liked,
+     id: data.id,
+     isLiked: !data.isLiked,
    };
-   const { success, msg } = await this.props.service.comment.updateLiked(params);
+   const { success, msg } = await this.props.service.comment.updateLiked(params, this.props.thread);
    if (!success) {
      Toast.error({
        content: msg,
@@ -88,8 +72,8 @@ class RenderReplyList extends React.Component {
    });
  }
  // 删除
- async deleteClick(type, data) {
-   this.comment = data;
+ async deleteClick(data) {
+   this.commentId = data;
    this.setState({
      showDeletePopup: true,
    });
@@ -97,9 +81,9 @@ class RenderReplyList extends React.Component {
 
  // 删除
  async deleteComment() {
-   if (!this.comment.id) return;
+   if (!this.comment) return;
 
-   const { success, msg } = await this.props.service.comment.delete(this.comment.id);
+   const { success, msg } = await this.props.service.comment.delete(this.comment.id, this.props.thread);
    this.setState({
      showDeletePopup: false,
    });
@@ -137,7 +121,7 @@ class RenderReplyList extends React.Component {
    const params = this.state.createReplyParams;
    params.content = val;
    console.log('参数', params);
-   const { success, msg } = await this.service.comment.createReply(params);
+   const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
 
    if (success) {
      Toast.success({
@@ -163,7 +147,7 @@ class RenderReplyList extends React.Component {
      isNoMore: false,
      attachments: [],
    };
-   const { success, msg } = await this.service.comment.createComment(params);
+   const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
    if (success) {
      Toast.success({
        content: '评论成功',
@@ -191,10 +175,11 @@ class RenderReplyList extends React.Component {
                   <CommentList
                     data={val}
                     key={val.id}
-                    avatarClick={type => this.avatarClick.bind(this, type)}
-                    likeClick={type => this.likeClick.bind(this, val, type)}
-                    replyClick={type => this.replyClick.bind(this, val, type)}
-                    deleteClick={() => this.deleteClick.bind(this, val)}
+                    avatarClick={type => this.avatarClick(type)}
+                    likeClick={data => this.likeClick(data)}
+                    replyClick={data => this.replyClick(data)}
+                    deleteClick={data => this.deleteClick(data)}
+                    createReply={data => this.createReply(data)}
                     isPostDetail={false}>
                   </CommentList>
                 </div>
@@ -211,9 +196,7 @@ class RenderReplyList extends React.Component {
 class CommentPCPage extends React.Component {
   constructor(props) {
     super(props);
-    this.service = {
-      comment: createCommentService(props),
-    };
+
     this.state = {
       isCommentLoading: false, // 列表loading
       commentData: {
@@ -706,8 +689,7 @@ class CommentPCPage extends React.Component {
               <RenderReplyList
                 totalCount={111}
                 commentData={this.state.commentData}
-                // store={threadStore}
-                service={this.service}>
+              >
               </RenderReplyList>
             </Fragment>
           </div>

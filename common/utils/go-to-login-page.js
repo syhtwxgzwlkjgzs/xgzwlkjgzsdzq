@@ -5,7 +5,7 @@
  * 具体见：https://nextjs.org/docs/api-reference/next/router#router-object
  */
 
-import Router from '@common/utils/web-router';
+import Router from '@discuzq/sdk/dist/router';
 import browser from './browser';
 import config from '../config/index';
 

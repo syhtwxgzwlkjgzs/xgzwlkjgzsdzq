@@ -45,7 +45,7 @@ class ThreadPostStore {
     position: {}, // 定位信息。longtitude，latitude，address，location
     contentText: '', // 文本内容
     audio: {}, // 语音
-    rewardQa: {}, // 悬赏问答
+    rewardQa: {}, // 悬赏问答 price-价格，expiredAt-悬赏结束时间
     product: {}, // 商品
     redpacket: {}, // 红包
     video: {}, // 视频
@@ -54,7 +54,7 @@ class ThreadPostStore {
   }
 
   @observable
-  categorySeleted = { // 选中的帖子类别
+  categorySelected = { // 选中的帖子类别
     parent: {}, // 选中的帖子父类
     child: {}, // 选中的帖子子类
   };

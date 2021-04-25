@@ -4,6 +4,7 @@ import { withRouter } from 'next/router';
 
 // import SearchInput from '@components/search-input';
 import SearchInput from '@components/search-input';
+import List from '@components/list';
 import SectionTitle from './components/section-title';
 import SearchPosts from './components/search-posts';
 import SearchTopics from './components/search-topics';
@@ -68,12 +69,12 @@ class SearchResultH5Page extends React.Component {
   render() {
     const { keyword } = this.state;
     const { searchTopics, searchUsers, searchThreads } = this.props.search;
-    const { pageData: topicsPageData = [] } = searchTopics;
-    const { pageData: usersPageData = [] } = searchUsers;
-    const { pageData: threadsPageData = [] } = searchThreads;
+    const { pageData: topicsPageData = [] } = searchTopics || {};
+    const { pageData: usersPageData = [] } = searchUsers || {};
+    const { pageData: threadsPageData = [] } = searchThreads || {};
 
     return (
-      <div className={styles.page}>
+      <List className={styles.page} allowRefresh={false}>
         <div className={styles.searchInput}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
         </div>
@@ -81,7 +82,7 @@ class SearchResultH5Page extends React.Component {
           <SectionTitle title="用户" onShowMore={this.redirectToSearchResultUser} />
         </div>
         {
-          usersPageData && usersPageData.length
+          usersPageData?.length
             ? <SearchUsers data={usersPageData} onItemClick={this.onUserClick} />
             : <NoData />
         }
@@ -91,7 +92,7 @@ class SearchResultH5Page extends React.Component {
           <SectionTitle title="主题" onShowMore={this.redirectToSearchResultPost} />
         </div>
         {
-          threadsPageData && threadsPageData.length
+          threadsPageData?.length
             ? <SearchPosts data={threadsPageData} onItemClick={this.onPostClick} />
             : <NoData />
         }
@@ -101,12 +102,12 @@ class SearchResultH5Page extends React.Component {
           <SectionTitle title="话题" onShowMore={this.redirectToSearchResultTopic} />
         </div>
         {
-          topicsPageData && topicsPageData.length
+          topicsPageData?.length
             ? <SearchTopics data={topicsPageData} onItemClick={this.onTopicClick} />
             : <NoData />
         }
 
-      </div>
+      </List>
     );
   }
 }

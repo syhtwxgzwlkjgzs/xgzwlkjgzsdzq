@@ -26,10 +26,6 @@ class IndexH5Page extends React.Component {
     this.renderItem = this.renderItem.bind(this);
   }
 
-  componentDidMount() {
-    console.log(this.props.user);
-  }
-
   // 点击更多弹出筛选
   searchClick = () => {
     this.setState({
@@ -60,7 +56,7 @@ class IndexH5Page extends React.Component {
   onClickFilter = ({ categoryids, types, essence, sequence }) => {
     const { dispatch = () => {} } = this.props;
 
-    dispatch('', { categoryids, types, essence, sequence });
+    dispatch('click-filter', { categoryids, types, essence, sequence });
     this.setState({
       filter: {
         categoryids,
@@ -79,15 +75,32 @@ class IndexH5Page extends React.Component {
     return dispatch('moreData', filter);
   }
 
+  // 后台接口的分类数据不会包含「全部」，此处前端手动添加
+  handleCategories = () => {
+    const { categories = [] } = this.props.index || {};
+
+    if (!categories?.length) {
+      return categories;
+    }
+
+    let tmpCategories = categories.filter(item => item.name === '全部');
+    if (tmpCategories?.length) {
+      return categories;
+    }
+    tmpCategories = [{ name: '全部', pid: '', children: [] }, ...categories];
+    return tmpCategories;
+  }
+
   renderHeaderContent = () => {
     const { index } = this.props;
     const { currentIndex } = this.state;
     const { sticks = [], categories = [] } = index;
+    const newCategories = this.handleCategories(categories);
 
     return (
       <div>
         <HomeHeader/>
-        {categories && categories.length > 0 && <div className={styles.homeContent}>
+        {categories?.length > 0 && <div className={styles.homeContent}>
           <Tabs
             scrollable
             type='primary'
@@ -100,7 +113,7 @@ class IndexH5Page extends React.Component {
             }
           >
             {
-              categories.map((item, index) => (
+              newCategories?.map((item, index) => (
                 <Tabs.TabPanel
                   key={index}
                   id={item.pid}
@@ -138,6 +151,7 @@ class IndexH5Page extends React.Component {
     const { filter } = this.state;
     const { threads = {}, categories = [] } = index;
     const { currentPage, totalPage, pageData } = threads || {};
+    const newCategories = this.handleCategories(categories);
 
     return (
       <div className={styles.container}>
@@ -157,7 +171,7 @@ class IndexH5Page extends React.Component {
         }
 
         <FilterView
-          data={categories}
+          data={newCategories}
           current={filter}
           onCancel={this.onClose}
           visible={this.state.visible}

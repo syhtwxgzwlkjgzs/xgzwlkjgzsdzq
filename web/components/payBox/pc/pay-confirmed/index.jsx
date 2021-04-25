@@ -12,11 +12,11 @@ export default class index extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      this.setState({
-        isShow: true,
-      });
-    }, 1000);
+    // setTimeout(() => {
+    //   this.setState({
+    //     isShow: true,
+    //   });
+    // }, 1000);
   }
 
   onCloseBtn = () => {

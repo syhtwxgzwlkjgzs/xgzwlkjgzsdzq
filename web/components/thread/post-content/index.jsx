@@ -3,7 +3,7 @@ import { Button, Icon, RichText } from '@discuzq/design';
 
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
-
+console.log(xss)
 import styles from './index.module.scss';
 
 /**
@@ -41,18 +41,20 @@ const Index = ({
   };
   // 过滤内容
   const filterContent = useMemo(() => {
-    const _content = content ? xss(s9e.parse(content)) : '暂无内容';
+    let newContent = content ? s9e.parse(content) : '暂无内容';
+    newContent = xss(newContent);
 
-    return !loading ? _content : '内容加载中';
+    return !loading ? newContent : '内容加载中';
   }, [content, loading]);
   // 是否显示遮罩 是付费内容并且隐藏内容百分比大于0 或 显示查看更多并且查看更多状态为false 则显示遮罩
   const showHideCover = !loading ? (isPayContent && hidePercent > 0) || (useShowMore && !showMore) : false;
 
-  const onShowMore = useCallback(() => {
+  const onShowMore = useCallback((e) => {
     if (contentTooLong) {
       // 内容过长直接跳转到详情页面
       onRedirectToDetail && onRedirectToDetail();
     } else {
+      e.stopPropagation();
       setShowMore(true);
     }
   }, [contentTooLong]);

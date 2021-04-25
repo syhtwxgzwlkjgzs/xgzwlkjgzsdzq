@@ -1,16 +1,23 @@
-:global {
-  .dzq-tag {
-    height: 25px;
-    padding: 4px 8px;
-    line-height: 16px;
-    font-size: 12px;
-    color: #2469f6;
-    border: none;
-    border-radius: 5px;
-    background: #e8f0fe;
+.tag {
+  display: inline-flex;
+  height: 25px;
+  line-height: 24px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #2469f6;
+  border: none;
+  border-radius: 5px;
+  background: #e8f0fe;
+  align-items: center;
+  :global {
     .dzq-icon{
       margin-right: 4px;
-      margin-bottom: 3px;
+    }
+    .dzq-icon-CloseOutlined {
+      margin-right: 0;
+      &:before {
+        content: '\E908';
+      }
     }
   }
 }

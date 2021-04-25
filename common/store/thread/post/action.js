@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import ThreadPostStore from './store';
-import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread } from '@common/server';
+import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread, updateThread } from '@common/server';
 import { LOADING_TOTAL_TYPE, THREAD_TYPE } from '@common/constants/thread-post';
 
 class ThreadPostAction extends ThreadPostStore {
@@ -9,19 +9,21 @@ class ThreadPostAction extends ThreadPostStore {
    */
   @action.bound
   async createThread() {
-    // 待更换为全局loading?
-    // this.setLoadingStatus(LOADING_TOTAL_TYPE.emoji, true);
     const params = this.getCreateThreadParams();
     const ret = await createThread(params);
-    // this.setLoadingStatus(LOADING_TOTAL_TYPE.emoji, false);
-    // const { code, data = [] } = ret;
-    // 相关数据处理待实际调用时修改
-    // let emojis = [];
-    // if (code === 0) emojis = data.map(item => ({ code: item.code, url: item.url }));
-    // this.setEmoji(emojis);
     return ret;
   }
 
+  /**
+   * 更新帖子
+   * @param {number} id 帖子id
+   */
+  @action.bound
+  async updateThread(id) {
+    const params = this.getCreateThreadParams();
+    const ret = await updateThread({ ...params, threadId: Number(id) });
+    return ret;
+  }
 
   /**
    * 获取所有表情
@@ -151,9 +153,9 @@ class ThreadPostAction extends ThreadPostStore {
     this.postData = { ...this.postData, ...data };
   }
 
-  @action
-  setCategorySeleted(data) {
-    this.categorySeleted = data || { parent: {}, child: {} };
+  @action.bound
+  setCategorySelected(data) {
+    this.categorySelected = data || { parent: {}, child: {} };
   }
 
   /**
@@ -234,6 +236,66 @@ class ThreadPostAction extends ThreadPostStore {
     const contentIndexes = this.gettContentIndexes();
     if (Object.keys(contentIndexes).length > 0) params.content.indexes = contentIndexes;
     return params;
+  }
+
+  @action
+  formatThreadDetailToPostData(detail) {
+    const { title, categoryId, content, freeWords = 1 } = detail || {};
+    const price = Number(detail.price);
+    const attachmentPrice = Number(detail.attachmentPrice);
+    let position = {};
+    if (detail.position && detail.position.address) position = detail.position;
+    const contentText = content && content.text;
+    const contentindexes = (content && content.indexes) || {};
+    let audio = {};
+    let rewardQa = {};
+    let product = {};
+    let redpacket = {};
+    let video = {};
+    const images = {};
+    const files = {};
+    // 插件格式化
+    Object.keys(contentindexes).forEach((index) => {
+      const tomId = Number(contentindexes[index].tomId);
+      if (tomId === THREAD_TYPE.image) {
+        const imageBody = contentindexes[index].body || [];
+        imageBody.forEach((item) => {
+          images[item.id] = { ...item, type: item.fileType, name: item.fileName };
+        });
+      }
+      if (tomId === THREAD_TYPE.file) {
+        const fileBody = contentindexes[index].body || [];
+        fileBody.forEach((item) => {
+          files[item.id] = { ...item, type: item.fileType, name: item.fileName  };
+        });
+      }
+      if (tomId === THREAD_TYPE.audio) audio = contentindexes[index].body;
+      if (tomId === THREAD_TYPE.product) product = contentindexes[index].body;
+      if (tomId === THREAD_TYPE.video) video = contentindexes[index].body;
+      if (tomId === THREAD_TYPE.redpacket) redpacket = contentindexes[index].body;
+      // expiredAt: rewardQa.times, price: rewardQa.value, type: 0
+      if (tomId === THREAD_TYPE.reward) rewardQa = {
+        ...contentindexes[index].body,
+        times: contentindexes[index].body.expiredAt,
+        value: contentindexes[index].body.price || 0,
+      };
+    });
+    this.setPostData({
+      title,
+      categoryId,
+      price,
+      attachmentPrice,
+      position,
+      contentText,
+      audio,
+      rewardQa,
+      product,
+      redpacket,
+      video,
+      images,
+      files,
+      freeWords,
+    });
   }
 }
 

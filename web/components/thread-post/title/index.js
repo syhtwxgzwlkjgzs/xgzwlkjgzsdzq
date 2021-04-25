@@ -19,7 +19,7 @@ const Title = ({ title, placeholder, isDisplay, onChange,  onFocus, onBlur }) =>
   useEffect(() => {
     // 设置标题回显
     title && setTitleVal(title);
-  }, []);
+  }, [title]);
 
   useEffect(() => {
     // 监听titleVal

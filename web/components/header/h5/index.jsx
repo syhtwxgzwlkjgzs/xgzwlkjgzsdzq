@@ -1,11 +1,19 @@
 import React, { useCallback } from 'react';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
-import Router from '@common/utils/web-router';
+import Router from '@discuzq/sdk/dist/router';
+
 export default function H5Header() {
   // todo
   const iconClickHandle = useCallback((type) => {
-    console.log(type);
+    switch(type) {
+      case 'home': Router.push({url: '/'});
+      break;
+      case 'msg': Router.push({url: '/my/notice'});
+      break;
+      case 'user': Router.push({url: '/my'});
+      break
+    }
   }, []);
 
   const gobackClickHandle = useCallback(() => {

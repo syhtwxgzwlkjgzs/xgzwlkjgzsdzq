@@ -56,7 +56,7 @@ class WeixinAuth extends React.Component {
           accessToken,
         });
         this.props.user.updateUserInfo(uid);
-        router.push({ pathname: '/' });
+        window.location.href = '/index';
         return;
       }
 

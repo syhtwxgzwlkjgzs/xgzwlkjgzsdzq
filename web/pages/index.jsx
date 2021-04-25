@@ -2,7 +2,6 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/index/h5';
 import IndexPCPage from '@layout/index/pc';
-import { getThreadList, getFirstData } from '@common/service/home';
 import { readCategories, readStickList, readThreadList } from '@server';
 import PayBox from '../components/payBox/index';
 
@@ -23,7 +22,7 @@ class Index extends React.Component {
 
     return {
       serverIndex: {
-        categories: categories && categories.code === 0 ? categories.data : null,
+        categories: categories && categories.code === 0 ? [{ name: '全部', pid: '', children: [] }, ...categories.data] : null,
         sticks: sticks && sticks.code === 0 ? sticks.data : null,
         threads: threads && threads.code === 0 ? threads.data : null,
       },
@@ -66,7 +65,6 @@ class Index extends React.Component {
 
   dispatch = async (type, data = {}) => {
     const { index } = this.props;
-    const { threads } = index;
     const { categoryids, types, essence, sequence } = data;
 
     if (type === 'click-filter') {

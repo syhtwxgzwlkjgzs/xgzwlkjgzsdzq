@@ -1,0 +1,34 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.title{
+  color: var(--color-text-primary);
+  font-size: rem($font-size-large);
+  padding: rem($padding-4n);
+  margin-top: rem($margin-4n);
+}
+
+.payList{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: rem($padding-4n);
+  .payListItem{
+    border-bottom: var(--border-border);
+    width: rem(46);
+    height: rem(49);
+    text-align: center;
+    line-height: rem(49);
+    font-size: rem(50);
+    &:not(:last-child) {
+      margin-right: rem($margin-2n);
+    }
+
+    &.curr{
+      border-bottom-color: var(--color-black);
+    }
+    &.activation{
+      border-bottom-color: var(--color-black);
+    }
+  }
+}

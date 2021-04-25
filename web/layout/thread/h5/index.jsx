@@ -1,8 +1,6 @@
 import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import createThreadService from '@common/service/thread';
-import createCommentService from '@common/service/comment';
 import layout from './layout.module.scss';
 import comment from './comment.module.scss';
 import footer from './footer.module.scss';
@@ -48,6 +46,9 @@ const typeMap = {
 const RenderThreadContent = observer((props) => {
   const { store: threadStore } = props;
   const { text, indexes } = threadStore?.threadData?.content || {};
+  // 是否合法
+  const isApproved = threadStore?.threadData?.isApproved || 0;
+  const isEssence = threadStore?.threadData?.displayTag?.isEssence || false;
 
   const parseContent = {};
   if (indexes && Object.keys(indexes)) {
@@ -81,67 +82,71 @@ const RenderThreadContent = observer((props) => {
             location={threadStore?.threadData?.position.location || ''}
             view={`${threadStore?.threadData?.viewCount}` || ''}
             time={`${threadStore?.threadData?.createdAt}` || ''}
-            isEssence={threadStore?.threadData?.isEssence}
+            isEssence={isEssence}
           ></UserInfo>
         </div>
         <div className={topic.more} onClick={onMoreClick}>
           <Icon size="20" color="#8590A6" name="MoreVOutlined"></Icon>
         </div>
       </div>
-      <div className={topic.body}>
-        {/* 文字 */}
-        {text && <PostContent content={text || ''} />}
-        {/* 视频 */}
-        {parseContent.VIDEO && (
-          <VideoPlay
-            url={parseContent.VIDEO.mediaUrl}
-            coverUrl={parseContent.VIDEO.coverUrl}
-            width={400}
-            height={200}
-          />
-        )}
-        {/* 图片 */}
-        {parseContent.IMAGE && <ImageContent imgData={parseContent.IMAGE} />}
-        {/* 商品 */}
-        {parseContent.GOODS && (
-          <div>
-            <ProductItem
-              image={parseContent.GOODS.imagePath}
-              amount={parseContent.GOODS.price}
-              title={parseContent.GOODS.title}
+
+      {
+        isApproved === 1
+        && <div className={topic.body}>
+          {/* 文字 */}
+          {text && <PostContent content={text || ''} />}
+          {/* 视频 */}
+          {parseContent.VIDEO && (
+            <VideoPlay
+              url={parseContent.VIDEO.mediaUrl}
+              coverUrl={parseContent.VIDEO.coverUrl}
+              width={400}
+              height={200}
             />
-            <Button
-              className={topic.buyBtn}
-              type="primary"
-              onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
-            >
-              购买商品
+          )}
+          {/* 图片 */}
+          {parseContent.IMAGE && <ImageContent imgData={parseContent.IMAGE} />}
+          {/* 商品 */}
+          {parseContent.GOODS && (
+            <div>
+              <ProductItem
+                image={parseContent.GOODS.imagePath}
+                amount={parseContent.GOODS.price}
+                title={parseContent.GOODS.title}
+              />
+              <Button
+                className={topic.buyBtn}
+                type="primary"
+                onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
+              >
+                购买商品
             </Button>
-          </div>
-        )}
-        {/* 音频 */}
-        {parseContent.VOICE && <AudioPlay />}
-        {/* 附件 */}
-        {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
+            </div>
+          )}
+          {/* 音频 */}
+          {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
+          {/* 附件 */}
+          {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
 
-        <div className={topic.tag}>使用交流</div>
+          <div className={topic.tag}>使用交流</div>
 
-        {(parseContent.RED_PACKET || parseContent.REWARD) && (
-          <div className={topic.reward}>
-            {/* 红包 */}
-            {parseContent.RED_PACKET && (
-              <PostRewardProgressBar remaining={parseContent.RED_PACKET.number} received={1} />
-            )}
-            {/* 打赏 */}
-            {parseContent.REWARD && <PostRewardProgressBar type={POST_TYPE.BOUNTY} remaining={2} received={5} />}
-          </div>
-        )}
+          {(parseContent.RED_PACKET || parseContent.REWARD) && (
+            <div className={topic.reward}>
+              {/* 红包 */}
+              {parseContent.RED_PACKET && (
+                <PostRewardProgressBar remaining={parseContent.RED_PACKET.number} received={1} />
+              )}
+              {/* 打赏 */}
+              {parseContent.REWARD && <PostRewardProgressBar type={POST_TYPE.BOUNTY} remaining={2} received={5} />}
+            </div>
+          )}
 
-        {/* <div style={{ textAlign: 'center' }}>
+          {/* <div style={{ textAlign: 'center' }}>
           <Button className={topic.rewardButton} type='primary' size='large'>打赏</Button>
         </div> */}
-        {/* 附件 */}
-      </div>
+          {/* 附件 */}
+        </div>
+      }
       <div className={topic.footer}>
         <div className={topic.thumbs}>
           <div
@@ -155,24 +160,28 @@ const RenderThreadContent = observer((props) => {
             <Tip imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
           </div>
         </div>
-        <span>{threadStore?.threadData?.likeReward?.shareCount || 0}次分享</span>
+        {
+          threadStore?.threadData?.likeReward?.shareCount > 0
+          && <span>{threadStore?.threadData?.likeReward?.shareCount}次分享</span>
+        }
       </div>
     </div>
   );
 });
 
 // 评论列表
+@inject('thread')
+@inject('comment')
 @observer
 class RenderCommentList extends React.Component {
   constructor(props) {
     super(props);
-    (this.service = this.props.service),
-    (this.state = {
+    this.state = {
       showCommentInput: false, // 是否弹出评论框
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
       inputText: '请输入内容', // 默认回复框placeholder内容
-    });
+    };
 
     this.commentData = null;
     this.replyData = null;
@@ -194,7 +203,7 @@ class RenderCommentList extends React.Component {
       id: data.id,
       isLiked: !data.isLiked,
     };
-    const { success, msg } = await this.props.service.comment.updateLiked(params);
+    const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
     if (!success) {
       Toast.error({
         content: msg,
@@ -210,7 +219,7 @@ class RenderCommentList extends React.Component {
       id: reply.id,
       isLiked: !reply.isLiked,
     };
-    const { success, msg } = await this.props.service.comment.updateLiked(params);
+    const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
     if (!success) {
       Toast.error({
         content: msg,
@@ -230,7 +239,7 @@ class RenderCommentList extends React.Component {
   async deleteComment() {
     if (!this.commentData.id) return;
 
-    const { success, msg } = await this.props.service.comment.delete(this.commentData.id);
+    const { success, msg } = await this.props.comment.delete(this.commentData.id, this.props.thread);
     this.setState({
       showDeletePopup: false,
     });
@@ -249,9 +258,10 @@ class RenderCommentList extends React.Component {
   replyClick(comment) {
     this.commentData = comment;
     this.replyData = null;
+    const userName = comment?.user?.username || comment?.user?.userName;
     this.setState({
       showCommentInput: true,
-      inputText: comment?.user?.username ? `回复${comment.user.username}` : '请输入内容',
+      inputText: userName ? `回复${userName}` : '请输入内容',
     });
   }
 
@@ -260,16 +270,17 @@ class RenderCommentList extends React.Component {
     this.commentData = null;
     this.replyData = reply;
     this.replyData.commentId = comment.id;
-    console.log(reply);
+    const userName = reply?.user?.username || reply?.user?.userName;
+
     this.setState({
       showCommentInput: true,
-      inputText: reply?.user?.username ? `回复${reply.user.username}` : '请输入内容',
+      inputText: userName ? `回复${userName}` : '请输入内容',
     });
   }
 
   // 创建回复评论+回复回复接口
   async createReply(val) {
-    const id = this.props.store?.threadData?.id;
+    const id = this.props.thread?.threadData?.id;
     if (!id) return;
 
     const params = {
@@ -291,17 +302,17 @@ class RenderCommentList extends React.Component {
       params.commentId = this.commentData.id;
     }
 
-    const { success, msg } = await this.service.comment.createReply(params);
+    const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
 
     if (success) {
       this.setState({
         showCommentInput: false,
-        inputText: '请输入内容',
+        inputValue: '',
       });
       Toast.success({
         content: '回复成功',
       });
-      return;
+      return true;
     }
 
     Toast.error({
@@ -315,13 +326,13 @@ class RenderCommentList extends React.Component {
   }
 
   onCommentClick(data) {
-    if (data.id && this.props.store?.threadData?.id) {
-      this.props.router.push(`/thread/comment/${data.id}?threadId=${this.props.store?.threadData?.id}`);
+    if (data.id && this.props.thread?.threadData?.id) {
+      this.props.router.push(`/thread/comment/${data.id}?threadId=${this.props.thread?.threadData?.id}`);
     }
   }
 
   render() {
-    const { totalCount, commentList } = this.props.store;
+    const { totalCount, commentList } = this.props.thread;
     return (
       <Fragment>
         <div className={comment.header}>
@@ -375,14 +386,12 @@ class RenderCommentList extends React.Component {
 @inject('user')
 @inject('thread')
 @inject('comment')
+@inject('index')
 @observer
 class ThreadH5Page extends React.Component {
   constructor(props) {
     super(props);
-    this.service = {
-      thread: createThreadService(props),
-      comment: createCommentService(props),
-    };
+
     this.state = {
       showDeletePopup: false, // 是否弹出删除弹框
       showCommentInput: false, // 是否弹出评论框
@@ -428,7 +437,6 @@ class ThreadH5Page extends React.Component {
   componentDidMount() {
     // 当内容加载完成后，获取评论区所在的位置
     this.position = this.commentDataRef?.current?.offsetTop - 50;
-    console.log(this.props);
   }
 
   componentDidUpdate() {
@@ -436,6 +444,11 @@ class ThreadH5Page extends React.Component {
     if (this.props.thread.isReady) {
       this.position = this.commentDataRef?.current?.offsetTop - 50;
     }
+  }
+
+  componentWillUnmount() {
+    // 清空数据
+    // this.props?.thread && this.props.thread.reset();
   }
 
   // 点击信息icon
@@ -450,10 +463,9 @@ class ThreadH5Page extends React.Component {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
-      pid: this.props.thread?.threadData?.postId,
       isFavorite: !this.props.thread?.isFavorite,
     };
-    const { success, msg } = await this.service.thread.updateFavorite(params);
+    const { success, msg } = await this.props.thread.updateFavorite(params);
 
     if (success) {
       Toast.success({
@@ -485,7 +497,7 @@ class ThreadH5Page extends React.Component {
       sort: this.commentDataSort ? '-createdAt' : 'createdAt',
     };
 
-    const { success, msg } = await this.service.thread.loadCommentList(params);
+    const { success, msg } = await this.props.thread.loadCommentList(params);
     this.setState({
       isCommentLoading: false,
     });
@@ -523,21 +535,33 @@ class ThreadH5Page extends React.Component {
   onOperClick = (type) => {
     // 1 置顶  2 加精  3 删除  4 举报
     this.setState({ showMorePopup: false });
-    if (type === '1') {
-      this.updateSticky();
-    } else if (type === '2') {
+
+    // 举报
+    if (type === 'stick') {
+      this.updateStick();
+    }
+
+    // 加精
+    if (type === 'essence') {
       this.updateEssence();
-    } else if (type === '3') {
+    }
+
+    // 删除
+    if (type === 'delete') {
       this.setState({ showDeletePopup: true });
-    } else {
-      console.log('举报');
+    }
+
+    // 编辑
+    if (type === 'edit') {
+      if (!this.props.thread?.threadData?.id) return;
+      this.props.router.push(`/thread/post?id=${this.props.thread?.threadData?.id}`);
     }
   };
 
   // 置顶提示
-  setTopState(isSticky) {
+  setTopState(isStick) {
     this.setState({
-      showContent: isSticky,
+      showContent: isStick,
       setTop: !this.state.setTop,
     });
     setTimeout(() => {
@@ -546,14 +570,13 @@ class ThreadH5Page extends React.Component {
   }
 
   // 置顶接口
-  async updateSticky() {
+  async updateStick() {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
-      pid: this.props.thread?.threadData?.postId,
-      isSticky: !this.props.thread?.isSticky,
+      isStick: !this.props.thread?.threadData?.isStick,
     };
-    const { success, msg } = await this.service.thread.updateSticky(params);
+    const { success, msg } = await this.props.thread.updateStick(params);
 
     if (success) {
       this.setTopState(true);
@@ -570,10 +593,9 @@ class ThreadH5Page extends React.Component {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
-      pid: this.props.thread?.threadData?.postId,
-      isEssence: !this.props.thread?.isEssence,
+      isEssence: !this.props.thread?.threadData?.displayTag?.isEssence,
     };
-    const { success, msg } = await this.service.thread.updateEssence(params);
+    const { success, msg } = await this.props.thread.updateEssence(params);
 
     if (success) {
       Toast.success({
@@ -591,18 +613,17 @@ class ThreadH5Page extends React.Component {
   async delete() {
     this.setState({ showDeletePopup: false });
     const id = this.props.thread?.threadData?.id;
-    const pid = this.props.thread?.threadData?.postId;
 
-    const { success, msg } = await this.service.thread.delete(id, pid);
+    const { success, msg } = await this.props.thread.delete(id, this.props.index);
 
     if (success) {
       Toast.success({
-        content: '删除成功',
+        content: '删除成功，即将跳转至首页',
       });
 
       setTimeout(() => {
         this.props.router.push('/');
-      }, 500);
+      }, 1000);
 
       return;
     }
@@ -632,13 +653,14 @@ class ThreadH5Page extends React.Component {
       isNoMore: false,
       attachments: [],
     };
-    const { success, msg } = await this.service.comment.createComment(params);
+    const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
       Toast.success({
         content: '评论成功',
       });
       this.setState({
         showCommentInput: false,
+        inputValue: '',
       });
       return true;
     }
@@ -658,7 +680,7 @@ class ThreadH5Page extends React.Component {
       content: val,
       attachments: [],
     };
-    const { success, msg } = await this.service.comment.updateComment(params);
+    const { success, msg } = await this.props.comment.updateComment(params, this.props.thread);
     if (success) {
       Toast.success({
         content: '修改成功',
@@ -699,13 +721,31 @@ class ThreadH5Page extends React.Component {
       pid: this.props.thread?.threadData?.postId,
       isLiked: !this.props.thread?.threadData?.isLike,
     };
-    const { success, msg } = await this.service.thread.updateLiked(params);
+    const { success, msg } = await this.props.thread.updateLiked(params, this.props.index);
 
     if (!success) {
       Toast.error({
         content: msg,
       });
     }
+  }
+
+  // 分享
+  async onShareClick() {
+    const id = this.props.thread?.threadData?.id;
+
+    const { success, msg } = await this.props.thread.shareThread(id);
+
+    if (success) {
+      Toast.success({
+        content: '分享成功',
+      });
+      return;
+    }
+
+    Toast.error({
+      content: msg,
+    });
   }
 
   render() {
@@ -715,10 +755,31 @@ class ThreadH5Page extends React.Component {
       moreClick: this.onMoreClick,
     };
 
+    // 更多弹窗权限
+    const morePermissions = {
+      canEdit: threadStore?.threadData?.ability?.canEdit,
+      canDelete: threadStore?.threadData?.ability?.canDelete,
+      canEssence: threadStore?.threadData?.ability?.canEssence,
+      canStick: threadStore?.threadData?.ability?.canStick,
+    };
+    // 更多弹窗界面
+    const moreStatuses = {
+      isEssence: threadStore?.threadData?.displayTag?.isEssence,
+      isStick: threadStore?.threadData?.isStick,
+    };
+
+    const isApproved = threadStore?.threadData?.isApproved || 0;
+
     return (
       <div className={layout.container}>
         <div className={layout.header}>
           <Header></Header>
+          {
+            isReady && isApproved !== 1
+            && <div className={topic.examine}>
+              内容正在审核中，审核通过后才能正常显示！
+            </div>
+          }
         </div>
 
         <div
@@ -744,8 +805,6 @@ class ThreadH5Page extends React.Component {
               <Fragment>
                 <RenderCommentList
                   router={this.props.router}
-                  store={threadStore}
-                  service={this.service}
                   sort={flag => this.onSortChange(flag)}
                   onEditClick={comment => this.onEditClick(comment)}>
                 </RenderCommentList>
@@ -774,6 +833,8 @@ class ThreadH5Page extends React.Component {
           ></InputPopup>
           {/* 更多弹层 */}
           <MorePopup
+            permissions={morePermissions}
+            statuses={moreStatuses}
             visible={this.state.showMorePopup}
             onClose={() => this.setState({ showMorePopup: false })}
             onSubmit={() => this.setState({ showMorePopup: false })}
@@ -804,7 +865,7 @@ class ThreadH5Page extends React.Component {
               size="20"
               name="CollectOutlined"
             ></Icon>
-            <Icon className={footer.icon} size="20" name="ShareAltOutlined"></Icon>
+            <Icon onClick={() => this.onShareClick()} className={footer.icon} size="20" name="ShareAltOutlined"></Icon>
           </div>
         </div>
       </div>

@@ -1,13 +1,14 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 .container {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 rem($padding-4n);
   height: rem(52);
   border-radius: 5px;
-  background: #f5f7f8;
+  background: var(--background-color-text);
   margin-bottom: rem(8);
 
   .size {
@@ -16,7 +17,14 @@
   }
   .content {
     margin: 0 rem(8);
-    color: #0b0b37;
+    color: var(--color-text-primary);
     font-size: rem($font-size-primary);
+  }
+  .a {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
   }
 }
