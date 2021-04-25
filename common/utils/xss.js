@@ -1,4 +1,5 @@
 import xss from 'xss';
+// const xss = {};
 
 // 自定义白名单
 xss.whiteList.img = ['src', 'alt', 'title', 'width', 'height', 'class'];
