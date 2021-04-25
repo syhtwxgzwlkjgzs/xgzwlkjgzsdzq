@@ -52,7 +52,7 @@ class SearchResultPostH5Page extends React.Component {
   onPostClick = (data) => {};
 
   render() {
-    const { keyword, refreshing } = this.state;
+    const { keyword } = this.state;
     const { threads } = this.props.search;
     const { pageData, currentPage, totalPage } = threads || { pageData: [] };
 
@@ -63,7 +63,7 @@ class SearchResultPostH5Page extends React.Component {
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
         </div>
         {
-          pageData && pageData.length
+          pageData?.length
             ? (
               <List
                 className={styles.list}

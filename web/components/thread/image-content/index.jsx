@@ -19,6 +19,15 @@ const Index = ({ imgData = [] }) => {
     }, 0);
   };
 
+  const onClickMore = (e) => {
+    e.stopPropagation();
+
+    setDefaultImg(imgData[0].url);
+    setTimeout(() => {
+      setVisible(true);
+    }, 0);
+  };
+
   const HomeImg = () => {
     if (imgData.length <= 2) {
       if (imgData.length === 0) {
@@ -57,7 +66,11 @@ const Index = ({ imgData = [] }) => {
             {otherImage.map((item, index) => (
                 <div key={index} className={img[`imagesBotomData${imgData.length > 5 ? 5 : imgData.length}`]}>
                   <img className={img[`imagesBotomDataPath${imgData.length > 5 ? 5 : imgData.length}`]} src={item.thumbUrl} alt="" onClick={() => onClick(item.id)} />
-                  {imgData.length > 5 && index === 2 && <div className={img.modalBox}><span className={img.imgSpan}>{`+${numContent}`}</span></div>}
+                  {imgData.length > 5 && index === 2 && (
+                    <div className={img.modalBox} onClick={onClickMore}>
+                      <span className={img.imgSpan}>{`+${numContent}`}</span>
+                    </div>
+                  )}
                 </div>
             ))}
           </div>

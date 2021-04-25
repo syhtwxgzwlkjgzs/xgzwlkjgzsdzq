@@ -15,7 +15,7 @@ import UserInfo from './user-info';
 import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
-import { updateThreadInfo, updateThreadShare, filterClickClassName, handleAttachmentData, noop } from './utils';
+import { filterClickClassName, handleAttachmentData, noop } from './utils';
 
 @inject('site')
 @inject('index')
@@ -26,7 +26,7 @@ class Index extends React.Component {
       e.stopPropagation();
       const { data = {} } = this.props;
       const { threadId = '' } = data;
-      updateThreadShare({ threadId });
+      this.props.index.updateThreadShare({ threadId });
     }
     // 评论
     onComment = (e) => {
@@ -45,7 +45,7 @@ class Index extends React.Component {
       e.stopPropagation();
       const { data = {} } = this.props;
       const { threadId = '', isLike, postId } = data;
-      updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } });
+      this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } });
     }
     // 支付
     onPay = (e) => {
@@ -102,7 +102,12 @@ class Index extends React.Component {
                   isPay={payType !== 0}
                 />
               )}
-              {imageData && <ImageContent imgData={imageData} isPay={payType !== 0} onPay={this.onPay} />}
+              {imageData && <ImageContent
+                imgData={imageData}
+                isPay={payType !== 0}
+                onPay={this.onPay}
+                onClickMore={this.onClick}
+              />}
               {rewardData && <RewardQuestion
                 content={rewardData.content || ''}
                 money={rewardData.money}
@@ -120,7 +125,7 @@ class Index extends React.Component {
               {/* 付费蒙层 */}
               {
                 payType !== 0 && (
-                  <div className={styles.cover} onClick={this.onPay}>
+                  <div className={styles.cover} onClick={payType === 1 ? this.onClick : this.onPay}>
                     {
                       payType === 2 ? (
                         <Button className={styles.button} type="primary" onClick={this.onPay}>

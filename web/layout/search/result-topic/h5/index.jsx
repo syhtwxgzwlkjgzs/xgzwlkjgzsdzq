@@ -63,7 +63,7 @@ class SearchResultTopicH5Page extends React.Component {
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
         </div>
         {
-          pageData && pageData?.length
+          pageData?.length
             ? (
               <List
                 className={styles.list}

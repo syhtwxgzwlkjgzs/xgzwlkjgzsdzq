@@ -1,19 +1,19 @@
 import { observable } from 'mobx';
 class SearchStore {
   // 发现页
-  @observable indexTopics = { pageData: [] }
-  @observable indexUsers = { pageData: [] }
-  @observable indexThreads = { pageData: [] }
+  @observable indexTopics = null
+  @observable indexUsers = null
+  @observable indexThreads = null
 
   // 更多页
-  @observable topics = { pageData: [] }
-  @observable users = { pageData: [] }
-  @observable threads = { pageData: [] }
+  @observable topics = null
+  @observable users = null
+  @observable threads = null
 
   // 搜索页
-  @observable searchTopics = { pageData: [] }
-  @observable searchUsers = { pageData: [] }
-  @observable searchThreads = { pageData: [] }
+  @observable searchTopics = null
+  @observable searchUsers = null
+  @observable searchThreads = null
 }
 
 export default SearchStore;

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Tabs, Popup } from '@discuzq/design';
 import UserItem from '../user-item';
 import styles from './index.module.scss';
-import { getLikedUsers } from '@common/service/home';
+import { getLikedUsers } from './http';
 import NoData from '@components/no-data';
 import List from '../../list';
 
@@ -44,32 +44,32 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
     if (type === 0) {
       allPageNum.current += 1;
       if (page !== 1) {
-        data.list.unshift(all?.list || []);
+        data?.pageData?.list.unshift(all?.pageData?.list || []);
       }
       setAll(data);
     } else if (type === 1) {
       likePageNum.current += 1;
       if (page !== 1) {
-        data.list.unshift(likes?.list || []);
+        data?.pageData?.list.unshift(likes?.pageData?.list || []);
       }
       setLikes(data);
     } else if (type === 2) {
       tipPageNum.current += 1;
       if (page !== 1) {
-        data.list.unshift(tips?.list || []);
+        data?.pageData?.list.unshift(tips?.pageData?.list || []);
       }
       setTips(data);
     }
   };
 
   const renderList = (data) => {
-    const { list, currentPage = 0, totalPage = 0 } = data;
+    const { pageData, currentPage = 0, totalPage = 0 } = data;
 
     return (
       <List className={styles.list} onRefresh={singleLoadData} noMore={currentPage === totalPage}>
         {
-          list?.map((item, index) => (
-            <UserItem key={index} imgSrc={item.avatar} title={item.nickname} subTitle={item.time} />
+          pageData?.list?.map((item, index) => (
+            <UserItem key={index} imgSrc={item.avatar} title={item.username} subTitle={item.passedAt} />
           ))
         }
       </List>
@@ -84,15 +84,15 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
     >
         <Tabs>
           <Tabs.TabPanel key='1-1' id={0} label='全部'>
-            {all?.list?.length ? renderList(all) : <NoData />}
+            {all?.pageData?.list?.length ? renderList(all) : <NoData />}
           </Tabs.TabPanel>
 
           <Tabs.TabPanel key='1-3' id={1} label='点赞'>
-            {likes?.list?.length ? renderList(likes) : <NoData />}
+            {likes?.pageData?.list?.length ? renderList(likes) : <NoData />}
           </Tabs.TabPanel>
 
           <Tabs.TabPanel key='1-2' id={2} label='打赏'>
-            {tips?.list?.length ? renderList(tips) : <NoData />}
+            {tips?.pageData?.list?.length ? renderList(tips) : <NoData />}
           </Tabs.TabPanel>
         </Tabs>
     </Popup>

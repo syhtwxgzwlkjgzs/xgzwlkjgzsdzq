@@ -103,7 +103,7 @@ export default function HOCFetchSiteData(Component) {
         const { serverUser, serverSite, user, site } = this.props;
         let siteConfig;
         let loginStatus = false;
-
+        
         // 设置平台标识
         site.setPlatform(getPlatform(window.navigator.userAgent));
 
