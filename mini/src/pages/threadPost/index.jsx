@@ -4,6 +4,7 @@ import { View } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import ThemePage from '@components/theme-page';
 import { PlusinToolbar, DefaultToolbar, GeneralUpload, Tag, Title, Content, ClassifyPopup } from '@components/thread-post';
+import { Units } from '@components/common';
 import styles from './index.module.scss';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 
@@ -118,6 +119,8 @@ class Index extends Component {
         <View className={styles['plusin']}>
 
           <GeneralUpload type={uploadType} />
+
+          <Units type='product' productSrc={'https://img20.360buyimg.com/ceco/s700x700_jfs/t1/153702/29/15780/81514/601663b6E0eb5908f/3cb05e84fe495b03.jpg!q70.jpg'} productDesc={'又帅又痞 设计师日本纯钛眼镜框超轻近视男款复古镜架可配有度数，天天佩戴，应每日清洗镜架及镜片！不用时应先清洁再收纳！'} productPrice={564.99} onDelete={() => {}} />
 
         </View>
 

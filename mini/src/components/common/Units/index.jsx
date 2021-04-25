@@ -9,7 +9,7 @@
  import { Icon } from '@discuzq/design';
 
 const Index = (props) => {
-  const { type = 'upload', filename, size, src, className, onUpload, onDelete } = props;
+  const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice } = props;
 
   // 图片展示
   const img = (
@@ -45,6 +45,20 @@ const Index = (props) => {
     </View>
   );
 
+  // 商品展示
+  const product = (
+    <View className={styles['product']}>
+      <Image className={styles['image']} src={productSrc}></Image>
+      <View className={styles['content']}>
+        <Text className={styles['desc']}>{productDesc}</Text>
+        <View className={styles['opera']}>
+          <Text className={styles['price']}>{`￥${productPrice}`}</Text>
+          <Icon name='MailOutlined' size={16} onClick={onDelete} />
+        </View>
+      </View>
+    </View>
+  );
+
   // 附件添加
   const attaUpload = (
     <View className={styles['upload-atta']} onClick={onUpload}>
@@ -68,6 +82,7 @@ const Index = (props) => {
     case 'video': return video;
     case 'img': return img;
     case 'atta': return atta;
+    case 'product': return product;
   };
 };
 
