@@ -1,7 +1,11 @@
 import { formatDate } from './format-date';
 
 export const diffDate = function (time, referenceTime) {
-  if (!time) formatDate(new Date(), 'yyyy-MM-dd');;
+  if (!time) formatDate(new Date(), 'yyyy-MM-dd');
+
+  if (typeof time === 'string') {
+    time = time.replace(/-/g, '/');
+  }
 
   const timestamp = new Date(time).getTime();
   const refTimestamp = referenceTime ? new Date(referenceTime).getTime() : Date.now();

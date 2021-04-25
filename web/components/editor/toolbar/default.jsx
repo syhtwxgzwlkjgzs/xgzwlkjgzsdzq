@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 import { defaultIcon } from '@common/constants/const';
 
 export default function DefaultToolbar(props) {
-  const { children, onClick, onSubmit } = props;
+  const { children, onClick, onSubmit, value } = props;
   const [currentAction, setCurrentAction] = useState('');
+
+  useEffect(() => {
+    if (!value) setCurrentAction(value);
+  }, [value]);
 
   return (
     <div className={styles['dvditor-toolbar']}>
@@ -13,12 +17,17 @@ export default function DefaultToolbar(props) {
         {defaultIcon.map(item => (
           <Icon key={item.name}
             onClick={() => {
-              setCurrentAction(item.name);
-              onClick(item);
+              if (item.id === currentAction) {
+                setCurrentAction('');
+                onClick({ id: '' });
+              } else {
+                setCurrentAction(item.id);
+                onClick(item);
+              }
             }}
             className={styles['dvditor-toolbar__item']}
             name={item.name}
-            color={item.name === currentAction && item.active}
+            color={item.id === currentAction && item.active}
             size="20">
           </Icon>
         ))}

@@ -545,6 +545,12 @@ class ThreadH5Page extends React.Component {
     if (type === 'delete') {
       this.setState({ showDeletePopup: true });
     }
+
+    // 编辑
+    if (type === 'edit') {
+      if (!this.props.thread?.threadData?.id) return;
+      this.props.router.push(`/thread/post?id=${this.props.thread?.threadData?.id}`);
+    }
   };
 
   // 置顶提示
@@ -719,6 +725,24 @@ class ThreadH5Page extends React.Component {
     }
   }
 
+  // 分享
+  async onShareClick() {
+    const id = this.props.thread?.threadData?.id;
+
+    const { success, msg } = await this.props.thread.shareThread(id);
+
+    if (success) {
+      Toast.success({
+        content: '分享成功',
+      });
+      return;
+    }
+
+    Toast.error({
+      content: msg,
+    });
+  }
+
   render() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
@@ -828,7 +852,7 @@ class ThreadH5Page extends React.Component {
               size="20"
               name="CollectOutlined"
             ></Icon>
-            <Icon className={footer.icon} size="20" name="ShareAltOutlined"></Icon>
+            <Icon onClick={() => this.onShareClick()} className={footer.icon} size="20" name="ShareAltOutlined"></Icon>
           </div>
         </div>
       </div>
