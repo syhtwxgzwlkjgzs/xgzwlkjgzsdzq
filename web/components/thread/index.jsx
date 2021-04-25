@@ -14,6 +14,7 @@ import UserInfo from './user-info';
 import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
+import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import { filterClickClassName, handleAttachmentData, noop } from './utils';
 
 @inject('site')
@@ -26,8 +27,8 @@ class Index extends React.Component {
 
       Toast.info({ content: '分享链接已复制成功' });
 
-      // const { threadId = '', title = '' } = this.props.data || {};
-      // h5Share(title)
+      const { title = '' } = this.props.data || {};
+      h5Share(title);
       // this.props.index.updateThreadShare({ threadId });
     }
     // 评论

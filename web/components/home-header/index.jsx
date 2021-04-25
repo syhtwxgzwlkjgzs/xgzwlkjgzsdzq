@@ -5,6 +5,8 @@ import getApi from '@discuzq/sdk/dist/utils/platform-api';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import SharePopup from '../thread/share-popup';
+import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
+
 
 /**
  * 帖子头部
@@ -65,6 +67,7 @@ class HomeHeader extends React.Component {
       this.setState({ visible: true });
     } else {
       const title = document?.title || '';
+      h5Share(title);
       Toast.info({ content: '分享链接已复制成功' });
     }
   }
