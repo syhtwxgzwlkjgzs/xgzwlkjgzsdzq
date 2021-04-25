@@ -45,3 +45,4 @@ export { default as readOrderDetail } from './pay/readOrderDetail';
 export { default as readWalletUser } from './wallet/read-walletUser';
 export { default as updatePayPwd } from './pay/updatePayPwd';
 export { default as updateThread } from './thread-post/update-thread';
+export { default as updateUsersUpdate } from './user/updateUsersUpdate';

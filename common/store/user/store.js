@@ -1,4 +1,5 @@
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
+import { get } from '../../utils/get';
 
 class UserStore {
   constructor(props) {
@@ -8,6 +9,11 @@ class UserStore {
   @observable loginStatus = 'padding';
   @observable accessToken = null;
   @observable weixinNickName = null;
+
+  // 是否能使用钱包支付
+  @computed get canWalletPay() {
+    return get(this.userInfo, 'canWalletPay');
+  }
 }
 
 export default UserStore;

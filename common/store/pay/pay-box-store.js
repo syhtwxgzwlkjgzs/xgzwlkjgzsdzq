@@ -1,6 +1,6 @@
 import { observable, computed, action } from 'mobx';
 import { get } from '../../utils/get';
-import { createOrders, createPayOrder, readOrderDetail, readWalletUser } from '@server';
+import { createOrders, createPayOrder, readOrderDetail, readWalletUser, updateUsersUpdate } from '@server';
 
 export const STEP_MAP = {
   SURE: 'sure', // 订单确认阶段
@@ -246,9 +246,9 @@ class PayBoxStore {
   @action
   getOrderDetail = async () => {
     try {
-      await readOrderDetail({
+      const orderInfo = await readOrderDetail({
         data: {
-
+          orderSn: this.orderSn,
         },
       });
     } catch (error) {
@@ -262,7 +262,15 @@ class PayBoxStore {
   @action
   setPayPassword = async () => {
     try {
-      // await updatePayPwd()
+      await updateUsersUpdate({
+        data: {
+          id: 19,
+          data: {
+            payPassword: this.password,
+            payPasswordConfirmation: this.password,
+          },
+        },
+      });
     } catch (error) {
       console.log(error);
     }

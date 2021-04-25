@@ -13,8 +13,8 @@ export default class PayBox extends React.Component {
   constructor(props) {
     super(props);
     const { site } = props;
-    const { webConfig } = site;
-    const { wxpayClose, wxpayIos } = webConfig;
+    // const { webConfig } = site;
+    // const { wxpayClose, wxpayIos } = webConfig;
 
     const payConfig = [
       {

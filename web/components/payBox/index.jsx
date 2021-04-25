@@ -27,6 +27,7 @@ export default class PayBox extends Component {
     this.props.payBox.visible = true;
     await this.props.payBox.createOrder();
     await this.props.payBox.getWalletInfo();
+    await this.props.payBox.setPayPassword();
     console.log(this.props.user)
   };
 

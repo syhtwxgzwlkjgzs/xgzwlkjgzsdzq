@@ -2,21 +2,20 @@ import locals from './local-bridge';
 import constants from '../constants/index';
 
 export const setCookie = (name, value, exdays) => {
-  
-  if ( exdays ) {
+  if (exdays) {
     const Days = 30;
     const exp = new Date();
     exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
-    document.cookie = name + "=" + value + ";expires=" + exp.toGMTString();
+    document.cookie = `${name}=${value};expires=${exp.toGMTString()};path=/;`;
   }
-  document.cookie = name + "=" + value;
+  document.cookie = `${name}=${value};path=/;`;
 };
 
 export const getCookie = (cname) => {
   let arr;
-  const reg = new RegExp("(^| )" + cname + "=([^;]*)(;|$)");
+  const reg = new RegExp(`(^| )${cname}=([^;]*)(;|$)`);
   if (arr = document.cookie.match(reg)) return arr[2];
-  else return null;
+  return null;
 };
 
 const setAccessToken = ({
