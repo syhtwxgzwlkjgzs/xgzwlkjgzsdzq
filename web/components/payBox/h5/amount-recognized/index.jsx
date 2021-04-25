@@ -34,24 +34,6 @@ export default class AmountRecognized extends Component {
     };
   }
 
-  renderDiffTradeType = (type) => {
-    let value = '';
-    switch (type) {
-      case '1': // 表示付费贴
-        value = '付费帖';
-        break;
-      case '2': // 表示打赏
-        value = '打赏';
-        break;
-      case '3':
-        value = '表示付费加入';
-        break;
-      default:
-        break;
-    }
-    return value;
-  };
-
   // 点击支付去到
   goToThePayConfirmPage = () => {};
 
