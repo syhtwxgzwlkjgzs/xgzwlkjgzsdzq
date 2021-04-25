@@ -18,6 +18,12 @@ class UserAction extends SiteStore {
     }
   }
 
+  // 写入用户发帖权限
+  @action
+  async setUserPermissions(data) {
+    this.permissions = data;
+  }
+
   // 登录后获取新的用户信息
   @action
   async updateUserInfo(id) {

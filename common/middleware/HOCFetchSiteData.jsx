@@ -3,7 +3,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import isServer from '@common/utils/is-server';
 import getPlatform from '@common/utils/get-platform';
-import { readForum, readUser } from '@server';
+import { readForum, readUser, readPermissions } from '@server';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
@@ -24,6 +24,7 @@ export default function HOCFetchSiteData(Component) {
           let serverSite;
           let __props = {};
           let userData;
+          let userPermissions;
 
           // 服务端
           if (isServer()) {
@@ -42,7 +43,10 @@ export default function HOCFetchSiteData(Component) {
               userInfo = await readUser({
                 params: { pid: siteConfig.data.user.userId },
               }, ctx);
+              userPermissions = await readPermissions({});
+
               userData = (userInfo && userInfo.code === 0) ? userInfo.data : null;
+              userPermissions = (userPermissions && userPermissions.code === 0) ? userPermissions.data : null;
             }
 
 
@@ -59,6 +63,7 @@ export default function HOCFetchSiteData(Component) {
             serverSite,
             serverUser: {
               userInfo: userData,
+              userPermissions
             },
           };
         } catch (err) {
@@ -79,6 +84,7 @@ export default function HOCFetchSiteData(Component) {
         serverSite && serverSite.closeSite && site.setCloseSiteConfig(serverSite.closeSite);
         serverSite && serverSite.webConfig && site.setSiteConfig(serverSite.webConfig);
         serverUser && serverUser.userInfo && user.setUserInfo(serverUser.userInfo);
+        serverUser && serverUser.userPermissions && user.setUserPermissions(serverUser.userPermissions);
 
         // 如果还没有获取用户名登录入口是否展示接口，那么请求来赋予初始值
         if (this.props.site.isUserLoginVisible === null) {
@@ -127,6 +133,10 @@ export default function HOCFetchSiteData(Component) {
                     && (!serverUser || !serverUser.userInfo)
           ) {
             const userInfo = await readUser({ params: { pid: siteConfig.user.userId } });
+            const userPermissions = await readPermissions({});
+            
+            // 添加用户发帖权限
+            userPermissions.code === 0 && userPermissions.data && user.setUserPermissions(userPermissions.data);
             // 当客户端无法获取用户信息，那么将作为没有登录处理
             userInfo.data && user.setUserInfo(userInfo.data);
             loginStatus = !!userInfo.data;
