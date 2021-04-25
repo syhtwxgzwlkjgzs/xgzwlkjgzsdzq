@@ -3,7 +3,7 @@ import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import ThemePage from '@components/theme-page';
-import { PlusinToolbar, DefaultToolbar, GeneralUpload, Tag, Title, Content, ClassifyPopup } from '@components/thread-post';
+import { PluginToolbar, DefaultToolbar, GeneralUpload, Tag, Title, Content, ClassifyPopup } from '@components/thread-post';
 import { Units } from '@components/common';
 import styles from './index.module.scss';
 import { THREAD_TYPE } from '@common/constants/thread-post';
@@ -50,7 +50,9 @@ class Index extends Component {
     setPostData({ title });
   }
 
-  onContentChange = (contentText) => { // 处理文本框内容
+  // 处理文本框内容
+  onContentChange = (contentText) => {
+    debugger;
     const { setPostData } = this.props.threadPost;
     setPostData({ contentText });
   }
@@ -63,61 +65,66 @@ class Index extends Component {
     }
   }
 
-  onClassifyChange = ({ parent, child }) => { // 设置当前选中分类、分类id
+  // 设置当前选中分类、分类id
+  onClassifyChange = ({ parent, child }) => {
     const { setPostData, setCategorySelected } = this.props.threadPost;
     setPostData({ categoryId: child.pid || parent.pid });
     setCategorySelected({ parent, child });
   }
 
-  handlePlusinClick(item) {
+  // 点击发帖插件时回调，如上传图片、视频、附件或艾特、话题等
+  handlePluginClick(item) {
     this.setState({
       operationType: item.type
     });
 
+    let nextRoute;
     switch (item.type) {
       //  其它类型可依次补充
       case THREAD_TYPE.reward:
-        Taro.navigateTo({
-          url: '/pages/threadPost/selectReward'
-        });
+        nextRoute = '/pages/threadPost/selectReward';
         break;
       case THREAD_TYPE.goods:
-        Taro.navigateTo({
-          url: '/pages/threadPost/selectProduct'
-        });
+        nextRoute = '/pages/threadPost/selectProduct';
         break;
       case THREAD_TYPE.video:
         this.handleVideoUpload();
         break;
-      case 106:
-        Taro.navigateTo({
-          url: '/pages/threadPost/selectRedpacket'
-        });
+      case THREAD_TYPE.redPacket:
+        nextRoute = '/pages/threadPost/selectRedpacket';
         break;
     }
+
+    if (nextRoute) Taro.navigateTo({ url: nextRoute });
+
   }
 
-  getYundianboSignature = async (fn) => {
-    const res = await readYundianboSignature();
-    const { code, data } = res;
-    const signature = code === 0 ? data.token : '';
-    fn(signature);
-  }
-
-  // 执行视频上传
+  // 执行上传视频
   handleVideoUpload = () => {
     const { setPostData } = this.props.threadPost;
     Taro.chooseVideo({
       success: (file) => {
         Taro.showLoading({
           title: '上传中',
+          mask: true
         });
         // 执行云点播相关的上传工作
         VodUploader.start({
           // 必填，把 wx.chooseVideo 回调的参数(file)传进来
           mediaFile: file,
           // 必填，获取签名的函数
-          getSignature: this.getYundianboSignature,
+          getSignature: async (fn) => {
+            const res = await readYundianboSignature();
+            const { code, data } = res;
+            if (code === 0) {
+              fn(data.token);
+            } else {
+              Taro.showToast({
+                title: '上传失败',
+                duration: 2000
+              });
+            }
+          },
           // 上传中回调，获取上传进度等信息
           progress: function(result) {
             console.log('progress');
@@ -134,6 +141,10 @@ class Index extends Component {
           },
           // 上传错误回调，处理异常
           error: function(result) {
+            Taro.showToast({
+              title: '上传失败',
+              duration: 2000
+            });
             console.log('error');
             console.log(result);
           },
@@ -142,16 +153,16 @@ class Index extends Component {
     });
   }
 
-  redpacketContent = () => { // 悬赏文本展示
+  // 红包tag展示
+  redpacketContent = () => {
     const { redpacket: { rule, orderPrice, number } } = this.props.threadPost.postData;
     return `${rule === 1 ? '随机红包' : '定额红包'}\\总金额 ${orderPrice}元\\${number}个`
   }
 
   render() {
     const { categories } = this.props.index;
-    const { envConfig, theme, changeTheme } = this.props.site;
     const { postData } = this.props.threadPost;
-    const { rewardQa, redpacket, video } = postData; // 悬赏信息
+    const { rewardQa, redpacket, video } = postData;
     const {
       title,
       isShowTitle,
@@ -160,66 +171,62 @@ class Index extends Component {
     } = this.state;
 
     return (
-      <ThemePage>
-        {/* 文本框区域，inclue标题、帖子文字内容等 */}
-        <View>
-          <Title title={title} show={isShowTitle} onInput={this.onTitleInput} />
-          <Content
-            value={postData.content}
-            onChange={this.onContentChange}
-            onFocus={this.onContentFocus}
-          />
-        </View>
+      <>
+        <View className={styles['container']}>
+          {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
+          <View className={styles['content']}>
+            <Title title={title} show={isShowTitle} onInput={this.onTitleInput} />
+            <Content
+              value={postData.content}
+              onChange={this.onContentChange}
+              onFocus={this.onContentFocus}
+            />
 
-        {/* 插件区域、include图片、附件、语音等 */}
-        <View className={styles['plusin']}>
-
-          <GeneralUpload type={operationType} />
-
-          <Units type='product' productSrc={'https://img20.360buyimg.com/ceco/s700x700_jfs/t1/153702/29/15780/81514/601663b6E0eb5908f/3cb05e84fe495b03.jpg!q70.jpg'} productDesc={'又帅又痞 设计师日本纯钛眼镜框超轻近视男款复古镜架可配有度数，天天佩戴，应每日清洗镜架及镜片！不用时应先清洁再收纳！'} productPrice={564.99} onDelete={() => {}} />
-
-          {video.videoUrl && <Units type='video' src={video.videoUrl} />}
-
-        </View>
-
-        {/* 工具栏区域、include各种插件触发图标、发布等 */}
-        <View className={styles['toolbar']}>
-          <View className={styles['tag-toolbar']}>
-            {/* 红包tag */}
-            {redpacket.money &&
-              <Tag
-                content={this.redpacketContent()}
-                clickCb={this.toSelectRedpacket}
-              />
-            }
-            {/* 悬赏tag */}
-            {rewardQa.price &&
-              <Tag
-                content={`悬赏金额${rewardQa.price}元\\结束时间${rewardQa.expiredAt}`}
-                clickCb={this.toSelectReward}
-              />
-            }
+            <View className={styles['plugin']}>
+              <GeneralUpload type={operationType} />
+              <Units type='product' productSrc={'https://img20.360buyimg.com/ceco/s700x700_jfs/t1/153702/29/15780/81514/601663b6E0eb5908f/3cb05e84fe495b03.jpg!q70.jpg'} productDesc={'又帅又痞 设计师日本纯钛眼镜框超轻近视男款复古镜架可配有度数，天天佩戴，应每日清洗镜架及镜片！不用时应先清洁再收纳！'} productPrice={564.99} onDelete={() => {}} />
+              {video.videoUrl && <Units type='video' src={video.videoUrl} />}
+            </View>
           </View>
-          <PlusinToolbar
-            clickCb={(item) => {
-              this.handlePlusinClick(item);
-            }}
-            onCategoryClick={() => this.setState({ showClassifyPopup: true })}
-          />
-          <DefaultToolbar clickCb={(item) => {
-            this.handlePlusinClick(item);
-          }} />
 
-
-          {/* 二级分类弹框 */}
-          <ClassifyPopup
-            show={showClassifyPopup}
-            category={categories}
-            onHide={() => this.setState({ showClassifyPopup: false })}
-            onChange={this.onClassifyChange}
-          />
+          {/* 工具栏区域、include各种插件触发图标、发布等 */}
+          <View className={styles['toolbar']}>
+            <View className={styles['tag-toolbar']}>
+              {/* 红包tag */}
+              {redpacket.money &&
+                <Tag
+                  content={this.redpacketContent()}
+                  clickCb={this.toSelectRedpacket}
+                />
+              }
+              {/* 悬赏tag */}
+              {rewardQa.price &&
+                <Tag
+                  content={`悬赏金额${rewardQa.price}元\\结束时间${rewardQa.expiredAt}`}
+                  clickCb={this.toSelectReward}
+                />
+              }
+            </View>
+            <PluginToolbar
+              clickCb={(item) => {
+                this.handlePluginClick(item);
+              }}
+              onCategoryClick={() => this.setState({ showClassifyPopup: true })}
+            />
+            <DefaultToolbar clickCb={(item) => {
+              this.handlePluginClick(item);
+            }} />
+          </View>
         </View>
-      </ThemePage >
+
+        {/* 二级分类弹框 */}
+        <ClassifyPopup
+          show={showClassifyPopup}
+          category={categories}
+          onHide={() => this.setState({ showClassifyPopup: false })}
+          onChange={this.onClassifyChange}
+        />
+      </>
     );
   }
 }

@@ -36,9 +36,7 @@ const Index = inject('threadPost')(observer(({ threadPost }) => {
             const { code, data = {}, msg } = res;
             if (code === 0) {
               setPostData({ product: data });
-              Taro.navigateTo({
-                url: '/pages/threadPost/index'
-              });
+              Taro.navigateBack();
             } else {
               Toast.error({ content: msg });
             }

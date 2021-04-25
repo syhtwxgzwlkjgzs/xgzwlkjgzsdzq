@@ -14,9 +14,9 @@ const Index = inject('site', 'threadPost')(observer((props) => {
   const { site, threadPost, clickCb, onCategoryClick } = props;
 
   // 控制插件icon的显示/隐藏
-  const [plusShow, setPlusShow] = useState(false);
+  const [plugShow, setplugShow] = useState(false);
   // 设置当前选中的插件
-  const [currentPlus, setCurrentPlus] = useState({});
+  const [currentplug, setCurrentplug] = useState({});
 
   const content = useCallback(
     () => {
@@ -27,17 +27,17 @@ const Index = inject('site', 'threadPost')(observer((props) => {
   )
 
   // 插件icon元素
-  const plus = attachIcon.map((item, index) => {
+  const plug = attachIcon.map((item, index) => {
     return (
       <Icon
         key={index}
-        className={styles['plus-icon']}
+        className={styles['plug-icon']}
         onClick={() => {
-          setCurrentPlus(item);
+          setCurrentplug(item);
           clickCb(item);
         }}
         name={item.name}
-        color={item.name === currentPlus.name && item.active}
+        color={item.name === currentplug.name && item.active}
         size='20'
       />
     );
@@ -62,10 +62,10 @@ const Index = inject('site', 'threadPost')(observer((props) => {
   return (
     <View className={styles['container']}>
       <View className={styles['category']}>
-        { plusShow ? plus : category }
+        { plugShow ? plug : category }
       </View>
-      <View onClick={() => {setPlusShow(!plusShow);}}>
-        { (!plusShow) && (<Icon name={currentPlus.name || 'PictureOutlinedBig'} size='20' />) }
+      <View onClick={() => {setplugShow(!plugShow);}}>
+        { (!plugShow) && (<Icon name={currentplug.name || 'PictureOutlinedBig'} size='20' />) }
         <Icon name="MoreBOutlined" size='20' />
       </View>
     </View>
