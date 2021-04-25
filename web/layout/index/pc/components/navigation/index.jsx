@@ -22,14 +22,14 @@ const Index = () => {
               <Menu.SubMenu index={index} title={title(item.name)}>
                 {item.children.map((childrens, indexs) => {
                   return (
-                    <Menu.Item index={indexs}>{childrens.name}</Menu.Item>
+                    <Menu.Item index={indexs} key={indexs}>{childrens.name}</Menu.Item>
                   )
                 })}
               </Menu.SubMenu>
             )
           } else {
             return (
-              <Menu.Item index={index}>{title(item.name)}</Menu.Item>
+              <Menu.Item index={index} key={index}>{title(item.name)}</Menu.Item>
             )
           }
         })}

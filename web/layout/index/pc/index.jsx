@@ -10,8 +10,6 @@ import Navigation from './components/navigation';
 import QcCode from './components/qcCode';
 import Recommend from './components/recommend';
 import ThreadContent from '@components/thread';
-import RewardQuestion from '@components/thread/reward-question';
-import RedPacket from '@components/thread/red-packet';
 import Copyright from './components/copyright';
 @inject('site')
 @inject('user')
@@ -70,8 +68,6 @@ class IndexPCPage extends React.Component {
           </div>
         </div>
         <div className={styles.themeBox}>
-            <RewardQuestion/>
-            <RedPacket/>
           <div className={styles.themeItem}>
             <ThreadContent/>
           </div>
