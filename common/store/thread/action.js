@@ -349,6 +349,7 @@ class ThreadAction extends ThreadStore {
       page === 1 ? (commentList = res?.data?.pageData || []) : commentList.push(...(res?.data?.pageData || []));
 
       this.setCommentList(this.commentListAdapter(commentList));
+      this.setTotalCount(res?.data?.totalCount || 0);
 
       return {
         msg: '操作成功',
