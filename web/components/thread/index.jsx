@@ -16,7 +16,7 @@ import NoData from '../no-data';
 import styles from './index.module.scss';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import { filterClickClassName, handleAttachmentData, noop } from './utils';
-
+import browser from '@common/utils/browser';
 @inject('site')
 @inject('index')
 @inject('user')
@@ -55,10 +55,10 @@ class Index extends React.Component {
       e.stopPropagation();
 
       // 对没有登录的先做
-      if (!this.props.user.isLogin()) {
-        Toast.info({ content: '请先登录!' });
-        return;
-      }
+      // if (!this.props.user.isLogin()) {
+      //   Toast.info({ content: '请先登录!' });
+      //   return;
+      // }
       const { data = {} } = this.props;
       const { threadId = '', isLike, postId } = data;
       this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } });

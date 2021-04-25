@@ -43,7 +43,7 @@ export default function HOCFetchSiteData(Component) {
               userInfo = await readUser({
                 params: { pid: siteConfig.data.user.userId },
               }, ctx);
-              userPermissions = await readPermissions({});
+              userPermissions = await readPermissions({}, ctx);
 
               userData = (userInfo && userInfo.code === 0) ? userInfo.data : null;
               userPermissions = (userPermissions && userPermissions.code === 0) ? userPermissions.data : null;
