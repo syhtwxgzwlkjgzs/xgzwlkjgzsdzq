@@ -66,6 +66,25 @@ class ThreadAction extends ThreadStore {
   }
 
   @action
+  setReplyListDetailField(commentId, replyId, key, value) {
+    if (this.commentList?.length) {
+      // 查找评论
+      this.commentList.forEach((comment) => {
+        if (comment.id === commentId) {
+          if (comment?.lastThreeComments?.length) {
+            // 查找回复
+            comment?.lastThreeComments.forEach((reply) => {
+              if (reply.id === replyId) {
+                reply[key] = value;
+              }
+            });
+          }
+        }
+      });
+    }
+  }
+
+  @action
   setTotalCount(data) {
     this.totalCount = data;
   }
