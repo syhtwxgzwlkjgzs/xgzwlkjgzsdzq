@@ -327,12 +327,15 @@ class ThreadCreate extends React.Component {
       <>
         <Header />
         <div className={styles['post-inner']}>
+          {/* 标题 */}
           <Title
             title={postData.title}
             onChange={title => this.setPostData({ title })}
             onFocus={this.setBottomFixed}
             onBlur={this.clearBottomFixed}
+            autofocus
           />
+          {/* 编辑器 */}
           <DVditor
             value={postData.contentText}
             emoji={emoji}
@@ -405,6 +408,7 @@ class ThreadCreate extends React.Component {
           )}
         </div>
         <div id="post-bottombar" className={styles['post-bottombar']}>
+          {/* 插入位置 */}
           <div id="post-position" className={styles['position-box']}>
             <Position
               position={postData.position}
