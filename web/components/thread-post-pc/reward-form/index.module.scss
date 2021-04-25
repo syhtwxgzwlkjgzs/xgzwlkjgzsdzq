@@ -1,0 +1,119 @@
+@import '@common/styles/index.scss';
+
+.form-wrapper {
+  :global {
+    .dzq-input {
+      display: inline-block;
+      width: 40px;
+
+      .dzq-input__inner {
+        border: none;
+        padding: 0;
+        text-align: center;
+      }
+      
+    }
+
+    .dzq-popup__overlay {
+      z-index: 1000;
+    }
+
+    .dzq-popup__container {
+      z-index: 1001;
+    }
+
+    .datepicker-modal {
+      height: 100vh !important;
+    }
+
+    .box_sans{
+      
+    }
+    .gcw7b6avyvQr4OAyM9Tf_{
+      position: absolute;
+      top: -62px;
+    }
+  }
+
+  .redpacket-box {
+    margin: 0 auto;
+    width: 409px;
+    min-height: 227px;
+    background-color: var(--color-white);
+    border-radius: 5px;
+
+    .title-top {
+      height: 43px;
+      line-height: 43px;
+      text-align: center;
+      position: relative;
+      font-family: "PingFang SC";
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 43px;
+      color: var(--color-text-primary);
+
+      .title-top-right {
+        position: absolute;
+        right: 24px;
+        top:12px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .color-text {
+      color: #4f5a70;
+    }
+
+    .line-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-left: 16px;
+      margin-right: 16px;
+      padding-top: 16px;
+      padding-bottom: 16px;
+      border-bottom: var(--border-border);
+      font-size: 14px;
+    }
+
+    .line-box-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-left: 16px;
+      margin-right: 16px;
+      padding-top: 16px;
+      padding-bottom: 16px;
+      font-size: 14px;
+    }
+  }
+
+  .btn {
+    padding: 12px 80px 0 80px;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    line-height: 53px;
+    -webkit-tap-highlight-color: transparent;
+
+    .btn-one {
+      width: 116px;
+      height: 36px;
+      color: #333;
+      text-align: center;
+      border: none;
+      background: #eee;
+    }
+
+    .btn-two {
+      width: 116px;
+      height: 36px;
+      color: white;
+      text-align: center;
+      background-color: #2469f6;
+      border: none;
+    }
+  }
+}
