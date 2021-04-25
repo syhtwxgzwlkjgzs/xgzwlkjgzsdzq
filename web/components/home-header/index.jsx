@@ -1,12 +1,12 @@
 import React from 'react';
 import styles from './index.module.scss';
 import { Icon, Toast } from '@discuzq/design';
-import getApi from '@discuzq/sdk/dist/utils/platform-api';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import SharePopup from '../thread/share-popup';
+import { isWx } from './utils';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
-
+// import goToLoginPage from '@common/utils/go-to-login-page';
 
 /**
  * 帖子头部
@@ -15,11 +15,22 @@ import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
  */
 
  @inject('site')
+ @inject('user')
  @observer
 class HomeHeader extends React.Component {
   state = {
     visible: false,
-    platform: getApi,
+    isWeixin: false,
+  }
+
+  componentDidMount() {
+    // 判断是否在微信浏览器
+    try {
+      const isWeixin = isWx();
+      this.setState({ isWeixin });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   logoImg = '/dzq-img/admin-logo-x2.png';
@@ -62,8 +73,14 @@ class HomeHeader extends React.Component {
   }
 
   onShare = () => {
-    const { platform } = getApi;
-    if (platform === 'wx') {
+    const { user } = this.props;
+    if (!user.isLogin()) {
+      // goToLoginPage();
+      return;
+    }
+    // 判断是否在微信浏览器
+    const { isWeixin } = this.state;
+    if (isWeixin) {
       this.setState({ visible: true });
     } else {
       const title = document?.title || '';
@@ -78,7 +95,7 @@ class HomeHeader extends React.Component {
 
   render() {
     const { bgColor, hideInfo = false } = this.props;
-    const { visible, platform } = this.state;
+    const { visible, isWeixin } = this.state;
     const { countUsers, countThreads } = this.getSiteInfo();
 
     return (
@@ -112,7 +129,7 @@ class HomeHeader extends React.Component {
             <span className={styles.text}>分享</span>
           </li>
         </ul>}
-        <SharePopup visible={visible} onClose={this.onClose} />
+        {isWeixin && <SharePopup visible={visible} onClose={this.onClose} />}
       </div>
     );
   }

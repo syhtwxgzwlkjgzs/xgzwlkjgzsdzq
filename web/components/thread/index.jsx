@@ -15,21 +15,28 @@ import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
-import { filterClickClassName, handleAttachmentData, noop } from './utils';
+// import goToLoginPage from '@common/utils/go-to-login-page';
+import { filterClickClassName, handleAttachmentData } from './utils';
 
 @inject('site')
 @inject('index')
+@inject('user')
 @observer
 class Index extends React.Component {
     // 分享
     onShare = (e) => {
       e.stopPropagation();
 
-      Toast.info({ content: '分享链接已复制成功' });
+      const { title = '', threadId = '', user } = this.props.data || {};
 
-      const { title = '' } = this.props.data || {};
+      if (!user.isLogin()) {
+        // goToLoginPage();
+        return;
+      }
+
+      Toast.info({ content: '分享链接已复制成功' });
       h5Share(title);
-      // this.props.index.updateThreadShare({ threadId });
+      this.props.index.updateThreadShare({ threadId });
     }
     // 评论
     onComment = (e) => {
@@ -46,7 +53,13 @@ class Index extends React.Component {
     // 点赞
     onPraise = (e) => {
       e.stopPropagation();
-      const { data = {} } = this.props;
+
+      const { data = {}, user } = this.props;
+      if (!user.isLogin()) {
+        // goToLoginPage();
+        return;
+      }
+
       const { threadId = '', isLike, postId } = data;
       this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } });
     }
@@ -65,8 +78,14 @@ class Index extends React.Component {
       if (!filterClickClassName(e.target)) {
         return;
       }
-      const { data = {} } = this.props;
-      const { threadId = '' } = data;
+
+      const { threadId = '', ability } = this.props.data || {};
+      const { canReply } = ability;
+      if (!canReply) {
+        Toast.info({ content: '暂无权限查看详情' });
+        return;
+      }
+
       if (threadId !== '') {
         this.props.router.push(`/thread/${threadId}`);
       } else {
@@ -76,7 +95,7 @@ class Index extends React.Component {
       // 执行外部传进来的点击事件
       const { onClick } = this.props;
       if (typeof(onClick) === 'function') {
-        onClick(data);
+        onClick(this.props.data);
       }
     }
 
