@@ -40,6 +40,13 @@ class CommentH5Page extends React.Component {
       isLiked: !data.isLiked,
     };
     const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
+
+    if (success) {
+      this.props.comment.setCommentDetailField(data.id, 'isLiked', params.isLiked);
+      const likeCount = params.isLiked ? data.likeCount + 1 : data.likeCount - 1;
+      this.props.comment.setCommentDetailField(data.id, 'likeCount', likeCount);
+    }
+
     if (!success) {
       Toast.error({
         content: msg,
@@ -56,6 +63,13 @@ class CommentH5Page extends React.Component {
       isLiked: !reply.isLiked,
     };
     const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
+
+    if (success) {
+      this.props.comment.setReplyListDetailField(reply.id, 'isLiked', params.isLiked);
+      const likeCount = params.isLiked ? reply.likeCount + 1 : reply.likeCount - 1;
+      this.props.comment.setReplyListDetailField(reply.id, 'likeCount', likeCount);
+    }
+
     if (!success) {
       Toast.error({
         content: msg,
@@ -156,7 +170,6 @@ class CommentH5Page extends React.Component {
 
   render() {
     const { commentDetail: commentData, isReady } = this.props.comment;
-    isReady && (commentData.lastThreeComments = commentData?.commentPosts || []);
 
     return (
       <div className={styles.index}>
