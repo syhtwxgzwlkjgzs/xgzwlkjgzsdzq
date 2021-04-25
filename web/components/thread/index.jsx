@@ -55,10 +55,10 @@ class Index extends React.Component {
       e.stopPropagation();
 
       // 对没有登录的先做
-      // if (!this.props.user.isLogin()) {
-      //   Toast.info({ content: '请先登录!' });
-      //   return;
-      // }
+      if (!this.props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        return;
+      }
       const { data = {} } = this.props;
       const { threadId = '', isLike, postId } = data;
       this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } });
