@@ -11,12 +11,26 @@ export default function DefaultToolbar(props) {
     if (!value) setCurrentAction(value);
   }, [value]);
 
+  function handleClick() {
+    setCurrentAction('');
+    onClick({ id: '' });
+  }
+
+  useEffect(() => {
+    window.document.body.addEventListener('click', handleClick);
+
+    return () => {
+      window.document.body.removeEventListener('click', () => handleClick);
+    };
+  }, []);
+
   return (
     <div className={styles['dvditor-toolbar']}>
       <div className={styles['dvditor-toolbar__left']}>
         {defaultIcon.map(item => (
           <Icon key={item.name}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               if (item.id === currentAction) {
                 setCurrentAction('');
                 onClick({ id: '' });
