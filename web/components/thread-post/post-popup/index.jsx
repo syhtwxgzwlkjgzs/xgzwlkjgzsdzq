@@ -6,7 +6,7 @@ import { Popup } from '@discuzq/design';// 原来就有的封装
 import PropTypes from 'prop-types';// 类型拦截
 import styles from './index.module.scss';// 私有样式
 
-const PostPopup = ({ list, onClick, cancel }) => {
+const PostPopup = ({ list, onClick, cancel, visible }) => {
   const handlePopup = (item) => {
     onClick(item);
     cancel();
@@ -17,7 +17,7 @@ const PostPopup = ({ list, onClick, cancel }) => {
       className={styles.tan}
       position="bottom"// 从哪个地方弹出 'bottom' | 'top' | 'center';
       maskClosable={true}// 点击遮罩层是否关闭弹出层，但好像没什么用
-      visible={true}// 是否显示弹出层
+      visible={visible}// 是否显示弹出层
       onClose={() => { // 遮罩层点击关闭回调,传一个'取消'，可自定义更改
         cancel();
       }}
