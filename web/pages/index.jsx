@@ -45,6 +45,7 @@ class Index extends React.Component {
         type: 3,
         threadId: 98,
         payeeId: 59,
+        isAnonymous: false
       },
       success: (orderInfo) => {
         console.log(orderInfo);

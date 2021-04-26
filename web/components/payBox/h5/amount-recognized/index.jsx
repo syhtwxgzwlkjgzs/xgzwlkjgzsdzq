@@ -3,42 +3,54 @@ import { inject, observer } from 'mobx-react';
 import { Popup, Icon, Button, Checkbox } from '@discuzq/design';
 import styles from './index.module.scss';
 import CommonAccountContent from '../../components/common-account-content';
+import { Toast } from '@discuzq/design';
+import PayConfirmed from '../pay-confirmed';
+import { STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
 
 @inject('payBox')
 @observer
 export default class AmountRecognized extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isShow: false,
-      currentPaymentData: [
-        {
-          trade_type: '1', // 交易类型 1|2|3 帖子|打赏|付费加入
-          goods_name: '帖子标题', // 商品名称
-          pay_money: '9.90', // 支付金额
-          is_anonymous: '1', // 是否匿名
-        },
-        {
-          trade_type: '2',
-          goods_name: '打赏的内容', // 商品名称
-          pay_money: '19.90', // 支付金额
-          is_anonymous: '0', // 是否匿名
-        },
-        {
-          trade_type: '3',
-          goods_name: '付费加入...', // 商品名称
-          pay_money: '19.90', // 支付金额
-          is_anonymous: '0', // 是否匿名
-        }
-      ],
-    };
+    this.state = {};
   }
 
-  // 点击支付去到
-  goToThePayConfirmPage = () => {};
+  // 转换金额小数
+  transMoneyToFixed = (num) => {
+    return Number(num).toFixed(2);
+  };
+
+  // 点击支付去到 选择支付方式页面
+  goToThePayConfirmPage = async () => {
+    try {
+      await this.props.payBox.createOrder();
+    } catch (error) {
+      Toast.error({
+        content: error.Message,
+        hasMask: false,
+        duration: 1000,
+      });
+    }
+  };
+
+  // 确认金额内容
+  renderAmountRecognizedContent = () => {
+    const { options = {} } = this.props;
+    const { amount } = options;
+    return (
+      <div className={styles.amountWrapper}>
+        <CommonAccountContent currentPaymentData={options} />
+        {/* 按钮区域-提交内容 */}
+        <div className={styles.amountSubmit}>
+          <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.asBtn} full>
+            支付 ￥{this.transMoneyToFixed(amount)}
+          </Button>
+        </div>
+      </div>
+    );
+  };
 
   render() {
-    const { currentPaymentData = [] } = this.state;
     return (
       <Popup
         position="bottom"
@@ -48,15 +60,7 @@ export default class AmountRecognized extends Component {
           this.props.payBox.visible = false;
         }}
       >
-        <div className={styles.amountWrapper}>
-          <CommonAccountContent currentPaymentData={currentPaymentData} />
-          {/* 按钮区域-提交内容 */}
-          <div className={styles.amountSubmit}>
-            <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.asBtn} full>
-              支付 ￥...
-            </Button>
-          </div>
-        </div>
+        {this.props.payBox.step === STEP_MAP.PAYWAY ? <PayConfirmed /> : this.renderAmountRecognizedContent()}
       </Popup>
     );
   }

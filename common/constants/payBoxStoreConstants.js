@@ -37,6 +37,19 @@ export const ORDER_STATUS_MAP = {
   OUT_DATE_PAY: 4,
 };
 
+// 订单交易类型映射表
+export const ORDER_TRADE_TYPE = {
+  REGEISTER_SITE: 1, // 表示注册(站点付费加入)
+  REWARD: 2, // 表示打赏
+  THEME: 3, //购买主题
+  AUTHORITY_GROUP: 4, // 购买权限组
+  PUT_PROBLEM: 5, // 付费提问
+  ATTACHMEMENT: 7, // 附件
+  RED_PACKET: 9, // 红包
+  POST_REWARD: 10, // 悬赏
+  COMBIE_PAYMENT: 11 // 合并支付（红包+悬赏） 
+}
+
 export const PAY_BOX_ERROR_CODE_MAP = {
   NOT_IN_WEIXIN_PAY: {
     Code: 'pbx_0001',
