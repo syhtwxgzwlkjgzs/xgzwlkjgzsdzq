@@ -29,6 +29,9 @@ class PayBoxStore {
   // 订单信息
   @observable orderInfo = null;
 
+  // 是否匿名
+  @observable isAnonymous = false;
+
   // 轮询 timer
   @observable timer = null;
 
@@ -121,7 +124,10 @@ class PayBoxStore {
   @action
   createOrder = throttle(async () => {
     try {
-      const data = this.options;
+      const data = {
+        ...this.options,
+        isAnonymous: this.isAnonymous,
+      };
       const createRes = await createOrders({
         timeout: 3000,
         data,
@@ -255,7 +261,6 @@ class PayBoxStore {
   @action
   getOrderDetail = async () => {
     try {
-      console.log(this);
       const orderInfoRes = await readOrderDetail({
         params: {
           orderSn: this.orderSn,

@@ -25,6 +25,8 @@ export default class PayBox extends Component {
       data: {},
     },
   ) => {
+    // 每次新的付费创建，需要清空前一次的付费信息
+    this.props.payBox.clear();
     this.props.payBox.options = {
       ...options.data,
     };
