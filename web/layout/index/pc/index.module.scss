@@ -1,7 +1,59 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
-.text {
-    font-size: rem($font-size-label);
-    color: var(--color-error);
+.indexWrap {
+  background: #f5f7f8;
+  width: 100%;
+  height: 100vh;
+  .indexLeft {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    .indexLeftBox {
+      width: rem(260);
+    }
+  }
+  .indexRight {
+    width: rem(286);
+  }
+  .indexContent {
+    width: 100%;
+    min-width: rem(652);
+    .contnetTop {
+      width: 100%;
+      background: var(--color-white);
+      box-sizing: border-box;
+    }
+  }
+  .topBox {
+    position: relative;
+    padding-left: rem($margin-2n);
+    .PostTheme {
+      position: absolute;
+      right: rem($padding-6n);
+      top: rem($padding-10);
+    }
+  }
+  .TopNewsBox {
+    padding: rem($padding-10) 0;
+    margin: 0 rem($margin-6n);
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+  }
+  .topNewContent {
+    padding: rem($padding-10) 0;
+    margin: 0 rem($margin-6n);
+  }
+  .themeBox {
+    overflow: hidden;
+    margin-top: rem($margin-5n);
+    .themeItem {
+      margin-bottom: rem($margin-10);
+    }
+  }
+  .threadContent {
+    margin-bottom: rem(10);
+    border-radius: rem(5);
+  }
 }
+
   

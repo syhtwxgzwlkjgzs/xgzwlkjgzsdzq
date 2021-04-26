@@ -1,4 +1,7 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
 .text {
-  color: var(--color-text-primary);
+  color: var(--color-error);
   background-color: var(--background-color);
 }

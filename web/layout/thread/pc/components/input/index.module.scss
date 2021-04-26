@@ -4,14 +4,15 @@
 .container {
   background: var(--color-white);
   border: var(--border-border);
+  border-radius: rem(5);
+  overflow: hidden;
 }
 
 .main {
-  // background: var(--background-color);
-  // padding: rem($margin-4n);
   :global{
     .dzq-textarea {
-      border: 1px solid #eee;
+      border: 1px solid transparent;
+      border-radius: 0;
       .dzq-textarea__inner{
         background: #f5f7f8;
         resize: none;

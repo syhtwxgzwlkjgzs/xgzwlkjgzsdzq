@@ -1,0 +1,5 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.content {
+  padding: rem($padding-5n) 0;
+}
