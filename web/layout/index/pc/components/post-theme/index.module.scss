@@ -1,0 +1,7 @@
+@import '@common/styles/var.scss';
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.publishBtn {
+  width: rem(88);
+  height: rem(36);
+}
