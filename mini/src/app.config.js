@@ -6,8 +6,8 @@ export default {
   // 首页和详情页在主包
   pages: [
     'pages/index/index',
-    'pages/threadDetail/index',
-    'pages/threadDetail/commentDetail/index/123',
+    'pages/thread/index',
+    'pages/thread/comment/index',
     'pages/threadPost/index',
     'pages/threadPost/selectReward',
   ],

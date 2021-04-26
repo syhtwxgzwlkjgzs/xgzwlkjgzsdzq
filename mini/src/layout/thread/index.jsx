@@ -1,9 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { View, Text } from '@tarojs/components';
-import Taro from '@tarojs/taro';
+import Taro, { getCurrentInstance } from '@tarojs/taro';
 import { observer, inject } from 'mobx-react';
 
-import ThemePage from '@components/theme-page';
 import { Icon, Input, Badge, Toast, Button } from '@discuzq/design';
 
 import layout from './layout.module.scss';
@@ -19,10 +18,30 @@ import DeletePopup from './components/delete-popup';
 import throttle from '@common/utils/thottle';
 
 
+const typeMap = {
+  101: 'IMAGE',
+  102: 'VOICE',
+  103: 'VIDEO',
+  104: 'GOODS',
+  105: 'QA',
+  106: 'RED_PACKET',
+  107: 'REWARD',
+  108: 'VOTE',
+  109: 'QUEUE',
+  110: 'FILE',
+  111: 'QA_IMAGE',
+};
+
 // 帖子内容
 const RenderThreadContent = observer((props) => {
   const { store: threadStore } = props;
   const { text, indexes } = threadStore?.threadData?.content || {};
+  const tipData = {
+    postId: threadStore?.threadData?.postId,
+    threadId: threadStore?.threadData?.threadId,
+  };
+  // 是否合法
+  const isApproved = threadStore?.threadData?.isApproved || 0;
   const isEssence = threadStore?.threadData?.displayTag?.isEssence || false;
 
   const parseContent = {};
@@ -48,11 +67,103 @@ const RenderThreadContent = observer((props) => {
   };
 
   return (
-    <View className={`${layout.top} ${topic.container}`}>
-      这是帖子的内容哈
-    </View>
+    <View>帖子内容</View>
+    // <View className={`${layout.top} ${topic.container}`}>
+    //   <View className={topic.header}>
+    //     <View className={topic.userInfo}>
+    //       <UserInfo
+    //         name={threadStore?.threadData?.user?.userName || ''}
+    //         avatar={threadStore?.threadData?.user?.avatar || ''}
+    //         location={threadStore?.threadData?.position.location || ''}
+    //         view={`${threadStore?.threadData?.viewCount}` || ''}
+    //         time={`${threadStore?.threadData?.createdAt}` || ''}
+    //         isEssence={isEssence}
+    //       ></UserInfo>
+    //     </View>
+    //     <View className={topic.more} onClick={onMoreClick}>
+    //       <Icon size="20" color="#8590A6" name="MoreVOutlined"></Icon>
+    //     </View>
+    //   </View>
+
+    //   {
+    //     isApproved === 1
+    //     && <View className={topic.body}>
+    //       {/* 文字 */}
+    //       {text && <PostContent content={text || ''} />}
+    //       {/* 视频 */}
+    //       {parseContent.VIDEO && (
+    //         <VideoPlay
+    //           url={parseContent.VIDEO.mediaUrl}
+    //           coverUrl={parseContent.VIDEO.coverUrl}
+    //           width={400}
+    //           height={200}
+    //         />
+    //       )}
+    //       {/* 图片 */}
+    //       {parseContent.IMAGE && <ImageContent imgData={parseContent.IMAGE} />}
+    //       {/* 商品 */}
+    //       {parseContent.GOODS && (
+    //         <View>
+    //           <ProductItem
+    //             image={parseContent.GOODS.imagePath}
+    //             amount={parseContent.GOODS.price}
+    //             title={parseContent.GOODS.title}
+    //           />
+    //           <Button
+    //             className={topic.buyBtn}
+    //             type="primary"
+    //             onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
+    //           >
+    //             购买商品
+    //         </Button>
+    //         </View>
+    //       )}
+    //       {/* 音频 */}
+    //       {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
+    //       {/* 附件 */}
+    //       {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
+
+    //       <View className={topic.tag}>使用交流</View>
+
+    //       {(parseContent.RED_PACKET || parseContent.REWARD) && (
+    //         <View className={topic.reward}>
+    //           {/* 红包 */}
+    //           {parseContent.RED_PACKET && (
+    //             <PostRewardProgressBar remaining={parseContent.RED_PACKET.number} received={1} />
+    //           )}
+    //           {/* 打赏 */}
+    //           {parseContent.REWARD && <PostRewardProgressBar type={POST_TYPE.BOUNTY} remaining={2} received={5} />}
+    //         </View>
+    //       )}
+
+    //       {/* <View style={{ textAlign: 'center' }}>
+    //       <Button className={topic.rewardButton} type='primary' size='large'>打赏</Button>
+    //     </View> */}
+    //       {/* 附件 */}
+    //     </View>
+    //   }
+    //   <View className={topic.footer}>
+    //     <View className={topic.thumbs}>
+    //       <View
+    //         className={classnames(topic.liked, threadStore?.threadData?.isLike && topic.isLiked)}
+    //         onClick={onLikeClick}
+    //       >
+    //         <Icon name="LikeOutlined"></Icon>
+    //         <span>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
+    //       </View>
+    //       <View className={topic.likeReward} >
+    //         <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
+    //       </View>
+    //     </View>
+    //     {
+    //       threadStore?.threadData?.likeReward?.shareCount > 0
+    //       && <span>{threadStore?.threadData?.likeReward?.shareCount}次分享</span>
+    //     }
+    //   </View>
+    // </View>
   );
 });
+
 
 // 评论列表
 @inject('thread')
@@ -322,7 +433,6 @@ class Index extends Component {
 
   // 滚动事件
   handleOnScroll = () => {
-    console.log('滚滚滚谷歌你');
     // 加载评论列表
     const scrollDistance = this.threadBodyRef?.current?.scrollTop;
     const offsetHeight = this.threadBodyRef?.current?.offsetHeight;
@@ -636,7 +746,10 @@ class Index extends Component {
     const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
 
     return (
-      <ThemePage>
+      // <View>
+      //   123
+      // </View>
+
       <View className={layout.container}>
         <View className={layout.header}>header</View>
         <View
@@ -663,7 +776,7 @@ class Index extends Component {
                   onEditClick={comment => this.onEditClick(comment)}>
                 </RenderCommentList>
                 {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
-                {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
+                {/* {isNoMore && <NoMore empty={totalCount === 0}></NoMore>} */}
               </Fragment>
             ) : (
               <LoadingTips type="init"></LoadingTips>
@@ -703,7 +816,6 @@ class Index extends Component {
           onSubmit={value => this.onPublishClick(value)}
         /> */}
       </View>
-      </ThemePage>
     );
   }
 }
