@@ -11,8 +11,27 @@ import IndexMiniPage from '@layout/index/mini';
 
 
 @inject('site')
+@inject('index')
 @observer
 class Index extends Component {
+
+  async componentDidMount() {
+    const { index } = this.props;
+    // 当服务器无法获取数据时，触发浏览器渲染
+    const hasCategoriesData = !!index.categories;
+    const hasSticksData = !!index.sticks;
+    const hasThreadsData = !!index.threads;
+
+    if (!hasCategoriesData) {
+      this.props.index.getReadCategories();
+    }
+    if (!hasSticksData) {
+      this.props.index.getRreadStickList();
+    }
+    if (!hasThreadsData) {
+      this.props.index.getReadThreadList();
+    }
+  }
 
   render() {
     const { envConfig, theme, changeTheme } = this.props.site;
