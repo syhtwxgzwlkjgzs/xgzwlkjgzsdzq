@@ -86,7 +86,7 @@ class PayBoxStore {
     if (error.Code) {
       throw {
         Code: error.Code,
-        Message: error.Message
+        Message: error.Message,
       };
     }
     throw {
@@ -143,7 +143,13 @@ class PayBoxStore {
       }
       this.resErrorFactory(createRes);
     } catch (error) {
-      this.errorHandler(error);
+      if (error.Code) {
+        throw error;
+      }
+      throw {
+        ...PAY_BOX_ERROR_CODE_MAP.NETWORK_ERROR,
+        error,
+      };
     }
   }, 2000);
 
@@ -164,7 +170,13 @@ class PayBoxStore {
 
       this.resErrorFactory(getWalletRes);
     } catch (error) {
-      this.errorHandler(error);
+      if (error.Code) {
+        throw error;
+      }
+      throw {
+        ...PAY_BOX_ERROR_CODE_MAP.NETWORK_ERROR,
+        error,
+      };
     }
   }
 
@@ -192,7 +204,13 @@ class PayBoxStore {
 
       this.resErrorFactory(payRes);
     } catch (error) {
-      this.errorHandler(error);
+      if (error.Code) {
+        throw error;
+      }
+      throw {
+        ...PAY_BOX_ERROR_CODE_MAP.NETWORK_ERROR,
+        error,
+      };
     }
   };
 
@@ -230,7 +248,13 @@ class PayBoxStore {
         });
       }
     } catch (error) {
-      this.errorHandler(error);
+      if (error.Code) {
+        throw error;
+      }
+      throw {
+        ...PAY_BOX_ERROR_CODE_MAP.NETWORK_ERROR,
+        error,
+      };
     }
   }, 1000);
 
@@ -255,7 +279,13 @@ class PayBoxStore {
         this.getOrderDetail();
       }, 1000);
     } catch (error) {
-      this.errorHandler(error);
+      if (error.Code) {
+        throw error;
+      }
+      throw {
+        ...PAY_BOX_ERROR_CODE_MAP.NETWORK_ERROR,
+        error,
+      };
     }
   }, 1000);
 
@@ -316,7 +346,13 @@ class PayBoxStore {
         }
       }
     } catch (error) {
-      this.errorHandler(error);
+      if (error.Code) {
+        throw error;
+      }
+      throw {
+        ...PAY_BOX_ERROR_CODE_MAP.NETWORK_ERROR,
+        error,
+      };
     }
   }
 
@@ -338,7 +374,13 @@ class PayBoxStore {
 
       this.resErrorFactory(setPayPwdRes);
     } catch (error) {
-      this.errorHandler(error);
+      if (error.Code) {
+        throw error;
+      }
+      throw {
+        ...PAY_BOX_ERROR_CODE_MAP.NETWORK_ERROR,
+        error,
+      };
     }
   }
 
