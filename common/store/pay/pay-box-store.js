@@ -2,45 +2,8 @@ import { observable, computed, action } from 'mobx';
 import { get } from '../../utils/get';
 import { createOrders, createPayOrder, readOrderDetail, readWalletUser, updateUsersUpdate } from '@server';
 import isWeixin from '../../utils/is-weixin';
-
-export const STEP_MAP = {
-  SURE: 'sure', // 订单确认阶段
-  PAYWAY: 'payway', // 选择支付方式阶段
-  PAY: 'pay', // 付费阶段
-  WALLET_PASSWORD: 'walletPassword', // 钱包密码输入阶段
-  RESULT: 'result', // 付费完成后确认付费信息阶段
-};
-
-// 支付模式映射表
-export const PAYWAY_MAP = {
-  WX: 'weixin', // 微信支付
-  WALLET: 'wallet', // 钱包支付
-};
-
-// 微信支付状态映射表
-export const WX_PAY_STATUS = {
-  WX_PAY_OK: 'get_brand_wcpay_request:ok',
-  WX_PAY_CANCEL: 'get_brand_wcpay_request:cancel',
-  WX_PAY_FAIL: 'get_brand_wcpay_request:fail',
-};
-
-// 支付方式映射表
-export const PAY_MENT_MAP = {
-  WX_QRCODE: 10,
-  WX_H5: 11,
-  WX_OFFICAL: 12,
-  WX_MINI_PROGRAM: 13,
-  WALLET: 20,
-};
-
-// 订单状态映射表
-export const ORDER_STATUS_MAP = {
-  PENDING_PAY: 0,
-  PAID: 1,
-  CANCEL_PAY: 2,
-  FAIL_PAY: 3,
-  OUT_DATE_PAY: 4,
-};
+import browser from '../../utils/browser';
+import { STEP_MAP, PAYWAY_MAP, WX_PAY_STATUS, PAY_MENT_MAP, ORDER_STATUS_MAP, PAY_BOX_ERROR_CODE_MAP } from '../../constants/payBoxStoreConstants';
 
 export const listenWXJsBridgeAndExecCallback = (callback) => {
   if (typeof WeixinJSBridge === 'undefined') {
@@ -101,6 +64,30 @@ class PayBoxStore {
     return get(this.orderInfo, 'orderSn');
   }
 
+  resErrorFactory = (res, handlers = {}) => {
+    const resCode = get(res, 'code') !== 0;
+    if (handlers[resCode]) {
+      handlers(res);
+    }
+    if (resCode !== 0) {
+      throw {
+        Code: res.code,
+        Message: res.msg,
+      };
+    }
+  }
+
+  errorHandler = (error) => {
+    console.error(error);
+    if (error.Code) {
+      throw error;
+    }
+    throw {
+      ...PAY_BOX_ERROR_CODE_MAP.NETWORK_ERROR,
+      error,
+    };
+  }
+
   @action
   onBridgeReady = data => new Promise((resolve, reject) => {
     const { appId, timeStamp, nonceStr, package: wxPackage, paySign } = data;
@@ -119,17 +106,11 @@ class PayBoxStore {
       }
 
       if (payStatus === WX_PAY_STATUS.WX_PAY_CANCEL) {
-        reject({
-          Code: '',
-          Message: '',
-        });
+        reject(PAY_BOX_ERROR_CODE_MAP.WX_PAY_CANCEL);
       }
 
       if (payStatus === WX_PAY_STATUS.WX_PAY_FAIL) {
-        reject({
-          Code: '',
-          Message: '',
-        });
+        reject(PAY_BOX_ERROR_CODE_MAP.WX_PAY_FAIL);
       }
     });
   })
@@ -150,20 +131,9 @@ class PayBoxStore {
         this.orderInfo = get(createRes, 'data', {});
         return createRes;
       }
-      throw {
-        Code: createRes.code,
-        Message: createRes.msg,
-      };
+      this.resErrorFactory(createRes);
     } catch (error) {
-      console.error(error);
-      if (error.Code) {
-        throw error;
-      }
-      throw {
-        Code: 'ulg_9999',
-        Message: '网络错误',
-        error,
-      };
+      this.errorHandler(error);
     }
   }
 
@@ -179,9 +149,12 @@ class PayBoxStore {
 
       if (get(getWalletRes, 'code') === 0) {
         this.walletInfo = get(getWalletRes, 'data', {});
+        return getWalletRes;
       }
+
+      this.resErrorFactory(getWalletRes);
     } catch (error) {
-      console.error(error);
+      this.errorHandler(error);
     }
   }
 
@@ -206,8 +179,10 @@ class PayBoxStore {
           password: this.password,
         },
       });
+
+      this.resErrorFactory(payRes);
     } catch (error) {
-      console.log(error);
+      this.errorHandler(error);
     }
   }
 
@@ -219,17 +194,23 @@ class PayBoxStore {
     try {
       if (!isWeixin()) {
         // is not in weixin, just throw tips error
-        throw {
-          Code: '',
-          Message: '微信外浏览器无法拉起付款',
-        };
+        throw PAY_BOX_ERROR_CODE_MAP.NOT_IN_WEIXIN_PAY;
       }
+
+      // IOS 暂时政策不允许支付
+      if (browser.env('ios')) {
+        throw PAY_BOX_ERROR_CODE_MAP.IN_IOS;
+      }
+
       const payRes = await createPayOrder({
         data: {
           orderSn: this.orderSn,
           paymentType: PAY_MENT_MAP.WX_OFFICAL,
         },
       });
+
+      this.resErrorFactory(payRes);
+
       if (payRes.code === 0) {
         listenWXJsBridgeAndExecCallback(() => {
           this.onBridgeReady(get(payRes, 'data.wechatPayResult.wechatJs'));
@@ -239,7 +220,7 @@ class PayBoxStore {
         });
       }
     } catch (error) {
-      console.log(error);
+      this.errorHandler(error);
     }
   }
 
@@ -255,9 +236,12 @@ class PayBoxStore {
           paymentType: PAY_MENT_MAP.WX_QRCODE,
         },
       });
+
+      this.resErrorFactory(payRes);
+
       this.wechatQRCode = get(payRes, 'data.wechatPayResult.wechatQrcode');
     } catch (error) {
-      console.log(error);
+      this.errorHandler(error);
     }
   }
 
@@ -267,13 +251,16 @@ class PayBoxStore {
   @action
   getOrderDetail = async () => {
     try {
-      const orderInfo = await readOrderDetail({
+      const orderInfoRes = await readOrderDetail({
         data: {
           orderSn: this.orderSn,
         },
       });
 
-      const orderStatus = get(orderInfo, 'data.status');
+      // if request failed
+      this.resErrorFactory(orderInfoRes);
+
+      const orderStatus = get(orderInfoRes, 'data.status');
 
       if (orderStatus === ORDER_STATUS_MAP.PENDING_PAY) {
         return;
@@ -315,7 +302,7 @@ class PayBoxStore {
         }
       }
     } catch (error) {
-      console.log(error);
+      this.errorHandler(error);
     }
   }
 
@@ -325,7 +312,7 @@ class PayBoxStore {
   @action
   setPayPassword = async () => {
     try {
-      await updateUsersUpdate({
+      const setPayPwdRes = await updateUsersUpdate({
         data: {
           id: 19,
           data: {
@@ -334,8 +321,10 @@ class PayBoxStore {
           },
         },
       });
+
+      this.resErrorFactory(setPayPwdRes);
     } catch (error) {
-      console.log(error);
+      this.errorHandler(error);
     }
   }
 }
