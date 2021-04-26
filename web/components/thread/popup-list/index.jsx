@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Tabs, Popup } from '@discuzq/design';
+import React, { useState, useEffect, useRef } from 'react';
+import { Tabs, Popup, Icon } from '@discuzq/design';
 import UserItem from '../user-item';
 import styles from './index.module.scss';
-import { getLikedUsers } from '@common/service/home';
 import NoData from '@components/no-data';
+import { readLikedUsers } from '@server';
+import List from '../../list';
 
 /**
  * 帖子点赞、打赏点击之后的弹出视图
@@ -12,122 +13,138 @@ import NoData from '@components/no-data';
  */
 
 const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
-  const tabList = useRef([
-    {
-      id: '0',
-      label: '全部',
-      badge: '10',
-      icon: 'succuss',
-    },
-    {
-      id: '1',
-      label: '点赞',
-      badge: '10',
-      icon: 'succuss',
-    },
-    {
-      id: '2',
-      label: '打赏',
-      badge: '10',
-      icon: 'succuss',
-    },
-  ]);
-
   const allPageNum = useRef(1);
   const likePageNum = useRef(1);
-  const rewardPageNum = useRef(1);
+  const tipPageNum = useRef(1);
 
-  const [dataSource, setDataSource] = useState([]);
-  const [dataSource1, setDataSource1] = useState([]);
-  const [dataSource2, setDataSource2] = useState([]);
+  const [all, setAll] = useState(null);
+  const [likes, setLikes] = useState(null);
+  const [tips, setTips] = useState(null);
+
+  const [current, setCurrent] = useState(0);
 
   useEffect(() => {
     if (visible) {
-      loadData();
+      loadData({ type: current });
     }
   }, [visible]);
 
-  const loadData = async () => {
+  const loadData = async ({ type }) => {
     const { postId = '', threadId = '' } = tipData;
-    const res = await getLikedUsers({ threadId, postId, isAll: true });
-    setDataSource(res[0]?.list || []);
-    setDataSource1(res[1]?.list || []);
-    setDataSource2(res[2]?.list || []);
+    const res = await readLikedUsers({ params: { threadId, postId, type, page: 1 } });
+
+    setAll(res?.data);
   };
 
-  const singleloadData = async (page = 1, type = 1) => {
-    const { data } = await getLikedUsers({ threadId: '61', postId: '0', page, type });
+  const singleLoadData = async ({ page = 1, type = 1 } = {}) => {
+    const { postId = '', threadId = '' } = tipData;
+    const res = await readLikedUsers({ params: { threadId, postId, page, type } });
 
-    const { list = [] } = data || {};
+    const data = res?.data || {};
 
     if (type === 0) {
-      allPageNum.current += 1;
-      if (page === 1) {
-        setDataSource(list);
-      } else {
-        setDataSource([...dataSource, ...list]);
+      if (page !== 1) {
+        data?.pageData?.list.unshift(...(all?.pageData?.list || []));
       }
+      setAll(data);
     } else if (type === 1) {
-      likePageNum.current += 1;
-      if (page === 1) {
-        setDataSource1(list);
-      } else {
-        setDataSource([...dataSource1, ...list]);
+      if (page !== 1) {
+        data?.pageData?.list.unshift(...(likes?.pageData?.list || []));
       }
+      setLikes(data);
     } else if (type === 2) {
-      rewardPageNum.current += 1;
-      if (page === 1) {
-        setDataSource2(list);
-      } else {
-        setDataSource([...dataSource2, ...list]);
+      if (page !== 1) {
+        data?.pageData?.list.unshift(...(tips?.pageData?.list || []));
       }
+      setTips(data);
     }
   };
 
-  const renderList = useCallback((id) => {
-    if (!visible) {
-      return null;
+  const loadMoreData = () => {
+    if (current === 0) {
+      allPageNum.current += 1;
+      return singleLoadData({ page: allPageNum.current, type: current });
     }
-    let data = dataSource;
-    if (id === '1') {
-      data = dataSource1;
-    } else if (id === '2') {
-      data = dataSource2;
+    if (current === 1) {
+      likePageNum.current += 1;
+      return singleLoadData({ page: likePageNum.current, type: current });
     }
+    tipPageNum.current += 1;
+    return singleLoadData({ page: tipPageNum.current, type: current });
+  };
 
-    return (
-      <>
-        {
-          data && data.length
-            ? (
-            <div className={styles.list}>
-              {
-                data.map((item, index) => (
-                  <UserItem key={index} imgSrc={item.avatar} title={item.nickname} subTitle={item.time} />
-                ))
-              }
-            </div>
-            )
-            : <NoData />
-          }
-      </>
+  const onClickTab = (id) => {
+    setCurrent(id);
+    const hasAll = id === 0 && !all;
+    const hasLikes = id === 1 && !likes;
+    const hasTips = id === 2 && !tips;
 
-    );
-  }, [visible]) ;
+    if (hasAll || hasLikes || hasTips) {
+      singleLoadData({ type: id });
+    }
+  };
 
+  const onClose = () => {
+    onHidden();
+    setAll(null);
+    setLikes(null);
+    setTips(null);
+    setCurrent(0);
+  };
+
+  const renderHeader = ({ title, icon, number  }) => (
+    <div className={styles.label}>
+      {icon && <Icon name={icon} />}
+      <span className={`${styles.title} disable-click`}>{title}</span>
+      {number !== 0 && number !== '0' && <span className="disable-click">{number}</span>}
+    </div>
+  );
 
   return (
     <Popup
         position="bottom"
         visible={visible}
-        onClose={onHidden}
+        onClose={onClose}
     >
-        <Tabs>
-            {tabList.current.map(item => (
-                <Tabs.TabPanel key={item.id} id={item.id} label={item.label} badge={item.badge} icon={item.icon}>
-                {renderList(item.id)}
-                </Tabs.TabPanel>
-            ))}
+        <Tabs
+          onActive={onClickTab}
+          activeId={current}
+        >
+          <Tabs.TabPanel key={0} id={0} label={renderHeader({ icon: '', title: '全部', number: all?.pageData?.allCount })}>
+            {all?.pageData?.list?.length ? (
+              <List className={styles.list} onRefresh={loadMoreData} noMore={all.currentPage === all.totalPage}>
+              {
+                all.pageData?.list?.map((item, index) => (
+                    <UserItem key={index} imgSrc={item.avatar} title={item.username} subTitle={item.passedAt} />
+                ))
+              }
+            </List>
+            ) : <NoData className={styles.list} />}
+          </Tabs.TabPanel>
+
+          <Tabs.TabPanel key={1} id={1} label={renderHeader({ icon: 'LikeOutlined', title: '点赞', number: all?.pageData?.likeCount })}>
+            {likes?.pageData?.list?.length ? (
+              <List className={styles.list} onRefresh={loadMoreData} noMore={likes?.currentPage === likes?.totalPage}>
+              {
+                likes.pageData?.list?.map((item, index) => (
+                  <UserItem key={index} imgSrc={item.avatar} title={item.username} subTitle={item.passedAt} />
+                ))
+              }
+            </List>
+            ) : <NoData className={styles.list} />}
+          </Tabs.TabPanel>
+
+          <Tabs.TabPanel key={2} id={2} label={renderHeader({ icon: 'HeartOutlined', title: '打赏', number: all?.pageData?.raidCount })}>
+            {tips?.pageData?.list?.length ? (
+              <List className={styles.list} onRefresh={loadMoreData} noMore={tips?.currentPage === tips?.totalPage}>
+              {
+                tips.pageData?.list?.map((item, index) => (
+                  <UserItem key={index} imgSrc={item.avatar} title={item.username} subTitle={item.passedAt} />
+                ))
+              }
+            </List>
+            ) : <NoData className={styles.list} />}
+          </Tabs.TabPanel>
         </Tabs>
     </Popup>
   );

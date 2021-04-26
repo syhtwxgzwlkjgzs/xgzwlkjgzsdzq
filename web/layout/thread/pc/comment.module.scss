@@ -3,7 +3,6 @@
 .container {
   // width: 100%;
   width: calc(100% - rem(48));
-  height: rem(597);
   background: #fff;
   padding: 0 rem($font-line-height-primary);
 }
@@ -30,10 +29,6 @@
       padding-left: rem(4);
     }
   }
-}
-
-.input {
-  border: var(--border-border);
 }
 
 .body {

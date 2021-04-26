@@ -2,26 +2,20 @@ import locals from './local-bridge';
 import constants from '../constants/index';
 
 export const setCookie = (name, value, exdays) => {
-  let cookie = `${name}=${value};`;
   if (exdays) {
-    const d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    const expires = `expires=${d.toGMTString()}`;
-    cookie = `${cookie} ${expires}`;
+    const Days = 30;
+    const exp = new Date();
+    exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+    document.cookie = `${name}=${value};expires=${exp.toGMTString()};path=/;`;
   }
-  document.cookie += cookie;
+  document.cookie = `${name}=${value};path=/;`;
 };
 
 export const getCookie = (cname) => {
-  const name = `${cname}=`;
-  const cookie = document.cookie.split(';');
-  for (let i = 0, len = cookie.length; i < len; i++) {
-    const c = cookie[i].trim();
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return '';
+  let arr;
+  const reg = new RegExp(`(^| )${cname}=([^;]*)(;|$)`);
+  if (arr = document.cookie.match(reg)) return arr[2];
+  return null;
 };
 
 const setAccessToken = ({
@@ -30,7 +24,6 @@ const setAccessToken = ({
   if (!accessToken) return;
   const expireSeconds = 30 * 24 * 60 * 60 * 1000;
   setCookie(constants.ACCESS_TOKEN_NAME, accessToken, 30);
-  // setCookie('rtess', accessToken, 30);
   locals.set(constants.ACCESS_TOKEN_NAME, accessToken, expireSeconds);
 };
 

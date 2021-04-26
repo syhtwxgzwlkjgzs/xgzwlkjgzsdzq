@@ -1,7 +1,6 @@
 import React from 'react';
 import { withRouter } from 'next/router';
-import PropTypes from 'prop-types';
-import { Button } from '@discuzq/design';
+import { Button, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import ImageContent from './image-content';
 import AudioPlay from './audio-play';
@@ -15,22 +14,41 @@ import UserInfo from './user-info';
 import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
-import { updateThreadInfo, updateThreadShare } from './utils';
-
+import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
+import { filterClickClassName, handleAttachmentData } from './utils';
+// import goToLoginPage from '@common/utils/go-to-login-page';
 @inject('site')
 @inject('index')
+@inject('user')
 @observer
 class Index extends React.Component {
     // 分享
     onShare = (e) => {
       e.stopPropagation();
-      const { data = {} } = this.props;
-      const { threadId = '' } = data;
-      updateThreadShare({ threadId });
+
+      // 对没有登录的先登录
+      if (!this.props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        // goToLoginPage();
+        return;
+      }
+
+      Toast.info({ content: '分享链接已复制成功' });
+
+      const { title = '', threadId = '' } = this.props.data || {};
+      h5Share(title);
+      this.props.index.updateThreadShare({ threadId });
     }
     // 评论
     onComment = (e) => {
       e.stopPropagation();
+
+      // 对没有登录的先登录
+      if (!this.props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        // goToLoginPage();
+        return;
+      }
 
       const { data = {} } = this.props;
       const { threadId = '' } = data;
@@ -43,13 +61,27 @@ class Index extends React.Component {
     // 点赞
     onPraise = (e) => {
       e.stopPropagation();
+
+      // 对没有登录的先登录
+      if (!this.props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        // goToLoginPage();
+        return;
+      }
       const { data = {} } = this.props;
       const { threadId = '', isLike, postId } = data;
-      updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } });
+      this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } });
     }
     // 支付
     onPay = (e) => {
       e.stopPropagation();
+
+      // 对没有登录的先做
+      if (!this.props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        // goToLoginPage();
+        return;
+      }
 
       if (this.props.payType === '0') {
         return;
@@ -58,9 +90,18 @@ class Index extends React.Component {
       console.log('发起支付流程');
     }
 
-    onClick = () => {
-      const { data = {} } = this.props;
-      const { threadId = '' } = data;
+    onClick = (e) => {
+      if (!filterClickClassName(e.target)) {
+        return;
+      }
+
+      const { threadId = '', ability } = this.props.data || {};
+      const { canViewPost } = ability;
+
+      if (!canViewPost) {
+        Toast.info({ content: '暂无权限查看详情，请联系管理员' });
+      }
+
       if (threadId !== '') {
         this.props.router.push(`/thread/${threadId}`);
       } else {
@@ -70,36 +111,8 @@ class Index extends React.Component {
       // 执行外部传进来的点击事件
       const { onClick } = this.props;
       if (typeof(onClick) === 'function') {
-        onClick(data);
+        onClick(this.props.data);
       }
-    }
-
-    // 处理附件的数据
-    handleAttachmentData = (data) => {
-      const newData = { text: data.text };
-      const values = Object.values(data.indexes || {});
-      values.forEach((item) => {
-        const { tomId } = item;
-        if (tomId === '101') { // 图片
-          newData.imageData = item.body;
-        } else if (tomId === '102') { // 音频
-          newData.audioData = item.body;
-        } else if (tomId === '103') { // 视频
-          newData.videoData = item.body;
-        } else if (tomId === '104') { // 商品
-          newData.goodsData = item.body;
-        } else if (tomId === '105') { // 问答
-          newData.qaData = item.body;
-        } else if (tomId === '106') { // 红包
-          newData.redPacketData = item.body;
-        } else if (tomId === '107') { // 悬赏
-          newData.rewardData = item.body;
-        } else if (tomId === '108') { // 附件
-          newData.fileData = item.body;
-        }
-      });
-
-      return newData;
     }
 
     // 帖子属性内容
@@ -113,21 +126,26 @@ class Index extends React.Component {
         redPacketData,
         rewardData,
         fileData,
-      } = this.handleAttachmentData(data);
+      } = handleAttachmentData(data);
 
       return (
-        <div className={styles.wrapper}>
+        <div className={styles.wrapper} ref={this.ref}>
             {text && <PostContent content={text} onPay={this.onPay} />}
             <div className={styles.content}>
               {videoData && (
                 <VideoPlay
-                  width={378}
-                  height={224}
                   url={videoData.mediaUrl}
                   coverUrl={videoData.coverUrl}
+                  onPay={this.onPay}
+                  isPay={payType !== 0}
                 />
               )}
-              {imageData && <ImageContent imgData={imageData} />}
+              {imageData && <ImageContent
+                imgData={imageData}
+                isPay={payType !== 0}
+                onPay={this.onPay}
+                onClickMore={this.onClick}
+              />}
               {rewardData && <RewardQuestion
                 content={rewardData.content || ''}
                 money={rewardData.money}
@@ -139,17 +157,21 @@ class Index extends React.Component {
                   amount={goodsData.price}
                   title={goodsData.title}
               />}
-              {audioData && <AudioPlay url={audioData.mediaUrl} />}
-              {fileData && <AttachmentView attachments={fileData} onClick={this.onPay} />}
+              {audioData && <AudioPlay url={audioData.mediaUrl} isPay={payType !== 0} />}
+              {fileData && <AttachmentView attachments={fileData} onClick={this.onPay} isPay={payType !== 0} />}
 
-              {/* 附件付费蒙层 */}
+              {/* 付费蒙层 */}
               {
-                payType === 2 && (
-                  <div className={styles.cover}>
-                    <Button className={styles.button} type="primary" onClick={this.onPay}>
-                      <span className={styles.icon}>$</span>
-                      支付{attachmentPrice}元查看附件内容
-                    </Button>
+                payType !== 0 && (
+                  <div className={styles.cover} onClick={payType === 1 ? this.onClick : this.onPay}>
+                    {
+                      payType === 2 ? (
+                        <Button className={styles.button} type="primary" onClick={this.onPay}>
+                          <span className={styles.icon}>$</span>
+                          支付{attachmentPrice}元查看附件内容
+                        </Button>
+                      ) : null
+                    }
                   </div>
                 )
               }

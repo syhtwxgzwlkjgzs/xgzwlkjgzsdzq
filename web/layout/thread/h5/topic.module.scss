@@ -7,7 +7,6 @@
 }
 
 .header {
-  // height: rem(54);
   background: var(--color-white);
   display: flex;
   justify-content: space-between;
@@ -56,12 +55,6 @@
   font-size: rem($font-size-primary);
 }
 
-.thumbs {
-  display: flex;
-  align-items: center;
-  font-size: rem($font-size-primary);
-}
-
 .buyBtn {
   margin-top: rem($margin-4n);
   width: 100%;
@@ -77,12 +70,18 @@
   border-radius: rem($border-radius-small);
 }
 
+.thumbs {
+  display: flex;
+  align-items: center;
+  font-size: rem($font-size-primary);
+}
+
 .liked {
   display: flex;
   align-items: center;
 
   span {
-    margin-left: rem(8);
+    margin-left: rem($margin-2n);
   }
 }
 
@@ -91,5 +90,13 @@
 }
 
 .likeReward {
-  margin-left: rem(16);
+  margin-left: rem($margin-4n);
+}
+
+.examine {
+  padding: rem(8) 0;
+  background: var(--color-error);
+  color: var(--color-white);
+  text-align: center;
+  font-size: rem(14);
 }

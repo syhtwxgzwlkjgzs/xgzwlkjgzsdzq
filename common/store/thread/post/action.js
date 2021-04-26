@@ -1,26 +1,29 @@
 import { action } from 'mobx';
 import ThreadPostStore from './store';
-import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread } from '@common/server';
-import { LOADING_TOTAL_TYPE } from '@common/constants/thread-post';
+import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread, updateThread } from '@common/server';
+import { LOADING_TOTAL_TYPE, THREAD_TYPE } from '@common/constants/thread-post';
 
 class ThreadPostAction extends ThreadPostStore {
   /**
    * 发帖
    */
   @action.bound
-  async createThread(params) {
-    // 待更换为全局loading?
-    // this.setLoadingStatus(LOADING_TOTAL_TYPE.emoji, true);
+  async createThread() {
+    const params = this.getCreateThreadParams();
     const ret = await createThread(params);
-    // this.setLoadingStatus(LOADING_TOTAL_TYPE.emoji, false);
-    // const { code, data = [] } = ret;
-    // 相关数据处理待实际调用时修改
-    // let emojis = [];
-    // if (code === 0) emojis = data.map(item => ({ code: item.code, url: item.url }));
-    // this.setEmoji(emojis);
     return ret;
   }
 
+  /**
+   * 更新帖子
+   * @param {number} id 帖子id
+   */
+  @action.bound
+  async updateThread(id) {
+    const params = this.getCreateThreadParams();
+    const ret = await updateThread({ ...params, threadId: Number(id) });
+    return ret;
+  }
 
   /**
    * 获取所有表情
@@ -150,9 +153,150 @@ class ThreadPostAction extends ThreadPostStore {
     this.postData = { ...this.postData, ...data };
   }
 
+  @action.bound
+  setCategorySelected(data) {
+    this.categorySelected = data || { parent: {}, child: {} };
+  }
+
+  /**
+   * 获取格式化之后的插件对象信息，包括语音等
+   */
   @action
-  setCategorySeleted(data) {
-    this.categorySeleted = data || { parent: {}, child: {} };
+  gettContentIndexes() {
+    const { images, video, files, product, audio, redpacket, rewardQa } = this.postData;
+    const imageIds = Object.values(images).map(item => item.id);
+    const docIds = Object.values(files).map(item => item.id);
+    const contentIndexes = {};
+    if (imageIds.length > 0) {
+      contentIndexes[THREAD_TYPE.image] = {
+        tomId: THREAD_TYPE.image,
+        body: { imageIds },
+      };
+    }
+    if (video.id) {
+      contentIndexes[THREAD_TYPE.video] = {
+        tomId: THREAD_TYPE.video,
+        body: { videoId: video.id },
+      };
+    }
+    if (docIds.length > 0) {
+      contentIndexes[THREAD_TYPE.file] = {
+        tomId: THREAD_TYPE.file,
+        body: { docIds },
+      };
+    }
+    if (product.id) {
+      contentIndexes[THREAD_TYPE.goods] = {
+        tomId: THREAD_TYPE.goods,
+        body: { ...product },
+      };
+    }
+    if (audio.id) {
+      contentIndexes[THREAD_TYPE.voice] = {
+        tomId: THREAD_TYPE.voice,
+        body: { audioId: audio.id },
+      };
+    }
+    // TODO:需要支付，缺少 orderId
+    if (redpacket.price) {
+      contentIndexes[THREAD_TYPE.redPacket] = {
+        tomId: THREAD_TYPE.redPacket,
+        body: { ...redpacket },
+      };
+    }
+    // TODO:需要支付，缺少 orderId
+    if (rewardQa.times) {
+      contentIndexes[THREAD_TYPE.qa] = {
+        tomId: THREAD_TYPE.qa,
+        body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0 },
+      };
+    }
+    return contentIndexes;
+  }
+
+  /**
+   * 获取发帖时需要的参数
+   */
+  @action
+  getCreateThreadParams() {
+    const { title, categoryId, contentText, position, price, attachmentPrice, freeWords } = this.postData;
+    const params = {
+      title, categoryId, content: {
+        text: contentText,
+      },
+    };
+    if (position.address) params.position = position;
+    if (!!price) {
+      params.price = price;
+      params.freeWords = freeWords;
+    }
+    if (!!attachmentPrice) params.attachmentPrice = attachmentPrice;
+    if (this.postData.draft) params.draft = this.postData.draft;
+    if (this.postData.anonymous) params.anonymous = this.postData.anonymous;
+    const contentIndexes = this.gettContentIndexes();
+    if (Object.keys(contentIndexes).length > 0) params.content.indexes = contentIndexes;
+    return params;
+  }
+
+  @action
+  formatThreadDetailToPostData(detail) {
+    const { title, categoryId, content, freeWords = 1 } = detail || {};
+    const price = Number(detail.price);
+    const attachmentPrice = Number(detail.attachmentPrice);
+    let position = {};
+    if (detail.position && detail.position.address) position = detail.position;
+    const contentText = content && content.text;
+    const contentindexes = (content && content.indexes) || {};
+    let audio = {};
+    let rewardQa = {};
+    let product = {};
+    let redpacket = {};
+    let video = {};
+    const images = {};
+    const files = {};
+    // 插件格式化
+    Object.keys(contentindexes).forEach((index) => {
+      const tomId = Number(contentindexes[index].tomId);
+      if (tomId === THREAD_TYPE.image) {
+        const imageBody = contentindexes[index].body || [];
+        imageBody.forEach((item) => {
+          images[item.id] = { ...item, type: item.fileType, name: item.fileName };
+        });
+      }
+      if (tomId === THREAD_TYPE.file) {
+        const fileBody = contentindexes[index].body || [];
+        fileBody.forEach((item) => {
+          files[item.id] = { ...item, type: item.fileType, name: item.fileName  };
+        });
+      }
+      if (tomId === THREAD_TYPE.audio) audio = contentindexes[index].body;
+      if (tomId === THREAD_TYPE.product) product = contentindexes[index].body;
+      if (tomId === THREAD_TYPE.video) video = contentindexes[index].body;
+      if (tomId === THREAD_TYPE.redpacket) redpacket = contentindexes[index].body;
+      // expiredAt: rewardQa.times, price: rewardQa.value, type: 0
+      if (tomId === THREAD_TYPE.reward) rewardQa = {
+        ...contentindexes[index].body,
+        times: contentindexes[index].body.expiredAt,
+        value: contentindexes[index].body.price || 0,
+      };
+    });
+    this.setPostData({
+      // 标题去掉富文本
+      title: title.replace(/<[^<>]+>/g, ''),
+      categoryId,
+      price,
+      attachmentPrice,
+      position,
+      contentText,
+      audio,
+      rewardQa,
+      product,
+      redpacket,
+      video,
+      images,
+      files,
+      freeWords,
+    });
   }
 }
 

@@ -13,7 +13,8 @@
     "lintcss:fix": "stylelint src/**/*.{scss}",
     "dev:weapp": "cross-env NODE_ENV=development dzq dev -p mini --type weapp",
     "build:weapp": "cross-env NODE_ENV=production dzq build -p mini --type weapp",
-    "dev": "taro build --type weapp --watch"
+    "dev": "taro build --type weapp --watch",
+    "build": "taro build --type weapp"
   },
   "browserslist": [
     "last 3 versions",
@@ -24,9 +25,9 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "7.7.7",
-    "@discuzq/cli": "0.0.1-alpha.21",
-    "@discuzq/design": "0.0.1-alpha.21",
-    "@discuzq/sdk": "0.0.1-alpha.21",
+    "@discuzq/cli": "0.0.1-alpha.22",
+    "@discuzq/design": "0.0.1-alpha.22",
+    "@discuzq/sdk": "0.0.1-alpha.22",
     "@tarojs/components": "3.2.2",
     "@tarojs/react": "3.2.2",
     "@tarojs/runtime": "3.2.2",
@@ -34,7 +35,8 @@
     "mobx": "4.15.4",
     "mobx-react": "6.1.8",
     "react": "17.0.1",
-    "react-dom": "17.0.1"
+    "react-dom": "17.0.1",
+    "xss": "^1.0.8"
   },
   "devDependencies": {
     "@babel/core": "7.8.0",
