@@ -1,19 +1,26 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon, Popup, Textarea, Upload, Button } from '@discuzq/design';
 import styles from './index.module.scss';
 
 const InputPop = (props) => {
-  const { visible, onSubmit, onClose } = props;
+  const { visible, onSubmit, initValue, onClose, inputText = '请输入内容' } = props;
 
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setValue(initValue || '');
+  }, [initValue]);
 
   const onSubmitClick = async () => {
     if (typeof onSubmit === 'function') {
       try {
         setLoading(true);
-        await onSubmit(value);
+        const success = await onSubmit(value);
+        if (success) {
+          setValue('');
+        }
       } catch (error) {
         console.log(error);
       } finally {
@@ -37,16 +44,16 @@ const InputPop = (props) => {
             showLimit={true}
             value={value}
             onChange={e => setValue(e.target.value)}
-            placeholder='请输入内容'>
+            placeholder={inputText}>
           </Textarea>
-          <Upload listType='card'>
+          {/* <Upload listType='card'>
             <Button loading={loading} type='text' className={styles.upload}>
               <Icon name="PlusOutlined" size={20}></Icon>
               <span>上传附件</span>
             </Button>
-          </Upload>
+          </Upload> */}
         </div>
-        <Button onClick={onSubmitClick} className={styles.button} type='primary' size='large'>发布</Button>
+        <Button full={true} loading={loading} onClick={onSubmitClick} className={styles.button} type='primary' size='large'>发布</Button>
       </div>
     </Popup>);
 };

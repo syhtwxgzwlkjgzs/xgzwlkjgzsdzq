@@ -4,9 +4,9 @@ class IndexStore {
 
   @observable categories = null;
 
-  @observable sticks = [];
+  @observable sticks = null;
 
-  @observable threads = [];
+  @observable threads = null;
 }
 
 export default IndexStore;

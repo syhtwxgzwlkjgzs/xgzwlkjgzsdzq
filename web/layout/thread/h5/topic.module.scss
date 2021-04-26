@@ -7,10 +7,21 @@
 }
 
 .header {
-  // height: rem(54);
   background: var(--color-white);
   display: flex;
   justify-content: space-between;
+}
+
+.userInfo {
+  flex: 1;
+}
+
+.more {
+  padding-left: rem($padding-2n);
+}
+
+.essence {
+  margin-right: rem($margin-2n);
 }
 
 .body {
@@ -25,6 +36,17 @@
   width: 100%;
 }
 
+.reward {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rewardButton {
+  margin: 0 auto;
+  width: rem(156);
+}
+
 .footer {
   display: flex;
   align-items: center;
@@ -33,8 +55,48 @@
   font-size: rem($font-size-primary);
 }
 
+.buyBtn {
+  margin-top: rem($margin-4n);
+  width: 100%;
+  height: rem(36);
+}
+
+.tag {
+  display: inline-block;
+  color: var(--color-text-regular);
+  background: var(--background-color);
+  font-size: rem($font-size-label);
+  padding: rem($padding-2n) rem($padding-1n);
+  border-radius: rem($border-radius-small);
+}
+
 .thumbs {
   display: flex;
   align-items: center;
   font-size: rem($font-size-primary);
+}
+
+.liked {
+  display: flex;
+  align-items: center;
+
+  span {
+    margin-left: rem($margin-2n);
+  }
+}
+
+.isLiked {
+  color: var(--color-primary);
+}
+
+.likeReward {
+  margin-left: rem($margin-4n);
+}
+
+.examine {
+  padding: rem(8) 0;
+  background: var(--color-error);
+  color: var(--color-white);
+  text-align: center;
+  font-size: rem(14);
 }

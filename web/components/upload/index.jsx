@@ -20,20 +20,22 @@ export default function DzqUpload(props) {
     onFail,
     onComplete,
     data,
+    accept,
   } = props;
   const multiple = limit > 1;
 
-  const post = async (file, list, updater) => {
+  const post = async (file) => { // file, list, updater
     const formData = new FormData();
     formData.append('file', file.originFileObj);
     Object.keys(data).forEach((item) => {
       formData.append(item, data[item]);
     });
-    const ret = await createAttachment(formData, (progressEvent) => {
-      const complete = (progressEvent.loaded / progressEvent.total * 100 | 0);
-      file.status = 'uploading';
-      file.percent += complete;
-      updater(list);
+    // TODO:进度条目前有问题
+    const ret = await createAttachment(formData, () => { // progressEvent
+      // const complete = (progressEvent.loaded / progressEvent.total * 100 | 1);
+      // file.status = 'uploading';
+      // // file.percent += complete;
+      // updater(list);
     });
     if (ret.code === 0) {
       onSuccess(ret, file);
@@ -45,8 +47,11 @@ export default function DzqUpload(props) {
     return ret;
   };
 
+  // TODO: 因为上传组件不支持传class和style，所以在外面增加了一层dom
+  const className = isCustomUploadIcon ? 'dzq-custom-upload' : '';
+
   return (
-    <>
+    <div className={className}>
       <Upload
         listType={listType}
         fileList={fileList}
@@ -63,6 +68,7 @@ export default function DzqUpload(props) {
           onChange(fileList);
         }}
         customRequest={post}
+        accept={accept}
       >
         {!isCustomUploadIcon && (
           <Button type='text' className={classNames(styles['flex-column-center'], styles['text-grey'])}>
@@ -72,7 +78,7 @@ export default function DzqUpload(props) {
         )}
         {isCustomUploadIcon && children}
       </Upload>
-    </>
+    </div>
   );
 }
 

@@ -5,22 +5,20 @@ import PCHeader from './pc';
 
 @inject('site')
 @observer
-class Header extends React.Component{
-    constructor(props) {
-        super(props);
+class Header extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const { site } = this.props;
+    const { platform } = site;
+
+    if (platform === 'pc') {
+      return <PCHeader/>;
     }
-
-    render() {
-
-        const {site} = this.props;
-        const {platform} = site;
-
-        if ( platform === 'pc' ) {
-            return <PCHeader/>;
-        }else {
-            return <H5Header/>;
-        }
-    }
-} 
+    return <H5Header {...this.props}/>;
+  }
+}
 
 export default Header;

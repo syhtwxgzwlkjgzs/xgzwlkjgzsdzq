@@ -22,7 +22,7 @@ package-lock.json
 .eslintcache
 .next
 .DS_Store
-
+.idea
 dzq-default-web
 dzq-default-web-static
 

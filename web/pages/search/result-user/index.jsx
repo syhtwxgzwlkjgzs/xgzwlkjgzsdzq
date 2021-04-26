@@ -2,6 +2,8 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/search/result-user/h5';
 import IndexPCPage from '@layout/search/result-user/pc';
+import { readUsersList } from '@server';
+import { Toast } from '@discuzq/design';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
@@ -9,45 +11,57 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @inject('search')
 @observer
 class Index extends React.Component {
+  static async getInitialProps(ctx) {
+    const search = ctx?.query?.keyword || '';
+    const result = await readUsersList({ params: { filter: { username: search } } });
+
+    return {
+      serverSearch: {
+        users: result?.data,
+      },
+    };
+  }
+
+  page = 1;
+  perPage = 10;
+
   constructor(props) {
     super(props);
+    const { serverSearch, search } = this.props;
+    // 初始化数据到store中
+    serverSearch && serverSearch.users && search.setUsers(serverSearch.users);
+  }
+
+  async componentDidMount() {
+    const { search, router } = this.props;
+    const { keyword = '' } = router.query;
+    // 当服务器无法获取数据时，触发浏览器渲染
+    const hasUsers = !!search.users;
+
+    if (!hasUsers) {
+      this.toastInstance = Toast.loading({
+        content: '加载中...',
+        duration: 0,
+      });
+
+      this.page = 1;
+      await search.getUsersList({ search: keyword });
+
+      this.toastInstance?.destroy();
+    }
+  }
+
+  dispatch = async (type, data) => {
     const { search } = this.props;
-    search.setUsers({
-      pageData: [
-        {
-          pid: 1,
-          username: 'admin',
-          avatar: '',
-          groupName: '',
-        },
-        {
-          pid: 2,
-          username: 'cjw',
-          avatar: '',
-          groupName: '普通会员',
-        },
-        {
-          pid: 3,
-          username: 'cjw11',
-          avatar: '',
-          groupName: '普通会员',
-        },
-        {
-          pid: 4,
-          username: 'cjw22',
-          avatar: '',
-          groupName: '普通会员',
-        },
-      ],
-      currentPage: 1,
-      perPage: 20,
-      firstPageUrl: 'https://discuz.dnspod.dev/apiv3/users.list?filter[username]=&page=1',
-      nextPageUrl: 'https://discuz.dnspod.dev/apiv3/users.list?filter[username]=&page=2',
-      prePageUrl: 'https://discuz.dnspod.dev/apiv3/users.list?filter[username]=&page=1',
-      pageLength: 4,
-      totalCount: 4,
-      totalPage: 1,
-    });
+
+    if (type === 'refresh') {
+      this.page = 1;
+    } else if (type === 'moreData') {
+      this.page += 1;
+    }
+
+    await search.getUsersList({ search: data, perPage: this.perPage, page: this.page });
+    return;
   }
 
   render() {
@@ -58,7 +72,7 @@ class Index extends React.Component {
       return <IndexPCPage />;
     }
 
-    return <IndexH5Page />;
+    return <IndexH5Page dispatch={this.dispatch} />;
   }
 }
 

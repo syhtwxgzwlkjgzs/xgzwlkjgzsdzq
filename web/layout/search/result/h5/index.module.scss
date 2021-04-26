@@ -2,7 +2,9 @@
 @import '@common/styles/variable/index.scss';
 
 .page {
+  height: 100vh;
   padding-top: rem($padding-4n);
+  background-color: var(--color-white);
 }
 .searchInput {
   padding: 0 rem($padding-4n);

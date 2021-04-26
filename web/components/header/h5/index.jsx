@@ -1,15 +1,26 @@
 import React, { useCallback } from 'react';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
-import Router from '@common/utils/web-router';
-export default function H5Header() {
+import Router from '@discuzq/sdk/dist/router';
+
+export default function H5Header(props) {
+  const { isBackCustom } = props;
   // todo
   const iconClickHandle = useCallback((type) => {
-    console.log(type);
+    switch (type) {
+      case 'home': Router.push({ url: '/' });
+        break;
+      case 'msg': Router.push({ url: '/my/notice' });
+        break;
+      case 'user': Router.push({ url: '/my' });
+        break;
+    }
   }, []);
 
   const gobackClickHandle = useCallback(() => {
-    Router.back();
+    let isBack = true;
+    if (typeof isBackCustom === 'function') isBack = isBackCustom();
+    if (isBack) Router.back();
   }, []);
 
   return (
@@ -25,7 +36,7 @@ export default function H5Header() {
                 }} name="MessageOutlined" color="#C4C9D6" size={20} />
                 <Icon onClick={() => {
                   iconClickHandle('user');
-                }} name="UserOutlined" color="#C4C9D6" size={20} />
+                }} name="ProfessionOutlined" color="#C4C9D6" size={20} />
             </div>
         </div>
     </div>

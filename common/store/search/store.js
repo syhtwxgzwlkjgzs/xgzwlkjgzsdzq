@@ -9,6 +9,11 @@ class SearchStore {
   @observable topics = null
   @observable users = null
   @observable threads = null
+
+  // 搜索页
+  @observable searchTopics = null
+  @observable searchUsers = null
+  @observable searchThreads = null
 }
 
 export default SearchStore;

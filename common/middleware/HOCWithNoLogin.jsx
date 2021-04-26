@@ -2,7 +2,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import isServer from '@common/utils/is-server';
-import Router from '@common/utils/web-router';
+import Router from '@discuzq/sdk/dist/router';
 
 
 // 只能非登陆状态才能进入
@@ -44,14 +44,14 @@ export default function HOCWithNoLogin(Component) {
     componentDidMount() {
       const { user } = this.props;
       if (user.loginStatus) {
-        Router.redirect('/');
+        Router.redirect({url: '/'});
       }
     }
 
     componentDidUpdate() {
       const { user } = this.props;
       if (user.loginStatus) {
-        Router.redirect('/');
+        Router.redirect({url: '/'});
       }
     }
 

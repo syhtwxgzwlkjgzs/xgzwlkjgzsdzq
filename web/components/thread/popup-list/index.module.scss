@@ -3,6 +3,29 @@
 
 .list {
   overflow-y: auto;
-  max-height: 80vh;
-  min-height: 40vh;
+  height: 70vh;
+  // min-height: 40vh;
+}
+
+.tabs {
+  max-width: rem(572);
+  margin: 0 auto;
+}
+
+.tabIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin: 0 rem(10);
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .title {
+    margin: 0 rem(4);
+  }
 }

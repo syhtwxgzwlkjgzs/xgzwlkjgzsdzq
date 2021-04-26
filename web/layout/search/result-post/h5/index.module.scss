@@ -7,6 +7,14 @@
   flex-direction: column;
   box-sizing: border-box;
   overflow: hidden;
+  background-color: var(--color-white);
+  .list {
+    flex: 1;
+    background-color: var(--background-color);
+  }
+  .listItem {
+    margin-bottom: rem(10);
+  }
 }
 .searchInput {
   padding: rem($padding-4n);

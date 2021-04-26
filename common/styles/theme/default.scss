@@ -35,6 +35,7 @@ $light: (
   --color-disabled4: #e8e8ea,
   --color-disabled5: #f4f4f5,
   --color-white: #fff,
+  --color-black: #000,
   --border-line-color: #eee,
 
 
@@ -46,6 +47,13 @@ $light: (
   --background-color: #f6f7f9,
   --background-color-text: #f9fafb,
   --background-color-text2: #eff1f3,
+
+  // 评论相关
+  --comment-box-bg-color: #f5f7f8,
+  --comment-content-bg-color: #f4f6f7,
+
+  // 加载文字颜色
+  --loading-font-color: #c4c9d6,
 
   --mask-background-color: rgba(51, 51, 51, 0.3),
 

@@ -31,17 +31,17 @@ const BaseLayout = (props) => {
 
         <Row justify="center" gutter={20} className={styles.content}>
             <Col>
-                {left && left({ ...props })}
+                {typeof(left) === 'function' ? left({ ...props }) : left}
             </Col>
             <Col>
-                {children && children({ ...props })}
+                {typeof(children) === 'function' ? children({ ...props }) : children}
             </Col>
             <Col>
-                {right && right({ ...props })}
+                {typeof(right) === 'function' ? right({ ...props }) : right}
             </Col>
         </Row>
 
-        {footer && footer({ ...props })}
+        {typeof(footer) === 'function' ? footer({ ...props }) : footer}
     </React.Fragment>
   );
 };

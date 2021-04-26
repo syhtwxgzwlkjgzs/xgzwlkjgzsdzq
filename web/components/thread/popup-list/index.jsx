@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Tabs, Button, Icon, Popup } from '@discuzq/design';
+import { Tabs, Popup, Icon } from '@discuzq/design';
 import UserItem from '../user-item';
-import data from './data';
 import styles from './index.module.scss';
+import NoData from '@components/no-data';
+import { readLikedUsers } from '@server';
+import List from '../../list';
 
 /**
  * 帖子点赞、打赏点击之后的弹出视图
@@ -10,58 +12,168 @@ import styles from './index.module.scss';
  * @prop {string}  onHidden 关闭视图的回调
  */
 
-const Index = ({ visible = false, onHidden = () => {} }) => {
-  const tabList = useRef([
-    {
-      id: '0',
-      label: '全部',
-      badge: '10',
-      icon: 'succuss',
-    },
-    {
-      id: '1',
-      label: '点赞',
-      badge: '10',
-      icon: 'succuss',
-    },
-    {
-      id: '2',
-      label: '打赏',
-      badge: '10',
-      icon: 'succuss',
-    },
-  ]);
+const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
+  const allPageNum = useRef(1);
+  const likePageNum = useRef(1);
+  const tipPageNum = useRef(1);
 
-  const [dataSource, setDataSource] = useState([]);
+  const [all, setAll] = useState(null);
+  const [likes, setLikes] = useState(null);
+  const [tips, setTips] = useState(null);
+
+  const [current, setCurrent] = useState(0);
 
   useEffect(() => {
-    setTimeout(() => {
-      setDataSource(data);
-    }, 1000);
-  }, []);
+    if (visible) {
+      loadData({ type: current });
+    }
+  }, [visible]);
 
-  const renderList = () => (
-    <div className={styles.list}>
-        {
-          dataSource.map((item, index) => (
-            <UserItem key={index} imgSrc={item.img} title={item.name} subTitle={item.time} />
-          ))
-        }
+  const loadData = async ({ type }) => {
+    const { postId = '', threadId = '' } = tipData;
+    const res = await readLikedUsers({ params: { threadId, postId, type, page: 1 } });
+
+    setAll(res?.data);
+  };
+
+  const singleLoadData = async ({ page = 1, type = 1 } = {}) => {
+    const { postId = '', threadId = '' } = tipData;
+    const res = await readLikedUsers({ params: { threadId, postId, page, type } });
+
+    const data = res?.data || {};
+
+    if (type === 0) {
+      if (page !== 1) {
+        data?.pageData?.list.unshift(...(all?.pageData?.list || []));
+      }
+      setAll(data);
+    } else if (type === 1) {
+      if (page !== 1) {
+        data?.pageData?.list.unshift(...(likes?.pageData?.list || []));
+      }
+      setLikes(data);
+    } else if (type === 2) {
+      if (page !== 1) {
+        data?.pageData?.list.unshift(...(tips?.pageData?.list || []));
+      }
+      setTips(data);
+    }
+  };
+
+  const loadMoreData = () => {
+    if (current === 0) {
+      allPageNum.current += 1;
+      return singleLoadData({ page: allPageNum.current, type: current });
+    }
+    if (current === 1) {
+      likePageNum.current += 1;
+      return singleLoadData({ page: likePageNum.current, type: current });
+    }
+    tipPageNum.current += 1;
+    return singleLoadData({ page: tipPageNum.current, type: current });
+  };
+
+  const onClickTab = (id) => {
+    setCurrent(id);
+    const hasAll = id === 0 && !all;
+    const hasLikes = id === 1 && !likes;
+    const hasTips = id === 2 && !tips;
+
+    if (hasAll || hasLikes || hasTips) {
+      singleLoadData({ type: id });
+    }
+  };
+
+  const searchClick = () => {
+
+  };
+
+  const onClose = () => {
+    onHidden();
+    setAll(null);
+    setLikes(null);
+    setTips(null);
+    setCurrent(0);
+  };
+
+  const renderHeader = ({ title, icon, number  }) => (
+    <div className={styles.label}>
+      {icon && <Icon name={icon} />}
+      <span className={`${styles.title} disable-click`}>{title}</span>
+      {number !== 0 && number !== '0' && <span className="disable-click">{number}</span>}
     </div>
+  );
+
+  const tabItems = [
+    {
+      icon: '',
+      title: '全部',
+      data: all,
+      number: all?.pageData?.allCount || 0,
+    },
+    {
+      icon: 'LikeOutlined',
+      title: '点赞',
+      data: likes,
+      number: all?.pageData?.likeCount || 0,
+    },
+    {
+      icon: 'HeartOutlined',
+      title: '打赏',
+      data: tips,
+      number: all?.pageData?.raidCount || 0,
+    },
+  ];
+
+  const renderTabPanel = () => (
+    tabItems.map((dataSource, index) => {
+      const arr = dataSource?.data?.pageData?.list || [];
+      return (
+        <Tabs.TabPanel
+          key={index}
+          id={index}
+          label={renderHeader({ icon: dataSource.icon, title: dataSource.title, number: dataSource.number })}>
+            {
+              arr.length ? (
+                <List
+                  className={styles.list}
+                  onRefresh={loadMoreData}
+                  noMore={dataSource.data?.currentPage === dataSource.data?.totalPage}
+                >
+                  {
+                    arr.map((item, index) => (
+                        <UserItem key={index} imgSrc={item.avatar} title={item.username} subTitle={item.passedAt} />
+                    ))
+                  }
+                </List>
+              ) : <NoData className={styles.list} />
+            }
+        </Tabs.TabPanel>
+      );
+    })
   );
 
   return (
     <Popup
-        position="bottom"
+        position={tipData?.platform === 'h5' ? 'bottom' : 'center'}
         visible={visible}
-        onClose={onHidden}
+        onClose={onClose}
     >
-        <Tabs>
-            {tabList.current.map(item => (
-                <Tabs.TabPanel key={item.id} id={item.id} label={item.label} badge={item.badge} icon={item.icon}>
-                {renderList()}
-                </Tabs.TabPanel>
-            ))}
+        <Tabs
+          onActive={onClickTab}
+          activeId={current}
+          className={styles.tabs}
+          tabBarExtraContent={
+            tipData?.platform === 'pc' && (
+              <div onClick={onClose} className={styles.tabIcon}>
+                <Icon name="CheckOutlined" />
+              </div>
+            )
+          }
+        >
+          {
+            renderTabPanel()
+          }
         </Tabs>
     </Popup>
   );

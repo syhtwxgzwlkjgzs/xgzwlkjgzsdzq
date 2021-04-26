@@ -1,0 +1,47 @@
+@import '@common/styles/variable/index.scss';
+@import '@common/styles/fn/rem.scss';
+
+.container {
+  width: rem(245);
+  height: rem(125);
+  border-radius: var(--border-radius-small);
+  background: var(--color-white);
+  margin: 0 auto;
+  .deleteTips {
+    color: var(--color-text-primary);
+    border-bottom: var(--border-border);
+    .tips {
+      width: 100%;
+      font-weight: var(--font-weight-regular);
+      font-size: rem($font-size-middle);
+      line-height: rem($font-line-height-small);
+      text-align: center;
+      padding-top: rem($padding-5n);
+    }
+    .content {
+      width: 100%;
+      font-size: rem($font-size-primary);
+      line-height: rem($font-line-height-middle);
+      text-align: center;
+      padding: rem($padding-10) 0;
+    }
+  }
+  .btn {
+    display: flex;
+    font-size: rem($font-size-middle);
+    line-height: rem($font-line-height-large);
+    text-align: center;
+    .close { 
+      width: 50%;
+      border-right: var(--border-border);
+    }
+    .ok {
+      width: 50%;
+      color: var(--color-primary);
+    }
+  }
+}
+
+.button {
+  width: 100%;
+}

@@ -3,13 +3,13 @@
  */
 import React, { memo } from 'react'; // 性能优化的
 import { Popup } from '@discuzq/design';// 原来就有的封装
-import '@discuzq/design/styles/index.scss';// 公共样式
 import PropTypes from 'prop-types';// 类型拦截
 import styles from './index.module.scss';// 私有样式
 
-const PostPopup = ({ list, visible, onClick }) => {
+const PostPopup = ({ list, onClick, cancel, visible }) => {
   const handlePopup = (item) => {
     onClick(item);
+    cancel();
   };// 自己定义用来调用传进来的方法的
 
   return (
@@ -19,7 +19,7 @@ const PostPopup = ({ list, visible, onClick }) => {
       maskClosable={true}// 点击遮罩层是否关闭弹出层，但好像没什么用
       visible={visible}// 是否显示弹出层
       onClose={() => { // 遮罩层点击关闭回调,传一个'取消'，可自定义更改
-        handlePopup('取消');
+        cancel();
       }}
     >
       {/* 循环渲染传进来的数组 */}
@@ -37,7 +37,7 @@ const PostPopup = ({ list, visible, onClick }) => {
         {/* 取消按钮 */}
         <h3
           onClick={() => {
-            handlePopup('取消');
+            cancel();
           }}
         >
           取消
@@ -55,7 +55,6 @@ PostPopup.propTypes = {
 
 // 设置props默认类型
 PostPopup.defaultProps = {
-  visible: false,
   list: ['保存草稿', '不保存'],
 };
 

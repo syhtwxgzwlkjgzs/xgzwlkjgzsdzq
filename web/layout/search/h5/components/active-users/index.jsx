@@ -8,10 +8,12 @@ import styles from './index.module.scss';
  * @prop {{id:string, image:string, name: string}[]} data 用户数据
  * @prop {function} onItemClick 用户点击事件
  */
-const ActiveUsers = ({ data, onItemClick }) => (
+const ActiveUsers = ({ data, onItemClick }) => {
+  const newData = data.filter((_, index) => index < 10);
+  return (
   <div className={styles.list}>
-    {data.length > 0
-      && Array(Math.ceil(data.length / 5))
+    {newData.length > 0
+      && Array(Math.ceil(newData.length / 5))
         .fill('')
         .map((v, rowIndex, rowArr) => (
           <div key={rowIndex} className={`${styles.itemRow} ${rowIndex === rowArr.length - 1 ? styles.lastRow : ''}`}>
@@ -19,14 +21,15 @@ const ActiveUsers = ({ data, onItemClick }) => (
               .fill('')
               .map((v, index) => {
                 const prevIndex = rowIndex * 5;
-                const user = data[index + prevIndex];
+                const user = newData[index + prevIndex];
                 if (!user) return null;
                 return <User key={index} data={user} onClick={onItemClick} />;
               })}
           </div>
         ))}
   </div>
-);
+  );
+};
 
 /**
  * 用户组件
@@ -40,7 +43,7 @@ const User = ({ data, onClick }) => {
 
   return (
     <div className={styles.item} onClick={click}>
-      <Avatar className={styles.avatar} image={data.avatar} name={data.username} />
+      <Avatar image={data.avatar} name={data.username} />
       <div className={styles.name}>{data.username || ''}</div>
     </div>
   );

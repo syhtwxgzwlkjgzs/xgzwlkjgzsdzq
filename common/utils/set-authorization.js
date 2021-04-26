@@ -9,7 +9,7 @@ export default function setAuthorization(config) {
   let token;
   if (isServer() && config.__context) {
     const { headers } = config.__context.req;
-    const { cookie } = headers
+    const { cookie } = headers;
     const cookieData = formatCookie(cookie);
     if (cookieData) {
       token = cookieData.access_token || undefined;

@@ -1,0 +1,60 @@
+@import '@common/styles/index.scss';
+.parse-goods-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: rem(343);
+  height: 100vh;
+  padding: 0 var(--margin-4n);
+  font-family: 'PingFang SC';
+  color: var(--color-text-primary);
+  background-color: #fff;
+  .parse-goods-title {
+    margin-top: var(--margin-4n);
+    font-size: 14px;
+    line-height: 22px;
+  }
+  .parse-goods-image {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: 24px 0 16px;
+    .image-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .image-text {
+      margin-top: 8px;
+      font-size: 12px;
+      line-height: 24px;
+    }
+  }
+  :global{
+    .dzq-textarea{
+      width: 100%;
+      border: var(--border-border);
+      .dzq-textarea__inner{
+        background-color: #f5f7f8;
+        resize: none;
+      }
+    }
+  }
+  .parse-goods-btn {
+    position: absolute;
+    bottom: 20px;
+    left: 16px;
+    right: 16px;
+    height: 42px;
+    display: flex;
+    justify-content: space-between;
+    :global {
+      .dzq-button {
+        width: 48%;
+        height: 100%;
+        border-radius: 5px;
+      }
+    }
+  }
+}
