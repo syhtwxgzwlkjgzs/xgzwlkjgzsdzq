@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import styles from './index.module.scss';
 import { Dialog, Button, Checkbox, Icon, Input } from '@discuzq/design';
+import { inject } from 'mobx-react';
 
+
+@inject('payBox')
 export default class index extends Component {
   constructor(props) {
     super(props);
@@ -17,6 +20,7 @@ export default class index extends Component {
     //     isShow: true,
     //   });
     // }, 1000);
+    this.props.payBox.wechatPayOrderQRCode();
   }
 
   onCloseBtn = () => {
@@ -27,26 +31,25 @@ export default class index extends Component {
 
   changePayment = (type) => {
     this.setState({
-      isSelectedKey: type
-    })
+      isSelectedKey: type,
+    });
   }
 
   renderDiffPaymementContent = () => {
     const { isSelectedKey } = this.state;
     if (isSelectedKey == 'wechat') {
       return this.renderWechatCodePaymementContent();
-    } else if (isSelectedKey == 'wallet') {
+    } if (isSelectedKey == 'wallet') {
       return this.renderWalletPaymementContent();
     }
   };
 
   // 渲染微信支付内容
-  renderWechatCodePaymementContent = () => {
-    return (
+  renderWechatCodePaymementContent = () => (
       <div className={styles.wechatPayment}>
         {/* 二维码 */}
         <div className={styles.wPaymentCode}>
-          <img />
+          <img src={this.props.payBox.wechatQRCode}/>
         </div>
         {/* 微信支付内容 */}
         <div className={styles.wPaymentDec}>
@@ -66,12 +69,10 @@ export default class index extends Component {
           </div>
         </div>
       </div>
-    );
-  };
+  );
 
   // 渲染钱包支付内容
-  renderWalletPaymementContent = () => {
-    return (
+  renderWalletPaymementContent = () => (
       <div className={styles.walletPayment}>
         <div className={styles.walletTitle}>
           <Icon className={styles.icon} name="PayOutlined" size="30" color={'#1878f3'} />
@@ -88,13 +89,11 @@ export default class index extends Component {
           <Button size="large" className={styles.walletConfirmBtn} type="primary">确认支付</Button>
         </div>
       </div>
-    );
-  };
+  );
 
   render() {
     return (
       <div>
-        <Dialog visible={this.state.isShow} position="center" maskClosable={true}>
           <div className={styles.payconfirmWrapper}>
             {/* 头部 */}
             <div className={styles.payTitle}>支付</div>
@@ -103,8 +102,12 @@ export default class index extends Component {
             {/* tab切换支付方式 */}
             <div>
               <div className={styles.payTab_top}>
-                <a onClick={() => {this.changePayment('wechat')}} className={styles.payTab}>微信支付</a>
-                <a onClick={() => {this.changePayment('wallet')}} className={styles.payTab}>钱包支付</a>
+                <a onClick={() => {
+                  this.changePayment('wechat');
+                }} className={styles.payTab}>微信支付</a>
+                <a onClick={() => {
+                  this.changePayment('wallet');
+                }} className={styles.payTab}>钱包支付</a>
               </div>
               <hr />
               {/* 渲染不同方式的支付内容 */}
@@ -115,7 +118,6 @@ export default class index extends Component {
               X
             </div>
           </div>
-        </Dialog>
       </div>
     );
   }

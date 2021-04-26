@@ -66,7 +66,7 @@ class PayBoxStore {
   }
 
   resErrorFactory = (res, handlers = {}) => {
-    const resCode = get(res, 'code') !== 0;
+    const resCode = get(res, 'code');
     if (handlers[resCode]) {
       handlers(res);
     }
@@ -79,7 +79,6 @@ class PayBoxStore {
   }
 
   errorHandler = (error) => {
-    console.error(error);
     if (error.Code) {
       throw error;
     }
@@ -142,7 +141,7 @@ class PayBoxStore {
    * 获取用户钱包信息
    */
   @action
-  getWalletInfo = async (uid = 19) => {
+  getWalletInfo = async (uid) => {
     try {
       const getWalletRes = await readWalletUser({
         params: { uid },
@@ -241,6 +240,10 @@ class PayBoxStore {
       this.resErrorFactory(payRes);
 
       this.wechatQRCode = get(payRes, 'data.wechatPayResult.wechatQrcode');
+
+      this.timer = setInterval(() => {
+        this.getOrderDetail();
+      }, 1000);
     } catch (error) {
       this.errorHandler(error);
     }
@@ -252,8 +255,9 @@ class PayBoxStore {
   @action
   getOrderDetail = async () => {
     try {
+      console.log(this);
       const orderInfoRes = await readOrderDetail({
-        data: {
+        params: {
           orderSn: this.orderSn,
         },
       });

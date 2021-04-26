@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import EventEmitter from 'eventemitter3';
 import H5PayBox from './h5/amount-recognized';
-import PCPayBox from './pc/pay-confirmed';
+import PCPayBox from './pc';
 
 class PayBoxEmitter extends EventEmitter {}
 

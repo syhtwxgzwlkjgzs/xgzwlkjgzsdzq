@@ -39,6 +39,7 @@ export default class index extends Component {
     //     isShow: true,
     //   });
     // }, 1000);
+    console.log(this.props.payBox)
   }
 
   onCloseBtn = () => {
@@ -47,11 +48,19 @@ export default class index extends Component {
     });
   };
 
+  goToThePayConfirmPage = async () => {
+    try {
+      await this.props.payBox.createOrder()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   render() {
     const { currentPaymentData = [] } = this.state;
     return (
       <div>
-        <Dialog visible={this.props.payBox.visible} position="center" maskClosable={true}>
+        <>
           <div className={styles.amountWrapper}>
             <CommonAccountContent currentPaymentData={currentPaymentData} />
             <hr className={styles.acExplain_hr}/>
@@ -67,7 +76,7 @@ export default class index extends Component {
               X
             </div>
           </div>
-        </Dialog>
+        </>
       </div>
     );
   }
