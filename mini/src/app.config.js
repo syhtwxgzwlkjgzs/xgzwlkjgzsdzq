@@ -21,7 +21,8 @@ export default {
       root: 'subPages',
       pages: [
         '404/index',
-        'close/index'
+        'close/index',
+        'user/login/index'
       ]
     }
   ],

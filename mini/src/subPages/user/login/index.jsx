@@ -18,7 +18,7 @@ class Index extends Component {
     return (
       <Page>
         <View className={styles.page}>
-          <View className={styles.text}>站点已关闭</View>
+          <View className={styles.text}>登录</View>
         </View>
       </Page>
     );

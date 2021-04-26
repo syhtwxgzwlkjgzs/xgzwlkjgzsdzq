@@ -1,6 +1,6 @@
 import React from 'react';
 import { getCurrentInstance } from '@tarojs/taro';
-import ThemePage from '@components/theme-page';
+import Page from '@components/page';
 import { inject } from 'mobx-react';
 import ThreadMiniPage from '../../layout/thread/index';
 
@@ -33,9 +33,9 @@ class Detail extends React.Component {
 
   render() {
     return (
-      <ThemePage>
+      <Page>
         <ThreadMiniPage></ThreadMiniPage>
-      </ThemePage>
+      </Page>
     )
   }
 }
