@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import styles from './index.module.scss';
 import { Dialog, Button, Checkbox } from '@discuzq/design';
 import CommonAccountContent from '../../components/common-account-content';
+import { inject } from 'mobx-react';
 
+@inject('payBox')
 export default class index extends Component {
   constructor(props) {
     super(props);
@@ -49,7 +51,7 @@ export default class index extends Component {
     const { currentPaymentData = [] } = this.state;
     return (
       <div>
-        <Dialog visible={this.state.isShow} position="center" maskClosable={true}>
+        <Dialog visible={this.props.payBox.visible} position="center" maskClosable={true}>
           <div className={styles.amountWrapper}>
             <CommonAccountContent currentPaymentData={currentPaymentData} />
             <hr className={styles.acExplain_hr}/>

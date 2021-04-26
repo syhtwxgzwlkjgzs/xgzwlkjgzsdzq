@@ -14,6 +14,10 @@ class UserStore {
   @computed get canWalletPay() {
     return get(this.userInfo, 'canWalletPay');
   }
+
+  @computed get id() {
+    return get(this.userInfo, 'id');
+  }
 }
 
 export default UserStore;
