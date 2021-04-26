@@ -1,8 +1,10 @@
+$--plugin-background-color: #f5f7f8;
+
 @mixin img {
   height: 169px;
   width: 169px;
   border-radius: 5px;
-  background: #f5f7f8;
+  background: var($--plugin-background-color);
   display: flex;
   align-items: center;
 }
@@ -10,7 +12,7 @@
 @mixin atta {
   height: 52px;
   border-radius: 5px;
-  background: #f5f7f8;
+  background: var($--plugin-background-color);
   display: flex;
   align-items: center;
   margin-bottom: 8px;
@@ -101,14 +103,13 @@
   height: 114px;
   padding: 10px;
   border-radius: 5px;
-  background: #f9fafb;
+  background: var($--plugin-background-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
   .image {
     width: 82px;
     height: 82px;
-    // margin-right: 16px;
   }
   .content {
     width: 225px;
