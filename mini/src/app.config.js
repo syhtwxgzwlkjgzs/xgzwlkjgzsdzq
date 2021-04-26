@@ -15,7 +15,8 @@ export default {
     {
       root: 'subPages',
       pages: [
-        '404/index'
+        '404/index',
+        'close/index'
       ]
     }
   ],
