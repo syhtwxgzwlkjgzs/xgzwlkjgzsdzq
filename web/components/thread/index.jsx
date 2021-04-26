@@ -181,7 +181,8 @@ class Index extends React.Component {
     }
 
     render() {
-      const { data, className = '' } = this.props;
+      const { data, className = '', site } = this.props;
+      const { platform } = site;
 
       if (!data) {
         return <NoData />;
@@ -240,7 +241,7 @@ class Index extends React.Component {
             onComment={this.onComment}
             onPraise={this.onPraise}
             isLiked={isLike}
-            tipData={{ postId, threadId }}
+            tipData={{ postId, threadId, platform }}
           />
         </div>
       );
