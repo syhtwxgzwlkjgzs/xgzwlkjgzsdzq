@@ -2,9 +2,9 @@ import React from 'react';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import { Popup, Icon, Button, Radio } from '@discuzq/design';
+import Router from '@discuzq/sdk/dist/router';
 import { PAY_MENT_MAP, PAYWAY_MAP, STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
 // import browser from '@common/utils/browser';
-// import Router from '@common/utils/web-router';
 
 @inject('site')
 @inject('user')
@@ -68,7 +68,8 @@ export default class PayBox extends React.Component {
   }
 
   goSetPayPwa() {
-    // Router.push('/modify/paypwd?token=1');
+    Router.redirect({url: '/test/payoffpwd?title=设置支付密码'});
+    // Router.push('/test/payoffpwd?title=设置支付密码');
   }
 
   /**
@@ -87,8 +88,13 @@ export default class PayBox extends React.Component {
   };
 
   // 点击确认支付
-  handlePayConfirmed = async () => {
-    this.props.payBox.step = STEP_MAP.PAY
+  handlePayConfirmed = () => {
+    if (this.state.paymentType === PAY_MENT_MAP.WALLET) {// 表示钱包支付
+      this.props.payBox.walletPayEnsure()
+      this.goSetPayPwa()
+    } else if (this.state.paymentType === PAY_MENT_MAP.WX) { // 表示微信支付
+
+    }
   };
 
   render() {

@@ -6,39 +6,8 @@ import { inject } from 'mobx-react';
 
 @inject('payBox')
 export default class index extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isShow: false,
-      currentPaymentData: [
-        {
-          trade_type: '1', // 交易类型 1|2|3 帖子|打赏|付费加入
-          goods_name: '帖子标题', // 商品名称
-          pay_money: '9.90', // 支付金额
-          is_anonymous: '1', // 是否匿名
-        },
-        {
-          trade_type: '2',
-          goods_name: '打赏的内容', // 商品名称
-          pay_money: '19.90', // 支付金额
-          is_anonymous: '0', // 是否匿名
-        },
-        // {
-        //   trade_type: '3',
-        //   goods_name: '付费加入...', // 商品名称
-        //   pay_money: '19.90', // 支付金额
-        //   is_anonymous: '0', // 是否匿名
-        // },
-      ],
-    };
-  }
 
   componentDidMount() {
-    // setTimeout(() => {
-    //   this.setState({
-    //     isShow: true,
-    //   });
-    // }, 1000);
     console.log(this.props.payBox)
   }
 
@@ -57,12 +26,12 @@ export default class index extends Component {
   }
 
   render() {
-    const { currentPaymentData = [] } = this.state;
+    const { options = {} } = this.props.payBox
     return (
       <div>
         <>
           <div className={styles.amountWrapper}>
-            <CommonAccountContent currentPaymentData={currentPaymentData} />
+            <CommonAccountContent currentPaymentData={options} />
             <hr className={styles.acExplain_hr}/>
             {/* 按钮区域-提交内容 */}
             <div className={styles.amountSubmit}>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import H5PayoffPwd from '../../../components/payPwd/h5/payoffPwd/index'
+import H5PayoffPwd from '../../../components/payBox/h5/payPwd'
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
 class Index extends Component {

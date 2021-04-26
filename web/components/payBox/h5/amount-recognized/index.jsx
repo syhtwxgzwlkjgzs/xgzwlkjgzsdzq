@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Popup, Icon, Button, Checkbox } from '@discuzq/design';
+import { Button } from '@discuzq/design';
 import styles from './index.module.scss';
 import CommonAccountContent from '../../components/common-account-content';
 import { Toast } from '@discuzq/design';
-import PayConfirmed from '../pay-confirmed';
 import { STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
 
 @inject('payBox')
@@ -35,7 +34,7 @@ export default class AmountRecognized extends Component {
 
   // 确认金额内容
   renderAmountRecognizedContent = () => {
-    const { options = {} } = this.props;
+    const { options = {} } = this.props.payBox;
     const { amount } = options;
     return (
       <div className={styles.amountWrapper}>
@@ -43,7 +42,7 @@ export default class AmountRecognized extends Component {
         {/* 按钮区域-提交内容 */}
         <div className={styles.amountSubmit}>
           <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.asBtn} full>
-            支付 ￥{this.transMoneyToFixed(amount)}
+            支付 ￥{amount}
           </Button>
         </div>
       </div>
@@ -51,17 +50,6 @@ export default class AmountRecognized extends Component {
   };
 
   render() {
-    return (
-      <Popup
-        position="bottom"
-        maskClosable={true}
-        visible={this.props.payBox.visible}
-        onClose={() => {
-          this.props.payBox.visible = false;
-        }}
-      >
-        {this.props.payBox.step === STEP_MAP.PAYWAY ? <PayConfirmed /> : this.renderAmountRecognizedContent()}
-      </Popup>
-    );
+    return <div>{this.renderAmountRecognizedContent()}</div>;
   }
 }
