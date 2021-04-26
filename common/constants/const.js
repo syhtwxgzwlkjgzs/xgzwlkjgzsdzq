@@ -80,6 +80,7 @@ export const defaultIcon = [
     name: 'DollarLOutlined', // 付费
     active: activeColor,
     id: defaultOperation.pay,
+    type: THREAD_TYPE.paid
   },
 ];
 
@@ -116,3 +117,15 @@ export const attachIcon = [
     type: THREAD_TYPE.reward,
   },
 ];
+
+// 发帖时底部弹起的付费选项
+export const paidSelectType = [
+  {
+    name: '帖子付费',
+    type: THREAD_TYPE.paidPost,
+  },
+  {
+    name: '附件付费',
+    type: THREAD_TYPE.paidAttachment,
+  },
+]

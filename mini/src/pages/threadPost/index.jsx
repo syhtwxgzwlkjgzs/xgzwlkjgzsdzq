@@ -3,7 +3,7 @@ import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import ThemePage from '@components/theme-page';
-import { PluginToolbar, DefaultToolbar, GeneralUpload, Tag, Title, Content, ClassifyPopup } from '@components/thread-post';
+import { PluginToolbar, DefaultToolbar, GeneralUpload, Tag, Title, Content, ClassifyPopup, PaidTypePopup } from '@components/thread-post';
 import { Units } from '@components/common';
 import styles from './index.module.scss';
 import { THREAD_TYPE } from '@common/constants/thread-post';
@@ -93,6 +93,17 @@ class Index extends Component {
       case THREAD_TYPE.redPacket:
         nextRoute = '/pages/threadPost/selectRedpacket';
         break;
+      case THREAD_TYPE.paid:
+        this.setState({ showPaidType: true });
+        break;
+      case THREAD_TYPE.paidPost:
+        nextRoute = `/pages/threadPost/selectPaid?paidType=${THREAD_TYPE.paidPost}`;
+        this.setState({ showPaidType: false })
+        break;
+      case THREAD_TYPE.paidAttachment:
+        nextRoute = `/pages/threadPost/selectPaid?paidType=${THREAD_TYPE.paidAttachment}`;
+        this.setState({ showPaidType: false });
+        break;
     }
 
     if (nextRoute) Taro.navigateTo({ url: nextRoute });
@@ -126,12 +137,12 @@ class Index extends Component {
             }
           },
           // 上传中回调，获取上传进度等信息
-          progress: function(result) {
+          progress: function (result) {
             console.log('progress');
             console.log(result);
           },
           // 上传完成回调，获取上传后的视频 URL 等信息
-          finish: function(result) {
+          finish: function (result) {
             Taro.hideLoading();
             setPostData({
               video: result
@@ -140,7 +151,7 @@ class Index extends Component {
             console.log(result);
           },
           // 上传错误回调，处理异常
-          error: function(result) {
+          error: function (result) {
             Taro.showToast({
               title: '上传失败',
               duration: 2000
@@ -168,6 +179,7 @@ class Index extends Component {
       isShowTitle,
       showClassifyPopup,
       operationType,
+      showPaidType,
     } = this.state;
 
     return (
@@ -184,7 +196,7 @@ class Index extends Component {
 
             <View className={styles['plugin']}>
               <GeneralUpload type={operationType} />
-              <Units type='product' productSrc={'https://img20.360buyimg.com/ceco/s700x700_jfs/t1/153702/29/15780/81514/601663b6E0eb5908f/3cb05e84fe495b03.jpg!q70.jpg'} productDesc={'又帅又痞 设计师日本纯钛眼镜框超轻近视男款复古镜架可配有度数，天天佩戴，应每日清洗镜架及镜片！不用时应先清洁再收纳！'} productPrice={564.99} onDelete={() => {}} />
+              <Units type='product' productSrc={'https://img20.360buyimg.com/ceco/s700x700_jfs/t1/153702/29/15780/81514/601663b6E0eb5908f/3cb05e84fe495b03.jpg!q70.jpg'} productDesc={'又帅又痞 设计师日本纯钛眼镜框超轻近视男款复古镜架可配有度数，天天佩戴，应每日清洗镜架及镜片！不用时应先清洁再收纳！'} productPrice={564.99} onDelete={() => { }} />
               {video.videoUrl && <Units type='video' src={video.videoUrl} />}
             </View>
           </View>
@@ -192,18 +204,25 @@ class Index extends Component {
           {/* 工具栏区域、include各种插件触发图标、发布等 */}
           <View className={styles['toolbar']}>
             <View className={styles['tag-toolbar']}>
+              {/* 插入付费tag */}
+              {(postData.price || postData.attachmentPrice)
+                ? <Tag
+                  content={`付费总额${postData.price + postData.attachmentPrice}元`}
+                  clickCb={() => this.handlePluginClick({ type: THREAD_TYPE.paid })}
+                /> : null
+              }
               {/* 红包tag */}
               {redpacket.money &&
                 <Tag
                   content={this.redpacketContent()}
-                  clickCb={this.toSelectRedpacket}
+                  clickCb={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
                 />
               }
               {/* 悬赏tag */}
               {rewardQa.price &&
                 <Tag
                   content={`悬赏金额${rewardQa.price}元\\结束时间${rewardQa.expiredAt}`}
-                  clickCb={this.toSelectReward}
+                  clickCb={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
                 />
               }
             </View>
@@ -226,6 +245,13 @@ class Index extends Component {
           onHide={() => this.setState({ showClassifyPopup: false })}
           onChange={this.onClassifyChange}
         />
+        {/* 选择付费类型弹框 */}
+        <PaidTypePopup
+          show={showPaidType}
+          onClick={(item) => this.handlePluginClick(item)}
+          onHide={() => this.setState({ showPaidType: false })}
+        />
+        
       </>
     );
   }
