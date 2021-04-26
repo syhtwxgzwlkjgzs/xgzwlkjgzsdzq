@@ -10,7 +10,7 @@ import styles from './index.module.scss';
  * @prop {function} onShowMore 查看更多事件
  * @prop {boolean} isShowMore 是否显示更多
  */
-const TrendingTopics = ({ icon, title, onShowMore, isShowMore = true }) => (
+const TrendingTopics = ({ icon = { type: '' }, title, onShowMore, isShowMore = true }) => (
   <div className={styles.container}>
     <div className={styles.left}>
       <div className={styles.leftBox}>

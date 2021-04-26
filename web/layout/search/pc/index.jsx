@@ -4,14 +4,12 @@ import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
 import SectionTitle from '../h5/components/section-title'
 import TrendingTopicMore from './components/trending-topic-more';
-import PopularContents from './components/popular-contents';
+import ThreadContent from '@components/thread';
 import ActiveUsersMore from './components/active-users-more';
 import Stepper from './components/stepper';
-import topicData from '../trending-topics';
-import userData from '../active-users';
-import contentData from '../popular-contents'
 import { withRouter } from 'next/router';
 @inject('site')
+@inject('search')
 @observer
 class SearchPCPage extends React.Component {
   redirectToSearchResultPost = () => {
@@ -38,19 +36,26 @@ class SearchPCPage extends React.Component {
   }
   // 中间 -- 潮流话题 活跃用户 热门内容
   renderContent = () => {
+    const { indexTopics, indexUsers, indexThreads } = this.props.search;
+    const { pageData: topicsPageData = [] } = indexTopics || {};
+    const { pageData: usersPageData = [] } = indexUsers || {};
+    const { pageData: threadsPageData = [] } = indexThreads || {};
+
     return (
       <div className={styles.searchContent}>
         <div className={styles.section}>
           <SectionTitle title="潮流话题" onShowMore={this.redirectToSearchResultTopic} />
-          <TrendingTopicMore data={topicData} onItemClick={this.onTopicClick}/>
+          <TrendingTopicMore data={topicsPageData} onItemClick={this.onTopicClick}/>
         </div>
         <div className={styles.section}>
           <SectionTitle title="活跃用户" onShowMore={this.redirectToSearchResultUser} />
-          <ActiveUsersMore data={userData} onItemClick={this.onUserClick}/>
+          <ActiveUsersMore data={usersPageData} onItemClick={this.onUserClick}/>
         </div>
         <div className={styles.section}>
           <SectionTitle title="热门内容" onShowMore={this.redirectToSearchResultPost} />
-          <PopularContents data={contentData} onItemClick={this.onPostClick}/>
+          {
+            threadsPageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)
+          }
         </div>
       </div>
     )
@@ -62,7 +67,7 @@ class SearchPCPage extends React.Component {
           left={() => <div></div>}
           right={ this.renderRight }
         >
-          { this.renderContent }
+          { this.renderContent() }
         </BaseLayout>
       </div>
     );

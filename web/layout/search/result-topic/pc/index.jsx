@@ -5,10 +5,9 @@ import BaseLayout from '@components/base-layout';
 import SectionTitle from '../../../search/h5/components/section-title'
 import TrendingTopicMore from '../../../search/pc/components/trending-topic-more';
 import ActiveUsers from '../../../search/pc/components/active-users'
-import topicData from '../../trending-topics';
-import userData from '../../active-users';
 import { withRouter } from 'next/router';
 @inject('site')
+@inject('search')
 @observer
 class SearchResultTopicPCPage extends React.Component {
   redirectToSearchResultUser = () => {
@@ -16,21 +15,25 @@ class SearchResultTopicPCPage extends React.Component {
   };
   onTopicClick = data => console.log('topic click', data);
   renderRight = () => {
+    const { users } = this.props.search;
+    const { pageData = [], currentPage, totalPage } = users || { pageData: [] };
     return (
       <div className={styles.searchRight}>
         <div className={styles.section}>
           <SectionTitle title="活跃用户" onShowMore={this.redirectToSearchResultUser}/>
-          <ActiveUsers data={userData} onItemClick={this.onUserClick}/>
+          <ActiveUsers data={pageData} onItemClick={this.onUserClick}/>
         </div>
       </div>
     )
   }
   renderContent = () => {
+    const { topics } = this.props.search;
+    const { pageData = [], currentPage, totalPage } = topics || { pageData: [] };
     return (
       <div className={styles.searchContent}>
         <div className={styles.section}>
           <SectionTitle title="潮流话题" isShowMore={false}/>
-          <TrendingTopicMore data={topicData} onItemClick={this.onTopicClick}/>
+          <TrendingTopicMore data={pageData} onItemClick={this.onTopicClick}/>
         </div>
       </div>
     )
