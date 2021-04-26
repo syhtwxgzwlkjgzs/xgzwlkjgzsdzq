@@ -11,15 +11,22 @@ import Router from '@discuzq/sdk/dist/router';
 export default class Page extends React.Component {
 
   static defaultProps = {
-    isLogin: false
+    isLogin: false,
+    noLogin: false
   }
 
   constructor(props) {
     super(props);
-    const { isLogin, user } = this.props;
+    const { noLogin, isLogin, user } = this.props;
     if ( isLogin && !user.isLogin()) {
       Router.redirect({
         url: '/subPages/user/login/index'
+      });
+    }
+
+    if (noLogin && user.isLogin()) {
+      Router.redirect({
+        url: '/pages/index/index'
       });
     }
   }
