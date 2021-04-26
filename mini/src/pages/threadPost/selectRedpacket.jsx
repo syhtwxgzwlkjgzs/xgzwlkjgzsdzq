@@ -1,13 +1,6 @@
-import React, { Component } from 'react';
-import { View } from '@tarojs/components';
+import React from 'react';
 import Redpacket from '@components/thread-post/redpacket';
 
-export default class selectRedpacket extends Component {
-  render() {
-    return (
-      <View>
-        <Redpacket />
-      </View>
-    )
-  }
-}
+const Index = () => <Redpacket />;
+
+export default Index;
