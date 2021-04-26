@@ -11,7 +11,7 @@ import styles from './index.module.scss';
 
 import PropTypes from 'prop-types';
 
-const Title = ({ title, placeholder, isDisplay, onChange,  onFocus, onBlur }) => {
+const Title = ({ title, placeholder, isDisplay, onChange,  onFocus, onBlur, ...props }) => {
   // state 标题值
   const [titleVal, setTitleVal] = useState('');
 
@@ -34,6 +34,7 @@ const Title = ({ title, placeholder, isDisplay, onChange,  onFocus, onBlur }) =>
       onChange={e => setTitleVal(e.target.value)}
       onFocus={onFocus}
       onBlur={onBlur}
+      {...props}
     />
   );
 };

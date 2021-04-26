@@ -11,6 +11,26 @@ class CommentAction extends CommentStore {
   @action
   setCommentDetail(data) {
     this.commentDetail = data;
+    if (this.commentDetail) {
+      this.commentDetail.lastThreeComments = this?.commentDetail?.commentPosts || [];
+    }
+  }
+
+
+  @action
+  setCommentDetailField(key, data) {
+    this.commentDetail[key] = data;
+  }
+
+  @action
+  setReplyListDetailField(replyId, key, value) {
+    if (this.commentPosts?.length) {
+      this.commentPosts.forEach((reply) => {
+        if (reply.id === replyId) {
+          reply[key] = value;
+        }
+      });
+    }
   }
 
   @action
@@ -208,7 +228,7 @@ class CommentAction extends CommentStore {
    * @returns {object} 处理结果
    */
    @action
-   async updateLiked(params, ThreadStore) {
+   async updateLiked(params) {
      const { id, isLiked } = params;
      if (!id) {
        return {
@@ -228,12 +248,6 @@ class CommentAction extends CommentStore {
      const res = await updateComment({ data: requestParams });
 
      if (res?.data && res.code === 0) {
-       // TODO:是否还要更新评论详情页
-       // this && this.setCommentDetailField('isLiked', !!isLiked);
-
-       // 更新评论列表的单项
-       ThreadStore && ThreadStore.setCommentListDetailField(id, 'isLiked', !!isLiked);
-
        return {
          msg: '操作成功',
          success: true,

@@ -29,6 +29,7 @@ import { withRouter } from 'next/router';
 import { getVisualViewpost } from '@common/utils/get-client-height';
 import throttle from '@common/utils/thottle';
 import Header from '@components/header';
+import Router from '@discuzq/sdk/dist/router';
 import * as localData from '../common';
 
 const maxCount = 5000;
@@ -58,6 +59,7 @@ class ThreadCreate extends React.Component {
       paySelectText: ['帖子付费', '附件付费'],
       curPaySelect: '',
       count: 0,
+      draftShow: false,
     };
   }
   componentDidMount() {
@@ -179,10 +181,10 @@ class ThreadCreate extends React.Component {
 
   handleVideoUploadComplete = (ret, file) => {
     // 上传视频
-    const { fileId: id, video } = ret;
+    const { fileId, video } = ret;
     this.setPostData({
-      videoFile: {
-        id,
+      video: {
+        id: fileId,
         thumbUrl: video.url,
         type: file.type,
       },
@@ -200,17 +202,17 @@ class ThreadCreate extends React.Component {
     this.setState({ atList });
   }
 
-  submit = async () => {
+  submit = async (isDraft) => {
     const { postData } = this.props.threadPost;
-    if (!postData.contentText) {
+    if (!isDraft && !postData.contentText) {
       Toast.info({ content: '请填写您要发布的内容' });
       return;
     }
-    if (this.state.count > maxCount) {
+    if (!isDraft && this.state.count > maxCount) {
       Toast.info({ content: `输入的内容不能超过${maxCount}字` });
       return;
     }
-    Toast.loading({ content: '创建中...' });
+    Toast.loading({ content: isDraft ? '保存草稿中...' : '创建中...' });
     const { threadPost, thread } = this.props;
     const threadId = this.props.router.query.id || '';
     let ret = {};
@@ -219,11 +221,23 @@ class ThreadCreate extends React.Component {
     const { code, data, msg } = ret;
     if (code === 0) {
       thread.setThreadData(data);
-      this.props.router.replace(`/thread/${data.threadId}`);
-    } else {
-      Toast.error({ content: msg });
+      if (!isDraft) this.props.router.replace(`/thread/${data.threadId}`);
+      return true;
     }
+    Toast.error({ content: msg });
+
+    return false;
   };
+
+  handleDraft = async (val) => {
+    this.setState({ draftShow: false });
+    let flag = true;
+    if (val === '保存草稿') {
+      this.setPostData({ draft: 1 });
+      flag = await this.submit(true);
+    }
+    if (val && flag) Router.back();
+  }
 
   onReady = (player) => {
     const { postData } = this.props.threadPost;
@@ -273,7 +287,7 @@ class ThreadCreate extends React.Component {
     const { threadPost, index } = this.props;
     const { postData } = threadPost;
     const { emoji, topic, atList, currentDefaultOperation, currentAttachOperation, categoryChooseShow } = this.state;
-    const category = (index.categories && index.categories.slice()) || [];
+    const category = ((index.categories && index.categories.slice()) || []).filter(item => item.name !== '全部');
     // 悬赏问答
     if (currentAttachOperation === THREAD_TYPE.reward) return (
       <ForTheForm
@@ -325,14 +339,22 @@ class ThreadCreate extends React.Component {
 
     return (
       <>
-        <Header />
+        <Header
+          isBackCustom={() => {
+            this.setState({ draftShow: true });
+            return false;
+          }}
+        />
         <div className={styles['post-inner']}>
+          {/* 标题 */}
           <Title
             title={postData.title}
             onChange={title => this.setPostData({ title })}
             onFocus={this.setBottomFixed}
             onBlur={this.clearBottomFixed}
+            autofocus
           />
+          {/* 编辑器 */}
           <DVditor
             value={postData.contentText}
             emoji={emoji}
@@ -405,6 +427,7 @@ class ThreadCreate extends React.Component {
           )}
         </div>
         <div id="post-bottombar" className={styles['post-bottombar']}>
+          {/* 插入位置 */}
           <div id="post-position" className={styles['position-box']}>
             <Position
               position={postData.position}
@@ -467,6 +490,16 @@ class ThreadCreate extends React.Component {
             list={this.state.paySelectText}
             onClick={val => this.setState({ curPaySelect: val })}
             cancel={() => this.setState({ currentDefaultOperation: '' })}
+            visible={currentDefaultOperation === defaultOperation.pay}
+          />
+        )}
+        {/* 是否保存草稿 */}
+        {this.state.draftShow && (
+          <PostPopup
+            list={['保存草稿', '不保存草稿']}
+            onClick={val => this.handleDraft(val)}
+            cancel={() => this.handleDraft()}
+            visible={this.state.draftShow}
           />
         )}
       </>
