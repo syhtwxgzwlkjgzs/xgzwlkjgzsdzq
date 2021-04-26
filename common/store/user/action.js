@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import SiteStore from './store';
-import { readUser } from '@server';
+import { readUser, readPermissions } from '@server';
 
 class UserAction extends SiteStore {
   constructor(props) {
@@ -18,11 +18,19 @@ class UserAction extends SiteStore {
     }
   }
 
+  // 写入用户发帖权限
+  @action
+  async setUserPermissions(data) {
+    this.permissions = data;
+  }
+
   // 登录后获取新的用户信息
   @action
   async updateUserInfo(id) {
     const userInfo = await readUser({ params: { pid: id } });
+    const userPermissions = await readPermissions({});
     userInfo.data && this.setUserInfo(userInfo.data);
+    userPermissions.data && this.setUserPermissions(userPermissions.data);
     return userInfo.code === 0 && userInfo.data;
   }
 
@@ -30,12 +38,12 @@ class UserAction extends SiteStore {
   @action
   updateLoginStatus(isLogin) {
     this.loginStatus = isLogin;
-    console.log(this.loginStatus);
   }
 
   @action
   removeUserInfo() {
     this.userInfo = null;
+    this.permissions = null;
     this.noUserInfo = false;
   }
 
