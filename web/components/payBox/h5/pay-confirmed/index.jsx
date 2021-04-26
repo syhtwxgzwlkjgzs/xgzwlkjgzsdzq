@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import { Popup, Icon, Button, Radio } from '@discuzq/design';
+import { PAY_MENT_MAP, PAYWAY_MAP, STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
 // import browser from '@common/utils/browser';
 // import Router from '@common/utils/web-router';
 
@@ -21,36 +22,35 @@ export default class PayBox extends React.Component {
         name: '钱包支付',
         icon: 'PayOutlined',
         color: '#1878f3',
-        value: '1',
+        paymentType: 20,
       },
     ];
 
     // if ( browser.env('weixin') && wxpayClose ) {
     //     if ( browser.env(ios) && wxpayIos) {
-    //         payConfig.unshift(
-    //             {
-    //                 name: '微信支付',
-    //                 icon: 'PayOutlined',
-    //                 color: '#09bb07',
-    //                 value: '0',
-    //             }
-    //         );
+    payConfig.unshift({
+      name: '微信支付',
+      icon: 'PayOutlined',
+      color: '#09bb07',
+      paymentType: 11,
+    });
     //     }
     // }
 
     this.state = {
       isShow: false,
       payConfig,
+      paymentType: '',
     };
     this.goSetPayPwa = this.goSetPayPwa.bind(this);
   }
 
-  componentDidMount() {
-    // setTimeout(() => {
-    //   this.setState({
-    //     isShow: true,
-    //   });
-    // }, 1000);
+  async componentDidMount() {
+    const { id } = this.props?.user;
+    try {
+      await this.props.payBox.getWalletInfo(id);
+    } catch (error) {
+    }
   }
 
   walletPaySubText() {
@@ -64,27 +64,50 @@ export default class PayBox extends React.Component {
         </p>
       );
     }
-    return <p className={styles.subText}>钱包余额：￥{walletBalance}</p>;
+    return <p className={styles.subText}>钱包余额：￥{this.props.payBox?.walletAvaAmount}</p>;
   }
 
   goSetPayPwa() {
     // Router.push('/modify/paypwd?token=1');
-    
   }
 
+  /**
+   * 选择支付方式
+   */
+  handleChangePaymentType = (value) => {
+    this.setState({
+      paymentType: value,
+    }, ()=> {
+      if (value === PAY_MENT_MAP.WALLET) {
+        this.props.payBox.payWay = PAYWAY_MAP.WALLET
+      } else if (value === PAY_MENT_MAP.WX_H5) {
+        this.props.payBox.payWay = PAYWAY_MAP.WX
+      }
+    });
+  };
+
+  // 点击确认支付
+  handlePayConfirmed = async () => {
+    this.props.payBox.step = STEP_MAP.PAY
+  };
+
   render() {
-    const { visible = true, onClose = () => {} } = this.props;
-    const { user, site } = this.props;
-    const { payConfig } = this.state;
+    const { options = {} } = this.props.payBox;
+    const { payConfig, paymentType, checked } = this.state;
     // console.log(user);
     // console.log(site);
     return (
-      <Popup position="bottom" maskClosable={true} visible={this.state.isShow} onClose={onClose}>
-        <div className={styles.payBox}>
-          <div className={styles.title}>
-            <p>支付金额：￥9.90</p>
-          </div>
-          <div className={styles.list}>
+      <div className={styles.payBox}>
+        <div className={styles.title}>
+          <p>支付金额：￥{options.amount}</p>
+        </div>
+        <div className={styles.list}>
+          <Radio.Group
+            value={paymentType}
+            onChange={(checked) => {
+              this.handleChangePaymentType(checked);
+            }}
+          >
             {payConfig.map((item, key) => {
               return (
                 <div key={key} className={styles.listItem}>
@@ -93,26 +116,26 @@ export default class PayBox extends React.Component {
                     <p className={styles.text}>{item.name}</p>
                   </div>
                   <div className={styles.right}>
-                    {item.value === '1' && this.walletPaySubText()}
-                    <Radio />
+                    {item.paymentType === PAY_MENT_MAP.WALLET && this.walletPaySubText()}
+                    <Radio name={item.paymentType} />
                   </div>
                 </div>
               );
             })}
-          </div>
-          <div className={styles.tips}>
-            <p>asdadsadsd</p>
-          </div>
-          <div className={styles.btnBox}>
-            <Button className={styles.btn} type="primary" size="large" full>
-              确认支付￥1元
-            </Button>
-            <Button className={styles.btn} size="large" full>
-              取消
-            </Button>
-          </div>
+          </Radio.Group>
         </div>
-      </Popup>
+        {/* <div className={styles.tips}>
+          <p>asdadsadsd</p>
+        </div> */}
+        <div className={styles.btnBox}>
+          <Button className={styles.btn} type="primary" size="large" full onClick={this.handlePayConfirmed}>
+            确认支付￥{options.amount} 元
+          </Button>
+          <Button className={styles.btn} size="large" full>
+            取消
+          </Button>
+        </div>
+      </div>
     );
   }
 }

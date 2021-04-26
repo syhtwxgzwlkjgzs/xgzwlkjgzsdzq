@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styles from './index.module.scss';
 import { Checkbox } from '@discuzq/design';
+import { ORDER_TRADE_TYPE } from '../../../../common/constants/payBoxStoreConstants';
 
 export default class CommonAccountContent extends Component {
   /**
@@ -11,13 +12,13 @@ export default class CommonAccountContent extends Component {
   renderDiffTradeType = (type) => {
     let value = '';
     switch (type) {
-      case '1': // 表示付费贴
+      case ORDER_TRADE_TYPE.THEME: // 表示付费贴
         value = '付费帖';
         break;
-      case '2': // 表示打赏
+      case ORDER_TRADE_TYPE.POST_REWARD: // 表示打赏
         value = '打赏';
         break;
-      case '3':
+      case ORDER_TRADE_TYPE.REGEISTER_SITE:
         value = '表示付费加入';
         break;
       default:
@@ -26,43 +27,42 @@ export default class CommonAccountContent extends Component {
     return value;
   };
 
+  // 转换金额小数
+  transMoneyToFixed = (num) => {
+    return Number(num).toFixed(2);
+  };
+
   render() {
-    const { currentPaymentData = [], isNotShowTitle, titleName } = this.props;
+    const { currentPaymentData = {}, isNotShowTitle, titleName } = this.props;
+    const { type, amount, isAnonymous } = currentPaymentData;
     return (
       <>
         {/* 标题 */}
         {!isNotShowTitle && <div className={styles.amountTitle}>{titleName}</div>}
         {/* 主要内容区域 */}
         <div className={styles.amountContent}>
-          {currentPaymentData &&
-            !!currentPaymentData.length &&
-            currentPaymentData.map((item, index) => {
-              let is_show_hr = currentPaymentData.length > 0 && index != currentPaymentData.length - 1;
-              return (
-                <>
-                  <div className={styles.acExplain}>
-                    <span className={styles.acExplain_label}>交易类型</span>{' '}
-                    <span className={styles.acExplain_value}>{this.renderDiffTradeType(item.trade_type)}</span>
-                  </div>
-                  <div className={styles.acExplain}>
-                    <span className={styles.acExplain_label}>商品名称</span>{' '}
-                    <span className={styles.acExplain_value}>{item.goods_name}</span>
-                  </div>
-                  <div className={styles.acExplain}>
-                    <span className={styles.acExplain_label}>支付金额</span>
-                    <span>￥{item.pay_money}</span>
-                  </div>
-                  <div className={styles.acExplain}>
-                    <Checkbox checked={item.is_anonymous == '1'} /> 隐藏我的付费信息
-                  </div>
-                  {is_show_hr && (
-                    <div>
-                      <hr className={styles.acExplain_hr}/>
-                    </div>
-                  )}
-                </>
-              );
-            })}
+          <div className={styles.acExplain}>
+            <span className={styles.acExplain_label}>交易类型</span>{' '}
+            <span className={styles.acExplain_value}>{this.renderDiffTradeType(type)}</span>
+          </div>
+          <div className={styles.acExplain}>
+            <span className={styles.acExplain_label}>商品名称</span>{' '}
+            <span className={styles.acExplain_value}>{'暂未设置'}</span>
+          </div>
+          <div className={styles.acExplain}>
+            <span className={styles.acExplain_label}>支付金额</span>
+            <span>￥{this.transMoneyToFixed(amount)}</span>
+          </div>
+          {type == '1' && (
+            <div className={styles.acExplain}>
+              <Checkbox checked={isAnonymous} /> 隐藏我的付费信息
+            </div>
+          )}
+          {type == ORDER_TRADE_TYPE.COMBIE_PAYMENT && (
+            <div>
+              <hr className={styles.acExplain_hr} />
+            </div>
+          )}
         </div>
       </>
     );
@@ -70,7 +70,7 @@ export default class CommonAccountContent extends Component {
 }
 
 CommonAccountContent.defaultProps = {
-  currentPaymentData: [], // 当前支付对象
+  currentPaymentData: {}, // 当前支付对象
   isNotShowTitle: false, // 是否不显示title标题
   titleName: '确认金额', // 默认交易金额title标题名称
 };
