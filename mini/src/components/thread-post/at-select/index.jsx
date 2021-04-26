@@ -80,7 +80,7 @@ class AtSelect extends Component {
     // 处理已选@ren，更新store
     const { postData, setPostData } = this.props.threadPost;
     const at = checkUser.map(item => `@${item.user.userName}`).join(' ');
-    const contentText = `${postData.contentText}${at}`;
+    const contentText = `${postData.contentText} ${at}`;
     setPostData({ contentText });
 
     // 返回发帖页

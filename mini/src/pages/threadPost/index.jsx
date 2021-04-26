@@ -107,6 +107,9 @@ class Index extends Component {
       case THREAD_TYPE.at:
         nextRoute = '/pages/threadPost/selectAt';
         break;
+      case THREAD_TYPE.topic:
+        nextRoute = '/pages/threadPost/selectTopic';
+        break;
     }
 
     if (nextRoute) Taro.navigateTo({ url: nextRoute });
