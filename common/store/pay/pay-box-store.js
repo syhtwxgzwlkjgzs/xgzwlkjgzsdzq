@@ -3,21 +3,8 @@ import { get } from '../../utils/get';
 import { createOrders, createPayOrder, readOrderDetail, readWalletUser, updateUsersUpdate } from '@server';
 import isWeixin from '../../utils/is-weixin';
 import browser from '../../utils/browser';
-import { STEP_MAP, PAYWAY_MAP, WX_PAY_STATUS, PAY_MENT_MAP, ORDER_STATUS_MAP, PAY_BOX_ERROR_CODE_MAP } from '../../constants/payBoxStoreConstants';
+import { STEP_MAP, WX_PAY_STATUS, PAY_MENT_MAP, ORDER_STATUS_MAP, PAY_BOX_ERROR_CODE_MAP } from '../../constants/payBoxStoreConstants';
 import throttle from '../../utils/thottle';
-
-export const listenWXJsBridgeAndExecCallback = (callback) => {
-  if (typeof WeixinJSBridge === 'undefined') {
-    if (document.addEventListener) {
-      document.addEventListener('WeixinJSBridgeReady', callback, false);
-    } else if (document.attachEvent) {
-      document.attachEvent('WeixinJSBridgeReady', callback);
-      document.attachEvent('onWeixinJSBridgeReady', callback);
-    }
-  } else {
-    callback();
-  }
-};
 
 class PayBoxStore {
   // 订单 options
@@ -95,33 +82,6 @@ class PayBoxStore {
     };
   }
 
-  @action
-  onBridgeReady = data => new Promise((resolve, reject) => {
-    const { appId, timeStamp, nonceStr, package: wxPackage, paySign } = data;
-    // eslint-disable-next-line no-undef
-    WeixinJSBridge.invoke('getBrandWCPayRequest', {
-      appId,
-      timeStamp,
-      nonceStr,
-      package: wxPackage,
-      signType: 'MD5',
-      paySign,
-    }, (data) => {
-      const payStatus = get(data, 'err_msg', '');
-      if (payStatus === WX_PAY_STATUS.WX_PAY_OK) {
-        resolve();
-      }
-
-      if (payStatus === WX_PAY_STATUS.WX_PAY_CANCEL) {
-        reject(PAY_BOX_ERROR_CODE_MAP.WX_PAY_CANCEL);
-      }
-
-      if (payStatus === WX_PAY_STATUS.WX_PAY_FAIL) {
-        reject(PAY_BOX_ERROR_CODE_MAP.WX_PAY_FAIL);
-      }
-    });
-  })
-
   /**
    * 创建订单
    */
@@ -192,7 +152,7 @@ class PayBoxStore {
    * 钱包支付订单
    */
   @action
-  walletPayOrder = async () => {
+  walletPayOrder = throttle(async () => {
     try {
       const payRes = await createPayOrder({
         data: {
@@ -203,6 +163,19 @@ class PayBoxStore {
       });
 
       this.resErrorFactory(payRes);
+
+      // 支付成功
+      if (get(payRes, 'data.walletPayResult.result') === 'success') {
+        // success
+        if (this.options.success) {
+          this.options.success(this.orderInfo);
+        }
+
+        if (this.options.completed) {
+          this.options.completed(this.orderInfo);
+        }
+        return payRes;
+      }
     } catch (error) {
       if (error.Code) {
         throw error;
@@ -212,13 +185,17 @@ class PayBoxStore {
         error,
       };
     }
-  };
+  }, 1000);
 
   /**
    * 微信支付订单
+   * 后端实现分别位于 h5-backend 和 miniprogram-backend
    */
   @action
-  wechatPayOrder = throttle(async () => {
+  wechatPayOrder = throttle(async ({
+    listenWXJsBridgeAndExecCallback,
+    onBridgeReady,
+  }) => {
     try {
       if (!isWeixin()) {
         // is not in weixin, just throw tips error
@@ -241,7 +218,7 @@ class PayBoxStore {
 
       if (payRes.code === 0) {
         listenWXJsBridgeAndExecCallback(() => {
-          this.onBridgeReady(get(payRes, 'data.wechatPayResult.wechatJs'));
+          onBridgeReady(get(payRes, 'data.wechatPayResult.wechatJs'));
           this.timer = setInterval(() => {
             this.getOrderDetail();
           }, 1000);
@@ -319,8 +296,8 @@ class PayBoxStore {
           this.options.success(this.orderInfo);
         }
 
-        if (this.options.complete) {
-          this.options.complete(this.orderInfo);
+        if (this.options.completed) {
+          this.options.completed(this.orderInfo);
         }
       }
 
@@ -330,8 +307,8 @@ class PayBoxStore {
           this.options.failed(this.orderInfo);
         }
 
-        if (this.options.complete) {
-          this.options.complete(this.orderInfo);
+        if (this.options.completed) {
+          this.options.completed(this.orderInfo);
         }
       }
 
@@ -341,8 +318,8 @@ class PayBoxStore {
           this.options.failed(this.orderInfo);
         }
 
-        if (this.options.complete) {
-          this.options.complete(this.orderInfo);
+        if (this.options.completed) {
+          this.options.completed(this.orderInfo);
         }
       }
     } catch (error) {
