@@ -47,6 +47,7 @@ class Index extends Component {
               clearable={false}
               className={layout.input}
               mode="number"
+              appendWidth="auto"
               append={
                 wxPhoneBind.codeTimeout
                 ? <View style={{ textAlign: 'right', paddingRight: '6px' }}>{wxPhoneBind.codeTimeout}s后重试</View>
