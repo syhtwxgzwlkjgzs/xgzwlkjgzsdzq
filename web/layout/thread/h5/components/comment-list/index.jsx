@@ -3,7 +3,8 @@ import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import ReplyList from '../reply-list/index';
 import { diffDate } from '@common/utils/diff-date';
-
+import { observer } from 'mobx-react';
+@observer
 class CommentList extends React.Component {
   constructor(props) {
     super(props);
@@ -13,17 +14,10 @@ class CommentList extends React.Component {
       isShowAdopt: false, // 是否展示采纳按钮
       isHideEdit: this.props.isHideEdit, // 隐藏评论编辑删除
       isShowOne: this.props.isShowOne || false, // 是否只显示一条评论回复
-      isLiked: this.props.data.isLiked,
-      likeCount: this.props.data.likeCount,
     };
     this.needReply = this.props.data.lastThreeComments;// 评论的回复
   }
 
-  static async getInitialProps() {
-    return {
-
-    };
-  }
   toCommentDetail = () => {
     if (this.state.isShowOne) {
       typeof this.props.onCommentClick === 'function' && this.props.onCommentClick();
@@ -37,13 +31,6 @@ class CommentList extends React.Component {
 
   // 点击评论赞
   likeClick() {
-    this.setState({
-      isLiked: !this.state.isLiked,
-    }, () => {
-      this.setState({
-        likeCount: this.state.isLiked ? this.state.likeCount + 1 : this.state.likeCount - 1,
-      });
-    });
     typeof this.props.likeClick === 'function' && this.props.likeClick();
   }
 
@@ -145,9 +132,9 @@ class CommentList extends React.Component {
               <div className={styles.commentBtn}>
                 <div className={styles.commentTime}>{diffDate(this.props.data.createdAt)}</div>
                 <div className={styles.extraBottom}>
-                  <div className={this.state.isLiked ? styles.commentLike : styles.commentLiked}>
+                  <div className={this.props?.data?.isLiked ? styles.commentLike : styles.commentLiked}>
                     <span onClick={() => this.likeClick(canLike)}>
-                      赞&nbsp;{this.state.likeCount > 0 ? this.state.likeCount : ''}
+                      赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
                     </span>
                   </div>
                   <div className={styles.commentReply}>

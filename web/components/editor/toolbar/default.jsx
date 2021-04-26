@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '@discuzq/design';
 import styles from './index.module.scss';
-import { defaultIcon } from '@common/constants/const';
+import { defaultIcon, defaultOperation } from '@common/constants/const';
 
 export default function DefaultToolbar(props) {
   const { children, onClick, onSubmit, value } = props;
@@ -12,8 +12,10 @@ export default function DefaultToolbar(props) {
   }, [value]);
 
   function handleClick() {
-    setCurrentAction('');
-    onClick({ id: '' });
+    if (defaultOperation.emoji === currentAction) {
+      setCurrentAction('');
+      onClick({ id: '' });
+    }
   }
 
   useEffect(() => {

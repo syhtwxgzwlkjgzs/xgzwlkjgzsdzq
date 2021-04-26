@@ -3,6 +3,16 @@
 
 .list {
   overflow-y: auto;
-  max-height: 80vh;
-  min-height: 40vh;
+  height: 70vh;
+  // min-height: 40vh;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .title {
+    margin: 0 rem(4);
+  }
 }

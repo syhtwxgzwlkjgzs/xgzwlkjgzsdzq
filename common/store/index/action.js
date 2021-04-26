@@ -38,7 +38,7 @@ class IndexAction extends IndexStore {
 
     const result = await readThreadList({ params: { perPage, page, filter: newFilter, sequence } });
     if (result.code === 0 && result.data) {
-      if (this.threads && result.data.pageData) {
+      if (this.threads && result.data.pageData && page !== 1) {
         this.threads.pageData.push(...result.data.pageData);
         const newPageData = this.threads.pageData.slice();
         this.setThreads({ ...result.data, pageData: newPageData });

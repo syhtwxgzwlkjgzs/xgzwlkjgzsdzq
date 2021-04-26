@@ -1,3 +1,4 @@
+import isServer from '@common/utils/is-server';
 const browser={
     env: (t) => {
         const u = navigator.userAgent;
@@ -16,8 +17,7 @@ const browser={
             case 'qq' : return u.match(/\sQQ/i) == " qq"; //是否QQ
             default: return false;
         }
-    },
-    language:(navigator.browserLanguage || navigator.language).toLowerCase()
+    }
 }
 
 export default browser;
