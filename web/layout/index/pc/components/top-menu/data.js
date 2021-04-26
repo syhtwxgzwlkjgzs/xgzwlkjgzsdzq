@@ -1,73 +1,90 @@
 export default [
   {
     label: '默认', // 默认智能排序
-    value: 'isSort',
-    isShow: false // 根据组件传值决定其显示性
+    type: 'sequence',
+    isActive: true,
   }, {
     label: '所有', // 所有
-    value: 'all',
-    isShow: true
+    type: 'all',
+    isActive: false,
   }, {
     label: '精华', // 精华
-    value: 'isEssence',
-    isShow: true
+    type: 'essence',
+    isActive: false,
   }, {
     label: '已关注', // 已关注
-    value: 'followed',
-    isShow: true
+    type: 'attention',
+    isActive: false,
   }, {
-    label: '类型', // 类型
-    value: 'followed',
-    isShow: true,
-    children: [{
-        label: '不限', // 不限
+    label: '类型',
+    type: 'types',
+    children: [
+      {
+        label: '不限',
         value: '',
-        divided: true
-      }, {
-        label: '文本', // 文本
-        value: 0,
-        divided: true
-      }, {
-        label: '帖子', // 帖子
-        value: 1,
-        divided: true
-      }, {
-        label: '视频', // 视频
-        value: 2,
-        divided: true
-      }, {
-        label: '图片', // 图片
-        value: 3,
-        divided: true
-      }, {
-        label: '语音', // 语音
-        value: 4,
-        divided: true
-      }, {
-        label: '问答', // 问答
-        value: 5,
-        divided: true
-      }, {
-        label: '商品', // 商品
-        value: 6,
-        divided: false
-      }]
+        isActive: true,
+      },
+      {
+        label: '视频',
+        value: '103',
+        isActive: false,
+      },
+      {
+        label: '图片',
+        value: '101',
+        isActive: false,
+      },
+      {
+        label: '语音',
+        value: '102',
+        isActive: false,
+      },
+      {
+        label: '问答',
+        value: '105',
+        isActive: false,
+      },
+      {
+        label: '商品',
+        value: '104',
+        isActive: false,
+      },
+      {
+        label: '红包',
+        value: '106',
+        isActive: false,
+      },
+      {
+        label: '悬赏问答',
+        value: '107',
+        isActive: false,
+      },
+      {
+        label: '文件附件',
+        value: '108',
+        isActive: false,
+      },
+    ],
   }, {
     label: '排序', // 类型
-    value: 'followed',
-    isShow: true,
-    children:[{
+    type: 'sort',
+    isActive: false,
+    children: [{
       label: '不限', // 不限
       value: '',
-      divided: true
+      isActive: true,
     }, {
       label: '发布时间', // 发布时间
-      value: '-createdAt',
-      divided: true
+      value: '1',
+      isActive: false,
     }, {
-      label: '更新时间', // 更新时间
-      value: '-updatedAt',
-      divided: false
-    }]
-  }
+      label: '评论时间', // 更新时间
+      value: '2',
+      isActive: false,
+    }, {
+      label: '热门内容', // 更新时间
+      value: '3',
+      isActive: false,
+    }],
+  },
 ];
