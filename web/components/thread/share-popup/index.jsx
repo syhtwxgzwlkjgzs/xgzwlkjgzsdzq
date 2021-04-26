@@ -19,7 +19,7 @@ const SharePopup = ({ visible = false, onClose = noop }) => {
     >
       <div className={styles.container}>
         <img src={sharePoint} className={styles.sharePoint} />
-        <img src={shareKnow} className={styles.shareKnow} />
+        <img src={shareKnow} className={styles.shareKnow} onClick={onClose} />
       </div>
     </Popup>);
 };

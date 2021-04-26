@@ -24,17 +24,18 @@ export default function DzqUpload(props) {
   } = props;
   const multiple = limit > 1;
 
-  const post = async (file, list, updater) => {
+  const post = async (file) => { // file, list, updater
     const formData = new FormData();
     formData.append('file', file.originFileObj);
     Object.keys(data).forEach((item) => {
       formData.append(item, data[item]);
     });
-    const ret = await createAttachment(formData, (progressEvent) => {
-      const complete = (progressEvent.loaded / progressEvent.total * 100 | 0);
-      file.status = 'uploading';
-      file.percent += complete;
-      updater(list);
+    // TODO:进度条目前有问题
+    const ret = await createAttachment(formData, () => { // progressEvent
+      // const complete = (progressEvent.loaded / progressEvent.total * 100 | 1);
+      // file.status = 'uploading';
+      // // file.percent += complete;
+      // updater(list);
     });
     if (ret.code === 0) {
       onSuccess(ret, file);

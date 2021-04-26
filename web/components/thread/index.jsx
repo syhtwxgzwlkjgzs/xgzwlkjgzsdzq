@@ -15,25 +15,40 @@ import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
-import { filterClickClassName, handleAttachmentData, noop } from './utils';
-
+import { filterClickClassName, handleAttachmentData } from './utils';
+// import goToLoginPage from '@common/utils/go-to-login-page';
 @inject('site')
 @inject('index')
+@inject('user')
 @observer
 class Index extends React.Component {
     // 分享
     onShare = (e) => {
       e.stopPropagation();
 
+      // 对没有登录的先登录
+      if (!this.props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        // goToLoginPage();
+        return;
+      }
+
       Toast.info({ content: '分享链接已复制成功' });
 
-      const { title = '' } = this.props.data || {};
+      const { title = '', threadId = '' } = this.props.data || {};
       h5Share(title);
-      // this.props.index.updateThreadShare({ threadId });
+      this.props.index.updateThreadShare({ threadId });
     }
     // 评论
     onComment = (e) => {
       e.stopPropagation();
+
+      // 对没有登录的先登录
+      if (!this.props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        // goToLoginPage();
+        return;
+      }
 
       const { data = {} } = this.props;
       const { threadId = '' } = data;
@@ -46,6 +61,13 @@ class Index extends React.Component {
     // 点赞
     onPraise = (e) => {
       e.stopPropagation();
+
+      // 对没有登录的先登录
+      if (!this.props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        // goToLoginPage();
+        return;
+      }
       const { data = {} } = this.props;
       const { threadId = '', isLike, postId } = data;
       this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } });
@@ -53,6 +75,13 @@ class Index extends React.Component {
     // 支付
     onPay = (e) => {
       e.stopPropagation();
+
+      // 对没有登录的先做
+      if (!this.props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        // goToLoginPage();
+        return;
+      }
 
       if (this.props.payType === '0') {
         return;
@@ -65,8 +94,14 @@ class Index extends React.Component {
       if (!filterClickClassName(e.target)) {
         return;
       }
-      const { data = {} } = this.props;
-      const { threadId = '' } = data;
+
+      const { threadId = '', ability } = this.props.data || {};
+      const { canViewPost } = ability;
+
+      if (!canViewPost) {
+        Toast.info({ content: '暂无权限查看详情，请联系管理员' });
+      }
+
       if (threadId !== '') {
         this.props.router.push(`/thread/${threadId}`);
       } else {
@@ -76,7 +111,7 @@ class Index extends React.Component {
       // 执行外部传进来的点击事件
       const { onClick } = this.props;
       if (typeof(onClick) === 'function') {
-        onClick(data);
+        onClick(this.props.data);
       }
     }
 

@@ -71,4 +71,5 @@ export const ACCEPT_FILE_TYPES = [
   '.xls',
   '.rar',
   '.txt',
+  '*/*',
 ];

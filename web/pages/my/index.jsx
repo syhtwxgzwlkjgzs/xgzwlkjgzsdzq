@@ -11,7 +11,7 @@ class MyCenter extends React.Component {
 
   loginOut() {
     clearLoginStatus();
-    Router.replace({url: '/'});
+    window.location.replace('/');
   }
 
   render() {
