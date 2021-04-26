@@ -7,6 +7,8 @@ export default {
   pages: [
     // 'pages/test/paybox/index',
     'pages/index/index',
+    'pages/thread/index',
+    'pages/thread/comment/index',
     'pages/threadPost/index',
     'pages/threadPost/selectReward',
   ],
