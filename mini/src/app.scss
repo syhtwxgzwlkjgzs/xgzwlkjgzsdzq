@@ -1,2 +1,14 @@
 @import '@styles/index.scss';
-@import '@discuzq/design/dist/styles/index.scss';
+@import '@discuzq/design/dist/styles/var.scss';
+
+// 因@discuzq/design中部分组件css使用的选择器在小程序中会报错，所以@discuzq/design的组件样式先按需引入
+@import "@discuzq/design/dist/components/button/styles/index.scss";
+@import "@discuzq/design/dist/components/icon/styles/index.scss";
+@import '@discuzq/design/dist/components/audio/styles/index.scss';
+@import "@discuzq/design/dist/components/toast/styles/index.scss";
+@import "@discuzq/design/dist/components/popup/styles/index.scss";
+
+page {
+  font-family: var(--font-family);
+  background: var(--color-white);
+}

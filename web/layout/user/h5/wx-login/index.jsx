@@ -2,33 +2,30 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './index.module.scss';
+import { Icon } from '@discuzq/design';
+import '@discuzq/design/dist/styles/index.scss';
 import WeixinQrCode from '../../../../components/login/h5/wx-qr-code';
-import HeaderLogin from '../../../../components/login/h5/header-login';
-import isWeiXin from '@common/utils/is-weixin';
+import HomeHeader from '@components/home-header';
 
 @inject('site')
 @inject('user')
 @inject('h5QrCode')
 @observer
 class WXLoginH5Page extends React.Component {
-  constructor(props) {
-    super(props);
-    // 如果在微信环境内，则直接拉起登录
-    if (isWeiXin()) {
-      window.location.href = `${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`;
-    }
-  }
-
   async componentDidMount() {
-    await this.props.h5QrCode.generate({ params: { type: 'mobile_browser_login',
-      redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`)}` } });
+    await this.props.h5QrCode.generate({
+      params: {
+        type: 'mobile_browser_login',
+        redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`)}`,
+      },
+    });
   }
 
   render() {
     const isAnotherLoginWayAvaliable = this.props.site.isSmsOpen || this.props.site.isUserLoginVisible;
     return (
       <div className={layout.container}>
-        <HeaderLogin />
+        <HomeHeader hideInfo/>
         <div className={layout.content}>
           <div className={layout.title}>微信登录</div>
           {/* 二维码 start */}
@@ -46,7 +43,7 @@ class WXLoginH5Page extends React.Component {
                 }}
                 className={layout['otherLogin-button-weixin']}
               >
-                <img src="/login-user.png" alt="" />
+                <Icon name='UserOutlined' color='#4084FF'/>
               </span>
             )}
             {this.props.site.isSmsOpen && (
@@ -56,7 +53,7 @@ class WXLoginH5Page extends React.Component {
                 }}
                 className={layout['otherLogin-button-user']}
               >
-                <img src="/login-phone.png" alt="" />
+                <Icon name='PhoneOutlined' color='#FFC300'/>
               </span>
             )}
           </div>

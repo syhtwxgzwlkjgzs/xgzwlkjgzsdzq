@@ -9,12 +9,13 @@ import 'vditor/src/assets/scss/index.scss';
 import './index.scss';
 
 export default function DVditor(props) {
-  const { onChange, emoji, atList, topic, onFocus, onBlur } = props;
+  const { onChange, emoji, atList, topic, onFocus, onBlur, value, onCountChange } = props;
   const vditorId = 'dzq-vditor';
 
   const [isFocus, setIsFocus] = useState(false);
   const [vditor, setVditor] = useState(null);
-  const [, setRange] = useState(null);
+  const [range, setRange] = useState(null);
+  const [contentCount, setContentCount] = useState(0);
 
 
   // TODO: 这里有点问题
@@ -23,6 +24,7 @@ export default function DVditor(props) {
     // const { vditor } = this.vditor;
     // const mode = vditor[vditor.currentMode];
     const selection = window.getSelection();
+    console.log(selection.rangeCount);
     if (selection.rangeCount > 0) return selection.getRangeAt(0);
     // if (mode.range) return mode.range;
     // const { element } = mode;
@@ -34,14 +36,14 @@ export default function DVditor(props) {
     return range;
   };
 
-  // const setCurrentPositon = () => {
-  //   // https://developer.mozilla.org/zh-CN/docs/Web/API/Selection
-  //   const selection = window.getSelection();
-  //   // 将所有的区域都从选区中移除。
-  //   selection.removeAllRanges();
-  //   // 一个区域（Range）对象将被加入选区。
-  //   selection.addRange(range);
-  // };
+  const setCurrentPositon = () => {
+    // https://developer.mozilla.org/zh-CN/docs/Web/API/Selection
+    const selection = window.getSelection();
+    // 将所有的区域都从选区中移除。
+    selection.removeAllRanges();
+    // 一个区域（Range）对象将被加入选区。
+    if (range) selection.addRange(range);
+  };
 
   useEffect(() => {
     initVditor();
@@ -49,6 +51,7 @@ export default function DVditor(props) {
 
   useEffect(() => {
     if (emoji && emoji.code) {
+      setCurrentPositon();
       const value = `![${emoji.code}emoji](${emoji.url})`;
       vditor.insertValue(value);
     }
@@ -60,36 +63,54 @@ export default function DVditor(props) {
       return '';
     });
     if (users.length) {
+      setCurrentPositon();
       vditor.insertValue(users.join(' '));
     }
   }, [atList]);
 
   useEffect(() => {
-    if (topic) vditor.insertValue(`${topic} `);
+    if (topic) {
+      setCurrentPositon();
+      vditor.insertValue(`${topic} `);
+    }
   }, [topic]);
+
+  useEffect(() => {
+    onCountChange(contentCount);
+  }, [contentCount]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      clearTimeout(timer);
+      if (vditor && vditor.getValue && vditor.getValue() === '\n' && vditor.getValue() !== value) {
+        vditor.insertValue(vditor.html2md(value));
+      }
+    }, 500);
+  }, [value]);
 
   function initVditor() {
     // https://ld246.com/article/1549638745630#options
     const editor = new Vditor(
       vditorId,
       {
+        mode: 'wysiwyg',
         height: 178,
         placeholder: '请填写您的发布内容…',
         // 编辑器初始化值
-        value: '',
+        value,
         cache: { enable: false },
         // 编辑器异步渲染完成后的回调方法
         after: () => {},
         focus: () => {
-          const range = getEditorRange();
           setIsFocus(true);
           onFocus();
-          setRange(range);
         },
         input: () => {
           onChange(editor);
         },
         blur: () => {
+          const range = getEditorRange();
+          setRange(range);
           onChange(editor);
           onBlur();
           setIsFocus(false);
@@ -117,6 +138,13 @@ export default function DVditor(props) {
         },
         counter: {
           enable: true,
+          after(count) {
+            setContentCount(count);
+          },
+          type: 'markdown',
+        },
+        outline: {
+          enable: false,
         },
       },
     );

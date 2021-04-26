@@ -1,41 +1,35 @@
 import React from 'react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
-import { formatDate } from '@common/utils/format-date';
-
+import { diffDate } from '@common/utils/diff-date';
+import { observer } from 'mobx-react';
+@observer
 export default class ReplyList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLiked: this.props.data.isLiked,
-      likeCount: this.props.data.likeCount,
-    };
-  }
-  static async getInitialProps() {
-    return {
-
-    };
-  }
   // 跳转至评论详情
   toCommentDetail() {
     console.log('跳至评论详情');
   }
 
   likeClick() {
-    this.setState({
-      isLiked: !this.state.isLiked,
-    }, () => {
-      this.setState({
-        likeCount: this.state.isLiked ? this.state.likeCount + 1 : this.state.likeCount - 1,
-      });
-    });
     typeof this.props.likeClick === 'function' && this.props.likeClick();
   }
   replyClick() {
     typeof this.props.replyClick === 'function' && this.props.replyClick();
   }
 
+  generatePermissions(data = {}) {
+    return {
+      canApprove: data.canApprove || false,
+      canDelete: data.canDelete || false,
+      canEdit: data.canEdit || false,
+      canHide: data.canLike || false,
+      canLike: data.canLike || false,
+    };
+  }
+
   render() {
+    const { canLike } = this.generatePermissions(this.props.data);
+
     return (
       <div className={styles.replyList}>
         <div className={styles.replyListAvatar} onClick={this.props.avatarClick('2')}>
@@ -64,7 +58,7 @@ export default class ReplyList extends React.Component {
                       </Avatar>
                     </div>
                     <span className={styles.replyedUserName}>
-                      {this.props.data.replyUser.username || this.props.data.replyUser.userName }
+                      {this.props.data.replyUser.username || this.props.data.replyUser.userName}
                     </span>
                   </div> : ''
               }
@@ -72,11 +66,11 @@ export default class ReplyList extends React.Component {
             </div>
           </div>
           <div className={styles.replyListFooter}>
-            <div className={styles.replyTime}>{formatDate(this.props.data.createdAt, 'yyyy-MM-dd hh:mm')}</div>
+            <div className={styles.replyTime}>{diffDate(this.props.data.createdAt)}</div>
             <div className={styles.extraBottom}>
-              <div className={this.state.isLiked ? styles.replyLike : styles.replyLiked}>
-                <span onClick={() => this.likeClick()}>
-                  赞{this.state.likeCount === 0 ? '' : this.state.likeCount}
+              <div className={this.props?.data?.isLiked ? styles.replyLike : styles.replyLiked}>
+                <span onClick={() => this.likeClick(canLike)}>
+                  赞&nbsp;{ this.props?.data?.likeCount === 0 ? '' :  this.props.data.likeCount}
                 </span>
               </div>
               <div className={styles.replyReply}>

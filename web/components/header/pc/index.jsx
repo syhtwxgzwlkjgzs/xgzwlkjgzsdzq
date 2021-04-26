@@ -4,8 +4,6 @@ import styles from './index.module.scss';
 import { Icon, Input, Button } from '@discuzq/design';
 import Avatar from '@components/avatar';
 
-import Router from '@common/utils/web-router';
-
 @inject('site')
 @inject('user')
 @observer
@@ -19,7 +17,7 @@ class Header extends React.Component {
     if (site.setSite && site.setSite.siteLogo && site.setSite.siteLogo !== '') {
       return <img className={styles.siteLogo} src={site.setSite.siteLogo}/>;
     }
-    return <img className={styles.siteLogo} src='admin-logo-pc.png'/>;
+    return <img className={styles.siteLogo} src='/dzq-img/admin-logo-pc.png'/>;
   }
 
   renderUserInfo() {

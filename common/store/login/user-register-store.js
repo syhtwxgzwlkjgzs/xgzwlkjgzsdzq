@@ -2,6 +2,7 @@ import { observable, action } from 'mobx';
 import { usernameRegister } from '@server';
 import { get } from '../../utils/get';
 import setAccessToken from '../../utils/set-access-token';
+import { checkUserStatus } from '@common/store/login/util';
 
 export default class UserRegisterStore {
   @observable username = '';
@@ -44,6 +45,8 @@ export default class UserRegisterStore {
           passwordConfirmation: this.passwordConfirmation,
         },
       });
+      checkUserStatus(registerResp);
+
       if (registerResp.code === 0) {
         const accessToken = get(registerResp, 'data.accessToken');
         // 注册成功后，默认登录

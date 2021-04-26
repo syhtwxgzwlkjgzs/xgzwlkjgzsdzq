@@ -8,6 +8,7 @@
   flex-direction: column;
   box-sizing: border-box;
   overflow: hidden;
+  background-color: var(--color-white);
 }
 .searchInput {
   padding: 0 rem($padding-4n);

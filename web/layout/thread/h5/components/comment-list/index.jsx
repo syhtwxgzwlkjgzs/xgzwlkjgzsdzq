@@ -2,8 +2,9 @@ import React from 'react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import ReplyList from '../reply-list/index';
-import { formatDate } from '@common/utils/format-date';
-
+import { diffDate } from '@common/utils/diff-date';
+import { observer } from 'mobx-react';
+@observer
 class CommentList extends React.Component {
   constructor(props) {
     super(props);
@@ -13,18 +14,10 @@ class CommentList extends React.Component {
       isShowAdopt: false, // 是否展示采纳按钮
       isHideEdit: this.props.isHideEdit, // 隐藏评论编辑删除
       isShowOne: this.props.isShowOne || false, // 是否只显示一条评论回复
-      isLiked: this.props.data.isLiked,
-      likeCount: this.props.data.likeCount,
     };
     this.needReply = this.props.data.lastThreeComments;// 评论的回复
-    this.replyNumber = this.props.data.replyCount - 1; // 评论的回复
   }
 
-  static async getInitialProps() {
-    return {
-
-    };
-  }
   toCommentDetail = () => {
     if (this.state.isShowOne) {
       typeof this.props.onCommentClick === 'function' && this.props.onCommentClick();
@@ -38,13 +31,6 @@ class CommentList extends React.Component {
 
   // 点击评论赞
   likeClick() {
-    this.setState({
-      isLiked: !this.state.isLiked,
-    }, () => {
-      this.setState({
-        likeCount: this.state.isLiked ? this.state.likeCount + 1 : this.state.likeCount - 1,
-      });
-    });
     typeof this.props.likeClick === 'function' && this.props.likeClick();
   }
 
@@ -82,15 +68,27 @@ class CommentList extends React.Component {
     typeof this.props.reployAvatarClick === 'function' && this.props.reployAvatarClick(data);
   }
 
+  generatePermissions(data = {}) {
+    return {
+      canApprove: data.canApprove || false,
+      canDelete: data.canDelete || false,
+      canEdit: data.canEdit || false,
+      canHide: data.canLike || false,
+      canLike: data.canLike || false,
+    };
+  }
+
   render() {
+    const { canDelete, canEdit, canLike } = this.generatePermissions(this.props.data);
+
     return (
       <div className={styles.commentList}>
         <div className={styles.header}>
           <div className={styles.showGet}>
             {!this.state.isHideEdit
               && <div className={styles.extra}>
-                {/* <div className={styles.revise} onClick={() => this.editClick()}>编辑</div> */}
-                <div className={styles.revise} onClick={() => this.deleteClick()}>删除</div>
+                {canEdit && <div className={styles.revise} onClick={() => this.editClick()}>编辑</div>}
+                {canDelete && <div className={styles.revise} onClick={() => this.deleteClick()}>删除</div>}
               </div>
             }
             {
@@ -132,10 +130,12 @@ class CommentList extends React.Component {
             </div>
             <div className={styles.commentListFooter}>
               <div className={styles.commentBtn}>
-                <div className={styles.commentTime}>{formatDate(this.props.data.createdAt, 'yyyy-MM-dd hh:mm')}</div>
+                <div className={styles.commentTime}>{diffDate(this.props.data.createdAt)}</div>
                 <div className={styles.extraBottom}>
-                  <div className={this.state.isLiked ? styles.commentLike : styles.commentLiked}>
-                    <span onClick={() => this.likeClick()}>赞{this.state.likeCount > 0 ? this.state.likeCount : ''}</span>
+                  <div className={this.props?.data?.isLiked ? styles.commentLike : styles.commentLiked}>
+                    <span onClick={() => this.likeClick(canLike)}>
+                      赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
+                    </span>
                   </div>
                   <div className={styles.commentReply}>
                     <span onClick={() => this.replyClick()}>回复</span>
@@ -149,16 +149,16 @@ class CommentList extends React.Component {
                 </div>
               </div>
               {
-                this.replyNumber > 0 && this.state.isShowOne
+                this.props.data?.replyCount - 1 > 0 && this.state.isShowOne
                   ? <div
                     className={styles.moreReply}
                     onClick={() => this.toCommentDetail()}>
-                    查看之前{this.replyNumber}条回复...
+                    查看之前{this.props.data?.replyCount - 1}条回复...
                     </div> : ''
               }
               {
-                this.needReply?.length
-                && <div className={styles.ReplyList}>
+                this.needReply?.length > 0
+                && <div className={styles.replyList}>
                   {
                     this.state.isShowOne
                       ? <ReplyList

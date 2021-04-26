@@ -4,7 +4,7 @@ import IndexH5Page from '@layout/thread/post/h5';
 import IndexPCPage from '@layout/thread/post/pc';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-// import HOCWithLogin from '@common/middleware/HOCWithLogin';
+import HOCWithLogin from '@common/middleware/HOCWithLogin';
 
 @inject('site')
 @observer
@@ -21,4 +21,4 @@ class Index extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(Index);
+export default HOCFetchSiteData(HOCWithLogin(Index));

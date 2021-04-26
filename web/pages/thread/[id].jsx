@@ -11,53 +11,20 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 class Detail extends React.Component {
   static async getInitialProps(ctx) {
     const id = ctx?.query?.id;
-    if (!id) {
-      return {
-        props: {
-          serverThread: null,
-          commentList: null,
-        },
-      };
-    }
-    // 获取分类数据
-    const res = await readThreadDetail({ params: { threadId: Number(id) } });
-
-    // 获取评论列表
-    const commentRes = await readCommentList({
-      params: {
-        filter: {
-          thread: Number(id),
-        },
-        sort: '-createdAt',
-        page: 1,
-        perPage: 5,
-      },
-    });
-
-    return {
-      props: {
-        serverThread: res.data,
-        commentList: commentRes.data || [],
-      },
+    const serverThread = {
+      threadData: null,
+      commentList: null,
+      totalCount: 0,
     };
-  }
 
-  constructor(props) {
-    super(props);
-    const { serverThread, thread } = this.props;
-
-    // 初始化数据到store中
-    serverThread && thread.setThreadData(serverThread);
-  }
-
-  async componentDidMount() {
-    const { id } = this.props.router.query;
-    if (!this.props.serverThread && id) {
+    if (id) {
+      // 获取分类数据
       const res = await readThreadDetail({ params: { threadId: Number(id) } });
       if (res.code === 0) {
-        this.props.thread.setThreadData(res.data);
+        serverThread.threadData = res.data;
       }
 
+      // 获取评论列表
       const commentRes = await readCommentList({
         params: {
           filter: {
@@ -68,9 +35,46 @@ class Detail extends React.Component {
           perPage: 5,
         },
       });
+
       if (commentRes.code === 0) {
-        this.props.thread.setCommentList(commentRes.data?.pageData);
-        this.props.thread.setTotalCount(commentRes.data?.totalCount);
+        serverThread.commentList = commentRes.data?.pageData || [];
+        serverThread.totalCount = commentRes.data?.totalCount || 0;
+      }
+    }
+    return {
+      serverThread,
+    };
+  }
+
+  constructor(props) {
+    super(props);
+
+    const { thread, serverThread } = this.props;
+
+    // 初始化数据到store中
+    serverThread?.threadData && thread.setThreadData(serverThread.threadData);
+    serverThread?.commentList && thread.setCommentList(serverThread.commentList);
+    serverThread?.totalCount && thread.setTotalCount(serverThread.totalCount);
+  }
+
+  async componentDidMount() {
+    const { id } = this.props.router.query;
+    // 判断缓存
+    const oldId = this.props?.thread?.threadData?.threadId;
+    if (Number(id) === oldId && id && oldId) {
+      return;
+    }
+    this.props.thread.reset();
+
+    if (id && !this.props?.thread?.threadData?.threadId) {
+      if (!this.props?.thread?.threadData) {
+        this.props.thread.fetchThreadDetail(id);
+      }
+      if (!this.props?.thread?.commentList) {
+        const params = {
+          id,
+        };
+        this.props.thread.loadCommentList(params);
       }
     }
   }
@@ -78,7 +82,6 @@ class Detail extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
-    console.log(platform);
     return platform === 'h5' ? <ThreadH5Page /> : <ThreadPCPage />;
   }
 }

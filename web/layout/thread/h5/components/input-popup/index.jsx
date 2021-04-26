@@ -1,13 +1,17 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon, Popup, Textarea, Upload, Button } from '@discuzq/design';
 import styles from './index.module.scss';
 
 const InputPop = (props) => {
-  const { visible, onSubmit, onClose, inputText = '请输入内容' } = props;
+  const { visible, onSubmit, initValue, onClose, inputText = '请输入内容' } = props;
 
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setValue(initValue || '');
+  }, [initValue]);
 
   const onSubmitClick = async () => {
     if (typeof onSubmit === 'function') {
@@ -49,7 +53,7 @@ const InputPop = (props) => {
             </Button>
           </Upload> */}
         </div>
-        <Button loading={loading} onClick={onSubmitClick} className={styles.button} type='primary' size='large'>发布</Button>
+        <Button full={true} loading={loading} onClick={onSubmitClick} className={styles.button} type='primary' size='large'>发布</Button>
       </div>
     </Popup>);
 };
