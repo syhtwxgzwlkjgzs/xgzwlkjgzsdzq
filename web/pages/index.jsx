@@ -39,13 +39,20 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
-    const orderOptions = PayBox.orderBuilder({
-      amount: 1,
-      type: 3,
-      threadId: 98,
-      payeeId: 59,
+    PayBox.createPayBox({
+      data: {
+        amount: 1,
+        type: 3,
+        threadId: 98,
+        payeeId: 59,
+      },
+      success: (orderInfo) => {
+        console.log(orderInfo);
+      },
+      failed: (orderInfo) => {
+        console.log(orderInfo);
+      },
     });
-    PayBox.createPayBox(orderOptions);
     const { serverIndex, index } = this.props;
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasCategoriesData = !!index.categories;

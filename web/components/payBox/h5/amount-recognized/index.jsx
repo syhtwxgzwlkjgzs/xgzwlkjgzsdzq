@@ -43,9 +43,9 @@ export default class AmountRecognized extends Component {
       <Popup
         position="bottom"
         maskClosable={true}
-        visible={this.props.payBox.options.visible}
+        visible={this.props.payBox.visible}
         onClose={() => {
-          this.props.payBox.options.visible = false;
+          this.props.payBox.visible = false;
         }}
       >
         <div className={styles.amountWrapper}>

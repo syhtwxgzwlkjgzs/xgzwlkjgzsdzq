@@ -20,9 +20,13 @@ export default class PayBox extends Component {
     payBoxEmitter.on('createPayBox', this.createPayBox);
   }
 
-  createPayBox = async (options) => {
+  createPayBox = async (
+    options = {
+      data: {},
+    },
+  ) => {
     this.props.payBox.options = {
-      ...options
+      ...options.data,
     };
     this.props.payBox.visible = true;
   };
@@ -36,21 +40,22 @@ export default class PayBox extends Component {
   }
 }
 
-PayBox.createPayBox = (options) => payBoxEmitter.emit('createPayBox', options);
-
 /**
  * 订单生成函数
  * @param {{
- *  amount: number;
- *  redAmount: number;
- *  rewardAmount: number;
- *  isAnonymous: number;
- *  type: number;
- *  threadId: number;
- *  groupId: number;
- *  payeeId: number;
- * }} orderOptions
+ *  data: {
+ *    amount: number;
+ *    redAmount: number;
+ *    rewardAmount: number;
+ *    isAnonymous: number;
+ *    type: number;
+ *    threadId: number;
+ *    groupId: number;
+ *    payeeId: number;
+ * }
+ * success: (orderInfo: any) => any
+ * failed: (orderInfo: any) => any
+ * completed: (orderInfo: any) => any
+ * }} options
  */
-PayBox.orderBuilder = (orderOptions) => {
-  return orderOptions;
-};
+PayBox.createPayBox = (options) => payBoxEmitter.emit('createPayBox', options);

@@ -121,7 +121,7 @@ class PayBoxStore {
   @action
   createOrder = async () => {
     try {
-      const data = JSON.parse(JSON.stringify(this.options));
+      const data = this.options;
       const createRes = await createOrders({
         timeout: 3000,
         data,
@@ -326,6 +326,24 @@ class PayBoxStore {
     } catch (error) {
       this.errorHandler(error);
     }
+  }
+
+  /**
+   * 清空所有状态
+   */
+  @action
+  clear = () => {
+    clearInterval(this.timer);
+    this.options = {};
+    this.visible = false;
+    this.orderInfo = null;
+    this.timer = null;
+    this.step = STEP_MAP.SURE;
+    this.payWay = null;
+    this.payResult = null;
+    this.password = null;
+    this.walletInfo = null;
+    this.wechatQRCode = null;
   }
 }
 
