@@ -4,6 +4,7 @@ import { createOrders, createPayOrder, readOrderDetail, readWalletUser, updateUs
 import isWeixin from '../../utils/is-weixin';
 import browser from '../../utils/browser';
 import { STEP_MAP, PAYWAY_MAP, WX_PAY_STATUS, PAY_MENT_MAP, ORDER_STATUS_MAP, PAY_BOX_ERROR_CODE_MAP } from '../../constants/payBoxStoreConstants';
+import throttle from '../../utils/thottle';
 
 export const listenWXJsBridgeAndExecCallback = (callback) => {
   if (typeof WeixinJSBridge === 'undefined') {
@@ -119,7 +120,7 @@ class PayBoxStore {
    * 创建订单
    */
   @action
-  createOrder = async () => {
+  createOrder = throttle(async () => {
     try {
       const data = this.options;
       const createRes = await createOrders({
@@ -135,7 +136,7 @@ class PayBoxStore {
     } catch (error) {
       this.errorHandler(error);
     }
-  }
+  }, 2000);
 
   /**
    * 获取用户钱包信息
@@ -170,7 +171,7 @@ class PayBoxStore {
    * 钱包支付订单
    */
   @action
-  walletPayOrder = async () => {
+  walletPayOrder = throttle(async () => {
     try {
       const payRes = await createPayOrder({
         data: {
@@ -184,13 +185,13 @@ class PayBoxStore {
     } catch (error) {
       this.errorHandler(error);
     }
-  }
+  }, 1000);
 
   /**
    * 微信支付订单
    */
   @action
-  wechatPayOrder = async () => {
+  wechatPayOrder = throttle(async () => {
     try {
       if (!isWeixin()) {
         // is not in weixin, just throw tips error
@@ -222,13 +223,13 @@ class PayBoxStore {
     } catch (error) {
       this.errorHandler(error);
     }
-  }
+  }, 1000);
 
   /**
    * 微信支付订单
    */
   @action
-  wechatPayOrderQRCode = async () => {
+  wechatPayOrderQRCode = throttle(async () => {
     try {
       const payRes = await createPayOrder({
         data: {
@@ -243,7 +244,7 @@ class PayBoxStore {
     } catch (error) {
       this.errorHandler(error);
     }
-  }
+  }, 1000);
 
   /**
    * 获取订单详情

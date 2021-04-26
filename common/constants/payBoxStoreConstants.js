@@ -58,4 +58,8 @@ export const PAY_BOX_ERROR_CODE_MAP = {
     Code: 'pbx_9999',
     Message: '网络错误',
   },
+  WX_MINI_PAY_CREATE_FAILED: {
+    Code: 'pbx_0005',
+    Message: '拉起微信小程序支付失败',
+  },
 };
