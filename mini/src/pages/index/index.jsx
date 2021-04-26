@@ -23,7 +23,7 @@ class Index extends Component {
 
   render() {
     const { webConfig, envConfig, theme, changeTheme } = this.props.site;
-    console.log(this.props.site)
+
     return (
       <Page>
         <View>

@@ -106,10 +106,11 @@ class App extends Component {
   }
 
   render() {
+    const { children } = this.props;
     return (
       <Provider {...this.store}>
         {/* this.props.children 就是要渲染的页面 */}
-        {this.props.children}
+        {children}
       </Provider>
     );
   }
