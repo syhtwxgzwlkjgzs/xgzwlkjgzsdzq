@@ -14,6 +14,7 @@ export default {
     'pages/threadPost/selectProduct',
     'pages/threadPost/selectPaid',
     'pages/threadPost/selectAt',
+    'pages/threadPost/selectTopic',
   ],
   subPackages: [
     {

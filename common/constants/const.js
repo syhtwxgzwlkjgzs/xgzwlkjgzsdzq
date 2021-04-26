@@ -64,6 +64,7 @@ export const defaultIcon = [
     name: 'SharpOutlined', // #
     active: activeColor,
     id: defaultOperation.topic,
+    type: THREAD_TYPE.topic
   },
   {
     name: 'PaperClipOutlined', // 附件
