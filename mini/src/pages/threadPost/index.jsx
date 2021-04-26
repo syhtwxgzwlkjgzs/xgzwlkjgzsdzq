@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
-import { View } from '@tarojs/components';
+import { View, Button } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import ThemePage from '@components/theme-page';
 import { PluginToolbar, DefaultToolbar, GeneralUpload, Tag, Title, Content, ClassifyPopup, PaidTypePopup } from '@components/thread-post';
@@ -52,7 +52,6 @@ class Index extends Component {
 
   // 处理文本框内容
   onContentChange = (contentText) => {
-    debugger;
     const { setPostData } = this.props.threadPost;
     setPostData({ contentText });
   }
@@ -173,7 +172,7 @@ class Index extends Component {
   render() {
     const { categories } = this.props.index;
     const { postData } = this.props.threadPost;
-    const { rewardQa, redpacket, video } = postData;
+    const { rewardQa, redpacket, video, product } = postData;
     const {
       title,
       isShowTitle,
@@ -181,7 +180,7 @@ class Index extends Component {
       operationType,
       showPaidType,
     } = this.state;
-
+    console.log(product);
     return (
       <>
         <View className={styles['container']}>
@@ -195,9 +194,13 @@ class Index extends Component {
             />
 
             <View className={styles['plugin']}>
+
               <GeneralUpload type={operationType} />
-              <Units type='product' productSrc={'https://img20.360buyimg.com/ceco/s700x700_jfs/t1/153702/29/15780/81514/601663b6E0eb5908f/3cb05e84fe495b03.jpg!q70.jpg'} productDesc={'又帅又痞 设计师日本纯钛眼镜框超轻近视男款复古镜架可配有度数，天天佩戴，应每日清洗镜架及镜片！不用时应先清洁再收纳！'} productPrice={564.99} onDelete={() => { }} />
+
+              {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => {}} />}
+
               {video.videoUrl && <Units type='video' src={video.videoUrl} />}
+
             </View>
           </View>
 
@@ -251,7 +254,7 @@ class Index extends Component {
           onClick={(item) => this.handlePluginClick(item)}
           onHide={() => this.setState({ showPaidType: false })}
         />
-        
+
       </>
     );
   }

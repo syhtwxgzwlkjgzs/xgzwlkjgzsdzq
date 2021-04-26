@@ -25,12 +25,14 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
     files.body = [];
   }
 
+
+  const [isRecording, setIsRecording] = useState(false);
+
   // 执行上传
-  const upload = (file) => {
-    const tempPath = file.path;
+  const upload = (tempFilePath) => {
     Taro.uploadFile({
       url: 'https://discuzv3-dev.dnspod.dev/apiv3/attachments',
-      filePath: tempPath,
+      filePath: tempFilePath,
       name: 'file',
       header: {
         'Content-Type': 'multipart/form-data',
@@ -41,10 +43,12 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
           switch(type) {
             case THREAD_TYPE.image: return 1;
             case THREAD_TYPE.file: return 0;
+            case THREAD_TYPE.voice: return 3;
           }
         })()
       },
       success(res) {
+        console.log(res);
         switch(type) {
           case THREAD_TYPE.image:
             images.body.push({
@@ -74,7 +78,7 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
   const chooseImage = () => {
     Taro.chooseImage({
       success(res) {
-        upload(res.tempFiles[0]);
+        upload(res.tempFiles[0].path);
       }
     });
   }
@@ -83,9 +87,37 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
   const chooseFile = () => {
     Taro.chooseMessageFile({
       success(res) {
-        upload(res.tempFiles[0]);
+        upload(res.tempFiles[0].path);
       }
     });
+  }
+
+  // 执行录音
+  const handleAudioRecord = () => {
+    const recorderManager = Taro.getRecorderManager()
+    recorderManager.onStart(() => {
+      console.log('recorder start')
+    })
+    recorderManager.onPause(() => {
+      console.log('recorder pause')
+    })
+    recorderManager.onStop((res) => {
+      console.log('recorder stop', res)
+      upload(res.tempFilePath);
+    })
+    recorderManager.onFrameRecorded((res) => {
+      const { frameBuffer } = res
+      console.log('frameBuffer.byteLength', frameBuffer.byteLength)
+    })
+    const options = {
+      duration: 10000,
+      sampleRate: 44100,
+      numberOfChannels: 1,
+      encodeBitRate: 192000,
+      format: 'mp3',
+      frameSize: 50
+    }
+    recorderManager.start(options)
   }
 
   // 进行附件上传
@@ -121,10 +153,19 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
     </View>
   );
 
+  // 录音并上传
+  const audioRecord = (type === THREAD_TYPE.voice) && (
+    <Units type='audio-record' isRecording={isRecording} onStart={() => {
+      setIsRecording(true);
+      handleAudioRecord();
+    }} />
+  );
+
   return (
     <>
       {atta}
       {img}
+      {audioRecord}
     </>
   );
 }));
