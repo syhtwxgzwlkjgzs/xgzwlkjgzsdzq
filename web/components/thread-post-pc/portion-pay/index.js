@@ -1,5 +1,6 @@
 /**
- * 付费表单 - 全部
+ * 付费表单 - 附件付费
+ * input输入小数待优化
  */
 import React, { memo, useState, useEffect } from 'react';
 import { Button, Input, Slider, Popup, Icon } from '@discuzq/design';
@@ -61,7 +62,7 @@ const PortionPay = ({ visible, confirm, data, onVisibleChange }) => {
                 visible={show}
             >
                 <div className={styles['redpacket-box']}>
-                    <div className={styles['title-top']}><span>部分付费</span>
+                    <div className={styles['title-top']}><span>附件付费</span>
                         <Icon className={styles['title-top-right']} onClick={handleClose} name="LikeOutlined" size={20} color="#8490a8"></Icon>
                     </div>
                     <div>
@@ -177,7 +178,7 @@ PortionPay.propTypes = {
 PortionPay.defaultProps = {
     visible: false, // 是否显示
     data: {}, // 假设有数据返回重显
-    confirm: (e) => { console.log(e) },
+    confirm: () => {},
     onVisibleChange: () => { },
 };
 

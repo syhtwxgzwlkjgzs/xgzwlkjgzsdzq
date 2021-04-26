@@ -1,3 +1,5 @@
+@import '@common/styles/index.scss';
+
 .paid-wrapper {
 
 
@@ -16,7 +18,33 @@
 
         .dzq-popup__overlay {
             // background-color: #fff;
-            z-index: 1000;
+            z-index: var(--zindex-backtotop);
+        }
+
+        .dzq-slider {
+
+            .dzq-slider__progress--stick,
+            .dzq-slider__progress--active,
+            .dzq-slider__feature {
+                height: 4px;
+            }
+
+            .dzq-slider__progress__button {
+                width: 24px;
+                height: 24px;
+                background: var(--color-primary);
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    left: 7px;
+                    top: 7px;
+                    width: 10px;
+                    height: 10px;
+                    background: var(--color-white);
+                    border-radius: var(--borde0a0s-cir0);
+                }
+            }
         }
 
     }
@@ -24,14 +52,14 @@
     .toview {
         display: flex;
         flex-direction: column;
-        margin-right: 16px;
-        margin-left: 16px;
-        padding-bottom: 10px;
+        margin-right: var(--margin-4n);
+        margin-left: var(--margin-4n);
+        padding-bottom: var(--padding-10);
         border-bottom: var(--border-border);
 
         .toviewone {
             height: 33px;
-            font-size: 12px;
+            font-size: var(--font-size-label);
             color: #8490a8;
         }
     }
@@ -39,8 +67,8 @@
     .redpacket-box {
         width: 409px;
         height: 419px;
-        padding-top: 24px;
         margin: 0 auto;
+        padding-top: var(--padding-6n);
         border-radius: 5px;
         background: #fff;
 
@@ -49,9 +77,8 @@
             line-height: 43px;
             text-align: center;
             position: relative;
-            font-weight: 600;
-            font-size: 16px;
-            line-height: 43px;
+            font-weight: var(--font-weight-regular);
+            font-size: var(--font-size-middle);
             color: var(--color-text-primary);
 
             .title-top-right {
@@ -68,10 +95,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-left: 16px;
-            margin-right: 16px;
-            // padding-top: 16px;
-            font-size: 14px;
+            margin-left: var(--margin-4n);
+            margin-right: var(--margin-4n);
+            font-size: var(--font-size-primary);
 
             .text-style {
                 color: #4f5a70;
@@ -83,12 +109,12 @@
             justify-content: space-between;
             align-items: center;
             height: 34px;
-            margin-left: 16px;
-            margin-right: 16px;
+            margin-left: var(--margin-4n);
+            margin-right: var(--margin-4n);
             padding-top: 9px;
             padding-bottom: 9px;
-            border-bottom: 1px solid #eee;
-            font-size: 14px;
+            border-bottom: var(--border-border);
+            font-size: var(--font-size-primary);
 
             .text-style {
                 color: #4f5a70;
@@ -100,12 +126,11 @@
             justify-content: space-between;
             align-items: center;
             height: 34px;
-            margin-left: 16px;
-            margin-right: 16px;
+            margin-left: var(--margin-4n);
+            margin-right: var(--margin-4n);
             padding-top: 9px;
             padding-bottom: 9px;
-            // border-bottom: 1px solid #eee;
-            font-size: 14px;
+            font-size: var(--font-size-primary);
 
             .text-style {
                 color: #4f5a70;
@@ -131,15 +156,15 @@
             color: #333;
             text-align: center;
             border: none;
-            background: #eee;
+            background: var(--border-line-color);
         }
 
         .btn-two {
             width: 116px;
             height: 36px;
-            color: white;
+            color: var(--color-white);
             text-align: center;
-            background-color: #2469f6;
+            background-color: var(--color-primary);
             border: none;
         }
     }

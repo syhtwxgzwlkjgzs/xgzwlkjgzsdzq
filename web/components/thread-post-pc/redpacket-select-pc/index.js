@@ -23,6 +23,14 @@
      setShow(false);
    };
  
+   const onMoneyChang = (e) => { // 对红包金额做仅可输入两位小数的操作
+    const val = e.target.value;
+    const _money = val.replace(/\.\d*$/, $1 => {
+      return $1.slice(0, 3)
+    });
+    setMoney( _money );
+  }
+
    useEffect(() => {
      if (data !== undefined && Object.keys(data).length > 0) {
        setRule(data.rule);
@@ -98,7 +106,7 @@
            <div className={styles['line-box']}>
              <div className={styles['text-style']}> 红包总金额 </div>
              <div>
-               <Input mode="number" value={money} onChange={(e) => setMoney(+e.target.value)} />元
+               <Input mode="number" value={money} onChange={onMoneyChang} />元
                </div>
            </div>
            {/* 红包个数 */}

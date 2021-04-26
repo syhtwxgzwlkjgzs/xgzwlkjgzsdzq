@@ -1,15 +1,12 @@
 /**
- * 添加红包表单
- * @prop {boolean} visible 切换红包弹框显示性
- * @prop {object} data 输入红包数据
- * @prop {function} cancle 取消事件
- * @prop {function} confirm 确认事件，输出红包对象
+ * 切换付费表单
+ *手风琴组件待优化
  */
-import React, { memo, useState } from 'react'; // 性能优化的
-import { Dropdown, Icon } from '@discuzq/design'; // 原来就有的封装
-import styles from './index.module.scss'; // 私有样式
+import React, { memo } from 'react'; 
+import { Dropdown, Icon } from '@discuzq/design'; 
+import styles from './index.module.scss'; 
 
-import PropTypes from 'prop-types'; // 类型拦截
+import PropTypes from 'prop-types'; 
 
 
 const PayType = ({ confirm }) => {
@@ -17,8 +14,8 @@ const PayType = ({ confirm }) => {
         confirm(e);
     };
     const menu = () => <Dropdown.Menu>
-        <Dropdown.Item id="1">全部付费</Dropdown.Item>
-        <Dropdown.Item id="2" >部分付费</Dropdown.Item>
+        <Dropdown.Item id="1">帖子付费</Dropdown.Item>
+        <Dropdown.Item id="2" >附件付费</Dropdown.Item>
     </Dropdown.Menu>;
 
     return (
@@ -37,8 +34,7 @@ PayType.propTypes = {
 
 // 设置props默认参数
 PayType.defaultProps = {
-    confirm: (e) => { console.log(e) },
-
+    confirm: () => { },
 };
 
 export default memo(PayType);

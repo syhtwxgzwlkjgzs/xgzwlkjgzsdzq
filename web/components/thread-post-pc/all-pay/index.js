@@ -1,5 +1,5 @@
 /**
- * 付费表单 - 全部
+ * 付费表单 - 帖子付费
  */
 import React, { memo, useState, useEffect } from 'react';
 import { Button, Input, Slider, Popup, Icon } from '@discuzq/design';
@@ -54,7 +54,7 @@ const AllPay = ({ visible, confirm, data, onVisibleChange }) => {
                 visible={show}
             >
                 <div className={styles['redpacket-box']}>
-                    <div className={styles['title-top']}><span>全帖付费</span>
+                    <div className={styles['title-top']}><span>帖子付费</span>
                         <Icon className={styles['title-top-right']} onClick={handleClose} name="LikeOutlined" size={20} color="#8490a8"></Icon>
                     </div>
                     <div>
