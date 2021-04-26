@@ -41,10 +41,10 @@ class Index extends React.Component {
   async componentDidMount() {
     PayBox.createPayBox({
       data: {
-        amount: 1,
+        amount: 0.1,
         type: 3,
-        threadId: 98,
-        payeeId: 59,
+        threadId: 4,
+        payeeId: 16,
         isAnonymous: false
       },
       success: (orderInfo) => {

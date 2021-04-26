@@ -81,9 +81,13 @@ class PayBoxStore {
     }
   }
 
-  errorHandler = (error) => {
+  errorHandler = async (error) => {
+    console.log(error);
     if (error.Code) {
-      throw error;
+      throw {
+        Code: error.Code,
+        Message: error.Message
+      };
     }
     throw {
       ...PAY_BOX_ERROR_CODE_MAP.NETWORK_ERROR,
@@ -176,13 +180,13 @@ class PayBoxStore {
    * 钱包支付订单
    */
   @action
-  walletPayOrder = throttle(async () => {
+  walletPayOrder = async () => {
     try {
       const payRes = await createPayOrder({
         data: {
           orderSn: this.orderSn,
           paymentType: PAY_MENT_MAP.WALLET,
-          password: this.password,
+          payPassword: this.password,
         },
       });
 
@@ -190,7 +194,7 @@ class PayBoxStore {
     } catch (error) {
       this.errorHandler(error);
     }
-  }, 1000);
+  };
 
   /**
    * 微信支付订单
