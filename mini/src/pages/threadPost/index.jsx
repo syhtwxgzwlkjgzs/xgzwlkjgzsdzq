@@ -104,6 +104,9 @@ class Index extends Component {
         nextRoute = `/pages/threadPost/selectPaid?paidType=${THREAD_TYPE.paidAttachment}`;
         this.setState({ showPaidType: false });
         break;
+      case THREAD_TYPE.at:
+        nextRoute = '/pages/threadPost/selectAt';
+        break;
     }
 
     if (nextRoute) Taro.navigateTo({ url: nextRoute });
@@ -189,7 +192,7 @@ class Index extends Component {
           <View className={styles['content']}>
             <Title title={title} show={isShowTitle} onInput={this.onTitleInput} />
             <Content
-              value={postData.content}
+            value={postData.contentText}
               onChange={this.onContentChange}
               onFocus={this.onContentFocus}
             />
