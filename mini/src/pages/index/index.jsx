@@ -8,7 +8,10 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
 @inject('site')
 @inject('index')
+<<<<<<< HEAD
 @inject('user')
+=======
+>>>>>>> d97e450ed2d6d838ef23fced8dd64411c62e9756
 @observer
 class Index extends React.Component {
   page = 1;
@@ -71,6 +74,24 @@ class Index extends React.Component {
       });
 
       return;
+    }
+  }
+
+  async componentDidMount() {
+    const { index } = this.props;
+    // 当服务器无法获取数据时，触发浏览器渲染
+    const hasCategoriesData = !!index.categories;
+    const hasSticksData = !!index.sticks;
+    const hasThreadsData = !!index.threads;
+
+    if (!hasCategoriesData) {
+      this.props.index.getReadCategories();
+    }
+    if (!hasSticksData) {
+      this.props.index.getRreadStickList();
+    }
+    if (!hasThreadsData) {
+      this.props.index.getReadThreadList();
     }
   }
 
