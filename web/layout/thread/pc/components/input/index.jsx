@@ -61,19 +61,19 @@ const Input = (props) => {
         <div className={styles.footer}>
             <div className={styles.linkBtn}>
               <Icon
-                name='PoweroffOutlined'
+                name='SmilingFaceOutlined'
                 size='20'
                 className={styles.btnIcon}
                 onClick={onEmojiClick}>
               </Icon>
               <Icon
-                name='PoweroffOutlined'
+                name='AtOutlined'
                 size='20'
                 className={styles.btnIcon}
                 onClick={onFindFriendsClick}>
               </Icon>
               <Icon
-                name='PoweroffOutlined'
+                name='SharpOutlined'
                 size='20'
                 className={styles.btnIcon}
                 onClick={onTopicClick}>

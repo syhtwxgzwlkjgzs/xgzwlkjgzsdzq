@@ -1,27 +1,27 @@
-@import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 .commentList {
-  padding: rem($padding-4n);
+  padding: 16px;
   .header {
     display: flex;
     justify-content: flex-end;
 
     .showGet {
       width: 100%;
-      padding-left: rem(48);
+      padding-left: 48px;
       display: flex;
       justify-content: space-between;
 
       .revise {
-        font-size: rem($font-size-primary);
+        font-size: 14px;
         text-align: left;
         color: var(--color-text-secondary);
+        margin-right: 10px;
       }
       .showMoneyNum {
-        font-size: rem($font-size-label);
+        font-size: 12px;
         text-align: left;
         color: var(--color-text-primary);
-        margin-left: rem($margin-10);
+        margin-left: 10px;
         .moneyNumber {
           color: var(--color-error);
         }
@@ -30,26 +30,32 @@
   }
   .content {
     display: flex;
-    padding-top: rem($padding-10);
+    padding-top: 10px;
     .commentListAvatar {
-      margin-right: rem($margin-10);
+      margin-right: 10px;
+      .avater {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #eee;
+      }
     }
     .commentListContent {
       width: 100%;
       .commentListContentText {
-        padding: rem($padding-2n);
-        border-radius: rem($border-radius-small);
+        padding: 8px;
+        border-radius: 5px;
         background: var(--comment-box-bg-color);
         .commentListName {
           font-weight: var(--font-weight-regular);
-          font-size: rem($font-size-primary);
-          line-height: rem(18);
+          font-size: 14px;
+          line-height: 18px;
           text-align: left;
           color: var(--color-text-primary);
         }
         .commentListText {
-          font-size: rem($font-size-middle);
-          line-height: rem($font-line-height-middle);
+          font-size: 16px;
+          line-height: 26px;
           text-align: left;
           color: var(--color-text-primary);
         }
@@ -59,10 +65,10 @@
           display: flex;
           align-items: center;
           justify-content: space-between;
-          font-size: rem($font-size-primary);
+          font-size: 14px;
           text-align: left;
           color: var(--color-text-secondary);
-          padding-top: rem($padding-2n);
+          padding-top: 8px;
           .commentTime {
             // flex: 1;
           }
@@ -85,10 +91,10 @@
         }
         .moreReply {
           font-weight: var(--font-weight-regular);
-          font-size: var($font-size-primary);
+          font-size: 14px;
           text-align: left;
           color: var(--color-text-primary);
-          padding-top: rem($padding-4n); 
+          padding-top: 16px; 
         }
       }
     }
@@ -97,16 +103,16 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    > div {
-      margin-right: rem($margin-2n);
+    > View {
+      margin-right: 8px;
     }
   }
   .extraBottom {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    > div {
-      margin-left: rem(24);
+    > View {
+      margin-left: 24px;
     }
   }
 }

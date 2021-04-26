@@ -1,44 +1,55 @@
-@import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 .replyList {
   display: flex;
-  padding-top: rem($padding-4n);
+  padding-top: 16px;
   .replyListAvatar {
-    margin-right: rem($margin-10);
+    margin-right: 10px;
+    .avater {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #eee;
+      }
   }
   .replyListContent {
     width: 100%;
     .replyListContentText {
-      padding: rem($padding-2n);;
-      border-radius: rem($border-radius-small);
+      padding: 8px;
+      border-radius: 5px;
       background: var(--comment-box-bg-color);
       .replyListName {
         font-weight: var(--font-weight-regular);
-        font-size: rem($font-size-primary);
-        line-height: rem(18);
+        font-size: 14px;
+        line-height: 18px;
         text-align: left;
         color: var(--color-text-primary);
       }
       .replyListText {
-        font-size: rem($font-size-middle);
-        line-height: rem($font-line-height-middle);
+        font-size: 16px;
+        line-height: 26px;
         text-align: left;
         color: var(--color-text-primary);
         .commentUser {
           display: inline-block;
           .replyedUserName {
             font-weight: var(--font-weight-regular);
-            font-size: rem($font-size-primary);
-            margin-right: rem($margin-2n);
-            line-height: rem(18);
+            font-size: 14px;
+            margin-right: 8px;
+            line-height: 18px;
             text-align: left;
             color: var(--color-primary);
           }
           .replyedAvatar {
             display: inline-block;
-            margin-right: rem($margin-1n);
+            margin-right: 4px;
             position: relative;
-            top: rem(6);
+            top: 6px;
+            .avater {
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                background: #eee;
+              }
           }
         }
       }
@@ -47,10 +58,10 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: rem($font-size-primary);
+      font-size: 14px;
       text-align: left;
       color: var(--color-text-secondary);
-      padding-top: rem($padding-2n);
+      padding-top: 8px;
       .replyTime {
         // flex: 1;
       }
@@ -74,8 +85,8 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    > div {
-      margin-left: rem(24);
+    > View {
+      margin-left: 24px;
     }
   }
 }
