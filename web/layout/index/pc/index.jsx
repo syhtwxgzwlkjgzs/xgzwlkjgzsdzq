@@ -58,13 +58,18 @@ class IndexPCPage extends React.Component {
 
 
   // 左侧 -- 分类
-  renderLeft = () => (
+  renderLeft = () => {
+    const { categories = [] } = this.props.index;
+    const newCategories = this.handleCategories(categories);
+
+    return (
       <div className={styles.indexLeft}>
         <div className={styles.indexLeftBox}>
-          <Navigation />
+          <Navigation categories={newCategories} />
         </div>
       </div>
-  )
+    );
+  }
   // 右侧 -- 二维码 推荐内容
   renderRight = () => (
       <div className={styles.indexRight}>

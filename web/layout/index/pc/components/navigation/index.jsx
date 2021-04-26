@@ -1,45 +1,34 @@
 import React from 'react';
-import style from './index.module.scss';
 import { Menu, Card } from '@discuzq/design';
-import categories from './data';
 
-const Index = () => {
-  const title = (name = '全部') => {
-    return (
-      <div>
-        <span>{name}</span>
-        <span style={{float: 'right'}}>{Math.ceil(Math.random()*1000)}</span>
-      </div>
-    )
-  }
-  const CategoriesContent = () => {
-    return (
+const Index = ({ categories }) => {
+  const renderSubMenuTitle = ({ name, threadCount }) => (
+    <div>
+      <span>{name}</span>
+      {threadCount !== 0 && <span style={{ cssFloat: 'right' }}>{threadCount}</span>}
+    </div>
+  );
+
+  const CategoriesContent = () => (
       <Menu>
-        <Menu.Item index="3">{title('全部')}</Menu.Item>
-        {categories?.map((item, index) => {
-          if (item.children && item.children.length > 0) {
-            return (
-              <Menu.SubMenu index={index} title={title(item.name)}>
-                {item.children.map((childrens, indexs) => {
-                  return (
+        {
+          categories?.map((item, index) => (item?.children?.length > 0 ? (
+              <Menu.SubMenu key={index} index={index} title={renderSubMenuTitle(item)}>
+                {item.children.map((childrens, indexs) => (
                     <Menu.Item index={indexs} key={indexs}>{childrens.name}</Menu.Item>
-                  )
-                })}
+                ))}
               </Menu.SubMenu>
-            )
-          } else {
-            return (
-              <Menu.Item index={index} key={index}>{title(item.name)}</Menu.Item>
-            )
-          }
-        })}
+          ) : (
+                  <Menu.Item index={index} key={index}>{renderSubMenuTitle(item)}</Menu.Item>
+          )))
+        }
       </Menu>
-    )
-  }
+  );
+
   return (
     <Card style={{ background: '#fff' }} bordered={false}>
       <CategoriesContent />
     </Card>
-  )
-}
-export default React.memo(Index)
+  );
+};
+export default React.memo(Index);
