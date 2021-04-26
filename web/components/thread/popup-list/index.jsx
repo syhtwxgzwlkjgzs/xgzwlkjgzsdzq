@@ -84,6 +84,10 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
     }
   };
 
+  const searchClick = () => {
+
+  };
+
   const onClose = () => {
     onHidden();
     setAll(null);
@@ -102,13 +106,19 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
 
   return (
     <Popup
-        position="bottom"
+        position="center"
         visible={visible}
         onClose={onClose}
     >
         <Tabs
           onActive={onClickTab}
           activeId={current}
+          className={styles.tabs}
+          tabBarExtraContent={
+            <div onClick={searchClick} className={styles.tabIcon}>
+              <Icon name="SecondaryMenuOutlined" />
+            </div>
+          }
         >
           <Tabs.TabPanel key={0} id={0} label={renderHeader({ icon: '', title: '全部', number: all?.pageData?.allCount })}>
             {all?.pageData?.list?.length ? (
