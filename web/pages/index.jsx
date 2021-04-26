@@ -38,7 +38,6 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
-
     const { index } = this.props;
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasCategoriesData = !!index.categories;
@@ -81,7 +80,7 @@ class Index extends React.Component {
     const { platform } = site;
 
     if (platform === 'pc') {
-      return <IndexPCPage/>;
+      return <IndexPCPage dispatch={this.dispatch} />;
     }
     return <IndexH5Page dispatch={this.dispatch} />;
   }

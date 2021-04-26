@@ -1,0 +1,36 @@
+@import '@common/styles/variable/index.scss';
+.index {
+  height: 100vh;
+  width: 100vw;
+  .header {
+    height: 50px;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 16px;
+    .show {
+      .showGet {
+        display: flex;
+        justify-content: flex-end;
+        .icon {
+          line-height: 50px;
+          font-size: 12px;
+        }
+        .showMoneyNum {
+          font-weight: var(--font-weight-regular);
+          font-size: 12px;
+          line-height: 50px;
+          text-align: left;
+          color: var(--color-text-primary);
+          margin-left: 8px;
+          .moneyNumber {
+            color: var(--color-error);
+          }
+        }
+      }
+    }
+    .more {
+      line-height: 50px;
+      margin-left: 20px;
+    }
+  }
+}
