@@ -6,6 +6,8 @@ import { Button, Audio, Icon } from '@discuzq/design';
 import ThemePage from '@components/theme-page';
 import { APP_THEME } from '@common/constants/site';
 import styles from './index.module.scss';
+import ThreadContent from '@components/thread';
+import IndexMiniPage from '@layout/index/mini';
 
 
 @inject('site')
@@ -17,7 +19,7 @@ class Index extends Component {
 
     return (
       <ThemePage>
-        <View>
+        {/* <View>
           <Text className={styles.text}>{envConfig.baseURL}</Text>
           <View className={styles.text}>{theme}</View>
           <Button onClick={() => {
@@ -34,7 +36,8 @@ class Index extends Component {
           <Icon name="LoadingOutlined" size="large" />
           <Icon name="UserOutlined" size="small" />
           <Icon name="UserOutlined" />
-        </View>
+        </View> */}
+        <IndexMiniPage />
       </ThemePage>
     );
   }

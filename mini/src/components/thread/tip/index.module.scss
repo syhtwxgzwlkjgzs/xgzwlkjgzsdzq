@@ -1,0 +1,15 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.container {
+  position: relative;
+  max-width: rem(44);
+  .img { }
+  .imgAfter {
+    position: absolute;
+    border: var(--color-white) solid rem(1);
+    border-radius: 50%;
+    right: rem(-1);
+    top: rem(-1);
+  }
+}
