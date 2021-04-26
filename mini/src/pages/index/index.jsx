@@ -11,15 +11,6 @@ import styles from './index.module.scss';
 @inject('site')
 @observer
 class Index extends Component {
-  componentWillMount() { }
-
-  componentDidMount() { }
-
-  componentWillUnmount() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
 
   render() {
     const { envConfig, theme, changeTheme } = this.props.site;
