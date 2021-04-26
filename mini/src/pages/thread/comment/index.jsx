@@ -1,9 +1,8 @@
 import React from 'react';
 import { inject } from 'mobx-react';
 import { readCommentDetail } from '@server';
-import CommentH5Page from '@layout/thread/comment/h5';
-import CommentPCPage from '@layout/thread/comment/pc';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import CommentMiniPage from '../../../layout/thread/comment/index';
 
 @inject('site')
 @inject('comment')
@@ -48,9 +47,7 @@ class CommentDetail extends React.Component {
   }
 
   render() {
-    const { site } = this.props;
-    const { platform } = site;
-    return platform === 'h5' ? <CommentH5Page /> : <CommentPCPage />;
+    return <CommentMiniPage></CommentMiniPage>
   }
 }
 
