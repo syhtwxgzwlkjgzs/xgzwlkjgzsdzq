@@ -86,7 +86,7 @@ class IndexMiniPage extends React.Component {
 
     return (
       <View>
-        {/* <HomeHeader/> */}
+        <HomeHeader/>
         {categories && categories.length > 0 && <View className={styles.homeContent}>
           <Tabs
             scrollable
@@ -137,11 +137,12 @@ class IndexMiniPage extends React.Component {
     const { index } = this.props;
     const { filter } = this.state;
     const { threads = {}, categories = [] } = index;
+    const { currentIndex } = this.state;
     const { currentPage, totalPage, pageData } = threads || {};
     console.log(index, '数据');
     return (
       <View className={styles.container}>
-        {/* { pageData?.length > 0
+        { pageData?.length > 0
           ? (
             <List
               className={styles.list}
@@ -154,7 +155,7 @@ class IndexMiniPage extends React.Component {
             />
           )
           : this.renderNoData()
-        } */}
+        }
 
         <FilterView
           data={categories}
@@ -164,7 +165,6 @@ class IndexMiniPage extends React.Component {
           onSubmit={this.onClickFilter}
         />
        <Tabbar placeholder />
-       {/* <ThreadContent /> */}
       </View>
     );
   }

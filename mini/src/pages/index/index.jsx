@@ -1,46 +1,83 @@
-import React, { Component } from 'react';
-import Taro from '@tarojs/taro';
-import { View, Text } from '@tarojs/components';
-import { observer, inject } from 'mobx-react';
-import { Button, Audio, Icon } from '@discuzq/design';
-import ThemePage from '@components/theme-page';
-import { APP_THEME } from '@common/constants/site';
-import styles from './index.module.scss';
-import ThreadContent from '@components/thread';
+import React from 'react';
+import { inject, observer } from 'mobx-react';
 import IndexMiniPage from '@layout/index/mini';
+import { readCategories, readStickList, readThreadList } from '@server';
 
+import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+// import HOCWithLogin from '@common/middleware/HOCWithLogin';
 
 @inject('site')
+@inject('index')
+@inject('user')
 @observer
-class Index extends Component {
+class Index extends React.Component {
+  page = 1;
+  prePage = 10;
+  // static async getInitialProps(ctx) {
+  //   const categories = await readCategories({}, ctx);
+  //   const sticks = await readStickList({}, ctx);
+  //   const threads = await readThreadList({ params: { filter: {}, sequence: 0, perPage: 10, page: 1 } }, ctx);
+
+  //   return {
+  //     serverIndex: {
+  //       categories: categories && categories.code === 0 ? [{ name: '全部', pid: '', children: [] }, ...categories.data] : null,
+  //       sticks: sticks && sticks.code === 0 ? sticks.data : null,
+  //       threads: threads && threads.code === 0 ? threads.data : null,
+  //     },
+  //   };
+  // }
+
+  constructor(props) {
+    super(props);
+    const { serverIndex, index } = this.props;
+    // 初始化数据到store中
+    serverIndex && serverIndex.categories && index.setCategories(serverIndex.categories);
+    serverIndex && serverIndex.sticks && index.setSticks(serverIndex.sticks);
+    serverIndex && serverIndex.threads && index.setThreads(serverIndex.threads);
+  }
+
+  async componentDidMount() {
+    const { index } = this.props;
+    // 当服务器无法获取数据时，触发浏览器渲染
+    const hasCategoriesData = !!index.categories;
+    const hasSticksData = !!index.sticks;
+    const hasThreadsData = !!index.threads;
+
+    if (!hasCategoriesData) {
+      this.props.index.getReadCategories();
+    }
+    if (!hasSticksData) {
+      this.props.index.getRreadStickList();
+    }
+    if (!hasThreadsData) {
+      this.props.index.getReadThreadList();
+    }
+  }
+
+  dispatch = async (type, data = {}) => {
+    const { index } = this.props;
+    const { categoryids, types, essence, sequence } = data;
+
+    if (type === 'click-filter') {
+      this.page = 1;
+      index.screenData({ filter: { categoryids, types, essence }, sequence });
+    } else if (type === 'moreData') {
+      this.page += 1;
+      await index.getReadThreadList({
+        perPage: this.prePage,
+        page: this.page,
+        filter: { categoryids, types, essence },
+        sequence,
+      });
+
+      return;
+    }
+  }
 
   render() {
-    const { envConfig, theme, changeTheme } = this.props.site;
-
-    return (
-      <ThemePage>
-        {/* <View>
-          <Text className={styles.text}>{envConfig.baseURL}</Text>
-          <View className={styles.text}>{theme}</View>
-          <Button onClick={() => {
-            Taro.navigateTo({
-              url: '/pages/threadPost/index'
-            })
-          }}>去发帖的按钮</Button>
-          <Button onClick={() => {
-            Taro.navigateTo({
-              url: '/pages/thread/index?id=140'
-            })
-          }}>去详情的按钮</Button>
-          <Audio src='https://demo.dj63.com//2016/CLUB商业/club中文/20140101/夏日香气_主题曲_左右为难_电视剧歌曲_韩语.mp3'></Audio>
-          <Icon name="LoadingOutlined" size="large" />
-          <Icon name="UserOutlined" size="small" />
-          <Icon name="UserOutlined" />
-        </View> */}
-        <IndexMiniPage />
-      </ThemePage>
-    );
+    return <IndexMiniPage dispatch={this.dispatch} />;
   }
 }
 
-export default Index;
+// eslint-disable-next-line new-cap
+export default HOCFetchSiteData(Index);

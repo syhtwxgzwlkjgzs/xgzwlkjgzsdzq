@@ -36,15 +36,15 @@
   position: absolute;
   bottom: 0;
   display: flex;
-  width: rem(343);
+  width: 343px;
   height: 52px;
   border-top: 1px solid #eee;
-  padding: 0 rem(16);
+  padding: 0 16px;
   justify-content: space-between;
   align-items: center;
   :global {
     .dzq-button {
-      width: rem(166);
+      width: 166px;
       height: 42px;
     }
   }

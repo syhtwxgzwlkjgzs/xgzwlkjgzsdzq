@@ -3,13 +3,13 @@
 
 .container {
   position: relative;
-  max-width: rem(44);
+  max-width: 44px;
   .img { }
   .imgAfter {
     position: absolute;
-    border: var(--color-white) solid rem(1);
+    border: var(--color-white) solid 1px;
     border-radius: 50%;
-    right: rem(-1);
-    top: rem(-1);
+    right: -1px;
+    top: -1px;
   }
 }

@@ -7,13 +7,13 @@
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  padding: rem($padding-2n) rem($padding-4n);
+  padding: 8px 16px;
   &:before {
     position: absolute;
     height: 1px;
     content: '';
-    right: rem($padding-4n);
-    left: rem($padding-4n);
+    right: 16px;
+    left: 16px;
     bottom: 0;
     background-color: #f5f7f8;
   }
@@ -24,27 +24,27 @@
 
   .header {
     position: relative;
-    margin-right: rem(12);
+    margin-right: 12px;
     .img {
       display: inline-block;
-      width: rem(38);
-      height: rem(38);
-      border-radius: rem(19);
-      line-height: rem(38);
+      width: 38px;
+      height: 38px;
+      border-radius: 19px;
+      line-height: 38px;
       text-align: center;
-      font-size: rem(20);
+      font-size: 20px;
       background: #f5f7f8;
     }
     .icon {
       position: absolute;
-      bottom: rem(-5);
-      right: rem(-5);
-      border-radius: rem($border-radius-big);
-      height: rem(20);
-      width: rem(20);
-      border: var(--color-white) solid rem(1);
+      bottom: -5px;
+      right: -5px;
+      border-radius: 10px;
+      height: 20px;
+      width: 20px;
+      border: var(--color-white) solid 1px;
       text-align: center;
-      line-height: rem(20);
+      line-height: 20px;
       color: var(--color-white);
     }
   }
@@ -52,19 +52,19 @@
   .content {
     display: flex;
     flex-direction: column;
-    font-size: rem($font-size-primary);
+    font-size: 14px;
     .title {
       color: #0b0b37;
-      line-height: rem(18);
+      line-height: 18px;
     }
     .subTitle {
       color: var(--color-text-secondary);
-      line-height: rem(18);
+      line-height: 18px;
     }
   }
 
   .footer {
-    font-size: rem($font-size-label);
+    font-size: 12px;
     color: #8490a8;
   }
 }

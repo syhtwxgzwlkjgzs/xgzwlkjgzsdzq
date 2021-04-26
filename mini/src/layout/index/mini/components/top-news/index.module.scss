@@ -8,19 +8,19 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin: 0 rem($padding-4n);
-    height: rem(36);
+    margin: 0 16px;
+    height: 36px;
     border-bottom: 1px solid var(--border-line-color);
     .prefix {
-      font-size: rem($font-size-primary);
-      line-height: rem($font-line-height-primary);
+      font-size: 14px;
+      line-height: 24px;
       color: var(--color-text-secondary);
-      margin-right: rem($padding-4n);
+      margin-right: 16px;
       word-break: keep-all;
     }
     .title {
-      font-size: rem($font-size-primary);
-      line-height: rem($font-line-height-primary);
+      font-size: 14px;
+      line-height: 24px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

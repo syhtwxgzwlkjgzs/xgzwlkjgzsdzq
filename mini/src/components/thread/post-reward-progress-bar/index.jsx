@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Progress } from '@discuzq/design';
 
 import styles from './index.module.scss';
+import { View, Text, Image } from '@tarojs/components';
 
 /**
  * 帖子奖励进度条
@@ -20,7 +21,7 @@ const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0 }) => {
     texts = {
       remaining: (
         <>
-          剩余<span className={styles.count}>{remaining}</span>个
+          剩余<Text className={styles.count}>{remaining}</Text>个
         </>
       ),
       received: `已领取${received}个`,
@@ -32,7 +33,7 @@ const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0 }) => {
     texts = {
       remaining: (
         <>
-          剩余<span className={styles.count}>{remaining}</span>元
+          剩余<Text className={styles.count}>{remaining}</Text>元
         </>
       ),
       received: `已发放${received}元`,
@@ -42,7 +43,7 @@ const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0 }) => {
   }
 
   return (
-    <div className={`${styles.container} ${className}`}>
+    <View className={`${styles.container} ${className}`}>
       <Progress
         type="circle"
         percent={percent}
@@ -51,11 +52,11 @@ const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0 }) => {
         lineWidth={12}
         isShowText={false}
       />
-      <img className={styles.icon} />
-      <div className={styles.remaining}>{texts.remaining}</div>
-      <div className={styles.received}>{texts.received}</div>
-      {texts.receive && <div className={styles.receive}>{texts.receive}</div>}
-    </div>
+      <Image className={styles.icon} />
+      <View className={styles.remaining}>{texts.remaining}</View>
+      <View className={styles.received}>{texts.received}</View>
+      {texts.receive && <View className={styles.receive}>{texts.receive}</View>}
+    </View>
   );
 };
 

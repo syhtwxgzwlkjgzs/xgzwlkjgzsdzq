@@ -2,24 +2,24 @@
 @import '@common/styles/variable/index.scss';
 .container {
   box-sizing: border-box;
-  padding: 0 rem($padding-4n);
+  padding: 0 16px;
   padding-bottom: 0;
   background: #fff;
   .title {
-    font-size: rem($font-size-middle);
-    line-height: rem(26);
+    font-size: 16px;
+    line-height: 26px;
     text-align: left;
     color: #0b0b37;
   }
 
   .header {
-    padding-bottom: rem(24);
-    padding-top: rem(16);
+    padding-bottom: 24px;
+    padding-top: 16px;
   }
   .content {
     position: relative;
     // >* {
-    //   margin-top: rem(16);
+    //   margin-top: 16px;
     // }
 
     .cover {
@@ -36,22 +36,22 @@
     }
   }
   .bottom {
-    height: rem(52);
+    height: 52px;
     display: flex;
     align-items: center;
-    border-top: var(--border-line-color) solid rem(1);
-    margin-top: rem(12);
+    border-top: var(--border-line-color) solid 1px;
+    margin-top: 12px;
   }
   .button {
     width: 100%;
-    height: rem(36);
-    font-size: rem($font-size-primary);
-    line-height: rem(36);
+    height: 36px;
+    font-size: 14px;
+    line-height: 36px;
     padding: 0;
-    margin-bottom: rem(16);
+    margin-bottom: 16px;
     .icon {
-      font-size: rem($font-size-primary);
-      margin-right: rem($margin-10);
+      font-size: 14px;
+      margin-right: 10px;
     }
   }
 }

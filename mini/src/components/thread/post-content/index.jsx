@@ -19,7 +19,7 @@ import { View, Text, Image } from '@tarojs/components';
  * @prop {boolean}  loading
  */
 
-const Index = ({
+ const Index = ({
   content,
   useShowMore = true,
   isPayContent,
@@ -59,18 +59,18 @@ const Index = ({
     }
   }, [contentTooLong]);
 
-  useEffect(() => {
-    const el = contentWrapperRef.current;
-    if (el && !loading) {
-      if (el.scrollHeight <= el.clientHeight) {
-        // 内容小于6行 隐藏查看更多
-        setShowMore(true);
-      }
-      if (window && el.scrollHeight <= window.screen.height) {
-        setContentTooLong(false);
-      }
-    }
-  }, [contentWrapperRef.current]);
+  // useEffect(() => {
+  //   const el = contentWrapperRef.current;
+  //   if (el && !loading) {
+  //     if (el.scrollHeight <= el.clientHeight) {
+  //       // 内容小于6行 隐藏查看更多
+  //       setShowMore(true);
+  //     }
+  //     if (window && el.scrollHeight <= window.screen.height) {
+  //       setContentTooLong(false);
+  //     }
+  //   }
+  // }, [contentWrapperRef.current]);
 
   return (
     <View className={styles.container} {...props}>

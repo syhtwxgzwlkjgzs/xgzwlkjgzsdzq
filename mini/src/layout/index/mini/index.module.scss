@@ -1,7 +1,7 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 .text {
-  font-size: rem($font-size-label);
+  font-size: 12px;
   color: var(--color-error);
 }
 .container {
@@ -11,19 +11,19 @@
   height: 100vh;
   .homeContent {
     background: var(--color-white);
-    margin-bottom: rem(10);
+    margin-bottom: 10px;
   }
   .list {
     flex: 1;
   }
   .tabIcon {
-    width: rem(50);
+    width: 50px;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
   }
   .listItem {
-    margin-bottom: rem(10);
+    margin-bottom: 10px;
   }
 }

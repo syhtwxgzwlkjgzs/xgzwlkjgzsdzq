@@ -7,13 +7,19 @@
 }
 
 .avatar {
-  width: rem(38);
-  height: rem(38);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  image {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
 }
 
 .right {
   flex: 1;
-  margin-left: rem($margin-2n);
+  margin-left: 8px;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
@@ -22,9 +28,9 @@
 
 .name {
   color: var(--color-text-primary);
-  font-size: rem($font-size-primary);
+  font-size: 14px;
   font-weight: bold;
-  max-width: rem(100);
+  max-width: 100px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -32,9 +38,9 @@
 
 .groupName {
   color: var(--color-text-secondary);
-  font-size: rem($font-size-label);
-  margin-left: rem($margin-2n);
-  max-width: rem(100);
+  font-size: 12px;
+  margin-left: 8px;
+  max-width: 100px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -44,23 +50,23 @@
   color: var(--color-text-secondary);
   display: flex;
   align-items: center;
-  font-size: rem($font-size-label);
+  font-size: 12px;
 }
 
 .time {
-  margin-right: rem($margin-10);
-  font-size: rem($font-size-label);
+  margin-right: 10px;
+  font-size: 12px;
 }
 
 .location {
-  margin-right: rem($margin-10);
+  margin-right: 10px;
   display: flex;
   align-items: center;
   
   span {
-    margin-left: rem($margin-1n);
-    font-size: rem($font-size-label);
-    max-width: rem(100);
+    margin-left: 4px;
+    font-size: 12px;
+    max-width: 100px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -68,13 +74,13 @@
 }
 
 .view {
-  margin-right: rem($margin-10);
+  margin-right: 10px;
   display: flex;
   align-items: center;
 
   span {
-    margin-left: rem($margin-1n);
-    font-size: rem($font-size-label);
+    margin-left: 4px;
+    font-size: 12px;
   }
 }
 
@@ -85,6 +91,6 @@
   display: flex;
 
   >div {
-    margin-left: rem(8);
+    margin-left: 8px;
   }
 }

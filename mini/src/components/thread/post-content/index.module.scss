@@ -8,10 +8,10 @@
   .content {
     position: relative;
     display: inline-block;
-    line-height: rem($font-line-height-middle);
-    font-size: rem($font-size-middle) !important;
+    line-height: 26px;
+    font-size: 16px !important;
     color: var( --color-text-primary);
-    margin-top: rem($padding-1n);
+    margin-top: 4px;
     word-break: break-all;
     p,
     h1,
@@ -20,11 +20,11 @@
     h4,
     h5,
     h6 {
-      font-size: rem($font-size-middle) !important;
+      font-size: 16px !important;
     }
     img {
       max-width: 100%;
-      max-height: rem(2);
+      max-height: 2px;
       overflow: hidden;
     }
     /*
@@ -37,7 +37,7 @@
   .hideCover {
     position: relative;
     overflow: hidden;
-    max-height: rem(165);
+    max-height: 165px;
     &:after {
       position: absolute;
       display: block;
@@ -45,7 +45,7 @@
       bottom: 0;
       content: '';
       width: 100%;
-      height: rem(165);
+      height: 165px;
       background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
     }
   }
@@ -55,11 +55,11 @@
     justify-content: center;
     align-items: center;
     font-weight: normal;
-    font-size: rem($font-size-primary);
-    line-height: rem($font-line-height-primary);
+    font-size: 14px;
+    line-height: 24px;
     color: var(--color-primary);
     .icon {
-      margin-left: rem(9);
+      margin-left: 9px;
       transform: rotateZ(90deg);
     }
   }
@@ -69,19 +69,19 @@
     align-items: center;
     .hidePercent {
       font-weight: normal;
-      font-size: rem($font-size-primary);
-      line-height: rem($font-line-height-primary);
+      font-size: 14px;
+      line-height: 24px;
       text-align: left;
       color: var(--color-primary);;
     }
     .payButton {
-      margin-top: rem($padding-4n);
-      line-height: rem(16.8);
+      margin-top: 16px;
+      line-height: 16.8px;
     }
     .payButtonIcon {
-      margin-right: rem($padding-2n);
-      width: rem(13.93);
-      height: rem(16.62);
+      margin-right: 8px;
+      width: 13.93px;
+      height: 16.62px;
       background-color: var(--color-white);
     }
   }

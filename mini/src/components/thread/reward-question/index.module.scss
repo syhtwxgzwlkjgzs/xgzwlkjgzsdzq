@@ -4,52 +4,52 @@
 .container {
   .box {
     height: 104px;
-    border-radius: rem($border-radius-small);
+    border-radius: 5px;
     background:var(--color-warn5);
     display: flex;
     align-items: center;
-    margin-bottom: rem($margin-4n);
+    margin-bottom: 16px;
     .money {
-      flex: 0 0 rem(94);
-      height: rem(104);
-      border-radius: rem($border-radius-small) 0 0 rem($border-radius-small);
+      flex: 0 0 94px;
+      height:104px;
+      border-radius: 5px 0 0 5px;
       background: var(--color-error);
       font-weight: normal;
-      font-size: rem($font-size-large);
-      line-height: rem(104);
+      font-size: 20px;
+      line-height: 104px;
       color: var(--color-white);
       text-align: center;
     }
     .content {
-      height: rem(104);
-      border-radius: rem($border-radius-small) 0 0 rem($border-radius-small);
-      padding: rem($padding-10) rem($padding-4n);
+      height: 104px;
+      border-radius: 5px 0 0 5px;
+      padding: 10px 16px;
       box-sizing: border-box;
       .title {
         width: 100%;
         font-weight: normal;
-        font-size: rem($font-size-primary);
-        line-height: rem(29.67);
-        height: rem(29.67);
+        font-size: 14px;
+        line-height: 29.67px;
+        height: 29.67px;
         color: var(--color-text-primary);
         overflow: hidden;
       }
       .avatar {
-        width: rem(16);
-        height: rem(16);
+        width: 16px;
+        height: 16px;
         border-radius: 50%;
-        margin: 0 rem($margin-1n);
+        margin: 0 4px;
         background: #727170;
       }
       .username {
         color: var(--color-primary);
-        margin-right: rem($margin-1n);
+        margin-right: 4px;
       }
       .text {
-        height: rem(48);
+        height: 48px;
         font-weight: normal;
-        font-size: rem($font-size-middle);
-        line-height: rem($font-line-height-middle);
+        font-size: 16px;
+        line-height: 26px;
         color: var(--color-text-primary);
         overflow: hidden;
         text-overflow: ellipsis;
