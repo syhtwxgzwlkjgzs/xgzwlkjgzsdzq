@@ -8,10 +8,7 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
 @inject('site')
 @inject('index')
-<<<<<<< HEAD
 @inject('user')
-=======
->>>>>>> d97e450ed2d6d838ef23fced8dd64411c62e9756
 @observer
 class Index extends React.Component {
   page = 1;
