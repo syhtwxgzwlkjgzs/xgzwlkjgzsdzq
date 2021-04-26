@@ -1,0 +1,12 @@
+@import '@common/styles/variable/index.scss';
+
+.page{
+  background: var(--color-white);
+}
+.text {
+  margin-top: 200px;
+  color: var(--color-text-primary);
+  text-align: center;
+  font-size: $font-size-large + px;
+}
+
