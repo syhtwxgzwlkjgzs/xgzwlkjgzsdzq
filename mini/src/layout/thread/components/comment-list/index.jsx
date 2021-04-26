@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from '@tarojs/components';
+import { Icon } from '@discuzq/design';
 // import Avatar from '@components/avatar';
 import styles from './index.module.scss';
 import { diffDate } from '@common/utils/diff-date';
@@ -97,24 +98,33 @@ class CommentList extends React.Component {
               </View>
             }
             </View>
-            {
-              this.state.isShowReward
-                ? <View>
-                  <View className={styles.showMoneyNum}>
-                    获得<Text className={styles.moneyNumber}>{6}</Text>元悬赏金
+            <View className={styles.headerRigth}>
+              {
+                this.state.isShowReward
+                  ? <View>
+                    <View className={styles.showMoneyNum}>
+                      获得<Text className={styles.moneyNumber}>{6}</Text>元悬赏金
+                    </View>
                   </View>
-                </View>
-                : ''
-            }
-            {
-              this.state.isShowRedPacket
-                ? <View>
-                  <View className={styles.showMoneyNum}>
-                    获得<Text className={styles.moneyNumber}>{6}</Text>元红包
+                  : ''
+              }
+              {
+                this.state.isShowRedPacket
+                  ? <View>
+                    <View className={styles.showMoneyNum}>
+                      获得<Text className={styles.moneyNumber}>{6}</Text>元红包
+                    </View>
                   </View>
+                  : ''
+              }
+              {
+                !this.state.isShowOne ? (
+                <View className={styles.more} onClick={this.props.onMoreClick}>
+                  <Icon size="16" color="#8590A6" name="MoreVOutlined" className={styles.moreIcon}></Icon>
                 </View>
-                : ''
-            }
+                ) : ''
+              }
+            </View>
           </View>
         </View>
         <View className={styles.content}>

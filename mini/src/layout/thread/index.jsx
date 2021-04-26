@@ -555,11 +555,11 @@ class Index extends Component {
     this.setState({ showMorePopup: true });
   };
 
-  // 1 置顶  2 加精  3 删除  4 举报
+  // 更多中的操作
   onOperClick = (type) => {
     this.setState({ showMorePopup: false });
 
-    // 举报
+    // 置顶
     if (type === 'stick') {
       this.updateStick();
     }
@@ -572,6 +572,11 @@ class Index extends Component {
     // 删除
     if (type === 'delete') {
       this.setState({ showDeletePopup: true });
+    }
+
+    // 举报
+    if (type === 'report') {
+      console.log('点击举报');
     }
   };
 
