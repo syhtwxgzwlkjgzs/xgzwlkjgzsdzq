@@ -3,7 +3,7 @@ import { getCurrentInstance, navigateTo  } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import { Button, Toast } from '@discuzq/design';
-import ThemePage from '@components/theme-page';
+import Page from '@components/page';
 import { usernameLogin } from '@server';
 import setAccessToken from '@common/utils/set-access-token';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
@@ -78,7 +78,7 @@ class Index extends Component {
     const { nickname, sessionToken } = getCurrentInstance().router.params;
 
     return (
-      <ThemePage>
+      <Page>
         <View className={layout.container}>
           <View className={layout.content}>
             <View className={layout.title}>绑定微信号</View>
@@ -114,7 +114,7 @@ class Index extends Component {
             </Button>
           </View>
         </View>
-      </ThemePage>
+      </Page>
     );
   }
 }

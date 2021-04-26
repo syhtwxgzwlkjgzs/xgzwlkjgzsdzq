@@ -3,7 +3,7 @@ import { getCurrentInstance  } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import { Button, Input } from '@discuzq/design';
-import ThemePage from '@components/theme-page';
+import Page from '@components/page';
 import layout from './index.module.scss';
 
 
@@ -26,7 +26,7 @@ class Index extends Component {
     const { nickname } = getCurrentInstance().router.params;
 
     return (
-      <ThemePage>
+      <Page>
         <View className={layout.container}>
           <View className={layout.content}>
             <View className={layout.title}>手机号登陆，并绑定微信账号</View>
@@ -66,7 +66,7 @@ class Index extends Component {
             {/* 登录按钮 end */}
           </View>
         </View>
-      </ThemePage>
+      </Page>
     );
   }
 }

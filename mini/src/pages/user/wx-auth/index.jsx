@@ -17,6 +17,7 @@ class MiniAuth extends React.Component {
     try {
       await this.getParamCode();
       const params = await this.getUserInfo(); // 获取参数
+      // 小程序登录
       const res = await miniLogin({
         timeout: 10000,
         params: {
@@ -25,14 +26,6 @@ class MiniAuth extends React.Component {
           encryptedData: params.encryptedData
         },
       });
-      console.log({
-        jsCode: this.props.commonLogin.jsCode,
-        iv: params.iv,
-        encryptedData: params.encryptedData
-      });
-      console.log(res);
-      console.log(params);
-      checkUserStatus(res);
 
       // 落地页开关打开
       if (res.code === NEED_BIND_OR_REGISTER_USER) {

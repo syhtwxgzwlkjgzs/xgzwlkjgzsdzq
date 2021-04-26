@@ -3,7 +3,7 @@ import { getCurrentInstance, navigateTo } from '@tarojs/taro';
 import { View, Image, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import { Button } from '@discuzq/design';
-import ThemePage from '@components/theme-page';
+import Page from '@components/page';
 import layout from './index.module.scss';
 
 
@@ -26,7 +26,7 @@ class Index extends Component {
     const { statusCode, statusMsg } = getCurrentInstance().router.params;
 
     return (
-      <ThemePage>
+      <Page>
         <View className={layout.container}>
           <View className={layout.content}>
             <View className={layout.icon}>
@@ -47,7 +47,7 @@ class Index extends Component {
             </Button>
           </View>
         </View>
-      </ThemePage>
+      </Page>
     );
   }
 }
