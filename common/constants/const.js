@@ -58,6 +58,7 @@ export const defaultIcon = [
     name: 'AtOutlined', // @
     active: activeColor,
     id: defaultOperation.at,
+    type: THREAD_TYPE.at
   },
   {
     name: 'SharpOutlined', // #

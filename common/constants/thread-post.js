@@ -39,6 +39,7 @@ export const THREAD_TYPE = {
   paid: 112, // 插入付费
   paidPost: 113, // 支付主题
   paidAttachment: 114, // 支付附件
+  at: 115, // @用户
 };
 
 // 图片类型

@@ -13,6 +13,7 @@ export default {
     'pages/threadPost/selectReward',
     'pages/threadPost/selectProduct',
     'pages/threadPost/selectPaid',
+    'pages/threadPost/selectAt',
   ],
   subPackages: [
     {
