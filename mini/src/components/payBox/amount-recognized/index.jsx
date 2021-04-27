@@ -1,80 +1,42 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import { Popup, Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 import { Button, View, Text, Checkbox } from '@tarojs/components';
-import PayConfirmed from '../pay-confirmed/index'
-
+import PayConfirmed from '../pay-confirmed/index';
+import { ORDER_TRADE_TYPE } from '../../../../../common/constants/payBoxStoreConstants';
+@inject('payBox')
+@observer
 export default class AmountRecognized extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isShow: false,
-      currentPaymentData: [
-        {
-          trade_type: '1', // 交易类型 1|2|3 帖子|打赏|付费加入
-          goods_name: '帖子标题', // 商品名称
-          pay_money: '9.90', // 支付金额
-          is_anonymous: '1', // 是否匿名
-        },
-        {
-          trade_type: '2',
-          goods_name: '打赏的内容', // 商品名称
-          pay_money: '19.90', // 支付金额
-          is_anonymous: '0', // 是否匿名
-        },
-        {
-          trade_type: '3',
-          goods_name: '付费加入...', // 商品名称
-          pay_money: '19.90', // 支付金额
-          is_anonymous: '0', // 是否匿名
-        },
-      ],
       isNotShowTitle: false,
       titleName: '确认金额',
-      isShow1: false
     };
   }
 
-  componentDidMount() {
-    console.log('进来了————挂载');
-  }
+  componentDidMount() {}
 
-  onClick = () => {
-    console.log('进来了','ssssssssssss_111111111');
-    this.setState({
-      isShow: !this.state.isShow
-    })
-  }
-
-  onClick1 = () => {
-    this.setState({
-      isShow1: !this.state.isShow1
-    })
-  }
-
-  onClose = () => {
-    this.setState({
-      isShow: !this.state.isShow
-    })
-  }
-
-  onClose1 = () => {
-    this.setState({
-      isShow1: !this.state.isShow1
-    })
-  }
-
+  /**
+   * 渲染不同交易类型
+   * @param {String} type
+   * @returns 返回对应交易类型名称
+   */
   renderDiffTradeType = (type) => {
     let value = '';
     switch (type) {
-      case '1': // 表示付费贴
+      case ORDER_TRADE_TYPE.THEME: // 表示付费贴
         value = '付费帖';
         break;
-      case '2': // 表示打赏
+      case ORDER_TRADE_TYPE.POST_REWARD: // 表示打赏
         value = '打赏';
         break;
-      case '3':
+      case ORDER_TRADE_TYPE.REGEISTER_SITE:
         value = '表示付费加入';
+        break;
+      case ORDER_TRADE_TYPE.PUT_PROBLEM: // 付费提问
+        value = '付费提问';
         break;
       default:
         break;
@@ -86,66 +48,57 @@ export default class AmountRecognized extends Component {
   goToThePayConfirmPage = () => {};
 
   renderContent = () => {
-    const { currentPaymentData = [], isNotShowTitle, titleName } = this.state;
+    const { isNotShowTitle, titleName } = this.state;
+    const { options = {} } = this.props.payBox;
+    const { type, amount, isAnonymous } = options;
     return (
       <>
         {/* 标题 */}
-        {!isNotShowTitle && <View className={styles.amountTitle}>{titleName}</View>}
+        {!isNotShowTitle && <View className={styles.amountTitle}>{titleName || '确认金额'}</View>}
         {/* 主要内容区域 */}
         <View className={styles.amountContent}>
-          {currentPaymentData &&
-            !!currentPaymentData.length &&
-            currentPaymentData.map((item, index) => {
-              let is_show_hr = currentPaymentData.length > 0 && index != currentPaymentData.length - 1;
-              return (
-                <>
-                  <View className={styles.acExplain}>
-                    <Text className={styles.acExplain_label}>交易类型</Text>{' '}
-                    <Text className={styles.acExplain_value}>{this.renderDiffTradeType(item.trade_type)}</Text>
-                  </View>
-                  <View className={styles.acExplain}>
-                    <Text className={styles.acExplain_label}>商品名称</Text>{' '}
-                    <Text className={styles.acExplain_value}>{item.goods_name}</Text>
-                  </View>
-                  <View className={styles.acExplain}>
-                    <Text className={styles.acExplain_label}>支付金额</Text>
-                    <Text>￥{item.pay_money}</Text>
-                  </View>
-                  <View className={styles.acExplain}>
-                    <Checkbox style={{verticalAlign:'middle'}} checked={item.is_anonymous == '1'} />
-                    <Text style={{verticalAlign:'middle'}}>隐藏我的付费信息</Text>
-                  </View>
-                  {is_show_hr && (
-                    <View>
-                      <View className={styles.acExplain_hr} />
-                    </View>
-                  )}
-                </>
-              );
-            })}
+          <>
+            <View className={styles.acExplain}>
+              <Text className={styles.acExplain_label}>交易类型</Text>{' '}
+              <Text className={styles.acExplain_value}>{this.renderDiffTradeType(type)}</Text>
+            </View>
+            <View className={styles.acExplain}>
+              <Text className={styles.acExplain_label}>商品名称</Text>{' '}
+              <Text className={styles.acExplain_value}>{'暂未设置'}</Text>
+            </View>
+            <View className={styles.acExplain}>
+              <Text className={styles.acExplain_label}>支付金额</Text>
+              <Text>￥{amount}</Text>
+            </View>
+            {type === ORDER_TRADE_TYPE.REGEISTER_SITE && (
+              <View className={styles.acExplain}>
+                <Checkbox style={{ verticalAlign: 'middle' }} checked={isAnonymous} />
+                <Text style={{ verticalAlign: 'middle' }}>隐藏我的付费信息</Text>
+              </View>
+            )}
+            {type == ORDER_TRADE_TYPE.COMBIE_PAYMENT && (
+              <View>
+                <View className={styles.acExplain_hr} />
+              </View>
+            )}
+          </>
         </View>
       </>
     );
   };
 
   render() {
-    const { isShow, isShow1 } = this.state;
+    const { options = {} } = this.props.payBox;
+    const { amount } = options;
     return (
-      <View>
-        <Button style={{marginTop: '50%'}} onClick={this.onClick}>点击弹出确认金额</Button>
-        <Button onClick={this.onClick1}>点击弹出支付方式页面</Button>
-        <Popup position="bottom" maskClosable={true} visible={isShow} onClose={this.onClose}>
-          <View className={styles.amountWrapper}>
-            {this.renderContent()}
-            {/* 按钮区域-提交内容 */}
-            <View className={styles.amountSubmit}>
-              <Button type="primary" className={styles.asBtn} >
-                支付 ￥...
-              </Button>
-            </View>
-          </View>
-        </Popup>
-        <PayConfirmed visible={isShow1} onClose={this.onClose1}/>
+      <View className={styles.amountWrapper}>
+        {this.renderContent()}
+        {/* 按钮区域-提交内容 */}
+        <View className={styles.amountSubmit}>
+          <Button type="primary" className={styles.asBtn}>
+            支付 ￥{amount}
+          </Button>
+        </View>
       </View>
     );
   }

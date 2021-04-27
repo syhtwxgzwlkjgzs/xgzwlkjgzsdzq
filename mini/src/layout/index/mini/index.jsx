@@ -10,6 +10,7 @@ import TopNew from './components/top-news';
 import Tabbar from './components/tabbar';
 import FilterView from './components/filter-view';
 import { View, Text } from '@tarojs/components';
+import PayBox from '../../../components/payBox'
 
 @inject('site')
 @inject('user')
@@ -139,7 +140,7 @@ class IndexMiniPage extends React.Component {
     const { threads = {}, categories = [] } = index;
     const { currentIndex } = this.state;
     const { currentPage, totalPage, pageData } = threads || {};
-    console.log(index, '数据');
+    console.log(index, '数据111111');
     return (
       <View className={styles.container}>
         { pageData?.length > 0
@@ -165,6 +166,7 @@ class IndexMiniPage extends React.Component {
           onSubmit={this.onClickFilter}
         />
        <Tabbar placeholder />
+       <PayBox />
       </View>
     );
   }

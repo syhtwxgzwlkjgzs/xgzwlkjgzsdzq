@@ -56,7 +56,7 @@ export default class CommonAccountContent extends Component {
             <span className={styles.acExplain_label}>支付金额</span>
             <span>￥{this.transMoneyToFixed(amount)}</span>
           </div>
-          {type == '1' && (
+          {type === ORDER_TRADE_TYPE.REGEISTER_SITE && (
             <div className={styles.acExplain}>
               <Checkbox checked={isAnonymous} /> 隐藏我的付费信息
             </div>
