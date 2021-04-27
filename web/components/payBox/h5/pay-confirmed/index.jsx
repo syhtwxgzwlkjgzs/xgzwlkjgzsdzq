@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Popup, Icon, Button, Radio } from '@discuzq/design';
 import Router from '@discuzq/sdk/dist/router';
 import { PAY_MENT_MAP, PAYWAY_MAP, STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
+import { listenWXJsBridgeAndExecCallback,onBridgeReady } from '../../../../../common/store/pay/weixin-h5-backend';
 // import browser from '@common/utils/browser';
 
 @inject('site')
@@ -68,8 +69,10 @@ export default class PayBox extends React.Component {
   }
 
   goSetPayPwa() {
-    Router.redirect({url: '/test/payoffpwd?title=设置支付密码'});
+    // Router.redirect({url: '/test/payoffpwd?title=设置支付密码'});
     // Router.push('/test/payoffpwd?title=设置支付密码');
+    this.props.payBox.step = STEP_MAP.SET_PASSWORD
+    this.props.payBox.visible = false
   }
 
   /**
@@ -91,9 +94,12 @@ export default class PayBox extends React.Component {
   handlePayConfirmed = () => {
     if (this.state.paymentType === PAY_MENT_MAP.WALLET) {// 表示钱包支付
       this.props.payBox.walletPayEnsure()
-      this.goSetPayPwa()
-    } else if (this.state.paymentType === PAY_MENT_MAP.WX) { // 表示微信支付
-
+      this.props.payBox.visible = false
+      // this.goSetPayPwa()
+    } else if (this.state.paymentType === PAY_MENT_MAP.WX_H5) { // 表示微信支付
+      console.log('进来了','sssssss_点击微信支付');
+      this.props.payBox.wechatPayOrder({listenWXJsBridgeAndExecCallback,onBridgeReady})
+      // this.props.payBox.visible = false
     }
   };
 

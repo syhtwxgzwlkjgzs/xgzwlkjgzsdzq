@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import styles from './index.module.scss';
+import { inject, observer } from 'mobx-react';
+import { STEP_MAP } from '../../../../common/constants/payBoxStoreConstants';
 
+@inject('payBox')
+@observer
 export default class Index extends Component {
   constructor(props) {
     super(props);
@@ -72,21 +76,24 @@ export default class Index extends Component {
     if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
       // 表示输入数字
       let set_num = this.toMarryNumber(e.keyCode);
-      this.props.updatePwd && this.props.updatePwd(set_num,'add');
+      this.props.updatePwd && this.props.updatePwd(set_num, 'add');
     } else if (e.keyCode == 13) {
       // 表示输入回车
     } else if (e.keyCode == 8) {
       // 表示回退事件
-      this.props.updatePwd && this.props.updatePwd('','delete');
+      this.props.updatePwd && this.props.updatePwd('', 'delete');
     } else {
       // 其他非数字情况
     }
   };
 
   renderPwdItem() {
-    const { list = [] } = this.props;
+    const { list = [], whetherIsShowPwdBox } = this.props;
     const nodeList = list.map((item, key) => (
-      <div className={`${styles.payListItem} ${styles.activation}`} key={key}>
+      <div
+        className={`${styles.payListItem} ${styles.activation} ${whetherIsShowPwdBox && styles.payListItem01}`}
+        key={key}
+      >
         {'*'}
       </div>
     ));
@@ -95,9 +102,16 @@ export default class Index extends Component {
       for (let i = nodeList.length; i < 6; i++) {
         if (!curr) {
           curr = true;
-          nodeList.push(<div className={`${styles.payListItem} ${styles.curr}`} key={i}></div>);
+          nodeList.push(
+            <div
+              className={`${styles.payListItem} ${styles.curr} ${whetherIsShowPwdBox && styles.payListItem01}`}
+              key={i}
+            ></div>,
+          );
         } else {
-          nodeList.push(<div className={styles.payListItem} key={i}></div>);
+          nodeList.push(
+            <div className={`${styles.payListItem} ${whetherIsShowPwdBox && styles.payListItem01}`} key={i}></div>,
+          );
         }
       }
     }
@@ -105,11 +119,26 @@ export default class Index extends Component {
     return nodeList;
   }
 
+  showTitle = () => {
+    const { step } = this.props.payBox;
+    let title = '输入支付密码';
+    switch (step) {
+      case STEP_MAP.WALLET_PASSWORD: // 表示钱包支付
+        title = '输入支付密码';
+        break;
+      case STEP_MAP.SET_PASSWORD: // 表示设置支付密码
+        title = '设置支付密码';
+        break;
+      default:
+        break;
+    }
+    return title
+  };
+
   render() {
-    const { setPwdTitle } = this.props;
     return (
       <div>
-        <p className={styles.title}>{setPwdTitle||'输入支付密码'}</p>
+        <p className={styles.title}>{this.showTitle() || '输入支付密码'}</p>
         <div className={styles.payList}>{this.renderPwdItem()}</div>
       </div>
     );
@@ -117,5 +146,6 @@ export default class Index extends Component {
 }
 
 Index.defaultProps = {
-  setPwdTitle: '', // 设置对应密码标题
+  updatePwd: function () {}, // 更新密码回调
+  whetherIsShowPwdBox: false, // 是否显示输入密码框 默认显示下划线密码输入（样式）
 };
