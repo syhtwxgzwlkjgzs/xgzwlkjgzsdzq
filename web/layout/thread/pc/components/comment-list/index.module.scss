@@ -1,57 +1,29 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 .commentList {
-  .padding {
-    padding: rem($padding-2n) 0;
-  }
+  padding: rem($padding-4n);
   .header {
-    padding: rem(10) 0 0 0;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
 
-    .back {
-      font-family: 'PingFangSC-Regular';
-      font-weight: normal;
-      font-size: rem($font-size-primary);
-      line-height: rem($font-line-height-middle);
-      text-align: left;
-      color: var(--color-text-secondary);
-      .backIcon {
-        margin-right: rem(6);
-        margin-top: rem(-2);
-      }
-
-    }
     .showGet {
+      width: 100%;
+      padding-left: rem(48);
       display: flex;
       justify-content: space-between;
-      font-family: 'PingFangSC-Regular';
-      font-weight: normal;
+
       .revise {
         font-size: rem($font-size-primary);
-        line-height: rem($font-line-height-middle);
         text-align: left;
         color: var(--color-text-secondary);
-      }
-      .delete {
-        font-size: rem($font-size-primary);
-        line-height: rem($font-line-height-middle);
-        text-align: left;
-        color: var(--color-text-secondary);
-        margin-left: rem($margin-5n);
-        .deleteIcon { 
-          margin-right: rem(6);
-          margin-top: rem(-2);
-        }
       }
       .showMoneyNum {
-        font-size: rem($font-size-primary);
-        line-height: rem($font-line-height-middle); // line-height: 16.8px;
+        font-size: rem($font-size-label);
         text-align: left;
         color: var(--color-text-primary);
         margin-left: rem($margin-10);
         .moneyNumber {
-          color: #f61f40;
+          color: var(--color-error);
         }
       }
     }
@@ -67,18 +39,15 @@
       .commentListContentText {
         padding: rem($padding-2n);
         border-radius: rem($border-radius-small);
-        background: var(--background-color);
+        background: var(--comment-box-bg-color);
         .commentListName {
-          font-family: 'PingFangSC-Semibold';
-          font-weight: normal;
+          font-weight: var(--font-weight-regular);
           font-size: rem($font-size-primary);
           line-height: rem(18);
           text-align: left;
           color: var(--color-text-primary);
         }
         .commentListText {
-          font-family: 'PingFang SC';
-          font-weight: normal;
           font-size: rem($font-size-middle);
           line-height: rem($font-line-height-middle);
           text-align: left;
@@ -87,21 +56,13 @@
       }
       .commentListFooter {
         .commentBtn {
-          height: rem(26);
           display: flex;
           align-items: center;
           justify-content: space-between;
           font-size: rem($font-size-primary);
-          font-family: 'PingFangSC-Regular';
-          font-weight: normal;
-          line-height: rem($font-line-height-middle); // line-height: 16.8px;
           text-align: left;
           color: var(--color-text-secondary);
           padding-top: rem($padding-2n);
-          .btnIcon {
-            margin-right: rem(6);
-            margin-top: rem(-2);        
-          }
           .commentTime {
             // flex: 1;
           }
@@ -122,25 +83,12 @@
             // flex: 1;
           }
         }
-        .input {
-          margin-top: rem($padding-2n);
-        }
         .moreReply {
-          height: rem(26);
-          font-family: 'PingFang SC';
-          font-weight: 600;
+          font-weight: var(--font-weight-regular);
           font-size: var($font-size-primary);
-          // line-height: var($font-line-height-middle);
-          line-height: rem(26);
           text-align: left;
           color: var(--color-text-primary);
-          padding: rem(8) 0;
-        }
-        .line {
-          width: 100%;
-          height: rem(1);
-          background: #eee;
-          margin: rem($margin-5n) 0;
+          padding-top: rem($padding-4n); 
         }
       }
     }
@@ -150,7 +98,7 @@
     align-items: center;
     justify-content: flex-start;
     > div {
-      margin-right: rem(8);
+      margin-right: rem($margin-2n);
     }
   }
   .extraBottom {

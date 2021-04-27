@@ -84,6 +84,10 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
     }
   };
 
+  const searchClick = () => {
+
+  };
+
   const onClose = () => {
     onHidden();
     setAll(null);
@@ -100,51 +104,76 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
     </div>
   );
 
+  const tabItems = [
+    {
+      icon: '',
+      title: '全部',
+      data: all,
+      number: all?.pageData?.allCount || 0,
+    },
+    {
+      icon: 'LikeOutlined',
+      title: '点赞',
+      data: likes,
+      number: all?.pageData?.likeCount || 0,
+    },
+    {
+      icon: 'HeartOutlined',
+      title: '打赏',
+      data: tips,
+      number: all?.pageData?.raidCount || 0,
+    },
+  ];
+
+  const renderTabPanel = () => (
+    tabItems.map((dataSource, index) => {
+      const arr = dataSource?.data?.pageData?.list || [];
+      return (
+        <Tabs.TabPanel
+          key={index}
+          id={index}
+          label={renderHeader({ icon: dataSource.icon, title: dataSource.title, number: dataSource.number })}>
+            {
+              arr.length ? (
+                <List
+                  className={styles.list}
+                  onRefresh={loadMoreData}
+                  noMore={dataSource.data?.currentPage === dataSource.data?.totalPage}
+                >
+                  {
+                    arr.map((item, index) => (
+                        <UserItem key={index} imgSrc={item.avatar} title={item.username} subTitle={item.passedAt} />
+                    ))
+                  }
+                </List>
+              ) : <NoData className={styles.list} />
+            }
+        </Tabs.TabPanel>
+      );
+    })
+  );
+
   return (
     <Popup
-        position="bottom"
+        position={tipData?.platform === 'h5' ? 'bottom' : 'center'}
         visible={visible}
         onClose={onClose}
     >
         <Tabs
           onActive={onClickTab}
           activeId={current}
+          className={styles.tabs}
+          tabBarExtraContent={
+            tipData?.platform === 'pc' && (
+              <div onClick={onClose} className={styles.tabIcon}>
+                <Icon name="CheckOutlined" />
+              </div>
+            )
+          }
         >
-          <Tabs.TabPanel key={0} id={0} label={renderHeader({ icon: '', title: '全部', number: all?.pageData?.allCount })}>
-            {all?.pageData?.list?.length ? (
-              <List className={styles.list} onRefresh={loadMoreData} noMore={all.currentPage === all.totalPage}>
-              {
-                all.pageData?.list?.map((item, index) => (
-                    <UserItem key={index} imgSrc={item.avatar} title={item.username} subTitle={item.passedAt} />
-                ))
-              }
-            </List>
-            ) : <NoData className={styles.list} />}
-          </Tabs.TabPanel>
-
-          <Tabs.TabPanel key={1} id={1} label={renderHeader({ icon: 'LikeOutlined', title: '点赞', number: all?.pageData?.likeCount })}>
-            {likes?.pageData?.list?.length ? (
-              <List className={styles.list} onRefresh={loadMoreData} noMore={likes?.currentPage === likes?.totalPage}>
-              {
-                likes.pageData?.list?.map((item, index) => (
-                  <UserItem key={index} imgSrc={item.avatar} title={item.username} subTitle={item.passedAt} />
-                ))
-              }
-            </List>
-            ) : <NoData className={styles.list} />}
-          </Tabs.TabPanel>
-
-          <Tabs.TabPanel key={2} id={2} label={renderHeader({ icon: 'HeartOutlined', title: '打赏', number: all?.pageData?.raidCount })}>
-            {tips?.pageData?.list?.length ? (
-              <List className={styles.list} onRefresh={loadMoreData} noMore={tips?.currentPage === tips?.totalPage}>
-              {
-                tips.pageData?.list?.map((item, index) => (
-                  <UserItem key={index} imgSrc={item.avatar} title={item.username} subTitle={item.passedAt} />
-                ))
-              }
-            </List>
-            ) : <NoData className={styles.list} />}
-          </Tabs.TabPanel>
+          {
+            renderTabPanel()
+          }
         </Tabs>
     </Popup>
   );

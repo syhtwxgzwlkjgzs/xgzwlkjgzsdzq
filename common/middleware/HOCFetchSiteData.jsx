@@ -174,7 +174,7 @@ export default function HOCFetchSiteData(Component) {
             Router.redirect({url:'/close'});
           }
         } else {
-          // 重定向到错误页面
+          // 重定向到错误页面验收通过
           Router.redirect({url: '/500'});
         }
       }
