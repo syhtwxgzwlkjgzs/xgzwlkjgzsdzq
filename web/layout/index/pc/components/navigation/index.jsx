@@ -1,11 +1,30 @@
 import React from 'react';
 import { Menu, Card } from '@discuzq/design';
+import { noop }  from '@components/thread/utils'
 
-const Index = ({ categories }) => {
+const Index = ({ categories, totalThreads = 0, onNavigationClick = noop }) => {
+
+  const onClick =(subIndex, index) => {
+    if (`${subIndex}`.indexOf('-') !== -1) {
+      const categoryIds = subIndex.split('-')
+      onNavigationClick({ categoryIds, sequence: 0 })
+    } else {
+      let categoryIds = ['']
+      let sequence = 0
+      if (subIndex !== 0) {
+        categoryIds = [subIndex]
+      }
+      if (subIndex === 1) {
+        sequence = 1
+      }
+      onNavigationClick({ categoryIds, sequence })
+    }
+  }
+
   const renderSubMenuTitle = ({ name, threadCount }) => (
     <div>
       <span>{name}</span>
-      {threadCount !== 0 && <span style={{ cssFloat: 'right' }}>{threadCount}</span>}
+      {threadCount !== 0 && <span style={{ cssFloat: 'right' }}>{name === '全部' ? totalThreads : threadCount}</span>}
     </div>
   );
 
@@ -13,13 +32,13 @@ const Index = ({ categories }) => {
       <Menu>
         {
           categories?.map((item, index) => (item?.children?.length > 0 ? (
-              <Menu.SubMenu key={index} index={index} title={renderSubMenuTitle(item)}>
-                {item.children.map((childrens, indexs) => (
-                    <Menu.Item index={indexs} key={indexs}>{childrens.name}</Menu.Item>
+              <Menu.SubMenu key={index} index={item.pid} title={renderSubMenuTitle(item)} onClick={onClick}>
+                {item.children.map((children, subIndex) => (
+                    <Menu.Item index={`${item.pid}-${subIndex}`} key={subIndex} onClick={onClick}>{children.name}</Menu.Item>
                 ))}
               </Menu.SubMenu>
           ) : (
-                  <Menu.Item index={index} key={index}>{renderSubMenuTitle(item)}</Menu.Item>
+              <Menu.Item index={index} key={index} onClick={onClick}>{renderSubMenuTitle(item)}</Menu.Item>
           )))
         }
       </Menu>
