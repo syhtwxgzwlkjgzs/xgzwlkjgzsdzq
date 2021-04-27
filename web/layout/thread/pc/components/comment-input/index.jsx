@@ -4,16 +4,20 @@ import { Textarea, Toast, Upload, Button, Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 
 const CommentInput = (props) => {
-  const { visible, onSubmit, onClose, height, inputValue, placeholder = '写下我的评论...' } = props;
+  const { visible, onSubmit, onClose, height, initValue, placeholder = '写下我的评论...' } = props;
 
-  const [value, setValue] = useState(inputValue || '');
+  const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const [placeholderState, setPlaceholder] = useState(placeholder);
+  const [placeholderState, setPlaceholder] = useState('');
 
   useEffect(() => {
-    setPlaceholder(setPlaceholder);
+    setPlaceholder(placeholder);
   }, [placeholder]);
+
+  useEffect(() => {
+    setValue(initValue);
+  }, [initValue]);
 
   const onSubmitClick = async () => {
     if (typeof onSubmit === 'function') {
@@ -55,7 +59,8 @@ const CommentInput = (props) => {
           showLimit={true}
           value={value}
           onChange={e => setValue(e.target.value)}
-          placeholder={placeholderState}>
+          placeholder={placeholderState}
+          disabled={loading}>
         </Textarea>
         {/* <Upload listType='card'>
             <Button loading={loading} type='text' className={styles.upload}>
@@ -66,7 +71,7 @@ const CommentInput = (props) => {
       </div>
       <div className={styles.footer}>
         <div className={styles.linkBtn}>
-          <Icon
+          {/* <Icon
             name='SmilingFaceOutlined'
             size='20'
             className={styles.btnIcon}
@@ -83,7 +88,7 @@ const CommentInput = (props) => {
             size='20'
             className={styles.btnIcon}
             onClick={onTopicClick}>
-          </Icon>
+          </Icon> */}
         </div>
         <Button loading={loading} onClick={onSubmitClick} className={styles.button} type='primary' size='large'>发布</Button>
       </div>

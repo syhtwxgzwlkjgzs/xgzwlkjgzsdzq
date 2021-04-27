@@ -52,6 +52,14 @@ class CommentDetail extends React.Component {
     if (!this.props.serverData && id) {
       const res = await readCommentDetail({ params: { pid: Number(id) } });
       this.props.comment.setCommentDetail(res.data);
+
+      // 获取作者信息
+      const { site } = this.props;
+      const { platform } = site;
+      const userId = this.props.comment?.commentDetail?.userId;
+      if (platform === 'pc' && userId) {
+        this.props.comment.fetchAuthorInfo(userId);
+      }
     }
   }
 

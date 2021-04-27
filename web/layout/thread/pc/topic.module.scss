@@ -16,14 +16,9 @@
   flex: 1;
 }
 
-.more {
-  padding-left: rem($padding-2n);
-  display: flex;
-}
-
 .iconText {
   margin-left: rem(24);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   cursor: pointer;
 

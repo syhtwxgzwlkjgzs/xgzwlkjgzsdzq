@@ -44,3 +44,31 @@
 .bottom {
   margin-top: rem($margin-10);
 }
+
+
+.editCmment {
+  position: relative;
+  width: rem(600);
+  background: var(--color-white);
+  margin: auto;
+  padding: rem(24);
+  border-radius: rem(5);
+
+  .close {
+    position: absolute;
+    top: rem(16);
+    right: rem(16);
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    font-size: rem(18);
+  }
+
+  .title {
+    font-size: rem(16);
+    margin-bottom: rem(16);
+  }
+
+  .user {
+    margin-bottom: rem(16);
+  }
+}

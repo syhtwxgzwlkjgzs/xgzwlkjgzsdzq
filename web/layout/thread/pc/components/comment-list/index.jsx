@@ -208,6 +208,7 @@ class CommentList extends React.Component {
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
                         toCommentDetail={() => this.toCommentDetail()}
+                        onSubmit={value => this.props.onSubmit(value)}
                         isShowInput={this.state.replyId && this.state.replyId === this.needReply[0].id}>
                       </ReplyList>
                       : (this.needReply || [])
@@ -219,6 +220,7 @@ class CommentList extends React.Component {
                             likeClick={() => this.replyLikeClick(val)}
                             replyClick={() => this.replyReplyClick(val)}
                             toCommentDetail={() => this.toCommentDetail()}
+                            onSubmit={value => this.props.onSubmit(value)}
                             isShowInput={this.state.replyId && this.state.replyId === val.id}>
                           </ReplyList>
                         ))

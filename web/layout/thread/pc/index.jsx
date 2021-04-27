@@ -7,7 +7,7 @@ import AuthorInfo from './components/author-info/index';
 import CommentList from './components/comment-list/index';
 import CommentInput from './components/comment-input/index';
 import LoadingTips from './components/loading-tips';
-import { Icon, Toast, Button, Divider, Dropdown } from '@discuzq/design';
+import { Icon, Toast, Button, Divider, Dropdown, Popup } from '@discuzq/design';
 import UserInfo from '@components/thread/user-info';
 import Header from '@components/header';
 import NoMore from './components/no-more';
@@ -54,7 +54,17 @@ const RenderThreadContent = observer((props) => {
   };
   // 是否合法
   const isApproved = threadStore?.threadData?.isApproved || 0;
+  // 是否加精
   const isEssence = threadStore?.threadData?.displayTag?.isEssence || false;
+  // 是否置顶
+  const isStick = threadStore?.threadData?.isStick;
+
+  // 更多弹窗权限
+  const canEdit = threadStore?.threadData?.ability?.canEdit;
+  const canDelete = threadStore?.threadData?.ability?.canDelete;
+  const canEssence = threadStore?.threadData?.ability?.canEssence;
+  const canStick = threadStore?.threadData?.ability?.canStick;
+
 
   const parseContent = {};
   if (indexes && Object.keys(indexes)) {
@@ -66,16 +76,16 @@ const RenderThreadContent = observer((props) => {
     });
   }
 
-  const onMoreClick = () => {
-    props.fun.moreClick();
-  };
-
   const onLikeClick = () => {
     typeof props.onLikeClick === 'function' && props.onLikeClick();
   };
 
   const onBuyClick = (url) => {
     url && window.open(url);
+  };
+
+  const onDropdownChange = (key) => {
+    typeof props.onOperClick === 'function' && props.onOperClick(key);
   };
 
   return (
@@ -91,28 +101,26 @@ const RenderThreadContent = observer((props) => {
             isEssence={isEssence}
           ></UserInfo>
         </div>
-        <div className={topic.more} onClick={onMoreClick}>
+        <div className={topic.more}>
           <div className={topic.iconText}>
             <Dropdown
               menu={<Dropdown.Menu>
-                <Dropdown.Item id="edit">编辑</Dropdown.Item>
-                <Dropdown.Item id="3">置顶</Dropdown.Item>
-                <Dropdown.Item id="1">精华</Dropdown.Item>
-                <Dropdown.Item id="delete" disabled={true}>
-                  删除
-                </Dropdown.Item>
+                {canEdit && <Dropdown.Item id="edit">编辑</Dropdown.Item>}
+                {canStick && <Dropdown.Item id="stick">{isStick ? '取消置顶' : '置顶'}</Dropdown.Item>}
+                {canEssence && <Dropdown.Item id="essence"> {isEssence ? '取消精华' : '精华'}</Dropdown.Item>}
+                {canDelete && <Dropdown.Item id="delete">删除</Dropdown.Item>}
               </Dropdown.Menu>}
               placement="center"
               hideOnClick={true}
-              arrow={true}
+              arrow={false}
               trigger="hover"
-              onChange={key => console.log(key)}
+              onChange={key => onDropdownChange(key)}
             >
               <Icon className={topic.icon} name="SettingOutlined"></Icon>
               <span className={topic.text}>管理</span>
             </Dropdown>
           </div>
-          <div className={topic.iconText}>
+          <div className={topic.iconText} onClick={onDropdownChange('report')}>
             <Icon className={topic.icon} name="WarnOutlinedThick"></Icon>
             <span className={topic.text}>举报</span>
           </div>
@@ -427,6 +435,7 @@ class RenderCommentList extends React.Component {
                 replyLikeClick={reploy => this.replyLikeClick(reploy, val)}
                 replyReplyClick={reploy => this.replyReplyClick(reploy, val)}
                 onCommentClick={() => this.onCommentClick(val)}
+                onSubmit={val => this.createReply(val)}
                 isShowOne={true}
                 isShowInput={this.state.commentId === val.id}
               ></CommentList>
@@ -458,8 +467,7 @@ class ThreadPCPage extends React.Component {
       showMorePopup: false, // 是否弹出更多框
       isCommentLoading: false, // 列表loading
       setTop: false, // 置顶
-      showContent: '',
-      // inputValue: '', // 评论内容
+      inputValue: '', // 评论内容
     };
 
     this.perPage = 5;
@@ -584,18 +592,8 @@ class ThreadPCPage extends React.Component {
     });
   }
 
-  // 点击更多icon
-  onMoreClick = () => {
-    console.log('更多');
-    // this.setState({
-    //   text: !this.state.text,
-    // });
-    this.setState({ showMorePopup: true });
-  };
-
-  onOperClick = (type) => {
-    // 1 置顶  2 加精  3 删除  4 举报
-    this.setState({ showMorePopup: false });
+  onOperClick(type) {
+    console.log(type);
 
     // 举报
     if (type === 'stick') {
@@ -617,7 +615,7 @@ class ThreadPCPage extends React.Component {
       if (!this.props.thread?.threadData?.id) return;
       this.props.router.push(`/thread/post?id=${this.props.thread?.threadData?.id}`);
     }
-  };
+  }
 
   // 置顶提示
   setTopState(isStick) {
@@ -700,8 +698,9 @@ class ThreadPCPage extends React.Component {
   }
 
   // 点击发布按钮
-  onPublishClick(val) {
-    this.comment ? this.updateComment(val) : this.createComment(val);
+  async onPublishClick(val) {
+    if (!val) return;
+    return this.comment ? await this.updateComment(val) : await this.createComment(val);
   }
 
   // 创建评论
@@ -748,7 +747,6 @@ class ThreadPCPage extends React.Component {
       });
       this.setState({
         showCommentInput: false,
-        inputValue: '',
       });
       return true;
     }
@@ -760,6 +758,7 @@ class ThreadPCPage extends React.Component {
   // 点击编辑评论
   onEditClick(comment) {
     this.comment = comment;
+    console.log(this.comment);
     this.setState({
       inputValue: comment.content,
       showCommentInput: true,
@@ -812,28 +811,10 @@ class ThreadPCPage extends React.Component {
   render() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
-    const fun = {
-      moreClick: this.onMoreClick,
-    };
-
-    // 更多弹窗权限
-    const morePermissions = {
-      canEdit: threadStore?.threadData?.ability?.canEdit,
-      canDelete: threadStore?.threadData?.ability?.canDelete,
-      canEssence: threadStore?.threadData?.ability?.canEssence,
-      canStick: threadStore?.threadData?.ability?.canStick,
-    };
-    // 更多弹窗界面
-    const moreStatuses = {
-      isEssence: threadStore?.threadData?.displayTag?.isEssence,
-      isStick: threadStore?.threadData?.isStick,
-    };
-
-    const isApproved = threadStore?.threadData?.isApproved || 0;
 
     return (
       <div className={layout.container}>
-        <ShowTop showContent={this.state.showContent} setTop={this.state.setTop}></ShowTop>
+        <ShowTop showContent={this.props.thread?.threadData?.isStick} setTop={this.state.setTop}></ShowTop>
         <div className={layout.header}>
           <Header></Header>
         </div>
@@ -852,7 +833,7 @@ class ThreadPCPage extends React.Component {
               {isReady ? (
                 <RenderThreadContent
                   store={threadStore}
-                  fun={fun}
+                  onOperClick={type => this.onOperClick(type)}
                   onLikeClick={() => this.onLikeClick()}
                 ></RenderThreadContent>
               ) : (
@@ -882,13 +863,39 @@ class ThreadPCPage extends React.Component {
           {/* 右边信息 */}
           <div className={layout.bodyRigth}>
             <div className={layout.authorInfo}>
-              {threadStore?.threadData?.user && <AuthorInfo user={threadStore?.threadData?.user}></AuthorInfo>}
+              {threadStore?.authorInfo && <AuthorInfo user={threadStore?.authorInfo}></AuthorInfo>}
             </div>
             <div className={layout.recommend}>
               <RecommendContent></RecommendContent>
             </div>
           </div>
         </div>
+
+        {/* 编辑弹窗 */}
+        <Popup
+          position="center"
+          visible={this.state.showCommentInput}
+          onClose={() => this.onClose()}
+        >
+          <div className={layout.editCmment}>
+            <div className={layout.close} onClick={() => this.onClose()}>
+              <Icon size={18} name="WrongOutlined"></Icon>
+            </div>
+            <div className={layout.title}>编辑评论</div>
+            <div className={layout.user}>
+              <UserInfo
+                name={this?.comment?.user?.username || ''}
+                avatar={this?.comment?.user?.avatar || ''}
+                time={`${this?.comment?.updatedAt}` || ''}>
+              </UserInfo>
+            </div>
+            <CommentInput
+              height='middle'
+              onSubmit={value => this.onPublishClick(value)}
+              initValue={this.state.inputValue}>
+            </CommentInput>
+          </div>
+        </Popup>
 
 
         <DeletePopup

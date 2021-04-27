@@ -35,11 +35,11 @@ class AuthorInfo extends React.Component {
             <div className={styles.info}>
                 <div className={styles.AuthorInfo}>
                     <div className={styles.avatar}>
-                        <Avatar image={this.user.avatar} name={this.user.userName} circle={true}></Avatar>
+                        <Avatar image={this.user.avatarUrl} name={this.user.username} circle={true}></Avatar>
                     </div>
                     <div className={styles.information}>
-                        <div className={styles.name}>{this.user.userName || ''}</div>
-                        <div className={styles.dynamic}>活跃在 {diffDate(this.user.joinedAt)}</div>
+                        <div className={styles.name}>{this.user.username || ''}</div>
+                        <div className={styles.dynamic}>活跃在 {diffDate(new Date(this.user.updatedAt))}</div>
                     </div>
                 </div>
                 <div className={styles.theme}>

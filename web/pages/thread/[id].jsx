@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'next/router';
 import { inject } from 'mobx-react';
-import { readThreadDetail, readCommentList } from '@server';
+import { readThreadDetail, readCommentList, readUser } from '@server';
 import ThreadH5Page from '@layout/thread/h5';
 import ThreadPCPage from '@layout/thread/pc';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
@@ -15,10 +15,11 @@ class Detail extends React.Component {
       threadData: null,
       commentList: null,
       totalCount: 0,
+      authorInfo: null,
     };
 
     if (id) {
-      // 获取分类数据
+      // 获取帖子详情
       const res = await readThreadDetail({ params: { threadId: Number(id) } });
       if (res.code === 0) {
         serverThread.threadData = res.data;
@@ -39,6 +40,18 @@ class Detail extends React.Component {
       if (commentRes.code === 0) {
         serverThread.commentList = commentRes.data?.pageData || [];
         serverThread.totalCount = commentRes.data?.totalCount || 0;
+      }
+
+
+      // 获取作者信息
+      const { site } = this.props;
+      const { platform } = site;
+      const userId = serverThread?.threadData?.userId;
+      if (platform === 'pc' && userId) {
+        const userRes = await readUser({ params: { pid: userId } });
+        if (userRes.code === 0) {
+          serverThread.authorInfo = userRes.data;
+        }
       }
     }
     return {
@@ -68,7 +81,15 @@ class Detail extends React.Component {
 
     if (id && !this.props?.thread?.threadData?.threadId) {
       if (!this.props?.thread?.threadData) {
-        this.props.thread.fetchThreadDetail(id);
+        await this.props.thread.fetchThreadDetail(id);
+
+        // 获取作者信息
+        const { site } = this.props;
+        const { platform } = site;
+        const userId = this.props.thread?.threadData?.user?.userId;
+        if (platform === 'pc' && userId) {
+          this.props.thread.fetchAuthorInfo(userId);
+        }
       }
       if (!this.props?.thread?.commentList) {
         const params = {

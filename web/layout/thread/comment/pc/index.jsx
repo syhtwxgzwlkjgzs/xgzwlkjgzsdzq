@@ -21,7 +21,7 @@ class CommentPCPage extends React.Component {
     this.state = {
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
-      commentId: null, // 默认回复框placeholder内容
+      commentId: null, // 当前点击的commentid
     };
 
     this.commentData = null;
@@ -31,12 +31,6 @@ class CommentPCPage extends React.Component {
   // 返回
   onBackClick() {
     this.props.router.back();
-  }
-
-
-  // 点击更多
-  onMoreClick() {
-    console.log('点击了更多');
   }
 
   // 点击评论的赞
@@ -160,6 +154,7 @@ class CommentPCPage extends React.Component {
 
     if (success) {
       this.setState({
+        commentId: null,
       });
       Toast.success({
         content: '回复成功',
@@ -210,7 +205,10 @@ class CommentPCPage extends React.Component {
           {/* 右边信息 */}
           <div className={styles.bodyRigth}>
             <div className={styles.authorInfo}>
-              <AuthorInfo></AuthorInfo>
+            {this.props.comment?.authorInfo
+              ? <AuthorInfo user={this.props.comment?.authorInfo}></AuthorInfo>
+              : <LoadingTips type='init'></LoadingTips>
+            }
             </div>
             <div className={styles.recommend}>
               <RecommendContent></RecommendContent>
