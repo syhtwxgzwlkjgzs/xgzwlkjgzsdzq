@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import { Icon } from '@discuzq/design';
-// import Avatar from '@components/avatar';
+import Avatar from '@components/avatar';
 import { diffDate } from '@common/utils/diff-date';
 import styles from './index.module.scss';
 import ReplyList from '../reply-list/index';
