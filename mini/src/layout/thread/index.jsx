@@ -334,7 +334,7 @@ class RenderCommentList extends React.Component {
 
   onCommentClick = (data) => {
     Taro.navigateTo({
-      url: `comment/index`,
+      url: '/subPages/thread/comment/index',
     });
   }
 

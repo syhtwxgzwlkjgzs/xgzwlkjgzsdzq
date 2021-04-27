@@ -36,7 +36,7 @@ class Index extends Component {
           }}>去发帖的按钮</Button>
           <Button onClick={() => {
             Taro.navigateTo({
-              url: '/pages/thread'
+              url: '/pages/thread/index?id=136'
             })
           }}>去详情的按钮</Button>
           <Audio src='https://demo.dj63.com//2016/CLUB商业/club中文/20140101/夏日香气_主题曲_左右为难_电视剧歌曲_韩语.mp3'></Audio>
