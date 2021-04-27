@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import ImageContent from '@components/thread/image-content';
-
+import { handleAttachmentData, noop } from '@components/thread/utils';
+import PostContent from '@components/thread/post-content';
 import styles from './index.module.scss';
 
 /**
@@ -27,22 +28,26 @@ const Topic = ({ data, onClick }) => {
   const click = useCallback(() => {
     onClick && onClick(data);
   }, [data, onClick]);
-
+  const {
+    text,
+    imageData
+  } = handleAttachmentData(data.threads[0].content);
   return (
     <div className={styles.item} onClick={click}>
-      <div className={styles.title}>{data.title && `#${data.title}#`}</div>
+      <div className={styles.title}>{data.content && `#${data.content}#`}</div>
       <div className={styles.content}>
-        {data.content}
+        {text}
       </div>
-      <ImageContent imgData={data.images}/>
+       {/* {text && <PostContent content={text} onPay={this.onPay} />} */}
+      <ImageContent imgData={imageData}/>
       <div className={styles.footer}>
         <div className={styles.numBox}>
           <span>热度</span>
-          {data.view_count || 0}
+          {data.viewCount || 0}
         </div>
         <div className={styles.numBox}>
           <span>内容</span>
-          {data.thread_count || 0}
+          {data.threadCount || 0}
         </div>
       </div>
     </div>
