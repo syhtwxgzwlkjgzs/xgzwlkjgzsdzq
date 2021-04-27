@@ -46,7 +46,7 @@ export default class index extends Component {
 
   onPasswordChange = (e) => {
     console.log(e.target.value);
-    if (isNaN(e.target.value)) return;
+    // if (isNaN(e.target.value)) return;
     this.props.payBox.password = e.target.value;
   };
 
