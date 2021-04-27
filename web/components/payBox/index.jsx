@@ -30,6 +30,10 @@ export default class PayBox extends Component {
     this.props.payBox.options = {
       ...options.data,
     };
+    const noop = () => {}
+    this.props.payBox.onSuccess = options.success || noop;
+    this.props.payBox.onFailed = options.failed || noop;
+    this.props.payBox.onCompleted = options.completed || noop;
     this.props.payBox.visible = true;
   };
 

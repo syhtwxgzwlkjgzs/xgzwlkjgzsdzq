@@ -77,7 +77,7 @@ class Index extends React.Component {
 
     if (type === 'click-filter') {
       this.page = 1;
-      index.screenData({ filter: { categoryids, types, essence, attention, sort}, sequence });
+      index.screenData({ filter: { categoryids, types, essence, attention, sort }, sequence });
     } else if (type === 'moreData') {
       this.page += 1;
       await index.getReadThreadList({
