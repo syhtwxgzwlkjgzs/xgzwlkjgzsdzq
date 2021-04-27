@@ -10,6 +10,7 @@ import Header from '@components/header';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
+import { genMiniScheme } from '@server';
 
 
 @inject('site')
@@ -63,10 +64,26 @@ class LoginPhoneH5Page extends React.Component {
         return;
       }
 
-      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT.Code) {
+      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT.Code && this.props.site.wechatEnv === 'openPlatform') {
         this.props.commonLogin.needToBindWechat = true;
         this.props.commonLogin.sessionToken = e.sessionToken;
         this.props.router.push(`/user/wx-bind-qrcode?sessionToken=${e.sessionToken}&loginType=phone&nickname=${e.nickname}`);
+        return;
+      }
+
+      // 微信绑定，跳入小程序绑定
+      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT.Code && this.props.site.wechatEnv === 'miniProgram') {
+        this.props.commonLogin.needToBindMini = true;
+        const resp = await genMiniScheme();
+        if (resp.code === 0) {
+          window.location.href = get(resp, 'data.openLink', '');
+          return;
+        }
+        Toast.error({
+          content: '网络错误',
+          hasMask: false,
+          duration: 1000,
+        });
         return;
       }
 
