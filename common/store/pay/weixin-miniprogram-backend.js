@@ -1,4 +1,5 @@
 import { PAY_BOX_ERROR_CODE_MAP } from '../../constants/payBoxStoreConstants';
+import Taro from '@tarojs/taro';
 
 export const onBridgeReady = data => new Promise((resolve, reject) => {
   const { appId, timeStamp, nonceStr, package: wxPackage, paySign } = data;

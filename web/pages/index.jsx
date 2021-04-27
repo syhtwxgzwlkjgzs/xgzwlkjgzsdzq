@@ -43,7 +43,7 @@ class Index extends React.Component {
       data: {
         amount: 0.1,
         type: 3,
-        threadId: 4,
+        threadId: 5,
         payeeId: 16,
         isAnonymous: false,
       },
@@ -77,7 +77,7 @@ class Index extends React.Component {
 
     if (type === 'click-filter') {
       this.page = 1;
-      index.screenData({ filter: { categoryids, types, essence, attention, sort}, sequence });
+      index.screenData({ filter: { categoryids, types, essence, attention, sort }, sequence });
     } else if (type === 'moreData') {
       this.page += 1;
       await index.getReadThreadList({

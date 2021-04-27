@@ -3,10 +3,29 @@ import { get } from '../../utils/get';
 import { createOrders, createPayOrder, readOrderDetail, readWalletUser, updateUsersUpdate } from '@server';
 import isWeixin from '../../utils/is-weixin';
 import browser from '../../utils/browser';
-import { STEP_MAP, WX_PAY_STATUS, PAY_MENT_MAP, ORDER_STATUS_MAP, PAY_BOX_ERROR_CODE_MAP } from '../../constants/payBoxStoreConstants';
-import throttle from '../../utils/thottle';
+import { STEP_MAP, PAY_MENT_MAP, ORDER_STATUS_MAP, PAY_BOX_ERROR_CODE_MAP } from '../../constants/payBoxStoreConstants';
+
+const noop = () => {};
 
 class PayBoxStore {
+  // 成功回调
+  onSuccess = noop;
+  successCallback = () => {
+    this.onSuccess(this.orderInfo);
+  };
+
+  // 失败回调
+  onFailed = noop;
+  failedCallback = () => {
+    this.onFailed(this.orderInfo);
+  };
+
+  // 结束回调
+  onCompleted = noop;
+  completedCallback = () => {
+    this.onCompleted(this.orderInfo);
+  };
+
   // 订单 options
   @observable options = {};
 
@@ -86,7 +105,7 @@ class PayBoxStore {
    * 创建订单
    */
   @action
-  createOrder = throttle(async () => {
+  createOrder = async () => {
     try {
       const data = {
         ...this.options,
@@ -111,7 +130,7 @@ class PayBoxStore {
         error,
       };
     }
-  }, 2000);
+  };
 
   /**
    * 获取用户钱包信息
@@ -152,7 +171,7 @@ class PayBoxStore {
    * 钱包支付订单
    */
   @action
-  walletPayOrder = throttle(async () => {
+  walletPayOrder = async () => {
     try {
       const payRes = await createPayOrder({
         data: {
@@ -166,14 +185,8 @@ class PayBoxStore {
 
       // 支付成功
       if (get(payRes, 'data.walletPayResult.result') === 'success') {
-        // success
-        if (this.options.success) {
-          this.options.success(this.orderInfo);
-        }
-
-        if (this.options.completed) {
-          this.options.completed(this.orderInfo);
-        }
+        this.successCallback();
+        this.completedCallback();
         return payRes;
       }
     } catch (error) {
@@ -185,14 +198,14 @@ class PayBoxStore {
         error,
       };
     }
-  }, 1000);
+  };
 
   /**
    * 微信支付订单
    * 后端实现分别位于 h5-backend 和 miniprogram-backend
    */
   @action
-  wechatPayOrder = throttle(async ({
+  wechatPayOrder = async ({
     listenWXJsBridgeAndExecCallback,
     onBridgeReady,
   }) => {
@@ -233,13 +246,13 @@ class PayBoxStore {
         error,
       };
     }
-  }, 1000);
+  };
 
   /**
    * 微信支付订单
    */
   @action
-  wechatPayOrderQRCode = throttle(async () => {
+  wechatPayOrderQRCode = async () => {
     try {
       const payRes = await createPayOrder({
         data: {
@@ -264,7 +277,7 @@ class PayBoxStore {
         error,
       };
     }
-  }, 1000);
+  };
 
   /**
    * 获取订单详情
@@ -292,35 +305,20 @@ class PayBoxStore {
 
       if (orderStatus === ORDER_STATUS_MAP.PAID) {
         // success
-        if (this.options.success) {
-          this.options.success(this.orderInfo);
-        }
-
-        if (this.options.completed) {
-          this.options.completed(this.orderInfo);
-        }
+        this.successCallback();
+        this.completedCallback();
       }
 
       if (orderStatus === ORDER_STATUS_MAP.OUT_DATE_PAY) {
         // outdate
-        if (this.options.failed) {
-          this.options.failed(this.orderInfo);
-        }
-
-        if (this.options.completed) {
-          this.options.completed(this.orderInfo);
-        }
+        this.failedCallback();
+        this.completedCallback();
       }
 
       if (orderStatus === ORDER_STATUS_MAP.FAIL_PAY) {
         // paid failed
-        if (this.options.failed) {
-          this.options.failed(this.orderInfo);
-        }
-
-        if (this.options.completed) {
-          this.options.completed(this.orderInfo);
-        }
+        this.failedCallback();
+        this.completedCallback();
       }
     } catch (error) {
       if (error.Code) {
