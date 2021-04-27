@@ -1,10 +1,20 @@
 import { action } from 'mobx';
 import ThreadStore from './store';
-import { updatePosts, operateThread, readCommentList, readThreadDetail, shareThread } from '@server';
+import { updatePosts, operateThread, readCommentList, readThreadDetail, shareThread, readUser } from '@server';
 
 class ThreadAction extends ThreadStore {
   constructor(props) {
     super(props);
+  }
+
+  @action
+  async fetchAuthorInfo(userId) {
+    const userRes = await readUser({ params: { pid: userId } });
+    if (userRes.code === 0) {
+      this.authorInfo = userRes.data;
+    }
+
+    return userRes;
   }
 
   /**
@@ -162,9 +172,10 @@ class ThreadAction extends ThreadStore {
       this.setThreadDetailLikePayCount(res.data.likeCount);
 
       // 更新首页store
-      IndexStore && IndexStore.updateAssignThreadInfo(id, {
-        isLike: !!isLiked,
-      });
+      IndexStore
+        && IndexStore.updateAssignThreadInfo(id, {
+          isLike: !!isLiked,
+        });
 
       return {
         msg: '操作成功',
@@ -267,8 +278,8 @@ class ThreadAction extends ThreadStore {
    * @returns {object} 处理结果
    */
   @action
-  async delete(id, pid, IndexStore) {
-    if (!id || !pid) {
+  async delete(id, IndexStore) {
+    if (!id) {
       return {
         msg: '参数不完整',
         success: false,

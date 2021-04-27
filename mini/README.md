@@ -6,19 +6,14 @@
 ![MobX 4](https://img.shields.io/badge/MobX-4.15.4-brightgreen)
 ![Taro 3](https://img.shields.io/badge/Taro-3.1.1-brightgreen)
 
-## 使用
-
-说明：目前 `@discuz/cli` 安装有问题
+## 构建命令
 
 ```bash
-# 安装依赖
-$ npm install
+// 本地开发
+npm run dev:weapp
 
-# 本地开发
-$ npm run dev:weapp
-
-# 构建
-$ npm run build:weapp
+// 构建小程序
+npm run build:weapp
 ```
 
 ## 目录结构
@@ -29,13 +24,16 @@ $ npm run build:weapp
 | |- index.js           # 默认配置
 | |- prod.js            # 生产环境配置文件
 |- src                  # 源代码
-| |- components         # 业务组件
+| |- components         # 公共业务组件
 | | |- ...
 | |- pages              # 页面
 | | |- index
-| | | |- component      # 独属于该页面的组件
-| | | |- index.jsx
+| | | |- components     # 独属于该页面的组件
+| | | |  |- ...     
+| | | |- index.jsx      # 页面入口文件
+| | | |- index.module.scss # 样式文件
 | | |- ...
+| |- subPages              # 子模块页面
 | |- styles             # 样式
 | | |- index.scss         # 样式入口文件
 | | |- reset.scss         # 重置样式
@@ -43,6 +41,8 @@ $ npm run build:weapp
 | |- app.config.js      # 应用页面配置入口文件
 | |- app.jsx            # 全局入口文件
 | |- app.scss           # 全局样式入口
+| |- public             # 资源文件
+| | |- images           # 图片资源
 ```
 
 ## 环境配置
@@ -55,41 +55,47 @@ $ npm run build:weapp
 
 ## 页面开发规范
 
-1. [命名规范](.。/docs/naming.md)
-
-2. 各司其职
-
-> 说明：根据**目录结构**给出来的目录说明，将不同职责的模块放入在不同目录中实现。比如：
-
-- `pages` 目录中存放页面。如果某些组件是只属于该页面的，就需要在对应的页面下面新建 `components` 目录，用于存放页面组件
-- `styles` 目录中存放共用的样式
-- `comoponents` 目录中存放公共组件
-- `utils` 是工具函数目录，一个功能函数对应一个文件
 
 1. 页面分包问题
 > 说明:
 > 分包的入口文件：`./src/app.config.js`
 > 分包打包优化：`./config` 文件夹下面的文件
 - 主包：只包含首页和详情页
-- 子包：除首页和详情页的包都在子包
+- 子包：除首页和详情页和个人中心的包都在子包
 
 ## 布局单位
 
 设计稿按照 `375px` 进行设计。在项目中尺寸单位建议使用 px、 百分比 %，Taro 默认会对所有单位进行转换。
 
+## 样式编写
+
+所有页面的样式文件，必须以`xxx.module.scss`进行编写。Discuz!Q作为一个SPA应用，将使用`SCSS Module`来实现样式作用域保护。
+
+### 颜色
+所有的验收单位必须使用符合当前theme的颜色标准
+
+### 尺寸
+所有尺寸必须使用common中定义的scss变量进行使用
+
 ## 引用规则
 
 提供快速引用指定目录的方式。
 
-- @constants：对应 `./src/constants`
-- @component：对应 `./src/components`
-- @utils：对应 `./src/utils`
-- @pages：对应 `./src/pages`
-- @store：对应 `./src/store`
-- @styles：对应 `./src/styles`
+- @components->mini目录下的components文件
+- @layout->mini目录下的layout文件
+- @utils->mini目录下的utils文件
+- @pages->mini目录下的pages文件
+- @config->mini目录下的config文件
+- @common->mini目录以外的common目录
+- @store->mini目录以外的common目录下的store文件
+- @server->mini目录以外的common目录下的server文件
 
 
 ## 依赖
 - [Taro 3](http://taro-docs.jd.com/taro/docs/README)
 - [MobX 4](https://cn.mobx.js.org/)
 
+## 目录规范
+- 文件使用`-`进行分割，例如:is-login
+- 变量名称统一使用小驼峰命名
+- 组件名称必须使用大驼峰命名

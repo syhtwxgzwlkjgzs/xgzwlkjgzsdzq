@@ -54,15 +54,20 @@
       .replyTime {
         // flex: 1;
       }
-      .replyLiked {
-        // flex: 1;
-      }
-      .replyLike {
-        // flex: 1;
+      .commentLiked {
         color: var(--color-primary);
       }
+      .commentLike {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        cursor: pointer;
+      }
       .replyReply {
-        // flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        cursor: pointer;
       }
       .replyDelete {
         // flex: 1;
@@ -78,4 +83,16 @@
       margin-left: rem(24);
     }
   }
+}
+.icon {
+  margin-right: rem(8);
+  font-size: rem(14) !important;
+}
+
+.active {
+  color: var(--color-primary);
+}
+
+.commentInput {
+  margin-top: rem(16);
 }

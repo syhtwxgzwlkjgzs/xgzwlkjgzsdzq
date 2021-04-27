@@ -1,0 +1,43 @@
+@import '@common/styles/variable/index.scss';
+@import '@common/styles/fn/rem.scss';
+
+.container {
+  width: 100%;
+  padding: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  box-sizing: border-box;
+  border-radius: 5px;
+  background: var(--background-color-text);
+  .image {
+    flex: none;
+    width: 82px;
+    height: 82px;
+    object-fit: cover;
+    &.empty{
+      background-color: var(--mask-background-color);
+    }
+  }
+  .content {
+    flex: 1;
+    margin-left: 16px;
+    .title {
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 22px;
+      text-align: left;
+      color: #515a6e;
+      height: 44px;
+      overflow: hidden;
+    }
+    .amount {
+      margin-top: 8px;
+      font-weight: normal;
+      font-size: 20px;
+      line-height: 30px;
+      text-align: left;
+      color: #e02433;
+    }
+  }
+}

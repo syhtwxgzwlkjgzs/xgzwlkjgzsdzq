@@ -11,6 +11,7 @@ class IndexStore {
   @computed get categoriesNoAll() {
     return (this.categories || []).filter(item => item.name !== '全部');
   }
+  @observable recommends = null;
 }
 
 export default IndexStore;

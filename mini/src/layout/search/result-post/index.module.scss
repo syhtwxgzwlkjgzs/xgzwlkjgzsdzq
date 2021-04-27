@@ -1,0 +1,13 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.searchInput {
+  padding: 16px;
+}
