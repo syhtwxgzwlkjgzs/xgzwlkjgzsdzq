@@ -35,9 +35,21 @@
   color: var(--color-text-primary);
 }
 .more {
+  cursor: pointer;
   font-size: rem($font-size-primary);
   line-height: rem($font-line-height-middle);
   text-align: left;
   color: var(--color-text-primary);
   margin-right: rem($padding-2n);
+}
+.leftBox {
+}
+.icon1 {
+  color: #3AC15F;
+}
+.icon2 {
+  color: #FFC300;
+}
+.icon3 {
+  color: #E02433;
 }

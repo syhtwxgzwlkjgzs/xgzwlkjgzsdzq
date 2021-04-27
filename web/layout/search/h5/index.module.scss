@@ -3,6 +3,8 @@
 
 .page {
   padding-top: rem($padding-4n);
+  height: 100vh;
+  background-color: var(--color-white);
 }
 .section {
   padding: rem($padding-4n);

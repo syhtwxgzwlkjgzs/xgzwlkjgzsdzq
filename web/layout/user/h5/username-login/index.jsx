@@ -1,12 +1,14 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import { Input, Button, Toast } from '@discuzq/design';
+import { Input, Button, Toast, Icon } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
-import HeaderLogin from '../../../../components/login/h5/header-login';
+import HomeHeader from '@components/home-header';
+import Header from '@components/header';
 import { NEED_BIND_WEIXIN_FLAG, NEED_BIND_PHONE_FLAG } from '@common/store/login/user-login-store';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import { get } from '@common/utils/get';
 
 @inject('site')
 @inject('user')
@@ -27,7 +29,7 @@ class LoginH5Page extends React.Component {
     // TODO: 完善完这里的所有逻辑
     if (e.Code === NEED_BIND_WEIXIN_FLAG) {
       this.props.commonLogin.needToBindWechat = true;
-      this.props.router.push(`/user/wx-bind-qrcode?sessionToken=${e.sessionToken}&loginType=username`);
+      this.props.router.push(`/user/wx-bind-qrcode?sessionToken=${e.sessionToken}&loginType=username&nickname=${e.nickname}`);
       return;
     }
 
@@ -54,15 +56,18 @@ class LoginH5Page extends React.Component {
 
   handleLoginButtonClick = async () => {
     try {
-      await this.props.userLogin.login();
+      const resp = await this.props.userLogin.login();
+      const uid = get(resp, 'uid', '');
+      this.props.user.updateUserInfo(uid);
       Toast.success({
         content: '登录成功',
         hasMask: false,
         duration: 1000,
       });
       // FIXME: Toast 暂时不支持回调能力
+      // FIXME: 使用 window 跳转用来解决，获取 forum 在登录前后不同的问题，后续需要修改 store 完成
       setTimeout(() => {
-        this.props.router.push('/index');
+        window.location.href = '/index';
         return;
       }, 1000);
     } catch (e) {
@@ -71,22 +76,30 @@ class LoginH5Page extends React.Component {
   };
 
   render() {
+    const { site } = this.props;
+    const { platform } = site;
     const isAnotherLoginWayAvailable = this.props.site.wechatEnv !== 'none' || this.props.site.isSmsOpen;
     return (
-      <div className={layout.container}>
-        <HeaderLogin />
-        <div className={layout.content}>
-          <div className={layout.title}>用户名登录</div>
+      <div className={platform === 'h5' ? layout.container : layout.pc_container}>
+        {
+          platform === 'h5'
+            ? <HomeHeader hideInfo/>
+            : <Header/>
+        }
+        <div className={platform === 'h5' ? layout.content : layout.pc_content}>
+          <div className={platform === 'h5' ? layout.title : layout.pc_title}>用户名登录</div>
           {/* 输入框 start */}
+          { platform === 'h5' ? <></> : <div className={layout.tips}>用户名</div> }
           <Input
-            className={layout.input}
+            className={platform === 'h5' ? layout.input : layout.pc_input}
             value={this.props.userLogin.username}
             placeholder="输入您的用户名"
             onChange={this.handleUsernameChange}
           />
+          { platform === 'h5' ? <></> : <div className={layout.tips}>登录密码</div> }
           <Input
             clearable={false}
-            className={layout.input}
+            className={platform === 'h5' ? layout.input : layout.pc_input}
             mode="password"
             value={this.props.userLogin.password}
             placeholder="输入您的登录密码"
@@ -94,11 +107,11 @@ class LoginH5Page extends React.Component {
           />
           {/* 输入框 end */}
           {/* 登录按钮 start */}
-          <Button className={layout.button} type="primary" onClick={this.handleLoginButtonClick}>
+          <Button className={platform === 'h5' ? layout.button : layout.pc_button} type="primary" onClick={this.handleLoginButtonClick}>
             登录
           </Button>
           {/* 登录按钮 end */}
-          <div className={layout.functionalRegion}>
+          <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
             {!(this.props.site.isSmsOpen || this.props.site.wechatEnv !== 'none') && (
               <span
                 className={layout.clickBtn}
@@ -121,16 +134,16 @@ class LoginH5Page extends React.Component {
               </span>
             )}
           </div>
-          {isAnotherLoginWayAvailable && <div className={layout['otherLogin-title']}>其他登录方式</div>}
-          <div className={layout['otherLogin-button']}>
+          {isAnotherLoginWayAvailable && <div className={platform === 'h5' ? layout['otherLogin-title'] : layout.pc_otherLogin_title}>其他登录方式</div>}
+          <div className={platform === 'h5' ? layout['otherLogin-button'] : layout.pc_otherLogin_button}>
             {this.props.site.wechatEnv !== 'none' && (
               <span
                 onClick={() => {
                   this.props.router.push('wx-login');
                 }}
-                className={layout['otherLogin-button-weixin']}
+                className={platform === 'h5' ? layout['otherLogin-button-weixin'] : layout.button_left}
               >
-                <img src="/login-weixin.png" alt="" />
+                <Icon name='WechatOutlined' color='#04C160'/>
               </span>
             )}
             {this.props.site.isSmsOpen && (
@@ -138,13 +151,13 @@ class LoginH5Page extends React.Component {
                 onClick={() => {
                   this.props.router.push('phone-login');
                 }}
-                className={layout['otherLogin-button-phone']}
+                className={platform === 'h5' ? layout['otherLogin-button-phone'] : layout.button_right}
               >
-                <img src="/login-phone.png" alt="" />
+              <Icon name='PhoneOutlined' color='#FFC300'/>
               </span>
             )}
           </div>
-          <div className={layout['otherLogin-tips']}>注册登录即表示您同意《注册协议》《隐私协议》</div>
+          <div className={platform === 'h5' ? layout['otherLogin-tips'] : layout.pc_otherLogin_tips}>注册登录即表示您同意《注册协议》《隐私协议》</div>
         </div>
       </div>
     );

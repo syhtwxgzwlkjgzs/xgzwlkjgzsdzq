@@ -47,9 +47,11 @@
     left: 16px;
     right: 16px;
     height: 42px;
+    display: flex;
+    justify-content: space-between;
     :global {
       .dzq-button {
-        width: 100%;
+        width: 48%;
         height: 100%;
         border-radius: 5px;
       }

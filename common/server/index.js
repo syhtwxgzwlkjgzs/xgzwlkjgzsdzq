@@ -1,9 +1,10 @@
 
 export { default as readUser } from './readUser';
 export { default as readForum } from './readForum';
+export { default as readPermissions } from './readPermissions';
 export { default as usernameLogin } from './usernameLogin';
 export { default as usernameRegister } from './usernameRegister';
-export { default as genH5Qrcode } from './genH5Qrcode';
+export { default as genH5Qrcode } from './genH5QrCode';
 export { default as smsSend } from './smsSend';
 export { default as smsLogin } from './smsLogin';
 export { default as readThreadDetail } from './thread/readThreadDetail';
@@ -13,6 +14,8 @@ export { default as readReplyList } from './thread/readReplyList';
 export { default as createPosts } from './thread/createPosts';
 export { default as updateComment } from './thread/updateComment';
 export { default as readCommentDetail } from './thread/readCommentDetail';
+export { default as operateThread } from './thread/operateThread';
+export { default as shareThread } from './thread/shareThread';
 export { default as readTopicsList } from './search/readTopicsList';
 export { default as readUsersList } from './search/readUsersList';
 export { default as readCategories } from './home/readCategories';
@@ -37,3 +40,5 @@ export { default as usernameAutoBind } from './wx-username-auto-bind';
 export { default as createThread } from './thread-post/create-thread';
 export { default as readYundianboSignature } from './thread-post/read-yundianbo-signature';
 export { default as setNickname } from './setNickname';
+export { default as transitionSmsBind } from './transitionSmsBind';
+export { default as updateThread } from './thread-post/update-thread';

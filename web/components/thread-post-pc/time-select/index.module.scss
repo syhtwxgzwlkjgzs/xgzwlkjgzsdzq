@@ -1,0 +1,129 @@
+@import '@common/styles/index.scss';
+
+:global {
+    .react-calendar__navigation {
+        &>button {
+            font-size: 16px !important;
+            color: #4f5a70;
+        }
+    }
+
+    .rc-time-picker-panel-select {
+        &::-webkit-scrollbar {
+            width: 0px;
+        }
+    }
+
+    .rc-time-picker-panel-inner {
+        position: absolute;
+        top: 30px;
+    }
+
+    .rc-time-picker-input {
+        width: 174px;
+        height: 36px;
+        line-height: 36px;
+    }
+
+    .react-calendar__month-view__days {
+        border-top: var(--border-border);
+        border-bottom: var(--border-border);
+        margin-top: 6px;
+    }
+
+    .rc-time-picker-clear{
+        display: none;
+    }
+}
+
+.nodisaplay {
+    display: none;
+}
+
+.box_sans {
+    position: relative;
+    width: 409px;
+    min-height: 498px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background: #fff;
+    padding-right: 24px;
+    padding-left: 24px;
+
+    .demonstrate {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding-bottom: 3%;
+
+        .demonstrateone {
+            width: 170px;
+            height: 36px;
+            line-height: 36px;
+            padding-left: 4px;
+            border-radius: 5px;
+            background: white;
+            border: 1px solid #2469f6;
+        }
+    }
+
+    .title-top {
+        padding-top: 24px;
+        padding-bottom: 24px;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 21px;
+        text-align: center;
+        color: #0b0b37;
+    }
+
+    .title-top-right {
+        position: absolute;
+        right: 29px;
+        top: 25px;
+        width: 20px;
+        height: 20px;
+    }
+
+    .calendar {
+
+        button {
+            border: none;
+            width: 50px;
+            height: 50px;
+            background-color: #fff;
+            font-size: 14px;
+            color: #4f5a70;
+        }
+
+    }
+
+    .btn {
+        padding: 12px 56px 0 56px;
+        display: flex;
+        justify-content: space-between;
+        text-align: center;
+        line-height: 53px;
+
+        -webkit-tap-highlight-color: transparent;
+
+        .btn-one {
+            width: 116px;
+            height: 36px;
+            color: #333;
+            text-align: center;
+            border: none;
+            background: #eee;
+        }
+
+        .btn-two {
+            width: 116px;
+            height: 36px;
+            color: white;
+            text-align: center;
+            background-color: #2469f6;
+            border: none;
+        }
+    }
+}

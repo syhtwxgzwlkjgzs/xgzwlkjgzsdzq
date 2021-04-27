@@ -3,8 +3,8 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import isServer from '@common/utils/is-server';
 import getPlatform from '@common/utils/get-platform';
-import { readForum, readUser } from '@server';
-import Router from '@common/utils/web-router';
+import { readForum, readUser, readPermissions } from '@server';
+import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import reload from '@common/utils/reload';
@@ -24,12 +24,12 @@ export default function HOCFetchSiteData(Component) {
           let serverSite;
           let __props = {};
           let userData;
+          let userPermissions;
 
           // 服务端
           if (isServer()) {
             const { headers } = ctx.req;
             platform = getPlatform(headers['user-agent']);
-
             // 获取站点信息
             siteConfig = await readForum({}, ctx);
             serverSite = {
@@ -43,7 +43,10 @@ export default function HOCFetchSiteData(Component) {
               userInfo = await readUser({
                 params: { pid: siteConfig.data.user.userId },
               }, ctx);
+              userPermissions = await readPermissions({}, ctx);
+
               userData = (userInfo && userInfo.code === 0) ? userInfo.data : null;
+              userPermissions = (userPermissions && userPermissions.code === 0) ? userPermissions.data : null;
             }
 
 
@@ -55,9 +58,12 @@ export default function HOCFetchSiteData(Component) {
 
           return {
             ...__props,
+            // serverSite: {},
+            // serverUser: {},
             serverSite,
             serverUser: {
               userInfo: userData,
+              userPermissions
             },
           };
         } catch (err) {
@@ -78,6 +84,7 @@ export default function HOCFetchSiteData(Component) {
         serverSite && serverSite.closeSite && site.setCloseSiteConfig(serverSite.closeSite);
         serverSite && serverSite.webConfig && site.setSiteConfig(serverSite.webConfig);
         serverUser && serverUser.userInfo && user.setUserInfo(serverUser.userInfo);
+        serverUser && serverUser.userPermissions && user.setUserPermissions(serverUser.userPermissions);
 
         // 如果还没有获取用户名登录入口是否展示接口，那么请求来赋予初始值
         if (this.props.site.isUserLoginVisible === null) {
@@ -102,7 +109,7 @@ export default function HOCFetchSiteData(Component) {
         const { serverUser, serverSite, user, site } = this.props;
         let siteConfig;
         let loginStatus = false;
-
+        
         // 设置平台标识
         site.setPlatform(getPlatform(window.navigator.userAgent));
 
@@ -126,6 +133,10 @@ export default function HOCFetchSiteData(Component) {
                     && (!serverUser || !serverUser.userInfo)
           ) {
             const userInfo = await readUser({ params: { pid: siteConfig.user.userId } });
+            const userPermissions = await readPermissions({});
+            
+            // 添加用户发帖权限
+            userPermissions.code === 0 && userPermissions.data && user.setUserPermissions(userPermissions.data);
             // 当客户端无法获取用户信息，那么将作为没有登录处理
             userInfo.data && user.setUserInfo(userInfo.data);
             loginStatus = !!userInfo.data;
@@ -160,11 +171,11 @@ export default function HOCFetchSiteData(Component) {
           });
           // 关闭站点
           if (router.asPath !== '/close' && site.closeSiteConfig) {
-            Router.redirect('/close');
+            Router.redirect({url:'/close'});
           }
         } else {
-          // 重定向到错误页面
-          Router.redirect('/500');
+          // 重定向到错误页面验收通过
+          Router.redirect({url: '/500'});
         }
       }
 
@@ -182,7 +193,6 @@ export default function HOCFetchSiteData(Component) {
 
       render() {
         const { isNoSiteData } = this.state;
-
         if (isNoSiteData) {
           return <h1>loading</h1>;
         }

@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/index/h5';
 import IndexPCPage from '@layout/index/pc';
-import { getThreadList, getFirstData } from '@common/service/home';
+import { readCategories, readStickList, readThreadList } from '@server';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 // import HOCWithLogin from '@common/middleware/HOCWithLogin';
@@ -12,14 +12,18 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @inject('user')
 @observer
 class Index extends React.Component {
+  page = 1;
+  prePage = 10;
   static async getInitialProps(ctx) {
-    const { res } = await getFirstData({}, ctx);
+    const categories = await readCategories({}, ctx);
+    const sticks = await readStickList({}, ctx);
+    const threads = await readThreadList({ params: { filter: {}, sequence: 0, perPage: 10, page: 1 } }, ctx);
 
     return {
       serverIndex: {
-        categories: res[0] || [],
-        sticks: res[1] || [],
-        threads: res[2] || {},
+        categories: categories && categories.code === 0 ? [{ name: '全部', pid: '', children: [] }, ...categories.data] : null,
+        sticks: sticks && sticks.code === 0 ? sticks.data : null,
+        threads: threads && threads.code === 0 ? threads.data : null,
       },
     };
   }
@@ -34,29 +38,41 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
-    const { serverIndex, index } = this.props;
-
+    const { index } = this.props;
     // 当服务器无法获取数据时，触发浏览器渲染
-    const isBool1 = !index.categories && (!serverIndex || !serverIndex.categories);
-    const isBool2 = !index.sticks && (!serverIndex || !serverIndex.sticks);
-    const isBool3 = !index.threads && (!serverIndex || !serverIndex.threads);
+    const hasCategoriesData = !!index.categories;
+    const hasSticksData = !!index.sticks;
+    const hasThreadsData = !!index.threads;
 
-    if (!isBool1 && !isBool2 && !isBool3) {
-      const { res } = await getFirstData({});
-
-      index.setCategories(res[0] || []);
-      index.setSticks(res[1] || []);
-      index.setThreads(res[2] || {});
+    if (!hasCategoriesData) {
+      this.props.index.getReadCategories();
+    }
+    if (!hasSticksData) {
+      this.props.index.getRreadStickList();
+    }
+    if (!hasThreadsData) {
+      this.props.index.getReadThreadList();
     }
   }
 
-  dispatch = async (type, data = '') => {
+  dispatch = async (type, data = {}) => {
     const { index } = this.props;
-    const { categoryids, types, essence, sequence } = data;
+    const { categoryids, types, essence, sequence, attention, sort } = data;
 
-    const { res } = await getThreadList({ filter: { categoryids, types, essence }, sequence });
-    index.setSticks(res[1] || []);
-    index.setThreads(res[0] || {});
+    if (type === 'click-filter') {
+      this.page = 1;
+      index.screenData({ filter: { categoryids, types, essence, attention, sort}, sequence });
+    } else if (type === 'moreData') {
+      this.page += 1;
+      await index.getReadThreadList({
+        perPage: this.prePage,
+        page: this.page,
+        filter: { categoryids, types, essence, attention, sort },
+        sequence,
+      });
+
+      return;
+    }
   }
 
   render() {
@@ -64,7 +80,7 @@ class Index extends React.Component {
     const { platform } = site;
 
     if (platform === 'pc') {
-      return <IndexPCPage/>;
+      return <IndexPCPage dispatch={this.dispatch} />;
     }
     return <IndexH5Page dispatch={this.dispatch} />;
   }

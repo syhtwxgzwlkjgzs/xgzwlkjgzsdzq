@@ -6,10 +6,12 @@ import typeofFn from '@common/utils/typeof';
 import setAuthorization from '@common/utils/set-authorization';
 import setUserAgent from '@common/utils/set-user-agent';
 import { ENV_CONFIG } from '@common/constants/site';
+import isServer from '@common/utils/is-server';
+import Router from '@discuzq/sdk/dist/router';
 
 const api = apiIns({
   baseURL: ENV_CONFIG.COMMOM_BASE_URL,
-  timeout: 2000,
+  timeout: isServer() ? 2000 : 0,
 });
 
 const { http } = api;
@@ -33,7 +35,8 @@ http.interceptors.request.use(
   (config) => {
     // eslint-disable-next-line no-param-reassign
     config = setUserAgent(config);
-    return setAuthorization(config);
+    const requestData = setAuthorization(config);
+    return requestData;
   },
   (error) => {
     // 对请求错误做些什么
@@ -49,6 +52,10 @@ http.interceptors.request.use(
 // 响应结果进行设置
 http.interceptors.response.use((res) => {
   const { data } = res;
+  // 如果4002将重定向到登录
+  if (data.Code === -4002) {
+    Router.redirect({url: '/user/login'});
+  }
   return {
     code: data.Code,
     data: reasetData(data.Data),

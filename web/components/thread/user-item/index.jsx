@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Button, Icon } from '@discuzq/design';
 import Avatar from '../../avatar';
 import { noop } from '../utils';
@@ -13,9 +13,14 @@ import styles from './index.module.scss';
  * @prop {string}  label 额外信息
  * @prop {string}  onClick 点击事件
  */
-
-const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noop  }) => (
-    <div className={styles.listItem} key={index} onClick={onClick}>
+// TODO 点击穿透问题之后想办法解决
+const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noop  }) => {
+  const handleClick = (e) => {
+    e.stopPropagation();
+    onClick();
+  };
+  return (
+    <div className={styles.listItem} key={index} onClick={handleClick}>
       <div className={styles.wrapper}>
           <div className={styles.header}>
               <Avatar className={styles.img} image={imgSrc} name={title} />
@@ -41,10 +46,11 @@ const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noo
             <Icon className={styles.rightIcon} name="RightOutlined" size={12} />
           </div>
         ) : (
-          <Button type="primary" onClick={onClick}>查看主页</Button>
+          <Button type="primary" onClick={handleClick}>查看主页</Button>
         )
       }
     </div>
-);
+  );
+};
 
 export default React.memo(Index);

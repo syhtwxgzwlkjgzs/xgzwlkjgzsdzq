@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { Input, Button } from '@discuzq/design';
+import { Input, Button, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 
@@ -8,31 +8,31 @@ const ProductSelect = (props) => {
   const [link, setLink] = useState('');
   const goodImages = [
     {
-      src: '/jingdong.svg',
+      src: '/dzq-img/jingdong.svg',
       name: '京东',
       width: 20,
       height: 20,
     },
     {
-      src: '/taobao.svg',
+      src: '/dzq-img/taobao.svg',
       name: '淘宝',
       width: 20,
       height: 20,
     },
     {
-      src: '/tmall.svg',
+      src: '/dzq-img/tmall.svg',
       name: '天猫',
       width: 20,
       height: 20,
     },
     {
-      src: '/pinduoduo.svg',
+      src: '/dzq-img/pinduoduo.svg',
       name: '拼多多',
       width: 20,
       height: 20,
     },
     {
-      src: '/youzan.svg',
+      src: '/dzq-img/youzan.svg',
       name: '有赞',
       width: 20,
       height: 20,
@@ -50,9 +50,11 @@ const ProductSelect = (props) => {
     // 2 有链接，发起请求解析商品
     const { onAnalyseSuccess, threadPost } = props;
     const res = await threadPost.fetchProductAnalysis({ address: link });
-    const { code, data = {} } = res;
+    const { code, data = {}, msg } = res;
     if (code === 0) {
       onAnalyseSuccess(data);
+    } else {
+      Toast.error({ content: msg });
     }
   };
 
@@ -75,6 +77,9 @@ const ProductSelect = (props) => {
         onChange={e => setLink(e.target.value)}
       />
       <div className={styles['parse-goods-btn']}>
+        <Button onClick={props.cancel}>
+          取消
+        </Button>
         <Button type="primary" onClick={parseLink}>
           确定
         </Button>

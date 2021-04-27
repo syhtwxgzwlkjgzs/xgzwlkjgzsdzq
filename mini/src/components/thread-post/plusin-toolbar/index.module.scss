@@ -1,0 +1,30 @@
+.container {
+  height: 45px;
+  padding: 0 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-label);
+  border-top: 1px solid var(--border-line-color);
+  border-bottom: 1px solid var(--border-line-color);
+  background: var(--color-white);
+
+  .category {
+    line-height: 1;
+    display: flex;
+    align-items: center;
+
+    .icon {
+      margin-right: 6px;
+    }
+
+    Text {
+      margin-right: 8px;
+    }
+  }
+
+  .plus-icon {
+    margin-left: 24px;
+  }
+
+}

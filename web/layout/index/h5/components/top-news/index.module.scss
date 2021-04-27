@@ -3,14 +3,13 @@
 
 .list {
   width: 100%;
-  background: #fff;
+  background: var(--color-white);
   .item {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin: 0 rem($padding-4n);
     height: rem(36);
-    border-bottom: 1px solid var(--border-line-color);
+    cursor: pointer;
     .prefix {
       font-size: rem($font-size-primary);
       line-height: rem($font-line-height-primary);
@@ -25,5 +24,8 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+  }
+  .item:last-child {
+    border-bottom: none !important;
   }
 }

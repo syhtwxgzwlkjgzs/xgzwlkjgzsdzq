@@ -4,15 +4,16 @@ import { inject } from 'mobx-react';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 import HOCWithNoLogin from '@common/middleware/HOCWithNoLogin';
+import HOCLoginMode from '@common/middleware/HOCLoginMode';
 
 @inject('site')
 class LoginPhone extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
-    return platform === 'h5' ? <LoginPhoneH5Page /> : <></>;
+    return <LoginPhoneH5Page />;
   }
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(LoginPhone);
+export default HOCFetchSiteData(HOCLoginMode('phone')(LoginPhone));

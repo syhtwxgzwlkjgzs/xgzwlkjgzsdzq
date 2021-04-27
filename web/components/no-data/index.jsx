@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, Icon } from '@discuzq/design';
+import React, { useEffect, useState } from 'react';
+import { Button, Icon, Spin } from '@discuzq/design';
 import { noop } from '../thread/utils';
 
 import styles from './index.module.scss';
@@ -13,14 +13,29 @@ import styles from './index.module.scss';
  * @prop {string} btnText 自定义刷新按钮文字
  */
 
-const NoData = ({ text = '暂无数据', icon = '', onClick = noop, isShowBtn = false, btnText = '点击刷新' }) => (
-    <div className={styles.container}>
+const NoData = ({ className = '', text = '暂无数据', icon = '', onClick = noop, isShowBtn = false, btnText = '点击刷新' }) => {
+  // 为了防止已进入页面，就出现暂无数据
+  const [isHidden, setIsHidden] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      clearTimeout(timer);
+      setIsHidden(false);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
+
+  return (
+    <div className={`${styles.container} ${className}`}>
       <div className={styles.wrapper}>
         {icon && <Icon name={icon} size={48} className={styles.icon} />}
-        <span>{text}</span>
+        {!isHidden && <span>{text}</span>}
       </div>
       {isShowBtn && <Button onClick={onClick}>{btnText}</Button>}
     </div>
-);
+  );
+};
 
 export default React.memo(NoData);

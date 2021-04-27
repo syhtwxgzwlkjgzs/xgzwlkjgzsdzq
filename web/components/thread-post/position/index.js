@@ -8,23 +8,23 @@
 import React, { memo, useState, useEffect } from 'react';
 import { withRouter } from 'next/router';
 import { Tag, Icon, Toast } from '@discuzq/design';
-import './index.module.scss';
+import styles from './index.module.scss';
 
 import PropTypes from 'prop-types';
 
 const Position = (props) => {
-  const { position, key, router, onChange } = props;
+  const { position, key, router, onChange, onClick } = props;
   const { query = {} } = router;
   const [currentPosition, setCurrentPosition] = useState({});
 
   useEffect(() => {
-    if (position.location) setCurrentPosition(position);
+    if (position.address) setCurrentPosition(position);
   }, [position]);
 
   useEffect(() => {
     if (query.addr) {
       const { addr = '', latng = '', name = '' } = query;
-      const latngArr = latng.split(',');
+      const latngArr = (latng || '').split(',');
       const current = {
         longitude: parseFloat(latngArr[1] || ''),
         latitude: parseFloat(latngArr[0] || ''),
@@ -36,15 +36,17 @@ const Position = (props) => {
   }, [query]);
 
   useEffect(() => {
-    if (currentPosition.address !== position.address) onChange(currentPosition);
+    if (currentPosition.address !== position.address
+      || currentPosition.location !== position.location) onChange(currentPosition);
   }, [currentPosition]);
 
   // handle
   const choosePosition = () => {
     // 选择位置，已经存在定位，则点击选择位置无效
-    if (position.address) {
-      return;
-    }
+    // if (position.address) {
+    //   return;
+    // }
+    onClick();
     // 检查腾讯位置服务key值
     if (!key) {
       Toast.error({ content: '请检查配置的腾讯位置服务的key是否设置正确' });
@@ -63,7 +65,7 @@ const Position = (props) => {
   const showPosition = (value) => {
     const coord = `${value.lat},${value.lng}`; // 坐标
     let { href } = window.location;
-    const index = href.indexOf('?name'); // 过滤掉上次选择后返回的参数
+    const index = href.indexOf('name='); // 过滤掉上次选择后返回的参数
     if (index !== -1) {
       href = href.substr(0, index);
     }
@@ -85,9 +87,10 @@ const Position = (props) => {
       onClose={
         () => setCurrentPosition({ location: '添加位置' })
       }
+      className={styles.tag}
     >
-      <Icon name="EyeOutlined" color="#2469F6" size={12} />
-      {currentPosition.location}
+      <Icon name="PositionOutlined" color="#2469F6" size={12} />
+      {currentPosition.location || '添加位置'}
     </Tag>
   );
 };
@@ -95,7 +98,7 @@ const Position = (props) => {
 Position.propTypes = {
   position: PropTypes.object,
   key: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
 };
 
 Position.defaultProps = {
@@ -107,7 +110,7 @@ Position.defaultProps = {
   },
   // TODO: 待改成从 forum 中取
   key: 'FF7BZ-27T3X-C574Z-73YBG-FGAJ2-4CF7I',
-  onChange: () => {}
+  onChange: () => {},
 };
 
 export default memo(withRouter(Position));

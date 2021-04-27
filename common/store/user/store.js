@@ -8,6 +8,7 @@ class UserStore {
   @observable loginStatus = 'padding';
   @observable accessToken = null;
   @observable weixinNickName = null;
+  @observable permissions = null;
 }
 
 export default UserStore;

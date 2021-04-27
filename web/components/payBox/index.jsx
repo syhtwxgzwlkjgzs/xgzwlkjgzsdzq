@@ -3,7 +3,7 @@ import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import { Popup, Icon, Button, Radio } from '@discuzq/design';
 import browser from '@common/utils/browser';
-import Router from '@common/utils/web-router';
+import Router from '@discuzq/sdk/dist/router';
 
 @inject('site')
 @inject('user')
@@ -64,15 +64,13 @@ export default class PayBox extends React.Component {
     }
 
     goSetPayPwa() {
-        Router.push('/modify/paypwd?token=1');
+        Router.push({url: '/modify/paypwd?token=1'});
     }
 
     render() {
         const { visible = true, onClose = () => {}  } = this.props;
         const { user, site } = this.props;
         const { payConfig } = this.state;
-        console.log(user);
-        console.log(site);
         return (
             <Popup
                 position="bottom"

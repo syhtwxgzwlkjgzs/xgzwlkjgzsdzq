@@ -1,0 +1,35 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.container {
+  width: 100vw;
+  background: var(--comment-box-bg-color);
+}
+
+.header {
+  width: 100%;
+  height: rem(60);
+  background: var(--color-white);
+  margin-bottom: rem(20);
+}
+
+.body {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  .bodyLeft {
+    width: rem(750);
+    margin-right: rem(20);
+  }
+  .bodyRigth {
+    width: rem(330);
+    .authorInfo {
+      width: 100%;
+      background: #fff;
+      margin-bottom: rem(20);
+    }
+    .recommend {
+      width: 100%;
+      background: #fff;
+    }
+  }
+}

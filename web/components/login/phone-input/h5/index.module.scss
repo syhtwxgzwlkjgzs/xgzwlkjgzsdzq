@@ -1,0 +1,43 @@
+@import '@common/styles/mixin/login.scss';
+@import '@common/styles/fn/rem.scss';
+.phoneInput {
+  position: relative;
+  .input {
+    @include input;
+  }
+}
+@mixin captchaBtn {
+  width: rem(94);
+  height: rem(36);
+  position: absolute;
+  right: 0;
+  bottom: rem(8);
+  text-align: center;
+  line-height: rem(36);
+  border-radius: rem(5);
+  color: var(--color-white);
+  font-size: rem(14);
+}
+.sendCaptcha {
+  @include captchaBtn;
+  background: var(--color-primary); 
+}
+.countDown {
+  @include captchaBtn;
+  color: #b5b5b5;
+  background: var(--border-line-color); 
+}
+.captchaInput{
+  margin-top: rem(32);
+  .captchaInput-title {
+    font-weight: normal;
+    font-size: rem(14);
+    line-height: rem(24);
+    text-align: left;
+    color: var(--color-text-secondary);
+    padding-left: rem(8);
+  }
+  .captchaInput-input:last-child{
+    margin-right: 0;
+  }
+}

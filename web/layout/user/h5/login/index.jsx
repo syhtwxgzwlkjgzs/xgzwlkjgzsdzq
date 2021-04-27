@@ -1,6 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
+import isWeiXin from '@common/utils/is-weixin';
 import '@discuzq/design/dist/styles/index.scss';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 
@@ -10,11 +11,21 @@ import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util'
 class Login extends React.Component {
   componentDidMount() {
     if (this.props.site.wechatEnv === 'miniProgram') {
+      if (isWeiXin()) {
+        const redirectEncodeUrl = encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`);
+        window.location.href = `https://discuzv3-dev.dnspod.dev/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
+        return;
+      }
       this.props.router.replace('/user/wx-login');
       return;
     }
 
     if (this.props.site.wechatEnv === 'openPlatform') {
+      if (isWeiXin()) {
+        const redirectEncodeUrl = encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`);
+        window.location.href = `https://discuzv3-dev.dnspod.dev/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
+        return;
+      }
       this.props.router.replace('/user/wx-login');
       return;
     }

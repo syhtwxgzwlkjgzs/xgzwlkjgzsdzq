@@ -3,6 +3,7 @@ import WeixinBindQrCodePage from '@layout/user/h5/wx-bind-qrcode';
 import { inject } from 'mobx-react';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCLoginMode from '@common/middleware/HOCLoginMode';
 
 @inject('site')
 class WeixinBind extends React.Component {
@@ -14,4 +15,4 @@ class WeixinBind extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(WeixinBind);
+export default HOCFetchSiteData(HOCLoginMode('weixin')(WeixinBind));
