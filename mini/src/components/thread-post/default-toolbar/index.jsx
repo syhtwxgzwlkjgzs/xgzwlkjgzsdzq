@@ -9,7 +9,7 @@ import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import { defaultIcon } from '@common/constants/const';
 
-const Index = inject('site', 'threadPost')(observer(({ clickCb }) => {
+const Index = inject('site', 'threadPost')(observer(({ onPluginClick, onSubmit }) => {
   const [currentTool, setCurrentTool] = useState({});
 
   // 工具栏icon元素
@@ -20,7 +20,7 @@ const Index = inject('site', 'threadPost')(observer(({ clickCb }) => {
         className={styles['plus-icon']}
         onClick={() => {
           setCurrentTool(item);
-          clickCb(item);
+          onPluginClick(item);
         }}
         name={item.name}
         color={item.id === currentTool.id && item.active}
@@ -32,7 +32,10 @@ const Index = inject('site', 'threadPost')(observer(({ clickCb }) => {
   return (
     <View className={styles['container']}>
       <View>{plus}</View>
-      <Text>发布</Text>
+      <Text onClick={() => {
+        onSubmit();
+        setCurrentTool({});
+      }}>发布</Text>
     </View>
   );
 }));

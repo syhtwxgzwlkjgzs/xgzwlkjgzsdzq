@@ -17,15 +17,6 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
 
   const { images, files } = localData;
 
-  if (!(images.body instanceof Array)) {
-    images.body = [];
-  }
-
-  if (!(files.body instanceof Array)) {
-    files.body = [];
-  }
-
-
   const [isRecording, setIsRecording] = useState(false);
 
   // 执行上传
@@ -50,21 +41,22 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
       },
       success(res) {
         console.log(res);
+        const data = JSON.parse(res.data).Data;
         switch(type) {
           case THREAD_TYPE.image:
-            images.body.push({
+            images[data.id] = {
               thumbUrl: tempFilePath,
-              ...res.data
-            });
+              ...data
+            };
             setPostData({images});
             break;
           case THREAD_TYPE.file:
-            files.body.push({
-              ...res.data,
+            files[data.id] = {
               thumbUrl: tempFilePath,
               name: file.name,
               size: file.size,
-            });
+              ...data
+            };
             setPostData({files});
             break;
         }
@@ -124,10 +116,10 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
   // 进行附件上传
   const atta = (
     <>
-      {files.body.map((item, index) => {
+      {Object.values(files).map((item, index) => {
         return (
           <Units key={index} type='atta' filename={item.name} size={`${Math.ceil(item.size / 1024)}KB`} onDelete={() => {
-            files.body.splice(index, 1);
+            delete files[item.id];
             setPostData({files});
           }} />
         );
@@ -140,17 +132,17 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
   // 进行图片上传
   const img = (
     <View className={styles['img-container']}>
-      {images.body.map((item, index) => {
+      {Object.values(images).map((item, index) => {
         const className = (index % 2 === 0) ? styles['margin'] : '';
         return (
           <Units className={className} type='img' src={item.thumbUrl} onDelete={() => {
-            images.body.splice(index, 1);
+            delete images[item.id];
             setPostData({images});
           }} />
         );
       })}
 
-      {(type === THREAD_TYPE.image && images.body.length < 9) && (<Units type='img-upload' onUpload={chooseImage} />)}
+      {(type === THREAD_TYPE.image && Object.values(images).length < 9) && (<Units type='img-upload' onUpload={chooseImage} />)}
     </View>
   );
 

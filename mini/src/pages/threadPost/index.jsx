@@ -162,11 +162,10 @@ class Index extends Component {
           // 上传完成回调，获取上传后的视频 URL 等信息
           finish: function (result) {
             Taro.hideLoading();
+            result.id = result.fileId;
             setPostData({
               video: result
             });
-            console.log('finish');
-            console.log(result);
           },
           // 上传错误回调，处理异常
           error: function (result) {
@@ -190,7 +189,7 @@ class Index extends Component {
 
   render() {
     const { categories } = this.props.index;
-    const { postData, setPostData } = this.props.threadPost;
+    const { postData, setPostData, createThread } = this.props.threadPost;
     const { rewardQa, redpacket, video, product, position } = postData;
     const {
       title,
@@ -220,8 +219,6 @@ class Index extends Component {
               {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => {}} />}
 
               {video.videoUrl && <Units type='video' src={video.videoUrl} />}
-
-
 
             </View>
           </View>
@@ -268,9 +265,20 @@ class Index extends Component {
               }}
               onCategoryClick={() => this.setState({ showClassifyPopup: true })}
             />
-            <DefaultToolbar clickCb={(item) => {
-              this.handlePluginClick(item);
-            }} />
+            <DefaultToolbar
+              onPluginClick={(item) => {
+                this.handlePluginClick(item);
+              }}
+              onSubmit={async () => {
+                Taro.showLoading({
+                  title: '创建中...',
+                });
+                console.log(postData);
+                await createThread();
+
+                Taro.hideLoading();
+              }}
+            />
           </View>
         </View>
 
