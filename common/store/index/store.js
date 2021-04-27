@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 class IndexStore {
   constructor() {}
 
@@ -7,6 +7,10 @@ class IndexStore {
   @observable sticks = null;
 
   @observable threads = null;
+
+  @computed get categoriesNoAll() {
+    return (this.categories || []).filter(item => item.name !== '全部');
+  }
 }
 
 export default IndexStore;
