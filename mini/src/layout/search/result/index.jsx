@@ -14,6 +14,7 @@ import { View, Text } from '@tarojs/components';
 import Page from '@components/page';
 import styles from './index.module.scss';
 import Taro from '@tarojs/taro';
+import { getCurrentInstance } from '@tarojs/taro';
 
 @inject('site')
 @inject('search')
@@ -21,8 +22,7 @@ import Taro from '@tarojs/taro';
 class SearchResultH5Page extends React.Component {
   constructor(props) {
     super(props);
-
-    const keyword = this.props.router.query.keyword || '';
+    const { keyword = '' } = getCurrentInstance().router.params;
 
     this.state = {
       keyword,
@@ -75,11 +75,12 @@ class SearchResultH5Page extends React.Component {
 
   render() {
     const { keyword } = this.state;
+    console.log(this.props.search, 'dssfdsf')
     const { searchTopics, searchUsers, searchThreads } = this.props.search;
     const { pageData: topicsPageData = [] } = searchTopics || {};
     const { pageData: usersPageData = [] } = searchUsers || {};
     const { pageData: threadsPageData = [] } = searchThreads || {};
-
+    console.log(usersPageData, 'usersPageData')
     return (
       <Page>
         <List className={styles.page} allowRefresh={false}>

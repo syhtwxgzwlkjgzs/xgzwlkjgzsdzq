@@ -5,25 +5,26 @@ import { readTopicsList } from '@server';
 import { Toast } from '@discuzq/design';
 import Page from '@components/page';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import { getCurrentInstance } from '@tarojs/taro';
 
 @inject('site')
 @inject('search')
 @observer
 class Index extends React.Component {
-  // static async getInitialProps(ctx) {
-  //   const search = ctx?.query?.keyword || '';
-  //   const topicFilter = {
-  //     hot: 0,
-  //     content: search,
-  //   };
-  //   const result = await readTopicsList({ params: { filter: topicFilter } });
+  static async getInitialProps(ctx) {
+    const search = ctx?.query?.keyword || '';
+    const topicFilter = {
+      hot: 0,
+      content: search,
+    };
+    const result = await readTopicsList({ params: { filter: topicFilter } });
 
-  //   return {
-  //     serverSearch: {
-  //       topics: result?.data,
-  //     },
-  //   };
-  // }
+    return {
+      serverSearch: {
+        topics: result?.data,
+      },
+    };
+  }
 
   page = 1;
   perPage = 10;
@@ -37,7 +38,8 @@ class Index extends React.Component {
 
   async componentDidMount() {
     const { search, router } = this.props;
-    const { keyword = '' } = router.query;
+    // const { keyword = '' } = router.query;
+    const { keyword = '' } = getCurrentInstance().router.params;
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasTopics = !!search.indexTopics;
 

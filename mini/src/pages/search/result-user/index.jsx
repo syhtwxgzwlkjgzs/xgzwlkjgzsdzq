@@ -5,21 +5,22 @@ import { readUsersList } from '@server';
 import { Toast } from '@discuzq/design';
 import Page from '@components/page';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import { getCurrentInstance } from '@tarojs/taro';
 
 @inject('site')
 @inject('search')
 @observer
 class Index extends React.Component {
-  // static async getInitialProps(ctx) {
-  //   const search = ctx?.query?.keyword || '';
-  //   const result = await readUsersList({ params: { filter: { username: search } } });
+  static async getInitialProps(ctx) {
+    const search = ctx?.query?.keyword || '';
+    const result = await readUsersList({ params: { filter: { username: search } } });
 
-  //   return {
-  //     serverSearch: {
-  //       users: result?.data,
-  //     },
-  //   };
-  // }
+    return {
+      serverSearch: {
+        users: result?.data,
+      },
+    };
+  }
 
   page = 1;
   perPage = 10;
@@ -27,13 +28,16 @@ class Index extends React.Component {
   constructor(props) {
     super(props);
     const { serverSearch, search } = this.props;
+    console.log(this.props, 'props')
     // 初始化数据到store中
     serverSearch && serverSearch.users && search.setUsers(serverSearch.users);
   }
 
   async componentDidMount() {
     const { search, router } = this.props;
-    const { keyword = '' } = router.query;
+    console.log(search, 'search');
+    // const { keyword = '' } = router.query;
+    const { keyword = '' } = getCurrentInstance().router.params;
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasUsers = !!search.indexUsers;
 
@@ -51,6 +55,7 @@ class Index extends React.Component {
   }
 
   dispatch = async (type, data) => {
+    console.log('dispatch', type, data)
     const { search } = this.props;
 
     if (type === 'refresh') {

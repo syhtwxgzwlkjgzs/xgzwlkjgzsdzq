@@ -30,7 +30,6 @@ class SearchH5Page extends React.Component {
     Taro.navigateTo({
       url: `/pages/search/result-post/index`
     })
-    this.props.router.push('/search/result-post');
   };
 
   redirectToSearchResultUser = () => {
