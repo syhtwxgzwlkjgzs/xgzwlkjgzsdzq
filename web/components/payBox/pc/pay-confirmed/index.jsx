@@ -17,7 +17,7 @@ export default class index extends Component {
 
   async componentDidMount() {
     try {
-      this.changePayment()
+      this.changePayment();
       // 获取微信二维码
       await this.props.payBox.wechatPayOrderQRCode();
       // 获取钱包用户信息
@@ -34,19 +34,21 @@ export default class index extends Component {
   };
 
   changePayment = (type = PAYWAY_MAP.WALLET) => {
-    this.setState({
-      isSelectedKey: type,
-    },() => {
-      this.handleChangePaymentType(type)
-    } );
+    this.setState(
+      {
+        isSelectedKey: type,
+      },
+      () => {
+        this.handleChangePaymentType(type);
+      },
+    );
   };
 
   onPasswordChange = (e) => {
     console.log(e.target.value);
-    console.log(e,'ssssssss_value');
-    if (isNaN(e.target.value)) return
-    this.props.payBox.password = e.target.value
-  }
+    if (isNaN(e.target.value)) return;
+    this.props.payBox.password = e.target.value;
+  };
 
   goSetPayPwa = () => {
     // Router.redirect({url: '/test/payoffpwd?title=设置支付密码'});
@@ -59,7 +61,7 @@ export default class index extends Component {
    * 选择支付方式
    */
   handleChangePaymentType = (type) => {
-    let value = type === PAYWAY_MAP.WX ? 10 : 20
+    let value = type === PAYWAY_MAP.WX ? 10 : 20;
     this.setState(
       {
         paymentType: value,
@@ -79,27 +81,23 @@ export default class index extends Component {
     if (this.state.paymentType === PAY_MENT_MAP.WALLET) {
       // 表示钱包支付
       // await this.props.payBox.walletPayEnsure();
-      console.log(this.props.payBox.password);
-      debugger
       if (!this.props.payBox.password) {
-        debugger
         Toast.error({
-          content: '请输入支付密码'
-        })
-        return
-      }
-      return
-      await this.props.payBox.walletPayOrder();
-        Toast.success({
-          content: '支付成功',
-          hasMask: false,
-          duration: 1000,
+          content: '请输入支付密码',
         });
-        // await this.props.payBox.clear();
+        return;
+      }
+      await this.props.payBox.walletPayOrder();
+      Toast.success({
+        content: '支付成功',
+        hasMask: false,
+        duration: 1000,
+      });
+      await this.props.payBox.clear();
     } else if (this.state.paymentType === PAY_MENT_MAP.WX_QRCODE) {
       // 表示微信支付
       console.log('进来了', 'sssssss_点击微信支付');
-     await this.props.payBox.wechatPayOrderQRCode();
+      await this.props.payBox.wechatPayOrderQRCode();
       // this.props.payBox.visible = false
     }
   };
@@ -172,8 +170,20 @@ export default class index extends Component {
             </div>
             <div className={styles.walletDec}>
               <span>支付密码</span>
-              <Input mode="password" className={styles.walletChangePwd} placeholder="请输入密码" value={this.props.payBox.password} onChange={this.onPasswordChange} />
-              <Button onClick={this.handlePayConfirmed} size="large" className={styles.walletConfirmBtn} type="primary" disabled={!this.props?.payBox?.password}>
+              <Input
+                mode="password"
+                className={styles.walletChangePwd}
+                placeholder="请输入密码"
+                value={this.props.payBox.password}
+                onChange={this.onPasswordChange}
+              />
+              <Button
+                onClick={this.handlePayConfirmed}
+                size="large"
+                className={styles.walletConfirmBtn}
+                type="primary"
+                disabled={!this.props?.payBox?.password}
+              >
                 确认支付
               </Button>
             </div>
@@ -219,7 +229,12 @@ export default class index extends Component {
             <div className={styles.payTab_bottom}>{this.renderDiffPaymementContent()}</div>
           </div>
           {/* 关闭按钮 */}
-          <div onClick={this.onCloseBtn} className={styles.paymentCloseBtn}>
+          <div
+            onClick={() => {
+              this.props.payBox.clear();
+            }}
+            className={styles.paymentCloseBtn}
+          >
             X
           </div>
         </div>

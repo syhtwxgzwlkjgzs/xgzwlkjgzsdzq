@@ -24,16 +24,21 @@ export default class index extends Component {
         <>
           <div className={styles.amountWrapper}>
             <CommonAccountContent currentPaymentData={options} />
-            <hr className={styles.acExplain_hr} /> 
+            <hr className={styles.acExplain_hr} />
             {/* 按钮区域-提交内容 */}
             <div className={styles.amountSubmit}>
-            <span>合计：￥ {amount} 元</span>
+              <span>合计：￥ {amount} 元</span>
               <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.asBtn}>
                 确认支付
               </Button>
             </div>
             {/* 关闭按钮 */}
-            <div onClick={this.onCloseBtn} className={styles.amountCloseBtn}>
+            <div
+              onClick={() => {
+                this.props.payBox.clear();
+              }}
+              className={styles.amountCloseBtn}
+            >
               X
             </div>
           </div>
