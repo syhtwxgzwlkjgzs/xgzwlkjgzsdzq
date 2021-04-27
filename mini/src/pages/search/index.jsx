@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import IndexH5Page from '../../layout/search';
 import { readUsersList, readTopicsList, readThreadList } from '@server';
 import { Toast } from '@discuzq/design';
-
+import Page from '@components/page';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
 @inject('site')
@@ -45,11 +45,15 @@ class Index extends React.Component {
       duration: 0,
     });
     await search.getSearchData({ hasTopics: hasIndexTopics, hasUsers: hasIndexUsers, hasThreads: hasIndexThreads });
-    // this.toastInstance?.destroy();
+    this.toastInstance?.destroy();
   }
 
   render() {
-    return <IndexH5Page dispatch={this.dispatch}/>;
+    return (
+      <Page>
+        <IndexH5Page dispatch={this.dispatch}/>
+      </Page>
+    );
   }
 }
 

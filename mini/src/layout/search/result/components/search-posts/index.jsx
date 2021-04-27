@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Post } from '../../../../../../components/search-result-item';
+import { Post } from '@components/search-result-item';
 
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
