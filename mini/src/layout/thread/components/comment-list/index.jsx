@@ -1,13 +1,13 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import { Icon } from '@discuzq/design';
 // import Avatar from '@components/avatar';
-import styles from './index.module.scss';
 import { diffDate } from '@common/utils/diff-date';
+import styles from './index.module.scss';
 import ReplyList from '../reply-list/index';
 
-
-
+@observer
 class CommentList extends React.Component {
     
     static async getInitialProps() {
@@ -18,13 +18,11 @@ class CommentList extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        isShowReward: true, // 是否展示获得多少悬赏金
+        isShowReward: false, // 是否展示获得多少悬赏金
         isShowRedPacket: false, // 是否展示获得多少红包
         isShowAdopt: false, // 是否展示采纳按钮
         isHideEdit: this.props.isHideEdit, // 隐藏评论编辑删除
         isShowOne: this.props.isShowOne || false, // 是否只显示一条评论回复
-        isLiked: this.props.data.isLiked,
-        likeCount: this.props.data.likeCount,
       };
       this.needReply = this.props.data.lastThreeComments;// 评论的回复
     }
@@ -41,13 +39,6 @@ class CommentList extends React.Component {
 
   // 点击评论赞
   likeClick() {
-    this.setState({
-      isLiked: !this.state.isLiked,
-    }, () => {
-      this.setState({
-        likeCount: this.state.isLiked ? this.state.likeCount + 1 : this.state.likeCount - 1,
-      });
-    });
     typeof this.props.likeClick === 'function' && this.props.likeClick();
   }
 
@@ -85,7 +76,19 @@ class CommentList extends React.Component {
     typeof this.props.reployAvatarClick === 'function' && this.props.reployAvatarClick(data);
   }
 
+  generatePermissions(data = {}) {
+    return {
+      canApprove: data.canApprove || false,
+      canDelete: data.canDelete || false,
+      canEdit: data.canEdit || false,
+      canHide: data.canLike || false,
+      canLike: data.canLike || false,
+    };
+  }
+
   render() {
+    const { canDelete, canEdit, canLike } = this.generatePermissions(this.props.data);
+
     return (
       <View className={styles.commentList}>
         <View className={styles.header}>
@@ -93,21 +96,21 @@ class CommentList extends React.Component {
             <View>
             {!this.state.isHideEdit
               && <View className={styles.extra}>
-                <View className={styles.revise} onClick={() => this.editClick()}>编辑</View>
-                <View className={styles.revise} onClick={() => this.deleteClick()}>删除</View>
+                {canEdit && <View className={styles.revise} onClick={() => this.editClick()}>编辑</View>}
+                {canDelete && <View className={styles.revise} onClick={() => this.deleteClick()}>删除</View>}
               </View>
             }
             </View>
             <View className={styles.headerRigth}>
               {
                 this.state.isShowReward
-                  ? <View>
+                ? <View>
                     <View className={styles.showMoneyNum}>
                       获得<Text className={styles.moneyNumber}>{6}</Text>元悬赏金
                     </View>
                   </View>
                   : ''
-              }
+                }
               {
                 this.state.isShowRedPacket
                   ? <View>
@@ -149,9 +152,9 @@ class CommentList extends React.Component {
               <View className={styles.commentBtn}>
                 <View className={styles.commentTime}>{diffDate(this.props.data.createdAt)}</View>
                 <View className={styles.extraBottom}>
-                  <View className={this.state.isLiked ? styles.commentLike : styles.commentLiked}>
-                    <Text onClick={() => this.likeClick()}>
-                      赞&nbsp;{this.state.likeCount > 0 ? this.state.likeCount : ''}
+                  <View className={this.props?.data?.isLiked ? styles.commentLike : styles.commentLiked}>
+                    <Text onClick={() => this.likeClick(canLike)}>
+                      赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
                     </Text>
                   </View>
                   <View className={styles.commentReply}>
@@ -174,19 +177,19 @@ class CommentList extends React.Component {
                     </View> : ''
               }
               {
-                this.needReply?.length > 0
+                this.props.data.lastThreeComments?.length > 0
                 && <View className={styles.replyList}>
                   {
                     this.state.isShowOne
                       ? <ReplyList
-                        data={this.needReply[0]}
-                        key={this.needReply[0].id}
-                        avatarClick={() => this.reployAvatarClick(this.needReply[0])}
-                        likeClick={() => this.replyLikeClick(this.needReply[0])}
-                        replyClick={() => this.replyReplyClick(this.needReply[0])}
+                        data={this.props.data.lastThreeComments[0]}
+                        key={this.props.data.lastThreeComments[0].id}
+                        avatarClick={() => this.reployAvatarClick(this.props.data.lastThreeComments[0])}
+                        likeClick={() => this.replyLikeClick(this.props.data.lastThreeComments[0])}
+                        replyClick={() => this.replyReplyClick(this.props.data.lastThreeComments[0])}
                         toCommentDetail={() => this.toCommentDetail()}>
                       </ReplyList>
-                      : (this.needReply || [])
+                      : (this.props.data.lastThreeComments || [])
                         .map((val, index) => (
                           <ReplyList
                             data={val}

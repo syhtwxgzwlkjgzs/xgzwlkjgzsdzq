@@ -200,12 +200,8 @@ class RenderCommentList extends React.Component {
 
   // 点击评论的赞
   async likeClick(data) {
-    console.log('哈哈哈啊哈');
-    Toast.success({
-      content: '这是赞啊',
-    });
     if (!data.id) return;
-
+    
     const params = {
       id: data.id,
       isLiked: !data.isLiked,
@@ -334,7 +330,7 @@ class RenderCommentList extends React.Component {
 
   onCommentClick = (data) => {
     Taro.navigateTo({
-      url: '/subPages/thread/comment/index',
+      url: `/subPages/thread/comment/index?id=${data.id}&threadId=${this.props.thread?.threadData?.id}`,
     });
   }
 
