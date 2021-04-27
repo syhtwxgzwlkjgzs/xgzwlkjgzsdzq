@@ -7,10 +7,9 @@
  import { View, Text, Image, Video } from '@tarojs/components';
  import styles from './index.module.scss';
  import { Icon } from '@discuzq/design';
- import classNames from 'classnames';
 
 const Index = (props) => {
-  const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, isRecording, onStart, onTagClick, tagContent } = props;
+  const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, onTagClick, tagContent } = props;
 
   // 标签展示
   const tag = (
@@ -79,58 +78,8 @@ const Index = (props) => {
     </View>
   );
 
-  // 录音组件
-  const hz = Array(9).fill('').map((item, index) => {
-    const defaultClass = styles[`audio-record__hz-${index + 1}`];
-    const animationClass = styles[`audio-record__hz-${index + 1}--animation`];
-    return (
-      <View
-        className={
-          classNames(
-            defaultClass,
-            {
-              [animationClass]: isRecording
-            }
-          )
-        }
-      >
-      </View>
-    );
-  });
-
-  const audioRecord = (
-    <View className={styles['audio-record']}>
-
-      {isRecording && <Text className={styles['record-duration']}>45S</Text>}
-
-      <View className={styles['record-area']}>
-        <View className={styles['hz-container']}>{hz}</View>
-        <View className={styles['record-btn']} onClick={onStart}>
-          <View className={styles['record-status']}>
-            {isRecording ? <View className={styles['recording-icon']}></View> : <Icon name='MicroOutlined' size={20} />}
-          </View>
-        </View>
-        <View className={styles['hz-container']}>{[].concat(hz).reverse()}</View>
-      </View>
-
-      <View className={styles['operation-area']}>
-        {isRecording ? (
-          <>
-            <Icon name='PlusOutlined' size={16} />
-            <Text className={styles['record-tips']}>录制中</Text>
-            <Icon name='PlusOutlined' size={16} />
-          </>
-        ) : (
-          <Text className={styles['record-tips']}>点击录音</Text>
-        )}
-      </View>
-    </View>
-  );
-
-
   switch (type) {
     case 'tag': return tag;
-    case 'audio-record': return audioRecord;
     case 'atta-upload': return attaUpload;
     case 'img-upload': return imgUpload;
     case 'video': return video;
