@@ -1,0 +1,56 @@
+@import '@common/styles/var.scss';
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.container {
+  overflow: hidden;
+  height: 165px;
+  position: relative;
+  .topBar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    box-sizing: border-box;
+    .goback{
+      transform: rotate(180deg);
+    }
+  }
+  .logoBox {
+    margin-top: 57.8px;
+    max-height: 40px;
+    overflow: hidden;
+    .logo {
+      display: block;
+      max-height: 40px;
+      margin: 0 auto;
+    }
+  }
+  .siteInfo {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 26px;
+    .text {
+      font-size: 16px;
+      color: var( --color-white);
+      opacity: 0.5;
+    }
+    .content {
+      font-size: 16px;
+      color: var( --color-white);
+      padding-left: 8px;
+    }
+    .shareIcon {
+      display: inline-block;
+      opacity: 0.5;
+      padding-right: 8px;
+    }
+  }
+}

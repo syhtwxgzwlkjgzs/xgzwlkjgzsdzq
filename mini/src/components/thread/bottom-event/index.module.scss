@@ -1,0 +1,52 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.user {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .userImg {
+    display: flex;
+    .numText {
+      line-height: 24px;
+      font-size: 12px;
+      color: #8490a8;
+      margin-left: 4px;
+    }
+  }
+  .commentSharing {
+    display: flex;
+    .division {
+      line-height: 24px;
+      font-size: 12px;
+      color: #8490a8;
+      margin: 0 4px;
+    }
+    .commentNum {
+      line-height: 24px;
+      font-size: 12px;
+      color: #8490a8;
+    }
+  }
+}
+
+.operation {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: var(--border-line-color) solid 1px;
+  margin-top: 12px;
+  .fabulous {
+    line-height: 20px;
+    .fabulousPost {
+      margin-left: 6px;
+      font-size: 14px;
+      line-height: 20px;
+      color: var(--color-text-secondary);
+      font-weight: normal;
+    }
+    .icon {
+      margin-bottom: 2px;
+    }
+  }
+}

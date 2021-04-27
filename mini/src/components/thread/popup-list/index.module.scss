@@ -1,0 +1,8 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.list {
+  overflow-y: auto;
+  max-height: 80vh;
+  min-height: 40vh;
+}
