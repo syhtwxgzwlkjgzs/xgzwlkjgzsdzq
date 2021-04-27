@@ -3,6 +3,8 @@ import styles from './index.module.scss';
 import { Video } from '@discuzq/design';
 import { noop } from '../utils';
 import { View, Text } from '@tarojs/components';
+import { getElementRect, randomStr } from './utils'
+import { useReady } from '@tarojs/taro'
 
 /**
  * 视频
@@ -27,6 +29,7 @@ const Index = ({
 }) => {
   let player = null;
   const ref = useRef();
+  const videoId = useRef(`video${randomStr()}`);
   const [rect, setRect] = useState({});
 
   const onReady = (ins) => {
@@ -34,12 +37,13 @@ const Index = ({
   };
 
   useEffect(() => {
-    const rect = ref.current.getBoundingClientRect();
-    setRect(rect);
+    getElementRect(videoId.current).then(res => {
+      setRect({ width: res?.width || 378 });
+    })
   }, []);
 
   return (
-    <View id="common-video-play" className={styles.container} ref={ref}>
+    <View id={videoId.current} className={styles.container} ref={ref}>
       <Video
         className={styles.videoBox}
         onReady={onReady}

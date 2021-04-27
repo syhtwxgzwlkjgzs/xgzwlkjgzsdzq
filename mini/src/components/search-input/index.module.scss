@@ -1,0 +1,39 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.inputWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 16px;
+  padding-right: 4px;
+  width: 100%;
+  height: 36px;
+  border-radius: 5px;
+  background-color: var(--background-color-text2);
+  box-sizing: border-box;
+  .input {
+    flex: 1;
+    margin-left: 0.6px;
+    background-color: transparent;
+    width: inherit;
+    input {
+      border: 0;
+      background-color: inherit;
+      font-size: var(--font-size-primary);
+      line-height: var(--font-line-height-primary);
+    }
+  }
+}
+.cancel {
+  margin-left: 16px;
+  font-size: var(--font-size-primary);
+  line-height: var(--font-line-height-primary);
+  color: var(--color-text-secondary);
+  word-break: keep-all;
+}
