@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Popup, Icon } from '@discuzq/design';
+import { Popup, Icon,Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import { Button, View, Text, Checkbox } from '@tarojs/components';
-import PayConfirmed from '../pay-confirmed/index';
 import { ORDER_TRADE_TYPE } from '../../../../../common/constants/payBoxStoreConstants';
 @inject('payBox')
 @observer
@@ -16,7 +15,6 @@ export default class AmountRecognized extends Component {
     };
   }
 
-  componentDidMount() {}
 
   /**
    * 渲染不同交易类型
@@ -44,8 +42,18 @@ export default class AmountRecognized extends Component {
     return value;
   };
 
-  // 点击支付去到
-  goToThePayConfirmPage = () => {};
+  // 点击支付去到 选择支付方式页面
+  goToThePayConfirmPage = async () => {
+    try {
+      await this.props.payBox.createOrder();
+    } catch (error) {
+      Toast.error({
+        content: error.Message,
+        hasMask: false,
+        duration: 1000,
+      });
+    }
+  };
 
   renderContent = () => {
     const { isNotShowTitle, titleName } = this.state;
@@ -95,7 +103,7 @@ export default class AmountRecognized extends Component {
         {this.renderContent()}
         {/* 按钮区域-提交内容 */}
         <View className={styles.amountSubmit}>
-          <Button type="primary" className={styles.asBtn}>
+          <Button onClick={this.goToThePayConfirmPage} type="primary" className={styles.asBtn}>
             支付 ￥{amount}
           </Button>
         </View>

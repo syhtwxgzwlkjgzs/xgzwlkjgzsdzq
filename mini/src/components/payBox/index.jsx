@@ -5,7 +5,9 @@ import { inject, observer } from 'mobx-react';
 import EventEmitter from 'eventemitter3';
 import { View } from '@tarojs/components';
 import { STEP_MAP } from '../../../../common/constants/payBoxStoreConstants';
-import AmountRecognized from './amount-recognized'
+import AmountRecognized from './amount-recognized';
+import PayConfirmed from './pay-confirmed';
+import PayPwd from './payPwd'
 
 class PayBoxEmitter extends EventEmitter {}
 
@@ -31,7 +33,7 @@ export default class PayBox extends Component {
     this.props.payBox.options = {
       ...options.data,
     };
-    const noop = () => {}
+    const noop = () => {};
     this.props.payBox.onSuccess = options.success || noop;
     this.props.payBox.onFailed = options.failed || noop;
     this.props.payBox.onCompleted = options.completed || noop;
@@ -49,12 +51,14 @@ export default class PayBox extends Component {
             this.props.payBox.visible = false;
           }}
         >
-          {
-            this.props.payBox.step === STEP_MAP.SURE && <AmountRecognized />
-          }
+          {this.props.payBox.step === STEP_MAP.SURE && <AmountRecognized />}
+          {this.props.payBox.step === STEP_MAP.PAYWAY && <PayConfirmed />}
         </Popup>
+        {(this.props.payBox.step === STEP_MAP.WALLET_PASSWORD || this.props.payBox.step === STEP_MAP.SET_PASSWORD) && (
+          <PayPwd />
+        )}
       </View>
-    )
+    );
   }
 }
 

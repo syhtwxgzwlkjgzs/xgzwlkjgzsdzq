@@ -22,7 +22,6 @@ class PayPassword extends React.Component {
   componentDidMount() {}
 
   keyboardClickHander(e) {
-    console.log(e, 'sssssssss_e');
     // const key = e.target.getAttribute('data-key');
     const key = e.target.dataset?.key;
     if (key == null) {
@@ -49,34 +48,7 @@ class PayPassword extends React.Component {
   }
 
   async submitPwa() {
-    const { list } = this.state;
-    const { router, user } = this.props;
-    const { userInfo } = user;
-    const { id } = userInfo;
-    const { query } = router;
-    const { token = '' } = query;
-    ('');
-    const data = {
-      id,
-      payPasswordToken: token,
-      payPassword: list.join(''),
-      payPasswordConfirmation: list.join(''),
-    };
 
-    const target = Toast.loading({
-      content: '提交中...',
-      duration: 0,
-    });
-
-    const result = await user.updateUserInfo(id);
-    target.hide();
-    if (result) {
-      Toast.error({
-        content: '更新用户信息错误！',
-        duration: 1000,
-      });
-    }
-    router.back();
   }
 
   renderPwdItem() {
