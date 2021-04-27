@@ -1,12 +1,14 @@
 import React from 'react';
 import styles from './index.module.scss';
-import { Toast } from '@discuzq/design';
+import { Toast, Dialog } from '@discuzq/design';
 // import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 import { inject, observer } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
+import { STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
 
 @inject('site')
 @inject('user')
+@inject('payBox')
 @observer
 class PayPassword extends React.Component {
   constructor(props) {
@@ -40,7 +42,7 @@ class PayPassword extends React.Component {
         },
         () => {
           if (this.state.list.length === 6) {
-            // this.submitPwa();
+            this.submitPwa();
           }
         },
       );
@@ -48,13 +50,55 @@ class PayPassword extends React.Component {
   }
 
   async submitPwa() {
-
+    let { list = [] } = this.state;
+    let pwd = list.join('');
+    this.props.payBox.password = pwd;
+    if (this.props.payBox.step === STEP_MAP.WALLET_PASSWORD) {
+      // 表示钱包支付密码
+      console.log('进来了', 'ssssss_钱包支付阶段');
+      try {
+        await this.props.payBox.walletPayOrder();
+        Toast.success({
+          content: '支付成功',
+          hasMask: false,
+          duration: 1000,
+        });
+        await this.props.payBox.clear();
+      } catch (error) {
+        console.log(error, 'sssssssssss_钱包支付异常回调');
+        Toast.error({
+          content: '支付失败，请重新输入',
+          hasMask: false,
+          duration: 1000,
+        });
+        this.setState({
+          list: [],
+        });
+      }
+    } else if (this.props.payBox.step === STEP_MAP.SET_PASSWORD) {
+      //表示设置支付密码
+      console.log('进来了', 'ssssss_设置密码阶段');
+      try {
+        let id = this.props.user.id;
+        if (!id) return;
+        await this.props.payBox.setPayPassword(id);
+        await this.props.user.updateUserInfo(id);
+        this.props.payBox.step = STEP_MAP.PAYWAY;
+        this.props.payBox.visible = true;
+      } catch (error) {
+        console.log(error, 'sssssssssss_设置支付密码异常回调');
+      }
+    }
   }
 
   renderPwdItem() {
-    const { list } = this.state;
+    const { list = [] } = this.state;
+    const { whetherIsShowPwdBox = true } = this.props;
     const nodeList = list.map((item, key) => (
-      <View className={`${styles.payListItem} ${styles.activation}`} key={key}>
+      <View
+        className={`${styles.payListItem} ${styles.activation} ${whetherIsShowPwdBox && styles.payListItem01}`}
+        key={key}
+      >
         {'*'}
       </View>
     ));
@@ -63,9 +107,16 @@ class PayPassword extends React.Component {
       for (let i = nodeList.length; i < 6; i++) {
         if (!curr) {
           curr = true;
-          nodeList.push(<View className={`${styles.payListItem} ${styles.curr}`} key={i}></View>);
+          nodeList.push(
+            <View
+              className={`${styles.payListItem} ${styles.curr} ${whetherIsShowPwdBox && styles.payListItem01}`}
+              key={i}
+            ></View>,
+          );
         } else {
-          nodeList.push(<View className={styles.payListItem} key={i}></View>);
+          nodeList.push(
+            <View className={`${styles.payListItem} ${whetherIsShowPwdBox && styles.payListItem01}`} key={i}></View>,
+          );
         }
       }
     }
@@ -73,12 +124,36 @@ class PayPassword extends React.Component {
     return nodeList;
   }
 
+  // 渲染弹窗形式支付
+  renderDialogPayment = () => {
+    return (
+      <Dialog className={styles.dialogPaymentWrapper} visible={true} position="center" maskClosable={true}>
+        <View className={styles.title}>{this.showTitle() || '输入支付密码'}</View>
+        <View className={styles.payList}>{this.renderPwdItem()}</View>
+      </Dialog>
+    );
+  };
+
+  showTitle = () => {
+    const { step } = this.props?.payBox;
+    let title = '输入支付密码';
+    switch (step) {
+      case STEP_MAP.WALLET_PASSWORD: // 表示钱包支付
+        title = '输入支付密码';
+        break;
+      case STEP_MAP.SET_PASSWORD: // 表示设置支付密码
+        title = '设置支付密码';
+        break;
+      default:
+        break;
+    }
+    return title;
+  };
+
   render() {
-    const { setPwdTitle } = this.props;
     return (
       <View>
-        <Text className={styles.title}>{setPwdTitle || '输入支付密码'}</Text>
-        <View className={styles.payList}>{this.renderPwdItem()}</View>
+        {this.renderDialogPayment()}
         <View className={styles.keyboard} onClick={this.keyboardClickHander}>
           <View className={styles.line}>
             <View data-key="1" className={styles.column}>

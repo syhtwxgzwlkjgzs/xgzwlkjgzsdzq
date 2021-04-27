@@ -1,35 +1,9 @@
 @import '@common/styles/variable/index.scss';
+@import '@common/styles/mixin/index.scss';
 
-.title{
-  color: var(--color-text-primary);
-  font-size: 16px;
-  padding: 16px;
-  margin-top: 16px;
-}
-
-.payList{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px;
-  .payListItem{
-    border-bottom: var(--border-border);
-    width: 46px;
-    height: 49px;
-    text-align: center;
-    line-height: 49px;
-    font-size: 24px;
-    &:not(:last-child) {
-      margin-right: 8px;
-    }
-
-    &.curr{
-      border-bottom-color: var(--color-black);
-    }
-    &.activation{
-      border-bottom-color: var(--color-black);
-    }
-  }
+.dialogPaymentWrapper {
+  width: 100%;
+  min-height: 500px;
 }
 
 .keyboard{
@@ -37,6 +11,8 @@
   position: fixed;
   left: 0;
   bottom: 0;
+  z-index: 1111;
+  background-color: #fff;
   .line{
     display: flex;
     align-items: center;
@@ -64,6 +40,56 @@
       border-right: none;
       line-height: 50px;
       background: #ededed;
+    }
+  }
+}
+
+.title{
+  color: var(--color-text-primary);
+  font-size: 20px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.payList{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  .payListItem{
+    border-bottom: var(--border-border);
+    width: 46px;
+    height: 49px;
+    text-align: center;
+    line-height: 49px;
+    font-size: 50px;
+    &:not(:last-child) {
+      margin-right: 8px;
+    }
+
+    &.curr{
+      border-bottom-color: #C5C6CA;
+    }
+    &.activation{
+      border-bottom-color: #C5C6CA;
+    }
+  }
+  .payListItem01 {
+    border: var(--border-border);
+    width: 46px;
+    height: 49px;
+    text-align: center;
+    line-height: 69px;
+    font-size: 50px;
+    &:not(:last-child) {
+      margin-right: 8px;
+    }
+
+    &.curr{
+      border-color: #C5C6CA;
+    }
+    &.activation{
+      border-color: #C5C6CA;
     }
   }
 }
