@@ -31,7 +31,7 @@ class MiniAuth extends React.Component {
   }
 
   getUserProfileCallback = async (params) => {
-    const { inviteCode } = getCurrentInstance().router.params;
+    const { inviteCode = '' } = getCurrentInstance().router.params;
     try {
       await this.getParamCode();
       // 小程序登录
@@ -44,7 +44,12 @@ class MiniAuth extends React.Component {
           inviteCode
         },
       });
-      console.log(params);
+      console.log({
+        jsCode: this.props.commonLogin.jsCode,
+        iv: params.iv,
+        encryptedData: params.encryptedData,
+        inviteCode
+      });
       console.log(resp);
       checkUserStatus(resp);
       // 优先判断是否能登录

@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action } from 'mobx';
 import { get } from '../../utils/get';
 
 
@@ -13,6 +13,7 @@ export default class commonLoginStore {
     @observable needToCompleteExtraInfo = false;
     @observable needToBindPhone = false;
     @observable needToBindWechat = false;
+    @observable needToBindMini = false;
     @observable sessionToken = '';
     @observable statusMessage = '';
     @observable nickName = '';

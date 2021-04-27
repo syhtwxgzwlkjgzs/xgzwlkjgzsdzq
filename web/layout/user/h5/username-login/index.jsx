@@ -9,6 +9,7 @@ import Header from '@components/header';
 import { NEED_BIND_WEIXIN_FLAG, NEED_BIND_PHONE_FLAG } from '@common/store/login/user-login-store';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
+import { genMiniScheme } from '@server';
 
 @inject('site')
 @inject('user')
@@ -25,11 +26,27 @@ class LoginH5Page extends React.Component {
     this.props.userLogin.password = e.target.value;
   };
 
-  loginErrorHandler = (e) => {
-    // TODO: 完善完这里的所有逻辑
-    if (e.Code === NEED_BIND_WEIXIN_FLAG) {
+  loginErrorHandler = async (e) => {
+    // 微信绑定，跳入微信扫码绑定
+    if (e.Code === NEED_BIND_WEIXIN_FLAG && this.props.site.wechatEnv === 'openPlatform') {
       this.props.commonLogin.needToBindWechat = true;
       this.props.router.push(`/user/wx-bind-qrcode?sessionToken=${e.sessionToken}&loginType=username&nickname=${e.nickname}`);
+      return;
+    }
+
+    // 微信绑定，跳入小程序绑定
+    if (e.Code === NEED_BIND_WEIXIN_FLAG && this.props.site.wechatEnv === 'miniProgram') {
+      this.props.commonLogin.needToBindMini = true;
+      const resp = await genMiniScheme();
+      if (resp.code === 0) {
+        window.location.href = get(resp, 'data.openLink', '');
+        return;
+      }
+      Toast.error({
+        content: '网络错误',
+        hasMask: false,
+        duration: 1000,
+      });
       return;
     }
 
