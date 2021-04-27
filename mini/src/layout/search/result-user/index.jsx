@@ -4,10 +4,10 @@ import { withRouter } from 'next/router';
 
 import SearchInput from '@components/search-input';
 import SearchUsers from './components/search-users';
-import Header from '@components/header';
 
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
+import Page from '@components/page';
 
 @inject('site')
 @inject('search')
@@ -69,6 +69,7 @@ class SearchResultUserH5Page extends React.Component {
     const { users } = this.props.search;
     const { pageData } = users || { pageData: [] };
     return (
+    <Page>
       <View className={styles.page}>
         <View className={styles.searchInput}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
@@ -81,6 +82,7 @@ class SearchResultUserH5Page extends React.Component {
           onItemClick={this.onUserClick}
         />
       </View>
+    </Page>
     );
   }
 }

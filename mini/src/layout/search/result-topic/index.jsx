@@ -4,10 +4,10 @@ import { withRouter } from 'next/router';
 
 import SearchInput from '@components/search-input';
 import SearchTopics from './components/search-topics';
-import Header from '@components/header';
 
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
+import Page from '@components/page';
 
 @inject('search')
 @observer
@@ -68,18 +68,20 @@ class SearchResultTopicH5Page extends React.Component {
     const { topics } = this.props.search;
     const { pageData } = topics || { pageData: [] };
     return (
-      <View className={styles.page}>
-        <View className={styles.searchInput}>
-          <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
+      <Page>
+        <View className={styles.page}>
+          <View className={styles.searchInput}>
+            <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
+          </View>
+          <SearchTopics
+            data={pageData}
+            refreshing={refreshing}
+            onRefresh={this.refreshData}
+            onFetchMore={this.fetchMoreData}
+            onItemClick={this.onTopicClick}
+          />
         </View>
-        <SearchTopics
-          data={pageData}
-          refreshing={refreshing}
-          onRefresh={this.refreshData}
-          onFetchMore={this.fetchMoreData}
-          onItemClick={this.onTopicClick}
-        />
-      </View>
+      </Page>
     );
   }
 }

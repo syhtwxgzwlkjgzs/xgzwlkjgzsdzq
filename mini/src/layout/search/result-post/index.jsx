@@ -7,14 +7,13 @@ import SearchPosts from './components/search-posts';
 
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
+import Page from '@components/page';
 
 @inject('site')
 @observer
 class SearchResultPostH5Page extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props);
-    console.log(this.props.children, this.props.myText, '111')
     const keyword = '';
 
     this.state = {
@@ -41,7 +40,6 @@ class SearchResultPostH5Page extends React.Component {
   };
 
   fetchMoreData = () => {
-    // const { keyword } = this.state;
     setTimeout(() => {
       this.setState(({ data }) => ({
         data: data.concat(getData(2)),
@@ -64,18 +62,20 @@ class SearchResultPostH5Page extends React.Component {
     const { keyword, data, refreshing } = this.state;
 
     return (
-      <View className={styles.page}>
-        <View className={styles.searchInput}>
-          <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
+      <Page>
+        <View className={styles.page}>
+          <View className={styles.searchInput}>
+            <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
+          </View>
+          <SearchPosts
+            data={data}
+            refreshing={refreshing}
+            onRefresh={this.refreshData}
+            onFetchMore={this.fetchMoreData}
+            onItemClick={this.onPostClick}
+          />
         </View>
-        <SearchPosts
-          data={data}
-          refreshing={refreshing}
-          onRefresh={this.refreshData}
-          onFetchMore={this.fetchMoreData}
-          onItemClick={this.onPostClick}
-        />
-      </View>
+      </Page>
     );
   }
 }

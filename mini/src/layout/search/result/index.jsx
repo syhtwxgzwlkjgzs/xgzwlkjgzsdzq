@@ -2,7 +2,6 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 
-// import SearchInput from '@components/search-input';
 import SearchInput from '@components/search-input';
 import SectionTitle from './components/section-title';
 import SearchPosts from './components/search-posts';
@@ -11,6 +10,7 @@ import SearchUsers from './components/search-users';
 import { View, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
+import Page from '@components/page';
 
 @inject('site')
 @observer
@@ -29,14 +29,12 @@ class SearchResultH5Page extends React.Component {
   }
 
   redirectToSearchResultPost = () => {
-    // this.props.router.push(`/search/result-post?keyword=${this.state.keyword || ''}`);
     Taro.navigateTo({
       url: `/pages/search/result-post/index?keyword=${this.state.keyword || ''}`
     })
   };
 
   redirectToSearchResultUser = () => {
-    // this.props.router.push(`/search/result-user?keyword=${this.state.keyword || ''}`);
     Taro.navigateTo({
       url: `/pages/search/result-user/index?keyword=${this.state.keyword || ''}`
     })
@@ -46,11 +44,9 @@ class SearchResultH5Page extends React.Component {
     Taro.navigateTo({
       url: `/pages/search/result-topic/index?keyword=${this.state.keyword || ''}`
     })
-    // this.props.router.push(`/search/result-topic?keyword=${this.state.keyword || ''}`);
   };
 
   onCancel = () => {
-    // this.props.router.back();
     Taro.navigateBack({ delta: 1});
   };
 
@@ -73,25 +69,27 @@ class SearchResultH5Page extends React.Component {
     const { keyword } = this.state;
 
     return (
-      <View className={styles.page}>
-        <View className={styles.searchInput}>
-          <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
+      <Page>
+        <View className={styles.page}>
+          <View className={styles.searchInput}>
+            <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
+          </View>
+          <View className={styles.section}>
+            <SectionTitle title="用户" onShowMore={this.redirectToSearchResultUser} />
+          </View>
+          <SearchUsers data={SearchUsersData} onItemClick={this.onUserClick} />
+          <View className={styles.hr}></View>
+          <View className={styles.section}>
+            <SectionTitle title="主题" onShowMore={this.redirectToSearchResultPost} />
+          </View>
+          <SearchPosts data={Array(2).fill('')} onItemClick={this.onPostClick} />
+          <View className={styles.hr}></View>
+          <View className={styles.section}>
+            <SectionTitle title="话题" onShowMore={this.redirectToSearchResultTopic} />
+          </View>
+          <SearchTopics data={SearchTopicsData} onItemClick={this.onTopicClick} />
         </View>
-        <View className={styles.section}>
-          <SectionTitle title="用户" onShowMore={this.redirectToSearchResultUser} />
-        </View>
-        <SearchUsers data={SearchUsersData} onItemClick={this.onUserClick} />
-        <View className={styles.hr}></View>
-        <View className={styles.section}>
-          <SectionTitle title="主题" onShowMore={this.redirectToSearchResultPost} />
-        </View>
-        <SearchPosts data={Array(2).fill('')} onItemClick={this.onPostClick} />
-        <View className={styles.hr}></View>
-        <View className={styles.section}>
-          <SectionTitle title="话题" onShowMore={this.redirectToSearchResultTopic} />
-        </View>
-        <SearchTopics data={SearchTopicsData} onItemClick={this.onTopicClick} />
-      </View>
+      </Page>
     );
   }
 }

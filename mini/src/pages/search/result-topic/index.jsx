@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/search/result-topic';
 import { readTopicsList } from '@server';
 import { Toast } from '@discuzq/design';
-
+import Page from '@components/page';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
 @inject('site')
@@ -69,7 +69,11 @@ class Index extends React.Component {
 
   render() {
 
-    return <IndexH5Page dispatch={this.dispatch} />;
+    return (
+      <Page>
+        <IndexH5Page dispatch={this.dispatch} />
+      </Page>
+    );
   }
 }
 
