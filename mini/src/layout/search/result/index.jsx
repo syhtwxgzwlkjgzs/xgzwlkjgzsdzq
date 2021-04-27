@@ -2,23 +2,27 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 
+// import SearchInput from '@components/search-input';
 import SearchInput from '@components/search-input';
+import List from '@components/list';
 import SectionTitle from './components/section-title';
 import SearchPosts from './components/search-posts';
 import SearchTopics from './components/search-topics';
 import SearchUsers from './components/search-users';
+import NoData from '@components/no-data';
 import { View, Text } from '@tarojs/components';
-import Taro from '@tarojs/taro';
-import styles from './index.module.scss';
 import Page from '@components/page';
+import styles from './index.module.scss';
+import Taro from '@tarojs/taro';
 
 @inject('site')
+@inject('search')
 @observer
 class SearchResultH5Page extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props);
-    const keyword = '';
+
+    const keyword = this.props.router.query.keyword || '';
 
     this.state = {
       keyword,
@@ -50,13 +54,17 @@ class SearchResultH5Page extends React.Component {
     Taro.navigateBack({ delta: 1});
   };
 
-  searchData = keyword => console.log('search', keyword);
+  searchData = (keyword) => {
+    const { dispatch } = this.props;
+    dispatch('search', keyword);
+  };
 
   onSearch = (keyword) => {
     // query 更新
     this.props.router.replace(`/search/result?keyword=${keyword}`);
-    this.setState({ keyword });
-    this.searchData(keyword);
+    this.setState({ keyword }, () => {
+      this.searchData(keyword);
+    });
   };
 
   onUserClick = data => console.log('user click', data);
@@ -67,36 +75,50 @@ class SearchResultH5Page extends React.Component {
 
   render() {
     const { keyword } = this.state;
+    const { searchTopics, searchUsers, searchThreads } = this.props.search;
+    const { pageData: topicsPageData = [] } = searchTopics || {};
+    const { pageData: usersPageData = [] } = searchUsers || {};
+    const { pageData: threadsPageData = [] } = searchThreads || {};
 
     return (
       <Page>
-        <View className={styles.page}>
+        <List className={styles.page} allowRefresh={false}>
           <View className={styles.searchInput}>
             <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
           </View>
           <View className={styles.section}>
             <SectionTitle title="用户" onShowMore={this.redirectToSearchResultUser} />
           </View>
-          <SearchUsers data={SearchUsersData} onItemClick={this.onUserClick} />
+          {
+            usersPageData?.length
+              ? <SearchUsers data={usersPageData} onItemClick={this.onUserClick} />
+              : <NoData />
+          }
+
           <View className={styles.hr}></View>
           <View className={styles.section}>
             <SectionTitle title="主题" onShowMore={this.redirectToSearchResultPost} />
           </View>
-          <SearchPosts data={Array(2).fill('')} onItemClick={this.onPostClick} />
+          {
+            threadsPageData?.length
+              ? <SearchPosts data={threadsPageData} onItemClick={this.onPostClick} />
+              : <NoData />
+          }
+
           <View className={styles.hr}></View>
           <View className={styles.section}>
             <SectionTitle title="话题" onShowMore={this.redirectToSearchResultTopic} />
           </View>
-          <SearchTopics data={SearchTopicsData} onItemClick={this.onTopicClick} />
-        </View>
+          {
+            topicsPageData?.length
+              ? <SearchTopics data={topicsPageData} onItemClick={this.onTopicClick} />
+              : <NoData />
+          }
+
+        </List>
       </Page>
     );
   }
 }
-const SearchUsersData = [{ name: 'user1' }, { name: 'user1' }];
-const SearchTopicsData = [
-  { title: '#dasda#1', content: '#dasda#', hotCount: 2, contentCount: 3 },
-  { title: '#dasda#2', content: '#dasda#', hotCount: 2, contentCount: 3 },
-];
 
 export default withRouter(SearchResultH5Page);

@@ -35,7 +35,7 @@ class Index extends React.Component {
     const { search, router } = this.props;
     const { keyword = '' } = router.query;
     // 当服务器无法获取数据时，触发浏览器渲染
-    const hasUsers = !!search.users;
+    const hasUsers = !!search.indexUsers;
 
     if (!hasUsers) {
       this.toastInstance = Toast.loading({
