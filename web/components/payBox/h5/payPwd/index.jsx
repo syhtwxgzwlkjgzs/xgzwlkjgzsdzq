@@ -1,9 +1,10 @@
 import React from 'react';
 import styles from './index.module.scss';
 import Header from '@components/header';
-import { Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import CommonPayoffPwd from '../../components/common-paypwd-content';
+import { Dialog, Toast } from '@discuzq/design';
+import { PAY_BOX_ERROR_CODE_MAP, STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
 
 @inject('site')
 @inject('user')
@@ -32,7 +33,7 @@ class Index extends React.Component {
         },
         () => {
           if (this.state.list.length === 6) {
-            console.log('进来了','ssssssssssss_01');
+            console.log('进来了', 'ssssssssssss_01');
             this.submitPwa();
             alert(`设置成功,密码为${this.state.list.join(',')}`);
           }
@@ -50,7 +51,7 @@ class Index extends React.Component {
     if (key == null) {
       return null;
     }
-    const { list } = this.state;
+    const { list = [] } = this.state;
 
     if (key === '-1') {
       this.setState({
@@ -71,50 +72,64 @@ class Index extends React.Component {
   }
 
   async submitPwa() {
-    let { list = [] } = this.state
-    let pwd = list.join('')
-    this.props.payBox.password = pwd
-   try {
-    await this.props.payBox.walletPayOrder()
-   } catch (error) {
-     console.log(error,'sssssssssss_输入完成密码回调');
-   }
-    // const { list } = this.state;
-    // const { router, user } = this.props;
-    // const { userInfo } = user;
-    // const { id } = userInfo;
-    // const { query } = router;
-    // const { token = '' } = query;
-    // ('');
-    // const data = {
-    //   id,
-    //   payPasswordToken: token,
-    //   payPassword: list.join(''),
-    //   payPasswordConfirmation: list.join(''),
-    // };
-    // if (!id) return;
-    // const target = Toast.loading({
-    //   content: '提交中...',
-    //   duration: 0,
-    // });
-
-    // const result = await user.updateUserInfo(id);
-    // target.hide();
-    // if (result) {
-    //   Toast.error({
-    //     content: '更新用户信息错误！',
-    //     duration: 1000,
-    //   });
-    // }
-    // router.back();
+    let { list = [] } = this.state;
+    let pwd = list.join('');
+    this.props.payBox.password = pwd;
+    if (this.props.payBox.step === STEP_MAP.WALLET_PASSWORD) {
+      // 表示钱包支付密码
+      console.log('进来了', 'ssssss_钱包支付阶段');
+      try {
+        await this.props.payBox.walletPayOrder();
+        Toast.success({
+          content: '支付成功',
+          hasMask: false,
+          duration: 1000,
+        });
+        await this.props.payBox.clear();
+      } catch (error) {
+        console.log(error, 'sssssssssss_钱包支付异常回调');
+        Toast.error({
+          content: '支付失败，请重新输入',
+          hasMask: false,
+          duration: 1000,
+        });
+        this.setState({
+          list: [],
+        });
+      }
+    } else if (this.props.payBox.step === STEP_MAP.SET_PASSWORD) {
+      //表示设置支付密码
+      console.log('进来了', 'ssssss_设置密码阶段');
+      try {
+        let id = this.props.user.id;
+        if (!id) return;
+        await this.props.payBox.setPayPassword(id);
+        await this.props.user.updateUserInfo(id);
+        this.props.payBox.step = STEP_MAP.PAYWAY;
+        this.props.payBox.visible = true;
+      } catch (error) {
+        console.log(error, 'sssssssssss_设置支付密码异常回调');
+      }
+    }
   }
+
+  // 渲染弹窗形式支付
+  renderDialogPayment = () => {
+    const { list = [] } = this.state;
+    return (
+      <Dialog className={{}} visible={true} position="center" maskClosable={true}>
+        <CommonPayoffPwd list={list} updatePwd={this.updatePwd} whetherIsShowPwdBox={true} />
+      </Dialog>
+    );
+  };
 
   render() {
     const { list = [] } = this.state;
     return (
       <div>
-        <Header />
-        <CommonPayoffPwd list={list} updatePwd={this.updatePwd} />
+        {/* <Header /> */}
+        {/* <CommonPayoffPwd list={list} updatePwd={this.updatePwd} /> */}
+        {this.renderDialogPayment()}
         <div className={styles.keyboard} onClick={this.keyboardClickHander}>
           <div className={styles.line}>
             <div data-key="1" className={styles.column}>

@@ -42,8 +42,8 @@ class Index extends React.Component {
     PayBox.createPayBox({
       data: {
         amount: 0.1,
-        type: 3,
-        threadId: 5,
+        type: 5,
+        threadId: 4,
         payeeId: 16,
         isAnonymous: false,
       },

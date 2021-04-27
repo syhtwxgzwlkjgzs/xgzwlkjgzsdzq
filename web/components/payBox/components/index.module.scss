@@ -60,10 +60,28 @@
     }
 
     &.curr{
-      border-bottom-color: var(--color-black);
+      border-bottom-color: #C5C6CA;
     }
     &.activation{
-      border-bottom-color: var(--color-black);
+      border-bottom-color: #C5C6CA;
+    }
+  }
+  .payListItem01 {
+    border: var(--border-border);
+    width: rem(46);
+    height: rem(49);
+    text-align: center;
+    line-height: rem(69);
+    font-size: rem(50);
+    &:not(:last-child) {
+      margin-right: rem($margin-2n);
+    }
+
+    &.curr{
+      border-color: #C5C6CA;
+    }
+    &.activation{
+      border-color: #C5C6CA;
     }
   }
 }
