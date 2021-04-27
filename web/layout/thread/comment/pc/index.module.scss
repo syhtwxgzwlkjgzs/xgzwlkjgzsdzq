@@ -19,38 +19,38 @@
   justify-content: center;
 
   .bodyLeft {
-    padding: 50px;
+    padding: rem(50);
     width: rem(750);
     margin-right: rem(20);
-    background: #fff;
+    background: var(--color-white);
   }
   .bodyRigth {
     width: rem(300);
 
     .authorInfo {
       width: 100%;
-      min-height: rem(290);
+      height: rem(290);
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #fff;
+      background: var(--color-white);
       margin-bottom: rem(20);
     }
     .recommend {
       width: 100%;
-      background: #fff;
+      background: var(--color-white);
     }
   }
 }
 
 .back {
-  font-size: rem(14);
-  color: #8590a6;
+  font-size: rem($font-size-primary);
+  color: var(--color-text-secondary);
   cursor: pointer;
   display: flex;
   align-items: center;
 
   span {
-    margin-left: rem(4);
+    margin-left: rem($margin-1n);
   }
 }

@@ -95,21 +95,8 @@
   font-size: rem($font-size-primary);
 }
 
-.liked {
-  display: flex;
-  align-items: center;
-
-  span {
-    margin-left: rem($margin-2n);
-  }
-}
-
-.isLiked {
-  color: var(--color-primary);
-}
-
 .likeReward {
-  margin-left: rem($margin-4n);
+  margin-right: rem($margin-2n);
 }
 
 .examine {
@@ -119,3 +106,29 @@
   text-align: center;
   font-size: rem(14);
 }
+
+
+.bottomOperate {
+  padding: 0 rem(54);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: rem($font-size-primary);
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    
+    span {
+      margin-left: rem($margin-2n);
+    }
+
+    &.active {
+      color: var(--color-primary) !important;
+    }
+  }
+}
+

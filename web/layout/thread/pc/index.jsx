@@ -29,6 +29,7 @@ import AttachmentView from '@components/thread/attachment-view';
 import throttle from '@common/utils/thottle';
 import classnames from 'classnames';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
+import BottomEvent from '@components/thread/bottom-event';
 
 const typeMap = {
   101: 'IMAGE',
@@ -78,6 +79,14 @@ const RenderThreadContent = observer((props) => {
 
   const onLikeClick = () => {
     typeof props.onLikeClick === 'function' && props.onLikeClick();
+  };
+
+  const onCollectionClick = () => {
+    typeof props.onCollectionClick === 'function' && props.onCollectionClick();
+  };
+
+  const onShareClick = () => {
+    typeof props.onShareClick === 'function' && props.onShareClick();
   };
 
   const onBuyClick = (url) => {
@@ -188,16 +197,10 @@ const RenderThreadContent = observer((props) => {
       }
       <div className={topic.footer}>
         <div className={topic.thumbs}>
-          <div
-            className={classnames(topic.liked, threadStore?.threadData?.isLike && topic.isLiked)}
-            onClick={onLikeClick}
-          >
-            <Icon name="LikeOutlined"></Icon>
-            <span>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
-          </div>
           <div className={topic.likeReward} >
             <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
           </div>
+          <span>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
         </div>
         {
           threadStore?.threadData?.likeReward?.shareCount > 0
@@ -205,7 +208,24 @@ const RenderThreadContent = observer((props) => {
         }
       </div>
       <Divider></Divider>
-
+      <div className={topic.bottomOperate}>
+        <div
+          className={classnames(topic.item, threadStore?.threadData?.isLike && topic.active)}
+          onClick={onLikeClick}>
+          <Icon name="LikeOutlined"></Icon>
+          <span>{threadStore?.threadData?.isLike ? '取消' : '赞'}</span>
+        </div>
+        <div
+          className={classnames(topic.item, threadStore?.threadData?.isFavorite && topic.active)}
+          onClick={onCollectionClick}>
+          <Icon name="CollectOutlined"></Icon>
+          <span>{threadStore?.threadData?.isFavorite ? '取消' : '收藏'}</span>
+        </div>
+        <div className={classnames(topic.item)} onClick={onShareClick}>
+          <Icon name="ShareAltOutlined"></Icon>
+          <span>分享</span>
+        </div>
+      </div>
 
     </div>
   );
@@ -477,9 +497,6 @@ class ThreadPCPage extends React.Component {
     // 滚动定位相关属性
     this.threadBodyRef = React.createRef();
     this.commentDataRef = React.createRef();
-    this.position = 0;
-    this.nextPosition = 0;
-    this.flag = true;
 
     // 修改评论数据
     this.comment = null;
@@ -487,7 +504,6 @@ class ThreadPCPage extends React.Component {
 
   // 滚动事件
   handleOnScroll() {
-    console.log(1);
     // 加载评论列表
     const scrollDistance = this.threadBodyRef?.current?.scrollTop;
     const offsetHeight = this.threadBodyRef?.current?.offsetHeight;
@@ -497,55 +513,6 @@ class ThreadPCPage extends React.Component {
       this.page = this.page + 1;
       this.loadCommentList();
     }
-
-    if (this.flag) {
-      this.nextPosition = this.threadBodyRef?.current?.scrollTop || 0;
-    }
-  }
-
-  componentDidMount() {
-    // 当内容加载完成后，获取评论区所在的位置
-    this.position = this.commentDataRef?.current?.offsetTop - 50;
-  }
-
-  componentDidUpdate() {
-    // 当内容加载完成后，获取评论区所在的位置
-    if (this.props.thread.isReady) {
-      this.position = this.commentDataRef?.current?.offsetTop - 50;
-    }
-  }
-
-  componentWillUnmount() {
-    // 清空数据
-    // this.props?.thread && this.props.thread.reset();
-  }
-
-  // 点击信息icon
-  onMessageClick() {
-    const position = this.flag ? this.position : this.nextPosition;
-    this.flag = !this.flag;
-    this.threadBodyRef.current.scrollTo(0, position);
-  }
-
-  // 点击收藏icon
-  async onCollectionClick() {
-    const id = this.props.thread?.threadData?.id;
-    const params = {
-      id,
-      isFavorite: !this.props.thread?.isFavorite,
-    };
-    const { success, msg } = await this.props.thread.updateFavorite(params);
-
-    if (success) {
-      Toast.success({
-        content: '操作成功',
-      });
-      return;
-    }
-
-    Toast.error({
-      content: msg,
-    });
   }
 
   // 加载评论列表
@@ -808,6 +775,22 @@ class ThreadPCPage extends React.Component {
     // }
   }
 
+  // 点击收藏icon
+  async onCollectionClick() {
+    const id = this.props.thread?.threadData?.id;
+    const params = {
+      id,
+      isFavorite: !this.props.thread?.isFavorite,
+    };
+    const { success, msg } = await this.props.thread.updateFavorite(params);
+
+    if (!success) {
+      Toast.error({
+        content: msg,
+      });
+    }
+  }
+
   render() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
@@ -835,6 +818,8 @@ class ThreadPCPage extends React.Component {
                   store={threadStore}
                   onOperClick={type => this.onOperClick(type)}
                   onLikeClick={() => this.onLikeClick()}
+                  onCollectionClick={() => this.onCollectionClick()}
+                  onShareClick={() => this.onShareClick()}
                 ></RenderThreadContent>
               ) : (
                 <LoadingTips type="init"></LoadingTips>
@@ -863,7 +848,11 @@ class ThreadPCPage extends React.Component {
           {/* 右边信息 */}
           <div className={layout.bodyRigth}>
             <div className={layout.authorInfo}>
-              {threadStore?.authorInfo && <AuthorInfo user={threadStore?.authorInfo}></AuthorInfo>}
+              {
+                threadStore?.authorInfo
+                  ? <AuthorInfo user={threadStore.authorInfo}></AuthorInfo>
+                  : <LoadingTips type='init'></LoadingTips>
+              }
             </div>
             <div className={layout.recommend}>
               <RecommendContent></RecommendContent>
