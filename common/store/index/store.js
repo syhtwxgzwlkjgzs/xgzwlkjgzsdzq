@@ -7,6 +7,8 @@ class IndexStore {
   @observable sticks = null;
 
   @observable threads = null;
+
+  @observable recommends = null;
 }
 
 export default IndexStore;

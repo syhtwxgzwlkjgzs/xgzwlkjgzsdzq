@@ -12,6 +12,16 @@ class Header extends React.Component {
     super(props);
   }
 
+  state = {
+    value: ''
+  }
+
+  handleSearch = (e) => {
+   const { onSearch = () => {} } = this.props
+
+   onSearch(e.target?.value || '')
+  }
+
   renderHeaderLogo() {
     const { site } = this.props;
     if (site.setSite && site.setSite.siteLogo && site.setSite.siteLogo !== '') {
@@ -46,8 +56,6 @@ class Header extends React.Component {
 
   render() {
     const { site, user } = this.props;
-    console.log(site);
-    console.log(user);
 
     return (
             <div className={styles.header}>
@@ -56,7 +64,7 @@ class Header extends React.Component {
                         <div className={styles.left}>
                             {this.renderHeaderLogo()}
                             <div className={styles.inputBox}>
-                                <Input placeholder='搜索' style={{ width: '580px' }} icon='SearchOutlined'/>
+                                <Input placeholder='搜索' style={{ width: '580px' }} icon='SearchOutlined' onEnter={this.handleSearch} />
                             </div>
                         </div>
                         <div className={styles.right}>
