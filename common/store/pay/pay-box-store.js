@@ -337,11 +337,11 @@ class PayBoxStore {
    * 设置支付密码
    */
   @action
-  setPayPassword = async () => {
+  setPayPassword = async (id) => {
     try {
       const setPayPwdRes = await updateUsersUpdate({
         data: {
-          id: 19,
+          id,
           data: {
             payPassword: this.password,
             payPasswordConfirmation: this.password,
