@@ -1,0 +1,59 @@
+@import '@common/styles/var.scss';
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.container {
+  width: 100%;
+  overflow: hidden;
+  padding: rem($padding-6n);
+  background: var(--color-white);
+  .stepsItem {
+    display: flex;
+    padding-bottom: rem(40);
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    .line {
+      width: rem(2);
+      height: rem(45);
+      background: var(--border-line-color);
+      position: absolute;
+      top: rem(22);
+      left: rem($padding-2n);
+    }
+    &:last-child {
+      padding-bottom: 0;
+    }
+    .icon {
+      margin-left: rem($margin-4n);
+    }
+    .content {
+      font-size: rem($font-size-primary);
+      line-height: rem(24);
+      color: var(--color-text-primary);
+      margin-left: rem($margin-2n);
+    }
+  }
+  .circle {
+    width: rem($padding-4n);
+    height: rem($padding-4n);
+    background: transparent;
+    border: 2px solid var(--border-line-color);
+    border-radius: 50%;
+  }
+  .circleBox {
+    width: rem($padding-4n);
+    height: rem($padding-4n);
+    background: transparent;
+    border: 2px solid var(--color-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .innerRing {
+      width: rem($margin-1n);
+      height: rem($margin-1n);
+      background: var(--color-primary);
+      border-radius: 50%;
+    }
+  }
+}

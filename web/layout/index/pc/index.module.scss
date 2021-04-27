@@ -3,6 +3,7 @@
 .indexWrap {
   background: #f5f7f8;
   width: 100%;
+  height: 100vh;
   .indexLeft {
     width: 100%;
     display: flex;
@@ -48,6 +49,10 @@
     .themeItem {
       margin-bottom: rem($margin-10);
     }
+  }
+  .threadContent {
+    margin-bottom: rem(10);
+    border-radius: rem(5);
   }
 }
 

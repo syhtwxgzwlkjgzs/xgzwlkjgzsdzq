@@ -66,6 +66,9 @@ class App extends Component {
   // 初始化站点数据
   async initSiteData() {
     const { site, user } = this.store;
+
+    let loginStatus = false;
+
     site.setPlatform('mini');
 
     // 获取站点信息
@@ -86,7 +89,11 @@ class App extends Component {
       userPermissions.code === 0 && userPermissions.data && user.setUserPermissions(userPermissions.data);
       // 当客户端无法获取用户信息，那么将作为没有登录处理
       userInfo.code === 0 && userInfo.data && user.setUserInfo(userInfo.data);
+
+      loginStatus = !!userInfo.data && !!userInfo.data.id;
     }
+    user.updateLoginStatus(loginStatus);
+
   }
 
   // 检查站点状态
