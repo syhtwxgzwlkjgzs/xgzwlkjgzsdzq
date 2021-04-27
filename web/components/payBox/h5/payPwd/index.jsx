@@ -117,7 +117,7 @@ class Index extends React.Component {
   renderDialogPayment = () => {
     const { list = [] } = this.state;
     return (
-      <Dialog className={{}} visible={true} position="center" maskClosable={true}>
+      <Dialog visible={true} position="center" maskClosable={true}>
         <CommonPayoffPwd list={list} updatePwd={this.updatePwd} whetherIsShowPwdBox={true} />
       </Dialog>
     );

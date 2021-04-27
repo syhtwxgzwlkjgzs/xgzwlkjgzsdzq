@@ -52,7 +52,7 @@ class Index extends React.Component {
       },
       failed: (orderInfo) => {
         console.log(orderInfo);
-      },
+      }
     });
     const { serverIndex, index } = this.props;
     // 当服务器无法获取数据时，触发浏览器渲染
