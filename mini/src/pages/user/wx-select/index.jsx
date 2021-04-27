@@ -13,7 +13,7 @@ import layout from './index.module.scss';
 
 @inject('site')
 @observer
-class Index extends Component {
+class WXSelect extends Component {
   componentWillMount() { }
 
   componentDidMount() { }
@@ -119,4 +119,4 @@ class Index extends Component {
   }
 }
 
-export default Index;
+export default WXSelect;

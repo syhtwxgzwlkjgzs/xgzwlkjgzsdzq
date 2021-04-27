@@ -1,62 +1,76 @@
 import React from 'react';
-import Taro, { navigateTo  } from '@tarojs/taro';
+import Taro, { getCurrentInstance, navigateTo, redirectTo  } from '@tarojs/taro';
 import { inject } from 'mobx-react';
-import { Toast } from '@discuzq/design';
+import { Toast, Popup } from '@discuzq/design';
+import { Button, View } from '@tarojs/components';
 import { miniLogin } from '@server';
-import { get } from '@common/utils/get';
 import setAccessToken from '@common/utils/set-access-token';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
+import layout from './index.module.scss';
 
 const NEED_BIND_OR_REGISTER_USER = -7016;
 @inject('site')
 @inject('user')
 @inject('commonLogin')
 class MiniAuth extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      isVisible: true
+    }
+  }
   async componentDidMount() {
+    const { action, sessionToken } = getCurrentInstance().router.params;
+    // 其他地方跳入的小程序绑定流程
+    if(action === 'mini-bind'){
+      redirectTo({
+        url: `/pages/wx-bind/index?sessionToken=${sessionToken}`
+      })
+      return;
+    }
+  }
 
+  getUserProfileCallback = async (params) => {
+    const { inviteCode } = getCurrentInstance().router.params;
     try {
       await this.getParamCode();
-      const params = await this.getUserInfo(); // 获取参数
       // 小程序登录
-      const res = await miniLogin({
+      const resp = await miniLogin({
         timeout: 10000,
         params: {
           jsCode: this.props.commonLogin.jsCode,
           iv: params.iv,
-          encryptedData: params.encryptedData
+          encryptedData: params.encryptedData,
+          inviteCode
         },
       });
-
-      // 落地页开关打开
-      if (res.code === NEED_BIND_OR_REGISTER_USER) {
-        const { sessionToken, accessToken, nickname, uid } = res.data;
-        this.props.user.nickname = nickname;
-        // 注册成功后，默认登录
+      console.log(params);
+      console.log(resp);
+      checkUserStatus(resp);
+      // 优先判断是否能登录
+      if (resp.code === 0) {
+        const { accessToken, uid } = resp.data;
         setAccessToken({
           accessToken,
         });
         this.props.user.updateUserInfo(uid);
+        redirectTo({
+          url: `/pages/index/index`
+        });
+        return;
+      }
+      // 落地页开关打开
+      if (resp.code === NEED_BIND_OR_REGISTER_USER) {
+        const { sessionToken, nickname } = resp.data;
+        this.props.user.nickname = nickname;
         navigateTo({
           url: `/pages/wx-select/index?sessionToken=${sessionToken}&nickname=${nickname}`
         });
         return;
       }
-
-      if (res.code === 0) {
-        const accessToken = get(res, 'data.accessToken');
-        const uid = get(res, 'data.uid');
-        // 注册成功后，默认登录
-        setAccessToken({
-          accessToken,
-        });
-        this.props.user.updateUserInfo(uid);
-        window.location.href = '/index';
-        return;
-      }
-
       throw {
-        Code: res.code,
-        Message: res.msg,
+        Code: resp.code,
+        Message: resp.msg,
       };
     } catch (error) {
       // 跳转状态页
@@ -104,12 +118,15 @@ class MiniAuth extends React.Component {
    * 获取用户信息
    * @returns 用户信息
    */
-  getUserInfo = () => new Promise((resolve, reject) => {
-    Taro.getUserInfo({
-      desc: "t偷你猴子哦",
+  getUserProfile = () => new Promise((resolve, reject) => {
+    this.setState({
+      isVisible: false
+    })
+    Taro.getUserProfile({
+      desc: "查询用户是否绑定过账号",
       success: (res) => {
-        console.log('res', res);
-        if(res.errMsg === 'getUserInfo:ok'){
+        if(res.errMsg === 'getUserProfile:ok'){
+          this.getUserProfileCallback(res);
           return resolve(res);
         }
         reject(res);
@@ -122,7 +139,16 @@ class MiniAuth extends React.Component {
 
 
   render() {
-    return <></>;
+    return (
+      <Popup
+        position="bottom"
+        visible={this.state.isVisible}
+      >
+        <View  className={layout.modal} >
+          <Button className={layout.button} onClick={this.getUserProfile}>微信快捷登录</Button>
+        </View>
+      </Popup>
+      );
   }
 }
 
