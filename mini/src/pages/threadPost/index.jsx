@@ -9,6 +9,8 @@ import styles from './index.module.scss';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 import { readYundianboSignature } from '@common/server';
 import VodUploader from 'vod-wx-sdk-v2';
+import Router from '@discuzq/sdk/dist/router';
+import Page from '@components/page';
 
 @inject('index')
 @inject('site')
@@ -25,6 +27,7 @@ class Index extends Component {
       operationType: 0,
     }
   }
+
   componentWillMount() { }
 
   componentDidMount() {
@@ -186,9 +189,8 @@ class Index extends Component {
       operationType,
       showPaidType,
     } = this.state;
-    console.log(product);
     return (
-      <>
+      <Page isLogin>
         <View className={styles['container']}>
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
           <View className={styles['content']}>
@@ -261,7 +263,7 @@ class Index extends Component {
           onHide={() => this.setState({ showPaidType: false })}
         />
 
-      </>
+      </Page>
     );
   }
 }

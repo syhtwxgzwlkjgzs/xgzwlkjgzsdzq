@@ -5,7 +5,7 @@ import {readForum, readUser, readPermissions} from '@server';
 import Router from '@discuzq/sdk/dist/router';
 import { View } from '@tarojs/components';
 import Taro from '@tarojs/taro'
-
+import clearLoginStatus from '@common/utils/clear-login-status';
 import { Icon } from '@discuzq/design';
 import '@discuzq/design/dist/components/icon/styles/index.scss';
 import './app.scss';
@@ -15,7 +15,7 @@ class App extends Component {
   store = initializeStore();
 
   async componentDidMount() {
-    const siteConfig = await readForum({});
+
   }
 
   /**
@@ -32,26 +32,7 @@ class App extends Component {
    * 注意：options 参数的字段在不同小程序中可能存在差异。所以具体使用的时候请看相关小程序的文档
    */
   async onLaunch(options) {
-    const { site, user } = this.store;
-    site.setPlatform('mini');
-    // 获取站点信息
-    const siteResult = await readForum({});
-    siteResult.data && site.setSiteConfig(siteResult.data);
-
-    if( siteResult && siteResult.data && siteResult.data.user ) {
-
-      
-
-      const userInfo = await readUser({ params: { pid: siteResult.data.user.userId } });
-      const userPermissions = await readPermissions({});
-
-      // 添加用户发帖权限
-      userPermissions.code === 0 && userPermissions.data && user.setUserPermissions(userPermissions.data);
-      // 当客户端无法获取用户信息，那么将作为没有登录处理
-      userInfo.code === 0 && userInfo.data && user.setUserInfo(userInfo.data);
-    }
-
-    
+    this.initSiteData();
   }
 
   /**
@@ -82,11 +63,61 @@ class App extends Component {
     });
   }
 
+  // 初始化站点数据
+  async initSiteData() {
+    const { site, user } = this.store;
+
+    let loginStatus = false;
+
+    site.setPlatform('mini');
+
+    // 获取站点信息
+    const siteResult = await readForum({});
+
+    // 检查站点状态
+    const isPass = this.setAppCommonStatus(siteResult);
+    if(!isPass) return;
+
+    siteResult.data && site.setSiteConfig(siteResult.data);
+
+    if( siteResult && siteResult.data && siteResult.data.user ) {
+
+      const userInfo = await readUser({ params: { pid: siteResult.data.user.userId } });
+      const userPermissions = await readPermissions({});
+
+      // 添加用户发帖权限
+      userPermissions.code === 0 && userPermissions.data && user.setUserPermissions(userPermissions.data);
+      // 当客户端无法获取用户信息，那么将作为没有登录处理
+      userInfo.code === 0 && userInfo.data && user.setUserInfo(userInfo.data);
+
+      loginStatus = !!userInfo.data && !!userInfo.data.id;
+    }
+    user.updateLoginStatus(loginStatus);
+
+  }
+
+  // 检查站点状态
+  setAppCommonStatus(result) {
+    switch (result.code) {
+      case -3005: site.setCloseSiteConfig(result.data);
+        Router.redirect({
+          url: '/subPages/close/index'
+        });
+        return false;
+      case -4002:
+        clearLoginStatus();
+        this.initSiteData(); // 重新获取数据
+        return false;
+    }
+    return true;
+  }
+
   render() {
+    const { children } = this.props;
     return (
       <Provider {...this.store}>
         {/* this.props.children 就是要渲染的页面 */}
-        {this.props.children}
+        {children}
       </Provider>
     );
   }
