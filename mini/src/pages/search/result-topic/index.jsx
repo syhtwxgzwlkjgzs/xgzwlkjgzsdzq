@@ -43,17 +43,17 @@ class Index extends React.Component {
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasTopics = !!search.indexTopics;
 
-    if (!hasTopics) {
-      this.toastInstance = Toast.loading({
-        content: '加载中...',
-        duration: 0,
-      });
+    // if (!hasTopics) {
+    //   this.toastInstance = Toast.loading({
+    //     content: '加载中...',
+    //     duration: 0,
+    //   });
 
       this.page = 1;
       await search.getTopicsList({ search: keyword });
 
-      this.toastInstance?.destroy();
-    }
+    //   this.toastInstance?.destroy();
+    // }
   }
 
   dispatch = async (type, data) => {
