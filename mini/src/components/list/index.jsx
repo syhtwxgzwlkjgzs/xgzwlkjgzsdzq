@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Spin } from '@discuzq/design';
-import { View, Text } from '@tarojs/components';
+import { View, Text, ScrollView } from '@tarojs/components';
 import styles from './index.module.scss';
 
 /**
@@ -39,15 +39,8 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
     };
   };
 
-  const onTouchMove = throttle(() => {
-    if (!listWrapper || !listWrapper.current || !allowRefresh) {
-      return;
-    }
-    const { clientHeight } = listWrapper.current;
-    const { scrollHeight } = listWrapper.current;
-    const { scrollTop } = listWrapper.current;
-
-    if ((scrollHeight <= clientHeight + scrollTop) && !isLoading.current) {
+  const onTouchMove = throttle((e) => {
+    if (e && !isLoading.current) {
       isLoading.current = true;
       setLoadText('加载中...');
       if (typeof(onRefresh) === 'function') {
@@ -71,21 +64,20 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
   }, 50);
 
   return (
-    <View className={`${styles.container} ${className}`} style={{ height }}>
-      <View
-        className={styles.wrapper}
-        ref={listWrapper}
-        onScroll={onTouchMove}
-      >
-        {children}
-        {allowRefresh && (
-              <View className={styles.footer}>
-                { loadText === '加载中...' && <Spin className={styles.spin} type="spinner" /> }
-                { loadText }
-              </View>
-        )}
-      </View>
-    </View>
+    <ScrollView 
+      scrollY 
+      className={`${styles.container} ${className}`} 
+      style={{ height }} 
+      onScrollToLower={onTouchMove}
+    >
+      {children}
+      {allowRefresh && (
+            <View className={styles.footer}>
+              { loadText === '加载中...' && <Spin className={styles.spin} type="spinner" /> }
+              { loadText }
+            </View>
+      )}
+    </ScrollView>
   );
 };
 
