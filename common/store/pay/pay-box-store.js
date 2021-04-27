@@ -116,8 +116,8 @@ class PayBoxStore {
         data,
       });
       if (get(createRes, 'code') === 0) {
-        this.step = STEP_MAP.PAYWAY;
         this.orderInfo = get(createRes, 'data', {});
+        this.step = STEP_MAP.PAYWAY;
         return createRes;
       }
       this.resErrorFactory(createRes);
@@ -210,6 +210,7 @@ class PayBoxStore {
     onBridgeReady,
   }) => {
     try {
+      // #ifdef H5
       if (!isWeixin()) {
         // is not in weixin, just throw tips error
         throw PAY_BOX_ERROR_CODE_MAP.NOT_IN_WEIXIN_PAY;
@@ -219,6 +220,7 @@ class PayBoxStore {
       if (browser.env('ios')) {
         throw PAY_BOX_ERROR_CODE_MAP.IN_IOS;
       }
+      // #endif
 
       const payRes = await createPayOrder({
         data: {
@@ -265,8 +267,8 @@ class PayBoxStore {
 
       this.wechatQRCode = get(payRes, 'data.wechatPayResult.wechatQrcode');
 
-      this.timer = setInterval(() => {
-        this.getOrderDetail();
+      this.timer = setInterval(async () => {
+        await this.getOrderDetail();
       }, 1000);
     } catch (error) {
       if (error.Code) {

@@ -52,8 +52,6 @@ export default class index extends Component {
     this.props.payBox.password = pwd;
     if (this.props.payBox.step === STEP_MAP.WALLET_PASSWORD) {
       // 表示钱包支付密码
-      console.log('进来了', 'ssssss_钱包支付阶段');
-      return
       try {
         await this.props.payBox.walletPayOrder();
         Toast.success({
@@ -75,8 +73,6 @@ export default class index extends Component {
       }
     } else if (this.props.payBox.step === STEP_MAP.SET_PASSWORD) {
       //表示设置支付密码
-      console.log('进来了', 'ssssss_设置密码阶段');
-      return
       try {
         let id = this.props.user.id;
         if (!id) return;
