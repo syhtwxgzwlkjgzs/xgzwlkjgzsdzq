@@ -2,74 +2,40 @@
 @import '@common/styles/variable/index.scss';
 
 .container {
-  width: calc(100% - rem(32));
-  background: #fff;
+  background: var(--color-white);
   padding: rem($padding-4n);
-  margin-bottom: rem(20);
-}
-
-.operation {
-  position: absolute;
-  right: rem(44);
-  top: rem(26);
-  z-index: 999;
-  text-align: center;
-  .triangle {
-
-  }
-  .operationBtn {
-    width: rem(100);
-    height: rem(140);
-    background: #fff;
-    padding: rem(10);
-    box-shadow: 0 2px 12px 0 rgba($color: #000, $alpha: 0.1);
-    .btn {
-      height: rem(36);
-      color: #606266;
-      padding: 0 rem($padding-5n);
-      font-size: rem(14);
-      text-align: center;
-      line-height: rem(36);
-      border-bottom: rem(1) solid #eee;
-      border-radius: rem(4);
-    }
-    .btn:last-child {
-      border-bottom: none;
-    }
-    .btn:hover{
-      color: var(--color-primary);
-      cursor: pointer;
-    }
-  }
-}
-.isShowOperation {
-  display: none;
 }
 
 .header {
-  // height: rem(54);
   background: var(--color-white);
   display: flex;
   justify-content: space-between;
-  position: relative;
-  .headerRigth {
-    display: flex;
-    font-family: PingFangSC-Regular;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 16px;
-    text-align: left;
+}
+
+.userInfo {
+  flex: 1;
+}
+
+.iconText {
+  margin-left: rem(24);
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+
+  :global {
+    .dzq-dropdown-menu.dzq-dropdown-menu--center {
+      top: rem(30);
+    }
+  }
+
+  .text {
+    margin-left: rem(8);
     color: #8490a8;
-    .manage {
-      margin-left: rem($margin-4n);
-    }
-    .report {
-      margin-left: rem($margin-4n);
-    }
-    .icon {
-      margin-right: rem($margin-2n);
-      margin-top: rem(-2);
-    }
+  }
+
+  .icon {
+    font-size: rem(14);
+    color: #8490a8;
   }
 }
 
@@ -80,7 +46,7 @@
 .body {
   margin-top: rem($margin-4n);
 
-  >* {
+  > * {
     margin-bottom: rem($margin-5n);
   }
 }
@@ -108,8 +74,61 @@
   font-size: rem($font-size-primary);
 }
 
+.buyBtn {
+  margin-top: rem($margin-4n);
+  width: 100%;
+  height: rem(36);
+}
+
+.tag {
+  display: inline-block;
+  color: var(--color-text-regular);
+  background: var(--background-color);
+  font-size: rem($font-size-label);
+  padding: rem($padding-2n) rem($padding-1n);
+  border-radius: rem($border-radius-small);
+}
+
 .thumbs {
   display: flex;
   align-items: center;
   font-size: rem($font-size-primary);
 }
+
+.likeReward {
+  margin-right: rem($margin-2n);
+}
+
+.examine {
+  padding: rem(8) 0;
+  background: var(--color-error);
+  color: var(--color-white);
+  text-align: center;
+  font-size: rem(14);
+}
+
+
+.bottomOperate {
+  padding: 0 rem(54);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: rem($font-size-primary);
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    
+    span {
+      margin-left: rem($margin-2n);
+    }
+
+    &.active {
+      color: var(--color-primary) !important;
+    }
+  }
+}
+

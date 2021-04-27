@@ -1,238 +1,238 @@
 import React from 'react';
-import { withRouter } from 'next/router';
 import styles from './index.module.scss';
-import { Avatar, Icon, Toast } from '@discuzq/design';
-// import '@discuzq/design/styles/index.scss';
+import Avatar from '@components/avatar';
 import ReplyList from '../reply-list/index';
-import Input from '../input/index';
+import { diffDate } from '@common/utils/diff-date';
+import { observer } from 'mobx-react';
+import { Icon } from '@discuzq/design';
+import classnames from 'classnames';
+import CommentInput from '../comment-input/index';
 
+@observer
 class CommentList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isShowInput: false, // 是否显示input框
       isShowReward: false, // 是否展示获得多少悬赏金
-      isShowRedPacket: true, // 是否展示获得多少红包
-      isShowAdopt: true, // 是否展示采纳按钮
-      isPostDetail: this.props.isPostDetail || false, // 是否只显示一条评论回复
-      isLiked: this.props.data.isLiked,
-      likeCount: this.props.data.likeCount,
+      isShowRedPacket: false, // 是否展示获得多少红包
+      isShowAdopt: false, // 是否展示采纳按钮
+      isHideEdit: this.props.isHideEdit, // 隐藏评论编辑删除
+      isShowOne: this.props.isShowOne || false, // 是否只显示一条评论回复
+      isShowInput: this.props.isShowInput, // 是否显示输入框
+      replyId: null,
+      placeholder: '输入你的回复',
     };
     this.needReply = this.props.data.lastThreeComments;// 评论的回复
-    this.replyNumber = this.props.data.replyCount - 1; // 评论的回复
   }
-  componentDidMount() {
-    // this.loadCommentList();
-    this.showOne();
-  }
-  static async getInitialProps() {
-    return {
 
-    };
-  }
   toCommentDetail = () => {
-    if (this.state.isPostDetail && this.props?.data?.id) {
-      this.props.router.push(`/thread/comment/${this.props?.data?.id}`);
+    if (this.state.isShowOne) {
+      typeof this.props.onCommentClick === 'function' && this.props.onCommentClick();
     }
   }
-  // 处理评论的回复只显示一条
-  showOne() {
-    console.log('this.isPostDetail', this.state.isPostDetail);
-    if (this.state.isPostDetail) {
-      this.needReply = [];
-      this.props.data?.lastThreeComments?.length && this.needReply.push(this.props.data.lastThreeComments[0]);
-    }
+
+  // 点击头像
+  avatarClick() {
+    typeof this.props?.avatarClick === 'function' && this.props.avatarClick();
   }
+
+  // 点击评论赞
   likeClick() {
-    this.setState({
-      isLiked: !this.state.isLiked,
-    }, () => {
-      this.setState({
-        likeCount: this.state.isLiked ? this.state.likeCount + 1 : this.state.likeCount - 1,
-      });
-    });
-    this.props.likeClick(this.props.data);
+    typeof this.props.likeClick === 'function' && this.props.likeClick();
   }
+
+  // 点击评论回复
   replyClick() {
-    this.props.replyClick(this.props.data);
-    this.setState({ isShowInput: !this.state.isShowInput });
+    const userName = this.props.data?.user?.username || this.props.data?.user?.userName;
+
+    this.setState({
+      isShowInput: !this.state.isShowInput,
+      replyId: null,
+      placeholder: userName ? `回复${userName}` : '请输入内容',
+    });
+    typeof this.props.replyClick === 'function' && this.props.replyClick();
   }
-  // deleteClick() {
-  //   this.props.deleteClick('1');
-  // }
+
+  // 点击评论删除
+  deleteClick() {
+    typeof this.props.deleteClick === 'function' && this.props.deleteClick();
+  }
+
+  // 点击评论采纳
   adoptClick() {
     console.log('点击采纳');
   }
-  // 返回上一页
-  onBackClick = () => {
-    Toast.success({
-      content: '返回上一页',
-    });
-  }
-  // createReply(val) {
-  //   this.state.createReply(val);
-  // }
 
-  // onPublishClick(val) {
-  //   this.props.createReply(val);
-  // }
+  // 点击评论编辑
+  editClick() {
+    typeof this.props.editClick === 'function' && this.props.editClick();
+  }
+
+  // 点击回复赞
+  replyLikeClick(data) {
+    typeof this.props.replyLikeClick === 'function' && this.props.replyLikeClick(data);
+  }
+
+  // 点击回复回复
+  replyReplyClick(data) {
+    this.setState({
+      replyId: data?.id,
+    });
+
+    typeof this.props.replyReplyClick === 'function' && this.props.replyReplyClick(data);
+  }
+
+  reployAvatarClick(data) {
+    typeof this.props.reployAvatarClick === 'function' && this.props.reployAvatarClick(data);
+  }
+
+  generatePermissions(data = {}) {
+    return {
+      canApprove: data.canApprove || false,
+      canDelete: data.canDelete || false,
+      canEdit: data.canEdit || false,
+      canHide: data.canLike || false,
+      canLike: data.canLike || false,
+    };
+  }
 
   render() {
-    const { likeClick, replyClick, deleteClick, createReply, avatarClick } = this.props;
+    const { canDelete, canEdit, canLike } = this.generatePermissions(this.props.data);
 
     return (
       <div className={styles.commentList}>
         <div className={styles.header}>
-          {
-            this.state.isPostDetail ? <div></div>
-              : <div className={styles.back} onClick={this.onBackClick}>
-                <Icon
-                  name='WarnOutlined'
-                  size='16'
-                  className={styles.backIcon}>
-                </Icon>
-                <span>返回</span>
+          <div className={styles.showGet}>
+            {!this.state.isHideEdit
+              && <div className={styles.extra}>
+                {canEdit && <div className={styles.revise} onClick={() => this.editClick()}>编辑</div>}
+                {canDelete && <div className={styles.revise} onClick={() => this.deleteClick()}>删除</div>}
               </div>
-          }
-          <div className={`${styles.showGet} ${this.state.isPostDetail ? '' : styles.padding}`}>
-            <div className={styles.extra}>
-              {/* <div className={styles.revise}>编辑</div> */}
-            </div>
-            {
-              this.state.isPostDetail
-                ? <div className={styles.delete}>
-                  <Icon
-                    name='WarnOutlined'
-                    size='16'
-                    className={styles.deleteIcon}>
-                  </Icon>
-                  <span onClick={() => deleteClick(this.props.data.id)}>删除</span>
-                </div> : ''
             }
             {
               this.state.isShowReward
                 ? <div>
                   <div className={styles.showMoneyNum}>
                     获得<span className={styles.moneyNumber}>{6}</span>元悬赏金
-                      </div>
-                </div> : ''
+                  </div>
+                </div>
+                : ''
             }
             {
               this.state.isShowRedPacket
                 ? <div>
                   <div className={styles.showMoneyNum}>
                     获得<span className={styles.moneyNumber}>{6}</span>元红包
-                      </div>
-                </div> : ''
-            }
-            {
-              this.state.isPostDetail
-                ? '' : <div className={styles.delete}>
-                  <Icon
-                    name='WarnOutlined'
-                    size='16'
-                    className={styles.deleteIcon}>
-                  </Icon>
-                  <span onClick={() => deleteClick(this.props.data.id)}>删除</span>
+                  </div>
                 </div>
+                : ''
             }
           </div>
         </div>
         <div className={styles.content}>
-          <div className={styles.commentListAvatar} onClick={() => avatarClick('1')}>
-            <Avatar image={this.props.data.user.avatar} circle={true}></Avatar>
+          <div className={styles.commentListAvatar} onClick={() => this.avatarClick()}>
+            <Avatar
+              image={this.props.data.user.avatar}
+              name={this.props.data.user.username || this.props.data.user.userName || ''}
+              circle={true}>
+            </Avatar>
           </div>
           <div className={styles.commentListContent}>
+            {/* 评论内容 */}
             <div className={styles.commentListContentText} onClick={() => this.toCommentDetail()}>
               <div className={styles.commentListName}>
-                {this.props.data.user.username}
+                {this.props.data.user.username || this.props.data.user.userName}
               </div>
               <div className={styles.commentListText}>
                 {this.props.data.content}
               </div>
             </div>
+
             <div className={styles.commentListFooter}>
-              {
-                this.state.isPostDetail
-                  ? <div className={styles.commentBtn}>
-                    <div className={styles.commentTime}>{this.props.data.createdAt.split(' ')[1]}</div>
-                    <div className={styles.extraBottom}>
-                      <div className={this.state.isLiked ? styles.commentLike : styles.commentLiked}>
-                        <Icon
-                          name='LikeOutlined'
-                          size='16'
-                          className={styles.btnIcon}>
-                        </Icon>
-                        <span onClick={() => this.likeClick()}>赞{this.state.likeCount > 0 ? this.state.likeCount : ''}</span>
-                      </div>
-                      <div className={styles.commentReply}>
-                        <Icon
-                          name='MessageOutlined'
-                          size='16'
-                          className={styles.btnIcon}>
-                        </Icon>
-                        <span onClick={() => this.replyClick()}>回复</span>
-                      </div>
-                      {
-                        this.state.isShowAdopt
-                          ? <div className={styles.commentAdopt}>
-                            <Icon
-                              name='WarnOutlined'
-                              size='16'
-                              className={styles.btnIcon}>
-                            </Icon>
-                            <span onClick={() => this.adoptClick()}>采纳</span>
-                          </div> : ''
-                      }
-                      <div className={styles.commentReply}>
-                        <Icon
-                          name='WarnOutlined'
-                          size='16'
-                          className={styles.btnIcon}>
-                        </Icon>
-                        <span onClick={() => replyClick(this.props.data)}>举报</span>
-                      </div>
-                    </div>
+              {/* 操作按钮 */}
+              <div className={styles.commentBtn}>
+                <div className={styles.commentTime}>{diffDate(this.props.data.createdAt)}</div>
+                <div className={styles.extraBottom}>
+                  <div
+                    className={classnames(styles.commentLike, this.props?.data?.isLiked && styles.active)}
+                    onClick={() => this.likeClick(canLike)}>
+                    <Icon className={styles.icon} name="LikeOutlined"></Icon>
+                      赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
                   </div>
-                  : <div className={styles.line}></div>
+                  <div
+                    className={
+                      classnames(styles.commentReply, this.props.isShowInput && this.state.isShowInput && styles.active)
+                    }
+                    onClick={() => this.replyClick()}>
+                    <Icon className={styles.icon} name="MessageOutlined"></Icon>
+                    <span>回复</span>
+                  </div>
+                  {
+                    this.state.isShowAdopt
+                      ? <div className={styles.commentAdopt}>
+                        <Icon className={styles.icon} name="ExactnessOutlined"></Icon>
+                        <span onClick={() => this.adoptClick()}>采纳</span>
+                      </div> : ''
+                  }
+                </div>
+              </div>
+
+              {/* 回复输入框 */}
+              {this.props.isShowInput && this.state.isShowInput
+                && <div className={styles.commentInput}>
+                  <CommentInput
+                    height='label'
+                    onSubmit={value => this.props.onSubmit(value)}
+                    placeholder={this.state.placeholder}>
+                  </CommentInput>
+                </div>
               }
               {
-                this.state.isShowInput ? <div className={styles.input}>
-                  <Input onSubmit={createReply} height='label' />
-                </div> : ''
-              }
-              {
-                this.replyNumber > 0 && this.state.isPostDetail
+                this.props.data?.replyCount - 1 > 0 && this.state.isShowOne
                   ? <div
                     className={styles.moreReply}
                     onClick={() => this.toCommentDetail()}>
-                    查看之前{this.replyNumber}条回复...
+                    查看之前{this.props.data?.replyCount - 1}条回复...
                     </div> : ''
               }
-              <div className={styles.ReplyList}>
-                {
-                  this.needReply.map((val, index) => (
-                    <ReplyList
-                      data={val}
-                      key={index}
-                      avatarClick={type => avatarClick(type)}
-                      likeClick={data => likeClick(data)}
-                      replyClick={data => replyClick(data)}
-                      deleteClick={data => deleteClick(data)}
-                      toCommentDetail={this.toCommentDetail}
-                      createReply={createReply}
-                      isPostDetail={this.state.isPostDetail}>
-                    </ReplyList>
-                  ))
-                }
-              </div>
+              {/* 回复列表 */}
+              {
+                this.needReply?.length > 0
+                && <div className={styles.replyList}>
+                  {
+                    this.state.isShowOne
+                      ? <ReplyList
+                        data={this.needReply[0]}
+                        key={this.needReply[0].id}
+                        avatarClick={() => this.reployAvatarClick(this.needReply[0])}
+                        likeClick={() => this.replyLikeClick(this.needReply[0])}
+                        replyClick={() => this.replyReplyClick(this.needReply[0])}
+                        toCommentDetail={() => this.toCommentDetail()}
+                        onSubmit={value => this.props.onSubmit(value)}
+                        isShowInput={this.state.replyId && this.state.replyId === this.needReply[0].id}>
+                      </ReplyList>
+                      : (this.needReply || [])
+                        .map((val, index) => (
+                          <ReplyList
+                            data={val}
+                            key={val.id || index}
+                            avatarClick={() => this.reployAvatarClick(val)}
+                            likeClick={() => this.replyLikeClick(val)}
+                            replyClick={() => this.replyReplyClick(val)}
+                            toCommentDetail={() => this.toCommentDetail()}
+                            onSubmit={value => this.props.onSubmit(value)}
+                            isShowInput={this.state.replyId && this.state.replyId === val.id}>
+                          </ReplyList>
+                        ))
+                  }
+                </div>
+              }
             </div>
           </div>
         </div>
-
       </div>
     );
   }
 }
 
-export default withRouter(CommentList);
+export default CommentList;

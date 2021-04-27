@@ -1,0 +1,19 @@
+@import '@common/styles/var.scss';
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.container {
+  width: 100%;
+
+  .activeItem {
+    color: #2469f6 !important;
+  }
+}
+.line {
+  position: absolute;
+  bottom: 10px;
+  left: 30%;
+  width: 40%;
+  height: 2px;
+  border-radius: 1px;
+  background: #2469f6;
+}

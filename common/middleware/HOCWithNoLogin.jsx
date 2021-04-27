@@ -12,7 +12,7 @@ export default function HOCWithNoLogin(Component) {
   class CheckNoLoginStatus extends React.Component {
     // 应用初始化
     static async getInitialProps(ctx, preProps) {
-      if (!preProps) {
+      if (!preProps) { 
         throw Error('CheckNoLoginStatus必须前置使用HOCFetchSiteData');
       }
 

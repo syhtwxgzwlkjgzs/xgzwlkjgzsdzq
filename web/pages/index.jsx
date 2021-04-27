@@ -73,17 +73,17 @@ class Index extends React.Component {
 
   dispatch = async (type, data = {}) => {
     const { index } = this.props;
-    const { categoryids, types, essence, sequence } = data;
+    const { categoryids, types, essence, sequence, attention, sort } = data;
 
     if (type === 'click-filter') {
       this.page = 1;
-      index.screenData({ filter: { categoryids, types, essence }, sequence });
+      index.screenData({ filter: { categoryids, types, essence, attention, sort}, sequence });
     } else if (type === 'moreData') {
       this.page += 1;
       await index.getReadThreadList({
         perPage: this.prePage,
         page: this.page,
-        filter: { categoryids, types, essence },
+        filter: { categoryids, types, essence, attention, sort },
         sequence,
       });
 
@@ -96,7 +96,7 @@ class Index extends React.Component {
     const { platform } = site;
 
     if (platform === 'pc') {
-      return <IndexPCPage/>;
+      return <IndexPCPage dispatch={this.dispatch} />;
     }
     return <IndexH5Page dispatch={this.dispatch} />;
   }

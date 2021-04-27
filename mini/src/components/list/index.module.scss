@@ -1,0 +1,23 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.container {
+  overflow: hidden;
+
+  .wrapper {
+    height: 100%;
+    overflow-y: scroll;
+  }
+
+  .footer {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    .spin {
+      margin-right: 4px;
+    }
+  }
+}
