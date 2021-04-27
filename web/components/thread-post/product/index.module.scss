@@ -29,8 +29,8 @@
         font-size: 14px;
         line-height: 24px;
         color: var(--color-text-regular);
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
+        display: box;
+        box-orient: vertical;
         -webkit-line-clamp: 2;
         overflow: hidden;
       }
@@ -42,13 +42,13 @@
         line-height: 30px;
         color: #e02433;
       }
-      .delete-icon {
-        position: absolute;
-        bottom: -3px;
-        right: -14px;
-        padding: 5px;
-      }
     }
+  }
+  .delete-icon {
+    position: absolute;
+    bottom: -3px;
+    right: -14px;
+    padding: 5px;
   }
   .good-add-box {
     display: flex;
@@ -66,3 +66,11 @@
   }
 }
 
+.pc {
+  .delete-icon {
+    position: absolute;
+    bottom: 50%;
+    right: 0;
+    transform: translate(0, 50%);
+  }
+}
