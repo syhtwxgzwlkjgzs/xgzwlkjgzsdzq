@@ -4,7 +4,7 @@ import { View } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import { Button, Toast } from '@discuzq/design';
 import Page from '@components/page';
-import { usernameLogin } from '@server';
+import { usernameAutoBind } from '@server';
 import setAccessToken from '@common/utils/set-access-token';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
 import { get } from '@common/utils/get';
@@ -24,16 +24,13 @@ class WXSelect extends Component {
 
   componentDidHide() { }
 
-  handleLoginCallback = async () => {
+  handleAutobindCallback = async () => {
     const { sessionToken } = getCurrentInstance().router.params;
 
     try {
-      const res = await usernameLogin({
+      const res = await usernameAutoBind({
         timeout: 10000,
         params: {
-          username: '',
-          password: '',
-          type: 'mobilebrowser_username_login',
           sessionToken,
         },
       });
@@ -86,7 +83,7 @@ class WXSelect extends Component {
             <Button
               className={layout.button}
               type="primary"
-              onClick={this.handleLoginCallback}
+              onClick={this.handleAutobindCallback}
             >
               创建新账号
             </Button>
