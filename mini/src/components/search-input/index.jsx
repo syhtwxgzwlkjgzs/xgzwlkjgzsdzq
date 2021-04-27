@@ -2,6 +2,7 @@ import React from 'react';
 import { Input, Icon } from '@discuzq/design';
 
 import styles from './index.module.scss';
+import { View, Text } from '@tarojs/components';
 
 /**
  * 搜索输入框
@@ -16,8 +17,8 @@ const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = tru
   const [value, setValue] = React.useState(defaultValue);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.inputWrapper}>
+    <View className={styles.container}>
+      <View className={styles.inputWrapper}>
         <Icon name="SearchOutlined" size={16} />
         <Input
           clearable={true}
@@ -26,15 +27,15 @@ const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = tru
           onChange={e => setValue(e.target.value)}
           className={styles.input}
         />
-      </div>
+      </View>
       {
         isShowCancel && (
-          <div className={styles.cancel} onClick={onCancel}>
+          <View className={styles.cancel} onClick={onCancel}>
             取消
-          </div>
+          </View>
         )
       }
-    </div>
+    </View>
   );
 };
 

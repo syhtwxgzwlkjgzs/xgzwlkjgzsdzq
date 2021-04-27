@@ -3,6 +3,7 @@ import React from 'react';
 import { Post } from '../../../../../../components/search-result-item';
 
 import styles from './index.module.scss';
+import { View, Text } from '@tarojs/components';
 
 /**
  * 帖子搜索结果
@@ -10,11 +11,11 @@ import styles from './index.module.scss';
  * @prop {function} onItemClick 帖子点击事件
  */
 const SearchPosts = ({ data, onItemClick }) => (
-  <div className={styles.list}>
+  <View className={styles.list}>
     {data.map((item, index, arr) => (
-      <Post key={index} data={item} onClick={onItemClick} divider={index !== arr.length - 1} />
+      <Post key={index} data={item} onClick={onItemClick} Viewider={index !== arr.length - 1} />
     ))}
-  </div>
+  </View>
 );
 
 export default React.memo(SearchPosts);

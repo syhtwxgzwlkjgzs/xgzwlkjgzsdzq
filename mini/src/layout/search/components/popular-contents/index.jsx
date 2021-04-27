@@ -1,23 +1,20 @@
 import React from 'react';
 
-// import ThreadContent from '@components/thread';
+import ThreadContent from '@components/thread';
 
 import styles from './index.module.scss';
+import { View, Text } from '@tarojs/components';
 
 /**
  * 热门内容
  * @prop {object[]} data 帖子数据
  */
 const PopularContents = ({ data, onItemClick }) => (
-  <div className={styles.list}>
-    {/* {
+  <View className={styles.list}>
+    {
       data.map((item, index) => <ThreadContent data={item} key={index} />)
-    } */}
-    热门内容
-    {/* {data.map((item, index, arr) => (
-      <Post key={index} data={item} onClick={onItemClick} divider={index !== arr.length - 1} />
-    ))} */}
-  </div>
+    }
+  </View>
 );
 
 export default React.memo(PopularContents);

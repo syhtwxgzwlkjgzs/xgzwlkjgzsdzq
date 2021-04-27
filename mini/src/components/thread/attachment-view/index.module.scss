@@ -1,0 +1,30 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  height: 52px;
+  border-radius: 5px;
+  background: var(--background-color-text);
+  margin-bottom: 8px;
+
+  .size {
+    color: #4f5a70;
+    font-size: 12px;
+  }
+  .content {
+    margin: 0 8px;
+    color: var(--color-text-primary);
+    font-size: 14px;
+  }
+  .a {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+  }
+}

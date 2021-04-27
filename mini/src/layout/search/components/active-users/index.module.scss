@@ -24,8 +24,16 @@
     .avatar {
       width: 38px;
       height: 38px;
+      line-height: 38px;
       margin: 0 auto;
-      line-height: 0;
+      background: #ccc;
+      border-radius: 50%;
+      text-align: center;
+      image {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
     }
     .name {
       width: 46px;

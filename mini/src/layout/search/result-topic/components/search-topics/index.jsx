@@ -4,6 +4,7 @@ import { Topic } from '@components/search-result-item';
 import List from '../list';
 
 import styles from './index.module.scss';
+import { View, Text } from '@tarojs/components';
 
 /**
  * 话题搜索结果

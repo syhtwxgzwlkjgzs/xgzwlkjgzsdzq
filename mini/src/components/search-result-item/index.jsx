@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 
 import ThreadContent from '@components/thread';
 import styles from './index.module.scss';
+import { View, Text } from '@tarojs/components';
 
 /**
  * 话题组件
@@ -14,14 +15,14 @@ export const Topic = ({ data, onClick }) => {
   }, [data, onClick]);
 
   return (
-    <div className={styles.topic} onClick={click}>
-      <div className={styles.title}>{data.content || '暂无内容'}</div>
-      <div className={styles.content}>{data.content || ''}</div>
-      <div className={styles.tags}>
-        <div className={styles.tag}>热度{data.viewCount || 0}</div>
-        <div className={styles.tag}>内容{data.threadCount || 0}</div>
-      </div>
-    </div>
+    <View className={styles.topic} onClick={click}>
+      <View className={styles.title}>{data.content || '暂无内容'}</View>
+      <View className={styles.content}>{data.content || ''}</View>
+      <View className={styles.tags}>
+        <View className={styles.tag}>热度{data.viewCount || 0}</View>
+        <View className={styles.tag}>内容{data.threadCount || 0}</View>
+      </View>
+    </View>
   );
 };
 
@@ -29,18 +30,18 @@ export const Topic = ({ data, onClick }) => {
  * 帖子组件
  * @prop {object}   data 帖子数据
  * @prop {function} onClick 帖子点击事件
- * @prop {boolean}  divider 分割线
+ * @prop {boolean}  Viewider 分割线
  */
 // const click = useCallback(() => {
 //   onClick && onClick(data);
 // }, [data, onClick]);
 
 // TODO: 帖子如何点击待处理 click
-export const Post = ({ divider, ...props }) => (
-  <div {...props}>
-    <div>
+export const Post = ({ Viewider, ...props }) => (
+  <View {...props}>
+    <View>
       <ThreadContent />
-    </div>
-    {divider && <div className={styles.hr} />}
-  </div>
+    </View>
+    {Viewider && <View className={styles.hr} />}
+  </View>
 );

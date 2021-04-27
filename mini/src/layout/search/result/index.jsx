@@ -8,6 +8,7 @@ import SectionTitle from './components/section-title';
 import SearchPosts from './components/search-posts';
 import SearchTopics from './components/search-topics';
 import SearchUsers from './components/search-users';
+import { View, Text } from '@tarojs/components';
 
 import styles from './index.module.scss';
 
@@ -62,25 +63,25 @@ class SearchResultH5Page extends React.Component {
     const { keyword } = this.state;
 
     return (
-      <div className={styles.page}>
-        <div className={styles.searchInput}>
+      <View className={styles.page}>
+        <View className={styles.searchInput}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
-        </div>
-        <div className={styles.section}>
+        </View>
+        <View className={styles.section}>
           <SectionTitle title="用户" onShowMore={this.redirectToSearchResultUser} />
-        </div>
+        </View>
         <SearchUsers data={SearchUsersData} onItemClick={this.onUserClick} />
-        <div className={styles.hr}></div>
-        <div className={styles.section}>
+        <View className={styles.hr}></View>
+        <View className={styles.section}>
           <SectionTitle title="主题" onShowMore={this.redirectToSearchResultPost} />
-        </div>
+        </View>
         <SearchPosts data={Array(2).fill('')} onItemClick={this.onPostClick} />
-        <div className={styles.hr}></div>
-        <div className={styles.section}>
+        <View className={styles.hr}></View>
+        <View className={styles.section}>
           <SectionTitle title="话题" onShowMore={this.redirectToSearchResultTopic} />
-        </div>
+        </View>
         <SearchTopics data={SearchTopicsData} onItemClick={this.onTopicClick} />
-      </div>
+      </View>
     );
   }
 }

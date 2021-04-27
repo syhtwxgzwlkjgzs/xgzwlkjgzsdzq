@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import UserItem from '@components/thread/user-item';
 import List from '../list';
+import { View, Text } from '@tarojs/components';
 
 import styles from './index.module.scss';
 

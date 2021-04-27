@@ -7,6 +7,7 @@ import SearchInput from '@components/search-input';
 import SearchPosts from './components/search-posts';
 
 import styles from './index.module.scss';
+import { View, Text } from '@tarojs/components';
 
 @inject('site')
 @observer
@@ -63,11 +64,11 @@ class SearchResultPostH5Page extends React.Component {
     const { keyword, data, refreshing } = this.state;
 
     return (
-      <div className={styles.page}>
+      <View className={styles.page}>
         <Header />
-        <div className={styles.searchInput}>
+        <View className={styles.searchInput}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
-        </div>
+        </View>
         <SearchPosts
           data={data}
           refreshing={refreshing}
@@ -75,7 +76,7 @@ class SearchResultPostH5Page extends React.Component {
           onFetchMore={this.fetchMoreData}
           onItemClick={this.onPostClick}
         />
-      </div>
+      </View>
     );
   }
 }

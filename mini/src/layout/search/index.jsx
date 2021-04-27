@@ -8,7 +8,6 @@ import SectionTitle from './components/section-title';
 import TrendingTopics from './components/trending-topics';
 import ActiveUsers from './components/active-users';
 import PopularContents from './components/popular-contents';
-import Header from '../../components/header';
 import { View, Text } from '@tarojs/components';
 
 import styles from './index.module.scss';
@@ -43,32 +42,30 @@ class SearchH5Page extends React.Component {
 
   render() {
     const { indexTopics, indexUsers, indexThreads } = this.props.search;
-    const { pageData: topicsPageData } = indexTopics;
-    const { pageData: usersPageData } = indexUsers;
-    const { pageData: threadsPageData } = indexThreads;
+    const { pageData: topicsPageData = [] } = indexTopics|| {};
+    const { pageData: usersPageData = [] } = indexUsers || {};
+    const { pageData: threadsPageData = [] } = indexThreads || {};
     return (
       <View className={styles.page}>
-        {/* 水电费考虑到所发生的 */}
-        <Header />
         <View className={styles.section}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} />
           <SectionTitle title="潮流话题" onShowMore={this.redirectToSearchResultTopic} />
-          {/* <TrendingTopics data={topicsPageData} onItemClick={this.onTopicClick} /> */}
+          <TrendingTopics data={topicsPageData} onItemClick={this.onTopicClick} />
         </View>
         <View className={styles.hr} />
         <View className={styles.section}>
           <SectionTitle title="活跃用户" onShowMore={this.redirectToSearchResultUser} />
-          {/* <ActiveUsers data={usersPageData} onItemClick={this.onUserClick} /> */}
+          <ActiveUsers data={usersPageData} onItemClick={this.onUserClick} />
         </View>
         <View className={styles.hr} />
         <View className={`${styles.section} ${styles.popularContents}`}>
           <SectionTitle title="热门内容" onShowMore={this.redirectToSearchResultPost} />
         </View>
-        {/* <PopularContents data={threadsPageData} onItemClick={this.onPostClick} /> */}
+        <PopularContents data={threadsPageData} onItemClick={this.onPostClick} />
       </View>
     );
   }
 }
 
-// export default withRouter(SearchH5Page);
-export default SearchH5Page;
+export default withRouter(SearchH5Page);
+// export default SearchH5Page;

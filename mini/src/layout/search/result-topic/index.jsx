@@ -7,6 +7,7 @@ import SearchTopics from './components/search-topics';
 import Header from '@components/header';
 
 import styles from './index.module.scss';
+import { View, Text } from '@tarojs/components';
 
 @inject('search')
 @observer
@@ -66,11 +67,11 @@ class SearchResultTopicH5Page extends React.Component {
     const { topics } = this.props.search;
     const { pageData } = topics || { pageData: [] };
     return (
-      <div className={styles.page}>
+      <View className={styles.page}>
         <Header />
-        <div className={styles.searchInput}>
+        <View className={styles.searchInput}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
-        </div>
+        </View>
         <SearchTopics
           data={pageData}
           refreshing={refreshing}
@@ -78,7 +79,7 @@ class SearchResultTopicH5Page extends React.Component {
           onFetchMore={this.fetchMoreData}
           onItemClick={this.onTopicClick}
         />
-      </div>
+      </View>
     );
   }
 }

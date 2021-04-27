@@ -49,7 +49,7 @@ class Index extends React.Component {
   }
 
   render() {
-    return <IndexH5Page />;
+    return <IndexH5Page dispatch={this.dispatch}/>;
   }
 }
 

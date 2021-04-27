@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import Router from '@discuzq/sdk/dist/router';
+import { View, Text } from '@tarojs/components';
 
 export default function H5Header(props) {
   const { isBackCustom } = props;
@@ -24,10 +25,10 @@ export default function H5Header(props) {
   }, []);
 
   return (
-    <div className={styles.header}>
-        <div className={styles.headerContent}>
-            <div onClick={gobackClickHandle} className={styles.left}>返回</div>
-            <div className={styles.right}>
+    <View className={styles.header}>
+        <View className={styles.headerContent}>
+            <View onClick={gobackClickHandle} className={styles.left}>返回</View>
+            <View className={styles.right}>
                 <Icon onClick={() => {
                   iconClickHandle('home');
                 }} name="HomeOutlined" color="#C4C9D6" size={20} />
@@ -37,8 +38,8 @@ export default function H5Header(props) {
                 <Icon onClick={() => {
                   iconClickHandle('user');
                 }} name="ProfessionOutlined" color="#C4C9D6" size={20} />
-            </div>
-        </div>
-    </div>
+            </View>
+        </View>
+    </View>
   );
 }

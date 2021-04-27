@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import Avatar from '@components/avatar';
 
 import styles from './index.module.scss';
+import { View, Text } from '@tarojs/components';
 
 /**
  * 活跃用户
@@ -9,12 +10,12 @@ import styles from './index.module.scss';
  * @prop {function} onItemClick 用户点击事件
  */
 const ActiveUsers = ({ data, onItemClick }) => (
-  <div className={styles.list}>
+  <View className={styles.list}>
     {data.length > 0
       && Array(Math.ceil(data.length / 5))
         .fill('')
         .map((v, rowIndex, rowArr) => (
-          <div key={rowIndex} className={`${styles.itemRow} ${rowIndex === rowArr.length - 1 ? styles.lastRow : ''}`}>
+          <View key={rowIndex} className={`${styles.itemRow} ${rowIndex === rowArr.length - 1 ? styles.lastRow : ''}`}>
             {Array(5)
               .fill('')
               .map((v, index) => {
@@ -23,9 +24,9 @@ const ActiveUsers = ({ data, onItemClick }) => (
                 if (!user) return null;
                 return <User key={index} data={user} onClick={onItemClick} />;
               })}
-          </div>
+          </View>
         ))}
-  </div>
+  </View>
 );
 
 /**
@@ -39,10 +40,10 @@ const User = ({ data, onClick }) => {
   }, [data, onClick]);
 
   return (
-    <div className={styles.item} onClick={click}>
+    <View className={styles.item} onClick={click}>
       <Avatar className={styles.avatar} image={data.avatar} name={data.username} />
-      <div className={styles.name}>{data.username || ''}</div>
-    </div>
+      <View className={styles.name}>{data.username || ''}</View>
+    </View>
   );
 };
 

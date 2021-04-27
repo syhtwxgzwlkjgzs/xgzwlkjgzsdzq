@@ -3,6 +3,7 @@ import React from 'react';
 import { User } from '../../../../../../components/search-result-item';
 
 import styles from './index.module.scss';
+import { View, Text } from '@tarojs/components';
 
 /**
  * 用户搜索结果
@@ -10,11 +11,11 @@ import styles from './index.module.scss';
  * @prop {function} onItemClick 用户点击事件
  */
 const SearchUsers = ({ data = [], onItemClick }) => (
-  <div className={styles.list}>
+  <View className={styles.list}>
     {data.map((item, index) => (
       <User key={index} data={item} onClick={onItemClick} />
     ))}
-  </div>
+  </View>
 );
 
 export default React.memo(SearchUsers);

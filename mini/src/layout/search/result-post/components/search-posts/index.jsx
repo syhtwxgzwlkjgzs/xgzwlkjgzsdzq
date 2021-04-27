@@ -16,7 +16,7 @@ import styles from './index.module.scss';
 const SearchPosts = ({ data, refreshing, onRefresh, onFetchMore, onItemClick }) => {
   const renderItem = useCallback(
     ({ data: _data, index }) => (
-      <Post key={index} data={_data[index]} onClick={onItemClick} divider={index !== _data.length - 1} />
+      <Post key={index} data={_data[index]} onClick={onItemClick} Viewider={index !== _data.length - 1} />
     ),
     [onItemClick],
   );
