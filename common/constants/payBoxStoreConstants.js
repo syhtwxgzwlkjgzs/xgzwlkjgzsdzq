@@ -4,6 +4,7 @@ export const STEP_MAP = {
   PAY: 'pay', // 付费阶段
   WALLET_PASSWORD: 'walletPassword', // 钱包密码输入阶段
   RESULT: 'result', // 付费完成后确认付费信息阶段
+  SET_PASSWORD: 'setPassword', // 设置支付密码
 };
 
 // 支付模式映射表
@@ -74,5 +75,5 @@ export const PAY_BOX_ERROR_CODE_MAP = {
   WX_MINI_PAY_CREATE_FAILED: {
     Code: 'pbx_0005',
     Message: '拉起微信小程序支付失败',
-  },
+  }
 };

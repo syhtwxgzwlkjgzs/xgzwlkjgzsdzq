@@ -152,7 +152,7 @@ class PayBoxStore {
    * 钱包支付订单
    */
   @action
-  walletPayOrder = throttle(async () => {
+  walletPayOrder = async () => {
     try {
       const payRes = await createPayOrder({
         data: {
@@ -185,7 +185,7 @@ class PayBoxStore {
         error,
       };
     }
-  }, 1000);
+  };
 
   /**
    * 微信支付订单
