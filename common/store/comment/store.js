@@ -6,6 +6,7 @@ class CommentStore {
   }
   @observable commentDetail = null; // 评论信息
   @observable threadId = null; // 评论信息
+  @observable authorInfo = null; // 作者信息
 
   // 回复列表
   @computed get replyList() {

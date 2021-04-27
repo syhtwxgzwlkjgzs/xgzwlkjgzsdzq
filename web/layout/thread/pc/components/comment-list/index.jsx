@@ -4,6 +4,10 @@ import Avatar from '@components/avatar';
 import ReplyList from '../reply-list/index';
 import { diffDate } from '@common/utils/diff-date';
 import { observer } from 'mobx-react';
+import { Icon } from '@discuzq/design';
+import classnames from 'classnames';
+import CommentInput from '../comment-input/index';
+
 @observer
 class CommentList extends React.Component {
   constructor(props) {
@@ -14,6 +18,9 @@ class CommentList extends React.Component {
       isShowAdopt: false, // 是否展示采纳按钮
       isHideEdit: this.props.isHideEdit, // 隐藏评论编辑删除
       isShowOne: this.props.isShowOne || false, // 是否只显示一条评论回复
+      isShowInput: this.props.isShowInput, // 是否显示输入框
+      replyId: null,
+      placeholder: '输入你的回复',
     };
     this.needReply = this.props.data.lastThreeComments;// 评论的回复
   }
@@ -36,6 +43,13 @@ class CommentList extends React.Component {
 
   // 点击评论回复
   replyClick() {
+    const userName = this.props.data?.user?.username || this.props.data?.user?.userName;
+
+    this.setState({
+      isShowInput: !this.state.isShowInput,
+      replyId: null,
+      placeholder: userName ? `回复${userName}` : '请输入内容',
+    });
     typeof this.props.replyClick === 'function' && this.props.replyClick();
   }
 
@@ -61,6 +75,10 @@ class CommentList extends React.Component {
 
   // 点击回复回复
   replyReplyClick(data) {
+    this.setState({
+      replyId: data?.id,
+    });
+
     typeof this.props.replyReplyClick === 'function' && this.props.replyReplyClick(data);
   }
 
@@ -120,6 +138,7 @@ class CommentList extends React.Component {
             </Avatar>
           </div>
           <div className={styles.commentListContent}>
+            {/* 评论内容 */}
             <div className={styles.commentListContentText} onClick={() => this.toCommentDetail()}>
               <div className={styles.commentListName}>
                 {this.props.data.user.username || this.props.data.user.userName}
@@ -128,26 +147,46 @@ class CommentList extends React.Component {
                 {this.props.data.content}
               </div>
             </div>
+
             <div className={styles.commentListFooter}>
+              {/* 操作按钮 */}
               <div className={styles.commentBtn}>
                 <div className={styles.commentTime}>{diffDate(this.props.data.createdAt)}</div>
                 <div className={styles.extraBottom}>
-                  <div className={this.props?.data?.isLiked ? styles.commentLike : styles.commentLiked}>
-                    <span onClick={() => this.likeClick(canLike)}>
+                  <div
+                    className={classnames(styles.commentLike, this.props?.data?.isLiked && styles.active)}
+                    onClick={() => this.likeClick(canLike)}>
+                    <Icon className={styles.icon} name="LikeOutlined"></Icon>
                       赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
-                    </span>
                   </div>
-                  <div className={styles.commentReply}>
-                    <span onClick={() => this.replyClick()}>回复</span>
+                  <div
+                    className={
+                      classnames(styles.commentReply, this.props.isShowInput && this.state.isShowInput && styles.active)
+                    }
+                    onClick={() => this.replyClick()}>
+                    <Icon className={styles.icon} name="MessageOutlined"></Icon>
+                    <span>回复</span>
                   </div>
                   {
                     this.state.isShowAdopt
                       ? <div className={styles.commentAdopt}>
+                        <Icon className={styles.icon} name="ExactnessOutlined"></Icon>
                         <span onClick={() => this.adoptClick()}>采纳</span>
                       </div> : ''
                   }
                 </div>
               </div>
+
+              {/* 回复输入框 */}
+              {this.props.isShowInput && this.state.isShowInput
+                && <div className={styles.commentInput}>
+                  <CommentInput
+                    height='label'
+                    onSubmit={value => this.props.onSubmit(value)}
+                    placeholder={this.state.placeholder}>
+                  </CommentInput>
+                </div>
+              }
               {
                 this.props.data?.replyCount - 1 > 0 && this.state.isShowOne
                   ? <div
@@ -156,6 +195,7 @@ class CommentList extends React.Component {
                     查看之前{this.props.data?.replyCount - 1}条回复...
                     </div> : ''
               }
+              {/* 回复列表 */}
               {
                 this.needReply?.length > 0
                 && <div className={styles.replyList}>
@@ -167,7 +207,9 @@ class CommentList extends React.Component {
                         avatarClick={() => this.reployAvatarClick(this.needReply[0])}
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
-                        toCommentDetail={() => this.toCommentDetail()}>
+                        toCommentDetail={() => this.toCommentDetail()}
+                        onSubmit={value => this.props.onSubmit(value)}
+                        isShowInput={this.state.replyId && this.state.replyId === this.needReply[0].id}>
                       </ReplyList>
                       : (this.needReply || [])
                         .map((val, index) => (
@@ -177,7 +219,9 @@ class CommentList extends React.Component {
                             avatarClick={() => this.reployAvatarClick(val)}
                             likeClick={() => this.replyLikeClick(val)}
                             replyClick={() => this.replyReplyClick(val)}
-                            toCommentDetail={() => this.toCommentDetail()}>
+                            toCommentDetail={() => this.toCommentDetail()}
+                            onSubmit={value => this.props.onSubmit(value)}
+                            isShowInput={this.state.replyId && this.state.replyId === val.id}>
                           </ReplyList>
                         ))
                   }

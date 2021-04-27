@@ -1,0 +1,63 @@
+@import '@common/styles/variable/index.scss';
+@import '@common/styles/fn/rem.scss';
+
+.container {
+  background: var(--color-white);
+  border: var(--border-border);
+  border-radius: rem(5);
+  overflow: hidden;
+}
+
+.main {
+  :global{
+    .dzq-textarea {
+      border: 1px solid transparent;
+      border-radius: 0;
+      .dzq-textarea__inner{
+        background: #f5f7f8;
+        resize: none;
+      }
+    }
+  }
+}
+
+
+.input {
+  width: 100%;
+  background: #f5f7f8;
+}
+.heightMiddle {
+  height: rem(116);
+}
+.heightLabel {
+  height: rem(76);
+}
+
+.upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  span {
+    margin-top: rem($margin-1n);
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  .linkBtn {
+    display: flex;
+    color: #8a95ac;
+    .btnIcon {
+      line-height: rem(52);
+      padding: 0 rem($padding-2n);
+    }
+  }
+  .button {
+    width: rem(100);
+    height: rem(36);
+    border-radius: rem($border-radius-small);
+    margin: rem($margin-2n) rem($margin-4n);
+  }
+}

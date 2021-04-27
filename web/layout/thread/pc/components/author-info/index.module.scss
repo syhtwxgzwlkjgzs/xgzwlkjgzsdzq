@@ -1,93 +1,94 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 .container {
-    padding: rem($padding-4n);
-    .header {
-        font-family: 'PingFang SC';
-        font-weight: 600;
-        font-size: rem(18);
-        line-height: rem($font-line-height-primary);
+  padding: rem($padding-4n);
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+
+  .header {
+    font-weight: var(--font-weight-regular);
+    font-size: rem(18);
+    line-height: rem($font-line-height-primary);
+    text-align: left;
+    color: var(--color-text-primary);
+    padding-bottom: rem($padding-4n);
+    border-bottom: var(--border-border);
+  }
+
+  .info {
+    padding-bottom: rem($padding-5n);
+    .AuthorInfo {
+      display: flex;
+      padding: rem($padding-5n) 0;
+      .information {
+        padding-left: rem($padding-1n);
+        font-weight: normal;
+        font-size: rem($font-size-primary);
+        line-height: rem(16);
         text-align: left;
-        color: var(--color-text-primary);
-        padding-bottom: rem($padding-4n);
-        border-bottom: var(--border-border);
-    }
-    
-    .info {
-        padding-bottom: rem($padding-5n);
-        .AuthorInfo {
-            display: flex;
-            padding: rem($padding-5n) 0;
-            .information {
-                padding-left: rem($padding-1n);
-                font-weight: normal;
-                font-size: rem($font-size-primary);
-                line-height: rem(16);
-                text-align: left;
-                .name {
-                    color: var(--color-text-primary);
-                    font-family: 'PingFangSC-Semibold';
-                    padding: rem($padding-1n) 0;
-                }
-                .dynamic {
-                    color: var(--color-text-secondary);
-                    font-family: 'PingFangSC-Regular';
-                }
-            }
+        .name {
+          color: var(--color-text-primary);
+          font-weight: var(--font-weight-regular);
+          padding: rem($padding-1n) 0;
         }
-
-        .theme {
-            display: flex;
-            justify-content: space-around;
-            .themeInfo {
-                font-weight: normal;
-                .title {
-                    font-family: 'PingFang SC';
-                    font-size: rem($font-size-primary);
-                    line-height: rem(16);
-                    text-align: center;
-                    color: #4f5a70;
-                }
-                .number {
-                    font-family: 'PingFangSC-Semibold';
-                    font-size: rem($font-size-large);
-                    line-height: rem(16);
-                    text-align: center;
-                    color: var(--color-text-primary);
-                    padding-top: rem($padding-4n);
-                }
-            }
+        .dynamic {
+          color: var(--color-text-secondary);
         }
+      }
     }
 
-    .btn {
-        display: flex;
-        justify-content: center;
-        padding-top: rem(10);
-        border-top: var(--border-border);
-        .follow {
-            width: rem(114);
-            height: rem(36);
-            background: #c4c9d6;
-            border-radius: rem($border-radius-small);
-            margin: rem(10);
-            line-height: rem(36);
-            text-align: center;
-            color: #fff;
+    .theme {
+      display: flex;
+      justify-content: space-between;
+      .themeInfo {
+        font-weight: normal;
+        .title {
+          font-size: rem($font-size-primary);
+          line-height: rem(16);
+          text-align: center;
+          color: #4f5a70;
         }
-        .privateLetter {
-            width: rem(114);
-            height: rem(36);
-            border: solid rem(1) var(--color-primary);
-            border-radius: rem($border-radius-small);
-            margin: rem(10);
-            line-height: rem(36);
-            text-align: center;
-            color: var(--color-primary);
+        .number {
+          font-weight: var(--font-weight-regular);
+          font-size: rem($font-size-large);
+          line-height: rem(16);
+          text-align: center;
+          color: var(--color-text-primary);
+          padding-top: rem($padding-4n);
         }
-
-        .btnIcon {
-            margin-right: rem($margin-1n);
-        }
+      }
     }
+  }
+
+  .btn {
+    display: flex;
+    justify-content: center;
+    padding-top: rem(10);
+    border-top: var(--border-border);
+
+    .follow {
+      width: rem(114);
+      height: rem(36);
+      margin: rem(10);
+    }
+
+    .privateLetter {
+      width: rem(114);
+      height: rem(36);
+      margin: rem(10);
+      border: 1px solid var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .btnItem {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btnIcon {
+      margin-right: rem($margin-2n);
+    }
+  }
 }

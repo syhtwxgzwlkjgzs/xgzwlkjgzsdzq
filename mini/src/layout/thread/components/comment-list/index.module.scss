@@ -17,15 +17,29 @@
         color: var(--color-text-secondary);
         margin-right: 10px;
       }
-      .showMoneyNum {
-        font-size: 12px;
-        text-align: left;
-        color: var(--color-text-primary);
-        margin-left: 10px;
-        .moneyNumber {
-          color: var(--color-error);
+
+      .headerRigth {
+        display: flex;
+        .showMoneyNum {
+          font-size: 12px;
+          text-align: left;
+          color: var(--color-text-primary);
+          margin-left: 10px;
+          .moneyNumber {
+            color: var(--color-error);
+          }
+        }
+        .more {
+          font-size: 12px;
+          text-align: left;
+          color: var(--color-text-primary);
+          margin-left: 20px;
+          .moreIcon {
+            margin-top: -4px;
+          }
         }
       }
+
     }
   }
   .content {

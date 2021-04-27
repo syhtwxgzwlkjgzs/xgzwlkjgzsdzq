@@ -17,20 +17,38 @@
   .input {
     
   }
+  
   .inputIcon {
     padding: 0 10px;
-
+    
   }
 }
 
 .icon {
   margin-left: 24px;
   display: inline-block;
-
+  position: relative;
+  
   // TODO:暂未提供token
   color: #8490a8;
-
+  
   :first-child {
     margin-left: 0;
   }
+}
+
+.badge {
+  width: 20px;
+  height: 20px;
+  font-family: 'PingFang SC';
+  font-weight: normal;
+  font-size: 10px;
+  text-align: center;
+  line-height: 20px;
+  color: #fff;
+  background: var(--color-error);
+  border-radius: 50%;
+  position: absolute;
+  right: -8px;
+  top: -8px;
 }

@@ -1,11 +1,27 @@
 import { action } from 'mobx';
 import CommentStore from './store';
-import { readCommentDetail, updateComment, createPosts, updatePosts } from '@server';
+import { readCommentDetail, updateComment, createPosts, updatePosts, readUser } from '@server';
 import xss from '@common/utils/xss';
 
 class CommentAction extends CommentStore {
   constructor(props) {
     super(props);
+  }
+
+  @action
+  async fetchAuthorInfo(userId) {
+    const userRes = await readUser({ params: { pid: userId } });
+    if (userRes.code === 0) {
+      this.authorInfo = userRes.data;
+    }
+
+    return userRes;
+  }
+
+  @action
+  reset() {
+    this.commentDetail = null;
+    this.threadId = null;
   }
 
   @action

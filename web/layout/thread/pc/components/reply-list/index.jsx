@@ -3,8 +3,20 @@ import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { diffDate } from '@common/utils/diff-date';
 import { observer } from 'mobx-react';
+import classnames from 'classnames'
+import { Icon } from '@discuzq/design'
+import CommentInput from '../comment-input/index';
+
 @observer
 export default class ReplyList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isShowInput: this.props.isShowInput, // 是否显示输入框
+      placeholder: '输入你的回复',
+    };
+  }
+
   // 跳转至评论详情
   toCommentDetail() {
     console.log('跳至评论详情');
@@ -14,6 +26,12 @@ export default class ReplyList extends React.Component {
     typeof this.props.likeClick === 'function' && this.props.likeClick();
   }
   replyClick() {
+    const userName = this.props.data?.user?.username || this.props.data?.user?.userName;
+
+    this.setState({
+      isShowInput: !this.state.isShowInput,
+      placeholder: userName ? `回复${userName}` : '请输入内容',
+    });
     typeof this.props.replyClick === 'function' && this.props.replyClick();
   }
 
@@ -67,17 +85,35 @@ export default class ReplyList extends React.Component {
           </div>
           <div className={styles.replyListFooter}>
             <div className={styles.replyTime}>{diffDate(this.props.data.createdAt)}</div>
+
+            {/* 操作按钮 */}
             <div className={styles.extraBottom}>
-              <div className={this.props?.data?.isLiked ? styles.replyLike : styles.replyLiked}>
-                <span onClick={() => this.likeClick(canLike)}>
-                  赞&nbsp;{ this.props?.data?.likeCount === 0 ? '' :  this.props.data.likeCount}
-                </span>
+              <div
+                className={classnames(styles.commentLike, this.props?.data?.isLiked && styles.active)}
+                onClick={() => this.likeClick(canLike)}>
+                <Icon className={styles.icon} name="LikeOutlined"></Icon>
+                    赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
               </div>
-              <div className={styles.replyReply}>
-                <span onClick={() => this.replyClick()}>回复</span>
+              <div className=
+                {classnames(styles.commentReply, this.props.isShowInput && this.state.isShowInput && styles.active)}
+                onClick={() => this.replyClick()}>
+                <Icon className={styles.icon} name="MessageOutlined"></Icon>
+                <span>回复</span>
               </div>
             </div>
           </div>
+
+
+          {/* 回复输入框 */}
+          {this.props.isShowInput && this.state.isShowInput
+            && <div className={styles.commentInput}>
+              <CommentInput
+                height='label'
+                onSubmit={value => this.props.onSubmit(value)}
+                placeholder={this.state.placeholder}>
+              </CommentInput>
+            </div>
+          }
         </div>
       </div>
     );
