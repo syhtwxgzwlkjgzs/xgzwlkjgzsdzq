@@ -1,13 +1,13 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 
 import RecommendContent from './components/recommend-content/index';
 import AuthorInfo from './components/author-info/index';
 import CommentList from './components/comment-list/index';
-import CommentInput from './components/input/index';
+import CommentInput from './components/comment-input/index';
 import LoadingTips from './components/loading-tips';
-import { Icon, Toast, Tag, Button, Card, Menu } from '@discuzq/design';
+import { Icon, Toast, Button, Divider, Dropdown } from '@discuzq/design';
 import UserInfo from '@components/thread/user-info';
 import Header from '@components/header';
 import NoMore from './components/no-more';
@@ -92,9 +92,34 @@ const RenderThreadContent = observer((props) => {
           ></UserInfo>
         </div>
         <div className={topic.more} onClick={onMoreClick}>
-          <Icon size="20" color="#8590A6" name="MoreVOutlined"></Icon>
+          <div className={topic.iconText}>
+            <Dropdown
+              menu={<Dropdown.Menu>
+                <Dropdown.Item id="edit">编辑</Dropdown.Item>
+                <Dropdown.Item id="3">置顶</Dropdown.Item>
+                <Dropdown.Item id="1">精华</Dropdown.Item>
+                <Dropdown.Item id="delete" disabled={true}>
+                  删除
+                </Dropdown.Item>
+              </Dropdown.Menu>}
+              placement="center"
+              hideOnClick={true}
+              arrow={true}
+              trigger="hover"
+              onChange={key => console.log(key)}
+            >
+              <Icon className={topic.icon} name="SettingOutlined"></Icon>
+              <span className={topic.text}>管理</span>
+            </Dropdown>
+          </div>
+          <div className={topic.iconText}>
+            <Icon className={topic.icon} name="WarnOutlinedThick"></Icon>
+            <span className={topic.text}>举报</span>
+          </div>
         </div>
       </div>
+
+      <Divider></Divider>
 
       {
         isApproved === 1
@@ -171,6 +196,9 @@ const RenderThreadContent = observer((props) => {
           && <span>{threadStore?.threadData?.likeReward?.shareCount}次分享</span>
         }
       </div>
+      <Divider></Divider>
+
+
     </div>
   );
 });
@@ -186,7 +214,8 @@ class RenderCommentList extends React.Component {
       showCommentInput: false, // 是否弹出评论框
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
-      inputText: '请输入内容', // 默认回复框placeholder内容
+      placeholder: '写下我评论...', // 默认回复框placeholder内容
+      commentId: null,
     };
 
     this.commentData = null;
@@ -281,7 +310,8 @@ class RenderCommentList extends React.Component {
     const userName = comment?.user?.username || comment?.user?.userName;
     this.setState({
       showCommentInput: true,
-      inputText: userName ? `回复${userName}` : '请输入内容',
+      placeholder: userName ? `回复${userName}` : '请输入内容',
+      commentId: comment.id,
     });
   }
 
@@ -294,7 +324,8 @@ class RenderCommentList extends React.Component {
 
     this.setState({
       showCommentInput: true,
-      inputText: userName ? `回复${userName}` : '请输入内容',
+      placeholder: userName ? `回复${userName}` : '请输入内容',
+      commentId: null,
     });
   }
 
@@ -367,8 +398,21 @@ class RenderCommentList extends React.Component {
 
         {/* 输入框 */}
         <div className={comment.input}>
-          <CommentInput onSubmit={value => this.onPublishClick(value)} height='middle'></CommentInput>
+          <CommentInput
+            height='middle'
+            onSubmit={value => this.props.onPublishClick(value)}
+            initValue={this.state.inputValue}
+            placeholder={this.state.placeholder}>
+          </CommentInput>
         </div>
+
+        {/* 评论弹层 */}
+        {/* <InputPopup
+            visible={this.state.showCommentInput}
+            onClose={() => this.onClose()}
+            initValue={this.state.inputValue}
+            onSubmit={value => this.onPublishClick(value)}
+          ></InputPopup> */}
 
         <div className={comment.body}>
           {commentList.map((val, index) => (
@@ -384,6 +428,7 @@ class RenderCommentList extends React.Component {
                 replyReplyClick={reploy => this.replyReplyClick(reploy, val)}
                 onCommentClick={() => this.onCommentClick(val)}
                 isShowOne={true}
+                isShowInput={this.state.commentId === val.id}
               ></CommentList>
             </div>
           ))}
@@ -434,6 +479,7 @@ class ThreadPCPage extends React.Component {
 
   // 滚动事件
   handleOnScroll() {
+    console.log(1);
     // 加载评论列表
     const scrollDistance = this.threadBodyRef?.current?.scrollTop;
     const offsetHeight = this.threadBodyRef?.current?.offsetHeight;
@@ -509,7 +555,7 @@ class ThreadPCPage extends React.Component {
       id,
       page: this.page,
       perPage: this.perPage,
-      sort: this.commentDataSort ? '-createdAt' : 'createdAt',
+      sort: this.commentDataSort ? 'createdAt' : '-createdAt',
     };
 
     const { success, msg } = await this.props.thread.loadCommentList(params);
@@ -792,61 +838,64 @@ class ThreadPCPage extends React.Component {
           <Header></Header>
         </div>
 
+
         <div
           className={layout.body}
           ref={this.threadBodyRef}
           onScrollCapture={() => throttle(this.handleOnScroll(), 500)}
         >
-          <div className={layout.body}>
-            {/* 左边内容和评论 */}
-            <div className={layout.bodyLeft}>
-              <div className={topic.container}>
-                {/* 帖子内容 */}
-                {isReady ? (
-                  <RenderThreadContent
-                    store={threadStore}
-                    fun={fun}
-                    onLikeClick={() => this.onLikeClick()}
-                  ></RenderThreadContent>
-                ) : (
-                  <LoadingTips type="init"></LoadingTips>
-                )}
-              </div>
 
-              {/* 回复详情内容 */}
-              <div className={`${layout.bottom} ${comment.container}`} ref={this.commentDataRef}>
-                {isCommentReady ? (
-                  <Fragment>
-                    <RenderCommentList
-                      router={this.props.router}
-                      sort={flag => this.onSortChange(flag)}
-                      onEditClick={comment => this.onEditClick(comment)}>
-                    </RenderCommentList>
-                    {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
-                    {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
-                  </Fragment>
-                ) : (
-                  <LoadingTips type="init"></LoadingTips>
-                )}
-              </div>
+          {/* 左边内容和评论 */}
+          <div className={layout.bodyLeft}>
+            <div className={topic.container}>
+              {/* 帖子内容 */}
+              {isReady ? (
+                <RenderThreadContent
+                  store={threadStore}
+                  fun={fun}
+                  onLikeClick={() => this.onLikeClick()}
+                ></RenderThreadContent>
+              ) : (
+                <LoadingTips type="init"></LoadingTips>
+              )}
             </div>
 
-            {/* 右边信息 */}
-            <div className={layout.bodyRigth}>
-              <div className={layout.authorInfo}>
-                <AuthorInfo></AuthorInfo>
-              </div>
-              <div className={layout.recommend}>
-                <RecommendContent></RecommendContent>
-              </div>
+            {/* 回复详情内容 */}
+            <div className={`${layout.bottom} ${comment.container}`} ref={this.commentDataRef}>
+              {isCommentReady ? (
+                <Fragment>
+                  <RenderCommentList
+                    router={this.props.router}
+                    sort={flag => this.onSortChange(flag)}
+                    onEditClick={comment => this.onEditClick(comment)}
+                    onPublishClick={value => this.onPublishClick(value)}>
+                  </RenderCommentList>
+                  {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
+                  {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
+                </Fragment>
+              ) : (
+                <LoadingTips type="init"></LoadingTips>
+              )}
             </div>
           </div>
-          <DeletePopup
-            visible={this.state.showDeletePopup}
-            onClose={() => this.setState({ showDeletePopup: false })}
-            onBtnClick={() => this.delete()}
-          ></DeletePopup>
+
+          {/* 右边信息 */}
+          <div className={layout.bodyRigth}>
+            <div className={layout.authorInfo}>
+              {threadStore?.threadData?.user && <AuthorInfo user={threadStore?.threadData?.user}></AuthorInfo>}
+            </div>
+            <div className={layout.recommend}>
+              <RecommendContent></RecommendContent>
+            </div>
+          </div>
         </div>
+
+
+        <DeletePopup
+          visible={this.state.showDeletePopup}
+          onClose={() => this.setState({ showDeletePopup: false })}
+          onBtnClick={() => this.delete()}
+        ></DeletePopup>
       </div>
     );
   }

@@ -1,22 +1,18 @@
 
 import React from 'react';
-import { Avatar, Icon, Toast } from '@discuzq/design';
+import { Icon, Toast } from '@discuzq/design';
+import Avatar from '@components/avatar';
 import styles from './index.module.scss';
+import { diffDate } from '@common/utils/diff-date';
 
 class AuthorInfo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isFollow: true, // 是否关注
-      avatarUrl: '', // 楼主头像url
-      name: 'Pit', // 楼主用户名
-      dynamicDayNum: 2, // 活跃天数
-      themeCount: 36, // 主题数量
-      likeCount: 800, // 点赞数量
-      concernCount: 16, // 关注数量
-      fansCount: 162, // 粉丝数量
-      isShowBtn: true, // 是否显示关注、私信
+      isShowBtn: true,
     };
+
+    this.user = this.props.user || {};
   }
 
   onFollowClick() {
@@ -39,29 +35,29 @@ class AuthorInfo extends React.Component {
             <div className={styles.info}>
                 <div className={styles.AuthorInfo}>
                     <div className={styles.avatar}>
-                        <Avatar image={this.state.avatarUrl} circle={true}></Avatar>
+                        <Avatar image={this.user.avatar} name={this.user.userName} circle={true}></Avatar>
                     </div>
                     <div className={styles.information}>
-                        <div className={styles.name}>{this.state.name}</div>
-                        <div className={styles.dynamic}>活跃在 {this.state.dynamicDayNum}天前</div>
+                        <div className={styles.name}>{this.user.userName || ''}</div>
+                        <div className={styles.dynamic}>活跃在 {diffDate(this.user.joinedAt)}</div>
                     </div>
                 </div>
                 <div className={styles.theme}>
                     <div className={styles.themeInfo}>
                         <div className={styles.title}>主题</div>
-                        <div className={styles.number}>{this.state.themeCount}</div>
+                        <div className={styles.number}>{this.user.threadCount}</div>
                     </div>
                     <div className={styles.themeInfo}>
                         <div className={styles.title}>点赞</div>
-                        <div className={styles.number}>{this.state.likeCount}</div>
+                        <div className={styles.number}>{this.user.likedCount}</div>
                     </div>
                     <div className={styles.themeInfo}>
                         <div className={styles.title}>已关注</div>
-                        <div className={styles.number}>{this.state.concernCount}</div>
+                        <div className={styles.number}>{this.user.followCount}</div>
                     </div>
                     <div className={styles.themeInfo}>
                         <div className={styles.title}>粉丝</div>
-                        <div className={styles.number}>{this.state.fansCount}</div>
+                        <div className={styles.number}>{this.user.fansCount}</div>
                     </div>
                 </div>
             </div>
@@ -75,12 +71,12 @@ class AuthorInfo extends React.Component {
                                 className={styles.btnIcon}>
                             </Icon>
                             <span>
-                                {this.state.isFollow ? '已关注' : '关注'}
+                                {this.user.isFollow ? '已关注' : '关注'}
                             </span>
                         </div>
                         <div className={styles.privateLetter} onClick={() => this.onprivateLetter()}>
                             <Icon
-                                name='MessageOutlined'
+                                name='CommentOutlined'
                                 size='14'
                                 className={styles.btnIcon}>
                             </Icon>

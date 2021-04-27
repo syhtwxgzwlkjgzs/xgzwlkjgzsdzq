@@ -38,6 +38,13 @@ class CommentDetail extends React.Component {
   async componentDidMount() {
     const { id, threadId } = this.props.router.query;
 
+    // 判断缓存
+    const oldId = this.props?.comment?.commentDetail?.id;
+    if (Number(id) === oldId && id && oldId) {
+      return;
+    }
+    this.props.comment.reset();
+
     if (threadId) {
       this.props.comment.setThreadId(threadId);
     }

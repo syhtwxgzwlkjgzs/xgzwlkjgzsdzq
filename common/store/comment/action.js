@@ -9,6 +9,12 @@ class CommentAction extends CommentStore {
   }
 
   @action
+  reset() {
+    this.commentDetail = null;
+    this.threadId = null;
+  }
+
+  @action
   setCommentDetail(data) {
     this.commentDetail = data;
     if (this.commentDetail) {

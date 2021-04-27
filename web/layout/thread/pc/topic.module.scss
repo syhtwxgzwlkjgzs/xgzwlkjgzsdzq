@@ -18,6 +18,30 @@
 
 .more {
   padding-left: rem($padding-2n);
+  display: flex;
+}
+
+.iconText {
+  margin-left: rem(24);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  :global {
+    .dzq-dropdown-menu.dzq-dropdown-menu--center {
+      top: rem(30);
+    }
+  }
+
+  .text {
+    margin-left: rem(8);
+    color: #8490a8;
+  }
+
+  .icon {
+    font-size: rem(14);
+    color: #8490a8;
+  }
 }
 
 .essence {

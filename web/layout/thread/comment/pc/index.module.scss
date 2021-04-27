@@ -3,6 +3,7 @@
 .container {
   width: 100vw;
   background: var(--comment-box-bg-color);
+  min-height: 100vh;
 }
 
 .header {
@@ -16,9 +17,12 @@
   width: 100%;
   display: flex;
   justify-content: center;
+
   .bodyLeft {
+    padding: 50px;
     width: rem(750);
     margin-right: rem(20);
+    background: #fff;
   }
   .bodyRigth {
     width: rem(330);
@@ -31,5 +35,17 @@
       width: 100%;
       background: #fff;
     }
+  }
+}
+
+.back {
+  font-size: rem(14);
+  color: #8590a6;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  span {
+    margin-left: rem(4);
   }
 }

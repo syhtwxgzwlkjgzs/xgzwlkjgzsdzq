@@ -1,7 +1,7 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 .commentList {
-  padding: rem($padding-4n);
+  padding: rem($padding-4n) 0;
   .header {
     display: flex;
     justify-content: flex-end;
@@ -66,15 +66,17 @@
           .commentTime {
             // flex: 1;
           }
-          .commentLiked {
-            // flex: 1;
-          }
           .commentLike {
-            // flex: 1;
-            color: var(--color-primary);
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            cursor: pointer;
           }
           .commentReply {
-            // flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            cursor: pointer;
           }
           .commentDelete {
             // flex: 1;
@@ -88,7 +90,8 @@
           font-size: var($font-size-primary);
           text-align: left;
           color: var(--color-text-primary);
-          padding-top: rem($padding-4n); 
+          padding-top: rem($padding-4n);
+          cursor: pointer;
         }
       }
     }
@@ -109,4 +112,17 @@
       margin-left: rem(24);
     }
   }
+}
+
+.icon {
+  margin-right: rem(8);
+  font-size: rem(14) !important;
+}
+
+.active {
+  color: var(--color-primary);
+}
+
+.commentInput {
+  margin-top: rem(16);
 }
