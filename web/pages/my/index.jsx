@@ -1,27 +1,21 @@
 import React from 'react';
-import styles from './index.module.scss';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 import HOCWithLogin from '@common/middleware/HOCWithLogin';
-import Header from '@components/header';
-import { Button } from '@discuzq/design';
-import clearLoginStatus from '@common/utils/clear-login-status'; 
-import Router from '@discuzq/sdk/dist/router';
+import { inject, observer } from 'mobx-react';
+import MyH5Page from '@layout/my/h5';
+import MyPCPage from '@layout/my/pc';
 
+@inject('site')
+@observer
 class MyCenter extends React.Component {
-
-  loginOut() {
-    clearLoginStatus();
-    window.location.replace('/');
-  }
-
   render() {
-    return (
-      <div className='index'>
-        <Header/>
-        <h1>敬请期待</h1>
-        <Button onClick={this.loginOut}>退出登录</Button>
-      </div>
-    );
+    const { site } = this.props;
+    const { platform } = site;
+
+    if (platform === 'pc') {
+      return <MyPCPage />;
+    }
+    return <MyH5Page />;
   }
 }
 
