@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
-import { PluginToolbar, DefaultToolbar, GeneralUpload, Tag, Title, Content, ClassifyPopup, PaidTypePopup, Position, Emoji } from '@components/thread-post';
-import { Popup } from '@discuzq/design';
+import { PluginToolbar, DefaultToolbar, GeneralUpload, Title, Content, ClassifyPopup, PaidTypePopup, Position, Emoji } from '@components/thread-post';
 import { Units } from '@components/common';
 import styles from './index.module.scss';
 import { THREAD_TYPE } from '@common/constants/thread-post';
@@ -289,6 +288,7 @@ class Index extends Component {
           onHide={() => this.setState({ showPaidType: false })}
         />
 
+        {/* 表情类型弹框 */}
         <Emoji show={showEmoji} onHide={() => {
           this.setState({
             showEmoji: false

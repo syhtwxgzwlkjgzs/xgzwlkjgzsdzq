@@ -1,0 +1,17 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.page {
+  padding-top: 16px;
+}
+.section {
+  padding: 16px;
+  padding-top: 0;
+  &.popularContents{
+    padding-bottom: 0;
+  }
+}
+.hr {
+  height: 10px;
+  background-color: var(--background-color);
+}

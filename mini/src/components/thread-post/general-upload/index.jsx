@@ -29,7 +29,8 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
   const [isRecording, setIsRecording] = useState(false);
 
   // 执行上传
-  const upload = (tempFilePath) => {
+  const upload = (file) => {
+    const tempFilePath = file.path || file.tempPath;
     Taro.uploadFile({
       url: 'https://discuzv3-dev.dnspod.dev/apiv3/attachments',
       filePath: tempFilePath,
@@ -52,7 +53,7 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
         switch(type) {
           case THREAD_TYPE.image:
             images.body.push({
-              thumbUrl: tempPath,
+              thumbUrl: tempFilePath,
               ...res.data
             });
             setPostData({images});
@@ -60,7 +61,7 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
           case THREAD_TYPE.file:
             files.body.push({
               ...res.data,
-              thumbUrl: tempPath,
+              thumbUrl: tempFilePath,
               name: file.name,
               size: file.size,
             });
@@ -78,7 +79,7 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
   const chooseImage = () => {
     Taro.chooseImage({
       success(res) {
-        upload(res.tempFiles[0].path);
+        upload(res.tempFiles[0]);
       }
     });
   }
@@ -87,7 +88,7 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
   const chooseFile = () => {
     Taro.chooseMessageFile({
       success(res) {
-        upload(res.tempFiles[0].path);
+        upload(res.tempFiles[0]);
       }
     });
   }
