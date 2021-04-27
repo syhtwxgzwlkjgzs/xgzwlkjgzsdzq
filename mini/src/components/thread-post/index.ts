@@ -7,3 +7,4 @@ export { default as ClassifyPopup } from './classify-popup';
 export { default as AnalyseProduct } from './analyse-product';
 export { default as PaidTypePopup } from './paid-type-popup';
 export { default as Position } from './position';
+export { default as Emoji } from './emoji';

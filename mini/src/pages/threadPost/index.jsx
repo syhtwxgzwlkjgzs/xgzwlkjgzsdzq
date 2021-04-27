@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
-import { PluginToolbar, DefaultToolbar, GeneralUpload, Tag, Title, Content, ClassifyPopup, PaidTypePopup, Position } from '@components/thread-post';
+import { PluginToolbar, DefaultToolbar, GeneralUpload, Tag, Title, Content, ClassifyPopup, PaidTypePopup, Position, Emoji } from '@components/thread-post';
+import { Popup } from '@discuzq/design';
 import { Units } from '@components/common';
 import styles from './index.module.scss';
 import { THREAD_TYPE } from '@common/constants/thread-post';
@@ -24,7 +25,8 @@ class Index extends Component {
       isShowTitle: true, // 默认显示标题
       showClassifyPopup: false, // 切换分类弹框show
       operationType: 0,
-      contentTextLength: 5000
+      contentTextLength: 5000,
+      showEmoji: false
     }
   }
 
@@ -116,6 +118,11 @@ class Index extends Component {
       case THREAD_TYPE.topic:
         nextRoute = '/pages/threadPost/selectTopic';
         break;
+      case THREAD_TYPE.emoji:
+        this.setState({
+          showEmoji: true
+        });
+        break;
     }
 
     if (nextRoute) Taro.navigateTo({ url: nextRoute });
@@ -193,6 +200,7 @@ class Index extends Component {
       operationType,
       showPaidType,
       contentTextLength,
+      showEmoji,
     } = this.state;
     return (
       <Page>
@@ -213,6 +221,8 @@ class Index extends Component {
               {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => {}} />}
 
               {video.videoUrl && <Units type='video' src={video.videoUrl} />}
+
+
 
             </View>
           </View>
@@ -278,6 +288,12 @@ class Index extends Component {
           onClick={(item) => this.handlePluginClick(item)}
           onHide={() => this.setState({ showPaidType: false })}
         />
+
+        <Emoji show={showEmoji} onHide={() => {
+          this.setState({
+            showEmoji: false
+          });
+        }} />
 
       </Page>
     );
