@@ -7,13 +7,21 @@ export default {
   pages: [
     // 'pages/test/paybox/index',
     'pages/index/index',
-    'pages/thread/index',
-    'pages/thread/comment/index',
+    // 'pages/thread/index',
+    // 'pages/thread/comment/index',
     'pages/threadPost/index',
     'pages/threadPost/selectReward',
   ],
-  // 其它在子包。更新的时候负责人需要注意一下分包之后的打包优化配置
-  // subPackages: [],
+  subPackages: [
+    {
+      root: 'subPages',
+      pages: [
+        '404/index',
+        'close/index',
+        'user/login/index'
+      ]
+    }
+  ],
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',

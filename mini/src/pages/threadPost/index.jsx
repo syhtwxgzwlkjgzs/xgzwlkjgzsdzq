@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
-import ThemePage from '@components/theme-page';
+import Page from '@components/page';
 import { PlusinToolbar, DefaultToolbar, GeneralUpload, Tag, Title, Content, ClassifyPopup } from '@components/thread-post';
 import styles from './index.module.scss';
+import Router from '@discuzq/sdk/dist/router';
 
 @inject('index')
 @inject('site')
@@ -21,6 +22,7 @@ class Index extends Component {
       uploadType: 0,
     }
   }
+
   componentWillMount() { }
 
   componentDidMount() {
@@ -101,7 +103,7 @@ class Index extends Component {
     } = this.state;
 
     return (
-      <ThemePage>
+      <Page isLogin>
         {/* 文本框区域，inclue标题、帖子文字内容等 */}
         <View>
           <Title title={title} show={isShowTitle} onInput={this.onTitleInput} />
@@ -147,7 +149,7 @@ class Index extends Component {
             onChange={this.onClassifyChange}
           />
         </View>
-      </ThemePage >
+      </Page>
     );
   }
 }
