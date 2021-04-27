@@ -46,7 +46,7 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
       if (typeof(onRefresh) === 'function') {
         onRefresh()
           .then(() => {
-            setLoadText('加载完成');
+            setLoadText('加载中...');
             isLoading.current = false;
           })
           .catch(() => {
@@ -69,6 +69,7 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
       className={`${styles.container} ${className}`} 
       style={{ height }} 
       onScrollToLower={onTouchMove}
+      lowerThreshold={80}
     >
       {children}
       {allowRefresh && (
