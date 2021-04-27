@@ -1,0 +1,61 @@
+@import '@common/styles/variable/index.scss';
+@import '@common/styles/fn/rem.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  height: 150px;
+  width: 150px;
+  .progress {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    height: 150px;
+    width: 150px;
+  }
+  .remaining {
+    margin-top: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: left;
+    color: var(--color-text-primary);
+    .count {
+      font-size: inherit;
+      color: #e02433;
+    }
+  }
+  .received {
+    margin-top: 4px;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 17px;
+    color: #4f5a70;
+  }
+  .receive {
+    margin-top: 4px;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 17px;
+    text-align: left;
+    color: #8490a8;
+  }
+  &.redPack {
+    .icon {
+      margin-top: 27px;
+      width: 15px;
+      height: 20px;
+      background-color: #e02433;
+    }
+  }
+  &.bounty {
+    .icon {
+      margin-top: 40px;
+      width: 20px;
+      height: 20px;
+      background-color: #ffc300;
+    }
+  }
+}

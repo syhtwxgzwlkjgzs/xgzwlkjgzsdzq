@@ -1,0 +1,39 @@
+@import '@common/styles/var.scss';
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.container {
+    border-radius: 5px;
+    background: #fef9ec;
+    display: flex;
+    align-items: center;
+    .money {
+      flex: 0 0 69px;
+      height: 100%;
+      border-radius: 5px 0 0 5px;
+      background: #e4414e;
+    }
+    .title {
+      font-size: 16px;
+      line-height: 22px;
+      height: 22px;
+      overflow: hidden;
+      color: #0b0b37;
+      margin-bottom: 10px;
+    }
+    .content {
+      height: 100%;
+      box-sizing: border-box;
+      padding: 10px 16px;
+    }
+    .text {
+      color: #0b0b37;
+      font-size: 16px;
+      line-height: 26px;
+      height: 72px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+}
