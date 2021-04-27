@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
 import { View, Button } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
-import ThemePage from '@components/theme-page';
 import { PluginToolbar, DefaultToolbar, GeneralUpload, Tag, Title, Content, ClassifyPopup, PaidTypePopup } from '@components/thread-post';
 import { Units } from '@components/common';
 import styles from './index.module.scss';
@@ -190,7 +189,7 @@ class Index extends Component {
       showPaidType,
     } = this.state;
     return (
-      <Page isLogin>
+      <Page>
         <View className={styles['container']}>
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
           <View className={styles['content']}>
