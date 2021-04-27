@@ -5,6 +5,8 @@ import styles from './index.module.scss';
 import CommentList from '../components/comment-list/index';
 import { Icon, Toast } from '@discuzq/design';
 import InputPopup from '../components/input-popup';
+import MorePopup from '../components/more-popup';
+import DeletePopup from '../components/delete-popup';
 
 @inject('site')
 @inject('user')
@@ -19,6 +21,7 @@ class CommentPage extends React.Component {
       isShowRedPacket: true,
       isShowReward: false,
       showCommentInput: false, // 是否弹出评论框
+      showMorePopup: false,
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
       inputText: '请输入内容', // 默认回复框placeholder内容
@@ -504,12 +507,40 @@ class CommentPage extends React.Component {
   // 点击更多
   onMoreClick() {
     console.log('点击了更多');
+    this.setState({ showMorePopup: true });
   }
+  
+  // 更多中的操作
+  onOperClick = (type) => {
+    this.setState({ showMorePopup: false });
+
+    // 置顶
+    // if (type === 'stick') {
+    //   this.updateStick();
+    // }
+
+    // 加精
+    // if (type === 'essence') {
+    //   this.updateEssence();
+    // }
+
+    // 删除
+    if (type === 'delete') {
+      this.commentData = this.state.commentData;
+      this.setState({ showDeletePopup: true });
+    }
+
+    // 举报
+    if (type === 'report') {
+      console.log('点击举报');
+    }
+  };
 
   // 点击评论的赞
   async likeClick(data) {
+    console.log(this.props);
     if (!data.id) return;
-
+    
     const params = {
       id: data.id,
       isLiked: !data.isLiked,
@@ -521,7 +552,7 @@ class CommentPage extends React.Component {
       });
     }
   }
-
+  
   // 点击回复的赞
   async replyLikeClick(reply) {
     if (!reply.id) return;
@@ -563,6 +594,12 @@ class CommentPage extends React.Component {
     Toast.error({
       content: msg,
     });
+  }
+
+  // 确定删除
+  onBtnClick() {
+    this.deleteComment();
+    this.setState({ showDeletePopup: false });
   }
 
   // 点击评论的回复
@@ -632,6 +669,29 @@ class CommentPage extends React.Component {
   render() {
     // const { commentDetail: commentData, isReady } = this.props.comment;
     // isReady && (commentData.lastThreeComments = commentData?.commentPosts || []);
+    // 更多弹窗权限
+    // const morePermissions = {
+    //   canEdit: threadStore?.threadData?.ability?.canEdit,
+    //   canDelete: threadStore?.threadData?.ability?.canDelete,
+    //   canEssence: threadStore?.threadData?.ability?.canEssence,
+    //   canStick: threadStore?.threadData?.ability?.canStick,
+    // };
+    const morePermissions = {
+      canEdit: false,
+      canDelete: true,
+      canEssence: false,
+      canStick: false,
+    };
+
+    // 更多弹窗界面
+    // const moreStatuses = {
+    //   isEssence: threadStore?.threadData?.displayTag?.isEssence,
+    //   isStick: threadStore?.threadData?.isStick,
+    // };
+    const moreStatuses = {
+      isEssence: false,
+      isStick: false,
+    };
 
     return (
       <View className={styles.index}>
@@ -674,18 +734,36 @@ class CommentPage extends React.Component {
             deleteClick={() => this.deleteClick(this.state.commentData)}
             replyLikeClick={reploy => this.replyLikeClick(reploy, this.state.commentData)}
             replyReplyClick={reploy => this.replyReplyClick(reploy, this.state.commentData)}
-            isHideEdit={true}>
+            onMoreClick={() => this.onMoreClick()}
+            isHideEdit>
           </CommentList>
         </View>
 
         <View className={styles.footer}>
           {/* 评论弹层 */}
-          {/* <InputPopup
+          <InputPopup
             visible={this.state.showCommentInput}
             inputText={this.state.inputText}
             onClose={() => this.setState({ showCommentInput: false })}
             onSubmit={value => this.createReply(value)}>
-          </InputPopup> */}
+          </InputPopup>
+
+         {/* 更多弹层 */}
+         <MorePopup
+            permissions={morePermissions}
+            statuses={moreStatuses}
+            visible={this.state.showMorePopup}
+            onClose={() => this.setState({ showMorePopup: false })}
+            onSubmit={() => this.setState({ showMorePopup: false })}
+            onOperClick={type => this.onOperClick(type)}
+          />
+          
+          {/* 删除弹层 */}
+          <DeletePopup
+            visible={this.state.showDeletePopup}
+            onClose={() => this.setState({ showDeletePopup: false })}
+            onBtnClick={type => this.onBtnClick(type)}
+          />
         </View>
       </View>
     );
