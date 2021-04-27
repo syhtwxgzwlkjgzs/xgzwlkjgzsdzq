@@ -103,7 +103,7 @@ class Index extends Component {
     } = this.state;
 
     return (
-      <Page isLogin>
+      <Page withLogin>
         {/* 文本框区域，inclue标题、帖子文字内容等 */}
         <View>
           <Title title={title} show={isShowTitle} onInput={this.onTitleInput} />
