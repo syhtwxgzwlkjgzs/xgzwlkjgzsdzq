@@ -9,7 +9,7 @@ import TrendingTopics from './components/trending-topics';
 import ActiveUsers from './components/active-users';
 import PopularContents from './components/popular-contents';
 import { View, Text } from '@tarojs/components';
-
+import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 import '@discuzq/design/dist/styles/index.scss';
 
@@ -18,26 +18,34 @@ import '@discuzq/design/dist/styles/index.scss';
 @observer
 class SearchH5Page extends React.Component {
   onSearch = (keyword) => {
-    this.props.router.push(`/search/result?keyword=${keyword || ''}`);
+    Taro.navigateTo({
+      url: `result?keyword=${keyword || ''}`
+    })
   };
 
   redirectToSearchResultPost = () => {
-    this.props.router.push('/search/result-post');
+    Taro.navigateTo({
+      url: '/pages/search/result-post/index'
+    })
   };
 
   redirectToSearchResultUser = () => {
-    this.props.router.push('/search/result-user');
+    Taro.navigateTo({
+      url: '/pages/search/result-user/index'
+    })
   };
 
   redirectToSearchResultTopic = () => {
-    this.props.router.push('/search/result-topic');
+    Taro.navigateTo({
+      url: '/pages/search/result-topic/index'
+    })
   };
   onUserClick = data => console.log('user click', data);
   onTopicClick = data => console.log('topic click', data);
   onPostClick = data => console.log('post click', data);
 
   onCancel = () => {
-    this.props.router.back();
+    Taro.navigateBack({ delta: 1});
   };
 
   render() {

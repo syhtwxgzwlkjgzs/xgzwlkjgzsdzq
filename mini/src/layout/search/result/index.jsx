@@ -3,13 +3,13 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 
 // import SearchInput from '@components/search-input';
-import SearchInput from '.././../../../components/search-input';
+import SearchInput from '@components/search-input';
 import SectionTitle from './components/section-title';
 import SearchPosts from './components/search-posts';
 import SearchTopics from './components/search-topics';
 import SearchUsers from './components/search-users';
 import { View, Text } from '@tarojs/components';
-
+import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 
 @inject('site')
@@ -17,8 +17,8 @@ import styles from './index.module.scss';
 class SearchResultH5Page extends React.Component {
   constructor(props) {
     super(props);
-
-    const keyword = this.props.router.query.keyword || '';
+    console.log(this.props);
+    const keyword = '';
 
     this.state = {
       keyword,
@@ -29,19 +29,29 @@ class SearchResultH5Page extends React.Component {
   }
 
   redirectToSearchResultPost = () => {
-    this.props.router.push(`/search/result-post?keyword=${this.state.keyword || ''}`);
+    // this.props.router.push(`/search/result-post?keyword=${this.state.keyword || ''}`);
+    Taro.navigateTo({
+      url: `/pages/search/result-post/index?keyword=${this.state.keyword || ''}`
+    })
   };
 
   redirectToSearchResultUser = () => {
-    this.props.router.push(`/search/result-user?keyword=${this.state.keyword || ''}`);
+    // this.props.router.push(`/search/result-user?keyword=${this.state.keyword || ''}`);
+    Taro.navigateTo({
+      url: `/pages/search/result-user/index?keyword=${this.state.keyword || ''}`
+    })
   };
 
   redirectToSearchResultTopic = () => {
-    this.props.router.push(`/search/result-topic?keyword=${this.state.keyword || ''}`);
+    Taro.navigateTo({
+      url: `/pages/search/result-topic/index?keyword=${this.state.keyword || ''}`
+    })
+    // this.props.router.push(`/search/result-topic?keyword=${this.state.keyword || ''}`);
   };
 
   onCancel = () => {
-    this.props.router.back();
+    // this.props.router.back();
+    Taro.navigateBack({ delta: 1});
   };
 
   searchData = keyword => console.log('search', keyword);

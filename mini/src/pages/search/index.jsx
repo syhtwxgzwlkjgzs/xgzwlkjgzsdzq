@@ -45,7 +45,7 @@ class Index extends React.Component {
       duration: 0,
     });
     await search.getSearchData({ hasTopics: hasIndexTopics, hasUsers: hasIndexUsers, hasThreads: hasIndexThreads });
-    // this.toastInstance?.destroy();
+    this.toastInstance?.destroy();
   }
 
   render() {

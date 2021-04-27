@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 
-import SearchInput from '.././../../../components/search-input';
+import SearchInput from '@components/search-input';
 import SearchUsers from './components/search-users';
 import Header from '@components/header';
 
@@ -15,8 +15,8 @@ import { View, Text } from '@tarojs/components';
 class SearchResultUserH5Page extends React.Component {
   constructor(props) {
     super(props);
-
-    const keyword = this.props.router.query.keyword || '';
+    console.log(this.props);
+    const keyword = '';
 
     this.state = {
       data: getData(15, keyword),
@@ -70,7 +70,6 @@ class SearchResultUserH5Page extends React.Component {
     const { pageData } = users || { pageData: [] };
     return (
       <View className={styles.page}>
-        <Header />
         <View className={styles.searchInput}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
         </View>
