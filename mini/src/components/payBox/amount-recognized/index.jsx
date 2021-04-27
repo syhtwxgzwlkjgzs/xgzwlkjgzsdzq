@@ -4,6 +4,7 @@ import { Popup, Icon,Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import { Button, View, Text, Checkbox } from '@tarojs/components';
 import { ORDER_TRADE_TYPE } from '../../../../../common/constants/payBoxStoreConstants';
+
 @inject('payBox')
 @observer
 export default class AmountRecognized extends Component {
