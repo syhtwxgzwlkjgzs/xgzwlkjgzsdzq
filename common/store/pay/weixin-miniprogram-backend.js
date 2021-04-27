@@ -1,4 +1,4 @@
-import { PAY_BOX_ERROR_CODE_MAP } from '../../constants/payBoxStoreConstants';
+import { PAY_BOX_ERROR_CODE_MAP, PAY_MENT_MAP } from '../../constants/payBoxStoreConstants';
 import Taro from '@tarojs/taro';
 
 export const onBridgeReady = data => new Promise((resolve, reject) => {
@@ -26,3 +26,13 @@ export const onBridgeReady = data => new Promise((resolve, reject) => {
 export const listenWXJsBridgeAndExecCallback = (callback) => {
   callback();
 };
+
+export const wxValidator = () => {
+  const systemInfo = Taro.getSystemInfoSync();
+  const { system } = systemInfo;
+  if (/iOS/.test(system)) {
+    throw PAY_BOX_ERROR_CODE_MAP.IN_IOS;
+  }
+};
+
+export const mode = PAY_MENT_MAP.WX_MINI_PROGRAM;

@@ -1,8 +1,6 @@
 import { observable, computed, action } from 'mobx';
 import { get } from '../../utils/get';
 import { createOrders, createPayOrder, readOrderDetail, readWalletUser, updateUsersUpdate } from '@server';
-import isWeixin from '../../utils/is-weixin';
-import browser from '../../utils/browser';
 import { STEP_MAP, PAY_MENT_MAP, ORDER_STATUS_MAP, PAY_BOX_ERROR_CODE_MAP } from '../../constants/payBoxStoreConstants';
 
 const noop = () => {};
@@ -208,24 +206,15 @@ class PayBoxStore {
   wechatPayOrder = async ({
     listenWXJsBridgeAndExecCallback,
     onBridgeReady,
+    wxValidator = noop,
+    mode,
   }) => {
     try {
-      // #ifdef H5
-      if (!isWeixin()) {
-        // is not in weixin, just throw tips error
-        throw PAY_BOX_ERROR_CODE_MAP.NOT_IN_WEIXIN_PAY;
-      }
-
-      // IOS 暂时政策不允许支付
-      if (browser.env('ios')) {
-        throw PAY_BOX_ERROR_CODE_MAP.IN_IOS;
-      }
-      // #endif
-
+      wxValidator();
       const payRes = await createPayOrder({
         data: {
           orderSn: this.orderSn,
-          paymentType: PAY_MENT_MAP.WX_OFFICAL,
+          paymentType: mode,
         },
       });
 

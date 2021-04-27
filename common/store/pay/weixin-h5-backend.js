@@ -1,5 +1,7 @@
-import { PAY_BOX_ERROR_CODE_MAP, WX_PAY_STATUS } from '../../constants/payBoxStoreConstants';
+import { PAY_BOX_ERROR_CODE_MAP, PAY_MENT_MAP, WX_PAY_STATUS } from '../../constants/payBoxStoreConstants';
 import { get } from '../../utils/get';
+import isWeixin from '../../utils/is-weixin';
+import browser from '../../utils/browser';
 
 export const onBridgeReady = data => new Promise((resolve, reject) => {
   const { appId, timeStamp, nonceStr, package: wxPackage, paySign } = data;
@@ -39,3 +41,19 @@ export const listenWXJsBridgeAndExecCallback = (callback) => {
     callback();
   }
 };
+
+export const wxValidator = () => {
+  // #ifdef H5
+  if (!isWeixin()) {
+    // is not in weixin, just throw tips error
+    throw PAY_BOX_ERROR_CODE_MAP.NOT_IN_WEIXIN_PAY;
+  }
+
+  // IOS 暂时政策不允许支付
+  if (browser.env('ios')) {
+    throw PAY_BOX_ERROR_CODE_MAP.IN_IOS;
+  }
+  // #endif
+};
+
+export const mode = PAY_MENT_MAP.WX_OFFICAL;
