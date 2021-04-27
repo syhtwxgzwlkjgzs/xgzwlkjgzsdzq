@@ -3,7 +3,7 @@
 .container {
   // width: 100%;
   width: calc(100% - rem(48));
-  background: #fff;
+  background: var(--color-white);
   padding: 0 rem($font-line-height-primary);
 }
 
@@ -11,7 +11,6 @@
   height: rem(50);
   display: flex;
   justify-content: space-between;
-  font-family: 'PingFang SC';
   font-weight: normal;
   background: var(--color-white);
   .number {
@@ -28,12 +27,16 @@
     .sortText {
       padding-left: rem(4);
     }
+    .sortIcon {
+      font-size: rem($font-size-primary) !important;
+    }
   }
 }
 
 .body {
+  background: var(--color-white);
+  
   .commentItems {
-    padding-bottom: rem($padding-5n);
-    border-bottom: solid rem(1) #eee;
+    border-bottom: var(--border-border);
   }
 }
