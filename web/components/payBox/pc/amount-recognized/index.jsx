@@ -6,36 +6,28 @@ import { inject } from 'mobx-react';
 
 @inject('payBox')
 export default class index extends Component {
-
-  componentDidMount() {
-    console.log(this.props.payBox)
-  }
-
-  onCloseBtn = () => {
-    this.setState({
-      isShow: false,
-    });
-  };
+  onCloseBtn = () => {};
 
   goToThePayConfirmPage = async () => {
     try {
-      await this.props.payBox.createOrder()
+      await this.props.payBox.createOrder();
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   render() {
-    const { options = {} } = this.props.payBox
+    const { options = {} } = this.props.payBox;
+    const { amount } = options;
     return (
       <div>
         <>
           <div className={styles.amountWrapper}>
             <CommonAccountContent currentPaymentData={options} />
-            <hr className={styles.acExplain_hr}/>
+            <hr className={styles.acExplain_hr} /> 
             {/* 按钮区域-提交内容 */}
             <div className={styles.amountSubmit}>
-              <span>合计：￥ 9.90 元</span>
+            <span>合计：￥ {amount} 元</span>
               <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.asBtn}>
                 确认支付
               </Button>

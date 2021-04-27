@@ -4,7 +4,6 @@ import styles from './index.module.scss';
 import Header from '@components/header';
 import { Button, Upload } from '@discuzq/design';
 import PayBox from '@components/payBox';
-import Paypwd from '@components/payPwd'
 
 @inject('site')
 @inject('user')
@@ -24,7 +23,6 @@ class IndexPCPage extends React.Component {
 
         <Button>123</Button>
         <PayBox />
-        <Paypwd />
       </div>
     );
   }

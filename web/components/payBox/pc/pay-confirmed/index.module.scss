@@ -7,7 +7,7 @@
   width: rem(530);
   font-size: rem($font-size-large);
   padding: rem($padding-4n);
-  .icon{
+  .icon {
     margin-right: rem($margin-4n);
   }
   .payTitle {
@@ -38,6 +38,12 @@
       color: #333;
     }
   }
+  .payTabActive {
+    text-decoration: underline;
+    color: #333;
+    cursor: pointer;
+    font-weight: 800;
+  }
   .wechatPayment {
     display: flex;
     align-items: center;
@@ -62,7 +68,7 @@
     }
   }
   .wPaymentCode {
-    >img {
+    > img {
       width: rem(178);
       height: rem(178);
       background-color: pink;
@@ -99,7 +105,7 @@
       margin-top: rem(16);
     }
   }
-  .walletDec >span:nth-child(1) {
+  .walletDec > span:nth-child(1) {
     color: #a1aabb;
     margin-right: rem(24);
   }

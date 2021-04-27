@@ -9,15 +9,6 @@ import { STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
 @inject('payBox')
 @observer
 export default class AmountRecognized extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  // 转换金额小数
-  transMoneyToFixed = (num) => {
-    return Number(num).toFixed(2);
-  };
 
   // 点击支付去到 选择支付方式页面
   goToThePayConfirmPage = async () => {

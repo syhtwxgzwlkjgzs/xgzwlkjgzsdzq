@@ -7,16 +7,12 @@ import { PAY_MENT_MAP, PAYWAY_MAP, STEP_MAP } from '../../../../../common/consta
 import { listenWXJsBridgeAndExecCallback,onBridgeReady } from '../../../../../common/store/pay/weixin-h5-backend';
 // import browser from '@common/utils/browser';
 
-@inject('site')
 @inject('user')
 @inject('payBox')
 @observer
 export default class PayBox extends React.Component {
   constructor(props) {
     super(props);
-    const { site } = props;
-    // const { webConfig } = site;
-    // const { wxpayClose, wxpayIos } = webConfig;
 
     const payConfig = [
       {
@@ -55,7 +51,7 @@ export default class PayBox extends React.Component {
   }
 
   walletPaySubText() {
-    const { site, user } = this.props;
+    const { user } = this.props;
     const { userInfo = {} } = user;
     const { canWalletPay, walletBalance } = userInfo || {};
     if (!canWalletPay) {
@@ -91,14 +87,14 @@ export default class PayBox extends React.Component {
   };
 
   // 点击确认支付
-  handlePayConfirmed = () => {
+  handlePayConfirmed = async () => {
     if (this.state.paymentType === PAY_MENT_MAP.WALLET) {// 表示钱包支付
-      this.props.payBox.walletPayEnsure()
+      await this.props.payBox.walletPayEnsure()
       this.props.payBox.visible = false
       // this.goSetPayPwa()
     } else if (this.state.paymentType === PAY_MENT_MAP.WX_H5) { // 表示微信支付
       console.log('进来了','sssssss_点击微信支付');
-      this.props.payBox.wechatPayOrder({listenWXJsBridgeAndExecCallback,onBridgeReady})
+     await this.props.payBox.wechatPayOrder({listenWXJsBridgeAndExecCallback,onBridgeReady})
       // this.props.payBox.visible = false
     }
   };
@@ -106,8 +102,6 @@ export default class PayBox extends React.Component {
   render() {
     const { options = {} } = this.props.payBox;
     const { payConfig, paymentType, checked } = this.state;
-    // console.log(user);
-    // console.log(site);
     return (
       <div className={styles.payBox}>
         <div className={styles.title}>
