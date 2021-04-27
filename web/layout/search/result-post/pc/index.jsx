@@ -6,6 +6,8 @@ import SectionTitle from '../../../search/h5/components/section-title'
 import ThreadContent from '@components/thread';
 import { withRouter } from 'next/router';
 import List from '@components/list'
+import NoData from '@components/no-data'
+
 @inject('site')
 @inject('search')
 @observer
@@ -43,13 +45,26 @@ class SearchResultPostH5Page extends React.Component {
         </div>
       </div>
     )
-  } 
+  }
+
+  searchData = (keyword) => {
+    const { dispatch } = this.props;
+    dispatch('search', keyword);
+  };
+
+  onSearch = (value) => {
+    this.setState({ keyword: value }, () => {
+      this.searchData(value);
+    });
+  }
+
   render() {
     const { currentPage, totalPage } = this.props.search.threads || { pageData: [] };
 
     return (
-      <List className={styles.searchWrap} noMore={currentPage === totalPage}  onRefresh={this.fetchMoreData}>
+      <List className={styles.searchWrap} noMore={currentPage >= totalPage}  onRefresh={this.fetchMoreData}>
         <BaseLayout
+          onSearch={this.onSearch}
           left={() => <div></div>}
           right={() => <div></div>}
         >

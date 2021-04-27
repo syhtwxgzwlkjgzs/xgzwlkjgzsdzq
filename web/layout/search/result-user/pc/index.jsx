@@ -27,6 +27,10 @@ class SearchResultUserPcPage extends React.Component {
   onTopicClick = data => console.log('topic click', data);
   onUserClick = data => console.log('user click', data);
 
+  onFollow = (userId) => {
+    this.props.search.postFollow(userId)
+  }
+
   fetchMoreData = () => {
     const { dispatch } = this.props;
     const { keyword } = this.state;
@@ -47,16 +51,28 @@ class SearchResultUserPcPage extends React.Component {
   }
   renderContent = () => {
     const { users } = this.props.search;
-    const { pageData = [], currentPage, totalPage } = users || { pageData: [] };
+    const { pageData = [] } = users || { pageData: [] };
     return (
       <div className={styles.searchContent}>
         <div className={styles.section}>
           <SectionTitle title="活跃用户" isShowMore={false} />
-          <ActiveUsersMore data={pageData} onItemClick={this.onUserClick}/>
+          <ActiveUsersMore data={pageData} onFollow={this.onFollow} onItemClick={this.onUserClick}/>
         </div>
       </div>
     )
   }
+
+  searchData = (keyword) => {
+    const { dispatch } = this.props;
+    dispatch('search', keyword);
+  };
+
+  onSearch = (value) => {
+    this.setState({ keyword: value }, () => {
+      this.searchData(value);
+    });
+  }
+
   render() {
     // const { keyword } = this.state;
     const { users } = this.props.search;
@@ -65,7 +81,7 @@ class SearchResultUserPcPage extends React.Component {
     return (
       <List className={styles.searchWrap} noMore={currentPage === totalPage} onRefresh={this.fetchMoreData}>
         <BaseLayout
-          left={() => <div></div>}
+          onSearch={this.onSearch}
           right={ this.renderRight }
         >
           { this.renderContent() }

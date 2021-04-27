@@ -1,5 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'next/router';
 import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
 import NewContent from './components/new-content';
@@ -49,6 +50,12 @@ class IndexPCPage extends React.Component {
         }
       });
     }, 30000);
+  }
+
+  onSearch = (value) => {
+    if (value) {
+      this.props.router.push(`/search?keyword=${value || ''}`);
+    }
   }
 
   changeBatch = () => {
@@ -169,6 +176,7 @@ class IndexPCPage extends React.Component {
     return (
       <List className={styles.indexWrap} onRefresh={this.onPullingUp} noMore={currentPage === totalPage}>
           <BaseLayout
+            onSearch={this.onSearch}
             left={ this.renderLeft(countThreads) }
             right={ this.renderRight }
           >
@@ -179,4 +187,4 @@ class IndexPCPage extends React.Component {
   }
 }
 
-export default IndexPCPage;
+export default withRouter(IndexPCPage);

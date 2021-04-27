@@ -74,7 +74,7 @@ class SearchAction extends SearchStore {
     };
 
     // 如果存在search字段，说明是在结果页发起的网络请求，此时只需要后台返回三条数据
-    if (search || search === '') {
+    if (type === 1) {
       newPerPage = 3;
     }
 

@@ -33,6 +33,17 @@ class SearchResultTopicPCPage extends React.Component {
     return dispatch('moreData', keyword);
   };
 
+  searchData = (keyword) => {
+    const { dispatch } = this.props;
+    dispatch('search', keyword);
+  };
+
+  onSearch = (value) => {
+    this.setState({ keyword: value }, () => {
+      this.searchData(value);
+    });
+  }
+
   renderRight = () => {
     const { pageData = [] } = this.props.search.indexUsers || { pageData: [] };
     return (
@@ -66,7 +77,7 @@ class SearchResultTopicPCPage extends React.Component {
     return (
       <List className={styles.searchWrap} noMore={currentPage === totalPage} onRefresh={this.fetchMoreData}>
         <BaseLayout
-          left={() => <div></div>}
+          onSearch={this.onSearch}
           right={ this.renderRight }
         >
           { this.renderContent }

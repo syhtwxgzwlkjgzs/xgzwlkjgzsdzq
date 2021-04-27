@@ -67,7 +67,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
     const { pageData, currentPage = 0, totalPage = 0 } = data;
 
     return (
-      <List className={styles.list} onRefresh={singleLoadData} noMore={currentPage === totalPage}>
+      <List className={styles.list} onRefresh={singleLoadData} noMore={currentPage >= totalPage}>
         {
           pageData?.list?.map((item, index) => (
             <UserItem key={index} imgSrc={item.avatar} title={item.username} subTitle={item.passedAt} />
