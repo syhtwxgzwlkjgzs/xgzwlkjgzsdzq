@@ -1,0 +1,96 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.contianer {
+  position: relative;
+  display: flex;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  image {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+}
+
+.right {
+  flex: 1;
+  margin-left: 8px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.name {
+  color: var(--color-text-primary);
+  font-size: 14px;
+  font-weight: bold;
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.groupName {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  margin-left: 8px;
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meta {
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+}
+
+.time {
+  margin-right: 10px;
+  font-size: 12px;
+}
+
+.location {
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  
+  span {
+    margin-left: 4px;
+    font-size: 12px;
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.view {
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+
+  span {
+    margin-left: 4px;
+    font-size: 12px;
+  }
+}
+
+.tags {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+
+  >div {
+    margin-left: 8px;
+  }
+}
