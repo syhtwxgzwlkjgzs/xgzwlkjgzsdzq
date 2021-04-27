@@ -13,6 +13,7 @@ import ThreadContent from '@components/thread';
 import List from '@components/list';
 import Copyright from './components/copyright';
 import { readThreadList } from '@server';
+import PayBox from '@components/payBox';
 
 @inject('site')
 @inject('user')
@@ -128,6 +129,7 @@ class IndexPCPage extends React.Component {
           />
         </div>
         <Copyright/>
+        <PayBox />
       </div>
   )
   // 中间 -- 筛选 置顶信息 是否新内容发布 主题内容
