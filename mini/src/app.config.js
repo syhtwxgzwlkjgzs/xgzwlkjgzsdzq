@@ -5,10 +5,8 @@ export default {
   // TODO: 分包处理
   // 首页和详情页在主包
   pages: [
-    // 'pages/test/paybox/index',
     'pages/index/index',
-    // 'pages/thread/index',
-    // 'pages/thread/comment/index',
+    'pages/thread/index',
     'pages/threadPost/index',
     'pages/threadPost/selectReward',
   ],
@@ -18,7 +16,8 @@ export default {
       pages: [
         '404/index',
         'close/index',
-        'user/login/index'
+        'user/login/index',
+        'thread/comment/index',
       ]
     }
   ],
