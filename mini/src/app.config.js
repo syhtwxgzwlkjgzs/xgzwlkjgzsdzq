@@ -6,9 +6,7 @@ export default {
   // 首页和详情页在主包
   pages: [
     'pages/index/index',
-    'pages/search/index',
-    // 'pages/thread/index',
-    // 'pages/thread/comment/index',
+    'pages/thread/index',
     'pages/threadPost/index',
     'pages/threadPost/selectRedpacket',
     'pages/threadPost/selectReward',
@@ -23,7 +21,8 @@ export default {
       pages: [
         '404/index',
         'close/index',
-        'user/login/index'
+        'user/login/index',
+        'thread/comment/index',
       ]
     }
   ],

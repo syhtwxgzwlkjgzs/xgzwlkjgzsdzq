@@ -38,6 +38,13 @@ class CommentDetail extends React.Component {
   async componentDidMount() {
     const { id, threadId } = this.props.router.query;
 
+    // 判断缓存
+    const oldId = this.props?.comment?.commentDetail?.id;
+    if (Number(id) === oldId && id && oldId) {
+      return;
+    }
+    this.props.comment.reset();
+
     if (threadId) {
       this.props.comment.setThreadId(threadId);
     }
@@ -45,6 +52,14 @@ class CommentDetail extends React.Component {
     if (!this.props.serverData && id) {
       const res = await readCommentDetail({ params: { pid: Number(id) } });
       this.props.comment.setCommentDetail(res.data);
+
+      // 获取作者信息
+      const { site } = this.props;
+      const { platform } = site;
+      const userId = this.props.comment?.commentDetail?.userId;
+      if (platform === 'pc' && userId) {
+        this.props.comment.fetchAuthorInfo(userId);
+      }
     }
   }
 
