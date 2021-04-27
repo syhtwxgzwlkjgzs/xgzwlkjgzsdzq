@@ -5,6 +5,16 @@
   position: relative;
   border: none;
   background-color: var(--color-white);
+  &.no-focus {
+    .vditor-toolbar {
+      display: none !important;
+    }
+  }
+  &__placeholder {
+    height: 36px;
+    width: 100%;
+  }
+
   .vditor-ir pre.vditor-reset,
   .vditor-wysiwyg pre.vditor-reset {
     height: 178px;
@@ -12,7 +22,7 @@
     font-size: var(--font-size-middle);
     color: var(--color-text-primary);
     &:before {
-      color: var(--color-text-placeholder);
+      color: var(--color-text-placeholder) !important;
     }
     &:focus {
       background-color: var(--color-white);
@@ -77,31 +87,22 @@
       display: none;
     }
   }
-  &.no-focus {
-    .vditor-toolbar {
-      display: none !important;
-    }
-  }
-  &__placeholder {
-    height: 36px;
-    width: 100%;
-  }
   .vditor-toolbar__item svg {
     width: 18px;
     height: 18px;
   }
-}
-
-.vditor-ir {
-  .vditor-reset>h1:before,
-  .vditor-reset>h2:before,
-  .vditor-reset>h3:before,
-  .vditor-reset>h4:before,
-  .vditor-reset>h5:before,
-  .vditor-reset>h6:before,
-  .vditor-toc:before {
-    content: '';
+  .vditor-ir {
+    .vditor-reset>h1:before,
+    .vditor-reset>h2:before,
+    .vditor-reset>h3:before,
+    .vditor-reset>h4:before,
+    .vditor-reset>h5:before,
+    .vditor-reset>h6:before,
+    .vditor-toc:before {
+      content: '';
+    }
+  }
+  .vditor-content {
+    border: none;
   }
 }
-
-.react-multi-carousel-list{display:flex;align-items:center;overflow:hidden;position:relative}.react-multi-carousel-track{list-style:none;padding:0;margin:0;display:flex;flex-direction:row;position:relative;transform-style:preserve-3d;backface-visibility:hidden;will-change:transform,transition}.react-multi-carousel-dot-list{position:absolute;bottom:0;display:flex;left:0;right:0;justify-content:center;margin:auto;padding:0;margin:0;list-style:none;text-align:center}.react-multi-carousel-dot button{display:inline-block;width:8px;height:8px;border-radius:50%;opacity:1;padding:5px 5px 5px 5px;box-shadow:none;transition:background .5s;border-width:2px;border-style:solid;border-color:grey;padding:0;margin:0;margin-right:6px;outline:0;cursor:pointer}.react-multi-carousel-dot button:hover:active{background:#080808}.react-multi-carousel-dot--active button{background:#080808}.react-multi-carousel-item{transform-style:preserve-3d;backface-visibility:hidden}@media all and (-ms-high-contrast:none),(-ms-high-contrast:active){.react-multi-carousel-item{flex-shrink:0 !important}.react-multi-carousel-track{overflow:visible !important}}
