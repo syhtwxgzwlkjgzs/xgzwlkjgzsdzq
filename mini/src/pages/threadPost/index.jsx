@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
-import { View, Button } from '@tarojs/components';
+import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
-import { PluginToolbar, DefaultToolbar, GeneralUpload, Tag, Title, Content, ClassifyPopup, PaidTypePopup } from '@components/thread-post';
+import { PluginToolbar, DefaultToolbar, GeneralUpload, Tag, Title, Content, ClassifyPopup, PaidTypePopup, Position } from '@components/thread-post';
 import { Units } from '@components/common';
 import styles from './index.module.scss';
 import { THREAD_TYPE } from '@common/constants/thread-post';
@@ -24,6 +24,7 @@ class Index extends Component {
       isShowTitle: true, // 默认显示标题
       showClassifyPopup: false, // 切换分类弹框show
       operationType: 0,
+      contentTextLength: 5000
     }
   }
 
@@ -39,7 +40,8 @@ class Index extends Component {
 
   componentDidHide() { }
 
-  fetchCategories() { // 若当前store内分类列表数据为空，则主动发起请求
+  // 若当前store内分类列表数据为空，则主动发起请求
+  fetchCategories() {
     const { categories, getReadCategories } = this.props.index;
     if (!categories || (categories && categories?.length === 0)) {
       getReadCategories();
@@ -53,9 +55,12 @@ class Index extends Component {
   }
 
   // 处理文本框内容
-  onContentChange = (contentText) => {
+  onContentChange = (contentText, maxLength) => {
     const { setPostData } = this.props.threadPost;
     setPostData({ contentText });
+    this.setState({
+      contentTextLength: maxLength - contentText.length
+    });
   }
 
   onContentFocus = () => {
@@ -179,14 +184,15 @@ class Index extends Component {
 
   render() {
     const { categories } = this.props.index;
-    const { postData } = this.props.threadPost;
-    const { rewardQa, redpacket, video, product } = postData;
+    const { postData, setPostData } = this.props.threadPost;
+    const { rewardQa, redpacket, video, product, position } = postData;
     const {
       title,
       isShowTitle,
       showClassifyPopup,
       operationType,
       showPaidType,
+      contentTextLength,
     } = this.state;
     return (
       <Page>
@@ -195,7 +201,7 @@ class Index extends Component {
           <View className={styles['content']}>
             <Title title={title} show={isShowTitle} onInput={this.onTitleInput} />
             <Content
-            value={postData.contentText}
+              value={postData.contentText}
               onChange={this.onContentChange}
               onFocus={this.onContentFocus}
             />
@@ -213,26 +219,37 @@ class Index extends Component {
 
           {/* 工具栏区域、include各种插件触发图标、发布等 */}
           <View className={styles['toolbar']}>
+            <View className={styles['location-bar']}>
+              <Position currentPosition={position} positionChange={(position) => {
+                setPostData({position});
+              }} />
+              <Text className={styles['text-length']}>{`还能输入${contentTextLength}个字`}</Text>
+            </View>
+
+
             <View className={styles['tag-toolbar']}>
               {/* 插入付费tag */}
-              {(postData.price || postData.attachmentPrice)
-                ? <Tag
-                  content={`付费总额${postData.price + postData.attachmentPrice}元`}
-                  clickCb={() => this.handlePluginClick({ type: THREAD_TYPE.paid })}
-                /> : null
-              }
+              {(Boolean(postData.price || postData.attachmentPrice)) && (
+                <Units
+                  type='tag'
+                  tagContent={`付费总额${postData.price + postData.attachmentPrice}元`}
+                  onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.paid })}
+                />
+              )}
               {/* 红包tag */}
               {redpacket.money &&
-                <Tag
-                  content={this.redpacketContent()}
-                  clickCb={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
+                <Units
+                  type='tag'
+                  tagContent={this.redpacketContent()}
+                  onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
                 />
               }
               {/* 悬赏tag */}
               {rewardQa.price &&
-                <Tag
-                  content={`悬赏金额${rewardQa.price}元\\结束时间${rewardQa.expiredAt}`}
-                  clickCb={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
+                <Units
+                  type='tag'
+                  tagContent={`悬赏金额${rewardQa.price}元\\结束时间${rewardQa.expiredAt}`}
+                  onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
                 />
               }
             </View>

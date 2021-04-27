@@ -10,7 +10,12 @@
  import classNames from 'classnames';
 
 const Index = (props) => {
-  const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, isRecording, onStart } = props;
+  const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, isRecording, onStart, onTagClick, tagContent } = props;
+
+  // 标签展示
+  const tag = (
+    <Text className={styles['tag']} onClick={() => {onTagClick();}}>{tagContent}</Text>
+  );
 
   // 图片展示
   const img = (
@@ -124,6 +129,7 @@ const Index = (props) => {
 
 
   switch (type) {
+    case 'tag': return tag;
     case 'audio-record': return audioRecord;
     case 'atta-upload': return attaUpload;
     case 'img-upload': return imgUpload;

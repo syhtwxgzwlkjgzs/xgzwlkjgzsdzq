@@ -8,7 +8,7 @@ import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import { attachIcon } from '@common/constants/const';
-import Tag from '@components/thread-post/tag';
+import { Units } from '@components/common';
 
 const Index = inject('site', 'threadPost')(observer((props) => {
   const { site, threadPost, clickCb, onCategoryClick } = props;
@@ -53,7 +53,7 @@ const Index = inject('site', 'threadPost')(observer((props) => {
         onClick={onCategoryClick}
       />
       <Text>分类</Text>
-      <Tag content={content() || '选择分类(必选)'} clickCb={() => {
+      <Units type='tag' tagContent={content() || '选择分类(必选)'} onTagClick={() => {
         // 处理分类弹框等逻辑
       }} />
     </>
