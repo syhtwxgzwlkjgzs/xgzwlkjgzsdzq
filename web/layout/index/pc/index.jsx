@@ -52,7 +52,9 @@ class IndexPCPage extends React.Component {
   }
 
   changeBatch = () => {
-    console.log('换一批');
+    const { dispatch = () => {} } = this.props;
+     const { filter } = this.state;
+     return dispatch('refresh-recommend', filter);
   }
   recommendDetails = () => {
     console.log('推荐详情');

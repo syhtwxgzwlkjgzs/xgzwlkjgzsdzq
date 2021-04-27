@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import styles from './index.module.scss';
 import { Video } from '@discuzq/design';
 import { noop } from '../utils';
@@ -26,7 +26,7 @@ const Index = ({
 }) => {
   let player = null;
   const ref = useRef();
-  const [rect, setRect] = useState({});
+  const [width, setWidth] = useState(null);
 
   const onReady = (ins) => {
     player = ins;
@@ -34,48 +34,24 @@ const Index = ({
 
   useEffect(() => {
     const rect = ref.current.getBoundingClientRect();
-    setRect(rect);
+    setWidth(rect?.width || 343);
   }, []);
 
   return (
     <div id="common-video-play" className={styles.container} ref={ref}>
-      <Video
-        className={styles.videoBox}
-        onReady={onReady}
-        onPlay={(e) => {
-        // console.log('play', e);
-        }}
-        onPause={(e) => {
-        // console.log('pause', e);
-        }}
-        onEnded={(e) => {
-        // console.log('ended', e);
-        }}
-        onTimeUpdate={e =>
-        // console.log('timeupdate', e);
-          1
-        }
-        onFullscreenChange={(e) => {
-        // console.log('fullscreenchange', e);
-        }}
-        onProgress={(e) => {
-        // console.log('progress', e);
-        }}
-        onLoadedMetaData={(e) => {
-        // console.log('loadmetadata', e);
-        }}
-        onWaiting={(e) => {
-        // console.log('waiting', e);
-        }}
-        onError={(e) => {
-        // console.log('error', e);
-        }}
-        src={url}
-        width={rect?.width || '343'}
-        height={9 * (rect?.width || '343') / 16 || '224'}
-        poster={coverUrl}
-        duration={time}
-      />
+      {
+        width && (
+          <Video
+            className={styles.videoBox}
+            onReady={onReady}
+            src={url}
+            width={width}
+            height={9 * (width) / 16 || '224'}
+            poster={coverUrl}
+            duration={time}
+          />
+        )
+      }
       {/* 视频蒙层 已付费时隐藏 未付费时显示 */}
       {
         isPay && <div className={styles.payBox} onClick={onPay}></div>

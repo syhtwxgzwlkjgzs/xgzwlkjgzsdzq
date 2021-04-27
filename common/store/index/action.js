@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import IndexStore from './store';
-import { readCategories, readStickList, readThreadList, updatePosts, createThreadShare } from '@server';
+import { readCategories, readStickList, readThreadList, updatePosts, createThreadShare, readRecommends } from '@server';
 import typeofFn from '@common/utils/typeof';
 
 class IndexAction extends IndexStore {
@@ -155,19 +155,28 @@ class IndexAction extends IndexStore {
    * @param {object}  obj 更新数据
    * @param {boolean} obj.isLike 是否更新点赞
    * @param {boolean} obj.isPost 是否更新评论数
+   * @param {boolean} obj.user 当前操作的用户
    * @returns
    */
   @action
   updateAssignThreadInfo(threadId, obj = {}) {
     const targetThread = this.findAssignThread(threadId);
+
     if (!targetThread) return;
     const { index, data } = targetThread;
 
     // 更新点赞
-    const { isLike, isPost } = obj;
+    const { isLike, isPost, isShare, user } = obj;
     if (!typeofFn.isUndefined(isLike) && !typeofFn.isNull(isLike)) {
       data.isLike = isLike;
-      data.likeReward.likePayCount = isLike ? data.likeReward.likePayCount + 1 : data.likeReward.likePayCount0 - 1;
+
+      if (isLike) {
+        data.likeReward.users = data.likeReward?.users?.length ? [user] : [...data.likeReward?.users, user]
+        data.likeReward.likePayCount = data.likeReward.likePayCount + 1
+      } else {
+        data.likeReward.users = data.likeReward.users.filter(item => item.userId === user.userId)
+        data.likeReward.likePayCount = data.likeReward.likePayCount - 1
+      }
     }
 
     // 更新评论
@@ -175,7 +184,12 @@ class IndexAction extends IndexStore {
       data.likeReward.postCount = isPost ? data.likeReward.postCount + 1 : data.likeReward.postCount - 1;
     }
 
-    if (this.threads && this.threads.pageData) {
+    // 更新分享
+    if (!typeofFn.isUndefined(isShare) && !typeofFn.isNull(isShare)) {
+      data.likeReward.shareCount = isShare ? data.likeReward.shareCount + 1 : data.likeReward.shareCount - 1;
+    }
+
+    if (this.threads?.pageData) {
       this.threads.pageData[index] = data;
     }
   }
@@ -201,11 +215,7 @@ class IndexAction extends IndexStore {
    */
   @action
   async updateThreadInfo({ pid, id, data = {} } = {}) {
-    const result = await updatePosts({ data: { pid, id, data } });
-    if (result.code === 0 && result.data) {
-      const { isLiked } = result.data;
-      this.updateAssignThreadInfo(id, { isLike: isLiked });
-    }
+    return await updatePosts({ data: { pid, id, data } });
   };
 
   /**
@@ -214,8 +224,28 @@ class IndexAction extends IndexStore {
    */
   @action
   async updateThreadShare({ threadId } = {}) {
-    await createThreadShare({ data: { threadId } });
+    return await createThreadShare({ data: { threadId } });
   };
+
+  /**
+   * 根据 ID 获取当前选中的类别
+   * @param {number} id 帖子类别id
+   * @returns 选中的帖子详细信息
+   */
+   @action
+   async getRecommends({ categoryIds }) { 
+    const res = await readRecommends({ params: { categoryIds } })
+    debugger
+   }
+
+  /**
+   * 推荐帖子
+   * @param {Object} data
+   */
+  @action
+  setRecommends(data) {
+    this.recommends = data;
+  }
 }
 
 export default IndexAction;
