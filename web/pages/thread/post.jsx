@@ -193,7 +193,7 @@ class Index extends React.Component {
   }
 
   // 发布提交
-  submit = async (isDraft) => {
+  handleSubmit = async (isDraft) => {
     const { postData } = this.props.threadPost;
     if (!isDraft && !postData.contentText) {
       Toast.info({ content: '请填写您要发布的内容' });
@@ -249,7 +249,9 @@ class Index extends React.Component {
           handleUploadChange={this.handleUploadChange}
           handleUploadComplete={this.handleUploadComplete}
           handleAudioUpload={this.handleAudioUpload}
+          handleEmojiClick={this.handleEmojiClick}
           handleSetState={data => this.setState({ ...data })}
+          handleSubmit={this.handleSubmit}
           {...this.state}
         />
       );

@@ -6,14 +6,14 @@ import DVditor from '@components/editor';
 import Title from '@components/thread-post-pc/title';
 import { AttachmentToolbar, DefaultToolbar } from '@components/editor/toolbar';
 import Position from '@components/thread-post/position';
-import { Button, Video, Audio, AudioRecord, Toast } from '@discuzq/design';
+import { Button, Video, Audio, AudioRecord } from '@discuzq/design';
 import ClassifyPopup from '@components/thread-post/classify-popup';
 import { withRouter } from 'next/router';
 import Emoji from '@components/editor/emoji';
 import ImageUpload from '@components/thread-post/image-upload';
 import { defaultOperation } from '@common/constants/const';
 import FileUpload from '@components/thread-post/file-upload';
-import { THREAD_TYPE, ATTACHMENT_TYPE } from '@common/constants/thread-post';
+import { THREAD_TYPE } from '@common/constants/thread-post';
 import Product from '@components/thread-post/product';
 import ProductSelect from '@components/thread-post/product-select';
 
@@ -29,7 +29,7 @@ class ThreadPCPage extends React.Component {
       // emoji,
       // topic,
       // atList,
-      // currentDefaultOperation,
+      currentDefaultOperation,
       currentAttachOperation,
     } = this.props;
     const { postData } = threadPost;
@@ -74,6 +74,15 @@ class ThreadPCPage extends React.Component {
                 <Video className="dzq-post-video" src={postData.video.thumbUrl} onReady={this.props.onReady} />
               )}
 
+              {/* 附件上传组件 */}
+              {(currentDefaultOperation === defaultOperation.attach || Object.keys(postData.files).length > 0) && (
+                <FileUpload
+                  fileList={Object.values(postData.files)}
+                  onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.file)}
+                  onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.file)}
+                />
+              )}
+
               {/* 商品组件 */}
               {postData.product && postData.product.readyContent && (
                 <Product
@@ -85,7 +94,19 @@ class ThreadPCPage extends React.Component {
             </div>
             <div className={styles.toolbar}>
               <div className={styles['toolbar-left']}>
-                <DefaultToolbar pc />
+                <DefaultToolbar
+                  pc
+                  value={currentDefaultOperation}
+                  onClick={
+                    item => this.props.handleSetState({ currentDefaultOperation: item.id, emoji: {} })
+                  }
+                  onSubmit={this.props.handleSubmit}>
+                  {/* 表情 */}
+                  <Emoji
+                    show={currentDefaultOperation === defaultOperation.emoji}
+                    emojis={threadPost.emojis}
+                    onClick={this.props.handleEmojiClick} />
+                </DefaultToolbar>
                 <div className={styles.divider}></div>
                 <AttachmentToolbar
                   pc
