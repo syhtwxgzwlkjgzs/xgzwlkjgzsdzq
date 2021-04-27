@@ -12,9 +12,9 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @observer
 class Index extends React.Component {
   static async getInitialProps(ctx) {
-    const topics = await readTopicsList({ params: { filter: { hot: 1 } } }, ctx);
-    const users = await readUsersList({}, ctx);
-    const threads = await readThreadList({ params: { filter: { sort: '3' } } }, ctx);
+    const topics = await readTopicsList({ params: { filter: { hot: 1 } }, perPage: 10 }, ctx);
+    const users = await readUsersList({ params: { perPage: 10 } }, ctx);
+    const threads = await readThreadList({ params: { filter: { sort: '3' }, perPage: 10 } }, ctx);
 
     return {
       serverSearch: {
