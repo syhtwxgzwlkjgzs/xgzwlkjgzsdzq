@@ -74,9 +74,10 @@ class LoginPhoneH5Page extends React.Component {
       // 微信绑定，跳入小程序绑定
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT.Code && this.props.site.wechatEnv === 'miniProgram') {
         this.props.commonLogin.needToBindMini = true;
+        this.props.commonLogin.sessionToken = e.sessionToken;
         const resp = await genMiniScheme();
         if (resp.code === 0) {
-          window.location.href = get(resp, 'data.openLink', '');
+          window.location.href = `${get(resp, 'data.openLink', '')}?sessionToken=${e.sessionToken}`;
           return;
         }
         Toast.error({

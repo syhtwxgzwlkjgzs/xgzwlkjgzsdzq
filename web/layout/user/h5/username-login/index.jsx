@@ -39,7 +39,7 @@ class LoginH5Page extends React.Component {
       this.props.commonLogin.needToBindMini = true;
       const resp = await genMiniScheme();
       if (resp.code === 0) {
-        window.location.href = get(resp, 'data.openLink', '');
+        window.location.href = `${get(resp, 'data.openLink', '')}?sessionToken=${e.sessionToken}`;
         return;
       }
       Toast.error({
