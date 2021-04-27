@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { Input, Button, Toast } from '@discuzq/design';
+import { Input, Button, Toast, Dialog, Icon } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 
@@ -58,7 +58,7 @@ const ProductSelect = (props) => {
     }
   };
 
-  return (
+  const content = (
     <div className={styles['parse-goods-box']}>
       <div className={styles['parse-goods-title']}>现支持以下商品链接</div>
       <div className={styles['parse-goods-image']}>
@@ -85,6 +85,31 @@ const ProductSelect = (props) => {
         </Button>
       </div>
     </div>
+  );
+
+  if (!props.pc) return content;
+
+  const header = (
+    <div className={styles['pc-header']}>
+      添加商品
+      <Icon
+        className={styles['pc-closeicon']}
+        name="DeleteOutlined"
+        size={12}
+        onClick={props.cancel}
+      />
+    </div>
+  );
+
+  return (
+    <Dialog
+      visible={props.visible}
+      className={styles.pc}
+      header={header}
+      onClose={props.cancel}
+    >
+      {content}
+    </Dialog>
   );
 };
 

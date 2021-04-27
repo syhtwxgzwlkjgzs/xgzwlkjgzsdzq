@@ -2,13 +2,13 @@ import React, { memo } from 'react';
 import { useRouter } from 'next/router';
 import { Icon } from '@discuzq/design';
 import styles from './index.module.scss';
-
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 function ShowGood({ good, onDelete }) {
   return (
     <>
-      <div className={styles.content}>
+      <div className={classNames(styles.content, styles.pc)}>
         <div className={styles['content-left']}>
           <img className={styles.image} src={good.imagePath} alt={good.title} />
         </div>
@@ -16,7 +16,7 @@ function ShowGood({ good, onDelete }) {
           <p className={styles['content-title']}>{good.title}</p>
           <span className={styles['content-price']}>￥{good.price}</span>
           <div className={styles['delete-icon']} onClick={onDelete}>
-            <Icon name="CloseCircleOutlined" size={20} color="#8490a8" />
+            <Icon name="DeleteOutlined" size={20} color="#8490a8" />
           </div>
         </div>
       </div>
