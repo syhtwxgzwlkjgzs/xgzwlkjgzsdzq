@@ -35,12 +35,9 @@ class TopicH5Page extends React.Component {
 
   }
 
-  render() {
-    const { content = '', threadCount = 0, viewCount = 0, threads = [] } = this.props.topic?.topicDetail?.pageData[0] || {};
-
+  renderItem = ({ content = '', threadCount = 0, viewCount = 0, threads = [] }, index) => {
     return (
-      <List className={styles.topicWrap} allowRefresh={false}>
-        <Header/>
+      <div key={index}>
         <DetailsHeader title={content} viewNum={viewCount} contentNum={threadCount} onShare={this.onShare} />
         <div className={styles.themeContent}>
           {
@@ -53,6 +50,19 @@ class TopicH5Page extends React.Component {
               : <NoData />
           }
         </div>
+      </div>
+    )
+  }
+
+  render() {
+    const { pageData = [] } = this.props.topic?.topicDetail || {};
+
+    return (
+      <List className={styles.topicWrap} allowRefresh={false}>
+        <Header/>
+        {
+          pageData?.map((item, index) => this.renderItem(item, index)) || <NoData />
+        }
       </List>
     );
   }
