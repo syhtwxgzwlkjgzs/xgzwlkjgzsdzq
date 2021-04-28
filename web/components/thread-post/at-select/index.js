@@ -13,6 +13,7 @@ import { Popup, Input, Checkbox, Button, ScrollView } from '@discuzq/design';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
+import DDialog from '@components/dialog';
 
 @inject('threadPost')
 @observer
@@ -79,6 +80,7 @@ class AtSelect extends Component {
 
   // 确认选择
   submitSelect() {
+    console.log(this.state.checkUser);
     if (this.state.checkUser.length === 0) {
       return;
     }
@@ -111,6 +113,60 @@ class AtSelect extends Component {
   render() {
     const { visible, threadPost } = this.props;
     const data = threadPost.follows || [];
+    const content = (
+      <div className={styles.wrapper}>
+        {/* 搜索框 */}
+        <Input
+          value={this.state.keywords}
+          icon="SearchOutlined"
+          placeholder='搜索用户'
+          onChange={e => this.updateKeywords(e)}
+        />
+
+        {/* 选择列表 */}
+        <Checkbox.Group
+          value={this.state.checkUser}
+          onChange={val => this.setState({ checkUser: val })}
+        >
+          <div className={styles['at-wrap']}>
+            <ScrollView
+              width='100%'
+              rowCount={data.length}
+              rowData={data}
+              rowHeight={54}
+              rowRenderer={this.renderItem.bind(this)}
+              onScrollTop={this.onScrollTop.bind(this)}
+              onScrollBottom={this.onScrollBottom.bind(this)}
+              onPullingUp={() => Promise.reject()}
+              isRowLoaded={() => true}
+              lowerThreshold={100}
+            />
+          </div>
+        </Checkbox.Group>
+
+        {/* 取消按钮 */}
+        <div className={styles.btn}>
+          <Button onClick={this.handleCancel}>取消</Button>
+          <Button
+            className={this.state.checkUser.length > 0 ? 'is-selected' : 'not-selected'}
+            onClick={() => this.submitSelect()}
+          >
+            {this.state.checkUser.length ? `@ 已选(${this.state.checkUser.length})` : '尚未选'}
+          </Button>
+        </div>
+      </div >
+    );
+
+    if (this.props.pc) return (
+      <DDialog
+        visible={this.props.visible}
+        className={styles.pc}
+        onClose={this.handleCancel}
+        title="@圈友"
+      >
+        {content}
+      </DDialog>
+    );
 
     return (
       <Popup
@@ -118,47 +174,7 @@ class AtSelect extends Component {
         position="center"
         visible={visible}
       >
-        <div className={styles.wrapper}>
-          {/* 搜索框 */}
-          <Input
-            value={this.state.keywords}
-            icon="SearchOutlined"
-            placeholder='搜索用户'
-            onChange={e => this.updateKeywords(e)}
-          />
-
-          {/* 选择列表 */}
-          <Checkbox.Group
-            value={this.state.checkUser}
-            onChange={val => this.setState({ checkUser: val })}
-          >
-            <div className={styles['at-wrap']}>
-              <ScrollView
-                width='100%'
-                rowCount={data.length}
-                rowData={data}
-                rowHeight={54}
-                rowRenderer={this.renderItem.bind(this)}
-                onScrollTop={this.onScrollTop.bind(this)}
-                onScrollBottom={this.onScrollBottom.bind(this)}
-                onPullingUp={() => Promise.reject()}
-                isRowLoaded={() => true}
-                lowerThreshold={100}
-              />
-            </div>
-          </Checkbox.Group>
-
-          {/* 取消按钮 */}
-          <div className={styles.btn}>
-            <Button onClick={this.handleCancel}>取消</Button>
-            <Button
-              className={this.state.checkUser.length > 0 ? 'is-selected' : 'not-selected'}
-              onClick={() => this.submitSelect()}
-            >
-              {this.state.checkUser.length ? `@ 已选(${this.state.checkUser.length})` : '尚未选'}
-            </Button>
-          </div>
-        </div >
+        {content}
       </Popup>
     );
   }

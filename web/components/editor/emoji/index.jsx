@@ -9,7 +9,7 @@ import './carousel.scss';
 const onePageCount = 35;
 
 export default function Emoji(props) {
-  const { emojis = [], onClick, show } = props;
+  const { emojis = [], onClick, show, pc } = props;
   const [visible, setVisible] = useState(false);
   const [page, setPage] = useState([]);
   const pageCount = [...Array(onePageCount).keys()];
@@ -28,7 +28,21 @@ export default function Emoji(props) {
     breakpoint: { max: 464, min: 0 },
     items: 1,
     slidesToSlide: 1, // optional, default to 1.
-  } };
+  },
+  };
+  if (pc) return (
+    <div className={`${styles['dzq-emoji']} ${styles.pc}`}>
+      {emojis.map(item => <img className={styles['dzq-emoji__icon']}
+        key={item.code}
+        src={item.url}
+        onClick={(e) => {
+          e.stopPropagation();
+          setVisible(false);
+          onClick(item);
+        }}
+      />)}
+    </div>
+  );
   return (
     <Carousel
       /*

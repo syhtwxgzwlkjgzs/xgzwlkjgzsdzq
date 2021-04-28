@@ -6,7 +6,7 @@ import DVditor from '@components/editor';
 import Title from '@components/thread-post-pc/title';
 import { AttachmentToolbar, DefaultToolbar } from '@components/editor/toolbar';
 import Position from '@components/thread-post/position';
-import { Button, Video, Audio, AudioRecord } from '@discuzq/design';
+import { Button, Video, Audio, AudioRecord, Tag } from '@discuzq/design';
 import ClassifyPopup from '@components/thread-post/classify-popup';
 import { withRouter } from 'next/router';
 import Emoji from '@components/editor/emoji';
@@ -16,6 +16,10 @@ import FileUpload from '@components/thread-post/file-upload';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 import Product from '@components/thread-post/product';
 import ProductSelect from '@components/thread-post/product-select';
+import AllPostPaid from '@components/thread/all-post-paid';
+import AtSelect from '@components/thread-post/at-select';
+import TopicSelect from '@components/thread-post/topic-select';
+import RedpacketSelect from '@components/thread-post/redpacket-select';
 import Copyright from '@components/copyright';
 
 @inject('threadPost')
@@ -27,13 +31,14 @@ class ThreadPCPage extends React.Component {
     const {
       threadPost,
       index,
-      // emoji,
-      // topic,
-      // atList,
+      emoji,
+      topic,
+      atList,
       currentDefaultOperation,
       currentAttachOperation,
     } = this.props;
     const { postData } = threadPost;
+    const { freeWords, price, attachmentPrice } = threadPost.postData;
 
     return (
       <>
@@ -44,6 +49,9 @@ class ThreadPCPage extends React.Component {
             <div className={styles.editor}>
               <DVditor
                 pc
+                emoji={emoji}
+                atList={atList}
+                topic={topic}
                 onChange={() => { }}
                 onCountChange={() => { }}
                 onFocus={() => { }}
@@ -92,6 +100,19 @@ class ThreadPCPage extends React.Component {
                   onDelete={() => this.props.setPostData({ product: {} })}
                 />
               )}
+
+              {/* 设置的金额相关展示 */}
+              <div className={styles['money-box']}>
+                {/* 付费 */}
+                {!!(postData.price || postData.attachmentPrice) && (
+                  <Tag>付费总额{postData.price + postData.attachmentPrice}元</Tag>
+                )}
+                {postData.redpacket.price && (<Tag>
+                  {postData.redpacket.rule === 1 ? '随机红包' : '定额红包'}
+                  \ 总金额{postData.redpacket.price}元\{postData.redpacket.number}个
+                  {postData.redpacket.condition === 1 && `\\集赞个数${postData.redpacket.likenum}`}
+                </Tag>)}
+              </div>
             </div>
             <div className={styles.toolbar}>
               <div className={styles['toolbar-left']}>
@@ -99,11 +120,18 @@ class ThreadPCPage extends React.Component {
                   pc
                   value={currentDefaultOperation}
                   onClick={
-                    item => this.props.handleSetState({ currentDefaultOperation: item.id, emoji: {} })
+                    (item, child) => {
+                      if (child && child.id) {
+                        this.props.handleSetState({ curPaySelect: child.id, emoji: {} });
+                      } else {
+                        this.props.handleSetState({ currentDefaultOperation: item.id, emoji: {} });
+                      }
+                    }
                   }
                   onSubmit={this.props.handleSubmit}>
                   {/* 表情 */}
                   <Emoji
+                    pc
                     show={currentDefaultOperation === defaultOperation.emoji}
                     emojis={threadPost.emojis}
                     onClick={this.props.handleEmojiClick} />
@@ -116,7 +144,11 @@ class ThreadPCPage extends React.Component {
                 />
               </div>
               <div className={styles['toolbar-right']}>
-                <Position />
+                <Position
+                  position={postData.position}
+                  onClick={() => this.props.saveDataLocal()}
+                  onChange={position => this.props.setPostData({ position })}
+                />
               </div>
             </div>
             <ClassifyPopup
@@ -146,6 +178,49 @@ class ThreadPCPage extends React.Component {
             }
             cancel={() => this.props.handleSetState({ currentAttachOperation: false })}
           />
+          {/* 插入付费 */}
+          {!!this.props.curPaySelect && (
+            <AllPostPaid
+              pc
+              visible={!!this.props.curPaySelect}
+              exhibition={this.props.curPaySelect}
+              cancle={() => {
+                this.props.handleSetState({ curPaySelect: '', currentDefaultOperation: '' });
+              }}
+              data={{ freeWords, price, attachmentPrice }}
+              confirm={(data) => {
+                this.props.setPostData({ ...data });
+              }}
+            />
+          )}
+          {/* 插入 at 关注的人 */}
+          {currentDefaultOperation === defaultOperation.at && (
+            <AtSelect
+              pc
+              visible={currentDefaultOperation === defaultOperation.at}
+              getAtList={list => this.props.handleAtListChange(list)}
+              onCancel={() => this.props.handleSetState({ currentDefaultOperation: '' })}
+            />
+          )}
+          {/* 插入选中的话题 */}
+          {currentDefaultOperation === defaultOperation.topic && (
+            <TopicSelect
+              pc
+              visible={currentDefaultOperation === defaultOperation.topic}
+              cancelTopic={() => this.props.handleSetState({ currentDefaultOperation: '' })}
+              clickTopic={val => this.props.handleSetState({ topic: val })}
+            />
+          )}
+          {/* 插入红包 */}
+          {currentDefaultOperation === defaultOperation.redpacket && (
+            <RedpacketSelect
+              pc
+              visible={currentDefaultOperation === defaultOperation.redpacket}
+              data={postData.redpacket}
+              cancel={() => this.props.handleSetState({ currentDefaultOperation: '' })}
+              confirm={data => this.props.setPostData({ redpacket: data })}
+            />
+          )}
         </div>
       </>
     );

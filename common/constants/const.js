@@ -46,7 +46,7 @@ export const defaultOperation = {
 const activeColor = '#2469f6';
 
 /**
- * 默认的操作栏 icon，TODO: 待更新
+ * 默认的操作栏 icon
  */
 export const defaultIcon = [
   {
@@ -64,25 +64,35 @@ export const defaultIcon = [
     name: 'SharpOutlined', // #
     active: activeColor,
     id: defaultOperation.topic,
-    type: THREAD_TYPE.topic
+    type: THREAD_TYPE.topic,
   },
   {
     name: 'PaperClipOutlined', // 附件
     active: activeColor,
     id: defaultOperation.attach,
-    type: THREAD_TYPE.file
+    type: THREAD_TYPE.file,
   },
   {
     name: 'WalletOutlined', // 红包
     active: activeColor,
     id: defaultOperation.redpacket,
-    type: THREAD_TYPE.redPacket
+    type: THREAD_TYPE.redPacket,
   },
   {
     name: 'DollarLOutlined', // 付费
     active: activeColor,
     id: defaultOperation.pay,
-    type: THREAD_TYPE.paid
+    menu: [
+      {
+        id: 'threadpay',
+        name: '帖子付费',
+      },
+      {
+        id: 'attachpay',
+        name: '附件付费',
+      },
+    ],
+    type: THREAD_TYPE.paid,
   },
 ];
 
@@ -130,7 +140,7 @@ export const paidOption = [
     name: '附件付费',
     type: THREAD_TYPE.paidAttachment,
   },
-]
+];
 
 // 发帖底部草稿选项
 export const draftOption = [
@@ -142,4 +152,4 @@ export const draftOption = [
     name: '不保存',
     type: THREAD_TYPE.abandonDraft,
   },
-]
+];

@@ -1,6 +1,7 @@
 import React, { memo, useState } from 'react';
-import { Input, Button, Toast, Dialog, Icon } from '@discuzq/design';
+import { Input, Button, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
+import DDialog from '@components/dialog';
 import styles from './index.module.scss';
 import { goodImages } from '@common/constants/const';
 
@@ -58,27 +59,15 @@ const ProductSelect = (props) => {
 
   if (!props.pc) return content;
 
-  const header = (
-    <div className={styles['pc-header']}>
-      添加商品
-      <Icon
-        className={styles['pc-closeicon']}
-        name="DeleteOutlined"
-        size={12}
-        onClick={props.cancel}
-      />
-    </div>
-  );
-
   return (
-    <Dialog
+    <DDialog
       visible={props.visible}
       className={styles.pc}
-      header={header}
       onClose={props.cancel}
+      title="添加商品"
     >
       {content}
-    </Dialog>
+    </DDialog>
   );
 };
 
