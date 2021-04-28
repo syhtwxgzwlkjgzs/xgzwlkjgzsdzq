@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import IndexH5Page from '../../layout/search';
 import { Toast } from '@discuzq/design';
 import Page from '@components/page';
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
 @inject('site')
 @inject('search')
@@ -30,4 +29,4 @@ class Index extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(Index);
+export default Index;

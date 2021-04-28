@@ -9,9 +9,7 @@ import HOCWeixin from '@common/middleware/HOCWeixin';
 @inject('site')
 class WXLogin extends React.Component {
   render() {
-    const { site } = this.props;
-    const { platform } = site;
-    return platform === 'h5' ? <WXLoginH5Page /> : <></>;
+    return <WXLoginH5Page />;
   }
 }
 

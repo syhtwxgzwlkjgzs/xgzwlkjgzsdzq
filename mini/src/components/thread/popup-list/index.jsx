@@ -5,6 +5,7 @@ import styles from './index.module.scss';
 import NoData from '@components/no-data';
 import { readLikedUsers } from '@server';
 import List from '../../list';
+import { View, Text } from '@tarojs/components';
 
 /**
  * 帖子点赞、打赏点击之后的弹出视图
@@ -84,11 +85,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
     }
   };
 
-  const searchClick = () => {
-
-  };
-
-  const onClose = () => {
+  const onClose = (e) => {
     onHidden();
     setAll(null);
     setLikes(null);
@@ -97,11 +94,11 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
   };
 
   const renderHeader = ({ title, icon, number  }) => (
-    <div className={styles.label}>
+    <View className={styles.label}>
       {icon && <Icon name={icon} />}
-      <span className={`${styles.title} disable-click`}>{title}</span>
-      {number !== 0 && number !== '0' && <span className="disable-click">{number}</span>}
-    </div>
+      <Text className={`${styles.title} disable-click`}>{title}</Text>
+      {number !== 0 && number !== '0' && <Text className="disable-click">{number}</Text>}
+    </View>
   );
 
   const tabItems = [
@@ -155,7 +152,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
 
   return (
     <Popup
-        position={tipData?.platform === 'h5' ? 'bottom' : 'center'}
+        position='bottom'
         visible={visible}
         onClose={onClose}
     >
@@ -163,13 +160,6 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
           onActive={onClickTab}
           activeId={current}
           className={styles.tabs}
-          tabBarExtraContent={
-            tipData?.platform === 'pc' && (
-              <div onClick={onClose} className={styles.tabIcon}>
-                <Icon name="CheckOutlined" />
-              </div>
-            )
-          }
         >
           {
             renderTabPanel()

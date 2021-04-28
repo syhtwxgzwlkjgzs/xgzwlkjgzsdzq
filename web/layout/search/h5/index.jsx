@@ -35,7 +35,13 @@ class SearchH5Page extends React.Component {
     this.props.router.push('/search/result-topic');
   };
   onUserClick = data => console.log('user click', data);
-  onTopicClick = data => console.log('topic click', data);
+
+  // 跳转话题详情
+  onTopicClick = data => {
+    const { topicId = '' } = data
+    this.props.router.push(`/topic/topic-detail/${topicId}`)
+  };
+
   onPostClick = data => console.log('post click', data);
 
   onCancel = () => {

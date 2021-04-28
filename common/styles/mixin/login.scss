@@ -78,9 +78,10 @@
   border-radius: 5px;
   background: #fff;
   box-shadow: 0 0 8px rgba(241, 243, 244, 0.16);
-  margin: 81px auto 0;
+  margin: 60px auto 0;
   text-align: center;
-  padding-bottom: 30px;
+  padding-bottom: 50px;
+  min-height: calc(100vh - 190px);
 }
 @mixin pc_button {
   width: 300px;
@@ -120,4 +121,20 @@
   text-align: left;
   color: #4f5a70;
   padding-bottom: 8px;
+}
+@mixin pc_titleTips {
+  font-size: 16px;
+  line-height: 30px;
+  text-align: left;
+  color: var(--color-text-primary);
+  img {
+    width: 30px;
+    height: 30px;
+    margin: 0 8px;
+  }
+}
+@mixin pc_body_background {
+  background: #f4f5f6;
+  padding-top: 20px;
+  padding-bottom: 60px;
 }

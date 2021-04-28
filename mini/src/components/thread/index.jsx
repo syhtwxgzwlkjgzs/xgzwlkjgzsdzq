@@ -14,7 +14,6 @@ import UserInfo from './user-info';
 import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
-import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import { filterClickClassName, handleAttachmentData } from './utils';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import Taro from '@tarojs/taro';
@@ -32,15 +31,17 @@ class Index extends React.Component {
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        // goToLoginPage();
+        goToLoginPage({ url: '/user/login' });
         return;
       }
 
-      Toast.info({ content: '分享链接已复制成功' });
-
       const { title = '', threadId = '' } = this.props.data || {};
-      h5Share(title);
-      this.props.index.updateThreadShare({ threadId });
+
+      this.props.index.updateThreadShare({ threadId }).then(result => {
+        if (result.code === 0) {
+          this.props.index.updateAssignThreadInfo(threadId, { isShare: true });
+        }
+      });
     }
     // 评论
     onComment = (e) => {
@@ -61,19 +62,24 @@ class Index extends React.Component {
         console.log('帖子不存在');
       }
     }
-    // 点赞
-    onPraise = (e) => {
+   // 点赞
+   onPraise = (e) => {
       e.stopPropagation();
 
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        // goToLoginPage();
+        goToLoginPage({ url: '/user/login' });
         return;
       }
-      const { data = {} } = this.props;
+      const { data = {}, user } = this.props;
       const { threadId = '', isLike, postId } = data;
-      this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } });
+      this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } }).then(result => {
+        if (result.code === 0 && result.data) {
+          const { isLiked } = result.data;
+          this.props.index.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
+        }
+      });
     }
     // 支付
     onPay = (e) => {

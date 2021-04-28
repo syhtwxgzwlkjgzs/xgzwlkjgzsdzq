@@ -1,5 +1,6 @@
 import { observable, computed, action } from 'mobx';
 import { get } from '../../utils/get';
+import isWeixin from '../../utils/is-weixin';
 import { createOrders, createPayOrder, readOrderDetail, readWalletUser, updateUsersUpdate } from '@server';
 import { STEP_MAP, PAY_MENT_MAP, ORDER_STATUS_MAP, PAY_BOX_ERROR_CODE_MAP } from '../../constants/payBoxStoreConstants';
 
@@ -238,6 +239,13 @@ class PayBoxStore {
       this.resErrorFactory(payRes);
 
       if (payRes.code === 0) {
+        // 清空之前的定时器
+        clearInterval(this.timer);
+
+        if (mode === PAY_MENT_MAP.WX_H5) {
+          console.log(payRes);
+          return;
+        }
         listenWXJsBridgeAndExecCallback(() => {
           onBridgeReady(get(payRes, 'data.wechatPayResult.wechatJs'));
           this.timer = setInterval(() => {

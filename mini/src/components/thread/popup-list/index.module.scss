@@ -8,7 +8,7 @@
 }
 
 .tabs {
-  max-width: rem(572);
+  width: 100%;;
   margin: 0 auto;
 }
 
@@ -17,7 +17,7 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  margin: 0 rem(10);
+  margin: 0 10px;
 }
 
 .label {
@@ -26,6 +26,6 @@
   justify-content: center;
 
   .title {
-    margin: 0 rem(4);
+    margin: 0 4px;
   }
 }

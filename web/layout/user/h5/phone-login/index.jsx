@@ -4,12 +4,13 @@ import { withRouter } from 'next/router';
 import { Button, Toast, Icon } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
-import PhoneInput from '../../../../components/login/phone-input';
+import PhoneInput from '@components/login/phone-input';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
+import { genMiniScheme } from '@server';
 
 
 @inject('site')
@@ -63,17 +64,34 @@ class LoginPhoneH5Page extends React.Component {
         return;
       }
 
-      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT.Code) {
+      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT.Code && this.props.site.wechatEnv === 'openPlatform') {
         this.props.commonLogin.needToBindWechat = true;
         this.props.commonLogin.sessionToken = e.sessionToken;
         this.props.router.push(`/user/wx-bind-qrcode?sessionToken=${e.sessionToken}&loginType=phone&nickname=${e.nickname}`);
         return;
       }
 
+      // 微信绑定，跳入小程序绑定
+      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT.Code && this.props.site.wechatEnv === 'miniProgram') {
+        this.props.commonLogin.needToBindMini = true;
+        this.props.commonLogin.sessionToken = e.sessionToken;
+        const resp = await genMiniScheme();
+        if (resp.code === 0) {
+          window.location.href = `${get(resp, 'data.openLink', '')}?sessionToken=${e.sessionToken}`;
+          return;
+        }
+        Toast.error({
+          content: '网络错误',
+          hasMask: false,
+          duration: 1000,
+        });
+        return;
+      }
+
       // 跳转状态页
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
         this.props.commonLogin.setStatusMessage(e.Code, e.Message);
-        this.props.router.push('/user/status');
+        this.props.router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
         return;
       }
 
@@ -103,6 +121,7 @@ class LoginPhoneH5Page extends React.Component {
     const isAnotherLoginWayAvaliable = this.props.site.wechatEnv !== 'none' || this.props.site.isUserLoginVisible;
 
     return (
+      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
@@ -110,11 +129,7 @@ class LoginPhoneH5Page extends React.Component {
             : <Header/>
         }
         <div className={platform === 'h5' ? layout.content : layout.pc_content}>
-          {
-            platform === 'h5'
-              ? <div className={layout.title}>手机号码登录/注册</div>
-              : <div className={layout.pc_title}>欢迎登录Discuz! Q</div>
-          }
+          <div className={platform === 'h5' ? layout.title : layout.pc_title}>手机号码登录/注册</div>
           <PhoneInput
             phoneNum={mobileLogin.mobile}
             captcha={mobileLogin.code}
@@ -158,6 +173,7 @@ class LoginPhoneH5Page extends React.Component {
           </div>
           <div className={platform === 'h5' ? layout['otherLogin-tips'] : layout.pc_otherLogin_tips} >注册登录即表示您同意《注册协议》《隐私协议》</div>
         </div>
+      </div>
       </div>
     );
   }

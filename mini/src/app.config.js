@@ -14,6 +14,11 @@ export default {
     'pages/threadPost/selectPaid',
     'pages/threadPost/selectAt',
     'pages/threadPost/selectTopic',
+    'pages/user/wx-select/index',
+    'pages/user/wx-bind-username/index',
+    'pages/user/wx-bind-phone/index',
+    'pages/user/status/index',
+    'pages/user/wx-auth/index',
   ],
   subPackages: [
     {

@@ -6,6 +6,7 @@ import { Button, Input, Slider, Toast } from '@discuzq/design'; // 原来就有�
 import styles from './index.module.scss'; // 私有样式
 import PropTypes from 'prop-types'; // 类型拦截
 import throttle from '@common/utils/thottle';
+import { View, Text } from '@tarojs/components';
 
 const AllPostPaid = ({ confirm, cancle, data, exhibition }) => {
   const [price, setPrice] = useState(0);// 支付的金额数量
@@ -33,11 +34,11 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition }) => {
   };
 
   return (
-    <div className={styles['redpacket-box']}>
-      {exhibition === '帖子付费' ? <div>
-        <div className={styles['line-box']}>
-          <div> 支付金额 </div>
-          <div>
+    <View className={styles['redpacket-box']}>
+      {exhibition === '帖子付费' ? <View>
+        <View className={styles['line-box']}>
+          <View> 支付金额 </View>
+          <View>
             <Input
               mode="number"
               value={price}
@@ -45,24 +46,24 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition }) => {
               onChange={e => setPrice(+e.target.value)}
             />
           元
-        </div>
-        </div>
-        <div className={styles.toview}>
-          <div className={styles.toviewone}> 免费查看字数 </div>
-          <div>
-            <div>
+        </View>
+        </View>
+        <View className={styles.toview}>
+          <View className={styles.toviewone}> 免费查看字数 </View>
+          <View>
+            <View>
               <Slider
                 value={freeWords}
                 defaultValue={freeWords}
                 formatter={value => `${value} %`}
                 onChange={throttle(e => setFreeWords(e), 100)}
               />
-            </div>
-          </div>
-        </div>
-      </div> : <div className={styles['line-box']}>
-        <div> 附件内容查看价格 </div>
-        <div>
+            </View>
+          </View>
+        </View>
+      </View> : <View className={styles['line-box']}>
+        <View> 附件内容查看价格 </View>
+        <View>
           <Input
             mode="number"
             value={attachmentPrice}
@@ -70,13 +71,13 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition }) => {
             onChange={e => setAttachmentPrice(+e.target.value)}
           />
           元
-        </div>
-      </div>}
-      <div className={styles.btn}>
+        </View>
+      </View>}
+      <View className={styles.btn}>
         <Button type="large" className={styles['btn-one']} onClick={cancle}>取消</Button>
         <Button type="large" className={styles['btn-two']} onClick={redbagconfirm}>确定</Button>
-      </div>
-    </div>
+      </View>
+    </View>
   );
 };
 

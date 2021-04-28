@@ -1,6 +1,5 @@
 
 @import '@common/styles/variable/index.scss';
-@import '@common/styles/fn/rem.scss';
 
 .container {
   width: 100%;
@@ -27,12 +26,6 @@
       max-height: 2px;
       overflow: hidden;
     }
-    /*
-  :global(.qq-emotion) {
-    height: rem(20);
-    margin-top: rem(-1);
-  } 
-  */
   }
   .hideCover {
     position: relative;
