@@ -23,8 +23,9 @@ class TopicAction extends TopicStore {
    * @returns {object} 处理结果
    */
     @action
-    async getTopicsList({ search = '', perPage = 10, page = 1 } = {}) {
+    async getTopicsList({ search = '', sortBy = '1', perPage = 10, page = 1 } = {}) {
       const topicFilter = {
+        sortBy,
         content: search,
         hot: 0
       };

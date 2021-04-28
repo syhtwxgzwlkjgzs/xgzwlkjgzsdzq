@@ -56,7 +56,6 @@ class TopicH5Page extends React.Component {
 
   render() {
     const { pageData = [] } = this.props.topic?.topicDetail || {};
-
     return (
       <List className={styles.topicWrap} allowRefresh={false}>
         <Header/>

@@ -56,7 +56,7 @@ class Index extends React.Component {
 
   dispatch = async (type, data) => {
     const { topic } = this.props;
-    const { keyword } = data
+    const { keyword, sort } = data
 
     if (type === 'refresh') {
       this.page = 1;
@@ -64,7 +64,7 @@ class Index extends React.Component {
       this.page += 1;
     }
 
-    await topic.getTopicsList({ search: keyword, perPage: this.perPage, page: this.page });
+    await topic.getTopicsList({ search: keyword, sortBy: sort, perPage: this.perPage, page: this.page });
     return;
   }
 
