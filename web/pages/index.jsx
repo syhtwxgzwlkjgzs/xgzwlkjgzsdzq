@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/index/h5';
 import IndexPCPage from '@layout/index/pc';
 import { readCategories, readStickList, readThreadList } from '@server';
+import PayBox from '../components/payBox/index';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 // import HOCWithLogin from '@common/middleware/HOCWithLogin';
@@ -38,7 +39,7 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
-    const { index } = this.props;
+    const { serverIndex, index } = this.props;
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasCategoriesData = !!index.categories;
     const hasSticksData = !!index.sticks;
@@ -61,7 +62,7 @@ class Index extends React.Component {
 
     if (type === 'click-filter') {
       this.page = 1;
-      index.screenData({ filter: { categoryids, types, essence, attention, sort}, sequence });
+      index.screenData({ filter: { categoryids, types, essence, attention, sort }, sequence });
     } else if (type === 'moreData') {
       this.page += 1;
       await index.getReadThreadList({

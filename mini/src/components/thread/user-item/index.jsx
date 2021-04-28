@@ -3,6 +3,7 @@ import { Button, Icon } from '@discuzq/design';
 import Avatar from '../../avatar';
 import { noop } from '../utils';
 import styles from './index.module.scss';
+import { View, Text } from '@tarojs/components'
 
 /**
  * 用户信息视图
@@ -20,36 +21,36 @@ const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noo
     onClick();
   };
   return (
-    <div className={styles.listItem} key={index} onClick={handleClick}>
-      <div className={styles.wrapper}>
-          <div className={styles.header}>
+    <View className={styles.listItem} key={index} onClick={handleClick}>
+      <View className={styles.wrapper}>
+          <View className={styles.header}>
               <Avatar className={styles.img} image={imgSrc} name={title} />
               {
                 icon && (
-                  <div className={styles.icon} style={{ backgroundColor: index % 2 === 0 ? '#e02433' : '#ffc300' }}>
+                  <View className={styles.icon} style={{ backgroundColor: index % 2 === 0 ? '#e02433' : '#ffc300' }}>
                       <Icon name={icon} />
-                  </div>
+                  </View>
                 )
               }
-          </div>
+          </View>
 
-          <div className={styles.content}>
-              <span className={styles.title}>{title}</span>
-              <span className={styles.subTitle}>{subTitle}</span>
-          </div>
-      </div>
+          <View className={styles.content}>
+              <Text className={styles.title}>{title}</Text>
+              <Text className={styles.subTitle}>{subTitle}</Text>
+          </View>
+      </View>
 
       {
         label || label === '' ? (
-          <div className={styles.footer}>
-            <span className={styles.label}>{label}</span>
+          <View className={styles.footer}>
+            <Text className={styles.label}>{label}</Text>
             <Icon className={styles.rightIcon} name="RightOutlined" size={12} />
-          </div>
+          </View>
         ) : (
           <Button type="primary" onClick={handleClick}>查看主页</Button>
         )
       }
-    </div>
+    </View>
   );
 };
 

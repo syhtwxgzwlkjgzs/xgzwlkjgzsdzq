@@ -24,7 +24,7 @@ const Index = ({ imgs = [], tipData = {} }) => {
 
   return (
     <>
-        <View className={styles.container} onClick={onClick} style={{ width: imgs.length === 1 ? '0.24rem' : '0.44rem' }}>
+        <View className={styles.container} onClick={onClick} style={{ width: imgs.length === 1 ? '24px' : '44px' }}>
             {
                 imgs.filter((_, index) => index < 2).map((item, index) => (
                   <View key={index} className={index === 0 ? styles.img : styles.imgAfter}>
