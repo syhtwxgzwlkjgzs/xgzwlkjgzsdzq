@@ -1,8 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'next/router';
 
-// import SearchInput from '@components/search-input';
 import SearchInput from '@components/search-input';
 import List from '@components/list';
 import SectionTitle from './components/section-title';
@@ -19,7 +17,7 @@ import { getCurrentInstance } from '@tarojs/taro';
 @inject('site')
 @inject('search')
 @observer
-class SearchResultH5Page extends React.Component {
+class SearchResultPage extends React.Component {
   constructor(props) {
     super(props);
     const { keyword = '' } = getCurrentInstance().router.params;
@@ -121,4 +119,4 @@ class SearchResultH5Page extends React.Component {
   }
 }
 
-export default withRouter(SearchResultH5Page);
+export default SearchResultPage;

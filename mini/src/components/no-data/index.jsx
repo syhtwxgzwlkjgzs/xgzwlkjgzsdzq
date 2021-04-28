@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Icon, Spin } from '@discuzq/design';
+import { Button, Icon } from '@discuzq/design';
 import { noop } from '../thread/utils';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
@@ -31,7 +31,7 @@ const NoData = ({ text = '暂无数据', icon = '', onClick = noop, isShowBtn = 
     <View className={styles.container}>
       <View className={styles.wrapper}>
         {icon && <Icon name={icon} size={48} className={styles.icon} />}
-        {!isHidden && <span>{text}</span>}
+        {!isHidden && <Text>{text}</Text>}
       </View>
       {isShowBtn && <Button onClick={onClick}>{btnText}</Button>}
     </View>

@@ -60,9 +60,9 @@ const Index = ({
           <View className={styles.portrait}>
             <Tip tipData={tipData} imgs={imgDatas}></Tip>
           </View>
-          <p className={styles.numText}>
+          <View className={styles.numText}>
             {wholeNum}
-          </p>
+          </View>
         </View> : <View></View>}
         <View className={styles.commentSharing}>
           {comment > 0 && <View className={styles.commentNum}>{`${comment}条评论`}</View>}
