@@ -98,7 +98,11 @@ export default class PayBox extends React.Component {
   handlePayConfirmed = async () => {
     if (this.state.paymentType === PAYWAY_MAP.WALLET) {
       // 表示钱包支付
-      await this.props.payBox.walletPayEnsure();
+      try {
+        await this.props.payBox.walletPayEnsure();
+      } catch (error) {
+        
+      }
       // this.props.payBox.visible = false;
       // this.goSetPayPwa()
     } else if (this.state.paymentType === PAYWAY_MAP.WX) {

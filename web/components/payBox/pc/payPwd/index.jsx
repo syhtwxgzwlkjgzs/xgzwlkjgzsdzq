@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import CommonPayoffPwd from '../../components/common-paypwd-content';
 import { STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
+import { Toast, Icon } from '@discuzq/design';
 
 @inject('site')
 @inject('user')
@@ -14,6 +15,12 @@ export default class index extends Component {
     this.state = {
       list: [],
     };
+  }
+
+  initState = () => {
+    this.setState({
+      list: [],
+    })
   }
 
   componentWillUnmount() {
@@ -61,7 +68,6 @@ export default class index extends Component {
         });
         await this.props.payBox.clear();
       } catch (error) {
-        console.log(error, 'sssssssssss_钱包支付异常回调');
         Toast.error({
           content: '支付失败，请重新输入',
           hasMask: false,
@@ -82,8 +88,22 @@ export default class index extends Component {
         this.props.payBox.visible = true;
       } catch (error) {
         console.log(error, 'sssssssssss_设置支付密码异常回调');
+        Toast.error({
+          content: '设置密码失败',
+          hasMask: false,
+          duration: 1000,
+        })
+        this.setState({
+          list: [],
+        });
       }
     }
+  }
+
+  // 点击取消或者关闭---回到上个页面
+  handleCancel = () => {
+    this.props.payBox.step = STEP_MAP.PAYWAY
+    this.initState()
   }
 
   render() {
@@ -91,6 +111,10 @@ export default class index extends Component {
     return (
       <div className={styles.payPwdWrapper}>
         <CommonPayoffPwd whetherIsShowPwdBox={true} list={list} updatePwd={this.updatePwd} />
+        {/* 关闭按钮 */}
+        <div className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
+          <Icon name="PaperClipOutlined" size={16} />
+        </div>
       </div>
     );
   }

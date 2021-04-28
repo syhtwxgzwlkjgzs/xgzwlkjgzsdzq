@@ -138,7 +138,7 @@ export default class Index extends Component {
   render() {
     return (
       <div>
-        {/* <p className={styles.title}>{this.showTitle() || '输入支付密码'}</p> */}
+        <p className={styles.title}>{this.showTitle() || '输入支付密码'}</p>
         <div className={styles.payList}>{this.renderPwdItem()}</div>
       </div>
     );
