@@ -20,6 +20,7 @@
 }
 .input {
   width: 300px;
+  margin-bottom: 24px;
 }
 .sendCaptcha {
   @include captchaBtn;

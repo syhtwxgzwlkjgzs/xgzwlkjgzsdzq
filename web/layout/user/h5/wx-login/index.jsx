@@ -2,10 +2,11 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './index.module.scss';
-import { Icon } from '@discuzq/design';
+import { Icon, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
-import WeixinQrCode from '../../../../components/login/h5/wx-qr-code';
+import WeixinQrCode from '@components/login/wx-qr-code';
 import HomeHeader from '@components/home-header';
+import Header from '@components/header';
 
 @inject('site')
 @inject('user')
@@ -13,35 +14,82 @@ import HomeHeader from '@components/home-header';
 @observer
 class WXLoginH5Page extends React.Component {
   async componentDidMount() {
-    await this.props.h5QrCode.generate({
-      params: {
-        type: 'mobile_browser_login',
-        redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`)}`,
-      },
-    });
+    try {
+      const { platform, webConfig } = this.props.site;
+      const redirectUri = `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`)}`;
+      let params;
+
+      if (platform === 'h5') {
+        params = {
+          type: 'mobile_browser_login',
+          redirectUri,
+        };
+      }
+      if (platform === 'pc') {
+        const { miniprogramClose } = webConfig.passport;
+        const type = miniprogramClose ?  'pc_login_mini' : 'pc_login';
+        params = {
+          type,
+          redirectUri,
+        };
+      }
+
+      await this.props.h5QrCode.generate({ params });
+      this.queryLoginState();
+    } catch (e) {
+      Toast.error({
+        content: e.Message,
+        hasMask: false,
+        duration: 1000,
+      });
+    }
+  }
+
+  queryLoginState() {
+    const timer = setInterval(async () => {
+      try {
+        await this.props.h5QrCode.login({
+          params: { sessionToken: this.props.h5QrCode.sessionToken },
+        });
+        clearInterval(timer);
+      } catch (e) {
+        Toast.error({
+          content: e.Message,
+          hasMask: false,
+          duration: 1000,
+        });
+      }
+    }, 3000);
   }
 
   render() {
+    const { site } = this.props;
+    const { platform } = site;
     const isAnotherLoginWayAvaliable = this.props.site.isSmsOpen || this.props.site.isUserLoginVisible;
     return (
-      <div className={layout.container}>
-        <HomeHeader hideInfo/>
-        <div className={layout.content}>
-          <div className={layout.title}>微信登录</div>
+      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
+      <div className={platform === 'h5' ? layout.container : layout.pc_container}>
+        {
+          platform === 'h5'
+            ? <HomeHeader hideInfo/>
+            : <Header/>
+        }
+        <div className={platform === 'h5' ? layout.content : layout.pc_content}>
+          <div className={platform === 'h5' ? layout.title : layout.pc_title}>微信登录</div>
           {/* 二维码 start */}
           <WeixinQrCode
             orCodeImg={this.props.h5QrCode.qrCode}
-            orCodeTips="长按保存二维码，并在微信中识别此二维码，即可完成登录"
+            orCodeTips={platform === 'h5' ? '长按保存二维码，并在微信中识别此二维码，即可完成登录' : '请使用微信，扫码登录'}
           />
           {/* 二维码 end */}
-          {isAnotherLoginWayAvaliable && <div className={layout['otherLogin-title']}>其他登录方式</div>}
-          <div className={layout['otherLogin-button']}>
+          {isAnotherLoginWayAvaliable && <div className={platform === 'h5' ? layout['otherLogin-title'] : layout.pc_otherLogin_title}>其他登录方式</div>}
+          <div className={platform === 'h5' ? layout['otherLogin-button'] : layout.pc_otherLogin_button}>
             {this.props.site.isUserLoginVisible && (
               <span
                 onClick={() => {
                   this.props.router.push('/user/username-login');
                 }}
-                className={layout['otherLogin-button-weixin']}
+                className={platform === 'h5' ? layout['otherLogin-button-weixin'] : layout.button_left}
               >
                 <Icon name='UserOutlined' color='#4084FF'/>
               </span>
@@ -51,14 +99,15 @@ class WXLoginH5Page extends React.Component {
                 onClick={() => {
                   this.props.router.push('/user/phone-login');
                 }}
-                className={layout['otherLogin-button-user']}
+                className={platform === 'h5' ? layout['otherLogin-button-user'] : layout.button_right}
               >
                 <Icon name='PhoneOutlined' color='#FFC300'/>
               </span>
             )}
           </div>
-          <div className={layout['otherLogin-outer__tips']}>注册登录即表示您同意《注册协议》《隐私协议》</div>
+          <div className={platform === 'h5' ? layout['otherLogin-outer__tips'] : layout.pc_otherLogin_tips} >注册登录即表示您同意《注册协议》《隐私协议》</div>
         </div>
+      </div>
       </div>
     );
   }

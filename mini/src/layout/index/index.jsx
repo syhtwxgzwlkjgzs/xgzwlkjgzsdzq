@@ -10,7 +10,8 @@ import TopNew from './components/top-news';
 import Tabbar from './components/tabbar';
 import FilterView from './components/filter-view';
 import { View, Text } from '@tarojs/components';
-import Page from '@components/page';
+import PayBox from '../../../components/payBox'
+
 @inject('site')
 @inject('user')
 @inject('index')
@@ -139,35 +140,34 @@ class IndexMiniPage extends React.Component {
     const { threads = {}, categories = [] } = index;
     const { currentIndex } = this.state;
     const { currentPage, totalPage, pageData } = threads || {};
-    console.log(index, '数据');
+    console.log(index, '数据111111');
     return (
-      <Page>
-        <View className={styles.container}>
-          { pageData?.length > 0
-            ? (
-              <List
-                className={styles.list}
-                onRefresh={this.onRefresh}
-                refreshing={false}
-                data={pageData}
-                renderItem={this.renderItem}
-                onPullingUp={this.onPullingUp}
-                noMore={currentPage >= totalPage}
-              />
-            )
-            : this.renderNoData()
-          }
+      <View className={styles.container}>
+        { pageData?.length > 0
+          ? (
+            <List
+              className={styles.list}
+              onRefresh={this.onRefresh}
+              refreshing={false}
+              data={pageData}
+              renderItem={this.renderItem}
+              onPullingUp={this.onPullingUp}
+              noMore={currentPage >= totalPage}
+            />
+          )
+          : this.renderNoData()
+        }
 
-          <FilterView
-            data={categories}
-            current={filter}
-            onCancel={this.onClose}
-            visible={this.state.visible}
-            onSubmit={this.onClickFilter}
-          />
-        <Tabbar placeholder />
-        </View>
-      </Page>
+        <FilterView
+          data={categories}
+          current={filter}
+          onCancel={this.onClose}
+          visible={this.state.visible}
+          onSubmit={this.onClickFilter}
+        />
+       <Tabbar placeholder />
+       <PayBox />
+      </View>
     );
   }
 }

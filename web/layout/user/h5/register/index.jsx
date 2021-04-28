@@ -34,7 +34,7 @@ class RegisterH5Page extends React.Component {
       // 跳转状态页
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
         this.props.commonLogin.setStatusMessage(e.Code, e.Message);
-        this.props.router.push('/user/status');
+        this.props.router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
         return;
       }
 
@@ -49,13 +49,13 @@ class RegisterH5Page extends React.Component {
     const { site } = this.props;
     const { platform } = site;
     return (
+      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
             ? <HomeHeader hideInfo/>
             : <Header/>
         }
-        <HomeHeader hideInfo/>
         <div className={platform === 'h5' ? layout.content : layout.pc_content}>
           <div className={platform === 'h5' ? layout.title : layout.pc_title}>用户名注册</div>
           <Input
@@ -111,6 +111,7 @@ class RegisterH5Page extends React.Component {
           </div>
           <div className={platform === 'h5' ? layout['otherLogin-tips'] : layout.pc_otherLogin_tips}>注册登录即表示您同意《注册协议》《隐私协议》</div>
         </div>
+      </div>
       </div>
     );
   }

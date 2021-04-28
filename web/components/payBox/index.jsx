@@ -1,114 +1,67 @@
-import React from 'react';
-import styles from './index.module.scss';
+// @ts-check
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Popup, Icon, Button, Radio } from '@discuzq/design';
-import browser from '@common/utils/browser';
-import Router from '@discuzq/sdk/dist/router';
+import EventEmitter from 'eventemitter3';
+import H5PayBox from './h5';
+import PCPayBox from './pc';
+
+class PayBoxEmitter extends EventEmitter {}
+
+const payBoxEmitter = new PayBoxEmitter();
 
 @inject('site')
+@inject('payBox')
 @inject('user')
 @observer
-export default class PayBox extends React.Component {
+export default class PayBox extends Component {
+  constructor(props) {
+    super(props);
+    this.createPayBox = this.createPayBox.bind(this);
+    payBoxEmitter.on('createPayBox', this.createPayBox);
+  }
 
-    constructor(props) {
-        super(props);
-        const {site} = props;
-        const {webConfig} = site;
-        const {wxpayClose, wxpayIos} = webConfig;
+  createPayBox = async (
+    options = {
+      data: {},
+    },
+  ) => {
+    // 每次新的付费创建，需要清空前一次的付费信息
+    this.props.payBox.clear();
+    this.props.payBox.options = {
+      ...options.data,
+    };
+    const noop = () => {}
+    this.props.payBox.onSuccess = options.success || noop;
+    this.props.payBox.onFailed = options.failed || noop;
+    this.props.payBox.onCompleted = options.completed || noop;
+    this.props.payBox.visible = true;
+  };
 
-        const payConfig = [
-            {
-                name: '钱包支付',
-                icon: 'PayOutlined',
-                color: '#1878f3',
-                value: '1',
-            }
-        ];
-
-        if ( browser.env('weixin') && wxpayClose ) {
-            if ( browser.env(ios) && wxpayIos) {
-                payConfig.unshift(
-                    {
-                        name: '微信支付',
-                        icon: 'PayOutlined',
-                        color: '#09bb07',
-                        value: '0',
-                    }
-                );
-            }
-        }
-
-        this.state = {
-            isShow: false,
-            payConfig
-        }
-        this.goSetPayPwa = this.goSetPayPwa.bind(this);
+  render() {
+    const { platform } = this.props.site;
+    if (platform === 'pc') {
+      return <PCPayBox />;
     }
-
-    componentDidMount() {
-        setTimeout(() => {
-            this.setState({
-                isShow: true
-            })
-        }, 1000);
-    }
-
-    walletPaySubText() {
-        const { site, user } = this.props;
-        const { userInfo } = user;
-        const { canWalletPay, walletBalance } = userInfo;
-        if (!canWalletPay) {
-            return (<p className={styles.subText} onClick={this.goSetPayPwa}>请设置支付密码</p>);
-        }
-        return (<p className={styles.subText}>钱包余额：￥{walletBalance}</p>);
-    }
-
-    goSetPayPwa() {
-        Router.push({url: '/modify/paypwd?token=1'});
-    }
-
-    render() {
-        const { visible = true, onClose = () => {}  } = this.props;
-        const { user, site } = this.props;
-        const { payConfig } = this.state;
-        return (
-            <Popup
-                position="bottom"
-                maskClosable={true}
-                visible={this.state.isShow}
-                onClose={onClose}
-            >
-                <div className={styles.payBox}>
-                    <div className={styles.title}>
-                        <p>支付金额：￥9.90</p>
-                    </div>
-                    <div className={styles.list}>
-                        {
-                            payConfig.map((item, key) => {
-                                return (
-                                    <div key={key} className={styles.listItem}>
-                                        <div className={styles.left}>
-                                            <Icon className={styles.icon} name={item.icon} color={item.color} size={20} />
-                                            <p className={styles.text}>{item.name}</p>
-                                        </div>
-                                        <div className={styles.right}>
-                                            {item.value === '1' && this.walletPaySubText()}
-                                            <Radio/>
-                                        </div>
-                                    </div>
-                                );
-                            })
-                        }
-                    </div>
-                    <div className={styles.tips}>
-                        <p>asdadsadsd</p>
-                    </div>
-                    <div className={styles.btnBox}>
-                        <Button className={styles.btn} type='primary' size='large' full>确认支付￥1元</Button>
-                        <Button className={styles.btn} size='large' full>取消</Button>
-                    </div>
-                </div>
-            </Popup>
-        );
-    }
+    return <H5PayBox options={this.props.payBox.options} />;
+  }
 }
+
+/**
+ * 订单生成函数
+ * @param {{
+ *  data: {
+ *    amount: number;
+ *    redAmount: number;
+ *    rewardAmount: number;
+ *    isAnonymous: number;
+ *    type: number;
+ *    threadId: number;
+ *    groupId: number;
+ *    payeeId: number;
+ * }
+ * success: (orderInfo: any) => any
+ * failed: (orderInfo: any) => any
+ * completed: (orderInfo: any) => any
+ * }} options
+ */
+PayBox.createPayBox = (options) => payBoxEmitter.emit('createPayBox', options);

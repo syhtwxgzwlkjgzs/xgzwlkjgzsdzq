@@ -16,6 +16,7 @@ class WeixinAuth extends React.Component {
   async componentDidMount() {
     const { router } = this.props;
     const { code, sessionId, sessionToken, state, action, nickname } = router.query;
+    console.log(router.query);
 
     // 如果要进行绑定逻辑，跳转绑定相关的页面
     if (action === 'wx-bind') {
@@ -68,7 +69,7 @@ class WeixinAuth extends React.Component {
       // 跳转状态页
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
-        this.props.router.push('/user/status');
+        this.props.router.push(`/user/status?statusCode=${error.Code}&statusMsg=${error.Message}`);
         return;
       }
       if (error.Code) {

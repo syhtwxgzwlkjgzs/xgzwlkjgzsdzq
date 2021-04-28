@@ -9,6 +9,8 @@
     "css": "sass"
   },
   "scripts": {
+    "dev": "taro build --type weapp --watch",
+    "build": "taro build --type weapp",
     "lint:fix": "eslint --ext .js,.ts,.tsx,.jsx ./ --max-warnings 0 --fix",
     "lintcss:fix": "stylelint src/**/*.{scss}",
     "dev:weapp": "cross-env NODE_ENV=development dzq dev -p mini --type weapp",

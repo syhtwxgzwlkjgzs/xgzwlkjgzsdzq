@@ -2,10 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexMiniPage from '@layout/index';
 import { readCategories, readStickList, readThreadList } from '@server';
-
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-import Page from '@components/page';
-// import HOCWithLogin from '@common/middleware/HOCWithLogin';
+import PayBox from '../../components/payBox';
 
 @inject('site')
 @inject('index')
@@ -21,7 +18,7 @@ class Index extends React.Component {
 
     return {
       serverIndex: {
-        categories: categories && categories.code === 0 ? [{ name: '全部', pid: '', children: [] }, ...categories.data] : null,
+        categories: categories && categories.code === 0 ? categories.data : null,
         sticks: sticks && sticks.code === 0 ? sticks.data : null,
         threads: threads && threads.code === 0 ? threads.data : null,
       },
@@ -38,6 +35,21 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
+      PayBox.createPayBox({
+        data: {
+          amount: 0.1,
+          type: 5,
+          threadId: 4,
+          payeeId: 16,
+          isAnonymous: false,
+        },
+        success: (orderInfo) => {
+          console.log(orderInfo);
+        },
+        failed: (orderInfo) => {
+          console.log(orderInfo);
+        },
+      });
     const { index } = this.props;
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasCategoriesData = !!index.categories;
@@ -76,11 +88,7 @@ class Index extends React.Component {
   }
 
   render() {
-    return (
-      <Page>
-        <IndexMiniPage dispatch={this.dispatch} />
-      </Page>
-    );
+    return <IndexMiniPage dispatch={this.dispatch} />;
   }
 }
 

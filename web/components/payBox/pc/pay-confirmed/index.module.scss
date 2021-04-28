@@ -1,0 +1,123 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.payconfirmWrapper {
+  background: var(--color-white);
+  min-height: rem(452);
+  width: rem(530);
+  font-size: rem($font-size-large);
+  padding: rem($padding-4n);
+  .icon {
+    margin-right: rem($margin-4n);
+  }
+  .payTitle {
+    font-weight: bold;
+  }
+  .payMoney {
+    width: 100%;
+    height: rem(110);
+    background-color: #f2f2f2;
+    margin: rem(30) 0;
+    line-height: rem(110);
+    text-align: center;
+    font-weight: bold;
+  }
+  .payTab_top {
+    margin-bottom: rem(24);
+  }
+  .payTab {
+    margin-right: rem($margin-6n);
+    &:hover {
+      text-decoration: underline;
+      color: #333;
+      cursor: pointer;
+      font-weight: 800;
+    }
+    &:active {
+      text-decoration: underline;
+      color: #333;
+    }
+  }
+  .payTabActive {
+    text-decoration: underline;
+    color: #333;
+    cursor: pointer;
+    font-weight: 800;
+  }
+  .wechatPayment {
+    display: flex;
+    align-items: center;
+
+    .wPaymentDec {
+      flex: 1;
+      padding: rem($margin-6n);
+    }
+    .wPayment_01 {
+      font-size: rem(28);
+      font-weight: 800;
+    }
+    .wPayment_02 {
+      display: flex;
+      align-items: center;
+      margin: rem(30) 0;
+      font-size: rem(16);
+      line-height: rem(20);
+    }
+    .wPayment_03 {
+      font-size: rem(16);
+    }
+  }
+  .wPaymentCode {
+    > img {
+      width: rem(178);
+      height: rem(178);
+      background-color: pink;
+    }
+  }
+  .walletPayment {
+    .walletTitle {
+      font-size: rem(28);
+      font-weight: 800;
+      margin: rem(32) 0;
+    }
+    .walletDec {
+      line-height: rem(36);
+    }
+    .walletBalance {
+      font-size: rem(30);
+      font-weight: 800;
+      letter-spacing: rem(1);
+    }
+    .walletSettingPwd {
+      color: var(--color-primary3);
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    .walletChangePwd {
+      display: inline-block;
+      height: rem(40);
+    }
+    .walletConfirmBtn {
+      display: block;
+      margin-left: rem(102);
+      margin-top: rem(16);
+    }
+  }
+  .walletDec > span:nth-child(1) {
+    color: #a1aabb;
+    margin-right: rem(24);
+  }
+  .paymentCloseBtn {
+    position: absolute;
+    right: rem($padding-4n);
+    top: rem($padding-4n);
+    cursor: pointer;
+    color: var(--color-disabled);
+    text-shadow: 0 -1 0 0;
+    &:hover {
+      color: #a1aabb;
+    }
+  }
+}

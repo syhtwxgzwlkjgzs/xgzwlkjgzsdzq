@@ -7,9 +7,7 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @inject('site')
 class BindNickname extends React.Component {
   render() {
-    const { site } = this.props;
-    const { platform } = site;
-    return platform === 'h5' ? <BindNicknameH5Page /> : <></>;
+    return <BindNicknameH5Page />;
   }
 }
 
