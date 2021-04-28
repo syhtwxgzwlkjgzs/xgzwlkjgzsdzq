@@ -65,7 +65,7 @@
     line-height: rem(49);
     font-size: rem(50);
     &:not(:last-child) {
-      margin-right: rem($margin-2n);
+      // margin-right: rem($margin-2n);
     }
 
     &.curr{
@@ -83,7 +83,7 @@
     line-height: rem(69);
     font-size: rem(50);
     &:not(:last-child) {
-      margin-right: rem($margin-2n);
+      // margin-right: rem($margin-2n);
     }
 
     &.curr{

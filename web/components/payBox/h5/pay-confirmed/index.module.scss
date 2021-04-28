@@ -7,8 +7,10 @@
   .title{
     text-align: center;
     padding: rem($padding-4n) 0;
+    background-color: #f2f2f2;
     p{
       font-size: rem($font-size-large);
+      font-weight: bold;
     }
   }
   .list{
