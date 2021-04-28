@@ -73,7 +73,7 @@ class Index extends React.Component {
     const { platform } = site;
 
     if (platform === 'pc') {
-      return <IndexPCPage />;
+      return <IndexPCPage dispatch={this.dispatch} />;
     }
 
     return <IndexH5Page dispatch={this.dispatch} />;
