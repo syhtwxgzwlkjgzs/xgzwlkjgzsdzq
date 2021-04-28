@@ -5,7 +5,7 @@ export default {
   // TODO: 分包处理
   // 首页和详情页在主包
   pages: [
-    // 'pages/index/index',
+    'pages/index/index',
     'pages/search/index',
     'pages/search/result/index',
     'pages/search/result-post/index',

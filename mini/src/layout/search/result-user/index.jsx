@@ -55,6 +55,7 @@ class SearchResultUserH5Page extends React.Component {
   render() {
     const { keyword } = this.state;
     const { users } = this.props.search;
+
     const { pageData = [], currentPage, totalPage } = users || { pageData: [] };
 
     return (

@@ -20,9 +20,13 @@ import Taro from '@tarojs/taro';
 @inject('search')
 @observer
 class SearchH5Page extends React.Component {
-  onSearch = () => {
+  state = {
+    keyword: ''
+  }
+  onSearch = (value) => {
+    this.setState({ keyword: value })
     Taro.navigateTo({
-      url: `/pages/search/result-post/index?keyword=${this.state.keyword || ''}`
+      url: `/pages/search/result/index?keyword=${value || ''}`
     })
   };
 
@@ -30,7 +34,6 @@ class SearchH5Page extends React.Component {
     Taro.navigateTo({
       url: `/pages/search/result-post/index`
     })
-    this.props.router.push('/search/result-post');
   };
 
   redirectToSearchResultUser = () => {
@@ -49,7 +52,7 @@ class SearchH5Page extends React.Component {
   onPostClick = data => console.log('post click', data);
 
   onCancel = () => {
-    this.props.router.back();
+    // Taro.navigateBack()
   };
 
   render() {

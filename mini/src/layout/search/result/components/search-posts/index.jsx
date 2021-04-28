@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Post } from '@components/search-result-item';
+import ThreadContent from '@components/thread';
 
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
@@ -13,7 +13,7 @@ import { View, Text } from '@tarojs/components';
 const SearchPosts = ({ data, onItemClick }) => (
   <View className={styles.list}>
     {data.map((item, index, arr) => (
-      <Post key={index} data={item} onClick={onItemClick} Viewider={index !== arr.length - 1} />
+      <ThreadContent key={index} className={styles.listItem} data={item} onClick={onItemClick} />
     ))}
   </View>
 );

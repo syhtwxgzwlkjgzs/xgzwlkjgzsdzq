@@ -8,6 +8,8 @@ import NoData from '@components/no-data';
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
 import Page from '@components/page';
+import List from '@components/list';
+import { Topic } from '@components/search-result-item';
 
 @inject('search')
 @observer
@@ -15,7 +17,6 @@ class SearchResultTopicH5Page extends React.Component {
   constructor(props) {
     super(props);
 
-    // const keyword = this.props.router.query.keyword || '';
     const keyword = '';
 
     this.state = {
