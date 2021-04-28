@@ -31,6 +31,7 @@ import DeletePopup from './components/delete-popup';
 import MorePopup from './components/more-popup';
 import ShowTop from './components/show-top';
 import NoMore from './components/no-more';
+import AboptPopup from './components/abopt-popup';
 
 
 
@@ -189,6 +190,7 @@ class RenderCommentList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      showAboptPopup: false, // 是否弹出采纳弹框
       showCommentInput: false, // 是否弹出评论框
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
@@ -355,10 +357,33 @@ class RenderCommentList extends React.Component {
     typeof this.props.onEditClick === 'function' && this.props.onEditClick(comment);
   }
 
+  // 跳转评论详情
   onCommentClick = (data) => {
     Taro.navigateTo({
       url: `/subPages/thread/comment/index?id=${data.id}&threadId=${this.props.thread?.threadData?.id}`,
     });
+  }
+
+  // 点击采纳
+  onAboptClick() {
+    this.setState({ showAboptPopup: true });
+  }
+
+  // 悬赏弹框确定
+  onAboptOk(data) {
+    this.setState({ showAboptPopup: false });
+    if (data > 0) {
+      console.log(`悬赏${data}元`);
+      Toast.success({
+        content: `悬赏${data}元`,
+      });
+    } else {
+      console.log('悬赏金额不能为0');
+      Toast.success({
+        content: '悬赏金额不能为0',
+      });
+    }
+    return true;
   }
 
   render() {
@@ -389,6 +414,7 @@ class RenderCommentList extends React.Component {
                 replyLikeClick={reploy => this.replyLikeClick(reploy, val)}
                 replyReplyClick={reploy => this.replyReplyClick(reploy, val)}
                 onCommentClick={() => this.onCommentClick(val)}
+                onAboptClick={() => this.onAboptClick()}
                 isShowOne
               ></CommentList>
             </View>
@@ -409,6 +435,14 @@ class RenderCommentList extends React.Component {
           onClose={() => this.setState({ showDeletePopup: false })}
           onBtnClick={() => this.deleteComment()}
         ></DeletePopup>
+
+        {/* 采纳弹层 */}
+        <AboptPopup
+          rewardAmount={1000} // 需要传入剩余悬赏金额
+          visible={this.state.showAboptPopup}
+          onCancel={() => this.setState({ showAboptPopup: false })}
+          onOkClick={data => this.onAboptOk(data)}
+        ></AboptPopup>
       </Fragment>
     );
   }
