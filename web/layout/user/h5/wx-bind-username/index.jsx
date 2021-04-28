@@ -28,7 +28,7 @@ class WXBindUsernameH5page extends React.Component {
     } catch (e) {
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
         this.props.commonLogin.setStatusMessage(e.Code, e.Message);
-        this.props.router.push('/user/status');
+        this.props.router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
         return;
       }
 

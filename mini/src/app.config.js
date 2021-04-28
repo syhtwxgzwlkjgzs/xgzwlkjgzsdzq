@@ -9,6 +9,11 @@ export default {
     'pages/thread/index',
     'pages/threadPost/index',
     'pages/threadPost/selectReward',
+    'pages/user/wx-select/index',
+    'pages/user/wx-bind-username/index',
+    'pages/user/wx-bind-phone/index',
+    'pages/user/status/index',
+    'pages/user/wx-auth/index',
   ],
   subPackages: [
     {

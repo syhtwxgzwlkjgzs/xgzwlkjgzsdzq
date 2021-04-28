@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action } from 'mobx';
 import { get } from '../../utils/get';
 
 
@@ -13,11 +13,15 @@ export default class commonLoginStore {
     @observable needToCompleteExtraInfo = false;
     @observable needToBindPhone = false;
     @observable needToBindWechat = false;
+    @observable needToBindMini = false;
     @observable sessionToken = '';
     @observable statusMessage = '';
     @observable nickName = '';
 
     @observable statusCode = null;
+    @observable statusMsg = '';
+
+    @observable jsCode = '';
 
     @action
     setSessionToken(sessionToken) {
@@ -33,6 +37,13 @@ export default class commonLoginStore {
     setStatusMessage(code, cause = '') {
       const causeMes = cause ? `，原因：${cause}` : '';
       this.statusCode = code;
+      this.statusMsg = cause;
       this.statusMessage = `${USER_STATUS_MAP[code]}${causeMes}`;
+      return this.statusMessage;
+    }
+
+    @action
+    setJsCode(code) {
+      this.jsCode = code;
     }
 }

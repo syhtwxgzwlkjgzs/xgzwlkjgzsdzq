@@ -26,4 +26,34 @@
     }
   }
 }
- 
+
+// ------------------PC
+.pc_container {
+  @include pc_container;
+}
+.pc_content {
+  width: 300px;
+  margin: 20px auto 0;
+  padding-bottom: 30px;
+  .pc_functionalRegion {
+    @include functionalRegion;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 30px;
+    color: #0b0b37;
+    text-align: center;
+    padding-bottom: 32px;
+  }
+  .pc_button {
+    @include pc_button;
+  }
+  .pc_icon{
+    width: 327px;
+    text-align: center;
+    .icon__img {
+      width: 150px;
+      height: 150px;
+      display: inline-block;
+    }
+  }
+}

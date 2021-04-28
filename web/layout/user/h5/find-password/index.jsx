@@ -5,7 +5,7 @@ import { Button, Input } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import HomeHeader from '@components/home-header';
-import PhoneInput from '../../../../components/login/h5/phone-input';
+import PhoneInput from '@components/login/phone-input';
 
 
 @inject('site')

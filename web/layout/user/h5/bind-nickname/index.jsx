@@ -5,6 +5,7 @@ import { Button, Input, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import HomeHeader from '@components/home-header';
+import Header from '@components/header';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 
 @inject('site')
@@ -44,7 +45,7 @@ class BindNicknameH5Page extends React.Component {
       // 跳转状态页
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
         this.props.commonLogin.setStatusMessage(e.Code, e.Message);
-        this.props.router.push('/user/status');
+        this.props.router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
         return;
       }
       Toast.error({
@@ -56,27 +57,38 @@ class BindNicknameH5Page extends React.Component {
   };
 
   render() {
-    const { nicknameBind } = this.props;
+    const { site, nicknameBind } = this.props;
+    const { platform } = site;
     return (
-      <div className={layout.container}>
-        <HomeHeader hideInfo/>
-        <div className={layout.content}>
-          <div className={layout.title}>设置昵称</div>
+      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
+      <div className={platform === 'h5' ? layout.container : layout.pc_container}>
+        {
+          platform === 'h5'
+            ? <HomeHeader hideInfo/>
+            : <Header/>
+        }
+        <div className={platform === 'h5' ? layout.content : layout.pc_content}>
+          <div className={platform === 'h5' ? layout.title : layout.pc_title}>设置昵称</div>
           <Input
-            className={layout.input}
+            className={platform === 'h5' ? layout.input : layout.pc_input}
             value={nicknameBind.nickname}
             placeholder="昵称"
             onChange={this.handleNicknameChange}
           />
-          <Button className={layout.button} type="primary" onClick={this.handleBindButtonClick}>
+          <Button
+            className={platform === 'h5' ? layout.button : layout.pc_button}
+            type="primary"
+            onClick={this.handleBindButtonClick}
+          >
             下一步
           </Button>
-          <div className={layout.functionalRegion}>
+          <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
             <span className={layout.clickBtn} onClick={() => {}}>
               退出登录
             </span>
           </div>
         </div>
+      </div>
       </div>
     );
   }

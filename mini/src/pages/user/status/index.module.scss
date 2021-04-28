@@ -1,0 +1,37 @@
+.container {
+  height: 100%;
+}
+.banner {
+  height: 140px;
+  text-align: center;
+  background-color: var(--color-primary);
+  img {
+    margin-top: 67px;
+  }
+}
+.content {
+  padding: 48px 24px;
+  .button {
+    width: 327px;
+    height: 42px;
+    margin-top: 32px;
+    line-height: 24px;
+  }
+  .functionalRegion {
+    text-align: center;
+    margin-top: 60px;
+    .clickBtn{
+      color: var(--color-primary);
+      cursor: pointer;
+    }
+  }
+  .icon{
+    width: 327px;
+    text-align: center;
+    .icon__img {
+      width: 150px;
+      height: 150px;
+      display: inline-block;
+    }
+  }
+}

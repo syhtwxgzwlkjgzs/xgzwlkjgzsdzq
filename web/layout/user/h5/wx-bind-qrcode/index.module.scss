@@ -15,4 +15,35 @@
     @include titleTips;
   }
 }
- 
+
+// ------------------PC
+.pc_body_background{
+  @include pc_body_background;
+}
+
+.pc_container {
+  @include pc_container;
+}
+.pc_content {
+  width: 300px;
+  margin: 20px auto 0;
+  .pc_title {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 30px;
+    color: #0b0b37;
+    text-align: center;
+    padding-bottom: 32px;
+  }
+  .pc_otherLogin_title {
+    @include pc_otherLoginText;
+    font-size: 14px;
+  }
+  .pc_otherLogin_tips{
+    @include pc_otherLoginText;
+  }
+  .pc_tips{
+    @include pc_titleTips;
+    margin-bottom: 32px;
+  }
+}

@@ -8,9 +8,7 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @inject('site')
 class ResetPassword extends React.Component {
   render() {
-    const { site } = this.props;
-    const { platform } = site;
-    return platform === 'h5' ? <ResetPasswordH5Page /> : <></>;
+    return <ResetPasswordH5Page />;
   }
 }
 
