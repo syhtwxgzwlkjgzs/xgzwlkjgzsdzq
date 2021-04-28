@@ -57,6 +57,7 @@ class List extends React.PureComponent {
       containerClassName,
       onPullingUp,
       noMore,
+      scrollTop,
     } = this.props;
     const { height } = this.state;
     const { emptyFunction, renderDiv } = this;
@@ -84,7 +85,7 @@ class List extends React.PureComponent {
     //   </div>
     // );
     return (
-      <BaseList className={composeClassName} onRefresh={onPullingUp} noMore={noMore}>
+      <BaseList className={composeClassName} onRefresh={onPullingUp} noMore={noMore} scrollTops={1111}>
         {data && data.map((_, index) => renderItem({ data, index })) }
       </BaseList>
     );
