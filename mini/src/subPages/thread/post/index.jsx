@@ -179,40 +179,32 @@ class Index extends Component {
 
     let nextRoute;
     switch (item.type) {
-      //  其它类型可依次补充
+      // 根据类型分发具体操作
       case THREAD_TYPE.reward:
-        nextRoute = '/pages/threadPost/selectReward';
+        nextRoute = '/subPages/thread/selectReward/index';
         break;
       case THREAD_TYPE.goods:
-        nextRoute = '/pages/threadPost/selectProduct';
-        break;
-      case THREAD_TYPE.video:
-        this.handleVideoUpload();
+        nextRoute = '/subPages/thread/selectProduct/index';
         break;
       case THREAD_TYPE.redPacket:
-        nextRoute = '/pages/threadPost/selectRedpacket';
+        nextRoute = '/subPages/thread/selectRedpacket/index';
         break;
       case THREAD_TYPE.paid:
         this.setState({ showPaidOption: true });
         break;
       case THREAD_TYPE.paidPost:
-        nextRoute = `/pages/threadPost/selectPaid?paidType=${THREAD_TYPE.paidPost}`;
+        nextRoute = `/subPages/thread/selectPayment/index?paidType=${THREAD_TYPE.paidPost}`;
         this.setState({ showPaidOption: false })
         break;
       case THREAD_TYPE.paidAttachment:
-        nextRoute = `/pages/threadPost/selectPaid?paidType=${THREAD_TYPE.paidAttachment}`;
+        nextRoute = `/subPages/thread/selectPayment/index?paidType=${THREAD_TYPE.paidAttachment}`;
         this.setState({ showPaidOption: false });
         break;
       case THREAD_TYPE.at:
-        nextRoute = '/pages/threadPost/selectAt';
+        nextRoute = '/subPages/thread/selectAt/index';
         break;
       case THREAD_TYPE.topic:
-        nextRoute = '/pages/threadPost/selectTopic';
-        break;
-      case THREAD_TYPE.emoji:
-        this.setState({
-          showEmoji: true
-        });
+        nextRoute = '/subPages/thread/selectTopic/index';
         break;
       case THREAD_TYPE.draft:
         this.setState({ showDraftOption: true });
@@ -222,6 +214,14 @@ class Index extends Component {
         break;
       case THREAD_TYPE.abandonDraft:
         this.handleDraft(THREAD_TYPE.abandonDraft);
+        break;
+      case THREAD_TYPE.video:
+        this.handleVideoUpload();
+        break;
+      case THREAD_TYPE.emoji:
+        this.setState({
+          showEmoji: true
+        });
         break;
     }
 
