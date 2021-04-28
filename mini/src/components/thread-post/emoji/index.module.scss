@@ -1,0 +1,23 @@
+.emoji-container {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  background: white;
+
+  .emoji-item {
+    width: 25px;
+    height: 25px;
+    margin: 4px;
+  }
+}
+
+.btn {
+  height: 44px;
+  line-height: 44px;
+  font-size: var(--font-size-primary);
+  color: #4f5a70;
+  text-align: center;
+  border-top: var(--border-border);
+  background: white;
+}

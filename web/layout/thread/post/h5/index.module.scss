@@ -22,6 +22,11 @@
     max-height: calc(100vh - 134px - env(safe-area-inset-bottom));
   }
 }
+
+.audio-record {
+  padding: rem(16);
+}
+
 .position-box {
   display: flex;
   height: 45px;

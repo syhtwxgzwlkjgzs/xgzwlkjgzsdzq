@@ -45,7 +45,6 @@
 
   .content {
     width: 100%;
-    padding: var(--padding-4n) 0;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
@@ -53,6 +52,8 @@
   }
 
   .content-parent {
+    padding: var(--padding-4n) 0;
+    border-bottom: var(--border-border);
     .active {
       color: #fff;
       background: #2469f6;
@@ -60,7 +61,7 @@
   }
 
   .content-child {
-    border-top: var(--border-border);
+    margin: var(--margin-4n) 0;
 
     .active {
       color: #2469f6;

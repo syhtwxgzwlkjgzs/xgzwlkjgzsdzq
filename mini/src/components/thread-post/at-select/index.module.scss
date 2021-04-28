@@ -1,0 +1,155 @@
+@import '@common/styles/var.scss';
+@mixin single-line() {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+@mixin flex() {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wrapper {
+  position: relative;
+  height: 100vh;
+
+  :global {
+    .dzq-input {
+      width: 100%;
+      padding: 10px 20px;
+      box-sizing: border-box;
+
+      .dzq-input__inner {
+        height: 40px;
+        padding-left: 35px;
+        padding-right: var(--padding-5);
+        font-size: var(--font-size-middle);
+        color: #0b0b37;
+        background: #f6f6f6;
+        border: none;
+      }
+
+      .dzq-input__icon {
+        left: 20px;
+        top: 50%;
+        margin-top: -18px;
+        color: var(--color-disabled2) !important;
+      }
+    }
+  }
+
+  .at-wrap {
+    flex: 1;
+    height: calc(100vh - 135px);
+    overflow: hidden;
+  }
+
+  .at-item {
+    @include flex();
+    height: 50px;
+    padding: 0 20px;
+
+    .avatar {
+      width: 35px;
+      height: 35px;
+
+      :global {
+        .dzq-avatar {
+          width: 100%;
+          height: 100%;
+          font-size: 22px;
+          color: #fff;
+          text-align: center;
+          line-height: 35px;
+          border-radius: 50%;
+
+          .dzq-avatar__img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+
+    .info {
+      flex: 1;
+      @include flex();
+      height: 51px;
+      padding: 0 8px;
+      font-size: var(--font-size-primary);
+      color: #777;
+      line-height: 50px;
+      border-bottom: var(--border-border);
+      .username {
+        max-width: 170px;
+        @include single-line();
+      }
+      .group {
+        max-width: 80px;
+        @include single-line();
+      }
+    }
+
+    :global {
+      .dzq-checkbox-wrap {
+        margin: 0;
+        padding: 13px 0;
+        -webkit-tap-highlight-color: transparent;
+        .dzq-checkbox {
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          &::after {
+            border-radius: 50%;
+            color: #ededed;
+          }
+        }
+        &.is-checked {
+          .dzq-checkbox {
+            background-color: #1878f3;
+          }
+          .dzq-icon {
+            font-size: 12px !important;
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+
+  .btn {
+    @include flex();
+    flex-wrap: nowrap;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: var(--padding-5n);
+    background: #fff;
+
+    :global {
+      .dzq-button {
+        width: 48%;
+        height: 35px;
+        font-size: var(--font-size-primary);
+        color: #777;
+        background: #f9fafc;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 2px;
+        transition: all 0.3s;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .not-selected {
+        color: #7d7979;
+        background-color: var(--color-white);
+      }
+      .is-selected {
+        color: var(--color-white);
+        background-color: #1878f3;
+      }
+    }
+  }
+}

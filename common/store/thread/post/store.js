@@ -47,7 +47,7 @@ class ThreadPostStore {
     audio: {}, // 语音
     rewardQa: {}, // 悬赏问答 price-价格，expiredAt-悬赏结束时间
     product: {}, // 商品
-    redpacket: {}, // 红包
+    redpacket: {}, // 红包 rule-规则，money-金额，number-个数，condition-领取条件，likenum-点赞数，orderPrice-红包订单金额
     video: {}, // 视频
     images: {}, // 图片
     files: {}, // 文件

@@ -9,7 +9,12 @@
  import { Icon } from '@discuzq/design';
 
 const Index = (props) => {
-  const { type = 'upload', filename, size, src, className, onUpload, onDelete } = props;
+  const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, onTagClick, tagContent } = props;
+
+  // 标签展示
+  const tag = (
+    <Text className={styles['tag']} onClick={() => {onTagClick();}}>{tagContent}</Text>
+  );
 
   // 图片展示
   const img = (
@@ -28,9 +33,7 @@ const Index = (props) => {
 
   // 视频展示
   const video = (
-    <View className={styles['video']}>
-      <Video src={src} />
-    </View>
+    <Video src={src} className={styles['video']} />
   );
 
   // 附件展示
@@ -42,6 +45,20 @@ const Index = (props) => {
         <Text className={styles['size']}>{size}</Text>
       </View>
       <Icon name='MailOutlined' size={16} onClick={onDelete} />
+    </View>
+  );
+
+  // 商品展示
+  const product = (
+    <View className={styles['product']}>
+      <Image className={styles['image']} src={productSrc}></Image>
+      <View className={styles['content']}>
+        <Text className={styles['desc']}>{productDesc}</Text>
+        <View className={styles['opera']}>
+          <Text className={styles['price']}>{`￥${productPrice}`}</Text>
+          <Icon name='MailOutlined' size={16} onClick={onDelete} />
+        </View>
+      </View>
     </View>
   );
 
@@ -61,13 +78,14 @@ const Index = (props) => {
     </View>
   );
 
-
   switch (type) {
+    case 'tag': return tag;
     case 'atta-upload': return attaUpload;
     case 'img-upload': return imgUpload;
     case 'video': return video;
     case 'img': return img;
     case 'atta': return atta;
+    case 'product': return product;
   };
 };
 
