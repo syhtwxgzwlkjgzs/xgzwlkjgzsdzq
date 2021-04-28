@@ -60,19 +60,19 @@ export default function DVditor(props) {
 
   useEffect(() => {
     const users = atList.map((item) => {
-      if (item.user) return `@${item.user.userName}`;
+      if (item.user) return ` @${item.user.userName} `;
       return '';
     });
     if (users.length) {
       setCurrentPositon();
-      vditor.insertValue(users.join(' '));
+      vditor.insertValue(users.join(''));
     }
   }, [atList]);
 
   useEffect(() => {
     if (topic) {
       setCurrentPositon();
-      vditor.insertValue(`${topic} `);
+      vditor.insertValue(` ${topic} `);
     }
   }, [topic]);
 

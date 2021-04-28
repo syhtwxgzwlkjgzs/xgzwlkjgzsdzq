@@ -17,6 +17,7 @@ import { THREAD_TYPE } from '@common/constants/thread-post';
 import Product from '@components/thread-post/product';
 import ProductSelect from '@components/thread-post/product-select';
 import AllPostPaid from '@components/thread/all-post-paid';
+import AtSelect from '@components/thread-post/at-select';
 
 @inject('threadPost')
 @inject('index')
@@ -29,7 +30,7 @@ class ThreadPCPage extends React.Component {
       index,
       emoji,
       // topic,
-      // atList,
+      atList,
       currentDefaultOperation,
       currentAttachOperation,
     } = this.props;
@@ -46,6 +47,7 @@ class ThreadPCPage extends React.Component {
               <DVditor
                 pc
                 emoji={emoji}
+                atList={atList}
                 onChange={() => { }}
                 onCountChange={() => { }}
                 onFocus={() => { }}
@@ -182,6 +184,15 @@ class ThreadPCPage extends React.Component {
               confirm={(data) => {
                 this.props.setPostData({ ...data });
               }}
+            />
+          )}
+          {/* 插入 at 关注的人 */}
+          {currentDefaultOperation === defaultOperation.at && (
+            <AtSelect
+              pc
+              visible={currentDefaultOperation === defaultOperation.at}
+              getAtList={list => this.props.handleAtListChange(list)}
+              onCancel={() => this.props.handleSetState({ currentDefaultOperation: '' })}
             />
           )}
         </div>
