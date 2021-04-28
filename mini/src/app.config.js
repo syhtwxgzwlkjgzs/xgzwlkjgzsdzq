@@ -18,6 +18,11 @@ export default {
         'close/index',
         'user/login/index',
         'thread/comment/index',
+        'search/index',
+        'search/result-topic/index',
+        'search/result-post/index',
+        'search/result-user/index',
+        'search/result/index',
       ]
     }
   ],

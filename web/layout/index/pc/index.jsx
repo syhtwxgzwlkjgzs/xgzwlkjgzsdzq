@@ -1,5 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'next/router';
 import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
 import NewContent from './components/new-content';
@@ -52,8 +53,16 @@ class IndexPCPage extends React.Component {
     }, 30000);
   }
 
+  onSearch = (value) => {
+    if (value) {
+      this.props.router.push(`/search?keyword=${value || ''}`);
+    }
+  }
+
   changeBatch = () => {
-    console.log('换一批');
+    const { dispatch = () => {} } = this.props;
+     const { filter } = this.state;
+     return dispatch('refresh-recommend', filter);
   }
   recommendDetails = () => {
     console.log('推荐详情');
@@ -169,6 +178,7 @@ class IndexPCPage extends React.Component {
     return (
       <List className={styles.indexWrap} onRefresh={this.onPullingUp} noMore={currentPage === totalPage}>
           <BaseLayout
+            onSearch={this.onSearch}
             left={ this.renderLeft(countThreads) }
             right={ this.renderRight }
           >
@@ -179,4 +189,4 @@ class IndexPCPage extends React.Component {
   }
 }
 
-export default IndexPCPage;
+export default withRouter(IndexPCPage);

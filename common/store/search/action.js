@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import SearchStore from './store';
-import { readTopicsList, readUsersList, readThreadList } from '../../server';
+import { readTopicsList, readUsersList, readThreadList, createFollow } from '../../server';
 
 class SearchAction extends SearchStore {
   constructor(props) {
@@ -74,7 +74,7 @@ class SearchAction extends SearchStore {
     };
 
     // 如果存在search字段，说明是在结果页发起的网络请求，此时只需要后台返回三条数据
-    if (search || search === '') {
+    if (type === 1) {
       newPerPage = 3;
     }
 
@@ -187,6 +187,22 @@ class SearchAction extends SearchStore {
     }
     return null;
   };
+
+/**
+ * 发现模块 - 关注
+ * @param {object} search * 搜索值
+ * @returns {object} 处理结果
+ */
+ @action
+ async postFollow(userId) {
+   const result = await createFollow({ data: { toUserId: userId } });
+
+   if (result.code === 0 && result.data) {
+     
+     return result.data;
+   }
+   return null;
+ };
 }
 
 export default SearchAction;

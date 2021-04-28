@@ -1,8 +1,8 @@
-@import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 
 .page {
   padding-top: 16px;
+  background: var(--color-white);
 }
 .section {
   padding: 16px;

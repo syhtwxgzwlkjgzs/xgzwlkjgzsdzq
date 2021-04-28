@@ -19,10 +19,10 @@ import WxPhoneBindStore from './login/wx-phone-bind-store';
 import H5QrCode from './login/h5-qrcode';
 import SearchStore from './search/action';
 import PayBoxStore from './pay/pay-box-store';
+import store from './store';
 
 useStaticRendering(isServer());
 
-let store = null;
 
 export default function initializeStore(initProps = {}) {
   const { site = {}, user = {} } = initProps;
@@ -51,8 +51,8 @@ export default function initializeStore(initProps = {}) {
       payBox: new PayBoxStore(),
     };
   }
-  if (store === null) {
-    store = {
+  if (store.getStore() === null) {
+    store.setStore({
       site: new SiteStore({
         envConfig: ENV_CONFIG,
         ...site,
@@ -74,8 +74,8 @@ export default function initializeStore(initProps = {}) {
       search: new SearchStore(),
       wxPhoneBind: new WxPhoneBindStore(),
       payBox: new PayBoxStore(),
-    };
+    });
   }
 
-  return store;
+  return store.getStore();
 }

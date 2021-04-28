@@ -47,7 +47,7 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
     const { scrollHeight } = listWrapper.current;
     const { scrollTop } = listWrapper.current;
 
-    if ((scrollHeight <= clientHeight + scrollTop) && !isLoading.current) {
+    if ((scrollHeight - 40 <= clientHeight + scrollTop) && !isLoading.current) {
       isLoading.current = true;
       setLoadText('加载中...');
       if (typeof(onRefresh) === 'function') {

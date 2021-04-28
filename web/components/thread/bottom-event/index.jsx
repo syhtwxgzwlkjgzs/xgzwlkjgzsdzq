@@ -25,13 +25,9 @@ const Index = ({
   onPraise = () => {},
 }) => {
   const postList = useMemo(() => {
-    const praise = !isLiked ? {
+    const praise =  {
       icon: 'LikeOutlined',
-      name: '赞',
-      event: onPraise,
-    } : {
-      icon: 'LikeOutlined',
-      name: '取消',
+      name: !isLiked ? '赞' : '取消',
       event: onPraise,
     };
 

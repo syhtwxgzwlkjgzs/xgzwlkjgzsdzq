@@ -9,10 +9,10 @@ import styles from './index.module.scss';
  * @prop {{id:string, image:string, name: string}[]} data 用户数据
  * @prop {function} onItemClick 用户点击事件
  */
-const ActiveUsers = ({ data, onItemClick }) => (
+const ActiveUsers = ({ data, onItemClick, onFollow }) => (
   <div className={styles.list}>
     {data?.map((item, index) => (
-      <User key={index} data={item} onClick={onItemClick} />
+      <User key={index} data={item} onFollow={onFollow} onClick={onItemClick} />
     ))}
   </div>
 );
@@ -22,10 +22,14 @@ const ActiveUsers = ({ data, onItemClick }) => (
  * @prop {object} data 用户数据
  * @prop {function} onClick 用户点击事件
  */
-const User = ({ data, onClick }) => {
+const User = ({ data, onClick, onFollow }) => {
   const click = useCallback(() => {
     onClick && onClick(data);
   }, [data, onClick]);
+
+  const handleFollow = () => {
+    onFollow(data.userId)
+  }
 
   return (
     <div className={styles.item} onClick={click}>
@@ -52,11 +56,11 @@ const User = ({ data, onClick }) => {
           </div>
           <div className={styles.numItem}>
             <span className={styles.numTitle}>关注</span>
-            {data.fansCount}
+            {data.followCount}
           </div>
         </div>
       </div>
-      <Button type="primary" className={styles.button}>
+      <Button type="primary" className={styles.button} onClick={handleFollow}>
         <Icon name="PlusOutlined" size={12} className={styles.addIcon}/>
         关注
       </Button>
