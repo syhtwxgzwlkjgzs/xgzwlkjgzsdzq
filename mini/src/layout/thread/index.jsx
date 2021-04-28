@@ -32,6 +32,7 @@ import MorePopup from './components/more-popup';
 import ShowTop from './components/show-top';
 import NoMore from './components/no-more';
 import AboptPopup from './components/abopt-popup';
+import ReportPopup from './components/report-popup';
 
 
 
@@ -460,6 +461,7 @@ class Index extends Component {
     super(props);
 
     this.state = {
+      showReportPopup: false, // 是否弹出举报弹框
       showDeletePopup: false, // 是否弹出删除弹框
       showCommentInput: false, // 是否弹出评论框
       showMorePopup: false, // 是否弹出更多框
@@ -482,6 +484,10 @@ class Index extends Component {
 
     // 修改评论数据
     this.comment = null;
+
+    // 举报内容选项
+    this.reportContent = ['广告垃圾', '违规内容', '恶意灌水', '重复发帖'];
+    this.inputText = '其他理由...';
   }
 
   componentDidMount() {
@@ -645,7 +651,7 @@ class Index extends Component {
 
     // 举报
     if (type === 'report') {
-      console.log('点击举报');
+      this.setState({ showReportPopup: true });
     }
 
     // 编辑
@@ -656,6 +662,11 @@ class Index extends Component {
       });
     }
   };
+
+  onReportOk(val) {
+    console.log('确定举报啦', val);
+    this.setState({ showReportPopup: false });
+  }
 
   // 置顶提示
   setTopState() {
@@ -951,6 +962,15 @@ class Index extends Component {
           visible={this.state.showDeletePopup}
           onClose={() => this.setState({ showDeletePopup: false })}
           onBtnClick={type => this.onBtnClick(type)}
+        />
+
+        {/* 举报弹层 */}
+        <ReportPopup
+          reportContent={this.reportContent}
+          inputText={this.inputText}
+          visible={this.state.showReportPopup}
+          onCancel={() => this.setState({ showReportPopup: false })}
+          onOkClick={data => this.onReportOk(data)}
         />
       </View>
     );

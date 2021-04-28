@@ -16,6 +16,7 @@ import layout from './layout.module.scss';
 import topic from './topic.module.scss';
 import comment from './comment.module.scss';
 
+import ReportPopup from './components/report-popup';
 import AboptPopup from './components/abopt-popup';
 import ShowTop from './components/show-top';
 import DeletePopup from './components/delete-popup';
@@ -130,7 +131,7 @@ const RenderThreadContent = observer((props) => {
               <span className={topic.text}>管理</span>
             </Dropdown>
           </div>
-          <div className={topic.iconText} onClick={onDropdownChange('report')}>
+          <div className={topic.iconText} onClick={() => onDropdownChange('report')}>
             <Icon className={topic.icon} name="WarnOutlinedThick"></Icon>
             <span className={topic.text}>举报</span>
           </div>
@@ -516,6 +517,7 @@ class ThreadPCPage extends React.Component {
     super(props);
 
     this.state = {
+      showReportPopup: false, // 是否弹出举报弹框
       showDeletePopup: false, // 是否弹出删除弹框
       showCommentInput: false, // 是否弹出评论框
       showMorePopup: false, // 是否弹出更多框
@@ -534,6 +536,10 @@ class ThreadPCPage extends React.Component {
 
     // 修改评论数据
     this.comment = null;
+
+    // 举报内容选项
+    this.reportContent = ['广告垃圾', '违规内容', '恶意灌水', '重复发帖'];
+    this.inputText = '其他理由...';
   }
 
   // 滚动事件
@@ -616,6 +622,19 @@ class ThreadPCPage extends React.Component {
       if (!this.props.thread?.threadData?.id) return;
       this.props.router.push(`/thread/post?id=${this.props.thread?.threadData?.id}`);
     }
+
+    // 举报
+    if (type === 'report') {
+      console.log('举报');
+      this.setState({ showReportPopup: true });
+    }
+  }
+
+  // 确定举报
+  onReportOk(val) {
+    console.log('确定举报啦', val);
+    this.setState({ showReportPopup: false });
+    return true;
   }
 
   // 置顶提示
@@ -854,6 +873,7 @@ class ThreadPCPage extends React.Component {
                   onLikeClick={() => this.onLikeClick()}
                   onCollectionClick={() => this.onCollectionClick()}
                   onShareClick={() => this.onShareClick()}
+                  onReportClick={() => this.onReportClick()}
                 ></RenderThreadContent>
               ) : (
                 <LoadingTips type="init"></LoadingTips>
@@ -920,12 +940,21 @@ class ThreadPCPage extends React.Component {
           </div>
         </Popup>
 
-
+        {/* 删除弹层 */}
         <DeletePopup
           visible={this.state.showDeletePopup}
           onClose={() => this.setState({ showDeletePopup: false })}
           onBtnClick={() => this.delete()}
         ></DeletePopup>
+
+        {/* 举报弹层 */}
+        <ReportPopup
+          reportContent={this.reportContent}
+          inputText={this.inputText}
+          visible={this.state.showReportPopup}
+          onCancel={() => this.setState({ showReportPopup: false })}
+          onOkClick={data => this.onReportOk(data)}
+        ></ReportPopup>
       </div>
     );
   }

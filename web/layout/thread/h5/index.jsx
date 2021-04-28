@@ -15,6 +15,7 @@ import UserInfo from '@components/thread/user-info';
 import Header from '@components/header';
 
 import AboptPopup from './components/abopt-popup';
+import ReportPopup from './components/report-popup';
 import ShowTop from './components/show-top';
 import DeletePopup from './components/delete-popup';
 import MorePopup from './components/more-popup';
@@ -445,6 +446,7 @@ class ThreadH5Page extends React.Component {
     super(props);
 
     this.state = {
+      showReportPopup: false, // 是否弹出举报弹框
       showDeletePopup: false, // 是否弹出删除弹框
       showCommentInput: false, // 是否弹出评论框
       showMorePopup: false, // 是否弹出更多框
@@ -467,6 +469,10 @@ class ThreadH5Page extends React.Component {
 
     // 修改评论数据
     this.comment = null;
+
+    // 举报内容选项
+    this.reportContent = ['广告垃圾', '违规内容', '恶意灌水', '重复发帖'];
+    this.inputText = '其他理由...';
   }
 
   // 滚动事件
@@ -608,7 +614,18 @@ class ThreadH5Page extends React.Component {
       if (!this.props.thread?.threadData?.id) return;
       this.props.router.push(`/thread/post?id=${this.props.thread?.threadData?.id}`);
     }
+
+    // 举报
+    if (type === 'report') {
+      this.setState({ showReportPopup: true });
+    }
   };
+
+  // 确定举报
+  onReportOk(val) {
+    console.log('确定举报啦', val);
+    this.setState({ showReportPopup: false });
+  }
 
   // 置顶提示
   setTopState(isStick) {
@@ -897,6 +914,14 @@ class ThreadH5Page extends React.Component {
             onClose={() => this.setState({ showDeletePopup: false })}
             onBtnClick={type => this.onBtnClick(type)}
           ></DeletePopup>
+          {/* 举报弹层 */}
+          <ReportPopup
+            reportContent={this.reportContent}
+            inputText={this.inputText}
+            visible={this.state.showReportPopup}
+            onCancel={() => this.setState({ showReportPopup: false })}
+            onOkClick={data => this.onReportOk(data)}
+          ></ReportPopup>
           {/* 操作区 */}
           <div className={footer.operate}>
             <div className={footer.icon} onClick={() => this.onMessageClick()}>
