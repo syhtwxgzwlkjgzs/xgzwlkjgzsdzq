@@ -16,6 +16,9 @@ class CopyRight extends React.Component {
       <div>
         {setSite.siteRecord && <div className={styles.text}>{setSite.siteRecord}</div>}
         {setSite.siteRecordCode && <div className={styles.text}>{setSite.siteRecordCode}</div>}
+
+        <div className={styles.text}>Powered By Discuz! Q © 2021</div>
+        <div className={styles.text}>粤ICP备20008502号-1</div>
       </div>
     );
   }
