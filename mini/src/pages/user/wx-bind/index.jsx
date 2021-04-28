@@ -93,7 +93,7 @@ class WXBind extends Component {
    */
   handleBindCallback = () => new Promise((resolve, reject) => {
     Taro.getUserProfile({
-      desc: "查询用户是否绑定过账号",
+      desc: "账号绑定微信",
       success: (res) => {
         if(res.errMsg === 'getUserProfile:ok'){
           this.getUserProfileCallback(res);
