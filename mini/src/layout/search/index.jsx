@@ -25,9 +25,8 @@ class SearchH5Page extends React.Component {
   }
   onSearch = (value) => {
     this.setState({ keyword: value })
-    debugger
     Taro.navigateTo({
-      url: `/pages/search/result-post/index?keyword=${value || ''}`
+      url: `/pages/search/result/index?keyword=${value || ''}`
     })
   };
 

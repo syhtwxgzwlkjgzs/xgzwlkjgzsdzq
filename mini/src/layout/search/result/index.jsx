@@ -75,12 +75,11 @@ class SearchResultH5Page extends React.Component {
 
   render() {
     const { keyword } = this.state;
-    console.log(this.props.search, 'dssfdsf')
     const { searchTopics, searchUsers, searchThreads } = this.props.search;
     const { pageData: topicsPageData = [] } = searchTopics || {};
     const { pageData: usersPageData = [] } = searchUsers || {};
     const { pageData: threadsPageData = [] } = searchThreads || {};
-    console.log(usersPageData, 'usersPageData')
+    console.log(threadsPageData, 'usersPageData')
     return (
       <Page>
         <List className={styles.page} allowRefresh={false}>
