@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexMiniPage from '@layout/index';
 import { readCategories, readStickList, readThreadList } from '@server';
-import PayBox from '../../components/payBox';
+import PayBox from '@components/payBox';
 
 @inject('site')
 @inject('index')
