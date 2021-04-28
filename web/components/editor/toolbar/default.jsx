@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Icon } from '@discuzq/design';
+import { Icon, Dropdown } from '@discuzq/design';
 import styles from './index.module.scss';
 import { defaultIcon, defaultOperation } from '@common/constants/const';
 
@@ -28,24 +28,48 @@ export default function DefaultToolbar(props) {
 
   const icons = (
     <>
-      {defaultIcon.map(item => (
-        <Icon key={item.name}
-          onClick={(e) => {
-            e.stopPropagation();
-            if (item.id === currentAction) {
-              setCurrentAction('');
-              onClick({ id: '' });
-            } else {
-              setCurrentAction(item.id);
-              onClick(item);
-            }
-          }}
-          className={styles['dvditor-toolbar__item']}
-          name={item.name}
-          color={item.id === currentAction && item.active}
-          size="20">
-        </Icon>
-      ))}
+      {defaultIcon.map((item) => {
+        const iconItem = (
+          <Icon key={item.name}
+            onClick={(e) => {
+              if (!item.menu) e.stopPropagation();
+              if (item.id === currentAction) {
+                setCurrentAction('');
+                if (!item.menu) onClick({ id: '' });
+              } else {
+                setCurrentAction(item.id);
+                if (!item.menu) onClick(item);
+              }
+            }}
+            className={styles['dvditor-toolbar__item']}
+            name={item.name}
+            color={item.id === currentAction && item.active}
+            size="20">
+          </Icon>
+        );
+        if (pc && item.menu) {
+          const menus = (
+            <Dropdown.Menu>
+              {(item.menu.map(elem => (<Dropdown.Item key={elem.id} id={elem.id}>{elem.name}</Dropdown.Item>)))}
+            </Dropdown.Menu>
+          );
+          return (
+            <Dropdown
+              key={item.id}
+              trigger="click"
+              menu={menus}
+              arrow={false}
+              onChange={(key) => {
+                setCurrentAction('');
+                onClick({ id: key }, item);
+              }}
+            >
+              {iconItem}
+            </Dropdown>
+          );
+        }
+        return iconItem;
+      })}
     </>
   );
 

@@ -34,7 +34,7 @@ export const defaultIcon = [
     name: 'PaperClipOutlined', // 附件
     active: activeColor,
     id: defaultOperation.attach,
-    type: THREAD_TYPE.file
+    type: THREAD_TYPE.file,
   },
   {
     name: 'WalletOutlined', // 红包
@@ -45,6 +45,16 @@ export const defaultIcon = [
     name: 'DollarLOutlined', // 付费
     active: activeColor,
     id: defaultOperation.pay,
+    menu: [
+      {
+        id: 'threadpay',
+        name: '帖子付费',
+      },
+      {
+        id: 'attachpay',
+        name: '附件付费',
+      },
+    ],
   },
 ];
 
