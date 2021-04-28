@@ -10,7 +10,7 @@ import TopNew from './components/top-news';
 import Tabbar from './components/tabbar';
 import FilterView from './components/filter-view';
 import { View, Text } from '@tarojs/components';
-import PayBox from '../../../components/payBox'
+import PayBox from '@components/payBox'
 
 @inject('site')
 @inject('user')
@@ -80,15 +80,32 @@ class IndexMiniPage extends React.Component {
     return dispatch('moreData', filter);
   }
 
+  // 后台接口的分类数据不会包含「全部」，此处前端手动添加
+  handleCategories = () => {
+    const { categories = [] } = this.props.index || {};
+
+    if (!categories?.length) {
+      return categories;
+    }
+
+    let tmpCategories = categories.filter(item => item.name === '全部');
+    if (tmpCategories?.length) {
+      return categories;
+    }
+    tmpCategories = [{ name: '全部', pid: '', children: [] }, ...categories];
+    return tmpCategories;
+  }
+
   renderHeaderContent = () => {
     const { index } = this.props;
     const { currentIndex } = this.state;
-    const { sticks = [], categories = [] } = index;
+    const { sticks = [] } = index;
+    const newCategories = this.handleCategories() 
 
     return (
       <View>
         <HomeHeader/>
-        {categories && categories.length > 0 && <View className={styles.homeContent}>
+        {newCategories?.length > 0 && <View className={styles.homeContent}>
           <Tabs
             scrollable
             type='primary'
@@ -101,7 +118,7 @@ class IndexMiniPage extends React.Component {
             }
           >
             {
-              categories.map((item, index) => (
+              newCategories.map((item, index) => (
                 <Tabs.TabPanel
                   key={index}
                   id={item.pid}
@@ -137,10 +154,10 @@ class IndexMiniPage extends React.Component {
   render() {
     const { index } = this.props;
     const { filter } = this.state;
-    const { threads = {}, categories = [] } = index;
-    const { currentIndex } = this.state;
+    const { threads = {} } = index;
     const { currentPage, totalPage, pageData } = threads || {};
-    console.log(index, '数据111111');
+    const newCategories = this.handleCategories() 
+  
     return (
       <View className={styles.container}>
         { pageData?.length > 0
@@ -159,7 +176,7 @@ class IndexMiniPage extends React.Component {
         }
 
         <FilterView
-          data={categories}
+          data={newCategories}
           current={filter}
           onCancel={this.onClose}
           visible={this.state.visible}

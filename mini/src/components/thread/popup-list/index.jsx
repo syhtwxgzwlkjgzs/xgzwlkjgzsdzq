@@ -85,11 +85,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
     }
   };
 
-  const searchClick = () => {
-
-  };
-
-  const onClose = () => {
+  const onClose = (e) => {
     onHidden();
     setAll(null);
     setLikes(null);
@@ -156,7 +152,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
 
   return (
     <Popup
-        position={tipData?.platform === 'h5' ? 'bottom' : 'center'}
+        position='bottom'
         visible={visible}
         onClose={onClose}
     >
@@ -164,13 +160,6 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
           onActive={onClickTab}
           activeId={current}
           className={styles.tabs}
-          tabBarExtraContent={
-            tipData?.platform === 'pc' && (
-              <View onClick={onClose} className={styles.tabIcon}>
-                <Icon name="CheckOutlined" />
-              </View>
-            )
-          }
         >
           {
             renderTabPanel()
