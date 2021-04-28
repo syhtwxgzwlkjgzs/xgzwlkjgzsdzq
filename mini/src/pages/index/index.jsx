@@ -35,21 +35,6 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
-      PayBox.createPayBox({
-        data: {
-          amount: 0.1,
-          type: 5,
-          threadId: 4,
-          payeeId: 16,
-          isAnonymous: false,
-        },
-        success: (orderInfo) => {
-          console.log(orderInfo);
-        },
-        failed: (orderInfo) => {
-          console.log(orderInfo);
-        },
-      });
     const { index } = this.props;
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasCategoriesData = !!index.categories;

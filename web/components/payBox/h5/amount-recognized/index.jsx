@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button } from '@discuzq/design';
+import { Button, Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 import CommonAccountContent from '../../components/common-account-content';
 import { Toast } from '@discuzq/design';
@@ -35,6 +35,12 @@ export default class AmountRecognized extends Component {
           <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.asBtn} full>
             支付 ￥{amount}
           </Button>
+        </div>
+        {/* 关闭按钮 */}
+        <div className={styles.payBoxCloseIcon} onClick={() => {
+          this.props.payBox.clear();
+        }}>
+          <Icon name="PaperClipOutlined" size={16} />
         </div>
       </div>
     );
