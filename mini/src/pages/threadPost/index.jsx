@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import Taro from '@tarojs/taro';
+import Taro, { getCurrentInstance } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
-import { PluginToolbar, DefaultToolbar, GeneralUpload, Title, Content, ClassifyPopup, PaidTypePopup, Position, Emoji } from '@components/thread-post';
+import { PluginToolbar, DefaultToolbar, GeneralUpload, Title, Content, ClassifyPopup, OptionPopup, Position, Emoji } from '@components/thread-post';
 import { Units } from '@components/common';
 import styles from './index.module.scss';
 import { THREAD_TYPE } from '@common/constants/thread-post';
+import { paidOption, draftOption } from '@common/constants/const';
 import { readYundianboSignature } from '@common/server';
 import VodUploader from 'vod-wx-sdk-v2';
 import Router from '@discuzq/sdk/dist/router';
@@ -13,43 +14,108 @@ import Page from '@components/page';
 
 @inject('index')
 @inject('site')
+@inject('thread')
 @inject('threadPost')
 @observer
 class Index extends Component {
   constructor() {
     super();
     this.state = {
-      postType: 'post', // 发布类型 post-首次发帖，edit-再次编辑，draft-草稿
-      title: '',
+      threadId: '', // 主题id
+      postType: 'isFirst', // 发布状态 isFirst-首次，isEdit-再编辑，isDraft-草稿
       isShowTitle: true, // 默认显示标题
+      maxLength: 5000, // 文本输入最大长度
       showClassifyPopup: false, // 切换分类弹框show
       operationType: 0,
       contentTextLength: 5000,
-      showEmoji: false
+      showEmoji: false,
+      showPaidOption: false, // 显示付费选项弹框
+      showDraftOption: false, // 显示草稿选项弹框
     }
+    this.timer = null;
   }
 
   componentWillMount() { }
 
-  componentDidMount() {
-    this.fetchCategories();
+  async componentDidMount() {
+    await this.fetchCategories(); // 请求分类
+    const { params } = getCurrentInstance().router;
+    const id = parseInt(params.threadId);
+    if (id) { // 请求主题
+      this.setState({ threadId: id })
+      this.setPostDataById(id);
+    } else {
+      this.openSaveDraft();
+    }
   }
 
-  componentWillUnmount() { }
+  componentWillUnmount() {
+    // 卸载发帖页时清理数据
+    clearInterval(this.timer);
+    this.resetData();
+  }
 
   componentDidShow() { }
 
   componentDidHide() { }
 
-  // 若当前store内分类列表数据为空，则主动发起请求
-  fetchCategories() {
+  // handle
+  postToast = (title, icon = 'none', duration = 2000) => { // toast
+    Taro.showToast({ title, icon, duration });
+  }
+
+  async fetchCategories() { // 若当前store内分类列表数据为空，则主动请求分类
     const { categories, getReadCategories } = this.props.index;
     if (!categories || (categories && categories?.length === 0)) {
-      getReadCategories();
+      await getReadCategories();
     }
   }
 
-  // handle
+  async setPostDataById(id) {
+    const { thread, threadPost } = this.props;
+    let ret = {};
+
+    // 再编辑时，含有主题数据，直接使用
+    if (id === thread.threadData?.id && thread.threadData) {
+      ret.data = thread.threadData;
+      ret.code = 0;
+    } else {
+      ret = await thread.fetchThreadDetail(id);
+    }
+
+    if (ret.code === 0) {
+      // 请求成功，设置分类，发帖数据,发帖状态，草稿状态开启自动保存
+      const { categoryId, isDraft } = ret.data;
+      this.setCategory(categoryId);
+      threadPost.formatThreadDetailToPostData(ret.data);
+      this.setState({ postType: isDraft === 1 ? 'isDraft' : 'isEdit' });
+      isDraft === 1 && this.openSaveDraft();
+    } else {
+      // 请求失败，弹出错误消息
+      this.postToast(ret.msg);
+    }
+  }
+
+  setCategory(categoryId) { // 设置当前主题已选分类
+    const categorySelected = this.props.index.getCategorySelectById(categoryId);
+    this.props.threadPost.setCategorySelected(categorySelected);
+  }
+
+  openSaveDraft = () => {
+    clearInterval(this.timer);
+    this.timer = setInterval(() => {
+      this.autoSaveDraft();
+    }, 120000)
+  }
+
+  autoSaveDraft = async () => {
+    const { postData, setPostData } = this.props.threadPost;
+    if (postData.contentText.length === 0) return;
+    !postData.draft && setPostData({ draft: 1 });
+    this.handleSubmit(true);
+  }
+
+  // 监听title输入
   onTitleInput = (title) => {
     const { setPostData } = this.props.threadPost;
     setPostData({ title });
@@ -67,7 +133,7 @@ class Index extends Component {
   onContentFocus = () => {
     // 首次发帖，文本框聚焦时，若标题为空，则此次永久隐藏标题输入
     const { postData } = this.props.threadPost;
-    if (this.state.postType === 'post' && postData.title === "") {
+    if (this.state.postType === 'isFirst' && postData.title === "") {
       this.setState({ isShowTitle: false })
     }
   }
@@ -101,15 +167,15 @@ class Index extends Component {
         nextRoute = '/pages/threadPost/selectRedpacket';
         break;
       case THREAD_TYPE.paid:
-        this.setState({ showPaidType: true });
+        this.setState({ showPaidOption: true });
         break;
       case THREAD_TYPE.paidPost:
         nextRoute = `/pages/threadPost/selectPaid?paidType=${THREAD_TYPE.paidPost}`;
-        this.setState({ showPaidType: false })
+        this.setState({ showPaidOption: false })
         break;
       case THREAD_TYPE.paidAttachment:
         nextRoute = `/pages/threadPost/selectPaid?paidType=${THREAD_TYPE.paidAttachment}`;
-        this.setState({ showPaidType: false });
+        this.setState({ showPaidOption: false });
         break;
       case THREAD_TYPE.at:
         nextRoute = '/pages/threadPost/selectAt';
@@ -121,6 +187,15 @@ class Index extends Component {
         this.setState({
           showEmoji: true
         });
+        break;
+      case THREAD_TYPE.draft:
+        this.setState({ showDraftOption: true });
+        break;
+      case THREAD_TYPE.saveDraft:
+        this.handleDraft(THREAD_TYPE.saveDraft);
+        break;
+      case THREAD_TYPE.abandonDraft:
+        this.handleDraft(THREAD_TYPE.abandonDraft);
         break;
     }
 
@@ -187,27 +262,106 @@ class Index extends Component {
     return `${rule === 1 ? '随机红包' : '定额红包'}\\总金额 ${orderPrice}元\\${number}个`
   }
 
+  handleSubmit = async (isDraft) => {
+    const { threadPost } = this.props;
+
+    if (!isDraft && !threadPost.postData.contentText) {
+      this.postToast('请填写您要发布的内容');
+      return;
+    }
+
+    !isDraft && Taro.showLoading({
+      title: isDraft ? '保存草稿中...' : '发布中...',
+      mask: true
+    });
+
+    const { threadId } = this.state;
+    let ret = {};
+
+    if (!threadId) {
+      ret = await threadPost.createThread(); // 不存在id，创建主题
+    } else {
+      ret = await threadPost.updateThread(threadId); // 存在id，更新主题
+    }
+
+    !isDraft && Taro.hideLoading();
+
+    const { code, data, msg } = ret;
+    if (code === 0) {
+      if (!threadId) {
+        this.setState({ threadId: data.threadId }); // 新帖首次保存草稿后，获取id
+      }
+      // thread.setThreadData(data);
+      // 非草稿，跳转主题详情页
+      Taro.hideLoading();
+      if (!isDraft) {
+        this.postToast('发布成功', 'success');
+        Taro.redirectTo({ url: `/pages/thread/index?id=${data.threadId}` });
+      }
+      return true;
+    } else {
+      !isDraft && this.postToast(msg);
+      return false;
+    }
+  }
+
+  handleDraft = (type) => { // 处理保存草稿点击
+    this.setState({ showDraftOption: false });
+    // 点击保存-调用submit方法，点击不保存-重定向首页
+    if (type === THREAD_TYPE.saveDraft) {
+      const { setPostData } = this.props.threadPost;
+      setPostData({ draft: 1 });
+      this.handleSubmit(true);
+    } else {
+      Taro.redirectTo({ url: '/pages/index/index' })
+    }
+  }
+
+  resetData = () => {
+    const { setPostData } = this.props.threadPost;
+    setPostData({
+      title: '',
+      categoryId: 0,
+      anonymous: 0,
+      draft: 0,
+      price: 0,
+      attachmentPrice: 0,
+      freeWords: 1,
+      position: {},
+      contentText: '',
+      audio: {},
+      rewardQa: {},
+      product: {},
+      redpacket: {},
+      video: {},
+      images: {},
+      files: {},
+    })
+  }
+
   render() {
     const { categories } = this.props.index;
     const { postData, setPostData, createThread } = this.props.threadPost;
     const { rewardQa, redpacket, video, product, position } = postData;
     const {
-      title,
       isShowTitle,
+      maxLength,
       showClassifyPopup,
       operationType,
-      showPaidType,
+      showPaidOption,
       contentTextLength,
       showEmoji,
+      showDraftOption,
     } = this.state;
     return (
       <Page>
         <View className={styles['container']}>
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
           <View className={styles['content']}>
-            <Title title={title} show={isShowTitle} onInput={this.onTitleInput} />
+            <Title title={postData.title} show={isShowTitle} onInput={this.onTitleInput} />
             <Content
               value={postData.contentText}
+              maxLength={maxLength}
               onChange={this.onContentChange}
               onFocus={this.onContentFocus}
             />
@@ -216,7 +370,7 @@ class Index extends Component {
 
               <GeneralUpload type={operationType} />
 
-              {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => {}} />}
+              {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => { }} />}
 
               {video.videoUrl && <Units type='video' src={video.videoUrl} />}
 
@@ -227,7 +381,7 @@ class Index extends Component {
           <View className={styles['toolbar']}>
             <View className={styles['location-bar']}>
               <Position currentPosition={position} positionChange={(position) => {
-                setPostData({position});
+                setPostData({ position });
               }} />
               <Text className={styles['text-length']}>{`还能输入${contentTextLength}个字`}</Text>
             </View>
@@ -269,15 +423,7 @@ class Index extends Component {
               onPluginClick={(item) => {
                 this.handlePluginClick(item);
               }}
-              onSubmit={async () => {
-                Taro.showLoading({
-                  title: '创建中...',
-                });
-                console.log(postData);
-                await createThread();
-
-                Taro.hideLoading();
-              }}
+              onSubmit={() => this.handleSubmit()}
             />
           </View>
         </View>
@@ -289,11 +435,19 @@ class Index extends Component {
           onHide={() => this.setState({ showClassifyPopup: false })}
           onChange={this.onClassifyChange}
         />
-        {/* 选择付费类型弹框 */}
-        <PaidTypePopup
-          show={showPaidType}
+        {/* 主题付费选项弹框 */}
+        <OptionPopup
+          show={showPaidOption}
+          list={paidOption}
           onClick={(item) => this.handlePluginClick(item)}
-          onHide={() => this.setState({ showPaidType: false })}
+          onHide={() => this.setState({ showPaidOption: false })}
+        />
+        {/* 主题草稿选项弹框 */}
+        <OptionPopup
+          show={showDraftOption}
+          list={draftOption}
+          onClick={(item) => this.handlePluginClick(item)}
+          onHide={() => this.setState({ showDraftOption: false })}
         />
 
         {/* 表情类型弹框 */}
