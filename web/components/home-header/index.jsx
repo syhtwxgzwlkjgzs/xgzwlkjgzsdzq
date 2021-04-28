@@ -4,7 +4,7 @@ import { Icon, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import SharePopup from '../thread/share-popup';
-import { isWx } from './utils';
+import isWeiXin from '@common/utils/is-weixin';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 // import goToLoginPage from '@common/utils/go-to-login-page';
 
@@ -20,17 +20,6 @@ import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 class HomeHeader extends React.Component {
   state = {
     visible: false,
-    isWeixin: false,
-  }
-
-  componentDidMount() {
-    // 判断是否在微信浏览器
-    try {
-      const isWeixin = isWx();
-      this.setState({ isWeixin });
-    } catch (error) {
-      console.log(error);
-    }
   }
 
   logoImg = '/dzq-img/admin-logo-x2.png';
@@ -79,8 +68,7 @@ class HomeHeader extends React.Component {
       return;
     }
     // 判断是否在微信浏览器
-    const { isWeixin } = this.state;
-    if (isWeixin) {
+    if (isWeiXin) {
       this.setState({ visible: true });
     } else {
       const title = document?.title || '';
@@ -95,7 +83,7 @@ class HomeHeader extends React.Component {
 
   render() {
     const { bgColor, hideInfo = false } = this.props;
-    const { visible, isWeixin } = this.state;
+    const { visible } = this.state;
     const { countUsers, countThreads } = this.getSiteInfo();
 
     return (
@@ -129,7 +117,7 @@ class HomeHeader extends React.Component {
             <span className={styles.text}>分享</span>
           </li>
         </ul>}
-        {isWeixin && <SharePopup visible={visible} onClose={this.onClose} />}
+        {isWeiXin && <SharePopup visible={visible} onClose={this.onClose} />}
       </div>
     );
   }

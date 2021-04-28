@@ -12,7 +12,7 @@ import QcCode from './components/qcCode';
 import Recommend from './components/recommend';
 import ThreadContent from '@components/thread';
 import List from '@components/list';
-import Copyright from './components/copyright';
+import Copyright from '@components/copyright';
 import { readThreadList } from '@server';
 import PayBox from '@components/payBox';
 
@@ -35,6 +35,21 @@ class IndexPCPage extends React.Component {
   filter = {}
 
   componentDidMount() {
+    // PayBox.createPayBox({
+    //   data: {
+    //     amount: 0.1,
+    //     type: 5,
+    //     threadId: 4,
+    //     payeeId: 16,
+    //     isAnonymous: false,
+    //   },
+    //   success: (orderInfo) => {
+    //     console.log(orderInfo);
+    //   },
+    //   failed: (orderInfo) => {
+    //     console.log(orderInfo);
+    //   },
+    // });
     if (this.timer) {
       clearInterval(this.timer);
     }

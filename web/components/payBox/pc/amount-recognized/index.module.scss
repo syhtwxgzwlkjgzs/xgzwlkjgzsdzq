@@ -5,17 +5,31 @@
 .amountWrapper {
   background: var(--color-white);
   min-height: rem(280);
-  width: rem(500);
+  width: rem(409);
   font-size: rem($font-size-large);
   padding: rem($padding-4n);
   // overflow-y: auto;
+  .amountAddUp {
+    height: rem(60);
+    border-radius: rem(5);
+    background: #fff9e5;
+    text-align: center;
+    line-height: rem(60);
+  }
+  .amountMoney {
+    color: #E02433;
+  }
   .amountSubmit {
-    margin-top: rem($margin-5n);
+    width: 80%;
+    margin: rem($margin-5n) auto 0;
     text-align: right;
     font-size: rem($font-size-middle);
     >span {
       margin-right: rem($margin-4n);
     }
+  }
+  .asBtn {
+    border-radius: rem(5);
   }
   .amountCloseBtn {
     position: absolute;
