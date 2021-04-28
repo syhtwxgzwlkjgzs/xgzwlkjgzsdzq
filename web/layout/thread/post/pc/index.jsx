@@ -107,11 +107,11 @@ class ThreadPCPage extends React.Component {
                 {!!(postData.price || postData.attachmentPrice) && (
                   <Tag>付费总额{postData.price + postData.attachmentPrice}元</Tag>
                 )}
-                <Tag>
+                {postData.redpacket.price && (<Tag>
                   {postData.redpacket.rule === 1 ? '随机红包' : '定额红包'}
                   \ 总金额{postData.redpacket.price}元\{postData.redpacket.number}个
                   {postData.redpacket.condition === 1 && `\\集赞个数${postData.redpacket.likenum}`}
-                </Tag>
+                </Tag>)}
               </div>
             </div>
             <div className={styles.toolbar}>
