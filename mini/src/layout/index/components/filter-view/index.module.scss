@@ -8,40 +8,40 @@
 }
 .container {
   box-sizing: border-box;
-  padding: rem(15);
+  padding: 15px;
   background-color: var(--color-white);
-  border-top-right-radius: rem($border-radius-small);
-  border-top-left-radius: rem($border-radius-small);
+  border-top-right-radius: var(--border-radius-small);
+  border-top-left-radius: var(--border-radius-small);
   .wrapper {
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: rem(10);
+    margin-bottom: 10px;
   }
   .childrenWrapper {
     border-top: 1px solid #eee;
-    margin-top: rem(6);
-    padding-top: rem(16);
+    margin-top: 6px;
+    padding-top: 16px;
   }
 
   .title {
     font-weight: 600;
-    font-size: rem($font-size-middle);
+    font-size: var(--font-size-middle);
     line-height: 24px;
     text-align: left;
     color: var(--color-text-primary);
-    margin-bottom: rem(16);
+    margin-bottom: 16px;
   }
 
   .span {
-    font-size: rem($font-size-primary);
-    width: rem(76);
-    height: rem(36);
-    line-height: rem(36);
+    font-size: var(--font-size-primary);
+    width: 76px;
+    height: 36px;
+    line-height: 36px;
     text-align: center;
-    border-radius: rem($border-radius-small);
+    border-radius: var(--border-radius-small);
     background: var(--background-color-text2);
-    margin-right: rem(10);
-    margin-bottom: rem(10);
+    margin-right: 10px;
+    margin-bottom: 10px;
   }
 
   .active {
@@ -61,16 +61,16 @@
   background-color: var(--color-white);
   text-align: center;
   .button {
-    width: rem(290);
-    height: rem(42);
-    margin-bottom: rem(24);
+    width: 290px;
+    height: 42px;
+    margin-bottom: 24px;
   }
   .footerBtn {
     border-top: 1px solid #eee;
     position: relative;
-    height: rem(54);
+    height: 54px;
     text-align: center;
-    line-height: rem(54);
-    font-size: rem($font-size-primary);
+    line-height: 54px;
+    font-size: var(--font-size-primary);
   }
 }

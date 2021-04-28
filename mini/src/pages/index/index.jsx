@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import IndexMiniPage from '@layout/index/mini';
+import IndexMiniPage from '@layout/index';
 import { readCategories, readStickList, readThreadList } from '@server';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
