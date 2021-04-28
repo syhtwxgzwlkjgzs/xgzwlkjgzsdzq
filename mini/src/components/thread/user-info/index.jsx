@@ -40,13 +40,13 @@ export default function UserInfo(props) {
           {props.location && (
             <View className={styles.location}>
               <Icon name="PositionOutlined"></Icon>
-              <Text>{props.location}</Text>
+              <Text className={styles.locationText}>{props.location}</Text>
             </View>
           )}
           {props.view && (
             <View className={styles.view}>
               <Icon name="EyeOutlined"></Icon>
-              <Text>{props.view}</Text>
+              <Text className={styles.viewText}>{props.view}</Text>
             </View>
           )}
         </View>
