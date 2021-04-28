@@ -1,0 +1,11 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.topicWrap {
+  background: var(--background-color-text2);
+  display: flex;
+  height: 100vh;
+  .topBox {
+    padding: rem($padding-4n);
+    background: var(--color-white);
+  }
+}
