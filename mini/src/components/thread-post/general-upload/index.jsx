@@ -120,7 +120,8 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
 
   // 录音并上传
   const audioRecord = (type === THREAD_TYPE.voice) && (
-    <AudioRecord duration={10} onUpload={(file) => {upload(file)}} />
+    <View></View>
+    // <AudioRecord duration={10} onUpload={(file) => {upload(file)}} />
   );
 
   return (
