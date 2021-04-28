@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
-// import Router from '@common/utils/web-router';
 import { View, Text, Image } from '@tarojs/components';
 
 /**

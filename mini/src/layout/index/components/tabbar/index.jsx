@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
-import { withRouter } from 'next/router';
 import { View, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 
@@ -54,4 +53,4 @@ const TabBar = ({ router, fixed = true, placeholder = false }) => {
   );
 };
 
-export default withRouter(TabBar);
+export default TabBar;

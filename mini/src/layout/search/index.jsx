@@ -1,8 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'next/router';
 
-// import SearchInput from '@components/search-input';
 import SearchInput from '@components/search-input';
 import List from '@components/list';
 import SectionTitle from './components/section-title';
@@ -19,7 +17,7 @@ import Taro from '@tarojs/taro';
 @inject('site')
 @inject('search')
 @observer
-class SearchH5Page extends React.Component {
+class SearchPage extends React.Component {
   state = {
     keyword: ''
   }
@@ -98,4 +96,4 @@ class SearchH5Page extends React.Component {
   }
 }
 
-export default withRouter(SearchH5Page);
+export default SearchPage;

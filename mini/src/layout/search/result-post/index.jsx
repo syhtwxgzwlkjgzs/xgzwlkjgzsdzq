@@ -1,6 +1,5 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'next/router';
 import NoData from '@components/no-data';
 import SearchInput from '@components/search-input';
 import List from '@components/list';
@@ -12,7 +11,7 @@ import styles from './index.module.scss';
 @inject('site')
 @inject('search')
 @observer
-class SearchResultPostH5Page extends React.Component {
+class SearchResultPostPage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -85,4 +84,4 @@ class SearchResultPostH5Page extends React.Component {
   }
 }
 
-export default withRouter(SearchResultPostH5Page);
+export default SearchResultPostPage;
