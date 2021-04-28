@@ -42,6 +42,7 @@
   padding: 16px 22px;
   :global {
     .dzq-tag {
+      margin-right: var(--margin-4n);
       padding: 0 4px;
       height: 25px;
       line-height: 25px;
@@ -49,6 +50,9 @@
       background-color: #f0f1f3;
       color: #4f5a70;
       border: none;
+      &:last-child {
+        margin-right: 0;
+      }
     }
   }
 }

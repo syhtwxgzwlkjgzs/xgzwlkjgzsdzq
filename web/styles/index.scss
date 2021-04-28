@@ -9,3 +9,6 @@
     height: rem(150);
   }
 }
+.dzq-toast--mask {
+  z-index: var(--zindex-toast);
+}

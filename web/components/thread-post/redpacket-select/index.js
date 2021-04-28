@@ -8,10 +8,10 @@
 import React, { memo, useState, useEffect } from 'react'; // 性能优化的
 import { Radio, Button, Input, Toast } from '@discuzq/design'; // 原来就有的封装
 import styles from './index.module.scss'; // 私有样式
-
+import DDialog from '@components/dialog';
 import PropTypes from 'prop-types'; // 类型拦截
 
-const RedpacketSelect = ({ data, confirm, cancel }) => {
+const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
   const [rule, setRule] = useState(1); // 0-定额 1-随机
   const [condition, setCondition] = useState(0); // 0-回复 1-集赞
   const [price, setPrice] = useState(0); // 金额
@@ -62,7 +62,7 @@ const RedpacketSelect = ({ data, confirm, cancel }) => {
     handleClose();
   };
 
-  return (
+  const content = (
     <div className={styles['redpacket-box']}>
       {/* 发放规则 */}
       <div className={styles['line-box']}>
@@ -126,6 +126,18 @@ const RedpacketSelect = ({ data, confirm, cancel }) => {
         </Button>
       </div>
     </div>
+  );
+
+  if (!pc) return content;
+  return (
+    <DDialog
+      visible={visible}
+      className={styles.pc}
+      onClose={handleClose}
+      title="添加商品"
+    >
+      {content}
+    </DDialog>
   );
 };
 // 设置props默认类型
