@@ -1,0 +1,87 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+@import '@common/styles/mixin/index.scss';
+
+// 金额确认标题   
+.amountTitle {
+  font-weight: bold;
+}
+// 金额确认主要内容
+.amountContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: rem($margin-6n) 0;
+  font-size: rem($font-size-middle);
+  // 交易内容item
+  .acExplain {
+    display: flex;
+    align-items: center;
+    line-height: rem($font-line-height-large);
+    margin: rem($margin-2n) 0;
+  }
+  // 交易类型label提示
+  .acExplain_label{
+    color: var(--color-disabled);
+    margin-right: rem($margin-4n);
+    flex-shrink: 0;
+  }
+  // 交易内容value
+  .acExplain_value {
+    flex-wrap: nowrap;
+    @include text-ellipsis();
+  }
+  .acExplain_hr {
+    color: var(--color-disabled5);
+  }
+}
+
+.title{
+  color: var(--color-text-primary);
+  font-size: rem($font-size-large);
+  padding: rem($padding-4n);
+  margin-top: rem($margin-4n);
+}
+
+.payList{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: rem($padding-4n);
+  .payListItem{
+    border-bottom: var(--border-border);
+    width: rem(46);
+    height: rem(49);
+    text-align: center;
+    line-height: rem(49);
+    font-size: rem(50);
+    &:not(:last-child) {
+      margin-right: rem($margin-2n);
+    }
+
+    &.curr{
+      border-bottom-color: #C5C6CA;
+    }
+    &.activation{
+      border-bottom-color: #C5C6CA;
+    }
+  }
+  .payListItem01 {
+    border: var(--border-border);
+    width: rem(46);
+    height: rem(49);
+    text-align: center;
+    line-height: rem(69);
+    font-size: rem(50);
+    &:not(:last-child) {
+      margin-right: rem($margin-2n);
+    }
+
+    &.curr{
+      border-color: #C5C6CA;
+    }
+    &.activation{
+      border-color: #C5C6CA;
+    }
+  }
+}

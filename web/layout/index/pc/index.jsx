@@ -14,6 +14,7 @@ import ThreadContent from '@components/thread';
 import List from '@components/list';
 import Copyright from './components/copyright';
 import { readThreadList } from '@server';
+import PayBox from '@components/payBox';
 
 @inject('site')
 @inject('user')
@@ -25,7 +26,7 @@ class IndexPCPage extends React.Component {
     this.state = {
       visible: false,
       currentIndex: '',
-      conNum: 0
+      conNum: 0,
     };
   }
 
@@ -38,15 +39,15 @@ class IndexPCPage extends React.Component {
       clearInterval(this.timer);
     }
     this.timer = setInterval(() => {
-      const { categoryids, types, essence, attention, sort, sequence } = this.filter
-      readThreadList({ params: { page: 1, filter: { categoryids, types, essence, attention, sort }, sequence } }).then(res => {
-        const { totalCount = 0 } = res?.data || {}
-        const { totalCount: nowTotal = 0 } = this.props.index?.threads || {}
+      const { categoryids, types, essence, attention, sort, sequence } = this.filter;
+      readThreadList({ params: { page: 1, filter: { categoryids, types, essence, attention, sort }, sequence } }).then((res) => {
+        const { totalCount = 0 } = res?.data || {};
+        const { totalCount: nowTotal = 0 } = this.props.index?.threads || {};
         if (totalCount > nowTotal) {
           this.setState({
             visible: true,
-            conNum: totalCount - nowTotal
-          })
+            conNum: totalCount - nowTotal,
+          });
         }
       });
     }, 30000);
@@ -75,26 +76,26 @@ class IndexPCPage extends React.Component {
    }
 
    onFilterClick = (result) => {
-    const { sequence, essence, attention, filter: { types, sort } } = result
-    const { dispatch = () => {} } = this.props;
-    this.filter = { ...this.filter, types, essence, sequence, attention, sort}
-    dispatch('click-filter', this.filter);
-   } 
+     const { sequence, essence, attention, filter: { types, sort } } = result;
+     const { dispatch = () => {} } = this.props;
+     this.filter = { ...this.filter, types, essence, sequence, attention, sort };
+     dispatch('click-filter', this.filter);
+   }
 
    onNavigationClick = ({ categoryIds, sequence }) => {
-    const { dispatch = () => {} } = this.props;
-    this.filter = { ...this.filter, categoryids: categoryIds, sequence}
-    dispatch('click-filter', this.filter);
+     const { dispatch = () => {} } = this.props;
+     this.filter = { ...this.filter, categoryids: categoryIds, sequence };
+     dispatch('click-filter', this.filter);
    }
 
    goRefresh = () => {
-    const { dispatch = () => {} } = this.props;
-    dispatch('click-filter', this.filter).then(res => {
-      this.setState({
-        visible: false,
-        conNum: 0
-      })
-    });
+     const { dispatch = () => {} } = this.props;
+     dispatch('click-filter', this.filter).then((res) => {
+       this.setState({
+         visible: false,
+         conNum: 0,
+       });
+     });
    }
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
@@ -137,11 +138,12 @@ class IndexPCPage extends React.Component {
           />
         </div>
         <Copyright/>
+        <PayBox />
       </div>
   )
   // 中间 -- 筛选 置顶信息 是否新内容发布 主题内容
   renderContent = (data) => {
-    const { visible, conNum } = this.state
+    const { visible, conNum } = this.state;
     const { sticks, threads } = data;
     const { pageData } = threads || {};
     return (
@@ -170,7 +172,7 @@ class IndexPCPage extends React.Component {
   }
   render() {
     const { index, site } = this.props;
-    const { countThreads = 0 } = site?.webConfig?.other || {}
+    const { countThreads = 0 } = site?.webConfig?.other || {};
     const { currentPage, totalPage } = this.props.index.threads || {};
 
     return (

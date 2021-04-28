@@ -1,15 +1,19 @@
 // @ts-check
 import React, { Component } from 'react';
+import { Popup, Icon } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import EventEmitter from 'eventemitter3';
-import H5PayBox from './h5';
-import PCPayBox from './pc';
+import { View } from '@tarojs/components';
+import { STEP_MAP } from '../../../../common/constants/payBoxStoreConstants';
+import AmountRecognized from './amount-recognized';
+import PayConfirmed from './pay-confirmed';
+import PayPwd from './payPwd';
+import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 
 class PayBoxEmitter extends EventEmitter {}
 
 const payBoxEmitter = new PayBoxEmitter();
 
-@inject('site')
 @inject('payBox')
 @inject('user')
 @observer
@@ -30,7 +34,7 @@ export default class PayBox extends Component {
     this.props.payBox.options = {
       ...options.data,
     };
-    const noop = () => {}
+    const noop = () => {};
     this.props.payBox.onSuccess = options.success || noop;
     this.props.payBox.onFailed = options.failed || noop;
     this.props.payBox.onCompleted = options.completed || noop;
@@ -38,11 +42,28 @@ export default class PayBox extends Component {
   };
 
   render() {
-    const { platform } = this.props.site;
-    if (platform === 'pc') {
-      return <PCPayBox />;
-    }
-    return <H5PayBox options={this.props.payBox.options} />;
+    console.log(this.props.payBox.step);
+    return (
+      <>
+        <ToastProvider>
+          <View>
+            <Popup
+              position="bottom"
+              maskClosable={true}
+              visible={this.props.payBox.visible}
+              onClose={() => {
+                this.props.payBox.visible = false;
+              }}
+            >
+              {this.props.payBox.step === STEP_MAP.SURE && <AmountRecognized />}
+              {this.props.payBox.step === STEP_MAP.PAYWAY && <PayConfirmed />}
+            </Popup>
+          </View>
+          {(this.props.payBox.step === STEP_MAP.WALLET_PASSWORD ||
+            this.props.payBox.step === STEP_MAP.SET_PASSWORD) && <PayPwd />}
+        </ToastProvider>
+      </>
+    );
   }
 }
 

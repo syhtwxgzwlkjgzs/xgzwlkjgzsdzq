@@ -7,7 +7,6 @@ import { View } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 import clearLoginStatus from '@common/utils/clear-login-status';
 import { Icon } from '@discuzq/design';
-import '@discuzq/design/dist/components/icon/styles/index.scss';
 import './app.scss';
 
 class App extends Component {

@@ -1,0 +1,71 @@
+@import '@common/styles/variable/index.scss';
+
+.payBox{
+  background: var(--color-white);
+  min-height: 240px;
+  padding: 16px;
+  padding-bottom: 24px;
+
+  .title{
+    text-align: center;
+    padding: 16px 0;
+    p{
+      font-size: 20px;
+    }
+  }
+  .list{
+    margin-top: 8px;
+    .listItem{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 16px;
+        .left{
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          width: 50%;
+          .icon{
+            margin-right: 8px;
+          }
+          .text{
+            font-size: 20px;
+            color: var(--color-text-primary)
+          }
+        }
+        .right{
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          width: 50%;
+          .subText{
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            margin-right: 8px;
+          }
+        }
+    }
+  }
+  .tips{
+    padding: 8px 0;
+    text-align: center;
+    font-size: 16px;
+    color: var(--color-text-secondary);
+  }
+
+  .btnBox{
+    margin-top: 8px;
+    background: var(--background-color);
+    .btn{
+      height: 50px;
+      background-color: var(--color-primary);
+      color: #fff;
+      &:not(:first-child) {
+        margin-top: 8px;
+        background-color: transparent;
+        color: #000;
+      }
+    }
+  }
+}
+

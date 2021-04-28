@@ -18,6 +18,7 @@ import CommonLoginStore from './login/common-login-store';
 import WxPhoneBindStore from './login/wx-phone-bind-store';
 import H5QrCode from './login/h5-qrcode';
 import SearchStore from './search/action';
+import PayBoxStore from './pay/pay-box-store';
 import store from './store';
 
 useStaticRendering(isServer());
@@ -47,6 +48,7 @@ export default function initializeStore(initProps = {}) {
       commonLogin: new CommonLoginStore(),
       search: new SearchStore(),
       wxPhoneBind: new WxPhoneBindStore(),
+      payBox: new PayBoxStore(),
     };
   }
   if (store.getStore() === null) {
@@ -71,7 +73,8 @@ export default function initializeStore(initProps = {}) {
       commonLogin: new CommonLoginStore(),
       search: new SearchStore(),
       wxPhoneBind: new WxPhoneBindStore(),
-    }); 
+      payBox: new PayBoxStore(),
+    });
   }
 
   return store.getStore();

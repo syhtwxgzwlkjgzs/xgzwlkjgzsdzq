@@ -1,4 +1,3 @@
-
 export { default as readUser } from './readUser';
 export { default as readForum } from './readForum';
 export { default as readPermissions } from './readPermissions';
@@ -43,4 +42,10 @@ export { default as createThread } from './thread-post/create-thread';
 export { default as readYundianboSignature } from './thread-post/read-yundianbo-signature';
 export { default as setNickname } from './setNickname';
 export { default as transitionSmsBind } from './transitionSmsBind';
+export { default as createOrders } from './pay/createOrders';
+export { default as createPayOrder } from './pay/createPayOrder';
+export { default as readOrderDetail } from './pay/readOrderDetail';
+export { default as readWalletUser } from './wallet/read-walletUser';
+export { default as updatePayPwd } from './pay/updatePayPwd';
 export { default as updateThread } from './thread-post/update-thread';
+export { default as updateUsersUpdate } from './user/updateUsersUpdate';
