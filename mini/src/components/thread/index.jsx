@@ -100,7 +100,6 @@ class Index extends React.Component {
     }
 
     onClick = (e) => {
-      debugger
       if (!filterClickClassName(e.target)) {
         return;
       }
