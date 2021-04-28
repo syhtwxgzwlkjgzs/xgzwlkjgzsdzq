@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-import { Icon, Tag } from '@discuzq/design';
-import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import React from 'react';
 import { diffDate } from '@common/utils/diff-date';
 import { View, Text } from '@tarojs/components';
+import { Icon, Tag } from '@discuzq/design';
+import styles from './index.module.scss';
 
 UserInfo.propTypes = {
   name: PropTypes.string.isRequired, // 用户名称
@@ -25,7 +25,7 @@ export default function UserInfo(props) {
     <View className={styles.contianer}>
       <Avatar
         className={styles.avatar}
-        circle={true}
+        circle
         image={props.avatar}
         name={props.name || ''}
         onClick={() => props.onClick()}

@@ -9,12 +9,12 @@
     "css": "sass"
   },
   "scripts": {
+    "dev": "taro build --type weapp --watch",
+    "build": "taro build --type weapp",
     "lint:fix": "eslint --ext .js,.ts,.tsx,.jsx ./ --max-warnings 0 --fix",
     "lintcss:fix": "stylelint src/**/*.{scss}",
     "dev:weapp": "cross-env NODE_ENV=development dzq dev -p mini --type weapp",
-    "build:weapp": "cross-env NODE_ENV=production dzq build -p mini --type weapp",
-    "dev": "taro build --type weapp --watch",
-    "build": "taro build --type weapp"
+    "build:weapp": "cross-env NODE_ENV=production dzq build -p mini --type weapp"
   },
   "browserslist": [
     "last 3 versions",
@@ -25,8 +25,8 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "7.7.7",
-    "@discuzq/design": "0.0.1-alpha.32",
-    "@discuzq/sdk": "0.0.1-alpha.32",
+    "@discuzq/design": "0.0.1-alpha.35",
+    "@discuzq/sdk": "0.0.1-alpha.35",
     "@tarojs/components": "3.2.2",
     "@tarojs/react": "3.2.2",
     "@tarojs/runtime": "3.2.2",
@@ -38,7 +38,7 @@
     "xss": "^1.0.8"
   },
   "devDependencies": {
-    "@discuzq/cli": "0.0.1-alpha.32",
+    "@discuzq/cli": "0.0.1-alpha.35",
     "@babel/core": "7.8.0",
     "@commitlint/cli": "12.0.1",
     "@commitlint/config-conventional": "12.0.1",

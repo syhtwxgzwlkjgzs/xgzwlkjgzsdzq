@@ -16,13 +16,14 @@ import MobileBindStore from './login/mobile-bind-store';
 import ResetPasswordStore from './login/reset-password-store';
 import CommonLoginStore from './login/common-login-store';
 import WxPhoneBindStore from './login/wx-phone-bind-store';
+import MiniBindStore from './login/mini-bind-store';
 import H5QrCode from './login/h5-qrcode';
 import SearchStore from './search/action';
-import TopicStore from './topic/action';
+import PayBoxStore from './pay/pay-box-store';
+import store from './store';
 
 useStaticRendering(isServer());
 
-let store = null;
 
 export default function initializeStore(initProps = {}) {
   const { site = {}, user = {} } = initProps;
@@ -35,7 +36,6 @@ export default function initializeStore(initProps = {}) {
       index: new IndexStore(),
       user: new UserStore(user),
       thread: new ThreadStore(),
-      topic: new TopicStore(),
       userLogin: new UserLoginStore(),
       userRegister: new UserRegisterStore(),
       mobileLogin: new MobileLoginStore(),
@@ -49,10 +49,12 @@ export default function initializeStore(initProps = {}) {
       commonLogin: new CommonLoginStore(),
       search: new SearchStore(),
       wxPhoneBind: new WxPhoneBindStore(),
+      miniBind: new MiniBindStore(),
+      payBox: new PayBoxStore(),
     };
   }
-  if (store === null) {
-    store = {
+  if (store.getStore() === null) {
+    store.setStore({
       site: new SiteStore({
         envConfig: ENV_CONFIG,
         ...site,
@@ -60,7 +62,6 @@ export default function initializeStore(initProps = {}) {
       index: new IndexStore(),
       user: new UserStore(user),
       thread: new ThreadStore(),
-      topic: new TopicStore(),
       userLogin: new UserLoginStore(),
       userRegister: new UserRegisterStore(),
       mobileLogin: new MobileLoginStore(),
@@ -74,8 +75,10 @@ export default function initializeStore(initProps = {}) {
       commonLogin: new CommonLoginStore(),
       search: new SearchStore(),
       wxPhoneBind: new WxPhoneBindStore(),
-    };
+      payBox: new PayBoxStore(),
+      miniBind: new MiniBindStore(),
+    });
   }
 
-  return store;
+  return store.getStore();
 }

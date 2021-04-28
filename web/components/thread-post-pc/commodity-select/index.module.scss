@@ -1,0 +1,112 @@
+@import '@common/styles/index.scss';
+
+.parse-goods-box {
+  margin: 0 auto;
+  width: 361px;
+  height: 368px;
+  border-radius: 5px;
+  padding: 0 var(--padding-6n);
+  padding-top: 24px;
+  font-family: 'PingFang SC';
+  color: var(--color-text-primary);
+  background-color: #fff;
+
+  .title-top {
+    height: 21px;
+    line-height: 21px;
+    text-align: center;
+    position: relative;
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-middle);
+    color: var(--color-text-primary);
+
+    .title-top-right {
+      position: absolute;
+      right: 8px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .parse-goods-title {
+    margin-top: var(--margin-4n);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-primary);
+    line-height: 22px;
+  }
+
+  .parse-goods-image {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 300px;
+    margin: var(--margin-4n) 0;
+
+    .image-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .image-text {
+      margin-top: 8px;
+      font-size: 12px;
+      line-height: 24px;
+    }
+  }
+
+  :global {
+    .dzq-textarea {
+      margin: 0 auto;
+      width: 361px;
+      height: 141px;
+      border-radius: 5px;
+      border: var(--border-border);
+
+      .dzq-textarea__inner {
+        background-color: #f5f7f8;
+        resize: none;
+      }
+    }
+
+    .dzq-popup__overlay {
+      z-index: var(--zindex-backtotop);
+    }
+
+    .dzq-toast-root {
+      z-index: var(--zindex-too0p)
+    }
+  }
+
+  .btn {
+    position: absolute;
+    bottom: 24px;
+    width: 249px;
+    padding-left: 64px;
+    padding-right: 64px;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    line-height: 53px;
+    -webkit-tap-highlight-color: transparent;
+
+    .btn-one {
+      width: 116px;
+      height: 36px;
+      color: #333;
+      text-align: center;
+      border: none;
+      background: var(--border-line-color);
+    }
+
+    .btn-two {
+      width: 116px;
+      height: 36px;
+      color: var(--color-white);
+      text-align: center;
+      background-color: var(--color-primary);
+      border: none;
+    }
+  }
+}

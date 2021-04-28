@@ -6,11 +6,14 @@ export default {
   // 首页和详情页在主包
   pages: [
     'pages/index/index',
-    'pages/search/index',
-    // 'pages/thread/index',
-    // 'pages/thread/comment/index',
+    'pages/thread/index',
     'pages/threadPost/index',
     'pages/threadPost/selectReward',
+    'pages/user/wx-select/index',
+    'pages/user/wx-bind-username/index',
+    'pages/user/wx-bind-phone/index',
+    'pages/user/status/index',
+    'pages/user/wx-auth/index',
   ],
   subPackages: [
     {
@@ -18,7 +21,13 @@ export default {
       pages: [
         '404/index',
         'close/index',
-        'user/login/index'
+        'user/login/index',
+        'thread/comment/index',
+        'search/index',
+        'search/result-topic/index',
+        'search/result-post/index',
+        'search/result-user/index',
+        'search/result/index',
       ]
     }
   ],

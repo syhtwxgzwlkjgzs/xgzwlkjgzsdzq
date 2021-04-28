@@ -5,11 +5,15 @@
   .replyListAvatar {
     margin-right: 10px;
     .avater {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      image {
         width: 24px;
         height: 24px;
         border-radius: 50%;
-        background: #eee;
       }
+    }
   }
   .replyListContent {
     width: 100%;
@@ -45,11 +49,16 @@
             position: relative;
             top: 6px;
             .avater {
+              width: 24px;
+              height: 24px;
+              border-radius: 50%;
+
+              image {
                 width: 24px;
                 height: 24px;
                 border-radius: 50%;
-                background: #eee;
               }
+            }
           }
         }
       }

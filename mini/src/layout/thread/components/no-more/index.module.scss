@@ -1,0 +1,16 @@
+@import '@common/styles/variable/index.scss';
+@import '@common/styles/fn/rem.scss';
+
+.container {
+  padding: 16px 0;
+  font-size: 14px;
+  text-align: center;
+  color: var(--color-text-placeholder);
+}
+
+.empty {
+  height: 116px;
+  line-height: 116px;
+  font-size: 14px;
+  color: var(--color-text-placeholder);
+}

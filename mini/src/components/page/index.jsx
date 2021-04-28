@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { View } from '@tarojs/components';
 import styles from './index.module.scss';
@@ -11,20 +11,20 @@ import Router from '@discuzq/sdk/dist/router';
 export default class Page extends React.Component {
 
   static defaultProps = {
-    isLogin: false,
-    noLogin: false
+    withLogin: false,
+    noWithLogin: false
   }
 
   constructor(props) {
     super(props);
-    const { noLogin, isLogin, user } = this.props;
-    if ( isLogin && !user.isLogin()) {
+    const { noWithLogin, withLogin, user } = this.props;
+    if ( withLogin && !user.isLogin()) {
       Router.redirect({
         url: '/subPages/user/login/index'
       });
     }
 
-    if (noLogin && user.isLogin()) {
+    if (noWithLogin && user.isLogin()) {
       Router.redirect({
         url: '/pages/index/index'
       });

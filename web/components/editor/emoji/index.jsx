@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Carousel from 'react-multi-carousel';
 // import 'react-multi-carousel/lib/styles.css';
 import styles from './index.module.scss';
+import './carousel.scss';
 
 // SwiperCore.use([Pagination]);
 
@@ -23,11 +24,11 @@ export default function Emoji(props) {
 
   if (!visible) return null;
 
-  const responsive = {mobile: {
+  const responsive = { mobile: {
     breakpoint: { max: 464, min: 0 },
     items: 1,
-    slidesToSlide: 1 // optional, default to 1.
-  }};
+    slidesToSlide: 1, // optional, default to 1.
+  } };
   return (
     <Carousel
       /*

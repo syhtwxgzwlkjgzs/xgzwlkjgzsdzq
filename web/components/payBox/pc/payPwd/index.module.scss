@@ -1,0 +1,10 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.payPwdWrapper{
+  background: var(--color-white);
+  // min-height: rem(452);
+  width: rem(530);
+  font-size: rem($font-size-large);
+  padding: rem($padding-4n);
+}

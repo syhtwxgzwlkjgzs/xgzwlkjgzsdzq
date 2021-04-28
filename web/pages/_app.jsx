@@ -3,15 +3,16 @@ import { Provider } from 'mobx-react';
 import App from 'next/app';
 import initializeStore from '@common/store';
 import Head from 'next/head';
+import PayBoxProvider from '../components/payBox/payBoxProvider';
 
 import '@discuzq/design/dist/styles/index.scss';
 import '../styles/index.scss';
-
 
 class DzqApp extends App {
   constructor(props) {
     super(props);
     this.appStore = initializeStore();
+    console.log(this.appStore);
   }
 
   render() {
@@ -22,7 +23,9 @@ class DzqApp extends App {
           <meta key="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover"/>
         </Head>
         <Provider {...this.appStore}>
-          <Component {...pageProps} />
+          <PayBoxProvider>
+            <Component {...pageProps} />
+          </PayBoxProvider>
         </Provider>
       </div>
     );

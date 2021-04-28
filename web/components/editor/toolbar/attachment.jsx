@@ -143,8 +143,40 @@ class AttachmentToolbar extends React.Component {
     }
   };
 
+  icons = () => attachIcon.map((item) => {
+    if (!item.isUpload) {
+      return <Icon key={item.name}
+        onClick={this.handleAttachClick.bind(this, item)}
+        className={styles['dvditor-attachment-toolbar__item']}
+        name={item.name}
+        color={item.type === this.state.currentAction && item.active}
+        size="20" />;
+    }
+    return (
+      <div key={item.name} onClick={this.trggerInput} style={{ display: 'inline-block' }}>
+        <Icon
+          onClick={this.handleAttachClick.bind(this, item)}
+          className={styles['dvditor-attachment-toolbar__item']}
+          name={item.name}
+          color={item.type === this.state.currentAction && item.active}
+          size="20" />
+        <input
+          style={{ display: 'none' }}
+          type="file"
+          ref={this.inputRef}
+          onChange={(e) => {
+            this.handleChange(e, item);
+          }}
+          multiple={item.limit > 1}
+          accept={item.accept}
+        />
+      </div>
+    );
+  })
+
   render() {
-    const { showAll, currentAction } = this.state;
+    if (this.props.pc) return this.icons();
+    const { showAll } = this.state;
     const styl = !showAll ? { display: 'none' } : {};
     return (
       <div className={styles['dvditor-attachment-toolbar']}>
@@ -160,36 +192,7 @@ class AttachmentToolbar extends React.Component {
         )}
         <div className={styles['dvditor-attachment-toolbar__inner']} style={styl}>
           <div className={styles['dvditor-attachment-toolbar__left']}>
-            {attachIcon.map((item) => {
-              if (!item.isUpload) {
-                return <Icon key={item.name}
-                  onClick={this.handleAttachClick.bind(this, item)}
-                  className={styles['dvditor-attachment-toolbar__item']}
-                  name={item.name}
-                  color={item.type === currentAction && item.active}
-                  size="20" />;
-              }
-              return (
-                <div key={item.name} onClick={this.trggerInput} style={{ display: 'inline-block' }}>
-                  <Icon
-                    onClick={this.handleAttachClick.bind(this, item)}
-                    className={styles['dvditor-attachment-toolbar__item']}
-                    name={item.name}
-                    color={item.type === currentAction && item.active}
-                    size="20" />
-                  <input
-                    style={{ display: 'none' }}
-                    type="file"
-                    ref={this.inputRef}
-                    onChange={(e) => {
-                      this.handleChange(e, item);
-                    }}
-                    multiple={item.limit > 1}
-                    accept={item.accept}
-                  />
-                </div>
-              );
-            })}
+            {this.icons()}
           </div>
           <div className={classNames(styles['dvditor-attachment-toolbar__right'], styles.show)}>
             <Icon name="MoreBOutlined" size="20" onClick={this.handleToggle} />
