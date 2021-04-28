@@ -1,10 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
-import Taro, { getCurrentInstance } from '@tarojs/taro';
+import Taro from '@tarojs/taro';
 import { observer, inject } from 'mobx-react';
+import Router from '@discuzq/sdk/dist/router';
 
-import { Icon, Input, Badge, Toast, Button } from '@discuzq/design';
+import { Icon, Badge, Toast, Button } from '@discuzq/design';
 
+import styleVar from '@common/styles/theme/default.scss.json';
 import UserInfo from '@components/thread/user-info';
 import ImageContent from '@components/thread/image-content';
 import AudioPlay from '@components/thread/audio-play';
@@ -24,11 +26,12 @@ import topic from './topic.module.scss';
 
 import CommentList from './components/comment-list/index';
 import LoadingTips from './components/loading-tips/index';
-import InputPopup  from './components/input-popup/index';
+import InputPopup from './components/input-popup/index';
 import DeletePopup from './components/delete-popup';
 import MorePopup from './components/more-popup';
 import ShowTop from './components/show-top';
 import NoMore from './components/no-more';
+
 
 
 const typeMap = {
@@ -211,7 +214,7 @@ class RenderCommentList extends React.Component {
   // 点击评论的赞
   async likeClick(data) {
     if (!data.id) return;
-    
+
     const params = {
       id: data.id,
       isLiked: !data.isLiked,
@@ -468,7 +471,7 @@ class Index extends Component {
   handleOnScroll = (e) => {
     // 加载评论列表
     if (this.state.toView !== '') {
-      this.setState({ toView: ''});
+      this.setState({ toView: '' });
     }
 
     if (this.flag) {
@@ -487,7 +490,7 @@ class Index extends Component {
 
   // 点击信息icon
   onMessageClick = () => {
-    this.setState({ toView: 'commentId'});
+    this.setState({ toView: 'commentId' });
     console.log(this.flag);
     if (this.flag) {
       this.flag = !this.flag;
@@ -609,6 +612,14 @@ class Index extends Component {
     // 举报
     if (type === 'report') {
       console.log('点击举报');
+    }
+
+    // 编辑
+    if (type === 'edit') {
+      if(!this.props.thread?.threadData?.threadId) return
+      Router.redirect({
+        url: `/pages/threadPost/index?id=${this.props.thread.threadData.threadId}`
+      });
     }
   };
 
@@ -815,12 +826,12 @@ class Index extends Component {
           scrollY
           scrollTop={this.position}
           lowerThreshold={50}
-          onScrollToLower ={() => this.scrollToLower()}
+          onScrollToLower={() => this.scrollToLower()}
           scrollIntoView={this.state.toView}
           onScroll={(e) => throttle(this.handleOnScroll(e), 500)}
-          >
-           {/* 帖子内容 */}
-           {isReady ? (
+        >
+          {/* 帖子内容 */}
+          {isReady ? (
             <RenderThreadContent
               store={threadStore}
               fun={fun}
@@ -830,7 +841,7 @@ class Index extends Component {
             <LoadingTips type="init"></LoadingTips>
           )}
           <View className={`${layout.bottom} ${comment.container}`} ref={this.commentDataRef} id='commentId'>
-             {isCommentReady ? (
+            {isCommentReady ? (
               <Fragment>
                 <RenderCommentList
                   router={this.props.router}
@@ -855,7 +866,7 @@ class Index extends Component {
           </View>
           {/* 操作区 */}
           <View className={footer.operate}>
-          {/* <View className={footer.icon} onClick={() => this.onMessageClick()}>
+            <View className={footer.icon} onClick={() => this.onMessageClick()}>
               {totalCount > 0
                 ? (
                   <Badge info={totalCount > 99 ? '99+' : `${totalCount || '0'}`}>
@@ -864,16 +875,16 @@ class Index extends Component {
                 )
                 : <Icon size="20" name="MessageOutlined"></Icon>
               }
-            </View> */}
-            <View className={footer.icon} onClick={this.onMessageClick}>
+            </View>
+            {/* <View className={footer.icon} onClick={this.onMessageClick}>
               {totalCount > 0
                 ? <View className={footer.badge}>{totalCount > 99 ? '99+' : `${totalCount || '0'}`}</View>
                 : ''
               }
               <Icon size="20" name="MessageOutlined"></Icon>
-            </View>
+            </View> */}
             <Icon
-              color={this.props.thread?.isFavorite ? 'blue' : ''}
+              color={this.props.thread?.isFavorite ? styleVar['--color-primary'] : ''}
               className={footer.icon}
               onClick={() => this.onCollectionClick()}
               size="20"
@@ -891,22 +902,22 @@ class Index extends Component {
           onSubmit={value => this.onPublishClick(value)}
         />
 
-         {/* 更多弹层 */}
-         <MorePopup
-            permissions={morePermissions}
-            statuses={moreStatuses}
-            visible={this.state.showMorePopup}
-            onClose={() => this.setState({ showMorePopup: false })}
-            onSubmit={() => this.setState({ showMorePopup: false })}
-            onOperClick={type => this.onOperClick(type)}
-          />
-          
-          {/* 删除弹层 */}
-          <DeletePopup
-            visible={this.state.showDeletePopup}
-            onClose={() => this.setState({ showDeletePopup: false })}
-            onBtnClick={type => this.onBtnClick(type)}
-          />
+        {/* 更多弹层 */}
+        <MorePopup
+          permissions={morePermissions}
+          statuses={moreStatuses}
+          visible={this.state.showMorePopup}
+          onClose={() => this.setState({ showMorePopup: false })}
+          onSubmit={() => this.setState({ showMorePopup: false })}
+          onOperClick={type => this.onOperClick(type)}
+        />
+
+        {/* 删除弹层 */}
+        <DeletePopup
+          visible={this.state.showDeletePopup}
+          onClose={() => this.setState({ showDeletePopup: false })}
+          onBtnClick={type => this.onBtnClick(type)}
+        />
       </View>
     );
   }

@@ -5,6 +5,7 @@
   width: calc(100% - rem(48));
   background: var(--color-white);
   padding: 0 rem($font-line-height-primary);
+  border-radius: 0 0 var(--border-radius-small) var(--border-radius-small);
 }
 
 .header {
@@ -35,7 +36,7 @@
 
 .body {
   background: var(--color-white);
-  
+
   .commentItems {
     border-bottom: var(--border-border);
   }
