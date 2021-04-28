@@ -13,8 +13,8 @@ import Taro from '@tarojs/taro';
 const TabBar = ({ router, fixed = true, placeholder = false }) => {
   const [tabs, setTabs] = useState([
     { icon: 'HomeOutlined', text: '首页', active: true, router: '/pages/index' },
-    { icon: 'FindOutlined', text: '发现', active: false, router: '/pages/search' },
-    { icon: 'PlusOutlined', router: '/pages/thread/post' },
+    { icon: 'FindOutlined', text: '发现', active: false, router: '/subPages/search/index' },
+    { icon: 'PlusOutlined', router: '/subPages/threadPost/index' },
     { icon: 'MessageOutlined', text: '消息', active: false, router: '/' },
     { icon: 'ProfessionOutlined', text: '我', active: false, router: '/pages/my' },
   ]);

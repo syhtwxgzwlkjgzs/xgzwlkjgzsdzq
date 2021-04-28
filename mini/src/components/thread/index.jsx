@@ -16,7 +16,8 @@ import NoData from '../no-data';
 import styles from './index.module.scss';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import { filterClickClassName, handleAttachmentData } from './utils';
-// import goToLoginPage from '@common/utils/go-to-login-page';
+import goToLoginPage from '@common/utils/go-to-login-page';
+import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 
 @inject('site')
@@ -55,7 +56,7 @@ class Index extends React.Component {
       const { data = {} } = this.props;
       const { threadId = '' } = data;
       if (threadId !== '') {
-        this.props.router.push(`/thread/${threadId}`);
+        Taro.navigateTo({url: `/pages/thread/index?id=${threadId}`});
       } else {
         console.log('帖子不存在');
       }
@@ -105,7 +106,7 @@ class Index extends React.Component {
       }
 
       if (threadId !== '') {
-        this.props.router.push(`/thread/${threadId}`);
+        Taro.navigateTo({url: `/pages/thread/index?id=${threadId}`});
       } else {
         console.log('帖子不存在');
       }

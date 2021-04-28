@@ -26,25 +26,28 @@ class SearchH5Page extends React.Component {
   onSearch = (value) => {
     this.setState({ keyword: value })
     Taro.navigateTo({
-      url: `/pages/search/result/index?keyword=${value || ''}`
+      url: `/subPages/search/result/index?keyword=${value || ''}`
     })
   };
 
   redirectToSearchResultPost = () => {
+    const { keyword } = this.state
     Taro.navigateTo({
-      url: `/pages/search/result-post/index`
+      url: `/subPages/search/result-post/index?keyword=${keyword || ''}`
     })
   };
 
   redirectToSearchResultUser = () => {
+    const { keyword } = this.state
     Taro.navigateTo({
-      url: `/pages/search/result-user/index`
+      url: `/subPages/search/result-user/index?keyword=${keyword || ''}`
     })
   };
 
   redirectToSearchResultTopic = () => {
+    const { keyword } = this.state
     Taro.navigateTo({
-      url: `/pages/search/result-topic/index`
+      url: `/subPages/search/result-topic/index?keyword=${keyword || ''}`
     })
   };
   onUserClick = data => console.log('user click', data);
