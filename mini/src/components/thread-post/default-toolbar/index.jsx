@@ -8,13 +8,25 @@ import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import { defaultIcon } from '@common/constants/const';
+import { defaultOperation as dOpera } from '@common/constants/const';
 
 const Index = inject('site', 'threadPost')(observer(({ onPluginClick, onSubmit }) => {
   const [currentTool, setCurrentTool] = useState({});
 
+  const permissionMap = {
+    [dOpera.emoji]: true,
+    [dOpera.at]: true,
+    [dOpera.topic]: true,
+    [dOpera.attach]: true,
+    [dOpera.redpacket]: true,
+    [dOpera.pay]: true
+  };
+
   // 工具栏icon元素
   const plus = defaultIcon.map((item, index) => {
-    return (
+    // 是否有权限
+    const canInsert = permissionMap[item.id];
+    return canInsert ? (
       <Icon
         key={index}
         className={styles['plus-icon']}
@@ -26,7 +38,7 @@ const Index = inject('site', 'threadPost')(observer(({ onPluginClick, onSubmit }
         color={item.id === currentTool.id && item.active}
         size='20'
       />
-    );
+    ) : null;
   });
 
   return (
