@@ -10,7 +10,7 @@ import TopNew from './components/top-news';
 import Tabbar from './components/tabbar';
 import FilterView from './components/filter-view';
 import { View, Text } from '@tarojs/components';
-import PayBox from '../../../components/payBox'
+import PayBox from '@components/payBox'
 
 @inject('site')
 @inject('user')
