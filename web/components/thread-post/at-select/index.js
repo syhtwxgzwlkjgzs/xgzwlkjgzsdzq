@@ -84,7 +84,6 @@ class AtSelect extends Component {
     if (this.state.checkUser.length === 0) {
       return;
     }
-    console.log(this.state.checkUser);
     this.props.getAtList(this.state.checkUser);
     this.props.onCancel();
   }

@@ -89,3 +89,12 @@
     }
   }
 }
+
+.pc {
+  .wrapper {
+    height: 500px;
+  }
+  .topic-wrap {
+    height: calc(500px - 110px);
+  }
+}

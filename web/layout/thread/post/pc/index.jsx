@@ -18,6 +18,7 @@ import Product from '@components/thread-post/product';
 import ProductSelect from '@components/thread-post/product-select';
 import AllPostPaid from '@components/thread/all-post-paid';
 import AtSelect from '@components/thread-post/at-select';
+import TopicSelect from '@components/thread-post/topic-select';
 
 @inject('threadPost')
 @inject('index')
@@ -29,7 +30,7 @@ class ThreadPCPage extends React.Component {
       threadPost,
       index,
       emoji,
-      // topic,
+      topic,
       atList,
       currentDefaultOperation,
       currentAttachOperation,
@@ -48,6 +49,7 @@ class ThreadPCPage extends React.Component {
                 pc
                 emoji={emoji}
                 atList={atList}
+                topic={topic}
                 onChange={() => { }}
                 onCountChange={() => { }}
                 onFocus={() => { }}
@@ -193,6 +195,15 @@ class ThreadPCPage extends React.Component {
               visible={currentDefaultOperation === defaultOperation.at}
               getAtList={list => this.props.handleAtListChange(list)}
               onCancel={() => this.props.handleSetState({ currentDefaultOperation: '' })}
+            />
+          )}
+          {/* 插入选中的话题 */}
+          {currentDefaultOperation === defaultOperation.topic && (
+            <TopicSelect
+              pc
+              visible={currentDefaultOperation === defaultOperation.topic}
+              cancelTopic={() => this.props.handleSetState({ currentDefaultOperation: '' })}
+              clickTopic={val => this.props.handleSetState({ topic: val })}
             />
           )}
         </div>

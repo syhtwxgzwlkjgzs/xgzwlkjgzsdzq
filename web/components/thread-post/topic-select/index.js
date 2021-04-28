@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Popup, Input, Button, Icon, ScrollView } from '@discuzq/design';
 import styles from './index.module.scss';
-
+import DDialog from '@components/dialog';
 import PropTypes from 'prop-types';
 
 @inject('threadPost')
@@ -108,54 +108,66 @@ class TopicSelect extends Component {
   render() {
     const { visible = false, threadPost, cancelTopic } = this.props;
     const { topics = [] } = threadPost;
+    const content = (
+      <div className={styles.wrapper}>
+        <Input
+          value={this.state.keywords}
+          icon="SearchOutlined"
+          placeholder='搜索话题'
+          onChange={e => this.updateKeywords(e)}
+        />
 
+        {/* 话题列表 */}
+        <div className={styles['topic-wrap']}>
+          {/* 新话题 */}
+          {this.state.keywords
+            && <div
+              className={styles['topic-item']}
+              onClick={this.handleItemClick}
+            >
+              <div className={styles['item-left']}>
+                <div className={styles.name}>#{this.state.keywords}#</div>
+              </div>
+              <div className={styles['item-right']}>新话题</div>
+            </div>
+          }
+          {/* 搜索列表 */}
+          <ScrollView
+            width='100%'
+            rowCount={topics.length}
+            rowData={topics}
+            rowHeight={54}
+            rowRenderer={this.renderItem.bind(this)}
+            onScrollTop={this.onScrollTop.bind(this)}
+            onScrollBottom={this.onScrollBottom.bind(this)}
+            onPullingUp={() => Promise.reject()}
+            isRowLoaded={() => true}
+          />
+        </div>
+
+        {/* 取消按钮 */}
+        <div className='btn-cancel'>
+          <Button onClick={cancelTopic}>取消</Button>
+        </div>
+      </div >
+    );
+    if (this.props.pc) return (
+      <DDialog
+        visible={visible}
+        className={styles.pc}
+        onClose={this.props.cancelTopic}
+        title="添加话题"
+      >
+        {content}
+      </DDialog>
+    );
     return (
       <Popup
         className={styles.popup}
         position="center"
         visible={visible}
       >
-        <div className={styles.wrapper}>
-          <Input
-            value={this.state.keywords}
-            icon="SearchOutlined"
-            placeholder='搜索话题'
-            onChange={e => this.updateKeywords(e)}
-          />
-
-          {/* 话题列表 */}
-          <div className={styles['topic-wrap']}>
-            {/* 新话题 */}
-            {this.state.keywords
-              && <div
-                className={styles['topic-item']}
-                onClick={this.handleItemClick}
-              >
-                <div className={styles['item-left']}>
-                  <div className={styles.name}>#{this.state.keywords}#</div>
-                </div>
-                <div className={styles['item-right']}>新话题</div>
-              </div>
-            }
-            {/* 搜索列表 */}
-            <ScrollView
-              width='100%'
-              rowCount={topics.length}
-              rowData={topics}
-              rowHeight={54}
-              rowRenderer={this.renderItem.bind(this)}
-              onScrollTop={this.onScrollTop.bind(this)}
-              onScrollBottom={this.onScrollBottom.bind(this)}
-              onPullingUp={() => Promise.reject()}
-              isRowLoaded={() => true}
-            />
-          </div>
-
-          {/* 取消按钮 */}
-          <div className='btn-cancel'>
-            <Button onClick={cancelTopic}>取消</Button>
-          </div>
-        </div >
+        {content}
       </Popup>
     );
   }
