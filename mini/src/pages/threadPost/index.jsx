@@ -17,6 +17,7 @@ import PayBox from '@components/payBox/index';
 
 @inject('index')
 @inject('site')
+@inject('user')
 @inject('thread')
 @inject('threadPost')
 @observer
@@ -43,6 +44,7 @@ class Index extends Component {
   componentWillMount() { }
 
   async componentDidMount() {
+    this.redirectToHome();
     await this.fetchCategories(); // 请求分类
     const { params } = getCurrentInstance().router;
     const id = parseInt(params.threadId);
@@ -57,9 +59,14 @@ class Index extends Component {
     Taro.eventCenter.on('closeChaReault', this.handleCloseChaReault);
   }
 
+  componentDidUpdate() {
+    this.redirectToHome();
+  }
 
   componentWillUnmount() {
-    // 卸载发帖页时清理数据
+    // 卸载发帖页时清理定时器、事件监听、重置发帖数据
+    const { resetPostData } = this.props.threadPost;
+    resetPostData();
     clearInterval(this.timer);
     this.resetData();
     Taro.eventCenter.off('captchaResult', this.handleCaptchaResult)
@@ -73,6 +80,14 @@ class Index extends Component {
   // handle
   postToast = (title, icon = 'none', duration = 2000) => { // toast
     Taro.showToast({ title, icon, duration });
+  }
+
+  redirectToHome = () => { // 检查发帖权限，没有则重定向首页
+    const { permissions } = this.props.user;
+    if (permissions && !permissions.createThread?.enable) {
+      this.postToast('暂无发帖权限');
+      Taro.redirectTo({ url: '/pages/index/index' })
+    }
   }
 
   async fetchCategories() { // 若当前store内分类列表数据为空，则主动请求分类
@@ -400,6 +415,7 @@ class Index extends Component {
   }
 
   render() {
+    const { permissions } = this.props.user;
     const { categories } = this.props.index;
     const { postData, setPostData, createThread } = this.props.threadPost;
     const { rewardQa, redpacket, video, product, position } = postData;
@@ -441,9 +457,11 @@ class Index extends Component {
             {/* 工具栏区域、include各种插件触发图标、发布等 */}
             <View className={styles['toolbar']}>
               <View className={styles['location-bar']}>
-                <Position currentPosition={position} positionChange={(position) => {
-                  setPostData({ position });
-                }} />
+                {permissions?.insertPosition?.enable &&
+                  <Position currentPosition={position} positionChange={(position) => {
+                    setPostData({ position });
+                  }} />
+                }
                 <Text className={styles['text-length']}>{`还能输入${contentTextLength}个字`}</Text>
               </View>
 
@@ -475,12 +493,14 @@ class Index extends Component {
                 }
               </View>
               <PluginToolbar
+                permissions={permissions}
                 clickCb={(item) => {
                   this.handlePluginClick(item);
                 }}
                 onCategoryClick={() => this.setState({ showClassifyPopup: true })}
               />
               <DefaultToolbar
+                permissions={permissions}
                 onPluginClick={(item) => {
                   this.handlePluginClick(item);
                 }}
