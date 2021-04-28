@@ -61,18 +61,17 @@ class IndexPCPage extends React.Component {
 
   changeBatch = () => {
     const { dispatch = () => {} } = this.props;
-     const { filter } = this.state;
-     return dispatch('refresh-recommend', filter);
+     return dispatch('refresh-recommend', this.filter);
   }
-  recommendDetails = () => {
-    console.log('推荐详情');
+  recommendDetails = (item) => {
+    const { threadId } = item
+    this.props.router.push(`/thread/${threadId}`);
   }
 
    // 上拉加载更多
    onPullingUp = () => {
      const { dispatch = () => {} } = this.props;
-     const { filter } = this.state;
-     return dispatch('moreData', filter);
+     return dispatch('moreData', this.filter);
    }
 
    onFilterClick = (result) => {
@@ -128,13 +127,14 @@ class IndexPCPage extends React.Component {
     );
   }
   // 右侧 -- 二维码 推荐内容
-  renderRight = () => (
+  renderRight = (data) => (
       <div className={styles.indexRight}>
         <QcCode />
         <div style={{ margin: '20px 0' }}>
           <Recommend
             changeBatch={this.changeBatch}
             recommendDetails={this.recommendDetails}
+            data={data}
           />
         </div>
         <Copyright/>
@@ -174,13 +174,14 @@ class IndexPCPage extends React.Component {
     const { index, site } = this.props;
     const { countThreads = 0 } = site?.webConfig?.other || {};
     const { currentPage, totalPage } = this.props.index.threads || {};
+    const { recommends } = this.props.index || [];
 
     return (
       <List className={styles.indexWrap} onRefresh={this.onPullingUp} noMore={currentPage === totalPage}>
           <BaseLayout
             onSearch={this.onSearch}
             left={ this.renderLeft(countThreads) }
-            right={ this.renderRight }
+            right={ this.renderRight(recommends) }
           >
             {this.renderContent(index)}
           </BaseLayout>

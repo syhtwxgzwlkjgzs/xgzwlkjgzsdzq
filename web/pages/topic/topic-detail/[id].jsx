@@ -21,7 +21,7 @@ class Index extends React.Component {
 
     return {
       serverTopic: {
-        topics: result?.data,
+        topicDetail: result?.data,
       },
     };
   }
@@ -33,14 +33,15 @@ class Index extends React.Component {
     super(props);
     const { serverTopic, topic } = this.props;
     // 初始化数据到store中
-    serverTopic && serverTopic.topics && topic.setTopicDetail(serverTopic.topics);
+    serverTopic && serverTopic.topicDetail && topic.setTopicDetail(serverTopic.topicDetail);
   }
 
   async componentDidMount() {
     const { topic, router } = this.props;
     const { id = '' } = router.query;
+
     // 当服务器无法获取数据时，触发浏览器渲染
-    const hasTopics = !!topic.topics;
+    const hasTopics = !!topic.topicDetail;
 
     if (!hasTopics) {
       this.toastInstance = Toast.loading({

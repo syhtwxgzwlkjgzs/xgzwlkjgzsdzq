@@ -233,9 +233,13 @@ class IndexAction extends IndexStore {
    * @returns 选中的帖子详细信息
    */
    @action
-   async getRecommends({ categoryIds }) { 
-    const res = await readRecommends({ params: { categoryIds } })
-    debugger
+   async getRecommends({ categoryIds = [] } = {}) { 
+    const result = await readRecommends({ params: { categoryIds } })
+    if (result.code === 0 && result.data) {
+      this.setRecommends(result.data);
+      return this.recommends;
+    }
+    return null
    }
 
   /**

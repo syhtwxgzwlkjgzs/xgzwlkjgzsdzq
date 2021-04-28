@@ -5,7 +5,7 @@ import ThreadContent from '@components/thread';
 import HomeHeader from '@components/home-header';
 import NoData from '@components/no-data';
 import styles from './index.module.scss';
-import List from './components/list';
+import List from '@components/list';
 import TopNew from './components/top-news';
 import Tabbar from './components/tabbar';
 import FilterView from './components/filter-view';
@@ -87,7 +87,7 @@ class IndexH5Page extends React.Component {
   }
 
   // 上拉加载更多
-  onPullingUp = () => {
+  onRefresh = () => {
     const { dispatch = () => {} } = this.props;
     const { filter } = this.state;
     return dispatch('moreData', filter);
@@ -178,12 +178,17 @@ class IndexH5Page extends React.Component {
             <List
               className={styles.list}
               onRefresh={this.onRefresh}
-              refreshing={false}
-              data={pageData}
-              renderItem={this.renderItem}
-              onPullingUp={this.onPullingUp}
               noMore={currentPage >= totalPage}
-            />
+            >
+              {
+                pageData.map((item, index) => (
+                  <div key={index}>
+                    { index === 0 && this.renderHeaderContent()}
+                    <ThreadContent data={item} className={styles.listItem} />
+                  </div>
+                ))
+              }
+            </List>
           )
           : this.renderNoData()
         }
