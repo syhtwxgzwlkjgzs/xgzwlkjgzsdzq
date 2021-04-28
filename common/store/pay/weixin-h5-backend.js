@@ -44,15 +44,15 @@ export const listenWXJsBridgeAndExecCallback = (callback) => {
 
 export const wxValidator = () => {
   // #ifdef H5
-  if (!isWeixin()) {
-    // is not in weixin, just throw tips error
-    throw PAY_BOX_ERROR_CODE_MAP.NOT_IN_WEIXIN_PAY;
-  }
+  // if (!isWeixin()) {
+  //   // is not in weixin, just throw tips error
+  //   throw PAY_BOX_ERROR_CODE_MAP.NOT_IN_WEIXIN_PAY;
+  // }
 
   // IOS 暂时政策不允许支付
-  if (browser.env('ios')) {
-    throw PAY_BOX_ERROR_CODE_MAP.IN_IOS;
-  }
+  // if (browser.env('ios')) {
+  //   throw PAY_BOX_ERROR_CODE_MAP.IN_IOS;
+  // }
   // #endif
 };
 
