@@ -18,7 +18,7 @@ const Index = inject('site', 'threadPost')(observer(({
   const [currentTool, setCurrentTool] = useState({});
 
   // 工具栏icon元素
-  const plus = useMemo(() => {
+  const plug = useMemo(() => {
     const permissionMap = {
       [dOpera.emoji]: true,
       [dOpera.at]: true,
@@ -33,7 +33,7 @@ const Index = inject('site', 'threadPost')(observer(({
       return canInsert ? (
         <Icon
           key={index}
-          className={styles['plus-icon']}
+          className={styles['plug-icon']}
           onClick={() => {
             setCurrentTool(item);
             onPluginClick(item);
@@ -48,7 +48,7 @@ const Index = inject('site', 'threadPost')(observer(({
 
   return (
     <View className={styles['container']}>
-      <View>{plus}</View>
+      <View>{plug}</View>
       <Text onClick={() => {
         onSubmit();
         setCurrentTool({});
