@@ -9,12 +9,6 @@ import ReplyList from '../reply-list/index';
 
 @observer
 class CommentList extends React.Component {
-    
-    static async getInitialProps() {
-        return {
-            
-        };
-    }
     constructor(props) {
       super(props);
       this.state = {
@@ -132,12 +126,12 @@ class CommentList extends React.Component {
         </View>
         <View className={styles.content}>
           <View className={styles.commentListAvatar} onClick={() => this.avatarClick()}>
-            <View className={styles.avater}>头像</View>
-            {/* <Avatar
+            <Avatar
+              className={styles.avater}
               image={this.props.data.user.avatar}
               name={this.props.data.user.username || this.props.data.user.userName || ''}
               circle>
-            </Avatar> */}
+            </Avatar>
           </View>
           <View className={styles.commentListContent}>
             <View className={styles.commentListContentText} onClick={() => this.toCommentDetail()}>

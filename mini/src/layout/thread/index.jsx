@@ -217,6 +217,13 @@ class RenderCommentList extends React.Component {
       isLiked: !data.isLiked,
     };
     const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
+
+    if (success) {
+      this.props.thread.setCommentListDetailField(data.id, 'isLiked', params.isLiked);
+      const likeCount = params.isLiked ? data.likeCount + 1 : data.likeCount - 1;
+      this.props.thread.setCommentListDetailField(data.id, 'likeCount', likeCount);
+    }
+
     if (!success) {
       Toast.error({
         content: msg,
@@ -225,7 +232,7 @@ class RenderCommentList extends React.Component {
   }
 
   // 点击回复的赞
-  async replyLikeClick(reply) {
+  async replyLikeClick(reply, comment) {
     if (!reply.id) return;
 
     const params = {
@@ -233,6 +240,13 @@ class RenderCommentList extends React.Component {
       isLiked: !reply.isLiked,
     };
     const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
+
+    if (success) {
+      this.props.thread.setReplyListDetailField(comment.id, reply.id, 'isLiked', params.isLiked);
+      const likeCount = params.isLiked ? reply.likeCount + 1 : reply.likeCount - 1;
+      this.props.thread.setReplyListDetailField(comment.id, reply.id, 'likeCount', likeCount);
+    }
+
     if (!success) {
       Toast.error({
         content: msg,
@@ -420,7 +434,7 @@ class Index extends Component {
 
     this.perPage = 5;
     this.page = 1; // 页码
-    this.commentDataSort = false;
+    this.commentDataSort = true;
 
     // 滚动定位相关属性
     this.threadBodyRef = React.createRef();

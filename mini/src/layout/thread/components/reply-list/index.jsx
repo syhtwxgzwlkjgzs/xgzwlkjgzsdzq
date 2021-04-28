@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from '@tarojs/components';
 import { observer } from 'mobx-react';
-// import Avatar from '@components/avatar';
+import Avatar from '@components/avatar';
 import { diffDate } from '@common/utils/diff-date';
 import styles from './index.module.scss';
 
@@ -45,13 +45,13 @@ class ReplyList extends React.Component {
     return (
       <View className={styles.replyList}>
         <View className={styles.replyListAvatar} onClick={this.props.avatarClick('2')}>
-        <View className={styles.avater}>头</View>
-          {/* <Avatar
+          <Avatar
+            className={styles.avater}
             image={this.props.data.user.avatar}
             name={this.props.data.user.username || this.props.data.user.userName || ''}
-            circle={true}
+            circle={!!true}
             size='small'>
-          </Avatar> */}
+          </Avatar>
         </View>
         <View className={styles.replyListContent}>
           <View className={styles.replyListContentText}>
@@ -63,13 +63,13 @@ class ReplyList extends React.Component {
                 this.props.data.commentUserId
                   ? <View className={styles.commentUser}>
                     <View className={styles.replyedAvatar} onClick={this.props.avatarClick('3')}>
-                        <View className={styles.avater}>头</View>
-                      {/* <Avatar
+                      <Avatar
+                        className={styles.avater}
                         image={this.props.data.user.avatar}
                         name={this.props.data.user.username || this.props.data.user.userName || ''}
-                        circle={true}
+                        circle
                         size='small'>
-                      </Avatar> */}
+                      </Avatar>
                     </View>
                     <Text className={styles.replyedUserName}>
                       {this.props.data.replyUser.username || this.props.data.replyUser.userName }

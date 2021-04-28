@@ -121,7 +121,7 @@ class CommentPage extends React.Component {
       showCommentInput: true,
     });
   }
-  
+
   // 更多中的操作
   onOperClick = (type) => {
     this.setState({ showMorePopup: false });
@@ -148,19 +148,26 @@ class CommentPage extends React.Component {
   async likeClick(data) {
     console.log(this.props);
     if (!data.id) return;
-    
+
     const params = {
       id: data.id,
       isLiked: !data.isLiked,
     };
     const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
+
+    if (success) {
+      this.props.comment.setCommentDetailField('isLiked', params.isLiked);
+      const likeCount = params.isLiked ? data.likeCount + 1 : data.likeCount - 1;
+      this.props.comment.setCommentDetailField('likeCount', likeCount);
+    }
+
     if (!success) {
       Toast.error({
         content: msg,
       });
     }
   }
-  
+
   // 点击回复的赞
   async replyLikeClick(reply) {
     if (!reply.id) return;
@@ -170,6 +177,13 @@ class CommentPage extends React.Component {
       isLiked: !reply.isLiked,
     };
     const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
+
+    if (success) {
+      this.props.comment.setReplyListDetailField(reply.id, 'isLiked', params.isLiked);
+      const likeCount = params.isLiked ? reply.likeCount + 1 : reply.likeCount - 1;
+      this.props.comment.setReplyListDetailField(reply.id, 'likeCount', likeCount);
+    }
+
     if (!success) {
       Toast.error({
         content: msg,
@@ -288,17 +302,17 @@ class CommentPage extends React.Component {
         <View className={styles.content}>
           {
             commentDetail && (
-            <CommentList
-              data={commentDetail}
-              avatarClick={() => this.avatarClick(commentDetail)}
-              likeClick={() => this.likeClick(commentDetail)}
-              replyClick={() => this.replyClick(commentDetail)}
-              deleteClick={() => this.deleteClick(commentDetail)}
-              replyLikeClick={reploy => this.replyLikeClick(reploy, commentDetail)}
-              replyReplyClick={reploy => this.replyReplyClick(reploy, commentDetail)}
-              onMoreClick={() => this.onMoreClick()}
-              isHideEdit>
-            </CommentList>
+              <CommentList
+                data={commentDetail}
+                avatarClick={() => this.avatarClick(commentDetail)}
+                likeClick={() => this.likeClick(commentDetail)}
+                replyClick={() => this.replyClick(commentDetail)}
+                deleteClick={() => this.deleteClick(commentDetail)}
+                replyLikeClick={reploy => this.replyLikeClick(reploy, commentDetail)}
+                replyReplyClick={reploy => this.replyReplyClick(reploy, commentDetail)}
+                onMoreClick={() => this.onMoreClick()}
+                isHideEdit>
+              </CommentList>
             )
           }
         </View>
@@ -313,8 +327,8 @@ class CommentPage extends React.Component {
             onSubmit={value => this.onPublishClick(value)}>
           </InputPopup>
 
-         {/* 更多弹层 */}
-         <MorePopup
+          {/* 更多弹层 */}
+          <MorePopup
             permissions={morePermissions}
             statuses={moreStatuses}
             visible={this.state.showMorePopup}
@@ -322,7 +336,7 @@ class CommentPage extends React.Component {
             onSubmit={() => this.setState({ showMorePopup: false })}
             onOperClick={type => this.onOperClick(type)}
           />
-          
+
           {/* 删除弹层 */}
           <DeletePopup
             visible={this.state.showDeletePopup}
