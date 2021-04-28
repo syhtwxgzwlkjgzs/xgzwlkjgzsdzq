@@ -22,10 +22,17 @@ class TopicH5Page extends React.Component {
       keyword
     })
     const { dispatch } = this.props;
-    return dispatch('refresh', { keyword });
+    return dispatch('refresh', { keyword, sort: this.state.sort });
   };
-  onCancel = () => {
+
+  onFilter = (id) => {
+    this.setState({
+      sort: id
+    })
+    const { dispatch } = this.props;
+    return dispatch('refresh', { keyword: this.state.keyword, sort: id });
   };
+
   redirectTopicDetails = (id) => {
     this.props.router.push(`/topic/topic-detail/${id}`);
   };
@@ -43,11 +50,11 @@ class TopicH5Page extends React.Component {
         <div className={styles.topBox}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} />
         </div>
-        <TopicHeader/>
+        <TopicHeader onClick={this.onFilter} />
         <List className={styles.list} noMore={currentPage >= totalPage} onRefresh={this.fetchMoreData}>
           {
             pageData?.map((item, index) => (
-              <TopicItem data={item} key={index} onClick={() => this.redirectTopicDetails(item.pid)}/>  
+              <TopicItem data={item} key={index} onClick={() => this.redirectTopicDetails(item.topicId)}/>  
             ))
           }
         </List>
