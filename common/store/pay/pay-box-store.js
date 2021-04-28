@@ -238,6 +238,10 @@ class PayBoxStore {
       this.resErrorFactory(payRes);
 
       if (payRes.code === 0) {
+        if (mode === PAY_MENT_MAP.WX_H5) {
+          console.log(payRes);
+          return;
+        }
         listenWXJsBridgeAndExecCallback(() => {
           onBridgeReady(get(payRes, 'data.wechatPayResult.wechatJs'));
           this.timer = setInterval(() => {
