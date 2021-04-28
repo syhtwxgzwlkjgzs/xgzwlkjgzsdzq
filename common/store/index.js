@@ -18,6 +18,7 @@ import CommonLoginStore from './login/common-login-store';
 import WxPhoneBindStore from './login/wx-phone-bind-store';
 import H5QrCode from './login/h5-qrcode';
 import SearchStore from './search/action';
+import TopicStore from './topic/action';
 
 useStaticRendering(isServer());
 
@@ -34,6 +35,7 @@ export default function initializeStore(initProps = {}) {
       index: new IndexStore(),
       user: new UserStore(user),
       thread: new ThreadStore(),
+      topic: new TopicStore(),
       userLogin: new UserLoginStore(),
       userRegister: new UserRegisterStore(),
       mobileLogin: new MobileLoginStore(),
@@ -58,6 +60,7 @@ export default function initializeStore(initProps = {}) {
       index: new IndexStore(),
       user: new UserStore(user),
       thread: new ThreadStore(),
+      topic: new TopicStore(),
       userLogin: new UserLoginStore(),
       userRegister: new UserRegisterStore(),
       mobileLogin: new MobileLoginStore(),

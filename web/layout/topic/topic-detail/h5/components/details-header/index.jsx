@@ -4,6 +4,7 @@ import { noop } from '@components/thread/utils';
 import styles from './index.module.scss';
 import Link from 'next/link';
 
+
 /**
  * 用户组件
  * @prop {string} title 话题标题
@@ -11,7 +12,7 @@ import Link from 'next/link';
  * @prop {number} contentNum 内容数
  * @prop {function} onClick 全部话题点击事件
  */
-const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onClick = noop}) => {
+const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop }) => {
   return (
     <div className={styles.container} >
       <div className={styles.title}>{title && `#${title}#`}</div>
@@ -27,7 +28,7 @@ const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onClick = noop}) => {
             <span className={styles.text}>内容数</span>
             <span className={styles.content}>{contentNum}</span>
           </li>
-          <li>
+          <li onClick={onShare}>
             <Icon className={styles.shareIcon} color="#8590a6" name="ShareAltOutlined"/>
             <span className={styles.text}>分享</span>
           </li>

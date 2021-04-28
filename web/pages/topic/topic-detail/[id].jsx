@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import IndexH5Page from '@layout/topic/h5';
-import IndexPCPage from '@layout/topic/pc';
+import IndexH5Page from '@layout/topic/topic-detail/h5';
+import IndexPCPage from '@layout/topic/topic-detail/pc';
 import { readTopicsList } from '@server';
 import { Toast } from '@discuzq/design';
 
@@ -12,9 +12,10 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @observer
 class Index extends React.Component {
   static async getInitialProps(ctx) {
-    const search = ctx?.query?.keyword || '';
+    const id = ctx?.query?.id;
+
     const topicFilter = {
-      content: search,
+      topicId: id,
     };
     const result = await readTopicsList({ params: { filter: topicFilter } });
 
@@ -32,12 +33,12 @@ class Index extends React.Component {
     super(props);
     const { serverTopic, topic } = this.props;
     // 初始化数据到store中
-    serverTopic && serverTopic.topics && topic.setTopics(serverTopic.topics);
+    serverTopic && serverTopic.topics && topic.setTopicDetail(serverTopic.topics);
   }
 
   async componentDidMount() {
     const { topic, router } = this.props;
-    const { keyword = '' } = router.query;
+    const { id = '' } = router.query;
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasTopics = !!topic.topics;
 
@@ -48,24 +49,10 @@ class Index extends React.Component {
       });
 
       this.page = 1;
-      await topic.getTopicsList({ search: keyword });
+      await topic.getTopicsDetail({ topicId: id });
 
       this.toastInstance?.destroy();
     }
-  }
-
-  dispatch = async (type, data) => {
-    const { topic } = this.props;
-    const { keyword } = data
-
-    if (type === 'refresh') {
-      this.page = 1;
-    } else if (type === 'moreData') {
-      this.page += 1;
-    }
-
-    await topic.getTopicsList({ search: keyword, perPage: this.perPage, page: this.page });
-    return;
   }
 
   render() {

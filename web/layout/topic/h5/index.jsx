@@ -6,31 +6,52 @@ import Header from '@components/header';
 import SearchInput from '@components/search-input';
 import List from '@components/list';
 import TopicHeader from './components/topic-header'
-import TopicList from './components/topic-list'
-import topicData from '../topics';
+import TopicItem from './components/topic-item'
 
 @inject('site')
 @inject('user')
-@inject('index')
+@inject('topic')
 @observer
 class TopicH5Page extends React.Component {
-  onSearch = (keyword) => {
+  state = {
+    keyword: '',
+    sort: ''
+  }
+  onSearch = (keyword = '') => {
+    this.setState({
+      keyword
+    })
+    const { dispatch } = this.props;
+    return dispatch('refresh', { keyword });
   };
   onCancel = () => {
   };
-  redirectTopicDetails = () => {
-    this.props.router.push('/topic/topic-details');
+  redirectTopicDetails = (id) => {
+    this.props.router.push(`/topic/topic-detail/${id}`);
   };
+  fetchMoreData = () => {
+    const { dispatch } = this.props;
+
+    return dispatch('moreData', this.state);
+  }
   render() {
+    const { pageData = [], currentPage = 0, totalPage = 0 } = this.props.topic?.topics || {}
+
     return (
-      <List className={styles.topicWrap} allowRefresh={false}>
+      <div className={styles.topicWrap}>
         <Header />
         <div className={styles.topBox}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} />
         </div>
         <TopicHeader/>
-        <TopicList data={topicData} onItemClick={this.redirectTopicDetails}/>
-      </List>
+        <List className={styles.list} noMore={currentPage >= totalPage} onRefresh={this.fetchMoreData}>
+          {
+            pageData?.map((item, index) => (
+              <TopicItem data={item} key={index} onClick={() => this.redirectTopicDetails(item.pid)}/>  
+            ))
+          }
+        </List>
+      </div>
     );
   }
 }
