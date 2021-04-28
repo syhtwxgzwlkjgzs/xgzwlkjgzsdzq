@@ -33,8 +33,8 @@ export default class PayBox extends React.Component {
     });
 
     this.state = {
-      isShow: false,
       payConfig,
+      paymentType:20
     };
     this.goSetPayPwa = this.goSetPayPwa.bind(this);
   }
@@ -69,6 +69,7 @@ export default class PayBox extends React.Component {
    * 选择支付方式
    */
   handleChangePaymentType = (value) => {
+    console.log(value,'sssssss_');
     this.setState(
       {
         paymentType: value,
@@ -76,7 +77,7 @@ export default class PayBox extends React.Component {
       () => {
         if (value === PAY_MENT_MAP.WALLET) {
           this.props.payBox.payWay = PAYWAY_MAP.WALLET;
-        } else if (value === PAY_MENT_MAP.WX_H5) {
+        } else if (value === PAY_MENT_MAP.WX_MINI_PROGRAM) {
           this.props.payBox.payWay = PAYWAY_MAP.WX;
         }
       },
@@ -117,6 +118,7 @@ export default class PayBox extends React.Component {
 
   // 点击确认支付
   handlePayConfirmed = async () => {
+    console.log(this.state.paymentType);
     if (this.state.paymentType === PAY_MENT_MAP.WALLET) {
       // 表示钱包支付
       await this.props.payBox.walletPayEnsure();

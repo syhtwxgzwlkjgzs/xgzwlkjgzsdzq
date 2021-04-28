@@ -40,7 +40,6 @@ export default class PayBox extends React.Component {
     // }
 
     this.state = {
-      isShow: false,
       payConfig,
       paymentType: '',
     };

@@ -7,7 +7,8 @@ import { View } from '@tarojs/components';
 import { STEP_MAP } from '../../../../common/constants/payBoxStoreConstants';
 import AmountRecognized from './amount-recognized';
 import PayConfirmed from './pay-confirmed';
-import PayPwd from './payPwd'
+import PayPwd from './payPwd';
+import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 
 class PayBoxEmitter extends EventEmitter {}
 
@@ -41,23 +42,27 @@ export default class PayBox extends Component {
   };
 
   render() {
+    console.log(this.props.payBox.step);
     return (
-      <View>
-        <Popup
-          position="bottom"
-          maskClosable={true}
-          visible={this.props.payBox.visible}
-          onClose={() => {
-            this.props.payBox.visible = false;
-          }}
-        >
-          {this.props.payBox.step === STEP_MAP.SURE && <AmountRecognized />}
-          {this.props.payBox.step === STEP_MAP.PAYWAY && <PayConfirmed />}
-        </Popup>
-        {(this.props.payBox.step === STEP_MAP.WALLET_PASSWORD || this.props.payBox.step === STEP_MAP.SET_PASSWORD) && (
-          <PayPwd />
-        )}
-      </View>
+      <>
+        <ToastProvider>
+          <View>
+            <Popup
+              position="bottom"
+              maskClosable={true}
+              visible={this.props.payBox.visible}
+              onClose={() => {
+                this.props.payBox.visible = false;
+              }}
+            >
+              {this.props.payBox.step === STEP_MAP.SURE && <AmountRecognized />}
+              {this.props.payBox.step === STEP_MAP.PAYWAY && <PayConfirmed />}
+            </Popup>
+          </View>
+          {(this.props.payBox.step === STEP_MAP.WALLET_PASSWORD ||
+            this.props.payBox.step === STEP_MAP.SET_PASSWORD) && <PayPwd />}
+        </ToastProvider>
+      </>
     );
   }
 }
