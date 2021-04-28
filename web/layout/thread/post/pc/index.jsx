@@ -133,7 +133,11 @@ class ThreadPCPage extends React.Component {
                 />
               </div>
               <div className={styles['toolbar-right']}>
-                <Position />
+                <Position
+                  position={postData.position}
+                  onClick={() => this.props.saveDataLocal()}
+                  onChange={position => this.props.setPostData({ position })}
+                />
               </div>
             </div>
             <ClassifyPopup
