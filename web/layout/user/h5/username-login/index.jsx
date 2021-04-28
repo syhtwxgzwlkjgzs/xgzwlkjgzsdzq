@@ -17,7 +17,7 @@ import { genMiniScheme } from '@server';
 @inject('userLogin')
 @inject('commonLogin')
 @observer
-class LoginH5Page extends React.Component {
+class UsernameH5Login extends React.Component {
   handleUsernameChange = (e) => {
     this.props.userLogin.username = e.target.value;
   };
@@ -185,4 +185,4 @@ class LoginH5Page extends React.Component {
   }
 }
 
-export default withRouter(LoginH5Page);
+export default withRouter(UsernameH5Login);

@@ -16,6 +16,7 @@ class WeixinAuth extends React.Component {
   async componentDidMount() {
     const { router } = this.props;
     const { code, sessionId, sessionToken, state, action, nickname } = router.query;
+    console.log(router.query);
 
     // 如果要进行绑定逻辑，跳转绑定相关的页面
     if (action === 'wx-bind') {

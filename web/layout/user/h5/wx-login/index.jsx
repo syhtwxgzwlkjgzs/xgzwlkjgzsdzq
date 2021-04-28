@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './index.module.scss';
-import { Icon } from '@discuzq/design';
+import { Icon, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import WeixinQrCode from '@components/login/wx-qr-code';
 import HomeHeader from '@components/home-header';
@@ -14,12 +14,52 @@ import Header from '@components/header';
 @observer
 class WXLoginH5Page extends React.Component {
   async componentDidMount() {
-    await this.props.h5QrCode.generate({
-      params: {
-        type: 'mobile_browser_login',
-        redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`)}`,
-      },
-    });
+    try {
+      const { platform, webConfig } = this.props.site;
+      const redirectUri = `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`)}`;
+      let params;
+
+      if (platform === 'h5') {
+        params = {
+          type: 'mobile_browser_login',
+          redirectUri,
+        };
+      }
+      if (platform === 'pc') {
+        const { miniprogramClose } = webConfig.passport;
+        const type = miniprogramClose ?  'pc_login_mini' : 'pc_login';
+        params = {
+          type,
+          redirectUri,
+        };
+      }
+
+      await this.props.h5QrCode.generate({ params });
+      this.queryLoginState();
+    } catch (e) {
+      Toast.error({
+        content: e.Message,
+        hasMask: false,
+        duration: 1000,
+      });
+    }
+  }
+
+  queryLoginState() {
+    const timer = setInterval(async () => {
+      try {
+        await this.props.h5QrCode.login({
+          params: { sessionToken: this.props.h5QrCode.sessionToken },
+        });
+        clearInterval(timer);
+      } catch (e) {
+        Toast.error({
+          content: e.Message,
+          hasMask: false,
+          duration: 1000,
+        });
+      }
+    }, 3000);
   }
 
   render() {
