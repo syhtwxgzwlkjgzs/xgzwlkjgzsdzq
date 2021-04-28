@@ -11,6 +11,7 @@ import { readYundianboSignature } from '@common/server';
 import VodUploader from 'vod-wx-sdk-v2';
 import Router from '@discuzq/sdk/dist/router';
 import Page from '@components/page';
+import { toTCaptcha } from '@common/utils/to-tcaptcha'
 
 @inject('index')
 @inject('site')
@@ -33,6 +34,8 @@ class Index extends Component {
       showDraftOption: false, // 显示草稿选项弹框
     }
     this.timer = null;
+    this.ticket = ''; // 腾讯云验证码返回票据
+    this.randstr = ''; // 腾讯云验证码返回随机字符串
   }
 
   componentWillMount() { }
@@ -47,12 +50,17 @@ class Index extends Component {
     } else {
       this.openSaveDraft();
     }
+    // 监听腾讯验证码事件
+    Taro.eventCenter.on('captchaResult', this.handleCaptchaResult);
+    Taro.eventCenter.on('closeChaReault', this.handleCloseChaReault);
   }
 
   componentWillUnmount() {
     // 卸载发帖页时清理数据
     clearInterval(this.timer);
     this.resetData();
+    Taro.eventCenter.off('captchaResult', this.handleCaptchaResult)
+    Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault)
   }
 
   componentDidShow() { }
@@ -262,30 +270,52 @@ class Index extends Component {
     return `${rule === 1 ? '随机红包' : '定额红包'}\\总金额 ${orderPrice}元\\${number}个`
   }
 
-  handleSubmit = async (isDraft) => {
-    const { threadPost } = this.props;
+  // 验证码滑动成功的回调
+  handleCaptchaResult = (result) => {
+    this.ticket = result.ticket;
+    this.randstr = result.randstr;
+    this.handleSubmit();
+  }
 
+  // 验证码点击关闭的回调
+  handleCloseChaReault = () => {
+    Taro.hideLoading();
+  }
+
+  handleSubmit = async (isDraft) => {
+    // 1 校验
+    const { threadPost, site } = this.props;
     if (!isDraft && !threadPost.postData.contentText) {
       this.postToast('请填写您要发布的内容');
       return;
     }
-
+    // 2 验证码
+    const { webConfig } = site;
+    if (webConfig) {
+      const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
+      const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
+      const createThreadWithCaptcha = webConfig?.other?.createThreadWithCaptcha;
+      if (qcloudCaptcha && createThreadWithCaptcha) {
+        if (!this.ticket || !this.randstr) {
+          toTCaptcha(qcloudCaptchaAppId);
+          return false;
+        }
+      }
+    }
+    // 3 loading
     !isDraft && Taro.showLoading({
       title: isDraft ? '保存草稿中...' : '发布中...',
       mask: true
     });
-
-    const { threadId } = this.state;
+    // 4 根据是否存在主题id，选择更新主题、新建主题
     let ret = {};
-
-    if (!threadId) {
-      ret = await threadPost.createThread(); // 不存在id，创建主题
+    const { threadId } = this.state;
+    if (threadId) {
+      ret = await threadPost.updateThread(threadId);
     } else {
-      ret = await threadPost.updateThread(threadId); // 存在id，更新主题
+      ret = await threadPost.createThread();
     }
-
-    !isDraft && Taro.hideLoading();
-
+    // 5 处理请求数据
     const { code, data, msg } = ret;
     if (code === 0) {
       if (!threadId) {
@@ -300,6 +330,7 @@ class Index extends Component {
       }
       return true;
     } else {
+      Taro.hideLoading();
       !isDraft && this.postToast(msg);
       return false;
     }
