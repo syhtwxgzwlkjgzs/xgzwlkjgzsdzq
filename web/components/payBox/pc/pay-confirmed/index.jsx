@@ -18,8 +18,6 @@ export default class index extends Component {
   async componentDidMount() {
     try {
       this.changePayment();
-      // 获取微信二维码
-      await this.props.payBox.wechatPayOrderQRCode();
       // 获取钱包用户信息
       const { id } = this.props?.user;
       if (!id) return;
@@ -66,10 +64,11 @@ export default class index extends Component {
       {
         paymentType: value,
       },
-      () => {
+      async () => {
         if (value === PAY_MENT_MAP.WALLET) {
           this.props.payBox.payWay = PAYWAY_MAP.WALLET;
         } else if (value === PAY_MENT_MAP.WX_QRCODE) {
+          await this.props.payBox.wechatPayOrderQRCode();
           this.props.payBox.payWay = PAYWAY_MAP.WX;
         }
       },
@@ -97,7 +96,6 @@ export default class index extends Component {
     } else if (this.state.paymentType === PAY_MENT_MAP.WX_QRCODE) {
       // 表示微信支付
       console.log('进来了', 'sssssss_点击微信支付');
-      await this.props.payBox.wechatPayOrderQRCode();
       // this.props.payBox.visible = false
     }
   };

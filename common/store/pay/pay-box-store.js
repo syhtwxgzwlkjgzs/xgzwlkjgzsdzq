@@ -24,6 +24,8 @@ class PayBoxStore {
     this.onCompleted(this.orderInfo);
   };
 
+  qrCodeCheckTimer = null;
+
   // 订单 options
   @observable options = {};
 
@@ -56,6 +58,9 @@ class PayBoxStore {
 
   // PC下使用的付费二维码
   @observable wechatQRCode = null;
+
+  // pc使用的付费二维码是否过期
+  @observable qrCodeTimeout = false;
 
   // 用户钱包状态
   @computed get walletStatus() {
@@ -97,6 +102,18 @@ class PayBoxStore {
       ...PAY_BOX_ERROR_CODE_MAP.NETWORK_ERROR,
       error,
     };
+  }
+
+  /**
+   * 二维码过期检查
+   */
+  @action
+  checkQrCodeTimeout = () => {
+    clearTimeout(this.qrCodeCheckTimer);
+    this.qrCodeCheckTimer = setTimeout(() => {
+      clearTimeout(this.timer);
+      this.qrCodeTimeout = true;
+    }, 1000 * 5 * 60);
   }
 
   /**
@@ -225,7 +242,7 @@ class PayBoxStore {
           onBridgeReady(get(payRes, 'data.wechatPayResult.wechatJs'));
           this.timer = setInterval(() => {
             this.getOrderDetail();
-          }, 1000);
+          }, 3000);
         });
       }
     } catch (error) {
@@ -256,9 +273,18 @@ class PayBoxStore {
 
       this.wechatQRCode = get(payRes, 'data.wechatPayResult.wechatQrcode');
 
+      // 每次进来清空上次的 timer
+      this.qrCodeTimeout = false;
+
+      // 清空之前的定时器
+      clearInterval(this.timer);
+
+      // 二维码有过期时间
+      this.checkQrCodeTimeout();
+
       this.timer = setInterval(async () => {
         await this.getOrderDetail();
-      }, 1000);
+      }, 3000);
     } catch (error) {
       if (error.Code) {
         throw error;
@@ -295,18 +321,24 @@ class PayBoxStore {
       this.timer = null;
 
       if (orderStatus === ORDER_STATUS_MAP.PAID) {
+        clearTimeout(this.qrCodeCheckTimer);
+        this.qrCodeTimeout = true;
         // success
         this.successCallback();
         this.completedCallback();
       }
 
       if (orderStatus === ORDER_STATUS_MAP.OUT_DATE_PAY) {
+        clearTimeout(this.qrCodeCheckTimer);
+        this.qrCodeTimeout = true;
         // outdate
         this.failedCallback();
         this.completedCallback();
       }
 
       if (orderStatus === ORDER_STATUS_MAP.FAIL_PAY) {
+        clearTimeout(this.qrCodeCheckTimer);
+        this.qrCodeTimeout = true;
         // paid failed
         this.failedCallback();
         this.completedCallback();
@@ -356,10 +388,12 @@ class PayBoxStore {
   @action
   clear = () => {
     clearInterval(this.timer);
+    clearTimeout(this.qrCodeCheckTimer);
     this.options = {};
     this.visible = false;
     this.orderInfo = null;
     this.timer = null;
+    this.qrCodeCheckTimer = null;
     this.step = STEP_MAP.SURE;
     this.payWay = null;
     this.payResult = null;
