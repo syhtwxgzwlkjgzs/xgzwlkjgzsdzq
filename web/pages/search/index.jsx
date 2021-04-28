@@ -12,9 +12,16 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @observer
 class Index extends React.Component {
   static async getInitialProps(ctx) {
-    const topics = await readTopicsList({ params: { filter: { hot: 1 } } }, ctx);
-    const users = await readUsersList({}, ctx);
-    const threads = await readThreadList({ params: { filter: { sort: '3' } } }, ctx);
+    const search = ctx?.query?.keyword || '';
+
+    const topicFilter = {
+      hot: search !== '' ? 0 : 1,
+      content: search,
+    };
+
+    const topics = await readTopicsList({ params: { filter: topicFilter, perPage: 10 } }, ctx);
+    const users = await readUsersList({ params: { filter: { username: search }, perPage: 10 } }, ctx);
+    const threads = await readThreadList({ params: { filter: { sort: '3', search }, perPage: 10 } }, ctx);
 
     return {
       serverSearch: {
@@ -35,7 +42,9 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
-    const { search } = this.props;
+    const { search, router } = this.props;
+    const { keyword = '' } = router?.query;
+
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasIndexTopics = !!search.indexTopics;
     const hasIndexUsers = !!search.indexUsers;
@@ -45,8 +54,16 @@ class Index extends React.Component {
       content: '加载中...',
       duration: 0,
     });
-    await search.getSearchData({ hasTopics: hasIndexTopics, hasUsers: hasIndexUsers, hasThreads: hasIndexThreads });
+
+    await search.getSearchData({ hasTopics: hasIndexTopics, hasUsers: hasIndexUsers, hasThreads: hasIndexThreads, search: keyword });
+
     this.toastInstance?.destroy();
+  }
+
+  dispatch = async (type, data = '') => {
+    const { search } = this.props;
+
+    search.getSearchData({ search: data });
   }
 
   render() {
@@ -54,7 +71,7 @@ class Index extends React.Component {
     const { platform } = site;
 
     if (platform === 'pc') {
-      return <IndexPCPage />;
+      return <IndexPCPage dispatch={this.dispatch} />;
     }
 
     return <IndexH5Page />;

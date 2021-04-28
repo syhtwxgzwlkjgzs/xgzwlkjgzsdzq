@@ -658,8 +658,9 @@ class ThreadH5Page extends React.Component {
   }
 
   // 点击发布按钮
-  onPublishClick(val) {
-    this.comment ? this.updateComment(val) : this.createComment(val);
+  async onPublishClick(val) {
+    if (!val) return;
+    return this.comment ? await this.updateComment(val) : await this.createComment(val);
   }
 
   // 创建评论
@@ -679,7 +680,6 @@ class ThreadH5Page extends React.Component {
       });
       this.setState({
         showCommentInput: false,
-        inputValue: '',
       });
       return true;
     }
@@ -706,7 +706,6 @@ class ThreadH5Page extends React.Component {
       });
       this.setState({
         showCommentInput: false,
-        inputValue: '',
       });
       return true;
     }

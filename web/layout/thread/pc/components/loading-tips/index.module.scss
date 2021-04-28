@@ -8,5 +8,17 @@
 }
 
 .init {
-  padding: rem($padding-6n) 0;
+  font-size: rem($font-size-primary);
+
+  * {
+    color: var(--loading-font-color);
+  }
+}
+
+.loadMore {
+  font-size: rem($font-size-label);
+
+  * {
+    color: var(--loading-font-color);
+  }
 }

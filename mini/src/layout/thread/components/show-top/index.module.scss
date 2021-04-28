@@ -1,0 +1,35 @@
+@import '@common/styles/variable/index.scss';
+
+.setTop {
+  width: 375px;
+  height: 52px;
+  background: var(--color-success4);
+  position: absolute;
+  text-align: center;
+  line-height: 52px;
+  color: var(--color-success);
+  display: none;
+  z-index: var(--zindex-popup);
+  .setTopIcon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: var(--borde0a0s-cir0);
+    line-height: 20px;
+    color: var(--color-white);
+    background: var(--color-success);
+    margin-right: 8px;
+  }
+}
+.inTop {
+  display: block;
+  transition: all 2s; 
+  // TODO: 更换token
+  opacity: 1;
+}
+.outTop {
+  transition: all 2s; 
+  // TODO:
+  opacity: 0;
+}
+

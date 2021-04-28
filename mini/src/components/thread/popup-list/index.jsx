@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Tabs, Popup, Icon } from '@discuzq/design';
+import { Tabs, Popup } from '@discuzq/design';
 import UserItem from '../user-item';
 import styles from './index.module.scss';
+import { getLikedUsers } from './http';
 import NoData from '@components/no-data';
 import { readLikedUsers } from '@server';
 import List from '../../list';
@@ -17,163 +18,83 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
   const likePageNum = useRef(1);
   const tipPageNum = useRef(1);
 
-  const [all, setAll] = useState(null);
-  const [likes, setLikes] = useState(null);
-  const [tips, setTips] = useState(null);
-
-  const [current, setCurrent] = useState(0);
+  const [all, setAll] = useState({});
+  const [likes, setLikes] = useState({});
+  const [tips, setTips] = useState({});
 
   useEffect(() => {
     if (visible) {
-      loadData({ type: current });
+      loadData();
     }
   }, [visible]);
 
-  const loadData = async ({ type }) => {
+  const loadData = async () => {
     const { postId = '', threadId = '' } = tipData;
-    const res = await readLikedUsers({ params: { threadId, postId, type, page: 1 } });
+    const { res } = await getLikedUsers({ threadId, postId, isAll: true });
 
-    setAll(res?.data);
+    setAll(res[0] || {});
+    setLikes(res[1] || {});
+    setTips(res[2] || {});
   };
 
-  const singleLoadData = async ({ page = 1, type = 1 } = {}) => {
+  const singleLoadData = async (page = 1, type = 1) => {
     const { postId = '', threadId = '' } = tipData;
-    const res = await readLikedUsers({ params: { threadId, postId, page, type } });
-
+    const { res } = await getLikedUsers({ threadId, postId, page, type });
     const data = res?.data || {};
 
     if (type === 0) {
+      allPageNum.current += 1;
       if (page !== 1) {
-        data?.pageData?.list.unshift(...(all?.pageData?.list || []));
+        data?.pageData?.list.unshift(all?.pageData?.list || []);
       }
       setAll(data);
     } else if (type === 1) {
+      likePageNum.current += 1;
       if (page !== 1) {
-        data?.pageData?.list.unshift(...(likes?.pageData?.list || []));
+        data?.pageData?.list.unshift(likes?.pageData?.list || []);
       }
       setLikes(data);
     } else if (type === 2) {
+      tipPageNum.current += 1;
       if (page !== 1) {
-        data?.pageData?.list.unshift(...(tips?.pageData?.list || []));
+        data?.pageData?.list.unshift(tips?.pageData?.list || []);
       }
       setTips(data);
     }
   };
 
-  const loadMoreData = () => {
-    if (current === 0) {
-      allPageNum.current += 1;
-      return singleLoadData({ page: allPageNum.current, type: current });
-    }
-    if (current === 1) {
-      likePageNum.current += 1;
-      return singleLoadData({ page: likePageNum.current, type: current });
-    }
-    tipPageNum.current += 1;
-    return singleLoadData({ page: tipPageNum.current, type: current });
+  const renderList = (data) => {
+    const { pageData, currentPage = 0, totalPage = 0 } = data;
+
+    return (
+      <List className={styles.list} onRefresh={singleLoadData} noMore={currentPage >= totalPage}>
+        {
+          pageData?.list?.map((item, index) => (
+            <UserItem key={index} imgSrc={item.avatar} title={item.username} subTitle={item.passedAt} />
+          ))
+        }
+      </List>
+    );
   };
-
-  const onClickTab = (id) => {
-    setCurrent(id);
-    const hasAll = id === 0 && !all;
-    const hasLikes = id === 1 && !likes;
-    const hasTips = id === 2 && !tips;
-
-    if (hasAll || hasLikes || hasTips) {
-      singleLoadData({ type: id });
-    }
-  };
-
-  const searchClick = () => {
-
-  };
-
-  const onClose = () => {
-    onHidden();
-    setAll(null);
-    setLikes(null);
-    setTips(null);
-    setCurrent(0);
-  };
-
-  const renderHeader = ({ title, icon, number  }) => (
-    <div className={styles.label}>
-      {icon && <Icon name={icon} />}
-      <span className={`${styles.title} disable-click`}>{title}</span>
-      {number !== 0 && number !== '0' && <span className="disable-click">{number}</span>}
-    </div>
-  );
-
-  const tabItems = [
-    {
-      icon: '',
-      title: '全部',
-      data: all,
-      number: all?.pageData?.allCount || 0,
-    },
-    {
-      icon: 'LikeOutlined',
-      title: '点赞',
-      data: likes,
-      number: all?.pageData?.likeCount || 0,
-    },
-    {
-      icon: 'HeartOutlined',
-      title: '打赏',
-      data: tips,
-      number: all?.pageData?.raidCount || 0,
-    },
-  ];
-
-  const renderTabPanel = () => (
-    tabItems.map((dataSource, index) => {
-      const arr = dataSource?.data?.pageData?.list || [];
-      return (
-        <Tabs.TabPanel
-          key={index}
-          id={index}
-          label={renderHeader({ icon: dataSource.icon, title: dataSource.title, number: dataSource.number })}>
-            {
-              arr.length ? (
-                <List
-                  className={styles.list}
-                  onRefresh={loadMoreData}
-                  noMore={dataSource.data?.currentPage === dataSource.data?.totalPage}
-                >
-                  {
-                    arr.map((item, index) => (
-                        <UserItem key={index} imgSrc={item.avatar} title={item.username} subTitle={item.passedAt} />
-                    ))
-                  }
-                </List>
-              ) : <NoData className={styles.list} />
-            }
-        </Tabs.TabPanel>
-      );
-    })
-  );
 
   return (
     <Popup
-        position={tipData?.platform === 'h5' ? 'bottom' : 'center'}
+        position="bottom"
         visible={visible}
-        onClose={onClose}
+        onClose={onHidden}
     >
-        <Tabs
-          onActive={onClickTab}
-          activeId={current}
-          className={styles.tabs}
-          tabBarExtraContent={
-            tipData?.platform === 'pc' && (
-              <div onClick={onClose} className={styles.tabIcon}>
-                <Icon name="CheckOutlined" />
-              </div>
-            )
-          }
-        >
-          {
-            renderTabPanel()
-          }
+        <Tabs>
+          <Tabs.TabPanel key='1-1' id={0} label='全部'>
+            {all?.pageData?.list?.length ? renderList(all) : <NoData />}
+          </Tabs.TabPanel>
+
+          <Tabs.TabPanel key='1-3' id={1} label='点赞'>
+            {likes?.pageData?.list?.length ? renderList(likes) : <NoData />}
+          </Tabs.TabPanel>
+
+          <Tabs.TabPanel key='1-2' id={2} label='打赏'>
+            {tips?.pageData?.list?.length ? renderList(tips) : <NoData />}
+          </Tabs.TabPanel>
         </Tabs>
     </Popup>
   );
