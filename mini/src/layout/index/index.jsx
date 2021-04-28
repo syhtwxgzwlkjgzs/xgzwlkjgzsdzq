@@ -10,7 +10,7 @@ import TopNew from './components/top-news';
 import Tabbar from './components/tabbar';
 import FilterView from './components/filter-view';
 import { View, Text } from '@tarojs/components';
-
+import Page from '@components/page';
 @inject('site')
 @inject('user')
 @inject('index')
@@ -141,31 +141,33 @@ class IndexMiniPage extends React.Component {
     const { currentPage, totalPage, pageData } = threads || {};
     console.log(index, '数据');
     return (
-      <View className={styles.container}>
-        { pageData?.length > 0
-          ? (
-            <List
-              className={styles.list}
-              onRefresh={this.onRefresh}
-              refreshing={false}
-              data={pageData}
-              renderItem={this.renderItem}
-              onPullingUp={this.onPullingUp}
-              noMore={currentPage >= totalPage}
-            />
-          )
-          : this.renderNoData()
-        }
+      <Page>
+        <View className={styles.container}>
+          { pageData?.length > 0
+            ? (
+              <List
+                className={styles.list}
+                onRefresh={this.onRefresh}
+                refreshing={false}
+                data={pageData}
+                renderItem={this.renderItem}
+                onPullingUp={this.onPullingUp}
+                noMore={currentPage >= totalPage}
+              />
+            )
+            : this.renderNoData()
+          }
 
-        <FilterView
-          data={categories}
-          current={filter}
-          onCancel={this.onClose}
-          visible={this.state.visible}
-          onSubmit={this.onClickFilter}
-        />
-       <Tabbar placeholder />
-      </View>
+          <FilterView
+            data={categories}
+            current={filter}
+            onCancel={this.onClose}
+            visible={this.state.visible}
+            onSubmit={this.onClickFilter}
+          />
+        <Tabbar placeholder />
+        </View>
+      </Page>
     );
   }
 }

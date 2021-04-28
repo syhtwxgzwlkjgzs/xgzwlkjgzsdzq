@@ -92,7 +92,7 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
           {
             contents.map((item, index) => (
               <Text
-                className={`${tip === item.pid ? styles.active : ''} ${styles.Text}`}
+                className={`${tip === item.pid ? styles.active : ''} ${styles.span}`}
                 key={index}
                 onClick={() => onClickFirst(item.pid, type)}
               >
@@ -106,7 +106,7 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
             <View className={`${styles.wrapper} ${styles.childrenWrapper}`}>
               {
                 contents[first].children.map((item, index) => (
-                  <Text className={`${firstChildren === item.pid ? styles.childrenActive : ''} ${styles.Text}`} key={`${index}-${index}`} onClick={() => onClickSecond(item.pid, type)}>{item.name}</Text>
+                  <Text className={`${firstChildren === item.pid ? styles.childrenActive : ''} ${styles.span}`} key={`${index}-${index}`} onClick={() => onClickSecond(item.pid, type)}>{item.name}</Text>
                 ))
               }
             </View>
