@@ -12,6 +12,7 @@ import layout from './index.module.scss';
 
 
 @inject('site')
+@inject('commonLogin')
 @observer
 class WXSelect extends Component {
   componentWillMount() { }

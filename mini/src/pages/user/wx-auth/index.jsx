@@ -1,5 +1,5 @@
 import React from 'react';
-import Taro, { getCurrentInstance, navigateTo, redirectTo  } from '@tarojs/taro';
+import Taro, { getCurrentInstance, redirectTo  } from '@tarojs/taro';
 import { inject } from 'mobx-react';
 import { Toast, Popup } from '@discuzq/design';
 import { Button, View } from '@tarojs/components';
@@ -50,7 +50,6 @@ class MiniAuth extends React.Component {
         encryptedData: params.encryptedData,
         inviteCode
       });
-      console.log(resp);
       checkUserStatus(resp);
       // 优先判断是否能登录
       if (resp.code === 0) {
@@ -68,8 +67,8 @@ class MiniAuth extends React.Component {
       if (resp.code === NEED_BIND_OR_REGISTER_USER) {
         const { sessionToken, nickname } = resp.data;
         this.props.user.nickname = nickname;
-        navigateTo({
-          url: `/pages/wx-select/index?sessionToken=${sessionToken}&nickname=${nickname}`
+        redirectTo({
+          url: `/pages/user/wx-select/index?sessionToken=${sessionToken}&nickname=${nickname}`
         });
         return;
       }
@@ -81,8 +80,8 @@ class MiniAuth extends React.Component {
       // 跳转状态页
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
-        navigateTo({
-          url: `/pages/user/status?statusCode=${error.Code}&statusMsg=${error.Message}`
+        redirectTo({
+          url: `/pages/user/status/index?statusCode=${error.Code}&statusMsg=${error.Message}`
         });
         return;
       }

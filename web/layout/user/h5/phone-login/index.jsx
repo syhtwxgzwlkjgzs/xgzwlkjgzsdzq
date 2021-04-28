@@ -119,7 +119,9 @@ class LoginPhoneH5Page extends React.Component {
     const { mobileLogin, site } = this.props;
     const { platform } = site;
     const isAnotherLoginWayAvaliable = this.props.site.wechatEnv !== 'none' || this.props.site.isUserLoginVisible;
-
+    /**
+     * TODO 样式这块待修改，pc、h5分开两个文件，类名保持一直，根据platform来判断加载哪个文件的layout
+     */
     return (
       <div className={platform === 'h5' ? '' : layout.pc_body_background}>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
