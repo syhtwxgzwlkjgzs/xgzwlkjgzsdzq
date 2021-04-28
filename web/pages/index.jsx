@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/index/h5';
 import IndexPCPage from '@layout/index/pc';
 import { readCategories, readStickList, readThreadList } from '@server';
+import PayBox from '../components/payBox/index';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 // import HOCWithLogin from '@common/middleware/HOCWithLogin';
@@ -21,7 +22,7 @@ class Index extends React.Component {
 
     return {
       serverIndex: {
-        categories: categories && categories.code === 0 ? [{ name: '全部', pid: '', children: [] }, ...categories.data] : null,
+        categories: categories && categories.code === 0 ? categories.data : null,
         sticks: sticks && sticks.code === 0 ? sticks.data : null,
         threads: threads && threads.code === 0 ? threads.data : null,
       },
@@ -53,6 +54,11 @@ class Index extends React.Component {
     if (!hasThreadsData) {
       this.props.index.getReadThreadList();
     }
+
+    const { platform } = this.props.site;
+    if (platform === 'pc') {
+      this.props.index.getRecommends()
+    }
   }
 
   dispatch = async (type, data = {}) => {
@@ -61,7 +67,7 @@ class Index extends React.Component {
 
     if (type === 'click-filter') {
       this.page = 1;
-      index.screenData({ filter: { categoryids, types, essence, attention, sort}, sequence });
+      index.screenData({ filter: { categoryids, types, essence, attention, sort }, sequence });
     } else if (type === 'moreData') {
       this.page += 1;
       await index.getReadThreadList({

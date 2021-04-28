@@ -9,6 +9,7 @@ import Header from '@components/header';
 import { NEED_BIND_WEIXIN_FLAG, NEED_BIND_PHONE_FLAG } from '@common/store/login/user-login-store';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
+import { genMiniScheme } from '@server';
 
 @inject('site')
 @inject('user')
@@ -16,7 +17,7 @@ import { get } from '@common/utils/get';
 @inject('userLogin')
 @inject('commonLogin')
 @observer
-class LoginH5Page extends React.Component {
+class UsernameH5Login extends React.Component {
   handleUsernameChange = (e) => {
     this.props.userLogin.username = e.target.value;
   };
@@ -25,11 +26,27 @@ class LoginH5Page extends React.Component {
     this.props.userLogin.password = e.target.value;
   };
 
-  loginErrorHandler = (e) => {
-    // TODO: 完善完这里的所有逻辑
-    if (e.Code === NEED_BIND_WEIXIN_FLAG) {
+  loginErrorHandler = async (e) => {
+    // 微信绑定，跳入微信扫码绑定
+    if (e.Code === NEED_BIND_WEIXIN_FLAG && this.props.site.wechatEnv === 'openPlatform') {
       this.props.commonLogin.needToBindWechat = true;
       this.props.router.push(`/user/wx-bind-qrcode?sessionToken=${e.sessionToken}&loginType=username&nickname=${e.nickname}`);
+      return;
+    }
+
+    // 微信绑定，跳入小程序绑定
+    if (e.Code === NEED_BIND_WEIXIN_FLAG && this.props.site.wechatEnv === 'miniProgram') {
+      this.props.commonLogin.needToBindMini = true;
+      const resp = await genMiniScheme();
+      if (resp.code === 0) {
+        window.location.href = `${get(resp, 'data.openLink', '')}?sessionToken=${e.sessionToken}`;
+        return;
+      }
+      Toast.error({
+        content: '网络错误',
+        hasMask: false,
+        duration: 1000,
+      });
       return;
     }
 
@@ -43,7 +60,7 @@ class LoginH5Page extends React.Component {
     // 跳转状态页
     if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
       this.props.commonLogin.setStatusMessage(e.Code, e.Message);
-      this.props.router.push('/user/status');
+      this.props.router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
       return;
     }
 
@@ -80,6 +97,7 @@ class LoginH5Page extends React.Component {
     const { platform } = site;
     const isAnotherLoginWayAvailable = this.props.site.wechatEnv !== 'none' || this.props.site.isSmsOpen;
     return (
+      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
@@ -122,16 +140,18 @@ class LoginH5Page extends React.Component {
                 注册用户
               </span>
             )}
-            <span> 忘记密码? </span>
             {this.props.site.isSmsOpen && (
-              <span
-                className={layout.clickBtn}
-                onClick={() => {
-                  this.props.router.push('reset-password');
-                }}
-              >
-                找回密码
-              </span>
+              <>
+                <span> 忘记密码? </span>
+                <span
+                  className={layout.clickBtn}
+                  onClick={() => {
+                    this.props.router.push('reset-password');
+                  }}
+                >
+                  找回密码
+                </span>
+              </>
             )}
           </div>
           {isAnotherLoginWayAvailable && <div className={platform === 'h5' ? layout['otherLogin-title'] : layout.pc_otherLogin_title}>其他登录方式</div>}
@@ -160,8 +180,9 @@ class LoginH5Page extends React.Component {
           <div className={platform === 'h5' ? layout['otherLogin-tips'] : layout.pc_otherLogin_tips}>注册登录即表示您同意《注册协议》《隐私协议》</div>
         </div>
       </div>
+      </div>
     );
   }
 }
 
-export default withRouter(LoginH5Page);
+export default withRouter(UsernameH5Login);

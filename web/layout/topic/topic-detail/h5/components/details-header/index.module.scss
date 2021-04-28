@@ -1,0 +1,45 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.container {
+  padding: rem($padding-4n);
+  background: var( --color-white);
+  overflow: hidden;
+  .title {
+    font-size: rem($font-size-middle);
+    line-height: rem($font-line-height-primary);
+    color: var(--color-text-primary);
+    margin-bottom: rem($margin-5);
+    font-weight: 700;
+  }
+  .allTopic {
+    font-size: rem($font-size-primary);
+    line-height: rem($font-line-height-primary);
+    color: var(--color-primary3);
+    margin-bottom: rem($margin-10);
+    padding-left: rem($padding-2n);
+    a {
+      color: var(--color-primary3);
+      text-decoration: none;
+    }
+  }
+  .siteInfo {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    .text {
+      font-size: rem($font-size-primary);
+      color: var(--color-text-secondary);
+    }
+    .content {
+      font-size: rem($font-size-primary);
+      color: var(--color-text-secondary);
+      padding-left: rem($padding-2n);
+    }
+    .shareIcon {
+      display: inline-block;
+      padding-right: rem($padding-2n);
+    }
+  }
+}

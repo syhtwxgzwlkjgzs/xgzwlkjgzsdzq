@@ -1,10 +1,8 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import IndexMiniPage from '@layout/index/mini';
+import IndexMiniPage from '@layout/index';
 import { readCategories, readStickList, readThreadList } from '@server';
-
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-// import HOCWithLogin from '@common/middleware/HOCWithLogin';
+import PayBox from '@components/payBox';
 
 @inject('site')
 @inject('index')
@@ -13,28 +11,6 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 class Index extends React.Component {
   page = 1;
   prePage = 10;
-  // static async getInitialProps(ctx) {
-  //   const categories = await readCategories({}, ctx);
-  //   const sticks = await readStickList({}, ctx);
-  //   const threads = await readThreadList({ params: { filter: {}, sequence: 0, perPage: 10, page: 1 } }, ctx);
-
-  //   return {
-  //     serverIndex: {
-  //       categories: categories && categories.code === 0 ? [{ name: '全部', pid: '', children: [] }, ...categories.data] : null,
-  //       sticks: sticks && sticks.code === 0 ? sticks.data : null,
-  //       threads: threads && threads.code === 0 ? threads.data : null,
-  //     },
-  //   };
-  // }
-
-  constructor(props) {
-    super(props);
-    const { serverIndex, index } = this.props;
-    // 初始化数据到store中
-    serverIndex && serverIndex.categories && index.setCategories(serverIndex.categories);
-    serverIndex && serverIndex.sticks && index.setSticks(serverIndex.sticks);
-    serverIndex && serverIndex.threads && index.setThreads(serverIndex.threads);
-  }
 
   async componentDidMount() {
     const { index } = this.props;
@@ -80,4 +56,4 @@ class Index extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(Index);
+export default Index;

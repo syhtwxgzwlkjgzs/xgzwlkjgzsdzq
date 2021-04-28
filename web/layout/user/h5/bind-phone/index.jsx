@@ -4,8 +4,9 @@ import { withRouter } from 'next/router';
 import { Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
+import PhoneInput from '@components/login/phone-input';
 import HomeHeader from '@components/home-header';
-import PhoneInput from '../../../../components/login/h5/phone-input';
+import Header from '@components/header';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 
@@ -46,7 +47,7 @@ class BindPhoneH5Page extends React.Component {
       // 跳转状态页
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
         this.props.commonLogin.setStatusMessage(e.Code, e.Message);
-        this.props.router.push('/user/status');
+        this.props.router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
         return;
       }
       Toast.error({
@@ -70,13 +71,19 @@ class BindPhoneH5Page extends React.Component {
   }
 
   render() {
-    const { mobileBind } = this.props;
+    const { mobileBind, site } = this.props;
+    const { platform } = site;
     return (
-      <div className={layout.container}>
-        <HomeHeader hideInfo/>
-        <div className={layout.content}>
-          <div className={layout.title}>绑定手机号</div>
-          <div className={layout.tips}>
+      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
+      <div className={platform === 'h5' ? layout.container : layout.pc_container}>
+        {
+          platform === 'h5'
+            ? <HomeHeader hideInfo/>
+            : <Header/>
+        }
+        <div className={platform === 'h5' ? layout.content : layout.pc_content}>
+          <div className={platform === 'h5' ? layout.title : layout.pc_title}>绑定手机号</div>
+          <div className={platform === 'h5' ? layout.tips : layout.pc_tips}>
             请绑定您的手机号
           </div>
           <PhoneInput
@@ -87,15 +94,16 @@ class BindPhoneH5Page extends React.Component {
             sendCodeCallback={this.handleSendCodeButtonClick}
             codeTimeout={mobileBind.codeTimeout}
           />
-          <Button className={layout.button} type="primary" onClick={this.handleBindButtonClick}>
+          <Button className={platform === 'h5' ? layout.button : layout.pc_button} type="primary" onClick={this.handleBindButtonClick}>
             下一步
           </Button>
-          <div className={layout.functionalRegion}>
+          <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
             <span className={layout.clickBtn} onClick={() => {
               this.props.router.push('login');
             }} >退出登录</span>
           </div>
         </div>
+      </div>
       </div>
     );
   }

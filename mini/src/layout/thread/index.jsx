@@ -1,9 +1,22 @@
 import React, { Component, Fragment } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
-import Taro, { getCurrentInstance } from '@tarojs/taro';
+import Taro from '@tarojs/taro';
 import { observer, inject } from 'mobx-react';
+import Router from '@discuzq/sdk/dist/router';
 
-import { Icon, Input, Badge, Toast, Button } from '@discuzq/design';
+import { Icon, Badge, Toast, Button } from '@discuzq/design';
+
+import styleVar from '@common/styles/theme/default.scss.json';
+import UserInfo from '@components/thread/user-info';
+import ImageContent from '@components/thread/image-content';
+import AudioPlay from '@components/thread/audio-play';
+import PostContent from '@components/thread/post-content';
+import ProductItem from '@components/thread/product-item';
+import VideoPlay from '@components/thread/video-play';
+import PostRewardProgressBar, { POST_TYPE } from '@components/thread/post-reward-progress-bar';
+import Tip from '@components/thread/tip';
+import AttachmentView from '@components/thread/attachment-view';
+import classnames from 'classnames';
 import throttle from '@common/utils/thottle';
 
 import layout from './layout.module.scss';
@@ -13,7 +26,7 @@ import topic from './topic.module.scss';
 
 import CommentList from './components/comment-list/index';
 import LoadingTips from './components/loading-tips/index';
-import InputPopup  from './components/input-popup/index';
+import InputPopup from './components/input-popup/index';
 import DeletePopup from './components/delete-popup';
 import MorePopup from './components/more-popup';
 import ShowTop from './components/show-top';
@@ -70,100 +83,100 @@ const RenderThreadContent = observer((props) => {
   };
 
   return (
-    <View>帖子内容</View>
-    // <View className={`${layout.top} ${topic.container}`}>
-    //   <View className={topic.header}>
-    //     <View className={topic.userInfo}>
-    //       <UserInfo
-    //         name={threadStore?.threadData?.user?.userName || ''}
-    //         avatar={threadStore?.threadData?.user?.avatar || ''}
-    //         location={threadStore?.threadData?.position.location || ''}
-    //         view={`${threadStore?.threadData?.viewCount}` || ''}
-    //         time={`${threadStore?.threadData?.createdAt}` || ''}
-    //         isEssence={isEssence}
-    //       ></UserInfo>
-    //     </View>
-    //     <View className={topic.more} onClick={onMoreClick}>
-    //       <Icon size="20" color="#8590A6" name="MoreVOutlined"></Icon>
-    //     </View>
-    //   </View>
+    // <View>帖子内容</View>
+    <View className={`${layout.top} ${topic.container}`}>
+      <View className={topic.header}>
+        <View className={topic.userInfo}>
+          <UserInfo
+            name={threadStore?.threadData?.user?.userName || ''}
+            avatar={threadStore?.threadData?.user?.avatar || ''}
+            location={threadStore?.threadData?.position.location || ''}
+            view={`${threadStore?.threadData?.viewCount}` || ''}
+            time={`${threadStore?.threadData?.createdAt}` || ''}
+            isEssence={isEssence}
+          ></UserInfo>
+        </View>
+        <View className={topic.more} onClick={onMoreClick}>
+          <Icon size="20" color="#8590A6" name="MoreVOutlined"></Icon>
+        </View>
+      </View>
 
-    //   {
-    //     isApproved === 1
-    //     && <View className={topic.body}>
-    //       {/* 文字 */}
-    //       {text && <PostContent content={text || ''} />}
-    //       {/* 视频 */}
-    //       {parseContent.VIDEO && (
-    //         <VideoPlay
-    //           url={parseContent.VIDEO.mediaUrl}
-    //           coverUrl={parseContent.VIDEO.coverUrl}
-    //           width={400}
-    //           height={200}
-    //         />
-    //       )}
-    //       {/* 图片 */}
-    //       {parseContent.IMAGE && <ImageContent imgData={parseContent.IMAGE} />}
-    //       {/* 商品 */}
-    //       {parseContent.GOODS && (
-    //         <View>
-    //           <ProductItem
-    //             image={parseContent.GOODS.imagePath}
-    //             amount={parseContent.GOODS.price}
-    //             title={parseContent.GOODS.title}
-    //           />
-    //           <Button
-    //             className={topic.buyBtn}
-    //             type="primary"
-    //             onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
-    //           >
-    //             购买商品
-    //         </Button>
-    //         </View>
-    //       )}
-    //       {/* 音频 */}
-    //       {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
-    //       {/* 附件 */}
-    //       {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
+      {
+        isApproved === 1
+        && <View className={topic.body}>
+          {/* 文字 */}
+          {text && <PostContent content={text || ''} />}
+          {/* 视频 */}
+          {parseContent.VIDEO && (
+            <VideoPlay
+              url={parseContent.VIDEO.mediaUrl}
+              coverUrl={parseContent.VIDEO.coverUrl}
+              width={400}
+              height={200}
+            />
+          )}
+          {/* 图片 */}
+          {parseContent.IMAGE && <ImageContent imgData={parseContent.IMAGE} />}
+          {/* 商品 */}
+          {parseContent.GOODS && (
+            <View>
+              <ProductItem
+                image={parseContent.GOODS.imagePath}
+                amount={parseContent.GOODS.price}
+                title={parseContent.GOODS.title}
+              />
+              <Button
+                className={topic.buyBtn}
+                type="primary"
+                onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
+              >
+                购买商品
+            </Button>
+            </View>
+          )}
+          {/* 音频 */}
+          {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
+          {/* 附件 */}
+          {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
 
-    //       <View className={topic.tag}>使用交流</View>
+          <View className={topic.tag}>使用交流</View>
 
-    //       {(parseContent.RED_PACKET || parseContent.REWARD) && (
-    //         <View className={topic.reward}>
-    //           {/* 红包 */}
-    //           {parseContent.RED_PACKET && (
-    //             <PostRewardProgressBar remaining={parseContent.RED_PACKET.number} received={1} />
-    //           )}
-    //           {/* 打赏 */}
-    //           {parseContent.REWARD && <PostRewardProgressBar type={POST_TYPE.BOUNTY} remaining={2} received={5} />}
-    //         </View>
-    //       )}
+          {(parseContent.RED_PACKET || parseContent.REWARD) && (
+            <View className={topic.reward}>
+              {/* 红包 */}
+              {parseContent.RED_PACKET && (
+                <PostRewardProgressBar remaining={parseContent.RED_PACKET.number} received={1} />
+              )}
+              {/* 打赏 */}
+              {parseContent.REWARD && <PostRewardProgressBar type={POST_TYPE.BOUNTY} remaining={2} received={5} />}
+            </View>
+          )}
 
-    //       {/* <View style={{ textAlign: 'center' }}>
-    //       <Button className={topic.rewardButton} type='primary' size='large'>打赏</Button>
-    //     </View> */}
-    //       {/* 附件 */}
-    //     </View>
-    //   }
-    //   <View className={topic.footer}>
-    //     <View className={topic.thumbs}>
-    //       <View
-    //         className={classnames(topic.liked, threadStore?.threadData?.isLike && topic.isLiked)}
-    //         onClick={onLikeClick}
-    //       >
-    //         <Icon name="LikeOutlined"></Icon>
-    //         <span>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
-    //       </View>
-    //       <View className={topic.likeReward} >
-    //         <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
-    //       </View>
-    //     </View>
-    //     {
-    //       threadStore?.threadData?.likeReward?.shareCount > 0
-    //       && <span>{threadStore?.threadData?.likeReward?.shareCount}次分享</span>
-    //     }
-    //   </View>
-    // </View>
+          {/* <View style={{ textAlign: 'center' }}>
+          <Button className={topic.rewardButton} type='primary' size='large'>打赏</Button>
+        </View> */}
+          {/* 附件 */}
+        </View>
+      }
+      <View className={topic.footer}>
+        <View className={topic.thumbs}>
+          <View
+            className={classnames(topic.liked, threadStore?.threadData?.isLike && topic.isLiked)}
+            onClick={onLikeClick}
+          >
+            <Icon name="LikeOutlined"></Icon>
+            <Text>{threadStore?.threadData?.likeReward?.likePayCount || ''}</Text>
+          </View>
+          <View className={topic.likeReward} >
+            <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
+          </View>
+        </View>
+        {
+          threadStore?.threadData?.likeReward?.shareCount > 0
+          && <Text>{threadStore?.threadData?.likeReward?.shareCount}次分享</Text>
+        }
+      </View>
+    </View>
   );
 });
 
@@ -200,10 +213,6 @@ class RenderCommentList extends React.Component {
 
   // 点击评论的赞
   async likeClick(data) {
-    console.log('哈哈哈啊哈');
-    Toast.success({
-      content: '这是赞啊',
-    });
     if (!data.id) return;
 
     const params = {
@@ -211,6 +220,13 @@ class RenderCommentList extends React.Component {
       isLiked: !data.isLiked,
     };
     const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
+
+    if (success) {
+      this.props.thread.setCommentListDetailField(data.id, 'isLiked', params.isLiked);
+      const likeCount = params.isLiked ? data.likeCount + 1 : data.likeCount - 1;
+      this.props.thread.setCommentListDetailField(data.id, 'likeCount', likeCount);
+    }
+
     if (!success) {
       Toast.error({
         content: msg,
@@ -219,7 +235,7 @@ class RenderCommentList extends React.Component {
   }
 
   // 点击回复的赞
-  async replyLikeClick(reply) {
+  async replyLikeClick(reply, comment) {
     if (!reply.id) return;
 
     const params = {
@@ -227,6 +243,13 @@ class RenderCommentList extends React.Component {
       isLiked: !reply.isLiked,
     };
     const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
+
+    if (success) {
+      this.props.thread.setReplyListDetailField(comment.id, reply.id, 'isLiked', params.isLiked);
+      const likeCount = params.isLiked ? reply.likeCount + 1 : reply.likeCount - 1;
+      this.props.thread.setReplyListDetailField(comment.id, reply.id, 'likeCount', likeCount);
+    }
+
     if (!success) {
       Toast.error({
         content: msg,
@@ -334,7 +357,7 @@ class RenderCommentList extends React.Component {
 
   onCommentClick = (data) => {
     Taro.navigateTo({
-      url: '/subPages/thread/comment/index',
+      url: `/subPages/thread/comment/index?id=${data.id}&threadId=${this.props.thread?.threadData?.id}`,
     });
   }
 
@@ -408,14 +431,13 @@ class Index extends Component {
       showMorePopup: false, // 是否弹出更多框
       isCommentLoading: false, // 列表loading
       setTop: false, // 置顶
-      showContent: '',
       inputValue: '', // 评论内容
       toView: '', // 接收元素id用来滚动定位
     };
 
     this.perPage = 5;
     this.page = 1; // 页码
-    this.commentDataSort = false;
+    this.commentDataSort = true;
 
     // 滚动定位相关属性
     this.threadBodyRef = React.createRef();
@@ -430,28 +452,30 @@ class Index extends Component {
 
   componentDidMount() {
     // 当内容加载完成后，获取评论区所在的位置
-    this.position = this.commentDataRef?.current?.offsetTop - 50;
-    // console.log('componentDidMount', this.props);
+    // this.position = this.commentDataRef?.current?.offsetTop - 50;
     this.loadCommentList();
   }
 
   componentDidUpdate() {
     // 当内容加载完成后，获取评论区所在的位置
     if (this.props.thread.isReady) {
-      this.position = this.commentDataRef?.current?.offsetTop - 50;
+      // this.position = this.commentDataRef?.current?.offsetTop - 50;
     }
   }
 
   componentWillUnmount() {
     // 清空数据
-    // this.props?.thread && this.props.thread.reset();
   }
 
   // 滚动事件
-  handleOnScroll = () => {
+  handleOnScroll = (e) => {
     // 加载评论列表
     if (this.state.toView !== '') {
-      this.setState({ toView: ''});
+      this.setState({ toView: '' });
+    }
+
+    if (this.flag) {
+      this.nextPosition = e.detail?.scrollTop || 0;
     }
   }
 
@@ -466,7 +490,19 @@ class Index extends Component {
 
   // 点击信息icon
   onMessageClick = () => {
-    this.setState({ toView: 'commentId'});
+    this.setState({ toView: 'commentId' });
+    console.log(this.flag);
+    if (this.flag) {
+      this.flag = !this.flag;
+    } else {
+      if (this.position <= 0) {
+        this.position = this.nextPosition + 1;
+      } else {
+        this.position = this.nextPosition - 1;
+      }
+      this.flag = !this.flag;
+
+    }
   }
 
   // 点击收藏icon
@@ -491,20 +527,19 @@ class Index extends Component {
   }
 
   // 点击分享icon
-    // 分享
-    async onShareClick() {
-      Toast.info({ content: '分享链接已复制成功' });
-  
-      // const id = this.props.thread?.threadData?.id;
-  
-      // const { success, msg } = await this.props.thread.shareThread(id);
-  
-      // if (!success) {
-      //   Toast.error({
-      //     content: msg,
-      //   });
-      // }
-    }
+  async onShareClick() {
+    Toast.info({ content: '分享链接已复制成功' });
+
+    // const id = this.props.thread?.threadData?.id;
+
+    // const { success, msg } = await this.props.thread.shareThread(id);
+
+    // if (!success) {
+    //   Toast.error({
+    //     content: msg,
+    //   });
+    // }
+  }
 
   // 加载评论列表
   async loadCommentList() {
@@ -578,12 +613,19 @@ class Index extends Component {
     if (type === 'report') {
       console.log('点击举报');
     }
+
+    // 编辑
+    if (type === 'edit') {
+      if(!this.props.thread?.threadData?.threadId) return
+      Router.redirect({
+        url: `/pages/threadPost/index?id=${this.props.thread.threadData.threadId}`
+      });
+    }
   };
 
   // 置顶提示
-  setTopState(isStick) {
+  setTopState() {
     this.setState({
-      showContent: isStick,
       setTop: !this.state.setTop,
     });
     setTimeout(() => {
@@ -593,7 +635,6 @@ class Index extends Component {
 
   // 置顶接口
   async updateStick() {
-    this.setTopState(true);
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
@@ -602,7 +643,7 @@ class Index extends Component {
     const { success, msg } = await this.props.thread.updateStick(params);
 
     if (success) {
-      this.setTopState(true);
+      this.setTopState();
       return;
     }
 
@@ -777,19 +818,20 @@ class Index extends Component {
     return (
 
       <View className={layout.container}>
-        <ShowTop showContent={this.state.showContent} setTop={this.state.setTop}></ShowTop>
-        <View className={layout.header} onClick={this.onMoreClick}>暂替更多按钮</View>
+        <ShowTop showContent={moreStatuses.isStick} setTop={this.state.setTop}></ShowTop>
         <ScrollView
           className={layout.body}
-          ref={this.threadBodyRef}
+          ref={this.hreadBodyRef}
+          id='hreadBodyId'
           scrollY
+          scrollTop={this.position}
           lowerThreshold={50}
-          onScrollToLower ={() => this.scrollToLower()}
+          onScrollToLower={() => this.scrollToLower()}
           scrollIntoView={this.state.toView}
-          onScroll={() => throttle(this.handleOnScroll(), 500)}
-          >
-           {/* 帖子内容 */}
-           {isReady ? (
+          onScroll={(e) => throttle(this.handleOnScroll(e), 500)}
+        >
+          {/* 帖子内容 */}
+          {isReady ? (
             <RenderThreadContent
               store={threadStore}
               fun={fun}
@@ -799,7 +841,7 @@ class Index extends Component {
             <LoadingTips type="init"></LoadingTips>
           )}
           <View className={`${layout.bottom} ${comment.container}`} ref={this.commentDataRef} id='commentId'>
-             {isCommentReady ? (
+            {isCommentReady ? (
               <Fragment>
                 <RenderCommentList
                   router={this.props.router}
@@ -824,7 +866,7 @@ class Index extends Component {
           </View>
           {/* 操作区 */}
           <View className={footer.operate}>
-          {/* <View className={footer.icon} onClick={() => this.onMessageClick()}>
+            <View className={footer.icon} onClick={() => this.onMessageClick()}>
               {totalCount > 0
                 ? (
                   <Badge info={totalCount > 99 ? '99+' : `${totalCount || '0'}`}>
@@ -833,16 +875,16 @@ class Index extends Component {
                 )
                 : <Icon size="20" name="MessageOutlined"></Icon>
               }
-            </View> */}
-            <View className={footer.icon} onClick={this.onMessageClick}>
+            </View>
+            {/* <View className={footer.icon} onClick={this.onMessageClick}>
               {totalCount > 0
                 ? <View className={footer.badge}>{totalCount > 99 ? '99+' : `${totalCount || '0'}`}</View>
                 : ''
               }
               <Icon size="20" name="MessageOutlined"></Icon>
-            </View>
+            </View> */}
             <Icon
-              color={this.props.thread?.isFavorite ? 'blue' : ''}
+              color={this.props.thread?.isFavorite ? styleVar['--color-primary'] : ''}
               className={footer.icon}
               onClick={() => this.onCollectionClick()}
               size="20"
@@ -860,22 +902,22 @@ class Index extends Component {
           onSubmit={value => this.onPublishClick(value)}
         />
 
-         {/* 更多弹层 */}
-         <MorePopup
-            permissions={morePermissions}
-            statuses={moreStatuses}
-            visible={this.state.showMorePopup}
-            onClose={() => this.setState({ showMorePopup: false })}
-            onSubmit={() => this.setState({ showMorePopup: false })}
-            onOperClick={type => this.onOperClick(type)}
-          />
-          
-          {/* 删除弹层 */}
-          <DeletePopup
-            visible={this.state.showDeletePopup}
-            onClose={() => this.setState({ showDeletePopup: false })}
-            onBtnClick={type => this.onBtnClick(type)}
-          />
+        {/* 更多弹层 */}
+        <MorePopup
+          permissions={morePermissions}
+          statuses={moreStatuses}
+          visible={this.state.showMorePopup}
+          onClose={() => this.setState({ showMorePopup: false })}
+          onSubmit={() => this.setState({ showMorePopup: false })}
+          onOperClick={type => this.onOperClick(type)}
+        />
+
+        {/* 删除弹层 */}
+        <DeletePopup
+          visible={this.state.showDeletePopup}
+          onClose={() => this.setState({ showDeletePopup: false })}
+          onBtnClick={type => this.onBtnClick(type)}
+        />
       </View>
     );
   }

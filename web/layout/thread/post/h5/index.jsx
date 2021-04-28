@@ -127,6 +127,7 @@ class ThreadCreate extends React.Component {
 
   // 处理录音完毕后的音频上传
   handleAudioUpload = async (blob) => {
+    Toast.loading({ content: '上传中' });
     const formData = new FormData();
     formData.append('file', blob);
     formData.append('type', ATTACHMENT_TYPE.audio);
@@ -373,9 +374,13 @@ class ThreadCreate extends React.Component {
           />
 
           {/* 录音组件 */}
-          {(currentAttachOperation === THREAD_TYPE.voice) && (<AudioRecord handleAudioBlob={(blob) => {
-            this.handleAudioUpload(blob);
-          }} />)}
+          {(currentAttachOperation === THREAD_TYPE.voice) && (
+            <div className={styles['audio-record']}>
+              <AudioRecord onUpload={(blob) => {
+                this.handleAudioUpload(blob);
+              }} />
+            </div>
+          )}
 
           {/* 语音组件 */}
           {(Boolean(postData.audio.mediaUrl)) && (<Audio src={postData.audio.mediaUrl} />)}

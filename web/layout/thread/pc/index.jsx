@@ -7,7 +7,7 @@ import AuthorInfo from './components/author-info/index';
 import CommentList from './components/comment-list/index';
 import CommentInput from './components/comment-input/index';
 import LoadingTips from './components/loading-tips';
-import { Icon, Toast, Button, Divider, Dropdown, Popup } from '@discuzq/design';
+import { Icon, Toast, Button, Divider, Dropdown, Popup, Card } from '@discuzq/design';
 import UserInfo from '@components/thread/user-info';
 import Header from '@components/header';
 import NoMore from './components/no-more';

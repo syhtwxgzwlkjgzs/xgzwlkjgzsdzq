@@ -60,7 +60,7 @@ const User = ({ data, onClick, onFollow }) => {
           </div>
         </div>
       </div>
-      <Button type="primary" className={styles.button} onClick={handleFollow}>
+      <Button type="primary" className={styles.button} onClick={handleFollow} disabled={data.isFollow}>
         <Icon name="PlusOutlined" size={12} className={styles.addIcon}/>
         关注
       </Button>

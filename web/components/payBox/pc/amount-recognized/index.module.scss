@@ -1,0 +1,48 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+// 外部容器
+.amountWrapper {
+  background: var(--color-white);
+  min-height: rem(280);
+  width: rem(409);
+  font-size: rem($font-size-large);
+  padding: rem($padding-4n);
+  // overflow-y: auto;
+  .amountAddUp {
+    height: rem(60);
+    border-radius: rem(5);
+    background: #fff9e5;
+    text-align: center;
+    line-height: rem(60);
+  }
+  .amountMoney {
+    color: #E02433;
+  }
+  .amountSubmit {
+    width: 80%;
+    margin: rem($margin-5n) auto 0;
+    text-align: right;
+    font-size: rem($font-size-middle);
+    >span {
+      margin-right: rem($margin-4n);
+    }
+  }
+  .asBtn {
+    border-radius: rem(5);
+  }
+  .amountCloseBtn {
+    position: absolute;
+    right: rem(30);
+    top: rem(30);
+    cursor: pointer;
+    color: var(--color-disabled);
+    text-shadow: 0 -1 0 0;
+    &:hover {
+      color: var(--color-info);
+    }
+  }
+  .acExplain_hr {
+    color: var(--color-disabled5);
+  }
+}

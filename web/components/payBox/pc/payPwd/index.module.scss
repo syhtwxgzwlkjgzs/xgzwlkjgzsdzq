@@ -1,0 +1,24 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.payPwdWrapper{
+  background: var(--color-white);
+  // min-height: rem(452);
+  width: rem(530);
+  font-size: rem($font-size-large);
+  padding: rem($padding-4n);
+}
+
+.payBoxCloseIcon{
+  position: absolute;
+  right: rem(22);
+  top: rem(20);
+  width: rem(40);
+  height: rem(40);
+  // background-color: pink;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8490A8;
+  cursor: pointer;
+}

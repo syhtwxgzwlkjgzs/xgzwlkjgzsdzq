@@ -41,8 +41,9 @@ class Login extends React.Component {
       || this.props.commonLogin.statusCode === REVIEWING
       || this.props.commonLogin.statusCode === REVIEW_REJECT
     ) {
-      this.props.commonLogin.setStatusMessage(this.props.commonLogin.statusCode);
-      this.props.router.push('/user/status');
+      const { statusCode, statusMsg } = this.props.commonLogin;
+      this.props.commonLogin.setStatusMessage(statusCode);
+      this.props.router.push(`/user/status?statusCode=${statusCode}&statusMsg=${statusMsg}`);
       return;
     }
 

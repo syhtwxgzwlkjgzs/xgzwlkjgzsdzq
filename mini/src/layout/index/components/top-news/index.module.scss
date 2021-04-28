@@ -1,0 +1,28 @@
+@import '@common/styles/variable/index.scss';
+
+.list {
+  width: 100%;
+  background: var(--color-white);
+  .item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 16px;
+    height: 36px;
+    border-bottom: 1px solid var(--border-line-color);
+    .prefix {
+      font-size: 14px;
+      line-height: 24px;
+      color: var(--color-text-secondary);
+      margin-right: 16px;
+      word-break: keep-all;
+    }
+    .title {
+      font-size: 14px;
+      line-height: 24px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}

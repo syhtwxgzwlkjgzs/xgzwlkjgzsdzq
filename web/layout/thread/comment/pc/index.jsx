@@ -44,9 +44,9 @@ class CommentPCPage extends React.Component {
     const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
 
     if (success) {
-      this.props.comment.setCommentDetailField(data.id, 'isLiked', params.isLiked);
+      this.props.comment.setCommentDetailField('isLiked', params.isLiked);
       const likeCount = params.isLiked ? data.likeCount + 1 : data.likeCount - 1;
-      this.props.comment.setCommentDetailField(data.id, 'likeCount', likeCount);
+      this.props.comment.setCommentDetailField('likeCount', likeCount);
     }
 
     if (!success) {
@@ -205,10 +205,10 @@ class CommentPCPage extends React.Component {
           {/* 右边信息 */}
           <div className={styles.bodyRigth}>
             <div className={styles.authorInfo}>
-            {this.props.comment?.authorInfo
-              ? <AuthorInfo user={this.props.comment?.authorInfo}></AuthorInfo>
-              : <LoadingTips type='init'></LoadingTips>
-            }
+              {this.props.comment?.authorInfo
+                ? <AuthorInfo user={this.props.comment?.authorInfo}></AuthorInfo>
+                : <LoadingTips type='init'></LoadingTips>
+              }
             </div>
             <div className={styles.recommend}>
               <RecommendContent></RecommendContent>

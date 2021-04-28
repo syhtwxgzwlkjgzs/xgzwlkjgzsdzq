@@ -166,7 +166,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
           tabBarExtraContent={
             tipData?.platform === 'pc' && (
               <div onClick={onClose} className={styles.tabIcon}>
-                <Icon name="CheckOutlined" />
+                <Icon name="CloseOutlined" />
               </div>
             )
           }

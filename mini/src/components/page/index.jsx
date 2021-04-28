@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { View } from '@tarojs/components';
 import styles from './index.module.scss';

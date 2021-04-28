@@ -33,7 +33,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
               : 'UNKNOWN';
             return (
               <View className={styles.container} key={index} onClick={onClick} >
-                <View>
+                <View className={styles.wrapper}>
                   {/* TODO 此处逻辑接口确定之后再改 */}
                   <Icon name={type && 'PaperClipOutlined'} />
                   <Text className={styles.content}>{item.fileName}</Text>

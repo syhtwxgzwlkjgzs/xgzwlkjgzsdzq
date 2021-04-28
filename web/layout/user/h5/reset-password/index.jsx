@@ -4,8 +4,9 @@ import { withRouter } from 'next/router';
 import { Button, Input, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
-import PhoneInput from '../../../../components/login/h5/phone-input';
+import PhoneInput from '@components/login/phone-input';
 import HomeHeader from '@components/home-header';
+import Header from '@components/header';
 
 
 @inject('site')
@@ -59,11 +60,18 @@ class ResetPasswordH5Page extends React.Component {
   };
 
   render() {
+    const { site } = this.props;
+    const { platform } = site;
     return (
-      <div className={layout.container}>
-        <HomeHeader hideInfo/>
-        <div className={layout.content}>
-          <div className={layout.title}>找回/重设密码</div>
+      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
+      <div className={platform === 'h5' ? layout.container : layout.pc_container}>
+        {
+          platform === 'h5'
+            ? <HomeHeader hideInfo/>
+            : <Header/>
+        }
+        <div className={platform === 'h5' ? layout.content : layout.pc_content}>
+          <div className={platform === 'h5' ? layout.title : layout.pc_title}>找回/重设密码</div>
           <PhoneInput
             phoneNum={this.props.resetPassword.mobile}
             captcha={this.props.resetPassword.code}
@@ -72,9 +80,10 @@ class ResetPasswordH5Page extends React.Component {
             sendCodeCallback={this.handleSendCodeButtonClick}
             codeTimeout={this.props.resetPassword.codeTimeout}
           />
+          { platform === 'h5' ? <></> : <div className={layout.tips}>新密码</div> }
           <Input
             clearable={false}
-            className={layout.input}
+            className={platform === 'h5' ? layout.input : layout.pc_input}
             mode="password"
             value={this.props.resetPassword.newPassword}
             placeholder="新密码"
@@ -82,9 +91,10 @@ class ResetPasswordH5Page extends React.Component {
               this.props.resetPassword.newPassword = e.target.value;
             }}
           />
+          { platform === 'h5' ? <></> : <div className={layout.tips}>重复新密码</div> }
           <Input
             clearable={false}
-            className={layout.input}
+            className={platform === 'h5' ? layout.input : layout.pc_input}
             mode="password"
             value={this.props.resetPassword.newPasswordRepeat}
             placeholder="重复新密码"
@@ -92,10 +102,15 @@ class ResetPasswordH5Page extends React.Component {
               this.props.resetPassword.newPasswordRepeat = e.target.value;
             }}
           />
-          <Button className={layout.button} type="primary" onClick={this.handleResetPasswordButtonClick}>
+          <Button
+            className={platform === 'h5' ? layout.button : layout.pc_button}
+            type="primary"
+            onClick={this.handleResetPasswordButtonClick}
+          >
             下一步
           </Button>
         </div>
+      </div>
       </div>
     );
   }

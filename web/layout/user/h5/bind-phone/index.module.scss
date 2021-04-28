@@ -19,7 +19,42 @@
   }
   .tips{
     @include titleTips;
-    margin-bottom: 0; 
+    margin-bottom: 0;
   }
 }
- 
+
+// ------------------PC
+.pc_body_background{
+  @include pc_body_background;
+}
+
+.pc_container {
+  @include pc_container;
+}
+.pc_content {
+  width: 300px;
+  margin: 20px auto 0;
+  .pc_title {
+    font-family: 'PingFang SC';
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 30px;
+    color: #0b0b37;
+    text-align: center;
+    padding-bottom: 32px;
+  }
+  .pc_button {
+    @include pc_button;
+  }
+  .pc_otherLogin_title {
+    @include pc_otherLoginText;
+    font-size: 14px;
+  }
+  .pc_functionalRegion {
+    @include pc_functionalRegion;
+  }
+  .pc_tips{
+    @include pc_titleTips;
+    margin-bottom: 32px;
+  }
+}

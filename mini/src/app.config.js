@@ -7,8 +7,11 @@ export default {
   pages: [
     'pages/index/index',
     'pages/thread/index',
-    'pages/threadPost/index',
-    'pages/threadPost/selectReward',
+    'pages/user/wx-select/index',
+    'pages/user/wx-bind-username/index',
+    'pages/user/wx-bind-phone/index',
+    'pages/user/status/index',
+    'pages/user/wx-auth/index',
   ],
   subPackages: [
     {
@@ -18,6 +21,18 @@ export default {
         'close/index',
         'user/login/index',
         'thread/comment/index',
+        'thread/post/index',
+        'thread/selectAt/index',
+        'thread/selectTopic/index',
+        'thread/selectProduct/index',
+        'thread/selectRedpacket/index',
+        'thread/selectReward/index',
+        'thread/selectPayment/index',
+        'search/index',
+        'search/result-topic/index',
+        'search/result-post/index',
+        'search/result-user/index',
+        'search/result/index',
       ]
     }
   ],

@@ -49,7 +49,10 @@ class SearchResultTopicH5Page extends React.Component {
     });
   };
 
-  onTopicClick = data => console.log('topic click', data);
+  onTopicClick = data => {
+    const { topicId = '' } = data
+    this.props.router.push(`/topic/topic-detail/${topicId}`)
+  };
 
   render() {
     const { keyword } = this.state;

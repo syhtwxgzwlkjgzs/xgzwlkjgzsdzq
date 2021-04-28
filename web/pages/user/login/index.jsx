@@ -8,9 +8,7 @@ import HOCWithNoLogin from '@common/middleware/HOCWithNoLogin';
 @inject('site')
 class Login extends React.Component {
   render() {
-    const { site } = this.props;
-    const { platform } = site;
-    return platform === 'h5' ? <H5Login></H5Login> : <></>;
+    return <H5Login/>;
   }
 }
 

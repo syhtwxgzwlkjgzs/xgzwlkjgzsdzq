@@ -40,14 +40,14 @@ const TextArea = ({
           maxLength={maxLength}
           showLimit={showLimit}
           cursorSpacing={cursorSpacing}
-          onChange={e => onChange(e.target.value)}
+          onChange={e => onChange(e.target.value, maxLength)}
           onFocus={onFocus}
         />
-        {!showLimit &&
+        {/* {!showLimit &&
           <View className={styles['content-length']}>
             还能输入{parseInt(maxLength - value.length)}个字
           </View>
-        }
+        } */}
       </View>
     </View>
   );

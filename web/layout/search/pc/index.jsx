@@ -8,9 +8,12 @@ import TrendingTopicMore from './components/trending-topic-more';
 import ThreadContent from '@components/thread';
 import ActiveUsersMore from './components/active-users-more';
 import Stepper from './components/stepper';
+import goToLoginPage from '@common/utils/go-to-login-page';
+import { Toast } from '@discuzq/design';
 
 @inject('site')
 @inject('search')
+@inject('user')
 @observer
 class SearchPCPage extends React.Component {
 
@@ -47,6 +50,12 @@ class SearchPCPage extends React.Component {
   }
 
   onFollow = (userId) => {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     this.props.search.postFollow(userId)
   }
   // 右侧 - 步骤条
@@ -63,7 +72,7 @@ class SearchPCPage extends React.Component {
     const { pageData: topicsPageData = [] } = indexTopics || {};
     const { pageData: usersPageData = [] } = indexUsers || {};
     const { pageData: threadsPageData = [] } = indexThreads || {};
-
+    // TODO 添加活跃用户和当前用户是同一人的判断
     return (
       <div className={styles.searchContent}>
         <div className={styles.section}>

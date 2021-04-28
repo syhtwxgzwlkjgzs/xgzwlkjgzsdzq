@@ -20,6 +20,7 @@ import AllPostPaid from '@components/thread/all-post-paid';
 import AtSelect from '@components/thread-post/at-select';
 import TopicSelect from '@components/thread-post/topic-select';
 import RedpacketSelect from '@components/thread-post/redpacket-select';
+import Copyright from '@components/copyright';
 
 @inject('threadPost')
 @inject('index')
@@ -164,9 +165,7 @@ class ThreadPCPage extends React.Component {
               <Button type="primary">发布</Button>
             </div>
           </div>
-          <div className={styles.copyright}>
-            Powered By Discuz! Q © 2021   粤ICP备20008502号-1
-          </div>
+          <Copyright/>
           {/* 插入商品 */}
           <ProductSelect
             pc

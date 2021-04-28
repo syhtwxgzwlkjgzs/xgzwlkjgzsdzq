@@ -69,36 +69,40 @@ const ClassifyPopup = (props) => {
       </div>
       <div className={styles['popup-content']} key={1}>
         {(category || []).map(item => (
-          <Button
-            key={item.pid}
-            className={classNames({
-              active:
-                ((categorySelected.parent && categorySelected.parent.pid) || selected.pid) === item.pid,
-              'is-pc': pc,
-            })}
-            onClick={() => {
-              handleClick(item);
-            }}
-          >
-            {item.name}
-          </Button>
+          item.canCreateThread
+            ? <Button
+              key={item.pid}
+              className={classNames({
+                active:
+                  ((categorySelected.parent && categorySelected.parent.pid) || selected.pid) === item.pid,
+                'is-pc': pc,
+              })}
+              onClick={() => {
+                handleClick(item);
+              }}
+            >
+              {item.name}
+            </Button>
+            : null
         ))}
       </div>
       {categoryChildren.length > 0 && (
         <div className={classNames(styles['popup-content'], styles['popup-content__children'])}>
           {(categoryChildren || []).map(item => (
-            <Button
-              key={item.pid}
-              className={classNames({
-                active: (categorySelected.child && categorySelected.child.pid) === item.pid,
-                'is-pc': pc,
-              })}
-              onClick={() => {
-                handleChildClick(item);
-              }}
-            >
-              {item.name}
-            </Button>
+            item.canCreateThread
+              ? <Button
+                key={item.pid}
+                className={classNames({
+                  active: (categorySelected.child && categorySelected.child.pid) === item.pid,
+                  'is-pc': pc,
+                })}
+                onClick={() => {
+                  handleChildClick(item);
+                }}
+              >
+                {item.name}
+              </Button>
+              : null
           ))}
         </div>
       )}

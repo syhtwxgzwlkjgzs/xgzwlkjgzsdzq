@@ -23,8 +23,8 @@ export const filterClickClassName = (dom) => {
 
 // 处理附件的数据
 export const handleAttachmentData = (data) => {
-  const newData = { text: data.text };
-  const values = Object.values(data.indexes || {});
+  const newData = { text: data?.text || '' };
+  const values = Object.values(data?.indexes || {});
   values.forEach((item) => {
     const { tomId } = item;
     if (tomId === '101') { // 图片

@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import { Icon, Input, Button } from '@discuzq/design';
 import Avatar from '@components/avatar';
+import { withRouter } from 'next/router';
 
 @inject('site')
 @inject('user')
@@ -22,12 +23,16 @@ class Header extends React.Component {
    onSearch(e.target?.value || '')
   }
 
+  handleRouter = (url) => {
+    this.props.router.push(url)
+  }
+
   renderHeaderLogo() {
     const { site } = this.props;
     if (site.setSite && site.setSite.siteLogo && site.setSite.siteLogo !== '') {
-      return <img className={styles.siteLogo} src={site.setSite.siteLogo}/>;
+      return <img className={styles.siteLogo} src={site.setSite.siteLogo} onClick={() => this.handleRouter('/')} />;
     }
-    return <img className={styles.siteLogo} src='/dzq-img/admin-logo-pc.png'/>;
+    return <img className={styles.siteLogo} src='/dzq-img/admin-logo-pc.png' onClick={() => this.handleRouter('/')} />;
   }
 
   renderUserInfo() {
@@ -69,7 +74,7 @@ class Header extends React.Component {
                         </div>
                         <div className={styles.right}>
                             <div className={styles.iconList}>
-                                <div className={styles.iconItem}>
+                                <div className={styles.iconItem} onClick={() => this.handleRouter('/')}>
                                     <Icon onClick={() => {
                                       this.iconClickHandle('home');
                                     }} name="HomeOutlined" size={15} />
@@ -81,7 +86,7 @@ class Header extends React.Component {
                                     }} name="MessageOutlined" size={15} />
                                     <p>消息</p>
                                 </div>
-                                <div className={styles.iconItem}>
+                                <div className={styles.iconItem} onClick={() => this.handleRouter('search')}>
                                     <Icon onClick={() => {
                                       this.iconClickHandle('home');
                                     }} name="FindOutlined" size={15} />
@@ -97,4 +102,4 @@ class Header extends React.Component {
   }
 }
 
-export default Header;
+export default withRouter(Header);
