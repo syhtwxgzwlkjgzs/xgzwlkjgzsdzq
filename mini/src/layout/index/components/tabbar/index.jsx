@@ -3,6 +3,7 @@ import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import { withRouter } from 'next/router';
 import { View, Text } from '@tarojs/components';
+import Taro from '@tarojs/taro';
 
 /**
  * tabbar组件
@@ -11,11 +12,11 @@ import { View, Text } from '@tarojs/components';
 
 const TabBar = ({ router, fixed = true, placeholder = false }) => {
   const [tabs, setTabs] = useState([
-    { icon: 'HomeOutlined', text: '首页', active: true, router: '/index' },
-    { icon: 'FindOutlined', text: '发现', active: false, router: '/search' },
-    { icon: 'PlusOutlined', router: '/thread/post' },
+    { icon: 'HomeOutlined', text: '首页', active: true, router: '/pages/index' },
+    { icon: 'FindOutlined', text: '发现', active: false, router: '/pages/search' },
+    { icon: 'PlusOutlined', router: '/pages/thread/post' },
     { icon: 'MessageOutlined', text: '消息', active: false, router: '/' },
-    { icon: 'ProfessionOutlined', text: '我', active: false, router: '/my' },
+    { icon: 'ProfessionOutlined', text: '我', active: false, router: '/pages/my' },
   ]);
 
   const handleClick = (i, idx) => {
@@ -25,7 +26,7 @@ const TabBar = ({ router, fixed = true, placeholder = false }) => {
       temp[idx].active = true;
       setTabs(temp);
     }
-    router.push(i.router);
+    Taro.navigateTo({url: i.router });
   };
 
   return (
