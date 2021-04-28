@@ -195,7 +195,7 @@ class SearchAction extends SearchStore {
  */
  @action
  async postFollow(userId) {
-   const result = await createFollow({ data: { data: {toUserId: userId } } });
+   const result = await createFollow({ data: { data: { toUserId: userId } } });
 
    if (result.code === 0 && result.data) {
      
