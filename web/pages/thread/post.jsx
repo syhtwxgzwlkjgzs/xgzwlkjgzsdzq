@@ -116,6 +116,7 @@ class Index extends React.Component {
 
   // 表情
   handleEmojiClick = (emoji) => {
+    console.log(emoji);
     this.setState({ emojiShow: false, emoji, currentDefaultOperation: '' });
   };
 

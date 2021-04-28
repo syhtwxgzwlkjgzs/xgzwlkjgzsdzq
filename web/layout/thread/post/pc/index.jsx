@@ -26,7 +26,7 @@ class ThreadPCPage extends React.Component {
     const {
       threadPost,
       index,
-      // emoji,
+      emoji,
       // topic,
       // atList,
       currentDefaultOperation,
@@ -43,6 +43,7 @@ class ThreadPCPage extends React.Component {
             <div className={styles.editor}>
               <DVditor
                 pc
+                emoji={emoji}
                 onChange={() => { }}
                 onCountChange={() => { }}
                 onFocus={() => { }}
@@ -103,6 +104,7 @@ class ThreadPCPage extends React.Component {
                   onSubmit={this.props.handleSubmit}>
                   {/* 表情 */}
                   <Emoji
+                    pc
                     show={currentDefaultOperation === defaultOperation.emoji}
                     emojis={threadPost.emojis}
                     onClick={this.props.handleEmojiClick} />

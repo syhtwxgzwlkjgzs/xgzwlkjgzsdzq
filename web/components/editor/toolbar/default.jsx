@@ -49,7 +49,12 @@ export default function DefaultToolbar(props) {
     </>
   );
 
-  if (pc) return icons;
+  if (pc) return (
+    <div className={`${styles['dvditor-toolbar']} ${styles.pc}`}>
+      {icons}
+      {children}
+    </div>
+  );
 
   return (
     <div className={styles['dvditor-toolbar']}>

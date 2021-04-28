@@ -35,6 +35,7 @@
   }
 }
 .toolbar {
+  position: relative;
   display: flex;
   height: 54px;
   align-items: center;
@@ -48,6 +49,7 @@
         margin-left: 0;
         margin-right: var(--margin-6n);
         color: #8490a8;
+        cursor: pointer;
       }
     }
   }
