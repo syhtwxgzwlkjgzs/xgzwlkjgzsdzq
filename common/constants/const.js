@@ -53,7 +53,6 @@ export const defaultIcon = [
     name: 'SmilingFaceOutlined', // emoji
     active: activeColor,
     id: defaultOperation.emoji,
-    type: defaultOperation.emoji
   },
   {
     name: 'AtOutlined', // @
