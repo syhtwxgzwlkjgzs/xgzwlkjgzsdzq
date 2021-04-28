@@ -41,6 +41,9 @@ export const THREAD_TYPE = {
   paidAttachment: 114, // 支付附件
   at: 115, // @用户
   topic: 116, // 话题
+  draft: 117, // 草稿
+  saveDraft: 118, // 保存草稿
+  abandonDraft: 119, // 不保存草稿
 };
 
 // 图片类型
