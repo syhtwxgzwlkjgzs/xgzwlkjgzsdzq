@@ -5,14 +5,15 @@
 // 金额确认标题   
 .amountTitle {
   font-weight: bold;
+  font-size: rem(16);
 }
 // 金额确认主要内容
 .amountContent {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: rem($margin-6n) 0;
-  font-size: rem($font-size-middle);
+  margin: rem($margin-6n) 0 rem($margin-4n);
+  font-size: rem(14);
   // 交易内容item
   .acExplain {
     display: flex;
@@ -22,17 +23,25 @@
   }
   // 交易类型label提示
   .acExplain_label{
-    color: var(--color-disabled);
+    color: #4F5A70;
     margin-right: rem($margin-4n);
     flex-shrink: 0;
   }
   // 交易内容value
   .acExplain_value {
+    color: #0B0B37;
     flex-wrap: nowrap;
     @include text-ellipsis();
   }
+  .acExplainNum {
+    color: #E02433;
+    font-size: rem(20);
+  }
   .acExplain_hr {
     color: var(--color-disabled5);
+  }
+  .acExplainDivider {
+    margin: rem(8) 0;
   }
 }
 
