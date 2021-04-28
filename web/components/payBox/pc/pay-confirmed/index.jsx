@@ -60,6 +60,10 @@ export default class index extends Component {
    */
   handleChangePaymentType = (value) => {
     this.props.payBox.payWay = value
+
+    if (this.props.payBox.payWay === PAYWAY_MAP.WX) {
+      this.props.payBox.wechatPayOrderQRCode();
+    }
   };
 
   // 点击确认支付
@@ -89,10 +93,6 @@ export default class index extends Component {
         })
         this.props.payBox.password = null
       }
-    } else if (this.props.payBox.payWay === PAYWAY_MAP.WX) {
-      // 表示微信支付
-      console.log('进来了', 'sssssss_点击微信支付');
-      // this.props.payBox.visible = false
     }
   };
 
