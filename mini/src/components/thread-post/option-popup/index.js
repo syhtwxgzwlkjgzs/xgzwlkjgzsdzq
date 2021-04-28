@@ -1,10 +1,9 @@
 /**
- * 发帖-选择主题付费类型框
+ * 发帖页 - 底部选项框
  */
 import React, { memo } from 'react';
 import { View } from '@tarojs/components';
 import { Popup } from '@discuzq/design';
-import { paidSelectType } from '@common/constants/const';
 import styles from './index.module.scss';
 
 import PropTypes from 'prop-types';
@@ -39,7 +38,7 @@ PaidTypePopup.propTypes = {
 
 PaidTypePopup.defaultProps = {
   show: false,
-  list: paidSelectType,
+  list: [],
   onClick: () => { },
   onHide: () => { },
 };

@@ -120,8 +120,8 @@ export const attachIcon = [
   },
 ];
 
-// 发帖时底部弹起的付费选项
-export const paidSelectType = [
+// 发帖底部付费选项
+export const paidOption = [
   {
     name: '帖子付费',
     type: THREAD_TYPE.paidPost,
@@ -129,5 +129,17 @@ export const paidSelectType = [
   {
     name: '附件付费',
     type: THREAD_TYPE.paidAttachment,
+  },
+]
+
+// 发帖底部草稿选项
+export const draftOption = [
+  {
+    name: '保存草稿',
+    type: THREAD_TYPE.saveDraft,
+  },
+  {
+    name: '不保存',
+    type: THREAD_TYPE.abandonDraft,
   },
 ]
