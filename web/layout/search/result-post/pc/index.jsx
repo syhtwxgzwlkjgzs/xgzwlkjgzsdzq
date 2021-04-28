@@ -5,14 +5,34 @@ import BaseLayout from '@components/base-layout';
 import SectionTitle from '../../../search/h5/components/section-title'
 import ThreadContent from '@components/thread';
 import { withRouter } from 'next/router';
+import List from '@components/list'
+import NoData from '@components/no-data'
+
 @inject('site')
 @inject('search')
 @observer
 class SearchResultPostH5Page extends React.Component {
+  constructor(props) {
+    super(props);
+
+    const keyword = this.props.router.query.keyword || '';
+
+    this.state = {
+      keyword,
+      refreshing: false,
+    };
+  }
+  
   onPostClick = data => console.log('post click', data);
+
+  fetchMoreData = () => {
+    const { dispatch } = this.props;
+    const { keyword } = this.state;
+    return dispatch('moreData', keyword);
+  };
+
   renderContent = () => {
-    const { threads } = this.props.search;
-    const { pageData = [], currentPage, totalPage } = threads || { pageData: [] };
+    const { pageData = [] } = this.props.search.threads || { pageData: [] };
     return (
       <div className={styles.searchContent}>
         <div className={styles.section}>
@@ -25,17 +45,32 @@ class SearchResultPostH5Page extends React.Component {
         </div>
       </div>
     )
-  } 
+  }
+
+  searchData = (keyword) => {
+    const { dispatch } = this.props;
+    dispatch('search', keyword);
+  };
+
+  onSearch = (value) => {
+    this.setState({ keyword: value }, () => {
+      this.searchData(value);
+    });
+  }
+
   render() {
+    const { currentPage, totalPage } = this.props.search.threads || { pageData: [] };
+
     return (
-      <div className={styles.searchWrap}>
+      <List className={styles.searchWrap} noMore={currentPage >= totalPage}  onRefresh={this.fetchMoreData}>
         <BaseLayout
+          onSearch={this.onSearch}
           left={() => <div></div>}
           right={() => <div></div>}
         >
           { this.renderContent }
         </BaseLayout>
-      </div>
+      </List>
     );
   }
 }

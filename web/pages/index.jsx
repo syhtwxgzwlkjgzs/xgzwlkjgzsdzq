@@ -72,6 +72,8 @@ class Index extends React.Component {
       });
 
       return;
+    } else if (type === 'refresh-recommend') {
+      await index.getRecommends({categoryIds: categoryids})
     }
   }
 

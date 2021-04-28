@@ -5,11 +5,12 @@
 import React, { useState, useEffect } from 'react';
 import Vditor from 'vditor';
 import classNames from 'classnames';
-import 'vditor/src/assets/scss/index.scss';
+import { baseOptions, baseToolbar } from './options';
 import './index.scss';
+import 'vditor/src/assets/scss/index.scss';
 
 export default function DVditor(props) {
-  const { onChange, emoji, atList, topic, onFocus, onBlur, value, onCountChange } = props;
+  const { pc, onChange, emoji = {}, atList = [], topic, onFocus, onBlur, value, onCountChange } = props;
   const vditorId = 'dzq-vditor';
 
   const [isFocus, setIsFocus] = useState(false);
@@ -93,12 +94,9 @@ export default function DVditor(props) {
     const editor = new Vditor(
       vditorId,
       {
-        mode: 'wysiwyg',
-        height: 178,
-        placeholder: '请填写您的发布内容…',
+        ...baseOptions,
         // 编辑器初始化值
         value,
-        cache: { enable: false },
         // 编辑器异步渲染完成后的回调方法
         after: () => {},
         focus: () => {
@@ -117,25 +115,6 @@ export default function DVditor(props) {
         },
         // 编辑器中选中文字后触发，PC才有效果
         select: () => {},
-        // 暂时还是使用的编辑器自带的toolbar，自己写的获取选中取并且更新有问题
-        toolbar: [
-          {
-            name: 'bold',
-            icon: '<div class="dzq-icon dzq-icon-MakeSthOutlined" style="font-size:16px"></div>',
-          },
-          {
-            name: 'italic',
-            icon: '<div class="dzq-icon dzq-icon-BiasOutlined" style="font-size:16px"></div>',
-          },
-          {
-            name: 'strike',
-            // icon: '<div class="dzq-icon dzq-icon-BiasOutlined" style="font-size:16px"></div>',
-          },
-        ],
-        toolbarConfig: {
-          hide: false,
-          pin: true,
-        },
         counter: {
           enable: true,
           after(count) {
@@ -143,18 +122,23 @@ export default function DVditor(props) {
           },
           type: 'markdown',
         },
-        outline: {
-          enable: false,
+        toolbarConfig: {
+          hide: !!pc,
+          pin: true,
+          bubbleHide: !pc,
         },
+        bubbleToolbar: pc ? [...baseToolbar] : [],
       },
     );
     setVditor(editor);
   }
 
+  const className = pc ? '' : classNames('dvditor', { 'no-focus': !pc && !isFocus });
+
   return (
     <>
-      <div id={vditorId} className={classNames('dvditor', { 'no-focus': !isFocus })}></div>
-      {isFocus && <div className="dvditor__placeholder"></div>}
+      <div id={vditorId} className={className}></div>
+      {!pc && isFocus && <div className="dvditor__placeholder"></div>}
     </>
   );
 }

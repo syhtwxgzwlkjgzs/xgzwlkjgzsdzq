@@ -1,0 +1,9 @@
+@import '@common/styles/mixin/login.scss';
+@import '@common/styles/fn/rem.scss';
+.box {
+    width: 100%;
+    height: rem(188);
+    // background-image: url('../../public/dzq-img/my-default-header-img.jpg');
+    background-position: center center;
+    background-size: 100% auto;
+}

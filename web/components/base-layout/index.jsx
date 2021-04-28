@@ -23,11 +23,11 @@ const { Row, Col } = Flex;
  */
 
 const BaseLayout = (props) => {
-  const { header = null, left = null, children = null, right = null, footer = null } = props;
+  const { header = null, left = null, children = null, right = null, footer = null, onSearch } = props;
 
   return (
     <React.Fragment>
-        {(header && header({ ...props })) || <Header />}
+        {(header && header({ ...props })) || <Header onSearch={onSearch} />}
 
         <Row justify="center" gutter={20} className={styles.content}>
             <Col>

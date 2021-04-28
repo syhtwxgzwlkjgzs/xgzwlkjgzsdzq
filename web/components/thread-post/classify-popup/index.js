@@ -2,14 +2,14 @@
  * 分类弹出层
  */
 import React, { memo, useState, useEffect } from 'react'; // 性能优化的
-import { Popup, Button } from '@discuzq/design'; // 原来就有的封装
+import { Popup, Button, Icon } from '@discuzq/design'; // 原来就有的封装
 import styles from './index.module.scss'; // 私有样式
 import PropTypes from 'prop-types'; // 类型拦截
 import typeofFn from '@common/utils/typeof';
 import classNames from 'classnames';
 
 const ClassifyPopup = (props) => {
-  const { show, onVisibleChange, category = [], onChange, categorySelected } = props;
+  const { pc, show, onVisibleChange, category = [], onChange, categorySelected } = props;
   const [visible, setVisible] = useState(false);
   const [categoryChildren, setCategoryChildren] = useState([]);
   const [selected, setSelected] = useState({});
@@ -59,6 +59,54 @@ const ClassifyPopup = (props) => {
     setChildren(selected);
   }, [selected]);
 
+  const titleClass = pc ? classNames(styles['popup-title'], styles['pc-title']) : styles['popup-title'];
+
+  const content = (
+    <>
+      <div className={titleClass}>
+        {pc && <Icon name="MenuOutlined" size="16" />}
+        选择分类
+      </div>
+      <div className={styles['popup-content']} key={1}>
+        {(category || []).map(item => (
+          <Button
+            key={item.pid}
+            className={classNames({
+              active:
+                ((categorySelected.parent && categorySelected.parent.pid) || selected.pid) === item.pid,
+              'is-pc': pc,
+            })}
+            onClick={() => {
+              handleClick(item);
+            }}
+          >
+            {item.name}
+          </Button>
+        ))}
+      </div>
+      {categoryChildren.length > 0 && (
+        <div className={classNames(styles['popup-content'], styles['popup-content__children'])}>
+          {(categoryChildren || []).map(item => (
+            <Button
+              key={item.pid}
+              className={classNames({
+                active: (categorySelected.child && categorySelected.child.pid) === item.pid,
+                'is-pc': pc,
+              })}
+              onClick={() => {
+                handleChildClick(item);
+              }}
+            >
+              {item.name}
+            </Button>
+          ))}
+        </div>
+      )}
+    </>
+  );
+
+  if (pc) return content;
+
   return (
     <Popup
       className={styles.tan}
@@ -70,51 +118,16 @@ const ClassifyPopup = (props) => {
         handleClose();
       }}
     >
-      <>
-        <div className="popup-title">选择分类</div>
-        <div className="popup-content" key={1}>
-          {(category || []).map(item => (
-              <Button
-                key={item.pid}
-                className={classNames({
-                  active:
-                    ((categorySelected.parent && categorySelected.parent.pid) || selected.pid) === item.pid,
-                })}
-                onClick={() => {
-                  handleClick(item);
-                }}
-              >
-                {item.name}
-              </Button>
-          ))}
-        </div>
-        {categoryChildren.length > 0 && (
-          <div className="popup-content popup-content__children">
-            {(categoryChildren || []).map(item => (
-              <Button
-                key={item.pid}
-                className={classNames({
-                  active: (categorySelected.child && categorySelected.child.pid) === item.pid,
-                })}
-                onClick={() => {
-                  handleChildClick(item);
-                }}
-              >
-                {item.name}
-              </Button>
-            ))}
-          </div>
-        )}
-        {/* 取消按钮 */}
-        <div
-          className="popup-cacel"
-          onClick={() => {
-            handleClose();
-          }}
-        >
-          取消
-        </div>
-      </>
+      {content}
+      {/* 取消按钮 */}
+      <div
+        className="popup-cacel"
+        onClick={() => {
+          handleClose();
+        }}
+      >
+        取消
+      </div>
     </Popup>
   );
 };

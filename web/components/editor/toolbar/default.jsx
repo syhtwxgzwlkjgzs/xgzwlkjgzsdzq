@@ -4,7 +4,7 @@ import styles from './index.module.scss';
 import { defaultIcon, defaultOperation } from '@common/constants/const';
 
 export default function DefaultToolbar(props) {
-  const { children, onClick, onSubmit, value } = props;
+  const { children, onClick, onSubmit, value, pc } = props;
   const [currentAction, setCurrentAction] = useState('');
 
   useEffect(() => {
@@ -26,27 +26,35 @@ export default function DefaultToolbar(props) {
     };
   }, []);
 
+  const icons = (
+    <>
+      {defaultIcon.map(item => (
+        <Icon key={item.name}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (item.id === currentAction) {
+              setCurrentAction('');
+              onClick({ id: '' });
+            } else {
+              setCurrentAction(item.id);
+              onClick(item);
+            }
+          }}
+          className={styles['dvditor-toolbar__item']}
+          name={item.name}
+          color={item.id === currentAction && item.active}
+          size="20">
+        </Icon>
+      ))}
+    </>
+  );
+
+  if (pc) return icons;
+
   return (
     <div className={styles['dvditor-toolbar']}>
       <div className={styles['dvditor-toolbar__left']}>
-        {defaultIcon.map(item => (
-          <Icon key={item.name}
-            onClick={(e) => {
-              e.stopPropagation();
-              if (item.id === currentAction) {
-                setCurrentAction('');
-                onClick({ id: '' });
-              } else {
-                setCurrentAction(item.id);
-                onClick(item);
-              }
-            }}
-            className={styles['dvditor-toolbar__item']}
-            name={item.name}
-            color={item.id === currentAction && item.active}
-            size="20">
-          </Icon>
-        ))}
+        {icons}
       </div>
       <div className={styles['dvditor-toolbar__right']}
         onClick={() => {
