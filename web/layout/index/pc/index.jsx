@@ -12,7 +12,7 @@ import QcCode from './components/qcCode';
 import Recommend from './components/recommend';
 import ThreadContent from '@components/thread';
 import List from '@components/list';
-import Copyright from './components/copyright';
+import Copyright from '@components/copyright';
 import { readThreadList } from '@server';
 import PayBox from '@components/payBox';
 
