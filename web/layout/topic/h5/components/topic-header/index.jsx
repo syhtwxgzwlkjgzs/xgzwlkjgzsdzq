@@ -1,20 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import { Dropdown, Icon } from '@discuzq/design';
+import { noop } from '@components/thread/utils';
 
 import styles from './index.module.scss';
 
 /**
  * 话题头部组件
  */
-const TopicHeader = () => {
-  const [topicSort, setTopicSort] = useState('recommended');
-  const onClickFirst = (key) => {
-    if (key === 1) {
-      setTopicSort('-viewCount');
-    } else {
-      setTopicSort('-threadCount');
-    }
-  };
+const TopicHeader = ({ onClick = noop }) => {
   const menu = () => {
     return (
       <Dropdown.Menu>
@@ -32,7 +25,7 @@ const TopicHeader = () => {
         placement="right"
         arrow={false}
         trigger="click"
-        onChange={() => onClickFirst(key)}
+        onChange={onClick}
         className={styles.sortDropdown}
       >
         <Icon name="SortOutlined" size={18} color='#2469f6'/>

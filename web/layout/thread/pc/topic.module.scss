@@ -4,6 +4,7 @@
 .container {
   background: var(--color-white);
   padding: rem($padding-4n);
+  border-radius: var(--border-radius-small) var(--border-radius-small) 0 0;
 }
 
 .header {
@@ -86,6 +87,7 @@
   background: var(--background-color);
   font-size: rem($font-size-label);
   padding: rem($padding-2n) rem($padding-1n);
+  line-height: rem($font-size-label);
   border-radius: rem($border-radius-small);
 }
 
