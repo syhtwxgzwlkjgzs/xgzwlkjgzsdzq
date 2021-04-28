@@ -37,11 +37,8 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
-    const { search, router } = this.props;
-    // const { keyword = '' } = router.query;
+    const { search } = this.props;
     const { keyword = '' } = getCurrentInstance().router.params;
-    // 当服务器无法获取数据时，触发浏览器渲染
-    const hasTopics = !!search.indexTopics;
 
     // if (!hasTopics) {
     //   this.toastInstance = Toast.loading({

@@ -1,6 +1,5 @@
 import React from 'react';
-import { withRouter } from 'next/router';
-
+import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
 
@@ -8,9 +7,9 @@ import { View, Text } from '@tarojs/components';
  * 置顶消息
  * @prop {{prefix:string, title:string}[]} data
  */
-const TopNews = ({ data = [], router }) => {
+const TopNews = ({ data = [] }) => {
   const onClick = ({ threadId } = {}) => {
-    router.push(`/thread/${threadId}`);
+    Taro.navigateTo({url: `/pages/thread/index?id=${threadId}`});
   };
   return (
   <View className={styles.list}>
@@ -24,4 +23,4 @@ const TopNews = ({ data = [], router }) => {
   );
 };
 
-export default withRouter(TopNews);
+export default TopNews;

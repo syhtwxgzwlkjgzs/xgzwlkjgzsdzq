@@ -34,23 +34,10 @@ class Index extends React.Component {
 
   async componentDidMount() {
     const { search, router } = this.props;
-    // const { keyword = '' } = router.query;
     const { keyword = '' } = getCurrentInstance().router.params;
-    
-    // 当服务器无法获取数据时，触发浏览器渲染
-    const hasThreads = !!search.indexThreads;
-
-    // if (!hasThreads) {
-    //   this.toastInstance = Toast.loading({
-    //     content: '加载中...',
-    //     duration: 0,
-    //   });
 
       this.page = 1;
       await search.getThreadList({ search: keyword });
-
-    //   this.toastInstance?.destroy();
-    // }
   }
 
   dispatch = async (type, data) => {
