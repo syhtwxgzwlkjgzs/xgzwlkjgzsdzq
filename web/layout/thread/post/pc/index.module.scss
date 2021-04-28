@@ -13,6 +13,7 @@
   }
 }
 .editor {
+  position: relative;
   padding: 16px;
   min-height: 428px;
   border: 1px solid #c5c6ca;
@@ -31,6 +32,23 @@
       .dzq-icon { /* stylelint-disable-line */
         color: var(--color-white);
       }
+    }
+  }
+}
+.money-box {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 16px 22px;
+  :global {
+    .dzq-tag {
+      padding: 0 4px;
+      height: 25px;
+      line-height: 25px;
+      border-radius: 5px;
+      background-color: #f0f1f3;
+      color: #4f5a70;
+      border: none;
     }
   }
 }

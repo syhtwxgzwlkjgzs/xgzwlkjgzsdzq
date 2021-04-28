@@ -54,3 +54,26 @@
     }
   }
 }
+
+.pc {
+  .redpacket-box {
+    position: static;
+    width: 100%;
+    height: auto;
+  }
+  .btn {
+    padding: 0;
+    padding-top: 10px;
+    position: static;
+    width: 100%;
+    display: block;
+    text-align: center;
+  }
+  :global {
+    .dzq-button {
+      &:first-child {
+        margin-right: 10px;
+      }
+    }
+  }
+}

@@ -6,7 +6,7 @@ import DVditor from '@components/editor';
 import Title from '@components/thread-post-pc/title';
 import { AttachmentToolbar, DefaultToolbar } from '@components/editor/toolbar';
 import Position from '@components/thread-post/position';
-import { Button, Video, Audio, AudioRecord } from '@discuzq/design';
+import { Button, Video, Audio, AudioRecord, Tag } from '@discuzq/design';
 import ClassifyPopup from '@components/thread-post/classify-popup';
 import { withRouter } from 'next/router';
 import Emoji from '@components/editor/emoji';
@@ -16,6 +16,7 @@ import FileUpload from '@components/thread-post/file-upload';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 import Product from '@components/thread-post/product';
 import ProductSelect from '@components/thread-post/product-select';
+import AllPostPaid from '@components/thread/all-post-paid';
 
 @inject('threadPost')
 @inject('index')
@@ -33,6 +34,7 @@ class ThreadPCPage extends React.Component {
       currentAttachOperation,
     } = this.props;
     const { postData } = threadPost;
+    const { freeWords, price, attachmentPrice } = threadPost.postData;
 
     return (
       <>
@@ -92,6 +94,14 @@ class ThreadPCPage extends React.Component {
                   onDelete={() => this.props.setPostData({ product: {} })}
                 />
               )}
+
+              {/* 设置的金额相关展示 */}
+              <div className={styles['money-box']}>
+                {/* 付费 */}
+                {!!(postData.price || postData.attachmentPrice) && (
+                  <Tag>付费总额{postData.price + postData.attachmentPrice}元</Tag>
+                )}
+              </div>
             </div>
             <div className={styles.toolbar}>
               <div className={styles['toolbar-left']}>
@@ -99,7 +109,13 @@ class ThreadPCPage extends React.Component {
                   pc
                   value={currentDefaultOperation}
                   onClick={
-                    item => this.props.handleSetState({ currentDefaultOperation: item.id, emoji: {} })
+                    (item, child) => {
+                      if (child && child.id) {
+                        this.props.handleSetState({ curPaySelect: child.id, emoji: {} });
+                      } else {
+                        this.props.handleSetState({ currentDefaultOperation: item.id, emoji: {} });
+                      }
+                    }
                   }
                   onSubmit={this.props.handleSubmit}>
                   {/* 表情 */}
@@ -149,6 +165,21 @@ class ThreadPCPage extends React.Component {
             }
             cancel={() => this.props.handleSetState({ currentAttachOperation: false })}
           />
+          {/* 插入付费 */}
+          {!!this.props.curPaySelect && (
+            <AllPostPaid
+              pc
+              visible={!!this.props.curPaySelect}
+              exhibition={this.props.curPaySelect}
+              cancle={() => {
+                this.props.handleSetState({ curPaySelect: '', currentDefaultOperation: '' });
+              }}
+              data={{ freeWords, price, attachmentPrice }}
+              confirm={(data) => {
+                this.props.setPostData({ ...data });
+              }}
+            />
+          )}
         </div>
       </>
     );

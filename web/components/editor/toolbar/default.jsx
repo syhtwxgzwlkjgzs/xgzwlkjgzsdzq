@@ -38,7 +38,7 @@ export default function DefaultToolbar(props) {
                 if (!item.menu) onClick({ id: '' });
               } else {
                 setCurrentAction(item.id);
-                if (!item.menu) onClick(item);
+                if (!(pc && item.menu)) onClick(item);
               }
             }}
             className={styles['dvditor-toolbar__item']}
@@ -50,7 +50,7 @@ export default function DefaultToolbar(props) {
         if (pc && item.menu) {
           const menus = (
             <Dropdown.Menu>
-              {(item.menu.map(elem => (<Dropdown.Item key={elem.id} id={elem.id}>{elem.name}</Dropdown.Item>)))}
+              {(item.menu.map(elem => (<Dropdown.Item key={elem.id} id={elem.name}>{elem.name}</Dropdown.Item>)))}
             </Dropdown.Menu>
           );
           return (
@@ -61,7 +61,7 @@ export default function DefaultToolbar(props) {
               arrow={false}
               onChange={(key) => {
                 setCurrentAction('');
-                onClick({ id: key }, item);
+                onClick(item, { id: key });
               }}
             >
               {iconItem}
