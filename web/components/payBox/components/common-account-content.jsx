@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from './index.module.scss';
-import { Checkbox } from '@discuzq/design';
+import { Checkbox, Divider } from '@discuzq/design';
 import { ORDER_TRADE_TYPE } from '../../../../common/constants/payBoxStoreConstants';
 
 export default class CommonAccountContent extends Component {
@@ -48,24 +48,27 @@ export default class CommonAccountContent extends Component {
             <span className={styles.acExplain_label}>交易类型</span>{' '}
             <span className={styles.acExplain_value}>{this.renderDiffTradeType(type)}</span>
           </div>
+          <Divider className={styles.acExplainDivider} />
           <div className={styles.acExplain}>
             <span className={styles.acExplain_label}>商品名称</span>{' '}
-            <span className={styles.acExplain_value}>{'暂未设置'}</span>
+            <span className={styles.acExplain_value}>{`迷宫一样的未来 转一个圈会到哪里 我喜欢爱情有点神秘`}</span>
           </div>
+          <Divider className={styles.acExplainDivider} />
           <div className={styles.acExplain}>
             <span className={styles.acExplain_label}>支付金额</span>
-            <span>￥{this.transMoneyToFixed(amount)}</span>
+            <span className={styles.acExplainNum}>￥{this.transMoneyToFixed(amount)}</span>
           </div>
           {type === ORDER_TRADE_TYPE.REGEISTER_SITE && (
             <div className={styles.acExplain}>
               <Checkbox checked={isAnonymous} /> 隐藏我的付费信息
             </div>
           )}
-          {type == ORDER_TRADE_TYPE.COMBIE_PAYMENT && (
+          <Divider className={styles.acExplainDivider} />
+          {/* {type == ORDER_TRADE_TYPE.COMBIE_PAYMENT && (
             <div>
               <hr className={styles.acExplain_hr} />
             </div>
-          )}
+          )} */}
         </div>
       </>
     );
