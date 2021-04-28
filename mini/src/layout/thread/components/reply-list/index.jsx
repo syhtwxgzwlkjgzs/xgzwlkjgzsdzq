@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text } from '@tarojs/components';
-// import Avatar from '@components/avatar';
+import { observer } from 'mobx-react';
+import Avatar from '@components/avatar';
 import { diffDate } from '@common/utils/diff-date';
 import styles from './index.module.scss';
 
-export default class ReplyList extends React.Component {
+@observer
+class ReplyList extends React.Component {
     static async getInitialProps() {
         return {
             
@@ -12,10 +14,7 @@ export default class ReplyList extends React.Component {
     }
     constructor(props) {
       super(props);
-      this.state = {
-        isLiked: this.props.data.isLiked,
-        likeCount: this.props.data.likeCount,
-      };
+      this.state = {};
     }
 
   // 跳转至评论详情
@@ -24,30 +23,35 @@ export default class ReplyList extends React.Component {
   }
 
   likeClick() {
-    this.setState({
-      isLiked: !this.state.isLiked,
-    }, () => {
-      this.setState({
-        likeCount: this.state.isLiked ? this.state.likeCount + 1 : this.state.likeCount - 1,
-      });
-    });
     typeof this.props.likeClick === 'function' && this.props.likeClick();
   }
   replyClick() {
     typeof this.props.replyClick === 'function' && this.props.replyClick();
   }
 
+  generatePermissions(data = {}) {
+    return {
+      canApprove: data.canApprove || false,
+      canDelete: data.canDelete || false,
+      canEdit: data.canEdit || false,
+      canHide: data.canLike || false,
+      canLike: data.canLike || false,
+    };
+  }
+
   render() {
+    const { canLike } = this.generatePermissions(this.props.data);
+
     return (
       <View className={styles.replyList}>
         <View className={styles.replyListAvatar} onClick={this.props.avatarClick('2')}>
-        <View className={styles.avater}>头</View>
-          {/* <Avatar
+          <Avatar
+            className={styles.avater}
             image={this.props.data.user.avatar}
             name={this.props.data.user.username || this.props.data.user.userName || ''}
-            circle={true}
+            circle={!!true}
             size='small'>
-          </Avatar> */}
+          </Avatar>
         </View>
         <View className={styles.replyListContent}>
           <View className={styles.replyListContentText}>
@@ -59,13 +63,13 @@ export default class ReplyList extends React.Component {
                 this.props.data.commentUserId
                   ? <View className={styles.commentUser}>
                     <View className={styles.replyedAvatar} onClick={this.props.avatarClick('3')}>
-                        <View className={styles.avater}>头</View>
-                      {/* <Avatar
+                      <Avatar
+                        className={styles.avater}
                         image={this.props.data.user.avatar}
                         name={this.props.data.user.username || this.props.data.user.userName || ''}
-                        circle={true}
+                        circle
                         size='small'>
-                      </Avatar> */}
+                      </Avatar>
                     </View>
                     <Text className={styles.replyedUserName}>
                       {this.props.data.replyUser.username || this.props.data.replyUser.userName }
@@ -78,9 +82,9 @@ export default class ReplyList extends React.Component {
           <View className={styles.replyListFooter}>
             <View className={styles.replyTime}>{diffDate(this.props.data.createdAt)}</View>
             <View className={styles.extraBottom}>
-              <View className={this.state.isLiked ? styles.replyLike : styles.replyLiked}>
-                <Text onClick={() => this.likeClick()}>
-                  赞&nbsp;{this.state.likeCount === 0 ? '' : this.state.likeCount}
+              <View className={this.props?.data?.isLiked ? styles.replyLike : styles.replyLiked}>
+                <Text onClick={() => this.likeClick(canLike)}>
+                  赞&nbsp;{ this.props?.data?.likeCount === 0 ? '' :  this.props.data.likeCount}
                 </Text>
               </View>
               <View className={styles.replyReply}>
@@ -93,3 +97,5 @@ export default class ReplyList extends React.Component {
     );
   }
 }
+
+export default ReplyList;

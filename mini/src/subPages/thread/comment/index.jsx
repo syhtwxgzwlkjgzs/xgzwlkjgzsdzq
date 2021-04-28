@@ -1,6 +1,7 @@
 import React from 'react';
 import { inject } from 'mobx-react';
 import { readCommentDetail } from '@server';
+import { getCurrentInstance } from '@tarojs/taro';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 import CommentMiniPage from '../../../layout/thread/comment/index';
 
@@ -34,7 +35,8 @@ class CommentDetail extends React.Component {
   }
 
   async componentDidMount() {
-    const { id, threadId } = this.props.router.query;
+    // const { id, threadId } = this.props.router.query;
+    const { id, threadId } = getCurrentInstance().router.params;
 
     if (threadId) {
       this.props.comment.setThreadId(threadId);

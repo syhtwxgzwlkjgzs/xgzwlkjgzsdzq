@@ -42,9 +42,9 @@ class CommentH5Page extends React.Component {
     const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
 
     if (success) {
-      this.props.comment.setCommentDetailField(data.id, 'isLiked', params.isLiked);
+      this.props.comment.setCommentDetailField('isLiked', params.isLiked);
       const likeCount = params.isLiked ? data.likeCount + 1 : data.likeCount - 1;
-      this.props.comment.setCommentDetailField(data.id, 'likeCount', likeCount);
+      this.props.comment.setCommentDetailField('likeCount', likeCount);
     }
 
     if (!success) {

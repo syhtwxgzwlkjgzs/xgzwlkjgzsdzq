@@ -40,8 +40,8 @@ class CommentAction extends CommentStore {
 
   @action
   setReplyListDetailField(replyId, key, value) {
-    if (this.commentPosts?.length) {
-      this.commentPosts.forEach((reply) => {
+    if (this.commentDetail?.lastThreeComments?.length) {
+      this.commentDetail.lastThreeComments.forEach((reply) => {
         if (reply.id === replyId) {
           reply[key] = value;
         }

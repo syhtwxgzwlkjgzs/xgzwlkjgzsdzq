@@ -64,7 +64,7 @@
   display: inline-block;
   color: var(--color-text-regular);
   background: var(--background-color);
-  font-size: 20px;
+  font-size: 12px;
   padding: 8px 4px;
   border-radius: 5px;
 }
@@ -79,7 +79,7 @@
   display: flex;
   align-items: center;
 
-  span {
+  Text {
     margin-left: 8px;
   }
 }
