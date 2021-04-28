@@ -11,45 +11,8 @@ import PayBox from '@components/payBox';
 class Index extends React.Component {
   page = 1;
   prePage = 10;
-  static async getInitialProps(ctx) {
-    const categories = await readCategories({}, ctx);
-    const sticks = await readStickList({}, ctx);
-    const threads = await readThreadList({ params: { filter: {}, sequence: 0, perPage: 10, page: 1 } }, ctx);
-
-    return {
-      serverIndex: {
-        categories: categories && categories.code === 0 ? [{ name: '全部', pid: '', children: [] }, ...categories.data] : null,
-        sticks: sticks && sticks.code === 0 ? sticks.data : null,
-        threads: threads && threads.code === 0 ? threads.data : null,
-      },
-    };
-  }
-
-  constructor(props) {
-    super(props);
-    const { serverIndex, index } = this.props;
-    // 初始化数据到store中
-    serverIndex && serverIndex.categories && index.setCategories(serverIndex.categories);
-    serverIndex && serverIndex.sticks && index.setSticks(serverIndex.sticks);
-    serverIndex && serverIndex.threads && index.setThreads(serverIndex.threads);
-  }
 
   async componentDidMount() {
-      PayBox.createPayBox({
-        data: {
-          amount: 0.1,
-          type: 5,
-          threadId: 4,
-          payeeId: 16,
-          isAnonymous: false,
-        },
-        success: (orderInfo) => {
-          console.log(orderInfo);
-        },
-        failed: (orderInfo) => {
-          console.log(orderInfo);
-        },
-      });
     const { index } = this.props;
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasCategoriesData = !!index.categories;

@@ -26,6 +26,24 @@ class IndexH5Page extends React.Component {
     this.renderItem = this.renderItem.bind(this);
   }
 
+  componentDidMount() {
+    PayBox.createPayBox({
+      data: {
+        amount: 0.1,
+        type: 5,
+        threadId: 4,
+        payeeId: 16,
+        isAnonymous: false,
+      },
+      success: (orderInfo) => {
+        console.log(orderInfo);
+      },
+      failed: (orderInfo) => {
+        console.log(orderInfo);
+      },
+    });
+  }
+
   // 点击更多弹出筛选
   searchClick = () => {
     this.setState({
@@ -178,7 +196,6 @@ class IndexH5Page extends React.Component {
           onSubmit={this.onClickFilter}
         />
        <Tabbar placeholder/>
-       <PayBox />
       </div>
     );
   }

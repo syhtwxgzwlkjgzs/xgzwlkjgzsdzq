@@ -1,0 +1,21 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.container {
+  padding: rem($padding-4n);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .title {
+    font-size: rem($font-size-middle);
+    line-height: rem($font-line-height-primary);
+    color: var(--color-text-primary);
+  }
+  :global(.dzq-dropdown__trigger) {
+    font-size: rem($font-size-primary);
+    color: var(--color-primary);
+  }
+  :global(.dzq-dropdown-menu__item) {
+    padding: rem($padding-10) 0;
+  }
+}

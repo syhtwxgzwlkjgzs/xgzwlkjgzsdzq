@@ -6,6 +6,7 @@ import { Button, Input, Toast } from '@discuzq/design'; // 原来就有的封装
 import DatePickers from '@components/thread/date-picker'; // 原来就有的封装
 import styles from './index.module.scss'; // 私有样式
 import PropTypes from 'prop-types'; // 类型拦截
+import { View, Text } from '@tarojs/components';
 
 const ForTheForm = ({ confirm, cancel, data }) => {
   const [value, setValue] = useState('');// 悬赏金额
@@ -37,10 +38,10 @@ const ForTheForm = ({ confirm, cancel, data }) => {
     });
   };
   return (
-    <div className={styles.rewards}>
-      <div className={styles['line-box']}>
-        <div> 悬赏金额 </div>
-        <div>
+    <View className={styles.rewards}>
+      <View className={styles['line-box']}>
+        <View> 悬赏金额 </View>
+        <View>
           <Input
             mode="number"
             value={value}
@@ -48,20 +49,20 @@ const ForTheForm = ({ confirm, cancel, data }) => {
             onChange={e => setValue(e.target.value)}
           />
           元
-        </div>
-      </div>
-      <div className={styles['line-box']}>
-        <div> 悬赏结束时间 </div>
-        <div>
-          <div
+        </View>
+      </View>
+      <View className={styles['line-box']}>
+        <View> 悬赏结束时间 </View>
+        <View>
+          <View
             onClick={() => {
               setShow(true);
             }}
           >
             {`${times}  >`}
-          </div>
-        </div>
-      </div>
+          </View>
+        </View>
+      </View>
       <DatePickers
         onSelects={(e) => {
           setTimes(e);
@@ -72,11 +73,11 @@ const ForTheForm = ({ confirm, cancel, data }) => {
           setShow(false);
         }}
       />
-      <div className={styles.btn}>
+      <View className={styles.btn}>
         <Button onClick={() => cancel()}>取消</Button>
         <Button type="primary" onClick={redbagconfirm}>确定</Button>
-      </div>
-    </div>
+      </View>
+    </View>
 
   );
 };

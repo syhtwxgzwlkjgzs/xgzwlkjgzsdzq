@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Popup, Icon, Button, Radio } from '@discuzq/design';
 import Router from '@discuzq/sdk/dist/router';
 import { PAY_MENT_MAP, PAYWAY_MAP, STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
+import isWeixin from '@common/utils/is-weixin';
 import {
   listenWXJsBridgeAndExecCallback,
   onBridgeReady,
@@ -102,6 +103,10 @@ export default class PayBox extends React.Component {
     } else if (this.state.paymentType === PAY_MENT_MAP.WX_H5) {
       // 表示微信支付
       console.log('进来了', 'sssssss_点击微信支付');
+      if (!isWeixin()) {
+        await this.props.payBox.wechatPayOrder({ listenWXJsBridgeAndExecCallback, onBridgeReady, wxValidator, mode: PAY_MENT_MAP.WX_H5 });
+        return;  
+      }
       await this.props.payBox.wechatPayOrder({ listenWXJsBridgeAndExecCallback, onBridgeReady, wxValidator, mode });
       // this.props.payBox.visible = false
     }

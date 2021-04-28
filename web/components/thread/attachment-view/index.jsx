@@ -32,7 +32,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
               : 'UNKNOWN';
             return (
               <div className={styles.container} key={index} onClick={onClick} >
-                <div>
+                <div className={styles.wrapper}>
                   {/* TODO 此处逻辑接口确定之后再改 */}
                   <Icon name={type && 'PaperClipOutlined'} />
                   <span className={styles.content}>{item.fileName}</span>
