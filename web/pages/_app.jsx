@@ -12,7 +12,6 @@ class DzqApp extends App {
   constructor(props) {
     super(props);
     this.appStore = initializeStore();
-    console.log(this.appStore);
   }
 
   render() {

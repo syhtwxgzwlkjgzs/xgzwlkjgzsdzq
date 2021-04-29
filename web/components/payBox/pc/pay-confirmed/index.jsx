@@ -108,9 +108,9 @@ export default class index extends Component {
   // 渲染微信支付内容
   renderWechatCodePaymementContent = () => (
     <div className={styles.wechatPayment}>
-      <div style={{display: 'flex'}}>{/* 二维码 */}
+      <div style={{display: 'flex',alignItems:'center'}}>{/* 二维码 */}
         <div className={styles.wPaymentCode}>
-          <img src={this.props.payBox.wechatQRCode} />
+          <img src={this.props.payBox.wechatQRCode} alt="二维码" />
         </div>
         {/* 微信支付内容 */}
         <div className={styles.wPaymentDec}>
@@ -148,7 +148,7 @@ export default class index extends Component {
             <div className={styles.walletDec}>
               <span>支付密码</span>
               <span>
-                钱包支付，需{' '}
+                <span className={styles.walletText}>钱包支付，需{' '}</span>
                 <span onClick={this.goSetPayPwa} className={styles.walletSettingPwd}>
                   设置支付密码
                 </span>
@@ -171,7 +171,7 @@ export default class index extends Component {
                 onChange={this.onPasswordChange}
               />
             </div>
-            <div style={{ width: '100%' }}>
+            <div className={styles.walletConfirmBc}>
               <Button
                 onClick={this.handlePayConfirmed}
                 size="large"

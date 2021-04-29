@@ -8,7 +8,8 @@ import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import reload from '@common/utils/reload';
-
+import { Icon } from '@discuzq/design';
+import styles from './HOCFetchSiteData.module.scss';
 // 获取全站数据
 export default function HOCFetchSiteData(Component) {
     @inject('site')
@@ -194,7 +195,11 @@ export default function HOCFetchSiteData(Component) {
       render() {
         const { isNoSiteData } = this.state;
         if (isNoSiteData) {
-          return <h1>loading</h1>;
+          return (
+            <div className={styles.loadingBox}>
+              <Icon className={styles.loading} name="LoadingOutlined" size="large" />
+            </div>
+          );
         }
         return <Component {...this.filterProps(this.props)}/>;
       }
