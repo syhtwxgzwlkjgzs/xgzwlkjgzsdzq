@@ -6,6 +6,15 @@
   min-height: 500px;
 }
 
+.paypwdDialogWrapper {
+  :global {
+    .dzq-modal__container {
+      width: 85%;
+      top: 36%;
+    }
+  }
+}
+
 .keyboard{
   width: 100%;
   position: fixed;
@@ -55,23 +64,25 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px;
+  padding: 16px 0;
   .payListItem{
-    border-bottom: var(--border-border);
-    width: 46px;
-    height: 49px;
+    border: var(--border-border);
+    width: 32px;
+    height: 32px;
     text-align: center;
     line-height: 49px;
     font-size: 50px;
+    border-radius: 5px;
+    flex-shrink: 0;
     &:not(:last-child) {
-      margin-right: 8px;
+      // margin-right: 8px;
     }
 
     &.curr{
-      border-bottom-color: #C5C6CA;
+      border-color: #C5C6CA;
     }
     &.activation{
-      border-bottom-color: #C5C6CA;
+      border-color: #C5C6CA;
     }
   }
   .payListItem01 {
@@ -82,7 +93,7 @@
     line-height: 69px;
     font-size: 50px;
     &:not(:last-child) {
-      margin-right: 8px;
+      // margin-right: 8px;
     }
 
     &.curr{
@@ -91,5 +102,46 @@
     &.activation{
       border-color: #C5C6CA;
     }
+  }
+}
+
+.paypwdDialogContent {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  .paypwdTitle {
+    font-size: 20px;
+  }
+  .paypwdAmount {
+    font-size: 26px;
+    font-weight: bold;
+    margin: 32px 0 40px;
+  }
+  .paypwdMesg {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+  }
+  .walletIcon {
+    color: var(--color-primary2);
+    margin-right: 8px;
+  }
+  .paypwdDivider {
+    margin: 18px 0 8px
+  }
+  .payBoxCloseIcon {
+    position: absolute;
+    right: -8px;
+    top: -8px;
+    width: 40px;
+    height: 40px;
+    // background-color: pink;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8490A8;
+    cursor: pointer;
   }
 }

@@ -148,7 +148,7 @@ export default class index extends Component {
             <div className={styles.walletDec}>
               <span>支付密码</span>
               <span>
-                钱包支付，需{' '}
+                <span className={styles.walletText}>钱包支付，需{' '}</span>
                 <span onClick={this.goSetPayPwa} className={styles.walletSettingPwd}>
                   设置支付密码
                 </span>

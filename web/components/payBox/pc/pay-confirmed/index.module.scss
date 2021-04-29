@@ -62,8 +62,8 @@
       padding: rem($margin-6n);
     }
     .wPayment_01 {
-      font-size: rem(22);
-      font-weight: 800;
+      font-size: rem(14);
+      font-weight: 600;
     }
     .wPayment_02 {
       display: flex;
@@ -89,8 +89,8 @@
   }
   .walletPayment {
     .walletTitle {
-      font-size: rem(22);
-      font-weight: 800;
+      font-size: rem(16);
+      font-weight: 600;
       margin: rem(32) 0;
     }
     .walletDec {
@@ -107,6 +107,9 @@
       &:hover {
         text-decoration: underline;
       }
+    }
+    .walletText {
+      font-size: rem(14);
     }
     .walletChangePwd {
       display: inline-block;
