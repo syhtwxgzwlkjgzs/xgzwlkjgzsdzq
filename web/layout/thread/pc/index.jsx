@@ -32,6 +32,7 @@ import throttle from '@common/utils/thottle';
 import classnames from 'classnames';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import Copyright from '@components/copyright';
+import threadPay from '@common/pay-bussiness/thread-pay';
 
 const typeMap = {
   101: 'IMAGE',
@@ -48,7 +49,7 @@ const typeMap = {
 };
 
 // 帖子内容
-const RenderThreadContent = observer((props) => {
+const RenderThreadContent = inject('user')(observer((props) => {
   const { store: threadStore } = props;
   const { text, indexes } = threadStore?.threadData?.content || {};
   const tipData = {
@@ -68,6 +69,13 @@ const RenderThreadContent = observer((props) => {
   const canEssence = threadStore?.threadData?.ability?.canEssence;
   const canStick = threadStore?.threadData?.ability?.canStick;
 
+  // 是否附件付费
+  const isAttachmentPay = threadStore?.threadData?.payType === 2 && threadStore?.threadData?.paid === false;
+  const attachmentPrice = threadStore?.threadData?.attachmentPrice || 0;
+  // 是否帖子付费
+  const isThreadPay = threadStore?.threadData?.payType === 1 && threadStore?.threadData?.paid === false;
+  const threadPrice = threadStore?.threadData?.price || 0;
+
 
   const parseContent = {};
   if (indexes && Object.keys(indexes)) {
@@ -78,6 +86,15 @@ const RenderThreadContent = observer((props) => {
       }
     });
   }
+
+  const onContentClick = async () => {
+    const thread = props.store.threadData;
+    const success = await threadPay(thread, props.user?.userInfo);
+
+    if (success) {
+      typeof props.paySuccess === 'function' && props.paySuccess();
+    }
+  };
 
   const onLikeClick = () => {
     typeof props.onLikeClick === 'function' && props.onLikeClick();
@@ -142,9 +159,18 @@ const RenderThreadContent = observer((props) => {
 
       {
         isApproved === 1
-        && <div className={topic.body}>
+        && <div className={topic.body} onClick={onContentClick}>
           {/* 文字 */}
           {text && <PostContent content={text || ''} />}
+
+          {/* 付费附件 */}
+          {
+            isAttachmentPay
+            && <div style={{ textAlign: 'center' }} onClick={onContentClick}>
+              <Button className={topic.payButton} type='primary' size='large'>支付{attachmentPrice}元查看附件</Button>
+            </div>
+          }
+
           {/* 视频 */}
           {parseContent.VIDEO && (
             <VideoPlay
@@ -192,9 +218,16 @@ const RenderThreadContent = observer((props) => {
           )}
 
           {/* <div style={{ textAlign: 'center' }}>
-          <Button className={topic.rewardButton} type='primary' size='large'>打赏</Button>
-        </div> */}
-          {/* 附件 */}
+            <Button className={topic.rewardButton} type='primary' size='large'>打赏</Button>
+          </div> */}
+
+          {/* 帖子付费 */}
+          {
+            isThreadPay
+            && <div style={{ textAlign: 'center' }} onClick={onContentClick}>
+              <Button className={topic.payButton} type='primary' size='large'>支付{threadPrice}元查看剩余内容</Button>
+            </div>
+          }
         </div>
       }
       <div className={topic.footer}>
@@ -231,7 +264,7 @@ const RenderThreadContent = observer((props) => {
 
     </div>
   );
-});
+}));
 
 // 评论列表
 @inject('thread')
@@ -555,6 +588,11 @@ class ThreadPCPage extends React.Component {
     }
   }
 
+  async onContentClick() {
+    const thread = this.props.thread.threadData;
+    // const res = await PayThread(thread);
+  }
+
   // 加载评论列表
   async loadCommentList() {
     const { isCommentReady } = this.props.thread;
@@ -874,6 +912,7 @@ class ThreadPCPage extends React.Component {
                   onCollectionClick={() => this.onCollectionClick()}
                   onShareClick={() => this.onShareClick()}
                   onReportClick={() => this.onReportClick()}
+                  onContentClick={() => this.onContentClick()}
                 ></RenderThreadContent>
               ) : (
                 <LoadingTips type="init"></LoadingTips>
