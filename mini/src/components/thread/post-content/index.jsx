@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Button, Icon, RichText } from '@discuzq/design';
+import { getElementRect, randomStr } from '../utils'
 
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
@@ -27,13 +28,17 @@ import { View, Text, Image } from '@tarojs/components';
   payAmount = 0,
   onPay,
   onRedirectToDetail,
-  loading,
+  loading = false,
   ...props
 }) => {
   // 内容是否超出屏幕高度
   const [contentTooLong, setContentTooLong] = useState(true);
   const [showMore, setShowMore] = useState(!useShowMore);
   const contentWrapperRef = useRef(null);
+
+  const wrapperId = useRef(`wrapper${randomStr()}`);
+  const contentId = useRef(`content${randomStr()}`);
+
 
   const texts = {
     showMore: '查看更多',
@@ -59,28 +64,33 @@ import { View, Text, Image } from '@tarojs/components';
     }
   }, [contentTooLong]);
 
-  // useEffect(() => {
-  //   const el = contentWrapperRef.current;
-  //   if (el && !loading) {
-  //     if (el.scrollHeight <= el.clientHeight) {
-  //       // 内容小于6行 隐藏查看更多
-  //       setShowMore(true);
-  //     }
-  //     if (window && el.scrollHeight <= window.screen.height) {
-  //       setContentTooLong(false);
-  //     }
-  //   }
-  // }, [contentWrapperRef.current]);
+  useEffect(() => {
+    const el = wrapperId.current;
+    
+    getElementRect(el).then(result => {
+      // 小于6行
+      if (result?.height < 180) {
+        setShowMore(true);
+      }
+      try {
+        const res = Taro.getSystemInfoSync()
+        // 小于1屏
+        if (result?.height <= res.windowHeight) {
+          setContentTooLong(false);
+        }
+      } catch (e) {}
+    })
+  }, [contentWrapperRef.current]);
 
   return (
     <View className={styles.container} {...props}>
       <View
-        ref={contentWrapperRef}
+        id={wrapperId.current}
         className={`${styles.contentWrapper} ${showHideCover ? styles.hideCover : ''}`}
         onClick={!showMore ? onShowMore : onRedirectToDetail}
       >
-        <View className={styles.content}>
-          <RichText html={filterContent} />
+        <View className={styles.content} dangerouslySetInnerHTML={{__html: filterContent}}>
+          {/* <RichText html={filterContent} /> */}
         </View>
       </View>
       {!loading && useShowMore && !showMore && (
