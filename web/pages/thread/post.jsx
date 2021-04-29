@@ -8,10 +8,9 @@ import HOCWithLogin from '@common/middleware/HOCWithLogin';
 import * as localData from '@layout/thread/post/common';
 import { Toast } from '@discuzq/design';
 import { createAttachment } from '@common/server';
-import { THREAD_TYPE, ATTACHMENT_TYPE } from '@common/constants/thread-post';
+import { THREAD_TYPE, ATTACHMENT_TYPE, MAX_COUNT } from '@common/constants/thread-post';
 import Router from '@discuzq/sdk/dist/router';
 
-const maxCount = 5000;
 @inject('site')
 @inject('threadPost')
 @inject('index')
@@ -211,8 +210,8 @@ class PostPage extends React.Component {
       Toast.info({ content: '请填写您要发布的内容' });
       return;
     }
-    if (!isDraft && this.state.count > maxCount) {
-      Toast.info({ content: `输入的内容不能超过${maxCount}字` });
+    if (!isDraft && this.state.count > MAX_COUNT) {
+      Toast.info({ content: `输入的内容不能超过${MAX_COUNT}字` });
       return;
     }
     Toast.loading({ content: isDraft ? '保存草稿中...' : '创建中...' });
@@ -266,6 +265,7 @@ class PostPage extends React.Component {
           handleSubmit={this.handleSubmit}
           saveDataLocal={this.saveDataLocal}
           handleAtListChange={this.handleAtListChange}
+          handleVditorChange={this.handleVditorChange}
           {...this.state}
         />
       );
