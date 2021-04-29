@@ -455,7 +455,7 @@ class ThreadCreate extends React.Component {
           <DefaultToolbar
             value={currentDefaultOperation}
             onClick={item => this.setState({ currentDefaultOperation: item.id, emoji: {} })}
-            onSubmit={this.submit}>
+            onSubmit={this.props.handleSubmit}>
             {/* 表情 */}
             <Emoji
               show={currentDefaultOperation === defaultOperation.emoji}
