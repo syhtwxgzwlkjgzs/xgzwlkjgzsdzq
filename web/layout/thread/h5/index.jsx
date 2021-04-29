@@ -789,7 +789,7 @@ class ThreadH5Page extends React.Component {
       pid: this.props.thread?.threadData?.postId,
       isLiked: !this.props.thread?.threadData?.isLike,
     };
-    const { success, msg } = await this.props.thread.updateLiked(params, this.props.index);
+    const { success, msg } = await this.props.thread.updateLiked(params, this.props.index, this.props.user);
 
     if (!success) {
       Toast.error({
