@@ -7,12 +7,10 @@ import styles from './index.module.scss';
 class PCCloseSite extends React.Component {
   render() {
     const { site } = this.props;
-    const { closeSiteConfig } = site;
 
     return (
       <div className={styles.page}>
-        <h1 className={styles.main}>关闭站点</h1>
-        {closeSiteConfig && <p className={styles.sub}>{closeSiteConfig.detail}</p>}
+        <h1 className={styles.main}>加入站点</h1>
       </div>
     );
   }

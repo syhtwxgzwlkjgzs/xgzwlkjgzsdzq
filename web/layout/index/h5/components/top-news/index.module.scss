@@ -25,6 +25,10 @@
       white-space: nowrap;
     }
   }
+  .itemBorder {
+    box-sizing: border-box;
+    border-bottom: rem(1) solid var(--border-line-color);
+  }
   .item:last-child {
     border-bottom: none !important;
   }

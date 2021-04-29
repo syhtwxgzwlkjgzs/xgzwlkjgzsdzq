@@ -4,19 +4,17 @@ import styles from './index.module.scss';
 
 @inject('site')
 @observer
-class PCCloseSite extends React.Component {
+class H5JoinSite extends React.Component {
   render() {
     const { site } = this.props;
-    const { closeSiteConfig } = site;
-
+    console.log(site)
     return (
       <div className={styles.page}>
-        <h1 className={styles.main}>关闭站点</h1>
-        {closeSiteConfig && <p className={styles.sub}>{closeSiteConfig.detail}</p>}
+        <h1 className={styles.main}>加入站点</h1>
       </div>
     );
   }
 }
 
 
-export default PCCloseSite;
+export default H5JoinSite;

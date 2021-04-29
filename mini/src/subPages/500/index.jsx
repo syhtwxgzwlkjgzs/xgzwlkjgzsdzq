@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
+import Router from '@discuzq/sdk/dist/router'
 import { View,  } from '@tarojs/components';
+import { Button} from '@discuzq/design';
 import Page from '@components/page';
-import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 
-@inject('site')
-@observer
-class Index extends Component {
+class SiteError extends Component {
   componentWillMount() { }
 
   componentDidMount() { }
@@ -18,17 +17,14 @@ class Index extends Component {
   componentDidHide() { }
 
   render() {
-    const { site } = this.props;
-    const { closeSiteConfig } = site;
     return (
       <Page>
         <View className={styles.page}>
-          <View className={styles.main}>站点已关闭</View>
-          {closeSiteConfig && <p className={styles.sub}>{closeSiteConfig.detail}</p>}
+          <View className={styles.text}>你访问的页面出错了</View>
         </View>
       </Page>
     );
   }
 }
 
-export default Index;
+export default SiteError;

@@ -18,6 +18,7 @@ import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
 @inject('threadPost')
 @inject('index')
 @inject('thread')
+@inject('user')
 @observer
 class PostPage extends React.Component {
   constructor(props) {
@@ -45,6 +46,7 @@ class PostPage extends React.Component {
   }
 
   componentDidMount() {
+    this.fetchPermissions();
     // 如果本地缓存有数据，这个目前主要用于定位跳出的情况
     const postData = this.getPostDataFromLocal();
     const { category, emoji } = localData.getCategoryEmoji() || {};
@@ -72,6 +74,11 @@ class PostPage extends React.Component {
     const postData = localData.getThreadPostDataLocal();
     localData.removeThreadPostDataLocal();
     return postData;
+  }
+
+  fetchPermissions() {
+    const { user } = this.props;
+    if (!user.permissions) user.updateUserInfo();
   }
 
   async fetchCategories() {
@@ -122,8 +129,9 @@ class PostPage extends React.Component {
       const audioSrc = window.URL.createObjectURL(blob);
       this.setState({
         audioSrc,
+        currentAttachOperation: false,
       });
-      this.setPostData({ audio: data, audioSrc });
+      this.setPostData({ audio: { ...data, mediaUrl: audioSrc }, audioSrc });
     }
   }
 
@@ -182,7 +190,7 @@ class PostPage extends React.Component {
   }
 
   // 视频准备上传
-  onReady = (player) => {
+  onVideoReady = (player) => {
     const { postData } = this.props.threadPost;
     // 兼容本地视频的显示
     const opt = {
@@ -202,7 +210,6 @@ class PostPage extends React.Component {
 
   // 关注列表
   handleAtListChange = (atList) => {
-    console.log(atList);
     this.setState({ atList });
   }
 
@@ -306,6 +313,7 @@ class PostPage extends React.Component {
             saveDataLocal={this.saveDataLocal}
             handleAtListChange={this.handleAtListChange}
             handleVditorChange={this.handleVditorChange}
+            onVideoReady={this.onVideoReady}
             {...this.state}
           />
         </PayBoxProvider>
@@ -314,7 +322,20 @@ class PostPage extends React.Component {
     return (
       <PayBoxProvider>
         <IndexH5Page
+          setPostData={data => this.setPostData(data)}
+          handleAttachClick={this.handleAttachClick}
+          handleVideoUploadComplete={this.handleVideoUploadComplete}
+          handleUploadChange={this.handleUploadChange}
+          handleUploadComplete={this.handleUploadComplete}
+          handleAudioUpload={this.handleAudioUpload}
+          handleEmojiClick={this.handleEmojiClick}
+          handleSetState={data => this.setState({ ...data })}
           handleSubmit={this.handleSubmit}
+          saveDataLocal={this.saveDataLocal}
+          handleAtListChange={this.handleAtListChange}
+          handleVditorChange={this.handleVditorChange}
+          onVideoReady={this.onVideoReady}
+          {...this.state}
         />
       </PayBoxProvider>
     );
