@@ -1,9 +1,10 @@
 import React from 'react';
 import { Menu, Card } from '@discuzq/design';
 import { noop }  from '@components/thread/utils'
+import styles from './index.module.scss';
 
 const Index = ({ categories, totalThreads = 0, onNavigationClick = noop }) => {
-
+  console.log(categories, 'categories');
   const onClick =(subIndex, index) => {
     if (`${subIndex}`.indexOf('-') !== -1) {
       const categoryIds = subIndex.split('-')

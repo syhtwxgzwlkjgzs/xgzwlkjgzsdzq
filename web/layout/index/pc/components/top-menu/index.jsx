@@ -97,6 +97,7 @@ const Index = ({ onSubmit = noop }) => {
             ) : (
                 <Menu.Item className={item.isActive && styles.activeItem} onClick={onClick} key={index} index={index} style={{ padding: '0 16px' }}>
                   {item.label}
+                  { item.isActive && <div className={styles.line}></div> }
                 </Menu.Item>
             )
           ))
