@@ -2,7 +2,6 @@ import React from 'react';
 import { Upload, Button, Icon } from '@discuzq/design';
 import { createAttachment } from '@common/server';
 import styles from './index.module.scss';
-import './index.scss';
 import classNames from 'classnames';
 
 export default function DzqUpload(props) {
@@ -48,7 +47,7 @@ export default function DzqUpload(props) {
   };
 
   // TODO: 因为上传组件不支持传class和style，所以在外面增加了一层dom
-  const className = isCustomUploadIcon ? 'dzq-custom-upload' : '';
+  const className = isCustomUploadIcon ? `${styles['dzq-custom-upload']} ${styles['dzq-upload-reset']}` : styles['dzq-upload-reset'];
 
   return (
     <div className={className}>

@@ -36,9 +36,17 @@ class SearchResultUserPcPage extends React.Component {
     }
 
     if (type === '1') {
-      this.props.search.postFollow(id)
+      this.props.search.postFollow(id).then(result => {
+        if (result) {
+          this.props.search.updateActiveUserInfo(id, { isFollow: true })
+        }
+      })
     } else {
-      this.props.search.cancelFollow({ id, type: 1 })
+      this.props.search.cancelFollow({ id, type: 1 }).then(result => {
+        if (result) {
+          this.props.search.updateActiveUserInfo(id, { isFollow: false })
+        }
+      })
     }
   }
 

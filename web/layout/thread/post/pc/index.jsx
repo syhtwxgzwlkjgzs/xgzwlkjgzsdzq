@@ -25,12 +25,14 @@ import Copyright from '@components/copyright';
 @inject('threadPost')
 @inject('index')
 @inject('thread')
+@inject('user')
 @observer
 class ThreadPCPage extends React.Component {
   render() {
     const {
       threadPost,
       index,
+      user,
       emoji,
       topic,
       atList,
@@ -80,7 +82,7 @@ class ThreadPCPage extends React.Component {
 
               {/* 视频组件 */}
               {(postData.video && postData.video.thumbUrl) && (
-                <Video className="dzq-post-video" src={postData.video.thumbUrl} onReady={this.props.onReady} />
+                <Video className="dzq-post-video" src={postData.video.thumbUrl} onReady={this.props.onVideoReady} />
               )}
 
               {/* 附件上传组件 */}
@@ -107,6 +109,13 @@ class ThreadPCPage extends React.Component {
                 {!!(postData.price || postData.attachmentPrice) && (
                   <Tag>付费总额{postData.price + postData.attachmentPrice}元</Tag>
                 )}
+                {/* 悬赏问答内容标识 */}
+                {(postData.rewardQa.value && postData.rewardQa.times) && (
+                  <Tag>
+                    {`悬赏金额${postData.rewardQa.value}元\\结束时间${postData.rewardQa.times}`}
+                  </Tag>
+                )}
+                {/* 红包 */}
                 {postData.redpacket.price && (<Tag>
                   {postData.redpacket.rule === 1 ? '随机红包' : '定额红包'}
                   \ 总金额{postData.redpacket.price}元\{postData.redpacket.number}个
@@ -120,6 +129,7 @@ class ThreadPCPage extends React.Component {
               <div className={styles['toolbar-left']}>
                 <DefaultToolbar
                   pc
+                  permissions={user.permissions}
                   value={currentDefaultOperation}
                   onClick={
                     (item, child) => {
@@ -143,14 +153,17 @@ class ThreadPCPage extends React.Component {
                   pc
                   onAttachClick={this.props.handleAttachClick}
                   onUploadComplete={this.props.handleVideoUploadComplete}
+                  permissions={user.permissions}
                 />
               </div>
               <div className={styles['toolbar-right']}>
-                <Position
-                  position={postData.position}
-                  onClick={() => this.props.saveDataLocal()}
-                  onChange={position => this.props.setPostData({ position })}
-                />
+                {user?.permissions?.insertPosition?.enable && (
+                  <Position
+                    position={postData.position}
+                    onClick={() => this.props.saveDataLocal()}
+                    onChange={position => this.props.setPostData({ position })}
+                  />
+                )}
               </div>
             </div>
             <ClassifyPopup

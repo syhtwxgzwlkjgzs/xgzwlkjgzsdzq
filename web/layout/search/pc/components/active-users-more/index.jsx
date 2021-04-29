@@ -40,7 +40,7 @@ const User = ({ data, onClick, onFollow }) => {
       return { text: '互关', icon: 'WithdrawOutlined', className: styles.withdraw }
     }
     return { text: '关注', icon: 'PlusOutlined', className: styles.follow }
-  }, [data])
+  }, [data.isFollow])
 
   return (
     <div className={styles.item} onClick={click}>

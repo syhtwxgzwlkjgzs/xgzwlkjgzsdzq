@@ -78,7 +78,9 @@ export default class Page extends React.Component {
     if(!isRender) return null;
     return (
       <View className={`${styles['dzq-page']} dzq-theme-${site.theme}`}>
-        {this.createContent()}
+        <PayBoxProvider>
+          {this.createContent()}
+        </PayBoxProvider>
       </View>
     );
   }

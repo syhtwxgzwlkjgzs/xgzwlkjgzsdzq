@@ -3,6 +3,7 @@ import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import { View, Text, Image } from '@tarojs/components';
+import logoImg from '../../../../web/public/dzq-img/admin-logo-x2.png'
 
 /**
  * 帖子头部
@@ -16,8 +17,6 @@ class HomeHeader extends React.Component {
   constructor(props) {
     super(props);
   }
-
-  logoImg = '/dzq-img/admin-logo-x2.png';
 
   getBgHeaderStyle( bgColor) {
     const { site } = this.props;
@@ -38,7 +37,7 @@ class HomeHeader extends React.Component {
     if (siteData && siteData.setSite && siteData.setSite.siteLogo) {
       return siteData.siteLogo;
     }
-    return this.logoImg;
+    return logoImg;
   }
 
   getSiteInfo() {

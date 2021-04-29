@@ -4,6 +4,7 @@ import styles from './index.module.scss';
 import { Checkbox, Divider } from '@discuzq/design';
 import { ORDER_TRADE_TYPE } from '../../../../common/constants/payBoxStoreConstants';
 
+@inject('site')
 @inject('payBox')
 @observer
 export default class CommonAccountContent extends Component {
@@ -27,6 +28,9 @@ export default class CommonAccountContent extends Component {
       case ORDER_TRADE_TYPE.PUT_PROBLEM: // 付费提问
         value = '付费提问'
         break
+      case ORDER_TRADE_TYPE.COMBIE_PAYMENT:
+        value = '红包+悬赏'
+        break
       default:
         break;
     }
@@ -44,21 +48,28 @@ export default class CommonAccountContent extends Component {
 
   render() {
     const { currentPaymentData = {} } = this.props;
-    const { type, amount, isAnonymous } = currentPaymentData;
+    const { type, amount, isAnonymous, title } = currentPaymentData;
+    const { platform } = this.props?.site;
+
     return (
       <>
         {/* 标题 */}
-        <div className={styles.amountTitle}>确认金额</div>
+        <div className={styles.amountTitle} style={{ textAlign: platform === 'pc' ? 'center' : 'left' }}>确认金额</div>
         {/* 主要内容区域 */}
         <div className={styles.amountContent}>
           <div className={styles.acExplain}>
             <span className={styles.acExplainLabel}>交易类型</span>{' '}
             <span className={styles.acExplainValue}>{this.renderDiffTradeType(type)}</span>
+            {/* {
+              type === ORDER_TRADE_TYPE.COMBIE_PAYMENT && (
+                <span></span>
+              )
+            } */}
           </div>
           <Divider className={styles.acExplainDivider} />
           <div className={styles.acExplain}>
             <span className={styles.acExplainLabel}>商品名称</span>{' '}
-            <span className={styles.acExplainValue}>{'放置标题名称'}</span>
+            <span className={styles.acExplainValue}>{title}</span>
           </div>
           <Divider className={styles.acExplainDivider} />
           <div className={styles.acExplain}>
