@@ -147,6 +147,7 @@ class PayPassword extends React.Component {
   // 渲染弹窗形式支付
   renderDialogPayment = () => {
     const { isShow } = this.state;
+    const { options = {} } = this.props?.payBox
     return (
       <View>
         <Dialog className={styles.paypwdDialogWrapper} visible={isShow} position="center" maskClosable={true}>
@@ -160,11 +161,11 @@ class PayPassword extends React.Component {
               ) : (
                 <>
                   <View className={styles.paypwdTitle}>立即支付</View>
-                  <View className={styles.paypwdAmount}>￥1</View>
+                  <View className={styles.paypwdAmount}>￥{options.amount}</View>
                   <View className={styles.paypwdMesg}>
                     <Text>支付方式</Text>
                     <Text>
-                      <Icon className={styles.walletIcon} name="WalletOutlined" />
+                      <Icon className={styles.walletIcon} name="PurseOutlined" />
                       <Text style={{ verticalAlign: 'middle' }}>钱包支付</Text>
                     </Text>
                   </View>
@@ -179,7 +180,7 @@ class PayPassword extends React.Component {
 
             {/* 关闭按钮 */}
             <View className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
-              <Icon name="PaperClipOutlined" size={16} />
+              <Icon name="CloseOutlined" size={16} />
             </View>
           </View>
         </Dialog>

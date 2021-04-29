@@ -146,6 +146,7 @@ class Index extends React.Component {
   // 渲染弹窗形式支付
   renderDialogPayment = () => {
     const { list = [], isShow } = this.state;
+    const { options = {} } = this.props?.payBox
     return (
       <div>
         <Dialog className={styles.paypwdDialogWrapper} visible={isShow} position="center" maskClosable={true}>
@@ -159,7 +160,7 @@ class Index extends React.Component {
               ) : (
                 <>
                   <div className={styles.paypwdTitle}>立即支付</div>
-                  <div className={styles.paypwdAmount}>￥1</div>
+                  <div className={styles.paypwdAmount}>￥{options.amount}</div>
                   <div className={styles.paypwdMesg}>
                     <span>支付方式</span>
                     <span>

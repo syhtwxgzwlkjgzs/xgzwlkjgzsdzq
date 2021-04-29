@@ -22,14 +22,14 @@ export default class PayBox extends React.Component {
     const payConfig = [
       {
         name: '钱包支付',
-        icon: 'PayOutlined',
+        icon: 'PurseOutlined',
         color: '#1878f3',
         paymentType: 'wallet',
       },
     ];
     payConfig.unshift({
       name: '微信支付',
-      icon: 'PayOutlined',
+      icon: 'WechatPaymentOutlined',
       color: '#09bb07',
       paymentType: 'weixin',
     });

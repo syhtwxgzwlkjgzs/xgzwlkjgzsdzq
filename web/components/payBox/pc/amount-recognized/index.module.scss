@@ -31,12 +31,12 @@
     }
   }
   .asBtn {
-    border-radius: rem(5);
+    border-radius: rem(5) !important;
   }
   .amountCloseBtn {
     position: absolute;
     right: rem(30);
-    top: rem(30);
+    top: rem(45);
     cursor: pointer;
     color: var(--color-disabled);
     text-shadow: 0 -1 0 0;

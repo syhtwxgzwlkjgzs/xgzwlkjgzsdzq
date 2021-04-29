@@ -115,11 +115,11 @@ export default class index extends Component {
         {/* 微信支付内容 */}
         <div className={styles.wPaymentDec}>
           <div className={styles.wPayment_01}>
-            <Icon className={styles.icon} name={'PayOutlined'} color={'#09bb07'} size={20} />
+            <Icon className={styles.icon} name={'WechatPaymentOutlined'} color={'#09bb07'} size={20} />
           微信支付
         </div>
           <div className={styles.wPayment_02}>
-            <Icon className={styles.icon} name={'PayOutlined'} color={'#09bb07'} size={20} />
+            <Icon className={styles.icon} name={'ScanOutlined'} color={'#09bb07'} size={20} />
             <div>
               <p>打开手机微信扫一扫</p>
               <p>扫描二维码完成支付</p>
@@ -140,7 +140,7 @@ export default class index extends Component {
     return (
       <div className={styles.walletPayment}>
         <div className={styles.walletTitle}>
-          <Icon className={styles.icon} name="PayOutlined" size="20" color={'#1878f3'} />
+          <Icon className={styles.icon} name="PurseOutlined" size="20" color={'#1878f3'} />
           钱包支付
         </div>
         {!canWalletPay ? (

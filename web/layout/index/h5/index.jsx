@@ -29,21 +29,21 @@ class IndexH5Page extends React.Component {
   }
 
   componentDidMount() {
-    // PayBox.createPayBox({
-    //   data: {
-    //     amount: 0.1,
-    //     type: 5,
-    //     threadId: 4,
-    //     payeeId: 16,
-    //     isAnonymous: false,
-    //   },
-    //   success: (orderInfo) => {
-    //     console.log(orderInfo);
-    //   },
-    //   failed: (orderInfo) => {
-    //     console.log(orderInfo);
-    //   },
-    // });
+    PayBox.createPayBox({
+      data: {
+        amount: 0.1,
+        type: 5,
+        threadId: 4,
+        payeeId: 16,
+        isAnonymous: false,
+      },
+      success: (orderInfo) => {
+        console.log(orderInfo);
+      },
+      failed: (orderInfo) => {
+        console.log(orderInfo);
+      },
+    });
   }
 
   // 点击更多弹出筛选
