@@ -135,7 +135,7 @@ export default function DVditor(props) {
     setVditor(editor);
   }
 
-  const className = pc ? 'dvditor' : classNames('dvditor', { 'no-focus': !pc && !isFocus });
+  const className = pc ? 'dvditor pc' : classNames('dvditor', { 'no-focus': !pc && !isFocus });
 
   return (
     <>
