@@ -8,6 +8,7 @@
   align-items: center;
   padding: rem($padding-4n) 0;
   border-bottom: 1px solid var(--border-line-color);
+  box-sizing: border-box;
   .left {
     display: flex;
     flex-direction: row;
@@ -24,6 +25,9 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    .rightIcon {
+      color: var(--color-text-secondary);
+    }
   }
 }
 .title {
@@ -37,7 +41,7 @@
 .more {
   cursor: pointer;
   font-size: rem($font-size-primary);
-  line-height: rem($font-line-height-middle);
+  line-height: rem($font-line-height-primary);
   text-align: left;
   color: var(--color-text-primary);
   margin-right: rem($padding-2n);
@@ -51,5 +55,5 @@
   color: #FFC300;
 }
 .icon3 {
-  color: #E02433;
+  color: var(--color-error);
 }
