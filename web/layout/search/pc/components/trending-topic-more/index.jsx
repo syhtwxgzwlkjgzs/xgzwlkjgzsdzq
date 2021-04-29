@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Icon } from '@discuzq/design';
 import styles from './index.module.scss';
-
+import { handleAttachmentData, noop } from '@components/thread/utils';
 /**
  * 潮流话题
  * @prop {string[]} data 话题数据
@@ -26,23 +26,31 @@ const Topic = ({ data, onClick, index, footer }) => {
   const click = useCallback(() => {
     onClick && onClick(data);
   }, [data, onClick]);
-
+  const {
+    text = '',
+    imageData = []
+  } = handleAttachmentData(data?.threads[0]?.content);
   return (
     <div className={styles.item}>
-      <img className={styles.img} src={data.img}/>
+      <div className={styles.imgBox}>
+        { imageData.length > 0 && imageData[0].url ? (
+            <img className={styles.img} src={data.img}/>
+          ) : `${data.content[0]}`
+        }
+      </div>
       <div className={styles.content}>
-        <div className={styles.title}>{data.title ? `#${data.title}#`: '暂无标题'}</div>
+        <div className={styles.title}>{data.content ? `#${data.content}#`: '暂无标题'}</div>
         <div className={styles.num}>
           <div className={styles.numItem}>
             <Icon name="EyeOutlined" size={15} color="#8490A8" className={styles.numIcon}/>
-            {data.view_count}
+            {data.viewCount}
           </div>
           <div className={styles.numItem}>
             <Icon name="MessageOutlined" size={15} color="#8490A8" className={styles.numIcon}/>
-            {data.thread_count}
+            {data.threadCount}
           </div>
         </div>
-        <div className={styles.text}>{data.content}</div>
+        <div className={styles.text}>{text || '暂无内容'}</div>
       </div>
     </div>
   );
