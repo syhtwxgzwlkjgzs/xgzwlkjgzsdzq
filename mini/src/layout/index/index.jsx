@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Icon, Tabs } from '@discuzq/design';
 import ThreadContent from '@components/thread';
 import HomeHeader from '@components/home-header';
 import NoData from '@components/no-data';
 import styles from './index.module.scss';
-import List from './components/list';
+import List from '@components/list';
 import TopNew from './components/top-news';
 import Tabbar from './components/tabbar';
 import FilterView from './components/filter-view';
@@ -23,14 +23,19 @@ class IndexMiniPage extends React.Component {
       visible: false,
       filter: {},
       currentIndex: '',
+      scroll: true,
     };
+    this.listRef = createRef();
     this.renderItem = this.renderItem.bind(this);
   }
 
-  componentDidMount() {
-    console.log(this.props.user);
-  }
+  onScroll = (e) => {
+    const { scrollTop = 0 } = e?.detail || {}
+    this.setState({
+      scroll: scrollTop < 160,
+    })
 
+  }
   // 点击更多弹出筛选
   searchClick = () => {
     this.setState({
@@ -74,7 +79,7 @@ class IndexMiniPage extends React.Component {
   }
 
   // 上拉加载更多
-  onPullingUp = () => {
+  onRefresh = () => {
     const { dispatch = () => {} } = this.props;
     const { filter } = this.state;
     return dispatch('moreData', filter);
@@ -96,17 +101,18 @@ class IndexMiniPage extends React.Component {
     return tmpCategories;
   }
 
-  renderHeaderContent = () => {
+  renderHeaderContent = (scroll) => {
     const { index } = this.props;
     const { currentIndex } = this.state;
     const { sticks = [] } = index;
-    const newCategories = this.handleCategories() 
-
+    const newCategories = this.handleCategories();
+    
     return (
       <View>
         <HomeHeader/>
-        {newCategories?.length > 0 && <View className={styles.homeContent}>
+        {newCategories?.length > 0 && <View ref={this.listRef} className={scroll ? styles.homeContent : styles.homeContentText}>
           <Tabs
+            className={styles.tabsBox}
             scrollable
             type='primary'
             onActive={this.onClickTab}
@@ -145,7 +151,7 @@ class IndexMiniPage extends React.Component {
   // 没有帖子列表数据时的默认展示
   renderNoData = () => (
     <>
-      {this.renderHeaderContent()}
+      {this.renderHeaderContent(true)}
       <NoData />
     </>
   )
@@ -153,7 +159,7 @@ class IndexMiniPage extends React.Component {
 
   render() {
     const { index } = this.props;
-    const { filter } = this.state;
+    const { filter , scroll} = this.state;
     const { threads = {} } = index;
     const { currentPage, totalPage, pageData } = threads || {};
     const newCategories = this.handleCategories() 
@@ -165,12 +171,18 @@ class IndexMiniPage extends React.Component {
             <List
               className={styles.list}
               onRefresh={this.onRefresh}
-              refreshing={false}
-              data={pageData}
-              renderItem={this.renderItem}
-              onPullingUp={this.onPullingUp}
               noMore={currentPage >= totalPage}
-            />
+              onScroll={this.onScroll}
+            >
+             {
+                pageData.map((item, index) => (
+                  <View key={index}>
+                    { index === 0 && this.renderHeaderContent(scroll)}
+                    <ThreadContent data={item} className={styles.listItem} />
+                  </View>
+                ))
+              }
+            </List>
           )
           : this.renderNoData()
         }

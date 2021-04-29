@@ -1,0 +1,11 @@
+@import '@common/styles/variable/index.scss';
+.topicWrap {
+  background: var(--background-color-text2);
+  height: 100vh;
+  .themeContent {
+    margin-top: 10px;
+    .item {
+      margin-bottom: 10px;
+    }
+  }
+}
