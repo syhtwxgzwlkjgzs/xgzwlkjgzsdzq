@@ -4,25 +4,34 @@ import { Icon, Toast, Button } from '@discuzq/design';
 import Avatar from '@components/avatar';
 import styles from './index.module.scss';
 import { diffDate } from '@common/utils/diff-date';
+import { inject, observer } from 'mobx-react';
 
+@inject('thread')
+@observer
 class AuthorInfo extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isShowBtn: true,
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            isShowBtn: true,
+        };
 
-    this.user = this.props.user || {};
-  }
+        this.user = this.props.user || {};
+    }
 
-  // 点击关注
-  onFollowClick() { }
+    // 点击关注
+    onFollowClick() {
+        if (this.props.thread.threadData.userId) {
+            this.props.thread?.authorInfo?.follow === 2 || this.props.thread?.authorInfo?.follow === 1
+                ? this.props.thread.cancelFollow({ id: this.props.thread.threadData.userId, type: 1 })
+                : this.props.thread.postFollow(this.props.thread.threadData.userId);
+        }
+    }
 
-  // 点击私信
-  onprivateLetter() { }
+    // 点击私信
+    onprivateLetter() { }
 
-  render() {
-    return (
+    render() {
+        return (
             <div className={styles.container}>
                 <div className={styles.header}>
                     <span>楼主</span>
@@ -58,16 +67,16 @@ class AuthorInfo extends React.Component {
                 </div>
                 {
                     this.state.isShowBtn
-                      ? <div className={styles.btn}>
-                            <Button type={this.user.isFollow ? 'defult' : 'primary'} className={styles.follow} onClick={() => this.onFollowClick()}>
+                        ? <div className={styles.btn}>
+                            <Button type={this.user.follow ? 'primary' : 'primary'} className={styles.follow} onClick={() => this.onFollowClick()}>
                                 <div className={styles.btnItem}>
                                     <Icon
-                                        name={this.user.isFollow ? 'CheckOutlined' : 'PlusOutlined'}
+                                        name={this.user.follow ? 'CheckOutlined' : 'PlusOutlined'}
                                         size='14'
                                         className={styles.btnIcon}>
                                     </Icon>
                                     <span>
-                                        {this.user.isFollow ? '已关注' : '关注'}
+                                        {this.user.follow ? '已关注' : '关注'}
                                     </span>
                                 </div>
                             </Button>
@@ -85,7 +94,7 @@ class AuthorInfo extends React.Component {
                         </div> : <div className={styles.btn}></div>
                 }
             </div>);
-  }
+    }
 }
 
 export default AuthorInfo;
