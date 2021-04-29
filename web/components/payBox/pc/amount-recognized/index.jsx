@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from './index.module.scss';
-import { Dialog, Button, Checkbox } from '@discuzq/design';
+import { Dialog, Button, Checkbox, Icon } from '@discuzq/design';
 import CommonAccountContent from '../../components/common-account-content';
 import { inject } from 'mobx-react';
 
@@ -43,7 +43,7 @@ export default class index extends Component {
               onClick={this.onClose}
               className={styles.amountCloseBtn}
             >
-              X
+              <Icon name="CloseOutlined" size={14} />
             </div>
           </div>
         </>

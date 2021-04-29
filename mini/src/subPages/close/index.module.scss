@@ -1,12 +1,20 @@
 @import '@common/styles/variable/index.scss';
+@import '@common/styles/fn/rem.scss';
 
 .page{
-  background: var(--color-white);
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  .main{
+      color: var(--color-text-primary);
+      font-size: 36px;
+  }
+  .sub{
+      color: var(--color-text-primary);
+      font-size: $font-size-large + px;
+      margin-top: $margin-4n + px;
+  }
 }
-.text {
-  margin-top: 200px;
-  color: var(--color-text-primary);
-  text-align: center;
-  font-size: $font-size-large + px;
-}
-

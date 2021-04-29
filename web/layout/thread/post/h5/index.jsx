@@ -10,9 +10,8 @@ import Emoji from '@components/editor/emoji';
 import ImageUpload from '@components/thread-post/image-upload';
 import { defaultOperation } from '@common/constants/const';
 import FileUpload from '@components/thread-post/file-upload';
-import { THREAD_TYPE, ATTACHMENT_TYPE } from '@common/constants/thread-post';
-import { createAttachment } from '@common/server';
-import { Video, Audio, AudioRecord, Toast } from '@discuzq/design';
+import { THREAD_TYPE } from '@common/constants/thread-post';
+import { Video, Audio, AudioRecord } from '@discuzq/design';
 import ClassifyPopup from '@components/thread-post/classify-popup';
 import ProductSelect from '@components/thread-post/product-select';
 import Product from '@components/thread-post/product';
@@ -30,7 +29,6 @@ import { getVisualViewpost } from '@common/utils/get-client-height';
 import throttle from '@common/utils/thottle';
 import Header from '@components/header';
 import Router from '@discuzq/sdk/dist/router';
-import * as localData from '../common';
 
 const maxCount = 5000;
 
@@ -41,47 +39,7 @@ const maxCount = 5000;
 @inject('user')
 @observer
 class ThreadCreate extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      emoji: {},
-      // 分类选择显示状态
-      categoryChooseShow: false,
-      atList: [],
-      topic: '',
-      isVditorFocus: false,
-      // 当前默认工具栏的操作 @common/constants/const defaultOperation
-      currentDefaultOperation: '',
-      // 当前附件工具栏的操作显示交互状态
-      currentAttachOperation: false,
-      // 解析完后显示商品信息
-      productShow: false,
-      // 语音贴上传成功的语音地址
-      mediaUrl: '',
-      paySelectText: ['帖子付费', '附件付费'],
-      curPaySelect: '',
-      count: 0,
-      draftShow: false,
-    };
-    this.captcha = ''; // 腾讯云验证码实例
-    this.ticket = ''; // 腾讯云验证码返回票据
-    this.randstr = ''; // 腾讯云验证码返回随机字符串
-  }
   componentDidMount() {
-    // 如果本地缓存有数据，这个目前主要用于定位跳出的情况
-    const postData = this.getPostDataFromLocal();
-    const { category, emoji } = localData.getCategoryEmoji() || {};
-    if (postData) {
-      this.props.index.setCategories(category);
-      this.props.threadPost.setEmoji(emoji);
-      localData.removeCategoryEmoji();
-      if (postData.categoryId) this.setCategory(postData.categoryId);
-      this.setPostData({ ...postData, position: this.props.threadPost.postData.position });
-    } else {
-      const { fetchEmoji, emojis } = this.props.threadPost;
-      if (emojis.length === 0) fetchEmoji();
-      this.fetchCategories();
-    }
     window.addEventListener('scroll', this.handler);
   }
 
@@ -90,215 +48,15 @@ class ThreadCreate extends React.Component {
     this.captcha = '';
   }
 
-  getPostDataFromLocal() {
-    const postData = localData.getThreadPostDataLocal();
-    localData.removeThreadPostDataLocal();
-    return postData;
-  }
-
-  setPostData(data) {
-    const { threadPost } = this.props;
-    threadPost.setPostData(data);
-  }
-
-  async fetchCategories() {
-    const { index, thread, threadPost } = this.props;
-    let { categories } = index;
-    if (!categories || (categories && categories.length === 0)) {
-      categories = await index.getReadCategories();
-    }
-    // 如果是编辑操作，需要获取链接中的帖子id，通过帖子id获取帖子详情信息
-    const { query } = this.props.router;
-    if (query && query.id) {
-      const id = Number(query.id);
-      let ret = {};
-      if (id === (thread.threadData && thread.threadData.id) && thread.threadData) {
-        ret.data = thread.threadData;
-        ret.code = 0;
-      } else ret = await thread.fetchThreadDetail(id);
-      if (ret.code === 0) {
-        const { categoryId } = ret.data;
-        this.setCategory(categoryId);
-        threadPost.formatThreadDetailToPostData(ret.data);
-      } else {
-        Toast.error({ content: ret.msg });
-      }
-    }
-  }
-
-  setCategory(categoryId) {
-    const categorySelected = this.props.index.getCategorySelectById(categoryId);
-    this.props.threadPost.setCategorySelected(categorySelected);
-  }
-
-  // 处理录音完毕后的音频上传
-  handleAudioUpload = async (blob) => {
-    Toast.loading({ content: '上传中' });
-    const formData = new FormData();
-    formData.append('file', blob);
-    formData.append('type', ATTACHMENT_TYPE.audio);
-    const res = await createAttachment(formData);
-    const { code, data } = res;
-    if (code === 0) {
-      const mediaUrl = window.URL.createObjectURL(blob);
-      data.mediaUrl = mediaUrl;
-      this.setState({
-        mediaUrl,
-      });
-      this.setPostData({ audio: data });
-    }
-  }
-
-  handleEmojiClick = (emoji) => {
-    this.setState({ emojiShow: false, emoji, currentDefaultOperation: '' });
-  };
-
-  handleCategoryClick = () => {
-    this.setState({ categoryChooseShow: true });
-  };
-
-  handleAttachClick = (item) => {
-    this.setState({ currentAttachOperation: item.type });
-  };
-
-  handleUploadChange = (fileList, type) => {
-    const { postData } = this.props.threadPost;
-    const { images, files } = postData;
-    const changeData = {};
-    (fileList || []).map((item) => {
-      let tmp = images[item.uid];
-      if (type === THREAD_TYPE.file) tmp = files[item.uid];
-      if (tmp) changeData[item.uid] = tmp;
-      return item;
-    });
-    if (type === THREAD_TYPE.image) this.setPostData({ images: changeData });
-    if (type === THREAD_TYPE.file) this.setPostData({ files: changeData });
-  };
-
-  handleUploadComplete = (ret, file, type) => {
-    const { uid } = file;
-    const { data } = ret;
-    const { postData } = this.props.threadPost;
-    const { images, files } = postData;
-    if (type === THREAD_TYPE.image) images[uid] = data;
-    if (type === THREAD_TYPE.file) files[uid] = data;
-    this.setPostData({ images, files });
-  }
-
-  handleVideoUploadComplete = (ret, file) => {
-    // 上传视频
-    const { fileId, video } = ret;
-    this.setPostData({
-      video: {
-        id: fileId,
-        thumbUrl: video.url,
-        type: file.type,
-      },
-    });
-  }
-
-  handleVditorChange = (vditor) => {
-    if (vditor) {
-      const htmlString = vditor.getHTML();
-      this.setPostData({ contentText: htmlString });
-    }
-  };
-
-  handleAtListChange = (atList) => {
-    this.setState({ atList });
-  }
-
-  toTCaptcha = async (qcloudCaptchaAppId) => {
-    // 验证码实例为空，则创建实例
-    if (!this.captcha) {
-      const TencentCaptcha = (await import('@common/utils/tcaptcha')).default;
-      this.captcha = new TencentCaptcha(qcloudCaptchaAppId, res => {
-        if (res.ret === 0) {
-          // 验证通过后发布
-          this.ticket = res.ticket;
-          this.randstr = res.randstr;
-          this.submit();
-        }
-        if (res.ret === 2) {
-          console.log('验证关闭');
-        }
-      });
-    }
-    // 显示验证码
-    this.captcha.show();
-  }
-
-  submit = async (isDraft) => {
-    const { postData, setPostData } = this.props.threadPost;
-    const { webConfig } = this.props.site;
-    // 1 校验主题信息
-    if (!isDraft && !postData.contentText) {
-      Toast.info({ content: '请填写您要发布的内容' });
-      return;
-    }
-    if (!isDraft && this.state.count > maxCount) {
-      Toast.info({ content: `输入的内容不能超过${maxCount}字` });
-      return;
-    }
-    // 2 验证码
-    if (webConfig) {
-      const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
-      const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
-      const createThreadWithCaptcha = webConfig?.other?.createThreadWithCaptcha;
-      // 开启了腾讯云验证码验证时，进行验证，通过后再进行实际的发布请求
-      if (qcloudCaptcha && createThreadWithCaptcha) {
-        // 验证码票据，验证码字符串不全时，弹出滑块验证码
-        if (!this.ticket || !this.randstr) {
-          this.toTCaptcha(qcloudCaptchaAppId); // 传递appId
-          return false; // 验证通过后会重新调用发布函数
-        }
-      }
-    }
-    // 将验证信息更新到发布store
-    if (this.ticket && this.randstr) {
-      setPostData({
-        ticket: this.ticket,
-        randstr: this.randstr,
-      });
-      this.ticket = '';
-      this.randstr = '';
-    }
-    Toast.loading({ content: isDraft ? '保存草稿中...' : '创建中...' });
-    const { threadPost, thread } = this.props;
-    const threadId = this.props.router.query.id || '';
-    let ret = {};
-    if (threadId) ret = await threadPost.updateThread(threadId);
-    else ret = await threadPost.createThread();
-    const { code, data, msg } = ret;
-    if (code === 0) {
-      thread.setThreadData(data);
-      if (!isDraft) this.props.router.replace(`/thread/${data.threadId}`);
-      return true;
-    }
-    Toast.error({ content: msg });
-
-    return false;
-  };
-
   handleDraft = async (val) => {
-    this.setState({ draftShow: false });
+    this.props.handleSetState({ draftShow: false });
     let flag = true;
     if (val === '保存草稿') {
-      this.setPostData({ draft: 1 });
-      flag = await this.submit(true);
+      this.props.setPostData({ draft: 1 });
+      flag = await this.props.handleSubmit(true);
     }
     if (val && flag) Router.back();
   }
-
-  onReady = (player) => {
-    const { postData } = this.props.threadPost;
-    // 兼容本地视频的显示
-    const opt = {
-      src: postData.video.thumbUrl,
-      type: postData.video.type,
-    };
-    player && player.src(opt);
-  };
 
   handler = () => {
     throttle(this.setBottomBarStyle(window.scrollY), 50);
@@ -339,17 +97,17 @@ class ThreadCreate extends React.Component {
     const { threadExtendPermissions, permissions } = user;
 
     const { postData } = threadPost;
-    const { emoji, topic, atList, currentDefaultOperation, currentAttachOperation, categoryChooseShow } = this.state;
+    const { emoji, topic, atList, currentDefaultOperation, currentAttachOperation, categoryChooseShow } = this.props;
     const category = ((index.categories && index.categories.slice()) || []).filter(item => item.name !== '全部');
     // 悬赏问答
     if (currentAttachOperation === THREAD_TYPE.reward) return (
       <ForTheForm
         confirm={(data) => {
-          this.setPostData({ rewardQa: data });
-          this.setState({ currentAttachOperation: false });
+          this.props.setPostData({ rewardQa: data });
+          this.props.handleSetState({ currentAttachOperation: false });
         }}
         cancel={() => {
-          this.setState({
+          this.props.handleSetState({
             currentAttachOperation: false,
           });
         }}
@@ -360,32 +118,32 @@ class ThreadCreate extends React.Component {
     if (currentAttachOperation === THREAD_TYPE.goods) return (
       <ProductSelect onAnalyseSuccess={
         (data) => {
-          this.setState({ currentAttachOperation: false });
-          this.setPostData({ product: data });
+          this.props.handleSetState({ currentAttachOperation: false });
+          this.props.setPostData({ product: data });
         }}
-        cancel={() => this.setState({ currentAttachOperation: false })}
+        cancel={() => this.props.handleSetState({ currentAttachOperation: false })}
       />
     );
     // 插入红包
     if (currentDefaultOperation === defaultOperation.redpacket) return (
       <RedpacketSelect
         data={postData.redpacket}
-        cancel={() => this.setState({ currentDefaultOperation: '' })}
-        confirm={data => this.setPostData({ redpacket: data })}
+        cancel={() => this.props.handleSetState({ currentDefaultOperation: '' })}
+        confirm={data => this.props.setPostData({ redpacket: data })}
       />
     );
     // 付费设置
     const { freeWords, price, attachmentPrice } = threadPost.postData;
-    if (this.state.curPaySelect) return (
+    if (this.props.curPaySelect) return (
       <AllPostPaid
-        exhibition={this.state.curPaySelect}
+        exhibition={this.props.curPaySelect}
         cancle={() => {
-          this.setState({ curPaySelect: '' });
+          this.props.handleSetState({ curPaySelect: '', currentDefaultOperation: '' });
         }}
         data={{ freeWords, price, attachmentPrice }}
         confirm={(data) => {
-          const { freeWords, price, attachmentPrice } = data;
-          this.setPostData({ freeWords: freeWords / 100,  price, attachmentPrice });
+          console.log(data);
+          this.props.setPostData({ ...data });
         }}
       />
     );
@@ -394,7 +152,7 @@ class ThreadCreate extends React.Component {
       <>
         <Header
           isBackCustom={() => {
-            this.setState({ draftShow: true });
+            this.props.handleSetState({ draftShow: true });
             return false;
           }}
         />
@@ -403,7 +161,7 @@ class ThreadCreate extends React.Component {
           <Title
             isDisplay={true}
             title={postData.title}
-            onChange={title => this.setPostData({ title })}
+            onChange={title => this.props.setPostData({ title })}
             onFocus={this.setBottomFixed}
             onBlur={this.clearBottomFixed}
             autofocus
@@ -414,16 +172,16 @@ class ThreadCreate extends React.Component {
             emoji={emoji}
             atList={atList}
             topic={topic}
-            onChange={this.handleVditorChange}
+            onChange={this.props.handleVditorChange}
             onFocus={() => {
               this.setBottomFixed();
-              this.setState({ isVditorFocus: true });
+              this.props.handleSetState({ isVditorFocus: true });
             }}
             onBlur={() => {
-              this.setState({ isVditorFocus: false });
+              this.props.handleSetState({ isVditorFocus: false });
               this.clearBottomFixed();
             }}
-            onCountChange={count => this.setState({ count })}
+            onCountChange={count => this.props.handleSetState({ count })}
           />
 
           {/* 录音组件 */}
@@ -445,21 +203,21 @@ class ThreadCreate extends React.Component {
           {(currentAttachOperation === THREAD_TYPE.image || Object.keys(postData.images).length > 0) && (
             <ImageUpload
               fileList={Object.values(postData.images)}
-              onChange={fileList => this.handleUploadChange(fileList, THREAD_TYPE.image)}
-              onComplete={(ret, file) => this.handleUploadComplete(ret, file, THREAD_TYPE.image)}
+              onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.image)}
+              onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.image)}
             />
           )}
 
           {/* 视频组件 */}
           {(postData.video && postData.video.thumbUrl) && (
-            <Video className="dzq-post-video" src={postData.video.thumbUrl} onReady={this.onReady} />
+            <Video className="dzq-post-video" src={postData.video.thumbUrl} onReady={this.props.onVideoReady} />
           )}
           {/* 附件上传组件 */}
           {(currentDefaultOperation === defaultOperation.attach || Object.keys(postData.files).length > 0) && (
             <FileUpload
               fileList={Object.values(postData.files)}
-              onChange={fileList => this.handleUploadChange(fileList, THREAD_TYPE.file)}
-              onComplete={(ret, file) => this.handleUploadComplete(ret, file, THREAD_TYPE.file)}
+              onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.file)}
+              onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.file)}
             />
           )}
 
@@ -467,21 +225,29 @@ class ThreadCreate extends React.Component {
           {postData.product && postData.product.readyContent && (
             <Product
               good={postData.product}
-              onDelete={() => this.setPostData({ product: {} })}
+              onDelete={() => this.props.setPostData({ product: {} })}
             />
+          )}
+          {/* 付费 */}
+          {!!(postData.price || postData.attachmentPrice) && (
+            <div className={styles['reward-qa-box']}>
+              <div className={styles['reward-qa-box-content']}>
+                付费总额{postData.price + postData.attachmentPrice}元
+              </div>
+            </div>
           )}
           {/* 悬赏问答内容标识 */}
           {(postData.rewardQa.value && postData.rewardQa.times) && (
             <div className={styles['reward-qa-box']}>
               <div className={styles['reward-qa-box-content']} onClick={() => {
-                this.setState({ rewardQaShow: true });
+                this.props.handleSetState({ rewardQaShow: true });
               }}>{`悬赏金额${postData.rewardQa.value}元\\结束时间${postData.rewardQa.times}`}</div>
             </div>
           )}
           {/* 红包信息 */}
           {postData.redpacket.price && (
             <div className={styles['reward-qa-box']}>
-              <div className={styles['reward-qa-box-content']} onClick={() => this.setState({ redpacketSelectShow: true })}>
+              <div className={styles['reward-qa-box-content']} onClick={() => this.props.handleSetState({ redpacketSelectShow: true })}>
                 {postData.redpacket.rule === 1 ? '随机红包' : '定额红包'}\
                 总金额{postData.redpacket.price}元\{postData.redpacket.number}个
                 {postData.redpacket.condition === 1 && `\\集赞个数${postData.redpacket.likenum}`}
@@ -492,37 +258,32 @@ class ThreadCreate extends React.Component {
         <div id="post-bottombar" className={styles['post-bottombar']}>
           {/* 插入位置 */}
           <div id="post-position" className={styles['position-box']}>
-            <div className={styles['post-counter']}>还能输入{maxCount - this.state.count}个字</div>
-            {(permissions?.insertPosition?.enable) && (
-              <Position
-                position={postData.position}
-                onClick={() => {
-                  localData.setThreadPostDataLocal(postData);
-                  localData.setCategoryEmoji({ category, emoji: threadPost.emojis });
-                }}
-                onChange={position => this.setPostData({ position })}
-              />
-            )}
+            <div className={styles['post-counter']}>还能输入{maxCount - this.props.count}个字</div>
+            {(permissions?.insertPosition?.enable) && (<Position
+              position={postData.position}
+              onClick={() => this.props.saveDataLocal()}
+              onChange={position => this.props.setPostData({ position })} />)}
+
           </div>
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar
-            permission={threadExtendPermissions}
-            onAttachClick={this.handleAttachClick}
+            onAttachClick={this.props.handleAttachClick}
             // onUploadChange={this.handleUploadChange}
-            onUploadComplete={this.handleVideoUploadComplete}
+            onUploadComplete={this.props.handleVideoUploadComplete}
             category={<ToolsCategory categoryChoose={threadPost.categorySelected} onClick={this.handleCategoryClick} />}
+            permission={threadExtendPermissions}
           />
           {/* 默认的操作栏 */}
           <DefaultToolbar
             value={currentDefaultOperation}
+            onClick={item => this.props.handleSetState({ currentDefaultOperation: item.id, emoji: {} })}
             permission={threadExtendPermissions}
-            onClick={item => this.setState({ currentDefaultOperation: item.id, emoji: {} })}
-            onSubmit={this.submit}>
+            onSubmit={this.props.handleSubmit}>
             {/* 表情 */}
             <Emoji
               show={currentDefaultOperation === defaultOperation.emoji}
               emojis={threadPost.emojis}
-              onClick={this.handleEmojiClick} />
+              onClick={this.props.handleEmojiClick} />
           </DefaultToolbar>
         </div>
         {/* 选择帖子类别 */}
@@ -530,9 +291,9 @@ class ThreadCreate extends React.Component {
           show={categoryChooseShow}
           category={category}
           categorySelected={threadPost.categorySelected}
-          onVisibleChange={val => this.setState({ categoryChooseShow: val })}
+          onVisibleChange={val => this.props.handleSetState({ categoryChooseShow: val })}
           onChange={(parent, child) => {
-            this.setPostData({ categoryId: child.pid || parent.pid });
+            this.props.setPostData({ categoryId: child.pid || parent.pid });
             threadPost.setCategorySelected({ parent, child });
           }}
         />
@@ -540,34 +301,34 @@ class ThreadCreate extends React.Component {
         {currentDefaultOperation === defaultOperation.at && (
           <AtSelect
             visible={currentDefaultOperation === defaultOperation.at}
-            getAtList={this.handleAtListChange}
-            onCancel={() => this.setState({ currentDefaultOperation: '' })}
+            getAtList={this.props.handleAtListChange}
+            onCancel={() => this.props.handleSetState({ currentDefaultOperation: '' })}
           />
         )}
         {/* 插入选中的话题 */}
         {currentDefaultOperation === defaultOperation.topic && (
           <TopicSelect
             visible={currentDefaultOperation === defaultOperation.topic}
-            cancelTopic={() => this.setState({ currentDefaultOperation: '' })}
-            clickTopic={val => this.setState({ topic: val })}
+            cancelTopic={() => this.props.handleSetState({ currentDefaultOperation: '' })}
+            clickTopic={val => this.props.handleSetState({ topic: val })}
           />
         )}
         {/* 付费选择 */}
         {currentDefaultOperation === defaultOperation.pay && (
           <PostPopup
-            list={this.state.paySelectText}
-            onClick={val => this.setState({ curPaySelect: val })}
-            cancel={() => this.setState({ currentDefaultOperation: '' })}
+            list={this.props.paySelectText}
+            onClick={val => this.props.handleSetState({ curPaySelect: val })}
+            cancel={() => this.props.handleSetState({ currentDefaultOperation: '' })}
             visible={currentDefaultOperation === defaultOperation.pay}
           />
         )}
         {/* 是否保存草稿 */}
-        {this.state.draftShow && (
+        {this.props.draftShow && (
           <PostPopup
             list={['保存草稿', '不保存草稿']}
             onClick={val => this.handleDraft(val)}
             cancel={() => this.handleDraft()}
-            visible={this.state.draftShow}
+            visible={this.props.draftShow}
           />
         )}
       </>

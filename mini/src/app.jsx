@@ -7,6 +7,7 @@ import { View } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 import clearLoginStatus from '@common/utils/clear-login-status';
 import { Icon } from '@discuzq/design';
+
 import './app.scss';
 
 class App extends Component {
@@ -92,21 +93,24 @@ class App extends Component {
       loginStatus = !!userInfo.data && !!userInfo.data.id;
     }
     user.updateLoginStatus(loginStatus);
-
   }
 
   // 检查站点状态
   setAppCommonStatus(result) {
     switch (result.code) {
-      case -3005: site.setCloseSiteConfig(result.data);
+      case 0: 
+        break;
+      case -3005: site.setCloseSiteConfig(result.data);// 关闭站点
         Router.redirect({
           url: '/subPages/close/index'
         });
         return false;
-      case -4002:
+      case -4002:// token无效
         clearLoginStatus();
         this.initSiteData(); // 重新获取数据
         return false;
+      default: Router.redirect({url: '/subPages/500/index'});
+        break;
     }
     return true;
   }

@@ -11,6 +11,7 @@ export default function DefaultToolbar(props) {
     if (!value) setCurrentAction(value);
   }, [value]);
 
+
   function handleClick() {
     if (defaultOperation.emoji === currentAction) {
       setCurrentAction('');

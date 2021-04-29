@@ -3,8 +3,7 @@ import styles from './index.module.scss';
 import { Video } from '@discuzq/design';
 import { noop } from '../utils';
 import { View, Text } from '@tarojs/components';
-import { getElementRect, randomStr } from './utils'
-import { useReady } from '@tarojs/taro'
+import { getElementRect, randomStr } from '../utils'
 
 /**
  * 视频
