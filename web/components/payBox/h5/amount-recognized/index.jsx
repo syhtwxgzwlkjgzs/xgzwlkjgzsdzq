@@ -46,7 +46,7 @@ export default class AmountRecognized extends Component {
         </div>
         {/* 关闭按钮 */}
         <div className={styles.payBoxCloseIcon} onClick={this.onClose}>
-          <Icon name="PaperClipOutlined" size={16} />
+          <Icon name="CloseOutlined" size={14} />
         </div>
       </div>
     );

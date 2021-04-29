@@ -61,8 +61,8 @@ export default class AmountRecognized extends Component {
   }
 
   renderContent = () => {
-    const { options = {} } = this.props.payBox;
-    const { type, amount, isAnonymous } = options;
+    const { options = {} } = this.props?.payBox;
+    const { type, amount, isAnonymous, title } = options;
     return (
       <>
         {/* 标题 */}
@@ -77,7 +77,7 @@ export default class AmountRecognized extends Component {
             <Divider className={styles.acExplainDivider} />
             <View className={styles.acExplain}>
               <Text className={styles.acExplainLabel}>商品名称</Text>{' '}
-              <Text className={styles.acExplainValue}>{'暂未设置'}</Text>
+              <Text className={styles.acExplainValue}>{title}</Text>
             </View>
             <Divider className={styles.acExplainDivider} />
             <View className={styles.acExplain}>
@@ -113,7 +113,7 @@ export default class AmountRecognized extends Component {
         </View>
         {/* 关闭按钮 */}
         <View onClick={this.onClose} className={styles.payBoxCloseIcon}>
-          <Icon name="PaperClipOutlined" size={16} />
+          <Icon name="CloseOutlined" size={16} />
         </View>
       </View>
     );
