@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Spin } from '@discuzq/design';
-
+import { noop } from '@components/thread/utils';
 import styles from './index.module.scss';
 
 /**
@@ -12,7 +12,7 @@ import styles from './index.module.scss';
  * @prop {function} allowRefresh 是否启用上拉刷新
  */
 
-const List = ({ height, className = '', children, noMore = false, onRefresh, allowRefresh = true }) => {
+const List = ({ height, className = '', children, noMore, onRefresh, allowRefresh = true, onScroll = noop }) => {
   const listWrapper = useRef(null);
   const isLoading = useRef(false);
   const [loadText, setLoadText] = useState('加载中...');
@@ -47,6 +47,9 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
     const { scrollHeight } = listWrapper.current;
     const { scrollTop } = listWrapper.current;
 
+    // 滑动事件
+    onScroll({ scrollTop });
+    
     if ((scrollHeight - 40 <= clientHeight + scrollTop) && !isLoading.current) {
       isLoading.current = true;
       setLoadText('加载中...');
@@ -68,7 +71,7 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
           });
       }
     }
-  }, 50);
+  }, 0);
 
   return (
     <div className={`${styles.container} ${className}`} style={{ height }}>

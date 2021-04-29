@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Popup, Icon,Toast } from '@discuzq/design';
+import { Icon, Toast, Button, Divider } from '@discuzq/design';
 import styles from './index.module.scss';
-import { Button, View, Text, Checkbox } from '@tarojs/components';
+import { View, Text, Checkbox } from '@tarojs/components';
 import { ORDER_TRADE_TYPE } from '../../../../../common/constants/payBoxStoreConstants';
 
 @inject('payBox')
 @observer
 export default class AmountRecognized extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isNotShowTitle: false,
-      titleName: '确认金额',
-    };
-  }
 
+  onClose = () => {
+    // FIXME: 延时回调的修复
+    this.props.payBox.visible = false
+    setTimeout(() => {
+      this.props.payBox.clear();
+    },1000)
+  }
 
   /**
    * 渲染不同交易类型
@@ -56,40 +56,43 @@ export default class AmountRecognized extends Component {
     }
   };
 
+  handleChangeIsAnonymous = (checked) => {
+    this.props.payBox.isAnonymous = checked
+  }
+
   renderContent = () => {
-    const { isNotShowTitle, titleName } = this.state;
-    const { options = {} } = this.props.payBox;
-    const { type, amount, isAnonymous } = options;
+    const { options = {} } = this.props?.payBox;
+    const { type, amount, isAnonymous, title } = options;
     return (
       <>
         {/* 标题 */}
-        {!isNotShowTitle && <View className={styles.amountTitle}>{titleName || '确认金额'}</View>}
+        <View className={styles.amountTitle}>确认金额</View>
         {/* 主要内容区域 */}
         <View className={styles.amountContent}>
           <>
             <View className={styles.acExplain}>
-              <Text className={styles.acExplain_label}>交易类型</Text>{' '}
-              <Text className={styles.acExplain_value}>{this.renderDiffTradeType(type)}</Text>
+              <Text className={styles.acExplainLabel}>交易类型</Text>{' '}
+              <Text className={styles.acExplainValue}>{this.renderDiffTradeType(type)}</Text>
             </View>
+            <Divider className={styles.acExplainDivider} />
             <View className={styles.acExplain}>
-              <Text className={styles.acExplain_label}>商品名称</Text>{' '}
-              <Text className={styles.acExplain_value}>{'暂未设置'}</Text>
+              <Text className={styles.acExplainLabel}>商品名称</Text>{' '}
+              <Text className={styles.acExplainValue}>{title}</Text>
             </View>
+            <Divider className={styles.acExplainDivider} />
             <View className={styles.acExplain}>
-              <Text className={styles.acExplain_label}>支付金额</Text>
-              <Text>￥{amount}</Text>
+              <Text className={styles.acExplainLabel}>支付金额</Text>
+              <Text className={styles.acExplainNum}>￥{amount}</Text>
             </View>
-            {type === ORDER_TRADE_TYPE.REGEISTER_SITE && (
-              <View className={styles.acExplain}>
-                <Checkbox style={{ verticalAlign: 'middle' }} checked={isAnonymous} />
-                <Text style={{ verticalAlign: 'middle' }}>隐藏我的付费信息</Text>
-              </View>
-            )}
-            {type == ORDER_TRADE_TYPE.COMBIE_PAYMENT && (
-              <View>
-                <View className={styles.acExplain_hr} />
-              </View>
-            )}
+            {
+              type === ORDER_TRADE_TYPE.REGEISTER_SITE && 
+              (
+                <View className={styles.acExplain}>
+                  <Checkbox style={{ verticalAlign: 'middle', marginRight: 8 }} checked={this.props.payBox.isAnonymous} onChange={this.handleChangeIsAnonymous} />
+                  <Text style={{ verticalAlign: 'middle' }}>隐藏我的付费信息</Text>
+                </View>
+              )}
+            <Divider className={styles.acExplainDivider} />
           </>
         </View>
       </>
@@ -104,9 +107,13 @@ export default class AmountRecognized extends Component {
         {this.renderContent()}
         {/* 按钮区域-提交内容 */}
         <View className={styles.amountSubmit}>
-          <Button onClick={this.goToThePayConfirmPage} type="primary" className={styles.asBtn}>
+          <Button onClick={this.goToThePayConfirmPage} type="primary" className={styles.asBtn} full>
             支付 ￥{amount}
           </Button>
+        </View>
+        {/* 关闭按钮 */}
+        <View onClick={this.onClose} className={styles.payBoxCloseIcon}>
+          <Icon name="CloseOutlined" size={16} />
         </View>
       </View>
     );

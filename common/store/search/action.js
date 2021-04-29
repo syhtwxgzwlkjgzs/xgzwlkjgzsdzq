@@ -1,6 +1,7 @@
 import { action } from 'mobx';
 import SearchStore from './store';
-import { readTopicsList, readUsersList, readThreadList, createFollow } from '../../server';
+import { readTopicsList, readUsersList, readThreadList, createFollow, deleteFollow } from '../../server';
+import typeofFn from '@common/utils/typeof';
 
 class SearchAction extends SearchStore {
   constructor(props) {
@@ -196,13 +197,90 @@ class SearchAction extends SearchStore {
  @action
  async postFollow(userId) {
    const result = await createFollow({ data: { data: { toUserId: userId } } });
-
    if (result.code === 0 && result.data) {
-     
      return result.data;
    }
    return null;
  };
+
+ /**
+ * 发现模块 - 取消关注
+ * @param {object} search * 搜索值
+ * @returns {object} 处理结果
+ */
+  @action
+  async cancelFollow({ id, type }) {
+    const result = await deleteFollow({ data: { id, type: type } });
+    if (result.code === 0 && result.data) {
+      return result.data;
+    }
+    return null;
+  };
+
+  /**
+   * 更新用户状态
+   * @param {number} userId 用户id
+   * @param {object}  obj 更新数据
+   * @param {boolean} obj.isFollow 是否更新点赞
+   * @returns
+   */
+   @action
+   updateActiveUserInfo(userId, obj = {}) {
+     debugger
+    const users = this.findAssignUser(userId)
+
+    users?.forEach(item => {
+      this.updateInfo(item, obj)
+    })
+   }
+
+   @action
+  updateInfo(dataSource, obj) {
+    if (!dataSource) {
+      return
+    }
+    const { index, data, store } = dataSource;
+
+    // 更新点赞
+    const { isFollow } = obj;
+    if (!typeofFn.isUndefined(isFollow) && !typeofFn.isNull(isFollow)) {
+      data.isFollow = isFollow;
+    }
+
+    if (store?.pageData) {
+      const newArr = store.pageData.slice()
+      newArr[index] = data;
+      store.pageData = newArr
+    }
+  }
+
+   // 获取指定的用户数据
+  findAssignUser(userId) {
+    debugger
+    const users = []
+    if (this.indexUsers) {
+      const { pageData = [] } = this.indexUsers;
+      pageData.forEach((item, index) => {
+        if (item.userId === userId) {
+          users.push(
+            { index, data: item, store: this.indexUsers}
+          )
+        }
+      })
+    }
+debugger
+    if (this.users) {
+      const { pageData = [] } = this.users;
+      pageData.forEach((item, index) => {
+        if (item.userId === userId) {
+          users.push(
+            { index, data: item, store: this.users }
+          )
+        }
+      })
+    }
+    return users
+  }
 }
 
 export default SearchAction;

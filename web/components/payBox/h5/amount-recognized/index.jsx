@@ -10,6 +10,14 @@ import { STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
 @observer
 export default class AmountRecognized extends Component {
 
+  onClose = () => {
+    // FIXME: 延时回调的修复
+    this.props.payBox.visible = false
+    setTimeout(() => {
+      this.props.payBox.clear();
+    },1000)
+  }
+
   // 点击支付去到 选择支付方式页面
   goToThePayConfirmPage = async () => {
     try {
@@ -37,10 +45,8 @@ export default class AmountRecognized extends Component {
           </Button>
         </div>
         {/* 关闭按钮 */}
-        <div className={styles.payBoxCloseIcon} onClick={() => {
-          this.props.payBox.clear();
-        }}>
-          <Icon name="PaperClipOutlined" size={16} />
+        <div className={styles.payBoxCloseIcon} onClick={this.onClose}>
+          <Icon name="CloseOutlined" size={14} />
         </div>
       </div>
     );

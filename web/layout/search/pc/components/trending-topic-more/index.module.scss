@@ -7,10 +7,19 @@
   .item {
     display: flex;
     margin-bottom: rem(22);
-    .img {
+    .imgBox {
       width: rem(116);
       height: rem(116);
-      background: var(--border-line-color);
+      flex: 0 0 rem(116);
+      background: var(--color-text-secondary);
+      text-align: center;
+      line-height: rem(116);
+      font-size: rem($font-line-height-large);
+      color: var(--color-white);
+    }
+    .img {
+      width: 100%;
+      height: 100%;
     }
     .content {
       padding: rem($padding-1n) rem($padding-6n) 0;

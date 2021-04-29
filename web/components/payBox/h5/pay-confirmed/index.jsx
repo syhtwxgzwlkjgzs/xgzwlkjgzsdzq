@@ -22,14 +22,14 @@ export default class PayBox extends React.Component {
     const payConfig = [
       {
         name: '钱包支付',
-        icon: 'PayOutlined',
+        icon: 'PurseOutlined',
         color: '#1878f3',
         paymentType: 'wallet',
       },
     ];
     payConfig.unshift({
       name: '微信支付',
-      icon: 'PayOutlined',
+      icon: 'WechatPaymentOutlined',
       color: '#09bb07',
       paymentType: 'weixin',
     });
@@ -80,23 +80,12 @@ export default class PayBox extends React.Component {
    * 选择支付方式
    */
   handleChangePaymentType = (value) => {
-    this.setState(
-      {
-        paymentType: value,
-      },
-      () => {
-        if (value === PAYWAY_MAP.WALLET) {
-          this.props.payBox.payWay = PAYWAY_MAP.WALLET;
-        } else if (value === PAYWAY_MAP.WX) {
-          this.props.payBox.payWay = PAYWAY_MAP.WX;
-        }
-      },
-    );
+    this.props.payBox.payWay = value
   };
 
   // 点击确认支付
   handlePayConfirmed = async () => {
-    if (this.state.paymentType === PAYWAY_MAP.WALLET) {
+    if (this.props.payBox.payWay === PAYWAY_MAP.WALLET) {
       // 表示钱包支付
       try {
         await this.props.payBox.walletPayEnsure();
@@ -105,7 +94,7 @@ export default class PayBox extends React.Component {
       }
       // this.props.payBox.visible = false;
       // this.goSetPayPwa()
-    } else if (this.state.paymentType === PAYWAY_MAP.WX) {
+    } else if (this.props.payBox.payWay === PAYWAY_MAP.WX) {
       // 表示微信支付
       if (!isWeixin()) {
         await this.props.payBox.wechatPayOrder({ listenWXJsBridgeAndExecCallback, onBridgeReady, wxValidator, mode: PAY_MENT_MAP.WX_H5 });
@@ -128,7 +117,7 @@ export default class PayBox extends React.Component {
     const { payConfig, paymentType } = this.state;
     const { user } = this.props;
     const { userInfo = {} } = user;
-    const { canWalletPay, walletBalance } = userInfo || {};
+    const { canWalletPay } = userInfo || {};
     let disabled = !this.props.payBox.payWay
     if (this.props.payBox.payWay === PAYWAY_MAP.WALLET && !canWalletPay) {
       disabled = true

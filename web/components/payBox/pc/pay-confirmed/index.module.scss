@@ -3,7 +3,7 @@
 
 .payconfirmWrapper {
   background: var(--color-white);
-  min-height: rem(452);
+  // min-height: rem(452);
   width: rem(409);
   font-size: rem($font-size-large);
   padding: rem($padding-4n);
@@ -13,6 +13,7 @@
   .payTitle {
     font-weight: bold;
     text-align: center;
+    font-size: rem(22);
   }
   .payMoney {
     width: 100%;
@@ -63,12 +64,12 @@
     }
     .wPayment_01 {
       font-size: rem(22);
-      font-weight: 800;
+      font-weight: 600;
     }
     .wPayment_02 {
       display: flex;
       align-items: center;
-      margin: rem(30) 0;
+      margin: rem(16) 0;
       font-size: rem(14);
       line-height: rem(20);
       color: #4F5A70;
@@ -82,16 +83,17 @@
   }
   .wPaymentCode {
     > img {
-      width: rem(178);
-      height: rem(178);
-      background-color: pink;
+      width: rem(106);
+      height: rem(106);
+      // background-color: pink;
     }
   }
   .walletPayment {
+    padding-left: rem(30);
     .walletTitle {
       font-size: rem(22);
-      font-weight: 800;
-      margin: rem(32) 0;
+      font-weight: 600;
+      margin: rem(24) 0 rem(16);
     }
     .walletDec {
       line-height: rem(36);
@@ -108,14 +110,22 @@
         text-decoration: underline;
       }
     }
+    .walletText {
+      font-size: rem(14);
+    }
     .walletChangePwd {
       display: inline-block;
       height: rem(40);
     }
+    .walletConfirmBc {
+      width: 100%;
+      margin-top: rem(24);
+      padding-left: rem(45);
+    }
     .walletConfirmBtn {
       display: block;
-      margin: rem(24) auto 0;
       width: rem(248);
+      border-radius: rem(5);
     }
   }
   .walletDec > span:nth-child(1) {
