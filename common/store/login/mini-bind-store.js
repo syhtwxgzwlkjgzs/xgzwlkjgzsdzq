@@ -1,5 +1,5 @@
 import { action } from 'mobx';
-import { miniMobilebrowserBind } from '@server';
+import { miniBind } from '@server';
 import setAccessToken from '../../utils/set-access-token';
 
 export const IS_BINDING__FLAG = -7034;
@@ -8,7 +8,7 @@ export default class MiniBindStore {
   @action
   async mobilebrowserBind(data) {
     try {
-      const res = await miniMobilebrowserBind({
+      const res = await miniBind({
         timeout: 3000,
         data,
       });

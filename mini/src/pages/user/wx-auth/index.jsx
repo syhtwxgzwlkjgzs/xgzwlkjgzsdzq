@@ -37,7 +37,7 @@ class MiniAuth extends React.Component {
       // 小程序登录
       const resp = await miniLogin({
         timeout: 10000,
-        params: {
+        data: {
           jsCode: this.props.commonLogin.jsCode,
           iv: params.iv,
           encryptedData: params.encryptedData,
@@ -130,6 +130,7 @@ class MiniAuth extends React.Component {
       desc: "查询用户是否绑定过账号",
       success: (res) => {
         if(res.errMsg === 'getUserProfile:ok'){
+          console.log(res);
           this.getUserProfileCallback(res);
           return resolve(res);
         }

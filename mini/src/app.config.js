@@ -11,6 +11,8 @@ export default {
     'pages/user/wx-bind-username/index',
     'pages/user/wx-bind-phone/index',
     'pages/user/status/index',
+    'pages/user/bind-phone/index',
+    'pages/user/wx-bind/index',
     'pages/user/wx-auth/index',
   ],
   subPackages: [
