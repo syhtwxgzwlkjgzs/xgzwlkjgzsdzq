@@ -9,6 +9,7 @@ import ThreadContent from '@components/thread';
 import ActiveUsersMore from './components/active-users-more';
 import Stepper from './components/stepper';
 import goToLoginPage from '@common/utils/go-to-login-page';
+import Copyright from '@components/copyright';
 import { Toast } from '@discuzq/design';
 
 @inject('site')
@@ -73,6 +74,7 @@ class SearchPCPage extends React.Component {
     return (
       <div className={styles.searchRight}>
         <Stepper/>
+        <Copyright/>
       </div>
     )
   }
@@ -86,18 +88,34 @@ class SearchPCPage extends React.Component {
     return (
       <div className={styles.searchContent}>
         <div className={styles.section}>
-          <SectionTitle title="潮流话题" onShowMore={this.redirectToSearchResultTopic} />
+          <SectionTitle
+            title="潮流话题"
+            icon={{ type: 1, name: 'StrongSharpOutlined' }}
+            onShowMore={this.redirectToSearchResultTopic}
+          />
           <TrendingTopicMore data={topicsPageData} onItemClick={this.onTopicClick}/>
         </div>
         <div className={styles.section}>
-          <SectionTitle title="活跃用户" onShowMore={this.redirectToSearchResultUser} />
+          <SectionTitle
+            title="活跃用户"
+            icon={{ type: 2, name: 'MemberOutlined' }}
+            onShowMore={this.redirectToSearchResultUser}
+          />
           <ActiveUsersMore data={usersPageData} onItemClick={this.onUserClick} onFollow={this.onFollow} />
         </div>
-        <div className={styles.section}>
-          <SectionTitle title="热门内容" onShowMore={this.redirectToSearchResultPost} />
-          {
-            threadsPageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)
-          }
+        <div>
+          <div className={styles.postTitle}>
+            <SectionTitle
+              title="热门内容"
+              icon={{ type: 3, name: 'HotOutlined' }}
+              onShowMore={this.redirectToSearchResultPost}
+            />
+          </div>
+          <div className={styles.postContent}>
+            {
+              threadsPageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)
+            }
+          </div>
         </div>
       </div>
     )

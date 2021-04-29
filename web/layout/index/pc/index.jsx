@@ -143,18 +143,18 @@ class IndexPCPage extends React.Component {
   }
   // 右侧 -- 二维码 推荐内容
   renderRight = (data) => (
-      <div className={styles.indexRight}>
-        <QcCode />
-        <div style={{ margin: '20px 0' }}>
-          <Recommend
-            changeBatch={this.changeBatch}
-            recommendDetails={this.recommendDetails}
-            data={data}
-          />
-        </div>
-        <Copyright/>
-        <PayBox />
+    <div className={styles.indexRight}>
+      <QcCode />
+      <div className={styles.indexRightCon}>
+        <Recommend
+          changeBatch={this.changeBatch}
+          recommendDetails={this.recommendDetails}
+          data={data}
+        />
       </div>
+      <Copyright/>
+      <PayBox />
+    </div>
   )
   // 中间 -- 筛选 置顶信息 是否新内容发布 主题内容
   renderContent = (data) => {
@@ -170,12 +170,16 @@ class IndexPCPage extends React.Component {
               <PostTheme/>
             </div>
           </div>
-          <div className={styles.TopNewsBox}>
+          <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
             <TopNews data={sticks} itemMargin='0' isShowBorder={false}/>
           </div>
-          <div className={styles.topNewContent}>
-            <NewContent visible={visible} conNum={conNum} goRefresh={this.goRefresh} />
-          </div>
+          {
+            visible && (
+              <div className={styles.topNewContent}>
+                <NewContent visible={visible} conNum={conNum} goRefresh={this.goRefresh} />
+              </div>
+            )
+          }
         </div>
         <div className={styles.themeBox}>
           <div className={styles.themeItem}>
