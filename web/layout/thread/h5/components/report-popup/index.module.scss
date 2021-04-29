@@ -1,0 +1,59 @@
+@import '@common/styles/variable/index.scss';
+@import '@common/styles/fn/rem.scss';
+
+.container {
+  background: var(--color-white);
+  border-radius: rem($border-radius-big) rem($border-radius-big) 0 0;
+}
+
+.header {
+  width: 100%;
+  font-size: rem($font-size-label);
+  text-align: center;
+  .title {
+    color: #333;
+    line-height: rem(40);
+    padding-top: rem($padding-2n);
+  }
+  .reason {
+    color: #aaa;
+    padding-bottom: rem($padding-5n);
+  }
+}
+
+.body {
+  padding: 0 rem($padding-4n);
+  .reportTitle {
+    height: rem(50);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: solid rem(1) var(--border-line-color);
+    :global{
+      .dzq-checkbox-wrap{
+        -webkit-tap-highlight-color: transparent;
+      }
+    }
+  }
+ 
+}
+
+.input {
+  width: 100%;
+  height: rem(76);
+  margin-bottom: rem($margin-4n);
+  border: var(--border-border);
+}
+
+.button {
+  width: 100%;
+  .ok {
+    width: 100%;
+  }
+  .cancel {
+    width: 100%;
+    background: var(--color-white);
+    color: var(--color-black);
+    border: none;
+  }
+}

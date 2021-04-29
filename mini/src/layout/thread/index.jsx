@@ -31,6 +31,8 @@ import DeletePopup from './components/delete-popup';
 import MorePopup from './components/more-popup';
 import ShowTop from './components/show-top';
 import NoMore from './components/no-more';
+import AboptPopup from './components/abopt-popup';
+import ReportPopup from './components/report-popup';
 
 
 
@@ -189,6 +191,7 @@ class RenderCommentList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      showAboptPopup: false, // 是否弹出采纳弹框
       showCommentInput: false, // 是否弹出评论框
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
@@ -355,10 +358,33 @@ class RenderCommentList extends React.Component {
     typeof this.props.onEditClick === 'function' && this.props.onEditClick(comment);
   }
 
+  // 跳转评论详情
   onCommentClick = (data) => {
     Taro.navigateTo({
       url: `/subPages/thread/comment/index?id=${data.id}&threadId=${this.props.thread?.threadData?.id}`,
     });
+  }
+
+  // 点击采纳
+  onAboptClick() {
+    this.setState({ showAboptPopup: true });
+  }
+
+  // 悬赏弹框确定
+  onAboptOk(data) {
+    this.setState({ showAboptPopup: false });
+    if (data > 0) {
+      console.log(`悬赏${data}元`);
+      Toast.success({
+        content: `悬赏${data}元`,
+      });
+    } else {
+      console.log('悬赏金额不能为0');
+      Toast.success({
+        content: '悬赏金额不能为0',
+      });
+    }
+    return true;
   }
 
   render() {
@@ -389,6 +415,7 @@ class RenderCommentList extends React.Component {
                 replyLikeClick={reploy => this.replyLikeClick(reploy, val)}
                 replyReplyClick={reploy => this.replyReplyClick(reploy, val)}
                 onCommentClick={() => this.onCommentClick(val)}
+                onAboptClick={() => this.onAboptClick()}
                 isShowOne
               ></CommentList>
             </View>
@@ -409,6 +436,14 @@ class RenderCommentList extends React.Component {
           onClose={() => this.setState({ showDeletePopup: false })}
           onBtnClick={() => this.deleteComment()}
         ></DeletePopup>
+
+        {/* 采纳弹层 */}
+        <AboptPopup
+          rewardAmount={1000} // 需要传入剩余悬赏金额
+          visible={this.state.showAboptPopup}
+          onCancel={() => this.setState({ showAboptPopup: false })}
+          onOkClick={data => this.onAboptOk(data)}
+        ></AboptPopup>
       </Fragment>
     );
   }
@@ -426,6 +461,7 @@ class Index extends Component {
     super(props);
 
     this.state = {
+      showReportPopup: false, // 是否弹出举报弹框
       showDeletePopup: false, // 是否弹出删除弹框
       showCommentInput: false, // 是否弹出评论框
       showMorePopup: false, // 是否弹出更多框
@@ -448,6 +484,10 @@ class Index extends Component {
 
     // 修改评论数据
     this.comment = null;
+
+    // 举报内容选项
+    this.reportContent = ['广告垃圾', '违规内容', '恶意灌水', '重复发帖'];
+    this.inputText = '其他理由...';
   }
 
   componentDidMount() {
@@ -611,7 +651,7 @@ class Index extends Component {
 
     // 举报
     if (type === 'report') {
-      console.log('点击举报');
+      this.setState({ showReportPopup: true });
     }
 
     // 编辑
@@ -622,6 +662,11 @@ class Index extends Component {
       });
     }
   };
+
+  onReportOk(val) {
+    console.log('确定举报啦', val);
+    this.setState({ showReportPopup: false });
+  }
 
   // 置顶提示
   setTopState() {
@@ -917,6 +962,15 @@ class Index extends Component {
           visible={this.state.showDeletePopup}
           onClose={() => this.setState({ showDeletePopup: false })}
           onBtnClick={type => this.onBtnClick(type)}
+        />
+
+        {/* 举报弹层 */}
+        <ReportPopup
+          reportContent={this.reportContent}
+          inputText={this.inputText}
+          visible={this.state.showReportPopup}
+          onCancel={() => this.setState({ showReportPopup: false })}
+          onOkClick={data => this.onReportOk(data)}
         />
       </View>
     );
