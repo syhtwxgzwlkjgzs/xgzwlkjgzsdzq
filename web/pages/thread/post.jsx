@@ -18,6 +18,7 @@ import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
 @inject('threadPost')
 @inject('index')
 @inject('thread')
+@inject('user')
 @observer
 class PostPage extends React.Component {
   constructor(props) {
@@ -45,6 +46,7 @@ class PostPage extends React.Component {
   }
 
   componentDidMount() {
+    this.fetchPermissions();
     // 如果本地缓存有数据，这个目前主要用于定位跳出的情况
     const postData = this.getPostDataFromLocal();
     const { category, emoji } = localData.getCategoryEmoji() || {};
@@ -72,6 +74,11 @@ class PostPage extends React.Component {
     const postData = localData.getThreadPostDataLocal();
     localData.removeThreadPostDataLocal();
     return postData;
+  }
+
+  fetchPermissions() {
+    const { user } = this.props;
+    if (!user.permissions) user.updateUserInfo();
   }
 
   async fetchCategories() {

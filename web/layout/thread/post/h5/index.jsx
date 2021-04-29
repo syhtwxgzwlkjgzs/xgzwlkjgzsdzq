@@ -35,6 +35,7 @@ const maxCount = 5000;
 @inject('threadPost')
 @inject('index')
 @inject('thread')
+@inject('user')
 @observer
 class ThreadCreate extends React.Component {
   componentDidMount() {
@@ -90,7 +91,7 @@ class ThreadCreate extends React.Component {
   }
 
   render() {
-    const { threadPost, index } = this.props;
+    const { threadPost, index, user } = this.props;
     const { postData } = threadPost;
     const { emoji, topic, atList, currentDefaultOperation, currentAttachOperation, categoryChooseShow } = this.props;
     const category = ((index.categories && index.categories.slice()) || []).filter(item => item.name !== '全部');
@@ -260,11 +261,13 @@ class ThreadCreate extends React.Component {
             // onUploadChange={this.handleUploadChange}
             onUploadComplete={this.props.handleVideoUploadComplete}
             category={<ToolsCategory categoryChoose={threadPost.categorySelected} onClick={this.handleCategoryClick} />}
+            permissions={user.permissions}
           />
           {/* 默认的操作栏 */}
           <DefaultToolbar
             value={currentDefaultOperation}
             onClick={item => this.props.handleSetState({ currentDefaultOperation: item.id, emoji: {} })}
+            permissions={user.permissions}
             onSubmit={this.props.handleSubmit}>
             {/* 表情 */}
             <Emoji

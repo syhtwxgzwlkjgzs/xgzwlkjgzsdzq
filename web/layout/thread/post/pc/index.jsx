@@ -25,12 +25,14 @@ import Copyright from '@components/copyright';
 @inject('threadPost')
 @inject('index')
 @inject('thread')
+@inject('user')
 @observer
 class ThreadPCPage extends React.Component {
   render() {
     const {
       threadPost,
       index,
+      user,
       emoji,
       topic,
       atList,
@@ -127,6 +129,7 @@ class ThreadPCPage extends React.Component {
               <div className={styles['toolbar-left']}>
                 <DefaultToolbar
                   pc
+                  permissions={user.permissions}
                   value={currentDefaultOperation}
                   onClick={
                     (item, child) => {
@@ -150,6 +153,7 @@ class ThreadPCPage extends React.Component {
                   pc
                   onAttachClick={this.props.handleAttachClick}
                   onUploadComplete={this.props.handleVideoUploadComplete}
+                  permissions={user.permissions}
                 />
               </div>
               <div className={styles['toolbar-right']}>
