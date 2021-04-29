@@ -1,8 +1,11 @@
 @import '@common/styles/var.scss';
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
-.text {
-  font-size: rem($font-size-label);
-  line-height: rem($font-line-height-small);
-  color: var(--color-text-secondary);
+.container {
+  margin-top: rem($margin-5n);
+  .text {
+    font-size: rem($font-size-label);
+    line-height: rem($font-line-height-small);
+    color: var(--color-text-secondary);
+  }
 }

@@ -24,7 +24,7 @@ const TrendingTopics = ({ icon = { type: '' }, title, onShowMore, isShowMore = t
         <div onClick={onShowMore} className={styles.more}>
           更多
         </div>
-        <Icon name="RightOutlined" size={10} />
+        <Icon className={styles.rightIcon} name="RightOutlined" size={10} />
       </div>
       : ''
     }

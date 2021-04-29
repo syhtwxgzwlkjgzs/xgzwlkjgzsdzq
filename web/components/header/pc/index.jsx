@@ -4,6 +4,7 @@ import styles from './index.module.scss';
 import { Icon, Input, Button } from '@discuzq/design';
 import Avatar from '@components/avatar';
 import { withRouter } from 'next/router';
+import goToLoginPage from '@common/utils/go-to-login-page';
 
 @inject('site')
 @inject('user')
@@ -26,7 +27,10 @@ class Header extends React.Component {
   handleRouter = (url) => {
     this.props.router.push(url)
   }
-
+  // 登录
+  toLogin = () => {
+    goToLoginPage({ url: '/user/login' });
+  }
   renderHeaderLogo() {
     const { site } = this.props;
     if (site.setSite && site.setSite.siteLogo && site.setSite.siteLogo !== '') {
@@ -40,18 +44,18 @@ class Header extends React.Component {
     const { user } = this.props;
     if (user && user.userInfo && user.userInfo.id) {
       return (
-                <div className={styles.userInfo}>
-                    <Avatar className={styles.avatar} name={user.userInfo.username} circle={true} image={user.userInfo.avatarUrl} onClick={() => {}}></Avatar>
-                    <p className={styles.userName}>{user.userInfo.username || ''}</p>
-                </div>
+        <div className={styles.userInfo}>
+          <Avatar className={styles.avatar} name={user.userInfo.username} circle={true} image={user.userInfo.avatarUrl} onClick={() => {}}></Avatar>
+          <p className={styles.userName}>{user.userInfo.username || ''}</p>
+        </div>
       );
     }
 
     return (
-            <div className={styles.userInfo}>
-                <Button className={styles.userBtn} type='primary'>登录</Button>
-                <Button className={styles.userBtn}>注册</Button>
-            </div>
+      <div className={styles.userInfo}>
+        <Button className={styles.userBtn} type='primary' onClick={this.toLogin}>登录</Button>
+        <Button className={styles.userBtn}>注册</Button>
+      </div>
     );
   }
 

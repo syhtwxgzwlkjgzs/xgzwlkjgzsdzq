@@ -36,7 +36,7 @@
       margin-top: rem(12);
       font-size: rem($font-size-primary);
       line-height: rem(18);
-      color: #0b0b37;
+      color: var(--color-text-primary);
     }
   }
 }
