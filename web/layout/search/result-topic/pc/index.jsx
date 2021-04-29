@@ -47,18 +47,18 @@ class SearchResultTopicPCPage extends React.Component {
   renderRight = () => {
     const { pageData = [] } = this.props.search.indexUsers || { pageData: [] };
     return (
-      <>
-      {
-        pageData?.length > 0 && (
+      // <>
+      // {
+      //   pageData?.length > 0 && (
           <div className={styles.searchRight}>
             <div className={styles.section}>
               <SectionTitle title="活跃用户" onShowMore={this.redirectToSearchResultUser}/>
               <ActiveUsers data={pageData} onItemClick={this.onUserClick}/>
             </div>
           </div>
-        )
-      }
-      </>
+      //   )
+      // }
+      // </>
     )
   }
   renderContent = () => {
