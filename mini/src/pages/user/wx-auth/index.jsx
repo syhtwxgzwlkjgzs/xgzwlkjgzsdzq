@@ -24,7 +24,7 @@ class MiniAuth extends React.Component {
     // 其他地方跳入的小程序绑定流程
     if(action === 'mini-bind'){
       redirectTo({
-        url: `/pages/wx-bind/index?sessionToken=${sessionToken}`
+        url: `/pages/user/wx-bind/index?sessionToken=${sessionToken}`
       })
       return;
     }
