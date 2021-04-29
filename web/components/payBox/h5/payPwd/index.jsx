@@ -164,7 +164,7 @@ class Index extends React.Component {
                   <div className={styles.paypwdMesg}>
                     <span>支付方式</span>
                     <span>
-                      <Icon className={styles.walletIcon} name="WalletOutlined" />
+                      <Icon className={styles.walletIcon} name="PurseOutlined" />
                       <span style={{ verticalAlign: 'middle' }}>钱包支付</span>
                     </span>
                   </div>
@@ -180,7 +180,7 @@ class Index extends React.Component {
 
             {/* 关闭按钮 */}
             <div className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
-              <Icon name="PaperClipOutlined" size={16} />
+              <Icon name="CloseOutlined" size={16} />
             </div>
           </div>
         </Dialog>

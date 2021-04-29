@@ -35,21 +35,21 @@ class IndexPCPage extends React.Component {
   filter = {}
 
   componentDidMount() {
-    PayBox.createPayBox({
-      data: {
-        amount: 0.1,
-        type: 5,
-        threadId: 4,
-        payeeId: 16,
-        isAnonymous: false,
-      },
-      success: (orderInfo) => {
-        console.log(orderInfo);
-      },
-      failed: (orderInfo) => {
-        console.log(orderInfo);
-      },
-    });
+    // PayBox.createPayBox({
+    //   data: {
+    //     amount: 0.1,
+    //     type: 5,
+    //     threadId: 4,
+    //     payeeId: 16,
+    //     isAnonymous: false,
+    //   },
+    //   success: (orderInfo) => {
+    //     console.log(orderInfo);
+    //   },
+    //   failed: (orderInfo) => {
+    //     console.log(orderInfo);
+    //   },
+    // });
     if (this.timer) {
       clearInterval(this.timer);
     }
