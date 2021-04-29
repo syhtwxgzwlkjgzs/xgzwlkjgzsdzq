@@ -18,11 +18,8 @@ class CommentPage extends React.Component {
     super(props);
 
     this.state = {
-      isShowRedPacket: true,
-      isShowReward: false,
       showCommentInput: false, // 是否弹出评论框
       showMorePopup: false,
-      commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
       inputText: '请输入内容', // 默认回复框placeholder内容
       inputValue: '',
