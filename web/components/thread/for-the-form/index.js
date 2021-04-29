@@ -1,13 +1,15 @@
 /**
  * 悬赏表单 - 日历选择
+ * TODO: pc 的悬赏日历待重新选择插件
  */
 import React, { memo, useState, useEffect } from 'react'; // 性能优化的
 import { Button, Input, Toast } from '@discuzq/design'; // 原来就有的封装
 import DatePickers from '@components/thread/date-picker'; // 原来就有的封装
 import styles from './index.module.scss'; // 私有样式
 import PropTypes from 'prop-types'; // 类型拦截
+import DDialog from '@components/dialog';
 
-const ForTheForm = ({ confirm, cancel, data }) => {
+const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
   const [value, setValue] = useState('');// 悬赏金额
   const [times, setTimes] = useState('悬赏时间');// 悬赏的到期时间
   const [show, setShow] = useState(false);// 时间选择器是否显示
@@ -36,7 +38,7 @@ const ForTheForm = ({ confirm, cancel, data }) => {
       times,
     });
   };
-  return (
+  const content = (
     <div className={styles.rewards}>
       <div className={styles['line-box']}>
         <div> 悬赏金额 </div>
@@ -77,7 +79,17 @@ const ForTheForm = ({ confirm, cancel, data }) => {
         <Button type="primary" onClick={redbagconfirm}>确定</Button>
       </div>
     </div>
-
+  );
+  if (!pc) return content;
+  return (
+    <DDialog
+      visible={visible}
+      className={styles.pc}
+      onClose={cancel}
+      title="悬赏设置"
+    >
+      {content}
+    </DDialog>
   );
 };
 
