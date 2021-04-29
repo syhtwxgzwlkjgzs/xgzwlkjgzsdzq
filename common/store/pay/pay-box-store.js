@@ -334,6 +334,10 @@ class PayBoxStore {
         // success
         this.successCallback();
         this.completedCallback();
+        // FIXME: 暂时使用延时 clear
+        setTimeout(() => {
+          this.clear();
+        }, 1000);
       }
 
       if (orderStatus === ORDER_STATUS_MAP.OUT_DATE_PAY) {
@@ -342,6 +346,10 @@ class PayBoxStore {
         // outdate
         this.failedCallback();
         this.completedCallback();
+        // FIXME: 暂时使用延时 clear
+        setTimeout(() => {
+          this.clear();
+        }, 1000);
       }
 
       if (orderStatus === ORDER_STATUS_MAP.FAIL_PAY) {
@@ -350,6 +358,10 @@ class PayBoxStore {
         // paid failed
         this.failedCallback();
         this.completedCallback();
+        // FIXME: 暂时使用延时 clear
+        setTimeout(() => {
+          this.clear();
+        }, 1000);
       }
     } catch (error) {
       if (error.Code) {
