@@ -31,7 +31,6 @@ import throttle from '@common/utils/thottle';
 import Header from '@components/header';
 import Router from '@discuzq/sdk/dist/router';
 import * as localData from '../common';
-import tcaptchs from '@common/utils/tcaptcha';
 
 const maxCount = 5000;
 
@@ -209,9 +208,10 @@ class ThreadCreate extends React.Component {
     this.setState({ atList });
   }
 
-  toTCaptcha = (qcloudCaptchaAppId) => {
+  toTCaptcha = async (qcloudCaptchaAppId) => {
     // 验证码实例为空，则创建实例
     if (!this.captcha) {
+      const TencentCaptcha = (await import('@common/utils/tcaptcha')).default;
       this.captcha = new TencentCaptcha(qcloudCaptchaAppId, res => {
         if (res.ret === 0) {
           // 验证通过后发布
@@ -517,7 +517,7 @@ class ThreadCreate extends React.Component {
             value={currentDefaultOperation}
             permission={threadExtendPermissions}
             onClick={item => this.setState({ currentDefaultOperation: item.id, emoji: {} })}
-            onSubmit={this.props.handleSubmit}>
+            onSubmit={this.submit}>
             {/* 表情 */}
             <Emoji
               show={currentDefaultOperation === defaultOperation.emoji}

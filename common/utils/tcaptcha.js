@@ -1245,3 +1245,5 @@
     };
   },
 ]);
+
+export default window.TencentCaptcha;
