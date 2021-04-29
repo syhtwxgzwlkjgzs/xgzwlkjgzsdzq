@@ -1,0 +1,83 @@
+import React from 'react';
+import style from './index.module.scss';
+import { Icon } from '@discuzq/design';
+import { withRouter } from 'next/router';
+import { inject, observer } from 'mobx-react';
+
+
+@inject('index')
+@observer
+class Index extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    this.loadData()
+  }
+
+  changeBatch = () => {
+    this.loadData()
+  }
+
+  loadData = async () => {
+    await this.props.index.getRecommends();
+  }
+
+  recommendDetails = (item) => {
+    const { threadId } = item
+    this.props.router.push(`/thread/${threadId}`);
+  }
+
+  render () {
+    const { recommends } = this.props.index || [];
+
+    return (
+      <div className={style.recommend}>
+        <div className={style.recommendContent}>推荐内容</div>
+        {
+          recommends?.filter((_, index) => index < 5).map((item, index) => (
+              <div key={index} className={style.recommendBox} onClick={() => {this.recommendDetails(item)}}>
+                <div className={style.recommendTitle}>
+                  <p className={style.recommendSort}>{index + 1}</p>
+                  <p className={style.recommenText}>{item.title}</p>
+                </div>
+                <div className={style.browse}>
+                  <div className={style.browseBox}>
+                    <span className={style.browseIcon}><Icon name="EyeOutlined" sile={14}/></span>
+                    <span className={style.browseNumber}>11111</span>
+                  </div>
+                  <div className={style.browseButtom}>
+                    <div className={style.browseCategory}>
+                      {
+                        item.displayTag?.isPrice
+                        && (<p className={style.categoryText}>付费</p>)
+                      }
+                      {
+                        item.displayTag?.isEssence
+                        && (<p className={style.categoryEssence}>精华</p>)
+                      }
+                      {
+                        item.displayTag?.isRedPack
+                        && (<p className={style.categoryRed}>红包</p>)
+                      }
+                      {
+                        item.displayTag?.isReward
+                        && (<p className={style.categoryReward}>悬赏</p>)
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+          ))
+        }
+        <div className={style.recommendSwitch}>
+          <div className={style.switchBox} onClick={this.changeBatch}>
+            <span className={style.switchIcon}><Icon name="CloseCircleOutlined" size={14}/></span>换一批
+          </div>
+        </div>
+      </div>
+    );
+  }
+};
+export default withRouter(Index);
