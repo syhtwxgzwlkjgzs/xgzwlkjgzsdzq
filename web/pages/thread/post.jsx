@@ -268,7 +268,7 @@ class PostPage extends React.Component {
       const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
       const createThreadWithCaptcha = webConfig?.other?.createThreadWithCaptcha;
       // 开启了腾讯云验证码验证时，进行验证，通过后再进行实际的发布请求
-      if (true || (qcloudCaptcha && createThreadWithCaptcha)) {
+      if (qcloudCaptcha && createThreadWithCaptcha) {
         // 验证码票据，验证码字符串不全时，弹出滑块验证码
         if (!this.ticket || !this.randstr) {
           this.toTCaptcha(qcloudCaptchaAppId); // 传递appId
