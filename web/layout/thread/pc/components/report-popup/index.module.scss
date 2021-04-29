@@ -1,0 +1,98 @@
+@import '@common/styles/variable/index.scss';
+@import '@common/styles/fn/rem.scss';
+
+.container {
+  width: rem(620);
+  min-height: rem(335);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0 auto;
+  background: var(--color-white);
+  border-radius: rem($border-radius-big);
+}
+
+.header {
+  height: rem(50);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 rem($padding-5n);
+  .headerLeft {
+    font-size: rem($font-size-middle);
+    line-height: rem(50);
+  }
+  .headerIcon {
+    width: rem(50);
+    height: rem(50);
+    line-height: rem(50);
+    text-align: center;
+    font-size: rem($font-size-middle);
+  }
+}
+
+
+.body {
+  .radioGroup {
+    display: flex;
+    padding: 0 rem($padding-5n);
+    border-bottom: solid rem(1) var(--border-line-color);
+    .reportTitle {
+      display: flex;
+      align-items: center;
+      font-size: rem($font-size-middle);
+      margin-right: rem($margin-5n);
+      padding: rem($padding-5n) 0;
+    }
+  }
+  .other {
+    padding: 0 rem($padding-5n);
+    .reportTitle {
+      display: flex;
+      align-items: center;
+      font-size: rem($font-size-middle);
+      margin-right: rem($margin-5n);
+      padding: rem($padding-5n) 0;
+    }
+  }
+}
+
+.textarea {
+  padding: 0 rem($padding-5n);
+  :global{
+    .dzq-textarea {
+      border: 1px solid transparent;
+      border-radius: 0;
+      .dzq-textarea__inner{
+        background: #f5f7f8;
+        resize: none;
+      }
+    }
+  }
+  .input {
+    width: 100%;
+    // height: rem(114);
+    margin-bottom: rem($margin-4n);
+    border: var(--border-border);
+  }
+}
+
+.button {
+  width: 100%;
+  height: rem(50);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background: #f4f7f7;
+  .ok {
+    width: rem(70);
+    height: rem(36);
+    margin-right: rem($margin-6n);
+  }
+  .cancel {
+    width: rem(70);
+    height: rem(36);
+    background: #c9c9c9;
+    border: none;
+    margin-right: rem($margin-6n);
+  }
+}

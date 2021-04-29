@@ -17,7 +17,7 @@ const maxCount = 5000;
 @inject('index')
 @inject('thread')
 @observer
-class Index extends React.Component {
+class PostPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -59,6 +59,12 @@ class Index extends React.Component {
     }
   }
 
+  saveDataLocal = () => {
+    const { index, threadPost } = this.props;
+    localData.setThreadPostDataLocal(threadPost.postData);
+    localData.setCategoryEmoji({ category: index.categoriesNoAll, emoji: threadPost.emojis });
+  };
+
   // 从本地缓存中获取数据
   getPostDataFromLocal() {
     const postData = localData.getThreadPostDataLocal();
@@ -89,6 +95,11 @@ class Index extends React.Component {
         Toast.error({ content: ret.msg });
       }
     }
+  }
+
+  setCategory(categoryId) {
+    const categorySelected = this.props.index.getCategorySelectById(categoryId);
+    this.props.threadPost.setCategorySelected(categorySelected);
   }
 
   setPostData(data) {
@@ -189,6 +200,7 @@ class Index extends React.Component {
 
   // 关注列表
   handleAtListChange = (atList) => {
+    console.log(atList);
     this.setState({ atList });
   }
 
@@ -252,6 +264,8 @@ class Index extends React.Component {
           handleEmojiClick={this.handleEmojiClick}
           handleSetState={data => this.setState({ ...data })}
           handleSubmit={this.handleSubmit}
+          saveDataLocal={this.saveDataLocal}
+          handleAtListChange={this.handleAtListChange}
           {...this.state}
         />
       );
@@ -261,4 +275,4 @@ class Index extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(HOCWithLogin(Index));
+export default HOCFetchSiteData(HOCWithLogin(PostPage));

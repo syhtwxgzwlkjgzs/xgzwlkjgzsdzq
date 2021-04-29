@@ -60,7 +60,7 @@ const InputPop = (props) => {
               <div className={styles.text}>删除</div>
             </div>
           }
-          <div className={styles.moreItem} onClick={() => onOperClick('4')}>
+          <div className={styles.moreItem} onClick={() => onOperClick('report')}>
             <div className={styles.icon}>
               <Icon name="WarnOutlined" size={20}></Icon>
             </div>

@@ -153,9 +153,33 @@ class ThreadPostAction extends ThreadPostStore {
     this.postData = { ...this.postData, ...data };
   }
 
+  // 设置当前选中分类
   @action.bound
   setCategorySelected(data) {
     this.categorySelected = data || { parent: {}, child: {} };
+  }
+
+  // 重置发帖数据
+  @action.bound
+  resetPostData() {
+    this.postData = {
+      title: '',
+      categoryId: 0,
+      anonymous: 0,
+      draft: 0,
+      price: 0,
+      attachmentPrice: 0,
+      freeWords: 1,
+      position: {},
+      contentText: '',
+      audio: {},
+      rewardQa: {},
+      product: {},
+      redpacket: {},
+      video: {},
+      images: {},
+      files: {},
+    }
   }
 
   /**
@@ -266,7 +290,7 @@ class ThreadPostAction extends ThreadPostStore {
       if (tomId === THREAD_TYPE.file) {
         const fileBody = contentindexes[index].body || [];
         fileBody.forEach((item) => {
-          files[item.id] = { ...item, type: item.fileType, name: item.fileName  };
+          files[item.id] = { ...item, type: item.fileType, name: item.fileName };
         });
       }
       if (tomId === THREAD_TYPE.audio) audio = contentindexes[index].body;

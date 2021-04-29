@@ -13,6 +13,7 @@
   }
 }
 .editor {
+  position: relative;
   padding: 16px;
   min-height: 428px;
   border: 1px solid #c5c6ca;
@@ -34,7 +35,29 @@
     }
   }
 }
+.money-box {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 16px 22px;
+  :global {
+    .dzq-tag {
+      margin-right: var(--margin-4n);
+      padding: 0 4px;
+      height: 25px;
+      line-height: 25px;
+      border-radius: 5px;
+      background-color: #f0f1f3;
+      color: #4f5a70;
+      border: none;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
 .toolbar {
+  position: relative;
   display: flex;
   height: 54px;
   align-items: center;
@@ -48,6 +71,7 @@
         margin-left: 0;
         margin-right: var(--margin-6n);
         color: #8490a8;
+        cursor: pointer;
       }
     }
   }

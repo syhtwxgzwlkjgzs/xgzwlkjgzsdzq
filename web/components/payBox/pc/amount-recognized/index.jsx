@@ -6,7 +6,14 @@ import { inject } from 'mobx-react';
 
 @inject('payBox')
 export default class index extends Component {
-  onCloseBtn = () => {};
+
+  onClose = () => {
+    // FIXME: 延时回调的修复
+    this.props.payBox.visible = false
+    setTimeout(() => {
+      this.props.payBox.clear();
+    },1000)
+  }
 
   goToThePayConfirmPage = async () => {
     try {
@@ -24,19 +31,16 @@ export default class index extends Component {
         <>
           <div className={styles.amountWrapper}>
             <CommonAccountContent currentPaymentData={options} />
-            <hr className={styles.acExplain_hr} />
             {/* 按钮区域-提交内容 */}
+            <div className={styles.amountAddUp}>合计：<span className={styles.amountMoney}>￥ {amount} 元</span></div>
             <div className={styles.amountSubmit}>
-              <span>合计：￥ {amount} 元</span>
-              <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.asBtn}>
+              <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.asBtn} full>
                 确认支付
               </Button>
             </div>
             {/* 关闭按钮 */}
             <div
-              onClick={() => {
-                this.props.payBox.clear();
-              }}
+              onClick={this.onClose}
               className={styles.amountCloseBtn}
             >
               X

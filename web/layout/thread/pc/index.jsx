@@ -16,6 +16,8 @@ import layout from './layout.module.scss';
 import topic from './topic.module.scss';
 import comment from './comment.module.scss';
 
+import ReportPopup from './components/report-popup';
+import AboptPopup from './components/abopt-popup';
 import ShowTop from './components/show-top';
 import DeletePopup from './components/delete-popup';
 import ImageContent from '@components/thread/image-content';
@@ -129,7 +131,7 @@ const RenderThreadContent = observer((props) => {
               <span className={topic.text}>管理</span>
             </Dropdown>
           </div>
-          <div className={topic.iconText} onClick={onDropdownChange('report')}>
+          <div className={topic.iconText} onClick={() => onDropdownChange('report')}>
             <Icon className={topic.icon} name="WarnOutlinedThick"></Icon>
             <span className={topic.text}>举报</span>
           </div>
@@ -239,6 +241,7 @@ class RenderCommentList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      showAboptPopup: false, // 是否弹出采纳弹框
       showCommentInput: false, // 是否弹出评论框
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
@@ -404,10 +407,31 @@ class RenderCommentList extends React.Component {
     typeof this.props.onEditClick === 'function' && this.props.onEditClick(comment);
   }
 
+  // 跳转评论详情
   onCommentClick(data) {
     if (data.id && this.props.thread?.threadData?.id) {
       this.props.router.push(`/thread/comment/${data.id}?threadId=${this.props.thread?.threadData?.id}`);
     }
+  }
+
+  // 点击采纳
+  onAboptClick() {
+    this.setState({ showAboptPopup: true });
+  }
+
+  // 悬赏弹框确定
+  onAboptOk(data) {
+    this.setState({ showAboptPopup: false });
+    if (data > 0) {
+      Toast.success({
+        content: `悬赏${data}元`,
+      });
+    } else {
+      Toast.success({
+        content: '悬赏金额不能为0',
+      });
+    }
+    return true;
   }
 
   render() {
@@ -458,15 +482,26 @@ class RenderCommentList extends React.Component {
                 onSubmit={val => this.createReply(val)}
                 isShowOne={true}
                 isShowInput={this.state.commentId === val.id}
+                onAboptClick={() => this.onAboptClick()}
               ></CommentList>
             </div>
           ))}
         </div>
+
+        {/* 删除弹层 */}
         <DeletePopup
           visible={this.state.showDeletePopup}
           onClose={() => this.setState({ showDeletePopup: false })}
           onBtnClick={() => this.deleteComment()}
         ></DeletePopup>
+
+        {/* 采纳弹层 */}
+        <AboptPopup
+          rewardAmount={1000} // 需要传入剩余悬赏金额
+          visible={this.state.showAboptPopup}
+          onCancel={() => this.setState({ showAboptPopup: false })}
+          onOkClick={data => this.onAboptOk(data)}
+        ></AboptPopup>
       </Fragment>
     );
   }
@@ -482,6 +517,7 @@ class ThreadPCPage extends React.Component {
     super(props);
 
     this.state = {
+      showReportPopup: false, // 是否弹出举报弹框
       showDeletePopup: false, // 是否弹出删除弹框
       showCommentInput: false, // 是否弹出评论框
       showMorePopup: false, // 是否弹出更多框
@@ -500,6 +536,10 @@ class ThreadPCPage extends React.Component {
 
     // 修改评论数据
     this.comment = null;
+
+    // 举报内容选项
+    this.reportContent = ['广告垃圾', '违规内容', '恶意灌水', '重复发帖'];
+    this.inputText = '其他理由...';
   }
 
   // 滚动事件
@@ -582,6 +622,19 @@ class ThreadPCPage extends React.Component {
       if (!this.props.thread?.threadData?.id) return;
       this.props.router.push(`/thread/post?id=${this.props.thread?.threadData?.id}`);
     }
+
+    // 举报
+    if (type === 'report') {
+      console.log('举报');
+      this.setState({ showReportPopup: true });
+    }
+  }
+
+  // 确定举报
+  onReportOk(val) {
+    console.log('确定举报啦', val);
+    this.setState({ showReportPopup: false });
+    return true;
   }
 
   // 置顶提示
@@ -748,7 +801,7 @@ class ThreadPCPage extends React.Component {
       pid: this.props.thread?.threadData?.postId,
       isLiked: !this.props.thread?.threadData?.isLike,
     };
-    const { success, msg } = await this.props.thread.updateLiked(params, this.props.index);
+    const { success, msg } = await this.props.thread.updateLiked(params, this.props.index, this.props.user);
 
     if (!success) {
       Toast.error({
@@ -820,6 +873,7 @@ class ThreadPCPage extends React.Component {
                   onLikeClick={() => this.onLikeClick()}
                   onCollectionClick={() => this.onCollectionClick()}
                   onShareClick={() => this.onShareClick()}
+                  onReportClick={() => this.onReportClick()}
                 ></RenderThreadContent>
               ) : (
                 <LoadingTips type="init"></LoadingTips>
@@ -886,12 +940,21 @@ class ThreadPCPage extends React.Component {
           </div>
         </Popup>
 
-
+        {/* 删除弹层 */}
         <DeletePopup
           visible={this.state.showDeletePopup}
           onClose={() => this.setState({ showDeletePopup: false })}
           onBtnClick={() => this.delete()}
         ></DeletePopup>
+
+        {/* 举报弹层 */}
+        <ReportPopup
+          reportContent={this.reportContent}
+          inputText={this.inputText}
+          visible={this.state.showReportPopup}
+          onCancel={() => this.setState({ showReportPopup: false })}
+          onOkClick={data => this.onReportOk(data)}
+        ></ReportPopup>
       </div>
     );
   }

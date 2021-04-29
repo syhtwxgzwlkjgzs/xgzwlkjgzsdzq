@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from './index.module.scss';
-import { Dialog, Button, Checkbox, Icon, Input, Toast } from '@discuzq/design';
+import { Dialog, Button, Checkbox, Icon, Input, Toast, Radio, Divider } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import { PAYWAY_MAP, STEP_MAP, PAY_MENT_MAP } from '../../../../../common/constants/payBoxStoreConstants';
 
@@ -11,40 +11,40 @@ export default class index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isSelectedKey: 'wallet',
+      paymentType: 'wallet'
     };
+  }
+
+  onClose = () => {
+    this.props.payBox.visible = false
+    // FIXME: 延时回调的修复
+    setTimeout(() => {
+      this.props.payBox.clear();
+    },1000)
   }
 
   async componentDidMount() {
     try {
-      this.changePayment();
+      // this.changePayment();
+      this.initState()
       // 获取钱包用户信息
       const { id } = this.props?.user;
       if (!id) return;
       await this.props.payBox.getWalletInfo(id);
-    } catch (error) {}
+    } catch (error) { }
   }
 
-  onCloseBtn = () => {
+  initState = () => {
     this.setState({
-      isShow: false,
-    });
-  };
-
-  changePayment = (type = PAYWAY_MAP.WALLET) => {
-    this.setState(
-      {
-        isSelectedKey: type,
-      },
-      () => {
-        this.handleChangePaymentType(type);
-      },
-    );
-  };
+      paymentType: 'wallet'
+    })
+    this.props.payBox.payWay = PAYWAY_MAP.WALLET
+    this.props.payBox.password = null
+  }
 
   onPasswordChange = (e) => {
     console.log(e.target.value);
-    // if (isNaN(e.target.value)) return;
+    if (isNaN(e.target.value)) return;
     this.props.payBox.password = e.target.value;
   };
 
@@ -58,26 +58,17 @@ export default class index extends Component {
   /**
    * 选择支付方式
    */
-  handleChangePaymentType = (type) => {
-    let value = type === PAYWAY_MAP.WX ? 10 : 20;
-    this.setState(
-      {
-        paymentType: value,
-      },
-      async () => {
-        if (value === PAY_MENT_MAP.WALLET) {
-          this.props.payBox.payWay = PAYWAY_MAP.WALLET;
-        } else if (value === PAY_MENT_MAP.WX_QRCODE) {
-          await this.props.payBox.wechatPayOrderQRCode();
-          this.props.payBox.payWay = PAYWAY_MAP.WX;
-        }
-      },
-    );
+  handleChangePaymentType = (value) => {
+    this.props.payBox.payWay = value
+
+    if (this.props.payBox.payWay === PAYWAY_MAP.WX) {
+      this.props.payBox.wechatPayOrderQRCode();
+    }
   };
 
   // 点击确认支付
   handlePayConfirmed = async () => {
-    if (this.state.paymentType === PAY_MENT_MAP.WALLET) {
+    if (this.props.payBox.payWay === PAYWAY_MAP.WALLET) {
       // 表示钱包支付
       // await this.props.payBox.walletPayEnsure();
       if (!this.props.payBox.password) {
@@ -86,26 +77,30 @@ export default class index extends Component {
         });
         return;
       }
-      await this.props.payBox.walletPayOrder();
-      Toast.success({
-        content: '支付成功',
-        hasMask: false,
-        duration: 1000,
-      });
-      await this.props.payBox.clear();
-    } else if (this.state.paymentType === PAY_MENT_MAP.WX_QRCODE) {
-      // 表示微信支付
-      console.log('进来了', 'sssssss_点击微信支付');
-      // this.props.payBox.visible = false
+      try {
+        await this.props.payBox.walletPayOrder();
+        Toast.success({
+          content: '支付成功',
+          hasMask: false,
+          duration: 1000,
+        });
+        await this.props.payBox.clear();
+      } catch (error) {
+        Toast.error({
+          content: '支付失败，请重新输入',
+          hasMask: false,
+          duration: 1000,
+        })
+        this.props.payBox.password = null
+      }
     }
   };
 
   renderDiffPaymementContent = () => {
-    const { isSelectedKey } = this.state;
-    if (isSelectedKey === PAYWAY_MAP.WX) {
+    if (this.props.payBox.payWay === PAYWAY_MAP.WX) {
       return this.renderWechatCodePaymementContent();
     }
-    if (isSelectedKey === PAYWAY_MAP.WALLET) {
+    if (this.props.payBox.payWay === PAYWAY_MAP.WALLET) {
       return this.renderWalletPaymementContent();
     }
   };
@@ -113,26 +108,26 @@ export default class index extends Component {
   // 渲染微信支付内容
   renderWechatCodePaymementContent = () => (
     <div className={styles.wechatPayment}>
-      {/* 二维码 */}
-      <div className={styles.wPaymentCode}>
-        <img src={this.props.payBox.wechatQRCode} />
-      </div>
-      {/* 微信支付内容 */}
-      <div className={styles.wPaymentDec}>
-        <div className={styles.wPayment_01}>
-          <Icon className={styles.icon} name={'PayOutlined'} color={'#09bb07'} size={30} />
+      <div style={{display: 'flex',alignItems:'center'}}>{/* 二维码 */}
+        <div className={styles.wPaymentCode}>
+          <img src={this.props.payBox.wechatQRCode} alt="二维码" />
+        </div>
+        {/* 微信支付内容 */}
+        <div className={styles.wPaymentDec}>
+          <div className={styles.wPayment_01}>
+            <Icon className={styles.icon} name={'PayOutlined'} color={'#09bb07'} size={20} />
           微信支付
         </div>
-        <div className={styles.wPayment_02}>
-          <Icon className={styles.icon} name={'PayOutlined'} color={'#09bb07'} size={30} />
-          <div>
-            <p>打开手机微信扫一扫</p>
-            <p>扫描二维码完成支付</p>
+          <div className={styles.wPayment_02}>
+            <Icon className={styles.icon} name={'PayOutlined'} color={'#09bb07'} size={20} />
+            <div>
+              <p>打开手机微信扫一扫</p>
+              <p>扫描二维码完成支付</p>
+            </div>
           </div>
-        </div>
-        <div className={styles.wPayment_03}>
-          <p>二维码有效时长为5分钟，请尽快支付</p>
-        </div>
+        </div></div>
+      <div className={styles.wPayment_03}>
+        <p>二维码有效时长为5分钟，请尽快支付</p>
       </div>
     </div>
   );
@@ -145,7 +140,7 @@ export default class index extends Component {
     return (
       <div className={styles.walletPayment}>
         <div className={styles.walletTitle}>
-          <Icon className={styles.icon} name="PayOutlined" size="30" color={'#1878f3'} />
+          <Icon className={styles.icon} name="PayOutlined" size="20" color={'#1878f3'} />
           钱包支付
         </div>
         {!canWalletPay ? (
@@ -153,7 +148,7 @@ export default class index extends Component {
             <div className={styles.walletDec}>
               <span>支付密码</span>
               <span>
-                钱包支付，需{' '}
+                <span className={styles.walletText}>钱包支付，需{' '}</span>
                 <span onClick={this.goSetPayPwa} className={styles.walletSettingPwd}>
                   设置支付密码
                 </span>
@@ -175,12 +170,15 @@ export default class index extends Component {
                 value={this.props.payBox.password}
                 onChange={this.onPasswordChange}
               />
+            </div>
+            <div className={styles.walletConfirmBc}>
               <Button
                 onClick={this.handlePayConfirmed}
                 size="large"
                 className={styles.walletConfirmBtn}
                 type="primary"
                 disabled={!this.props?.payBox?.password}
+                full
               >
                 确认支付
               </Button>
@@ -192,7 +190,6 @@ export default class index extends Component {
   };
 
   render() {
-    const { isSelectedKey } = this.state;
     const { options = {} } = this.props?.payBox;
     const { amount } = options;
     return (
@@ -201,36 +198,32 @@ export default class index extends Component {
           {/* 头部 */}
           <div className={styles.payTitle}>支付</div>
           {/* 支付金额显示 */}
-          <div className={styles.payMoney}>支付金额 ￥{amount}</div>
+          <div className={styles.payMoney}>支付金额 <span className={styles.payM}>￥{amount}</span></div>
           {/* tab切换支付方式 */}
           <div>
             <div className={styles.payTab_top}>
-              <a
-                onClick={() => {
-                  this.changePayment('weixin');
-                }}
-                className={`${styles.payTab} ${isSelectedKey === PAYWAY_MAP.WX && styles.payTabActive}`}
-              >
-                微信支付
-              </a>
-              <a
-                onClick={() => {
-                  this.changePayment('wallet');
-                }}
-                className={`${styles.payTab} ${isSelectedKey === PAYWAY_MAP.WALLET && styles.payTabActive}`}
-              >
-                钱包支付
-              </a>
+              <Radio.Group value={this.props.payBox.payWay} onChange={this.handleChangePaymentType}>
+                <Radio
+                  name={'weixin'}
+                  className={`${styles.payTab} `}
+                >
+                  微信支付
+              </Radio>
+                <Radio
+                  name={'wallet'}
+                  className={`${styles.payTab}`}
+                >
+                  钱包支付
+              </Radio>
+              </Radio.Group>
             </div>
-            <hr />
+            <Divider />
             {/* 渲染不同方式的支付内容 */}
             <div className={styles.payTab_bottom}>{this.renderDiffPaymementContent()}</div>
           </div>
           {/* 关闭按钮 */}
           <div
-            onClick={() => {
-              this.props.payBox.clear();
-            }}
+            onClick={this.onClose}
             className={styles.paymentCloseBtn}
           >
             X

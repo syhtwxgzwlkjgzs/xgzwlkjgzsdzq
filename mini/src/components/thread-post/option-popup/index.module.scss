@@ -1,0 +1,32 @@
+.wrapper {
+  :global {
+    .dzq-popup__overlay {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .dzq-popup__container {
+      width: 100%;
+      background: var(--color-white);
+      border-radius: 10px 10px 0 0;
+    }
+  }
+
+  .content {
+    margin: 0 var(--padding-4n);
+    font-size: var(--font-size-middle);
+    text-align: center;
+    line-height: var(--font-line-height-small);
+    background: var(--color-white);
+
+    .item {
+      padding: var(--padding-4n);
+      color: var(--color-text-primary);
+      border-bottom: var(--border-border);
+    }
+    .btn {
+      padding: 13px 0;
+      margin-bottom: 12px;
+      color: #4f5a70;
+    }
+  }
+}

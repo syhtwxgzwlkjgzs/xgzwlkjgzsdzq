@@ -1,6 +1,6 @@
 @import '@common/styles/index.scss';
 .dzq-emoji {
-  position: absolute;
+  position: absolute !important;
   bottom: 45px;
   left: 0;
   right: 0;
@@ -20,5 +20,29 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+  }
+}
+.pc {
+  padding: 8px;
+  margin: 0;
+  margin-left: 2px;
+  position: absolute;
+  bottom: 54px;
+  height: 200px;
+  width: 390px;
+  overflow-y: scroll;
+  .dzq-emoji__icon {
+    margin: 0 2px;
+    cursor: pointer;
+  }
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: rgba(0, 0, 0, .09);
+    border-radius: 100px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, .09);
+    border-radius: 100px;
   }
 }
