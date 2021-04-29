@@ -7,10 +7,12 @@ import '@discuzq/design/dist/styles/index.scss';
 import WeixinQrCode from '@components/login/wx-qr-code';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 
 @inject('site')
 @inject('user')
 @inject('h5QrCode')
+@inject('commonLogin')
 @observer
 class WXLoginH5Page extends React.Component {
   timer = null;
@@ -56,13 +58,16 @@ class WXLoginH5Page extends React.Component {
         await this.props.h5QrCode.login({
           params: { sessionToken: this.props.h5QrCode.sessionToken },
         });
+        // FIXME: 使用 window 跳转用来解决，获取 forum 在登录前后不同的问题，后续需要修改 store 完成
+        window.location.href = '/index';
         clearInterval(this.timer);
       } catch (e) {
-        Toast.error({
-          content: e.Message,
-          hasMask: false,
-          duration: 1000,
-        });
+        console.log(e);
+        // 跳转状态页
+        if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
+          this.props.commonLogin.setStatusMessage(e.Code, e.Message);
+          this.props.router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
+        }
       }
     }, 3000);
   }
