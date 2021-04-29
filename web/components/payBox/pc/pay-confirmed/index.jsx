@@ -108,18 +108,18 @@ export default class index extends Component {
   // 渲染微信支付内容
   renderWechatCodePaymementContent = () => (
     <div className={styles.wechatPayment}>
-      <div style={{display: 'flex'}}>{/* 二维码 */}
+      <div style={{display: 'flex',alignItems:'center'}}>{/* 二维码 */}
         <div className={styles.wPaymentCode}>
-          <img src={this.props.payBox.wechatQRCode} />
+          <img src={this.props.payBox.wechatQRCode} alt="二维码" />
         </div>
         {/* 微信支付内容 */}
         <div className={styles.wPaymentDec}>
           <div className={styles.wPayment_01}>
-            <Icon className={styles.icon} name={'PayOutlined'} color={'#09bb07'} size={20} />
+            <Icon className={styles.icon} name={'WechatPaymentOutlined'} color={'#09bb07'} size={20} />
           微信支付
         </div>
           <div className={styles.wPayment_02}>
-            <Icon className={styles.icon} name={'PayOutlined'} color={'#09bb07'} size={20} />
+            <Icon className={styles.icon} name={'ScanOutlined'} color={'#09bb07'} size={20} />
             <div>
               <p>打开手机微信扫一扫</p>
               <p>扫描二维码完成支付</p>
@@ -140,7 +140,7 @@ export default class index extends Component {
     return (
       <div className={styles.walletPayment}>
         <div className={styles.walletTitle}>
-          <Icon className={styles.icon} name="PayOutlined" size="20" color={'#1878f3'} />
+          <Icon className={styles.icon} name="PurseOutlined" size="20" color={'#1878f3'} />
           钱包支付
         </div>
         {!canWalletPay ? (
@@ -148,7 +148,7 @@ export default class index extends Component {
             <div className={styles.walletDec}>
               <span>支付密码</span>
               <span>
-                钱包支付，需{' '}
+                <span className={styles.walletText}>钱包支付，需{' '}</span>
                 <span onClick={this.goSetPayPwa} className={styles.walletSettingPwd}>
                   设置支付密码
                 </span>
@@ -171,7 +171,7 @@ export default class index extends Component {
                 onChange={this.onPasswordChange}
               />
             </div>
-            <div style={{ width: '100%' }}>
+            <div className={styles.walletConfirmBc}>
               <Button
                 onClick={this.handlePayConfirmed}
                 size="large"

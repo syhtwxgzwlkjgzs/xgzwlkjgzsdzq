@@ -20,6 +20,7 @@ import PayBox from '../components/payBox/index';
         threadId: 6,
         type: 3,
       },
+      isAnonymous: false, // 是否匿名
       success: (orderInfo) => {}, // 支付成功回调
       failed: (orderInfo) => {}, // 支付失败回调
       completed: (orderInfo) => {} // 支付完成回调(成功或失败)

@@ -3,11 +3,11 @@
  * 基于 vditor 开源组件：https://github.com/Vanessa219/vditor
  */
 import React, { useState, useEffect } from 'react';
-import Vditor from 'vditor';
+import Vditor from '@discuzq/vditor';
 import classNames from 'classnames';
 import { baseOptions, baseToolbar } from './options';
 import './index.scss';
-import 'vditor/src/assets/scss/index.scss';
+import '@discuzq/vditor/src/assets/scss/index.scss';
 
 export default function DVditor(props) {
   const { pc, onChange, emoji = {}, atList = [], topic, onFocus, onBlur, value, onCountChange } = props;
@@ -96,6 +96,7 @@ export default function DVditor(props) {
       {
         _lutePath: 'https://imgcache.qq.com/operation/dianshi/other/lute.min.6cbcbfbacd9fa7cda638f1a6cfde011f7305a071.js?max_age=31536000',
         ...baseOptions,
+        height: pc ? 200 : 178,
         // 编辑器初始化值
         value,
         // 编辑器异步渲染完成后的回调方法
@@ -134,12 +135,12 @@ export default function DVditor(props) {
     setVditor(editor);
   }
 
-  const className = pc ? 'dvditor' : classNames('dvditor', { 'no-focus': !pc && !isFocus });
+  const className = pc ? 'dvditor pc' : classNames('dvditor', { 'no-focus': !pc && !isFocus });
 
   return (
     <>
       <div id={vditorId} className={className}></div>
-      {!pc && isFocus && <div className="dvditor__placeholder"></div>}
+      {/* {!pc && isFocus && <div className="dvditor__placeholder"></div>} */}
     </>
   );
 }

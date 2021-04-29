@@ -15,7 +15,6 @@ class Index extends React.Component {
     super(props);
     this.state = {
       list: [],
-      target: 0,
       isShow: false
     };
     this.keyboardClickHander = this.keyboardClickHander.bind(this);
@@ -24,7 +23,6 @@ class Index extends React.Component {
   initState = () => {
     this.setState({
       list: [],
-      target: 0,
       isShow: false
     })
   }
@@ -148,6 +146,7 @@ class Index extends React.Component {
   // 渲染弹窗形式支付
   renderDialogPayment = () => {
     const { list = [], isShow } = this.state;
+    const { options = {} } = this.props?.payBox
     return (
       <div>
         <Dialog className={styles.paypwdDialogWrapper} visible={isShow} position="center" maskClosable={true}>
@@ -161,11 +160,11 @@ class Index extends React.Component {
               ) : (
                 <>
                   <div className={styles.paypwdTitle}>立即支付</div>
-                  <div className={styles.paypwdAmount}>￥1</div>
+                  <div className={styles.paypwdAmount}>￥{options.amount}</div>
                   <div className={styles.paypwdMesg}>
                     <span>支付方式</span>
                     <span>
-                      <Icon className={styles.walletIcon} name="WalletOutlined" />
+                      <Icon className={styles.walletIcon} name="PurseOutlined" />
                       <span style={{ verticalAlign: 'middle' }}>钱包支付</span>
                     </span>
                   </div>
@@ -181,7 +180,7 @@ class Index extends React.Component {
 
             {/* 关闭按钮 */}
             <div className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
-              <Icon name="PaperClipOutlined" size={16} />
+              <Icon name="CloseOutlined" size={16} />
             </div>
           </div>
         </Dialog>
@@ -192,7 +191,7 @@ class Index extends React.Component {
   render() {
     const { list = [] } = this.state;
     return (
-      <div style={{ position: 'relative', zIndex: 9999 }}>
+      <div style={{ position: 'relative', zIndex: 1400 }}>
         {/* <Header /> */}
         {/* <CommonPayoffPwd list={list} updatePwd={this.updatePwd} /> */}
         {this.renderDialogPayment()}

@@ -8,6 +8,7 @@ import ActiveUsersMore from '../../../search/pc/components/active-users-more';
 import TrendingTopic from '../../../search/pc/components/trending-topics'
 import List from '@components/list'
 @inject('site')
+@inject('user')
 @inject('search')
 @observer
 class SearchResultUserPcPage extends React.Component {
@@ -27,8 +28,26 @@ class SearchResultUserPcPage extends React.Component {
   onTopicClick = data => console.log('topic click', data);
   onUserClick = data => console.log('user click', data);
 
-  onFollow = (userId) => {
-    this.props.search.postFollow(userId)
+  onFollow = ({ id, type }) => {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
+    if (type === '1') {
+      this.props.search.postFollow(id).then(result => {
+        if (result) {
+          this.props.search.updateActiveUserInfo(id, { isFollow: true })
+        }
+      })
+    } else {
+      this.props.search.cancelFollow({ id, type: 1 }).then(result => {
+        if (result) {
+          this.props.search.updateActiveUserInfo(id, { isFollow: false })
+        }
+      })
+    }
   }
 
   fetchMoreData = () => {

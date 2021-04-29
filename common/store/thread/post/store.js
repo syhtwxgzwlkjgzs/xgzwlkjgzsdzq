@@ -51,6 +51,7 @@ class ThreadPostStore {
     video: {}, // 视频
     images: {}, // 图片
     files: {}, // 文件
+    orderSn: '', // 支付订单号
   }
 
   @observable

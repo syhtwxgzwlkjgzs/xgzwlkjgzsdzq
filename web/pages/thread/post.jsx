@@ -8,14 +8,17 @@ import HOCWithLogin from '@common/middleware/HOCWithLogin';
 import * as localData from '@layout/thread/post/common';
 import { Toast } from '@discuzq/design';
 import { createAttachment } from '@common/server';
-import { THREAD_TYPE, ATTACHMENT_TYPE } from '@common/constants/thread-post';
+import { THREAD_TYPE, ATTACHMENT_TYPE, MAX_COUNT } from '@common/constants/thread-post';
 import Router from '@discuzq/sdk/dist/router';
+import PayBoxProvider from '@components/payBox/payBoxProvider';
+import PayBox from '@components/payBox/index';
+import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
 
-const maxCount = 5000;
 @inject('site')
 @inject('threadPost')
 @inject('index')
 @inject('thread')
+@inject('user')
 @observer
 class PostPage extends React.Component {
   constructor(props) {
@@ -43,6 +46,7 @@ class PostPage extends React.Component {
   }
 
   componentDidMount() {
+    this.fetchPermissions();
     // 如果本地缓存有数据，这个目前主要用于定位跳出的情况
     const postData = this.getPostDataFromLocal();
     const { category, emoji } = localData.getCategoryEmoji() || {};
@@ -70,6 +74,11 @@ class PostPage extends React.Component {
     const postData = localData.getThreadPostDataLocal();
     localData.removeThreadPostDataLocal();
     return postData;
+  }
+
+  fetchPermissions() {
+    const { user } = this.props;
+    if (!user.permissions) user.updateUserInfo();
   }
 
   async fetchCategories() {
@@ -120,8 +129,9 @@ class PostPage extends React.Component {
       const audioSrc = window.URL.createObjectURL(blob);
       this.setState({
         audioSrc,
+        currentAttachOperation: false,
       });
-      this.setPostData({ audio: data, audioSrc });
+      this.setPostData({ audio: { ...data, mediaUrl: audioSrc }, audioSrc });
     }
   }
 
@@ -180,7 +190,7 @@ class PostPage extends React.Component {
   }
 
   // 视频准备上传
-  onReady = (player) => {
+  onVideoReady = (player) => {
     const { postData } = this.props.threadPost;
     // 兼容本地视频的显示
     const opt = {
@@ -200,7 +210,6 @@ class PostPage extends React.Component {
 
   // 关注列表
   handleAtListChange = (atList) => {
-    console.log(atList);
     this.setState({ atList });
   }
 
@@ -211,14 +220,52 @@ class PostPage extends React.Component {
       Toast.info({ content: '请填写您要发布的内容' });
       return;
     }
-    if (!isDraft && this.state.count > maxCount) {
-      Toast.info({ content: `输入的内容不能超过${maxCount}字` });
+    if (!isDraft && this.state.count > MAX_COUNT) {
+      Toast.info({ content: `输入的内容不能超过${MAX_COUNT}字` });
       return;
     }
-    Toast.loading({ content: isDraft ? '保存草稿中...' : '创建中...' });
+    if (isDraft) this.setPostData({ draft: 1 });
+    else this.setPostData({ draft: 0 });
+    const { threadPost } = this.props;
+    const { rewardQa, redpacket } = threadPost.postData;
+    const rewardAmount = (Number(rewardQa.value) || 0);
+    const redAmount = (Number(redpacket.price) || 0);
+    const amount = rewardAmount + redAmount;
+    const data = { amount };
+    if (!isDraft && amount) {
+      let type = ORDER_TRADE_TYPE.RED_PACKET;
+      let title = '支付红包';
+      if (redAmount) {
+        data.redAmount = redAmount;
+      }
+      if (rewardAmount) {
+        type = ORDER_TRADE_TYPE.POST_REWARD;
+        title = '支付悬赏';
+        data.rewardAmount = rewardAmount;
+      }
+      if (rewardAmount && redAmount) {
+        type = ORDER_TRADE_TYPE.COMBIE_PAYMENT;
+        title = '支付红包和悬赏';
+      }
+      PayBox.createPayBox({
+        data: { ...data, title, type },
+        success: async (orderInfo) => {
+          const { orderSn } = orderInfo;
+          this.setPostData({ orderSn });
+          this.createThread(isDraft);
+        }, // 支付成功回调
+      });
+      return;
+    }
+    this.createThread(isDraft);
+    return false;
+  };
+
+  async createThread(isDraft) {
     const { threadPost, thread } = this.props;
     const threadId = this.props.router.query.id || '';
     let ret = {};
+    Toast.loading({ content: isDraft ? '保存草稿中...' : '创建中...' });
     if (threadId) ret = await threadPost.updateThread(threadId);
     else ret = await threadPost.createThread();
     const { code, data, msg } = ret;
@@ -228,9 +275,7 @@ class PostPage extends React.Component {
       return true;
     }
     Toast.error({ content: msg });
-
-    return false;
-  };
+  }
 
   // 保存草稿
   handleDraft = async (val) => {
@@ -254,7 +299,29 @@ class PostPage extends React.Component {
 
     if (platform === 'pc') {
       return (
-        <IndexPCPage
+        <PayBoxProvider>
+          <IndexPCPage
+            setPostData={data => this.setPostData(data)}
+            handleAttachClick={this.handleAttachClick}
+            handleVideoUploadComplete={this.handleVideoUploadComplete}
+            handleUploadChange={this.handleUploadChange}
+            handleUploadComplete={this.handleUploadComplete}
+            handleAudioUpload={this.handleAudioUpload}
+            handleEmojiClick={this.handleEmojiClick}
+            handleSetState={data => this.setState({ ...data })}
+            handleSubmit={this.handleSubmit}
+            saveDataLocal={this.saveDataLocal}
+            handleAtListChange={this.handleAtListChange}
+            handleVditorChange={this.handleVditorChange}
+            onVideoReady={this.onVideoReady}
+            {...this.state}
+          />
+        </PayBoxProvider>
+      );
+    }
+    return (
+      <PayBoxProvider>
+        <IndexH5Page
           setPostData={data => this.setPostData(data)}
           handleAttachClick={this.handleAttachClick}
           handleVideoUploadComplete={this.handleVideoUploadComplete}
@@ -266,11 +333,12 @@ class PostPage extends React.Component {
           handleSubmit={this.handleSubmit}
           saveDataLocal={this.saveDataLocal}
           handleAtListChange={this.handleAtListChange}
+          handleVditorChange={this.handleVditorChange}
+          onVideoReady={this.onVideoReady}
           {...this.state}
         />
-      );
-    }
-    return <IndexH5Page/>;
+      </PayBoxProvider>
+    );
   }
 }
 

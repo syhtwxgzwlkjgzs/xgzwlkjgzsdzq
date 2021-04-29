@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import IndexMiniPage from '@layout/index';
 import { readCategories, readStickList, readThreadList } from '@server';
 import PayBox from '@components/payBox';
+import Page from '@components/page';
 
 @inject('site')
 @inject('index')
@@ -51,7 +52,7 @@ class Index extends React.Component {
   }
 
   render() {
-    return <IndexMiniPage dispatch={this.dispatch} />;
+    return <Page><IndexMiniPage dispatch={this.dispatch} /></Page>;
   }
 }
 

@@ -9,6 +9,13 @@ import PayPwd from './payPwd';
 @inject('payBox')
 @observer
 export default class index extends Component {
+  onClose = () => {
+    // FIXME: 延时回调的修复
+    setTimeout(() => {
+      this.props.payBox.clear();
+    },1000)
+  }
+
   render() {
     const { step } = this.props.payBox;
     return (
@@ -17,9 +24,7 @@ export default class index extends Component {
           position="bottom"
           maskClosable={true}
           visible={this.props.payBox.visible}
-          onClose={() => {
-            this.props.payBox.visible = false;
-          }}
+          onClose={this.onClose}
         >
           {step === STEP_MAP.SURE && <AmountRecognized />}
           {step === STEP_MAP.PAYWAY && <PayConfirmed />}

@@ -112,7 +112,8 @@ class Index extends React.Component {
       }
 
       if (threadId !== '') {
-        Taro.navigateTo({url: `/pages/thread/index?id=${threadId}`});
+        // Taro.navigateTo({url: `/pages/thread/index?id=${threadId}`});
+        Taro.navigateTo({url: `/subPages/topic/index`});
       } else {
         console.log('帖子不存在');
       }
