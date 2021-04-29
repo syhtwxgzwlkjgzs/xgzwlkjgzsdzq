@@ -50,6 +50,19 @@ class ThreadAction extends ThreadStore {
   }
 
   @action
+  setThreadDetailLikedUsers(isLiked, userInfo) {
+    const users = this.threadData?.likeReward?.users;
+
+    if (isLiked) {
+      this.threadData.likeReward.users = users?.length
+        ? [...users, userInfo]
+        : [userInfo];
+    } else {
+      this.threadData.likeReward.users = users.filter(item => item.userId !== userInfo.userId);
+    }
+  }
+
+  @action
   setThreadDetailEssence(data) {
     this.threadData.displayTag.isEssence = data;
   }
@@ -147,7 +160,7 @@ class ThreadAction extends ThreadStore {
    * @returns {object} 处理结果
    */
   @action
-  async updateLiked(params, IndexStore) {
+  async updateLiked(params, IndexStore, UserStore) {
     const { id, pid, isLiked } = params;
     if (!id || !pid) {
       return {
@@ -171,6 +184,16 @@ class ThreadAction extends ThreadStore {
       this.setThreadDetailField('isLike', !!isLiked);
       this.setThreadDetailLikePayCount(res.data.likeCount);
 
+      // 更新点赞的用户
+      const currentUser = UserStore?.userInfo;
+      if (currentUser) {
+        const user = {
+          avatar: currentUser.avatarUrl,
+          userId: currentUser.id,
+          userName: currentUser.username,
+        };
+        this.setThreadDetailLikedUsers(!!isLiked, user);
+      }
       // 更新首页store
       IndexStore
         && IndexStore.updateAssignThreadInfo(id, {
