@@ -61,7 +61,8 @@ class AtSelect extends Component {
   }
 
   onScrollBottom = () => {
-    this.fetchFollow();
+    // 没有更多数据时，不再发送请求
+    !this.state.finish && this.fetchFollow();
   }
 
   // 取消选择
@@ -136,6 +137,7 @@ class AtSelect extends Component {
         />
         {/* 选择列表 */}
         <Checkbox.Group
+          className={styles['check-box']}
           value={checkUser}
           onChange={val => this.setState({ checkUser: val })}
         >
