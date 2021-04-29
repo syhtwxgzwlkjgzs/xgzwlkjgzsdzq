@@ -13,7 +13,6 @@ const TopicItem = ({ data, onClick }) => {
   const click = useCallback(() => {
     onClick && onClick(data);
   }, [data, onClick]);
-
   const {
     text = '',
     imageData = []

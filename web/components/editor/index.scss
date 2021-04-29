@@ -120,3 +120,9 @@
     border: none;
   }
 }
+.dvditor.pc {
+  .vditor-ir pre.vditor-reset,
+  .vditor-wysiwyg pre.vditor-reset {
+    padding: 0 !important;
+  }
+}

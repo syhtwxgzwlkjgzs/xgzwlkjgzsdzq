@@ -5,23 +5,27 @@ import Router from '@discuzq/sdk/dist/router';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
+import IndexPCPage from '@layout/close/pc';
+import IndexH5Page from '@layout/close/h5';
+
 @inject('site')
 @observer
 class CloseSite extends React.Component {
   render() {
     const { site } = this.props;
-    const { closeSiteConfig } = site;
+    const { closeSiteConfig, platform } = site;
 
     if (!isServer() && !closeSiteConfig) {
       Router.redirect({url: '/'});
     }
+    
+    if (platform === 'pc') {
+      return (
+        <IndexPCPage/>
+      );
+    }
+    return <IndexH5Page/>;
 
-    return (
-      <div className='index'>
-        <h1>关闭站点</h1>
-        {closeSiteConfig && <p>{closeSiteConfig.detail}</p>}
-      </div>
-    );
   }
 }
 

@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import { Checkbox, Divider } from '@discuzq/design';
 import { ORDER_TRADE_TYPE } from '../../../../common/constants/payBoxStoreConstants';
 
+@inject('payBox')
+@observer
 export default class CommonAccountContent extends Component {
   /**
    * 渲染不同交易类型
@@ -35,40 +38,41 @@ export default class CommonAccountContent extends Component {
     return Number(num).toFixed(2);
   };
 
+  handleChangeIsAnonymous = (checked) => {
+    this.props.payBox.isAnonymous = checked
+  }
+
   render() {
-    const { currentPaymentData = {}, isNotShowTitle, titleName } = this.props;
+    const { currentPaymentData = {} } = this.props;
     const { type, amount, isAnonymous } = currentPaymentData;
     return (
       <>
         {/* 标题 */}
-        {!isNotShowTitle && <div className={styles.amountTitle}>{titleName}</div>}
+        <div className={styles.amountTitle}>确认金额</div>
         {/* 主要内容区域 */}
         <div className={styles.amountContent}>
           <div className={styles.acExplain}>
-            <span className={styles.acExplain_label}>交易类型</span>{' '}
-            <span className={styles.acExplain_value}>{this.renderDiffTradeType(type)}</span>
+            <span className={styles.acExplainLabel}>交易类型</span>{' '}
+            <span className={styles.acExplainValue}>{this.renderDiffTradeType(type)}</span>
           </div>
           <Divider className={styles.acExplainDivider} />
           <div className={styles.acExplain}>
-            <span className={styles.acExplain_label}>商品名称</span>{' '}
-            <span className={styles.acExplain_value}>{`迷宫一样的未来 转一个圈会到哪里 我喜欢爱情有点神秘`}</span>
+            <span className={styles.acExplainLabel}>商品名称</span>{' '}
+            <span className={styles.acExplainValue}>{'放置标题名称'}</span>
           </div>
           <Divider className={styles.acExplainDivider} />
           <div className={styles.acExplain}>
-            <span className={styles.acExplain_label}>支付金额</span>
+            <span className={styles.acExplainLabel}>支付金额</span>
             <span className={styles.acExplainNum}>￥{this.transMoneyToFixed(amount)}</span>
           </div>
-          {type === ORDER_TRADE_TYPE.REGEISTER_SITE && (
-            <div className={styles.acExplain}>
-              <Checkbox checked={isAnonymous} /> 隐藏我的付费信息
-            </div>
-          )}
+          {
+            type === ORDER_TRADE_TYPE.REGEISTER_SITE &&
+            (
+              <div className={styles.acExplain}>
+                <Checkbox checked={this.props.payBox.isAnonymous} onChange={this.handleChangeIsAnonymous} /> 隐藏我的付费信息
+              </div>
+            )}
           <Divider className={styles.acExplainDivider} />
-          {/* {type == ORDER_TRADE_TYPE.COMBIE_PAYMENT && (
-            <div>
-              <hr className={styles.acExplain_hr} />
-            </div>
-          )} */}
         </div>
       </>
     );
@@ -78,5 +82,4 @@ export default class CommonAccountContent extends Component {
 CommonAccountContent.defaultProps = {
   currentPaymentData: {}, // 当前支付对象
   isNotShowTitle: false, // 是否不显示title标题
-  titleName: '确认金额', // 默认交易金额title标题名称
 };

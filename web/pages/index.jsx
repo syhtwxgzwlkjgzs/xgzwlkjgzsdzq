@@ -54,11 +54,6 @@ class Index extends React.Component {
     if (!hasThreadsData) {
       this.props.index.getReadThreadList();
     }
-
-    const { platform } = this.props.site;
-    if (platform === 'pc') {
-      this.props.index.getRecommends()
-    }
   }
 
   dispatch = async (type, data = {}) => {
@@ -79,14 +74,14 @@ class Index extends React.Component {
 
       return;
     } else if (type === 'refresh-recommend') {
-      await index.getRecommends({categoryIds: categoryids})
+      await index.getRecommends({ categoryIds: categoryids });
     }
   }
 
   render() {
     const { site } = this.props;
     const { platform } = site;
-
+    console.log(site);
     if (platform === 'pc') {
       return <IndexPCPage dispatch={this.dispatch} />;
     }

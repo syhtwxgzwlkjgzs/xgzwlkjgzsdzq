@@ -1,49 +1,53 @@
 import React from 'react';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
-import { Popup, Icon, Radio } from '@discuzq/design';
-// import browser from '@common/utils/browser';
-// import Router from '@common/utils/web-router';
-import { Button, View, Text, Checkbox } from '@tarojs/components';
+import { Icon, Radio,Button } from '@discuzq/design';
+import isWeixin from '@common/utils/is-weixin';
+import { View, Text } from '@tarojs/components';
 import { PAY_MENT_MAP, PAYWAY_MAP, STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants.js';
-import { listenWXJsBridgeAndExecCallback, onBridgeReady } from '../../../../../common/store/pay/weixin-miniprogram-backend.js'
-@inject('site')
+import { listenWXJsBridgeAndExecCallback, onBridgeReady, wxValidator, mode } from '../../../../../common/store/pay/weixin-miniprogram-backend.js'
 @inject('user')
 @inject('payBox')
 @observer
 export default class PayBox extends React.Component {
   constructor(props) {
     super(props);
-    const { site } = props;
-
     const payConfig = [
       {
         name: '钱包支付',
         icon: 'PayOutlined',
         color: '#1878f3',
-        paymentType: 20,
+        paymentType: 'wallet',
       },
     ];
-
     payConfig.unshift({
       name: '微信支付',
       icon: 'PayOutlined',
       color: '#09bb07',
-      paymentType: 13,
+      paymentType: 'weixin',
     });
 
     this.state = {
       payConfig,
-      paymentType:20
+      paymentType: null
     };
     this.goSetPayPwa = this.goSetPayPwa.bind(this);
+  }
+
+  initState = () => {
+    this.setState({
+      paymentType: 'wallet'
+    })
+    this.props.payBox.payWay = PAYWAY_MAP.WALLET
+    this.props.payBox.password = null
   }
 
   async componentDidMount() {
     const { id } = this.props?.user;
     try {
+      this.initState()
       await this.props.payBox.getWalletInfo(id);
-    } catch (error) {}
+    } catch (error) { }
   }
 
   walletPaySubText() {
@@ -62,115 +66,83 @@ export default class PayBox extends React.Component {
 
   goSetPayPwa() {
     this.props.payBox.step = STEP_MAP.SET_PASSWORD;
-    this.props.payBox.visible = false;
+    // this.props.payBox.visible = false;
   }
 
   /**
    * 选择支付方式
    */
   handleChangePaymentType = (value) => {
-    console.log(value,'sssssss_');
-    this.setState(
-      {
-        paymentType: value,
-      },
-      () => {
-        if (value === PAY_MENT_MAP.WALLET) {
-          this.props.payBox.payWay = PAYWAY_MAP.WALLET;
-        } else if (value === PAY_MENT_MAP.WX_MINI_PROGRAM) {
-          this.props.payBox.payWay = PAYWAY_MAP.WX;
-        }
-      },
-    );
+    this.props.payBox.payWay = value
   };
 
   // 点击确认支付
   handlePayConfirmed = async () => {
-    if (this.state.paymentType === PAY_MENT_MAP.WALLET) {
+    if (this.props.payBox.payWay === PAYWAY_MAP.WALLET) {
       // 表示钱包支付
-      await this.props.payBox.walletPayEnsure();
-      this.props.payBox.visible = false;
-      // this.goSetPayPwa()
-    } else if (this.state.paymentType === PAY_MENT_MAP.WX_MINI_PROGRAM) {
-      // 表示微信支付
-      console.log('进来了', 'sssssss_点击微信支付');
-      await this.props.payBox.wechatPayOrder({ listenWXJsBridgeAndExecCallback, onBridgeReady });
-      // this.props.payBox.visible = false
+      try {
+        await this.props.payBox.walletPayEnsure();
+      } catch (error) {
+
+      }
+    } else if (this.props.payBox.payWay === PAYWAY_MAP.WX) {
+      await this.props.payBox.wechatPayOrder({ listenWXJsBridgeAndExecCallback, onBridgeReady, wxValidator, mode });
     }
-  };
-  /**
-   * 选择支付方式
-   */
-  handleChangePaymentType = (value) => {
-    this.setState(
-      {
-        paymentType: value,
-      },
-      () => {
-        if (value === PAY_MENT_MAP.WALLET) {
-          this.props.payBox.payWay = PAYWAY_MAP.WALLET;
-        } else if (value === PAY_MENT_MAP.WX_MINI_PROGRAM) {
-          this.props.payBox.payWay = PAYWAY_MAP.WX;
-        }
-      },
-    );
   };
 
-  // 点击确认支付
-  handlePayConfirmed = async () => {
-    console.log(this.state.paymentType);
-    if (this.state.paymentType === PAY_MENT_MAP.WALLET) {
-      // 表示钱包支付
-      await this.props.payBox.walletPayEnsure();
-      this.props.payBox.visible = false;
-      // this.goSetPayPwa()
-    } else if (this.state.paymentType === PAY_MENT_MAP.WX_MINI_PROGRAM) {
-      // 表示微信支付
-      console.log('进来了', 'sssssss_点击微信支付');
-      await this.props.payBox.wechatPayOrder({ listenWXJsBridgeAndExecCallback, onBridgeReady });
-      // this.props.payBox.visible = false
-    }
-  };
+  // 点击取消
+  handleCancel = () => {
+    // 回到上一步
+    this.props.payBox.step = STEP_MAP.SURE
+    this.props.payBox.payWay = null
+  }
 
   render() {
     const { options = {} } = this.props.payBox;
-    const { payConfig, paymentType, checked } = this.state;
+    const { payConfig } = this.state;
+    const { user } = this.props;
+    const { userInfo = {} } = user;
+    const { canWalletPay } = userInfo || {};
+    let disabled = !this.props.payBox.payWay
+    if (this.props.payBox.payWay === PAYWAY_MAP.WALLET && !canWalletPay) {
+      disabled = true
+    }
     return (
-        <View className={styles.payBox}>
-          <View className={styles.title}>
-            <Text>支付金额：￥{options.amount}</Text>
-          </View>
-          <View className={styles.list}>
-            <Radio.Group
-              value={paymentType}
-              onChange={(checked) => {
-                this.handleChangePaymentType(checked);
-              }}
-            >
-              {payConfig.map((item, key) => {
-                return (
-                  <View key={key} className={styles.listItem}>
-                    <View className={styles.left}>
-                      <Icon className={styles.icon} name={item.icon} color={item.color} size={20} />
-                      <Text className={styles.text}>{item.name}</Text>
-                    </View>
-                    <View className={styles.right}>
-                      {item.paymentType === PAY_MENT_MAP.WALLET && this.walletPaySubText()}
-                      <Radio name={item.paymentType}/>
-                    </View>
+      <View className={styles.payBox}>
+        <View className={styles.title}>
+          <Text>支付金额：￥{options.amount}</Text>
+        </View>
+        <View className={styles.list}>
+          <Radio.Group
+            value={this.props.payBox.payWay}
+            onChange={(checked) => {
+              this.handleChangePaymentType(checked);
+            }}
+          >
+            {payConfig.map((item, key) => {
+              return (
+                <View key={key} className={styles.listItem}>
+                  <View className={styles.left}>
+                    <Icon className={styles.icon} name={item.icon} color={item.color} size={20} />
+                    <Text className={styles.text}>{item.name}</Text>
                   </View>
-                );
-              })}
-            </Radio.Group>
-          </View>
-          {/* <View className={styles.tips}>
+                  <View className={styles.right}>
+                    {item.paymentType === PAYWAY_MAP.WALLET && this.walletPaySubText()}
+                    {(item.paymentType === PAYWAY_MAP.WX || canWalletPay) && <Radio name={item.paymentType} />}
+                  </View>
+                </View>
+              );
+            })}
+          </Radio.Group>
+        </View>
+        {/* <View className={styles.tips}>
             <Text>asdadsadsd</Text>
           </View> */}
-          <View className={styles.btnBox}>
-            <Button className={styles.btn} onClick={this.handlePayConfirmed}>确认支付￥{options.amount}元</Button>
-            <Button className={styles.btn}>取消</Button>
-          </View>
+        <View className={styles.btnBox}>
+          <Button full disabled={disabled} className={styles.btn} onClick={this.handlePayConfirmed}>确认支付￥{options.amount}元</Button>
+          <Button full onClick={this.handleCancel} className={styles.btn}>取消</Button>
         </View>
+      </View>
     );
   }
 }

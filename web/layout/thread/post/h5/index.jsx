@@ -351,6 +351,7 @@ class ThreadCreate extends React.Component {
         <div className={styles['post-inner']}>
           {/* 标题 */}
           <Title
+            isDisplay={true}
             title={postData.title}
             onChange={title => this.setPostData({ title })}
             onFocus={this.setBottomFixed}
@@ -466,7 +467,7 @@ class ThreadCreate extends React.Component {
             value={currentDefaultOperation}
             permission={threadExtendPermissions}
             onClick={item => this.setState({ currentDefaultOperation: item.id, emoji: {} })}
-            onSubmit={this.submit}>
+            onSubmit={this.props.handleSubmit}>
             {/* 表情 */}
             <Emoji
               show={currentDefaultOperation === defaultOperation.emoji}

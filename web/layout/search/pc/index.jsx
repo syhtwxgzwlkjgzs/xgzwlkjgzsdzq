@@ -34,7 +34,12 @@ class SearchPCPage extends React.Component {
   };
 
   onUserClick = data => console.log('user click', data);
-  onTopicClick = data => console.log('topic click', data);
+
+  onTopicClick = data => {
+    const { topicId } = data
+    this.props.router.push(`/topic/topic-detail/${topicId}`);
+  };
+
   onPostClick = data => console.log('post click', data);
 
   searchData = (keyword) => {
@@ -49,15 +54,20 @@ class SearchPCPage extends React.Component {
     });
   }
 
-  onFollow = (userId) => {
+  onFollow = ({ id, type }) => {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
       goToLoginPage({ url: '/user/login' });
       return;
     }
 
-    this.props.search.postFollow(userId)
+    if (type === '1') {
+      this.props.search.postFollow(id)
+    } else {
+      this.props.search.cancelFollow({ id, type: 1 })
+    }
   }
+
   // 右侧 - 步骤条
   renderRight = () => {
     return (

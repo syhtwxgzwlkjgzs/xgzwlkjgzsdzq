@@ -1,0 +1,43 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.container {
+  padding: rem($padding-4n);
+  background: var( --color-white);
+  overflow: hidden;
+  .title {
+    font-size: rem($font-size-middle);
+    line-height: rem($font-line-height-primary);
+    color: var(--color-primary);
+    margin-bottom: rem($margin-4n);
+    font-weight: 700;
+  }
+  .siteInfo {
+    width: 100%;
+    display: flex;
+    box-sizing: border-box;
+    li { 
+      margin-right: rem(40);
+    }
+    .text {
+      font-size: rem($font-size-primary);
+      color: var(--color-text-secondary);
+    }
+    .content {
+      font-size: rem($font-size-primary);
+      color: var(--color-text-secondary);
+      padding: 0 rem($padding-2n);
+    }
+    .shareIcon {
+      display: inline-block;
+      padding-right: rem($padding-2n);
+    }
+  }
+  .allTopic {
+    a {
+      font-size: rem($font-size-primary);
+      color: var(--color-text-secondary);
+      text-decoration: none;
+    }
+  }
+}

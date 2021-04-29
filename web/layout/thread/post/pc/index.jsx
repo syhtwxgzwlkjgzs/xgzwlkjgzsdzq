@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import Header from '@components/header';
 import DVditor from '@components/editor';
-import Title from '@components/thread-post-pc/title';
+import Title from '@components/thread-post/title';
 import { AttachmentToolbar, DefaultToolbar } from '@components/editor/toolbar';
 import Position from '@components/thread-post/position';
 import { Button, Video, Audio, AudioRecord, Tag } from '@discuzq/design';
@@ -13,7 +13,7 @@ import Emoji from '@components/editor/emoji';
 import ImageUpload from '@components/thread-post/image-upload';
 import { defaultOperation } from '@common/constants/const';
 import FileUpload from '@components/thread-post/file-upload';
-import { THREAD_TYPE } from '@common/constants/thread-post';
+import { THREAD_TYPE, MAX_COUNT } from '@common/constants/thread-post';
 import Product from '@components/thread-post/product';
 import ProductSelect from '@components/thread-post/product-select';
 import AllPostPaid from '@components/thread/all-post-paid';
@@ -52,8 +52,8 @@ class ThreadPCPage extends React.Component {
                 emoji={emoji}
                 atList={atList}
                 topic={topic}
-                onChange={() => { }}
-                onCountChange={() => { }}
+                onChange={this.props.handleVditorChange}
+                onCountChange={count => this.props.handleSetState({ count })}
                 onFocus={() => { }}
                 onBlur={() => {}}
               />
@@ -112,6 +112,8 @@ class ThreadPCPage extends React.Component {
                   \ 总金额{postData.redpacket.price}元\{postData.redpacket.number}个
                   {postData.redpacket.condition === 1 && `\\集赞个数${postData.redpacket.likenum}`}
                 </Tag>)}
+                {/* 字数 */}
+                <div className={styles['editor-count']}>还能输入{MAX_COUNT - this.props.count}个字</div>
               </div>
             </div>
             <div className={styles.toolbar}>
@@ -161,8 +163,8 @@ class ThreadPCPage extends React.Component {
               }}
             />
             <div className={styles.footer}>
-              <Button type="info">保存至草稿箱</Button>
-              <Button type="primary">发布</Button>
+              <Button type="info" onClick={() => this.props.handleSubmit(true)}>保存至草稿箱</Button>
+              <Button type="primary" onClick={() => this.props.handleSubmit()}>发布</Button>
             </div>
           </div>
           <Copyright/>
