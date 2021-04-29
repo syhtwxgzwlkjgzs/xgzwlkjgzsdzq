@@ -144,7 +144,7 @@ class IndexH5Page extends React.Component {
             activeId={currentIndex}
             tabBarExtraContent={
               <div onClick={this.searchClick} className={styles.tabIcon}>
-                <Icon name="SecondaryMenuOutlined" />
+                <Icon name="SecondaryMenuOutlined" className={styles.buttonIcon}  size={16}/>
               </div>
             }
           >
@@ -159,8 +159,8 @@ class IndexH5Page extends React.Component {
             }
           </Tabs>
         </div>}
-        {sticks && sticks.length > 0 && <div className={styles.homeContent}>
-          <TopNew data={sticks}/>
+        {sticks && sticks.length > 0 && <div className={styles.homeContentTop}>
+          <TopNew data={sticks} itemMargin='1'/>
         </div>}
       </div>
     );

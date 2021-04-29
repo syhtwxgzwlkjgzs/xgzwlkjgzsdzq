@@ -27,26 +27,26 @@ class UsernameH5Login extends React.Component {
   };
 
   loginErrorHandler = async (e) => {
-    // 微信绑定，跳入微信扫码绑定
-    if (e.Code === NEED_BIND_WEIXIN_FLAG && this.props.site.wechatEnv === 'openPlatform') {
-      this.props.commonLogin.needToBindWechat = true;
-      this.props.router.push(`/user/wx-bind-qrcode?sessionToken=${e.sessionToken}&loginType=username&nickname=${e.nickname}`);
-      return;
-    }
-
-    // 微信绑定，跳入小程序绑定
-    if (e.Code === NEED_BIND_WEIXIN_FLAG && this.props.site.wechatEnv === 'miniProgram') {
-      this.props.commonLogin.needToBindMini = true;
-      const resp = await genMiniScheme();
-      if (resp.code === 0) {
-        window.location.href = `${get(resp, 'data.openLink', '')}?sessionToken=${e.sessionToken}`;
+    // 微信绑定
+    if (e.Code === NEED_BIND_WEIXIN_FLAG) {
+      const { wechatEnv, platform } = this.props.site;
+      if (wechatEnv === 'miniProgram' && platform === 'h5') {
+        this.props.commonLogin.needToBindMini = true;
+        const resp = await genMiniScheme();
+        if (resp.code === 0) {
+          window.location.href = `${get(resp, 'data.openLink', '')}?sessionToken=${e.sessionToken}`;
+          return;
+        }
+        Toast.error({
+          content: '网络错误',
+          hasMask: false,
+          duration: 1000,
+        });
         return;
       }
-      Toast.error({
-        content: '网络错误',
-        hasMask: false,
-        duration: 1000,
-      });
+      this.props.commonLogin.needToBindWechat = true;
+      this.props.commonLogin.sessionToken = e.sessionToken;
+      this.props.router.push(`/user/wx-bind-qrcode?sessionToken=${e.sessionToken}&loginType=${platform}&nickname=${e.nickname}`);
       return;
     }
 

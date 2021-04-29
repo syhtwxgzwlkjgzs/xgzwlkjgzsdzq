@@ -6,6 +6,7 @@
   background: #fff;
   display: flex;
   font-family: "PingFang SC";
+  border-radius: rem($border-radius-small);
   .codeBox {
     width: rem(83);
     height: rem(83);

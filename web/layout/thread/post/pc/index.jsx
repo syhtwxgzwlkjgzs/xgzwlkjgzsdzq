@@ -21,6 +21,7 @@ import AtSelect from '@components/thread-post/at-select';
 import TopicSelect from '@components/thread-post/topic-select';
 import RedpacketSelect from '@components/thread-post/redpacket-select';
 import Copyright from '@components/copyright';
+import ForTheForm from '@components/thread/for-the-form';
 
 @inject('threadPost')
 @inject('index')
@@ -234,6 +235,22 @@ class ThreadPCPage extends React.Component {
               data={postData.redpacket}
               cancel={() => this.props.handleSetState({ currentDefaultOperation: '' })}
               confirm={data => this.props.setPostData({ redpacket: data })}
+            />
+          )}
+          {currentAttachOperation === THREAD_TYPE.reward && (
+            <ForTheForm
+              pc
+              visible={currentAttachOperation === THREAD_TYPE.reward}
+              confirm={(data) => {
+                this.props.setPostData({ rewardQa: data });
+                this.props.handleSetState({ currentAttachOperation: false });
+              }}
+              cancel={() => {
+                this.props.handleSetState({
+                  currentAttachOperation: false,
+                });
+              }}
+              data={postData.rewardQa}
             />
           )}
         </div>

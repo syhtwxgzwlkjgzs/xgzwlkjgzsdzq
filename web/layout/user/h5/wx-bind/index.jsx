@@ -29,7 +29,7 @@ class WeixinBindH5Page extends React.Component {
             className={layout.button}
             type="primary"
             onClick={() => this.bind({
-              params: { sessionToken, code, sessionId, type: 'h5', state },
+              params: { sessionToken, code, sessionId, type: loginType, state },
             })}
           >
             绑定微信，并继续访问

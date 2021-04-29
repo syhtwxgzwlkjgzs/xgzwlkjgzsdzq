@@ -1,5 +1,5 @@
 import React from 'react';
-import Taro, { getCurrentInstance, navigateTo, redirectTo  } from '@tarojs/taro';
+import Taro, { getCurrentInstance, redirectTo  } from '@tarojs/taro';
 import { inject } from 'mobx-react';
 import { Toast, Popup } from '@discuzq/design';
 import { Button, View } from '@tarojs/components';
@@ -24,7 +24,7 @@ class MiniAuth extends React.Component {
     // 其他地方跳入的小程序绑定流程
     if(action === 'mini-bind'){
       redirectTo({
-        url: `/pages/wx-bind/index?sessionToken=${sessionToken}`
+        url: `/subPages/user/wx-bind/index?sessionToken=${sessionToken}`
       })
       return;
     }
@@ -37,7 +37,7 @@ class MiniAuth extends React.Component {
       // 小程序登录
       const resp = await miniLogin({
         timeout: 10000,
-        params: {
+        data: {
           jsCode: this.props.commonLogin.jsCode,
           iv: params.iv,
           encryptedData: params.encryptedData,
@@ -50,7 +50,6 @@ class MiniAuth extends React.Component {
         encryptedData: params.encryptedData,
         inviteCode
       });
-      console.log(resp);
       checkUserStatus(resp);
       // 优先判断是否能登录
       if (resp.code === 0) {
@@ -60,7 +59,7 @@ class MiniAuth extends React.Component {
         });
         this.props.user.updateUserInfo(uid);
         redirectTo({
-          url: `/pages/index/index`
+          url: `/subPages/index/index`
         });
         return;
       }
@@ -68,8 +67,8 @@ class MiniAuth extends React.Component {
       if (resp.code === NEED_BIND_OR_REGISTER_USER) {
         const { sessionToken, nickname } = resp.data;
         this.props.user.nickname = nickname;
-        navigateTo({
-          url: `/pages/wx-select/index?sessionToken=${sessionToken}&nickname=${nickname}`
+        redirectTo({
+          url: `/subPages/user/wx-select/index?sessionToken=${sessionToken}&nickname=${nickname}`
         });
         return;
       }
@@ -81,8 +80,8 @@ class MiniAuth extends React.Component {
       // 跳转状态页
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
-        navigateTo({
-          url: `/pages/user/status?statusCode=${error.Code}&statusMsg=${error.Message}`
+        redirectTo({
+          url: `/subPages/user/status/index?statusCode=${error.Code}&statusMsg=${error.Message}`
         });
         return;
       }
@@ -131,6 +130,7 @@ class MiniAuth extends React.Component {
       desc: "查询用户是否绑定过账号",
       success: (res) => {
         if(res.errMsg === 'getUserProfile:ok'){
+          console.log(res);
           this.getUserProfileCallback(res);
           return resolve(res);
         }

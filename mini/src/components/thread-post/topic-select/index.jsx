@@ -94,9 +94,9 @@ class TopicSelect extends Component {
       >
         <View className={styles['item-left']}>
           <View className={styles.name}>#{item.content}#</View>
-          {item.recommended === 1 &&
+          {item.recommended &&
             <View className={styles.recommend}>
-              <Icon name="LikeOutlined" size={20} color='#1878f3' />
+              <Icon name="LikeOutlined" size={20} color='#2469f6' />
             </View>
           }
         </View>
@@ -134,6 +134,7 @@ class TopicSelect extends Component {
           {/* 搜索列表 */}
           <ScrollView
             width='100%'
+            height={500}
             rowCount={topics.length}
             rowData={topics}
             rowHeight={54}

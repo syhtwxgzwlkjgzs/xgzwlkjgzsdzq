@@ -14,12 +14,20 @@
       margin-bottom: rem($margin-10);
     }
   }
+  .postTitle {
+    padding: 0 rem($padding-6n);
+    border-radius: rem($border-radius-small);
+    background: var(--color-white);
+  }
   .searchRight {
     width: rem(286);
     overflow: hidden;
   }
   .threadContent {
+    border-radius: rem($border-radius-small);
+    padding: 0 rem($padding-6n);
     margin-bottom: rem(16);
+    overflow: hidden;
   }
 }
 
