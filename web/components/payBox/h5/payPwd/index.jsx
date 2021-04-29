@@ -15,7 +15,6 @@ class Index extends React.Component {
     super(props);
     this.state = {
       list: [],
-      target: 0,
       isShow: false
     };
     this.keyboardClickHander = this.keyboardClickHander.bind(this);
@@ -24,7 +23,6 @@ class Index extends React.Component {
   initState = () => {
     this.setState({
       list: [],
-      target: 0,
       isShow: false
     })
   }
@@ -192,7 +190,7 @@ class Index extends React.Component {
   render() {
     const { list = [] } = this.state;
     return (
-      <div style={{ position: 'relative', zIndex: 9999 }}>
+      <div style={{ position: 'relative', zIndex: 1400 }}>
         {/* <Header /> */}
         {/* <CommonPayoffPwd list={list} updatePwd={this.updatePwd} /> */}
         {this.renderDialogPayment()}

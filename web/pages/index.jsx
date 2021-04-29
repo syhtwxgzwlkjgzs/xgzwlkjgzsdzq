@@ -57,7 +57,7 @@ class Index extends React.Component {
 
     const { platform } = this.props.site;
     if (platform === 'pc') {
-      this.props.index.getRecommends()
+      this.props.index.getRecommends();
     }
   }
 
@@ -79,7 +79,7 @@ class Index extends React.Component {
 
       return;
     } else if (type === 'refresh-recommend') {
-      await index.getRecommends({categoryIds: categoryids})
+      await index.getRecommends({ categoryIds: categoryids });
     }
   }
 
