@@ -12,7 +12,7 @@ import QcCode from './components/qcCode';
 import Recommend from './components/recommend';
 import ThreadContent from '@components/thread';
 import List from '@components/list';
-import Copyright from './components/copyright';
+import Copyright from '@components/copyright';
 import { readThreadList } from '@server';
 import PayBox from '@components/payBox';
 
@@ -35,6 +35,21 @@ class IndexPCPage extends React.Component {
   filter = {}
 
   componentDidMount() {
+    // PayBox.createPayBox({
+    //   data: {
+    //     amount: 0.1,
+    //     type: 5,
+    //     threadId: 4,
+    //     payeeId: 16,
+    //     isAnonymous: false,
+    //   },
+    //   success: (orderInfo) => {
+    //     console.log(orderInfo);
+    //   },
+    //   failed: (orderInfo) => {
+    //     console.log(orderInfo);
+    //   },
+    // });
     if (this.timer) {
       clearInterval(this.timer);
     }
@@ -61,18 +76,17 @@ class IndexPCPage extends React.Component {
 
   changeBatch = () => {
     const { dispatch = () => {} } = this.props;
-     const { filter } = this.state;
-     return dispatch('refresh-recommend', filter);
+     return dispatch('refresh-recommend', this.filter);
   }
-  recommendDetails = () => {
-    console.log('推荐详情');
+  recommendDetails = (item) => {
+    const { threadId } = item
+    this.props.router.push(`/thread/${threadId}`);
   }
 
    // 上拉加载更多
    onPullingUp = () => {
      const { dispatch = () => {} } = this.props;
-     const { filter } = this.state;
-     return dispatch('moreData', filter);
+     return dispatch('moreData', this.filter);
    }
 
    onFilterClick = (result) => {
@@ -128,13 +142,14 @@ class IndexPCPage extends React.Component {
     );
   }
   // 右侧 -- 二维码 推荐内容
-  renderRight = () => (
+  renderRight = (data) => (
       <div className={styles.indexRight}>
         <QcCode />
         <div style={{ margin: '20px 0' }}>
           <Recommend
             changeBatch={this.changeBatch}
             recommendDetails={this.recommendDetails}
+            data={data}
           />
         </div>
         <Copyright/>
@@ -174,13 +189,14 @@ class IndexPCPage extends React.Component {
     const { index, site } = this.props;
     const { countThreads = 0 } = site?.webConfig?.other || {};
     const { currentPage, totalPage } = this.props.index.threads || {};
+    const { recommends } = this.props.index || [];
 
     return (
       <List className={styles.indexWrap} onRefresh={this.onPullingUp} noMore={currentPage === totalPage}>
           <BaseLayout
             onSearch={this.onSearch}
             left={ this.renderLeft(countThreads) }
-            right={ this.renderRight }
+            right={ this.renderRight(recommends) }
           >
             {this.renderContent(index)}
           </BaseLayout>

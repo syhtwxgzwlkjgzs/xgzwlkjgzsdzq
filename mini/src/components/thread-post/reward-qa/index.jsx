@@ -29,6 +29,14 @@ class RewardQa extends Component {
     })
   }
 
+  onMoneyChang = (e) => { // 处理悬赏金额输入
+    const val = e.target.value;
+    const money = val.replace(/\.\d*$/, $1 => {
+      return $1.slice(0, 3)
+    })
+    this.setState({ money })
+  }
+
   openTimePicker = () => { // 开启时间选择框
     const { openModal } = this.timeRef.current;
     openModal();
@@ -51,7 +59,7 @@ class RewardQa extends Component {
       const { setPostData } = this.props.threadPost;
       setPostData({
         rewardQa: {
-          price: money,
+          price: parseFloat(money),
           expiredAt: selectedTime,
         }
       })
@@ -121,7 +129,7 @@ class RewardQa extends Component {
               placeholder="金额"
               placeholderStyle="color:#c5c6ca"
               maxLength={10}
-              onChange={e => this.setState({ money: e.detail.value })}
+              onChange={this.onMoneyChang}
             />元
           </View>
         </View>

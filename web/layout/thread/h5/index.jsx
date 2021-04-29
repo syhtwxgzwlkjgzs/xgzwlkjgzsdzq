@@ -9,6 +9,7 @@ import CommentList from './components/comment-list/index';
 import NoMore from './components/no-more';
 import LoadingTips from './components/loading-tips';
 
+import styleVar from '@common/styles/theme/default.scss.json';
 import { Icon, Input, Badge, Toast, Button } from '@discuzq/design';
 import UserInfo from '@components/thread/user-info';
 import Header from '@components/header';
@@ -877,7 +878,7 @@ class ThreadH5Page extends React.Component {
               }
             </div>
             <Icon
-              color={this.props.thread?.isFavorite ? 'blue' : ''}
+              color={this.props.thread?.isFavorite ? styleVar['--color-primary'] : ''}
               className={footer.icon}
               onClick={() => this.onCollectionClick()}
               size="20"

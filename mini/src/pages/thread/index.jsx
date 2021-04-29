@@ -2,7 +2,10 @@ import React from 'react';
 import { getCurrentInstance } from '@tarojs/taro';
 import Page from '@components/page';
 import { inject } from 'mobx-react';
+import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import ThreadMiniPage from '../../layout/thread/index';
+
+const MemoToastProvider = React.memo(ToastProvider)
 
 @inject('site')
 @inject('thread')
@@ -34,7 +37,9 @@ class Detail extends React.Component {
   render() {
     return (
       <Page>
-        <ThreadMiniPage></ThreadMiniPage>
+        <MemoToastProvider>
+          <ThreadMiniPage></ThreadMiniPage>
+        </MemoToastProvider>
       </Page>
     )
   }

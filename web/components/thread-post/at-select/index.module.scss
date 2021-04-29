@@ -86,7 +86,7 @@
           width: 24px;
           height: 24px;
           border-radius: 50%;
-          &::after {
+          &:after {
             border-radius: 50%;
           }
         }
@@ -137,5 +137,13 @@
         background-color: #1878f3;
       }
     }
+  }
+}
+.pc {
+  .wrapper {
+    height: 500px;
+  }
+  .at-wrap {
+    height: calc(500px - 135px);
   }
 }

@@ -3,11 +3,12 @@
  */
 import React, { useState, useEffect } from 'react'; // 性能优化的
 import { Button, Input, Slider, Toast } from '@discuzq/design'; // 原来就有的封装
+import DDialog from '@components/dialog';
 import styles from './index.module.scss'; // 私有样式
 import PropTypes from 'prop-types'; // 类型拦截
 import throttle from '@common/utils/thottle';
 
-const AllPostPaid = ({ confirm, cancle, data, exhibition }) => {
+const AllPostPaid = ({ confirm, cancle, data, exhibition, pc, visible }) => {
   const [price, setPrice] = useState(0);// 支付的金额数量
   const [attachmentPrice, setAttachmentPrice] = useState(0);
   const [freeWords, setFreeWords] = useState(0);// 可免费查看数量的百分比数字
@@ -25,42 +26,45 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition }) => {
       return;
     }
     if (exhibition === '帖子付费') {
-      confirm({ price, freeWords, attachmentPrice: 0 });
+      confirm({ price, freeWords: freeWords / 100 });
     } else {
-      confirm({ price: 0, freeWords, attachmentPrice });
+      confirm({ attachmentPrice });
     }
     cancle();
   };
 
-  return (
+  const content = (
     <div className={styles['redpacket-box']}>
-      {exhibition === '帖子付费' ? <div>
-        <div className={styles['line-box']}>
-          <div> 支付金额 </div>
-          <div>
-            <Input
-              mode="number"
-              value={price}
-              placeholder="金额"
-              onChange={e => setPrice(+e.target.value)}
-            />
-          元
-        </div>
-        </div>
-        <div className={styles.toview}>
-          <div className={styles.toviewone}> 免费查看字数 </div>
-          <div>
+      {exhibition === '帖子付费' && (
+        <div>
+          <div className={styles['line-box']}>
+            <div> 支付金额 </div>
             <div>
-              <Slider
-                value={freeWords}
-                defaultValue={freeWords}
-                formatter={value => `${value} %`}
-                onChange={throttle(e => setFreeWords(e), 100)}
+              <Input
+                mode="number"
+                value={price}
+                placeholder="金额"
+                onChange={e => setPrice(+e.target.value)}
               />
+              元
+            </div>
+          </div>
+          <div className={styles.toview}>
+            <div className={styles.toviewone}> 免费查看字数 </div>
+            <div>
+              <div>
+                <Slider
+                  value={freeWords}
+                  defaultValue={freeWords}
+                  formatter={value => `${value} %`}
+                  onChange={throttle(e => setFreeWords(e), 100)}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div> : <div className={styles['line-box']}>
+      )}
+      {exhibition === '附件付费' && (< div className={styles['line-box']}>
         <div> 附件内容查看价格 </div>
         <div>
           <Input
@@ -71,12 +75,24 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition }) => {
           />
           元
         </div>
-      </div>}
+      </div>)}
       <div className={styles.btn}>
         <Button type="large" className={styles['btn-one']} onClick={cancle}>取消</Button>
-        <Button type="large" className={styles['btn-two']} onClick={redbagconfirm}>确定</Button>
+        <Button type="primary" className={styles['btn-two']} onClick={redbagconfirm}>确定</Button>
       </div>
     </div>
+  );
+  if (!pc) return content;
+
+  return (
+    <DDialog
+      title={exhibition}
+      visible={visible}
+      className={styles.pc}
+      onClose={cancle}
+    >
+      {content}
+    </DDialog>
   );
 };
 

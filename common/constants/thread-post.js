@@ -36,6 +36,14 @@ export const THREAD_TYPE = {
   // queue: 109, // 排队接龙
   file: 108, // 附件
   // qaImage: 111, // 问答图片
+  paid: 112, // 插入付费
+  paidPost: 113, // 支付主题
+  paidAttachment: 114, // 支付附件
+  at: 115, // @用户
+  topic: 116, // 话题
+  draft: 117, // 草稿
+  saveDraft: 118, // 保存草稿
+  abandonDraft: 119, // 不保存草稿
 };
 
 // 图片类型

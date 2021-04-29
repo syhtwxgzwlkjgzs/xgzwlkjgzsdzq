@@ -11,10 +11,10 @@
 .main {
   :global{
     .dzq-textarea {
-      border: 1px solid transparent;
-      border-radius: 0;
+      border: none;
+      border-radius: rem($border-radius-small) rem($border-radius-small) 0 0;
       .dzq-textarea__inner{
-        background: #f5f7f8;
+        background: var(--comment-box-bg-color);
         resize: none;
       }
     }
@@ -23,8 +23,10 @@
 
 
 .input {
-  width: 100%;
-  background: #f5f7f8;
+  width: 100% !important;
+  box-sizing: border-box;
+  background: var(--comment-box-bg-color);
+  overflow: hidden;
 }
 .heightMiddle {
   height: rem(116);

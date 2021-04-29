@@ -47,6 +47,7 @@
 }
 
 .footer {
+  margin-top: 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -65,6 +66,7 @@
   color: var(--color-text-regular);
   background: var(--background-color);
   font-size: 12px;
+  line-height: 12px;
   padding: 8px 4px;
   border-radius: 5px;
 }

@@ -68,26 +68,30 @@ const ClassifyPopup = (props) => {
       {/* 父类 */}
       <View className={`${styles.content} ${styles['content-parent']}`}>
         {(category?.slice() || []).map(item => (
-          <Button
-            key={item.pid}
-            className={`${parent.pid === item.pid ? styles.active : ''}`}
-            onClick={() => { handleParentClick(item) }}
-          >
-            {item.name}
-          </Button>
+          item.canCreateThread
+            ? <Button
+              key={item.pid}
+              className={`${parent.pid === item.pid ? styles.active : ''}`}
+              onClick={() => { handleParentClick(item) }}
+            >
+              {item.name}
+            </Button>
+            : null
         ))}
       </View>
       {/* 子类 */}
       {subcategory.length > 0 && (
         <View className={`${styles.content} ${styles['content-child']}`}>
           {(subcategory || []).map(item => (
-            <Button
-              key={item.pid}
-              className={`${child.pid === item.pid ? styles.active : ''}`}
-              onClick={() => { handleChildClick(item) }}
-            >
-              {item.name}
-            </Button>
+            item.canCreateThread
+              ? <Button
+                key={item.pid}
+                className={`${child.pid === item.pid ? styles.active : ''}`}
+                onClick={() => { handleChildClick(item) }}
+              >
+                {item.name}
+              </Button>
+              : null
           ))}
         </View>
       )}

@@ -27,7 +27,7 @@
     &:focus {
       background-color: var(--color-white);
     }
-    img[alt$=":emoji"] {
+    img[alt^=":"] {
       width: 30px;
     }
   }
@@ -91,7 +91,8 @@
     width: 18px;
     height: 18px;
   }
-  .vditor-ir {
+  .vditor-ir,
+  .vditor-wysiwyg {
     .vditor-reset>h1:before,
     .vditor-reset>h2:before,
     .vditor-reset>h3:before,
@@ -100,6 +101,19 @@
     .vditor-reset>h6:before,
     .vditor-toc:before {
       content: '';
+    }
+    .vditor-wysiwyg__block::before {
+      content: '';
+    }
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+      background-color: rgba(0, 0, 0, .09);
+      border-radius: 100px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, .09);
+      border-radius: 100px;
     }
   }
   .vditor-content {

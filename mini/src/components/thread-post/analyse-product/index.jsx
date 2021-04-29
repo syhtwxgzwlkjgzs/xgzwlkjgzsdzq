@@ -1,0 +1,53 @@
+import React, { useState } from 'react';
+import Taro from '@tarojs/taro';
+import { View, Text, Image, Textarea, Button } from '@tarojs/components';
+import { Toast } from '@discuzq/design';
+import { observer, inject } from 'mobx-react';
+import styles from './index.module.scss';
+import { goodImages } from '@common/constants/const';
+
+
+const Index = inject('threadPost')(observer(({ threadPost }) => {
+  const { fetchProductAnalysis, setPostData } = threadPost;
+
+  const [url, setUrl] = useState('');
+
+  return (
+    <View>
+      <View className={styles['title']}>现支持以下商品链接</View>
+      <View className={styles['product']}>
+        {goodImages.map((item) => (
+          <View className={styles['product-type']}>
+            <Image src={`https://discuzv3-dev.dnspod.dev${item.src}`} style={{width: `${item.width}px`, height: `${item.height}px`}} />
+            <Text>{item.name}</Text>
+          </View>
+        ))}
+      </View>
+      <View className={styles['textarea-container']}>
+        <Textarea className={styles['textarea']} placeholder='请粘贴\输入商品链接' value={url} onInput={(e) => {
+          setUrl(e.detail.value);
+        }} />
+      </View>
+      <View className={styles['button-container']}>
+        <Button
+          className={styles['button']}
+          onClick={async () => {
+            const res = await fetchProductAnalysis({ address: url });
+            const { code, data = {}, msg } = res;
+            if (code === 0) {
+              setPostData({ product: data });
+              Taro.navigateBack();
+            } else {
+              Toast.error({ content: msg });
+            }
+          }}
+        >
+          确定
+        </Button>
+      </View>
+    </View>
+  );
+}));
+
+
+export default Index;

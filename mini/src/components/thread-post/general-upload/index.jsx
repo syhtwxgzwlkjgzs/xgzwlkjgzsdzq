@@ -1,11 +1,12 @@
 
 /**
- * 通用上传组件、支持图片、附件、视频等的上传和展示
+ * 通用上传组件、支持图片、附件、录音等的上传和展示
  */
 import React, { useState } from 'react';
 import Taro from '@tarojs/taro';
 import { observer, inject } from 'mobx-react';
 import { View } from '@tarojs/components';
+import { AudioRecord } from '@discuzq/design';
 import { Units } from '@components/common';
 import styles from './index.module.scss';
 import { THREAD_TYPE } from '@common/constants/thread-post';
@@ -17,20 +18,13 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
 
   const { images, files } = localData;
 
-  if (!(images.body instanceof Array)) {
-    images.body = [];
-  }
-
-  if (!(files.body instanceof Array)) {
-    files.body = [];
-  }
-
   // 执行上传
   const upload = (file) => {
-    const tempPath = file.path;
+    console.log('upload', file);
+    const tempFilePath = file.path || file.tempFilePath;
     Taro.uploadFile({
       url: 'https://discuzv3-dev.dnspod.dev/apiv3/attachments',
-      filePath: tempPath,
+      filePath: tempFilePath,
       name: 'file',
       header: {
         'Content-Type': 'multipart/form-data',
@@ -41,25 +35,28 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
           switch(type) {
             case THREAD_TYPE.image: return 1;
             case THREAD_TYPE.file: return 0;
+            case THREAD_TYPE.voice: return 3;
           }
         })()
       },
       success(res) {
+        console.log(res);
+        const data = JSON.parse(res.data).Data;
         switch(type) {
           case THREAD_TYPE.image:
-            images.body.push({
-              thumbUrl: tempPath,
-              ...res.data
-            });
+            images[data.id] = {
+              thumbUrl: tempFilePath,
+              ...data
+            };
             setPostData({images});
             break;
           case THREAD_TYPE.file:
-            files.body.push({
-              ...res.data,
-              thumbUrl: tempPath,
+            files[data.id] = {
+              thumbUrl: tempFilePath,
               name: file.name,
               size: file.size,
-            });
+              ...data
+            };
             setPostData({files});
             break;
         }
@@ -91,10 +88,10 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
   // 进行附件上传
   const atta = (
     <>
-      {files.body.map((item, index) => {
+      {Object.values(files).map((item, index) => {
         return (
           <Units key={index} type='atta' filename={item.name} size={`${Math.ceil(item.size / 1024)}KB`} onDelete={() => {
-            files.body.splice(index, 1);
+            delete files[item.id];
             setPostData({files});
           }} />
         );
@@ -107,24 +104,31 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
   // 进行图片上传
   const img = (
     <View className={styles['img-container']}>
-      {images.body.map((item, index) => {
+      {Object.values(images).map((item, index) => {
         const className = (index % 2 === 0) ? styles['margin'] : '';
         return (
           <Units className={className} type='img' src={item.thumbUrl} onDelete={() => {
-            images.body.splice(index, 1);
+            delete images[item.id];
             setPostData({images});
           }} />
         );
       })}
 
-      {(type === THREAD_TYPE.image && images.body.length < 9) && (<Units type='img-upload' onUpload={chooseImage} />)}
+      {(type === THREAD_TYPE.image && Object.values(images).length < 9) && (<Units type='img-upload' onUpload={chooseImage} />)}
     </View>
+  );
+
+  // 录音并上传
+  const audioRecord = (type === THREAD_TYPE.voice) && (
+    // <View></View>
+    <AudioRecord duration={10} onUpload={(file) => {upload(file)}} />
   );
 
   return (
     <>
       {atta}
       {img}
+      {audioRecord}
     </>
   );
 }));

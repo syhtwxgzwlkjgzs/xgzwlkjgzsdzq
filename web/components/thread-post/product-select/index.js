@@ -1,43 +1,13 @@
 import React, { memo, useState } from 'react';
-import { Input, Button, Toast, Dialog, Icon } from '@discuzq/design';
+import { Input, Button, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
+import DDialog from '@components/dialog';
 import styles from './index.module.scss';
+import { goodImages } from '@common/constants/const';
 
 const ProductSelect = (props) => {
   // state data
   const [link, setLink] = useState('');
-  const goodImages = [
-    {
-      src: '/dzq-img/jingdong.svg',
-      name: '京东',
-      width: 20,
-      height: 20,
-    },
-    {
-      src: '/dzq-img/taobao.svg',
-      name: '淘宝',
-      width: 20,
-      height: 20,
-    },
-    {
-      src: '/dzq-img/tmall.svg',
-      name: '天猫',
-      width: 20,
-      height: 20,
-    },
-    {
-      src: '/dzq-img/pinduoduo.svg',
-      name: '拼多多',
-      width: 20,
-      height: 20,
-    },
-    {
-      src: '/dzq-img/youzan.svg',
-      name: '有赞',
-      width: 20,
-      height: 20,
-    },
-  ];
 
   // handle
   const parseLink = async () => {
@@ -89,27 +59,15 @@ const ProductSelect = (props) => {
 
   if (!props.pc) return content;
 
-  const header = (
-    <div className={styles['pc-header']}>
-      添加商品
-      <Icon
-        className={styles['pc-closeicon']}
-        name="DeleteOutlined"
-        size={12}
-        onClick={props.cancel}
-      />
-    </div>
-  );
-
   return (
-    <Dialog
+    <DDialog
       visible={props.visible}
       className={styles.pc}
-      header={header}
       onClose={props.cancel}
+      title="添加商品"
     >
       {content}
-    </Dialog>
+    </DDialog>
   );
 };
 
