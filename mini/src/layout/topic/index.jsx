@@ -1,18 +1,18 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'next/router';
 import styles from './index.module.scss';
-import Header from '@components/header';
 import SearchInput from '@components/search-input';
 import List from '@components/list';
 import TopicHeader from './components/topic-header'
 import TopicItem from './components/topic-item'
+import { View, Text } from '@tarojs/components';
+import Taro from '@tarojs/taro';
 
 @inject('site')
 @inject('user')
 @inject('topic')
 @observer
-class TopicH5Page extends React.Component {
+class TopicPage extends React.Component {
   state = {
     keyword: '',
     sort: ''
@@ -34,7 +34,10 @@ class TopicH5Page extends React.Component {
   };
 
   redirectTopicDetails = (id) => {
-    this.props.router.push(`/topic/topic-detail/${id}`);
+    Taro.navigateTo({
+      url: `/subPages/topic/topic-detail/index?id=${id || ''}`
+    })
+    // this.props.router.push(`/topic/topic-detail/${id}`);
   };
   fetchMoreData = () => {
     const { dispatch } = this.props;
@@ -43,14 +46,14 @@ class TopicH5Page extends React.Component {
   }
   render() {
     const { pageData = [], currentPage = 0, totalPage = 0 } = this.props.topic?.topics || {}
-
+    console.log(pageData, 'topicWrap');
     return (
-      <div className={styles.topicWrap}>
-        <Header />
-        <div className={styles.topBox}>
+      <View className={styles.topicWrap}>
+        <View className={styles.topBox}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} />
-        </div>
-        <TopicHeader onClick={this.onFilter} />
+        </View>
+       <TopicHeader onClick={this.onFilter} />
+        
         <List className={styles.list} noMore={currentPage >= totalPage} onRefresh={this.fetchMoreData}>
           {
             pageData?.map((item, index) => (
@@ -58,8 +61,8 @@ class TopicH5Page extends React.Component {
             ))
           }
         </List>
-      </div>
+      </View>
     );
   }
 }
-export default withRouter(TopicH5Page);
+export default TopicPage;

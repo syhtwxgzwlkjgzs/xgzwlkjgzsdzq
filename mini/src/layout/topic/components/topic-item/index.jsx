@@ -3,6 +3,7 @@ import ImageContent from '@components/thread/image-content';
 import PostContent from '@components/thread/post-content';
 import { handleAttachmentData, noop } from '@components/thread/utils';
 import styles from './index.module.scss';
+import { View, Text } from '@tarojs/components';
 
 /**
  * 话题组件
@@ -19,21 +20,21 @@ const TopicItem = ({ data, onClick }) => {
     imageData = []
   } = handleAttachmentData(data?.threads[0]?.content);
   return (
-    <div className={styles.item} onClick={click}>
-      <div className={styles.title}>{data.content && `#${data.content}#`}</div>
+    <View className={styles.item} onClick={click}>
+      <View className={styles.title}>{data.content && `#${data.content}#`}</View>
       <PostContent content={text} className={styles.content} />
       <ImageContent imgData={imageData}/>
-      <div className={styles.footer}>
-        <div className={styles.numBox}>
-          <span>热度</span>
+      <View className={styles.footer}>
+        <View className={styles.numBox}>
+          <Text className={styles.title}>热度</Text>
           {data.viewCount || 0}
-        </div>
-        <div className={styles.numBox}>
-          <span>内容</span>
+        </View>
+        <View className={styles.numBox}>
+          <Text className={styles.title}>内容</Text>
           {data.threadCount || 0}
-        </div>
-      </div>
-    </div>
+        </View>
+      </View>
+    </View>
   );
 };
 

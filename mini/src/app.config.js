@@ -28,6 +28,8 @@ export default {
         'search/result-post/index',
         'search/result-user/index',
         'search/result/index',
+        'topic/index',
+        'topic/topic-detail/index',
       ]
     }
   ],

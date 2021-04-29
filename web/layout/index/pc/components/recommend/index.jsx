@@ -1,11 +1,10 @@
 import React from 'react';
 import style from './index.module.scss';
 import { Icon } from '@discuzq/design';
-import data from './data';
 import { noop } from '@components/thread/utils';
 
 const Index = ({
-  recommendData = [],
+  data = [],
   changeBatch = noop,
   recommendDetails = noop,
 }) => {
@@ -14,7 +13,7 @@ const Index = ({
       <div className={style.recommendContent}>推荐内容</div>
       {
         data?.map((item, index) => (
-            <div key={index} className={style.recommendBox} onClick={recommendDetails}>
+            <div key={index} className={style.recommendBox} onClick={() => {recommendDetails(item)}}>
               <div className={style.recommendTitle}>
                 <p className={style.recommendSort}>{index + 1}</p>
                 <p className={style.recommenText}>{item.title}</p>

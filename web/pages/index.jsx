@@ -22,7 +22,7 @@ class Index extends React.Component {
 
     return {
       serverIndex: {
-        categories: categories && categories.code === 0 ? [{ name: '全部', pid: '', children: [] }, ...categories.data] : null,
+        categories: categories && categories.code === 0 ? categories.data : null,
         sticks: sticks && sticks.code === 0 ? sticks.data : null,
         threads: threads && threads.code === 0 ? threads.data : null,
       },
@@ -39,7 +39,7 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
-    const { serverIndex, index } = this.props;
+    const { index } = this.props;
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasCategoriesData = !!index.categories;
     const hasSticksData = !!index.sticks;
@@ -53,6 +53,11 @@ class Index extends React.Component {
     }
     if (!hasThreadsData) {
       this.props.index.getReadThreadList();
+    }
+
+    const { platform } = this.props.site;
+    if (platform === 'pc') {
+      this.props.index.getRecommends()
     }
   }
 

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Dropdown, Icon } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
-
+import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
 
 /**
@@ -17,9 +17,9 @@ const TopicHeader = ({ onClick = noop }) => {
     );
   }
   return (
-    <div className={styles.container}>
-      <div className={styles.title}>话题列表</div>
-      <Dropdown
+    <View className={styles.container}>
+      <View className={styles.title}>话题列表</View>
+      {/* <Dropdown
         style={{ display: 'inline-block' }}
         menu={menu()}
         placement="right"
@@ -30,8 +30,8 @@ const TopicHeader = ({ onClick = noop }) => {
       >
         <Icon name="SortOutlined" size={18} color='#2469f6'/>
         排序
-      </Dropdown>
-    </div>
+      </Dropdown> */}
+    </View>
   );
 };
 

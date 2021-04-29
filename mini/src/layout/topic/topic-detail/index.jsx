@@ -1,8 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'next/router';
 import styles from './index.module.scss';
-import Header from '@components/header';
 import List from '@components/list';
 import NoData from '@components/no-data';
 import DetailsHeader from './components/details-header'
@@ -10,12 +8,13 @@ import ThreadContent from '@components/thread';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import { Toast } from '@discuzq/design';
+import { View, Text } from '@tarojs/components';
 
 @inject('site')
 @inject('user')
 @inject('topic')
 @observer
-class TopicH5Page extends React.Component {
+class TopicPage extends React.Component {
 
   // 分享
   onShare = (e) => {
@@ -37,9 +36,9 @@ class TopicH5Page extends React.Component {
 
   renderItem = ({ content = '', threadCount = 0, viewCount = 0, threads = [] }, index) => {
     return (
-      <div key={index}>
+      <View key={index}>
         <DetailsHeader title={content} viewNum={viewCount} contentNum={threadCount} onShare={this.onShare} />
-        <div className={styles.themeContent}>
+        <View className={styles.themeContent}>
           {
             threads?.length ?
               (
@@ -49,16 +48,16 @@ class TopicH5Page extends React.Component {
               )
               : <NoData />
           }
-        </div>
-      </div>
+        </View>
+      </View>
     )
   }
 
   render() {
     const { pageData = [] } = this.props.topic?.topicDetail || {};
+    console.log(pageData, 'renderItem');
     return (
       <List className={styles.topicWrap} allowRefresh={false}>
-        <Header/>
         {
           pageData?.map((item, index) => this.renderItem(item, index)) || <NoData />
         }
@@ -66,4 +65,4 @@ class TopicH5Page extends React.Component {
     );
   }
 }
-export default withRouter(TopicH5Page);
+export default TopicPage;
