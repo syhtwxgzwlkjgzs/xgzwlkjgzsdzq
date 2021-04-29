@@ -188,7 +188,7 @@ class ThreadCreate extends React.Component {
           {(currentAttachOperation === THREAD_TYPE.voice && !postData.audio.mediaUrl) && (
             <div className={styles['audio-record']}>
               <AudioRecord duration={60} onUpload={(blob) => {
-                this.handleAudioUpload(blob);
+                this.props.handleAudioUpload(blob);
               }} />
             </div>
           )}
