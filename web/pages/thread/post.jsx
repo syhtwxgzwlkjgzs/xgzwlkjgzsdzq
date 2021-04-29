@@ -8,10 +8,12 @@ import HOCWithLogin from '@common/middleware/HOCWithLogin';
 import * as localData from '@layout/thread/post/common';
 import { Toast } from '@discuzq/design';
 import { createAttachment } from '@common/server';
-import { THREAD_TYPE, ATTACHMENT_TYPE } from '@common/constants/thread-post';
+import { THREAD_TYPE, ATTACHMENT_TYPE, MAX_COUNT } from '@common/constants/thread-post';
 import Router from '@discuzq/sdk/dist/router';
+import PayBoxProvider from '@components/payBox/payBoxProvider';
+import PayBox from '@components/payBox/index';
+import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
 
-const maxCount = 5000;
 @inject('site')
 @inject('threadPost')
 @inject('index')
@@ -211,23 +213,52 @@ class PostPage extends React.Component {
       Toast.info({ content: '请填写您要发布的内容' });
       return;
     }
-    if (!isDraft && this.state.count > maxCount) {
-      Toast.info({ content: `输入的内容不能超过${maxCount}字` });
+    if (!isDraft && this.state.count > MAX_COUNT) {
+      Toast.info({ content: `输入的内容不能超过${MAX_COUNT}字` });
       return;
     }
-    Toast.loading({ content: isDraft ? '保存草稿中...' : '创建中...' });
-    const { threadPost, thread } = this.props;
-    const threadId = this.props.router.query.id || '';
-    let ret = {};
-    if (threadId) ret = await threadPost.updateThread(threadId);
-    else ret = await threadPost.createThread();
-    const { code, data, msg } = ret;
-    if (code === 0) {
-      thread.setThreadData(data);
-      if (!isDraft) this.props.router.replace(`/thread/${data.threadId}`);
-      return true;
+    if (isDraft) this.setPostData({ draft: 1 });
+    else this.setPostData({ draft: 0 });
+    const { threadPost } = this.props;
+    const { rewardQa, redpacket } = threadPost.postData;
+    const amount = (Number(rewardQa.value) || 0) + (Number(redpacket.price) || 0);
+    if (!isDraft && amount) {
+      let type = ORDER_TRADE_TYPE.RED_PACKET;
+      let title = '支付红包';
+      if (Number(rewardQa.price)) {
+        type = ORDER_TRADE_TYPE.POST_REWARD;
+        title = '支付悬赏';
+      }
+      if (Number(rewardQa.price) && Number(redpacket.price)) {
+        type = ORDER_TRADE_TYPE.COMBIE_PAYMENT;
+        title = '支付红包和悬赏';
+      }
+      PayBox.createPayBox({
+        data: {      // data 中传递后台参数
+          amount,
+          title, // 商品名称，不同于后台参数
+          type,
+        },
+        success: async (orderInfo) => {
+          const { orderSn } = orderInfo;
+          console.log(orderInfo);
+          this.setPostData({ orderSn });
+          const { thread } = this.props;
+          const threadId = this.props.router.query.id || '';
+          let ret = {};
+          Toast.loading({ content: isDraft ? '保存草稿中...' : '创建中...' });
+          if (threadId) ret = await threadPost.updateThread(threadId);
+          else ret = await threadPost.createThread();
+          const { code, data, msg } = ret;
+          if (code === 0) {
+            thread.setThreadData(data);
+            if (!isDraft) this.props.router.replace(`/thread/${data.threadId}`);
+            return true;
+          }
+          Toast.error({ content: msg });
+        }, // 支付成功回调
+      });
     }
-    Toast.error({ content: msg });
 
     return false;
   };
@@ -254,23 +285,32 @@ class PostPage extends React.Component {
 
     if (platform === 'pc') {
       return (
-        <IndexPCPage
-          setPostData={data => this.setPostData(data)}
-          handleAttachClick={this.handleAttachClick}
-          handleVideoUploadComplete={this.handleVideoUploadComplete}
-          handleUploadChange={this.handleUploadChange}
-          handleUploadComplete={this.handleUploadComplete}
-          handleAudioUpload={this.handleAudioUpload}
-          handleEmojiClick={this.handleEmojiClick}
-          handleSetState={data => this.setState({ ...data })}
-          handleSubmit={this.handleSubmit}
-          saveDataLocal={this.saveDataLocal}
-          handleAtListChange={this.handleAtListChange}
-          {...this.state}
-        />
+        <PayBoxProvider>
+          <IndexPCPage
+            setPostData={data => this.setPostData(data)}
+            handleAttachClick={this.handleAttachClick}
+            handleVideoUploadComplete={this.handleVideoUploadComplete}
+            handleUploadChange={this.handleUploadChange}
+            handleUploadComplete={this.handleUploadComplete}
+            handleAudioUpload={this.handleAudioUpload}
+            handleEmojiClick={this.handleEmojiClick}
+            handleSetState={data => this.setState({ ...data })}
+            handleSubmit={this.handleSubmit}
+            saveDataLocal={this.saveDataLocal}
+            handleAtListChange={this.handleAtListChange}
+            handleVditorChange={this.handleVditorChange}
+            {...this.state}
+          />
+        </PayBoxProvider>
       );
     }
-    return <IndexH5Page/>;
+    return (
+      <PayBoxProvider>
+        <IndexH5Page
+          handleSubmit={this.handleSubmit}
+        />
+      </PayBoxProvider>
+    );
   }
 }
 
