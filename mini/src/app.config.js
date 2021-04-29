@@ -18,7 +18,9 @@ export default {
       root: 'subPages',
       pages: [
         '404/index',
+        '500/index',
         'close/index',
+        'join/index',
         'user/login/index',
         'thread/comment/index',
         'thread/post/index',
