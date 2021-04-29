@@ -122,8 +122,9 @@ class PostPage extends React.Component {
       const audioSrc = window.URL.createObjectURL(blob);
       this.setState({
         audioSrc,
+        currentAttachOperation: false,
       });
-      this.setPostData({ audio: data, audioSrc });
+      this.setPostData({ audio: { ...data, mediaUrl: audioSrc }, audioSrc });
     }
   }
 

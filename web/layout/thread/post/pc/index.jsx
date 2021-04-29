@@ -107,6 +107,13 @@ class ThreadPCPage extends React.Component {
                 {!!(postData.price || postData.attachmentPrice) && (
                   <Tag>付费总额{postData.price + postData.attachmentPrice}元</Tag>
                 )}
+                {/* 悬赏问答内容标识 */}
+                {(postData.rewardQa.value && postData.rewardQa.times) && (
+                  <Tag>
+                    {`悬赏金额${postData.rewardQa.value}元\\结束时间${postData.rewardQa.times}`}
+                  </Tag>
+                )}
+                {/* 红包 */}
                 {postData.redpacket.price && (<Tag>
                   {postData.redpacket.rule === 1 ? '随机红包' : '定额红包'}
                   \ 总金额{postData.redpacket.price}元\{postData.redpacket.number}个

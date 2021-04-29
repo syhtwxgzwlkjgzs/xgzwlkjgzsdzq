@@ -133,12 +133,12 @@ class ThreadCreate extends React.Component {
       <AllPostPaid
         exhibition={this.props.curPaySelect}
         cancle={() => {
-          this.props.handleSetState({ curPaySelect: '' });
+          this.props.handleSetState({ curPaySelect: '', currentDefaultOperation: '' });
         }}
         data={{ freeWords, price, attachmentPrice }}
         confirm={(data) => {
-          const { freeWords, price, attachmentPrice } = data;
-          this.props.setPostData({ freeWords: freeWords / 100,  price, attachmentPrice });
+          console.log(data);
+          this.props.setPostData({ ...data });
         }}
       />
     );
@@ -217,6 +217,14 @@ class ThreadCreate extends React.Component {
               good={postData.product}
               onDelete={() => this.props.setPostData({ product: {} })}
             />
+          )}
+          {/* 付费 */}
+          {!!(postData.price || postData.attachmentPrice) && (
+            <div className={styles['reward-qa-box']}>
+              <div className={styles['reward-qa-box-content']}>
+                付费总额{postData.price + postData.attachmentPrice}元
+              </div>
+            </div>
           )}
           {/* 悬赏问答内容标识 */}
           {(postData.rewardQa.value && postData.rewardQa.times) && (
