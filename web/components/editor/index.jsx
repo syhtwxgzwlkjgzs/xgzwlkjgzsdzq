@@ -7,7 +7,7 @@ import Vditor from '@discuzq/vditor';
 import classNames from 'classnames';
 import { baseOptions, baseToolbar } from './options';
 import './index.scss';
-import 'vditor/src/assets/scss/index.scss';
+import '@discuzq/vditor/src/assets/scss/index.scss';
 
 export default function DVditor(props) {
   const { pc, onChange, emoji = {}, atList = [], topic, onFocus, onBlur, value, onCountChange } = props;
@@ -140,7 +140,7 @@ export default function DVditor(props) {
   return (
     <>
       <div id={vditorId} className={className}></div>
-      {!pc && isFocus && <div className="dvditor__placeholder"></div>}
+      {/* {!pc && isFocus && <div className="dvditor__placeholder"></div>} */}
     </>
   );
 }
