@@ -5,7 +5,7 @@ import { Icon, Radio,Button } from '@discuzq/design';
 import isWeixin from '@common/utils/is-weixin';
 import { View, Text } from '@tarojs/components';
 import { PAY_MENT_MAP, PAYWAY_MAP, STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants.js';
-import { listenWXJsBridgeAndExecCallback, onBridgeReady } from '../../../../../common/store/pay/weixin-miniprogram-backend.js'
+import { listenWXJsBridgeAndExecCallback, onBridgeReady, wxValidator, mode } from '../../../../../common/store/pay/weixin-miniprogram-backend.js'
 @inject('user')
 @inject('payBox')
 @observer
@@ -15,14 +15,14 @@ export default class PayBox extends React.Component {
     const payConfig = [
       {
         name: '钱包支付',
-        icon: 'PayOutlined',
+        icon: 'PurseOutlined',
         color: '#1878f3',
         paymentType: 'wallet',
       },
     ];
     payConfig.unshift({
       name: '微信支付',
-      icon: 'PayOutlined',
+      icon: 'WechatPaymentOutlined',
       color: '#09bb07',
       paymentType: 'weixin',
     });
@@ -86,11 +86,6 @@ export default class PayBox extends React.Component {
 
       }
     } else if (this.props.payBox.payWay === PAYWAY_MAP.WX) {
-      // 表示微信支付
-      if (!isWeixin()) {
-        await this.props.payBox.wechatPayOrder({ listenWXJsBridgeAndExecCallback, onBridgeReady, wxValidator, mode: PAY_MENT_MAP.WX_H5 });
-        return;
-      }
       await this.props.payBox.wechatPayOrder({ listenWXJsBridgeAndExecCallback, onBridgeReady, wxValidator, mode });
     }
   };

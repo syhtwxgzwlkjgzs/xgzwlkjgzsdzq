@@ -121,10 +121,10 @@ export default class Index extends Component {
 
   showTitle = () => {
     const { step } = this.props.payBox;
-    let title = '输入支付密码';
+    let title = '';
     switch (step) {
       case STEP_MAP.WALLET_PASSWORD: // 表示钱包支付
-        title = '输入支付密码';
+        // title = '输入支付密码';
         break;
       case STEP_MAP.SET_PASSWORD: // 表示设置支付密码
         title = '设置支付密码';
@@ -138,7 +138,11 @@ export default class Index extends Component {
   render() {
     return (
       <div>
-        <p className={styles.title}>{this.showTitle() || '输入支付密码'}</p>
+        {
+          this.showTitle() && (
+            <p className={styles.title}>{this.showTitle()}</p>
+          )
+        }
         <div className={styles.payList}>{this.renderPwdItem()}</div>
       </div>
     );
