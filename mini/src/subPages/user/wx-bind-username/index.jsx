@@ -25,7 +25,7 @@ class Index extends Component {
         duration: 1000,
         onClose: () => {
           navigateTo({
-            url: `/pages/index/index`
+            url: `/subPages/index/index`
           });
         }
       });
@@ -33,7 +33,7 @@ class Index extends Component {
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
         this.props.commonLogin.setStatusMessage(e.Code, e.Message);
         navigateTo({
-          url: `/pages/user/status/index?statusCode=${e.Code}&statusMsg=${e.Message}`
+          url: `/subPages/user/status/index?statusCode=${e.Code}&statusMsg=${e.Message}`
         });
         return;
       }

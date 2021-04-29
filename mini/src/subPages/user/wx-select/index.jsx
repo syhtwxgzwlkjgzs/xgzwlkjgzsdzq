@@ -93,7 +93,7 @@ class WXSelect extends Component {
               type="primary"
               onClick={() => {
                 navigateTo({
-                  url: `/pages/user/wx-bind-username/index?sessionToken=${sessionToken}&nickname=${nickname}`
+                  url: `/subPages/user/wx-bind-username/index?sessionToken=${sessionToken}&nickname=${nickname}`
                 })
               }}
             >
@@ -104,7 +104,7 @@ class WXSelect extends Component {
               type="primary"
               onClick={() => {
                 navigateTo({
-                  url: `/pages/user/wx-bind-phone/index?sessionToken=${sessionToken}&nickname=${nickname}`
+                  url: `/subPages/user/wx-bind-phone/index?sessionToken=${sessionToken}&nickname=${nickname}`
                 })
               }}
             >

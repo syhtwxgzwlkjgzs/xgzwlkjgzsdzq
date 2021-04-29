@@ -37,7 +37,7 @@ class WXBind extends Component {
           content: '绑定成功',
         });
         redirectTo({
-          url: `/pages/index/index`
+          url: `/subPages/index/index`
         });
         return;
       }
@@ -50,7 +50,7 @@ class WXBind extends Component {
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
         navigateTo({
-          url: `/pages/user/status?statusCode=${error.Code}&statusMsg=${error.Message}`
+          url: `/subPages/user/status?statusCode=${error.Code}&statusMsg=${error.Message}`
         });
         return;
       }

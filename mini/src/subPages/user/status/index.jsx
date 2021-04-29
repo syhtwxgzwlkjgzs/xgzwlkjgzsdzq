@@ -41,7 +41,7 @@ class Index extends Component {
               console.log('退出登录');
 
               navigateTo({
-                url: '/pages/user/wx-select/index'
+                url: '/subPages/user/wx-select/index'
               });
             }}>
               退出登录

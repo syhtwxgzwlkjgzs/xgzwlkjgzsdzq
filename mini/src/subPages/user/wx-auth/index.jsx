@@ -24,7 +24,7 @@ class MiniAuth extends React.Component {
     // 其他地方跳入的小程序绑定流程
     if(action === 'mini-bind'){
       redirectTo({
-        url: `/pages/user/wx-bind/index?sessionToken=${sessionToken}`
+        url: `/subPages/user/wx-bind/index?sessionToken=${sessionToken}`
       })
       return;
     }
@@ -59,7 +59,7 @@ class MiniAuth extends React.Component {
         });
         this.props.user.updateUserInfo(uid);
         redirectTo({
-          url: `/pages/index/index`
+          url: `/subPages/index/index`
         });
         return;
       }
@@ -68,7 +68,7 @@ class MiniAuth extends React.Component {
         const { sessionToken, nickname } = resp.data;
         this.props.user.nickname = nickname;
         redirectTo({
-          url: `/pages/user/wx-select/index?sessionToken=${sessionToken}&nickname=${nickname}`
+          url: `/subPages/user/wx-select/index?sessionToken=${sessionToken}&nickname=${nickname}`
         });
         return;
       }
@@ -81,7 +81,7 @@ class MiniAuth extends React.Component {
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
         redirectTo({
-          url: `/pages/user/status/index?statusCode=${error.Code}&statusMsg=${error.Message}`
+          url: `/subPages/user/status/index?statusCode=${error.Code}&statusMsg=${error.Message}`
         });
         return;
       }
