@@ -8,11 +8,10 @@ import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import { attachIcon } from '@common/constants/const';
-import { THREAD_TYPE } from '@common/constants/thread-post';
 import { Units } from '@components/common';
 
-const Index = inject('site', 'threadPost')(observer((props) => {
-  const { permissions, site, threadPost, clickCb, onCategoryClick } = props;
+const Index = inject('user', 'threadPost')(observer((props) => {
+  const { threadPost, clickCb, onCategoryClick, user } = props;
 
   // 控制插件icon的显示/隐藏
   const [plugShow, setplugShow] = useState(false);
@@ -28,17 +27,11 @@ const Index = inject('site', 'threadPost')(observer((props) => {
   )
 
   // 插件icon元素
+  const { threadExtendPermissions: tep } = user;
   const plug = useMemo(() => {
-    const permissionMap = {
-      [THREAD_TYPE.image]: permissions?.insertImage?.enable, // 图片权限
-      [THREAD_TYPE.video]: permissions?.insertVideo?.enable, // 视频权限
-      [THREAD_TYPE.voice]: permissions?.insertAudio?.enable, // 音频权限
-      [THREAD_TYPE.goods]: permissions?.insertGoods?.enable, // 商品权限
-      [THREAD_TYPE.reward]: permissions?.insertReward?.enable, // 悬赏权限
-    };
     return attachIcon.map((item, index) => {
       // 是否有权限
-      const canInsert = permissionMap[item.type];
+      const canInsert = tep[item.type];
       return canInsert ? (
         <Icon
           key={index}
@@ -53,7 +46,7 @@ const Index = inject('site', 'threadPost')(observer((props) => {
         />
       ) : null;
     });
-  }, [permissions])
+  }, [tep])
 
   // 分类元素
   const category = (

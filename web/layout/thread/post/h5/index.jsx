@@ -33,6 +33,7 @@ import Router from '@discuzq/sdk/dist/router';
 const maxCount = 5000;
 
 @inject('threadPost')
+@inject('site')
 @inject('index')
 @inject('thread')
 @inject('user')
@@ -44,6 +45,7 @@ class ThreadCreate extends React.Component {
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handler);
+    this.captcha = '';
   }
 
   handleDraft = async (val) => {
@@ -92,6 +94,8 @@ class ThreadCreate extends React.Component {
 
   render() {
     const { threadPost, index, user } = this.props;
+    const { threadExtendPermissions, permissions } = user;
+
     const { postData } = threadPost;
     const { emoji, topic, atList, currentDefaultOperation, currentAttachOperation, categoryChooseShow } = this.props;
     const category = ((index.categories && index.categories.slice()) || []).filter(item => item.name !== '全部');
@@ -181,16 +185,21 @@ class ThreadCreate extends React.Component {
           />
 
           {/* 录音组件 */}
-          {(currentAttachOperation === THREAD_TYPE.voice) && (
+          {(currentAttachOperation === THREAD_TYPE.voice && !postData.audio.mediaUrl) && (
             <div className={styles['audio-record']}>
-              <AudioRecord onUpload={(blob) => {
-                this.props.handleAudioUpload(blob);
+              <AudioRecord duration={60} onUpload={(blob) => {
+                this.handleAudioUpload(blob);
               }} />
             </div>
           )}
 
           {/* 语音组件 */}
-          {(Boolean(postData.audio.mediaUrl)) && (<Audio src={postData.audio.mediaUrl} />)}
+          {(Boolean(postData.audio.mediaUrl)) && (
+            <div className={styles['audio-record']}>
+              <Audio src={postData.audio.mediaUrl} />
+            </div>
+          )}
+
           {(currentAttachOperation === THREAD_TYPE.image || Object.keys(postData.images).length > 0) && (
             <ImageUpload
               fileList={Object.values(postData.images)}
@@ -249,11 +258,12 @@ class ThreadCreate extends React.Component {
         <div id="post-bottombar" className={styles['post-bottombar']}>
           {/* 插入位置 */}
           <div id="post-position" className={styles['position-box']}>
-            {user?.permissions?.insertPosition?.enable && (<Position
+            <div className={styles['post-counter']}>还能输入{maxCount - this.props.count}个字</div>
+            {(permissions?.insertPosition?.enable) && (<Position
               position={postData.position}
               onClick={() => this.props.saveDataLocal()}
               onChange={position => this.props.setPostData({ position })} />)}
-            <div className={styles['post-counter']}>还能输入{maxCount - this.props.count}个字</div>
+
           </div>
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar
@@ -261,13 +271,13 @@ class ThreadCreate extends React.Component {
             // onUploadChange={this.handleUploadChange}
             onUploadComplete={this.props.handleVideoUploadComplete}
             category={<ToolsCategory categoryChoose={threadPost.categorySelected} onClick={this.handleCategoryClick} />}
-            permissions={user.permissions}
+            permission={threadExtendPermissions}
           />
           {/* 默认的操作栏 */}
           <DefaultToolbar
             value={currentDefaultOperation}
             onClick={item => this.props.handleSetState({ currentDefaultOperation: item.id, emoji: {} })}
-            permissions={user.permissions}
+            permission={threadExtendPermissions}
             onSubmit={this.props.handleSubmit}>
             {/* 表情 */}
             <Emoji

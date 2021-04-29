@@ -26,12 +26,13 @@ page {
       .location-bar {
         padding: 0 16px;
         display: flex;
+        flex-direction: row-reverse;
         justify-content: space-between;
         align-items: center;
         border-bottom: 1px solid var(--border-line-color);
         .text-length {
           font-size: 12px;
-          line-height: 22px;
+          line-height: 42px;
           text-align: left;
           color: #c5c6ca;
         }
