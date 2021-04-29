@@ -29,6 +29,7 @@
 
 .position-box {
   display: flex;
+  flex-direction: row-reverse;
   height: 45px;
   padding: 0 rem(16);
   align-items: center;

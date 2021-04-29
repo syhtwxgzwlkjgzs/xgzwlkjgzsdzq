@@ -4,26 +4,13 @@ import styles from './index.module.scss';
 import { defaultIcon, defaultOperation } from '@common/constants/const';
 
 export default function DefaultToolbar(props) {
-  const { children, onClick, onSubmit, value, pc, permissions = {} } = props;
+  const { children, onClick, onSubmit, value, pc, permission } = props;
   const [currentAction, setCurrentAction] = useState('');
-  const [permissionMap, setPermissionMap] = useState({
-    [defaultOperation.emoji]: true,
-    [defaultOperation.at]: true,
-    [defaultOperation.topic]: true,
-  });
 
   useEffect(() => {
     if (!value) setCurrentAction(value);
   }, [value]);
 
-  useEffect(() => {
-    setPermissionMap({
-      ...permissionMap,
-      [defaultOperation.attach]: permissions?.insertDoc?.enable,
-      [defaultOperation.redpacket]: permissions?.insertRedPacket?.enable,
-      [defaultOperation.pay]: permissions?.insertPay?.enable,
-    });
-  }, [permissions]);
 
   function handleClick() {
     if (defaultOperation.emoji === currentAction) {
@@ -40,11 +27,12 @@ export default function DefaultToolbar(props) {
     };
   }, []);
 
+
+
   const icons = (
     <>
       {defaultIcon.map((item) => {
-        if (!permissionMap[item.id]) return null;
-        const iconItem = (
+        const iconItem = permission[item.id] ? (
           <Icon key={item.name}
             onClick={(e) => {
               if (!item.menu) e.stopPropagation();
@@ -61,7 +49,7 @@ export default function DefaultToolbar(props) {
             color={item.id === currentAction && item.active}
             size="20">
           </Icon>
-        );
+        ) : null;
         if (pc && item.menu) {
           const menus = (
             <Dropdown.Menu>

@@ -7,7 +7,8 @@
 }
 
 .wrapper {
-  margin: 0 16px;
+  padding: 0 16px;
+  background: var(--color-white);
 
   :global{
     .tea-checkbox-group {
@@ -94,8 +95,8 @@
     margin: 0 10px;
     padding: 8px 0;
     background: var(--color-white);
-    border-top: var(--border-border)
-
+    border-top: var(--border-border);
+    
     :global {
       .dzq-button {
         width: 48%;
@@ -112,7 +113,7 @@
 
     .btn-confirm {
       color: var(--color-white);
-      background-color: #1878f3;
+      background-color: var(--color-primary);
     }
   }
 }

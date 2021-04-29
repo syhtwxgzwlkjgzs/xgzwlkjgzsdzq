@@ -68,7 +68,6 @@ class Index extends Component {
     const { resetPostData } = this.props.threadPost;
     resetPostData();
     clearInterval(this.timer);
-    this.resetData();
     Taro.eventCenter.off('captchaResult', this.handleCaptchaResult)
     Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault)
   }
@@ -392,32 +391,10 @@ class Index extends Component {
     }
   }
 
-  resetData = () => {
-    const { setPostData } = this.props.threadPost;
-    setPostData({
-      title: '',
-      categoryId: 0,
-      anonymous: 0,
-      draft: 0,
-      price: 0,
-      attachmentPrice: 0,
-      freeWords: 1,
-      position: {},
-      contentText: '',
-      audio: {},
-      rewardQa: {},
-      product: {},
-      redpacket: {},
-      video: {},
-      images: {},
-      files: {},
-    })
-  }
-
   render() {
     const { permissions } = this.props.user;
     const { categories } = this.props.index;
-    const { postData, setPostData, createThread } = this.props.threadPost;
+    const { postData, setPostData } = this.props.threadPost;
     const { rewardQa, redpacket, video, product, position } = postData;
     const {
       isShowTitle,
@@ -457,12 +434,12 @@ class Index extends Component {
             {/* 工具栏区域、include各种插件触发图标、发布等 */}
             <View className={styles['toolbar']}>
               <View className={styles['location-bar']}>
-                {permissions?.insertPosition?.enable &&
+                <Text className={styles['text-length']}>{`还能输入${contentTextLength}个字`}</Text>
+                {(permissions?.insertPosition?.enable) &&
                   <Position currentPosition={position} positionChange={(position) => {
                     setPostData({ position });
                   }} />
                 }
-                <Text className={styles['text-length']}>{`还能输入${contentTextLength}个字`}</Text>
               </View>
 
 
