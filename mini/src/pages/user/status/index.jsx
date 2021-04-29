@@ -39,8 +39,9 @@ class Index extends Component {
             </View>
             <Button className={layout.button} type="primary" onClick={() => {
               console.log('退出登录');
+
               navigateTo({
-                url: '/pages/user/wx-select'
+                url: '/pages/user/wx-select/index'
               });
             }}>
               退出登录
