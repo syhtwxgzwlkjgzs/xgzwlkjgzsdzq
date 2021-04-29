@@ -182,7 +182,7 @@ class PostPage extends React.Component {
   }
 
   // 视频准备上传
-  onReady = (player) => {
+  onVideoReady = (player) => {
     const { postData } = this.props.threadPost;
     // 兼容本地视频的显示
     const opt = {
@@ -306,6 +306,7 @@ class PostPage extends React.Component {
             saveDataLocal={this.saveDataLocal}
             handleAtListChange={this.handleAtListChange}
             handleVditorChange={this.handleVditorChange}
+            onVideoReady={this.onVideoReady}
             {...this.state}
           />
         </PayBoxProvider>
@@ -314,7 +315,20 @@ class PostPage extends React.Component {
     return (
       <PayBoxProvider>
         <IndexH5Page
+          setPostData={data => this.setPostData(data)}
+          handleAttachClick={this.handleAttachClick}
+          handleVideoUploadComplete={this.handleVideoUploadComplete}
+          handleUploadChange={this.handleUploadChange}
+          handleUploadComplete={this.handleUploadComplete}
+          handleAudioUpload={this.handleAudioUpload}
+          handleEmojiClick={this.handleEmojiClick}
+          handleSetState={data => this.setState({ ...data })}
           handleSubmit={this.handleSubmit}
+          saveDataLocal={this.saveDataLocal}
+          handleAtListChange={this.handleAtListChange}
+          handleVditorChange={this.handleVditorChange}
+          onVideoReady={this.onVideoReady}
+          {...this.state}
         />
       </PayBoxProvider>
     );

@@ -80,7 +80,7 @@ class ThreadPCPage extends React.Component {
 
               {/* 视频组件 */}
               {(postData.video && postData.video.thumbUrl) && (
-                <Video className="dzq-post-video" src={postData.video.thumbUrl} onReady={this.props.onReady} />
+                <Video className="dzq-post-video" src={postData.video.thumbUrl} onReady={this.props.onVideoReady} />
               )}
 
               {/* 附件上传组件 */}
