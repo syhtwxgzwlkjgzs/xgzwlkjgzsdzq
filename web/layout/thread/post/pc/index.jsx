@@ -163,8 +163,8 @@ class ThreadPCPage extends React.Component {
               }}
             />
             <div className={styles.footer}>
-              <Button type="info">保存至草稿箱</Button>
-              <Button type="primary">发布</Button>
+              <Button type="info" onClick={() => this.props.handleSubmit(true)}>保存至草稿箱</Button>
+              <Button type="primary" onClick={() => this.props.handleSubmit()}>发布</Button>
             </div>
           </div>
           <Copyright/>

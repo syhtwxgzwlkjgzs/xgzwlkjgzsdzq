@@ -214,6 +214,8 @@ class PostPage extends React.Component {
       Toast.info({ content: `输入的内容不能超过${MAX_COUNT}字` });
       return;
     }
+    if (isDraft) this.setPostData({ draft: 1 });
+    else this.setPostData({ draft: 0 });
     Toast.loading({ content: isDraft ? '保存草稿中...' : '创建中...' });
     const { threadPost, thread } = this.props;
     const threadId = this.props.router.query.id || '';
