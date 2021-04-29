@@ -58,11 +58,6 @@ class CommentList extends React.Component {
     typeof this.props.deleteClick === 'function' && this.props.deleteClick();
   }
 
-  // 点击评论采纳
-  adoptClick() {
-    console.log('点击采纳');
-  }
-
   // 点击评论编辑
   editClick() {
     typeof this.props.editClick === 'function' && this.props.editClick();
@@ -171,7 +166,7 @@ class CommentList extends React.Component {
                     this.state.isShowAdopt
                       ? <div className={styles.commentAdopt}>
                         <Icon className={styles.icon} name="ExactnessOutlined"></Icon>
-                        <span onClick={() => this.adoptClick()}>采纳</span>
+                        <span onClick={() => this.props.onAboptClick()}>采纳</span>
                       </div> : ''
                   }
                 </div>

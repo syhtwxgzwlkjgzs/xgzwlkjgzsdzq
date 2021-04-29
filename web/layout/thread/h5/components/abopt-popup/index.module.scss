@@ -1,0 +1,79 @@
+@import '@common/styles/variable/index.scss';
+@import '@common/styles/fn/rem.scss';
+
+.container {
+  background: var(--color-white);
+  border-radius: rem($border-radius-big) rem($border-radius-big) 0 0;
+}
+
+.header {
+  width: 100%;
+  height: rem(44);
+  font-size: rem($font-size-label);
+  line-height: rem(44);
+  text-align: center;
+}
+
+.body {
+  width: 100%;
+  .percentage {
+    height: rem(30);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: rem($padding-10) 0;
+    .text {
+      font-size: rem($font-size-label);
+      padding: 0 rem($padding-1n);
+    }
+    :global {
+      .dzq-input {
+        width: rem(90);
+        height: rem(30);
+        .dzq-input__inner {
+          width: rem(90);
+          height: rem(30);
+        }
+      }
+    }
+  }
+  .rewardMoney {
+    height: rem(30);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: rem($margin-10) 0;
+    .text {
+      font-size: rem($font-size-label);
+      padding: 0 rem($padding-1n);
+    }
+    :global {
+      .dzq-input {
+        width: rem(90);
+        height: rem(30);
+        .dzq-input__inner {
+          width: rem(90);
+          height: rem(30);
+        }
+      }
+    }
+  }
+}
+
+.button {
+  width: 100%;
+  display: flex;
+  .ok {
+    width: 50%;
+  }
+  .cancel {
+    width: 50%;
+    background: #c9c9c9;
+    border: none;
+  }
+}
+
+.blank {
+  width: 100%;
+  height: rem(40);
+}
