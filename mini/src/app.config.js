@@ -7,13 +7,6 @@ export default {
   pages: [
     'pages/index/index',
     'pages/thread/index',
-    'pages/user/wx-select/index',
-    'pages/user/wx-bind-username/index',
-    'pages/user/wx-bind-phone/index',
-    'pages/user/status/index',
-    'pages/user/bind-phone/index',
-    'pages/user/wx-bind/index',
-    'pages/user/wx-auth/index',
   ],
   subPackages: [
     {
@@ -37,6 +30,13 @@ export default {
         'search/result/index',
         'topic/index',
         'topic/topic-detail/index',
+        'user/wx-bind/index',
+        'user/wx-select/index',
+        'user/wx-bind-username/index',
+        'user/wx-bind-phone/index',
+        'user/status/index',
+        'user/bind-phone/index',
+        'user/wx-auth/index',
       ]
     }
   ],

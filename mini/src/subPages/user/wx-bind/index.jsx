@@ -17,7 +17,7 @@ import layout from './index.module.scss';
 @observer
 class WXBind extends Component {
   getUserProfileCallback = async (params) => {
-    const { sessionToken } = getCurrentInstance().router.params;
+    const { sessionToken = 'HZYvKnJgXfmtQkVgrYDlxdlVi0QZQ5E4' } = getCurrentInstance().router.params;
 
     try {
       await this.getParamCode();
@@ -26,6 +26,7 @@ class WXBind extends Component {
         iv: params.iv,
         encryptedData: params.encryptedData,
         sessionToken,
+        type: 'pc'
       });
       console.log(params)
       console.log(res)
