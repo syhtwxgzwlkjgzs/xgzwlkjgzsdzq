@@ -14,7 +14,6 @@ export default {
       pages: [
         '404/index',
         'close/index',
-        'user/login/index',
         'thread/comment/index',
         'thread/post/index',
         'thread/selectAt/index',
