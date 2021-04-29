@@ -37,6 +37,7 @@ const maxCount = 5000;
 @inject('threadPost')
 @inject('index')
 @inject('thread')
+@inject('user')
 @observer
 class ThreadCreate extends React.Component {
   constructor(props) {
@@ -55,7 +56,7 @@ class ThreadCreate extends React.Component {
       // 解析完后显示商品信息
       productShow: false,
       // 语音贴上传成功的语音地址
-      audioSrc: '',
+      mediaUrl: '',
       paySelectText: ['帖子付费', '附件付费'],
       curPaySelect: '',
       count: 0,
@@ -134,13 +135,12 @@ class ThreadCreate extends React.Component {
     const res = await createAttachment(formData);
     const { code, data } = res;
     if (code === 0) {
-      // 拼接不是很对，联调时和后台对一下，先本地模拟一下
-      // const audioSrc = `/${data.file_path}${data.attachment}`;
-      const audioSrc = window.URL.createObjectURL(blob);
+      const mediaUrl = window.URL.createObjectURL(blob);
+      data.mediaUrl = mediaUrl;
       this.setState({
-        audioSrc,
+        mediaUrl,
       });
-      this.setPostData({ audio: data, audioSrc });
+      this.setPostData({ audio: data });
     }
   }
 
@@ -285,7 +285,9 @@ class ThreadCreate extends React.Component {
   }
 
   render() {
-    const { threadPost, index } = this.props;
+    const { threadPost, index, user } = this.props;
+    const { threadExtendPermissions, permissions } = user;
+
     const { postData } = threadPost;
     const { emoji, topic, atList, currentDefaultOperation, currentAttachOperation, categoryChooseShow } = this.state;
     const category = ((index.categories && index.categories.slice()) || []).filter(item => item.name !== '全部');
@@ -374,16 +376,21 @@ class ThreadCreate extends React.Component {
           />
 
           {/* 录音组件 */}
-          {(currentAttachOperation === THREAD_TYPE.voice) && (
+          {(currentAttachOperation === THREAD_TYPE.voice && !postData.audio.mediaUrl) && (
             <div className={styles['audio-record']}>
-              <AudioRecord onUpload={(blob) => {
+              <AudioRecord duration={60} onUpload={(blob) => {
                 this.handleAudioUpload(blob);
               }} />
             </div>
           )}
 
           {/* 语音组件 */}
-          {(Boolean(postData.audio.mediaUrl)) && (<Audio src={postData.audio.mediaUrl} />)}
+          {(Boolean(postData.audio.mediaUrl)) && (
+            <div className={styles['audio-record']}>
+              <Audio src={postData.audio.mediaUrl} />
+            </div>
+          )}
+
           {(currentAttachOperation === THREAD_TYPE.image || Object.keys(postData.images).length > 0) && (
             <ImageUpload
               fileList={Object.values(postData.images)}
@@ -434,17 +441,21 @@ class ThreadCreate extends React.Component {
         <div id="post-bottombar" className={styles['post-bottombar']}>
           {/* 插入位置 */}
           <div id="post-position" className={styles['position-box']}>
-            <Position
-              position={postData.position}
-              onClick={() => {
-                localData.setThreadPostDataLocal(postData);
-                localData.setCategoryEmoji({ category, emoji: threadPost.emojis });
-              }}
-              onChange={position => this.setPostData({ position })} />
             <div className={styles['post-counter']}>还能输入{maxCount - this.state.count}个字</div>
+            {(permissions?.insertPosition?.enable) && (
+              <Position
+                position={postData.position}
+                onClick={() => {
+                  localData.setThreadPostDataLocal(postData);
+                  localData.setCategoryEmoji({ category, emoji: threadPost.emojis });
+                }}
+                onChange={position => this.setPostData({ position })}
+              />
+            )}
           </div>
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar
+            permission={threadExtendPermissions}
             onAttachClick={this.handleAttachClick}
             // onUploadChange={this.handleUploadChange}
             onUploadComplete={this.handleVideoUploadComplete}
@@ -453,6 +464,7 @@ class ThreadCreate extends React.Component {
           {/* 默认的操作栏 */}
           <DefaultToolbar
             value={currentDefaultOperation}
+            permission={threadExtendPermissions}
             onClick={item => this.setState({ currentDefaultOperation: item.id, emoji: {} })}
             onSubmit={this.submit}>
             {/* 表情 */}

@@ -144,15 +144,21 @@ class AttachmentToolbar extends React.Component {
   };
 
   icons = () => attachIcon.map((item) => {
+    const { permission } = this.props;
+
     if (!item.isUpload) {
-      return <Icon key={item.name}
-        onClick={this.handleAttachClick.bind(this, item)}
-        className={styles['dvditor-attachment-toolbar__item']}
-        name={item.name}
-        color={item.type === this.state.currentAction && item.active}
-        size="20" />;
+      return permission[item.type] ? (
+        <Icon
+          key={item.name}
+          onClick={this.handleAttachClick.bind(this, item)}
+          className={styles['dvditor-attachment-toolbar__item']}
+          name={item.name}
+          color={item.type === this.state.currentAction && item.active}
+          size="20"
+        />
+      ) : null;
     }
-    return (
+    return permission[item.type] ? (
       <div key={item.name} onClick={this.trggerInput} style={{ display: 'inline-block' }}>
         <Icon
           onClick={this.handleAttachClick.bind(this, item)}
@@ -171,7 +177,7 @@ class AttachmentToolbar extends React.Component {
           accept={item.accept}
         />
       </div>
-    );
+    ) : null;
   })
 
   render() {

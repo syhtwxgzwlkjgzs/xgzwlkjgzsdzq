@@ -457,12 +457,12 @@ class Index extends Component {
             {/* 工具栏区域、include各种插件触发图标、发布等 */}
             <View className={styles['toolbar']}>
               <View className={styles['location-bar']}>
-                {permissions?.insertPosition?.enable &&
+                <Text className={styles['text-length']}>{`还能输入${contentTextLength}个字`}</Text>
+                {(permissions?.insertPosition?.enable) &&
                   <Position currentPosition={position} positionChange={(position) => {
                     setPostData({ position });
                   }} />
                 }
-                <Text className={styles['text-length']}>{`还能输入${contentTextLength}个字`}</Text>
               </View>
 
 
