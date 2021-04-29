@@ -210,7 +210,6 @@ class PostPage extends React.Component {
 
   // 关注列表
   handleAtListChange = (atList) => {
-    console.log(atList);
     this.setState({ atList });
   }
 

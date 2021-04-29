@@ -249,10 +249,10 @@ class ThreadCreate extends React.Component {
         <div id="post-bottombar" className={styles['post-bottombar']}>
           {/* 插入位置 */}
           <div id="post-position" className={styles['position-box']}>
-            <Position
+            {user?.permissions?.insertPosition?.enable && (<Position
               position={postData.position}
               onClick={() => this.props.saveDataLocal()}
-              onChange={position => this.props.setPostData({ position })} />
+              onChange={position => this.props.setPostData({ position })} />)}
             <div className={styles['post-counter']}>还能输入{maxCount - this.props.count}个字</div>
           </div>
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
