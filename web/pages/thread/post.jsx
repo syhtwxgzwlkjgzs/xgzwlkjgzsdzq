@@ -228,13 +228,15 @@ class PostPage extends React.Component {
     if (!isDraft && amount) {
       let type = ORDER_TRADE_TYPE.RED_PACKET;
       let title = '支付红包';
+      if (redAmount) {
+        data.redAmount = redAmount;
+      }
       if (rewardAmount) {
         type = ORDER_TRADE_TYPE.POST_REWARD;
         title = '支付悬赏';
         data.rewardAmount = rewardAmount;
       }
       if (rewardAmount && redAmount) {
-        data.redAmount = redAmount;
         type = ORDER_TRADE_TYPE.COMBIE_PAYMENT;
         title = '支付红包和悬赏';
       }
