@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Spin } from '@discuzq/design';
 import { View, Text, ScrollView } from '@tarojs/components';
+import { noop } from '@components/thread/utils'
 import styles from './index.module.scss';
 
 /**
@@ -12,7 +13,7 @@ import styles from './index.module.scss';
  * @prop {function} allowRefresh 是否启用上拉刷新
  */
 
-const List = ({ height, className = '', children, noMore = false, onRefresh, allowRefresh = true }) => {
+const List = ({ height, className = '', children, noMore = false, onRefresh, allowRefresh = true, onScroll = noop }) => {
   const listWrapper = useRef(null);
   const isLoading = useRef(false);
   const [loadText, setLoadText] = useState('加载中...');
@@ -62,7 +63,7 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
       }
     }
   }, 50);
-
+ 
   return (
     <ScrollView 
       scrollY 
@@ -70,6 +71,7 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
       style={{ height }} 
       onScrollToLower={onTouchMove}
       lowerThreshold={80}
+      onScroll={onScroll}
     >
       {children}
       {allowRefresh && (
