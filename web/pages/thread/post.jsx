@@ -221,27 +221,27 @@ class PostPage extends React.Component {
     else this.setPostData({ draft: 0 });
     const { threadPost } = this.props;
     const { rewardQa, redpacket } = threadPost.postData;
-    const amount = (Number(rewardQa.value) || 0) + (Number(redpacket.price) || 0);
+    const rewardAmount = (Number(rewardQa.value) || 0);
+    const redAmount = (Number(redpacket.price) || 0);
+    const amount = rewardAmount + redAmount;
+    const data = { amount };
     if (!isDraft && amount) {
       let type = ORDER_TRADE_TYPE.RED_PACKET;
       let title = '支付红包';
-      if (Number(rewardQa.price)) {
+      if (rewardAmount) {
         type = ORDER_TRADE_TYPE.POST_REWARD;
         title = '支付悬赏';
+        data.rewardAmount = rewardAmount;
       }
-      if (Number(rewardQa.price) && Number(redpacket.price)) {
+      if (rewardAmount && redAmount) {
+        data.redAmount = redAmount;
         type = ORDER_TRADE_TYPE.COMBIE_PAYMENT;
         title = '支付红包和悬赏';
       }
       PayBox.createPayBox({
-        data: {      // data 中传递后台参数
-          amount,
-          title, // 商品名称，不同于后台参数
-          type,
-        },
+        data: { ...data, title, type },
         success: async (orderInfo) => {
           const { orderSn } = orderInfo;
-          console.log(orderInfo);
           this.setPostData({ orderSn });
           const { thread } = this.props;
           const threadId = this.props.router.query.id || '';
