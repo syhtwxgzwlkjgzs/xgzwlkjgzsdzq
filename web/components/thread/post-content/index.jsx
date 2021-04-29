@@ -79,8 +79,8 @@ const Index = ({
         className={`${styles.contentWrapper} ${showHideCover ? styles.hideCover : ''}`}
         onClick={!showMore ? onShowMore : onRedirectToDetail}
       >
-        <div className={styles.content}>
-          <RichText html={filterContent} />
+        <div className={styles.content} dangerouslySetInnerHTML={{__html: filterContent}}>
+          {/* <RichText html={filterContent} /> */}
         </div>
       </div>
       {!loading && useShowMore && !showMore && (
