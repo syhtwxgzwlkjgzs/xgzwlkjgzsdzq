@@ -34,7 +34,12 @@ class SearchPCPage extends React.Component {
   };
 
   onUserClick = data => console.log('user click', data);
-  onTopicClick = data => console.log('topic click', data);
+
+  onTopicClick = data => {
+    const { topicId } = data
+    this.props.router.push(`/topic/topic-detail/${topicId}`);
+  };
+
   onPostClick = data => console.log('post click', data);
 
   searchData = (keyword) => {

@@ -31,7 +31,7 @@ const Topic = ({ data, onClick, index, footer }) => {
     imageData = []
   } = handleAttachmentData(data?.threads[0]?.content);
   return (
-    <div className={styles.item}>
+    <div className={styles.item} onClick={click}>
       <div className={styles.imgBox}>
         { imageData.length > 0 && imageData[0].url ? (
             <img className={styles.img} src={data.img}/>

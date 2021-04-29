@@ -7,9 +7,10 @@ import List from '@components/list'
 import NoData from '@components/no-data';
 import SectionTitle from '@layout/search/h5/components/section-title'
 import DetailsHeader from './components/details-header';
+import ThreadContent from '@components/thread'
 @inject('site')
 @inject('user')
-@inject('index')
+@inject('topic')
 @observer
 class IndexPCPage extends React.Component {
   constructor(props) {
@@ -26,37 +27,38 @@ class IndexPCPage extends React.Component {
   }
    // 右侧 - 活跃用户 版权信息
    renderRight = () => {
-    // const { pageData = [] } = this.props.search.indexUsers || { pageData: [] };
     return (
-      <>
-      {
-        // pageData?.length > 0 && (
-          <div className={styles.topicRight}>
-            <div className={styles.section}>
-              <SectionTitle title="活跃用户" onShowMore={this.redirectToSearchResultUser}/>
-              {/* <ActiveUsers data={pageData} onItemClick={this.onUserClick}/> */}
-            </div>
-          </div>
-        // )
-      }
-      </>
-    )
-  }
-  // 中间 -- 话题
-  renderContent = () => {
-    const { pageData = [] } = this.props.topic?.topicDetail || {};
-    return (
-      <div className={styles.topicContent}>
-        <DetailsHeader/>
-        {
-          pageData?.length
-            ? pageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)
-            : <NoData />
-        }
+      <div className={styles.topicRight}>
+        <div className={styles.section}>
+          <SectionTitle title="活跃用户" onShowMore={this.redirectToSearchResultUser}/>
+          {/* <ActiveUsers data={pageData} onItemClick={this.onUserClick}/> */}
+        </div>
       </div>
     )
   }
+
+  renderItem = ({ content = '', threadCount = 0, viewCount = 0, threads = [] }, index) => {
+    return (
+      <div key={index}>
+        <DetailsHeader title={content} viewNum={viewCount} contentNum={threadCount} onShare={this.onShare} />
+        <div className={styles.themeContent}>
+          {
+            threads?.length ?
+              (
+                threads?.map((item, index) => (
+                  <ThreadContent data={item} key={index} className={styles.item} />
+                ))
+              )
+              : <NoData />
+          }
+        </div>
+      </div>
+    )
+  }
+
   render() {
+    const { pageData = [] } = this.props.topic?.topicDetail || {};
+
     return (
       <List className={styles.searchWrap}>
       <div className={styles.topicWrap}>
@@ -64,7 +66,9 @@ class IndexPCPage extends React.Component {
           onSearch={this.onSearch}
           right={ this.renderRight }
         >
-          { this.renderContent }
+          { 
+            pageData?.map((item, index) => this.renderItem(item, index)) || <NoData />
+          }
         </BaseLayout>
         </div>
       </List>

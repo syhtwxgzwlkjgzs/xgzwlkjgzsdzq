@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import Avatar from '@components/avatar';
 import { Button, Icon } from '@discuzq/design';
 
@@ -31,6 +31,16 @@ const User = ({ data, onClick, onFollow }) => {
     onFollow(data.userId)
   }
 
+  const btnInfo = useMemo(() => {
+    if (data.isFollow) {
+      return { text: '已关注', icon: 'CheckOutlined', className: styles.isFollow }
+    }
+    if (data.isMutualFollow) {
+      return { text: '互关', icon: 'WithdrawOutlined', className: styles.withdraw }
+    }
+    return { text: '关注', icon: 'PlusOutlined', className: styles.follow }
+  }, [data])
+
   return (
     <div className={styles.item} onClick={click}>
       <div>
@@ -60,9 +70,9 @@ const User = ({ data, onClick, onFollow }) => {
           </div>
         </div>
       </div>
-      <Button type="primary" className={styles.button} onClick={handleFollow} disabled={data.isFollow}>
-        <Icon name="PlusOutlined" size={12} className={styles.addIcon}/>
-        关注
+      <Button type="primary" className={`${styles.button} ${btnInfo.className}`} onClick={handleFollow}>
+        <Icon name={btnInfo.icon} size={12} className={styles.addIcon} />
+        {btnInfo.text}
       </Button>
     </div>
   );
