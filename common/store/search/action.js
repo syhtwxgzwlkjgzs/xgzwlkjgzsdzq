@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import SearchStore from './store';
-import { readTopicsList, readUsersList, readThreadList, createFollow } from '../../server';
+import { readTopicsList, readUsersList, readThreadList, createFollow, deleteFollow } from '../../server';
 
 class SearchAction extends SearchStore {
   constructor(props) {
@@ -203,6 +203,22 @@ class SearchAction extends SearchStore {
    }
    return null;
  };
+
+ /**
+ * 发现模块 - 取消关注
+ * @param {object} search * 搜索值
+ * @returns {object} 处理结果
+ */
+  @action
+  async cancelFollow({ id, type }) {
+    const result = await deleteFollow({ data: { id, type: type } });
+ 
+    if (result.code === 0 && result.data) {
+      
+      return result.data;
+    }
+    return null;
+  };
 }
 
 export default SearchAction;

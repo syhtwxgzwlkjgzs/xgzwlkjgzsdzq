@@ -28,7 +28,8 @@ const User = ({ data, onClick, onFollow }) => {
   }, [data, onClick]);
 
   const handleFollow = () => {
-    onFollow(data.userId)
+    const type = btnInfo.text === '关注' ? '1' : '0'
+    onFollow({ id: data.userId, type })
   }
 
   const btnInfo = useMemo(() => {
