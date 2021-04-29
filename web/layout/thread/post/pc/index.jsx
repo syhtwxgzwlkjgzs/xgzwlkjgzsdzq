@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import Header from '@components/header';
 import DVditor from '@components/editor';
-import Title from '@components/thread-post-pc/title';
+import Title from '@components/thread-post/title';
 import { AttachmentToolbar, DefaultToolbar } from '@components/editor/toolbar';
 import Position from '@components/thread-post/position';
 import { Button, Video, Audio, AudioRecord, Tag } from '@discuzq/design';

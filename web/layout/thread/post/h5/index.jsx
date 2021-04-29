@@ -349,6 +349,7 @@ class ThreadCreate extends React.Component {
         <div className={styles['post-inner']}>
           {/* 标题 */}
           <Title
+            isDisplay={true}
             title={postData.title}
             onChange={title => this.setPostData({ title })}
             onFocus={this.setBottomFixed}
