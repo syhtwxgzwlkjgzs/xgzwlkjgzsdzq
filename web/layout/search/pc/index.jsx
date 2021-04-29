@@ -61,11 +61,18 @@ class SearchPCPage extends React.Component {
       goToLoginPage({ url: '/user/login' });
       return;
     }
-
     if (type === '1') {
-      this.props.search.postFollow(id)
+      this.props.search.postFollow(id).then(result => {
+        if (result) {
+          this.props.search.updateActiveUserInfo(id, { isFollow: true })
+        }
+      })
     } else {
-      this.props.search.cancelFollow({ id, type: 1 })
+      this.props.search.cancelFollow({ id, type: 1 }).then(result => {
+        if (result) {
+          this.props.search.updateActiveUserInfo(id, { isFollow: false })
+        }
+      })
     }
   }
 
@@ -81,6 +88,7 @@ class SearchPCPage extends React.Component {
   // 中间 -- 潮流话题 活跃用户 热门内容
   renderContent = () => {
     const { indexTopics, indexUsers, indexThreads } = this.props.search;
+
     const { pageData: topicsPageData = [] } = indexTopics || {};
     const { pageData: usersPageData = [] } = indexUsers || {};
     const { pageData: threadsPageData = [] } = indexThreads || {};
@@ -125,7 +133,6 @@ class SearchPCPage extends React.Component {
       <div className={styles.searchWrap}>
         <BaseLayout
           onSearch={this.onSearch}
-          left={() => <div></div>}
           right={ this.renderRight }
         >
           { this.renderContent() }

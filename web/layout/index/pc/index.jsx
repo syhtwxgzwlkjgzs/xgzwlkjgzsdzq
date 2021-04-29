@@ -8,8 +8,8 @@ import TopMenu from './components/top-menu';
 import PostTheme from './components/post-theme';
 import TopNews from '../h5/components/top-news';
 import Navigation from './components/navigation';
-import QcCode from './components/qcCode';
-import Recommend from './components/recommend';
+import QcCode from '@components/qcCode';
+import Recommend from '@components/recommend';
 import ThreadContent from '@components/thread';
 import List from '@components/list';
 import Copyright from '@components/copyright';
@@ -72,15 +72,6 @@ class IndexPCPage extends React.Component {
     if (value) {
       this.props.router.push(`/search?keyword=${value || ''}`);
     }
-  }
-
-  changeBatch = () => {
-    const { dispatch = () => {} } = this.props;
-     return dispatch('refresh-recommend', this.filter);
-  }
-  recommendDetails = (item) => {
-    const { threadId } = item
-    this.props.router.push(`/thread/${threadId}`);
   }
 
    // 上拉加载更多
@@ -146,11 +137,7 @@ class IndexPCPage extends React.Component {
     <div className={styles.indexRight}>
       <QcCode />
       <div className={styles.indexRightCon}>
-        <Recommend
-          changeBatch={this.changeBatch}
-          recommendDetails={this.recommendDetails}
-          data={data}
-        />
+        <Recommend />
       </div>
       <Copyright/>
       <PayBox />
@@ -193,14 +180,13 @@ class IndexPCPage extends React.Component {
     const { index, site } = this.props;
     const { countThreads = 0 } = site?.webConfig?.other || {};
     const { currentPage, totalPage } = this.props.index.threads || {};
-    const { recommends } = this.props.index || [];
 
     return (
       <List className={styles.indexWrap} onRefresh={this.onPullingUp} noMore={currentPage === totalPage}>
           <BaseLayout
             onSearch={this.onSearch}
             left={ this.renderLeft(countThreads) }
-            right={ this.renderRight(recommends) }
+            right={ this.renderRight() }
           >
             {this.renderContent(index)}
           </BaseLayout>
