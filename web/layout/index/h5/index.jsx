@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef }from 'react';
 import { inject, observer } from 'mobx-react';
 import { Icon, Tabs } from '@discuzq/design';
 import ThreadContent from '@components/thread';
@@ -22,7 +22,9 @@ class IndexH5Page extends React.Component {
       visible: false,
       filter: {},
       currentIndex: '',
+      scroll: true,
     };
+    this.listRef = createRef();
     this.renderItem = this.renderItem.bind(this);
   }
 
@@ -55,6 +57,21 @@ class IndexH5Page extends React.Component {
     this.setState({
       visible: false,
     });
+  }
+  
+  onScroll = ({ scrollTop }) => {
+    const el = this.listRef.current.offsetTop;
+
+    if (scrollTop >= el) {
+      this.setState({
+        scroll: false,
+      })
+    }
+    if (scrollTop < 160) {
+      this.setState({
+        scroll: true,
+      })
+    }
   }
 
   onClickTab = (id = '') => {
@@ -109,7 +126,7 @@ class IndexH5Page extends React.Component {
     return tmpCategories;
   }
 
-  renderHeaderContent = () => {
+  renderHeaderContent = (scroll) => {
     const { index } = this.props;
     const { currentIndex } = this.state;
     const { sticks = [], categories = [] } = index;
@@ -118,8 +135,9 @@ class IndexH5Page extends React.Component {
     return (
       <div>
         <HomeHeader/>
-        {categories?.length > 0 && <div className={styles.homeContent}>
+        {categories?.length > 0 && <div ref={this.listRef} className={scroll ? styles.homeContent : styles.homeContentText}>
           <Tabs
+            className={styles.tabsBox}
             scrollable
             type='primary'
             onActive={this.onClickTab}
@@ -158,7 +176,7 @@ class IndexH5Page extends React.Component {
   // 没有帖子列表数据时的默认展示
   renderNoData = () => (
     <>
-      {this.renderHeaderContent()}
+      {this.renderHeaderContent(true)}
       <NoData />
     </>
   )
@@ -166,7 +184,7 @@ class IndexH5Page extends React.Component {
 
   render() {
     const { index } = this.props;
-    const { filter } = this.state;
+    const { filter, scroll } = this.state;
     const { threads = {}, categories = [] } = index;
     const { currentPage, totalPage, pageData } = threads || {};
     const newCategories = this.handleCategories(categories);
@@ -179,11 +197,12 @@ class IndexH5Page extends React.Component {
               className={styles.list}
               onRefresh={this.onRefresh}
               noMore={currentPage >= totalPage}
+              onScroll={this.onScroll}
             >
               {
                 pageData.map((item, index) => (
                   <div key={index}>
-                    { index === 0 && this.renderHeaderContent()}
+                    { index === 0 && this.renderHeaderContent(scroll)}
                     <ThreadContent data={item} className={styles.listItem} />
                   </div>
                 ))
