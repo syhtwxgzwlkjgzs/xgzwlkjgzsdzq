@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import { Spin } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
 import styles from './index.module.scss';
@@ -12,7 +12,7 @@ import styles from './index.module.scss';
  * @prop {function} allowRefresh 是否启用上拉刷新
  */
 
-const List = ({ height, className = '', children, noMore, onRefresh, allowRefresh = true, onScroll = noop }) => {
+const List = forwardRef(({ height, className = '', children, noMore, onRefresh, allowRefresh = true, onScroll = noop }, ref) => {
   const listWrapper = useRef(null);
   const isLoading = useRef(false);
   const [loadText, setLoadText] = useState('加载中...');
@@ -28,6 +28,13 @@ const List = ({ height, className = '', children, noMore, onRefresh, allowRefres
     onTouchMove();
   }, []);
 
+  useImperativeHandle(
+    ref,
+    () => ({
+      onBackTop,
+    }),
+  );
+
   const throttle = (fn, delay) => {
     let timer = null;
 
@@ -38,6 +45,10 @@ const List = ({ height, className = '', children, noMore, onRefresh, allowRefres
       }, delay);
     };
   };
+
+  const onBackTop = () => {
+    listWrapper.current.scrollTop = 0;
+  }
 
   const onTouchMove = throttle(() => {
     if (!listWrapper || !listWrapper.current || !allowRefresh) {
@@ -90,6 +101,6 @@ const List = ({ height, className = '', children, noMore, onRefresh, allowRefres
       </div>
     </div>
   );
-};
+});
 
 export default React.memo(List);
