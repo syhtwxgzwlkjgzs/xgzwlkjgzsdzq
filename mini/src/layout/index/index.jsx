@@ -29,21 +29,12 @@ class IndexMiniPage extends React.Component {
     this.renderItem = this.renderItem.bind(this);
   }
 
-  componentDidMount() {
-    console.log(this.props.user);
-  }
-  scrollTop = (e) => {
-    const el = this.listRef.current.offsetTop;
-    if (e >= 160) {
-      this.setState({
-        scroll: false,
-      })
-    }
-    if (e < 160) {
-      this.setState({
-        scroll: true,
-      })
-    }
+  onScroll = (e) => {
+    const { scrollTop = 0 } = e?.detail || {}
+    this.setState({
+      scroll: scrollTop < 160,
+    })
+
   }
   // 点击更多弹出筛选
   searchClick = () => {
@@ -88,7 +79,7 @@ class IndexMiniPage extends React.Component {
   }
 
   // 上拉加载更多
-  onPullingUp = () => {
+  onRefresh = () => {
     const { dispatch = () => {} } = this.props;
     const { filter } = this.state;
     return dispatch('moreData', filter);
@@ -181,7 +172,7 @@ class IndexMiniPage extends React.Component {
               className={styles.list}
               onRefresh={this.onRefresh}
               noMore={currentPage >= totalPage}
-              scrollTops={this.scrollTop}
+              onScroll={this.onScroll}
             >
              {
                 pageData.map((item, index) => (
