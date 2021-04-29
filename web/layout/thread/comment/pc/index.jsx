@@ -4,7 +4,7 @@ import { withRouter } from 'next/router';
 import styles from './index.module.scss';
 import AuthorInfo from '../../pc/components/author-info/index';
 import CommentList from '../../pc/components/comment-list/index';
-import RecommendContent from '../../pc/components/recommend-content/index';
+import Recommend from '@components/recommend';
 import Header from '@components/header';
 import { Icon, Toast } from '@discuzq/design';
 import LoadingTips from '../../pc/components/loading-tips';
@@ -211,7 +211,7 @@ class CommentPCPage extends React.Component {
               }
             </div>
             <div className={styles.recommend}>
-              <RecommendContent></RecommendContent>
+              <Recommend></Recommend>
             </div>
           </div>
         </div>
