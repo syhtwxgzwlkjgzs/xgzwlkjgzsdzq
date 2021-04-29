@@ -43,6 +43,9 @@ class PostPage extends React.Component {
       count: 0,
       draftShow: false,
     };
+    this.captcha = ''; // 腾讯云验证码实例
+    this.ticket = ''; // 腾讯云验证码返回票据
+    this.randstr = ''; // 腾讯云验证码返回随机字符串
   }
 
   componentDidMount() {
@@ -61,6 +64,10 @@ class PostPage extends React.Component {
       if (emojis.length === 0) fetchEmoji();
       this.fetchCategories();
     }
+  }
+
+  componentWillUnmount() {
+    this.captcha = '';
   }
 
   saveDataLocal = () => {
@@ -213,9 +220,29 @@ class PostPage extends React.Component {
     this.setState({ atList });
   }
 
+  toTCaptcha = async (qcloudCaptchaAppId) => {
+    // 验证码实例为空，则创建实例
+    if (!this.captcha) {
+      const TencentCaptcha = (await import('@common/utils/tcaptcha')).default;
+      this.captcha = new TencentCaptcha(qcloudCaptchaAppId, res => {
+        if (res.ret === 0) {
+          // 验证通过后发布
+          this.ticket = res.ticket;
+          this.randstr = res.randstr;
+          this.handleSubmit();
+        }
+        if (res.ret === 2) {
+          console.log('验证关闭');
+        }
+      });
+    }
+    // 显示验证码
+    this.captcha.show();
+  }
+
   // 发布提交
   handleSubmit = async (isDraft) => {
-    const { postData } = this.props.threadPost;
+    const { postData, setPostData } = this.props.threadPost;
     if (!isDraft && !postData.contentText) {
       Toast.info({ content: '请填写您要发布的内容' });
       return;
@@ -232,6 +259,34 @@ class PostPage extends React.Component {
     const redAmount = (Number(redpacket.price) || 0);
     const amount = rewardAmount + redAmount;
     const data = { amount };
+
+
+    // 2 验证码
+    const { webConfig } = this.props.site;
+    if (webConfig) {
+      const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
+      const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
+      const createThreadWithCaptcha = webConfig?.other?.createThreadWithCaptcha;
+      // 开启了腾讯云验证码验证时，进行验证，通过后再进行实际的发布请求
+      if (true || (qcloudCaptcha && createThreadWithCaptcha)) {
+        // 验证码票据，验证码字符串不全时，弹出滑块验证码
+        if (!this.ticket || !this.randstr) {
+          this.toTCaptcha(qcloudCaptchaAppId); // 传递appId
+          return false; // 验证通过后会重新调用发布函数
+        }
+      }
+    }
+
+    // 将验证信息更新到发布store
+    if (this.ticket && this.randstr) {
+      setPostData({
+        ticket: this.ticket,
+        randstr: this.randstr,
+      });
+      this.ticket = '';
+      this.randstr = '';
+    }
+
     if (!isDraft && amount) {
       let type = ORDER_TRADE_TYPE.RED_PACKET;
       let title = '支付红包';
