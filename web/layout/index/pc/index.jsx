@@ -135,6 +135,11 @@ class IndexPCPage extends React.Component {
     this.listRef?.current?.onBackTop()
   }
 
+  // 发帖
+  onPostThread = () => {
+    this.props.router.push('/thread/post');
+  }
+
   // 左侧 -- 分类
   renderLeft = (countThreads = 0) => {
     const { categories = [] } = this.props.index;
@@ -170,7 +175,9 @@ class IndexPCPage extends React.Component {
           <div className={styles.topBox}>
             <TopMenu onSubmit={this.onFilterClick} />
             <div className={styles.PostTheme}>
-              <PostTheme/>
+              <Button type="primary" className={styles.publishBtn} onClick={this.onPostThread}>
+                发 布
+              </Button>
             </div>
           </div>
           <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
