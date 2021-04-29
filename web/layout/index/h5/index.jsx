@@ -59,15 +59,15 @@ class IndexH5Page extends React.Component {
     });
   }
   
-  scrollTop = (e) => {
+  onScroll = ({ scrollTop }) => {
     const el = this.listRef.current.offsetTop;
-    console.log(e, el, '滚动');
-    if (e >= el) {
+
+    if (scrollTop >= el) {
       this.setState({
         scroll: false,
       })
     }
-    if (e < 160) {
+    if (scrollTop < 160) {
       this.setState({
         scroll: true,
       })
@@ -131,7 +131,7 @@ class IndexH5Page extends React.Component {
     const { currentIndex } = this.state;
     const { sticks = [], categories = [] } = index;
     const newCategories = this.handleCategories(categories);
-    console.log(scroll, '样式2');
+
     return (
       <div>
         <HomeHeader/>
@@ -188,7 +188,7 @@ class IndexH5Page extends React.Component {
     const { threads = {}, categories = [] } = index;
     const { currentPage, totalPage, pageData } = threads || {};
     const newCategories = this.handleCategories(categories);
-    console.log(scroll, '样式');
+
     return (
       <div className={styles.container}>
         { pageData?.length > 0
@@ -197,7 +197,7 @@ class IndexH5Page extends React.Component {
               className={styles.list}
               onRefresh={this.onRefresh}
               noMore={currentPage >= totalPage}
-              scrollTops={this.scrollTop}
+              onScroll={this.onScroll}
             >
               {
                 pageData.map((item, index) => (
