@@ -54,11 +54,6 @@ class Index extends React.Component {
     if (!hasThreadsData) {
       this.props.index.getReadThreadList();
     }
-
-    const { platform } = this.props.site;
-    if (platform === 'pc') {
-      this.props.index.getRecommends();
-    }
   }
 
   dispatch = async (type, data = {}) => {
