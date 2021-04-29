@@ -245,25 +245,30 @@ class PostPage extends React.Component {
         success: async (orderInfo) => {
           const { orderSn } = orderInfo;
           this.setPostData({ orderSn });
-          const { thread } = this.props;
-          const threadId = this.props.router.query.id || '';
-          let ret = {};
-          Toast.loading({ content: isDraft ? '保存草稿中...' : '创建中...' });
-          if (threadId) ret = await threadPost.updateThread(threadId);
-          else ret = await threadPost.createThread();
-          const { code, data, msg } = ret;
-          if (code === 0) {
-            thread.setThreadData(data);
-            if (!isDraft) this.props.router.replace(`/thread/${data.threadId}`);
-            return true;
-          }
-          Toast.error({ content: msg });
+          this.createThread(isDraft);
         }, // 支付成功回调
       });
+      return;
     }
-
+    this.createThread(isDraft);
     return false;
   };
+
+  async createThread(isDraft) {
+    const { threadPost, thread } = this.props;
+    const threadId = this.props.router.query.id || '';
+    let ret = {};
+    Toast.loading({ content: isDraft ? '保存草稿中...' : '创建中...' });
+    if (threadId) ret = await threadPost.updateThread(threadId);
+    else ret = await threadPost.createThread();
+    const { code, data, msg } = ret;
+    if (code === 0) {
+      thread.setThreadData(data);
+      if (!isDraft) this.props.router.replace(`/thread/${data.threadId}`);
+      return true;
+    }
+    Toast.error({ content: msg });
+  }
 
   // 保存草稿
   handleDraft = async (val) => {
