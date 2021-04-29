@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 
-import RecommendContent from './components/recommend-content/index';
 import AuthorInfo from './components/author-info/index';
 import CommentList from './components/comment-list/index';
 import CommentInput from './components/comment-input/index';
@@ -33,6 +32,8 @@ import classnames from 'classnames';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import Copyright from '@components/copyright';
 import threadPay from '@common/pay-bussiness/thread-pay';
+import Recommend from '@components/recommend';
+import QcCode from '@components/qcCode';
 
 const typeMap = {
   101: 'IMAGE',
@@ -948,7 +949,10 @@ class ThreadPCPage extends React.Component {
               }
             </div>
             <div className={layout.recommend}>
-              <RecommendContent></RecommendContent>
+              <Recommend></Recommend>
+            </div>
+            <div className={layout.qrcode}>
+              <QcCode></QcCode>
             </div>
             <div className={layout.copyright}>
               <Copyright></Copyright>

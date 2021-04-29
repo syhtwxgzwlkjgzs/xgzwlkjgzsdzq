@@ -40,6 +40,11 @@
       justify-content: center;
       border-radius: var(--border-radius-small);
     }
+
+    .qrcode {
+      margin-top: rem(20);
+    }
+
     .recommend {
       width: 100%;
       background: var(--color-white);
@@ -56,7 +61,6 @@
 .bottom {
   margin-top: rem($margin-10);
 }
-
 
 .editCmment {
   position: relative;
