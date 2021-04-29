@@ -179,7 +179,7 @@ class ThreadPostAction extends ThreadPostStore {
       video: {},
       images: {},
       files: {},
-    }
+    };
   }
 
   /**
@@ -187,7 +187,8 @@ class ThreadPostAction extends ThreadPostStore {
    */
   @action
   gettContentIndexes() {
-    const { images, video, files, product, audio, redpacket, rewardQa } = this.postData;
+    const { images, video, files, product, audio, redpacket, rewardQa, orderSn } = this.postData;
+    console.log(orderSn, 'orderSn');
     const imageIds = Object.values(images).map(item => item.id);
     const docIds = Object.values(files).map(item => item.id);
     const contentIndexes = {};
@@ -221,18 +222,18 @@ class ThreadPostAction extends ThreadPostStore {
         body: { audioId: audio.id },
       };
     }
-    // TODO:需要支付，缺少 orderId
+
     if (redpacket.price) {
       contentIndexes[THREAD_TYPE.redPacket] = {
         tomId: THREAD_TYPE.redPacket,
-        body: { ...redpacket },
+        body: { ...redpacket, orderSn },
       };
     }
-    // TODO:需要支付，缺少 orderId
+
     if (rewardQa.times) {
       contentIndexes[THREAD_TYPE.qa] = {
         tomId: THREAD_TYPE.qa,
-        body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0 },
+        body: { expiredAt: rewardQa.times, price: Number(rewardQa.value), type: 0, orderSn },
       };
     }
     return contentIndexes;
