@@ -31,7 +31,7 @@ import AttachmentView from '@components/thread/attachment-view';
 import throttle from '@common/utils/thottle';
 import classnames from 'classnames';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
-import BottomEvent from '@components/thread/bottom-event';
+import Copyright from '@components/copyright';
 
 const typeMap = {
   101: 'IMAGE',
@@ -910,6 +910,9 @@ class ThreadPCPage extends React.Component {
             </div>
             <div className={layout.recommend}>
               <RecommendContent></RecommendContent>
+            </div>
+            <div className={layout.copyright}>
+              <Copyright></Copyright>
             </div>
           </div>
         </div>
