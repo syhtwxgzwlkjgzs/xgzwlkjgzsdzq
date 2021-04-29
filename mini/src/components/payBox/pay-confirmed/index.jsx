@@ -5,7 +5,7 @@ import { Icon, Radio,Button } from '@discuzq/design';
 import isWeixin from '@common/utils/is-weixin';
 import { View, Text } from '@tarojs/components';
 import { PAY_MENT_MAP, PAYWAY_MAP, STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants.js';
-import { listenWXJsBridgeAndExecCallback, onBridgeReady } from '../../../../../common/store/pay/weixin-miniprogram-backend.js'
+import { listenWXJsBridgeAndExecCallback, onBridgeReady, wxValidator, mode } from '../../../../../common/store/pay/weixin-miniprogram-backend.js'
 @inject('user')
 @inject('payBox')
 @observer
@@ -86,11 +86,6 @@ export default class PayBox extends React.Component {
 
       }
     } else if (this.props.payBox.payWay === PAYWAY_MAP.WX) {
-      // 表示微信支付
-      if (!isWeixin()) {
-        await this.props.payBox.wechatPayOrder({ listenWXJsBridgeAndExecCallback, onBridgeReady, wxValidator, mode: PAY_MENT_MAP.WX_H5 });
-        return;
-      }
       await this.props.payBox.wechatPayOrder({ listenWXJsBridgeAndExecCallback, onBridgeReady, wxValidator, mode });
     }
   };
