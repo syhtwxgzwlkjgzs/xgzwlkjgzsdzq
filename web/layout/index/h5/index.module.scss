@@ -13,6 +13,19 @@
     background: var(--color-white);
     margin-bottom: rem(10);
   }
+  .homeContentText {
+    width: 100%;
+    background: var(--color-white);
+    border-bottom: rem(1) solid var(--color-text-placeholder);
+    margin-bottom: rem(10);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+  }
+  .tabsBox {
+    height: rem(53);
+  }
   .list {
     flex: 1;
   }
