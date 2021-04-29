@@ -31,10 +31,12 @@ import throttle from '@common/utils/thottle';
 import Header from '@components/header';
 import Router from '@discuzq/sdk/dist/router';
 import * as localData from '../common';
+import tcaptchs from '@common/utils/tcaptcha';
 
 const maxCount = 5000;
 
 @inject('threadPost')
+@inject('site')
 @inject('index')
 @inject('thread')
 @inject('user')
@@ -62,6 +64,9 @@ class ThreadCreate extends React.Component {
       count: 0,
       draftShow: false,
     };
+    this.captcha = ''; // 腾讯云验证码实例
+    this.ticket = ''; // 腾讯云验证码返回票据
+    this.randstr = ''; // 腾讯云验证码返回随机字符串
   }
   componentDidMount() {
     // 如果本地缓存有数据，这个目前主要用于定位跳出的情况
@@ -83,6 +88,7 @@ class ThreadCreate extends React.Component {
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handler);
+    this.captcha = '';
   }
 
   getPostDataFromLocal() {
@@ -203,8 +209,29 @@ class ThreadCreate extends React.Component {
     this.setState({ atList });
   }
 
+  toTCaptcha = (qcloudCaptchaAppId) => {
+    // 验证码实例为空，则创建实例
+    if (!this.captcha) {
+      this.captcha = new TencentCaptcha(qcloudCaptchaAppId, res => {
+        if (res.ret === 0) {
+          // 验证通过后发布
+          this.ticket = res.ticket;
+          this.randstr = res.randstr;
+          this.submit();
+        }
+        if (res.ret === 2) {
+          console.log('验证关闭');
+        }
+      });
+    }
+    // 显示验证码
+    this.captcha.show();
+  }
+
   submit = async (isDraft) => {
-    const { postData } = this.props.threadPost;
+    const { postData, setPostData } = this.props.threadPost;
+    const { webConfig } = this.props.site;
+    // 1 校验主题信息
     if (!isDraft && !postData.contentText) {
       Toast.info({ content: '请填写您要发布的内容' });
       return;
@@ -212,6 +239,29 @@ class ThreadCreate extends React.Component {
     if (!isDraft && this.state.count > maxCount) {
       Toast.info({ content: `输入的内容不能超过${maxCount}字` });
       return;
+    }
+    // 2 验证码
+    if (webConfig) {
+      const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
+      const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
+      const createThreadWithCaptcha = webConfig?.other?.createThreadWithCaptcha;
+      // 开启了腾讯云验证码验证时，进行验证，通过后再进行实际的发布请求
+      if (qcloudCaptcha && createThreadWithCaptcha) {
+        // 验证码票据，验证码字符串不全时，弹出滑块验证码
+        if (!this.ticket || !this.randstr) {
+          this.toTCaptcha(qcloudCaptchaAppId); // 传递appId
+          return false; // 验证通过后会重新调用发布函数
+        }
+      }
+    }
+    // 将验证信息更新到发布store
+    if (this.ticket && this.randstr) {
+      setPostData({
+        ticket: this.ticket,
+        randstr: this.randstr,
+      });
+      this.ticket = '';
+      this.randstr = '';
     }
     Toast.loading({ content: isDraft ? '保存草稿中...' : '创建中...' });
     const { threadPost, thread } = this.props;
