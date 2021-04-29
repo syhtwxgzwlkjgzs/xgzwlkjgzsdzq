@@ -28,6 +28,9 @@ export default class CommonAccountContent extends Component {
       case ORDER_TRADE_TYPE.PUT_PROBLEM: // 付费提问
         value = '付费提问'
         break
+      case ORDER_TRADE_TYPE.COMBIE_PAYMENT:
+        value = '红包+悬赏'
+        break
       default:
         break;
     }
@@ -57,6 +60,11 @@ export default class CommonAccountContent extends Component {
           <div className={styles.acExplain}>
             <span className={styles.acExplainLabel}>交易类型</span>{' '}
             <span className={styles.acExplainValue}>{this.renderDiffTradeType(type)}</span>
+            {/* {
+              type === ORDER_TRADE_TYPE.COMBIE_PAYMENT && (
+                <span></span>
+              )
+            } */}
           </div>
           <Divider className={styles.acExplainDivider} />
           <div className={styles.acExplain}>

@@ -188,22 +188,6 @@ class PayPassword extends React.Component {
     );
   };
 
-  showTitle = () => {
-    const { step } = this.props?.payBox;
-    let title = '输入支付密码';
-    switch (step) {
-      case STEP_MAP.WALLET_PASSWORD: // 表示钱包支付
-        title = '输入支付密码';
-        break;
-      case STEP_MAP.SET_PASSWORD: // 表示设置支付密码
-        title = '设置支付密码';
-        break;
-      default:
-        break;
-    }
-    return title;
-  };
-
   render() {
     const { list = [] } = this.state
     return (
