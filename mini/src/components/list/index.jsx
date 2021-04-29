@@ -12,7 +12,7 @@ import styles from './index.module.scss';
  * @prop {function} allowRefresh 是否启用上拉刷新
  */
 
-const List = ({ height, className = '', children, noMore = false, onRefresh, allowRefresh = true }) => {
+const List = ({ height, className = '', children, noMore = false, onRefresh, allowRefresh = true, scrollTops }) => {
   const listWrapper = useRef(null);
   const isLoading = useRef(false);
   const [loadText, setLoadText] = useState('加载中...');
@@ -62,7 +62,10 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
       }
     }
   }, 50);
-
+  const onScroll = (e) => {
+    // console.log(e.detail.scrollTop, '滚动高度');
+    scrollTops(e.detail.scrollTop);
+  }
   return (
     <ScrollView 
       scrollY 
@@ -70,6 +73,7 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
       style={{ height }} 
       onScrollToLower={onTouchMove}
       lowerThreshold={80}
+      onScroll={(e) => onScroll(e)}
     >
       {children}
       {allowRefresh && (
