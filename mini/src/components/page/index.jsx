@@ -4,6 +4,7 @@ import { View } from '@tarojs/components';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import Router from '@discuzq/sdk/dist/router';
+import PayBoxProvider from '../payBox/payBoxProvider';
 
 @inject('user')
 @inject('site')
@@ -52,7 +53,9 @@ export default class Page extends React.Component {
     const { site } = this.props;
     return (
       <View className={`${styles['dzq-page']} dzq-theme-${site.theme}`}>
-        {this.createContent()}
+        <PayBoxProvider>
+          {this.createContent()}
+        </PayBoxProvider>
       </View>
     );
   }
