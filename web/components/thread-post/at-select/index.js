@@ -2,18 +2,17 @@
  * at选择弹框组件。默认展示相互关注人员，搜索关键字按照站点全体人员查询
  * @prop {array} data 数据
  * @prop {boolean} visible 是否显示弹出层
- * @prop {function} onSearch 搜索事件
  * @prop {function} onCancel 取消
  * @prop {function} getAtList 确定
- * @prop {function} onScrollTop 触顶事件
- * @prop {function} onScrollBottom 触底事件
  */
 import React, { Component } from 'react';
-import { Popup, Input, Checkbox, Button, ScrollView } from '@discuzq/design';
+import { Popup, Input, Checkbox, Avatar, Button, ScrollView } from '@discuzq/design';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import DDialog from '@components/dialog';
+
+import stringToColor from '@common/utils/string-to-color';
 
 @inject('threadPost')
 @observer
@@ -57,24 +56,20 @@ class AtSelect extends Component {
   updateKeywords(e) {
     const keywords = e.target.value;
     this.setState({ keywords, page: 1 });
-    this.searchInput(keywords);
+    this.searchInput();
   }
 
   // 搜索用户
-  searchInput(keywords) {
+  searchInput() {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      this.props.onSearch(keywords);
       this.fetchFollow();
     }, 300);
   }
 
-  onScrollTop() {
-    this.props.onScrollTop();
-  }
-
   onScrollBottom() {
-    this.props.onScrollBottom();
+    // 没有更多数据时，不再发送请求
+    if (this.state.finish) return;
     this.fetchFollow();
   }
 
@@ -88,14 +83,29 @@ class AtSelect extends Component {
     this.props.onCancel();
   }
 
+  // 获取显示文字头像的背景色
+  getBackgroundColor = (name) => {
+    const character = name.charAt(0).toUpperCase()
+    return stringToColor(character);
+  }
+
   renderItem(info) {
     const { data, index } = info;
     const item = data[index] || {};
+    const username = item.user?.userName || '';
 
     return (
       <div className={styles['at-item']}>
         <div className={styles.avatar}>
-          <img className={styles.image} src={item?.user?.avatarUrl || '//dzq-img/noavatar.gif'} alt="" />
+          {item?.user?.avatar
+            ? <Avatar image={item.user.avatar} />
+            : <Avatar
+              text={username}
+              style={{
+                backgroundColor: `#${this.getBackgroundColor(username)}`
+              }}
+            />
+          }
         </div>
         <div className={styles.info}>
           <div className={styles.username}>{item?.user?.userName}</div>
@@ -130,12 +140,12 @@ class AtSelect extends Component {
         >
           <div className={styles['at-wrap']}>
             <ScrollView
+              className={styles['scroll-view']}
               width='100%'
               rowCount={data.length}
               rowData={data}
               rowHeight={54}
               rowRenderer={this.renderItem.bind(this)}
-              onScrollTop={this.onScrollTop.bind(this)}
               onScrollBottom={this.onScrollBottom.bind(this)}
               onPullingUp={() => Promise.reject()}
               isRowLoaded={() => true}
@@ -183,21 +193,15 @@ class AtSelect extends Component {
 AtSelect.propTypes = {
   data: PropTypes.array.isRequired,
   visible: PropTypes.bool.isRequired,
-  onSearch: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   getAtList: PropTypes.func.isRequired,
-  onScrollTop: PropTypes.func,
-  onScrollBottom: PropTypes.func,
 };
 
 AtSelect.defaultProps = {
   data: [],
   visible: false,
-  onSearch: () => {},
   onCancel: () => {},
   getAtList: () => {},
-  onScrollTop: () => {},
-  onScrollBottom: () => {},
 };
 
 export default AtSelect;

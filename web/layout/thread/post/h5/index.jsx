@@ -45,7 +45,6 @@ class ThreadCreate extends React.Component {
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handler);
-    this.captcha = '';
   }
 
   handleDraft = async (val) => {
