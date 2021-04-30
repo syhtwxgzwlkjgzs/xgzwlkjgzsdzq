@@ -319,8 +319,18 @@ class Index extends Component {
         }
       }
     }
+    // 3 将验证码信息更新到发布store
+    const { setPostData } = threadPost;
+    if (this.ticket && this.randstr) {
+      setPostData({
+        ticket: this.ticket,
+        randstr: this.randstr,
+      });
+      this.ticket = '';
+      this.randstr = '';
+    }
 
-    // 支付流程
+    // 4 支付流程
     const { rewardQa, redpacket } = postData;
     const rewardAmount = (Number(rewardQa.value) || 0);
     const redAmount = (Number(redpacket.price) || 0);
@@ -355,12 +365,12 @@ class Index extends Component {
       });
     }
 
-    // 3 loading
+    // 5 loading
     !isDraft && Taro.showLoading({
       title: isDraft ? '保存草稿中...' : '发布中...',
       mask: true
     });
-    // 4 根据是否存在主题id，选择更新主题、新建主题
+    // 6 根据是否存在主题id，选择更新主题、新建主题
     let ret = {};
     const { threadId } = this.state;
     if (threadId) {
@@ -368,7 +378,7 @@ class Index extends Component {
     } else {
       ret = await threadPost.createThread();
     }
-    // 5 处理请求数据
+    // 7 处理请求数据
     const { code, data, msg } = ret;
     if (code === 0) {
       if (!threadId) {
