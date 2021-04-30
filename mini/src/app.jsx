@@ -97,6 +97,7 @@ class App extends Component {
 
   // 检查站点状态
   setAppCommonStatus(result) {
+    const { site } = this.store;
     switch (result.code) {
       case 0: 
         break;
