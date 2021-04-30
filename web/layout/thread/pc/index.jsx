@@ -76,6 +76,8 @@ const RenderThreadContent = inject('user')(observer((props) => {
   // 是否帖子付费
   const isThreadPay = threadStore?.threadData?.payType === 1 && threadStore?.threadData?.paid === false;
   const threadPrice = threadStore?.threadData?.price || 0;
+  // 是否作者自己
+  const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData.userId;
 
 
   const parseContent = {};
@@ -166,7 +168,7 @@ const RenderThreadContent = inject('user')(observer((props) => {
 
           {/* 付费附件 */}
           {
-            isAttachmentPay
+            isAttachmentPay && !isSelf
             && <div style={{ textAlign: 'center' }} onClick={onContentClick}>
               <Button className={topic.payButton} type='primary' size='large'>支付{attachmentPrice}元查看附件</Button>
             </div>
@@ -224,7 +226,7 @@ const RenderThreadContent = inject('user')(observer((props) => {
 
           {/* 帖子付费 */}
           {
-            isThreadPay
+            isThreadPay && !isSelf
             && <div style={{ textAlign: 'center' }} onClick={onContentClick}>
               <Button className={topic.payButton} type='primary' size='large'>支付{threadPrice}元查看剩余内容</Button>
             </div>
@@ -883,6 +885,15 @@ class ThreadPCPage extends React.Component {
     }
   }
 
+  // 点击关注
+  onFollowClick() {
+    if (this.props.thread.threadData.userId) {
+      this.props.thread?.authorInfo?.follow === 2 || this.props.thread?.authorInfo?.follow === 1
+        ? this.props.thread.cancelFollow({ id: this.props.thread.threadData.userId, type: 1 })
+        : this.props.thread.postFollow(this.props.thread.threadData.userId);
+    }
+  }
+
   render() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
@@ -944,7 +955,7 @@ class ThreadPCPage extends React.Component {
             <div className={layout.authorInfo}>
               {
                 threadStore?.authorInfo
-                  ? <AuthorInfo user={threadStore.authorInfo}></AuthorInfo>
+                  ? <AuthorInfo user={threadStore.authorInfo} onFollowClick={() => this.onFollowClick()}></AuthorInfo>
                   : <LoadingTips type='init'></LoadingTips>
               }
             </div>
