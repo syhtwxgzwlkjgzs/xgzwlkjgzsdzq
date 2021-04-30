@@ -26,21 +26,22 @@ import PayBox from '@components/payBox';
  * groupId	int	N	用户组ID	用户购买用户组
  * payeeId	int	N	收款人ID	帖子的作者
  */
-export default (thread) => {
-  const { threadId, userId, title, group, payType, paid } = thread;
+export default (payData) => {
+  const { amount, isAnonymous, threadId, payeeId } = payData;
 
-  // 免费或已付费
-  if (payType === 0 || paid === null || paid === true) {
-    return Promise.resolve(true);
+  if (!amount || !threadId || !payeeId) {
+    return Promise.resolve({ success: false, data: '参数错误' });
   }
 
   const data = {
-    threadId,
-    title,
-    payeeId: userId,
-    groupId: group?.groupId,
+    amount,
+    isAnonymous,
     type: 2,
-    amount: 
+    threadId,
+    payeeId,
+    redAmount: 0,
+    rewardAmount: 0,
+    title: '打赏',
   };
 
   console.log(data);
@@ -49,10 +50,10 @@ export default (thread) => {
     PayBox.createPayBox({
       data,
       success: (orderInfo) => {
-        resolve(orderInfo);
+        resolve({ success: true, data: orderInfo });
       },
       failed: (orderInfo) => {
-        reject(orderInfo);
+        resolve({ success: false, data: orderInfo });
       },
     });
   });

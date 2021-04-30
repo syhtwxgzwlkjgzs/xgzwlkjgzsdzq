@@ -94,7 +94,7 @@ function AttachmentToolbar(props) {
         .done()
         // 上传完成
         .then((res) => {
-          onUploadComplete(res, this.file, item);
+          onUploadComplete(res, file, item);
           toastInstance?.destroy();
         })
         // 上传异常

@@ -17,13 +17,26 @@
         text-align: left;
         color: var(--color-text-secondary);
       }
-      .showMoneyNum {
-        font-size: rem($font-size-label);
-        text-align: left;
-        color: var(--color-text-primary);
-        margin-left: rem($margin-10);
-        .moneyNumber {
-          color: var(--color-error);
+
+      .headerRigth {
+        display: flex;
+        .showMoneyNum {
+          font-size: rem($font-size-label);
+          text-align: left;
+          color: var(--color-text-primary);
+          margin-left: rem($margin-10);
+          .moneyNumber {
+            color: var(--color-error);
+          }
+        }
+        .more {
+          font-size: rem($font-size-label);
+          text-align: left;
+          color: var(--color-text-primary);
+          margin-left: rem($margin-5n);
+          .moreIcon {
+            margin-top: -4px;
+          }
         }
       }
     }

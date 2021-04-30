@@ -48,10 +48,15 @@ class ThreadPCPage extends React.Component {
         <Header />
         <div className={styles.wrapper}>
           <div className={styles['wrapper-inner']}>
-            <Title pc isDisplay={true} />
+            <Title pc
+              title={postData.title}
+              isDisplay={true}
+              onChange={title => this.props.setPostData({ title })}
+            />
             <div className={styles.editor}>
               <DVditor
                 pc
+                value={postData.contentText}
                 emoji={emoji}
                 atList={atList}
                 topic={topic}
@@ -130,7 +135,7 @@ class ThreadPCPage extends React.Component {
               <div className={styles['toolbar-left']}>
                 <DefaultToolbar
                   pc
-                  permissions={user.permissions}
+                  permission={user.threadExtendPermissions}
                   value={currentDefaultOperation}
                   onClick={
                     (item, child) => {
@@ -154,7 +159,7 @@ class ThreadPCPage extends React.Component {
                   pc
                   onAttachClick={this.props.handleAttachClick}
                   onUploadComplete={this.props.handleVideoUploadComplete}
-                  permissions={user.permissions}
+                  permission={user.threadExtendPermissions}
                 />
               </div>
               <div className={styles['toolbar-right']}>

@@ -6,7 +6,8 @@ import BaseLayout from '@components/base-layout';
 import SectionTitle from '../../../search/h5/components/section-title'
 import ActiveUsersMore from '../../../search/pc/components/active-users-more';
 import TrendingTopic from '../../../search/pc/components/trending-topics'
-import List from '@components/list'
+import List from '@components/list';
+import Copyright from '@components/copyright';
 @inject('site')
 @inject('user')
 @inject('search')
@@ -65,6 +66,7 @@ class SearchResultUserPcPage extends React.Component {
           <SectionTitle title="潮流话题" onShowMore={this.redirectToSearchResultTopic}/>
           <TrendingTopic data={pageData} onItemClick={this.onTopicClick}/>
         </div>
+        <Copyright/>
       </div>
     )
   }
@@ -74,7 +76,11 @@ class SearchResultUserPcPage extends React.Component {
     return (
       <div className={styles.searchContent}>
         <div className={styles.section}>
-          <SectionTitle title="活跃用户" isShowMore={false} />
+          <SectionTitle
+            title="活跃用户"
+            isShowMore={false}
+            icon={{ type: 2, name: 'MemberOutlined' }}
+          />
           <ActiveUsersMore data={pageData} onFollow={this.onFollow} onItemClick={this.onUserClick}/>
         </div>
       </div>
@@ -98,7 +104,7 @@ class SearchResultUserPcPage extends React.Component {
     const { pageData = [], currentPage, totalPage } = users || { pageData: [] };
 
     return (
-      <List className={styles.searchWrap} noMore={currentPage === totalPage} onRefresh={this.fetchMoreData}>
+      <List className={styles.searchWrap} noMore={currentPage >= totalPage} onRefresh={this.fetchMoreData}>
         <BaseLayout
           onSearch={this.onSearch}
           right={ this.renderRight }
