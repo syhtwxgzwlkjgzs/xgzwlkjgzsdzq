@@ -1,6 +1,14 @@
 import { action } from 'mobx';
 import CommentStore from './store';
-import { readCommentDetail, updateComment, createPosts, updatePosts, readUser } from '@server';
+import {
+  readCommentDetail,
+  updateComment,
+  createPosts,
+  updatePosts,
+  readUser,
+  createFollow,
+  deleteFollow,
+} from '@server';
 import xss from '@common/utils/xss';
 
 class CommentAction extends CommentStore {
@@ -22,6 +30,7 @@ class CommentAction extends CommentStore {
   reset() {
     this.commentDetail = null;
     this.threadId = null;
+    this.authorInfo = null;
   }
 
   @action
@@ -31,7 +40,6 @@ class CommentAction extends CommentStore {
       this.commentDetail.lastThreeComments = this?.commentDetail?.commentPosts || [];
     }
   }
-
 
   @action
   setCommentDetailField(key, data) {
@@ -69,7 +77,7 @@ class CommentAction extends CommentStore {
    * @param {boolen} params.isNoMore 是否还有更多
    * @returns {object} 处理结果
    */
-   @action
+  @action
   async createComment(params, ThreadStore) {
     const { id, content, attachments, sort, isNoMore } = params;
     if (!id || !content) {
@@ -119,7 +127,7 @@ class CommentAction extends CommentStore {
     };
   }
 
-   /**
+  /**
    * 修改评论
    * @param {object} params * 参数
    * @param {number} params.id * 帖子id
@@ -128,53 +136,52 @@ class CommentAction extends CommentStore {
    * @param {array} params.attachments 附件内容
    * @returns {object} 处理结果
    */
-   @action
-   async updateComment(params, ThreadStore) {
-     const { id, pid, content, attachments } = params;
-     if (!id || !content || !pid) {
-       return {
-         msg: '参数不完整',
-         success: false,
-       };
-     }
+  @action
+  async updateComment(params, ThreadStore) {
+    const { id, pid, content, attachments } = params;
+    if (!id || !content || !pid) {
+      return {
+        msg: '参数不完整',
+        success: false,
+      };
+    }
 
-     const requestParams = {
-       id,
-       pid,
-       data: {
-         attributes: {
-           content: xss(content),
-           attachments,
-         },
-       },
-     };
+    const requestParams = {
+      id,
+      pid,
+      data: {
+        attributes: {
+          content: xss(content),
+          attachments,
+        },
+      },
+    };
 
-     const res = await updatePosts({ data: requestParams });
+    const res = await updatePosts({ data: requestParams });
 
-     if (res.code === 0 && res?.data?.content && ThreadStore) {
-       const { commentList } = ThreadStore;
+    if (res.code === 0 && res?.data?.content && ThreadStore) {
+      const { commentList } = ThreadStore;
 
-       // 更新列表中的评论
-       (commentList || []).forEach((comment) => {
-         if (comment.id === pid) {
-           comment.content = res.data.content;
-         }
-       });
+      // 更新列表中的评论
+      (commentList || []).forEach((comment) => {
+        if (comment.id === pid) {
+          comment.content = res.data.content;
+        }
+      });
 
-       return {
-         msg: '评论成功',
-         success: true,
-       };
-     }
+      return {
+        msg: '评论成功',
+        success: true,
+      };
+    }
 
-     return {
-       msg: res.msg,
-       success: false,
-     };
-   }
+    return {
+      msg: res.msg,
+      success: false,
+    };
+  }
 
-
-   /**
+  /**
    * 创建回复：回复评论 + 回复回复
    * @param {object} params * 参数
    * @param {number} params.id * 帖子id
@@ -187,177 +194,223 @@ class CommentAction extends CommentStore {
    * @param {array} params.commentUserId 评论回复用户id
    * @returns {object} 处理结果
    */
-   @action
-   async createReply(params, ThreadStore) {
-     const { id, commentId, replyId, commentPostId, content, isComment, attachments } = params;
-     if (!id || !content || !replyId || !commentId) {
-       return {
-         msg: '参数不完整',
-         success: false,
-       };
-     }
+  @action
+  async createReply(params, ThreadStore) {
+    const { id, commentId, replyId, commentPostId, content, isComment, attachments } = params;
+    if (!id || !content || !replyId || !commentId) {
+      return {
+        msg: '参数不完整',
+        success: false,
+      };
+    }
 
-     const requestParams = {
-       id,
-       replyId,
-       content: xss(content),
-       isComment,
-       attachments,
-       commentPostId,
-     };
+    const requestParams = {
+      id,
+      replyId,
+      content: xss(content),
+      isComment,
+      attachments,
+      commentPostId,
+    };
 
-     const res = await createPosts({ data: requestParams });
+    const res = await createPosts({ data: requestParams });
 
-     if (res.code === 0 && res?.data?.id && ThreadStore) {
-       const { commentList } = ThreadStore;
+    if (res.code === 0 && res?.data?.id && ThreadStore) {
+      const { commentList } = ThreadStore;
 
-       // 更新评论列表中的回复数据
-       if (commentList?.length) {
-         commentList.forEach((comment) => {
-           if (commentId === comment.id) {
-             comment.replyCount = comment.replyCount + 1;
-             comment.lastThreeComments.splice(0, 1, res.data);
-           }
-         });
-       }
+      // 更新评论列表中的回复数据
+      if (commentList?.length) {
+        commentList.forEach((comment) => {
+          if (commentId === comment.id) {
+            comment.replyCount = comment.replyCount + 1;
+            comment.lastThreeComments.splice(0, 1, res.data);
+          }
+        });
+      }
 
-       // 更新回复列表
-       this.addReplyToList(res.data);
+      // 更新回复列表
+      this.addReplyToList(res.data);
 
-       return {
-         msg: '回复成功',
-         success: true,
-       };
-     }
+      return {
+        msg: '回复成功',
+        success: true,
+      };
+    }
 
-     return {
-       msg: res.msg,
-       success: false,
-     };
-   }
+    return {
+      msg: res.msg,
+      success: false,
+    };
+  }
 
-   /**
+  /**
    * 点赞: 评论点赞 + 回复点赞
    * @param {object} parmas * 参数
    * @param {number} parmas.id * 评论id
    * @param {boolean} params.isLiked 是否点赞
    * @returns {object} 处理结果
    */
-   @action
-   async updateLiked(params) {
-     const { id, isLiked } = params;
-     if (!id) {
-       return {
-         msg: '评论id不存在',
-         success: false,
-       };
-     }
+  @action
+  async updateLiked(params) {
+    const { id, isLiked } = params;
+    if (!id) {
+      return {
+        msg: '评论id不存在',
+        success: false,
+      };
+    }
 
-     const requestParams = {
-       pid: id,
-       data: {
-         attributes: {
-           isLiked,
-         },
-       },
-     };
-     const res = await updateComment({ data: requestParams });
+    const requestParams = {
+      pid: id,
+      data: {
+        attributes: {
+          isLiked,
+        },
+      },
+    };
+    const res = await updateComment({ data: requestParams });
 
-     if (res?.data && res.code === 0) {
-       return {
-         msg: '操作成功',
-         success: true,
-       };
-     }
+    if (res?.data && res.code === 0) {
+      return {
+        msg: '操作成功',
+        success: true,
+      };
+    }
 
-     return {
-       msg: res.msg,
-       success: false,
-     };
-   }
+    return {
+      msg: res.msg,
+      success: false,
+    };
+  }
 
-   /**
+  /**
    * 删除评论
    * @param {number} commentId * 评论id
    * @returns {object} 处理结果
    */
-   @action
-   async delete(commentId, ThreadStore) {
-     if (!commentId) {
-       return {
-         success: false,
-         msg: '评论id不存在',
-       };
-     }
-     const requestParams = {
-       pid: commentId,
-       data: {
-         attributes: {
-           isDeleted: 1,
-         },
-       },
-     };
+  @action
+  async delete(commentId, ThreadStore) {
+    if (!commentId) {
+      return {
+        success: false,
+        msg: '评论id不存在',
+      };
+    }
+    const requestParams = {
+      pid: commentId,
+      data: {
+        attributes: {
+          isDeleted: 1,
+        },
+      },
+    };
 
-     const res = await updateComment({ data: requestParams });
-     if (res.code === 0 && ThreadStore) {
-       // 更新评论列表
-       const { commentList, totalCount } = ThreadStore;
-       if (commentList?.length) {
-         const index = commentList.findIndex(comment => commentId === comment.id);
-         commentList.splice(index, 1);
-         const newTotalCount = totalCount - 1;
-         ThreadStore.setTotalCount(newTotalCount);
-       }
+    const res = await updateComment({ data: requestParams });
+    if (res.code === 0 && ThreadStore) {
+      // 更新评论列表
+      const { commentList, totalCount } = ThreadStore;
+      if (commentList?.length) {
+        const index = commentList.findIndex((comment) => commentId === comment.id);
+        commentList.splice(index, 1);
+        const newTotalCount = totalCount - 1;
+        ThreadStore.setTotalCount(newTotalCount);
+      }
 
-       return {
-         success: true,
-         msg: '删除成功',
-       };
-     }
+      return {
+        success: true,
+        msg: '删除成功',
+      };
+    }
 
-     return {
-       msg: res.msg,
-       success: false,
-     };
-   }
+    return {
+      msg: res.msg,
+      success: false,
+    };
+  }
 
-   /**
+  /**
    * 获取回复详情
    * @param {object} parmas * 参数
    * @param {number} parmas.id * 评论id
    * @returns {object} 处理结果
    */
-   @action
-   async getCommentDetail(params) {
-     const { id } = params;
+  @action
+  async getCommentDetail(params) {
+    const { id } = params;
 
-     if (!id) {
-       return {
-         msg: '评论id不存在',
-         success: false,
-       };
-     }
+    if (!id) {
+      return {
+        msg: '评论id不存在',
+        success: false,
+      };
+    }
 
-     const requestParams = {
-       pid: id,
-     };
+    const requestParams = {
+      pid: id,
+    };
 
-     const res = await readCommentDetail({ params: requestParams });
+    const res = await readCommentDetail({ params: requestParams });
 
-     if (res.code === 0 && res?.data?.id) {
-       this.setCommentDetail(res.data);
+    if (res.code === 0 && res?.data?.id) {
+      this.setCommentDetail(res.data);
 
-       return {
-         msg: '操作成功',
-         success: true,
-       };
-     }
+      return {
+        msg: '操作成功',
+        success: true,
+      };
+    }
 
-     return {
-       msg: res.msg,
-       success: false,
-     };
-   }
+    return {
+      msg: res.msg,
+      success: false,
+    };
+  }
+
+  /**
+   * 关注
+   * @param {object} userId * 被关注人id
+   * @returns {object} 处理结果
+   */
+  @action
+  async postFollow(userId) {
+    const res = await createFollow({ data: { data: { toUserId: userId } } });
+    if (res.code === 0 && res.data) {
+      this.authorInfo.follow = res.data.isMutual ? 2 : 1;
+      this.authorInfo.fansCount = this.authorInfo.fansCount + 1;
+
+      return {
+        msg: '操作成功',
+        success: true,
+      };
+    }
+    return {
+      msg: res.msg,
+      success: false,
+    };
+  }
+
+  /**
+   * 发现模块 - 取消关注
+   * @param {object} search * 搜索值
+   * @returns {object} 处理结果
+   */
+  @action
+  async cancelFollow({ id, type }) {
+    const res = await deleteFollow({ data: { id, type: type } });
+    if (res.code === 0 && res.data) {
+      this.authorInfo.follow = 0;
+      this.authorInfo.fansCount = this.authorInfo.fansCount - 1;
+
+      return {
+        msg: '操作成功',
+        success: true,
+      };
+    }
+    return {
+      msg: res.msg,
+      success: false,
+    };
+  }
 }
 
 export default CommentAction;

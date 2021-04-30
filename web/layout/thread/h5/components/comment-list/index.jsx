@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
+import { Icon } from '@discuzq/design';
 import ReplyList from '../reply-list/index';
 import { diffDate } from '@common/utils/diff-date';
 import { observer } from 'mobx-react';
@@ -80,30 +81,42 @@ class CommentList extends React.Component {
       <div className={styles.commentList}>
         <div className={styles.header}>
           <div className={styles.showGet}>
-            {!this.state.isHideEdit
-              && <div className={styles.extra}>
-                {canEdit && <div className={styles.revise} onClick={() => this.editClick()}>编辑</div>}
-                {canDelete && <div className={styles.revise} onClick={() => this.deleteClick()}>删除</div>}
-              </div>
-            }
-            {
-              this.state.isShowReward
-                ? <div>
-                  <div className={styles.showMoneyNum}>
-                    获得<span className={styles.moneyNumber}>{6}</span>元悬赏金
-                  </div>
+            <div>
+              {!this.state.isHideEdit
+                && <div className={styles.extra}>
+                  {canEdit && <div className={styles.revise} onClick={() => this.editClick()}>编辑</div>}
+                  {canDelete && <div className={styles.revise} onClick={() => this.deleteClick()}>删除</div>}
                 </div>
-                : ''
-            }
-            {
-              this.state.isShowRedPacket
-                ? <div>
-                  <div className={styles.showMoneyNum}>
-                    获得<span className={styles.moneyNumber}>{6}</span>元红包
+              }
+            </div>
+            <div className={styles.headerRigth}>
+
+              {
+                this.state.isShowReward
+                  ? <div>
+                    <div className={styles.showMoneyNum}>
+                      获得<span className={styles.moneyNumber}>{6}</span>元悬赏金
+                    </div>
                   </div>
+                  : ''
+              }
+              {
+                this.state.isShowRedPacket
+                  ? <div>
+                    <div className={styles.showMoneyNum}>
+                      获得<span className={styles.moneyNumber}>{6}</span>元红包
+                    </div>
+                  </div>
+                  : ''
+              }
+              {
+                !this.state.isShowOne ? (
+                <div className={styles.more} onClick={this.props.onMoreClick}>
+                  <Icon size="16" color="#8590A6" name="MoreVOutlined" className={styles.moreIcon}></Icon>
                 </div>
-                : ''
-            }
+                ) : ''
+              }
+            </div>
           </div>
         </div>
         <div className={styles.content}>

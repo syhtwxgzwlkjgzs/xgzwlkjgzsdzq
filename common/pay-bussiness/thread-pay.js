@@ -32,7 +32,7 @@ export default (thread, user) => {
 
   // 免费或已付费
   if (payType === 0 || paid === null || paid === true) {
-    return Promise.resolve(true);
+    return Promise.resolve({ success: true });
   }
 
   const data = {
@@ -47,26 +47,24 @@ export default (thread, user) => {
   if (payType === 1) {
     data.type = 3;
     data.amount = price;
-    // data.title = '帖子付费';
+    data.title = '付费主题';
   }
 
   // 附件付费
   if (payType === 2) {
     data.type = 7;
     data.amount = attachmentPrice;
-    // data.title = '附件付费';
+    data.title = '附件付费';
   }
-
-  console.log(data);
 
   return new Promise((resolve, reject) => {
     PayBox.createPayBox({
       data,
       success: (orderInfo) => {
-        resolve(orderInfo);
+        resolve({ success: true, data: orderInfo });
       },
       failed: (orderInfo) => {
-        reject(orderInfo);
+        reject({ success: false, data: orderInfo });
       },
     });
   });
