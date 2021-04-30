@@ -128,7 +128,7 @@ class Index extends React.Component {
     renderThreadContent = ({ content: data, attachmentPrice, payType } = {}) => {
       const {
         text,
-        // imageData,
+        imageData,
         audioData,
         videoData,
         goodsData,
@@ -136,40 +136,6 @@ class Index extends React.Component {
         rewardData,
         fileData,
       } = handleAttachmentData(data);
-      const imageData = [
-        {
-            "id": 358,
-            "order": 0,
-            "type": 1,
-            "typeId": 0,
-            "isRemote": true,
-            "isApproved": 1,
-            "url": "https://discuz-service-test-1258344699.cos.ap-guangzhou.myqcloud.com/public/attachments/2021/04/29/9RCrxRfnht4bhHKRvu3LktIv7jM6PUVmboNwaXIB.jpg?sign=q-sign-algorithm%3Dsha1%26q-ak%3DAKIDCJAnwjKjthEk6HBm6fwzhCLFRRBlsBxG%26q-sign-time%3D1619704169%3B1619790629%26q-key-time%3D1619704169%3B1619790629%26q-header-list%3Dhost%26q-url-param-list%3D%26q-signature%3Da189e7ef2164d547c914755577d888f105a592a7",
-            "attachment": "9RCrxRfnht4bhHKRvu3LktIv7jM6PUVmboNwaXIB.jpg",
-            "extension": "jpg",
-            "fileName": "IMG_20200617_175316.jpg",
-            "filePath": "public/attachments/2021/04/29/",
-            "fileSize": 3500260,
-            "fileType": "image/jpeg",
-            "thumbUrl": "https://discuz-service-test-1258344699.cos.ap-guangzhou.myqcloud.com/public/attachments/2021/04/29/9RCrxRfnht4bhHKRvu3LktIv7jM6PUVmboNwaXIB.jpg?sign=q-sign-algorithm%3Dsha1%26q-ak%3DAKIDCJAnwjKjthEk6HBm6fwzhCLFRRBlsBxG%26q-sign-time%3D1619704169%3B1619790629%26q-key-time%3D1619704169%3B1619790629%26q-header-list%3Dhost%26q-url-param-list%3D%26q-signature%3Da189e7ef2164d547c914755577d888f105a592a7&imageMogr2/thumbnail/500x500"
-        },
-        {
-            "id": 359,
-            "order": 0,
-            "type": 1,
-            "typeId": 0,
-            "isRemote": true,
-            "isApproved": 1,
-            "url": "https://discuz-service-test-1258344699.cos.ap-guangzhou.myqcloud.com/public/attachments/2021/04/29/vUeSleJQ3RoPx8kaYEBluedNlPThy4G2T2clcIJE.jpg?sign=q-sign-algorithm%3Dsha1%26q-ak%3DAKIDCJAnwjKjthEk6HBm6fwzhCLFRRBlsBxG%26q-sign-time%3D1619704169%3B1619790629%26q-key-time%3D1619704169%3B1619790629%26q-header-list%3Dhost%26q-url-param-list%3D%26q-signature%3D457a238791c37cce75a4ed5c51972bbe1e569c96",
-            "attachment": "vUeSleJQ3RoPx8kaYEBluedNlPThy4G2T2clcIJE.jpg",
-            "extension": "jpg",
-            "fileName": "IMG_20200617_175310.jpg",
-            "filePath": "public/attachments/2021/04/29/",
-            "fileSize": 4327039,
-            "fileType": "image/jpeg",
-            "thumbUrl": "https://discuz-service-test-1258344699.cos.ap-guangzhou.myqcloud.com/public/attachments/2021/04/29/vUeSleJQ3RoPx8kaYEBluedNlPThy4G2T2clcIJE.jpg?sign=q-sign-algorithm%3Dsha1%26q-ak%3DAKIDCJAnwjKjthEk6HBm6fwzhCLFRRBlsBxG%26q-sign-time%3D1619704169%3B1619790629%26q-key-time%3D1619704169%3B1619790629%26q-header-list%3Dhost%26q-url-param-list%3D%26q-signature%3D457a238791c37cce75a4ed5c51972bbe1e569c96&imageMogr2/thumbnail/500x500"
-        }
-    ];
       return (
         <div className={styles.wrapper} ref={this.ref}>
             {text && <PostContent content={text} onPay={this.onPay} />}
@@ -182,12 +148,12 @@ class Index extends React.Component {
                   isPay={payType !== 0}
                 />
               )}
-              {imageData && <ImageContent
+              {imageData && (<ImageContent
                 imgData={imageData}
                 isPay={payType !== 0}
                 onPay={this.onPay}
                 onClickMore={this.onClick}
-              />}
+              />)}
               {rewardData && <RewardQuestion
                 content={rewardData.content || ''}
                 money={rewardData.money}

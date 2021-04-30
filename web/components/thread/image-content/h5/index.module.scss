@@ -4,7 +4,7 @@
   .imageBox {
     width: 100%;
     .images1 {
-      width: 100%;
+      width: rem(343);
       height: rem(260);
       margin: 0 auto;
       .imagesBox1 {
@@ -14,25 +14,25 @@
       }
     }
     .images2 {
-      width: 100%;
+      width: rem(343);
       height: rem(260);
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
       .imagesBox2 {
         display: block;
-        width: 49.8%;
+        width: rem(170);
         object-fit: cover;
       }
     }
     .images3 {
       display: flex;
-      width: 100%;
+      width: rem(343);
       height: rem(260);
       margin: 0 auto;
       flex-wrap: wrap;
       .imagesTop3 {
-        width: 100%;
+        width: rem(343);
         height: rem(128);
         .imagesTopData3 {
           display: block;
@@ -42,12 +42,12 @@
         }
       }
       .imagesBotom3 {
-        width: 100%;
+        width: rem(343);
         height: rem(126);
         display: flex;
         justify-content: space-between;
         .imagesBotomData3 {
-          flex-basis: calc(50% - 2px);
+          width: rem(170);
           height: rem(126);
           position: relative;
           .imagesBotomDataPath3 {
@@ -61,13 +61,13 @@
     }
     .images4 {
       display: flex;
-      width: 100%;
+      width: rem(343);
       height: rem(260);
       margin: 0 auto;
       overflow: hidden;
       justify-content: space-around;
       .imagesTop4 {
-        flex-basis: calc(60% - 5px);
+        width: rem(210);
         height: rem(260);
         .imagesTopData4 {
           display: block;
@@ -77,7 +77,7 @@
         }
       }
       .imagesBotom4 {
-        width: 40%;
+        width: rem(129);
         height: rem(260);
         display: flex;
         flex-direction: column;
@@ -96,7 +96,7 @@
     }
     .images5 {
       display: flex;
-      width: 100%;
+      width: rem(343);
       height: rem(260);
       margin: 0 auto;
       flex-wrap: wrap;
@@ -107,8 +107,8 @@
         justify-content: space-around;
         .imagesTopData5 {
           display: block;
-          flex-basis: calc(50% - 5px);
-          height: 100%;
+          width: rem(169);
+          height: rem(126);
           object-fit: cover;
         }
       }
@@ -118,7 +118,7 @@
         display: flex;
         justify-content: space-around;
         .imagesBotomData5 {
-          flex-basis: calc(33.33% - 5px);
+          width: rem(111);
           height: rem(111);
           position: relative;
           .imagesBotomDataPath5 {
