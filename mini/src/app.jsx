@@ -43,6 +43,8 @@ class App extends Component {
    * @param {string} options.appURL 展现时的调起协议，仅当 entryType 值为 schema 时存在
    */
   componentDidShow(options) {
+    // 捕获从其它小程序返回的验证码result
+    this.onCaptchaResult(options);
   }
 
   /**
@@ -113,6 +115,28 @@ class App extends Component {
         break;
     }
     return true;
+  }
+
+  // 处理验证码捕获
+  onCaptchaResult(options) {
+    console.log('show', options);
+    // 1 检查验证码票据
+    if (!this.captchaTicketExpire) this.captchaTicketExpire = {};
+    // 2 判断场景、场景id。 1038场景：从其它小程序返回
+    if (options.scene === 1038 && options.referrerInfo.appId === 'wx5a3a7366fd07e119') {
+      const result = options.referrerInfo.extraData;
+      if (result && result.ret === 0) {
+        // 验证成功
+        const theTicket = result.ticket;
+        if (!this.captchaTicketExpire[theTicket]) {
+          this.captchaTicketExpire[theTicket] = true;
+          Taro.eventCenter.trigger('captchaResult', result);
+        }
+      } else {
+        // 用户关闭验证
+        Taro.eventCenter.trigger('closeChaReault', result);
+      }
+    }
   }
 
   render() {
