@@ -6,6 +6,7 @@ import { Button, View } from '@tarojs/components';
 import { miniLogin } from '@server';
 import setAccessToken from '@common/utils/set-access-token';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
+import Page from '@components/page';
 import layout from './index.module.scss';
 
 const NEED_BIND_OR_REGISTER_USER = -7016;
@@ -59,7 +60,7 @@ class MiniAuth extends React.Component {
         });
         this.props.user.updateUserInfo(uid);
         redirectTo({
-          url: `/subPages/index/index`
+          url: `/pages/index/index`
         });
         return;
       }
@@ -145,14 +146,16 @@ class MiniAuth extends React.Component {
 
   render() {
     return (
-      <Popup
-        position="bottom"
-        visible={this.state.isVisible}
-      >
-        <View  className={layout.modal} >
-          <Button className={layout.button} onClick={this.getUserProfile}>微信快捷登录</Button>
-        </View>
-      </Popup>
+      <Page>
+        <Popup
+          position="bottom"
+          visible={this.state.isVisible}
+        >
+          <View  className={layout.modal} >
+            <Button className={layout.button} onClick={this.getUserProfile}>微信快捷登录</Button>
+          </View>
+        </Popup>
+      </Page>
       );
   }
 }

@@ -12,16 +12,6 @@ import { get } from '@common/utils/get';
 @inject('wxPhoneBind')
 @observer
 class Index extends Component {
-  componentWillMount() { }
-
-  componentDidMount() { }
-
-  componentWillUnmount() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
-
   handleSendCodeButtonClick = async () => {
     try {
       await this.props.wxPhoneBind.sendCode();

@@ -17,7 +17,7 @@ import layout from './index.module.scss';
 @observer
 class WXBind extends Component {
   getUserProfileCallback = async (params) => {
-    const { sessionToken = 'HZYvKnJgXfmtQkVgrYDlxdlVi0QZQ5E4' } = getCurrentInstance().router.params;
+    const { sessionToken } = getCurrentInstance().router.params;
 
     try {
       await this.getParamCode();
@@ -37,7 +37,7 @@ class WXBind extends Component {
           content: '绑定成功',
         });
         redirectTo({
-          url: `/subPages/index/index`
+          url: `/pages/index/index`
         });
         return;
       }
@@ -50,7 +50,7 @@ class WXBind extends Component {
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
         navigateTo({
-          url: `/subPages/user/status?statusCode=${error.Code}&statusMsg=${error.Message}`
+          url: `/subPages/user/status/index?statusCode=${error.Code}&statusMsg=${error.Message}`
         });
         return;
       }
@@ -112,7 +112,7 @@ class WXBind extends Component {
     const { nickname } = getCurrentInstance().router.params;
 
     return (
-      // <Page>
+      <Page>
         <View className={layout.container}>
           <View className={layout.content}>
             <View className={layout.title}>绑定微信</View>
@@ -126,7 +126,7 @@ class WXBind extends Component {
             </Button>
           </View>
         </View>
-      // </Page>
+      </Page>
     );
   }
 }
