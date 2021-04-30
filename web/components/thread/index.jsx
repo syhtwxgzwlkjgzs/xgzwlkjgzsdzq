@@ -140,7 +140,7 @@ class Index extends React.Component {
       return (
         <div className={styles.wrapper} ref={this.ref} >
             {text && <PostContent content={text} onPay={this.onPay} />}
-            <div className={`${styles.content} ${payType !== 0 && styles.payContent}`}>
+            <div className={`${styles.content} ${payType === 2 && styles.payContent}`}>
               {videoData && (
                 <VideoPlay
                   url={videoData.mediaUrl}
