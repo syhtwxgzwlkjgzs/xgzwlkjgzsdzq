@@ -131,7 +131,7 @@ class UsernameH5Login extends React.Component {
           </Button>
           {/* 登录按钮 end */}
           <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
-            {!(this.props.site.isSmsOpen || this.props.site.wechatEnv !== 'none') && (
+            {this.isRegister && (
               <span
                 className={layout.clickBtn}
                 onClick={() => {

@@ -1,8 +1,11 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
+import Router from '@discuzq/sdk/dist/router';
 import styles from './index.module.scss';
 import CommentList from '../../h5/components/comment-list/index';
+import MorePopup from '../../h5/components/more-popup';
+import DeletePopup from '../../h5/components/delete-popup';
 import Header from '@components/header';
 import { Icon, Toast } from '@discuzq/design';
 import InputPopup from '../../h5/components/input-popup';
@@ -17,6 +20,7 @@ class CommentH5Page extends React.Component {
     super(props);
 
     this.state = {
+      showMorePopup: false, // 是否弹出更多弹框
       showCommentInput: false, // 是否弹出评论框
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
@@ -25,15 +29,84 @@ class CommentH5Page extends React.Component {
 
     this.commentData = null;
     this.replyData = null;
+    this.recordCommentLike = { // 记录当前评论点赞状态
+      id: null,
+      status: null,
+    };
+    this.recordReplyLike = { // 记录当前评论点赞状态
+      id: null,
+      status: null,
+    };
   }
   // 点击更多
   onMoreClick() {
     console.log('点击了更多');
+    this.setState({ showMorePopup: true });
   }
+
+  // 更多中的操作
+  onOperClick = (type) => {
+    this.setState({ showMorePopup: false });
+
+    // 编辑
+    if (type === 'edit') {
+      console.log('点击了编辑', this.props.comment.commentDetail);
+      // this.onEditClick(this.props.comment.commentDetail);
+    }
+
+    // 删除
+    if (type === 'delete') {
+      // this.commentData = this.state.commentData;
+      this.setState({ showDeletePopup: true });
+    }
+
+    // 举报
+    if (type === 'report') {
+      console.log('点击举报');
+    }
+  };
+
+
+  // 删除评论
+  async deleteComment() {
+    if (!this.props?.comment?.commentDetail?.id) return;
+
+    const { success, msg } = await this.props.comment.delete(this.props.comment.commentDetail.id, this.props.thread);
+    this.setState({
+      showDeletePopup: false,
+    });
+    if (success) {
+      Toast.success({
+        content: '删除成功',
+      });
+      Router.back();
+      return;
+    }
+    Toast.error({
+      content: msg,
+    });
+  }
+
+  // 确定删除
+  onBtnClick() {
+    this.deleteComment();
+    this.setState({ showDeletePopup: false });
+  }
+
 
   // 点击评论的赞
   async likeClick(data) {
     if (!data.id) return;
+
+    if (this.recordCommentLike.id !== data.id) {
+      this.recordCommentLike.status = null;
+    }
+    if (this.recordCommentLike.status !== data.isLiked) {
+      this.recordCommentLike.status = data.isLiked;
+      this.recordCommentLike.id = data.id;
+    } else {
+      return;
+    }
 
     const params = {
       id: data.id,
@@ -57,6 +130,16 @@ class CommentH5Page extends React.Component {
   // 点击回复的赞
   async replyLikeClick(reply) {
     if (!reply.id) return;
+
+    if (this.recordCommentLike.id !== reply.id) {
+      this.recordCommentLike.status = null;
+    }
+    if (this.recordCommentLike.status !== reply.isLiked) {
+      this.recordCommentLike.status = reply.isLiked;
+      this.recordCommentLike.id = reply.id;
+    } else {
+      return;
+    }
 
     const params = {
       id: reply.id,
@@ -82,25 +165,6 @@ class CommentH5Page extends React.Component {
     this.commentData = data;
     this.setState({
       showDeletePopup: true,
-    });
-  }
-
-  // 删除评论
-  async deleteComment() {
-    if (!this.commentData.id) return;
-
-    const { success, msg } = await this.props.comment.delete(this.commentData.id, this.props.thread);
-    this.setState({
-      showDeletePopup: false,
-    });
-    if (success) {
-      Toast.success({
-        content: '删除成功',
-      });
-      return;
-    }
-    Toast.error({
-      content: msg,
     });
   }
 
@@ -171,6 +235,21 @@ class CommentH5Page extends React.Component {
   render() {
     const { commentDetail: commentData, isReady } = this.props.comment;
 
+    // 更多弹窗权限
+    const morePermissions = {
+      // canEdit: commentData?.canEdit,
+      canEdit: false,
+      canDelete: commentData?.canDelete,
+      canEssence: false,
+      canStick: false,
+    };
+
+    // 更多弹窗界面
+    const moreStatuses = {
+      isEssence: false,
+      isStick: false,
+    };
+
     return (
       <div className={styles.index}>
         <Header></Header>
@@ -214,6 +293,7 @@ class CommentH5Page extends React.Component {
               deleteClick={() => this.deleteClick(commentData)}
               replyLikeClick={reploy => this.replyLikeClick(reploy, commentData)}
               replyReplyClick={reploy => this.replyReplyClick(reploy, commentData)}
+              onMoreClick={() => this.onMoreClick()}
               isHideEdit={true}>
             </CommentList>
           }
@@ -227,6 +307,23 @@ class CommentH5Page extends React.Component {
             onClose={() => this.setState({ showCommentInput: false })}
             onSubmit={value => this.createReply(value)}>
           </InputPopup>
+
+          {/* 更多弹层 */}
+          <MorePopup
+            permissions={morePermissions}
+            statuses={moreStatuses}
+            visible={this.state.showMorePopup}
+            onClose={() => this.setState({ showMorePopup: false })}
+            onSubmit={() => this.setState({ showMorePopup: false })}
+            onOperClick={type => this.onOperClick(type)}
+          />
+
+          {/* 删除弹层 */}
+          <DeletePopup
+            visible={this.state.showDeletePopup}
+            onClose={() => this.setState({ showDeletePopup: false })}
+            onBtnClick={type => this.onBtnClick(type)}
+          />
         </div>
       </div>
     );

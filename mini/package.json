@@ -39,10 +39,10 @@
     "xss": "^1.0.8"
   },
   "devDependencies": {
+    "@discuzq/cli": "0.0.1-alpha.37",
     "@babel/core": "7.8.0",
     "@commitlint/cli": "12.0.1",
     "@commitlint/config-conventional": "12.0.1",
-    "@discuzq/cli": "0.0.1-alpha.37",
     "@tarojs/cli": "3.2.2",
     "@tarojs/mini-runner": "3.2.2",
     "@tarojs/webpack-runner": "3.2.2",

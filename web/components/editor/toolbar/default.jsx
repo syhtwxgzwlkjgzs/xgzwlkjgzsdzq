@@ -27,8 +27,6 @@ export default function DefaultToolbar(props) {
     };
   }, []);
 
-
-
   const icons = (
     <>
       {defaultIcon.map((item) => {

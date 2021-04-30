@@ -194,19 +194,46 @@ class RenderCommentList extends React.Component {
 
     this.commentData = null;
     this.replyData = null;
+    this.recordCommentLike = { // 记录当前评论点赞状态
+      id: null,
+      status: null,
+    };
+    this.recordReplyLike = { // 记录当前评论点赞状态
+      id: null,
+      status: null,
+    };
   }
 
   // 评论列表排序
-  onSortClick = () => {
-    this.setState({
-      commentSort: !this.state.commentSort,
-    });
-    typeof this.props.sort === 'function' && this.props.sort(!this.state.commentSort);
-  };
+  onSortClick = async () => {
+    if (typeof this.props.sort === 'function') {
+      try {
+        const success = await this.props.sort(!this.state.commentSort);
+        if (success) {
+          this.setState({
+            commentSort: !this.state.commentSort,
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
 
   // 点击评论的赞
   async likeClick(data) {
+    console.log(data);
     if (!data.id) return;
+
+    if (this.recordCommentLike.id !== data.id) {
+      this.recordCommentLike.status = null;
+    }
+    if (this.recordCommentLike.status !== data.isLiked) {
+      this.recordCommentLike.status = data.isLiked;
+      this.recordCommentLike.id = data.id;
+    } else {
+      return;
+    }
 
     const params = {
       id: data.id,
@@ -230,6 +257,16 @@ class RenderCommentList extends React.Component {
   // 点击回复的赞
   async replyLikeClick(reply, comment) {
     if (!reply.id) return;
+
+    if (this.recordReplyLike.id !== reply.id) {
+      this.recordReplyLike.status = null;
+    }
+    if (this.recordReplyLike.status !== reply.isLiked) {
+      this.recordReplyLike.status = reply.isLiked;
+      this.recordReplyLike.id = reply.id;
+    } else {
+      return;
+    }
 
     const params = {
       id: reply.id,
@@ -384,7 +421,7 @@ class RenderCommentList extends React.Component {
           <div className={comment.sort} onClick={() => this.onSortClick()}>
             <Icon className={comment.sortIcon} name="SortOutlined"></Icon>
             <span className={comment.sortText}>
-              {this.state.commentSort ? '评论从旧到新' : '评论从新到旧'}
+              {this.state.commentSort ? '评论从新到旧' : '评论从旧到新'}
             </span>
           </div>
         </div>
@@ -560,7 +597,7 @@ class ThreadH5Page extends React.Component {
       isCommentLoading: false,
     });
     if (success) {
-      return;
+      return true;
     }
     Toast.error({
       content: msg,
@@ -571,7 +608,7 @@ class ThreadH5Page extends React.Component {
   onSortChange(isCreateAt) {
     this.commentDataSort = isCreateAt;
     this.page = 1;
-    this.loadCommentList();
+    return this.loadCommentList();
   }
 
   // 点击评论

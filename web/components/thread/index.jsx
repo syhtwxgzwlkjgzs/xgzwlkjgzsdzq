@@ -17,9 +17,12 @@ import styles from './index.module.scss';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import { filterClickClassName, handleAttachmentData } from './utils';
 import goToLoginPage from '@common/utils/go-to-login-page';
+import threadPay from '@common/pay-bussiness/thread-pay';
+
 @inject('site')
 @inject('index')
 @inject('user')
+@inject('thread')
 @observer
 class Index extends React.Component {
     // 分享
@@ -82,7 +85,7 @@ class Index extends React.Component {
       });
     }
     // 支付
-    onPay = (e) => {
+    onPay = async (e) => {
       e.stopPropagation();
 
       // 对没有登录的先做
@@ -96,13 +99,23 @@ class Index extends React.Component {
         return;
       }
 
-      console.log('发起支付流程');
+      const thread = this.props.data;
+      const { success } = await threadPay(thread, this.props.user?.userInfo);
+
+      // 支付成功重新请求帖子数据
+      if (success && thread?.threadId) {
+        
+        const { code, data } = await this.props.thread.fetchThreadDetail(thread?.threadId);
+        if (code === 0 && data) {
+          this.props.index.updatePayThreadInfo(thread?.threadId, data)
+        }
+      }
     }
 
     onClick = (e) => {
-      if (!filterClickClassName(e.target)) {
-        return;
-      }
+      // if (!filterClickClassName(e.target)) {
+      //   return;
+      // }
 
       const { threadId = '', ability } = this.props.data || {};
       const { canViewPost } = ability;
@@ -125,7 +138,7 @@ class Index extends React.Component {
     }
 
     // 帖子属性内容
-    renderThreadContent = ({ content: data, attachmentPrice, payType } = {}) => {
+    renderThreadContent = ({ content: data, attachmentPrice, payType, paid } = {}) => {
       const {
         text,
         imageData,
@@ -138,9 +151,9 @@ class Index extends React.Component {
       } = handleAttachmentData(data);
 
       return (
-        <div className={styles.wrapper} ref={this.ref}>
-            {text && <PostContent content={text} onPay={this.onPay} />}
-            <div className={styles.content}>
+        <div className={styles.wrapper} ref={this.ref} >
+            {text && <PostContent content={text} onPay={this.onPay} onRedirectToDetail={this.onClick} />}
+            <div className={`${styles.content} ${payType === 2 && styles.payContent}`}>
               {videoData && (
                 <VideoPlay
                   url={videoData.mediaUrl}
@@ -149,12 +162,12 @@ class Index extends React.Component {
                   isPay={payType !== 0}
                 />
               )}
-              {imageData && <ImageContent
+              {imageData && (<ImageContent
                 imgData={imageData}
                 isPay={payType !== 0}
                 onPay={this.onPay}
                 onClickMore={this.onClick}
-              />}
+              />)}
               {rewardData && <RewardQuestion
                 content={rewardData.content || ''}
                 money={rewardData.money}
@@ -171,7 +184,7 @@ class Index extends React.Component {
 
               {/* 付费蒙层 */}
               {
-                payType !== 0 && (
+                !paid && payType !== 0 && (
                   <div className={styles.cover} onClick={payType === 1 ? this.onClick : this.onPay}>
                     {
                       payType === 2 ? (
@@ -211,12 +224,13 @@ class Index extends React.Component {
         postId,
         threadId,
         displayTag,
+        paid,
       } = data || {};
 
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
 
       return (
-        <div className={`${styles.container} ${className}`} onClick={this.onClick}>
+        <div className={`${styles.container} ${className}`}>
           <div className={styles.header}>
               <UserInfo
                 name={user.userName}
@@ -232,11 +246,11 @@ class Index extends React.Component {
               />
           </div>
 
-          {title && <div className={styles.title}>{title}</div>}
+          {title && <div className={styles.title} onClick={this.onClick}>{title}</div>}
 
           {this.renderThreadContent(data)}
 
-          {payType === 1 && <Button className={styles.button} type="primary" onClick={this.onPay}>
+          {!paid && payType === 1 && <Button className={styles.button} type="primary" onClick={this.onPay}>
             <span className={styles.icon}>$</span>
             支付{price}元查看剩余内容
           </Button>}

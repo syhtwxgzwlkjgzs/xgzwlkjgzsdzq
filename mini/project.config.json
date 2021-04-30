@@ -2,7 +2,7 @@
   "miniprogramRoot": "dist/",
   "projectname": "./template/taro-default",
   "description": "my-dzq",
-  "appid": "touristappid",
+  "appid": "wx20a124c872da3671",
   "setting": {
     "urlCheck": false,
     "es6": false,

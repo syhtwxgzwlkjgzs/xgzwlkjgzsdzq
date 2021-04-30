@@ -13,6 +13,7 @@ import Router from '@discuzq/sdk/dist/router';
 import PayBoxProvider from '@components/payBox/payBoxProvider';
 import PayBox from '@components/payBox/index';
 import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
+import { withRouter } from 'next/router';
 
 @inject('site')
 @inject('threadPost')
@@ -398,4 +399,4 @@ class PostPage extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(HOCWithLogin(PostPage));
+export default HOCFetchSiteData(HOCWithLogin(withRouter(PostPage)));
