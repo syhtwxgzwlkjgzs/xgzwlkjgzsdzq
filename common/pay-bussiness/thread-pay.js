@@ -64,7 +64,7 @@ export default (thread, user) => {
         resolve({ success: true, data: orderInfo });
       },
       failed: (orderInfo) => {
-        reject({ success: false, data: orderInfo });
+        resolve({ success: false, data: orderInfo });
       },
     });
   });
