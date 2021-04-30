@@ -10,10 +10,9 @@ import { paidOption, draftOption } from '@common/constants/const';
 import { readYundianboSignature } from '@common/server';
 import VodUploader from 'vod-wx-sdk-v2';
 import Router from '@discuzq/sdk/dist/router';
-import Page from '@components/page';
 import { toTCaptcha } from '@common/utils/to-tcaptcha'
-import PayBoxProvider from '@components/payBox/payBoxProvider';
 import PayBox from '@components/payBox/index';
+import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
 
 @inject('index')
 @inject('site')
@@ -302,7 +301,8 @@ class Index extends Component {
   handleSubmit = async (isDraft) => {
     // 1 校验
     const { threadPost, site } = this.props;
-    if (!isDraft && !threadPost.postData.contentText) {
+    const { postData } = threadPost;
+    if (!isDraft && !postData.contentText) {
       this.postToast('请填写您要发布的内容');
       return;
     }
@@ -320,29 +320,40 @@ class Index extends Component {
       }
     }
 
-    // 接入支付流程
-    // await new Promise((resolve) => {
-    //   PayBox.createPayBox({
-    //     data: {      // data 中传递后台参数
-    //       amount: 0.1,
-    //       payeeId: 59,
-    //       title: '', // 商品名称，不同于后台参数
-    //       threadId: 6,
-    //       type: 3,
-    //     },
-    //     success: (orderInfo) => {
-    //       console.log('success', orderInfo);
-    //       resolve();
-    //     }, // 支付成功回调
-    //     failed: (orderInfo) => {
-    //       console.log('fail', orderInfo);
-    //     }, // 支付失败回调
-    //     completed: (orderInfo) => {
-    //       console.log('comp', orderInfo);
-    //     } // 支付完成回调(成功或失败)
-    //   });
-    // });
+    // 支付流程
+    const { rewardQa, redpacket } = postData;
+    const rewardAmount = (Number(rewardQa.value) || 0);
+    const redAmount = (Number(redpacket.price) || 0);
+    const amount = rewardAmount + redAmount;
+    const options = { amount };
+    if (!isDraft && amount) {
+      let type = ORDER_TRADE_TYPE.RED_PACKET;
+      let title = '支付红包';
+      if (redAmount) {
+        options.redAmount = redAmount;
+      }
+      if (rewardAmount) {
+        type = ORDER_TRADE_TYPE.POST_REWARD;
+        title = '支付悬赏';
+        options.rewardAmount = rewardAmount;
+      }
+      if (rewardAmount && redAmount) {
+        type = ORDER_TRADE_TYPE.COMBIE_PAYMENT;
+        title = '支付红包和悬赏';
+      }
 
+      // 等待支付
+      await new Promise(() => {
+        PayBox.createPayBox({
+          data: { ...options, title, type },
+          success: async (orderInfo) => {
+            const { orderSn } = orderInfo;
+            this.setPostData({ orderSn });
+            resolve();
+          },
+        });
+      });
+    }
 
     // 3 loading
     !isDraft && Taro.showLoading({
@@ -407,116 +418,113 @@ class Index extends Component {
       showDraftOption,
     } = this.state;
     return (
-      <PayBoxProvider>
-        <Page>
-          <View className={styles['container']}>
-            {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
-            <View className={styles['content']}>
-              <Title title={postData.title} show={isShowTitle} onInput={this.onTitleInput} />
-              <Content
-                value={postData.contentText}
-                maxLength={maxLength}
-                onChange={this.onContentChange}
-                onFocus={this.onContentFocus}
-              />
+      <>
+        <View className={styles['container']}>
+          {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
+          <View className={styles['content']}>
+            <Title title={postData.title} show={isShowTitle} onInput={this.onTitleInput} />
+            <Content
+              value={postData.contentText}
+              maxLength={maxLength}
+              onChange={this.onContentChange}
+              onFocus={this.onContentFocus}
+            />
 
-              <View className={styles['plugin']}>
+            <View className={styles['plugin']}>
 
-                <GeneralUpload type={operationType} />
+              <GeneralUpload type={operationType} />
 
-                {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => { }} />}
+              {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => { }} />}
 
-                {video.videoUrl && <Units type='video' src={video.videoUrl} />}
+              {video.videoUrl && <Units type='video' src={video.videoUrl} />}
 
-              </View>
-            </View>
-
-            {/* 工具栏区域、include各种插件触发图标、发布等 */}
-            <View className={styles['toolbar']}>
-              <View className={styles['location-bar']}>
-                <Text className={styles['text-length']}>{`还能输入${contentTextLength}个字`}</Text>
-                {(permissions?.insertPosition?.enable) &&
-                  <Position currentPosition={position} positionChange={(position) => {
-                    setPostData({ position });
-                  }} />
-                }
-              </View>
-
-
-              <View className={styles['tag-toolbar']}>
-                {/* 插入付费tag */}
-                {(Boolean(postData.price || postData.attachmentPrice)) && (
-                  <Units
-                    type='tag'
-                    tagContent={`付费总额${postData.price + postData.attachmentPrice}元`}
-                    onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.paid })}
-                  />
-                )}
-                {/* 红包tag */}
-                {redpacket.money &&
-                  <Units
-                    type='tag'
-                    tagContent={this.redpacketContent()}
-                    onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
-                  />
-                }
-                {/* 悬赏tag */}
-                {rewardQa.price &&
-                  <Units
-                    type='tag'
-                    tagContent={`悬赏金额${rewardQa.price}元\\结束时间${rewardQa.expiredAt}`}
-                    onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
-                  />
-                }
-              </View>
-              <PluginToolbar
-                permissions={permissions}
-                clickCb={(item) => {
-                  this.handlePluginClick(item);
-                }}
-                onCategoryClick={() => this.setState({ showClassifyPopup: true })}
-              />
-              <DefaultToolbar
-                permissions={permissions}
-                onPluginClick={(item) => {
-                  this.handlePluginClick(item);
-                }}
-                onSubmit={() => this.handleSubmit()}
-              />
             </View>
           </View>
 
-          {/* 二级分类弹框 */}
-          <ClassifyPopup
-            show={showClassifyPopup}
-            category={categories}
-            onHide={() => this.setState({ showClassifyPopup: false })}
-            onChange={this.onClassifyChange}
-          />
-          {/* 主题付费选项弹框 */}
-          <OptionPopup
-            show={showPaidOption}
-            list={paidOption}
-            onClick={(item) => this.handlePluginClick(item)}
-            onHide={() => this.setState({ showPaidOption: false })}
-          />
-          {/* 主题草稿选项弹框 */}
-          <OptionPopup
-            show={showDraftOption}
-            list={draftOption}
-            onClick={(item) => this.handlePluginClick(item)}
-            onHide={() => this.setState({ showDraftOption: false })}
-          />
+          {/* 工具栏区域、include各种插件触发图标、发布等 */}
+          <View className={styles['toolbar']}>
+            <View className={styles['location-bar']}>
+              <Text className={styles['text-length']}>{`还能输入${contentTextLength}个字`}</Text>
+              {(permissions?.insertPosition?.enable) &&
+                <Position currentPosition={position} positionChange={(position) => {
+                  setPostData({ position });
+                }} />
+              }
+            </View>
 
-          {/* 表情类型弹框 */}
-          <Emoji show={showEmoji} onHide={() => {
-            this.setState({
-              showEmoji: false
-            });
-          }} />
 
-        </Page>
-      </PayBoxProvider>
+            <View className={styles['tag-toolbar']}>
+              {/* 插入付费tag */}
+              {(Boolean(postData.price || postData.attachmentPrice)) && (
+                <Units
+                  type='tag'
+                  tagContent={`付费总额${postData.price + postData.attachmentPrice}元`}
+                  onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.paid })}
+                />
+              )}
+              {/* 红包tag */}
+              {redpacket.money &&
+                <Units
+                  type='tag'
+                  tagContent={this.redpacketContent()}
+                  onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
+                />
+              }
+              {/* 悬赏tag */}
+              {rewardQa.price &&
+                <Units
+                  type='tag'
+                  tagContent={`悬赏金额${rewardQa.price}元\\结束时间${rewardQa.expiredAt}`}
+                  onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
+                />
+              }
+            </View>
+            <PluginToolbar
+              permissions={permissions}
+              clickCb={(item) => {
+                this.handlePluginClick(item);
+              }}
+              onCategoryClick={() => this.setState({ showClassifyPopup: true })}
+            />
+            <DefaultToolbar
+              permissions={permissions}
+              onPluginClick={(item) => {
+                this.handlePluginClick(item);
+              }}
+              onSubmit={() => this.handleSubmit()}
+            />
+          </View>
+        </View>
+
+        {/* 二级分类弹框 */}
+        <ClassifyPopup
+          show={showClassifyPopup}
+          category={categories}
+          onHide={() => this.setState({ showClassifyPopup: false })}
+          onChange={this.onClassifyChange}
+        />
+        {/* 主题付费选项弹框 */}
+        <OptionPopup
+          show={showPaidOption}
+          list={paidOption}
+          onClick={(item) => this.handlePluginClick(item)}
+          onHide={() => this.setState({ showPaidOption: false })}
+        />
+        {/* 主题草稿选项弹框 */}
+        <OptionPopup
+          show={showDraftOption}
+          list={draftOption}
+          onClick={(item) => this.handlePluginClick(item)}
+          onHide={() => this.setState({ showDraftOption: false })}
+        />
+
+        {/* 表情类型弹框 */}
+        <Emoji show={showEmoji} onHide={() => {
+          this.setState({
+            showEmoji: false
+          });
+        }} />
+      </>
     );
   }
 }
