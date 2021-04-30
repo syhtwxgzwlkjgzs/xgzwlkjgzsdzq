@@ -12,10 +12,8 @@ import CommentInput from '../comment-input/index';
 class CommentList extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      isShowReward: false, // 是否展示获得多少悬赏金
-      isShowRedPacket: false, // 是否展示获得多少红包
-      isShowAdopt: false, // 是否展示采纳按钮
       isHideEdit: this.props.isHideEdit, // 隐藏评论编辑删除
       isShowOne: this.props.isShowOne || false, // 是否只显示一条评论回复
       isShowInput: this.props.isShowInput, // 是否显示输入框
@@ -105,19 +103,19 @@ class CommentList extends React.Component {
               </div>
             }
             {
-              this.state.isShowReward
+              this.props.data?.rewards
                 ? <div>
                   <div className={styles.showMoneyNum}>
-                    获得<span className={styles.moneyNumber}>{6}</span>元悬赏金
+                    获得<span className={styles.moneyNumber}>{this.props.data.rewards}</span>元悬赏金
                   </div>
                 </div>
                 : ''
             }
             {
-              this.state.isShowRedPacket
+              this.props.data?.redPacketAmount
                 ? <div>
                   <div className={styles.showMoneyNum}>
-                    获得<span className={styles.moneyNumber}>{6}</span>元红包
+                    获得<span className={styles.moneyNumber}>{this.props.data.redPacketAmount}</span>元红包
                   </div>
                 </div>
                 : ''
@@ -163,7 +161,7 @@ class CommentList extends React.Component {
                     <span>回复</span>
                   </div>
                   {
-                    this.state.isShowAdopt
+                    this.props.isShowAdopt && !this.props.data.rewards
                       ? <div className={styles.commentAdopt}>
                         <Icon className={styles.icon} name="ExactnessOutlined"></Icon>
                         <span onClick={() => this.props.onAboptClick()}>采纳</span>
