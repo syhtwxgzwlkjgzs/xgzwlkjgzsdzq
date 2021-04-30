@@ -13,7 +13,7 @@ export default class Redpacket extends Component {
     super();
     this.state = {
       rule: 1, // 发放规则 0-定额 1-随机
-      money: '', // 红包金额
+      price: '', // 红包金额
       number: '', //  红包个数
       condition: 0, // 获利条件 0-回复 1-集赞
       likenum: '' // 集赞个数
@@ -23,17 +23,17 @@ export default class Redpacket extends Component {
   componentDidMount() { // 回显
     const { redpacket } = this.props.threadPost.postData;
     if (Object.keys(redpacket).length > 0) {
-      const { rule, money, number, condition, likenum } = redpacket;
-      this.setState({ rule, money, number, condition, likenum })
+      const { rule, price, number, condition, likenum } = redpacket;
+      this.setState({ rule, price, number, condition, likenum })
     }
   }
 
-  onMoneyChang = (e) => { // 对红包金额做仅可输入两位小数的操作
+  onPriceChang = (e) => { // 对红包金额做仅可输入两位小数的操作
     const val = e.target.value;
-    const money = val.replace(/\.\d*$/, $1 => {
+    const price = val.replace(/\.\d*$/, $1 => {
       return $1.slice(0, 3)
     })
-    this.setState({ money })
+    this.setState({ price })
   }
 
   redToast = (title) => { // toast
@@ -41,14 +41,14 @@ export default class Redpacket extends Component {
   }
 
   checkConfirm = () => { // 更新红包store前校验数据合法性
-    const { money, number, condition, likenum } = this.state;
+    const { price, number, condition, likenum } = this.state;
 
-    if (!money) {
+    if (!price) {
       this.redToast('请输入红包金额')
       return false;
     }
 
-    if (money < 0.1 || money > 200) {
+    if (price < 0.1 || price > 200) {
       this.redToast('可输入红包金额为0.1 ~ 200元')
       return false;
     }
@@ -76,29 +76,25 @@ export default class Redpacket extends Component {
     return true;
   }
 
-  handleCancel = () => { // 取消悬赏
+  handleCancel = () => { // 取消红包
     Taro.navigateBack();
   }
 
-  handleConfirm = () => { // 确认悬赏
+  handleConfirm = () => { // 确认红包
     // 1 校验数据
     if (!this.checkConfirm()) return;
 
     // 2 更新store
-    const { rule, money, number, condition, likenum } = this.state;
+    const { rule, price, number, condition, likenum } = this.state;
     const { setPostData } = this.props.threadPost;
-    const orderPrice = rule === 1
-      ? parseFloat(money)
-      : parseFloat(money) * parseInt(number);
 
     setPostData({
       redpacket: {
         rule,
-        money: parseFloat(money),
+        price: parseFloat(price),
         number: parseInt(number),
         condition,
         likenum: parseInt(likenum),
-        orderPrice
       }
     })
 
@@ -107,7 +103,7 @@ export default class Redpacket extends Component {
   }
 
   render() {
-    const { rule, money, number, condition, likenum } = this.state;
+    const { rule, price, number, condition, likenum } = this.state;
 
     return (
       <View className={styles.wrapper}>
@@ -127,13 +123,13 @@ export default class Redpacket extends Component {
             {rule === 1 ? '红包总金额' : '红包单个金额'}</Text>
           <View className={styles.right}>
             <Input
-              value={money}
+              value={price}
               mode="number"
               miniType="number"
               placeholder="金额"
               placeholderStyle="color:#c5c6ca"
               maxLength={6}
-              onChange={this.onMoneyChang}
+              onChange={this.onPriceChang}
             />元
           </View>
         </View>
