@@ -482,10 +482,10 @@ class Index extends Component {
                 />
               }
               {/* 悬赏tag */}
-              {rewardQa.price &&
+              {rewardQa.value &&
                 <Units
                   type='tag'
-                  tagContent={`悬赏金额${rewardQa.price}元\\结束时间${rewardQa.expiredAt}`}
+                  tagContent={`悬赏金额${rewardQa.value}元\\结束时间${rewardQa.expiredAt}`}
                   onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
                 />
               }

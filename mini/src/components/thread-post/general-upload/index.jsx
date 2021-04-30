@@ -16,22 +16,25 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
 
   const localData = JSON.parse(JSON.stringify(postData));
 
-  const { images, files } = localData;
+  const { images, files, audio } = localData;
 
   // 执行上传
   const upload = (file) => {
     console.log('upload', file);
     const tempFilePath = file.path || file.tempFilePath;
+    console.log(tempFilePath);
     Taro.uploadFile({
       url: 'https://discuzv3-dev.dnspod.dev/apiv3/attachments',
       filePath: tempFilePath,
       name: 'file',
       header: {
         'Content-Type': 'multipart/form-data',
-        authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIiLCJqdGkiOiJmMGFjYWQ1YTZhZDIwZjk2ZDE4YTY5NDM0MWExMmNkMThjZjViMzRhOGM5OTU2OTAzNzI4YmY4NDA3YzY0ZTk5ZWIxYTI2YzE3YWJiNTA0ZiIsImlhdCI6MTYxODgwNzgyNywibmJmIjoxNjE4ODA3ODI3LCJleHAiOjE2MjEzOTk4MjcsInN1YiI6IjEiLCJzY29wZXMiOltudWxsXX0.frITzUdCYmt46ZuJ7wVWikLfnwbHA_fKde1hONWEUhA6FhhVLUNwiB1AjHNdmtq0ZLMb0pFlVYYvWiG0bkU_I9OEYH7da43dDdrzB00dcEb__5pWytSevJGVRcxeNTMZ6SqYaxGFZFM525D_NVqJ83XoI3JJ9XFCGV86BuwPVvmyOXFccip8cjEZVicP-MLiXG8XhyHl9WJ_tCtz-cqTkHNbCLJo5QN-gD_79XwRbuAQ_P5QBIAGqaip0JS6nnVSNEX_eGGWNh-J2pAvWdIUM9EC0DgNXA33X-pTln7m0mUsK1FYDMr5CC3iEFbsoqo1tmXotws8UmESdxCUn92gIg'
+        authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIiLCJqdGkiOiIxNmUxZTAyNTEzZmNmNmI3YzAwYTIyZGIxNDY3NmQ0ZTIwMWZkYmQ5NzM0YTQ0Y2RiZWE3NjZhOGQ3YzZiMzUxYWMyYTI0MjVkZWVmZWQwNiIsImlhdCI6MTYxOTM0MjEyNSwibmJmIjoxNjE5MzQyMTI1LCJleHAiOjE2MjE5MzQxMjUsInN1YiI6IjEiLCJzY29wZXMiOltudWxsXX0.RZrWPw5xNljl8jexv6CCVni0wEGhb6g5zzsgCULa_3fHvCzrUSF0YMhCduCCTdnbKmbegVsVNMCVqDzJdMexgPD-hIUL9zouB4H7Ohy5dE6KIQpyrV08NP-27A5CUyVG-T7r1hMKkAVn0hBKY4zF3-q0RsN16jV4hLJtzyPfuOSeA92umoBFqsNnn-9tR5TTppkHs1-jJPgbGn4FPpxFbrEbIB9kMdYh_kShQ2IQLGTX-xGlNZBuxNigOY7xvB2xWp9LFW9X9DlbkDLRKbU_E5Q-MMNY0laa_9tgddCzEjzE2P1TeKIOVlB_JLql9sdCWb7OaVXi8xXTZuVAxphe0w'
       },
       formData: {
         'type': (() => {
+          console.log(type);
+          console.log(THREAD_TYPE.voice);
           switch(type) {
             case THREAD_TYPE.image: return 1;
             case THREAD_TYPE.file: return 0;
@@ -46,7 +49,7 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
           case THREAD_TYPE.image:
             images[data.id] = {
               thumbUrl: tempFilePath,
-              ...data
+              ...data,
             };
             setPostData({images});
             break;
@@ -55,9 +58,16 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
               thumbUrl: tempFilePath,
               name: file.name,
               size: file.size,
-              ...data
+              ...data,
             };
             setPostData({files});
+            break;
+          case THREAD_TYPE.voice:
+            audio = {
+              thumbUrl: tempFilePath,
+              ...data,
+            };
+            setPostData({audio});
             break;
         }
       },
@@ -119,16 +129,22 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
   );
 
   // 录音并上传
-  const audioRecord = (type === THREAD_TYPE.voice) && (
-    // <View></View>
-    <AudioRecord duration={10} onUpload={(file) => {upload(file)}} />
+  const audioRecord = (type === THREAD_TYPE.voice && !audio.id) && (
+    <AudioRecord duration={60} onUpload={(file) => {upload(file)}} />
   );
+
+  // 录音音频
+  const audioPlayer = (audio.id) && (
+    <Audio src={audio.thumbUrl} />
+  );
+
 
   return (
     <>
       {atta}
       {img}
       {audioRecord}
+      {audioPlayer}
     </>
   );
 }));

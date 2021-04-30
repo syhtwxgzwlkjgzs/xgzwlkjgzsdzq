@@ -39,11 +39,10 @@
     "xss": "^1.0.8"
   },
   "devDependencies": {
-    "@discuzq/cli": "0.0.1-alpha.39",
+    "@discuzq/cli": "0.0.1-alpha.37",
     "@babel/core": "7.8.0",
     "@commitlint/cli": "12.0.1",
     "@commitlint/config-conventional": "12.0.1",
-    "@discuzq/cli": "0.0.1-alpha.37",
     "@tarojs/cli": "3.2.2",
     "@tarojs/mini-runner": "3.2.2",
     "@tarojs/webpack-runner": "3.2.2",
@@ -60,7 +59,6 @@
     "eslint-plugin-prettier": "3.3.1",
     "eslint-plugin-react": "7.8.2",
     "eslint-plugin-react-hooks": "1.6.1",
-    "mini-css-extract-plugin": "^1.5.1",
     "prettier": "2.2.1",
     "regenerator-runtime": "^0.13.7",
     "stylelint": "9.3.0",
