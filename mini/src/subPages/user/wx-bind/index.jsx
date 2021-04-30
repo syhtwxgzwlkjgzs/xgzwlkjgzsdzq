@@ -4,9 +4,6 @@ import { View } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import { Button, Toast } from '@discuzq/design';
 import Page from '@components/page';
-// import { usernameLogin } from '@server';
-// import setAccessToken from '@common/utils/set-access-token';
-// import { get } from '@common/utils/get';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
 import layout from './index.module.scss';
 
@@ -17,7 +14,7 @@ import layout from './index.module.scss';
 @observer
 class WXBind extends Component {
   getUserProfileCallback = async (params) => {
-    const { sessionToken } = getCurrentInstance().router.params;
+    const { sessionToken = 'ebzB77iJ2PSQPYy8JTSqq9Fus4Yyob55' } = getCurrentInstance().router.params;
 
     try {
       await this.getParamCode();

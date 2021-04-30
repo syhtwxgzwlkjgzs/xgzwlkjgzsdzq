@@ -4,14 +4,15 @@ import { getCurrentInstance, navigateTo, redirectTo } from '@tarojs/taro';
 import { withRouter } from 'next/router';
 import { Button, Toast, Input } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
-import layout from './index.module.scss';
 import { View, Text } from '@tarojs/components';
 import Page from '@components/page';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
+import layout from './index.module.scss';
 
 
 @inject('site')
+@inject('user')
 @inject('wxPhoneBind')
 @inject('mobileBind')
 @observer
@@ -51,7 +52,7 @@ class BindPhoneH5Page extends React.Component {
   }
 
   render() {
-    const { wxPhoneBind } = this.props;
+    const { mobileBind } = this.props;
     return (
       <Page>
         <View className={layout.container}>
@@ -61,39 +62,43 @@ class BindPhoneH5Page extends React.Component {
             <View className={layout.tips}>
               请绑定您的手机号
             </View>
-              {/* 输入框 start */}
-              <Input
-                className={layout.input}
-                value={wxPhoneBind.mobile}
-                mode="number"
-                placeholder="输入您的手机号"
-                onChange={(e) => {
-                  wxPhoneBind.mobile = e.target.value;
-                }}
-              />
+            {/* 输入框 start */}
+            <Input
+              className={layout.input}
+              value={mobileBind.mobile}
+              mode="number"
+              placeholder="输入您的手机号"
+              onChange={(e) => {
+                mobileBind.mobile = e.target.value;
+              }}
+            />
+            <View className={layout.captchaInput}>
               <Input
                 clearable={false}
                 className={layout.input}
                 mode="number"
                 appendWidth="auto"
-                append={
-                  wxPhoneBind.codeTimeout
-                  ? <View style={{ textAlign: 'right', paddingRight: '6px' }}>{wxPhoneBind.codeTimeout}s后重试</View>
-                  : <Text size="mini" style={{ textAlign: 'right', paddingRight: '6px' }} onClick={wxPhoneBind.sendCode}>发送验证码</Text>
-                }
-                value={wxPhoneBind.code}
+                value={mobileBind.code}
                 placeholder="输入您的验证码"
                 onChange={(e) => {
-                  wxPhoneBind.code = e.target.value;
+                  mobileBind.code = e.target.value;
                 }}
               />
-              {/* 输入框 end */}
+              {mobileBind.codeTimeout ? (
+                <View className={layout.countDown}>{mobileBind.codeTimeout}s后重试</View>
+              ) : (
+                <Text size="mini" className={layout.sendCaptcha} onClick={mobileBind.sendCode}>发送验证码</Text>
+              )}
+            </View>
+            {/* 输入框 end */}
             <Button className={layout.button} type="primary" onClick={this.handleBindButtonClick}>
               下一步
             </Button>
             <View className={layout.functionalRegion}>
               <Text className={layout.clickBtn} onClick={() => {
-                this.props.router.push('login');
+                redirectTo({
+                  url: `/subPages/user/wx-auth/index`
+                });
               }} >退出登录</Text>
             </View>
           </View>

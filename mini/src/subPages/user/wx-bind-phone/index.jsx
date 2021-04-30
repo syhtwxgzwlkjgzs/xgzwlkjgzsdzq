@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
-import { getCurrentInstance  } from '@tarojs/taro';
+import { getCurrentInstance, navigateTo } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import { Button, Input, Toast } from '@discuzq/design';
+import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
 import layout from './index.module.scss';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 
+const MemoToastProvider = React.memo(ToastProvider)
+
 @inject('site')
+@inject('user')
+@inject('commonLogin')
 @inject('wxPhoneBind')
 @observer
 class Index extends Component {
@@ -24,8 +29,8 @@ class Index extends Component {
     }
   };
   handleBindButtonClick = async () => {
-    const { wxPhoneBind, router } = this.props;
-    const { sessionToken } = router.query;
+    const { wxPhoneBind } = this.props;
+    const { sessionToken } = getCurrentInstance().router.params;
     try {
       const resp = await wxPhoneBind.loginAndBind(sessionToken);
       const uid = get(resp, 'uid', '');
@@ -33,16 +38,19 @@ class Index extends Component {
       Toast.success({
         content: '登录成功',
         duration: 1000,
+        onClose: () => {
+          navigateTo({
+            url: `/pages/index/index`
+          });
+        }
       });
-
-      setTimeout(() => {
-        router.push('/index');
-      }, 1000);
     } catch (error) {
       // 跳转状态页
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
-        this.props.router.push(`/user/status?statusCode=${error.Code}&statusMsg=${error.Message}`);
+        navigateTo({
+          url: `/subPages/user/status/index?statusCode=${error.Code}&statusMsg=${error.Message}`
+        });
         return;
       }
       Toast.error({
@@ -57,6 +65,7 @@ class Index extends Component {
 
     return (
       <Page>
+        <MemoToastProvider>
         <View className={layout.container}>
           <View className={layout.content}>
             <View className={layout.title}>手机号登陆，并绑定微信账号</View>
@@ -67,29 +76,31 @@ class Index extends Component {
             {/* 输入框 start */}
             <Input
               className={layout.input}
-              value=''
+              value={wxPhoneBind.mobile}
               mode="number"
               placeholder="输入您的手机号"
               onChange={(e) => {
                 wxPhoneBind.mobile = e.target.value;
               }}
             />
-            <Input
-              clearable={false}
-              className={layout.input}
-              mode="number"
-              appendWidth="auto"
-              append={
-                wxPhoneBind.codeTimeout
-                ? <View style={{ textAlign: 'right', paddingRight: '6px' }}>{wxPhoneBind.codeTimeout}s后重试</View>
-                : <Text size="mini" style={{ textAlign: 'right', paddingRight: '6px' }} onClick={this.handleSendCodeButtonClick}>发送验证码</Text>
-              }
-              value=''
-              placeholder="输入您的验证码"
-              onChange={(e) => {
-                wxPhoneBind.code = e.target.value;
-              }}
-            />
+            <View className={layout.captchaInput}>
+              <Input
+                clearable={false}
+                className={layout.input}
+                mode="number"
+                appendWidth="auto"
+                value={wxPhoneBind.code}
+                placeholder="输入您的验证码"
+                onChange={(e) => {
+                  wxPhoneBind.code = e.target.value;
+                }}
+              />
+              {wxPhoneBind.codeTimeout ? (
+                <View className={layout.countDown}>{wxPhoneBind.codeTimeout}s后重试</View>
+              ) : (
+                <Text size="mini" className={layout.sendCaptcha} onClick={wxPhoneBind.sendCode}>发送验证码</Text>
+              )}
+            </View>
             {/* 输入框 end */}
             {/* 登录按钮 start */}
             <Button className={layout.button} type="primary" onClick={this.handleBindButtonClick}>
@@ -98,6 +109,7 @@ class Index extends Component {
             {/* 登录按钮 end */}
           </View>
         </View>
+        </MemoToastProvider>
       </Page>
     );
   }

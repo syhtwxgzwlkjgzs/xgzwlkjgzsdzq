@@ -13,6 +13,7 @@ import layout from './index.module.scss';
 
 const NEED_BIND_PHONE_FLAG = -8001;
 @inject('site')
+@inject('user')
 @inject('commonLogin')
 @observer
 class WXSelect extends Component {
