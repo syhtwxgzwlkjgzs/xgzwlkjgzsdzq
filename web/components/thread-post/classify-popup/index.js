@@ -59,6 +59,12 @@ const ClassifyPopup = (props) => {
     setChildren(selected);
   }, [selected]);
 
+  useEffect(() => {
+    if (categorySelected.parent && categorySelected.parent.pid && categorySelected.parent.pid !== selected.pid) {
+      setSelected(categorySelected.parent);
+    }
+  }, [categorySelected]);
+
   const titleClass = pc ? classNames(styles['popup-title'], styles['pc-title']) : styles['popup-title'];
 
   const content = (
@@ -74,7 +80,7 @@ const ClassifyPopup = (props) => {
               key={item.pid}
               className={classNames({
                 active:
-                  ((categorySelected.parent && categorySelected.parent.pid) || selected.pid) === item.pid,
+                  (categorySelected.parent && categorySelected.parent.pid) === item.pid,
                 'is-pc': pc,
               })}
               onClick={() => {

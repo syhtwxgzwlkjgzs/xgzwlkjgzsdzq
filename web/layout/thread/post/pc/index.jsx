@@ -48,10 +48,15 @@ class ThreadPCPage extends React.Component {
         <Header />
         <div className={styles.wrapper}>
           <div className={styles['wrapper-inner']}>
-            <Title pc isDisplay={true} />
+            <Title pc
+              title={postData.title}
+              isDisplay={true}
+              onChange={title => this.props.setPostData({ title })}
+            />
             <div className={styles.editor}>
               <DVditor
                 pc
+                value={postData.contentText}
                 emoji={emoji}
                 atList={atList}
                 topic={topic}
