@@ -104,7 +104,7 @@ class SearchResultUserPcPage extends React.Component {
     const { pageData = [], currentPage, totalPage } = users || { pageData: [] };
 
     return (
-      <List className={styles.searchWrap} noMore={currentPage === totalPage} onRefresh={this.fetchMoreData}>
+      <List className={styles.searchWrap} noMore={currentPage >= totalPage} onRefresh={this.fetchMoreData}>
         <BaseLayout
           onSearch={this.onSearch}
           right={ this.renderRight }

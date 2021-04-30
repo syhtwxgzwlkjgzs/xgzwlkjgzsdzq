@@ -78,7 +78,7 @@ class SearchResultTopicPCPage extends React.Component {
   render() {
     const { currentPage, totalPage } = this.props.search.topics || { pageData: [] };
     return (
-      <List className={styles.searchWrap} noMore={currentPage === totalPage} onRefresh={this.fetchMoreData}>
+      <List className={styles.searchWrap} noMore={currentPage >= totalPage} onRefresh={this.fetchMoreData}>
         <BaseLayout
           onSearch={this.onSearch}
           right={ this.renderRight }

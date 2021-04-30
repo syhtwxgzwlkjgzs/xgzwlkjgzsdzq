@@ -136,10 +136,11 @@ class Index extends React.Component {
         rewardData,
         fileData,
       } = handleAttachmentData(data);
+
       return (
-        <div className={styles.wrapper} ref={this.ref}>
+        <div className={styles.wrapper} ref={this.ref} >
             {text && <PostContent content={text} onPay={this.onPay} />}
-            <div className={styles.content}>
+            <div className={`${styles.content} ${payType !== 0 && styles.payContent}`}>
               {videoData && (
                 <VideoPlay
                   url={videoData.mediaUrl}

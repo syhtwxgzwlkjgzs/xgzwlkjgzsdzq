@@ -73,7 +73,7 @@ class IndexPCPage extends React.Component {
   render() {
     const { currentPage, totalPage } = this.props.topic?.topics || {}
     return (
-      <List className={styles.searchWrap} noMore={currentPage === totalPage} onRefresh={this.fetchMoreData}>
+      <List className={styles.searchWrap} noMore={currentPage >= totalPage} onRefresh={this.fetchMoreData}>
         <BaseLayout
           onSearch={this.onSearch}
           right={ this.renderRight }
