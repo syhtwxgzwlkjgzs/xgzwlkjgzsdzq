@@ -92,10 +92,11 @@ const RenderThreadContent = inject('user')(observer((props) => {
 
   const onContentClick = async () => {
     const thread = props.store.threadData;
-    const success = await threadPay(thread, props.user?.userInfo);
+    const { success } = await threadPay(thread, props.user?.userInfo);
 
-    if (success) {
-      typeof props.paySuccess === 'function' && props.paySuccess();
+    // 支付成功重新请求帖子数据
+    if (success && threadStore?.threadData?.threadId) {
+      threadStore.fetchThreadDetail(threadStore?.threadData?.threadId);
     }
   };
 
