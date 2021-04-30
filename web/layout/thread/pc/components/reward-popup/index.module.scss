@@ -2,8 +2,8 @@
 @import '@common/styles/fn/rem.scss';
 
 .container {
-  width: rem(620);
-  height: rem(280);
+  width: rem(420);
+  height: rem(200);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -33,45 +33,11 @@
 
 
 .percentage {
-  height: rem(30);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: rem($padding-10) 0;
-  .text {
-    font-size: rem($font-size-middle);
-    padding: 0 rem($padding-1n);
-  }
+  padding: rem(16);
+
   :global {
     .dzq-input {
-      width: rem(400);
-      height: rem(40);
-      .dzq-input__inner {
-        width: rem(400);
-        height: rem(40);
-      }
-    }
-  }
-}
-  
-.rewardMoney {
-  height: rem(30);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  margin: rem($margin-10) 0;
-  .text {
-    font-size: rem($font-size-middle);
-    padding: 0 rem($padding-1n);
-  }
-  :global {
-    .dzq-input {
-      width: rem(400);
-      height: rem(40);
-      .dzq-input__inner {
-        width: rem(400);
-        height: rem(40);
-      }
+      width: 100%;
     }
   }
 }
