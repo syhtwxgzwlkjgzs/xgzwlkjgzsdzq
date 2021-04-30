@@ -7,13 +7,17 @@
   .searchContent {
     width: 100%;
     min-width: rem(652);
-    .section {
-      margin-bottom: rem($margin-10);
-      padding: 0 rem($padding-6n);
-      background: var(--color-white);
-      border-radius: rem($border-radius-small);
-      box-shadow: 0 0 rem($padding-2n) rgba(241, 243, 244, 0.16);
-    }
+  }
+  .postTitle {
+    padding: 0 rem($padding-6n);
+    border-radius: rem($border-radius-small);
+    background: var(--color-white);
+  }
+  .threadContent {
+    border-radius: rem($border-radius-small);
+    padding: 0 rem($padding-6n);
+    margin-bottom: rem(16);
+    overflow: hidden;
   }
   .searchRight {
     width: rem(286);

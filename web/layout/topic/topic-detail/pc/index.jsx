@@ -8,6 +8,7 @@ import NoData from '@components/no-data';
 import SectionTitle from '@layout/search/h5/components/section-title'
 import DetailsHeader from './components/details-header';
 import ThreadContent from '@components/thread'
+import Copyright from '@components/copyright';
 @inject('site')
 @inject('user')
 @inject('topic')
@@ -33,13 +34,14 @@ class IndexPCPage extends React.Component {
           <SectionTitle title="活跃用户" onShowMore={this.redirectToSearchResultUser}/>
           {/* <ActiveUsers data={pageData} onItemClick={this.onUserClick}/> */}
         </div>
+        <Copyright/>
       </div>
     )
   }
 
   renderItem = ({ content = '', threadCount = 0, viewCount = 0, threads = [] }, index) => {
     return (
-      <div key={index}>
+      <div className={styles.topicContent} key={index}>
         <DetailsHeader title={content} viewNum={viewCount} contentNum={threadCount} onShare={this.onShare} />
         <div className={styles.themeContent}>
           {
@@ -60,7 +62,7 @@ class IndexPCPage extends React.Component {
     const { pageData = [] } = this.props.topic?.topicDetail || {};
 
     return (
-      <List className={styles.searchWrap}>
+      // <List className={styles.topicWrap}>
       <div className={styles.topicWrap}>
         <BaseLayout
           onSearch={this.onSearch}
@@ -71,7 +73,7 @@ class IndexPCPage extends React.Component {
           }
         </BaseLayout>
         </div>
-      </List>
+      // </List>
     );
   }
 }

@@ -6,7 +6,8 @@ import BaseLayout from '@components/base-layout';
 import SectionTitle from '@layout/search/h5/components/section-title'
 import TrendingTopicMore from '@layout/search/pc/components/trending-topic-more';
 import ActiveUsers from '@layout/search/pc/components/active-users'
-import List from '@components/list'
+import List from '@components/list';
+import Copyright from '@components/copyright';
 @inject('site')
 @inject('user')
 @inject('topic')
@@ -45,6 +46,7 @@ class IndexPCPage extends React.Component {
               <SectionTitle title="活跃用户" onShowMore={this.redirectToSearchResultUser}/>
               {/* <ActiveUsers data={pageData} onItemClick={this.onUserClick}/> */}
             </div>
+            <Copyright/>
           </div>
         // )
       }
@@ -58,7 +60,11 @@ class IndexPCPage extends React.Component {
     return (
       <div className={styles.searchContent}>
         <div className={styles.section}>
-          <SectionTitle title="潮流话题" isShowMore={false}/>
+          <SectionTitle
+            title="潮流话题"
+            isShowMore={false}
+            icon={{ type: 1, name: 'StrongSharpOutlined' }}
+          />
           <TrendingTopicMore data={pageData} onItemClick={this.onTopicClick}/>
         </div>
       </div>
