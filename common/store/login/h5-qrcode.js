@@ -1,5 +1,8 @@
 import { observable, action } from 'mobx';
 import { genH5Qrcode, h5QrcodeLogin, genMiniQrcode } from '@server';
+import setAccessToken from '../../utils/set-access-token';
+import { get } from '../../utils/get';
+import { checkUserStatus } from '@common/store/login/util';
 
 export default class H5Qrcode {
   @observable qrCode = '';
@@ -41,10 +44,13 @@ export default class H5Qrcode {
         timeout: 3000,
         ...opts,
       });
-      console.log(res);
+      checkUserStatus(res);
       if (res.code === 0) {
+        const accessToken = get(res, 'data.accessToken', '');
+        setAccessToken(accessToken);
         return ;
       }
+
       throw {
         Code: res.code,
         Message: res.msg,
