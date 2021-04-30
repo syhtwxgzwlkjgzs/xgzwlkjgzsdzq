@@ -1,7 +1,7 @@
 /**
  * 创建帖子页面的 Store
  */
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 import { LOADING_TOTAL_TYPE } from '@common/constants/thread-post';
 
 class ThreadPostStore {
@@ -47,7 +47,7 @@ class ThreadPostStore {
     audio: {}, // 语音
     rewardQa: {}, // 悬赏问答 price-价格，expiredAt-悬赏结束时间
     product: {}, // 商品
-    redpacket: {}, // 红包 rule-规则，money-金额，number-个数，condition-领取条件，likenum-点赞数，orderPrice-红包订单金额
+    redpacket: {}, // 红包 rule-规则，price-金额，number-个数，condition-领取条件，likenum-点赞数
     video: {}, // 视频
     images: {}, // 图片
     files: {}, // 文件
@@ -61,6 +61,13 @@ class ThreadPostStore {
     parent: {}, // 选中的帖子父类
     child: {}, // 选中的帖子子类
   };
+
+  @computed get redpacketTotalAmount() { // 计算红包总额
+    const { rule = 1, price = 0, number } = this.postData.redpacket;
+    return rule === 1
+      ? parseFloat(price)
+      : parseFloat(price) * parseInt(number);
+  }
 }
 
 export default ThreadPostStore;
