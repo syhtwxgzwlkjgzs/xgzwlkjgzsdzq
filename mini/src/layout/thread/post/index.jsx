@@ -282,8 +282,9 @@ class Index extends Component {
 
   // 红包tag展示
   redpacketContent = () => {
-    const { redpacket: { rule, orderPrice, number } } = this.props.threadPost.postData;
-    return `${rule === 1 ? '随机红包' : '定额红包'}\\总金额 ${orderPrice}元\\${number}个`
+    const { postData, redpacketTotalAmount: amount } = this.props.threadPost;
+    const { redpacket: { rule, number } } = postData;
+    return `${rule === 1 ? '随机红包' : '定额红包'}\\总金额 ${amount}元\\${number}个`
   }
 
   // 验证码滑动成功的回调
@@ -473,7 +474,7 @@ class Index extends Component {
                 />
               )}
               {/* 红包tag */}
-              {redpacket.money &&
+              {redpacket.price &&
                 <Units
                   type='tag'
                   tagContent={this.redpacketContent()}
