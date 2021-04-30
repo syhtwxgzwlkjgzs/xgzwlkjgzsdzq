@@ -210,7 +210,7 @@ class IndexPCPage extends React.Component {
         ref={this.listRef}
         className={styles.indexWrap} 
         onRefresh={this.onPullingUp} 
-        noMore={currentPage === totalPage} 
+        noMore={currentPage >= totalPage} 
         onScroll={this.onScroll}
       >
         <BaseLayout

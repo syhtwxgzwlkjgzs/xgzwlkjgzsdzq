@@ -138,9 +138,9 @@ class Index extends React.Component {
       } = handleAttachmentData(data);
 
       return (
-        <div className={styles.wrapper} ref={this.ref}>
+        <div className={styles.wrapper} ref={this.ref} >
             {text && <PostContent content={text} onPay={this.onPay} />}
-            <div className={styles.content}>
+            <div className={`${styles.content} ${payType !== 0 && styles.payContent}`}>
               {videoData && (
                 <VideoPlay
                   url={videoData.mediaUrl}
@@ -149,12 +149,12 @@ class Index extends React.Component {
                   isPay={payType !== 0}
                 />
               )}
-              {imageData && <ImageContent
+              {imageData && (<ImageContent
                 imgData={imageData}
                 isPay={payType !== 0}
                 onPay={this.onPay}
                 onClickMore={this.onClick}
-              />}
+              />)}
               {rewardData && <RewardQuestion
                 content={rewardData.content || ''}
                 money={rewardData.money}
