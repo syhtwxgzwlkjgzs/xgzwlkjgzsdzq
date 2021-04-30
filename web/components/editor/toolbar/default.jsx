@@ -4,12 +4,13 @@ import styles from './index.module.scss';
 import { defaultIcon, defaultOperation } from '@common/constants/const';
 
 export default function DefaultToolbar(props) {
-  const { children, onClick, onSubmit, value, pc } = props;
+  const { children, onClick, onSubmit, value, pc, permission } = props;
   const [currentAction, setCurrentAction] = useState('');
 
   useEffect(() => {
     if (!value) setCurrentAction(value);
   }, [value]);
+
 
   function handleClick() {
     if (defaultOperation.emoji === currentAction) {
@@ -26,10 +27,12 @@ export default function DefaultToolbar(props) {
     };
   }, []);
 
+
+
   const icons = (
     <>
       {defaultIcon.map((item) => {
-        const iconItem = (
+        const iconItem = permission[item.id] ? (
           <Icon key={item.name}
             onClick={(e) => {
               if (!item.menu) e.stopPropagation();
@@ -46,7 +49,7 @@ export default function DefaultToolbar(props) {
             color={item.id === currentAction && item.active}
             size="20">
           </Icon>
-        );
+        ) : null;
         if (pc && item.menu) {
           const menus = (
             <Dropdown.Menu>

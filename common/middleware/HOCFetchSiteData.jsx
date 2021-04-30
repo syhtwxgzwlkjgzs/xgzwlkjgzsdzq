@@ -153,16 +153,20 @@ export default function HOCFetchSiteData(Component) {
 
       setAppCommonStatus(result) {
         switch (result.code) {
+          case 0: 
+          break;
           case -3005: site.setCloseSiteConfig(result.data);
             break;
           case -4002:
             clearLoginStatus();
             reload();
             break;
+          default: Router.redirect({url: '/500'});
+            break;
         }
       }
 
-      // 检查是否满足渲染挑战
+      // 检查是否满足渲染条件
       isPass() {
         const { site, router } = this.props;
         const { isNoSiteData } = this.state;
@@ -174,9 +178,11 @@ export default function HOCFetchSiteData(Component) {
           if (router.asPath !== '/close' && site.closeSiteConfig) {
             Router.redirect({url:'/close'});
           }
-        } else {
-          // 重定向到错误页面验收通过
-          Router.redirect({url: '/500'});
+          // 付费加入
+          if ( router.asPath !== '/join' && site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay' ) {
+            // todo 需要判断登录后是否支付
+            Router.redirect({url: '/join'});
+          }
         }
       }
 

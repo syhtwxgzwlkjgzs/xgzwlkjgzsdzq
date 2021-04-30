@@ -1,3 +1,4 @@
+export const MAX_COUNT = 5000;
 /**
  * 加载或者总数对应的类型
  */

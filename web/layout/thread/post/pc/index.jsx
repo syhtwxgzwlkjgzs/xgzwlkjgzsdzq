@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import Header from '@components/header';
 import DVditor from '@components/editor';
-import Title from '@components/thread-post-pc/title';
+import Title from '@components/thread-post/title';
 import { AttachmentToolbar, DefaultToolbar } from '@components/editor/toolbar';
 import Position from '@components/thread-post/position';
 import { Button, Video, Audio, AudioRecord, Tag } from '@discuzq/design';
@@ -13,7 +13,7 @@ import Emoji from '@components/editor/emoji';
 import ImageUpload from '@components/thread-post/image-upload';
 import { defaultOperation } from '@common/constants/const';
 import FileUpload from '@components/thread-post/file-upload';
-import { THREAD_TYPE } from '@common/constants/thread-post';
+import { THREAD_TYPE, MAX_COUNT } from '@common/constants/thread-post';
 import Product from '@components/thread-post/product';
 import ProductSelect from '@components/thread-post/product-select';
 import AllPostPaid from '@components/thread/all-post-paid';
@@ -21,16 +21,19 @@ import AtSelect from '@components/thread-post/at-select';
 import TopicSelect from '@components/thread-post/topic-select';
 import RedpacketSelect from '@components/thread-post/redpacket-select';
 import Copyright from '@components/copyright';
+import ForTheForm from '@components/thread/for-the-form';
 
 @inject('threadPost')
 @inject('index')
 @inject('thread')
+@inject('user')
 @observer
 class ThreadPCPage extends React.Component {
   render() {
     const {
       threadPost,
       index,
+      user,
       emoji,
       topic,
       atList,
@@ -52,8 +55,8 @@ class ThreadPCPage extends React.Component {
                 emoji={emoji}
                 atList={atList}
                 topic={topic}
-                onChange={() => { }}
-                onCountChange={() => { }}
+                onChange={this.props.handleVditorChange}
+                onCountChange={count => this.props.handleSetState({ count })}
                 onFocus={() => { }}
                 onBlur={() => {}}
               />
@@ -80,7 +83,7 @@ class ThreadPCPage extends React.Component {
 
               {/* 视频组件 */}
               {(postData.video && postData.video.thumbUrl) && (
-                <Video className="dzq-post-video" src={postData.video.thumbUrl} onReady={this.props.onReady} />
+                <Video className="dzq-post-video" src={postData.video.thumbUrl} onReady={this.props.onVideoReady} />
               )}
 
               {/* 附件上传组件 */}
@@ -107,17 +110,27 @@ class ThreadPCPage extends React.Component {
                 {!!(postData.price || postData.attachmentPrice) && (
                   <Tag>付费总额{postData.price + postData.attachmentPrice}元</Tag>
                 )}
+                {/* 悬赏问答内容标识 */}
+                {(postData.rewardQa.value && postData.rewardQa.times) && (
+                  <Tag>
+                    {`悬赏金额${postData.rewardQa.value}元\\结束时间${postData.rewardQa.times}`}
+                  </Tag>
+                )}
+                {/* 红包 */}
                 {postData.redpacket.price && (<Tag>
                   {postData.redpacket.rule === 1 ? '随机红包' : '定额红包'}
                   \ 总金额{postData.redpacket.price}元\{postData.redpacket.number}个
                   {postData.redpacket.condition === 1 && `\\集赞个数${postData.redpacket.likenum}`}
                 </Tag>)}
+                {/* 字数 */}
+                <div className={styles['editor-count']}>还能输入{MAX_COUNT - this.props.count}个字</div>
               </div>
             </div>
             <div className={styles.toolbar}>
               <div className={styles['toolbar-left']}>
                 <DefaultToolbar
                   pc
+                  permissions={user.permissions}
                   value={currentDefaultOperation}
                   onClick={
                     (item, child) => {
@@ -141,14 +154,17 @@ class ThreadPCPage extends React.Component {
                   pc
                   onAttachClick={this.props.handleAttachClick}
                   onUploadComplete={this.props.handleVideoUploadComplete}
+                  permissions={user.permissions}
                 />
               </div>
               <div className={styles['toolbar-right']}>
-                <Position
-                  position={postData.position}
-                  onClick={() => this.props.saveDataLocal()}
-                  onChange={position => this.props.setPostData({ position })}
-                />
+                {user?.permissions?.insertPosition?.enable && (
+                  <Position
+                    position={postData.position}
+                    onClick={() => this.props.saveDataLocal()}
+                    onChange={position => this.props.setPostData({ position })}
+                  />
+                )}
               </div>
             </div>
             <ClassifyPopup
@@ -161,8 +177,8 @@ class ThreadPCPage extends React.Component {
               }}
             />
             <div className={styles.footer}>
-              <Button type="info">保存至草稿箱</Button>
-              <Button type="primary">发布</Button>
+              <Button type="info" onClick={() => this.props.handleSubmit(true)}>保存至草稿箱</Button>
+              <Button type="primary" onClick={() => this.props.handleSubmit()}>发布</Button>
             </div>
           </div>
           <Copyright/>
@@ -219,6 +235,22 @@ class ThreadPCPage extends React.Component {
               data={postData.redpacket}
               cancel={() => this.props.handleSetState({ currentDefaultOperation: '' })}
               confirm={data => this.props.setPostData({ redpacket: data })}
+            />
+          )}
+          {currentAttachOperation === THREAD_TYPE.reward && (
+            <ForTheForm
+              pc
+              visible={currentAttachOperation === THREAD_TYPE.reward}
+              confirm={(data) => {
+                this.props.setPostData({ rewardQa: data });
+                this.props.handleSetState({ currentAttachOperation: false });
+              }}
+              cancel={() => {
+                this.props.handleSetState({
+                  currentAttachOperation: false,
+                });
+              }}
+              data={postData.rewardQa}
             />
           )}
         </div>

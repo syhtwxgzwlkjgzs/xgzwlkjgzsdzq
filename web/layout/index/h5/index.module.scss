@@ -23,8 +23,24 @@
     left: 0;
     z-index: 2;
   }
+  .homeContentTop {
+    padding: 0 rem($padding-4n);
+    background: var(--color-white);
+    margin-bottom: rem(10);
+  }
   .tabsBox {
-    height: rem(53);
+    height: rem(52);
+    :global {
+      .dzq-tabs__bar {
+        height: rem(52);
+        .dzq-tabs__label {
+          font-size: rem($font-size-primary);
+          line-height: rem(20);
+          margin-top: rem(16);
+          font-weight: normal;
+        }
+      }
+    }
   }
   .list {
     flex: 1;
@@ -35,6 +51,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    .buttonIcon {
+      color: var(--color-text-secondary);
+    }
   }
   .listItem {
     margin-bottom: rem(10);

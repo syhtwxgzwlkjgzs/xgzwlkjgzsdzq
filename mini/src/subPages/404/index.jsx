@@ -5,7 +5,7 @@ import { Button} from '@discuzq/design';
 import Page from '@components/page';
 import styles from './index.module.scss';
 
-class Index extends Component {
+class NotFindPage extends Component {
   componentWillMount() { }
 
   componentDidMount() { }
@@ -34,4 +34,4 @@ class Index extends Component {
   }
 }
 
-export default Index;
+export default NotFindPage;

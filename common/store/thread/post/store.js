@@ -51,6 +51,9 @@ class ThreadPostStore {
     video: {}, // 视频
     images: {}, // 图片
     files: {}, // 文件
+    orderSn: '', // 支付订单号
+    ticket: '', // 腾讯云验证码返回票据
+    randstr: '', // 腾讯云验证码返回随机字符串
   }
 
   @observable

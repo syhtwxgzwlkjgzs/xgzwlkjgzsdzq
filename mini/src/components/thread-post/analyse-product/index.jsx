@@ -13,7 +13,7 @@ const Index = inject('threadPost')(observer(({ threadPost }) => {
   const [url, setUrl] = useState('');
 
   return (
-    <View>
+    <View className={styles.wrapper}>
       <View className={styles['title']}>现支持以下商品链接</View>
       <View className={styles['product']}>
         {goodImages.map((item) => (

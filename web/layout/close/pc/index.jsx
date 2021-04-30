@@ -4,7 +4,7 @@ import styles from './index.module.scss';
 
 @inject('site')
 @observer
-class H5CloseSite extends React.Component {
+class PCCloseSite extends React.Component {
   render() {
     const { site } = this.props;
     const { closeSiteConfig } = site;
@@ -19,4 +19,4 @@ class H5CloseSite extends React.Component {
 }
 
 
-export default H5CloseSite;
+export default PCCloseSite;

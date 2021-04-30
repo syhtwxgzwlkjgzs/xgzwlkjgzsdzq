@@ -1,7 +1,7 @@
 /**
  * 附件操作栏比如：图片上传、视频上传、语音上传等
  */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icon, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import classNames from 'classnames';
@@ -47,63 +47,57 @@ function getObjectURL(file) {
   return url;
 }
 
-class AttachmentToolbar extends React.Component {
-  static file = null;
-  static toastInstance = null;
-  constructor(props) {
-    super(props);
-    this.state = {
-      showAll: false,
-      currentAction: '',
-    };
+function AttachmentToolbar(props) {
+  let file = null;
+  let toastInstance = null;
+  const [showAll, setShowAll] = useState(false);
+  const [currentAction, setCurrentAction] = useState('');
+  const inputRef = React.createRef(null);
+
+  function handleAttachClick(item) {
+    setCurrentAction(item.type);
+    props.onAttachClick(item);
+    setShowAll(false);
   }
 
-  inputRef = React.createRef(null);
-
-  handleAttachClick(item) {
-    this.setState({ currentAction: item.type });
-    this.props.onAttachClick(item);
-    this.setState({ showAll: false });
-  }
-
-  handleToggle = () => {
-    this.setState({ showAll: !this.state.showAll });
-  }
-
-  trggerInput = () => {
-    this.inputRef.current.click();
+  const handleToggle = () => {
+    setShowAll(!showAll);
   };
 
-  getYundianboSignature = async () => {
+  const trggerInput = () => {
+    inputRef.current.click();
+  };
+
+  const getYundianboSignature = async () => {
     const res = await readYundianboSignature();
     const { code, data } = res;
     return code === 0 ? data.token : '';
-  }
+  };
 
-  uploadFiles = async (files, item = {}) => {
-    const { onUploadComplete } = this.props;
+  const uploadFiles = async (files, item = {}) => {
+    const { onUploadComplete } = props;
     if (item.type === THREAD_TYPE.video) {
-      this.file = files[0];
+      file = files[0];
       // 云点播上传视频：https://cloud.tencent.com/document/product/266/9239
       const TcVod = (await import('vod-js-sdk-v6')).default;
       new TcVod({
-        getSignature: this.getYundianboSignature,
+        getSignature: getYundianboSignature,
       })
-      // 开始上传
-        .upload({ mediaFile: this.file })
+        // 开始上传
+        .upload({ mediaFile: file })
         .on('media_progress', () => {
-          this.toastInstance = Toast.loading({
+          toastInstance = Toast.loading({
             content: '上传中...',
             duration: 0,
           });
         })
         .done()
-      // 上传完成
+        // 上传完成
         .then((res) => {
           onUploadComplete(res, this.file, item);
-          this.toastInstance?.destroy();
+          toastInstance?.destroy();
         })
-      // 上传异常
+        // 上传异常
         .catch((err) => {
           console.log(err);
         });
@@ -126,81 +120,84 @@ class AttachmentToolbar extends React.Component {
           formData.append(elem, item.data[elem]);
         });
         const ret = await createAttachment(formData);
-        this.props.onUploadComplete(ret, file, item);
+        props.onUploadComplete(ret, file, item);
       });
     }
-  }
+  };
 
-  handleChange = (e, item) => {
+  const handleChange = (e, item) => {
     if (e.target instanceof HTMLInputElement) {
       const { files } = e.target;
       if (!files) {
         return;
       }
-      this.uploadFiles(files, item);
+      uploadFiles(files, item);
 
-      this.inputRef.current.value = null;
+      inputRef.current.value = null;
     }
   };
 
-  icons = () => attachIcon.map((item) => {
+  const icons = () => attachIcon.map((item) => {
+    const { permission } = props;
+
     if (!item.isUpload) {
-      return <Icon key={item.name}
-        onClick={this.handleAttachClick.bind(this, item)}
-        className={styles['dvditor-attachment-toolbar__item']}
-        name={item.name}
-        color={item.type === this.state.currentAction && item.active}
-        size="20" />;
-    }
-    return (
-      <div key={item.name} onClick={this.trggerInput} style={{ display: 'inline-block' }}>
+      return permission[item.type] ? (
         <Icon
-          onClick={this.handleAttachClick.bind(this, item)}
+          key={item.name}
+          onClick={() => handleAttachClick(item)}
           className={styles['dvditor-attachment-toolbar__item']}
           name={item.name}
-          color={item.type === this.state.currentAction && item.active}
+          color={item.type === currentAction && item.active}
+          size="20"
+        />
+      ) : null;
+    }
+    return permission[item.type] ? (
+      <div key={item.name} onClick={trggerInput} style={{ display: 'inline-block' }}>
+        <Icon
+          onClick={() => handleAttachClick(item)}
+          className={styles['dvditor-attachment-toolbar__item']}
+          name={item.name}
+          color={item.type === currentAction && item.active}
           size="20" />
         <input
           style={{ display: 'none' }}
           type="file"
-          ref={this.inputRef}
+          ref={inputRef}
           onChange={(e) => {
-            this.handleChange(e, item);
+            handleChange(e, item);
           }}
           multiple={item.limit > 1}
           accept={item.accept}
         />
       </div>
-    );
-  })
+    ) : null;
+  });
 
-  render() {
-    if (this.props.pc) return this.icons();
-    const { showAll } = this.state;
-    const styl = !showAll ? { display: 'none' } : {};
-    return (
-      <div className={styles['dvditor-attachment-toolbar']}>
-        {!showAll && (
-          <>
-            <div className={styles['dvditor-attachment-toolbar__left']}>
-              {this.props.category}
-            </div>
-            <div className={styles['dvditor-attachment-toolbar__right']}>
-              <Icon name="MoreBOutlined" size="20" onClick={this.handleToggle} />
-            </div>
-          </>
-        )}
-        <div className={styles['dvditor-attachment-toolbar__inner']} style={styl}>
+  if (props.pc) return icons();
+  const styl = !showAll ? { display: 'none' } : {};
+  return (
+    <div className={styles['dvditor-attachment-toolbar']}>
+      {!showAll && (
+        <>
           <div className={styles['dvditor-attachment-toolbar__left']}>
-            {this.icons()}
+            {props.category}
           </div>
-          <div className={classNames(styles['dvditor-attachment-toolbar__right'], styles.show)}>
-            <Icon name="MoreBOutlined" size="20" onClick={this.handleToggle} />
+          <div className={styles['dvditor-attachment-toolbar__right']}>
+            <Icon name="MoreBOutlined" size="20" onClick={handleToggle} />
           </div>
+        </>
+      )}
+      <div className={styles['dvditor-attachment-toolbar__inner']} style={styl}>
+        <div className={styles['dvditor-attachment-toolbar__left']}>
+          {icons()}
+        </div>
+        <div className={classNames(styles['dvditor-attachment-toolbar__right'], styles.show)}>
+          <Icon name="MoreBOutlined" size="20" onClick={handleToggle} />
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 AttachmentToolbar.propTypes = {

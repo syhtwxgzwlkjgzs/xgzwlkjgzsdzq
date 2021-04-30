@@ -3,8 +3,7 @@ import { Menu, Card } from '@discuzq/design';
 import { noop }  from '@components/thread/utils'
 import styles from './index.module.scss';
 
-const Index = ({ categories, totalThreads = 0, onNavigationClick = noop }) => {
-  console.log(categories, 'categories');
+const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop }) => {
   const onClick =(subIndex, index) => {
     if (`${subIndex}`.indexOf('-') !== -1) {
       const categoryIds = subIndex.split('-')
@@ -33,7 +32,7 @@ const Index = ({ categories, totalThreads = 0, onNavigationClick = noop }) => {
       <Menu>
         {
           categories?.map((item, index) => (item?.children?.length > 0 ? (
-              <Menu.SubMenu key={index} index={item.pid} title={renderSubMenuTitle(item)} onClick={onClick}>
+              <Menu.SubMenu key={index} index={item.pid} title={renderSubMenuTitle(item)}>
                 {item.children.map((children, subIndex) => (
                     <Menu.Item index={`${item.pid}-${subIndex}`} key={subIndex} onClick={onClick}>{children.name}</Menu.Item>
                 ))}

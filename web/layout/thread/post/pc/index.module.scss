@@ -40,6 +40,7 @@
   bottom: 0;
   left: 0;
   padding: 16px 22px;
+  width: calc(892px - 44px);
   :global {
     .dzq-tag {
       margin-right: var(--margin-4n);
@@ -54,6 +55,13 @@
         margin-right: 0;
       }
     }
+  }
+  .editor-count {
+    position: absolute;
+    bottom: var(--margin-4n);
+    right: var(--margin-6n);
+    font-size: var(--font-size-label);
+    color: var(--color-text-placeholder);
   }
 }
 .toolbar {

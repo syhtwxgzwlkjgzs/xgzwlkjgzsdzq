@@ -1,0 +1,42 @@
+@import '@common/styles/index.scss';
+.datepicker-modal {
+  z-index: 1601 !important;
+}
+
+.datepicker-header {
+  color: #2469f6 !important;
+}
+
+.datepicker-wheel {
+  border-top: 1px solid #eee !important;
+  border-bottom: 1px solid #eee !important;
+}
+
+.datepicker-navbar {
+  border-top: 1px solid #eee;
+  padding-top: 8px !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .datepicker-navbar-btn {
+    display: inline-block;
+    color: #4f5a70 !important;
+    width: rem(140);
+    height: 44px;
+    background-color: #eff1f3;
+    padding: 0 !important;
+    border-radius: 5px;
+    &:first-child {
+      background-color: #2469f6;
+      color: #fff !important;
+      margin-right: 10px;
+    }
+    &:hover {
+      background-color: #2469f6;
+      color: white !important;
+    }
+  }
+}

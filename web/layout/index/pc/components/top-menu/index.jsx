@@ -72,25 +72,23 @@ const Index = ({ onSubmit = noop }) => {
                 <Menu.SubMenu 
                   key={index} 
                   index={index} 
-                  onClick={onClick} 
                   title={title(item.label)} 
                   className={item.isActive && styles.activeItem}
                   style={{ padding: '3px 0' }}
                 >
                   {
                     item.children.map((secondItem, secondIndex) => {
-                      // debugger
                       return (
-                      <Menu.Item
-                        className={secondItem.isActive && styles.activeItem}
-                        divided
-                        key={`${index}-${secondIndex}`}
-                        index={`${index}-${secondIndex}`}
-                        style={{ padding: '10px 20px' }}
-                        onClick={onClick}
-                      >
-                        {secondItem.label}
-                      </Menu.Item>
+                        <Menu.Item
+                          className={secondItem.isActive && styles.activeItem}
+                          divided
+                          key={`${index}-${secondIndex}`}
+                          index={`${index}-${secondIndex}`}
+                          style={{ padding: '10px 20px' }}
+                          onClick={onClick}
+                        >
+                          {secondItem.label}
+                        </Menu.Item>
                     )})
                   }
                 </Menu.SubMenu>

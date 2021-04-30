@@ -12,24 +12,26 @@
   cursor: pointer;
   padding-right: 8px;
 }
-.tips {
-  @include pc_tips;
-}
-.phoneInput {
-  margin-bottom: 24px;
-}
-.input {
-  width: 300px;
-  margin-bottom: 24px;
-}
-.sendCaptcha {
-  @include captchaBtn;
-}
-.countDown {
-  @include captchaBtn;
-  color: #b5b5b5;
-}
-.captchaInput{
-  position: relative;
-  margin-bottom: 24px;
+.pc_phone_input{
+  .tips {
+    @include pc_tips;
+  }
+  .phoneInput {
+    margin-bottom: 24px;
+  }
+  .input {
+    width: 300px;
+    margin-bottom: 24px;
+  }
+  .sendCaptcha {
+    @include captchaBtn;
+  }
+  .countDown {
+    @include captchaBtn;
+    color: #b5b5b5;
+  }
+  .captchaInput{
+    position: relative;
+    margin-bottom: 24px;
+  }
 }

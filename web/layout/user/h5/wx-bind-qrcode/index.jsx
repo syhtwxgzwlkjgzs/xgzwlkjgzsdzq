@@ -13,11 +13,13 @@ import Header from '@components/header';
 class WeixinBindQrCodePage extends React.Component {
   async componentDidMount() {
     const { sessionToken, loginType, nickname } = this.props.router.query;
+    const { platform, wechatEnv } = this.props.site;
+    const qrCodeType = platform === 'h5' ? 'mobile_browser_bind' : 'pc_bind';
     await this.props.h5QrCode.generate({
       params: {
         sessionToken,
-        type: 'mobile_browser_bind',
-        redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth?loginType=${loginType}&action=wx-bind&nickname=${nickname}`)}`,
+        type: wechatEnv === 'miniProgram' ? 'pc_bind_mini' : qrCodeType,
+        redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/${wechatEnv === 'miniProgram' ? 'pages/' : ''}user/wx-auth${wechatEnv === 'miniProgram' ? '/index' : ''}?loginType=${loginType}&action=wx-bind&nickname=${nickname}`)}`,
       },
     });
   }

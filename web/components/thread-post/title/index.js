@@ -27,15 +27,17 @@ const Title = ({ title, placeholder, isDisplay, onChange,  onFocus, onBlur, ...p
   }, [titleVal]);
 
   return (
-    <Input
-      className={`${styles.title} ${isDisplay ? styles['is-display'] : ''}`}
-      value={titleVal}
-      placeholder={placeholder}
-      onChange={e => setTitleVal(e.target.value)}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      {...props}
-    />
+    <div className={`${isDisplay ? '' : styles['is-display']}`}>
+      <Input
+        className={`${styles.title} ${isDisplay ? styles['is-display'] : ''}`}
+        value={titleVal}
+        placeholder={placeholder}
+        onChange={e => setTitleVal(e.target.value)}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        {...props}
+      />
+    </div>
   );
 };
 
