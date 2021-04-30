@@ -56,6 +56,16 @@ class CommentPCPage extends React.Component {
     }
   }
 
+  // 点击关注
+  onFollowClick() {
+    console.log(this.props.comment)
+    if (this.props.comment?.commentDetail?.userId) {
+      this.props.comment?.authorInfo?.follow === 2 || this.props.comment?.authorInfo?.follow === 1
+        ? this.props.comment.cancelFollow({ id: this.props.comment.commentDetail.userId, type: 1 })
+        : this.props.comment.postFollow(this.props.comment.commentDetail.userId);
+    }
+  }
+
   // 点击回复的赞
   async replyLikeClick(reply) {
     if (!reply.id) return;
@@ -206,7 +216,10 @@ class CommentPCPage extends React.Component {
           <div className={styles.bodyRigth}>
             <div className={styles.authorInfo}>
               {this.props.comment?.authorInfo
-                ? <AuthorInfo user={this.props.comment?.authorInfo}></AuthorInfo>
+                ? <AuthorInfo
+                  user={this.props.comment?.authorInfo}
+                  onFollowClick={() => this.onFollowClick()}>
+                </AuthorInfo>
                 : <LoadingTips type='init'></LoadingTips>
               }
             </div>

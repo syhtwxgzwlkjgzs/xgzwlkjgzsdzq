@@ -45,6 +45,7 @@ class ThreadAction extends ThreadStore {
     this.threadData = null;
     this.commentList = null;
     this.totalCount = 0;
+    this.authorInfo = null;
   }
 
   @action
