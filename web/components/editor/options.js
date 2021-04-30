@@ -23,7 +23,7 @@ export const baseOptions = {
   toolbar: [...baseToolbar],
   toolbarConfig: {
     hide: false,
-    pin: true,
+    pin: false,
   },
   outline: {
     enable: false,
