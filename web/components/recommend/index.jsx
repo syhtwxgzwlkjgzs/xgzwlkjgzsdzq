@@ -3,7 +3,7 @@ import style from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import { withRouter } from 'next/router';
 import { inject, observer } from 'mobx-react';
-
+import LoadingBox from '@components/loading-box';
 
 @inject('index')
 @observer
@@ -30,13 +30,13 @@ class Index extends React.Component {
   }
 
   render () {
-    const { recommends } = this.props.index || [];
-
+    const { recommends, recommendsStatus } = this.props.index || [];
     return (
       <div className={style.recommend}>
         <div className={style.recommendContent}>推荐内容</div>
+        { recommendsStatus === 'loading' && <LoadingBox/> }
         {
-          recommends?.filter((_, index) => index < 5).map((item, index) => (
+          recommendsStatus === 'none' && recommends?.filter((_, index) => index < 5).map((item, index) => (
               <div key={index} className={style.recommendBox} onClick={() => {this.recommendDetails(item)}}>
                 <div className={style.recommendTitle}>
                   <p className={style.recommendSort}>{index + 1}</p>
@@ -71,11 +71,11 @@ class Index extends React.Component {
               </div>
           ))
         }
-        <div className={style.recommendSwitch}>
+        {recommendsStatus === 'none' && <div className={style.recommendSwitch}>
           <div className={style.switchBox} onClick={this.changeBatch}>
             <span className={style.switchIcon}><Icon name="CloseCircleOutlined" size={14}/></span>换一批
           </div>
-        </div>
+        </div>}
       </div>
     );
   }

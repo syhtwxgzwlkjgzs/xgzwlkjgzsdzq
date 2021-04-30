@@ -6,7 +6,7 @@ import Router from '@discuzq/sdk/dist/router';
 import { View } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 import clearLoginStatus from '@common/utils/clear-login-status';
-import { Icon } from '@discuzq/design';
+import {Toast} from '@discuzq/design';
 
 import './app.scss';
 
@@ -15,7 +15,6 @@ class App extends Component {
   store = initializeStore();
 
   async componentDidMount() {
-
   }
 
   /**

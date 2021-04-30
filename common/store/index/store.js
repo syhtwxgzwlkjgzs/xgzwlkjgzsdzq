@@ -12,6 +12,7 @@ class IndexStore {
     return (this.categories || []).filter(item => item.name !== '全部');
   }
   @observable recommends = null;
+  @observable recommendsStatus = 'none'
 }
 
 export default IndexStore;
