@@ -231,8 +231,8 @@ class ThreadPostAction extends ThreadPostStore {
     }
 
     if (rewardQa.times) {
-      contentIndexes[THREAD_TYPE.qa] = {
-        tomId: THREAD_TYPE.qa,
+      contentIndexes[THREAD_TYPE.reward] = {
+        tomId: THREAD_TYPE.reward,
         body: { expiredAt: rewardQa.times, price: Number(rewardQa.value), type: 0, orderSn },
       };
     }
