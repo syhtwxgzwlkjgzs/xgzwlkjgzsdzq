@@ -149,6 +149,15 @@ class IndexAction extends IndexStore {
     this.threads = data;
   }
 
+  @action
+  updatePayThreadInfo(threadId, obj) {
+    const targetThread = this.findAssignThread(threadId);
+    const { index } = targetThread;
+    if (this.threads?.pageData) {
+      this.threads.pageData[index] = obj;
+    }
+  }
+
   /**
    * 更新帖子列表指定帖子状态
    * @param {number} threadId 帖子id
