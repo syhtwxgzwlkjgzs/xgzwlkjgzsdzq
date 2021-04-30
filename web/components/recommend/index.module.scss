@@ -9,7 +9,7 @@
   padding-bottom: 0;
   .recommendContent {
     font-weight: 600;
-    font-size: rem($font-size-large);
+    font-size: rem(18);
     line-height: 28px;
     color: #0b0b37;
     margin-bottom: rem(16);
@@ -106,6 +106,7 @@
   width: 100%;
   height: rem(52);
   border-top: rem(1) solid #EEEEEE;
+  cursor: pointer;
   .switchBox {
     width: rem(66);
     margin: rem(16) auto 0;

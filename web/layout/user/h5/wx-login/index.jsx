@@ -13,6 +13,7 @@ import Header from '@components/header';
 @inject('h5QrCode')
 @observer
 class WXLoginH5Page extends React.Component {
+  timer = null;
   async componentDidMount() {
     try {
       const { platform, webConfig } = this.props.site;
@@ -45,13 +46,17 @@ class WXLoginH5Page extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
   queryLoginState() {
-    const timer = setInterval(async () => {
+    this.timer = setInterval(async () => {
       try {
         await this.props.h5QrCode.login({
           params: { sessionToken: this.props.h5QrCode.sessionToken },
         });
-        clearInterval(timer);
+        clearInterval(this.timer);
       } catch (e) {
         Toast.error({
           content: e.Message,

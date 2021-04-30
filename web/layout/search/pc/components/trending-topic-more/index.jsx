@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 import { handleAttachmentData, noop } from '@components/thread/utils';
+import PostContent from '@components/thread/post-content';
 /**
  * 潮流话题
  * @prop {string[]} data 话题数据
@@ -50,7 +51,13 @@ const Topic = ({ data, onClick, index, footer }) => {
             {data.threadCount}
           </div>
         </div>
-        <div className={styles.text}>{text || '暂无内容'}</div>
+        {
+          text ? (
+          <PostContent content={text} className={styles.text} />
+          ) : (
+            <div className={styles.text}>{text || '暂无内容'}</div>
+          )
+        }
       </div>
     </div>
   );

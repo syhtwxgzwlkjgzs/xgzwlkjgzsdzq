@@ -1,7 +1,7 @@
 import React from 'react';
 import LoginPhoneH5Page from '@layout/user/h5/phone-login';
 import { inject } from 'mobx-react';
-import { Input, Button, Toast } from '@discuzq/design';
+import { Toast } from '@discuzq/design';
 import { h5WechatCodeLogin } from '@server';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 import HOCLoginMode from '@common/middleware/HOCLoginMode';
@@ -15,12 +15,11 @@ const NEED_BIND_OR_REGISTER_USER = -7016;
 class WeixinAuth extends React.Component {
   async componentDidMount() {
     const { router } = this.props;
-    const { code, sessionId, sessionToken, state, action, nickname } = router.query;
-    console.log(router.query);
+    const { code, sessionId, sessionToken, state, loginType, action, nickname } = router.query;
 
     // 如果要进行绑定逻辑，跳转绑定相关的页面
     if (action === 'wx-bind') {
-      router.push(`/user/wx-bind?code=${code}&sessionId=${sessionId}&sessionToken=${sessionToken}&state=${state}&nickname=${nickname}`);
+      router.push(`/user/wx-bind?code=${code}&sessionId=${sessionId}&sessionToken=${sessionToken}&state=${state}&nickname=${nickname}&loginType=${loginType}`);
       return;
     }
 

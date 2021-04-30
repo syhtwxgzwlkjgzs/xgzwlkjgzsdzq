@@ -1,6 +1,15 @@
 import { action } from 'mobx';
 import ThreadStore from './store';
-import { updatePosts, operateThread, readCommentList, readThreadDetail, shareThread, readUser } from '@server';
+import {
+  updatePosts,
+  operateThread,
+  readCommentList,
+  readThreadDetail,
+  shareThread,
+  readUser,
+  createFollow,
+  deleteFollow,
+} from '@server';
 
 class ThreadAction extends ThreadStore {
   constructor(props) {
@@ -54,11 +63,9 @@ class ThreadAction extends ThreadStore {
     const users = this.threadData?.likeReward?.users;
 
     if (isLiked) {
-      this.threadData.likeReward.users = users?.length
-        ? [...users, userInfo]
-        : [userInfo];
+      this.threadData.likeReward.users = users?.length ? [...users, userInfo] : [userInfo];
     } else {
-      this.threadData.likeReward.users = users.filter(item => item.userId !== userInfo.userId);
+      this.threadData.likeReward.users = users.filter((item) => item.userId !== userInfo.userId);
     }
   }
 
@@ -195,8 +202,8 @@ class ThreadAction extends ThreadStore {
         this.setThreadDetailLikedUsers(!!isLiked, user);
       }
       // 更新首页store
-      IndexStore
-        && IndexStore.updateAssignThreadInfo(id, {
+      IndexStore &&
+        IndexStore.updateAssignThreadInfo(id, {
           isLike: !!isLiked,
         });
 
@@ -410,6 +417,52 @@ class ThreadAction extends ThreadStore {
       };
     }
 
+    return {
+      msg: res.msg,
+      success: false,
+    };
+  }
+
+  /**
+   * 关注
+   * @param {object} userId * 被关注人id
+   * @returns {object} 处理结果
+   */
+  @action
+  async postFollow(userId) {
+    const res = await createFollow({ data: { data: { toUserId: userId } } });
+    if (res.code === 0 && res.data) {
+      this.authorInfo.follow = res.data.isMutual ? 2 : 1;
+      this.authorInfo.fansCount = this.authorInfo.fansCount + 1;
+
+      return {
+        msg: '操作成功',
+        success: true,
+      };
+    }
+    return {
+      msg: res.msg,
+      success: false,
+    };
+  }
+
+  /**
+   * 发现模块 - 取消关注
+   * @param {object} search * 搜索值
+   * @returns {object} 处理结果
+   */
+  @action
+  async cancelFollow({ id, type }) {
+    const res = await deleteFollow({ data: { id, type: type } });
+    if (res.code === 0 && res.data) {
+      this.authorInfo.follow = 0;
+      this.authorInfo.fansCount = this.authorInfo.fansCount - 1;
+
+      return {
+        msg: '操作成功',
+        success: true,
+      };
+    }
     return {
       msg: res.msg,
       success: false,

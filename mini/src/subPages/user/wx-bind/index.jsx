@@ -17,7 +17,7 @@ import layout from './index.module.scss';
 @observer
 class WXBind extends Component {
   getUserProfileCallback = async (params) => {
-    const { sessionToken } = getCurrentInstance().router.params;
+    const { sessionToken = 'HZYvKnJgXfmtQkVgrYDlxdlVi0QZQ5E4' } = getCurrentInstance().router.params;
 
     try {
       await this.getParamCode();
@@ -26,6 +26,7 @@ class WXBind extends Component {
         iv: params.iv,
         encryptedData: params.encryptedData,
         sessionToken,
+        type: 'pc'
       });
       console.log(params)
       console.log(res)
@@ -36,7 +37,7 @@ class WXBind extends Component {
           content: '绑定成功',
         });
         redirectTo({
-          url: `/pages/index/index`
+          url: `/subPages/index/index`
         });
         return;
       }
@@ -49,7 +50,7 @@ class WXBind extends Component {
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
         navigateTo({
-          url: `/pages/user/status?statusCode=${error.Code}&statusMsg=${error.Message}`
+          url: `/subPages/user/status?statusCode=${error.Code}&statusMsg=${error.Message}`
         });
         return;
       }
@@ -93,7 +94,7 @@ class WXBind extends Component {
    */
   handleBindCallback = () => new Promise((resolve, reject) => {
     Taro.getUserProfile({
-      desc: "查询用户是否绑定过账号",
+      desc: "账号绑定微信",
       success: (res) => {
         if(res.errMsg === 'getUserProfile:ok'){
           this.getUserProfileCallback(res);

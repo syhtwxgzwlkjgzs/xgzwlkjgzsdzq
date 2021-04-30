@@ -8,28 +8,20 @@ import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import { defaultIcon } from '@common/constants/const';
-import { defaultOperation as dOpera } from '@common/constants/const';
 
-const Index = inject('site', 'threadPost')(observer(({
-  permissions,
+const Index = inject('user')(observer(({
+  user,
   onPluginClick,
   onSubmit,
 }) => {
   const [currentTool, setCurrentTool] = useState({});
 
   // 工具栏icon元素
+  const { threadExtendPermissions: tep } = user;
   const plug = useMemo(() => {
-    const permissionMap = {
-      [dOpera.emoji]: true,
-      [dOpera.at]: true,
-      [dOpera.topic]: true,
-      [dOpera.attach]: permissions?.insertDoc?.enable,
-      [dOpera.redpacket]: permissions?.insertRedPacket?.enable,
-      [dOpera.pay]: permissions?.insertPay?.enable
-    };
     return defaultIcon.map((item, index) => {
       // 是否有权限
-      const canInsert = permissionMap[item.id];
+      const canInsert = tep[item.id];
       return canInsert ? (
         <Icon
           key={index}
@@ -44,7 +36,7 @@ const Index = inject('site', 'threadPost')(observer(({
         />
       ) : null;
     });
-  }, [permissions])
+  }, [tep])
 
   return (
     <View className={styles['container']}>

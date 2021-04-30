@@ -2,7 +2,7 @@
 @import '@common/styles/variable/index.scss';
 .list {
   width: 100%;
-  background-color: #eee;
+  background-color: var(--border-line-color);
   .bottom {
     margin-bottom: rem(10);
   }

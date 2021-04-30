@@ -1,6 +1,7 @@
 @import '@common/styles/variable/index.scss';
 
 .page{
+
   background: var(--color-white);
 }
 .text {
@@ -10,3 +11,7 @@
   font-size: $font-size-large + px;
 }
 
+.btnBox{
+  padding: 0 50px;
+  margin-top: 50px;
+}

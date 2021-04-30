@@ -1,15 +1,12 @@
 /**
- * 定位组件
+ * 表情组件
  */
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import { observer, inject } from 'mobx-react';
-import { View, Image, Text } from '@tarojs/components';
+import { View, Image } from '@tarojs/components';
 
 import styles from './index.module.scss';
 import { Popup } from '@discuzq/design';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import Taro from '@tarojs/taro';
 
 
 const Index = inject('threadPost')(observer(({ threadPost, show = false, onHide }) => {
@@ -38,15 +35,5 @@ const Index = inject('threadPost')(observer(({ threadPost, show = false, onHide 
 
   );
 }));
-
-Index.propTypes = {
-  /**
-   * 位置变化的回调
-   */
-   positionChange: PropTypes.func,
-
-   currentPosition: PropTypes.object,
-};
-
 
 export default memo(Index);

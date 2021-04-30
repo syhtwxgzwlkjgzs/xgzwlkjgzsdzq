@@ -1,0 +1,11 @@
+@import '@common/styles/var.scss';
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+:global {
+  .dzq-card {
+    border-radius: rem($border-radius-small);
+  }
+  .dzq-card__body {
+    padding: 0 rem($padding-4n);
+  }
+}

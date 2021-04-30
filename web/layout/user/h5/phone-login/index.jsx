@@ -64,27 +64,27 @@ class LoginPhoneH5Page extends React.Component {
         return;
       }
 
-      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT.Code && this.props.site.wechatEnv === 'openPlatform') {
-        this.props.commonLogin.needToBindWechat = true;
-        this.props.commonLogin.sessionToken = e.sessionToken;
-        this.props.router.push(`/user/wx-bind-qrcode?sessionToken=${e.sessionToken}&loginType=phone&nickname=${e.nickname}`);
-        return;
-      }
-
-      // 微信绑定，跳入小程序绑定
-      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT.Code && this.props.site.wechatEnv === 'miniProgram') {
-        this.props.commonLogin.needToBindMini = true;
-        this.props.commonLogin.sessionToken = e.sessionToken;
-        const resp = await genMiniScheme();
-        if (resp.code === 0) {
-          window.location.href = `${get(resp, 'data.openLink', '')}?sessionToken=${e.sessionToken}`;
+      // 微信绑定
+      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT.Code) {
+        const { wechatEnv, platform } = this.props.site;
+        if (wechatEnv === 'miniProgram' && platform === 'h5') {
+          this.props.commonLogin.needToBindMini = true;
+          this.props.commonLogin.sessionToken = e.sessionToken;
+          const resp = await genMiniScheme();
+          if (resp.code === 0) {
+            window.location.href = `${get(resp, 'data.openLink', '')}?sessionToken=${e.sessionToken}`;
+            return;
+          }
+          Toast.error({
+            content: '网络错误',
+            hasMask: false,
+            duration: 1000,
+          });
           return;
         }
-        Toast.error({
-          content: '网络错误',
-          hasMask: false,
-          duration: 1000,
-        });
+        this.props.commonLogin.needToBindWechat = true;
+        this.props.commonLogin.sessionToken = e.sessionToken;
+        this.props.router.push(`/user/wx-bind-qrcode?sessionToken=${e.sessionToken}&loginType=${platform}&nickname=${e.nickname}`);
         return;
       }
 
@@ -119,7 +119,9 @@ class LoginPhoneH5Page extends React.Component {
     const { mobileLogin, site } = this.props;
     const { platform } = site;
     const isAnotherLoginWayAvaliable = this.props.site.wechatEnv !== 'none' || this.props.site.isUserLoginVisible;
-
+    /**
+     * TODO 样式这块待修改，pc、h5分开两个文件，类名保持一直，根据platform来判断加载哪个文件的layout
+     */
     return (
       <div className={platform === 'h5' ? '' : layout.pc_body_background}>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>

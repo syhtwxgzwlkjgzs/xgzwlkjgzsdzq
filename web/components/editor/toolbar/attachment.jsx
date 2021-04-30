@@ -48,24 +48,11 @@ function getObjectURL(file) {
 }
 
 function AttachmentToolbar(props) {
-  const { permissions = {} } = props;
   let file = null;
   let toastInstance = null;
   const [showAll, setShowAll] = useState(false);
   const [currentAction, setCurrentAction] = useState('');
-  const [permissionMap, setPermissionMap] = useState({});
   const inputRef = React.createRef(null);
-
-  useEffect(() => {
-    setPermissionMap({
-      ...permissionMap,
-      [THREAD_TYPE.image]: permissions?.insertImage?.enable,
-      [THREAD_TYPE.video]: permissions?.insertVideo?.enable,
-      [THREAD_TYPE.voice]: permissions?.insertAudio?.enable,
-      [THREAD_TYPE.goods]: permissions?.insertGoods.enable,
-      [THREAD_TYPE.reward]: permissions?.insertReward?.enable,
-    });
-  }, [permissions]);
 
   function handleAttachClick(item) {
     setCurrentAction(item.type);
@@ -88,7 +75,7 @@ function AttachmentToolbar(props) {
   };
 
   const uploadFiles = async (files, item = {}) => {
-    const { onUploadComplete } = this.props;
+    const { onUploadComplete } = props;
     if (item.type === THREAD_TYPE.video) {
       file = files[0];
       // 云点播上传视频：https://cloud.tencent.com/document/product/266/9239
@@ -151,16 +138,21 @@ function AttachmentToolbar(props) {
   };
 
   const icons = () => attachIcon.map((item) => {
-    if (!permissionMap[item.type]) return null;
+    const { permission } = props;
+
     if (!item.isUpload) {
-      return <Icon key={item.name}
-        onClick={() => handleAttachClick(item)}
-        className={styles['dvditor-attachment-toolbar__item']}
-        name={item.name}
-        color={item.type === currentAction && item.active}
-        size="20" />;
+      return permission[item.type] ? (
+        <Icon
+          key={item.name}
+          onClick={() => handleAttachClick(item)}
+          className={styles['dvditor-attachment-toolbar__item']}
+          name={item.name}
+          color={item.type === currentAction && item.active}
+          size="20"
+        />
+      ) : null;
     }
-    return (
+    return permission[item.type] ? (
       <div key={item.name} onClick={trggerInput} style={{ display: 'inline-block' }}>
         <Icon
           onClick={() => handleAttachClick(item)}
@@ -179,7 +171,7 @@ function AttachmentToolbar(props) {
           accept={item.accept}
         />
       </div>
-    );
+    ) : null;
   });
 
   if (props.pc) return icons();

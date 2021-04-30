@@ -15,6 +15,7 @@ import List from '@components/list';
 import Copyright from '@components/copyright';
 import { readThreadList } from '@server';
 import PayBox from '@components/payBox';
+import { BackToTop, Button } from '@discuzq/design'
 
 @inject('site')
 @inject('user')
@@ -27,12 +28,16 @@ class IndexPCPage extends React.Component {
       visible: false,
       currentIndex: '',
       conNum: 0,
+      visibility: 'hidden',
     };
   }
 
   // 轮询定时器
   timer = null
+  // 筛选过滤数据
   filter = {}
+  // List组件ref
+  listRef = React.createRef()
 
   componentDidMount() {
     // PayBox.createPayBox({
@@ -103,6 +108,13 @@ class IndexPCPage extends React.Component {
      });
    }
 
+  // 回到顶部
+  onScroll = ({ scrollTop }) => {
+    this.setState({
+      visibility: scrollTop > 10 ? 'visible' : 'hidden',
+    })
+  }
+
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
   handleCategories = () => {
     const { categories = [] } = this.props.index || {};
@@ -119,6 +131,15 @@ class IndexPCPage extends React.Component {
     return tmpCategories;
   }
 
+  onBackTop = () => {
+    this.listRef?.current?.onBackTop()
+  }
+
+  // 发帖
+  onPostThread = () => {
+    this.props.router.push('/thread/post');
+  }
+
   // 左侧 -- 分类
   renderLeft = (countThreads = 0) => {
     const { categories = [] } = this.props.index;
@@ -133,15 +154,15 @@ class IndexPCPage extends React.Component {
     );
   }
   // 右侧 -- 二维码 推荐内容
-  renderRight = () => (
-      <div className={styles.indexRight}>
-        <QcCode />
-        <div style={{ margin: '20px 0' }}>
-          <Recommend />
-        </div>
-        <Copyright/>
-        <PayBox />
+  renderRight = (data) => (
+    <div className={styles.indexRight}>
+      <QcCode />
+      <div className={styles.indexRightCon}>
+        <Recommend />
       </div>
+      <Copyright/>
+      <PayBox />
+    </div>
   )
   // 中间 -- 筛选 置顶信息 是否新内容发布 主题内容
   renderContent = (data) => {
@@ -154,15 +175,21 @@ class IndexPCPage extends React.Component {
           <div className={styles.topBox}>
             <TopMenu onSubmit={this.onFilterClick} />
             <div className={styles.PostTheme}>
-              <PostTheme/>
+              <Button type="primary" className={styles.publishBtn} onClick={this.onPostThread}>
+                发 布
+              </Button>
             </div>
           </div>
-          <div className={styles.TopNewsBox}>
+          <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
             <TopNews data={sticks} itemMargin='0' isShowBorder={false}/>
           </div>
-          <div className={styles.topNewContent}>
-            <NewContent visible={visible} conNum={conNum} goRefresh={this.goRefresh} />
-          </div>
+          {
+            visible && (
+              <div className={styles.topNewContent}>
+                <NewContent visible={visible} conNum={conNum} goRefresh={this.goRefresh} />
+              </div>
+            )
+          }
         </div>
         <div className={styles.themeBox}>
           <div className={styles.themeItem}>
@@ -176,16 +203,24 @@ class IndexPCPage extends React.Component {
     const { index, site } = this.props;
     const { countThreads = 0 } = site?.webConfig?.other || {};
     const { currentPage, totalPage } = this.props.index.threads || {};
+    const { visibility } = this.state
 
     return (
-      <List className={styles.indexWrap} onRefresh={this.onPullingUp} noMore={currentPage === totalPage}>
-          <BaseLayout
-            onSearch={this.onSearch}
-            left={ this.renderLeft(countThreads) }
-            right={ this.renderRight() }
-          >
-            {this.renderContent(index)}
-          </BaseLayout>
+      <List 
+        ref={this.listRef}
+        className={styles.indexWrap} 
+        onRefresh={this.onPullingUp} 
+        noMore={currentPage === totalPage} 
+        onScroll={this.onScroll}
+      >
+        <BaseLayout
+          onSearch={this.onSearch}
+          left={ this.renderLeft(countThreads) }
+          right={ this.renderRight() }
+        >
+          {this.renderContent(index)}
+        </BaseLayout>
+        <Button className={styles.backTop} style={{ visibility }} onClick={this.onBackTop}>返回顶部</Button>
       </List>
     );
   }

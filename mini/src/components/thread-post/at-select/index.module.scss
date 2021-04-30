@@ -11,8 +11,11 @@
 }
 
 .wrapper {
-  position: relative;
+  @include flex();
+  flex-direction: column;
+  align-items: stretch;
   height: 100vh;
+  background: var(--color-white);
 
   :global {
     .dzq-input {
@@ -39,10 +42,12 @@
     }
   }
 
-  .at-wrap {
+  .check-box {
     flex: 1;
-    height: calc(100vh - 135px);
     overflow: hidden;
+    .at-wrap {
+      height: 100%;
+    }
   }
 
   .at-item {
@@ -108,7 +113,7 @@
         }
         &.is-checked {
           .dzq-checkbox {
-            background-color: #1878f3;
+            background-color: var(--color-primary);
           }
           .dzq-icon {
             font-size: 12px !important;
@@ -122,22 +127,21 @@
   .btn {
     @include flex();
     flex-wrap: nowrap;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: var(--padding-5n);
-    background: #fff;
+    margin: 0 var(--margin-10);
+    padding: var(--padding-2n) 0;
+    border-top: var(--border-border);
 
     :global {
       .dzq-button {
         width: 48%;
-        height: 35px;
-        font-size: var(--font-size-primary);
+        padding: var(--padding-10) 0;
+        font-size: var(--font-size-middle);
         color: #777;
+        line-height: var(--font-line-height-primary);
         background: #f9fafc;
+        border: none;
         border: 1px solid rgba(0, 0, 0, 0.2);
-        border-radius: 2px;
+        border-radius: var(--border-radius-small);
         transition: all 0.3s;
         -webkit-tap-highlight-color: transparent;
       }
@@ -148,7 +152,7 @@
       }
       .is-selected {
         color: var(--color-white);
-        background-color: #1878f3;
+        background-color: var(--color-primary);
       }
     }
   }

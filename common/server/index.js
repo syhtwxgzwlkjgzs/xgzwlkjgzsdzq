@@ -41,7 +41,7 @@ export { default as h5WechatCodeLogin } from './login/h5WechatCodeLogin';
 export { default as h5QrcodeLogin } from './login/h5QrcodeLogin';
 export { default as h5WechatCodeBind } from './h5WechatCodeBind';
 export { default as genMiniScheme } from './genMiniScheme';
-export { default as miniMobilebrowserBind } from './miniMobilebrowserBind';
+export { default as miniBind } from './miniBind';
 export { default as miniLogin } from './miniLogin';
 export { default as usernameAutoBind } from './wx-username-auto-bind';
 export { default as createThread } from './thread-post/create-thread';

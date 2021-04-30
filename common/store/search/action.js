@@ -226,7 +226,6 @@ class SearchAction extends SearchStore {
    */
    @action
    updateActiveUserInfo(userId, obj = {}) {
-     debugger
     const users = this.findAssignUser(userId)
 
     users?.forEach(item => {
@@ -256,7 +255,6 @@ class SearchAction extends SearchStore {
 
    // 获取指定的用户数据
   findAssignUser(userId) {
-    debugger
     const users = []
     if (this.indexUsers) {
       const { pageData = [] } = this.indexUsers;
@@ -268,7 +266,7 @@ class SearchAction extends SearchStore {
         }
       })
     }
-debugger
+
     if (this.users) {
       const { pageData = [] } = this.users;
       pageData.forEach((item, index) => {

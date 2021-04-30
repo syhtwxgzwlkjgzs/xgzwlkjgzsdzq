@@ -5,7 +5,6 @@ import { readCategories, readStickList, readThreadList } from '@server';
 import PayBox from '@components/payBox';
 import Page from '@components/page';
 
-
 @inject('site')
 @inject('index')
 @inject('user')
