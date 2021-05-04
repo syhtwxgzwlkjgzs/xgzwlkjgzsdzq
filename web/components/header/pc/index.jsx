@@ -12,10 +12,21 @@ import goToLoginPage from '@common/utils/go-to-login-page';
 class Header extends React.Component {
   constructor(props) {
     super(props);
+
+    const keyword = this.props.router.query.keyword || '';
+    this.state = {
+      value: keyword
+    };
   }
 
-  state = {
-    value: ''
+  // state = {
+  //   value: ''
+  // }
+
+  onChangeInput = (e) => {
+    this.setState({
+      value: e
+    });
   }
 
   handleSearch = (e) => {
@@ -23,6 +34,12 @@ class Header extends React.Component {
 
    onSearch(e.target?.value || '')
   }
+
+  handleIconClick = () => {
+    const { onSearch = () => {} } = this.props
+    onSearch(this.state.value || '')
+  }
+
 
   handleRouter = (url) => {
     this.props.router.push(url)
@@ -73,7 +90,15 @@ class Header extends React.Component {
                         <div className={styles.left}>
                             {this.renderHeaderLogo()}
                             <div className={styles.inputBox}>
-                                <Input placeholder='搜索' style={{ width: '580px' }} icon='SearchOutlined' onEnter={this.handleSearch} />
+                                <Input
+                                  placeholder='搜索'
+                                  style={{ width: '580px' }}
+                                  icon='SearchOutlined'
+                                  value={this.state.value}
+                                  onEnter={this.handleSearch}
+                                  onChange={e => this.onChangeInput(e.target.value)}
+                                  onIconClick={this.handleIconClick}
+                                />
                             </div>
                         </div>
                         <div className={styles.right}>
