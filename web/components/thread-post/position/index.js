@@ -85,12 +85,12 @@ const Position = (props) => {
       size="md"
       onClick={choosePosition}
       onClose={
-        () => setCurrentPosition({ location: '添加位置' })
+        () => setCurrentPosition({ location: '' })
       }
       className={styles.tag}
     >
       <Icon name="PositionOutlined" color="#2469F6" size={12} />
-      {currentPosition.location || '添加位置'}
+      {currentPosition.location || '你在哪里？'}
     </Tag>
   );
 };
@@ -105,7 +105,7 @@ Position.defaultProps = {
   position: {
     longitude: '',
     latitude: '',
-    location: '添加位置',
+    location: '',
     address: '',
   },
   // TODO: 待改成从 forum 中取
