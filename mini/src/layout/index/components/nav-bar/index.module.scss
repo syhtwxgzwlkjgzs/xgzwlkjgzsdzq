@@ -1,0 +1,21 @@
+@import '@common/styles/variable/index.scss';
+
+.container {
+  background-color: var(--color-white);
+  font-size: var(--font-size-middle);
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 100;
+  .statusBar {
+    width: 100%;
+  }
+  .navBar {
+    height: 44px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
