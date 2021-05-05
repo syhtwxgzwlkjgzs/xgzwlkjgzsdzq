@@ -35,14 +35,18 @@ class SearchResultPostH5Page extends React.Component {
     const { pageData = [] } = this.props.search.threads || { pageData: [] };
     return (
       <div className={styles.searchContent}>
-        <div className={styles.section}>
-          <SectionTitle title="热门内容" isShowMore={false}/>
-          {
+        <div className={styles.postTitle}>
+          <SectionTitle
+            title="热门内容"
+            isShowMore={false}
+            icon={{ type: 3, name: 'HotOutlined' }}
+          />
+        </div>
+        {
           pageData?.length
             ? pageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)
             : <NoData />
         }
-        </div>
       </div>
     )
   }

@@ -20,11 +20,7 @@ class AuthorInfo extends React.Component {
 
     // 点击关注
     onFollowClick() {
-        if (this.props.thread.threadData.userId) {
-            this.props.thread?.authorInfo?.follow === 2 || this.props.thread?.authorInfo?.follow === 1
-                ? this.props.thread.cancelFollow({ id: this.props.thread.threadData.userId, type: 1 })
-                : this.props.thread.postFollow(this.props.thread.threadData.userId);
-        }
+        typeof this.props.onFollowClick === 'function' && this.props.onFollowClick();
     }
 
     // 点击私信

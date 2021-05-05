@@ -24,7 +24,7 @@ class Index extends Component {
       <Page>
         <View className={styles.page}>
           <View className={styles.main}>站点已关闭</View>
-          {closeSiteConfig && <p className={styles.sub}>{closeSiteConfig.detail}</p>}
+          {closeSiteConfig && <View className={styles.sub}>{closeSiteConfig.detail}</View>}
         </View>
       </Page>
     );

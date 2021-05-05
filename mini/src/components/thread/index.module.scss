@@ -27,12 +27,14 @@
       left: 0;
       top: 0;
       bottom: 0;
-      background-color: #111;
-      background-color: rgba($color: #000, $alpha: 0.5);
+      // background-color: rgba($color: #000, $alpha: 0.5);
       z-index: 10;
       display: flex;
       align-items: center;
     }
+  }
+  .payContent {
+    min-height: rem(40);
   }
   .bottom {
     height: 52px;
