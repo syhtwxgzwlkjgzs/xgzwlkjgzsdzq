@@ -3,8 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './index.module.scss';
 import HomeHeader from '@components/home-header';
-import { get } from '@common/utils/get';
-import setAccessToken from '../../../../../common/utils/set-access-token';
 import { Button, Toast } from '@discuzq/design';
 import { h5WechatCodeBind } from '@server';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
@@ -23,17 +21,21 @@ class WeixinBindH5Page extends React.Component {
         <div className={layout.content}>
           <div className={layout.title}>绑定微信号</div>
           <div className={layout.tips}>
-            {nickname ? `${nickname}，` : ''}请绑定您的微信
+            {nickname ? `${nickname}，` : ''}{this.props.h5QrCode.bindTitle}
           </div>
-          <Button
-            className={layout.button}
-            type="primary"
-            onClick={() => this.bind({
-              params: { sessionToken, code, sessionId, type: loginType, state },
-            })}
-          >
-            绑定微信，并继续访问
-          </Button>
+          {
+            this.props.h5QrCode.isBtn
+            ? <Button
+                className={layout.button}
+                type="primary"
+                onClick={() => this.bind({
+                  params: { sessionToken, code, sessionId, type: loginType, state },
+                })}
+              >
+                绑定微信，并继续访问
+              </Button>
+            : <></>
+          }
         </div>
       </div>
     );
@@ -49,19 +51,8 @@ class WeixinBindH5Page extends React.Component {
       });
       checkUserStatus(res);
       if (res.code === 0) {
-        Toast.success({
-          content: '绑定成功',
-        });
-
-        const accessToken = get(res, 'data.accessToken', '');
-        const uid = get(res, 'data.uid', '');
-        // 种下 access_token
-        setAccessToken({
-          accessToken,
-        });
-        this.props.user.updateUserInfo(uid);
-
-        window.location.href = '/index';
+        this.props.h5QrCode.bindTitle = '已成功绑定';
+        this.props.h5QrCode.isBtn = false;
         return;
       }
       throw {

@@ -3,18 +3,21 @@ import Taro, { getCurrentInstance, redirectTo, navigateTo  } from '@tarojs/taro'
 import { View } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import { Button, Toast } from '@discuzq/design';
+import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
 import layout from './index.module.scss';
 
+const MemoToastProvider = React.memo(ToastProvider);
 
 @inject('site')
 @inject('miniBind')
+@inject('h5QrCode')
 @inject('commonLogin')
 @observer
 class WXBind extends Component {
   getUserProfileCallback = async (params) => {
-    const { sessionToken = 'ebzB77iJ2PSQPYy8JTSqq9Fus4Yyob55' } = getCurrentInstance().router.params;
+    const { sessionToken } = getCurrentInstance().router.params;
 
     try {
       await this.getParamCode();
@@ -25,17 +28,11 @@ class WXBind extends Component {
         sessionToken,
         type: 'pc'
       });
-      console.log(params)
-      console.log(res)
 
       checkUserStatus(res);
       if (res.code === 0) {
-        Toast.success({
-          content: '绑定成功',
-        });
-        redirectTo({
-          url: `/pages/index/index`
-        });
+        this.props.h5QrCode.bindTitle = '已成功绑定';
+        this.props.h5QrCode.isBtn = false;
         return;
       }
       throw {
@@ -110,19 +107,27 @@ class WXBind extends Component {
 
     return (
       <Page>
-        <View className={layout.container}>
-          <View className={layout.content}>
-            <View className={layout.title}>绑定微信</View>
-            <View className={layout.tips}>{nickname}，小虫，请绑定您的微信</View>
-            <Button
-              className={layout.button}
-              type="primary"
-              onClick={this.handleBindCallback}
-            >
-              点此，绑定微信，并继续访问
-            </Button>
+        <MemoToastProvider>
+          <View className={layout.container}>
+            <View className={layout.content}>
+              <View className={layout.title}>绑定微信</View>
+              <View className={layout.tips}>
+                {nickname ? `${nickname}，` : ''}{this.props.h5QrCode.bindTitle}
+              </View>
+              {
+                this.props.h5QrCode.isBtn
+                ? <Button
+                  className={layout.button}
+                  type="primary"
+                  onClick={this.handleBindCallback}
+                >
+                  点此，绑定微信，并继续访问
+                </Button>
+                : <></>
+              }
+            </View>
           </View>
-        </View>
+        </MemoToastProvider>
       </Page>
     );
   }

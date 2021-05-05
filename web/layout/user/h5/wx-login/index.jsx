@@ -19,7 +19,7 @@ class WXLoginH5Page extends React.Component {
   async componentDidMount() {
     try {
       const { platform, webConfig } = this.props.site;
-      const redirectUri = `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`)}`;
+      const redirectUri = `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-authorization`)}`;
       let params;
 
       if (platform === 'h5') {
@@ -62,7 +62,11 @@ class WXLoginH5Page extends React.Component {
         window.location.href = '/index';
         clearInterval(this.timer);
       } catch (e) {
-        console.log(e);
+        if (this.props.h5QrCode.countDown) {
+          this.props.h5QrCode.countDown = this.props.h5QrCode.countDown - 3;
+        } else {
+          clearInterval(this.timer);
+        }
         // 跳转状态页
         if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
           this.props.commonLogin.setStatusMessage(e.Code, e.Message);

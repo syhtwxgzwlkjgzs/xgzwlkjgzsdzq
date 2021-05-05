@@ -39,6 +39,7 @@ export { default as readUserLoginDisplay } from './readUserLoginDisplay';
 export { default as smsBind } from './smsBind';
 export { default as h5WechatCodeLogin } from './login/h5WechatCodeLogin';
 export { default as h5QrcodeLogin } from './login/h5QrcodeLogin';
+export { default as h5QrcodeBind } from './login/h5QrcodeBind';
 export { default as h5WechatCodeBind } from './h5WechatCodeBind';
 export { default as genMiniScheme } from './genMiniScheme';
 export { default as miniBind } from './miniBind';
