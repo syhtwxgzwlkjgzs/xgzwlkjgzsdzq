@@ -148,11 +148,6 @@ class PostPage extends React.Component {
     this.setState({ emojiShow: false, emoji, currentDefaultOperation: '' });
   };
 
-  // 分类
-  handleCategoryClick = () => {
-    this.setState({ categoryChooseShow: true });
-  };
-
   // 附件相关icon
   handleAttachClick = (item) => {
     this.setState({ currentAttachOperation: item.type });

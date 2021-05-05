@@ -92,6 +92,11 @@ class ThreadCreate extends React.Component {
     }, 100);
   }
 
+  // 分类
+  handleCategoryClick = () => {
+    this.props.handleSetState({ categoryChooseShow: true });
+  };
+
   render() {
     const { threadPost, index, user } = this.props;
     const { threadExtendPermissions, permissions } = user;
@@ -270,7 +275,10 @@ class ThreadCreate extends React.Component {
             onAttachClick={this.props.handleAttachClick}
             // onUploadChange={this.handleUploadChange}
             onUploadComplete={this.props.handleVideoUploadComplete}
-            category={<ToolsCategory categoryChoose={threadPost.categorySelected} onClick={this.handleCategoryClick} />}
+            category={
+              <ToolsCategory
+                categoryChoose={threadPost.categorySelected}
+                onClick={this.handleCategoryClick} />}
             permission={threadExtendPermissions}
           />
           {/* 默认的操作栏 */}
