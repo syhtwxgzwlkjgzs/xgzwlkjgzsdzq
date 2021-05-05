@@ -69,6 +69,7 @@ class PostPage extends React.Component {
 
   componentWillUnmount() {
     this.captcha = '';
+    this.props.threadPost.resetPostData();
   }
 
   saveDataLocal = () => {
