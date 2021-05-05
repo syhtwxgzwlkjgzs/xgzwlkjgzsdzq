@@ -67,12 +67,12 @@ class ThreadCreate extends React.Component {
     const height = getVisualViewpost();
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
     const postBottombar = document.querySelector('#post-bottombar');
-    const position = document.querySelector('#post-position');
-    if (!position) return;
-    position.style.display = 'none';
     postBottombar.style.top = `${height - 90 + y}px`;
     vditorToolbar.style.position = 'fixed';
     vditorToolbar.style.top = `${height - 130 + y}px`;
+    const position = document.querySelector('#post-position');
+    if (!position) return;
+    position.style.display = 'none';
   }
   setBottomFixed = () => {
     const timer = setTimeout(() => {
@@ -89,7 +89,7 @@ class ThreadCreate extends React.Component {
       if (!position) return;
       position.style.display = 'flex';
       postBottombar.style.top = `${height - 134}px`;
-    }, 100);
+    }, 200);
   }
 
   // 分类

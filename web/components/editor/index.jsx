@@ -100,19 +100,17 @@ export default function DVditor(props) {
         height: pc ? 200 : 178,
         // 编辑器初始化值
         value,
-        // 编辑器异步渲染完成后的回调方法
-        after: () => {},
         focus: () => {
           setIsFocus(true);
           onFocus();
         },
-        input: () => {
-          onChange(editor);
-        },
+        // input: () => {
+        //   onChange(editor);
+        // },
         blur: () => {
           const range = getEditorRange();
           setRange(range);
-          // onChange(editor);
+          onChange(editor);
           onBlur();
           setIsFocus(false);
         },
