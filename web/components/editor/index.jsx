@@ -25,8 +25,7 @@ export default function DVditor(props) {
     // const { vditor } = this.vditor;
     // const mode = vditor[vditor.currentMode];
     const selection = window.getSelection();
-    console.log(selection.rangeCount);
-    if (selection.rangeCount > 0) return selection.getRangeAt(0);
+    if (selection.rangeCount > 0 && selection.getRangeAt) return selection.getRangeAt(0);
     // if (mode.range) return mode.range;
     // const { element } = mode;
     // element.focus();
@@ -53,7 +52,8 @@ export default function DVditor(props) {
   useEffect(() => {
     if (emoji && emoji.code) {
       setCurrentPositon();
-      const value = `![${emoji.code}emoji](${emoji.url})`;
+      // 因为vditor的lute中有一些emoji表情和 emoji.code 重叠了。这里直接先这样处理
+      const value = `![:emoji](${emoji.url})`;
       vditor.insertValue(value);
     }
   }, [emoji]);
@@ -84,9 +84,10 @@ export default function DVditor(props) {
     const timer = setTimeout(() => {
       clearTimeout(timer);
       if (vditor && vditor.getValue && vditor.getValue() === '\n' && vditor.getValue() !== value) {
+        // setCurrentPositon();
         vditor.insertValue(vditor.html2md(value));
       }
-    }, 500);
+    }, 200);
   }, [value]);
 
   function initVditor() {
@@ -99,15 +100,13 @@ export default function DVditor(props) {
         height: pc ? 200 : 178,
         // 编辑器初始化值
         value,
-        // 编辑器异步渲染完成后的回调方法
-        after: () => {},
         focus: () => {
           setIsFocus(true);
           onFocus();
         },
-        input: () => {
-          onChange(editor);
-        },
+        // input: () => {
+        //   onChange(editor);
+        // },
         blur: () => {
           const range = getEditorRange();
           setRange(range);

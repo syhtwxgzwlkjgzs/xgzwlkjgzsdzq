@@ -5,10 +5,11 @@ import styles from './index.module.scss';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-function ShowGood({ good, onDelete }) {
+function ShowGood({ good, onDelete, pc }) {
+  const clsName = pc ? classNames(styles.content, styles.pc) : styles.content;
   return (
     <>
-      <div className={classNames(styles.content, styles.pc)}>
+      <div className={clsName}>
         <div className={styles['content-left']}>
           <img className={styles.image} src={good.imagePath} alt={good.title} />
         </div>

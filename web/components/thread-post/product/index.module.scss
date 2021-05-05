@@ -1,3 +1,4 @@
+@import '@common/styles/index.scss';
 .post-good-box {
   margin: 16px;
   background: #fff;
@@ -26,13 +27,11 @@
       margin-right: 8px;
       position: relative;
       .content-title {
+        height: 44px;
         font-size: 14px;
         line-height: 24px;
         color: var(--color-text-regular);
-        display: box;
-        box-orient: vertical;
-        -webkit-line-clamp: 2;
-        overflow: hidden;
+        @include lamp-clamp(2);
       }
       .content-price {
         display: inline-block;

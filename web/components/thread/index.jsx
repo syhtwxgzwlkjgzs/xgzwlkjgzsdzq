@@ -113,9 +113,9 @@ class Index extends React.Component {
     }
 
     onClick = (e) => {
-      if (!filterClickClassName(e.target)) {
-        return;
-      }
+      // if (!filterClickClassName(e.target)) {
+      //   return;
+      // }
 
       const { threadId = '', ability } = this.props.data || {};
       const { canViewPost } = ability;
@@ -152,7 +152,7 @@ class Index extends React.Component {
 
       return (
         <div className={styles.wrapper} ref={this.ref} >
-            {text && <PostContent content={text} onPay={this.onPay} />}
+            {text && <PostContent content={text} onPay={this.onPay} onRedirectToDetail={this.onClick} />}
             <div className={`${styles.content} ${payType === 2 && styles.payContent}`}>
               {videoData && (
                 <VideoPlay
@@ -230,7 +230,7 @@ class Index extends React.Component {
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
 
       return (
-        <div className={`${styles.container} ${className}`} onClick={this.onClick}>
+        <div className={`${styles.container} ${className}`}>
           <div className={styles.header}>
               <UserInfo
                 name={user.userName}
@@ -246,7 +246,7 @@ class Index extends React.Component {
               />
           </div>
 
-          {title && <div className={styles.title}>{title}</div>}
+          {title && <div className={styles.title} onClick={this.onClick}>{title}</div>}
 
           {this.renderThreadContent(data)}
 

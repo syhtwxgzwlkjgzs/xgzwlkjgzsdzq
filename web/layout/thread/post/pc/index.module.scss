@@ -13,7 +13,7 @@
   }
 }
 .editor {
-  // position: relative;
+  position: relative;
   padding: 16px;
   min-height: 428px;
   border: 1px solid #c5c6ca;
@@ -53,6 +53,9 @@
       border: none;
       &:last-child {
         margin-right: 0;
+      }
+      .dzq-icon {
+        cursor: pointer;
       }
     }
   }

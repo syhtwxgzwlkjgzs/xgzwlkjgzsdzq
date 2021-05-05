@@ -58,7 +58,7 @@ class Header extends React.Component {
 
   renderUserInfo() {
     // todo 跳转
-    const { user } = this.props;
+    const { user, site } = this.props;
     if (user && user.userInfo && user.userInfo.id) {
       return (
         <div className={styles.userInfo}>
@@ -71,7 +71,7 @@ class Header extends React.Component {
     return (
       <div className={styles.userInfo}>
         <Button className={styles.userBtn} type='primary' onClick={this.toLogin}>登录</Button>
-        <Button className={styles.userBtn}>注册</Button>
+        {site.isRegister && <Button className={styles.userBtn}>注册</Button>}
       </div>
     );
   }

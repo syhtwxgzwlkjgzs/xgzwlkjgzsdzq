@@ -62,6 +62,7 @@ export default class Page extends React.Component {
 
   createContent() {
     const { children, site } = this.props;
+    
     if (!site.webConfig && !site.closeSiteConfig) {
       return (
         <View className={styles.loadingBox}>
