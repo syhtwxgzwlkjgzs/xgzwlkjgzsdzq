@@ -44,7 +44,10 @@ const Index = ({ type = POST_TYPE.REDPACKET, title, content, onClick = noop }) =
 
   return (
     <View className={styles.container} style={texts.conHeight} onClick={onClick}>
-      <View className={styles.money}></View>
+      <View className={styles.money}>
+        <View className={styles.moneyTop}></View>
+        <View className={styles.moneyTBottom}>开</View>
+      </View>
       {texts.themeContent}
     </View>
   );
