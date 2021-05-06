@@ -28,12 +28,16 @@
       color: var(--color-text-secondary);
       padding: 0 rem($padding-2n);
     }
+    .share {
+      cursor: pointer;
+    }
     .shareIcon {
       display: inline-block;
       padding-right: rem($padding-2n);
     }
   }
   .allTopic {
+    cursor: pointer;
     a {
       font-size: rem($font-size-primary);
       color: var(--color-text-secondary);

@@ -60,6 +60,11 @@ class Index extends React.Component {
     const { index } = this.props;
     const { categoryids, types, essence, sequence, attention, sort } = data;
 
+    let newTypes = []
+    if (types && !(types instanceof Array)) {
+      newTypes = [types]
+    }
+
     if (type === 'click-filter') {
       this.toastInstance = Toast.loading({
         content: '加载中...',
@@ -67,7 +72,7 @@ class Index extends React.Component {
       });
 
       this.page = 1;
-      await index.screenData({ filter: { categoryids, types, essence, attention, sort }, sequence });
+      await index.screenData({ filter: { categoryids, types: newTypes, essence, attention, sort }, sequence });
 
       this.toastInstance?.destroy();
     } else if (type === 'moreData') {
@@ -75,7 +80,7 @@ class Index extends React.Component {
       await index.getReadThreadList({
         perPage: this.prePage,
         page: this.page,
-        filter: { categoryids, types, essence, attention, sort },
+        filter: { categoryids, types: newTypes, essence, attention, sort },
         sequence,
       });
 

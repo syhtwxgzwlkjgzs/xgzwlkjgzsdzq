@@ -18,10 +18,12 @@ import { filterClickClassName, handleAttachmentData } from './utils';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
+import threadPay from '@common/pay-bussiness/thread-pay';
 
 @inject('site')
 @inject('index')
 @inject('user')
+@inject('search')
 @observer
 class Index extends React.Component {
     // 分享
@@ -40,6 +42,7 @@ class Index extends React.Component {
       this.props.index.updateThreadShare({ threadId }).then(result => {
         if (result.code === 0) {
           this.props.index.updateAssignThreadInfo(threadId, { isShare: true });
+          this.props.search.updateAssignThreadInfo(threadId, { isShare: true });
         }
       });
     }
@@ -78,17 +81,18 @@ class Index extends React.Component {
         if (result.code === 0 && result.data) {
           const { isLiked } = result.data;
           this.props.index.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
+          this.props.search.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
         }
       });
     }
     // 支付
-    onPay = (e) => {
+    onPay = async (e) => {
       e.stopPropagation();
 
       // 对没有登录的先做
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        // goToLoginPage();
+        goToLoginPage({ url: '/user/login' });
         return;
       }
 
@@ -96,7 +100,18 @@ class Index extends React.Component {
         return;
       }
 
-      console.log('发起支付流程');
+      const thread = this.props.data;
+      const { success } = await threadPay(thread, this.props.user?.userInfo);
+
+      // 支付成功重新请求帖子数据
+      if (success && thread?.threadId) {
+        
+        const { code, data } = await this.props.thread.fetchThreadDetail(thread?.threadId);
+        if (code === 0 && data) {
+          this.props.index.updatePayThreadInfo(thread?.threadId, data)
+          this.props.search.updatePayThreadInfo(thread?.threadId, data)
+        }
+      }
     }
 
     onClick = () => {

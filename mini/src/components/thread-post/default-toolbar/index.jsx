@@ -36,7 +36,7 @@ const Index = inject('user')(observer(({
         />
       ) : null;
     });
-  }, [tep])
+  }, [tep, currentTool])
 
   return (
     <View className={styles['container']}>

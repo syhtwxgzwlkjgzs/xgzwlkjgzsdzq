@@ -10,7 +10,7 @@ import Emoji from '@components/editor/emoji';
 import ImageUpload from '@components/thread-post/image-upload';
 import { defaultOperation } from '@common/constants/const';
 import FileUpload from '@components/thread-post/file-upload';
-import { THREAD_TYPE } from '@common/constants/thread-post';
+import { THREAD_TYPE, MAX_COUNT } from '@common/constants/thread-post';
 import { Video, Audio, AudioRecord } from '@discuzq/design';
 import ClassifyPopup from '@components/thread-post/classify-popup';
 import ProductSelect from '@components/thread-post/product-select';
@@ -30,7 +30,9 @@ import throttle from '@common/utils/thottle';
 import Header from '@components/header';
 import Router from '@discuzq/sdk/dist/router';
 
-const maxCount = 5000;
+function isIOS() {
+  return /ip[honead]{2,4}(?:.*os\s([\w]+)\slike\smac|;\sopera)/i.test(window.navigator.userAgent.toLowerCase());
+}
 
 @inject('threadPost')
 @inject('site')
@@ -45,7 +47,6 @@ class ThreadCreate extends React.Component {
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handler);
-    this.captcha = '';
   }
 
   handleDraft = async (val) => {
@@ -59,6 +60,7 @@ class ThreadCreate extends React.Component {
   }
 
   handler = () => {
+    if (!isIOS()) return;
     throttle(this.setBottomBarStyle(window.scrollY), 50);
   }
 
@@ -67,6 +69,12 @@ class ThreadCreate extends React.Component {
     const height = getVisualViewpost();
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
     const postBottombar = document.querySelector('#post-bottombar');
+    if (!isIOS()) {
+      vditorToolbar.style.position = 'fixed';
+      vditorToolbar.style.bottom = '90px';
+      vditorToolbar.style.top = 'auto';
+      return;
+    }
     postBottombar.style.top = `${height - 90 + y}px`;
     vditorToolbar.style.position = 'fixed';
     vditorToolbar.style.top = `${height - 130 + y}px`;
@@ -81,6 +89,7 @@ class ThreadCreate extends React.Component {
     }, 150);
   }
   clearBottomFixed = () => {
+    if (!isIOS()) return;
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
       const height = getVisualViewpost();
@@ -263,7 +272,7 @@ class ThreadCreate extends React.Component {
         <div id="post-bottombar" className={styles['post-bottombar']}>
           {/* 插入位置 */}
           <div id="post-position" className={styles['position-box']}>
-            <div className={styles['post-counter']}>还能输入{maxCount - this.props.count}个字</div>
+            <div className={styles['post-counter']}>还能输入{MAX_COUNT - this.props.count}个字</div>
             {(permissions?.insertPosition?.enable) && (<Position
               position={postData.position}
               onClick={() => this.props.saveDataLocal()}
