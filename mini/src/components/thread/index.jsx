@@ -125,7 +125,7 @@ class Index extends React.Component {
     }
 
     // 帖子属性内容
-    renderThreadContent = ({ content: data, attachmentPrice, payType } = {}) => {
+    renderThreadContent = ({ content: data, attachmentPrice, payType, paid } = {}) => {
       const {
         text,
         imageData,
@@ -139,8 +139,8 @@ class Index extends React.Component {
 
       return (
         <View className={styles.wrapper} ref={this.ref}>
-            {text && <PostContent content={text} onPay={this.onPay} />}
-            <View className={styles.content}>
+            {text && <PostContent content={text} onPay={this.onPay} onRedirectToDetail={this.onClick} />}
+            <View className={`${styles.content} ${payType === 2 && styles.payContent}`}>
               {videoData && (
                 <VideoPlay
                   url={videoData.mediaUrl}
@@ -171,7 +171,7 @@ class Index extends React.Component {
 
               {/* 付费蒙层 */}
               {
-                payType !== 0 && (
+                !paid && payType !== 0 && (
                   <View className={styles.cover} onClick={payType === 1 ? this.onClick : this.onPay}>
                     {
                       payType === 2 ? (
@@ -210,12 +210,13 @@ class Index extends React.Component {
         postId,
         threadId,
         displayTag,
+        paid
       } = data || {};
 
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
 
       return (
-        <View className={`${styles.container} ${className}`} onClick={this.onClick}>
+        <View className={`${styles.container} ${className}`}>
           <View className={styles.header}>
               <UserInfo
                 name={user.userName}
@@ -231,11 +232,11 @@ class Index extends React.Component {
               />
           </View>
 
-          {title && <View className={styles.title}>{title}</View>}
+          {title && <View className={styles.title} onClick={this.onClick}>{title}</View>}
 
           {this.renderThreadContent(data)}
 
-          {payType === 1 && <Button className={styles.button} type="primary" onClick={this.onPay}>
+          {!paid && payType === 1 && <Button className={styles.button} type="primary" onClick={this.onPay}>
             <Text className={styles.icon}>$</Text>
             支付{price}元查看剩余内容
           </Button>}

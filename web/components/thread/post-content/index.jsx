@@ -30,7 +30,7 @@ const Index = ({
   ...props
 }) => {
   // 内容是否超出屏幕高度
-  const [contentTooLong, setContentTooLong] = useState(true);
+  const [contentTooLong, setContentTooLong] = useState(false);
   const [showMore, setShowMore] = useState(!useShowMore);
   const contentWrapperRef = useRef(null);
 
@@ -50,11 +50,12 @@ const Index = ({
   const showHideCover = !loading ? (isPayContent && hidePercent > 0) || (useShowMore && !showMore) : false;
 
   const onShowMore = useCallback((e) => {
+    e.stopPropagation();
+
     if (contentTooLong) {
       // 内容过长直接跳转到详情页面
       onRedirectToDetail && onRedirectToDetail();
     } else {
-      e.stopPropagation();
       setShowMore(true);
     }
   }, [contentTooLong]);

@@ -1,8 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexMiniPage from '@layout/index';
-import { readCategories, readStickList, readThreadList } from '@server';
-import PayBox from '@components/payBox';
 import Page from '@components/page';
 
 @inject('site')
@@ -29,6 +27,7 @@ class Index extends React.Component {
     if (!hasThreadsData) {
       this.props.index.getReadThreadList();
     }
+
   }
 
   dispatch = async (type, data = {}) => {
@@ -52,7 +51,11 @@ class Index extends React.Component {
   }
 
   render() {
-    return <Page><IndexMiniPage dispatch={this.dispatch} /></Page>;
+    return (
+      <Page>
+          <IndexMiniPage dispatch={this.dispatch} />
+      </Page>
+    );
   }
 }
 

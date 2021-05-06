@@ -45,7 +45,7 @@ const InputPop = (props) => {
           <div className={styles.headerLeft}>举报</div>
           <div className={styles.headerIcon}>
             {/* 叉号icon不显示，暂用对号代替 */}
-            <Icon size={14} name="CheckOutlined" onClick={onCancel}></Icon>
+            <Icon size={14} name="CloseOutlined" onClick={onCancel}></Icon>
           </div>
         </div>
         <div className={styles.body}>

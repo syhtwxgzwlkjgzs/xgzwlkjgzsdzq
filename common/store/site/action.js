@@ -60,6 +60,7 @@ class SiteAction extends SiteStore {
       };
     }
   }
+
 }
 
 export default SiteAction;

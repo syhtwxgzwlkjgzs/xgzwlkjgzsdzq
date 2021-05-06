@@ -25,7 +25,6 @@ export default function DVditor(props) {
     // const { vditor } = this.vditor;
     // const mode = vditor[vditor.currentMode];
     const selection = window.getSelection();
-    console.log(selection.rangeCount);
     if (selection.rangeCount > 0) return selection.getRangeAt(0);
     // if (mode.range) return mode.range;
     // const { element } = mode;
@@ -84,9 +83,10 @@ export default function DVditor(props) {
     const timer = setTimeout(() => {
       clearTimeout(timer);
       if (vditor && vditor.getValue && vditor.getValue() === '\n' && vditor.getValue() !== value) {
+        setCurrentPositon();
         vditor.insertValue(vditor.html2md(value));
       }
-    }, 500);
+    }, 100);
   }, [value]);
 
   function initVditor() {
@@ -111,7 +111,7 @@ export default function DVditor(props) {
         blur: () => {
           const range = getEditorRange();
           setRange(range);
-          onChange(editor);
+          // onChange(editor);
           onBlur();
           setIsFocus(false);
         },

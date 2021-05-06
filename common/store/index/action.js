@@ -150,6 +150,21 @@ class IndexAction extends IndexStore {
   }
 
   /**
+   * 支付成功后，更新帖子列表指定帖子状态
+   * @param {number} threadId 帖子id
+   * @param {object}  obj 更新数据
+   * @returns
+   */
+  @action
+  updatePayThreadInfo(threadId, obj) {
+    const targetThread = this.findAssignThread(threadId);
+    const { index } = targetThread;
+    if (this.threads?.pageData) {
+      this.threads.pageData[index] = obj;
+    }
+  }
+
+  /**
    * 更新帖子列表指定帖子状态
    * @param {number} threadId 帖子id
    * @param {object}  obj 更新数据
@@ -234,12 +249,19 @@ class IndexAction extends IndexStore {
    */
    @action
    async getRecommends({ categoryIds = [] } = {}) { 
-    const result = await readRecommends({ params: { categoryIds } })
-    if (result.code === 0 && result.data) {
-      this.setRecommends(result.data);
-      return this.recommends;
+    this.updateRecommendsStatus('loading');
+    try {
+      const result = await readRecommends({ params: { categoryIds } })
+      if (result.code === 0 && result.data) {
+        this.setRecommends(result.data);
+        this.updateRecommendsStatus('none');
+        return this.recommends;
+      }
+    } catch(err) {
+      console.err(err);
+      this.updateRecommendsStatus('none');
+      return null
     }
-    return null
    }
 
   /**
@@ -249,6 +271,10 @@ class IndexAction extends IndexStore {
   @action
   setRecommends(data) {
     this.recommends = data;
+  }
+  @action
+  updateRecommendsStatus(status) {
+    this.recommendsStatus = status;
   }
 }
 
