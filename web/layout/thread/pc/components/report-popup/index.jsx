@@ -79,10 +79,10 @@ const InputPop = (props) => {
           </div>
         </div>
         <div className={styles.button}>
-        <Button full={true} onClick={onSubmitClick} className={styles.ok} type="primary" size="large">
+        <Button onClick={onSubmitClick} className={styles.ok} type="primary" size="large">
           确定
         </Button>
-        <Button full={true} onClick={onCancel} className={styles.cancel} type="primary" size="large">
+        <Button onClick={onCancel} className={styles.cancel} type="primary" size="large">
           取消
         </Button>
         </div>

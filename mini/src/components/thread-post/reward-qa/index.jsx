@@ -22,9 +22,9 @@ class RewardQa extends Component {
   }
 
   componentDidMount() { // 回显悬赏信息
-    const { rewardQa: { price, expiredAt } } = this.props.threadPost.postData;
-    price && expiredAt && this.setState({
-      money: price,
+    const { rewardQa: { value, expiredAt } } = this.props.threadPost.postData;
+    value && expiredAt && this.setState({
+      money: value,
       selectedTime: expiredAt,
     })
   }
@@ -59,7 +59,7 @@ class RewardQa extends Component {
       const { setPostData } = this.props.threadPost;
       setPostData({
         rewardQa: {
-          price: parseFloat(money),
+          value: parseFloat(money),
           expiredAt: selectedTime,
         }
       })
