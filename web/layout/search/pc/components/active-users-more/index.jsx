@@ -45,7 +45,7 @@ const User = ({ data, onClick, onFollow }) => {
   return (
     <div className={styles.item} onClick={click}>
       <div>
-        <Avatar image={data.avatar} name={data.username} />
+        <Avatar image={data.avatar} name={data.username} isShowUserInfo userId={data.userId} />
       </div>
       <div className={styles.content}>
         <div className={styles.top}>

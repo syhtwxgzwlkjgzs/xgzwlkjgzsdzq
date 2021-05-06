@@ -1,9 +1,12 @@
+import { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Tag } from '@discuzq/design';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import React from 'react';
 import { diffDate } from '@common/utils/diff-date';
+import { ThreadCommonContext } from '../utils'
+
 
 UserInfo.propTypes = {
   name: PropTypes.string.isRequired, // 用户名称
@@ -20,9 +23,13 @@ UserInfo.propTypes = {
 };
 
 export default function UserInfo(props) {
+  const { platform, userId } = useContext(ThreadCommonContext)
+
   return (
     <div className={styles.contianer}>
       <Avatar
+        isShowUserInfo={platform === 'pc'}
+        userId={userId}
         className={styles.avatar}
         circle={true}
         image={props.avatar}

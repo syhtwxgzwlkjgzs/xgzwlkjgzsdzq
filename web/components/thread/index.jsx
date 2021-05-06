@@ -15,7 +15,7 @@ import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
-import { filterClickClassName, handleAttachmentData } from './utils';
+import { ThreadCommonContext, handleAttachmentData } from './utils';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import threadPay from '@common/pay-bussiness/thread-pay';
 
@@ -238,43 +238,45 @@ class Index extends React.Component {
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
 
       return (
-        <div className={`${styles.container} ${className}`}>
-          <div className={styles.header}>
-              <UserInfo
-                name={user.userName}
-                avatar={user.avatar}
-                location={position.address}
-                view={`${viewCount}`}
-                groupName={group?.groupName}
-                time={createdAt}
-                isEssence={isEssence}
-                isPrice={isPrice}
-                isRed={isRedPack}
-                isReward={isReward}
-              />
+        <ThreadCommonContext.Provider value={{ platform, userId: user?.userId }}>
+          <div className={`${styles.container} ${className}`}>
+            <div className={styles.header}>
+                <UserInfo
+                  name={user.userName}
+                  avatar={user.avatar}
+                  location={position.address}
+                  view={`${viewCount}`}
+                  groupName={group?.groupName}
+                  time={createdAt}
+                  isEssence={isEssence}
+                  isPrice={isPrice}
+                  isRed={isRedPack}
+                  isReward={isReward}
+                />
+            </div>
+
+            {title && <div className={styles.title} onClick={this.onClick}>{title}</div>}
+
+            {this.renderThreadContent(data)}
+
+            {!paid && payType === 1 && <Button className={styles.button} type="primary" onClick={this.onPay}>
+              <span className={styles.icon}>$</span>
+              支付{price}元查看剩余内容
+            </Button>}
+
+            <BottomEvent
+              userImgs={likeReward.users}
+              wholeNum={likeReward.likePayCount || 0}
+              comment={likeReward.postCount || 0}
+              sharing={likeReward.shareCount || 0}
+              onShare={this.onShare}
+              onComment={this.onComment}
+              onPraise={this.onPraise}
+              isLiked={isLike}
+              tipData={{ postId, threadId, platform }}
+            />
           </div>
-
-          {title && <div className={styles.title} onClick={this.onClick}>{title}</div>}
-
-          {this.renderThreadContent(data)}
-
-          {!paid && payType === 1 && <Button className={styles.button} type="primary" onClick={this.onPay}>
-            <span className={styles.icon}>$</span>
-            支付{price}元查看剩余内容
-          </Button>}
-
-          <BottomEvent
-            userImgs={likeReward.users}
-            wholeNum={likeReward.likePayCount || 0}
-            comment={likeReward.postCount || 0}
-            sharing={likeReward.shareCount || 0}
-            onShare={this.onShare}
-            onComment={this.onComment}
-            onPraise={this.onPraise}
-            isLiked={isLike}
-            tipData={{ postId, threadId, platform }}
-          />
-        </div>
+        </ThreadCommonContext.Provider>
       );
     }
 }
