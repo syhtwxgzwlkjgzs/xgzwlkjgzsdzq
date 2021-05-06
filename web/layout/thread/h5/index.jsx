@@ -130,6 +130,15 @@ const RenderThreadContent = observer((props) => {
         && <div className={topic.body}>
           {/* 文字 */}
           {text && <PostContent content={text || ''} />}
+
+          {/* 付费附件 */}
+          {
+            isAttachmentPay && !isSelf
+            && <div style={{ textAlign: 'center' }} onClick={onContentClick}>
+              <Button className={topic.payButton} type='primary' size='large'>支付{attachmentPrice}元查看附件</Button>
+            </div>
+          }
+
           {/* 视频 */}
           {parseContent.VIDEO && (
             <VideoPlay
@@ -489,7 +498,7 @@ class RenderCommentList extends React.Component {
     const isSelf = this.props.user?.userInfo?.id
       && this.props.user?.userInfo?.id === this.props.thread?.threadData?.userId;
 
-    const isReward = !this.props.thread?.threadData?.displayTag?.isReward;
+    const isReward = this.props.thread?.threadData?.displayTag?.isReward;
 
     const { indexes } = this.props.thread?.threadData?.content || {};
     const parseContent = {};
@@ -528,7 +537,11 @@ class RenderCommentList extends React.Component {
                 onCommentClick={() => this.onCommentClick(val)}
                 onAboptClick={() => this.onAboptClick(val)}
                 isShowOne={true}
-                isShowAdopt={isSelf && isReward}
+                isShowAdopt={ // 是帖子作者 && 是悬赏帖 && 评论人不是作者本人
+                  isSelf
+                  && isReward
+                  && this.props.thread?.threadData?.userId !== val.userId
+                }
               ></CommentList>
             </div>
           ))}

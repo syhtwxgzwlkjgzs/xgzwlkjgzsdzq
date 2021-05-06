@@ -521,7 +521,7 @@ class RenderCommentList extends React.Component {
     const isSelf = this.props.user?.userInfo?.id
       && this.props.user?.userInfo?.id === this.props.thread?.threadData?.userId;
 
-    const isReward = !this.props.thread?.threadData?.displayTag?.isReward;
+    const isReward = this.props.thread?.threadData?.displayTag?.isReward;
 
     const { indexes } = this.props.thread?.threadData?.content || {};
     const parseContent = {};
@@ -581,7 +581,11 @@ class RenderCommentList extends React.Component {
                 isShowOne={true}
                 isShowInput={this.state.commentId === val.id}
                 onAboptClick={() => this.onAboptClick(val)}
-                isShowAdopt={isSelf && isReward}
+                isShowAdopt={ // 是帖子作者 && 是悬赏帖 && 评论人不是作者本人
+                  isSelf
+                  && isReward
+                  && this.props.thread?.threadData?.userId !== val.userId
+                }
               ></CommentList>
             </div>
           ))}
