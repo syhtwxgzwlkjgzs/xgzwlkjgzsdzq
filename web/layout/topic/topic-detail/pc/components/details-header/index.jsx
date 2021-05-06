@@ -27,7 +27,7 @@ const TopicHeader = ({ title = '话题', viewNum = 0, contentNum = 0, onShare = 
             <span className={styles.text}>热度</span>
             <span className={styles.content}>{viewNum}</span>
           </li>
-          <li onClick={onShare}>
+          <li onClick={onShare} className={styles.share}>
             <Icon className={styles.shareIcon} color="#8590a6" name="ShareAltOutlined"/>
             <span className={styles.text}>分享</span>
           </li>
