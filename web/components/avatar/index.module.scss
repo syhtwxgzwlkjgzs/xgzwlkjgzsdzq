@@ -1,16 +1,22 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
-.noImageAvatar {
-    width: rem(38);
-    height: rem(38);
-    border-radius: 50%;
-    overflow: hidden;
-    background: var(--color-text-secondary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    p{
-        color: var(--color-primary10);
-        font-size: rem($font-size-large);
+.avatarBox{
+    position: relative;
+    .userInfoBox{
+        position: absolute;
+        width: rem(423);
+        height: rem(257);
+        border-radius: rem(5);
+        background: var(--color-white);
+        box-shadow: var(--box-shadow);
+        z-index: var(--zindex-backtotop);
+        transform: translateY(100%);
+        bottom: rem(-16);
+        box-sizing: border-box;
+        padding: rem(24);
+        .header{
+            
+        }
+        .content{}
     }
 }
