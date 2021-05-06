@@ -9,6 +9,8 @@ import {
   readUser,
   createFollow,
   deleteFollow,
+  createReports,
+  reward,
 } from '@server';
 
 class ThreadAction extends ThreadStore {
@@ -297,9 +299,6 @@ class ThreadAction extends ThreadStore {
     };
   }
 
-  // TODO:帖子打赏
-  async reward() {}
-
   // TODO:帖子支付
   async pay() {}
 
@@ -448,7 +447,7 @@ class ThreadAction extends ThreadStore {
   }
 
   /**
-   * 发现模块 - 取消关注
+   * 取消关注
    * @param {object} search * 搜索值
    * @returns {object} 处理结果
    */
@@ -459,6 +458,66 @@ class ThreadAction extends ThreadStore {
       this.authorInfo.follow = 0;
       this.authorInfo.fansCount = this.authorInfo.fansCount - 1;
 
+      return {
+        msg: '操作成功',
+        success: true,
+      };
+    }
+    return {
+      msg: res.msg,
+      success: false,
+    };
+  }
+
+  /**
+   * 举报
+   * @param {object} search * 搜索值
+   * @returns {object} 处理结果
+   */
+  @action
+  async createReports(params) {
+    const { threadId, type, reason, postId, userId } = params;
+
+    const requestParams = {
+      threadId,
+      type,
+      reason,
+      postId,
+      userId,
+    };
+
+    const res = await createReports({ data: requestParams });
+
+    if (res.code === 0 && res.data) {
+      return {
+        msg: '操作成功',
+        success: true,
+      };
+    }
+    return {
+      msg: res.msg,
+      success: false,
+    };
+  }
+
+  /**
+   * 采纳
+   * @param {object} search * 搜索值
+   * @returns {object} 处理结果
+   */
+  @action
+  async reward(params) {
+    const { threadId, postId, rewards } = params;
+
+    const requestParams = {
+      threadId,
+      postId,
+      rewards,
+    };
+
+    const res = await reward({ data: requestParams });
+
+    if (res.code === 0 && res.data) {
       return {
         msg: '操作成功',
         success: true,
