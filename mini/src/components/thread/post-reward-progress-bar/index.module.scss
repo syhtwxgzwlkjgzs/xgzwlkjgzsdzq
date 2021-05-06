@@ -23,7 +23,7 @@
     color: var(--color-text-primary);
     .count {
       font-size: inherit;
-      color: #e02433;
+      color: var(--color-error);
     }
   }
   .received {
@@ -46,7 +46,7 @@
       margin-top: 27px;
       width: 15px;
       height: 20px;
-      background-color: #e02433;
+      background-color: var(--color-error);
     }
   }
   &.bounty {

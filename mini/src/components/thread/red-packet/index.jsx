@@ -18,33 +18,42 @@ const Index = ({ type = POST_TYPE.REDPACKET, title, content, onClick = noop }) =
         themeContent: (
           <>
             <View className={styles.content}>
-            <View className={styles.text}>{content || '暂无内容'}</View>
+            <View className={styles.text}>{content || ''}</View>
             </View>
           </>
         ),
         conHeight: {
           height: '103px',
         },
+        textTop: {
+          top: '39px'
+        }
       };
     }
     return {
       themeContent: (
         <>
           <View className={styles.content}>
-              <View className={styles.title}>{title || '图文帖子'}</View>
-              <View className={styles.text}>{content || '暂无内容'}</View>
+              <View className={styles.title}>{title || ''}</View>
+              <View className={styles.text}>{content || ''}</View>
           </View>
         </>
       ),
       conHeight: {
         height: '135px',
       },
+      textTop: {
+        top: '53px'
+      }
     };
   }, [type]);
 
   return (
     <View className={styles.container} style={texts.conHeight} onClick={onClick}>
-      <View className={styles.money}></View>
+      <View className={styles.money}>
+        <View className={styles.moneyTop}></View>
+        <View className={styles.moneyTBottom} style={texts.textTop}>开</View>
+      </View>
       {texts.themeContent}
     </View>
   );
