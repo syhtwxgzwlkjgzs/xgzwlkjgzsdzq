@@ -44,8 +44,8 @@ export default class H5Qrcode {
   @action
   async login(opts) {
     try {
-      const { type } = opts.params;
-      const req = (type.indexOf('mini') > -1) ? h5QrcodeLogin : miniQrcodeLogin;
+      const { type } = opts;
+      const req = (type.indexOf('mini') > -1) ? miniQrcodeLogin : h5QrcodeLogin;
       const res = await req({
         timeout: 3000,
         ...opts,
@@ -74,9 +74,9 @@ export default class H5Qrcode {
   }
   @action
   async bind(opts) {
-    const { type } = opts.params;
-    const req = (type.indexOf('mini') > -1) ? h5QrcodeBind : miniQrcodeBind;
     try {
+      const { type } = opts;
+      const req = (type.indexOf('mini') > -1) ? miniQrcodeBind : h5QrcodeBind;
       const res = await req({
         timeout: 3000,
         ...opts,

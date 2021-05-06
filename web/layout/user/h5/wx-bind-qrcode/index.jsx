@@ -25,7 +25,7 @@ class WeixinBindQrCodePage extends React.Component {
           redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/${wechatEnv === 'miniProgram' ? 'pages/' : ''}user/wx-auth${wechatEnv === 'miniProgram' ? '/index' : ''}?loginType=${loginType}&action=wx-bind&nickname=${nickname}`)}`,
         },
       });
-      this.queryLoginState();
+      this.queryLoginState(wechatEnv === 'miniProgram' ? 'pc_bind_mini' : qrCodeType);
     } catch (e) {
       Toast.error({
         content: e.Message,
@@ -39,10 +39,11 @@ class WeixinBindQrCodePage extends React.Component {
     clearInterval(this.timer);
   }
 
-  queryLoginState() {
+  queryLoginState(type) {
     this.timer = setInterval(async () => {
       try {
         await this.props.h5QrCode.bind({
+          type,
           params: { sessionToken: this.props.h5QrCode.sessionToken },
         });
         // FIXME: 使用 window 跳转用来解决，获取 forum 在登录前后不同的问题，后续需要修改 store 完成

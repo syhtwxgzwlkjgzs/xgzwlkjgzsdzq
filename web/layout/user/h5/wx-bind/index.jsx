@@ -49,12 +49,12 @@ class WeixinBindH5Page extends React.Component {
         timeout: 3000,
         ...opts,
       });
-      checkUserStatus(res);
       if (res.code === 0) {
         this.props.h5QrCode.bindTitle = '已成功绑定';
         this.props.h5QrCode.isBtn = false;
         return;
       }
+      checkUserStatus(res);
       throw {
         Code: res.code,
         Message: res.msg,

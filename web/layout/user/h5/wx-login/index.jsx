@@ -38,7 +38,7 @@ class WXLoginH5Page extends React.Component {
       }
 
       await this.props.h5QrCode.generate({ params });
-      this.queryLoginState();
+      this.queryLoginState(params.type);
     } catch (e) {
       Toast.error({
         content: e.Message,
@@ -52,10 +52,11 @@ class WXLoginH5Page extends React.Component {
     clearInterval(this.timer);
   }
 
-  queryLoginState() {
+  queryLoginState(type) {
     this.timer = setInterval(async () => {
       try {
         await this.props.h5QrCode.login({
+          type,
           params: { sessionToken: this.props.h5QrCode.sessionToken },
         });
         // FIXME: 使用 window 跳转用来解决，获取 forum 在登录前后不同的问题，后续需要修改 store 完成
