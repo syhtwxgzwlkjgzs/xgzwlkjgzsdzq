@@ -79,7 +79,7 @@ const RenderThreadContent = inject('user')(observer((props) => {
   const isThreadPay = threadStore?.threadData?.payType === 1 && threadStore?.threadData?.paid === false;
   const threadPrice = threadStore?.threadData?.price || 0;
   // 是否作者自己
-  const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData.userId;
+  const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData?.userId;
 
 
   const parseContent = {};
@@ -169,7 +169,7 @@ const RenderThreadContent = inject('user')(observer((props) => {
 
       {
         isApproved === 1
-        && <div className={topic.body} onClick={onContentClick}>
+        && <div className={topic.body}>
           {/* 文字 */}
           {text && <PostContent useShowMore={false} content={text || ''} />}
 
@@ -513,7 +513,9 @@ class RenderCommentList extends React.Component {
 
     // 是否作者自己
     const isSelf = this.props.user?.userInfo?.id
-      && this.props.user?.userInfo?.id === this.props.thread?.threadData.userId;
+      && this.props.user?.userInfo?.id === this.props.thread?.threadData?.userId;
+
+    const isReward = this.props.thread?.threadData?.displayTag?.isReward;
 
     const { indexes } = this.props.thread?.threadData?.content || {};
     const parseContent = {};
@@ -573,7 +575,7 @@ class RenderCommentList extends React.Component {
                 isShowOne={true}
                 isShowInput={this.state.commentId === val.id}
                 onAboptClick={() => this.onAboptClick(val)}
-                isShowAdopt={isSelf}
+                isShowAdopt={isSelf && isReward}
               ></CommentList>
             </div>
           ))}
