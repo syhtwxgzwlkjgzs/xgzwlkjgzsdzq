@@ -67,7 +67,7 @@ class ThreadPCPage extends React.Component {
               />
               {/* 录音组件 */}
               {(currentAttachOperation === THREAD_TYPE.voice) && (
-                  <AudioRecord handleAudioBlob={(blob) => {
+                  <AudioRecord duration={60} onUpload={(blob) => {
                     this.props.handleAudioUpload(blob);
                   }}
                 />
