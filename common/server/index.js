@@ -17,6 +17,7 @@ export { default as readCommentDetail } from './thread/readCommentDetail';
 export { default as operateThread } from './thread/operateThread';
 export { default as shareThread } from './thread/shareThread';
 export { default as createReports } from './thread/createReports';
+export { default as reward } from './thread/reward';
 export { default as readTopicsList } from './search/readTopicsList';
 export { default as readUsersList } from './search/readUsersList';
 export { default as readCategories } from './home/readCategories';

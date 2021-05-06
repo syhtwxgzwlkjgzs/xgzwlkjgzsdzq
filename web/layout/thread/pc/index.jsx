@@ -231,7 +231,12 @@ const RenderThreadContent = inject('user')(observer((props) => {
               }
               {/* 悬赏 */}
               {
-                parseContent.REWARD && <PostRewardProgressBar type={POST_TYPE.BOUNTY} remaining={2} received={5} />
+                parseContent.REWARD && (
+                  <PostRewardProgressBar
+                    type={POST_TYPE.BOUNTY}
+                    remaining={parseContent.REWARD.remain_money}
+                    received={parseContent.REWARD.money - parseContent.REWARD.remain_money} />
+                )
               }
             </div>
           )}
@@ -476,18 +481,26 @@ class RenderCommentList extends React.Component {
 
   // 悬赏弹框确定
   async onAboptOk(data) {
-    if (data > 0 && this.commentData && this.props.thread?.threadData?.threadId) {
-      this.setState({ showAboptPopup: false });
+    if (data > 0) {
+      const params = {
+        postId: this.props.thread?.threadData?.postId,
+        rewards: data,
+        threadId: this.props.thread?.threadData?.threadId,
+      };
+      const { success, msg } = await this.props.thread.reward(params);
+      if (success) {
+        this.setState({ showAboptPopup: false });
 
-      Toast.success({
-        content: `成功悬赏${data}元`,
-      });
+        Toast.success({
+          content: `悬赏${data}元`,
+        });
+        return true;
+      }
     } else {
       Toast.success({
         content: '悬赏金额不能为0',
       });
     }
-    return true;
   }
 
   // 悬赏弹框取消
