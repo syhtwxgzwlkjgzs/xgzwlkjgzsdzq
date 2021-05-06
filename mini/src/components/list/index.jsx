@@ -62,7 +62,7 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
           });
       }
     }
-  }, 50);
+  }, 0);
  
   return (
     <ScrollView 
