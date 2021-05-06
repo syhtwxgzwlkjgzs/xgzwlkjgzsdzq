@@ -103,17 +103,17 @@ class Index extends React.Component {
       }
 
       const thread = this.props.data;
-      // const { success } = await threadPay(thread, this.props.user?.userInfo);
+      const { success } = await threadPay(thread, this.props.user?.userInfo);
 
-      // // 支付成功重新请求帖子数据
-      // if (success && thread?.threadId) {
+      // 支付成功重新请求帖子数据
+      if (success && thread?.threadId) {
         
-      //   const { code, data } = await this.props.thread.fetchThreadDetail(thread?.threadId);
-      //   if (code === 0 && data) {
-      //     this.props.index.updatePayThreadInfo(thread?.threadId, data)
-      //     this.props.search.updatePayThreadInfo(thread?.threadId, data)
-      //   }
-      // }
+        const { code, data } = await this.props.thread.fetchThreadDetail(thread?.threadId);
+        if (code === 0 && data) {
+          this.props.index.updatePayThreadInfo(thread?.threadId, data)
+          this.props.search.updatePayThreadInfo(thread?.threadId, data)
+        }
+      }
     }
 
     onClick = (e) => {
