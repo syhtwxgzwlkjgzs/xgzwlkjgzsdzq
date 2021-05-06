@@ -279,6 +279,94 @@ class SearchAction extends SearchStore {
     }
     return users
   }
+
+  /**
+   * 支付成功后，更新帖子列表指定帖子状态
+   * @param {number} threadId 帖子id
+   * @param {object}  obj 更新数据
+   * @returns
+   */
+   @action
+   updatePayThreadInfo(threadId, obj) {
+     const targetThreads = this.findAssignThread(threadId);
+     targetThreads.forEach(targetThread => {
+      const { index, store } = targetThread;
+      if (store?.pageData) {
+        store.pageData[index] = obj;
+      }
+     })
+   }
+ 
+   /**
+    * 更新帖子列表指定帖子状态
+    * @param {number} threadId 帖子id
+    * @param {object}  obj 更新数据
+    * @param {boolean} obj.isLike 是否更新点赞
+    * @param {boolean} obj.isPost 是否更新评论数
+    * @param {boolean} obj.user 当前操作的用户
+    * @returns
+    */
+   @action
+   updateAssignThreadInfo(threadId, obj = {}) {
+     const targetThreads = this.findAssignThread(threadId);
+
+     targetThreads.forEach(targetThread => {
+      if (!targetThread) return;
+        const { index, data, store } = targetThread;
+    
+        // 更新点赞
+        const { isLike, isPost, isShare, user } = obj;
+        if (!typeofFn.isUndefined(isLike) && !typeofFn.isNull(isLike)) {
+          data.isLike = isLike;
+    
+          if (isLike) {
+            data.likeReward.users = data.likeReward?.users?.length ? [user] : [...data.likeReward?.users, user]
+            data.likeReward.likePayCount = data.likeReward.likePayCount + 1
+          } else {
+            data.likeReward.users = data.likeReward.users.filter(item => item.userId === user.userId)
+            data.likeReward.likePayCount = data.likeReward.likePayCount - 1
+          }
+        }
+    
+        // 更新评论
+        if (!typeofFn.isUndefined(isPost) && !typeofFn.isNull(isPost)) {
+          data.likeReward.postCount = isPost ? data.likeReward.postCount + 1 : data.likeReward.postCount - 1;
+        }
+    
+        // 更新分享
+        if (!typeofFn.isUndefined(isShare) && !typeofFn.isNull(isShare)) {
+          data.likeReward.shareCount = isShare ? data.likeReward.shareCount + 1 : data.likeReward.shareCount - 1;
+        }
+    
+        if (store?.pageData) {
+          store.pageData[index] = data;
+        }
+     })
+   }
+
+   // 获取指定的帖子数据
+  findAssignThread(threadId) {
+    const threadArr = []
+    if (this.threads) {
+      const { pageData = [] } = this.threads;
+      for (let i = 0; i < pageData.length; i++)  {
+        if (pageData[i].threadId === threadId) {
+          threadArr.push({ index: i, data: pageData[i], store: this.threads });
+        }
+      }
+    }
+
+    if (this.indexThreads) {
+      const { pageData = [] } = this.indexThreads;
+      for (let i = 0; i < pageData.length; i++)  {
+        if (pageData[i].threadId === threadId) {
+          threadArr.push({ index: i, data: pageData[i], store: this.indexThreads });
+        }
+      }
+    }
+
+    return threadArr
+  }
 }
 
 export default SearchAction;
