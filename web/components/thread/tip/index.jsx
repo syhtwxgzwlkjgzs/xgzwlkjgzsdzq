@@ -1,7 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import PopupList from '../popup-list';
 import Avatar from '../../avatar';
-import { ThreadCommonContext } from '../utils'
 
 import styles from './index.module.scss';
 
@@ -12,8 +11,6 @@ import styles from './index.module.scss';
 
 const Index = ({ imgs = [], tipData = {}, wholeNum = 1 }) => {
   const [visible, setVisible] = useState(false);
-
-  const { platform } = useContext(ThreadCommonContext)
 
   const onClick = (e) => {
     e.stopPropagation();
@@ -35,8 +32,6 @@ const Index = ({ imgs = [], tipData = {}, wholeNum = 1 }) => {
                       imgSrc={item.avatar}
                       name={item.userName}
                       size='small'
-                      isShowUserInfo={platform === 'pc'}
-                      userId={item.userId}
                     />
                   </div>
                 ))

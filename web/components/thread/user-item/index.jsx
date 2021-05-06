@@ -15,9 +15,7 @@ import { ThreadCommonContext } from '../utils'
  * @prop {string}  onClick 点击事件
  */
 // TODO 点击穿透问题之后想办法解决
-const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noop  }) => {
-  const { platform, userId } = useContext(ThreadCommonContext)
-
+const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noop, userId, platform }) => {
   const handleClick = (e) => {
     e.stopPropagation();
     onClick();

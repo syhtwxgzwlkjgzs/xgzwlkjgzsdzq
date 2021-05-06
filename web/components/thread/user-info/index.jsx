@@ -1,11 +1,9 @@
-import { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Tag } from '@discuzq/design';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import React from 'react';
 import { diffDate } from '@common/utils/diff-date';
-import { ThreadCommonContext } from '../utils'
 
 
 UserInfo.propTypes = {
@@ -21,24 +19,20 @@ UserInfo.propTypes = {
   isReward: PropTypes.bool, // 是否悬赏
   isRed: PropTypes.bool, // 是否红包
   userId: PropTypes.number, // 用户id PC端
-  isShowPopup: PropTypes.bool, // 是否展示pop PC端
+  platform: PropTypes.string, // 是否展示pop PC端
 };
 
 export default function UserInfo(props) {
-  const { platform, userId } = useContext(ThreadCommonContext)
-
   return (
     <div className={styles.contianer}>
       <Avatar
-        isShowUserInfo={platform === 'pc'}
-        userId={userId}
+        isShowUserInfo={props.platform === 'pc'}
+        userId={props.userId}
         className={styles.avatar}
         circle={true}
         image={props.avatar}
         name={props.name || ''}
         onClick={() => props.onClick()}
-        userId={props.userId}
-        isShowPopup={props.isShowPopup}
       ></Avatar>
       <div className={styles.right}>
         <div>
