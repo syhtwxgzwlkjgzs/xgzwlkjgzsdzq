@@ -163,7 +163,7 @@ class CommentList extends React.Component {
                     <span>回复</span>
                   </div>
                   {
-                    this.props.isShowAdopt && !this.props.data.rewards
+                    this.props.isShowAdopt
                       ? <div className={styles.commentAdopt}>
                         <Icon className={styles.icon} name="ExactnessOutlined"></Icon>
                         <span onClick={() => this.props.onAboptClick()}>采纳</span>

@@ -521,7 +521,7 @@ class ThreadAction extends ThreadStore {
       // 更新store
       this.commentList.forEach((comment) => {
         if (comment.id === postId) {
-          comment.rewards = rewards;
+          comment.rewards = comment.rewards + Number(rewards);
         }
       });
 
