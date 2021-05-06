@@ -9,7 +9,7 @@ import styles from './index.module.scss';
  * @prop {string}    imgs 头像数据数组
  */
 
-const Index = ({ imgs = [], tipData = {}, wholeNum = 0 }) => {
+const Index = ({ imgs = [], tipData = {}, wholeNum = 1 }) => {
   const [visible, setVisible] = useState(false);
 
   const onClick = (e) => {
