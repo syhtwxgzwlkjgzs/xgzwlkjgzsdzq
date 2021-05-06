@@ -137,6 +137,8 @@ const RenderThreadContent = inject('user')(observer((props) => {
             view={`${threadStore?.threadData?.viewCount}` || ''}
             time={`${threadStore?.threadData?.createdAt}` || ''}
             isEssence={isEssence}
+            userId={threadStore?.threadData?.user?.userId}
+            isShowPopup={true}
           ></UserInfo>
         </div>
         <div className={topic.more}>
@@ -1098,7 +1100,9 @@ class ThreadPCPage extends React.Component {
               <UserInfo
                 name={this?.comment?.user?.username || ''}
                 avatar={this?.comment?.user?.avatar || ''}
-                time={`${this?.comment?.updatedAt}` || ''}>
+                time={`${this?.comment?.updatedAt}` || ''}
+                userId={this?.comment?.user?.userId}
+                isShowPopup={true}>
               </UserInfo>
             </div>
             <CommentInput
