@@ -147,7 +147,7 @@ class CommentList extends React.Component {
                     <Text onClick={() => this.replyClick()}>回复</Text>
                   </View>
                   {
-                    this.props.isShowAdopt && !this.props.data.rewards
+                    this.props.isShowAdopt
                       ? <View className={styles.commentAdopt}>
                         <Text onClick={() => this.props.onAboptClick()}>采纳</Text>
                       </View> : ''
