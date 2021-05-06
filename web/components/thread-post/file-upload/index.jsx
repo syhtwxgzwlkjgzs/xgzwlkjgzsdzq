@@ -9,7 +9,7 @@ export default function FileUpload(props) {
     listType="list"
     btnText="添加附件"
     data={data}
-    limit={9}
+    limit={9999}
     accept={ACCEPT_FILE_TYPES.join(',')}
     onChange={onChange}
     onComplete={onComplete}
