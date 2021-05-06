@@ -487,7 +487,7 @@ class RenderCommentList extends React.Component {
         rewards: data,
         threadId: this.props.thread?.threadData?.threadId,
       };
-      const { success } = await this.props.thread.reward(params);
+      const { success, msg } = await this.props.thread.reward(params);
       if (success) {
         this.setState({ showAboptPopup: false });
         Toast.success({
@@ -495,6 +495,10 @@ class RenderCommentList extends React.Component {
         });
         return true;
       }
+
+      Toast.error({
+        content: msg,
+      });
     } else {
       Toast.success({
         content: '悬赏金额不能为0',
@@ -515,7 +519,7 @@ class RenderCommentList extends React.Component {
     const isSelf = this.props.user?.userInfo?.id
       && this.props.user?.userInfo?.id === this.props.thread?.threadData?.userId;
 
-    const isReward = this.props.thread?.threadData?.displayTag?.isReward;
+    const isReward = !this.props.thread?.threadData?.displayTag?.isReward;
 
     const { indexes } = this.props.thread?.threadData?.content || {};
     const parseContent = {};

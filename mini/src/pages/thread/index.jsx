@@ -4,6 +4,7 @@ import Page from '@components/page';
 import { inject } from 'mobx-react';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import ThreadMiniPage from '../../layout/thread/index';
+import PayBoxProvider from '@components/payBox/payBoxProvider';
 
 const MemoToastProvider = React.memo(ToastProvider)
 
@@ -38,7 +39,9 @@ class Detail extends React.Component {
     return (
       <Page>
         <MemoToastProvider>
-          <ThreadMiniPage></ThreadMiniPage>
+          <PayBoxProvider>
+            <ThreadMiniPage></ThreadMiniPage>
+          </PayBoxProvider>
         </MemoToastProvider>
       </Page>
     )

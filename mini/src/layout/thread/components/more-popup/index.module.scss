@@ -5,7 +5,7 @@
   .more {
     background: var(--background-color);
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
     padding: 0 16px;
     .moreItem {

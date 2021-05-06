@@ -457,7 +457,7 @@ class RenderCommentList extends React.Component {
         rewards: data,
         threadId: this.props.thread?.threadData?.threadId,
       };
-      const { success } = await this.props.thread.reward(params);
+      const { success, msg } = await this.props.thread.reward(params);
       if (success) {
         this.setState({ showAboptPopup: false });
         Toast.success({
@@ -465,6 +465,10 @@ class RenderCommentList extends React.Component {
         });
         return true;
       }
+
+      Toast.error({
+        content: msg,
+      });
     } else {
       Toast.success({
         content: '悬赏金额不能为0',
@@ -746,7 +750,7 @@ class ThreadH5Page extends React.Component {
   };
 
   // 确定举报
-  onReportOk(val) {
+  async onReportOk(val) {
     if (!val) return;
     const params = {
       threadId: this.props.thread.threadData.threadId,
@@ -754,7 +758,7 @@ class ThreadH5Page extends React.Component {
       reason: val,
       userId: this.props.user.userInfo.id,
     };
-    const { success, msg } = this.props.thread.createReports(params);
+    const { success, msg } = await this.props.thread.createReports(params);
 
     if (success) {
       Toast.success({
@@ -764,8 +768,6 @@ class ThreadH5Page extends React.Component {
       this.setState({ showReportPopup: false });
       return true;
     }
-
-    console.log(msg);
 
     Toast.error({
       content: msg,
