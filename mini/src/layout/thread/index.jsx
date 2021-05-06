@@ -136,6 +136,15 @@ const RenderThreadContent = observer((props) => {
         && <View className={topic.body}>
           {/* 文字 */}
           {text && <PostContent content={text || ''} />}
+
+          {/* 付费附件 */}
+          {
+            isAttachmentPay && !isSelf
+            && <View style={{ textAlign: 'center' }} onClick={onContentClick}>
+              <Button className={topic.payButton} type='primary' size='large'>支付{attachmentPrice}元查看附件</Button>
+            </View>
+          }
+
           {/* 视频 */}
           {parseContent.VIDEO && (
             <VideoPlay
