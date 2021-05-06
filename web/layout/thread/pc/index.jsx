@@ -196,7 +196,7 @@ const RenderThreadContent = inject('user')(observer((props) => {
           {parseContent.IMAGE && <ImageContent imgData={parseContent.IMAGE} />}
           {/* 商品 */}
           {parseContent.GOODS && (
-            <div>
+            <div className={topic.goods}>
               <ProductItem
                 image={parseContent.GOODS.imagePath}
                 amount={parseContent.GOODS.price}
