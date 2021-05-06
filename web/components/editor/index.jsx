@@ -6,6 +6,8 @@ import React, { useState, useEffect } from 'react';
 import Vditor from '@discuzq/vditor';
 import classNames from 'classnames';
 import { baseOptions, baseToolbar } from './options';
+import { MAX_COUNT } from '@common/constants/thread-post';
+import LoadingBox from '@components/loading-box';
 import './index.scss';
 import '@discuzq/vditor/src/assets/scss/index.scss';
 
@@ -25,7 +27,7 @@ export default function DVditor(props) {
     // const { vditor } = this.vditor;
     // const mode = vditor[vditor.currentMode];
     const selection = window.getSelection();
-    if (selection.rangeCount > 0) return selection.getRangeAt(0);
+    if (selection.rangeCount > 0 && selection.getRangeAt) return selection.getRangeAt(0);
     // if (mode.range) return mode.range;
     // const { element } = mode;
     // element.focus();
@@ -52,7 +54,8 @@ export default function DVditor(props) {
   useEffect(() => {
     if (emoji && emoji.code) {
       setCurrentPositon();
-      const value = `![${emoji.code}emoji](${emoji.url})`;
+      // 因为vditor的lute中有一些emoji表情和 emoji.code 重叠了。这里直接先这样处理
+      const value = `![:emoji](${emoji.url})`;
       vditor.insertValue(value);
     }
   }, [emoji]);
@@ -83,10 +86,10 @@ export default function DVditor(props) {
     const timer = setTimeout(() => {
       clearTimeout(timer);
       if (vditor && vditor.getValue && vditor.getValue() === '\n' && vditor.getValue() !== value) {
-        setCurrentPositon();
+        // setCurrentPositon();
         vditor.insertValue(vditor.html2md(value));
       }
-    }, 100);
+    }, 200);
   }, [value]);
 
   function initVditor() {
@@ -99,21 +102,23 @@ export default function DVditor(props) {
         height: pc ? 200 : 178,
         // 编辑器初始化值
         value,
-        // 编辑器异步渲染完成后的回调方法
-        after: () => {},
         focus: () => {
           setIsFocus(true);
           onFocus();
         },
-        input: () => {
-          onChange(editor);
-        },
+        // input: () => {
+        //   onChange(editor);
+        // },
         blur: () => {
           const range = getEditorRange();
           setRange(range);
-          // onChange(editor);
-          onBlur();
-          setIsFocus(false);
+          onChange(editor);
+          // 兼容Android的操作栏渲染
+          const timer = setTimeout(() => {
+            clearTimeout(timer);
+            setIsFocus(false);
+            onBlur();
+          }, 100);
         },
         // 编辑器中选中文字后触发，PC才有效果
         select: () => {},
@@ -123,6 +128,7 @@ export default function DVditor(props) {
             setContentCount(count);
           },
           type: 'markdown',
+          max: MAX_COUNT,
         },
         toolbarConfig: {
           hide: !!pc,
@@ -139,6 +145,7 @@ export default function DVditor(props) {
 
   return (
     <>
+      {!vditor && <LoadingBox>编辑器加载中...</LoadingBox>}
       <div id={vditorId} className={className}></div>
       {/* {!pc && isFocus && <div className="dvditor__placeholder"></div>} */}
     </>

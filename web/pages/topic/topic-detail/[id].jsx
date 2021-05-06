@@ -11,11 +11,14 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 @inject('topic')
 @observer
 class Index extends React.Component {
+  page = 1;
+  perPage = 10;
+
   static async getInitialProps(ctx) {
     const id = ctx?.query?.id;
-
     const topicFilter = {
       topicId: id,
+      hot: 0
     };
     const result = await readTopicsList({ params: { filter: topicFilter } });
 
@@ -25,9 +28,6 @@ class Index extends React.Component {
       },
     };
   }
-
-  page = 1;
-  perPage = 10;
 
   constructor(props) {
     super(props);

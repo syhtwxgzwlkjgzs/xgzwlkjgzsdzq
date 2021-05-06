@@ -26,7 +26,11 @@ class SearchResultTopicPCPage extends React.Component {
   redirectToSearchResultUser = () => {
     this.props.router.push('/search/result-user');
   };
-  onTopicClick = data => console.log('topic click', data);
+
+  onTopicClick = data => {
+    const { topicId } = data
+    this.props.router.push(`/topic/topic-detail/${topicId}`);
+  };
 
   fetchMoreData = () => {
     const { dispatch } = this.props;

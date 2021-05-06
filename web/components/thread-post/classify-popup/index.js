@@ -14,7 +14,6 @@ const ClassifyPopup = (props) => {
   const [categoryChildren, setCategoryChildren] = useState([]);
   const [selected, setSelected] = useState({});
   const [selectedChild, setSelectedChild] = useState({});
-  const { length } = category;
   const handleClose = () => {
     setVisible(false);
   };
@@ -46,10 +45,14 @@ const ClassifyPopup = (props) => {
   }, [visible]);
 
   useEffect(() => {
+    if (categorySelected.parent && categorySelected.parent.pid && categorySelected.parent.pid !== selected.pid) {
+      setSelected(categorySelected.parent);
+      return;
+    }
     if (!category || selected.pid) return;
     const item = category[0] || [];
     setSelected(item);
-  }, [length]);
+  }, [category, categorySelected]);
 
   useEffect(() => {
     onChange(selected, selectedChild);
@@ -58,12 +61,6 @@ const ClassifyPopup = (props) => {
   useEffect(() => {
     setChildren(selected);
   }, [selected]);
-
-  useEffect(() => {
-    if (categorySelected.parent && categorySelected.parent.pid && categorySelected.parent.pid !== selected.pid) {
-      setSelected(categorySelected.parent);
-    }
-  }, [categorySelected]);
 
   const titleClass = pc ? classNames(styles['popup-title'], styles['pc-title']) : styles['popup-title'];
 
@@ -80,7 +77,7 @@ const ClassifyPopup = (props) => {
               key={item.pid}
               className={classNames({
                 active:
-                  (categorySelected.parent && categorySelected.parent.pid) === item.pid,
+                  selected.pid === item.pid,
                 'is-pc': pc,
               })}
               onClick={() => {
@@ -99,7 +96,7 @@ const ClassifyPopup = (props) => {
               ? <Button
                 key={item.pid}
                 className={classNames({
-                  active: (categorySelected.child && categorySelected.child.pid) === item.pid,
+                  active: selectedChild.pid === item.pid,
                   'is-pc': pc,
                 })}
                 onClick={() => {
