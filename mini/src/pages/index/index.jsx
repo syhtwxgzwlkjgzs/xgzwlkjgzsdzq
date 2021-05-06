@@ -2,6 +2,10 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexMiniPage from '@layout/index';
 import Page from '@components/page';
+import { Toast } from '@discuzq/design'
+import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+
+const MemoToastProvider = React.memo(ToastProvider)
 
 @inject('site')
 @inject('index')
@@ -12,22 +16,9 @@ class Index extends React.Component {
   prePage = 10;
 
   async componentDidMount() {
-    const { index } = this.props;
-    // 当服务器无法获取数据时，触发浏览器渲染
-    const hasCategoriesData = !!index.categories;
-    const hasSticksData = !!index.sticks;
-    const hasThreadsData = !!index.threads;
-
-    if (!hasCategoriesData) {
-      this.props.index.getReadCategories();
-    }
-    if (!hasSticksData) {
-      this.props.index.getRreadStickList();
-    }
-    if (!hasThreadsData) {
-      this.props.index.getReadThreadList();
-    }
-
+    this.props.index.getReadCategories();
+    this.props.index.getRreadStickList();
+    this.props.index.getReadThreadList();
   }
 
   dispatch = async (type, data = {}) => {
@@ -35,8 +26,13 @@ class Index extends React.Component {
     const { categoryids, types, essence, sequence } = data;
 
     if (type === 'click-filter') {
+      this.toastInstance = Toast.loading({
+        content: '加载中...',
+        duration: 1000,
+      });
+
       this.page = 1;
-      index.screenData({ filter: { categoryids, types, essence }, sequence });
+      await index.screenData({ filter: { categoryids, types, essence }, sequence, perPage: 5 });
     } else if (type === 'moreData') {
       this.page += 1;
       await index.getReadThreadList({
@@ -53,7 +49,9 @@ class Index extends React.Component {
   render() {
     return (
       <Page>
+        <MemoToastProvider>
           <IndexMiniPage dispatch={this.dispatch} />
+        </MemoToastProvider>
       </Page>
     );
   }

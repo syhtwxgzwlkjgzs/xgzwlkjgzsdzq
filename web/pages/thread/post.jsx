@@ -69,6 +69,7 @@ class PostPage extends React.Component {
 
   componentWillUnmount() {
     this.captcha = '';
+    this.props.threadPost.resetPostData();
   }
 
   saveDataLocal = () => {
@@ -144,11 +145,6 @@ class PostPage extends React.Component {
   // 表情
   handleEmojiClick = (emoji) => {
     this.setState({ emojiShow: false, emoji, currentDefaultOperation: '' });
-  };
-
-  // 分类
-  handleCategoryClick = () => {
-    this.setState({ categoryChooseShow: true });
   };
 
   // 附件相关icon

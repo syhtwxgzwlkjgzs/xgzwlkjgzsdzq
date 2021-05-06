@@ -180,6 +180,7 @@ class ThreadPostAction extends ThreadPostStore {
       images: {},
       files: {},
     };
+    this.setCategorySelected();
   }
 
   /**

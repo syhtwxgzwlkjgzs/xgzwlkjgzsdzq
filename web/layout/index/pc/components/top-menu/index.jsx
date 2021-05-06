@@ -65,7 +65,7 @@ const Index = ({ onSubmit = noop }) => {
   return (
     <div className={styles.container}>
       {/* 菜单 */}
-      <Menu mode="horizontal" menuTrigger="click">
+      <Menu mode="horizontal" menuTrigger="hover">
         {
           dataSource?.map((item, index) => (
             item.children ? (

@@ -99,11 +99,7 @@ class Index extends React.Component {
       console.log('发起支付流程');
     }
 
-    onClick = (e) => {
-      if (!filterClickClassName(e.target)) {
-        return;
-      }
-
+    onClick = () => {
       const { threadId = '', ability } = this.props.data || {};
       const { canViewPost } = ability;
 
