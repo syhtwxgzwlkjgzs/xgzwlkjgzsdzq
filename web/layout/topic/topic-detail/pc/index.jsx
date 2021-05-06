@@ -23,7 +23,7 @@ class IndexPCPage extends React.Component {
   }
   onSearch = (value) => {
     this.setState({ keyword: value }, () => {
-      this.searchData(value);
+      // this.searchData(value);
     });
   }
    // 右侧 - 活跃用户 版权信息

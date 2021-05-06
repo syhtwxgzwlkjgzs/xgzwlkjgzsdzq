@@ -28,4 +28,7 @@ export const baseOptions = {
   outline: {
     enable: false,
   },
+  hint: {
+    parse: false,
+  },
 };

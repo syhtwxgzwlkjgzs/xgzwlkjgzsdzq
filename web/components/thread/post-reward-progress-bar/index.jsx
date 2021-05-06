@@ -46,15 +46,18 @@ const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0 }) => {
       <Progress
         type="circle"
         percent={percent}
-        className={styles.progress}
         theme={progressTheme}
         lineWidth={12}
+        className={styles.progress}
         isShowText={false}
-      />
-      <img className={styles.icon} />
-      <div className={styles.remaining}>{texts.remaining}</div>
-      <div className={styles.received}>{texts.received}</div>
-      {texts.receive && <div className={styles.receive}>{texts.receive}</div>}
+      >
+        <div className={styles.content}>
+          <img className={styles.icon} />
+          <div className={styles.remaining}>{texts.remaining}</div>
+          <div className={styles.received}>{texts.received}</div>
+          {texts.receive && <div className={styles.receive}>{texts.receive}</div>}
+        </div>
+      </Progress>
     </div>
   );
 };

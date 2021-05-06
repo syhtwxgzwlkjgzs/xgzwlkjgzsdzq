@@ -4,7 +4,8 @@ import { View } from '@tarojs/components';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import Router from '@discuzq/sdk/dist/router';
-import { getCurrentInstance } from '@tarojs/taro'
+import { getCurrentInstance } from '@tarojs/taro';
+import PayBoxProvider from '@components/payBox/payBoxProvider';
 
 @inject('user')
 @inject('site')
@@ -62,7 +63,7 @@ export default class Page extends React.Component {
 
   createContent() {
     const { children, site } = this.props;
-    
+
     if (!site.webConfig && !site.closeSiteConfig) {
       return (
         <View className={styles.loadingBox}>
@@ -79,7 +80,9 @@ export default class Page extends React.Component {
     if(!isRender) return null;
     return (
       <View className={`${styles['dzq-page']} dzq-theme-${site.theme}`}>
+        <PayBoxProvider>
           {this.createContent()}
+        </PayBoxProvider>
       </View>
     );
   }

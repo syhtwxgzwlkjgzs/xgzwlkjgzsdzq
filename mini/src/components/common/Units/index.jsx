@@ -26,7 +26,7 @@ const Index = (props) => {
         })
       }} />
       <View className={styles['delete']} onClick={onDelete}>
-        <Icon name='PaperClipOutlined' size={16} />
+        <Icon name='DeleteOutlined' size={16} />
       </View>
     </View>
   );
@@ -44,7 +44,7 @@ const Index = (props) => {
         <Text className={styles['name']}>{filename}</Text>
         <Text className={styles['size']}>{size}</Text>
       </View>
-      <Icon name='MailOutlined' size={16} onClick={onDelete} />
+      <Icon name='DeleteOutlined' size={16} onClick={onDelete} />
     </View>
   );
 

@@ -5,6 +5,7 @@
   justify-content: space-between;
   align-items: center;
   margin-top: rem(10);
+  cursor: pointer;
   .userImg {
     display: flex;
     .numText {
@@ -37,6 +38,7 @@
   justify-content: space-between;
   border-top: var(--border-line-color) solid rem(1);
   margin-top: rem(12);
+  cursor: pointer;
   .fabulous {
     line-height: rem(20);
     .fabulousPost {
