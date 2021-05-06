@@ -17,21 +17,26 @@ import { Toast } from '@discuzq/design';
 @inject('user')
 @observer
 class SearchPCPage extends React.Component {
-
-  state = {
-    keyword: ''
+  constructor(props) {
+    super(props);
+    
+    const keyword = this.props.router.query.keyword || '';
+    this.state = {
+      value: keyword,
+      stepIndex: 0
+    };
   }
 
   redirectToSearchResultPost = () => {
-    this.props.router.push(`/search/result-post?keyword=${this.state.keyword || ''}`);
+    this.props.router.push(`/search/result-post?keyword=${this.state.value || ''}`);
   };
 
   redirectToSearchResultUser = () => {
-    this.props.router.push(`/search/result-user?keyword=${this.state.keyword || ''}`);
+    this.props.router.push(`/search/result-user?keyword=${this.state.value || ''}`);
   };
 
   redirectToSearchResultTopic = () => {
-    this.props.router.push(`/search/result-topic?keyword=${this.state.keyword || ''}`);
+    this.props.router.push(`/search/result-topic?keyword=${this.state.value || ''}`);
   };
 
   onUserClick = data => console.log('user click', data);
@@ -75,12 +80,26 @@ class SearchPCPage extends React.Component {
       })
     }
   }
-
+  itemClick = (index, idName) => {
+    const stepIndex = this.state.stepIndex;
+    if (stepIndex !== index) {
+      this.setState({stepIndex: index});
+      this.scrollToAnchor(idName);
+    }
+  }
+  scrollToAnchor = (anchorName) => {
+    if (anchorName) {
+      // 找到锚点
+      let anchorElement = document.getElementById(anchorName);
+      // 如果对应id的锚点存在，就跳转到锚点
+      if(anchorElement) { anchorElement.scrollIntoView({block: 'start', behavior: 'smooth'}); }
+    }
+  }
   // 右侧 - 步骤条
   renderRight = () => {
     return (
       <div className={styles.searchRight}>
-        <Stepper/>
+        <Stepper onItemClick={this.itemClick} selectIndex={this.state.stepIndex}/>
         <Copyright/>
       </div>
     )
@@ -95,7 +114,7 @@ class SearchPCPage extends React.Component {
     // TODO 添加活跃用户和当前用户是同一人的判断
     return (
       <div className={styles.searchContent}>
-        <div className={styles.section}>
+        <div className={styles.section} id="StrongSharpOutlined">
           <SectionTitle
             title="潮流话题"
             icon={{ type: 1, name: 'StrongSharpOutlined' }}
@@ -103,7 +122,7 @@ class SearchPCPage extends React.Component {
           />
           <TrendingTopicMore data={topicsPageData} onItemClick={this.onTopicClick}/>
         </div>
-        <div className={styles.section}>
+        <div className={styles.section} id="MemberOutlined">
           <SectionTitle
             title="活跃用户"
             icon={{ type: 2, name: 'MemberOutlined' }}
@@ -111,7 +130,7 @@ class SearchPCPage extends React.Component {
           />
           <ActiveUsersMore data={usersPageData} onItemClick={this.onUserClick} onFollow={this.onFollow} />
         </div>
-        <div>
+        <div id="HotOutlined">
           <div className={styles.postTitle}>
             <SectionTitle
               title="热门内容"

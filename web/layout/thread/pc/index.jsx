@@ -231,7 +231,12 @@ const RenderThreadContent = inject('user')(observer((props) => {
               }
               {/* 悬赏 */}
               {
-                parseContent.REWARD && <PostRewardProgressBar type={POST_TYPE.BOUNTY} remaining={2} received={5} />
+                parseContent.REWARD && (
+                  <PostRewardProgressBar
+                    type={POST_TYPE.BOUNTY}
+                    remaining={parseContent.REWARD.remain_money}
+                    received={parseContent.REWARD.money - parseContent.REWARD.remain_money} />
+                )
               }
             </div>
           )}
@@ -476,18 +481,25 @@ class RenderCommentList extends React.Component {
 
   // 悬赏弹框确定
   async onAboptOk(data) {
-    if (data > 0 && this.commentData && this.props.thread?.threadData?.threadId) {
-      this.setState({ showAboptPopup: false });
-
-      Toast.success({
-        content: `成功悬赏${data}元`,
-      });
+    if (data > 0) {
+      const params = {
+        postId: this.commentData.id,
+        rewards: data,
+        threadId: this.props.thread?.threadData?.threadId,
+      };
+      const { success } = await this.props.thread.reward(params);
+      if (success) {
+        this.setState({ showAboptPopup: false });
+        Toast.success({
+          content: `悬赏${data}元`,
+        });
+        return true;
+      }
     } else {
       Toast.success({
         content: '悬赏金额不能为0',
       });
     }
-    return true;
   }
 
   // 悬赏弹框取消
@@ -502,6 +514,17 @@ class RenderCommentList extends React.Component {
     // 是否作者自己
     const isSelf = this.props.user?.userInfo?.id
       && this.props.user?.userInfo?.id === this.props.thread?.threadData.userId;
+
+    const { indexes } = this.props.thread?.threadData?.content || {};
+    const parseContent = {};
+    if (indexes && Object.keys(indexes)) {
+      Object.entries(indexes).forEach(([, value]) => {
+        if (value) {
+          const { tomId, body } = value;
+          parseContent[typeMap[tomId]] = body;
+        }
+      });
+    }
 
     return (
       <Fragment>
@@ -564,12 +587,14 @@ class RenderCommentList extends React.Component {
         ></DeletePopup>
 
         {/* 采纳弹层 */}
-        <AboptPopup
-          rewardAmount={100} // 需要传入剩余悬赏金额
-          visible={this.state.showAboptPopup}
-          onCancel={() => this.onAboptCancel()}
-          onOkClick={data => this.onAboptOk(data)}
-        ></AboptPopup>
+        {parseContent?.REWARD?.money && (
+          <AboptPopup
+            rewardAmount={parseContent.REWARD.money} // 需要传入剩余悬赏金额
+            visible={this.state.showAboptPopup}
+            onCancel={() => this.onAboptCancel()}
+            onOkClick={data => this.onAboptOk(data)}
+          ></AboptPopup>
+        )}
       </Fragment>
     );
   }
@@ -707,9 +732,29 @@ class ThreadPCPage extends React.Component {
 
   // 确定举报
   onReportOk(val) {
-    console.log('确定举报啦', val);
-    this.setState({ showReportPopup: false });
-    return true;
+    if (!val) return;
+    const params = {
+      threadId: this.props.thread.threadData.threadId,
+      type: 1,
+      reason: val,
+      userId: this.props.user.userInfo.id,
+    };
+    const { success, msg } = this.props.thread.createReports(params);
+
+    if (success) {
+      Toast.success({
+        content: '操作成功',
+      });
+
+      this.setState({ showReportPopup: false });
+      return true;
+    }
+
+    console.log(msg);
+
+    Toast.error({
+      content: msg,
+    });
   }
 
   // 置顶提示
@@ -804,10 +849,12 @@ class ThreadPCPage extends React.Component {
     const params = {
       id,
       content: val,
+      postId: this.props.thread?.threadData?.postId,
       sort: this.commentDataSort, // 目前的排序
       isNoMore: false,
       attachments: [],
     };
+
     const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
       Toast.success({

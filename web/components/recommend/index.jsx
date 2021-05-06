@@ -44,8 +44,8 @@ class Index extends React.Component {
                 </div>
                 <div className={style.browse}>
                   <div className={style.browseBox}>
-                    <span className={style.browseIcon}><Icon name="EyeOutlined" sile={14}/></span>
-                    <span className={style.browseNumber}>11111</span>
+                    <span className={style.browseIcon}><Icon name="EyeOutlined" size={14}/></span>
+                    <span className={style.browseNumber}>{item.viewCount}</span>
                   </div>
                   <div className={style.browseButtom}>
                     <div className={style.browseCategory}>
