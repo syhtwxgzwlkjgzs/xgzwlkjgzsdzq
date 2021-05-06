@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import { genH5Qrcode, h5QrcodeLogin, genMiniQrcode, h5QrcodeBind } from '@server';
+import { genH5Qrcode, h5QrcodeLogin, miniQrcodeLogin, genMiniQrcode, h5QrcodeBind, miniQrcodeBind } from '@server';
 import setAccessToken from '../../utils/set-access-token';
 import { get } from '../../utils/get';
 import { checkUserStatus } from '@common/store/login/util';
@@ -44,7 +44,9 @@ export default class H5Qrcode {
   @action
   async login(opts) {
     try {
-      const res = await h5QrcodeLogin({
+      const { type } = opts.params;
+      const req = (type.indexOf('mini') > -1) ? h5QrcodeLogin : miniQrcodeLogin;
+      const res = await req({
         timeout: 3000,
         ...opts,
       });
@@ -72,8 +74,10 @@ export default class H5Qrcode {
   }
   @action
   async bind(opts) {
+    const { type } = opts.params;
+    const req = (type.indexOf('mini') > -1) ? h5QrcodeBind : miniQrcodeBind;
     try {
-      const res = await h5QrcodeBind({
+      const res = await req({
         timeout: 3000,
         ...opts,
       });
