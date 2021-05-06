@@ -6,6 +6,8 @@ import React, { useState, useEffect } from 'react';
 import Vditor from '@discuzq/vditor';
 import classNames from 'classnames';
 import { baseOptions, baseToolbar } from './options';
+import { MAX_COUNT } from '@common/constants/thread-post';
+import LoadingBox from '@components/loading-box';
 import './index.scss';
 import '@discuzq/vditor/src/assets/scss/index.scss';
 
@@ -111,8 +113,12 @@ export default function DVditor(props) {
           const range = getEditorRange();
           setRange(range);
           onChange(editor);
-          onBlur();
-          setIsFocus(false);
+          // 兼容Android的操作栏渲染
+          const timer = setTimeout(() => {
+            clearTimeout(timer);
+            setIsFocus(false);
+            onBlur();
+          }, 100);
         },
         // 编辑器中选中文字后触发，PC才有效果
         select: () => {},
@@ -122,6 +128,7 @@ export default function DVditor(props) {
             setContentCount(count);
           },
           type: 'markdown',
+          max: MAX_COUNT,
         },
         toolbarConfig: {
           hide: !!pc,
@@ -138,6 +145,7 @@ export default function DVditor(props) {
 
   return (
     <>
+      {!vditor && <LoadingBox>编辑器加载中...</LoadingBox>}
       <div id={vditorId} className={className}></div>
       {/* {!pc && isFocus && <div className="dvditor__placeholder"></div>} */}
     </>

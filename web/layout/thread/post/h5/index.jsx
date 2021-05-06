@@ -30,6 +30,10 @@ import throttle from '@common/utils/thottle';
 import Header from '@components/header';
 import Router from '@discuzq/sdk/dist/router';
 
+function isIOS() {
+  return /ip[honead]{2,4}(?:.*os\s([\w]+)\slike\smac|;\sopera)/i.test(window.navigator.userAgent.toLowerCase());
+}
+
 @inject('threadPost')
 @inject('site')
 @inject('index')
@@ -56,6 +60,7 @@ class ThreadCreate extends React.Component {
   }
 
   handler = () => {
+    if (!isIOS()) return;
     throttle(this.setBottomBarStyle(window.scrollY), 50);
   }
 
@@ -64,6 +69,12 @@ class ThreadCreate extends React.Component {
     const height = getVisualViewpost();
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
     const postBottombar = document.querySelector('#post-bottombar');
+    if (!isIOS()) {
+      vditorToolbar.style.position = 'fixed';
+      vditorToolbar.style.bottom = '90px';
+      vditorToolbar.style.top = 'auto';
+      return;
+    }
     postBottombar.style.top = `${height - 90 + y}px`;
     vditorToolbar.style.position = 'fixed';
     vditorToolbar.style.top = `${height - 130 + y}px`;
@@ -78,6 +89,7 @@ class ThreadCreate extends React.Component {
     }, 150);
   }
   clearBottomFixed = () => {
+    if (!isIOS()) return;
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
       const height = getVisualViewpost();
