@@ -138,7 +138,7 @@ const RenderThreadContent = inject('user')(observer((props) => {
             time={`${threadStore?.threadData?.createdAt}` || ''}
             isEssence={isEssence}
             userId={threadStore?.threadData?.user?.userId}
-            isShowPopup={true}
+            platform='pc'
           ></UserInfo>
         </div>
         <div className={topic.more}>
@@ -1014,6 +1014,8 @@ class ThreadPCPage extends React.Component {
   render() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
+    // 是否作者自己
+    const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === threadStore?.threadData?.userId;
 
     return (
       <div className={layout.container}>
@@ -1073,7 +1075,11 @@ class ThreadPCPage extends React.Component {
             <div className={layout.authorInfo}>
               {
                 threadStore?.authorInfo
-                  ? <AuthorInfo user={threadStore.authorInfo} onFollowClick={() => this.onFollowClick()}></AuthorInfo>
+                  ? <AuthorInfo
+                    user={threadStore.authorInfo}
+                    onFollowClick={() => this.onFollowClick()}
+                    isShowBtn={!isSelf}>
+                  </AuthorInfo>
                   : <LoadingTips type='init'></LoadingTips>
               }
             </div>
@@ -1106,7 +1112,7 @@ class ThreadPCPage extends React.Component {
                 avatar={this?.comment?.user?.avatar || ''}
                 time={`${this?.comment?.updatedAt}` || ''}
                 userId={this?.comment?.user?.userId}
-                isShowPopup={true}>
+                platform='pc'>
               </UserInfo>
             </div>
             <CommentInput

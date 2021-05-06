@@ -178,6 +178,7 @@ class CommentPCPage extends React.Component {
 
   render() {
     const { commentDetail: commentData, isReady } = this.props.comment;
+    const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === commentData?.userId;
 
     return (
       <div className={styles.container}>
@@ -217,7 +218,8 @@ class CommentPCPage extends React.Component {
               {this.props.comment?.authorInfo
                 ? <AuthorInfo
                   user={this.props.comment?.authorInfo}
-                  onFollowClick={() => this.onFollowClick()}>
+                  onFollowClick={() => this.onFollowClick()}
+                  isShowBtn={!isSelf}>
                 </AuthorInfo>
                 : <LoadingTips type='init'></LoadingTips>
               }

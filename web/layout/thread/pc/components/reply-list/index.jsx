@@ -56,7 +56,7 @@ export default class ReplyList extends React.Component {
             name={this.props.data.user.username || this.props.data.user.userName || ''}
             circle={true}
             userId={this.props.data.user.id}
-            isShowPopup={true}
+            isShowUserInfo={true}
             size='small'>
           </Avatar>
         </div>
@@ -75,7 +75,7 @@ export default class ReplyList extends React.Component {
                         name={this.props.data.user.username || this.props.data.user.userName || ''}
                         circle={true}
                         userId={this.props.data.user.id}
-                        isShowPopup={true}
+                        isShowUserInfo={true}
                         size='small'>
                       </Avatar>
                     </div>
