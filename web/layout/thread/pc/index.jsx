@@ -587,12 +587,14 @@ class RenderCommentList extends React.Component {
         ></DeletePopup>
 
         {/* 采纳弹层 */}
-        <AboptPopup
-          rewardAmount={parseContent.REWARD.money} // 需要传入剩余悬赏金额
-          visible={this.state.showAboptPopup}
-          onCancel={() => this.onAboptCancel()}
-          onOkClick={data => this.onAboptOk(data)}
-        ></AboptPopup>
+        {parseContent?.REWARD?.money && (
+          <AboptPopup
+            rewardAmount={parseContent.REWARD.money} // 需要传入剩余悬赏金额
+            visible={this.state.showAboptPopup}
+            onCancel={() => this.onAboptCancel()}
+            onOkClick={data => this.onAboptOk(data)}
+          ></AboptPopup>
+        )}
       </Fragment>
     );
   }
