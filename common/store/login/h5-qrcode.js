@@ -53,8 +53,10 @@ export default class H5Qrcode {
       checkUserStatus(res);
       if (res.code === 0) {
         const accessToken = get(res, 'data.accessToken', '');
-        setAccessToken(accessToken);
-        return ;
+        setAccessToken({
+          accessToken,
+        });
+        return res;
       }
 
       throw {
@@ -84,8 +86,10 @@ export default class H5Qrcode {
       checkUserStatus(res);
       if (res.code === 0) {
         const accessToken = get(res, 'data.accessToken', '');
-        setAccessToken(accessToken);
-        return ;
+        setAccessToken({
+          accessToken,
+        });
+        return res;
       }
 
       throw {

@@ -7,6 +7,7 @@ import '@discuzq/design/dist/styles/index.scss';
 import WeixinQrCode from '@components/login/wx-qr-code';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
+import { get } from '@common/utils/get';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 
 @inject('site')
@@ -57,19 +58,21 @@ class WXLoginH5Page extends React.Component {
   queryLoginState(type) {
     this.timer = setInterval(async () => {
       try {
-        await this.props.h5QrCode.login({
+        const res = await this.props.h5QrCode.login({
           type,
           params: { sessionToken: this.props.h5QrCode.sessionToken },
         });
+        const uid = get(res, 'data.uid');
+        this.props.user.updateUserInfo(uid);
         // FIXME: 使用 window 跳转用来解决，获取 forum 在登录前后不同的问题，后续需要修改 store 完成
         window.location.href = '/index';
         clearInterval(this.timer);
       } catch (e) {
-        // if (this.props.h5QrCode.countDown) {
-        //   this.props.h5QrCode.countDown = this.props.h5QrCode.countDown - 3;
-        // } else {
-        //   clearInterval(this.timer);
-        // }
+        if (this.props.h5QrCode.countDown) {
+          this.props.h5QrCode.countDown = this.props.h5QrCode.countDown - 3;
+        } else {
+          clearInterval(this.timer);
+        }
         // 跳转状态页
         if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
           this.props.commonLogin.setStatusMessage(e.Code, e.Message);

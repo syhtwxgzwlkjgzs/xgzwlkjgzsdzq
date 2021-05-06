@@ -6,6 +6,7 @@ import { Toast } from '@discuzq/design';
 import WeixinQrCode from '@components/login/wx-qr-code';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
+import { get } from '@common/utils/get';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 
 @inject('site')
@@ -42,10 +43,12 @@ class WeixinBindQrCodePage extends React.Component {
   queryLoginState(type) {
     this.timer = setInterval(async () => {
       try {
-        await this.props.h5QrCode.bind({
+        const res = await this.props.h5QrCode.bind({
           type,
           params: { sessionToken: this.props.h5QrCode.sessionToken },
         });
+        const uid = get(res, 'data.uid');
+        this.props.user.updateUserInfo(uid);
         // FIXME: 使用 window 跳转用来解决，获取 forum 在登录前后不同的问题，后续需要修改 store 完成
         window.location.href = '/index';
         clearInterval(this.timer);
