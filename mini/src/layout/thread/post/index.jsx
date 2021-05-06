@@ -302,7 +302,7 @@ class Index extends Component {
   handleSubmit = async (isDraft) => {
     // 1 校验
     const { threadPost, site } = this.props;
-    const { postData } = threadPost;
+    const { postData, redpacketTotalAmount } = threadPost;
     if (!isDraft && !postData.contentText) {
       this.postToast('请填写您要发布的内容');
       return;
@@ -332,9 +332,9 @@ class Index extends Component {
     }
 
     // 4 支付流程
-    const { rewardQa, redpacket } = postData;
+    const { rewardQa } = postData;
     const rewardAmount = (Number(rewardQa.value) || 0);
-    const redAmount = (Number(redpacket.price) || 0);
+    const redAmount = (Number(redpacketTotalAmount) || 0);
     const amount = rewardAmount + redAmount;
     const options = { amount };
     if (!isDraft && amount) {
