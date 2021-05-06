@@ -37,6 +37,7 @@ const Index = inject('user', 'threadPost')(observer((props) => {
           key={index}
           className={styles['plug-icon']}
           onClick={() => {
+            setplugShow(false);
             setCurrentplug(item);
             clickCb(item);
           }}
@@ -46,22 +47,21 @@ const Index = inject('user', 'threadPost')(observer((props) => {
         />
       ) : null;
     });
-  }, [tep])
+  }, [tep, currentplug])
 
   // 分类元素
   const category = (
-    <>
+    <View className={styles['category']} onClick={onCategoryClick}>
       <Icon
         name="SettingOutlined"
         size='20'
         className={styles['icon']}
-        onClick={onCategoryClick}
       />
       <Text>分类</Text>
       <Units type='tag' tagContent={content() || '选择分类(必选)'} onTagClick={() => {
         // 处理分类弹框等逻辑
       }} />
-    </>
+    </View>
   );
 
   return (

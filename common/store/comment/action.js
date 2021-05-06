@@ -79,7 +79,7 @@ class CommentAction extends CommentStore {
    */
   @action
   async createComment(params, ThreadStore) {
-    const { id, content, attachments, sort, isNoMore } = params;
+    const { id, content, attachments, postId, sort, isNoMore } = params;
     if (!id || !content) {
       return {
         msg: '参数不完整',
@@ -90,6 +90,7 @@ class CommentAction extends CommentStore {
     const requestParams = {
       id,
       content: xss(content),
+      replyId: postId,
       attachments,
     };
 
@@ -390,12 +391,35 @@ class CommentAction extends CommentStore {
   }
 
   /**
-   * 发现模块 - 取消关注
+   * 取消关注
    * @param {object} search * 搜索值
    * @returns {object} 处理结果
    */
   @action
   async cancelFollow({ id, type }) {
+    const res = await deleteFollow({ data: { id, type: type } });
+    if (res.code === 0 && res.data) {
+      this.authorInfo.follow = 0;
+      this.authorInfo.fansCount = this.authorInfo.fansCount - 1;
+
+      return {
+        msg: '操作成功',
+        success: true,
+      };
+    }
+    return {
+      msg: res.msg,
+      success: false,
+    };
+  }
+
+  /**
+   * 采纳
+   * @param {object} search * 搜索值
+   * @returns {object} 处理结果
+   */
+  @action
+  async reward({ id, type }) {
     const res = await deleteFollow({ data: { id, type: type } });
     if (res.code === 0 && res.data) {
       this.authorInfo.follow = 0;

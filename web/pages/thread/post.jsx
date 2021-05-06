@@ -133,8 +133,6 @@ class PostPage extends React.Component {
     const res = await createAttachment(formData);
     const { code, data } = res;
     if (code === 0) {
-      // 拼接不是很对，联调时和后台对一下，先本地模拟一下
-      // const audioSrc = `/${data.file_path}${data.attachment}`;
       const audioSrc = window.URL.createObjectURL(blob);
       this.setState({
         audioSrc,
@@ -251,11 +249,6 @@ class PostPage extends React.Component {
     if (isDraft) this.setPostData({ draft: 1 });
     else this.setPostData({ draft: 0 });
     const { threadPost } = this.props;
-    const { rewardQa, redpacket } = threadPost.postData;
-    const rewardAmount = (Number(rewardQa.value) || 0);
-    const redAmount = (Number(redpacket.price) || 0);
-    const amount = rewardAmount + redAmount;
-    const data = { amount };
 
 
     // 2 验证码
@@ -284,6 +277,13 @@ class PostPage extends React.Component {
       this.randstr = '';
     }
 
+
+    // 支付流程
+    const { rewardQa, redpacket } = threadPost.postData;
+    const rewardAmount = (Number(rewardQa.value) || 0);
+    const redAmount = (Number(redpacket.price) || 0);
+    const amount = rewardAmount + redAmount;
+    const data = { amount };
     if (!isDraft && amount) {
       let type = ORDER_TRADE_TYPE.RED_PACKET;
       let title = '支付红包';

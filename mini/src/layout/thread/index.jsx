@@ -371,25 +371,42 @@ class RenderCommentList extends React.Component {
   }
 
   // 悬赏弹框确定
-  onAboptOk(data) {
-    this.setState({ showAboptPopup: false });
+  async onAboptOk(data) {
     if (data > 0) {
-      console.log(`悬赏${data}元`);
-      Toast.success({
-        content: `悬赏${data}元`,
-      });
-    } else {
-      console.log('悬赏金额不能为0');
-      Toast.success({
-        content: '悬赏金额不能为0',
-      });
+      const params = {
+        postId: this.props.thread?.threadData?.postId,
+        rewards: data,
+        threadId: this.props.thread?.threadData?.threadId
+      }
+      const { success, msg } = await this.props.thread.reward(params)
+      if (success) {
+        this.setState({ showAboptPopup: false });
+
+        Toast.success({
+          content: `成功悬赏${data}元`,
+        });
+        return true;
+      }
     }
-    return true;
+
+    Toast.success({
+      content: '悬赏金额不能为0',
+    });
   }
 
   render() {
     const { totalCount, commentList } = this.props.thread;
-    console.log('this.props.thread', this.props.thread);
+    
+    const { indexes } = this.props.thread?.threadData?.content || {};
+    const parseContent = {};
+    if (indexes && Object.keys(indexes)) {
+      Object.entries(indexes).forEach(([, value]) => {
+        if (value) {
+          const { tomId, body } = value;
+          parseContent[typeMap[tomId]] = body;
+        }
+      });
+    }
 
     return (
       <Fragment>
@@ -656,7 +673,7 @@ class Index extends Component {
 
     // 编辑
     if (type === 'edit') {
-      if(!this.props.thread?.threadData?.threadId) return
+      if (!this.props.thread?.threadData?.threadId) return
       Router.redirect({
         url: `/pages/threadPost/index?id=${this.props.thread.threadData.threadId}`
       });

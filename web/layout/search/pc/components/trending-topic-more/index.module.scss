@@ -4,6 +4,7 @@
 .list {
   width: 100%;
   padding: rem($padding-6n) 0;
+  cursor: pointer;
   .item {
     display: flex;
     margin-bottom: rem(22);

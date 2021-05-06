@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
+import { noop } from '@components/thread/utils';
 import datas from './data';
 
 /**
@@ -9,7 +10,7 @@ import datas from './data';
  * @prop {function} onItemClick 步骤点击事件
  * @prop {function} selectIndex 选中项index
  */
- const Stepper = ({ data = datas, onItemClick, selectIndex = 0}) => (
+ const Stepper = ({ data = datas, onItemClick = noop, selectIndex = 0}) => (
   <div className={styles.container}>
     {data?.map((item, index, arr) => (
       <Steps
@@ -34,12 +35,12 @@ import datas from './data';
 * @prop {boolean} footer 是否底部组件
 */
 const Steps = ({ data, onClick, selectIndex, index, footer}) => {
-const click = useCallback(() => {
-  onClick && onClick(data);
-}, [data, onClick]);
+const handleClick = useCallback(() => {
+  onClick && onClick(index, data.iconName);
+}, [index, data, onClick]);
 
 return (
-  <div className={styles.stepsItem}>
+  <div className={styles.stepsItem} onClick={handleClick}>
     {
       footer ? null : (<div className={styles.line}></div>)
     }

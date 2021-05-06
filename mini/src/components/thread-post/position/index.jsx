@@ -50,7 +50,7 @@ const Index = (props) => {
     })}>
       <Icon name='PositionOutlined' size={10} onClick={chooseLocation} />
       <Text className={styles['text']} onClick={chooseLocation}>{positon.name || '你在哪里？'}</Text>
-      {isChose && <Icon className={styles['remove-icon']} name='PaperClipOutlined' size={10} onClick={removeLocation} />}
+      {isChose && <Icon className={styles['remove-icon']} name='DeleteOutlined' size={10} onClick={removeLocation} />}
     </View>
   );
 };
