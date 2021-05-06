@@ -11,7 +11,7 @@ import ClassifyPopup from '@components/thread-post/classify-popup';
 import { withRouter } from 'next/router';
 import Emoji from '@components/editor/emoji';
 import ImageUpload from '@components/thread-post/image-upload';
-import { defaultOperation } from '@common/constants/const';
+import { defaultOperation, paidOption } from '@common/constants/const';
 import FileUpload from '@components/thread-post/file-upload';
 import { THREAD_TYPE, MAX_COUNT } from '@common/constants/thread-post';
 import Product from '@components/thread-post/product';
@@ -116,12 +116,19 @@ class ThreadPCPage extends React.Component {
                   <Tag
                     closeable
                     onClose={() => this.props.setPostData({ price: 0, attachmentPrice: 0 })}
+                    onClick={() => {
+                      const curPaySelect = postData.price ? paidOption[0].name : paidOption[1].name;
+                      this.props.handleSetState({ curPaySelect });
+                    }}
                   >付费总额{postData.price + postData.attachmentPrice}元</Tag>
                 )}
                 {/* 悬赏问答内容标识 */}
                 {(postData.rewardQa.value && postData.rewardQa.times) && (
                   <Tag closeable
                     onClose={() => this.props.setPostData({ rewardQa: {} })}
+                    onClick={() => {
+                      this.props.handleSetState({ currentAttachOperation: THREAD_TYPE.reward });
+                    }}
                   >
                     {`悬赏金额${postData.rewardQa.value}元\\结束时间${postData.rewardQa.times}`}
                   </Tag>
@@ -130,6 +137,7 @@ class ThreadPCPage extends React.Component {
                 {postData.redpacket.price && (
                   <Tag closeable
                     onClose={() => this.props.setPostData({ redpacket: {} })}
+                    onClick={() => this.props.handleSetState({ currentDefaultOperation: defaultOperation.redpacket })}
                   >
                     {postData.redpacket.rule === 1 ? '随机红包' : '定额红包'}
                     \ 总金额{postData.redpacket.price}元\{postData.redpacket.number}个
