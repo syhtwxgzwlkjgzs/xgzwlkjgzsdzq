@@ -119,7 +119,7 @@ class IndexMiniPage extends React.Component {
             activeId={currentIndex}
             external={
               <View onClick={this.searchClick} className={styles.tabIcon}>
-                <Icon name="SecondaryMenuOutlined" />
+                <Icon className={styles.moreIcon} name="SecondaryMenuOutlined" />
               </View>
             }
           >

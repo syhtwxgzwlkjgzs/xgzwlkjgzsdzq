@@ -23,7 +23,21 @@
     z-index: 2;
   }
   .tabsBox {
-    height: 53px;
+    height: 52px;
+    :global {
+      .dzq-tabs__bar {
+        height: 52px;
+        .dzq-tabs__label {
+          font-size: 14px;
+          line-height: 20px;
+          margin-top: 16px;
+          font-weight: normal;
+        }
+      }
+    }
+    .moreIcon {
+      color: var(--color-text-secondary);
+    }
   }
   .list {
     flex: 1;
