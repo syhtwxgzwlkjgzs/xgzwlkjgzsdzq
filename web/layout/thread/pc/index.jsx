@@ -707,9 +707,29 @@ class ThreadPCPage extends React.Component {
 
   // 确定举报
   onReportOk(val) {
-    console.log('确定举报啦', val);
-    this.setState({ showReportPopup: false });
-    return true;
+    if (!val) return;
+    const params = {
+      threadId: this.props.thread.threadData.threadId,
+      type: 1,
+      reason: val,
+      userId: this.props.user.userInfo.id,
+    };
+    const { success, msg } = this.props.thread.createReports(params);
+
+    if (success) {
+      Toast.success({
+        content: '操作成功',
+      });
+
+      this.setState({ showReportPopup: false });
+      return true;
+    }
+
+    console.log(msg);
+
+    Toast.error({
+      content: msg,
+    });
   }
 
   // 置顶提示
@@ -804,10 +824,12 @@ class ThreadPCPage extends React.Component {
     const params = {
       id,
       content: val,
+      postId: this.props.thread?.threadData?.postId,
       sort: this.commentDataSort, // 目前的排序
       isNoMore: false,
       attachments: [],
     };
+
     const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
       Toast.success({
