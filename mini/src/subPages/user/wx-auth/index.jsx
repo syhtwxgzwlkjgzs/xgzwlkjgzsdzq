@@ -7,6 +7,7 @@ import { miniLogin } from '@server';
 import setAccessToken from '@common/utils/set-access-token';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
 import Page from '@components/page';
+import { getParamCode, getUserProfile } from '../common/utils'
 import layout from './index.module.scss';
 
 const NEED_BIND_OR_REGISTER_USER = -7016;
@@ -34,7 +35,7 @@ class MiniAuth extends React.Component {
   getUserProfileCallback = async (params) => {
     const { inviteCode = '' } = getCurrentInstance().router.params;
     try {
-      await this.getParamCode();
+      await getParamCode(this.props.commonLogin);
       // 小程序登录
       const resp = await miniLogin({
         timeout: 10000,
@@ -44,12 +45,6 @@ class MiniAuth extends React.Component {
           encryptedData: params.encryptedData,
           inviteCode
         },
-      });
-      console.log({
-        jsCode: this.props.commonLogin.jsCode,
-        iv: params.iv,
-        encryptedData: params.encryptedData,
-        inviteCode
       });
       checkUserStatus(resp);
       // 优先判断是否能登录
@@ -99,51 +94,6 @@ class MiniAuth extends React.Component {
     }
   }
 
-  /**
-   * 获取登录信息
-   * @returns 登录信息
-   */
-  getParamCode = () => new Promise((resolve, reject) => {
-      Taro.login({
-        success: (res) => {
-          if(res.errMsg === 'login:ok'){
-            this.props.commonLogin.setJsCode(res.code)
-            return resolve(res);
-          }
-          reject(res);
-        },
-        fail: (err) => {
-          reject(err);
-        }
-      })
-    })
-
-
-  /**
-   * 获取用户信息
-   * @returns 用户信息
-   */
-  getUserProfile = () => new Promise((resolve, reject) => {
-    this.setState({
-      isVisible: false
-    })
-    Taro.getUserProfile({
-      desc: "查询用户是否绑定过账号",
-      success: (res) => {
-        if(res.errMsg === 'getUserProfile:ok'){
-          console.log(res);
-          this.getUserProfileCallback(res);
-          return resolve(res);
-        }
-        reject(res);
-      },
-      fail: (res) => {
-        console.log('res', res);
-      }
-    })
-  })
-
-
   render() {
     return (
       <Page>
@@ -152,7 +102,7 @@ class MiniAuth extends React.Component {
           visible={this.state.isVisible}
         >
           <View  className={layout.modal} >
-            <Button className={layout.button} onClick={this.getUserProfile}>微信快捷登录</Button>
+            <Button className={layout.button} onClick={() => {getUserProfile(this.getUserProfileCallback)}}>微信快捷登录</Button>
           </View>
         </Popup>
       </Page>
