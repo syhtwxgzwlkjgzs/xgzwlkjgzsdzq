@@ -1,6 +1,7 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 .indexImage {
+  cursor: pointer;
   .imageBox {
     width: 100%;
     .images1 {

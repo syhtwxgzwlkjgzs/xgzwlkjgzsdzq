@@ -63,7 +63,7 @@ export default class Page extends React.Component {
 
   createContent() {
     const { children, site } = this.props;
-    
+
     if (!site.webConfig && !site.closeSiteConfig) {
       return (
         <View className={styles.loadingBox}>
@@ -80,7 +80,9 @@ export default class Page extends React.Component {
     if(!isRender) return null;
     return (
       <View className={`${styles['dzq-page']} dzq-theme-${site.theme}`}>
+        <PayBoxProvider>
           {this.createContent()}
+        </PayBoxProvider>
       </View>
     );
   }

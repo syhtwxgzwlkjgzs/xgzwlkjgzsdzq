@@ -3,6 +3,7 @@
 
 .list {
   width: 100%;
+  cursor: pointer;
   .item {
     display: flex;
     padding: rem($padding-4n) 0;

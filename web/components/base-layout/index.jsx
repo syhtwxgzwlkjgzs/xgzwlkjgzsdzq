@@ -79,7 +79,7 @@ const BaseLayout = (props) => {
 
         <Row justify="center" gutter={20} className={styles.content}>
             {
-              size !== 'sm' ? (
+              size !== 'sm' && size !== 'md' ? (
                 <Col>
                   {typeof(left) === 'function' ? useCallback(left({ ...props }), []) : left}
                 </Col>
