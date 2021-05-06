@@ -9,3 +9,12 @@
     padding: 0 rem($padding-4n);
   }
 }
+.active {
+  color: #0265FF;
+  span:nth-child(2) {
+    color: var(--color-text-regular);
+  }
+}
+.activeItem {
+  color: var(--color-primary) !important;
+}

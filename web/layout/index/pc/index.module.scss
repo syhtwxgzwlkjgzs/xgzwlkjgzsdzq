@@ -63,6 +63,9 @@
   .threadContent {
     margin-bottom: rem(10);
     border-radius: rem(5);
+    &:hover {
+      background: rgba(229, 242, 255, 0.3);
+    }
     // cursor: pointer;
   }
   .backTop {
