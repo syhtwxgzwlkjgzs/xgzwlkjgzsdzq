@@ -1,4 +1,4 @@
-import React,  { useEffect, useState } from 'react';
+import React,  { useCallback, useEffect, useState } from 'react';
 import { Flex } from '@discuzq/design';
 import Header from '@components/header';
 
@@ -80,8 +80,8 @@ const BaseLayout = (props) => {
         <Row justify="center" gutter={20} className={styles.content}>
             {
               size !== 'sm' ? (
-                <Col style={{width: '300px'}}>
-                  {typeof(left) === 'function' ? left({ ...props }) : left}
+                <Col>
+                  {typeof(left) === 'function' ? useCallback(left({ ...props }), []) : left}
                 </Col>
               ) : null
             }
@@ -91,8 +91,8 @@ const BaseLayout = (props) => {
             </Col>
             
             {
-              size !== 'sm' && size !== 'md' && size !== 'lg' ? (
-                <Col  style={{width: '300px'}}>
+              size !== 'sm' && size !== 'md' ? (
+                <Col>
                     {typeof(right) === 'function' ? right({ ...props }) : right}
                 </Col>
               ) : null
