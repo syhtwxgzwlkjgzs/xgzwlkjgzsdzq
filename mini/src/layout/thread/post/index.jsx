@@ -354,12 +354,12 @@ class Index extends Component {
       }
 
       // 等待支付
-      await new Promise(() => {
+      await new Promise((resolve) => {
         PayBox.createPayBox({
           data: { ...options, title, type },
           success: async (orderInfo) => {
             const { orderSn } = orderInfo;
-            this.setPostData({ orderSn });
+            setPostData({ orderSn });
             resolve();
           },
         });
