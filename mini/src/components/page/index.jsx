@@ -4,7 +4,8 @@ import { View } from '@tarojs/components';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import Router from '@discuzq/sdk/dist/router';
-import { getCurrentInstance } from '@tarojs/taro'
+import { getCurrentInstance } from '@tarojs/taro';
+import PayBoxProvider from '@components/payBox/payBoxProvider';
 
 @inject('user')
 @inject('site')
