@@ -48,11 +48,15 @@ const Index = ({
       <div className={styles.user}>
         {userImgs.length !== 0 ? <div className={styles.userImg}>
           <div className={styles.portrait}>
-            <Tip tipData={tipData} imgs={userImgs}></Tip>
+            <Tip tipData={tipData} imgs={userImgs} wholeNum={wholeNum}></Tip>
           </div>
-          <p className={styles.numText}>
-            {wholeNum}
-          </p>
+          {
+            wholeNum !== 0 && (
+              <p className={styles.numText}>
+                {wholeNum}
+              </p>
+            )
+          }
         </div> : <div></div>}
         <div className={styles.commentSharing}>
           {comment > 0 && <p className={styles.commentNum}>{`${comment}条评论`}</p>}

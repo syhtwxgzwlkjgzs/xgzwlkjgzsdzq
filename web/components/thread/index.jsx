@@ -23,6 +23,7 @@ import threadPay from '@common/pay-bussiness/thread-pay';
 @inject('index')
 @inject('user')
 @inject('thread')
+@inject('search')
 @observer
 class Index extends React.Component {
     // 分享
@@ -43,6 +44,7 @@ class Index extends React.Component {
       this.props.index.updateThreadShare({ threadId }).then(result => {
         if (result.code === 0) {
           this.props.index.updateAssignThreadInfo(threadId, { isShare: true });
+          this.props.search.updateAssignThreadInfo(threadId, { isShare: true });
         }
       });
     }
@@ -81,6 +83,7 @@ class Index extends React.Component {
         if (result.code === 0 && result.data) {
           const { isLiked } = result.data;
           this.props.index.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
+          this.props.search.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
         }
       });
     }
@@ -108,6 +111,7 @@ class Index extends React.Component {
         const { code, data } = await this.props.thread.fetchThreadDetail(thread?.threadId);
         if (code === 0 && data) {
           this.props.index.updatePayThreadInfo(thread?.threadId, data)
+          this.props.search.updatePayThreadInfo(thread?.threadId, data)
         }
       }
     }
