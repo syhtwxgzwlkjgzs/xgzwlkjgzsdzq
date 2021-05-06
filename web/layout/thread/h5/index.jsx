@@ -31,6 +31,9 @@ import AttachmentView from '@components/thread/attachment-view';
 import throttle from '@common/utils/thottle';
 import classnames from 'classnames';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
+import threadPay from '@common/pay-bussiness/thread-pay';
+import rewardPay from '@common/pay-bussiness/reward-pay';
+import RewardPopup from './components/reward-popup';
 
 const typeMap = {
   101: 'IMAGE',
@@ -58,6 +61,15 @@ const RenderThreadContent = observer((props) => {
   const isApproved = threadStore?.threadData?.isApproved || 0;
   const isEssence = threadStore?.threadData?.displayTag?.isEssence || false;
 
+  // 是否附件付费
+  const isAttachmentPay = threadStore?.threadData?.payType === 2 && threadStore?.threadData?.paid === false;
+  const attachmentPrice = threadStore?.threadData?.attachmentPrice || 0;
+  // 是否帖子付费
+  const isThreadPay = threadStore?.threadData?.payType === 1 && threadStore?.threadData?.paid === false;
+  const threadPrice = threadStore?.threadData?.price || 0;
+  // 是否作者自己
+  const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData?.userId;
+
   const parseContent = {};
   if (indexes && Object.keys(indexes)) {
     Object.entries(indexes).forEach(([, value]) => {
@@ -67,6 +79,17 @@ const RenderThreadContent = observer((props) => {
       }
     });
   }
+
+  const onContentClick = async () => {
+    const thread = props.store.threadData;
+    const { success } = await threadPay(thread, props.user?.userInfo);
+
+    // 支付成功重新请求帖子数据
+    if (success && threadStore?.threadData?.threadId) {
+      threadStore.fetchThreadDetail(threadStore?.threadData?.threadId);
+    }
+  };
+
 
   const onMoreClick = () => {
     props.fun.moreClick();
@@ -78,6 +101,10 @@ const RenderThreadContent = observer((props) => {
 
   const onBuyClick = (url) => {
     url && window.open(url);
+  };
+
+  const onRewardClick = () => {
+    typeof props.onRewardClick === 'function' && props.onRewardClick();
   };
 
   return (
@@ -136,23 +163,45 @@ const RenderThreadContent = observer((props) => {
           {/* 附件 */}
           {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
 
-          <div className={topic.tag}>使用交流</div>
+          {
+            threadStore?.threadData?.categoryName
+            && <div className={topic.tag}>{threadStore?.threadData?.categoryName}</div>
+          }
 
           {(parseContent.RED_PACKET || parseContent.REWARD) && (
             <div className={topic.reward}>
               {/* 红包 */}
-              {parseContent.RED_PACKET && (
-                <PostRewardProgressBar remaining={parseContent.RED_PACKET.number} received={1} />
-              )}
-              {/* 打赏 */}
-              {parseContent.REWARD && <PostRewardProgressBar type={POST_TYPE.BOUNTY} remaining={2} received={5} />}
+              {
+                parseContent.RED_PACKET && (
+                  <PostRewardProgressBar
+                    remaining={parseContent.RED_PACKET.remain_number}
+                    received={parseContent.RED_PACKET.number - parseContent.RED_PACKET.remain_number} />
+                )
+              }
+              {/* 悬赏 */}
+              {
+                parseContent.REWARD && (
+                  <PostRewardProgressBar
+                    type={POST_TYPE.BOUNTY}
+                    remaining={parseContent.REWARD.remain_money}
+                    received={parseContent.REWARD.money - parseContent.REWARD.remain_money} />
+                )
+              }
             </div>
           )}
 
-          {/* <div style={{ textAlign: 'center' }}>
-          <Button className={topic.rewardButton} type='primary' size='large'>打赏</Button>
-        </div> */}
-          {/* 附件 */}
+          {/* 帖子付费 */}
+          {
+            isThreadPay && !isSelf
+            && <div style={{ textAlign: 'center' }} onClick={onContentClick}>
+              <Button className={topic.payButton} type='primary' size='large'>支付{threadPrice}元查看剩余内容</Button>
+            </div>
+          }
+
+          {/* 打赏 */}
+          <div style={{ textAlign: 'center' }}>
+            <Button onClick={onRewardClick} className={topic.rewardButton} type='primary' size='large'>打赏</Button>
+          </div>
         </div>
       }
       <div className={topic.footer}>
@@ -180,6 +229,7 @@ const RenderThreadContent = observer((props) => {
 // 评论列表
 @inject('thread')
 @inject('comment')
+@inject('user')
 @observer
 class RenderCommentList extends React.Component {
   constructor(props) {
@@ -194,6 +244,7 @@ class RenderCommentList extends React.Component {
 
     this.commentData = null;
     this.replyData = null;
+
     this.recordCommentLike = { // 记录当前评论点赞状态
       id: null,
       status: null,
@@ -393,27 +444,64 @@ class RenderCommentList extends React.Component {
   }
 
   // 点击采纳
-  onAboptClick() {
+  onAboptClick(data) {
+    this.commentData = data;
     this.setState({ showAboptPopup: true });
   }
 
   // 悬赏弹框确定
-  onAboptOk(data) {
-    this.setState({ showAboptPopup: false });
+  async onAboptOk(data) {
     if (data > 0) {
-      Toast.success({
-        content: `悬赏${data}元`,
+      const params = {
+        postId: this.commentData?.id,
+        rewards: data,
+        threadId: this.props.thread?.threadData?.threadId,
+      };
+      const { success, msg } = await this.props.thread.reward(params);
+      if (success) {
+        this.setState({ showAboptPopup: false });
+        Toast.success({
+          content: `悬赏${data}元`,
+        });
+        return true;
+      }
+
+      Toast.error({
+        content: msg,
       });
     } else {
       Toast.success({
         content: '悬赏金额不能为0',
       });
     }
-    return true;
+  }
+
+  // 悬赏弹框取消
+  onAboptCancel() {
+    this.commentData = null;
+    this.setState({ showAboptPopup: false });
   }
 
   render() {
     const { totalCount, commentList } = this.props.thread;
+
+    // 是否作者自己
+    const isSelf = this.props.user?.userInfo?.id
+      && this.props.user?.userInfo?.id === this.props.thread?.threadData?.userId;
+
+    const isReward = !this.props.thread?.threadData?.displayTag?.isReward;
+
+    const { indexes } = this.props.thread?.threadData?.content || {};
+    const parseContent = {};
+    if (indexes && Object.keys(indexes)) {
+      Object.entries(indexes).forEach(([, value]) => {
+        if (value) {
+          const { tomId, body } = value;
+          parseContent[typeMap[tomId]] = body;
+        }
+      });
+    }
+
     return (
       <Fragment>
         <div className={comment.header}>
@@ -438,8 +526,9 @@ class RenderCommentList extends React.Component {
                 replyLikeClick={reploy => this.replyLikeClick(reploy, val)}
                 replyReplyClick={reploy => this.replyReplyClick(reploy, val)}
                 onCommentClick={() => this.onCommentClick(val)}
-                onAboptClick={() => this.onAboptClick()}
+                onAboptClick={() => this.onAboptClick(val)}
                 isShowOne={true}
+                isShowAdopt={isSelf && isReward}
               ></CommentList>
             </div>
           ))}
@@ -461,12 +550,14 @@ class RenderCommentList extends React.Component {
         ></DeletePopup>
 
         {/* 采纳弹层 */}
-        <AboptPopup
-          rewardAmount={1000} // 需要传入剩余悬赏金额
-          visible={this.state.showAboptPopup}
-          onCancel={() => this.setState({ showAboptPopup: false })}
-          onOkClick={data => this.onAboptOk(data)}
-        ></AboptPopup>
+        {parseContent?.REWARD?.money && (
+          <AboptPopup
+            rewardAmount={parseContent.REWARD.money} // 需要传入剩余悬赏金额
+            visible={this.state.showAboptPopup}
+            onCancel={() => this.onAboptCancel()}
+            onOkClick={data => this.onAboptOk(data)}
+          ></AboptPopup>
+        )}
       </Fragment>
     );
   }
@@ -487,6 +578,7 @@ class ThreadH5Page extends React.Component {
       showDeletePopup: false, // 是否弹出删除弹框
       showCommentInput: false, // 是否弹出评论框
       showMorePopup: false, // 是否弹出更多框
+      showRewardPopup: false, // 打赏弹窗
       isCommentLoading: false, // 列表loading
       setTop: false, // 置顶
       showContent: '',
@@ -628,7 +720,6 @@ class ThreadH5Page extends React.Component {
   };
 
   onOperClick = (type) => {
-    // 1 置顶  2 加精  3 删除  4 举报
     this.setState({ showMorePopup: false });
 
     // 举报
@@ -659,9 +750,28 @@ class ThreadH5Page extends React.Component {
   };
 
   // 确定举报
-  onReportOk(val) {
-    console.log('确定举报啦', val);
-    this.setState({ showReportPopup: false });
+  async onReportOk(val) {
+    if (!val) return;
+    const params = {
+      threadId: this.props.thread.threadData.threadId,
+      type: 1,
+      reason: val,
+      userId: this.props.user.userInfo.id,
+    };
+    const { success, msg } = await this.props.thread.createReports(params);
+
+    if (success) {
+      Toast.success({
+        content: '操作成功',
+      });
+
+      this.setState({ showReportPopup: false });
+      return true;
+    }
+
+    Toast.error({
+      content: msg,
+    });
   }
 
   // 置顶提示
@@ -853,6 +963,30 @@ class ThreadH5Page extends React.Component {
     // }
   }
 
+  // 点击打赏
+  onRewardClick() {
+    this.setState({ showRewardPopup: true });
+  }
+
+  // 确认打赏
+  async onRewardSubmit(value) {
+    if (!isNaN(Number(value)) && this.props.thread?.threadData?.threadId && this.props.thread?.threadData?.userId) {
+      this.setState({ showRewardPopup: false });
+      const params = {
+        amount: Number(value),
+        threadId: this.props.thread.threadData.threadId,
+        payeeId: this.props.thread.threadData.userId,
+      };
+
+      const { success } = await rewardPay(params);
+
+      // 支付成功重新请求帖子数据
+      if (success && this.props.thread?.threadData?.threadId) {
+        this.props.thread.fetchThreadDetail(this.props.thread?.threadData?.threadId);
+      }
+    }
+  }
+
   render() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
@@ -899,6 +1033,12 @@ class ThreadH5Page extends React.Component {
               store={threadStore}
               fun={fun}
               onLikeClick={() => this.onLikeClick()}
+              onOperClick={type => this.onOperClick(type)}
+              onCollectionClick={() => this.onCollectionClick()}
+              onShareClick={() => this.onShareClick()}
+              onReportClick={() => this.onReportClick()}
+              onContentClick={() => this.onContentClick()}
+              onRewardClick={() => this.onRewardClick()}
             ></RenderThreadContent>
           ) : (
             <LoadingTips type="init"></LoadingTips>
@@ -936,6 +1076,7 @@ class ThreadH5Page extends React.Component {
             initValue={this.state.inputValue}
             onSubmit={value => this.onPublishClick(value)}
           ></InputPopup>
+
           {/* 更多弹层 */}
           <MorePopup
             permissions={morePermissions}
@@ -945,6 +1086,7 @@ class ThreadH5Page extends React.Component {
             onSubmit={() => this.setState({ showMorePopup: false })}
             onOperClick={type => this.onOperClick(type)}
           ></MorePopup>
+
           {/* 删除弹层 */}
           <DeletePopup
             visible={this.state.showDeletePopup}
@@ -952,6 +1094,7 @@ class ThreadH5Page extends React.Component {
             onBtnClick={type => this.onBtnClick(type)}
           ></DeletePopup>
           {/* 举报弹层 */}
+
           <ReportPopup
             reportContent={this.reportContent}
             inputText={this.inputText}
@@ -959,6 +1102,14 @@ class ThreadH5Page extends React.Component {
             onCancel={() => this.setState({ showReportPopup: false })}
             onOkClick={data => this.onReportOk(data)}
           ></ReportPopup>
+
+          {/* 打赏弹窗 */}
+          <RewardPopup
+            visible={this.state.showRewardPopup}
+            onCancel={() => this.setState({ showRewardPopup: false })}
+            onOkClick={value => this.onRewardSubmit(value)}
+          ></RewardPopup>
+
           {/* 操作区 */}
           <div className={footer.operate}>
             <div className={footer.icon} onClick={() => this.onMessageClick()}>

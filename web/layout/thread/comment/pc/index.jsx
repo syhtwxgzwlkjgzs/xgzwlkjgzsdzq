@@ -58,7 +58,6 @@ class CommentPCPage extends React.Component {
 
   // 点击关注
   onFollowClick() {
-    console.log(this.props.comment)
     if (this.props.comment?.commentDetail?.userId) {
       this.props.comment?.authorInfo?.follow === 2 || this.props.comment?.authorInfo?.follow === 1
         ? this.props.comment.cancelFollow({ id: this.props.comment.commentDetail.userId, type: 1 })

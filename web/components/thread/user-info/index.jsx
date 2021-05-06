@@ -17,6 +17,8 @@ UserInfo.propTypes = {
   isPay: PropTypes.bool, // 是否付费
   isReward: PropTypes.bool, // 是否悬赏
   isRed: PropTypes.bool, // 是否红包
+  userId: PropTypes.number, // 用户id PC端
+  isShowPopup: PropTypes.bool, // 是否展示pop PC端
 };
 
 export default function UserInfo(props) {
@@ -28,6 +30,8 @@ export default function UserInfo(props) {
         image={props.avatar}
         name={props.name || ''}
         onClick={() => props.onClick()}
+        userId={props.userId}
+        isShowPopup={props.isShowPopup}
       ></Avatar>
       <div className={styles.right}>
         <div>

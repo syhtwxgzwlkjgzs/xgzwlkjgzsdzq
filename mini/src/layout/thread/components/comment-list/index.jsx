@@ -12,9 +12,6 @@ class CommentList extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        isShowReward: false, // 是否展示获得多少悬赏金
-        isShowRedPacket: false, // 是否展示获得多少红包
-        isShowAdopt: false, // 是否展示采纳按钮
         isHideEdit: this.props.isHideEdit, // 隐藏评论编辑删除
         isShowOne: this.props.isShowOne || false, // 是否只显示一条评论回复
       };
@@ -92,19 +89,19 @@ class CommentList extends React.Component {
             </View>
             <View className={styles.headerRigth}>
               {
-                this.state.isShowReward
+                this.props.data?.rewards
                 ? <View>
                     <View className={styles.showMoneyNum}>
-                      获得<Text className={styles.moneyNumber}>{6}</Text>元悬赏金
+                      获得<Text className={styles.moneyNumber}>{this.props.data.rewards}</Text>元悬赏金
                     </View>
                   </View>
                   : ''
                 }
               {
-                this.state.isShowRedPacket
+                this.props.data?.redPacketAmount
                   ? <View>
                     <View className={styles.showMoneyNum}>
-                      获得<Text className={styles.moneyNumber}>{6}</Text>元红包
+                      获得<Text className={styles.moneyNumber}>{this.props.data.redPacketAmount}</Text>元红包
                     </View>
                   </View>
                   : ''
@@ -150,7 +147,7 @@ class CommentList extends React.Component {
                     <Text onClick={() => this.replyClick()}>回复</Text>
                   </View>
                   {
-                    this.state.isShowAdopt
+                    this.props.isShowAdopt && !this.props.data.rewards
                       ? <View className={styles.commentAdopt}>
                         <Text onClick={() => this.props.onAboptClick()}>采纳</Text>
                       </View> : ''
