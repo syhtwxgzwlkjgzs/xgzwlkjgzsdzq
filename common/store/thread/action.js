@@ -517,7 +517,7 @@ class ThreadAction extends ThreadStore {
 
     const res = await reward({ data: requestParams });
 
-    if (res.code === 0 && res.data) {
+    if (res.code === 0) {
       return {
         msg: '操作成功',
         success: true,

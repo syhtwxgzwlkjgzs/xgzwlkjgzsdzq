@@ -483,14 +483,13 @@ class RenderCommentList extends React.Component {
   async onAboptOk(data) {
     if (data > 0) {
       const params = {
-        postId: this.props.thread?.threadData?.postId,
+        postId: this.commentData.id,
         rewards: data,
         threadId: this.props.thread?.threadData?.threadId,
       };
-      const { success, msg } = await this.props.thread.reward(params);
+      const { success } = await this.props.thread.reward(params);
       if (success) {
         this.setState({ showAboptPopup: false });
-
         Toast.success({
           content: `悬赏${data}元`,
         });
@@ -515,6 +514,17 @@ class RenderCommentList extends React.Component {
     // 是否作者自己
     const isSelf = this.props.user?.userInfo?.id
       && this.props.user?.userInfo?.id === this.props.thread?.threadData.userId;
+
+    const { indexes } = this.props.thread?.threadData?.content || {};
+    const parseContent = {};
+    if (indexes && Object.keys(indexes)) {
+      Object.entries(indexes).forEach(([, value]) => {
+        if (value) {
+          const { tomId, body } = value;
+          parseContent[typeMap[tomId]] = body;
+        }
+      });
+    }
 
     return (
       <Fragment>
@@ -578,7 +588,7 @@ class RenderCommentList extends React.Component {
 
         {/* 采纳弹层 */}
         <AboptPopup
-          rewardAmount={100} // 需要传入剩余悬赏金额
+          rewardAmount={parseContent.REWARD.money} // 需要传入剩余悬赏金额
           visible={this.state.showAboptPopup}
           onCancel={() => this.onAboptCancel()}
           onOkClick={data => this.onAboptOk(data)}

@@ -383,7 +383,7 @@ class RenderCommentList extends React.Component {
         this.setState({ showAboptPopup: false });
 
         Toast.success({
-          content: `悬赏${data}元`,
+          content: `成功悬赏${data}元`,
         });
         return true;
       }
@@ -396,7 +396,17 @@ class RenderCommentList extends React.Component {
 
   render() {
     const { totalCount, commentList } = this.props.thread;
-    console.log('this.props.thread', this.props.thread);
+    
+    const { indexes } = this.props.thread?.threadData?.content || {};
+    const parseContent = {};
+    if (indexes && Object.keys(indexes)) {
+      Object.entries(indexes).forEach(([, value]) => {
+        if (value) {
+          const { tomId, body } = value;
+          parseContent[typeMap[tomId]] = body;
+        }
+      });
+    }
 
     return (
       <Fragment>
