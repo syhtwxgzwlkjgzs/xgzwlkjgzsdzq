@@ -30,17 +30,18 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
   }, []);
 
   const throttle = (fn, delay) => {
-    let timer = null;
+    return args => {
+        if (fn.id) return
 
-    return function (...args) {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        fn(...args);
-      }, delay);
-    };
-  };
+        fn.id = setTimeout(() => {
+            fn.call(this, args)
+            clearTimeout(fn.id)
+            fn.id = null
+        }, delay)
+    }
+  }
 
-  const onTouchMove = throttle((e) => {
+  const onTouchMove = (e) => {
     if (e && !isLoading.current) {
       isLoading.current = true;
       setLoadText('加载中...');
@@ -62,7 +63,9 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
           });
       }
     }
-  }, 0);
+  };
+
+  const handleScroll = throttle(onScroll, 50)
  
   return (
     <ScrollView 
@@ -71,7 +74,7 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
       style={{ height }} 
       onScrollToLower={onTouchMove}
       lowerThreshold={80}
-      onScroll={onScroll}
+      onScroll={handleScroll}
     >
       {children}
       {allowRefresh && (

@@ -53,7 +53,6 @@ class IndexMiniPage extends React.Component {
       fixedTab: !(scrollTop < 160),
       showNavBar: !(scrollTop < 160),
     })
-
   }
   // 点击更多弹出筛选
   searchClick = () => {
