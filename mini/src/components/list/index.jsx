@@ -65,7 +65,7 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
     }
   };
 
-  const handleScroll = throttle(onScroll, 50)
+  const handleScroll = throttle(onScroll, 10)
  
   return (
     <ScrollView 
