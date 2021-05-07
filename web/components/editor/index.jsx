@@ -47,6 +47,7 @@ export default function DVditor(props) {
   }, [emoji]);
 
   useEffect(() => {
+    if (atList && !atList.length) return;
     const users = atList.map((item) => {
       if (item.user) return `&nbsp;@${item.user.userName}&nbsp;`;
       return '';
@@ -69,12 +70,11 @@ export default function DVditor(props) {
   }, [contentCount]);
 
   useEffect(() => {
-    if (vditor && vditor.getValue && vditor.getValue() !== '\n') return;
+    if ((vditor && vditor.getValue && vditor.getValue() !== '\n') || !value) return;
     const timer = setTimeout(() => {
       clearTimeout(timer);
       if (vditor && vditor.getValue && vditor.getValue() === '\n' && vditor.getValue() !== value) {
         // setCurrentPositon();
-        console.log(value);
         vditor.insertValue && vditor.insertValue(value);
       }
     }, 200);
