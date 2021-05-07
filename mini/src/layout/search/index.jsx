@@ -49,7 +49,11 @@ class SearchPage extends React.Component {
     })
   };
   onUserClick = data => console.log('user click', data);
-  onTopicClick = data => console.log('topic click', data);
+  onTopicClick = data => {
+    Taro.navigateTo({
+      url: `/subPages/topic/topic-detail/index?id=${data.topicId || ''}`
+    });
+  };
   onPostClick = data => console.log('post click', data);
 
   onCancel = () => {
