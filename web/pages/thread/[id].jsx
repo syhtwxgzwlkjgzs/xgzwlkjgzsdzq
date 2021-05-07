@@ -65,9 +65,16 @@ class Detail extends React.Component {
     const { thread, serverThread } = this.props;
 
     // 初始化数据到store中
-    // serverThread?.threadData && thread.setThreadData(serverThread.threadData);
-    // serverThread?.commentList && thread.setCommentList(serverThread.commentList);
-    // serverThread?.totalCount && thread.setTotalCount(serverThread.totalCount);
+    serverThread?.threadData && thread.setThreadData(serverThread.threadData);
+    serverThread?.commentList && thread.setCommentList(serverThread.commentList);
+    serverThread?.totalCount && thread.setTotalCount(serverThread.totalCount);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.router?.query?.id && this.props.router.query.id !== prevProps.router.query.id) {
+      this.props.thread.reset();
+      this.getPageDate(this.props.router.query.id);
+    }
   }
 
   async componentDidMount() {
@@ -80,23 +87,27 @@ class Detail extends React.Component {
     this.props.thread.reset();
 
     if (id && !this.props?.thread?.threadData?.threadId) {
-      if (!this.props?.thread?.threadData) {
-        await this.props.thread.fetchThreadDetail(id);
+      this.getPageDate(id);
+    }
+  }
 
-        // 获取作者信息
-        const { site } = this.props;
-        const { platform } = site;
-        const userId = this.props.thread?.threadData?.user?.userId;
-        if (platform === 'pc' && userId) {
-          this.props.thread.fetchAuthorInfo(userId);
-        }
+  async getPageDate(id) {
+    if (!this.props?.thread?.threadData) {
+      await this.props.thread.fetchThreadDetail(id);
+
+      // 获取作者信息
+      const { site } = this.props;
+      const { platform } = site;
+      const userId = this.props.thread?.threadData?.user?.userId;
+      if (platform === 'pc' && userId) {
+        this.props.thread.fetchAuthorInfo(userId);
       }
-      if (!this.props?.thread?.commentList) {
-        const params = {
-          id,
-        };
-        this.props.thread.loadCommentList(params);
-      }
+    }
+    if (!this.props?.thread?.commentList) {
+      const params = {
+        id,
+      };
+      this.props.thread.loadCommentList(params);
     }
   }
 
