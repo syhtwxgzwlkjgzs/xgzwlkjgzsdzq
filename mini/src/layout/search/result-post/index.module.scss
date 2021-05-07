@@ -6,8 +6,12 @@
   flex-direction: column;
   box-sizing: border-box;
   overflow: hidden;
-  background: var(--color-white);
+  background: var(--background-color-text2);
 }
 .searchInput {
+  background: var(--color-white);
   padding: 16px;
+}
+.listItem {
+  margin-bottom: 10px;
 }
