@@ -18,7 +18,7 @@ class UserCenterFriends extends React.Component {
           </div>
           <div className={styles.friendAction}>
             <Button type={'primary'}>
-                <Icon name={'PlusOutlined'}/> 关注
+                <Icon size={14} name={'PlusOutlined'}/> 关注
             </Button>
           </div>
         </div>
@@ -41,7 +41,7 @@ class UserCenterFriends extends React.Component {
           </div>
           <div className={styles.friendAction}>
             <Button type={'primary'} className={styles.friendActionFriend}>
-              <Icon name={'WithdrawOutlined'}/> 互关
+              <Icon size={14} name={'WithdrawOutlined'}/> 互关
             </Button>
           </div>
         </div>
@@ -65,7 +65,7 @@ class UserCenterFriends extends React.Component {
           </div>
           <div className={styles.friendAction}>
             <Button type={'primary'} className={styles.friendActionFollowed}>
-              <Icon name={'CheckOutlined'}/> 已关注
+              <Icon size={14} name={'CheckOutlined'}/> 已关注
             </Button>
           </div>
         </div>

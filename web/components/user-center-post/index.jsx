@@ -1,8 +1,11 @@
 import React from 'react';
 import styles from './index.module.scss';
 import { Avatar, Input, Icon } from '@discuzq/design';
+import { inject, observer } from 'mobx-react';
 
 // 用户中心发帖模块
+@inject('user')
+@observer
 class UserCenterPost extends React.Component {
   render() {
     return (

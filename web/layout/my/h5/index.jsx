@@ -6,7 +6,8 @@ import { inject, observer } from 'mobx-react';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import { Button } from '@discuzq/design';
 import UserCenterPost from '@components/user-center-post';
-import UserCenterFriends from '../../../components/user-center-friends';
+import UserCenterFriends from '@components/user-center-friends';
+import UserCenterAction from '@components/user-center-action';
 
 @inject('site')
 @observer
@@ -21,6 +22,7 @@ class H5MyPage extends React.Component {
     const { platform } = site;
     return (
             <div>
+                <UserCenterAction />
                 <UserCenterPost />
                 <UserCenterFriends />
                 <UserCenterHeaderImage/>
