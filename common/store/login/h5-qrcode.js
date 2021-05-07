@@ -4,6 +4,8 @@ import setAccessToken from '../../utils/set-access-token';
 import { get } from '../../utils/get';
 import { checkUserStatus } from '@common/store/login/util';
 
+const WAITING_FOR_SCANNING = -7002;
+
 export default class H5Qrcode {
   @observable qrCode = '';
   @observable sessionToken = '';
@@ -56,6 +58,10 @@ export default class H5Qrcode {
         setAccessToken({
           accessToken,
         });
+        return res;
+      }
+
+      if (res.code === WAITING_FOR_SCANNING) {
         return res;
       }
 
