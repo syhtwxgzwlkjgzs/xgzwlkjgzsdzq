@@ -31,7 +31,7 @@ class Detail extends React.Component {
           filter: {
             thread: Number(id),
           },
-          sort: '-createdAt',
+          sort: 'createdAt',
           page: 1,
           perPage: 5,
         },

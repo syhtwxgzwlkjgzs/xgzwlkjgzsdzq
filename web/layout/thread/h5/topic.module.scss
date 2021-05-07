@@ -27,7 +27,7 @@
 .body {
   margin-top: rem($margin-4n);
 
-  >* {
+  > * {
     margin-bottom: rem($margin-5n);
   }
 }
@@ -45,6 +45,21 @@
 .rewardButton {
   margin: 0 auto;
   width: rem(156);
+}
+
+.payButton {
+  width: rem(234);
+}
+
+.pay {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payIcon {
+  margin-right: rem($margin-2n);
 }
 
 .footer {

@@ -8,13 +8,13 @@
       text-align: center;
       font-size: var(--font-size-primary);
       color: #4f5a70;
-      border-top: 1px solid #eee;
+      border-top: var(--border-border);
     }
     .dzq-popup__container {
       width: rem(343);
       margin-right: rem(-10);
       padding: rem(16);
-      background: #fff;
+      background: var(--color-white);
       border-radius: rem(10) rem(10) 0 0;
       //   box-shadow: 0 -1px 15px 0 rgba(0, 0, 0, 0.3);
       overflow: hidden;
@@ -51,25 +51,25 @@
       padding: 0 rem(10);
       height: 36px;
       border-radius: 5px;
-      background: #eff1f3;
+      background: var(--background-color-text2);
       margin-right: rem(10);
       margin-bottom: rem(10);
       border: none;
       font-size: var(--font-size-primary);
       line-height: 24px;
       text-align: center;
-      color: #0b0b37;
+      color: var(--color-text-primary);
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
     .dzq-button.active {
-      background: #2469f6;
+      background: var(--color-primary);
       font-weight: normal;
       font-size: 14px;
       line-height: 24px;
       text-align: center;
-      color: #fff;
+      color: var(--color-white);
     }
     .dzq-button.is-pc {
       margin-right: var(--margin-4n);
@@ -79,14 +79,14 @@
 .popup-content__children {
   margin-bottom: rem(-10);
   padding: rem(16) 0;
-  border-top: 1px solid #eee;
+  border-top: var(--border-border);
   :global { /* stylelint-disable-line */
     .dzq-button.active {
-      color: #2469f6;
-      background-color: #e8f0fe;
+      color: var(--color-primary);
+      background-color: var(--color-primary10);
     }
     .dzq-buton {
-      background-color: #e8f0fe;
+      background-color: var(--color-primary10);
     }
   }
 }

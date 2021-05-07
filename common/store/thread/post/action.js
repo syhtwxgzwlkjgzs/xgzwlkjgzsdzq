@@ -79,7 +79,7 @@ class ThreadPostAction extends ThreadPostStore {
   @action.bound
   async fetchProductAnalysis(options = {}) {
     this.setLoadingStatus(LOADING_TOTAL_TYPE.product, true);
-    const ret = await readProcutAnalysis({ params: options });
+    const ret = await readProcutAnalysis({ data: options });
     const { code, data = {} } = ret;
     if (code === 0) this.setProduct(data);
     this.setLoadingStatus(LOADING_TOTAL_TYPE.product, false);

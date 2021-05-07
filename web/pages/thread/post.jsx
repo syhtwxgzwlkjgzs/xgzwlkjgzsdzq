@@ -238,6 +238,10 @@ class PostPage extends React.Component {
   // 发布提交
   handleSubmit = async (isDraft) => {
     const { postData, setPostData } = this.props.threadPost;
+    if (!this.props.user.threadExtendPermissions.createThread) {
+      Toast.info({ content: '您没有发帖权限' });
+      return;
+    }
     if (!isDraft && !postData.contentText) {
       Toast.info({ content: '请填写您要发布的内容' });
       return;
@@ -322,7 +326,7 @@ class PostPage extends React.Component {
     else ret = await threadPost.createThread();
     const { code, data, msg } = ret;
     if (code === 0) {
-      thread.setThreadData(data);
+      // thread.setThreadData(data);
       if (!isDraft) this.props.router.replace(`/thread/${data.threadId}`);
       return true;
     }
