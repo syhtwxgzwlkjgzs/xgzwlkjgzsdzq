@@ -10,12 +10,11 @@ import classNames from 'classnames';
 
 const ClassifyPopup = (props) => {
   const { pc, show, onVisibleChange, category = [], onChange, categorySelected } = props;
-  const [visible, setVisible] = useState(false);
   const [categoryChildren, setCategoryChildren] = useState([]);
   const [selected, setSelected] = useState({});
   const [selectedChild, setSelectedChild] = useState({});
   const handleClose = () => {
-    setVisible(false);
+    onVisibleChange(false);
   };
   const handleClick = (item) => {
     setSelected(item);
@@ -37,22 +36,17 @@ const ClassifyPopup = (props) => {
   };
 
   useEffect(() => {
-    if (show) setVisible(show);
-  }, [show]);
+    if (!category || (category && category.length === 0) || selected.pid) return;
+    const item = category[0] || {};
+    setSelected(item);
+  }, [category]);
 
   useEffect(() => {
-    onVisibleChange(visible);
-  }, [visible]);
-
-  useEffect(() => {
+    if (selected.pid) return;
     if (categorySelected.parent && categorySelected.parent.pid && categorySelected.parent.pid !== selected.pid) {
       setSelected(categorySelected.parent);
-      return;
     }
-    if (!category || selected.pid) return;
-    const item = category[0] || [];
-    setSelected(item);
-  }, [category, categorySelected]);
+  }, [categorySelected]);
 
   useEffect(() => {
     onChange(selected, selectedChild);
@@ -119,7 +113,7 @@ const ClassifyPopup = (props) => {
       className={styles.tan}
       position="bottom" // 从哪个地方弹出 'bottom' | 'top' | 'center';
       maskClosable={true} // 点击遮罩层是否关闭弹出层，但好像没什么用
-      visible={visible} // 是否显示弹出层
+      visible={show} // 是否显示弹出层
       onClose={() => {
         // 遮罩层点击关闭回调,传一个'取消'，可自定义更改
         handleClose();

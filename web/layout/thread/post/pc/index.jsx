@@ -11,7 +11,7 @@ import ClassifyPopup from '@components/thread-post/classify-popup';
 import { withRouter } from 'next/router';
 import Emoji from '@components/editor/emoji';
 import ImageUpload from '@components/thread-post/image-upload';
-import { defaultOperation } from '@common/constants/const';
+import { defaultOperation, paidOption } from '@common/constants/const';
 import FileUpload from '@components/thread-post/file-upload';
 import { THREAD_TYPE, MAX_COUNT } from '@common/constants/thread-post';
 import Product from '@components/thread-post/product';
@@ -63,13 +63,13 @@ class ThreadPCPage extends React.Component {
                 onChange={this.props.handleVditorChange}
                 onCountChange={count => this.props.handleSetState({ count })}
                 onFocus={() => { }}
-                onBlur={() => {}}
+                onBlur={() => { }}
               />
               {/* 录音组件 */}
               {(currentAttachOperation === THREAD_TYPE.voice) && (
-                  <AudioRecord handleAudioBlob={(blob) => {
-                    this.props.handleAudioUpload(blob);
-                  }}
+                <AudioRecord duration={60} onUpload={(blob) => {
+                  this.props.handleAudioUpload(blob);
+                }}
                 />
               )}
               {/* 语音组件 */}
@@ -80,6 +80,7 @@ class ThreadPCPage extends React.Component {
               {(currentAttachOperation === THREAD_TYPE.image
                 || Object.keys(postData.images).length > 0) && (
                 <ImageUpload
+                  className={styles['no-padding']}
                   fileList={Object.values(postData.images)}
                   onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.image)}
                   onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.image)}
@@ -94,6 +95,7 @@ class ThreadPCPage extends React.Component {
               {/* 附件上传组件 */}
               {(currentDefaultOperation === defaultOperation.attach || Object.keys(postData.files).length > 0) && (
                 <FileUpload
+                  className={styles['no-padding']}
                   fileList={Object.values(postData.files)}
                   onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.file)}
                   onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.file)}
@@ -116,12 +118,19 @@ class ThreadPCPage extends React.Component {
                   <Tag
                     closeable
                     onClose={() => this.props.setPostData({ price: 0, attachmentPrice: 0 })}
+                    onClick={() => {
+                      const curPaySelect = postData.price ? paidOption[0].name : paidOption[1].name;
+                      this.props.handleSetState({ curPaySelect });
+                    }}
                   >付费总额{postData.price + postData.attachmentPrice}元</Tag>
                 )}
                 {/* 悬赏问答内容标识 */}
                 {(postData.rewardQa.value && postData.rewardQa.times) && (
                   <Tag closeable
                     onClose={() => this.props.setPostData({ rewardQa: {} })}
+                    onClick={() => {
+                      this.props.handleSetState({ currentAttachOperation: THREAD_TYPE.reward });
+                    }}
                   >
                     {`悬赏金额${postData.rewardQa.value}元\\结束时间${postData.rewardQa.times}`}
                   </Tag>
@@ -130,6 +139,7 @@ class ThreadPCPage extends React.Component {
                 {postData.redpacket.price && (
                   <Tag closeable
                     onClose={() => this.props.setPostData({ redpacket: {} })}
+                    onClick={() => this.props.handleSetState({ currentDefaultOperation: defaultOperation.redpacket })}
                   >
                     {postData.redpacket.rule === 1 ? '随机红包' : '定额红包'}
                     \ 总金额{postData.redpacket.price}元\{postData.redpacket.number}个
@@ -195,7 +205,7 @@ class ThreadPCPage extends React.Component {
               <Button type="primary" onClick={() => this.props.handleSubmit()}>发布</Button>
             </div>
           </div>
-          <Copyright/>
+          <Copyright />
           {/* 插入商品 */}
           <ProductSelect
             pc

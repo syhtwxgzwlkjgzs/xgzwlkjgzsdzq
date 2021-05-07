@@ -3,7 +3,7 @@ import Upload from '@components/upload';
 import { ATTACHMENT_TYPE, ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post';
 
 export default function ImageUpload(props) {
-  const { onChange, onComplete, fileList } = props;
+  const { onChange, onComplete, fileList, ...other } = props;
   const data = { type: ATTACHMENT_TYPE.image };
   return <Upload
     listType="card"
@@ -14,5 +14,6 @@ export default function ImageUpload(props) {
     onChange={onChange}
     onComplete={onComplete}
     fileList={fileList}
+    {...other}
   />;
 }

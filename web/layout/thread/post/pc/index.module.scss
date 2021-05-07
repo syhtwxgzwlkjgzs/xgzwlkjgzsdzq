@@ -11,10 +11,17 @@
     min-height: calc(100vh - 60px - 40px - 96px);
     background-color: var(--color-white);
   }
+  .no-padding {
+    :global {
+      .dzq-upload {
+        padding: 0;
+      }
+    }
+  }
 }
 .editor {
   position: relative;
-  padding: 16px;
+  padding: 16px 16px 52px;
   min-height: 428px;
   border: 1px solid #c5c6ca;
   border-radius: 5px;
