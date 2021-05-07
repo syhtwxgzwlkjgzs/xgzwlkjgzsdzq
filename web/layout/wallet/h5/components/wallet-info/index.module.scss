@@ -18,7 +18,7 @@
     align-items: center;
     padding-top: rem($padding-5n);
     .avatar {
-        border: solid rem(4) #fff;
+        border: solid rem(4) var(--color-white);
     }
     .name {
         font-family: 'PingFangSC-Regular';
@@ -127,6 +127,6 @@
     .button {
         width: rem(282);
         height: rem(36);
-        border-radius: 5px;
+        border-radius: rem($border-radius-small);
     }
 }

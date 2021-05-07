@@ -1,0 +1,38 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.container {
+    padding: rem($padding-4n) rem($padding-4n) 0;
+    background: var(--color-white);
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    font-weight: normal;
+    padding-bottom: rem($padding-4n);
+    .text {
+        font-family: 'PingFang SC';
+        font-size: rem($font-size-primary);
+        text-align: left;
+        color: var(--color-text-primary);
+        line-height: rem(16);
+    }
+    .money {
+        font-family: 'PingFangSC-Semibold';
+        font-size: rem($font-size-middle);
+        text-align: left;
+        color: var(--color-error);
+    }
+}
+
+.time {
+    font-family: 'PingFangSC-Regular';
+    font-weight: normal;
+    font-size: rem($font-size-label);
+    text-align: left;
+    color: var(--color-text-secondary);
+    padding-bottom: rem($padding-4n);
+    border-bottom: solid rem(1) var(--border-line-color);
+
+}
