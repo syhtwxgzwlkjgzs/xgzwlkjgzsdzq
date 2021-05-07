@@ -80,6 +80,7 @@ class ThreadPCPage extends React.Component {
               {(currentAttachOperation === THREAD_TYPE.image
                 || Object.keys(postData.images).length > 0) && (
                 <ImageUpload
+                  className={styles['no-padding']}
                   fileList={Object.values(postData.images)}
                   onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.image)}
                   onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.image)}
@@ -94,6 +95,7 @@ class ThreadPCPage extends React.Component {
               {/* 附件上传组件 */}
               {(currentDefaultOperation === defaultOperation.attach || Object.keys(postData.files).length > 0) && (
                 <FileUpload
+                  className={styles['no-padding']}
                   fileList={Object.values(postData.files)}
                   onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.file)}
                   onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.file)}

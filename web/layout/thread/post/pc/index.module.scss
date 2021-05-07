@@ -11,6 +11,13 @@
     min-height: calc(100vh - 60px - 40px - 96px);
     background-color: var(--color-white);
   }
+  .no-padding {
+    :global {
+      .dzq-upload {
+        padding: 0;
+      }
+    }
+  }
 }
 .editor {
   position: relative;
