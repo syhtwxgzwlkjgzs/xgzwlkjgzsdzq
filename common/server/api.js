@@ -53,9 +53,9 @@ http.interceptors.request.use(
 http.interceptors.response.use((res) => {
   const { data } = res;
   // 如果4002将重定向到登录
-  if (data.Code === -4002) {
-    Router.redirect({url: '/user/login'});
-  }
+  // if (data.Code === -4002) {
+  //   Router.redirect({url: '/user/login'});
+  // }
   return {
     code: data.Code,
     data: reasetData(data.Data),
