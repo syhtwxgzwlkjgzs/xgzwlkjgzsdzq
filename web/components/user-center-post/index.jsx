@@ -21,33 +21,34 @@ class UserCenterPost extends React.Component {
                   style={{
                     width: '100%',
                   }}
+                  placeholder={'分享新鲜事'}
                 />
               </div>
             </div>
             <div className={styles.userCenterPostList}>
               <div  className={styles.userCenterPostListItem}>
-                <Icon size={20} name={'ShareAltOutlined'} />
+                <Icon size={20} name={'PictureOutlinedBig'} />
               </div>
               <div  className={styles.userCenterPostListItem}>
-                <Icon size={20} name={'ShareAltOutlined'} />
+                <Icon size={20} name={'VideoOutlined'} />
               </div>
               <div  className={styles.userCenterPostListItem}>
-                <Icon size={20} name={'ShareAltOutlined'} />
+                <Icon size={20} name={'MicroOutlined'} />
               </div>
               <div  className={styles.userCenterPostListItem}>
-                <Icon size={20} name={'ShareAltOutlined'} />
+                <Icon size={20} name={'ShoppingCartOutlined'} />
               </div>
               <div  className={styles.userCenterPostListItem}>
-                <Icon size={20} name={'ShareAltOutlined'} />
+                <Icon size={20} name={'QuestionOutlined'} />
               </div>
               <div  className={styles.userCenterPostListItem}>
-                <Icon size={20} name={'ShareAltOutlined'} />
+                <Icon size={20} name={'PaperClipOutlined'} />
               </div>
               <div  className={styles.userCenterPostListItem}>
-                <Icon size={20} name={'ShareAltOutlined'} />
+                <Icon size={20} name={'WalletOutlined'} />
               </div>
               <div  className={styles.userCenterPostListItem}>
-                <Icon size={20} name={'ShareAltOutlined'} />
+                <Icon size={20} name={'DollarLOutlined'} />
               </div>
             </div>
           </div>
