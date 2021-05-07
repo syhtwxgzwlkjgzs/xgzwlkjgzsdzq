@@ -127,7 +127,9 @@ class CommentList extends React.Component {
             <Avatar
               image={this.props.data.user.avatar}
               name={this.props.data.user.username || this.props.data.user.userName || ''}
-              circle={true}>
+              circle={true}
+              userId={this.props.data.user.id}
+              isShowUserInfo={true}>
             </Avatar>
           </div>
           <div className={styles.commentListContent}>
@@ -161,7 +163,7 @@ class CommentList extends React.Component {
                     <span>回复</span>
                   </div>
                   {
-                    this.props.isShowAdopt && !this.props.data.rewards
+                    this.props.isShowAdopt
                       ? <div className={styles.commentAdopt}>
                         <Icon className={styles.icon} name="ExactnessOutlined"></Icon>
                         <span onClick={() => this.props.onAboptClick()}>采纳</span>

@@ -12,12 +12,49 @@
       flex: 0 0 94px;
       height:104px;
       border-radius: 5px 0 0 5px;
-      background: var(--color-error);
-      font-weight: normal;
-      font-size: 20px;
-      line-height: 104px;
-      color: var(--color-white);
+      background: #C61A2F;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+      .moneyText {
+        font-size: 20px;
+        line-height: 28px;
+        font-weight: normal;
+        color: var(--color-white);
+        text-align: center;
+        margin: 32px auto 0;
+      }
+      .moneyTop {
+        width: 200%;
+        height: 100%;
+        border-radius: 0 0 50% 50%;
+        background: #F94151;
+        position: absolute;
+        top: -80px;
+        left: -50%;
+      }
+      .moneyBottom {
+        width: 200%;
+        height: 100%;
+        border-radius: 50% 50% 0 0;
+        background: #F94151;
+        position: absolute;
+        top: 76px;
+        left: -50%;
+      }
+      .moneyReward {
+        width: 30px;
+        height: 30px;
+        background: #FFDF47;
+        border-radius: 50%;
+        font-size: 16px;
+        line-height: 30px;
+        text-align: center;
+        color: #C61A2F;
+        position: absolute;
+        top: 64px;
+        left: 32px;
+      }
     }
     .content {
       height: 104px;
