@@ -50,7 +50,7 @@ class SearchResultTopicPCPage extends React.Component {
   }
 
   renderRight = () => {
-    const { pageData = [] } = this.props.search.indexUsers || { pageData: [] };
+    const { pageData = [] } = this.props.search.users || { pageData: [] };
     return (
       <div className={styles.searchRight}>
         <div className={styles.section}>
