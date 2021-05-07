@@ -10,6 +10,7 @@ import { NEED_BIND_WEIXIN_FLAG, NEED_BIND_PHONE_FLAG } from '@common/store/login
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 import { genMiniScheme } from '@server';
+import browser from '../../../../../common/utils/browser';
 
 @inject('site')
 @inject('user')
@@ -159,6 +160,12 @@ class UsernameH5Login extends React.Component {
             {this.props.site.wechatEnv !== 'none' && (
               <span
                 onClick={() => {
+                  if (browser.env('weixin')) {
+                    const redirectEncodeUrl = encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`);
+                    window.location.href = `https://discuzv3-dev.dnspod.dev/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
+                    return;
+                  }
+
                   this.props.router.push('wx-login');
                 }}
                 className={platform === 'h5' ? layout['otherLogin-button-weixin'] : layout.button_left}

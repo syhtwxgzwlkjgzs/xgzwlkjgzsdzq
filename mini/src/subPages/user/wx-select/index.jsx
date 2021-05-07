@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getCurrentInstance, navigateTo  } from '@tarojs/taro';
+import { getCurrentInstance, navigateTo, redirectTo  } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import { Button, Toast } from '@discuzq/design';
@@ -11,7 +11,9 @@ import { get } from '@common/utils/get';
 import layout from './index.module.scss';
 
 
+const NEED_BIND_PHONE_FLAG = -8001;
 @inject('site')
+@inject('user')
 @inject('commonLogin')
 @observer
 class WXSelect extends Component {
@@ -47,7 +49,18 @@ class WXSelect extends Component {
           accessToken,
         });
         this.props.user.updateUserInfo(uid);
-        window.location.href = '/index';
+        redirectTo({
+          url: `/pages/index/index`
+        });
+        return;
+      }
+
+      // 手机号绑定 flag
+      if (res.Code === NEED_BIND_PHONE_FLAG) {
+        this.props.commonLogin.needToBindPhone = true;
+        navigateTo({
+          url: `/subPages/user/bind-phone/index?sessionToken=${res.sessionToken}`
+        });
         return;
       }
       throw {
@@ -58,7 +71,9 @@ class WXSelect extends Component {
       // 跳转状态页
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
-        this.props.router.push(`/user/status?statusCode=${error.Code}&statusMsg=${error.Message}`);
+        navigateTo({
+          url: `/subPages/user/status/index?statusCode=${error.Code}&statusMsg=${error.Message}`
+        });
         return;
       }
       if (error.Code) {
