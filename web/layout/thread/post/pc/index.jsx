@@ -63,13 +63,13 @@ class ThreadPCPage extends React.Component {
                 onChange={this.props.handleVditorChange}
                 onCountChange={count => this.props.handleSetState({ count })}
                 onFocus={() => { }}
-                onBlur={() => {}}
+                onBlur={() => { }}
               />
               {/* 录音组件 */}
               {(currentAttachOperation === THREAD_TYPE.voice) && (
-                  <AudioRecord duration={60} onUpload={(blob) => {
-                    this.props.handleAudioUpload(blob);
-                  }}
+                <AudioRecord duration={60} onUpload={(blob) => {
+                  this.props.handleAudioUpload(blob);
+                }}
                 />
               )}
               {/* 语音组件 */}
@@ -205,7 +205,7 @@ class ThreadPCPage extends React.Component {
               <Button type="primary" onClick={() => this.props.handleSubmit()}>发布</Button>
             </div>
           </div>
-          <Copyright/>
+          <Copyright />
           {/* 插入商品 */}
           <ProductSelect
             pc
