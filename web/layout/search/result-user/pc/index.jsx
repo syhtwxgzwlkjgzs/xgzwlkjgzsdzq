@@ -3,7 +3,8 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
-import SectionTitle from '../../../search/h5/components/section-title'
+// import SectionTitle from '../../../search/h5/components/section-title'
+import SectionTitle from '@components/section-title';
 import ActiveUsersMore from '../../../search/pc/components/active-users-more';
 import TrendingTopic from '../../../search/pc/components/trending-topics'
 import List from '@components/list';

@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
-import SectionTitle from '../../../search/h5/components/section-title'
+import SectionTitle from '@components/section-title';
 import TrendingTopicMore from '../../../search/pc/components/trending-topic-more';
 import ActiveUsers from '../../../search/pc/components/active-users'
 import { withRouter } from 'next/router';
