@@ -1,34 +1,36 @@
+@import '@common/styles/var.scss';
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 .code {
   width: 100%;
   height: rem(115);
-  background: #fff;
+  background: var(--color-white);
   display: flex;
-  font-family: "PingFang SC";
   border-radius: rem($border-radius-small);
+  padding: rem($padding-4n);
+  box-sizing: border-box;
+  align-items: center;
   .codeBox {
     width: rem(83);
     height: rem(83);
-    margin: rem(16);
+    margin-right: rem($margin-10);
     .codeBoxImg {
       width: 100%;
       height: 100%;
     }
   }
   .codeText {
-    margin-top: rem(26);
     .codeTextVisit {
       font-size: rem($font-size-large);
-      line-height: rem(24);
-      color: #0B0B37;
+      line-height: rem($font-line-height-primary);
+      color: var(--color-text-primary);
       font-weight: bold;
     }
     .codeTextLogo {
-      margin-top: rem(8);
+      margin-top: rem($margin-2n);
       font-weight: normal;
       font-size: rem($font-size-large);
-      line-height: rem(24);
+      line-height: rem($font-line-height-primary);
       color: #4f5a70;
     }
   }
