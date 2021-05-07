@@ -141,7 +141,7 @@ const RenderThreadContent = inject('user')(observer((props) => {
             platform='pc'
           ></UserInfo>
         </div>
-        <div className={topic.more}>
+        {props?.user?.isLogin() && <div className={topic.more}>
           <div className={topic.iconText}>
             <Dropdown
               menu={<Dropdown.Menu>
@@ -165,6 +165,7 @@ const RenderThreadContent = inject('user')(observer((props) => {
             <span className={topic.text}>举报</span>
           </div>
         </div>
+        }
       </div>
 
       <Divider></Divider>
@@ -252,9 +253,11 @@ const RenderThreadContent = inject('user')(observer((props) => {
           }
 
           {/* 打赏 */}
-          <div style={{ textAlign: 'center' }}>
-            <Button onClick={onRewardClick} className={topic.rewardButton} type='primary' size='large'>打赏</Button>
-          </div>
+          {props?.user?.isLogin()
+            && <div style={{ textAlign: 'center' }}>
+              <Button onClick={onRewardClick} className={topic.rewardButton} type='primary' size='large'>打赏</Button>
+            </div>
+          }
         </div>
       }
       <div className={topic.footer}>

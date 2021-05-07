@@ -54,7 +54,7 @@ const typeMap = {
 };
 
 // 帖子内容
-const RenderThreadContent = observer((props) => {
+const RenderThreadContent = inject('user')(observer((props) => {
   const { store: threadStore } = props;
   const { text, indexes } = threadStore?.threadData?.content || {};
   const tipData = {
@@ -126,9 +126,12 @@ const RenderThreadContent = observer((props) => {
             isEssence={isEssence}
           ></UserInfo>
         </View>
-        <View className={topic.more} onClick={onMoreClick}>
-          <Icon size="20" color="#8590A6" name="MoreVOutlined"></Icon>
-        </View>
+        {
+          props?.user?.isLogin()
+          && <View className={topic.more} onClick={onMoreClick}>
+            <Icon size="20" color="#8590A6" name="MoreVOutlined"></Icon>
+          </View>
+        }
       </View>
 
       {
@@ -215,9 +218,12 @@ const RenderThreadContent = observer((props) => {
           }
 
           {/* 打赏 */}
-          <View style={{ textAlign: 'center' }}>
-            <Button onClick={onRewardClick} className={topic.rewardButton} type='primary' size='large'>打赏</Button>
-          </View>
+          {
+            props?.user?.isLogin()
+            && <View style={{ textAlign: 'center' }}>
+              <Button onClick={onRewardClick} className={topic.rewardButton} type='primary' size='large'>打赏</Button>
+            </View>
+          }
 
         </View>
       }
@@ -241,7 +247,7 @@ const RenderThreadContent = observer((props) => {
       </View>
     </View>
   );
-});
+}));
 
 
 // 评论列表

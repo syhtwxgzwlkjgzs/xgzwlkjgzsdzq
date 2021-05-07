@@ -50,7 +50,7 @@ const typeMap = {
 };
 
 // 帖子内容
-const RenderThreadContent = observer((props) => {
+const RenderThreadContent = inject('user')(observer((props) => {
   const { store: threadStore } = props;
   const { text, indexes } = threadStore?.threadData?.content || {};
   const tipData = {
@@ -120,9 +120,12 @@ const RenderThreadContent = observer((props) => {
             isEssence={isEssence}
           ></UserInfo>
         </div>
-        <div className={topic.more} onClick={onMoreClick}>
-          <Icon size="20" color="#8590A6" name="MoreVOutlined"></Icon>
-        </div>
+        {
+          props?.user?.isLogin()
+          && <div className={topic.more} onClick={onMoreClick}>
+            <Icon size="20" color="#8590A6" name="MoreVOutlined"></Icon>
+          </div>
+        }
       </div>
 
       {
@@ -208,9 +211,12 @@ const RenderThreadContent = observer((props) => {
           }
 
           {/* 打赏 */}
-          <div style={{ textAlign: 'center' }}>
-            <Button onClick={onRewardClick} className={topic.rewardButton} type='primary' size='large'>打赏</Button>
-          </div>
+          {
+            props?.user?.isLogin()
+            && <div style={{ textAlign: 'center' }}>
+              <Button onClick={onRewardClick} className={topic.rewardButton} type='primary' size='large'>打赏</Button>
+            </div>
+          }
         </div>
       }
       <div className={topic.footer}>
@@ -233,7 +239,7 @@ const RenderThreadContent = observer((props) => {
       </div>
     </div>
   );
-});
+}));
 
 // 评论列表
 @inject('thread')
