@@ -2,21 +2,46 @@
 @import '@common/styles/variable/index.scss';
 .container {
     border-radius: 5px;
-    background: #fef9ec;
+    background: var(--color-warn5);
     display: flex;
     align-items: center;
+    margin-bottom: 16px;
     .money {
-      flex: 0 0 69px;
+      flex: 0 0 94px;
       height: 100%;
       border-radius: 5px 0 0 5px;
-      background: #e4414e;
+      background: #C61A2F;
+      position: relative;
+      overflow: hidden;
+      .moneyTop {
+        width: 180%;
+        height: 100%;
+        position: absolute;
+        background: #F94151;
+        border-radius: 0 0 50% 50%;
+        top: -50%;
+        left: -40%;
+      }
+      .moneyTBottom {
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        font-size: 16px;
+        line-height: 30px;
+        text-align: center;
+        border-radius: 50%;
+        background: #FFDF47;
+        color: #C61A2F;
+        top: 39px;
+        left: 32px;
+      }
     }
     .title {
       font-size: 16px;
       line-height: 22px;
       height: 22px;
       overflow: hidden;
-      color: #0b0b37;
+      color: var(--color-text-primary);
       margin-bottom: 10px;
     }
     .content {
@@ -25,7 +50,7 @@
       padding: 10px 16px;
     }
     .text {
-      color: #0b0b37;
+      color: var(--color-text-primary);
       font-size: 16px;
       line-height: 26px;
       height: 72px;

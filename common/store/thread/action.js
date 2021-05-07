@@ -518,6 +518,13 @@ class ThreadAction extends ThreadStore {
     const res = await reward({ data: requestParams });
 
     if (res.code === 0) {
+      // 更新store
+      this.commentList.forEach((comment) => {
+        if (comment.id === postId) {
+          comment.rewards = comment.rewards + Number(rewards);
+        }
+      });
+
       return {
         msg: '操作成功',
         success: true,

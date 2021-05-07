@@ -1,19 +1,102 @@
-import React, { useMemo } from 'react';
-import { Avatar } from '@discuzq/design';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import { Avatar, Button, Icon } from '@discuzq/design';
+import { inject, observer } from 'mobx-react';
+import LoadingBox from '@components/loading-box';
+import styles from './index.module.scss';
 
-export default function avatar(props) {
-  const { image = '', name = '匿', onClick = () => {}, className = '', circle = true, size = 'primary' } = props;
+function avatar(props) {
+  const { image = '', name = '匿', onClick = () => {}, className = '', circle = true, size = 'primary', isShowUserInfo = false, userId = null } = props;
 
   const userName = useMemo(() => {
     const newName = name.toLocaleUpperCase()[0];
     return newName;
   }, [name]);
 
+  const [ isShow, changeIsShow ] = useState(false);
+  const [ userInfo, changeUserInfo ] = useState('padding');
+
+  const onMouseEnterHandler = useCallback(async () => {
+    if (!userId) return;
+    changeIsShow(true);
+
+    if ( !userInfo || userInfo === 'padding' ) {
+      const userInfo = await props.user.getAssignUserInfo(userId);
+      changeUserInfo(userInfo);
+    }
+  });
+
+  const onMouseLeaveHandler = useCallback(() => {
+    if (!userId) return;
+    changeIsShow(false);
+  });
+
+  const userInfoBox = useMemo(() => {
+    if (!isShowUserInfo || !userId) return null;
+
+    if (true || userInfo === 'padding') {
+      return (
+        <div className={styles.userInfoBox}>
+          <div className={styles.userInfoContent}>
+            <LoadingBox style={{height: '100%'}}/>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className={styles.userInfoBox}>
+        <div className={styles.userInfoContent}>
+          <div className={styles.header}>
+            <div className={styles.left}>
+              <Avatar className={styles.customAvatar} circle={true} image={userInfo.avatarUrl} siz='primary'></Avatar>
+            </div>
+            <div className={styles.right}>
+              <p className={styles.name}>{userInfo.username}</p>
+              <p className={styles.text}>{userInfo.signature && userInfo.signature !== '' ? userInfo.signature : '暂无签名'}</p>
+            </div>
+          </div>
+          <div className={styles.content}>
+            <div className={styles.item}>
+              <p className={styles.title}>主题</p>
+              <p className={styles.text}>{userInfo.threadCount || 0}</p>
+            </div>
+            <div className={styles.item}>
+              <p className={styles.title}>点赞</p>
+              <p className={styles.text}>{userInfo.likedCount || 0}</p>
+            </div>
+            <div className={styles.item}>
+              <p className={styles.title}>已关注</p>
+              <p className={styles.text}>{userInfo.followCount || 0}</p>
+            </div>
+            <div className={styles.item}>
+              <p className={styles.title}>粉丝</p>
+              <p className={styles.text}>{userInfo.fansCount || 0}</p>
+            </div>
+          </div>
+          <div className={styles.footer}>
+            <Button className={styles.btn} type='primary'><Icon className={styles.icon} name={userInfo.follow ? "CheckOutlined" : "PlusOutlined"} size={12}/>{userInfo.follow ? '已关注' : '关注'}</Button>
+            <Button className={[styles.btn, styles.ghost]} type='primary' ghost><Icon className={styles.icon} name="NewsOutlined" size={12}/>发私信</Button>
+            <Button className={styles.btn} type='primary'><Icon className={styles.icon} name="ShieldOutlined" size={12}/>屏蔽</Button>
+          </div>
+        </div>
+      </div> 
+    );
+  }, [userInfo, isShowUserInfo, userId])
+
   if (image && image !== '') {
-    return (<Avatar className={className} circle={circle} image={image} size={size} onClick={onClick}></Avatar>);
+    return (
+      <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
+        <Avatar className={className} circle={circle} image={image} size={size} onClick={onClick}></Avatar>
+        {isShow && userInfoBox}
+      </div>
+    );
   }
 
   return (
-    <Avatar className={className} circle={circle} text={userName} size={size} onClick={onClick}></Avatar>
+    <div className={styles.avatarBox}>
+      <Avatar className={className} circle={circle} text={userName} size={size} onClick={onClick}></Avatar>
+      {isShow && userInfoBox}
+    </div>
   );
 }
+export default inject('user')(avatar);

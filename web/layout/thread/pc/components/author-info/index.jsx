@@ -11,9 +11,6 @@ import { inject, observer } from 'mobx-react';
 class AuthorInfo extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            isShowBtn: true,
-        };
 
         this.user = this.props.user || {};
     }
@@ -35,7 +32,13 @@ class AuthorInfo extends React.Component {
                 <div className={styles.info}>
                     <div className={styles.AuthorInfo}>
                         <div className={styles.avatar}>
-                            <Avatar image={this.user.avatarUrl} name={this.user.username} circle={true}></Avatar>
+                            <Avatar
+                                image={this.user.avatarUrl}
+                                name={this.user.username}
+                                circle={true}
+                                userId={this.user.id}
+                                platform='pc'>
+                            </Avatar>
                         </div>
                         <div className={styles.information}>
                             <div className={styles.name}>{this.user.username || ''}</div>
@@ -62,7 +65,7 @@ class AuthorInfo extends React.Component {
                     </div>
                 </div>
                 {
-                    this.state.isShowBtn
+                    this.props.isShowBtn
                         ? <div className={styles.btn}>
                             <Button type={this.user.follow ? 'primary' : 'primary'} className={styles.follow} onClick={() => this.onFollowClick()}>
                                 <div className={styles.btnItem}>

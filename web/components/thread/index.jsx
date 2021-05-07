@@ -15,7 +15,7 @@ import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
-import { filterClickClassName, handleAttachmentData } from './utils';
+import { ThreadCommonContext, handleAttachmentData } from './utils';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import threadPay from '@common/pay-bussiness/thread-pay';
 
@@ -211,8 +211,8 @@ class Index extends React.Component {
     }
 
     render() {
-      const { data, className = '', site } = this.props;
-      const { platform } = site;
+      const { data, className = '', site = {} } = this.props;
+      const { platform = 'pc' } = site;
 
       if (!data) {
         return <NoData />;
@@ -251,6 +251,8 @@ class Index extends React.Component {
                 isPrice={isPrice}
                 isRed={isRedPack}
                 isReward={isReward}
+                userId={user?.userId}
+                platform={platform}
               />
           </div>
 

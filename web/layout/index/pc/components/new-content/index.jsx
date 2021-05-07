@@ -19,9 +19,9 @@ const NewContent = (props) => {
     <div>
       {
         visible && (
-          <div className={styles.container}>
+          <div className={styles.container} onClick={goRefresh}>
             <span className={styles.text}>有{conNum}条新发布的内容</span>
-            <div className={styles.refreshBtn} onClick={goRefresh}>
+            <div className={styles.refreshBtn}>
               点击刷新
             </div>
             <Icon className={styles.refreshIcon} name="LoadingOutlined" size={14} color='#90b2f8'/>

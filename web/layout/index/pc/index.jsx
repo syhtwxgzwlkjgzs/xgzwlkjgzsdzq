@@ -131,9 +131,6 @@ class IndexPCPage extends React.Component {
     return tmpCategories;
   }
 
-  onBackTop = () => {
-    this.listRef?.current?.onBackTop()
-  }
 
   // 发帖
   onPostThread = () => {
@@ -236,7 +233,6 @@ class IndexPCPage extends React.Component {
         >
           {this.renderContent(index)}
         </BaseLayout>
-        <Button className={styles.backTop} style={{ visibility }} onClick={this.onBackTop}>返回顶部</Button>
       </List>
     );
   }

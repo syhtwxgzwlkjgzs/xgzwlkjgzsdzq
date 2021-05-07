@@ -38,10 +38,15 @@ const Index = ({
   return (
     <View className={styles.container} onClick={onClick}>
       <View className={styles.box}>
-        <View className={styles.money}>￥{money}</View>
+        <View className={styles.money}>
+          <View className={styles.moneyTop}></View>
+          <View className={styles.moneyText}>￥{money}</View>
+          <View className={styles.moneyBottom}></View>
+          <View className={styles.moneyReward}>赏</View>
+        </View>
         <View className={styles.content}>
-          <View className={styles.title}>{texts || '悬赏问答'}</View>
-          <View className={styles.text}>{content || '暂无内容'}</View>
+          <View className={styles.title}>{texts || ''}</View>
+          <View className={styles.text}>{content || ''}</View>
         </View>
       </View>
       <Button className={styles.button} type="primary">{ type === POST_TYPE.NO_ANSWER ? '立即回答' : '查看答案'}</Button>
