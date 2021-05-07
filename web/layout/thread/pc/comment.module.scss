@@ -25,11 +25,14 @@
     line-height: rem(50);
     text-align: left;
     color: var(--color-text-secondary);
+    cursor: pointer;
     .sortText {
       padding-left: rem(4);
+      cursor: pointer;
     }
     .sortIcon {
       font-size: rem($font-size-primary) !important;
+      cursor: pointer;
     }
   }
 }

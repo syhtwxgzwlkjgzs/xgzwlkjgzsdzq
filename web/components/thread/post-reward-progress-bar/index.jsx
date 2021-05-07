@@ -52,7 +52,11 @@ const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0 }) => {
         isShowText={false}
       >
         <div className={styles.content}>
-          <img className={styles.icon} />
+          {
+            type === POST_TYPE.RED_PACK 
+              ? <img className={styles.icon} src='/dzq-img/redpacket-mini.png' />
+              : <img className={styles.icon} src='/dzq-img/coin.png' />
+          }
           <div className={styles.remaining}>{texts.remaining}</div>
           <div className={styles.received}>{texts.received}</div>
           {texts.receive && <div className={styles.receive}>{texts.receive}</div>}
