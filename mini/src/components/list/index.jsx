@@ -45,8 +45,9 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
     if (e && !isLoading.current) {
       isLoading.current = true;
       setLoadText('加载中...');
-      if (isPromise(onRefresh)) {
-        onRefresh()
+      if (typeof(onRefresh) === 'function') {
+        const promise = onRefresh()
+        isPromise(promise) && promise
           .then(() => {
             setLoadText('加载中...');
             isLoading.current = false;
