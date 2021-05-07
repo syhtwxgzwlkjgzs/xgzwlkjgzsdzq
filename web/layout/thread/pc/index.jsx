@@ -181,7 +181,12 @@ const RenderThreadContent = inject('user')(observer((props) => {
           {
             isAttachmentPay && !isSelf
             && <div style={{ textAlign: 'center' }} onClick={onContentClick}>
-              <Button className={topic.payButton} type='primary' size='large'>支付{attachmentPrice}元查看附件</Button>
+              <Button className={topic.payButton} type='primary' size='large'>
+                <div className={topic.pay}>
+                  <Icon className={topic.payIcon} name='DollarLOutlined' size={18}></Icon>
+                  支付{attachmentPrice}元查看附件
+                </div>
+              </Button>
             </div>
           }
 
@@ -253,7 +258,12 @@ const RenderThreadContent = inject('user')(observer((props) => {
           {
             isThreadPay && !isSelf
             && <div style={{ textAlign: 'center' }} onClick={onContentClick}>
-              <Button className={topic.payButton} type='primary' size='large'>支付{threadPrice}元查看剩余内容</Button>
+              <Button className={topic.payButton} type='primary' size='large'>
+                <div className={topic.pay}>
+                  <Icon className={topic.payIcon} name='DollarLOutlined' size={18}></Icon>
+                  支付{threadPrice}元查看剩余内容
+                </div>
+              </Button>
             </div>
           }
 
@@ -549,7 +559,7 @@ class RenderCommentList extends React.Component {
           <div className={comment.sort} onClick={() => this.onSortClick()}>
             <Icon className={comment.sortIcon} name="SortOutlined"></Icon>
             <span className={comment.sortText}>
-              {this.state.commentSort ? '评论从旧到新' : '评论从新到旧'}
+              {this.state.commentSort ? '评论从新到旧' : '评论从旧到新'}
             </span>
           </div>
         </div>
