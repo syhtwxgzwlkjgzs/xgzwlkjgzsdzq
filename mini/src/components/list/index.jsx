@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Spin } from '@discuzq/design';
 import { View, Text, ScrollView } from '@tarojs/components';
-import { noop } from '@components/thread/utils'
+import { noop, isPromise } from '@components/thread/utils'
 import styles from './index.module.scss';
 
 /**
@@ -30,22 +30,24 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
   }, []);
 
   const throttle = (fn, delay) => {
-    let timer = null;
+    return args => {
+        if (fn.id) return
 
-    return function (...args) {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        fn(...args);
-      }, delay);
-    };
-  };
+        fn.id = setTimeout(() => {
+            fn.call(this, args)
+            clearTimeout(fn.id)
+            fn.id = null
+        }, delay)
+    }
+  }
 
-  const onTouchMove = throttle((e) => {
+  const onTouchMove = (e) => {
     if (e && !isLoading.current) {
       isLoading.current = true;
       setLoadText('加载中...');
       if (typeof(onRefresh) === 'function') {
-        onRefresh()
+        const promise = onRefresh()
+        isPromise(promise) && promise
           .then(() => {
             setLoadText('加载中...');
             isLoading.current = false;
@@ -60,9 +62,13 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
               isLoading.current = true;
             }
           });
+      } else {
+        console.error('上拉刷新，必须返回promise');
       }
     }
-  }, 50);
+  };
+
+  const handleScroll = throttle(onScroll, 0)
  
   return (
     <ScrollView 
@@ -71,7 +77,7 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
       style={{ height }} 
       onScrollToLower={onTouchMove}
       lowerThreshold={80}
-      onScroll={onScroll}
+      onScroll={handleScroll}
     >
       {children}
       {allowRefresh && (

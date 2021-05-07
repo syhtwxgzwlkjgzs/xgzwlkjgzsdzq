@@ -14,7 +14,7 @@ import UserInfo from './user-info';
 import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
-import { filterClickClassName, handleAttachmentData } from './utils';
+import { handleAttachmentData } from './utils';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
@@ -24,6 +24,8 @@ import threadPay from '@common/pay-bussiness/thread-pay';
 @inject('index')
 @inject('user')
 @inject('search')
+@inject('topic')
+@inject('thread')
 @observer
 class Index extends React.Component {
     // 分享
@@ -43,6 +45,7 @@ class Index extends React.Component {
         if (result.code === 0) {
           this.props.index.updateAssignThreadInfo(threadId, { isShare: true });
           this.props.search.updateAssignThreadInfo(threadId, { isShare: true });
+          this.props.topic.updateAssignThreadInfo(threadId, { isShare: true });
         }
       });
     }
@@ -82,6 +85,7 @@ class Index extends React.Component {
           const { isLiked } = result.data;
           this.props.index.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
           this.props.search.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
+          this.props.topic.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
         }
       });
     }
@@ -110,6 +114,7 @@ class Index extends React.Component {
         if (code === 0 && data) {
           this.props.index.updatePayThreadInfo(thread?.threadId, data)
           this.props.search.updatePayThreadInfo(thread?.threadId, data)
+          this.props.topic.updatePayThreadInfo(thread?.threadId, data)
         }
       }
     }
@@ -171,11 +176,12 @@ class Index extends React.Component {
                 money={rewardData.money}
                 onClick={this.onPay}
               />}
-              {redPacketData && <RedPacket content={redPacketData.content || ''} onClick={this.onPay} />}
+              {redPacketData && <RedPacket content={redPacketData.content || ''} onClick={this.onClick} />}
               {goodsData && <ProductItem
                   image={goodsData.imagePath}
                   amount={goodsData.price}
                   title={goodsData.title}
+                  onClick={this.onClick}
               />}
               {audioData && <AudioPlay url={audioData.mediaUrl} isPay={payType !== 0} />}
               {fileData && <AttachmentView attachments={fileData} onClick={this.onPay} isPay={payType !== 0} />}

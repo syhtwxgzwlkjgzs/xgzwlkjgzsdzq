@@ -10,15 +10,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
   .text {
     font-size: rem($font-size-primary);
     color: #0065ff;
     margin-right: rem($margin-2n);
   }
   .refreshBtn {
-    font-size: 14px;
+    font-size: rem($font-size-primary);
     color: #90b2f8;
-    margin-right: rem(9.5);
+    margin-right: rem($margin-10);
     cursor: pointer;
   }
 }
