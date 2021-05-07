@@ -14,7 +14,7 @@ import UserInfo from './user-info';
 import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
-import { filterClickClassName, handleAttachmentData } from './utils';
+import { handleAttachmentData } from './utils';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';

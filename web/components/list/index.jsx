@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import { Spin } from '@discuzq/design';
-import { noop } from '@components/thread/utils';
+import { noop, isPromise } from '@components/thread/utils';
 import styles from './index.module.scss';
 
 /**
@@ -74,7 +74,7 @@ const List = forwardRef(({
     if ((scrollHeight - 40 <= clientHeight + scrollTop) && !isLoading.current) {
       isLoading.current = true;
       setLoadText('加载中...');
-      if (typeof(onRefresh) === 'function') {
+      if (isPromise(onRefresh)) {
         onRefresh()
           .then(() => {
             setLoadText('加载中...');
@@ -90,6 +90,8 @@ const List = forwardRef(({
               isLoading.current = true;
             }
           });
+      } else {
+        console.error('上拉刷新，必须返回promise');
       }
     }
   }, 0);
