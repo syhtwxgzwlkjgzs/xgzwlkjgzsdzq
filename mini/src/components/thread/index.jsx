@@ -176,11 +176,12 @@ class Index extends React.Component {
                 money={rewardData.money}
                 onClick={this.onPay}
               />}
-              {redPacketData && <RedPacket content={redPacketData.content || ''} onClick={this.onPay} />}
+              {redPacketData && <RedPacket content={redPacketData.content || ''} onClick={this.onClick} />}
               {goodsData && <ProductItem
                   image={goodsData.imagePath}
                   amount={goodsData.price}
                   title={goodsData.title}
+                  onClick={this.onClick}
               />}
               {audioData && <AudioPlay url={audioData.mediaUrl} isPay={payType !== 0} />}
               {fileData && <AttachmentView attachments={fileData} onClick={this.onPay} isPay={payType !== 0} />}
