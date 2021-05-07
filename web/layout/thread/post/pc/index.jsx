@@ -63,13 +63,13 @@ class ThreadPCPage extends React.Component {
                 onChange={this.props.handleVditorChange}
                 onCountChange={count => this.props.handleSetState({ count })}
                 onFocus={() => { }}
-                onBlur={() => {}}
+                onBlur={() => { }}
               />
               {/* 录音组件 */}
               {(currentAttachOperation === THREAD_TYPE.voice) && (
-                  <AudioRecord duration={60} onUpload={(blob) => {
-                    this.props.handleAudioUpload(blob);
-                  }}
+                <AudioRecord duration={60} onUpload={(blob) => {
+                  this.props.handleAudioUpload(blob);
+                }}
                 />
               )}
               {/* 语音组件 */}
@@ -79,12 +79,12 @@ class ThreadPCPage extends React.Component {
               {/* 插入图片 */}
               {(currentAttachOperation === THREAD_TYPE.image
                 || Object.keys(postData.images).length > 0) && (
-                <ImageUpload
-                  fileList={Object.values(postData.images)}
-                  onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.image)}
-                  onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.image)}
-                />
-              )}
+                  <ImageUpload
+                    fileList={Object.values(postData.images)}
+                    onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.image)}
+                    onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.image)}
+                  />
+                )}
 
               {/* 视频组件 */}
               {(postData.video && postData.video.thumbUrl) && (
@@ -203,7 +203,7 @@ class ThreadPCPage extends React.Component {
               <Button type="primary" onClick={() => this.props.handleSubmit()}>发布</Button>
             </div>
           </div>
-          <Copyright/>
+          <Copyright />
           {/* 插入商品 */}
           <ProductSelect
             pc

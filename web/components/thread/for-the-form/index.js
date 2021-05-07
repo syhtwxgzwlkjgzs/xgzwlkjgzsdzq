@@ -1,18 +1,23 @@
 /**
  * 悬赏表单 - 日历选择
- * TODO: pc 的悬赏日历待重新选择插件
+ * pc部分使用需 npm install react-datepicker --save 或者 yarn add react-datepicker
+ * 详细案例参考 https://github.com/Hacker0x01/react-datepicker/
  */
 import React, { memo, useState, useEffect } from 'react'; // 性能优化的
-import { Button, Input, Toast } from '@discuzq/design'; // 原来就有的封装
+import { Button, Input, Toast, Popup, Icon } from '@discuzq/design'; // 原来就有的封装
 import DatePickers from '@components/thread/date-picker'; // 原来就有的封装
+import DatePicker from "react-datepicker";
+import { formatDate } from '@common/utils/format-date.js';
+
+import "react-datepicker/dist/react-datepicker.css";
 import styles from './index.module.scss'; // 私有样式
 import PropTypes from 'prop-types'; // 类型拦截
-import DDialog from '@components/dialog';
 
 const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
   const [value, setValue] = useState('');// 悬赏金额
-  const [times, setTimes] = useState('悬赏时间');// 悬赏的到期时间
+  const [times, setTimes] = useState(formatDate(new Date(), 'yyyy-MM-dd h:mm'));// 悬赏的到期时间
   const [show, setShow] = useState(false);// 时间选择器是否显示
+
   // 时间选择器是否显示
   useEffect(() => {
     if (data !== undefined && Object.keys(data).length > 0) {
@@ -20,16 +25,16 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
       setTimes(data.times);
     }
   }, []);
+
   // 点击确定的时候返回参数
   const redbagconfirm = () => {
-    if (value <= 0 && value > 10000) {
+    if (value <= 0 || value > 10000) {
       Toast.warning({ content: '金额数不合理,0<money<10000' });
       return;
     }
-    // console.log(times);
     const gapTime = new Date(times).getTime() - new Date().getTime();
 
-    if (times === '悬赏时间' || gapTime < 24 * 3600 * 1000) {
+    if ( gapTime < 24 * 3600 * 1000 ) {
       Toast.warning({ content: '悬赏时间要大于当前时间24小时' });
       return;
     }
@@ -47,7 +52,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
             mode="number"
             value={value}
             placeholder="金额"
-            onChange={e => setValue(e.target.value)}
+            onChange={e => setValue(+e.target.value)}
           />
           元
         </div>
@@ -82,14 +87,36 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
   );
   if (!pc) return content;
   return (
-    <DDialog
-      visible={visible}
-      className={styles.pc}
-      onClose={cancel}
-      title="悬赏设置"
-    >
-      {content}
-    </DDialog>
+    <div className={styles['form-wrapper']}>
+      <Popup position="center" visible={visible}>
+        <div className={styles['redpacket-box']}>
+          <div className={styles['title-top']}><span>悬赏问答</span>
+            <Icon className={styles['title-top-right']} onClick={() => cancel()} name="LikeOutlined" size={20} color="#8490a8"></Icon>
+          </div>
+          <div className={styles['line-box']}>
+            <div className={styles['color-text']}> 悬赏金额 </div>
+            <div>
+              <Input
+                mode="number"
+                value={value}
+                placeholder="金额"
+                onChange={(e) => setValue(+e.target.value)}
+              />元
+          </div>
+          </div>
+          <div className={styles['line-box-bottom']}>
+            <div className={styles['color-text']}> 悬赏结束时间 </div>
+            <div>
+            <DatePicker selected={new Date()} onChange={date => setTimes(date)} showTimeSelect dateFormat="yyyy-MM-dd h:mm aa" /> 
+            </div>
+          </div>
+          <div className={styles.btn}>
+            <Button type="large" className={styles['btn-one']} onClick={() => cancel()}>取消</Button>
+            <Button type="large" className={styles['btn-two']} onClick={redbagconfirm}>确定</Button>
+          </div>
+        </div>
+      </Popup>
+    </div >
   );
 };
 

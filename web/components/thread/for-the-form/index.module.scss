@@ -30,25 +30,25 @@
     padding-bottom: 16px;
     font-size: 14px;
   }
-}
-
-.btn {
-  position: absolute;
-  bottom: 0;
-  display: flex;
-  width: rem(343);
-  height: 52px;
-  border-top: 1px solid #eee;
-  padding: 0 rem(16);
-  justify-content: space-between;
-  align-items: center;
-  :global {
-    .dzq-button {
-      width: rem(166);
-      height: 42px;
+  .btn {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    width: rem(343);
+    height: 52px;
+    border-top: 1px solid #eee;
+    padding: 0 rem(16);
+    justify-content: space-between;
+    align-items: center;
+    :global {
+      .dzq-button {
+        width: rem(166);
+        height: 42px;
+      }
     }
   }
 }
+
 
 .pc {
   z-index: var(--zindex-dialog) !important;
@@ -76,6 +76,191 @@
           margin-right: var(--margin-4n);
         }
       }
+    }
+  }
+}
+
+
+ // pc部分样式
+ .form-wrapper {
+  :global {
+
+    .react-datepicker {
+      // 整个盒子
+      height: 392px;
+      width: auto;
+      overflow: hidden;
+    }
+
+    .react-datepicker__current-month {
+      font-size: 16px;
+    }
+
+    .react-datepicker__navigation {
+      margin-right: 80px;
+      border: 10px solid transparent;
+      border-left-color: #ccc;
+    }
+
+    .react-datepicker__navigation--previous {
+      border-left-color: transparent;
+      border-right-color: #ccc;
+      margin-right: 0;
+      margin-left: 80px;
+    }
+
+    .react-datepicker__day-name {
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
+      margin: 0;
+    }
+
+    .react-datepicker {
+      font-size: 12px;
+    }
+
+    .react-datepicker__month {
+      margin: 20px;
+    }
+
+    .react-datepicker__day {
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
+      margin: 0;
+    }
+
+    // 时间组件中时间部分
+    .react-datepicker-time__header {
+      font-size: 16px;
+
+    }
+
+    .react-datepicker__time-box {
+      ::-webkit-scrollbar {
+        width: 0px;
+      }
+    }
+
+    //展示的input框部分
+    .react-datepicker__input-container>input {
+      width: 135px;
+      font-size: 14px;
+      border: none;
+    }
+    // 结束
+    .dzq-input {
+      display: inline-block;
+      width: 40px;
+
+      .dzq-input__inner {
+        border: none;
+        padding: 0;
+        text-align: center;
+      }
+
+    }
+
+
+    .dzq-popup__overlay {
+      z-index: 1000;
+    }
+
+    .dzq-popup__container {
+      z-index: 1001;
+    }
+
+    .datepicker-modal {
+      height: 100vh !important;
+    }
+
+    .box_sans {}
+
+    .gcw7b6avyvQr4OAyM9Tf_ {
+      position: absolute;
+      top: -62px;
+    }
+  }
+
+  .redpacket-box {
+    margin: 0 auto;
+    width: 409px;
+    min-height: 227px;
+    background-color: var(--color-white);
+    border-radius: 5px;
+
+    .title-top {
+      height: 43px;
+      line-height: 43px;
+      text-align: center;
+      position: relative;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 43px;
+      color: var(--color-text-primary);
+
+      .title-top-right {
+        position: absolute;
+        right: 24px;
+        top: 12px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .color-text {
+      color: #4f5a70;
+    }
+
+    .line-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-left: 16px;
+      margin-right: 16px;
+      padding-top: 16px;
+      padding-bottom: 16px;
+      border-bottom: var(--border-border);
+      font-size: 14px;
+    }
+
+    .line-box-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-left: 16px;
+      margin-right: 16px;
+      padding-top: 16px;
+      padding-bottom: 16px;
+      font-size: 14px;
+    }
+  }
+
+  .btn {
+    padding: 12px 80px 0 80px;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    line-height: 53px;
+    -webkit-tap-highlight-color: transparent;
+
+    .btn-one {
+      width: 116px;
+      height: 36px;
+      color: #333;
+      text-align: center;
+      border: none;
+      background: #eee;
+    }
+
+    .btn-two {
+      width: 116px;
+      height: 36px;
+      color: white;
+      text-align: center;
+      background-color: #2469f6;
+      border: none;
     }
   }
 }
