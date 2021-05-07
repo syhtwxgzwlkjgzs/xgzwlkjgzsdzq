@@ -79,7 +79,7 @@ class UserAction extends SiteStore {
    */
     @action
     async postFollow(userId) {
-      const res = await createFollow({ data: { data: { toUserId: userId } } });
+      const res = await createFollow({ data: {  toUserId: userId }});
       if (res.code === 0 && res.data) {
         return {
           msg: '操作成功',

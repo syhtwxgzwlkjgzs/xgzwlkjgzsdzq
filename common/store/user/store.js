@@ -37,6 +37,7 @@ class UserStore {
       [THREAD_TYPE.voice]: get(pm, 'insertAudio.enable'),
       [THREAD_TYPE.goods]: get(pm, 'insertGoods.enable'),
       [THREAD_TYPE.reward]: get(pm, 'insertReward.enable'),
+      createThread: get(pm, 'createThread.enable'),
     };
   }
 }
