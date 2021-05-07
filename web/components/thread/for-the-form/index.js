@@ -4,13 +4,13 @@
  * 详细案例参考 https://github.com/Hacker0x01/react-datepicker/
  */
 import React, { memo, useState, useEffect } from 'react'; // 性能优化的
-import { Button, Input, Toast, Popup, Icon } from '@discuzq/design'; // 原来就有的封装
+import { Button, Input, Toast } from '@discuzq/design'; // 原来就有的封装
 import DatePickers from '@components/thread/date-picker'; // 原来就有的封装
 import DDialog from '@components/dialog';
-import DatePicker from "react-datepicker";
+import DatePicker from 'react-datepicker';
 import { formatDate } from '@common/utils/format-date.js';
 
-import "react-datepicker/dist/react-datepicker.css";
+import 'react-datepicker/dist/react-datepicker.css';
 import styles from './index.module.scss'; // 私有样式
 import PropTypes from 'prop-types'; // 类型拦截
 
@@ -42,7 +42,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
     }
     confirm({
       value,
-      times,
+      times: formatDate(times, 'yyyy-MM-dd h:mm'),
     });
   };
   const content = (
@@ -63,10 +63,14 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
         <div> 悬赏结束时间 </div>
         <div>
           {pc ? <DatePicker selected={times} onChange={date => setTimes(date)} showTimeSelect dateFormat="yyyy-MM-dd h:mm aa" />
-            : <div onClick={() => { setShow(true); }} > {`${formatDate(times, 'yyyy-MM-dd h:mm')}  >`} </div> }
+            : <div onClick={() => setShow(true)} > {`${formatDate(times, 'yyyy-MM-dd h:mm')}  >`} </div> }
         </div>
       </div>
-      {pc ? '' : <DatePickers onSelects={(e) => { setTimes(e); setShow(false); }} isOpen={show} onCancels={() => { setShow(false); }} />}
+      {pc ? '' : <DatePickers
+        onSelects={(e) => {
+          setTimes(e);
+          setShow(false);
+        }} isOpen={show} onCancels={() => setShow(false)} />}
       <div className={styles.btn}>
         <Button onClick={() => cancel()}>取消</Button>
         <Button type="primary" onClick={redbagconfirm}>确定</Button>
