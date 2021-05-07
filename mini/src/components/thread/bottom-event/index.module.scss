@@ -44,8 +44,16 @@
       color: var(--color-text-secondary);
       font-weight: normal;
     }
+    .fabulousCancel {
+      margin-left: 6px;
+      font-size: 14px;
+      line-height: 20px;
+      color: var(--color-primary);
+      font-weight: normal;
+    }
     .icon {
       margin-bottom: 2px;
+      color: var(--color-text-secondary);
     }
   }
 }

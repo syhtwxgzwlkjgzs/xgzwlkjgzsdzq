@@ -9,6 +9,7 @@ import { View, Text } from '@tarojs/components';
 import Page from '@components/page';
 import List from '@components/list';
 import { Topic } from '@components/search-result-item';
+import Taro from '@tarojs/taro';
 
 @inject('search')
 @observer
@@ -48,8 +49,11 @@ class SearchResultPostPage extends React.Component {
     });
   };
 
-  onTopicClick = data => console.log('topic click', data);
-
+  onTopicClick = data => {
+    Taro.navigateTo({
+      url: `/subPages/topic/topic-detail/index?id=${data.topicId || ''}`
+    })
+  }
   render() {
     const { keyword } = this.state;
     const { topics } = this.props.search;
