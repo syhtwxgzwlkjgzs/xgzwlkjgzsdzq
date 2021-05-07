@@ -14,14 +14,18 @@ import UserInfo from './user-info';
 import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
-import { filterClickClassName, handleAttachmentData } from './utils';
+import { handleAttachmentData } from './utils';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
+import threadPay from '@common/pay-bussiness/thread-pay';
 
 @inject('site')
 @inject('index')
 @inject('user')
+@inject('search')
+@inject('topic')
+@inject('thread')
 @observer
 class Index extends React.Component {
     // 分享
@@ -40,6 +44,8 @@ class Index extends React.Component {
       this.props.index.updateThreadShare({ threadId }).then(result => {
         if (result.code === 0) {
           this.props.index.updateAssignThreadInfo(threadId, { isShare: true });
+          this.props.search.updateAssignThreadInfo(threadId, { isShare: true });
+          this.props.topic.updateAssignThreadInfo(threadId, { isShare: true });
         }
       });
     }
@@ -78,17 +84,19 @@ class Index extends React.Component {
         if (result.code === 0 && result.data) {
           const { isLiked } = result.data;
           this.props.index.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
+          this.props.search.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
+          this.props.topic.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
         }
       });
     }
     // 支付
-    onPay = (e) => {
+    onPay = async (e) => {
       e.stopPropagation();
 
       // 对没有登录的先做
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        // goToLoginPage();
+        goToLoginPage({ url: '/user/login' });
         return;
       }
 
@@ -96,14 +104,22 @@ class Index extends React.Component {
         return;
       }
 
-      console.log('发起支付流程');
+      const thread = this.props.data;
+      const { success } = await threadPay(thread, this.props.user?.userInfo);
+
+      // 支付成功重新请求帖子数据
+      if (success && thread?.threadId) {
+        
+        const { code, data } = await this.props.thread.fetchThreadDetail(thread?.threadId);
+        if (code === 0 && data) {
+          this.props.index.updatePayThreadInfo(thread?.threadId, data)
+          this.props.search.updatePayThreadInfo(thread?.threadId, data)
+          this.props.topic.updatePayThreadInfo(thread?.threadId, data)
+        }
+      }
     }
 
-    onClick = (e) => {
-      if (!filterClickClassName(e.target)) {
-        return;
-      }
-
+    onClick = () => {
       const { threadId = '', ability } = this.props.data || {};
       const { canViewPost } = ability;
 
@@ -160,11 +176,12 @@ class Index extends React.Component {
                 money={rewardData.money}
                 onClick={this.onPay}
               />}
-              {redPacketData && <RedPacket content={redPacketData.content || ''} onClick={this.onPay} />}
+              {redPacketData && <RedPacket content={redPacketData.content || ''} onClick={this.onClick} />}
               {goodsData && <ProductItem
                   image={goodsData.imagePath}
                   amount={goodsData.price}
                   title={goodsData.title}
+                  onClick={this.onClick}
               />}
               {audioData && <AudioPlay url={audioData.mediaUrl} isPay={payType !== 0} />}
               {fileData && <AttachmentView attachments={fileData} onClick={this.onPay} isPay={payType !== 0} />}

@@ -79,7 +79,7 @@ const RenderThreadContent = inject('user')(observer((props) => {
   const isThreadPay = threadStore?.threadData?.payType === 1 && threadStore?.threadData?.paid === false;
   const threadPrice = threadStore?.threadData?.price || 0;
   // 是否作者自己
-  const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData.userId;
+  const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData?.userId;
 
 
   const parseContent = {};
@@ -137,9 +137,11 @@ const RenderThreadContent = inject('user')(observer((props) => {
             view={`${threadStore?.threadData?.viewCount}` || ''}
             time={`${threadStore?.threadData?.createdAt}` || ''}
             isEssence={isEssence}
+            userId={threadStore?.threadData?.user?.userId}
+            platform='pc'
           ></UserInfo>
         </div>
-        <div className={topic.more}>
+        {props?.user?.isLogin() && <div className={topic.more}>
           <div className={topic.iconText}>
             <Dropdown
               menu={<Dropdown.Menu>
@@ -163,13 +165,14 @@ const RenderThreadContent = inject('user')(observer((props) => {
             <span className={topic.text}>举报</span>
           </div>
         </div>
+        }
       </div>
 
       <Divider></Divider>
 
       {
         isApproved === 1
-        && <div className={topic.body} onClick={onContentClick}>
+        && <div className={topic.body}>
           {/* 文字 */}
           {text && <PostContent useShowMore={false} content={text || ''} />}
 
@@ -194,7 +197,7 @@ const RenderThreadContent = inject('user')(observer((props) => {
           {parseContent.IMAGE && <ImageContent imgData={parseContent.IMAGE} />}
           {/* 商品 */}
           {parseContent.GOODS && (
-            <div>
+            <div className={topic.goods}>
               <ProductItem
                 image={parseContent.GOODS.imagePath}
                 amount={parseContent.GOODS.price}
@@ -231,7 +234,12 @@ const RenderThreadContent = inject('user')(observer((props) => {
               }
               {/* 悬赏 */}
               {
-                parseContent.REWARD && <PostRewardProgressBar type={POST_TYPE.BOUNTY} remaining={2} received={5} />
+                parseContent.REWARD && (
+                  <PostRewardProgressBar
+                    type={POST_TYPE.BOUNTY}
+                    remaining={parseContent.REWARD.remain_money}
+                    received={parseContent.REWARD.money - parseContent.REWARD.remain_money} />
+                )
               }
             </div>
           )}
@@ -245,9 +253,11 @@ const RenderThreadContent = inject('user')(observer((props) => {
           }
 
           {/* 打赏 */}
-          <div style={{ textAlign: 'center' }}>
-            <Button onClick={onRewardClick} className={topic.rewardButton} type='primary' size='large'>打赏</Button>
-          </div>
+          {props?.user?.isLogin()
+            && <div style={{ textAlign: 'center' }}>
+              <Button onClick={onRewardClick} className={topic.rewardButton} type='primary' size='large'>打赏</Button>
+            </div>
+          }
         </div>
       }
       <div className={topic.footer}>
@@ -476,18 +486,29 @@ class RenderCommentList extends React.Component {
 
   // 悬赏弹框确定
   async onAboptOk(data) {
-    if (data > 0 && this.commentData && this.props.thread?.threadData?.threadId) {
-      this.setState({ showAboptPopup: false });
+    if (data > 0) {
+      const params = {
+        postId: this.commentData.id,
+        rewards: data,
+        threadId: this.props.thread?.threadData?.threadId,
+      };
+      const { success, msg } = await this.props.thread.reward(params);
+      if (success) {
+        this.setState({ showAboptPopup: false });
+        Toast.success({
+          content: `悬赏${data}元`,
+        });
+        return true;
+      }
 
-      Toast.success({
-        content: `成功悬赏${data}元`,
+      Toast.error({
+        content: msg,
       });
     } else {
       Toast.success({
         content: '悬赏金额不能为0',
       });
     }
-    return true;
   }
 
   // 悬赏弹框取消
@@ -501,7 +522,20 @@ class RenderCommentList extends React.Component {
 
     // 是否作者自己
     const isSelf = this.props.user?.userInfo?.id
-      && this.props.user?.userInfo?.id === this.props.thread?.threadData.userId;
+      && this.props.user?.userInfo?.id === this.props.thread?.threadData?.userId;
+
+    const isReward = this.props.thread?.threadData?.displayTag?.isReward;
+
+    const { indexes } = this.props.thread?.threadData?.content || {};
+    const parseContent = {};
+    if (indexes && Object.keys(indexes)) {
+      Object.entries(indexes).forEach(([, value]) => {
+        if (value) {
+          const { tomId, body } = value;
+          parseContent[typeMap[tomId]] = body;
+        }
+      });
+    }
 
     return (
       <Fragment>
@@ -550,7 +584,11 @@ class RenderCommentList extends React.Component {
                 isShowOne={true}
                 isShowInput={this.state.commentId === val.id}
                 onAboptClick={() => this.onAboptClick(val)}
-                isShowAdopt={isSelf}
+                isShowAdopt={ // 是帖子作者 && 是悬赏帖 && 评论人不是作者本人
+                  isSelf
+                  && isReward
+                  && this.props.thread?.threadData?.userId !== val.userId
+                }
               ></CommentList>
             </div>
           ))}
@@ -564,12 +602,14 @@ class RenderCommentList extends React.Component {
         ></DeletePopup>
 
         {/* 采纳弹层 */}
-        <AboptPopup
-          rewardAmount={100} // 需要传入剩余悬赏金额
-          visible={this.state.showAboptPopup}
-          onCancel={() => this.onAboptCancel()}
-          onOkClick={data => this.onAboptOk(data)}
-        ></AboptPopup>
+        {parseContent?.REWARD?.money && (
+          <AboptPopup
+            rewardAmount={parseContent.REWARD.money} // 需要传入剩余悬赏金额
+            visible={this.state.showAboptPopup}
+            onCancel={() => this.onAboptCancel()}
+            onOkClick={data => this.onAboptOk(data)}
+          ></AboptPopup>
+        )}
       </Fragment>
     );
   }
@@ -707,9 +747,29 @@ class ThreadPCPage extends React.Component {
 
   // 确定举报
   onReportOk(val) {
-    console.log('确定举报啦', val);
-    this.setState({ showReportPopup: false });
-    return true;
+    if (!val) return;
+    const params = {
+      threadId: this.props.thread.threadData.threadId,
+      type: 1,
+      reason: val,
+      userId: this.props.user.userInfo.id,
+    };
+    const { success, msg } = this.props.thread.createReports(params);
+
+    if (success) {
+      Toast.success({
+        content: '操作成功',
+      });
+
+      this.setState({ showReportPopup: false });
+      return true;
+    }
+
+    console.log(msg);
+
+    Toast.error({
+      content: msg,
+    });
   }
 
   // 置顶提示
@@ -804,10 +864,12 @@ class ThreadPCPage extends React.Component {
     const params = {
       id,
       content: val,
+      postId: this.props.thread?.threadData?.postId,
       sort: this.commentDataSort, // 目前的排序
       isNoMore: false,
       attachments: [],
     };
+
     const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
       Toast.success({
@@ -955,6 +1017,8 @@ class ThreadPCPage extends React.Component {
   render() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
+    // 是否作者自己
+    const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === threadStore?.threadData?.userId;
 
     return (
       <div className={layout.container}>
@@ -1014,7 +1078,11 @@ class ThreadPCPage extends React.Component {
             <div className={layout.authorInfo}>
               {
                 threadStore?.authorInfo
-                  ? <AuthorInfo user={threadStore.authorInfo} onFollowClick={() => this.onFollowClick()}></AuthorInfo>
+                  ? <AuthorInfo
+                    user={threadStore.authorInfo}
+                    onFollowClick={() => this.onFollowClick()}
+                    isShowBtn={!isSelf}>
+                  </AuthorInfo>
                   : <LoadingTips type='init'></LoadingTips>
               }
             </div>
@@ -1045,7 +1113,9 @@ class ThreadPCPage extends React.Component {
               <UserInfo
                 name={this?.comment?.user?.username || ''}
                 avatar={this?.comment?.user?.avatar || ''}
-                time={`${this?.comment?.updatedAt}` || ''}>
+                time={`${this?.comment?.updatedAt}` || ''}
+                userId={this?.comment?.user?.userId}
+                platform='pc'>
               </UserInfo>
             </div>
             <CommentInput

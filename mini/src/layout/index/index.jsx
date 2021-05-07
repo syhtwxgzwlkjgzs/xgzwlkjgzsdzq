@@ -11,6 +11,9 @@ import Tabbar from './components/tabbar';
 import FilterView from './components/filter-view';
 import { View, Text } from '@tarojs/components';
 import PayBox from '@components/payBox'
+import NavBar from './components/nav-bar'
+import Taro from '@tarojs/taro';
+
 
 @inject('site')
 @inject('user')
@@ -23,18 +26,33 @@ class IndexMiniPage extends React.Component {
       visible: false,
       filter: {},
       currentIndex: '',
-      scroll: true,
+      fixedTab: false,
+      showNavBar: false,
+      navBarHeight: 64
     };
-    this.listRef = createRef();
     this.renderItem = this.renderItem.bind(this);
+  }
+  
+  navBarRef = React.createRef(null)
+
+  componentDidMount() {
+    try {
+      const res = Taro.getSystemInfoSync()
+      const height = res?.statusBarHeight || 20
+      this.setState({
+        navBarHeight: height + 44
+      })
+    } catch (e) {
+      // Do something when catch error
+    }
   }
 
   onScroll = (e) => {
     const { scrollTop = 0 } = e?.detail || {}
     this.setState({
-      scroll: scrollTop < 160,
+      fixedTab: !(scrollTop < 160),
+      showNavBar: !(scrollTop < 160),
     })
-
   }
   // 点击更多弹出筛选
   searchClick = () => {
@@ -59,6 +77,8 @@ class IndexMiniPage extends React.Component {
       },
       currentIndex: id,
       visible: false,
+      showNavBar: false,
+      fixedTab: false,
     });
   }
 
@@ -101,7 +121,7 @@ class IndexMiniPage extends React.Component {
     return tmpCategories;
   }
 
-  renderHeaderContent = (scroll) => {
+  renderHeaderContent = (fixedTab = false) => {
     const { index } = this.props;
     const { currentIndex } = this.state;
     const { sticks = [] } = index;
@@ -110,30 +130,35 @@ class IndexMiniPage extends React.Component {
     return (
       <View>
         <HomeHeader/>
-        {newCategories?.length > 0 && <View ref={this.listRef} className={scroll ? styles.homeContent : styles.homeContentText}>
-          <Tabs
-            className={styles.tabsBox}
-            scrollable
-            type='primary'
-            onActive={this.onClickTab}
-            activeId={currentIndex}
-            external={
-              <View onClick={this.searchClick} className={styles.tabIcon}>
-                <Icon name="SecondaryMenuOutlined" />
-              </View>
-            }
-          >
-            {
-              newCategories.map((item, index) => (
-                <Tabs.TabPanel
-                  key={index}
-                  id={item.pid}
-                  label={item.name}
-                />
-              ))
-            }
-          </Tabs>
-        </View>}
+        {newCategories?.length > 0 && (
+            <View 
+              className={!fixedTab ? styles.homeContent : styles.homeContentText}
+              style={{top: !fixedTab ? '' : `${this.state.navBarHeight}px`}}
+            >
+            <Tabs
+              className={styles.tabsBox}
+              scrollable
+              type='primary'
+              onActive={this.onClickTab}
+              activeId={currentIndex}
+              external={
+                <View onClick={this.searchClick} className={styles.tabIcon}>
+                  <Icon className={styles.moreIcon} name="SecondaryMenuOutlined" />
+                </View>
+              }
+            >
+              {
+                newCategories.map((item, index) => (
+                  <Tabs.TabPanel
+                    key={index}
+                    id={item.pid}
+                    label={item.name}
+                  />
+                ))
+              }
+            </Tabs>
+          </View>
+        )}
         {sticks && sticks.length > 0 && <View className={styles.homeContent}>
           <TopNew data={sticks}/>
         </View>}
@@ -151,21 +176,23 @@ class IndexMiniPage extends React.Component {
   // 没有帖子列表数据时的默认展示
   renderNoData = () => (
     <>
-      {this.renderHeaderContent(true)}
+      {this.renderHeaderContent()}
       <NoData />
     </>
   )
 
 
   render() {
-    const { index } = this.props;
-    const { filter , scroll} = this.state;
+    const { index, site } = this.props;
+    const { filter , fixedTab, showNavBar } = this.state;
     const { threads = {} } = index;
+    const { webConfig } = site
     const { currentPage, totalPage, pageData } = threads || {};
     const newCategories = this.handleCategories() 
-  
+
     return (
       <View className={styles.container}>
+        <NavBar ref={this.navBarRef} title={webConfig?.setSite?.siteName} isShow={showNavBar} />
         { pageData?.length > 0
           ? (
             <List
@@ -177,7 +204,7 @@ class IndexMiniPage extends React.Component {
              {
                 pageData.map((item, index) => (
                   <View key={index}>
-                    { index === 0 && this.renderHeaderContent(scroll)}
+                    { index === 0 && this.renderHeaderContent(fixedTab)}
                     <ThreadContent data={item} className={styles.listItem} />
                   </View>
                 ))

@@ -20,7 +20,10 @@ class IndexPCPage extends React.Component {
   redirectToSearchResultUser = () => {
     this.props.router.push('/search/result-user');
   };
-  onTopicClick = data => console.log('topic click', data);
+  onTopicClick = data => {
+    debugger
+    this.props.router.push(`/topic/topic-detail/${id}`);
+  };
   fetchMoreData = () => {
     const { dispatch } = this.props;
     const { keyword } = this.state;

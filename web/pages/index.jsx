@@ -4,7 +4,7 @@ import IndexH5Page from '@layout/index/h5';
 import IndexPCPage from '@layout/index/pc';
 import { readCategories, readStickList, readThreadList } from '@server';
 import PayBox from '../components/payBox/index';
-
+import { Toast } from '@discuzq/design'
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 // import HOCWithLogin from '@common/middleware/HOCWithLogin';
 
@@ -60,15 +60,27 @@ class Index extends React.Component {
     const { index } = this.props;
     const { categoryids, types, essence, sequence, attention, sort } = data;
 
+    let newTypes = []
+    if (types && !(types instanceof Array)) {
+      newTypes = [types]
+    }
+
     if (type === 'click-filter') {
+      this.toastInstance = Toast.loading({
+        content: '加载中...',
+        duration: 0,
+      });
+
       this.page = 1;
-      index.screenData({ filter: { categoryids, types, essence, attention, sort }, sequence });
+      await index.screenData({ filter: { categoryids, types: newTypes, essence, attention, sort }, sequence });
+
+      this.toastInstance?.destroy();
     } else if (type === 'moreData') {
       this.page += 1;
       await index.getReadThreadList({
         perPage: this.prePage,
         page: this.page,
-        filter: { categoryids, types, essence, attention, sort },
+        filter: { categoryids, types: newTypes, essence, attention, sort },
         sequence,
       });
 

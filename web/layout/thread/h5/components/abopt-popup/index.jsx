@@ -60,11 +60,10 @@ const InputPop = (props) => {
         <Button full={true} onClick={onSubmitClick} className={styles.ok} type="primary" size="large">
           确定
         </Button>
-        <Button full={true} onClick={onCancel} className={styles.cancel} type="primary" size="large">
+        <Button full={true} onClick={onCancel} className={styles.cancel} type="text" size="large">
           取消
         </Button>
         </div>
-        <div className={styles.blank}></div>
       </div>
     </Popup>
   );

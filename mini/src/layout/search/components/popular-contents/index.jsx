@@ -12,7 +12,7 @@ import { View, Text } from '@tarojs/components';
 const PopularContents = ({ data, onItemClick }) => (
   <View className={styles.list}>
     {
-      data.map((item, index) => <ThreadContent data={item} key={index} />)
+      data.map((item, index) => <ThreadContent className={styles.threadList} data={item} key={index} />)
     }
   </View>
 );

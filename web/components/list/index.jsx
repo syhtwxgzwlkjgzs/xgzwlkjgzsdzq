@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import { Spin } from '@discuzq/design';
-import { noop } from '@components/thread/utils';
+import { noop, isPromise } from '@components/thread/utils';
 import styles from './index.module.scss';
 
 /**
@@ -12,7 +12,16 @@ import styles from './index.module.scss';
  * @prop {function} allowRefresh 是否启用上拉刷新
  */
 
-const List = forwardRef(({ height, className = '', children, noMore, onRefresh, allowRefresh = true, onScroll = noop }, ref) => {
+const List = forwardRef(({ 
+  height, 
+  className = '', 
+  children, 
+  noMore, 
+  onRefresh, 
+  allowRefresh = true, 
+  onScroll = noop,
+  showRefresh = true,
+}, ref) => {
   const listWrapper = useRef(null);
   const isLoading = useRef(false);
   const [loadText, setLoadText] = useState('加载中...');
@@ -32,6 +41,7 @@ const List = forwardRef(({ height, className = '', children, noMore, onRefresh, 
     ref,
     () => ({
       onBackTop,
+      loadText,
     }),
   );
 
@@ -65,7 +75,8 @@ const List = forwardRef(({ height, className = '', children, noMore, onRefresh, 
       isLoading.current = true;
       setLoadText('加载中...');
       if (typeof(onRefresh) === 'function') {
-        onRefresh()
+        const promise = onRefresh()
+        isPromise(promise) && promise
           .then(() => {
             setLoadText('加载中...');
             isLoading.current = false;
@@ -80,6 +91,8 @@ const List = forwardRef(({ height, className = '', children, noMore, onRefresh, 
               isLoading.current = true;
             }
           });
+      } else {
+        console.error('上拉刷新，必须返回promise');
       }
     }
   }, 0);
@@ -92,11 +105,11 @@ const List = forwardRef(({ height, className = '', children, noMore, onRefresh, 
         onScroll={onTouchMove}
       >
         {children}
-        {allowRefresh && (
-              <div className={styles.footer}>
-                { loadText === '加载中...' && <Spin className={styles.spin} type="spinner" /> }
-                { loadText }
-              </div>
+        {allowRefresh && showRefresh && (
+          <div className={styles.footer}>
+            { loadText === '加载中...' && <Spin className={styles.spin} type="spinner" /> }
+            { loadText }
+          </div>
         )}
       </div>
     </div>

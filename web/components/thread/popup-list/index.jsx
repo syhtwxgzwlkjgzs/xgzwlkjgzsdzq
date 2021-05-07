@@ -125,7 +125,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
     },
   ];
 
-  const renderTabPanel = () => (
+  const renderTabPanel = (platform) => (
     tabItems.map((dataSource, index) => {
       const arr = dataSource?.data?.pageData?.list || [];
       return (
@@ -142,7 +142,14 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
                 >
                   {
                     arr.map((item, index) => (
-                        <UserItem key={index} imgSrc={item.avatar} title={item.username} subTitle={item.passedAt} />
+                        <UserItem 
+                          key={index} 
+                          imgSrc={item.avatar} 
+                          title={item.username} 
+                          subTitle={item.passedAt} 
+                          userId={item.userId}
+                          platform={platform}
+                        />
                     ))
                   }
                 </List>
@@ -172,7 +179,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
           }
         >
           {
-            renderTabPanel()
+            renderTabPanel(tipData?.platform)
           }
         </Tabs>
     </Popup>

@@ -10,9 +10,6 @@ class CommentList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isShowReward: false, // 是否展示获得多少悬赏金
-      isShowRedPacket: false, // 是否展示获得多少红包
-      isShowAdopt: false, // 是否展示采纳按钮
       isHideEdit: this.props.isHideEdit, // 隐藏评论编辑删除
       isShowOne: this.props.isShowOne || false, // 是否只显示一条评论回复
     };
@@ -92,28 +89,28 @@ class CommentList extends React.Component {
             <div className={styles.headerRigth}>
 
               {
-                this.state.isShowReward
+                this.props.data?.rewards
                   ? <div>
                     <div className={styles.showMoneyNum}>
-                      获得<span className={styles.moneyNumber}>{6}</span>元悬赏金
+                      获得<span className={styles.moneyNumber}>{this.props.data.rewards}</span>元悬赏金
                     </div>
                   </div>
                   : ''
               }
               {
-                this.state.isShowRedPacket
+                this.props.data?.redPacketAmount
                   ? <div>
                     <div className={styles.showMoneyNum}>
-                      获得<span className={styles.moneyNumber}>{6}</span>元红包
+                      获得<span className={styles.moneyNumber}>{this.props.data.redPacketAmount}</span>元红包
                     </div>
                   </div>
                   : ''
               }
               {
                 !this.state.isShowOne ? (
-                <div className={styles.more} onClick={this.props.onMoreClick}>
-                  <Icon size="16" color="#8590A6" name="MoreVOutlined" className={styles.moreIcon}></Icon>
-                </div>
+                  <div className={styles.more} onClick={this.props.onMoreClick}>
+                    <Icon size="16" color="#8590A6" name="MoreVOutlined" className={styles.moreIcon}></Icon>
+                  </div>
                 ) : ''
               }
             </div>
@@ -149,7 +146,7 @@ class CommentList extends React.Component {
                     <span onClick={() => this.replyClick()}>回复</span>
                   </div>
                   {
-                    this.state.isShowAdopt
+                    this.props.isShowAdopt
                       ? <div className={styles.commentAdopt}>
                         <span onClick={() => this.props.onAboptClick()}>采纳</span>
                       </div> : ''

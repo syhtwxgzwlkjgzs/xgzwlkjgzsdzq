@@ -48,11 +48,15 @@ const Index = ({
       <div className={styles.user}>
         {userImgs.length !== 0 ? <div className={styles.userImg}>
           <div className={styles.portrait}>
-            <Tip tipData={tipData} imgs={userImgs}></Tip>
+            <Tip tipData={tipData} imgs={userImgs} wholeNum={wholeNum}></Tip>
           </div>
-          <p className={styles.numText}>
-            {wholeNum}
-          </p>
+          {
+            wholeNum !== 0 && (
+              <p className={styles.numText}>
+                {wholeNum}
+              </p>
+            )
+          }
         </div> : <div></div>}
         <div className={styles.commentSharing}>
           {comment > 0 && <p className={styles.commentNum}>{`${comment}条评论`}</p>}
@@ -66,7 +70,7 @@ const Index = ({
         {
           postList.map((item, index) => (
               <div key={index} className={styles.fabulous} onClick={item.event}>
-                <Icon className={styles.icon} name={item.icon} size={14} color={`${item.name === '取消' ? '#2469f6' : ''}`}></Icon>
+                <Icon className={styles.icon} name={item.icon} size={14} color={`${item.name === '取消' ? '#2469f6' : '#8590A6'}`}></Icon>
                 <span className={styles.fabulousPost}>{item.name}</span>
               </div>
           ))

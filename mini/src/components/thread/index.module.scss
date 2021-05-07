@@ -3,12 +3,13 @@
   box-sizing: border-box;
   padding: 0 16px;
   padding-bottom: 0;
-  background: #fff;
+  background: var(--color-white);
+  content-visibility: auto;
   .title {
     font-size: 16px;
     line-height: 26px;
     text-align: left;
-    color: #0b0b37;
+    color: var(--color-text-primary);
   }
 
   .header {
@@ -34,7 +35,7 @@
     }
   }
   .payContent {
-    min-height: rem(40);
+    min-height: 40px;
   }
   .bottom {
     height: 52px;

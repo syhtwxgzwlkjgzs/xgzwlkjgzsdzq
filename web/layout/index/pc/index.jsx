@@ -15,7 +15,7 @@ import List from '@components/list';
 import Copyright from '@components/copyright';
 import { readThreadList } from '@server';
 import PayBox from '@components/payBox';
-import { BackToTop, Button } from '@discuzq/design'
+import { Spin, Button } from '@discuzq/design'
 
 @inject('site')
 @inject('user')
@@ -131,9 +131,6 @@ class IndexPCPage extends React.Component {
     return tmpCategories;
   }
 
-  onBackTop = () => {
-    this.listRef?.current?.onBackTop()
-  }
 
   // 发帖
   onPostThread = () => {
@@ -194,11 +191,26 @@ class IndexPCPage extends React.Component {
         <div className={styles.themeBox}>
           <div className={styles.themeItem}>
             {pageData?.map((item, index) => <ThreadContent className={styles.threadContent} key={index} data={item} />)}
+            {this.renderLoading()}
           </div>
         </div>
       </div>
     );
   }
+
+  // 加载视图
+  renderLoading = () => {
+    const { currentPage, totalPage } = this.props.index.threads || {};
+    return (
+      <div className={styles.footer}>
+        { currentPage < totalPage 
+          ? (<><Spin className={styles.spin} type="spinner" /> 加载中...</>)
+          : '没有更多数据'
+        }
+      </div>
+    )
+  }
+
   render() {
     const { index, site } = this.props;
     const { countThreads = 0 } = site?.webConfig?.other || {};
@@ -212,6 +224,7 @@ class IndexPCPage extends React.Component {
         onRefresh={this.onPullingUp} 
         noMore={currentPage >= totalPage} 
         onScroll={this.onScroll}
+        showRefresh={false}
       >
         <BaseLayout
           onSearch={this.onSearch}
@@ -220,7 +233,6 @@ class IndexPCPage extends React.Component {
         >
           {this.renderContent(index)}
         </BaseLayout>
-        <Button className={styles.backTop} style={{ visibility }} onClick={this.onBackTop}>返回顶部</Button>
       </List>
     );
   }

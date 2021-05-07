@@ -79,10 +79,14 @@
   font-size: rem($font-size-primary);
 }
 
+.goods {
+  display: flex;
+}
+
 .buyBtn {
-  margin-top: rem($margin-4n);
-  width: 100%;
-  height: rem(36);
+  width: rem(113);
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
 }
 
 .tag {
