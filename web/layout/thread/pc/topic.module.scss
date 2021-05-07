@@ -71,6 +71,17 @@
   width: rem(234);
 }
 
+.pay {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payIcon {
+  margin-right: rem($margin-2n);
+}
+
 .footer {
   display: flex;
   align-items: center;
