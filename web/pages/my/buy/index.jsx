@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-// import IndexH5Page from '@layout/my/buy/h5';
+import IndexH5Page from '@layout/my/buy/h5';
 import IndexPCPage from '@layout/my/buy/pc';
 import { readThreadList } from '@server';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
@@ -48,7 +48,7 @@ class Index extends React.Component {
       return <IndexPCPage dispatch={this.dispatch}/>;
     }
 
-    // return <IndexH5Page dispatch={this.dispatch}/>;
+    return <IndexH5Page dispatch={this.dispatch}/>;
   }
 }
 
