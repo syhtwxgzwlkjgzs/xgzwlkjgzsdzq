@@ -27,9 +27,9 @@
       position: absolute;
       right: 0;
       left: 0;
-      top: 0;
+      top: rem(-16);
       bottom: 0;
-      // background-color: rgba($color: #000, $alpha: 0.5);
+      background-color: rgba($color: #000, $alpha: 0.5);
       z-index: 10;
       display: flex;
       align-items: center;

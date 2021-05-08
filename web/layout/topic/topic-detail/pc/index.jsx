@@ -5,7 +5,7 @@ import { withRouter } from 'next/router';
 import BaseLayout from '@components/base-layout';
 import List from '@components/list'
 import NoData from '@components/no-data';
-import SectionTitle from '@layout/search/h5/components/section-title'
+import SectionTitle from '@components/section-title'
 import DetailsHeader from './components/details-header';
 import ThreadContent from '@components/thread'
 import Copyright from '@components/copyright';
