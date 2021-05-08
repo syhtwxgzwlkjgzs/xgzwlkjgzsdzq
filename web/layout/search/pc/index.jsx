@@ -149,14 +149,13 @@ class SearchPCPage extends React.Component {
   }
   render() {
     return (
-      <div className={styles.searchWrap}>
         <BaseLayout
+          allowRefresh={false}
           onSearch={this.onSearch}
           right={ this.renderRight }
         >
           { this.renderContent() }
         </BaseLayout>
-      </div>
     );
   }
 }
