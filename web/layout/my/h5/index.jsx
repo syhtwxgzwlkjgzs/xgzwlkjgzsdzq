@@ -6,10 +6,11 @@ import { inject, observer } from 'mobx-react';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import { Button } from '@discuzq/design';
 import UserCenterPost from '@components/user-center-post';
-import UserCenterFriends from '@components/user-center-friends';
+import UserCenterFans from '@components/user-center-fans';
 import UserCenterAction from '@components/user-center-action';
 
 @inject('site')
+@inject('user')
 @observer
 class H5MyPage extends React.Component {
   loginOut() {
@@ -21,14 +22,20 @@ class H5MyPage extends React.Component {
     const { site } = this.props;
     const { platform } = site;
     return (
-            <div>
-                <UserCenterAction />
-                <UserCenterPost />
-                <UserCenterFriends />
-                <UserCenterHeaderImage/>
-                <UserCenterHead platform={platform}/>
-                <Button onClick={this.loginOut}>退出登录</Button>
-            </div>
+      <div>
+        <UserCenterHeaderImage />
+        <UserCenterHead platform={platform} />
+        <div className={styles.unit}>
+          <UserCenterAction />
+        </div>
+        <div className={styles.unit}>
+          <UserCenterPost />
+        </div>
+        <div className={styles.unit}>
+          <UserCenterFans />
+        </div>
+        <Button onClick={this.loginOut}>退出登录</Button>
+      </div>
     );
   }
 }

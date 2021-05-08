@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import SiteStore from './store';
-import { readUser, readPermissions, createFollow, deleteFollow } from '@server';
+import { readUser, readPermissions, createFollow, deleteFollow, getUserFollow, getUserFans } from '@server';
 
 class UserAction extends SiteStore {
   constructor(props) {
@@ -32,6 +32,29 @@ class UserAction extends SiteStore {
     userInfo.data && this.setUserInfo(userInfo.data);
     userPermissions.data && this.setUserPermissions(userPermissions.data);
     return userInfo.code === 0 && userInfo.data;
+  }
+
+  // 获取指定用户的用户信息，用于获取他人首页
+  @action
+  async getTargetUserInfo(id) {
+    this.targetUser = null;
+    this.targetUserId = id;
+    const userInfo = await this.getAssignUserInfo(id);
+    this.targetUser = userInfo;
+    return userInfo;
+  }
+
+
+  @action
+  async getUserFollow() {
+    const follows = await getUserFollow({});
+    console.log(follows);
+  }
+
+  @action
+  async getUserFans() {
+    const fans = await getUserFans({});
+    console.log(fans);
   }
 
   // 更新是否没有用户数据状态
@@ -67,33 +90,33 @@ class UserAction extends SiteStore {
         return userInfo.data;
       }
       return null;
-    }catch(err) {
+    } catch (err) {
       return null;
     }
   }
 
-   /**
+  /**
    * 关注
    * @param {object} userId * 被关注人id
    * @returns {object} 处理结果
    */
     @action
-    async postFollow(userId) {
-      const res = await createFollow({ data: {  toUserId: userId }});
-      if (res.code === 0 && res.data) {
-        return {
-          msg: '操作成功',
-          data: res.data,
-          success: true,
-        };
-      }
+  async postFollow(userId) {
+    const res = await createFollow({ data: {  toUserId: userId } });
+    if (res.code === 0 && res.data) {
       return {
-        msg: res.msg,
-        data: null,
-        success: false,
+        msg: '操作成功',
+        data: res.data,
+        success: true,
       };
     }
-  
+    return {
+      msg: res.msg,
+      data: null,
+      success: false,
+    };
+  }
+
     /**
      * 取消关注
      * @param {object} search * 搜索值
@@ -101,7 +124,7 @@ class UserAction extends SiteStore {
      */
     @action
     async cancelFollow({ id, type }) {
-      const res = await deleteFollow({ data: { id, type: type } });
+      const res = await deleteFollow({ data: { id, type } });
       if (res.code === 0 && res.data) {
         return {
           msg: '操作成功',
@@ -115,7 +138,6 @@ class UserAction extends SiteStore {
         success: false,
       };
     }
-  
 }
 
 export default UserAction;

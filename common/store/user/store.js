@@ -12,6 +12,14 @@ class UserStore {
   @observable accessToken = null;
   @observable weixinNickName = null;
   @observable permissions = null;
+
+  // 检索的目标用户，非自己
+  @observable targetUser = null;
+
+  // 检索的目标用户id
+  @observable targetUserId = null;
+
+
   // 是否能使用钱包支付
   @computed get canWalletPay() {
     return get(this.userInfo, 'canWalletPay');
@@ -19,6 +27,16 @@ class UserStore {
 
   @computed get id() {
     return get(this.userInfo, 'id');
+  }
+
+  // 关注数
+  @computed get followCount() {
+    return get(this.userInfo, 'followCount');
+  }
+
+  // 粉丝数
+  @computed get fansCount() {
+    return get(this.userInfo, 'fansCount');
   }
 
   // 发帖扩展的权限
