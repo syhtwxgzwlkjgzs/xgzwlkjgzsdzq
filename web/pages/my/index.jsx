@@ -21,4 +21,4 @@ class MyCenter extends React.Component {
 
 // export default HOCFetchSiteData(HOCWithLogin(MyCenter));
 
-export default MyCenter;
+export default HOCFetchSiteData(MyCenter);

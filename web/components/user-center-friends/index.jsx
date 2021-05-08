@@ -1,5 +1,6 @@
 import React from 'react';
-import { Avatar, Input, Icon, Button, Divider } from '@discuzq/design';
+import { Input, Icon, Button, Divider } from '@discuzq/design';
+import Avatar from '@components/avatar';
 import styles from './index.module.scss';
 
 class UserCenterFriends extends React.Component {
@@ -17,17 +18,12 @@ class UserCenterFriends extends React.Component {
             </div>
           </div>
           <div className={styles.friendAction}>
-            <Button type={'primary'}>
-                <Icon size={14} name={'PlusOutlined'}/> 关注
+            <Button type={'primary'} className={styles.friendActionFollow}>
+              <Icon size={14} name={'PlusOutlined'} />
+              <span>关注</span>
             </Button>
           </div>
         </div>
-
-        <Divider
-          style={{
-            margin: 0,
-          }}
-        />
 
         <div className={styles.friendItem}>
           <div className={styles.friendInfo}>
@@ -41,22 +37,16 @@ class UserCenterFriends extends React.Component {
           </div>
           <div className={styles.friendAction}>
             <Button type={'primary'} className={styles.friendActionFriend}>
-              <Icon size={14} name={'WithdrawOutlined'}/> 互关
+              <Icon size={14} name={'WithdrawOutlined'} />
+              <span>互关</span>
             </Button>
           </div>
         </div>
 
-        <Divider
-          style={{
-            marginTop: 0,
-            marginBottom: 0,
-          }}
-        />
-
         <div className={styles.friendItem}>
           <div className={styles.friendInfo}>
             <div className={styles.friendAvatar}>
-              <Avatar text={'黑'} circle />
+              <Avatar image={'123'} userId={38} isShowUserInfo={true} circle />
             </div>
             <div className={styles.friendTextInfo}>
               <div className={styles.friendName}>I am a friend</div>
@@ -65,7 +55,8 @@ class UserCenterFriends extends React.Component {
           </div>
           <div className={styles.friendAction}>
             <Button type={'primary'} className={styles.friendActionFollowed}>
-              <Icon size={14} name={'CheckOutlined'}/> 已关注
+              <Icon size={14} name={'CheckOutlined'} />
+              <span>已关注</span>
             </Button>
           </div>
         </div>

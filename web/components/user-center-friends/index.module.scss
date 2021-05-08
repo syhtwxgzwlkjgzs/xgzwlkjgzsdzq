@@ -35,13 +35,47 @@
 }
 
 .friendAction {
+
+    .friendActionFollow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-top: rem(4);
+        padding-bottom: rem(4);
+
+        span {
+            padding-left: rem(8);
+            font-size: 12px;
+        }
+    }
+
     .friendActionFriend {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         background: #FFC300;
         border-color: #FFC300;
+        padding-top: rem(4);
+        padding-bottom: rem(4);
+
+        span {
+            padding-left: rem(8);
+            font-size: 12px;
+        }
     }   
 
     .friendActionFollowed {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         background: #7BA5F9;
         border-color: #7BA5F9;
+        padding-top: rem(4);
+        padding-bottom: rem(4);
+
+        span {
+            padding-left: rem(8);
+            font-size: 12px;
+        }
     }
 }

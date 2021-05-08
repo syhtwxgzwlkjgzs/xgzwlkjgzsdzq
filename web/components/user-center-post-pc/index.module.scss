@@ -1,6 +1,6 @@
 @import '@common/styles/fn/rem.scss';
 .userCenterPost {
-    padding: rem(16);
+    padding: rem(24);
     cursor: pointer;
 
     .userCenterPostContent {
@@ -31,6 +31,9 @@
     .userCenterPostList {
         padding-top: rem(24);
         display: flex;
-        justify-content: space-between;
+
+        .userCenterPostListItem {
+            margin-right: rem(24);
+        }
     }
 }

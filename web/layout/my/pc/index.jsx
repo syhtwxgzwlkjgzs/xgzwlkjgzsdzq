@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './index.module.scss';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import { Button } from '@discuzq/design';
-import UserCenterPost from '@components/user-center-post';
+import UserCenterPost from '@components/user-center-post-pc';
 
 class PCMyPage extends React.Component {
   loginOut() {
