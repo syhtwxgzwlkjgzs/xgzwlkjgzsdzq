@@ -238,6 +238,10 @@ class PostPage extends React.Component {
   // 发布提交
   handleSubmit = async (isDraft) => {
     const { postData, setPostData } = this.props.threadPost;
+    if (!this.props.user.threadExtendPermissions.createThread) {
+      Toast.info({ content: '您没有发帖权限' });
+      return;
+    }
     if (!isDraft && !postData.contentText) {
       Toast.info({ content: '请填写您要发布的内容' });
       return;

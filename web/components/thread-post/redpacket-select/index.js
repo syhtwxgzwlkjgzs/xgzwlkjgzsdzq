@@ -82,7 +82,7 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       <div className={styles['line-box']}>
         <div> 红包总金额 </div>
         <div>
-          <Input mode="number" value={price} onChange={e => setPrice(+e.target.value)} />元
+          <Input mode="number" htmlType="number" value={price} onChange={e => setPrice(+e.target.value)} />元
         </div>
       </div>
       {/* 红包个数 */}
