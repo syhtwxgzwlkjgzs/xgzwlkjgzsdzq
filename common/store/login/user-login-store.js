@@ -61,6 +61,10 @@ export default class UserLoginStore {
       }
 
       if (loginResp.code === NEED_BIND_WEIXIN_FLAG) {
+        const accessToken = get(loginResp, 'data.accessToken', '');
+        setAccessToken({
+          accessToken,
+        });
         throw {
           Code: 8000,
           Message: '需要绑定微信',

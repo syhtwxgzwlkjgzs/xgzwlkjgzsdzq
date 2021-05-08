@@ -1,59 +1,63 @@
 import React, { Component } from 'react';
-import Taro, { getCurrentInstance, redirectTo, navigateTo  } from '@tarojs/taro';
+import { getCurrentInstance, redirectTo  } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import { Button, Toast } from '@discuzq/design';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
-import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
+import { miniLogin } from '@server';
+import { checkUserStatus } from '@common/store/login/util';
 import layout from './index.module.scss';
 import { getParamCode, getUserProfile } from '../common/utils'
 
 const MemoToastProvider = React.memo(ToastProvider);
+const NEED_BIND_OR_REGISTER_USER = -7016;
 
 @inject('site')
 @inject('miniBind')
 @inject('h5QrCode')
 @inject('commonLogin')
 @observer
-class WXBind extends Component {
-  getUserProfileCallback = async (params) => {
-    const { sessionToken } = getCurrentInstance().router.params;
+class WXAuthorization extends Component {
 
+  authorization = async (params) => {
+    const { sessionToken, inviteCode } = getCurrentInstance().router.params;
     try {
       await getParamCode(this.props.commonLogin);
-      const res = await this.props.miniBind.mobilebrowserBind({
-        jsCode: this.props.commonLogin.jsCode,
-        iv: params.iv,
-        encryptedData: params.encryptedData,
-        sessionToken,
-        type: 'pc'
+      // 小程序登录
+      const res = await miniLogin({
+        timeout: 10000,
+        data: {
+          jsCode: this.props.commonLogin.jsCode,
+          iv: params.iv,
+          encryptedData: params.encryptedData,
+          inviteCode,
+          sessionToken
+        },
       });
-      checkUserStatus(res);
+
+      // 落地页开关打开
+      if (res.code === NEED_BIND_OR_REGISTER_USER) {
+        const { sessionToken, nickname } = res.data;
+        redirectTo({
+          url: `/subPages/user/wx-select/index?sessionToken=${sessionToken}&nickname=${nickname}`
+        });
+        return;
+      }
       if (res.code === 0) {
-        this.props.h5QrCode.bindTitle = '已成功绑定';
+        this.props.h5QrCode.loginTitle = '已成功登录';
         this.props.h5QrCode.isBtn = false;
         return;
       }
+      checkUserStatus(res);
       throw {
         Code: res.code,
         Message: res.msg,
       };
     } catch (error) {
-      // 跳转状态页
-      if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
-        this.props.commonLogin.setStatusMessage(error.Code, error.Message);
-        navigateTo({
-          url: `/subPages/user/status/index?statusCode=${error.Code}&statusMsg=${error.Message}`
-        });
-        return;
-      }
-      if (error.Code) {
-        Toast.error({
-          content: error.Message,
-        });
-        return;
-      }
+      Toast.error({
+        content: error.Message,
+      });
       throw {
         Code: 'ulg_9999',
         Message: '网络错误',
@@ -70,18 +74,17 @@ class WXBind extends Component {
         <MemoToastProvider>
           <View className={layout.container}>
             <View className={layout.content}>
-              <View className={layout.title}>绑定微信</View>
               <View className={layout.tips}>
-                {nickname ? `${nickname}，` : ''}{this.props.h5QrCode.bindTitle}
+                {nickname ? `${nickname}，` : ''}{this.props.h5QrCode.loginTitle}
               </View>
               {
                 this.props.h5QrCode.isBtn
                 ? <Button
                   className={layout.button}
                   type="primary"
-                  onClick={() => {getUserProfile(this.getUserProfileCallback)}}
+                  onClick={() => {getUserProfile(this.authorization)}}
                 >
-                  点此，绑定微信，并继续访问
+                  确定
                 </Button>
                 : <></>
               }
@@ -93,4 +96,4 @@ class WXBind extends Component {
   }
 }
 
-export default WXBind;
+export default WXAuthorization;

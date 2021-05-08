@@ -14,6 +14,7 @@ function avatar(props) {
 
   const [ isShow, changeIsShow ] = useState(false);
   const [ userInfo, changeUserInfo ] = useState('padding');
+  const [ following, changeFollowStatus ] = useState(false);
 
   const onMouseEnterHandler = useCallback(async () => {
     if (!userId) return;
@@ -30,14 +31,35 @@ function avatar(props) {
     changeIsShow(false);
   });
 
+  const followHandler = useCallback(async () => {
+    changeFollowStatus(true);
+    if ( userInfo.follow === 0 ) {
+      const res = await props.user.postFollow(userId);
+      if ( res.success ) {
+        userInfo.follow = res.data.isMutual ? 2 : 1;
+        userInfo.fansCount = userInfo.fansCount + 1;
+      }
+    } else {
+      const res = await props.user.cancelFollow({id: userId, type: 1});
+      if ( res.success ) {
+        userInfo.follow = 0;
+        userInfo.fansCount = userInfo.fansCount - 1;
+      }
+    }
+    changeFollowStatus(false);
+    changeUserInfo({...userInfo});
+  }, [userInfo]); 
+  
+
+
   const userInfoBox = useMemo(() => {
     if (!isShowUserInfo || !userId) return null;
 
-    if (true || userInfo === 'padding') {
+    if (userInfo === 'padding') {
       return (
         <div className={styles.userInfoBox}>
           <div className={styles.userInfoContent}>
-            <LoadingBox style={{height: '100%'}}/>
+            <LoadingBox style={{minHeight: '100%'}}/>
           </div>
         </div>
       );
@@ -74,7 +96,7 @@ function avatar(props) {
             </div>
           </div>
           <div className={styles.footer}>
-            <Button className={styles.btn} type='primary'><Icon className={styles.icon} name={userInfo.follow ? "CheckOutlined" : "PlusOutlined"} size={12}/>{userInfo.follow ? '已关注' : '关注'}</Button>
+            <Button onClick={followHandler} loading={following} className={styles.btn} type='primary'>{!following && <Icon className={styles.icon} name={ userInfo.follow !== 0 ? "CheckOutlined" : "PlusOutlined"} size={12}/>}{userInfo.follow ? '已关注' : '关注'}</Button>
             <Button className={[styles.btn, styles.ghost]} type='primary' ghost><Icon className={styles.icon} name="NewsOutlined" size={12}/>发私信</Button>
             <Button className={styles.btn} type='primary'><Icon className={styles.icon} name="ShieldOutlined" size={12}/>屏蔽</Button>
           </div>
@@ -82,6 +104,8 @@ function avatar(props) {
       </div> 
     );
   }, [userInfo, isShowUserInfo, userId])
+
+  
 
   if (image && image !== '') {
     return (
