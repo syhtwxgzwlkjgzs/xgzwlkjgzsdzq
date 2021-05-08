@@ -1,16 +1,19 @@
 import React from 'react';
 import { Input, Icon, Button, Divider } from '@discuzq/design';
+import { inject, observer } from 'mobx-react';
 import Avatar from '@components/avatar';
 import styles from './index.module.scss';
 
+@inject('user')
+@observer
 class UserCenterFriends extends React.Component {
   static defaultProps = {
-    id: 38,
+    id: null,
     imgUrl: '',
     type: 'follow',
     withHeaderUserInfo: false,
-    userName: 'userName',
-    userGroup: 'userGroup',
+    userName: null,
+    userGroup: null,
   };
 
   render() {

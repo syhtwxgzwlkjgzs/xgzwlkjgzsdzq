@@ -13,12 +13,27 @@ class UserStore {
   @observable weixinNickName = null;
   @observable permissions = null;
 
+  @observable userFans = {};
+  @observable userFansPage = 1;
+  @observable userFansTotalPage = 1;
+
+  @observable userFollows = {};
+  @observable userFollowsPage = 1;
+  @observable userFollowsTotalPage = 1;
+
   // 检索的目标用户，非自己
   @observable targetUser = null;
 
   // 检索的目标用户id
   @observable targetUserId = null;
 
+  @observable targetUserFans = {};
+  @observable targetUserFansPage = 1;
+  @observable targetUserFansTotalPage = 1;
+
+  @observable targetUserFollows = {};
+  @observable targetUsersPage = 1;
+  @observable targetUserFollowsTotalPage = 1;
 
   // 是否能使用钱包支付
   @computed get canWalletPay() {
