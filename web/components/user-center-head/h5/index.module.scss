@@ -87,7 +87,7 @@
         line-height: rem(30);
         display: inline-block;
         :global {
-          .dzq-icon-CompileOutlined {
+          .dzq-icon {
             vertical-align: middle;
           }
         }
@@ -100,6 +100,25 @@
       .userBtnText {
         vertical-align: middle;
         margin-left: rem(8);
+      }
+    }
+    .shieldBtn {
+      position: absolute;
+      top: rem(-26);
+      right: rem(16);
+      display: inline-block;
+      :global {
+        .dzq-icon {
+          vertical-align: middle;
+          font-size: rem(14);
+          color: #fff;
+        }
+      }
+      span {
+        vertical-align: middle;
+        font-size: rem(14);
+        color: #fff;
+        margin-left: rem(4);
       }
     }
 }
