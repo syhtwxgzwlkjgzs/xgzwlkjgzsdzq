@@ -198,6 +198,11 @@ export default class mobileLoginStore {
         }
 
         if (smsLoginResp.code === NEED_BIND_TOKEN_FLAG) {
+          const accessToken = get(smsLoginResp, 'data.accessToken', '');
+          // 种下 access_token
+          setAccessToken({
+            accessToken,
+          });
           throw {
             ...MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT,
             sessionToken: get(smsLoginResp, 'data.sessionToken'),
