@@ -61,15 +61,15 @@ export default class index extends Component {
         </div>
         {/* 下 */}
         <div className={styles.userBtn}>
-          {/* <Button type="primary">
+          <Button type="primary">
             <Icon name="CompileOutlined" />
             <span className={styles.userBtnText}>编辑资料</span>
           </Button>
           <Button>
             <Icon name="PoweroffOutlined" />
             <span className={styles.userBtnText}>退出登录</span>
-          </Button> */}
-          <Button onClick={this.handleChangeAttention} type="primary">
+          </Button>
+          {/* <Button onClick={this.handleChangeAttention} type="primary">
             {
               this.state.isAttention ? (
                 <>
@@ -87,13 +87,13 @@ export default class index extends Component {
           <Button>
             <Icon name="NewsOutlined" />
             <span className={styles.userBtnText}>发私信</span>
-          </Button>
+          </Button> */}
         </div>
         {/* 右上角屏蔽按钮 */}
-        <div onClick={this.handleChangeShield} className={styles.shieldBtn}>
+        {/* <div onClick={this.handleChangeShield} className={styles.shieldBtn}>
           <Icon name="ShieldOutlined" />
           <span>{this.state.isShield ? '解除屏蔽' : '屏蔽'}</span>
-        </div>
+        </div> */}
       </div>
     )
   }
