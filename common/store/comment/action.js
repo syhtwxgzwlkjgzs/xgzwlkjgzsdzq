@@ -6,7 +6,6 @@ import {
   createPosts,
   updatePosts,
   readUser,
-  createFollow,
   deleteFollow,
 } from '@server';
 import xss from '@common/utils/xss';
@@ -373,9 +372,10 @@ class CommentAction extends CommentStore {
    * @returns {object} 处理结果
    */
   @action
-  async postFollow(userId) {
-    const res = await createFollow({ data: { data: { toUserId: userId } } });
-    if (res.code === 0 && res.data) {
+  async postFollow(userId, UserStore) {
+    const res = await UserStore.postFollow(userId);
+
+    if (res.success && res.data) {
       this.authorInfo.follow = res.data.isMutual ? 2 : 1;
       this.authorInfo.fansCount = this.authorInfo.fansCount + 1;
 
@@ -396,9 +396,10 @@ class CommentAction extends CommentStore {
    * @returns {object} 处理结果
    */
   @action
-  async cancelFollow({ id, type }) {
-    const res = await deleteFollow({ data: { id, type: type } });
-    if (res.code === 0 && res.data) {
+  async cancelFollow({ id, type }, UserStore) {
+    const res = await UserStore.cancelFollow({ id, type });
+
+    if (res.success && res.data) {
       this.authorInfo.follow = 0;
       this.authorInfo.fansCount = this.authorInfo.fansCount - 1;
 

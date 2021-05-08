@@ -211,7 +211,7 @@ const RenderThreadContent = inject('user')(observer((props) => {
               />
               <Button
                 className={topic.buyBtn}
-                type="primary"
+                type="danger"
                 onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
               >
                 购买商品
@@ -1000,8 +1000,8 @@ class ThreadPCPage extends React.Component {
   onFollowClick() {
     if (this.props.thread.threadData.userId) {
       this.props.thread?.authorInfo?.follow === 2 || this.props.thread?.authorInfo?.follow === 1
-        ? this.props.thread.cancelFollow({ id: this.props.thread.threadData.userId, type: 1 })
-        : this.props.thread.postFollow(this.props.thread.threadData.userId);
+        ? this.props.thread.cancelFollow({ id: this.props.thread.threadData.userId, type: 1 }, this.props.user)
+        : this.props.thread.postFollow(this.props.thread.threadData.userId, this.props.user);
     }
   }
 
