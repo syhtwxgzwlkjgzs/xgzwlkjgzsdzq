@@ -21,14 +21,14 @@ class H5MyPage extends React.Component {
     const { site } = this.props;
     const { platform } = site;
     return (
-            <div>
-                <UserCenterAction />
-                <UserCenterPost />
-                <UserCenterFriends />
-                <UserCenterHeaderImage/>
-                <UserCenterHead platform={platform}/>
-                <Button onClick={this.loginOut}>退出登录</Button>
-            </div>
+      <div>
+        <UserCenterHeaderImage />
+        <UserCenterHead platform={platform} />
+        {/* <UserCenterAction />
+        <UserCenterPost />
+        <UserCenterFriends />
+        <Button onClick={this.loginOut}>退出登录</Button> */}
+      </div>
     );
   }
 }
