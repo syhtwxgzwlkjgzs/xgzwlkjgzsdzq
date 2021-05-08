@@ -5,13 +5,13 @@ import InstantMessage from './instant-message';
 const H5MyPage = inject('site')(observer(() => {
   const test = () => {};
 
-  const doSubmit = async (val) => {
+  const doSubmit = (val) => {
     console.log(`${val} is submitted!`);
     return true;
   }
 
   return (
-    <InstantMessage messageHistory={[]} onSubmit={doSubmit}/>
+    <InstantMessage messageHistory={[]} onSubmit={doSubmit} persona={"myself"}/>
   );
 }));
 
