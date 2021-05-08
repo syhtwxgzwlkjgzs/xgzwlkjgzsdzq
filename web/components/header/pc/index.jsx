@@ -115,7 +115,7 @@ class Header extends React.Component {
                                     }} name="MessageOutlined" size={15} />
                                     <p>消息</p>
                                 </div>
-                                <div className={styles.iconItem} onClick={() => this.handleRouter('search')}>
+                                <div className={styles.iconItem} onClick={() => this.handleRouter('/search')}>
                                     <Icon onClick={() => {
                                       this.iconClickHandle('home');
                                     }} name="FindOutlined" size={15} />
