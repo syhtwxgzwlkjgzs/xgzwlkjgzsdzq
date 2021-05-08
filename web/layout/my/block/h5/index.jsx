@@ -23,7 +23,7 @@ class Index extends React.Component {
       <div className={styles.shieldBox}>
         <Header />
         <div className={styles.titleBox}>
-          共有2位用户
+          {`共有${pageData.length}位用户`}
         </div>
         {
           pageData?.length

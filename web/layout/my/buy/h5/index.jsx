@@ -22,7 +22,7 @@ class Index extends React.Component {
       <div className={styles.collectBox}>
         <Header />
         <div className={styles.titleBox}>
-          12条购买
+          {`${pageData?.length}条购买`}
         </div>
         {
           pageData?.length
