@@ -17,52 +17,39 @@ export default function DVditor(props) {
 
   const [isFocus, setIsFocus] = useState(false);
   const [vditor, setVditor] = useState(null);
-  const [range, setRange] = useState(null);
   const [contentCount, setContentCount] = useState(0);
-
-
-  // TODO: 这里有点问题
-  const getEditorRange = () => {
-    let range;
-    // const { vditor } = this.vditor;
-    // const mode = vditor[vditor.currentMode];
-    const selection = window.getSelection();
-    if (selection.rangeCount > 0 && selection.getRangeAt) return selection.getRangeAt(0);
-    // if (mode.range) return mode.range;
-    // const { element } = mode;
-    // element.focus();
-    // // eslint-disable-next-line prefer-const
-    // range = element.ownerDocument.createRange();
-    // range.setStart(element, 0);
-    // range.collapse(true);
-    return range;
-  };
 
   const setCurrentPositon = () => {
     // https://developer.mozilla.org/zh-CN/docs/Web/API/Selection
     const selection = window.getSelection();
     // 将所有的区域都从选区中移除。
     selection.removeAllRanges();
+    // 直接获取当前编辑器的 range
+    const { range } = vditor.vditor[vditor.vditor.currentMode];
     // 一个区域（Range）对象将被加入选区。
     if (range) selection.addRange(range);
   };
 
   useEffect(() => {
-    initVditor();
+    if (!vditor) initVditor();
+    return () => {
+      if (vditor && vditor.destroy) vditor.destroy();
+    };
   }, []);
 
   useEffect(() => {
     if (emoji && emoji.code) {
       setCurrentPositon();
       // 因为vditor的lute中有一些emoji表情和 emoji.code 重叠了。这里直接先这样处理
-      const value = `![:emoji](${emoji.url})`;
+      const value = `<img alt=":emoji" src="${emoji.url}" />`;
       vditor.insertValue(value);
     }
   }, [emoji]);
 
   useEffect(() => {
+    if (atList && !atList.length) return;
     const users = atList.map((item) => {
-      if (item.user) return ` @${item.user.userName} `;
+      if (item.user) return `&nbsp;@${item.user.userName}&nbsp;`;
       return '';
     });
     if (users.length) {
@@ -74,7 +61,7 @@ export default function DVditor(props) {
   useEffect(() => {
     if (topic) {
       setCurrentPositon();
-      vditor && vditor.insertValue(` ${topic} `);
+      vditor && vditor.insertValue(`&nbsp;${topic}&nbsp;`);
     }
   }, [topic]);
 
@@ -83,11 +70,12 @@ export default function DVditor(props) {
   }, [contentCount]);
 
   useEffect(() => {
+    if ((vditor && vditor.getValue && vditor.getValue() !== '\n') || !value) return;
     const timer = setTimeout(() => {
       clearTimeout(timer);
       if (vditor && vditor.getValue && vditor.getValue() === '\n' && vditor.getValue() !== value) {
         // setCurrentPositon();
-        vditor.insertValue(vditor.html2md(value));
+        vditor.insertValue && vditor.insertValue(value);
       }
     }, 200);
   }, [value]);
@@ -110,8 +98,6 @@ export default function DVditor(props) {
         //   onChange(editor);
         // },
         blur: () => {
-          const range = getEditorRange();
-          setRange(range);
           onChange(editor);
           // 兼容Android的操作栏渲染
           const timer = setTimeout(() => {

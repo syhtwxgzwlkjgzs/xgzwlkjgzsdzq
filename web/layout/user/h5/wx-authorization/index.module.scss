@@ -1,0 +1,17 @@
+@import '@common/styles/mixin/login.scss';
+@import '@common/styles/fn/rem.scss';
+.container {
+  height: 100vh;
+  .button {
+    @include button;
+  }
+}
+.content {
+  padding: rem(48) rem(24);
+  .title {
+    @include title;
+  }
+  .tips{
+    @include titleTips;
+  }
+}

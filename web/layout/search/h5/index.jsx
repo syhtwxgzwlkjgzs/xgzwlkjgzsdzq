@@ -1,11 +1,9 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-
-// import SearchInput from '@components/search-input';
 import SearchInput from '@components/search-input';
 import List from '@components/list';
-import SectionTitle from './components/section-title';
+import SectionTitle from '@components/section-title'
 import TrendingTopics from './components/trending-topics';
 import ActiveUsers from './components/active-users';
 import PopularContents from './components/popular-contents';

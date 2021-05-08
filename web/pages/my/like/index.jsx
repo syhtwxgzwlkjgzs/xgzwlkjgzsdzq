@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import IndexH5Page from '@layout/my/like/h5';
-// import IndexPCPage from '@layout/my/like/pc';
+// import IndexH5Page from '@layout/my/like/h5';
+import IndexPCPage from '@layout/my/like/pc';
 import { readThreadList } from '@server';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
@@ -44,11 +44,11 @@ class Index extends React.Component {
     const { site } = this.props;
     const { platform } = site;
 
-    // if (platform === 'pc') {
-    //   return <IndexPCPage dispatch={this.dispatch}/>;
-    // }
+    if (platform === 'pc') {
+      return <IndexPCPage dispatch={this.dispatch}/>;
+    }
 
-    return <IndexH5Page dispatch={this.dispatch}/>;
+    // return <IndexH5Page dispatch={this.dispatch}/>;
   }
 }
 

@@ -36,6 +36,7 @@ import threadPay from '@common/pay-bussiness/thread-pay';
 import rewardPay from '@common/pay-bussiness/reward-pay';
 import Recommend from '@components/recommend';
 import QcCode from '@components/qcCode';
+import { minus } from '@common/utils/calculate';
 
 const typeMap = {
   101: 'IMAGE',
@@ -141,7 +142,7 @@ const RenderThreadContent = inject('user')(observer((props) => {
             platform='pc'
           ></UserInfo>
         </div>
-        <div className={topic.more}>
+        {props?.user?.isLogin() && <div className={topic.more}>
           <div className={topic.iconText}>
             <Dropdown
               menu={<Dropdown.Menu>
@@ -165,6 +166,7 @@ const RenderThreadContent = inject('user')(observer((props) => {
             <span className={topic.text}>举报</span>
           </div>
         </div>
+        }
       </div>
 
       <Divider></Divider>
@@ -227,8 +229,10 @@ const RenderThreadContent = inject('user')(observer((props) => {
               {
                 parseContent.RED_PACKET && (
                   <PostRewardProgressBar
-                    remaining={parseContent.RED_PACKET.remain_number}
-                    received={parseContent.RED_PACKET.number - parseContent.RED_PACKET.remain_number} />
+                    remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
+                    received={
+                      Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
+                    } />
                 )
               }
               {/* 悬赏 */}
@@ -236,8 +240,10 @@ const RenderThreadContent = inject('user')(observer((props) => {
                 parseContent.REWARD && (
                   <PostRewardProgressBar
                     type={POST_TYPE.BOUNTY}
-                    remaining={parseContent.REWARD.remain_money}
-                    received={parseContent.REWARD.money - parseContent.REWARD.remain_money} />
+                    remaining={Number(parseContent.REWARD.remain_money || 0)}
+                    received={
+                      minus(Number(parseContent.REWARD.money || 0), Number(parseContent.REWARD.remain_money || 0))
+                    } />
                 )
               }
             </div>
@@ -252,9 +258,11 @@ const RenderThreadContent = inject('user')(observer((props) => {
           }
 
           {/* 打赏 */}
-          <div style={{ textAlign: 'center' }}>
-            <Button onClick={onRewardClick} className={topic.rewardButton} type='primary' size='large'>打赏</Button>
-          </div>
+          {props?.user?.isLogin()
+            && <div style={{ textAlign: 'center' }}>
+              <Button onClick={onRewardClick} className={topic.rewardButton} type='primary' size='large'>打赏</Button>
+            </div>
+          }
         </div>
       }
       <div className={topic.footer}>
@@ -634,7 +642,7 @@ class ThreadPCPage extends React.Component {
 
     this.perPage = 5;
     this.page = 1; // 页码
-    this.commentDataSort = false;
+    this.commentDataSort = true;
 
     // 滚动定位相关属性
     this.threadBodyRef = React.createRef();
