@@ -16,11 +16,17 @@
 }
 @mixin input {
   width: rem(327);
+  box-sizing: border-box;
+  padding: rem(24) 0;
+  height: rem(64);
+  border-bottom: rem(1) solid #eee;
   :global(.dzq-input__inner) {
-    height: rem(68);
+    font-size: rem(16);
     border: none;
+    padding: 0;
+    height: rem(24);
+    line-height: rem(24);
     border-radius: 0;
-    border-bottom: rem(1) solid #eee;
   }
 }
 @mixin passwordInput {
@@ -32,9 +38,13 @@
   width: rem(327);
   height: rem(42);
   margin-top: rem(32);
+  font-size: rem(16);
+  padding: rem(10) 0;
+  box-sizing: border-box;
 }
 @mixin functionalRegion {
   margin-top: rem(16);
+  font-size: rem(14);
   text-align: center;
   .clickBtn{
     color: var(--color-primary);
@@ -54,9 +64,10 @@
   margin: 0 rem(16);
   width: rem(40);
   height: rem(40);
-  line-height: rem(40);
+  line-height: rem(38);
   display: inline-block;
   text-align: center;
+  background: var(--comment-box-bg-color);
 }
 @mixin titleTips {
   font-size: rem(16);
