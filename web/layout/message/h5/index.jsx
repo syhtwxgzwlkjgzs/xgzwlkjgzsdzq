@@ -1,15 +1,17 @@
 import React from 'react';
-import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
-import { Button } from '@discuzq/design';
+import InstantMessage from './instant-message';
 
 const H5MyPage = inject('site')(observer(() => {
   const test = () => {};
 
+  const doSubmit = async (val) => {
+    console.log(`${val} is submitted!`);
+    return true;
+  }
+
   return (
-    <div className={styles.container}>
-      <Button onClick={test}>h5 test</Button>
-    </div>
+    <InstantMessage messageHistory={[]} onSubmit={doSubmit}/>
   );
 }));
 
