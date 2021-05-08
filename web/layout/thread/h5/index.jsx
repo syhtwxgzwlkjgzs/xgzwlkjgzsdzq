@@ -169,7 +169,7 @@ const RenderThreadContent = inject('user')(observer((props) => {
               />
               <Button
                 className={topic.buyBtn}
-                type="primary"
+                type="danger"
                 onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
               >
                 购买商品

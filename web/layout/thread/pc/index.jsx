@@ -139,7 +139,6 @@ const RenderThreadContent = inject('user')(observer((props) => {
             time={`${threadStore?.threadData?.createdAt}` || ''}
             isEssence={isEssence}
             userId={threadStore?.threadData?.user?.userId}
-            platform='pc'
           ></UserInfo>
         </div>
         {props?.user?.isLogin() && <div className={topic.more}>

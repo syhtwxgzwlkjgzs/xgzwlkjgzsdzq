@@ -29,12 +29,13 @@
 
     .authorInfo {
       width: 100%;
-      height: rem(290);
+      height: rem(306);
       display: flex;
       align-items: center;
       justify-content: center;
       background: var(--color-white);
       margin-bottom: rem(20);
+      border-radius: rem($border-radius-small);
     }
     .recommend {
       width: 100%;

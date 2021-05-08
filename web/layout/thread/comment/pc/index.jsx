@@ -198,7 +198,6 @@ class CommentPCPage extends React.Component {
             {isReady
               ? <CommentList
                 data={commentData}
-                avatarClick={() => this.avatarClick(commentData)}
                 likeClick={() => this.likeClick(commentData)}
                 replyClick={() => this.replyClick(commentData)}
                 deleteClick={() => this.deleteClick(commentData)}
