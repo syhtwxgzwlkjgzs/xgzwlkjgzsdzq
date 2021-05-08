@@ -152,6 +152,7 @@ export default function HOCFetchSiteData(Component) {
       }
 
       setAppCommonStatus(result) {
+        const { site } = this.props;
         switch (result.code) {
           case 0: 
           break;
