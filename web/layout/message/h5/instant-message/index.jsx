@@ -4,7 +4,7 @@ import { Button, Textarea, Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 
 const InstantMessage = (props) => {
-  const { messageHistory = {}, onSubmit, persona="itself" } = props;
+  const { messageHistory = {}, onSubmit, persona = 'itself' } = props;
 
   const [messages, setMessages] = useState(messageHistory);
   const [typingValue, setTypingValue] = useState('');
@@ -15,8 +15,8 @@ const InstantMessage = (props) => {
   }, [messages]);
 
   const doSubmitClick = async (e) => {
-    if(!typingValue || typeof onSubmit !== 'function') return;
-
+    if (!typingValue || typeof onSubmit !== 'function') return;
+    console.log(persona);
     try {
       setLoading(true);
       const success = await onSubmit(typingValue);
@@ -31,8 +31,7 @@ const InstantMessage = (props) => {
     }
   };
 
-  const onPressEnter = (e) => {
-    console.log("pressing");
+  const doPressEnter = (e) => {
     if (e.key !== 'Enter') return;
     doSubmitClick();
   };
@@ -41,9 +40,11 @@ const InstantMessage = (props) => {
     <>
       <div className={styles.dialogBox}>
         {messages.map((val, idx) => (
-          <div>
+          <div className={ (persona === 'myself' ? 
+          `${styles.myself}` : 
+          `${styles.itself}`) + ` ${styles.persona}`}>
+            <Icon name="UserOutlined" size={20} color={'var(--color-primary)'} />
             <div key={idx}>{val}</div>
-            <Icon name="UserOutlined" size={20} color={"var(--color-primary)"} />
           </div>
         ))}
       </div>
@@ -56,7 +57,7 @@ const InstantMessage = (props) => {
             maxLength={5000}
             rows={5}
             onChange={(e) => setTypingValue(e.target.value)}
-            onKeyDown={onPressEnter}
+            onKeyDown={doPressEnter}
           />
         </div>
         <div className="submit">

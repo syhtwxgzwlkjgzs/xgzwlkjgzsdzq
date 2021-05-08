@@ -1,4 +1,18 @@
 .dialogBox {
+  display: flex;
+  flex-direction: column;
   height: 200px;
   overflow: scroll;
+}
+
+.persona {
+  display: flex;
+}
+
+.myself {
+  flex-direction: row-reverse;
+}
+
+.itself {
+  flex-direction: row;
 }
