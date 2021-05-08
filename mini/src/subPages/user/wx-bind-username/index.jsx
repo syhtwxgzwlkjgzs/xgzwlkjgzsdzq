@@ -25,7 +25,7 @@ class Index extends Component {
         duration: 1000,
         onClose: () => {
           navigateTo({
-            url: `/subPages/index/index`
+            url: `/pages/index/index`
           });
         }
       });
