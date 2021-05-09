@@ -8,8 +8,8 @@ import RefreshView from './RefreshView';
  * @prop {function} height 容器高度
  * @prop {function} className 容器样式
  * @param {string} noMore 无更多数据
- * @prop {function} onRefresh 触底触发事件，需返回promise
- * @prop {function} allowRefresh 是否启用上拉刷新
+ * @prop {function} onRefresh 触底触发事件，需返回promise；若没有声明onRefresh，不触发上拉刷新
+ * @prop {function} onScroll 滑动事件
  */
 
 const List = forwardRef(({ 
@@ -18,7 +18,6 @@ const List = forwardRef(({
   children, 
   noMore, 
   onRefresh, 
-  allowRefresh = true, 
   onScroll = noop,
   showRefresh = true,
 }, ref) => {
@@ -60,7 +59,7 @@ const List = forwardRef(({
   }
 
   const onTouchMove = throttle(() => {
-    if (!listWrapper || !listWrapper.current || !allowRefresh) {
+    if (!listWrapper || !listWrapper.current || !onRefresh) {
       return;
     }
     const { clientHeight } = listWrapper.current;
@@ -100,7 +99,7 @@ const List = forwardRef(({
         onScroll={onTouchMove}
       >
         {children}
-        {allowRefresh && showRefresh && <RefreshView noMore={noMore} />}
+        {onRefresh && showRefresh && <RefreshView noMore={noMore} />}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { Spin, Button } from '@discuzq/design';
 import SectionTitle from '@components/section-title';
 import NoData from '@components/no-data';
@@ -20,12 +20,16 @@ const Index = (props) => {
     type = 'small',
   } = props
 
+  const isNoData = useMemo(() => {
+    return !!children && noData
+  }, [noData, children])
+
   return (
     <div className={`${styles.container} ${type === 'small' ? styles.small : styles.normal}`}>
       {header || <SectionTitle {...props} />}
-      {!isLoading && !noData && children}
-      {!isLoading && noData && <NoData />}
-      {isLoading && !noData && <Spin type="spinner" />}
+      {!isLoading && !isNoData && children}
+      {!isLoading && isNoData && <NoData />}
+      {isLoading && !isNoData && <Spin type="spinner" />}
       {footer}
     </div>
   );

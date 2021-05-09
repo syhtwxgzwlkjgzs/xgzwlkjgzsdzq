@@ -1,6 +1,5 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
 import TrendingTopicMore from '../../../search/pc/components/trending-topic-more';
 import ActiveUsers from '../../../search/pc/components/active-users'
@@ -78,17 +77,15 @@ class SearchResultTopicPCPage extends React.Component {
   render() {
     const { currentPage, totalPage } = this.props.search.topics || { pageData: [] };
     return (
-      // <List className={styles.searchWrap} noMore={currentPage >= totalPage} onRefresh={this.fetchMoreData} showRefresh={false}>
-        <BaseLayout
-          noMore={currentPage >= totalPage} 
-          onRefresh={this.fetchMoreData} 
-          showRefresh={false}
-          onSearch={this.onSearch}
-          right={ this.renderRight }
-        >
-          { this.renderContent }
-        </BaseLayout>
-      // </List>
+      <BaseLayout
+        noMore={currentPage >= totalPage} 
+        onRefresh={this.fetchMoreData} 
+        showRefresh={false}
+        onSearch={this.onSearch}
+        right={ this.renderRight }
+      >
+        { this.renderContent }
+      </BaseLayout>
     );
   }
 }

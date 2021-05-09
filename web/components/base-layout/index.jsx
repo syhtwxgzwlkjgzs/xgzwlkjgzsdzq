@@ -25,7 +25,7 @@ const { Row, Col } = Flex;
  */
 
 const BaseLayout = (props) => {
-  const { header = null, left = null, children = null, right = null, footer = null, onSearch, noMore = false, allowRefresh = true } = props;
+  const { header = null, left = null, children = null, right = null, footer = null, onSearch, noMore = false, onRefresh } = props;
 
   const [size, setSize] = useState('xl')
 
@@ -76,73 +76,34 @@ const BaseLayout = (props) => {
   };
 
   return (
-    <React.Fragment>
-        
+    <div className={styles.container}>
+      {(header && header({ ...props })) || <Header onSearch={onSearch} />}
 
-        {/* <Row justify="center" gutter={20} className={styles.content}>
-            {
-              size !== 'sm' && size !== 'md' ? (
-                <Col>
-                  {typeof(left) === 'function' ? useCallback(left({ ...props }), []) : left}
-                </Col>
-              ) : null
-            }
-
-            <Col>
-                {typeof(children) === 'function' ? children({ ...props }) : children}
-            </Col>
-            
-            {
-              size !== 'sm' && size !== 'md' ? (
-                <Col style={{ position: 'relative' }}>
-                  <div style={{ position: 'absolute' }}>
-                    {typeof(right) === 'function' ? right({ ...props }) : right}
-                  </div>
-                </Col>
-              ) : null
-            }
-            
-        </Row> */}
-        <div className={styles.container}>
-          {(header && header({ ...props })) || <Header onSearch={onSearch} />}
-
-          {/* <div className={styles.wrapper}> */}
+        {
+          left && (
             <div className={styles.left}>
               {typeof(left) === 'function' ? useCallback(left({ ...props }), []) : left}
             </div>
+          )
+        }
+        
+        <List {...props} className={styles.list}>
+          <div className={`${styles.center} ${!left && styles.centerTwo} ${!right && !left && styles.centerOne}`}>
+            {typeof(children) === 'function' ? children({ ...props }) : children}
+            {onRefresh && <RefreshView noMore={noMore} />}
+          </div>
+        </List>
 
-            <List {...props} className={styles.list}>
-              <div className={`${styles.center} ${!left && styles.centerTwo}`}>
-                {typeof(children) === 'function' ? children({ ...props }) : children}
-                {allowRefresh && <RefreshView noMore={noMore} />}
-              </div>
-            </List>
-
+        {
+          right && (
             <div className={`${styles.right} ${!left && styles.rightTwo}`}>
               {typeof(right) === 'function' ? right({ ...props }) : right}
             </div>
-          {/* </div> */}
+          )
+        }
 
-          {typeof(footer) === 'function' ? footer({ ...props }) : footer}
-        </div>
-        
-        {/* <div className={`${styles.wrapper} ${!left && styles.wrapperTwo}`}>
-          <div className={styles.left}>
-            {typeof(left) === 'function' ? useCallback(left({ ...props }), []) : left}
-          </div>
-
-          <div className={styles.center}>
-            {typeof(children) === 'function' ? children({ ...props }) : children}
-          </div>
-          
-          <div className={`${styles.right} ${!left && styles.rightTwo}`}>
-            {typeof(right) === 'function' ? right({ ...props }) : right}
-          </div>
-
-        </div> */}
-
-        {typeof(footer) === 'function' ? footer({ ...props }) : footer}
-    </React.Fragment>
+      {typeof(footer) === 'function' ? footer({ ...props }) : footer}
+    </div>
   );
 };
 

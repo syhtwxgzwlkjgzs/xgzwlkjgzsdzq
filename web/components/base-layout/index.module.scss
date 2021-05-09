@@ -24,10 +24,6 @@
   justify-content: center;
 }
 
-.centerTwo {
-  margin-right: rem(350);
-}
-
 .left {
   position: fixed;
   right: 50%;
@@ -41,6 +37,14 @@
   display: flex;
   flex-direction: column;
   margin-top: rem(20);
+}
+
+.centerTwo {
+  margin-right: rem(350);
+}
+
+.centerOne {
+  margin-right: 0;
 }
 
 .right {
