@@ -16,7 +16,6 @@ const InstantMessage = (props) => {
 
   const doSubmitClick = async (e) => {
     if (!typingValue || typeof onSubmit !== 'function') return;
-    console.log(persona);
     try {
       setLoading(true);
       const success = await onSubmit(typingValue);
@@ -40,29 +39,39 @@ const InstantMessage = (props) => {
     <>
       <div className={styles.dialogBox}>
         {messages.map((val, idx) => (
-          <div className={ (persona === 'myself' ? 
-          `${styles.myself}` : 
-          `${styles.itself}`) + ` ${styles.persona}`}>
-            <Icon name="UserOutlined" size={20} color={'var(--color-primary)'} />
-            <div key={idx}>{val}</div>
+          <div className={ (persona === 'myself' ? `${styles.myself}` : 
+            `${styles.itself}`) + ` ${styles.persona}`}>
+
+            <div className={styles.profileIcon}>
+              <Icon name="UserOutlined" size={20} color={'var(--color-primary)'} />
+            </div>
+            <div key={idx} className={styles.msgContent}>{val}</div>
+
           </div>
         ))}
       </div>
-      <div className="toolBox">
-        <div className="tools"></div>
-        <div className="typingArea">
-          <Textarea
-            value={typingValue}
-            focus={true}
-            maxLength={5000}
-            rows={5}
-            onChange={(e) => setTypingValue(e.target.value)}
-            onKeyDown={doPressEnter}
-          />
+      <div className={styles.interactionBox}>
+        <div className={styles.tools}>
+          <div className={styles.emoj}>
+            <Icon name="SmilingFaceOutlined" size={20} color={'var(--color-text-secondary)'}/>
+          </div>
+          <div className={styles.pictureUpload}>
+            <Icon name="PictureOutlinedBig" size={20} color={'var(--color-text-secondary)'}/>
+          </div>
         </div>
-        <div className="submit">
-          <Button type="primary" onClick={doSubmitClick}>
-            确认
+        <Textarea
+          className={styles.typingArea}
+          value={typingValue}
+          focus={true}
+          maxLength={5000}
+          rows={3}
+          onChange={(e) => setTypingValue(e.target.value)}
+          onKeyDown={doPressEnter}
+          placeholder={" 请输入内容"}
+        />
+        <div className={styles.submit}>
+          <Button className={styles.submitBtn} type="primary" onClick={doSubmitClick}>
+            发送
           </Button>
         </div>
       </div>

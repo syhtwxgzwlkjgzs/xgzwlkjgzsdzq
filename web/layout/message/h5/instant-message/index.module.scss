@@ -1,18 +1,104 @@
+@import './vars.scss';
+
 .dialogBox {
+  @include im-pagebed;
   display: flex;
   flex-direction: column;
-  height: 200px;
+  height: 60vh;
   overflow: scroll;
 }
 
 .persona {
   display: flex;
+  margin: rem($margin-2n) 0;
+}
+
+.profileIcon {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+}
+
+.msgContent {
+  display: flex;
+  position: relative;
+  align-items: center;
+  padding: rem($padding-2n);
+  overflow-wrap: anywhere;
+  border-radius: rem($border-radius-small);
+
+  &:before{
+    content: '';
+    border: 8px solid;
+    border-color: transparent;
+    position: absolute;
+    top: 10px;
+    z-index: -1;
+  }
 }
 
 .myself {
   flex-direction: row-reverse;
+  .msgContent {
+    @include text-font;
+    margin-left: rem($margin-6n);
+    margin-right: rem($margin-2n);
+    background-color: var(--color-primary);
+    &:before{
+      border-left-color: var(--color-primary);
+      right: -13px;
+    }
+  }
 }
 
 .itself {
   flex-direction: row;
+  .msgContent {
+    @include text-font($color: var(--color-text-primary));
+    margin-right: rem($margin-6n);
+    margin-left: rem($margin-2n);
+    background-color: var(--comment-box-bg-color);
+    &:before{
+      border-right-color: var(--comment-box-bg-color);
+      left: -13px;
+    }
+  }
+}
+
+.interactionBox {
+  @include im-pagebed;
+  border-top: var(--border-border);
+  height: 40vh;
+}
+
+.tools {
+  display: flex;
+  padding: rem($margin-4n) 0;
+}
+
+.emoj {
+  margin-left: rem($margin-1n);
+}
+
+.pictureUpload {
+  margin-left: rem($margin-4n);
+}
+
+.typingArea {
+  width: 100%;
+  border: none;
+}
+
+.submit {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submitBtn {
+  padding: rem($padding-2n) rem($padding-6n);
+  margin: rem($margin-4n) 0;
 }
