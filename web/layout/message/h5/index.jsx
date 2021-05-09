@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import InstantMessage from './instant-message';
+import InstantMessaging from './instant-messaging';
 
 const H5MyPage = inject('site')(observer(() => {
 
@@ -10,7 +10,7 @@ const H5MyPage = inject('site')(observer(() => {
   }
 
   return (
-    <InstantMessage messageHistory={[]} onSubmit={doSubmit} persona={"myself"}/>
+    <InstantMessaging messageHistory={[]} onSubmit={doSubmit} persona={"myself"}/>
   );
 }));
 

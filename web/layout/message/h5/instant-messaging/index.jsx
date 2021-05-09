@@ -3,7 +3,7 @@ import { Button, Textarea, Icon } from '@discuzq/design';
 
 import styles from './index.module.scss';
 
-const InstantMessage = (props) => {
+const InstantMessaging = (props) => {
   const { messageHistory = {}, onSubmit, persona = 'itself' } = props;
 
   const [messages, setMessages] = useState(messageHistory);
@@ -79,4 +79,4 @@ const InstantMessage = (props) => {
   );
 };
 
-export default InstantMessage;
+export default InstantMessaging;
