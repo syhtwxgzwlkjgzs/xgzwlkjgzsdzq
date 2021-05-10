@@ -1,0 +1,27 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.container {
+  background: var(--comment-box-bg-color);
+  width: 100%;
+  .content {
+    width: 100%;
+    min-width: rem(652);
+  }
+  .title {
+    padding: 0 rem($padding-6n);
+    border-radius: rem($border-radius-small);
+    background: var(--color-white);
+  }
+  .right {
+    width: rem(286);
+    overflow: hidden;
+  }
+  .threadContent {
+    border-radius: rem($border-radius-small);
+    padding: 0 rem($padding-6n);
+    margin-bottom: rem($margin-10);
+    overflow: hidden;
+  }
+}
+
+  

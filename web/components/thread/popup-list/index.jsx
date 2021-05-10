@@ -121,7 +121,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
       icon: 'HeartOutlined',
       title: '打赏',
       data: tips,
-      number: all?.pageData?.raidCount || 0,
+      number: all?.pageData?.rewardCount || 0,
     },
   ];
 
