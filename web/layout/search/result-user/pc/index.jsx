@@ -1,14 +1,12 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
-// import SectionTitle from '../../../search/h5/components/section-title'
-import SectionTitle from '@components/section-title';
 import ActiveUsersMore from '../../../search/pc/components/active-users-more';
-import TrendingTopic from '../../../search/pc/components/trending-topics'
-import List from '@components/list';
 import Copyright from '@components/copyright';
+import SidebarPanel from '@components/sidebar-panel';
+import PopTopic from '@components/pop-topic';
+
 @inject('site')
 @inject('user')
 @inject('search')
@@ -59,31 +57,11 @@ class SearchResultUserPcPage extends React.Component {
   };
 
   renderRight = () => {
-    const { pageData = [] } = this.props.search.topics || { pageData: [] };
     return (
-      <div className={styles.searchRight}>
-        <div className={styles.section}>
-          <SectionTitle title="潮流话题" onShowMore={this.redirectToSearchResultTopic}/>
-          <TrendingTopic data={pageData} onItemClick={this.onTopicClick}/>
-        </div>
+      <>
+        <PopTopic />
         <Copyright/>
-      </div>
-    )
-  }
-  renderContent = () => {
-    const { users } = this.props.search;
-    const { pageData = [] } = users || { pageData: [] };
-    return (
-      <div className={styles.searchContent}>
-        <div className={styles.section}>
-          <SectionTitle
-            title="活跃用户"
-            isShowMore={false}
-            icon={{ type: 2, name: 'MemberOutlined' }}
-          />
-          <ActiveUsersMore data={pageData} onFollow={this.onFollow} onItemClick={this.onUserClick}/>
-        </div>
-      </div>
+      </>
     )
   }
 
@@ -101,17 +79,26 @@ class SearchResultUserPcPage extends React.Component {
   render() {
     // const { keyword } = this.state;
     const { users } = this.props.search;
-    const { pageData = [], currentPage, totalPage } = users || { pageData: [] };
+    const { pageData, currentPage, totalPage } = users || { pageData: [] };
 
     return (
-      <List className={styles.searchWrap} noMore={currentPage >= totalPage} onRefresh={this.fetchMoreData}>
-        <BaseLayout
-          onSearch={this.onSearch}
-          right={ this.renderRight }
+      <BaseLayout
+        onSearch={this.onSearch}
+        right={ this.renderRight }
+        noMore={currentPage >= totalPage} 
+        showRefresh={false}
+        onRefresh={this.fetchMoreData}
+      >
+        <SidebarPanel 
+          title="活跃用户" 
+          type='normal'
+          isShowMore={false}
+          noData={!pageData?.length}
+          icon={{ type: 2, name: 'MemberOutlined' }}
         >
-          { this.renderContent() }
-        </BaseLayout>
-      </List>
+          <ActiveUsersMore data={pageData} onFollow={this.onFollow} onItemClick={this.onUserClick}/>
+        </SidebarPanel>
+      </BaseLayout>
     );
   }
 }
