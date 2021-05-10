@@ -1,6 +1,5 @@
 import React from 'react';
 import UserCenterFriends from '../user-center-friends';
-import { inject, observer } from 'mobx-react';
 import { Spin } from '@discuzq/design';
 import { followerAdapter } from './adapter';
 import styles from './index.module.scss';
@@ -17,6 +16,8 @@ class UserCenterFollow extends React.Component {
     splitElement: <div></div>,
     friends: [],
     loadMoreAction: async () => {},
+    followHandler: async () => {},
+    unFollowHandler: async () => {},
     hasMorePage: false,
   };
 
@@ -87,6 +88,8 @@ class UserCenterFollow extends React.Component {
                 withHeaderUserInfo={true}
                 userName={user.userName}
                 userGroup={user.groupName}
+                followHandler={this.props.followHandler}
+                unFollowHandler={this.props.unFollowHandler}
               />
               {this.props.splitElement}
             </div>

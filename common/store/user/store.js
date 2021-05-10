@@ -56,30 +56,28 @@ class UserStore {
 
   // 点赞数
   @computed get likedCount() {
-    return get(this.userInfo,'likedCount')
+    return get(this.userInfo, 'likedCount');
   }
 
   // 用户名称
   @computed get username() {
-    return get(this.userInfo, 'username')
+    return get(this.userInfo, 'username');
   }
 
   // 微信昵称
   @computed get nickname() {
-    return get(this.userInfo, 'nickname')
+    return get(this.userInfo, 'nickname');
   }
 
   // 背景图地址
   @computed get backgroundUrl() {
-    return get(this.userInfo, 'backgroundUrl')
+    return get(this.userInfo, 'backgroundUrl');
   }
 
   // 用户签名
   @computed get signature() {
-    return get(this.userInfo, 'signature')
+    return get(this.userInfo, 'signature');
   }
-
- 
 
 
   // 发帖扩展的权限
