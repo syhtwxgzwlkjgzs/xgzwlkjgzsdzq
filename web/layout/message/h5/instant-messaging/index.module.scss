@@ -26,8 +26,8 @@
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  width: 38px;
-  height: 38px;
+  width: $im-profile-icon-size;
+  height: $im-profile-icon-size;
 }
 
 .msgContent {
@@ -52,8 +52,8 @@
   flex-direction: row-reverse;
   .msgContent {
     @include text-font;
-    margin-left: rem($margin-6n);
-    margin-right: rem($margin-2n);
+    margin-left: $im-msg-space-aside;
+    margin-right: $im-gap-btw-icon-and-msg;
     background-color: var(--color-primary);
     &:before{
       border-left-color: var(--color-primary);
@@ -66,8 +66,8 @@
   flex-direction: row;
   .msgContent {
     @include text-font($color: var(--color-text-primary));
-    margin-right: rem($margin-6n);
-    margin-left: rem($margin-2n);
+    margin-right: $im-msg-space-aside;
+    margin-left: $im-gap-btw-icon-and-msg;
     background-color: var(--comment-box-bg-color);
     &:before{
       border-right-color: var(--comment-box-bg-color);

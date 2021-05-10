@@ -2,6 +2,9 @@
 @import '@common/styles/variable/index.scss';
 
 $im-pagebed-padding: rem($padding-5n);
+$im-profile-icon-size: rem(44);
+$im-gap-btw-icon-and-msg: rem($margin-2n);
+$im-msg-space-aside: $im-pagebed-padding + $im-profile-icon-size + $im-gap-btw-icon-and-msg;
 
 @mixin im-pagebed {
   padding: 0 $im-pagebed-padding;
