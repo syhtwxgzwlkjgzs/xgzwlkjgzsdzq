@@ -12,6 +12,10 @@ export default class index extends Component {
           <UserCenterHeaderImage />
           <div className={styles.headImgBox}>
             <Avatar size='big' />
+            {/* 相机图标 */}
+            <div className={styles.userCenterEditCameraIcon}>
+              <Icon name="CameraOutlined" />
+            </div>
           </div>
           {/* 编辑修改说明 */}
           <div className={styles.userCenterEditDec}>

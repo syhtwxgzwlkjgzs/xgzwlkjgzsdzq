@@ -31,4 +31,24 @@
         color: #0B0B37;
     }
   }
+  .userCenterEditCameraIcon {
+    position: absolute;
+    width: rem(34);
+    height: rem(34);
+    background-color: #2469F6;
+    border-radius: 50%;
+    right: 0;
+    bottom: 0;
+    padding: rem(2);
+    box-sizing: border-box;
+    border: rem(2) solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    :global {
+      .dzq-icon {
+        color: #fff;
+      }
+    }
+  }
 }
