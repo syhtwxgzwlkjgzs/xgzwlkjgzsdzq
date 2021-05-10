@@ -14,18 +14,18 @@ import UserCenterEditInfo from '../../../components/user-center-edit-info/index'
 @inject('user')
 @observer
 class H5MyPage extends React.Component {
+  
   loginOut() {
     clearLoginStatus();
     window.location.replace('/');
   }
 
-
   render() {
     const { site } = this.props;
     const { platform } = site;
-    return (
-      <UserCenterEditInfo />
-    )
+    // return (
+    //   <UserCenterEditInfo />
+    // )
     return (
       <div>
         <UserCenterHeaderImage />
