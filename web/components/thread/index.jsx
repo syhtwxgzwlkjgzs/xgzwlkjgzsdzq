@@ -134,7 +134,7 @@ class Index extends React.Component {
     }
 
     render() {
-      const { data, className = '', site = {} } = this.props;
+      const { data, className = '', site = {}, showBottomStyle = true } = this.props;
       const { platform = 'pc' } = site;
 
       if (!data) {
@@ -157,7 +157,7 @@ class Index extends React.Component {
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
 
       return (
-        <div className={`${styles.container} ${className}`}>
+        <div className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom}`}>
           <div className={styles.header}>
               <UserInfo
                 name={user.userName}
