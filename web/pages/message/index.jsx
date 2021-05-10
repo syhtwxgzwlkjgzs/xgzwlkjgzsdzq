@@ -21,7 +21,18 @@ const Index = ({ site }) => {
    *
   */
   const router = useRouter();
-  const params = (({ page = 'index', subPage, dialogId }) => ({ page, subPage, dialogId }))(router.query);
+  // 参数过滤
+  const params = (({ page, subPage, dialogId }) => {
+    if (!['index', 'thread', 'finance', 'account', 'im'].includes(page)) {
+      page = 'index';
+    }
+
+    if (!['at', 'reply', 'like'].includes(subPage)) {
+      subPage = '';
+    }
+
+    return { page, subPage, dialogId };
+  })(router.query);
 
   if (platform === 'pc') {
     return <PCPage {...params} />;

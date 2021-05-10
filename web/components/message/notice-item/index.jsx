@@ -113,7 +113,13 @@ class Index extends Component {
 
   render() {
     const { type, item = {}, site, onDelete } = this.props;
+
+
     const { platform } = site;
+    const isPc = platform === 'pc';
+
+
+
     const avatarUrl = this.getAvatar(item.avatar);
 
     return (
@@ -174,13 +180,13 @@ class Index extends Component {
               {type === 'financial' &&
                 <p
                   className={styles['content-html']}
-                  style={platform === 'pc' ? { paddingRight: '20px' } : {}}
+                  style={isPc ? { paddingRight: '20px' } : {}}
                 >
                   在帖子"
                   <span
                     className={styles['single-line']}
                     style={{
-                      maxWidth: `${platform === 'pc' ? '400px' : '90px'}`,
+                      maxWidth: `${isPc ? '400px' : '90px'}`,
                       display: 'inline-block',
                       verticalAlign: 'bottom'
                     }}
@@ -196,7 +202,7 @@ class Index extends Component {
                     [styles['single-line']]: ['chat'].includes(type),
                     [styles['multiple-line']]: ['system', 'user'].includes(type),
                   })}
-                  style={platform === 'pc' ? { paddingRight: '20px' } : {}}
+                  style={isPc ? { paddingRight: '20px' } : {}}
                   dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
                 />
               }
@@ -212,11 +218,11 @@ class Index extends Component {
         </div>
         {/* 删除 */}
         <div
-          className={platform === 'pc' ? styles['delete-pc'] : styles['delete-h5']}
+          className={isPc ? styles['delete-pc'] : styles['delete-h5']}
           onClick={() => onDelete(item.id)}
         >
           <Icon className={styles.icon} name="DeleteOutlined" size={14} />
-          {platform === 'pc' ? '' : '删除'}
+          {isPc ? '' : '删除'}
         </div>
       </div>
     );

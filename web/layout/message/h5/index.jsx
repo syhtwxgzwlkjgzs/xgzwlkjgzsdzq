@@ -8,7 +8,7 @@ import NoticeItem from '@components/message/notice-item';
 import SliderLeft from '@components/message/slider-left';
 import mock from '../mock.json';
 
-const Index = () => {
+const Index = ({ page, subPage, dialogId }) => {
   // props,state
   const [type, setType] = useState('financial'); // chat,system,financial,user
   const [list, setList] = useState([]);
