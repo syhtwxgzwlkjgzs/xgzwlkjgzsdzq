@@ -1,6 +1,7 @@
 @import './vars.scss';
 
 .pcPage {
+  @include im-pagebed;
   position: relative;
   max-width: 750px;
 }

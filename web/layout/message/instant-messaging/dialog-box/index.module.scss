@@ -1,7 +1,6 @@
 @import '../vars.scss';
 
 .pcDialogBox {
-  @include im-pagebed;
   display: flex;
   flex-direction: column;
   height: 60vh;
@@ -9,7 +8,6 @@
 }
 
 .h5DialogBox {
-  @include im-pagebed;
   display: flex;
   flex-direction: column;
   height: 90vh;
@@ -26,7 +24,6 @@
 }
 
 .msgTime {
-  @include im-pagebed;
   @include text-font($color: var(--color-text-secondary));
   display: flex;
   justify-content: center;
