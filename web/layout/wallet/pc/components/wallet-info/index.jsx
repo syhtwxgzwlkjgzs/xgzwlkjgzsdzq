@@ -55,7 +55,7 @@ class WalletInfo extends React.Component {
             {
                 this.props.webPageType === 'PC'
                   ? <div className={styles.footer}>
-                        <Button type={'text'} className={styles.button}>提现</Button>
+                        <Button type={'text'} className={styles.button} onClick={this.props.showWithrawal}>提现</Button>
                     </div> : ''
             }
         </div>
