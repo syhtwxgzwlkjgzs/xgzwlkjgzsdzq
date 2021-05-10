@@ -8,6 +8,7 @@
 import React, { memo, useState, useEffect } from 'react';
 import { withRouter } from 'next/router';
 import { Tag, Icon, Toast } from '@discuzq/design';
+import classNames from 'classnames';
 import styles from './index.module.scss';
 
 import PropTypes from 'prop-types';
@@ -81,15 +82,17 @@ const Position = (props) => {
   return (
     <Tag
       type="primary"
-      closeable
+      closeable={position.location}
       size="md"
       onClick={choosePosition}
       onClose={
         () => setCurrentPosition({ location: '' })
       }
-      className={styles.tag}
+      className={classNames(styles.tag, {
+        [styles.checked]: position.location !== '',
+      })}
     >
-      <Icon name="PositionOutlined" color="#2469F6" size={12} />
+      <Icon name="PositionOutlined" size={12} />
       {currentPosition.location || '你在哪里？'}
     </Tag>
   );

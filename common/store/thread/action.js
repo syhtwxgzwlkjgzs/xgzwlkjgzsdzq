@@ -384,7 +384,7 @@ class ThreadAction extends ThreadStore {
    */
   @action
   async loadCommentList(params) {
-    const { id, page = 1, perPage = 5, sort = '-createdAt' } = params;
+    const { id, page = 1, perPage = 5, sort = 'createdAt' } = params;
     if (!id) {
       return {
         msg: '帖子id不存在',

@@ -117,6 +117,12 @@ $width: rem(169);
           margin: 0;
           text-align: center;
         }
+        .dzq-icon-PaperClipOutlined {
+          &::before {
+            content: '\e90e';
+            color: var(--color-success);
+          }
+        }
       }
 
       .dzq-button--text {
