@@ -1,0 +1,11 @@
+@import './vars.scss';
+
+.onPcPage {
+  max-width: 750px;
+}
+
+.onH5Page {
+  @include im-pagebed;
+  border-top: var(--border-border);
+  height: 40vh;
+}

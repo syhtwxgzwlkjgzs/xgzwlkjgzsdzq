@@ -5,6 +5,8 @@ import { inject, observer } from 'mobx-react';
 import DialogBox from './dialog-box';
 import InteractionBox from './interaction-box';
 
+import styles from './index.module.scss';
+
 @inject('site')
 @observer
 class InstantMessaging extends React.Component {
@@ -18,10 +20,10 @@ class InstantMessaging extends React.Component {
     const { platform } = site;
 
     return (
-      <>
+      <div className={platform === 'h5' ? styles.onH5Page : styles.onPcPage}>
         <DialogBox shownMessages={messagesHistory} persona={persona} dialogBoxRef={dialogBoxRef} />
         <InteractionBox onSubmit={onSubmit} dialogBoxRef={dialogBoxRef} platform={platform} />
-      </>
+      </div>
     );
   }
 }

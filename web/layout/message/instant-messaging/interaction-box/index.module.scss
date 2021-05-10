@@ -1,12 +1,5 @@
 @import '../vars.scss';
 
-
-.interactionBox {
-  @include im-pagebed;
-  border-top: var(--border-border);
-  height: 40vh;
-}
-
 .tools {
   display: flex;
   padding: rem($margin-4n) 0;

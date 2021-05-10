@@ -52,36 +52,60 @@ const InteractionBox = (props) => {
 
   return (
     <>
-      <div className={styles.interactionBox}>
-        {platform === 'h5' && <></>}
-        {platform === 'pc' && (
-          <>
-            <div className={styles.tools}>
-              <div className={styles.emoj}>
-                <Icon name="SmilingFaceOutlined" size={20} color={'var(--color-text-secondary)'} />
-              </div>
-              <div className={styles.pictureUpload}>
-                <Icon name="PictureOutlinedBig" size={20} color={'var(--color-text-secondary)'} />
-              </div>
+      {platform === 'h5' && (
+        <>
+          <div className={styles.tools}>
+            <div className={styles.emoj}>
+              <Icon name="SmilingFaceOutlined" size={20} color={'var(--color-text-secondary)'} />
             </div>
-            <Textarea
-              className={styles.typingArea}
-              value={typingValue}
-              focus={true}
-              maxLength={5000}
-              rows={3}
-              onChange={(e) => setTypingValue(e.target.value)}
-              onKeyDown={doPressEnter}
-              placeholder={' 请输入内容'}
-            />
-            <div className={styles.submit}>
-              <Button className={styles.submitBtn} type="primary" onClick={doSubmitClick}>
-                发送
-              </Button>
+            <div className={styles.pictureUpload}>
+              <Icon name="PictureOutlinedBig" size={20} color={'var(--color-text-secondary)'} />
             </div>
-          </>
-        )}
-      </div>
+          </div>
+          <Textarea
+            className={styles.typingArea}
+            value={typingValue}
+            focus={true}
+            maxLength={5000}
+            rows={3}
+            onChange={(e) => setTypingValue(e.target.value)}
+            onKeyDown={doPressEnter}
+            placeholder={' 请输入内容'}
+          />
+          <div className={styles.submit}>
+            <Button className={styles.submitBtn} type="primary" onClick={doSubmitClick}>
+              发送
+            </Button>
+          </div>
+        </>
+      )}
+      {platform === 'pc' && (
+        <>
+          <div className={styles.tools}>
+            <div className={styles.emoj}>
+              <Icon name="SmilingFaceOutlined" size={20} color={'var(--color-text-secondary)'} />
+            </div>
+            <div className={styles.pictureUpload}>
+              <Icon name="PictureOutlinedBig" size={20} color={'var(--color-text-secondary)'} />
+            </div>
+          </div>
+          <Textarea
+            className={styles.typingArea}
+            value={typingValue}
+            focus={true}
+            maxLength={5000}
+            rows={3}
+            onChange={(e) => setTypingValue(e.target.value)}
+            onKeyDown={doPressEnter}
+            placeholder={' 请输入内容'}
+          />
+          <div className={styles.submit}>
+            <Button className={styles.submitBtn} type="primary" onClick={doSubmitClick}>
+              发送
+            </Button>
+          </div>
+        </>
+      )}
     </>
   );
 };
