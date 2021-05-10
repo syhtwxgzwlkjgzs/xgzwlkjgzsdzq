@@ -38,6 +38,10 @@ export default {
         'user/status/index',
         'user/bind-phone/index',
         'user/wx-auth/index',
+        'my/like/index',
+        'my/collect/index',
+        'my/buy/index',
+        'my/block/index'
       ]
     }
   ],
