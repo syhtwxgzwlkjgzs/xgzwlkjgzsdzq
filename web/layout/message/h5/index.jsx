@@ -1,17 +1,25 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import InstantMessaging from './instant-messaging';
+import InstantMessaging from '../instant-messaging';
 
-const H5MyPage = inject('site')(observer(() => {
+@inject('site')
+@observer
+class MsgH5Page extends Component {
+  state = {
+    messagesHistory: [],
+  };
 
-  const doSubmit = (val) => {
-    console.log(`${val.text} is submitted!`);
+  doSubmit = (val) => {
+    if (!val) return;
+    const { messagesHistory } = this.state;
+    this.setState({ messagesHistory: [...messagesHistory, val] });
     return true;
+  };
+
+  render() {
+    const { messagesHistory } = this.state;
+    return <InstantMessaging messagesHistory={messagesHistory} onSubmit={this.doSubmit} persona={'myself'} />;
   }
+}
 
-  return (
-    <InstantMessaging messagesHistory={[]} onSubmit={doSubmit} persona={"myself"}/>
-  );
-}));
-
-export default H5MyPage;
+export default MsgH5Page;

@@ -1,4 +1,5 @@
-@import './vars.scss';
+@import '../vars.scss';
+
 
 .dialogBox {
   @include im-pagebed;
@@ -74,41 +75,4 @@
       left: -13px;
     }
   }
-}
-
-.interactionBox {
-  @include im-pagebed;
-  border-top: var(--border-border);
-  height: 40vh;
-}
-
-.tools {
-  display: flex;
-  padding: rem($margin-4n) 0;
-}
-
-.emoj {
-  margin-left: rem($margin-1n);
-}
-
-.pictureUpload {
-  margin-left: rem($margin-4n);
-}
-
-.typingArea {
-  width: 100%;
-  border: none;
-  textarea {
-    padding: 0;
-  }
-}
-
-.submit {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.submitBtn {
-  padding: rem($padding-2n) rem($padding-6n);
-  margin: rem($margin-4n) 0;
 }
