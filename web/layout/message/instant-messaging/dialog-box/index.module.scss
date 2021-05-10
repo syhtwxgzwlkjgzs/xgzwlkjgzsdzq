@@ -1,7 +1,6 @@
 @import '../vars.scss';
 
-
-.dialogBox {
+.pcDialogBox {
   @include im-pagebed;
   display: flex;
   flex-direction: column;
@@ -9,11 +8,30 @@
   overflow-y: auto;
 }
 
+.h5DialogBox {
+  @include im-pagebed;
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  overflow-y: auto;
+
+  .itself {
+    .msgContent {
+      background-color: var(--color-white);
+      &:before {
+        border-right-color: var(--color-white);
+      }
+    }
+  }
+}
+
 .msgTime {
   @include im-pagebed;
   @include text-font($color: var(--color-text-secondary));
   display: flex;
   justify-content: center;
+  padding-top: rem($padding-1n);
+  padding-bottom: rem($padding-1n);
 }
 
 .persona {
@@ -27,6 +45,7 @@
   justify-content: center;
   align-items: center;
   border-radius: 50%;
+  color: blue;
   width: $im-profile-icon-size;
   height: $im-profile-icon-size;
 }
@@ -39,13 +58,12 @@
   overflow-wrap: anywhere;
   border-radius: rem($border-radius-small);
 
-  &:before{
+  &:before {
     content: '';
     border: 8px solid;
     border-color: transparent;
     position: absolute;
     top: 10px;
-    z-index: -1;
   }
 }
 
@@ -56,7 +74,7 @@
     margin-left: $im-msg-space-aside;
     margin-right: $im-gap-btw-icon-and-msg;
     background-color: var(--color-primary);
-    &:before{
+    &:before {
       border-left-color: var(--color-primary);
       right: -13px;
     }
@@ -70,7 +88,7 @@
     margin-right: $im-msg-space-aside;
     margin-left: $im-gap-btw-icon-and-msg;
     background-color: var(--comment-box-bg-color);
-    &:before{
+    &:before {
       border-right-color: var(--comment-box-bg-color);
       left: -13px;
     }

@@ -1,11 +1,14 @@
 @import './vars.scss';
 
-.onPcPage {
+.pcPage {
+  position: relative;
   max-width: 750px;
 }
 
-.onH5Page {
+.h5Page {
   @include im-pagebed;
+  position: relative;
   border-top: var(--border-border);
-  height: 40vh;
+  height: 100vh;
+  background-color: var(--comment-content-bg-color);
 }

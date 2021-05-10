@@ -20,8 +20,8 @@ class InstantMessaging extends React.Component {
     const { platform } = site;
 
     return (
-      <div className={platform === 'h5' ? styles.onH5Page : styles.onPcPage}>
-        <DialogBox shownMessages={messagesHistory} persona={persona} dialogBoxRef={dialogBoxRef} />
+      <div className={platform === 'h5' ? styles.h5Page : styles.pcPage}>
+        <DialogBox shownMessages={messagesHistory} persona={persona} dialogBoxRef={dialogBoxRef} platform={platform} />
         <InteractionBox onSubmit={onSubmit} dialogBoxRef={dialogBoxRef} platform={platform} />
       </div>
     );

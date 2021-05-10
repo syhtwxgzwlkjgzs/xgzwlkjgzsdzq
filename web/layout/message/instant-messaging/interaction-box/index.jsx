@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Textarea, Icon } from '@discuzq/design';
+import { Button, Textarea, Icon, Input } from '@discuzq/design';
 
 import styles from './index.module.scss';
 
@@ -25,7 +25,6 @@ const InteractionBox = (props) => {
 
   const doSubmitClick = async () => {
     if (!typingValue || typeof onSubmit !== 'function') return;
-
     const currentTime = new Date().getTime(),
       msgPiece = {
         timestamp: currentTime,
@@ -53,34 +52,27 @@ const InteractionBox = (props) => {
   return (
     <>
       {platform === 'h5' && (
-        <>
-          <div className={styles.tools}>
-            <div className={styles.emoj}>
-              <Icon name="SmilingFaceOutlined" size={20} color={'var(--color-text-secondary)'} />
-            </div>
-            <div className={styles.pictureUpload}>
-              <Icon name="PictureOutlinedBig" size={20} color={'var(--color-text-secondary)'} />
+        <div className={styles.h5InteractionBox}>
+          <div className={styles.inputWrapper}>
+            <Input value={typingValue} placeholder=" 请输入内容" onChange={(e) => setTypingValue(e.target.value)} />
+            <div className={styles.tools}>
+              <div>
+                <Icon name="SmilingFaceOutlined" size={20} color={'var(--color-text-secondary)'} />
+              </div>
+              <div className={styles.pictureUpload}>
+                <Icon name="PictureOutlinedBig" size={20} color={'var(--color-text-secondary)'} />
+              </div>
             </div>
           </div>
-          <Textarea
-            className={styles.typingArea}
-            value={typingValue}
-            focus={true}
-            maxLength={5000}
-            rows={3}
-            onChange={(e) => setTypingValue(e.target.value)}
-            onKeyDown={doPressEnter}
-            placeholder={' 请输入内容'}
-          />
           <div className={styles.submit}>
-            <Button className={styles.submitBtn} type="primary" onClick={doSubmitClick}>
+            <Button type="primary" onClick={doSubmitClick}>
               发送
             </Button>
           </div>
-        </>
+        </div>
       )}
       {platform === 'pc' && (
-        <>
+        <div className={styles.pcInteractionBox}>
           <div className={styles.tools}>
             <div className={styles.emoj}>
               <Icon name="SmilingFaceOutlined" size={20} color={'var(--color-text-secondary)'} />
@@ -104,7 +96,7 @@ const InteractionBox = (props) => {
               发送
             </Button>
           </div>
-        </>
+        </div>
       )}
     </>
   );
