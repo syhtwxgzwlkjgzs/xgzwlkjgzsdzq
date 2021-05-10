@@ -39,6 +39,8 @@ export default {
         'user/bind-phone/index',
         'user/wx-auth/index',
         'user/wx-authorization/index',
+        // 我的草稿页
+        'my/draft/index',
       ]
     }
   ],
