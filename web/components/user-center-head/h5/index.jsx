@@ -1,30 +1,29 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { Button, Icon } from '@discuzq/design';
 
 export default class index extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       isShield: false, // 表示是否屏蔽
       isAttention: false, // 表示是否关注
-    }
+    };
   }
 
   // 点击屏蔽
   handleChangeShield = () => {
     this.setState({
-      isShield: !this.state.isShield
-    })
+      isShield: !this.state.isShield,
+    });
   }
 
   // 点击关注
   handleChangeAttention = () => {
     this.setState({
-      isAttention: !this.state.isAttention
-    })
+      isAttention: !this.state.isAttention,
+    });
   }
 
   render() {
@@ -95,6 +94,6 @@ export default class index extends Component {
           <span>{this.state.isShield ? '解除屏蔽' : '屏蔽'}</span>
         </div> */}
       </div>
-    )
+    );
   }
 }
