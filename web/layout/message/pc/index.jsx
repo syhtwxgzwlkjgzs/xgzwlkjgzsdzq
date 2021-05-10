@@ -1,13 +1,14 @@
 import React, { memo, useState, useEffect } from 'react';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
-import { Button } from '@discuzq/design';
+import InstantMessaging from '../instant-messaging';
 
 import NoticeItem from '@components/message/notice-item';
 import mock from '../mock.json';
 
 const Index = () => {
   // props,state
+  const [messagesHistory, setMessagesHistory] = useState([]);
   const [type, setType] = useState('user'); // chat,system,financial,user
   const [list, setList] = useState([]);
 
@@ -21,6 +22,14 @@ const Index = () => {
     const _list = [...list].filter(item => item.id !== id);
     setList(_list);
   }
+
+  const doSubmit = (val) => {
+    if (!val) return;
+    setMessagesHistory([...messagesHistory, val]);
+    return true;
+  };
+
+
   return (
     <div className={styles.container}>
       <Button>pc test</Button>
@@ -40,7 +49,7 @@ const Index = () => {
         </div>
         <div className={styles.right}></div>
       </div>
-
+      <InstantMessaging messagesHistory={messagesHistory} onSubmit={doSubmit} persona={'myself'} />
     </div>
   );
 };

@@ -1,0 +1,93 @@
+@import '../vars.scss';
+
+.pcDialogBox {
+  display: flex;
+  flex-direction: column;
+  height: 60vh;
+  overflow-y: auto;
+}
+
+.h5DialogBox {
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  overflow-y: auto;
+
+  .itself {
+    .msgContent {
+      background-color: var(--color-white);
+      &:before {
+        border-right-color: var(--color-white);
+      }
+    }
+  }
+}
+
+.msgTime {
+  @include text-font($color: var(--color-text-secondary));
+  display: flex;
+  justify-content: center;
+  padding-top: rem($padding-1n);
+  padding-bottom: rem($padding-1n);
+}
+
+.persona {
+  display: flex;
+  margin: rem($margin-2n) 0;
+}
+
+.profileIcon {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: blue;
+  width: $im-profile-icon-size;
+  height: $im-profile-icon-size;
+}
+
+.msgContent {
+  display: flex;
+  position: relative;
+  align-items: center;
+  padding: rem($padding-2n);
+  overflow-wrap: anywhere;
+  border-radius: rem($border-radius-small);
+
+  &:before {
+    content: '';
+    border: 8px solid;
+    border-color: transparent;
+    position: absolute;
+    top: 10px;
+  }
+}
+
+.myself {
+  flex-direction: row-reverse;
+  .msgContent {
+    @include text-font;
+    margin-left: $im-msg-space-aside;
+    margin-right: $im-gap-btw-icon-and-msg;
+    background-color: var(--color-primary);
+    &:before {
+      border-left-color: var(--color-primary);
+      right: -13px;
+    }
+  }
+}
+
+.itself {
+  flex-direction: row;
+  .msgContent {
+    @include text-font($color: var(--color-text-primary));
+    margin-right: $im-msg-space-aside;
+    margin-left: $im-gap-btw-icon-and-msg;
+    background-color: var(--comment-box-bg-color);
+    &:before {
+      border-right-color: var(--comment-box-bg-color);
+      left: -13px;
+    }
+  }
+}

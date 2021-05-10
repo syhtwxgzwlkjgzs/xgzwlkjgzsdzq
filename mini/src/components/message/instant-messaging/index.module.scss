@@ -1,0 +1,9 @@
+@import './vars.scss';
+
+.container {
+  @include im-pagebed;
+  position: relative;
+  border-top: var(--border-border);
+  height: 100vh;
+  background-color: var(--comment-content-bg-color);
+}
