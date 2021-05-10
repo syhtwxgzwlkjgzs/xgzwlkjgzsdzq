@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { Button, Icon } from '@discuzq/design';
+import clearLoginStatus from '@common/utils/clear-login-status';
 
 export default class index extends Component {
   constructor(props) {
@@ -24,6 +25,11 @@ export default class index extends Component {
     this.setState({
       isAttention: !this.state.isAttention,
     });
+  }
+
+  logout = () => {
+    clearLoginStatus();
+    window.location.replace('/');
   }
 
   render() {
@@ -64,7 +70,7 @@ export default class index extends Component {
             <Icon name="CompileOutlined" />
             <span className={styles.userBtnText}>编辑资料</span>
           </Button>
-          <Button>
+          <Button onClick={this.logout}>
             <Icon name="PoweroffOutlined" />
             <span className={styles.userBtnText}>退出登录</span>
           </Button>
