@@ -1,0 +1,10 @@
+.slider {
+  background: var(--color-white);
+  overflow: hidden;
+
+  .slider-item {
+    position: relative;
+    left: 0;
+    transition: all 0.4s;
+  }
+}

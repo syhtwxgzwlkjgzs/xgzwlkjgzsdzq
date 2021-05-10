@@ -14,7 +14,7 @@ const TabBar = ({ router, fixed = true, placeholder = false }) => {
     { icon: 'HomeOutlined', text: '首页', active: true, router: '/pages/index' },
     { icon: 'FindOutlined', text: '发现', active: false, router: '/subPages/search/index' },
     { icon: 'PlusOutlined', router: '/subPages/thread/post/index' },
-    { icon: 'MessageOutlined', text: '消息', active: false, router: '/' },
+    { icon: 'MessageOutlined', text: '消息', active: false, router: '/pages/message/index' },
     { icon: 'ProfessionOutlined', text: '我', active: false, router: '/pages/my' },
   ]);
 
