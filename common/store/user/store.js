@@ -79,6 +79,16 @@ class UserStore {
     return get(this.userInfo, 'signature');
   }
 
+  // 用户头像
+  @computed get avatarUrl() {
+    return get(this.userInfo, 'avatarUrl');
+  }
+
+  // 用户手机号
+  @computed get mobile() {
+    return get(this.userInfo, 'mobile');
+  }
+
 
   // 发帖扩展的权限
   @computed get threadExtendPermissions() {

@@ -4,7 +4,6 @@ import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { Button, Icon } from '@discuzq/design';
 import clearLoginStatus from '@common/utils/clear-login-status';
-
 @inject('user')
 @observer
 export default class index extends Component {
@@ -42,7 +41,7 @@ export default class index extends Component {
         {/* 上 */}
         <div className={styles.h5boxTop}>
           <div className={styles.headImgBox}>
-            <Avatar size='big' text={this.user.username} />
+            <Avatar image={this.user.avatarUrl} size='big' name={this.user.username} />
           </div>
           {/* 粉丝|关注|点赞 */}
           <div className={styles.userMessageList}>

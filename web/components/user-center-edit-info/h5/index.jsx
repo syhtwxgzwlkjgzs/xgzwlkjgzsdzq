@@ -3,7 +3,16 @@ import UserCenterEditHeader from '../../user-center-edit-header/index'
 import { Button, Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
+import { inject, observer } from 'mobx-react';
+@inject('user')
+@observer
 export default class index extends Component {
+
+  constructor(props) {
+    super(props)
+    this.user = this.props.user || {}
+  }
+
   render() {
     return (
       <div>
@@ -15,19 +24,19 @@ export default class index extends Component {
           <div className={styles.userCenterEditItem}>
             <div className={styles.userCenterEditLabel}>
               <label>昵称</label>
-              <div>Users</div>
+              <div>{this.user.nickname}</div>
             </div>
           </div>
           <div className={styles.userCenterEditItem}>
             <div className={styles.userCenterEditLabel}>
               <label>用户名</label>
-              <div>Users</div>
+              <div>{this.user.username}</div>
             </div>
           </div>
           <div className={styles.userCenterEditItem}>
             <div className={styles.userCenterEditLabel}>
               <label>手机号码</label>
-              <div>182****420</div>
+              <div>{this.user.mobile}</div>
             </div>
             <div><Icon name="RightOutlined" /></div>
           </div>
