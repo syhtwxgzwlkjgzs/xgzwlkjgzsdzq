@@ -8,15 +8,15 @@
 }
 
 .header {
-    height: rem(50);
+    height: 50px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: var(--color-white);
-    font-size: rem($font-size-primary);
+    font-size: 14px;
     font-weight: bold;
-    padding: 0 rem($padding-4n);
-    margin-bottom: rem($margin-2n);
+    padding: 0 16px;
+    margin-bottom: 8px;
     
     font-family: 'PingFangSC-Regular';
     font-weight: normal;
@@ -28,13 +28,13 @@
     background: var(--color-white);
     .content {
         font-weight: normal;
-        padding: rem($padding-4n);
+        padding: 16px;
         border-bottom: var(--border-border);
         .upper {
             display: flex;
             justify-content: space-between;
             font-family: "PingFang SC";
-            font-size: rem($font-size-primary);
+            font-size: 14px;
             text-align: left;
             color: var(--color-text-primary);
         }
@@ -42,10 +42,10 @@
             display: flex;
             justify-content: space-between;
             font-family: 'PingFangSC-Regular';
-            font-size: rem($font-size-label);
+            font-size: 12px;
             text-align: left;
             color: var(--color-text-secondary);
-            padding-top: rem($padding-5n);
+            padding-top: 20px;
         }
     }
 

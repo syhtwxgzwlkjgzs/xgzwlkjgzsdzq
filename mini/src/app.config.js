@@ -39,6 +39,9 @@ export default {
         'user/bind-phone/index',
         'user/wx-auth/index',
         'user/wx-authorization/index',
+        'wallet/index',
+        'wallet/frozen/index',
+        'wallet/withdrawal/index',
       ]
     }
   ],

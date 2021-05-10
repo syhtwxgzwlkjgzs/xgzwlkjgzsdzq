@@ -1,6 +1,9 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
+import { View } from '@tarojs/components';
+import { Tabs, Button } from '@discuzq/design';
+import Taro from '@tarojs/taro';
 
 import layout from './layout.module.scss';
 
@@ -10,32 +13,31 @@ import PayList from './components/pay-list/index';
 import WithdrawalList from './components/withdrawal-list/index';
 import NoMore from './components/no-more';
 
-import { Tabs, Icon, Button } from '@discuzq/design';
 
 
 @observer
 class WalletH5Page extends React.Component {
   constructor(props) {
     super(props);
-
+    
     this.state = {
       tabsType: 'income',
     };
   }
-
+  
   // 点击冻结金额
   onFrozenAmountClick() {
-    this.props.router.push('/wallet/frozen');
+    Taro.navigateTo({url: '/subPages/wallet/frozen/index'});
   }
-
+  
   // 切换选项卡
   onTabActive(val) {
     this.setState({ tabsType: val });
   }
-
+  
   // 点击提现
   toWithrawal = () => {
-    this.props.router.push('/wallet/withdrawal');
+    Taro.navigateTo({url: '/subPages/wallet/withdrawal/index'});
   }
 
   render() {
@@ -132,23 +134,23 @@ class WalletH5Page extends React.Component {
     ];
 
     return (
-        <div className={layout.container}>
-          <div className={layout.scroll}>
-            <div className={layout.header}>
+        <View className={layout.container}>
+          <View className={layout.scroll}>
+            <View className={layout.header}>
               <WalletInfo
-                walletData={this.props.walletData}
                 webPageType='h5'
+                walletData={this.props.walletData}
                 onFrozenAmountClick={() => this.onFrozenAmountClick()}
-                >
+              >
               </WalletInfo>
-            </div>
-            <div className={layout.choiceTime}>
-              <div className={layout.status}>全部状态</div>
-              <div className={layout.status}>2012年4月</div>
-            </div>
-            <div className={layout.tabs}>
+            </View>
+            <View className={layout.choiceTime}>
+              <View className={layout.status}>全部状态</View>
+              <View className={layout.status}>2012年4月</View>
+            </View>
+            <View className={layout.tabs}>
               <Tabs
-                scrollable={true}
+                scrollable
                 className={layout.tabList}
                 onActive={val => this.onTabActive(val)}
               >
@@ -175,12 +177,12 @@ class WalletH5Page extends React.Component {
                 </Tabs.TabPanel>
               ))}
               </Tabs>
-            </div>
-          </div>
-          <div className={layout.footer}>
-            <Button className={layout.button} onClick={this.toWithrawal}>提现</Button>
-          </div>
-        </div>
+            </View>
+          </View>
+          <View className={layout.footer}>
+            <Button className={layout.button} onClick={this.toWithrawal} type='primary'>提现</Button>
+          </View>
+        </View>
     );
   }
 }

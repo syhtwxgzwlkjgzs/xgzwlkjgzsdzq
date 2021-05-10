@@ -2,7 +2,7 @@
 @import '@common/styles/variable/index.scss';
 
 .container {
-    padding: rem($padding-4n) rem($padding-4n) 0;
+    padding: 16px 16px 0;
     background: var(--color-white);
 }
 
@@ -10,52 +10,37 @@
     display: flex;
     justify-content: space-between;
     font-weight: normal;
-    padding-bottom: rem($padding-4n);
+    padding-bottom: 16px;
     color: var(--color-text-primary);
     .text {
         font-family: 'PingFangSC-Regular';
-        font-size: rem($font-size-primary);
+        font-size: 14px;
         text-align: left;
-        line-height: rem(16);
+        line-height: 16px;
     }
     .money {
         font-family: "PingFang SC";
         font-weight: 600;
-        font-size: rem($font-size-middle);
+        font-size: 16px;
         text-align: left;
     }
 }
-
 .footer {
     display: flex;
     justify-content: space-between;
+    border-bottom: var(--border-border);
     font-family: 'PingFangSC-Regular';
     font-weight: normal;
-    font-size: rem($font-size-label);
+    font-size: 12px;
     .time {
         text-align: left;
         color: var(--color-text-secondary);
+        padding-bottom: 16px;
     }
-    .withdrawalStatus1 {
-        color: var(--color-primary);
-    }
-    .withdrawalStatus2 {
+    .payStatusTrue {
         color: var(--pc-user-info-title);
     }
-    .withdrawalStatus3 {
-        color: var(--color-error);
+    .payStatusFalse {
+        color: var(--color-primary);
     }
-    .withdrawalStatus4 {
-        color: #3ac15f;
-    }
-}
-
-.serialNumber {
-    font-family: 'PingFangSC-Regular';
-    font-weight: normal;
-    font-size: rem($font-size-label);
-    text-align: left;
-    color: #8490a8;
-    padding: rem($padding-4n) 0;
-    border-bottom: var(--border-border);
 }

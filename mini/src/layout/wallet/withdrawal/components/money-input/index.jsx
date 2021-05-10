@@ -1,6 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { Input } from '@discuzq/design';
+import { View, Text } from '@tarojs/components';
+
 import styles from './index.module.scss';
 
 const MoneyInput = (props) => {
@@ -18,19 +20,19 @@ const MoneyInput = (props) => {
   }, [visible]);
 
   return (
-    <div className={styles.container}>
-     <div className={styles.header}>提现金额</div>
-     <div className={styles.input}>
-       <span className={styles.moneyIcon}>￥</span>
+    <View className={styles.container}>
+     <View className={styles.header}>提现金额</View>
+     <View className={styles.input}>
+       <Text className={styles.moneyIcon}>￥</Text>
         <Input
           value={value}
           placeholder="0.00"
           onChange={e => onChange(e.target.value)}
           mode='number'
         />
-     </div>
-     <div className={styles.leastMoney}>提现金额最低1元</div>
-    </div>);
+     </View>
+     <View className={styles.leastMoney}>提现金额最低1元</View>
+    </View>);
 };
 
 export default MoneyInput;

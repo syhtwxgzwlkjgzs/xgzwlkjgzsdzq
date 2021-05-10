@@ -3,26 +3,26 @@
 
 .container {
   box-sizing: content-box;
-  width: rem(361);
-  height: rem(316);
+  width: 361px;
+  height: 316px;
   margin: 0 auto;
-  border-radius: rem(5);
+  border-radius: 5px;
   background: var(--color-white);
-  padding: rem($padding-6n);
+  padding: 24px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-  padding-bottom: rem(12);
+  padding-bottom: 12px;
 
   .title {
     font-family: 'PingFang SC';
     font-weight: 600;
-    font-size: rem($font-size-middle);
+    font-size: 16px;
     text-align: left;
     color: var(--color-text-primary);
-    padding-left: rem($padding-4n);
+    padding-left: 16px;
   }
 }
 
@@ -30,14 +30,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: rem($padding-6n);
+  padding-bottom: 24px;
   .text {
     font-family: 'PingFangSC-Regular';
     font-weight: normal;
-    font-size: rem($font-size-primary);
+    font-size: 14px;
     text-align: left;
     color: var(--pc-user-info-title);
-    padding: rem(12) 0;
+    padding: 12px 0;
     opacity: 1;
   }
   .moneyNum {
@@ -56,8 +56,8 @@
   align-items: center;
   :global {
     .dzq-button {
-      width: rem(248);
-      height: rem(36);
+      width: 248px;
+      height: 36px;
     }
   }
 }

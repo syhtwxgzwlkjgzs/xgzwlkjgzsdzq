@@ -1,13 +1,9 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
+import { View, Text } from '@tarojs/components';
 
 import styles from './index.module.scss';
-
-import Header from '@components/Header/h5';
-
-// import { Tabs, Icon, Button } from '@discuzq/design';
-
 
 @observer
 class FrozenAmount extends React.Component {
@@ -46,28 +42,27 @@ class FrozenAmount extends React.Component {
     ];
 
     return (
-        <div className={styles.container}>
-          <Header></Header>
-          <div className={styles.header}>
-            <div className={styles.record}>共有{3}条记录</div>
-            <div className={styles.totalMoney}>涉及金额 {15.00}元</div>
-          </div>
-          <div className={styles.body}>
+        <View className={styles.container}>
+          <View className={styles.header}>
+            <View className={styles.record}>共有{3}条记录</View>
+            <View className={styles.totalMoney}>涉及金额 {15.00}元</View>
+          </View>
+          <View className={styles.body}>
           {
             frozenData.map(value => (
-              <div className={styles.content} key={value.id}>
-                <div className={styles.upper}>
-                  <div>问答冻结</div>
-                  <div>1.00</div>
-                </div>
-                <div className={styles.lower}>
-                  <div>2021-3-25 14:50</div>
-                  <div>ID: <span>180617</span></div>
-                </div>
-              </div>
+              <View className={styles.content} key={value.id}>
+                <View className={styles.upper}>
+                  <View>问答冻结</View>
+                  <View>1.00</View>
+                </View>
+                <View className={styles.lower}>
+                  <View>2021-3-25 14:50</View>
+                  <View>ID: <Text>180617</Text></View>
+                </View>
+              </View>
             ))}
-          </div>
-        </div>
+          </View>
+        </View>
     );
   }
 }
