@@ -11,13 +11,17 @@ export default class index extends Component {
         {/* middle */}
         <div className={styles.userCenterEditMiddle}>
           <h3>个人信息</h3>
-          <div className={styles.userCenterEditLabel}>
-            <label>昵称</label>
-            <div>Users</div>
+          <div className={styles.userCenterEditItem}>
+            <div className={styles.userCenterEditLabel}>
+              <label>昵称</label>
+              <div>Users</div>
+            </div>
           </div>
-          <div className={styles.userCenterEditLabel}>
-            <label>用户名</label>
-            <div>Users</div>
+          <div className={styles.userCenterEditItem}>
+            <div className={styles.userCenterEditLabel}>
+              <label>用户名</label>
+              <div>Users</div>
+            </div>
           </div>
           <div className={styles.userCenterEditItem}>
             <div className={styles.userCenterEditLabel}>
@@ -40,9 +44,11 @@ export default class index extends Component {
             </div>
             <div><Icon name="RightOutlined" /></div>
           </div>
-          <div className={styles.userCenterEditLabel} style={{ border: 'none' }}>
-            <label>微信</label>
-            <div><img /> Users（解绑）</div>
+          <div className={styles.userCenterEditItem} style={{ border: 'none' }}>
+            <div className={styles.userCenterEditLabel}>
+              <label>微信</label>
+              <div><img /> Users（解绑）</div>
+            </div>
           </div>
         </div>
         {/* bottom */}

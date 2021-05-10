@@ -12,12 +12,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-bottom: 1px solid #F4F6F7;
     >div:nth-child(2) {
       margin-left: rem(8);
     }
     :global {
       .dzq-icon {
-        font-size: rem(12);
+        font-size: rem(12) !important;
       }
     }
   }
@@ -29,7 +30,7 @@
     height: rem(36);
     line-height: rem(36);
     font-size: rem(14);
-    border-bottom: 1px solid #F4F6F7;
+    // border-bottom: 1px solid #F4F6F7;
     >label {
       color: #4F5A70;
     }
@@ -67,12 +68,13 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: rem(8);
+    border-bottom: 1px solid #F4F6F7;
     >div:nth-child(2) {
       margin-left: rem(8);
     }
     :global {
       .dzq-icon {
-        font-size: rem(12);
+        font-size: rem(12) !important;
       }
     }
   }
@@ -84,7 +86,7 @@
     height: rem(36);
     line-height: rem(36);
     font-size: rem(14);
-    border-bottom: 1px solid #F4F6F7;
+    // border-bottom: 1px solid #F4F6F7;
     >label {
       color: #4F5A70;
     }
