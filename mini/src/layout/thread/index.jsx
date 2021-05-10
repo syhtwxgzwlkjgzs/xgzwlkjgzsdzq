@@ -169,7 +169,7 @@ const RenderThreadContent = inject('user')(observer((props) => {
               />
               <Button
                 className={topic.buyBtn}
-                type="primary"
+                type="danger"
                 onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
               >
                 购买商品
@@ -506,7 +506,7 @@ class RenderCommentList extends React.Component {
           <View className={comment.sort} onClick={() => this.onSortClick()}>
             <Icon className={comment.sortIcon} name="SortOutlined"></Icon>
             <Text className={comment.sortText}>
-              {this.state.commentSort ? '评论从旧到新' : '评论从新到旧'}
+              {this.state.commentSort ? '评论从新到旧' : '评论从旧到新'}
             </Text>
           </View>
         </View>
