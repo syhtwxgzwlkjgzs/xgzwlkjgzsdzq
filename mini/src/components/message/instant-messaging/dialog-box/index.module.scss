@@ -13,13 +13,13 @@
   @include text-font($color: var(--color-text-secondary));
   display: flex;
   justify-content: center;
-  padding-top: rem($padding-1n);
-  padding-bottom: rem($padding-1n);
+  padding-top: $im-gap-btw-icon-and-msg;
+  padding-bottom: $im-gap-btw-icon-and-msg;
 }
 
 .persona {
   display: flex;
-  margin: rem($margin-2n) 0;
+  margin: var(--padding-3n) 0;
 }
 
 .profileIcon {
@@ -37,9 +37,9 @@
   display: flex;
   position: relative;
   align-items: center;
-  padding: rem($padding-2n);
+  padding: $im-gap-btw-icon-and-msg;
   overflow-wrap: anywhere;
-  border-radius: rem($border-radius-small);
+  border-radius: var(--border-radius-small);
 
   &:before {
     content: '';

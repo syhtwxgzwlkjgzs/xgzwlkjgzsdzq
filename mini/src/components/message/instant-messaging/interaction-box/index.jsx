@@ -65,7 +65,7 @@ const InteractionBox = (props) => {
           </View>
         </View>
         <View className={styles.submit}>
-          <Button type="primary" onClick={doSubmitClick}>
+          <Button className={styles.submitBtn} type="primary" onClick={doSubmitClick}>
             发送
           </Button>
         </View>

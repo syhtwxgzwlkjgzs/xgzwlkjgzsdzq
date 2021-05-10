@@ -1,19 +1,19 @@
-@import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
 
-$im-pagebed-padding: rem($padding-5n);
-$im-profile-icon-size: rem(44);
-$im-gap-btw-icon-and-msg: rem($margin-2n);
+$im-pagebed-padding: var(--padding-4n);
+$im-profile-icon-size: 38px;
+$im-gap-btw-icon-and-msg: var(--padding-4n);
 $im-msg-space-aside: $im-pagebed-padding + $im-profile-icon-size + $im-gap-btw-icon-and-msg;
+$im-space-in-between-btns: var(--padding-3n);
 
 @mixin im-pagebed {
   padding: 0 $im-pagebed-padding;
 }
 
 @mixin text-font(
-  $font-size: rem($font-size-primary),
-  $font-weight: rem($font-line-height-small),
-  $line-height: rem(30),
+  $font-size: var(--font-size-middle),
+  $font-weight: var(--font-weight-light),
+  $line-height: var(--font-line-height-middle),
   $color: var(--color-white)
 ) {
   font-family: 'PingFang SC';

@@ -7,17 +7,19 @@
   justify-content: space-between;
   bottom: 0;
   left: 0;
-  padding: rem($padding-2n) rem($padding-4n);
+  padding: var(--padding-3n) $im-pagebed-padding;
   background-color: var(--color-white);
+  width: 100%;
 }
 
 .inputWrapper {
   display: flex;
   background-color: var(--background-color-text2);
-  border-radius: rem($border-radius-small);
+  border-radius: var(--border-radius-small);
+  width: 100%;
   :global {
     .dzq-input {
-      width: auto;
+      width: 100%;
     }
     .dzq-input__inner {
       background-color: var(--background-color-text2);
@@ -33,15 +35,20 @@
 .tools {
   display: flex;
   align-items: center;
-  padding: rem($padding-2n);
+  justify-content: space-between;
+  margin: 0 $im-space-in-between-btns;
 }
 
 .submit {
   display: flex;
   align-items: center;
-  margin-left: rem($margin-2n);
+  margin-left: $im-space-in-between-btns;
+}
+
+.submitBtn {
+  padding: var(--padding-2n) var(--padding-4n);
 }
 
 .pictureUpload {
-  margin-left: rem($margin-2n);
+  margin-left: $im-space-in-between-btns;
 }
