@@ -14,9 +14,9 @@ const InteractionBox = (props) => {
   };
 
   const checkToShowCurrentMsgTime = (curTimestamp) => {
-    const displayGapInMins = 3,
+    const DISPLAY_GAP_IN_MINS = 3,
       diff = new Date(curTimestamp).getMinutes() - new Date(lastTimestamp).getMinutes();
-    if (diff < displayGapInMins) {
+    if (diff < DISPLAY_GAP_IN_MINS) {
       return false;
     } else {
       setLastTimestamp(curTimestamp);
