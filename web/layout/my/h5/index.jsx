@@ -8,6 +8,7 @@ import { Button } from '@discuzq/design';
 import UserCenterPost from '@components/user-center-post';
 import UserCenterFollow from '@components/user-center-follow';
 import UserCenterAction from '@components/user-center-action';
+import UserCenterEditInfo from '../../../components/user-center-edit-info/index'
 
 @inject('site')
 @inject('user')
@@ -22,6 +23,9 @@ class H5MyPage extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
+    return (
+      <UserCenterEditInfo />
+    )
     return (
       <div>
         <UserCenterHeaderImage />
