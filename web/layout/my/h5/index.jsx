@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react';
 import UserCenterPost from '@components/user-center-post';
 import UserCenterFollow from '@components/user-center-follow';
 import UserCenterAction from '@components/user-center-action';
-import ButtomNavBar from '@components/buttom-nav-bar';
+import BottomNavBar from '@components/bottom-nav-bar';
 import UserCenterEditInfo from '@components/user-center-edit-info';
 import Thread from '@components/thread';
 
@@ -58,7 +58,7 @@ class H5MyPage extends React.Component {
           {this.state.threads.map((thread, index) => <Thread data={thread} key={index} />)}
         </div>
 
-        <ButtomNavBar placeholder />
+        <BottomNavBar placeholder />
       </div>
     );
   };
