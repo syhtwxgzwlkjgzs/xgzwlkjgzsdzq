@@ -16,11 +16,6 @@ export default class index extends Component {
     this.user = this.props.user || {};
   }
 
-  loginOut() {
-    // clearLoginStatus();
-    // window.location.replace('/');
-  }
-
   // 点击屏蔽
   handleChangeShield = () => {
     this.setState({
@@ -33,6 +28,11 @@ export default class index extends Component {
     this.setState({
       isAttention: !this.state.isAttention,
     });
+  }
+
+  logout = () => {
+    clearLoginStatus();
+    window.location.replace('/');
   }
 
   render() {
@@ -73,7 +73,7 @@ export default class index extends Component {
             <Icon name="CompileOutlined" />
             <span className={styles.userBtnText}>编辑资料</span>
           </Button>
-          <Button onClick={this.loginOut}>
+          <Button onClick={this.logout}>
             <Icon name="PoweroffOutlined" />
             <span className={styles.userBtnText}>退出登录</span>
           </Button>

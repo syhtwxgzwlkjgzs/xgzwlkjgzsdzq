@@ -1,4 +1,4 @@
-import React, { createRef }from 'react';
+import React, { createRef } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Icon, Tabs } from '@discuzq/design';
 import ThreadContent from '@components/thread';
@@ -7,7 +7,7 @@ import NoData from '@components/no-data';
 import styles from './index.module.scss';
 import List from '@components/list';
 import TopNew from './components/top-news';
-import Tabbar from './components/tabbar';
+import ButtomNavBar from '@components/buttom-nav-bar';
 import FilterView from './components/filter-view';
 import PayBox from '@components/payBox';
 
@@ -58,19 +58,19 @@ class IndexH5Page extends React.Component {
       visible: false,
     });
   }
-  
+
   onScroll = ({ scrollTop }) => {
     const el = this.listRef.current.offsetTop;
 
     if (scrollTop >= el) {
       this.setState({
         scroll: false,
-      })
+      });
     }
     if (scrollTop < 160) {
       this.setState({
         scroll: true,
-      })
+      });
     }
   }
 
@@ -219,7 +219,7 @@ class IndexH5Page extends React.Component {
           visible={this.state.visible}
           onSubmit={this.onClickFilter}
         />
-       <Tabbar placeholder/>
+       <ButtomNavBar placeholder/>
       </div>
     );
   }

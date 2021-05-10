@@ -1,8 +1,14 @@
+@import '@common/styles/fn/rem.scss';
+
+.mobileLayout {
+    padding-bottom: rem(65);
+}
+
 .unit {
     &::before {
         content: '';
         display: block;
-        height: 10px;
+        height: rem(10);
         background: #F4F6F7;
     }
 }
