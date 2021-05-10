@@ -3,11 +3,12 @@ import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import { Button } from '@discuzq/design';
 
+
 import NoticeItem from '@components/message/notice-item';
 import SliderLeft from '@components/message/slider-left';
 import mock from '../mock.json';
 
-const H5MyPage = () => {
+const Index = () => {
   // props,state
   const [type, setType] = useState('financial'); // chat,system,financial,user
   const [list, setList] = useState([]);
@@ -37,4 +38,4 @@ const H5MyPage = () => {
   );
 };
 
-export default inject('site')(observer(memo(H5MyPage)));
+export default inject('site')(observer(memo(Index)));

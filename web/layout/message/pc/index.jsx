@@ -6,7 +6,7 @@ import { Button } from '@discuzq/design';
 import NoticeItem from '@components/message/notice-item';
 import mock from '../mock.json';
 
-const PCMyPage = () => {
+const Index = () => {
   // props,state
   const [type, setType] = useState('user'); // chat,system,financial,user
   const [list, setList] = useState([]);
@@ -45,6 +45,6 @@ const PCMyPage = () => {
   );
 };
 
-export default inject('site')(observer(memo(PCMyPage)));
+export default inject('site')(observer(memo(Index)));
 
 
