@@ -5,6 +5,7 @@ import Avatar from '@components/avatar';
 import styles from './index.module.scss';
 import { diffDate } from '@common/utils/diff-date';
 import { inject, observer } from 'mobx-react';
+import classnames from 'classnames';
 
 @inject('thread')
 @observer
@@ -67,7 +68,10 @@ class AuthorInfo extends React.Component {
                 {
                     this.props.isShowBtn
                         ? <div className={styles.btn}>
-                            <Button type={this.user.follow ? 'primary' : 'primary'} className={styles.follow} onClick={() => this.onFollowClick()}>
+                            <Button
+                                type={this.user.follow ? 'primary' : 'primary'}
+                                className={classnames(styles.follow, this.user.follow && styles['is-followed'])}
+                                onClick={() => this.onFollowClick()}>
                                 <div className={styles.btnItem}>
                                     <Icon
                                         name={this.user.follow ? 'CheckOutlined' : 'PlusOutlined'}
@@ -90,7 +94,8 @@ class AuthorInfo extends React.Component {
                                     <span>发私信</span>
                                 </div>
                             </Button>
-                        </div> : <div className={styles.btn}></div>
+                        </div>
+                        : <div className={styles.btn}></div>
                 }
             </div>);
     }
