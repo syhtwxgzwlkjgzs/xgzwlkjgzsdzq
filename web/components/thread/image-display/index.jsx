@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ImagePreviewer } from '@discuzq/design';
 import styles from './index.module.scss';
 
+// TODO 图片懒加载
 const Index = ({ images, platform = 'h5' }) => {
     const [bigImages, setBigImages] = useState([])
     const [smallImages, setSmallImages] = useState([])

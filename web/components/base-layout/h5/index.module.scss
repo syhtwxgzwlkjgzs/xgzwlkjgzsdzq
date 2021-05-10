@@ -7,7 +7,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #f5f7f8;
+  background: var(--background-color-text2);
 }
 
 .wrapper {
@@ -25,4 +25,11 @@
 
 .center {
   width: 100%;
+}
+
+:global {
+  .dzq-pull-refresh__loading {
+    font-size: rem($font-size-primary);
+    top: rem(-20);
+  }
 }

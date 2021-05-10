@@ -4,58 +4,58 @@
   font-size: rem($font-size-label);
   color: var(--color-error);
 }
-.container {
-  background: var(--background-color-text2);
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  .homeContent {
-    background: var(--color-white);
-    margin-bottom: rem(10);
-  }
-  .homeContentText {
-    width: 100%;
-    background: var(--color-white);
-    border-bottom: rem(1) solid var(--color-text-placeholder);
-    margin-bottom: rem(10);
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 2;
-  }
-  .homeContentTop {
-    padding: 0 rem($padding-4n);
-    background: var(--color-white);
-    margin-bottom: rem(10);
-  }
-  .tabsBox {
-    height: rem(52);
-    :global {
-      .dzq-tabs__bar {
-        height: rem(52);
-        .dzq-tabs__label {
-          font-size: rem($font-size-primary);
-          line-height: rem(20);
-          margin-top: rem(16);
-          font-weight: normal;
-        }
+// .container {
+//   background: var(--background-color-text2);
+//   display: flex;
+//   flex-direction: column;
+//   height: 100vh;
+.homeContent {
+  background: var(--color-white);
+  margin-bottom: rem(10);
+}
+.homeContentText {
+  width: 100%;
+  background: var(--color-white);
+  border-bottom: rem(1) solid var(--color-text-placeholder);
+  margin-bottom: rem(10);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+.homeContentTop {
+  padding: 0 rem($padding-4n);
+  background: var(--color-white);
+  margin-bottom: rem(10);
+}
+.tabsBox {
+  height: rem(52);
+  :global {
+    .dzq-tabs__bar {
+      height: rem(52);
+      .dzq-tabs__label {
+        font-size: rem($font-size-primary);
+        line-height: rem(20);
+        margin-top: rem(16);
+        font-weight: normal;
       }
     }
   }
-  .list {
-    flex: 1;
-  }
-  .tabIcon {
-    width: rem(50);
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .buttonIcon {
-      color: var(--color-text-secondary);
-    }
-  }
-  .listItem {
-    margin-bottom: rem(10);
+}
+// .list {
+//   flex: 1;
+// }
+.tabIcon {
+  width: rem(50);
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .buttonIcon {
+    color: var(--color-text-secondary);
   }
 }
+// .listItem {
+//   margin-bottom: rem(10);
+// }
+// }

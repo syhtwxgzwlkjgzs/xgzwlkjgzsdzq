@@ -9,7 +9,7 @@ import List from '@components/list';
 import TopNew from './components/top-news';
 import ButtomNavBar from '@components/bottom-nav-bar';
 import FilterView from './components/filter-view';
-import PayBox from '@components/payBox';
+import BaseLayout from '@components/base-layout';
 
 @inject('site')
 @inject('user')
@@ -26,24 +26,6 @@ class IndexH5Page extends React.Component {
     };
     this.listRef = createRef();
     this.renderItem = this.renderItem.bind(this);
-  }
-
-  componentDidMount() {
-    // PayBox.createPayBox({
-    //   data: {
-    //     amount: 0.1,
-    //     type: 5,
-    //     threadId: 4,
-    //     payeeId: 16,
-    //     isAnonymous: false,
-    //   },
-    //   success: (orderInfo) => {
-    //     console.log(orderInfo);
-    //   },
-    //   failed: (orderInfo) => {
-    //     console.log(orderInfo);
-    //   },
-    // });
   }
 
   // 点击更多弹出筛选
@@ -190,37 +172,65 @@ class IndexH5Page extends React.Component {
     const newCategories = this.handleCategories(categories);
 
     return (
-      <div className={styles.container}>
-        { pageData?.length > 0
-          ? (
-            <List
-              className={styles.list}
-              onRefresh={this.onRefresh}
-              noMore={currentPage >= totalPage}
-              onScroll={this.onScroll}
-            >
-              {
-                pageData.map((item, index) => (
-                  <div key={index}>
-                    { index === 0 && this.renderHeaderContent(scroll)}
-                    <ThreadContent data={item} className={styles.listItem} />
-                  </div>
-                ))
-              }
-            </List>
-          )
-          : this.renderNoData()
-        }
+      <BaseLayout
+        showHeader={false}
+        showTabBar
+        onPullDown={() => { console.log(123456); }}
+        onRefresh={this.onRefresh}
+        noMore={currentPage >= totalPage}
+        onScroll={this.onScroll}
+      >
+          { pageData?.length > 0
+            ? (
+              pageData.map((item, index) => (
+                <div key={index}>
+                  { index === 0 && this.renderHeaderContent(scroll)}
+                  <ThreadContent data={item} className={styles.listItem} />
+                </div>
+              ))
+            )
+            : this.renderNoData()
+          }
 
-        <FilterView
-          data={newCategories}
-          current={filter}
-          onCancel={this.onClose}
-          visible={this.state.visible}
-          onSubmit={this.onClickFilter}
-        />
-       <ButtomNavBar placeholder/>
-      </div>
+          <FilterView
+            data={newCategories}
+            current={filter}
+            onCancel={this.onClose}
+            visible={this.state.visible}
+            onSubmit={this.onClickFilter}
+          />
+      </BaseLayout>
+      // <div className={styles.container}>
+      //   { pageData?.length > 0
+      //     ? (
+      //       <List
+      //         className={styles.list}
+      //         onRefresh={this.onRefresh}
+      //         noMore={currentPage >= totalPage}
+      //         onScroll={this.onScroll}
+      //       >
+      //         {
+      //           pageData.map((item, index) => (
+      //             <div key={index}>
+      //               { index === 0 && this.renderHeaderContent(scroll)}
+      //               <ThreadContent data={item} className={styles.listItem} />
+      //             </div>
+      //           ))
+      //         }
+      //       </List>
+      //     )
+      //     : this.renderNoData()
+      //   }
+
+      //   <FilterView
+      //     data={newCategories}
+      //     current={filter}
+      //     onCancel={this.onClose}
+      //     visible={this.state.visible}
+      //     onSubmit={this.onClickFilter}
+      //   />
+      //  <ButtomNavBar placeholder/>
+      // </div>
     );
   }
 }
