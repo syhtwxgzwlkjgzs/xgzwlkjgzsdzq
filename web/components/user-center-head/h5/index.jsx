@@ -41,7 +41,7 @@ export default class index extends Component {
         {/* 上 */}
         <div className={styles.h5boxTop}>
           <div className={styles.headImgBox}>
-            <Avatar size='big' text={this.user.username} />
+            <Avatar size='big' name={this.user.username} />
           </div>
           {/* 粉丝|关注|点赞 */}
           <div className={styles.userMessageList}>
