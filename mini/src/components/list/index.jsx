@@ -16,7 +16,7 @@ import styles from './index.module.scss';
 const List = ({ height, className = '', children, noMore = false, onRefresh, allowRefresh = true, onScroll = noop }) => {
   const listWrapper = useRef(null);
   const isLoading = useRef(false);
-  const [loadText, setLoadText] = useState('加载中...');
+  const [loadText, setLoadText] = useState('加载更多...');
 
   useEffect(() => {
     if (noMore) {
@@ -44,12 +44,12 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
   const onTouchMove = (e) => {
     if (e && !isLoading.current) {
       isLoading.current = true;
-      setLoadText('加载中...');
+      setLoadText('加载更多...');
       if (typeof(onRefresh) === 'function') {
         const promise = onRefresh()
         isPromise(promise) && promise
           .then(() => {
-            setLoadText('加载中...');
+            setLoadText('加载更多...');
             isLoading.current = false;
           })
           .catch(() => {
@@ -82,7 +82,7 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
       {children}
       {allowRefresh && (
             <View className={styles.footer}>
-              { loadText === '加载中...' && <Spin className={styles.spin} type="spinner" /> }
+              { loadText === '加载更多...' && <Spin className={styles.spin} type="spinner" /> }
               { loadText }
             </View>
       )}

@@ -2,9 +2,8 @@
 @import '@common/styles/fn/rem.scss';
 
 .container {
-  background: var(--color-white);
   text-align: center;
-  padding: rem($padding-4n) 0;
+  padding: rem($padding-6n) 0;
 }
 
 .init {
