@@ -58,7 +58,18 @@ export default class index extends Component {
         </div>
         {/* bottom */}
         <div className={styles.userCenterEditBottom}>
-
+          <h3>实名认证</h3>
+          <div className={styles.userCenterEditItem}>
+            <div className={styles.userCenterEditLabel}>
+              <label>申请实名认证</label>
+              <div>去认证</div>
+            </div>
+            <div><Icon name="RightOutlined" /></div>
+          </div>
+          <div className={styles.userCenterEditBtn}>
+            <Button>取消</Button>
+            <Button type="primary">保存</Button>
+          </div>
         </div>
       </>
     )
