@@ -1,7 +1,6 @@
 @import '@common/styles/index.scss';
 
 .drafts_box {
-    height: 100vh;
     display: flex;
     flex-direction: column;
     background-color: #f5f7f8;
@@ -41,25 +40,12 @@
             padding: var(--padding-4n) 0;
             border-bottom: var(--border-border);
 
-
-            .drafts_p {
-                font-size: var(--font-size-primary);
-                color: var(--color-text-primary);
-                line-height: var(--font-line-height-middle);
-            }
-
             .drafts_time {
                 margin-top: var(--margin-2n);
                 color: var(--color-text-secondary);
             }
+
         }
     }
 
-    .drafts_bottomTitle {
-        margin-top: var(--margin-2n);
-        font-size: var(--font-size-middle);
-        background-color: #f5f7f8;
-        color: var(--color-disabled);
-        text-align: center;
-    }
 }
