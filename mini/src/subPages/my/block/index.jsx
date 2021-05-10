@@ -3,8 +3,7 @@ import { inject, observer } from 'mobx-react';
 import IndexMiniPage from '@layout/my/block';
 import { readUsersList } from '@server';
 import { Toast } from '@discuzq/design';
-
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import Page from '@components/page';
 
 @inject('site')
 @inject('search')
@@ -67,9 +66,13 @@ class Index extends React.Component {
   }
 
   render() {
-    return <IndexMiniPage dispatch={this.dispatch} />;
+    return (
+      <Page>
+        <IndexMiniPage dispatch={this.dispatch} />
+      </Page>
+    )
   }
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(Index);
+export default Index;

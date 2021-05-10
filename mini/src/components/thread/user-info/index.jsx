@@ -18,6 +18,7 @@ UserInfo.propTypes = {
   isPay: PropTypes.bool, // 是否付费
   isReward: PropTypes.bool, // 是否悬赏
   isRed: PropTypes.bool, // 是否红包
+  collect: PropTypes.bool,
 };
 
 export default function UserInfo(props) {
@@ -57,6 +58,7 @@ export default function UserInfo(props) {
         {props.isPay && <Tag type="success">付费</Tag>}
         {props.isReward && <Tag type="warning">悬赏</Tag>}
         {props.isRed && <Tag type="danger">红包</Tag>}
+        {props.collect === 'collect' &&  <Icon className={styles.listItemIcon} name='CollectOutlined' size={20} />}
       </View>
     </View>
   );

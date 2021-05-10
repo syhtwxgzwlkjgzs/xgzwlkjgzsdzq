@@ -207,8 +207,7 @@ class Index extends React.Component {
     }
 
     render() {
-      const { data, className = '' } = this.props;
-
+      const { data, className = '', collect = '' } = this.props;
       if (!data) {
         return <NoData />;
       }
@@ -246,6 +245,7 @@ class Index extends React.Component {
                 isPrice={isPrice}
                 isRed={isRedPack}
                 isReward={isReward}
+                collect={collect}
               />
           </View>
 
