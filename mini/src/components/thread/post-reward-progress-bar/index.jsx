@@ -51,11 +51,14 @@ const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0 }) => {
         theme={progressTheme}
         lineWidth={12}
         isShowText={false}
-      />
-      <Image className={styles.icon} />
-      <View className={styles.remaining}>{texts.remaining}</View>
-      <View className={styles.received}>{texts.received}</View>
-      {texts.receive && <View className={styles.receive}>{texts.receive}</View>}
+      >
+        <View className={styles.content}>
+          <Image className={styles.icon} />
+          <View className={styles.remaining}>{texts.remaining}</View>
+          <View className={styles.received}>{texts.received}</View>
+          {texts.receive && <View className={styles.receive}>{texts.receive}</View>}
+        </View>
+      </Progress>
     </View>
   );
 };

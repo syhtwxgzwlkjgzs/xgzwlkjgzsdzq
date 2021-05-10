@@ -28,15 +28,15 @@ export default function H5Header(props) {
         <div className={styles.headerContent}>
             <div onClick={gobackClickHandle} className={styles.left}>返回</div>
             <div className={styles.right}>
-                <Icon onClick={() => {
+                <Icon className={styles.icon} onClick={() => {
                   iconClickHandle('home');
-                }} name="HomeOutlined" color="#C4C9D6" size={20} />
-                <Icon onClick={() => {
+                }} name="HomeOutlined" />
+                <Icon className={styles.icon} onClick={() => {
                   iconClickHandle('msg');
-                }} name="MessageOutlined" color="#C4C9D6" size={20} />
-                <Icon onClick={() => {
+                }} name="MailOutlined" />
+                <Icon className={styles.icon} onClick={() => {
                   iconClickHandle('user');
-                }} name="ProfessionOutlined" color="#C4C9D6" size={20} />
+                }} name="ProfessionOutlined" />
             </div>
         </div>
     </div>

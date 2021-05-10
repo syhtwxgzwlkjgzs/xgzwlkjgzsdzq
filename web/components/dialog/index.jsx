@@ -10,7 +10,7 @@ export default function DDialog(props) {
       {title}
       <Icon
         className={styles['pc-closeicon']}
-        name="DeleteOutlined"
+        name="CloseOutlined"
         size={12}
         onClick={onClose}
       />

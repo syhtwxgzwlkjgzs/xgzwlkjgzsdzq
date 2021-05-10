@@ -2,6 +2,6 @@
 @import "@discuzq/design/dist/styles/index.scss";
 
 page {
-  font-family: var(--font-family);
+  font-family: $fontFamily!important;
   background: var(--color-white);
 }

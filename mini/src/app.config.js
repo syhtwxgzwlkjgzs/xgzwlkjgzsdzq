@@ -39,13 +39,13 @@ export default {
         'user/status/index',
         'user/bind-phone/index',
         'user/wx-auth/index',
+        'user/wx-authorization/index',
       ]
     }
   ],
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',
-    navigationBarTitleText: 'WeChat',
     navigationBarTextStyle: 'black',
   },
 };

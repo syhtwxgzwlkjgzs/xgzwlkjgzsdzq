@@ -1,0 +1,46 @@
+@import '@common/styles/variable/index.scss';
+
+.footer {
+  display: flex;
+  // position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: var(--color-white);
+  border-top: var(--border-border);
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  height: 70px;
+  .item {
+    margin-top: 2px;
+    flex: 1;
+    flex-shrink: 0;
+    text-align: center;
+    color: var(--color-text-secondary);
+  }
+  .active {
+    color: var(--color-primary);
+    font-weight: bold;
+  }
+  .text {
+    font-size: rem($font-size-label);
+    line-height: rem($font-line-height-small);
+  }
+  .addIcon {
+    height: 48px;
+    line-height: 48px;
+    width: 48px;
+    background: var(--color-primary);
+    text-align: center;
+    border-radius: 50%;
+    display: inline-block;
+  }
+}
+
+.placeholder {
+  width: 100%;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  height: 70px;
+}

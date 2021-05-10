@@ -81,7 +81,7 @@ const Index = ({
           postList.map((item, index) => (
               <View key={index} className={styles.fabulous} onClick={item.event}>
                 <Icon className={styles.icon} name={item.icon} size={14} color={`${item.name === '取消' ? '#2469f6' : ''}`}></Icon>
-                <Text className={styles.fabulousPost}>{item.name}</Text>
+                <Text className={item.name === '取消' ? styles.fabulousCancel : styles.fabulousPost}>{item.name}</Text>
               </View>
           ))
         }

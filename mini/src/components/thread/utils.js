@@ -92,6 +92,10 @@ export const extensionList = [
   'MP3', 'MP4', 'PDF', 'PPT', 'PSD', 'RAR', 'TXT', 'XLS', 'XLSX', 'ZIP', 'JPG', 'WAV',
 ];
 
+export const isPromise = (obj) => {
+  return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
+}
+
 /* dispatch 类型常量 */
 export const ON_LIKE = 'ON_LIKE'; // 点赞事件
 export const ON_SHARE = 'ON_LIKE'; // 分享事件

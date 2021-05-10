@@ -9,8 +9,8 @@ const Index = () => {
 
   return (
     <div className={styles.container}>
-      <img className={styles.coverTop} src='cover-top.png'/>
-      <img className={styles.coverBottom} src='cover-bottom.png'/>
+      <img className={styles.coverTop} src='/cover-top.png'/>
+      <img className={styles.coverBottom} src='/cover-bottom.png'/>
     </div>
   );
 };

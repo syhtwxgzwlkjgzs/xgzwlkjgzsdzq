@@ -17,7 +17,7 @@ export default class MiniBindStore {
         setAccessToken({
           accessToken: data.accessToken,
         });
-        return res.data;
+        return res;
       }
       throw {
         Code: res.code,
