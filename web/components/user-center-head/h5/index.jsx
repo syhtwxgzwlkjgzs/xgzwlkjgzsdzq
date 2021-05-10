@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { Button, Icon } from '@discuzq/design';
+import clearLoginStatus from '@common/utils/clear-login-status';
 @inject('user')
 @observer
 export default class index extends Component {
@@ -13,6 +14,11 @@ export default class index extends Component {
       isAttention: false, // 表示是否关注
     };
     this.user = this.props.user || {};
+  }
+
+  loginOut() {
+    // clearLoginStatus();
+    // window.location.replace('/');
   }
 
   // 点击屏蔽
@@ -67,7 +73,7 @@ export default class index extends Component {
             <Icon name="CompileOutlined" />
             <span className={styles.userBtnText}>编辑资料</span>
           </Button>
-          <Button>
+          <Button onClick={this.loginOut}>
             <Icon name="PoweroffOutlined" />
             <span className={styles.userBtnText}>退出登录</span>
           </Button>

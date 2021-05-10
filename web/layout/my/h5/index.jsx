@@ -39,7 +39,7 @@ class H5MyPage extends React.Component {
         <div className={styles.unit}>
           <UserCenterFollow />
         </div>
-        <Button onClick={this.loginOut}>退出登录</Button>
+        {/* <Button onClick={this.loginOut}>退出登录</Button> */}
       </div>
     );
   }
