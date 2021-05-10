@@ -1,13 +1,25 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import InstantMessaging from '../instant-messaging';
 
-const PCMyPage = inject('site')(observer(() => {
-  const test = () => {};
+@inject('site')
+@observer
+class MsgPCPage extends Component {
+  state = {
+    messagesHistory: [],
+  };
 
-  return (
-    <div>
-    </div>
-  );
-}));
+  doSubmit = (val) => {
+    if (!val) return;
+    const { messagesHistory } = this.state;
+    this.setState({ messagesHistory: [...messagesHistory, val] });
+    return true;
+  };
 
-export default PCMyPage;
+  render() {
+    const { messagesHistory } = this.state;
+    return <InstantMessaging messagesHistory={messagesHistory} onSubmit={this.doSubmit} persona={'myself'} />;
+  }
+}
+
+export default MsgPCPage;

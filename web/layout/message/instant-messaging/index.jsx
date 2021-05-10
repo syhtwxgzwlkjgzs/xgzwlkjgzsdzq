@@ -1,20 +1,30 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { inject, observer } from 'mobx-react';
 
 import DialogBox from './dialog-box';
 import InteractionBox from './interaction-box';
 
-const InstantMessaging = (props) => {
-  const { messagesHistory = [], onSubmit, persona = 'itself' } = props;
-  const dialogBoxRef = useRef();
+@inject('site')
+@observer
+class InstantMessaging extends React.Component {
+  state = {
+    dialogBoxRef: React.createRef(),
+  };
 
-  return (
-    <>
-      <DialogBox shownMessages={messagesHistory} persona={persona} dialogBoxRef={dialogBoxRef} />
-      <InteractionBox onSubmit={onSubmit} dialogBoxRef={dialogBoxRef} />
-    </>
-  );
-};
+  render() {
+    const { messagesHistory = [], onSubmit, persona = 'itself', site } = this.props;
+    const { dialogBoxRef } = this.state;
+    const { platform } = site;
+
+    return (
+      <>
+        <DialogBox shownMessages={messagesHistory} persona={persona} dialogBoxRef={dialogBoxRef} />
+        <InteractionBox onSubmit={onSubmit} dialogBoxRef={dialogBoxRef} platform={platform} />
+      </>
+    );
+  }
+}
 
 InstantMessaging.propTypes = {
   messagesHistory: PropTypes.array.isRequired, // 消息历史输出组
