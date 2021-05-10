@@ -5,7 +5,7 @@ import { Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 
 const DialogBox = (props) => {
-  const { shownMessages, persona = 'itself', dialogBoxRef, platform } = props;
+  const { shownMessages, persona = 'itself', dialogBoxRef } = props;
 
   const formatMsgDate = (timestamp) => {
     const date = new Date(timestamp),
@@ -20,7 +20,7 @@ const DialogBox = (props) => {
   };
 
   return (
-    <View className={platform === 'pc' ? styles.pcDialogBox : styles.h5DialogBox} ref={dialogBoxRef}>
+    <View className={styles.dialogBox} ref={dialogBoxRef}>
       {shownMessages.map(({ timestamp, displayTimePanel, text }, idx) => (
         <React.Fragment key={idx}>
           {displayTimePanel && displayMsgTime(timestamp)}

@@ -1,11 +1,6 @@
 @import './vars.scss';
 
-.pcPage {
-  position: relative;
-  max-width: 750px;
-}
-
-.h5Page {
+.container {
   @include im-pagebed;
   position: relative;
   border-top: var(--border-border);

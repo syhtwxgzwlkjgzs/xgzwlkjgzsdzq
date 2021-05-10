@@ -1,28 +1,11 @@
 @import '../vars.scss';
 
-.pcDialogBox {
-  @include im-pagebed;
-  display: flex;
-  flex-direction: column;
-  height: 60vh;
-  overflow-y: auto;
-}
-
-.h5DialogBox {
+.dialogBox {
   @include im-pagebed;
   display: flex;
   flex-direction: column;
   height: 90vh;
   overflow-y: auto;
-
-  .itself {
-    .msgContent {
-      background-color: var(--color-white);
-      &:before {
-        border-right-color: var(--color-white);
-      }
-    }
-  }
 }
 
 .msgTime {
@@ -87,9 +70,9 @@
     @include text-font($color: var(--color-text-primary));
     margin-right: $im-msg-space-aside;
     margin-left: $im-gap-btw-icon-and-msg;
-    background-color: var(--comment-box-bg-color);
+    background-color: var(--color-white);
     &:before {
-      border-right-color: var(--comment-box-bg-color);
+      border-right-color: var(--color-white);
       left: -13px;
     }
   }

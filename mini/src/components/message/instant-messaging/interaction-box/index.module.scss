@@ -1,6 +1,6 @@
 @import '../vars.scss';
 
-.h5InteractionBox {
+.interactionBox {
   @include im-pagebed;
   display: flex;
   position: absolute;
@@ -9,80 +9,39 @@
   left: 0;
   padding: rem($padding-2n) rem($padding-4n);
   background-color: var(--color-white);
-
-  .inputWrapper {
-    display: flex;
-    background-color: var(--background-color-text2);
-    border-radius: rem($border-radius-small);
-    :global {
-      .dzq-input {
-        width: auto;
-      }
-      .dzq-input__inner {
-        background-color: var(--background-color-text2);
-        border-top-right-radius: unset;
-        border-bottom-right-radius: unset;
-        &:focus-visible {
-          border: none;
-        }
-      }
-    }
-  }
-
-  .tools {
-    align-items: center;
-    padding: rem($padding-2n);
-  }
-
-  .submit {
-    align-items: center;
-    margin-left: rem($margin-2n);
-  }
-
-  .pictureUpload {
-    margin-left: rem($margin-2n);
-  }
 }
 
-.pcInteractionBox {
-  @include im-pagebed;
-  border-top: var(--border-border);
-
-  .tools {
-    padding: rem($margin-4n) 0;
-  }
-
-  .emoj {
-    margin-left: rem($margin-1n);
-  }
-
-  .pictureUpload {
-    margin-left: rem($margin-4n);
-  }
-
-  .typingArea {
-    width: 100%;
-    border: none;
-    textarea {
-      resize: none;
-      padding: 0;
+.inputWrapper {
+  display: flex;
+  background-color: var(--background-color-text2);
+  border-radius: rem($border-radius-small);
+  :global {
+    .dzq-input {
+      width: auto;
     }
-  }
-
-  .submit {
-    justify-content: flex-end;
-  }
-
-  .submitBtn {
-    padding: rem($padding-2n) rem($padding-6n);
-    margin: rem($margin-4n) 0;
+    .dzq-input__inner {
+      background-color: var(--background-color-text2);
+      border-top-right-radius: unset;
+      border-bottom-right-radius: unset;
+      &:focus-visible {
+        border: none;
+      }
+    }
   }
 }
 
 .tools {
   display: flex;
+  align-items: center;
+  padding: rem($padding-2n);
 }
 
 .submit {
   display: flex;
+  align-items: center;
+  margin-left: rem($margin-2n);
+}
+
+.pictureUpload {
+  margin-left: rem($margin-2n);
 }
