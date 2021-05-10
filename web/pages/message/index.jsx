@@ -7,7 +7,7 @@ import MyPCPage from '@layout/message/pc';
 
 @inject('site')
 @observer
-class MyCenter extends React.Component {
+class Index extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
@@ -19,4 +19,4 @@ class MyCenter extends React.Component {
   }
 }
 
-export default HOCFetchSiteData(HOCWithLogin(MyCenter));
+export default HOCFetchSiteData(HOCWithLogin(Index));

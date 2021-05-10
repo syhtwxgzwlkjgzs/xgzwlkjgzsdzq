@@ -1,4 +1,4 @@
-import React, {memo, useState, useEffect} from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import { Button } from '@discuzq/design';
@@ -25,7 +25,7 @@ const H5MyPage = () => {
 
   return (
     <div className={styles.container}>
-      <Button onClick={test}>h5 test</Button>
+      <Button>h5 test</Button>
       <SliderLeft
         list={list}
         offsetLeft={'-74px'}

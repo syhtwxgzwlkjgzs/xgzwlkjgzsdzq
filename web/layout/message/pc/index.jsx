@@ -7,7 +7,6 @@ import NoticeItem from '@components/message/notice-item';
 import mock from '../mock.json';
 
 const PCMyPage = () => {
-  const test = () => { };
   // props,state
   const [type, setType] = useState('user'); // chat,system,financial,user
   const [list, setList] = useState([]);
@@ -24,7 +23,7 @@ const PCMyPage = () => {
   }
   return (
     <div className={styles.container}>
-      <Button onClick={test}>pc test</Button>
+      <Button>pc test</Button>
       <div className={styles.list}>
         <div className={styles.left}>
           {list.map(item => {
