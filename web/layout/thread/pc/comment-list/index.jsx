@@ -1,10 +1,10 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { inject, observer } from 'mobx-react';
 import comment from './index.module.scss';
 import AboptPopup from '../components/abopt-popup';
 import CommentList from '../components/comment-list/index';
 import CommentInput from '../components/comment-input/index';
-import DeletePopup from '../components/delete-popup';
+import DeletePopup from '@components/thread-detail-pc/delete-popup';
 import { Icon, Toast } from '@discuzq/design';
 
 const typeMap = {

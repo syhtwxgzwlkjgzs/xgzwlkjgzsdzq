@@ -13,6 +13,11 @@
   background: var(--color-white);
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.headerTag {
+  margin-left: rem(24);
 }
 
 .userInfo {
@@ -20,7 +25,7 @@
 }
 
 .iconText {
-  margin-left: rem(24);
+  margin-left: rem($margin-6n);
   display: inline-flex;
   align-items: center;
   cursor: pointer;
@@ -32,13 +37,13 @@
   }
 
   .text {
-    margin-left: rem(8);
-    color: #8490a8;
+    margin-left: rem($margin-2n);
+    color: var(--color-text-secondary);
   }
 
   .icon {
     font-size: rem(14);
-    color: #8490a8;
+    color: var(--color-text-secondary);
   }
 }
 
@@ -50,7 +55,7 @@
   margin-top: rem($margin-4n);
 
   > * {
-    margin-bottom: rem($margin-5n);
+    margin-bottom: rem($margin-6n);
   }
 }
 
@@ -65,8 +70,24 @@
 }
 
 .rewardButton {
+  display: block;
   margin: 0 auto;
   width: rem(156);
+}
+
+.buttonIconText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttonIcon {
+  font-size: rem($font-size-primary);
+}
+
+.buttonText {
+  margin-left: rem($margin-2n);
+  font-size: rem($font-size-primary);
 }
 
 .payButton {
@@ -85,11 +106,19 @@
 }
 
 .footer {
+  margin-top: rem($margin-6n);
   display: flex;
   align-items: center;
   justify-content: space-between;
   color: var(--color-text-secondary);
   font-size: rem($font-size-primary);
+}
+
+.share {
+  font-size: rem($font-size-label);
+  color: var(--color-text-secondary);
+  height: rem(17);
+  line-height: rem(17);
 }
 
 .goods {
@@ -104,12 +133,12 @@
 
 .tag {
   display: inline-block;
-  color: var(--color-text-regular);
+  color: var(--pc-user-info-title);
   background: var(--background-color);
   font-size: rem($font-size-label);
-  padding: rem($padding-2n) rem($padding-1n);
-  line-height: rem($font-size-label);
+  padding: rem($padding-1n) rem($padding-1n);
   border-radius: rem($border-radius-small);
+  line-height: rem(17);
 }
 
 .thumbs {
@@ -123,7 +152,7 @@
 }
 
 .examine {
-  padding: rem(8) 0;
+  padding: rem($padding-2n) 0;
   background: var(--color-error);
   color: var(--color-white);
   text-align: center;
@@ -143,7 +172,7 @@
     font-size: rem($font-size-primary);
     cursor: pointer;
     color: var(--color-text-secondary);
-    
+
     span {
       margin-left: rem($margin-2n);
     }
@@ -154,3 +183,6 @@
   }
 }
 
+.divider {
+  margin: rem($margin-4n) 0;
+}

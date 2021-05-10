@@ -8,7 +8,7 @@ import VideoPlay from '@components/thread/video-play';
 import PostRewardProgressBar, { POST_TYPE } from '@components/thread/post-reward-progress-bar';
 import Tip from '@components/thread/tip';
 import AttachmentView from '@components/thread/attachment-view';
-import { Icon, Button, Divider, Dropdown } from '@discuzq/design';
+import { Icon, Button, Divider, Dropdown, Tag } from '@discuzq/design';
 import UserInfo from '@components/thread/user-info';
 import classnames from 'classnames';
 import topic from './index.module.scss';
@@ -59,6 +59,13 @@ export default inject('user')(
     const threadPrice = threadStore?.threadData?.price || 0;
     // 是否作者自己
     const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData?.userId;
+
+    // 是否悬赏帖
+    const isRedPack = threadStore?.threadData?.displayTag?.isRedPack;
+    // 是否红包帖
+    const isReward = threadStore?.threadData?.displayTag?.isReward;
+    // 是否可以打赏
+    const canReward = props?.user?.isLogin() && !isRedPack && !isReward;
 
     const parseContent = {};
     if (indexes && Object.keys(indexes)) {
@@ -114,7 +121,6 @@ export default inject('user')(
               location={threadStore?.threadData?.position.location || ''}
               view={`${threadStore?.threadData?.viewCount}` || ''}
               time={`${threadStore?.threadData?.createdAt}` || ''}
-              isEssence={isEssence}
               userId={threadStore?.threadData?.user?.userId}
             ></UserInfo>
           </div>
@@ -144,6 +150,11 @@ export default inject('user')(
                 <Icon className={topic.icon} name="WarnOutlinedThick"></Icon>
                 <span className={topic.text}>举报</span>
               </div>
+            </div>
+          )}
+          {isEssence && (
+            <div className={topic.headerTag}>
+              <Tag type="primary">精华</Tag>
             </div>
           )}
         </div>
@@ -200,6 +211,7 @@ export default inject('user')(
             {/* 附件 */}
             {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
 
+            {/* 标签 */}
             {threadStore?.threadData?.categoryName && (
               <div className={topic.tag}>{threadStore?.threadData?.categoryName}</div>
             )}
@@ -242,15 +254,18 @@ export default inject('user')(
             )}
 
             {/* 打赏 */}
-            {props?.user?.isLogin() && (
-              <div style={{ textAlign: 'center' }}>
-                <Button onClick={onRewardClick} className={topic.rewardButton} type="primary" size="large">
-                  打赏
-                </Button>
-              </div>
+            {canReward && (
+              <Button onClick={onRewardClick} className={topic.rewardButton} type="primary" size="large">
+                <div className={topic.buttonIconText}>
+                  <Icon className={topic.buttonIcon} name="HeartOutlined"></Icon>
+                  <span className={topic.buttonText}>打赏</span>
+                </div>
+              </Button>
             )}
           </div>
         )}
+
+        {/* 点赞分享 */}
         <div className={topic.footer}>
           <div className={topic.thumbs}>
             <div className={topic.likeReward}>
@@ -259,10 +274,13 @@ export default inject('user')(
             <span>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
           </div>
           {threadStore?.threadData?.likeReward?.shareCount > 0 && (
-            <span>{threadStore?.threadData?.likeReward?.shareCount}次分享</span>
+            <span className={topic.share}>{threadStore?.threadData?.likeReward?.shareCount}次分享</span>
           )}
         </div>
-        <Divider></Divider>
+
+        <Divider className={topic.divider}></Divider>
+
+        {/* 操作按钮 */}
         <div className={topic.bottomOperate}>
           <div
             className={classnames(topic.item, threadStore?.threadData?.isLike && topic.active)}
