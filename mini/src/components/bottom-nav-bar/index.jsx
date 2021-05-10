@@ -9,13 +9,13 @@ import Taro from '@tarojs/taro';
  * @prop {boolean} placeholder 固定在底部时，是否在标签位置生成一个等高的占位元素
  */
 
-const TabBar = ({ router, fixed = true, placeholder = false }) => {
+const BottomNavBar = ({ router, fixed = true, placeholder = false }) => {
   const [tabs, setTabs] = useState([
     { icon: 'HomeOutlined', text: '首页', active: true, router: '/pages/index' },
     { icon: 'FindOutlined', text: '发现', active: false, router: '/subPages/search/index' },
     { icon: 'PlusOutlined', router: '/subPages/thread/post/index' },
-    { icon: 'MessageOutlined', text: '消息', active: false, router: '/' },
-    { icon: 'ProfessionOutlined', text: '我', active: false, router: '/pages/my' },
+    { icon: 'MailOutlined', text: '消息', active: false, router: '/' },
+    { icon: 'ProfessionOutlined', text: '我的', active: false, router: '/pages/my' },
   ]);
 
   const handleClick = (i, idx) => {
@@ -53,4 +53,4 @@ const TabBar = ({ router, fixed = true, placeholder = false }) => {
   );
 };
 
-export default TabBar;
+export default BottomNavBar;

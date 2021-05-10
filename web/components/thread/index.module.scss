@@ -5,7 +5,12 @@
   padding: 0 rem($padding-4n);
   padding-bottom: 0;
   background: #fff;
+  border-radius: rem(5);
   cursor: pointer;
+
+  &:hover {
+    background: rgba(229, 242, 255, 0.3);
+  }
   .title {
     font-size: rem($font-size-middle);
     line-height: rem(26);
@@ -58,4 +63,8 @@
       margin-right: rem($margin-10);
     }
   }
+}
+
+.containerBottom {
+  margin-bottom: rem(10);
 }
