@@ -7,7 +7,7 @@ import NoData from '@components/no-data';
 import styles from './index.module.scss';
 import List from '@components/list';
 import TopNew from './components/top-news';
-import Tabbar from './components/tabbar';
+import ButtomNavBar from '@components/buttom-nav-bar';
 import FilterView from './components/filter-view';
 import PayBox from '@components/payBox';
 
@@ -219,7 +219,7 @@ class IndexH5Page extends React.Component {
           visible={this.state.visible}
           onSubmit={this.onClickFilter}
         />
-       <Tabbar placeholder/>
+       <ButtomNavBar placeholder/>
       </div>
     );
   }
