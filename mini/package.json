@@ -13,7 +13,7 @@
     "build": "taro build --type weapp",
     "lint:fix": "eslint --ext .js,.ts,.tsx,.jsx ./ --max-warnings 0 --fix",
     "lintcss:fix": "stylelint src/**/*.{scss}",
-    "dev:weapp": "cross-env NODE_ENV=production dzq dev -p mini --type weapp",
+    "dev:weapp": "cross-env NODE_ENV=development dzq dev -p mini --type weapp",
     "build:weapp": "cross-env NODE_ENV=production dzq build -p mini --type weapp"
   },
   "browserslist": [
@@ -66,7 +66,8 @@
     "stylelint-config-prettier": "8.0.2",
     "stylelint-config-rational-order": "0.1.2",
     "stylelint-config-standard": "21.0.0",
-    "stylelint-prettier": "1.2.0"
+    "stylelint-prettier": "1.2.0",
+    "webpack": "4.46.0"
   },
   "config": {
     "commitizen": {

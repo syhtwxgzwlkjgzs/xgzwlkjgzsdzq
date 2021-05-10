@@ -7,7 +7,7 @@ import NoData from '@components/no-data';
 import styles from './index.module.scss';
 import List from '@components/list';
 import TopNew from './components/top-news';
-import ButtomNavBar from '@components/buttom-nav-bar';
+import ButtomNavBar from '@components/bottom-nav-bar';
 import FilterView from './components/filter-view';
 import PayBox from '@components/payBox';
 
