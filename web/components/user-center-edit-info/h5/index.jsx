@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import UserCenterEditHeader from '../../user-center-edit-header/index'
 import { Button, Icon } from '@discuzq/design';
 import styles from './index.module.scss';
+import Avatar from '@components/avatar';
 export default class index extends Component {
   render() {
     return (
@@ -47,7 +48,7 @@ export default class index extends Component {
           <div className={styles.userCenterEditItem} style={{ border: 'none' }}>
             <div className={styles.userCenterEditLabel}>
               <label>微信</label>
-              <div><img /> Users（解绑）</div>
+              <div className={styles.userCenterEditWeChat}><Avatar size="small" /> <span>Users（解绑）</span></div>
             </div>
           </div>
         </div>
