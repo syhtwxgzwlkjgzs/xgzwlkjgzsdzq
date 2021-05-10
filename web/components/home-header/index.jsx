@@ -87,7 +87,7 @@ class HomeHeader extends React.Component {
     const { countUsers, countThreads } = this.getSiteInfo();
 
     return (
-      <div className={styles.container} style={{style, ...this.getBgHeaderStyle(bgColor)}}>
+      <div className={styles.container} style={{...style, ...this.getBgHeaderStyle(bgColor)}}>
         {hideInfo && <div className={styles.topBar}>
           <div></div>
           <div>

@@ -107,6 +107,7 @@
 }
 
 @mixin pc_otherLoginBtn {
+  cursor: pointer;
   border-radius: 50%;
   border: 1px solid #eee;
   margin: 0 16px;
@@ -120,6 +121,7 @@
 @mixin pc_functionalRegion {
   margin-top: 16px;
   text-align: center;
+  font-size: rem(14);
   .clickBtn{
     color: var(--color-primary);
     cursor: pointer;

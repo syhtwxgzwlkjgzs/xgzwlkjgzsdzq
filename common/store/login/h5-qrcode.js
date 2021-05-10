@@ -10,7 +10,7 @@ export default class H5Qrcode {
   @observable qrCode = '';
   @observable sessionToken = '';
   @observable countDown = 120;
-  @observable loginTitle = '你确定要授权登录DISCUZ!Q吗？';
+  @observable loginTitle = '你确定要授权登录Discuz!Q吗？';
   @observable bindTitle = '请绑定您的微信';
   @observable isBtn = true;
 
@@ -58,10 +58,6 @@ export default class H5Qrcode {
         setAccessToken({
           accessToken,
         });
-        return res;
-      }
-
-      if (res.code === WAITING_FOR_SCANNING) {
         return res;
       }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import { Icon, Button } from '@discuzq/design';
+import { Icon, Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import { get } from '@common/utils/get';
@@ -11,6 +11,21 @@ const testArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 @inject('site')
 @observer
 class InviteH5Page extends React.Component {
+  toLocaleCopyCase = async () => {
+    try {
+      const clipboardObj = navigator.clipboard;
+      await clipboardObj.writeText('我是邀请链接');
+      Toast.success({
+        content: '复制链接成功',
+        duration: 1000,
+      });
+    } catch (e) {
+      Toast.error({
+        content: '复制链接失败',
+      });
+    }
+  }
+
   render() {
     return (
       <>
@@ -67,7 +82,12 @@ class InviteH5Page extends React.Component {
           {/* 邀请列表 end */}
           {/* 邀请朋友 start */}
           <div className={layout.invite_bottom}>
-            <Button className={layout.invite_bottom_button}>邀请朋友</Button>
+            <Button
+              className={layout.invite_bottom_button}
+              onClick={this.toLocaleCopyCase}
+            >
+              邀请朋友
+            </Button>
           </div>
           {/* 邀请朋友 end */}
         </div>

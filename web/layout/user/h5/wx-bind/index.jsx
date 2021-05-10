@@ -17,7 +17,7 @@ class WeixinBindH5Page extends React.Component {
     const { sessionToken, loginType, code, sessionId, state, nickname }  = this.props.router.query;
     return (
       <div className={layout.container}>
-        <HomeHeader hideinfo/>
+        <HomeHeader hideInfo style={{height: '20%'}}/>
         <div className={layout.content}>
           <div className={layout.title}>绑定微信号</div>
           <div className={layout.tips}>

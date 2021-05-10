@@ -19,19 +19,19 @@ class WXAuthorizationPage extends React.Component {
   render() {
     return (
       <div className={layout.container}>
-        <HomeHeader hideinfo/>
+        <HomeHeader hideInfo style={{height: '20%'}}/>
         <div className={layout.content}>
           <div className={layout.title}>{this.props.h5QrCode.loginTitle}</div>
           {
             this.props.h5QrCode.isBtn
-            ? <Button
+              ? <Button
                 className={layout.button}
                 type="primary"
                 onClick={this.authorization}
               >
                 确定
               </Button>
-            : <></>
+              : <></>
           }
         </div>
       </div>
