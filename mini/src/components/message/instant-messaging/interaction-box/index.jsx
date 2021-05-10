@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { View } from '@tarojs/components';
 import { Button, Textarea, Icon, Input } from '@discuzq/design';
 
 import styles from './index.module.scss';
@@ -52,35 +53,35 @@ const InteractionBox = (props) => {
   return (
     <>
       {platform === 'h5' && (
-        <div className={styles.h5InteractionBox}>
-          <div className={styles.inputWrapper}>
+        <View className={styles.h5InteractionBox}>
+          <View className={styles.inputWrapper}>
             <Input value={typingValue} placeholder=" 请输入内容" onChange={(e) => setTypingValue(e.target.value)} />
-            <div className={styles.tools}>
-              <div>
+            <View className={styles.tools}>
+              <View>
                 <Icon name="SmilingFaceOutlined" size={20} color={'var(--color-text-secondary)'} />
-              </div>
-              <div className={styles.pictureUpload}>
+              </View>
+              <View className={styles.pictureUpload}>
                 <Icon name="PictureOutlinedBig" size={20} color={'var(--color-text-secondary)'} />
-              </div>
-            </div>
-          </div>
-          <div className={styles.submit}>
+              </View>
+            </View>
+          </View>
+          <View className={styles.submit}>
             <Button type="primary" onClick={doSubmitClick}>
               发送
             </Button>
-          </div>
-        </div>
+          </View>
+        </View>
       )}
       {platform === 'pc' && (
-        <div className={styles.pcInteractionBox}>
-          <div className={styles.tools}>
-            <div className={styles.emoj}>
+        <View className={styles.pcInteractionBox}>
+          <View className={styles.tools}>
+            <View className={styles.emoj}>
               <Icon name="SmilingFaceOutlined" size={20} color={'var(--color-text-secondary)'} />
-            </div>
-            <div className={styles.pictureUpload}>
+            </View>
+            <View className={styles.pictureUpload}>
               <Icon name="PictureOutlinedBig" size={20} color={'var(--color-text-secondary)'} />
-            </div>
-          </div>
+            </View>
+          </View>
           <Textarea
             className={styles.typingArea}
             value={typingValue}
@@ -91,12 +92,12 @@ const InteractionBox = (props) => {
             onKeyDown={doPressEnter}
             placeholder={' 请输入内容'}
           />
-          <div className={styles.submit}>
+          <View className={styles.submit}>
             <Button className={styles.submitBtn} type="primary" onClick={doSubmitClick}>
               发送
             </Button>
-          </div>
-        </div>
+          </View>
+        </View>
       )}
     </>
   );

@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from '@tarojs/components';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 
@@ -20,10 +21,10 @@ class InstantMessaging extends React.Component {
     const { platform } = site;
 
     return (
-      <div className={platform === 'h5' ? styles.h5Page : styles.pcPage}>
+      <View className={platform === 'h5' ? styles.h5Page : styles.pcPage}>
         <DialogBox shownMessages={messagesHistory} persona={persona} dialogBoxRef={dialogBoxRef} platform={platform} />
         <InteractionBox onSubmit={onSubmit} dialogBoxRef={dialogBoxRef} platform={platform} />
-      </div>
+      </View>
     );
   }
 }

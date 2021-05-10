@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from '@tarojs/components';
 import { Icon } from '@discuzq/design';
 
 import styles from './index.module.scss';
@@ -15,23 +16,23 @@ const DialogBox = (props) => {
 
   const displayMsgTime = (curTimestamp) => {
     const formattedDate = formatMsgDate(curTimestamp);
-    return <div className={styles.msgTime}>{formattedDate}</div>;
+    return <View className={styles.msgTime}>{formattedDate}</View>;
   };
 
   return (
-    <div className={platform === 'pc' ? styles.pcDialogBox : styles.h5DialogBox} ref={dialogBoxRef}>
+    <View className={platform === 'pc' ? styles.pcDialogBox : styles.h5DialogBox} ref={dialogBoxRef}>
       {shownMessages.map(({ timestamp, displayTimePanel, text }, idx) => (
         <React.Fragment key={idx}>
           {displayTimePanel && displayMsgTime(timestamp)}
-          <div className={(persona === 'myself' ? `${styles.myself}` : `${styles.itself}`) + ` ${styles.persona}`}>
-            <div className={styles.profileIcon}>
+          <View className={(persona === 'myself' ? `${styles.myself}` : `${styles.itself}`) + ` ${styles.persona}`}>
+            <View className={styles.profileIcon}>
               <Icon name="UserOutlined" size={20} color={'var(--color-primary)'} />
-            </div>
-            <div className={styles.msgContent}>{text}</div>
-          </div>
+            </View>
+            <View className={styles.msgContent}>{text}</View>
+          </View>
         </React.Fragment>
       ))}
-    </div>
+    </View>
   );
 };
 
