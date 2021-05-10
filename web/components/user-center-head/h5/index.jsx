@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { Button, Icon } from '@discuzq/design';
 import clearLoginStatus from '@common/utils/clear-login-status';
 
+@inject('user')
+@observer
 export default class index extends Component {
   constructor(props) {
     super(props);
@@ -11,6 +14,7 @@ export default class index extends Component {
       isShield: false, // 表示是否屏蔽
       isAttention: false, // 表示是否关注
     };
+    this.user = this.props.user || {};
   }
 
   // 点击屏蔽
@@ -38,31 +42,31 @@ export default class index extends Component {
         {/* 上 */}
         <div className={styles.h5boxTop}>
           <div className={styles.headImgBox}>
-            <Avatar size='big' />
+            <Avatar size='big' text={this.user.username} />
           </div>
           {/* 粉丝|关注|点赞 */}
           <div className={styles.userMessageList}>
             <div className={styles.userMessageListItem}>
               <span>粉丝</span>
-              <span>2880</span>
+              <span>{this.user.fansCount||0}</span>
             </div>
             <div className={styles.userMessageListItem}>
               <span>关注</span>
-              <span>974</span>
+              <span>{this.user.followCount||0}</span>
             </div>
             <div className={styles.userMessageListItem}>
               <span>点赞</span>
-              <span>1368</span>
+              <span>{this.user.likedCount||0}</span>
             </div>
           </div>
         </div>
         {/* 中 用户昵称和他所在的用户组名称 */}
         <div>
           <div className={styles.userNameOrTeam}>
-            <span>Amber</span>
+            <span>{this.user.username}</span>
             <span>官方团队</span>
           </div>
-          <p className={styles.text}>不会开飞机的程序员，不是一个好的摄影师不会开飞机的程序员，不是一个好的摄影师不会开飞机的程序员，不是一个好的摄影师不会开飞机的程序员，不是一个好的摄影师</p>
+          <p className={styles.text}>{this.user.signature||'没有签名的时候应该怎么展示'}</p>
         </div>
         {/* 下 */}
         <div className={styles.userBtn}>
