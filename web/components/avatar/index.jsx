@@ -96,7 +96,7 @@ function avatar(props) {
             </div>
           </div>
           <div className={styles.footer}>
-            <Button onClick={followHandler} loading={following} className={styles.btn} type='primary'>{!following && <Icon className={styles.icon} name={ userInfo.follow !== 0 ? "CheckOutlined" : "PlusOutlined"} size={12}/>}{userInfo.follow ? '已关注' : '关注'}</Button>
+            <Button onClick={following ? () => {} : followHandler} loading={following} className={styles.btn} type='primary'>{!following && <Icon className={styles.icon} name={ userInfo.follow !== 0 ? "CheckOutlined" : "PlusOutlined"} size={12}/>}{userInfo.follow ? '已关注' : '关注'}</Button>
             <Button className={[styles.btn, styles.ghost]} type='primary' ghost><Icon className={styles.icon} name="NewsOutlined" size={12}/>发私信</Button>
             <Button className={styles.btn} type='primary'><Icon className={styles.icon} name="ShieldOutlined" size={12}/>屏蔽</Button>
           </div>

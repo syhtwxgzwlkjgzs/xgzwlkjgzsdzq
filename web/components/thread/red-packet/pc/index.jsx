@@ -4,7 +4,7 @@ export default function PCIndex(props) {
   return (
     <div className={styles.redpackBox}>
       <div className={styles.money}>
-        <img className={styles.bgImg} src='redpacket.png'/>
+        <img className={styles.bgImg} src='/redpacket.png'/>
       </div>
     </div>
   );
