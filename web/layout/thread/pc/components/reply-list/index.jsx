@@ -55,6 +55,8 @@ export default class ReplyList extends React.Component {
             image={this.props.data.user.avatar}
             name={this.props.data.user.username || this.props.data.user.userName || ''}
             circle={true}
+            userId={this.props.data.user.id}
+            isShowUserInfo={true}
             size='small'>
           </Avatar>
         </div>
@@ -72,6 +74,8 @@ export default class ReplyList extends React.Component {
                         image={this.props.data.user.avatar}
                         name={this.props.data.user.username || this.props.data.user.userName || ''}
                         circle={true}
+                        userId={this.props.data.user.id}
+                        isShowUserInfo={true}
                         size='small'>
                       </Avatar>
                     </div>

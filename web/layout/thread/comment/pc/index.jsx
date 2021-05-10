@@ -58,11 +58,10 @@ class CommentPCPage extends React.Component {
 
   // 点击关注
   onFollowClick() {
-    console.log(this.props.comment)
     if (this.props.comment?.commentDetail?.userId) {
       this.props.comment?.authorInfo?.follow === 2 || this.props.comment?.authorInfo?.follow === 1
-        ? this.props.comment.cancelFollow({ id: this.props.comment.commentDetail.userId, type: 1 })
-        : this.props.comment.postFollow(this.props.comment.commentDetail.userId);
+        ? this.props.comment.cancelFollow({ id: this.props.comment.commentDetail.userId, type: 1 }, this.props.user)
+        : this.props.comment.postFollow(this.props.comment.commentDetail.userId, this.props.user);
     }
   }
 
@@ -179,6 +178,7 @@ class CommentPCPage extends React.Component {
 
   render() {
     const { commentDetail: commentData, isReady } = this.props.comment;
+    const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === commentData?.userId;
 
     return (
       <div className={styles.container}>
@@ -218,7 +218,8 @@ class CommentPCPage extends React.Component {
               {this.props.comment?.authorInfo
                 ? <AuthorInfo
                   user={this.props.comment?.authorInfo}
-                  onFollowClick={() => this.onFollowClick()}>
+                  onFollowClick={() => this.onFollowClick()}
+                  isShowBtn={!isSelf}>
                 </AuthorInfo>
                 : <LoadingTips type='init'></LoadingTips>
               }

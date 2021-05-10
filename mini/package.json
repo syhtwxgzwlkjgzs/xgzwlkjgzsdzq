@@ -13,7 +13,7 @@
     "build": "taro build --type weapp",
     "lint:fix": "eslint --ext .js,.ts,.tsx,.jsx ./ --max-warnings 0 --fix",
     "lintcss:fix": "stylelint src/**/*.{scss}",
-    "dev:weapp": "cross-env NODE_ENV=development dzq dev -p mini --type weapp",
+    "dev:weapp": "cross-env NODE_ENV=production dzq dev -p mini --type weapp",
     "build:weapp": "cross-env NODE_ENV=production dzq build -p mini --type weapp"
   },
   "browserslist": [
@@ -31,8 +31,8 @@
     "@tarojs/react": "3.2.2",
     "@tarojs/runtime": "3.2.2",
     "@tarojs/taro": "3.2.2",
-    "mobx": "4.15.4",
-    "mobx-react": "6.1.8",
+    "mobx": "4.8.0",
+    "mobx-react": "6.1.4",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "vod-wx-sdk-v2": "^1.0.3",

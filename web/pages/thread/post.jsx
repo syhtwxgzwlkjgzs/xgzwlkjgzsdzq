@@ -326,7 +326,7 @@ class PostPage extends React.Component {
     else ret = await threadPost.createThread();
     const { code, data, msg } = ret;
     if (code === 0) {
-      thread.setThreadData(data);
+      // thread.setThreadData(data);
       if (!isDraft) this.props.router.replace(`/thread/${data.threadId}`);
       return true;
     }

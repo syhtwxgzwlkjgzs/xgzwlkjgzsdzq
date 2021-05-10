@@ -24,7 +24,7 @@ class SiteStore {
   @observable isUserLoginVisible = null;
 
   @computed get isRegister() {
-    return !(this.isSmsOpen || this.wechatEnv !== 'none');
+    return !this.isSmsOpen && this.wechatEnv === 'none';
   }
 
   @computed get isSmsOpen() {

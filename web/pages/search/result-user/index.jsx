@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/search/result-user/h5';
 import IndexPCPage from '@layout/search/result-user/pc';
-import { readUsersList } from '@server';
+import { readTopicsList, readUsersList } from '@server';
 import { Toast } from '@discuzq/design';
 
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
@@ -13,11 +13,16 @@ import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 class Index extends React.Component {
   static async getInitialProps(ctx) {
     const search = ctx?.query?.keyword || '';
+    const topicFilter = {
+      hot: 0,
+      content: search,
+    };
     const result = await readUsersList({ params: { filter: { username: search } } });
-
+    const topics = await readTopicsList({ params: { filter: topicFilter, perPage: 10 } });
     return {
       serverSearch: {
         users: result?.data,
+        topics: topics?.data,
       },
     };
   }
@@ -30,6 +35,7 @@ class Index extends React.Component {
     const { serverSearch, search } = this.props;
     // 初始化数据到store中
     serverSearch && serverSearch.users && search.setUsers(serverSearch.users);
+    serverSearch && serverSearch.topics && search.setTopics(serverSearch.topics);
   }
 
   async componentDidMount() {
@@ -37,20 +43,25 @@ class Index extends React.Component {
     const { keyword = '' } = router.query;
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasUsers = !!search.users;
+    const hasTopics = !!search.topics;
 
-    if (!hasUsers) {
+    if (!hasUsers || !hasTopics) {
       this.toastInstance = Toast.loading({
         content: '加载中...',
         duration: 0,
       });
 
       this.page = 1;
-      await search.getUsersList({ search: keyword });
+      await this.getData(keyword);
 
       this.toastInstance?.destroy();
     }
   }
-
+  getData = (keyword) => {
+    const { search } = this.props;
+    search.getTopicsList({ search: keyword, perPage: 1, page:10   });
+    search.getUsersList({ search: keyword, perPage: this.perPage, page: this.page  });
+  }
   dispatch = async (type, data) => {
     const { search } = this.props;
 
@@ -60,7 +71,7 @@ class Index extends React.Component {
       this.page += 1;
     }
 
-    await search.getUsersList({ search: data, perPage: this.perPage, page: this.page });
+    await this.getData(data);
     return;
   }
 

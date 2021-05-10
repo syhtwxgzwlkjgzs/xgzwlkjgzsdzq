@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Icon } from '@discuzq/design';
 import Avatar from '../../avatar';
 import { noop } from '../utils';
 import styles from './index.module.scss';
+import { ThreadCommonContext } from '../utils'
 
 /**
  * 用户信息视图
@@ -14,7 +15,7 @@ import styles from './index.module.scss';
  * @prop {string}  onClick 点击事件
  */
 // TODO 点击穿透问题之后想办法解决
-const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noop  }) => {
+const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noop, userId, platform }) => {
   const handleClick = (e) => {
     e.stopPropagation();
     onClick();
@@ -23,7 +24,13 @@ const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noo
     <div className={styles.listItem} key={index} onClick={handleClick}>
       <div className={styles.wrapper}>
           <div className={styles.header}>
-              <Avatar className={styles.img} image={imgSrc} name={title} />
+              <Avatar 
+                className={styles.img} 
+                image={imgSrc} 
+                name={title} 
+                isShowUserInfo={platform === 'pc'}
+                userId={userId}
+              />
               {
                 icon && (
                   <div className={styles.icon} style={{ backgroundColor: index % 2 === 0 ? '#e02433' : '#ffc300' }}>

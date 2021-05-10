@@ -1,5 +1,6 @@
 @import '@common/styles/variable/index.scss';
 .indexImage {
+  margin-bottom: 16px;
   .imageBox {
     width: 100%;
     .images1 {
@@ -21,6 +22,7 @@
       .imagesBox2 {
         display: block;
         width: 170px;
+        height: 100%;
         object-fit: cover;
       }
     }

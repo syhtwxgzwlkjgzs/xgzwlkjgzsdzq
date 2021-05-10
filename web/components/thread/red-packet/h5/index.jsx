@@ -22,33 +22,40 @@ export default function H5Index(props) {
         themeContent: (
             <>
               <div className={styles.content}>
-              <div className={styles.text}>{content || '暂无内容'}</div>
+              <div className={styles.text}>{content || ''}</div>
               </div>
             </>
         ),
         conHeight: {
           height: '103px',
         },
+        textTop: {
+          top: '39px'
+        }
       };
     }
     return {
       themeContent: (
         <>
           <div className={styles.content}>
-              <div className={styles.title}>{title || '图文帖子'}</div>
-              <div className={styles.text}>{content || '暂无内容'}</div>
+              <div className={styles.title}>{title || ''}</div>
+              <div className={styles.text}>{content || ''}</div>
           </div>
         </>
       ),
       conHeight: {
         height: '135px',
       },
+      textTop: {
+        top: '53px'
+      }
     };
   }, [type]);
   return (
     <div className={styles.container} style={texts.conHeight} onClick={onClick}>
       <div className={styles.money}>
-        <img className={styles.bgImg} src='redpacket.png'/>
+        <div className={styles.moneyTop}></div>
+        <div className={styles.moneyTBottom} style={texts.textTop}>开</div>
       </div>
       {texts.themeContent}
     </div>

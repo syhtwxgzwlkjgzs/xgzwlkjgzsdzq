@@ -196,7 +196,7 @@ class SearchAction extends SearchStore {
  */
  @action
  async postFollow(userId) {
-   const result = await createFollow({ data: { data: { toUserId: userId } } });
+   const result = await createFollow({ data: { toUserId: userId } });
    if (result.code === 0 && result.data) {
      return result.data;
    }
@@ -289,6 +289,7 @@ class SearchAction extends SearchStore {
    @action
    updatePayThreadInfo(threadId, obj) {
      const targetThreads = this.findAssignThread(threadId);
+
      targetThreads.forEach(targetThread => {
       const { index, store } = targetThread;
       if (store?.pageData) {

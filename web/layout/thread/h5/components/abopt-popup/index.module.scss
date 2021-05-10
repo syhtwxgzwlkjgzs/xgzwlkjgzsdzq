@@ -59,21 +59,3 @@
     }
   }
 }
-
-.button {
-  width: 100%;
-  display: flex;
-  .ok {
-    width: 50%;
-  }
-  .cancel {
-    width: 50%;
-    background: #c9c9c9;
-    border: none;
-  }
-}
-
-.blank {
-  width: 100%;
-  height: rem(40);
-}

@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
-import SectionTitle from '@layout/search/h5/components/section-title'
+import SectionTitle from '@components/section-title';
 import TrendingTopicMore from '@layout/search/pc/components/trending-topic-more';
 import ActiveUsers from '@layout/search/pc/components/active-users'
 import List from '@components/list';
@@ -20,7 +20,10 @@ class IndexPCPage extends React.Component {
   redirectToSearchResultUser = () => {
     this.props.router.push('/search/result-user');
   };
-  onTopicClick = data => console.log('topic click', data);
+  onTopicClick = data => {
+    debugger
+    this.props.router.push(`/topic/topic-detail/${id}`);
+  };
   fetchMoreData = () => {
     const { dispatch } = this.props;
     const { keyword } = this.state;

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { noop } from '../utils'
 import styles from './index.module.scss';
 import { View, Text, Image } from '@tarojs/components';
 
@@ -11,11 +11,11 @@ import { View, Text, Image } from '@tarojs/components';
  * @prop {boolean}       loading
  */
 
-const Index = ({ image, title, amount = 0, loading, className: _className = '', ...props }) => {
+const Index = ({ image, title, amount = 0, loading, className: _className = '', onClick = noop }) => {
   const _title = !loading ? title || '暂无内容' : '内容加载中';
 
   return (
-    <View className={`${styles.container} ${_className}`} {...props}>
+    <View className={`${styles.container} ${_className}`} onClick={onClick}>
       <Image className={`${styles.image} ${!image ? styles.empty : ''}`} src={image} />
       <View className={styles.content}>
         <View className={styles.title}>{_title}</View>

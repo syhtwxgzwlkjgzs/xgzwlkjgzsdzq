@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import SiteStore from './store';
-import { readUser, readPermissions } from '@server';
+import { readUser, readPermissions, createFollow, deleteFollow } from '@server';
 
 class UserAction extends SiteStore {
   constructor(props) {
@@ -57,6 +57,65 @@ class UserAction extends SiteStore {
   isLogin() {
     return !!this.userInfo && !!this.userInfo.id;
   }
+
+  // 获取指定用户信息
+  @action
+  async getAssignUserInfo(userId) {
+    try {
+      const userInfo = await readUser({ params: { pid: userId } });
+      if (userInfo.code === 0 && userInfo.data) {
+        return userInfo.data;
+      }
+      return null;
+    }catch(err) {
+      return null;
+    }
+  }
+
+   /**
+   * 关注
+   * @param {object} userId * 被关注人id
+   * @returns {object} 处理结果
+   */
+    @action
+    async postFollow(userId) {
+      const res = await createFollow({ data: {  toUserId: userId }});
+      if (res.code === 0 && res.data) {
+        return {
+          msg: '操作成功',
+          data: res.data,
+          success: true,
+        };
+      }
+      return {
+        msg: res.msg,
+        data: null,
+        success: false,
+      };
+    }
+  
+    /**
+     * 取消关注
+     * @param {object} search * 搜索值
+     * @returns {object} 处理结果
+     */
+    @action
+    async cancelFollow({ id, type }) {
+      const res = await deleteFollow({ data: { id, type: type } });
+      if (res.code === 0 && res.data) {
+        return {
+          msg: '操作成功',
+          data: res.data,
+          success: true,
+        };
+      }
+      return {
+        msg: res.msg,
+        data: null,
+        success: false,
+      };
+    }
+  
 }
 
 export default UserAction;

@@ -35,10 +35,15 @@ export default function H5Index(props) {
   return (
     <div className={styles.container} onClick={onClick}>
       <div className={styles.box}>
-          <div className={styles.money}>{money > 0 ? `￥${money}`: ''}</div>
+          <div className={styles.money}>
+            <div className={styles.moneyTop}></div>
+            <div className={styles.moneyText}>{money > 0 ? `￥${money}`: ''}</div>
+            <div className={styles.moneyBottom}></div>
+            <div className={styles.moneyReward}>赏</div>
+          </div>
           <div className={styles.content}>
-              <div className={styles.title}>{texts || '悬赏问答'}</div>
-              <div className={styles.text}>{content || '暂无内容'}</div>
+              <div className={styles.title}>{texts || ''}</div>
+              <div className={styles.text}>{content || ''}</div>
           </div>
       </div>
       <Button className={styles.button} type="primary">{ type === POST_TYPE.NO_ANSWER ? '立即回答' : '查看答案'}</Button>

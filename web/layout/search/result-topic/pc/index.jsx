@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
-import SectionTitle from '../../../search/h5/components/section-title'
+import SectionTitle from '@components/section-title';
 import TrendingTopicMore from '../../../search/pc/components/trending-topic-more';
 import ActiveUsers from '../../../search/pc/components/active-users'
 import { withRouter } from 'next/router';
@@ -26,7 +26,11 @@ class SearchResultTopicPCPage extends React.Component {
   redirectToSearchResultUser = () => {
     this.props.router.push('/search/result-user');
   };
-  onTopicClick = data => console.log('topic click', data);
+
+  onTopicClick = data => {
+    const { topicId } = data
+    this.props.router.push(`/topic/topic-detail/${topicId}`);
+  };
 
   fetchMoreData = () => {
     const { dispatch } = this.props;
@@ -46,7 +50,7 @@ class SearchResultTopicPCPage extends React.Component {
   }
 
   renderRight = () => {
-    const { pageData = [] } = this.props.search.indexUsers || { pageData: [] };
+    const { pageData = [] } = this.props.search.users || { pageData: [] };
     return (
       <div className={styles.searchRight}>
         <div className={styles.section}>

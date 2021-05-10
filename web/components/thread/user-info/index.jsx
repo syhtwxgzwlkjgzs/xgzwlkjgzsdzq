@@ -5,6 +5,7 @@ import Avatar from '@components/avatar';
 import React from 'react';
 import { diffDate } from '@common/utils/diff-date';
 
+
 UserInfo.propTypes = {
   name: PropTypes.string.isRequired, // 用户名称
   avatar: PropTypes.string.isRequired, // 用户头像
@@ -17,12 +18,16 @@ UserInfo.propTypes = {
   isPay: PropTypes.bool, // 是否付费
   isReward: PropTypes.bool, // 是否悬赏
   isRed: PropTypes.bool, // 是否红包
+  userId: PropTypes.number, // 用户id PC端
+  platform: PropTypes.string, // 是否展示pop PC端
 };
 
 export default function UserInfo(props) {
   return (
     <div className={styles.contianer}>
       <Avatar
+        isShowUserInfo={props.platform === 'pc'}
+        userId={props.userId}
         className={styles.avatar}
         circle={true}
         image={props.avatar}
