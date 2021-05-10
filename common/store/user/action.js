@@ -1,6 +1,7 @@
 import { action } from 'mobx';
 import SiteStore from './store';
 import { readUser, readPermissions, createFollow, deleteFollow, getUserFollow, getUserFans } from '@server';
+import { get } from '../../utils/get';
 
 class UserAction extends SiteStore {
   constructor(props) {
@@ -47,14 +48,51 @@ class UserAction extends SiteStore {
 
   @action
   async getUserFollow() {
-    const follows = await getUserFollow({});
-    console.log(follows);
+    const followsRes = await getUserFollow({
+      params: {
+        page: this.userFollowsPage,
+        perPage: 20,
+      },
+    });
+
+    if (followsRes.code !== 0) {
+      console.error(followsRes);
+      return;
+    }
+
+    const pageData = get(followsRes, 'data.pageData', []);
+    const totalPage = get(followsRes, 'data.totalPage', 1);
+    this.userFollowsTotalPage = totalPage;
+    this.userFollows[this.userFollowsPage] = pageData;
+    if (this.userFollowsPage < this.userFollowsTotalPage) {
+      this.userFollowsPage += 1;
+    }
+    this.userFollows = { ...this.userFollows };
   }
 
   @action
   async getUserFans() {
-    const fans = await getUserFans({});
-    console.log(fans);
+    const fansRes = await getUserFans({
+      params: {
+        page: this.userFansPage,
+        perPage: 20,
+      },
+    });
+
+    if (fansRes.code !== 0) {
+      console.error(fansRes);
+      return;
+    }
+
+    const pageData = get(fansRes, 'data.pageData', []);
+    const totalPage = get(fansRes, 'data.totalPage', 1);
+    this.userFans[this.userFansPage] = pageData;
+    this.userFansTotalPage = totalPage;
+    this.userFollows[this.userFansPage] = pageData;
+    if (this.userFansPage < this.userFansTotalPage) {
+      this.userFansPage += 1;
+    }
+    this.userFollows = { ...this.userFollows };
   }
 
   // 更新是否没有用户数据状态
@@ -100,9 +138,9 @@ class UserAction extends SiteStore {
    * @param {object} userId * 被关注人id
    * @returns {object} 处理结果
    */
-    @action
+  @action
   async postFollow(userId) {
-    const res = await createFollow({ data: {  toUserId: userId } });
+    const res = await createFollow({ data: { toUserId: userId } });
     if (res.code === 0 && res.data) {
       return {
         msg: '操作成功',
@@ -117,27 +155,27 @@ class UserAction extends SiteStore {
     };
   }
 
-    /**
-     * 取消关注
-     * @param {object} search * 搜索值
-     * @returns {object} 处理结果
-     */
-    @action
-    async cancelFollow({ id, type }) {
-      const res = await deleteFollow({ data: { id, type } });
-      if (res.code === 0 && res.data) {
-        return {
-          msg: '操作成功',
-          data: res.data,
-          success: true,
-        };
-      }
+  /**
+   * 取消关注
+   * @param {object} search * 搜索值
+   * @returns {object} 处理结果
+   */
+  @action
+  async cancelFollow({ id, type }) {
+    const res = await deleteFollow({ data: { id, type } });
+    if (res.code === 0 && res.data) {
       return {
-        msg: res.msg,
-        data: null,
-        success: false,
+        msg: '操作成功',
+        data: res.data,
+        success: true,
       };
     }
+    return {
+      msg: res.msg,
+      data: null,
+      success: false,
+    };
+  }
 }
 
 export default UserAction;

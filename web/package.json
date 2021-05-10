@@ -10,7 +10,7 @@
     "start:static": "cross-env DEBUG=dzq_error NODE_ENV=production dzq start -H 127.0.0.1 -port 9527 --no-ssr"
   },
   "dependencies": {
-    "@discuzq/design": "0.0.1-alpha.40",
+    "@discuzq/design": "0.0.1-alpha.41",
     "@discuzq/sdk": "0.0.1-alpha.40",
     "@discuzq/vditor": "0.0.1-alpha.4",
     "babel-plugin-import": "1.13.3",

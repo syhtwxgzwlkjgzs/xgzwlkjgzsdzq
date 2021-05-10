@@ -60,8 +60,8 @@ class CommentPCPage extends React.Component {
   onFollowClick() {
     if (this.props.comment?.commentDetail?.userId) {
       this.props.comment?.authorInfo?.follow === 2 || this.props.comment?.authorInfo?.follow === 1
-        ? this.props.comment.cancelFollow({ id: this.props.comment.commentDetail.userId, type: 1 })
-        : this.props.comment.postFollow(this.props.comment.commentDetail.userId);
+        ? this.props.comment.cancelFollow({ id: this.props.comment.commentDetail.userId, type: 1 }, this.props.user)
+        : this.props.comment.postFollow(this.props.comment.commentDetail.userId, this.props.user);
     }
   }
 
