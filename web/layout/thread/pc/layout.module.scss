@@ -68,7 +68,7 @@
   background: var(--color-white);
   margin: auto;
   padding: rem(24);
-  border-radius: rem(5);
+  border-radius: var(--border-radius-small);
 
   .close {
     position: absolute;

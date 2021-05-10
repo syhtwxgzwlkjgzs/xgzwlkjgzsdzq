@@ -1,0 +1,156 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.container {
+  width: 100%;
+  background: var(--color-white);
+  padding: rem($padding-6n) rem($padding-6n) rem($padding-4n) rem($padding-6n);
+  border-radius: var(--border-radius-small);
+  box-sizing: border-box;
+}
+
+.header {
+  background: var(--color-white);
+  display: flex;
+  justify-content: space-between;
+}
+
+.userInfo {
+  flex: 1;
+}
+
+.iconText {
+  margin-left: rem(24);
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+
+  :global {
+    .dzq-dropdown-menu.dzq-dropdown-menu--center {
+      top: rem(30);
+    }
+  }
+
+  .text {
+    margin-left: rem(8);
+    color: #8490a8;
+  }
+
+  .icon {
+    font-size: rem(14);
+    color: #8490a8;
+  }
+}
+
+.essence {
+  margin-right: rem($margin-2n);
+}
+
+.body {
+  margin-top: rem($margin-4n);
+
+  > * {
+    margin-bottom: rem($margin-5n);
+  }
+}
+
+.image {
+  width: 100%;
+}
+
+.reward {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rewardButton {
+  margin: 0 auto;
+  width: rem(156);
+}
+
+.payButton {
+  width: rem(234);
+}
+
+.pay {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payIcon {
+  margin-right: rem($margin-2n);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--color-text-secondary);
+  font-size: rem($font-size-primary);
+}
+
+.goods {
+  display: flex;
+}
+
+.buyBtn {
+  width: rem(113);
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.tag {
+  display: inline-block;
+  color: var(--color-text-regular);
+  background: var(--background-color);
+  font-size: rem($font-size-label);
+  padding: rem($padding-2n) rem($padding-1n);
+  line-height: rem($font-size-label);
+  border-radius: rem($border-radius-small);
+}
+
+.thumbs {
+  display: flex;
+  align-items: center;
+  font-size: rem($font-size-primary);
+}
+
+.likeReward {
+  margin-right: rem($margin-2n);
+}
+
+.examine {
+  padding: rem(8) 0;
+  background: var(--color-error);
+  color: var(--color-white);
+  text-align: center;
+  font-size: rem(14);
+}
+
+.bottomOperate {
+  padding: 0 rem(54);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: rem($font-size-primary);
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    
+    span {
+      margin-left: rem($margin-2n);
+    }
+
+    &.active {
+      color: var(--color-primary) !important;
+    }
+  }
+}
+
