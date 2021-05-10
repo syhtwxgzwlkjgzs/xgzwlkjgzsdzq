@@ -10,11 +10,11 @@
   display: flex;
   justify-content: flex-end;
   .indexLeftBox {
-    width: rem(260);
+    width: 100%;
   }
 }
 .indexRight {
-  width: rem(286);
+  width: 100%;
   .indexRightCon {
     margin-top: rem($margin-5n);
     border-radius: rem($border-radius-small);

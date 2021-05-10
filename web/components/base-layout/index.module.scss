@@ -1,9 +1,8 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
-.content {
-  padding: rem($padding-5n) 0;
-}
+
 .container {
+  position: relative;
   width: 100%;
   height: 100vh;
   display: flex;
@@ -25,10 +24,10 @@
 }
 
 .left {
-  position: fixed;
+  position: absolute;
   right: 50%;
   top: rem(80);
-  margin-right: rem(395);
+  margin-right: rem(410);
   width: rem(300);
 }
 
@@ -37,6 +36,7 @@
   display: flex;
   flex-direction: column;
   margin-top: rem(20);
+  margin-right: rem(30);
 }
 
 .centerTwo {
@@ -48,9 +48,9 @@
 }
 
 .right {
-  position: fixed;
+  position: absolute;
   left: 50%;
-  margin-left: rem(395);
+  margin-left: rem(380);
   top: rem(80);
   width: rem(330);
 }

@@ -3,9 +3,9 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import BaseLayout from '@components/base-layout';
 import ActiveUsersMore from '../../../search/pc/components/active-users-more';
-import TrendingTopic from '../../../search/pc/components/trending-topics'
 import Copyright from '@components/copyright';
 import SidebarPanel from '@components/sidebar-panel';
+import PopTopic from '@components/pop-topic';
 
 @inject('site')
 @inject('user')
@@ -57,16 +57,9 @@ class SearchResultUserPcPage extends React.Component {
   };
 
   renderRight = () => {
-    const { pageData = [] } = this.props.search.topics || { pageData: [] };
     return (
       <>
-        <SidebarPanel 
-          title="潮流话题"
-          noData={pageData.length} 
-          onShowMore={this.redirectToSearchResultTopic}
-        >
-           <TrendingTopic data={pageData} onItemClick={this.onTopicClick}/>
-        </SidebarPanel>
+        <PopTopic />
         <Copyright/>
       </>
     )

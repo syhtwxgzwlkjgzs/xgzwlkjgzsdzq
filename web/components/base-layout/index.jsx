@@ -1,4 +1,4 @@
-import React,  { useCallback, useEffect, useState } from 'react';
+import React,  { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Flex } from '@discuzq/design';
 import Header from '@components/header';
 import List from '@components/list'
@@ -9,25 +9,26 @@ import styles from './index.module.scss';
 const { Row, Col } = Flex;
 
 /**
- * PC端集成布局组件
- * @prop {function}} header 头部视图组件
-  * @prop {function}} left 内容区域左部视图组件
-  * @prop {function}} children 内容区域中间视图组件
-  * @prop {function}} right 内容区域右部视图组件
-  * @prop {function}} footer 底部视图组件
-  * example ：
-  *     <BaseLayout
-          left={(props) => <div>左边</div>}
-          right={(props) => <div>右边</div>}
-        >
-          {(props) => <div>中间</div>}
-        </BaseLayout>
- */
+* PC端集成布局组件
+* @prop {function} header 头部视图组件
+* @prop {function} left 内容区域左部视图组件
+* @prop {function} children 内容区域中间视图组件
+* @prop {function} right 内容区域右部视图组件
+* @prop {function} footer 底部视图组件
+* @prop other List Props // List组件所有的属性
+* @example 
+*     <BaseLayout
+        left={(props) => <div>左边</div>}
+        right={(props) => <div>右边</div>}
+      >
+        {(props) => <div>中间</div>}
+      </BaseLayout>
+*/
 
 const BaseLayout = (props) => {
   const { header = null, left = null, children = null, right = null, footer = null, onSearch, noMore = false, onRefresh } = props;
 
-  const [size, setSize] = useState('xl')
+  const size = useRef('xl')
 
   const debounce = (fn, wait) => {
     let timer = null;
@@ -41,8 +42,7 @@ const BaseLayout = (props) => {
 
   const updateSize = debounce(() => {
     if (window) {
-      const size = calcSize(window.innerWidth);
-      setSize(size);
+      size.current = calcSize(window.innerWidth);
     }
   }, 50);
 
@@ -60,13 +60,13 @@ const BaseLayout = (props) => {
     if (width < 992) {
         size = 'sm';
     }
-    else if (width >= 992 && width < 1200) {
+    else if (width >= 992 && width < 1100) {
         size = 'md';
     }
-    else if (width >= 1200 && width < 1400) {
+    else if (width >= 1100 && width < 1400) {
         size = 'lg';
     }
-    else if (width >= 1400 && width < 1880) {
+    else if (width >= 1440 && width < 1880) {
         size = 'xl';
     }
     else {
@@ -75,12 +75,20 @@ const BaseLayout = (props) => {
     return size;
   };
 
+  const showLeft = useMemo(() => {
+    return left && (size.current === 'xl' || size.current === 'xxl')
+  }, [size.current])
+
+  const showRight = useMemo(() => {
+    return right && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg')
+  }, [size.current])
+
   return (
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
 
         {
-          left && (
+          showLeft && (
             <div className={styles.left}>
               {typeof(left) === 'function' ? useCallback(left({ ...props }), []) : left}
             </div>
@@ -88,14 +96,16 @@ const BaseLayout = (props) => {
         }
         
         <List {...props} className={styles.list}>
-          <div className={`${styles.center} ${!left && styles.centerTwo} ${!right && !left && styles.centerOne}`}>
-            {typeof(children) === 'function' ? children({ ...props }) : children}
-            {onRefresh && <RefreshView noMore={noMore} />}
+          <div className={styles.wrapper}>
+            <div className={`${styles.center} ${!left && styles.centerTwo} ${!right && !left && styles.centerOne}`}>
+              {typeof(children) === 'function' ? children({ ...props }) : children}
+              {onRefresh && <RefreshView noMore={noMore} />}
+            </div>
           </div>
         </List>
 
         {
-          right && (
+          showRight && (
             <div className={`${styles.right} ${!left && styles.rightTwo}`}>
               {typeof(right) === 'function' ? right({ ...props }) : right}
             </div>
