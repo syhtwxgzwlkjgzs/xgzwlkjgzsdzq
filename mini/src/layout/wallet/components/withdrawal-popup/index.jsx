@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { Popup } from '@discuzq/design';
-import { Icon, Button } from '@discuzq/design';
+import { Popup, Icon, Button } from '@discuzq/design';
+import { View } from '@tarojs/components';
 
 import styles from './index.module.scss';
 
@@ -29,29 +29,29 @@ const WithdrawalPop = (props) => {
 
   return (
     <Popup
-      position="center"
+      position="bottom"
       visible={visible}
       onClose={onClose}
     >
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <div></div>
-          <div className={styles.title}>提现</div>
-          <div onClick={onClose}>
+      <View className={styles.container}>
+        <View className={styles.header}>
+          <View></View>
+          <View className={styles.title}>提现</View>
+          <View onClick={onClose}>
             <Icon name='CloseOutlined' size='12' color='#8490a8'></Icon>
-          </div>
-        </div>
-        <div className={styles.availableAmount}>
-          <div className={styles.text}>可提现金额</div>
-          <div className={styles.moneyNum}>{props.moneyNumber}</div>
-        </div>
-        <div className={styles.moneyInput}>
+          </View>
+        </View>
+        <View className={styles.availableAmount}>
+          <View className={styles.text}>可提现金额</View>
+          <View className={styles.moneyNum}>{props.moneyNumber}</View>
+        </View>
+        <View className={styles.moneyInput}>
           <MoneyInput getmoneyNum={data => getmoneyNum(data)} visible={visible}></MoneyInput>
-        </div>
-        <div className={styles.button}>
+        </View>
+        <View className={styles.button}>
           <Button type='primary' onClick={onMoneyToWixin}>提现到微信钱包</Button>
-        </div>
-      </div>
+        </View>
+      </View>
     </Popup>);
 };
 

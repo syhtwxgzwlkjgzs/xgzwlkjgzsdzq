@@ -29,7 +29,7 @@ const WithdrawalPop = (props) => {
 
   return (
     <Popup
-      position="center"
+      position="bottom"
       visible={visible}
       onClose={onClose}
     >

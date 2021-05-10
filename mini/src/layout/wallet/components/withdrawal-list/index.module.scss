@@ -2,7 +2,7 @@
 @import '@common/styles/variable/index.scss';
 
 .container {
-    padding: rem($padding-4n) rem($padding-4n) 0;
+    padding: 16px 16px 0;
     background: var(--color-white);
 }
 
@@ -10,18 +10,18 @@
     display: flex;
     justify-content: space-between;
     font-weight: normal;
-    padding-bottom: rem($padding-4n);
+    padding-bottom: 16px;
     color: var(--color-text-primary);
     .text {
         font-family: 'PingFangSC-Regular';
-        font-size: rem($font-size-primary);
+        font-size: 14px;
         text-align: left;
-        line-height: rem(16);
+        line-height: 16px;
     }
     .money {
         font-family: "PingFang SC";
         font-weight: 600;
-        font-size: rem($font-size-middle);
+        font-size: 16px;
         text-align: left;
     }
 }
@@ -31,7 +31,7 @@
     justify-content: space-between;
     font-family: 'PingFangSC-Regular';
     font-weight: normal;
-    font-size: rem($font-size-label);
+    font-size: 12px;
     .time {
         text-align: left;
         color: var(--color-text-secondary);
@@ -53,9 +53,9 @@
 .serialNumber {
     font-family: 'PingFangSC-Regular';
     font-weight: normal;
-    font-size: rem($font-size-label);
+    font-size: 12px;
     text-align: left;
     color: #8490a8;
-    padding: rem($padding-4n) 0;
+    padding: 16px 0;
     border-bottom: var(--border-border);
 }

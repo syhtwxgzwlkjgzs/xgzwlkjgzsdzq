@@ -2,7 +2,8 @@
 @import '@common/styles/fn/rem.scss';
 
 .container {
-  width: 100%;
+  // width: 100%;
+  padding: rem($padding-6n);
 }
 
 .header {

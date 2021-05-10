@@ -177,7 +177,14 @@ class ThreadPCPage extends React.Component {
     this.setState({ showWithdrawalPopup: true });
   }
 
+  // 提现到微信钱包
+  moneyToWixin = (moneyNum) => {
+    console.log('钱数', moneyNum);
+    this.setState({ showWithdrawalPopup: false });
+  }
+
   render() {
+    console.log(this.props.walletData);
     const recordType = {
       income: '收入明细',
       pay: '支出明细',
@@ -219,7 +226,12 @@ class ThreadPCPage extends React.Component {
           {/* 右边信息 */}
           <div className={layout.bodyRigth}>
             <div className={layout.walletInfo}>
-              <WalletInfo webPageType='PC' showWithrawal={() => this.showWithrawal()}></WalletInfo>
+              <WalletInfo
+                walletData={this.props.walletData}
+                webPageType='PC'
+                showWithrawal={() => this.showWithrawal()}
+              >
+              </WalletInfo>
             </div>
             <div className={layout.tabs}>
               <Tabs selectClick={type => this.selectClick(type)}></Tabs>
@@ -234,7 +246,8 @@ class ThreadPCPage extends React.Component {
         <WithdrawalPop
           visible={this.state.showWithdrawalPopup}
           onClose={() => this.setState({ showWithdrawalPopup: false })}
-          onOkClick={value => console.log('提现到微信钱包', value)}
+          moneyNumber={this.props.walletData?.availableAmount}
+          moneyToWixin={moneyNum => this.moneyToWixin(moneyNum)}
         />
       </div>
     );

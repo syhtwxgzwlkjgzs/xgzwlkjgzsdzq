@@ -6,7 +6,7 @@
   width: rem(361);
   height: rem(316);
   margin: 0 auto;
-  border-radius: rem(5);
+  border-radius: rem($border-radius-small);
   background: var(--color-white);
   padding: rem($padding-6n);
 }
