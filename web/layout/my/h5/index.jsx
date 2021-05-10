@@ -5,7 +5,6 @@ import UserCenterHead from '@components/user-center-head';
 import { inject, observer } from 'mobx-react';
 import clearLoginStatus from '@common/utils/clear-login-status'; 
 import { Button } from '@discuzq/design';
-
 @inject('site')
 @observer
 class H5MyPage extends React.Component {
