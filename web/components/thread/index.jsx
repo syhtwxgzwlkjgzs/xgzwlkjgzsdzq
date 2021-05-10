@@ -176,7 +176,7 @@ class Index extends React.Component {
               />
           </div>
 
-          <ThreadCenterView data={data} onClick={this.onClick} onPay={this.onPay} />
+          <ThreadCenterView data={data} onClick={this.onClick} onPay={this.onPay} platform={platform} />
 
           <BottomEvent
             userImgs={likeReward.users}
