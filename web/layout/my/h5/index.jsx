@@ -7,6 +7,7 @@ import UserCenterPost from '@components/user-center-post';
 import UserCenterFollow from '@components/user-center-follow';
 import UserCenterAction from '@components/user-center-action';
 import ButtomNavBar from '@components/buttom-nav-bar';
+import UserCenterEditInfo from '@components/user-center-edit-info'
 
 @inject('site')
 @inject('user')
@@ -15,6 +16,7 @@ class H5MyPage extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
+    // return <UserCenterEditInfo />
     return (
       <div className={styles.mobileLayout}>
         <UserCenterHeaderImage />
