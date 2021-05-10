@@ -12,9 +12,9 @@ import { Icon } from '@discuzq/design';
 import styles from './HOCFetchSiteData.module.scss';
 // 获取全站数据
 export default function HOCFetchSiteData(Component) {
-    @inject('site')
-    @inject('user')
-    @observer
+  @inject('site')
+  @inject('user')
+  @observer
   class FetchSiteData extends React.Component {
       // 应用初始化
       static async getInitialProps(ctx) {

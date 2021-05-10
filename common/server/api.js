@@ -56,19 +56,19 @@ http.interceptors.response.use((res) => {
   // if (data.Code === -4002) {
   //   Router.redirect({url: '/user/login'});
   // }
-  return {
+  return Promise.resolve({
     code: data.Code,
     data: reasetData(data.Data),
     msg: data.Message,
-  };
+  });
 }, (err) => {
   console.error('response', err.stack);
   console.error('response', err.message);
-  return {
+  return Promise.resolve({
     code: -1,
     data: null,
     msg: '',
-  };
+  });
 });
 
 export default api;

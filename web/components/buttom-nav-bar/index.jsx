@@ -13,8 +13,8 @@ const TabBar = ({ router, fixed = true, placeholder = false }) => {
     { icon: 'HomeOutlined', text: '首页', active: true, router: '/index' },
     { icon: 'FindOutlined', text: '发现', active: false, router: '/search' },
     { icon: 'PlusOutlined', router: '/thread/post' },
-    { icon: 'MessageOutlined', text: '消息', active: false, router: '/' },
-    { icon: 'ProfessionOutlined', text: '我', active: false, router: '/my' },
+    { icon: 'MailOutlined', text: '消息', active: false, router: '/' },
+    { icon: 'ProfessionOutlined', text: '我的', active: false, router: '/my' },
   ]);
 
   const handleClick = (i, idx) => {
@@ -38,7 +38,7 @@ const TabBar = ({ router, fixed = true, placeholder = false }) => {
       ) : (
           <div key={idx} style={{ flex: 1, textAlign: 'center' }} onClick={() => handleClick(i, idx)}>
             <div className={styles.addIcon}>
-              <Icon name={i.icon} size={24} color="#fff" />
+              <Icon name={i.icon} size={28} color="#fff" />
             </div>
           </div>
       )))}
