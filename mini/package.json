@@ -35,8 +35,8 @@
     "mobx-react": "6.1.4",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "vod-wx-sdk-v2": "^1.0.3",
-    "xss": "^1.0.8"
+    "vod-wx-sdk-v2": "1.0.3",
+    "xss": "1.0.8"
   },
   "devDependencies": {
     "@discuzq/cli": "0.0.1-alpha.39",
@@ -50,7 +50,7 @@
     "@types/webpack-env": "1.13.6",
     "babel-preset-taro": "3.2.2",
     "commitizen": "4.2.3",
-    "cross-env": "^7.0.3",
+    "cross-env": "7.0.3",
     "eslint": "6.8.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-config-taro": "3.2.2",
@@ -59,9 +59,9 @@
     "eslint-plugin-prettier": "3.3.1",
     "eslint-plugin-react": "7.8.2",
     "eslint-plugin-react-hooks": "1.6.1",
-    "mini-css-extract-plugin": "^1.5.1",
+    "mini-css-extract-plugin": "1.5.1",
     "prettier": "2.2.1",
-    "regenerator-runtime": "^0.13.7",
+    "regenerator-runtime": "0.13.7",
     "stylelint": "9.3.0",
     "stylelint-config-prettier": "8.0.2",
     "stylelint-config-rational-order": "0.1.2",
