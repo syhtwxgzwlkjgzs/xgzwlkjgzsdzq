@@ -7,7 +7,7 @@ import NoData from '@components/no-data';
 import styles from './index.module.scss';
 import List from '@components/list';
 import TopNew from './components/top-news';
-import Tabbar from './components/tabbar';
+import BottomNavBar from '@components/bottom-nav-bar';
 import FilterView from './components/filter-view';
 import { View, Text } from '@tarojs/components';
 import PayBox from '@components/payBox'
@@ -221,7 +221,7 @@ class IndexMiniPage extends React.Component {
           visible={this.state.visible}
           onSubmit={this.onClickFilter}
         />
-       <Tabbar placeholder />
+       <BottomNavBar placeholder />
        <PayBox />
       </View>
     );

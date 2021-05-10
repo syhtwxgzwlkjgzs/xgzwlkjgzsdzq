@@ -45,7 +45,6 @@ export default {
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',
-    navigationBarTitleText: 'Discuz!Q',
     navigationBarTextStyle: 'black',
   },
 };
