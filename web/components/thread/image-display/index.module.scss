@@ -22,6 +22,7 @@
     box-sizing: border-box;
     border-radius: rem($border-radius-small);
     object-fit: cover;
+    background-color: var(--background-color);
   }
 
   .modalBox {
