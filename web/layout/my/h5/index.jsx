@@ -16,7 +16,7 @@ class H5MyPage extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
-    // return <UserCenterEditInfo />
+    return <UserCenterEditInfo />
     return (
       <div className={styles.mobileLayout}>
         <UserCenterHeaderImage />

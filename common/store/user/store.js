@@ -89,6 +89,11 @@ class UserStore {
     return get(this.userInfo, 'mobile')
   }
 
+  // 获取绑定微信内容
+  @computed get unionid() {
+    return get(this.userInfo, 'unionid')
+  }
+
  
 
 
