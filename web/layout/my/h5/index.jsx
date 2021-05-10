@@ -26,9 +26,14 @@ class H5MyPage extends React.Component {
           <UserCenterPost />
         </div>
         <div className={styles.unit}>
-          <UserCenterFollow />
+          <UserCenterFollow
+            friends={this.props.user.userFollows}
+            loadMorePage={true}
+            loadMoreAction={this.props.user.getUserFollow}
+            hasMorePage={this.props.user.userFollowsTotalPage < this.props.user.userFollowsPage}
+          />
         </div>
-        <ButtomNavBar placeholder/>
+        <ButtomNavBar placeholder />
       </div>
     );
   }

@@ -47,11 +47,11 @@ class UserAction extends SiteStore {
 
 
   @action
-  async getUserFollow() {
+  getUserFollow = async () => {
     const followsRes = await getUserFollow({
       params: {
         page: this.userFollowsPage,
-        perPage: 20,
+        perPage: 2,
       },
     });
 
