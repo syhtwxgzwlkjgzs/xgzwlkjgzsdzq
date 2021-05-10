@@ -34,9 +34,13 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
               <div className={styles.container} key={index} onClick={onClick} >
                 <div className={styles.wrapper}>
                   {/* TODO 此处逻辑接口确定之后再改 */}
-                  <Icon name={type && 'PaperClipOutlined'} />
-                  <span className={styles.content}>{item.fileName}</span>
-                  <span className={styles.size}>{handleFileSize(parseFloat(item.fileSize || 0))}</span>
+                  <div className={styles.containerText}>
+                    <Icon className={styles.containerIcon} name={type && 'DocOutlined'} />
+                    <span className={styles.content}>hjdgfajhsfgjahgfjhgasdfjhagsfjagdfjdshf</span>
+                  </div>
+                  <div className={styles.containerNum}>
+                    <span className={styles.size}>{handleFileSize(parseFloat(item.fileSize || 0))}</span>
+                  </div>
                 </div>
 
                 {!isHidden && <Icon name="CloseOutlined" />}
