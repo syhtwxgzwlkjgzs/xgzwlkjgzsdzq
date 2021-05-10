@@ -12,11 +12,10 @@ import NoMore from './components/no-more';
 import RewardPopup from './components/reward-popup';
 
 import layout from './layout.module.scss';
-import comment from './comment.module.scss';
 
 import ReportPopup from './components/report-popup';
 import ShowTop from './components/show-top';
-import DeletePopup from './components/delete-popup';
+import DeletePopup from '@components/thread-detail-pc/delete-popup';
 
 import throttle from '@common/utils/thottle';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
@@ -467,7 +466,7 @@ class ThreadPCPage extends React.Component {
               )}
 
             {/* 回复详情内容 */}
-            <div className={`${layout.bottom} ${comment.container}`} ref={this.commentDataRef}>
+            <div className={`${layout.bottom}`} ref={this.commentDataRef}>
               {isCommentReady ? (
                 <Fragment>
                   <RenderCommentList

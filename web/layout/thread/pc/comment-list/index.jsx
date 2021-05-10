@@ -179,6 +179,7 @@ class RenderCommentList extends React.Component {
       this.setState({
         showCommentInput: false,
         inputValue: '',
+        commentId: null
       });
       Toast.success({
         content: '回复成功',
@@ -263,11 +264,11 @@ class RenderCommentList extends React.Component {
     }
 
     return (
-      <Fragment>
+      <div className={comment.container}>
         <div className={comment.header}>
           <div className={comment.number}>共{totalCount}条评论</div>
           <div className={comment.sort} onClick={() => this.onSortClick()}>
-            <Icon className={comment.sortIcon} name="SortOutlined"></Icon>
+            <Icon className={comment.sortIcon} name="SortOutlined" size={14}></Icon>
             <span className={comment.sortText}>{this.state.commentSort ? '评论从新到旧' : '评论从旧到新'}</span>
           </div>
         </div>
@@ -332,7 +333,7 @@ class RenderCommentList extends React.Component {
             onOkClick={(data) => this.onAboptOk(data)}
           ></AboptPopup>
         )}
-      </Fragment>
+      </div>
     );
   }
 }

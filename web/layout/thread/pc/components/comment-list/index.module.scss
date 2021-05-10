@@ -2,58 +2,40 @@
 @import '@common/styles/variable/index.scss';
 .commentList {
   padding: rem($padding-4n) 0;
+
   .header {
     display: flex;
     justify-content: flex-end;
-
-    .showGet {
-      width: 100%;
-      padding-left: rem(48);
-      display: flex;
-      justify-content: space-between;
-
-      .revise {
-        font-size: rem($font-size-primary);
-        text-align: left;
-        color: var(--color-text-secondary);
-      }
-      .showMoneyNum {
-        font-size: rem($font-size-label);
-        text-align: left;
-        color: var(--color-text-primary);
-        margin-left: rem($margin-10);
-        .moneyNumber {
-          color: var(--color-error);
-        }
-      }
-    }
+    margin-bottom: rem($margin-4n);
   }
+
   .content {
     display: flex;
-    padding-top: rem($padding-10);
     .commentListAvatar {
-      margin-right: rem($margin-10);
+      margin-right: rem($margin-2n);
     }
     .commentListContent {
       width: 100%;
       .commentListContentText {
-        padding: rem($padding-2n);
+        padding: rem($padding-4n);
         border-radius: rem($border-radius-small);
         background: var(--comment-box-bg-color);
         .commentListName {
           font-weight: var(--font-weight-regular);
           font-size: rem($font-size-primary);
-          line-height: rem(18);
+          line-height: rem(20);
           text-align: left;
           color: var(--color-text-primary);
         }
         .commentListText {
+          margin-top: rem(4);
           font-size: rem($font-size-middle);
-          line-height: rem($font-line-height-middle);
+          line-height: rem(22);
           text-align: left;
           color: var(--color-text-primary);
         }
       }
+
       .commentListFooter {
         .commentBtn {
           display: flex;
@@ -63,8 +45,10 @@
           text-align: left;
           color: var(--color-text-secondary);
           padding-top: rem($padding-2n);
+          line-height: rem(20);
+
           .commentTime {
-            // flex: 1;
+            font-size: rem($font-size-label);
           }
           .commentLike {
             display: flex;
@@ -79,7 +63,10 @@
             cursor: pointer;
           }
           .commentDelete {
-            // flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            cursor: pointer;
           }
           .commentAdopt {
             // flex: 1;
@@ -87,24 +74,17 @@
         }
         .moreReply {
           font-weight: var(--font-weight-regular);
-          font-size: var($font-size-primary);
+          font-size: rem($font-size-primary);
           text-align: left;
           color: var(--color-text-primary);
           padding-top: rem($padding-4n);
+          line-height: rem(22);
           cursor: pointer;
         }
       }
     }
   }
-  .extra {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    cursor: pointer;
-    > div {
-      margin-right: rem($margin-2n);
-    }
-  }
+  
   .extraBottom {
     display: flex;
     align-items: center;
@@ -129,18 +109,6 @@
   margin-top: rem(16);
 }
 
-.imageNumber {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.image {
-  width: rem(13);
-  height: rem(18);
-}
-
-.rewardImage {
-  width: rem(18);
-  height: rem(18);
+.divider {
+  margin-bottom: rem($margin-2n);
 }
