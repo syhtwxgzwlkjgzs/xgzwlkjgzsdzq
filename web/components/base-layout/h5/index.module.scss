@@ -29,11 +29,11 @@
   .center {
     width: 100%;
   }
-}
 
-:global {
-  .dzq-pull-refresh__loading {
-    font-size: rem($font-size-primary);
-    top: rem(-20);
+  :global {/* stylelint-disable-line */
+    .dzq-pull-refresh__loading {
+      font-size: rem($font-size-primary);
+      top: rem(-20);
+    }
   }
 }

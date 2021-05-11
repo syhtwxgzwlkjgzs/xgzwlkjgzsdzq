@@ -66,16 +66,6 @@ const Index = ({
     } else if (filterContent?.length > 1000) {
       setContentTooLong(true)
     }
-    // const el = contentWrapperRef.current;
-    // if (el && !loading) {
-    //   if (el.scrollHeight <= el.clientHeight) {
-    //     // 内容小于6行 隐藏查看更多
-    //     setHiddenMore(true);
-    //   }
-    //   if (window && el.scrollHeight <= window.screen.height) {
-    //     setContentTooLong(false);
-    //   }
-    // }
   }, [filterContent]);
 
   return (
