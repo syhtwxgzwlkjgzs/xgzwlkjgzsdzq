@@ -2,7 +2,7 @@
   "miniprogramRoot": "dist/",
   "projectname": "./template/taro-default",
   "description": "my-dzq",
-  "appid": "wx2e9b05a6ed3a96a9",
+  "appid": "wx20a124c872da3671",
   "setting": {
     "urlCheck": false,
     "es6": false,
@@ -23,7 +23,7 @@
     "compileHotReLoad": false,
     "useMultiFrameRuntime": true,
     "useApiHook": true,
-    "useApiHostProcess": true,
+    "useApiHostProcess": false,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],

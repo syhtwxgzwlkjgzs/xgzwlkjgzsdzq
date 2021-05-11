@@ -1,5 +1,5 @@
 {
-  "user": [
+  "account": [
     {
       "msg": " // 回复                     ————  账号-@、回复、点赞 （优先title）",
       "type": "replied",
@@ -69,10 +69,9 @@
       "content": "你好hkk，公开i库回馈ui会故意哦吼"
     }
   ],
-  "system": [
+  "thread": [
     {
       "msg": "// 系统-帖子通知 8种，通通用后端数据 title区分 （title,content分别使用）",
-      "type": "system",
       "id": 22093,
       "created_at": "2021-04-14T18:02:26+08:00",
       "content": "we001你好，你发布的内容 1111111123123111111 已被修改",

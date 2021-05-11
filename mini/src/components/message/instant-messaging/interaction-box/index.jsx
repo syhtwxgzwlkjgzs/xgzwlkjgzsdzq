@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View } from '@tarojs/components';
-import { Button, Textarea, Icon, Input } from '@discuzq/design';
+import { Button, Icon, Input } from '@discuzq/design';
 
 import styles from './index.module.scss';
 
@@ -32,6 +32,7 @@ const InteractionBox = (props) => {
         displayTimePanel: checkToShowCurrentMsgTime(currentTime),
         textType: 'string',
         text: typingValue,
+        ownedBy: 'myself',
       };
 
     try {
