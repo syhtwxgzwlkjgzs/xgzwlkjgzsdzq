@@ -1,19 +1,8 @@
 import React from 'react';
 import styles from './index.module.scss';
-import Avatar from '@components/avatar';
+import H5HeadetContent from './h5/index'
 
 class UserCenterHead extends React.Component {
-
-    renderH5Content() {
-        return (
-            <div className={styles.h5box}>
-                <div className={styles.headImgBox}>
-                    <Avatar size='big'/>
-                </div>
-                <p className={styles.text}>不会开飞机的程序员，不是一个好的摄影师不会开飞机的程序员，不是一个好的摄影师不会开飞机的程序员，不是一个好的摄影师不会开飞机的程序员，不是一个好的摄影师</p>
-            </div>
-        )
-    }
 
     renderPCContent() {
         return (
@@ -26,7 +15,7 @@ class UserCenterHead extends React.Component {
     render() {
         const { platform } = this.props;
         if (platform === 'h5') {
-            return this.renderH5Content();
+            return <H5HeadetContent />;
         } else {
             return this.renderH5Content();
         }

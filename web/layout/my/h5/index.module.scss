@@ -1,0 +1,42 @@
+@import '@common/styles/fn/rem.scss';
+
+.mobileLayout {
+    padding-bottom: rem(65);
+}
+
+.unit {
+    &::before {
+        content: '';
+        display: block;
+        height: rem(10);
+        background: #F4F6F7;
+    }
+}
+
+.dividerContainer {
+    padding-left: rem(16);
+    padding-right: rem(16);
+}
+
+.divider {
+    margin: rem(8) 0;
+}
+
+.threadUnit {
+    padding: rem(16);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .threadTitle {
+        font-weight: 600;
+        font-size: rem(16);
+        color: #0b0b37;
+        margin-right: rem(12);
+    }
+
+    .threadCount {
+        font-size: rem(12);
+        color: #8490a8;
+    }
+}

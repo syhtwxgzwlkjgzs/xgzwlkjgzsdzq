@@ -8,7 +8,7 @@
   .replyListContent {
     width: 100%;
     .replyListContentText {
-      padding: rem($padding-2n);;
+      padding: rem($padding-4n);
       border-radius: rem($border-radius-small);
       background: var(--comment-box-bg-color);
       .replyListName {
@@ -23,21 +23,33 @@
         line-height: rem($font-line-height-middle);
         text-align: left;
         color: var(--color-text-primary);
+        width: 100%;
+        word-break: break-word;
+
         .commentUser {
           display: inline-block;
+          word-break: initial;
+
+          .replyedAvatar {
+            display: inline-block;
+            margin-right: rem($margin-1n);
+            position: relative;
+            top: rem(4);
+
+            .avatar {
+              width: rem(18);
+              height: rem(18);
+            }
+          }
+
           .replyedUserName {
+            display: inline-block;
             font-weight: var(--font-weight-regular);
             font-size: rem($font-size-primary);
             margin-right: rem($margin-2n);
             line-height: rem(18);
             text-align: left;
             color: var(--color-primary);
-          }
-          .replyedAvatar {
-            display: inline-block;
-            margin-right: rem($margin-1n);
-            position: relative;
-            top: rem(6);
           }
         }
       }
@@ -51,7 +63,7 @@
       color: var(--color-text-secondary);
       padding-top: rem($padding-2n);
       .replyTime {
-        // flex: 1;
+        font-size: rem($font-size-label);
       }
       .commentLiked {
         color: var(--color-primary);

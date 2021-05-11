@@ -1,0 +1,17 @@
+@import '@common/styles/fn/rem.scss';
+
+.threadFirstItem {
+    &::before {
+        content: '';
+        display: none;
+    }
+}
+
+.threadItem {
+    &::before {
+        content: '';
+        display: block;
+        height: rem(10);
+        background: #F4F6F7;
+    }
+}

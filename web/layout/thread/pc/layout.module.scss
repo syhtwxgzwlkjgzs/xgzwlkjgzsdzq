@@ -10,7 +10,7 @@
 
 .header {
   width: 100%;
-  height: rem(60);
+  background: var(--color-white);
 }
 
 .body {
@@ -27,11 +27,13 @@
   }
 
   .bodyRigth {
+    position: sticky;
+    top: rem(0);
     width: rem(330);
 
     .authorInfo {
       width: 100%;
-      height: rem(290);
+      height: rem(306);
       background: var(--color-white);
       margin-bottom: rem(20);
       display: flex;
@@ -59,6 +61,7 @@
 
 .bottom {
   margin-top: rem($margin-10);
+  width: 100%;
 }
 
 .editCmment {
@@ -67,7 +70,7 @@
   background: var(--color-white);
   margin: auto;
   padding: rem(24);
-  border-radius: rem(5);
+  border-radius: var(--border-radius-small);
 
   .close {
     position: absolute;

@@ -34,7 +34,12 @@ class WalletInfo extends React.Component {
             }
             <div className={`${this.props.webPageType === 'h5' ? styles.totalAmountH5 : styles.totalAmountPC}`}>
                 <div className={styles.moneyTitle}>当前总金额</div>
-                <div className={styles.moneyNum}>11866.12</div>
+                {
+                  this.props.walletData?.freezeAmount && this.props.walletData?.availableAmount
+                    ? <div className={styles.moneyNum}>
+                    {Number(this.props.walletData?.freezeAmount) + Number(this.props.walletData?.availableAmount)}
+                  </div> : <div className={styles.moneyNum}></div>
+                }
             </div>
             <div className={`${this.props.webPageType === 'h5' ? styles.amountStatusH5 : styles.amountStatusPC}`}>
                 <div className={styles.frozenAmount} onClick={this.props.onFrozenAmountClick}>
@@ -45,11 +50,11 @@ class WalletInfo extends React.Component {
                               ? <Icon name={'RightOutlined'} size='10' className={styles.icon}></Icon> : ''
                         }
                     </div>
-                    <div className={styles.statusNum}>80.12</div>
+                    <div className={styles.statusNum}>{this.props.walletData?.freezeAmount}</div>
                 </div>
                 <div className={styles.withdrawalAmount}>
                     <div className={styles.statusTitle}>可提现金额</div>
-                    <div className={styles.statusNum}>11786.00</div>
+                    <div className={styles.statusNum}>{this.props.walletData?.availableAmount}</div>
                 </div>
             </div>
             {

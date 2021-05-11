@@ -28,7 +28,7 @@
     .content {
         font-weight: normal;
         padding: rem($padding-4n);
-        border-bottom: solid rem(1) var(--border-line-color);
+        border-bottom: var(--border-border);
         .upper {
             display: flex;
             justify-content: space-between;
@@ -43,7 +43,7 @@
             font-family: 'PingFangSC-Regular';
             font-size: rem($font-size-label);
             text-align: left;
-            color: #8590a6;
+            color: var(--color-text-secondary);
             padding-top: rem($padding-5n);
         }
     }

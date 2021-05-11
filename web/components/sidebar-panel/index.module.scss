@@ -2,7 +2,6 @@
 
 .container {
   width: 100%;
-  border-radius: rem($border-radius-small);
   background-color: var(--color-white);
   box-sizing: border-box;
   .header {
@@ -11,6 +10,10 @@
     display: flex;
     align-items: center;
   }
+}
+
+.containerPC {
+  border-radius: rem($border-radius-small);
 }
 
 .small {

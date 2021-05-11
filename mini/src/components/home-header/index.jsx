@@ -57,11 +57,11 @@ class HomeHeader extends React.Component {
 
 
   render() {
-    const { bgColor, hideInfo = false } = this.props;
+    const { bgColor, hideInfo = false, style = {}, digest = null } = this.props;
     const { countUsers, countThreads } = this.getSiteInfo();
 
     return (
-      <View className={styles.container} style={this.getBgHeaderStyle(bgColor)}>
+      <View className={styles.container} style={{style, ...this.getBgHeaderStyle(bgColor)}}>
         {hideInfo && <View className={styles.topBar}>
           <View></View>
           <View>
@@ -77,17 +77,21 @@ class HomeHeader extends React.Component {
               src={this.getLogo()}
           />
         </View>
+        {digest && <View className={styles.digest}>
+            <Text className={styles.left}>站长 {digest.admin || ''}</Text>
+            <Text className={styles.right}>已创建 {digest.day || ''}天</Text>
+        </View>}
         {!hideInfo && <View className={styles.siteInfo}>
-          <View>
+          <View className={styles.item}>
             <Text className={styles.text}>成员</Text>
             <Text className={styles.content}>{countUsers}</Text>
           </View>
-          <View>
+          <View className={styles.item}>
             <Text className={styles.text}>内容</Text>
             <Text className={styles.content}>{countThreads}</Text>
           </View>
-          <View>
-            <Icon className={styles.shareIcon} color="#fff" name="ShareAltOutlined"/>
+          <View className={styles.item}>
+            <Icon className={styles.shareIcon} size={16} color="#fff" name="ShareAltOutlined"/>
             <Text className={styles.text}>分享</Text>
           </View>
         </View>}

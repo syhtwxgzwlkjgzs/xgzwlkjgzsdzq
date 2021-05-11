@@ -33,7 +33,8 @@ class Index extends React.Component {
       Toast.info({ content: '分享链接已复制成功' });
 
       const { title = '', threadId = '' } = this.props.data || {};
-      h5Share(title);
+
+      h5Share({title, path: `thread/${threadId}`});
       this.props.index.updateThreadShare({ threadId }).then(result => {
         if (result.code === 0) {
           this.props.index.updateAssignThreadInfo(threadId, { isShare: true });
@@ -157,7 +158,7 @@ class Index extends React.Component {
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
 
       return (
-        <div className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom}`}>
+        <div className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
           <div className={styles.header}>
               <UserInfo
                 name={user.userName}
@@ -176,7 +177,7 @@ class Index extends React.Component {
               />
           </div>
 
-          <ThreadCenterView data={data} onClick={this.onClick} onPay={this.onPay} />
+          <ThreadCenterView data={data} onClick={this.onClick} onPay={this.onPay} platform={platform} />
 
           <BottomEvent
             userImgs={likeReward.users}

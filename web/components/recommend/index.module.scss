@@ -2,38 +2,35 @@
 .recommend {
   width: 100%;
   box-sizing: border-box;
-  font-family: "PingFang SC";
-  background: #fff;
-  padding: rem(16);
+  background: var(--color-white);
+  padding: 0 rem($padding-4n);
   padding-bottom: 0;
   .recommendContent {
     font-weight: 600;
     font-size: rem(18);
-    line-height: 28px;
-    color: #0b0b37;
-    margin-bottom: rem(16);
+    height: rem(57);
+    line-height: rem(57);
+    color: var(--color-text-primary);
   }
 }
 .recommendBox {
   width: 100%;
   height: rem(82);
-  border-top: rem(1) solid #EEEEEE;
+  border-top: var(--border-border);
   .recommendTitle {
     display: flex;
-    margin-top: rem(16);
+    padding-top: rem($margin-4n);
     .recommendSort {
-      margin-right: rem(8);
-      font-weight: normal;
+      margin-right: rem($margin-2n);
       font-size: rem($font-size-primary);
-      line-height: 24px;
-      color: #e02433;
+      line-height: rem($font-line-height-small);
+      color: var(--color-error);
     }
     .recommenText {
-      width: rem(272);
-      font-weight: normal;
-      font-size: 16px;
-      line-height: 24px;
-      color: #0b0b37;
+      flex: 1;
+      font-size: rem($font-size-middle);
+      line-height: rem($font-line-height-small);
+      color: var(--color-text-primary);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -42,26 +39,25 @@
   .browse {
     width: 100%;
     display: flex;
-    margin-top: rem(8);
+    margin-top: rem($margin-10);
     justify-content: space-between;
+    align-items: center;
     .browseBox {
-      font-weight: normal;
       font-size: rem($font-size-label);
-      line-height: rem(26);
-      color: #8490a8;
+      line-height: rem($font-line-height-small);
+      color: var(--color-text-secondary);
       .browseIcon {
-        margin-right: rem(4);
+        margin-right: rem($margin-1n);
       }
     }
     .browseButtom {
       display: flex;
       .browseSurplus {
-        font-weight: normal;
         font-size: rem($font-size-label);
-        line-height: rem(24);
-        color: #0b0b37;
+        line-height: rem($font-line-height-primary);
+        color: var(--color-text-primary);
         .surNumber {
-          color: #E02433;
+          color: var(--color-error);
         }
       }
       .browseCategory {
@@ -69,10 +65,8 @@
         p {
           width: rem(40);
           height: rem(21);
-          margin-left: rem(8);
-          border-radius: rem(5);
-          font-family: "PingFangSC-Regular";
-          font-weight: normal;
+          margin-left: rem($margin-2n);
+          border-radius: rem($border-radius-small);
           font-size: rem($font-size-label);
           line-height: rem(21);
           text-align: center;
@@ -83,14 +77,14 @@
           border: rem(1) solid #3ac15f;
         }
         .categoryEssence {
-          color: #2469F6;
+          color: var(--color-primary);
           background: transparent;
-          border: rem(1) solid #2469F6;
+          border: rem(1) solid var(--color-primary);
         }
         .categoryRed {
-          color: #E02433;
+          color: var(--color-error);
           background: transparent;
-          border: rem(1) solid #E02433;
+          border: rem(1) solid var(--color-error);
         }
         .categoryReward {
           color: #FFC300;
@@ -104,17 +98,16 @@
 .recommendSwitch {
   width: 100%;
   height: rem(52);
-  border-top: rem(1) solid #EEEEEE;
+  border-top: var(--border-border);
   cursor: pointer;
   .switchBox {
     width: rem(66);
-    margin: rem(16) auto 0;
-    font-weight: normal;
+    margin: rem($margin-4n) auto 0;
     font-size: rem($font-size-primary);
-    line-height: rem(24);
-    color: #4f5a70;
+    line-height: rem($font-line-height-primary);
+    color: var(--pc-user-info-title);
     .switchIcon {
-      margin-right: rem(8);
+      margin-right: rem($margin-2n);
     }
   }
 }
