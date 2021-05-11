@@ -116,6 +116,58 @@ class UserStore {
     return get(this.userInfo, 'unionid');
   }
 
+
+  // 目标用户关注数
+  @computed get targetUserFollowCount() {
+    return get(this.targetUser, 'followCount');
+  }
+
+  // 目标用户粉丝数
+  @computed get targetUserFansCount() {
+    return get(this.targetUser, 'fansCount');
+  }
+
+  // 目标用户点赞数
+  @computed get targetUserLikedCount() {
+    return get(this.targetUser, 'likedCount');
+  }
+
+  // 目标用户名称
+  @computed get targetUserUsername() {
+    return get(this.targetUser, 'username');
+  }
+
+  // 目标用户微信昵称
+  @computed get targetUserNickname() {
+    return get(this.targetUser, 'nickname');
+  }
+
+  // 目标用户背景图地址
+  @computed get targetUserBackgroundUrl() {
+    return get(this.targetUser, 'backgroundUrl');
+  }
+
+  // 目标用户签名
+  @computed get targetUserSignature() {
+    return get(this.targetUser, 'signature');
+  }
+
+  // 目标用户头像
+  @computed get targetUserAvatarUrl() {
+    return get(this.targetUser, 'avatarUrl');
+  }
+
+  // 目标用户手机号
+  @computed get targetUserMobile() {
+    return get(this.targetUser, 'mobile');
+  }
+
+  // 目标用户被屏蔽状态
+  @computed get targetUserDenyStatus() {
+    return get(this.targetUser, 'isDeny');
+  }
+
+
   // 发帖扩展的权限
   @computed get threadExtendPermissions() {
     const { permissions: pm } = this;
