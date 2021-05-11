@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 .text {
   font-size: rem($font-size-label);
   color: var(--color-error);
@@ -39,6 +38,12 @@
         margin-top: rem(16);
         font-weight: normal;
       }
+      .dzq-tabs__item.is-active {
+        font-family: "PingFang SC";
+        font-weight: 600;
+        color: var( --color-primary);
+      }
+
     }
   }
 }

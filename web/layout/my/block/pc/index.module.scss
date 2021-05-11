@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 .container {
   background: var(--comment-box-bg-color);
   width: 100%;
@@ -31,4 +30,3 @@
   }
 }
 
-  

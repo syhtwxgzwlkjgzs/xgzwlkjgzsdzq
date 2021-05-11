@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .list {
   width: 100%;
@@ -10,7 +9,6 @@
     align-items: center;
     height: rem(36);
     cursor: pointer;
-    font-family: "PingFang SC";
     .prefix {
       font-size: rem($font-size-primary);
       font-weight: normal;
@@ -31,6 +29,17 @@
   .itemBorder {
     box-sizing: border-box;
     border-bottom: rem(1) solid var(--border-line-color);
+  }
+  .itemBox {
+    height: rem(38);
+    .prefix {
+      font-size: rem($font-size-middle);
+      line-height: rem($font-line-height-small);
+    }
+    .title {
+      font-size: rem($font-size-middle);
+      line-height: rem($font-line-height-small);
+    }
   }
   .item:last-child {
     border-bottom: none !important;

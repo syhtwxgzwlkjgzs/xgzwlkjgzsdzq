@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 .header{
     height: rem(60);
     width: 100%;
@@ -31,7 +30,7 @@
                     height: rem(24);
                     cursor: pointer;
                 }
-    
+
                 .inputBox{
                     margin-left: rem(20);
                 }
@@ -48,7 +47,7 @@
                         align-items: center;
                         cursor: pointer;
                         &:hover{
-                            
+
                             p,div{
                                 color: var(--color-primary);
                             }
@@ -62,7 +61,7 @@
                         p{
                             font-size: rem($font-size-primary);
                             margin-left: rem($margin-2n);
-                            color: var(--pc-header-btn-text-color);
+                            color: $text-color-regular;
                         }
                     }
                 }
@@ -74,7 +73,7 @@
                     margin-left: rem(49);
                     .userName{
                         margin-left: rem(16);
-                        color: var(--pc-header-username-text-color);
+                        color: $text-color-regular;
                         font-size: rem($font-size-primary);
                     }
                     .userBtn{
@@ -85,7 +84,7 @@
                     }
                 }
             }
-            
+
         }
     }
 }

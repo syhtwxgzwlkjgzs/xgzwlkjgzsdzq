@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 // .indexWrap {
 //   background: #f5f7f8;
 //   width: 100%;
@@ -41,7 +40,7 @@
   }
 }
 .TopNewsBox {
-  padding: rem($padding-10) 0;
+  padding: rem($padding-2n) 0;
   margin: 0 rem($margin-6n);
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
@@ -80,4 +79,3 @@
 }
 // }
 
-  

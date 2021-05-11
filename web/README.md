@@ -188,8 +188,7 @@ export default Index;
 
 示例
 ```scss
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 .text {
     font-size: rem($font-size-label);
     color: var(--color-error);

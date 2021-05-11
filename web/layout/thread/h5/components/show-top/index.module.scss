@@ -1,5 +1,4 @@
-@import '@common/styles/variable/index.scss';
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 
 .setTop {
   width: rem(375);
@@ -24,12 +23,12 @@
 }
 .inTop {
   display: block;
-  transition: all 2s; 
+  transition: all 2s;
   // TODO: 更换token
   opacity: 1;
 }
 .outTop {
-  transition: all 2s; 
+  transition: all 2s;
   // TODO:
   opacity: 0;
 }
