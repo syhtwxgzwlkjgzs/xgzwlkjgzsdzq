@@ -9,8 +9,14 @@ import { get } from '@common/utils/get';
 const testArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 @inject('site')
+@inject('invite')
 @observer
 class InviteH5Page extends React.Component {
+  async componentDidMount() {
+    // const inviteList = await this.invite.useRequest();
+    // console.log(inviteList);
+  }
+
   toLocaleCopyCase = async () => {
     try {
       const clipboardObj = navigator.clipboard;

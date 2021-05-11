@@ -17,14 +17,14 @@
 @mixin input {
   width: rem(327);
   box-sizing: border-box;
-  padding: rem(24) 0;
+  padding: rem(26) 0 rem(16);
   height: rem(64);
   border-bottom: rem(1) solid #eee;
   :global(.dzq-input__inner) {
     font-size: rem(16);
     border: none;
     padding: 0;
-    height: rem(24);
+    height: rem(22);
     line-height: rem(24);
     border-radius: 0;
   }
@@ -43,8 +43,8 @@
   box-sizing: border-box;
 }
 @mixin functionalRegion {
-  margin-top: rem(16);
-  font-size: rem(14);
+  margin-top: rem(24);
+  font-size: rem(16);
   text-align: center;
   .clickBtn{
     color: var(--color-primary);

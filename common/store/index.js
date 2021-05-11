@@ -21,7 +21,8 @@ import MiniBindStore from './login/mini-bind-store';
 import H5QrCode from './login/h5-qrcode';
 import SearchStore from './search/action';
 import PayBoxStore from './pay/pay-box-store';
-import ForumStore from './my/forum';
+import InviteStore from './invite/action';
+import ForumStore from './forum/action';
 import store from './store';
 
 useStaticRendering(isServer());
@@ -54,6 +55,7 @@ export default function initializeStore(initProps = {}) {
       miniBind: new MiniBindStore(),
       payBox: new PayBoxStore(),
       topic: new TopicStore(),
+      invite: new InviteStore(),
       forum: new ForumStore(),
     };
   }
@@ -82,6 +84,7 @@ export default function initializeStore(initProps = {}) {
       payBox: new PayBoxStore(),
       topic: new TopicStore(),
       miniBind: new MiniBindStore(),
+      invite: new InviteStore(),
       forum: new ForumStore(),
     });
   }

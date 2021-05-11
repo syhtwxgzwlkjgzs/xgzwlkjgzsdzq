@@ -3,19 +3,34 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import { Popup, Icon } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
-import layout from './index.module.scss';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
+import List from '@components/list';
 import { get } from '@common/utils/get';
-
+import layout from './index.module.scss';
+import UserCenterFriends from '@components/user-center-friends';
 
 @inject('site')
 @inject('forum')
 @observer
-class StatusH5Page extends React.Component {
+class ForumH5Page extends React.Component {
+  async componentDidMount() {
+    const { forum } = this.props;
+    const usersList = await forum.useRequest('readUsersList', {
+      params: {
+        filter: {
+          hot: 0
+        }
+      }
+    });
+
+    console.log(usersList);
+    forum.setUsersPageData(usersList);
+  }
   render() {
     const { site, forum } = this.props;
     const { platform } = site;
+    const { usersPageData = [] } = forum;
     // 站点介绍
     const siteIntroduction = get(site, 'webConfig.setSite.siteIntroduction', '');
     // 创建时间
@@ -76,9 +91,21 @@ class StatusH5Page extends React.Component {
             <div className={layout.label}>成员</div>
             <div className={layout.right} onClick={() => forum.setIsPopup(true)}>
               <div className={layout.forum_member}>
-                <img className={layout.forum_member_img} src="/dzq-img/login-user.png" alt=""/>
-                <img className={layout.forum_member_img} src="/dzq-img/login-user.png" alt=""/>
-                <img className={layout.forum_member_img} src="/dzq-img/login-user.png" alt=""/>
+                {
+                  usersPageData.length
+                    ? usersPageData.map((item, index) => {
+                      if (index > 2) {
+                        return <></>;
+                      }
+
+                      return item.avatar
+                        ? <img key={item.id} className={layout.forum_member_img} src={item.avatar} alt=""/>
+                        : <span key={item.id} className={`${layout.forum_member_img} ${layout.forum_member_char}`} >
+                            匿
+                          </span>;
+                    })
+                    : <></>
+                }
                 <Icon site={10} color='#8590A6' name='RightOutlined'/>
               </div>
             </div>
@@ -102,12 +129,32 @@ class StatusH5Page extends React.Component {
           position="bottom"
           visible={forum.isPopup}
           onClose={() => forum.setIsPopup(false)}
+          containerClassName={layout.forum_users_popup}
         >
-          <h1>成员</h1>
+          <List
+            className={layout.forum_users_list}
+          >
+            {usersPageData.map((user, index) => {
+              if (index + 1 > this.props.limit) return null;
+              return (
+                <div key={index}>
+                  <UserCenterFriends
+                    id={user.id}
+                    type='follow'
+                    imgUrl={user.avatar}
+                    withHeaderUserInfo={true}
+                    userName={user.nickname}
+                    followHandler={()=> {console.log("关注")}}
+                  />
+                  <div></div>
+                </div>
+              );
+            })}
+          </List>
         </Popup>
       </>
     )
   }
 }
 
-export default withRouter(StatusH5Page);
+export default withRouter(ForumH5Page);
