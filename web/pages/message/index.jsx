@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import React, { memo } from 'react';
 import { inject, observer } from 'mobx-react';
 import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
@@ -17,13 +18,13 @@ const Index = ({ site }) => {
    * page=thread: 帖子通知，subPage=at/reply/like为贴子通知下@我的、回复我的、点赞我的3个子页面
    * page=finance: 财务通知
    * page=account: 账号消息
-   * page=im: 聊天对话，dialogId=xxx为当前对话id
+   * page=chat: 聊天对话，dialogId=xxx为当前对话id
    *
   */
   const router = useRouter();
   // 参数过滤
   const params = (({ page, subPage, dialogId }) => {
-    if (!['index', 'thread', 'finance', 'account', 'im'].includes(page)) {
+    if (!['index', 'thread', 'finance', 'account', 'chat'].includes(page)) {
       page = 'index';
     }
 
