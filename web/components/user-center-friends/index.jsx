@@ -16,11 +16,16 @@ class UserCenterFriends extends React.Component {
     userGroup: null,
     followHandler: async () => {},
     unFollowHandler: async () => {},
+    onContainerClick: async ({ id }) => {},
   };
 
   render() {
     return (
-      <div>
+      <div onClick={async () => {
+        await this.props.onContainerClick({
+          id: this.props.id,
+        });
+      }}>
         <div className={styles.friendItem}>
           <div className={styles.friendInfo}>
             <div className={styles.friendAvatar}>

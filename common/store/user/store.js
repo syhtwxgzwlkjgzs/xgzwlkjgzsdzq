@@ -7,6 +7,7 @@ class UserStore {
   constructor(props) {
     this.userInfo = props.userInfo ? props.userInfo : null;
   }
+
   @observable userInfo = null;
   @observable loginStatus = 'padding';
   @observable accessToken = null;
@@ -21,6 +22,16 @@ class UserStore {
   @observable userFollowsPage = 1;
   @observable userFollowsTotalPage = 1;
 
+  @observable userThreads = [];
+  @observable userThreadsPage = 1;
+  @observable userThreadsTotalCount = 0;
+  @observable userThreadsTotalPage = 1;
+
+  @observable userLikes = [];
+  @observable userLikesPage = 1;
+  @observable userLikesTotalCount = 0;
+  @observable userLikesTotalPage = 1;
+
   // 检索的目标用户，非自己
   @observable targetUser = null;
 
@@ -34,6 +45,17 @@ class UserStore {
   @observable targetUserFollows = {};
   @observable targetUsersPage = 1;
   @observable targetUserFollowsTotalPage = 1;
+
+
+  @observable targetUserThreads = [];
+  @observable targetUserThreadsPage = 1;
+  @observable targetUserThreadsTotalCount = 0;
+  @observable targetUserThreadsTotalPage = 1;
+
+  @observable targetUserLikes = [];
+  @observable targetUserLikesPage = 1;
+  @observable targetUserLikesTotalCount = 0;
+  @observable targetUserLikesTotalPage = 1;
 
   // 是否能使用钱包支付
   @computed get canWalletPay() {
@@ -91,11 +113,8 @@ class UserStore {
 
   // 获取绑定微信内容
   @computed get unionid() {
-    return get(this.userInfo, 'unionid')
+    return get(this.userInfo, 'unionid');
   }
-
- 
-
 
   // 发帖扩展的权限
   @computed get threadExtendPermissions() {

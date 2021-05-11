@@ -12,6 +12,8 @@ import BottomNavBar from '@components/bottom-nav-bar';
 import UserCenterEditInfo from '@components/user-center-edit-info';
 import Thread from '@components/thread';
 import List from '@components/list';
+import BaseLayout from '@components/base-layout';
+import NoData from '@components/no-data';
 
 @inject('site')
 @inject('user')
@@ -19,60 +21,52 @@ import List from '@components/list';
 class H5MyPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      threads: [],
-    };
   }
 
   componentDidMount = async () => {
-    const threads = await this.props.user.getUserThreads();
-    this.setState({
-      threads,
-    });
+    await this.props.user.getUserThreads();
   };
 
-  render = () => {
-    const { site } = this.props;
+  render() {
+    const { site, user } = this.props;
     const { platform } = site;
+    const { userThreads, userThreadsTotalCount, userThreadsPage, userThreadsTotalPage } = user;
     // return <UserCenterEditInfo />
     return (
-      <div className={styles.mobileLayout}>
-        <UserCenterHeaderImage />
-        <UserCenterHead platform={platform} />
-        <div className={styles.unit}>
-          <UserCenterAction />
-        </div>
-        <div className={styles.unit}>
-          <UserCenterPost />
-        </div>
-        {/* <div className={styles.unit}>
-          <UserCenterFollow
-            friends={this.props.user.userFollows}
-            loadMorePage={true}
-            loadMoreAction={this.props.user.getUserFollow}
-            hasMorePage={this.props.user.userFollowsTotalPage < this.props.user.userFollowsPage}
-          />
-        </div> */}
-
-        <div className={styles.unit}>
-          <div className={styles.threadUnit}>
-            <div className={styles.threadTitle}>主题</div>
-            <div className={styles.threadCount}>166个主题</div>
+      <BaseLayout
+        curr={'my'}
+        showHeader={false}
+        showTabBar={true}
+        onRefresh={user.getUserThreads}
+        noMore={userThreadsTotalPage >= userThreadsPage}
+      >
+        <div className={styles.mobileLayout}>
+          <UserCenterHeaderImage />
+          <UserCenterHead platform={platform} />
+          <div className={styles.unit}>
+            <UserCenterAction />
           </div>
-
-          <div className={styles.dividerContainer}>
-            <Divider className={styles.divider} />
+          <div className={styles.unit}>
+            <UserCenterPost />
           </div>
+          <div className={styles.unit}>
+            <div className={styles.threadUnit}>
+              <div className={styles.threadTitle}>主题</div>
+              <div className={styles.threadCount}>{userThreadsTotalCount}个主题</div>
+            </div>
 
-          <div className={styles.threadItemContainer}>
-            <UserCenterThreads data={this.state.threads} />
+            <div className={styles.dividerContainer}>
+              <Divider className={styles.divider} />
+            </div>
+
+            <div className={styles.threadItemContainer}>
+              {userThreads && userThreads.length > 0 ? <UserCenterThreads data={userThreads} /> : <NoData />}
+            </div>
           </div>
         </div>
-
-        <BottomNavBar curr={'my'} placeholder />
-      </div>
+      </BaseLayout>
     );
-  };
+  }
 }
 
 export default H5MyPage;
