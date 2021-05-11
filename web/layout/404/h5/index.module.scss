@@ -9,23 +9,18 @@
     justify-content: flex-start;
     flex-direction: column;
     .img{
-        margin-top: rem(105);
-        width: rem(80);
-        height: rem(80);
+        margin-top: rem(100);
+        width: rem(234);
+        height: rem(156);
     }
-    .main{
+    .text{
+        padding: 0 rem(40);
         margin-top: rem(24);
-        color: var(--color-text-primary);
-        font-size: rem($font-size-large);
+        font-weight: normal;
+        font-size: rem($font-size-primary);
         line-height: rem($font-line-height-primary);
-        padding: 0 rem(40);
-    }
-    .sub{
-        margin-top: rem(8);
+        text-align: center;
         color: var(--color-text-secondary);
-        font-size: rem($font-size-label);
-        line-height: rem($font-line-height-primary);
-        padding: 0 rem(40);
     }
     .fixedBox{
         position: fixed;
