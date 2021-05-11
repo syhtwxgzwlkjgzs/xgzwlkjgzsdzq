@@ -8,9 +8,9 @@ const Index = ({ imgData = [], platform = 'h5' }) => {
     const [smallImages, setSmallImages] = useState([])
     const [visible, setVisible] = useState(false);
     const [defaultImg, setDefaultImg] = useState('');
-    const [smallSty, setSmallSty] = useState({})
+    const [smallSty, setSmallSty] = useState(null)
 
-    const smallDiv = useRef(null)
+    const smallImg = useRef(null)
     
     const imagePreviewers = useMemo(() => imgData.map(item => item.url), [imgData]);
 
@@ -28,10 +28,11 @@ const Index = ({ imgData = [], platform = 'h5' }) => {
 
     // 设置大于4张图片时的高度
     useEffect(() => {
-        if (smallDiv.current && imgData?.length > 4) {
-            setSmallSty({ height: `${smallDiv.current.clientWidth}px` })
+        if (smallImg.current && imgData?.length > 4) {
+            console.log(smallImg.current.clientWidth);
+            setSmallSty({ height: `${smallImg.current.clientWidth}px` })
         }
-    }, [])
+    }, [imgData])
 
     const onClick = (id) => {
         imgData.forEach((item) => {
@@ -77,7 +78,7 @@ const Index = ({ imgData = [], platform = 'h5' }) => {
                     { bigImages.map((item, index) => <img className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />)}
                 </div>
                 <div className={styles.smallImages} style={smallSty}>
-                    { smallImages.map((item, index) => <img ref={smallDiv} className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />) }
+                    { smallImages.map((item, index) => <img ref={smallImg} className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={`1-${index}`} />) }
                     {
                         imgData?.length > 5 && (
                             <>
