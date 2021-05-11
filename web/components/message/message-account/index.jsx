@@ -1,5 +1,6 @@
 import React, { memo } from 'react'
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'next/router';
 import styles from './index.module.scss';
 
 import Card from '../message-card';
@@ -15,29 +16,45 @@ class Index extends React.Component {
         {
           iconName: 'AtOutlined',
           title: '@我的',
-          link: '',
+          link: '/message?page=account&subPage=at',
           totalCount: 0,
         },
         {
           iconName: 'MessageOutlined',
           title: '回复我的',
-          link: '',
+          link: '/message?page=account&subPage=reply',
           totalCount: 0,
         },
         {
           iconName: 'LikeOutlined',
           title: '点赞我的',
-          link: '',
+          link: '/message?page=account&subPage=like',
           totalCount: 0,
         },
-      ]
+      ],
+      type: 'accountMsgList'
     }
   }
 
+  // componentDidMount() {
+  //   console.log(111);
+  //   const { readAccountMsgList, readAtMsgList, readReplyMsgList, readLikeMsgList } = this.props.message;
+  //   readAccountMsgList(1);
+  // }
+
+  componentWillReceiveProps() {
+    console.log(arguments);
+  }
+
+  toOtherMessage = (link) => {
+    this.props.router.push(link);
+  }
+
   getRenderList = () => {
-    const { accountMsgList } = this.props.message;
+    const { message } = this.props;
+    const {type} = this.state;
     let list = [];
-    accountMsgList.list.forEach(item => {
+    message[type].list.forEach(item => {
       list.push({
         id: item.id,
         createdAt: item.createdAt,
@@ -70,7 +87,7 @@ class Index extends React.Component {
 
   render() {
     const list = this.getRenderList();
-    const card = <Card cardItems={this.state.items} />
+    const card = <Card cardItems={this.state.items} redirectCallback ={this.toOtherMessage}/>
     return (
       <div className={styles.wrapper}>
         <Notice
@@ -79,11 +96,10 @@ class Index extends React.Component {
           type='account'
           onScrollBottom={this.handleAccountBottom}
           onBtnClick={this.handleAccountDelete}
-          {...this.props}
         />
       </div>
     )
   }
 }
 
-export default Index;
+export default withRouter(Index);
