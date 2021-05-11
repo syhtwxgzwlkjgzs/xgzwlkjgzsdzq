@@ -6,7 +6,7 @@ import MessageThread from '@components/message/message-thread';
 import MessageFinancial from '@components/message/message-financial';
 import MessageChat from '@components/message/message-chat';
 
-const Index = inject('message')(observer(({ page, subPage, dialogId, message }) => {
+const Index = ({ page, subPage, dialogId, message }) => {
   const { readAccountMsgList, readDialogList, createDialog, dialogList, accountMsgList } = message;
 
   useEffect(() => {
@@ -38,6 +38,6 @@ const Index = inject('message')(observer(({ page, subPage, dialogId, message }) 
     case 'chat':
       return <MessageChat dialogId={dialogId} />;
   }
-}));
+};
 
-export default Index;
+export default inject('message')(observer(memo(Index)));
