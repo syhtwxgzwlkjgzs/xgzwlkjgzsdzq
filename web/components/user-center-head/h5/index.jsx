@@ -65,7 +65,7 @@ export default class index extends Component {
             <span>{this.user.username}</span>
             <span>官方团队</span>
           </div>
-          <p className={styles.text}>{this.user.signature||'没有签名的时候应该怎么展示'}</p>
+          <p className={styles.text}>{this.user.signature||'这个人很懒，什么也没留下~'}</p>
         </div>
         {/* 下 */}
         <div className={styles.userBtn}>
