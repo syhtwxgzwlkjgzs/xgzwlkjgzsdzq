@@ -4,13 +4,13 @@ import { inject, observer } from 'mobx-react';
 import InstantMessaging from '../../../components/message/instant-messaging';
 
 import NoticeItem from '@components/message/notice-item';
-import SliderLeft from '@components/message/slider-left';
+import SliderLeft from '@components/message/slider-left/index';
 import mock from '../mock.json';
 
 const Index = ({ page, subPage, dialogId }) => {
   // props,state
   const [messagesHistory, setMessagesHistory] = useState([]);
-  const [type, setType] = useState('financial'); // chat,system,financial,user
+  const [type, setType] = useState('account'); // chat,thread,financial,account
   const [list, setList] = useState([]);
 
   // hooks
