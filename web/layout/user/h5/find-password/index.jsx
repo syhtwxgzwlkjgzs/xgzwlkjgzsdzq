@@ -24,7 +24,7 @@ class FindPasswordH5Page extends React.Component {
     const { username } = this.state;
     return (
       <div className={layout.container}>
-        <HomeHeader hideInfo style={{height: '20%'}}/>
+        <HomeHeader hideInfo/>
         <div className={layout.content}>
           <div className={layout.title}>找回密码</div>
           <Input

@@ -45,7 +45,7 @@ class WXBindUsernameH5page extends React.Component {
     userLogin.sessionToken = router.query.sessionToken;
     return (
       <div className={layout.container}>
-        <HomeHeader hideInfo style={{height: '20%'}}/>
+        <HomeHeader hideInfo/>
         <div className={layout.content}>
           <div className={layout.title}>用户名登录，并绑定微信账号</div>
           <div className={layout.tips}>

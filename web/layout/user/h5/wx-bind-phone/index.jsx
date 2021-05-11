@@ -74,7 +74,7 @@ class WXBindPhoneH5Page extends React.Component {
     const { nickname } = router.query;
     return (
       <div className={layout.container}>
-        <HomeHeader hideInfo style={{height: '20%'}}/>
+        <HomeHeader hideInfo/>
         <div className={layout.content}>
           <div className={layout.title}>手机号登陆，并绑定微信账号</div>
           <div className={layout.tips}>
