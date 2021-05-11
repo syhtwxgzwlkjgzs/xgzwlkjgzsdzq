@@ -86,7 +86,7 @@ class UserAction extends SiteStore {
     const totalPage = get(followsRes, 'data.totalPage', 1);
     this.userFollowsTotalPage = totalPage;
     this.userFollows[this.userFollowsPage] = pageData;
-    if (this.userFollowsPage < this.userFollowsTotalPage) {
+    if (this.userFollowsPage <= this.userFollowsTotalPage) {
       this.userFollowsPage += 1;
     }
     this.userFollows = { ...this.userFollows };
@@ -111,7 +111,7 @@ class UserAction extends SiteStore {
     this.userFans[this.userFansPage] = pageData;
     this.userFansTotalPage = totalPage;
     this.userFans[this.userFansPage] = pageData;
-    if (this.userFansPage < this.userFansTotalPage) {
+    if (this.userFansPage <= this.userFansTotalPage) {
       this.userFansPage += 1;
     }
     this.userFans = { ...this.userFans };
@@ -138,7 +138,7 @@ class UserAction extends SiteStore {
     const totalPage = get(followsRes, 'data.totalPage', 1);
     this.targetUserFollowsTotalPage = totalPage;
     this.targetUserFollows[this.targetUserFollowsPage] = pageData;
-    if (this.targetUserFollowsPage < this.targetUserFollowsTotalPage) {
+    if (this.targetUserFollowsPage <= this.targetUserFollowsTotalPage) {
       this.targetUserFollowsPage += 1;
     }
     this.targetUserFollows = { ...this.targetUserFollows };
@@ -166,7 +166,7 @@ class UserAction extends SiteStore {
     this.targetUserFans[this.targetUserFansPage] = pageData;
     this.targetUserFansTotalPage = totalPage;
     this.targetUserFollows[this.targetUserFansPage] = pageData;
-    if (this.targetUserFansPage < this.targetUserFansTotalPage) {
+    if (this.targetUserFansPage <= this.targetUserFansTotalPage) {
       this.targetUserFansPage += 1;
     }
     this.targetUserFans = { ...this.targetUserFans };

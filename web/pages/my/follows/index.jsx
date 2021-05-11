@@ -10,6 +10,20 @@ import Router from '@discuzq/sdk/dist/router';
 @observer
 export default class index extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      height: '100%'
+    }
+  }
+
+  componentDidMount() {
+    this.setState({
+      height: window.outerHeight
+    })
+  }
+  
+
   // 点击关注
   followHandler = async ({id}) => {
     try {
@@ -54,7 +68,9 @@ export default class index extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{
+        height: this.state.height
+      }}>
         <Header />
         <UserCenterFllows
           friends={this.props.user.userFollows}

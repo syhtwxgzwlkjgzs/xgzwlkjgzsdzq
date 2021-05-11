@@ -73,13 +73,13 @@ class UserCenterFollow extends React.Component {
 
   // 判断关注状态
   judgeFollowsStatus = (user) => {
-    let type = 'followed'
+    let type = 'followed';
     if (user.isUnFollowed) { // 表示点击了取消关注==>变为要关注的状态
-      type = 'follow'
+      type = 'follow';
     } else if (user.isMutual) {
-      type = 'friend'
+      type = 'friend';
     }
-    return type
+    return type;
   }
 
   render() {

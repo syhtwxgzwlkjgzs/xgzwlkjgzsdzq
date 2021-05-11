@@ -1,26 +1,38 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Header from '@components/header';
-import UserCenterFans from '@components/user-center-fans'
-import { Divider, Toast } from '@discuzq/design'
-import styles from './index.module.scss'
+import UserCenterFans from '@components/user-center-fans';
+import { Divider, Toast } from '@discuzq/design';
+import styles from './index.module.scss';
 import { withRouter } from 'next/router';
 import Router from '@discuzq/sdk/dist/router';
 
 @inject('user')
 @observer
 class index extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      height: '100%',
+    };
+  }
+
+  componentDidMount() {
+    this.setState({
+      height: window.outerHeight,
+    });
+  }
 
   // 点击关注
   followHandler = async ({ id }) => {
     try {
-      await this.props.user.postFollow(id)
+      await this.props.user.postFollow(id);
       Toast.success({
         content: '关注成功',
         hasMask: false,
         duration: 1000,
-      })
-      this.props.user.setUserFansBeFollowed(id)
+      });
+      this.props.user.setUserFansBeFollowed(id);
     } catch (error) {
 
     }
@@ -29,36 +41,34 @@ class index extends Component {
   // 取消关注
   unFollowHandler = async ({ id }) => {
     try {
-      await this.props.user.cancelFollow({ id, type: 1 })
+      await this.props.user.cancelFollow({ id, type: 1 });
       this.props.user.setUserFansBeUnFollowed(id);
       Toast.success({
         content: '取消成功',
         hasMask: false,
         duration: 1000,
-      })
+      });
     } catch (error) {
 
     }
   }
 
-  onContainerClick = ({id}) => {
-    Router.push({url: `/my/others?otherId=${id}`})
+  onContainerClick = ({ id }) => {
+    Router.push({ url: `/my/others?otherId=${id}` });
   }
 
-  splitElement = () => {
-    return (
+  splitElement = () => (
       <div className={styles.splitEmelent}>
         <Divider />
       </div>
-    )
-  }
+  )
 
   render() {
-    const { query } = this.props.router
-    let flag = query && query.isOtherPerson
+    const { query } = this.props.router;
+    const flag = query && query.isOtherPerson;
     return (
       <div style={{
-        height: '100%'
+        height: this.state.height,
       }}>
         <Header />
         {
@@ -87,8 +97,8 @@ class index extends Component {
           )
         }
       </div>
-    )
+    );
   }
 }
 
-export default withRouter(index)
+export default withRouter(index);
