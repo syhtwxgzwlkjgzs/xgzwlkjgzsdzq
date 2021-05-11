@@ -2,15 +2,16 @@
 @import '@common/styles/fn/rem.scss';
 
 .container {
-  padding: rem($padding-6n) 0;
+  padding: rem($padding-4n) 0;
   text-align: center;
+  color: var(--color-text-placeholder);
+  font-weight: normal;
   font-size: rem($font-size-primary);
-  color: var(--loading-font-color);
 }
 
 .empty {
   height: rem(116);
   line-height: rem(116);
   font-size: rem($font-size-primary);
-  color: var(--loading-font-color);
+  color: var(--color-text-placeholder);
 }

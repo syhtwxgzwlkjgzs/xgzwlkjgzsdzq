@@ -8,21 +8,23 @@
 
   .header {
     font-weight: var(--font-weight-regular);
-    font-size: rem(18);
     line-height: rem($font-line-height-primary);
     text-align: left;
+    font-size: rem(18);
     color: var(--color-text-primary);
     padding-bottom: rem($padding-4n);
     border-bottom: var(--border-border);
   }
 
   .info {
-    padding-bottom: rem($padding-5n);
+    padding-bottom: rem($padding-6n);
+
     .AuthorInfo {
       display: flex;
-      padding: rem($padding-5n) 0;
+      padding: rem($padding-6n) 0;
+
       .information {
-        padding-left: rem($padding-1n);
+        padding-left: rem($padding-2n);
         font-weight: normal;
         font-size: rem($font-size-primary);
         line-height: rem(16);
@@ -34,6 +36,7 @@
         }
         .dynamic {
           color: var(--color-text-secondary);
+          font-size: rem($font-size-primary);
         }
       }
     }
@@ -43,19 +46,21 @@
       justify-content: space-between;
       .themeInfo {
         font-weight: normal;
+
         .title {
           font-size: rem($font-size-primary);
           line-height: rem(16);
           text-align: center;
-          color: #4f5a70;
+          color: var(--pc-user-info-title);
         }
         .number {
+          height: rem(28);
+          line-height: rem(28);
           font-weight: var(--font-weight-regular);
           font-size: rem($font-size-large);
-          line-height: rem(16);
           text-align: center;
           color: var(--color-text-primary);
-          padding-top: rem($padding-4n);
+          padding-top: rem($padding-2n);
         }
       }
     }
@@ -64,19 +69,18 @@
   .btn {
     display: flex;
     justify-content: center;
-    padding-top: rem(10);
+    padding-top: rem($padding-6n);
     border-top: var(--border-border);
 
     .follow {
       width: rem(114);
       height: rem(36);
-      margin: rem(10);
+      margin-right: rem($margin-6n);
     }
 
     .privateLetter {
       width: rem(114);
       height: rem(36);
-      margin: rem(10);
       border: 1px solid var(--color-primary);
       color: var(--color-primary);
     }
@@ -90,5 +94,11 @@
     .btnIcon {
       margin-right: rem($margin-2n);
     }
+  }
+
+  .is-followed {
+    // TODO:token
+    background: #7BA5F9;
+    border-color: #7BA5F9;
   }
 }
