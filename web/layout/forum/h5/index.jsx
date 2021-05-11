@@ -101,7 +101,7 @@ class ForumH5Page extends React.Component {
                       return item.avatar
                         ? <img key={item.id} className={layout.forum_member_img} src={item.avatar} alt=""/>
                         : <span key={item.id} className={`${layout.forum_member_img} ${layout.forum_member_char}`} >
-                            匿
+                            {item.nickname.substring(0, 1)}
                           </span>;
                     })
                     : <></>
