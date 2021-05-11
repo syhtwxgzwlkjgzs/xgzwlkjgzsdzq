@@ -33,6 +33,7 @@ class Index extends React.Component {
       Toast.info({ content: '分享链接已复制成功' });
 
       const { title = '', threadId = '' } = this.props.data || {};
+      // TODO 具体路径
       h5Share(title);
       this.props.index.updateThreadShare({ threadId }).then(result => {
         if (result.code === 0) {

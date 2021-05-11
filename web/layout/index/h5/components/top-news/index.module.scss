@@ -32,6 +32,14 @@
     box-sizing: border-box;
     border-bottom: rem(1) solid var(--border-line-color);
   }
+  .itemBox {
+    .prefix {
+      font-size: rem($font-size-middle);
+    }
+    .title {
+      font-size: rem($font-size-middle);
+    }
+  }
   .item:last-child {
     border-bottom: none !important;
   }

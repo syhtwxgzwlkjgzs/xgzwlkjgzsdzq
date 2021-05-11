@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import ImageContent from '@components/thread/image-content';
+import ImageDisplay from '@components/thread/image-display';
 import AudioPlay from '@components/thread/audio-play';
 import PostContent from '@components/thread/post-content';
 import ProductItem from '@components/thread/product-item';
@@ -188,7 +188,7 @@ export default inject('user')(
               />
             )}
             {/* 图片 */}
-            {parseContent.IMAGE && <ImageContent imgData={parseContent.IMAGE} />}
+            {parseContent.IMAGE && <ImageDisplay imgData={parseContent.IMAGE} />}
             {/* 商品 */}
             {parseContent.GOODS && (
               <div className={topic.goods}>
