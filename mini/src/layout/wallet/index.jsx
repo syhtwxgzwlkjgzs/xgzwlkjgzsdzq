@@ -1,8 +1,8 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import { View } from '@tarojs/components';
-import { Tabs, Button } from '@discuzq/design';
+import { View, Text } from '@tarojs/components';
+import { Tabs, Button, Icon } from '@discuzq/design';
 import Taro from '@tarojs/taro';
 
 import layout from './layout.module.scss';
@@ -38,6 +38,15 @@ class WalletH5Page extends React.Component {
   // 点击提现
   toWithrawal = () => {
     Taro.navigateTo({url: '/subPages/wallet/withdrawal/index'});
+  }
+
+  // 点击时间选择
+  onSelectStatus = (type) => {
+    if (type === 'select') {
+      console.log('选择时间');
+    } else {
+      console.log('点击了全部状态');
+    }
   }
 
   render() {
@@ -145,8 +154,16 @@ class WalletH5Page extends React.Component {
               </WalletInfo>
             </View>
             <View className={layout.choiceTime}>
-              <View className={layout.status}>全部状态</View>
-              <View className={layout.status}>2012年4月</View>
+              {/* <View className={layout.status}>全部状态</View>
+              <View className={layout.status}>2012年4月</View> */}
+              <View className={layout.status} onClick={() => this.onSelectStatus('all')}>
+                <Text className={layout.text}>全部状态</Text>
+                <Icon name='UnderOutlined' size='6' className={layout.icon}></Icon>
+              </View>
+              <View className={layout.status} onClick={() => this.onSelectStatus('select')}>
+                <Text className={layout.text}>2012年4月</Text>
+                <Icon name='UnderOutlined' size='6' className={layout.icon}></Icon>
+              </View>
             </View>
             <View className={layout.tabs}>
               <Tabs
