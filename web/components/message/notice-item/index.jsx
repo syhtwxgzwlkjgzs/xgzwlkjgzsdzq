@@ -159,7 +159,7 @@ class Index extends Component {
                 {item.userName || item.title}
               </div>
               {['chat', 'thread'].includes(type) &&
-                <div className={styles.time}>{diffDate(new Date(item.created_at))}</div>
+                <div className={styles.time}>{diffDate(new Date(item.createdAt))}</div>
               }
               {type === 'financial' &&
                 <div className={styles.amount}>+{(item.amount).toFixed(2)}</div>
@@ -206,7 +206,7 @@ class Index extends Component {
             {/* 底部 */}
             {['financial', 'account'].includes(type) &&
               <div className={`${styles.bottom} ${styles.time}`}>
-                {diffDate(new Date(item.created_at))}
+                {diffDate(new Date(item.createdAt))}
               </div>
             }
           </div>
