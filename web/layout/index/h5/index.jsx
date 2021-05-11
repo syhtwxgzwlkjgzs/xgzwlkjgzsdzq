@@ -1,15 +1,13 @@
-import React, { createRef }from 'react';
+import React, { createRef } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Icon, Tabs } from '@discuzq/design';
 import ThreadContent from '@components/thread';
 import HomeHeader from '@components/home-header';
 import NoData from '@components/no-data';
 import styles from './index.module.scss';
-import List from '@components/list';
 import TopNew from './components/top-news';
-import ButtomNavBar from '@components/bottom-nav-bar';
 import FilterView from './components/filter-view';
-import PayBox from '@components/payBox';
+import BaseLayout from '@components/base-layout';
 
 @inject('site')
 @inject('user')
@@ -23,27 +21,10 @@ class IndexH5Page extends React.Component {
       filter: {},
       currentIndex: '',
       scroll: true,
+      isFinished: true
     };
     this.listRef = createRef();
     this.renderItem = this.renderItem.bind(this);
-  }
-
-  componentDidMount() {
-    // PayBox.createPayBox({
-    //   data: {
-    //     amount: 0.1,
-    //     type: 5,
-    //     threadId: 4,
-    //     payeeId: 16,
-    //     isAnonymous: false,
-    //   },
-    //   success: (orderInfo) => {
-    //     console.log(orderInfo);
-    //   },
-    //   failed: (orderInfo) => {
-    //     console.log(orderInfo);
-    //   },
-    // });
   }
 
   // 点击更多弹出筛选
@@ -58,19 +39,22 @@ class IndexH5Page extends React.Component {
       visible: false,
     });
   }
-  
-  onScroll = ({ scrollTop }) => {
+
+  onScroll = ({ scrollTop = 0 } = {}) => {
+    if (!this.listRef.current) {
+      return
+    }
     const el = this.listRef.current.offsetTop;
 
     if (scrollTop >= el) {
       this.setState({
         scroll: false,
-      })
+      });
     }
     if (scrollTop < 160) {
       this.setState({
         scroll: true,
-      })
+      });
     }
   }
 
@@ -181,46 +165,52 @@ class IndexH5Page extends React.Component {
     </>
   )
 
+  // 下拉刷新
+  onPullDown = () => {
+    this.setState({ isFinished: false }) 
+    setTimeout(() => { 
+      this.setState({ isFinished: true }) 
+    }, 2000)
+  }
+
 
   render() {
     const { index } = this.props;
-    const { filter, scroll } = this.state;
+    const { filter, scroll, isFinished } = this.state;
     const { threads = {}, categories = [] } = index;
     const { currentPage, totalPage, pageData } = threads || {};
     const newCategories = this.handleCategories(categories);
 
     return (
-      <div className={styles.container}>
-        { pageData?.length > 0
-          ? (
-            <List
-              className={styles.list}
-              onRefresh={this.onRefresh}
-              noMore={currentPage >= totalPage}
-              onScroll={this.onScroll}
-            >
-              {
-                pageData.map((item, index) => (
-                  <div key={index}>
-                    { index === 0 && this.renderHeaderContent(scroll)}
-                    <ThreadContent data={item} className={styles.listItem} />
-                  </div>
-                ))
-              }
-            </List>
-          )
-          : this.renderNoData()
-        }
+      <BaseLayout
+        showHeader={false}
+        showTabBar
+        onRefresh={this.onRefresh}
+        noMore={currentPage >= totalPage}
+        onScroll={this.onScroll}
+        isFinished={isFinished}
+        curr='home'
+      >
+          { pageData?.length > 0
+            ? (
+              pageData.map((item, index) => (
+                <div key={index}>
+                  { index === 0 && this.renderHeaderContent(scroll)}
+                  <ThreadContent data={item} className={styles.listItem} />
+                </div>
+              ))
+            )
+            : this.renderNoData()
+          }
 
-        <FilterView
-          data={newCategories}
-          current={filter}
-          onCancel={this.onClose}
-          visible={this.state.visible}
-          onSubmit={this.onClickFilter}
-        />
-       <ButtomNavBar placeholder/>
-      </div>
+          <FilterView
+            data={newCategories}
+            current={filter}
+            onCancel={this.onClose}
+            visible={this.state.visible}
+            onSubmit={this.onClickFilter}
+          />
+      </BaseLayout>
     );
   }
 }

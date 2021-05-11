@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button } from '@discuzq/design';
-import ImageContent from './image-content';
 import AudioPlay from './audio-play';
 import PostContent from './post-content';
 import ProductItem from './product-item';
@@ -9,6 +8,8 @@ import RewardQuestion from './reward-question';
 import VideoPlay from './video-play';
 import { handleAttachmentData } from './utils';
 import AttachmentView from './attachment-view';
+import ImageDisplay from './image-display';
+import Packet from './packet';
 import styles from './index.module.scss';
 
 /**
@@ -23,10 +24,13 @@ const Index = (props) => {
         title = '',
         payType,
         price,
-        paid,
-        onClick,
-        onPay
+        paid
     } = props.data || {};
+
+    const {
+      onClick,
+      onPay
+    } = props
 
     // 帖子属性内容
     const renderThreadContent = ({ content: data, attachmentPrice, payType, paid } = {}) => {
@@ -53,18 +57,21 @@ const Index = (props) => {
                     isPay={payType !== 0}
                   />
                 )}
-                {imageData && (<ImageContent
-                  imgData={imageData}
-                  isPay={payType !== 0}
-                  onPay={onPay}
-                  onClickMore={onClick}
-                />)}
-                {rewardData && <RewardQuestion
-                  content={rewardData.content || ''}
+                {imageData && (
+                    <ImageDisplay 
+                        platform={props.platform} 
+                        imgData={imageData} 
+                        isPay={payType !== 0}
+                        onPay={onPay}
+                        onClickMore={onClick} />
+                    )
+                }
+                {rewardData && <Packet
+                  type={1}
                   money={rewardData.money}
-                  onClick={onPay}
+                  onClick={onClick}
                 />}
-                {redPacketData && <RedPacket content={redPacketData.content || ''} onClick={onPay} />}
+                {redPacketData && <Packet money={redPacketData.money || 0} onClick={onClick} />}
                 {goodsData && <ProductItem
                     image={goodsData.imagePath}
                     amount={goodsData.price}

@@ -6,6 +6,7 @@ import { withRouter } from 'next/router';
 /**
  * BottomNavBar组件
  * @prop {boolean} placeholder 固定在底部时，是否在标签位置生成一个等高的占位元素
+ * @prop {boolean} curr 常亮icon
  */
 
 const BottomNavBar = ({ router, fixed = true, placeholder = false, curr = 'home' }) => {

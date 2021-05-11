@@ -48,3 +48,16 @@
     color: var(--color-text-primary);
   }
 }
+
+.button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  :global {
+    .dzq-button {
+      width: rem(248);
+      height: rem(36);
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import ImageContent from '@components/thread/image-content';
+import ImageDisplay from '@components/thread/image-display';
 import PostContent from '@components/thread/post-content';
 import { handleAttachmentData, noop } from '@components/thread/utils';
 import styles from './index.module.scss';
@@ -21,7 +21,7 @@ const TopicItem = ({ data, onClick }) => {
     <div className={styles.item} onClick={click}>
       <div className={styles.title}>{data.content && `#${data.content}#`}</div>
       <PostContent content={text} className={styles.content} />
-      <ImageContent imgData={imageData}/>
+      <ImageDisplay imgData={imageData}/>
       <div className={styles.footer}>
         <div className={styles.numBox}>
           <span>热度</span>

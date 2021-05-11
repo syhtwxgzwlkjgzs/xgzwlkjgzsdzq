@@ -15,6 +15,7 @@
     width: rem(82);
     height: rem(82);
     object-fit: cover;
+    border-radius: rem(5);
     &.empty{
       background-color: var(--mask-background-color);
     }
@@ -22,16 +23,20 @@
   .content {
     flex: 1;
     margin-left: rem($padding-4n);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     .title {
       font-weight: normal;
       font-size: rem($font-size-primary);
       line-height: rem($font-line-height-primary);
       text-align: left;
       color: var(--color-text-regular);
-      height: rem(44);
+      max-height: rem(44);
       overflow: hidden;
     }
     .amount {
+      font-family: 'PingFangSC-Semibold';
       margin-top: rem($padding-2n);
       font-weight: normal;
       font-size: rem(20);
