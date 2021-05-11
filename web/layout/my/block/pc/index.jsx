@@ -4,12 +4,11 @@ import { withRouter } from 'next/router';
 import styles from './index.module.scss';
 import SectionTitle from '@components/section-title'
 import BaseLayout from '@components/base-layout';
-import ThreadContent from '@components/thread';
+import Users from '@layout/search/h5/components/active-users';
 import Copyright from '@components/copyright';
-import TrendingTopic from '@layout/search/pc/components/trending-topics'
+import ShieldList from './components/shield-list'
 
 @inject('site')
-@inject('index')
 @inject('search')
 @observer
 class LikePCPage extends React.Component {
@@ -17,8 +16,8 @@ class LikePCPage extends React.Component {
     super(props);
   }
 
-  redirectToSearchResultTopic = () => {
-    this.props.router.push('/search/result-topic');
+  redirectToSearchResultPost = () => {
+    this.props.router.push(`/search/result-post?keyword=${this.state.value || ''}`);
   };
   // 头部搜索
   onSearch = (value) => {
@@ -26,41 +25,42 @@ class LikePCPage extends React.Component {
   }
   // 右侧 - 潮流话题 粉丝 版权信息
   renderRight = () => {
-    const { pageData = [] } = this.props.search.topics || { pageData: [] };
+    const { search } = this.props;
+    const { pageData = [], currentPage, totalPage } = search.users;
     return (
       <div className={styles.right}>
         <div className={styles.section}>
-          <SectionTitle title="潮流话题" onShowMore={this.redirectToSearchResultTopic}/>
-          <TrendingTopic data={pageData} onItemClick={this.onTopicClick}/>
+          <SectionTitle
+            title="用户"
+            isShowMore={false}
+          />
+          <Users data={pageData.slice(0, 5)}/>
         </div>
         <Copyright/>
       </div>
     )
   }
-  // 中间 -- 我的点赞
+  // 中间 -- 我的屏蔽
   renderContent = (data) => {
     const num = 8;
-    const { threads } = data;
-    const { pageData, totalCount } = threads || {};
+    const { search } = this.props;
+    const { pageData = [], currentPage, totalPage } = search.users;
     return (
       <div className={styles.content}>
-        <div className={styles.title}>
+        <div className={styles.section}>
           <SectionTitle
-            title="我的点赞"
+            title="我的屏蔽"
             icon={{ type: 3, name: 'LikeOutlined' }}
             isShowMore={false}
-            rightText={`共有${totalCount}条点赞`}
+            rightText={`共有${num}位用户`}
           />
+          <ShieldList data={pageData}/>
         </div>
-        {
-          pageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)
-        }
       </div>
     )
   }
   render() {
     const { index, site } = this.props;
-    console.log(index);
     return (
       <div className={styles.container}>
         <BaseLayout

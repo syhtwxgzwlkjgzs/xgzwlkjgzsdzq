@@ -12,13 +12,24 @@
   margin-bottom: rem(8);
 
   .wrapper {
+    width: 100%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
   }
-
+  .containerText {
+    width: 70%;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+  }
   .size {
     color: #4f5a70;
     font-size: rem($font-size-label);
+  }
+  .containerIcon {
+    color: #3ac15f;
   }
   .content {
     margin: 0 rem(8);

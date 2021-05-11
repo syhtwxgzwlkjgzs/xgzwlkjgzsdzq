@@ -10,8 +10,10 @@
     align-items: center;
     height: rem(36);
     cursor: pointer;
+    font-family: "PingFang SC";
     .prefix {
       font-size: rem($font-size-primary);
+      font-weight: normal;
       line-height: rem($font-line-height-primary);
       color: var(--color-text-secondary);
       margin-right: rem($padding-4n);
@@ -20,6 +22,7 @@
     .title {
       font-size: rem($font-size-primary);
       line-height: rem($font-line-height-primary);
+      color: var(--color-text-primary);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
