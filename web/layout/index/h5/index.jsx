@@ -5,9 +5,7 @@ import ThreadContent from '@components/thread';
 import HomeHeader from '@components/home-header';
 import NoData from '@components/no-data';
 import styles from './index.module.scss';
-import List from '@components/list';
 import TopNew from './components/top-news';
-import ButtomNavBar from '@components/bottom-nav-bar';
 import FilterView from './components/filter-view';
 import BaseLayout from '@components/base-layout';
 
@@ -184,11 +182,13 @@ class IndexH5Page extends React.Component {
       <BaseLayout
         showHeader={false}
         showTabBar
+        showPullDown
         onPullDown={this.onPullDown}
         onRefresh={this.onRefresh}
         noMore={currentPage >= totalPage}
         onScroll={this.onScroll}
         isFinished={isFinished}
+        curr='home'
       >
           { pageData?.length > 0
             ? (
@@ -210,37 +210,6 @@ class IndexH5Page extends React.Component {
             onSubmit={this.onClickFilter}
           />
       </BaseLayout>
-      // <div className={styles.container}>
-      //   { pageData?.length > 0
-      //     ? (
-      //       <List
-      //         className={styles.list}
-      //         onRefresh={this.onRefresh}
-      //         noMore={currentPage >= totalPage}
-      //         onScroll={this.onScroll}
-      //       >
-      //         {
-      //           pageData.map((item, index) => (
-      //             <div key={index}>
-      //               { index === 0 && this.renderHeaderContent(scroll)}
-      //               <ThreadContent data={item} className={styles.listItem} />
-      //             </div>
-      //           ))
-      //         }
-      //       </List>
-      //     )
-      //     : this.renderNoData()
-      //   }
-
-      //   <FilterView
-      //     data={newCategories}
-      //     current={filter}
-      //     onCancel={this.onClose}
-      //     visible={this.state.visible}
-      //     onSubmit={this.onClickFilter}
-      //   />
-      //  <ButtomNavBar placeholder/>
-      // </div>
     );
   }
 }
