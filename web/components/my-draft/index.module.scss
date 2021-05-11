@@ -9,13 +9,14 @@
         flex: 1;
     }
 
+
     .drafts_lenth {
         height: rem(55);
+        padding-left: rem(16);
         line-height: rem(55);
         font-size: var(--font-size-primary);
         color: #4f5a70;
         background-color: var(--color-white);
-        padding-left: rem(16);
         margin-bottom: var(--margin-10);
     }
 
@@ -41,6 +42,104 @@
             border-bottom: var(--border-border);
 
             .drafts_time {
+                margin-top: var(--margin-2n);
+                color: var(--color-text-secondary);
+            }
+
+        }
+    }
+
+}
+
+// PC样式
+.drafts_boxpc {
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f7f8;
+
+    .listpc {
+        flex: 1;
+    }
+
+
+    .drafts_lenthpc {
+        height: rem(55);
+        padding-left: rem(16);
+        line-height: rem(55);
+        font-size: var(--font-size-primary);
+        color: #4f5a70;
+        background-color: var(--color-white);
+        margin-bottom: var(--margin-10);
+    }
+
+
+    .drafts_listboxpc {
+        padding: 0 var(--padding-4n);
+        background-color: var(--color-white);
+        border-radius: var(--border-radius-small);
+
+        .drafts_lenthpc {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0;
+            height: rem(73);
+            line-height: rem(55);
+            font-size: var(--font-size-primary);
+            color: #4f5a70;
+            background-color: var(--color-white);
+            border-bottom: var(--border-border);
+
+            .drafts_lift_titlepc {
+                font-weight: var(--font-weight-regular);
+                font-size: 18px;
+                line-height: var(--font-line-height-primary);
+                margin-left: var(--margin-2n);
+                color: #0b0b37;
+            }
+        }
+
+        .drafts_deletepc {
+            width: 20%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--color-white);
+            background-color: red;
+        }
+
+        .drafts_listpc {
+            width: 100%;
+            min-height: rem(48);
+            padding: var(--padding-4n) 0;
+            border-bottom: var(--border-border);
+
+            .drafts_list_centerpc {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .drafts_list_center_onepc {
+                    width: 80%;
+                }
+
+                .drafts_list_center_twopc {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 20%;
+
+                    .drafts_list_center_txt {
+                        margin-left: var(--margin-2n);
+                        font-size: var(--font-size-primary);
+                        line-height: 16.8px;
+                        color: var(--color-text-secondary);
+                    }
+                }
+            }
+
+            .drafts_timepc {
                 margin-top: var(--margin-2n);
                 color: var(--color-text-secondary);
             }
