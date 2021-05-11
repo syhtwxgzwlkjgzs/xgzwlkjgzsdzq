@@ -3,6 +3,8 @@ import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import InstantMessaging from '../../../components/message/instant-messaging';
 
+import MessageAccount from '@components/message/message-account';
+import MessageIndex from '@components/message/message-index';
 import Notice from '@components/message/notice';
 import mock from '../mock.json';
 
@@ -38,12 +40,19 @@ const Index = ({ page, subPage, dialogId, message }) => {
     return true;
   };
 
-  return (
-    <div className={styles.container}>
-      <Notice list={list} type={type} onBtnClick={handleDelete} />
-      <InstantMessaging messagesHistory={messagesHistory} onSubmit={doSubmit} />
-    </div>
-  );
+  switch (page) {
+    case 'index':
+      return <MessageIndex />;
+    case 'account':
+      return <MessageAccount subPage={subPage} />;
+  }
+
+  // return (
+  //   <div className={styles.container}>
+  //     <Notice list={list} type={type} onBtnClick={handleDelete} />
+  //     <InstantMessaging messagesHistory={messagesHistory} onSubmit={doSubmit} />
+  //   </div>
+  // );
 };
 
 export default inject('site', 'message')(observer(memo(Index)));
