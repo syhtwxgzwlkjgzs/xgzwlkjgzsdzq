@@ -47,7 +47,8 @@ class UserCenterFriends extends React.Component {
               <Button
                 type={'primary'}
                 className={styles.friendActionFollow}
-                onClick={async () => {
+                onClick={async (e) => {
+                  e.stopPropagation();
                   await this.props.followHandler({
                     id: this.props.id,
                   });
@@ -62,7 +63,8 @@ class UserCenterFriends extends React.Component {
               <Button
                 type={'primary'}
                 className={styles.friendActionFriend}
-                onClick={async () => {
+                onClick={async (e) => {
+                  e.stopPropagation();
                   await this.props.unFollowHandler({
                     id: this.props.id,
                   });
@@ -77,7 +79,8 @@ class UserCenterFriends extends React.Component {
               <Button
                 type={'primary'}
                 className={styles.friendActionFollowed}
-                onClick={async () => {
+                onClick={async (e) => {
+                  e.stopPropagation();
                   await this.props.unFollowHandler({
                     id: this.props.id,
                   });
