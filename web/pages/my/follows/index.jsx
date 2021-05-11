@@ -1,9 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Header from '@components/header';
-import UserCenterFllows from '@components/user-center-follow'
-import { Divider, Toast } from '@discuzq/design'
-import styles from './index.module.scss'
+import UserCenterFllows from '@components/user-center-follow';
+import { Divider, Toast } from '@discuzq/design';
+import styles from './index.module.scss';
+import Router from '@discuzq/sdk/dist/router';
 
 @inject('user')
 @observer
@@ -39,6 +40,10 @@ export default class index extends Component {
     }
   }
 
+  onContainerClick = ({id}) => {
+    Router.push({url: `/my/others?otherId=${id}`})
+  }
+
   splitElement = () => {
     return (
       <div className={styles.splitEmelent}>
@@ -59,6 +64,7 @@ export default class index extends Component {
           followHandler={this.followHandler}
           unFollowHandler={this.unFollowHandler}
           splitElement={this.splitElement()}
+          onContainerClick={this.onContainerClick}
         />
       </div>
     )
