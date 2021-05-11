@@ -94,6 +94,11 @@ class UserStore {
     return get(this.userInfo, 'unionid')
   }
 
+  // 获取用户的用户组
+  @computed get group() {
+    return get(this.userInfo, 'group')
+  }
+
  
 
 
