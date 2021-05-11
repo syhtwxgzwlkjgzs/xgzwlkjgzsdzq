@@ -1,12 +1,13 @@
-import React, { memo } from 'react'
-import styles from './index.module.scss';
+import React from 'react'
+import CategoryList from '../category-list'
 
-const Index = () => {
+const MessageIndex = () => {
   return (
-    <div className={styles.wrapper}>
-      欣然
-    </div>
+    <>
+      <CategoryList />
+    </>
   )
 }
 
-export default memo(Index)
+export default MessageIndex
+

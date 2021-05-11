@@ -2,7 +2,7 @@ import React, { memo, useState, useEffect } from 'react';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import InstantMessaging from '../../../components/message/instant-messaging';
-import CategoryList from '@components/message/category-list';
+import MessageIndex from '@components/message/message-index';
 
 import MessageAccount from '@components/message/message-account';
 import MessageIndex from '@components/message/message-index';
