@@ -20,7 +20,6 @@ class index extends Component {
       if (flag === 'true') {
         this.props.user.setTargetUserFansBeFollowed(query.otherId)
       } else {
-        debugger
         this.props.user.setUserFansBeFollowed(id)
       }
       Toast.success({
