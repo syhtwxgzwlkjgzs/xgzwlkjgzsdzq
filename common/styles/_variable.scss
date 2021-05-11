@@ -1,0 +1,123 @@
+/**
+ * 业务中用到的颜色以及字体、层级关系、间距等都从此变量文件中获取，不要直接在业务中存在css变量的使用
+ */
+// ------ Font 字体 --------
+$font-family: 'PingFang SC',
+  'BlinkMacSystemFont',
+  'Helvetica Neue',
+  'Arial',
+  'Hiragino Sans GB',
+  'STHeiti',
+  'Microsoft YaHei',
+  'Microsoft JhengHei',
+  'Source Han Sans SC',
+  'Noto Sans CJK SC',
+  'Source Han Sans CN',
+  'Noto Sans SC',
+  'Source Han Sans TC',
+  'Noto Sans CJK TC',
+  'WenQuanYi Micro Hei',
+  'SimSun',
+  sans-serif;
+
+$font-size-small: 12px;
+$font-size-base: 14px;
+$font-size-middle: 16px;
+$font-size-large: 20px;
+$font-size-label: $font-size-small;
+$font-size-primary: $font-size-base;
+
+$font-line-height-small: 22px;
+$font-line-height-base: 24px;
+$font-line-height-middle: 26px;
+$font-line-height-large: 30px;
+$font-line-height-primary: $font-line-height-base;
+
+// ------ Colors 颜色 ------------
+$primary-color: var(--color-primary) !default;
+$info-color: var(--color-info) !default;
+$success-color: var(--color-success) !default;
+$warn-color: var(--color-warn) !default;
+$error-color: var(--color-error) !default;
+
+$black: var(--color-black) !default;
+$white: var(--color-white) !default;
+
+// ------ Background Color 背景 -----
+$body-bg-color: var(--background-color);
+
+// ------ text color -------
+$text-color-primary: var(--color-text-primary);
+$text-color-regular: var(--color-text-regular);
+$text-color-secondary: var(--color-text-secondary);
+$text-color-placeholder: var(--color-text-placeholder);
+
+$text-bg-color: var(--background-color-text);
+$text-bg-color2: var(--background-color-text2);
+$text-bg-color3: var(--background-color-text3);
+
+// ------ icon color ------------
+$icon-color: var(--color-text-secondary);
+$icon-color-active: var(--color-primary2);
+
+// ----- boder color ----
+$border-color: var(--border-line-color);
+$border-color-hover: $text-color-placeholder;
+
+// ---- border shadow color ----
+$border-shadow-color: var(--shadow-color);
+$border-shadow-color2: var(--shadow-color2);
+
+// ---- mask color ----
+$mask-bg-color: var(--mask-background-color);
+
+// ---- loading color ----
+$loading-text-color: $text-color-placeholder;
+
+// ---- tag color： 悬赏、付费 ------
+$tag-text-color1: var(--color-orange);
+$tag-text-color2: $warn-color;
+$tag-text-color3: $success-color;
+
+// ---- comment color ----
+$comment-bg-color: $text-bg-color3;
+
+// ---- link color ----
+$link-text-color: $primary-color;
+
+// ------ border ----------
+$border-radius-small: 5px;
+$border-radius-big: 10px;
+$border-radius-circle: 50%;
+$border-radius-zero: 0;
+
+$border-solid-1: 1px solid $border-color;
+$border-dotted-1: 1px dashed $border-color;
+
+// ------ spacer： 间距 padding & margin ----------
+
+$padding-base: 4px;
+$padding-1n: $padding-base;
+$padding-2n: $padding-base * 2;
+$padding-4n: $padding-base * 4;
+$padding-5n: $padding-base * 5;
+$padding-6n: $padding-base * 6;
+$padding-5: 5px;
+$padding-10: 10px;
+
+$margin-base: 4px;
+$margin-1n: $margin-base;
+$margin-2n: $margin-base * 2;
+$margin-4n: $margin-base * 4;
+$margin-5n: $margin-base * 5;
+$margin-6n: $margin-base * 6;
+$margin-5: 5px;
+$margin-10: 10px;
+
+// ------- z-index -----------
+$zindex-normal: 0;
+$zindex-backtotop: 1000;
+$zindex-tooltip: 1200;
+$zindex-popup: 1400;
+$zindex-dialog: 1600;
+$zindex-toast: 1800;

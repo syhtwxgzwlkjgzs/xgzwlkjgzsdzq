@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .container {
     height: 100vh;
@@ -37,7 +36,7 @@
             padding: rem($padding-2n) 0 rem($padding-5n) 0;
         }
     }
-    
+
     .moneyInput {
         width: rem(343);
         height: rem(168);

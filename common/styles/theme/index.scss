@@ -1,0 +1,17 @@
+@import './default.scss';
+
+page,
+.dzq-theme-light,
+[data-dzq-theme='light'] {
+  @each $name,
+    $value in $light {
+    #{$name}: #{$value};
+  }
+}
+
+:root {
+  @each $name,
+    $value in $light {
+    #{$name}: #{$value};
+  }
+}

@@ -1,10 +1,9 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 .user {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: rem(10);
+  margin-top: rem(16);
   cursor: pointer;
   .userImg {
     display: flex;
@@ -37,8 +36,9 @@
   align-items: center;
   justify-content: space-between;
   border-top: var(--border-line-color) solid rem(1);
-  margin-top: rem(12);
+  margin-top: rem(8);
   cursor: pointer;
+  box-sizing: border-box;
   .fabulous {
     line-height: rem(20);
     .fabulousPost {

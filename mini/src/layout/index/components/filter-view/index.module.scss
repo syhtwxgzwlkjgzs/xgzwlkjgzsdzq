@@ -1,5 +1,4 @@
-@import '@common/styles/var.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 .popup{
   max-height: 90%;
   overflow-y: auto;
@@ -53,7 +52,7 @@
     color: var(--color-primary);
   }
 
-  
+
 }
 
 .footer {
