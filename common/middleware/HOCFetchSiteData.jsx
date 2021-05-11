@@ -7,7 +7,6 @@ import { readForum, readUser, readPermissions } from '@server';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
-import reload from '@common/utils/reload';
 import { Icon } from '@discuzq/design';
 import styles from './HOCFetchSiteData.module.scss';
 // 获取全站数据
@@ -160,7 +159,7 @@ export default function HOCFetchSiteData(Component) {
             break;
           case -4002:
             clearLoginStatus();
-            reload();
+            window && window.location.reload();
             break;
           default: Router.redirect({url: '/500'});
             break;
