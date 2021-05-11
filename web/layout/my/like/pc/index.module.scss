@@ -1,34 +1,39 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
-.container {
-  background: var(--comment-box-bg-color);
-  width: 100%;
-  .content {
-    width: 100%;
-    min-width: rem(652);
-  }
-  .title {
-    padding: 0 rem($padding-6n);
-    border-radius: rem($border-radius-small);
-    background: var(--color-white);
-  }
-  .right {
-    width: rem(286);
-    overflow: hidden;
-    .section {
-      padding: 0 rem($padding-6n);
-      background: var(--color-white);
-      border-radius: rem($border-radius-small);
-      box-shadow: 0 0 rem($padding-2n) rgba(241, 243, 244, 0.16);
-      margin-bottom: rem($margin-10);
-    }
-  }
-  .threadContent {
-    border-radius: rem($border-radius-small);
-    padding: 0 rem($padding-6n);
-    margin-bottom: rem($margin-10);
-    overflow: hidden;
-  }
+// .container {
+//   background: var(--comment-box-bg-color);
+//   width: 100%;
+//   .content {
+//     width: 100%;
+//     min-width: rem(652);
+//   }
+//   .title {
+//     padding: 0 rem($padding-6n);
+//     border-radius: rem($border-radius-small);
+//     background: var(--color-white);
+//   }
+//   .right {
+//     width: rem(286);
+//     overflow: hidden;
+//     .section {
+//       padding: 0 rem($padding-6n);
+//       background: var(--color-white);
+//       border-radius: rem($border-radius-small);
+//       box-shadow: 0 0 rem($padding-2n) rgba(241, 243, 244, 0.16);
+//       margin-bottom: rem($margin-10);
+//     }
+//   }
+//   .threadContent {
+//     border-radius: rem($border-radius-small);
+//     padding: 0 rem($padding-6n);
+//     margin-bottom: rem($margin-10);
+//     overflow: hidden;
+//   }
+// }
+.threadContent {
+  border-radius: rem($border-radius-small);
+  padding: 0 rem($padding-6n);
+  margin-bottom: rem($margin-10);
+  overflow: hidden;
 }
-
   
