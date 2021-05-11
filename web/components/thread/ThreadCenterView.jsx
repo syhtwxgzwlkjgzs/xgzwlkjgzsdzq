@@ -63,7 +63,7 @@ const Index = (props) => {
                 {imageData && (
                     <ImageDisplay 
                         platform={props.platform} 
-                        images={imageData} 
+                        imageData={imageData} 
                         isPay={payType !== 0}
                         onPay={onPay}
                         onClickMore={onClick} />
