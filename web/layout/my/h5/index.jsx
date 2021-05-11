@@ -1,14 +1,17 @@
 import React from 'react';
 import styles from './index.module.scss';
+import { Divider } from '@discuzq/design';
 import UserCenterHeaderImage from '@components/user-center-header-images';
 import UserCenterHead from '@components/user-center-head';
 import { inject, observer } from 'mobx-react';
 import UserCenterPost from '@components/user-center-post';
 import UserCenterFollow from '@components/user-center-follow';
 import UserCenterAction from '@components/user-center-action';
+import UserCenterThreads from '@components/user-center-threads';
 import BottomNavBar from '@components/bottom-nav-bar';
 import UserCenterEditInfo from '@components/user-center-edit-info';
 import Thread from '@components/thread';
+import List from '@components/list';
 
 @inject('site')
 @inject('user')
@@ -26,15 +29,12 @@ class H5MyPage extends React.Component {
     this.setState({
       threads,
     });
-
-    console.log(threads);
   };
 
   render = () => {
     const { site } = this.props;
     const { platform } = site;
     // return <UserCenterEditInfo />
-    console.log(this.state.threads);
     return (
       <div className={styles.mobileLayout}>
         <UserCenterHeaderImage />
@@ -55,10 +55,21 @@ class H5MyPage extends React.Component {
         </div> */}
 
         <div className={styles.unit}>
-          {this.state.threads.map((thread, index) => <Thread data={thread} key={index} />)}
+          <div className={styles.threadUnit}>
+            <div className={styles.threadTitle}>主题</div>
+            <div className={styles.threadCount}>166个主题</div>
+          </div>
+
+          <div className={styles.dividerContainer}>
+            <Divider className={styles.divider} />
+          </div>
+
+          <div className={styles.threadItemContainer}>
+            <UserCenterThreads data={this.state.threads} />
+          </div>
         </div>
 
-        <BottomNavBar placeholder />
+        <BottomNavBar curr={'my'} placeholder />
       </div>
     );
   };
