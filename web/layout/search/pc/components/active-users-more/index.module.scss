@@ -69,7 +69,7 @@
       height: rem(36);
       font-size: rem($font-size-primary);
       line-height: rem(18);
-      padding: rem(8) rem(36);
+      padding: rem($padding-2n) rem(36);
       display: flex;
       align-items: center;
       .addIcon {
