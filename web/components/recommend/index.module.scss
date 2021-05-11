@@ -26,7 +26,6 @@
       margin-right: rem($margin-2n);
       font-size: rem($font-size-primary);
       line-height: rem($font-line-height-small);
-      color: var(--color-error);
     }
     .recommenText {
       flex: 1;
@@ -114,4 +113,42 @@
       color: var(--color-text-secondary);
     }
   }
+}
+.itemIndex1 {
+  color: var(--color-error);
+}
+.itemIndex2 {
+  color: var(--color-error);
+  opacity: 0.8;
+}
+.itemIndex3 {
+  color: var(--color-error);
+  opacity: 0.6;
+}
+.itemIndex4 {
+  color: var(--color-error);
+  opacity: 0.5;
+}
+.itemIndex5 {
+  color: #ffc300;
+}
+.itemIndex6 {
+  color: #ffc300;
+  opacity: 0.8;
+}
+.itemIndex7 {
+  color: #ffc300;
+  opacity: 0.6;
+}
+.itemIndex8 {
+  color: #ffc300;
+  opacity: 0.5;
+}
+.itemIndex9 {
+  color: #ffc300;
+  opacity: 0.4;
+}
+.itemIndex10 {
+  color: #ffc300;
+  opacity: 0.3;
 }
