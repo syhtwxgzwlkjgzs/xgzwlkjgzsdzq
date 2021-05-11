@@ -15,13 +15,13 @@ class InstantMessaging extends React.Component {
   };
 
   render() {
-    const { messagesHistory = [], onSubmit, persona = 'itself', site } = this.props;
+    const { messagesHistory = [], onSubmit, site } = this.props;
     const { dialogBoxRef } = this.state;
     const { platform } = site;
 
     return (
       <div className={platform === 'h5' ? styles.h5Page : styles.pcPage}>
-        <DialogBox shownMessages={messagesHistory} persona={persona} dialogBoxRef={dialogBoxRef} platform={platform} />
+        <DialogBox shownMessages={messagesHistory} dialogBoxRef={dialogBoxRef} platform={platform} />
         <InteractionBox onSubmit={onSubmit} dialogBoxRef={dialogBoxRef} platform={platform} />
       </div>
     );
@@ -42,12 +42,12 @@ InstantMessaging.defaultProps = {
       displayTimePanel: true, // 会话框中显示当前时间
       textType: 'string', // 消息内容类型
       text: '', // 消息内容
+      ownedBy: 'myself', // 消息所属人
     },
   ],
   onSubmit: (val) => {
     console.log(`${val.text} has been submitted!`);
   },
-  persona: 'myself', // or "itself"
 };
 
 export default InstantMessaging;

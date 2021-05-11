@@ -33,7 +33,7 @@ const Index = ({ page, subPage, dialogId }) => {
   return (
     <div className={styles.container}>
       <SliderLeft list={list} offsetLeft={'-74px'} type={type} RenderItem={NoticeItem} onDelete={handleDelete} />
-      <InstantMessaging messagesHistory={messagesHistory} onSubmit={doSubmit} persona={'myself'} />
+      <InstantMessaging messagesHistory={messagesHistory} onSubmit={doSubmit} />
     </div>
   );
 };
