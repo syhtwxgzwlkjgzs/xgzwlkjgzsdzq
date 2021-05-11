@@ -53,7 +53,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
                   <div className={styles.left}>
                     <Icon className={styles.containerIcon} name={type && 'DocOutlined'} />
                     <div className={styles.containerText}>
-                      <span className={styles.content}>hjdgfajhsfgjahgfjhgasdfjhagsfjagdfjdshf</span>
+                      <span className={styles.content}>{item.fileName}</span>
                       <span className={styles.size}>{handleFileSize(parseFloat(item.fileSize || 0))}</span>
                     </div>
                   </div>
