@@ -1,7 +1,6 @@
 @import '@common/styles/index.scss';
 @import './reset.scss';
 @import '@discuzq/design/dist/styles/index.scss';
-
 .dzq-post-video {
   margin: rem(16);
   div[data-vjs-player=true] { /* stylelint-disable-line */
@@ -11,4 +10,8 @@
 }
 .dzq-toast--mask {
   z-index: var(--zindex-toast);
+}
+
+* {
+  font-family: $font-family !important;
 }

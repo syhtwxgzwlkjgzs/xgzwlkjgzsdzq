@@ -1,6 +1,5 @@
-@import '@common/styles/var.scss';
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+
+@import '@common/styles/index.scss';
 .container {
   overflow: hidden;
   height: rem(165);
@@ -29,6 +28,21 @@
       margin: 0 auto;
     }
   }
+  .digest{
+    margin-top: rem(32);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .left{
+      margin-right: rem(16);
+    }
+    .left,.right{
+      font-weight: normal;
+      font-size: rem($font-size-primary);
+      line-height: rem($font-line-height-middle);
+      color: var(--color-white);
+    }
+  }
   .siteInfo {
     width: 100%;
     display: flex;
@@ -36,21 +50,37 @@
     padding: 0 rem($padding-10);
     box-sizing: border-box;
     position: absolute;
-    bottom: rem($font-line-height-middle);
+    bottom: rem($font-line-height-primary);
+    .item {
+      display: flex;
+      align-items: center;
+    }
     .text {
       font-size: rem($font-size-middle);
+      line-height: rem(24);
       color: var( --color-white);
-      opacity: 0.5;
+      font-weight: normal;
+      opacity: 0.6;
+    }
+    .shareText {
+      font-size: rem($font-size-middle);
+      line-height: rem(24);
+      color: var( --color-white);
+      font-weight: normal;
     }
     .content {
       font-size: rem($font-size-middle);
       color: var( --color-white);
+      font-weight: normal;
       padding-left: rem($padding-2n);
     }
     .shareIcon {
       display: inline-block;
-      opacity: 0.5;
+      color: var( --color-white);
+      opacity: 0.6;
       padding-right: rem($padding-2n);
+      box-sizing: border-box;
     }
+    
   }
 }

@@ -45,11 +45,11 @@ const User = ({ data, onClick, onFollow }) => {
   return (
     <div className={styles.item} onClick={click}>
       <div>
-        <Avatar image={data.avatar} name={data.username} isShowUserInfo userId={data.userId} />
+        <Avatar image={data.avatar} name={data.nickname} isShowUserInfo userId={data.userId} />
       </div>
       <div className={styles.content}>
         <div className={styles.top}>
-          <span className={styles.name}>{data.username}</span>
+          <span className={styles.name}>{data.nickname}</span>
           <span className={styles.group}>{data.groupName}</span>
         </div>
         <div className={styles.num}>
@@ -72,7 +72,7 @@ const User = ({ data, onClick, onFollow }) => {
         </div>
       </div>
       <Button type="primary" className={`${styles.button} ${btnInfo.className}`} onClick={handleFollow}>
-        <Icon name={btnInfo.icon} size={12} className={styles.addIcon} />
+        <Icon name={btnInfo.icon} size={10} className={styles.addIcon} />
         {btnInfo.text}
       </Button>
     </div>

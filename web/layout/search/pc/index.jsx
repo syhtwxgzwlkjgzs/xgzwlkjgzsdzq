@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
-import SectionTitle from '../h5/components/section-title'
+import SectionTitle from '@components/section-title'
 import TrendingTopicMore from './components/trending-topic-more';
 import ThreadContent from '@components/thread';
 import ActiveUsersMore from './components/active-users-more';
@@ -149,14 +149,13 @@ class SearchPCPage extends React.Component {
   }
   render() {
     return (
-      <div className={styles.searchWrap}>
         <BaseLayout
+          allowRefresh={false}
           onSearch={this.onSearch}
           right={ this.renderRight }
         >
           { this.renderContent() }
         </BaseLayout>
-      </div>
     );
   }
 }

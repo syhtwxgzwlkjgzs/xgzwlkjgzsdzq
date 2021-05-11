@@ -47,12 +47,17 @@ const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0 }) => {
         type="circle"
         percent={percent}
         theme={progressTheme}
-        lineWidth={12}
+        lineWidth={14}
         className={styles.progress}
         isShowText={false}
+        lineCap='round'
       >
         <div className={styles.content}>
-          <img className={styles.icon} />
+          {
+            type === POST_TYPE.RED_PACK
+              ? <img className={styles.icon} src='/dzq-img/redpacket-mini.png' />
+              : <img className={styles.icon} src='/dzq-img/coin.png' />
+          }
           <div className={styles.remaining}>{texts.remaining}</div>
           <div className={styles.received}>{texts.received}</div>
           {texts.receive && <div className={styles.receive}>{texts.receive}</div>}

@@ -1,0 +1,33 @@
+@import '@common/styles/index.scss';
+
+.collectBox {
+  background-color: var(--background-color);
+}
+.titleBox {
+  width: 100%;
+  height: rem(53);
+  background-color: var(--color-white);
+  font-size: rem($font-size-primary);
+  color: var( --pc-user-info-title);
+  padding: 0 rem($padding-4n);
+  line-height: rem(53);
+  margin-bottom: rem(10);
+}
+.list {
+  flex: 1;
+  background-color: var(--background-color);
+}
+.listItem {
+  margin-bottom: rem(10);
+  position: relative;
+}
+.listItemBox {
+  width: rem(20);
+  height: rem(20);
+  right: rem(16);
+  top: rem(16);
+  position: absolute;
+  .listItemIcon {
+    color: var(--color-primary);
+  }
+}

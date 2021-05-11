@@ -1,5 +1,4 @@
-@import '@common/styles/variable/index.scss';
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 
 .container {
   display: flex;
@@ -8,7 +7,7 @@
   position: relative;
   height: rem(150);
   width: rem(150);
-  
+
   .progress {
     margin-left: rem(-5);
   }
@@ -29,7 +28,7 @@
     color: var(--color-text-primary);
     .count {
       font-size: inherit;
-      color: #e02433;
+      color: var(--color-error);
     }
   }
   .received {
@@ -52,7 +51,6 @@
       margin-top: rem(27);
       width: rem(15);
       height: rem(20);
-      background-color: #e02433;
     }
   }
   &.bounty {
@@ -60,7 +58,6 @@
       margin-top: rem(40);
       width: rem(20);
       height: rem(20);
-      background-color: #ffc300;
     }
   }
 }

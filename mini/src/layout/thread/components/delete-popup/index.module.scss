@@ -1,4 +1,4 @@
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .container {
   width: 245px;
@@ -30,7 +30,7 @@
     font-size: 16px;
     line-height: 30px;
     text-align: center;
-    .close { 
+    .close {
       width: 50%;
       border-right: var(--border-border);
     }

@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 .indexImage {
   .imageBox {
     width: 100%;
@@ -138,7 +137,7 @@
             line-height: rem(111);
             .imgSpan {
               font-size: rem($font-size-large);
-              color: #fff;
+              color: var( --color-white);
             }
           }
         }

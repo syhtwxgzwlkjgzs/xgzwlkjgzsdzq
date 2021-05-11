@@ -23,6 +23,9 @@ export default class commonLoginStore {
 
     @observable jsCode = '';
 
+
+    @observable captcha = null;
+
     @action
     setSessionToken(sessionToken) {
       this.sessionToken = sessionToken;
@@ -45,5 +48,24 @@ export default class commonLoginStore {
     @action
     setJsCode(code) {
       this.jsCode = code;
+    }
+
+    @action
+    toTCaptcha = async ({appid, resCallback, quitCallback}) => {
+      // 验证码实例为空，则创建实例
+      if (!this.captcha) {
+        const TencentCaptcha = (await import('@common/utils/tcaptcha')).default;
+        this.captcha = new TencentCaptcha(appid, (res) => {
+          if (res.ret === 0) {
+            // 验证通过后发布
+            resCallback();
+          }
+          if (res.ret === 2) {
+            quitCallback();
+          }
+        });
+      }
+      // 显示验证码
+      this.captcha.show();
     }
 }

@@ -1,0 +1,9 @@
+@import '@common/styles/index.scss';
+
+.list {
+  flex: 1;
+  background-color: var(--background-color);
+}
+.listItem {
+  margin-bottom: rem(10);
+}

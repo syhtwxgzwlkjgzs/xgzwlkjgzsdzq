@@ -1,0 +1,61 @@
+@import '@common/styles/index.scss';
+
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: rem($padding-4n) 0;
+  border-bottom: 1px solid var(--border-line-color);
+  box-sizing: border-box;
+  .left {
+    display: flex;
+    align-items: center;
+    height: rem($font-line-height-primary);
+  }
+  .right {
+    display: flex;
+    align-items: center;
+    height: rem($font-line-height-primary);
+    .rightIcon {
+      margin-left: rem($margin-1n);
+      color: var(--color-text-secondary);
+    }
+  }
+  .title {
+    font-weight: var(--font-weight-regular);
+    line-height: rem($font-line-height-primary);
+    font-size: rem($font-size-middle);
+    color: var(--color-text-primary);
+    margin-left: rem($padding-2n);
+  }
+  .noMargin {
+    margin-left: 0;
+  }
+  .more {
+    cursor: pointer;
+    font-size: rem($font-size-primary);
+    color: var(--color-text-primary);
+    line-height: rem($font-line-height-primary);
+  }
+  .num {
+    font-size: rem($font-size-label);
+    color: var(--color-text-secondary);
+    margin-left: rem($margin-2n);
+    line-height: rem($font-line-height-primary);
+  }
+  .text {
+    font-size: rem($font-size-label);
+    color: var(--pc-user-info-title);
+    line-height: rem($font-line-height-primary);
+  }
+}
+.icon1 {
+  color: #3AC15F;
+}
+.icon2 {
+  color: #FFC300;
+}
+.icon3 {
+  color: var(--color-error);
+}

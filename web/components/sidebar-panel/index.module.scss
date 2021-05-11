@@ -1,0 +1,33 @@
+@import '@common/styles/index.scss';
+
+.container {
+  width: 100%;
+  background-color: var(--color-white);
+  box-sizing: border-box;
+  .header {
+    font-size: rem($font-size-middle);
+    color: var(--color-text-primary);
+    display: flex;
+    align-items: center;
+  }
+}
+
+.containerPC {
+  border-radius: rem($border-radius-small);
+}
+
+.small {
+  max-width: rem(330);
+  padding: 0 rem($padding-4n);
+  .header {
+    height: rem(54);
+  }
+}
+
+.normal {
+  max-width: rem(750);
+  padding: 0 rem($padding-6n);
+  .header {
+    height: rem(70);
+  }
+}

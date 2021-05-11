@@ -1,0 +1,219 @@
+@import '@common/styles/index.scss';
+
+.container {
+  width: 100%;
+  background: var(--color-white);
+  padding: rem($padding-6n) rem($padding-6n) rem($padding-4n) rem($padding-6n);
+  border-radius: var(--border-radius-small);
+  box-sizing: border-box;
+}
+
+.header {
+  background: var(--color-white);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headerTag {
+  margin-left: rem(24);
+}
+
+.userInfo {
+  flex: 1;
+}
+
+.iconText {
+  margin-left: rem($margin-6n);
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+
+  :global {
+    .dzq-dropdown-menu.dzq-dropdown-menu--center {
+      top: rem(30);
+    }
+  }
+
+  .text {
+    margin-left: rem($margin-2n);
+    color: var(--color-text-secondary);
+  }
+
+  .icon {
+    font-size: rem(14);
+    color: var(--color-text-secondary);
+  }
+}
+
+.essence {
+  margin-right: rem($margin-2n);
+}
+
+.body {
+  margin-top: rem($margin-4n);
+
+  > * {
+    margin-bottom: rem($margin-6n);
+  }
+}
+
+.image {
+  width: 100%;
+}
+
+.reward {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rewardButton {
+  display: block;
+  margin: 0 auto;
+  width: rem(156);
+}
+
+.buttonIconText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttonIcon {
+  font-size: rem($font-size-primary);
+}
+
+.buttonText {
+  margin-left: rem($margin-2n);
+  font-size: rem($font-size-primary);
+}
+
+.payButton {
+  width: rem(234);
+}
+
+.pay {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payIcon {
+  margin-right: rem($margin-2n);
+}
+
+.footer {
+  margin-top: rem($margin-6n);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--color-text-secondary);
+  font-size: rem($font-size-primary);
+}
+
+.share {
+  font-size: rem($font-size-label);
+  color: var(--color-text-secondary);
+  height: rem(17);
+  line-height: rem(17);
+}
+
+.goods {
+  display: flex;
+}
+
+.buyBtn {
+  width: rem(113);
+  box-sizing: content-box;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.buyContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .buyText {
+    margin-top: rem($margin-2n);
+  }
+}
+
+.tag {
+  display: inline-block;
+  color: var(--pc-user-info-title);
+  background: var(--background-color);
+  font-size: rem($font-size-label);
+  padding: rem($padding-1n) rem($padding-1n);
+  border-radius: rem($border-radius-small);
+  line-height: rem(17);
+}
+
+.thumbs {
+  display: flex;
+  align-items: center;
+  font-size: rem($font-size-primary);
+}
+
+.likeReward {
+  margin-right: rem($margin-2n);
+}
+
+.examine {
+  padding: rem($padding-2n) 0;
+  background: var(--color-error);
+  color: var(--color-white);
+  text-align: center;
+  font-size: rem(14);
+}
+
+.bottomOperate {
+  padding: 0 rem(54);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: rem($font-size-primary);
+    cursor: pointer;
+    color: var(--color-text-secondary);
+
+    span {
+      margin-left: rem($margin-2n);
+    }
+
+    &.active {
+      color: var(--color-primary) !important;
+    }
+  }
+}
+
+.divider {
+  margin: rem($margin-4n) 0;
+}
+
+.rewardBody {
+  text-align: center;
+}
+
+.rewardMoney {
+  margin-top: rem(20);
+  line-height: rem(20);
+  font-size: rem($font-size-primary);
+  color: var(--color-text-primary);
+}
+.rewardNumber {
+  color: var(--color-error);
+}
+
+.rewardTime {
+  margin-top: rem(4);
+  font-size: rem($font-size-label);
+  color: var(--color-text-secondary);
+}

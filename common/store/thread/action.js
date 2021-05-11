@@ -7,8 +7,6 @@ import {
   readThreadDetail,
   shareThread,
   readUser,
-  createFollow,
-  deleteFollow,
   createReports,
   reward,
 } from '@server';
@@ -384,7 +382,7 @@ class ThreadAction extends ThreadStore {
    */
   @action
   async loadCommentList(params) {
-    const { id, page = 1, perPage = 5, sort = '-createdAt' } = params;
+    const { id, page = 1, perPage = 5, sort = 'createdAt' } = params;
     if (!id) {
       return {
         msg: '帖子id不存在',
@@ -426,12 +424,14 @@ class ThreadAction extends ThreadStore {
   /**
    * 关注
    * @param {object} userId * 被关注人id
+   * @param {object} UserStore * userstore
    * @returns {object} 处理结果
    */
   @action
-  async postFollow(userId) {
-    const res = await createFollow({ data: { data: { toUserId: userId } } });
-    if (res.code === 0 && res.data) {
+  async postFollow(userId, UserStore) {
+    const res = await UserStore.postFollow(userId);
+
+    if (res.success && res.data) {
       this.authorInfo.follow = res.data.isMutual ? 2 : 1;
       this.authorInfo.fansCount = this.authorInfo.fansCount + 1;
 
@@ -448,13 +448,16 @@ class ThreadAction extends ThreadStore {
 
   /**
    * 取消关注
-   * @param {object} search * 搜索值
+   * @param {object} userId * 被关注人id
+   * @param {object} type * 关注类型
+   * @param {object} UserStore * userstore
    * @returns {object} 处理结果
    */
   @action
-  async cancelFollow({ id, type }) {
-    const res = await deleteFollow({ data: { id, type: type } });
-    if (res.code === 0 && res.data) {
+  async cancelFollow({ id, type }, UserStore) {
+    const res = await UserStore.cancelFollow({ id, type });
+
+    if (res.success && res.data) {
       this.authorInfo.follow = 0;
       this.authorInfo.fansCount = this.authorInfo.fansCount - 1;
 

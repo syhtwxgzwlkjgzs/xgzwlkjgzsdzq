@@ -1,23 +1,23 @@
 @import './theme/default.scss';
 @import './theme/dark.scss';
 
-page,
-.dzq-theme-light,
-[data-dzq-theme='light'] {
-  @each $name,
-    $value in $light {
-    #{$name}: #{$value};
-  }
-}
+// page,
+// .dzq-theme-light,
+// [data-dzq-theme='light'] {
+//   @each $name,
+//     $value in $light {
+//     #{$name}: #{$value};
+//   }
+// }
 
-page,
-.dzq-theme-dark,
-[data-dzq-theme='dark'] {
-  @each $name,
-    $value in $dark {
-    #{$name}: #{$value};
-  }
-}
+// page,
+// .dzq-theme-dark,
+// [data-dzq-theme='dark'] {
+//   @each $name,
+//     $value in $dark {
+//     #{$name}: #{$value};
+//   }
+// }
 
 :root {
   @each $name,
@@ -30,4 +30,4 @@ page,
   @return $n / 100 + rem;
 }
 
-$fontFamily: -apple-system, 'PingFang SC', 'BlinkMacSystemFont', 'Helvetica Neue', 'Arial', 'Hiragino Sans GB', 'STHeiti', 'Microsoft YaHei', 'Microsoft JhengHei', 'Source Han Sans SC', 'Noto Sans CJK SC', 'Source Han Sans CN', 'Noto Sans SC', 'Source Han Sans TC', 'Noto Sans CJK TC', 'WenQuanYi Micro Hei', 'SimSun', sans-serif;
+$fontFamily: 'PingFang SC', 'BlinkMacSystemFont', 'Helvetica Neue', 'Arial', 'Hiragino Sans GB', 'STHeiti', 'Microsoft YaHei', 'Microsoft JhengHei', 'Source Han Sans SC', 'Noto Sans CJK SC', 'Source Han Sans CN', 'Noto Sans SC', 'Source Han Sans TC', 'Noto Sans CJK TC', 'WenQuanYi Micro Hei', 'SimSun', sans-serif;

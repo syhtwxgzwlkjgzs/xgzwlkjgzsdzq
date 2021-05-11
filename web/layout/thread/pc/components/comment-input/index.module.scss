@@ -1,26 +1,26 @@
-@import '@common/styles/variable/index.scss';
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 
 .container {
   background: var(--color-white);
   border: var(--border-border);
-  border-radius: rem(5);
+  border-radius: rem($border-radius-small);
   overflow: hidden;
 }
 
 .main {
-  :global{
+  :global {
     .dzq-textarea {
       border: none;
       border-radius: rem($border-radius-small) rem($border-radius-small) 0 0;
-      .dzq-textarea__inner{
+      .dzq-textarea__inner {
+        padding: rem($padding-4n);
+        font-size: rem($font-size-primary);
         background: var(--comment-box-bg-color);
         resize: none;
       }
     }
   }
 }
-
 
 .input {
   width: 100% !important;
@@ -39,7 +39,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+
   span {
     margin-top: rem($margin-1n);
   }
@@ -47,7 +47,12 @@
 
 .footer {
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  height: rem(52);
+  padding: 0 rem(16);
+  border-top: var(--border-border);
+
   .linkBtn {
     display: flex;
     color: #8a95ac;
@@ -56,10 +61,12 @@
       padding: 0 rem($padding-2n);
     }
   }
+
   .button {
     width: rem(100);
     height: rem(36);
     border-radius: rem($border-radius-small);
-    margin: rem($margin-2n) rem($margin-4n);
+    box-sizing: border-box;
+    font-size: rem($font-size-primary);
   }
 }

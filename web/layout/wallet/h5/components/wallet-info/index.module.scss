@@ -1,0 +1,131 @@
+@import '@common/styles/index.scss';
+
+.containerH5 {
+    background: var(--color-primary);
+    padding: rem($padding-4n);
+}
+.containerPC {
+    width: rem(330);
+    background: var(--color-primary);
+    border-radius: rem($border-radius-small);
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: rem($padding-5n);
+    .avatar {
+        border: solid rem(4) var(--color-white);
+    }
+    .name {
+        font-family: 'PingFangSC-Regular';
+        font-weight: normal;
+        font-size: rem($font-size-middle);
+        line-height: rem(16.8);
+        text-align: left;
+        color: var(--color-white);
+        padding: rem($padding-4n) 0;
+    }
+}
+.totalAmountPC {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-white);
+    text-align: center;
+    .moneyTitle {
+        font-family: 'PingFangSC-Regular';
+        font-weight: normal;
+        font-size: rem($font-size-primary);
+        line-height: rem(16.8);
+        padding: rem($padding-2n) 0;
+    }
+    .moneyNum {
+        font-family: "PingFang SC";
+        font-weight: 600;
+        font-size: rem(30);
+        line-height: rem($font-line-height-large);
+        padding: rem($padding-2n) 0 rem($padding-5n) 0;
+    }
+}
+.totalAmountH5 {
+    color: var(--color-white);
+    text-align: left;
+    padding-top: rem(40);
+    .moneyTitle {
+        font-family: 'PingFangSC-Regular';
+        font-weight: normal;
+        font-size: rem($font-size-primary);
+        line-height: rem(16.8);
+        padding: rem($padding-2n) 0;
+    }
+    .moneyNum {
+        font-family: "PingFang SC";
+        font-weight: 600;
+        font-size: rem(30);
+        line-height: rem($font-line-height-large);
+        padding: rem($padding-2n) 0 rem($padding-5n) 0;
+    }
+}
+.amountStatusPC {
+    display: flex;
+    justify-content: space-around;
+    color: var(--color-white);
+    text-align: center;
+    .statusTitle {
+        font-family: 'PingFangSC-Regular';
+        font-weight: normal;
+        font-size: rem($font-size-primary);
+        line-height: rem($font-line-height-primary);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .icon {
+            margin-left: rem($margin-2n);
+        }
+    }
+    .statusNum {
+        font-family: 'PingFang SC';
+        font-weight: normal;
+        font-size: rem($font-size-large);
+        line-height: rem(16.8);
+        padding: rem(14) 0;
+    }
+}
+.amountStatusH5 {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    color: var(--color-white);
+    text-align: left;
+    .statusTitle {
+        font-family: 'PingFangSC-Regular';
+        font-weight: normal;
+        font-size: rem($font-size-primary);
+        line-height: rem($font-line-height-primary);
+
+    }
+    .statusNum {
+        font-family: 'PingFang SC';
+        font-weight: normal;
+        font-size: rem($font-size-large);
+        line-height: rem(16.8);
+        padding: rem(14) 0;
+    }
+    .withdrawalAmount {
+        margin-right: rem(40);
+    }
+}
+.footer {
+    display: flex;
+    justify-content: center;
+    padding: rem(26) 0;
+    .button {
+        width: rem(282);
+        height: rem(36);
+        border-radius: rem($border-radius-small);
+    }
+}

@@ -7,14 +7,13 @@ import { readForum, readUser, readPermissions } from '@server';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
-import reload from '@common/utils/reload';
 import { Icon } from '@discuzq/design';
 import styles from './HOCFetchSiteData.module.scss';
 // 获取全站数据
 export default function HOCFetchSiteData(Component) {
-    @inject('site')
-    @inject('user')
-    @observer
+  @inject('site')
+  @inject('user')
+  @observer
   class FetchSiteData extends React.Component {
       // 应用初始化
       static async getInitialProps(ctx) {
@@ -152,6 +151,7 @@ export default function HOCFetchSiteData(Component) {
       }
 
       setAppCommonStatus(result) {
+        const { site } = this.props;
         switch (result.code) {
           case 0: 
           break;
@@ -159,7 +159,7 @@ export default function HOCFetchSiteData(Component) {
             break;
           case -4002:
             clearLoginStatus();
-            reload();
+            window && window.location.reload();
             break;
           default: Router.redirect({url: '/500'});
             break;

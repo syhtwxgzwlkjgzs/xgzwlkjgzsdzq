@@ -2,22 +2,14 @@ import React from 'react';
 import { withRouter } from 'next/router';
 import { Button, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
-import ImageContent from './image-content';
-import AudioPlay from './audio-play';
-import PostContent from './post-content';
-import ProductItem from './product-item';
-import RedPacket from './red-packet';
-import RewardQuestion from './reward-question';
-import VideoPlay from './video-play';
 import BottomEvent from './bottom-event';
 import UserInfo from './user-info';
-import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
-import { ThreadCommonContext, handleAttachmentData } from './utils';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import threadPay from '@common/pay-bussiness/thread-pay';
+import ThreadCenterView from './ThreadCenterView';
 
 @inject('site')
 @inject('index')
@@ -41,7 +33,8 @@ class Index extends React.Component {
       Toast.info({ content: '分享链接已复制成功' });
 
       const { title = '', threadId = '' } = this.props.data || {};
-      h5Share(title);
+
+      h5Share({title, path: `thread/${threadId}`});
       this.props.index.updateThreadShare({ threadId }).then(result => {
         if (result.code === 0) {
           this.props.index.updateAssignThreadInfo(threadId, { isShare: true });
@@ -121,10 +114,6 @@ class Index extends React.Component {
     }
 
     onClick = (e) => {
-      // if (!filterClickClassName(e.target)) {
-      //   return;
-      // }
-
       const { threadId = '', ability } = this.props.data || {};
       const { canViewPost } = ability;
 
@@ -145,73 +134,8 @@ class Index extends React.Component {
       }
     }
 
-    // 帖子属性内容
-    renderThreadContent = ({ content: data, attachmentPrice, payType, paid } = {}) => {
-      const {
-        text,
-        imageData,
-        audioData,
-        videoData,
-        goodsData,
-        redPacketData,
-        rewardData,
-        fileData,
-      } = handleAttachmentData(data);
-
-      return (
-        <div className={styles.wrapper} ref={this.ref} >
-            {text && <PostContent content={text} onPay={this.onPay} onRedirectToDetail={this.onClick} />}
-            <div className={`${styles.content} ${payType === 2 && styles.payContent}`}>
-              {videoData && (
-                <VideoPlay
-                  url={videoData.mediaUrl}
-                  coverUrl={videoData.coverUrl}
-                  onPay={this.onPay}
-                  isPay={payType !== 0}
-                />
-              )}
-              {imageData && (<ImageContent
-                imgData={imageData}
-                isPay={payType !== 0}
-                onPay={this.onPay}
-                onClickMore={this.onClick}
-              />)}
-              {rewardData && <RewardQuestion
-                content={rewardData.content || ''}
-                money={rewardData.money}
-                onClick={this.onPay}
-              />}
-              {redPacketData && <RedPacket content={redPacketData.content || ''} onClick={this.onPay} />}
-              {goodsData && <ProductItem
-                  image={goodsData.imagePath}
-                  amount={goodsData.price}
-                  title={goodsData.title}
-              />}
-              {audioData && <AudioPlay url={audioData.mediaUrl} isPay={payType !== 0} />}
-              {fileData && <AttachmentView attachments={fileData} onClick={this.onPay} isPay={payType !== 0} />}
-
-              {/* 付费蒙层 */}
-              {
-                !paid && payType !== 0 && (
-                  <div className={styles.cover} onClick={payType === 1 ? this.onClick : this.onPay}>
-                    {
-                      payType === 2 ? (
-                        <Button className={styles.button} type="primary" onClick={this.onPay}>
-                          <span className={styles.icon}>$</span>
-                          支付{attachmentPrice}元查看附件内容
-                        </Button>
-                      ) : null
-                    }
-                  </div>
-                )
-              }
-            </div>
-        </div>
-      );
-    }
-
     render() {
-      const { data, className = '', site = {} } = this.props;
+      const { data, className = '', site = {}, showBottomStyle = true } = this.props;
       const { platform = 'pc' } = site;
 
       if (!data) {
@@ -219,26 +143,22 @@ class Index extends React.Component {
       }
 
       const {
-        title = '',
         user = {},
         position = {},
         likeReward = {},
-        payType,
         viewCount,
-        price,
         group,
         createdAt,
         isLike,
         postId,
         threadId,
         displayTag,
-        paid,
       } = data || {};
 
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
 
       return (
-        <div className={`${styles.container} ${className}`}>
+        <div className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
           <div className={styles.header}>
               <UserInfo
                 name={user.userName}
@@ -253,17 +173,11 @@ class Index extends React.Component {
                 isReward={isReward}
                 userId={user?.userId}
                 platform={platform}
+                onClick={this.onClick}
               />
           </div>
 
-          {title && <div className={styles.title} onClick={this.onClick}>{title}</div>}
-
-          {this.renderThreadContent(data)}
-
-          {!paid && payType === 1 && <Button className={styles.button} type="primary" onClick={this.onPay}>
-            <span className={styles.icon}>$</span>
-            支付{price}元查看剩余内容
-          </Button>}
+          <ThreadCenterView data={data} onClick={this.onClick} onPay={this.onPay} platform={platform} />
 
           <BottomEvent
             userImgs={likeReward.users}

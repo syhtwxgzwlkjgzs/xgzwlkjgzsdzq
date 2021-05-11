@@ -37,7 +37,7 @@ import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import threadPay from '@common/pay-bussiness/thread-pay';
 import rewardPay from '@common/pay-bussiness/reward-pay';
 import RewardPopup from './components/reward-popup';
-
+import { minus } from '@common/utils/calculate';
 
 const typeMap = {
   101: 'IMAGE',
@@ -54,7 +54,7 @@ const typeMap = {
 };
 
 // 帖子内容
-const RenderThreadContent = observer((props) => {
+const RenderThreadContent = inject('user')(observer((props) => {
   const { store: threadStore } = props;
   const { text, indexes } = threadStore?.threadData?.content || {};
   const tipData = {
@@ -126,9 +126,12 @@ const RenderThreadContent = observer((props) => {
             isEssence={isEssence}
           ></UserInfo>
         </View>
-        <View className={topic.more} onClick={onMoreClick}>
-          <Icon size="20" color="#8590A6" name="MoreVOutlined"></Icon>
-        </View>
+        {
+          props?.user?.isLogin()
+          && <View className={topic.more} onClick={onMoreClick}>
+            <Icon size="20" color="#8590A6" name="MoreVOutlined"></Icon>
+          </View>
+        }
       </View>
 
       {
@@ -166,7 +169,7 @@ const RenderThreadContent = observer((props) => {
               />
               <Button
                 className={topic.buyBtn}
-                type="primary"
+                type="danger"
                 onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
               >
                 购买商品
@@ -190,8 +193,10 @@ const RenderThreadContent = observer((props) => {
               {
                 parseContent.RED_PACKET && (
                   <PostRewardProgressBar
-                    remaining={parseContent.RED_PACKET.remain_number}
-                    received={parseContent.RED_PACKET.number - parseContent.RED_PACKET.remain_number} />
+                    remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
+                    received={
+                      Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
+                    } />
                 )
               }
               {/* 悬赏 */}
@@ -199,8 +204,10 @@ const RenderThreadContent = observer((props) => {
                 parseContent.REWARD && (
                   <PostRewardProgressBar
                     type={POST_TYPE.BOUNTY}
-                    remaining={parseContent.REWARD.remain_money}
-                    received={parseContent.REWARD.money - parseContent.REWARD.remain_money} />
+                    remaining={Number(parseContent.REWARD.remain_money || 0)}
+                    received={
+                      minus(Number(parseContent.REWARD.money || 0), Number(parseContent.REWARD.remain_money || 0))
+                    } />
                 )
               }
             </View>
@@ -215,9 +222,12 @@ const RenderThreadContent = observer((props) => {
           }
 
           {/* 打赏 */}
-          <View style={{ textAlign: 'center' }}>
-            <Button onClick={onRewardClick} className={topic.rewardButton} type='primary' size='large'>打赏</Button>
-          </View>
+          {
+            props?.user?.isLogin()
+            && <View style={{ textAlign: 'center' }}>
+              <Button onClick={onRewardClick} className={topic.rewardButton} type='primary' size='large'>打赏</Button>
+            </View>
+          }
 
         </View>
       }
@@ -241,7 +251,7 @@ const RenderThreadContent = observer((props) => {
       </View>
     </View>
   );
-});
+}));
 
 
 // 评论列表
@@ -496,7 +506,7 @@ class RenderCommentList extends React.Component {
           <View className={comment.sort} onClick={() => this.onSortClick()}>
             <Icon className={comment.sortIcon} name="SortOutlined"></Icon>
             <Text className={comment.sortText}>
-              {this.state.commentSort ? '评论从旧到新' : '评论从新到旧'}
+              {this.state.commentSort ? '评论从新到旧' : '评论从旧到新'}
             </Text>
           </View>
         </View>
@@ -683,7 +693,7 @@ class Index extends Component {
       id,
       page: this.page,
       perPage: this.perPage,
-      sort: this.commentDataSort ? '-createdAt' : 'createdAt',
+      sort: this.commentDataSort ? 'createdAt' : '-createdAt',
     };
 
     const { success, msg } = await this.props.thread.loadCommentList(params);

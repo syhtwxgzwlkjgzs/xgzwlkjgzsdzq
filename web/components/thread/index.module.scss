@@ -1,35 +1,37 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 .container {
   box-sizing: border-box;
   padding: 0 rem($padding-4n);
   padding-bottom: 0;
-  background: #fff;
-  cursor: pointer;
+  background: var(--color-white);
+
+  // &:hover {
+  //   background: rgba(229, 242, 255, 0.3);
+  // }
   .title {
     font-size: rem($font-size-middle);
+    font-weight: 600;
     line-height: rem(26);
     text-align: left;
-    color: #0b0b37;
+    color: var(--color-text-primary);
   }
 
   .header {
-    padding-bottom: rem(24);
-    padding-top: rem(16);
+    padding: rem($padding-4n) 0;
   }
   .content {
     position: relative;
     >* {
-      margin-top: rem(16);
+      margin-top: rem($margin-4n);
     }
 
     .cover {
       position: absolute;
       right: 0;
       left: 0;
-      top: 0;
+      top: rem(-16);
       bottom: 0;
-      // background-color: rgba($color: #000, $alpha: 0.5);
+      background-color: rgba($color: #000, $alpha: 0.5);
       z-index: 10;
       display: flex;
       align-items: center;
@@ -52,10 +54,18 @@
     font-size: rem($font-size-primary);
     line-height: rem(36);
     padding: 0;
-    margin-bottom: rem(16);
+    margin-bottom: rem($margin-4n);
     .icon {
       font-size: rem($font-size-primary);
       margin-right: rem($margin-10);
     }
   }
+}
+
+.containerBottom {
+  margin-bottom: rem(10);
+}
+
+.containerPC {
+  border-radius: rem(5);
 }

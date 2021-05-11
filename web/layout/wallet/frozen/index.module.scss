@@ -1,0 +1,51 @@
+@import '@common/styles/index.scss';
+
+.container {
+  height: 100vh;
+  width: 100vw;
+  background: var(--comment-content-bg-color);
+}
+
+.header {
+    height: rem(50);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--color-white);
+    font-size: rem($font-size-primary);
+    font-weight: bold;
+    padding: 0 rem($padding-4n);
+    margin-bottom: rem($margin-2n);
+
+    font-family: 'PingFangSC-Regular';
+    font-weight: normal;
+    text-align: left;
+    color: var(--color-text-secondary);
+}
+
+.body {
+    background: var(--color-white);
+    .content {
+        font-weight: normal;
+        padding: rem($padding-4n);
+        border-bottom: var(--border-border);
+        .upper {
+            display: flex;
+            justify-content: space-between;
+            font-family: "PingFang SC";
+            font-size: rem($font-size-primary);
+            text-align: left;
+            color: var(--color-text-primary);
+        }
+        .lower {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'PingFangSC-Regular';
+            font-size: rem($font-size-label);
+            text-align: left;
+            color: var(--color-text-secondary);
+            padding-top: rem($padding-5n);
+        }
+    }
+
+}

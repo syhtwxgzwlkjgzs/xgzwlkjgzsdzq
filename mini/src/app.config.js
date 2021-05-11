@@ -38,6 +38,12 @@ export default {
         'user/status/index',
         'user/bind-phone/index',
         'user/wx-auth/index',
+        'user/wx-authorization/index',
+        // 我的草稿页
+        'my/draft/index',
+        'wallet/index',
+        'wallet/frozen/index',
+        'wallet/withdrawal/index',
         'my/like/index',
         'my/collect/index',
         'my/buy/index',
@@ -48,7 +54,6 @@ export default {
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',
-    navigationBarTitleText: 'WeChat',
     navigationBarTextStyle: 'black',
   },
 };

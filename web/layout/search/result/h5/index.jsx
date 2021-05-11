@@ -2,10 +2,9 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 
-// import SearchInput from '@components/search-input';
 import SearchInput from '@components/search-input';
 import List from '@components/list';
-import SectionTitle from './components/section-title';
+import SectionTitle from '@components/section-title'
 import SearchPosts from './components/search-posts';
 import SearchTopics from './components/search-topics';
 import SearchUsers from './components/search-users';

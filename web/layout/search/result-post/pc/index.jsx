@@ -1,12 +1,9 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
-import SectionTitle from '../../../search/h5/components/section-title'
+import SidebarPanel from '@components/sidebar-panel';
 import ThreadContent from '@components/thread';
 import { withRouter } from 'next/router';
-import List from '@components/list'
-import NoData from '@components/no-data'
 
 @inject('site')
 @inject('search')
@@ -22,8 +19,6 @@ class SearchResultPostH5Page extends React.Component {
       refreshing: false,
     };
   }
-  
-  onPostClick = data => console.log('post click', data);
 
   fetchMoreData = () => {
     const { dispatch } = this.props;
@@ -34,20 +29,17 @@ class SearchResultPostH5Page extends React.Component {
   renderContent = () => {
     const { pageData = [] } = this.props.search.threads || { pageData: [] };
     return (
-      <div className={styles.searchContent}>
-        <div className={styles.postTitle}>
-          <SectionTitle
-            title="热门内容"
-            isShowMore={false}
-            icon={{ type: 3, name: 'HotOutlined' }}
-          />
-        </div>
+      <SidebarPanel 
+        title="热门内容" 
+        type='normal'
+        isShowMore={false}
+        noData={!pageData?.length}
+        icon={{ type: 3, name: 'HotOutlined' }}
+      >
         {
-          pageData?.length
-            ? pageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)
-            : <NoData />
+          pageData?.map((item, index) => <ThreadContent data={item} key={index} />)
         }
-      </div>
+      </SidebarPanel>
     )
   }
 
@@ -66,15 +58,14 @@ class SearchResultPostH5Page extends React.Component {
     const { currentPage, totalPage } = this.props.search.threads || { pageData: [] };
 
     return (
-      <List className={styles.searchWrap} noMore={currentPage >= totalPage}  onRefresh={this.fetchMoreData}>
-        <BaseLayout
-          onSearch={this.onSearch}
-          left={() => <div></div>}
-          right={() => <div></div>}
-        >
-          { this.renderContent }
-        </BaseLayout>
-      </List>
+      <BaseLayout
+        onSearch={this.onSearch}
+        noMore={currentPage >= totalPage}
+        onRefresh={this.fetchMoreData}
+        showRefresh={false}
+      >
+        { this.renderContent }
+      </BaseLayout>
     );
   }
 }

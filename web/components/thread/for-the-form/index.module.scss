@@ -7,6 +7,73 @@
   height: 100vh;
   background-color: #fff;
   :global {
+
+    .react-datepicker {
+      // 整个盒子
+      display: flex;
+      height: 392px;
+      overflow: hidden;
+    }
+
+    .react-datepicker__current-month {
+      font-size: 16px;
+    }
+
+    .react-datepicker__navigation {
+      margin-right: 80px;
+      border: 10px solid transparent;
+      border-left-color: #ccc;
+    }
+
+    .react-datepicker__navigation--previous {
+      border-left-color: transparent;
+      border-right-color: #ccc;
+      margin-right: 0;
+      margin-left: 80px;
+    }
+
+    .react-datepicker__day-name {
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
+      margin: 0;
+    }
+
+    .react-datepicker {
+      font-size: 12px;
+    }
+
+    .react-datepicker__month {
+      margin: 20px;
+    }
+
+    .react-datepicker__day {
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
+      margin: 0;
+    }
+
+    // 时间组件中时间部分
+    .react-datepicker-time__header {
+      font-size: 16px;
+
+    }
+
+    .react-datepicker__time-box {
+      ::-webkit-scrollbar {
+        width: 0px;
+      }
+    }
+
+    //展示的input框部分
+    .react-datepicker__input-container>input {
+      width: 135px;
+      font-size: 14px;
+      border: none;
+    }
+    // 结束
+
     .dzq-input {
       display: inline-block;
       width: 40px;
@@ -30,25 +97,25 @@
     padding-bottom: 16px;
     font-size: 14px;
   }
-}
-
-.btn {
-  position: absolute;
-  bottom: 0;
-  display: flex;
-  width: rem(343);
-  height: 52px;
-  border-top: 1px solid #eee;
-  padding: 0 rem(16);
-  justify-content: space-between;
-  align-items: center;
-  :global {
-    .dzq-button {
-      width: rem(166);
-      height: 42px;
+  .btn {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    width: rem(343);
+    height: 52px;
+    border-top: 1px solid #eee;
+    padding: 0 rem(16);
+    justify-content: space-between;
+    align-items: center;
+    :global {
+      .dzq-button {
+        width: rem(166);
+        height: 42px;
+      }
     }
   }
 }
+
 
 .pc {
   z-index: var(--zindex-dialog) !important;
