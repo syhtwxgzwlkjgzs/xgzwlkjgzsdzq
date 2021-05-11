@@ -1,0 +1,49 @@
+@import '@common/styles/variable/index.scss';
+@import '@common/styles/fn/rem.scss';
+
+.container {
+  // width: 100%;
+  padding: 24px;
+}
+
+.header {
+  font-family: 'PingFangSC-Regular';
+  font-weight: normal;
+  font-size: 14px;
+  text-align: left;
+  color: var(--pc-user-info-title);
+}
+
+.input {
+  display: flex;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: var(--border-border);
+  :global {
+    .dzq-input__inner {
+      height: 42px;
+      border: none;
+      font-family: 'PingFang SC';
+      font-weight: 600;
+      font-size: 30px;
+      text-align: left;
+      color: #c5c6ca;
+    }
+  }
+  .moneyIcon {
+    font-family: 'PingFang SC';
+    font-weight: 600;
+    font-size: 30px;
+    text-align: left;
+    color: var(--color-text-primary);
+  }
+}
+
+.leastMoney {
+  font-family: 'PingFangSC-Regular';
+  font-weight: normal;
+  font-size: 12px;
+  text-align: left;
+  color: var(--color-text-secondary);
+  padding: 24px 0;
+}

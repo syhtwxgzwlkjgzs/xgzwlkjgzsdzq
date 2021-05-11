@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 .commentList {
   padding: rem($padding-4n);
   .header {
@@ -101,7 +100,7 @@
           font-size: var($font-size-primary);
           text-align: left;
           color: var(--color-text-primary);
-          padding-top: rem($padding-4n); 
+          padding-top: rem($padding-4n);
         }
       }
     }

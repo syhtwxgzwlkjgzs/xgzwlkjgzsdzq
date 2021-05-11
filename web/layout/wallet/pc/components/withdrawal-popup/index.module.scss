@@ -1,5 +1,4 @@
-@import '@common/styles/variable/index.scss';
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 
 .container {
   box-sizing: content-box;
@@ -46,5 +45,18 @@
     font-size: 30px;
     text-align: left;
     color: var(--color-text-primary);
+  }
+}
+
+.button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  :global {
+    .dzq-button {
+      width: rem(248);
+      height: rem(36);
+    }
   }
 }

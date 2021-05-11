@@ -1,0 +1,58 @@
+@import '@common/styles/index.scss';
+
+.container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .totalAmount {
+        width: 100%;
+        height: rem(167);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: var(--color-white);
+        text-align: center;
+        background: var(--color-primary);
+        .moneyTitle {
+            font-family: 'PingFangSC-Regular';
+            font-weight: normal;
+            font-size: rem($font-size-primary);
+            line-height: rem(16.8);
+            padding: rem($padding-2n) 0;
+        }
+        .moneyNum {
+            font-family: "PingFang SC";
+            font-weight: 600;
+            font-size: rem(30);
+            line-height: rem($font-line-height-large);
+            padding: rem($padding-2n) 0 rem($padding-5n) 0;
+        }
+    }
+
+    .moneyInput {
+        width: rem(343);
+        height: rem(168);
+        border-radius: rem($border-radius-small);
+        background: var(--color-white);
+        margin-top: rem(-34);
+    }
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    padding: rem($padding-2n) 0;
+    .button {
+        width: rem(343);
+        height: rem(42);
+        border-radius: rem($border-radius-small);
+    }
+}

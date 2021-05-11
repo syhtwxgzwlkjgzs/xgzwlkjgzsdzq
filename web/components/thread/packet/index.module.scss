@@ -1,11 +1,9 @@
-@import '@common/styles/var.scss';
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 .container {
   display: flex;
   justify-content: center;
   cursor: pointer;
-  
+
   .wrapper {
     position: relative;
     display: flex;

@@ -1,5 +1,7 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
+// .searchWrap {
+//   background: #f5f7f8;
+//   width: 100%;
 .searchContent {
   width: 100%;
   min-width: rem(652);
@@ -17,14 +19,14 @@
   background: var(--color-white);
 }
 .searchRight {
-  width: 100%;
+  width: rem(286);
   overflow: hidden;
 }
 .threadContent {
   border-radius: rem($border-radius-small);
   padding: 0 rem($padding-6n);
-  margin-bottom: rem($margin-10);
+  margin-bottom: rem(16);
   overflow: hidden;
 }
+// }
 
-  

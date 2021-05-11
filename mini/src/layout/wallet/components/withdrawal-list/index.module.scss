@@ -1,0 +1,61 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.container {
+    padding: 16px 16px 0;
+    background: var(--color-white);
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    font-weight: normal;
+    padding-bottom: 16px;
+    color: var(--color-text-primary);
+    .text {
+        font-family: 'PingFangSC-Regular';
+        font-size: 14px;
+        text-align: left;
+        line-height: 16px;
+    }
+    .money {
+        font-family: "PingFang SC";
+        font-weight: 600;
+        font-size: 16px;
+        text-align: left;
+    }
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'PingFangSC-Regular';
+    font-weight: normal;
+    font-size: 12px;
+    .time {
+        text-align: left;
+        color: var(--color-text-secondary);
+    }
+    .withdrawalStatus1 {
+        color: var(--color-primary);
+    }
+    .withdrawalStatus2 {
+        color: var(--pc-user-info-title);
+    }
+    .withdrawalStatus3 {
+        color: var(--color-error);
+    }
+    .withdrawalStatus4 {
+        color: #3ac15f;
+    }
+}
+
+.serialNumber {
+    font-family: 'PingFangSC-Regular';
+    font-weight: normal;
+    font-size: 12px;
+    text-align: left;
+    color: #8490a8;
+    padding: 16px 0;
+    border-bottom: var(--border-border);
+}

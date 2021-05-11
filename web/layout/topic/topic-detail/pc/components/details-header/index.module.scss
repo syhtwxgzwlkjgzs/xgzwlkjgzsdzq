@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .container {
   padding: rem($padding-4n);
@@ -17,7 +16,7 @@
     width: 100%;
     display: flex;
     box-sizing: border-box;
-    li { 
+    li {
       margin-right: rem(40);
     }
     .text {
