@@ -50,7 +50,7 @@
           font-size: rem($font-size-primary);
           line-height: rem(16);
           text-align: center;
-          color: var(--pc-user-info-title);
+          color: $text-color-regular;
         }
         .number {
           height: rem(28);

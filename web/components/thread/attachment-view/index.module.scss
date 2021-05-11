@@ -26,7 +26,7 @@
     .right {
       width: rem(64);
       font-size: rem($font-size-label);
-      color: var(--pc-user-info-title);
+      color: $text-color-regular;
       display: flex;
       justify-content: space-between;
       align-items: center;

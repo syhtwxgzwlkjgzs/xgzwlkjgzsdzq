@@ -105,7 +105,7 @@
     margin: rem($margin-4n) auto 0;
     font-size: rem($font-size-primary);
     line-height: rem($font-line-height-primary);
-    color: var(--pc-user-info-title);
+    color: $text-color-regular;
     .switchIcon {
       margin-right: rem($margin-2n);
     }

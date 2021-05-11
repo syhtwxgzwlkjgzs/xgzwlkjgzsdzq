@@ -76,7 +76,7 @@
                         font-size: rem($font-size-primary);
                         line-height: rem($font-line-height-small);
                         text-align: center;
-                        color: var(--pc-user-info-title);
+                        color: $text-color-regular;
                     }
                     .text{
                         margin-top: rem($margin-2n);
