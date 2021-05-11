@@ -3,7 +3,7 @@ import { View, Button } from '@tarojs/components';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import InstantMessaging from '@components/message/instant-messaging';
-import MessageCard from '@components/message/category-list';
+import MessageCard from '@components/message/message-card';
 
 import Notice from '@components/message/notice';
 import mock from './mock.json';
@@ -32,9 +32,30 @@ const Index = inject('site')(
       return true;
     };
 
+  const cardContent = [
+    {
+      iconName: 'RemindOutlined',
+      title: '帖子通知',
+      link: '#',
+      totalCount: 0,
+    },
+    {
+      iconName: 'RenminbiOutlined',
+      title: '财务通知',
+      link: '#',
+      totalCount: 11,
+    },
+    {
+      iconName: 'LeaveWordOutlined',
+      title: '账号消息',
+      link: '#',
+      totalCount: 100,
+    },
+  ];
+
   return (
     <View className={styles.container}>
-      <MessageCard />
+      <MessageCard cardItems={cardContent}/>
       <Button>mini test</Button>
       <Notice list={list} type={type} onBtnClick={handleDelete} />
       <InstantMessaging messagesHistory={messagesHistory} onSubmit={doSubmit} />
