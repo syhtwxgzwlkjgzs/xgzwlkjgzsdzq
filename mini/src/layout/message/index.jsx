@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {View, Button} from '@tarojs/components';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import InstantMessaging from '@components/message/instant-messaging';
@@ -10,7 +11,7 @@ import mock from './mock.json';
 const Index = inject('site')(observer(() => {
   // props,state
   const [messagesHistory, setMessagesHistory] = useState([]);
-  const [type, setType] = useState('user'); // chat,system,financial,user
+  const [type, setType] = useState('financial'); // chat,thread,financial,account
   const [list, setList] = useState([]);
 
   // hooks
