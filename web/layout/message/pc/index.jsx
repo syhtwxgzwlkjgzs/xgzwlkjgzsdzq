@@ -1,9 +1,9 @@
 import React, { memo, useState, useEffect } from 'react';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
-import InstantMessaging from '../instant-messaging';
-
+import CategoryList from '@components/message/category-list';
 import NoticeItem from '@components/message/notice-item';
+import InstantMessaging from '../instant-messaging';
 import mock from '../mock.json';
 
 const Index = () => {
@@ -32,6 +32,7 @@ const Index = () => {
 
   return (
     <div className={styles.container}>
+      <CategoryList />
       <Button>pc test</Button>
       <div className={styles.list}>
         <div className={styles.left}>

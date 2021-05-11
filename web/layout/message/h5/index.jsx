@@ -5,6 +5,7 @@ import InstantMessaging from '../instant-messaging';
 
 import NoticeItem from '@components/message/notice-item';
 import SliderLeft from '@components/message/slider-left/index';
+import CategoryList from '@components/message/category-list';
 import mock from '../mock.json';
 
 const Index = ({ page, subPage, dialogId }) => {
@@ -32,6 +33,7 @@ const Index = ({ page, subPage, dialogId }) => {
 
   return (
     <div className={styles.container}>
+      <CategoryList />
       <SliderLeft
         list={list}
         offsetLeft={'-74px'}
