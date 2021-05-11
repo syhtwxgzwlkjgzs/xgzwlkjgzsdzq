@@ -156,27 +156,83 @@ class UserAction extends SiteStore {
   }
 
   @action
-  async listFollow(userId) {
-    const followResult = await this.postFollow(userId);
-    if (!followResult.success) {
-      throw {
-        Code: 'usr_0000',
-        Msg: '关注用户错误',
-      };
-    }
-    // const setFollowStatus = (dataList) => {
-    //   Object.keys(dataList).forEach((key) => {
-    //     dataList[key].forEach((item) => {
-    //       if (!item.userFollow.isMutual) {
-    //         item.userFollow = true;
-    //       }
-    //     });
-    //   });
-    // };
+  async setUserFollowerBeFollowed(id) {
+    Object.keys(this.userFollows).forEach((key) => {
+      this.userFollows[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isUnFollowed = false;
+      });
+    });
+  }
 
-    // setFollowStatus(this.userFollows);
-    // setFollowStatus(this.userFans);
-    // setFollowStatus
+  @action
+  async setUserFollowerBeUnFollowed(id) {
+    Object.keys(this.userFollows).forEach((key) => {
+      this.userFollows[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isUnFollowed = true;
+      });
+    });
+  }
+
+  @action
+  async setUserFansBeFollowed(id) {
+    Object.keys(this.userFans).forEach((key) => {
+      this.userFans[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isMutual = true;
+      });
+    });
+  }
+
+  @action
+  async setUserFansBeUnFollowed(id) {
+    Object.keys(this.userFans).forEach((key) => {
+      this.userFans[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isMutual = false;
+      });
+    });
+  }
+
+  @action
+  async setTargetUserFollowerBeFollowed(id) {
+    Object.keys(this.targetUserFollows).forEach((key) => {
+      this.targetUserFollows[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isUnFollowed = false;
+      });
+    });
+  }
+
+  @action
+  async setTargetUserFollowerBeUnFollowed(id) {
+    Object.keys(this.targetUserFollows).forEach((key) => {
+      this.targetUserFollows[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isUnFollowed = true;
+      });
+    });
+  }
+
+  @action
+  async setTargetUserFansBeFollowed(id) {
+    Object.keys(this.targetUserFans).forEach((key) => {
+      this.targetUserFans[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isMutual = true;
+      });
+    });
+  }
+
+  @action
+  async setTargetUserFansBeUnFollowed(id) {
+    Object.keys(this.targetUserFans).forEach((key) => {
+      this.targetUserFans[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isMutual = false;
+      });
+    });
   }
 
   /**
