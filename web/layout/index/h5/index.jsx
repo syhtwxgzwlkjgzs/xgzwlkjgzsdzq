@@ -40,7 +40,10 @@ class IndexH5Page extends React.Component {
     });
   }
 
-  onScroll = ({ scrollTop }) => {
+  onScroll = ({ scrollTop = 0 } = {}) => {
+    if (!this.listRef.current) {
+      return
+    }
     const el = this.listRef.current.offsetTop;
 
     if (scrollTop >= el) {

@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle, useMemo } from 'react';
-import { Spin, Button } from '@discuzq/design';
+import React, { useMemo } from 'react';
+import { Spin } from '@discuzq/design';
 import SectionTitle from '@components/section-title';
 import NoData from '@components/no-data';
 import styles from './index.module.scss';
@@ -18,14 +18,25 @@ const Index = (props) => {
     footer = null, 
     header = null, 
     type = 'small',
+    className = '',
+    platform = 'pc'
   } = props
 
   const isNoData = useMemo(() => {
     return !!children && noData
   }, [noData, children])
 
+  const pcStyle = useMemo(() => {
+    if (platform === 'pc') {
+      const width = type === 'small' ? styles.small : styles.normal
+      return `${styles.containerPC} ${width}`
+    } else {
+      return ''
+    }
+  }, [platform, type])
+
   return (
-    <div className={`${styles.container} ${type === 'small' ? styles.small : styles.normal}`}>
+    <div className={`${styles.container} ${pcStyle} ${className}`}>
       {header || <SectionTitle {...props} />}
       {!isLoading && !isNoData && children}
       {!isLoading && isNoData && <NoData />}
