@@ -200,18 +200,28 @@ class CommentPCPage extends React.Component {
                 <Icon name="ReturnOutlined"></Icon>
                 <span className={styles.text}>返回</span>
               </div>
-              {this.props.comment?.rewards ? <RewardDisplay number={this.props.comment.rewards}></RewardDisplay> : ''}
-              {this.props.comment?.redPacketAmount ? (
-                <RedPacketDisplay number={this.props.comment.redPacketAmount}></RedPacketDisplay>
-              ) : (
-                ''
-              )}
-              {this.props.comment?.commentDetail?.canDelete && (
-                <div className={styles.delete} onClick={() => this.deleteClick()}>
-                  <Icon name="DeleteOutlined"></Icon>
-                  <span className={styles.text}>删除</span>
-                </div>
-              )}
+              <div className={styles.bodyHeaderOperate}>
+                {this.props.comment?.rewards ? (
+                  <div className={styles.reward}>
+                    <RewardDisplay number={this.props.comment.rewards}></RewardDisplay>
+                  </div>
+                ) : (
+                  ''
+                )}
+                {this.props.comment?.redPacketAmount ? (
+                  <div className={styles.redpacket}>
+                    <RedPacketDisplay number={this.props.comment.redPacketAmount}></RedPacketDisplay>
+                  </div>
+                ) : (
+                  ''
+                )}
+                {this.props.comment?.commentDetail?.canDelete && (
+                  <div className={styles.delete} onClick={() => this.deleteClick()}>
+                    <Icon name="DeleteOutlined"></Icon>
+                    <span className={styles.text}>删除</span>
+                  </div>
+                )}
+              </div>
             </div>
             {/* 内容 */}
             {isReady ? (
