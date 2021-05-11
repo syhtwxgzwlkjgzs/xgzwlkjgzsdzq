@@ -3,8 +3,7 @@ import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import InstantMessaging from '../../../components/message/instant-messaging';
 
-import NoticeItem from '@components/message/notice-item';
-import SliderLeft from '@components/message/slider-left/index';
+import Notice from '@components/message/notice';
 import mock from '../mock.json';
 
 const Index = ({ page, subPage, dialogId }) => {
@@ -32,7 +31,7 @@ const Index = ({ page, subPage, dialogId }) => {
 
   return (
     <div className={styles.container}>
-      <SliderLeft list={list} offsetLeft={'-74px'} type={type} RenderItem={NoticeItem} onDelete={handleDelete} />
+      <Notice list={list} type={type} onDelete={handleDelete} />
       <InstantMessaging messagesHistory={messagesHistory} onSubmit={doSubmit} />
     </div>
   );

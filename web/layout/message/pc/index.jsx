@@ -3,7 +3,7 @@ import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import InstantMessaging from '../../../components/message/instant-messaging';
 
-import NoticeItem from '@components/message/notice-item';
+import Notice from '@components/message/notice';
 import mock from '../mock.json';
 
 const Index = () => {
@@ -31,12 +31,10 @@ const Index = () => {
 
   return (
     <div className={styles.container}>
-      <Button>pc test</Button>
+      <div>pc test</div>
       <div className={styles.list}>
         <div className={styles.left}>
-          {list.map((item) => {
-            return <NoticeItem item={item} type={type} onDelete={handleDelete} key={item.id} />;
-          })}
+          <Notice list={list} type={type} onDelete={handleDelete} />
         </div>
         <div className={styles.right}></div>
       </div>
