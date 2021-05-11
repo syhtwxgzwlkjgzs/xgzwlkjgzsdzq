@@ -443,25 +443,6 @@ class UserAction extends SiteStore {
     return this.targetUserThreads;
   }
 
-
-  // TODO: 等待后台接口 Readay
-  /**
-   * 获取用户喜欢列表
-   */
-  @action
-  async getUserLikeLists() {
-
-  }
-
-  // TODO: 等待后台接口 Readay
-  /**
-   * 获取指定用户喜欢列表
-   */
-  @action
-  async getTargetUserLikeLists() {
-
-  }
-
   /**
    * 上传新的头像
    */
@@ -507,6 +488,37 @@ class UserAction extends SiteStore {
   @action
   async updateEditedUserInfo() {
     await updateUsersUpdate();
+  }
+
+  /**
+   * 四个清理函数，清理用户和目标用户粉丝信息
+   */
+  @action
+  cleanUserFans = () => {
+    this.userFans = {};
+    this.userFansPage = 1;
+    this.userFansTotalPage = 1;
+  }
+
+  @action
+  cleanUserFollows = () => {
+    this.userFollows = {};
+    this.userFollowsPage = 1;
+    this.userFollowsTotalPage = 1;
+  }
+
+  @action
+  cleanTargetUserFans = () => {
+    this.targetUserFans = {};
+    this.targetUserFansPage = 1;
+    this.targetUserFansTotalPage = 1;
+  }
+
+  @action
+  cleanTargetUserFollows = () => {
+    this.targetUserFollows = {};
+    this.targetUserFollowsPage = 1;
+    this.targetUserFollowsTotalPage = 1;
   }
 }
 
