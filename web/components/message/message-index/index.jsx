@@ -13,7 +13,7 @@ import styles from './index.module.scss';
 export class MessageIndex extends Component {
   state = {
     type: 'chat',
-    refreshing: true,
+    finished: true,
     cardContent: [
       {
         iconName: 'RemindOutlined',
@@ -37,18 +37,23 @@ export class MessageIndex extends Component {
   };
 
   handleDelete = (item) => {
-    const { dialogList } = this.props.message;
-    const _dialogList = [...dialogList].filter((i) => i.id !== item.id);
-    this.setState({ dialogList: _dialogList });
+    const { message } = this.props;
+    message.deleteDialog(item.id);
   };
 
-  onRefresh = () => {
-    this.setState({ refreshing: false });
+  handleRefresh = () => {
+    const { message } = this.props;
+    this.setState({ finished: false });
     setTimeout(async () => {
-      await this.props.message.readDialogList(2);
-      this.setState({ refreshing: true, dialogList: this.props.message.dialogList });
-    }, 1000);
+      await message.readDialogList(message.dialogList.currentPage);
+      this.setState({ finished: true });
+    }, 200);
   };
+
+  handleScrollBottom = () => {
+    const { message } = this.props;
+    return message.readDialogList(2);
+  }
 
   formatChatDialogList = (dialogList) => {
     const newList = [];
@@ -56,10 +61,10 @@ export class MessageIndex extends Component {
       newList.push({
         id: item.dialogMessage.id,
         dialogId: item.dialogMessage.dialogId,
-        createdAt: item.dialogMessage.createdAt,
-        content: item.dialogMessage.summary,
+        createdAt: item.dialogMessage.createdAt || 0,
+        content: item.dialogMessage.summary || "",
         title: '',
-        avatar: item.sender.avatar,
+        avatar: item.sender.avatar || "",
         userId: item.sender.userId,
         userName: item.sender.username,
       });
@@ -69,22 +74,21 @@ export class MessageIndex extends Component {
 
   componentDidMount() {
     this.props.message.readDialogList(1);
-    this.setState({ dialogList: this.props.message.dialogList });
   }
 
   render() {
-    const { cardContent, type, refreshing } = this.state;
+    const { cardContent, type, finished } = this.state;
     const { dialogList } = this.props.message;
     // console.log('message: ', this.props.message);
     // console.log('dialog: ', dialogList);
-    const newDialogList = this.formatChatDialogList(dialogList);
+    const newDialogList = this.formatChatDialogList(dialogList.list);
     // console.log(newDialogList);
 
     return (
       <div className={styles.container}>
-        <PullDownRefresh onRefresh={this.onRefresh} isFinished={refreshing} height={800}>
-          <MessageCard cardItems={cardContent} />
-          <List className={styles.searchWrap} onRefresh={this.fetchMoreData}>
+        <PullDownRefresh height={'800px'} onRefresh={this.handleRefresh} isFinished={finished}>
+          <List className={styles.list} height={'800px'} noMore={dialogList.currentPage >= dialogList.totalPage} onRefresh={this.handleScrollBottom}>
+            <MessageCard cardItems={cardContent} />
             <Notice list={newDialogList} type={type} onBtnClick={this.handleDelete} />
           </List>
         </PullDownRefresh>

@@ -1,6 +1,10 @@
 .container {
   height: 100vh;
   background: var(--comment-content-bg-color);
+
+  .pull{
+    height: 100vh;
+  }
 }
 
 .list {
