@@ -20,16 +20,16 @@ class RegisterH5Page extends React.Component {
     handleRegisterBtnClick = async () => {
       const { webConfig } = this.props.site;
       const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
-
       if (qcloudCaptcha) {
-        const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
-        return this.showCaptcha(qcloudCaptchaAppId);
+        return this.showCaptcha();
       }
 
       await this.toRegister();
     }
-    async showCaptcha(qcloudCaptchaAppId) {
+    async showCaptcha() {
       // 验证码实例为空，则创建实例
+      const { webConfig } = this.props.site;
+      const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
       if (!this.captcha) {
         const TencentCaptcha = (await import('@common/utils/tcaptcha')).default;
         this.captcha = new TencentCaptcha(qcloudCaptchaAppId, (res) => {
