@@ -144,7 +144,7 @@
 
 .tag {
   display: inline-block;
-  color: var(--pc-user-info-title);
+  color: $text-color-regular;
   background: var(--background-color);
   font-size: rem($font-size-label);
   padding: rem($padding-1n) rem($padding-1n);

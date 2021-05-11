@@ -35,7 +35,7 @@
     font-weight: normal;
     font-size: rem($font-size-primary);
     text-align: left;
-    color: var(--pc-user-info-title);
+    color: $text-color-regular;
     padding: rem(12) 0;
     opacity: 1;
   }
