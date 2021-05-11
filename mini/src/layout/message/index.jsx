@@ -4,8 +4,7 @@ import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import InstantMessaging from '@components/message/instant-messaging';
 
-import NoticeItem from '@components/message/notice-item';
-import SliderLeft from '@components/message/slider-left';
+import Notice from '@components/message/notice';
 import mock from './mock.json';
 
 const Index = inject('site')(
@@ -32,14 +31,13 @@ const Index = inject('site')(
       return true;
     };
 
-    return (
-      <View className={styles.container}>
-        <Button>mini test</Button>
-        <SliderLeft list={list} offsetLeft={'-74px'} type={type} RenderItem={NoticeItem} onDelete={handleDelete} />
-        <InstantMessaging messagesHistory={messagesHistory} onSubmit={doSubmit} />
-      </View>
-    );
-  }),
-);
+  return (
+    <View className={styles.container}>
+      <Button>mini test</Button>
+      <Notice list={list} type={type} onDelete={handleDelete} />
+      <InstantMessaging messagesHistory={messagesHistory} onSubmit={doSubmit} />
+    </View>
+  );
+}));
 
 export default Index;

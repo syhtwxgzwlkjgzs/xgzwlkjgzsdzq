@@ -43,4 +43,5 @@ const Index = ({ site }) => {
 
 
 // export default HOCFetchSiteData(HOCWithLogin(memo(Index)));
-export default inject('site')(observer(memo(Index)));
+// export default inject('site')(observer(memo(Index)));
+export default HOCFetchSiteData(HOCWithLogin(inject('site')(observer(memo(Index)))));
