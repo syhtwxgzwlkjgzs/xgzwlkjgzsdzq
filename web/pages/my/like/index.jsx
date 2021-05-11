@@ -14,7 +14,7 @@ class Index extends React.Component {
   prePage = 10;
   static async getInitialProps(ctx) {
     const result = await readTopicsList();
-    const threads = await readThreadList({ params: { filter: {}, sequence: 0, perPage: 10, page: 1 } }, ctx);
+    const threads = await readThreadList({ params: { filter: {}, sequence: 0, perPage: 10} }, ctx);
     return {
       serverIndex: {
         threads: threads && threads.code === 0 ? threads.data : null,
@@ -36,6 +36,7 @@ class Index extends React.Component {
     const { index, search } = this.props;
     const hasThreadsData = !!index.threads;
     const hasTopics = !!search.topics;
+    this.page = 1;
     if (!hasThreadsData) {
       this.props.index.getReadThreadList();
     }
@@ -44,6 +45,12 @@ class Index extends React.Component {
     }
   }
   dispatch = async (type, data = {}) => {
+    const { index } = this.props;
+    if (type === 'refresh') {
+      this.page = 1;
+    } else if (type === 'moreData') {
+      this.page += 1;
+    }
     await index.getReadThreadList({
       perPage: this.prePage,
       page: this.page,
