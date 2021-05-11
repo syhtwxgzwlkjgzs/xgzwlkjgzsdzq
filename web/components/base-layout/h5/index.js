@@ -18,7 +18,8 @@ import styles from './index.module.scss';
 */
 
 const BaseLayout = (props) => {
-  const { showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, refresh = true } = props;
+  const { showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true } = props;
+  const [height, setHeight] = useState(0)
 
   const debounce = (fn, wait) => {
     let timer = null;
@@ -30,17 +31,26 @@ const BaseLayout = (props) => {
     }
   }
 
+  const pullDownWrapper = useRef(null)
+
+  useEffect(() => {
+    if (pullDownWrapper.current) {
+      setHeight(pullDownWrapper.current.clientHeight)
+    }
+  }, [])
 
   return (
     <div className={styles.container}>
         {showHeader && <Header />}
         {
-          showPullDown ? (
-            <PullDownRefresh onRefresh={onPullDown} isFinished={refresh} height={750}>
-                <List {...props} className={styles.list}>
-                    {typeof(children) === 'function' ? children({ ...props }) : children}
-                </List>
-            </PullDownRefresh>
+          !showPullDown ? (
+            <div className={styles.list} ref={pullDownWrapper}>
+              <PullDownRefresh onRefresh={onPullDown} isFinished={isFinished} height={height}>
+                  <List {...props} className={styles.listHeight}>
+                      {typeof(children) === 'function' ? children({ ...props }) : children}
+                  </List>
+              </PullDownRefresh>
+            </div>
           ) : (
             <List {...props} className={styles.list}>
                 {typeof(children) === 'function' ? children({ ...props }) : children}

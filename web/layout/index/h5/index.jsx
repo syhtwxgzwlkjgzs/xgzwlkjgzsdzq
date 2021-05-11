@@ -23,6 +23,7 @@ class IndexH5Page extends React.Component {
       filter: {},
       currentIndex: '',
       scroll: true,
+      isFinished: true
     };
     this.listRef = createRef();
     this.renderItem = this.renderItem.bind(this);
@@ -163,10 +164,18 @@ class IndexH5Page extends React.Component {
     </>
   )
 
+  // 下拉刷新
+  onPullDown = () => {
+    this.setState({ isFinished: false }) 
+    setTimeout(() => { 
+      this.setState({ isFinished: true }) 
+    }, 2000)
+  }
+
 
   render() {
     const { index } = this.props;
-    const { filter, scroll } = this.state;
+    const { filter, scroll, isFinished } = this.state;
     const { threads = {}, categories = [] } = index;
     const { currentPage, totalPage, pageData } = threads || {};
     const newCategories = this.handleCategories(categories);
@@ -175,10 +184,11 @@ class IndexH5Page extends React.Component {
       <BaseLayout
         showHeader={false}
         showTabBar
-        onPullDown={() => { console.log(123456); }}
+        onPullDown={this.onPullDown}
         onRefresh={this.onRefresh}
         noMore={currentPage >= totalPage}
         onScroll={this.onScroll}
+        isFinished={isFinished}
       >
           { pageData?.length > 0
             ? (
