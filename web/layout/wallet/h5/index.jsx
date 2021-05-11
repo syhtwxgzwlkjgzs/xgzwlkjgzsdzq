@@ -38,6 +38,15 @@ class WalletH5Page extends React.Component {
     this.props.router.push('/wallet/withdrawal');
   }
 
+  // 点击时间选择
+  onSelectStatus = (type) => {
+    if (type === 'select') {
+      console.log('选择时间');
+    } else {
+      console.log('点击了全部状态');
+    }
+  }
+
   render() {
     const tabList = [
       ['income', '收入明细', null, { name: 'RedPacketOutlined' }],
@@ -143,8 +152,14 @@ class WalletH5Page extends React.Component {
               </WalletInfo>
             </div>
             <div className={layout.choiceTime}>
-              <div className={layout.status}>全部状态</div>
-              <div className={layout.status}>2012年4月</div>
+              <div className={layout.status} onClick={() => this.onSelectStatus('all')}>
+                <span className={layout.text}>全部状态</span>
+                <Icon name='UnderOutlined' size='6' className={layout.icon}></Icon>
+              </div>
+              <div className={layout.status} onClick={() => this.onSelectStatus('select')}>
+                <span className={layout.text}>2012年4月</span>
+                <Icon name='UnderOutlined' size='6' className={layout.icon}></Icon>
+              </div>
             </div>
             <div className={layout.tabs}>
               <Tabs
