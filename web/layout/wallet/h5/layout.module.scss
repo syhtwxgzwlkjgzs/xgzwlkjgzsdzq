@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .container {
   height: 100vh;
@@ -18,7 +17,7 @@
   .header {
     width: 100%;
   }
-  
+
   .choiceTime {
     width: 100%;
     height: rem(52);
@@ -34,7 +33,7 @@
       line-height: rem(52);
     }
   }
-  
+
   .tabs {
     width: 100%;
     border-bottom: var(--border-border);

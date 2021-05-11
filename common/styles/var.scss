@@ -1,23 +1,23 @@
 @import './theme/default.scss';
 @import './theme/dark.scss';
 
-page,
-.dzq-theme-light,
-[data-dzq-theme='light'] {
-  @each $name,
-    $value in $light {
-    #{$name}: #{$value};
-  }
-}
+// page,
+// .dzq-theme-light,
+// [data-dzq-theme='light'] {
+//   @each $name,
+//     $value in $light {
+//     #{$name}: #{$value};
+//   }
+// }
 
-page,
-.dzq-theme-dark,
-[data-dzq-theme='dark'] {
-  @each $name,
-    $value in $dark {
-    #{$name}: #{$value};
-  }
-}
+// page,
+// .dzq-theme-dark,
+// [data-dzq-theme='dark'] {
+//   @each $name,
+//     $value in $dark {
+//     #{$name}: #{$value};
+//   }
+// }
 
 :root {
   @each $name,

@@ -1,8 +1,6 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
-@import '@common/styles/mixin/index.scss';
+@import '@common/styles/index.scss';
 
-// 金额确认标题   
+// 金额确认标题
 .amountTitle {
   font-weight: 600;
   font-size: rem(16);

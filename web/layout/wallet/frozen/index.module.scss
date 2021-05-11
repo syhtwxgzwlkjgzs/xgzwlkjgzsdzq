@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .container {
   height: 100vh;
@@ -17,7 +16,7 @@
     font-weight: bold;
     padding: 0 rem($padding-4n);
     margin-bottom: rem($margin-2n);
-    
+
     font-family: 'PingFangSC-Regular';
     font-weight: normal;
     text-align: left;

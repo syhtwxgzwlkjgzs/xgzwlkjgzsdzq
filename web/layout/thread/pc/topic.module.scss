@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .container {
   background: var(--color-white);
@@ -141,7 +140,7 @@
     font-size: rem($font-size-primary);
     cursor: pointer;
     color: var(--color-text-secondary);
-    
+
     span {
       margin-left: rem($margin-2n);
     }
