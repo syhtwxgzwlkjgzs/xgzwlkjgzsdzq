@@ -6,6 +6,7 @@ import { Icon } from '@discuzq/design';
 import throttle from '@common/utils/thottle';
 import styles from './index.module.scss';
 import PropTypes from 'prop-types';
+import List from '@components/list';
 
 /**
  * 左滑列表项
@@ -146,19 +147,28 @@ class Index extends Component {
   }
 
   render() {
-    const { list = [], ...other } = this.props;
+    const { topCard = null, list = [], onScrollBottom = () => { }, ...other } = this.props;
     return (
-      <div className={styles.slider}>
-        {list.map(item => (
-          <SlierItem
-            key={item.id}
-            item={item}
-            currentId={this.state.currentId}
-            onSliderTouch={(id) => this.setState({ currentId: id })}
-            {...other}
-          />
-        ))}
-      </div>
+      <List
+        height={'100vh'}
+        allowRefresh={true}
+        onRefresh={onScrollBottom}
+      >
+        {/* 顶部导航卡片 */}
+        {topCard}
+        {/* show list */}
+        <div className={styles.slider}>
+          {list.map(item => (
+            <SlierItem
+              key={item.id}
+              item={item}
+              currentId={this.state.currentId}
+              onSliderTouch={(id) => this.setState({ currentId: id })}
+              {...other}
+            />
+          ))}
+        </div>
+      </List>
     );
   }
 };

@@ -99,7 +99,7 @@ class MessageAction extends MessageStore {
 
   deleteListItem(key, id) {
     const data = this[key];
-    const list = [].concat(data.list)
+    const list = [].concat(...data.list)
     try {
       list.forEach((item, index) => {
         if (item.id === id) {
