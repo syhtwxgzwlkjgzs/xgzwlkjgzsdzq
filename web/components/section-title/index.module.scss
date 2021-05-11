@@ -33,9 +33,7 @@
     line-height: rem($font-line-height-primary);
     font-size: rem($font-size-middle);
     color: var(--color-text-primary);
-  }
-  .margin {
-    margin-right: rem($padding-2n);
+    margin-left: rem($padding-2n);
   }
   .noMargin {
     margin-left: 0;
