@@ -10,7 +10,6 @@
     align-items: center;
     height: rem(36);
     cursor: pointer;
-    font-family: "PingFang SC";
     .prefix {
       font-size: rem($font-size-primary);
       font-weight: normal;
@@ -33,11 +32,14 @@
     border-bottom: rem(1) solid var(--border-line-color);
   }
   .itemBox {
+    height: rem(38);
     .prefix {
       font-size: rem($font-size-middle);
+      line-height: rem($font-line-height-small);
     }
     .title {
       font-size: rem($font-size-middle);
+      line-height: rem($font-line-height-small);
     }
   }
   .item:last-child {
