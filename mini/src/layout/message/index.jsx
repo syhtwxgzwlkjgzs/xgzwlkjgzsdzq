@@ -3,6 +3,7 @@ import { View, Button } from '@tarojs/components';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import InstantMessaging from '@components/message/instant-messaging';
+import CategoryList from '@components/message/category-list';
 
 import Notice from '@components/message/notice';
 import mock from './mock.json';
@@ -33,6 +34,7 @@ const Index = inject('site')(
 
   return (
     <View className={styles.container}>
+      <CategoryList />
       <Button>mini test</Button>
       <Notice list={list} type={type} onBtnClick={handleDelete} />
       <InstantMessaging messagesHistory={messagesHistory} onSubmit={doSubmit} />
