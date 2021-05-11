@@ -38,9 +38,11 @@ const Index = (props) => {
   return (
     <div className={`${styles.container} ${pcStyle} ${className}`}>
       {header || <SectionTitle {...props} />}
-      {!isLoading && !isNoData && children}
-      {!isLoading && isNoData && <NoData />}
-      {isLoading && !isNoData && <Spin type="spinner" />}
+      {
+        isLoading ? <Spin type="spinner" /> : (
+          isNoData ? <NoData /> : children
+        )
+      }
       {footer}
     </div>
   );
