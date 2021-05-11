@@ -31,6 +31,7 @@ const InteractionBox = (props) => {
         displayTimePanel: checkToShowCurrentMsgTime(currentTime),
         textType: 'string',
         text: typingValue,
+        ownedBy: 'myself',
       };
 
     try {

@@ -40,7 +40,7 @@ const Index = () => {
         </div>
         <div className={styles.right}></div>
       </div>
-      <InstantMessaging messagesHistory={messagesHistory} onSubmit={doSubmit} persona={'myself'} />
+      <InstantMessaging messagesHistory={messagesHistory} onSubmit={doSubmit} />
     </div>
   );
 };
