@@ -24,12 +24,13 @@ class MessageAction extends MessageStore {
   setMsgList(page, key, ret) {
     const { code, data = [] } = ret;
     if (code === 0) {
+      const list = data.pageData || [];
       if (page === 1) {
         // 刷新
-        this[key] = data;
+        this[key] = list;
       } else {
         // 加载下一页
-        this[key] = this[key].concat(data);
+        this[key] = this[key].concat(list);
       }
     }
   }

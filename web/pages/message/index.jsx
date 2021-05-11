@@ -8,7 +8,7 @@ import PCPage from '@layout/message/pc';
 import { useRouter } from 'next/router';
 
 const Index = ({ site }) => {
-  const { platform } = site;
+  const { isPC } = site;
 
   /**
    * 消息页面当前显示模块
@@ -35,7 +35,7 @@ const Index = ({ site }) => {
     return { page, subPage, dialogId };
   })(router.query);
 
-  if (platform === 'pc') {
+  if (isPC) {
     return <PCPage {...params} />;
   }
   return <H5Page {...params} />;
