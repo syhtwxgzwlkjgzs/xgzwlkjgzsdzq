@@ -4,6 +4,7 @@ import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { Button, Icon } from '@discuzq/design';
 import clearLoginStatus from '@common/utils/clear-login-status';
+import Router from '@discuzq/sdk/dist/router';
 @inject('user')
 @observer
 export default class index extends Component {
@@ -35,6 +36,16 @@ export default class index extends Component {
     window.location.replace('/');
   }
 
+  // 点击粉丝列表
+  goToFansList = () => {
+    Router.push({url: '/my/fans'})
+  }
+
+  // 点击关注
+  goToFollowsList = () => {
+    Router.push({url: 'my/follows'})
+  }
+
   render() {
     return (
       <div className={styles.h5box}>
@@ -45,11 +56,11 @@ export default class index extends Component {
           </div>
           {/* 粉丝|关注|点赞 */}
           <div className={styles.userMessageList}>
-            <div className={styles.userMessageListItem}>
+            <div onClick={this.goToFansList} className={styles.userMessageListItem}>
               <span>粉丝</span>
               <span>{this.user.fansCount||0}</span>
             </div>
-            <div className={styles.userMessageListItem}>
+            <div onClick={this.goToFollowsList} className={styles.userMessageListItem}>
               <span>关注</span>
               <span>{this.user.followCount||0}</span>
             </div>
