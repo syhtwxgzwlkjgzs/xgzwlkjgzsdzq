@@ -1,8 +1,8 @@
 import { action } from 'mobx';
 import SiteStore from './store';
-import { readUser, readPermissions, createFollow, deleteFollow, getUserFollow, getUserFans, readThreadList, denyUser } from '@server';
+import { readUser, readPermissions, createFollow, deleteFollow, getUserFollow, getUserFans, readThreadList, denyUser, deleteDeny } from '@server';
 import { get } from '../../utils/get';
-import deepClone from '../../utils/deep-clone';
+import set from '../../utils/set';
 
 class UserAction extends SiteStore {
   constructor(props) {
@@ -97,14 +97,25 @@ class UserAction extends SiteStore {
   }
 
   /**
-   * 取消屏蔽指定 id 的用户s
+   * 取消屏蔽指定 id 的用户
    * @param {*} id
    */
   @action
   async undenyUser(id) {
-    await denyUser({
-      data: {},
+    const deleteDenyRes = await deleteDeny({
+      data: {
+        id,
+      },
     });
+
+    if (deleteDenyRes.code === 0) {
+      return deleteDenyRes.data;
+    }
+
+    throw {
+      Code: deleteDenyRes.code,
+      Msg: deleteDenyRes.message,
+    };
   }
 
   /**
@@ -113,9 +124,20 @@ class UserAction extends SiteStore {
    */
   @action
   async denyUser(id) {
-    await denyUser({
-      data: {},
+    const denyUserRes = await denyUser({
+      data: {
+        id,
+      },
     });
+
+    if (denyUserRes.code === 0) {
+      return denyUserRes.data;
+    }
+
+    throw {
+      Code: denyUserRes.code,
+      Msg: denyUserRes.message,
+    };
   }
 
   // 更新是否没有用户数据状态
@@ -240,6 +262,16 @@ class UserAction extends SiteStore {
     });
   }
 
+  @action
+  setTargetUserDenied() {
+    set(this.targetUser, 'isDeny', true);
+  }
+
+  @action
+  setTargetUserNotBeDenied() {
+    set(this.targetUser, 'isDeny', false);
+  }
+
   /**
    * 关注
    * @param {object} userId * 被关注人id
@@ -336,6 +368,7 @@ class UserAction extends SiteStore {
   }
 
 
+  // TODO: 等待后台接口 Readay
   /**
    * 获取用户喜欢列表
    */
@@ -344,6 +377,7 @@ class UserAction extends SiteStore {
 
   }
 
+  // TODO: 等待后台接口 Readay
   /**
    * 获取指定用户喜欢列表
    */
