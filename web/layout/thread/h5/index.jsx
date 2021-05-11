@@ -20,7 +20,7 @@ import ShowTop from './components/show-top';
 import DeletePopup from '@components/thread-detail-pc/delete-popup';
 import MorePopup from './components/more-popup';
 import InputPopup from './components/input-popup';
-import ImageContent from '@components/thread/image-content';
+import ImageDisplay from '@components/thread/image-display';
 import AudioPlay from '@components/thread/audio-play';
 import PostContent from '@components/thread/post-content';
 import ProductItem from '@components/thread/product-item';
@@ -158,7 +158,7 @@ const RenderThreadContent = inject('user')(observer((props) => {
             />
           )}
           {/* 图片 */}
-          {parseContent.IMAGE && <ImageContent imgData={parseContent.IMAGE} />}
+          {parseContent.IMAGE && <ImageDisplay imgData={parseContent.IMAGE} />}
           {/* 商品 */}
           {parseContent.GOODS && (
             <div>

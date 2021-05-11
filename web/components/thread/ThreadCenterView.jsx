@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button } from '@discuzq/design';
-import ImageContent from './image-content';
 import AudioPlay from './audio-play';
 import PostContent from './post-content';
 import ProductItem from './product-item';
@@ -25,10 +24,13 @@ const Index = (props) => {
         title = '',
         payType,
         price,
-        paid,
-        onClick,
-        onPay
+        paid
     } = props.data || {};
+
+    const {
+      onClick,
+      onPay
+    } = props
 
     // 帖子属性内容
     const renderThreadContent = ({ content: data, attachmentPrice, payType, paid } = {}) => {
