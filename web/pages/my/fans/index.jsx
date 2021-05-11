@@ -4,10 +4,12 @@ import Header from '@components/header';
 import UserCenterFans from '@components/user-center-fans'
 import { Divider, Toast } from '@discuzq/design'
 import styles from './index.module.scss'
+import { withRouter } from 'next/router';
+import Router from '@discuzq/sdk/dist/router';
 
 @inject('user')
 @observer
-export default class index extends Component {
+class index extends Component {
 
   // 点击关注
   followHandler = async ({ id }) => {
@@ -39,6 +41,10 @@ export default class index extends Component {
     }
   }
 
+  onContainerClick = ({id}) => {
+    Router.push({url: `/my/others?otherId=${id}`})
+  }
+
   splitElement = () => {
     return (
       <div className={styles.splitEmelent}>
@@ -48,21 +54,41 @@ export default class index extends Component {
   }
 
   render() {
+    const { query } = this.props.router
+    let flag = query && query.isOtherPerson
     return (
       <div style={{
         height: '100%'
       }}>
         <Header />
-        <UserCenterFans
-          friends={this.props.user.userFans}
-          loadMorePage={true}
-          loadMoreAction={this.props.user.getUserFans}
-          hasMorePage={this.props.user.userFansTotalPage < this.props.user.userFansPage}
-          followHandler={this.followHandler}
-          unFollowHandler={this.unFollowHandler}
-          splitElement={this.splitElement()}
-        />
+        {
+          !flag ? (
+            <UserCenterFans
+              friends={this.props.user.userFans}
+              loadMorePage={true}
+              loadMoreAction={this.props.user.getUserFans}
+              hasMorePage={this.props.user.userFansTotalPage < this.props.user.userFansPage}
+              followHandler={this.followHandler}
+              unFollowHandler={this.unFollowHandler}
+              splitElement={this.splitElement()}
+              onContainerClick={this.onContainerClick}
+            />
+          ) : (
+            <UserCenterFans
+              friends={this.props.user.targetUserFans}
+              loadMorePage={true}
+              loadMoreAction={this.props.user.getTargetUserFans}
+              hasMorePage={this.props.user.userFansTotalPage < this.props.user.targetUserFansPage}
+              followHandler={this.followHandler}
+              unFollowHandler={this.unFollowHandler}
+              splitElement={this.splitElement()}
+              onContainerClick={this.onContainerClick}
+            />
+          )
+        }
       </div>
     )
   }
 }
+
+export default withRouter(index)

@@ -7,17 +7,17 @@ class UserCenterHead extends React.Component {
     renderPCContent() {
         return (
             <div className={styles.pcbox}>
-            
+
             </div>
         )
     }
 
     render() {
-        const { platform } = this.props;
+        const { platform, isOtherPerson } = this.props;
         if (platform === 'h5') {
-            return <H5HeadetContent />;
+            return <H5HeadetContent isOtherPerson={isOtherPerson} />;
         } else {
-            return this.renderH5Content();
+            return this.renderPCContent();
         }
     }
 
