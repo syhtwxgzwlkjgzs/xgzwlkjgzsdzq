@@ -15,7 +15,7 @@ import styles from './index.module.scss';
 const Index = ({ icon = { type: '' }, title, leftNum, onShowMore, isShowMore = true, rightText }) => (
   <div className={styles.container}>
     <div className={styles.left}>
-      <Icon className={styles[`icon${icon.type}`]} name={icon.name} size={16} color={icon.color}/>
+      <Icon className={`${styles[`icon${icon.type}`]} ${styles.margin}`} name={icon.name} size={16} color={icon.color}/>
       <div className={styles.title}>{title}</div>
       <div className={styles.num}>{leftNum}</div>
     </div>

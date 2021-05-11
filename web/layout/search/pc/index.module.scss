@@ -1,8 +1,5 @@
 @import '@common/styles/fn/rem.scss';
 @import '@common/styles/variable/index.scss';
-// .searchWrap {
-//   background: #f5f7f8;
-//   width: 100%;
 .searchContent {
   width: 100%;
   min-width: rem(652);
@@ -20,7 +17,7 @@
   background: var(--color-white);
 }
 .searchRight {
-  width: rem(286);
+  width: 100%;
   overflow: hidden;
 }
 .threadContent {
@@ -29,6 +26,5 @@
   margin-bottom: rem(16);
   overflow: hidden;
 }
-// }
 
   

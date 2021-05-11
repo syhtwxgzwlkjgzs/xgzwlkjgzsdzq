@@ -36,20 +36,26 @@
     }
     .num {
       display: flex;
+      align-items: center;
       font-size: rem($font-size-label);
-      line-height: rem($padding-4n);
+      line-height: rem(17);
       color: var(--color-text-secondary);
       margin: rem($margin-2n) 0;
       .numItem {
         margin-right: rem($font-size-label);
+        .numIcon {
+          margin-right: rem($margin-1n);
+        }
       }
-      .numIcon {
-        margin-right: rem($margin-1n);
+      .viewBox {
+        .numIcon {
+          margin-right: rem(6.19);
+        }
       }
     }
     .text {
-      font-size: rem($font-size-middle);
-      line-height: rem($font-line-height-middle);
+      font-size: rem($font-size-primary);
+      line-height: rem($font-line-height-primary);
       color: var(--color-text-primary);
       display: -webkit-box;
       -webkit-box-orient: vertical;

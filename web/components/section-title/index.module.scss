@@ -29,11 +29,16 @@
     }
   }
   .title {
-    margin-left: rem($padding-2n);
     font-weight: var(--font-weight-regular);
     line-height: rem($font-line-height-primary);
     font-size: rem($font-size-middle);
     color: var(--color-text-primary);
+  }
+  .margin {
+    margin-right: rem($padding-2n);
+  }
+  .noMargin {
+    margin-left: 0;
   }
   .more {
     cursor: pointer;

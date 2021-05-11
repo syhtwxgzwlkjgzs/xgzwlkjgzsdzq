@@ -53,8 +53,8 @@ return (
         <div className={styles.circle}></div>
       )
     }
-    <Icon className={styles.icon} name={data.iconName} size={20} color={data.iconColor}/>
-    <div className={styles.content}>{data.content}</div>
+    <Icon className={styles.icon} name={data.iconName} size={20} color={`${selectIndex === index ? '#2469f6' : data.iconColor}`}/>
+    <div className={`${styles.content} ${selectIndex === index ? styles.itemActive : ''}`}>{data.content}</div>
   </div>
 );
 };
