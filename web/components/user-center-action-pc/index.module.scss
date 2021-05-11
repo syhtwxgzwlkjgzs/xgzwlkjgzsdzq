@@ -1,0 +1,33 @@
+@import '@common/styles/fn/rem.scss';
+
+.userCenterAction {
+    display: flex;
+    padding: rem(24);
+    flex-wrap: wrap;
+
+    .userCenterActionItem {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-right: rem(32);
+        cursor: pointer;
+
+        &:last-child {
+            margin-right: 0;
+        }
+
+        .userCenterActionItemIcon {}
+
+        .userCenterActionItemDesc {
+            margin-top: rem(8);
+        }
+    }
+}
+
+.userActionMobile {
+    .userCenterActionItem {
+        width: 25%;
+        margin: 0;
+    }
+}
