@@ -1,38 +1,39 @@
 import React, { Component } from 'react';
-import { Avatar, Badge, Icon } from '@discuzq/design';
+import { Badge, Icon } from '@discuzq/design';
+import Router from '@discuzq/sdk/dist/router';
 
 import styles from './index.module.scss';
 
 
 export class CategoryList extends Component {
   state = {
-    categoryContent: [
+    categoryItems: [
       {
         iconName: 'RemindOutlined',
         title: '帖子通知',
-        link: '/',
+        link: '#',
         totalCount: 0,
       },
       {
         iconName: 'RenminbiOutlined',
         title: '财务通知',
-        link: '/',
+        link: '#',
         totalCount: 11,
       },
       {
         iconName: 'LeaveWordOutlined',
         title: '账号消息',
-        link: '/',
+        link: '#',
         totalCount: 100,
       },
     ],
   };
 
   render() {
-    const { categoryContent } = this.state;
+    const { categoryItems } = this.state;
     return (
       <div className={styles.container}>
-        {categoryContent.map(({ iconName, title, link, totalCount }, idx) => (
+        {categoryItems.map(({ iconName, title, link, totalCount }, idx) => (
           <div key={idx} className={styles.notificationItem}>
             {totalCount > 0 ? (
               <div className={styles.iconWrapper}>
