@@ -2,6 +2,7 @@ import { action } from 'mobx';
 import SiteStore from './store';
 import { readUser, readPermissions, createFollow, deleteFollow, getUserFollow, getUserFans, readThreadList, denyUser } from '@server';
 import { get } from '../../utils/get';
+import deepClone from '../../utils/deep-clone';
 
 class UserAction extends SiteStore {
   constructor(props) {
@@ -163,6 +164,7 @@ class UserAction extends SiteStore {
         user.userFollow.isUnFollowed = false;
       });
     });
+    this.userFollows = { ...this.userFollows };
   }
 
   @action
@@ -173,6 +175,7 @@ class UserAction extends SiteStore {
         user.userFollow.isUnFollowed = true;
       });
     });
+    this.userFollows = { ...this.userFollows };
   }
 
   @action
