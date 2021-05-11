@@ -21,7 +21,6 @@ class H5OthersPage extends React.Component {
 
   componentDidMount = async () => {
     const { query } = this.props.router
-    console.log(query);
     if (query.otherId) {
       await this.props.user.getTargetUserInfo(query.otherId);
       await this.props.user.getTargetUserThreads(query.otherId);

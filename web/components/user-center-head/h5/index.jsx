@@ -25,8 +25,18 @@ class index extends Component {
   }
 
   // 点击关注
-  handleChangeAttention = () => {
-
+  handleChangeAttention = (follow) => {
+    console.log(follow);
+    const { query } = this.props.router
+    if (query.otherId) {
+      if (follow !== 0) {
+        this.props.user.cancelFollow({ id: query.otherId, type: 1 })
+        // this.props.user.setTargetUserFollowerBeFollowed(query.otherId)
+      } else {
+        this.props.user.postFollow(query.otherId)
+        // this.props.user.setTargetUserFollowerBeUnFollowed(query.otherId)
+      }
+    }
   }
 
   logout = () => {
@@ -99,7 +109,7 @@ class index extends Component {
           {
             this.props.isOtherPerson ? (
               <>
-                <Button onClick={this.handleChangeAttention} type="primary">
+                <Button onClick={() => { this.handleChangeAttention(user.follow) }} type="primary">
                   <Icon name={user.follow !== 0 ? "CheckOutlined" : "PlusOutlined"} />
                   <span className={styles.userBtnText}>{user.follow ? '已关注' : '关注'}</span>
                 </Button>
