@@ -102,11 +102,66 @@ class UserAction extends SiteStore {
     const totalPage = get(fansRes, 'data.totalPage', 1);
     this.userFans[this.userFansPage] = pageData;
     this.userFansTotalPage = totalPage;
-    this.userFollows[this.userFansPage] = pageData;
+    this.userFans[this.userFansPage] = pageData;
     if (this.userFansPage < this.userFansTotalPage) {
       this.userFansPage += 1;
     }
-    this.userFollows = { ...this.userFollows };
+    this.userFans = { ...this.userFans };
+  }
+
+  @action
+  getTargetUserFollow = async (id) => {
+    const followsRes = await getUserFollow({
+      params: {
+        page: this.targetUserFollowsPage,
+        perPage: 20,
+        filter: {
+          userId: id,
+        },
+      },
+    });
+
+    if (followsRes.code !== 0) {
+      console.error(followsRes);
+      return;
+    }
+
+    const pageData = get(followsRes, 'data.pageData', []);
+    const totalPage = get(followsRes, 'data.totalPage', 1);
+    this.targetUserFollowsTotalPage = totalPage;
+    this.targetUserFollows[this.targetUserFollowsPage] = pageData;
+    if (this.targetUserFollowsPage < this.targetUserFollowsTotalPage) {
+      this.targetUserFollowsPage += 1;
+    }
+    this.targetUserFollows = { ...this.targetUserFollows };
+  }
+
+  @action
+  getTargetUserFans = async (id) => {
+    const fansRes = await getUserFans({
+      params: {
+        page: this.targetUserFansPage,
+        perPage: 20,
+        filter: {
+          userId: id,
+        },
+      },
+    });
+
+    if (fansRes.code !== 0) {
+      console.error(fansRes);
+      return;
+    }
+
+    const pageData = get(fansRes, 'data.pageData', []);
+    const totalPage = get(fansRes, 'data.totalPage', 1);
+    this.targetUserFans[this.targetUserFansPage] = pageData;
+    this.targetUserFansTotalPage = totalPage;
+    this.targetUserFollows[this.targetUserFansPage] = pageData;
+    if (this.targetUserFansPage < this.targetUserFansTotalPage) {
+      this.targetUserFansPage += 1;
+    }
+    this.targetUserFans = { ...this.targetUserFans };
   }
 
   /**
@@ -403,16 +458,39 @@ class UserAction extends SiteStore {
    * 上传新的头像
    */
   @action
-  async updateAvatar() {
-    await updateAvatar();
+  async updateAvatar(fileList) {
+    const param = new FormData();
+    param.append('avatar', fileList[0]);// 通过append向form对象添加数据
+    param.append('pid', this.id);
+    await updateAvatar({
+      transformRequest: [function (data) {
+        return data;
+      }],
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      data: param,
+    });
+    await this.updateUserInfo(this.id);
   }
 
   /**
    * 上传新的背景图
    */
   @action
-  async updateBackground() {
-    await updateBackground();
+  async updateBackground(fileList) {
+    const param = new FormData();
+    param.append('background', fileList[0]);// 通过append向form对象添加数据
+    await updateBackground({
+      transformRequest: [function (data) {
+        return data;
+      }],
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      data: param,
+    });
+    await this.updateUserInfo(this.id);
   }
 
   /**

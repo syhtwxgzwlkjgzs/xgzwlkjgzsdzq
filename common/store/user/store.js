@@ -43,7 +43,7 @@ class UserStore {
   @observable targetUserFansTotalPage = 1;
 
   @observable targetUserFollows = {};
-  @observable targetUsersPage = 1;
+  @observable targetUserFollowsPage = 1;
   @observable targetUserFollowsTotalPage = 1;
 
 
@@ -118,7 +118,7 @@ class UserStore {
 
   // 获取用户的用户组
   @computed get group() {
-    return get(this.userInfo, 'group')
+    return get(this.userInfo, 'group');
   }
 
 
