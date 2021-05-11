@@ -3,7 +3,6 @@ import UserCenterFriends from '../user-center-friends';
 import { Spin } from '@discuzq/design';
 import { followerAdapter } from './adapter';
 import styles from './index.module.scss';
-
 class UserCenterFollow extends React.Component {
   firstLoaded = false;
   containerRef = React.createRef(null);
@@ -15,10 +14,10 @@ class UserCenterFollow extends React.Component {
     loadMorePage: true,
     splitElement: <div></div>,
     friends: [],
-    loadMoreAction: async () => {},
-    followHandler: async () => {},
-    unFollowHandler: async () => {},
-    onContainerClick: async ({ id }) => {},
+    loadMoreAction: async () => { },
+    followHandler: async () => { },
+    unFollowHandler: async () => { },
+    onContainerClick: async ({ id }) => { },
     hasMorePage: false,
   };
 
@@ -72,6 +71,17 @@ class UserCenterFollow extends React.Component {
     }
   };
 
+  // 判断关注状态
+  judgeFollowsStatus = (user) => {
+    let type = 'followed'
+    if (user.isUnFollowed) { // 表示点击了取消关注==>变为要关注的状态
+      type = 'follow'
+    } else if (user.isMutual) {
+      type = 'friend'
+    }
+    return type
+  }
+
   render() {
     return (
       <div
@@ -87,7 +97,7 @@ class UserCenterFollow extends React.Component {
             <div key={user.id}>
               <UserCenterFriends
                 id={user.id}
-                type={user.isMutual ? 'friend' : 'followed'}
+                type={this.judgeFollowsStatus(user)}
                 imgUrl={user.avatar}
                 withHeaderUserInfo={true}
                 userName={user.userName}

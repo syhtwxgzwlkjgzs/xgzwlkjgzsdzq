@@ -9,6 +9,7 @@ export const followerAdapter = (data) => {
       avatar: user.user.avatar,
       userName: user.user.userName,
       isMutual: user.userFollow.isMutual,
+      isUnFollowed: user.userFollow.isUnFollowed
     }));
   });
 

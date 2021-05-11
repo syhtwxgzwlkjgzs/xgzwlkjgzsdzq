@@ -4,6 +4,7 @@ import { Button, Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
+import Router from '@discuzq/sdk/dist/router';
 @inject('user')
 @observer
 export default class index extends Component {
@@ -11,6 +12,11 @@ export default class index extends Component {
   constructor(props) {
     super(props)
     this.user = this.props.user || {}
+  }
+
+  // 点击取消
+  handleCancel = () => {
+    Router.back()
   }
 
   render() {
@@ -76,7 +82,7 @@ export default class index extends Component {
             <div><Icon name="RightOutlined" /></div>
           </div> */}
           <div className={styles.userCenterEditBtn}>
-            <Button>取消</Button>
+            <Button onClick={this.handleCancel}>取消</Button>
             <Button type="primary">保存</Button>
           </div>
         </div>
