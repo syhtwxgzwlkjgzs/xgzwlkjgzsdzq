@@ -7,7 +7,16 @@ import NoticeItem from '@components/message/notice-item';
 import SliderLeft from '@components/message/slider-left';
 import mock from '../mock.json';
 
-const Index = ({ page, subPage, dialogId }) => {
+const Index = ({ page, subPage, dialogId, message }) => {
+  const { readAccountMsgList, readDialogList } = message;
+
+  useEffect(() => {
+    readAccountMsgList(1);
+    readDialogList();
+  });
+
+
+  console.log(message);
   // props,state
   const [messagesHistory, setMessagesHistory] = useState([]);
   const [type, setType] = useState('financial'); // chat,system,financial,user
@@ -44,4 +53,4 @@ const Index = ({ page, subPage, dialogId }) => {
   );
 };
 
-export default inject('site')(observer(memo(Index)));
+export default inject('site', 'message')(observer(memo(Index)));

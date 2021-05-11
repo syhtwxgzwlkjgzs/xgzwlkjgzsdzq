@@ -60,3 +60,7 @@ export { default as readWalletUser } from './wallet/read-walletUser';
 export { default as updatePayPwd } from './pay/updatePayPwd';
 export { default as updateThread } from './thread-post/update-thread';
 export { default as updateUsersUpdate } from './user/updateUsersUpdate';
+
+// 消息模块
+export { default as readDialogList } from './message/readDialogList';
+export { default as readMsgList } from './message/readMsgList';
