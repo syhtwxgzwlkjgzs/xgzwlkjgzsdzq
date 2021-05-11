@@ -64,3 +64,4 @@ export { default as updateUsersUpdate } from './user/updateUsersUpdate';
 // 消息模块
 export { default as readDialogList } from './message/readDialogList';
 export { default as readMsgList } from './message/readMsgList';
+export { default as createDialog } from './message/createDialog';

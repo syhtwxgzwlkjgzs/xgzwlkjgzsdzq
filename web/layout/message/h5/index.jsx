@@ -1,58 +1,43 @@
-import React, { memo, useState, useEffect } from 'react';
-import styles from './index.module.scss';
+import React, { memo, useState, useEffect, useMemo } from 'react';
 import { inject, observer } from 'mobx-react';
-import InstantMessaging from '../../../components/message/instant-messaging';
-
 import MessageAccount from '@components/message/message-account';
 import MessageIndex from '@components/message/message-index';
-import Notice from '@components/message/notice';
-import mock from '../mock.json';
+import MessageThread from '@components/message/message-thread';
+import MessageFinancial from '@components/message/message-financial';
+import MessageChat from '@components/message/message-chat';
 
-const Index = ({ page, subPage, dialogId, message }) => {
-  const { readAccountMsgList, readDialogList } = message;
+const Index = inject('message')(observer(({ page, subPage, dialogId, message }) => {
+  const { readAccountMsgList, readDialogList, createDialog, dialogList, accountMsgList } = message;
 
   useEffect(() => {
     readAccountMsgList(1);
-    readDialogList();
-  });
-
-
-  console.log(message);
-  // props,state
-  const [messagesHistory, setMessagesHistory] = useState([]);
-  const [type, setType] = useState('account'); // chat,thread,financial,account
-  const [list, setList] = useState([]);
-
-  // hooks
-  useEffect(() => {
-    setList(mock[type]); // 设置渲染数据
+    // readDialogList();
+    // ['fishcui1234', '18279670797', 'cjw', 'LamHo', 'yuzhihang1', 'heifeipangpang', '郝梦茹', '余努力', '网友B1r8jI', '网友hlvaHi', 'heifeipang123', '网友6HZYch', '黑哈哈', '网友4tEz2z', 'Lam', '暮光2'].forEach(item => {
+    //   createDialog({
+    //     recipientUsername: item,
+    //     messageText: '祝您身体健康',
+    //   });
+    // });
   }, []);
 
-  // handle
-  const handleDelete = (item) => {
-    const _list = [...list].filter(i => i.id !== item.id);
-    setList(_list);
-  };
+  useMemo(() => {
+    console.log(accountMsgList);
+  }, [accountMsgList]);
 
-  const doSubmit = (val) => {
-    if (!val) return;
-    setMessagesHistory([...messagesHistory, val]);
-    return true;
-  };
+  console.log(page);
 
   switch (page) {
     case 'index':
-      return <MessageIndex />;
+      return <MessageIndex accountMsgList={accountMsgList} />;
     case 'account':
       return <MessageAccount subPage={subPage} />;
+    case 'thread':
+      return <MessageThread />;
+    case 'financial':
+      return <MessageFinancial />;
+    case 'chat':
+      return <MessageChat dialogId={dialogId} />;
   }
+}));
 
-  // return (
-  //   <div className={styles.container}>
-  //     <Notice list={list} type={type} onBtnClick={handleDelete} />
-  //     <InstantMessaging messagesHistory={messagesHistory} onSubmit={doSubmit} />
-  //   </div>
-  // );
-};
-
-export default inject('site', 'message')(observer(memo(Index)));
+export default Index;

@@ -2,6 +2,13 @@ import { observable, computed } from 'mobx';
 import { get } from '../../utils/get';
 
 class MessageStore {
+  initList = {
+    list: [],
+    currentPage: 1,
+    totalPage: 0,
+    totalCount: 0,
+  };
+
   /**
    * 总的未读消息
    */
@@ -25,42 +32,42 @@ class MessageStore {
   /**
    * 私信对话列表
    */
-  @observable dialogList = [];
+  @observable dialogList = this.initList;
 
   /**
    * 单个私信对话内的消息列表
    */
-  @observable dialogMsgList = [];
+  @observable dialogMsgList = this.initList;
 
   /**
    * 财务通知列表
    */
-  @observable financialMsgList = [];
+  @observable financialMsgList = this.initList;
 
   /**
    * 账号消息列表
    */
-  @observable accountMsgList = [];
+  @observable accountMsgList = this.initList;
 
   /**
    * at我的消息列表
    */
-  @observable atMsgList = [];
+  @observable atMsgList = this.initList;
 
   /**
    * 回复我的消息列表
    */
-  @observable replyMsgList = [];
+  @observable replyMsgList = this.initList;
 
   /**
    * 点赞我的消息列表
    */
-  @observable likeMsgList = [];
+  @observable likeMsgList = this.initList;
 
   /**
    * 帖子通知列表
    */
-  @observable threadMsgList = [];
+  @observable threadMsgList = this.initList;
 }
 
 export default MessageStore;

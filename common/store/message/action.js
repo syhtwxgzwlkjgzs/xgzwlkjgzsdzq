@@ -1,11 +1,11 @@
 import { action } from 'mobx';
 import MessageStore from './store';
-import { readDialogList, readMsgList } from '@server';
+import { readDialogList, readMsgList, createDialog } from '@server';
 
 class MessageAction extends MessageStore {
   // 设置消息分页的每页条数
   perPage = {
-    perPage: 20,
+    perPage: 5,
   };
   // 组装获取消息列表的入参
   assemblyParams(page, types) {
@@ -21,16 +21,20 @@ class MessageAction extends MessageStore {
   }
   // 设置消息列表数据
   @action
-  setMsgList(page, key, ret) {
-    const { code, data = [] } = ret;
+  setMsgList(currentPage, key, ret) {
+    const { code, data = {} } = ret;
     if (code === 0) {
-      const list = data.pageData || [];
-      if (page === 1) {
+      const { pageData: list = [] } = data;
+      const listData = (({ totalPage = 0, totalCount = 0 }) => ({ list, totalPage, totalCount, currentPage }))(data);
+      if (currentPage === 1) {
         // 刷新
-        this[key] = list;
+        this[key] = listData;
       } else {
         // 加载下一页
-        this[key] = this[key].concat(list);
+        this[key] = {
+          ...listData,
+          list: this[key].list.concat(list),
+        };
       }
     }
   }
@@ -68,6 +72,13 @@ class MessageAction extends MessageStore {
       },
     });
     this.setMsgList(page, 'dialogList', ret);
+  }
+
+  // 创建新的私信对话
+  @action.bound
+  async createDialog(params) {
+    const ret = await createDialog(params);
+    console.log('创建新的私信对话', ret);
   }
 }
 
