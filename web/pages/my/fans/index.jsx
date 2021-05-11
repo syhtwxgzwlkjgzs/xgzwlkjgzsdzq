@@ -8,10 +8,11 @@ import UserCenterFans from '@components/user-center-fans'
 export default class index extends Component {
   render() {
     return (
-      <div>
+      <div style={{
+        height: '100%'
+      }}>
         <Header />
-        我的天
-        <UserCenterFans 
+        <UserCenterFans
           friends={this.props.user.userFans}
           loadMorePage={true}
           loadMoreAction={this.props.user.getUserFans}

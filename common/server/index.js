@@ -62,3 +62,4 @@ export { default as updateThread } from './thread-post/update-thread';
 export { default as updateUsersUpdate } from './user/updateUsersUpdate';
 export { default as getUserFans } from './user/getUserFans';
 export { default as getUserFollow } from './user/getUserFollow';
+export { default as denyUser } from './user/denyUser';

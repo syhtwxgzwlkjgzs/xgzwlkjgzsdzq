@@ -186,3 +186,23 @@
 .divider {
   margin: rem($margin-4n) 0;
 }
+
+.rewardBody {
+  text-align: center;
+}
+
+.rewardMoney {
+  margin-top: rem(20);
+  line-height: rem(20);
+  font-size: rem($font-size-primary);
+  color: var(--color-text-primary);
+}
+.rewardNumber {
+  color: var(--color-error);
+}
+
+.rewardTime {
+  margin-top: rem(4);
+  font-size: rem($font-size-label);
+  color: var(--color-text-secondary);
+}

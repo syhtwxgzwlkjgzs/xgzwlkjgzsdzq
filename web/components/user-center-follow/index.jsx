@@ -18,6 +18,7 @@ class UserCenterFollow extends React.Component {
     loadMoreAction: async () => {},
     followHandler: async () => {},
     unFollowHandler: async () => {},
+    onContainerClick: async ({ id }) => {},
     hasMorePage: false,
   };
 
@@ -57,26 +58,29 @@ class UserCenterFollow extends React.Component {
   }
 
   // 加载更多函数
-   loadMore = async () => {
-     const scrollDom = this.containerRef.current;
-     if (scrollDom.clientHeight + scrollDom.scrollTop === scrollDom.scrollHeight) {
-       if (!this.checkLoadCondition()) return;
-       this.setState({
-         loading: true,
-       });
-       await this.props.loadMoreAction();
-       this.setState({
-         loading: false,
-       });
-     }
-   }
+  loadMore = async () => {
+    const scrollDom = this.containerRef.current;
+    if (scrollDom.clientHeight + scrollDom.scrollTop === scrollDom.scrollHeight) {
+      if (!this.checkLoadCondition()) return;
+      this.setState({
+        loading: true,
+      });
+      await this.props.loadMoreAction();
+      this.setState({
+        loading: false,
+      });
+    }
+  };
 
-   render() {
-     return (
-      <div ref={this.containerRef} style={{
-        height: '100%',
-        overflow: 'scroll',
-      }}>
+  render() {
+    return (
+      <div
+        ref={this.containerRef}
+        style={{
+          height: '100%',
+          overflow: 'scroll',
+        }}
+      >
         {followerAdapter(this.props.friends).map((user, index) => {
           if (index + 1 > this.props.limit) return null;
           return (
@@ -87,6 +91,7 @@ class UserCenterFollow extends React.Component {
                 imgUrl={user.avatar}
                 withHeaderUserInfo={true}
                 userName={user.userName}
+                onContainerClick={this.props.onContainerClick}
                 userGroup={user.groupName}
                 followHandler={this.props.followHandler}
                 unFollowHandler={this.props.unFollowHandler}
@@ -95,12 +100,10 @@ class UserCenterFollow extends React.Component {
             </div>
           );
         })}
-        <div className={styles.loadMoreContainer}>
-            {this.state.loading && <Spin type={'spinner'}>加载中 ...</Spin>}
-        </div>
+        <div className={styles.loadMoreContainer}>{this.state.loading && <Spin type={'spinner'}>加载中 ...</Spin>}</div>
       </div>
-     );
-   }
+    );
+  }
 }
 
 export default UserCenterFollow;

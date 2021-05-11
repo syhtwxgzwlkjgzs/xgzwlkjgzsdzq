@@ -4,7 +4,7 @@ import { withRouter } from 'next/router';
 
 import styles from './index.module.scss';
 
-// import NoMore from './components/no-more';
+import Header from '@components/Header/h5';
 
 // import { Tabs, Icon, Button } from '@discuzq/design';
 
@@ -47,6 +47,7 @@ class FrozenAmount extends React.Component {
 
     return (
         <div className={styles.container}>
+          <Header></Header>
           <div className={styles.header}>
             <div className={styles.record}>共有{3}条记录</div>
             <div className={styles.totalMoney}>涉及金额 {15.00}元</div>

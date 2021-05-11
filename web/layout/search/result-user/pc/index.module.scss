@@ -6,7 +6,6 @@
   height: 100vh;
   .searchContent {
     width: 100%;
-    min-width: rem(652);
   }
   .section {
     padding: 0 rem($padding-6n);
@@ -16,8 +15,7 @@
     margin-bottom: rem($margin-10);
   }
   .searchRight {
-    width: rem(286);
-    overflow: hidden;
+    width: 100%;
   }
 }
 

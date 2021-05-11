@@ -1,14 +1,31 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Popup } from '@discuzq/design';
-import { Icon } from '@discuzq/design';
+import { Icon, Button } from '@discuzq/design';
 
 import styles from './index.module.scss';
 
 import MoneyInput from '../money-input';
 
 const WithdrawalPop = (props) => {
-  const { visible, onClose } = props;
+  const { visible, onClose, moneyToWixin } = props;
+
+  const [data, setData] = useState('');
+
+  const getmoneyNum = (data) => {
+    // console.log(data);
+    if (Number(data) >= 1) {
+      setData(data);
+    } else {
+      setData('');
+    }
+  };
+
+  // 点击提现到微信钱包
+  const onMoneyToWixin = () => {
+    moneyToWixin(data);
+    setData('');
+  };
 
   return (
     <Popup
@@ -26,10 +43,13 @@ const WithdrawalPop = (props) => {
         </div>
         <div className={styles.availableAmount}>
           <div className={styles.text}>可提现金额</div>
-          <div className={styles.moneyNum}>11786.00</div>
+          <div className={styles.moneyNum}>{props.moneyNumber}</div>
         </div>
         <div className={styles.moneyInput}>
-          <MoneyInput></MoneyInput>
+          <MoneyInput getmoneyNum={data => getmoneyNum(data)} visible={visible}></MoneyInput>
+        </div>
+        <div className={styles.button}>
+          <Button type='primary' onClick={onMoneyToWixin}>提现到微信钱包</Button>
         </div>
       </div>
     </Popup>);

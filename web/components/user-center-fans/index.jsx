@@ -19,6 +19,7 @@ class UserCenterFans extends React.Component {
       loadMoreAction: async () => {},
       followHandler: async () => {},
       unFollowHandler: async () => {},
+      onContainerClick: async ({ id }) => {},
       hasMorePage: false,
     };
 
@@ -59,6 +60,7 @@ class UserCenterFans extends React.Component {
 
     // 加载更多函数
      loadMore = async () => {
+       console.log('load more');
        const scrollDom = this.containerRef.current;
        if (scrollDom.clientHeight + scrollDom.scrollTop === scrollDom.scrollHeight) {
          if (!this.checkLoadCondition()) return;
@@ -87,6 +89,7 @@ class UserCenterFans extends React.Component {
                   type={user.isMutual ? 'friend' : 'follow'}
                   imgUrl={user.avatar}
                   withHeaderUserInfo={true}
+                  onContainerClick={this.props.onContainerClick}
                   userName={user.userName}
                   userGroup={user.groupName}
                   followHandler={this.props.followHandler}

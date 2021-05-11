@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import SiteStore from './store';
-import { readUser, readPermissions, createFollow, deleteFollow, getUserFollow, getUserFans, readThreadList } from '@server';
+import { readUser, readPermissions, createFollow, deleteFollow, getUserFollow, getUserFans, readThreadList, denyUser } from '@server';
 import { get } from '../../utils/get';
 
 class UserAction extends SiteStore {
@@ -51,7 +51,7 @@ class UserAction extends SiteStore {
     const followsRes = await getUserFollow({
       params: {
         page: this.userFollowsPage,
-        perPage: 2,
+        perPage: 20,
       },
     });
 
@@ -71,7 +71,7 @@ class UserAction extends SiteStore {
   }
 
   @action
-  async getUserFans() {
+  getUserFans = async () => {
     const fansRes = await getUserFans({
       params: {
         page: this.userFansPage,
@@ -93,6 +93,28 @@ class UserAction extends SiteStore {
       this.userFansPage += 1;
     }
     this.userFollows = { ...this.userFollows };
+  }
+
+  /**
+   * 取消屏蔽指定 id 的用户s
+   * @param {*} id
+   */
+  @action
+  async undenyUser(id) {
+    await denyUser({
+      data: {},
+    });
+  }
+
+  /**
+   * 屏蔽指定  id 的用户
+   * @param {*} id
+   */
+  @action
+  async denyUser(id) {
+    await denyUser({
+      data: {},
+    });
   }
 
   // 更新是否没有用户数据状态
@@ -131,6 +153,30 @@ class UserAction extends SiteStore {
     } catch (err) {
       return null;
     }
+  }
+
+  @action
+  async listFollow(userId) {
+    const followResult = await this.postFollow(userId);
+    if (!followResult.success) {
+      throw {
+        Code: 'usr_0000',
+        Msg: '关注用户错误',
+      };
+    }
+    // const setFollowStatus = (dataList) => {
+    //   Object.keys(dataList).forEach((key) => {
+    //     dataList[key].forEach((item) => {
+    //       if (!item.userFollow.isMutual) {
+    //         item.userFollow = true;
+    //       }
+    //     });
+    //   });
+    // };
+
+    // setFollowStatus(this.userFollows);
+    // setFollowStatus(this.userFans);
+    // setFollowStatus
   }
 
   /**
@@ -177,18 +223,72 @@ class UserAction extends SiteStore {
     };
   }
 
+  /**
+   * 获取用户自己发的主题列表
+   * @returns
+   */
   @action
-  async getUserThreads() {
+  getUserThreads = async () => {
     const userThreadList = await readThreadList({
       params: {
+        page: this.userThreadsPage,
         filter: {
           toUserId: 0,
           complex: 5,
         },
       },
     });
+    const pageData = get(userThreadList, 'data.pageData', []);
+    const totalPage = get(userThreadList, 'data.totalPage', 1);
+    this.userThreadsTotalPage = totalPage;
+    this.userThreads = [...this.userThreads, ...pageData];
+    this.userThreadsTotalCount = get(userThreadList, 'data.totalCount', 0);
 
-    return userThreadList.data.pageData;
+    return this.userThreads;
+  }
+
+
+  /**
+   * 获取指定用户发的主题列表
+   * @param {*} id
+   * @returns
+   */
+  @action
+  async getTargetUserThreads(id) {
+    const targetUserThreadList = await readThreadList({
+      params: {
+        page: this.targetUsersPage,
+        filter: {
+          toUserId: id,
+          complex: 5,
+        },
+      },
+    });
+
+    const pageData = get(targetUserThreadList, 'data.pageData', []);
+    const totalPage = get(targetUserThreadList, 'data.totalPage', 1);
+    this.targetUserThreadsTotalPage = totalPage;
+    this.targetUserThreads = [...this.targetUserThreads, ...pageData];
+    this.targetUserThreadsTotalCount = get(targetUserThreadList, 'data.totalCount', 0);
+
+    return this.targetUserThreads;
+  }
+
+
+  /**
+   * 获取用户喜欢列表
+   */
+  @action
+  async getUserLikeLists() {
+
+  }
+
+  /**
+   * 获取指定用户喜欢列表
+   */
+  @action
+  async getTargetUserLikeLists() {
+
   }
 }
 
