@@ -285,6 +285,7 @@ class UserAction extends SiteStore {
       });
     });
     this.userFans = { ...this.userFans };
+    console.log('want to render','ssssssssss_01');
   }
 
   @action
@@ -296,6 +297,7 @@ class UserAction extends SiteStore {
       });
     });
     this.userFans = { ...this.userFans };
+    console.log('want to render','ssssssssss_022');
   }
 
   @action

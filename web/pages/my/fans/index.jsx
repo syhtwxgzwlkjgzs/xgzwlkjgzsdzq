@@ -27,14 +27,20 @@ class index extends Component {
   followHandler = async ({ id }) => {
     try {
       await this.props.user.postFollow(id);
+      const { query } = this.props.router;
+      const flag = query && query.isOtherPerson;
+      if (flag === 'true') {
+        this.props.user.setTargetUserFansBeFollowed(query.otherId);
+      } else {
+        this.props.user.setUserFansBeFollowed(id);
+      }
       Toast.success({
         content: '关注成功',
         hasMask: false,
         duration: 1000,
       });
-      this.props.user.setUserFansBeFollowed(id);
     } catch (error) {
-
+      console.log(error);
     }
   }
 
@@ -42,19 +48,25 @@ class index extends Component {
   unFollowHandler = async ({ id }) => {
     try {
       await this.props.user.cancelFollow({ id, type: 1 });
-      this.props.user.setUserFansBeUnFollowed(id);
+      const { query } = this.props.router;
+      const flag = query && query.isOtherPerson;
+      if (flag === 'true') {
+        this.props.user.setTargetUserFansBeUnFollowed(query.otherId);
+      } else {
+        this.props.user.setUserFansBeUnFollowed(id);
+      }
       Toast.success({
         content: '取消成功',
         hasMask: false,
         duration: 1000,
       });
     } catch (error) {
-
+      console.log(error);
     }
   }
 
   onContainerClick = ({ id }) => {
-    Router.push({ url: `/my/others?otherId=${id}` });
+    Router.push({ url: `/my/others?isOtherPerson=${true}&otherId=${id}` });
   }
 
   splitElement = () => (
@@ -66,6 +78,7 @@ class index extends Component {
   render() {
     const { query } = this.props.router;
     const flag = query && query.isOtherPerson;
+    console.log(this.props.user);
     return (
       <div style={{
         height: this.state.height,
