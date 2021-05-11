@@ -4,9 +4,7 @@ import Router from '@discuzq/sdk/dist/router';
 
 import styles from './index.module.scss';
 
-
 const MessageCard = (props) => {
-
   const { cardItems } = props;
   return (
     <div className={styles.container}>
@@ -14,11 +12,11 @@ const MessageCard = (props) => {
         <div key={idx} className={styles.notificationItem}>
           {totalCount > 0 ? (
             <div className={styles.iconWrapper}>
-              <Icon name={iconName} className={styles.icon} size={20}/>
+              <Icon name={iconName} className={styles.icon} size={20} />
               <Badge info={totalCount > 99 ? '99+' : `${totalCount || '0'}`} className={styles.badge} />
             </div>
           ) : (
-            <Icon name={iconName} className={styles.icon} size={20}/>
+            <Icon name={iconName} className={styles.icon} size={20} />
           )}
           <div className={styles.title}>{title}</div>
           <div
@@ -27,12 +25,12 @@ const MessageCard = (props) => {
               Router.push({ url: link });
             }}
           >
-            <Icon name={"RightOutlined"} className={styles.rightArrow} size={10}/>
+            <Icon name={'RightOutlined'} className={styles.rightArrow} size={10} />
           </div>
         </div>
       ))}
     </div>
   );
-}
+};
 
 export default MessageCard;
