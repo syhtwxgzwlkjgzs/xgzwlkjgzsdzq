@@ -162,22 +162,6 @@
     }
   }
 
-  /*左滑删除按钮*/
-  .delete {
-    flex: 0 0 74px;
-    align-items: stretch;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: var(--font-size-primary);
-    color: var(--color-white);
-    background: var(--color-error);
-    .icon {
-      margin-bottom: var(--margin-2n);
-    }
-  }
-
   .single-line {
     @include text-ellipsis();
   }

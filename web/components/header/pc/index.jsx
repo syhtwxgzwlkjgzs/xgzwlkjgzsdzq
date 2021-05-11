@@ -109,7 +109,7 @@ class Header extends React.Component {
                                     }} name="HomeOutlined" size={15} />
                                     <p>首页</p>
                                 </div>
-                                <div className={styles.iconItem}>
+                                <div className={styles.iconItem} onClick={() => this.handleRouter('/message')}>
                                     <Icon onClick={() => {
                                       this.iconClickHandle('home');
                                     }} name="MailOutlined" size={17} />

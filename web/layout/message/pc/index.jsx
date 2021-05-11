@@ -18,8 +18,8 @@ const Index = () => {
   }, []);
 
   // handle
-  const handleDelete = (id) => {
-    const _list = [...list].filter((item) => item.id !== id);
+  const handleDelete = (item) => {
+    const _list = [...list].filter(i => i.id !== item.id);
     setList(_list);
   };
 
@@ -34,7 +34,7 @@ const Index = () => {
       <div>pc test</div>
       <div className={styles.list}>
         <div className={styles.left}>
-          <Notice list={list} type={type} onDelete={handleDelete} />
+          <Notice list={list} type={type} onBtnClick={handleDelete} />
         </div>
         <div className={styles.right}></div>
       </div>

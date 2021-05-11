@@ -112,14 +112,9 @@ class Index extends Component {
   }
 
   render() {
-    const { type, item = {}, site, onDelete } = this.props;
-
-
+    const { type, item = {}, site, onBtnClick } = this.props;
     const { platform } = site;
     const isPc = platform === 'pc';
-
-
-
     const avatarUrl = this.getAvatar(item.avatar);
 
     return (
@@ -216,14 +211,12 @@ class Index extends Component {
             }
           </div>
         </div>
-        {/* 删除 */}
-        <div
-          className={isPc ? styles['delete-pc'] : styles['delete-h5']}
-          onClick={() => onDelete(item.id)}
-        >
-          <Icon className={styles.icon} name="DeleteOutlined" size={14} />
-          {isPc ? '' : '删除'}
-        </div>
+        {/* PC删除 */}
+        {isPc &&
+          <div className={styles.delete} onClick={() => onBtnClick(item)}>
+            <Icon className={styles.icon} name="DeleteOutlined" size={14} />
+          </div>
+        }
       </div>
     );
   }
@@ -232,13 +225,13 @@ class Index extends Component {
 Index.propTypes = {
   type: PropTypes.string,
   item: PropTypes.object,
-  onDelete: PropTypes.func,
+  onBtnClick: PropTypes.func,
 }
 
 Index.defaultProps = {
   type: 'thread',
   item: {},
-  onDelete: () => { },
+  onBtnClick: () => { },
 }
 
 export default Index;
