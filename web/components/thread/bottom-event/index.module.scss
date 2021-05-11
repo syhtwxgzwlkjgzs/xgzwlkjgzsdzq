@@ -43,14 +43,20 @@
   .fabulous {
     line-height: rem(20);
     .fabulousPost {
-      margin-left: rem(6);
+      margin-left: rem(8);
       font-size: rem($font-size-primary);
       line-height: rem(20);
       color: var(--color-text-secondary);
-      font-weight: normal;
+    }
+    .fabulousCancel {
+      margin-left: rem(8);
+      font-size: rem($font-size-primary);
+      line-height: rem(20);
+      color: var(--color-primary);
     }
     .icon {
       margin-bottom: rem(2);
+      color: var(--color-text-secondary);
     }
   }
 }

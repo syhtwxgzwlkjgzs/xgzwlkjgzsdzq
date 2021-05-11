@@ -29,6 +29,21 @@
       margin: 0 auto;
     }
   }
+  .digest{
+    margin-top: rem(32);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .left{
+      margin-right: rem(16);
+    }
+    .left,.right{
+      font-weight: normal;
+      font-size: rem($font-size-primary);
+      line-height: rem($font-line-height-middle);
+      color: var(--color-white);
+    }
+  }
   .siteInfo {
     width: 100%;
     display: flex;
@@ -65,5 +80,6 @@
       padding-right: rem($padding-2n);
       box-sizing: border-box;
     }
+    
   }
 }

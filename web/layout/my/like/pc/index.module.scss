@@ -15,6 +15,13 @@
   .right {
     width: rem(286);
     overflow: hidden;
+    .section {
+      padding: 0 rem($padding-6n);
+      background: var(--color-white);
+      border-radius: rem($border-radius-small);
+      box-shadow: 0 0 rem($padding-2n) rgba(241, 243, 244, 0.16);
+      margin-bottom: rem($margin-10);
+    }
   }
   .threadContent {
     border-radius: rem($border-radius-small);

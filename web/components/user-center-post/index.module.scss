@@ -1,0 +1,36 @@
+@import '@common/styles/fn/rem.scss';
+.userCenterPost {
+    padding: rem(16);
+    cursor: pointer;
+
+    .userCenterPostContent {
+        display: flex;
+        width: 100%;
+
+        .userCenterPostAvatar {
+            padding-top: rem(16);
+            margin-right: rem(8);
+        }
+    }
+
+    .userCenterPostTitle {
+        font-size: 18px;
+        color: var(--color-text-primary);
+    }
+
+    .userCenterPostInfo {
+        display: flex;
+        padding-top: rem(16);
+
+
+        .userCenterPostInput {
+            width: 100%;
+        }
+    }
+
+    .userCenterPostList {
+        padding-top: rem(24);
+        display: flex;
+        justify-content: space-between;
+    }
+}

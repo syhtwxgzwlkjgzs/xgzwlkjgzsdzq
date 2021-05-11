@@ -9,7 +9,7 @@ import { extensionList, noop } from '../utils';
  * @prop {Boolean} isHidden 是否隐藏删除按钮
  */
 
-const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noop }) => {
+const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noop, onPay = noop }) => {
   // 处理文件大小的显示
   const handleFileSize = (fileSize) => {
     if (fileSize > 1000000) {
@@ -21,6 +21,23 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
 
     return `${fileSize} B`;
   };
+
+  const onDownLoad = (url) => {
+    if (!isPay) {
+      window.open(url, '_self')
+    } else {
+      onPay()
+    }
+  }
+
+  const onPreviewer = (url) => {
+    if (!isPay) {
+       window.open(url, '_self')
+    } else {
+      onPay()
+    }
+  }
+
   return (
     <div>
         {
@@ -33,15 +50,19 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
             return (
               <div className={styles.container} key={index} onClick={onClick} >
                 <div className={styles.wrapper}>
-                  {/* TODO 此处逻辑接口确定之后再改 */}
-                  <Icon name={type && 'PaperClipOutlined'} />
-                  <span className={styles.content}>{item.fileName}</span>
-                  <span className={styles.size}>{handleFileSize(parseFloat(item.fileSize || 0))}</span>
+                  <div className={styles.left}>
+                    <Icon className={styles.containerIcon} name={type && 'DocOutlined'} />
+                    <div className={styles.containerText}>
+                      <span className={styles.content}>hjdgfajhsfgjahgfjhgasdfjhagsfjagdfjdshf</span>
+                      <span className={styles.size}>{handleFileSize(parseFloat(item.fileSize || 0))}</span>
+                    </div>
+                  </div>
+                  
+                  <div className={styles.right}>
+                    <span onClick={() => onPreviewer(item.url)}>浏览</span>
+                    <span onClick={() => onDownLoad(item.url)}>下载</span>
+                  </div>
                 </div>
-
-                {!isHidden && <Icon name="CloseOutlined" />}
-
-                {!isPay && <a href={item.url} className={styles.a}></a>}
               </div>
             );
           })

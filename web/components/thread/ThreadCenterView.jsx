@@ -9,6 +9,8 @@ import RewardQuestion from './reward-question';
 import VideoPlay from './video-play';
 import { handleAttachmentData } from './utils';
 import AttachmentView from './attachment-view';
+import ImageDisplay from './image-display';
+import Packet from './packet';
 import styles from './index.module.scss';
 
 /**
@@ -53,18 +55,21 @@ const Index = (props) => {
                     isPay={payType !== 0}
                   />
                 )}
-                {imageData && (<ImageContent
-                  imgData={imageData}
-                  isPay={payType !== 0}
-                  onPay={onPay}
-                  onClickMore={onClick}
-                />)}
-                {rewardData && <RewardQuestion
-                  content={rewardData.content || ''}
+                {imageData && (
+                    <ImageDisplay 
+                        platform={props.platform} 
+                        imageData={imageData} 
+                        isPay={payType !== 0}
+                        onPay={onPay}
+                        onClickMore={onClick} />
+                    )
+                }
+                {rewardData && <Packet
+                  type={1}
                   money={rewardData.money}
-                  onClick={onPay}
+                  onClick={onClick}
                 />}
-                {redPacketData && <RedPacket content={redPacketData.content || ''} onClick={onPay} />}
+                {redPacketData && <Packet money={redPacketData.money || 0} onClick={onClick} />}
                 {goodsData && <ProductItem
                     image={goodsData.imagePath}
                     amount={goodsData.price}

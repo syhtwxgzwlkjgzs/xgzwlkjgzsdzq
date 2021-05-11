@@ -13,14 +13,13 @@
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
         height: rem(60);
-        min-width: rem(1200);
+        min-width: rem(1150);
         width: 100%;
         border-bottom: 1px solid var(--border-line-color);
         z-index: var(--zindex-too0p);
         .headerContent{
-            width: rem(1200);
+            width: rem(1436);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -34,7 +33,7 @@
                 }
     
                 .inputBox{
-                    margin-left: rem(32);
+                    margin-left: rem(20);
                 }
             }
             .right{

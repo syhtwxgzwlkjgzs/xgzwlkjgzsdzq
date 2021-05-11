@@ -82,12 +82,12 @@ class HomeHeader extends React.Component {
   }
 
   render() {
-    const { bgColor, hideInfo = false } = this.props;
+    const { bgColor, hideInfo = false, style = {}, digest = null } = this.props;
     const { visible } = this.state;
     const { countUsers, countThreads } = this.getSiteInfo();
 
     return (
-      <div className={styles.container} style={this.getBgHeaderStyle(bgColor)}>
+      <div className={styles.container} style={{style, ...this.getBgHeaderStyle(bgColor)}}>
         {hideInfo && <div className={styles.topBar}>
           <div></div>
           <div>
@@ -103,12 +103,16 @@ class HomeHeader extends React.Component {
               src={this.getLogo()}
           />
         </div>
+        {digest && <div className={styles.digest}>
+            <div className={styles.left}>站长 {digest.admin}</div>
+            <div className={styles.right}>已创建 {digest.day}天</div>
+        </div>}
         {!hideInfo && <ul className={styles.siteInfo}>
-          <li>
+          <li className={styles.item}>
             <span className={styles.text}>成员</span>
             <span className={styles.content}>{countUsers}</span>
           </li>
-          <li>
+          <li className={styles.item}>
             <span className={styles.text}>内容</span>
             <span className={styles.content}>{countThreads}</span>
           </li>

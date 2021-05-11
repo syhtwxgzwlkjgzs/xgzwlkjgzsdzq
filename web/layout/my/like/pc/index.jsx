@@ -6,18 +6,19 @@ import SectionTitle from '@components/section-title'
 import BaseLayout from '@components/base-layout';
 import ThreadContent from '@components/thread';
 import Copyright from '@components/copyright';
-// import data from './data';
+import TrendingTopic from '@layout/search/pc/components/trending-topics'
 
 @inject('site')
 @inject('index')
+@inject('search')
 @observer
 class LikePCPage extends React.Component {
   constructor(props) {
     super(props);
   }
 
-  redirectToSearchResultPost = () => {
-    this.props.router.push(`/search/result-post?keyword=${this.state.value || ''}`);
+  redirectToSearchResultTopic = () => {
+    this.props.router.push('/search/result-topic');
   };
   // 头部搜索
   onSearch = (value) => {
@@ -25,8 +26,13 @@ class LikePCPage extends React.Component {
   }
   // 右侧 - 潮流话题 粉丝 版权信息
   renderRight = () => {
+    const { pageData = [] } = this.props.search.topics || { pageData: [] };
     return (
       <div className={styles.right}>
+        <div className={styles.section}>
+          <SectionTitle title="潮流话题" onShowMore={this.redirectToSearchResultTopic}/>
+          <TrendingTopic data={pageData} onItemClick={this.onTopicClick}/>
+        </div>
         <Copyright/>
       </div>
     )
@@ -35,7 +41,7 @@ class LikePCPage extends React.Component {
   renderContent = (data) => {
     const num = 8;
     const { threads } = data;
-    const { pageData } = threads || {};
+    const { pageData, totalCount } = threads || {};
     return (
       <div className={styles.content}>
         <div className={styles.title}>
@@ -43,7 +49,7 @@ class LikePCPage extends React.Component {
             title="我的点赞"
             icon={{ type: 3, name: 'LikeOutlined' }}
             isShowMore={false}
-            rightText={`共有${num}条点赞`}
+            rightText={`共有${totalCount}条点赞`}
           />
         </div>
         {
@@ -54,6 +60,7 @@ class LikePCPage extends React.Component {
   }
   render() {
     const { index, site } = this.props;
+    console.log(index);
     return (
       <div className={styles.container}>
         <BaseLayout

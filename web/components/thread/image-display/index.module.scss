@@ -1,0 +1,153 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+.container {
+  display: flex;
+  box-sizing: border-box;
+  height: rem(260);
+  width: 100%;
+
+  .bigImages {
+    display: flex;
+    box-sizing: border-box;
+    justify-content: space-between;
+  }
+
+  .smallImages {
+    position: relative;
+    display: flex;
+    box-sizing: border-box;
+    justify-content: space-between;
+  }
+
+  .img {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: rem($border-radius-small);
+    object-fit: cover;
+    background-color: var(--background-color);
+  }
+
+  .modalBox {
+    position: absolute;
+    width: 33%;
+    height: 100%;
+    background: var(--color-black);
+    opacity: 0.5;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: rem($border-radius-small);
+    .imgSpan {
+      font-weight: 600;
+      font-size: rem($font-size-large);
+      color: #fff;
+    }
+  }
+}
+
+.containerPC {
+  height: rem(532);
+}
+
+// 根据图片数量，确定排列方向
+.containerRow {
+  flex-direction: row;
+  .bigImages {
+    margin-right: rem(4);
+  }
+  .smallImages {
+    flex-direction: column;
+  }
+}
+
+.containerColumn {
+  flex-direction: column;
+  .bigImages {
+    margin-bottom: rem(4);
+  }
+  .smallImages {
+    flex-direction: row;
+  }
+}
+
+// 根据图片数量，确定样式
+.containerNum1 {
+  .bigImages {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.containerNum2 {
+  .bigImages {
+    height: 100%;
+    width: 50%;
+  }
+
+  .smallImages {
+    height: 100%;
+    width: 50%;
+
+    .img {
+      height: 100%;
+    }
+  }
+}
+
+.containerNum3 {
+  .bigImages {
+    height: 50%;
+    width: 100%;
+  }
+
+  .smallImages {
+    height: 50%;
+    width: 100%;
+    flex-direction: row;
+    .img {
+      width: 50%;
+      height: 100%;
+      margin-right: rem(4);
+    }
+  }
+}
+
+.containerNum4 {
+  .bigImages {
+    height: 100%;
+    width: 62%;
+  }
+
+  .smallImages {
+    height: 100%;
+    width: 38%;
+    flex-direction: column;
+    .img {
+      height: 33%;
+    }
+  }
+}
+
+.containerNum5 {
+  .bigImages {
+    height: 50%;
+    width: 100%;
+    
+
+    .img {
+      width: 49.7%;
+    }
+  }
+
+  .smallImages {
+    height: 50%;
+    width: 100%;
+    flex-direction: row;
+
+    .img {
+      width: 33%;
+    }
+  }
+}

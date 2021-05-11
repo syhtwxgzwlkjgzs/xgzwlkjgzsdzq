@@ -69,14 +69,15 @@ export default class ReplyList extends React.Component {
               {
                 this.props.data.commentUserId
                   ? <div className={styles.commentUser}>
-                    <div className={styles.replyedAvatar} onClick={this.props.avatarClick('3')}>
+                    <div className={styles.replyedAvatar} onClick={this.props.avatarClick()}>
                       <Avatar
+                        className={styles.avatar}
                         image={this.props.data.user.avatar}
                         name={this.props.data.user.username || this.props.data.user.userName || ''}
                         circle={true}
                         userId={this.props.data.user.id}
                         isShowUserInfo={true}
-                        size='small'>
+                        size='mini'>
                       </Avatar>
                     </div>
                     <span className={styles.replyedUserName}>
@@ -84,7 +85,7 @@ export default class ReplyList extends React.Component {
                     </span>
                   </div> : ''
               }
-              <span onClick={() => this.props.toCommentDetail()}>{this.props.data.content}</span>
+              {this.props.data.content}
             </div>
           </div>
           <div className={styles.replyListFooter}>
