@@ -33,7 +33,7 @@ import { View, Text, Image } from '@tarojs/components';
 }) => {
   // 内容是否超出屏幕高度
   const [contentTooLong, setContentTooLong] = useState(true);
-  const [showMore, setShowMore] = useState(!useShowMore);
+  const [showMore, setHiddenMore] = useState(!useShowMore);
   const contentWrapperRef = useRef(null);
 
   const wrapperId = useRef(`wrapper${randomStr()}`);
@@ -60,27 +60,32 @@ import { View, Text, Image } from '@tarojs/components';
       onRedirectToDetail && onRedirectToDetail();
     } else {
       e.stopPropagation();
-      setShowMore(true);
+      setHiddenMore(true);
     }
   }, [contentTooLong]);
 
   useEffect(() => {
-    const el = wrapperId.current;
+    // const el = wrapperId.current;
     
-    getElementRect(el).then(result => {
-      // 小于6行
-      if (result?.height < 180) {
-        setShowMore(true);
-      }
-      try {
-        const res = Taro.getSystemInfoSync()
-        // 小于1屏
-        if (result?.height <= res.windowHeight) {
-          setContentTooLong(false);
-        }
-      } catch (e) {}
-    })
-  }, [contentWrapperRef.current]);
+    // getElementRect(el).then(result => {
+    //   // 小于6行
+    //   if (result?.height < 180) {
+    //     setHiddenMore(true);
+    //   }
+    //   try {
+    //     const res = Taro.getSystemInfoSync()
+    //     // 小于1屏
+    //     if (result?.height <= res.windowHeight) {
+    //       setContentTooLong(false);
+    //     }
+    //   } catch (e) {}
+    // })
+    if (filterContent?.length < 262) {
+      setHiddenMore(true);
+    } else if (filterContent?.length > 1000) {
+      setContentTooLong(true)
+    }
+  }, [filterContent]);
 
   return (
     <View className={styles.container} {...props}>
