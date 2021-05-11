@@ -39,6 +39,14 @@ class UserAction extends SiteStore {
     this.permissions = data;
   }
 
+  // 初始化编辑用用户信息
+  @action
+  initEditInfo() {
+    this.editNickName = get(this.userInfo, 'nickname');
+    this.editUserName = get(this.userInfo, 'username');
+    this.editSignature = get(this.userInfo, 'signature');
+  }
+
   // 登录后获取新的用户信息
   @action
   async updateUserInfo(id) {

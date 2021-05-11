@@ -32,6 +32,15 @@ class UserStore {
   @observable userLikesTotalCount = 0;
   @observable userLikesTotalPage = 1;
 
+  // 编辑模式下的 username
+  @observable editUserName = '';
+
+  // 编辑模式下的昵称
+  @observable editNickName = '';
+
+  // 编辑模式下的签名
+  @observable editSignature = '';
+
   // 检索的目标用户，非自己
   @observable targetUser = null;
 
