@@ -6,6 +6,10 @@
   padding: rem($padding-4n) rem($padding-6n) 0 rem($padding-6n);
   border-radius: var(--border-radius-small);
   box-sizing: border-box;
+
+  &.isEmpty {
+    padding-bottom: rem($padding-4n);
+  }
 }
 
 .header {

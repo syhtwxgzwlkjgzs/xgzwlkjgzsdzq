@@ -6,6 +6,7 @@ import CommentList from '../components/comment-list/index';
 import CommentInput from '../components/comment-input/index';
 import DeletePopup from '@components/thread-detail-pc/delete-popup';
 import { Icon, Toast } from '@discuzq/design';
+import classnames from 'classnames';
 
 const typeMap = {
   101: 'IMAGE',
@@ -179,7 +180,7 @@ class RenderCommentList extends React.Component {
       this.setState({
         showCommentInput: false,
         inputValue: '',
-        commentId: null
+        commentId: null,
       });
       Toast.success({
         content: '回复成功',
@@ -264,9 +265,13 @@ class RenderCommentList extends React.Component {
     }
 
     return (
-      <div className={comment.container}>
+      <div className={classnames(comment.container, !totalCount && comment.isEmpty)}>
         <div className={comment.header}>
-          <div className={comment.number}>共{totalCount}条评论</div>
+          {totalCount ? (
+            <div className={comment.number}>{totalCount}条评论</div>
+          ) : (
+            <div className={comment.number}>暂无评论</div>
+          )}
           <div className={comment.sort} onClick={() => this.onSortClick()}>
             <Icon className={comment.sortIcon} name="SortOutlined" size={14}></Icon>
             <span className={comment.sortText}>{this.state.commentSort ? '评论从新到旧' : '评论从旧到新'}</span>
@@ -338,4 +343,4 @@ class RenderCommentList extends React.Component {
   }
 }
 
-export default RenderCommentList
+export default RenderCommentList;

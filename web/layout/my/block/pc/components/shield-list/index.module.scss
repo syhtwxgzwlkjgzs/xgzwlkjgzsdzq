@@ -1,0 +1,42 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/variable/index.scss';
+
+.list {
+  width: 100%;
+  .item {
+    display: flex;
+    padding: rem($padding-4n) 0;
+    border-bottom: 1px solid var(--border-line-color);
+    &:last-child {
+      border-bottom: none;
+    }
+    .content {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      justify-content: space-between;
+      .name {
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: rem($font-size-primary);
+        color: var(--color-text-primary);
+        font-weight: 700;
+      }
+    }
+    .avatar {
+      width: rem(38);
+      height: rem(38);
+      margin-right: rem($margin-4n);
+      cursor: pointer;
+    }
+    .button {
+      border: none;
+      font-size: 12px;
+      border-radius: 5px;
+      background: #c4c9d6;
+      color: #fff;
+    }
+  }
+}

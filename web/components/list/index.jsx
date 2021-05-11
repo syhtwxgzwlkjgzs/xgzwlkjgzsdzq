@@ -12,17 +12,17 @@ import RefreshView from './RefreshView';
  * @prop {function} onScroll 滑动事件
  */
 
-const List = forwardRef(({ 
-  height, 
-  className = '', 
-  children, 
-  noMore, 
-  onRefresh, 
+const List = forwardRef(({
+  height,
+  className = '',
+  children,
+  noMore,
+  onRefresh,
   onScroll = noop,
   showRefresh = true,
 }, ref) => {
   const listWrapper = useRef(null);
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (noMore) {
@@ -56,7 +56,7 @@ const List = forwardRef(({
 
   const onBackTop = () => {
     listWrapper.current.scrollTop = 0;
-  }
+  };
 
   const onTouchMove = throttle(() => {
     if (!listWrapper || !listWrapper.current || !onRefresh) {
@@ -68,11 +68,11 @@ const List = forwardRef(({
 
     // 滑动事件
     onScroll({ scrollTop });
-    
+
     if ((scrollHeight - 40 <= clientHeight + scrollTop) && !isLoading) {
       setIsLoading(true);
       if (typeof(onRefresh) === 'function') {
-        const promise = onRefresh()
+        const promise = onRefresh();
         isPromise(promise) && promise
           .then(() => {
             setIsLoading(false);

@@ -45,9 +45,17 @@
     }
   }
 
-  .delete {
+  .bodyHeaderOperate {
     margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
+
+  .reward,.delete,.redpacket {
+    margin-left: rem(24);
+  }
+  
 
   .bodyRigth {
     width: rem(330);
