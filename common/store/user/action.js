@@ -186,6 +186,7 @@ class UserAction extends SiteStore {
         user.userFollow.isMutual = true;
       });
     });
+    this.userFans = { ...this.userFans };
   }
 
   @action
@@ -196,6 +197,7 @@ class UserAction extends SiteStore {
         user.userFollow.isMutual = false;
       });
     });
+    this.userFans = { ...this.userFans };
   }
 
   @action

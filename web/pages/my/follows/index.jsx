@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import Header from '@components/header';
 import UserCenterFllows from '@components/user-center-follow'
 import { Divider, Toast } from '@discuzq/design'
+import styles from './index.module.scss'
 
 @inject('user')
 @observer
@@ -40,8 +41,8 @@ export default class index extends Component {
 
   splitElement = () => {
     return (
-      <div style={{padding: '0 16px'}}>
-        <Divider style={{margin:0}} />
+      <div className={styles.splitEmelent}>
+        <Divider />
       </div>
     )
   }
