@@ -8,6 +8,8 @@ import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
+import { TencentCaptcha } from '@discuzq/sdk/common_modules/sliding-captcha/tcaptcha';
+
 @inject('site')
 @inject('user')
 @inject('thread')
@@ -15,7 +17,32 @@ import { get } from '@common/utils/get';
 @inject('commonLogin')
 @observer
 class RegisterH5Page extends React.Component {
-  handleRegister = async () => {
+    handleRegisterBtnClick = async () => {
+      const { webConfig } = this.props.site;
+      const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
+
+      if (qcloudCaptcha) {
+        const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
+        return this.showCaptcha(qcloudCaptchaAppId);
+      }
+
+      await this.toRegister();
+    }
+    async showCaptcha(qcloudCaptchaAppId) {
+      // 验证码实例为空，则创建实例
+      if (!this.captcha) {
+        const TencentCaptcha = (await import('@common/utils/tcaptcha')).default;
+        this.captcha = new TencentCaptcha(qcloudCaptchaAppId, (res) => {
+          if (res.ret === 0) {
+            this.toRegister();
+          }
+        });
+      }
+      // 显示验证码
+      this.captcha.show();
+    }
+
+  toRegister = async () => {
     try {
       const resp = await this.props.userRegister.register();
       const uid = get(resp, 'uid', '');
@@ -95,7 +122,7 @@ class RegisterH5Page extends React.Component {
               this.props.userRegister.nickname = e.target.value;
             }}
           />
-          <Button className={platform === 'h5' ? layout.button : layout.pc_button} type="primary" onClick={this.handleRegister}>
+          <Button id="register-btn" className={platform === 'h5' ? layout.button : layout.pc_button} type="primary" onClick={this.handleRegisterBtnClick}>
             注册
           </Button>
           <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
