@@ -4,13 +4,13 @@
   padding: 0 rem($padding-4n);
   padding-bottom: 0;
   background: var(--color-white);
-  border-radius: rem(5);
 
   // &:hover {
   //   background: rgba(229, 242, 255, 0.3);
   // }
   .title {
     font-size: rem($font-size-middle);
+    font-weight: 600;
     line-height: rem(26);
     text-align: left;
     color: var(--color-text-primary);

@@ -72,7 +72,7 @@ const User = ({ data, onClick, onFollow }) => {
         </div>
       </div>
       <Button type="primary" className={`${styles.button} ${btnInfo.className}`} onClick={handleFollow}>
-        <Icon name={btnInfo.icon} size={12} className={styles.addIcon} />
+        <Icon name={btnInfo.icon} size={10} className={styles.addIcon} />
         {btnInfo.text}
       </Button>
     </div>

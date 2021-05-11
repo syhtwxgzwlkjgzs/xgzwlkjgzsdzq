@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
-import { extensionList, noop } from '../utils';
+import { extensionList, isPromise, noop } from '../utils';
 
 /**
  * 附件
@@ -38,6 +38,36 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
     }
   }
 
+  const Normal = ({ item, index, type }) => {
+    return (
+      <div className={styles.container} key={index} onClick={onClick} >
+        <div className={styles.wrapper}>
+          <div className={styles.left}>
+            <Icon className={styles.containerIcon} size={20} name={type && 'DocOutlined'} />
+            <div className={styles.containerText}>
+              <span className={styles.content}>{item.fileName}</span>
+              <span className={styles.size}>{handleFileSize(parseFloat(item.fileSize || 0))}</span>
+            </div>
+          </div>
+          
+          <div className={styles.right}>
+            <span className={styles.span} onClick={() => onPreviewer(item.url)}>浏览</span>
+            <span className={styles.span} onClick={() => onDownLoad(item.url)}>下载</span>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  const Pay = ({ item, index, type }) => {
+    return (
+      <div className={styles.container} key={index}>
+        <Icon className={styles.containerIcon} size={20} name={type && 'DocOutlined'} />
+        <span className={styles.content}>{item.fileName}</span>
+      </div>
+    )
+  }
+
   return (
     <div>
         {
@@ -48,22 +78,11 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
               ? extension.toUpperCase()
               : 'UNKNOWN';
             return (
-              <div className={styles.container} key={index} onClick={onClick} >
-                <div className={styles.wrapper}>
-                  <div className={styles.left}>
-                    <Icon className={styles.containerIcon} size={20} name={type && 'DocOutlined'} />
-                    <div className={styles.containerText}>
-                      <span className={styles.content}>{item.fileName}</span>
-                      <span className={styles.size}>{handleFileSize(parseFloat(item.fileSize || 0))}</span>
-                    </div>
-                  </div>
-                  
-                  <div className={styles.right}>
-                    <span className={styles.span} onClick={() => onPreviewer(item.url)}>浏览</span>
-                    <span className={styles.span} onClick={() => onDownLoad(item.url)}>下载</span>
-                  </div>
-                </div>
-              </div>
+              !isPay ? (
+                <Normal key={index} item={item} index={index} type={type} /> 
+              ) : (
+                <Pay key={index} item={item} index={index} type={type} />
+              )
             );
           })
         }
