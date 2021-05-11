@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import MessageStore from './store';
-import { readDialogList, readMsgList, createDialog } from '@server';
+import { readDialogList, readMsgList, createDialog, deleteMsg, deleteDialog } from '@server';
 
 class MessageAction extends MessageStore {
   // 设置消息分页的每页条数
@@ -79,6 +79,39 @@ class MessageAction extends MessageStore {
   async createDialog(params) {
     const ret = await createDialog(params);
     console.log('创建新的私信对话', ret);
+  }
+
+  // 删除私信对话
+  @action.bound
+  async deleteDialog(id) {
+    const ret = await deleteDialog({ id });
+    const { code } = ret;
+    if (code === 0) this.deleteListItem('dialogList', id);
+  }
+
+  // 删除消息
+  @action.bound
+  async deleteMsg(id, storeKey) {
+    const ret = await deleteMsg({ id });
+    const { code } = ret;
+    if (code === 0) this.deleteListItem(storeKey, id);
+  }
+
+  deleteListItem(key, id) {
+    const data = this[key];
+    const list = [].concat(data.list)
+    try {
+      list.forEach((item, index) => {
+        if (item.id === id) {
+          list.splice(index, 1);
+          this[key] = {
+            ...data,
+            list
+          }
+          throw 'break';
+        }
+      });
+    } catch (e) {}
   }
 }
 

@@ -65,3 +65,5 @@ export { default as updateUsersUpdate } from './user/updateUsersUpdate';
 export { default as readDialogList } from './message/readDialogList';
 export { default as readMsgList } from './message/readMsgList';
 export { default as createDialog } from './message/createDialog';
+export { default as deleteDialog } from './message/deleteDialog';
+export { default as deleteMsg } from './message/deleteMsg';

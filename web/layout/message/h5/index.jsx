@@ -11,7 +11,7 @@ const Index = ({ page, subPage, dialogId, message }) => {
 
   useEffect(() => {
     readAccountMsgList(1);
-    // readDialogList();
+    readDialogList();
     // ['fishcui1234', '18279670797', 'cjw', 'LamHo', 'yuzhihang1', 'heifeipangpang', '郝梦茹', '余努力', '网友B1r8jI', '网友hlvaHi', 'heifeipang123', '网友6HZYch', '黑哈哈', '网友4tEz2z', 'Lam', '暮光2'].forEach(item => {
     //   createDialog({
     //     recipientUsername: item,
