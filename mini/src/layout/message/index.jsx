@@ -20,8 +20,8 @@ const Index = inject('site')(
     }, []);
 
     // handle
-    const handleDelete = (id) => {
-      const _list = [...list].filter((item) => item.id !== id);
+  const handleDelete = (item) => {
+    const _list = [...list].filter(i => i.id !== item.id);
       setList(_list);
     };
 
@@ -34,7 +34,7 @@ const Index = inject('site')(
   return (
     <View className={styles.container}>
       <Button>mini test</Button>
-      <Notice list={list} type={type} onDelete={handleDelete} />
+      <Notice list={list} type={type} onBtnClick={handleDelete} />
       <InstantMessaging messagesHistory={messagesHistory} onSubmit={doSubmit} />
     </View>
   );

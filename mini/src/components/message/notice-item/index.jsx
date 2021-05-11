@@ -97,7 +97,7 @@ class Index extends Component {
   }
 
   render() {
-    const { type, item = {}, onDelete } = this.props;
+    const { type, item = {}, onBtnClick } = this.props;
     const avatarUrl = this.getAvatar(item.avatar);
 
     return (
@@ -192,11 +192,6 @@ class Index extends Component {
             }
           </View>
         </View>
-        {/* 删除 */}
-        <View className={styles.delete} onClick={() => onDelete(item.id)}>
-          <Icon className={styles.icon} name="DeleteOutlined" size={14} />
-          删除
-        </View>
       </View>
     );
   }
@@ -205,13 +200,13 @@ class Index extends Component {
 Index.propTypes = {
   type: PropTypes.string,
   item: PropTypes.object,
-  onDelete: PropTypes.func,
+  onBtnClick: PropTypes.func,
 }
 
 Index.defaultProps = {
   type: 'thread',
   item: {},
-  onDelete: () => { },
+  onBtnClick: () => { },
 }
 
 export default Index;

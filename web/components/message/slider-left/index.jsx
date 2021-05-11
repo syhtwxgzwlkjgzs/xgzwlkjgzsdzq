@@ -2,18 +2,20 @@
  * 左滑列表、列表项组件
 */
 import React, { Component, PureComponent } from 'react';
+import { Icon } from '@discuzq/design';
 import throttle from '@common/utils/thottle';
 import styles from './index.module.scss';
-
 import PropTypes from 'prop-types';
+
 /**
  * 左滑列表项
  * @prop {object} item 列表项数据
  * @prop {number} currentId 当前滑动项id
- * @prop {string} offsetLeft 左滑距离 例如：offsetLeft={'-74px'}，左滑74像素
+ * @prop {string} offsetLeft 左滑距离,单位px 例如：offsetLeft={'74px'}，左滑74像素
  * @prop {object} RenderItem 列表项渲染组件
- * @prop {function} onSliderTouch 监听滑动项触摸处理函数
+ * @prop {function} onBtnClick 处理左滑按钮点击
  */
+
 class SlierItem extends PureComponent {
   constructor(props) {
     super(props);
@@ -26,7 +28,7 @@ class SlierItem extends PureComponent {
 
   // touchStart，更新当前触摸项，记录起点
   handleTouchStart = (e) => {
-    const { item, currentId, onSliderTouch = () => { } } = this.props;
+    const { item, currentId, onSliderTouch } = this.props;
     currentId !== item.id && onSliderTouch(item.id);
     this.setState({
       startX: e.touches[0].clientX,
@@ -40,7 +42,7 @@ class SlierItem extends PureComponent {
     const moveY = e.touches[0].clientY - this.state.startY;
     if (Math.abs(moveX) > Math.abs(moveY) && Math.abs(moveX) > 50) {
       this.setState({
-        leftValue: moveX > 0 ? 0 : this.props.offsetLeft
+        leftValue: moveX > 0 ? 0 : `-${this.props.offsetLeft}`
       });
     }
   }
@@ -51,7 +53,20 @@ class SlierItem extends PureComponent {
   }
 
   render() {
-    const { item = [], currentId, RenderItem = null, ...other } = this.props;
+    const {
+      item = {},
+      currentId,
+      RenderItem = null,
+      offsetLeft,
+      iconName,
+      iconSize,
+      iconText,
+      Color,
+      Background,
+      onBtnClick,
+      ...other
+    } = this.props;
+
     return (
       <div
         className={styles['slider-item']}
@@ -62,18 +77,46 @@ class SlierItem extends PureComponent {
         onTouchMove={throttle(this.handleTouchMove.bind(this), 30)}
         onClick={this.handleClickToBack}
       >
-        {RenderItem && <RenderItem item={item} {...other} />}
+        {/* 滑块内容展示 */}
+        <div className={styles['slider-content']}>
+          {RenderItem && <RenderItem item={item} {...other} />}
+        </div>
+        {/* 滑块操作按钮 */}
+        <div
+          className={styles['slider-brn']}
+          style={{
+            flexBasis: offsetLeft,
+            color: Color,
+            background: Background
+          }}
+          onClick={() => onBtnClick(item)}
+        >
+          <Icon className={styles.icon} name={iconName} size={iconSize} />
+          {iconText}
+        </div>
       </div >
     )
   }
 }
 
 SlierItem.propTypes = {
-  offsetLeft: PropTypes.string
+  offsetLeft: PropTypes.string,
+  iconName: PropTypes.string,
+  iconSize: PropTypes.number,
+  iconText: PropTypes.string,
+  Color: PropTypes.string,
+  Background: PropTypes.string,
+  onBtnClick: PropTypes.func,
 }
 
 SlierItem.defaultProps = {
-  offsetLeft: '-74px'
+  offsetLeft: '74px',
+  iconName: 'DeleteOutlined',
+  iconSize: 14,
+  iconText: '删除',
+  Color: '#fff',
+  Background: '#e02433',
+  onBtnClick: () => { }
 }
 
 /**
@@ -99,14 +142,7 @@ class Index extends Component {
 
   // 重置滑动块id，让左滑块归位
   resetSliderId = (e) => {
-    if (e.target.nodeName === 'HTML') {
-      this.state.currentId && this.setState({ currentId: 0 })
-    }
-  }
-
-  // 更新当前滑动项id
-  updateSliderId = (id) => {
-    this.setState({ currentId: id })
+    this.state.currentId && this.setState({ currentId: 0 })
   }
 
   render() {
@@ -118,7 +154,7 @@ class Index extends Component {
             key={item.id}
             item={item}
             currentId={this.state.currentId}
-            onSliderTouch={this.updateSliderId}
+            onSliderTouch={(id) => this.setState({ currentId: id })}
             {...other}
           />
         ))}

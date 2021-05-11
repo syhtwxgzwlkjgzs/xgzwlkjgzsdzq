@@ -27,8 +27,8 @@ const Index = ({ page, subPage, dialogId, message }) => {
   }, []);
 
   // handle
-  const handleDelete = (id) => {
-    const _list = [...list].filter((item) => item.id !== id);
+  const handleDelete = (item) => {
+    const _list = [...list].filter(i => i.id !== item.id);
     setList(_list);
   };
 
@@ -40,7 +40,7 @@ const Index = ({ page, subPage, dialogId, message }) => {
 
   return (
     <div className={styles.container}>
-      <Notice list={list} type={type} onDelete={handleDelete} />
+      <Notice list={list} type={type} onBtnClick={handleDelete} />
       <InstantMessaging messagesHistory={messagesHistory} onSubmit={doSubmit} />
     </div>
   );
