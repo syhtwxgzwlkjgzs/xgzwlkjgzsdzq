@@ -126,8 +126,8 @@
     &.detail-chat {
       margin-left: var(--margin-2n);
     }
-    /*帖子、系统详情*/
-    &.detail-system {
+    /*帖子详情*/
+    &.detail-thread {
       margin-left: var(--margin-2n);
       .middle {
         line-height: rem(22);
@@ -138,7 +138,7 @@
       top: 0;
     }
     /*账号详情*/
-    &.detail-user {
+    &.detail-account {
       .top {
         padding: rem(8) rem(8) 0;
         background: var(--comment-box-bg-color);

@@ -9,7 +9,7 @@ import mock from '../mock.json';
 const Index = () => {
   // props,state
   const [messagesHistory, setMessagesHistory] = useState([]);
-  const [type, setType] = useState('user'); // chat,system,financial,user
+  const [type, setType] = useState('account'); // chat,thread,financial,account
   const [list, setList] = useState([]);
 
   // hooks
