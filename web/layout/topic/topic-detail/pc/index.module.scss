@@ -10,6 +10,9 @@
     border-radius: rem($border-radius-small);
     overflow: hidden;
   }
+  .themeContent {
+    margin-top: rem($margin-10);
+  }
   .topicRight {
     width: rem(286);
     overflow: hidden;

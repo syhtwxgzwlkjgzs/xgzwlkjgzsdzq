@@ -4,6 +4,7 @@
 .container {
   padding: rem($padding-4n);
   background: var( --color-white);
+  border-radius: rem($border-radius-small);
   overflow: hidden;
   .title {
     font-size: rem($font-size-middle);
