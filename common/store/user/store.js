@@ -56,37 +56,37 @@ class UserStore {
 
   // 点赞数
   @computed get likedCount() {
-    return get(this.userInfo,'likedCount')
+    return get(this.userInfo, 'likedCount');
   }
 
   // 用户名称
   @computed get username() {
-    return get(this.userInfo, 'username')
+    return get(this.userInfo, 'username');
   }
 
   // 微信昵称
   @computed get nickname() {
-    return get(this.userInfo, 'nickname')
+    return get(this.userInfo, 'nickname');
   }
 
   // 背景图地址
   @computed get backgroundUrl() {
-    return get(this.userInfo, 'backgroundUrl')
+    return get(this.userInfo, 'backgroundUrl');
   }
 
   // 用户签名
   @computed get signature() {
-    return get(this.userInfo, 'signature')
+    return get(this.userInfo, 'signature');
   }
 
   // 用户头像
   @computed get avatarUrl() {
-    return get(this.userInfo, 'avatarUrl')
+    return get(this.userInfo, 'avatarUrl');
   }
 
   // 用户手机号
   @computed get mobile() {
-    return get(this.userInfo, 'mobile')
+    return get(this.userInfo, 'mobile');
   }
 
   // 获取绑定微信内容

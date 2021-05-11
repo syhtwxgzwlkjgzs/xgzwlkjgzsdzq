@@ -1,21 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import { View, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 
 /**
- * tabbar组件
+ * BottomNavBar组件
  * @prop {boolean} placeholder 固定在底部时，是否在标签位置生成一个等高的占位元素
  */
 
-const TabBar = ({ router, fixed = true, placeholder = false }) => {
+const BottomNavBar = ({ router, fixed = true, placeholder = false, curr = 'home' }) => {
+
+  const checkCurrActiveTab = useCallback((curr, target) => {
+    return curr === target;
+  }, [curr])
+
   const [tabs, setTabs] = useState([
-    { icon: 'HomeOutlined', text: '首页', active: true, router: '/pages/index' },
-    { icon: 'FindOutlined', text: '发现', active: false, router: '/subPages/search/index' },
+    { icon: 'HomeOutlined', text: '首页', active: checkCurrActiveTab(curr, 'home'), router: '/pages/index' },
+    { icon: 'FindOutlined', text: '发现', active: checkCurrActiveTab(curr, 'search'), router: '/subPages/search/index' },
     { icon: 'PlusOutlined', router: '/subPages/thread/post/index' },
-    { icon: 'MessageOutlined', text: '消息', active: false, router: '/' },
-    { icon: 'ProfessionOutlined', text: '我', active: false, router: '/pages/my' },
+    { icon: 'MailOutlined', text: '消息', active: checkCurrActiveTab(curr, 'message'), router: '/' },
+    { icon: 'ProfessionOutlined', text: '我的', active: checkCurrActiveTab(curr, 'my'), router: '/pages/my' },
   ]);
 
   const handleClick = (i, idx) => {
@@ -53,4 +58,4 @@ const TabBar = ({ router, fixed = true, placeholder = false }) => {
   );
 };
 
-export default TabBar;
+export default BottomNavBar;

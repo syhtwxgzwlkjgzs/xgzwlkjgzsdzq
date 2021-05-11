@@ -14,6 +14,8 @@ class UserCenterFriends extends React.Component {
     withHeaderUserInfo: false,
     userName: null,
     userGroup: null,
+    followHandler: async () => {},
+    unFollowHandler: async () => {},
   };
 
   render() {
@@ -40,8 +42,10 @@ class UserCenterFriends extends React.Component {
               <Button
                 type={'primary'}
                 className={styles.friendActionFollow}
-                onClick={() => {
-                  console.log('follow');
+                onClick={async () => {
+                  await this.props.followHandler({
+                    id: this.props.id,
+                  });
                 }}
               >
                 <Icon size={14} name={'PlusOutlined'} />
@@ -53,8 +57,10 @@ class UserCenterFriends extends React.Component {
               <Button
                 type={'primary'}
                 className={styles.friendActionFriend}
-                onClick={() => {
-                  console.log('friend');
+                onClick={async () => {
+                  await this.props.unFollowHandler({
+                    id: this.props.id,
+                  });
                 }}
               >
                 <Icon size={14} name={'WithdrawOutlined'} />
@@ -66,8 +72,10 @@ class UserCenterFriends extends React.Component {
               <Button
                 type={'primary'}
                 className={styles.friendActionFollowed}
-                onClick={() => {
-                  console.log('followed');
+                onClick={async () => {
+                  await this.props.unFollowHandler({
+                    id: this.props.id,
+                  });
                 }}
               >
                 <Icon size={14} name={'CheckOutlined'} />

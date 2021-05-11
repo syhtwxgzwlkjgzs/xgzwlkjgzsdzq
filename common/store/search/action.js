@@ -83,7 +83,7 @@ class SearchAction extends SearchStore {
       ? readTopicsList({ params: { filter: topicFilter, perPage: newPerPage, page: 1 } })
       : {};
     const promise2 = !hasUsers
-      ? readUsersList({ params: { filter: { username: search }, perPage: newPerPage, page: 1 } })
+      ? readUsersList({ params: { filter: { nickname: search }, perPage: newPerPage, page: 1 } })
       : {};
     const promise3 = !hasThreads
       ? readThreadList({ params: { filter: { filter: { sort: '3', search } }, perPage: newPerPage, page: 1 } })
@@ -119,9 +119,9 @@ class SearchAction extends SearchStore {
    * @returns {object} 处理结果
    */
   @action
-  async getTopicsList({ search = '', perPage = 10, page = 1 } = {}) {
+  async getTopicsList({ search = '', hot = 0, perPage = 10, page = 1 } = {}) {
     const topicFilter = {
-      hot: 0,
+      hot: hot,
       content: search,
     };
     const result = await readTopicsList({ params: { filter: topicFilter, perPage, page } });

@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import SiteStore from './store';
-import { readUser, readPermissions, createFollow, deleteFollow, getUserFollow, getUserFans } from '@server';
+import { readUser, readPermissions, createFollow, deleteFollow, getUserFollow, getUserFans, readThreadList } from '@server';
 import { get } from '../../utils/get';
 
 class UserAction extends SiteStore {
@@ -47,11 +47,11 @@ class UserAction extends SiteStore {
 
 
   @action
-  async getUserFollow() {
+  getUserFollow = async () => {
     const followsRes = await getUserFollow({
       params: {
         page: this.userFollowsPage,
-        perPage: 20,
+        perPage: 2,
       },
     });
 
@@ -175,6 +175,20 @@ class UserAction extends SiteStore {
       data: null,
       success: false,
     };
+  }
+
+  @action
+  async getUserThreads() {
+    const userThreadList = await readThreadList({
+      params: {
+        filter: {
+          toUserId: 0,
+          complex: 5,
+        },
+      },
+    });
+
+    return userThreadList.data.pageData;
   }
 }
 

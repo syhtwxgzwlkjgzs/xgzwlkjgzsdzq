@@ -17,7 +17,7 @@ import Header from '@components/header';
 import AboptPopup from './components/abopt-popup';
 import ReportPopup from './components/report-popup';
 import ShowTop from './components/show-top';
-import DeletePopup from './components/delete-popup';
+import DeletePopup from '@components/thread-detail-pc/delete-popup';
 import MorePopup from './components/more-popup';
 import InputPopup from './components/input-popup';
 import ImageContent from '@components/thread/image-content';
@@ -169,7 +169,7 @@ const RenderThreadContent = inject('user')(observer((props) => {
               />
               <Button
                 className={topic.buyBtn}
-                type="primary"
+                type="danger"
                 onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
               >
                 购买商品

@@ -5,17 +5,15 @@ import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
 import NewContent from './components/new-content';
 import TopMenu from './components/top-menu';
-import PostTheme from './components/post-theme';
 import TopNews from '../h5/components/top-news';
 import Navigation from './components/navigation';
 import QcCode from '@components/qcCode';
 import Recommend from '@components/recommend';
 import ThreadContent from '@components/thread';
-import List from '@components/list';
 import Copyright from '@components/copyright';
 import { readThreadList } from '@server';
 import PayBox from '@components/payBox';
-import { Spin, Button } from '@discuzq/design'
+import { Button } from '@discuzq/design'
 
 @inject('site')
 @inject('user')
@@ -40,21 +38,6 @@ class IndexPCPage extends React.Component {
   listRef = React.createRef()
 
   componentDidMount() {
-    // PayBox.createPayBox({
-    //   data: {
-    //     amount: 0.1,
-    //     type: 5,
-    //     threadId: 4,
-    //     payeeId: 16,
-    //     isAnonymous: false,
-    //   },
-    //   success: (orderInfo) => {
-    //     console.log(orderInfo);
-    //   },
-    //   failed: (orderInfo) => {
-    //     console.log(orderInfo);
-    //   },
-    // });
     if (this.timer) {
       clearInterval(this.timer);
     }
@@ -165,7 +148,7 @@ class IndexPCPage extends React.Component {
   renderContent = (data) => {
     const { visible, conNum } = this.state;
     const { sticks, threads } = data;
-    const { pageData } = threads || {};
+    const { pageData, currentPage, totalPage } = threads || {};
     return (
       <div className={styles.indexContent}>
         <div className={styles.contnetTop}>
@@ -191,49 +174,29 @@ class IndexPCPage extends React.Component {
         <div className={styles.themeBox}>
           <div className={styles.themeItem}>
             {pageData?.map((item, index) => <ThreadContent className={styles.threadContent} key={index} data={item} />)}
-            {this.renderLoading()}
           </div>
         </div>
       </div>
     );
   }
 
-  // 加载视图
-  renderLoading = () => {
-    const { currentPage, totalPage } = this.props.index.threads || {};
-    return (
-      <div className={styles.footer}>
-        { currentPage < totalPage 
-          ? (<><Spin className={styles.spin} type="spinner" /> 加载中...</>)
-          : '没有更多数据'
-        }
-      </div>
-    )
-  }
-
   render() {
     const { index, site } = this.props;
     const { countThreads = 0 } = site?.webConfig?.other || {};
     const { currentPage, totalPage } = this.props.index.threads || {};
-    const { visibility } = this.state
 
     return (
-      <List 
-        ref={this.listRef}
-        className={styles.indexWrap} 
+      <BaseLayout
+        onSearch={this.onSearch}
         onRefresh={this.onPullingUp} 
         noMore={currentPage >= totalPage} 
         onScroll={this.onScroll}
         showRefresh={false}
+        left={ this.renderLeft(countThreads) }
+        right={ this.renderRight() }
       >
-        <BaseLayout
-          onSearch={this.onSearch}
-          left={ this.renderLeft(countThreads) }
-          right={ this.renderRight() }
-        >
-          {this.renderContent(index)}
-        </BaseLayout>
-      </List>
+        {this.renderContent(index)}
+      </BaseLayout>
     );
   }
 }
