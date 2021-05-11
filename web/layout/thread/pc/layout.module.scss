@@ -11,7 +11,7 @@
 
 .header {
   width: 100%;
-  height: rem(60);
+  background: var(--color-white);
 }
 
 .body {
@@ -28,6 +28,8 @@
   }
 
   .bodyRigth {
+    position: sticky;
+    top: rem(0);
     width: rem(330);
 
     .authorInfo {
