@@ -116,7 +116,7 @@ class HomeHeader extends React.Component {
             <span className={styles.text}>内容</span>
             <span className={styles.content}>{countThreads}</span>
           </li>
-          <li onClick={this.onShare}>
+          <li className={styles.item} onClick={this.onShare}>
             <Icon className={styles.shareIcon} color="#fff" name="ShareAltOutlined"/>
             <span className={styles.shareText}>分享</span>
           </li>

@@ -25,6 +25,7 @@
     border-radius: rem($border-radius-small);
     object-fit: cover;
     background-color: var(--background-color);
+    cursor: pointer;
   }
 
   .modalBox {

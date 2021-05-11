@@ -3,28 +3,28 @@ import { ImagePreviewer } from '@discuzq/design';
 import styles from './index.module.scss';
 
 // TODO 图片懒加载
-const Index = ({ imageData, platform = 'h5' }) => {
+const Index = ({ imgData = [], platform = 'h5' }) => {
     const [bigImages, setBigImages] = useState([])
     const [smallImages, setSmallImages] = useState([])
     const [visible, setVisible] = useState(false);
     const [defaultImg, setDefaultImg] = useState('');
     
-    const imagePreviewers = useMemo(() => imageData.map(item => item.url), [imageData]);
+    const imagePreviewers = useMemo(() => imgData.map(item => item.url), [imgData]);
 
     useEffect(() => {
-        if (!imageData?.length) {
+        if (!imgData?.length) {
 
-        } else if (imageData.length < 5) {
-            setBigImages([imageData[0]])
-            setSmallImages(imageData.slice(1, imageData.length + 1))
+        } else if (imgData.length < 5) {
+            setBigImages([imgData[0]])
+            setSmallImages(imgData.slice(1, imgData.length + 1))
         } else {
-            setBigImages([imageData[0], imageData[1]])
-            setSmallImages([imageData[2], imageData[3], imageData[4]])
+            setBigImages([imgData[0], imgData[1]])
+            setSmallImages([imgData[2], imgData[3], imgData[4]])
         } 
-    }, [imageData])
+    }, [imgData])
 
     const onClick = (id) => {
-        imageData.forEach((item) => {
+        imgData.forEach((item) => {
           if (item.id === id) {
             setDefaultImg(item.url);
             setTimeout(() => {
@@ -38,7 +38,7 @@ const Index = ({ imageData, platform = 'h5' }) => {
     const onClickMore = (e) => {
         e.stopPropagation();
 
-        setDefaultImg(imageData[4].url);
+        setDefaultImg(imgData[4].url);
         setTimeout(() => {
             setVisible(true);
         }, 0);
@@ -46,19 +46,19 @@ const Index = ({ imageData, platform = 'h5' }) => {
     
 
     const direction = useMemo(() => {
-        if (imageData?.length > 5) {
+        if (imgData?.length > 5) {
             return styles.containerColumn
         }
-        if (imageData?.length > 1) {
-            return imageData.length % 2 === 0 ? styles.containerRow : styles.containerColumn
+        if (imgData?.length > 1) {
+            return imgData.length % 2 === 0 ? styles.containerRow : styles.containerColumn
         }
         return ''
-    }, [imageData])
+    }, [imgData])
 
     const style = useMemo(() => {
-        const num = imageData.length > 5 ? 5 : imageData?.length
+        const num = imgData.length > 5 ? 5 : imgData?.length
         return `containerNum${num}`
-    }, [imageData])
+    }, [imgData])
 
     return (
         <>
@@ -69,9 +69,9 @@ const Index = ({ imageData, platform = 'h5' }) => {
                 <div className={styles.smallImages}>
                     { smallImages.map((item, index) => <img className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />) }
                     {
-                        imageData?.length > 5 && (
+                        imgData?.length > 5 && (
                             <div className={styles.modalBox} onClick={onClickMore}>
-                                <span className={styles.imgSpan}>{`+${imageData.length - 5}`}</span>
+                                <span className={styles.imgSpan}>{`+${imgData.length - 5}`}</span>
                             </div>
                         )
                     }
