@@ -57,20 +57,24 @@ export default class index extends Component {
           <div className={styles.userCenterEditItem} style={{ border: 'none' }}>
             <div className={styles.userCenterEditLabel}>
               <label>微信</label>
-              <div className={styles.userCenterEditWeChat}><Avatar size="small" /> <span>Users（解绑）</span></div>
+              <div className={styles.userCenterEditWeChat}>{
+                this.user.unionid ? <>
+                  <Avatar size="small" image={this.user.avatarUrl} name={this.user.username} /> <span>{this.user.nickname}（解绑）</span>
+                </> : '暂未绑定'
+              }</div>
             </div>
           </div>
         </div>
         {/* bottom */}
         <div className={styles.userCenterEditBottom}>
-          <h3>实名认证</h3>
+          {/* <h3>实名认证</h3>
           <div className={styles.userCenterEditItem}>
             <div className={styles.userCenterEditLabel}>
               <label>申请实名认证</label>
               <div>去认证</div>
             </div>
             <div><Icon name="RightOutlined" /></div>
-          </div>
+          </div> */}
           <div className={styles.userCenterEditBtn}>
             <Button>取消</Button>
             <Button type="primary">保存</Button>
