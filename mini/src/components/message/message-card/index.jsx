@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import { View } from '@tarojs/components';
 import { Badge, Icon } from '@discuzq/design';
 import Router from '@discuzq/sdk/dist/router';
 
 import styles from './index.module.scss';
 
 
-export class CategoryList extends Component {
+export class MessageCard extends Component {
   state = {
     categoryItems: [
       {
@@ -32,31 +33,31 @@ export class CategoryList extends Component {
   render() {
     const { categoryItems } = this.state;
     return (
-      <div className={styles.container}>
+      <View className={styles.container}>
         {categoryItems.map(({ iconName, title, link, totalCount }, idx) => (
-          <div key={idx} className={styles.notificationItem}>
+          <View key={idx} className={styles.notificationItem}>
             {totalCount > 0 ? (
-              <div className={styles.iconWrapper}>
+              <View className={styles.iconWrapper}>
                 <Icon name={iconName} className={styles.icon} size={20}/>
                 <Badge info={totalCount > 99 ? '99+' : `${totalCount || '0'}`} className={styles.badge} />
-              </div>
+              </View>
             ) : (
               <Icon name={iconName} className={styles.icon} size={20}/>
             )}
-            <div className={styles.title}>{title}</div>
-            <div
+            <View className={styles.title}>{title}</View>
+            <View
               className={styles.arrow}
               onClick={() => {
                 Router.push({ url: link });
               }}
             >
               <Icon name={"RightOutlined"} className={styles.rightArrow} size={10}/>
-            </div>
-          </div>
+            </View>
+          </View>
         ))}
-      </div>
+      </View>
     );
   }
 }
 
-export default CategoryList;
+export default MessageCard;

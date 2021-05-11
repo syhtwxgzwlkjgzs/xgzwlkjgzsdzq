@@ -1,10 +1,10 @@
 import React from 'react'
-import CategoryList from '../category-list'
+import MessageCard from '../message-card'
 
 const MessageIndex = () => {
   return (
     <>
-      <CategoryList />
+      <MessageCard />
     </>
   )
 }
