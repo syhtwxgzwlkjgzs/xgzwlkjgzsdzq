@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ImagePreviewer } from '@discuzq/design';
 import styles from './index.module.scss';
 
@@ -8,6 +8,9 @@ const Index = ({ imgData = [], platform = 'h5' }) => {
     const [smallImages, setSmallImages] = useState([])
     const [visible, setVisible] = useState(false);
     const [defaultImg, setDefaultImg] = useState('');
+    const [smallSty, setSmallSty] = useState({})
+
+    const smallDiv = useRef(null)
     
     const imagePreviewers = useMemo(() => imgData.map(item => item.url), [imgData]);
 
@@ -22,6 +25,13 @@ const Index = ({ imgData = [], platform = 'h5' }) => {
             setSmallImages([imgData[2], imgData[3], imgData[4]])
         } 
     }, [imgData])
+
+    // 设置大于4张图片时的高度
+    useEffect(() => {
+        if (smallDiv.current && imgData?.length > 4) {
+            setSmallSty({ height: `${smallDiv.current.clientWidth}px` })
+        }
+    }, [])
 
     const onClick = (id) => {
         imgData.forEach((item) => {
@@ -66,13 +76,14 @@ const Index = ({ imgData = [], platform = 'h5' }) => {
                 <div className={styles.bigImages}>
                     { bigImages.map((item, index) => <img className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />)}
                 </div>
-                <div className={styles.smallImages}>
-                    { smallImages.map((item, index) => <img className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />) }
+                <div className={styles.smallImages} style={smallSty}>
+                    { smallImages.map((item, index) => <img ref={smallDiv} className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />) }
                     {
                         imgData?.length > 5 && (
-                            <div className={styles.modalBox} onClick={onClickMore}>
-                                <span className={styles.imgSpan}>{`+${imgData.length - 5}`}</span>
-                            </div>
+                            <>
+                            <div className={styles.modalBox} onClick={onClickMore}></div>
+                            <span className={styles.imgSpan}>{`+${imgData.length - 5}`}</span>
+                            </>
                         )
                     }
                 </div>
