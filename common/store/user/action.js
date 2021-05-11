@@ -1,6 +1,19 @@
 import { action } from 'mobx';
 import SiteStore from './store';
-import { readUser, readPermissions, createFollow, deleteFollow, getUserFollow, getUserFans, readThreadList, denyUser, deleteDeny } from '@server';
+import {
+  readUser,
+  readPermissions,
+  createFollow,
+  deleteFollow,
+  getUserFollow,
+  getUserFans,
+  readThreadList,
+  denyUser,
+  deleteDeny,
+  updateAvatar,
+  updateBackground,
+  updateUsersUpdate,
+} from '@server';
 import { get } from '../../utils/get';
 import set from '../../utils/set';
 
@@ -380,6 +393,30 @@ class UserAction extends SiteStore {
   @action
   async getTargetUserLikeLists() {
 
+  }
+
+  /**
+   * 上传新的头像
+   */
+  @action
+  async updateAvatar() {
+    await updateAvatar();
+  }
+
+  /**
+   * 上传新的背景图
+   */
+  @action
+  async updateBackground() {
+    await updateBackground();
+  }
+
+  /**
+   * 更新新的用户信息
+   */
+  @action
+  async updateEditedUserInfo() {
+    await updateUsersUpdate();
   }
 }
 

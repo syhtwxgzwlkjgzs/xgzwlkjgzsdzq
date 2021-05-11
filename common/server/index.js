@@ -64,3 +64,5 @@ export { default as getUserFans } from './user/getUserFans';
 export { default as getUserFollow } from './user/getUserFollow';
 export { default as denyUser } from './user/denyUser';
 export { default as deleteDeny } from './user/deleteDeny';
+export { default as updateAvatar } from './user/updateAvatar';
+export { default as updateBackground } from './user/updateBackground';
