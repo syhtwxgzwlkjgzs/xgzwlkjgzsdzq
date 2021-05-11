@@ -2,7 +2,7 @@ import React, { memo, useState, useEffect } from 'react';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import InstantMessaging from '../../../components/message/instant-messaging';
-import CategoryList from '@components/message/category-list';
+import MessageIndex from '@components/message/message-index';
 
 import Notice from '@components/message/notice';
 import mock from '../mock.json';
@@ -41,7 +41,7 @@ const Index = ({ page, subPage, dialogId, message }) => {
 
   return (
     <div className={styles.container}>
-      <CategoryList />
+      <MessageIndex />
       <Notice list={list} type={type} onBtnClick={handleDelete} />
       <InstantMessaging messagesHistory={messagesHistory} onSubmit={doSubmit} />
     </div>
