@@ -60,13 +60,13 @@ class SearchResultTopicPCPage extends React.Component {
   }
 
   renderContent = () => {
-    const { pageData = [], currentPage, totalPage } = this.props.search.topics || { pageData: [] };
+    const { pageData = [] } = this.props.search.topics || { pageData: [] };
     return (
       <SidebarPanel 
         title="潮流话题" 
         type='normal'
         isShowMore={false}
-        noData={false}
+        noData={!pageData.length}
         icon={{ type: 1, name: 'StrongSharpOutlined' }}
       >
         <TrendingTopicMore data={pageData} onItemClick={this.onTopicClick}/>

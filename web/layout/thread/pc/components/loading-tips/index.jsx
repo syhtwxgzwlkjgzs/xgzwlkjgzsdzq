@@ -8,7 +8,7 @@ export default function LoadingTips(props) {
   const { type } = props;
   return <div className={classNames(styles.container)}>
         {type === 'init'
-          ? <Spin className={styles.init} type="spinner" vertical>加载页面中...</Spin>
+          ? <Spin className={styles.init} type="spinner" vertical>加载数据中...</Spin>
           : <Spin className={styles.loadMore}  type="spinner">加载更多...</Spin>
         }
     </div>;

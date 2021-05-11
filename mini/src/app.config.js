@@ -41,6 +41,9 @@ export default {
         'user/wx-authorization/index',
         // 我的草稿页
         'my/draft/index',
+        'wallet/index',
+        'wallet/frozen/index',
+        'wallet/withdrawal/index',
       ]
     }
   ],
