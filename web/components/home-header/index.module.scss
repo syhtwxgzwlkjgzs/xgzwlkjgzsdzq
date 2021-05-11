@@ -51,25 +51,34 @@
     padding: 0 rem($padding-10);
     box-sizing: border-box;
     position: absolute;
-    bottom: rem($font-line-height-middle);
-    .item{
-      display: flex;
-      align-items: center;
-      .text {
-        font-size: rem($font-size-middle);
-        color: var( --color-white);
-        opacity: 0.5;
-      }
-      .content {
-        font-size: rem($font-size-middle);
-        color: var( --color-white);
-        padding-left: rem($padding-2n);
-      }
-      .shareIcon {
-        display: inline-block;
-        opacity: 0.5;
-        padding-right: rem($padding-2n);
-      }
+    bottom: rem($font-line-height-primary);
+    .text {
+      font-size: rem($font-size-middle);
+      line-height: rem(24);
+      color: var( --color-white);
+      font-weight: normal;
+      opacity: 0.6;
+    }
+    .shareText {
+      font-family: PingFangSC-Regular;
+      font-size: rem($font-size-middle);
+      line-height: rem(24);
+      color: var( --color-white);
+      font-weight: normal;
+    }
+    .content {
+      font-size: rem($font-size-middle);
+      color: var( --color-white);
+      font-weight: normal;
+      padding-left: rem($padding-2n);
+    }
+    .shareIcon {
+      display: inline-block;
+      color: var( --color-white);
+      opacity: 0.6;
+      padding-bottom: rem(2);
+      padding-right: rem($padding-2n);
+      box-sizing: border-box;
     }
     
   }

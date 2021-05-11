@@ -116,9 +116,9 @@ class HomeHeader extends React.Component {
             <span className={styles.text}>内容</span>
             <span className={styles.content}>{countThreads}</span>
           </li>
-          <li className={styles.item} onClick={this.onShare}>
-            <Icon className={styles.shareIcon} size={16} color="#fff" name="ShareAltOutlined"/>
-            <span className={styles.text}>分享</span>
+          <li onClick={this.onShare}>
+            <Icon className={styles.shareIcon} color="#fff" name="ShareAltOutlined"/>
+            <span className={styles.shareText}>分享</span>
           </li>
         </ul>}
         {isWeiXin && <SharePopup visible={visible} onClose={this.onClose} />}
