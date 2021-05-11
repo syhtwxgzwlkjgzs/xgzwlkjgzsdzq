@@ -4,14 +4,14 @@
   width: 100%;
   box-sizing: border-box;
   background: var(--color-white);
-  padding: rem($padding-4n);
+  padding: 0 rem($padding-4n);
   padding-bottom: 0;
   .recommendContent {
     font-weight: 600;
     font-size: rem(18);
-    line-height: rem(28);
+    height: rem(57);
+    line-height: rem(57);
     color: var(--color-text-primary);
-    margin-bottom: rem($margin-4n);
   }
 }
 .recommendBox {
@@ -20,19 +20,17 @@
   border-top: var(--border-border);
   .recommendTitle {
     display: flex;
-    margin-top: rem($margin-4n);
+    padding-top: rem($margin-4n);
     .recommendSort {
       margin-right: rem($margin-2n);
-      font-weight: normal;
       font-size: rem($font-size-primary);
-      line-height: rem($font-line-height-primary);
+      line-height: rem($font-line-height-small);
       color: var(--color-error);
     }
     .recommenText {
       flex: 1;
-      font-weight: normal;
       font-size: rem($font-size-middle);
-      line-height: rem($font-line-height-primary);
+      line-height: rem($font-line-height-small);
       color: var(--color-text-primary);
       overflow: hidden;
       text-overflow: ellipsis;
@@ -42,12 +40,12 @@
   .browse {
     width: 100%;
     display: flex;
-    margin-top: rem($margin-2n);
+    margin-top: rem($margin-10);
     justify-content: space-between;
+    align-items: center;
     .browseBox {
-      font-weight: normal;
       font-size: rem($font-size-label);
-      line-height: rem($font-line-height-middle);
+      line-height: rem($font-line-height-small);
       color: var(--color-text-secondary);
       .browseIcon {
         margin-right: rem($margin-1n);
@@ -56,7 +54,6 @@
     .browseButtom {
       display: flex;
       .browseSurplus {
-        font-weight: normal;
         font-size: rem($font-size-label);
         line-height: rem($font-line-height-primary);
         color: var(--color-text-primary);
@@ -71,7 +68,6 @@
           height: rem(21);
           margin-left: rem($margin-2n);
           border-radius: rem($border-radius-small);
-          font-weight: normal;
           font-size: rem($font-size-label);
           line-height: rem(21);
           text-align: center;
@@ -108,7 +104,6 @@
   .switchBox {
     width: rem(66);
     margin: rem($margin-4n) auto 0;
-    font-weight: normal;
     font-size: rem($font-size-primary);
     line-height: rem($font-line-height-primary);
     color: var(--pc-user-info-title);

@@ -51,7 +51,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
               <div className={styles.container} key={index} onClick={onClick} >
                 <div className={styles.wrapper}>
                   <div className={styles.left}>
-                    <Icon className={styles.containerIcon} name={type && 'DocOutlined'} />
+                    <Icon className={styles.containerIcon} size={20} name={type && 'DocOutlined'} />
                     <div className={styles.containerText}>
                       <span className={styles.content}>{item.fileName}</span>
                       <span className={styles.size}>{handleFileSize(parseFloat(item.fileSize || 0))}</span>
@@ -59,8 +59,8 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
                   </div>
                   
                   <div className={styles.right}>
-                    <span onClick={() => onPreviewer(item.url)}>浏览</span>
-                    <span onClick={() => onDownLoad(item.url)}>下载</span>
+                    <span className={styles.span} onClick={() => onPreviewer(item.url)}>浏览</span>
+                    <span className={styles.span} onClick={() => onDownLoad(item.url)}>下载</span>
                   </div>
                 </div>
               </div>
