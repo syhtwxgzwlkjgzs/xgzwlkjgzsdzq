@@ -4,6 +4,7 @@ import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import InstantMessaging from '@components/message/instant-messaging';
 
+import CategoryList from '@components/message/category-list';
 import NoticeItem from '@components/message/notice-item';
 import SliderLeft from '@components/message/slider-left';
 import mock from './mock.json';
@@ -33,6 +34,7 @@ const Index = inject('site')(observer(() => {
 
   return (
     <View className={styles.container}>
+      <CategoryList />
       <Button>mini test</Button>
       <SliderLeft
         list={list}
