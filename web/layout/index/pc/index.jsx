@@ -156,7 +156,7 @@ class IndexPCPage extends React.Component {
             <TopMenu onSubmit={this.onFilterClick} />
             <div className={styles.PostTheme}>
               <Button type="primary" className={styles.publishBtn} onClick={this.onPostThread}>
-                发 布
+                发布
               </Button>
             </div>
           </div>
