@@ -19,6 +19,9 @@
 
       .headerRigth {
         display: flex;
+        .redpacket {
+          margin-left: rem($margin-4n);
+        }
         .showMoneyNum {
           font-size: rem($font-size-label);
           text-align: left;
@@ -42,11 +45,12 @@
   }
   .content {
     display: flex;
-    padding-top: rem(9);
+    padding-top: rem($padding-10);
     .commentListAvatar {
       margin-right: rem($margin-2n);
     }
     .commentListContent {
+      width: 100%;
       .commentListContentText {
         padding: rem($padding-2n);
         border-radius: rem($border-radius-small);

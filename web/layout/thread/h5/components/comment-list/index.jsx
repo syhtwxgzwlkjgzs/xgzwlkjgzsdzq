@@ -80,7 +80,6 @@ class CommentList extends React.Component {
           <div className={styles.showGet}>
             <div></div>
             <div className={styles.headerRigth}>
-
               {
                 this.props.data?.rewards
                   ? <div className={styles.imageNumber}>
@@ -93,7 +92,7 @@ class CommentList extends React.Component {
               }
               {
                 this.props.data?.redPacketAmount
-                  ? <div className={styles.imageNumber}>
+                  ? <div className={`${styles.redpacket} ${styles.imageNumber}`}>
                     <img className={styles.image} src="/dzq-img/redpacket-mini.png" alt="红包图标" />
                     <div className={styles.showMoneyNum}>
                       获得<span className={styles.moneyNumber}>{this.props.data.redPacketAmount}</span>元红包
