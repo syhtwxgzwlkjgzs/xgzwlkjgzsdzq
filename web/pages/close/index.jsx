@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import isServer from '@common/utils/is-server';
 import Router from '@discuzq/sdk/dist/router';
 
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 import IndexPCPage from '@layout/close/pc';
 import IndexH5Page from '@layout/close/h5';

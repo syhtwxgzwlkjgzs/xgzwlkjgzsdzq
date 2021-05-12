@@ -7,7 +7,7 @@
     margin-bottom: rem($margin-4n);
     height: rem(82);
     border-radius: rem($border-radius-small);
-    background: var(--comment-box-bg-color);
+    background-color: $comment-bg-color;
     display: flex;
     align-items: center;
     padding: rem($padding-4n) rem($padding-6n);
@@ -37,6 +37,7 @@
     }
     .num {
       display: flex;
+      color: var(--color-text-regular);
       .numItem {
         font-size: rem($font-size-primary);
         line-height: rem($font-line-height-small);
@@ -60,7 +61,7 @@
         }
       }
       .numTitle {
-        color: var(--pc-user-info-title);
+        color: var(--color-text-regular);
         margin-right: rem($margin-5);
       }
     }

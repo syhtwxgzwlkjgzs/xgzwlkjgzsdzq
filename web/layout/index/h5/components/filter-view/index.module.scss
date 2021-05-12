@@ -7,17 +7,26 @@
 }
 .container {
   box-sizing: border-box;
-  padding: rem(15);
+  padding: rem(25) rem(15) rem(16);
   background-color: var(--color-white);
   border-top-right-radius: rem($border-radius-small);
   border-top-left-radius: rem($border-radius-small);
+  position: relative;
+  .containerIcon {
+    position: absolute;
+    right: rem(16);
+    top: rem(25);
+  }
+  .searchIcon {
+    color: var(--color-text-secondary);
+  }
   .wrapper {
     display: flex;
     flex-wrap: wrap;
     margin-bottom: rem(10);
   }
   .childrenWrapper {
-    border-top: 1px solid #eee;
+    border-top: 1px solid var(--border-line-color);
     margin-top: rem(6);
     padding-top: rem(16);
   }
@@ -65,7 +74,7 @@
     margin-bottom: rem(24);
   }
   .footerBtn {
-    border-top: 1px solid #eee;
+    border-top: 1px solid var(--border-line-color);
     position: relative;
     height: rem(54);
     text-align: center;

@@ -145,7 +145,7 @@
 .tag {
   display: inline-block;
   color: $text-color-regular;
-  background: var(--background-color);
+  background: $tag-info-bg-color;
   font-size: rem($font-size-label);
   padding: rem($padding-1n) rem($padding-1n);
   border-radius: rem($border-radius-small);
@@ -200,6 +200,7 @@
 
 .rewardBody {
   text-align: center;
+  margin-bottom: rem($margin-6n);
 }
 
 .rewardMoney {

@@ -8,6 +8,10 @@
     margin-bottom: rem($margin-4n);
   }
 
+  .redpacket {
+    margin-left: rem($margin-4n);
+  }
+
   .content {
     display: flex;
     .commentListAvatar {
@@ -18,7 +22,7 @@
       .commentListContentText {
         padding: rem($padding-4n);
         border-radius: rem($border-radius-small);
-        background: var(--comment-box-bg-color);
+        background-color: $comment-bg-color;
         .commentListName {
           font-weight: var(--font-weight-regular);
           font-size: rem($font-size-primary);
@@ -32,6 +36,7 @@
           line-height: rem(22);
           text-align: left;
           color: var(--color-text-primary);
+          word-break: break-word;
         }
       }
 
@@ -83,7 +88,7 @@
       }
     }
   }
-  
+
   .extraBottom {
     display: flex;
     align-items: center;
@@ -98,6 +103,7 @@
 .icon {
   margin-right: rem(8);
   font-size: rem(14) !important;
+  color: $icon-color;
 }
 
 .active {
@@ -110,4 +116,9 @@
 
 .divider {
   margin-bottom: rem($margin-2n);
+}
+
+.revise {
+  display: flex;
+  align-items: center;
 }

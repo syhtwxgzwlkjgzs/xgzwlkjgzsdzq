@@ -86,7 +86,7 @@
        <Popup position="center" visible={show}>
          <div className={styles['redpacket-box']}>
          <div className={styles['title-top']}><span>添加红包</span>
-            <Icon className={styles['title-top-right']} onClick={handleClose} name="LikeOutlined" size={20} color="#8490a8"></Icon>
+            <Icon className={styles['title-top-right']} onClick={handleClose} name="LikeOutlined" size={20} color="#8590A6"></Icon>
           </div>
            {/* 发放规则 */}
            <div className={styles['line-box']}>

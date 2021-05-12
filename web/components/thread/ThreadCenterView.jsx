@@ -48,7 +48,7 @@ const Index = (props) => {
         return (
           <div className={styles.wrapper}>
               {text && <PostContent content={text} onPay={onPay} onRedirectToDetail={onClick} />}
-              <div className={`${styles.content} ${payType === 2 && styles.payContent}`}>
+              <div className={styles.content}>
                 {videoData && (
                   <VideoPlay
                     url={videoData.mediaUrl}
@@ -77,24 +77,8 @@ const Index = (props) => {
                     amount={goodsData.price}
                     title={goodsData.title}
                 />}
-                {audioData && <AudioPlay url={audioData.mediaUrl} isPay={payType !== 0} />}
-                {fileData && <AttachmentView attachments={fileData} onClick={onPay} isPay={payType !== 0} />}
-  
-                {/* 付费蒙层 */}
-                {
-                  !paid && payType !== 0 && (
-                    <div className={styles.cover} onClick={payType === 1 ? onClick : onPay}>
-                      {
-                        payType === 2 ? (
-                          <Button className={styles.button} type="primary" onClick={onPay}>
-                            <span className={styles.icon}>$</span>
-                            支付{attachmentPrice}元查看附件内容
-                          </Button>
-                        ) : null
-                      }
-                    </div>
-                  )
-                }
+                {audioData && <AudioPlay url={audioData.mediaUrl} isPay={payType !== 0} onPay={onPay} />}
+                {fileData && <AttachmentView attachments={fileData} onPay={onPay} isPay={payType !== 0} />}
               </div>
           </div>
         );
@@ -107,11 +91,14 @@ const Index = (props) => {
             {renderThreadContent(props.data)}
 
             {
-                !paid && payType === 1 && (
+                !paid && payType !== 0 && (
+                  <div className={styles.pay}>
                     <Button className={styles.button} type="primary" onClick={onPay}>
                         <span className={styles.icon}>$</span>
-                        支付{price}元查看剩余内容
-                    </Button>
+                        {payType === 1 ? `支付${price}元查看剩余内容` : `支付${price}元查看附件内容`}
+                    </Button>                  
+                  </div>
+                  
                 )
             }
         </>

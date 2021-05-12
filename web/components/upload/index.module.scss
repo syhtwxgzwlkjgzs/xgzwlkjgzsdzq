@@ -2,7 +2,7 @@
 @import '@common/styles/index.scss';
 
 .text-grey {
-  color: #8490a8;
+  color: #8590A6;
 }
 
 .flex-column-center {
@@ -46,7 +46,7 @@ $width: rem(169);
           width: $width;
           height: $width;
           font-size: 0;
-          color: #8490a8;
+          color: #8590A6;
           background-color: $background-color;
           border-color: $background-color;
           border-radius: 5px;
@@ -127,7 +127,7 @@ $width: rem(169);
 
       .dzq-button--text {
         font-size: var(--font-size-primary);
-        color: #8490a8;
+        color: #8590A6;
         background-color: $background-color;
         border: 0;
       }

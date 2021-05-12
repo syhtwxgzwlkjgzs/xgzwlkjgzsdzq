@@ -29,8 +29,7 @@ const Index = ({ imgData = [], platform = 'h5' }) => {
     // 设置大于4张图片时的高度
     useEffect(() => {
         if (smallImg.current && imgData?.length > 4) {
-            console.log(smallImg.current.clientWidth);
-            setSmallSty({ height: `${smallImg.current.clientWidth}px` })
+            setSmallSty({ height: `${smallImg.current.clientWidth}px`, width: `${smallImg.current.clientWidth}px` })
         }
     }, [imgData])
 
@@ -77,8 +76,8 @@ const Index = ({ imgData = [], platform = 'h5' }) => {
                 <div className={styles.bigImages}>
                     { bigImages.map((item, index) => <img className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />)}
                 </div>
-                <div className={styles.smallImages} style={smallSty}>
-                    { smallImages.map((item, index) => <img ref={smallImg} className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={`1-${index}`} />) }
+                <div className={styles.smallImages}>
+                    { smallImages.map((item, index) => <img style={smallSty} ref={smallImg} className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={`1-${index}`} />) }
                     {
                         imgData?.length > 5 && (
                             <>

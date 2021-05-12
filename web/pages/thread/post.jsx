@@ -3,8 +3,8 @@ import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/thread/post/h5';
 import IndexPCPage from '@layout/thread/post/pc';
 
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-import HOCWithLogin from '@common/middleware/HOCWithLogin';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import HOCWithLogin from '@middleware/HOCWithLogin';
 import * as localData from '@layout/thread/post/common';
 import { Toast } from '@discuzq/design';
 import { createAttachment } from '@common/server';

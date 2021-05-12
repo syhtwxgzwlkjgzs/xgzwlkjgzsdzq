@@ -3,7 +3,7 @@ import { withRouter } from 'next/router';
 import { inject } from 'mobx-react';
 import WalletH5Page from '@layout/wallet/h5';
 import WalletPCPage from '@layout/wallet/pc';
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import { readWalletUser } from '@server';
 
 @inject('site')
