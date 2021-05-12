@@ -2,7 +2,7 @@ import { observable, action, computed } from 'mobx';
 import { smsSend, smsLogin } from '@server';
 import { get } from '../../utils/get';
 import setAccessToken from '../../utils/set-access-token';
-import { checkUserStatus } from '@common/store/login/util';
+import { checkUserStatus, toTCaptcha } from '@common/store/login/util';
 
 export const MOBILE_LOGIN_STORE_ERRORS = {
   MOBILE_VERIFY_ERROR: {
@@ -108,25 +108,31 @@ export default class mobileLoginStore {
     }
 
     @action
-    sendCode = async () => {
+    sendCode = async (registerCaptcha, qcloudCaptchaAppId) => {
       // 发送前校验
       this.beforeSendVerify();
       try {
-        const smsResp = await smsSend({
-          timeout: 3000,
-          data: {
-            mobile: this.mobile,
-            type: 'login',
+        toTCaptcha({
+          registerCaptcha,
+          appid: qcloudCaptchaAppId,
+          resCallback: async () => {
+            const smsResp = await smsSend({
+              timeout: 3000,
+              data: {
+                mobile: this.mobile,
+                type: 'login',
+              },
+            });
+            if (smsResp.code === 0) {
+              this.setCounter(smsResp.data.interval);
+              return smsResp.data;
+            }
+            throw {
+              Code: smsResp.code,
+              Message: smsResp.msg,
+            }
           },
         });
-        if (smsResp.code === 0) {
-          this.setCounter(smsResp.data.interval);
-          return smsResp.data;
-        }
-        throw {
-          Code: smsResp.code,
-          Message: smsResp.msg,
-        };
       } catch (error) {
         if (error.Code) {
           throw error;

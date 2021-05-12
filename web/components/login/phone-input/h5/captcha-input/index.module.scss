@@ -1,20 +1,23 @@
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 .container{
   .captchaInput-input {
     text-align: center;
     display: inline-block;
-    font-size: rem(14);
     height: rem(52);
     width: rem(40);
     margin-right: rem(16);
+    box-sizing: border-box;
+    padding: rem(18) 0;
+    border-bottom: rem(1) solid #eee;
     :global(.dzq-input__inner) {
       text-align: center;
-      line-height: rem(52);
-      height: rem(52);
+      font-size: rem(16);
       width: rem(40);
+      height: rem(24);
+      line-height: rem(24);
+      padding: 0;
       border: none;
       border-radius: 0;
-      border-bottom: rem(1) solid #eee;
     }
   }
   .captchaInput-input:last-child {

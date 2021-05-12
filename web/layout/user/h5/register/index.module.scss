@@ -1,5 +1,5 @@
 @import '../../../../../common/styles/mixin/login.scss';
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 .container {
   height: 100vh;
 }
@@ -23,7 +23,7 @@
   }
   .otherLogin-tips{
     @include otherLoginText;
-    margin-top: rem(131);
+    margin-top: rem(32);
   }
 }
 

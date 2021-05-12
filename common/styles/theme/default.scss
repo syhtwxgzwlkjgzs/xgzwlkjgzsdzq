@@ -41,7 +41,7 @@ $light: (
   --color-orange: #f66524, // 标签里面用到的：悬赏、付费等
 
   --border-line-color: #eee,
-  --border-color-hover: #c5c6ca,
+  --border-color-hover: #c5c6ca, // TODO: 待去掉，没用
 
   --shadow-color: #c5c9d5,
   --shadow-color2: #f1f3f4,
@@ -52,31 +52,20 @@ $light: (
   // 董琳说 8490a8 对应的应该是 8590a6
   --color-text-placeholder: #c5c6cb, // border hover 的颜色还有 loading 文字和这个一致
 
-  --background-color: #f6f7f9,
+  // pc，移动都是统一这个背景色；另外 // 评论框，评论，附件，语音，模块与模块之间的间距背景色
+  --background-color: #f5f7f8,
+
   --background-color-text: #f9fafb,
+  // 灰色标签（编辑器付费、红包设置之后的显示的背景色），灰色按钮背景色
   --background-color-text2: #eff1f3,
-  --background-color-text3: #f5f7f8,
-  --mask-background-color: rgba(51, 51, 51, 0.3),
+
+  --mask-background-color: rgba(0, 0, 0, 0.5), // 遮罩背景统一使用这个
 
   // 评论相关
-  --comment-box-bg-color: #f5f7f8,
+  --comment-box-bg-color: #f5f7f8, // TODO: 没用，待去掉
   --comment-content-bg-color: #f4f6f7, // TODO: 董琳找不着，需要相关人处理一下，如果找的到对应的设计稿颜色，找一下董琳和邹玉薇
 
-  // 加载文字颜色
-  --loading-font-color: #c4c9d6, // TODO: 待去掉
-
-  // PC用户头像弹窗信息标题验收
-  --pc-user-info-title: #4f5a70,
   // TODO: 待去掉
-
-  // PC通用头部按钮文字颜色
-  --pc-header-btn-text-color: #4f5a70,
-  // TODO: 待去掉
-
-  // PC通用头部y用户名
-  --pc-header-username-text-color: #4f5a70,
-  // TODO: 待去掉
-
   --border-border: 1px solid #eee,
   // TODO: 待去掉
 

@@ -6,8 +6,6 @@ import { Toast } from '@discuzq/design';
 import { getCurrentInstance } from '@tarojs/taro';
 import Page from '@components/page';
 
-// import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-
 @inject('site')
 @inject('topic')
 @observer

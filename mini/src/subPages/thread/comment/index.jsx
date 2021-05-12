@@ -2,7 +2,6 @@ import React from 'react';
 import { inject } from 'mobx-react';
 import { readCommentDetail } from '@server';
 import { getCurrentInstance } from '@tarojs/taro';
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 import CommentMiniPage from '../../../layout/thread/comment/index';
 
 @inject('site')
@@ -54,4 +53,4 @@ class CommentDetail extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(CommentDetail);
+export default CommentDetail;

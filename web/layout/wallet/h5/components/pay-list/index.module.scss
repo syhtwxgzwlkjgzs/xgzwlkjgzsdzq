@@ -37,7 +37,7 @@
         padding-bottom: rem($padding-4n);
     }
     .payStatusTrue {
-        color: var(--pc-user-info-title);
+        color: $text-color-regular;
     }
     .payStatusFalse {
         color: var(--color-primary);

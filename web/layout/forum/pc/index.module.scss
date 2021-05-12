@@ -1,0 +1,48 @@
+@import '@common/styles/index.scss';
+@mixin img {
+  width: rem(18);
+  height: rem(18);
+  border-radius: 50%;
+  border: rem(1) solid var(--color-white);
+}
+
+.content{
+  padding: 0 rem(16);
+  .list{
+    border-bottom: rem(1) solid var(--border-line-color);
+    height: rem(52);
+    line-height: rem(52);
+    font-size: rem(14);
+    font-weight: normal;
+    .label{
+      float: left;
+      color: #4f5a70;
+    }
+    .right{
+      float: right;
+    }
+  }
+  .forum_agent{
+    .forum_agent_img{
+      @include img;
+    }
+    .forum_agent_name{
+      padding-left: rem(8);
+    }
+  }
+  .forum_member{
+    .forum_member_img{
+      @include img;
+    }
+    .forum_member_img:nth-child(2){
+      position: relative;
+      left: rem(-4);
+      z-index: 2;
+    }
+    .forum_member_img:nth-child(3){
+      position: relative;
+      left: rem(-8);
+      z-index: 3;
+    }
+  }
+}

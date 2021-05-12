@@ -1,4 +1,5 @@
 @import '@common/styles/index.scss';
+
 .container {
   display: flex;
   box-sizing: border-box;
@@ -35,15 +36,22 @@
     opacity: 0.5;
     top: 0;
     right: 0;
+    border-radius: rem($border-radius-small);
+  }
+
+  .imgSpan {
+    position: absolute;
+    width: 33%;
+    height: 100%;
+    top: 0;
+    right: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: 600;
+    font-size: rem($font-size-large);
+    color: #fff;
     border-radius: rem($border-radius-small);
-    .imgSpan {
-      font-weight: 600;
-      font-size: rem($font-size-large);
-      color: #fff;
-    }
   }
 }
 
@@ -65,10 +73,11 @@
 .containerColumn {
   flex-direction: column;
   .bigImages {
-    margin-bottom: rem(4);
+    // margin-bottom: rem(4);
   }
   .smallImages {
     flex-direction: row;
+    margin-top: rem(4);
   }
 }
 
@@ -106,10 +115,10 @@
     height: 50%;
     width: 100%;
     flex-direction: row;
+
     .img {
-      width: 50%;
+      width: 49.6%;
       height: 100%;
-      margin-right: rem(4);
     }
   }
 }
@@ -131,10 +140,14 @@
 }
 
 .containerNum5 {
-  .bigImages {
-    height: 50%;
-    width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
+  .bigImages {
+    width: 100%;
+    // flex: 1;
+    height: 55.5%;
 
     .img {
       width: 49.7%;
@@ -142,9 +155,9 @@
   }
 
   .smallImages {
-    height: 50%;
     width: 100%;
     flex-direction: row;
+    height: 43%;
 
     .img {
       width: 33%;

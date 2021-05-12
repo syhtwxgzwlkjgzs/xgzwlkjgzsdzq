@@ -2,7 +2,7 @@
 
 .wrapper {
   padding: 20px 0;
-  background-color: var(--comment-box-bg-color);
+  background-color: $comment-bg-color;
 
   &-inner {
     margin: 0 auto;

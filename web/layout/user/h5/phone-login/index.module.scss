@@ -1,5 +1,5 @@
 @import '@common/styles/mixin/login.scss';
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 .container {
   height: 100vh;
 }
@@ -64,7 +64,7 @@
   }
   .otherLogin-title {
     @include otherLoginText;
-    margin-top: rem(120);
+    margin-top: rem(30);
     font-size: rem(14);
   }
   .otherLogin-button{

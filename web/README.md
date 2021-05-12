@@ -169,7 +169,7 @@ export default Index;
 
 在开发过程中，引入rem函数进行单位换算。
 ```scss
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 .text {
     font-size: rem(30);
     color: red;

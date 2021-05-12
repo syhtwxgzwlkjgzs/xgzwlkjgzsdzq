@@ -156,7 +156,7 @@ class IndexPCPage extends React.Component {
             <TopMenu onSubmit={this.onFilterClick} />
             <div className={styles.PostTheme}>
               <Button type="primary" className={styles.publishBtn} onClick={this.onPostThread}>
-                发 布
+                发布
               </Button>
             </div>
           </div>
@@ -173,7 +173,7 @@ class IndexPCPage extends React.Component {
         </div>
         <div className={styles.themeBox}>
           <div className={styles.themeItem}>
-            {pageData?.map((item, index) => <ThreadContent className={styles.threadContent} key={index} data={item} />)}
+            {pageData?.map((item, index) => <ThreadContent className={styles.threadContent} key={index} data={item}/>)}
           </div>
         </div>
       </div>

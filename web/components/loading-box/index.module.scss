@@ -12,7 +12,7 @@
     .loading{
       display: block;
       animation: loading 1s linear infinite;
-      color: var(--loading-font-color);
+      color: $loading-text-color;
     }
   }
 

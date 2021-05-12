@@ -61,7 +61,7 @@
                         p{
                             font-size: rem($font-size-primary);
                             margin-left: rem($margin-2n);
-                            color: var(--pc-header-btn-text-color);
+                            color: $text-color-regular;
                         }
                     }
                 }
@@ -73,7 +73,7 @@
                     margin-left: rem(49);
                     .userName{
                         margin-left: rem(16);
-                        color: var(--pc-header-username-text-color);
+                        color: $text-color-regular;
                         font-size: rem($font-size-primary);
                     }
                     .userBtn{

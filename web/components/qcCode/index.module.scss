@@ -30,7 +30,7 @@
       font-weight: normal;
       font-size: rem($font-size-large);
       line-height: rem($font-line-height-primary);
-      color: var(--pc-user-info-title);
+      color: $text-color-regular;
     }
   }
 }

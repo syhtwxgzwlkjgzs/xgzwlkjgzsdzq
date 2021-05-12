@@ -1,4 +1,5 @@
 @import '@common/styles/index.scss';
+@import '@common/styles/theme/index.scss'; // 主题样式
 @import './reset.scss';
 @import '@discuzq/design/dist/styles/index.scss';
 .dzq-post-video {
@@ -9,7 +10,7 @@
   }
 }
 .dzq-toast--mask {
-  z-index: var(--zindex-toast);
+  z-index: $zindex-toast;
 }
 
 * {

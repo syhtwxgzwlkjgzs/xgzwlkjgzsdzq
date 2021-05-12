@@ -77,7 +77,7 @@ const CommoditySelect = (props) => {
         >
             <div className={styles['parse-goods-box']}>
             <div className={styles['title-top']}><span>添加商品</span>
-            <Icon className={styles['title-top-right']} onClick={handleClose} name="LikeOutlined" size={20} color="#8490a8"></Icon>
+            <Icon className={styles['title-top-right']} onClick={handleClose} name="LikeOutlined" size={20} color="#8590A6"></Icon>
             </div>
                 <div className={styles['parse-goods-title']}>现支持以下商品链接</div>
                 <div className={styles['parse-goods-image']}>
@@ -113,4 +113,4 @@ CommoditySelect.defaultProps = {
     visible: false, // 是否显示
 };
 
-export default inject('threadPost')(observer(memo(CommoditySelect)));
+export default inject('threadPost')(observer(CommoditySelect));

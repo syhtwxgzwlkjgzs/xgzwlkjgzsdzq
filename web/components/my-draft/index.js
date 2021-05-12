@@ -5,7 +5,7 @@
  * @prop {function} onRefresh 触底事件，需要传一个promise
  * 侧滑删除组件详情参考 https://github.com/sandstreamdev/react-swipeable-list
  */
-import React, { memo, useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { inject, observer } from 'mobx-react';
 import { SwipeableList, SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
 import { Icon } from '@discuzq/design'; // 原来就有的封装
@@ -121,4 +121,4 @@ MyDrafts.defaultProps = {
   onRefresh: () => { }, // 触底需要传一个pormise
 };
 
-export default inject('index')(observer(memo(MyDrafts)));
+export default inject('index')(observer(MyDrafts));

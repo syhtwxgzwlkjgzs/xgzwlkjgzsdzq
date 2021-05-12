@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './index.module.scss';
 import Header from '@components/header';
 import { Toast } from '@discuzq/design';
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import { inject, observer } from 'mobx-react';
 
 @inject('site')

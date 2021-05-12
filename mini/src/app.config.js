@@ -7,6 +7,7 @@ export default {
   pages: [
     'pages/index/index',
     'pages/thread/index',
+    'pages/message/index',
   ],
   subPackages: [
     {
@@ -39,7 +40,6 @@ export default {
         'user/bind-phone/index',
         'user/wx-auth/index',
         'user/wx-authorization/index',
-        // 我的草稿页
         'my/draft/index',
         'wallet/index',
         'wallet/frozen/index',
@@ -52,4 +52,6 @@ export default {
     navigationBarBackgroundColor: '#fff',
     navigationBarTextStyle: 'black',
   },
+  // wx5a3a7366fd07e119 验证码防水墙小程序
+  navigateToMiniProgramAppIdList: ["wx5a3a7366fd07e119"]
 };

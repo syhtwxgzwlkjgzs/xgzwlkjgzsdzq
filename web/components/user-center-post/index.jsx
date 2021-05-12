@@ -44,42 +44,42 @@ class UserCenterPost extends React.Component {
         <div className={styles.userCenterPostList}>
           {this.props.user.threadExtendPermissions[THREAD_TYPE.image] && (
             <div className={styles.userCenterPostListItem}>
-              <Icon color={'#8490A8'} size={20} name={'PictureOutlinedBig'} />
+              <Icon color={'#8590A6'} size={20} name={'PictureOutlinedBig'} />
             </div>
           )}
           {this.props.user.threadExtendPermissions[THREAD_TYPE.video] && (
             <div className={styles.userCenterPostListItem}>
-              <Icon color={'#8490A8'} size={20} name={'VideoOutlined'} />
+              <Icon color={'#8590A6'} size={20} name={'VideoOutlined'} />
             </div>
           )}
           {this.props.user.threadExtendPermissions[THREAD_TYPE.voice] && (
             <div className={styles.userCenterPostListItem}>
-              <Icon color={'#8490A8'} size={20} name={'MicroOutlined'} />
+              <Icon color={'#8590A6'} size={20} name={'MicroOutlined'} />
             </div>
           )}
           {this.props.user.threadExtendPermissions[THREAD_TYPE.goods] && (
             <div className={styles.userCenterPostListItem}>
-              <Icon color={'#8490A8'} size={20} name={'ShoppingCartOutlined'} />
+              <Icon color={'#8590A6'} size={20} name={'ShoppingCartOutlined'} />
             </div>
           )}
           {this.props.user.threadExtendPermissions.createThread && (
             <div className={styles.userCenterPostListItem}>
-              <Icon color={'#8490A8'} size={20} name={'QuestionOutlined'} />
+              <Icon color={'#8590A6'} size={20} name={'QuestionOutlined'} />
             </div>
           )}
           {this.props.user.threadExtendPermissions[defaultOperation.attach] && (
             <div className={styles.userCenterPostListItem}>
-              <Icon color={'#8490A8'} size={20} name={'PaperClipOutlined'} />
+              <Icon color={'#8590A6'} size={20} name={'PaperClipOutlined'} />
             </div>
           )}
           {this.props.user.threadExtendPermissions[defaultOperation.redpacket] && (
             <div className={styles.userCenterPostListItem}>
-              <Icon color={'#8490A8'} size={20} name={'WalletOutlined'} />
+              <Icon color={'#8590A6'} size={20} name={'WalletOutlined'} />
             </div>
           )}
           {this.props.user.threadExtendPermissions[defaultOperation.pay] && (
             <div className={styles.userCenterPostListItem}>
-              <Icon color={'#8490A8'} size={20} name={'DollarLOutlined'} />
+              <Icon color={'#8590A6'} size={20} name={'DollarLOutlined'} />
             </div>
           )}
         </div>

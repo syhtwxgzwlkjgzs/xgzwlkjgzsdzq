@@ -4,11 +4,13 @@ import setAccessToken from '../../utils/set-access-token';
 import { get } from '../../utils/get';
 import { checkUserStatus } from '@common/store/login/util';
 
+const WAITING_FOR_SCANNING = -7002;
+
 export default class H5Qrcode {
   @observable qrCode = '';
   @observable sessionToken = '';
   @observable countDown = 120;
-  @observable loginTitle = '你确定要授权登录DISCUZ!Q吗？';
+  @observable loginTitle = '你确定要授权登录Discuz!Q吗？';
   @observable bindTitle = '请绑定您的微信';
   @observable isBtn = true;
 

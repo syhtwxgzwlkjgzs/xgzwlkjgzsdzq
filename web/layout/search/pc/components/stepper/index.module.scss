@@ -5,6 +5,7 @@
   overflow: hidden;
   padding: rem($padding-6n);
   background: var(--color-white);
+  border-radius: rem($border-radius-small);
   .stepsItem {
     display: flex;
     padding-bottom: rem(40);
@@ -16,7 +17,7 @@
       height: rem(45);
       background: var(--border-line-color);
       position: absolute;
-      top: rem(22);
+      top: rem($font-line-height-small);
       left: rem($padding-2n);
     }
     &:last-child {
@@ -26,10 +27,15 @@
       margin-left: rem($margin-4n);
     }
     .content {
+      font-weight: normal;
       font-size: rem($font-size-primary);
-      line-height: rem(24);
+      line-height: rem($font-line-height-primary);
       color: var(--color-text-primary);
       margin-left: rem($margin-2n);
+    }
+    .itemActive {
+      font-weight: 600;
+      color: var(--color-primary);
     }
   }
   .circle {

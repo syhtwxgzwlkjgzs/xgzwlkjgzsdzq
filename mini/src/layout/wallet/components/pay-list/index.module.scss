@@ -1,5 +1,5 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
+
 
 .container {
     padding: 16px 16px 0;
@@ -38,7 +38,7 @@
         padding-bottom: 16px;
     }
     .payStatusTrue {
-        color: var(--pc-user-info-title);
+        color: $text-color-regular;
     }
     .payStatusFalse {
         color: var(--color-primary);

@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import { smsResetPwd, smsSend } from '@server';
+import { toTCaptcha } from '@common/store/login/util';
 
 export const RESET_PASSWORD_STORE_ERRORS = {
   NETWORK_ERROR: {
@@ -129,26 +130,32 @@ export default class resetPasswordStore {
     }
 
     @action
-    sendCode = async () => {
+    sendCode = async (registerCaptcha, qcloudCaptchaAppId) => {
       // 发送前校验
       this.beforeSendVerify();
 
       try {
-        const smsResp = await smsSend({
-          timeout: 3000,
-          data: {
-            mobile: this.mobile,
-            type: 'reset_pwd',
+        toTCaptcha({
+          registerCaptcha,
+          appid: qcloudCaptchaAppId,
+          resCallback: async () => {
+            const smsResp = await smsSend({
+              timeout: 3000,
+              data: {
+                mobile: this.mobile,
+                type: 'reset_pwd',
+              },
+            });
+            if (smsResp.code === 0) {
+              this.setCounter(smsResp.data.interval);
+              return smsResp.data;
+            }
+            throw {
+              Code: smsResp.code,
+              Message: smsResp.msg,
+            };
           },
         });
-        if (smsResp.code === 0) {
-          this.setCounter(smsResp.data.interval);
-          return smsResp.data;
-        }
-        throw {
-          Code: smsResp.code,
-          Message: smsResp.msg,
-        };
       } catch (error) {
         if (error.Code) {
           throw error;
