@@ -73,13 +73,13 @@
     // margin-bottom: rem(16);
     font-size: rem(16);
   }
-  &::before {
-    content: '';
-    display: block;
-    height: 10px;
-    background: #F4F6F7;
-    margin: 0 rem(-20);
-  }
+  // &::before {
+  //   content: '';
+  //   display: block;
+  //   height: 10px;
+  //   background: #F4F6F7;
+  //   margin: 0 rem(-20);
+  // }
   .userCenterEditItem {
     display: flex;
     align-items: center;
