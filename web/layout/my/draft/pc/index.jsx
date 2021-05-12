@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import BaseLayout from '@components/base-layout';
 import Tideway from '@components/pop-topic';
 import ThreadCenterView from '@components/thread/ThreadCenterView';
+import NoData from '@components/no-data';
 import Copyright from '@components/copyright';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
@@ -40,6 +41,7 @@ class PC extends React.Component {
       <div className={styles.wrapper}>
         {this.renderHeader()}
         <div className={styles.content}>
+          {list.length === 0 && <NoData />}
           {list.map((item, index) => (
             <div className={styles.item} key={index}>
               <div className={styles['item-left']}>

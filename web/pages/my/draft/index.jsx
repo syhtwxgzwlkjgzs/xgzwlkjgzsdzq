@@ -6,6 +6,7 @@ import H5Page from '@layout/my/draft/h5';
 import PCPage from '@layout/my/draft/pc';
 import { THREAD_LIST_FILTER_COMPLEX } from '@common/constants/index';
 import { Toast } from '@discuzq/design';
+import { withRouter } from 'next/router';
 
 @inject('site')
 @inject('index')
@@ -33,6 +34,7 @@ class Draft extends React.Component {
   handleEdit = item => this.props.router.push(`/thread/post?id=${item.threadId}`);
 
   handleDelete = async (item) => {
+    console.log('delete');
     const { thread, index } = this.props;
     this.toastInstance = Toast.loading({
       content: '删除中...',
@@ -59,9 +61,13 @@ class Draft extends React.Component {
         onDelete={item => this.handleDelete(item)}
       />;
     }
-    return <H5Page />;
+    return <H5Page
+      dispatch={this.fetchData}
+      onEdit={item => this.handleEdit(item)}
+      onDelete={item => this.handleDelete(item)}
+    />;
   }
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(HOCWithLogin(Draft));
+export default HOCFetchSiteData(HOCWithLogin(withRouter(Draft)));
