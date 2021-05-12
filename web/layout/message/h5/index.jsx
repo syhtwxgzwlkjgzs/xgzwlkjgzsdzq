@@ -40,4 +40,4 @@ const Index = ({ page, subPage, dialogId, message }) => {
   }
 };
 
-export default inject('message')(observer(memo(Index)));
+export default inject('message')(observer(Index));

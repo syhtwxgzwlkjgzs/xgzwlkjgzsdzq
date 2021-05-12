@@ -69,3 +69,4 @@ export { default as deleteDialog } from './message/deleteDialog';
 export { default as deleteMsg } from './message/deleteMsg';
 export { default as readDialogMsgList } from './message/readDialogMsgList';
 export { default as createDialogMsg } from './message/createDialogMsg';
+export { default as readUnreadCount } from './message/readUnreadCount';

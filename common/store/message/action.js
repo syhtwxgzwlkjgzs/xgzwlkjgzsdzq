@@ -1,8 +1,15 @@
 import { action } from 'mobx';
 import MessageStore from './store';
-import { readDialogList, readMsgList, createDialog, deleteMsg, deleteDialog, readDialogMsgList, createDialogMsg } from '@server';
+import { readDialogList, readMsgList, createDialog, deleteMsg, deleteDialog, readDialogMsgList, createDialogMsg, readUnreadCount } from '@server';
 
 class MessageAction extends MessageStore {
+  // 获取未读消息数量 readUnreadCount
+  @action.bound
+  async readUnreadCount(params) {
+    const ret = await readUnreadCount(params);
+    console.log('创建新的私信对话', ret);
+  }
+
   // 设置消息分页的每页条数
   perPage = {
     perPage: 5,

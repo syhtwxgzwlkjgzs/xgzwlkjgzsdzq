@@ -4,7 +4,8 @@ import styles from './index.module.scss';
 import InstantMessaging from '../instant-messaging';
 
 const Index = ({ dialogId, message, user }) => {
-  const { readDialogMsgList, dialogMsgList: { list }, createDialogMsg } = message;
+  const { readDialogMsgList, dialogMsgList, createDialogMsg } = message;
+
   let timeoutId = null;
   useEffect(() => {
     updateMsgList();
@@ -23,14 +24,14 @@ const Index = ({ dialogId, message, user }) => {
   };
 
   const messagesHistory = useMemo(() => {
-    return list.map(item => ({
+    return dialogMsgList.list.map(item => ({
       timestamp: item.createdAt,
       displayTimePanel: true,
       textType: 'string',
       text: item.summary,
       ownedBy: user.id === item.userId ? 'myself' : 'itself',
     })).reverse();
-  });
+  }, [dialogMsgList]);
 
   return (
     <div className={styles.wrapper}>
@@ -45,4 +46,4 @@ const Index = ({ dialogId, message, user }) => {
   )
 }
 
-export default inject('message', 'user')(observer(memo(Index)));
+export default inject('message', 'user')(observer(Index));

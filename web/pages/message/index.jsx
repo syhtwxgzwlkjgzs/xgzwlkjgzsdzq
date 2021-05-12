@@ -1,14 +1,13 @@
 /* eslint-disable no-param-reassign */
-import React, { memo } from 'react';
+import React from 'react';
 import { inject, observer } from 'mobx-react';
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-import HOCWithLogin from '@common/middleware/HOCWithLogin';
+import { HOCFetchSiteData, HOCWithLogin } from '../_hoc';
 import H5Page from '@layout/message/h5';
 import PCPage from '@layout/message/pc';
 import { useRouter } from 'next/router';
 
-const Index = ({ site }) => {
-  const { isPC } = site;
+let Index = inject('site')(observer(({ site }) => {
+
 
   /**
    * 消息页面当前显示模块
@@ -35,13 +34,12 @@ const Index = ({ site }) => {
     return { page, subPage, dialogId };
   })(router.query);
 
+  const { isPC } = site;
   if (isPC) {
     return <PCPage {...params} />;
   }
   return <H5Page {...params} />;
-};
+}));
 
 
-// export default HOCFetchSiteData(HOCWithLogin(memo(Index)));
-// export default inject('site')(observer(memo(Index)));
-export default HOCFetchSiteData(HOCWithLogin(inject('site')(observer(memo(Index)))));
+export default HOCFetchSiteData(HOCWithLogin(Index));

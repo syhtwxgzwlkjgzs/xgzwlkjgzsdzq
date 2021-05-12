@@ -45,4 +45,4 @@ const Index = () => {
   );
 };
 
-export default inject('site')(observer(memo(Index)));
+export default inject('site')(observer(Index));

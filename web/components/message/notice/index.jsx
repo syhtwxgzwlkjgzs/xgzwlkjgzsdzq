@@ -24,4 +24,4 @@ const Index = ({ site, ...props }) => {
   return <SliderLeft RenderItem={NoticeItem} {...props} />
 }
 
-export default inject('site')(observer(memo(Index)));
+export default inject('site')(observer(Index));
