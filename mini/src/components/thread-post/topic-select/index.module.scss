@@ -78,11 +78,13 @@
     }
   }
 
+  .btn-container {
+    @include ios-safe-area-inset-bottom;
+  }
   .btn {
     margin: 0 var(--margin-10);
     padding: var(--padding-2n) 0;
     border-top: var(--border-border);
-    @include ios-safe-area-inset-bottom;
 
     :global {
       .dzq-button {
