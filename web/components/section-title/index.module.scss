@@ -46,7 +46,7 @@
   }
   .text {
     font-size: rem($font-size-label);
-    color: var(--pc-user-info-title);
+    color: $text-color-regular;
     line-height: rem($font-line-height-primary);
   }
 }

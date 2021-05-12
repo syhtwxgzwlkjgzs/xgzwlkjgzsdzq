@@ -118,7 +118,7 @@
     font-size: rem(14);
     line-height: rem(36);
     text-align: left;
-    color: var(--pc-user-info-title);
+    color: $text-color-regular;
   }
   @mixin inviteListName {
     display: inline-block;
