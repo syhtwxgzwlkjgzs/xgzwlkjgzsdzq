@@ -16,14 +16,13 @@
   }
   .otherLogin-within__tips{
     @include otherLoginText;
-    margin-top: rem(180);
+    margin-top: rem(32);
   }
   .functionalRegion {
     @include functionalRegion;
   }
   .tips{
     @include titleTips;
-    margin-bottom: 0; 
+    margin-bottom: 0;
   }
 }
- 

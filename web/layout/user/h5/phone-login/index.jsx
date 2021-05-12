@@ -106,7 +106,11 @@ class LoginPhoneH5Page extends React.Component {
 
   handleSendCodeButtonClick = async () => {
     try {
-      await this.props.mobileLogin.sendCode();
+      const { site } = this.props;
+      const { webConfig } = site;
+      const registerCaptcha = get(webConfig, 'setReg.registerCaptcha', false);
+      const qcloudCaptchaAppId = get(webConfig, 'qcloud.qcloudCaptchaAppId', false);
+      await this.props.mobileLogin.sendCode(registerCaptcha, qcloudCaptchaAppId);
     } catch (e) {
       Toast.error({
         content: e.Message,
@@ -166,7 +170,7 @@ class LoginPhoneH5Page extends React.Component {
                 }}
                 className={platform === 'h5' ? layout['otherLogin-button-weixin'] : layout.button_left}
               >
-                <Icon name='WechatOutlined' color='#04C160'/>
+                <Icon size={20} name='WechatOutlined' color='#04C160'/>
               </span>
             )}
             {this.props.site.isUserLoginVisible && (
@@ -176,7 +180,7 @@ class LoginPhoneH5Page extends React.Component {
                 }}
                 className={platform === 'h5' ? layout['otherLogin-button-user'] : layout.button_right}
               >
-                <Icon name='UserOutlined' color='#4084FF'/>
+                <Icon size={20} name='UserOutlined' color='#4084FF'/>
               </span>
             )}
           </div>

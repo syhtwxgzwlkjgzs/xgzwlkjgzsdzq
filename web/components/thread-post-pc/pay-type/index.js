@@ -21,7 +21,7 @@ const PayType = ({ confirm }) => {
     return (
         <div className={styles['pay-type-wrapper']}>
             <Dropdown menu={menu()} style={{ display: 'inline-block', marginLeft: '40px' }} onChange={key => handleValue(key)}>
-                <Icon className={styles['title-top-right']} name="LikeOutlined" size={20} color="#8490a8"></Icon>
+                <Icon className={styles['title-top-right']} name="LikeOutlined" size={20} color="#8590A6"></Icon>
             </Dropdown>
         </div>
     );

@@ -17,14 +17,14 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         font-size: rem($font-size-primary);
-        line-height: rem(20);
+        line-height: rem($padding-5n);
         color: var(--color-text-primary);
         font-weight: 700;
       }
       .groupName {
         font-size: rem($font-size-primary);
         line-height: rem($font-line-height-small);
-        color: #8490a8;
+        color: var(--color-text-secondary);
       }
     }
     .avatar {

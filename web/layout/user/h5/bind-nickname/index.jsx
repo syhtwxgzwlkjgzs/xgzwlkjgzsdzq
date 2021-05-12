@@ -83,7 +83,9 @@ class BindNicknameH5Page extends React.Component {
             下一步
           </Button>
           <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
-            <span className={layout.clickBtn} onClick={() => {}}>
+            <span className={layout.clickBtn} onClick={() => {
+              this.props.router.push('login');
+            }}>
               退出登录
             </span>
           </div>
