@@ -101,7 +101,7 @@ class WXBindPhoneH5Page extends React.Component {
           >
             登录并绑定
           </Button>
-          <div className={layout['otherLogin-within__tips']}>注册登录即表示您同意《注册协议》《隐私协议》</div>
+          <div className={layout['otherLogin-within__tips']}>注册登录即表示您同意<span>《注册协议》</span><span>《隐私协议》</span></div>
         </div>
       </div>
     );

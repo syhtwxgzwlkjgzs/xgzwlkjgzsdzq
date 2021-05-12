@@ -1,8 +1,9 @@
 @import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 @mixin title {
   font-weight: 600;
-  font-size: rem(20);
-  line-height: rem(30);
+  font-size: rem($font-size-large);
+  line-height: rem($font-line-height-large);
   text-align: left;
   color: var(--color-text-primary);
 }
@@ -17,15 +18,15 @@
 @mixin input {
   width: rem(327);
   box-sizing: border-box;
-  padding: rem(26) 0 rem(16);
-  height: rem(64);
+  padding: rem($padding-6n) 0 rem($padding-4n);
+  height: rem(62);
   border-bottom: rem(1) solid #eee;
   :global(.dzq-input__inner) {
-    font-size: rem(16);
+    font-size: rem($font-size-middle);
     border: none;
     padding: 0;
     height: rem(22);
-    line-height: rem(24);
+    line-height: rem($font-line-height-base);
     border-radius: 0;
   }
 }
@@ -38,13 +39,13 @@
   width: rem(327);
   height: rem(42);
   margin-top: rem(32);
-  font-size: rem(16);
-  padding: rem(10) 0;
+  font-size: rem($font-size-middle);
+  padding: rem($padding-10) 0;
   box-sizing: border-box;
 }
 @mixin functionalRegion {
-  margin-top: rem(24);
-  font-size: rem(16);
+  margin-top: rem($margin-6n);
+  font-size: rem($font-size-base);
   text-align: center;
   .clickBtn{
     color: var(--color-primary);
@@ -56,7 +57,11 @@
   text-align: center;
   line-height: rem(26);
   font-weight: normal;
-  color: #c5c6ca;
+  color: var(--color-text-secondary);
+  span {
+    cursor: pointer;
+    color: var(--color-primary);
+  }
 }
 @mixin otherLoginBtn {
   border-radius: 50%;
@@ -103,7 +108,11 @@
   font-weight: normal;
   font-size: 12px;
   line-height: 26px;
-  color: #c5c6ca;
+  color: var(--color-text-secondary);
+  span {
+    cursor: pointer;
+    color: var(--color-primary);
+  }
 }
 
 @mixin pc_otherLoginBtn {

@@ -25,6 +25,10 @@
   }
   .input {
     width: 327px;
+    box-sizing: border-box;
+    padding: 26px 0 rem(16);
+    height: rem(64);
+    border-bottom: rem(1) solid #eee;
     :global(.dzq-input__inner) {
       height: 68px;
       border: none;
@@ -51,6 +55,9 @@
     height: 42px;
     line-height: 24px;
     margin-top: 32px;
+    font-size: 16px;
+    padding: 10px 0;
+    box-sizing: border-box;
   }
   .functionalRegion {
     margin-top: 16px;

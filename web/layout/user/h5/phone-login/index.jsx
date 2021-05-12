@@ -184,7 +184,7 @@ class LoginPhoneH5Page extends React.Component {
               </span>
             )}
           </div>
-          <div className={platform === 'h5' ? layout['otherLogin-tips'] : layout.pc_otherLogin_tips} >注册登录即表示您同意《注册协议》《隐私协议》</div>
+          <div className={platform === 'h5' ? layout['otherLogin-tips'] : layout.pc_otherLogin_tips} >注册登录即表示您同意<span>《注册协议》</span><span>《隐私协议》</span></div>
         </div>
       </div>
       </div>
