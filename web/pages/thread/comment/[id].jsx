@@ -4,7 +4,7 @@ import { inject } from 'mobx-react';
 import { readCommentDetail } from '@server';
 import CommentH5Page from '@layout/thread/comment/h5';
 import CommentPCPage from '@layout/thread/comment/pc';
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 @inject('site')
 @inject('comment')

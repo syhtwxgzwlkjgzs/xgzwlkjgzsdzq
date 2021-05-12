@@ -2,7 +2,7 @@ import React from 'react';
 import UsernameH5Login from '@layout/user/h5/username-login';
 import { inject } from 'mobx-react';
 
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 @inject('site')
 class UsernameLogin extends React.Component {
