@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ImagePreviewer } from '@discuzq/design';
+import { noop } from '../utils'
 import styles from './index.module.scss';
 
 // TODO 图片懒加载
-const Index = ({ imgData = [], platform = 'h5' }) => {
+const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) => {
     const [bigImages, setBigImages] = useState([])
     const [smallImages, setSmallImages] = useState([])
     const [visible, setVisible] = useState(false);
@@ -34,15 +35,19 @@ const Index = ({ imgData = [], platform = 'h5' }) => {
     }, [imgData])
 
     const onClick = (id) => {
-        imgData.forEach((item) => {
-          if (item.id === id) {
-            setDefaultImg(item.url);
-            setTimeout(() => {
-                setVisible(true);
-                
-            }, 10);
-          }
-        });
+        if (isPay) {
+            onPay()
+        } else {
+            imgData.forEach((item) => {
+                if (item.id === id) {
+                  setDefaultImg(item.url);
+                  setTimeout(() => {
+                      setVisible(true);
+                      
+                  }, 10);
+                }
+            });
+        }
     };
 
     const onClickMore = (e) => {
