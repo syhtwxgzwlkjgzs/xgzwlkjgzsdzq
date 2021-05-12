@@ -31,7 +31,7 @@ const Topic = ({ data, onClick, index, footer }) => {
   return (
     <div className={`${styles.item} ${footer ? styles.footerItem : ''}`} onClick={click}>
       <span className={`${styles.index} ${styles[`itemIndex${index + 1}`]}`}>{index + 1}</span>
-      <span className={styles.text}>{data.content}</span>
+      <span className={styles.text}>{`#${data.content}#`}</span>
     </div>
   );
 };

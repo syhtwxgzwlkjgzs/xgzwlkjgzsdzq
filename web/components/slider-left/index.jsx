@@ -2,20 +2,21 @@
  * 左滑列表、列表项组件
 */
 import React, { Component, PureComponent } from 'react';
-import { View } from '@tarojs/components';
 import { Icon } from '@discuzq/design';
 import throttle from '@common/utils/thottle';
 import styles from './index.module.scss';
-
 import PropTypes from 'prop-types';
+import List from '@components/list';
+
 /**
  * 左滑列表项
  * @prop {object} item 列表项数据
  * @prop {number} currentId 当前滑动项id
- * @prop {string} offsetLeft 左滑距离 例如：offsetLeft={'-74px'}，左滑74像素
+ * @prop {string} offsetLeft 左滑距离,单位px 例如：offsetLeft={'74px'}，左滑74像素
  * @prop {object} RenderItem 列表项渲染组件
  * @prop {function} onBtnClick 处理左滑按钮点击
  */
+
 class SlierItem extends PureComponent {
   constructor(props) {
     super(props);
@@ -68,7 +69,7 @@ class SlierItem extends PureComponent {
     } = this.props;
 
     return (
-      <View
+      <div
         className={styles['slider-item']}
         style={{
           'transform': ` translateX(${currentId === item.id ? this.state.leftValue : 0})`
@@ -78,11 +79,11 @@ class SlierItem extends PureComponent {
         onClick={this.handleClickToBack}
       >
         {/* 滑块内容展示 */}
-        <View className={styles['slider-content']}>
+        <div className={styles['slider-content']}>
           {RenderItem && <RenderItem item={item} {...other} />}
-        </View>
+        </div>
         {/* 滑块操作按钮 */}
-        <View
+        <div
           className={styles['slider-brn']}
           style={{
             flexBasis: offsetLeft,
@@ -93,8 +94,8 @@ class SlierItem extends PureComponent {
         >
           <Icon className={styles.icon} name={iconName} size={iconSize} />
           {iconText}
-        </View>
-      </View >
+        </div>
+      </div >
     )
   }
 }
@@ -116,7 +117,7 @@ SlierItem.defaultProps = {
   iconText: '删除',
   Color: '#fff',
   Background: '#e02433',
-  onBtnClick: () => { },
+  onBtnClick: () => { }
 }
 
 /**
@@ -131,22 +132,63 @@ class Index extends Component {
     }
   }
 
+  componentDidMount() {
+    // 监听消息项之外的地方的click
+    window.addEventListener('click', this.resetSliderId)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('click', this.resetSliderId)
+  }
+
+  // 重置滑动块id，让左滑块归位
+  resetSliderId = (e) => {
+    this.state.currentId && this.setState({ currentId: 0 })
+  }
+
   render() {
-    const { list = [], ...other } = this.props;
+    const { height, noMore, topCard, list, onScrollBottom, ...other } = this.props;
     return (
-      <View className={styles.slider}>
-        {list.map(item => (
-          <SlierItem
-            key={item.id}
-            item={item}
-            currentId={this.state.currentId}
-            onSliderTouch={(id) => this.setState({ currentId: id })}
-            {...other}
-          />
-        ))}
-      </View>
+      <List
+        height={height}
+        noMore={noMore}
+        allowRefresh={true}
+        onRefresh={onScrollBottom}
+      >
+        {/* 顶部导航卡片 */}
+        {topCard}
+        {/* show list */}
+        <div className={styles.slider}>
+          {list.map((item, index) => (
+            <SlierItem
+              key={item.id}
+              item={item}
+              index={index}
+              currentId={this.state.currentId}
+              onSliderTouch={(id) => this.setState({ currentId: id })}
+              {...other}
+            />
+          ))}
+        </div>
+      </List>
     );
   }
 };
+
+Index.propsTypes = {
+  height: PropTypes.string,
+  noMore: PropTypes.bool,
+  topCard: PropTypes.object,
+  list: PropTypes.array,
+  onScrollBottom: PropTypes.func
+}
+
+Index.defaultProps = {
+  height: '100vh',
+  noMore: false,
+  topCard: null,
+  list: [],
+  onScrollBottom: () => { }
+}
 
 export default Index;

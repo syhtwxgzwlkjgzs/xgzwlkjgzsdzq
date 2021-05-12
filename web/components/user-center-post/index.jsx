@@ -15,7 +15,7 @@ class UserCenterPost extends React.Component {
       <div
         className={styles.userCenterPost}
         onClick={() => {
-          Router.push('/thread/post');
+          Router.push({ url: '/thread/post' });
         }}
       >
         <div className={styles.userCenterPostTitle}>发帖</div>
@@ -74,7 +74,7 @@ class UserCenterPost extends React.Component {
           )}
           {this.props.user.threadExtendPermissions[defaultOperation.redpacket] && (
             <div className={styles.userCenterPostListItem}>
-              <Icon color={'#8590A6'} size={20} name={'WalletOutlined'} />
+              <Icon color={'#8590A6'} size={20} name={'RedPacketOutlined'} />
             </div>
           )}
           {this.props.user.threadExtendPermissions[defaultOperation.pay] && (
