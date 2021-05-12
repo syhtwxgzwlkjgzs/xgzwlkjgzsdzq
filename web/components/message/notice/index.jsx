@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { inject, observer } from 'mobx-react';
 import NoticeItem from '@components/message/notice-item';
-import SliderLeft from '@components/message/slider-left';
+import SliderLeft from '@components/slider-left';
 
 /**
  * 消息通知组件(h5 + PC)
