@@ -56,9 +56,11 @@
     height: rem(36);
     font-size: rem($font-size-primary);
     line-height: rem(36);
-    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     .icon {
-      font-size: rem($font-size-primary);
+      font-size: rem($font-size-large);
       margin-right: rem($margin-10);
     }
   }
@@ -69,6 +71,6 @@
 }
 
 .containerPC {
-  padding: 0 rem( $padding-6n);
+  padding: 0 rem($padding-6n);
   border-radius: rem(5);
 }

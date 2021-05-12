@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Button } from '@discuzq/design';
 import AudioPlay from './audio-play';
 import PostContent from './post-content';
@@ -27,6 +27,10 @@ const Index = (props) => {
         paid
     } = props.data || {};
 
+    const needPay = useMemo(() => {
+      return payType !== 0 && !paid
+    }, [paid, payType])
+
     const {
       onClick,
       onPay
@@ -54,14 +58,14 @@ const Index = (props) => {
                     url={videoData.mediaUrl}
                     coverUrl={videoData.coverUrl}
                     onPay={onPay}
-                    isPay={payType !== 0}
+                    isPay={needPay}
                   />
                 )}
                 {imageData && (
                     <ImageDisplay 
                         platform={props.platform} 
                         imgData={imageData} 
-                        isPay={payType !== 0}
+                        isPay={needPay}
                         onPay={onPay}
                         onClickMore={onClick} />
                     )
@@ -77,8 +81,8 @@ const Index = (props) => {
                     amount={goodsData.price}
                     title={goodsData.title}
                 />}
-                {audioData && <AudioPlay url={audioData.mediaUrl} isPay={payType !== 0} onPay={onPay} />}
-                {fileData && <AttachmentView attachments={fileData} onPay={onPay} isPay={payType !== 0} />}
+                {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
+                {fileData && <AttachmentView attachments={fileData} onPay={onPay} isPay={needPay} />}
               </div>
           </div>
         );
@@ -91,7 +95,7 @@ const Index = (props) => {
             {renderThreadContent(props.data)}
 
             {
-                !paid && payType !== 0 && (
+                needPay && (
                   <div className={styles.pay}>
                     <Button className={styles.button} type="primary" onClick={onPay}>
                         <span className={styles.icon}>$</span>

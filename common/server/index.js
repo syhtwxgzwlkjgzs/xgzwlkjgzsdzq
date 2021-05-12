@@ -64,6 +64,10 @@ export { default as updateUsersUpdate } from './user/updateUsersUpdate';
 export { default as getUserFans } from './user/getUserFans';
 export { default as groupPermissionList } from './forum/groupPermissionList';
 export { default as getUserFollow } from './user/getUserFollow';
+export { default as denyUser } from './user/denyUser';
+export { default as deleteDeny } from './user/deleteDeny';
+export { default as updateAvatar } from './user/updateAvatar';
+export { default as updateBackground } from './user/updateBackground';
 
 // 消息模块
 export { default as readDialogList } from './message/readDialogList';

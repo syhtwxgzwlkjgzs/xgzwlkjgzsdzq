@@ -8,7 +8,7 @@ import styles from './index.module.scss';
  * @prop {{id:string, image:string, name: string}[]} data 用户数据
  * @prop {function} onItemClick 用户点击事件
  */
-const ShieldList = ({ data, onItemClick }) => (
+const ShieldList = ({ data = [], onItemClick }) => (
   <div className={styles.list}>
     {data?.map((item, index) => (
       <User key={index} data={item} onClick={onItemClick} />

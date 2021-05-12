@@ -9,45 +9,43 @@ import UserCenterAction from '@components/user-center-action';
 import UserCenterThreads from '@components/user-center-threads';
 import BaseLayout from '@components/base-layout';
 import NoData from '@components/no-data';
+import { withRouter } from 'next/router';
 
 @inject('site')
 @inject('user')
 @observer
-class H5MyPage extends React.Component {
+class H5OthersPage extends React.Component {
   constructor(props) {
     super(props);
+    this.props.user.cleanTargetUserThreads();
   }
 
   componentDidMount = async () => {
-    await this.props.user.getUserThreads();
+    const { query } = this.props.router;
+    if (query.otherId) {
+      await this.props.user.getTargetUserInfo(query.otherId);
+      await this.props.user.getTargetUserThreads(query.otherId);
+    }
   };
 
   render() {
     const { site, user } = this.props;
     const { platform } = site;
-    const { userThreads, userThreadsTotalCount, userThreadsPage, userThreadsTotalPage } = user;
-
+    const { targetUserThreads, targetUserThreadsTotalCount, targetUserThreadsPage, targetUserThreadsTotalPage } = user;
     return (
       <BaseLayout
-        curr={'my'}
         showHeader={false}
-        showTabBar={true}
-        onRefresh={user.getUserThreads}
-        noMore={userThreadsTotalPage <= userThreadsPage}
+        showTabBar={false}
+        onRefresh={user.getTargetUserThreads}
+        noMore={targetUserThreadsTotalPage <= targetUserThreadsPage}
       >
         <div className={styles.mobileLayout}>
-          <UserCenterHeaderImage />
-          <UserCenterHead platform={platform} />
-          <div className={styles.unit}>
-            <UserCenterAction />
-          </div>
-          <div className={styles.unit}>
-            <UserCenterPost />
-          </div>
+          <UserCenterHeaderImage isOtherPerson={true} />
+          <UserCenterHead platform={platform} isOtherPerson={true} />
           <div className={styles.unit}>
             <div className={styles.threadUnit}>
               <div className={styles.threadTitle}>主题</div>
-              <div className={styles.threadCount}>{userThreadsTotalCount}个主题</div>
+              <div className={styles.threadCount}>{targetUserThreadsTotalCount}个主题</div>
             </div>
 
             <div className={styles.dividerContainer}>
@@ -55,7 +53,11 @@ class H5MyPage extends React.Component {
             </div>
 
             <div className={styles.threadItemContainer}>
-              {userThreads && userThreads.length > 0 ? <UserCenterThreads data={userThreads} /> : <NoData />}
+              {targetUserThreads && targetUserThreads.length > 0 ? (
+                <UserCenterThreads data={targetUserThreads} />
+              ) : (
+                <NoData />
+              )}
             </div>
           </div>
         </div>
@@ -64,4 +66,4 @@ class H5MyPage extends React.Component {
   }
 }
 
-export default H5MyPage;
+export default withRouter(H5OthersPage);
