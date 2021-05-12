@@ -81,7 +81,7 @@ $tag-text-color1: var(--color-orange);
 $tag-text-color2: $warn-color;
 $tag-text-color3: $success-color;
 
-$tag-info-bg-color: $body-bg-color;
+$tag-info-bg-color: $text-bg-color2;
 
 // ---- comment color ----
 $comment-bg-color: $body-bg-color;
@@ -90,7 +90,7 @@ $comment-bg-color: $body-bg-color;
 $link-text-color: $primary-color;
 
 // ---- button color ----
-$button-info-color: $body-bg-color;
+$button-info-color: $text-bg-color2;
 
 // ------ border ----------
 $border-radius-small: 5px;
