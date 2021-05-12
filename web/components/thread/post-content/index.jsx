@@ -89,10 +89,10 @@ const Index = ({
       {!loading && showMore && isPayContent && (
         <div className={styles.payInfo}>
           <div className={styles.hidePercent}>{texts.hidePercent}</div>
-          <Button type="primary" onClick={onPay} className={styles.payButton}>
+          {/* <Button type="primary" onClick={onPay} className={styles.payButton}>
             <img className={styles.payButtonIcon} />
             {texts.payButton}
-          </Button>
+          </Button> */}
         </div>
       )}
     </div>
