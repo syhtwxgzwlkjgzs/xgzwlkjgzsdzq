@@ -68,3 +68,13 @@ export { default as denyUser } from './user/denyUser';
 export { default as deleteDeny } from './user/deleteDeny';
 export { default as updateAvatar } from './user/updateAvatar';
 export { default as updateBackground } from './user/updateBackground';
+
+// 消息模块
+export { default as readDialogList } from './message/readDialogList';
+export { default as readMsgList } from './message/readMsgList';
+export { default as createDialog } from './message/createDialog';
+export { default as deleteDialog } from './message/deleteDialog';
+export { default as deleteMsg } from './message/deleteMsg';
+export { default as readDialogMsgList } from './message/readDialogMsgList';
+export { default as createDialogMsg } from './message/createDialogMsg';
+export { default as readUnreadCount } from './message/readUnreadCount';

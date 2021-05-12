@@ -1,4 +1,3 @@
-
 @import '@common/styles/index.scss';
 :global {
   .dzq-card {
@@ -7,13 +6,29 @@
   .dzq-card__body {
     padding: 0 rem($padding-4n);
   }
-}
-.active {
-  color: #0265FF;
-  span:nth-child(2) {
-    color: var(--color-text-regular);
+
+  .dzq-submenu__title.is-active {
+    font-weight: 600;
+    color: #0265ff;
+  }
+
+  .dzq-menu .dzq-menu-item.is-active {
+    font-weight: 600;
+    color: #0265ff;
+  }
+
+  .dzq-submenu > .dzq-menu .dzq-menu-item.is-active {
+    font-weight: initial;
   }
 }
+
 .activeItem {
   color: var(--color-primary) !important;
+  font-weight: 600;
+}
+
+.span {
+  color: #8590a6;
+  float: right;
+  font-weight: normal;
 }

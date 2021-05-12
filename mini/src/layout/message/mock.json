@@ -1,0 +1,189 @@
+{
+  "account": [
+    {
+      "msg": " // 回复                     ————  账号-@、回复、点赞 （优先title）",
+      "type": "replied",
+      "created_at": "2021-04-15T10:50:32+08:00",
+      "id": 22081,
+      "content": "<p>f<img style=\"display:inline-block;vertical-align:top\" src=\"https://discuz-dev.dnspod.dev/emoji/qq/weixiao.gif\" alt=\"weixiao\" class=\"qq-emotion\">fff</p>",
+      "thread_id": 8932,
+      "title": "测试发送11",
+      "avatar": "https://discuz-service-test-1258344699.cos.ap-guangzhou.myqcloud.com/public/avatar/000/00/00/01.png?sign=q-sign-algorithm%3Dsha1%26q-ak%3DAKIDCJAnwjKjthEk6HBm6fwzhCLFRRBlsBxG%26q-sign-time%3D1620543782%3B1620630242%26q-key-time%3D1620543782%3B1620630242%26q-header-list%3Dhost%26q-url-param-list%3D%26q-signature%3Db509bb1082f4bf3aa9dcd96dc97ff31ff46db0b5&x-cos-security-token=abc",
+      "user_id": 1,
+      "userName": "admin"
+    },
+    {
+      "msg": "@",
+      "type": "related",
+      "created_at": "2021-05-06T10:50:32+08:00",
+      "content": "",
+      "id": 22138,
+      "post_id": 13094,
+      "thread_id": 9656,
+      "thread_is_approved": 1,
+      "title": "<p>啊手<img style=\"display:inline-block;vertical-align:top\" src=\"https://discuz-dev.dnspod.dev/emoji/qq/weixiao.gif\" alt=\"weixiao\" class=\"qq-emotion\">动阀手动阀啊手动阀手动阀啊手动阀手动阀啊手动阀手动阀啊手动阀手动阀啊手动阀手动阀啊手动阀手动阀啊手动阀手动阀啊手动阀手动阀啊手动阀手动阀啊</p>",
+      "avatar": "",
+      "user_id": 439,
+      "userName": "we002"
+    },
+    {
+      "msg": "点赞",
+      "type": "liked",
+      "created_at": "2021-04-15T10:50:23+08:00",
+      "id": 22078,
+      "content": "<p>111111111111111333333311111</p>\n\n\n<p>31233123123</p>\n\n\n<p>111111</p>\n\n\n<p>55555</p>",
+      "thread_id": 8932,
+      "title": "测试发送11",
+      "avatar": "https://discuz-service-test-1258344699.cos.ap-guangzhou.myqcloud.com/public/avatar/000/00/00/01.png?sign=q-sign-algorithm%3Dsha1%26q-ak%3DAKIDCJAnwjKjthEk6HBm6fwzhCLFRRBlsBxG%26q-sign-time%3D1620543782%3B1620630242%26q-key-time%3D1620543782%3B1620630242%26q-header-list%3Dhost%26q-url-param-list%3D%26q-signature%3Db509bb1082f4bf3aa9dcd96dc97ff31ff46db0b5&x-cos-security-token=abc",
+      "user_id": 1,
+      "userName": "admin"
+    }
+  ],
+  "chat": [
+    {
+      "msg": "// 私信 （展示content）",
+      "created_at": "2021-03-26T17:07:02+08:00",
+      "id": "1004",
+      "userName": "zx666",
+      "avatar": "https://discuz-service-test-1258344699.cos.ap-guangzhou.myqcloud.com/public/avatar/000/00/63/51.png?sign=q-sign-algorithm%3Dsha1%26q-ak%3DAKIDCJAnwjKjthEk6HBm6fwzhCLFRRBlsBxG%26q-sign-time%3D1620367786%3B1620454246%26q-key-time%3D1620367786%3B1620454246%26q-header-list%3Dhost%26q-url-param-list%3D%26q-signature%3Dc66d4d103fd88caf9aec57d5e83c00d8e8db2423&x-cos-security-token=abc",
+      "recipient": {},
+      "sender": {},
+      "content": "你好，<img style=\"display:inline-block;vertical-align:top\" src=\"https://discuz-dev.dnspod.dev/emoji/qq/weixiao.gif\" alt=\"weixiao\" class=\"qq-emotion\">今天是晴天.可以数控技术的接口的技术老师地方大V"
+    },
+    {
+      "created_at": "2021-05-07T17:06:44+08:00",
+      "id": "1045",
+      "userName": "网友YyuzJ1",
+      "avatar": "https://discuz-service-test-1258344699.cos.ap-guangzhou.myqcloud.com/public/avatar/000/00/62/39.png?sign=q-sign-algorithm%3Dsha1%26q-ak%3DAKIDCJAnwjKjthEk6HBm6fwzhCLFRRBlsBxG%26q-sign-time%3D1620369798%3B1620456258%26q-key-time%3D1620369798%3B1620456258%26q-header-list%3Dhost%26q-url-param-list%3D%26q-signature%3D148b93516ad9a305bf79e96e457c92f9c19212bd&x-cos-security-token=abc",
+      "recipient": {},
+      "sender": {},
+      "content": "发送图片"
+    },
+    {
+      "created_at": "2021-03-26T20:08:44+08:00",
+      "id": "1005",
+      "userName": "clz123",
+      "avatar": "https://discuz-service-test-1258344699.cos.ap-guangzhou.myqcloud.com/public/avatar/000/00/62/06.png?sign=q-sign-algorithm%3Dsha1%26q-ak%3DAKIDCJAnwjKjthEk6HBm6fwzhCLFRRBlsBxG%26q-sign-time%3D1620543726%3B1620630186%26q-key-time%3D1620543726%3B1620630186%26q-header-list%3Dhost%26q-url-param-list%3D%26q-signature%3D01299effe04c7b8ece7efa4c4306f75a4366f3e2&x-cos-security-token=abc",
+      "recipient": {},
+      "sender": {},
+      "content": "你好hkk，公开i库回馈ui会故意哦吼"
+    }
+  ],
+  "thread": [
+    {
+      "msg": "// 系统-帖子通知 8种，通通用后端数据 title区分 （title,content分别使用）",
+      "id": 22093,
+      "created_at": "2021-04-14T18:02:26+08:00",
+      "content": "we001你好，你发布的内容 1111111123123111111 已被修改",
+      "title": "内容通知"
+    },
+    {
+      "id": 22033,
+      "created_at": "2021-04-14T16:15:57+08:00",
+      "content": "we001你好，你的注册申请已审核通过。",
+      "title": "注册审核通知"
+    },
+    {
+      "id": 22083,
+      "created_at": "2021-04-17T16:07:28+08:00",
+      "content": "we001你好，你的帐号已解除禁用",
+      "title": "用户通知"
+    }
+  ],
+  "financial": [
+    {
+      "msg": "// 红包",
+      "type": "receiveredpacket",
+      "order_type": 21,
+      "amount": 1098,
+      "content": "hkhl<img style=\"display:inline-block;vertical-align:top\" src=\"https://discuz-dev.dnspod.dev/emoji/qq/weixiao.gif\" alt=\"weixiao\" class=\"qq-emotion\">函数书卡户啊呼哈u爱哦和",
+      "created_at": "2021-04-26T16:54:02+08:00",
+      "id": 2198,
+      "thread_id": 82398,
+      "avatar": "https://discuz-service-test-1258344699.cos.ap-guangzhou.myqcloud.com/public/avatar/000/00/60/47.png?sign=q-sign-algorithm%3Dsha1%26q-ak%3DAKIDCJAnwjKjthEk6HBm6fwzhCLFRRBlsBxG%26q-sign-time%3D1620550223%3B1620636683%26q-key-time%3D1620550223%3B1620636683%26q-header-list%3Dhost%26q-url-param-list%3D%26q-signature%3Dac02744bb102031b1127dc470c8475fa525a1b65&x-cos-security-token=abc",
+      "user_id": 6047,
+      "userName": "we001"
+    },
+    {
+      "msg": "// 付费内容",
+      "type": "rewarded",
+      "order_type": 3,
+      "amount": 10.00,
+      "content": "付费 10 元",
+      "title": "我是<img style=\"display:inline-block;vertical-align:top\" src=\"https://discuz-dev.dnspod.dev/emoji/qq/weixiao.gif\" alt=\"weixiao\" class=\"qq-emotion\">财务title数据累死了瑟吉欧is大家哦IDiOSID",
+      "created_at": "2021-04-13T19:26:06+08:00",
+      "id": 21894,
+      "thread_id": 8932,
+      "type": "rewarded",
+      "avatar": "https://discuz-service-test-1258344699.cos.ap-guangzhou.myqcloud.com/public/avatar/000/00/62/67.png?sign=q-sign-algorithm%3Dsha1%26q-ak%3DAKIDCJAnwjKjthEk6HBm6fwzhCLFRRBlsBxG%26q-sign-time%3D1620370733%3B1620457193%26q-key-time%3D1620370733%3B1620457193%26q-header-list%3Dhost%26q-url-param-list%3D%26q-signature%3D9f1609444111049d9a5b78f63da9a3aa858b9b0f&x-cos-security-token=abc",
+      "user_id": 6267,
+      "userName": "users"
+    },
+    {
+      "msg": "// 红包",
+      "type": "receiveredpacket",
+      "order_type": 21,
+      "amount": 10.23,
+      "content": "红包10.23hsks和借款收到了多少几艘京东",
+      "created_at": "2021-04-26T16:54:02+08:00",
+      "id": 22898,
+      "thread_id": 8298,
+      "avatar": "https://discuz-service-test-1258344699.cos.ap-guangzhou.myqcloud.com/public/avatar/000/00/60/47.png?sign=q-sign-algorithm%3Dsha1%26q-ak%3DAKIDCJAnwjKjthEk6HBm6fwzhCLFRRBlsBxG%26q-sign-time%3D1620550223%3B1620636683%26q-key-time%3D1620550223%3B1620636683%26q-header-list%3Dhost%26q-url-param-list%3D%26q-signature%3Dac02744bb102031b1127dc470c8475fa525a1b65&x-cos-security-token=abc",
+      "user_id": 6047,
+      "userName": "we001"
+    },
+    {
+      "msg": "// 悬赏",
+      "type": "threadrewarded",
+      "order_type": 5,
+      "amount": 23.00,
+      "content": "月亮，悬赏",
+      "created_at": "2021-04-26T16:54:02+08:00",
+      "id": 34298,
+      "thread_id": 8298,
+      "avatar": "https://discuz-service-test-1258344699.cos.ap-guangzhou.myqcloud.com/public/avatar/000/00/60/47.png?sign=q-sign-algorithm%3Dsha1%26q-ak%3DAKIDCJAnwjKjthEk6HBm6fwzhCLFRRBlsBxG%26q-sign-time%3D1620370733%3B1620457193%26q-key-time%3D1620370733%3B1620457193%26q-header-list%3Dhost%26q-url-param-list%3D%26q-signature%3D4b521e7f32f854096479287b73e4d39128f0406e&x-cos-security-token=abc",
+      "user_id": 6047,
+      "userName": "we001"
+    },
+    {
+      "msg": "// 打赏",
+      "type": "rewarded",
+      "order_type": 2,
+      "amount": 0.50,
+      "content": "we，打赏,获得打赏金0.5元",
+      "created_at": "2021-05-03T16:54:02+08:00",
+      "id": 4298,
+      "thread_id": 8238,
+      "avatar": "https://discuz-service-test-1258344699.cos.ap-guangzhou.myqcloud.com/public/avatar/000/00/60/47.png?sign=q-sign-algorithm%3Dsha1%26q-ak%3DAKIDCJAnwjKjthEk6HBm6fwzhCLFRRBlsBxG%26q-sign-time%3D1620550223%3B1620636683%26q-key-time%3D1620550223%3B1620636683%26q-header-list%3Dhost%26q-url-param-list%3D%26q-signature%3Dac02744bb102031b1127dc470c8475fa525a1b65&x-cos-security-token=abc",
+      "user_id": 6047,
+      "userName": "we001"
+    },
+    {
+      "msg": "// 付费内容",
+      "type": "rewarded",
+      "order_type": 3,
+      "amount": 0.50,
+      "content": "测试发送11",
+      "created_at": "2021-04-13T19:26:06+08:00",
+      "id": 2104,
+      "thread_id": 8932,
+      "type": "rewarded",
+      "avatar": "https://discuz-service-test-1258344699.cos.ap-guangzhou.myqcloud.com/public/avatar/000/00/62/67.png?sign=q-sign-algorithm%3Dsha1%26q-ak%3DAKIDCJAnwjKjthEk6HBm6fwzhCLFRRBlsBxG%26q-sign-time%3D1620370733%3B1620457193%26q-key-time%3D1620370733%3B1620457193%26q-header-list%3Dhost%26q-url-param-list%3D%26q-signature%3D9f1609444111049d9a5b78f63da9a3aa858b9b0f&x-cos-security-token=abc",
+      "user_id": 6267,
+      "userName": "users"
+    },
+    {
+      "msg": "// 悬赏退回",
+      "type": "threadrewardedexpired",
+      "order_type": 5,
+      "amount": 1,
+      "content": "红树湾",
+      "created_at": "2021-04-19T16:54:02+08:00",
+      "id": 25408,
+      "thread_id": 8498,
+      "avatar": "https://discuz-service-test-1258344699.cos.ap-guangzhou.myqcloud.com/public/avatar/000/00/60/47.png?sign=q-sign-algorithm%3Dsha1%26q-ak%3DAKIDCJAnwjKjthEk6HBm6fwzhCLFRRBlsBxG%26q-sign-time%3D1620370733%3B1620457193%26q-key-time%3D1620370733%3B1620457193%26q-header-list%3Dhost%26q-url-param-list%3D%26q-signature%3D4b521e7f32f854096479287b73e4d39128f0406e&x-cos-security-token=abc",
+      "user_id": 6047,
+      "userName": "we001"
+    }
+  ]
+}

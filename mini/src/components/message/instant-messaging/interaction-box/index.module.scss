@@ -1,0 +1,54 @@
+@import '../vars.scss';
+
+.interactionBox {
+  @include im-pagebed;
+  display: flex;
+  position: absolute;
+  justify-content: space-between;
+  bottom: 0;
+  left: 0;
+  padding: var(--padding-3n) $im-pagebed-padding;
+  background-color: var(--color-white);
+  width: 100%;
+}
+
+.inputWrapper {
+  display: flex;
+  background-color: var(--background-color-text2);
+  border-radius: var(--border-radius-small);
+  width: 100%;
+  :global {
+    .dzq-input {
+      width: 100%;
+    }
+    .dzq-input__inner {
+      background-color: var(--background-color-text2);
+      border-top-right-radius: unset;
+      border-bottom-right-radius: unset;
+      &:focus-visible {
+        border: none;
+      }
+    }
+  }
+}
+
+.tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 $im-space-in-between-btns;
+}
+
+.submit {
+  display: flex;
+  align-items: center;
+  margin-left: $im-space-in-between-btns;
+}
+
+.submitBtn {
+  padding: var(--padding-2n) var(--padding-4n);
+}
+
+.pictureUpload {
+  margin-left: $im-space-in-between-btns;
+}

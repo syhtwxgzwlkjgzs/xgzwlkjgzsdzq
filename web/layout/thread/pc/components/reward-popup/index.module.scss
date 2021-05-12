@@ -60,7 +60,6 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  background: $body-bg-color;
   
   .ok {
     width: rem(70);
@@ -71,5 +70,7 @@
     width: rem(70);
     height: rem(36);
     margin-right: rem($margin-6n);
+    background: $button-info-bg-color;
+    border: none;
   }
 }

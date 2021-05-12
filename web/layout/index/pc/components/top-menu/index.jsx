@@ -73,14 +73,14 @@ const Index = ({ onSubmit = noop }) => {
                   key={index} 
                   index={index} 
                   title={title(item.label)} 
-                  className={item.isActive && styles.activeItem}
+                  // className={item.isActive && styles.activeItem}
                   style={{ padding: '3px 0' }}
                 >
                   {
                     item.children.map((secondItem, secondIndex) => {
                       return (
                         <Menu.Item
-                          className={secondItem.isActive && styles.activeItem}
+                          // className={secondItem.isActive && styles.activeItem}
                           divided
                           key={`${index}-${secondIndex}`}
                           index={`${index}-${secondIndex}`}
