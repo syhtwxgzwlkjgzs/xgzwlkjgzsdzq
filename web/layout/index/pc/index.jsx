@@ -5,6 +5,7 @@ import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
 import NewContent from './components/new-content';
 import TopMenu from './components/top-menu';
+import TopNav from './components/top-nav';
 import TopNews from '../h5/components/top-news';
 import Navigation from './components/navigation';
 import QcCode from '@components/qcCode';

@@ -34,7 +34,7 @@ class LikePCPage extends React.Component {
             title="用户"
             isShowMore={false}
           />
-          <Users data={pageData.slice(0, 5)}/>
+          <Users data={pageData?.slice(0, 5)}/>
         </div>
         <Copyright/>
       </div>
