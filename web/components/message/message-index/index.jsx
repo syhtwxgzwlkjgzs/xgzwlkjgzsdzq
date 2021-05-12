@@ -56,21 +56,18 @@ export class MessageIndex extends Component {
 
   formatChatDialogList = (dialogList) => {
     const newList = [];
-    dialogList.forEach(({ dialogMessage, sender }, idx) => {
+    dialogList.forEach(({ dialogMessage, sender }) => {
       newList.push({
-        id: dialogMessage?.id ? dialogMessage.id : '',
-        dialogId: dialogMessage?.dialogId ? dialogMessage.dialogId : '',
-        createdAt: dialogMessage?.createdAt ? dialogMessage.createdAt : 0,
-        content: dialogMessage?.summary ? dialogMessage.summary : '',
+        id: dialogMessage?.id || '',
+        dialogId: dialogMessage?.dialogId || '',
+        createdAt: dialogMessage?.createdAt || 0,
+        content: dialogMessage?.summary || '',
         title: '',
-        avatar: sender?.avatar ? sender.avatar : '',
-        userId: sender?.userId ? sender.userId : '',
-        userName: sender?.username ? sender.username : '',
+        avatar: sender?.avatar || '',
+        userId: sender?.userId || '',
+        userName: sender?.username || '',
       });
     });
-    for (const item of dialogList) {
-      if (!item.dialogMessage || !item.sender) continue;
-    }
 
     return newList;
   };
@@ -91,7 +88,6 @@ export class MessageIndex extends Component {
     const { cardContent, type, finished } = this.state;
     const { dialogList } = this.props.message;
     const newDialogList = this.formatChatDialogList(dialogList.list);
-    console.log(this.props.message);
 
     return (
       <div className={styles.container}>
