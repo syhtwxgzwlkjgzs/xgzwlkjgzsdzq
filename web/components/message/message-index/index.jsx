@@ -44,6 +44,7 @@ export class MessageIndex extends Component {
   handleRefresh = () => {
     const { message } = this.props;
     this.setState({ finished: false });
+    console.log('Triggering refreshing at TOP!');
     setTimeout(async () => {
       await message.readDialogList(message.dialogList.currentPage);
       this.setState({ finished: true });
@@ -52,23 +53,26 @@ export class MessageIndex extends Component {
 
   handleScrollBottom = () => {
     const { message } = this.props;
+    console.log('Triggering refreshing at BOTTOM!');
     return message.readDialogList(2);
-  }
+  };
 
   formatChatDialogList = (dialogList) => {
     const newList = [];
-    dialogList.forEach((item) => {
+    for (const item of dialogList) {
+      if (!item.dialogMessage || !item.sender) continue;
       newList.push({
         id: item.dialogMessage.id,
         dialogId: item.dialogMessage.dialogId,
         createdAt: item.dialogMessage.createdAt || 0,
-        content: item.dialogMessage.summary || "",
+        content: item.dialogMessage.summary || '',
         title: '',
-        avatar: item.sender.avatar || "",
+        avatar: item.sender.avatar || '',
         userId: item.sender.userId,
         userName: item.sender.username,
       });
-    });
+    }
+
     return newList;
   };
 
@@ -82,14 +86,24 @@ export class MessageIndex extends Component {
     // console.log('message: ', this.props.message);
     // console.log('dialog: ', dialogList);
     const newDialogList = this.formatChatDialogList(dialogList.list);
-    // console.log(newDialogList);
-
+    console.log(newDialogList);
+    // console.log(`currentPage: ${dialogList.currentPage}, totalPage: ${dialogList.totalPage}`);
     return (
       <div className={styles.container}>
-        <PullDownRefresh height={'800px'} onRefresh={this.handleRefresh} isFinished={finished}>
-          <List className={styles.list} height={'800px'} noMore={dialogList.currentPage >= dialogList.totalPage} onRefresh={this.handleScrollBottom}>
+        <PullDownRefresh className={styles.pullDownContainer} onRefresh={this.handleRefresh} isFinished={finished}>
+          <List
+            className={styles.list}
+            height={'100vh'}
+            noMore={dialogList.currentPage >= dialogList.totalPage}
+            onRefresh={this.handleScrollBottom}
+          >
             <MessageCard cardItems={cardContent} />
-            <Notice list={newDialogList} type={type} onBtnClick={this.handleDelete} />
+            <Notice
+              list={newDialogList}
+              type={type}
+              onBtnClick={this.handleDelete}
+              onScrollBottom={this.handleScrollBottom}
+            />
           </List>
         </PullDownRefresh>
       </div>

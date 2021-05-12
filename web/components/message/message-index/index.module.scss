@@ -2,10 +2,9 @@
   height: 100vh;
   background: var(--comment-content-bg-color);
 
-  .pull{
-    height: 100vh;
+  :global {
+    .dzq-pull-refresh .dzq-pull-refresh__list {
+      height: 100vh !important;
+    }
   }
-}
-
-.list {
 }
