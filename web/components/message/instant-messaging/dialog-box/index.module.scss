@@ -84,9 +84,9 @@
     @include text-font($color: var(--color-text-primary));
     margin-right: $im-msg-space-aside;
     margin-left: $im-gap-btw-icon-and-msg;
-    background-color: var(--comment-box-bg-color);
+    background-color: $comment-bg-color;
     &:before {
-      border-right-color: var(--comment-box-bg-color);
+      border-right-color: $comment-bg-color;
       left: -13px;
     }
   }
