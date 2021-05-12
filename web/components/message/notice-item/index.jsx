@@ -16,7 +16,7 @@
  *
  * 账号消息，@、点赞、回复主题、回复评论
  *
-*/
+ */
 import React, { Component } from 'react';
 import { Avatar, Badge, Icon } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
@@ -35,7 +35,7 @@ const threadTips = {
   replied: '回复了你',
   related: '@了你',
   liked: '点赞了你',
-}
+};
 
 @inject('site')
 @observer
@@ -45,16 +45,16 @@ class Index extends Component {
     const { type, site } = this.props;
     const url = site?.webConfig?.setSite?.siteFavicon;
     if (type === 'thread') {
-      return url || "/favicon.ico";
+      return url || '/favicon.ico';
     }
     return avatar;
-  }
+  };
 
   // 获取头像背景色
   getBackgroundColor = (name) => {
     const character = name?.charAt(0).toUpperCase() || 'a';
     return stringToColor(character);
-  }
+  };
 
   // 针对财务消息，获取后缀提示语
   getFinancialTips = (item) => {
@@ -64,7 +64,7 @@ class Index extends Component {
     if (item.type === 'questioned') {
       return '悬赏了你';
     }
-    if (item.type === 'receiveredpacke') {
+    if (item.type === 'receiveredpacket') {
       return '获取红包';
     }
     if (item.type === 'withdrawal') {
@@ -80,9 +80,7 @@ class Index extends Component {
   parseHTML = () => {
     const { type, item } = this.props;
     // 1 获取基础内容，财务信息、账户信息优先使用title展示
-    let _content = ['financial', 'account'].includes(type)
-      ? (item.title || item.content)
-      : item.content;
+    let _content = ['financial', 'account'].includes(type) ? item.title || item.content : item.content;
     // 2 过滤内容
     _content = this.filterTag(_content);
     // 3 拼接account前置tip
@@ -92,26 +90,26 @@ class Index extends Component {
     }
     // 4 return
     return _content ? xss(s9e.parse(_content)) : '加载中...';
-  }
+  };
 
   // 跳转用户中心
   toUserCenter = (e, canJump, item) => {
     e.stopPropagation();
     // 后续用户中心做好后，需拼接用户id
-    canJump && Router.push({ url: `/user/${item.userId}` })
-  }
+    canJump && Router.push({ url: `/user/${item.userId}` });
+  };
 
   // 跳转主题详情or私信
   toDetailOrChat = (e, item) => {
     if (e.target.nodeName === 'A') return;
     const { type } = this.props;
     if (type === 'financial' || type === 'account') {
-      Router.push({ url: `'/thread/${item.threadId}` })
+      Router.push({ url: `'/thread/${item.threadId}` });
     }
     if (type === 'chat') {
       console.log('去私信页面');
     }
-  }
+  };
 
   render() {
     const { type, item = {}, site, onBtnClick } = this.props;
@@ -120,7 +118,6 @@ class Index extends Component {
 
     return (
       <div className={'item ' + styles.wrapper}>
-
         {/* 默认block */}
         <div className={styles.block}>
           {/* 头像 */}
@@ -138,16 +135,17 @@ class Index extends Component {
                     backgroundColor: `#${this.getBackgroundColor(item.username)}`
                   }}
                 />
-              }
+              )}
             </Badge>
           </div>
           {/* 详情 */}
-          <div className={classNames(styles.detail, {
-            [styles['detail-chat']]: type === 'chat',
-            [styles['detail-thread']]: type === 'thread',
-            [styles['detail-financial']]: type === 'financial',
-            [styles['detail-account']]: type === 'account',
-          })}
+          <div
+            className={classNames(styles.detail, {
+              [styles['detail-chat']]: type === 'chat',
+              [styles['detail-thread']]: type === 'thread',
+              [styles['detail-financial']]: type === 'financial',
+              [styles['detail-account']]: type === 'account',
+            })}
           >
             {/* 顶部 */}
             <div
@@ -159,40 +157,32 @@ class Index extends Component {
               >
                 {item.username || this.filterTag(item.title)}
               </div>
-              {['chat', 'thread'].includes(type) &&
+              {['chat', 'thread'].includes(type) && (
                 <div className={styles.time}>{diffDate(new Date(item.createdAt))}</div>
-              }
-              {type === 'financial' &&
-                <div className={styles.amount}>+{(item.amount).toFixed(2)}</div>
-              }
+              )}
+              {type === 'financial' && <div className={styles.amount}>+{parseFloat(item.amount).toFixed(2)}</div>}
             </div>
 
             {/* 中部 */}
-            <div
-              className={classNames(styles.middle)}
-              onClick={(e) => this.toDetailOrChat(e, item)}
-            >
+            <div className={classNames(styles.middle)} onClick={(e) => this.toDetailOrChat(e, item)}>
               {/* 财务内容 */}
-              {type === 'financial' &&
-                <p
-                  className={styles['content-html']}
-                  style={isPc ? { paddingRight: '20px' } : {}}
-                >
+              {type === 'financial' && (
+                <p className={styles['content-html']} style={isPc ? { paddingRight: '20px' } : {}}>
                   在帖子"
                   <span
                     className={styles['single-line']}
                     style={{
                       maxWidth: `${isPc ? '400px' : '90px'}`,
                       display: 'inline-block',
-                      verticalAlign: 'bottom'
+                      verticalAlign: 'bottom',
                     }}
                     dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
                   />
                   "中{this.getFinancialTips(item)}
                 </p>
-              }
+              )}
               {/* 私信、帖子、账户 */}
-              {['chat', 'thread', 'account'].includes(type) &&
+              {['chat', 'thread', 'account'].includes(type) && (
                 <p
                   className={classNames(styles['content-html'], {
                     [styles['single-line']]: ['chat'].includes(type),
@@ -201,23 +191,21 @@ class Index extends Component {
                   style={isPc ? { paddingRight: '20px' } : {}}
                   dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
                 />
-              }
+              )}
             </div>
 
             {/* 底部 */}
-            {['financial', 'account'].includes(type) &&
-              <div className={`${styles.bottom} ${styles.time}`}>
-                {diffDate(new Date(item.createdAt))}
-              </div>
-            }
+            {['financial', 'account'].includes(type) && (
+              <div className={`${styles.bottom} ${styles.time}`}>{diffDate(new Date(item.createdAt))}</div>
+            )}
           </div>
         </div>
         {/* PC删除 */}
-        {isPc &&
+        {isPc && (
           <div className={styles.delete} onClick={() => onBtnClick(item)}>
             <Icon className={styles.icon} name="DeleteOutlined" size={14} />
           </div>
-        }
+        )}
       </div>
     );
   }
@@ -227,12 +215,12 @@ Index.propTypes = {
   type: PropTypes.string,
   item: PropTypes.object,
   onBtnClick: PropTypes.func,
-}
+};
 
 Index.defaultProps = {
   type: 'thread',
   item: {},
-  onBtnClick: () => { },
-}
+  onBtnClick: () => {},
+};
 
 export default Index;
