@@ -78,14 +78,7 @@ class CommentList extends React.Component {
       <div className={styles.commentList}>
         <div className={styles.header}>
           <div className={styles.showGet}>
-            <div>
-              {!this.state.isHideEdit
-                && <div className={styles.extra}>
-                  {canEdit && <div className={styles.revise} onClick={() => this.editClick()}>编辑</div>}
-                  {canDelete && <div className={styles.revise} onClick={() => this.deleteClick()}>删除</div>}
-                </div>
-              }
-            </div>
+            <div></div>
             <div className={styles.headerRigth}>
 
               {
@@ -148,11 +141,17 @@ class CommentList extends React.Component {
                     <span onClick={() => this.replyClick()}>回复</span>
                   </div>
                   {
-                    this.props.isShowAdopt
+                    true
                       ? <div className={styles.commentAdopt}>
                         <span onClick={() => this.props.onAboptClick()}>采纳</span>
                       </div> : ''
                   }
+                  {!this.state.isHideEdit
+                && <div className={styles.extra}>
+                  {/* {canEdit && <div className={styles.revise} onClick={() => this.editClick()}>编辑</div>} */}
+                  {canDelete && <div className={styles.revise} onClick={() => this.deleteClick()}>删除</div>}
+                </div>
+              }
                 </div>
               </div>
               {
