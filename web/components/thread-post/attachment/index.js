@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 function AttachmentCard({ item = {}, onClear }) {
   return (
     <div className={styles['attachment-item']}>
-      <Icon className={styles.icon} name="EditQuestionOutlined" size={16} color="#8490a8" />
+      <Icon className={styles.icon} name="EditQuestionOutlined" size={16} color="#8590A6" />
       <div className={styles.content}>
         <p className={styles.name}>{item.name}{item.id}</p>
         <span className={styles.size}>{item.size}</span>
@@ -16,7 +16,7 @@ function AttachmentCard({ item = {}, onClear }) {
         className={styles.icon}
         name="CloseCircleOutlined"
         size={16}
-        color="#8490a8"
+        color="#8590A6"
         onClick={() => onClear(item.id)}
       />
     </div>
@@ -36,7 +36,7 @@ const Attachment = (props) => {
       ))}
       {list.length < 3 && (
         <div className={styles['add-box']} onClick={onAdd}>
-          <Icon name="PlusOutlined" size={20} color="#8490a8" />
+          <Icon name="PlusOutlined" size={20} color="#8590A6" />
           添加附件
         </div>
       )}

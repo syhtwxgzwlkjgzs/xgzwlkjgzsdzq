@@ -8,6 +8,10 @@
     margin-bottom: rem($margin-4n);
   }
 
+  .redpacket {
+    margin-left: rem($margin-4n);
+  }
+
   .content {
     display: flex;
     .commentListAvatar {
@@ -18,7 +22,7 @@
       .commentListContentText {
         padding: rem($padding-4n);
         border-radius: rem($border-radius-small);
-        background: var(--comment-box-bg-color);
+        background-color: $comment-bg-color;
         .commentListName {
           font-weight: var(--font-weight-regular);
           font-size: rem($font-size-primary);
@@ -83,7 +87,7 @@
       }
     }
   }
-  
+
   .extraBottom {
     display: flex;
     align-items: center;

@@ -9,7 +9,7 @@
   // 用户信息 start
   .user_info{
     height: rem(165);
-    background: var(--comment-box-bg-color);
+    background: $comment-bg-color;
     position: relative;
   }
   .user_info_author{

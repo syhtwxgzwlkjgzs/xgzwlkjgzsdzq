@@ -43,11 +43,11 @@ const Topic = ({ data, onClick, index, footer }) => {
         <div className={styles.title}>{data.content ? `#${data.content}#`: '暂无标题'}</div>
         <div className={styles.num}>
           <div className={styles.numItem}>
-            <Icon name="EyeOutlined" size={14} color="#8490A8" className={styles.numIcon}/>
+            <Icon name="EyeOutlined" size={14} color="#8590A6" className={styles.numIcon}/>
             {data.viewCount}
           </div>
           <div className={styles.viewBox}>
-            <Icon name="MessageOutlined" size={14} color="#8490A8" className={styles.numIcon}/>
+            <Icon name="MessageOutlined" size={14} color="#8590A6" className={styles.numIcon}/>
             {data.threadCount}
           </div>
         </div>
