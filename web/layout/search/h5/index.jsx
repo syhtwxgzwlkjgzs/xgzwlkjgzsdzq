@@ -79,7 +79,7 @@ class SearchH5Page extends React.Component {
         </div>
         {
           threadsPageData?.length
-            ? <PopularContents data={threadsPageData} onItemClick={this.onPostClick} />
+            ? <PopularContents data={threadsPageData} />
             : <NoData />
         }
       </List>

@@ -103,6 +103,7 @@ class CaptchaInput extends React.Component {
         {value.map((item, index) => (
           <Input
             mode="number"
+            htmlType="number"
             key={index}
             value={value[index]}
             onChange={(e) => {
