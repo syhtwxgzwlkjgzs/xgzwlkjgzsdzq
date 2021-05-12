@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 
 import MessageCard from '@components/message/message-card';
 import Notice from '@components/message/notice';
-import List from '@components/list';
 import { PullDownRefresh } from '@discuzq/design';
 
 import styles from './index.module.scss';
@@ -19,19 +18,19 @@ export class MessageIndex extends Component {
         iconName: 'RemindOutlined',
         title: '帖子通知',
         link: '/message/?page=thread',
-        totalCount: this.props.message.threadUnread,
+        totalCount: 0,
       },
       {
         iconName: 'RenminbiOutlined',
         title: '财务通知',
         link: '/message/?page=financial',
-        totalCount: this.props.message.financialUnread,
+        totalCount: 0,
       },
       {
         iconName: 'LeaveWordOutlined',
         title: '账号消息',
         link: '/message/?page=account',
-        totalCount: this.props.message.accountUnread,
+        totalCount: 0,
       },
     ],
   };
@@ -52,45 +51,53 @@ export class MessageIndex extends Component {
 
   handleScrollBottom = () => {
     const { message } = this.props;
-    return message.readDialogList(2);
-  }
+    return message.readDialogList(message.initList.currentPage);
+  };
 
   formatChatDialogList = (dialogList) => {
     const newList = [];
-    dialogList.forEach((item) => {
+    dialogList.forEach(({ dialogMessage, sender }) => {
       newList.push({
-        id: item.dialogMessage.id,
-        dialogId: item.dialogMessage.dialogId,
-        createdAt: item.dialogMessage.createdAt || 0,
-        content: item.dialogMessage.summary || "",
+        id: dialogMessage?.id || '',
+        dialogId: dialogMessage?.dialogId || '',
+        createdAt: dialogMessage?.createdAt || 0,
+        content: dialogMessage?.summary || '',
         title: '',
-        avatar: item.sender?.avatar || "",
-        userId: item.sender?.userId,
-        userName: item.sender?.username,
+        avatar: sender?.avatar || '',
+        userId: sender?.userId || '',
+        userName: sender?.username || '',
       });
     });
+
     return newList;
   };
 
-  componentDidMount() {
-    this.props.message.readDialogList(1);
+  async componentDidMount() {
+    await this.props.message.readDialogList(1);
+    const { threadUnread, financialUnread, accountUnread } = this.props.message;
+    const cardContent = [...this.state.cardContent];
+    cardContent[0].totalCount = threadUnread;
+    cardContent[1].totalCount = financialUnread;
+    cardContent[2].totalCount = accountUnread;
+
+    this.setState({ cardContent });
   }
 
   render() {
     const { cardContent, type, finished } = this.state;
     const { dialogList } = this.props.message;
-    // console.log('message: ', this.props.message);
-    // console.log('dialog: ', dialogList);
     const newDialogList = this.formatChatDialogList(dialogList.list);
-    // console.log(newDialogList);
 
     return (
       <div className={styles.container}>
-        <PullDownRefresh height={'800px'} onRefresh={this.handleRefresh} isFinished={finished}>
-          <List className={styles.list} height={'800px'} noMore={dialogList.currentPage >= dialogList.totalPage} onRefresh={this.handleScrollBottom}>
-            <MessageCard cardItems={cardContent} />
-            <Notice list={newDialogList} type={type} onBtnClick={this.handleDelete} />
-          </List>
+        <PullDownRefresh className={styles.pullDownContainer} onRefresh={this.handleRefresh} isFinished={finished}>
+          <Notice
+            topCard={<MessageCard cardItems={cardContent} />}
+            list={newDialogList}
+            type={type}
+            onBtnClick={this.handleDelete}
+            onScrollBottom={this.handleScrollBottom}
+          />
         </PullDownRefresh>
       </div>
     );
