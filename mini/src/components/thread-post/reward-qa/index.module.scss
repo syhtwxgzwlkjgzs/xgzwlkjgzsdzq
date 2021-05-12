@@ -9,6 +9,7 @@
   padding: 0 16px;
   overflow: hidden;
   background: var(--color-white);
+  border-top: 1px solid var(--border-line-color);
 
   .reward-item {
     @include flex();
