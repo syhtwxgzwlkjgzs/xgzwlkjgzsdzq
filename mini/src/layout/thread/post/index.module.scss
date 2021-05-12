@@ -22,11 +22,9 @@ page {
     }
 
     .toolbar {
-
       .location-bar {
         padding: 0 16px;
         display: flex;
-        flex-direction: row-reverse;
         justify-content: space-between;
         align-items: center;
         border-bottom: 1px solid var(--border-line-color);
@@ -36,7 +34,6 @@ page {
           text-align: left;
           color: #c5c6ca;
         }
-
       }
 
       .tag-toolbar {
@@ -45,6 +42,7 @@ page {
         align-items: center;
         flex-wrap: wrap;
         background: var(--color-white);
+        border-bottom: 1px solid var(--border-line-color);
       }
     }
   }
