@@ -79,7 +79,7 @@ class RegisterH5Page extends React.Component {
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
-            ? <HomeHeader hideInfo/>
+            ? <HomeHeader hideInfo mode='login'/>
             : <Header/>
         }
         <div className={platform === 'h5' ? layout.content : layout.pc_content}>
@@ -135,7 +135,7 @@ class RegisterH5Page extends React.Component {
               登录
             </span>
           </div>
-          <div className={platform === 'h5' ? layout['otherLogin-tips'] : layout.pc_otherLogin_tips}>注册登录即表示您同意《注册协议》《隐私协议》</div>
+          <div className={platform === 'h5' ? layout['otherLogin-tips'] : layout.pc_otherLogin_tips}>注册登录即表示您同意<span>《注册协议》</span><span>《隐私协议》</span></div>
         </div>
       </div>
       </div>

@@ -1,5 +1,7 @@
+@import '@common/styles/mixin/login.scss';
+@import '@common/styles/index.scss';
 .container {
-  height: 100%;
+  @include mini_container;
 }
 .banner {
   height: 140px;
@@ -10,20 +12,13 @@
   }
 }
 .content {
-  padding: 48px 24px;
+  @include mini_content;
   .button {
-    width: 327px;
-    height: 42px;
-    margin-top: 32px;
-    line-height: 24px;
+    @include mini_button;
   }
   .functionalRegion {
-    text-align: center;
-    margin-top: 60px;
-    .clickBtn{
-      color: var(--color-primary);
-      cursor: pointer;
-    }
+    @include mini_functionalRegion;
+    margin-top: 32px;
   }
   .icon{
     width: 327px;
