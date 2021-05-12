@@ -56,7 +56,13 @@
       .text {
         font-size: 16px;
         color: var( --color-white);
-        opacity: 0.5;
+        opacity: 0.6;
+      }
+      .shareText {
+        font-size: 16px;
+        line-height: 24px;
+        color: var( --color-white);
+        font-weight: normal;
       }
       .content {
         font-size: 16px;
@@ -65,7 +71,7 @@
       }
       .shareIcon {
         display: inline-block;
-        opacity: 0.5;
+        opacity: 0.6;
         padding-right: 8px;
       }
     }
