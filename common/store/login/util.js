@@ -88,6 +88,7 @@ const checkUserStatus = (resp) => {
  * @param {*} param0
  */
 const toTCaptcha = async ({registerCaptcha, appid, resCallback = () => {}, quitCallback = () => {}}) => {
+  console.log(registerCaptcha);
   if (!registerCaptcha) {
     resCallback();
     return;

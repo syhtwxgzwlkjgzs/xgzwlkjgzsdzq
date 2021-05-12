@@ -110,7 +110,7 @@ class LoginPhoneH5Page extends React.Component {
       const { webConfig } = site;
       const registerCaptcha = get(webConfig, 'setReg.registerCaptcha', false);
       const qcloudCaptchaAppId = get(webConfig, 'qcloud.qcloudCaptchaAppId', false);
-      await this.props.mobileLogin.sendCode(registerCaptcha, qcloudCaptchaAppId);
+      await this.props.mobileLogin.sendCode({registerCaptcha, qcloudCaptchaAppId});
     } catch (e) {
       Toast.error({
         content: e.Message,
