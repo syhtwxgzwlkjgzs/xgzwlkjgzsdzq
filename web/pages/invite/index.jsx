@@ -3,7 +3,7 @@ import InvitePCPage from '@layout/invite/pc';
 import InviteH5Page from '@layout/invite/h5';
 import { inject } from 'mobx-react';
 
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 @inject('site')
 class Invite extends React.Component {

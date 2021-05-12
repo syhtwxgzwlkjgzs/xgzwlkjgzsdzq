@@ -15,18 +15,18 @@
 .header {
   height: rem(50);
   display: flex;
+  align-items: center;
   justify-content: space-between;
   padding: 0 rem($padding-5n);
+
   .headerLeft {
     font-size: rem($font-size-middle);
     line-height: rem(50);
   }
   .headerIcon {
-    width: rem(50);
-    height: rem(50);
-    line-height: rem(50);
     text-align: center;
     font-size: rem($font-size-middle);
+    cursor: pointer;
   }
 }
 
@@ -82,7 +82,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  background: #f4f7f7;
+
   .ok {
     width: rem(70);
     height: rem(36);
@@ -91,7 +91,7 @@
   .cancel {
     width: rem(70);
     height: rem(36);
-    background: #c9c9c9;
+    background: $button-info-bg-color;
     border: none;
     margin-right: rem($margin-6n);
   }

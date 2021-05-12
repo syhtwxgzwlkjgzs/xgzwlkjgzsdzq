@@ -81,6 +81,10 @@ class CommentList extends React.Component {
     typeof this.props.reployAvatarClick === 'function' && this.props.reployAvatarClick(data);
   }
 
+  reportClick(data) {
+    typeof this.props.reportClick === 'function' && this.props.reportClick(data);
+  }
+
   async onSubmit(value) {
     if (typeof this.props.onSubmit === 'function') {
       const success = await this.props.onSubmit(value);
@@ -110,8 +114,11 @@ class CommentList extends React.Component {
         {this.props.data?.rewards || this.props.data?.redPacketAmount ? (
           <div className={styles.header}>
             {this.props.data?.rewards ? <RewardDisplay number={this.props.data.rewards}></RewardDisplay> : ''}
+
             {this.props.data?.redPacketAmount ? (
-              <RedPacketDisplay number={this.props.data.redPacketAmount}></RedPacketDisplay>
+              <div className={styles.redpacket}>
+                <RedPacketDisplay number={this.props.data.redPacketAmount}></RedPacketDisplay>
+              </div>
             ) : (
               ''
             )}
@@ -180,6 +187,11 @@ class CommentList extends React.Component {
                         <span>删除</span>
                       </div>
                     )}
+
+                    <div className={styles.revise} onClick={() => this.reportClick()}>
+                      <Icon className={styles.icon} name="WarnOutlinedThick"></Icon>
+                      <span>举报</span>
+                    </div>
                   </div>
                 </div>
               )}
