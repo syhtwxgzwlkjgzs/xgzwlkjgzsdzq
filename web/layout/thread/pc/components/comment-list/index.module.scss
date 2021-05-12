@@ -108,6 +108,10 @@
 
 .active {
   color: var(--color-primary);
+
+  .icon {
+    color: var(--color-primary);
+  }
 }
 
 .commentInput {
