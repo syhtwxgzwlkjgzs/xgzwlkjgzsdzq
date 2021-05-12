@@ -1,7 +1,8 @@
 @import '@common/styles/fn/rem.scss';
+@import '@common/styles/_variable.scss';
 
 .splitEmelent {
- padding: 0 rem(16);
+ padding: 0 rem($padding-4n);
  :global {
    .dzq-divider {
      margin: 0;

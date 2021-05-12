@@ -1,10 +1,11 @@
 @import '@common/styles/index.scss';
+@import '@common/styles/_variable.scss';
 
 .userCenterEditMiddle {
-  padding: rem(16);
+  padding: rem($padding-4n);
   padding-bottom: 0;
   h3 {
-    font-size: rem(16);
+    font-size: rem($font-size-middle);
     // margin-bottom: rem(16);
   }
   .userCenterEditItem {
@@ -12,13 +13,13 @@
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid #F4F6F7;
-    padding: rem(16) 0;
+    padding: rem($padding-4n) 0;
     >div:nth-child(2) {
-      margin-left: rem(8);
+      margin-left: rem($margin-2n);
     }
     :global {
       .dzq-icon {
-        font-size: rem(12) !important;
+        font-size: rem($font-size-small) !important;
       }
       .dzq-input {
         width: 100%;
@@ -28,10 +29,10 @@
       .dzq-input__inner {
         text-align: right;
         border: none;
-        font-size: rem(14);
+        font-size: rem($font-size-base);
         height: 0;
         line-height: 1;
-        margin-top: rem(-8);
+        margin-top: rem(-$margin-2n);
         padding-right: 0;
         display: block;
       }
@@ -44,19 +45,19 @@
     align-items: center;
     // height: rem(36);
     // line-height: rem(36);
-    font-size: rem(14);
+    font-size: rem($font-size-base);
     // border-bottom: 1px solid #F4F6F7;
     >label {
-      color: #4F5A70;
+      color: $text-color-regular;
     }
     >div {
-      color: #0B0B37;
+      color: $text-color-primary;
     }
     .userCenterEditWeChat {
       display: flex;
       align-items: center;
       span {
-        margin-left: rem(16);
+        margin-left: rem($margin-4n);
       }
     }
   }
@@ -64,13 +65,13 @@
 
 .userCenterEditBottom {
   height: rem(156);
-  padding: rem(16);
+  padding: rem($padding-4n);
   box-sizing: border-box;
   padding-top: 0;
   h3 {
-    margin-top: rem(16);
+    margin-top: rem($margin-4n);
     // margin-bottom: rem(16);
-    font-size: rem(16);
+    font-size: rem($font-size-middle);
   }
   // &::before {
   //   content: '';
@@ -83,15 +84,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: rem(16) rem(20);
+    padding: rem($padding-4n) rem($padding-5n);
     border-bottom: 1px solid #F4F6F7;
-    margin: 0 rem(-20) rem(8);
+    margin: 0 rem(-$margin-5n) rem($margin-2n);
     >div:nth-child(2) {
-      margin-left: rem(8);
+      margin-left: rem($margin-2n);
     }
     :global {
       .dzq-icon {
-        font-size: rem(12) !important;
+        font-size: rem($font-size-small) !important;
       }
     }
   }
@@ -102,13 +103,13 @@
     align-items: center;
     // height: rem(36);
     // line-height: rem(36);
-    font-size: rem(14);
+    font-size: rem($font-size-base);
     // border-bottom: 1px solid #F4F6F7;
     >label {
-      color: #4F5A70;
+      color: $text-color-regular;
     }
     >div {
-      color: #0B0B37;
+      color: $text-color-primary;
     }
   }
   .userCenterEditBtn {
@@ -120,12 +121,12 @@
     button {
       width: rem(166);
       height: rem(42);
-      font-size: rem(16);
+      font-size: rem($font-size-middle);
       border: none;
     }
     button:nth-child(1) {
-      margin-right: rem(9);
-      background-color: #EFF1F3;
+      margin-right: rem($margin-10);
+      background-color: $text-bg-color2;
     }
   }
 }
