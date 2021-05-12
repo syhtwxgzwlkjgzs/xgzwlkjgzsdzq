@@ -5,7 +5,7 @@ import IndexPCPage from '@layout/search/result-user/pc';
 import { readTopicsList, readUsersList } from '@server';
 import { Toast } from '@discuzq/design';
 
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 @inject('site')
 @inject('search')
