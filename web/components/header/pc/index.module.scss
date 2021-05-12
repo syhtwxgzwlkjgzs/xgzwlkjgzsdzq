@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 .header{
     height: rem(60);
     width: 100%;
@@ -13,14 +12,13 @@
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
         height: rem(60);
-        min-width: rem(1200);
+        min-width: rem(1150);
         width: 100%;
         border-bottom: 1px solid var(--border-line-color);
         z-index: var(--zindex-too0p);
         .headerContent{
-            width: rem(1200);
+            width: rem(1436);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -32,9 +30,9 @@
                     height: rem(24);
                     cursor: pointer;
                 }
-    
+
                 .inputBox{
-                    margin-left: rem(32);
+                    margin-left: rem(20);
                 }
             }
             .right{
@@ -49,7 +47,7 @@
                         align-items: center;
                         cursor: pointer;
                         &:hover{
-                            
+
                             p,div{
                                 color: var(--color-primary);
                             }
@@ -63,7 +61,7 @@
                         p{
                             font-size: rem($font-size-primary);
                             margin-left: rem($margin-2n);
-                            color: var(--pc-header-btn-text-color);
+                            color: $text-color-regular;
                         }
                     }
                 }
@@ -75,7 +73,7 @@
                     margin-left: rem(49);
                     .userName{
                         margin-left: rem(16);
-                        color: var(--pc-header-username-text-color);
+                        color: $text-color-regular;
                         font-size: rem($font-size-primary);
                     }
                     .userBtn{
@@ -86,7 +84,7 @@
                     }
                 }
             }
-            
+
         }
     }
 }

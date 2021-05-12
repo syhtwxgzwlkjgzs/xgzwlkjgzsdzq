@@ -60,7 +60,11 @@ class BindPhoneH5Page extends React.Component {
 
   handleSendCodeButtonClick = async () => {
     try {
-      await this.props.mobileBind.sendCode();
+      const { site } = this.props;
+      const { webConfig } = site;
+      const registerCaptcha = get(webConfig, 'setReg.registerCaptcha', false);
+      const qcloudCaptchaAppId = get(webConfig, 'qcloud.qcloudCaptchaAppId', false);
+      await this.props.mobileBind.sendCode(registerCaptcha, qcloudCaptchaAppId);
     } catch (e) {
       Toast.error({
         content: e.Message,

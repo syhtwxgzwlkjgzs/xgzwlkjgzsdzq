@@ -1,47 +1,45 @@
 import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
-import { Spin } from '@discuzq/design';
 import { noop, isPromise } from '@components/thread/utils';
 import styles from './index.module.scss';
+import RefreshView from './RefreshView';
 
 /**
  * 列表组件，集成上拉刷新能力
  * @prop {function} height 容器高度
  * @prop {function} className 容器样式
  * @param {string} noMore 无更多数据
- * @prop {function} onRefresh 触底触发事件，需返回promise
- * @prop {function} allowRefresh 是否启用上拉刷新
+ * @prop {function} onRefresh 触底触发事件，需返回promise；若没有声明onRefresh，不触发上拉刷新
+ * @prop {function} onScroll 滑动事件
  */
 
-const List = forwardRef(({ 
-  height, 
-  className = '', 
-  children, 
-  noMore, 
-  onRefresh, 
-  allowRefresh = true, 
+const List = forwardRef(({
+  height,
+  className = '',
+  children,
+  noMore,
+  onRefresh,
   onScroll = noop,
   showRefresh = true,
 }, ref) => {
   const listWrapper = useRef(null);
-  const isLoading = useRef(false);
-  const [loadText, setLoadText] = useState('加载中...');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (noMore) {
-      setLoadText('没有更多数据');
-      isLoading.current = true;
+      setIsLoading(true);
     }
   }, [noMore]);
 
   useEffect(() => {
     onTouchMove();
+    // TODO 判断是处于PC端，且
   }, []);
 
   useImperativeHandle(
     ref,
     () => ({
       onBackTop,
-      loadText,
+      isLoading,
     }),
   );
 
@@ -58,10 +56,10 @@ const List = forwardRef(({
 
   const onBackTop = () => {
     listWrapper.current.scrollTop = 0;
-  }
+  };
 
   const onTouchMove = throttle(() => {
-    if (!listWrapper || !listWrapper.current || !allowRefresh) {
+    if (!listWrapper || !listWrapper.current || !onRefresh) {
       return;
     }
     const { clientHeight } = listWrapper.current;
@@ -70,25 +68,21 @@ const List = forwardRef(({
 
     // 滑动事件
     onScroll({ scrollTop });
-    
-    if ((scrollHeight - 40 <= clientHeight + scrollTop) && !isLoading.current) {
-      isLoading.current = true;
-      setLoadText('加载中...');
+
+    if ((scrollHeight - 40 <= clientHeight + scrollTop) && !isLoading) {
+      setIsLoading(true);
       if (typeof(onRefresh) === 'function') {
-        const promise = onRefresh()
+        const promise = onRefresh();
         isPromise(promise) && promise
           .then(() => {
-            setLoadText('加载中...');
-            isLoading.current = false;
+            setIsLoading(false);
           })
           .catch(() => {
-            setLoadText('加载失败');
-            isLoading.current = false;
+            setIsLoading(false);
           })
           .finally(() => {
             if (noMore) {
-              setLoadText('没有更多数据');
-              isLoading.current = true;
+              setIsLoading(true);
             }
           });
       } else {
@@ -105,12 +99,7 @@ const List = forwardRef(({
         onScroll={onTouchMove}
       >
         {children}
-        {allowRefresh && showRefresh && (
-          <div className={styles.footer}>
-            { loadText === '加载中...' && <Spin className={styles.spin} type="spinner" /> }
-            { loadText }
-          </div>
-        )}
+        {onRefresh && showRefresh && <RefreshView noMore={noMore} />}
       </div>
     </div>
   );

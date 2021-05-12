@@ -12,11 +12,11 @@ import styles from './index.module.scss';
  * @prop {boolean} isShowMore 是否显示更多
  * @prop {boolean} rightText 右侧描述文字
  */
-const TrendingTopics = ({ icon = { type: '' }, title, leftNum, onShowMore, isShowMore = true, rightText }) => (
+const Index = ({ icon = {}, title, leftNum, onShowMore, isShowMore = true, rightText }) => (
   <div className={styles.container}>
     <div className={styles.left}>
       <Icon className={styles[`icon${icon.type}`]} name={icon.name} size={16} color={icon.color}/>
-      <div className={styles.title}>{title}</div>
+      <div className={`${styles.title} ${JSON.stringify(icon) === '{}' ? styles.noMargin : ''}`}>{title}</div>
       <div className={styles.num}>{leftNum}</div>
     </div>
     <div className={styles.right}>
@@ -33,4 +33,4 @@ const TrendingTopics = ({ icon = { type: '' }, title, leftNum, onShowMore, isSho
   </div>
 );
 
-export default React.memo(TrendingTopics);
+export default React.memo(Index);

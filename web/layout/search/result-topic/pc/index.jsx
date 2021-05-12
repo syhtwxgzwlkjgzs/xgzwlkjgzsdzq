@@ -1,13 +1,11 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
-import SectionTitle from '@components/section-title';
 import TrendingTopicMore from '../../../search/pc/components/trending-topic-more';
 import ActiveUsers from '../../../search/pc/components/active-users'
 import { withRouter } from 'next/router';
-import List from '@components/list';
 import Copyright from '@components/copyright';
+import SidebarPanel from '@components/sidebar-panel';
 @inject('site')
 @inject('search')
 @observer
@@ -52,44 +50,42 @@ class SearchResultTopicPCPage extends React.Component {
   renderRight = () => {
     const { pageData = [] } = this.props.search.users || { pageData: [] };
     return (
-      <div className={styles.searchRight}>
-        <div className={styles.section}>
-          <SectionTitle
-            title="活跃用户"
-            onShowMore={this.redirectToSearchResultUser}
-          />
+      <>
+        <SidebarPanel title="活跃用户" onShowMore={this.redirectToSearchResultUser} noData={false}>
           <ActiveUsers data={pageData} onItemClick={this.onUserClick}/>
-        </div>
+        </SidebarPanel>
         <Copyright/>
-      </div>
+      </>
     )
   }
+
   renderContent = () => {
     const { pageData = [] } = this.props.search.topics || { pageData: [] };
     return (
-      <div className={styles.searchContent}>
-        <div className={styles.section}>
-          <SectionTitle
-            title="潮流话题"
-            isShowMore={false}
-            icon={{ type: 1, name: 'StrongSharpOutlined' }}
-          />
-          <TrendingTopicMore data={pageData} onItemClick={this.onTopicClick}/>
-        </div>
-      </div>
+      <SidebarPanel 
+        title="潮流话题" 
+        type='normal'
+        isShowMore={false}
+        noData={!pageData.length}
+        icon={{ type: 1, name: 'StrongSharpOutlined' }}
+      >
+        <TrendingTopicMore data={pageData} onItemClick={this.onTopicClick}/>
+      </SidebarPanel>
     )
   }
+
   render() {
     const { currentPage, totalPage } = this.props.search.topics || { pageData: [] };
     return (
-      <List className={styles.searchWrap} noMore={currentPage >= totalPage} onRefresh={this.fetchMoreData}>
-        <BaseLayout
-          onSearch={this.onSearch}
-          right={ this.renderRight }
-        >
-          { this.renderContent }
-        </BaseLayout>
-      </List>
+      <BaseLayout
+        noMore={currentPage >= totalPage} 
+        onRefresh={this.fetchMoreData} 
+        showRefresh={false}
+        onSearch={this.onSearch}
+        right={ this.renderRight }
+      >
+        { this.renderContent }
+      </BaseLayout>
     );
   }
 }

@@ -64,9 +64,9 @@ export class MessageIndex extends Component {
         createdAt: item.dialogMessage.createdAt || 0,
         content: item.dialogMessage.summary || "",
         title: '',
-        avatar: item.sender.avatar || "",
-        userId: item.sender.userId,
-        userName: item.sender.username,
+        avatar: item.sender?.avatar || "",
+        userId: item.sender?.userId,
+        userName: item.sender?.username,
       });
     });
     return newList;

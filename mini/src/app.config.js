@@ -40,6 +40,10 @@ export default {
         'user/bind-phone/index',
         'user/wx-auth/index',
         'user/wx-authorization/index',
+        'my/draft/index',
+        'wallet/index',
+        'wallet/frozen/index',
+        'wallet/withdrawal/index',
       ]
     }
   ],
@@ -48,4 +52,6 @@ export default {
     navigationBarBackgroundColor: '#fff',
     navigationBarTextStyle: 'black',
   },
+  // wx5a3a7366fd07e119 验证码防水墙小程序
+  navigateToMiniProgramAppIdList: ["wx5a3a7366fd07e119"]
 };

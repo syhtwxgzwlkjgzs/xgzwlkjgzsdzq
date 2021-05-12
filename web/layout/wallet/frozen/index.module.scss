@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .container {
   height: 100vh;
@@ -17,7 +16,7 @@
     font-weight: bold;
     padding: 0 rem($padding-4n);
     margin-bottom: rem($margin-2n);
-    
+
     font-family: 'PingFangSC-Regular';
     font-weight: normal;
     text-align: left;
@@ -29,7 +28,7 @@
     .content {
         font-weight: normal;
         padding: rem($padding-4n);
-        border-bottom: solid rem(1) var(--border-line-color);
+        border-bottom: var(--border-border);
         .upper {
             display: flex;
             justify-content: space-between;
@@ -44,7 +43,7 @@
             font-family: 'PingFangSC-Regular';
             font-size: rem($font-size-label);
             text-align: left;
-            color: #8590a6;
+            color: var(--color-text-secondary);
             padding-top: rem($padding-5n);
         }
     }

@@ -25,7 +25,6 @@ class WalletH5Page extends React.Component {
 
   // 点击冻结金额
   onFrozenAmountClick() {
-    console.log('点击了冻结金额');
     this.props.router.push('/wallet/frozen');
   }
 
@@ -34,9 +33,18 @@ class WalletH5Page extends React.Component {
     this.setState({ tabsType: val });
   }
 
-  // 点击提现按钮
-  onWithdrawalClick() {
-    console.log('点击了提现按钮');
+  // 点击提现
+  toWithrawal = () => {
+    this.props.router.push('/wallet/withdrawal');
+  }
+
+  // 点击时间选择
+  onSelectStatus = (type) => {
+    if (type === 'select') {
+      console.log('选择时间');
+    } else {
+      console.log('点击了全部状态');
+    }
   }
 
   render() {
@@ -136,11 +144,22 @@ class WalletH5Page extends React.Component {
         <div className={layout.container}>
           <div className={layout.scroll}>
             <div className={layout.header}>
-              <WalletInfo webPageType='h5' onFrozenAmountClick={() => this.onFrozenAmountClick()}></WalletInfo>
+              <WalletInfo
+                walletData={this.props.walletData}
+                webPageType='h5'
+                onFrozenAmountClick={() => this.onFrozenAmountClick()}
+                >
+              </WalletInfo>
             </div>
             <div className={layout.choiceTime}>
-              <div className={layout.status}>全部状态</div>
-              <div className={layout.status}>2012年4月</div>
+              <div className={layout.status} onClick={() => this.onSelectStatus('all')}>
+                <span className={layout.text}>全部状态</span>
+                <Icon name='UnderOutlined' size='6' className={layout.icon}></Icon>
+              </div>
+              <div className={layout.status} onClick={() => this.onSelectStatus('select')}>
+                <span className={layout.text}>2012年4月</span>
+                <Icon name='UnderOutlined' size='6' className={layout.icon}></Icon>
+              </div>
             </div>
             <div className={layout.tabs}>
               <Tabs
@@ -174,7 +193,7 @@ class WalletH5Page extends React.Component {
             </div>
           </div>
           <div className={layout.footer}>
-            <Button className={layout.button} onClick={this.onWithdrawalClick}>提现</Button>
+            <Button className={layout.button} onClick={this.toWithrawal}>提现</Button>
           </div>
         </div>
     );

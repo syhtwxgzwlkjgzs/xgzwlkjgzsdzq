@@ -6,7 +6,7 @@ export default [
   },
   {
     iconName: "MemberOutlined",
-    iconColor: "#2469F6",
+    iconColor: "#FFC300",
     content: "活跃用户"
   },
   {

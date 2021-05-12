@@ -1,10 +1,10 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .contianer {
   position: relative;
   display: flex;
   cursor: pointer;
+  font-family: 'PingFangSC-Semibold';
 }
 
 .avatar {
@@ -57,7 +57,7 @@
   margin-right: rem($margin-10);
   display: flex;
   align-items: center;
-  
+
   span {
     margin-left: rem($margin-1n);
     font-size: rem($font-size-label);

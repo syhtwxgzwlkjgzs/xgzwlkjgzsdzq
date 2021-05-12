@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .container {
     box-sizing: border-box;
@@ -20,11 +19,17 @@
     color: #4f5a70;
 
     .left {
-        width: 33%;
+        width: 40%;
+    }
+    .leftWidth {
+        width: 30%;
+    }
+    .rigthWidth {
+        width: 70%;
     }
 
     .rigth {
-        width: 66%;
+        width: 60%;
         display: flex;
         justify-content: space-around;
         .type {
@@ -33,8 +38,14 @@
         .money {
             width: 33%;
         }
+        .status {
+            width: 33%;
+        }
         .time {
             width: 33%;
+        }
+        .payWidth {
+            width: 25%;
         }
     }
 }
@@ -43,21 +54,28 @@
     display: flex;
     justify-content: space-between;
     height: rem(36);
-    padding: 0 rem($padding-4n);
+    padding: rem($padding-2n) rem($padding-4n);
     font-weight: normal;
     font-size: rem($font-size-primary);
     text-align: left;
     line-height: rem(36);
+    border-bottom: var(--border-border);
 
     .left {
-        width: 33%;
+        width: 40%;
         font-family: "PingFang SC";
         font-weight: normal;
         font-size: rem($font-size-primary);
     }
+    .leftWidth {
+        width: 30%;
+    }
+    .rigthWidth {
+        width: 70%;
+    }
 
     .rigth {
-        width: 66%;
+        width: 60%;
         display: flex;
         justify-content: space-around;
         text-align: left;
@@ -66,6 +84,12 @@
             width: 33%;
             font-weight: normal;
             color: var(--color-text-primary);
+        }
+        .status {
+            font-family: "PingFang SC";
+            width: 33%;
+            font-weight: normal;
+            // color: var(--color-text-primary);
         }
         .money {
             width: 33%;
@@ -79,6 +103,9 @@
             font-family: 'PingFangSC-Regular';
             font-weight: normal;
             color: var(--color-text-secondary);
+        }
+        .payWidth {
+            width: 25%;
         }
     }
 }
