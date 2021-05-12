@@ -285,7 +285,6 @@ class UserAction extends SiteStore {
       });
     });
     this.userFans = { ...this.userFans };
-    console.log('want to render','ssssssssss_01');
   }
 
   @action
@@ -297,7 +296,6 @@ class UserAction extends SiteStore {
       });
     });
     this.userFans = { ...this.userFans };
-    console.log('want to render','ssssssssss_022');
   }
 
   @action
@@ -308,6 +306,7 @@ class UserAction extends SiteStore {
         user.userFollow.isUnFollowed = false;
       });
     });
+    this.targetUserFollows = { ...this.targetUserFollows }
   }
 
   @action
@@ -328,6 +327,7 @@ class UserAction extends SiteStore {
         user.userFollow.isMutual = true;
       });
     });
+    this.targetUserFans = { ...this.targetUserFans };
   }
 
   @action
@@ -338,6 +338,7 @@ class UserAction extends SiteStore {
         user.userFollow.isMutual = false;
       });
     });
+    this.targetUserFans = { ...this.targetUserFans };
   }
 
   @action

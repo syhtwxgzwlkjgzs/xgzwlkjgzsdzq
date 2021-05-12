@@ -6,6 +6,7 @@ import { Divider, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import { withRouter } from 'next/router';
 import Router from '@discuzq/sdk/dist/router';
+import GetQueryString from '../../../../common/utils/get-query-string';
 
 @inject('user')
 @observer
@@ -14,12 +15,16 @@ class index extends Component {
     super(props);
     this.state = {
       height: '100%',
+      renderComponent: null,
     };
+    this.props.user.cleanUserFans()
+    this.props.user.cleanTargetUserFans()
   }
 
   componentDidMount() {
     this.setState({
       height: window.outerHeight,
+      renderComponent: this.getRenderComponent()
     });
   }
 
@@ -27,13 +32,16 @@ class index extends Component {
   followHandler = async ({ id }) => {
     try {
       await this.props.user.postFollow(id)
-      const { query } = this.props.router
-      let flag = query && query.isOtherPerson
-      if (flag === 'true') {
-        this.props.user.setTargetUserFansBeFollowed(query.otherId)
+      const isOtherFans = JSON.parse(GetQueryString('isOtherPerson'));
+      const isOtherFansId = GetQueryString('otherId');
+      if (isOtherFans) {
+        this.props.user.setTargetUserFansBeFollowed(isOtherFansId)
       } else {
         this.props.user.setUserFansBeFollowed(id)
       }
+      this.setState({
+        renderComponent:this.getRenderComponent()
+      })
       Toast.success({
         content: '关注成功',
         hasMask: false,
@@ -48,13 +56,16 @@ class index extends Component {
   unFollowHandler = async ({ id }) => {
     try {
       await this.props.user.cancelFollow({ id, type: 1 })
-      const { query } = this.props.router
-      let flag = query && query.isOtherPerson
-      if (flag === 'true') {
-        this.props.user.setTargetUserFansBeUnFollowed(query.otherId);
+      const isOtherFans = JSON.parse(GetQueryString('isOtherPerson'));
+      if (isOtherFans) {
+        const isOtherFansId = GetQueryString('otherId');
+        this.props.user.setTargetUserFansBeUnFollowed(isOtherFansId);
       } else {
         this.props.user.setUserFansBeUnFollowed(id);
       }
+      this.setState({
+        renderComponent:this.getRenderComponent()
+      })
       Toast.success({
         content: '取消成功',
         hasMask: false,
@@ -70,21 +81,19 @@ class index extends Component {
   }
 
   splitElement = () => (
-      <div className={styles.splitEmelent}>
-        <Divider />
-      </div>
+    <div className={styles.splitEmelent}>
+      <Divider />
+    </div>
   )
 
-  render() {
-    const { query } = this.props.router
-    let flag = query && query.isOtherPerson
+  getRenderComponent = () => {
+    const isOtherFans = JSON.parse(GetQueryString('isOtherPerson'));
+    const id = GetQueryString('otherId');
+    console.log(this.props.user.targetUserFans);
     return (
-      <div style={{
-        height: this.state.height,
-      }}>
-        <Header />
+      <>
         {
-          flag !== 'true' ? (
+          !isOtherFans ? (
             <UserCenterFans
               friends={this.props.user.userFans}
               loadMorePage={true}
@@ -99,7 +108,11 @@ class index extends Component {
             <UserCenterFans
               friends={this.props.user.targetUserFans}
               loadMorePage={true}
-              loadMoreAction={this.props.user.getTargetUserFans}
+              loadMoreAction={async () => {
+                if (id) {
+                  await this.props.user.getTargetUserFans(id)
+                }
+              }}
               hasMorePage={this.props.user.userFansTotalPage < this.props.user.targetUserFansPage}
               followHandler={this.followHandler}
               unFollowHandler={this.unFollowHandler}
@@ -108,6 +121,17 @@ class index extends Component {
             />
           )
         }
+      </>
+    )
+  }
+
+  render() {
+    return (
+      <div style={{
+        height: this.state.height,
+      }}>
+        <Header />
+        {this.state.renderComponent}
       </div>
     );
   }
