@@ -121,7 +121,7 @@ class MessageAction extends MessageStore {
   // 从store数据中删除消息
   deleteListItem(key, id) {
     const data = this[key];
-    const list = [].concat(data.list)
+    const list = [].concat(...data.list)
     try {
       list.forEach((item, index) => {
         if (item.id === id) {
