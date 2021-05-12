@@ -27,11 +27,6 @@ class UserStore {
   @observable userThreadsTotalCount = 0;
   @observable userThreadsTotalPage = 1;
 
-  @observable userLikes = [];
-  @observable userLikesPage = 1;
-  @observable userLikesTotalCount = 0;
-  @observable userLikesTotalPage = 1;
-
   // 编辑模式下的 username
   @observable editUserName = '';
 
@@ -60,11 +55,6 @@ class UserStore {
   @observable targetUserThreadsPage = 1;
   @observable targetUserThreadsTotalCount = 0;
   @observable targetUserThreadsTotalPage = 1;
-
-  @observable targetUserLikes = [];
-  @observable targetUserLikesPage = 1;
-  @observable targetUserLikesTotalCount = 0;
-  @observable targetUserLikesTotalPage = 1;
 
   // 是否能使用钱包支付
   @computed get canWalletPay() {

@@ -16,10 +16,10 @@ class UserCenterFans extends React.Component {
     loadMorePage: true,
     splitElement: <div></div>,
     friends: [],
-    loadMoreAction: async () => { },
-    followHandler: async () => { },
-    unFollowHandler: async () => { },
-    onContainerClick: async ({ id }) => { },
+    loadMoreAction: async () => {},
+    followHandler: async () => {},
+    unFollowHandler: async () => {},
+    onContainerClick: async ({ id }) => {},
     hasMorePage: false,
   };
 
@@ -60,7 +60,6 @@ class UserCenterFans extends React.Component {
 
   // 加载更多函数
   loadMore = async () => {
-    console.log('load more');
     const scrollDom = this.containerRef.current;
     if (scrollDom.clientHeight + scrollDom.scrollTop === scrollDom.scrollHeight) {
       if (!this.checkLoadCondition()) return;
@@ -72,23 +71,26 @@ class UserCenterFans extends React.Component {
         loading: false,
       });
     }
-  }
+  };
 
   // 判断关注状态
   judgeFollowsStatus = (user) => {
-    let type = 'follow'
-    if (!!user.isMutual) {
-      type = 'friend'
+    let type = 'follow';
+    if (user.isMutual) {
+      type = 'friend';
     }
-    return type
-  }
+    return type;
+  };
 
   render() {
     return (
-      <div ref={this.containerRef} style={{
-        height: '100%',
-        overflow: 'scroll',
-      }}>
+      <div
+        ref={this.containerRef}
+        style={{
+          height: '100%',
+          overflow: 'scroll',
+        }}
+      >
         {followerAdapter(this.props.friends).map((user, index) => {
           if (index + 1 > this.props.limit) return null;
           return (
@@ -108,9 +110,7 @@ class UserCenterFans extends React.Component {
             </div>
           );
         })}
-        <div className={styles.loadMoreContainer}>
-          {this.state.loading && <Spin type={'spinner'}>加载中 ...</Spin>}
-        </div>
+        <div className={styles.loadMoreContainer}>{this.state.loading && <Spin type={'spinner'}>加载中 ...</Spin>}</div>
       </div>
     );
   }

@@ -11,6 +11,20 @@ import { withRouter } from 'next/router';
 @observer
 class index extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      height: '100%'
+    }
+  }
+
+  componentDidMount() {
+    this.setState({
+      height: window.outerHeight
+    })
+  }
+  
+
   // 点击关注
   followHandler = async ({ id }) => {
     try {
@@ -70,10 +84,12 @@ class index extends Component {
     const { query } = this.props.router
     let flag = query && query.isOtherPerson
     return (
-      <div>
+      <div style={{
+        height: this.state.height
+      }}>
         <Header />
         {
-          !flag ? (
+          flag !== 'true' ? (
             <UserCenterFllows
               friends={this.props.user.userFollows}
               loadMorePage={true}

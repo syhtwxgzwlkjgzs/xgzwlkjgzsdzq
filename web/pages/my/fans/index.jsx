@@ -1,15 +1,27 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Header from '@components/header';
-import UserCenterFans from '@components/user-center-fans'
-import { Divider, Toast } from '@discuzq/design'
-import styles from './index.module.scss'
+import UserCenterFans from '@components/user-center-fans';
+import { Divider, Toast } from '@discuzq/design';
+import styles from './index.module.scss';
 import { withRouter } from 'next/router';
 import Router from '@discuzq/sdk/dist/router';
 
 @inject('user')
 @observer
 class index extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      height: '100%',
+    };
+  }
+
+  componentDidMount() {
+    this.setState({
+      height: window.outerHeight,
+    });
+  }
 
   // 点击关注
   followHandler = async ({ id }) => {
@@ -47,7 +59,7 @@ class index extends Component {
         content: '取消成功',
         hasMask: false,
         duration: 1000,
-      })
+      });
     } catch (error) {
       console.log(error);
     }
@@ -57,25 +69,22 @@ class index extends Component {
     Router.push({ url: `/my/others?isOtherPerson=${true}&otherId=${id}` })
   }
 
-  splitElement = () => {
-    return (
+  splitElement = () => (
       <div className={styles.splitEmelent}>
         <Divider />
       </div>
-    )
-  }
+  )
 
   render() {
     const { query } = this.props.router
     let flag = query && query.isOtherPerson
-    console.log(this.props.user);
     return (
       <div style={{
-        height: '100%'
+        height: this.state.height,
       }}>
         <Header />
         {
-          !flag ? (
+          flag !== 'true' ? (
             <UserCenterFans
               friends={this.props.user.userFans}
               loadMorePage={true}
@@ -100,8 +109,8 @@ class index extends Component {
           )
         }
       </div>
-    )
+    );
   }
 }
 
-export default withRouter(index)
+export default withRouter(index);
