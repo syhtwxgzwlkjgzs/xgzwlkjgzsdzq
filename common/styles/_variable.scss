@@ -44,17 +44,19 @@ $black: var(--color-black) !default;
 $white: var(--color-white) !default;
 
 // ------ Background Color 背景 -----
+// 全局背景色，pc移动端一致，另外评论框，评论，附件，语音，模块与模块之间的间距背景色也是
 $body-bg-color: var(--background-color);
 
 // ------ text color -------
 $text-color-primary: var(--color-text-primary);
 $text-color-regular: var(--color-text-regular);
 $text-color-secondary: var(--color-text-secondary);
+// border hover 的颜色还有 loading 文字和这个一致
 $text-color-placeholder: var(--color-text-placeholder);
 
 $text-bg-color: var(--background-color-text);
+// 灰色标签（编辑器付费、红包设置之后的显示的背景色），灰色按钮（取消）背景色
 $text-bg-color2: var(--background-color-text2);
-$text-bg-color3: var(--background-color-text3);
 
 // ------ icon color ------------
 $icon-color: var(--color-text-secondary);
@@ -79,11 +81,16 @@ $tag-text-color1: var(--color-orange);
 $tag-text-color2: $warn-color;
 $tag-text-color3: $success-color;
 
+$tag-info-bg-color: $body-bg-color;
+
 // ---- comment color ----
-$comment-bg-color: $text-bg-color3;
+$comment-bg-color: $body-bg-color;
 
 // ---- link color ----
 $link-text-color: $primary-color;
+
+// ---- button color ----
+$button-info-color: $body-bg-color;
 
 // ------ border ----------
 $border-radius-small: 5px;
@@ -93,6 +100,9 @@ $border-radius-zero: 0;
 
 $border-solid-1: 1px solid $border-color;
 $border-dotted-1: 1px dashed $border-color;
+
+// ------ spacer bg color -------
+$spacer-bg-color: $body-bg-color;
 
 // ------ spacer： 间距 padding & margin ----------
 
