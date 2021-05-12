@@ -1,15 +1,36 @@
 import React from 'react';
 import { Icon, Badge } from '@discuzq/design';
 import styles from './index.module.scss';
+import Router from '@discuzq/sdk/dist/router';
 
 class UserCenterAction extends React.Component {
+  // 点击我的消息
+  handleMyMessage = () => {
+    Router.push({ url: '/message' });
+  }
+
+  // 点击我的钱包
+  handleMyWallet = () => {
+    Router.push({ url: '/wallet' });
+  }
+
+  // 点击站点信息
+  handleMySiteInfo = () => {
+    Router.push({ url: '/forum' });
+  }
+
+  // 点击推广信息
+  handleMyInvite = () => {
+    Router.push({ url: 'invite' });
+  }
+
   render() {
     return (
       //   移动端实现
       <div className={styles.userActionMobile}>
         <div className={styles.userCenterAction}>
           <div className={styles.userCenterActionItemContainer}>
-            <div className={styles.userCenterActionItem}>
+            <div onClick={this.handleMyMessage} className={styles.userCenterActionItem}>
               <div className={styles.userCenterActionItemIcon}>
                 <Badge info={12}>
                   <Icon name={'MailOutlined'} color={'#4F5A70'} size={20} />
@@ -20,7 +41,7 @@ class UserCenterAction extends React.Component {
           </div>
 
           <div className={styles.userCenterActionItemContainer}>
-            <div className={styles.userCenterActionItem}>
+            <div onClick={this.handleMyWallet} className={styles.userCenterActionItem}>
               <div className={styles.userCenterActionItemIcon}>
                 <Badge>
                   <Icon name={'PayOutlined'} color={'#4F5A70'} size={20} />
@@ -76,7 +97,7 @@ class UserCenterAction extends React.Component {
           </div>
 
           <div className={styles.userCenterActionItemContainer}>
-            <div className={styles.userCenterActionItem}>
+            <div onClick={this.handleMySiteInfo} className={styles.userCenterActionItem}>
               <div className={styles.userCenterActionItemIcon}>
                 <Badge>
                   <Icon name={'NotepadOutlined'} color={'#4F5A70'} size={20} />
@@ -87,7 +108,7 @@ class UserCenterAction extends React.Component {
           </div>
 
           <div className={styles.userCenterActionItemContainer}>
-            <div className={styles.userCenterActionItem}>
+            <div onClick={this.handleMyInvite} className={styles.userCenterActionItem}>
               <div className={styles.userCenterActionItemIcon}>
                 <Badge>
                   <Icon name={'NotbookOutlined'} color={'#4F5A70'} size={20} />
