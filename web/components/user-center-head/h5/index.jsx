@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
-import { Button, Icon } from '@discuzq/design';
+import { Button, Icon, Toast } from '@discuzq/design';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
@@ -20,8 +20,23 @@ class index extends Component {
   }
 
   // 点击屏蔽
-  handleChangeShield = () => {
-
+  handleChangeShield = (isDeny) => {
+    const { query } = this.props.router
+    if (isDeny) {
+      this.props.user.undenyUser(query.otherId)
+      Toast.success({
+        content: '解除屏蔽成功',
+        hasMask: false,
+        duration: 1000,
+      })
+    } else {
+      this.props.user.denyUser(query.otherId)
+      Toast.success({
+        content: '屏蔽成功',
+        hasMask: false,
+        duration: 1000,
+      })
+    }
   }
 
   // 点击关注
@@ -96,7 +111,7 @@ class index extends Component {
       default:
         break;
     }
-    return {icon, text}
+    return { icon, text }
   }
 
   render() {
@@ -138,7 +153,7 @@ class index extends Component {
           {
             this.props.isOtherPerson ? (
               <>
-                <Button onClick={() => { this.handleChangeAttention(user.follow) }} type="primary" className={styles.userFriendsBtn}>
+                <Button onClick={() => { this.handleChangeAttention(user.follow) }} type="primary" className={user.follow === 2 && styles.userFriendsBtn}>
                   <Icon name={this.renderFollowedStatus(user.follow).icon} />
                   <span className={styles.userBtnText}>{this.renderFollowedStatus(user.follow).text}</span>
                 </Button>
@@ -164,7 +179,7 @@ class index extends Component {
         {/* 右上角屏蔽按钮 */}
         {
           this.props.isOtherPerson && (
-            <div onClick={this.handleChangeShield} className={styles.shieldBtn}>
+            <div onClick={() => {this.handleChangeShield(user.isDeny)}} className={styles.shieldBtn}>
               <Icon name="ShieldOutlined" />
               <span>{user.isDeny ? '解除屏蔽' : '屏蔽'}</span>
             </div>
