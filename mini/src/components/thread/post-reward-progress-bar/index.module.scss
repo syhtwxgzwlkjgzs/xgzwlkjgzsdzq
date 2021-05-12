@@ -1,4 +1,4 @@
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .container {
   display: flex;
@@ -44,7 +44,7 @@
     font-size: 12px;
     line-height: 17px;
     text-align: left;
-    color: #8490a8;
+    color: #8590A6;
   }
   &.redPack {
     .icon {

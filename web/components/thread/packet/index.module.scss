@@ -1,11 +1,9 @@
-@import '@common/styles/var.scss';
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 .container {
   display: flex;
   justify-content: center;
   cursor: pointer;
-  
+
   .wrapper {
     position: relative;
     display: flex;
@@ -29,10 +27,14 @@
     z-index: 2;
     font-size: rem($font-size-primary);
     margin-bottom: rem($padding-2n);
-    margin-top: rem(63);
+    font-weight: normal;
+    margin-top: rem(38);
   }
   .money {
+    font-family: PingFangSC-Semibold;
     z-index: 2;
     font-size: rem($font-size-large);
+    margin-top: rem(8);
+    font-weight: normal;
   }
 }

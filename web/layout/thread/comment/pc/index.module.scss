@@ -1,9 +1,8 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 .container {
   width: 100vw;
   height: 100vh;
-  background: var(--comment-box-bg-color);
+  background-color: $comment-bg-color;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -61,7 +60,7 @@
   .reward,.delete,.redpacket {
     margin-left: rem(24);
   }
-  
+
 
   .bodyRigth {
     position: sticky;

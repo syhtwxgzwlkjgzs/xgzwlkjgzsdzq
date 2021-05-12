@@ -54,7 +54,7 @@ const PayPopup = ({ visible, confirm, data, onVisibleChange, exhibition }) => {
          <div className={styles['redpacket-box']}>
         {exhibition === 1 ? <>
             <div className={styles['title-top']}><span>帖子付费</span>
-                <Icon className={styles['title-top-right']} onClick={handleClose} name="LikeOutlined" size={20} color="#8490a8"></Icon>
+                <Icon className={styles['title-top-right']} onClick={handleClose} name="LikeOutlined" size={20} color="#8590A6"></Icon>
             </div>
             <div>
                 {/* 全贴价格 */}
@@ -91,7 +91,7 @@ const PayPopup = ({ visible, confirm, data, onVisibleChange, exhibition }) => {
         : 
         <>
         <div className={styles['title-top']}><span>附件付费</span>
-                <Icon className={styles['title-top-right']} onClick={handleClose} name="LikeOutlined" size={20} color="#8490a8"></Icon>
+                <Icon className={styles['title-top-right']} onClick={handleClose} name="LikeOutlined" size={20} color="#8590A6"></Icon>
             </div>
         <div className={styles['line-box']}>
             <div> 支付金额 </div>

@@ -39,7 +39,7 @@ class Index extends React.Component {
           recommendsStatus === 'none' && recommends?.filter((_, index) => index < 5).map((item, index) => (
               <div key={index} className={style.recommendBox} onClick={() => {this.recommendDetails(item)}}>
                 <div className={style.recommendTitle}>
-                  <p className={style.recommendSort}>{index + 1}</p>
+                  <p className={`${style.recommendSort} ${style[`itemIndex${index+1}`]}`}>{index + 1}</p>
                   <p className={style.recommenText}>{item.title}</p>
                 </div>
                 <div className={style.browse}>
@@ -73,7 +73,7 @@ class Index extends React.Component {
         }
         {recommendsStatus === 'none' && <div className={style.recommendSwitch}>
           <div className={style.switchBox} onClick={this.changeBatch}>
-            <span className={style.switchIcon}><Icon name="CloseCircleOutlined" size={14}/></span>换一批
+            <Icon name="WithdrawOutlined" className={style.switchIcon} size={14}/>换一批
           </div>
         </div>}
       </div>

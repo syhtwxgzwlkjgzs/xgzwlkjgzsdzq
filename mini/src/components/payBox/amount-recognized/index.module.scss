@@ -1,5 +1,4 @@
-@import '@common/styles/variable/index.scss';
-@import '@common/styles/mixin/index.scss';
+@import '@common/styles/index.scss';
 
 // 外部容器
 .amountWrapper {
@@ -65,6 +64,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #8490A8;
+  color: #8590A6;
   cursor: pointer;
 }

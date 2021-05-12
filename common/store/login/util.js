@@ -23,6 +23,8 @@ export const BANNED_USER = -4009; // 禁用
 export const REVIEWING = 2; // 审核
 export const REVIEW_REJECT = -4007; // 审核拒绝
 
+let captcha = null;
+
 const throwFormattedError = (error) => {
   if (error.code) {
     throw error;
@@ -81,4 +83,30 @@ const checkUserStatus = (resp) => {
   }
 };
 
-export { throwFormattedError, networkRequestCatcher, checkCompleteUserInfo, checkUserStatus };
+/**
+ * 防水墙设置
+ * @param {*} param0
+ */
+const toTCaptcha = async ({registerCaptcha, appid, resCallback = () => {}, quitCallback = () => {}}) => {
+  if (!registerCaptcha) {
+    resCallback();
+    return;
+  }
+  // 验证码实例为空，则创建实例
+  if (!captcha) {
+    const TencentCaptcha = (await import('@common/utils/tcaptcha')).default;
+    captcha = new TencentCaptcha(appid, (res) => {
+      if (res.ret === 0) {
+        // 验证通过后发布
+        resCallback();
+      }
+      if (res.ret === 2) {
+        quitCallback();
+      };
+    });
+  };
+  // 显示验证码
+  captcha.show();
+};
+
+export { throwFormattedError, networkRequestCatcher, checkCompleteUserInfo, checkUserStatus, toTCaptcha };

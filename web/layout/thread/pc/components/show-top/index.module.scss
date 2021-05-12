@@ -1,5 +1,4 @@
-@import '@common/styles/variable/index.scss';
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 
 .setTop {
   width: 100%;
@@ -24,11 +23,11 @@
 }
 .inTop {
   display: block;
-  transition: all 2s; 
+  transition: all 2s;
   opacity: 1;
 }
 .outTop {
-  transition: all 2s; 
+  transition: all 2s;
   opacity: 0;
   // display: none;
 }

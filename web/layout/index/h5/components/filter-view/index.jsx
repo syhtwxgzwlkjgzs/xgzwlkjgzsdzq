@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button, Popup } from '@discuzq/design';
+import { Button, Icon, Popup } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
 import filterData from './data';
 
@@ -124,6 +124,9 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
       onClose={handleCancel}
     >
       <div className={styles.container}>
+        <div className={styles.containerIcon}>
+          <Icon className={styles.searchIcon} name='SearchOutlined' size={20}></Icon>
+        </div>
         { data && data.map((item, index) => renderContent(item, index)) }
       </div>
       <div className={styles.footer}>

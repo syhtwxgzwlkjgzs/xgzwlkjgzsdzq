@@ -58,7 +58,7 @@ const RewardForm = ({ visible, data, confirm, onVisibleChange }) => {
       <Popup position="center" visible={isshow}>
         <div className={styles['redpacket-box']}>
           <div className={styles['title-top']}><span>悬赏问答</span>
-            <Icon className={styles['title-top-right']} onClick={handleClose} name="LikeOutlined" size={20} color="#8490a8"></Icon>
+            <Icon className={styles['title-top-right']} onClick={handleClose} name="LikeOutlined" size={20} color="#8590A6"></Icon>
           </div>
           <div className={styles['line-box']}>
             <div className={styles['color-text']}> 悬赏金额 </div>

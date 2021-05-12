@@ -1,14 +1,13 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .list {
   padding: rem($padding-4n) 0 rem($padding-6n);
   .item {
     width: 100%;
     margin-bottom: rem($margin-4n);
-    height: 82px;
+    height: rem(82);
     border-radius: rem($border-radius-small);
-    background: #f5f7f8;
+    background-color: $comment-bg-color;
     display: flex;
     align-items: center;
     padding: rem($padding-4n) rem($padding-6n);
@@ -27,22 +26,33 @@
         font-weight: 700;
         font-size: rem($font-size-middle);
         line-height: rem(18);
-        color: #0b0b37;
+        color: var(--color-text-primary);
         margin-right: rem($margin-2n);
       }
       .group {
         font-size: rem($font-size-primary);
         line-height: rem($font-line-height-small);
-        color: #8490a8;
+        color: var(--color-text-secondary);
       }
     }
     .num {
       display: flex;
+      color: var(--color-text-regular);
       .numItem {
         font-size: rem($font-size-primary);
         line-height: rem($font-line-height-small);
         color: var(--color-primary);
         padding: 0 rem($padding-2n);
+        position: relative;
+        &::after {
+          position: absolute;
+          left: 0;
+          top: rem($padding-1n);
+          content: '';
+          width: rem(1);
+          height: rem($font-size-label);
+          background: var(--border-line-color);
+        }
         &:first-child {
           padding-left: 0;
         }
@@ -51,17 +61,19 @@
         }
       }
       .numTitle {
-        color: #4f5a70;
-        margin-right: rem($margin-2n);
+        color: var(--color-text-regular);
+        margin-right: rem($margin-5);
       }
     }
     .button {
       height: rem(36);
       font-size: rem($font-size-primary);
       line-height: rem(18);
-      width: rem(113);
+      padding: rem($padding-2n) rem(36);
+      display: flex;
+      align-items: center;
       .addIcon {
-        margin-right: rem($margin-2n);
+        margin-right: rem($margin-5);
       }
     }
 
