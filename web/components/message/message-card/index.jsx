@@ -14,7 +14,7 @@ const MessageCard = (props) => {
           {totalCount > 0 ? (
             <div className={styles.iconWrapper}>
               <Icon name={iconName} className={styles.icon} size={20} />
-              <Badge info={totalCount > 99 ? '99+' : `${totalCount || '0'}`} className={styles.badge} />
+              <Badge info={totalCount > 99 ? '99+' : totalCount || null} className={styles.badge} />
             </div>
           ) : (
             <Icon name={iconName} className={styles.icon} size={20} />
