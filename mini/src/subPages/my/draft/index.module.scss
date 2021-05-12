@@ -1,0 +1,47 @@
+@import '@common/styles/index.scss';
+
+.drafts-box {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--comment-box-bg-color);
+
+  .list {
+    flex: 1;
+  }
+
+  .drafts-lenth {
+    height: 55px;
+    padding-left: var(--padding-4n);
+    line-height: 55px;
+    font-size: var(--font-size-primary);
+    color: var(--pc-user-info-title);
+    background-color: var(--color-white);
+    margin-bottom: var(--margin-10);
+  }
+
+  .drafts-listbox {
+    width: 100%;
+    padding: 0 var(--padding-4n);
+    background-color: var(--color-white);
+
+    .drafts-list {
+      width: 100%;
+      min-height: 48px;
+      padding: var(--padding-4n) 0;
+      border-bottom: var(--border-border);
+
+      .drafts-list-finally {
+        width: 100%;
+        min-height: 48px;
+        padding: var(--padding-4n) 0;
+      }
+
+    }
+
+    .drafts-time {
+      font-size: var(--font-size-label);
+      margin-top: var(--margin-2n);
+      color: var(--color-text-secondary);
+    }
+  }
+}
