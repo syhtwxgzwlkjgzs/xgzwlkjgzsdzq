@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .listItem {
   position: relative;
@@ -65,6 +64,6 @@
 
   .footer {
     font-size: rem($font-size-label);
-    color: #8490a8;
+    color: #8590A6;
   }
 }

@@ -81,6 +81,21 @@ class CommentList extends React.Component {
     typeof this.props.reployAvatarClick === 'function' && this.props.reployAvatarClick(data);
   }
 
+  reportClick(data) {
+    typeof this.props.reportClick === 'function' && this.props.reportClick(data);
+  }
+
+  async onSubmit(value) {
+    if (typeof this.props.onSubmit === 'function') {
+      const success = await this.props.onSubmit(value);
+      if (success) {
+        this.setState({
+          replyId: null,
+        });
+      }
+    }
+  }
+
   generatePermissions(data = {}) {
     return {
       canApprove: data.canApprove || false,
@@ -99,8 +114,11 @@ class CommentList extends React.Component {
         {this.props.data?.rewards || this.props.data?.redPacketAmount ? (
           <div className={styles.header}>
             {this.props.data?.rewards ? <RewardDisplay number={this.props.data.rewards}></RewardDisplay> : ''}
+
             {this.props.data?.redPacketAmount ? (
-              <RedPacketDisplay number={this.props.data.redPacketAmount}></RedPacketDisplay>
+              <div className={styles.redpacket}>
+                <RedPacketDisplay number={this.props.data.redPacketAmount}></RedPacketDisplay>
+              </div>
             ) : (
               ''
             )}
@@ -169,6 +187,11 @@ class CommentList extends React.Component {
                         <span>删除</span>
                       </div>
                     )}
+
+                    <div className={styles.revise} onClick={() => this.reportClick()}>
+                      <Icon className={styles.icon} name="WarnOutlinedThick"></Icon>
+                      <span>举报</span>
+                    </div>
                   </div>
                 </div>
               )}
@@ -178,7 +201,7 @@ class CommentList extends React.Component {
                 <div className={styles.commentInput}>
                   <CommentInput
                     height="label"
-                    onSubmit={(value) => this.props.onSubmit(value)}
+                    onSubmit={(value) => this.onSubmit(value)}
                     placeholder={this.state.placeholder}
                   ></CommentInput>
                 </div>
@@ -204,7 +227,7 @@ class CommentList extends React.Component {
                       likeClick={() => this.replyLikeClick(this.needReply[0])}
                       replyClick={() => this.replyReplyClick(this.needReply[0])}
                       toCommentDetail={() => this.toCommentDetail()}
-                      onSubmit={(value) => this.props.onSubmit(value)}
+                      onSubmit={(value) => this.onSubmit(value)}
                       isShowInput={this.state.replyId && this.state.replyId === this.needReply[0].id}
                     ></ReplyList>
                   ) : (
@@ -216,7 +239,7 @@ class CommentList extends React.Component {
                         likeClick={() => this.replyLikeClick(val)}
                         replyClick={() => this.replyReplyClick(val)}
                         toCommentDetail={() => this.toCommentDetail()}
-                        onSubmit={(value) => this.props.onSubmit(value)}
+                        onSubmit={(value) => this.onSubmit(value)}
                         isShowInput={this.state.replyId && this.state.replyId === val.id}
                       ></ReplyList>
                     ))

@@ -2,7 +2,7 @@ import { observable, action } from 'mobx';
 import { smsBind, smsSend } from '@server';
 import { get } from '../../utils/get';
 import setAccessToken from '../../utils/set-access-token';
-import { checkUserStatus } from '@common/store/login/util';
+import { checkUserStatus, toTCaptcha } from '@common/store/login/util';
 
 export const MOBILE_BIND_STORE_ERRORS = {
   MOBILE_VERIFY_ERROR: {
@@ -77,26 +77,32 @@ export default class mobileBindStore {
     }
 
     @action
-    sendCode = async () => {
+    sendCode = async (registerCaptcha, qcloudCaptchaAppId) => {
       // 发送前校验
       this.beforeSendVerify();
 
       try {
-        const smsResp = await smsSend({
-          timeout: 3000,
-          data: {
-            mobile: this.mobile,
-            type: 'bind',
+        toTCaptcha({
+          registerCaptcha,
+          appid: qcloudCaptchaAppId,
+          resCallback: async () => {
+            const smsResp = await smsSend({
+              timeout: 3000,
+              data: {
+                mobile: this.mobile,
+                type: 'bind',
+              },
+            });
+            if (smsResp.code === 0) {
+              this.setCounter(smsResp.data.interval);
+              return smsResp.data;
+            }
+            throw {
+              Code: smsResp.code,
+              Message: smsResp.msg,
+            };
           },
         });
-        if (smsResp.code === 0) {
-          this.setCounter(smsResp.data.interval);
-          return smsResp.data;
-        }
-        throw {
-          Code: smsResp.code,
-          Message: smsResp.msg,
-        };
       } catch (error) {
         if (error.Code) {
           throw error;

@@ -2,9 +2,9 @@ import React from 'react';
 import RegisterH5Page from '@layout/user/h5/register';
 import { inject } from 'mobx-react';
 
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-import HOCWithNoLogin from '@common/middleware/HOCWithNoLogin';
-import HOCLoginMode from '@common/middleware/HOCLoginMode';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import HOCWithNoLogin from '@middleware/HOCWithNoLogin';
+import HOCLoginMode from '@middleware/HOCLoginMode';
 
 @inject('site')
 class Register extends React.Component {

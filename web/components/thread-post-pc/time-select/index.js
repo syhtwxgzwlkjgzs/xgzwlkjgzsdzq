@@ -58,7 +58,7 @@ const TimeSelect = ({ time, onSelects, isOpen, onisOpenChange }) => {
         <>
             <div className={`${show ? styles.box_sans : styles.nodisaplay}`}>
                 <p className={styles['title-top']}>悬赏问答</p>
-                <Icon className={styles['title-top-right']} onClick={handleClose} name="LikeOutlined" size={20} color="#8490a8"></Icon>
+                <Icon className={styles['title-top-right']} onClick={handleClose} name="LikeOutlined" size={20} color="#8590A6"></Icon>
                 <div className={styles.demonstrate}>
                     <p className={styles.demonstrateone}>{month}</p>
                     <TimePicker showSecond={false} placeholder={`${minute}`} onChange={e => { handleTime(formatDate(e._d, 'hh:mm')) }} />

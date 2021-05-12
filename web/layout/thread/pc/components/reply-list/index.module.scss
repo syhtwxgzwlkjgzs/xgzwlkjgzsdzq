@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 .replyList {
   display: flex;
   padding-top: rem($padding-4n);
@@ -11,7 +10,7 @@
     .replyListContentText {
       padding: rem($padding-4n);
       border-radius: rem($border-radius-small);
-      background: var(--comment-box-bg-color);
+      background-color: $comment-bg-color;
       .replyListName {
         font-weight: var(--font-weight-regular);
         font-size: rem($font-size-primary);

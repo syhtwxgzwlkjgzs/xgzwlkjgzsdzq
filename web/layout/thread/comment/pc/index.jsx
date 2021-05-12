@@ -11,6 +11,7 @@ import LoadingTips from '../../pc/components/loading-tips';
 import RewardDisplay from '@components/thread-detail-pc/reward-display';
 import RedPacketDisplay from '@components/thread-detail-pc/red-packet-display';
 import DeletePopup from '@components/thread-detail-pc/delete-popup';
+import NoMore from '../../pc/components/no-more';
 
 @inject('site')
 @inject('user')
@@ -193,52 +194,55 @@ class CommentPCPage extends React.Component {
 
         <div className={styles.body}>
           {/* 左边内容和评论 */}
-          <div className={styles.bodyLeft}>
-            {/* 头部 */}
-            <div className={styles.bodyLeftHeader}>
-              <div className={styles.back} onClick={() => this.onBackClick()}>
-                <Icon name="ReturnOutlined"></Icon>
-                <span className={styles.text}>返回</span>
+          <div>
+            <div className={styles.bodyLeft}>
+              {/* 头部 */}
+              <div className={styles.bodyLeftHeader}>
+                <div className={styles.back} onClick={() => this.onBackClick()}>
+                  <Icon name="ReturnOutlined"></Icon>
+                  <span className={styles.text}>返回</span>
+                </div>
+                <div className={styles.bodyHeaderOperate}>
+                  {this.props.comment?.rewards ? (
+                    <div className={styles.reward}>
+                      <RewardDisplay number={this.props.comment.rewards}></RewardDisplay>
+                    </div>
+                  ) : (
+                    ''
+                  )}
+                  {this.props.comment?.redPacketAmount ? (
+                    <div className={styles.redpacket}>
+                      <RedPacketDisplay number={this.props.comment.redPacketAmount}></RedPacketDisplay>
+                    </div>
+                  ) : (
+                    ''
+                  )}
+                  {this.props.comment?.commentDetail?.canDelete && (
+                    <div className={styles.delete} onClick={() => this.deleteClick()}>
+                      <Icon name="DeleteOutlined"></Icon>
+                      <span className={styles.text}>删除</span>
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className={styles.bodyHeaderOperate}>
-                {this.props.comment?.rewards ? (
-                  <div className={styles.reward}>
-                    <RewardDisplay number={this.props.comment.rewards}></RewardDisplay>
-                  </div>
-                ) : (
-                  ''
-                )}
-                {this.props.comment?.redPacketAmount ? (
-                  <div className={styles.redpacket}>
-                    <RedPacketDisplay number={this.props.comment.redPacketAmount}></RedPacketDisplay>
-                  </div>
-                ) : (
-                  ''
-                )}
-                {this.props.comment?.commentDetail?.canDelete && (
-                  <div className={styles.delete} onClick={() => this.deleteClick()}>
-                    <Icon name="DeleteOutlined"></Icon>
-                    <span className={styles.text}>删除</span>
-                  </div>
-                )}
-              </div>
+              {/* 内容 */}
+              {isReady ? (
+                <CommentList
+                  data={commentData}
+                  likeClick={() => this.likeClick(commentData)}
+                  replyClick={() => this.replyClick(commentData)}
+                  replyLikeClick={(reploy) => this.replyLikeClick(reploy, commentData)}
+                  replyReplyClick={(reploy) => this.replyReplyClick(reploy, commentData)}
+                  isHideEdit={true}
+                  isFirstDivider={true}
+                  isShowInput={this.state.commentId === commentData.id}
+                  onSubmit={(value) => this.createReply(value)}
+                ></CommentList>
+              ) : (
+                <LoadingTips type="init"></LoadingTips>
+              )}
             </div>
-            {/* 内容 */}
-            {isReady ? (
-              <CommentList
-                data={commentData}
-                likeClick={() => this.likeClick(commentData)}
-                replyClick={() => this.replyClick(commentData)}
-                replyLikeClick={(reploy) => this.replyLikeClick(reploy, commentData)}
-                replyReplyClick={(reploy) => this.replyReplyClick(reploy, commentData)}
-                isHideEdit={true}
-                isFirstDivider={true}
-                isShowInput={this.state.commentId === commentData.id}
-                onSubmit={(value) => this.createReply(value)}
-              ></CommentList>
-            ) : (
-              <LoadingTips type="init"></LoadingTips>
-            )}
+            <NoMore empty={false}></NoMore>
           </div>
 
           {/* 右边信息 */}

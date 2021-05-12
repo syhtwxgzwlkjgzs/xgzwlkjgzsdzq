@@ -2,7 +2,7 @@ import React from 'react';
 import BindNicknameH5Page from '@layout/user/h5/bind-nickname';
 import { inject } from 'mobx-react';
 
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 @inject('site')
 class BindNickname extends React.Component {

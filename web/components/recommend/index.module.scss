@@ -1,11 +1,11 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 .recommend {
   width: 100%;
   box-sizing: border-box;
   background: var(--color-white);
   padding: 0 rem($padding-4n);
   padding-bottom: 0;
+  border-radius: rem($border-radius-small);
   .recommendContent {
     font-weight: 600;
     font-size: rem(18);
@@ -25,7 +25,6 @@
       margin-right: rem($margin-2n);
       font-size: rem($font-size-primary);
       line-height: rem($font-line-height-small);
-      color: var(--color-error);
     }
     .recommenText {
       flex: 1;
@@ -71,26 +70,44 @@
           font-size: rem($font-size-label);
           line-height: rem(21);
           text-align: center;
+          position: relative;
+          &::after {
+              content: "";
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              opacity: 0.1;
+              top: 0;
+              left: 0;
+          }
         }
         .categoryText {
           color: #3ac15f;
-          background: transparent;
           border: rem(1) solid #3ac15f;
+          &::after {
+            background-color: #3ac15f;
+          }
         }
         .categoryEssence {
           color: var(--color-primary);
-          background: transparent;
           border: rem(1) solid var(--color-primary);
+          &::after {
+            background-color: var(--color-primary);
+          }
         }
         .categoryRed {
           color: var(--color-error);
-          background: transparent;
           border: rem(1) solid var(--color-error);
+          &::after {
+            background-color: var(--color-error);
+          }
         }
         .categoryReward {
           color: #FFC300;
-          background: transparent;
           border: rem(1) solid #FFC300;
+          &::after {
+            background-color: #FFC300;
+          }
         }
       }
     }
@@ -101,14 +118,54 @@
   height: rem(52);
   border-top: var(--border-border);
   cursor: pointer;
+  text-align: center;
+  padding-top: rem($padding-4n);
+  box-sizing: border-box;
   .switchBox {
-    width: rem(66);
-    margin: rem($margin-4n) auto 0;
     font-size: rem($font-size-primary);
     line-height: rem($font-line-height-primary);
-    color: var(--pc-user-info-title);
+    color: $text-color-regular;
     .switchIcon {
       margin-right: rem($margin-2n);
+      color: var(--color-text-secondary);
     }
   }
+}
+.itemIndex1 {
+  color: var(--color-error);
+}
+.itemIndex2 {
+  color: var(--color-error);
+  opacity: 0.8;
+}
+.itemIndex3 {
+  color: var(--color-error);
+  opacity: 0.6;
+}
+.itemIndex4 {
+  color: var(--color-error);
+  opacity: 0.5;
+}
+.itemIndex5 {
+  color: #ffc300;
+}
+.itemIndex6 {
+  color: #ffc300;
+  opacity: 0.8;
+}
+.itemIndex7 {
+  color: #ffc300;
+  opacity: 0.6;
+}
+.itemIndex8 {
+  color: #ffc300;
+  opacity: 0.5;
+}
+.itemIndex9 {
+  color: #ffc300;
+  opacity: 0.4;
+}
+.itemIndex10 {
+  color: #ffc300;
+  opacity: 0.3;
 }

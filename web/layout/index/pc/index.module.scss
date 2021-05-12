@@ -1,10 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
-// .indexWrap {
-//   background: #f5f7f8;
-//   width: 100%;
-//   height: 100vh;
-//   box-sizing: border-box;
+@import '@common/styles/index.scss';
 .indexLeft {
   width: 100%;
   display: flex;
@@ -30,6 +24,10 @@
     box-sizing: border-box;
     border-radius: rem($border-radius-small);
   }
+}
+.publishBtn {
+  width: rem(88);
+  height: rem(36);
 }
 .topBox {
   position: relative;
@@ -78,6 +76,5 @@
     margin-right: rem(4);
   }
 }
-// }
 
-  
+

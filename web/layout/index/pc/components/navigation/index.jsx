@@ -8,46 +8,43 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop }) 
   const [pID, setPID] = useState(-1);
   const [secondIndex, setSecondIndex] = useState(-1);
   const onClick =(subIndex, index) => {
-    if (`${subIndex}`.indexOf('-') !== -1) {
-      const categoryIds = subIndex.split('-')
-      setFistIndex(-1);
-      setPID(Number(categoryIds[0]));
-      setSecondIndex(Number(categoryIds[1]));
-      onNavigationClick({ categoryIds, sequence: 0 })
-    } else {
-      setPID(-1);
-      setSecondIndex(-1);
-      setFistIndex(subIndex)
-      let categoryIds = ['']
-      let sequence = 0
-      if (subIndex !== 0) {
-        categoryIds = [subIndex]
-      }
-      if (subIndex === 1) {
+    let categoryIds = subIndex.split('/')
+    let sequence = 0;
+    setFistIndex(categoryIds[0]);
+    setSecondIndex(categoryIds[1]);
+    if (categoryIds[1] === '-1') {
+      if (categoryIds[0] === '1') { // 默认
         sequence = 1
       }
-      onNavigationClick({ categoryIds, sequence })
+
+      if (categoryIds[0] !== '') { // 全部
+        categoryIds = [categoryIds[0]]
+      } else {
+        categoryIds = []
+      }
     }
+
+    onNavigationClick({ categoryIds, sequence })
   }
 
   const renderSubMenuTitle = ({ name, threadCount }) => (
     <div>
       <span>{name}</span>
-      {threadCount !== 0 && <span style={{ cssFloat: 'right' }}>{name === '全部' ? totalThreads : threadCount}</span>}
+      {threadCount !== 0 && <span className={styles.span}>{name === '全部' ? totalThreads : threadCount}</span>}
     </div>
   );
 
   const CategoriesContent = () => (
-      <Menu>
+      <Menu defaultOpeneds={[`${fistIndex}`]} defaultSubmenuActives={[`${fistIndex}`]} defaultActives={[`${fistIndex}/${secondIndex}`]}>
         {
           categories?.map((item, index) => (item?.children?.length > 0 ? (
-              <Menu.SubMenu key={index} index={item.pid} className={styles.activeItem} title={renderSubMenuTitle(item)}>
+              <Menu.SubMenu key={index} index={`${item.pid}`}  title={renderSubMenuTitle(item)}>
                 {item.children.map((children, subIndex) => (
-                    <Menu.Item index={`${item.pid}-${subIndex}`} key={subIndex} onClick={onClick} className={pID === item.pid && secondIndex === subIndex && styles.activeItem}>{children.name}</Menu.Item>
+                    <Menu.Item index={`${item.pid}/${children.pid}`} key={subIndex} onClick={onClick}>{children.name}</Menu.Item>
                 ))}
               </Menu.SubMenu>
           ) : (
-              <Menu.Item index={index} key={index} onClick={onClick} className={fistIndex === index && styles.active}>{renderSubMenuTitle(item)}</Menu.Item>
+              <Menu.Item index={`${item.pid}/-1`} key={index} onClick={onClick}>{renderSubMenuTitle(item)}</Menu.Item>
           )))
         }
       </Menu>

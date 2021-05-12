@@ -179,6 +179,9 @@ export default inject('user')(
               </div>
             )}
 
+            {/* 图片 */}
+            {parseContent.IMAGE && <ImageDisplay platform="pc" imgData={parseContent.IMAGE} />}
+
             {/* 视频 */}
             {parseContent.VIDEO && (
               <VideoPlay
@@ -188,29 +191,33 @@ export default inject('user')(
                 height={200}
               />
             )}
-            {/* 图片 */}
-            {parseContent.IMAGE && <ImageDisplay platform='pc' imgData={parseContent.IMAGE} />}
+
+            {/* 音频 */}
+            {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
+
+            {/* 附件 */}
+            {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
+
             {/* 商品 */}
             {parseContent.GOODS && (
               <div className={topic.goods}>
                 <ProductItem
-                  image={parseContent.GOODS.imagePath}
-                  amount={parseContent.GOODS.price}
-                  title={parseContent.GOODS.title}
+                  image={parseContent?.GOODS?.imagePath}
+                  amount={parseContent?.GOODS?.price}
+                  title={parseContent?.GOODS?.title}
                 />
                 <Button
                   className={topic.buyBtn}
                   type="danger"
                   onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
                 >
-                  购买商品
+                  <div className={topic.buyContent}>
+                    <Icon className={topic.buyIcon} name="ShoppingCartOutlined" size={20}></Icon>
+                    <span className={topic.buyText}>购买商品</span>
+                  </div>
                 </Button>
               </div>
             )}
-            {/* 音频 */}
-            {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
-            {/* 附件 */}
-            {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
 
             {/* 标签 */}
             {threadStore?.threadData?.categoryName && (
@@ -219,15 +226,6 @@ export default inject('user')(
 
             {(parseContent.RED_PACKET || parseContent.REWARD) && (
               <div className={topic.reward}>
-                {/* 红包 */}
-                {parseContent.RED_PACKET && (
-                  <PostRewardProgressBar
-                    remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
-                    received={
-                      Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
-                    }
-                  />
-                )}
                 {/* 悬赏 */}
                 {parseContent.REWARD && (
                   <div className={topic.rewardBody}>
@@ -240,9 +238,22 @@ export default inject('user')(
                       )}
                     />
                     <div className={topic.rewardMoney}>
-                      本帖向所有人悬赏<span className={topic.rewardNumber}>{parseContent.REWARD.remain_money || 0}</span>元
+                      本帖向所有人悬赏
+                      <span className={topic.rewardNumber}>{parseContent.REWARD.remain_money || 0}</span>元
                     </div>
                     <div className={topic.rewardTime}>{parseContent.REWARD.expired_at}截止悬赏</div>
+                  </div>
+                )}
+
+                {/* 红包 */}
+                {parseContent.RED_PACKET && (
+                  <div>
+                    <PostRewardProgressBar
+                      remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
+                      received={
+                        Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
+                      }
+                    />
                   </div>
                 )}
               </div>

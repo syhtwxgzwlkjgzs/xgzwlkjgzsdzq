@@ -18,7 +18,6 @@ class StatusH5Page extends React.Component {
     const { commonLogin, site, router } = this.props;
     const { platform } = site;
     const { statusCode, statusMsg } = router.query;
-    console.log(statusCode, `statusMsg:${statusMsg}`);
     return (
       <div className={platform === 'h5' ? '' : layout.pc_body_background}>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
@@ -33,12 +32,11 @@ class StatusH5Page extends React.Component {
           </div>
           <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
               <span>
-                { commonLogin.statusMessage || commonLogin.setStatusMessage(statusCode, statusMsg) }
+                { commonLogin.statusMessage || (statusCode && commonLogin.setStatusMessage(statusCode, statusMsg)) }
               </span>
           </div>
           <Button className={platform === 'h5' ? layout.button : layout.pc_button } type="primary" onClick={() => {
-            console.log('退出登录');
-            router.push('login');
+            this.props.router.push('login');
           }}>
             退出登录
           </Button>

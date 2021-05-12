@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 .topicWrap {
   background: #f5f7f8;
   width: 100%;
@@ -10,8 +9,11 @@
     border-radius: rem($border-radius-small);
     overflow: hidden;
   }
+  .themeContent {
+    margin-top: rem($margin-10);
+  }
   .topicRight {
-    width: rem(286);
+    width: 100%;
     overflow: hidden;
     .section {
       margin-bottom: rem($margin-10);
@@ -23,4 +25,3 @@
   }
 }
 
-  

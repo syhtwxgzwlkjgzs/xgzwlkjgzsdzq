@@ -2,8 +2,8 @@ import React from 'react';
 import WeixinBindH5Page from '@layout/user/h5/wx-bind';
 import { inject } from 'mobx-react';
 
-import HOCLoginMode from '@common/middleware/HOCLoginMode';
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCLoginMode from '@middleware/HOCLoginMode';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 @inject('site')
 class WeixinBind extends React.Component {

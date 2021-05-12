@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .shieldBox {
   width: 100%;
@@ -11,7 +10,7 @@
   height: rem(53);
   background-color: var(--color-white);
   font-size: rem($font-size-primary);
-  color: var(--pc-user-info-title);
+  color: $text-color-regular;
   padding: 0 rem($padding-4n);
   line-height: rem(53);
   margin-bottom: rem(10);
@@ -59,7 +58,7 @@
   border-radius: rem(5);
   line-height: rem(26);
   text-align: center;
-  background: var(--loading-font-color);
+  background: $loading-text-color;
   padding: 0;
   border: none;
 }
