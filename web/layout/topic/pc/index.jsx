@@ -21,7 +21,6 @@ class IndexPCPage extends React.Component {
     this.props.router.push('/search/result-user');
   };
   onTopicClick = data => {
-    debugger
     this.props.router.push(`/topic/topic-detail/${id}`);
   };
   fetchMoreData = () => {

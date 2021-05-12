@@ -1,12 +1,51 @@
-import React, { memo } from 'react'
+import React from 'react'
+import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 
-const Index = () => {
-  return (
-    <div className={styles.wrapper}>
-      帖子
-    </div>
-  )
+import Header from '@components/header';
+import Notice from '../notice';
+
+@inject('message')
+@observer
+class Index extends React.Component {
+  // 初始化
+  async componentDidMount() {
+    this.fetchMessageData(1);
+  }
+
+  // 请求数据
+  fetchMessageData(initPage = 0) {
+    const { readThreadMsgList, threadMsgList: { currentPage } } = this.props.message;
+    return readThreadMsgList(initPage || currentPage + 1);
+  }
+
+  // 触底请求数据
+  handleThreadBottom = () => {
+    return this.fetchMessageData();
+  }
+
+  // 处理帖子消息删除
+  handleThreadDelete = (item) => {
+    const { deleteMsg } = this.props.message;
+    deleteMsg(item.id, 'threadMsgList')
+  }
+
+  render() {
+    const { threadMsgList: data } = this.props.message;
+    return (
+      <div className={styles.wrapper}>
+        <Header />
+        <Notice
+          height='calc(100vh - 44px)'
+          noMore = { data.currentPage >= data.totalPage }
+          list={data.list}
+          type='thread'
+          onScrollBottom={this.handleThreadBottom}
+          onBtnClick={this.handleThreadDelete}
+        />
+      </div>
+    )
+  }
 }
 
-export default memo(Index)
+export default Index;

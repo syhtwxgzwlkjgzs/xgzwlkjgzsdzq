@@ -1,5 +1,4 @@
-@import "@common/styles/fn/rem.scss";
-@import "@common/styles/mixin/text.scss";
+@import '@common/styles/index.scss';
 @mixin multiple-line($line) {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -99,7 +98,7 @@
     .middle {
       padding-top: var(--margin-1n);
       font-size: var(--font-size-primary);
-      color: var(--background-color-text3);
+      color: $text-color-secondary;
       line-height: 20px;
 
       :global {
@@ -120,7 +119,7 @@
       font-size: var(--font-size-label);
       line-height: 20px;
       text-align: left;
-      color: var(--background-color-text3);
+      color: $text-color-secondary;
     }
 
     /*私信详情*/

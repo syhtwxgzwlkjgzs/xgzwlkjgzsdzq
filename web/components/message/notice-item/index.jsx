@@ -58,21 +58,22 @@ class Index extends Component {
 
   // 针对财务消息，获取后缀提示语
   getFinancialTips = (item) => {
-    if (item.type === 'rewarded' && item.order_type === 2) {
-      return '打赏了你';
-    }
-    if (item.type === 'rewarded' && item.order_type === 3) {
+    if (item.type === 'rewarded') {
       return '支付了你';
     }
-    if (item.type === 'threadrewarded') {
+    if (item.type === 'questioned') {
       return '悬赏了你';
     }
-    if (item.type === 'threadrewardedexpired') {
-      return '悬赏退回';
-    }
-    if (item.type === 'receiveredpacket') {
+    if (item.type === 'receiveredpacke') {
       return '获取红包';
     }
+    if (item.type === 'withdrawal') {
+      return '获取提现';
+    }
+  }
+
+  filterTag(html) {
+    return html?.replace(/^(<p>)/, '').replace(/(<\/p>)$/, '');
   }
 
   // parse content
@@ -83,7 +84,7 @@ class Index extends Component {
       ? (item.title || item.content)
       : item.content;
     // 2 过滤内容
-    _content = _content.replace(/^(<p>)/, '').replace(/(<\/p>)$/, '');
+    _content = this.filterTag(_content);
     // 3 拼接account前置tip
     if (type === 'account') {
       const tip = `<span class=\"${styles.tip}\">${threadTips[item.type]}</span>`;
@@ -102,7 +103,7 @@ class Index extends Component {
 
   // 跳转主题详情or私信
   toDetailOrChat = (e, item) => {
-    if (e.target.nodeName !== 'DIV') return;
+    if (e.target.nodeName === 'A') return;
     const { type } = this.props;
     if (type === 'financial' || type === 'account') {
       Router.push({ url: `'/thread/${item.threadId}` })
@@ -114,8 +115,7 @@ class Index extends Component {
 
   render() {
     const { type, item = {}, site, onBtnClick } = this.props;
-    const { platform } = site;
-    const isPc = platform === 'pc';
+    const { isPc } = site;
     const avatarUrl = this.getAvatar(item.avatar);
 
     return (
@@ -128,14 +128,14 @@ class Index extends Component {
             className={styles.avatar}
             onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
           >
-            <Badge info={null}>
+            <Badge info={item.unReadCount > 99 ? '99+' : (item.unReadCount || null)}>
               {avatarUrl
                 ? <Avatar image={avatarUrl} circle={true} />
                 : <Avatar
-                  text={item.userName}
+                  text={item.username}
                   circle={true}
                   style={{
-                    backgroundColor: `#${this.getBackgroundColor(item.userName)}`
+                    backgroundColor: `#${this.getBackgroundColor(item.username)}`
                   }}
                 />
               }
@@ -157,7 +157,7 @@ class Index extends Component {
                 className={styles.name}
                 onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
               >
-                {item.userName || item.title}
+                {item.username || this.filterTag(item.title)}
               </div>
               {['chat', 'thread'].includes(type) &&
                 <div className={styles.time}>{diffDate(new Date(item.createdAt))}</div>
