@@ -65,7 +65,7 @@ export class MessageIndex extends Component {
         title: '',
         avatar: sender?.avatar || '',
         userId: sender?.userId || '',
-        userName: sender?.username || '',
+        username: sender?.username || '',
       });
     });
 
