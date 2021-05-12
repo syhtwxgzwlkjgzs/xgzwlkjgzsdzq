@@ -1,3 +1,4 @@
+@import '@styles/index.scss';
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -81,6 +82,7 @@
     margin: 0 var(--margin-10);
     padding: var(--padding-2n) 0;
     border-top: var(--border-border);
+    @include ios-safe-area-inset-bottom;
 
     :global {
       .dzq-button {
