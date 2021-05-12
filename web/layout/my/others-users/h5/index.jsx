@@ -40,7 +40,7 @@ class H5OthersPage extends React.Component {
         noMore={targetUserThreadsTotalPage >= targetUsersPage}
       >
         <div className={styles.mobileLayout}>
-          <UserCenterHeaderImage />
+          <UserCenterHeaderImage isOtherPerson={true} />
           <UserCenterHead platform={platform} isOtherPerson={true} />
           <div className={styles.unit}>
             <div className={styles.threadUnit}>

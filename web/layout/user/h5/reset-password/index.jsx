@@ -7,6 +7,7 @@ import layout from './index.module.scss';
 import PhoneInput from '@components/login/phone-input';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
+import { get } from '@common/utils/get';
 
 
 @inject('site')
@@ -27,7 +28,11 @@ class ResetPasswordH5Page extends React.Component {
 
   handleSendCodeButtonClick = async () => {
     try {
-      await this.props.resetPassword.sendCode();
+      const { site } = this.props;
+      const { webConfig } = site;
+      const registerCaptcha = get(webConfig, 'setReg.registerCaptcha', false);
+      const qcloudCaptchaAppId = get(webConfig, 'qcloud.qcloudCaptchaAppId', false);
+      await this.props.resetPassword.sendCode(registerCaptcha, qcloudCaptchaAppId);
     } catch (e) {
       Toast.error({
         content: e.Message,

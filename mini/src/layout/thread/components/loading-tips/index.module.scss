@@ -1,4 +1,4 @@
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .container {
   background: var(--color-white);
@@ -8,10 +8,10 @@
 
 .init {
   font-size: 14px;
-  color: var(--loading-font-color);
+  color: $loading-text-color;
 }
 
 .loadMore {
   font-size: 14px;
-  color: var(--loading-font-color);
+  color: $loading-text-color;
 }

@@ -1,9 +1,9 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .container {
   padding: rem($padding-4n);
   background: var( --color-white);
+  border-radius: rem($border-radius-small);
   overflow: hidden;
   .title {
     font-size: rem($font-size-middle);
@@ -15,8 +15,9 @@
   .siteInfo {
     width: 100%;
     display: flex;
+    align-items: center;
     box-sizing: border-box;
-    li { 
+    li {
       margin-right: rem(40);
     }
     .text {
@@ -30,6 +31,8 @@
     }
     .share {
       cursor: pointer;
+      display: flex;
+      align-items: center;
     }
     .shareIcon {
       display: inline-block;

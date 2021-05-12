@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .containerH5 {
     background: var(--color-primary);
@@ -107,7 +106,7 @@
         font-weight: normal;
         font-size: rem($font-size-primary);
         line-height: rem($font-line-height-primary);
-      
+
     }
     .statusNum {
         font-family: 'PingFang SC';

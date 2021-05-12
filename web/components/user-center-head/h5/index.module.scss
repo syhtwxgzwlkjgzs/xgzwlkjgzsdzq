@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 .h5box {
     width: 100%;
     min-height: rem(196);
@@ -43,7 +42,7 @@
     }
     .userMessageList {
       display: flex;
-      position: absolute;      
+      position: absolute;
       right: 0;
       width: rem(230);
       align-items: center;
@@ -101,6 +100,10 @@
         vertical-align: middle;
         margin-left: rem(8);
       }
+    }
+    .userFriendsBtn {
+      background: #FFC300;
+      border-color: #FFC300;
     }
     .shieldBtn {
       position: absolute;

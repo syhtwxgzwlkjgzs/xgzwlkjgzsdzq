@@ -1,5 +1,4 @@
-@import '@common/styles/variable/index.scss';
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 
 .inputClick {
   .input {
@@ -12,7 +11,7 @@
   display: inline-block;
 
   // TODO:暂未提供token
-  color: #8490a8;
+  color: #8590A6;
 
   :first-child {
     margin-left: 0;

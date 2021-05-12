@@ -1,8 +1,7 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .colorTrue {
-    color: var(--pc-user-info-title);
+    color: $text-color-regular;
 }
 .payFalse {
     color: var(--color-primary);

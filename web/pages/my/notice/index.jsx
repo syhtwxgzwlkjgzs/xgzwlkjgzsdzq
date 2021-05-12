@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './index.module.scss';
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-import HOCWithLogin from '@common/middleware/HOCWithLogin';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import HOCWithLogin from '@middleware/HOCWithLogin';
 import Header from '@components/header';
 
 

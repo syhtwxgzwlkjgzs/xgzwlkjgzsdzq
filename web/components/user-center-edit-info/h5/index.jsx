@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import UserCenterEditHeader from '../../user-center-edit-header/index'
-import { Button, Icon } from '@discuzq/design';
+import { Button, Icon, Input } from '@discuzq/design';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
@@ -11,12 +11,52 @@ export default class index extends Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      isClickNickName: false
+    }
     this.user = this.props.user || {}
+  }
+
+  initState = () => {
+    this.setState({
+      isClickNickName: false
+    })
+  }
+
+  componentDidMount() {
+    this.initState()
+    this.props.user.initEditInfo()
   }
 
   // 点击取消
   handleCancel = () => {
     Router.back()
+  }
+
+  handleClickNickName = () => {
+    this.setState({
+      isClickNickName: !this.state.isClickNickName
+    })
+  }
+
+  handleChangeNickName = (e) => {
+    let value = e.target.value
+    this.props.user.editNickName = value
+  }
+
+  // 渲染修改用户名
+  renderInputNickName = () => {
+    const { isClickNickName } = this.state
+    return (
+      <div className={styles.userCenterEditLabel}>
+        <label>昵称</label>
+        <div>{isClickNickName ? <Input focus={true} maxLength={10} value={this.user.editNickName} onChange={this.handleChangeNickName} /> : this.user.editNickName}</div>
+      </div>
+    )
+  }
+
+  handleUpdateEditedUserInfo = () => {
+    this.props.user.updateEditedUserInfo()
   }
 
   render() {
@@ -27,16 +67,13 @@ export default class index extends Component {
         {/* middle */}
         <div className={styles.userCenterEditMiddle}>
           <h3>个人信息</h3>
-          <div className={styles.userCenterEditItem}>
-            <div className={styles.userCenterEditLabel}>
-              <label>昵称</label>
-              <div>{this.user.nickname}</div>
-            </div>
+          <div onClick={this.handleClickNickName} className={styles.userCenterEditItem}>
+            {this.renderInputNickName()}
           </div>
           <div className={styles.userCenterEditItem}>
             <div className={styles.userCenterEditLabel}>
               <label>用户名</label>
-              <div>{this.user.username}</div>
+              <div>{this.user.editUserName}</div>
             </div>
           </div>
           <div className={styles.userCenterEditItem}>
@@ -83,7 +120,7 @@ export default class index extends Component {
           </div> */}
           <div className={styles.userCenterEditBtn}>
             <Button onClick={this.handleCancel}>取消</Button>
-            <Button type="primary">保存</Button>
+            <Button onClick={this.handleUpdateEditedUserInfo} type="primary">保存</Button>
           </div>
         </div>
       </div>

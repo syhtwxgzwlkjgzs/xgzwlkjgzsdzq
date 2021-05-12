@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .userCenterEditHeader {
   position: relative;
@@ -33,6 +32,18 @@
       line-height: 1.2;
       color: #0B0B37;
       margin-left: rem(8);
+      :global {
+        .dzq-input {
+          width: 100%;
+          height: rem(16);
+        }
+        .dzq-input__inner {
+          width: 100%;
+          line-height: 1;
+          height: rem(16);
+          border: none;
+        }
+      }
     }
   }
   .userCenterEditCameraIcon {

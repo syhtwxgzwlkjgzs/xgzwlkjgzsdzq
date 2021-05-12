@@ -87,7 +87,7 @@ class HomeHeader extends React.Component {
     const { countUsers, countThreads } = this.getSiteInfo();
 
     return (
-      <div className={styles.container} style={{style, ...this.getBgHeaderStyle(bgColor)}}>
+      <div className={styles.container} style={{...style, ...this.getBgHeaderStyle(bgColor)}}>
         {hideInfo && <div className={styles.topBar}>
           <div></div>
           <div>
@@ -117,8 +117,8 @@ class HomeHeader extends React.Component {
             <span className={styles.content}>{countThreads}</span>
           </li>
           <li className={styles.item} onClick={this.onShare}>
-            <Icon className={styles.shareIcon} size={16} color="#fff" name="ShareAltOutlined"/>
-            <span className={styles.text}>分享</span>
+            <Icon className={styles.shareIcon} color="#fff" name="ShareAltOutlined"/>
+            <span className={styles.shareText}>分享</span>
           </li>
         </ul>}
         {isWeiXin && <SharePopup visible={visible} onClose={this.onClose} />}

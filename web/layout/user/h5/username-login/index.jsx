@@ -170,7 +170,7 @@ class UsernameH5Login extends React.Component {
                 }}
                 className={platform === 'h5' ? layout['otherLogin-button-weixin'] : layout.button_left}
               >
-                <Icon name='WechatOutlined' color='#04C160'/>
+                <Icon size={20} name='WechatOutlined' color='#04C160'/>
               </span>
             )}
             {this.props.site.isSmsOpen && (
@@ -180,7 +180,7 @@ class UsernameH5Login extends React.Component {
                 }}
                 className={platform === 'h5' ? layout['otherLogin-button-phone'] : layout.button_right}
               >
-              <Icon name='PhoneOutlined' color='#FFC300'/>
+              <Icon size={20} name='PhoneOutlined' color='#FFC300'/>
               </span>
             )}
           </div>

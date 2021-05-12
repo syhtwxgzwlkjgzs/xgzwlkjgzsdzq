@@ -6,6 +6,7 @@ import { Divider, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
+import GetQueryString from '../../../../common/utils/get-query-string';
 
 @inject('user')
 @observer
@@ -14,16 +15,20 @@ class index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      height: '100%'
+      height: '100%',
+      renderComponent: null,
     }
+    this.props.user.cleanUserFollows()
+    this.props.user.cleanTargetUserFollows()
   }
 
   componentDidMount() {
     this.setState({
-      height: window.outerHeight
+      height: window.outerHeight,
+      renderComponent: this.getRenderComponent()
     })
   }
-  
+
 
   // 点击关注
   followHandler = async ({ id }) => {
@@ -34,14 +39,16 @@ class index extends Component {
         hasMask: false,
         duration: 1000,
       })
-      const { query } = this.props.router
-      let flag = query && query.isOtherPerson
-      if (flag) {
-        this.props.user.setTargetUserFollowerBeFollowed(query.otherId)
+      const isOtherFollows = JSON.parse(GetQueryString('isOtherPerson'));
+      if (isOtherFollows) {
+        const isOtherFollowId = GetQueryString('otherId');
+        this.props.user.setTargetUserFollowerBeFollowed(isOtherFollowId)
       } else {
         this.props.user.setUserFollowerBeFollowed(id)
       }
-      
+      this.setState({
+        renderComponent:this.getRenderComponent()
+      })
     } catch (error) {
       console.log(error);
     }
@@ -51,13 +58,16 @@ class index extends Component {
   unFollowHandler = async ({ id }) => {
     try {
       await this.props.user.cancelFollow({ id, type: 1 })
-      const { query } = this.props.router
-      let flag = query && query.isOtherPerson
-      if (flag) {
-        this.props.user.setTargetUserFollowerBeUnFollowed(query.otherId);
+      const isOtherFollows = JSON.parse(GetQueryString('isOtherPerson'));
+      const isOtherFollowId = GetQueryString('otherId');
+      if (isOtherFollows) {
+        this.props.user.setTargetUserFollowerBeUnFollowed(isOtherFollowId);
       } else {
         this.props.user.setUserFollowerBeUnFollowed(id);
       }
+      this.setState({
+        renderComponent:this.getRenderComponent()
+      })
       Toast.success({
         content: '取消成功',
         hasMask: false,
@@ -72,6 +82,7 @@ class index extends Component {
     Router.push({ url: `/my/others?isOtherPerson=${true}&otherId=${id}` })
   }
 
+  // 分割线
   splitElement = () => {
     return (
       <div className={styles.splitEmelent}>
@@ -80,16 +91,13 @@ class index extends Component {
     )
   }
 
-  render() {
-    const { query } = this.props.router
-    let flag = query && query.isOtherPerson
+  getRenderComponent() {
+    const isOtherFollows = JSON.parse(GetQueryString('isOtherPerson'));
+    const id = GetQueryString('otherId');
     return (
-      <div style={{
-        height: this.state.height
-      }}>
-        <Header />
+      <>
         {
-          !flag ? (
+          !isOtherFollows ? (
             <UserCenterFllows
               friends={this.props.user.userFollows}
               loadMorePage={true}
@@ -104,7 +112,11 @@ class index extends Component {
             <UserCenterFllows
               friends={this.props.user.targetUserFollows}
               loadMorePage={true}
-              loadMoreAction={this.props.user.getTargetUserFollow}
+              loadMoreAction={async () => {
+                if (id) {
+                  await this.props.user.getTargetUserFollow(id)
+                }
+              }}
               hasMorePage={this.props.user.targetUserFollowsTotalPage < this.props.user.targetUserFollowsPage}
               followHandler={this.followHandler}
               unFollowHandler={this.unFollowHandler}
@@ -113,9 +125,19 @@ class index extends Component {
             />
           )
         }
-
-      </div>
+      </>
     )
+  }
+
+  render() {
+    return (
+      <div style={{
+        height: this.state.height
+      }}>
+        <Header />
+        {this.state.renderComponent}
+      </div>
+    );
   }
 }
 

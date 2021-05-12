@@ -185,8 +185,6 @@ class IndexH5Page extends React.Component {
       <BaseLayout
         showHeader={false}
         showTabBar
-        showPullDown
-        onPullDown={this.onPullDown}
         onRefresh={this.onRefresh}
         noMore={currentPage >= totalPage}
         onScroll={this.onScroll}

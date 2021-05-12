@@ -5,7 +5,7 @@ import IndexPCPage from '@layout/topic/pc';
 import { readTopicsList } from '@server';
 import { Toast } from '@discuzq/design';
 
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 @inject('site')
 @inject('topic')

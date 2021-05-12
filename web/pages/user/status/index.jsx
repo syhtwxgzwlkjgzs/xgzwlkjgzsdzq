@@ -2,7 +2,7 @@ import React from 'react';
 import StatusH5Page from '@layout/user/h5/status';
 import { inject } from 'mobx-react';
 
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 @inject('site')
 class Status extends React.Component {

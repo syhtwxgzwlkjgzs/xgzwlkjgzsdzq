@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .userCenterEditMiddle {
   padding: rem(16);
@@ -21,6 +20,21 @@
       .dzq-icon {
         font-size: rem(12) !important;
       }
+      .dzq-input {
+        width: 100%;
+        height: 0;
+        line-height: 1;
+      }
+      .dzq-input__inner {
+        text-align: right;
+        border: none;
+        font-size: rem(14);
+        height: 0;
+        line-height: 1;
+        margin-top: rem(-8);
+        padding-right: 0;
+        display: block;
+      }
     }
   }
   .userCenterEditLabel {
@@ -37,13 +51,6 @@
     }
     >div {
       color: #0B0B37;
-    }
-    img {
-      width: rem(18);
-      height: rem(18);
-      border-radius: 50%;
-      background-color: pink;
-      margin-right: rem(16);
     }
     .userCenterEditWeChat {
       display: flex;
@@ -65,13 +72,13 @@
     // margin-bottom: rem(16);
     font-size: rem(16);
   }
-  &::before {
-    content: '';
-    display: block;
-    height: 10px;
-    background: #F4F6F7;
-    margin: 0 rem(-20);
-  }
+  // &::before {
+  //   content: '';
+  //   display: block;
+  //   height: 10px;
+  //   background: #F4F6F7;
+  //   margin: 0 rem(-20);
+  // }
   .userCenterEditItem {
     display: flex;
     align-items: center;

@@ -1,0 +1,40 @@
+@import '@common/styles/index.scss';
+.container {
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+
+  .wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: rem(193);
+    width: rem(144);
+    color: #ffeea2;
+  }
+
+  .img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .title {
+    z-index: 2;
+    font-size: rem($font-size-primary);
+    margin-bottom: rem($padding-2n);
+    font-weight: normal;
+    margin-top: rem(38);
+  }
+  .money {
+    font-family: PingFangSC-Semibold;
+    z-index: 2;
+    font-size: rem($font-size-large);
+    margin-top: rem(8);
+    font-weight: normal;
+  }
+}

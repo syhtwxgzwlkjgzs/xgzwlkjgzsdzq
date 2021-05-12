@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .container {
   height: 100vh;
@@ -18,13 +17,13 @@
   .header {
     width: 100%;
   }
-  
+
   .choiceTime {
     height: rem(52);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: var(--comment-box-bg-color);
+    background-color: $comment-bg-color;
     padding:0 rem($padding-4n);
     .status {
       font-family: 'PingFangSC-Regular';
@@ -36,7 +35,7 @@
       }
     }
   }
-  
+
   .tabs {
     width: 100%;
     border-bottom: var(--border-border);

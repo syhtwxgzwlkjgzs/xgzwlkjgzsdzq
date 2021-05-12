@@ -1,5 +1,4 @@
-@import '@common/styles/variable/index.scss';
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 
 .container {
   width: rem(364);
@@ -33,7 +32,7 @@
     font-size: rem($font-size-primary);
     line-height: rem(36);
     text-align: center;
-    .close { 
+    .close {
       width: rem(116);
       height: rem(36);
       border-radius: rem($border-radius-small);
