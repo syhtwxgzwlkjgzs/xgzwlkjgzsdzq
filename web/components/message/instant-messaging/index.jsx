@@ -31,7 +31,6 @@ class InstantMessaging extends React.Component {
 InstantMessaging.propTypes = {
   messagesHistory: PropTypes.array.isRequired, // 消息历史输出组
   onSubmit: PropTypes.func.isRequired, // 作用于交互框中提交函数
-  persona: PropTypes.string.isRequired, // 使用“myself”或者“itself”指定不同人称
 };
 
 // 设置props默认类型

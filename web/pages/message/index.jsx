@@ -1,12 +1,13 @@
 /* eslint-disable no-param-reassign */
 import React, { useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
-import { HOCFetchSiteData, HOCWithLogin } from '../_hoc';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import HOCWithLogin from '@middleware/HOCWithLogin';
 import H5Page from '@layout/message/h5';
 import PCPage from '@layout/message/pc';
 import { useRouter } from 'next/router';
 
-let Index = inject('site', 'message')(observer(({ site, message }) => {
+const Index = inject('site', 'message')(observer(({ site, message }) => {
   /**
    * 消息页面当前显示模块
    *
@@ -17,10 +18,10 @@ let Index = inject('site', 'message')(observer(({ site, message }) => {
    * page=account: 账号消息
    * page=chat: 聊天对话，dialogId=xxx为当前对话id
    *
-  */
+   */
   const router = useRouter();
   // 参数过滤
-  const params = (({ page, subPage, dialogId }) => {
+  const params = (({ page, subPage, dialogId, username }) => {
     if (!['index', 'thread', 'financial', 'account', 'chat'].includes(page)) {
       page = 'index';
     }
@@ -29,15 +30,13 @@ let Index = inject('site', 'message')(observer(({ site, message }) => {
       subPage = '';
     }
 
-    return { page, subPage, dialogId };
+    return { page, subPage, dialogId, username };
   })(router.query);
 
-  const { readUnreadCount } = message;
+  // 更新未读消息
   useEffect(() => {
-    readUnreadCount();
+    message.readUnreadCount();
   });
-
-
 
   const { isPC } = site;
   if (isPC) {
