@@ -7,6 +7,7 @@ export default {
   pages: [
     'pages/index/index',
     'pages/thread/index',
+    'pages/message/index',
   ],
   subPackages: [
     {

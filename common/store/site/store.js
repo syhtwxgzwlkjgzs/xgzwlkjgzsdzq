@@ -27,6 +27,10 @@ class SiteStore {
     return !this.isSmsOpen && this.wechatEnv === 'none';
   }
 
+  @computed get isPC() {
+    return this.platform === 'pc';
+  }
+
   @computed get isSmsOpen() {
     return get(this.webConfig, 'qcloud.qcloudSms', false);
   }

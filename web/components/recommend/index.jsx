@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './index.module.scss';
-import { Icon } from '@discuzq/design';
+import { Icon, Tag  } from '@discuzq/design';
 import { withRouter } from 'next/router';
 import { inject, observer } from 'mobx-react';
 import LoadingBox from '@components/loading-box';

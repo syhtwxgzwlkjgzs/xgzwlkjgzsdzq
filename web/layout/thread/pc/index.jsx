@@ -26,7 +26,7 @@ import QcCode from '@components/qcCode';
 
 import RenderThreadContent from './content';
 import RenderCommentList from './comment-list';
-
+import goToLoginPage from '@common/utils/go-to-login-page';
 
 @inject('site')
 @inject('user')
@@ -128,8 +128,6 @@ class ThreadPCPage extends React.Component {
 
   // 更多操作
   onOperClick(type) {
-    console.log(type);
-
     // 举报
     if (type === 'stick') {
       this.updateStick();
@@ -158,16 +156,35 @@ class ThreadPCPage extends React.Component {
     }
   }
 
+  onReportClick(comment) {
+    this.comment = comment;
+    this.setState({ showReportPopup: true });
+  }
+
   // 确定举报
-  onReportOk(val) {
+  async onReportOk(val) {
+    // 对没有登录的先登录
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     if (!val) return;
     const params = {
       threadId: this.props.thread.threadData.threadId,
-      type: 1,
       reason: val,
       userId: this.props.user.userInfo.id,
     };
-    const { success, msg } = this.props.thread.createReports(params);
+    // 举报评论
+    if (this.comment) {
+      params.type = 2;
+      params.postId = this.comment.id;
+    } else {
+      params.type = 1;
+    }
+
+    const { success, msg } = await this.props.thread.createReports(params);
 
     if (success) {
       Toast.success({
@@ -178,11 +195,14 @@ class ThreadPCPage extends React.Component {
       return true;
     }
 
-    console.log(msg);
-
     Toast.error({
       content: msg,
     });
+  }
+
+  onReportCancel() {
+    this.comment = null;
+    this.setState({ showReportPopup: false });
   }
 
   // 置顶提示
@@ -440,30 +460,27 @@ class ThreadPCPage extends React.Component {
           <Header></Header>
         </div>
 
-
         <div
           className={layout.body}
           ref={this.threadBodyRef}
           onScrollCapture={() => throttle(this.handleOnScroll(), 500)}
         >
-
           {/* 左边内容和评论 */}
           <div className={layout.bodyLeft}>
-              {/* 帖子内容 */}
-              {isReady ? (
-                <RenderThreadContent
-                  store={threadStore}
-                  onOperClick={type => this.onOperClick(type)}
-                  onLikeClick={() => this.onLikeClick()}
-                  onCollectionClick={() => this.onCollectionClick()}
-                  onShareClick={() => this.onShareClick()}
-                  onReportClick={() => this.onReportClick()}
-                  onContentClick={() => this.onContentClick()}
-                  onRewardClick={() => this.onRewardClick()}
-                ></RenderThreadContent>
-              ) : (
-                <LoadingTips type="init"></LoadingTips>
-              )}
+            {/* 帖子内容 */}
+            {isReady ? (
+              <RenderThreadContent
+                store={threadStore}
+                onOperClick={(type) => this.onOperClick(type)}
+                onLikeClick={() => this.onLikeClick()}
+                onCollectionClick={() => this.onCollectionClick()}
+                onShareClick={() => this.onShareClick()}
+                onContentClick={() => this.onContentClick()}
+                onRewardClick={() => this.onRewardClick()}
+              ></RenderThreadContent>
+            ) : (
+              <LoadingTips type="init"></LoadingTips>
+            )}
 
             {/* 回复详情内容 */}
             <div className={`${layout.bottom}`} ref={this.commentDataRef}>
@@ -471,10 +488,11 @@ class ThreadPCPage extends React.Component {
                 <Fragment>
                   <RenderCommentList
                     router={this.props.router}
-                    sort={flag => this.onSortChange(flag)}
-                    onEditClick={comment => this.onEditClick(comment)}
-                    onPublishClick={value => this.onPublishClick(value)}>
-                  </RenderCommentList>
+                    sort={(flag) => this.onSortChange(flag)}
+                    onEditClick={(comment) => this.onEditClick(comment)}
+                    onPublishClick={(value) => this.onPublishClick(value)}
+                    onReportClick={(comment) => this.onReportClick(comment)}
+                  ></RenderCommentList>
                   {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
                 </Fragment>
               ) : (
@@ -487,15 +505,15 @@ class ThreadPCPage extends React.Component {
           {/* 右边信息 */}
           <div className={layout.bodyRigth}>
             <div className={layout.authorInfo}>
-              {
-                threadStore?.authorInfo
-                  ? <AuthorInfo
-                    user={threadStore.authorInfo}
-                    onFollowClick={() => this.onFollowClick()}
-                    isShowBtn={!isSelf}>
-                  </AuthorInfo>
-                  : <LoadingTips type='init'></LoadingTips>
-              }
+              {threadStore?.authorInfo ? (
+                <AuthorInfo
+                  user={threadStore.authorInfo}
+                  onFollowClick={() => this.onFollowClick()}
+                  isShowBtn={!isSelf}
+                ></AuthorInfo>
+              ) : (
+                <LoadingTips type="init"></LoadingTips>
+              )}
             </div>
             <div className={layout.recommend}>
               <Recommend></Recommend>
@@ -510,11 +528,7 @@ class ThreadPCPage extends React.Component {
         </div>
 
         {/* 编辑弹窗 */}
-        <Popup
-          position="center"
-          visible={this.state.showCommentInput}
-          onClose={() => this.onClose()}
-        >
+        <Popup position="center" visible={this.state.showCommentInput} onClose={() => this.onClose()}>
           <div className={layout.editCmment}>
             <div className={layout.close} onClick={() => this.onClose()}>
               <Icon size={18} name="WrongOutlined"></Icon>
@@ -526,14 +540,14 @@ class ThreadPCPage extends React.Component {
                 avatar={this?.comment?.user?.avatar || ''}
                 time={`${this?.comment?.updatedAt}` || ''}
                 userId={this?.comment?.user?.userId}
-                platform='pc'>
-              </UserInfo>
+                platform="pc"
+              ></UserInfo>
             </div>
             <CommentInput
-              height='middle'
-              onSubmit={value => this.onPublishClick(value)}
-              initValue={this.state.inputValue}>
-            </CommentInput>
+              height="middle"
+              onSubmit={(value) => this.onPublishClick(value)}
+              initValue={this.state.inputValue}
+            ></CommentInput>
           </div>
         </Popup>
 
@@ -549,15 +563,15 @@ class ThreadPCPage extends React.Component {
           reportContent={this.reportContent}
           inputText={this.inputText}
           visible={this.state.showReportPopup}
-          onCancel={() => this.setState({ showReportPopup: false })}
-          onOkClick={data => this.onReportOk(data)}
+          onCancel={() => this.onReportCancel()}
+          onOkClick={(data) => this.onReportOk(data)}
         ></ReportPopup>
 
         {/* 打赏弹窗 */}
         <RewardPopup
           visible={this.state.showRewardPopup}
           onCancel={() => this.setState({ showRewardPopup: false })}
-          onOkClick={value => this.onRewardSubmit(value)}
+          onOkClick={(value) => this.onRewardSubmit(value)}
         ></RewardPopup>
       </div>
     );

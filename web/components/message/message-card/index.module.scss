@@ -1,0 +1,54 @@
+@import '@common/styles/index.scss';
+
+.container {
+  background-color: var(--color-white);
+  border-bottom: rem(10) solid var(--comment-content-bg-color);
+}
+
+.notificationItem {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 50px;
+  margin: 0 rem($margin-4n);
+  padding: rem($padding-2n) 0;
+  border-bottom: var(--border-border);
+  font-size: var(--font-size-middle);
+  line-height: var(--font-line-height-primary);
+  &:last-child {
+    border: none;
+  }
+}
+
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -12px;
+  :global {
+    .dzq-badge__info {
+      transform: scale(0.7);
+    }
+  }
+}
+
+.iconWrapper {
+  position: relative;
+}
+
+.icon {
+  position: relative;
+  background-color: var(--color-primary);
+  padding: rem($padding-2n);
+  border-radius: 50%;
+  color: var(--color-white);
+}
+
+.title {
+  flex: 1;
+  padding: rem($padding-4n);
+}
+
+.arrow {
+  padding: rem($padding-4n);
+  padding-right: 0;
+}

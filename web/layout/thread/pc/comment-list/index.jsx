@@ -244,6 +244,11 @@ class RenderCommentList extends React.Component {
     this.setState({ showAboptPopup: false });
   }
 
+  // 举报
+  reportClick(comment) {
+    typeof this.props.onReportClick === 'function' && this.props.onReportClick(comment);
+  }
+
   render() {
     const { totalCount, commentList } = this.props.thread;
 
@@ -308,6 +313,7 @@ class RenderCommentList extends React.Component {
                 editClick={() => this.editClick(val)}
                 replyLikeClick={(reploy) => this.replyLikeClick(reploy, val)}
                 replyReplyClick={(reploy) => this.replyReplyClick(reploy, val)}
+                reportClick={() => this.reportClick(val)}
                 onCommentClick={() => this.onCommentClick(val)}
                 onSubmit={(val) => this.createReply(val)}
                 isShowOne={true}
