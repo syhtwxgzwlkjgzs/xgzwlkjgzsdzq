@@ -1,6 +1,6 @@
 @import '@common/styles/index.scss';
 .container {
-  background: var(--comment-box-bg-color);
+  background-color: $comment-bg-color;
   width: 100%;
   .content {
     width: 100%;

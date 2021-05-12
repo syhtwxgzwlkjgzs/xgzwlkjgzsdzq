@@ -7,7 +7,7 @@
     margin-bottom: rem($margin-4n);
     height: rem(82);
     border-radius: rem($border-radius-small);
-    background: var(--comment-box-bg-color);
+    background-color: $comment-bg-color;
     display: flex;
     align-items: center;
     padding: rem($padding-4n) rem($padding-6n);
