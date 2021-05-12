@@ -78,8 +78,8 @@ class Index extends Component {
     return _content ? xss(s9e.parse(_content)) : '加载中...';
   }
 
-  // 跳转用户账户中心
-  toAccountCenter = (e, canJump, item) => {
+  // 跳转用户中心
+  toUserCenter = (e, canJump, item) => {
     e.stopPropagation();
     // 后续用户中心做好后，再根据用户id设置对应路由
     canJump && Taro.navigateTo({ url: '/subPages/user/status/index' })
@@ -108,7 +108,7 @@ class Index extends Component {
           {/* 头像 */}
           <View
             className={styles.avatar}
-            onClick={(e) => this.toAccountCenter(e, type !== 'thread', item)}
+            onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
           >
             <Badge info={null}>
               {avatarUrl
@@ -137,12 +137,12 @@ class Index extends Component {
             >
               <View
                 className={styles.name}
-                onClick={(e) => this.toAccountCenter(e, type !== 'thread', item)}
+                onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
               >
                 {item.userName || item.title}
               </View>
               {['chat', 'thread'].includes(type) &&
-                <View className={styles.time}>{diffDate(new Date(item.created_at))}</View>
+                <View className={styles.time}>{diffDate(new Date(item.createdAt))}</View>
               }
               {type === 'financial' &&
                 <View className={styles.amount}>+{(item.amount).toFixed(2)}</View>
@@ -187,7 +187,7 @@ class Index extends Component {
             {/* 底部 */}
             {['financial', 'account'].includes(type) &&
               <View className={`${styles.bottom} ${styles.time}`}>
-                {diffDate(new Date(item.created_at))}
+                {diffDate(new Date(item.createdAt))}
               </View>
             }
           </View>

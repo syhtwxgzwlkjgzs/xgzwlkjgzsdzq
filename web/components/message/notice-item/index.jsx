@@ -93,18 +93,19 @@ class Index extends Component {
     return _content ? xss(s9e.parse(_content)) : '加载中...';
   }
 
-  // 跳转用户账户中心
-  toAccountCenter = (e, canJump, item) => {
+  // 跳转用户中心
+  toUserCenter = (e, canJump, item) => {
     e.stopPropagation();
     // 后续用户中心做好后，需拼接用户id
-    canJump && Router.push({ url: '/user' })
+    canJump && Router.push({ url: `/user/${item.userId}` })
   }
 
   // 跳转主题详情or私信
   toDetailOrChat = (e, item) => {
+    if (e.target.nodeName !== 'DIV') return;
     const { type } = this.props;
     if (type === 'financial' || type === 'account') {
-      Router.push({ url: `'/thread/${item.id}` })
+      Router.push({ url: `'/thread/${item.threadId}` })
     }
     if (type === 'chat') {
       console.log('去私信页面');
@@ -125,7 +126,7 @@ class Index extends Component {
           {/* 头像 */}
           <div
             className={styles.avatar}
-            onClick={(e) => this.toAccountCenter(e, type !== 'thread', item)}
+            onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
           >
             <Badge info={null}>
               {avatarUrl
@@ -154,12 +155,12 @@ class Index extends Component {
             >
               <div
                 className={styles.name}
-                onClick={(e) => this.toAccountCenter(e, type !== 'thread', item)}
+                onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
               >
                 {item.userName || item.title}
               </div>
               {['chat', 'thread'].includes(type) &&
-                <div className={styles.time}>{diffDate(new Date(item.created_at))}</div>
+                <div className={styles.time}>{diffDate(new Date(item.createdAt))}</div>
               }
               {type === 'financial' &&
                 <div className={styles.amount}>+{(item.amount).toFixed(2)}</div>
@@ -206,7 +207,7 @@ class Index extends Component {
             {/* 底部 */}
             {['financial', 'account'].includes(type) &&
               <div className={`${styles.bottom} ${styles.time}`}>
-                {diffDate(new Date(item.created_at))}
+                {diffDate(new Date(item.createdAt))}
               </div>
             }
           </div>
