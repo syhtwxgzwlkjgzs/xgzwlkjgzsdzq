@@ -7,8 +7,6 @@ import PCPage from '@layout/message/pc';
 import { useRouter } from 'next/router';
 
 let Index = inject('site')(observer(({ site }) => {
-
-
   /**
    * 消息页面当前显示模块
    *
