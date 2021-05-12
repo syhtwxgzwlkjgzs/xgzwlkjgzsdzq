@@ -18,19 +18,19 @@ export class MessageIndex extends Component {
         iconName: 'RemindOutlined',
         title: '帖子通知',
         link: '/message/?page=thread',
-        totalCount: this.props.message.threadUnread,
+        totalCount: 0,
       },
       {
         iconName: 'RenminbiOutlined',
         title: '财务通知',
         link: '/message/?page=financial',
-        totalCount: this.props.message.financialUnread,
+        totalCount: 0,
       },
       {
         iconName: 'LeaveWordOutlined',
         title: '账号消息',
         link: '/message/?page=account',
-        totalCount: this.props.message.accountUnread,
+        totalCount: 0,
       },
     ],
   };
@@ -76,14 +76,21 @@ export class MessageIndex extends Component {
   };
 
   async componentDidMount() {
-    await this.props.message.readDialogList(1);
+    const { cardContent } = this.state;
+    const { readDialogList, threadUnread, financialUnread, accountUnread } = this.props.message;
+
+    cardContent[0].totalCount = threadUnread;
+    cardContent[1].totalCount = financialUnread;
+    cardContent[2].totalCount = accountUnread;
+
+    this.setState({ cardContent });
+    await readDialogList(1);
   }
 
   render() {
     const { cardContent, type, finished } = this.state;
     const { dialogList } = this.props.message;
     const newDialogList = this.formatChatDialogList(dialogList.list);
-    console.log(this.props.message);
 
     return (
       <div className={styles.container}>
