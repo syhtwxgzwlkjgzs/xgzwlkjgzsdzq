@@ -3,6 +3,10 @@
   overflow: hidden;
   position: relative;
   cursor: pointer;
+  border-radius: rem(5);
+  .videoBox {
+    border-radius: rem(5);
+  }
   .payBox {
     position: absolute;
     top: 0;
