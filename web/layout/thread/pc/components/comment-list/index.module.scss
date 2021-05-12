@@ -102,6 +102,7 @@
 .icon {
   margin-right: rem(8);
   font-size: rem(14) !important;
+  color: $icon-color;
 }
 
 .active {
@@ -114,4 +115,9 @@
 
 .divider {
   margin-bottom: rem($margin-2n);
+}
+
+.revise {
+  display: flex;
+  align-items: center;
 }
