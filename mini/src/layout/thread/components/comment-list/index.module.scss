@@ -63,7 +63,7 @@
       .commentListContentText {
         padding: 8px;
         border-radius: 5px;
-        background: var(--comment-box-bg-color);
+        background: $comment-bg-color;
         .commentListName {
           font-weight: var(--font-weight-regular);
           font-size: 14px;
