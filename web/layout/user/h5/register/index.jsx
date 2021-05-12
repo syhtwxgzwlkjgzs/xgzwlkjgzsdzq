@@ -8,7 +8,6 @@ import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
-import { TencentCaptcha } from '@discuzq/sdk/dist/common_modules/sliding-captcha/tcaptcha';
 
 @inject('site')
 @inject('user')
