@@ -17,7 +17,7 @@ function ShowGood({ good, onDelete, pc }) {
           <p className={styles['content-title']}>{good.title}</p>
           <span className={styles['content-price']}>￥{good.price}</span>
           <div className={styles['delete-icon']} onClick={onDelete}>
-            <Icon name="DeleteOutlined" size={20} color="#8490a8" />
+            <Icon name="DeleteOutlined" size={20} color="#8590A6" />
           </div>
         </div>
       </div>
@@ -28,7 +28,7 @@ function ShowGood({ good, onDelete, pc }) {
 function AddGood({ addGood }) {
   return (
     <div className={styles['good-add-box']} onClick={addGood}>
-      <Icon name="PlusOutlined" size={20} color="#8490a8" />
+      <Icon name="PlusOutlined" size={20} color="#8590A6" />
       <span className={styles['good-add-text']}>添加商品</span>
     </div>
   );
