@@ -89,7 +89,11 @@ class HomeHeader extends React.Component {
     return (
       <div className={`${styles.container} ${mode ? styles[`container_mode_${mode}`] : ''}`} style={{...style, ...this.getBgHeaderStyle(bgColor)}}>
         {hideInfo && <div className={styles.topBar}>
-          <div></div>
+          {
+            mode === 'login'
+              ? <div onClick={() => Router.back()} className={styles.left}>返回</div>
+              : <></>
+          }
           <div>
             <Icon onClick={() => {
               Router.redirect({url:'/'});
