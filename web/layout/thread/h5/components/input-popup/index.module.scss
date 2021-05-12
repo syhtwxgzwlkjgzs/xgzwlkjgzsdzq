@@ -11,6 +11,8 @@
 
 .button {
   width: 100%;
+  font-size: rem($font-size-primary);
+  line-height: rem($font-line-height-primary);
 }
 
 .input {

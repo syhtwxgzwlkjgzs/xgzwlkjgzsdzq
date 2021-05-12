@@ -1,6 +1,11 @@
 @import '@common/styles/index.scss';
 
 .inputClick {
+  :global {
+    .dzq-input.is-disabled .dzq-input__inner {
+      background-color: var(--comment-box-bg-color);
+    }
+  }
   .input {
     width: rem(176);
   }
