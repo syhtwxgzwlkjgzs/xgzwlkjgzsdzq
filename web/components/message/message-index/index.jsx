@@ -91,6 +91,7 @@ export class MessageIndex extends Component {
     const { cardContent, type, finished } = this.state;
     const { dialogList } = this.props.message;
     const newDialogList = this.formatChatDialogList(dialogList.list);
+    console.log(this.props.message);
 
     return (
       <div className={styles.container}>
