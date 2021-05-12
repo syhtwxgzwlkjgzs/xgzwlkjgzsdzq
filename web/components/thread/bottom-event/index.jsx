@@ -27,7 +27,7 @@ const Index = ({
   const postList = useMemo(() => {
     const praise =  {
       icon: 'LikeOutlined',
-      name: !isLiked ? '赞' : '取消',
+      name: '赞',
       event: onPraise,
     };
 
@@ -70,8 +70,8 @@ const Index = ({
         {
           postList.map((item, index) => (
               <div key={index} className={styles.fabulous} onClick={item.event}>
-                <Icon className={styles.icon} name={item.icon} size={14} color={`${item.name === '取消' ? '#2469f6' : '#8590A6'}`}></Icon>
-                <span className={ item.name === '取消' ? styles.fabulousCancel: styles.fabulousPost}>{item.name}</span>
+                <Icon className={styles.icon} name={item.icon} size={14} color={`${isLiked ? '#2469f6' : '#8590A6'}`}></Icon>
+                <span className={isLiked ? styles.fabulousCancel: styles.fabulousPost}>{item.name}</span>
               </div>
           ))
         }

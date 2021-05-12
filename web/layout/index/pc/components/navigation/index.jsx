@@ -30,7 +30,7 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop }) 
   const renderSubMenuTitle = ({ name, threadCount }) => (
     <div>
       <span>{name}</span>
-      {threadCount !== 0 && <span style={{ cssFloat: 'right' }}>{name === '全部' ? totalThreads : threadCount}</span>}
+      {threadCount !== 0 && <span className={styles.span}>{name === '全部' ? totalThreads : threadCount}</span>}
     </div>
   );
 
