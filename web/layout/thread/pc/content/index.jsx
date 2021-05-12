@@ -198,16 +198,16 @@ export default inject('user')(
                   amount={parseContent?.GOODS?.price}
                   title={parseContent?.GOODS?.title}
                 />
-                  <Button
-                    className={topic.buyBtn}
-                    type="danger"
-                    onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
-                  >
-                    <div className={topic.buyContent}>
-                      <Icon className={topic.buyIcon} name="ShoppingCartOutlined" size={20}></Icon>
-                      <span className={topic.buyText}>购买商品</span>
-                    </div>
-                  </Button>
+                <Button
+                  className={topic.buyBtn}
+                  type="danger"
+                  onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
+                >
+                  <div className={topic.buyContent}>
+                    <Icon className={topic.buyIcon} name="ShoppingCartOutlined" size={20}></Icon>
+                    <span className={topic.buyText}>购买商品</span>
+                  </div>
+                </Button>
               </div>
             )}
             {/* 音频 */}
@@ -224,12 +224,14 @@ export default inject('user')(
               <div className={topic.reward}>
                 {/* 红包 */}
                 {parseContent.RED_PACKET && (
-                  <PostRewardProgressBar
-                    remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
-                    received={
-                      Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
-                    }
-                  />
+                  <div className={topic.redpacketBody}>
+                    <PostRewardProgressBar
+                      remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
+                      received={
+                        Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
+                      }
+                    />
+                  </div>
                 )}
                 {/* 悬赏 */}
                 {parseContent.REWARD && (

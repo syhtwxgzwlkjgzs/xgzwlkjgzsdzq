@@ -110,8 +110,11 @@ class CommentList extends React.Component {
         {this.props.data?.rewards || this.props.data?.redPacketAmount ? (
           <div className={styles.header}>
             {this.props.data?.rewards ? <RewardDisplay number={this.props.data.rewards}></RewardDisplay> : ''}
+
             {this.props.data?.redPacketAmount ? (
-              <RedPacketDisplay number={this.props.data.redPacketAmount}></RedPacketDisplay>
+              <div className={styles.redpacket}>
+                <RedPacketDisplay number={this.props.data.redPacketAmount}></RedPacketDisplay>
+              </div>
             ) : (
               ''
             )}
