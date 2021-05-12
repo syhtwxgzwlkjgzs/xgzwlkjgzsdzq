@@ -81,12 +81,15 @@
 
 .tag {
   display: inline-block;
-  color: var(--color-text-regular);
-  background: var(--background-color);
+  // TODO:token  $text-color-regular不生效
+  // color: $text-color-regular;
+  color: #4f5a70;
+  background: #f0f1f3; // TODO:token
   font-size: rem($font-size-label);
   padding: rem($padding-1n);
   border-radius: rem($border-radius-small);
   margin-bottom: rem($padding-4n);
+  line-height: rem(17);
 }
 
 .thumbs {
@@ -135,7 +138,7 @@
   .rewardNumber {
     color: var(--color-error);
   }
-  
+
   .rewardTime {
     margin-top: rem($margin-1n);
     font-size: rem($font-size-label);
@@ -143,4 +146,3 @@
     text-align: center;
   }
 }
-
