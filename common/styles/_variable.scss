@@ -23,6 +23,7 @@ $font-family: 'PingFang SC',
 $font-size-small: 12px;
 $font-size-base: 14px;
 $font-size-middle: 16px;
+$font-size-middle-extra: 18px;
 $font-size-large: 20px;
 $font-size-label: $font-size-small;
 $font-size-primary: $font-size-base;
@@ -61,6 +62,7 @@ $text-bg-color2: var(--background-color-text2);
 // ------ icon color ------------
 $icon-color: var(--color-text-secondary);
 $icon-color-active: var(--color-primary2);
+$icon-success-color: $success-color;
 
 // ----- boder color ----
 $border-color: var(--border-line-color);
