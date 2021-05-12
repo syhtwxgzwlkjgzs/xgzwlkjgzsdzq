@@ -73,10 +73,11 @@
 .containerColumn {
   flex-direction: column;
   .bigImages {
-    margin-bottom: rem(4);
+    // margin-bottom: rem(4);
   }
   .smallImages {
     flex-direction: row;
+    margin-top: rem(4);
   }
 }
 
@@ -140,10 +141,13 @@
 
 .containerNum5 {
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
   .bigImages {
     width: 100%;
-    flex: 1;
+    // flex: 1;
+    height: 55.5%;
 
     .img {
       width: 49.7%;
@@ -153,7 +157,7 @@
   .smallImages {
     width: 100%;
     flex-direction: row;
-    height: 40%;
+    height: 43%;
 
     .img {
       width: 33%;

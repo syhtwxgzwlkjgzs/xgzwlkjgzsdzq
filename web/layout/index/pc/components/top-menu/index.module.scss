@@ -4,8 +4,9 @@
   width: 100%;
 
   .activeItem {
-    color: #2469f6 !important;
+    color: #0265ff !important;
     position: relative;
+    font-weight: 600;
   }
 }
 .line {
@@ -15,5 +16,5 @@
   width: 40%;
   height: 2px;
   border-radius: 1px;
-  background: #2469f6;
+  background: #0265ff;
 }
