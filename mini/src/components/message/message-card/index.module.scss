@@ -1,0 +1,54 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/_variable.scss';
+
+.container {
+  background-color: var(--color-white);
+  margin-bottom: rem(10);
+}
+
+.notificationItem {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 80px;
+  margin: 0 16px;
+  padding: 16px 0;
+  border-bottom: var(--border-border);
+  font-size: var(--font-size-middle);
+  line-height: var(--font-line-height-primary);
+  &:last-child {
+    border: none;
+  }
+}
+
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -12px;
+  :global {
+    .dzq-badge__info {
+      transform: scale(0.7);
+    }
+  }
+}
+
+.iconWrapper {
+  position: relative;
+}
+
+.icon {
+  position: relative;
+  background-color: var(--color-primary);
+  padding: 11px;
+  border-radius: 50%;
+  color: var(--color-white);
+}
+
+.title {
+  flex: 1;
+  padding: 16px;
+}
+
+.arrow {
+  padding: 16px;
+}

@@ -1,0 +1,22 @@
+.container {
+  background: #eee;
+  height: 100vh;
+
+  .list {
+    display: flex;
+    flex-wrap: no-wrap;
+    justify-content: space-between;
+    gap: 20px;
+    .left {
+      flex: 1;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .right {
+      width: 320px;
+      height: 200px;
+      background: rgb(31, 102, 168);
+    }
+  }
+}

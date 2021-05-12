@@ -1,0 +1,172 @@
+@import "@common/styles/fn/rem.scss";
+@import "@common/styles/mixin/text.scss";
+@mixin multiple-line($line) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $line;
+  word-break: break-all;
+}
+
+.wrapper {
+  width: 100%;
+  background: var(--color-white);
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+
+  View,
+  Text {
+    box-sizing: content-box;
+  }
+
+  /*内容展示区*/
+  .block {
+    flex: 1 0 100%;
+    padding-top: var(--margin-4n);
+    display: flex;
+    justify-content: flex-start;
+    transition: all 0.5s;
+  }
+
+  .avatar {
+    flex: 0 0 38px;
+    height: 38px;
+    margin-left: var(--margin-2n);
+    padding: 0 var(--padding-2n);
+
+    :global {
+      .dzq-badge {
+        width: 100%;
+        height: 100%;
+      }
+      .dzq-avatar {
+        width: 100%;
+        height: 100%;
+        font-size: 22px;
+        color: var(--color-white);
+        text-align: center;
+        line-height: 38px;
+        background: transparent;
+
+        .dzq-avatar__img {
+          width: 100%;
+          height: 100%;
+          vertical-align: top;
+        }
+
+        .dzq-avatar__text {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+
+  .detail {
+    width: calc(100vw - 86px);
+    overflow: hidden;
+    padding-bottom: var(--padding-4n);
+    margin-right: var(--margin-4n);
+    font-size: var(--font-size-middle);
+    border-bottom: var(--border-border);
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      height: 20px;
+
+      .name {
+        font-weight: 600;
+        font-size: var(--font-size-primary);
+        text-align: left;
+        line-height: 20px;
+        color: var(--color-text-primary);
+      }
+
+      .amount {
+        font-weight: 600;
+        font-size: var(--font-size-middle);
+        line-height: 20px;
+        text-align: right;
+        color: var(--color-error);
+      }
+    }
+
+    .middle {
+      padding-top: var(--margin-1n);
+      font-size: var(--font-size-primary);
+      color: var(--background-color-text3);
+      line-height: 20px;
+
+      :global {
+        .qq-emotion {
+          width: 20px;
+          height: 20px;
+          vertical-align: top;
+        }
+      }
+    }
+
+    .bottom {
+      margin-top: var(--margin-2n);
+    }
+
+    .time {
+      font-weight: normal;
+      font-size: var(--font-size-label);
+      line-height: 20px;
+      text-align: left;
+      color: var(--background-color-text3);
+    }
+
+    /*私信详情*/
+    &.detail-chat {
+      margin-left: var(--margin-2n);
+    }
+    /*帖子详情*/
+    &.detail-thread {
+      margin-left: var(--margin-2n);
+      .middle {
+        line-height: 22px;
+      }
+    }
+    /*财务详情*/
+    &.detail-financial {
+      top: 0;
+    }
+    /*账号详情*/
+    &.detail-account {
+      .top {
+        padding: 8px 8px 0;
+        background: var(--comment-box-bg-color);
+        border-radius: 5px 5px 0 0;
+      }
+      .middle {
+        padding: var(--padding-2n);
+        padding-top: var(--padding-1n);
+        font-size: var(--font-size-middle);
+        line-height: 24px;
+        background: var(--comment-box-bg-color);
+        border-radius: 0 0 5px 5px;
+        .content-html {
+          .tip {
+            color: var(--color-primary);
+            padding-right: var(--padding-5);
+          }
+        }
+      }
+    }
+  }
+
+  .single-line {
+    @include text-ellipsis();
+  }
+
+  .multiple-line {
+    @include multiple-line(3);
+  }
+}

@@ -1,5 +1,5 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
+
 .content{
   padding-top: rem($padding-4n);
   background-color: var(--color-white);
@@ -60,7 +60,7 @@
     height: rem(34);
     box-sizing: border-box;
     border-radius: rem($border-radius-small);
-    background: var(--pc-user-info-title);
+    background: $text-color-regular;
     .bottom_tips_img{
       width: rem(18);
       height: rem(18);
@@ -76,7 +76,7 @@
       width: 0;
       height: 0;
       border: rem(8) solid transparent;
-      border-top: rem(8) solid var(--pc-user-info-title);
+      border-top: rem(8) solid $text-color-regular;
     }
   }
 }
