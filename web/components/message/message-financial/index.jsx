@@ -1,12 +1,28 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect } from 'react';
+import { inject, observer } from 'mobx-react';
+import { PullDownRefresh } from '@discuzq/design';
+
+import Notice from '@components/message/notice';
+
 import styles from './index.module.scss';
 
-const Index = () => {
+const FinancialIndex = ({ message }) => {
+  const { readDialogMsgList, dialogMsgList, createDialogMsg } = message;
+
+  useEffect(() => {
+    console.log(message);
+  }, []);
+
+  const handleDelete = () => {
+    return true;
+  };
+
   return (
     <div className={styles.wrapper}>
-      财务
+      <div>this is financial</div>
+      <Notice list={[]} type={'financial'} onBtnClick={handleDelete} />
     </div>
-  )
-}
+  );
+};
 
-export default memo(Index)
+export default inject('message')(observer(FinancialIndex));
