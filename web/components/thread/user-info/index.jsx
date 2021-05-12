@@ -57,7 +57,8 @@ export default function UserInfo(props) {
       </div>
 
       <div className={styles.tags}>
-        {props.isEssence && <Tag type="primary">精华</Tag>}
+        {props.isEssence && <div className={styles.tagSuccess}><Tag type="primary">精华</Tag></div>}
+        {/* {props.isEssence && <Tag type="primary">精华</Tag>} */}
         {props.isPay && <Tag type="success">付费</Tag>}
         {props.isReward && <Tag type="warning">悬赏</Tag>}
         {props.isRed && <Tag type="danger">红包</Tag>}
