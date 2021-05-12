@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import H5OthersUserCenter from '@layout/my/others-users/h5'
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData';
 
 @inject('site')
 @observer

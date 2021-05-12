@@ -89,7 +89,6 @@ class index extends Component {
   getRenderComponent = () => {
     const isOtherFans = JSON.parse(GetQueryString('isOtherPerson'));
     const id = GetQueryString('otherId');
-    console.log(this.props.user.targetUserFans);
     return (
       <>
         {

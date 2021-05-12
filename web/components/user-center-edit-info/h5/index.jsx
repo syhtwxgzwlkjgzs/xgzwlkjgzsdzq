@@ -12,12 +12,19 @@ export default class index extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isChangeNickName: false
+      isClickNickName: false
     }
     this.user = this.props.user || {}
   }
 
+  initState = () => {
+    this.setState({
+      isClickNickName: false
+    })
+  }
+
   componentDidMount() {
+    this.initState()
     this.props.user.initEditInfo()
   }
 
@@ -28,7 +35,7 @@ export default class index extends Component {
 
   handleClickNickName = () => {
     this.setState({
-      isChangeNickName: !this.state.isChangeNickName
+      isClickNickName: !this.state.isClickNickName
     })
   }
 
@@ -39,13 +46,17 @@ export default class index extends Component {
 
   // 渲染修改用户名
   renderInputNickName = () => {
-    const { isChangeNickName } = this.state
+    const { isClickNickName } = this.state
     return (
       <div className={styles.userCenterEditLabel}>
         <label>昵称</label>
-        <div>{isChangeNickName ? <Input focus={true} maxLength={10} value={this.user.editNickName} onChange={this.handleChangeNickName} /> : this.user.editNickName}</div>
+        <div>{isClickNickName ? <Input focus={true} maxLength={10} value={this.user.editNickName} onChange={this.handleChangeNickName} /> : this.user.editNickName}</div>
       </div>
     )
+  }
+
+  handleUpdateEditedUserInfo = () => {
+    this.props.user.updateEditedUserInfo()
   }
 
   render() {
@@ -109,7 +120,7 @@ export default class index extends Component {
           </div> */}
           <div className={styles.userCenterEditBtn}>
             <Button onClick={this.handleCancel}>取消</Button>
-            <Button type="primary">保存</Button>
+            <Button onClick={this.handleUpdateEditedUserInfo} type="primary">保存</Button>
           </div>
         </div>
       </div>

@@ -31,10 +31,10 @@ class index extends Component {
     if (query.otherId) {
       if (follow !== 0) {
         this.props.user.cancelFollow({ id: query.otherId, type: 1 })
-        // this.props.user.setTargetUserFollowerBeFollowed(query.otherId)
+        this.props.user.setTargetUserUnFollowed(follow)
       } else {
         this.props.user.postFollow(query.otherId)
-        // this.props.user.setTargetUserFollowerBeUnFollowed(query.otherId)
+        this.props.user.setTargetUserFollowed(follow)
       }
     }
   }
@@ -68,6 +68,12 @@ class index extends Component {
   // 点击编辑资料
   goToMyEditInfo = () => {
     Router.push({ url: `my/edit` })
+  }
+
+  // 点击发送私信
+  handleMessage = () => {
+    const username = this.props.user.username
+    Router.push({ url: `/message?page=chat&username=${username}` })
   }
 
   render() {
@@ -110,10 +116,10 @@ class index extends Component {
             this.props.isOtherPerson ? (
               <>
                 <Button onClick={() => { this.handleChangeAttention(user.follow) }} type="primary">
-                  <Icon name={user.follow !== 0 ? "CheckOutlined" : "PlusOutlined"} />
+                  <Icon name={user.follow ? "CheckOutlined" : "PlusOutlined"} />
                   <span className={styles.userBtnText}>{user.follow ? '已关注' : '关注'}</span>
                 </Button>
-                <Button>
+                <Button onClick={this.handleMessage}>
                   <Icon name="NewsOutlined" />
                   <span className={styles.userBtnText}>发私信</span>
                 </Button>
