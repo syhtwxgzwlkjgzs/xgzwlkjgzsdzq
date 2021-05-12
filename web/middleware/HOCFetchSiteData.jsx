@@ -29,7 +29,7 @@ export default function HOCFetchSiteData(Component) {
         // 服务端
         if (isServer()) {
           const { headers } = ctx.req;
-          platform = getPlatform(headers['user-agent']);
+          platform = headers ? getPlatform(headers['user-agent']) : 'pc';
           // 获取站点信息
           siteConfig = await readForum({}, ctx);
           serverSite = {
