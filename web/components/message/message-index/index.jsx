@@ -73,15 +73,14 @@ export class MessageIndex extends Component {
   };
 
   async componentDidMount() {
-    const { cardContent } = this.state;
-    const { readDialogList, threadUnread, financialUnread, accountUnread } = this.props.message;
-
+    await this.props.message.readDialogList(1);
+    const { threadUnread, financialUnread, accountUnread } = this.props.message;
+    const cardContent = [...this.state.cardContent];
     cardContent[0].totalCount = threadUnread;
     cardContent[1].totalCount = financialUnread;
     cardContent[2].totalCount = accountUnread;
 
     this.setState({ cardContent });
-    await readDialogList(1);
   }
 
   render() {
