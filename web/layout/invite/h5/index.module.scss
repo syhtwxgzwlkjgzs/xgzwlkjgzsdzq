@@ -1,0 +1,218 @@
+@import '@common/styles/fn/rem.scss';
+.content{
+  height: 100%;
+  // 头部
+  .header{
+    height: rem(164);
+    background: var(--color-primary);
+  }
+  // 用户信息 start
+  .user_info{
+    height: rem(165);
+    background: $comment-bg-color;
+    position: relative;
+  }
+  .user_info_author{
+    width: rem(118);
+    height: rem(118);
+    position: absolute;
+    left: rem(128);
+    top: rem(-120);
+    border-radius: 50%;
+    background: var(--color-white);
+    border: rem(1) solid var(--color-white);
+    z-index: 3;
+  }
+  .user_info_content{
+    width: rem(343);
+    height: rem(213);
+    position: absolute;
+    left: rem(16);
+    top: rem(-60);
+    background: var(--color-white);
+    border-radius: rem(5);
+    text-align: center;
+    padding: 0 rem(16);
+    box-sizing: border-box;
+  }
+  .user_info_name{
+    font-weight: 600;
+    font-size: rem(16);
+    line-height: rem(24);
+    color: var(--color-text-primary);
+    opacity: 1;
+    margin-top: rem(68);
+  }
+  .user_info_tag{
+    font-weight: normal;
+    font-size: rem(12);
+    line-height: rem(22);
+    color: var(--color-text-secondary);
+  }
+  .user_info_invite{
+    width: rem(311);
+    height: rem(78);
+    border-radius: rem(5);
+    background: var(--comment-box-bg-color);
+  }
+  @mixin userInfoInvite {
+    width: rem(154);
+    height: rem(78);
+    display: inline-block;
+    text-align: center;
+    .invite_num_title{
+      font-weight: normal;
+      font-size: rem(14);
+      line-height: rem(24);
+      color: #4f5a70;
+      opacity: 1;
+      padding-top: rem(16);
+    }
+    .invite_num_content{
+      font-weight: 600;
+      font-size: rem(16);
+      line-height: rem(26);
+      color: #0b0b37;
+    }
+  }
+  .invite_num{
+    @include userInfoInvite;
+  }
+  .invite_money{
+    @include userInfoInvite;
+    border-left: rem(1) solid var(--color-white);
+  }
+  // 用户信息 end
+
+  // 邀请列表 start
+  .invite_list{
+    margin-bottom: rem(59);
+    min-height: rem(285);
+    box-sizing: border-box;
+    padding: rem(16);
+    padding-bottom: 0;
+  }
+  .invite_list_title{
+    font-size: rem(16);
+    vertical-align: middle;
+    height: rem(24);
+  }
+  .invite_list_titleIcon{
+    line-height: rem(24);
+    float: left;
+  }
+  .invite_list_titleText{
+    line-height: rem(24);
+    float: left;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    padding-left: rem(8);
+  }
+  .invite_list_header{
+    height: rem(36);
+    padding: 0 rem(8);
+    box-sizing: border-box;
+    border-radius: rem(5) rem(5) 0 0;
+    background: var(--comment-box-bg-color);
+    font-weight: normal;
+    font-size: rem(14);
+    line-height: rem(36);
+    text-align: left;
+    color: var(--pc-user-info-title);
+  }
+  @mixin inviteListName {
+    display: inline-block;
+    width: rem(110);
+    float: left;
+  }
+  @mixin inviteListMoney {
+    display: inline-block;
+    width: rem(96);
+    float: left;
+  }
+  @mixin inviteListTime {
+    display: inline-block;
+    float: left;
+  }
+  .invite_list_headerName,.invite_list_itemName{
+    @include inviteListName;
+  }
+  .invite_list_headerMoney{
+    @include inviteListMoney;
+  }
+  .invite_list_headerTime{
+    @include inviteListTime;
+  }
+  .invite_list_item{
+    position: relative;
+    height: rem(54);
+    line-height: rem(54);
+    padding: 0 rem(8);
+    box-sizing: border-box;
+    font-size: rem(14);
+  }
+  .invite_list_itemName{
+    @include inviteListName;
+    box-sizing: border-box;
+    padding-right: rem(14);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    img {
+      width: rem(18);
+      height: rem(18);
+      border-radius: 50%;
+    }
+    span{
+      font-weight: normal;
+      padding-left: rem(8);
+      color: var(--color-text-primary);
+    }
+  }
+  .invite_list_itemMoney{
+    @include inviteListMoney;
+    box-sizing: border-box;
+    padding-right: rem(14);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-weight: normal;
+    font-size: rem(16);
+    color: var(--color-error);
+  }
+  .invite_list_itemTime{
+    @include inviteListTime;
+    color: var(--color-text-secondary);
+  }
+  .invite_list_itemLine{
+    height: rem(1);
+    width: rem(311);
+    background: var(--border-line-color);
+    position: absolute;
+    left: rem(16);
+    bottom: 0;
+  }
+  // 邀请列表 end
+
+  // 邀请朋友 start
+  .invite_bottom{
+    width: 100%;
+    box-sizing: border-box;
+    position: fixed;
+    bottom: 0;
+    padding: rem(8) rem(16);
+    background: var(--color-white);
+    border-top: rem(1) solid var(--border-line-color);
+    .invite_bottom_button{
+      width: rem(343);
+      height: rem(42);
+      background: var(--color-primary);
+      font-weight: normal;
+      line-height: rem(24);
+      text-align: center;
+      color: var(--color-white);
+      font-size: rem(16);
+    }
+  }
+  // 邀请朋友 end
+}

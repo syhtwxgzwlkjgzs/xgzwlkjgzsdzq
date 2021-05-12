@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .container {
     box-sizing: border-box;
@@ -11,7 +10,7 @@
     height: rem(36);
     padding: 0 rem($padding-4n);
     border-radius: rem(5) rem(5) 0 0;
-    background: var(--comment-box-bg-color);
+    background-color: $comment-bg-color;
     font-family: "PingFang SC";
     font-weight: normal;
     font-size: rem($font-size-primary);

@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 // .searchWrap {
 //   background: #f5f7f8;
 //   width: 100%;
@@ -20,7 +19,7 @@
   background: var(--color-white);
 }
 .searchRight {
-  width: rem(286);
+  width: 100%;
   overflow: hidden;
 }
 .threadContent {
@@ -31,4 +30,3 @@
 }
 // }
 
-  

@@ -111,7 +111,7 @@ class WXLoginH5Page extends React.Component {
                 }}
                 className={platform === 'h5' ? layout['otherLogin-button-weixin'] : layout.button_left}
               >
-                <Icon name='UserOutlined' color='#4084FF'/>
+                <Icon size={20} name='UserOutlined' color='#4084FF'/>
               </span>
             )}
             {this.props.site.isSmsOpen && (
@@ -121,7 +121,7 @@ class WXLoginH5Page extends React.Component {
                 }}
                 className={platform === 'h5' ? layout['otherLogin-button-user'] : layout.button_right}
               >
-                <Icon name='PhoneOutlined' color='#FFC300'/>
+                <Icon size={20} name='PhoneOutlined' color='#FFC300'/>
               </span>
             )}
           </div>

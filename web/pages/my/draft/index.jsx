@@ -1,6 +1,6 @@
 import React from 'react';
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-import HOCWithLogin from '@common/middleware/HOCWithLogin';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import HOCWithLogin from '@middleware/HOCWithLogin';
 import { inject, observer } from 'mobx-react';
 import H5Page from '@layout/my/draft/h5';
 import PCPage from '@layout/my/draft/pc';

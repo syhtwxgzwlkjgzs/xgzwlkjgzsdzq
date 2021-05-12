@@ -1,9 +1,8 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 .container {
   width: 100vw;
   height: 100vh;
-  background: var(--comment-box-bg-color);
+  background-color: $comment-bg-color;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -11,7 +10,7 @@
 
 .header {
   width: 100%;
-  height: rem(60);
+  background: var(--color-white);
 }
 
 .body {
@@ -28,6 +27,8 @@
   }
 
   .bodyRigth {
+    position: sticky;
+    top: rem(0);
     width: rem(330);
 
     .authorInfo {

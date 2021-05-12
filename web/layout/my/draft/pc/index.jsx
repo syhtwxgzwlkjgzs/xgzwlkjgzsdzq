@@ -1,13 +1,13 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-
+import MyDrafts from '@components/my-draft'
 @inject('site')
 @observer
 class PC extends React.Component {
   render() {
     return (
       <div>
-        我的草稿pc页面
+        <MyDrafts pc ></MyDrafts>
       </div>
     );
   }

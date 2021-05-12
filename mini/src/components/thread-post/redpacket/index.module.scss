@@ -1,4 +1,4 @@
-@import '@common/styles/var.scss';
+@import '@common/styles/index.scss';
 
 @mixin flex() {
   display: flex;
@@ -96,7 +96,7 @@
     padding: 8px 0;
     background: var(--color-white);
     border-top: var(--border-border);
-    
+
     :global {
       .dzq-button {
         width: 48%;

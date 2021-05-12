@@ -1,5 +1,4 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 
 .loadingBox{
     width: 100%;
@@ -13,10 +12,10 @@
     .loading{
       display: block;
       animation: loading 1s linear infinite;
-      color: var(--loading-font-color);
+      color: $loading-text-color;
     }
   }
-  
+
   @keyframes loading
   {
   from {transform: rotate(0deg);}

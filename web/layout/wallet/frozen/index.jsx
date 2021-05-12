@@ -4,7 +4,7 @@ import { withRouter } from 'next/router';
 
 import styles from './index.module.scss';
 
-import Header from '@components/Header/h5';
+import Header from '@components/header/h5';
 
 // import { Tabs, Icon, Button } from '@discuzq/design';
 

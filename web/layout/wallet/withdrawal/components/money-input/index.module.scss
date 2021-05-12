@@ -1,5 +1,4 @@
-@import '@common/styles/variable/index.scss';
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 
 .container {
   // width: 100%;
@@ -11,7 +10,7 @@
   font-weight: normal;
   font-size: rem($font-size-primary);
   text-align: left;
-  color: var(--pc-user-info-title);
+  color: $text-color-regular;
 }
 
 .input {

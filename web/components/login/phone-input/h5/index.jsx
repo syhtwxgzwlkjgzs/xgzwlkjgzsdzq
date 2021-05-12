@@ -23,6 +23,7 @@ class PhoneInputH5 extends React.Component {
         <div className={layout.phoneInput}>
           <Input
             mode="number"
+            htmlType="number"
             className={layout.input}
             value={phoneNum}
             placeholder="请输入手机号码"

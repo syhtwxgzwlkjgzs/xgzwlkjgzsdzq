@@ -31,7 +31,7 @@ const Index = ({
 }) => {
   // 内容是否超出屏幕高度
   const [contentTooLong, setContentTooLong] = useState(false);
-  const [showMore, setShowMore] = useState(!useShowMore);
+  const [showMore, setHiddenMore] = useState(!useShowMore);
   const contentWrapperRef = useRef(null);
 
   const texts = {
@@ -56,22 +56,17 @@ const Index = ({
       // 内容过长直接跳转到详情页面
       onRedirectToDetail && onRedirectToDetail();
     } else {
-      setShowMore(true);
+      setHiddenMore(true);
     }
   }, [contentTooLong]);
 
   useEffect(() => {
-    const el = contentWrapperRef.current;
-    if (el && !loading) {
-      if (el.scrollHeight <= el.clientHeight) {
-        // 内容小于6行 隐藏查看更多
-        setShowMore(true);
-      }
-      if (window && el.scrollHeight <= window.screen.height) {
-        setContentTooLong(false);
-      }
+    if (filterContent?.length < 262) {
+      setHiddenMore(true);
+    } else if (filterContent?.length > 1000) {
+      setContentTooLong(true)
     }
-  }, [contentWrapperRef.current]);
+  }, [filterContent]);
 
   return (
     <div className={styles.container} {...props}>
@@ -80,8 +75,8 @@ const Index = ({
         className={`${styles.contentWrapper} ${showHideCover ? styles.hideCover : ''}`}
         onClick={!showMore ? onShowMore : onRedirectToDetail}
       >
-        <div className={styles.content} dangerouslySetInnerHTML={{__html: filterContent}}>
-          {/* <RichText html={filterContent} /> */}
+        <div className={styles.content}>
+          <RichText content={filterContent} />
         </div>
       </div>
       {!loading && useShowMore && !showMore && (
