@@ -3,17 +3,29 @@ import MessageStore from './store';
 import { readDialogList, readMsgList, createDialog, deleteMsg, deleteDialog, readDialogMsgList, createDialogMsg, readUnreadCount } from '@server';
 
 class MessageAction extends MessageStore {
-  // 获取未读消息数量 readUnreadCount
+  // 获取未读消息数量
   @action.bound
-  async readUnreadCount(params) {
-    const ret = await readUnreadCount(params);
-    console.log('创建新的私信对话', ret);
+  async readUnreadCount() {
+    const ret = await readUnreadCount();
+    const { code, data } = ret;
+    if (code === 0) {
+      const { unreadNotifications, typeUnreadNotifications } = data;
+      const { questioned = 0, receiveredpacket = 0, related = 0, replied = 0, system = 0, withdrawal = 0, liked = 0, rewarded = 0 } = typeUnreadNotifications;
+      this.totalUnread = unreadNotifications;
+      this.threadUnread = related + replied + liked;
+      this.financialUnread = questioned + receiveredpacket + withdrawal + rewarded;
+      this.accountUnread = system;
+      this.atUnread = related;
+      this.replyUnread = replied;
+      this.likeUnread = liked;
+    }
   }
 
   // 设置消息分页的每页条数
   perPage = {
-    perPage: 5,
+    perPage: 10,
   };
+
   // 组装获取消息列表的入参
   assemblyParams(page, types) {
     return {
@@ -31,6 +43,9 @@ class MessageAction extends MessageStore {
   setMsgList(currentPage, key, ret) {
     const { code, data = {} } = ret;
     if (code === 0) {
+      // 更新未读消息数量
+      this.readUnreadCount();
+
       const { pageData: list = [] } = data;
       const listData = (({ totalPage = 0, totalCount = 0 }) => ({ list, totalPage, totalCount, currentPage }))(data);
       if (currentPage === 1) {
@@ -68,6 +83,18 @@ class MessageAction extends MessageStore {
   async readLikeMsgList(page = 1) {
     const ret = await readMsgList(this.assemblyParams(page, 'liked'));
     this.setMsgList(page, 'likeMsgList', ret);
+  }
+  // 获取财务消息
+  @action.bound
+  async readFinancialMsgList(page = 1) {
+    const ret = await readMsgList(this.assemblyParams(page, 'rewarded,questioned,receiveredpacke,withdrawal'));
+    this.setMsgList(page, 'financialMsgList', ret);
+  }
+  // 获取帖子通知
+  @action.bound
+  async readThreadMsgList(page = 1) {
+    const ret = await readMsgList(this.assemblyParams(page, 'system'));
+    this.setMsgList(page, 'threadMsgList', ret);
   }
   // 获取对话列表
   @action.bound

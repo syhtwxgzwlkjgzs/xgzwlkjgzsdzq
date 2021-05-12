@@ -1,12 +1,12 @@
 /* eslint-disable no-param-reassign */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
 import { HOCFetchSiteData, HOCWithLogin } from '../_hoc';
 import H5Page from '@layout/message/h5';
 import PCPage from '@layout/message/pc';
 import { useRouter } from 'next/router';
 
-let Index = inject('site')(observer(({ site }) => {
+let Index = inject('site', 'message')(observer(({ site, message }) => {
   /**
    * 消息页面当前显示模块
    *
@@ -31,6 +31,13 @@ let Index = inject('site')(observer(({ site }) => {
 
     return { page, subPage, dialogId };
   })(router.query);
+
+  const { readUnreadCount } = message;
+  useEffect(() => {
+    readUnreadCount();
+  });
+
+
 
   const { isPC } = site;
   if (isPC) {

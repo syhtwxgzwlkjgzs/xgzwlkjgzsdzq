@@ -30,6 +30,21 @@ class MessageStore {
   @observable accountUnread = 0;
 
   /**
+   * at我的未读消息
+   */
+  @observable atUnread = 0;
+
+  /**
+   * 回复我的未读消息
+   */
+  @observable replyUnread = 0;
+
+  /**
+   * 点赞我的未读消息
+   */
+  @observable likeUnread = 0;
+
+  /**
    * 私信对话列表
    */
   @observable dialogList = this.initList;

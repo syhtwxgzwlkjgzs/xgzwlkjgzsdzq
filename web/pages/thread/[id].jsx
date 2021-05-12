@@ -4,7 +4,7 @@ import { inject } from 'mobx-react';
 import { readThreadDetail, readCommentList, readUser } from '@server';
 import ThreadH5Page from '@layout/thread/h5';
 import ThreadPCPage from '@layout/thread/pc';
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import { HOCFetchSiteData } from '../_hoc';
 
 @inject('site')
 @inject('thread')
