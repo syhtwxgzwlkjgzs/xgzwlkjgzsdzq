@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 
 import MessageCard from '@components/message/message-card';
 import Notice from '@components/message/notice';
-import List from '@components/list';
 import { PullDownRefresh } from '@discuzq/design';
 
 import styles from './index.module.scss';
@@ -52,53 +51,50 @@ export class MessageIndex extends Component {
 
   handleScrollBottom = () => {
     const { message } = this.props;
-    return message.readDialogList(2);
+    return message.readDialogList(message.initList.currentPage);
   };
 
   formatChatDialogList = (dialogList) => {
     const newList = [];
+    dialogList.forEach(({ dialogMessage, sender }, idx) => {
+      newList.push({
+        id: dialogMessage?.id ? dialogMessage.id : '',
+        dialogId: dialogMessage?.dialogId ? dialogMessage.dialogId : '',
+        createdAt: dialogMessage?.createdAt ? dialogMessage.createdAt : 0,
+        content: dialogMessage?.summary ? dialogMessage.summary : '',
+        title: '',
+        avatar: sender?.avatar ? sender.avatar : '',
+        userId: sender?.userId ? sender.userId : '',
+        userName: sender?.username ? sender.username : '',
+      });
+    });
     for (const item of dialogList) {
       if (!item.dialogMessage || !item.sender) continue;
-      newList.push({
-        id: item.dialogMessage.id,
-        dialogId: item.dialogMessage.dialogId,
-        createdAt: item.dialogMessage.createdAt || 0,
-        content: item.dialogMessage.summary || '',
-        title: '',
-        avatar: item.sender.avatar || '',
-        userId: item.sender.userId,
-        userName: item.sender.username,
-      });
     }
 
     return newList;
   };
 
-  componentDidMount() {
-    this.props.message.readDialogList(1);
+  async componentDidMount() {
+    await this.props.message.readDialogList(1);
   }
 
   render() {
     const { cardContent, type, finished } = this.state;
     const { dialogList } = this.props.message;
     const newDialogList = this.formatChatDialogList(dialogList.list);
+    console.log(this.props.message);
 
     return (
       <div className={styles.container}>
         <PullDownRefresh className={styles.pullDownContainer} onRefresh={this.handleRefresh} isFinished={finished}>
-          <List
-            height={'100vh'}
-            noMore={dialogList.currentPage >= dialogList.totalPage}
-            onRefresh={this.handleScrollBottom}
-          >
-            <MessageCard cardItems={cardContent} />
-            <Notice
-              list={newDialogList}
-              type={type}
-              onBtnClick={this.handleDelete}
-              // onScrollBottom={this.handleScrollBottom}
-            />
-          </List>
+          <Notice
+            topCard={<MessageCard cardItems={cardContent} />}
+            list={newDialogList}
+            type={type}
+            onBtnClick={this.handleDelete}
+            onScrollBottom={this.handleScrollBottom}
+          />
         </PullDownRefresh>
       </div>
     );
