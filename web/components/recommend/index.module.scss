@@ -15,6 +15,7 @@
   }
 }
 .recommendBox {
+  cursor: pointer;
   width: 100%;
   height: rem(82);
   border-top: var(--border-border);
@@ -71,42 +72,42 @@
           line-height: rem(21);
           text-align: center;
           position: relative;
-          &::after {
-              content: "";
-              position: absolute;
-              width: 100%;
-              height: 100%;
-              opacity: 0.1;
-              top: 0;
-              left: 0;
+          &:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            top: 0;
+            left: 0;
           }
         }
         .categoryText {
           color: #3ac15f;
           border: rem(1) solid #3ac15f;
-          &::after {
+          &:after {
             background-color: #3ac15f;
           }
         }
         .categoryEssence {
           color: var(--color-primary);
           border: rem(1) solid var(--color-primary);
-          &::after {
+          &:after {
             background-color: var(--color-primary);
           }
         }
         .categoryRed {
           color: var(--color-error);
           border: rem(1) solid var(--color-error);
-          &::after {
+          &:after {
             background-color: var(--color-error);
           }
         }
         .categoryReward {
-          color: #FFC300;
-          border: rem(1) solid #FFC300;
-          &::after {
-            background-color: #FFC300;
+          color: #ffc300;
+          border: rem(1) solid #ffc300;
+          &:after {
+            background-color: #ffc300;
           }
         }
       }
