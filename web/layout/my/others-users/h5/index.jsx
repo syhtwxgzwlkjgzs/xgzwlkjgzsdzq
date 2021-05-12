@@ -17,10 +17,11 @@ import { withRouter } from 'next/router';
 class H5OthersPage extends React.Component {
   constructor(props) {
     super(props);
+    this.props.user.cleanTargetUserThreads();
   }
 
   componentDidMount = async () => {
-    const { query } = this.props.router
+    const { query } = this.props.router;
     if (query.otherId) {
       await this.props.user.getTargetUserInfo(query.otherId);
       await this.props.user.getTargetUserThreads(query.otherId);
@@ -30,14 +31,13 @@ class H5OthersPage extends React.Component {
   render() {
     const { site, user } = this.props;
     const { platform } = site;
-    const { targetUserThreads, targetUserThreadsTotalCount, targetUsersPage, targetUserThreadsTotalPage } = user;
+    const { targetUserThreads, targetUserThreadsTotalCount, targetUserThreadsPage, targetUserThreadsTotalPage } = user;
     return (
       <BaseLayout
-        // curr={'my'}
         showHeader={false}
         showTabBar={false}
         onRefresh={user.getTargetUserThreads}
-        noMore={targetUserThreadsTotalPage >= targetUsersPage}
+        noMore={targetUserThreadsTotalPage <= targetUserThreadsPage}
       >
         <div className={styles.mobileLayout}>
           <UserCenterHeaderImage isOtherPerson={true} />
@@ -53,7 +53,11 @@ class H5OthersPage extends React.Component {
             </div>
 
             <div className={styles.threadItemContainer}>
-              {targetUserThreads && targetUserThreads.length > 0 ? <UserCenterThreads data={targetUserThreads} /> : <NoData />}
+              {targetUserThreads && targetUserThreads.length > 0 ? (
+                <UserCenterThreads data={targetUserThreads} />
+              ) : (
+                <NoData />
+              )}
             </div>
           </div>
         </div>

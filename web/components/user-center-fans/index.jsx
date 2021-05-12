@@ -36,6 +36,7 @@ class UserCenterFans extends React.Component {
     this.firstLoaded = true;
     this.setState({
       loading: false,
+      fans: {},
     });
 
     this.containerRef.current.addEventListener('scroll', this.loadMore);
@@ -53,7 +54,7 @@ class UserCenterFans extends React.Component {
     if (!this.props.loadMorePage) {
       return false;
     }
-    if (this.props.hasMorePage) return false;
+    if (!this.props.hasMorePage) return false;
 
     return true;
   }

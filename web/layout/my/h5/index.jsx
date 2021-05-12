@@ -26,13 +26,14 @@ class H5MyPage extends React.Component {
     const { site, user } = this.props;
     const { platform } = site;
     const { userThreads, userThreadsTotalCount, userThreadsPage, userThreadsTotalPage } = user;
+
     return (
       <BaseLayout
         curr={'my'}
         showHeader={false}
         showTabBar={true}
         onRefresh={user.getUserThreads}
-        noMore={userThreadsTotalPage >= userThreadsPage}
+        noMore={userThreadsTotalPage <= userThreadsPage}
       >
         <div className={styles.mobileLayout}>
           <UserCenterHeaderImage />
