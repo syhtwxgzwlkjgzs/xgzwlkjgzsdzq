@@ -44,19 +44,28 @@ export default class index extends Component {
     this.props.user.editNickName = value
   }
 
+  handleBlurNickName = (e) => {
+    let value = e.target.value
+    this.props.user.editNickName = value
+    this.setState({
+      isClickNickName: false
+    })
+  }
+
   // 渲染修改用户名
   renderInputNickName = () => {
     const { isClickNickName } = this.state
     return (
       <div className={styles.userCenterEditLabel}>
         <label>昵称</label>
-        <div>{isClickNickName ? <Input focus={true} maxLength={10} value={this.user.editNickName} onChange={this.handleChangeNickName} /> : this.user.editNickName}</div>
+        <div>{isClickNickName ? <Input focus={true} maxLength={10} value={this.user.editNickName} onChange={this.handleChangeNickName} onBlur={this.handleBlurNickName} /> : this.user.editNickName}</div>
       </div>
     )
   }
 
   handleUpdateEditedUserInfo = () => {
     this.props.user.updateEditedUserInfo()
+    Router.push({url: `/my`})
   }
 
   render() {

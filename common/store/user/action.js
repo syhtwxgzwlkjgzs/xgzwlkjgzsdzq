@@ -341,32 +341,6 @@ class UserAction extends SiteStore {
     this.targetUserFans = { ...this.targetUserFans };
   }
 
-  /**
-   * 直接在他人主页点击关注
-   */
-  @action
-  async setTargetUserFollowed(follow) {
-    Object.keys(this.targetUser).forEach((key) => {
-      if (key === 'follow') {
-        this.targetUser[key] = true
-      }
-    });
-    this.targetUser = { ...this.targetUser };
-  }
-
-  /**
-   * 直接在他人主页取消关注
-   */
-  @action
-  async setTargetUserUnFollowed(follow) {
-    Object.keys(this.targetUser).forEach((key) => {
-      if (key === 'follow') {
-        this.targetUser[key] = false
-      }
-    });
-    this.targetUser = { ...this.targetUser };
-  }
-
   @action
   setTargetUserDenied() {
     set(this.targetUser, 'isDeny', true);

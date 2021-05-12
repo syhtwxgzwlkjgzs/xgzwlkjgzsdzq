@@ -50,6 +50,13 @@ export default class index extends Component {
     this.props.user.editSignature = e.target.value
   }
 
+  handleBlurSignature = (e) => {
+    this.props.user.editSignature = e.target.value
+    this.setState({
+      isClickSignature: false
+    })
+  }
+
   render() {
     return (
       <>
@@ -69,7 +76,7 @@ export default class index extends Component {
             <Icon onClick={this.handleClickSignature} name="CompileOutlined" />
             {
               this.state.isClickSignature ? (
-                <span className={styles.text}><Input maxLength={20} focus={true} onChange={this.handleChangeSignature} onBlur={this.handleChangeSignature} value={this.user.editSignature} placeholder="这个人很懒，什么也没留下~" /></span>
+                <span className={styles.text}><Input maxLength={20} focus={true} onChange={this.handleChangeSignature} onBlur={this.handleBlurSignature} value={this.user.editSignature} placeholder="这个人很懒，什么也没留下~" /></span>
               ) : (
                 <span className={styles.text}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</span>
               )

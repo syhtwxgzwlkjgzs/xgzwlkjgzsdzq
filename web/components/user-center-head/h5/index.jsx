@@ -24,6 +24,7 @@ class index extends Component {
     const { query } = this.props.router
     if (isDeny) {
       this.props.user.undenyUser(query.otherId)
+      this.props.user.setTargetUserNotBeDenied()
       Toast.success({
         content: '解除屏蔽成功',
         hasMask: false,
@@ -31,6 +32,7 @@ class index extends Component {
       })
     } else {
       this.props.user.denyUser(query.otherId)
+      this.props.user.setTargetUserDenied()
       Toast.success({
         content: '屏蔽成功',
         hasMask: false,
@@ -40,16 +42,15 @@ class index extends Component {
   }
 
   // 点击关注
-  handleChangeAttention = (follow) => {
-    console.log(follow);
+  handleChangeAttention = async (follow) => {
     const { query } = this.props.router
     if (query.otherId) {
       if (follow !== 0) {
-        this.props.user.cancelFollow({ id: query.otherId, type: 1 })
-        // this.props.user.setTargetUserUnFollowed(follow)
+        await this.props.user.cancelFollow({ id: query.otherId, type: 1 })
+        await this.props.user.getTargetUserInfo(query.otherId)
       } else {
-        this.props.user.postFollow(query.otherId)
-        // this.props.user.setTargetUserFollowed(follow)
+        await this.props.user.postFollow(query.otherId)
+        await this.props.user.getTargetUserInfo(query.otherId)
       }
     }
   }
@@ -179,7 +180,7 @@ class index extends Component {
         {/* 右上角屏蔽按钮 */}
         {
           this.props.isOtherPerson && (
-            <div onClick={() => {this.handleChangeShield(user.isDeny)}} className={styles.shieldBtn}>
+            <div onClick={() => { this.handleChangeShield(user.isDeny) }} className={styles.shieldBtn}>
               <Icon name="ShieldOutlined" />
               <span>{user.isDeny ? '解除屏蔽' : '屏蔽'}</span>
             </div>
