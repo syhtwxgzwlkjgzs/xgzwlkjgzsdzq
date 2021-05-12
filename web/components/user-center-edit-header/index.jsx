@@ -52,7 +52,7 @@ export default class index extends Component {
           {/* 编辑修改说明 */}
           <div className={styles.userCenterEditDec}>
             <Icon name="CompileOutlined" />
-            <span className={styles.text}>{this.user.signature || '这个人很懒，什么也没留下~'}</span>
+            <span className={styles.text}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</span>
           </div>
         </div>
       </>
