@@ -53,7 +53,7 @@
     width: rem(311);
     height: rem(78);
     border-radius: rem(5);
-    background: $comment-bg-color;
+    background-color: $comment-bg-color;
   }
   @mixin userInfoInvite {
     width: rem(154);
@@ -113,7 +113,7 @@
     padding: 0 rem(8);
     box-sizing: border-box;
     border-radius: rem(5) rem(5) 0 0;
-    background: $comment-bg-color;
+    background-color: $comment-bg-color;
     font-weight: normal;
     font-size: rem(14);
     line-height: rem(36);

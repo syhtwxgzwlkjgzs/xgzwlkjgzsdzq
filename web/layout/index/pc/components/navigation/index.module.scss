@@ -1,4 +1,3 @@
-
 @import '@common/styles/index.scss';
 :global {
   .dzq-card {
@@ -7,13 +6,19 @@
   .dzq-card__body {
     padding: 0 rem($padding-4n);
   }
+
   .dzq-submenu__title.is-active {
     font-weight: 600;
     color: #0265ff;
   }
-  .dzq-menu-item.is-active {
+
+  .dzq-menu .dzq-menu-item.is-active {
     font-weight: 600;
     color: #0265ff;
+  }
+
+  .dzq-submenu > .dzq-menu .dzq-menu-item.is-active {
+    font-weight: initial;
   }
 }
 
