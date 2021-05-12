@@ -3,6 +3,9 @@
   background: var(--comment-content-bg-color);
 
   :global {
+    .dzq-pull-refresh__loading {
+      font-size: var(--font-size-middle);
+    }
     .dzq-pull-refresh .dzq-pull-refresh__list {
       height: 100vh !important;
     }

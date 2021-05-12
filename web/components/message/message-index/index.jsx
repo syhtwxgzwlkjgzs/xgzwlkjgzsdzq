@@ -44,7 +44,6 @@ export class MessageIndex extends Component {
   handleRefresh = () => {
     const { message } = this.props;
     this.setState({ finished: false });
-    console.log('Triggering refreshing at TOP!');
     setTimeout(async () => {
       await message.readDialogList(message.dialogList.currentPage);
       this.setState({ finished: true });
@@ -53,7 +52,6 @@ export class MessageIndex extends Component {
 
   handleScrollBottom = () => {
     const { message } = this.props;
-    console.log('Triggering refreshing at BOTTOM!');
     return message.readDialogList(2);
   };
 
@@ -83,16 +81,12 @@ export class MessageIndex extends Component {
   render() {
     const { cardContent, type, finished } = this.state;
     const { dialogList } = this.props.message;
-    // console.log('message: ', this.props.message);
-    // console.log('dialog: ', dialogList);
     const newDialogList = this.formatChatDialogList(dialogList.list);
-    console.log(newDialogList);
-    // console.log(`currentPage: ${dialogList.currentPage}, totalPage: ${dialogList.totalPage}`);
+
     return (
       <div className={styles.container}>
         <PullDownRefresh className={styles.pullDownContainer} onRefresh={this.handleRefresh} isFinished={finished}>
           <List
-            className={styles.list}
             height={'100vh'}
             noMore={dialogList.currentPage >= dialogList.totalPage}
             onRefresh={this.handleScrollBottom}
@@ -102,7 +96,7 @@ export class MessageIndex extends Component {
               list={newDialogList}
               type={type}
               onBtnClick={this.handleDelete}
-              onScrollBottom={this.handleScrollBottom}
+              // onScrollBottom={this.handleScrollBottom}
             />
           </List>
         </PullDownRefresh>
