@@ -88,4 +88,9 @@
   >div {
     margin-left: rem(8);
   }
+  :global {
+    .dzq-tag::after {
+      z-index: 1;
+    }
+  }
 }
