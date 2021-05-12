@@ -73,7 +73,7 @@ export const defaultIcon = [
     type: THREAD_TYPE.file,
   },
   {
-    name: 'WalletOutlined', // 红包
+    name: 'RedPacketOutlined', // 红包
     active: activeColor,
     id: defaultOperation.redpacket,
     type: THREAD_TYPE.redPacket,

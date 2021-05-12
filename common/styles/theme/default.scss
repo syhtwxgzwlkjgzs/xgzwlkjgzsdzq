@@ -1,3 +1,5 @@
+// TODO: 除颜色和字体以外，其它变量需要逐步移动到scss变量中
+// TODO: 颜色待和董琳对接
 $light: (
   --color-primary: #2469f6,
   --color-primary2: #3978f7,
@@ -9,12 +11,12 @@ $light: (
   --color-primary8: #bdd2fc,
   --color-primary9: #d3e1fd,
   --color-primary10: #e9f0fe,
-  --color-success: #57bd6a,
+  --color-success: #3ac15f,
   --color-success2: #79ca88,
   --color-success3: #abdeb4,
   --color-success4: #ccebd2,
   --color-success5: #eef8f0,
-  --color-info: #5087f8,
+  --color-info: #5087f8, // TODO: 这里的色系和primary有重复，需要确认问题
   --color-info2: #739ff9,
   --color-info3: #a7c3fb,
   --color-info4: #cadbfd,
@@ -24,7 +26,7 @@ $light: (
   --color-error3: #ef9199,
   --color-error4: #f6bdc1,
   --color-error5: #fce9ea,
-  --color-warn: #f6c443,
+  --color-warn: #ffc300,
   --color-warn2: #f8d069,
   --color-warn3: #fae1a1,
   --color-warn4: #fcedc6,
@@ -36,39 +38,38 @@ $light: (
   --color-disabled5: #f4f4f5,
   --color-white: #fff,
   --color-black: #000,
-  --border-line-color: #eee,
+  --color-orange: #f66524, // 标签里面用到的：悬赏、付费等
 
+  --border-line-color: #eee,
+  --border-color-hover: #c5c6ca,
+
+  --shadow-color: #c5c9d5,
+  --shadow-color2: #f1f3f4,
 
   --color-text-primary: #0b0b37,
-  --color-text-regular: #515a6e,
+  --color-text-regular: #4f5a70,
   --color-text-secondary: #8590a6,
-  --color-text-placeholder: #c5c6cb,
+  // 董琳说 8490a8 对应的应该是 8590a6
+  --color-text-placeholder: #c5c6cb, // border hover 的颜色还有 loading 文字和这个一致
 
   --background-color: #f6f7f9,
   --background-color-text: #f9fafb,
   --background-color-text2: #eff1f3,
+  --background-color-text3: #f5f7f8,
+  --mask-background-color: rgba(51, 51, 51, 0.3),
 
   // 评论相关
   --comment-box-bg-color: #f5f7f8,
-  --comment-content-bg-color: #f4f6f7,
+  --comment-content-bg-color: #f4f6f7, // TODO: 董琳找不着，需要相关人处理一下，如果找的到对应的设计稿颜色，找一下董琳和邹玉薇
 
-  // 加载文字颜色
-  --loading-font-color: #c4c9d6,
-
-  // PC用户头像弹窗信息标题验收
-  --pc-user-info-title: #4f5a70,
-
-  // PC通用头部按钮文字颜色
-  --pc-header-btn-text-color: #4F5A70,
-  // PC通用头部y用户名
-  --pc-header-username-text-color: #4F5A70,
-
-  --mask-background-color: rgba(51, 51, 51, 0.3),
-
+  // TODO: 待去掉
   --border-border: 1px solid #eee,
+  // TODO: 待去掉
 
   --border-color-dotted-border: 1px dashed #eee,
+  // TODO: 待去掉
 
+  // TODO: 下面的部分待移除
   --font-size-label: 12px,
   --font-size-primary: 14px,
   --font-size-middle: 16px,
@@ -111,5 +112,5 @@ $light: (
   --margin-5n: 20px,
   --margin-6n: 24px,
   --margin-5: 5px,
-  --margin-10: 10px
+  --margin-10: 10px,
 );

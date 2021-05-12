@@ -1,6 +1,5 @@
-@import '@common/styles/var.scss';
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+
+@import '@common/styles/index.scss';
 .code {
   width: 100%;
   height: rem(115);
@@ -31,7 +30,7 @@
       font-weight: normal;
       font-size: rem($font-size-large);
       line-height: rem($font-line-height-primary);
-      color: var(--pc-user-info-title);
+      color: $text-color-regular;
     }
   }
 }

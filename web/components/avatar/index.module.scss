@@ -1,14 +1,13 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/variable/index.scss';
+@import '@common/styles/index.scss';
 .avatarBox{
     position: relative;
     .userInfoBox{
         position: absolute;
-        
+
         z-index: var(--zindex-backtotop);
         transform: translateY(100%);
         bottom: 0;
-        
+
         .userInfoContent{
             margin-top: rem(16);
             box-sizing: border-box;
@@ -77,7 +76,7 @@
                         font-size: rem($font-size-primary);
                         line-height: rem($font-line-height-small);
                         text-align: center;
-                        color: var(--pc-user-info-title);
+                        color: $text-color-regular;
                     }
                     .text{
                         margin-top: rem($margin-2n);
@@ -112,6 +111,6 @@
                 }
             }
         }
-        
+
     }
 }

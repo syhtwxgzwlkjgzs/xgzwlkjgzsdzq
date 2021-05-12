@@ -1,5 +1,4 @@
-@import '@common/styles/variable/index.scss';
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 
 .container {
   text-align: center;
@@ -15,7 +14,7 @@
   font-size: rem($font-size-primary);
 
   * {
-    color: var(--loading-font-color);
+    color: $loading-text-color;
   }
 }
 
@@ -23,6 +22,6 @@
   font-size: rem($font-size-label);
 
   * {
-    color: var(--loading-font-color);
+    color: $loading-text-color;
   }
 }
