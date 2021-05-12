@@ -43,7 +43,6 @@ export class MessageIndex extends Component {
   handleRefresh = () => {
     const { message } = this.props;
     this.setState({ finished: false });
-    console.log('Triggering refreshing at TOP!');
     setTimeout(async () => {
       await message.readDialogList(message.dialogList.currentPage);
       this.setState({ finished: true });
