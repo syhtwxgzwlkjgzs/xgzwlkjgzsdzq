@@ -163,7 +163,7 @@ class Index extends React.Component {
               <UserInfo
                 name={user.userName}
                 avatar={user.avatar}
-                location={position.address}
+                location={position.location}
                 view={`${viewCount}`}
                 groupName={group?.groupName}
                 time={createdAt}
