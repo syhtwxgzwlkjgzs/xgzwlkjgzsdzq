@@ -81,6 +81,11 @@
       padding-right: rem($padding-2n);
       box-sizing: border-box;
     }
-    
   }
+}
+.container_mode_login {
+  height: rem(128);
+}
+.container_mode_invite {
+  height: rem(156);
 }

@@ -76,7 +76,7 @@ class WeixinBindQrCodePage extends React.Component {
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
-            ? <HomeHeader hideInfo/>
+            ? <HomeHeader hideInfo mode='login'/>
             : <Header/>
         }
         <div className={platform === 'h5' ? layout.content : layout.pc_content}>
