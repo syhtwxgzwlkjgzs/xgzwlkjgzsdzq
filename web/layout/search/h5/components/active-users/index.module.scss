@@ -17,6 +17,9 @@
   }
   .item {
     margin-right: rem(28);
+    .avatarImg {
+      margin: 0 auto;
+    }
     &:last-child{
       margin-right: 0;
     }
