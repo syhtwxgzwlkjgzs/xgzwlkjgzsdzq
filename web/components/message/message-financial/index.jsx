@@ -21,7 +21,7 @@ const FinancialIndex = ({ message }) => {
   const formatFinancialList = (list) => {
     const newList = [];
     list.forEach(({ amount, content, createdAt, id, threadId, type, userAvatar, userId, username }) => {
-      const newItem = { amount, content, createdAt, id, threadId, type, userAvatar, userId, userName: username };
+      const newItem = { amount, content, createdAt, id, threadId, type, userAvatar, userId, username };
       newList.push(newItem);
     });
 

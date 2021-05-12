@@ -70,7 +70,7 @@ class Index extends Component {
     if (item.type === 'withdrawal') {
       return '获取提现';
     }
-  }
+  };
 
   filterTag(html) {
     return html?.replace(/^(<p>)/, '').replace(/(<\/p>)$/, '');
@@ -121,18 +121,16 @@ class Index extends Component {
         {/* 默认block */}
         <div className={styles.block}>
           {/* 头像 */}
-          <div
-            className={styles.avatar}
-            onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
-          >
-            <Badge info={item.unReadCount > 99 ? '99+' : (item.unReadCount || null)}>
-              {avatarUrl
-                ? <Avatar image={avatarUrl} circle={true} />
-                : <Avatar
-                  text={item.username}
+          <div className={styles.avatar} onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}>
+            <Badge info={null}>
+              {avatarUrl ? (
+                <Avatar image={avatarUrl} circle={true} />
+              ) : (
+                <Avatar
+                  text={item.userName}
                   circle={true}
                   style={{
-                    backgroundColor: `#${this.getBackgroundColor(item.username)}`
+                    backgroundColor: `#${this.getBackgroundColor(item.userName)}`,
                   }}
                 />
               )}
@@ -148,13 +146,8 @@ class Index extends Component {
             })}
           >
             {/* 顶部 */}
-            <div
-              className={classNames(styles.top, { [styles.background]: type === 'account' })}
-            >
-              <div
-                className={styles.name}
-                onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
-              >
+            <div className={classNames(styles.top, { [styles.background]: type === 'account' })}>
+              <div className={styles.name} onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}>
                 {item.username || this.filterTag(item.title)}
               </div>
               {['chat', 'thread'].includes(type) && (
