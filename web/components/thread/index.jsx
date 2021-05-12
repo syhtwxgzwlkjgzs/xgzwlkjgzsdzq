@@ -21,7 +21,7 @@ import ThreadCenterView from './ThreadCenterView';
 class Index extends React.Component {
     // 分享
     onShare = (e) => {
-      e.stopPropagation();
+      e && e.stopPropagation();
 
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
@@ -45,7 +45,7 @@ class Index extends React.Component {
     }
     // 评论
     onComment = (e) => {
-      e.stopPropagation();
+      e && e.stopPropagation();
 
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
@@ -64,7 +64,7 @@ class Index extends React.Component {
     }
     // 点赞
     onPraise = (e) => {
-      e.stopPropagation();
+      e && e.stopPropagation();
 
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
@@ -85,7 +85,7 @@ class Index extends React.Component {
     }
     // 支付
     onPay = async (e) => {
-      e.stopPropagation();
+      e && e.stopPropagation();
 
       // 对没有登录的先做
       if (!this.props.user.isLogin()) {
