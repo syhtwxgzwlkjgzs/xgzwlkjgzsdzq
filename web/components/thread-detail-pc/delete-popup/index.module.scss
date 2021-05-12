@@ -35,19 +35,14 @@
     .close {
       width: rem(116);
       height: rem(36);
-      border-radius: rem($border-radius-small);
-      color: #4f5a70;
-      background: var(--background-color-text2);
+      background: $button-info-bg-color;
       margin-right: rem($margin-5n);
-
+      border: none;
     }
+
     .ok {
-      // text-align: center;
       width: rem(116);
       height: rem(36);
-      border-radius: rem($border-radius-small);
-      color: var(--color-white);
-      background: var(--color-primary);
     }
   }
 }

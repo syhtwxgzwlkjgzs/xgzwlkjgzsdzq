@@ -61,7 +61,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
 
   const Pay = ({ item, index, type }) => {
     return (
-      <div className={styles.container} key={index}>
+      <div className={`${styles.container} ${styles.containerPay}`} key={index} onPay={onPay}>
         <Icon className={styles.containerIcon} size={20} name={type && 'DocOutlined'} />
         <span className={styles.content}>{item.fileName}</span>
       </div>

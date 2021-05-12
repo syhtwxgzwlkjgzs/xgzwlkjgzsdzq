@@ -1,4 +1,4 @@
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 @mixin title {
   font-weight: 600;
   font-size: rem(20);
@@ -67,7 +67,7 @@
   line-height: rem(38);
   display: inline-block;
   text-align: center;
-  background: var(--comment-box-bg-color);
+  background: $comment-bg-color;
 }
 @mixin titleTips {
   font-size: rem(16);

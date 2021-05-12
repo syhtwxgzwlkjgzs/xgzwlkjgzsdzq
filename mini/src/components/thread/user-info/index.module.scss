@@ -93,3 +93,8 @@
     margin-left: 8px;
   }
 }
+:global {
+  .dzq-tag::after {
+    z-index: 1;
+  }
+}

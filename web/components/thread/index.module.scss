@@ -48,13 +48,15 @@
     border-top: var(--border-line-color) solid rem(1);
     margin-top: rem(12);
   }
+  .pay {
+    margin: rem(16) rem(50) 0 rem(50);
+  }
   .button {
     width: 100%;
     height: rem(36);
     font-size: rem($font-size-primary);
     line-height: rem(36);
     padding: 0;
-    margin-bottom: rem($margin-4n);
     .icon {
       font-size: rem($font-size-primary);
       margin-right: rem($margin-10);
@@ -67,5 +69,6 @@
 }
 
 .containerPC {
+  padding: 0 rem( $padding-6n);
   border-radius: rem(5);
 }
