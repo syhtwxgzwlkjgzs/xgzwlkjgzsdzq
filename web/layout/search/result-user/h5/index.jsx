@@ -55,7 +55,7 @@ class SearchResultUserH5Page extends React.Component {
     const { keyword } = this.state;
     const { users } = this.props.search;
     const { pageData = [], currentPage, totalPage } = users || { pageData: [] };
-
+    console.log(pageData, '搜索用户数据');
     return (
       <div className={styles.page}>
         <Header />
@@ -74,7 +74,7 @@ class SearchResultUserH5Page extends React.Component {
                   pageData.map((item, index) => (
                     <UserItem
                       key={index}
-                      title={item.username}
+                      title={item.nickname}
                       imgSrc={item.avatar}
                       label={item.groupName}
                       onClick={this.onUserClick}
