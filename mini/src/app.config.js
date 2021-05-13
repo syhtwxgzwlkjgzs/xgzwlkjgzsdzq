@@ -43,6 +43,10 @@ export default {
         'wallet/index',
         'wallet/frozen/index',
         'wallet/withdrawal/index',
+        'my/like/index',
+        'my/collect/index',
+        'my/buy/index',
+        'my/block/index'
       ]
     }
   ],
