@@ -42,8 +42,10 @@ const Index = ({
   };
   // 过滤内容
   const filterContent = useMemo(() => {
+    console.log(content)
     let newContent = content ? s9e.parse(content) : '暂无内容';
     newContent = xss(newContent);
+    console.log(newContent)
 
     return !loading ? newContent : '内容加载中';
   }, [content, loading]);
