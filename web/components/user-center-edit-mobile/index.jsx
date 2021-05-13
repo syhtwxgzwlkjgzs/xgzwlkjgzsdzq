@@ -81,7 +81,7 @@ class index extends Component {
       <div>
         <Header />
         <div className={styles.content}>
-          <h3>{current_step === 'first' ? '验证原手机号码' : '请输入新绑定手机号'}</h3>
+          <h3>{current_step === 'first' ? '验证旧手机' : '设置新手机'}</h3>
           <div className={styles.labelInfo}>
             {
               current_step === 'first' ? (
@@ -91,7 +91,7 @@ class index extends Component {
                 </div>
               ) : (
                 <div className={styles.labelInput}>
-                  <Input placeholder="请输入绑定手机号" onChange={this.handleInputChange} focus={true} onBlur={this.handleInputBlur} onFocus={this.handleInputFocus} />
+                  <Input placeholder="输入新手机号码" onChange={this.handleInputChange} focus={true} onBlur={this.handleInputBlur} onFocus={this.handleInputFocus} />
                 </div>
               )
             }
@@ -100,12 +100,12 @@ class index extends Component {
             </div>
           </div>
           <div className={styles.bindCode}>
-            <span>验证码</span>
+            <span>请输入短信验证码</span>
             <CaptchaInput current_step={current_step} updatePwd={this.updatePwd} list={list} is_blur={is_blur} />
           </div>
         </div>
         <div className={styles.bottom}>
-          <Button onClick={this.handleStepBtn} type={"primary"} className={styles.btn}>{this.state.current_step === 'first' ? "下一步" : '确定'}</Button>
+          <Button onClick={this.handleStepBtn} type={"primary"} className={styles.btn}>{this.state.current_step === 'first' ? "下一步" : '提交'}</Button>
         </div>
       </div>
     )

@@ -25,9 +25,9 @@ class index extends Component {
   renderSetPayPwd = () => {
     return (
       <div className={styles.content}>
-        <h3>设置支付密码</h3>
+        <h3>设置账户密码</h3>
         <div className={styles.paypwdInput}>
-          <Input placeholder="请输入您的支付密码" mode="password" />
+          <Input placeholder="请设置您的账户密码" mode="password" />
         </div>
       </div>
     )
@@ -37,12 +37,12 @@ class index extends Component {
   renderCanPayPwd = () => {
     return (
       <div className={styles.content}>
-        <h3>修改支付密码</h3>
+        <h3>修改密码</h3>
         <div className={styles.labelInfo}>
           <div className={styles.labelValue}>
-            <Input mode="password" placeholder="请输入原密码" />
+            <Input mode="password" placeholder="请输入旧密码" />
           </div>
-          <div onClick={this.handleGoToFindPayPwd} className={styles.tips}>忘记密码？</div>
+          <div onClick={this.handleGoToFindPayPwd} className={styles.tips}>忘记旧密码？</div>
         </div>
       </div>
     )
@@ -57,7 +57,7 @@ class index extends Component {
         }
         <div className={styles.bottom}>
           {
-            this.props.user?.canWalletPay ? <Button onClick={this.goToResetPayPwd} type={"primary"} className={styles.btn}>下一步</Button> : <Button type={"primary"} className={styles.btn}>确定</Button>
+            this.props.user?.canWalletPay ? <Button onClick={this.goToResetPayPwd} type={"primary"} className={styles.btn}>下一步</Button> : <Button type={"primary"} className={styles.btn}>提交</Button>
           }
         </div>
       </div>
