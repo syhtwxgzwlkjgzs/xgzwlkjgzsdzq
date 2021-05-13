@@ -1,3 +1,4 @@
+@import "@common/styles/index.scss";
 .wrapper {
-  background: var(--comment-content-bg-color);
+  background: $body-bg-color;
 }
