@@ -31,10 +31,9 @@
     margin-top: rem(38);
   }
   .money {
-    font-family: PingFangSC-Semibold;
     z-index: 2;
     font-size: rem($font-size-large);
     margin-top: rem(8);
-    font-weight: normal;
+    font-weight: 600;
   }
 }
