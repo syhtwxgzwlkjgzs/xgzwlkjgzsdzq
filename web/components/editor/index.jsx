@@ -90,9 +90,6 @@ export default function DVditor(props) {
         height: pc ? 200 : 178,
         // 编辑器初始化值
         value,
-        focus: () => {
-          onFocus();
-        },
         // input: () => {
         //   onChange(editor);
         // },
@@ -107,7 +104,10 @@ export default function DVditor(props) {
         },
         // 编辑器中选中文字后触发，PC才有效果
         select: (value) => {
-          if (value) setIsFocus(true);
+          if (value) {
+            onFocus();
+            setIsFocus(true);
+          }
         },
         counter: {
           enable: true,
