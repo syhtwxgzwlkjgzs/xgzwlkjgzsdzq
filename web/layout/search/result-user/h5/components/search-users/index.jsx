@@ -19,7 +19,7 @@ const SearchUsers = ({ data = [], refreshing, onRefresh, onFetchMore, onItemClic
       return (
         <UserItem
         key={index}
-        title={item.username}
+        title={item.nickname}
         imgSrc={item.avatar}
         label={item.groupName}
         onClick={onItemClick}

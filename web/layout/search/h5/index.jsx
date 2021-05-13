@@ -5,13 +5,9 @@ import SearchInput from '@components/search-input';
 import TrendingTopics from './components/trending-topics';
 import ActiveUsers from './components/active-users';
 import PopularContents from './components/popular-contents';
-import SectionTitle from '@components/section-title'
-import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
 import '@discuzq/design/dist/styles/index.scss';
 import SidebarPanel from '@components/sidebar-panel';
-import NoData from '@components/no-data';
-
 
 @inject('site')
 @inject('search')
@@ -60,7 +56,7 @@ class SearchH5Page extends React.Component {
           title="潮流话题" 
           onShowMore={this.redirectToSearchResultTopic}
           isLoading={!topicsPageData}
-          noData={topicsPageData?.length}
+          noData={!topicsPageData?.length}
           platform='h5'
         >
           {
@@ -73,7 +69,7 @@ class SearchH5Page extends React.Component {
           title="活跃用户" 
           onShowMore={this.redirectToSearchResultUser}
           isLoading={!usersPageData}
-          noData={usersPageData?.length}
+          noData={!usersPageData?.length}
           platform='h5'
         >
           {
@@ -81,14 +77,18 @@ class SearchH5Page extends React.Component {
           }
         </SidebarPanel>
 
-        <div className={`${styles.section} ${styles.popularContents}`}>
-          <SectionTitle icon={{ type: 3, name: 'HotOutlined' }} title="热门内容" onShowMore={this.redirectToSearchResultPost} />
-        </div>
-        {
-          threadsPageData?.length
-            ? <PopularContents data={threadsPageData} />
-            : <NoData />
-        }
+        <SidebarPanel
+          icon={{ type: 3, name: 'HotOutlined' }}
+          title="热门内容" 
+          onShowMore={this.redirectToSearchResultPost}
+          isLoading={!threadsPageData}
+          noData={!threadsPageData?.length}
+          platform='h5'
+        >
+          {
+            threadsPageData?.length && <PopularContents data={threadsPageData} />
+          }
+        </SidebarPanel>
       </BaseLayout>
     );
   }
