@@ -5,9 +5,11 @@ import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
+import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData'
+@inject('site')
 @inject('user')
 @observer
-export default class index extends Component {
+class index extends Component {
 
   constructor(props) {
     super(props)
@@ -68,6 +70,11 @@ export default class index extends Component {
     Router.push({url: `/my`})
   }
 
+  handleGoToEditMobile = () => {
+    console.log('去到修改手机号页面');
+    Router.push({url: `/my/edit/mobile`})
+  }
+
   render() {
     return (
       <div>
@@ -90,7 +97,12 @@ export default class index extends Component {
               <label>手机号码</label>
               <div>{this.user.mobile}</div>
             </div>
-            <div><Icon name="RightOutlined" /></div>
+            <div onClick={this.handleGoToEditMobile}><Icon name="RightOutlined" /></div>
+            {/* {
+              this.props.site.isSmsOpen && (
+                <div><Icon name="RightOutlined" /></div>
+              )
+            } */}
           </div>
           <div className={styles.userCenterEditItem}>
             <div className={styles.userCenterEditLabel}>
@@ -136,3 +148,5 @@ export default class index extends Component {
     )
   }
 }
+
+export default HOCFetchSiteData(index)
