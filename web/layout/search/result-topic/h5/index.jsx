@@ -1,16 +1,9 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-
 import SearchInput from '@components/search-input';
-import NoData from '@components/no-data';
 import BaseLayout from '@components/base-layout';
-
-import SearchTopics from './components/search-topics';
-import Header from '@components/header';
 import { Topic } from '@components/search-result-item';
-
-import styles from './index.module.scss';
 
 @inject('search')
 @observer
@@ -62,7 +55,6 @@ class SearchResultTopicH5Page extends React.Component {
 
     return (
         <BaseLayout
-          className={styles.list}
           onRefresh={this.fetchMoreData}
           noMore={currentPage >= totalPage}
         >

@@ -5,6 +5,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: $white;
   .title {
     font-size: rem($font-size-middle);
     line-height: rem($font-line-height-primary);
