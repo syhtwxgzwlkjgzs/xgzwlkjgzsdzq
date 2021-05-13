@@ -80,25 +80,16 @@
   height: 54px;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #eee;
+  border-bottom: $border-solid-1;
   &-left {
     display: flex;
     align-items: center;
-    :global { /* stylelint-disable-line */
-      .dzq-icon {
-        margin-left: 0;
-        margin-right: $margin-6n;
-        color: $text-color-secondary;
-        cursor: pointer;
-      }
-    }
   }
   .divider {
-    margin-right: $margin-6n;
     display: inline-block;
     height: 20px;
     width: 1px;
-    background-color: #eee;
+    background-color: $border-color;
   }
 }
 .footer {
@@ -112,7 +103,7 @@
         margin-right: 36px;
         background-color: $text-bg-color2;
         border: none;
-        color: #4f5a70;
+        color: $text-color-regular;
       }
     }
   }

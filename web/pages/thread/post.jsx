@@ -137,7 +137,6 @@ class PostPage extends React.Component {
       const audioSrc = window.URL.createObjectURL(blob);
       this.setState({
         audioSrc,
-        currentAttachOperation: false,
       });
       this.setPostData({ audio: { ...data, mediaUrl: audioSrc }, audioSrc });
     }
@@ -151,6 +150,7 @@ class PostPage extends React.Component {
   // 附件相关icon
   handleAttachClick = (item) => {
     this.setState({ currentAttachOperation: item.type });
+    this.props.threadPost.setCurrentSelectedToolbar(item.type);
   };
 
   // 附件和图片上传
@@ -319,7 +319,7 @@ class PostPage extends React.Component {
   };
 
   async createThread(isDraft) {
-    const { threadPost, thread } = this.props;
+    const { threadPost } = this.props;
     const threadId = this.props.router.query.id || '';
     let ret = {};
     Toast.loading({ content: isDraft ? '保存草稿中...' : '创建中...' });
