@@ -221,7 +221,12 @@
   }
   :global(.dzq-icon-EyeOutlined) {
     top: 16px;
+    line-height: 36px;
     z-index: 3;
+    color: var(--color-disabled2) !important;
+    &:hover {
+      color: $primary-color !important;
+    }
   }
 }
 @mixin mini_captchaBtn{
