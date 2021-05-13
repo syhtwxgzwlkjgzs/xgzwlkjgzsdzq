@@ -15,16 +15,16 @@
 
   .itself {
     .msgContent {
-      background-color: var(--color-white);
+      background-color: $white;
       &:before {
-        border-right-color: var(--color-white);
+        border-right-color: $white;
       }
     }
   }
 }
 
 .msgTime {
-  @include text-font($color: var(--color-text-secondary));
+  @include text-font($color: $text-color-secondary);
   display: flex;
   justify-content: center;
   padding-top: rem($padding-1n);
@@ -45,6 +45,7 @@
   color: blue;
   width: $im-profile-icon-size;
   height: $im-profile-icon-size;
+  background-color: $primary-color;
 }
 
 .msgContent {
@@ -70,9 +71,9 @@
     @include text-font;
     margin-left: $im-msg-space-aside;
     margin-right: $im-gap-btw-icon-and-msg;
-    background-color: var(--color-primary);
+    background-color: $primary-color;
     &:before {
-      border-left-color: var(--color-primary);
+      border-left-color: $primary-color;
       right: -13px;
     }
   }
@@ -81,7 +82,7 @@
 .itself {
   flex-direction: row;
   .msgContent {
-    @include text-font($color: var(--color-text-primary));
+    @include text-font($color: $text-color-primary);
     margin-right: $im-msg-space-aside;
     margin-left: $im-gap-btw-icon-and-msg;
     background-color: $comment-bg-color;
