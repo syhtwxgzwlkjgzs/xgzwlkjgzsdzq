@@ -20,7 +20,7 @@ class WXSelectH5Page extends React.Component {
     const { sessionToken, nickname } = router.query;
     return (
       <div className={layout.container}>
-        <HomeHeader hideInfo/>
+        <HomeHeader hideInfo mode='login'/>
         <div className={layout.content}>
           <div className={layout.title}>绑定微信号</div>
           <div className={layout.tips}>微信用户 {nickname}，请选择您要进行的操作</div>
