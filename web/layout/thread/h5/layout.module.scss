@@ -35,3 +35,14 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.input {
+  :global {
+    .dzq-input__inner {
+
+      &::placeholder {
+        color: #c5c6ca;
+      }
+    }
+  }
+}

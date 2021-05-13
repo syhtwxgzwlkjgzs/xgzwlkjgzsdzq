@@ -7,8 +7,9 @@ import CommentList from '../../h5/components/comment-list/index';
 import MorePopup from '../../h5/components/more-popup';
 import DeletePopup from '../../h5/components/delete-popup';
 import Header from '@components/header';
-import { Icon, Toast } from '@discuzq/design';
+import { Toast } from '@discuzq/design';
 import InputPopup from '../../h5/components/input-popup';
+import ReportPopup from '../../h5/components/report-popup';
 
 @inject('site')
 @inject('user')
@@ -20,6 +21,7 @@ class CommentH5Page extends React.Component {
     super(props);
 
     this.state = {
+      showReportPopup: false, // 举报弹框
       showMorePopup: false, // 是否弹出更多弹框
       showCommentInput: false, // 是否弹出评论框
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
@@ -29,14 +31,20 @@ class CommentH5Page extends React.Component {
 
     this.commentData = null;
     this.replyData = null;
-    this.recordCommentLike = { // 记录当前评论点赞状态
+    this.recordCommentLike = {
+      // 记录当前评论点赞状态
       id: null,
       status: null,
     };
-    this.recordReplyLike = { // 记录当前评论点赞状态
+    this.recordReplyLike = {
+      // 记录当前评论点赞状态
       id: null,
       status: null,
     };
+
+    // 举报内容选项
+    this.reportContent = ['广告垃圾', '违规内容', '恶意灌水', '重复发帖'];
+    this.inputText = '其他理由...';
   }
   // 点击更多
   onMoreClick() {
@@ -46,6 +54,11 @@ class CommentH5Page extends React.Component {
 
   // 更多中的操作
   onOperClick = (type) => {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      return;
+    }
+
     this.setState({ showMorePopup: false });
 
     // 编辑
@@ -62,10 +75,9 @@ class CommentH5Page extends React.Component {
 
     // 举报
     if (type === 'report') {
-      console.log('点击举报');
+      this.setState({ showReportPopup: true });
     }
   };
-
 
   // 删除评论
   async deleteComment() {
@@ -93,9 +105,13 @@ class CommentH5Page extends React.Component {
     this.setState({ showDeletePopup: false });
   }
 
-
   // 点击评论的赞
   async likeClick(data) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      return;
+    }
+
     if (!data.id) return;
 
     if (this.recordCommentLike.id !== data.id) {
@@ -129,6 +145,11 @@ class CommentH5Page extends React.Component {
 
   // 点击回复的赞
   async replyLikeClick(reply) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      return;
+    }
+
     if (!reply.id) return;
 
     if (this.recordCommentLike.id !== reply.id) {
@@ -232,6 +253,33 @@ class CommentH5Page extends React.Component {
     });
   }
 
+  // 确定举报
+  async onReportOk(val) {
+    if (!val) return;
+
+    const params = {
+      threadId: this.props.thread.threadData.threadId,
+      type: 2,
+      reason: val,
+      userId: this.props.user.userInfo.id,
+      postId: this.props?.comment?.commentDetail?.id,
+    };
+    const { success, msg } = await this.props.thread.createReports(params);
+
+    if (success) {
+      Toast.success({
+        content: '操作成功',
+      });
+
+      this.setState({ showReportPopup: false });
+      return true;
+    }
+
+    Toast.error({
+      content: msg,
+    });
+  }
+
   render() {
     const { commentDetail: commentData, isReady } = this.props.comment;
 
@@ -274,28 +322,22 @@ class CommentH5Page extends React.Component {
                 </div> : ''
             }
           </div>
-          <Icon
-            onClick={() => this.onMoreClick()}
-            className={styles.more}
-            size='20'
-            name='ShareAltOutlined'>
-          </Icon>
         </div> */}
 
         {/* 内容 */}
         <div className={styles.content}>
-          {isReady
-            && <CommentList
+          {isReady && (
+            <CommentList
               data={commentData}
               likeClick={() => this.likeClick(commentData)}
               replyClick={() => this.replyClick(commentData)}
               deleteClick={() => this.deleteClick(commentData)}
-              replyLikeClick={reploy => this.replyLikeClick(reploy, commentData)}
-              replyReplyClick={reploy => this.replyReplyClick(reploy, commentData)}
+              replyLikeClick={(reploy) => this.replyLikeClick(reploy, commentData)}
+              replyReplyClick={(reploy) => this.replyReplyClick(reploy, commentData)}
               onMoreClick={() => this.onMoreClick()}
-              isHideEdit={true}>
-            </CommentList>
-          }
+              isHideEdit={true}
+            ></CommentList>
+          )}
         </div>
 
         <div className={styles.footer}>
@@ -304,8 +346,8 @@ class CommentH5Page extends React.Component {
             visible={this.state.showCommentInput}
             inputText={this.state.inputText}
             onClose={() => this.setState({ showCommentInput: false })}
-            onSubmit={value => this.createReply(value)}>
-          </InputPopup>
+            onSubmit={(value) => this.createReply(value)}
+          ></InputPopup>
 
           {/* 更多弹层 */}
           <MorePopup
@@ -314,15 +356,24 @@ class CommentH5Page extends React.Component {
             visible={this.state.showMorePopup}
             onClose={() => this.setState({ showMorePopup: false })}
             onSubmit={() => this.setState({ showMorePopup: false })}
-            onOperClick={type => this.onOperClick(type)}
+            onOperClick={(type) => this.onOperClick(type)}
           />
 
           {/* 删除弹层 */}
           <DeletePopup
             visible={this.state.showDeletePopup}
             onClose={() => this.setState({ showDeletePopup: false })}
-            onBtnClick={type => this.onBtnClick(type)}
+            onBtnClick={(type) => this.onBtnClick(type)}
           />
+
+          {/* 举报弹层 */}
+          <ReportPopup
+            reportContent={this.reportContent}
+            inputText={this.inputText}
+            visible={this.state.showReportPopup}
+            onCancel={() => this.setState({ showReportPopup: false })}
+            onOkClick={(data) => this.onReportOk(data)}
+          ></ReportPopup>
         </div>
       </div>
     );
@@ -330,4 +381,3 @@ class CommentH5Page extends React.Component {
 }
 
 export default withRouter(CommentH5Page);
-
