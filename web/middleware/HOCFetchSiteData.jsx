@@ -9,6 +9,7 @@ import { withRouter } from 'next/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import { Icon } from '@discuzq/design';
 import styles from './HOCFetchSiteData.module.scss';
+
 // 获取全站数据
 export default function HOCFetchSiteData(Component) {
   @inject('site')
@@ -63,7 +64,7 @@ export default function HOCFetchSiteData(Component) {
           serverSite,
           serverUser: {
             userInfo: userData,
-            userPermissions
+            userPermissions,
           },
         };
       } catch (err) {
@@ -104,6 +105,7 @@ export default function HOCFetchSiteData(Component) {
         isNoSiteData,
       };
     }
+
     async componentDidMount() {
       const { isNoSiteData } = this.state;
       const { serverUser, serverSite, user, site } = this.props;
@@ -154,14 +156,14 @@ export default function HOCFetchSiteData(Component) {
       const { site } = this.props;
       switch (result.code) {
         case 0:
-        break;
+          break;
         case -3005: site.setCloseSiteConfig(result.data);
           break;
         case -4002:
           clearLoginStatus();
           reload();
           break;
-        default: Router.redirect({url: '/500'});
+        default: Router.redirect({ url: '/500' });
           break;
       }
     }
@@ -176,12 +178,12 @@ export default function HOCFetchSiteData(Component) {
         });
         // 关闭站点
         if (router.asPath !== '/close' && site.closeSiteConfig) {
-          Router.redirect({url:'/close'});
+          Router.redirect({ url: '/close' });
         }
         // 付费加入
-        if ( router.asPath !== '/join' && site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay' ) {
+        if (router.asPath !== '/join' && site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay') {
           // todo 需要判断登录后是否支付
-          Router.redirect({url: '/join'});
+          Router.redirect({ url: '/join' });
         }
       }
     }

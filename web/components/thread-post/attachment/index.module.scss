@@ -9,7 +9,7 @@
     height: 52px;
     margin: 0 16px 8px;
     padding: 0 8px;
-    background: #f5f7f8;
+    background: $body-bg-color;
     border-radius: 5px;
     .icon {
       padding: 16px 8px;
@@ -39,7 +39,7 @@
     color: #8590A6;
     text-align: center;
     line-height: 52px;
-    background: #f5f7f8;
+    background: $body-bg-color;
     border-radius: 5px;
     :global {
       .dzq-icon {

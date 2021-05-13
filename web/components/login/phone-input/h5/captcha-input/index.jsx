@@ -5,6 +5,7 @@ import '@discuzq/design/dist/styles/index.scss';
 
 let inputIndex = null;
 
+// TODO 目前存在bug：点击验证码焦点错误、焦点在验证码时，无法失去焦点、输入完验证码后点击最后一个输入框，再输入一下会生成第七个输入框
 class CaptchaInput extends React.Component {
   constructor(props) {
     super(props);
@@ -51,6 +52,7 @@ class CaptchaInput extends React.Component {
       v[index] = val;
     }
     inputCallback(v.join(''));
+    // TODO 这里会导致获取焦点错误，待修复
     if (val === '') {
       this.lastFocus(e, index);
       return;

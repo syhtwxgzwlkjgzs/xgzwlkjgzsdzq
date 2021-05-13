@@ -10,8 +10,7 @@
     .replyListContentText {
       padding: rem($padding-2n);;
       border-radius: rem($border-radius-small);
-      // TODO:token
-      background: #f5f7f8;
+      background: $body-bg-color;
       .replyListName {
         font-weight: var(--font-weight-regular);
         font-size: rem($font-size-primary);

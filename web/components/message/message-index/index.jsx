@@ -1,18 +1,24 @@
-import React, { Component, memo } from 'react';
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 
 import MessageCard from '@components/message/message-card';
 import Notice from '@components/message/notice';
-import { PullDownRefresh } from '@discuzq/design';
+import { PullDownRefresh, ScrollView } from '@discuzq/design';
 
 import styles from './index.module.scss';
 
 @inject('message')
 @observer
 export class MessageIndex extends Component {
+  constructor(props) {
+    super(props);
+    this.pullDownRef = React.createRef();
+  }
+
   state = {
     type: 'chat',
     finished: true,
+    isReachingTop: false,
     cardContent: [
       {
         iconName: 'RemindOutlined',
@@ -40,13 +46,22 @@ export class MessageIndex extends Component {
     message.deleteDialog(item.id);
   };
 
+  handleScroll = ({ scrollTop }) => {
+    // 只有在顶部才刷新
+    if (scrollTop <= 0) {
+      this.setState({ isReachingTop: true });
+    } else {
+      this.setState({ isReachingTop: false });
+    }
+  };
+
   handleRefresh = () => {
     const { message } = this.props;
     this.setState({ finished: false });
     setTimeout(async () => {
-      await message.readDialogList(message.dialogList.currentPage);
+      await message.readDialogList(1);
       this.setState({ finished: true });
-    }, 200);
+    }, 3000);
   };
 
   handleScrollBottom = () => {
@@ -84,13 +99,19 @@ export class MessageIndex extends Component {
   }
 
   render() {
-    const { cardContent, type, finished } = this.state;
+    const { cardContent, type, finished, isReachingTop } = this.state;
     const { dialogList } = this.props.message;
     const newDialogList = this.formatChatDialogList(dialogList.list);
 
     return (
-      <div className={styles.container}>
-        <PullDownRefresh className={styles.pullDownContainer} onRefresh={this.handleRefresh} isFinished={finished}>
+      <div className={styles.container} ref={this.pullDownRef}>
+        <PullDownRefresh
+          className={styles.pullDownContainer}
+          onRefresh={this.handleRefresh.bind(this)}
+          isFinished={finished}
+          isScrollView
+          isReachTop={isReachingTop}
+        >
           <Notice
             topCard={<MessageCard cardItems={cardContent} />}
             noMore={dialogList.currentPage >= dialogList.totalPage}
@@ -98,6 +119,7 @@ export class MessageIndex extends Component {
             type={type}
             onBtnClick={this.handleDelete}
             onScrollBottom={this.handleScrollBottom}
+            onScroll={this.handleScroll}
           />
         </PullDownRefresh>
       </div>
@@ -105,4 +127,4 @@ export class MessageIndex extends Component {
   }
 }
 
-export default memo(MessageIndex);
+export default MessageIndex;

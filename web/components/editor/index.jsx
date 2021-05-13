@@ -41,7 +41,7 @@ export default function DVditor(props) {
     if (emoji && emoji.code) {
       setCurrentPositon();
       // 因为vditor的lute中有一些emoji表情和 emoji.code 重叠了。这里直接先这样处理
-      const value = `<img alt=":emoji" src="${emoji.url}" />`;
+      const value = `<img alt=":${emoji.code}:emoji" src="${emoji.url}" />`;
       vditor.insertValue(value);
     }
   }, [emoji]);

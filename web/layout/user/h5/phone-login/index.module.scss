@@ -28,7 +28,7 @@
     border-radius: rem(5);
     color: var(--color-white);
     font-size: rem(14);
-    background: var(--color-primary); 
+    background: $primary-color;
   }
   .captchaInput{
     margin-top: rem(32);
