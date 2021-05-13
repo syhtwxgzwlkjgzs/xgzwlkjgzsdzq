@@ -139,7 +139,7 @@ function AttachmentToolbar(props) {
 
   const icons = () => attachIcon.map((item) => {
     const { permission } = props;
-
+    if (props.pc && item.type === THREAD_TYPE.voice) return null;
     if (!item.isUpload) {
       return permission[item.type] ? (
         <Icon
