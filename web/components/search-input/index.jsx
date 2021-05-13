@@ -18,7 +18,7 @@ const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = tru
   return (
     <div className={`${styles.container} ${!isShowBottom && styles.hiddenBottom}`}>
       <div className={styles.inputWrapper}>
-        <Icon name="SearchOutlined" size={16} />
+        <Icon className={styles.inputWrapperIcon} name="SearchOutlined" size={16} />
         <Input
           value={value}
           clearable={true}

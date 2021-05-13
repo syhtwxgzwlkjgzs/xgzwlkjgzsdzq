@@ -8,6 +8,9 @@ export default class UserRegisterStore {
   @observable username = '';
   @observable password = '';
   @observable nickname = '';
+  @observable code = ''; // 注册邀请码
+  @observable captchaTicket = '';
+  @observable captchaRandStr = '';
   @observable passwordConfirmation = '';
 
   isPasswordSame() {
@@ -18,9 +21,7 @@ export default class UserRegisterStore {
     return !this.username || !this.password || !this.nickname || !this.passwordConfirmation;
   }
 
-  @action
-  register = async () => {
-    // 信息需要填写完整
+  verifyForm() {
     if (this.isInfoNotCpl()) {
       throw {
         Code: 'reg_0000',
@@ -34,7 +35,10 @@ export default class UserRegisterStore {
         Message: '两次输入的密码不一致',
       };
     }
+  }
 
+  @action
+  register = async () => {
     try {
       const registerResp = await usernameRegister({
         timeout: 3000,
@@ -43,6 +47,8 @@ export default class UserRegisterStore {
           password: this.password,
           nickname: this.nickname,
           passwordConfirmation: this.passwordConfirmation,
+          captchaRandStr: this.captchaRandStr,
+          captchaTicket: this.captchaTicket,
         },
       });
       checkUserStatus(registerResp);
