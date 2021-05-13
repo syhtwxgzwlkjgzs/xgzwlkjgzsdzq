@@ -28,6 +28,11 @@ import threadPay from '@common/pay-bussiness/thread-pay';
 @inject('thread')
 @observer
 class Index extends React.Component {
+
+    state = {
+      isSendingLike: false,
+    }
+
     // 分享
     onShare = (e) => {
       e.stopPropagation();
@@ -71,6 +76,7 @@ class Index extends React.Component {
    // 点赞
    onPraise = (e) => {
       e.stopPropagation();
+      if(this.state.isSendingLike) return;
 
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
@@ -80,6 +86,8 @@ class Index extends React.Component {
       }
       const { data = {}, user } = this.props;
       const { threadId = '', isLike, postId } = data;
+      
+      this.setState({isSendingLike: true});
       this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } }).then(result => {
         if (result.code === 0 && result.data) {
           const { isLiked } = result.data;
@@ -87,6 +95,7 @@ class Index extends React.Component {
           this.props.search.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
           this.props.topic.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
         }
+        this.setState({isSendingLike: false});
       });
     }
     // 支付
@@ -109,7 +118,6 @@ class Index extends React.Component {
 
       // 支付成功重新请求帖子数据
       if (success && thread?.threadId) {
-        
         const { code, data } = await this.props.thread.fetchThreadDetail(thread?.threadId);
         if (code === 0 && data) {
           this.props.index.updatePayThreadInfo(thread?.threadId, data)
@@ -267,6 +275,7 @@ class Index extends React.Component {
             onComment={this.onComment}
             onPraise={this.onPraise}
             isLiked={isLike}
+            isSendingLike={this.state.isSendingLike}
             tipData={{ postId, threadId }}
           />
         </View>
