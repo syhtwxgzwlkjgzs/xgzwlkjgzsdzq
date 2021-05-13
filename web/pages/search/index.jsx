@@ -20,7 +20,7 @@ class Index extends React.Component {
     };
 
     const topics = await readTopicsList({ params: { filter: topicFilter, perPage: 10 } }, ctx);
-    const users = await readUsersList({ params: { filter: { username: search }, perPage: 10 } }, ctx);
+    const users = await readUsersList({ params: { filter: { nickname: search }, perPage: 10 } }, ctx);
     const threads = await readThreadList({ params: { filter: { sort: '3', search }, perPage: 10 } }, ctx);
 
     return {

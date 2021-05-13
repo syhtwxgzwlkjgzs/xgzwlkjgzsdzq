@@ -160,7 +160,7 @@ class SearchAction extends SearchStore {
    */
   @action
   async getUsersList({ search = '', perPage = 10, page = 1  } = {}) {
-    const result = await readUsersList({ params: { filter: { username: search }, perPage, page } });
+    const result = await readUsersList({ params: { filter: { nickname: search }, perPage, page } });
 
     if (result.code === 0 && result.data) {
       if (this.users && result.data.pageData && page !== 1) {
