@@ -25,10 +25,10 @@ const Title = ({ title, placeholder, show, onInput }) => {
   }, [titleVal]);
 
   return (
-    <View className={styles.container}>
+    <View className={`${styles.container} ${show ? '' : styles['is-display']}`}>
       <View className={styles['container-inner']}>
         <Input
-          className={`${styles.title} ${show ? '' : styles['is-display']}`}
+          className={styles.title}
           type="text"
           value={titleVal}
           placeholder={placeholder}
