@@ -73,7 +73,7 @@ class Index extends Component {
   };
 
   filterTag(html) {
-    return html?.replace(/^(<p>)/, '').replace(/(<\/p>)$/, '');
+    return html?.replace(/(<p>)|(<\/p>)|(<br>)/g, '');
   }
 
   // parse content
@@ -117,7 +117,7 @@ class Index extends Component {
     const avatarUrl = this.getAvatar(item.avatar);
 
     return (
-      <div className={'item ' + styles.wrapper}>
+      <div className={styles.wrapper}>
         {/* 默认block */}
         <div className={styles.block}>
           {/* 头像 */}
@@ -127,10 +127,10 @@ class Index extends Component {
                 <Avatar image={avatarUrl} circle={true} />
               ) : (
                 <Avatar
-                  text={item.userName}
+                  text={item.username}
                   circle={true}
                   style={{
-                    backgroundColor: `#${this.getBackgroundColor(item.userName)}`,
+                    backgroundColor: `#${this.getBackgroundColor(item.username)}`,
                   }}
                 />
               )}
@@ -157,7 +157,10 @@ class Index extends Component {
             </div>
 
             {/* 中部 */}
-            <div className={classNames(styles.middle)} onClick={(e) => this.toDetailOrChat(e, item)}>
+            <div
+              className={classNames(styles.middle)}
+              onClick={(e) => this.toDetailOrChat(e, item)}
+            >
               {/* 财务内容 */}
               {type === 'financial' && (
                 <p className={styles['content-html']} style={isPc ? { paddingRight: '20px' } : {}}>
