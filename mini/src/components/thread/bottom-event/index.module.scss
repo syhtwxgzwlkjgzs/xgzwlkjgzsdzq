@@ -54,6 +54,16 @@
     .icon {
       margin-bottom: 2px;
       color: var(--color-text-secondary);
+      &.likedColor {
+        color: $primary-color;
+      }
+      &.dislikedColor {
+        color: $text-color-secondary;
+      }
+    }
+    &[disabled] {
+      cursor:not-allowed;
+      opacity: 0.6;
     }
   }
 }
