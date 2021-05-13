@@ -3,8 +3,6 @@ import { Button } from '@discuzq/design';
 import AudioPlay from './audio-play';
 import PostContent from './post-content';
 import ProductItem from './product-item';
-import RedPacket from './red-packet';
-import RewardQuestion from './reward-question';
 import VideoPlay from './video-play';
 import { handleAttachmentData } from './utils';
 import AttachmentView from './attachment-view';

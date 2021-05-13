@@ -7,6 +7,7 @@
   justify-content: space-between;
   box-sizing: border-box;
   padding: rem($padding-4n) rem($padding-4n);
+  background-color: $white;
   &:before {
     position: absolute;
     height: 1px;
@@ -66,7 +67,7 @@
 
   .footer {
     font-size: rem($font-size-label);
-    color: --color-text-secondary;
+    color: var(--color-text-secondary);
     .label {
       margin-right: rem(7);
     }

@@ -1,14 +1,9 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-
 import SearchInput from '@components/search-input';
-import NoData from '@components/no-data';
+import BaseLayout from '@components/base-layout';
 import UserItem from '@components/thread/user-item';
-import List from '@components/list';
-import Header from '@components/header';
-
-import styles from './index.module.scss';
 
 @inject('site')
 @inject('search')
@@ -55,37 +50,25 @@ class SearchResultUserH5Page extends React.Component {
     const { keyword } = this.state;
     const { users } = this.props.search;
     const { pageData = [], currentPage, totalPage } = users || { pageData: [] };
-    console.log(pageData, '搜索用户数据');
+
     return (
-      <div className={styles.page}>
-        <Header />
-        <div className={styles.searchInput}>
-          <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
-        </div>
+      <BaseLayout
+        onRefresh={this.fetchMoreData}
+        noMore={currentPage >= totalPage}
+      >
+        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
         {
-          pageData?.length
-            ? (
-              <List
-                className={styles.list}
-                onRefresh={this.fetchMoreData}
-                noMore={currentPage >= totalPage}
-              >
-                {
-                  pageData.map((item, index) => (
-                    <UserItem
-                      key={index}
-                      title={item.nickname}
-                      imgSrc={item.avatar}
-                      label={item.groupName}
-                      onClick={this.onUserClick}
-                    />
-                  ))
-                }
-              </List>
-            )
-            : <NoData />
+          pageData?.map((item, index) => (
+            <UserItem
+              key={index}
+              title={item.nickname}
+              imgSrc={item.avatar}
+              label={item.groupName}
+              onClick={this.onUserClick}
+            />
+          ))
         }
-      </div>
+      </BaseLayout>
     );
   }
 }

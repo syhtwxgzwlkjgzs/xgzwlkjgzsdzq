@@ -12,11 +12,11 @@ import styles from './index.module.scss';
  * @prop {string} isShowCancel 是否显示取消按钮
  */
 
-const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = true }) => {
+const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = true, isShowBottom = true }) => {
   const [value, setValue] = React.useState(defaultValue);
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${!isShowBottom && styles.hiddenBottom}`}>
       <div className={styles.inputWrapper}>
         <Icon className={styles.inputWrapperIcon} name="SearchOutlined" size={16} />
         <Input
