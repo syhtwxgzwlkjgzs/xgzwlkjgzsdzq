@@ -16,7 +16,7 @@
   display: inline-block;
 
   // TODO:暂未提供token
-  color: #8590A6;
+  color: var(--color-text-secondary);
 
   :first-child {
     margin-left: 0;
