@@ -31,6 +31,13 @@
   }
 }
 
+.title {
+  color: $text-color-primary;
+  line-height: 21px;
+  font-weight: var(--font-weight-regular);
+  font-size: rem($font-size-middle);
+}
+
 .image {
   width: 100%;
 }
@@ -39,6 +46,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.rewardBody {
+  text-align: center;
+  margin-bottom: rem($margin-6n);
 }
 
 .rewardButton {
@@ -61,6 +73,10 @@
   margin-right: rem($margin-2n);
 }
 
+.rewardext {
+  font-size: rem($font-size-base);
+}
+
 .footer {
   display: flex;
   align-items: center;
@@ -75,13 +91,27 @@
   height: rem(36);
 }
 
+.buyContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .buyText {
+    // margin-left: rem($margin-2n);
+  }
+}
+
 .tag {
   display: inline-block;
-  color: var(--color-text-regular);
-  background: var(--background-color);
+  // TODO:token  $text-color-regular不生效
+  // color: $text-color-regular;
+  color: #4f5a70;
+  background: #f0f1f3; // TODO:token
   font-size: rem($font-size-label);
-  padding: rem($padding-2n) rem($padding-1n);
+  padding: rem($padding-1n);
   border-radius: rem($border-radius-small);
+  margin-bottom: rem($padding-4n);
+  line-height: rem(17);
 }
 
 .thumbs {
@@ -113,4 +143,29 @@
   color: var(--color-white);
   text-align: center;
   font-size: rem(14);
+}
+
+.rewardText {
+  padding: rem($padding-4n) 0;
+  background: $body-bg-color;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: $border-radius-small;
+  
+  .rewardMoney {
+    line-height: rem($font-line-height-base);
+    font-size: rem($font-size-primary);
+    color: var(--color-text-primary);
+  }
+  .rewardNumber {
+    color: var(--color-error);
+  }
+
+  .rewardTime {
+    margin-top: rem($margin-1n);
+    font-size: rem($font-size-label);
+    color: var(--color-text-secondary);
+    text-align: center;
+  }
 }

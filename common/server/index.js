@@ -29,7 +29,6 @@ export { default as readLikedUsers } from './home/readLikedUsers';
 export { default as readRecommends } from './home/readRecommends';
 export { default as createFollow } from './search/createFollow';
 export { default as deleteFollow } from './search/deleteFollow';
-export { default as inviteUsersList } from './invite/inviteUsersList';
 export { default as default } from './api';
 export { default as readEmoji } from './thread-post/read-emoji';
 export { default as readFollow } from './thread-post/read-follow';
@@ -78,3 +77,8 @@ export { default as deleteMsg } from './message/deleteMsg';
 export { default as readDialogMsgList } from './message/readDialogMsgList';
 export { default as createDialogMsg } from './message/createDialogMsg';
 export { default as readUnreadCount } from './message/readUnreadCount';
+
+// 邀请模块
+export { default as inviteUsersList } from './invite/inviteUsersList';
+export { default as inviteDetail } from './invite/inviteDetail';
+export { default as createInviteLink } from './invite/createInviteLink';

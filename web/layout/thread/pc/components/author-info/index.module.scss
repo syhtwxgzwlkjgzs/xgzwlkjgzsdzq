@@ -43,6 +43,8 @@
     .theme {
       display: flex;
       justify-content: space-between;
+      padding: 0 rem($padding-2n);
+
       .themeInfo {
         font-weight: normal;
 

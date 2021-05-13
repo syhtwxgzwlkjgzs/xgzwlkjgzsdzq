@@ -78,16 +78,8 @@ class CommentList extends React.Component {
       <div className={styles.commentList}>
         <div className={styles.header}>
           <div className={styles.showGet}>
-            <div>
-              {!this.state.isHideEdit
-                && <div className={styles.extra}>
-                  {canEdit && <div className={styles.revise} onClick={() => this.editClick()}>编辑</div>}
-                  {canDelete && <div className={styles.revise} onClick={() => this.deleteClick()}>删除</div>}
-                </div>
-              }
-            </div>
+            <div></div>
             <div className={styles.headerRigth}>
-
               {
                 this.props.data?.rewards
                   ? <div className={styles.imageNumber}>
@@ -100,7 +92,7 @@ class CommentList extends React.Component {
               }
               {
                 this.props.data?.redPacketAmount
-                  ? <div className={styles.imageNumber}>
+                  ? <div className={`${styles.redpacket} ${styles.imageNumber}`}>
                     <img className={styles.image} src="/dzq-img/redpacket-mini.png" alt="红包图标" />
                     <div className={styles.showMoneyNum}>
                       获得<span className={styles.moneyNumber}>{this.props.data.redPacketAmount}</span>元红包
@@ -153,6 +145,12 @@ class CommentList extends React.Component {
                         <span onClick={() => this.props.onAboptClick()}>采纳</span>
                       </div> : ''
                   }
+                  {!this.state.isHideEdit
+                && <div className={styles.extra}>
+                  {/* {canEdit && <div className={styles.revise} onClick={() => this.editClick()}>编辑</div>} */}
+                  {canDelete && <div className={styles.revise} onClick={() => this.deleteClick()}>删除</div>}
+                </div>
+              }
                 </div>
               </div>
               {

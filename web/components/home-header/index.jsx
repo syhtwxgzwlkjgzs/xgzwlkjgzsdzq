@@ -82,14 +82,18 @@ class HomeHeader extends React.Component {
   }
 
   render() {
-    const { bgColor, hideInfo = false, style = {}, digest = null } = this.props;
+    const { bgColor, hideInfo = false, style = {}, digest = null, mode = '' } = this.props;
     const { visible } = this.state;
     const { countUsers, countThreads } = this.getSiteInfo();
 
     return (
-      <div className={styles.container} style={{...style, ...this.getBgHeaderStyle(bgColor)}}>
+      <div className={`${styles.container} ${mode ? styles[`container_mode_${mode}`] : ''}`} style={{...style, ...this.getBgHeaderStyle(bgColor)}}>
         {hideInfo && <div className={styles.topBar}>
-          <div></div>
+          {
+            mode === 'login'
+              ? <div onClick={() => Router.back()} className={styles.left}>返回</div>
+              : <></>
+          }
           <div>
             <Icon onClick={() => {
               Router.redirect({url:'/'});

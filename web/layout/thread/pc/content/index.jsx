@@ -15,20 +15,7 @@ import classnames from 'classnames';
 import topic from './index.module.scss';
 import threadPay from '@common/pay-bussiness/thread-pay';
 import { minus } from '@common/utils/calculate';
-
-const typeMap = {
-  101: 'IMAGE',
-  102: 'VOICE',
-  103: 'VIDEO',
-  104: 'GOODS',
-  105: 'QA',
-  106: 'RED_PACKET',
-  107: 'REWARD',
-  108: 'VOTE',
-  109: 'QUEUE',
-  110: 'FILE',
-  111: 'QA_IMAGE',
-};
+import {parseContentData} from '../../utils';
 
 // 帖子内容
 export default inject('user')(
@@ -68,15 +55,7 @@ export default inject('user')(
     // 是否可以打赏
     const canReward = props?.user?.isLogin() && !isRedPack && !isReward;
 
-    const parseContent = {};
-    if (indexes && Object.keys(indexes)) {
-      Object.entries(indexes).forEach(([, value]) => {
-        if (value) {
-          const { tomId, body } = value;
-          parseContent[typeMap[tomId]] = body;
-        }
-      });
-    }
+    const parseContent = parseContentData(indexes);
 
     const onContentClick = async () => {
       const thread = props.store.threadData;
@@ -155,7 +134,9 @@ export default inject('user')(
           )}
           {isEssence && (
             <div className={topic.headerTag}>
-              <Tag type="primary">精华</Tag>
+              <div className={topic.browseCategory}>
+                <p className={topic.categoryEssence}>精华</p>
+              </div>
             </div>
           )}
         </div>
@@ -164,6 +145,9 @@ export default inject('user')(
 
         {isApproved === 1 && (
           <div className={topic.body}>
+            {/* 标题 */}
+            {threadStore?.threadData?.title && <div className={topic.title}>{threadStore?.threadData?.title}</div>}
+
             {/* 文字 */}
             {text && <PostContent useShowMore={false} content={text || ''} />}
 
@@ -275,7 +259,7 @@ export default inject('user')(
             {canReward && (
               <Button onClick={onRewardClick} className={topic.rewardButton} type="primary" size="large">
                 <div className={topic.buttonIconText}>
-                  <Icon className={topic.buttonIcon} name="HeartOutlined"></Icon>
+                  <Icon className={topic.buttonIcon} name="HeartOutlined" size={19}></Icon>
                   <span className={topic.buttonText}>打赏</span>
                 </div>
               </Button>
@@ -305,14 +289,14 @@ export default inject('user')(
             onClick={onLikeClick}
           >
             <Icon name="LikeOutlined"></Icon>
-            <span>{threadStore?.threadData?.isLike ? '取消' : '赞'}</span>
+            <span>赞</span>
           </div>
           <div
             className={classnames(topic.item, threadStore?.threadData?.isFavorite && topic.active)}
             onClick={onCollectionClick}
           >
             <Icon name="CollectOutlined"></Icon>
-            <span>{threadStore?.threadData?.isFavorite ? '取消' : '收藏'}</span>
+            <span>收藏</span>
           </div>
           <div className={classnames(topic.item)} onClick={onShareClick}>
             <Icon name="ShareAltOutlined"></Icon>

@@ -135,10 +135,11 @@ class Index extends Component {
     const { list = [], ...other } = this.props;
     return (
       <View className={styles.slider}>
-        {list.map(item => (
+        {list.map((item, index) => (
           <SlierItem
             key={item.id}
             item={item}
+            index={index}
             currentId={this.state.currentId}
             onSliderTouch={(id) => this.setState({ currentId: id })}
             {...other}

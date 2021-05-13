@@ -4,24 +4,23 @@
 }
 
 .header {
-  height: rem(50);
+  height: rem(54);
   padding: 0 rem($padding-4n);
   display: flex;
   justify-content: space-between;
   background: var(--color-white);
-  border-bottom: rem(1) solid var(--border-line-color);
+  border-bottom: var(--border-border);
   .number {
     font-size: rem($font-size-middle);
     text-align: left;
-    font-weight: var(--font-weight-regular);
     color: var(--color-text-primary);
-    line-height: rem(50);
+    line-height: rem(54);
   }
   .sort {
     display: flex;
     align-items: center;
     font-size: rem($font-size-primary);
-    line-height: rem(50);
+    line-height: rem(54);
     text-align: left;
     color: var(--color-text-secondary);
     .sortText {

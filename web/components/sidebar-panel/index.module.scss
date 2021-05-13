@@ -10,6 +10,15 @@
     display: flex;
     align-items: center;
   }
+
+  .spinner {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $text-color-placeholder;
+    height: rem(60);
+  }
 }
 
 .containerPC {
@@ -22,6 +31,11 @@
   .header {
     height: rem(54);
   }
+}
+
+.containerH5 {
+  padding: 0 rem($padding-4n);
+  margin-bottom: rem(10);
 }
 
 .normal {

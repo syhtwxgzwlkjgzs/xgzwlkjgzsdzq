@@ -4,8 +4,8 @@ import { get } from '../../utils/get';
 class MessageStore {
   initList = {
     list: [],
-    currentPage: 1,
-    totalPage: 0,
+    currentPage: 0,
+    totalPage: 1,
     totalCount: 0,
   };
 
