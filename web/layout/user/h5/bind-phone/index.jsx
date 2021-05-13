@@ -91,12 +91,12 @@ class BindPhoneH5Page extends React.Component {
             请绑定您的手机号
           </div>
           <PhoneInput
-            phoneNum={mobileBind.mobile}
-            captcha={mobileBind.code}
-            phoneNumCallback={this.handlePhoneNumCallback}
-            phoneCodeCallback={this.handlePhoneCodeCallback}
-            sendCodeCallback={this.handleSendCodeButtonClick}
-            codeTimeout={mobileBind.codeTimeout}
+            phoneNum={mobileBind.mobile}  // 手机号
+            captcha={mobileBind.code} // 验证码
+            phoneNumCallback={this.handlePhoneNumCallback} // 手机号输入时的回调
+            phoneCodeCallback={this.handlePhoneCodeCallback} // 验证码输入时的回调
+            sendCodeCallback={this.handleSendCodeButtonClick} // 验证码点击时的回调
+            codeTimeout={mobileBind.codeTimeout} // 验证码倒计时
           />
           <Button className={platform === 'h5' ? layout.button : layout.pc_button} type="primary" onClick={this.handleBindButtonClick}>
             下一步

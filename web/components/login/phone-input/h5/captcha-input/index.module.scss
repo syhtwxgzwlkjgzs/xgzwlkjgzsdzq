@@ -5,19 +5,19 @@
     display: inline-block;
     height: rem(52);
     width: rem(40);
-    margin-right: rem(16);
+    margin-right: rem($margin-4n);
     box-sizing: border-box;
     padding: rem($padding-4n) 0;
     border-bottom: rem(1) solid #eee;
     :global(.dzq-input__inner) {
       text-align: center;
-      font-size: rem(16);
+      font-size: rem($font-size-middle);
       width: rem(40);
       height: rem(18);
       line-height: rem(18);
       padding: 0;
       border: none;
-      border-radius: 0;
+      border-radius: $border-radius-zero;
     }
   }
   .captchaInput-input:last-child {
