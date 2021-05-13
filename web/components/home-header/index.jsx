@@ -73,7 +73,7 @@ class HomeHeader extends React.Component {
     } else {
       const title = document?.title || '';
       h5Share(title);
-      Toast.info({ content: '分享链接已复制成功' });
+      Toast.info({ content: '复制链接成功' });
     }
   }
 

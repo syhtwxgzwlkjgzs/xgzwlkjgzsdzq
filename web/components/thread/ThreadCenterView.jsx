@@ -68,19 +68,19 @@ const Index = (props) => {
                         onClickMore={onClick} />
                     )
                 }
+                {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
+                {fileData && <AttachmentView attachments={fileData} onPay={onPay} isPay={needPay} />}
+                {goodsData && <ProductItem
+                    image={goodsData.imagePath}
+                    amount={goodsData.price}
+                    title={goodsData.title}
+                />}
                 {rewardData && <Packet
                   type={1}
                   money={rewardData.money}
                   onClick={onClick}
                 />}
                 {redPacketData && <Packet money={redPacketData.money || 0} onClick={onClick} />}
-                {goodsData && <ProductItem
-                    image={goodsData.imagePath}
-                    amount={goodsData.price}
-                    title={goodsData.title}
-                />}
-                {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
-                {fileData && <AttachmentView attachments={fileData} onPay={onPay} isPay={needPay} />}
               </div>
           </div>
         );
