@@ -13,7 +13,7 @@ import Emoji from '@components/editor/emoji';
 import ImageUpload from '@components/thread-post/image-upload';
 import { defaultOperation, paidOption } from '@common/constants/const';
 import FileUpload from '@components/thread-post/file-upload';
-import { THREAD_TYPE, MAX_COUNT } from '@common/constants/thread-post';
+import { THREAD_TYPE } from '@common/constants/thread-post';
 import Product from '@components/thread-post/product';
 import ProductSelect from '@components/thread-post/product-select';
 import AllPostPaid from '@components/thread/all-post-paid';
@@ -147,7 +147,7 @@ class ThreadPCPage extends React.Component {
                   </Tag>
                 )}
                 {/* 字数 */}
-                <div className={styles['editor-count']}>还能输入{MAX_COUNT - this.props.count}个字</div>
+                {/* <div className={styles['editor-count']}>还能输入{MAX_COUNT - this.props.count}个字</div> */}
               </div>
             </div>
             <div className={styles.toolbar}>
