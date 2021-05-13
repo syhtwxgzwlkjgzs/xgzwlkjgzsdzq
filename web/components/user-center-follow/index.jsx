@@ -3,7 +3,6 @@ import UserCenterFriends from '../user-center-friends';
 import { Spin } from '@discuzq/design';
 import { followerAdapter } from './adapter';
 import styles from './index.module.scss';
-
 class UserCenterFollow extends React.Component {
   firstLoaded = false;
   containerRef = React.createRef(null);
@@ -15,9 +14,10 @@ class UserCenterFollow extends React.Component {
     loadMorePage: true,
     splitElement: <div></div>,
     friends: [],
-    loadMoreAction: async () => {},
-    followHandler: async () => {},
-    unFollowHandler: async () => {},
+    loadMoreAction: async () => { },
+    followHandler: async () => { },
+    unFollowHandler: async () => { },
+    onContainerClick: async ({ id }) => { },
     hasMorePage: false,
   };
 
@@ -34,6 +34,7 @@ class UserCenterFollow extends React.Component {
     this.firstLoaded = true;
     this.setState({
       loading: false,
+      follows: {},
     });
 
     this.containerRef.current.addEventListener('scroll', this.loadMore);
@@ -57,36 +58,51 @@ class UserCenterFollow extends React.Component {
   }
 
   // 加载更多函数
-   loadMore = async () => {
-     const scrollDom = this.containerRef.current;
-     if (scrollDom.clientHeight + scrollDom.scrollTop === scrollDom.scrollHeight) {
-       if (!this.checkLoadCondition()) return;
-       this.setState({
-         loading: true,
-       });
-       await this.props.loadMoreAction();
-       this.setState({
-         loading: false,
-       });
-     }
-   }
+  loadMore = async () => {
+    const scrollDom = this.containerRef.current;
+    if (scrollDom.clientHeight + scrollDom.scrollTop === scrollDom.scrollHeight) {
+      if (!this.checkLoadCondition()) return;
+      this.setState({
+        loading: true,
+      });
+      await this.props.loadMoreAction();
+      this.setState({
+        loading: false,
+      });
+    }
+  };
 
-   render() {
-     return (
-      <div ref={this.containerRef} style={{
-        height: '100%',
-        overflow: 'scroll',
-      }}>
+  // 判断关注状态
+  judgeFollowsStatus = (user) => {
+    let type = 'followed';
+    if (user.isUnFollowed) { // 表示点击了取消关注==>变为要关注的状态
+      type = 'follow';
+    } else if (user.isMutual) {
+      type = 'friend';
+    }
+    return type;
+  }
+
+  render() {
+    return (
+      <div
+        ref={this.containerRef}
+        style={{
+          height: '100%',
+          overflow: 'scroll',
+        }}
+      >
         {followerAdapter(this.props.friends).map((user, index) => {
           if (index + 1 > this.props.limit) return null;
           return (
             <div key={user.id}>
               <UserCenterFriends
                 id={user.id}
-                type={user.isMutual ? 'friend' : 'followed'}
+                type={this.judgeFollowsStatus(user)}
                 imgUrl={user.avatar}
                 withHeaderUserInfo={true}
                 userName={user.userName}
+                onContainerClick={this.props.onContainerClick}
                 userGroup={user.groupName}
                 followHandler={this.props.followHandler}
                 unFollowHandler={this.props.unFollowHandler}
@@ -95,12 +111,10 @@ class UserCenterFollow extends React.Component {
             </div>
           );
         })}
-        <div className={styles.loadMoreContainer}>
-            {this.state.loading && <Spin type={'spinner'}>加载中 ...</Spin>}
-        </div>
+        <div className={styles.loadMoreContainer}>{this.state.loading && <Spin type={'spinner'}>加载中 ...</Spin>}</div>
       </div>
-     );
-   }
+    );
+  }
 }
 
 export default UserCenterFollow;

@@ -147,10 +147,11 @@ class Index extends Component {
   }
 
   render() {
-    const { topCard = null, list = [], onScrollBottom = () => { }, ...other } = this.props;
+    const { height, noMore, topCard, list, onScrollBottom, ...other } = this.props;
     return (
       <List
-        height={'100vh'}
+        height={height}
+        noMore={noMore}
         allowRefresh={true}
         onRefresh={onScrollBottom}
       >
@@ -158,10 +159,11 @@ class Index extends Component {
         {topCard}
         {/* show list */}
         <div className={styles.slider}>
-          {list.map(item => (
+          {list.map((item, index) => (
             <SlierItem
               key={item.id}
               item={item}
+              index={index}
               currentId={this.state.currentId}
               onSliderTouch={(id) => this.setState({ currentId: id })}
               {...other}
@@ -172,5 +174,21 @@ class Index extends Component {
     );
   }
 };
+
+Index.propsTypes = {
+  height: PropTypes.string,
+  noMore: PropTypes.bool,
+  topCard: PropTypes.object,
+  list: PropTypes.array,
+  onScrollBottom: PropTypes.func
+}
+
+Index.defaultProps = {
+  height: '100vh',
+  noMore: false,
+  topCard: null,
+  list: [],
+  onScrollBottom: () => { }
+}
 
 export default Index;

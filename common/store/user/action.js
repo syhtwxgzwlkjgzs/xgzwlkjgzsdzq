@@ -1,7 +1,21 @@
 import { action } from 'mobx';
 import SiteStore from './store';
-import { readUser, readPermissions, createFollow, deleteFollow, getUserFollow, getUserFans, readThreadList } from '@server';
+import {
+  readUser,
+  readPermissions,
+  createFollow,
+  deleteFollow,
+  getUserFollow,
+  getUserFans,
+  readThreadList,
+  denyUser,
+  deleteDeny,
+  updateAvatar,
+  updateBackground,
+  updateUsersUpdate,
+} from '@server';
 import { get } from '../../utils/get';
+import set from '../../utils/set';
 
 class UserAction extends SiteStore {
   constructor(props) {
@@ -25,6 +39,14 @@ class UserAction extends SiteStore {
     this.permissions = data;
   }
 
+  // 初始化编辑用用户信息
+  @action
+  initEditInfo() {
+    this.editNickName = get(this.userInfo, 'nickname');
+    this.editUserName = get(this.userInfo, 'username');
+    this.editSignature = get(this.userInfo, 'signature');
+  }
+
   // 登录后获取新的用户信息
   @action
   async updateUserInfo(id) {
@@ -38,7 +60,6 @@ class UserAction extends SiteStore {
   // 获取指定用户的用户信息，用于获取他人首页
   @action
   async getTargetUserInfo(id) {
-    this.targetUser = null;
     this.targetUserId = id;
     const userInfo = await this.getAssignUserInfo(id);
     this.targetUser = userInfo;
@@ -51,7 +72,7 @@ class UserAction extends SiteStore {
     const followsRes = await getUserFollow({
       params: {
         page: this.userFollowsPage,
-        perPage: 2,
+        perPage: 20,
       },
     });
 
@@ -64,14 +85,14 @@ class UserAction extends SiteStore {
     const totalPage = get(followsRes, 'data.totalPage', 1);
     this.userFollowsTotalPage = totalPage;
     this.userFollows[this.userFollowsPage] = pageData;
-    if (this.userFollowsPage < this.userFollowsTotalPage) {
+    if (this.userFollowsPage <= this.userFollowsTotalPage) {
       this.userFollowsPage += 1;
     }
     this.userFollows = { ...this.userFollows };
   }
 
   @action
-  async getUserFans() {
+  getUserFans = async () => {
     const fansRes = await getUserFans({
       params: {
         page: this.userFansPage,
@@ -88,11 +109,109 @@ class UserAction extends SiteStore {
     const totalPage = get(fansRes, 'data.totalPage', 1);
     this.userFans[this.userFansPage] = pageData;
     this.userFansTotalPage = totalPage;
-    this.userFollows[this.userFansPage] = pageData;
-    if (this.userFansPage < this.userFansTotalPage) {
+    this.userFans[this.userFansPage] = pageData;
+    if (this.userFansPage <= this.userFansTotalPage) {
       this.userFansPage += 1;
     }
-    this.userFollows = { ...this.userFollows };
+    this.userFans = { ...this.userFans };
+  }
+
+  @action
+  getTargetUserFollow = async (id) => {
+    const followsRes = await getUserFollow({
+      params: {
+        page: this.targetUserFollowsPage,
+        perPage: 20,
+        filter: {
+          userId: id,
+        },
+      },
+    });
+
+    if (followsRes.code !== 0) {
+      console.error(followsRes);
+      return;
+    }
+
+    const pageData = get(followsRes, 'data.pageData', []);
+    const totalPage = get(followsRes, 'data.totalPage', 1);
+    this.targetUserFollowsTotalPage = totalPage;
+    this.targetUserFollows[this.targetUserFollowsPage] = pageData;
+    if (this.targetUserFollowsPage <= this.targetUserFollowsTotalPage) {
+      this.targetUserFollowsPage += 1;
+    }
+    this.targetUserFollows = { ...this.targetUserFollows };
+  }
+
+  @action
+  getTargetUserFans = async (id) => {
+    const fansRes = await getUserFans({
+      params: {
+        page: this.targetUserFansPage,
+        perPage: 20,
+        filter: {
+          userId: id,
+        },
+      },
+    });
+
+    if (fansRes.code !== 0) {
+      console.error(fansRes);
+      return;
+    }
+
+    const pageData = get(fansRes, 'data.pageData', []);
+    const totalPage = get(fansRes, 'data.totalPage', 1);
+    this.targetUserFansTotalPage = totalPage;
+    this.targetUserFans[this.targetUserFansPage] = pageData;
+    if (this.targetUserFansPage <= this.targetUserFansTotalPage) {
+      this.targetUserFansPage += 1;
+    }
+    this.targetUserFans = { ...this.targetUserFans };
+  }
+
+  /**
+   * 取消屏蔽指定 id 的用户
+   * @param {*} id
+   */
+  @action
+  async undenyUser(id) {
+    const deleteDenyRes = await deleteDeny({
+      data: {
+        id,
+      },
+    });
+
+    if (deleteDenyRes.code === 0) {
+      return deleteDenyRes.data;
+    }
+
+    throw {
+      Code: deleteDenyRes.code,
+      Msg: deleteDenyRes.message,
+    };
+  }
+
+  /**
+   * 屏蔽指定  id 的用户
+   * @param {*} id
+   */
+  @action
+  async denyUser(id) {
+    const denyUserRes = await denyUser({
+      data: {
+        id,
+      },
+    });
+
+    if (denyUserRes.code === 0) {
+      return denyUserRes.data;
+    }
+
+    throw {
+      Code: denyUserRes.code,
+      Msg: denyUserRes.message,
+    };
   }
 
   // 更新是否没有用户数据状态
@@ -131,6 +250,103 @@ class UserAction extends SiteStore {
     } catch (err) {
       return null;
     }
+  }
+
+  @action
+  async setUserFollowerBeFollowed(id) {
+    Object.keys(this.userFollows).forEach((key) => {
+      this.userFollows[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isUnFollowed = false;
+      });
+    });
+    this.userFollows = { ...this.userFollows };
+  }
+
+  @action
+  async setUserFollowerBeUnFollowed(id) {
+    Object.keys(this.userFollows).forEach((key) => {
+      this.userFollows[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isUnFollowed = true;
+      });
+    });
+    this.userFollows = { ...this.userFollows };
+  }
+
+  @action
+  async setUserFansBeFollowed(id) {
+    Object.keys(this.userFans).forEach((key) => {
+      this.userFans[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isMutual = true;
+      });
+    });
+    this.userFans = { ...this.userFans };
+  }
+
+  @action
+  async setUserFansBeUnFollowed(id) {
+    Object.keys(this.userFans).forEach((key) => {
+      this.userFans[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isMutual = false;
+      });
+    });
+    this.userFans = { ...this.userFans };
+  }
+
+  @action
+  async setTargetUserFollowerBeFollowed(id) {
+    Object.keys(this.targetUserFollows).forEach((key) => {
+      this.targetUserFollows[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isUnFollowed = false;
+      });
+    });
+    this.targetUserFollows = { ...this.targetUserFollows };
+  }
+
+  @action
+  async setTargetUserFollowerBeUnFollowed(id) {
+    Object.keys(this.targetUserFollows).forEach((key) => {
+      this.targetUserFollows[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isUnFollowed = true;
+      });
+    });
+  }
+
+  @action
+  async setTargetUserFansBeFollowed(id) {
+    Object.keys(this.targetUserFans).forEach((key) => {
+      this.targetUserFans[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isMutual = true;
+      });
+    });
+    this.targetUserFans = { ...this.targetUserFans };
+  }
+
+  @action
+  async setTargetUserFansBeUnFollowed(id) {
+    Object.keys(this.targetUserFans).forEach((key) => {
+      this.targetUserFans[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isMutual = false;
+      });
+    });
+    this.targetUserFans = { ...this.targetUserFans };
+  }
+
+  @action
+  setTargetUserDenied() {
+    set(this.targetUser, 'isDeny', true);
+  }
+
+  @action
+  setTargetUserNotBeDenied() {
+    set(this.targetUser, 'isDeny', false);
   }
 
   /**
@@ -177,18 +393,154 @@ class UserAction extends SiteStore {
     };
   }
 
+  /**
+   * 获取用户自己发的主题列表
+   * @returns
+   */
   @action
-  async getUserThreads() {
+  getUserThreads = async () => {
     const userThreadList = await readThreadList({
       params: {
+        page: this.userThreadsPage,
         filter: {
           toUserId: 0,
           complex: 5,
         },
       },
     });
+    const pageData = get(userThreadList, 'data.pageData', []);
+    const totalPage = get(userThreadList, 'data.totalPage', 1);
+    this.userThreadsTotalPage = totalPage;
+    this.userThreads = [...this.userThreads, ...pageData];
+    this.userThreadsTotalCount = get(userThreadList, 'data.totalCount', 0);
 
-    return userThreadList.data.pageData;
+    if (this.userThreadsPage <= this.userThreadsTotalPage) {
+      this.userThreadsPage += 1;
+    }
+
+    return this.userThreads;
+  }
+
+
+  /**
+   * 获取指定用户发的主题列表
+   * @param {*} id
+   * @returns
+   */
+  @action
+  async getTargetUserThreads(id) {
+    const targetUserThreadList = await readThreadList({
+      params: {
+        page: this.targetUserThreadsPage,
+        filter: {
+          toUserId: id,
+          complex: 5,
+        },
+      },
+    });
+
+    const pageData = get(targetUserThreadList, 'data.pageData', []);
+    const totalPage = get(targetUserThreadList, 'data.totalPage', 1);
+    this.targetUserThreadsTotalPage = totalPage;
+    this.targetUserThreads = [...this.targetUserThreads, ...pageData];
+    this.targetUserThreadsTotalCount = get(targetUserThreadList, 'data.totalCount', 0);
+
+    if (this.targetUserThreadsPage <= this.targetUserThreadsTotalPage) {
+      this.targetUserThreadsPage += 1;
+    }
+
+    return this.targetUserThreads;
+  }
+
+  /**
+   * 上传新的头像
+   */
+  @action
+  async updateAvatar(fileList) {
+    const param = new FormData();
+    param.append('avatar', fileList[0]);// 通过append向form对象添加数据
+    param.append('pid', this.id);
+    await updateAvatar({
+      transformRequest: [function (data) {
+        return data;
+      }],
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      data: param,
+    });
+    await this.updateUserInfo(this.id);
+  }
+
+  /**
+   * 上传新的背景图
+   */
+  @action
+  async updateBackground(fileList) {
+    const param = new FormData();
+    param.append('background', fileList[0]);// 通过append向form对象添加数据
+    await updateBackground({
+      transformRequest: [function (data) {
+        return data;
+      }],
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      data: param,
+    });
+    await this.updateUserInfo(this.id);
+  }
+
+  // FIXME: 这里报接口参数错误
+  /**
+   * 更新新的用户信息
+   */
+  @action
+  async updateEditedUserInfo() {
+    await updateUsersUpdate({
+      data: {
+        signature: this.editSignature,
+      },
+    });
+  }
+
+  /**
+   * 四个清理函数，清理用户和目标用户粉丝信息
+   */
+  @action
+  cleanUserFans = () => {
+    this.userFans = {};
+    this.userFansPage = 1;
+    this.userFansTotalPage = 1;
+  }
+
+  @action
+  cleanUserFollows = () => {
+    this.userFollows = {};
+    this.userFollowsPage = 1;
+    this.userFollowsTotalPage = 1;
+  }
+
+  @action
+  cleanTargetUserThreads = () => {
+    this.targetUserThreads = [];
+    this.targetUserThreadsPage = 1;
+    this.targetUserThreadsTotalCount = 0;
+    this.targetUserThreadsTotalPage = 1;
+  }
+
+  @action
+  cleanTargetUserFans = () => {
+    this.targetUserFans = {};
+    this.targetUserFansPage = 1;
+    this.targetUserFansTotalPage = 1;
+  }
+
+  @action
+  cleanTargetUserFollows = () => {
+    this.targetUserFollows = {};
+    this.targetUserFollowsPage = 1;
+    this.targetUserFollowsTotalPage = 1;
   }
 }
 

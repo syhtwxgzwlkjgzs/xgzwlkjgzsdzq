@@ -113,4 +113,4 @@ CommoditySelect.defaultProps = {
     visible: false, // 是否显示
 };
 
-export default inject('threadPost')(observer(memo(CommoditySelect)));
+export default inject('threadPost')(observer(CommoditySelect));

@@ -10,10 +10,11 @@
   // }
   .title {
     font-size: rem($font-size-middle);
-    font-weight: 600;
+    font-weight: bold;
     line-height: rem(26);
     text-align: left;
     color: var(--color-text-primary);
+    cursor: pointer;
   }
 
   .header {
