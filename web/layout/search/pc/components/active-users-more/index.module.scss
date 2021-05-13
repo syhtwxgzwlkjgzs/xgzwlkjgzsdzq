@@ -12,6 +12,8 @@
     align-items: center;
     padding: rem($padding-4n) rem($padding-6n);
     box-sizing: border-box;
+    cursor: pointer;
+
     &:last-child {
       margin-bottom: 0;
     }
@@ -46,7 +48,7 @@
         padding: 0 rem($padding-2n);
         margin-right: rem(1);
         position: relative;
-        &::after {
+        &:after {
           position: absolute;
           right: -1px;
           top: -1px;
@@ -60,7 +62,7 @@
         }
         &:last-child {
           border-right: none;
-          &::after {
+          &:after {
             content: '';
           }
         }
