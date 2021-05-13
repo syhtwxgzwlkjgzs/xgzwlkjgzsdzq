@@ -37,6 +37,7 @@
     }
     .num {
       display: flex;
+      align-items: center;
       color: var(--color-text-regular);
       .numItem {
         font-size: rem($font-size-primary);
@@ -47,12 +48,12 @@
         position: relative;
         &::after {
           position: absolute;
-          right: 0;
-          top: rem($padding-1n);
-          content: '';
-          width: rem(1);
-          height: rem($font-size-label);
-          background: var(--border-line-color);
+          right: -1px;
+          top: -1px;
+          content: '|';
+          font-size: rem(12);
+          line-height: rem($font-line-height-small);
+          color: var(--border-line-color);
         }
         &:first-child {
           padding-left: 0;
@@ -60,7 +61,7 @@
         &:last-child {
           border-right: none;
           &::after {
-            background: none;
+            content: '';
           }
         }
       }
