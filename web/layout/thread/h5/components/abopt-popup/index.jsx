@@ -24,7 +24,7 @@ const InputPop = (props) => {
   const onInputChange = (val) => {
     console.log(val);
     setValue(val);
-    setMoneyNum(Number(val) * 0.01 * rewardAmount);
+    setMoneyNum((Number(val) * 0.01 * rewardAmount).toFixed(2));
   };
 
   const onSubmitClick = async () => {
