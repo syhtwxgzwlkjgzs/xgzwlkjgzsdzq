@@ -5,34 +5,34 @@ import { Icon, Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import { get } from '@common/utils/get';
-
-const testArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+import { ENV_CONFIG } from '@common/constants/site';
 
 @inject('site')
 @inject('invite')
 @observer
 class InviteH5Page extends React.Component {
   async componentDidMount() {
-    // const inviteList = await this.invite.useRequest();
-    // console.log(inviteList);
+    await this.props.invite.getInviteUsersList();
   }
 
-  toLocaleCopyCase = async () => {
+  createInviteLink = async () => {
     try {
+      await this.props.invite.createInviteLink();
       const clipboardObj = navigator.clipboard;
-      await clipboardObj.writeText('我是邀请链接');
+      await clipboardObj.writeText(`${ENV_CONFIG.COMMOM_BASE_URL}/forum/partner-invite?code=${this.props.invite.inviteLink}`);
       Toast.success({
-        content: '复制链接成功',
+        content: '创建邀请链接成功',
         duration: 1000,
       });
     } catch (e) {
       Toast.error({
-        content: '复制链接失败',
+        content: e.Message,
       });
     }
   }
 
   render() {
+    const { inviteData } = this.props.invite;
     return (
       <>
         <div className={layout.content}>
@@ -41,18 +41,18 @@ class InviteH5Page extends React.Component {
           {/* 头部 end */}
           {/* 用户信息 start */}
           <div className={layout.user_info}>
-            <img className={layout.user_info_author} src="/dzq-img/login-user.png" alt=""/>
+            <img className={layout.user_info_author} src={inviteData.avatar} alt=""/>
             <div className={layout.user_info_content}>
-              <div className={layout.user_info_name}>Amber</div>
-              <div className={layout.user_info_tag}>官方团队</div>
+              <div className={layout.user_info_name}>{inviteData.nickname}</div>
+              <div className={layout.user_info_tag}>{inviteData.groupName}</div>
               <div className={layout.user_info_invite}>
                 <div className={layout.invite_num}>
                   <div className={layout.invite_num_title}>已邀人数</div>
-                  <div className={layout.invite_num_content}>62</div>
+                  <div className={layout.invite_num_content}>{inviteData.totalInviteUsers}</div>
                 </div>
                 <div className={layout.invite_money}>
                   <div className={layout.invite_num_title}>赚得赏金</div>
-                  <div className={layout.invite_num_content}>1024.00</div>
+                  <div className={layout.invite_num_content}>{inviteData.totalInviteBounties}</div>
                 </div>
               </div>
             </div>
@@ -71,14 +71,14 @@ class InviteH5Page extends React.Component {
             </div>
             <div className={layout.invite_list_content}>
               {
-                testArr.map((item, index) => (
+                inviteData?.inviteUsersList?.map((item, index) => (
                   <div key={index} className={layout.invite_list_item}>
                       <div className={layout.invite_list_itemName}>
-                        <img src="/dzq-img/login-user.png" alt=""/>
-                        <span>嘻嘻哈哈嘻嘻哈哈</span>
+                        <img src={item.avatar} alt=""/>
+                        <span>{item.nickname}</span>
                       </div>
-                      <span className={layout.invite_list_itemMoney}>+1288.00</span>
-                      <span className={layout.invite_list_itemTime}>2020-10-28 10:42</span>
+                      <span className={layout.invite_list_itemMoney}>+{item.bounty}</span>
+                      <span className={layout.invite_list_itemTime}>{item.joinedAt}</span>
                       <span className={layout.invite_list_itemLine}></span>
                   </div>
                 ))
@@ -90,7 +90,7 @@ class InviteH5Page extends React.Component {
           <div className={layout.invite_bottom}>
             <Button
               className={layout.invite_bottom_button}
-              onClick={this.toLocaleCopyCase}
+              onClick={this.createInviteLink}
             >
               邀请朋友
             </Button>
@@ -98,7 +98,7 @@ class InviteH5Page extends React.Component {
           {/* 邀请朋友 end */}
         </div>
       </>
-    )
+    );
   }
 }
 
