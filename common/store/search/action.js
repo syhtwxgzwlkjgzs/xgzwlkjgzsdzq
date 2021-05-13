@@ -79,38 +79,50 @@ class SearchAction extends SearchStore {
       newPerPage = 3;
     }
 
-    const promise1 = !hasTopics
-      ? readTopicsList({ params: { filter: topicFilter, perPage: newPerPage, page: 1 } })
-      : {};
-    const promise2 = !hasUsers
-      ? readUsersList({ params: { filter: { nickname: search }, perPage: newPerPage, page: 1 } })
-      : {};
-    const promise3 = !hasThreads
-      ? readThreadList({ params: { filter: { filter: { sort: '3', search } }, perPage: newPerPage, page: 1 } })
-      : {};
-    const promise = [promise1, promise2, promise3];
+    // const promise1 = !hasTopics
+    //   ? readTopicsList({ params: { filter: topicFilter, perPage: newPerPage, page: 1 } })
+    //   : {};
+    // const promise2 = !hasUsers
+    //   ? readUsersList({ params: { filter: { nickname: search }, perPage: newPerPage, page: 1 } })
+    //   : {};
+    // const promise3 = !hasThreads
+    //   ? readThreadList({ params: { filter: { filter: { sort: '3', search } }, perPage: newPerPage, page: 1 } })
+    //   : {};
+    // const promise = [promise1, promise2, promise3];
 
-    let res = await Promise.allSettled(promise);
+    // let res = await Promise.allSettled(promise);
 
-    res = res.map((item) => {
-      const { value } = item;
-      const { code, data } = value;
-      return code === 0 ? data : {};
-    });
+    // res = res.map((item) => {
+    //   const { value } = item;
+    //   const { code, data } = value;
+    //   return code === 0 ? data : {};
+    // });
 
-    if (type === 0) {
-      !hasTopics && this.setIndexTopics(res[0]);
-      !hasUsers && this.setIndexUsers(res[1]);
-      !hasThreads && this.setIndexThreads(res[2]);
-    } else if (type === 1) {
-      !hasTopics && this.setSearchTopics(res[0]);
-      !hasUsers && this.setSearchUsers(res[1]);
-      !hasThreads && this.setSearchThreads(res[2]);
+    // if (type === 0) {
+    //   !hasTopics && this.setIndexTopics(res[0]);
+    //   !hasUsers && this.setIndexUsers(res[1]);
+    //   !hasThreads && this.setIndexThreads(res[2]);
+    // } else if (type === 1) {
+    //   !hasTopics && this.setSearchTopics(res[0]);
+    //   !hasUsers && this.setSearchUsers(res[1]);
+    //   !hasThreads && this.setSearchThreads(res[2]);
+    // }
+
+    if ( !hasTopics ) {
+      const res = await readTopicsList({ params: { filter: topicFilter, perPage: newPerPage, page: 1 } });
+      const { code, data } = res;
+      this.setIndexTopics(code === 0 ? data : {});
     }
-
-    return {
-      res,
-    };
+    if ( !hasUsers ) {
+      const res = await readUsersList({ params: { filter: { nickname: search }, perPage: newPerPage, page: 1 } });
+      const { code, data } = res;
+      this.setIndexUsers(code === 0 ? data : {});
+    }
+    if ( !hasThreads ) {
+      const res = await readThreadList({ params: { filter: { filter: { sort: '3', search } }, perPage: newPerPage, page: 1 } });
+      const { code, data } = res;
+      this.setIndexThreads(code === 0 ? data : {});
+    }
   };
 
   /**

@@ -28,6 +28,10 @@ class Index extends React.Component {
         indexTopics: topics?.data,
         indexUsers: users?.data,
         indexThreads: threads?.data,
+
+        indexTopics: null,
+        indexUsers: null,
+        indexThreads: null,
       },
     };
   }
@@ -50,14 +54,14 @@ class Index extends React.Component {
     const hasIndexUsers = !!search.indexUsers;
     const hasIndexThreads = !!search.indexThreads;
 
-    this.toastInstance = Toast.loading({
-      content: '加载中...',
-      duration: 0,
-    });
+    // this.toastInstance = Toast.loading({
+    //   content: '加载中...',
+    //   duration: 0,
+    // });
 
-    await search.getSearchData({ hasTopics: hasIndexTopics, hasUsers: hasIndexUsers, hasThreads: hasIndexThreads, search: keyword });
+    search.getSearchData({ hasTopics: hasIndexTopics, hasUsers: hasIndexUsers, hasThreads: hasIndexThreads, search: keyword });
 
-    this.toastInstance?.destroy();
+    // this.toastInstance?.destroy();
   }
 
   dispatch = async (type, data = '') => {
