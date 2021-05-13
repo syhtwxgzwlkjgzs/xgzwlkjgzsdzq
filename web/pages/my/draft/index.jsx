@@ -34,7 +34,6 @@ class Draft extends React.Component {
   handleEdit = item => this.props.router.push(`/thread/post?id=${item.threadId}`);
 
   handleDelete = async (item) => {
-    console.log('delete');
     const { thread, index } = this.props;
     this.toastInstance = Toast.loading({
       content: '删除中...',

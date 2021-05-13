@@ -29,7 +29,6 @@ class H5 extends React.Component {
               swipeLeft={{
                 content: <div className={styles['item-delete']}>删除</div>,
                 action: () => {
-                  console.log('jjj');
                   this.props.onDelete(item);
                 },
               }}
