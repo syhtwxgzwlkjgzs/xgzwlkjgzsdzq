@@ -257,10 +257,10 @@
     }
   }
   .categoryEssence {
-    color: var(--color-primary);
-    border: rem(1) solid var(--color-primary);
+    color: var(--color-orange);
+    border: rem(1) solid var(--color-orange);
     &::after {
-      background-color: var(--color-primary);
+      background-color: var(--color-orange);
     }
   }
   .categoryRed {
