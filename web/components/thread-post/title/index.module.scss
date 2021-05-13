@@ -9,7 +9,7 @@
   width: 100% !important;
   height: 52px;
   border: none;
-  border-bottom: var(--border-border);
+  border-bottom: $border-solid-1;
   align-items: center;
 
   :global { /* stylelint-disable-line*/
