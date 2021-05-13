@@ -2,16 +2,16 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import SearchInput from '@components/search-input';
-import List from '@components/list';
-import SectionTitle from '@components/section-title'
 import TrendingTopics from './components/trending-topics';
 import ActiveUsers from './components/active-users';
 import PopularContents from './components/popular-contents';
-import Header from '@components/header';
+import SectionTitle from '@components/section-title'
+import styles from './index.module.scss';
+import BaseLayout from '@components/base-layout';
+import '@discuzq/design/dist/styles/index.scss';
+import SidebarPanel from '@components/sidebar-panel';
 import NoData from '@components/no-data';
 
-import styles from './index.module.scss';
-import '@discuzq/design/dist/styles/index.scss';
 
 @inject('site')
 @inject('search')
@@ -48,32 +48,39 @@ class SearchH5Page extends React.Component {
 
   render() {
     const { indexTopics, indexUsers, indexThreads } = this.props.search;
-    const { pageData: topicsPageData = [] } = indexTopics || {};
-    const { pageData: usersPageData = [] } = indexUsers || {};
-    const { pageData: threadsPageData = [] } = indexThreads || {};
+    const { pageData: topicsPageData } = indexTopics || {};
+    const { pageData: usersPageData } = indexUsers || {};
+    const { pageData: threadsPageData } = indexThreads || {};
 
     return (
-      <List className={styles.page} allowRefresh={false}>
-        <Header />
-        <div className={styles.section}>
-          <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} />
-          <SectionTitle icon={{ type: 1, name: 'StrongSharpOutlined' }} title="潮流话题" onShowMore={this.redirectToSearchResultTopic} />
+      <BaseLayout allowRefresh={false} curr='search' showTabBar>
+        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} />
+        <SidebarPanel
+          icon={{ type: 1, name: 'StrongSharpOutlined' }} 
+          title="潮流话题" 
+          onShowMore={this.redirectToSearchResultTopic}
+          isLoading={!topicsPageData}
+          noData={topicsPageData?.length}
+          platform='h5'
+        >
           {
-            topicsPageData?.length
-              ? <TrendingTopics data={topicsPageData} onItemClick={this.onTopicClick} />
-              : <NoData />
+            topicsPageData?.length && <TrendingTopics data={topicsPageData} onItemClick={this.onTopicClick} />
           }
-        </div>
-        <div className={styles.hr} />
-        <div className={styles.section}>
-          <SectionTitle icon={{ type: 2, name: 'MemberOutlined' }} title="活跃用户" onShowMore={this.redirectToSearchResultUser} />
+        </SidebarPanel>
+
+        <SidebarPanel
+          icon={{ type: 2, name: 'MemberOutlined' }}
+          title="活跃用户" 
+          onShowMore={this.redirectToSearchResultUser}
+          isLoading={!usersPageData}
+          noData={usersPageData?.length}
+          platform='h5'
+        >
           {
-            usersPageData?.length
-              ? <ActiveUsers data={usersPageData} onItemClick={this.onUserClick} />
-              : <NoData />
+            usersPageData?.length && <ActiveUsers data={usersPageData} onItemClick={this.onUserClick} />
           }
-        </div>
-        <div className={styles.hr} />
+        </SidebarPanel>
+
         <div className={`${styles.section} ${styles.popularContents}`}>
           <SectionTitle icon={{ type: 3, name: 'HotOutlined' }} title="热门内容" onShowMore={this.redirectToSearchResultPost} />
         </div>
@@ -82,7 +89,7 @@ class SearchH5Page extends React.Component {
             ? <PopularContents data={threadsPageData} />
             : <NoData />
         }
-      </List>
+      </BaseLayout>
     );
   }
 }
