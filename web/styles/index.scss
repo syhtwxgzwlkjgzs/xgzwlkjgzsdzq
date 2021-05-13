@@ -1,7 +1,7 @@
+@import '@discuzq/design/dist/styles/index.scss';
 @import '@common/styles/index.scss';
 @import '@common/styles/theme/index.scss'; // 主题样式
 @import './reset.scss';
-@import '@discuzq/design/dist/styles/index.scss';
 .dzq-post-video {
   margin: rem(16);
   div[data-vjs-player=true] { /* stylelint-disable-line */
@@ -11,6 +11,12 @@
 }
 .dzq-toast--mask {
   z-index: $zindex-toast;
+}
+
+.dzq-input__inner {
+  &::placeholder {
+    color: $text-color-placeholder;
+  }
 }
 
 * {

@@ -24,6 +24,7 @@ const RenderThreadContent = inject('user')(
     const tipData = {
       postId: threadStore?.threadData?.postId,
       threadId: threadStore?.threadData?.threadId,
+      platform: 'h5',
     };
     // 是否合法
     const isApproved = threadStore?.threadData?.isApproved || 0;
@@ -37,6 +38,13 @@ const RenderThreadContent = inject('user')(
     const threadPrice = threadStore?.threadData?.price || 0;
     // 是否作者自己
     const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData?.userId;
+
+    // 是否悬赏帖
+    const isRedPack = threadStore?.threadData?.displayTag?.isRedPack;
+    // 是否红包帖
+    const isReward = threadStore?.threadData?.displayTag?.isReward;
+    // 是否可以打赏
+    const canReward = props?.user?.isLogin() && !isRedPack && !isReward;
 
     const parseContent = parseContentData(indexes);
 
@@ -88,10 +96,13 @@ const RenderThreadContent = inject('user')(
 
         {isApproved === 1 && (
           <div className={styles.body}>
+            {/* 标题 */}
+            {threadStore?.threadData?.title && <div className={styles.title}>{threadStore?.threadData?.title}</div>}
+
             {/* 文字 */}
-            {text && <PostContent content={text || ''} />}
+            {text && <PostContent useShowMore={false} content={text || ''} />}
             {/* 悬赏文案 */}
-            {(parseContent.REWARD) && (
+            {parseContent.REWARD && (
               <div className={styles.rewardText}>
                 {/* 悬赏 */}
                 {parseContent.REWARD && (
@@ -117,6 +128,7 @@ const RenderThreadContent = inject('user')(
                 </Button>
               </div>
             )}
+
             {/* 图片 */}
             {parseContent.IMAGE && <ImageDisplay imgData={parseContent.IMAGE} />}
 
@@ -127,7 +139,7 @@ const RenderThreadContent = inject('user')(
                 coverUrl={parseContent.VIDEO.coverUrl}
                 width={400}
                 height={200}
-                />
+              />
             )}
             {/* 音频 */}
             {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
@@ -146,8 +158,10 @@ const RenderThreadContent = inject('user')(
                   type="danger"
                   onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
                 >
-                  <Icon className={styles.payIcon} name="ShoppingCartOutlined" size={20}></Icon>
-                  <span className={styles.buyText}>购买商品</span>
+                  <div className={styles.buyContent}>
+                    <Icon className={styles.payIcon} name="ShoppingCartOutlined" size={19}></Icon>
+                    <span className={styles.buyText}>购买商品</span>
+                  </div>
                 </Button>
               </div>
             )}
@@ -160,14 +174,16 @@ const RenderThreadContent = inject('user')(
               <div className={styles.reward}>
                 {/* 悬赏 */}
                 {parseContent.REWARD && (
-                  <PostRewardProgressBar
-                    type={POST_TYPE.BOUNTY}
-                    remaining={Number(parseContent.REWARD.remain_money || 0)}
-                    received={minus(
-                      Number(parseContent.REWARD.money || 0),
-                      Number(parseContent.REWARD.remain_money || 0),
-                    )}
-                  />
+                  <div className={styles.rewardBody}>
+                    <PostRewardProgressBar
+                      type={POST_TYPE.BOUNTY}
+                      remaining={Number(parseContent.REWARD.remain_money || 0)}
+                      received={minus(
+                        Number(parseContent.REWARD.money || 0),
+                        Number(parseContent.REWARD.remain_money || 0),
+                      )}
+                    />
+                  </div>
                 )}
                 {/* 红包 */}
                 {parseContent.RED_PACKET && (
@@ -194,10 +210,10 @@ const RenderThreadContent = inject('user')(
             )}
 
             {/* 打赏 */}
-            {props?.user?.isLogin() && (
+            {canReward && (
               <div style={{ textAlign: 'center' }}>
                 <Button onClick={onRewardClick} className={styles.rewardButton} type="primary" size="large">
-                 <Icon className={styles.payIcon} name="HeartOutlined" size={19}></Icon>
+                  <Icon className={styles.payIcon} name="HeartOutlined" size={19}></Icon>
                   <span className={styles.rewardext}>打赏</span>
                 </Button>
               </div>

@@ -2,14 +2,14 @@
 
 .wrapper {
   padding: 20px 0;
-  background-color: $comment-bg-color;
+  background-color: $body-bg-color;
 
   &-inner {
     margin: 0 auto;
     padding: 48px 104px;
     width: 892px;
     min-height: calc(100vh - 60px - 40px - 96px);
-    background-color: var(--color-white);
+    background-color: $white;
   }
   .no-padding {
     :global {
@@ -23,8 +23,8 @@
   position: relative;
   padding: 16px 16px 52px;
   min-height: 428px;
-  border: 1px solid #c5c6ca;
-  border-radius: 5px;
+  border: $border-solid-1;
+  border-radius: $border-radius-small;
   :global { /* stylelint-disable-line */
     .vditor {
       border: none;
@@ -37,7 +37,7 @@
     }
     .vditor-bubble-toolbar {
       .dzq-icon { /* stylelint-disable-line */
-        color: var(--color-white);
+        color: $white;
       }
     }
   }
@@ -46,17 +46,17 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  padding: 16px 22px;
+  padding: $padding-4n $padding-6n;
   width: calc(892px - 44px);
   :global {
     .dzq-tag {
-      margin-right: var(--margin-4n);
+      margin-right: $margin-4n;
       padding: 0 4px;
       height: 25px;
       line-height: 25px;
       border-radius: 5px;
-      background-color: #f0f1f3;
-      color: #4f5a70;
+      background-color: $tag-info-bg-color;
+      color: $text-color-regular;
       border: none;
       &:last-child {
         margin-right: 0;
@@ -68,10 +68,10 @@
   }
   .editor-count {
     position: absolute;
-    bottom: var(--margin-4n);
-    right: var(--margin-6n);
-    font-size: var(--font-size-label);
-    color: var(--color-text-placeholder);
+    bottom: $margin-4n;
+    right: $margin-6n;
+    font-size: $font-size-label;
+    color: $text-color-placeholder;
   }
 }
 .toolbar {
@@ -87,14 +87,14 @@
     :global { /* stylelint-disable-line */
       .dzq-icon {
         margin-left: 0;
-        margin-right: var(--margin-6n);
-        color: #8490a8;
+        margin-right: $margin-6n;
+        color: $text-color-secondary;
         cursor: pointer;
       }
     }
   }
   .divider {
-    margin-right: var(--margin-6n);
+    margin-right: $margin-6n;
     display: inline-block;
     height: 20px;
     width: 1px;
@@ -110,16 +110,11 @@
       height: 36px;
       &:first-child {
         margin-right: 36px;
-        background-color: var(--background-color-text2);
+        background-color: $text-bg-color2;
         border: none;
         color: #4f5a70;
       }
     }
   }
 }
-.copyright {
-  margin: 24px 0;
-  font-size: var(--font-size-label);
-  text-align: center;
-  color: var(--color-text-secondary);
-}
+

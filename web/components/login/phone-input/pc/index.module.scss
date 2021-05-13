@@ -5,33 +5,33 @@
   right: 8px;
   bottom: 0;
   text-align: center;
-  line-height: rem(36);
-  border-radius: rem(5);
-  font-size: 14px;
-  color: #8590a6;
+  line-height: 36px;
+  border-radius: $border-radius-small;
+  font-size: $font-size-base;
+  color: $icon-color;
   cursor: pointer;
-  padding-right: 8px;
+  padding-right: $padding-2n;
 }
 .pc_phone_input{
   .tips {
     @include pc_tips;
   }
   .phoneInput {
-    margin-bottom: 24px;
+    margin-bottom: $margin-6n;
   }
   .input {
     width: 300px;
-    margin-bottom: 24px;
+    margin-bottom: $margin-6n;
   }
   .sendCaptcha {
     @include captchaBtn;
   }
   .countDown {
     @include captchaBtn;
-    color: #b5b5b5;
+    color: $text-color-secondary;
   }
   .captchaInput{
     position: relative;
-    margin-bottom: 24px;
+    margin-bottom: $margin-6n;
   }
 }

@@ -103,7 +103,7 @@ export default class wxPhoneBindStore {
     }
 
     @action
-    sendCode = async (registerCaptcha, qcloudCaptchaAppId) => {
+    sendCode = async ({registerCaptcha, qcloudCaptchaAppId}) => {
       // 发送前校验
       this.beforeSendVerify();
       try {

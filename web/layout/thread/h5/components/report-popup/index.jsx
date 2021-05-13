@@ -5,10 +5,8 @@ import styles from './index.module.scss';
 const InputPop = (props) => {
   const { visible, onOkClick, onCancel, inputText, reportContent = [] } = props;
 
-
   const [value, setValue] = useState('');
   const [showTextarea, setShowTextarea] = useState(false);
-
 
   const onChoiceChange = (e) => {
     if (e === 'other') {
@@ -41,41 +39,40 @@ const InputPop = (props) => {
           <div className={styles.reason}>请点击举报理由</div>
         </div>
         <div className={styles.body}>
-          <Radio.Group defaultValue='5' onChange={e => onChoiceChange(e)}>
-            {
-              reportContent.map((val, index) => (
-                <div className={styles.reportTitle} key={index}>
-                  <div className={styles.content}>{val}</div>
-                  <Radio name={`${index}`}></Radio>
-                </div>
-              ))
-            }
+          <Radio.Group defaultValue="5" onChange={(e) => onChoiceChange(e)}>
+            {reportContent.map((val, index) => (
+              <div className={styles.reportTitle} key={index}>
+                <div className={styles.content}>{val}</div>
+                <Radio name={`${index}`}></Radio>
+              </div>
+            ))}
             <div className={styles.reportTitle}>
               <div className={styles.content}>其他</div>
               <Radio name="other"></Radio>
             </div>
           </Radio.Group>
-          {
-            showTextarea
-              ? <div className={styles.textarea}>
+          {showTextarea ? (
+            <div className={styles.textarea}>
               <Textarea
                 className={styles.input}
                 rows={5}
                 showLimit={true}
                 value={value}
-                onChange={e => setValue(e.target.value)}
-                placeholder={inputText}>
-              </Textarea>
-            </div> : ''
-          }
+                onChange={(e) => setValue(e.target.value)}
+                placeholder={inputText}
+              ></Textarea>
+            </div>
+          ) : (
+            ''
+          )}
         </div>
         <div className={styles.button}>
-          <Button full={true} onClick={onSubmitClick} className={styles.ok} type="primary" size="large">
-            确定
-        </Button>
-          <Button full={true} onClick={onCancel} className={styles.cancel} type="primary" size="large">
+          <Button onClick={onCancel} className={styles.cancel}>
             取消
-        </Button>
+          </Button>
+          <Button onClick={onSubmitClick} className={styles.ok} type="primary">
+            确定
+          </Button>
         </div>
       </div>
     </Popup>

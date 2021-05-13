@@ -11,7 +11,7 @@
   align-items: center;
 }
 
-$background-color: #f5f7f8;
+$background-color: $body-bg-color;
 $width: rem(169);
 
 .dzq-custom-upload {
