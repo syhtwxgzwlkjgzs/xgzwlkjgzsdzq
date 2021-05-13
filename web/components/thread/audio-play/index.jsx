@@ -11,16 +11,18 @@ import { noop } from '../utils';
  * @prop {function} goCheckAudio 音频点击事件
  */
 
-const Index = ({ isPay = false, url, goCheckAudio = noop }) => {
+const Index = ({ isPay = false, url, onPay = noop }) => {
   const onPlay = () => {
     console.log('正在播放');
   };
   return (
     <div className={styles.container}>
-      <Audio src={url} onPlay={onPlay} />
-      {/* 音频蒙层 已付费时隐藏 未付费时显示 */}
       {
-        isPay && <div className={styles.payBox} onClick={goCheckAudio}></div>
+        isPay ? (
+          <div className={styles.wrapper}>
+            <img src='/dzq-img/pay-audio.png' className={styles.payBox} onClick={onPay}></img>
+          </div>
+        ) : <Audio src={url} onPlay={onPlay} />
       }
     </div>
   );

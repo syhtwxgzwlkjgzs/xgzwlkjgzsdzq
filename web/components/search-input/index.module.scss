@@ -4,6 +4,9 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  background-color: $white;
+  padding: rem($padding-4n);
+  padding-bottom: 0;
 }
 .inputWrapper {
   display: flex;
@@ -31,7 +34,7 @@
 }
 .cancel {
   margin-left: rem($padding-4n);
-  font-size: var(--font-size-primary);
+  font-size: rem($font-size-primary);
   line-height: var(--font-line-height-primary);
   color: var(--color-text-secondary);
   word-break: keep-all;

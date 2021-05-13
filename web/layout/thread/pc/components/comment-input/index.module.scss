@@ -15,7 +15,7 @@
       .dzq-textarea__inner {
         padding: rem($padding-4n);
         font-size: rem($font-size-primary);
-        background: var(--comment-box-bg-color);
+        background-color: $comment-bg-color;
         resize: none;
       }
     }
@@ -25,7 +25,7 @@
 .input {
   width: 100% !important;
   box-sizing: border-box;
-  background: var(--comment-box-bg-color);
+  background-color: $comment-bg-color;
   overflow: hidden;
 }
 .heightMiddle {

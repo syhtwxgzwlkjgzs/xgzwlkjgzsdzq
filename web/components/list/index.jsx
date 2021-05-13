@@ -15,6 +15,7 @@ import RefreshView from './RefreshView';
 const List = forwardRef(({
   height,
   className = '',
+  wrapperClass = '',
   children,
   noMore,
   onRefresh,
@@ -94,7 +95,7 @@ const List = forwardRef(({
   return (
     <div className={`${styles.container} ${className}`} style={{ height }}>
       <div
-        className={styles.wrapper}
+        className={`${styles.wrapper} ${wrapperClass}`}
         ref={listWrapper}
         onScroll={onTouchMove}
       >

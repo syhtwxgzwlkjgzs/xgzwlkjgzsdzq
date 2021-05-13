@@ -10,7 +10,7 @@ import styles from './index.module.scss';
  * @prop {string | number} received 红包帖子：已领取数量 , 赏金帖子：已发放多少元
  */
 
-const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0 }) => {
+const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0, condition = 0 }) => {
   const percent = useMemo(() => (received > 0 ? (received / (received + remaining)) * 100 : 0), [remaining, received]);
   let texts = {};
   let className = '';
@@ -24,7 +24,7 @@ const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0 }) => {
         </>
       ),
       received: `已领取${received}个`,
-      receive: '评论领红包',
+      receive: condition ? '集赞领红包' : '评论领红包',
     };
     className = styles.redPack;
     progressTheme = 'danger';
@@ -50,14 +50,14 @@ const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0 }) => {
         lineWidth={14}
         className={styles.progress}
         isShowText={false}
-        lineCap='round'
+        lineCap="round"
       >
         <div className={styles.content}>
-          {
-            type === POST_TYPE.RED_PACK
-              ? <img className={styles.icon} src='/dzq-img/redpacket-mini.png' />
-              : <img className={styles.icon} src='/dzq-img/coin.png' />
-          }
+          {type === POST_TYPE.RED_PACK ? (
+            <img className={styles.icon} src="/dzq-img/redpacket-mini.png" />
+          ) : (
+            <img className={styles.icon} src="/dzq-img/coin.png" />
+          )}
           <div className={styles.remaining}>{texts.remaining}</div>
           <div className={styles.received}>{texts.received}</div>
           {texts.receive && <div className={styles.receive}>{texts.receive}</div>}

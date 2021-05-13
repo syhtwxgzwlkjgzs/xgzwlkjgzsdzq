@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/my/buy/h5';
 import IndexPCPage from '@layout/my/buy/pc';
 import { readThreadList } from '@server';
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 @inject('site')
 @inject('index')

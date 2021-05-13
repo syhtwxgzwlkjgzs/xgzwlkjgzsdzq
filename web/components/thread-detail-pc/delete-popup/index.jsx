@@ -1,5 +1,5 @@
 import React from 'react';
-import { Popup } from '@discuzq/design';
+import { Popup, Button } from '@discuzq/design';
 import styles from './index.module.scss';
 
 const deletePop = (props) => {
@@ -13,12 +13,12 @@ const deletePop = (props) => {
           <div className={styles.content}>确定删除这篇内容吗？</div>
         </div>
         <div className={styles.btn}>
-          <div className={styles.close} onClick={onClose}>
+          <Button className={styles.close} onClick={onClose}>
             取消
-          </div>
-          <div className={styles.ok} onClick={onBtnClick}>
+          </Button>
+          <Button type='primary' className={styles.ok} onClick={onBtnClick}>
             确定
-          </div>
+          </Button>
         </div>
       </div>
     </Popup>

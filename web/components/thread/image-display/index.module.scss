@@ -20,7 +20,6 @@
   }
 
   .img {
-    width: 100%;
     box-sizing: border-box;
     border-radius: rem($border-radius-small);
     object-fit: cover;
@@ -55,12 +54,225 @@
   }
 }
 
+.containerH5 {
+  height: rem(260);
+  width: rem(343);
+
+  .containerNum1 {
+    .bigImages {
+      height: rem(260);
+      width: rem(343);
+
+      .img {
+        width: 100%;
+      }
+    }
+  }
+
+  .containerNum2 {
+    .bigImages {
+      height: 100%;
+      width: rem(169);
+
+      .img {
+        height: 100%;
+        width: 100%;
+      }
+    }
+  
+    .smallImages {
+      height: 100%;
+      width: rem(169);
+  
+      .img {
+        height: 100%;
+        width: 100%;
+      }
+    }
+  }
+  .containerNum3 {
+    height: rem(260);
+    width: rem(343);
+
+    .bigImages {
+      height: rem(128);
+      width: 100%;
+
+      .img {
+        width: 100%;
+      }
+    }
+  
+    .smallImages {
+      height: rem(126);
+      width: 100%;
+      flex-direction: row;
+  
+      .img {
+        width: rem(169);
+        height: 100%;
+      }
+    }
+  }
+  
+  .containerNum4 {
+    height: rem(260);
+    width: rem(343);
+    .bigImages {
+      height: 100%;
+      width: rem(210);
+
+      .img {
+        width: 100%;
+      }
+    }
+  
+    .smallImages {
+      height: 100%;
+      width: rem(129);
+      flex-direction: column;
+      .img {
+        height: rem(84);
+      }
+    }
+  }
+  
+  .containerNum5 {
+    height: rem(260);
+    width: rem(343);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  
+    .bigImages {
+      width: 100%;
+      height: rem(126);
+  
+      .img {
+        width: rem(169);
+      }
+    }
+  
+    .smallImages {
+      width: 100%;
+      flex-direction: row;
+      height: rem(111);
+  
+      .img {
+        width: rem(111);
+      }
+    }
+  }
+}
+
 .containerPC {
   height: rem(532);
+  width: rem(702);
+
+  .containerNum1 {
+  
+    .bigImages {
+      height: 100%;
+      width: rem(702);
+    }
+  }
+
+  .containerNum2 {
+    .bigImages {
+      height: 100%;
+      width: rem(349);
+
+      .img {
+        height: 100%;
+        width: 100%;
+      }
+    }
+  
+    .smallImages {
+      height: 100%;
+      width: rem(349);
+  
+      .img {
+        height: 100%;
+        width: 100%;
+      }
+    }
+  }
+
+  .containerNum3 {
+    .bigImages {
+      height: rem(266);
+      width: 100%;
+
+      .img {
+        width: rem(702);
+        height: 100%;
+      }
+    }
+  
+    .smallImages {
+      height: rem(262);
+      width: 100%;
+      flex-direction: row;
+  
+      .img {
+        width: rem(349);
+        height: 100%;
+      }
+    }
+  }
+  
+  .containerNum4 {
+    .bigImages {
+      height: 100%;
+      width: rem(434);
+
+      .img {
+        width: rem(434);
+      }
+    }
+  
+    .smallImages {
+      height: 100%;
+      width: rem(264);
+      flex-direction: column;
+      .img {
+        height: rem(175);
+      }
+    }
+  }
+  
+  .containerNum5 {
+    width: rem(702);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  
+    .bigImages {
+      width: 100%;
+      height: rem(262);
+  
+      .img {
+        width: rem(349);
+        height: rem(263);
+      }
+    }
+  
+    .smallImages {
+      width: 100%;
+      flex-direction: row;
+      height: rem(232);
+  
+      .img {
+        width: rem(232);
+      }
+    }
+  }
 }
 
 // 根据图片数量，确定排列方向
 .containerRow {
+  display: flex;
   flex-direction: row;
   .bigImages {
     margin-right: rem(4);
@@ -71,92 +283,17 @@
 }
 
 .containerColumn {
+  display: flex;
   flex-direction: column;
   .bigImages {
-    margin-bottom: rem(4);
+    // margin-bottom: rem(4);
   }
   .smallImages {
     flex-direction: row;
+    margin-top: rem(4);
   }
 }
 
-// 根据图片数量，确定样式
-.containerNum1 {
-  .bigImages {
-    height: 100%;
-    width: 100%;
-  }
-}
 
-.containerNum2 {
-  .bigImages {
-    height: 100%;
-    width: 50%;
-  }
 
-  .smallImages {
-    height: 100%;
-    width: 50%;
 
-    .img {
-      height: 100%;
-    }
-  }
-}
-
-.containerNum3 {
-  .bigImages {
-    height: 50%;
-    width: 100%;
-  }
-
-  .smallImages {
-    height: 50%;
-    width: 100%;
-    flex-direction: row;
-
-    .img {
-      width: 49.6%;
-      height: 100%;
-    }
-  }
-}
-
-.containerNum4 {
-  .bigImages {
-    height: 100%;
-    width: 62%;
-  }
-
-  .smallImages {
-    height: 100%;
-    width: 38%;
-    flex-direction: column;
-    .img {
-      height: 33%;
-    }
-  }
-}
-
-.containerNum5 {
-  overflow: hidden;
-
-  .bigImages {
-    width: 100%;
-    flex: 1;
-
-    .img {
-      width: 49.7%;
-    }
-  }
-
-  .smallImages {
-    width: 100%;
-    flex-direction: row;
-    height: 40%;
-
-    .img {
-      width: 33%;
-    }
-  }
-}

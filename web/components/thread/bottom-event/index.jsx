@@ -70,8 +70,8 @@ const Index = ({
         {
           postList.map((item, index) => (
               <div key={index} className={styles.fabulous} onClick={item.event}>
-                <Icon className={styles.icon} name={item.icon} size={14} color={`${isLiked ? '#2469f6' : '#8590A6'}`}></Icon>
-                <span className={isLiked ? styles.fabulousCancel: styles.fabulousPost}>{item.name}</span>
+                <Icon className={styles.icon} name={item.icon} size={14} color={`${isLiked && item.name ===  '赞' ? '#2469f6' : '#8590A6'}`}></Icon>
+                <span className={isLiked && item.name ===  '赞' ? styles.fabulousCancel: styles.fabulousPost}>{item.name}</span>
               </div>
           ))
         }

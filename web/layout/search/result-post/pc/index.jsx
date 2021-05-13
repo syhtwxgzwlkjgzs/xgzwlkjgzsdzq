@@ -4,6 +4,7 @@ import BaseLayout from '@components/base-layout';
 import SidebarPanel from '@components/sidebar-panel';
 import ThreadContent from '@components/thread';
 import { withRouter } from 'next/router';
+import styles from './index.module.scss';
 
 @inject('site')
 @inject('search')
@@ -26,18 +27,18 @@ class SearchResultPostH5Page extends React.Component {
     return dispatch('moreData', keyword);
   };
 
-  renderContent = () => {
-    const { pageData = [] } = this.props.search.threads || { pageData: [] };
+  renderContent = (pageData) => {
     return (
       <SidebarPanel 
         title="热门内容" 
         type='normal'
         isShowMore={false}
+        isLoading={!pageData}
         noData={!pageData?.length}
         icon={{ type: 3, name: 'HotOutlined' }}
       >
         {
-          pageData?.map((item, index) => <ThreadContent data={item} key={index} />)
+          pageData?.map((item, index) => <ThreadContent className={styles.wrapper} data={item} key={index} />)
         }
       </SidebarPanel>
     )
@@ -55,7 +56,7 @@ class SearchResultPostH5Page extends React.Component {
   }
 
   render() {
-    const { currentPage, totalPage } = this.props.search.threads || { pageData: [] };
+    const { pageData, currentPage, totalPage } = this.props.search.threads || {};
 
     return (
       <BaseLayout
@@ -64,7 +65,7 @@ class SearchResultPostH5Page extends React.Component {
         onRefresh={this.fetchMoreData}
         showRefresh={false}
       >
-        { this.renderContent }
+        { this.renderContent(pageData) }
       </BaseLayout>
     );
   }

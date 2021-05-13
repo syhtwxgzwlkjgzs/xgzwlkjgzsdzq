@@ -5,8 +5,8 @@ import IndexPCPage from '@layout/index/pc';
 import { readCategories, readStickList, readThreadList } from '@server';
 import PayBox from '../components/payBox/index';
 import { Toast } from '@discuzq/design'
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-// import HOCWithLogin from '@common/middleware/HOCWithLogin';
+import HOCFetchSiteData from '../middleware/HOCFetchSiteData';
+// import HOCWithLogin from '@middleware/HOCWithLogin';
 
 @inject('site')
 @inject('index')
