@@ -284,7 +284,7 @@ class Index extends Component {
   redpacketContent = () => {
     const { postData, redpacketTotalAmount: amount } = this.props.threadPost;
     const { redpacket: { rule, number } } = postData;
-    return `${rule === 1 ? '随机红包' : '定额红包'}\\总金额 ${amount}元\\${number}个`
+    return `${rule === 1 ? '随机红包' : '定额红包'}\\总金额 ${amount}元\\${number}个`;
   }
 
   // 验证码滑动成功的回调
@@ -454,42 +454,44 @@ class Index extends Component {
 
           {/* 工具栏区域、include各种插件触发图标、发布等 */}
           <View className={styles['toolbar']}>
-            <View className={styles['location-bar']}>
-              <Text className={styles['text-length']}>{`还能输入${contentTextLength}个字`}</Text>
-              {(permissions?.insertPosition?.enable) &&
+
+            {/* <Text className={styles['text-length']}>{`还能输入${contentTextLength}个字`}</Text> */}
+            {(permissions?.insertPosition?.enable) &&
+              <View className={styles['location-bar']}>
                 <Position currentPosition={position} positionChange={(position) => {
                   setPostData({ position });
                 }} />
-              }
-            </View>
+              </View>
+            }
 
-
-            <View className={styles['tag-toolbar']}>
-              {/* 插入付费tag */}
-              {(Boolean(postData.price || postData.attachmentPrice)) && (
-                <Units
-                  type='tag'
-                  tagContent={`付费总额${postData.price + postData.attachmentPrice}元`}
-                  onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.paid })}
-                />
-              )}
-              {/* 红包tag */}
-              {redpacket.price &&
-                <Units
-                  type='tag'
-                  tagContent={this.redpacketContent()}
-                  onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
-                />
-              }
-              {/* 悬赏tag */}
-              {rewardQa.value &&
-                <Units
-                  type='tag'
-                  tagContent={`悬赏金额${rewardQa.value}元\\结束时间${rewardQa.expiredAt}`}
-                  onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
-                />
-              }
-            </View>
+            {(Boolean(postData.price || postData.attachmentPrice) || redpacket.price || rewardQa.value) && (
+              <View className={styles['tag-toolbar']}>
+                {/* 插入付费tag */}
+                {(Boolean(postData.price || postData.attachmentPrice)) && (
+                  <Units
+                    type='tag'
+                    tagContent={`付费总额${postData.price + postData.attachmentPrice}元`}
+                    onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.paid })}
+                  />
+                )}
+                {/* 红包tag */}
+                {redpacket.price &&
+                  <Units
+                    type='tag'
+                    tagContent={this.redpacketContent()}
+                    onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
+                  />
+                }
+                {/* 悬赏tag */}
+                {rewardQa.value &&
+                  <Units
+                    type='tag'
+                    tagContent={`悬赏金额${rewardQa.value}元\\结束时间${rewardQa.expiredAt}`}
+                    onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
+                  />
+                }
+              </View>
+            )}
             <PluginToolbar
               permissions={permissions}
               clickCb={(item) => {

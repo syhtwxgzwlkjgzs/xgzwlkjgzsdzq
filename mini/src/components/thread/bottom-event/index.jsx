@@ -55,7 +55,7 @@ const Index = ({
   ]
   return (
     <View>
-      <View className={(userImgs.length !== 0 || comment > 0 || sharing > 0) ? styles.user : styles.users}>
+      <View className={styles.user}>
         {userImgs.length !== 0 ? <View className={styles.userImg}>
           <View className={styles.portrait}>
             <Tip tipData={tipData} imgs={imgDatas} wholeNum={wholeNum}></Tip>
@@ -76,7 +76,7 @@ const Index = ({
       </View>
 
 
-      <View className={(userImgs.length !== 0 || comment > 0 || sharing > 0) ? styles.operation : styles.operations}>
+      <View className={styles.operation}>
         {
           postList.map((item, index) => (
               <View key={index} className={styles.fabulous} onClick={item.event}>
