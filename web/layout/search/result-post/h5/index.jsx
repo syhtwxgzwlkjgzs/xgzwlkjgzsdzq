@@ -1,12 +1,9 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-
-import Header from '@components/header';
-import NoData from '@components/no-data';
 import SearchInput from '@components/search-input';
-import List from '@components/list';
 import ThreadContent from '@components/thread';
+import BaseLayout from '@components/base-layout';
 
 import styles from './index.module.scss';
 
@@ -57,29 +54,18 @@ class SearchResultPostH5Page extends React.Component {
     const { pageData, currentPage, totalPage } = threads || { pageData: [] };
 
     return (
-      <div className={styles.page}>
-        <Header />
-        <div className={styles.searchInput}>
-          <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
-        </div>
+      <BaseLayout
+          className={styles.list}
+          onRefresh={this.fetchMoreData}
+          noMore={currentPage >= totalPage}
+      >
+        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} isShowBottom={false} />
         {
-          pageData?.length
-            ? (
-              <List
-                className={styles.list}
-                onRefresh={this.fetchMoreData}
-                noMore={currentPage >= totalPage}
-              >
-                {
-                  pageData?.map((item, index) => (
-                    <ThreadContent className={styles.listItem} key={index} data={item} />
-                  ))
-                }
-              </List>
-            )
-            : <NoData />
+          pageData?.map((item, index) => (
+            <ThreadContent className={styles.listItem} key={index} data={item} />
+          ))
         }
-      </div>
+      </BaseLayout>
     );
   }
 }
