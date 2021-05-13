@@ -3,17 +3,18 @@ import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/thread/post/h5';
 import IndexPCPage from '@layout/thread/post/pc';
 
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-import HOCWithLogin from '@common/middleware/HOCWithLogin';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import HOCWithLogin from '@middleware/HOCWithLogin';
 import * as localData from '@layout/thread/post/common';
 import { Toast } from '@discuzq/design';
 import { createAttachment } from '@common/server';
-import { THREAD_TYPE, ATTACHMENT_TYPE, MAX_COUNT } from '@common/constants/thread-post';
+import { THREAD_TYPE, ATTACHMENT_TYPE } from '@common/constants/thread-post';
 import Router from '@discuzq/sdk/dist/router';
 import PayBoxProvider from '@components/payBox/payBoxProvider';
 import PayBox from '@components/payBox/index';
 import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
 import { withRouter } from 'next/router';
+
 
 @inject('site')
 @inject('threadPost')
@@ -246,10 +247,10 @@ class PostPage extends React.Component {
       Toast.info({ content: '请填写您要发布的内容' });
       return;
     }
-    if (!isDraft && this.state.count > MAX_COUNT) {
-      Toast.info({ content: `输入的内容不能超过${MAX_COUNT}字` });
-      return;
-    }
+    // if (!isDraft && this.state.count > MAX_COUNT) {
+    //   Toast.info({ content: `输入的内容不能超过${MAX_COUNT}字` });
+    //   return;
+    // }
     if (isDraft) this.setPostData({ draft: 1 });
     else this.setPostData({ draft: 0 });
     const { threadPost } = this.props;

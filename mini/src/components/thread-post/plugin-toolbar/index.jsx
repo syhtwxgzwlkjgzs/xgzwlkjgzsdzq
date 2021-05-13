@@ -53,8 +53,8 @@ const Index = inject('user', 'threadPost')(observer((props) => {
   const category = (
     <View className={styles['category']} onClick={onCategoryClick}>
       <Icon
-        name="SettingOutlined"
-        size='20'
+        name="MenuOutlined"
+        size='14'
         className={styles['icon']}
       />
       <Text>分类</Text>

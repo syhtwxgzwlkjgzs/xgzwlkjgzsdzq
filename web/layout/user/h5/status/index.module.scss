@@ -1,5 +1,5 @@
 @import '@common/styles/mixin/login.scss';
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 .container {
   height: 100vh;
 }
@@ -13,6 +13,7 @@
   }
   .functionalRegion {
     @include functionalRegion;
+    line-height: rem(24);
     text-align: center;
     margin-top: rem(60);
   }

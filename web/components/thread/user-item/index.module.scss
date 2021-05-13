@@ -6,7 +6,8 @@
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  padding: rem($padding-2n) rem($padding-4n);
+  padding: rem($padding-4n) rem($padding-4n);
+  background-color: $white;
   &:before {
     position: absolute;
     height: 1px;
@@ -14,7 +15,7 @@
     right: rem($padding-4n);
     left: rem($padding-4n);
     bottom: 0;
-    background-color: #f5f7f8;
+    background-color: var(--border-line-color);
   }
   .wrapper {
     display: flex;
@@ -23,7 +24,9 @@
 
   .header {
     position: relative;
-    margin-right: rem(12);
+    height: rem(38);
+    margin-right: rem(8);
+    box-sizing: border-box;
     .img {
       display: inline-block;
       width: rem(38);
@@ -32,7 +35,7 @@
       line-height: rem(38);
       text-align: center;
       font-size: rem(20);
-      background: #f5f7f8;
+      background: $body-bg-color;
     }
     .icon {
       position: absolute;
@@ -64,6 +67,9 @@
 
   .footer {
     font-size: rem($font-size-label);
-    color: #8490a8;
+    color: var(--color-text-secondary);
+    .label {
+      margin-right: rem(7);
+    }
   }
 }

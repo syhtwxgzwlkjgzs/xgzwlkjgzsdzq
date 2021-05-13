@@ -1,5 +1,5 @@
 @import '@common/styles/mixin/login.scss';
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 .container {
   height: 100vh;
 }
@@ -28,7 +28,7 @@
     border-radius: rem(5);
     color: var(--color-white);
     font-size: rem(14);
-    background: var(--color-primary); 
+    background: $primary-color;
   }
   .captchaInput{
     margin-top: rem(32);

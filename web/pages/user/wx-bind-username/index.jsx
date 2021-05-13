@@ -2,8 +2,8 @@ import React from 'react';
 import WXBindUsernameH5Page from '@layout/user/h5/wx-bind-username';
 import { inject } from 'mobx-react';
 
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-import HOCLoginMode from '@common/middleware/HOCLoginMode';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import HOCLoginMode from '@middleware/HOCLoginMode';
 
 @inject('site')
 class WXBindUsername extends React.Component {

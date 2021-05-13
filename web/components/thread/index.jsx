@@ -21,7 +21,7 @@ import ThreadCenterView from './ThreadCenterView';
 class Index extends React.Component {
     // 分享
     onShare = (e) => {
-      e.stopPropagation();
+      e && e.stopPropagation();
 
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
@@ -45,7 +45,7 @@ class Index extends React.Component {
     }
     // 评论
     onComment = (e) => {
-      e.stopPropagation();
+      e && e.stopPropagation();
 
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
@@ -64,7 +64,7 @@ class Index extends React.Component {
     }
     // 点赞
     onPraise = (e) => {
-      e.stopPropagation();
+      e && e.stopPropagation();
 
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
@@ -85,7 +85,7 @@ class Index extends React.Component {
     }
     // 支付
     onPay = async (e) => {
-      e.stopPropagation();
+      e && e.stopPropagation();
 
       // 对没有登录的先做
       if (!this.props.user.isLogin()) {
@@ -159,11 +159,11 @@ class Index extends React.Component {
 
       return (
         <div className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
-          <div className={styles.header}>
+          <div className={styles.header} onClick={this.onClick}>
               <UserInfo
                 name={user.userName}
                 avatar={user.avatar}
-                location={position.address}
+                location={position.location}
                 view={`${viewCount}`}
                 groupName={group?.groupName}
                 time={createdAt}
@@ -173,7 +173,6 @@ class Index extends React.Component {
                 isReward={isReward}
                 userId={user?.userId}
                 platform={platform}
-                onClick={this.onClick}
               />
           </div>
 

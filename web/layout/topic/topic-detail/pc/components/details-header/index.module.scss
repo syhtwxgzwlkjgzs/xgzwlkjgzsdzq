@@ -15,6 +15,7 @@
   .siteInfo {
     width: 100%;
     display: flex;
+    align-items: center;
     box-sizing: border-box;
     li {
       margin-right: rem(40);
@@ -30,6 +31,8 @@
     }
     .share {
       cursor: pointer;
+      display: flex;
+      align-items: center;
     }
     .shareIcon {
       display: inline-block;

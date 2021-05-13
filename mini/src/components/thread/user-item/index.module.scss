@@ -14,7 +14,7 @@
     right: 16px;
     left: 16px;
     bottom: 0;
-    background-color: #f5f7f8;
+    background-color: $body-bg-color;
   }
   .wrapper {
     display: flex;
@@ -32,7 +32,7 @@
       line-height: 38px;
       text-align: center;
       font-size: 20px;
-      background: #f5f7f8;
+      background: $body-bg-color;
       overflow: hidden;
       image {
         width: 100%;
@@ -70,6 +70,6 @@
 
   .footer {
     font-size: 12px;
-    color: #8490a8;
+    color: #8590A6;
   }
 }

@@ -1,4 +1,4 @@
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 
 
 .container {
@@ -24,7 +24,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: var(--comment-box-bg-color);
+    background: $comment-bg-color;
     padding:0 16px;
     .status {
       font-family: 'PingFangSC-Regular';

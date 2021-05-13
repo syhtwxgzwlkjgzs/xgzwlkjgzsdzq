@@ -10,23 +10,27 @@
   background: var(--color-white);
   border-radius: rem($border-radius-big);
   overflow: hidden;
+  padding: 0 rem(24) rem(24) rem(24);
 }
 
 .header {
-  height: rem(50);
+  height: rem(64);
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  padding: 0 rem($padding-5n);
+
   .headerLeft {
+    flex: 1;
     font-size: rem($font-size-middle);
-    line-height: rem(50);
+    font-weight: var(--font-weight-regular);
+    line-height: rem(64);
+    text-align: center;
   }
   .headerIcon {
-    width: rem(50);
-    height: rem(50);
-    line-height: rem(50);
     text-align: center;
     font-size: rem($font-size-middle);
+    cursor: pointer;
+    color: $text-color-secondary;
   }
 }
 
@@ -34,7 +38,6 @@
 .body {
   .radioGroup {
     display: flex;
-    padding: 0 rem($padding-5n);
     border-bottom: solid rem(1) var(--border-line-color);
     .reportTitle {
       display: flex;
@@ -45,7 +48,6 @@
     }
   }
   .other {
-    padding: 0 rem($padding-5n);
     .reportTitle {
       display: flex;
       align-items: center;
@@ -57,13 +59,12 @@
 }
 
 .textarea {
-  padding: 0 rem($padding-5n);
   :global{
     .dzq-textarea {
       border: 1px solid transparent;
       border-radius: 0;
       .dzq-textarea__inner{
-        background: #f5f7f8;
+        background: $body-bg-color;
         resize: none;
       }
     }
@@ -80,19 +81,18 @@
   width: 100%;
   height: rem(50);
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
-  background: #f4f7f7;
+
   .ok {
-    width: rem(70);
+    width: rem(116);
     height: rem(36);
-    margin-right: rem($margin-6n);
   }
   .cancel {
-    width: rem(70);
+    width: rem(116);
     height: rem(36);
-    background: #c9c9c9;
+    background: $button-info-bg-color;
     border: none;
-    margin-right: rem($margin-6n);
+    margin-right: rem($margin-4n);
   }
 }

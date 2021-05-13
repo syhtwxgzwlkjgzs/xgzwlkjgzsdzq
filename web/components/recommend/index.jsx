@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './index.module.scss';
-import { Icon } from '@discuzq/design';
+import { Icon, Tag  } from '@discuzq/design';
 import { withRouter } from 'next/router';
 import { inject, observer } from 'mobx-react';
 import LoadingBox from '@components/loading-box';
@@ -73,7 +73,7 @@ class Index extends React.Component {
         }
         {recommendsStatus === 'none' && <div className={style.recommendSwitch}>
           <div className={style.switchBox} onClick={this.changeBatch}>
-            <Icon name="WithdrawOutlined" className={style.switchIcon} size={14}/>换一批
+            <Icon name="RenovateOutlined" className={style.switchIcon} size={14}/>换一批
           </div>
         </div>}
       </div>

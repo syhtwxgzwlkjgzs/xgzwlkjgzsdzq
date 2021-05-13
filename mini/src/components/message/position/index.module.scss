@@ -1,0 +1,32 @@
+.positon {
+  display: flex;
+  align-items: center;
+  height: 25px;
+  border-radius: 5px;
+  background: #f0f1f3;
+  color: #4f5a70;
+  padding: 4px 10px;
+  margin: 9px 8px 9px 0;
+  font-size: var(--font-size-label);
+  max-width: 50%;
+
+  .text {
+    font-size: 12px;
+    line-height: 16px;
+    text-align: left;
+    display: inline-block;
+    margin-left: 4px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .remove-icon {
+    margin-left: 8px;
+  }
+}
+
+.chose {
+  color: var(--color-primary);
+  background: #E8F0FE;
+}

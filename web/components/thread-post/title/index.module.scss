@@ -1,21 +1,24 @@
 @import '@common/styles/index.scss';
 
+.wrapper {
+  margin: 0 rem($margin-4n);
+}
+
 .title {
   display: flex !important;
-  width: rem(343) !important;
+  width: 100% !important;
   height: 52px;
-  padding: 0 rem(16);
   border: none;
-  border-bottom: var(--border-border);
+  border-bottom: $border-solid-1;
   align-items: center;
 
   :global { /* stylelint-disable-line*/
     .dzq-input__inner {
-      padding: 8px 0;
-      font-size: var(--font-size-large);
-      line-height: var(--font-line-height-small);
+      padding: rem($padding-2n) 0;
+      font-size: $font-size-large;
+      line-height: $font-line-height-small;
       border: none;
-      color: var(--color-text-primary);
+      color: $text-color-primary;
       text-align: left !important;
     }
   }

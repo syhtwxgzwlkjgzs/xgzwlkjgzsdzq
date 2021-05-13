@@ -29,11 +29,11 @@
 
 .position-box {
   display: flex;
-  flex-direction: row-reverse;
+  // flex-direction: row-reverse;
   height: 45px;
   padding: 0 rem(16);
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   :global { /* stylelint-disable-line */
     .dzq-tag {
       display: flex;

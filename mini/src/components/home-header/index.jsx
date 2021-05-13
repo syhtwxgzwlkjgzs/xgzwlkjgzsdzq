@@ -92,7 +92,7 @@ class HomeHeader extends React.Component {
           </View>
           <View className={styles.item}>
             <Icon className={styles.shareIcon} size={16} color="#fff" name="ShareAltOutlined"/>
-            <Text className={styles.shareText}>分享</Text>
+            <Text className={styles.text}>分享</Text>
           </View>
         </View>}
       </View>

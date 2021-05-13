@@ -1,5 +1,5 @@
 @import '@common/styles/mixin/login.scss';
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 .container {
   height: 100vh;
 }
@@ -7,7 +7,7 @@
   @include banner;
 }
 .content {
-  padding: rem(48) rem(24);
+  padding: rem($padding-6n);
   .title {
     @include title;
   }
@@ -20,7 +20,7 @@
   }
   .tips{
     @include titleTips;
-    margin-bottom: 0; 
+    margin-bottom: 0;
   }
 }
 

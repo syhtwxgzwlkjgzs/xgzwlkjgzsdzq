@@ -1,6 +1,11 @@
 @import '@common/styles/index.scss';
 
 .inputClick {
+  :global {
+    .dzq-input.is-disabled .dzq-input__inner {
+      background-color: var(--comment-box-bg-color);
+    }
+  }
   .input {
     width: rem(176);
   }
@@ -11,7 +16,7 @@
   display: inline-block;
 
   // TODO:暂未提供token
-  color: #8490a8;
+  color: #8590A6;
 
   :first-child {
     margin-left: 0;

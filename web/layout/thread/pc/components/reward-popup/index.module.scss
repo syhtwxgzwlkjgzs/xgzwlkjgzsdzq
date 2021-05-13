@@ -1,64 +1,80 @@
 @import '@common/styles/index.scss';
 
 .container {
-  width: rem(420);
-  height: rem(200);
+  width: rem(520);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin: 0 auto;
   background: var(--color-white);
   border-radius: rem($border-radius-big);
   overflow: hidden;
+  padding: 0 rem(24) rem(24) rem(24);
 }
 
 .header {
-  height: rem(50);
+  height: rem(64);
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  padding: 0 rem(20);
+
   .headerLeft {
+    flex: 1;
     font-size: rem($font-size-middle);
-    line-height: rem(50);
+    font-weight: var(--font-weight-regular);
+    line-height: rem(64);
+    text-align: center;
   }
   .headerIcon {
-    width: rem(50);
-    height: rem(50);
-    line-height: rem(50);
     text-align: center;
     font-size: rem($font-size-middle);
+    cursor: pointer;
+    color: $text-color-secondary;
   }
 }
 
+.rewardList {
+  margin-top: rem($margin-4n);
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: rem(60);
+
+  .reward {
+    width: rem(60);
+    height: rem(35);
+    border: $border-solid-1;
+    margin-right: rem($margin-2n);
+    margin-bottom: rem($margin-2n);
+  }
+}
 
 .percentage {
-  padding: rem(16);
+  display: flex;
+  align-items: center;
 
-  :global {
-    .dzq-input {
-      width: 100%;
-    }
+  .text {
+    margin-right: rem($margin-2n);;
+    font-size: rem($font-size-primary);;
   }
 }
 
 
 .button {
+  margin-top: rem($margin-6n);
   width: 100%;
-  height: rem(50);
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
-  background: #f4f7f7;
+
   .ok {
-    width: rem(70);
+    width: rem(116);
     height: rem(36);
-    margin-right: rem($margin-6n);
   }
   .cancel {
-    width: rem(70);
+    width: rem(116);
     height: rem(36);
-    background: #c9c9c9;
+    background: $button-info-bg-color;
     border: none;
-    margin-right: rem($margin-6n);
+    margin-right: rem($margin-4n);
   }
 }

@@ -134,7 +134,7 @@ class TopicSelect extends Component {
           {/* 搜索列表 */}
           <ScrollView
             width='100%'
-            height={500}
+            height={450}
             rowCount={topics.length}
             rowData={topics}
             rowHeight={54}
@@ -146,8 +146,10 @@ class TopicSelect extends Component {
         </View>
 
         {/* 取消按钮 */}
-        <View className={styles.btn}>
-          <Button onClick={this.cancel}>取消</Button>
+        <View className={styles['btn-container']}>
+          <View className={styles.btn}>
+            <Button onClick={this.cancel}>取消</Button>
+          </View>
         </View>
       </View >
     );

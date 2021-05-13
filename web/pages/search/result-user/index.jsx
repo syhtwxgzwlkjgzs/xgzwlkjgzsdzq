@@ -5,7 +5,7 @@ import IndexPCPage from '@layout/search/result-user/pc';
 import { readTopicsList, readUsersList } from '@server';
 import { Toast } from '@discuzq/design';
 
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 @inject('site')
 @inject('search')
@@ -38,29 +38,26 @@ class Index extends React.Component {
     serverSearch && serverSearch.topics && search.setTopics(serverSearch.topics);
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { search, router } = this.props;
     const { keyword = '' } = router.query;
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasUsers = !!search.users;
     const hasTopics = !!search.topics;
 
-    if (!hasUsers || !hasTopics) {
+    if (!hasUsers) {
       this.toastInstance = Toast.loading({
         content: '加载中...',
         duration: 0,
       });
 
       this.page = 1;
-      await this.getData(keyword);
-
+      search.getUsersList({ search: keyword });
       this.toastInstance?.destroy();
     }
-  }
-  getData = (keyword) => {
-    const { search } = this.props;
-    search.getTopicsList({ search: keyword, perPage: 1, page:10   });
-    search.getUsersList({ search: keyword, perPage: this.perPage, page: this.page  });
+    if (!hasTopics) {
+      search.getTopicsList({ search: keyword, perPage: 1});
+    }
   }
   dispatch = async (type, data) => {
     const { search } = this.props;
@@ -71,7 +68,7 @@ class Index extends React.Component {
       this.page += 1;
     }
 
-    await this.getData(data);
+    await search.getUsersList({ search: data, perPage: this.perPage, page: this.page });
     return;
   }
 

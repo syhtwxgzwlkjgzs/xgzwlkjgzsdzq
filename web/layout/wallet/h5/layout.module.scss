@@ -23,7 +23,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: var(--comment-box-bg-color);
+    background-color: $comment-bg-color;
     padding:0 rem($padding-4n);
     .status {
       font-family: 'PingFangSC-Regular';

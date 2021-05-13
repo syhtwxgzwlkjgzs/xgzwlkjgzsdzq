@@ -10,7 +10,7 @@
     .replyListContentText {
       padding: rem($padding-4n);
       border-radius: rem($border-radius-small);
-      background: var(--comment-box-bg-color);
+      background-color: $comment-bg-color;
       .replyListName {
         font-weight: var(--font-weight-regular);
         font-size: rem($font-size-primary);
@@ -106,4 +106,8 @@
 
 .commentInput {
   margin-top: rem(16);
+}
+
+.commentReply {
+  cursor: pointer;
 }

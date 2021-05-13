@@ -57,10 +57,10 @@ const User = ({ data, onClick, onFollow }) => {
             <span className={styles.numTitle}>主题</span>
             {data.threadCount}
           </div>
-          <div className={styles.numItem}>
+          {/* <div className={styles.numItem}>
             <span className={styles.numTitle}>问答</span>
             {data.questionCount}
-          </div>
+          </div> */}
           <div className={styles.numItem}>
             <span className={styles.numTitle}>点赞</span>
             {data.likedCount}
@@ -72,7 +72,12 @@ const User = ({ data, onClick, onFollow }) => {
         </div>
       </div>
       <Button type="primary" className={`${styles.button} ${btnInfo.className}`} onClick={handleFollow}>
-        <Icon name={btnInfo.icon} size={10} className={styles.addIcon} />
+        {
+          btnInfo.text === '关注' ?
+          <span className={styles.addText}>+</span>
+          : 
+          <Icon name={btnInfo.icon} size={10} className={styles.addIcon} />
+        }
         {btnInfo.text}
       </Button>
     </div>

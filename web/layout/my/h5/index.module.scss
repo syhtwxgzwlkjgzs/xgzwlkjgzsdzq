@@ -1,7 +1,7 @@
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 
 .mobileLayout {
-    padding-bottom: rem(65);
+    background: white;
 }
 
 .unit {
@@ -37,6 +37,6 @@
 
     .threadCount {
         font-size: rem(12);
-        color: #8490a8;
+        color: #8590A6;
     }
 }

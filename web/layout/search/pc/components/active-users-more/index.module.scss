@@ -7,7 +7,7 @@
     margin-bottom: rem($margin-4n);
     height: rem(82);
     border-radius: rem($border-radius-small);
-    background: var(--comment-box-bg-color);
+    background-color: $comment-bg-color;
     display: flex;
     align-items: center;
     padding: rem($padding-4n) rem($padding-6n);
@@ -37,15 +37,17 @@
     }
     .num {
       display: flex;
+      color: var(--color-text-regular);
       .numItem {
         font-size: rem($font-size-primary);
         line-height: rem($font-line-height-small);
         color: var(--color-primary);
         padding: 0 rem($padding-2n);
+        margin-right: rem(1);
         position: relative;
         &::after {
           position: absolute;
-          left: 0;
+          right: 0;
           top: rem($padding-1n);
           content: '';
           width: rem(1);
@@ -57,22 +59,28 @@
         }
         &:last-child {
           border-right: none;
+          &::after {
+            background: none;
+          }
         }
       }
       .numTitle {
-        color: var(--pc-user-info-title);
+        color: var(--color-text-regular);
         margin-right: rem($margin-5);
       }
     }
     .button {
+      width: rem(113);
       height: rem(36);
       font-size: rem($font-size-primary);
-      line-height: rem(18);
-      padding: rem($padding-2n) rem(36);
       display: flex;
       align-items: center;
+      justify-content: center;
       .addIcon {
         margin-right: rem($margin-5);
+      }
+      .addText {
+        margin-right: rem(4);
       }
     }
 

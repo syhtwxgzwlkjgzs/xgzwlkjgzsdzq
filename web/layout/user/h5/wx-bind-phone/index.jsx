@@ -32,7 +32,7 @@ class WXBindPhoneH5Page extends React.Component {
       const { webConfig } = site;
       const registerCaptcha = get(webConfig, 'setReg.registerCaptcha', false);
       const qcloudCaptchaAppId = get(webConfig, 'qcloud.qcloudCaptchaAppId', false);
-      await this.props.wxPhoneBind.sendCode(registerCaptcha, qcloudCaptchaAppId);
+      await this.props.wxPhoneBind.sendCode({registerCaptcha, qcloudCaptchaAppId});
     } catch (e) {
       Toast.error({
         content: e.Message,
@@ -74,7 +74,7 @@ class WXBindPhoneH5Page extends React.Component {
     const { nickname } = router.query;
     return (
       <div className={layout.container}>
-        <HomeHeader hideInfo/>
+        <HomeHeader hideInfo mode='login'/>
         <div className={layout.content}>
           <div className={layout.title}>手机号登陆，并绑定微信账号</div>
           <div className={layout.tips}>
@@ -101,7 +101,7 @@ class WXBindPhoneH5Page extends React.Component {
           >
             登录并绑定
           </Button>
-          <div className={layout['otherLogin-within__tips']}>注册登录即表示您同意《注册协议》《隐私协议》</div>
+          <div className={layout['otherLogin-within__tips']}>注册登录即表示您同意<span>《注册协议》</span><span>《隐私协议》</span></div>
         </div>
       </div>
     );

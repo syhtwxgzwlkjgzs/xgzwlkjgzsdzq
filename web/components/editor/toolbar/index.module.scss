@@ -1,6 +1,6 @@
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 
-$margin16: rem(16);
+$margin16: rem($margin-4n);
 
 .dvditor-toolbar {
   position: relative;
@@ -8,23 +8,29 @@ $margin16: rem(16);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--background-color);
+  background-color: $body-bg-color;
   &__left {
     margin-left: $margin16;
-    font-size: var(--font-size-primary);
+    font-size: $font-size-primary;
   }
   &__right {
     margin-right: $margin16;
-    font-size: var(--font-size-primary);
-    color: var(--color-primary);
+    font-size: $font-size-primary;
+    color: $text-color-primary;
   }
   &__item {
     position: relative;
     margin-right: rem(24);
     display: inline-flex;
-    font-size: var(--font-size-primary);
+    font-size: $font-size-primary;
+    color: $icon-color;
+    cursor: pointer;
     &:last-child {
       margin-right: 0;
+    }
+
+    &.active {
+      color: $icon-color-active;
     }
   }
 }
@@ -40,13 +46,12 @@ $margin16: rem(16);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: var(--font-size-label);
-  background-color: var(--color-white);
-  border-top: 1px solid rgba($color: #eee, $alpha: 0.75);
-  border-bottom: 1px solid rgba($color: #eee, $alpha: 0.75);
+  font-size: $font-size-label;
+  background-color: $white;
+  border-top: 1px solid $border-color;
   &__left {
     margin-left: $margin16;
-    font-size: var(--font-size-label);
+    font-size: $font-size-label;
   }
   &__right {
     margin-right: $margin16;
@@ -54,7 +59,8 @@ $margin16: rem(16);
       width: rem(36);
       margin-right: 0;
       text-align: right;
-      border-left: 1px solid rgba($color: #eee, $alpha: 0.75);;
+      border-left: 1px solid $border-color;
+      background-clip: padding-box;
     }
   }
   &__inner {
@@ -64,11 +70,30 @@ $margin16: rem(16);
     align-items: center;
     justify-content: space-between;
     flex: 1;
-    border-radius: 5px;
-    box-shadow: 0 0 8px #f2f3f5;
+    border-radius: $border-radius-small;
   }
   &__item {
-    margin-left: rem(16);
+    display: inline-block;
+    margin-left: $margin-6n;
+    color: $icon-color;
+    cursor: pointer;
+    &:first-child {
+      margin-left: 0;
+    }
+    :global {
+      .dzq-icon {
+        color: $icon-color;
+        cursor: pointer;
+      }
+    }
+    &.active {
+      color: $icon-color-active;
+      :global {
+        .dzq-icon {
+          color: $icon-color-active;
+        }
+      }
+    }
   }
 }
 
@@ -78,7 +103,7 @@ $margin16: rem(16);
   display: flex;
   align-items: center;
   &__item {
-    margin-right: rem(24);
+    margin-right: $margin-6n;
     &:last-child {
       margin-right: 0;
     }
@@ -86,5 +111,5 @@ $margin16: rem(16);
 }
 
 .pc {
-  background-color: var(--color-white);
+  background-color: $white;
 }

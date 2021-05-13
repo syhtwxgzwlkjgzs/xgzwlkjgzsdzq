@@ -5,7 +5,7 @@ import IndexPCPage from '@layout/search/pc';
 import { readUsersList, readTopicsList, readThreadList } from '@server';
 import { Toast } from '@discuzq/design';
 
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 @inject('site')
 @inject('search')
@@ -20,7 +20,7 @@ class Index extends React.Component {
     };
 
     const topics = await readTopicsList({ params: { filter: topicFilter, perPage: 10 } }, ctx);
-    const users = await readUsersList({ params: { filter: { username: search }, perPage: 10 } }, ctx);
+    const users = await readUsersList({ params: { filter: { nickname: search }, perPage: 10 } }, ctx);
     const threads = await readThreadList({ params: { filter: { sort: '3', search }, perPage: 10 } }, ctx);
 
     return {
@@ -28,6 +28,10 @@ class Index extends React.Component {
         indexTopics: topics?.data,
         indexUsers: users?.data,
         indexThreads: threads?.data,
+
+        indexTopics: null,
+        indexUsers: null,
+        indexThreads: null,
       },
     };
   }
@@ -50,14 +54,14 @@ class Index extends React.Component {
     const hasIndexUsers = !!search.indexUsers;
     const hasIndexThreads = !!search.indexThreads;
 
-    this.toastInstance = Toast.loading({
-      content: '加载中...',
-      duration: 0,
-    });
+    // this.toastInstance = Toast.loading({
+    //   content: '加载中...',
+    //   duration: 0,
+    // });
 
-    await search.getSearchData({ hasTopics: hasIndexTopics, hasUsers: hasIndexUsers, hasThreads: hasIndexThreads, search: keyword });
+    search.getSearchData({ hasTopics: hasIndexTopics, hasUsers: hasIndexUsers, hasThreads: hasIndexThreads, search: keyword });
 
-    this.toastInstance?.destroy();
+    // this.toastInstance?.destroy();
   }
 
   dispatch = async (type, data = '') => {

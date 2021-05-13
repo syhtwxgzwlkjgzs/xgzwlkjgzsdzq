@@ -1,4 +1,4 @@
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 
 
 .site{
@@ -44,7 +44,7 @@
       float: left;
       margin-left: rem($margin-6n);
       margin-right: rem($margin-2n);
-      color: var(--pc-header-btn-text-color);
+      color: $text-color-regular;
     }
     .site_status_item{
       float: left;

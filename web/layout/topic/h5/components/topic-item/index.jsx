@@ -17,11 +17,12 @@ const TopicItem = ({ data, onClick }) => {
     text = '',
     imageData = []
   } = handleAttachmentData(data?.threads[0]?.content);
+
   return (
     <div className={styles.item} onClick={click}>
       <div className={styles.title}>{data.content && `#${data.content}#`}</div>
       <PostContent content={text} className={styles.content} />
-      <ImageDisplay imgData={imageData}/>
+      {imageData?.length && <ImageDisplay imgData={imageData}/>}
       <div className={styles.footer}>
         <div className={styles.numBox}>
           <span>热度</span>

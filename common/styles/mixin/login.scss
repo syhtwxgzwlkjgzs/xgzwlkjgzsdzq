@@ -1,15 +1,15 @@
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 @mixin title {
-  font-weight: 600;
-  font-size: rem(20);
-  line-height: rem(30);
+  font-weight: 700;
+  font-size: rem($font-size-large);
+  line-height: rem($font-line-height-large);
   text-align: left;
   color: var(--color-text-primary);
 }
 @mixin banner {
   height: rem(140);
   text-align: center;
-  background-color: var(--color-primary);
+  background-color: $primary-color;
   img {
     margin-top: rem(67);
   }
@@ -17,15 +17,15 @@
 @mixin input {
   width: rem(327);
   box-sizing: border-box;
-  padding: rem(26) 0 rem(16);
-  height: rem(64);
+  padding: rem($padding-6n) 0 rem($padding-4n);
+  height: rem(62);
   border-bottom: rem(1) solid #eee;
   :global(.dzq-input__inner) {
-    font-size: rem(16);
+    font-size: rem($font-size-middle);
     border: none;
     padding: 0;
     height: rem(22);
-    line-height: rem(24);
+    line-height: rem($font-line-height-base);
     border-radius: 0;
   }
 }
@@ -38,47 +38,51 @@
   width: rem(327);
   height: rem(42);
   margin-top: rem(32);
-  font-size: rem(16);
-  padding: rem(10) 0;
+  font-size: rem($font-size-middle);
+  padding: rem($padding-10) 0;
   box-sizing: border-box;
 }
 @mixin functionalRegion {
-  margin-top: rem(24);
-  font-size: rem(16);
+  margin-top: rem($margin-6n);
+  font-size: rem($font-size-base);
   text-align: center;
   .clickBtn{
-    color: var(--color-primary);
+    color: $primary-color;
     cursor: pointer;
   }
 }
 @mixin otherLoginText {
-  font-size: rem(12);
+  font-size: rem($font-size-small);
   text-align: center;
-  line-height: rem(26);
+  line-height: rem($font-line-height-middle);
   font-weight: normal;
-  color: #c5c6ca;
+  color: $icon-color;
+  span {
+    cursor: pointer;
+    color: $primary-color;
+  }
 }
 @mixin otherLoginBtn {
-  border-radius: 50%;
+  border-radius: $border-radius-circle;
   border: rem(1) solid #eee;
-  margin: 0 rem(16);
+  margin: 0 rem($margin-4n);
   width: rem(40);
   height: rem(40);
   line-height: rem(38);
   display: inline-block;
   text-align: center;
-  background: var(--comment-box-bg-color);
+  background: $comment-bg-color;
 }
 @mixin titleTips {
-  font-size: rem(16);
+  font-size: rem($font-size-middle);
   margin: rem(32) 0;
-  line-height: rem(30);
+  line-height: rem($font-line-height-large);
   text-align: left;
   color: var(--color-text-primary);
   img {
     width: rem(30);
     height: rem(30);
-    margin: 0 rem(8);
+    margin: 0 rem($margin-2n);
   }
 }
 
@@ -86,9 +90,9 @@
 
 @mixin pc_container {
   width: 1100px;
-  border-radius: 5px;
-  background: #fff;
-  box-shadow: 0 0 8px rgba(241, 243, 244, 0.16);
+  border-radius: $border-radius-small;
+  background: $white;
+  box-shadow: 0 0 8px $border-shadow-color2;
   margin: 60px auto 0;
   text-align: center;
   padding-bottom: 50px;
@@ -102,15 +106,19 @@
   margin-top: 32px;
   font-weight: normal;
   font-size: 12px;
-  line-height: 26px;
-  color: #c5c6ca;
+  line-height: $font-line-height-middle;
+  color: $icon-color;
+  span {
+    cursor: pointer;
+    color: $primary-color;
+  }
 }
 
 @mixin pc_otherLoginBtn {
   cursor: pointer;
-  border-radius: 50%;
-  border: 1px solid #eee;
-  margin: 0 16px;
+  border-radius: $border-radius-circle;
+  border: $border-solid-1;
+  margin: 0 $margin-4n;
   width: 40px;
   height: 40px;
   line-height: 40px;
@@ -119,35 +127,106 @@
 }
 
 @mixin pc_functionalRegion {
-  margin-top: 16px;
+  margin-top: $margin-4n;
   text-align: center;
-  font-size: rem(14);
+  font-size: $font-size-base;
   .clickBtn{
-    color: var(--color-primary);
+    color: $primary-color;
     cursor: pointer;
   }
 }
 @mixin pc_tips {
   font-weight: normal;
-  font-size: 14px;
-  line-height: 24px;
+  font-size: $font-size-base;
+  line-height: $font-line-height-base;
   text-align: left;
-  color: #4f5a70;
-  padding-bottom: 8px;
+  color: $text-color-regular;
+  padding-bottom: $padding-2n;
 }
 @mixin pc_titleTips {
-  font-size: 16px;
-  line-height: 30px;
+  font-size: $font-size-middle;
+  line-height: $font-line-height-large;
   text-align: left;
   color: var(--color-text-primary);
   img {
     width: 30px;
     height: 30px;
-    margin: 0 8px;
+    margin: 0 $margin-2n;
   }
 }
 @mixin pc_body_background {
-  background: #f4f5f6;
-  padding-top: 20px;
+  background: $body-bg-color;
+  padding-top: $padding-5n;
   padding-bottom: 60px;
+}
+
+// -------------------------------------小程序
+@mixin mini_container {
+  background-color: var(--color-white);
+  height: 100vh;
+}
+@mixin mini_content {
+  padding: 48px $padding-6n;
+}
+@mixin mini_title {
+  font-weight: 600;
+  font-size: $font-size-large;
+  line-height: $font-line-height-large;
+  text-align: left;
+  color: var(--color-text-primary);
+}
+@mixin mini_functionalRegion {
+  text-align: center;
+  .clickBtn{
+    color: $primary-color;
+    cursor: pointer;
+  }
+}
+@mixin mini_tips {
+  font-size: $font-size-middle;
+  margin: 32px 0;
+  line-height: $font-line-height-large;
+  text-align: left;
+  color: $text-color-primary;
+}
+@mixin mini_button {
+  width: 327px;
+  height: 42px;
+  margin-top: 32px;
+  font-size: $font-size-middle;
+  padding: $padding-10 0;
+  line-height: 20px;
+  box-sizing: border-box;
+}
+
+@mixin mini_input {
+  width: 327px;
+  box-sizing: border-box;
+  padding: $padding-6n 0 $padding-4n;
+  height: 62px;
+  border-bottom: $border-solid-1;
+  :global(.dzq-input__inner) {
+    font-size: $font-size-middle;
+    border: none;
+    padding: 0;
+    height: 22px;
+    line-height: $font-line-height-base;
+    border-radius: 0;
+  }
+  :global(.dzq-icon-EyeOutlined) {
+    top: 16px;
+    z-index: 3;
+  }
+}
+@mixin mini_captchaBtn{
+  position: absolute;
+  right: 0;
+  bottom: 18px;
+  text-align: center;
+  border-radius: $border-radius-small;
+  font-size: $font-size-base;
+  color: $text-color-secondary;
+  cursor: pointer;
+  padding-right: $padding-2n;
+  z-index: 2;
 }

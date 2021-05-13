@@ -1,6 +1,6 @@
 import React from 'react';
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
-import HOCWithLogin from '@common/middleware/HOCWithLogin';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import HOCWithLogin from '@middleware/HOCWithLogin';
 import { inject, observer } from 'mobx-react';
 import MyH5Page from '@layout/my/h5';
 import MyPCPage from '@layout/my/pc';
@@ -19,6 +19,4 @@ class MyCenter extends React.Component {
   }
 }
 
-// export default HOCFetchSiteData(HOCWithLogin(MyCenter));
-
-export default HOCFetchSiteData(MyCenter);
+export default HOCFetchSiteData(HOCWithLogin(MyCenter));

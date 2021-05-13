@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Button, Icon, RichText } from '@discuzq/design';
+import { noop } from '../utils'
 
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
@@ -25,7 +26,7 @@ const Index = ({
   hidePercent = 0,
   payAmount = 0,
   onPay,
-  onRedirectToDetail,
+  onRedirectToDetail = noop,
   loading,
   ...props
 }) => {
@@ -75,8 +76,8 @@ const Index = ({
         className={`${styles.contentWrapper} ${showHideCover ? styles.hideCover : ''}`}
         onClick={!showMore ? onShowMore : onRedirectToDetail}
       >
-        <div className={styles.content}>
-          <RichText content={filterContent} />
+        <div className={styles.content} dangerouslySetInnerHTML={{__html: filterContent }}>
+          {/* <RichText content={filterContent} /> */}
         </div>
       </div>
       {!loading && useShowMore && !showMore && (
@@ -88,10 +89,10 @@ const Index = ({
       {!loading && showMore && isPayContent && (
         <div className={styles.payInfo}>
           <div className={styles.hidePercent}>{texts.hidePercent}</div>
-          <Button type="primary" onClick={onPay} className={styles.payButton}>
+          {/* <Button type="primary" onClick={onPay} className={styles.payButton}>
             <img className={styles.payButtonIcon} />
             {texts.payButton}
-          </Button>
+          </Button> */}
         </div>
       )}
     </div>

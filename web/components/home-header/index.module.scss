@@ -14,6 +14,10 @@
     justify-content: space-between;
     padding: rem($padding-4n);
     box-sizing: border-box;
+    .left{
+      font-size: rem($font-size-middle);
+      color: var(--color-white);
+    }
     .goback{
       transform: rotate(180deg);
     }
@@ -81,6 +85,11 @@
       padding-right: rem($padding-2n);
       box-sizing: border-box;
     }
-    
   }
+}
+.container_mode_login {
+  height: rem(128);
+}
+.container_mode_invite {
+  height: rem(156);
 }

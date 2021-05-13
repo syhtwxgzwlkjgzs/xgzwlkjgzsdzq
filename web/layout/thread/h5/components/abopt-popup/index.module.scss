@@ -5,25 +5,74 @@
   border-radius: rem($border-radius-big) rem($border-radius-big) 0 0;
 }
 
+.main {
+  padding: rem($padding-4n) rem($padding-4n) 0;
+  border-bottom: var(--border-border);
+}
+
 .header {
-  width: 100%;
-  height: rem(44);
-  font-size: rem($font-size-label);
-  line-height: rem(44);
-  text-align: center;
+  font-family: "PingFang SC";
+  font-weight: 600;
+  font-size: rem($font-size-middle);
+  line-height: rem(17.8);
+  text-align: left;
+  color: var(--color-text-primary);
 }
 
 .body {
   width: 100%;
   .percentage {
-    height: rem(30);
     display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: rem($padding-10) 0;
+    flex-direction: column;
+    border-bottom: var(--border-border);
     .text {
-      font-size: rem($font-size-label);
-      padding: 0 rem($padding-1n);
+      font-family: "PingFang SC";
+      font-weight: normal;
+      font-size: rem($font-size-primary);
+      line-height: rem(17.8);
+      text-align: left;
+      color: var(--pc-user-info-title);
+      padding: rem($padding-4n) 0 rem($padding-2n) 0;
+    }
+    .slider {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: rem($padding-2n);
+      .perCent {
+
+      }
+      :global {
+        .dzq-slider__progress--active {
+          height: rem(4);
+        }
+        .dzq-slider__progress__button {
+          width: rem(10);
+          height: rem(10);
+          border: rem(7) solid var(--color-primary);
+        }
+      }
+    }
+  }
+  .rewardMoney {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: rem($font-size-primary);
+    font-weight: normal;
+    padding: rem($padding-4n) 0;
+    border-bottom: var(--border-border);
+    .text {
+      font-family: 'PingFang SC';
+      line-height: rem(17.8);
+      text-align: left;
+      color: var(--pc-user-info-title);
+    }
+    .moneyNum {
+      font-family: 'PingFangSC-Regular';
+      line-height: rem(16.8);
+      text-align: left;
+      color: var(--color-text-primary);
     }
     :global {
       .dzq-input {
@@ -36,25 +85,24 @@
       }
     }
   }
-  .rewardMoney {
-    height: rem(30);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: rem($margin-10) 0;
-    .text {
-      font-size: rem($font-size-label);
-      padding: 0 rem($padding-1n);
-    }
-    :global {
-      .dzq-input {
-        width: rem(90);
-        height: rem(30);
-        .dzq-input__inner {
-          width: rem(90);
-          height: rem(30);
-        }
-      }
-    }
+}
+
+.button {
+  display: flex;
+  justify-content: space-between;
+  padding: rem($padding-2n) rem($padding-4n) rem(19);
+  border-bottom: var(--border-border);
+  .cancel {
+    width: rem(167);
+    height: rem(42);
+    border-radius: rem($border-radius-small);
+    color: var(--pc-user-info-title);
+    background: var(--background-color-text2);
+  }
+  .ok {
+    width: rem(167);
+    height: rem(42);
+    border-radius: rem($border-radius-small);
+    background: var(--color-primary);
   }
 }

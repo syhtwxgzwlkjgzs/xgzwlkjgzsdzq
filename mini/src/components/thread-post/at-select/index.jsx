@@ -158,14 +158,16 @@ class AtSelect extends Component {
         </Checkbox.Group>
 
         {/* 取消按钮 */}
-        <View className={styles.btn}>
-          <Button onClick={this.handleCancel}>取消</Button>
-          <Button
-            className={checkUser.length > 0 ? 'is-selected' : 'not-selected'}
-            onClick={() => this.submitSelect()}
-          >
-            {checkUser.length ? `@ 已选(${checkUser.length})` : '尚未选'}
-          </Button>
+        <View className={styles['btn-container']}>
+          <View className={styles.btn}>
+            <Button onClick={this.handleCancel}>取消</Button>
+            <Button
+              className={checkUser.length > 0 ? 'is-selected' : 'not-selected'}
+              onClick={() => this.submitSelect()}
+            >
+              {checkUser.length ? `@ 已选(${checkUser.length})` : '尚未选'}
+            </Button>
+          </View>
         </View>
       </View >
     );

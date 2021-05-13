@@ -4,7 +4,6 @@ import IndexH5Page from '@layout/search/result-post';
 import { Toast } from '@discuzq/design';
 import Page from '@components/page';
 import { getCurrentInstance } from '@tarojs/taro';
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
 
 @inject('site')
 @inject('search')
@@ -45,4 +44,4 @@ class Index extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(Index);
+export default Index;

@@ -13,6 +13,10 @@ const Index = ({ onSubmit = noop }) => {
   // 选中项index
   const newFilterData = filterData.slice();
   const [dataSource, setDataSource] = useState(newFilterData);
+  // 一级菜单是否可以多选
+  const [multiple, setMultiple] = useState(true)
+  // 二级菜单是否可以多选
+  const [subMultiple, setSubMultiple] = useState(false)
 
   // 点击筛选项，获取目标值
   const onClick = (subIndex, index) => {
@@ -28,7 +32,6 @@ const Index = ({ onSubmit = noop }) => {
       const indexItem = newDataSource[index];
       indexItem.isActive = true;
     } else if (`${index}` === '-1') {
-      
       const indexItems = newDataSource.map(item => {
         if (!item.children?.length) {
           item.isActive = false
@@ -65,7 +68,7 @@ const Index = ({ onSubmit = noop }) => {
   return (
     <div className={styles.container}>
       {/* 菜单 */}
-      <Menu mode="horizontal" menuTrigger="hover">
+      <Menu mode="horizontal" menuTrigger="hover" multiple={multiple}>
         {
           dataSource?.map((item, index) => (
             item.children ? (
@@ -73,14 +76,14 @@ const Index = ({ onSubmit = noop }) => {
                   key={index} 
                   index={index} 
                   title={title(item.label)} 
-                  className={item.isActive && styles.activeItem}
+                  // className={item.isActive && styles.activeItem}
                   style={{ padding: '3px 0' }}
                 >
                   {
                     item.children.map((secondItem, secondIndex) => {
                       return (
                         <Menu.Item
-                          className={secondItem.isActive && styles.activeItem}
+                          // className={secondItem.isActive && styles.activeItem}
                           divided
                           key={`${index}-${secondIndex}`}
                           index={`${index}-${secondIndex}`}

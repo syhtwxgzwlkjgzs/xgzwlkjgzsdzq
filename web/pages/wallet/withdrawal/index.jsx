@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'next/router';
 import { inject } from 'mobx-react';
 import Withdrawal from '@layout/wallet/withdrawal';
-import HOCFetchSiteData from '@common/middleware/HOCFetchSiteData';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import { readWalletUser } from '@server';
 
 class WalletPage extends React.Component {
