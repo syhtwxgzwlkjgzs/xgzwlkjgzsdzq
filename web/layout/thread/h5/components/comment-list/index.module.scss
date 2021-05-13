@@ -54,7 +54,9 @@
       .commentListContentText {
         padding: rem($padding-2n);
         border-radius: rem($border-radius-small);
-        background-color: $comment-bg-color;
+        // TODO:token
+        background: #f5f7f8;
+
         .commentListName {
           font-weight: var(--font-weight-regular);
           font-size: rem($font-size-primary);
@@ -65,7 +67,6 @@
           padding-bottom: rem($padding-1n);
         }
         .commentListText {
-          font-family: "PingFang SC";
           font-size: rem($font-size-middle);
           line-height: rem($font-line-height-middle);
           text-align: left;
