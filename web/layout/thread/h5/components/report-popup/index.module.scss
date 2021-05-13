@@ -3,41 +3,51 @@
 .container {
   background: var(--color-white);
   border-radius: rem($border-radius-big) rem($border-radius-big) 0 0;
+  padding: rem($padding-4n);
 }
 
 .header {
   width: 100%;
   font-size: rem($font-size-label);
   text-align: center;
+
   .title {
-    color: #333;
-    line-height: rem(40);
     padding-top: rem($padding-2n);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: rem($font-size-middle);
+    font-weight: var(--font-weight-regular);
+    color: $text-color-primary;
   }
+
   .reason {
-    color: #aaa;
-    padding-bottom: rem($padding-5n);
+    margin-top: rem($margin-2n);
+    color: $text-color-regular;
   }
 }
 
 .body {
-  padding: 0 rem($padding-4n);
+  margin-top: rem($margin-4n);
   .reportTitle {
     height: rem(50);
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: solid rem(1) var(--border-line-color);
-    :global{
-      .dzq-checkbox-wrap{
+    font-size: rem($font-size-base);
+    color: $text-color-primary;
+    :global {
+      .dzq-checkbox-wrap {
         -webkit-tap-highlight-color: transparent;
       }
     }
   }
-
 }
 
 .input {
+  margin-top: rem($margin-2n);
   width: 100%;
   height: rem(76);
   margin-bottom: rem($margin-4n);
@@ -45,14 +55,21 @@
 }
 
 .button {
+  margin-top: rem($margin-6n);
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   .ok {
-    width: 100%;
+    width: rem(167);
+    height: rem(42);
   }
   .cancel {
-    width: 100%;
-    background: var(--color-white);
-    color: var(--color-black);
+    width: rem(167);
+    height: rem(42);
+    background: $button-info-bg-color;
     border: none;
+    margin-right: rem($margin-4n);
   }
 }

@@ -54,7 +54,8 @@
       .commentListContentText {
         padding: rem($padding-2n);
         border-radius: rem($border-radius-small);
-        background-color: $comment-bg-color;
+        background: $body-bg-color;
+
         .commentListName {
           font-weight: var(--font-weight-regular);
           font-size: rem($font-size-primary);
@@ -65,7 +66,6 @@
           padding-bottom: rem($padding-1n);
         }
         .commentListText {
-          font-family: "PingFang SC";
           font-size: rem($font-size-middle);
           line-height: rem($font-line-height-middle);
           text-align: left;
@@ -119,9 +119,6 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    > div {
-      margin-right: rem($margin-2n);
-    }
   }
   .extraBottom {
     display: flex;

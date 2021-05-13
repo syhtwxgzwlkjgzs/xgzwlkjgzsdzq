@@ -90,10 +90,10 @@
           }
         }
         .categoryEssence {
-          color: var(--color-primary);
-          border: rem(1) solid var(--color-primary);
+          color: $tag-text-color1;
+          border: rem(1) solid $tag-text-color1;
           &:after {
-            background-color: var(--color-primary);
+            background-color: $tag-text-color1;
           }
         }
         .categoryRed {

@@ -45,22 +45,19 @@ class Index extends React.Component {
     const hasUsers = !!search.users;
     const hasTopics = !!search.topics;
 
-    if (!hasUsers || !hasTopics) {
+    if (!hasUsers) {
       this.toastInstance = Toast.loading({
         content: '加载中...',
         duration: 0,
       });
 
       this.page = 1;
-      await this.getData(keyword);
-
+      await search.getUsersList({ search: keyword });
       this.toastInstance?.destroy();
     }
-  }
-  getData = (keyword) => {
-    const { search } = this.props;
-    search.getTopicsList({ search: keyword, perPage: 1, page:10   });
-    search.getUsersList({ search: keyword, perPage: this.perPage, page: this.page  });
+    if (!hasTopics) {
+      search.getTopicsList({ search: keyword, perPage: 1});
+    }
   }
   dispatch = async (type, data) => {
     const { search } = this.props;
@@ -71,7 +68,7 @@ class Index extends React.Component {
       this.page += 1;
     }
 
-    await this.getData(data);
+    await search.getUsersList({ search: data, perPage: this.perPage, page: this.page });
     return;
   }
 

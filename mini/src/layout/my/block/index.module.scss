@@ -1,0 +1,64 @@
+
+
+.shieldBox {
+  width: 100%;
+  height: 100%;
+  background-color: var(--background-color);
+}
+.titleBox {
+  width: 100%;
+  height: 53px;
+  background-color: var(--color-white);
+  font-size: 14px;
+  color: var(--pc-user-info-title);
+  padding: 0 16px;
+  line-height: 53px;
+  margin-bottom: 10px;
+}
+.list {
+  flex: 1;
+  background-color: var(--color-white);
+}
+.haieldImg {
+  width: 100%;
+  height: 70px;
+  padding: 0 16px;
+  background-color: var(--color-white);
+  box-sizing: border-box;
+}
+.haieldImgBox {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid #eee;
+  box-sizing: border-box;
+}
+.haieldImgHead {
+  display: flex;
+  .haieldName {
+    font-family: PingFangSC-Semibold;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    color: var(--color-text-primary);
+    margin: 9px 0 0 8px;
+  }
+}
+.haieldName {
+  border-radius: 5px;
+  margin-top: 7px;
+}
+.haieldButton {
+  font-size: 12px;
+  width: 72px;
+  height: 25px;
+  color: var( --color-white);
+  border-radius: 5px;
+  line-height: 26px;
+  text-align: center;
+  background: var(--loading-font-color);
+  padding: 0;
+  border: none;
+}

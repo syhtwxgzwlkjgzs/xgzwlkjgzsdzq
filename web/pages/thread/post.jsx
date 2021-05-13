@@ -8,7 +8,7 @@ import HOCWithLogin from '@middleware/HOCWithLogin';
 import * as localData from '@layout/thread/post/common';
 import { Toast } from '@discuzq/design';
 import { createAttachment } from '@common/server';
-import { THREAD_TYPE, ATTACHMENT_TYPE, MAX_COUNT } from '@common/constants/thread-post';
+import { THREAD_TYPE, ATTACHMENT_TYPE } from '@common/constants/thread-post';
 import Router from '@discuzq/sdk/dist/router';
 import PayBoxProvider from '@components/payBox/payBoxProvider';
 import PayBox from '@components/payBox/index';
@@ -137,7 +137,6 @@ class PostPage extends React.Component {
       const audioSrc = window.URL.createObjectURL(blob);
       this.setState({
         audioSrc,
-        currentAttachOperation: false,
       });
       this.setPostData({ audio: { ...data, mediaUrl: audioSrc }, audioSrc });
     }
@@ -151,6 +150,7 @@ class PostPage extends React.Component {
   // 附件相关icon
   handleAttachClick = (item) => {
     this.setState({ currentAttachOperation: item.type });
+    this.props.threadPost.setCurrentSelectedToolbar(item.type);
   };
 
   // 附件和图片上传
@@ -247,10 +247,10 @@ class PostPage extends React.Component {
       Toast.info({ content: '请填写您要发布的内容' });
       return;
     }
-    if (!isDraft && this.state.count > MAX_COUNT) {
-      Toast.info({ content: `输入的内容不能超过${MAX_COUNT}字` });
-      return;
-    }
+    // if (!isDraft && this.state.count > MAX_COUNT) {
+    //   Toast.info({ content: `输入的内容不能超过${MAX_COUNT}字` });
+    //   return;
+    // }
     if (isDraft) this.setPostData({ draft: 1 });
     else this.setPostData({ draft: 0 });
     const { threadPost } = this.props;
@@ -319,7 +319,7 @@ class PostPage extends React.Component {
   };
 
   async createThread(isDraft) {
-    const { threadPost, thread } = this.props;
+    const { threadPost } = this.props;
     const threadId = this.props.router.query.id || '';
     let ret = {};
     Toast.loading({ content: isDraft ? '保存草稿中...' : '创建中...' });

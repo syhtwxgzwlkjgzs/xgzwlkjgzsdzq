@@ -15,20 +15,7 @@ import classnames from 'classnames';
 import topic from './index.module.scss';
 import threadPay from '@common/pay-bussiness/thread-pay';
 import { minus } from '@common/utils/calculate';
-
-const typeMap = {
-  101: 'IMAGE',
-  102: 'VOICE',
-  103: 'VIDEO',
-  104: 'GOODS',
-  105: 'QA',
-  106: 'RED_PACKET',
-  107: 'REWARD',
-  108: 'VOTE',
-  109: 'QUEUE',
-  110: 'FILE',
-  111: 'QA_IMAGE',
-};
+import {parseContentData} from '../../utils';
 
 // 帖子内容
 export default inject('user')(
@@ -68,15 +55,7 @@ export default inject('user')(
     // 是否可以打赏
     const canReward = props?.user?.isLogin() && !isRedPack && !isReward;
 
-    const parseContent = {};
-    if (indexes && Object.keys(indexes)) {
-      Object.entries(indexes).forEach(([, value]) => {
-        if (value) {
-          const { tomId, body } = value;
-          parseContent[typeMap[tomId]] = body;
-        }
-      });
-    }
+    const parseContent = parseContentData(indexes);
 
     const onContentClick = async () => {
       const thread = props.store.threadData;

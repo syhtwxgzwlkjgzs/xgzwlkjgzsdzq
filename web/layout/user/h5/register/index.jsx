@@ -8,7 +8,7 @@ import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
-
+// import { TencentCaptcha } from '@discuzq/sdk/dist/common_modules/sliding-captcha';
 @inject('site')
 @inject('user')
 @inject('thread')
@@ -17,22 +17,34 @@ import { get } from '@common/utils/get';
 @observer
 class RegisterH5Page extends React.Component {
     handleRegisterBtnClick = async () => {
-      const { webConfig } = this.props.site;
-      const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
-      if (qcloudCaptcha) {
-        return this.showCaptcha();
-      }
+      try {
+        this.props.userRegister.verifyForm();
+        const { webConfig } = this.props.site;
+        const registerCaptcha = webConfig?.setReg?.registerCaptcha;
+        if (registerCaptcha) {
+          return this.showCaptcha();
+        }
 
-      await this.toRegister();
+        await this.toRegister();
+      } catch (e) {
+        Toast.error({
+          content: e.Message,
+          hasMask: false,
+          duration: 1000,
+        });
+      }
     }
     async showCaptcha() {
       // 验证码实例为空，则创建实例
       const { webConfig } = this.props.site;
       const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
+
       if (!this.captcha) {
-        const TencentCaptcha = (await import('@common/utils/tcaptcha')).default;
+        const { TencentCaptcha } = (await import('@discuzq/sdk/dist/common_modules/sliding-captcha'));
         this.captcha = new TencentCaptcha(qcloudCaptchaAppId, (res) => {
           if (res.ret === 0) {
+            this.props.userRegister.captchaRandStr = res.randstr;
+            this.props.userRegister.captchaTicket = res.ticket;
             this.toRegister();
           }
         });
