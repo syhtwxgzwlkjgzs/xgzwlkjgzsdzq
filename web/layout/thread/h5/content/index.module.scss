@@ -32,7 +32,7 @@
 }
 
 .title {
-  color: $text-color-primary;
+  color: var(--color-text-primary);
   line-height: 21px;
   font-weight: var(--font-weight-regular);
   font-size: rem($font-size-middle);
