@@ -2,7 +2,7 @@
 @import '@common/styles/_variable.scss';
 
 .content {
-  padding: $padding-6n;
+  padding: rem($padding-6n);
   padding-bottom: 0;
   height: 100%;
   h3 {

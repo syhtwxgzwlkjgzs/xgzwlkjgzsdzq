@@ -2,7 +2,7 @@
 @import '@common/styles/_variable.scss';
 
 .content {
-  padding: $padding-6n;
+  padding: rem($padding-6n);
   padding-bottom: 0;
   h3 {
     font-size: rem($font-size-large);
@@ -34,9 +34,7 @@
       :global {
         .dzq-input__inner {
           border: none;
-
         }
-        
       }
     }
   }
@@ -58,3 +56,27 @@
     font-size: $font-size-middle;
   }
 }
+
+.labelInfo {
+  padding: rem($padding-6n);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .labelValue {
+    color: $text-color-primary;
+    font-size: $font-size-middle;
+    border-bottom: 1px solid $border-color;
+    flex: 1;
+    :global {
+      .dzq-input {
+        width: 100%;
+      }
+      .dzq-input__inner {
+        width: 100%;
+        border: none;
+        font-size: rem($font-size-middle);
+      }
+    }
+  }
+}
+

@@ -80,6 +80,11 @@ class index extends Component {
     Router.push({url: `/my/edit/pwd`})
   }
 
+  handleGoToEditPayPwd = () => {
+    console.log('去到修改支付密码页面');
+    Router.push({url: '/my/edit/paypwd'})
+  }
+
   render() {
     return (
       <div>
@@ -121,7 +126,7 @@ class index extends Component {
               <label>支付密码</label>
               <div>修改</div>
             </div>
-            <div><Icon name="RightOutlined" /></div>
+            <div onClick={this.handleGoToEditPayPwd}><Icon name="RightOutlined" /></div>
           </div>
           <div className={styles.userCenterEditItem} style={{ border: 'none' }}>
             <div className={styles.userCenterEditLabel}>
