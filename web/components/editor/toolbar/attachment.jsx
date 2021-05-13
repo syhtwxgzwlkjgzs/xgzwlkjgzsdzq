@@ -139,26 +139,28 @@ function AttachmentToolbar(props) {
 
   const icons = () => attachIcon.map((item) => {
     const { permission } = props;
-
+    if (props.pc && item.type === THREAD_TYPE.voice) return null;
+    const clsName = item.type === currentAction ? `${styles['dvditor-attachment-toolbar__item']} ${styles.active}` : styles['dvditor-attachment-toolbar__item'];
     if (!item.isUpload) {
       return permission[item.type] ? (
         <Icon
           key={item.name}
           onClick={() => handleAttachClick(item)}
-          className={styles['dvditor-attachment-toolbar__item']}
+          className={clsName}
           name={item.name}
-          color={item.type === currentAction && item.active}
           size="20"
         />
       ) : null;
     }
     return permission[item.type] ? (
-      <div key={item.name} onClick={trggerInput} style={{ display: 'inline-block' }}>
+      <div
+        key={item.name}
+        onClick={trggerInput}
+        className={clsName}
+      >
         <Icon
           onClick={() => handleAttachClick(item)}
-          className={styles['dvditor-attachment-toolbar__item']}
           name={item.name}
-          color={item.type === currentAction && item.active}
           size="20" />
         <input
           style={{ display: 'none' }}

@@ -57,7 +57,11 @@ class RenderCommentList extends React.Component {
 
   // 点击评论的赞
   async likeClick(data) {
-    console.log(data);
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      return;
+    }
+
     if (!data.id) return;
 
     if (this.recordCommentLike.id !== data.id) {
@@ -92,6 +96,11 @@ class RenderCommentList extends React.Component {
   // 点击回复的赞
   async replyLikeClick(reply, comment) {
     if (!reply.id) return;
+
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      return;
+    }
 
     if (this.recordReplyLike.id !== reply.id) {
       this.recordReplyLike.status = null;
@@ -176,7 +185,7 @@ class RenderCommentList extends React.Component {
   // 创建回复评论+回复回复接口
   async createReply(val) {
     const id = this.props.thread?.threadData?.id;
-    if (!id) return;
+    if (!id || !val) return;
 
     const params = {
       id,
@@ -229,6 +238,11 @@ class RenderCommentList extends React.Component {
 
   // 点击采纳
   onAboptClick(data) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      return;
+    }
+
     this.commentData = data;
     this.setState({ showAboptPopup: true });
   }
@@ -270,8 +284,8 @@ class RenderCommentList extends React.Component {
     const { totalCount, commentList } = this.props.thread;
 
     // 是否作者自己
-    const isSelf = this.props.user?.userInfo?.id
-        && this.props.user?.userInfo?.id === this.props.thread?.threadData?.userId;
+    const isSelf =
+      this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === this.props.thread?.threadData?.userId;
 
     const isReward = this.props.thread?.threadData?.displayTag?.isReward;
 

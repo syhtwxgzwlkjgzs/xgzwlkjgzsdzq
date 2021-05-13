@@ -79,7 +79,7 @@ class SearchResultUserPcPage extends React.Component {
   render() {
     // const { keyword } = this.state;
     const { users } = this.props.search;
-    const { pageData, currentPage, totalPage } = users || { pageData: [] };
+    const { pageData, currentPage, totalPage } = users || {};
 
     return (
       <BaseLayout
@@ -92,7 +92,7 @@ class SearchResultUserPcPage extends React.Component {
         <SidebarPanel 
           title="活跃用户" 
           type='normal'
-          isShowMore={false}
+          isShowMore={!pageData}
           noData={!pageData?.length}
           icon={{ type: 2, name: 'MemberOutlined' }}
         >

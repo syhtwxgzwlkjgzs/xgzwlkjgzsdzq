@@ -31,6 +31,13 @@
   }
 }
 
+.title {
+  color: $text-color-primary;
+  line-height: 21px;
+  font-weight: var(--font-weight-regular);
+  font-size: rem($font-size-middle);
+}
+
 .image {
   width: 100%;
 }
@@ -39,6 +46,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.rewardBody {
+  text-align: center;
+  margin-bottom: rem($margin-6n);
 }
 
 .rewardButton {
@@ -77,6 +89,16 @@
   margin-top: rem($margin-4n);
   width: 100%;
   height: rem(36);
+}
+
+.buyContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .buyText {
+    // margin-left: rem($margin-2n);
+  }
 }
 
 .tag {
@@ -125,11 +147,12 @@
 
 .rewardText {
   padding: rem($padding-4n) 0;
-  background: var(--background-color-text);
+  background: $body-bg-color;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: var($border-radius-small);
+  border-radius: $border-radius-small;
+  
   .rewardMoney {
     line-height: rem($font-line-height-base);
     font-size: rem($font-size-primary);

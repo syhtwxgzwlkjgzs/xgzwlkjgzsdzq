@@ -1,15 +1,1 @@
-@import '@common/styles/index.scss';
 
-.section {
-  padding: rem($padding-4n);
-  padding-top: 0;
-  background-color: $white;
-
-  &.popularContents{
-    padding-bottom: 0;
-  }
-}
-.hr {
-  height: rem(10);
-  background-color: var(--background-color);
-}
