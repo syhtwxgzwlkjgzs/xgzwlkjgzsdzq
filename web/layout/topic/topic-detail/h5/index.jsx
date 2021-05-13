@@ -27,7 +27,7 @@ class TopicH5Page extends React.Component {
       return;
     }
 
-    Toast.info({ content: '分享链接已复制成功' });
+    Toast.info({ content: '复制链接成功' });
 
     const { content = '' } = this.props.topic?.topicDetail?.pageData[0] || {};
     h5Share(content);

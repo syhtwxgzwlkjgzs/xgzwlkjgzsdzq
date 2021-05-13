@@ -20,7 +20,6 @@ class IndexH5Page extends React.Component {
       visible: false,
       filter: {},
       currentIndex: '',
-      scroll: true,
       isFinished: true
     };
     this.listRef = createRef();
@@ -38,24 +37,6 @@ class IndexH5Page extends React.Component {
     this.setState({
       visible: false,
     });
-  }
-
-  onScroll = ({ scrollTop = 0 } = {}) => {
-    if (!this.listRef.current) {
-      return
-    }
-    const el = this.listRef.current.offsetTop;
-
-    if (scrollTop >= el) {
-      this.setState({
-        scroll: false,
-      });
-    }
-    if (scrollTop < 160) {
-      this.setState({
-        scroll: true,
-      });
-    }
   }
 
   onClickTab = (id = '') => {
@@ -110,16 +91,16 @@ class IndexH5Page extends React.Component {
     return tmpCategories;
   }
 
-  renderHeaderContent = (scroll) => {
+  renderHeaderContent = () => {
     const { index } = this.props;
     const { currentIndex } = this.state;
     const { sticks = [], categories = [] } = index;
     const newCategories = this.handleCategories(categories);
 
     return (
-      <div>
+      <>
         <HomeHeader/>
-        {categories?.length > 0 && <div ref={this.listRef} className={scroll ? styles.homeContent : styles.homeContentText}>
+        {categories?.length > 0 && <div ref={this.listRef} className={styles.homeContent}>
           <Tabs
             className={styles.tabsBox}
             scrollable
@@ -146,7 +127,7 @@ class IndexH5Page extends React.Component {
         {sticks && sticks.length > 0 && <div className={styles.homeContentTop}>
           <TopNew data={sticks} itemMargin='1'/>
         </div>}
-      </div>
+      </>
     );
   }
 
@@ -176,7 +157,7 @@ class IndexH5Page extends React.Component {
 
   render() {
     const { index } = this.props;
-    const { filter, scroll, isFinished } = this.state;
+    const { filter, isFinished } = this.state;
     const { threads = {}, categories = [] } = index;
     const { currentPage, totalPage, pageData } = threads || {};
     const newCategories = this.handleCategories(categories);
@@ -194,10 +175,10 @@ class IndexH5Page extends React.Component {
           { pageData?.length > 0
             ? (
               pageData.map((item, index) => (
-                <div key={index}>
-                  { index === 0 && this.renderHeaderContent(scroll)}
-                  <ThreadContent data={item} className={styles.listItem} />
-                </div>
+                <>
+                  { index === 0 && this.renderHeaderContent()}
+                  <ThreadContent key={index} data={item} className={styles.listItem} />
+                </>
               ))
             )
             : this.renderNoData()
