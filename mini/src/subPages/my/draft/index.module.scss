@@ -1,6 +1,7 @@
 @import '@common/styles/index.scss';
 
 .drafts-box {
+  height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: var(--comment-box-bg-color);
@@ -27,15 +28,14 @@
     .drafts-list {
       width: 100%;
       min-height: 48px;
-      padding: var(--padding-4n) 0;
+      padding-bottom: var(--padding-4n);
       border-bottom: var(--border-border);
+    }
 
-      .drafts-list-finally {
-        width: 100%;
-        min-height: 48px;
-        padding: var(--padding-4n) 0;
-      }
-
+    .drafts-list-finally {
+      width: 100%;
+      min-height: 48px;
+      padding-bottom: var(--padding-4n);
     }
 
     .drafts-time {
