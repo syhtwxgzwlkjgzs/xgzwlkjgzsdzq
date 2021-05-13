@@ -1,3 +1,4 @@
+@import '@styles/index.scss';
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -5,6 +6,7 @@
   align-items: stretch;
   height: 100vh;
   background: var(--color-white);
+  border-top: 1px solid var(--border-line-color);
 
   :global {
     .dzq-input {
@@ -76,6 +78,9 @@
     }
   }
 
+  .btn-container {
+    @include ios-safe-area-inset-bottom;
+  }
   .btn {
     margin: 0 var(--margin-10);
     padding: var(--padding-2n) 0;

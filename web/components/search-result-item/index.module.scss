@@ -58,6 +58,7 @@
 .topic {
   padding: rem($padding-2n) rem($padding-4n);
   border-bottom: 1px solid var(--border-line-color);
+  background-color: $white;
   .title {
     font-size: rem($font-size-middle);
     line-height: rem($font-line-height-primary);

@@ -1,8 +1,11 @@
 import React from 'react';
-import { inject, observer } from 'mobx-react';
+import { View, Text } from '@tarojs/components';
+import { observer, inject } from 'mobx-react';
+import classnames from 'classnames';
 import { Icon, Button } from '@discuzq/design';
-import { parseContentData } from '../../utils';
-import ImageDisplay from '@components/thread/image-display';
+
+import UserInfo from '@components/thread/user-info';
+import ImageContent from '@components/thread/image-content';
 import AudioPlay from '@components/thread/audio-play';
 import PostContent from '@components/thread/post-content';
 import ProductItem from '@components/thread/product-item';
@@ -10,11 +13,11 @@ import VideoPlay from '@components/thread/video-play';
 import PostRewardProgressBar, { POST_TYPE } from '@components/thread/post-reward-progress-bar';
 import Tip from '@components/thread/tip';
 import AttachmentView from '@components/thread/attachment-view';
-import { minus } from '@common/utils/calculate';
 import threadPay from '@common/pay-bussiness/thread-pay';
-import classnames from 'classnames';
-import UserInfo from '@components/thread/user-info';
-import styles from './index.module.scss';
+import { minus } from '@common/utils/calculate';
+
+import { parseContentData } from '../../utils';
+import topic from './index.module.scss';
 
 // 帖子内容
 const RenderThreadContent = inject('user')(
@@ -67,9 +70,10 @@ const RenderThreadContent = inject('user')(
     };
 
     return (
-      <div className={`${styles.container}`}>
-        <div className={styles.header}>
-          <div className={styles.userInfo}>
+      // <View>帖子内容</View>
+      <View className={`${topic.container}`}>
+        <View className={topic.header}>
+          <View className={topic.userInfo}>
             <UserInfo
               name={threadStore?.threadData?.user?.userName || ''}
               avatar={threadStore?.threadData?.user?.avatar || ''}
@@ -78,47 +82,27 @@ const RenderThreadContent = inject('user')(
               time={`${threadStore?.threadData?.createdAt}` || ''}
               isEssence={isEssence}
             ></UserInfo>
-          </div>
+          </View>
           {props?.user?.isLogin() && (
-            <div className={styles.more} onClick={onMoreClick}>
+            <View className={topic.more} onClick={onMoreClick}>
               <Icon size="20" color="#8590A6" name="MoreVOutlined"></Icon>
-            </div>
+            </View>
           )}
-        </div>
+        </View>
 
         {isApproved === 1 && (
-          <div className={styles.body}>
+          <View className={topic.body}>
             {/* 文字 */}
             {text && <PostContent content={text || ''} />}
-            {/* 悬赏文案 */}
-            {(parseContent.REWARD) && (
-              <div className={styles.rewardText}>
-                {/* 悬赏 */}
-                {parseContent.REWARD && (
-                  <div>
-                    <div className={styles.rewardMoney}>
-                      本帖向所有人悬赏
-                      <span className={styles.rewardNumber}>{parseContent.REWARD.remain_money || 0}</span>元
-                    </div>
-                    <div className={styles.rewardTime}>{parseContent.REWARD.expired_at}截止悬赏</div>
-                  </div>
-                )}
-              </div>
-            )}
 
             {/* 付费附件 */}
             {isAttachmentPay && !isSelf && (
-              <div style={{ textAlign: 'center' }} onClick={onContentClick}>
-                <Button className={styles.payButton} type="primary" size="large">
-                  <div className={styles.pay}>
-                    <Icon className={styles.payIcon} name="DollarLOutlined" size={18}></Icon>
-                    支付{attachmentPrice}元查看附件
-                  </div>
+              <View style={{ textAlign: 'center' }} onClick={onContentClick}>
+                <Button className={topic.payButton} type="primary" size="large">
+                  支付{attachmentPrice}元查看附件
                 </Button>
-              </div>
+              </View>
             )}
-            {/* 图片 */}
-            {parseContent.IMAGE && <ImageDisplay imgData={parseContent.IMAGE} />}
 
             {/* 视频 */}
             {parseContent.VIDEO && (
@@ -127,37 +111,48 @@ const RenderThreadContent = inject('user')(
                 coverUrl={parseContent.VIDEO.coverUrl}
                 width={400}
                 height={200}
-                />
+              />
             )}
-            {/* 音频 */}
-            {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
-            {/* 附件 */}
-            {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
+            {/* 图片 */}
+            {parseContent.IMAGE && <ImageContent imgData={parseContent.IMAGE} />}
             {/* 商品 */}
             {parseContent.GOODS && (
-              <div>
+              <View>
                 <ProductItem
                   image={parseContent.GOODS.imagePath}
                   amount={parseContent.GOODS.price}
                   title={parseContent.GOODS.title}
                 />
                 <Button
-                  className={styles.buyBtn}
+                  className={topic.buyBtn}
                   type="danger"
                   onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
                 >
-                  <Icon className={styles.payIcon} name="ShoppingCartOutlined" size={20}></Icon>
-                  <span className={styles.buyText}>购买商品</span>
+                  购买商品
                 </Button>
-              </div>
+              </View>
             )}
+            {/* 音频 */}
+            {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
+            {/* 附件 */}
+            {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
+
             {/* 标签 */}
             {threadStore?.threadData?.categoryName && (
-              <div className={styles.tag}>{threadStore?.threadData?.categoryName}</div>
+              <View className={topic.tag}>{threadStore?.threadData?.categoryName}</View>
             )}
 
             {(parseContent.RED_PACKET || parseContent.REWARD) && (
-              <div className={styles.reward}>
+              <View className={topic.reward}>
+                {/* 红包 */}
+                {parseContent.RED_PACKET && (
+                  <PostRewardProgressBar
+                    remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
+                    received={
+                      Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
+                    }
+                  />
+                )}
                 {/* 悬赏 */}
                 {parseContent.REWARD && (
                   <PostRewardProgressBar
@@ -169,59 +164,46 @@ const RenderThreadContent = inject('user')(
                     )}
                   />
                 )}
-                {/* 红包 */}
-                {parseContent.RED_PACKET && (
-                  <PostRewardProgressBar
-                    remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
-                    received={
-                      Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
-                    }
-                  />
-                )}
-              </div>
+              </View>
             )}
 
             {/* 帖子付费 */}
             {isThreadPay && !isSelf && (
-              <div style={{ textAlign: 'center' }} onClick={onContentClick}>
-                <Button className={styles.payButton} type="primary" size="large">
-                  <div className={styles.pay}>
-                    <Icon className={styles.payIcon} name="DollarLOutlined" size={18}></Icon>
-                    支付{threadPrice}元查看剩余内容
-                  </div>
+              <View style={{ textAlign: 'center' }} onClick={onContentClick}>
+                <Button className={topic.payButton} type="primary" size="large">
+                  支付{threadPrice}元查看剩余内容
                 </Button>
-              </div>
+              </View>
             )}
 
             {/* 打赏 */}
             {props?.user?.isLogin() && (
-              <div style={{ textAlign: 'center' }}>
-                <Button onClick={onRewardClick} className={styles.rewardButton} type="primary" size="large">
-                 <Icon className={styles.payIcon} name="HeartOutlined" size={19}></Icon>
-                  <span className={styles.rewardext}>打赏</span>
+              <View style={{ textAlign: 'center' }}>
+                <Button onClick={onRewardClick} className={topic.rewardButton} type="primary" size="large">
+                  打赏
                 </Button>
-              </div>
+              </View>
             )}
-          </div>
+          </View>
         )}
-        <div className={styles.footer}>
-          <div className={styles.thumbs}>
-            <div
-              className={classnames(styles.liked, threadStore?.threadData?.isLike && styles.isLiked)}
+        <View className={topic.footer}>
+          <View className={topic.thumbs}>
+            <View
+              className={classnames(topic.liked, threadStore?.threadData?.isLike && topic.isLiked)}
               onClick={onLikeClick}
             >
-              <Icon name="LikeOutlined" size={20}></Icon>
-              <span>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
-            </div>
-            <div className={styles.likeReward}>
+              <Icon name="LikeOutlined"></Icon>
+              <Text>{threadStore?.threadData?.likeReward?.likePayCount || ''}</Text>
+            </View>
+            <View className={topic.likeReward}>
               <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
-            </div>
-          </div>
+            </View>
+          </View>
           {threadStore?.threadData?.likeReward?.shareCount > 0 && (
-            <span>{threadStore?.threadData?.likeReward?.shareCount}次分享</span>
+            <Text>{threadStore?.threadData?.likeReward?.shareCount}次分享</Text>
           )}
-        </div>
-      </div>
+        </View>
+      </View>
     );
   }),
 );

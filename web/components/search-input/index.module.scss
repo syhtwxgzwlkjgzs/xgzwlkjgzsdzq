@@ -4,6 +4,9 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  background-color: $white;
+  padding: rem($padding-4n);
+  padding-bottom: 0;
 }
 .inputWrapper {
   display: flex;

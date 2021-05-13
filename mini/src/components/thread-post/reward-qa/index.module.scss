@@ -9,6 +9,7 @@
   padding: 0 16px;
   overflow: hidden;
   background: var(--color-white);
+  border-top: 1px solid var(--border-line-color);
 
   .reward-item {
     @include flex();
@@ -61,7 +62,8 @@
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: constant(safe-area-inset-bottom);
+    bottom: env(safe-area-inset-bottom);
     margin: 0 10px;
     padding: 8px 0;
     background: #fff;

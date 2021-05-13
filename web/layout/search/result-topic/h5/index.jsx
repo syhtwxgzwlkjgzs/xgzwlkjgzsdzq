@@ -4,7 +4,8 @@ import { withRouter } from 'next/router';
 
 import SearchInput from '@components/search-input';
 import NoData from '@components/no-data';
-import List from '@components/list';
+import BaseLayout from '@components/base-layout';
+
 import SearchTopics from './components/search-topics';
 import Header from '@components/header';
 import { Topic } from '@components/search-result-item';
@@ -60,29 +61,18 @@ class SearchResultTopicH5Page extends React.Component {
     const { pageData = [], currentPage, totalPage } = topics || { pageData: [] };
 
     return (
-      <div className={styles.page}>
-        <Header />
-        <div className={styles.searchInput}>
+        <BaseLayout
+          className={styles.list}
+          onRefresh={this.fetchMoreData}
+          noMore={currentPage >= totalPage}
+        >
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
-        </div>
-        {
-          pageData?.length
-            ? (
-              <List
-                className={styles.list}
-                onRefresh={this.fetchMoreData}
-                noMore={currentPage >= totalPage}
-              >
-                {
-                  pageData?.map((item, index) => (
-                    <Topic key={index} data={item} onClick={this.onTopicClick} />
-                  ))
-                }
-              </List>
-            )
-            : <NoData />
-        }
-      </div>
+          {
+            pageData?.map((item, index) => (
+              <Topic key={index} data={item} onClick={this.onTopicClick} />
+            ))
+          }
+        </BaseLayout>
     );
   }
 }

@@ -1,5 +1,6 @@
 .wrapper{
-background: var(--color-white);
+  background: var(--color-white);
+  border-top: 1px solid var(--border-line-color);
 }
 
 .title {
@@ -46,7 +47,8 @@ background: var(--color-white);
 .button-container {
   padding: 8px 16px;
   position: fixed;
-  bottom: 0;
+  bottom: constant(safe-area-inset-bottom);
+  bottom: env(safe-area-inset-bottom);
   width: 100%;
   .button {
     height: 42px;
