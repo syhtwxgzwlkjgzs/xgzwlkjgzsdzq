@@ -1,5 +1,4 @@
-@import '@common/styles/index.scss';
-@import '@styles/index.scss';
+@import "@common/styles/index.scss";
 @mixin single-line() {
   overflow: hidden;
   white-space: nowrap;
@@ -16,30 +15,57 @@
   flex-direction: column;
   align-items: stretch;
   height: 100vh;
-  background: var(--color-white);
-  border-top: 1px solid var(--border-line-color);
+  background: $white;
+  border-top: $border-solid-1;
 
   :global {
     .dzq-input {
       width: 100%;
-      padding: 10px 20px;
+      padding: $padding-10 $padding-5n;
       box-sizing: border-box;
 
       .dzq-input__inner {
         height: 40px;
-        padding-left: 35px;
-        padding-right: var(--padding-5);
-        font-size: var(--font-size-middle);
-        color: #0b0b37;
-        background: #f6f6f6;
+        padding: 0 35px;
+        font-size: $font-size-middle;
+        color: $text-color-primary;
+        background: $text-bg-color2;
         border: none;
       }
 
-      .dzq-input__icon {
+      .dzq-icon-SearchOutlined {
         left: 20px;
         top: 50%;
         margin-top: -18px;
-        color: var(--color-disabled2) !important;
+        line-height: 36px;
+        color: $icon-color-light !important;
+      }
+
+      .input-placeholder {
+        color: $text-color-placeholder;
+      }
+    }
+  }
+  .input-box {
+    position: relative;
+
+    .delete {
+      position: absolute;
+      top: 50%;
+      right: 30px;
+      margin-top: -10px;
+      width: 20px;
+      height: 20px;
+      background: transparent;
+      border: 1px solid $icon-color-light;
+      border-radius: $border-radius-circle;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .delete-icon {
+        color: $icon-color-light;
+        transform: scale(0.8);
       }
     }
   }
@@ -49,13 +75,18 @@
     overflow: hidden;
     .at-wrap {
       height: 100%;
+      :global {
+        .scroll-view {
+          height: calc(100% - 59px) !important;
+        }
+      }
     }
   }
 
   .at-item {
     @include flex();
     height: 50px;
-    padding: 0 20px;
+    padding: 0 $padding-5n;
 
     .avatar {
       width: 35px;
@@ -66,15 +97,15 @@
           width: 100%;
           height: 100%;
           font-size: 22px;
-          color: #fff;
+          color: $white;
           text-align: center;
           line-height: 35px;
-          border-radius: 50%;
+          border-radius: $border-radius-circle;
 
           .dzq-avatar__img {
             width: 100%;
             height: 100%;
-            border-radius: 50%;
+            border-radius: $border-radius-circle;
           }
         }
       }
@@ -83,12 +114,12 @@
     .info {
       flex: 1;
       @include flex();
-      height: 51px;
-      padding: 0 8px;
-      font-size: var(--font-size-primary);
-      color: #777;
+      height: 50px;
+      padding: 0 $padding-2n;
+      font-size: $font-size-primary;
+      color: $text-color-primary;
       line-height: 50px;
-      border-bottom: var(--border-border);
+      border-bottom: $border-solid-1;
       .username {
         max-width: 170px;
         @include single-line();
@@ -102,24 +133,24 @@
     :global {
       .dzq-checkbox-wrap {
         margin: 0;
-        padding: 13px 0;
+        padding: $padding-3n 0;
         -webkit-tap-highlight-color: transparent;
         .dzq-checkbox {
           width: 24px;
           height: 24px;
-          border-radius: 50%;
+          border-radius: $border-radius-circle;
           &::after {
-            border-radius: 50%;
-            color: #ededed;
+            border-radius: $border-radius-circle;
+            color: $white;
           }
         }
         &.is-checked {
           .dzq-checkbox {
-            background-color: var(--color-primary);
+            background-color: $primary-color;
           }
           .dzq-icon {
-            font-size: 12px !important;
-            color: #fff;
+            font-size: $font-size-small !important;
+            color: $white;
           }
         }
       }
@@ -129,37 +160,37 @@
   .btn-container {
     @include ios-safe-area-inset-bottom;
   }
+
   .btn {
     @include flex();
     flex-wrap: nowrap;
-    margin: 0 var(--margin-10);
-    padding: var(--padding-2n) 0;
-    border-top: var(--border-border);
-
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: constant(safe-area-inset-bottom);
+    bottom: env(safe-area-inset-bottom);
+    margin: 0 $margin-10;
+    padding: $padding-2n 0;
+    background: $white;
+    border-top: $border-solid-1;
 
     :global {
       .dzq-button {
         width: 48%;
-        padding: var(--padding-10) 0;
-        font-size: var(--font-size-middle);
-        color: #777;
-        line-height: var(--font-line-height-primary);
-        background: #f9fafc;
+        padding: $padding-10 0;
+        font-size: $font-size-middle;
+        color: $text-color-regular;
+        line-height: $font-line-height-small;
         border: none;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        border-radius: var(--border-radius-small);
-        transition: all 0.3s;
+        border-radius: $border-radius-small;
+        background: $text-bg-color2;
         -webkit-tap-highlight-color: transparent;
       }
+    }
 
-      .not-selected {
-        color: #7d7979;
-        background-color: var(--color-white);
-      }
-      .is-selected {
-        color: var(--color-white);
-        background-color: var(--color-primary);
-      }
+    .selected {
+      color: $white;
+      background-color: $primary-color;
     }
   }
 }

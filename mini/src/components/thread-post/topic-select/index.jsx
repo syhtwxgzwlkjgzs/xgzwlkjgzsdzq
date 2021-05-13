@@ -120,7 +120,7 @@ class TopicSelect extends Component {
         {/* 话题列表 */}
         <View className={styles['topic-wrap']}>
           {/* 新话题 */}
-          {this.state.keywords &&
+          {this.state.keywords !== '' &&
             <View
               className={styles['topic-item']}
               onClick={this.handleItemClick}
@@ -133,6 +133,7 @@ class TopicSelect extends Component {
           }
           {/* 搜索列表 */}
           <ScrollView
+            className={'scroll-view'}
             width='100%'
             height={450}
             rowCount={topics.length}

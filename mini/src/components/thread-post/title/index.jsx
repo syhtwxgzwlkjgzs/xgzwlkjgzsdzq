@@ -28,11 +28,10 @@ const Title = ({ title, placeholder, show, onInput }) => {
     <View className={`${styles.container} ${show ? '' : styles['is-display']}`}>
       <View className={styles['container-inner']}>
         <Input
-          className={styles.title}
           type="text"
           value={titleVal}
           placeholder={placeholder}
-          placeholderStyle='color:#c5c6ca'
+          placeholderStyle='color:#c5c6cb'
           onInput={e => setTitleVal(e.target.value)}
         />
       </View>
