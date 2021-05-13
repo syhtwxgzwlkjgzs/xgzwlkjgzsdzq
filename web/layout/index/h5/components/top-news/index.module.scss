@@ -7,30 +7,35 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    height: rem(36);
-    cursor: pointer;
     .prefix {
-      font-size: rem($font-size-primary);
-      font-weight: normal;
-      line-height: rem($font-line-height-primary);
       color: var(--color-text-secondary);
-      margin-right: rem($padding-4n);
       word-break: keep-all;
     }
     .title {
-      font-size: rem($font-size-primary);
-      line-height: rem($font-line-height-primary);
       color: var(--color-text-primary);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
   }
-  .itemBorder {
-    box-sizing: border-box;
+  .itemH5 {
+    height: rem(36);
     border-bottom: rem(1) solid var(--border-line-color);
+    &:last-child{
+      border-bottom: none;
+    }
+    .prefix {
+      font-size: rem($font-size-primary);
+      line-height: rem($font-line-height-primary);
+      margin-right: rem($padding-4n);
+    }
+    .title {
+      font-size: rem($font-size-primary);
+      line-height: rem($font-line-height-primary);
+    }
   }
-  .itemBox {
+  .itemPC {
+    cursor: pointer;
     height: rem(38);
     .prefix {
       font-size: rem($font-size-middle);
@@ -41,8 +46,5 @@
       font-size: rem($font-size-middle);
       line-height: rem($font-line-height-small);
     }
-  }
-  .item:last-child {
-    border-bottom: none !important;
   }
 }

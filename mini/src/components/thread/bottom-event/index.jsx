@@ -20,6 +20,7 @@ const Index = ({
   comment = 2,
   sharing = 2,
   isLiked = false,
+  isSendingLike = false,
   tipData,
   onShare = () => {},
   onComment = () => {},
@@ -79,8 +80,8 @@ const Index = ({
       <View className={styles.operation}>
         {
           postList.map((item, index) => (
-              <View key={index} className={styles.fabulous} onClick={item.event}>
-                <Icon className={styles.icon} name={item.icon} size={14} color={`${item.name === '取消' ? '#2469f6' : ''}`}></Icon>
+              <View key={index} className={styles.fabulous} onClick={item.event} disabled={item.name === '赞' && isSendingLike}>
+                <Icon className={`${styles.icon} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`}  name={item.icon} size={14}></Icon>
                 <Text className={item.name === '取消' ? styles.fabulousCancel : styles.fabulousPost}>{item.name}</Text>
               </View>
           ))
