@@ -40,6 +40,7 @@ $info-color: var(--color-info) !default;
 $success-color: var(--color-success) !default;
 $warn-color: var(--color-warn) !default;
 $error-color: var(--color-error) !default;
+$primary-color10: var(--color-primary10);
 
 $primary-disabled-color: var(--color-primary5);
 
@@ -57,13 +58,18 @@ $text-color-secondary: var(--color-text-secondary);
 // border hover 的颜色还有 loading 文字和这个一致
 $text-color-placeholder: var(--color-text-placeholder);
 
+$text-color-primary-color: $primary-color;
+$text-color-error: $error-color;
+
 $text-bg-color: var(--background-color-text);
 // 灰色标签（编辑器付费、红包设置之后的显示的背景色），灰色按钮（取消）背景色
 $text-bg-color2: var(--background-color-text2);
 
 // ------ icon color ------------
-$icon-color: var(--color-text-secondary);
-$icon-color-active: var(--color-primary2);
+$icon-color-light: $text-color-secondary;
+$icon-color: $text-color-regular;
+$icon-color-active: $primary-color;
+$icon-primary-color: $primary-color;
 $icon-success-color: $success-color;
 
 // ----- boder color ----
@@ -86,6 +92,7 @@ $tag-text-color2: $warn-color;
 $tag-text-color3: $success-color;
 
 $tag-info-bg-color: $text-bg-color2;
+$tag-primary-lighter-color: $primary-color10;
 
 // ---- comment color ----
 $comment-bg-color: $body-bg-color;
@@ -105,6 +112,8 @@ $border-radius-zero: 0;
 
 $border-solid-1: 1px solid $border-color;
 $border-dotted-1: 1px dashed $border-color;
+
+$border-solid-1-hover: 1px solid $border-color-hover;
 
 // ------ spacer bg color -------
 $spacer-bg-color: $body-bg-color;

@@ -12,7 +12,7 @@
   flex-direction: row;
   align-items: center;
   padding-left: rem($padding-4n);
-  padding-right: rem($padding-1n);
+  padding-right: rem($padding-4n);
   width: 100%;
   height: rem(36);
   border-radius: rem(5);
@@ -20,6 +20,9 @@
   box-sizing: border-box;
   .inputWrapperIcon {
     color: var(--color-text-secondary);
+  }
+  .deleteIcon {
+    color: var(--border-color-hover);
   }
   .input {
     flex: 1;

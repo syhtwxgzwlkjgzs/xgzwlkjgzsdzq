@@ -1,28 +1,30 @@
 @import '../vars.scss';
 
 .interactionBox {
-  @include im-pagebed;
   display: flex;
   position: absolute;
   justify-content: space-between;
   bottom: 0;
   left: 0;
-  padding: var(--padding-3n) $im-pagebed-padding;
+  padding-top: rem($padding-2n);
+  padding-bottom: rem($padding-2n);
   background-color: var(--color-white);
-  width: 100%;
+  width: 100vw;
 }
 
 .inputWrapper {
   display: flex;
-  background-color: var(--background-color-text2);
-  border-radius: var(--border-radius-small);
-  width: 100%;
+  background-color: $text-bg-color2;
+  border-radius: $border-radius-small;
+  flex: 2;
+  justify-content: space-between;
+  margin-left: $im-pagebed-padding;
   :global {
     .dzq-input {
       width: 100%;
     }
     .dzq-input__inner {
-      background-color: var(--background-color-text2);
+      background-color: $text-bg-color2;
       border-top-right-radius: unset;
       border-bottom-right-radius: unset;
       &:focus-visible {
@@ -43,10 +45,11 @@
   display: flex;
   align-items: center;
   margin-left: $im-space-in-between-btns;
+  margin-right: $im-pagebed-padding;
 }
 
 .submitBtn {
-  padding: var(--padding-2n) var(--padding-4n);
+  padding: $padding-2n $padding-4n;
 }
 
 .pictureUpload {

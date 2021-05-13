@@ -16,7 +16,7 @@
     margin-bottom: 10px;
   }
   .childrenWrapper {
-    border-top: 1px solid #eee;
+    border-top: 1px solid var(--border-line-color);
     margin-top: 6px;
     padding-top: 16px;
   }
@@ -48,7 +48,7 @@
   }
 
   .childrenActive {
-    background: #e8f0fe;
+    background: var(--color-primary10);
     color: var(--color-primary);
   }
 
@@ -64,7 +64,7 @@
     margin-bottom: 24px;
   }
   .footerBtn {
-    border-top: 1px solid #eee;
+    border-top: 1px solid var(--border-line-color);
     position: relative;
     height: 54px;
     text-align: center;

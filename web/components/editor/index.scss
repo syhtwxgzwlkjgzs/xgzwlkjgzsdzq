@@ -1,10 +1,15 @@
 /* stylelint-disable */
 @import '@common/styles/index.scss';
+.dvditor.h5 {
+  .vditor-bubble-toolbar {
+    display: none !important;
+  }
+}
 
 .dvditor {
   position: relative;
   border: none !important;
-  background-color: var(--color-white);
+  background-color: $white;
   &.no-focus {
     .vditor-toolbar {
       display: none !important;
@@ -19,13 +24,13 @@
   .vditor-wysiwyg pre.vditor-reset {
     height: 178px;
     padding: rem(16) !important;
-    font-size: var(--font-size-middle);
-    color: var(--color-text-primary);
+    font-size: $font-size-middle;
+    color: $text-color-primary;
     &:before {
-      color: var(--color-text-placeholder) !important;
+      color: $text-color-placeholder !important;
     }
     &:focus {
-      background-color: var(--color-white);
+      background-color: $white;
     }
     img[alt^=":"] {
       width: 30px;
@@ -38,8 +43,8 @@
     div,
     a {
       margin-bottom: 0;
-      line-height: var(--font-line-height-middle);
-      font-size: var(--font-size-middle);
+      line-height: $font-line-height-middle;
+      font-size: $font-size-middle;
       font-family: $font-family;
     }
     strong {
@@ -53,8 +58,8 @@
     div,
     a {
       margin-bottom: 0;
-      line-height: var(--font-line-height-middle);
-      font-size: var(--font-size-middle);
+      line-height: $font-line-height-middle;
+      font-size: $font-size-middle;
       font-family: $font-family;
     }
     strong {
@@ -76,11 +81,14 @@
     top: 177px;
     background-color: #fff;
     border: 0;
-    border-top: 1px solid rgba($color: #eee, $alpha: 0.75);
+    border-top: $border-solid-1;
     &__item {
-      font-size: var(--font-size-middle);
+      font-size: $font-size-middle;
       button {
-        font-size: var(--font-size-middle);
+        font-size: $font-size-middle;
+      }
+      .dzq-icon {
+        color: $icon-color;
       }
     }
     .vditor-counter {

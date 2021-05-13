@@ -162,7 +162,7 @@ class IndexPCPage extends React.Component {
             </div>
           </div>
           <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
-            <TopNews data={sticks} itemMargin='0' isShowBorder={false}/>
+            <TopNews data={sticks} platform="pc" isShowBorder={false}/>
           </div>
           {
             visible && (
