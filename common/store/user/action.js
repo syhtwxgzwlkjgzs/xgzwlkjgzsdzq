@@ -60,7 +60,6 @@ class UserAction extends SiteStore {
   // 获取指定用户的用户信息，用于获取他人首页
   @action
   async getTargetUserInfo(id) {
-    this.targetUser = null;
     this.targetUserId = id;
     const userInfo = await this.getAssignUserInfo(id);
     this.targetUser = userInfo;
@@ -163,9 +162,8 @@ class UserAction extends SiteStore {
 
     const pageData = get(fansRes, 'data.pageData', []);
     const totalPage = get(fansRes, 'data.totalPage', 1);
-    this.targetUserFans[this.targetUserFansPage] = pageData;
     this.targetUserFansTotalPage = totalPage;
-    this.targetUserFollows[this.targetUserFansPage] = pageData;
+    this.targetUserFans[this.targetUserFansPage] = pageData;
     if (this.targetUserFansPage <= this.targetUserFansTotalPage) {
       this.targetUserFansPage += 1;
     }
@@ -306,7 +304,7 @@ class UserAction extends SiteStore {
         user.userFollow.isUnFollowed = false;
       });
     });
-    this.targetUserFollows = { ...this.targetUserFollows }
+    this.targetUserFollows = { ...this.targetUserFollows };
   }
 
   @action
@@ -416,6 +414,10 @@ class UserAction extends SiteStore {
     this.userThreads = [...this.userThreads, ...pageData];
     this.userThreadsTotalCount = get(userThreadList, 'data.totalCount', 0);
 
+    if (this.userThreadsPage <= this.userThreadsTotalPage) {
+      this.userThreadsPage += 1;
+    }
+
     return this.userThreads;
   }
 
@@ -429,7 +431,7 @@ class UserAction extends SiteStore {
   async getTargetUserThreads(id) {
     const targetUserThreadList = await readThreadList({
       params: {
-        page: this.targetUsersPage,
+        page: this.targetUserThreadsPage,
         filter: {
           toUserId: id,
           complex: 5,
@@ -442,6 +444,10 @@ class UserAction extends SiteStore {
     this.targetUserThreadsTotalPage = totalPage;
     this.targetUserThreads = [...this.targetUserThreads, ...pageData];
     this.targetUserThreadsTotalCount = get(targetUserThreadList, 'data.totalCount', 0);
+
+    if (this.targetUserThreadsPage <= this.targetUserThreadsTotalPage) {
+      this.targetUserThreadsPage += 1;
+    }
 
     return this.targetUserThreads;
   }
@@ -485,12 +491,17 @@ class UserAction extends SiteStore {
     await this.updateUserInfo(this.id);
   }
 
+  // FIXME: 这里报接口参数错误
   /**
    * 更新新的用户信息
    */
   @action
   async updateEditedUserInfo() {
-    await updateUsersUpdate();
+    await updateUsersUpdate({
+      data: {
+        signature: this.editSignature,
+      },
+    });
   }
 
   /**
@@ -508,6 +519,14 @@ class UserAction extends SiteStore {
     this.userFollows = {};
     this.userFollowsPage = 1;
     this.userFollowsTotalPage = 1;
+  }
+
+  @action
+  cleanTargetUserThreads = () => {
+    this.targetUserThreads = [];
+    this.targetUserThreadsPage = 1;
+    this.targetUserThreadsTotalCount = 0;
+    this.targetUserThreadsTotalPage = 1;
   }
 
   @action

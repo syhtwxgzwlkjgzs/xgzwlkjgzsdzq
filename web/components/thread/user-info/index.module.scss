@@ -84,8 +84,23 @@
   top: 0;
   right: 0;
   display: flex;
-
+  .tagSuccess {
+    :global {
+      .dzq-tag-text {
+        color: #F66524;
+      }
+      .dzq-tag--primary {
+        border-color: #F66524;
+        background: transparent;
+      }
+    }
+  }
   >div {
     margin-left: rem(8);
+  }
+  :global {
+    .dzq-tag::after {
+      z-index: 1;
+    }
   }
 }

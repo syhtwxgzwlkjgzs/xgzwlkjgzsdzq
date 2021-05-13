@@ -2,35 +2,42 @@
 
 .container {
   width: rem(520);
-  min-height: rem(200);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin: 0 auto;
   background: var(--color-white);
   border-radius: rem($border-radius-big);
   overflow: hidden;
+  padding: 0 rem(24) rem(24) rem(24);
 }
 
 .header {
-  height: rem(50);
+  height: rem(64);
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0 rem($padding-5n);
+  justify-content: space-between;
+
   .headerLeft {
+    flex: 1;
     font-size: rem($font-size-middle);
-    line-height: rem(50);
+    font-weight: var(--font-weight-regular);
+    line-height: rem(64);
+    text-align: center;
   }
   .headerIcon {
+    text-align: center;
+    font-size: rem($font-size-middle);
     cursor: pointer;
+    color: $text-color-secondary;
   }
 }
 
 .rewardList {
+  margin-top: rem($margin-4n);
   display: flex;
   flex-wrap: wrap;
-  padding: 0 rem($padding-4n) 0 rem(80);
+  padding-left: rem(60);
 
   .reward {
     width: rem(60);
@@ -44,7 +51,6 @@
 .percentage {
   display: flex;
   align-items: center;
-  padding: rem(16);
 
   .text {
     margin-right: rem($margin-2n);;
@@ -54,22 +60,21 @@
 
 
 .button {
-  margin-top: rem($margin-4n);
+  margin-top: rem($margin-6n);
   width: 100%;
-  height: rem(50);
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
-  background: $body-bg-color;
-  
+
   .ok {
-    width: rem(70);
+    width: rem(116);
     height: rem(36);
-    margin-right: rem($margin-6n);
   }
   .cancel {
-    width: rem(70);
+    width: rem(116);
     height: rem(36);
-    margin-right: rem($margin-6n);
+    background: $button-info-bg-color;
+    border: none;
+    margin-right: rem($margin-4n);
   }
 }

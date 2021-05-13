@@ -8,6 +8,10 @@
     margin-bottom: rem($margin-4n);
   }
 
+  .redpacket {
+    margin-left: rem($margin-4n);
+  }
+
   .content {
     display: flex;
     .commentListAvatar {
@@ -32,6 +36,7 @@
           line-height: rem(22);
           text-align: left;
           color: var(--color-text-primary);
+          word-break: break-word;
         }
       }
 
@@ -98,10 +103,15 @@
 .icon {
   margin-right: rem(8);
   font-size: rem(14) !important;
+  color: $icon-color;
 }
 
 .active {
   color: var(--color-primary);
+
+  .icon {
+    color: var(--color-primary);
+  }
 }
 
 .commentInput {
@@ -110,4 +120,9 @@
 
 .divider {
   margin-bottom: rem($margin-2n);
+}
+
+.revise {
+  display: flex;
+  align-items: center;
 }

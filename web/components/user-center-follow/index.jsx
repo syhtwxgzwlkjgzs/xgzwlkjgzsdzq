@@ -34,6 +34,7 @@ class UserCenterFollow extends React.Component {
     this.firstLoaded = true;
     this.setState({
       loading: false,
+      follows: {},
     });
 
     this.containerRef.current.addEventListener('scroll', this.loadMore);

@@ -84,31 +84,29 @@ const BaseLayout = (props) => {
   return (
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
-
-        {
-          showLeft && (
-            <div className={styles.left}>
-              {typeof(left) === 'function' ? useCallback(left({ ...props }), []) : left}
-            </div>
-          )
-        }
         
-        <List {...props} className={styles.list}>
-          <div className={styles.wrapper}>
-            <div className={`${styles.center} ${!left && styles.centerTwo} ${!right && !left && styles.centerOne}`}>
-              {typeof(children) === 'function' ? children({ ...props }) : children}
-              {onRefresh && <RefreshView noMore={noMore} />}
-            </div>
-          </div>
-        </List>
+        <List {...props} className={styles.list} wrapperClass={styles.wrapper}>
+          {
+            showLeft && (
+              <div className={styles.left}>
+                {typeof(left) === 'function' ? useCallback(left({ ...props }), []) : left}
+              </div>
+            )
+          }
 
-        {
-          showRight && (
-            <div className={`${styles.right} ${!left && styles.rightTwo}`}>
-              {typeof(right) === 'function' ? right({ ...props }) : right}
-            </div>
-          )
-        }
+          <div className={styles.center}>
+            {typeof(children) === 'function' ? children({ ...props }) : children}
+            {onRefresh && <RefreshView noMore={noMore} />}
+          </div>
+
+          {
+            showRight && (
+              <div className={styles.right}>
+                {typeof(right) === 'function' ? right({ ...props }) : right}
+              </div>
+            )
+          }
+        </List>
 
       {typeof(footer) === 'function' ? footer({ ...props }) : footer}
     </div>

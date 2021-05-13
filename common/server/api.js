@@ -62,8 +62,10 @@ http.interceptors.response.use((res) => {
     msg: data.Message,
   });
 }, (err) => {
-  console.error('response', err.stack);
-  console.error('response', err.message);
+  if (window) {
+    console.error('response', err.stack);
+    console.error('response', err.message);
+  }
   return Promise.resolve({
     code: -1,
     data: null,

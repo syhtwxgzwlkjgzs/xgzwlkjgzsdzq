@@ -50,6 +50,13 @@
   margin-right: rem($margin-2n);
 }
 
+.title {
+  color: $text-color-primary;
+  line-height: 21px;
+  font-weight: var(--font-weight-regular);
+  font-size: rem($font-size-middle);
+}
+
 .body {
   margin-top: rem($margin-4n);
 
@@ -80,9 +87,9 @@
   justify-content: center;
 }
 
-.buttonIcon {
-  font-size: rem($font-size-primary);
-}
+// .buttonIcon {
+//   font-size: rem(18);
+// }
 
 .buttonText {
   margin-left: rem($margin-2n);
@@ -144,12 +151,15 @@
 
 .tag {
   display: inline-block;
-  color: $text-color-regular;
-  background: var(--background-color);
+  // TODO:token  $text-color-regular不生效
+  // color: $text-color-regular;
+  color: #4f5a70;
+  background: #f0f1f3; // TODO:token
   font-size: rem($font-size-label);
   padding: rem($padding-1n) rem($padding-1n);
   border-radius: rem($border-radius-small);
   line-height: rem(17);
+  cursor: pointer;
 }
 
 .thumbs {
@@ -200,6 +210,7 @@
 
 .rewardBody {
   text-align: center;
+  margin-bottom: rem($margin-6n);
 }
 
 .rewardMoney {
@@ -216,4 +227,54 @@
   margin-top: rem(4);
   font-size: rem($font-size-label);
   color: var(--color-text-secondary);
+}
+
+.browseCategory {
+  display: flex;
+  p {
+    width: rem(40);
+    height: rem(21);
+    border-radius: rem($border-radius-small);
+    font-size: rem($font-size-label);
+    line-height: rem(21);
+    text-align: center;
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0.1;
+      top: 0;
+      left: 0;
+    }
+  }
+  .categoryText {
+    color: #3ac15f;
+    border: rem(1) solid #3ac15f;
+    &::after {
+      background-color: #3ac15f;
+    }
+  }
+  .categoryEssence {
+    color: var(--color-primary);
+    border: rem(1) solid var(--color-primary);
+    &::after {
+      background-color: var(--color-primary);
+    }
+  }
+  .categoryRed {
+    color: var(--color-error);
+    border: rem(1) solid var(--color-error);
+    &::after {
+      background-color: var(--color-error);
+    }
+  }
+  .categoryReward {
+    color: #ffc300;
+    border: rem(1) solid #ffc300;
+    &::after {
+      background-color: #ffc300;
+    }
+  }
 }

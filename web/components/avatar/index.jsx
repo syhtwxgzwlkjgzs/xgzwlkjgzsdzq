@@ -8,19 +8,19 @@ function avatar(props) {
   const { image = '', name = '匿', onClick = () => {}, className = '', circle = true, size = 'primary', isShowUserInfo = false, userId = null } = props;
 
   const userName = useMemo(() => {
-    const newName = name.toLocaleUpperCase()[0];
+    const newName = (name || '').toLocaleUpperCase()[0];
     return newName;
   }, [name]);
 
-  const [ isShow, changeIsShow ] = useState(false);
-  const [ userInfo, changeUserInfo ] = useState('padding');
-  const [ following, changeFollowStatus ] = useState(false);
+  const [isShow, changeIsShow] = useState(false);
+  const [userInfo, changeUserInfo] = useState('padding');
+  const [following, changeFollowStatus] = useState(false);
 
   const onMouseEnterHandler = useCallback(async () => {
     if (!userId) return;
     changeIsShow(true);
 
-    if ( !userInfo || userInfo === 'padding' ) {
+    if (!userInfo || userInfo === 'padding') {
       const userInfo = await props.user.getAssignUserInfo(userId);
       changeUserInfo(userInfo);
     }
@@ -33,23 +33,22 @@ function avatar(props) {
 
   const followHandler = useCallback(async () => {
     changeFollowStatus(true);
-    if ( userInfo.follow === 0 ) {
+    if (userInfo.follow === 0) {
       const res = await props.user.postFollow(userId);
-      if ( res.success ) {
+      if (res.success) {
         userInfo.follow = res.data.isMutual ? 2 : 1;
         userInfo.fansCount = userInfo.fansCount + 1;
       }
     } else {
-      const res = await props.user.cancelFollow({id: userId, type: 1});
-      if ( res.success ) {
+      const res = await props.user.cancelFollow({ id: userId, type: 1 });
+      if (res.success) {
         userInfo.follow = 0;
         userInfo.fansCount = userInfo.fansCount - 1;
       }
     }
     changeFollowStatus(false);
-    changeUserInfo({...userInfo});
-  }, [userInfo]); 
-  
+    changeUserInfo({ ...userInfo });
+  }, [userInfo]);
 
 
   const userInfoBox = useMemo(() => {
@@ -59,7 +58,7 @@ function avatar(props) {
       return (
         <div className={styles.userInfoBox}>
           <div className={styles.userInfoContent}>
-            <LoadingBox style={{minHeight: '100%'}}/>
+            <LoadingBox style={{ minHeight: '100%' }}/>
           </div>
         </div>
       );
@@ -96,16 +95,15 @@ function avatar(props) {
             </div>
           </div>
           <div className={styles.footer}>
-            <Button onClick={following ? () => {} : followHandler} loading={following} className={styles.btn} type='primary'>{!following && <Icon className={styles.icon} name={ userInfo.follow !== 0 ? "CheckOutlined" : "PlusOutlined"} size={12}/>}{userInfo.follow ? '已关注' : '关注'}</Button>
+            <Button onClick={following ? () => {} : followHandler} loading={following} className={styles.btn} type='primary'>{!following && <Icon className={styles.icon} name={ userInfo.follow !== 0 ? 'CheckOutlined' : 'PlusOutlined'} size={12}/>}{userInfo.follow ? '已关注' : '关注'}</Button>
             <Button className={[styles.btn, styles.ghost]} type='primary' ghost><Icon className={styles.icon} name="NewsOutlined" size={12}/>发私信</Button>
             <Button className={styles.btn} type='primary'><Icon className={styles.icon} name="ShieldOutlined" size={12}/>屏蔽</Button>
           </div>
         </div>
-      </div> 
+      </div>
     );
-  }, [userInfo, isShowUserInfo, userId])
+  }, [userInfo, isShowUserInfo, userId]);
 
-  
 
   if (image && image !== '') {
     return (

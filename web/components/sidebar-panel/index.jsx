@@ -23,7 +23,7 @@ const Index = (props) => {
   } = props
 
   const isNoData = useMemo(() => {
-    return !!children && noData
+    return !children && !!noData
   }, [noData, children])
 
   const pcStyle = useMemo(() => {
@@ -31,7 +31,7 @@ const Index = (props) => {
       const width = type === 'small' ? styles.small : styles.normal
       return `${styles.containerPC} ${width}`
     } else {
-      return ''
+      return styles.containerH5
     }
   }, [platform, type])
 
@@ -39,7 +39,11 @@ const Index = (props) => {
     <div className={`${styles.container} ${pcStyle} ${className}`}>
       {header || <SectionTitle {...props} />}
       {
-        isLoading ? <Spin type="spinner" /> : (
+        isLoading ? (
+          <div className={styles.spinner}>
+            <Spin type="spinner" />
+          </div>
+        ) : (
           isNoData ? <NoData /> : children
         )
       }

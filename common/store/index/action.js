@@ -186,7 +186,7 @@ class IndexAction extends IndexStore {
       data.isLike = isLike;
 
       if (isLike) {
-        data.likeReward.users = data.likeReward?.users?.length ? [user] : [...data.likeReward?.users, user]
+        data.likeReward.users = data.likeReward?.users?.length ? [{ ...user, avatar: user.avatarUrl }] : [...data.likeReward?.users, { ...user, avatar: user.avatarUrl }]
         data.likeReward.likePayCount = data.likeReward.likePayCount + 1
       } else {
         data.likeReward.users = data.likeReward.users.filter(item => item.userId === user.userId)

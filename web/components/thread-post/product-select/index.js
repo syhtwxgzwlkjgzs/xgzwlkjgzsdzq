@@ -71,4 +71,4 @@ const ProductSelect = (props) => {
   );
 };
 
-export default inject('threadPost')(observer(memo(ProductSelect)));
+export default inject('threadPost')(observer(ProductSelect));

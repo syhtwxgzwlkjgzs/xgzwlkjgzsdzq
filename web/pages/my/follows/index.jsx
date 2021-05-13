@@ -11,44 +11,40 @@ import GetQueryString from '../../../../common/utils/get-query-string';
 @inject('user')
 @observer
 class index extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
       height: '100%',
       renderComponent: null,
-    }
-    this.props.user.cleanUserFollows()
-    this.props.user.cleanTargetUserFollows()
+    };
+    this.props.user.cleanUserFollows();
+    this.props.user.cleanTargetUserFollows();
   }
 
   componentDidMount() {
     this.setState({
       height: window.outerHeight,
-      renderComponent: this.getRenderComponent()
-    })
+      renderComponent: true,
+    });
   }
 
 
   // 点击关注
   followHandler = async ({ id }) => {
     try {
-      await this.props.user.postFollow(id)
+      await this.props.user.postFollow(id);
       Toast.success({
         content: '关注成功',
         hasMask: false,
         duration: 1000,
-      })
+      });
       const isOtherFollows = JSON.parse(GetQueryString('isOtherPerson'));
       if (isOtherFollows) {
         const isOtherFollowId = GetQueryString('otherId');
-        this.props.user.setTargetUserFollowerBeFollowed(isOtherFollowId)
+        this.props.user.setTargetUserFollowerBeFollowed(isOtherFollowId);
       } else {
-        this.props.user.setUserFollowerBeFollowed(id)
+        this.props.user.setUserFollowerBeFollowed(id);
       }
-      this.setState({
-        renderComponent:this.getRenderComponent()
-      })
     } catch (error) {
       console.log(error);
     }
@@ -57,7 +53,7 @@ class index extends Component {
   // 取消关注
   unFollowHandler = async ({ id }) => {
     try {
-      await this.props.user.cancelFollow({ id, type: 1 })
+      await this.props.user.cancelFollow({ id, type: 1 });
       const isOtherFollows = JSON.parse(GetQueryString('isOtherPerson'));
       const isOtherFollowId = GetQueryString('otherId');
       if (isOtherFollows) {
@@ -65,31 +61,26 @@ class index extends Component {
       } else {
         this.props.user.setUserFollowerBeUnFollowed(id);
       }
-      this.setState({
-        renderComponent:this.getRenderComponent()
-      })
       Toast.success({
         content: '取消成功',
         hasMask: false,
         duration: 1000,
-      })
+      });
     } catch (error) {
       console.log(error);
     }
   }
 
   onContainerClick = ({ id }) => {
-    Router.push({ url: `/my/others?isOtherPerson=${true}&otherId=${id}` })
+    Router.push({ url: `/my/others?isOtherPerson=${true}&otherId=${id}` });
   }
 
   // 分割线
-  splitElement = () => {
-    return (
+  splitElement = () => (
       <div className={styles.splitEmelent}>
         <Divider />
       </div>
-    )
-  }
+  )
 
   getRenderComponent() {
     const isOtherFollows = JSON.parse(GetQueryString('isOtherPerson'));
@@ -114,7 +105,7 @@ class index extends Component {
               loadMorePage={true}
               loadMoreAction={async () => {
                 if (id) {
-                  await this.props.user.getTargetUserFollow(id)
+                  await this.props.user.getTargetUserFollow(id);
                 }
               }}
               hasMorePage={this.props.user.targetUserFollowsTotalPage < this.props.user.targetUserFollowsPage}
@@ -126,19 +117,19 @@ class index extends Component {
           )
         }
       </>
-    )
+    );
   }
 
   render() {
     return (
       <div style={{
-        height: this.state.height
+        height: this.state.height,
       }}>
         <Header />
-        {this.state.renderComponent}
+        {this.state.renderComponent && this.getRenderComponent()}
       </div>
     );
   }
 }
 
-export default withRouter(index)
+export default withRouter(index);

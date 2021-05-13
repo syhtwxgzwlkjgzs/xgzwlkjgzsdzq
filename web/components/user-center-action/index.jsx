@@ -4,25 +4,24 @@ import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 
 class UserCenterAction extends React.Component {
-
   // 点击我的消息
   handleMyMessage = () => {
-    Router.push({url: '/message'})
+    Router.push({ url: '/message' });
   }
 
   // 点击我的钱包
   handleMyWallet = () => {
-    Router.push({url: '/wallet'})
+    Router.push({ url: '/wallet' });
   }
 
   // 点击站点信息
   handleMySiteInfo = () => {
-    Router.push({url: '/forum'})
+    Router.push({ url: '/forum' });
   }
 
   // 点击推广信息
   handleMyInvite = () => {
-    Router.push({url: 'invite'})
+    Router.push({ url: 'invite' });
   }
 
   render() {

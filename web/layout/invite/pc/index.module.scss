@@ -1,4 +1,4 @@
-@import '@common/styles/fn/rem.scss';
+@import '@common/styles/index.scss';
 .content{
   height: 100%;
   // 头部
@@ -53,7 +53,7 @@
     width: rem(311);
     height: rem(78);
     border-radius: rem(5);
-    $comment-bg-color
+    background-color: $comment-bg-color;
   }
   @mixin userInfoInvite {
     width: rem(154);
@@ -113,12 +113,12 @@
     padding: 0 rem(8);
     box-sizing: border-box;
     border-radius: rem(5) rem(5) 0 0;
-    $comment-bg-color
+    background-color: $comment-bg-color;
     font-weight: normal;
     font-size: rem(14);
     line-height: rem(36);
     text-align: left;
-    color: var(--pc-user-info-title);
+    color: $text-color-regular;
   }
   @mixin inviteListName {
     display: inline-block;

@@ -3,7 +3,7 @@
 .inputClick {
   width: 176px;
   height: 36px;
-  background: var(--comment-box-bg-color);
+  background: $comment-bg-color;
   display: flex;
   align-items: center;
   font-family: 'PingFang SC';

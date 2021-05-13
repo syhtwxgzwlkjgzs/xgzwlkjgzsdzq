@@ -1,10 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Button } from '@discuzq/design';
 import AudioPlay from './audio-play';
 import PostContent from './post-content';
 import ProductItem from './product-item';
-import RedPacket from './red-packet';
-import RewardQuestion from './reward-question';
 import VideoPlay from './video-play';
 import { handleAttachmentData } from './utils';
 import AttachmentView from './attachment-view';
@@ -27,6 +25,10 @@ const Index = (props) => {
         paid
     } = props.data || {};
 
+    const needPay = useMemo(() => {
+      return payType !== 0 && !paid
+    }, [paid, payType])
+
     const {
       onClick,
       onPay
@@ -48,20 +50,20 @@ const Index = (props) => {
         return (
           <div className={styles.wrapper}>
               {text && <PostContent content={text} onPay={onPay} onRedirectToDetail={onClick} />}
-              <div className={`${styles.content} ${payType === 2 && styles.payContent}`}>
+              <div className={styles.content}>
                 {videoData && (
                   <VideoPlay
                     url={videoData.mediaUrl}
                     coverUrl={videoData.coverUrl}
                     onPay={onPay}
-                    isPay={payType !== 0}
+                    isPay={needPay}
                   />
                 )}
                 {imageData && (
                     <ImageDisplay 
                         platform={props.platform} 
                         imgData={imageData} 
-                        isPay={payType !== 0}
+                        isPay={needPay}
                         onPay={onPay}
                         onClickMore={onClick} />
                     )
@@ -77,24 +79,8 @@ const Index = (props) => {
                     amount={goodsData.price}
                     title={goodsData.title}
                 />}
-                {audioData && <AudioPlay url={audioData.mediaUrl} isPay={payType !== 0} />}
-                {fileData && <AttachmentView attachments={fileData} onClick={onPay} isPay={payType !== 0} />}
-  
-                {/* 付费蒙层 */}
-                {
-                  !paid && payType !== 0 && (
-                    <div className={styles.cover} onClick={payType === 1 ? onClick : onPay}>
-                      {
-                        payType === 2 ? (
-                          <Button className={styles.button} type="primary" onClick={onPay}>
-                            <span className={styles.icon}>$</span>
-                            支付{attachmentPrice}元查看附件内容
-                          </Button>
-                        ) : null
-                      }
-                    </div>
-                  )
-                }
+                {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
+                {fileData && <AttachmentView attachments={fileData} onPay={onPay} isPay={needPay} />}
               </div>
           </div>
         );
@@ -107,11 +93,14 @@ const Index = (props) => {
             {renderThreadContent(props.data)}
 
             {
-                !paid && payType === 1 && (
+                needPay && (
+                  <div className={styles.pay}>
                     <Button className={styles.button} type="primary" onClick={onPay}>
                         <span className={styles.icon}>$</span>
-                        支付{price}元查看剩余内容
-                    </Button>
+                        {payType === 1 ? `支付${price}元查看剩余内容` : `支付${price}元查看附件内容`}
+                    </Button>                  
+                  </div>
+                  
                 )
             }
         </>

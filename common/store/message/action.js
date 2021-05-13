@@ -1,0 +1,174 @@
+import { action } from 'mobx';
+import MessageStore from './store';
+import { readDialogList, readMsgList, createDialog, deleteMsg, deleteDialog, readDialogMsgList, createDialogMsg, readUnreadCount } from '@server';
+
+class MessageAction extends MessageStore {
+  // 获取未读消息数量
+  @action.bound
+  async readUnreadCount() {
+    const ret = await readUnreadCount();
+    const { code, data } = ret;
+    if (code === 0) {
+      const { unreadNotifications, typeUnreadNotifications } = data;
+      const { questioned = 0, receiveredpacket = 0, related = 0, replied = 0, system = 0, withdrawal = 0, liked = 0, rewarded = 0 } = typeUnreadNotifications;
+      this.totalUnread = unreadNotifications;
+      this.threadUnread = related + replied + liked;
+      this.financialUnread = questioned + receiveredpacket + withdrawal + rewarded;
+      this.accountUnread = system;
+      this.atUnread = related;
+      this.replyUnread = replied;
+      this.likeUnread = liked;
+    }
+  }
+
+  // 设置消息分页的每页条数
+  perPage = {
+    perPage: 10,
+  };
+
+  // 组装获取消息列表的入参
+  assemblyParams(page, types) {
+    return {
+      params: {
+        ...this.perPage,
+        page,
+        filter: {
+          type: types,
+        },
+      },
+    };
+  }
+  // 设置消息列表数据
+  @action
+  setMsgList(currentPage, key, ret) {
+    const { code, data = {} } = ret;
+    if (code === 0) {
+      // 更新未读消息数量
+      this.readUnreadCount();
+
+      const { pageData: list = [] } = data;
+      const listData = (({ totalPage = 0, totalCount = 0 }) => ({ list, totalPage, totalCount, currentPage }))(data);
+      if (currentPage === 1) {
+        // 刷新
+        this[key] = listData;
+      } else {
+        // 加载下一页
+        this[key] = {
+          ...listData,
+          list: this[key].list.concat(list),
+        };
+      }
+    }
+  }
+  // 获取账号消息
+  @action.bound
+  async readAccountMsgList(page = 1) {
+    const ret = await readMsgList(this.assemblyParams(page, 'related,replied,liked'));
+    this.setMsgList(page, 'accountMsgList', ret);
+  }
+  // 获取@我的消息
+  @action.bound
+  async readAtMsgList(page = 1) {
+    const ret = await readMsgList(this.assemblyParams(page, 'related'));
+    this.setMsgList(page, 'atMsgList', ret);
+  }
+  // 获取回复我的消息
+  @action.bound
+  async readReplyMsgList(page = 1) {
+    const ret = await readMsgList(this.assemblyParams(page, 'replied'));
+    this.setMsgList(page, 'replyMsgList', ret);
+  }
+  // 获取点赞我的消息
+  @action.bound
+  async readLikeMsgList(page = 1) {
+    const ret = await readMsgList(this.assemblyParams(page, 'liked'));
+    this.setMsgList(page, 'likeMsgList', ret);
+  }
+  // 获取财务消息
+  @action.bound
+  async readFinancialMsgList(page = 1) {
+    const ret = await readMsgList(this.assemblyParams(page, 'rewarded,questioned,receiveredpacket,withdrawal'));
+    this.setMsgList(page, 'financialMsgList', ret);
+  }
+  // 获取帖子通知
+  @action.bound
+  async readThreadMsgList(page = 1) {
+    const ret = await readMsgList(this.assemblyParams(page, 'system'));
+    this.setMsgList(page, 'threadMsgList', ret);
+  }
+  // 获取对话列表
+  @action.bound
+  async readDialogList(page = 1) {
+    const ret = await readDialogList({
+      params: {
+        ...this.perPage,
+        page,
+      },
+    });
+    this.setMsgList(page, 'dialogList', ret);
+  }
+
+  // 获取对话的消息列表
+  @action.bound
+  async readDialogMsgList(dialogId, page = 1) {
+    const ret = await readDialogMsgList({
+      params: {
+        perPage: 100,
+        page,
+        filter: {
+          dialogId
+        }
+      },
+    });
+    this.setMsgList(page, 'dialogMsgList', ret);
+  }
+
+  // 创建新的私信对话
+  @action.bound
+  async createDialog(params) {
+    const ret = await createDialog(params);
+    console.log('创建新的私信对话', ret);
+  }
+
+  // 私信对话发送新的消息
+  @action.bound
+  async createDialogMsg(params) {
+    return await createDialogMsg(params);
+  }
+
+  // 删除私信对话
+  @action.bound
+  async deleteDialog(id) {
+    const ret = await deleteDialog({ id });
+    const { code } = ret;
+    if (code === 0) this.deleteListItem('dialogList', id);
+  }
+
+  // 删除消息
+  @action.bound
+  async deleteMsg(id, storeKey) {
+    const ret = await deleteMsg({ id });
+    const { code } = ret;
+    if (code === 0) this.deleteListItem(storeKey, id);
+  }
+
+  // 从store数据中删除消息
+  deleteListItem(key, id) {
+    const data = this[key];
+    const list = [].concat(...data.list)
+    try {
+      list.forEach((item, index) => {
+        if (item.id === id) {
+          list.splice(index, 1);
+          this[key] = {
+            ...data,
+            list
+          }
+          throw 'break';
+        }
+      });
+    } catch (e) {}
+  }
+}
+
+export default MessageAction;

@@ -5,10 +5,8 @@ import styles from './index.module.scss';
 const InputPop = (props) => {
   const { visible, onOkClick, onCancel, inputText, reportContent = [] } = props;
 
-
   const [value, setValue] = useState('');
   const [res, setRes] = useState('');
-
 
   const onChoiceChange = (e) => {
     if (e === 'other') {
@@ -49,16 +47,14 @@ const InputPop = (props) => {
           </div>
         </div>
         <div className={styles.body}>
-          <Radio.Group defaultValue='5' onChange={e => onChoiceChange(e)}>
+          <Radio.Group defaultValue="5" onChange={(e) => onChoiceChange(e)}>
             <div className={styles.radioGroup}>
-              {
-                reportContent.map((val, index) => (
-                  <div className={styles.reportTitle} key={index}>
-                    <Radio name={`${index}`}></Radio>
-                    <div className={styles.content}>{val}</div>
-                  </div>
-                ))
-              }
+              {reportContent.map((val, index) => (
+                <div className={styles.reportTitle} key={index}>
+                  <Radio name={`${index}`}></Radio>
+                  <div className={styles.content}>{val}</div>
+                </div>
+              ))}
             </div>
             <div className={styles.other}>
               <div className={styles.reportTitle}>
@@ -73,18 +69,18 @@ const InputPop = (props) => {
               rows={5}
               showLimit={true}
               value={value}
-              onChange={e => onChange(e.target.value)}
-              placeholder={inputText}>
-            </Textarea>
+              onChange={(e) => onChange(e.target.value)}
+              placeholder={inputText}
+            ></Textarea>
           </div>
         </div>
         <div className={styles.button}>
-        <Button onClick={onSubmitClick} className={styles.ok} type="primary" size="large">
-          确定
-        </Button>
-        <Button onClick={onCancel} className={styles.cancel} type="primary" size="large">
-          取消
-        </Button>
+          <Button onClick={onCancel} className={styles.cancel}>
+            取消
+          </Button>
+          <Button onClick={onSubmitClick} className={styles.ok} type="primary">
+            确定
+          </Button>
         </div>
       </div>
     </Popup>

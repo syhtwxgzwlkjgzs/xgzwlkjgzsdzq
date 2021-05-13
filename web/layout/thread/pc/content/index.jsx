@@ -155,7 +155,9 @@ export default inject('user')(
           )}
           {isEssence && (
             <div className={topic.headerTag}>
-              <Tag type="primary">精华</Tag>
+              <div className={topic.browseCategory}>
+                <p className={topic.categoryEssence}>精华</p>
+              </div>
             </div>
           )}
         </div>
@@ -164,6 +166,9 @@ export default inject('user')(
 
         {isApproved === 1 && (
           <div className={topic.body}>
+            {/* 标题 */}
+            {threadStore?.threadData?.title && <div className={topic.title}>{threadStore?.threadData?.title}</div>}
+
             {/* 文字 */}
             {text && <PostContent useShowMore={false} content={text || ''} />}
 
@@ -179,6 +184,9 @@ export default inject('user')(
               </div>
             )}
 
+            {/* 图片 */}
+            {parseContent.IMAGE && <ImageDisplay platform="pc" imgData={parseContent.IMAGE} />}
+
             {/* 视频 */}
             {parseContent.VIDEO && (
               <VideoPlay
@@ -188,8 +196,13 @@ export default inject('user')(
                 height={200}
               />
             )}
-            {/* 图片 */}
-            {parseContent.IMAGE && <ImageDisplay platform="pc" imgData={parseContent.IMAGE} />}
+
+            {/* 音频 */}
+            {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
+
+            {/* 附件 */}
+            {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
+
             {/* 商品 */}
             {parseContent.GOODS && (
               <div className={topic.goods}>
@@ -198,22 +211,18 @@ export default inject('user')(
                   amount={parseContent?.GOODS?.price}
                   title={parseContent?.GOODS?.title}
                 />
-                  <Button
-                    className={topic.buyBtn}
-                    type="danger"
-                    onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
-                  >
-                    <div className={topic.buyContent}>
-                      <Icon className={topic.buyIcon} name="ShoppingCartOutlined" size={20}></Icon>
-                      <span className={topic.buyText}>购买商品</span>
-                    </div>
-                  </Button>
+                <Button
+                  className={topic.buyBtn}
+                  type="danger"
+                  onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
+                >
+                  <div className={topic.buyContent}>
+                    <Icon className={topic.buyIcon} name="ShoppingCartOutlined" size={20}></Icon>
+                    <span className={topic.buyText}>购买商品</span>
+                  </div>
+                </Button>
               </div>
             )}
-            {/* 音频 */}
-            {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
-            {/* 附件 */}
-            {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
 
             {/* 标签 */}
             {threadStore?.threadData?.categoryName && (
@@ -222,15 +231,6 @@ export default inject('user')(
 
             {(parseContent.RED_PACKET || parseContent.REWARD) && (
               <div className={topic.reward}>
-                {/* 红包 */}
-                {parseContent.RED_PACKET && (
-                  <PostRewardProgressBar
-                    remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
-                    received={
-                      Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
-                    }
-                  />
-                )}
                 {/* 悬赏 */}
                 {parseContent.REWARD && (
                   <div className={topic.rewardBody}>
@@ -247,6 +247,18 @@ export default inject('user')(
                       <span className={topic.rewardNumber}>{parseContent.REWARD.remain_money || 0}</span>元
                     </div>
                     <div className={topic.rewardTime}>{parseContent.REWARD.expired_at}截止悬赏</div>
+                  </div>
+                )}
+
+                {/* 红包 */}
+                {parseContent.RED_PACKET && (
+                  <div>
+                    <PostRewardProgressBar
+                      remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
+                      received={
+                        Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
+                      }
+                    />
                   </div>
                 )}
               </div>
@@ -268,7 +280,7 @@ export default inject('user')(
             {canReward && (
               <Button onClick={onRewardClick} className={topic.rewardButton} type="primary" size="large">
                 <div className={topic.buttonIconText}>
-                  <Icon className={topic.buttonIcon} name="HeartOutlined"></Icon>
+                  <Icon className={topic.buttonIcon} name="HeartOutlined" size={19}></Icon>
                   <span className={topic.buttonText}>打赏</span>
                 </div>
               </Button>
@@ -298,14 +310,14 @@ export default inject('user')(
             onClick={onLikeClick}
           >
             <Icon name="LikeOutlined"></Icon>
-            <span>{threadStore?.threadData?.isLike ? '取消' : '赞'}</span>
+            <span>赞</span>
           </div>
           <div
             className={classnames(topic.item, threadStore?.threadData?.isFavorite && topic.active)}
             onClick={onCollectionClick}
           >
             <Icon name="CollectOutlined"></Icon>
-            <span>{threadStore?.threadData?.isFavorite ? '取消' : '收藏'}</span>
+            <span>收藏</span>
           </div>
           <div className={classnames(topic.item)} onClick={onShareClick}>
             <Icon name="ShareAltOutlined"></Icon>

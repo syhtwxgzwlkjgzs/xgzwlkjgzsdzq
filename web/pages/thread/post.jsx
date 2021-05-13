@@ -15,6 +15,7 @@ import PayBox from '@components/payBox/index';
 import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
 import { withRouter } from 'next/router';
 
+
 @inject('site')
 @inject('threadPost')
 @inject('index')

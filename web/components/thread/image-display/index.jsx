@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ImagePreviewer } from '@discuzq/design';
+import { noop } from '../utils'
 import styles from './index.module.scss';
 
 // TODO 图片懒加载
-const Index = ({ imgData = [], platform = 'h5' }) => {
+const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) => {
     const [bigImages, setBigImages] = useState([])
     const [smallImages, setSmallImages] = useState([])
     const [visible, setVisible] = useState(false);
@@ -29,21 +30,24 @@ const Index = ({ imgData = [], platform = 'h5' }) => {
     // 设置大于4张图片时的高度
     useEffect(() => {
         if (smallImg.current && imgData?.length > 4) {
-            console.log(smallImg.current.clientWidth);
-            setSmallSty({ height: `${smallImg.current.clientWidth}px` })
+            setSmallSty({ height: `${smallImg.current.clientWidth}px`, width: `${smallImg.current.clientWidth}px` })
         }
     }, [imgData])
 
     const onClick = (id) => {
-        imgData.forEach((item) => {
-          if (item.id === id) {
-            setDefaultImg(item.url);
-            setTimeout(() => {
-                setVisible(true);
-                
-            }, 10);
-          }
-        });
+        if (isPay) {
+            onPay()
+        } else {
+            imgData.forEach((item) => {
+                if (item.id === id) {
+                  setDefaultImg(item.url);
+                  setTimeout(() => {
+                      setVisible(true);
+                      
+                  }, 10);
+                }
+            });
+        }
     };
 
     const onClickMore = (e) => {
@@ -73,20 +77,22 @@ const Index = ({ imgData = [], platform = 'h5' }) => {
 
     return (
         <>
-            <div className={`${styles.container} ${direction} ${styles[style]} ${platform === 'pc' && styles.containerPC}`}>
-                <div className={styles.bigImages}>
-                    { bigImages.map((item, index) => <img className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />)}
-                </div>
-                <div className={styles.smallImages} style={smallSty}>
-                    { smallImages.map((item, index) => <img ref={smallImg} className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={`1-${index}`} />) }
-                    {
-                        imgData?.length > 5 && (
-                            <>
-                            <div className={styles.modalBox} onClick={onClickMore}></div>
-                            <span className={styles.imgSpan}>{`+${imgData.length - 5}`}</span>
-                            </>
-                        )
-                    }
+            <div className={`${styles.container}  ${platform === 'pc' ? styles.containerPC : styles.containerH5}`}>
+                <div className={`${direction} ${styles[style]}`}>
+                    <div className={styles.bigImages}>
+                        { bigImages.map((item, index) => <img className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />)}
+                    </div>
+                    <div className={styles.smallImages}>
+                        { smallImages.map((item, index) => <img ref={smallImg} className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={`1-${index}`} />) }
+                        {
+                            imgData?.length > 5 && (
+                                <>
+                                <div className={styles.modalBox} onClick={onClickMore}></div>
+                                <span className={styles.imgSpan}>{`+${imgData.length - 5}`}</span>
+                                </>
+                            )
+                        }
+                    </div>
                 </div>
             </div>
 

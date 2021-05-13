@@ -10,7 +10,7 @@
   }
 }
 .dzq-toast--mask {
-  z-index: var(--zindex-toast);
+  z-index: $zindex-toast;
 }
 
 * {

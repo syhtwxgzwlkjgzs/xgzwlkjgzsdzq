@@ -14,6 +14,7 @@
     line-height: rem(26);
     text-align: left;
     color: var(--color-text-primary);
+    cursor: pointer;
   }
 
   .header {
@@ -48,15 +49,19 @@
     border-top: var(--border-line-color) solid rem(1);
     margin-top: rem(12);
   }
+  .pay {
+    margin: rem(16) rem(50) 0 rem(50);
+  }
   .button {
     width: 100%;
     height: rem(36);
     font-size: rem($font-size-primary);
     line-height: rem(36);
-    padding: 0;
-    margin-bottom: rem($margin-4n);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     .icon {
-      font-size: rem($font-size-primary);
+      font-size: rem($font-size-large);
       margin-right: rem($margin-10);
     }
   }
@@ -67,5 +72,6 @@
 }
 
 .containerPC {
+  padding: 0 rem($padding-6n);
   border-radius: rem(5);
 }

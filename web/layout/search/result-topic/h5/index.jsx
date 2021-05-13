@@ -1,15 +1,9 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-
 import SearchInput from '@components/search-input';
-import NoData from '@components/no-data';
-import List from '@components/list';
-import SearchTopics from './components/search-topics';
-import Header from '@components/header';
+import BaseLayout from '@components/base-layout';
 import { Topic } from '@components/search-result-item';
-
-import styles from './index.module.scss';
 
 @inject('search')
 @observer
@@ -60,29 +54,17 @@ class SearchResultTopicH5Page extends React.Component {
     const { pageData = [], currentPage, totalPage } = topics || { pageData: [] };
 
     return (
-      <div className={styles.page}>
-        <Header />
-        <div className={styles.searchInput}>
+        <BaseLayout
+          onRefresh={this.fetchMoreData}
+          noMore={currentPage >= totalPage}
+        >
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
-        </div>
-        {
-          pageData?.length
-            ? (
-              <List
-                className={styles.list}
-                onRefresh={this.fetchMoreData}
-                noMore={currentPage >= totalPage}
-              >
-                {
-                  pageData?.map((item, index) => (
-                    <Topic key={index} data={item} onClick={this.onTopicClick} />
-                  ))
-                }
-              </List>
-            )
-            : <NoData />
-        }
-      </div>
+          {
+            pageData?.map((item, index) => (
+              <Topic key={index} data={item} onClick={this.onTopicClick} />
+            ))
+          }
+        </BaseLayout>
     );
   }
 }
