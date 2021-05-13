@@ -40,6 +40,12 @@
     font-size: rem($font-size-primary);
     color: var(--color-text-primary);
     line-height: rem($font-line-height-primary);
+    &:hover {
+      color: var(--color-primary);
+      .rightIcon {
+        color: var(--color-primary) !important;
+      }
+    }
   }
   .num {
     font-size: rem($font-size-label);

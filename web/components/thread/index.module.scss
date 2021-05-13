@@ -10,7 +10,7 @@
   // }
   .title {
     font-size: rem($font-size-middle);
-    font-weight: 600;
+    font-weight: bold;
     line-height: rem(26);
     text-align: left;
     color: var(--color-text-primary);
@@ -74,4 +74,10 @@
 .containerPC {
   padding: 0 rem($padding-6n);
   border-radius: rem(5);
+  .header {
+    padding: rem($padding-6n) 0;
+  }
+  .title {
+    margin-bottom: rem($font-size-small);
+  }
 }
