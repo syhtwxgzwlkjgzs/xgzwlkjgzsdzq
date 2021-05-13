@@ -10,7 +10,8 @@
     .replyListContentText {
       padding: rem($padding-2n);;
       border-radius: rem($border-radius-small);
-      background-color: $comment-bg-color;
+      // TODO:token
+      background: #f5f7f8;
       .replyListName {
         font-weight: var(--font-weight-regular);
         font-size: rem($font-size-primary);
@@ -41,6 +42,12 @@
             margin-right: rem($margin-1n);
             position: relative;
             top: rem(6);
+
+
+            .avatar {
+              width: rem(18);
+              height: rem(18);
+            }
           }
         }
       }

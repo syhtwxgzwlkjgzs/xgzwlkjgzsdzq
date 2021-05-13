@@ -147,11 +147,13 @@
 
 .rewardText {
   padding: rem($padding-4n) 0;
-  background: var(--background-color-text);
+  // TODO:token
+  background: #f5f7f8;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: var($border-radius-small);
+  border-radius: $border-radius-small;
+  
   .rewardMoney {
     line-height: rem($font-line-height-base);
     font-size: rem($font-size-primary);

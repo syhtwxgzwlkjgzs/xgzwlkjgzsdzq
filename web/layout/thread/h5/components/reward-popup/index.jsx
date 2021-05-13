@@ -5,12 +5,16 @@ import styles from './index.module.scss';
 const InputPop = (props) => {
   const { visible, onOkClick, onCancel } = props;
 
-
   const [value, setValue] = useState('');
-
 
   const onInputChange = (val) => {
     setValue(val);
+  };
+
+  const rewardList = [1, 2, 5, 10, 20, 50, 88, 128];
+
+  const onRewardClick = (item) => {
+    setValue(item);
   };
 
   const onSubmitClick = async () => {
@@ -29,25 +33,35 @@ const InputPop = (props) => {
   return (
     <Popup position="bottom" visible={visible} onClose={onCancel}>
       <div className={styles.container}>
-        <div className={styles.body}>
-          <div className={styles.percentage}>
-            <div className={styles.text}>打赏金额:</div>
-            <Input
-              mode='number'
-              className={styles.input}
-              placeholder='请输入打赏金额'
-              value={value}
-              onChange={e => onInputChange(e.target.value)}
-            />
-          </div>
+        <div className={styles.header}>打赏</div>
+
+        <div className={styles.percentage}>
+          <span className={styles.text}>打赏金额</span>
+          <Input
+            prefixIcon="RenminbiOutlined"
+            mode="number"
+            placeholder="请输入打赏金额"
+            className={styles.input}
+            value={value}
+            onChange={(e) => onInputChange(e.target.value)}
+          />
         </div>
+
+        <div className={styles.rewardList}>
+          {rewardList.map((item) => (
+            <Button onClick={() => onRewardClick(item)} className={styles.reward} key={item}>
+              ￥{item}
+            </Button>
+          ))}
+        </div>
+
         <div className={styles.button}>
-        <Button full={true} onClick={onSubmitClick} className={styles.ok} type="primary" size="large">
-          确定
-        </Button>
-        <Button full={true} onClick={onCancel} className={styles.cancel} type="text" size="large">
-          取消
-        </Button>
+          <Button onClick={onCancel} className={styles.cancel} type="default">
+            取消
+          </Button>
+          <Button onClick={onSubmitClick} className={styles.ok} type="primary">
+            确定
+          </Button>
         </div>
       </div>
     </Popup>
