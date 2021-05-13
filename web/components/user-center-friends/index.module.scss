@@ -71,8 +71,8 @@
         align-items: center;
         justify-content: center;
         // 这个颜色没有
-        background: #7BA5F9;
-        border-color: #7BA5F9;
+        background: var(--color-primary5);
+        border-color: var(--color-primary5);
         padding-top: rem($padding-1n);
         padding-bottom: rem($padding-1n);
 

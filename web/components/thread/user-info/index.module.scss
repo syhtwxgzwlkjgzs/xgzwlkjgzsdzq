@@ -104,10 +104,10 @@
     }
   }
   .categoryEssence {
-    color:  #F66524;
-    border: rem(1) solid  #F66524;
+    color:  var(--color-orange);
+    border: rem(1) solid  var(--color-orange);
     &:after {
-      background-color:  #F66524;
+      background-color:  var(--color-orange);
     }
   }
   >div {

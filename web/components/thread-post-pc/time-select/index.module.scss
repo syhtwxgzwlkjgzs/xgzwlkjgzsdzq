@@ -46,7 +46,7 @@
     min-height: 498px;
     border-radius: 5px;
     box-sizing: border-box;
-    background: #fff;
+    background: var(--color-white);
     padding-right: 24px;
     padding-left: 24px;
 
@@ -92,7 +92,7 @@
             border: none;
             width: 50px;
             height: 50px;
-            background-color: #fff;
+            background-color: var(--color-white);
             font-size: 14px;
             color: #4f5a70;
         }

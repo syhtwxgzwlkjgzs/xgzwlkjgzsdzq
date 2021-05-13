@@ -6,7 +6,7 @@
 .popup {
   :global {
     .dzq-popup__overlay {
-      background-color: #fff;
+      background-color: var(--color-white);
     }
   }
 }
