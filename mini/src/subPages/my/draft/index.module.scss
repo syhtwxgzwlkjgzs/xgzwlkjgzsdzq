@@ -4,7 +4,8 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--comment-box-bg-color);
+  background-color: $body-bg-color;
+  font-family:$font-family ;
 
   .list {
     flex: 1;
@@ -12,36 +13,36 @@
 
   .drafts-lenth {
     height: 55px;
-    padding-left: var(--padding-4n);
+    padding-left: $padding-4n;
     line-height: 55px;
-    font-size: var(--font-size-primary);
-    color: var(--pc-user-info-title);
-    background-color: var(--color-white);
-    margin-bottom: var(--margin-10);
+    font-size: $font-size-base;
+    color: $text-color-regular;
+    background-color: $white;
+    margin-bottom: $margin-10;
   }
 
   .drafts-listbox {
     width: 100%;
-    padding: 0 var(--padding-4n);
-    background-color: var(--color-white);
+    padding: 0 $padding-4n;
+    background-color: $white;
 
     .drafts-list {
       width: 100%;
       min-height: 48px;
-      padding-bottom: var(--padding-4n);
-      border-bottom: var(--border-border);
+      padding-bottom: $padding-4n;
+      border-bottom: $border-solid-1;
     }
 
     .drafts-list-finally {
       width: 100%;
       min-height: 48px;
-      padding-bottom: var(--padding-4n);
+      padding-bottom: $padding-4n;
     }
 
     .drafts-time {
-      font-size: var(--font-size-label);
-      margin-top: var(--margin-2n);
-      color: var(--color-text-secondary);
+      font-size: $font-size-small;
+      margin-top: $margin-2n;
+      color: $text-color-secondary;
     }
   }
 }

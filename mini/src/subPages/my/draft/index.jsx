@@ -10,7 +10,7 @@ import { THREAD_LIST_FILTER_COMPLEX } from '@common/constants/index';
 import { diffDate } from '@common/utils/diff-date';
 
 import styles from './index.module.scss';
-// TOOD 目前页面使用的数据展示待组件编辑优化
+// TODO: 目前页面使用的数据展示待组件编辑优化
 class DraftItem extends React.Component { // 草稿箱渲染部分
 
   handleEdit = (item) => {
