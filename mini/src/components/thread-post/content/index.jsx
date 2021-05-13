@@ -27,6 +27,7 @@ const TextArea = ({
   cursorSpacing,
   onChange,
   onFocus,
+  onBlur,
 }) => {
   return (
     <View className={styles.container}>
@@ -42,12 +43,9 @@ const TextArea = ({
           cursorSpacing={cursorSpacing}
           onChange={e => onChange(e.target.value, maxLength)}
           onFocus={onFocus}
+          onBlur={onBlur}
+          autoHeight={true}
         />
-        {/* {!showLimit &&
-          <View className={styles['content-length']}>
-            还能输入{parseInt(maxLength - value.length)}个字
-          </View>
-        } */}
       </View>
     </View>
   );
@@ -68,7 +66,7 @@ TextArea.propTypes = {
 // 设置props默认类型
 TextArea.defaultProps = {
   value: '',
-  rows: 8,
+  rows: 4,
   placeholder: '请填写您的发布内容...',
   disabled: false,
   maxLength: 5000,
@@ -76,6 +74,7 @@ TextArea.defaultProps = {
   cursorSpacing: 0,
   onChange: () => { },
   onFocus: () => { },
+  onBlur: () => {},
 };
 
 export default memo(TextArea);

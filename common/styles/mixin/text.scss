@@ -13,7 +13,9 @@
 @mixin lamp-clamp($line) {
   overflow: hidden;
   text-overflow: ellipsis;
+  display: -webkit-box;
   display: box;
+  -webkit-box-orient: vertical;
   -webkit-line-clamp: $line;
   word-break: break-all;
 }
