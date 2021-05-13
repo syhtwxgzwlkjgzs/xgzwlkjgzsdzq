@@ -5,6 +5,7 @@ import Header from '@components/header';
 import styles from './index.module.scss'
 import HOCFetchSiteData from '../../middleware/HOCFetchSiteData'
 import CaptchaInput from './captcha-input/index'
+import VerifyCode from './verify-code/index'
 
 @inject('site')
 @observer
@@ -70,6 +71,10 @@ class index extends Component {
     })
   }
 
+  getVerifyCode = ({ calback }) => {
+    if (calback && typeof calback === 'function') calback()
+  }
+
   render() {
     const { current_step, list = [], is_blur } = this.state
     return (
@@ -91,7 +96,7 @@ class index extends Component {
               )
             }
             <div>
-              <Button className={styles.codeBtn} type="primary">发送验证码</Button>
+              <VerifyCode key={current_step} text={"发送验证码"} getVerifyCode={this.getVerifyCode} />
             </div>
           </div>
           <div className={styles.bindCode}>

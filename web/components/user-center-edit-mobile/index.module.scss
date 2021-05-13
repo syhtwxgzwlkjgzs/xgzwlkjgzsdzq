@@ -81,3 +81,11 @@
     font-size: $font-size-middle;
   }
 }
+
+.verifyCodeBtn {
+  height: rem(36);
+  font-size: rem($font-size-primary);
+}
+.verifyCodeDisabled {
+  color: var(--color-disabled);
+}
