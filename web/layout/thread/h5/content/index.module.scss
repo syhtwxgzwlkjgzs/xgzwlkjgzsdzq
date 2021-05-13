@@ -147,8 +147,7 @@
 
 .rewardText {
   padding: rem($padding-4n) 0;
-  // TODO:token
-  background: #f5f7f8;
+  background: $body-bg-color;
   display: flex;
   flex-direction: column;
   align-items: center;
