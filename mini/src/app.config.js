@@ -7,7 +7,6 @@ export default {
   pages: [
     'pages/index/index',
     'pages/thread/index',
-    'pages/message/index',
   ],
   subPackages: [
     {
@@ -44,6 +43,7 @@ export default {
         'wallet/index',
         'wallet/frozen/index',
         'wallet/withdrawal/index',
+        'message/index',
       ]
     }
   ],

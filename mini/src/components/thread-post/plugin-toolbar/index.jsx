@@ -29,7 +29,7 @@ const Index = inject('user', 'threadPost')(observer((props) => {
   // 插件icon元素
   const { threadExtendPermissions: tep } = user;
   const plug = useMemo(() => {
-    return attachIcon.map((item, index) => {
+    const plugs = attachIcon.map((item, index) => {
       // 是否有权限
       const canInsert = tep[item.type];
       return canInsert ? (
@@ -47,6 +47,17 @@ const Index = inject('user', 'threadPost')(observer((props) => {
         />
       ) : null;
     });
+
+    return (
+      <View className={styles['plugin-icon-container']}>
+        <View className={styles['plugin-icon']}>
+          {plugs}
+        </View>
+        <View className={styles['switcher']} onClick={() => {setplugShow(false);}}>
+          <Icon name="MoreBOutlined" size='20' />
+        </View>
+      </View>
+    );
   }, [tep, currentplug])
 
   // 分类元素
@@ -58,9 +69,7 @@ const Index = inject('user', 'threadPost')(observer((props) => {
         className={styles['icon']}
       />
       <Text>分类</Text>
-      <Units type='tag' tagContent={content() || '选择分类(必选)'} onTagClick={() => {
-        // 处理分类弹框等逻辑
-      }} />
+      <Units type='tag' tagContent={content() || '选择分类(必选)'} />
     </View>
   );
 
@@ -70,7 +79,7 @@ const Index = inject('user', 'threadPost')(observer((props) => {
         { plugShow ? plug : category }
       </View>
       <View onClick={() => {setplugShow(!plugShow);}}>
-        { (!plugShow) && (<Icon name={currentplug.name || 'PictureOutlinedBig'} size='20' />) }
+        { (!plugShow) && (<Icon className={styles['icon-color']} name={currentplug.name || 'PictureOutlinedBig'} size='20' />) }
         <Icon name="MoreBOutlined" size='20' />
       </View>
     </View>
