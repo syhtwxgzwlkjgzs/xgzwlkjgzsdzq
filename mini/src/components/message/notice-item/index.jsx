@@ -43,21 +43,23 @@ class Index extends Component {
 
   // 针对财务消息，获取后缀提示语
   getFinancialTips = (item) => {
-    if (item.type === 'rewarded' && item.order_type === 2) {
-      return '打赏了你';
-    }
-    if (item.type === 'rewarded' && item.order_type === 3) {
+    if (item.type === 'rewarded') {
       return '支付了你';
     }
-    if (item.type === 'threadrewarded') {
+    if (item.type === 'questioned') {
       return '悬赏了你';
-    }
-    if (item.type === 'threadrewardedexpired') {
-      return '悬赏退回';
     }
     if (item.type === 'receiveredpacket') {
       return '获取红包';
     }
+    if (item.type === 'withdrawal') {
+      return '获取提现';
+    }
+  };
+
+  // parse content
+  filterTag(html) {
+    return html?.replace(/(<p>)|(<\/p>)|(<br>)/g, '');
   }
 
   // parse content
@@ -68,7 +70,7 @@ class Index extends Component {
       ? (item.title || item.content)
       : item.content;
     // 2 过滤内容
-    _content = _content.replace(/^(<p>)/, '').replace(/(<\/p>)$/, '');
+    _content = this.filterTag(_content);
     // 3 拼接account前置tip
     if (type === 'account') {
       const tip = `<span class=\"${styles.tip}\">${threadTips[item.type]}</span>`;
@@ -82,11 +84,12 @@ class Index extends Component {
   toUserCenter = (e, canJump, item) => {
     e.stopPropagation();
     // 后续用户中心做好后，再根据用户id设置对应路由
-    canJump && Taro.navigateTo({ url: '/subPages/user/status/index' })
+    canJump && Taro.navigateTo({ url: `/subPages/user/index?id=${item.userId}` })
   }
 
   // 跳转主题详情or私信
   toDetailOrChat = (e, item) => {
+    if (e.target.nodeName === 'A') return;
     const { type } = this.props;
     if (type === 'financial' || type === 'account') {
       Taro.navigateTo({ url: `/pages/thread/index?id=${item.id}` })
@@ -97,11 +100,11 @@ class Index extends Component {
   }
 
   render() {
-    const { type, item = {}, onBtnClick } = this.props;
+    const { type, item = {} } = this.props;
     const avatarUrl = this.getAvatar(item.avatar);
 
     return (
-      <View className={'item ' + styles.wrapper}>
+      <View className={styles.wrapper}>
 
         {/* 默认block */}
         <View className={styles.block}>
@@ -139,7 +142,7 @@ class Index extends Component {
                 className={styles.name}
                 onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
               >
-                {item.username || item.title}
+                {item.username || this.filterTag(item.title)}
               </View>
               {['chat', 'thread'].includes(type) &&
                 <View className={styles.time}>{diffDate(new Date(item.createdAt))}</View>
@@ -200,13 +203,11 @@ class Index extends Component {
 Index.propTypes = {
   type: PropTypes.string,
   item: PropTypes.object,
-  onBtnClick: PropTypes.func,
 }
 
 Index.defaultProps = {
   type: 'thread',
   item: {},
-  onBtnClick: () => { },
 }
 
 export default Index;
