@@ -20,7 +20,7 @@ $margin16: rem($margin-4n);
   }
   &__item {
     position: relative;
-    margin-right: rem(24);
+    margin-right: rem($margin-6n);
     display: inline-flex;
     font-size: $font-size-primary;
     color: $icon-color;
@@ -121,4 +121,11 @@ $margin16: rem($margin-4n);
 
 .pc {
   background-color: $white;
+  .dvditor-toolbar {
+    &__item {
+      &:first-child {
+        margin-right: rem($margin-6n);
+      }
+    }
+  }
 }

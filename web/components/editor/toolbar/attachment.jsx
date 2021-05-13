@@ -140,7 +140,8 @@ function AttachmentToolbar(props) {
   const icons = () => attachIcon.map((item) => {
     const { permission } = props;
     if (props.pc && item.type === THREAD_TYPE.voice) return null;
-    const clsName = item.type === currentAction ? `${styles['dvditor-attachment-toolbar__item']} ${styles.active}` : styles['dvditor-attachment-toolbar__item'];
+    const action = props.currentSelectedToolbar || currentAction;
+    const clsName = item.type === action ? `${styles['dvditor-attachment-toolbar__item']} ${styles.active}` : styles['dvditor-attachment-toolbar__item'];
     if (!item.isUpload) {
       return permission[item.type] ? (
         <Icon
@@ -178,6 +179,8 @@ function AttachmentToolbar(props) {
 
   if (props.pc) return icons();
   const styl = !showAll ? { display: 'none' } : {};
+  const action = props.currentSelectedToolbar || currentAction;
+  const currentIcon = attachIcon.filter(item => item.type === action)[0]?.name;
   return (
     <div className={styles['dvditor-attachment-toolbar']}>
       {!showAll && (
@@ -185,8 +188,9 @@ function AttachmentToolbar(props) {
           <div className={styles['dvditor-attachment-toolbar__left']}>
             {props.category}
           </div>
-          <div className={styles['dvditor-attachment-toolbar__right']}>
-            <Icon name="MoreBOutlined" size="20" onClick={handleToggle} />
+          <div className={styles['dvditor-attachment-toolbar__right']} onClick={handleToggle}>
+            {currentIcon && <Icon name={currentIcon} size="20" />}
+            <Icon name="MoreBOutlined" size="20" />
           </div>
         </>
       )}
@@ -194,8 +198,11 @@ function AttachmentToolbar(props) {
         <div className={styles['dvditor-attachment-toolbar__left']}>
           {icons()}
         </div>
-        <div className={classNames(styles['dvditor-attachment-toolbar__right'], styles.show)}>
-          <Icon name="MoreBOutlined" size="20" onClick={handleToggle} />
+        <div
+          className={classNames(styles['dvditor-attachment-toolbar__right'], styles.show)}
+          onClick={handleToggle}
+        >
+          <Icon name="MoreBOutlined" size="20" />
         </div>
       </div>
     </div>

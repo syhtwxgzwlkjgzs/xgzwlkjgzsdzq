@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Button } from '@discuzq/design';
+import { Button, Icon } from '@discuzq/design';
 import AudioPlay from './audio-play';
 import PostContent from './post-content';
 import ProductItem from './product-item';
@@ -68,19 +68,19 @@ const Index = (props) => {
                         onClickMore={onClick} />
                     )
                 }
+                {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
+                {fileData && <AttachmentView attachments={fileData} onPay={onPay} isPay={needPay} />}
+                {goodsData && <ProductItem
+                    image={goodsData.imagePath}
+                    amount={goodsData.price}
+                    title={goodsData.title}
+                />}
                 {rewardData && <Packet
                   type={1}
                   money={rewardData.money}
                   onClick={onClick}
                 />}
                 {redPacketData && <Packet money={redPacketData.money || 0} onClick={onClick} />}
-                {goodsData && <ProductItem
-                    image={goodsData.imagePath}
-                    amount={goodsData.price}
-                    title={goodsData.title}
-                />}
-                {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
-                {fileData && <AttachmentView attachments={fileData} onPay={onPay} isPay={needPay} />}
               </div>
           </div>
         );
@@ -96,7 +96,7 @@ const Index = (props) => {
                 needPay && (
                   <div className={styles.pay}>
                     <Button className={styles.button} type="primary" onClick={onPay}>
-                        <span className={styles.icon}>$</span>
+                        <Icon className={styles.payIcon} name="DollarLOutlined" size={18}></Icon>
                         {payType === 1 ? `支付${price}元查看剩余内容` : `支付${price}元查看附件内容`}
                     </Button>                  
                   </div>

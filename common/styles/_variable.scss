@@ -67,7 +67,8 @@ $text-bg-color2: var(--background-color-text2);
 // ------ icon color ------------
 $icon-color-light: $text-color-secondary;
 $icon-color: $text-color-regular;
-$icon-color-active: var(--color-primary2);
+$icon-color-active: $primary-color;
+$icon-primary-color: $primary-color;
 $icon-success-color: $success-color;
 
 // ----- boder color ----

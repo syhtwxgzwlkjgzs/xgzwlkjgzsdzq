@@ -10,11 +10,11 @@
   // }
   .title {
     font-size: rem($font-size-middle);
-    font-weight: bold;
-    line-height: rem(26);
-    text-align: left;
+    font-weight: 600;
+    line-height: rem(22);
     color: var(--color-text-primary);
     cursor: pointer;
+    margin-bottom: rem($margin-4n);
   }
 
   .header {
@@ -60,9 +60,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    .icon {
-      font-size: rem($font-size-large);
-      margin-right: rem($margin-10);
+    .payIcon {
+      margin-right: rem($margin-2n);
     }
   }
 }
@@ -76,8 +75,5 @@
   border-radius: rem(5);
   .header {
     padding: rem($padding-6n) 0;
-  }
-  .title {
-    margin-bottom: rem($font-size-small);
   }
 }

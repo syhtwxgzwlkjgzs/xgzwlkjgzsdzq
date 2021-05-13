@@ -293,6 +293,7 @@ class ThreadCreate extends React.Component {
                 categoryChoose={threadPost.categorySelected}
                 onClick={this.handleCategoryClick} />}
             permission={threadExtendPermissions}
+            currentSelectedToolbar={threadPost.currentSelectedToolbar}
           />
           {/* 默认的操作栏 */}
           <DefaultToolbar
