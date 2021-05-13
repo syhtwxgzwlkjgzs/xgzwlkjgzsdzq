@@ -271,10 +271,10 @@
     }
   }
   .categoryReward {
-    color: #ffc300;
-    border: rem(1) solid #ffc300;
+    color: var(--color-warn);
+    border: rem(1) solid var(--color-warn);
     &::after {
-      background-color: #ffc300;
+      background-color: var(--color-warn);
     }
   }
 }

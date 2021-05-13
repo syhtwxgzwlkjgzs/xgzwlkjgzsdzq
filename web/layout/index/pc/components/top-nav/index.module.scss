@@ -10,7 +10,7 @@
     line-height: 24px;
     font-weight: normal;
     margin-right: rem(32);
-    color: #4f5a70;
+    color: var(--color-text-regular);
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -38,7 +38,7 @@
     left: rem(-60);
     display: flex;
     flex-direction: column;
-    background-color: white;
+    background-color: var(--color-var(--color-white));
     z-index: 1000;
     border-radius: rem(5);
     border: 1px solid var(--border-line-color);
