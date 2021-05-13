@@ -20,7 +20,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 2;
+  z-index: 1000;
 }
 .homeContentTop {
   padding: 0 rem($padding-4n);
@@ -39,7 +39,7 @@
         font-weight: normal;
       }
       .dzq-tabs__item.is-active {
-        font-family: "PingFang SC";
+        font-family: 'PingFang SC';
         font-weight: 600;
         color: var( --color-primary);
       }
