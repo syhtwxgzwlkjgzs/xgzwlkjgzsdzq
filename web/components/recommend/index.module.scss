@@ -83,10 +83,10 @@
           }
         }
         .categoryText {
-          color: #3ac15f;
-          border: rem(1) solid #3ac15f;
+          color: var(--color-success);
+          border: rem(1) solid var(--color-success);
           &:after {
-            background-color: #3ac15f;
+            background-color: var(--color-success);
           }
         }
         .categoryEssence {
