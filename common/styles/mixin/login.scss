@@ -30,8 +30,8 @@
   }
 }
 @mixin passwordInput {
-  div{
-    top: rem(15);
+  :global(.dzq-input__icon){
+    top: rem(16);
   }
 }
 @mixin button {
