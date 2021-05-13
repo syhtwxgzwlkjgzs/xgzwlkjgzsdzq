@@ -2,8 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import styles from './index.module.scss';
-import Header from '@components/header';
-import List from '@components/list';
+import BaseLayout from '@components/base-layout';
 import NoData from '@components/no-data';
 import DetailsHeader from './components/details-header'
 import ThreadContent from '@components/thread';
@@ -55,14 +54,15 @@ class TopicH5Page extends React.Component {
   }
 
   render() {
-    const { pageData = [] } = this.props.topic?.topicDetail || {};
+    const { pageData } = this.props.topic?.topicDetail || {};
     return (
-      <List className={styles.topicWrap} allowRefresh={false}>
-        <Header/>
+      <BaseLayout allowRefresh={false}>
         {
-          pageData?.map((item, index) => this.renderItem(item, index)) || <NoData />
+          pageData?.map((item, index) => (
+            this.renderItem(item, index))  
+          )
         }
-      </List>
+      </BaseLayout>
     );
   }
 }

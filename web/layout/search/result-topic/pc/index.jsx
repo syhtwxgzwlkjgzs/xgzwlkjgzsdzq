@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import BaseLayout from '@components/base-layout';
 import TrendingTopicMore from '../../../search/pc/components/trending-topic-more';
-import ActiveUsers from '../../../search/pc/components/active-users'
+import ActiveUsers from '@components/active-users'
 import { withRouter } from 'next/router';
 import Copyright from '@components/copyright';
 import SidebarPanel from '@components/sidebar-panel';
@@ -48,25 +48,21 @@ class SearchResultTopicPCPage extends React.Component {
   }
 
   renderRight = () => {
-    const { pageData = [] } = this.props.search.users || { pageData: [] };
     return (
       <>
-        <SidebarPanel title="活跃用户" onShowMore={this.redirectToSearchResultUser} noData={false}>
-          <ActiveUsers data={pageData} onItemClick={this.onUserClick}/>
-        </SidebarPanel>
+        <ActiveUsers />
         <Copyright/>
       </>
     )
   }
 
-  renderContent = () => {
-    const { pageData = [] } = this.props.search.topics || { pageData: [] };
+  renderContent = (pageData) => {
     return (
       <SidebarPanel 
         title="潮流话题" 
         type='normal'
-        isShowMore={false}
-        noData={!pageData.length}
+        isShowMore={!pageData}
+        noData={!pageData?.length}
         icon={{ type: 1, name: 'StrongSharpOutlined' }}
       >
         <TrendingTopicMore data={pageData} onItemClick={this.onTopicClick}/>
@@ -75,7 +71,7 @@ class SearchResultTopicPCPage extends React.Component {
   }
 
   render() {
-    const { currentPage, totalPage } = this.props.search.topics || { pageData: [] };
+    const { pageData, currentPage, totalPage } = this.props.search.topics || {};
     return (
       <BaseLayout
         noMore={currentPage >= totalPage} 
@@ -84,7 +80,7 @@ class SearchResultTopicPCPage extends React.Component {
         onSearch={this.onSearch}
         right={ this.renderRight }
       >
-        { this.renderContent }
+        { this.renderContent(pageData) }
       </BaseLayout>
     );
   }

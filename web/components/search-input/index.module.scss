@@ -6,7 +6,6 @@
   align-items: center;
   background-color: $white;
   padding: rem($padding-4n);
-  padding-bottom: 0;
 }
 .inputWrapper {
   display: flex;
@@ -38,4 +37,8 @@
   line-height: var(--font-line-height-primary);
   color: var(--color-text-secondary);
   word-break: keep-all;
+}
+
+.hiddenBottom {
+  padding-bottom: 0;
 }

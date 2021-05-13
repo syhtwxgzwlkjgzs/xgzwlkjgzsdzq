@@ -11,7 +11,12 @@ import styles from './index.module.scss';
 const PopularContents = ({ data, onItemClick }) => (
   <div className={styles.list}>
     {
-      data.map((item, index) => <ThreadContent className={styles.bottom} data={item} key={index} />)
+      data.map((item, index) => (
+        <div key={index}>
+          <ThreadContent showBottomStyle={false} className={styles.bottom} data={item} key={index} />
+          <div className={styles.hr}></div>
+        </div>
+      ))
     }
   </div>
 );
