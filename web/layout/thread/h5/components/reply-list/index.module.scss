@@ -3,26 +3,30 @@
   display: flex;
   padding-top: rem($padding-4n);
   .replyListAvatar {
-    margin-right: rem($margin-10);
+    margin-right: rem($margin-2n);
   }
   .replyListContent {
     width: 100%;
     .replyListContentText {
       padding: rem($padding-2n);;
       border-radius: rem($border-radius-small);
-      background-color: $comment-bg-color;
+      // TODO:token
+      background: #f5f7f8;
       .replyListName {
         font-weight: var(--font-weight-regular);
         font-size: rem($font-size-primary);
-        line-height: rem(18);
+        font-family: 'PingFangSC-Semibol';
+        line-height: rem(17.8);
         text-align: left;
         color: var(--color-text-primary);
+        padding-bottom: rem($padding-1n);
       }
       .replyListText {
         font-size: rem($font-size-middle);
         line-height: rem($font-line-height-middle);
         text-align: left;
         color: var(--color-text-primary);
+        word-break: break-all;
         .commentUser {
           display: inline-block;
           .replyedUserName {
@@ -38,6 +42,12 @@
             margin-right: rem($margin-1n);
             position: relative;
             top: rem(6);
+
+
+            .avatar {
+              width: rem(18);
+              height: rem(18);
+            }
           }
         }
       }
@@ -47,11 +57,13 @@
       align-items: center;
       justify-content: space-between;
       font-size: rem($font-size-primary);
+      line-height: rem(16.8);
       text-align: left;
       color: var(--color-text-secondary);
       padding-top: rem($padding-2n);
       .replyTime {
         // flex: 1;
+        font-size: rem($font-size-label);
       }
       .replyLiked {
         // flex: 1;

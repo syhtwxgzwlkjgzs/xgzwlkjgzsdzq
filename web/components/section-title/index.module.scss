@@ -8,6 +8,7 @@
   padding: rem($padding-4n) 0;
   border-bottom: 1px solid var(--border-line-color);
   box-sizing: border-box;
+  background-color: $white;
   .left {
     display: flex;
     align-items: center;
@@ -39,6 +40,12 @@
     font-size: rem($font-size-primary);
     color: var(--color-text-primary);
     line-height: rem($font-line-height-primary);
+    &:hover {
+      color: var(--color-primary);
+      .rightIcon {
+        color: var(--color-primary) !important;
+      }
+    }
   }
   .num {
     font-size: rem($font-size-label);

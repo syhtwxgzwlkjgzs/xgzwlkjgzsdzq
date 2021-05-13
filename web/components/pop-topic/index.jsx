@@ -31,15 +31,16 @@ class Index extends React.Component {
   };
 
   render () {
-    const { pageData = [] } = this.props.search.topics || { pageData: [] };
+    const { pageData } = this.props.search.topics || {};
 
     return (
       <SidebarPanel 
         title="潮流话题"
-        noData={!pageData.length} 
+        isLoading={!pageData}
+        noData={!pageData?.length} 
         onShowMore={this.redirectToSearchResultTopic}
       >
-          <TrendingTopic data={pageData} onItemClick={this.onTopicClick}/>
+          <TrendingTopic data={pageData?.filter((_, index) => index < 10)} onItemClick={this.onTopicClick}/>
       </SidebarPanel>
     );
   }

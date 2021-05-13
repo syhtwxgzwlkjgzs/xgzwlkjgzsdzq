@@ -4,6 +4,8 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  background-color: $white;
+  padding: rem($padding-4n);
 }
 .inputWrapper {
   display: flex;
@@ -16,6 +18,9 @@
   border-radius: rem(5);
   background-color: var(--background-color-text2);
   box-sizing: border-box;
+  .inputWrapperIcon {
+    color: var(--color-text-secondary);
+  }
   .input {
     flex: 1;
     margin-left: rem(0.6);
@@ -35,4 +40,8 @@
   line-height: var(--font-line-height-primary);
   color: var(--color-text-secondary);
   word-break: keep-all;
+}
+
+.hiddenBottom {
+  padding-bottom: 0;
 }
