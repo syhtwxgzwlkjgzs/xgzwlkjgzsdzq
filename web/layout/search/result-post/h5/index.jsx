@@ -5,8 +5,6 @@ import SearchInput from '@components/search-input';
 import ThreadContent from '@components/thread';
 import BaseLayout from '@components/base-layout';
 
-import styles from './index.module.scss';
-
 @inject('site')
 @inject('search')
 @observer
@@ -55,7 +53,6 @@ class SearchResultPostH5Page extends React.Component {
 
     return (
       <BaseLayout
-          className={styles.list}
           onRefresh={this.fetchMoreData}
           noMore={currentPage >= totalPage}
       >

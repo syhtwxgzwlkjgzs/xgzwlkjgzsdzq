@@ -5,8 +5,6 @@ import SearchInput from '@components/search-input';
 import BaseLayout from '@components/base-layout';
 import UserItem from '@components/thread/user-item';
 
-import styles from './index.module.scss';
-
 @inject('site')
 @inject('search')
 @observer
@@ -55,52 +53,22 @@ class SearchResultUserH5Page extends React.Component {
 
     return (
       <BaseLayout
-          className={styles.list}
-          onRefresh={this.fetchMoreData}
-          noMore={currentPage >= totalPage}
-        >
-          <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
-          {
-            pageData?.map((item, index) => (
-              <UserItem
-                key={index}
-                title={item.nickname}
-                imgSrc={item.avatar}
-                label={item.groupName}
-                onClick={this.onUserClick}
-              />
-            ))
-          }
-        </BaseLayout>
-      // <div className={styles.page}>
-      //   <Header />
-      //   <div className={styles.searchInput}>
-      //     <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
-      //   </div>
-      //   {
-      //     pageData?.length
-      //       ? (
-      //         <List
-      //           className={styles.list}
-      //           onRefresh={this.fetchMoreData}
-      //           noMore={currentPage >= totalPage}
-      //         >
-      //           {
-      //             pageData.map((item, index) => (
-      //               <UserItem
-      //                 key={index}
-      //                 title={item.username}
-      //                 imgSrc={item.avatar}
-      //                 label={item.groupName}
-      //                 onClick={this.onUserClick}
-      //               />
-      //             ))
-      //           }
-      //         </List>
-      //       )
-      //       : <NoData />
-        // }
-      // </div>
+        onRefresh={this.fetchMoreData}
+        noMore={currentPage >= totalPage}
+      >
+        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
+        {
+          pageData?.map((item, index) => (
+            <UserItem
+              key={index}
+              title={item.nickname}
+              imgSrc={item.avatar}
+              label={item.groupName}
+              onClick={this.onUserClick}
+            />
+          ))
+        }
+      </BaseLayout>
     );
   }
 }
