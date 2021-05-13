@@ -1,565 +1,31 @@
 import React, { Component, Fragment } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
-import Taro from '@tarojs/taro';
 import { observer, inject } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 
-import { Icon, Badge, Toast, Button } from '@discuzq/design';
+import { Icon, Badge, Toast } from '@discuzq/design';
 
 import styleVar from '@common/styles/theme/default.scss.json';
-import UserInfo from '@components/thread/user-info';
-import ImageContent from '@components/thread/image-content';
-import AudioPlay from '@components/thread/audio-play';
-import PostContent from '@components/thread/post-content';
-import ProductItem from '@components/thread/product-item';
-import VideoPlay from '@components/thread/video-play';
-import PostRewardProgressBar, { POST_TYPE } from '@components/thread/post-reward-progress-bar';
-import Tip from '@components/thread/tip';
-import AttachmentView from '@components/thread/attachment-view';
-import classnames from 'classnames';
 import throttle from '@common/utils/thottle';
+
+import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
+import rewardPay from '@common/pay-bussiness/reward-pay';
 
 import layout from './layout.module.scss';
 import footer from './footer.module.scss';
-import comment from './comment.module.scss';
-import topic from './topic.module.scss';
 
-import CommentList from './components/comment-list/index';
 import LoadingTips from './components/loading-tips/index';
 import InputPopup from './components/input-popup/index';
 import DeletePopup from './components/delete-popup';
 import MorePopup from './components/more-popup';
 import ShowTop from './components/show-top';
 import NoMore from './components/no-more';
-import AboptPopup from './components/abopt-popup';
+
 import ReportPopup from './components/report-popup';
-import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
-import threadPay from '@common/pay-bussiness/thread-pay';
-import rewardPay from '@common/pay-bussiness/reward-pay';
 import RewardPopup from './components/reward-popup';
-import { minus } from '@common/utils/calculate';
 
-const typeMap = {
-  101: 'IMAGE',
-  102: 'VOICE',
-  103: 'VIDEO',
-  104: 'GOODS',
-  105: 'QA',
-  106: 'RED_PACKET',
-  107: 'REWARD',
-  108: 'VOTE',
-  109: 'QUEUE',
-  110: 'FILE',
-  111: 'QA_IMAGE',
-};
-
-// 帖子内容
-const RenderThreadContent = inject('user')(observer((props) => {
-  const { store: threadStore } = props;
-  const { text, indexes } = threadStore?.threadData?.content || {};
-  const tipData = {
-    postId: threadStore?.threadData?.postId,
-    threadId: threadStore?.threadData?.threadId,
-  };
-  // 是否合法
-  const isApproved = threadStore?.threadData?.isApproved || 0;
-  const isEssence = threadStore?.threadData?.displayTag?.isEssence || false;
-
-  // 是否附件付费
-  const isAttachmentPay = threadStore?.threadData?.payType === 2 && threadStore?.threadData?.paid === false;
-  const attachmentPrice = threadStore?.threadData?.attachmentPrice || 0;
-  // 是否帖子付费
-  const isThreadPay = threadStore?.threadData?.payType === 1 && threadStore?.threadData?.paid === false;
-  const threadPrice = threadStore?.threadData?.price || 0;
-  // 是否作者自己
-  const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData?.userId;
-
-  const parseContent = {};
-  if (indexes && Object.keys(indexes)) {
-    Object.entries(indexes).forEach(([, value]) => {
-      if (value) {
-        const { tomId, body } = value;
-        parseContent[typeMap[tomId]] = body;
-      }
-    });
-  }
-
-  const onContentClick = async () => {
-    const thread = props.store.threadData;
-    const { success } = await threadPay(thread, props.user?.userInfo);
-
-    // 支付成功重新请求帖子数据
-    if (success && threadStore?.threadData?.threadId) {
-      threadStore.fetchThreadDetail(threadStore?.threadData?.threadId);
-    }
-  };
-
-  const onMoreClick = () => {
-    props.fun.moreClick();
-  };
-
-  const onLikeClick = () => {
-    typeof props.onLikeClick === 'function' && props.onLikeClick();
-  };
-
-  const onBuyClick = (url) => {
-    url && window.open(url);
-  };
-
-
-  const onRewardClick = () => {
-    typeof props.onRewardClick === 'function' && props.onRewardClick();
-  };
-
-
-  return (
-    // <View>帖子内容</View>
-    <View className={`${layout.top} ${topic.container}`}>
-      <View className={topic.header}>
-        <View className={topic.userInfo}>
-          <UserInfo
-            name={threadStore?.threadData?.user?.userName || ''}
-            avatar={threadStore?.threadData?.user?.avatar || ''}
-            location={threadStore?.threadData?.position.location || ''}
-            view={`${threadStore?.threadData?.viewCount}` || ''}
-            time={`${threadStore?.threadData?.createdAt}` || ''}
-            isEssence={isEssence}
-          ></UserInfo>
-        </View>
-        {
-          props?.user?.isLogin()
-          && <View className={topic.more} onClick={onMoreClick}>
-            <Icon size="20" color="#8590A6" name="MoreVOutlined"></Icon>
-          </View>
-        }
-      </View>
-
-      {
-        isApproved === 1
-        && <View className={topic.body}>
-          {/* 文字 */}
-          {text && <PostContent content={text || ''} />}
-
-          {/* 付费附件 */}
-          {
-            isAttachmentPay && !isSelf
-            && <View style={{ textAlign: 'center' }} onClick={onContentClick}>
-              <Button className={topic.payButton} type='primary' size='large'>支付{attachmentPrice}元查看附件</Button>
-            </View>
-          }
-
-          {/* 视频 */}
-          {parseContent.VIDEO && (
-            <VideoPlay
-              url={parseContent.VIDEO.mediaUrl}
-              coverUrl={parseContent.VIDEO.coverUrl}
-              width={400}
-              height={200}
-            />
-          )}
-          {/* 图片 */}
-          {parseContent.IMAGE && <ImageContent imgData={parseContent.IMAGE} />}
-          {/* 商品 */}
-          {parseContent.GOODS && (
-            <View>
-              <ProductItem
-                image={parseContent.GOODS.imagePath}
-                amount={parseContent.GOODS.price}
-                title={parseContent.GOODS.title}
-              />
-              <Button
-                className={topic.buyBtn}
-                type="danger"
-                onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
-              >
-                购买商品
-            </Button>
-            </View>
-          )}
-          {/* 音频 */}
-          {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
-          {/* 附件 */}
-          {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
-
-          {/* 标签 */}
-          {
-            threadStore?.threadData?.categoryName
-            && <View className={topic.tag}>{threadStore?.threadData?.categoryName}</View>
-          }
-
-          {(parseContent.RED_PACKET || parseContent.REWARD) && (
-            <View className={topic.reward}>
-              {/* 红包 */}
-              {
-                parseContent.RED_PACKET && (
-                  <PostRewardProgressBar
-                    remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
-                    received={
-                      Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
-                    } />
-                )
-              }
-              {/* 悬赏 */}
-              {
-                parseContent.REWARD && (
-                  <PostRewardProgressBar
-                    type={POST_TYPE.BOUNTY}
-                    remaining={Number(parseContent.REWARD.remain_money || 0)}
-                    received={
-                      minus(Number(parseContent.REWARD.money || 0), Number(parseContent.REWARD.remain_money || 0))
-                    } />
-                )
-              }
-            </View>
-          )}
-
-          {/* 帖子付费 */}
-          {
-            isThreadPay && !isSelf
-            && <View style={{ textAlign: 'center' }} onClick={onContentClick}>
-              <Button className={topic.payButton} type='primary' size='large'>支付{threadPrice}元查看剩余内容</Button>
-            </View>
-          }
-
-          {/* 打赏 */}
-          {
-            props?.user?.isLogin()
-            && <View style={{ textAlign: 'center' }}>
-              <Button onClick={onRewardClick} className={topic.rewardButton} type='primary' size='large'>打赏</Button>
-            </View>
-          }
-
-        </View>
-      }
-      <View className={topic.footer}>
-        <View className={topic.thumbs}>
-          <View
-            className={classnames(topic.liked, threadStore?.threadData?.isLike && topic.isLiked)}
-            onClick={onLikeClick}
-          >
-            <Icon name="LikeOutlined"></Icon>
-            <Text>{threadStore?.threadData?.likeReward?.likePayCount || ''}</Text>
-          </View>
-          <View className={topic.likeReward} >
-            <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
-          </View>
-        </View>
-        {
-          threadStore?.threadData?.likeReward?.shareCount > 0
-          && <Text>{threadStore?.threadData?.likeReward?.shareCount}次分享</Text>
-        }
-      </View>
-    </View>
-  );
-}));
-
-
-// 评论列表
-@inject('thread')
-@inject('comment')
-@inject('user')
-@observer
-class RenderCommentList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showAboptPopup: false, // 是否弹出采纳弹框
-      showCommentInput: false, // 是否弹出评论框
-      commentSort: true, // ture 评论从旧到新 false 评论从新到旧
-      showDeletePopup: false, // 是否弹出删除弹框
-      inputText: '请输入内容', // 默认回复框placeholder内容
-    };
-
-    this.commentData = null;
-    this.replyData = null;
-  }
-
-  componentDidMount() {
-    console.log('componentDidMount', this.props.thread);
-  }
-
-  // 评论列表排序
-  onSortClick = () => {
-    this.setState({
-      commentSort: !this.state.commentSort,
-    });
-    typeof this.props.sort === 'function' && this.props.sort(!this.state.commentSort);
-  };
-
-  // 点击评论的赞
-  async likeClick(data) {
-    if (!data.id) return;
-
-    const params = {
-      id: data.id,
-      isLiked: !data.isLiked,
-    };
-    const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
-
-    if (success) {
-      this.props.thread.setCommentListDetailField(data.id, 'isLiked', params.isLiked);
-      const likeCount = params.isLiked ? data.likeCount + 1 : data.likeCount - 1;
-      this.props.thread.setCommentListDetailField(data.id, 'likeCount', likeCount);
-    }
-
-    if (!success) {
-      Toast.error({
-        content: msg,
-      });
-    }
-  }
-
-  // 点击回复的赞
-  async replyLikeClick(reply, comment) {
-    if (!reply.id) return;
-
-    const params = {
-      id: reply.id,
-      isLiked: !reply.isLiked,
-    };
-    const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
-
-    if (success) {
-      this.props.thread.setReplyListDetailField(comment.id, reply.id, 'isLiked', params.isLiked);
-      const likeCount = params.isLiked ? reply.likeCount + 1 : reply.likeCount - 1;
-      this.props.thread.setReplyListDetailField(comment.id, reply.id, 'likeCount', likeCount);
-    }
-
-    if (!success) {
-      Toast.error({
-        content: msg,
-      });
-    }
-  }
-
-  // 点击评论的删除
-  async deleteClick(data) {
-    this.commentData = data;
-    this.setState({
-      showDeletePopup: true,
-    });
-  }
-
-  // 删除评论
-  async deleteComment() {
-    if (!this.commentData.id) return;
-
-    const { success, msg } = await this.props.comment.delete(this.commentData.id, this.props.thread);
-    this.setState({
-      showDeletePopup: false,
-    });
-    if (success) {
-      Toast.success({
-        content: '删除成功',
-      });
-      return;
-    }
-    Toast.error({
-      content: msg,
-    });
-  }
-
-  // 点击评论的回复
-  replyClick(comment) {
-    this.commentData = comment;
-    this.replyData = null;
-    const userName = comment?.user?.username || comment?.user?.userName;
-    this.setState({
-      showCommentInput: true,
-      inputText: userName ? `回复${userName}` : '请输入内容',
-    });
-  }
-
-  // 点击回复的回复
-  replyReplyClick(reply, comment) {
-    this.commentData = null;
-    this.replyData = reply;
-    this.replyData.commentId = comment.id;
-    const userName = reply?.user?.username || reply?.user?.userName;
-
-    this.setState({
-      showCommentInput: true,
-      inputText: userName ? `回复${userName}` : '请输入内容',
-    });
-  }
-
-  // 创建回复评论+回复回复接口
-  async createReply(val) {
-    const id = this.props.thread?.threadData?.id;
-    if (!id) return;
-
-    const params = {
-      id,
-      content: val,
-    };
-
-    // 楼中楼回复
-    if (this.replyData) {
-      params.replyId = this.replyData.id;
-      params.isComment = true;
-      params.commentId = this.replyData.commentId;
-      params.commentPostId = this.replyData.id;
-    }
-    // 回复评论
-    if (this.commentData) {
-      params.replyId = this.commentData.id;
-      params.isComment = true;
-      params.commentId = this.commentData.id;
-    }
-
-    const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
-
-    if (success) {
-      this.setState({
-        showCommentInput: false,
-        inputValue: '',
-      });
-      Toast.success({
-        content: '回复成功',
-      });
-      return true;
-    }
-
-    Toast.error({
-      content: msg,
-    });
-  }
-
-  // 点击编辑
-  editClick(comment) {
-    typeof this.props.onEditClick === 'function' && this.props.onEditClick(comment);
-  }
-
-  // 跳转评论详情
-  onCommentClick = (data) => {
-    Taro.navigateTo({
-      url: `/subPages/thread/comment/index?id=${data.id}&threadId=${this.props.thread?.threadData?.id}`,
-    });
-  }
-
-  // 点击采纳
-  onAboptClick(data) {
-    this.commentData = data;
-    this.setState({ showAboptPopup: true });
-  }
-
-  // 悬赏弹框确定
-  async onAboptOk(data) {
-    if (data > 0) {
-      const params = {
-        postId: this.props.thread?.threadData?.postId,
-        rewards: data,
-        threadId: this.props.thread?.threadData?.threadId
-      }
-      const { success, msg } = await this.props.thread.reward(params)
-      if (success) {
-        this.setState({ showAboptPopup: false });
-
-        Toast.success({
-          content: `成功悬赏${data}元`,
-        });
-        return true;
-      }
-
-      Toast.error({
-        content: msg,
-      });
-
-      return
-    }
-
-    Toast.success({
-      content: '悬赏金额不能为0',
-    });
-  }
-
-  // 悬赏弹框取消
-  onAboptCancel() {
-    this.commentData = null;
-    this.setState({ showAboptPopup: false });
-  }
-
-  render() {
-    const { totalCount, commentList } = this.props.thread;
-
-    const { indexes } = this.props.thread?.threadData?.content || {};
-    const parseContent = {};
-    if (indexes && Object.keys(indexes)) {
-      Object.entries(indexes).forEach(([, value]) => {
-        if (value) {
-          const { tomId, body } = value;
-          parseContent[typeMap[tomId]] = body;
-        }
-      });
-    }
-
-    // 是否作者自己
-    const isSelf = this.props.user?.userInfo?.id
-      && this.props.user?.userInfo?.id === this.props.thread?.threadData?.userId;
-    // 是否是悬赏帖
-    const isReward = this.props.thread?.threadData?.displayTag?.isReward;
-
-    return (
-      <Fragment>
-        <View className={comment.header}>
-          <View className={comment.number}>共{totalCount}条评论</View>
-          <View className={comment.sort} onClick={() => this.onSortClick()}>
-            <Icon className={comment.sortIcon} name="SortOutlined"></Icon>
-            <Text className={comment.sortText}>
-              {this.state.commentSort ? '评论从新到旧' : '评论从旧到新'}
-            </Text>
-          </View>
-        </View>
-        <View className={comment.body}>
-          {commentList.map((val, index) => (
-            <View className={comment.commentItems} key={val.id || index}>
-              <CommentList
-                data={val}
-                key={val.id}
-                likeClick={() => this.likeClick(val)}
-                replyClick={() => this.replyClick(val)}
-                deleteClick={() => this.deleteClick(val)}
-                editClick={() => this.editClick(val)}
-                replyLikeClick={reploy => this.replyLikeClick(reploy, val)}
-                replyReplyClick={reploy => this.replyReplyClick(reploy, val)}
-                onCommentClick={() => this.onCommentClick(val)}
-                onAboptClick={() => this.onAboptClick(val)}
-                isShowOne={true}
-                isShowAdopt={isSelf && isReward && this.props.thread?.threadData?.userId !== val.userId} // 是帖子作者 && 是悬赏帖 && 评论人不是作者本人
-              ></CommentList>
-            </View>
-          ))}
-        </View>
-
-        {/* 评论弹层 */}
-        <InputPopup
-          visible={this.state.showCommentInput}
-          inputText={this.state.inputText}
-          onClose={() => this.setState({ showCommentInput: false })}
-          onSubmit={value => this.createReply(value)}
-        ></InputPopup>
-
-        {/* 删除弹层 */}
-        <DeletePopup
-          visible={this.state.showDeletePopup}
-          onClose={() => this.setState({ showDeletePopup: false })}
-          onBtnClick={() => this.deleteComment()}
-        ></DeletePopup>
-
-        {/* 采纳弹层 */}
-        {parseContent?.REWARD?.money && (
-          <AboptPopup
-            rewardAmount={parseContent.REWARD.money} // 需要传入剩余悬赏金额
-            visible={this.state.showAboptPopup}
-            onCancel={() => this.onAboptCancel()}
-            onOkClick={data => this.onAboptOk(data)}
-          ></AboptPopup>
-        )}
-      </Fragment>
-    );
-  }
-}
-
+import RenderCommentList from './detail/comment-list'
+import RenderThreadContent from './detail/content'
 
 @inject('site')
 @inject('user')
@@ -1050,7 +516,7 @@ class Index extends Component {
           ) : (
             <LoadingTips type="init"></LoadingTips>
           )}
-          <View className={`${layout.bottom} ${comment.container}`} ref={this.commentDataRef} id='commentId'>
+          <View className={`${layout.bottom}`} ref={this.commentDataRef} id='commentId'>
             {isCommentReady ? (
               <Fragment>
                 <RenderCommentList
@@ -1076,7 +542,7 @@ class Index extends Component {
           </View>
           {/* 操作区 */}
           <View className={footer.operate}>
-            <View className={footer.icon} onClick={() => this.onMessageClick()}>
+            {/* <View className={footer.icon} onClick={() => this.onMessageClick()}>
               {totalCount > 0
                 ? (
                   <Badge info={totalCount > 99 ? '99+' : `${totalCount || '0'}`}>
@@ -1085,14 +551,14 @@ class Index extends Component {
                 )
                 : <Icon size="20" name="MessageOutlined"></Icon>
               }
-            </View>
-            {/* <View className={footer.icon} onClick={this.onMessageClick}>
+            </View> */}
+            <View className={footer.icon} onClick={this.onMessageClick}>
               {totalCount > 0
                 ? <View className={footer.badge}>{totalCount > 99 ? '99+' : `${totalCount || '0'}`}</View>
                 : ''
               }
               <Icon size="20" name="MessageOutlined"></Icon>
-            </View> */}
+            </View>
             <Icon
               color={this.props.thread?.isFavorite ? styleVar['--color-primary'] : ''}
               className={footer.icon}

@@ -87,7 +87,7 @@ class MessageAction extends MessageStore {
   // 获取财务消息
   @action.bound
   async readFinancialMsgList(page = 1) {
-    const ret = await readMsgList(this.assemblyParams(page, 'rewarded,questioned,receiveredpacke,withdrawal'));
+    const ret = await readMsgList(this.assemblyParams(page, 'rewarded,questioned,receiveredpacket,withdrawal'));
     this.setMsgList(page, 'financialMsgList', ret);
   }
   // 获取帖子通知

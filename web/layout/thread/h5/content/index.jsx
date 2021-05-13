@@ -24,6 +24,7 @@ const RenderThreadContent = inject('user')(
     const tipData = {
       postId: threadStore?.threadData?.postId,
       threadId: threadStore?.threadData?.threadId,
+      platform: 'h5',
     };
     // 是否合法
     const isApproved = threadStore?.threadData?.isApproved || 0;
@@ -37,6 +38,13 @@ const RenderThreadContent = inject('user')(
     const threadPrice = threadStore?.threadData?.price || 0;
     // 是否作者自己
     const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData?.userId;
+
+    // 是否悬赏帖
+    const isRedPack = threadStore?.threadData?.displayTag?.isRedPack;
+    // 是否红包帖
+    const isReward = threadStore?.threadData?.displayTag?.isReward;
+    // 是否可以打赏
+    const canReward = props?.user?.isLogin() && !isRedPack && !isReward;
 
     const parseContent = parseContentData(indexes);
 
@@ -88,8 +96,26 @@ const RenderThreadContent = inject('user')(
 
         {isApproved === 1 && (
           <div className={styles.body}>
+            {/* 标题 */}
+            {threadStore?.threadData?.title && <div className={styles.title}>{threadStore?.threadData?.title}</div>}
+
             {/* 文字 */}
-            {text && <PostContent content={text || ''} />}
+            {text && <PostContent useShowMore={false} content={text || ''} />}
+            {/* 悬赏文案 */}
+            {parseContent.REWARD && (
+              <div className={styles.rewardText}>
+                {/* 悬赏 */}
+                {parseContent.REWARD && (
+                  <div>
+                    <div className={styles.rewardMoney}>
+                      本帖向所有人悬赏
+                      <span className={styles.rewardNumber}>{parseContent.REWARD.remain_money || 0}</span>元
+                    </div>
+                    <div className={styles.rewardTime}>{parseContent.REWARD.expired_at}截止悬赏</div>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* 付费附件 */}
             {isAttachmentPay && !isSelf && (
@@ -103,6 +129,9 @@ const RenderThreadContent = inject('user')(
               </div>
             )}
 
+            {/* 图片 */}
+            {parseContent.IMAGE && <ImageDisplay imgData={parseContent.IMAGE} />}
+
             {/* 视频 */}
             {parseContent.VIDEO && (
               <VideoPlay
@@ -112,8 +141,10 @@ const RenderThreadContent = inject('user')(
                 height={200}
               />
             )}
-            {/* 图片 */}
-            {parseContent.IMAGE && <ImageDisplay imgData={parseContent.IMAGE} />}
+            {/* 音频 */}
+            {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
+            {/* 附件 */}
+            {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
             {/* 商品 */}
             {parseContent.GOODS && (
               <div>
@@ -127,21 +158,33 @@ const RenderThreadContent = inject('user')(
                   type="danger"
                   onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
                 >
-                  购买商品
+                  <div className={styles.buyContent}>
+                    <Icon className={styles.payIcon} name="ShoppingCartOutlined" size={19}></Icon>
+                    <span className={styles.buyText}>购买商品</span>
+                  </div>
                 </Button>
               </div>
             )}
-            {/* 音频 */}
-            {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
-            {/* 附件 */}
-            {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
-
+            {/* 标签 */}
             {threadStore?.threadData?.categoryName && (
               <div className={styles.tag}>{threadStore?.threadData?.categoryName}</div>
             )}
 
             {(parseContent.RED_PACKET || parseContent.REWARD) && (
               <div className={styles.reward}>
+                {/* 悬赏 */}
+                {parseContent.REWARD && (
+                  <div className={styles.rewardBody}>
+                    <PostRewardProgressBar
+                      type={POST_TYPE.BOUNTY}
+                      remaining={Number(parseContent.REWARD.remain_money || 0)}
+                      received={minus(
+                        Number(parseContent.REWARD.money || 0),
+                        Number(parseContent.REWARD.remain_money || 0),
+                      )}
+                    />
+                  </div>
+                )}
                 {/* 红包 */}
                 {parseContent.RED_PACKET && (
                   <PostRewardProgressBar
@@ -149,17 +192,6 @@ const RenderThreadContent = inject('user')(
                     received={
                       Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
                     }
-                  />
-                )}
-                {/* 悬赏 */}
-                {parseContent.REWARD && (
-                  <PostRewardProgressBar
-                    type={POST_TYPE.BOUNTY}
-                    remaining={Number(parseContent.REWARD.remain_money || 0)}
-                    received={minus(
-                      Number(parseContent.REWARD.money || 0),
-                      Number(parseContent.REWARD.remain_money || 0),
-                    )}
                   />
                 )}
               </div>
@@ -178,10 +210,11 @@ const RenderThreadContent = inject('user')(
             )}
 
             {/* 打赏 */}
-            {props?.user?.isLogin() && (
+            {canReward && (
               <div style={{ textAlign: 'center' }}>
                 <Button onClick={onRewardClick} className={styles.rewardButton} type="primary" size="large">
-                  打赏
+                  <Icon className={styles.payIcon} name="HeartOutlined" size={19}></Icon>
+                  <span className={styles.rewardext}>打赏</span>
                 </Button>
               </div>
             )}
@@ -193,7 +226,7 @@ const RenderThreadContent = inject('user')(
               className={classnames(styles.liked, threadStore?.threadData?.isLike && styles.isLiked)}
               onClick={onLikeClick}
             >
-              <Icon name="LikeOutlined"></Icon>
+              <Icon name="LikeOutlined" size={20}></Icon>
               <span>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
             </div>
             <div className={styles.likeReward}>

@@ -1,10 +1,12 @@
 @import '@common/styles/index.scss';
+@import '@common/styles/_variable.scss';
+
 .h5box {
     width: 100%;
     min-height: rem(196);
     position: relative;
     // top: rem(-10);
-    margin-top: rem(-10);
+    margin-top: rem(-$margin-10);
     // border-bottom: var(--border-border);
     background-color: var(--color-white);
     // background-color: pink;
@@ -13,7 +15,7 @@
     // display: flex;
     // align-items: flex-end;
     // justify-content: center;
-    border-radius: rem(10) rem(10) 0 0;
+    border-radius: rem($border-radius-big) rem($border-radius-big) 0 0;
     .h5boxTop {
       position: relative;
       height: rem(60);
@@ -37,7 +39,7 @@
         line-clamp: 2;
         -webkit-box-orient: vertical;
         line-height: 1.2;
-        color: #4F5A70;
+        color: $text-color-regular;
         margin-top: rem(12);
     }
     .userMessageList {
@@ -47,7 +49,7 @@
       width: rem(230);
       align-items: center;
       justify-content: center;
-      line-height: rem(24);
+      line-height: rem($font-line-height-base);
     }
     .userMessageListItem {
       display: flex;
@@ -56,34 +58,34 @@
       justify-content: center;
       width: 76%;
       >span:nth-child(1) {
-        font-size: rem(14);
-        color: #0B0B37;
+        font-size: rem($font-size-base);
+        color: $text-color-primary;
       }
       >span:nth-child(2) {
-        font-size: rem(16);
+        font-size: rem($font-size-middle);
         font-weight: 600;
-        color: #0B0B37;
+        color: $text-color-primary;
       }
     }
     .userNameOrTeam {
-      line-height: rem(22);
+      line-height: rem($font-line-height-small);
       >span:nth-child(1) {
-        font-size: rem(20);
+        font-size: rem($font-size-large);
         font-weight: 600;
-        color: #0B0B37;
-        margin-right: rem(8);
+        color: $text-color-primary;
+        margin-right: rem($margin-2n);
       }
       >span:nth-child(2) {
-        font-size: rem(12);
-        color: #4F5A70;
+        font-size: rem($font-size-small);
+        color: $text-color-regular;
       }
     }
     .userBtn {
-      margin-top: rem(16);
+      margin-top: rem($margin-4n);
       button {
         width: rem(166);
         height: rem(44);
-        font-size: rem(16);
+        font-size: rem($font-size-middle);
         display: inline-block;
         :global {
           .dzq-icon {
@@ -92,14 +94,18 @@
         }
       }
       button:nth-child(2) {
-        margin-left: rem(8);
-        border-color: #2469F6;
-        color: #2469F6;
+        margin-left: rem($margin-2n);
+        border-color: $primary-color;
+        color: $primary-color;
       }
       .userBtnText {
         vertical-align: middle;
-        margin-left: rem(8);
+        margin-left: rem($margin-2n);
       }
+    }
+    .userFriendsBtn {
+      background: $warn-color;
+      border-color: $warn-color;
     }
     .shieldBtn {
       position: absolute;
@@ -109,15 +115,15 @@
       :global {
         .dzq-icon {
           vertical-align: middle;
-          font-size: rem(14);
-          color: #fff;
+          font-size: rem($font-size-base);
+          color: $white;
         }
       }
       span {
         vertical-align: middle;
-        font-size: rem(14);
-        color: #fff;
-        margin-left: rem(4);
+        font-size: rem($font-size-base);
+        color: $white;
+        margin-left: rem($margin-2n);
       }
     }
 }

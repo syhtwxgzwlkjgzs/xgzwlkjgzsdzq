@@ -114,10 +114,10 @@ class Index extends Component {
               {avatarUrl
                 ? <Avatar image={avatarUrl} circle={true} />
                 : <Avatar
-                  text={item.userName}
+                  text={item.username}
                   circle={true}
                   style={{
-                    backgroundColor: `#${this.getBackgroundColor(item.userName)}`
+                    backgroundColor: `#${this.getBackgroundColor(item.username)}`
                   }}
                 />
               }
@@ -139,7 +139,7 @@ class Index extends Component {
                 className={styles.name}
                 onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
               >
-                {item.userName || item.title}
+                {item.username || item.title}
               </View>
               {['chat', 'thread'].includes(type) &&
                 <View className={styles.time}>{diffDate(new Date(item.createdAt))}</View>

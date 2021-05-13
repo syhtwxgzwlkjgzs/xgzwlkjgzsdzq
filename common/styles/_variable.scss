@@ -23,6 +23,7 @@ $font-family: 'PingFang SC',
 $font-size-small: 12px;
 $font-size-base: 14px;
 $font-size-middle: 16px;
+$font-size-middle-extra: 18px;
 $font-size-large: 20px;
 $font-size-label: $font-size-small;
 $font-size-primary: $font-size-base;
@@ -39,6 +40,8 @@ $info-color: var(--color-info) !default;
 $success-color: var(--color-success) !default;
 $warn-color: var(--color-warn) !default;
 $error-color: var(--color-error) !default;
+
+$primary-disabled-color: var(--color-primary5);
 
 $black: var(--color-black) !default;
 $white: var(--color-white) !default;
@@ -61,6 +64,7 @@ $text-bg-color2: var(--background-color-text2);
 // ------ icon color ------------
 $icon-color: var(--color-text-secondary);
 $icon-color-active: var(--color-primary2);
+$icon-success-color: $success-color;
 
 // ----- boder color ----
 $border-color: var(--border-line-color);
@@ -91,6 +95,7 @@ $link-text-color: $primary-color;
 
 // ---- button color ----
 $button-info-bg-color: $text-bg-color2;
+$button-primary-disabled-bg-color: $primary-disabled-color;
 
 // ------ border ----------
 $border-radius-small: 5px;
@@ -109,6 +114,7 @@ $spacer-bg-color: $body-bg-color;
 $padding-base: 4px;
 $padding-1n: $padding-base;
 $padding-2n: $padding-base * 2;
+$padding-3n: $padding-base * 3;
 $padding-4n: $padding-base * 4;
 $padding-5n: $padding-base * 5;
 $padding-6n: $padding-base * 6;
@@ -118,6 +124,7 @@ $padding-10: 10px;
 $margin-base: 4px;
 $margin-1n: $margin-base;
 $margin-2n: $margin-base * 2;
+$margin-3n: $margin-base * 3;
 $margin-4n: $margin-base * 4;
 $margin-5n: $margin-base * 5;
 $margin-6n: $margin-base * 6;

@@ -77,20 +77,22 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
 
     return (
         <>
-            <div className={`${styles.container} ${direction} ${styles[style]} ${platform === 'pc' && styles.containerPC}`}>
-                <div className={styles.bigImages}>
-                    { bigImages.map((item, index) => <img className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />)}
-                </div>
-                <div className={styles.smallImages}>
-                    { smallImages.map((item, index) => <img style={smallSty} ref={smallImg} className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={`1-${index}`} />) }
-                    {
-                        imgData?.length > 5 && (
-                            <>
-                            <div className={styles.modalBox} onClick={onClickMore}></div>
-                            <span className={styles.imgSpan}>{`+${imgData.length - 5}`}</span>
-                            </>
-                        )
-                    }
+            <div className={`${styles.container}  ${platform === 'pc' ? styles.containerPC : styles.containerH5}`}>
+                <div className={`${direction} ${styles[style]}`}>
+                    <div className={styles.bigImages}>
+                        { bigImages.map((item, index) => <img className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />)}
+                    </div>
+                    <div className={styles.smallImages}>
+                        { smallImages.map((item, index) => <img ref={smallImg} className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={`1-${index}`} />) }
+                        {
+                            imgData?.length > 5 && (
+                                <>
+                                <div className={styles.modalBox} onClick={onClickMore}></div>
+                                <span className={styles.imgSpan}>{`+${imgData.length - 5}`}</span>
+                                </>
+                            )
+                        }
+                    </div>
                 </div>
             </div>
 

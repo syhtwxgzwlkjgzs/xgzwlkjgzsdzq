@@ -3,7 +3,7 @@
 
 .dvditor {
   position: relative;
-  border: none;
+  border: none !important;
   background-color: var(--color-white);
   &.no-focus {
     .vditor-toolbar {

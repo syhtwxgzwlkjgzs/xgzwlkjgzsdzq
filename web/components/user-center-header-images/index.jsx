@@ -5,9 +5,16 @@ import { inject, observer } from 'mobx-react';
 @observer
 class UserCenterHeaderImage extends React.Component {
   render() {
-    const backgroundUrl = this.props?.user?.backgroundUrl
+    let backgroundUrl = this.props.user?.backgroundUrl;
+    if (this.props.isOtherPerson) {
+      backgroundUrl = this.props.user.targetUserBackgroundUrl
+    }
     return (
-            <div className={styles.box} style={{ backgroundImage: backgroundUrl||'url(\'/dzq-img/my-default-header-img.jpg\')' }}/>
+      <div
+        className={styles.box}
+        style={{ backgroundImage: backgroundUrl || 'url(\'/dzq-img/my-default-header-img.jpg\')' }}
+        {...this.props}
+      />
     );
   }
 }
