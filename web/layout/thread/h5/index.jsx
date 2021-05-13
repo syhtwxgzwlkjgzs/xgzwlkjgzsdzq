@@ -525,7 +525,7 @@ class ThreadH5Page extends React.Component {
         <div className={layout.footer}>
           {/* 评论区触发 */}
           <div className={footer.inputClick} onClick={() => this.onInputClick()}>
-            <Input className={footer.input} placeholder="写评论" disabled={true} icon="EditOutlined"></Input>
+            <Input className={footer.input} placeholder="写评论" disabled={true} prefixIcon="EditOutlined"></Input>
           </div>
 
           {/* 评论弹层 */}
