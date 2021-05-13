@@ -30,8 +30,12 @@
   }
 }
 @mixin passwordInput {
-  div{
-    top: rem(15);
+  :global(.dzq-input__icon){
+    top: rem(16);
+    color: var(--color-disabled2) !important;
+    &:hover {
+      color: $primary-color !important;
+    }
   }
 }
 @mixin button {
@@ -185,9 +189,11 @@
 @mixin mini_tips {
   font-size: $font-size-middle;
   margin: 32px 0;
-  line-height: $font-line-height-large;
+  line-height: $font-line-height-middle;
   text-align: left;
   color: $text-color-primary;
+  display: flex;
+  flex-direction: column;
 }
 @mixin mini_button {
   width: 327px;
@@ -215,7 +221,12 @@
   }
   :global(.dzq-icon-EyeOutlined) {
     top: 16px;
+    line-height: 36px;
     z-index: 3;
+    color: var(--color-disabled2) !important;
+    &:hover {
+      color: $primary-color !important;
+    }
   }
 }
 @mixin mini_captchaBtn{
