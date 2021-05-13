@@ -27,7 +27,6 @@ class RegisterH5Page extends React.Component {
 
         await this.toRegister();
       } catch (e) {
-        console.log(e);
         Toast.error({
           content: e.Message,
           hasMask: false,
