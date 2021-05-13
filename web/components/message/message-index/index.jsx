@@ -51,7 +51,7 @@ export class MessageIndex extends Component {
 
   handleScrollBottom = () => {
     const { message } = this.props;
-    return message.readDialogList(message.initList.currentPage);
+    return message.readDialogList(message.dialogList.currentPage + 1);
   };
 
   formatChatDialogList = (dialogList) => {
@@ -93,6 +93,7 @@ export class MessageIndex extends Component {
         <PullDownRefresh className={styles.pullDownContainer} onRefresh={this.handleRefresh} isFinished={finished}>
           <Notice
             topCard={<MessageCard cardItems={cardContent} />}
+            noMore={dialogList.currentPage >= dialogList.totalPage}
             list={newDialogList}
             type={type}
             onBtnClick={this.handleDelete}

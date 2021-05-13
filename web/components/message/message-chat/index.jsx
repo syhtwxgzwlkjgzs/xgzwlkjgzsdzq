@@ -27,7 +27,7 @@ const Index = ({ dialogId, message, user }) => {
     return dialogMsgList.list
       .map((item) => ({
         timestamp: item.createdAt,
-        userAvatar: item.userAvatar,
+        userAvatar: item.user.avatar,
         displayTimePanel: true,
         textType: 'string',
         text: item.summary,

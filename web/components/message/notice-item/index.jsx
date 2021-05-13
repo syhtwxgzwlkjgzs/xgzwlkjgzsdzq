@@ -104,10 +104,10 @@ class Index extends Component {
     if (e.target.nodeName === 'A') return;
     const { type } = this.props;
     if (type === 'financial' || type === 'account') {
-      Router.push({ url: `'/thread/${item.threadId}` });
+      Router.push({ url: `/thread/${item.threadId}` });
     }
     if (type === 'chat') {
-      console.log('去私信页面');
+      Router.push({ url: `/message?page=chat&dialogId=${item.dialogId}` });
     }
   };
 
