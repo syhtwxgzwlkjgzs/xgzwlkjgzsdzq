@@ -18,7 +18,7 @@ class Index extends React.Component {
       content: search,
     };
     const result = await readTopicsList({ params: { filter: topicFilter } });
-    const users = await readUsersList({ params: { filter: { username: search }, perPage: 10 } });
+    const users = await readUsersList({ params: { filter: { username: search }, perPage: 6 } });
     return {
       serverSearch: {
         topics: result?.data,
@@ -38,37 +38,36 @@ class Index extends React.Component {
     serverSearch && serverSearch.users && search.setUsers(serverSearch.users);
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { search, router } = this.props;
     const { keyword = '' } = router.query;
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasTopics = !!search.topics;
     const hasUsers = !!search.users;
 
-    if (!hasTopics || !hasUsers) {
+    if (!hasTopics) {
       this.toastInstance = Toast.loading({
         content: '加载中...',
         duration: 0,
       });
 
       this.page = 1;
-      await this.getData(keyword);
+      search.getTopicsList({ search: keyword });
       this.toastInstance?.destroy();
     }
-  }
-  getData = (keyword) => {
-    const { search } = this.props;
-    search.getTopicsList({ search: keyword, perPage: this.perPage, page: this.page });
-    search.getUsersList({ search: keyword });
+    if (!hasUsers) {
+      search.getUsersList({ search: keyword, page: 1});
+    }
   }
 
   dispatch = async (type, data) => {
+    const { search } = this.props;
     if (type === 'refresh') {
       this.page = 1;
     } else if (type === 'moreData') {
       this.page += 1;
     }
-    await this.getData(data);
+    await search.getTopicsList({ search: keyword,  perPage: this.perPage, page: this.page });
     return;
   }
 
