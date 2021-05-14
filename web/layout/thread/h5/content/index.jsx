@@ -68,6 +68,10 @@ const RenderThreadContent = inject('user')(
       }
     };
 
+    const onTagClick = () => {
+      typeof props.onTagClick === 'function' && props.onTagClick();
+    };
+
     const onMoreClick = () => {
       props.fun.moreClick();
     };
@@ -131,11 +135,9 @@ const RenderThreadContent = inject('user')(
             {/* 付费附件 */}
             {isAttachmentPay && !isSelf && (
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
-                <Button className={styles.payButton} type="primary" size="large">
-                  <div className={styles.pay}>
-                    <Icon className={styles.payIcon} name="DollarLOutlined" size={18}></Icon>
-                    支付{attachmentPrice}元查看附件
-                  </div>
+                <Button className={styles.payButton} type="primary">
+                  <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
+                  <span>支付{attachmentPrice}元查看附件内容</span>
                 </Button>
               </div>
             )}
@@ -170,16 +172,16 @@ const RenderThreadContent = inject('user')(
                   type="danger"
                   onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
                 >
-                  <div className={styles.buyContent}>
-                    <Icon className={styles.payIcon} name="ShoppingCartOutlined" size={18}></Icon>
-                    <span className={styles.buyText}>购买商品</span>
-                  </div>
+                  <Icon className={styles.payIcon} name="ShoppingCartOutlined" size={20}></Icon>
+                  <span className={styles.buyText}>购买商品</span>
                 </Button>
               </div>
             )}
             {/* 标签 */}
             {threadStore?.threadData?.categoryName && (
-              <div className={styles.tag}>{threadStore?.threadData?.categoryName}</div>
+              <div className={styles.tag} onClick={onTagClick}>
+                {threadStore?.threadData?.categoryName}
+              </div>
             )}
 
             {(parseContent.RED_PACKET || parseContent.REWARD) && (
@@ -212,11 +214,9 @@ const RenderThreadContent = inject('user')(
             {/* 帖子付费 */}
             {isThreadPay && !isSelf && (
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
-                <Button className={styles.payButton} type="primary" size="large">
-                  <div className={styles.pay}>
-                    <Icon className={styles.payIcon} name="DollarLOutlined" size={18}></Icon>
-                    支付{threadPrice}元查看剩余内容
-                  </div>
+                <Button className={styles.payButton} type="primary">
+                  <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
+                  支付{threadPrice}元查看剩余内容
                 </Button>
               </div>
             )}
@@ -225,7 +225,7 @@ const RenderThreadContent = inject('user')(
             {canBeReward && (
               <div style={{ textAlign: 'center' }}>
                 <Button onClick={onRewardClick} className={styles.rewardButton} type="primary" size="large">
-                  <Icon className={styles.payIcon} name="HeartOutlined" size={19}></Icon>
+                  <Icon className={styles.payIcon} name="HeartOutlined" size={20}></Icon>
                   <span className={styles.rewardext}>打赏</span>
                 </Button>
               </div>
