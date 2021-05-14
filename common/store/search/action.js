@@ -340,7 +340,7 @@ class SearchAction extends SearchStore {
 
             // 添加当前用户到按过赞的用户列表
             data.likeReward.users = data.likeReward.users.length ?
-                                    [...data.likeReward.users, userAdded]:
+                                    [userAdded, ...data.likeReward.users]:
                                     [userAdded];
           } else {
             // 从按过赞用户列表中删除当前用户
