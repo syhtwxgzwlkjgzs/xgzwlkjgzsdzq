@@ -90,10 +90,6 @@ export default function DVditor(props) {
         height: pc ? 200 : 178,
         // 编辑器初始化值
         value,
-        focus: () => {
-          setIsFocus(true);
-          onFocus();
-        },
         // input: () => {
         //   onChange(editor);
         // },
@@ -107,7 +103,12 @@ export default function DVditor(props) {
           }, 100);
         },
         // 编辑器中选中文字后触发，PC才有效果
-        select: () => {},
+        select: (value) => {
+          if (value) {
+            onFocus();
+            setIsFocus(true);
+          }
+        },
         counter: {
           enable: true,
           after(count) {
@@ -119,7 +120,7 @@ export default function DVditor(props) {
         toolbarConfig: {
           hide: !!pc,
           pin: true,
-          bubbleHide: !pc,
+          bubbleHide: false,
         },
         bubbleToolbar: pc ? [...baseToolbar] : [],
       },
@@ -127,7 +128,7 @@ export default function DVditor(props) {
     setVditor(editor);
   }
 
-  const className = pc ? 'dvditor pc' : classNames('dvditor', { 'no-focus': !pc && !isFocus });
+  const className = pc ? 'dvditor pc' : classNames('dvditor h5', { 'no-focus': !pc && !isFocus });
 
   return (
     <>

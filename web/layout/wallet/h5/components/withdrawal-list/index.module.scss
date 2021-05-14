@@ -45,7 +45,7 @@
         color: var(--color-error);
     }
     .withdrawalStatus4 {
-        color: #3ac15f;
+        color: var(--color-success);
     }
 }
 
@@ -54,7 +54,7 @@
     font-weight: normal;
     font-size: rem($font-size-label);
     text-align: left;
-    color: #8490a8;
+    color: var(--color-text-secondary);
     padding: rem($padding-4n) 0;
     border-bottom: var(--border-border);
 }

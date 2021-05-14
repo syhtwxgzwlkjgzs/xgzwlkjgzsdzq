@@ -44,7 +44,9 @@ class SearchResultUserH5Page extends React.Component {
     });
   };
 
-  onUserClick = data => console.log('user click', data);
+  onUserClick = ({ userId } = {}) => {
+    this.props.router.push(`/my/others?isOtherPerson=true&otherId=${userId}`);
+  };
 
   render() {
     const { keyword } = this.state;

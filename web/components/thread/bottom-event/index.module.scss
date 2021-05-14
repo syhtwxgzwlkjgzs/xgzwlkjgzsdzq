@@ -52,21 +52,19 @@
   box-sizing: border-box;
 }
 .fabulous {
-  line-height: rem(20);
+  display: flex;
+  align-items: center;
   .fabulousPost {
     margin-left: rem(8);
     font-size: rem($font-size-primary);
-    line-height: rem(20);
     color: var(--color-text-secondary);
   }
   .fabulousCancel {
     margin-left: rem(8);
     font-size: rem($font-size-primary);
-    line-height: rem(20);
     color: var(--color-primary);
   }
   .icon {
-    margin-bottom: rem(2);
     color: var(--color-text-secondary);
     &.likedColor {
       color: $primary-color;
@@ -76,7 +74,7 @@
     }
   }
   &[disabled] {
-    cursor:not-allowed;
+    cursor: not-allowed;
     opacity: 0.6;
   }
 }

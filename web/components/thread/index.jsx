@@ -197,6 +197,7 @@ class Index extends React.Component {
             isLiked={isLike}
             isSendingLike={this.state.isSendingLike}
             tipData={{ postId, threadId, platform }}
+            platform={platform}
           />
         </div>
       );

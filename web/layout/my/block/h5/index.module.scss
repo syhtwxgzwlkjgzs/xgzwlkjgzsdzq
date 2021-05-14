@@ -32,7 +32,7 @@
   display: flex;
   justify-content: space-between;
   padding: rem($padding-4n) 0;
-  border-bottom: rem(1) solid #eee;
+  border-bottom: rem(1) solid var(--border-line-color);
   box-sizing: border-box;
 }
 .haieldImgHead {

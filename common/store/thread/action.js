@@ -77,7 +77,7 @@ class ThreadAction extends ThreadStore {
 
   @action
   setThreadDetailField(key, data) {
-    if (this.threadData && this.threadData[key]) this.threadData[key] = data;
+    if (this.threadData && Reflect.has(this.threadData, key)) this.threadData[key] = data;
   }
 
   @action
