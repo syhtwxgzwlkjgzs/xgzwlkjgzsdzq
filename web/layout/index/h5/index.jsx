@@ -154,14 +154,13 @@ class IndexH5Page extends React.Component {
     }, 2000)
   }
 
-
   render() {
     const { index } = this.props;
     const { filter, isFinished } = this.state;
     const { threads = {}, categories = [] } = index;
     const { currentPage, totalPage, pageData } = threads || {};
     const newCategories = this.handleCategories(categories);
-
+    // TODO 处理key值问题
     return (
       <BaseLayout
         showHeader={false}
@@ -195,4 +194,5 @@ class IndexH5Page extends React.Component {
     );
   }
 }
+
 export default IndexH5Page;

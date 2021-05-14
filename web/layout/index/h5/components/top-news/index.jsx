@@ -11,19 +11,27 @@ const TopNews = ({ data = [], router, platform = 'h5'}) => {
   const onClick = ({ threadId } = {}) => {
     router.push(`/thread/${threadId}`);
   };
+
+  const handlerTitle = (title = '') => {
+    if (platform = 'h5' && title.length > 20) {
+      return `${title.slice(0, 20)}...`
+    }
+    return title
+  }
+
   return (
-  <div className={styles.list}>
-    {data?.map((item, index) => (
-      <div
-        key={index}
-        className={`${styles.item} ${platform === 'pc' ? styles.itemPC : styles.itemH5}`}
-        onClick={() => onClick(item)}
-      >
-        <div className={styles.prefix}>{item.prefix || '置顶'}</div>
-        <div className={styles.title}>{item.title}</div>
-      </div>
-    ))}
-  </div>
+    <div className={styles.list}>
+      {data?.map((item, index) => (
+        <div
+          key={index}
+          className={`${styles.item} ${platform === 'pc' ? styles.itemPC : styles.itemH5}`}
+          onClick={() => onClick(item)}
+        >
+          <div className={styles.prefix}>{item.prefix || '置顶'}</div>
+          <div className={styles.title}>{handlerTitle(item.title)}</div>
+        </div>
+      ))}
+    </div>
   );
 };
 
