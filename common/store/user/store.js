@@ -14,14 +14,6 @@ class UserStore {
   @observable weixinNickName = null;
   @observable permissions = null;
 
-  @observable userFans = {};
-  @observable userFansPage = 1;
-  @observable userFansTotalPage = 1;
-
-  @observable userFollows = {};
-  @observable userFollowsPage = 1;
-  @observable userFollowsTotalPage = 1;
-
   @observable userThreads = [];
   @observable userThreadsPage = 1;
   @observable userThreadsTotalCount = 0;
@@ -41,14 +33,6 @@ class UserStore {
 
   // 检索的目标用户id
   @observable targetUserId = null;
-
-  @observable targetUserFans = {};
-  @observable targetUserFansPage = 1;
-  @observable targetUserFansTotalPage = 1;
-
-  @observable targetUserFollows = {};
-  @observable targetUserFollowsPage = 1;
-  @observable targetUserFollowsTotalPage = 1;
 
 
   @observable targetUserThreads = [];
@@ -73,6 +57,12 @@ class UserStore {
 
   @observable oldMobileVerifyCode = '';
   @observable newMobileVerifyCode = '';
+
+  oldCodeTimer = null;
+  @observable oldCodeTimeout = null;
+
+  newCodeTimer = null;
+  @observable newCodeTimeout = null;
 
   // 是否能使用钱包支付
   @computed get canWalletPay() {

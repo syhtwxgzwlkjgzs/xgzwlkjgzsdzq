@@ -84,3 +84,4 @@ export { default as inviteDetail } from './invite/inviteDetail';
 export { default as createInviteLink } from './invite/createInviteLink';
 
 export { default as readResetPayPwdToken } from './pay/readResetPayPwdToken';
+export { default as smsRebind } from './user//smsRebind';
