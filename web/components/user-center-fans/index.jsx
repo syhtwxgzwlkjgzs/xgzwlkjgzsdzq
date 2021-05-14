@@ -4,14 +4,19 @@ import { inject, observer } from 'mobx-react';
 import { Spin } from '@discuzq/design';
 import { followerAdapter } from './adapter';
 import styles from './index.module.scss';
+import { createFollow, deleteFollow, getUserFollow, getUserFans } from '@server';
+import { get } from '@common/utils/get';
+import deepClone from '@common/utils/deep-clone';
 
 class UserCenterFans extends React.Component {
   firstLoaded = false;
   containerRef = React.createRef(null);
 
   static defaultProps = {
+    // 用户id，如果不传，认为是自己的粉丝
+    userId: null,
     // 加载数量限制
-    limit: 100,
+    limit: 1000,
     // 加载更多页面
     loadMorePage: true,
     splitElement: <div></div>,
@@ -27,16 +32,119 @@ class UserCenterFans extends React.Component {
     super(props);
     this.state = {
       loading: true,
+      fans: {},
     };
   }
 
+  page = 1;
+  totalPage = 1;
+
+  fetchFans = async () => {
+    const opts = {
+      params: {
+        page: this.page,
+        perPage: 20,
+        filter: {
+          userId: this.props.userId,
+        },
+      },
+    };
+
+    const fansRes = await getUserFans(opts);
+
+    if (fansRes.code !== 0) {
+      console.error(fansRes);
+      return;
+    }
+
+    const pageData = get(fansRes, 'data.pageData', []);
+    const totalPage = get(fansRes, 'data.totalPage', 1);
+
+    this.totalPage = totalPage;
+
+    const newFans = Object.assign({}, this.state.fans);
+
+    newFans[this.page] = pageData;
+
+    this.setState({
+      fans: newFans,
+    });
+
+    if (this.page <= this.totalPage) {
+      this.page += 1;
+    }
+  };
+
+  setFansBeFollowed({ id, isMutual }) {
+    const targetFans = deepClone(this.state.fans);
+    Object.keys(targetFans).forEach((key) => {
+      targetFans[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isMutual = isMutual;
+        user.userFollow.isFollow = true;
+      });
+    });
+    this.setState({
+      fans: targetFans,
+    });
+  }
+
+  setFansBeUnFollowed(id) {
+    const targetFans = deepClone(this.state.fans);
+    Object.keys(targetFans).forEach((key) => {
+      targetFans[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isFollow = false;
+      });
+    });
+    this.setState({
+      fans: targetFans,
+    });
+  }
+
+  followUser = async ({ id: userId }) => {
+    const res = await createFollow({ data: { toUserId: userId } });
+    if (res.code === 0 && res.data) {
+      this.setFansBeFollowed({
+        id: userId,
+        isMutual: res.data.isMutual,
+      });
+      return {
+        msg: '操作成功',
+        data: res.data,
+        success: true,
+      };
+    }
+    return {
+      msg: res.msg,
+      data: null,
+      success: false,
+    };
+  };
+
+  unFollowUser = async ({ id }) => {
+    const res = await deleteFollow({ data: { id, type: 1 } });
+    if (res.code === 0 && res.data) {
+      this.setFansBeUnFollowed(id);
+      return {
+        msg: '操作成功',
+        data: res.data,
+        success: true,
+      };
+    }
+    return {
+      msg: res.msg,
+      data: null,
+      success: false,
+    };
+  };
+
   async componentDidMount() {
     // 第一次加载完后，才允许加载更多页面
-    await this.props.loadMoreAction();
+    await this.fetchFans();
     this.firstLoaded = true;
     this.setState({
       loading: false,
-      fans: {},
     });
 
     this.containerRef.current.addEventListener('scroll', this.loadMore);
@@ -50,11 +158,12 @@ class UserCenterFans extends React.Component {
 
   // 检查是否满足触底加载更多的条件
   checkLoadCondition() {
+    const hasMorePage = this.totalPage >= this.page;
     if (this.state.loading) return false;
     if (!this.props.loadMorePage) {
       return false;
     }
-    if (!this.props.hasMorePage) return false;
+    if (!hasMorePage) return false;
 
     return true;
   }
@@ -67,7 +176,7 @@ class UserCenterFans extends React.Component {
       this.setState({
         loading: true,
       });
-      await this.props.loadMoreAction();
+      await this.fetchFans();
       this.setState({
         loading: false,
       });
@@ -76,11 +185,13 @@ class UserCenterFans extends React.Component {
 
   // 判断关注状态
   judgeFollowsStatus = (user) => {
-    let type = 'follow';
     if (user.isMutual) {
-      type = 'friend';
+      return 'friend';
     }
-    return type;
+    if (user.isFollow) {
+      return 'followed';
+    }
+    return 'follow';
   };
 
   render() {
@@ -92,7 +203,7 @@ class UserCenterFans extends React.Component {
           overflow: 'scroll',
         }}
       >
-        {followerAdapter(this.props.friends).map((user, index) => {
+        {followerAdapter(this.state.fans).map((user, index) => {
           if (index + 1 > this.props.limit) return null;
           return (
             <div key={user.id}>
@@ -104,8 +215,8 @@ class UserCenterFans extends React.Component {
                 onContainerClick={this.props.onContainerClick}
                 userName={user.userName}
                 userGroup={user.groupName}
-                followHandler={this.props.followHandler}
-                unFollowHandler={this.props.unFollowHandler}
+                followHandler={this.followUser}
+                unFollowHandler={this.unFollowUser}
               />
               {this.props.splitElement}
             </div>
