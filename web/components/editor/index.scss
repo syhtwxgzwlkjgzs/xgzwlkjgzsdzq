@@ -1,5 +1,10 @@
 /* stylelint-disable */
 @import '@common/styles/index.scss';
+.dvditor.h5 {
+  .vditor-bubble-toolbar {
+    display: none !important;
+  }
+}
 
 .dvditor {
   position: relative;
@@ -81,6 +86,9 @@
       font-size: $font-size-middle;
       button {
         font-size: $font-size-middle;
+      }
+      .dzq-icon {
+        color: $icon-color;
       }
     }
     .vditor-counter {

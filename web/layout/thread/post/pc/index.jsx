@@ -179,6 +179,7 @@ class ThreadPCPage extends React.Component {
                   onAttachClick={this.props.handleAttachClick}
                   onUploadComplete={this.props.handleVideoUploadComplete}
                   permission={user.threadExtendPermissions}
+                  currentSelectedToolbar={threadPost.currentSelectedToolbar}
                 />
               </div>
               <div className={styles['toolbar-right']}>

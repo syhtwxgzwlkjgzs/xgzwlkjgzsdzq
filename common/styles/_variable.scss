@@ -40,6 +40,7 @@ $info-color: var(--color-info) !default;
 $success-color: var(--color-success) !default;
 $warn-color: var(--color-warn) !default;
 $error-color: var(--color-error) !default;
+$primary-color10: var(--color-primary10);
 
 $primary-disabled-color: var(--color-primary5);
 
@@ -67,7 +68,8 @@ $text-bg-color2: var(--background-color-text2);
 // ------ icon color ------------
 $icon-color-light: $text-color-secondary;
 $icon-color: $text-color-regular;
-$icon-color-active: var(--color-primary2);
+$icon-color-active: $primary-color;
+$icon-primary-color: $primary-color;
 $icon-success-color: $success-color;
 
 // ----- boder color ----
@@ -90,6 +92,7 @@ $tag-text-color2: $warn-color;
 $tag-text-color3: $success-color;
 
 $tag-info-bg-color: $text-bg-color2;
+$tag-primary-lighter-color: $primary-color10;
 
 // ---- comment color ----
 $comment-bg-color: $body-bg-color;
@@ -99,6 +102,8 @@ $link-text-color: $primary-color;
 
 // ---- button color ----
 $button-info-bg-color: $text-bg-color2;
+$button-primary-bg-color: $primary-color;
+$button-primary-light-bg-color: $primary-color10;
 $button-primary-disabled-bg-color: $primary-disabled-color;
 
 // ------ border ----------

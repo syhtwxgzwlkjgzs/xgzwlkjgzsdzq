@@ -27,11 +27,10 @@ class TopicH5Page extends React.Component {
       return;
     }
 
-    Toast.info({ content: '分享链接已复制成功' });
+    Toast.info({ content: '复制链接成功' });
 
-    const { content = '' } = this.props.topic?.topicDetail?.pageData[0] || {};
-    h5Share(content);
-
+    const { content = '', topicId = '' } = this.props.topic?.topicDetail?.pageData[0] || {};
+    h5Share({ title: content, path: `/topic/topic-detail/${topicId}` });
   }
 
   renderItem = ({ content = '', threadCount = 0, viewCount = 0, threads = [] }, index) => {

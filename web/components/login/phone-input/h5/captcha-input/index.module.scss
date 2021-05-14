@@ -13,8 +13,8 @@
       text-align: center;
       font-size: rem($font-size-middle);
       width: rem(40);
-      height: rem(18);
-      line-height: rem(18);
+      height: rem(24);
+      line-height: rem($font-line-height-base);
       padding: 0;
       border: none;
       border-radius: $border-radius-zero;

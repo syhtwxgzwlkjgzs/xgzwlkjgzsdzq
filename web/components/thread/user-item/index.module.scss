@@ -56,7 +56,7 @@
     flex-direction: column;
     font-size: rem($font-size-primary);
     .title {
-      color: #0b0b37;
+      color: var(--color-text-primary);
       line-height: rem(18);
     }
     .subTitle {

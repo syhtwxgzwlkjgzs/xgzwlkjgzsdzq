@@ -250,10 +250,10 @@
     }
   }
   .categoryText {
-    color: #3ac15f;
-    border: rem(1) solid #3ac15f;
+    color: var(--color-success);
+    border: rem(1) solid var(--color-success);
     &::after {
-      background-color: #3ac15f;
+      background-color: var(--color-success);
     }
   }
   .categoryEssence {
@@ -271,10 +271,10 @@
     }
   }
   .categoryReward {
-    color: #ffc300;
-    border: rem(1) solid #ffc300;
+    color: var(--color-warn);
+    border: rem(1) solid var(--color-warn);
     &::after {
-      background-color: #ffc300;
+      background-color: var(--color-warn);
     }
   }
 }

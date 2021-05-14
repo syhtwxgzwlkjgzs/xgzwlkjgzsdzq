@@ -34,6 +34,11 @@ class MiniAuth extends React.Component {
 
   getUserProfileCallback = async (params) => {
     const { inviteCode = '' } = getCurrentInstance().router.params;
+    const { commonLogin } = this.props;
+    const avatarUrl = params?.userInfo?.avatarUrl;
+    const nickName = params?.userInfo?.nickName;
+    commonLogin.setAvatarUrl(avatarUrl);
+    commonLogin.setNickname(nickName);
     try {
       await getParamCode(this.props.commonLogin);
       // 小程序登录
@@ -61,10 +66,9 @@ class MiniAuth extends React.Component {
       }
       // 落地页开关打开
       if (resp.code === NEED_BIND_OR_REGISTER_USER) {
-        const { sessionToken, nickname } = resp.data;
-        this.props.user.nickname = nickname;
+        const { sessionToken } = resp.data;
         redirectTo({
-          url: `/subPages/user/wx-select/index?sessionToken=${sessionToken}&nickname=${nickname}`
+          url: `/subPages/user/wx-select/index?sessionToken=${sessionToken}&nickname=${nickName}`
         });
         return;
       }

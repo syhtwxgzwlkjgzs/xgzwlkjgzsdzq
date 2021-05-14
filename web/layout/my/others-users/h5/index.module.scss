@@ -40,6 +40,6 @@
     .threadCount {
         font-size: rem($font-size-small);
         // 这个目前也没有定义
-        color: #8490a8;
+        color: var(--color-text-secondary);
     }
 }

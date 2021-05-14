@@ -242,34 +242,36 @@ class ThreadCreate extends React.Component {
               onDelete={() => this.props.setPostData({ product: {} })}
             />
           )}
-          {/* 付费 */}
-          {!!(postData.price || postData.attachmentPrice) && (
-            <div className={styles['reward-qa-box']} onClick={() => {
-              this.props.handleSetState({ currentDefaultOperation: defaultOperation.pay });
-            }}>
-              <div className={styles['reward-qa-box-content']}>
-                付费总额{postData.price + postData.attachmentPrice}元
-              </div>
-            </div>
-          )}
-          {/* 悬赏问答内容标识 */}
-          {(postData.rewardQa.value && postData.rewardQa.times) && (
+          {((postData.rewardQa.value && postData.rewardQa.times)
+            || postData.redpacket.price
+            || !!(postData.price || postData.attachmentPrice)
+          ) && (
             <div className={styles['reward-qa-box']}>
-              <div className={styles['reward-qa-box-content']} onClick={() => {
-                this.props.handleSetState({ currentAttachOperation: THREAD_TYPE.reward });
-              }}>{`悬赏金额${postData.rewardQa.value}元\\结束时间${postData.rewardQa.times}`}</div>
-            </div>
-          )}
-          {/* 红包信息 */}
-          {postData.redpacket.price && (
-            <div className={styles['reward-qa-box']}>
-              <div className={styles['reward-qa-box-content']}
-                onClick={() => this.props.handleSetState({ currentDefaultOperation: defaultOperation.redpacket })}
-              >
-                {postData.redpacket.rule === 1 ? '随机红包' : '定额红包'}\
-                总金额{postData.redpacket.price}元\{postData.redpacket.number}个
-                {postData.redpacket.condition === 1 && `\\集赞个数${postData.redpacket.likenum}`}
-              </div>
+              {/* 付费 */}
+              {!!(postData.price || postData.attachmentPrice) && (
+                <div className={styles['reward-qa-box-content']}>
+                  付费总额{postData.price + postData.attachmentPrice}元
+                </div>
+              )}
+              {/* 悬赏问答内容标识 */}
+              {postData.rewardQa.value && postData.rewardQa.times  && (
+                <div
+                  className={styles['reward-qa-box-content']} onClick={() => {
+                    this.props.handleSetState({ currentAttachOperation: THREAD_TYPE.reward });
+                  }}
+                >
+                  {`悬赏金额${postData.rewardQa.value}元\\结束时间${postData.rewardQa.times}`}
+                </div>
+              )}
+              {/* 红包信息 */}
+              {postData.redpacket.price && (
+                <div className={styles['reward-qa-box-content']}
+                  onClick={() => this.props.handleSetState({ currentDefaultOperation: defaultOperation.redpacket })}
+                >
+                  {postData.redpacket.rule === 1 ? '随机红包' : '定额红包'}\总金额&nbsp;{postData.redpacket.price}元\{postData.redpacket.number}个
+                  {postData.redpacket.condition === 1 && `\\集赞个数${postData.redpacket.likenum}`}
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -293,6 +295,7 @@ class ThreadCreate extends React.Component {
                 categoryChoose={threadPost.categorySelected}
                 onClick={this.handleCategoryClick} />}
             permission={threadExtendPermissions}
+            currentSelectedToolbar={threadPost.currentSelectedToolbar}
           />
           {/* 默认的操作栏 */}
           <DefaultToolbar

@@ -38,7 +38,7 @@ class Index extends React.Component {
     serverSearch && serverSearch.users && search.setUsers(serverSearch.users);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { search, router } = this.props;
     const { keyword = '' } = router.query;
     // 当服务器无法获取数据时，触发浏览器渲染
@@ -52,7 +52,7 @@ class Index extends React.Component {
       });
 
       this.page = 1;
-      search.getTopicsList({ search: keyword });
+      await search.getTopicsList({ search: keyword });
       this.toastInstance?.destroy();
     }
     if (!hasUsers) {

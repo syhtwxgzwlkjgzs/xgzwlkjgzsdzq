@@ -18,6 +18,11 @@
     color: $text-color-placeholder;
   }
 }
+// 默认的icon颜色
+.dzq-icon {
+  color: $icon-color;
+  cursor: pointer;
+}
 
 * {
   font-family: $font-family !important;

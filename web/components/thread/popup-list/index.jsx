@@ -5,6 +5,8 @@ import styles from './index.module.scss';
 import NoData from '@components/no-data';
 import { readLikedUsers } from '@server';
 import List from '../../list';
+import { withRouter } from 'next/router';
+
 
 /**
  * 帖子点赞、打赏点击之后的弹出视图
@@ -12,7 +14,7 @@ import List from '../../list';
  * @prop {string}  onHidden 关闭视图的回调
  */
 
-const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
+const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) => {
   const allPageNum = useRef(1);
   const likePageNum = useRef(1);
   const tipPageNum = useRef(1);
@@ -88,6 +90,10 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
 
   };
 
+  const onUserClick = (userId='') => {
+    router.push(`/my/others?isOtherPerson=true&otherId=${userId}`);
+  };
+
   const onClose = () => {
     onHidden();
     setAll(null);
@@ -138,7 +144,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
                 <List
                   className={styles.list}
                   onRefresh={loadMoreData}
-                  noMore={dataSource.data?.currentPage === dataSource.data?.totalPage}
+                  noMore={dataSource.data?.currentPage >= dataSource.data?.totalPage}
                 >
                   {
                     arr.map((item, index) => (
@@ -149,6 +155,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
                           subTitle={item.passedAt} 
                           userId={item.userId}
                           platform={platform}
+                          onClick={onUserClick}
                         />
                     ))
                   }
@@ -170,6 +177,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
           onActive={onClickTab}
           activeId={current}
           className={styles.tabs}
+          scrollable
           tabBarExtraContent={
             tipData?.platform === 'pc' && (
               <div onClick={onClose} className={styles.tabIcon}>
@@ -186,4 +194,4 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {} }) => {
   );
 };
 
-export default React.memo(Index);
+export default withRouter(React.memo(Index));
