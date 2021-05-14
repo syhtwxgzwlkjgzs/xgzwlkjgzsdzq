@@ -1,28 +1,19 @@
 import React, { useState } from 'react';
-import { Toast, Popup, Button, Input } from '@discuzq/design';
+import { Popup, Button, Slider } from '@discuzq/design';
+import throttle from '@common/utils/thottle';
 import { View } from '@tarojs/components';
 import styles from './index.module.scss';
 
 const InputPop = (props) => {
   const { visible, onOkClick, onCancel, rewardAmount } = props;
 
+  const [data, setData] = useState(0);
+  const [moneyNum, setMoneyNum] = useState(0);
 
-  const [value, setValue] = useState('');
-  const [moneyNum, setMoneyNum] = useState('');
-
-  let valueNum = null;
   const onInputChange = (val) => {
-    valueNum = Number(val);
-    console.log(valueNum);
-    if (valueNum >= 0 && valueNum <= 100) {
-      setValue(valueNum);
-      setMoneyNum(valueNum * 0.01 * rewardAmount);
-    } else {
-      setMoneyNum(0);
-      Toast.success({
-        content: '请输入0-100',
-      });
-    }
+    console.log(val);
+    setData(val);
+    setMoneyNum(Number(val) * 0.01 * rewardAmount);
   };
 
   const onSubmitClick = async () => {
@@ -30,8 +21,8 @@ const InputPop = (props) => {
       try {
         const success = await onOkClick(moneyNum);
         if (success) {
-          setValue('');
-          setMoneyNum('');
+          setMoneyNum(0);
+          setData(0);
         }
       } catch (error) {
         console.log(error);
@@ -42,31 +33,33 @@ const InputPop = (props) => {
   return (
     <Popup position="bottom" visible={visible} onClose={onCancel}>
       <View className={styles.container}>
-        <View className={styles.header}>采纳回复悬赏</View>
-        <View className={styles.body}>
-          <View className={styles.percentage}>
-            <View className={styles.text}>悬赏百分比:</View>
-            <Input
-              mode='number'
-              className={styles.input}
-              value={value}
-              maxLength={3}
-              onChange={e => onInputChange(e.target.value)}
-            />
-            <View className={styles.text}>%</View>
-          </View>
-          <View className={styles.rewardMoney}>
-            <View className={styles.text}>悬赏金额:</View>
-            <Input mode='number' className={styles.input} value={moneyNum} disabled />
+        <View className={styles.main}>
+          <View className={styles.header}>采纳回复悬赏</View>
+          <View className={styles.body}>
+            <View className={styles.percentage}>
+              <View className={styles.text}>悬赏百分比:</View>
+              <View className={styles.slider}>
+                <Slider
+                  value={data}
+                  defaultValue={data}
+                  formatter={value => `${value} %`}
+                  onChange={throttle(e => onInputChange(e), 500)}
+                />
+              </View>
+            </View>
+            <View className={styles.rewardMoney}>
+              <View className={styles.text}>悬赏金额</View>
+              <View className={styles.text}>{moneyNum}元</View>
+            </View>
           </View>
         </View>
         <View className={styles.button}>
-        <Button full onClick={onSubmitClick} className={styles.ok} type="primary" size="large">
-          确定
-        </Button>
-        <Button full onClick={onCancel} className={styles.cancel} type="text" size="large">
-          取消
-        </Button>
+          <Button full onClick={onCancel} className={styles.cancel} type="text" size="medium">
+            取消
+          </Button>
+          <Button full onClick={onSubmitClick} className={styles.ok} type="primary" size="medium">
+            确定
+          </Button>
         </View>
       </View>
     </Popup>

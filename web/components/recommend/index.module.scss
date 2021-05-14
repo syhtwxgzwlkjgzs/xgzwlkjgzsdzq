@@ -83,17 +83,17 @@
           }
         }
         .categoryText {
-          color: #3ac15f;
-          border: rem(1) solid #3ac15f;
+          color: var(--color-success);
+          border: rem(1) solid var(--color-success);
           &:after {
-            background-color: #3ac15f;
+            background-color: var(--color-success);
           }
         }
         .categoryEssence {
-          color: var(--color-primary);
-          border: rem(1) solid var(--color-primary);
+          color: $tag-text-color1;
+          border: rem(1) solid $tag-text-color1;
           &:after {
-            background-color: var(--color-primary);
+            background-color: $tag-text-color1;
           }
         }
         .categoryRed {
@@ -104,10 +104,10 @@
           }
         }
         .categoryReward {
-          color: #ffc300;
-          border: rem(1) solid #ffc300;
+          color: var(--color-warn);
+          border: rem(1) solid var(--color-warn);
           &:after {
-            background-color: #ffc300;
+            background-color: var(--color-warn);
           }
         }
       }
@@ -148,25 +148,25 @@
   opacity: 0.5;
 }
 .itemIndex5 {
-  color: #ffc300;
+  color: var(--color-warn);
 }
 .itemIndex6 {
-  color: #ffc300;
+  color: var(--color-warn);
   opacity: 0.8;
 }
 .itemIndex7 {
-  color: #ffc300;
+  color: var(--color-warn);
   opacity: 0.6;
 }
 .itemIndex8 {
-  color: #ffc300;
+  color: var(--color-warn);
   opacity: 0.5;
 }
 .itemIndex9 {
-  color: #ffc300;
+  color: var(--color-warn);
   opacity: 0.4;
 }
 .itemIndex10 {
-  color: #ffc300;
+  color: var(--color-warn);
   opacity: 0.3;
 }

@@ -19,7 +19,7 @@ class WXAuthorizationPage extends React.Component {
   render() {
     return (
       <div className={layout.container}>
-        <HomeHeader hideInfo/>
+        <HomeHeader hideInfo mode='login'/>
         <div className={layout.content}>
           <div className={layout.title}>{this.props.h5QrCode.loginTitle}</div>
           {

@@ -6,7 +6,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #f5f7f8;
+  background: $body-bg-color;
 }
 
 .wrapper {
@@ -14,6 +14,7 @@
   display: flex;
   justify-content: center;
   overflow-y: scroll;
+  // padding: rem(20) 0;
 }
 
 .center {
@@ -25,15 +26,17 @@
 
 .left {
   position: sticky;
-  top: rem(20);
+  top: rem(0);
   margin-right: rem(20);
+  padding-top: rem(20);
   width: rem(300);
 }
 
 .right {
   position: sticky;
   margin-left: rem(20);
-  top: rem(20);
+  top: rem(0);
+  padding-top: rem(20);
   width: rem(330);
 }
 

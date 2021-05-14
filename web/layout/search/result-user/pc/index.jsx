@@ -25,8 +25,15 @@ class SearchResultUserPcPage extends React.Component {
   redirectToSearchResultTopic = () => {
     this.props.router.push('/search/result-topic');
   };
-  onTopicClick = data => console.log('topic click', data);
-  onUserClick = data => console.log('user click', data);
+
+  onUserClick = ({ userId } = {}) => {
+    this.props.router.push(`/my/others?isOtherPerson=true&otherId=${userId}`);
+  };
+
+  onTopicClick = data => {
+    const { topicId } = data
+    this.props.router.push(`/topic/topic-detail/${topicId}`);
+  };
 
   onFollow = ({ id, type }) => {
     if (!this.props.user.isLogin()) {

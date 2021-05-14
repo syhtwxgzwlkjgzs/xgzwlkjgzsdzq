@@ -18,7 +18,7 @@ import { ThreadCommonContext } from '../utils'
 const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noop, userId, platform }) => {
   const handleClick = (e) => {
     e.stopPropagation();
-    onClick();
+    onClick(userId);
   };
   return (
     <div className={styles.listItem} key={index} onClick={handleClick}>

@@ -13,14 +13,14 @@ class CommentList extends React.Component {
       isHideEdit: this.props.isHideEdit, // 隐藏评论编辑删除
       isShowOne: this.props.isShowOne || false, // 是否只显示一条评论回复
     };
-    this.needReply = this.props.data.lastThreeComments;// 评论的回复
+    this.needReply = this.props.data.lastThreeComments; // 评论的回复
   }
 
   toCommentDetail = () => {
     if (this.state.isShowOne) {
       typeof this.props.onCommentClick === 'function' && this.props.onCommentClick();
     }
-  }
+  };
 
   // 点击头像
   avatarClick() {
@@ -80,33 +80,33 @@ class CommentList extends React.Component {
           <div className={styles.showGet}>
             <div></div>
             <div className={styles.headerRigth}>
-              {
-                this.props.data?.rewards
-                  ? <div className={styles.imageNumber}>
-                    <img className={styles.rewardImage} src="/dzq-img/coin.png" alt="悬赏图标" />
-                    <div className={styles.showMoneyNum}>
-                      获得<span className={styles.moneyNumber}>{this.props.data.rewards}</span>元悬赏金
-                    </div>
+              {this.props.data?.rewards ? (
+                <div className={styles.imageNumber}>
+                  <img className={styles.rewardImage} src="/dzq-img/coin.png" alt="悬赏图标" />
+                  <div className={styles.showMoneyNum}>
+                    获得<span className={styles.moneyNumber}>{this.props.data.rewards}</span>元悬赏金
                   </div>
-                  : ''
-              }
-              {
-                this.props.data?.redPacketAmount
-                  ? <div className={`${styles.redpacket} ${styles.imageNumber}`}>
-                    <img className={styles.image} src="/dzq-img/redpacket-mini.png" alt="红包图标" />
-                    <div className={styles.showMoneyNum}>
-                      获得<span className={styles.moneyNumber}>{this.props.data.redPacketAmount}</span>元红包
-                    </div>
+                </div>
+              ) : (
+                ''
+              )}
+              {this.props.data?.redPacketAmount ? (
+                <div className={`${styles.redpacket} ${styles.imageNumber}`}>
+                  <img className={styles.image} src="/dzq-img/redpacket-mini.png" alt="红包图标" />
+                  <div className={styles.showMoneyNum}>
+                    获得<span className={styles.moneyNumber}>{this.props.data.redPacketAmount}</span>元红包
                   </div>
-                  : ''
-              }
-              {
-                !this.state.isShowOne ? (
-                  <div className={styles.more} onClick={this.props.onMoreClick}>
-                    <Icon size="16" color="#8590A6" name="MoreVOutlined" className={styles.moreIcon}></Icon>
-                  </div>
-                ) : ''
-              }
+                </div>
+              ) : (
+                ''
+              )}
+              {!this.state.isShowOne ? (
+                <div className={styles.more} onClick={this.props.onMoreClick}>
+                  <Icon size="16" color="#8590A6" name="MoreVOutlined" className={styles.moreIcon}></Icon>
+                </div>
+              ) : (
+                ''
+              )}
             </div>
           </div>
         </div>
@@ -115,17 +115,15 @@ class CommentList extends React.Component {
             <Avatar
               image={this.props.data.user.avatar}
               name={this.props.data.user.username || this.props.data.user.userName || ''}
-              circle={true}>
-            </Avatar>
+              circle={true}
+            ></Avatar>
           </div>
           <div className={styles.commentListContent}>
             <div className={styles.commentListContentText} onClick={() => this.toCommentDetail()}>
               <div className={styles.commentListName}>
                 {this.props.data.user.username || this.props.data.user.userName}
               </div>
-              <div className={styles.commentListText}>
-                {this.props.data.content}
-              </div>
+              <div className={styles.commentListText}>{this.props.data.content}</div>
             </div>
             <div className={styles.commentListFooter}>
               <div className={styles.commentBtn}>
@@ -139,55 +137,57 @@ class CommentList extends React.Component {
                   <div className={styles.commentReply}>
                     <span onClick={() => this.replyClick()}>回复</span>
                   </div>
-                  {
-                    true
-                      ? <div className={styles.commentAdopt}>
-                        <span onClick={() => this.props.onAboptClick()}>采纳</span>
-                      </div> : ''
-                  }
-                  {!this.state.isHideEdit
-                && <div className={styles.extra}>
-                  {/* {canEdit && <div className={styles.revise} onClick={() => this.editClick()}>编辑</div>} */}
-                  {canDelete && <div className={styles.revise} onClick={() => this.deleteClick()}>删除</div>}
-                </div>
-              }
+                  {this.props.isShowAdopt ? (
+                    <div className={styles.commentAdopt}>
+                      <span onClick={() => this.props.onAboptClick()}>采纳</span>
+                    </div>
+                  ) : (
+                    ''
+                  )}
+                  {!this.state.isHideEdit && (
+                    <div className={styles.extra}>
+                      {/* {canEdit && <div className={styles.revise} onClick={() => this.editClick()}>编辑</div>} */}
+                      {canDelete && (
+                        <div className={styles.revise} onClick={() => this.deleteClick()}>
+                          删除
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
-              {
-                this.props.data?.replyCount - 1 > 0 && this.state.isShowOne
-                  ? <div
-                    className={styles.moreReply}
-                    onClick={() => this.toCommentDetail()}>
-                    查看之前{this.props.data?.replyCount - 1}条回复...
-                    </div> : ''
-              }
-              {
-                this.needReply?.length > 0
-                && <div className={styles.replyList}>
-                  {
-                    this.state.isShowOne
-                      ? <ReplyList
-                        data={this.needReply[0]}
-                        key={this.needReply[0].id}
-                        avatarClick={() => this.reployAvatarClick(this.needReply[0])}
-                        likeClick={() => this.replyLikeClick(this.needReply[0])}
-                        replyClick={() => this.replyReplyClick(this.needReply[0])}
-                        toCommentDetail={() => this.toCommentDetail()}>
-                      </ReplyList>
-                      : (this.needReply || [])
-                        .map((val, index) => (
-                          <ReplyList
-                            data={val}
-                            key={val.id || index}
-                            avatarClick={() => this.reployAvatarClick(val)}
-                            likeClick={() => this.replyLikeClick(val)}
-                            replyClick={() => this.replyReplyClick(val)}
-                            toCommentDetail={() => this.toCommentDetail()}>
-                          </ReplyList>
-                        ))
-                  }
+              {this.props.data?.replyCount - 1 > 0 && this.state.isShowOne ? (
+                <div className={styles.moreReply} onClick={() => this.toCommentDetail()}>
+                  查看之前{this.props.data?.replyCount - 1}条回复...
                 </div>
-              }
+              ) : (
+                ''
+              )}
+              {this.needReply?.length > 0 && (
+                <div className={styles.replyList}>
+                  {this.state.isShowOne ? (
+                    <ReplyList
+                      data={this.needReply[0]}
+                      key={this.needReply[0].id}
+                      avatarClick={() => this.reployAvatarClick(this.needReply[0])}
+                      likeClick={() => this.replyLikeClick(this.needReply[0])}
+                      replyClick={() => this.replyReplyClick(this.needReply[0])}
+                      toCommentDetail={() => this.toCommentDetail()}
+                    ></ReplyList>
+                  ) : (
+                    (this.needReply || []).map((val, index) => (
+                      <ReplyList
+                        data={val}
+                        key={val.id || index}
+                        avatarClick={() => this.reployAvatarClick(val)}
+                        likeClick={() => this.replyLikeClick(val)}
+                        replyClick={() => this.replyReplyClick(val)}
+                        toCommentDetail={() => this.toCommentDetail()}
+                      ></ReplyList>
+                    ))
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

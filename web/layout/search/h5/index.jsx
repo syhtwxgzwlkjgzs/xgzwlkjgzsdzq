@@ -28,7 +28,10 @@ class SearchH5Page extends React.Component {
   redirectToSearchResultTopic = () => {
     this.props.router.push('/search/result-topic');
   };
-  onUserClick = data => console.log('user click', data);
+
+  onUserClick = ({ userId } = {}) => {
+    this.props.router.push(`/my/others?isOtherPerson=true&otherId=${userId}`);
+  };
 
   // 跳转话题详情
   onTopicClick = data => {

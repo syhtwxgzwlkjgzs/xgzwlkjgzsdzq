@@ -22,7 +22,8 @@
       .commentListContentText {
         padding: rem($padding-4n);
         border-radius: rem($border-radius-small);
-        background-color: $comment-bg-color;
+        background-color: $body-bg-color;
+        
         .commentListName {
           font-weight: var(--font-weight-regular);
           font-size: rem($font-size-primary);

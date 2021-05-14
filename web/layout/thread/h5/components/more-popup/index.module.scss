@@ -1,14 +1,18 @@
 @import '@common/styles/index.scss';
 
 .container {
+  width: 100%;
   background: var(--color-white);
+  border-radius: rem($border-radius-big) rem($border-radius-big) 0 0;
+  overflow: hidden;
+  padding: rem($padding-4n);
+  box-sizing: border-box;
 
   .more {
-    background: var(--background-color);
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
-    padding: 0 rem($padding-4n);
+
     .moreItem {
       margin: rem($padding-4n) rem($padding-4n) 0 rem($padding-4n);
 
@@ -17,7 +21,7 @@
         height: rem(50);
         text-align: center;
         line-height: rem(50);
-        background: var(--color-white);
+        background: $body-bg-color;
         border-radius: var(--border-radius-small);
         color: var(--color-text-regular);
       }
@@ -32,5 +36,21 @@
 }
 
 .button {
+  margin-top: rem($margin-4n);
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .ok {
+    width: rem(167);
+    height: rem(42);
+  }
+  .cancel {
+    width: rem(167);
+    height: rem(42);
+    background: $button-info-bg-color;
+    border: none;
+    margin-right: rem($margin-4n);
+  }
 }

@@ -4,36 +4,40 @@
   position: relative;
   .input {
     @include input;
+    margin-top: rem($padding-3n);
+    padding: rem($padding-4n) 0 rem($padding-6n);
   }
 }
 @mixin captchaBtn {
   width: rem(94);
   height: rem(36);
   position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   right: 0;
-  bottom: rem(10);
-  text-align: center;
-  line-height: rem(36);
-  border-radius: rem(5);
+  bottom: rem($margin-4n);
+  border-radius: rem($border-radius-small);
   color: var(--color-white);
-  font-size: rem(14);
+  font-size: rem($font-size-base);
 }
 .sendCaptcha {
   @include captchaBtn;
-  background: var(--color-primary); 
+  background: $primary-color;
 }
 .countDown {
   @include captchaBtn;
-  color: #b5b5b5;
-  background: var(--border-line-color); 
+  color: $text-color-secondary;
+  background: $border-color;
 }
 .captchaInput{
-  margin-top: rem(32);
+  margin-top: rem($margin-6n);
   .captchaInput-title {
     font-weight: normal;
-    font-size: rem(14);
-    line-height: rem(24);
+    font-size: rem($font-size-base);
+    line-height: rem($font-line-height-base);
     text-align: left;
+    padding: rem(2) 0;
     color: var(--color-text-secondary);
   }
   .captchaInput-input:last-child{

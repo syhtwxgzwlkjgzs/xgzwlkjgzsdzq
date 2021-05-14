@@ -42,7 +42,7 @@ class CommentAction extends CommentStore {
 
   @action
   setCommentDetailField(key, data) {
-    this.commentDetail[key] = data;
+    if (this.commentDetail && Reflect.has(this.commentDetail, key)) this.commentDetail[key] = data;
   }
 
   @action

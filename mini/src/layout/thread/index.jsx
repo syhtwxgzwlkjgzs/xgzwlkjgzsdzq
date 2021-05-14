@@ -424,7 +424,7 @@ class Index extends Component {
 
   // 分享
   async onShareClick() {
-    Toast.info({ content: '分享链接已复制成功' });
+    Toast.info({ content: '复制链接成功' });
 
     const { title = '' } = this.props.thread?.threadData || {};
     h5Share(title);

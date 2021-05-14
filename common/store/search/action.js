@@ -79,38 +79,50 @@ class SearchAction extends SearchStore {
       newPerPage = 3;
     }
 
-    const promise1 = !hasTopics
-      ? readTopicsList({ params: { filter: topicFilter, perPage: newPerPage, page: 1 } })
-      : {};
-    const promise2 = !hasUsers
-      ? readUsersList({ params: { filter: { nickname: search }, perPage: newPerPage, page: 1 } })
-      : {};
-    const promise3 = !hasThreads
-      ? readThreadList({ params: { filter: { filter: { sort: '3', search } }, perPage: newPerPage, page: 1 } })
-      : {};
-    const promise = [promise1, promise2, promise3];
+    // const promise1 = !hasTopics
+    //   ? readTopicsList({ params: { filter: topicFilter, perPage: newPerPage, page: 1 } })
+    //   : {};
+    // const promise2 = !hasUsers
+    //   ? readUsersList({ params: { filter: { nickname: search }, perPage: newPerPage, page: 1 } })
+    //   : {};
+    // const promise3 = !hasThreads
+    //   ? readThreadList({ params: { filter: { filter: { sort: '3', search } }, perPage: newPerPage, page: 1 } })
+    //   : {};
+    // const promise = [promise1, promise2, promise3];
 
-    let res = await Promise.allSettled(promise);
+    // let res = await Promise.allSettled(promise);
 
-    res = res.map((item) => {
-      const { value } = item;
-      const { code, data } = value;
-      return code === 0 ? data : {};
-    });
+    // res = res.map((item) => {
+    //   const { value } = item;
+    //   const { code, data } = value;
+    //   return code === 0 ? data : {};
+    // });
 
-    if (type === 0) {
-      !hasTopics && this.setIndexTopics(res[0]);
-      !hasUsers && this.setIndexUsers(res[1]);
-      !hasThreads && this.setIndexThreads(res[2]);
-    } else if (type === 1) {
-      !hasTopics && this.setSearchTopics(res[0]);
-      !hasUsers && this.setSearchUsers(res[1]);
-      !hasThreads && this.setSearchThreads(res[2]);
+    // if (type === 0) {
+    //   !hasTopics && this.setIndexTopics(res[0]);
+    //   !hasUsers && this.setIndexUsers(res[1]);
+    //   !hasThreads && this.setIndexThreads(res[2]);
+    // } else if (type === 1) {
+    //   !hasTopics && this.setSearchTopics(res[0]);
+    //   !hasUsers && this.setSearchUsers(res[1]);
+    //   !hasThreads && this.setSearchThreads(res[2]);
+    // }
+
+    if ( !hasTopics ) {
+      const res = await readTopicsList({ params: { filter: topicFilter, perPage: newPerPage, page: 1 } });
+      const { code, data } = res;
+      this.setIndexTopics(code === 0 ? data : {});
     }
-
-    return {
-      res,
-    };
+    if ( !hasUsers ) {
+      const res = await readUsersList({ params: { filter: { nickname: search }, perPage: newPerPage, page: 1 } });
+      const { code, data } = res;
+      this.setIndexUsers(code === 0 ? data : {});
+    }
+    if ( !hasThreads ) {
+      const res = await readThreadList({ params: { filter: { filter: { sort: '3', search } }, perPage: newPerPage, page: 1 } });
+      const { code, data } = res;
+      this.setIndexThreads(code === 0 ? data : {});
+    }
   };
 
   /**
@@ -317,16 +329,28 @@ class SearchAction extends SearchStore {
     
         // 更新点赞
         const { isLike, isPost, isShare, user } = obj;
-        if (!typeofFn.isUndefined(isLike) && !typeofFn.isNull(isLike)) {
+        if (!typeofFn.isUndefined(isLike) && !typeofFn.isNull(isLike) &&
+        user && data.likeReward && data.likeReward.users) {
           data.isLike = isLike;
-    
+
+          const theUserId = user.userId || user.id;
+
           if (isLike) {
-            data.likeReward.users = data.likeReward?.users?.length ? [user] : [...data.likeReward?.users, user]
-            data.likeReward.likePayCount = data.likeReward.likePayCount + 1
+            const userAdded = { userId: theUserId, avatar: user.avatarUrl, username: user.username };
+
+            // 添加当前用户到按过赞的用户列表
+            data.likeReward.users = data.likeReward.users.length ?
+                                    [...data.likeReward.users, userAdded]:
+                                    [userAdded];
           } else {
-            data.likeReward.users = data.likeReward.users.filter(item => item.userId === user.userId)
-            data.likeReward.likePayCount = data.likeReward.likePayCount - 1
+            // 从按过赞用户列表中删除当前用户
+            data.likeReward.users = data.likeReward.users.length ?
+                                    [...data.likeReward.users].filter(item => {
+                                      return (item.userId !== theUserId)
+                                    }) :
+                                    data.likeReward.users;
           }
+          data.likeReward.likePayCount = data.likeReward.users.length;
         }
     
         // 更新评论

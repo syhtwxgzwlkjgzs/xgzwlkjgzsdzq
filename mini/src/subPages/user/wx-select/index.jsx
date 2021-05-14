@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { getCurrentInstance, navigateTo, redirectTo  } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
-import { Button, Toast } from '@discuzq/design';
+import { Button, Toast, Avatar } from '@discuzq/design';
 import Page from '@components/page';
 import { usernameAutoBind } from '@server';
 import setAccessToken from '@common/utils/set-access-token';
@@ -89,13 +89,17 @@ class WXSelect extends Component {
 
   render() {
     const { nickname, sessionToken } = getCurrentInstance().router.params;
+    const { commonLogin } = this.props;
 
     return (
       <Page>
         <View className={layout.container}>
           <View className={layout.content}>
             <View className={layout.title}>绑定微信号</View>
-            <View className={layout.tips}>微信用户 {nickname}，请选择您要进行的操作</View>
+            <View className={layout.tips}>
+              <View style={{display: 'flex' }}>微信用户<Avatar style={{margin: '0 8px'}} circle size='small' image={commonLogin.avatarUrl}/>{nickname}</View>
+              <View>请选择您要进行的操作</View>
+            </View>
             <Button
               className={layout.button}
               type="primary"

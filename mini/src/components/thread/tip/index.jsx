@@ -29,7 +29,7 @@ const Index = ({ imgs = [], tipData = {}, wholeNum = 1 }) => {
                 wholeNum !== 0 && imgs.filter((_, index) => index < 2).map((item, index) => (
                   <View key={index} className={index === 0 ? styles.img : styles.imgAfter}>
                     <Avatar
-                      imgSrc={item.avatar}
+                      image={item.avatar}
                       name={item.userName}
                       size='small'
                     />

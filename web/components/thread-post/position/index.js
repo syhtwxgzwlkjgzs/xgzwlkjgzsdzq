@@ -82,14 +82,14 @@ const Position = (props) => {
   return (
     <Tag
       type="primary"
-      closeable={position.location}
+      closeable={currentPosition.location}
       size="md"
       onClick={choosePosition}
       onClose={
         () => setCurrentPosition({ location: '' })
       }
       className={classNames(styles.tag, {
-        [styles.checked]: position.location !== '',
+        [styles.checked]: !!currentPosition.location,
       })}
     >
       <Icon name="PositionOutlined" size={12} />

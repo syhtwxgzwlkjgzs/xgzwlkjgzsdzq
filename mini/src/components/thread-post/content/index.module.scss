@@ -1,7 +1,6 @@
 @import '@common/styles/index.scss';
 
 .container {
-  background: #fff;
   .container-inner {
     padding: 8px 16px;
   }
@@ -18,11 +17,13 @@
         line-height: 26px;
         text-align: left;
         resize: none;
+        min-height: 78px;
+        max-height: 260px;
       }
 
       .textarea-placeholder {
-        font-size: 16px;
-        color: #c5c6ca;
+        font-size: 20px;
+        color: $text-color-placeholder;
       }
     }
   }
@@ -31,7 +32,7 @@
     height: 20px;
     line-height: 22px;
     font-size: 12px;
-    color: #c5c6ca;
+    color: $text-color-placeholder;
     text-align: right;
   }
 }

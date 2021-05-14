@@ -1,14 +1,15 @@
+@import '@common/styles/index.scss';
 .modal{
   width: 375px;
   padding: 40px 0;
-  background: #fff;
+  background: $white;
   .button {
     width: 327px;
     height: 42px;
     line-height: 42px;
-    font-size: 14px;
-    border-radius: 5px;
-    background: #2469f6;
-    color: #fff;
+    font-size: $font-size-middle;
+    border-radius: $border-radius-small;
+    background: $primary-color;
+    color: $white;
   }
 }
