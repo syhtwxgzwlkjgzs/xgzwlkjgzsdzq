@@ -31,7 +31,7 @@ const Title = ({ title, placeholder, show, onInput }) => {
           type="text"
           value={titleVal}
           placeholder={placeholder}
-          placeholderStyle='color:#c5c6cb'
+          placeholderStyle='color:#c5c6cb;font-size:20px;'
           onInput={e => setTitleVal(e.target.value)}
         />
       </View>
