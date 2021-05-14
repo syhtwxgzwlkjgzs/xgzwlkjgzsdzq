@@ -601,12 +601,11 @@ class ThreadH5Page extends React.Component {
           <div className={footer.operate}>
             <div className={footer.icon} onClick={() => this.onMessageClick()}>
               {totalCount > 0 ? (
-                <Badge info={totalCount > 99 ? '99+' : `${totalCount || '0'}`}>
-                  <Icon size="20" name="MessageOutlined"></Icon>
-                </Badge>
+                <div className={footer.badge}>{totalCount > 99 ? '99+' : `${totalCount || '0'}`}</div>
               ) : (
-                <Icon size="20" name="MessageOutlined"></Icon>
+                ''
               )}
+              <Icon size="20" name="MessageOutlined"></Icon>
             </div>
             <Icon
               color={this.props.thread?.isFavorite ? styleVar['--color-primary'] : ''}
