@@ -18,6 +18,13 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
   const [number, setNumber] = useState(1); // 红包个数
   const [likenum, setLikenum] = useState(1); // 集赞数
 
+  const onMoneyChang = (e) => { // 处理红包金额输入
+    const val = e.target.value;
+    const money = val.replace(/\.\d*$/, $1 => {
+      return $1.slice(0, 3)
+    })
+    setPrice( money )
+  }
   const handleClose = () => {
     cancel();
   };
@@ -82,7 +89,7 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       <div className={styles['line-box']}>
         <div className={styles.label}>红包总金额</div>
         <div className={styles.item}>
-          <Input mode="number" htmlType="number" value={price} onChange={e => setPrice(+e.target.value)} />元
+          <Input mode="number" htmlType="number" value={price} onChange={e => onMoneyChang(e)} />元
         </div>
       </div>
       {/* 红包个数 */}
