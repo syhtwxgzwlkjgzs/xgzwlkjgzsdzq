@@ -17,10 +17,10 @@
     }
 
     &.curr{
-      border-bottom-color: var(--color-black);
+      border-bottom-color: $border-color-hover;
     }
     &.activation{
-      border-bottom-color: var(--color-black);
+      border-bottom-color: $border-color-hover;
     }
   }
 }
