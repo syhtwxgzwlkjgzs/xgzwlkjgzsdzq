@@ -2,10 +2,34 @@
 .toview {
   display: flex;
   flex-direction: column;
-  padding: 16px;
+  padding: 0 $padding-4n $padding-6n;
   .toviewone{
-    height: 33px;
+    font-family: 'PingFang SC';
+    font-weight: normal;
+    font-size: $font-size-small;
+    line-height: $font-line-height-small;
+    text-align: left;
+    color: $text-color-secondary;
+    padding: $padding-2n 0;
   }
+  .slider {
+    :global {
+      .dzq-slider__progress--active {
+        height: rem(4);
+      }
+      .dzq-slider__progress__button {
+        width: rem(10);
+        height: rem(10);
+        border: rem(7) solid var(--color-primary);
+      }
+      .dzq-slider__progress {
+        height: rem(24);
+      }
+    }
+  }
+}
+.toviewPC {
+  padding: $padding-2n $padding-4n $padding-6n;
 }
 .redpacket-box {
   position: absolute;
@@ -18,11 +42,24 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-left: 16px;
-    margin-right: 16px;
-    padding-top: 16px;
-    padding-bottom: 16px;
+    margin: 0 $margin-4n;
+    padding-top: $padding-4n;
     font-size: 14px;
+    .payText {
+      font-family: "PingFang SC";
+      font-weight: normal;
+      font-size: $font-size-base;
+      line-height: rem(17.8);
+      text-align: left;
+      color: $text-color-regular;
+    }
+    .payNumber {
+      font-weight: normal;
+      font-size: $font-size-base;
+      line-height: rem(16.8);
+      text-align: left;
+      color: $text-color-primary;
+    }
   }
   :global {
     .dzq-input {
@@ -31,9 +68,11 @@
       text-align: right;
     }
     .dzq-input__inner {
+      height: rem(20);
       border: none;
       padding-right: 5px;
       text-align: right;
+      padding: 0 $padding-2n;
     }
   }
 }
@@ -43,7 +82,6 @@
   display: flex;
   width: rem(343);
   height: 52px;
-  border-top: 1px solid var(--border-line-color);
   padding: 0 rem(16);
   justify-content: space-between;
   align-items: center;
@@ -63,14 +101,18 @@
   }
   .btn {
     padding: 0;
-    padding-top: 10px;
     position: static;
     width: 100%;
+    height: rem(36);
+    // margin-bottom: $margin-2n;
     display: block;
     text-align: center;
   }
   :global {
     .dzq-button {
+      width: rem(116);
+      height: rem(36);
+      border-radius: $border-radius-small;
       &:first-child {
         margin-right: 10px;
       }
