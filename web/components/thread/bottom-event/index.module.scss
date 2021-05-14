@@ -4,10 +4,10 @@
   justify-content: space-between;
   align-items: center;
   margin: rem(16) 0 rem(8);
-  cursor: pointer;
 }
 .userImg {
   display: flex;
+  cursor: pointer;
   .numText {
     line-height: rem(24);
     font-size: rem($font-size-label);
@@ -17,6 +17,7 @@
 }
 .commentSharing {
   display: flex;
+  cursor: pointer;
   .division {
     line-height: rem(24);
     font-size: rem($font-size-label);

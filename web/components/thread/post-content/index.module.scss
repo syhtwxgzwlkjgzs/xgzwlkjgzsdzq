@@ -4,12 +4,12 @@
 .container {
   width: 100%;
   position: relative;
-  cursor: pointer;
   overflow: hidden;
   .contentWrapper{
     .content {
       position: relative;
       display: inline-block;
+      cursor: pointer;
       line-height: rem($font-line-height-middle);
       font-size: rem($font-size-middle) !important;
       color: var( --color-text-primary);
