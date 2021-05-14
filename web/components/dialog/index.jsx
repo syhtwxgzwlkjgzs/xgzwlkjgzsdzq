@@ -7,7 +7,8 @@ export default function DDialog(props) {
   const { title, children,
     onClose = () => { },
     onCacel = () => { },
-    onConfirm = () => {},
+    onConfirm = () => { },
+    isCustomBtn = false,
     className,
     ...other
   } = props;
@@ -31,10 +32,12 @@ export default function DDialog(props) {
       {...other}
     >
       {children}
-      <div className={styles.btn}>
-        <Button onClick={() => onCacel()}>取消</Button>
-        <Button type="primary" onClick={() => onConfirm()}>确定</Button>
-      </div>
+      {!isCustomBtn && (
+        <div className={styles.btn}>
+          <Button onClick={() => onCacel()}>取消</Button>
+          <Button type="primary" onClick={() => onConfirm()}>确定</Button>
+        </div>
+      )}
     </Dialog>
   );
 }

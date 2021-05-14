@@ -208,17 +208,19 @@ class ThreadPCPage extends React.Component {
           </div>
           <Copyright />
           {/* 插入商品 */}
-          <ProductSelect
-            pc
-            visible={currentAttachOperation === THREAD_TYPE.goods}
-            onAnalyseSuccess={
-              (data) => {
-                this.props.handleSetState({ currentAttachOperation: false });
-                this.props.setPostData({ product: data });
+          {currentAttachOperation === THREAD_TYPE.goods && (
+            <ProductSelect
+              pc
+              visible={currentAttachOperation === THREAD_TYPE.goods}
+              onAnalyseSuccess={
+                (data) => {
+                  this.props.handleSetState({ currentAttachOperation: false });
+                  this.props.setPostData({ product: data });
+                }
               }
-            }
-            cancel={() => this.props.handleSetState({ currentAttachOperation: false })}
-          />
+              cancel={() => this.props.handleSetState({ currentAttachOperation: false })}
+            />
+          )}
           {/* 插入付费 */}
           {!!this.props.curPaySelect && (
             <AllPostPaid

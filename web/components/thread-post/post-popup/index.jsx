@@ -14,7 +14,6 @@ const PostPopup = ({ list, onClick, cancel, visible }) => {
 
   return (
     <Popup
-      className={styles.tan}
       position="bottom"// 从哪个地方弹出 'bottom' | 'top' | 'center';
       maskClosable={true}// 点击遮罩层是否关闭弹出层，但好像没什么用
       visible={visible}// 是否显示弹出层
@@ -23,19 +22,23 @@ const PostPopup = ({ list, onClick, cancel, visible }) => {
       }}
     >
       {/* 循环渲染传进来的数组 */}
-      <div className="box-popup">
-        {list.map(item => (
-            <h2
-              key={item}
-              onClick={() => {
-                handlePopup(item);
-              }}
-            >
-              {item}
-            </h2>
-        ))}
+      <div className={styles.container}>
+        <div className={styles.list}>
+          {list.map(item => (
+              <h2
+                className={styles.item}
+                key={item}
+                onClick={() => {
+                  handlePopup(item);
+                }}
+              >
+                {item}
+              </h2>
+          ))}
+        </div>
         {/* 取消按钮 */}
         <h3
+          className={styles.cancel}
           onClick={() => {
             cancel();
           }}

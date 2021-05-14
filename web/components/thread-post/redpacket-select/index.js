@@ -115,16 +115,18 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
         </div>
       )}
       {/* 按钮 */}
-      <div className={styles.btn}>
-        <Button onClick={() => {
-          handleClose();
-        }}>
-          取消
-        </Button>
-        <Button type="primary" onClick={selectRedpacket}>
-          确定
-        </Button>
-      </div>
+      {!pc && (
+        <div className={styles.btn}>
+          <Button onClick={() => {
+            handleClose();
+          }}>
+            取消
+          </Button>
+          <Button type="primary" onClick={selectRedpacket}>
+            确定
+          </Button>
+        </div>
+      )}
     </div>
   );
 
@@ -134,7 +136,9 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       visible={visible}
       className={styles.pc}
       onClose={handleClose}
-      title="添加商品"
+      title="添加红包"
+      onCacel={handleClose}
+      onConfirm={selectRedpacket}
     >
       {content}
     </DDialog>
