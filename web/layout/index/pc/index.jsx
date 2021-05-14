@@ -28,6 +28,7 @@ class IndexPCPage extends React.Component {
       currentIndex: '',
       conNum: 0,
       visibility: 'hidden',
+      isShowDefault: this.checkIsOpenDefaultTab()
     };
   }
 
@@ -112,6 +113,7 @@ class IndexPCPage extends React.Component {
       return categories;
     }
     tmpCategories = [{ name: '全部', pid: '', children: [] }, ...categories];
+    
     return tmpCategories;
   }
 
@@ -145,16 +147,21 @@ class IndexPCPage extends React.Component {
       <PayBox />
     </div>
   )
+  
+  checkIsOpenDefaultTab() {
+    return this.props.site.checkSiteIsOpenDefautlThreadListData();
+  }
+
   // 中间 -- 筛选 置顶信息 是否新内容发布 主题内容
   renderContent = (data) => {
-    const { visible, conNum } = this.state;
+    const { visible, conNum, isShowDefault } = this.state;
     const { sticks, threads } = data;
     const { pageData, currentPage, totalPage } = threads || {};
     return (
       <div className={styles.indexContent}>
         <div className={styles.contnetTop}>
           <div className={styles.topBox}>
-            <TopMenu onSubmit={this.onFilterClick} />
+            <TopMenu onSubmit={this.onFilterClick} isShowDefault={isShowDefault}/>
             <div className={styles.PostTheme}>
               <Button type="primary" className={styles.publishBtn} onClick={this.onPostThread}>
                 发布

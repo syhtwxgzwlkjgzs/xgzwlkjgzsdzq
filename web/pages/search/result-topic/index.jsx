@@ -67,7 +67,7 @@ class Index extends React.Component {
     } else if (type === 'moreData') {
       this.page += 1;
     }
-    await search.getTopicsList({ search: keyword,  perPage: this.perPage, page: this.page });
+    await search.getTopicsList({ search: data,  perPage: this.perPage, page: this.page });
     return;
   }
 

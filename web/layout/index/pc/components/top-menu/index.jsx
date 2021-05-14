@@ -8,10 +8,16 @@ import filterData from './data';
  * @prop {object} data 筛选数据
  * @prop {number} filterIndex 筛选选中项index
  */
-const Index = ({ onSubmit = noop }) => {
+const Index = ({ onSubmit = noop, isShowDefault = false }) => {
   const title = (name = '导航') => <span>{name}</span>;
   // 选中项index
   const newFilterData = filterData.slice();
+
+  isShowDefault && newFilterData.unshift({
+    label: '默认', // 默认智能排序
+    type: 'sequence',
+    isActive: true,
+  });
   const [dataSource, setDataSource] = useState(newFilterData);
   // 一级菜单是否可以多选
   const [multiple, setMultiple] = useState(true)

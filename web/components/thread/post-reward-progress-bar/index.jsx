@@ -47,7 +47,7 @@ const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0, conditi
         type="circle"
         percent={percent}
         theme={progressTheme}
-        lineWidth={14}
+        lineWidth={12}
         className={styles.progress}
         isShowText={false}
         lineCap="round"

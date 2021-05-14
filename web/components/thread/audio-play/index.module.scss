@@ -8,7 +8,7 @@
     align-items: center;
     height: rem(52);
     border-radius: rem($border-radius-small);
-    background: var(--background-color-text);
+    background: $body-bg-color;
   }
   .payBox {
     width: rem(180);

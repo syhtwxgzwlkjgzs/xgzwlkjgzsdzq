@@ -20,11 +20,14 @@
     margin-bottom: $margin-6n;
   }
   .input {
-    width: 300px;
-    margin-bottom: $margin-6n;
+    @include pc_input;
   }
   .sendCaptcha {
     @include captchaBtn;
+    color: $primary-color;
+    &:hover {
+      color: $text-color-secondary;
+    }
   }
   .countDown {
     @include captchaBtn;
