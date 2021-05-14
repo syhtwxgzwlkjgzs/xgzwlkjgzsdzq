@@ -15,14 +15,14 @@
         font-weight: var(--font-weight-regular);
         font-size: rem($font-size-primary);
         font-family: 'PingFangSC-Semibol';
-        line-height: rem(17.8);
+        line-height: rem(20);
         text-align: left;
         color: var(--color-text-primary);
-        padding-bottom: rem($padding-1n);
       }
       .replyListText {
+        margin-top: rem($margin-1n);
         font-size: rem($font-size-middle);
-        line-height: rem($font-line-height-middle);
+        line-height: rem(22);
         text-align: left;
         color: var(--color-text-primary);
         word-break: break-all;
@@ -40,8 +40,7 @@
             display: inline-block;
             margin-right: rem($margin-1n);
             position: relative;
-            top: rem(6);
-
+            top: rem(4);
 
             .avatar {
               width: rem(18);

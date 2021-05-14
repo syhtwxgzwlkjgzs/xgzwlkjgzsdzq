@@ -30,21 +30,31 @@ const RenderThreadContent = inject('user')(
     const isApproved = threadStore?.threadData?.isApproved || 0;
     const isEssence = threadStore?.threadData?.displayTag?.isEssence || false;
 
-    // 是否附件付费
+    // 是否免费帖
+    const isFree = threadStore?.threadData?.payType === 0;
+
+    // 是否附件付费帖
     const isAttachmentPay = threadStore?.threadData?.payType === 2 && threadStore?.threadData?.paid === false;
     const attachmentPrice = threadStore?.threadData?.attachmentPrice || 0;
-    // 是否帖子付费
+    // 是否已付费
+    const isPayed = threadStore?.threadData?.paid === true;
+    // 是否付费帖子
     const isThreadPay = threadStore?.threadData?.payType === 1 && threadStore?.threadData?.paid === false;
     const threadPrice = threadStore?.threadData?.price || 0;
     // 是否作者自己
     const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData?.userId;
 
-    // 是否悬赏帖
-    const isRedPack = threadStore?.threadData?.displayTag?.isRedPack;
     // 是否红包帖
+    const isRedPack = threadStore?.threadData?.displayTag?.isRedPack;
+    // 是否悬赏帖
     const isReward = threadStore?.threadData?.displayTag?.isReward;
-    // 是否可以打赏
-    const canReward = props?.user?.isLogin() && !isRedPack && !isReward;
+
+    // 是否打赏帖
+    const isBeReward = isFree && threadStore?.threadData?.ability.canBeReward && !isRedPack && !isReward;
+    // 是否显示打赏按钮： 免费帖 && 不是自己 && 不是红包 && 不是悬赏 && 允许被打赏
+    const canBeReward = isFree && threadStore?.threadData?.ability.canBeReward && !isRedPack && !isReward && !isSelf;
+    // 是否已打赏
+    const isRewarded = false;
 
     const parseContent = parseContentData(indexes);
 
@@ -101,6 +111,7 @@ const RenderThreadContent = inject('user')(
 
             {/* 文字 */}
             {text && <PostContent useShowMore={false} content={text || ''} />}
+
             {/* 悬赏文案 */}
             {parseContent.REWARD && (
               <div className={styles.rewardText}>
@@ -152,6 +163,7 @@ const RenderThreadContent = inject('user')(
                   image={parseContent.GOODS.imagePath}
                   amount={parseContent.GOODS.price}
                   title={parseContent.GOODS.title}
+                  className={styles.product}
                 />
                 <Button
                   className={styles.buyBtn}
@@ -159,7 +171,7 @@ const RenderThreadContent = inject('user')(
                   onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
                 >
                   <div className={styles.buyContent}>
-                    <Icon className={styles.payIcon} name="ShoppingCartOutlined" size={19}></Icon>
+                    <Icon className={styles.payIcon} name="ShoppingCartOutlined" size={18}></Icon>
                     <span className={styles.buyText}>购买商品</span>
                   </div>
                 </Button>
@@ -210,7 +222,7 @@ const RenderThreadContent = inject('user')(
             )}
 
             {/* 打赏 */}
-            {canReward && (
+            {canBeReward && (
               <div style={{ textAlign: 'center' }}>
                 <Button onClick={onRewardClick} className={styles.rewardButton} type="primary" size="large">
                   <Icon className={styles.payIcon} name="HeartOutlined" size={19}></Icon>
@@ -222,19 +234,38 @@ const RenderThreadContent = inject('user')(
         )}
         <div className={styles.footer}>
           <div className={styles.thumbs}>
+            {/* 付费 */}
+            {isThreadPay && (
+              <Icon
+                className={classnames(styles.payIcon, isPayed && styles.actived)}
+                name="DollarLOutlined"
+                size={18}
+              ></Icon>
+            )}
+            {/* 打赏 */}
+            {isBeReward && (
+              <Icon
+                className={classnames(styles.payIcon, isRewarded && styles.actived)}
+                name="HeartOutlined"
+                size={18}
+              ></Icon>
+            )}
+            {/* 点赞 */}
             <div
-              className={classnames(styles.liked, threadStore?.threadData?.isLike && styles.isLiked)}
+              className={classnames(styles.liked, threadStore?.threadData?.isLike && styles.actived)}
               onClick={onLikeClick}
             >
-              <Icon name="LikeOutlined" size={20}></Icon>
-              <span>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
+              <Icon name="LikeOutlined" size={18}></Icon>
+              {threadStore?.threadData?.likeReward?.likePayCount > 0 && (
+                <span className={styles.likedNumber}>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
+              )}
             </div>
             <div className={styles.likeReward}>
               <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
             </div>
           </div>
           {threadStore?.threadData?.likeReward?.shareCount > 0 && (
-            <span>{threadStore?.threadData?.likeReward?.shareCount}次分享</span>
+            <span className={styles.shareCount}>{threadStore?.threadData?.likeReward?.shareCount}次分享</span>
           )}
         </div>
       </div>

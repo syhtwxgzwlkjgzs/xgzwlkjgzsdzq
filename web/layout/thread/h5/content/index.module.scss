@@ -16,7 +16,9 @@
 }
 
 .more {
+  line-height: rem(20);
   padding-left: rem($padding-2n);
+  color: var(--color-text-secondary);
 }
 
 .essence {
@@ -24,10 +26,10 @@
 }
 
 .body {
-  margin-top: rem($margin-4n);
+  margin-top: rem($margin-6n);
 
   > * {
-    margin-bottom: rem($margin-5n);
+    margin-bottom: rem($margin-4n);
   }
 }
 
@@ -46,6 +48,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: rem($margin-6n);
 }
 
 .rewardBody {
@@ -83,12 +86,14 @@
   justify-content: space-between;
   color: var(--color-text-secondary);
   font-size: rem($font-size-primary);
+  height: rem(24);
 }
 
 .buyBtn {
   margin-top: rem($margin-4n);
   width: 100%;
   height: rem(36);
+  box-sizing: border-box;
 }
 
 .buyContent {
@@ -98,13 +103,12 @@
 
   .buyText {
     // margin-left: rem($margin-2n);
+    line-height: rem(20);
   }
 }
 
 .tag {
   display: inline-block;
-  // TODO:token  $text-color-regular不生效
-  // color: $text-color-regular;
   color: var(--color-text-regular);
   background: #f0f1f3; // TODO:token
   font-size: rem($font-size-label);
@@ -123,13 +127,9 @@
 .liked {
   display: flex;
   align-items: center;
-
-  span {
-    margin-left: rem($margin-2n);
-  }
 }
 
-.isLiked {
+.actived {
   color: var(--color-primary);
 }
 
@@ -146,7 +146,7 @@
 }
 
 .rewardText {
-  padding: rem($padding-4n) 0;
+  padding: rem($padding-4n);
   background: $body-bg-color;
   display: flex;
   flex-direction: column;
@@ -154,11 +154,12 @@
   border-radius: $border-radius-small;
 
   .rewardMoney {
-    line-height: rem($font-line-height-base);
+    line-height: rem(20);
     font-size: rem($font-size-primary);
     color: var(--color-text-primary);
   }
   .rewardNumber {
+    line-height: rem(17);
     color: var(--color-error);
   }
 
@@ -168,4 +169,19 @@
     color: var(--color-text-secondary);
     text-align: center;
   }
+}
+
+.likedNumber {
+  line-height: rem(20);
+  margin-left: rem($margin-2n);
+}
+
+.shareCount {
+  line-height: rem(17);
+  font-size: rem(12);
+}
+
+.product {
+  padding: 0;
+  background: none;
 }
