@@ -98,6 +98,7 @@ class AtSelect extends Component {
   }
 
   renderItem(info) {
+    console.log(info);
     const { data, index } = info;
     const item = data[index] || {};
     const username = item.user?.userName || '';
@@ -187,6 +188,7 @@ class AtSelect extends Component {
         visible={this.props.visible}
         className={styles.pc}
         onClose={this.handleCancel}
+        isCustomBtn={true}
         title="@圈友"
       >
         {content}

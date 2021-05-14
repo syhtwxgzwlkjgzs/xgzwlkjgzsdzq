@@ -173,6 +173,7 @@ class TopicSelect extends Component {
         className={styles.pc}
         onClose={this.props.cancelTopic}
         title="添加话题"
+        isCustomBtn={true}
       >
         {content}
       </DDialog>
