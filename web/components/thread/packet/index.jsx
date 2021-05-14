@@ -15,7 +15,7 @@ const Index = ({ money = 0, type = 0, onClick }) => {
       <div className={styles.wrapper}>
         <img className={styles.img} src={url} />
         <span className={styles.title}>{title}</span>
-        {!!money && <span className={styles.money}>￥{money}</span>}
+        <span className={styles.money}>￥{money}</span>
       </div>
     </div>
   );

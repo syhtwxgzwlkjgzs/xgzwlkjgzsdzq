@@ -19,3 +19,14 @@
     padding: rem($padding-10) 0;
   }
 }
+.sortDropdown {
+  color: $text-color-secondary;
+  font-size: $font-size-base;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: rem(20);
+  .icon {
+    margin-right: rem($padding-2n);
+  }
+}

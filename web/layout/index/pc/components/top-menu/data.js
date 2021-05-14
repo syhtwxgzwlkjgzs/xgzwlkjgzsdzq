@@ -35,11 +35,11 @@ export default [
         value: '102',
         isActive: false,
       },
-      {
-        label: '问答',
-        value: '105',
-        isActive: false,
-      },
+      // {
+      //   label: '问答',
+      //   value: '105',
+      //   isActive: false,
+      // },
       {
         label: '商品',
         value: '104',
