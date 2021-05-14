@@ -39,6 +39,13 @@ class index extends Component {
     Router.push({ url: '/user/reset-password' })
   }
 
+  // 输入旧密码
+  handleSetOldPwd = (e) => {
+    this.setState({
+      oldPassword: e.target.value
+    })
+  }
+
   // 设置账户密码
   handleSetPwd = (e) => {
     this.setState({
@@ -55,7 +62,7 @@ class index extends Component {
 
   // 点击提交
   handleSubmit = async () => {
-    const { newPassword, newPasswordRepeat } = this.state
+    const { oldPassword, newPassword, newPasswordRepeat } = this.state
     if (newPassword !== newPasswordRepeat) {
       Toast.error({
         content: '两次密码输入有误',
@@ -64,44 +71,65 @@ class index extends Component {
       })
       return
     }
+    this.props.user.oldPassword = oldPassword
     this.props.user.newPassword = newPassword
     this.props.user.newPasswordRepeat = newPasswordRepeat
-    this.props.user.setUserPassword().then(res => {
-      Toast.success({
-        content: '设置密码成功',
-        hasMask: false,
-        duration: 1000,
+    if (this.props.user.hasPassword) {
+      this.props.user.resetUserPassword().then(res => {
+        Toast.success({
+          content: '修改密码成功',
+          hasMask: false,
+          duration: 1000,
+        })
+        Router.back()
+      }).catch((err) => {
+        Toast.error({
+          content: err.Message || '修改密码失败, 请重新设置',
+          hasMask: false,
+          duration: 1000,
+        })
+        this.props.user.newPassword = null
+        this.props.user.newPasswordRepeat = null
+        this.initState()
       })
-      Router.back()
-    }).catch((err) => {
-      Toast.error({
-        content: '设置密码失败, 请重新设置',
-        hasMask: false,
-        duration: 1000,
+    } else {
+      this.props.user.setUserPassword().then(res => {
+        Toast.success({
+          content: '设置密码成功',
+          hasMask: false,
+          duration: 1000,
+        })
+        Router.back()
+      }).catch((err) => {
+        Toast.error({
+          content: err.Message || '设置密码失败, 请重新设置',
+          hasMask: false,
+          duration: 1000,
+        })
+        this.props.user.oldPassword = null
+        this.props.user.newPassword = null
+        this.props.user.newPasswordRepeat = null
+        this.initState()
       })
-      this.props.user.newPassword = null
-      this.props.user.newPasswordRepeat = null
-      this.initState()
-    })
+    }
+
 
   }
 
   // 渲染未设置密码
   renderHasNoPassword = () => {
-    const { username } = this.props.user
     const { newPassword, newPasswordRepeat } = this.state
-    console.log('重新渲染了 render');
     return (
       <>
         <h3>设置密码</h3>
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}>{username}</div>
+          <div className={styles.labelValue}>{this.props.user?.username}</div>
         </div>
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}><Input maxLength={20} onChange={this.handleSetPwd} mode="password" placeholder="请设置密码" value={newPassword} /></div>
+          <div className={styles.labelValue}><Input onChange={this.handleSetPwd} mode="password" placeholder="请设置密码" value={newPassword} /></div>
         </div>
         <div className={styles.labelInfo}>
-          <div onChange={this.hadleNewPasswordRepeat} className={styles.labelValue}><Input mode="password" maxLength={20} placeholder="请确认密码" value={newPasswordRepeat} /></div>
+          <div onChange={this.hadleNewPasswordRepeat} className={styles.labelValue}><Input mode="password" placeholder="请确认密码" value={newPasswordRepeat} /></div>
         </div>
       </>
     )
@@ -109,34 +137,39 @@ class index extends Component {
 
   // 渲染已设置密码
   renderHasPassword = () => {
+    const { newPassword, newPasswordRepeat } = this.state
     return (
       <>
         <h3>修改密码</h3>
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}>{username}</div>
+          <div className={styles.labelValue}>{this.props.user?.username}</div>
         </div>
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}><Input mode="password" placeholder="请输入旧密码" /></div>
+          <div className={styles.labelValue}><Input onChange={this.handleSetOldPwd} mode="password" placeholder="请输入旧密码" /></div>
         </div>
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}><Input mode="password" placeholder="请输入新密码" /></div>
+          <div className={styles.labelValue}><Input value={newPassword} onChange={this.handleSetPwd} mode="password" placeholder="请输入新密码" /></div>
         </div>
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}><Input mode="password" placeholder="请重复输入新密码" /></div>
+          <div className={styles.labelValue}><Input onChange={this.hadleNewPasswordRepeat} mode="password" value={newPasswordRepeat} placeholder="请重复输入新密码" /></div>
         </div>
       </>
     )
   }
 
   render() {
-    const { hasPassword } = this.props.user
-    const { newPassword, newPasswordRepeat } = this.state
-    let isSubmit = !newPassword || !newPasswordRepeat
+    const { oldPassword, newPassword, newPasswordRepeat } = this.state
+    let isSubmit = false
+    if (this.props.user?.hasPassword) {
+      isSubmit = !oldPassword || !newPassword || !newPasswordRepeat
+    } else {
+      isSubmit = (!newPassword || !newPasswordRepeat)
+    }
     return (
       <div>
         <Header />
         <div className={styles.content}>
-          {hasPassword ? this.renderHasPassword() : this.renderHasNoPassword()}
+          {this.props.user?.hasPassword ? this.renderHasPassword() : this.renderHasNoPassword()}
         </div>
         <div onClick={this.handleResetPwd} className={styles.tips}>忘记旧密码？</div>
         <div className={styles.bottom}>
