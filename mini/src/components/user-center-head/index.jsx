@@ -84,7 +84,7 @@ class index extends Component {
 
   // 点击编辑资料
   goToMyEditInfo = () => {
-    Router.push({ url: `my/edit` })
+    Router.push({ url: `edit/index` })
   }
 
   // 点击发送私信
