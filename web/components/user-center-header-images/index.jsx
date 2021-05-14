@@ -7,12 +7,13 @@ class UserCenterHeaderImage extends React.Component {
   render() {
     let backgroundUrl = this.props.user?.backgroundUrl;
     if (this.props.isOtherPerson) {
-      backgroundUrl = this.props.user.targetUserBackgroundUrl
+      backgroundUrl = this.props.user.targetUserBackgroundUrl;
     }
+
     return (
       <div
         className={styles.box}
-        style={{ backgroundImage: backgroundUrl || 'url(\'/dzq-img/my-default-header-img.jpg\')' }}
+        style={{ backgroundImage: `url(${backgroundUrl})` || 'url(\'/dzq-img/my-default-header-img.jpg\')' }}
         {...this.props}
       />
     );

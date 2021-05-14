@@ -30,7 +30,7 @@
         width: 100%;
         // text-align: center;
         font-size: rem($font-size-primary);
-        color: var(--color-text-primary);
+        color: $text-color-primary;
         text-overflow: -o-ellipsis-lastline;
         overflow: hidden;
         text-overflow: ellipsis;
