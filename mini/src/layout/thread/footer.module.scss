@@ -13,7 +13,12 @@
   text-align: left;
   color: #c5c6ca;
   border-radius: 5px;
-  border: 1px solid var(--border-line-color);
+  border: var(--border-border);
+  :global {
+    .dzq-input.is-disabled .dzq-input__inner {
+      background-color: var(--comment-box-bg-color);
+    }
+  }
   .input {
 
   }
