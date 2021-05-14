@@ -424,7 +424,6 @@ class Index extends Component {
       showClassifyPopup,
       operationType,
       showPaidOption,
-      contentTextLength,
       showEmoji,
       showDraftOption,
     } = this.state;

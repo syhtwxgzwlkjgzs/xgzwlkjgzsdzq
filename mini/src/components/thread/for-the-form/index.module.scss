@@ -5,7 +5,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #fff;
+  background-color: var(--color-white);
   :global {
     .dzq-input {
       display: inline-block;

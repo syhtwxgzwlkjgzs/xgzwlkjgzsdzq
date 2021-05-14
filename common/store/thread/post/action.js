@@ -11,6 +11,7 @@ class ThreadPostAction extends ThreadPostStore {
   async createThread() {
     const params = this.getCreateThreadParams();
     const ret = await createThread(params);
+    if (ret.code === 0) this.currentSelectedToolbar = false;
     return ret;
   }
 
@@ -323,6 +324,11 @@ class ThreadPostAction extends ThreadPostStore {
       files,
       freeWords,
     });
+  }
+
+  @action
+  setCurrentSelectedToolbar(type) {
+    this.currentSelectedToolbar = type;
   }
 }
 

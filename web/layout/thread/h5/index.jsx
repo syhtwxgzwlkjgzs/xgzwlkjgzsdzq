@@ -18,6 +18,7 @@ import DeletePopup from '@components/thread-detail-pc/delete-popup';
 import MorePopup from './components/more-popup';
 import InputPopup from './components/input-popup';
 import throttle from '@common/utils/thottle';
+import xss from '@common/utils/xss';
 
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import rewardPay from '@common/pay-bussiness/reward-pay';
@@ -25,7 +26,6 @@ import RewardPopup from './components/reward-popup';
 
 import RenderThreadContent from './content';
 import RenderCommentList from './comment-list';
-
 
 @inject('site')
 @inject('user')
@@ -111,6 +111,11 @@ class ThreadH5Page extends React.Component {
 
   // 点击收藏icon
   async onCollectionClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      return;
+    }
+
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
@@ -169,6 +174,11 @@ class ThreadH5Page extends React.Component {
 
   // 点击评论
   onInputClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      return;
+    }
+
     this.setState({
       showCommentInput: true,
     });
@@ -184,6 +194,11 @@ class ThreadH5Page extends React.Component {
   };
 
   onOperClick = (type) => {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      return;
+    }
+
     this.setState({ showMorePopup: false });
 
     // 举报
@@ -216,6 +231,7 @@ class ThreadH5Page extends React.Component {
   // 确定举报
   async onReportOk(val) {
     if (!val) return;
+
     const params = {
       threadId: this.props.thread.threadData.threadId,
       type: 1,
@@ -394,6 +410,11 @@ class ThreadH5Page extends React.Component {
 
   // 点赞
   async onLikeClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      return;
+    }
+
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
@@ -411,7 +432,7 @@ class ThreadH5Page extends React.Component {
 
   // 分享
   async onShareClick() {
-    Toast.info({ content: '分享链接已复制成功' });
+    Toast.info({ content: '复制链接成功' });
 
     const { title = '' } = this.props.thread?.threadData || {};
     h5Share(title);
@@ -429,6 +450,11 @@ class ThreadH5Page extends React.Component {
 
   // 点击打赏
   onRewardClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      return;
+    }
+
     this.setState({ showRewardPopup: true });
   }
 
@@ -477,7 +503,9 @@ class ThreadH5Page extends React.Component {
       <div className={layout.container}>
         <div className={layout.header}>
           <Header></Header>
-          {isReady && isApproved !== 1 && <div className={layout.examine}>内容正在审核中，审核通过后才能正常显示！</div>}
+          {isReady && isApproved !== 1 && (
+            <div className={layout.examine}>内容正在审核中，审核通过后才能正常显示！</div>
+          )}
         </div>
 
         <div
@@ -525,7 +553,7 @@ class ThreadH5Page extends React.Component {
         <div className={layout.footer}>
           {/* 评论区触发 */}
           <div className={footer.inputClick} onClick={() => this.onInputClick()}>
-            <Input className={footer.input} placeholder="写评论" disabled={true} icon="EditOutlined"></Input>
+            <Input className={footer.input} placeholder="写评论" disabled={true} prefixIcon="EditOutlined"></Input>
           </div>
 
           {/* 评论弹层 */}

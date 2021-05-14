@@ -1,19 +1,23 @@
 @import '../vars.scss';
 
 .h5InteractionBox {
-  @include im-pagebed;
   display: flex;
   position: absolute;
   justify-content: space-between;
   bottom: 0;
   left: 0;
-  padding: rem($padding-2n) rem($padding-4n);
+  padding-top: rem($padding-2n);
+  padding-bottom: rem($padding-2n);
   background-color: var(--color-white);
+  width: 100vw;
 
   .inputWrapper {
     display: flex;
     background-color: var(--background-color-text2);
     border-radius: rem($border-radius-small);
+    flex: 2;
+    justify-content: space-between;
+    margin-left: $im-pagebed-padding;
     :global {
       .dzq-input {
         width: auto;
@@ -37,6 +41,7 @@
   .submit {
     align-items: center;
     margin-left: rem($margin-2n);
+    margin-right: $im-pagebed-padding;
   }
 
   .pictureUpload {

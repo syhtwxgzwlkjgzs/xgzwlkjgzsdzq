@@ -37,7 +37,7 @@ class Index extends React.Component {
       <SidebarPanel 
         title="潮流话题"
         isLoading={!pageData}
-        noData={!pageData.length} 
+        noData={!pageData?.length} 
         onShowMore={this.redirectToSearchResultTopic}
       >
           <TrendingTopic data={pageData?.filter((_, index) => index < 10)} onItemClick={this.onTopicClick}/>

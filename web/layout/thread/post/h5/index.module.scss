@@ -29,11 +29,11 @@
 
 .position-box {
   display: flex;
-  flex-direction: row-reverse;
+  // flex-direction: row-reverse;
   height: 45px;
   padding: 0 rem(16);
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   :global { /* stylelint-disable-line */
     .dzq-tag {
       display: flex;
@@ -60,12 +60,8 @@
 .reward-qa-box {
   border-top: 1px solid #eee;
   &-content {
-    display: flex;
-    align-items: center;
-    height: 25px;
-    margin: rem(12) rem(16);
-    padding: rem(4) rem(8);
-    border-radius: 5px;
-    background: #f0f1f3;
+    @include tag-default;
+    margin-left: rem($margin-4n);
+    margin-top: rem($margin-10);
   }
 }

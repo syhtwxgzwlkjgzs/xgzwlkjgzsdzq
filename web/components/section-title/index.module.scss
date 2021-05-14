@@ -40,6 +40,12 @@
     font-size: rem($font-size-primary);
     color: var(--color-text-primary);
     line-height: rem($font-line-height-primary);
+    &:hover {
+      color: var(--color-primary);
+      .rightIcon {
+        color: var(--color-primary) !important;
+      }
+    }
   }
   .num {
     font-size: rem($font-size-label);
@@ -54,10 +60,10 @@
   }
 }
 .icon1 {
-  color: #3ac15f;
+  color: var(--color-success);
 }
 .icon2 {
-  color: #ffc300;
+  color: var(--color-warn);
 }
 .icon3 {
   color: var(--color-error);

@@ -13,7 +13,12 @@
   text-align: left;
   color: #c5c6ca;
   border-radius: 5px;
-  border: 1px solid #eee;
+  border: var(--border-border);
+  :global {
+    .dzq-input.is-disabled .dzq-input__inner {
+      background-color: var(--comment-box-bg-color);
+    }
+  }
   .input {
 
   }
@@ -30,7 +35,7 @@
   position: relative;
 
   // TODO:暂未提供token
-  color: #8590A6;
+  color: var(--color-text-secondary);
 
   :first-child {
     margin-left: 0;
@@ -45,7 +50,7 @@
   font-size: 10px;
   text-align: center;
   line-height: 20px;
-  color: #fff;
+  color: var(--color-white);
   background: var(--color-error);
   border-radius: 50%;
   position: absolute;

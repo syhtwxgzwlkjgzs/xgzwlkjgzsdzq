@@ -27,7 +27,7 @@ const Title = ({ title, placeholder, isDisplay, onChange,  onFocus, onBlur, ...p
   }, [titleVal]);
 
   return (
-    <div className={`${isDisplay ? '' : styles['is-display']}`}>
+    <div className={`${isDisplay ? styles.wrapper : styles['is-display']}`}>
       <Input
         className={`${styles.title} ${isDisplay ? styles['is-display'] : ''}`}
         value={titleVal}
@@ -54,7 +54,7 @@ Title.propTypes = {
 Title.defaultProps = {
   title: '',
   isDisplay: false,
-  placeholder: '标题(可选)',
+  placeholder: '标题（可选）',
   onChange: () => { },
   onFocus: () => { },
   onBlur: () => { },

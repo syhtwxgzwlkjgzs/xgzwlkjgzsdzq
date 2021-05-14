@@ -61,7 +61,6 @@
     font-size: rem($font-size-primary);
     font-weight: normal;
     padding: rem($padding-4n) 0;
-    border-bottom: var(--border-border);
     .text {
       font-family: 'PingFang SC';
       line-height: rem(17.8);
@@ -91,7 +90,7 @@
   display: flex;
   justify-content: space-between;
   padding: rem($padding-2n) rem($padding-4n) rem(19);
-  border-bottom: var(--border-border);
+
   .cancel {
     width: rem(167);
     height: rem(42);

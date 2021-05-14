@@ -1,11 +1,10 @@
 @import '@common/styles/index.scss';
 
 .container {
-  margin-top: 8px;
-  background: #fff;
+  height: 50px;
 
   .container-inner {
-    padding: 8px 0;
+    padding: 16px 0 8px 0;
     margin: 0 16px;
     border-bottom: 1px solid var(--border-line-color);
 

@@ -39,23 +39,22 @@ class Index extends React.Component {
   async componentDidMount() {
     const { topic, router } = this.props;
     const { id = '' } = router.query;
-
+    console.log(id, 'sadasdas ', topic.topicDetail)
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasTopics = !!topic.topicDetail;
-
-    if (!hasTopics) {
-      this.toastInstance = Toast.loading({
-        content: '加载中...',
-        duration: 0,
-      });
-
-      this.page = 1;
-      await topic.getTopicsDetail({ topicId: id });
-
-      this.toastInstance?.destroy();
+    if (hasTopics) {
+      topic.setTopicDetail(null)
     }
-  }
+    this.toastInstance = Toast.loading({
+      content: '加载中...',
+      duration: 0,
+    });
 
+    this.page = 1;
+    await topic.getTopicsDetail({ topicId: id });
+
+    this.toastInstance?.destroy();
+  }
   render() {
     const { site } = this.props;
     const { platform } = site;

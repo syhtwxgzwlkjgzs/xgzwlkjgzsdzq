@@ -35,6 +35,7 @@ class Index extends React.Component {
       ],
       funcType: 'readAccountMsgList',
       type: 'accountMsgList', // 账户消息类型 accountMsgList，atMsgList,replyMsgList,likeMsgList
+      isFinished: true, // 下拉刷新是否结束
     }
   }
 
@@ -120,7 +121,14 @@ class Index extends React.Component {
     return list;
   }
 
-  // 处理账号列表触底 tip: 监听上拉触底之后，一定要返回Promise对象
+  // 触顶下拉刷新
+  onPullDown = async () => {
+    this.setState({ isFinished: false });
+    await this.fetchMessageData(1);
+    this.setState({ isFinished: true });
+  }
+
+  // 触底上拉加载 tip: 监听上拉触底之后，一定要返回Promise对象
   handleAccountBottom = () => {
     return this.fetchMessageData();
   }
@@ -138,22 +146,25 @@ class Index extends React.Component {
 
   render() {
     const { message } = this.props;
-    const data = message[this.state.type]
+    const { type, items, isFinished } = this.state;
+    const data = message[type]
     const renderList = this.handleRenderList(data.list);
     const card = <Card
-      cardItems={this.state.items}
+      cardItems={items}
       redirectCallback={this.toOtherMessage}
     />
-  
+
     return (
       <div className={styles.wrapper}>
         <Header />
         <Notice
+          isFinished={isFinished}
           height='calc(100vh - 44px)'
           noMore={data.currentPage >= data.totalPage}
-          topCard={this.state.type === 'accountMsgList' ? card : null}
+          topCard={type === 'accountMsgList' ? card : null}
           list={renderList}
           type='account'
+          onPullDown={this.onPullDown}
           onScrollBottom={this.handleAccountBottom}
           onBtnClick={this.handleAccountDelete}
         />

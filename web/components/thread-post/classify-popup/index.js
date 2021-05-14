@@ -56,11 +56,11 @@ const ClassifyPopup = (props) => {
     setChildren(selected);
   }, [selected]);
 
-  const titleClass = pc ? classNames(styles['popup-title'], styles['pc-title']) : styles['popup-title'];
+  const clsWrapper = pc ? classNames(styles.pc, styles.wrapper) : styles.wrapper;
 
   const content = (
-    <>
-      <div className={titleClass}>
+    <div className={clsWrapper}>
+      <div className={styles['popup-title']}>
         {pc && <Icon name="MenuOutlined" size="16" />}
         选择分类
       </div>
@@ -103,7 +103,7 @@ const ClassifyPopup = (props) => {
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 
   if (pc) return content;

@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import { Popup, Button, Input } from '@discuzq/design';
+import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
-import { View } from '@tarojs/components';
 
 const InputPop = (props) => {
   const { visible, onOkClick, onCancel } = props;
 
-
   const [value, setValue] = useState('');
-
 
   const onInputChange = (val) => {
     setValue(val);
+  };
+
+  const rewardList = [1, 2, 5, 10, 20, 50, 88, 128];
+
+  const onRewardClick = (item) => {
+    setValue(item);
   };
 
   const onSubmitClick = async () => {
@@ -30,25 +34,35 @@ const InputPop = (props) => {
   return (
     <Popup position="bottom" visible={visible} onClose={onCancel}>
       <View className={styles.container}>
-        <View className={styles.body}>
-          <View className={styles.percentage}>
-            <View className={styles.text}>打赏金额:</View>
-            <Input
-              mode='number'
-              className={styles.input}
-              placeholder='请输入打赏金额'
-              value={value}
-              onChange={e => onInputChange(e.target.value)}
-            />
-          </View>
+        <View className={styles.header}>打赏</View>
+
+        <View className={styles.percentage}>
+          <Text className={styles.text}>打赏金额</Text>
+          <Input
+            prefixIcon="RenminbiOutlined"
+            mode="number"
+            placeholder="请输入打赏金额"
+            className={styles.input}
+            value={value}
+            onChange={(e) => onInputChange(e.target.value)}
+          />
         </View>
+
+        <View className={styles.rewardList}>
+          {rewardList.map((item) => (
+            <Button onClick={() => onRewardClick(item)} className={styles.reward} key={item}>
+              ￥{item}
+            </Button>
+          ))}
+        </View>
+
         <View className={styles.button}>
-          <Button full={true} onClick={onSubmitClick} className={styles.ok} type="primary" size="large">
-            确定
-        </Button>
-          <Button full={true} onClick={onCancel} className={styles.cancel} type="text" size="large">
+          <Button onClick={onCancel} className={styles.cancel} type="default">
             取消
-        </Button>
+          </Button>
+          <Button onClick={onSubmitClick} className={styles.ok} type="primary">
+            确定
+          </Button>
         </View>
       </View>
     </Popup>

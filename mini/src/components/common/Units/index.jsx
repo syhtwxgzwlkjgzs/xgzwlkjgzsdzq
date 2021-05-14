@@ -40,7 +40,7 @@ const Index = (props) => {
   const atta = (
     <View className={styles['atta']}>
       <View src={src} className={styles['left']}>
-        <Icon name='PaperClipOutlined' size={16} />
+        <Icon name='DocOutlined' size={16} color={'#3ac15f'} />
         <Text className={styles['name']}>{filename}</Text>
         <Text className={styles['size']}>{size}</Text>
       </View>

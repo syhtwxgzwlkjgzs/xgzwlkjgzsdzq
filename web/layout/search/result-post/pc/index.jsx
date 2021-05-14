@@ -38,7 +38,12 @@ class SearchResultPostH5Page extends React.Component {
         icon={{ type: 3, name: 'HotOutlined' }}
       >
         {
-          pageData?.map((item, index) => <ThreadContent className={styles.wrapper} data={item} key={index} />)
+          pageData?.map((item, index) => (
+            <div>
+                <ThreadContent className={styles.wrapper} showBottom={false} data={item} key={index} />
+                <div className={styles.hr}></div>
+            </div>
+          ))
         }
       </SidebarPanel>
     )

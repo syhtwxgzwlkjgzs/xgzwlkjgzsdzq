@@ -1,98 +1,121 @@
 @import '@common/styles/index.scss';
 
 .container {
-  width: rem(620);
-  height: rem(280);
+  width: rem(520);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin: 0 auto;
   background: var(--color-white);
   border-radius: rem($border-radius-big);
   overflow: hidden;
+  padding: 0 rem(24) rem(24) rem(24);
 }
 
 .header {
-  height: rem(50);
+  height: rem(64);
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  padding: 0 rem(20);
+
   .headerLeft {
+    flex: 1;
     font-size: rem($font-size-middle);
-    line-height: rem(50);
+    font-weight: var(--font-weight-regular);
+    line-height: rem(64);
+    text-align: center;
   }
   .headerIcon {
-    width: rem(50);
-    height: rem(50);
-    line-height: rem(50);
     text-align: center;
     font-size: rem($font-size-middle);
+    cursor: pointer;
+    color: $text-color-secondary;
   }
 }
 
+.body {
+  width: 100%;
 
-.percentage {
-  height: rem(30);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: rem($padding-10) 0;
-  .text {
-    font-size: rem($font-size-middle);
-    padding: 0 rem($padding-1n);
+  .percentage {
+    display: flex;
+    flex-direction: column;
+
+    .text {
+      font-weight: normal;
+      color: var(--pc-user-info-title);
+      font-size: rem($font-size-middle);
+      line-height: rem(17.8);
+      text-align: left;
+      padding: rem($padding-4n) 0 rem($padding-2n) 0;
+    }
+
+    .slider {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: rem($padding-2n);
+      .perCent {
+      }
+      :global {
+        .dzq-slider__progress--active {
+          height: rem(4);
+        }
+        .dzq-slider__progress__button {
+          width: rem(10);
+          height: rem(10);
+          border: rem(7) solid var(--color-primary);
+        }
+      }
+    }
   }
-  :global {
-    .dzq-input {
-      width: rem(400);
-      height: rem(40);
-      .dzq-input__inner {
-        width: rem(400);
-        height: rem(40);
+  .rewardMoney {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: rem($font-size-primary);
+    font-weight: normal;
+    padding: rem($padding-4n) 0;
+    .text {
+      line-height: rem(17.8);
+      text-align: left;
+      color: var(--pc-user-info-title);
+      font-size: rem($font-size-middle);
+    }
+    .moneyNum {
+      font-family: 'PingFangSC-Regular';
+      line-height: rem(16.8);
+      text-align: left;
+      color: var(--color-text-primary);
+    }
+    :global {
+      .dzq-input {
+        width: rem(90);
+        height: rem(30);
+        .dzq-input__inner {
+          width: rem(90);
+          height: rem(30);
+        }
       }
     }
   }
 }
-
-.rewardMoney {
-  height: rem(30);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  margin: rem($margin-10) 0;
-  .text {
-    font-size: rem($font-size-middle);
-    padding: 0 rem($padding-1n);
-  }
-  :global {
-    .dzq-input {
-      width: rem(400);
-      height: rem(40);
-      .dzq-input__inner {
-        width: rem(400);
-        height: rem(40);
-      }
-    }
-  }
-}
-
 
 .button {
+  margin-top: rem($margin-6n);
   width: 100%;
-  height: rem(50);
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
-  background: #f4f7f7;
+
   .ok {
-    width: rem(70);
+    width: rem(116);
     height: rem(36);
-    margin-right: rem($margin-6n);
   }
   .cancel {
-    width: rem(70);
+    width: rem(116);
     height: rem(36);
-    background: #c9c9c9;
+    background: $button-info-bg-color;
     border: none;
-    margin-right: rem($margin-6n);
+    margin-right: rem($margin-4n);
   }
 }

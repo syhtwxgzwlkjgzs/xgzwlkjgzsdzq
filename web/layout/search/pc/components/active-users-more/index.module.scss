@@ -12,6 +12,8 @@
     align-items: center;
     padding: rem($padding-4n) rem($padding-6n);
     box-sizing: border-box;
+    cursor: pointer;
+
     &:last-child {
       margin-bottom: 0;
     }
@@ -37,27 +39,32 @@
     }
     .num {
       display: flex;
+      align-items: center;
       color: var(--color-text-regular);
       .numItem {
         font-size: rem($font-size-primary);
         line-height: rem($font-line-height-small);
         color: var(--color-primary);
         padding: 0 rem($padding-2n);
+        margin-right: rem(1);
         position: relative;
-        &::after {
+        &:after {
           position: absolute;
-          left: 0;
-          top: rem($padding-1n);
-          content: '';
-          width: rem(1);
-          height: rem($font-size-label);
-          background: var(--border-line-color);
+          right: -1px;
+          top: -1px;
+          content: '|';
+          font-size: rem(12);
+          line-height: rem($font-line-height-small);
+          color: var(--border-line-color);
         }
         &:first-child {
           padding-left: 0;
         }
         &:last-child {
           border-right: none;
+          &:after {
+            content: '';
+          }
         }
       }
       .numTitle {
@@ -66,14 +73,17 @@
       }
     }
     .button {
+      width: rem(113);
       height: rem(36);
       font-size: rem($font-size-primary);
-      line-height: rem(18);
-      padding: rem($padding-2n) rem(36);
       display: flex;
       align-items: center;
+      justify-content: center;
       .addIcon {
         margin-right: rem($margin-5);
+      }
+      .addText {
+        margin-right: rem(4);
       }
     }
 

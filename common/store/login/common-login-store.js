@@ -17,6 +17,7 @@ export default class commonLoginStore {
     @observable sessionToken = '';
     @observable statusMessage = '';
     @observable nickName = '';
+    @observable avatarUrl = '';
 
     @observable statusCode = null;
     @observable statusMsg = '';
@@ -31,6 +32,11 @@ export default class commonLoginStore {
     @action
     setNickname(nickName) {
       this.nickName = nickName;
+    }
+
+    @action
+    setAvatarUrl(avatarUrl) {
+      this.avatarUrl = avatarUrl;
     }
 
     @action
