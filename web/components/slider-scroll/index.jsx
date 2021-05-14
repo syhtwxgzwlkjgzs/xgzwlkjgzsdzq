@@ -175,7 +175,6 @@ class Index extends Component {
       withTopBar,
       withBottomBar,
       topCard,
-      RenderItem = null,
       onPullDown,
       onScrollBottom,
       ...other
@@ -209,7 +208,6 @@ class Index extends Component {
                   item={item}
                   index={index}
                   currentId={currentId}
-                  RenderItem={RenderItem}
                   onSliderTouch={(id) => this.setState({ currentId: id })}
                   {...other}
                 />
