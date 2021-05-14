@@ -89,13 +89,14 @@
   text-align: center;
   :global { /* stylelint-disable-line */
     .dzq-button {
+      @include button-default;
       width: 130px;
       height: 36px;
       &:first-child {
-        margin-right: 36px;
-        background-color: $text-bg-color2;
-        border: none;
-        color: $text-color-regular;
+        margin-right: $margin-6n;
+      }
+      &:last-child {
+        @include button-primary;
       }
     }
   }

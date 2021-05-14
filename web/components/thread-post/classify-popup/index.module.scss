@@ -30,10 +30,15 @@
   &.pc {
     margin: rem($margin-base * 8) 0;
 
-    &.popup-title {
-      margin: 36px 0 $margin-4n;
+    .popup-title {
       display: flex;
       align-items: center;
+      color: $text-color-primary;
+      :global {
+        .dzq-icon {
+          color: $text-color-primary;
+        }
+      }
     }
 
     :global {
