@@ -18,6 +18,9 @@ export default class commonLoginStore {
     @observable statusMessage = '';
     @observable nickName = '';
     @observable avatarUrl = '';
+    @observable captchaTicket = '';
+    @observable captchaRandStr = '';
+    @observable captcha = null;
 
     @observable statusCode = null;
     @observable statusMsg = '';
@@ -51,5 +54,23 @@ export default class commonLoginStore {
     @action
     setJsCode(code) {
       this.jsCode = code;
+    }
+
+    @action
+    showCaptcha(qcloudCaptchaAppId, TencentCaptcha) {
+      return new Promise(async (resolve, reject) => {
+        if (!this.captcha) {
+          this.captcha = new TencentCaptcha(qcloudCaptchaAppId, (res) => {
+            if (res.ret === 0) {
+              this.captchaRandStr = res.randstr;
+              this.captchaTicket = res.ticket;
+              return resolve(res);
+            }
+            return reject(res);
+          });
+        }
+        // 显示验证码
+        this.captcha.show();
+      });
     }
 }
