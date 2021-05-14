@@ -6,87 +6,81 @@
       height: 44px;
       line-height: 44px;
       text-align: center;
-      font-size: var(--font-size-primary);
-      color: #4f5a70;
-      border-top: var(--border-border);
+      font-size: $font-size-base;
+      color: $text-color-regular;
+      // border-top: $border-solid-1;
     }
     .dzq-popup__container {
-      width: rem(343);
-      margin-right: rem(-10);
-      padding: rem(16);
-      background: var(--color-white);
-      border-radius: rem(10) rem(10) 0 0;
+      width: 100vw;
+      margin-right: rem(-$margin-10);
+      padding: rem($padding-4n) 0;
+      background: $white;
+      border-radius: rem($border-radius-big) rem($border-radius-big) 0 0;
       //   box-shadow: 0 -1px 15px 0 rgba(0, 0, 0, 0.3);
       overflow: hidden;
     }
     .dzq-popup__overlay {
-      background-color: rgba(51, 51, 51, 0.3) !important;
+      background-color: $mask-bg-color !important;
+    }
+  }
+}
+.wrapper {
+  overflow: hidden;
+  margin: 0 rem($margin-4n);
+  &.pc {
+    margin: rem($margin-base * 8) 0;
+
+    &.popup-title {
+      margin: 36px 0 $margin-4n;
+      display: flex;
+      align-items: center;
+    }
+
+    :global {
+      .dzq-icon {
+        margin-right: $margin-2n;
+      }
     }
   }
 }
 .popup-title {
-  margin-bottom: rem(16);
-  font-size: var(--font-size-middle);
-  font-weight: 600;
-}
-.pc-title {
-  &.popup-title {
-    margin: 36px 0 var(--margin-4n);
-    display: flex;
-    align-items: center;
-  }
-  :global { /* stylelint-disable-line */
-    .dzq-icon {
-      margin-right: var(--margin-2n);
-    }
-  }
+  font-size: $font-size-middle;
+  font-weight: 700;
 }
 .popup-content {
-  width: 100%;
-  margin-bottom: rem(-10);
-  padding: rem(16) 0;
+  padding: rem($padding-4n) 0 rem(6);
+  border-bottom: $border-solid-1;
   :global { /* stylelint-disable-line */
     .dzq-button {
+      @include button-default;
+      @include text-ellipsis;
       max-width: rem(310);
-      padding: 0 rem(10);
-      height: 36px;
-      border-radius: 5px;
-      background: var(--background-color-text2);
-      margin-right: rem(10);
-      margin-bottom: rem(10);
-      border: none;
-      font-size: var(--font-size-primary);
-      line-height: 24px;
-      text-align: center;
-      color: var(--color-text-primary);
-      overflow: hidden;
-      text-overflow: ellipsis;
+      margin-right: rem($margin-10);
+      margin-bottom: rem($margin-10);
     }
 
-    .dzq-button.active {
-      background: var(--color-primary);
+    .dzq-button.active,
+    .dzq-button.is-mouseenter {
+      @include button-default;
+      @include button-primary;
       font-weight: normal;
-      font-size: 14px;
-      line-height: 24px;
-      text-align: center;
-      color: var(--color-white);
     }
     .dzq-button.is-pc {
-      margin-right: var(--margin-4n);
+      margin-right: $margin-4n;
     }
   }
 }
 .popup-content__children {
-  margin-bottom: rem(-10);
-  padding: rem(16) 0;
-  border-top: var(--border-border);
+  margin-bottom: rem(6);
+  // border-top: $border-solid-1;
+  // border-bottom: $border-solid-1;
   :global { /* stylelint-disable-line */
     .dzq-button.active {
-      color: var(--color-primary);
-      background-color: var(--color-primary10);
+      @include button-primary-light-active;
     }
-    .dzq-buton {
-      background-color: var(--color-primary10);
+    .dzq-buton,
+    .dzq-button.is-mouseenter {
+      @include button-primary-light;
     }
   }
 }
