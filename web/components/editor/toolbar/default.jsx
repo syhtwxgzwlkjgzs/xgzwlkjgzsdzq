@@ -23,7 +23,7 @@ export default function DefaultToolbar(props) {
     window.document.body.addEventListener('click', handleClick);
 
     return () => {
-      window.document.body.removeEventListener('click', () => handleClick);
+      window.document.body.removeEventListener('click', handleClick);
     };
   }, []);
 
@@ -35,7 +35,7 @@ export default function DefaultToolbar(props) {
             onClick={(e) => {
               if (!item.menu) e.stopPropagation();
               if (item.id === currentAction) {
-                setCurrentAction('');
+                // setCurrentAction('');
                 if (!item.menu) onClick({ id: '' });
               } else {
                 setCurrentAction(item.id);

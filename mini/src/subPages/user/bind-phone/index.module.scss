@@ -17,7 +17,7 @@
   }
   .sendCaptcha {
     @include mini_captchaBtn;
-    font-size: 14px;
+    font-size: $font-size-base;
   }
   .countDown {
     @include mini_captchaBtn;
@@ -28,14 +28,14 @@
   }
   .functionalRegion {
     @include mini_functionalRegion;
-    margin-top: 16px;
+    margin-top: $margin-4n;
   }
   .tips{
     @include mini_tips;
     img {
       width: 30px;
       height: 30px;
-      margin: 0 8px;
+      margin: 0 $margin-2n;
     }
     margin-bottom: 0;
   }

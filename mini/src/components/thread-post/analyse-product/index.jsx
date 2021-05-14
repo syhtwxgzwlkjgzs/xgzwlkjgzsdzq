@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Taro from '@tarojs/taro';
 import { View, Text, Image, Textarea, Button } from '@tarojs/components';
+import { Input } from '@discuzq/design';
 import { Toast } from '@discuzq/design';
 import { observer, inject } from 'mobx-react';
 import styles from './index.module.scss';
@@ -24,9 +25,13 @@ const Index = inject('threadPost')(observer(({ threadPost }) => {
         ))}
       </View>
       <View className={styles['textarea-container']}>
-        <Textarea className={styles['textarea']} placeholder='请粘贴\输入商品链接' value={url} onInput={(e) => {
-          setUrl(e.detail.value);
-        }} />
+        <Input.Textarea
+          placeholder='请粘贴\输入商品链接'
+          value={url}
+          onChange={(e) => {
+            setUrl(e.detail.value);
+          }}
+        />
       </View>
       <View className={styles['button-container']}>
         <Button

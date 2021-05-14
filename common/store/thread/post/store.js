@@ -62,6 +62,10 @@ class ThreadPostStore {
     child: {}, // 选中的帖子子类
   };
 
+  // 当前选择的工具栏
+  @observable
+  currentSelectedToolbar = false;
+
   @computed get redpacketTotalAmount() { // 计算红包总额
     const { rule = 1, price = 0, number } = this.postData.redpacket;
     return rule === 1

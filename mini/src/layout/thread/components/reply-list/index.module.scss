@@ -3,7 +3,7 @@
   display: flex;
   padding-top: 16px;
   .replyListAvatar {
-    margin-right: 10px;
+    margin-right: 8px;
     .avater {
       width: 24px;
       height: 24px;
@@ -24,19 +24,22 @@
       .replyListName {
         font-weight: var(--font-weight-regular);
         font-size: 14px;
-        line-height: 18px;
         text-align: left;
         color: var(--color-text-primary);
+        font-family: 'PingFangSC-Semibol';
+        line-height: 17.8px;
+        padding-bottom: 4px;
       }
       .replyListText {
         font-size: 16px;
         line-height: 26px;
         text-align: left;
         color: var(--color-text-primary);
+        word-break: break-all;
         .commentUser {
           display: inline-block;
           .replyedUserName {
-            font-weight: var(--font-weight-regular);
+            font-weight: normal;
             font-size: 14px;
             margin-right: 8px;
             line-height: 18px;
@@ -71,8 +74,10 @@
       text-align: left;
       color: var(--color-text-secondary);
       padding-top: 8px;
+      line-height: 16.8px;
       .replyTime {
         // flex: 1;
+        font-size: 12px;
       }
       .replyLiked {
         // flex: 1;

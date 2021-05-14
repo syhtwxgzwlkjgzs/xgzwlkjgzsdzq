@@ -5,18 +5,11 @@
   align-items: center;
   &__text {
     display: inline-block;
-    margin: 0 rem(8) 0 rem(6);
-    font-size: var(--font-size-label);
-    color: #4f5a70;
+    margin: 0 rem($margin-2n) 0 rem($margin-1n);
+    font-size: $font-size-label;
+    color: $text-color-regular;
   }
   &__tag {
-    display: inline-block;
-    height: 25px;
-    line-height: 25px;
-    padding: 0 rem(4);
-    font-size: var(--font-size-label);
-    border-radius: 5px;
-    color: #4f5a70;
-    background-color: #f0f1f3;
+    @include tag-default;
   }
 }
