@@ -99,6 +99,9 @@ const RenderThreadContent = inject('user')(
               view={`${threadStore?.threadData?.viewCount}` || ''}
               time={`${threadStore?.threadData?.createdAt}` || ''}
               isEssence={isEssence}
+              isPay={isThreadPay}
+              isReward={isReward}
+              isRed={isRedPack}
             ></UserInfo>
           </div>
           {props?.user?.isLogin() && (

@@ -1,5 +1,27 @@
 @import '@common/styles/index.scss';
 
+@mixin input {
+  box-sizing: border-box;
+
+  :global {
+    .dzq-input__inner {
+      font-size: rem($font-size-primary);
+      border: none;
+      padding: 0;
+      height: rem(20);
+      line-height: rem(20);
+      border-radius: 0;
+      text-align: right;
+      -webkit-tap-highlight-color: transparent;
+
+      &::placeholder {
+        color: $text-color-placeholder;
+        font-size: rem($font-size-small);
+      }
+    }
+  }
+}
+
 .container {
   width: 100%;
   display: flex;
@@ -17,27 +39,52 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   font-size: rem($font-size-middle);
   font-weight: var(--font-weight-regular);
 }
 
-.percentage {
+.rewardInput {
   margin-top: rem($margin-4n);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: $border-solid-1;
+  padding-bottom: rem($padding-4n);
+  color: $text-color-regular;
+
+  .prepend {
+    word-break: keep-all;
+    line-height: rem(20);
+  }
+
+  .input {
+    flex: 1;
+    @include input;
+  }
+
+  .append {
+    padding-left: rem($padding-1n);
+    line-height: rem(20);
+  }
 }
 
 .rewardList {
   margin-top: rem($margin-4n);
   display: flex;
+  justify-content: space-between;
   flex-wrap: wrap;
-  padding-left: rem(60);
 
   .reward {
-    width: rem(60);
-    height: rem(35);
-    border: $border-solid-1;
-    margin-right: rem($margin-2n);
-    margin-bottom: rem($margin-2n);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $border-radius-small;
+    width: rem(76);
+    height: rem(36);
+    background: $text-bg-color2;
+    margin-bottom: rem($margin-4n);
   }
 }
 
@@ -51,8 +98,14 @@
   }
 }
 
+.divider {
+  margin: 0;
+  width: 200%;
+  margin-left: rem(-40);
+}
+
 .button {
-  margin-top: rem($margin-6n);
+  padding-top: rem($margin-2n);
   width: 100%;
   display: flex;
   justify-content: center;
@@ -65,7 +118,8 @@
   .cancel {
     width: rem(167);
     height: rem(42);
-    background: $button-info-bg-color;
+    color: $text-color-regular;
+    background: $text-bg-color2;
     border: none;
     margin-right: rem($margin-4n);
   }

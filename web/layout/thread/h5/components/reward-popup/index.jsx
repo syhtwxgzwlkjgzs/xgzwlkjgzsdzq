@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Popup, Button, Input } from '@discuzq/design';
+import { Popup, Button, Input, Divider } from '@discuzq/design';
 import styles from './index.module.scss';
 
 const InputPop = (props) => {
@@ -33,27 +33,29 @@ const InputPop = (props) => {
   return (
     <Popup position="bottom" visible={visible} onClose={onCancel}>
       <div className={styles.container}>
-        <div className={styles.header}>打赏</div>
+        <div className={styles.header}>支付作者继续创作</div>
 
-        <div className={styles.percentage}>
-          <span className={styles.text}>打赏金额</span>
+        <div className={styles.rewardInput}>
+          <span className={styles.prepend}>支付金额</span>
           <Input
-            prefixIcon="RenminbiOutlined"
             mode="number"
-            placeholder="请输入打赏金额"
+            placeholder="金额"
             className={styles.input}
             value={value}
             onChange={(e) => onInputChange(e.target.value)}
           />
+          <span className={styles.append}>元</span>
         </div>
 
         <div className={styles.rewardList}>
           {rewardList.map((item) => (
-            <Button onClick={() => onRewardClick(item)} className={styles.reward} key={item}>
+            <div onClick={() => onRewardClick(item)} className={styles.reward} key={item}>
               ￥{item}
-            </Button>
+            </div>
           ))}
         </div>
+
+        <Divider className={styles.divider}></Divider>
 
         <div className={styles.button}>
           <Button onClick={onCancel} className={styles.cancel} type="default">
