@@ -78,6 +78,7 @@ class Index extends Component {
               className={layout.input}
               value={wxPhoneBind.mobile}
               mode="number"
+              clearable
               placeholder="输入您的手机号"
               onChange={(e) => {
                 wxPhoneBind.mobile = e.target.value;

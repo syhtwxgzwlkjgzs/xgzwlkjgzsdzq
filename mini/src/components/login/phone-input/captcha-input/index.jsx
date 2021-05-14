@@ -1,7 +1,8 @@
 import React from 'react';
-import layout from './index.module.scss';
 import { Input } from '@discuzq/design';
+import { View } from '@tarojs/components';
 import '@discuzq/design/dist/styles/index.scss';
+import layout from './index.module.scss';
 
 let inputIndex = null;
 
@@ -102,7 +103,7 @@ class CaptchaInput extends React.Component {
   render() {
     const value = this.getValue();
     return (
-      <div className={layout.container}>
+      <View className={layout.container}>
         {value.map((item, index) => (
           <Input
             mode="number"
@@ -125,7 +126,7 @@ class CaptchaInput extends React.Component {
             }}
           />
         ))}
-      </div>
+      </View>
     );
   }
 }

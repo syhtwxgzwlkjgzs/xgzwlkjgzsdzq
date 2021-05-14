@@ -19,7 +19,7 @@
   box-sizing: border-box;
   padding: rem($padding-6n) 0 rem($padding-4n);
   height: rem(62);
-  border-bottom: rem(1) solid #eee;
+  border-bottom: $border-solid-1;
   :global(.dzq-input__inner) {
     font-size: rem($font-size-middle);
     border: none;
@@ -27,6 +27,14 @@
     height: rem(22);
     line-height: rem($font-line-height-base);
     border-radius: 0;
+  }
+  :global(.dzq-input__icon){
+    top: rem(16);
+    font-size: rem($font-size-middle) !important;
+    color: var(--color-disabled2) !important;
+    &:hover {
+      color: $primary-color !important;
+    }
   }
 }
 @mixin passwordInput {
@@ -102,6 +110,18 @@
   padding-bottom: 50px;
   min-height: calc(100vh - 190px);
 }
+@mixin pc_content {
+  width: 300px;
+  margin: $margin-5n auto 0;
+}
+@mixin pc_title {
+  font-weight: 600;
+  font-size: $font-size-large;
+  line-height: $font-line-height-large;
+  color: $text-color-primary;
+  text-align: center;
+  padding-bottom: 32px;
+}
 @mixin pc_button {
   width: 300px;
   height: 36px;
@@ -128,6 +148,18 @@
   line-height: 40px;
   display: inline-block;
   text-align: center;
+}
+
+@mixin pc_input {
+  width: 300px;
+  margin-bottom: $margin-6n;
+  :global(.dzq-input__icon){
+    font-size: 16px !important;
+    color: var(--border-color-hover) !important;
+    &:hover {
+      color: $primary-color !important;
+    }
+  }
 }
 
 @mixin pc_functionalRegion {
@@ -223,6 +255,16 @@
     top: 16px;
     line-height: 36px;
     z-index: 3;
+    color: var(--color-disabled2) !important;
+    &:hover {
+      color: $primary-color !important;
+    }
+  }
+  :global(.dzq-input__icon){
+    top: 16px;
+    line-height: 36px;
+    z-index: 3;
+    font-size: $font-size-middle !important;
     color: var(--color-disabled2) !important;
     &:hover {
       color: $primary-color !important;

@@ -67,6 +67,7 @@ class BindPhoneH5Page extends React.Component {
               className={layout.input}
               value={mobileBind.mobile}
               mode="number"
+              clearable
               placeholder="输入您的手机号"
               onChange={(e) => {
                 mobileBind.mobile = e.target.value;

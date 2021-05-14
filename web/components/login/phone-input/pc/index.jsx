@@ -26,6 +26,7 @@ class PhoneInputPC extends React.Component {
             mode="number"
             className={layout.input}
             value={phoneNum}
+            clearable={true}
             placeholder="请输入您的手机号码"
             onChange={this.setPhoneNum}
           />

@@ -111,6 +111,7 @@ class UsernameH5Login extends React.Component {
           { platform === 'h5' ? <></> : <div className={layout.tips}>用户名</div> }
           <Input
             className={platform === 'h5' ? layout.input : layout.pc_input}
+            clearable={true}
             value={this.props.userLogin.username}
             placeholder="输入您的用户名"
             onChange={this.handleUsernameChange}

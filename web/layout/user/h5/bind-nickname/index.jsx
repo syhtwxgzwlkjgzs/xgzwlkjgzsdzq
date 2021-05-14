@@ -73,6 +73,7 @@ class BindNicknameH5Page extends React.Component {
             className={platform === 'h5' ? layout.input : layout.pc_input}
             value={nicknameBind.nickname}
             placeholder="昵称"
+            clearable={true}
             onChange={this.handleNicknameChange}
           />
           <Button

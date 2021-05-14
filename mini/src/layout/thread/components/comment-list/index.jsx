@@ -1,11 +1,14 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { View, Text } from '@tarojs/components';
+import { View, Text, Image } from '@tarojs/components';
 import { Icon } from '@discuzq/design';
 import Avatar from '@components/avatar';
 import { diffDate } from '@common/utils/diff-date';
 import styles from './index.module.scss';
 import ReplyList from '../reply-list/index';
+
+import redPacketMini from '../../../../../../web/public/dzq-img/redpacket-mini.png';
+import coin from '../../../../../../web/public/dzq-img/coin.png';
 
 @observer
 class CommentList extends React.Component {
@@ -79,27 +82,22 @@ class CommentList extends React.Component {
       <View className={styles.commentList}>
         <View className={styles.header}>
           <View className={styles.showGet}>
-            <View>
-            {!this.state.isHideEdit
-              && <View className={styles.extra}>
-                {canEdit && <View className={styles.revise} onClick={() => this.editClick()}>编辑</View>}
-                {canDelete && <View className={styles.revise} onClick={() => this.deleteClick()}>删除</View>}
-              </View>
-            }
-            </View>
+            <View></View>
             <View className={styles.headerRigth}>
               {
                 this.props.data?.rewards
-                ? <View>
+                  ? <View className={styles.imageNumber}>
+                    <Image className={styles.rewardImage} src={coin} alt="悬赏图标" />
                     <View className={styles.showMoneyNum}>
                       获得<Text className={styles.moneyNumber}>{this.props.data.rewards}</Text>元悬赏金
                     </View>
                   </View>
                   : ''
-                }
+              }
               {
                 this.props.data?.redPacketAmount
-                  ? <View>
+                  ? <View className={`${styles.redpacket} ${styles.imageNumber}`}>
+                    <Image className={styles.image} src={redPacketMini} alt="红包图标" />
                     <View className={styles.showMoneyNum}>
                       获得<Text className={styles.moneyNumber}>{this.props.data.redPacketAmount}</Text>元红包
                     </View>
@@ -152,6 +150,14 @@ class CommentList extends React.Component {
                         <Text onClick={() => this.props.onAboptClick()}>采纳</Text>
                       </View> : ''
                   }
+                  <View>
+                    {!this.state.isHideEdit
+                      && <View className={styles.extra}>
+                        {/* {canEdit && <View className={styles.revise} onClick={() => this.editClick()}>编辑</View>} */}
+                        {canDelete && <View className={styles.revise} onClick={() => this.deleteClick()}>删除</View>}
+                      </View>
+                    }
+                  </View>
                 </View>
               </View>
               {
