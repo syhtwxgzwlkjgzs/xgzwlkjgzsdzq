@@ -2,8 +2,6 @@ import React from 'react';
 import styles from './index.module.scss';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import { Button } from '@discuzq/design';
-import UserCenterPost from '@components/user-center-post-pc';
-import UserCenterAction from '@components/user-center-action-pc';
 import UserBaseLaout from '@components/user-center-base-laout-pc'
 import SidebarPanel from '@components/sidebar-panel';
 import ThreadContent from '@components/thread';
@@ -75,11 +73,6 @@ class PCMyPage extends React.Component {
         >
           { this.renderContent(pageData) }
         </UserBaseLaout>
-      // <div>
-      //   <h1>pc</h1>
-      //   <UserCenterPost />
-      //   <Button onClick={this.loginOut}>退出登录</Button>
-      // </div>
     );
   }
 }

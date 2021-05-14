@@ -1,13 +1,16 @@
 import React from 'react';
+import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import clearLoginStatus from '@common/utils/clear-login-status';
-import { Button } from '@discuzq/design';
 import UserCenterPost from '@components/user-center-post-pc';
 import UserCenterAction from '@components/user-center-action-pc';
 import UserBaseLaout from '@components/user-center-base-laout-pc'
 import SidebarPanel from '@components/sidebar-panel';
 import ThreadContent from '@components/thread';
 import Copyright from '@components/copyright';
+@inject('site')
+@inject('user')
+@observer
 class PCMyPage extends React.Component {
   loginOut() {
     clearLoginStatus();
@@ -38,8 +41,10 @@ class PCMyPage extends React.Component {
     </>
     )
   }
-  renderContent = (pageData) => {
-    const num = 0;
+  renderContent = () => {
+    const { user } = this.props;
+    const { userThreads, userThreadsTotalCount, userThreadsPage, userThreadsTotalPage } = user;
+    console.log(this.props, 'userThreads');
     return (
       <div className={styles.userContent}>
         <div className={styles.section}>
@@ -52,12 +57,12 @@ class PCMyPage extends React.Component {
           title="主题" 
           type='normal'
           bigSize={true}
-          isShowMore={!pageData}
-          leftNum ={`${num}个主题`}
-          noData={!pageData?.length}
+          isShowMore={!userThreads}
+          leftNum ={`${userThreadsTotalCount}个主题`}
+          noData={!userThreads?.length}
         >
           {
-            pageData?.map((item, index) => (
+            userThreads?.map((item, index) => (
               <div>
                   <ThreadContent className={styles.wrapper} showBottom={false} data={item} key={index} />
                   <div className={styles.hr}></div>
@@ -69,20 +74,14 @@ class PCMyPage extends React.Component {
     )
   }
   render() {
-    const { pageData } = {};
     return (
        <UserBaseLaout
           allowRefresh={false}
           onSearch={this.onSearch}
           right={ this.renderRight }
         >
-          { this.renderContent(pageData) }
+          { this.renderContent() }
         </UserBaseLaout>
-      // <div>
-      //   <h1>pc</h1>
-      //   <UserCenterPost />
-      //   <Button onClick={this.loginOut}>退出登录</Button>
-      // </div>
     );
   }
 }
