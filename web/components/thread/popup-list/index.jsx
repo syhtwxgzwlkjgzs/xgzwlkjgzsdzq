@@ -125,9 +125,9 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
     },
     {
       icon: 'HeartOutlined',
-      title: '打赏',
+      title: tipData?.payType === 1 ? '付费' : '打赏',
       data: tips,
-      number: all?.pageData?.rewardCount || 0,
+      number: tipData?.payType === 1 ? all?.pageData?.raidCount || 0 : all?.pageData?.rewardCount || 0 // [2021.5.14 罗欣然]: all.pageData.raidCount 这个数据应该为all.pageData.paidCount，后端来不及改数据结构了
     },
   ];
 
