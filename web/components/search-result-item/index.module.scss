@@ -57,7 +57,6 @@
 /* topic */
 .topic {
   padding: rem($padding-2n) rem($padding-4n);
-  border-bottom: 1px solid var(--border-line-color);
   background-color: $white;
   .title {
     font-size: rem($font-size-middle);
@@ -65,15 +64,19 @@
     font-weight: var(--font-weight-bold);
   }
   .content {
-    font-size: rem($font-size-primary);
-    line-height: rem($font-line-height-small);
-    margin-top: 0 rem($padding-2n);
+    display: box;
+    font-size: rem($font-size-middle);
+    line-height: rem(26);
+    max-height: rem(50);
+    margin: rem($padding-4n) 0;
+    @include lamp-clamp($line: 2);
   }
   .tags {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    margin-top: 0 rem($padding-2n);
+    padding-bottom: rem($padding-2n);
+    border-bottom: 1px solid var(--border-line-color);
     .tag {
       font-size: rem($font-size-label);
       line-height: rem($font-line-height-small);

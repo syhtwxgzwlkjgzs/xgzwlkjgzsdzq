@@ -14,6 +14,7 @@
 .icon {
   margin-left: rem($margin-6n);
   display: inline-block;
+  position: relative;
 
   // TODO:暂未提供token
   color: var(--color-text-secondary);
@@ -21,4 +22,22 @@
   :first-child {
     margin-left: 0;
   }
+}
+
+.badge {
+  min-width: rem(16);
+  height: rem(16);
+  font-family: 'PingFang SC';
+  font-weight: normal;
+  font-size: 12px;
+  text-align: center;
+  line-height: rem(16);
+  color: var(--color-white);
+  background: var(--color-error);
+  border-radius: rem(8);
+  padding: 0 rem(6);
+  box-sizing: border-box;
+  position: absolute;
+  right: -50%;
+  top: rem(-8);
 }

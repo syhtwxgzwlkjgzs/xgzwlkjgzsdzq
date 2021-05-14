@@ -26,9 +26,16 @@
     display: flex;
     justify-content: space-between;
     box-sizing: border-box;
+    align-items: center;
+    li {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
     .text {
       font-size: rem($font-size-primary);
       color: var(--color-text-secondary);
+      line-height: 1;
     }
     .content {
       font-size: rem($font-size-primary);
