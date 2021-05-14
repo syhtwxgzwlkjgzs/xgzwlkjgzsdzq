@@ -446,48 +446,6 @@ class UserAction extends SiteStore {
     throw {};
   }
 
-  // 老手机号验证码倒计时
-  @action
-  setOldCounter = (sec) => {
-    this.oldCodeTimer = sec;
-    // 总定时器，到时间清除 counter
-    this.codeTimmer = setTimeout(() => {
-      this.oldCodeTimer = null;
-      this.oldCodeTimeout = null;
-    }, Number(this.oldCodeTimeout) * 1000);
-    // 每秒 -1
-    const counter = () => {
-      if (this.oldCodeTimeout) {
-        this.oldCodeTimeout = this.oldCodeTimeout - 1;
-        setTimeout(() => {
-          counter();
-        }, 1000);
-      }
-    };
-    setTimeout(() => counter(), 1000);
-  }
-
-  // 新手机号验证码倒计时
-  @action
-  setOldCounter = (sec) => {
-    this.newCodeTimer = sec;
-    // 总定时器，到时间清除 counter
-    this.codeTimmer = setTimeout(() => {
-      this.newCodeTimer = null;
-      this.newCodeTimeout = null;
-    }, Number(this.newCodeTimeout) * 1000);
-    // 每秒 -1
-    const counter = () => {
-      if (this.newCodeTimeout) {
-        this.newCodeTimeout = this.newCodeTimeout - 1;
-        setTimeout(() => {
-          counter();
-        }, 1000);
-      }
-    };
-    setTimeout(() => counter(), 1000);
-  }
-
   /**
    * 重设用户密码
    */
@@ -509,12 +467,18 @@ class UserAction extends SiteStore {
   }
 
   @action
-  async sendSmsVerifyCode(mobile) {
+  async sendSmsVerifyCode({
+    mobile,
+    captchaTicket,
+    captchaRandStr,
+  }) {
     const smsResp = await smsSend({
       timeout: 3000,
       data: {
         mobile,
         type: 'verify',
+        captchaTicket,
+        captchaRandStr,
       },
     });
 

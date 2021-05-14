@@ -88,11 +88,9 @@ class index extends Component {
     return (
       <>
         {!isOtherFans ? (
-          <UserCenterFans />
+          <UserCenterFans onContainerClick={this.onContainerClick} />
         ) : (
-          <UserCenterFans
-            userId={id}
-          />
+          <UserCenterFans userId={id} onContainerClick={this.onContainerClick} />
         )}
       </>
     );

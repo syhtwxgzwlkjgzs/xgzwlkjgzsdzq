@@ -75,12 +75,13 @@ class UserCenterFollows extends React.Component {
     }
   };
 
-  setFansBeFollowed(id) {
+  setFansBeFollowed({ id, isMutual }) {
     const targetFollows = deepClone(this.state.follows);
     Object.keys(targetFollows).forEach((key) => {
       targetFollows[key].forEach((user) => {
         if (get(user, 'user.pid') !== id) return;
-        user.userFollow.isMutual = true;
+        user.userFollow.isMutual = isMutual;
+        user.userFollow.isFollow = true;
       });
     });
     this.setState({
@@ -93,7 +94,7 @@ class UserCenterFollows extends React.Component {
     Object.keys(targetFollows).forEach((key) => {
       targetFollows[key].forEach((user) => {
         if (get(user, 'user.pid') !== id) return;
-        user.userFollow.isMutual = true;
+        user.userFollow.isFollow = false;
       });
     });
     this.setState({
@@ -104,7 +105,10 @@ class UserCenterFollows extends React.Component {
   followUser = async ({ id: userId }) => {
     const res = await createFollow({ data: { toUserId: userId } });
     if (res.code === 0 && res.data) {
-      this.setFansBeFollowed(userId);
+      this.setFansBeFollowed({
+        id: userId,
+        isMutual: res.data.isMutual,
+      });
       return {
         msg: '操作成功',
         data: res.data,
@@ -181,15 +185,16 @@ class UserCenterFollows extends React.Component {
 
   // 判断关注状态
   judgeFollowsStatus = (user) => {
-    let type = 'follow';
     if (user.isMutual) {
-      type = 'friend';
+      return 'friend';
     }
-    return type;
+    if (user.isFollow) {
+      return 'followed';
+    }
+    return 'follow';
   };
 
   render() {
-    console.log(this.state.follows);
     return (
       <div
         ref={this.containerRef}
