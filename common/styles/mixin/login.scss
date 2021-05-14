@@ -27,9 +27,10 @@
     height: rem(22);
     line-height: rem($font-line-height-base);
     border-radius: 0;
+    -webkit-tap-highlight-color: transparent;
   }
   :global(.dzq-input__icon){
-    top: rem(16);
+    top: rem(17);
     font-size: rem($font-size-middle) !important;
     color: var(--color-disabled2) !important;
     &:hover {
@@ -39,7 +40,7 @@
 }
 @mixin passwordInput {
   :global(.dzq-input__icon){
-    top: rem(16);
+    top: rem(17);
     color: var(--color-disabled2) !important;
     &:hover {
       color: $primary-color !important;
@@ -76,7 +77,6 @@
 }
 @mixin otherLoginBtn {
   border-radius: $border-radius-circle;
-  border: rem(1) solid #eee;
   margin: 0 rem($margin-4n);
   width: rem(40);
   height: rem(40);
@@ -141,7 +141,7 @@
 @mixin pc_otherLoginBtn {
   cursor: pointer;
   border-radius: $border-radius-circle;
-  border: $border-solid-1;
+  background: $comment-bg-color;
   margin: 0 $margin-4n;
   width: 40px;
   height: 40px;
@@ -153,6 +153,7 @@
 @mixin pc_input {
   width: 300px;
   margin-bottom: $margin-6n;
+  -webkit-tap-highlight-color: transparent;
   :global(.dzq-input__icon){
     font-size: 16px !important;
     color: var(--border-color-hover) !important;
@@ -243,6 +244,7 @@
   padding: $padding-6n 0 $padding-4n;
   height: 62px;
   border-bottom: $border-solid-1;
+  -webkit-tap-highlight-color: transparent;
   :global(.dzq-input__inner) {
     font-size: $font-size-middle;
     border: none;
@@ -252,7 +254,7 @@
     border-radius: 0;
   }
   :global(.dzq-icon-EyeOutlined) {
-    top: 16px;
+    top: 17px;
     line-height: 36px;
     z-index: 3;
     color: var(--color-disabled2) !important;
@@ -261,7 +263,7 @@
     }
   }
   :global(.dzq-input__icon){
-    top: 16px;
+    top: 17px;
     line-height: 36px;
     z-index: 3;
     font-size: $font-size-middle !important;
