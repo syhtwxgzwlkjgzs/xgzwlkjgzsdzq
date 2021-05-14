@@ -101,18 +101,7 @@ class index extends Component {
             />
           ) : (
             <UserCenterFllows
-              friends={this.props.user.targetUserFollows}
-              loadMorePage={true}
-              loadMoreAction={async () => {
-                if (id) {
-                  await this.props.user.getTargetUserFollow(id);
-                }
-              }}
-              hasMorePage={this.props.user.targetUserFollowsTotalPage < this.props.user.targetUserFollowsPage}
-              followHandler={this.followHandler}
-              unFollowHandler={this.unFollowHandler}
-              splitElement={this.splitElement()}
-              onContainerClick={this.onContainerClick}
+              userId={id}
             />
           )
         }

@@ -1,23 +1,30 @@
 import React from 'react';
 import UserCenterFriends from '../user-center-friends';
+import { inject, observer } from 'mobx-react';
 import { Spin } from '@discuzq/design';
 import { followerAdapter } from './adapter';
 import styles from './index.module.scss';
-class UserCenterFollow extends React.Component {
+import { createFollow, deleteFollow, getUserFollow, getUserFans } from '@server';
+import { get } from '@common/utils/get';
+import deepClone from '@common/utils/deep-clone';
+
+class UserCenterFollows extends React.Component {
   firstLoaded = false;
   containerRef = React.createRef(null);
 
   static defaultProps = {
+    // 用户id，如果不传，认为是自己的粉丝
+    userId: null,
     // 加载数量限制
-    limit: 100,
+    limit: 1000,
     // 加载更多页面
     loadMorePage: true,
     splitElement: <div></div>,
     friends: [],
-    loadMoreAction: async () => { },
-    followHandler: async () => { },
-    unFollowHandler: async () => { },
-    onContainerClick: async ({ id }) => { },
+    loadMoreAction: async () => {},
+    followHandler: async () => {},
+    unFollowHandler: async () => {},
+    onContainerClick: async ({ id }) => {},
     hasMorePage: false,
   };
 
@@ -25,16 +32,115 @@ class UserCenterFollow extends React.Component {
     super(props);
     this.state = {
       loading: true,
+      follows: {},
     };
   }
 
+  page = 1;
+  totalPage = 1;
+
+  fetchFollows = async () => {
+    const opts = {
+      params: {
+        page: this.page,
+        perPage: 20,
+        filter: {
+          userId: this.props.userId,
+        },
+      },
+    };
+
+    const followRes = await getUserFollow(opts);
+
+    if (followRes.code !== 0) {
+      console.error(followRes);
+      return;
+    }
+
+    const pageData = get(followRes, 'data.pageData', []);
+    const totalPage = get(followRes, 'data.totalPage', 1);
+
+    this.totalPage = totalPage;
+
+    const newFollows = Object.assign({}, this.state.follows);
+
+    newFollows[this.page] = pageData;
+
+    this.setState({
+      follows: newFollows,
+    });
+
+    if (this.page <= this.totalPage) {
+      this.page += 1;
+    }
+  };
+
+  setFansBeFollowed(id) {
+    const targetFollows = deepClone(this.state.follows);
+    Object.keys(targetFollows).forEach((key) => {
+      targetFollows[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isMutual = true;
+      });
+    });
+    this.setState({
+      follows: targetFollows,
+    });
+  }
+
+  setFansBeUnFollowed(id) {
+    const targetFollows = deepClone(this.state.follows);
+    Object.keys(targetFollows).forEach((key) => {
+      targetFollows[key].forEach((user) => {
+        if (get(user, 'user.pid') !== id) return;
+        user.userFollow.isMutual = true;
+      });
+    });
+    this.setState({
+      follows: targetFollows,
+    });
+  }
+
+  followUser = async ({ id: userId }) => {
+    const res = await createFollow({ data: { toUserId: userId } });
+    if (res.code === 0 && res.data) {
+      this.setFansBeFollowed(userId);
+      return {
+        msg: '操作成功',
+        data: res.data,
+        success: true,
+      };
+    }
+    return {
+      msg: res.msg,
+      data: null,
+      success: false,
+    };
+  };
+
+  unFollowUser = async ({ id }) => {
+    const res = await deleteFollow({ data: { id, type: 1 } });
+    if (res.code === 0 && res.data) {
+      this.setFansBeUnFollowed(id);
+      return {
+        msg: '操作成功',
+        data: res.data,
+        success: true,
+      };
+    }
+    return {
+      msg: res.msg,
+      data: null,
+      success: false,
+    };
+  };
+
   async componentDidMount() {
     // 第一次加载完后，才允许加载更多页面
-    await this.props.loadMoreAction();
+    await this.fetchFollows();
     this.firstLoaded = true;
     this.setState({
       loading: false,
-      follows: {},
     });
 
     this.containerRef.current.addEventListener('scroll', this.loadMore);
@@ -48,11 +154,12 @@ class UserCenterFollow extends React.Component {
 
   // 检查是否满足触底加载更多的条件
   checkLoadCondition() {
+    const hasMorePage = this.totalPage >= this.page;
     if (this.state.loading) return false;
     if (!this.props.loadMorePage) {
       return false;
     }
-    if (this.props.hasMorePage) return false;
+    if (!hasMorePage) return false;
 
     return true;
   }
@@ -65,7 +172,7 @@ class UserCenterFollow extends React.Component {
       this.setState({
         loading: true,
       });
-      await this.props.loadMoreAction();
+      await this.fetchFollows();
       this.setState({
         loading: false,
       });
@@ -74,16 +181,15 @@ class UserCenterFollow extends React.Component {
 
   // 判断关注状态
   judgeFollowsStatus = (user) => {
-    let type = 'followed';
-    if (user.isUnFollowed) { // 表示点击了取消关注==>变为要关注的状态
-      type = 'follow';
-    } else if (user.isMutual) {
+    let type = 'follow';
+    if (user.isMutual) {
       type = 'friend';
     }
     return type;
-  }
+  };
 
   render() {
+    console.log(this.state.follows);
     return (
       <div
         ref={this.containerRef}
@@ -92,7 +198,7 @@ class UserCenterFollow extends React.Component {
           overflow: 'scroll',
         }}
       >
-        {followerAdapter(this.props.friends).map((user, index) => {
+        {followerAdapter(this.state.follows).map((user, index) => {
           if (index + 1 > this.props.limit) return null;
           return (
             <div key={user.id}>
@@ -101,11 +207,11 @@ class UserCenterFollow extends React.Component {
                 type={this.judgeFollowsStatus(user)}
                 imgUrl={user.avatar}
                 withHeaderUserInfo={true}
-                userName={user.userName}
                 onContainerClick={this.props.onContainerClick}
+                userName={user.userName}
                 userGroup={user.groupName}
-                followHandler={this.props.followHandler}
-                unFollowHandler={this.props.unFollowHandler}
+                followHandler={this.followUser}
+                unFollowHandler={this.unFollowUser}
               />
               {this.props.splitElement}
             </div>
@@ -117,4 +223,4 @@ class UserCenterFollow extends React.Component {
   }
 }
 
-export default UserCenterFollow;
+export default UserCenterFollows;
