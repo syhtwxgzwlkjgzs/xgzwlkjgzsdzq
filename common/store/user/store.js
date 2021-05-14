@@ -56,6 +56,24 @@ class UserStore {
   @observable targetUserThreadsTotalCount = 0;
   @observable targetUserThreadsTotalPage = 1;
 
+  /**
+   * 重设用户密码时使用
+   */
+  @observable oldPassword = '';
+  @observable newPassword = '';
+  @observable newPasswordRepeat = '';
+
+  /**
+   * 修改用户手机号时使用
+   * 老的手机号使用 computed 中的 mobile
+   * 新的手机号绑定至 newMobile 中
+   * 以下两个验证码分别为验证老手机号的验证码和验证新手机号的验证码
+   */
+  @observable newMobile = '';
+
+  @observable oldMobileVerifyCode = '';
+  @observable newMobileVerifyCode = '';
+
   // 是否能使用钱包支付
   @computed get canWalletPay() {
     return get(this.userInfo, 'canWalletPay');

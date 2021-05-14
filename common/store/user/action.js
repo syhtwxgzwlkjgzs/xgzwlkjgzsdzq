@@ -497,11 +497,46 @@ class UserAction extends SiteStore {
    */
   @action
   async updateEditedUserInfo() {
-    await updateUsersUpdate({
+    const updateUserInfoRes = await updateUsersUpdate({
       data: {
         signature: this.editSignature,
       },
     });
+  }
+
+  /**
+   * 初次设置用户密码
+   */
+  @action
+  async setUserPassword() {
+    const setUserPasswordRes = await updateUsersUpdate({
+      newPassword: this.newPassword,
+      passwordConfirmation: this.newPasswordRepeat,
+    });
+
+    if (setUserPasswordRes.code === 0) {
+      return setUserPasswordRes.data;
+    }
+
+    throw {};
+  }
+
+  /**
+   * 重设用户密码
+   */
+  @action
+  async resetUserPassword() {
+    const resetUserPasswordRes = await  updateUsersUpdate({
+      password: this.oldPassword,
+      newPassword: this.newPassword,
+      passwordConfirmation: this.newPasswordRepeat,
+    });
+
+    if (resetUserPasswordRes.code === 0) {
+      return resetUserPasswordRes.data;
+    }
+
+    throw {};
   }
 
   /**
