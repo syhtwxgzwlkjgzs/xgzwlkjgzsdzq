@@ -49,7 +49,7 @@ export default function UserInfo(props) {
           )}
           {props.view && (
             <div className={styles.view}>
-              <Icon name="EyeOutlined"></Icon>
+              <Icon name="EyeOutlined" className={styles.viewIcon}></Icon>
               <span>{props.view}</span>
             </div>
           )}

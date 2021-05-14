@@ -1,41 +1,40 @@
 @import '@common/styles/index.scss';
 .header{
+  height: rem(44);
+  display: block;
+  .headerContent{
+    display: flex;
+    padding: rem($padding-2n) rem($padding-4n);
+    box-sizing: border-box;
+    background: var(--color-white);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: rem(44);
-    display: block;
-    .headerContent{
-        display: flex;
-        padding: rem($padding-2n) rem($padding-4n);
-        box-sizing: border-box;
-        background: var(--color-white);
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: rem(44);
-        border-bottom: 1px solid var(--border-line-color);
-        z-index: var(--zindex-too0p);
-        .left{
-            width: 50%;
-            display: block;
-            font-size: rem($font-size-middle);
-            color: var(--color-text-secondary);
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-        }
-        .right{
-            width: 50%;
-            display: block;
-            display: flex;
-            align-items: center;
-            justify-content:flex-end;
-            .icon{
-                &:not(:last-child) {
-                    margin-right: rem($margin-4n);
-                }
-                font-size: rem(20)!important;
-                color: var(--color-text-secondary);
-            }
-        }
+    border-bottom: 1px solid var(--border-line-color);
+    z-index: var(--zindex-too0p);
+    .left{
+      width: 50%;
+      font-size: rem($font-size-base);
+      color: $text-color-primary;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
     }
+    .right{
+      width: 50%;
+      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      .icon{
+        &:not(:last-child) {
+          margin-right: rem($margin-4n);
+        }
+        font-size: rem(20) !important;
+        color: var(--color-text-secondary);
+      }
+    }
+  }
 }

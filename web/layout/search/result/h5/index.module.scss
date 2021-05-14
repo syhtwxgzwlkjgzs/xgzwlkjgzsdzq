@@ -1,19 +1,5 @@
 @import '@common/styles/index.scss';
 
-.page {
-  height: 100vh;
-  padding-top: rem($padding-4n);
-  background-color: var(--color-white);
-}
-.searchInput {
-  padding: 0 rem($padding-4n);
-}
-.section {
-  padding: rem($padding-4n);
-  padding-top: rem($padding-2n);
-  padding-bottom: 0;
-}
-.hr {
-  height: rem(10);
-  background-color: var(--background-color);
+.bottom {
+  margin-bottom: 0;
 }

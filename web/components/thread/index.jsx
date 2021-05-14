@@ -169,8 +169,8 @@ class Index extends React.Component {
         <div className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
           <div className={styles.header} onClick={this.onClick}>
               <UserInfo
-                name={user.userName}
-                avatar={user.avatar}
+                name={user.userName || ''}
+                avatar={user.avatar || ''}
                 location={position.location}
                 view={`${viewCount}`}
                 groupName={group?.groupName}

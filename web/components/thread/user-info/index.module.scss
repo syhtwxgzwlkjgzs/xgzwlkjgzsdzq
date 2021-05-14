@@ -77,6 +77,10 @@
     margin-left: rem($margin-1n);
     font-size: rem($font-size-label);
   }
+
+  .viewIcon {
+    color: $text-color-secondary;
+  }
 }
 
 .tags {
@@ -104,17 +108,17 @@
     }
   }
   .categoryEssence {
-    color:  var(--color-orange);
+    color: var(--color-orange);
     border: rem(1) solid  var(--color-orange);
     &:after {
-      background-color:  var(--color-orange);
+      background-color: var(--color-orange);
     }
   }
   >div {
     margin-left: rem(8);
   }
   :global {
-    .dzq-tag::after {
+    .dzq-tag:after {
       z-index: 1;
     }
   }

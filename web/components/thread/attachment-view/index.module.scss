@@ -7,7 +7,7 @@
   padding: 0 rem($padding-4n);
   height: rem(52);
   border-radius: rem($border-radius-small);
-  background: var(--background-color-text);
+  background: $body-bg-color;
   margin-bottom: rem(8);
 
   .wrapper {

@@ -59,7 +59,7 @@ class SearchResultPostH5Page extends React.Component {
         <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} isShowBottom={false} />
         {
           pageData?.map((item, index) => (
-            <ThreadContent className={styles.listItem} key={index} data={item} />
+            <ThreadContent key={index} data={item} />
           ))
         }
       </BaseLayout>

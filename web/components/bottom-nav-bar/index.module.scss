@@ -13,6 +13,7 @@
   padding-bottom: constant(safe-area-inset-bottom);  ///兼容 IOS<11.2/
   padding-bottom: env(safe-area-inset-bottom);  ///兼容 IOS>11.2/
   height: rem(56);
+  z-index: 1000;
 
   .item {
     margin-top: rem(2);
