@@ -17,7 +17,7 @@ class Index extends React.Component {
   static async getInitialProps(ctx, {user, site}) {
     const categories = await readCategories({}, ctx);
     const sticks = await readStickList({}, ctx);
-    const sequence = site && site.webConfig && site.webConfig.setSite ? site.setSite.siteOpenSort : 0;
+    const sequence = site && site.webConfig && site.webConfig.setSite ? site.webConfig.setSite.siteOpenSort : 0;
   
     const threads = await readThreadList({ params: { filter: {}, sequence, perPage: 10, page: 1 } }, ctx);
 

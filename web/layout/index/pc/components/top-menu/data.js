@@ -2,7 +2,7 @@ export default [
   {
     label: '所有', // 所有
     type: 'all',
-    isActive: false,
+    isActive: true,
   }, {
     label: '精华', // 精华
     type: 'essence',
