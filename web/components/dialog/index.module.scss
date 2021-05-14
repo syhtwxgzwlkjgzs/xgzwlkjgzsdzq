@@ -1,24 +1,51 @@
+@import '@common/styles/index.scss';
 .pc {
-  z-index: var(--zindex-dialog);
+  z-index: $zindex-dialog;
   :global {
     .dzq-modal__container {
+      padding: $padding-6n;
       width: 410px;
+      border-radius: $border-radius-small;
     }
     .dzq-modal__body {
       padding: 0;
     }
   }
   &-header {
-    margin-top: var(--margin-2n);
     position: relative;
     text-align: center;
-    font-size: var(--font-size-middle);
+    font-size: $font-size-middle;
     font-weight: 600;
   }
   &-closeicon {
     position: absolute;
     top: 0;
     right: 0;
+    color: $icon-color;
+  }
+  .btn {
+    position: static;
+    width: 100%;
+    padding: 0;
+    margin-top: $margin-4n;
+    justify-content: center;
+    border: none;
+    text-align: center;
+
+    :global {
+      .dzq-button {
+        width: 116px;
+        height: 36px;
+        @include button-default;
+
+        &:first-child {
+          margin-right: $margin-4n;
+        }
+        &:last-child {
+          @include button-primary;
+        }
+      }
+    }
   }
 }
 

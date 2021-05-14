@@ -6,7 +6,7 @@
  * @prop {function} getAtList 确定
  */
 import React, { Component } from 'react';
-import { Popup, Input, Checkbox, Avatar, Button, ScrollView } from '@discuzq/design';
+import { Popup, Input, Checkbox, Avatar, Button, ScrollView, Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
@@ -89,7 +89,16 @@ class AtSelect extends Component {
     return stringToColor(character);
   }
 
+  // 清除关键字
+  clearKeywords = () => {
+    this.setState(
+      { keywords: '', checkUser: [], page: 1 },
+      () => this.fetchFollow()
+    );
+  }
+
   renderItem(info) {
+    console.log(info);
     const { data, index } = info;
     const item = data[index] || {};
     const username = item.user?.userName || '';
@@ -126,12 +135,19 @@ class AtSelect extends Component {
     const content = (
       <div className={styles.wrapper}>
         {/* 搜索框 */}
-        <Input
-          value={this.state.keywords}
-          icon="SearchOutlined"
-          placeholder='搜索用户'
-          onChange={e => this.updateKeywords(e)}
-        />
+        <div className={styles.input}>
+          <Input
+            value={this.state.keywords}
+            icon="SearchOutlined"
+            placeholder='搜索用户'
+            onChange={e => this.updateKeywords(e)}
+          />
+          {this.state.keywords &&
+            <div className={styles.delete} onClick={this.clearKeywords}>
+              <Icon className={styles['delete-icon']} name="CloseOutlined" size={8} color='#f2f4f5'></Icon>
+            </div>
+          }
+        </div>
 
         {/* 选择列表 */}
         <Checkbox.Group
@@ -172,6 +188,7 @@ class AtSelect extends Component {
         visible={this.props.visible}
         className={styles.pc}
         onClose={this.handleCancel}
+        isCustomBtn={true}
         title="@圈友"
       >
         {content}

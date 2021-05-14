@@ -5,7 +5,6 @@ import Avatar from '@components/avatar';
 import React from 'react';
 import { diffDate } from '@common/utils/diff-date';
 
-
 UserInfo.propTypes = {
   name: PropTypes.string.isRequired, // 用户名称
   avatar: PropTypes.string.isRequired, // 用户头像
@@ -34,11 +33,13 @@ export default function UserInfo(props) {
         name={props.name || ''}
         onClick={() => props.onClick()}
       ></Avatar>
+
       <div className={styles.right}>
         <div>
           <span className={styles.name}>{props.name}</span>
           {props.groupName && <span className={styles.groupName}>{props.groupName}</span>}
         </div>
+
         <div className={styles.meta}>
           {props.time && <span className={styles.time}>{diffDate(props.time)}</span>}
           {props.location && (
@@ -49,7 +50,7 @@ export default function UserInfo(props) {
           )}
           {props.view && (
             <div className={styles.view}>
-              <Icon name="EyeOutlined"></Icon>
+              <Icon name="EyeOutlined" className={styles.viewIcon}></Icon>
               <span>{props.view}</span>
             </div>
           )}

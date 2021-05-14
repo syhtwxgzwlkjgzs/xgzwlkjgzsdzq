@@ -477,6 +477,11 @@ class ThreadH5Page extends React.Component {
     }
   }
 
+  // 点击标签 TODO:带上参数
+  onTagClick() {
+    this.props.router.push('/');
+  }
+
   render() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
@@ -526,6 +531,7 @@ class ThreadH5Page extends React.Component {
               onReportClick={() => this.onReportClick()}
               onContentClick={() => this.onContentClick()}
               onRewardClick={() => this.onRewardClick()}
+              onTagClick={() => this.onTagClick()}
             ></RenderThreadContent>
           ) : (
             <LoadingTips type="init"></LoadingTips>
@@ -601,12 +607,11 @@ class ThreadH5Page extends React.Component {
           <div className={footer.operate}>
             <div className={footer.icon} onClick={() => this.onMessageClick()}>
               {totalCount > 0 ? (
-                <Badge info={totalCount > 99 ? '99+' : `${totalCount || '0'}`}>
-                  <Icon size="20" name="MessageOutlined"></Icon>
-                </Badge>
+                <div className={footer.badge}>{totalCount > 99 ? '99+' : `${totalCount || '0'}`}</div>
               ) : (
-                <Icon size="20" name="MessageOutlined"></Icon>
+                ''
               )}
+              <Icon size="20" name="MessageOutlined"></Icon>
             </div>
             <Icon
               color={this.props.thread?.isFavorite ? styleVar['--color-primary'] : ''}

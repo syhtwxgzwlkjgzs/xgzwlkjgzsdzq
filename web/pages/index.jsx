@@ -6,7 +6,6 @@ import { readCategories, readStickList, readThreadList } from '@server';
 import PayBox from '../components/payBox/index';
 import { Toast } from '@discuzq/design'
 import HOCFetchSiteData from '../middleware/HOCFetchSiteData';
-// import HOCWithLogin from '@middleware/HOCWithLogin';
 
 @inject('site')
 @inject('index')
@@ -15,10 +14,12 @@ import HOCFetchSiteData from '../middleware/HOCFetchSiteData';
 class Index extends React.Component {
   page = 1;
   prePage = 10;
-  static async getInitialProps(ctx) {
+  static async getInitialProps(ctx, {user, site}) {
     const categories = await readCategories({}, ctx);
     const sticks = await readStickList({}, ctx);
-    const threads = await readThreadList({ params: { filter: {}, sequence: 0, perPage: 10, page: 1 } }, ctx);
+    const sequence = site && site.webConfig && site.webConfig.setSite ? site.webConfig.setSite.siteOpenSort : 0;
+  
+    const threads = await readThreadList({ params: { filter: {}, sequence, perPage: 10, page: 1 } }, ctx);
 
     return {
       serverIndex: {
@@ -52,7 +53,7 @@ class Index extends React.Component {
       this.props.index.getRreadStickList();
     }
     if (!hasThreadsData) {
-      this.props.index.getReadThreadList();
+      this.props.index.getReadThreadList({sequence: this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0});
     }
   }
 
