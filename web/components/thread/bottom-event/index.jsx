@@ -21,6 +21,7 @@ const Index = ({
   isLiked = false,
   isSendingLike = false,
   tipData,
+  platform,
   onShare = () => {},
   onComment = () => {},
   onPraise = () => {},
@@ -74,8 +75,14 @@ const Index = ({
         {
           postList.map((item, index) => (
               <div key={index} className={styles.fabulous} onClick={item.event} disabled={item.name === '赞' && isSendingLike}>
-                <Icon className={`${styles.icon} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`} name={item.icon} size={14}></Icon>
-                <span className={isLiked && item.name ===  '赞' ? styles.fabulousCancel: styles.fabulousPost}>{item.name}</span>
+                <Icon 
+                  className={`${styles.icon} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`} 
+                  name={item.icon} 
+                  size={platform === 'pc' ? 16 :14}>  
+                </Icon>
+                <span className={isLiked && item.name ===  '赞' ? styles.fabulousCancel: styles.fabulousPost}>
+                  {item.name}
+                </span>
               </div>
           ))
         }
