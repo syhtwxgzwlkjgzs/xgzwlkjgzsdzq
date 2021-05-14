@@ -44,7 +44,7 @@ class ThreadPCPage extends React.Component {
     const { freeWords, price, attachmentPrice } = threadPost.postData;
 
     return (
-      <>
+      <div className={styles.container}>
         <Header />
         <div className={styles.wrapper}>
           <div className={styles['wrapper-inner']}>
@@ -206,7 +206,7 @@ class ThreadPCPage extends React.Component {
               <Button type="primary" onClick={() => this.props.handleSubmit()}>发布</Button>
             </div>
           </div>
-          <Copyright />
+          <Copyright center />
           {/* 插入商品 */}
           {currentAttachOperation === THREAD_TYPE.goods && (
             <ProductSelect
@@ -281,7 +281,7 @@ class ThreadPCPage extends React.Component {
             />
           )}
         </div>
-      </>
+      </div>
     );
   }
 }

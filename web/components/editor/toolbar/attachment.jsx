@@ -1,7 +1,7 @@
 /**
  * 附件操作栏比如：图片上传、视频上传、语音上传等
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icon, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import classNames from 'classnames';
@@ -60,7 +60,8 @@ function AttachmentToolbar(props) {
     setShowAll(false);
   }
 
-  const handleToggle = () => {
+  const handleToggle = (e) => {
+    e.stopPropagation();
     setShowAll(!showAll);
   };
 
@@ -136,6 +137,18 @@ function AttachmentToolbar(props) {
       inputRef.current.value = null;
     }
   };
+
+  const handleClick = () => {
+    setShowAll(false);
+  };
+
+  useEffect(() => {
+    window.document.body.addEventListener('click', handleClick);
+
+    return () => {
+      window.document.body.removeEventListener('click', handleClick);
+    };
+  }, []);
 
   const icons = () => attachIcon.map((item) => {
     const { permission } = props;
