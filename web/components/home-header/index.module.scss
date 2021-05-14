@@ -17,6 +17,10 @@
     .left{
       font-size: rem($font-size-middle);
       color: var(--color-white);
+      display: flex;
+      :global(.dzq-icon){
+        margin-right: $margin-2n;
+      }
     }
     .goback{
       transform: rotate(180deg);

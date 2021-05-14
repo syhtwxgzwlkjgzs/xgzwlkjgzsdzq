@@ -9,6 +9,7 @@
     box-sizing: border-box;
     padding: rem($padding-4n) 0;
     border-bottom: rem(1) solid var(--border-line-color);
+    -webkit-tap-highlight-color: transparent;
     :global(.dzq-input__inner) {
       text-align: center;
       font-size: rem($font-size-middle);
@@ -18,6 +19,7 @@
       padding: 0;
       border: none;
       border-radius: $border-radius-zero;
+      -webkit-tap-highlight-color: transparent;
     }
   }
   .captchaInput-input_val {

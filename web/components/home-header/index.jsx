@@ -91,7 +91,9 @@ class HomeHeader extends React.Component {
         {hideInfo && <div className={styles.topBar}>
           {
             mode === 'login'
-              ? <div onClick={() => Router.back()} className={styles.left}>返回</div>
+              ? <div onClick={() => Router.back()} className={styles.left}>
+                  <Icon name="LeftOutlined" />返回
+                </div>
               : <></>
           }
           <div>
