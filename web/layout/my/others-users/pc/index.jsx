@@ -19,11 +19,12 @@ class PCMyPage extends React.Component {
     this.props.router.replace(`/search?keyword=${value}`);
   }
   renderRight = () => {
-    const { pageData } = {};
+    const { pageData = []  } = {};
     return (
       <>
       <SidebarPanel 
         title="粉丝"
+        noData={pageData.length} 
         onShowMore={this.moreFans}
       >
       </SidebarPanel>
@@ -31,6 +32,7 @@ class PCMyPage extends React.Component {
       <SidebarPanel 
         title="关注"
         leftNum="2880"
+        noData={pageData.length} 
         onShowMore={this.moreFollow}
       >
       </SidebarPanel>
@@ -42,12 +44,6 @@ class PCMyPage extends React.Component {
     const num = 0;
     return (
       <div className={styles.userContent}>
-        <div className={styles.section}>
-          <UserCenterPost/>
-        </div>
-        <div className={styles.section}>
-          <UserCenterAction/>
-        </div>
         <SidebarPanel 
           title="主题" 
           type='normal'
@@ -72,6 +68,7 @@ class PCMyPage extends React.Component {
     const { pageData } = {};
     return (
        <UserBaseLaout
+          isOtherPerson={true}
           allowRefresh={false}
           onSearch={this.onSearch}
           right={ this.renderRight }
