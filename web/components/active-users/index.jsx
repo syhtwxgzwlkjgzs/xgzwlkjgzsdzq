@@ -19,12 +19,14 @@ class Index extends React.Component {
     this.props.router.push('/search/result-user');
   }
 
-  onUserClick = () => {}
+  onUserClick = ({ userId } = {}) => {
+    this.props.router.push(`/my/others?isOtherPerson=true&otherId=${userId}`);
+  };
 
   loadData = async () => {
     const { pageData = [] } = this.props.search.users || { pageData: [] };
     if (!pageData.length) {
-      await this.props.search.getUsersList
+      await this.props.search.getUsersList()
     }
   }
 

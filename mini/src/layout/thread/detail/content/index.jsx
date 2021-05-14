@@ -104,6 +104,8 @@ const RenderThreadContent = inject('user')(
               </View>
             )}
 
+            {/* 图片 */}
+            {parseContent.IMAGE && <ImageContent imgData={parseContent.IMAGE} />}
             {/* 视频 */}
             {parseContent.VIDEO && (
               <VideoPlay
@@ -113,8 +115,10 @@ const RenderThreadContent = inject('user')(
                 height={200}
               />
             )}
-            {/* 图片 */}
-            {parseContent.IMAGE && <ImageContent imgData={parseContent.IMAGE} />}
+            {/* 音频 */}
+            {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
+            {/* 附件 */}
+            {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
             {/* 商品 */}
             {parseContent.GOODS && (
               <View>
@@ -128,14 +132,27 @@ const RenderThreadContent = inject('user')(
                   type="danger"
                   onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
                 >
-                  购买商品
+                  <Icon className={topic.buttonIcon} name="ShoppingCartOutlined" size={20}></Icon>
+                  <Text className={topic.buyText}>购买商品</Text>
                 </Button>
               </View>
             )}
-            {/* 音频 */}
-            {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
-            {/* 附件 */}
-            {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
+
+            {/* 悬赏文案 */}
+            {(parseContent.REWARD) && (
+              <View className={topic.rewardText}>
+                {/* 悬赏 */}
+                {parseContent.REWARD && (
+                  <View>
+                    <View className={topic.rewardMoney}>
+                      本帖向所有人悬赏
+                      <Text className={topic.rewardNumber}>{parseContent.REWARD.remain_money || 0}</Text>元
+                    </View>
+                    <View className={topic.rewardTime}>{parseContent.REWARD.expired_at}截止悬赏</View>
+                  </View>
+                )}
+              </View>
+            )}
 
             {/* 标签 */}
             {threadStore?.threadData?.categoryName && (
@@ -144,15 +161,6 @@ const RenderThreadContent = inject('user')(
 
             {(parseContent.RED_PACKET || parseContent.REWARD) && (
               <View className={topic.reward}>
-                {/* 红包 */}
-                {parseContent.RED_PACKET && (
-                  <PostRewardProgressBar
-                    remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
-                    received={
-                      Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
-                    }
-                  />
-                )}
                 {/* 悬赏 */}
                 {parseContent.REWARD && (
                   <PostRewardProgressBar
@@ -164,6 +172,15 @@ const RenderThreadContent = inject('user')(
                     )}
                   />
                 )}
+                {/* 红包 */}
+                {parseContent.RED_PACKET && (
+                  <PostRewardProgressBar
+                    remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
+                    received={
+                      Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
+                    }
+                  />
+                )}
               </View>
             )}
 
@@ -171,7 +188,10 @@ const RenderThreadContent = inject('user')(
             {isThreadPay && !isSelf && (
               <View style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={topic.payButton} type="primary" size="large">
-                  支付{threadPrice}元查看剩余内容
+                  <View className={topic.pay}>
+                    <Icon className={topic.buttonIcon} name="DollarLOutlined" size={18}></Icon>
+                    支付{threadPrice}元查看剩余内容
+                  </View>
                 </Button>
               </View>
             )}
@@ -180,7 +200,8 @@ const RenderThreadContent = inject('user')(
             {props?.user?.isLogin() && (
               <View style={{ textAlign: 'center' }}>
                 <Button onClick={onRewardClick} className={topic.rewardButton} type="primary" size="large">
-                  打赏
+                  <Icon className={topic.buttonIcon} name="HeartOutlined"></Icon>
+                  <Text className={topic.rewardext}>打赏</Text>
                 </Button>
               </View>
             )}
@@ -192,7 +213,7 @@ const RenderThreadContent = inject('user')(
               className={classnames(topic.liked, threadStore?.threadData?.isLike && topic.isLiked)}
               onClick={onLikeClick}
             >
-              <Icon name="LikeOutlined"></Icon>
+              <Icon name="LikeOutlined" size={20}></Icon>
               <Text>{threadStore?.threadData?.likeReward?.likePayCount || ''}</Text>
             </View>
             <View className={topic.likeReward}>

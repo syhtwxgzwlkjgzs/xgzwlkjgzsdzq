@@ -1,0 +1,48 @@
+@import '@common/styles/index.scss';
+
+.drafts-box {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: $body-bg-color;
+  font-family:$font-family ;
+
+  .list {
+    flex: 1;
+  }
+
+  .drafts-lenth {
+    height: 55px;
+    padding-left: $padding-4n;
+    line-height: 55px;
+    font-size: $font-size-base;
+    color: $text-color-regular;
+    background-color: $white;
+    margin-bottom: $margin-10;
+  }
+
+  .drafts-listbox {
+    width: 100%;
+    padding: 0 $padding-4n;
+    background-color: $white;
+
+    .drafts-list {
+      width: 100%;
+      min-height: 48px;
+      padding-bottom: $padding-4n;
+      border-bottom: $border-solid-1;
+    }
+
+    .drafts-list-finally {
+      width: 100%;
+      min-height: 48px;
+      padding-bottom: $padding-4n;
+    }
+
+    .drafts-time {
+      font-size: $font-size-small;
+      margin-top: $margin-2n;
+      color: $text-color-secondary;
+    }
+  }
+}

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { getCurrentInstance, navigateTo } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
-import { Button, Input, Toast } from '@discuzq/design';
+import { Button, Input, Toast, Avatar } from '@discuzq/design';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
 import layout from './index.module.scss';
@@ -60,7 +60,7 @@ class Index extends Component {
   }
 
   render() {
-    const { wxPhoneBind } = this.props;
+    const { wxPhoneBind, commonLogin } = this.props;
     const { nickname } = getCurrentInstance().router.params;
 
     return (
@@ -70,8 +70,8 @@ class Index extends Component {
           <View className={layout.content}>
             <View className={layout.title}>手机号登陆，并绑定微信账号</View>
             <View className={layout.tips}>
-              <View>hi， 微信用户 {nickname}</View>
-              <View>请您登录，即可完成微信号和手机号的绑定</View>
+              <View style={{display: 'flex' }}>hi， 微信用户<Avatar style={{margin: '0 8px'}} circle size='small' image={commonLogin.avatarUrl}/>{nickname}</View>
+              <View>请您登录，即可完成微信号和用户名的绑定</View>
             </View>
             {/* 输入框 start */}
             <Input

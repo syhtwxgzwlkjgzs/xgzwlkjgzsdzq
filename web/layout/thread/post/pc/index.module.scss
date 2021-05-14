@@ -50,19 +50,11 @@
   width: calc(892px - 44px);
   :global {
     .dzq-tag {
+      @include tag-default;
       margin-right: $margin-4n;
-      padding: 0 4px;
-      height: 25px;
-      line-height: 25px;
-      border-radius: 5px;
-      background-color: $tag-info-bg-color;
-      color: $text-color-regular;
-      border: none;
+
       &:last-child {
         margin-right: 0;
-      }
-      .dzq-icon {
-        cursor: pointer;
       }
     }
   }
@@ -97,13 +89,14 @@
   text-align: center;
   :global { /* stylelint-disable-line */
     .dzq-button {
+      @include button-default;
       width: 130px;
       height: 36px;
       &:first-child {
-        margin-right: 36px;
-        background-color: $text-bg-color2;
-        border: none;
-        color: $text-color-regular;
+        margin-right: $margin-6n;
+      }
+      &:last-child {
+        @include button-primary;
       }
     }
   }

@@ -21,6 +21,7 @@ const Index = ({
   isLiked = false,
   isSendingLike = false,
   tipData,
+  platform,
   onShare = () => {},
   onComment = () => {},
   onPraise = () => {},
@@ -44,9 +45,13 @@ const Index = ({
     }];
   }, [isLiked]);
 
+  const needHeight = useMemo(() => {
+    return userImgs.length !== 0 || comment > 0 || sharing > 0
+  }, [userImgs, comment, sharing])
+
   return (
     <div>
-      <div className={(userImgs.length !== 0 || comment > 0 || sharing > 0) ? styles.user : styles.users}>
+      <div className={needHeight ? styles.user : styles.users}>
         {userImgs.length !== 0 ? <div className={styles.userImg}>
           <div className={styles.portrait}>
             <Tip tipData={tipData} imgs={userImgs} wholeNum={wholeNum}></Tip>
@@ -66,13 +71,18 @@ const Index = ({
         </div>
       </div>
 
-
-      <div className={(userImgs.length !== 0 || comment > 0 || sharing > 0) ? styles.operation : styles.operations}>
+      <div className={needHeight ? styles.operation : styles.operations}>
         {
           postList.map((item, index) => (
               <div key={index} className={styles.fabulous} onClick={item.event} disabled={item.name === '赞' && isSendingLike}>
-                <Icon className={`${styles.icon} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`} name={item.icon} size={14}></Icon>
-                <span className={isLiked && item.name ===  '赞' ? styles.fabulousCancel: styles.fabulousPost}>{item.name}</span>
+                <Icon 
+                  className={`${styles.icon} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`} 
+                  name={item.icon} 
+                  size={platform === 'pc' ? 16 :14}>  
+                </Icon>
+                <span className={isLiked && item.name ===  '赞' ? styles.fabulousCancel: styles.fabulousPost}>
+                  {item.name}
+                </span>
               </div>
           ))
         }

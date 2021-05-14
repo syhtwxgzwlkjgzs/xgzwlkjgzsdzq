@@ -58,7 +58,7 @@ page {
 
   .name {
     line-height: 52px;
-    color: #0b0b37;
+    color: var(--color-text-primary);
     margin-left: 8px;
     font-size: var(--font-size-primary);
     display: inline-block;
@@ -138,7 +138,7 @@ page {
         font-size: 20px;
         line-height: 30px;
         text-align: left;
-        color: #e02433;
+        color: var(--color-error);
       }
     }
   }

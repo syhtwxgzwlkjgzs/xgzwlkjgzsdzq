@@ -180,7 +180,8 @@ function AttachmentToolbar(props) {
   if (props.pc) return icons();
   const styl = !showAll ? { display: 'none' } : {};
   const action = props.currentSelectedToolbar || currentAction;
-  const currentIcon = attachIcon.filter(item => item.type === action)[0]?.name;
+  const currentIcon = attachIcon.filter(item => item.type === action)[0]?.name
+    || attachIcon.filter(item => item.type === THREAD_TYPE.image)[0]?.name;
   return (
     <div className={styles['dvditor-attachment-toolbar']}>
       {!showAll && (

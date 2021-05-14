@@ -3,12 +3,16 @@ import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import { withRouter } from 'next/router';
 import BaseLayout from '@components/base-layout';
-import List from '@components/list'
+import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
+import goToLoginPage from '@common/utils/go-to-login-page';
 import NoData from '@components/no-data';
 import SectionTitle from '@components/section-title'
 import DetailsHeader from './components/details-header';
 import ThreadContent from '@components/thread'
 import Copyright from '@components/copyright';
+import { Toast } from '@discuzq/design';
+import ActiveUsers from '@components/active-users'
+
 @inject('site')
 @inject('user')
 @inject('topic')
@@ -26,16 +30,31 @@ class IndexPCPage extends React.Component {
       // this.searchData(value);
     });
   }
+
+  // 分享
+  onShare = (e) => {
+    e.stopPropagation();
+
+    // 对没有登录的先登录
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
+    Toast.info({ content: '复制链接成功' });
+
+    const { content = '', topicId = '' } = this.props.topic?.topicDetail?.pageData[0] || {};
+    h5Share({ title: content, path: `/topic/topic-detail/${topicId}` });
+  }
+
    // 右侧 - 活跃用户 版权信息
    renderRight = () => {
     return (
-      <div className={styles.topicRight}>
-        <div className={styles.section}>
-          <SectionTitle title="活跃用户" onShowMore={this.redirectToSearchResultUser}/>
-          {/* <ActiveUsers data={pageData} onItemClick={this.onUserClick}/> */}
-        </div>
-        <Copyright/>
-      </div>
+      <>
+      <ActiveUsers />
+      <Copyright/>
+      </>
     )
   }
 
