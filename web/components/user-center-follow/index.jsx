@@ -14,7 +14,7 @@ class UserCenterFollows extends React.Component {
 
   static defaultProps = {
     // 用户id，如果不传，认为是自己的粉丝
-    userId: 546,
+    userId: null,
     // 加载数量限制
     limit: 1000,
     // 加载更多页面
