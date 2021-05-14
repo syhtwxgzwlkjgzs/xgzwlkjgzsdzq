@@ -75,12 +75,13 @@ class UserCenterFans extends React.Component {
     }
   };
 
-  setFansBeFollowed(id) {
+  setFansBeFollowed({ id, isMutual }) {
     const targetFans = deepClone(this.state.fans);
     Object.keys(targetFans).forEach((key) => {
       targetFans[key].forEach((user) => {
         if (get(user, 'user.pid') !== id) return;
-        user.userFollow.isMutual = true;
+        user.userFollow.isMutual = isMutual;
+        user.userFollow.isFollow = true;
       });
     });
     this.setState({
@@ -93,7 +94,7 @@ class UserCenterFans extends React.Component {
     Object.keys(targetFans).forEach((key) => {
       targetFans[key].forEach((user) => {
         if (get(user, 'user.pid') !== id) return;
-        user.userFollow.isMutual = true;
+        user.userFollow.isFollow = false;
       });
     });
     this.setState({
@@ -101,10 +102,13 @@ class UserCenterFans extends React.Component {
     });
   }
 
-  followUser = async (userId) => {
+  followUser = async ({ id: userId }) => {
     const res = await createFollow({ data: { toUserId: userId } });
     if (res.code === 0 && res.data) {
-      this.setFansBeFollowed(userId);
+      this.setFansBeFollowed({
+        id: userId,
+        isMutual: res.data.isMutual,
+      });
       return {
         msg: '操作成功',
         data: res.data,
@@ -118,7 +122,7 @@ class UserCenterFans extends React.Component {
     };
   };
 
-  unFollowUser = async (id) => {
+  unFollowUser = async ({ id }) => {
     const res = await deleteFollow({ data: { id, type: 1 } });
     if (res.code === 0 && res.data) {
       this.setFansBeUnFollowed(id);
@@ -181,15 +185,16 @@ class UserCenterFans extends React.Component {
 
   // 判断关注状态
   judgeFollowsStatus = (user) => {
-    let type = 'follow';
     if (user.isMutual) {
-      type = 'friend';
+      return 'friend';
     }
-    return type;
+    if (user.isFollow) {
+      return 'followed';
+    }
+    return 'follow';
   };
 
   render() {
-    console.log(this.state.fans);
     return (
       <div
         ref={this.containerRef}
