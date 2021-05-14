@@ -1,11 +1,7 @@
 @import '@common/styles/index.scss';
-.topicWrap {
-  background: var(--background-color-text2);
-  height: 100vh;
-  .themeContent {
-    margin-top: rem($margin-10);
-    .item {
-      margin-bottom: rem($margin-10);
-    }
+.themeContent {
+  margin-top: rem($margin-10);
+  .item {
+    margin-bottom: rem($margin-10);
   }
 }

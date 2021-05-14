@@ -39,7 +39,10 @@ class SearchPCPage extends React.Component {
     this.props.router.push(`/search/result-topic?keyword=${this.state.value || ''}`);
   };
 
-  onUserClick = data => console.log('user click', data);
+  // TODO 处理用户是自己的数据
+  onUserClick = ({ userId } = {}) => {
+    this.props.router.push(`/my/others?isOtherPerson=true&otherId=${userId}`);
+  };
 
   onTopicClick = data => {
     const { topicId } = data

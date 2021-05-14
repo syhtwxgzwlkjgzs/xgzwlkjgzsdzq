@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { getCurrentInstance, navigateTo } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
-import { Input, Button, Toast } from '@discuzq/design';
+import { Input, Button, Toast, Avatar } from '@discuzq/design';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
@@ -47,7 +47,7 @@ class Index extends Component {
   };
 
   render() {
-    const { userLogin } = this.props;
+    const { userLogin, commonLogin } = this.props;
     const { nickname, sessionToken } = getCurrentInstance().router.params;
     userLogin.sessionToken = sessionToken;
 
@@ -58,11 +58,12 @@ class Index extends Component {
           <View className={layout.content}>
             <View className={layout.title}>用户名登录，并绑定微信账号</View>
             <View className={layout.tips}>
-              <View>hi， 微信用户 {nickname}</View>
+              <View style={{display: 'flex' }}>hi， 微信用户<Avatar style={{margin: '0 8px'}} circle size='small' image={commonLogin.avatarUrl}/>{nickname}</View>
               <View>请您登录，即可完成微信号和用户名的绑定</View>
             </View>
             {/* 输入框 start */}
             <Input
+              clearable
               className={layout.input}
               value={userLogin.username}
               placeholder="输入您的用户名"
@@ -71,7 +72,7 @@ class Index extends Component {
               }}
             />
             <Input
-              clearable={false}
+              clearable
               className={layout.input}
               mode="password"
               value={userLogin.password}
