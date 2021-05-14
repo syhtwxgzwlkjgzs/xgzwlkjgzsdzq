@@ -1,4 +1,4 @@
-@import '@common/styles/index.scss';
+@import "@common/styles/index.scss";
 
 @mixin flex() {
   display: flex;
@@ -7,62 +7,72 @@
 }
 
 .wrapper {
-  padding: 0 16px;
-  background: var(--color-white);
-  border-top: 1px solid var(--border-line-color);
+  padding: 0 $padding-4n;
+  background: $white;
+  border-top: $border-solid-1;
 
-  :global{
+  :global {
     .tea-checkbox-group {
       .dzq-checkbox-wrap {
         margin-right: 0;
         -webkit-tap-highlight-color: transparent;
         &:last-child {
-          margin-left: 24px;
+          margin-left: $margin-6n;
         }
 
         .dzq-checkbox {
           width: 20px;
           height: 20px;
-          border-radius: var(--border-radius-small);
-          &::after{
+          border-radius: $border-radius-small;
+          &::after {
             width: 40px;
             height: 40px;
-            border-radius: var(--border-radius-small);
+            border-radius: $border-radius-big;
           }
         }
 
-        .dzq-icon{
-          font-size: var(--font-size-label) !important;
+        .dzq-icon {
+          font-size: $font-size-label !important;
         }
 
         .dzq-checkbox__label {
-          color: var(--color-text-primary);
+          color: $text-color-primary;
+        }
+
+        &.is-checked {
+          .dzq-checkbox::after {
+            border: none;
+          }
         }
       }
     }
 
     .dzq-input {
       .dzq-input__inner {
-        padding: var(--padding-2n);
+        padding: $padding-2n;
         text-align: right;
         border: none;
+      }
+
+      .input-placeholder {
+        color: $text-color-placeholder;
       }
     }
   }
 
   .reward-item {
     @include flex();
-    padding: 16px 0;
-    font-size: 14px;
-    color: var(--color-text-primary);
-    border-top: var(--border-border);
+    padding: $padding-4n 0;
+    font-size: $font-size-primary;
+    color: $text-color-primary;
+    border-top: $border-solid-1;
     &:first-child {
       border-top: none;
     }
 
     .left {
       width: 100px;
-      color: #4f5a70;
+      color: $text-color-regular;
       line-height: 18px;
       text-align: left;
     }
@@ -80,7 +90,7 @@
       .right {
         flex: 0;
         width: 70px;
-        border-bottom: var(--border-border);
+        border-bottom: $border-solid-1;
       }
     }
   }
@@ -94,28 +104,28 @@
     right: 0;
     bottom: constant(safe-area-inset-bottom);
     bottom: env(safe-area-inset-bottom);
-    margin: 0 10px;
-    padding: 8px 0;
-    background: var(--color-white);
-    border-top: var(--border-border);
+    margin: 0 $margin-10;
+    padding: $padding-2n 0;
+    background: $white;
+    border-top: $border-solid-1;
 
     :global {
       .dzq-button {
         width: 48%;
-        padding: 10px 0;
-        font-size: var(--font-size-middle);
-        color: #4f5a70;
-        line-height: 24px;
+        padding: $padding-10 0;
+        font-size: $font-size-middle;
+        color: $text-color-regular;
+        line-height: $font-line-height-small;
         border: none;
-        border-radius: var(--border-radius-small);
-        background: var(--background-color-text2);
+        border-radius: $border-radius-small;
+        background: $text-bg-color2;
         -webkit-tap-highlight-color: transparent;
       }
     }
 
     .btn-confirm {
-      color: var(--color-white);
-      background-color: var(--color-primary);
+      color: $white;
+      background-color: $primary-color;
     }
   }
 }
