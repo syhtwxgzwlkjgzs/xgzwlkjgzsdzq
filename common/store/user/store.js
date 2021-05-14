@@ -118,6 +118,11 @@ class UserStore {
     return get(this.userInfo, 'mobile');
   }
 
+  // 获取实际用户手机号
+  @computed get originalMobile() {
+    return get(this.userInfo, 'originalMobile')
+  }
+
   // 获取绑定微信内容
   @computed get unionid() {
     return get(this.userInfo, 'unionid');

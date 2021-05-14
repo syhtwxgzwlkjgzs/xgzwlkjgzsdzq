@@ -8,6 +8,7 @@ import CaptchaInput from './captcha-input/index'
 import VerifyCode from './verify-code/index'
 
 @inject('site')
+@inject('user')
 @observer
 class index extends Component {
 
@@ -72,11 +73,27 @@ class index extends Component {
   }
 
   getVerifyCode = ({ calback }) => {
-    if (calback && typeof calback === 'function') calback()
+    const { originalMobile } = this.props.user
+    console.log(originalMobile);
+    this.props.user.sendSmsVerifyCode(originalMobile)
+    .then(res => {
+      console.log(res);
+      if (calback && typeof calback === 'function') calback()
+    })
+    .catch((err) => {
+      console.log(err);
+      Toast.error({
+        content: '发送验证码失败',
+        hasMask: false,
+        duration: 1000,
+      })
+      if (calback && typeof calback === 'function') calback(err)
+    })
   }
 
   render() {
     const { current_step, list = [], is_blur } = this.state
+    const { mobile } = this.props?.user
     return (
       <div>
         <Header />
@@ -87,7 +104,7 @@ class index extends Component {
               current_step === 'first' ? (
                 <div>
                   <span className={styles.labelName}>原手机号</span>
-                  <span className={styles.labelValue}>18270****420</span>
+                  <span className={styles.labelValue}>{mobile}</span>
                 </div>
               ) : (
                 <div className={styles.labelInput}>

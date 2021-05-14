@@ -34,7 +34,13 @@ export default class VerificationCode extends React.Component {
       },
       function () {
         this.props.getVerifyCode({
-          calback: function () {
+          calback: function (err) {
+            if (err) {
+              that.setState({
+                buttonDisabled: false
+              })
+              return
+            }
             const { initTimeValue } = that.state
             that.setState({
               interval: setInterval(function () {
