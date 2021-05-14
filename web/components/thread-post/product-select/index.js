@@ -46,14 +46,16 @@ const ProductSelect = (props) => {
         rows={8}
         onChange={e => setLink(e.target.value)}
       />
-      <div className={styles['parse-goods-btn']}>
-        <Button onClick={props.cancel}>
-          取消
-        </Button>
-        <Button type="primary" onClick={parseLink}>
-          确定
-        </Button>
-      </div>
+      {!props.pc && (
+        <div className={styles['parse-goods-btn']}>
+          <Button onClick={props.cancel}>
+            取消
+          </Button>
+          <Button type="primary" onClick={parseLink}>
+            确定
+          </Button>
+        </div>
+      )}
     </div>
   );
 
@@ -65,6 +67,8 @@ const ProductSelect = (props) => {
       className={styles.pc}
       onClose={props.cancel}
       title="添加商品"
+      onCacel={props.cancel}
+      onConfirm={parseLink}
     >
       {content}
     </DDialog>
