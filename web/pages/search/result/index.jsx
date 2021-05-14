@@ -15,7 +15,7 @@ class Index extends React.Component {
     const search = ctx?.query?.keyword || '';
 
     const topicFilter = {
-      hot: search !== '' ? 0 : 1,
+      hot: 1,
       content: search,
     };
 

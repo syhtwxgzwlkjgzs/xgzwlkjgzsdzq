@@ -31,7 +31,6 @@ const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = tru
         <Icon className={styles.inputWrapperIcon} name="SearchOutlined" size={16} />
         <Input
           value={value}
-          clearable={true}
           placeholder='全局设置的全部功能'
           onEnter={e => onSearch(e.target.value)}
           onChange={e => inputChange(e)}

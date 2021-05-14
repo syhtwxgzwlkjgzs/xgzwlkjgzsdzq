@@ -26,6 +26,14 @@ class TopicSelect extends Component {
     this.timer = null;
   }
 
+  // 清除关键字
+  clearKeywords = () => {
+    this.setState(
+      { keywords: '', checkUser: [], page: 1 },
+      () => this.loadTopics()
+    );
+  }
+
   // 初始化话题请求
   async componentDidMount() {
     const { fetchTopic } = this.props.threadPost;
@@ -110,12 +118,20 @@ class TopicSelect extends Component {
     const { topics = [] } = threadPost;
     const content = (
       <div className={styles.wrapper}>
-        <Input
-          value={this.state.keywords}
-          icon="SearchOutlined"
-          placeholder='搜索话题'
-          onChange={e => this.updateKeywords(e)}
-        />
+        {/* 搜索框 */}
+        <div className={styles.input}>
+          <Input
+            value={this.state.keywords}
+            icon="SearchOutlined"
+            placeholder='搜索话题'
+            onChange={e => this.updateKeywords(e)}
+          />
+          {this.state.keywords &&
+            <div className={styles.delete} onClick={this.clearKeywords}>
+              <Icon className={styles['delete-icon']} name="CloseOutlined" size={8} color='#f2f4f5'></Icon>
+            </div>
+          }
+        </div>
 
         {/* 话题列表 */}
         <div className={styles['topic-wrap']}>
