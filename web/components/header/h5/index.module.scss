@@ -1,6 +1,6 @@
 @import '@common/styles/index.scss';
 .header{
-  height: rem(44);
+  height: rem(40);
   display: block;
   .headerContent{
     display: flex;
@@ -11,7 +11,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: rem(44);
+    height: rem(40);
     border-bottom: 1px solid var(--border-line-color);
     z-index: var(--zindex-too0p);
     .left{
@@ -21,6 +21,9 @@
       display: flex;
       align-items: center;
       justify-content: flex-start;
+      .backIcon {
+        margin-right: rem($padding-2n);
+      }
     }
     .right{
       width: 50%;
