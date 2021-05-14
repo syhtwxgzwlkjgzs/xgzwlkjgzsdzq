@@ -3,6 +3,8 @@ import { getCurrentInstance, navigateTo } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import { Button, Input, Toast, Avatar } from '@discuzq/design';
+import Taro from '@tarojs/taro';
+import { toTCaptcha } from '@common/utils/to-tcaptcha'
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
 import layout from './index.module.scss';
@@ -17,17 +19,58 @@ const MemoToastProvider = React.memo(ToastProvider)
 @inject('wxPhoneBind')
 @observer
 class Index extends Component {
+  constructor() {
+    super();
+    this.ticket = ''; // 腾讯云验证码返回票据
+    this.randstr = ''; // 腾讯云验证码返回随机字符串
+  }
+
+
+  componentDidMount() {
+    // 监听腾讯验证码事件
+    Taro.eventCenter.on('captchaResult', this.handleCaptchaResult);
+    Taro.eventCenter.on('closeChaReault', this.handleCloseChaReault);
+  }
+
+  componentWillUnmount() {
+    // 卸载监听腾讯验证码事件
+    Taro.eventCenter.off('captchaResult', this.handleCaptchaResult)
+    Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault)
+  }
+
+  // 验证码滑动成功的回调
+  handleCaptchaResult = (result) => {
+    this.ticket = result.ticket;
+    this.randstr = result.randstr;
+  }
+
+  // 验证码点击关闭的回调
+  handleCloseChaReault = () => {
+    this.ticket = '';
+    this.randstr = '';
+  }
+
   handleSendCodeButtonClick = async () => {
-    try {
-      await this.props.wxPhoneBind.sendCode();
-    } catch (e) {
+    try{
+      const { webConfig } = this.props.site;
+      const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
+      await toTCaptcha(qcloudCaptchaAppId);
+
+      // 发送前校验
+      this.props.wxPhoneBind.beforeSendVerify();
+      await this.props.wxPhoneBind.sendCode({
+        captchaRandStr: this.ticket,
+        captchaTicket: this.randstr
+      });
+    }catch(e){
       Toast.error({
         content: e.Message,
         hasMask: false,
         duration: 1000,
       });
     }
-  };
+  }
+
   handleBindButtonClick = async () => {
     const { wxPhoneBind } = this.props;
     const { sessionToken } = getCurrentInstance().router.params;

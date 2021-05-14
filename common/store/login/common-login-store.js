@@ -66,7 +66,6 @@ export default class commonLoginStore {
               this.captchaTicket = res.ticket;
               return resolve(res);
             }
-            return reject(res);
           });
         }
         // 显示验证码
