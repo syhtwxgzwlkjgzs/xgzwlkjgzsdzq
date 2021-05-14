@@ -161,14 +161,6 @@ class IndexH5Page extends React.Component {
     </div>
   )
 
-  // 没有帖子列表数据时的默认展示
-  renderNoData = () => (
-    <>
-      {this.renderHeaderContent(true)}
-      <NoData />
-    </>
-  )
-
   // 下拉刷新
   onPullDown = () => {
     this.setState({ isFinished: false }) 
@@ -203,7 +195,7 @@ class IndexH5Page extends React.Component {
                 </>
               ))
             )
-            : this.renderNoData()
+            : this.renderHeaderContent()
           }
 
           <FilterView

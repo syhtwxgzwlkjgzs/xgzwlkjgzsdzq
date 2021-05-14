@@ -38,15 +38,24 @@
       .dzq-tabs__label {
         font-size: rem($font-size-primary);
         line-height: rem(20);
-        margin-top: rem(16);
         font-weight: normal;
+        margin: 0;
+        padding: 0;
       }
       .dzq-tabs__item.is-active {
         font-family: 'PingFang SC';
         font-weight: 600;
-        color: var( --color-primary);
+        color: $primary-color;
       }
-
+      .dzq-tabs__item {
+        padding: 0 $padding-4n;
+      }
+      .dzq-tabs__scroll {
+        display: flex;
+      }
+    }
+    .dzq-tabs__panel {
+      height: 0;
     }
   }
 }

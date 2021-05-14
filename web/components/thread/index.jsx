@@ -161,6 +161,7 @@ class Index extends React.Component {
         postId,
         threadId,
         displayTag,
+        payType,
       } = data || {};
 
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
@@ -176,7 +177,7 @@ class Index extends React.Component {
                 groupName={group?.groupName}
                 time={createdAt}
                 isEssence={isEssence}
-                isPrice={isPrice}
+                isPay={isPrice}
                 isRed={isRedPack}
                 isReward={isReward}
                 userId={user?.userId}
@@ -196,7 +197,7 @@ class Index extends React.Component {
             onPraise={this.onPraise}
             isLiked={isLike}
             isSendingLike={this.state.isSendingLike}
-            tipData={{ postId, threadId, platform }}
+            tipData={{ postId, threadId, platform, payType }}
             platform={platform}
           />
         </div>
