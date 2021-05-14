@@ -63,7 +63,19 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
         <div className={styles.label}>悬赏结束时间</div>
         <div className={styles.item}>
           {pc
-            ? <DatePicker selected={times} onChange={date => setTimes(date)} showTimeSelect dateFormat="yyyy-MM-dd h:mm aa" />
+            ? (
+              <>
+                <DatePicker
+                  selected={times}
+                  minDate={new Date()}
+                  onChange={date => setTimes(date)}
+                  showTimeSelect
+                  dateFormat="yyyy-MM-dd HH:mm:ss"
+                  locale="zh"
+                />
+                <Icon name="RightOutlined" />
+              </>
+            )
             : (
               <>
                 <div onClick={() => setShow(true)} > {`${formatDate(times, 'yyyy-MM-dd h:mm')}`} </div>
@@ -72,15 +84,22 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
             )}
         </div>
       </div>
-      {pc ? '' : <DatePickers
-        onSelects={(e) => {
-          setTimes(e);
-          setShow(false);
-        }} isOpen={show} onCancels={() => setShow(false)} />}
-      <div className={styles.btn}>
-        <Button onClick={() => cancel()}>取消</Button>
-        <Button type="primary" onClick={redbagconfirm}>确定</Button>
-      </div>
+      {pc ? '' : (
+        <>
+          <DatePickers
+            onSelects={(e) => {
+              setTimes(e);
+              setShow(false);
+            }}
+            isOpen={show} onCancels={() => setShow(false)}
+          />
+          <div className={styles.btn}>
+            <Button onClick={() => cancel()}>取消</Button>
+            <Button type="primary" onClick={redbagconfirm}>确定</Button>
+          </div>
+        </>
+      )
+      }
     </div>
   );
   if (!pc) return content;
@@ -89,7 +108,9 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
       visible={visible}
       className={styles.pc}
       onClose={cancel}
-      title="悬赏设置"
+      onCacel={cancel}
+      onConfirm={redbagconfirm}
+      title="悬赏问答"
     >
       {content}
     </DDialog>

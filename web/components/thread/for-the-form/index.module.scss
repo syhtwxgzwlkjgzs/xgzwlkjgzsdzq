@@ -43,68 +43,94 @@
       // 整个盒子
       display: flex;
       height: 392px;
+      font-size: $font-size-middle;
+      border-radius: $border-radius-small;
       overflow: hidden;
+      &__header,
+      &-time__header {
+        font-size: $font-size-middle;
+        border-radius: 0;
+        border: $border-solid-1;
+        background: $white;
+      }
+      &__time-container {
+        border-left: $border-solid-1;
+      }
+      &__current-month,
+      &__day-name {
+        font-size: $font-size-middle;
+        color: $text-color-primary;
+      }
+      &__day--weekend,
+      &__time-list-item,
+      &__day {
+        font-size: $font-size-base;
+        color: $text-color-regular;
+      }
+      &__day--disabled {
+        font-size: $font-size-base;
+        color: $text-color-placeholder;
+      }
+      &__day--selected,
+      &__day--today {
+        color: $white;
+        background-color: $primary-color;
+        border-radius: $border-radius-small;
+      }
+      &__month {
+        margin: $margin-4n;
+      }
+    }
+    .react-datepicker__day-name,
+    .react-datepicker__day,
+    .react-datepicker__time-name {
+      width: 20px !important;
+      height: 20px !important;
+      line-height: 20px !important;
+      margin-left: 18px !important;
+      margin-bottom: 8px !important;
     }
 
-    .react-datepicker__current-month {
-      font-size: 16px;
+    .react-datepicker__day:hover,
+    .react-datepicker__month-text:hover,
+    .react-datepicker__quarter-text:hover,
+    .react-datepicker__year-text:hover,
+    .react-datepicker__day--keyboard-selected {
+      background-color: $primary-color;
+      border-radius: $border-radius-small;
+      color: $white;
+    }
+    .react-datepicker__day--disabled:hover {
+      background-color: $white;
+      color: $text-color-placeholder;
+    }
+    .react-datepicker__time-list-item {
+      height: 20px;
+      display: flex;
+      align-items: center;
+    }
+    .react-datepicker__time-list-item--selected {
+      height: 20px;
+      background-color: $primary-color !important;
     }
 
     .react-datepicker__navigation {
-      margin-right: 80px;
-      border: 10px solid transparent;
-      border-left-color: #ccc;
-    }
-
-    .react-datepicker__navigation--previous {
-      border-left-color: transparent;
-      border-right-color: #ccc;
-      margin-right: 0;
-      margin-left: 80px;
-    }
-
-    .react-datepicker__day-name {
-      width: 50px;
-      height: 50px;
-      line-height: 50px;
-      margin: 0;
-    }
-
-    .react-datepicker {
-      font-size: 12px;
-    }
-
-    .react-datepicker__month {
-      margin: 20px;
-    }
-
-    .react-datepicker__day {
-      width: 50px;
-      height: 50px;
-      line-height: 50px;
-      margin: 0;
-    }
-
-    // 时间组件中时间部分
-    .react-datepicker-time__header {
-      font-size: 16px;
-
-    }
-
-    .react-datepicker__time-box {
-      ::-webkit-scrollbar {
-        width: 0px;
+      border: $border-radius-big solid transparent;
+      &--previous {
+        border-right-color: $border-color;
+      }
+      &--next {
+        border-left-color: $border-color;
       }
     }
-
-    //展示的input框部分
-    .react-datepicker__input-container>input {
-      width: 135px;
-      font-size: 14px;
-      border: none;
-    }
-    .datepicker-modal{
-      z-index: 1500 !important;
+    .react-datepicker__input-container {
+      input {
+        max-width: rem(220px);
+        border: 0;
+        color: $text-color-primary;
+        font-size: $font-size-base;
+        cursor: pointer;
+      }
     }
   }
   .btn {
@@ -138,26 +164,9 @@
   .rewards {
     position: static;
     width: 100%;
-    height: 250px;
-  }
-
-  .btn {
-    position: static;
-    width: 100%;
-    padding: 0;
-    margin-top: var(--margin-6n);
-    justify-content: center;
-    border: none;
-
-    :global {
-      .dzq-button {
-        width: 116px;
-        height: 36px;
-
-        &:first-child {
-          margin-right: var(--margin-4n);
-        }
-      }
+    height: 100%;
+    .line-box:last-child {
+      border-bottom: none;
     }
   }
 }
