@@ -26,6 +26,11 @@
     display: flex;
     justify-content: space-between;
     box-sizing: border-box;
+    align-items: center;
+    li {
+      display: flex;
+      justify-content: center;
+    }
     .text {
       font-size: rem($font-size-primary);
       color: var(--color-text-secondary);
