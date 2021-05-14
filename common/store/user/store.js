@@ -184,6 +184,11 @@ class UserStore {
     return get(this.targetUser, 'isDeny');
   }
 
+  // 判断用户是否存在用户密码
+  @computed get hasPassword() {
+    return get(this.userInfo, 'hasPassword')
+  }
+
 
   // 发帖扩展的权限
   @computed get threadExtendPermissions() {

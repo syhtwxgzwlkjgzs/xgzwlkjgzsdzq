@@ -476,7 +476,7 @@ class UserAction extends SiteStore {
       timeout: 3000,
       data: {
         mobile,
-        type: 'update',
+        type: 'rebind',
         captchaTicket,
         captchaRandStr,
       },
@@ -524,7 +524,7 @@ class UserAction extends SiteStore {
   async verifyOldMobile() {
     const smsVerifyRes = await smsVerify({
       data: {
-        mobile: this.mobile,
+        mobile: this.originalMobile,
         code: this.oldMobileVerifyCode,
       },
     });
