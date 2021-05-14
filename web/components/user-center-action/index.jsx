@@ -21,7 +21,27 @@ class UserCenterAction extends React.Component {
 
   // 点击推广信息
   handleMyInvite = () => {
-    Router.push({ url: 'invite' });
+    Router.push({ url: '/invite' });
+  }
+
+  // 点击我的屏蔽
+  handleMyBan = () => {
+    Router.push({ url: '/my/block' });
+  }
+
+  // 点击我的购买
+  handleMyBuy = () => {
+    Router.push({ url: '/my/buy' });
+  }
+
+  // 点击我的草稿箱
+  handleMyDraft = () => {
+    Router.push({ url: '/my/draft' });
+  }
+
+  // 点击我的收藏
+  handleMyCollect = () => {
+    Router.push({ url: '/my/collect' });
   }
 
   render() {
@@ -52,7 +72,7 @@ class UserCenterAction extends React.Component {
           </div>
 
           <div className={styles.userCenterActionItemContainer}>
-            <div className={styles.userCenterActionItem}>
+            <div onClick={this.handleMyCollect} className={styles.userCenterActionItem}>
               <div className={styles.userCenterActionItemIcon}>
                 <Badge>
                   <Icon name={'CollectOutlinedBig'} color={'#4F5A70'} size={20} />
@@ -63,7 +83,7 @@ class UserCenterAction extends React.Component {
           </div>
 
           <div className={styles.userCenterActionItemContainer}>
-            <div className={styles.userCenterActionItem}>
+            <div onClick={this.handleMyBan} className={styles.userCenterActionItem}>
               <div className={styles.userCenterActionItemIcon}>
                 <Badge>
                   <Icon name={'ShieldOutlined'} color={'#4F5A70'} size={20} />
@@ -74,7 +94,7 @@ class UserCenterAction extends React.Component {
           </div>
         </div>
         <div className={styles.userCenterAction}>
-          <div className={styles.userCenterActionItemContainer}>
+          <div onClick={this.handleMyBuy} className={styles.userCenterActionItemContainer}>
             <div className={styles.userCenterActionItem}>
               <div className={styles.userCenterActionItemIcon}>
                 <Badge>
@@ -86,7 +106,7 @@ class UserCenterAction extends React.Component {
           </div>
 
           <div className={styles.userCenterActionItemContainer}>
-            <div className={styles.userCenterActionItem}>
+            <div onClick={this.handleMyDraft} className={styles.userCenterActionItem}>
               <div className={styles.userCenterActionItemIcon}>
                 <Badge>
                   <Icon name={'RecycleBinOutlined'} color={'#4F5A70'} size={20} />

@@ -467,6 +467,33 @@ class UserAction extends SiteStore {
   }
 
   @action
+  async sendSmsUpdateCode({
+    mobile,
+    captchaTicket,
+    captchaRandStr,
+  }) {
+    const smsResp = await smsSend({
+      timeout: 3000,
+      data: {
+        mobile,
+        type: 'update',
+        captchaTicket,
+        captchaRandStr,
+      },
+    });
+
+    if (smsResp.code === 0) {
+      // 可以利用 interval 获取过期时间
+      return smsResp.data;
+    }
+
+    throw {
+      Code: smsResp.code,
+      Message: smsResp.msg,
+    };
+  }
+
+  @action
   async sendSmsVerifyCode({
     mobile,
     captchaTicket,
