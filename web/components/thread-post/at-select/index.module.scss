@@ -157,8 +157,7 @@
     right: 0;
     bottom: constant(safe-area-inset-bottom);
     bottom: env(safe-area-inset-bottom);
-    margin: 0 $margin-10;
-    padding: $padding-2n 0;
+    padding: rem($padding-2n) rem($padding-4n);
     background: $white;
     justify-content: center;
     border-top: $border-solid-1;
@@ -167,6 +166,7 @@
       .dzq-button {
         @include button-default;
         width: rem(166);
+        height: rem(42);
         -webkit-tap-highlight-color: transparent;
         &:first-child {
           margin-right: rem($margin-10);

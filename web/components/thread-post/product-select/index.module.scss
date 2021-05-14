@@ -46,17 +46,26 @@
   }
   .parse-goods-btn {
     position: absolute;
-    bottom: rem($margin-5n);
-    left: rem($margin-4n);
-    right: rem($margin-4n);
-    height: 42px;
+    left: 0;
+    bottom: 0;
+    border-top: $border-solid-1;
+    padding: rem($padding-2n) rem($padding-4n);
     display: flex;
     justify-content: space-between;
     :global {
       .dzq-button {
-        width: 48%;
-        height: 100%;
-        border-radius: $border-radius-small;
+        -webkit-tap-highlight-color: transparent;
+        @include button-default;
+        width: rem(166);
+        height: rem(42);
+
+        &:first-child {
+          margin-right: rem($margin-10);
+        }
+
+        &:last-child {
+          @include button-primary;
+        }
       }
     }
   }

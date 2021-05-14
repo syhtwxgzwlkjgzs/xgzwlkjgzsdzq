@@ -64,13 +64,14 @@
       right: 0;
       bottom: 0;
       height: rem(52px);
-      margin: 0 rem($margin-4n);
+      padding: rem($padding-2n) rem($padding-4n);
       display: flex;
       align-items: center;
       background: $white;
       .dzq-button {
         @include button-default;
         width: 100%;
+        height: rem(42);
       }
     }
   }
