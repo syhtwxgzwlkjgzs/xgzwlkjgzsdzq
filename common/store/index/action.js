@@ -288,6 +288,7 @@ class IndexAction extends IndexStore {
   updateRecommendsStatus(status) {
     this.recommendsStatus = status;
   }
+
 }
 
 export default IndexAction;

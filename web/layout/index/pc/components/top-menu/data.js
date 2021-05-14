@@ -1,9 +1,5 @@
 export default [
   {
-    label: '默认', // 默认智能排序
-    type: 'sequence',
-    isActive: true,
-  }, {
     label: '所有', // 所有
     type: 'all',
     isActive: false,
