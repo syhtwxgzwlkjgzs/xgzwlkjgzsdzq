@@ -177,7 +177,7 @@ class Index extends React.Component {
                 groupName={group?.groupName}
                 time={createdAt}
                 isEssence={isEssence}
-                isPrice={isPrice}
+                isPay={isPrice}
                 isRed={isRedPack}
                 isReward={isReward}
                 userId={user?.userId}
