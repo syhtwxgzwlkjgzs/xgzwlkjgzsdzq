@@ -9,14 +9,22 @@ import PropTypes from 'prop-types'; // 类型拦截
 import throttle from '@common/utils/thottle';
 
 const AllPostPaid = ({ confirm, cancle, data, exhibition, pc, visible }) => {
-  const [price, setPrice] = useState(0);// 支付的金额数量
-  const [attachmentPrice, setAttachmentPrice] = useState(0);
+  const [price, setPrice] = useState('');// 支付的金额数量
+  const [attachmentPrice, setAttachmentPrice] = useState('');
   const [freeWords, setFreeWords] = useState(0);// 可免费查看数量的百分比数字
   useEffect(() => { // 重显的逻辑
     if (data != undefined && Object.keys(data).length > 0) {
-      setPrice(data.price);
+      if (data.price === 0) {
+        setPrice('');
+      } else {
+        setPrice(data.price);
+      }
+      if (data.price === 0) {
+        setAttachmentPrice('');
+      } else {
+        setAttachmentPrice(data.attachmentPrice);
+      }
       setFreeWords(data.freeWords * 100);
-      setAttachmentPrice(data.attachmentPrice);
     }
   }, []);
   // 当点击确定是把参数返回去
@@ -38,8 +46,8 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition, pc, visible }) => {
       {exhibition === '帖子付费' && (
         <div>
           <div className={styles['line-box']}>
-            <div> 支付金额 </div>
-            <div>
+            <div className={styles.payText}> 支付金额 </div>
+            <div className={styles.payNumber}>
               <Input
                 mode="number"
                 value={price}
@@ -49,17 +57,15 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition, pc, visible }) => {
               元
             </div>
           </div>
-          <div className={styles.toview}>
+          <div className={`${pc ? styles.toviewPC : ''} ${styles.toview}`}>
             <div className={styles.toviewone}> 免费查看字数 </div>
-            <div>
-              <div>
-                <Slider
-                  value={freeWords}
-                  defaultValue={freeWords}
-                  formatter={value => `${value} %`}
-                  onChange={throttle(e => setFreeWords(e), 100)}
-                />
-              </div>
+            <div className={styles.slider}>
+              <Slider
+                value={freeWords}
+                defaultValue={freeWords}
+                formatter={value => `${value} %`}
+                onChange={throttle(e => setFreeWords(e), 100)}
+              />
             </div>
           </div>
         </div>
