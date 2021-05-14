@@ -5,7 +5,38 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #fff;
+  background-color: $white;
+  .line-box {
+    display: flex;
+    margin: 0 rem($margin-4n);
+    height: 52px;
+    font-size: $font-size-base;
+    border-bottom: $border-solid-1;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .label {
+    color: $text-color-regular;
+  }
+  .item {
+    display: flex;
+    align-items: center;
+    color: $text-color-primary;
+    :global {
+      .dzq-icon {
+        transform: scale(.6);
+        color: $icon-color;
+      }
+      .dzq-input {
+        max-width: rem(220px);
+        border: none;
+      }
+      .dzq-input__inner {
+        border: none;
+        text-align: right;
+      }
+    }
+  }
   :global {
 
     .react-datepicker {
@@ -72,37 +103,16 @@
       font-size: 14px;
       border: none;
     }
-    // 结束
-
-    .dzq-input {
-      display: inline-block;
-      width: 40px;
-    }
-    .dzq-input__inner {
-      border: none;
-      padding: 0;
-      text-align: center;
-    }
     .datepicker-modal{
       z-index: 1500 !important;
     }
-  }
-  .line-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-left: 16px;
-    margin-right: 16px;
-    padding-top: 16px;
-    padding-bottom: 16px;
-    font-size: 14px;
   }
   .btn {
     position: absolute;
     bottom: 0;
     display: flex;
     width: rem(343);
-    height: 52px;
+    height: 58px;
     border-top: 1px solid #eee;
     padding: 0 rem(16);
     justify-content: space-between;
@@ -111,6 +121,11 @@
       .dzq-button {
         width: rem(166);
         height: 42px;
+        @include button-default;
+
+        &:last-child {
+          @include button-primary;
+        }
       }
     }
   }
