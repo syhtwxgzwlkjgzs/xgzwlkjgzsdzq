@@ -21,6 +21,14 @@
       display: flex;
       align-items: center;
       justify-content: flex-start;
+      .left-arrow {
+        transform: rotate(
+          180deg
+        );
+      }
+      .text {
+        padding-left: $padding-2n;
+      }
     }
     .right{
       width: 50%;
