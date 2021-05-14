@@ -419,6 +419,7 @@ class PayBoxStore {
   getPayPwdResetToken = async () => {
     if (!this.oldPayPwd) {
       // error
+      return
     }
 
     const getTokenRes = await readResetPayPwdToken({
