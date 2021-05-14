@@ -1,6 +1,6 @@
 @import '@common/styles/index.scss';
 .pc {
-  z-index: var(--zindex-dialog);
+  z-index: $zindex-dialog;
   :global {
     .dzq-modal__container {
       padding: $padding-6n;

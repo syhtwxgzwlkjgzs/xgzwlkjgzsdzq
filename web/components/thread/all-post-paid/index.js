@@ -65,24 +65,24 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition, pc, visible }) => {
         </div>
       )}
       {exhibition === '附件付费' && (
-        <>
-          <div className={styles['line-box']}>
-            <div> 附件内容查看价格 </div>
-            <div>
-              <Input
-                mode="number"
-                value={attachmentPrice}
-                placeholder="金额"
-                onChange={e => setAttachmentPrice(+e.target.value)}
-              />
-              元
-            </div>
+        <div className={styles['line-box']}>
+          <div> 附件内容查看价格 </div>
+          <div>
+            <Input
+              mode="number"
+              value={attachmentPrice}
+              placeholder="金额"
+              onChange={e => setAttachmentPrice(+e.target.value)}
+            />
+            元
           </div>
-          <div className={styles.btn}>
-            <Button type="large" className={styles['btn-one']} onClick={cancle}>取消</Button>
-            <Button type="primary" className={styles['btn-two']} onClick={redbagconfirm}>确定</Button>
-          </div>
-        </>
+        </div>
+      )}
+      {!pc && (
+        <div className={styles.btn}>
+          <Button type="large" className={styles['btn-one']} onClick={cancle}>取消</Button>
+          <Button type="primary" className={styles['btn-two']} onClick={redbagconfirm}>确定</Button>
+        </div>
       )}
     </div>
   );
