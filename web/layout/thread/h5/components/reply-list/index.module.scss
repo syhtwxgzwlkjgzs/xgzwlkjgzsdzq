@@ -12,9 +12,8 @@
       border-radius: rem($border-radius-small);
       background: $body-bg-color;
       .replyListName {
-        font-weight: var(--font-weight-regular);
         font-size: rem($font-size-primary);
-        font-family: 'PingFangSC-Semibol';
+        font-weight: bold;
         line-height: rem(20);
         text-align: left;
         color: var(--color-text-primary);
@@ -29,7 +28,7 @@
         .commentUser {
           display: inline-block;
           .replyedUserName {
-            font-weight: var(--font-weight-regular);
+            font-weight: bold;
             font-size: rem($font-size-primary);
             margin-right: rem($margin-2n);
             line-height: rem(18);

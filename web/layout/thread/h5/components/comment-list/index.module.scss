@@ -57,9 +57,8 @@
         background: $body-bg-color;
 
         .commentListName {
-          font-weight: var(--font-weight-regular);
+          font-weight: bold;
           font-size: rem($font-size-primary);
-          font-family: 'PingFangSC-Semibol';
           line-height: rem(20);
           text-align: left;
           color: var(--color-text-primary);
@@ -105,7 +104,8 @@
           }
         }
         .moreReply {
-          font-weight: var(--font-weight-regular);
+          // font-weight: var(--font-weight-regular);
+          font-weight: bold;
           font-size: rem($font-size-primary);
           line-height: rem($font-line-height-middle);
           text-align: left;

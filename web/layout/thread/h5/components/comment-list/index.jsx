@@ -137,12 +137,10 @@ class CommentList extends React.Component {
                   <div className={styles.commentReply}>
                     <span onClick={() => this.replyClick()}>回复</span>
                   </div>
-                  {this.props.isShowAdopt ? (
+                  {this.props.isShowAdopt && (
                     <div className={styles.commentAdopt}>
                       <span onClick={() => this.props.onAboptClick()}>采纳</span>
                     </div>
-                  ) : (
-                    ''
                   )}
                   {!this.state.isHideEdit && (
                     <div className={styles.extra}>

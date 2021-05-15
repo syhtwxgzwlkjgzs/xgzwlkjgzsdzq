@@ -3,13 +3,14 @@
 .setTop {
   width: rem(375);
   height: rem(52);
-  background: var(--color-success4);
+  background: var(--color-success9);
   position: absolute;
   text-align: center;
   line-height: rem(52);
-  color: var(--color-success);
+  color: $success-color;
   display: none;
   z-index: var(--zindex-popup);
+  
   .setTopIcon {
     display: inline-block;
     width: rem(20);
@@ -17,8 +18,12 @@
     border-radius: $border-radius-circle;
     line-height: rem(20);
     color: var(--color-white);
-    background: var(--color-success);
+    background: $success-color;
     margin-right: rem($margin-2n);
+
+    .icon {
+      font-size: rem($font-size-small) !important;
+    }
   }
 }
 .inTop {
@@ -32,4 +37,3 @@
   // TODO:
   opacity: 0;
 }
-
