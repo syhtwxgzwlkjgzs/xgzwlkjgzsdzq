@@ -58,10 +58,10 @@ const InteractionBox = (props) => {
             <Input value={typingValue} placeholder=" 请输入内容" onChange={(e) => setTypingValue(e.target.value)} />
             <div className={styles.tools}>
               <div>
-                <Icon name="SmilingFaceOutlined" size={20} color={'var(--color-text-secondary)'} />
+                <Icon name="SmilingFaceOutlined" size={20} />
               </div>
               <div className={styles.pictureUpload}>
-                <Icon name="PictureOutlinedBig" size={20} color={'var(--color-text-secondary)'} />
+                <Icon name="PictureOutlinedBig" size={20} />
               </div>
             </div>
           </div>
@@ -76,10 +76,10 @@ const InteractionBox = (props) => {
         <div className={styles.pcInteractionBox}>
           <div className={styles.tools}>
             <div className={styles.emoj}>
-              <Icon name="SmilingFaceOutlined" size={20} color={'var(--color-text-secondary)'} />
+              <Icon name="SmilingFaceOutlined" size={20} />
             </div>
             <div className={styles.pictureUpload}>
-              <Icon name="PictureOutlinedBig" size={20} color={'var(--color-text-secondary)'} />
+              <Icon name="PictureOutlinedBig" size={20} />
             </div>
           </div>
           <Textarea

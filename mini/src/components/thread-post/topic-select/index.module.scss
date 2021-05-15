@@ -1,12 +1,13 @@
-@import '@styles/index.scss';
+@import "@common/styles/index.scss";
+
 .wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: stretch;
   height: 100vh;
-  background: var(--color-white);
-  border-top: 1px solid var(--border-line-color);
+  background: $white;
+  border-top: $border-solid-1;
 
   :global {
     .dzq-input {
@@ -17,10 +18,10 @@
       .dzq-input__inner {
         height: 40px;
         padding-left: 35px;
-        padding-right: var(--padding-5);
-        font-size: var(--font-size-middle);
-        color: var(--color-text-primary);
-        background: #f6f6f6;
+        padding-right: $padding-5;
+        font-size: $font-size-middle;
+        color: $text-color-primary;
+        background: $text-bg-color2;
         border: none;
       }
 
@@ -28,16 +29,18 @@
         left: 20px;
         top: 50%;
         margin-top: -18px;
-        color: var(--color-disabled2) !important;
+        color: $icon-color-light !important;
       }
     }
   }
 
-  .check-box{
+  .topic-wrap {
     flex: 1;
-    .topic-wrap {
-      flex: 100%;
-      overflow: hidden;
+    overflow: hidden;
+    :global {
+      .scroll-view {
+        height: 100% !important;
+      }
     }
   }
 
@@ -46,7 +49,7 @@
     justify-content: space-between;
     padding: 16px 20px;
     line-height: 20px;
-    border-bottom: var(--border-border);
+    border-bottom: $border-solid-1;
 
     .item-left {
       display: flex;
@@ -56,7 +59,7 @@
       .name {
         max-width: 197px;
         line-height: 20px;
-        font-size: var(--font-size-primary);
+        font-size: $font-size-primary;
         font-weight: 600;
         color: #333;
         word-break: break-all;
@@ -65,14 +68,14 @@
       .recommend {
         width: 20px;
         height: 20px;
-        margin-left: var(--margin-5n);
-        margin-bottom: var(--margin-2n);
+        margin-left: margin-5n;
+        margin-bottom: margin-2n;
         font-size: 22px;
       }
     }
 
     .item-right {
-      font-size: var(--font-size-label);
+      font-size: $font-size-small;
       color: rgb(51, 51, 51);
       white-space: nowrap;
     }
@@ -82,20 +85,21 @@
     @include ios-safe-area-inset-bottom;
   }
   .btn {
-    margin: 0 var(--margin-10);
-    padding: var(--padding-2n) 0;
-    border-top: var(--border-border);
+    margin: 0 $margin-10;
+    padding: $padding-2n 0;
+    border-top: $border-solid-1;
+    background: $white;
 
     :global {
       .dzq-button {
         width: 100%;
-        padding: var(--padding-10) 0;
-        font-size: var(--font-size-middle);
-        color: #777;
-        line-height: var(--font-line-height-primary);
-        background: #f9fafc;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        border-radius: var(--border-radius-small);
+        padding: $padding-10 0;
+        font-size: $font-size-middle;
+        color: $text-color-regular;
+        line-height: $font-line-height-small;
+        background: $text-bg-color2;
+        border: none;
+        border-radius: $border-radius-small;
         transition: all 0.3s;
       }
     }

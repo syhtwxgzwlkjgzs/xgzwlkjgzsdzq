@@ -127,7 +127,6 @@ export default class Redpacket extends Component {
               mode="number"
               miniType="number"
               placeholder="金额"
-              placeholderStyle="color:#c5c6ca"
               maxLength={6}
               onChange={this.onPriceChang}
             />元
@@ -142,7 +141,6 @@ export default class Redpacket extends Component {
               mode="number"
               miniType="number"
               placeholder="个数"
-              placeholderStyle="color:#c5c6ca"
               maxLength={3}
               onChange={e => this.setState({ number: +e.target.value })}
             />个
@@ -169,7 +167,6 @@ export default class Redpacket extends Component {
                 mode="number"
                 miniType="number"
                 placeholder="个数"
-                placeholderStyle="color:#c5c6ca"
                 maxLength={3}
                 onChange={e => this.setState({ likenum: +e.target.value })}
               />个
