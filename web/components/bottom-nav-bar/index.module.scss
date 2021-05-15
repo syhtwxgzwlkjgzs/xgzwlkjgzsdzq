@@ -3,6 +3,7 @@
 .footer {
   display: flex;
   // position: fixed;
+  box-sizing: border-box;
   bottom: 0;
   width: 100%;
   background: var(--color-white);
@@ -10,9 +11,10 @@
   align-items: flex-start;
   justify-content: space-between;
   padding-top: rem(8);
+  // margin-top: rem(8);
   padding-bottom: constant(safe-area-inset-bottom);  ///兼容 IOS<11.2/
   padding-bottom: env(safe-area-inset-bottom);  ///兼容 IOS>11.2/
-  height: rem(56);
+  height: rem(64);
   z-index: 1000;
 
   .item {
@@ -44,5 +46,5 @@
   width: 100%;
   padding-bottom: constant(safe-area-inset-bottom);  ///兼容 IOS<11.2/
   padding-bottom: env(safe-area-inset-bottom);  ///兼容 IOS>11.2/
-  height: rem(56);
+  height: rem(64);
 }

@@ -184,8 +184,13 @@ class RenderCommentList extends React.Component {
 
   // 创建回复评论+回复回复接口
   async createReply(val) {
+    if (!val) {
+      Toast.info({ content: '请输入内容!' });
+      return;
+    }
+
     const id = this.props.thread?.threadData?.id;
-    if (!id || !val) return;
+    if (!id) return;
 
     const params = {
       id,

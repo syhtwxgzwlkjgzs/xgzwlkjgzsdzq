@@ -25,6 +25,7 @@ import InviteStore from './invite/action';
 import ForumStore from './forum/action';
 import MessageStore from './message/action';
 import store from './store';
+import BaseLayoutStore from './baselayout/action';
 
 useStaticRendering(isServer());
 
@@ -59,6 +60,7 @@ export default function initializeStore(initProps = {}) {
       topic: new TopicStore(),
       invite: new InviteStore(),
       forum: new ForumStore(),
+      baselayout: new BaseLayoutStore(),
     };
   }
   if (store.getStore() === null) {
@@ -89,6 +91,7 @@ export default function initializeStore(initProps = {}) {
       miniBind: new MiniBindStore(),
       invite: new InviteStore(),
       forum: new ForumStore(),
+      baselayout: new BaseLayoutStore(),
     });
   }
 
