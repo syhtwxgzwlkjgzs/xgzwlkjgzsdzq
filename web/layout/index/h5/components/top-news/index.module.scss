@@ -21,6 +21,7 @@
   .itemH5 {
     height: rem(36);
     border-bottom: rem(1) solid var(--border-line-color);
+    box-sizing: border-box;
     &:last-child{
       border-bottom: none;
     }
