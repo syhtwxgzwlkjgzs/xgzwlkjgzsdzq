@@ -5,7 +5,7 @@ import Page from '@components/page';
 import { Toast } from '@discuzq/design';
 import List from '@components/list';
 import { inject, observer } from 'mobx-react';
-import SliderLeft from '@components/slider-left';
+import SliderScroll from '@components/slider-scroll';
 import { THREAD_LIST_FILTER_COMPLEX } from '@common/constants/index';
 import { diffDate } from '@common/utils/diff-date';
 
@@ -86,7 +86,7 @@ class Index extends Component {
         <View className={styles['drafts-box']}>
           <List onRefresh={() => this.fetchData(true)} className={styles.list} noMore={currentPage >= totalPage}>
             <View className={styles['drafts-lenth']}>{list.length} 条草稿</View>
-            <SliderLeft
+            <SliderScroll
               data={data}
               list={list}
               RenderItem={DraftItem}
