@@ -20,7 +20,6 @@ class Index extends React.Component {
           filter: {
             complex: 2,
           },
-          sequence: 0,
           perPage: 10,
         },
       },
@@ -54,7 +53,6 @@ class Index extends React.Component {
           filter: {
             complex: 2,
           },
-          sequence: 0,
           perPage: 10,
         },
       });

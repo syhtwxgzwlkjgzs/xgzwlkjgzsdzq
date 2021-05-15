@@ -18,9 +18,7 @@ class Index extends React.Component {
           filter: {
             complex: 3,
           },
-          sequence: 0,
           perPage: 10,
-          page: 1,
         },
       },
       ctx,
