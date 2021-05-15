@@ -32,7 +32,7 @@ const List = forwardRef(({
   }, [noMore]);
 
   useEffect(() => {
-    onTouchMove();
+    onTouchMove({ isFirst: true });
     // TODO 判断是处于PC端，且
   }, []);
 
@@ -66,7 +66,7 @@ const List = forwardRef(({
     }
   };
 
-  const onTouchMove = throttle(() => {
+  const onTouchMove = throttle(({ isFirst = false }) => {
 
     if (!listWrapper || !listWrapper.current || !onRefresh) {
       return;
@@ -78,13 +78,21 @@ const List = forwardRef(({
     // 滑动事件
     onScroll({ scrollTop });
 
-    if ((scrollHeight - 40 <= clientHeight + scrollTop) && !isLoading) {
+    // 处理首页筛选，更新数据的时候，会触发一次上拉刷新
+    let allowHandleRefresh = true
+    if (!isFirst) {
+      allowHandleRefresh = (scrollTop !== 0)
+    }
+
+    if ((scrollHeight - 40 <= clientHeight + scrollTop) && !isLoading && allowHandleRefresh) {
       setIsLoading(true);
-      if (typeof(onRefresh) === 'function') {
+      if (typeof(onRefresh) === 'function' ) {
         const promise = onRefresh();
         isPromise(promise) && promise
           .then(() => {
             setIsLoading(false);
+            // TODO 临时解决，由于页面渲染太慢导致无限触发上拉刷新问题
+            listWrapper.current.scrollTop = listWrapper.current.scrollTop - 50;
           })
           .catch(() => {
             setIsLoading(false);

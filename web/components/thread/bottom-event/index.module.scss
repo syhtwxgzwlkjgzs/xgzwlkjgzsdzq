@@ -8,6 +8,7 @@
 .userImg {
   @include cursor-on-pc;
   display: flex;
+  align-items: center;
   .numText {
     line-height: rem(24);
     font-size: rem($font-size-label);

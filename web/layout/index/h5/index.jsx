@@ -161,17 +161,9 @@ class IndexH5Page extends React.Component {
     </div>
   )
 
-  // 下拉刷新
-  onPullDown = () => {
-    this.setState({ isFinished: false }) 
-    setTimeout(() => { 
-      this.setState({ isFinished: true }) 
-    }, 2000)
-  }
-
-  onScroll = (e) => {
-    this.props.baselayout.jumpToScrollingPos = e.scrollTop;
-  }
+  // onScroll = (e) => {
+  //   this.props.baselayout.jumpToScrollingPos = e.scrollTop;
+  // }
 
   render() {
     const { index } = this.props;
@@ -186,7 +178,6 @@ class IndexH5Page extends React.Component {
         showTabBar
         onRefresh={this.onRefresh}
         noMore={currentPage >= totalPage}
-        onScroll={this.onScroll}
         isFinished={isFinished}
         curr='home'
       >
@@ -195,7 +186,7 @@ class IndexH5Page extends React.Component {
               pageData.map((item, index) => (
                 <>
                   { index === 0 && this.renderHeaderContent()}
-                  <ThreadContent key={index} data={item} className={styles.listItem} />
+                  <ThreadContent key={index} data={item} showBottomStyle={index !== pageData.length - 1} className={styles.listItem} />
                 </>
               ))
             )
