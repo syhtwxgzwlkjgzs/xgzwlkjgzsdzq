@@ -68,6 +68,7 @@ const Index = ({
   }
 
   useEffect(() => {
+    console.log(filterContent);
     if (filterContent?.length < 262) {
       setHiddenMore(true);
     } else if (filterContent?.length > 1000) {
