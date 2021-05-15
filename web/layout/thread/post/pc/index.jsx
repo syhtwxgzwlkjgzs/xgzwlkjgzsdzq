@@ -50,7 +50,7 @@ class ThreadPCPage extends React.Component {
           <div className={styles['wrapper-inner']}>
             <Title pc
               title={postData.title}
-              isDisplay={this.props.isTitleShow}
+              isDisplay={true}
               onChange={title => this.props.setPostData({ title })}
             />
             <div className={styles.editor}>
