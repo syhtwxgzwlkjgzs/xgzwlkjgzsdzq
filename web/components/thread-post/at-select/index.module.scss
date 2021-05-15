@@ -37,8 +37,8 @@
       align-items: center;
 
       .delete-icon {
-        color: $icon-color-light;
         transform: scale(0.8);
+        color: $white;
       }
     }
   }
@@ -47,25 +47,24 @@
     .dzq-input {
       box-sizing: border-box;
       width: 100%;
-      padding: $padding-4n $padding-4n $padding-2n;
+      padding: rem($padding-4n $padding-4n $padding-2n);
       .dzq-input__inner {
         height: rem(36);
         font-weight: normal;
         font-size: $font-size-base;
-        font-family: "PingFang SC";
-        background: var(--background-color-text2);
+        background: $text-bg-color2;
         color: $text-color-primary;
         line-height: $font-line-height-base;
         padding-left: rem(30);
         border: none;
-        // padding-right: 5px;  
+        // padding-right: 5px;
         // text-align: left;
       }
       .dzq-input__icon {
         left: rem(16);
         top: 50%;
         margin-top: rem(-14);
-        color: var(--color-disabled2) !important;
+        color: $disabled-color2 !important;
       }
     }
   }
@@ -93,12 +92,12 @@
           height: 100%;
           text-align: center;
           line-height: rem(38);
-          border-radius: 50%;
+          border-radius: $border-radius-circle;
 
           .dzq-avatar__img {
             width: 100%;
             height: 100%;
-            border-radius: 50%;
+            border-radius: $border-radius-circle;
           }
         }
       }
@@ -113,7 +112,6 @@
         max-width: rem(170);
         @include single-line();
         font-size: $font-size-base;
-        line-height: rem(17.8);
         text-align: left;
         color: $text-color-primary;
       }
@@ -121,7 +119,6 @@
         max-width: rem(80);
         @include single-line();
         font-size: $font-size-small;
-        line-height: rem(16.8);
         text-align: left;
         color: $text-color-secondary;
       }
@@ -135,17 +132,17 @@
         .dzq-checkbox {
           width: rem(24);
           height: rem(24);
-          border-radius: 50%;
+          border-radius: $border-radius-circle;
           &:after {
-            border-radius: 50%;
+            border-radius: $border-radius-circle;
           }
         }
         &.is-checked {
           .dzq-checkbox {
-            background-color: #1878f3;
+            background-color: $primary-color;
           }
           .dzq-icon {
-            color: #fff;
+            color: $white;
           }
         }
       }
@@ -160,34 +157,38 @@
     right: 0;
     bottom: constant(safe-area-inset-bottom);
     bottom: env(safe-area-inset-bottom);
-    margin: 0 $margin-10;
-    padding: $padding-2n 0;
+    padding: rem($padding-2n) rem($padding-4n);
     background: $white;
+    justify-content: center;
     border-top: $border-solid-1;
 
     :global {
       .dzq-button {
-        width: 48%;
-        padding: $padding-10 0;
-        font-size: $font-size-middle;
-        color: $text-color-regular;
-        line-height: $font-line-height-small;
-        border: none;
-        border-radius: $border-radius-small;
-        background: $text-bg-color2;
+        @include button-default;
+        width: rem(166);
+        height: rem(42);
         -webkit-tap-highlight-color: transparent;
+        &:first-child {
+          margin-right: rem($margin-10);
+        }
+        &.is-selected {
+          @include button-primary;
+        }
       }
-    }
-
-    .selected {
-      color: $white;
-      background-color: $primary-color;
     }
   }
 }
 .pc {
   .wrapper {
     height: 500px;
+    .btn {
+      border-top: none;
+      :global {
+        .dzq-button {
+          width: rem(116);
+        }
+      }
+    }
   }
   .at-wrap {
     height: calc(500px - 135px);

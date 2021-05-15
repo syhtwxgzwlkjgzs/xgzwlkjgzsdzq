@@ -29,8 +29,10 @@ class TopicSelect extends Component {
   // 清除关键字
   clearKeywords = () => {
     this.setState(
-      { keywords: '', checkUser: [], page: 1 },
-      () => this.loadTopics()
+      { keywords: '', checkUser: [], pageNum: 1 },
+      () => {
+        this.loadTopics();
+      },
     );
   }
 
@@ -103,9 +105,7 @@ class TopicSelect extends Component {
         <div className={styles['item-left']}>
           <div className={styles.name}>#{item.content}#</div>
           {item.recommended === 1
-            && <div className={styles.recommend}>
-              <Icon name="LikeOutlined" size={20} color='#1878f3' />
-            </div>
+            && <Icon name="LikeOutlined" />
           }
         </div>
         <div className={styles['item-right']}>{item.viewCount}热度</div>
@@ -128,7 +128,7 @@ class TopicSelect extends Component {
           />
           {this.state.keywords &&
             <div className={styles.delete} onClick={this.clearKeywords}>
-              <Icon className={styles['delete-icon']} name="CloseOutlined" size={8} color='#f2f4f5'></Icon>
+              <Icon className={styles['delete-icon']} name="CloseOutlined" size={8}></Icon>
             </div>
           }
         </div>

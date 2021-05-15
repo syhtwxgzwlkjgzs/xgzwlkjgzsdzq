@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { Icon, Tabs } from '@discuzq/design';
 import ThreadContent from '@components/thread';
 import HomeHeader from '@components/home-header';
-import NoData from '@components/no-data';
 import styles from './index.module.scss';
 import TopNew from './components/top-news';
 import FilterView from './components/filter-view';

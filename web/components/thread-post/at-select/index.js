@@ -98,7 +98,6 @@ class AtSelect extends Component {
   }
 
   renderItem(info) {
-    console.log(info);
     const { data, index } = info;
     const item = data[index] || {};
     const username = item.user?.userName || '';
@@ -144,7 +143,7 @@ class AtSelect extends Component {
           />
           {this.state.keywords &&
             <div className={styles.delete} onClick={this.clearKeywords}>
-              <Icon className={styles['delete-icon']} name="CloseOutlined" size={8} color='#f2f4f5'></Icon>
+              <Icon className={styles['delete-icon']} name="CloseOutlined" size={8}></Icon>
             </div>
           }
         </div>

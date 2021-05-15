@@ -11,9 +11,10 @@ class CopyRight extends React.Component {
   render() {
     const { site } = this.props;
     if ( !site || !site.webConfig) return null;
-    const { setSite } = site.webConfig; 
+    const { setSite } = site.webConfig;
+    const clsName = this.props.center ? `${styles.container} ${styles.center}` : styles.container;
     return (
-      <div className={styles.container}>
+      <div className={clsName}>
         {setSite.siteRecord && <div className={styles.text}>{setSite.siteRecord}</div>}
         {setSite.siteRecordCode && <div className={styles.text}>{setSite.siteRecordCode}</div>}
       </div>

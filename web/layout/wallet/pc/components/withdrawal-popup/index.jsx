@@ -38,7 +38,7 @@ const WithdrawalPop = (props) => {
           <div></div>
           <div className={styles.title}>提现</div>
           <div onClick={onClose}>
-            <Icon name='CloseOutlined' size='12' color='#8490a8'></Icon>
+            <Icon name='CloseOutlined' size='12' color='#8590a6'></Icon>
           </div>
         </div>
         <div className={styles.availableAmount}>
