@@ -18,12 +18,12 @@ export default class index extends Component {
           </div>
           <div className={styles.labelInfo}>
             <div className={styles.labelValue}>
-              <Input mode="password" placeholder="请再次确认新密码" />
+              <Input mode="password" placeholder="请重复输入新密码" />
             </div>
           </div>
         </div>
         <div className={styles.bottom}>
-          <Button type={"primary"} className={styles.btn}>确定</Button>
+          <Button type={"primary"} className={styles.btn}>提交</Button>
         </div>
       </div>
     )

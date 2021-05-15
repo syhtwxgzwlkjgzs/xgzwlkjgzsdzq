@@ -27,7 +27,7 @@ const Title = ({ title, placeholder, isDisplay, onChange,  onFocus, onBlur, ...p
   }, [titleVal]);
 
   return (
-    <div className={`${isDisplay ? styles.wrapper : styles['is-display']}`}>
+    <div id="dzq-threadpost-title" className={`${isDisplay ? styles.wrapper : styles['is-display']}`}>
       <Input
         className={`${styles.title} ${isDisplay ? styles['is-display'] : ''}`}
         value={titleVal}
@@ -35,6 +35,7 @@ const Title = ({ title, placeholder, isDisplay, onChange,  onFocus, onBlur, ...p
         onChange={e => setTitleVal(e.target.value)}
         onFocus={onFocus}
         onBlur={onBlur}
+        focus
         {...props}
       />
     </div>

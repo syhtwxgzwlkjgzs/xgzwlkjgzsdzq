@@ -11,29 +11,26 @@ import styles from './index.module.scss';
  */
 
 const Index = (props) => {
-  const { 
-    noData = true, 
-    isLoading = false, 
-    children, 
-    footer = null, 
-    header = null, 
+  const {
+    noData = true,
+    isLoading = false,
+    children,
+    footer = null,
+    header = null,
     type = 'small',
     className = '',
-    platform = 'pc'
-  } = props
+    platform = 'pc',
+  } = props;
 
-  const isNoData = useMemo(() => {
-    return !children && !!noData
-  }, [noData, children])
+  const isNoData = useMemo(() => !children && !!noData, [noData, children]);
 
   const pcStyle = useMemo(() => {
     if (platform === 'pc') {
-      const width = type === 'small' ? styles.small : styles.normal
-      return `${styles.containerPC} ${width}`
-    } else {
-      return styles.containerH5
+      const width = type === 'small' ? styles.small : styles.normal;
+      return `${styles.containerPC} ${width}`;
     }
-  }, [platform, type])
+    return styles.containerH5;
+  }, [platform, type]);
 
   return (
     <div className={`${styles.container} ${pcStyle} ${className}`}>

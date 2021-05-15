@@ -23,6 +23,17 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      .richText{
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        word-break: break-all;
+        font-size: 14px;
+        :global(.qq-emotion){
+          height: 20px;
+          width: 20px;
+        }
+      }
     }
   }
 }

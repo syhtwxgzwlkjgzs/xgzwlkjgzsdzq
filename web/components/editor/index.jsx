@@ -42,7 +42,7 @@ export default function DVditor(props) {
       setCurrentPositon();
       // 因为vditor的lute中有一些emoji表情和 emoji.code 重叠了。这里直接先这样处理
       const value = `<img alt=":${emoji.code}:emoji" src="${emoji.url}" />`;
-      vditor.insertValue(value);
+      vditor.insertValue(vditor.html2md(value));
     }
   }, [emoji]);
 
@@ -54,14 +54,14 @@ export default function DVditor(props) {
     });
     if (users.length) {
       setCurrentPositon();
-      vditor && vditor.insertValue(users.join(''));
+      vditor && vditor.insertValue(vditor.html2md(users.join('')));
     }
   }, [atList]);
 
   useEffect(() => {
     if (topic) {
       setCurrentPositon();
-      vditor && vditor.insertValue(`&nbsp;${topic}&nbsp;`);
+      vditor && vditor.insertValue(vditor.html2md(`&nbsp;${topic}&nbsp;`));
     }
   }, [topic]);
 
@@ -74,8 +74,7 @@ export default function DVditor(props) {
     const timer = setTimeout(() => {
       clearTimeout(timer);
       if (vditor && vditor.getValue && vditor.getValue() === '\n' && vditor.getValue() !== value) {
-        // setCurrentPositon();
-        vditor.insertValue && vditor.insertValue(value);
+        vditor.setValue && vditor.setValue(vditor.html2md(value));
       }
     }, 200);
   }, [value]);
@@ -90,11 +89,13 @@ export default function DVditor(props) {
         height: pc ? 200 : 178,
         // 编辑器初始化值
         value,
-        // input: () => {
-        //   onChange(editor);
-        // },
-        blur: () => {
+        focus: () => {
+          setIsFocus(false);
+        },
+        input: () => {
           onChange(editor);
+        },
+        blur: () => {
           // 兼容Android的操作栏渲染
           const timer = setTimeout(() => {
             clearTimeout(timer);
