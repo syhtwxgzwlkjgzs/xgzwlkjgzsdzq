@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './index.module.scss';
-import H5HeadetContent from './h5/index'
-
+import H5HeadetContent from './h5/index';
+import PCHeadetContent from './pc/index';
 class UserCenterHead extends React.Component {
 
     renderPCContent() {
@@ -17,7 +17,7 @@ class UserCenterHead extends React.Component {
         if (platform === 'h5') {
             return <H5HeadetContent isOtherPerson={isOtherPerson} />;
         } else {
-            return this.renderPCContent();
+            return <PCHeadetContent isOtherPerson={isOtherPerson}/>;
         }
     }
 

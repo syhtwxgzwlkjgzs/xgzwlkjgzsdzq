@@ -15,6 +15,7 @@ class MyCenter extends React.Component {
     if (platform === 'pc') {
       return <MyPCPage />;
     }
+
     return <MyH5Page />;
   }
 }

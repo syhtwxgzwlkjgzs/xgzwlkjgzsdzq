@@ -1,88 +1,87 @@
-import React, { Component } from 'react'
-import UserCenterEditHeader from '../../user-center-edit-header/index'
+import React, { Component } from 'react';
+import UserCenterEditHeader from '../../user-center-edit-header/index';
 import { Button, Icon, Input } from '@discuzq/design';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
-import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData'
+import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData';
 @inject('site')
 @inject('user')
 @observer
 class index extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      isClickNickName: false
-    }
-    this.user = this.props.user || {}
+      isClickNickName: false,
+    };
+    this.user = this.props.user || {};
   }
 
   initState = () => {
     this.setState({
-      isClickNickName: false
-    })
+      isClickNickName: false,
+    });
   }
 
   componentDidMount() {
-    this.initState()
-    this.props.user.initEditInfo()
+    this.initState();
+    this.props.user.initEditInfo();
   }
 
   // 点击取消
   handleCancel = () => {
-    Router.back()
+    Router.back();
   }
 
   handleClickNickName = () => {
     this.setState({
-      isClickNickName: !this.state.isClickNickName
-    })
+      isClickNickName: !this.state.isClickNickName,
+    });
   }
 
   handleChangeNickName = (e) => {
-    let value = e.target.value
-    this.props.user.editNickName = value
+    const { value } = e.target;
+    this.props.user.editNickName = value;
   }
 
   handleBlurNickName = (e) => {
-    let value = e.target.value
-    this.props.user.editNickName = value
+    const { value } = e.target;
+    this.props.user.editNickName = value;
     this.setState({
-      isClickNickName: false
-    })
+      isClickNickName: false,
+    });
   }
 
   // 渲染修改用户名
   renderInputNickName = () => {
-    const { isClickNickName } = this.state
+    const { isClickNickName } = this.state;
     return (
       <div className={styles.userCenterEditLabel}>
         <label>昵称</label>
         <div>{isClickNickName ? <Input focus={true} maxLength={10} value={this.user.editNickName} onChange={this.handleChangeNickName} onBlur={this.handleBlurNickName} /> : this.user.editNickName}</div>
       </div>
-    )
+    );
   }
 
   handleUpdateEditedUserInfo = () => {
-    this.props.user.updateEditedUserInfo()
-    Router.push({url: `/my`})
+    this.props.user.updateEditedUserInfo();
+    Router.push({ url: '/my' });
   }
 
   handleGoToEditMobile = () => {
     console.log('去到修改手机号页面');
-    Router.push({url: `/my/edit/mobile`})
+    Router.push({ url: '/my/edit/mobile' });
   }
 
   handleGoToEditAccountPwd = () => {
     console.log('去到修改账户密码页面');
-    Router.push({url: `/my/edit/pwd`})
+    Router.push({ url: '/my/edit/pwd' });
   }
 
   handleGoToEditPayPwd = () => {
     console.log('去到修改支付密码页面');
-    Router.push({url: '/my/edit/paypwd'})
+    Router.push({ url: '/my/edit/paypwd' });
   }
 
   render() {
@@ -155,8 +154,8 @@ class index extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default HOCFetchSiteData(index)
+export default index;

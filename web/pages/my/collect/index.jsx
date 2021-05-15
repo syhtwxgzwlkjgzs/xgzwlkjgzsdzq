@@ -12,7 +12,17 @@ class Index extends React.Component {
   page = 1;
   prePage = 10;
   static async getInitialProps(ctx) {
-    const threads = await readThreadList({ params: { filter: {}, sequence: 0, perPage: 10, page: 1 } }, ctx);
+    const threads = await readThreadList(
+      {
+        params: {
+          filter: {
+            complex: 3,
+          },
+          perPage: 10,
+        },
+      },
+      ctx,
+    );
     return {
       serverIndex: {
         threads: threads && threads.code === 0 ? threads.data : null,
@@ -30,25 +40,35 @@ class Index extends React.Component {
     const { index } = this.props;
     const hasThreadsData = !!index.threads;
     if (!hasThreadsData) {
-      this.props.index.getReadThreadList();
+      this.props.index.getReadThreadList({
+        perPage: this.prePage,
+        page: this.page,
+        filter: {
+          complex: 3,
+        },
+      });
     }
   }
   dispatch = async (type, data = {}) => {
+    const { index } = this.props;
     await index.getReadThreadList({
       perPage: this.prePage,
       page: this.page,
+      filter: {
+        complex: 3,
+      },
     });
-  }
+  };
 
   render() {
     const { site } = this.props;
     const { platform } = site;
 
     if (platform === 'pc') {
-      return <IndexPCPage dispatch={this.dispatch}/>;
+      return <IndexPCPage dispatch={this.dispatch} />;
     }
 
-    return <IndexH5Page dispatch={this.dispatch}/>;
+    return <IndexH5Page dispatch={this.dispatch} />;
   }
 }
 
