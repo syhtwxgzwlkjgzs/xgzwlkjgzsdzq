@@ -10,7 +10,6 @@ import xss from '@common/utils/xss';
  */
 const TopNews = ({ data = [], router, platform = 'h5'}) => {
   const onClick = ({ threadId } = {}) => {
-    conosle.log(333)
     router.push(`/thread/${threadId}`);
   };
 

@@ -29,6 +29,7 @@ import { getVisualViewpost } from '@common/utils/get-client-height';
 import throttle from '@common/utils/thottle';
 import Header from '@components/header';
 import Router from '@discuzq/sdk/dist/router';
+import VideoDisplay from '@components/thread-post/video-display';
 
 function isIOS() {
   return /ip[honead]{2,4}(?:.*os\s([\w]+)\slike\smac|;\sopera)/i.test(window.navigator.userAgent.toLowerCase());
@@ -223,7 +224,10 @@ class ThreadCreate extends React.Component {
 
           {/* 视频组件 */}
           {(postData.video && postData.video.thumbUrl) && (
-            <Video className="dzq-post-video" src={postData.video.thumbUrl} onReady={this.props.onVideoReady} />
+            <VideoDisplay
+              src={postData.video.thumbUrl}
+              onDelete={() => this.props.setPostData({ video: {} })}
+              onReady={this.props.onVideoReady} />
           )}
           {/* 附件上传组件 */}
           {(currentDefaultOperation === defaultOperation.attach || Object.keys(postData.files).length > 0) && (
