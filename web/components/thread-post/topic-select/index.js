@@ -79,6 +79,10 @@ class TopicSelect extends Component {
     }
     // 2 发起请求
     await fetchTopic(params);
+    if (pageNum * pageSize > this.props.threadPost.topics.length) {
+      this.setState({ isLastPage: true });
+      return Promise.reject();
+    }
     // 3 更新页码
     this.setState({ pageNum: this.state.pageNum + 1 });
     return Promise.reject();

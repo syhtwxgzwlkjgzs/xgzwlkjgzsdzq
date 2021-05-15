@@ -11,6 +11,7 @@ import LoadingTips from './components/loading-tips';
 import styleVar from '@common/styles/theme/default.scss.json';
 import { Icon, Input, Badge, Toast } from '@discuzq/design';
 import Header from '@components/header';
+import goToLoginPage from '@common/utils/go-to-login-page';
 
 import ReportPopup from './components/report-popup';
 import ShowTop from './components/show-top';
@@ -113,6 +114,7 @@ class ThreadH5Page extends React.Component {
   async onCollectionClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
       return;
     }
 
@@ -176,6 +178,7 @@ class ThreadH5Page extends React.Component {
   onInputClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
       return;
     }
 
@@ -196,6 +199,7 @@ class ThreadH5Page extends React.Component {
   onOperClick = (type) => {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
       return;
     }
 
@@ -286,6 +290,8 @@ class ThreadH5Page extends React.Component {
 
     if (success) {
       this.setTopState(params.isStick);
+      // TODO:更新首页置顶列表
+      // this.props.index.screenData()
       return;
     }
 
@@ -346,7 +352,10 @@ class ThreadH5Page extends React.Component {
 
   // 点击发布按钮
   async onPublishClick(val) {
-    if (!val) return;
+    if (!val) {
+      Toast.info({ content: '请输入内容!' });
+      return;
+    }
     return this.comment ? await this.updateComment(val) : await this.createComment(val);
   }
 
@@ -422,6 +431,7 @@ class ThreadH5Page extends React.Component {
   async onLikeClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
       return;
     }
 
@@ -462,6 +472,7 @@ class ThreadH5Page extends React.Component {
   onRewardClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
       return;
     }
 

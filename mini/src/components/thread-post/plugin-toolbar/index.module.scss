@@ -1,3 +1,4 @@
+@import '@styles/index.scss';
 .container {
   height: 45px;
   padding: 0 16px;
@@ -7,6 +8,7 @@
   font-size: var(--font-size-label);
   border-bottom: 1px solid var(--border-line-color);
   background: var(--color-white);
+  position: relative;
 
   .category {
     line-height: 1;
@@ -15,6 +17,7 @@
 
     .icon {
       margin-right: 6px;
+      color: $icon-color;
     }
 
     Text {
@@ -23,7 +26,39 @@
   }
 
   .plug-icon {
-    margin-left: 24px;
+    margin-left: 16px;
+    margin-right: 8px;
+    color: $icon-color;
   }
 
+  .icon-color {
+    color: $icon-color;
+  }
+
+  .plugin-icon-container {
+    background: $white;
+    z-index: 10;
+    height: 28px;
+    box-shadow: 0px 0px 8px #f2f3f5;
+    position: absolute;
+    right: 16px;
+    left: 16px;
+
+    .plugin-icon {
+      float: left;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .switcher {
+      float: right;
+      width: 35px;
+      margin: 4px 0;
+      border-left: 1px solid var(--border-line-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
 }

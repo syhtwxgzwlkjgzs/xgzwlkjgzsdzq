@@ -8,8 +8,8 @@
       font-size: rem($font-size-primary);
       border: none;
       padding: 0;
-      height: rem(17);
-      line-height: rem(17);
+      height: rem(18);
+      line-height: rem(18);
       border-radius: 0;
       text-align: right;
       -webkit-tap-highlight-color: transparent;
@@ -53,6 +53,7 @@
   border-bottom: $border-solid-1;
   padding-bottom: rem($padding-4n);
   color: $text-color-regular;
+  font-size: $font-size-primary;
 
   .prepend {
     word-break: keep-all;
@@ -79,10 +80,16 @@
     align-items: center;
     justify-content: center;
     border-radius: $border-radius-small;
+    font-size: $font-size-primary;
     width: rem(76);
     height: rem(36);
     background: $text-bg-color2;
+    color: $text-color-primary;
     margin-bottom: rem($margin-4n);
+
+    &.actived {
+      color: $primary-color;
+    }
   }
 }
 

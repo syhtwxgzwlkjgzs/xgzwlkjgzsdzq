@@ -1,22 +1,8 @@
-.container {
-  background: #eee;
-  height: 100vh;
+.rightside {
+  width: 100%;
+  overflow: hidden;
+}
 
-  .list {
-    display: flex;
-    flex-wrap: no-wrap;
-    justify-content: space-between;
-    gap: 20px;
-    .left {
-      flex: 1;
-      background: #fff;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .right {
-      width: 320px;
-      height: 200px;
-      background: rgb(31, 102, 168);
-    }
-  }
+.stepper-container {
+  margin-bottom: 20px;
 }

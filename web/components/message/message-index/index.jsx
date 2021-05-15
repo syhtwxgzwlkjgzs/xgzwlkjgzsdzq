@@ -1,44 +1,68 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-
-import MessageCard from '@components/message/message-card';
-import Notice from '@components/message/notice';
-import { PullDownRefresh, ScrollView } from '@discuzq/design';
-
+import { withRouter } from 'next/router';
 import styles from './index.module.scss';
+
+import Card from '@components/message/message-card';
+import Notice from '@components/message/notice';
 
 @inject('message')
 @observer
 export class MessageIndex extends Component {
   constructor(props) {
     super(props);
-    this.pullDownRef = React.createRef();
+    this.state = {
+      type: 'chat',
+      items: [
+        {
+          iconName: 'RemindOutlined',
+          title: '帖子通知',
+          link: '/message/?page=thread',
+          totalCount: 0,
+        },
+        {
+          iconName: 'RenminbiOutlined',
+          title: '财务通知',
+          link: '/message/?page=financial',
+          totalCount: 0,
+        },
+        {
+          iconName: 'LeaveWordOutlined',
+          title: '账号消息',
+          link: '/message/?page=account',
+          totalCount: 0,
+        },
+      ],
+    };
   }
 
-  state = {
-    type: 'chat',
-    finished: true,
-    isReachingTop: false,
-    cardContent: [
-      {
-        iconName: 'RemindOutlined',
-        title: '帖子通知',
-        link: '/message/?page=thread',
-        totalCount: 0,
-      },
-      {
-        iconName: 'RenminbiOutlined',
-        title: '财务通知',
-        link: '/message/?page=financial',
-        totalCount: 0,
-      },
-      {
-        iconName: 'LeaveWordOutlined',
-        title: '账号消息',
-        link: '/message/?page=account',
-        totalCount: 0,
-      },
-    ],
+  async componentDidMount() {
+    await this.props.message.readDialogList(1);
+    const { threadUnread, financialUnread, accountUnread } = this.props.message;
+    const items = [...this.state.items];
+    items[0].totalCount = threadUnread;
+    items[1].totalCount = financialUnread;
+    items[2].totalCount = accountUnread;
+
+    this.setState({ items });
+  }
+
+  formatChatDialogList = (data = []) => {
+    const newList = [];
+    data.forEach((item) => {
+      const { dialogMessage, sender } = item;
+      newList.push({
+        id: item.id,
+        createdAt: item.updatedAt || item.createdAt,
+        dialogId: dialogMessage?.dialogId,
+        content: dialogMessage?.summary,
+        avatar: sender?.avatar,
+        userId: sender?.userId,
+        username: sender?.username,
+      });
+    });
+
+    return newList;
   };
 
   handleDelete = (item) => {
@@ -46,22 +70,9 @@ export class MessageIndex extends Component {
     message.deleteDialog(item.id);
   };
 
-  handleScroll = ({ scrollTop }) => {
-    // 只有在顶部才刷新
-    if (scrollTop <= 0) {
-      this.setState({ isReachingTop: true });
-    } else {
-      this.setState({ isReachingTop: false });
-    }
-  };
-
-  handleRefresh = () => {
+  onPullDown = () => {
     const { message } = this.props;
-    this.setState({ finished: false });
-    setTimeout(async () => {
-      await message.readDialogList(1);
-      this.setState({ finished: true });
-    }, 3000);
+    return message.readDialogList(1);
   };
 
   handleScrollBottom = () => {
@@ -69,62 +80,33 @@ export class MessageIndex extends Component {
     return message.readDialogList(message.dialogList.currentPage + 1);
   };
 
-  formatChatDialogList = (dialogList) => {
-    const newList = [];
-    dialogList.forEach(({ dialogMessage, sender }) => {
-      newList.push({
-        id: dialogMessage?.id || '',
-        dialogId: dialogMessage?.dialogId || '',
-        createdAt: dialogMessage?.createdAt || 0,
-        content: dialogMessage?.summary || '',
-        title: '',
-        avatar: sender?.avatar || '',
-        userId: sender?.userId || '',
-        username: sender?.username || '',
-      });
-    });
-
-    return newList;
-  };
-
-  async componentDidMount() {
-    await this.props.message.readDialogList(1);
-    const { threadUnread, financialUnread, accountUnread } = this.props.message;
-    const cardContent = [...this.state.cardContent];
-    cardContent[0].totalCount = threadUnread;
-    cardContent[1].totalCount = financialUnread;
-    cardContent[2].totalCount = accountUnread;
-
-    this.setState({ cardContent });
+  // 跳转其它消息类型
+  toOtherMessage = (link) => {
+    this.props.router.push(link);
   }
 
   render() {
-    const { cardContent, type, finished, isReachingTop } = this.state;
+    const { items } = this.state;
+    const card = <Card cardItems={items} onClick={this.toOtherMessage} />;
     const { dialogList } = this.props.message;
     const newDialogList = this.formatChatDialogList(dialogList.list);
 
     return (
-      <div className={styles.container} ref={this.pullDownRef}>
-        <PullDownRefresh
-          className={styles.pullDownContainer}
-          onRefresh={this.handleRefresh.bind(this)}
-          isFinished={finished}
-          isScrollView
-          isReachTop={isReachingTop}
-        >
-          <Notice
-            topCard={<MessageCard cardItems={cardContent} />}
-            noMore={dialogList.currentPage >= dialogList.totalPage}
-            list={newDialogList}
-            type={type}
-            onBtnClick={this.handleDelete}
-            onScrollBottom={this.handleScrollBottom}
-            onScroll={this.handleScroll}
-          />
-        </PullDownRefresh>
+      <div className={styles.wrapper}>
+        <Notice
+          height='calc(100vh - 65px)'
+          withBottomBar={true}
+          noMore={dialogList.currentPage >= dialogList.totalPage}
+          topCard={card}
+          list={newDialogList}
+          type='chat'
+          onPullDown={this.onPullDown}
+          onScrollBottom={this.handleScrollBottom}
+          onBtnClick={this.handleDelete}
+        />
       </div>
-    );
+    )
   }
 }
 
-export default MessageIndex;
+export default withRouter(MessageIndex);

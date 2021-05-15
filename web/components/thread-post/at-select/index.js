@@ -48,6 +48,10 @@ class AtSelect extends Component {
       params.filter.type = 0;
     }
     const ret = await threadPost.fetchFollow(params);
+    if (page * perPage > this.props.threadPost.follows.length) {
+      this.setState({ finish: true });
+      return Promise.reject();
+    }
     if (ret.code === 0) {
       this.setState({ page: page + 1 });
     }

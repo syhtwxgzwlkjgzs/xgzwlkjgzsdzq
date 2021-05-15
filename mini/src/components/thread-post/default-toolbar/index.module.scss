@@ -11,7 +11,8 @@
   @include ios-safe-area-inset-bottom;
 
   .plug-icon {
-    margin-right: 20px;
+    margin-right: 24px;
+    color: $icon-color;
   }
 
   Text {

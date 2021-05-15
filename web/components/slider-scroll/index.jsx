@@ -118,7 +118,7 @@ SlierItem.defaultProps = {
   iconText: '删除',
   Color: '#fff',
   Background: '#e02433',
-  onBtnClick: () => {},
+  onBtnClick: () => { },
 };
 
 /**
@@ -132,6 +132,7 @@ class Index extends Component {
       currentId: 0,
       isTop: false, // 列表位置
       damping: 0, // 下拉距离，下拉时将动态改变
+      isFinished: true, // 下拉刷新是否结束
     }
   }
 
@@ -154,32 +155,36 @@ class Index extends Component {
     const _isTop = scrollTop === 0;
     isTop !== _isTop && this.setState({
       isTop: _isTop,
-      damping: _isTop ? 80 : 0,
+      damping: _isTop ? 100 : 0,
     });
   }
 
-  onPullDownRefresh = () => {
+  onPullDownRefresh = async () => {
     this.setState({ currentId: 0 });
     if (!this.state.isTop) return;
-    this.props.onPullDown();
+    this.setState({ isFinished: false });
+    await this.props.onPullDown();
+    this.setState({ isFinished: true });
   }
 
   render() {
     const {
-      isFinished,
-      height,
-      noMore,
-      topCard,
       list,
+      noMore,
+      height,
+      withTopBar,
+      withBottomBar,
+      topCard,
       onPullDown,
       onScrollBottom,
       ...other
     } = this.props;
-    const { damping, currentId } = this.state;
+    const { isFinished, damping, currentId } = this.state;
 
     return (
       <div className={classNames(styles.wrapper, {
-        [styles['wrapper-bar']]: topCard !== null
+        [styles['with-top']]: withTopBar,
+        [styles['with-bottom']]: withBottomBar,
       })}>
         <PullDownRefresh
           onRefresh={this.onPullDownRefresh}
@@ -216,9 +221,10 @@ class Index extends Component {
 }
 
 Index.propsTypes = {
-  isFinished: PropTypes.bool,
   height: PropTypes.string,
   noMore: PropTypes.bool,
+  withTopBar: PropTypes.bool,
+  withBottomBar: PropTypes.bool,
   topCard: PropTypes.object,
   list: PropTypes.array,
   onPullDown: PropTypes.func,
@@ -226,12 +232,13 @@ Index.propsTypes = {
 }
 
 Index.defaultProps = {
-  isFinished: true,
   height: '100vh',
   noMore: false,
+  withTopBar: false,
+  withBottomBar: false,
   topCard: null,
   list: [],
-  onPullDown: () => { },
+  onPullDown: () => Promise.resolve(true),
   onScrollBottom: () => { },
 }
 
