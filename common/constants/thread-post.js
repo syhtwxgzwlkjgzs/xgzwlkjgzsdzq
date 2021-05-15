@@ -10,6 +10,14 @@ export const LOADING_TOTAL_TYPE = {
 };
 
 /**
+ * 上传视频音频类型
+ */
+export const CREATE_VA = {
+  video: 0,
+  audio: 1,
+};
+
+/**
  * 附件类型，上传的时候需要传递的 type
  */
 export const ATTACHMENT_TYPE = {
