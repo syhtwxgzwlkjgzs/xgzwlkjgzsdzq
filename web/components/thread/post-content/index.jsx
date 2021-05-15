@@ -2,6 +2,7 @@ import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react'
 import { Button, Icon, RichText } from '@discuzq/design';
 import { noop } from '../utils'
 
+import fuzzyCalcContentLength from '@common/utils/fuzzy-calc-content-length';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 
@@ -68,10 +69,10 @@ const Index = ({
   }
 
   useEffect(() => {
-    console.log(filterContent);
-    if (filterContent?.length < 262) {
+    const length = fuzzyCalcContentLength(filterContent)
+    if (length < 262) {
       setHiddenMore(true);
-    } else if (filterContent?.length > 1000) {
+    } else if (length > 1000) {
       setContentTooLong(true)
     }
   }, [filterContent]);
