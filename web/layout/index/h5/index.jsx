@@ -11,6 +11,7 @@ import BaseLayout from '@components/base-layout';
 @inject('site')
 @inject('user')
 @inject('index')
+@inject('baselayout')
 @observer
 class IndexH5Page extends React.Component {
   constructor(props) {
@@ -166,6 +167,10 @@ class IndexH5Page extends React.Component {
     setTimeout(() => { 
       this.setState({ isFinished: true }) 
     }, 2000)
+  }
+
+  onScroll = (e) => {
+    this.props.baselayout.jumpToScrollingPos = e.scrollTop;
   }
 
   render() {
