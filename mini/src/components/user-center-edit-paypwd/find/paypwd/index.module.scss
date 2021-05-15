@@ -1,0 +1,98 @@
+@import '@common/styles/index.scss';
+@import '@common/styles/_variable.scss';
+
+.content {
+  padding: $padding-6n;
+  padding-bottom: 0;
+  h3 {
+    font-size: $font-size-large;
+    color: $text-color-primary;
+    margin-bottom: $margin-5n;
+    letter-spacing: 1px;
+  }
+  .setTtile {
+    display: block;
+    font-size: $font-size-large;
+    color: $text-color-primary;
+    margin-bottom: $margin-5n;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+  .labelInfo {
+    padding: $margin-10 0 $margin-6n;
+    border-bottom: 1px solid $border-color;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $margin-6n;
+    .labelName {
+      color: $text-color-regular;
+      font-size: $font-size-primary;
+      margin-right: $margin-4n;
+    }
+    .labelValue {
+      color: $text-color-primary;
+      font-size: $font-size-middle;
+      :global {
+        .dzq-input__icon {
+          line-height: 36px;
+        }
+      }
+    }
+    .codeBtn {
+      height: 36px;
+      font-size: $font-size-primary;
+    }
+    .labelInput {
+      :global {
+        .dzq-input__inner {
+          border: none;
+        }
+      }
+    }
+  }
+  .bindCode {
+    color: $text-color-regular;
+    font-size: $font-size-primary;
+  }
+}
+
+.bottom {
+  position: fixed;
+  bottom: 20px;
+  width: 100%;
+  border-top: 1px solid $border-color;
+  padding: $padding-2n $padding-4n $padding-10;
+  .btn {
+    width: 343px;
+    height: 42px;
+    font-size: $font-size-middle;
+  }
+}
+
+.labelInfo {
+  padding: $padding-6n;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .labelValue {
+    color: $text-color-primary;
+    font-size: $font-size-middle;
+    border-bottom: 1px solid $border-color;
+    flex: 1;
+    :global {
+      .dzq-input {
+        width: 100%;
+      }
+      .dzq-input__inner {
+        width: 100%;
+        border: none;
+        font-size: $font-size-middle;
+      }
+      .dzq-input__icon {
+        line-height: 36px;
+      }
+    }
+  }
+}
+

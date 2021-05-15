@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react';
 import { Button, Input, Toast } from '@discuzq/design';
 import Header from '@components/header';
-import styles from './index.module.scss'
-import HOCFetchSiteData from '../../middleware/HOCFetchSiteData'
-import CaptchaInput from './captcha-input/index'
-import VerifyCode from './verify-code/index'
+import styles from './index.module.scss';
+import CaptchaInput from './captcha-input/index';
+import VerifyCode from './verify-code/index';
 import Router from '@discuzq/sdk/dist/router';
+import { View, Text } from '@tarojs/components';
 
 @inject('site')
 @inject('user')
@@ -158,38 +158,37 @@ class index extends Component {
       isSubmit = (list.length !== 6 || !this.validateTel(bind_mobile))
     }
     return (
-      <div>
-        <Header />
-        <div className={styles.content}>
-          <h3>{current_step === 'first' ? '验证旧手机' : '设置新手机'}</h3>
-          <div className={styles.labelInfo}>
+      <View>
+        <View className={styles.content}>
+          <Text className={styles.setTtile}>{current_step === 'first' ? '验证旧手机' : '设置新手机'}</Text>
+          <View className={styles.labelInfo}>
             {
               current_step === 'first' ? (
-                <div>
-                  <span className={styles.labelName}>原手机号</span>
-                  <span className={styles.labelValue}>{mobile}</span>
-                </div>
+                <View>
+                  <Text className={styles.labelName}>原手机号</Text>
+                  <Text className={styles.labelValue}>{mobile}</Text>
+                </View>
               ) : (
-                <div className={styles.labelInput}>
+                <View className={styles.labelInput}>
                   <Input placeholder="输入新手机号码" onChange={this.handleInputChange} focus={true} onBlur={this.handleInputBlur} onFocus={this.handleInputFocus} value={bind_mobile} />
-                </div>
+                </View>
               )
             }
-            <div>
+            <View>
               <VerifyCode initTimeValue={this.state.initTimeValue} value_pass_check={value_pass_check} key={current_step} text={"发送验证码"} getVerifyCode={this.getVerifyCode} />
-            </div>
-          </div>
-          <div className={styles.bindCode}>
-            <span>请输入短信验证码</span>
+            </View>
+          </View>
+          <View className={styles.bindCode}>
+            <Text>请输入短信验证码</Text>
             <CaptchaInput current_step={current_step} updatePwd={this.updatePwd} list={list} is_blur={is_blur} />
-          </div>
-        </div>
-        <div className={styles.bottom}>
+          </View>
+        </View>
+        <View className={styles.bottom}>
           <Button disabled={isSubmit} onClick={this.handleStepBtn} type={"primary"} className={styles.btn}>{this.state.current_step === 'first' ? "下一步" : '提交'}</Button>
-        </div>
-      </div>
+        </View>
+      </View>
     )
   }
 }
 
-export default HOCFetchSiteData(index)
+export default index

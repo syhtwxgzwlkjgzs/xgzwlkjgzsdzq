@@ -5,11 +5,16 @@ export default {
   // TODO: 分包处理
   // 首页和详情页在主包
   pages: [
-    'pages/my/index',
     'pages/index/index',
     'pages/thread/index',
     'pages/message/index',
+    'pages/my/index',
     'pages/my/edit/index',
+    'pages/my/edit/mobile/index',
+    'pages/my/edit/pwd/index',
+    'pages/my/edit/paypwd/index',
+    'pages/my/edit/reset/paypwd/index',
+    'pages/my/edit/find/paypwd/index',
   ],
   subPackages: [
     {

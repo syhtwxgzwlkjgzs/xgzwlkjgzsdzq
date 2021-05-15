@@ -73,17 +73,17 @@ class index extends Component {
 
   handleGoToEditMobile = () => {
     console.log('去到修改手机号页面');
-    Router.push({url: `/my/edit/mobile`})
+    Router.push({url: `mobile/index`})
   }
 
   handleGoToEditAccountPwd = () => {
     console.log('去到修改账户密码页面');
-    Router.push({url: `/my/edit/pwd`})
+    Router.push({url: `pwd/index`})
   }
 
   handleGoToEditPayPwd = () => {
     console.log('去到修改支付密码页面');
-    Router.push({url: '/my/edit/paypwd'})
+    Router.push({url: 'paypwd/index'})
   }
 
   render() {
