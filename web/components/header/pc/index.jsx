@@ -15,7 +15,7 @@ class Header extends React.Component {
 
     const keyword = this.props.router.query.keyword || '';
     this.state = {
-      value: keyword
+      value: keyword,
     };
   }
 
@@ -25,44 +25,53 @@ class Header extends React.Component {
 
   onChangeInput = (e) => {
     this.setState({
-      value: e
+      value: e,
     });
-  }
+  };
 
   handleSearch = (e) => {
-   const { onSearch = () => {} } = this.props
+    const { onSearch = () => {} } = this.props;
 
-   onSearch(e.target?.value || '')
-  }
+    onSearch(e.target?.value || '');
+  };
 
   handleIconClick = () => {
-    const { onSearch = () => {} } = this.props
-    onSearch(this.state.value || '')
-  }
-
+    const { onSearch = () => {} } = this.props;
+    onSearch(this.state.value || '');
+  };
 
   handleRouter = (url) => {
-    this.props.router.push(url)
-  }
+    this.props.router.push(url);
+  };
   // 登录
   toLogin = () => {
     goToLoginPage({ url: '/user/login' });
-  }
+  };
   renderHeaderLogo() {
     const { site } = this.props;
     if (site.setSite && site.setSite.siteLogo && site.setSite.siteLogo !== '') {
       return <img className={styles.siteLogo} src={site.setSite.siteLogo} onClick={() => this.handleRouter('/')} />;
     }
-    return <img className={styles.siteLogo} src='/dzq-img/admin-logo-pc.png' onClick={() => this.handleRouter('/')} />;
+    return <img className={styles.siteLogo} src="/dzq-img/admin-logo-pc.png" onClick={() => this.handleRouter('/')} />;
   }
+
+  handleUserInfoClick = () => {
+    this.props.router.push('/my');
+  };
 
   renderUserInfo() {
     // todo 跳转
     const { user, site } = this.props;
     if (user && user.userInfo && user.userInfo.id) {
       return (
-        <div className={styles.userInfo}>
-          <Avatar className={styles.avatar} name={user.userInfo.username} circle={true} image={user.userInfo.avatarUrl} onClick={() => {}}></Avatar>
+        <div className={styles.userInfo} onClick={this.handleUserInfoClick}>
+          <Avatar
+            className={styles.avatar}
+            name={user.userInfo.username}
+            circle={true}
+            image={user.userInfo.avatarUrl}
+            onClick={() => {}}
+          ></Avatar>
           <p className={styles.userName}>{user.userInfo.username || ''}</p>
         </div>
       );
@@ -70,7 +79,9 @@ class Header extends React.Component {
 
     return (
       <div className={styles.userInfo}>
-        <Button className={styles.userBtn} type='primary' onClick={this.toLogin}>登录</Button>
+        <Button className={styles.userBtn} type="primary" onClick={this.toLogin}>
+          登录
+        </Button>
         {site.isRegister && <Button className={styles.userBtn}>注册</Button>}
       </div>
     );
@@ -84,49 +95,61 @@ class Header extends React.Component {
     const { site, user } = this.props;
 
     return (
-            <div className={styles.header}>
-                <div className={styles.headerFixedBox}>
-                    <div className={styles.headerContent}>
-                        <div className={styles.left}>
-                            {this.renderHeaderLogo()}
-                            <div className={styles.inputBox}>
-                                <Input
-                                  placeholder='搜索'
-                                  style={{ width: '580px' }}
-                                  icon='SearchOutlined'
-                                  value={this.state.value}
-                                  onEnter={this.handleSearch}
-                                  onChange={e => this.onChangeInput(e.target.value)}
-                                  onIconClick={this.handleIconClick}
-                                />
-                            </div>
-                        </div>
-                        <div className={styles.right}>
-                            <div className={styles.iconList}>
-                                <div className={styles.iconItem} onClick={() => this.handleRouter('/')}>
-                                    <Icon onClick={() => {
-                                      this.iconClickHandle('home');
-                                    }} name="HomeOutlined" size={15} />
-                                    <p>首页</p>
-                                </div>
-                                <div className={styles.iconItem} onClick={() => this.handleRouter('/message')}>
-                                    <Icon onClick={() => {
-                                      this.iconClickHandle('home');
-                                    }} name="MailOutlined" size={17} />
-                                    <p>消息</p>
-                                </div>
-                                <div className={styles.iconItem} onClick={() => this.handleRouter('/search')}>
-                                    <Icon onClick={() => {
-                                      this.iconClickHandle('home');
-                                    }} name="FindOutlined" size={17} />
-                                    <p>发现</p>
-                                </div>
-                            </div>
-                            {this.renderUserInfo()}
-                        </div>
-                    </div>
-                </div>
+      <div className={styles.header}>
+        <div className={styles.headerFixedBox}>
+          <div className={styles.headerContent}>
+            <div className={styles.left}>
+              {this.renderHeaderLogo()}
+              <div className={styles.inputBox}>
+                <Input
+                  placeholder="搜索"
+                  style={{ width: '580px' }}
+                  icon="SearchOutlined"
+                  value={this.state.value}
+                  onEnter={this.handleSearch}
+                  onChange={e => this.onChangeInput(e.target.value)}
+                  onIconClick={this.handleIconClick}
+                />
+              </div>
             </div>
+            <div className={styles.right}>
+              <div className={styles.iconList}>
+                <div className={styles.iconItem} onClick={() => this.handleRouter('/')}>
+                  <Icon
+                    onClick={() => {
+                      this.iconClickHandle('home');
+                    }}
+                    name="HomeOutlined"
+                    size={15}
+                  />
+                  <p>首页</p>
+                </div>
+                <div className={styles.iconItem} onClick={() => this.handleRouter('/message')}>
+                  <Icon
+                    onClick={() => {
+                      this.iconClickHandle('home');
+                    }}
+                    name="MailOutlined"
+                    size={17}
+                  />
+                  <p>消息</p>
+                </div>
+                <div className={styles.iconItem} onClick={() => this.handleRouter('/search')}>
+                  <Icon
+                    onClick={() => {
+                      this.iconClickHandle('home');
+                    }}
+                    name="FindOutlined"
+                    size={17}
+                  />
+                  <p>发现</p>
+                </div>
+              </div>
+              {this.renderUserInfo()}
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 }

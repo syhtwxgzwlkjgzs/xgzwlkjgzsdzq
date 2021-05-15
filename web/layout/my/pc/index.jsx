@@ -4,7 +4,7 @@ import styles from './index.module.scss';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import UserCenterPost from '@components/user-center-post-pc';
 import UserCenterAction from '@components/user-center-action-pc';
-import UserBaseLaout from '@components/user-center-base-laout-pc'
+import UserBaseLaout from '@components/user-center-base-laout-pc';
 import SidebarPanel from '@components/sidebar-panel';
 import ThreadContent from '@components/thread';
 import Copyright from '@components/copyright';
@@ -25,13 +25,13 @@ class PCMyPage extends React.Component {
     const { pageData } = {};
     return (
       <>
-      <SidebarPanel 
+      <SidebarPanel
         title="粉丝"
         onShowMore={this.moreFans}
       >
       </SidebarPanel>
       <div className={styles.hr}></div>
-      <SidebarPanel 
+      <SidebarPanel
         title="关注"
         leftNum="2880"
         onShowMore={this.moreFollow}
@@ -39,12 +39,11 @@ class PCMyPage extends React.Component {
       </SidebarPanel>
       <Copyright/>
     </>
-    )
+    );
   }
   renderContent = () => {
     const { user } = this.props;
     const { userThreads, userThreadsTotalCount, userThreadsPage, userThreadsTotalPage } = user;
-    console.log(this.props, 'userThreads');
     return (
       <div className={styles.userContent}>
         <div className={styles.section}>
@@ -53,8 +52,8 @@ class PCMyPage extends React.Component {
         <div className={styles.section}>
           <UserCenterAction/>
         </div>
-        <SidebarPanel 
-          title="主题" 
+        <SidebarPanel
+          title="主题"
           type='normal'
           bigSize={true}
           isShowMore={!userThreads}
@@ -71,7 +70,7 @@ class PCMyPage extends React.Component {
           }
         </SidebarPanel>
       </div>
-    )
+    );
   }
   render() {
     return (

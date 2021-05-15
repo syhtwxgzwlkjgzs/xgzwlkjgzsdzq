@@ -91,6 +91,10 @@ class index extends Component {
     Router.push({ url: `/message?page=chat&username=${username}` });
   };
 
+  gotoLikeList = () => {
+    Router.push({ url: '/my/like' });
+  };
+
   // 渲染关注状态
   renderFollowedStatus = (follow) => {
     let icon = '';
@@ -134,7 +138,7 @@ class index extends Component {
               <span>关注</span>
               <span>{user.followCount || 0}</span>
             </div>
-            <div className={styles.userMessageListItem}>
+            <div onClick={this.gotoLikeList} className={styles.userMessageListItem}>
               <span>点赞</span>
               <span>{user.likedCount || 0}</span>
             </div>
