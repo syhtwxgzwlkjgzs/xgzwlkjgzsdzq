@@ -111,12 +111,12 @@ export default function DVditor(props) {
           }
         },
         counter: {
-          enable: true,
-          after(count) {
-            setContentCount(count);
-          },
-          type: 'markdown',
-          max: MAX_COUNT,
+          enable: false,
+          // after(count) {
+          //   setContentCount(count);
+          // },
+          // type: 'markdown',
+          // max: MAX_COUNT,
         },
         toolbarConfig: {
           hide: !!pc,
