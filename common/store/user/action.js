@@ -13,6 +13,9 @@ import {
   updateAvatar,
   updateBackground,
   updateUsersUpdate,
+  smsSend,
+  smsRebind,
+  smsVerify,
 } from '@server';
 import { get } from '../../utils/get';
 import set from '../../utils/set';
@@ -253,93 +256,6 @@ class UserAction extends SiteStore {
   }
 
   @action
-  async setUserFollowerBeFollowed(id) {
-    Object.keys(this.userFollows).forEach((key) => {
-      this.userFollows[key].forEach((user) => {
-        if (get(user, 'user.pid') !== id) return;
-        user.userFollow.isUnFollowed = false;
-      });
-    });
-    this.userFollows = { ...this.userFollows };
-  }
-
-  @action
-  async setUserFollowerBeUnFollowed(id) {
-    Object.keys(this.userFollows).forEach((key) => {
-      this.userFollows[key].forEach((user) => {
-        if (get(user, 'user.pid') !== id) return;
-        user.userFollow.isUnFollowed = true;
-      });
-    });
-    this.userFollows = { ...this.userFollows };
-  }
-
-  @action
-  async setUserFansBeFollowed(id) {
-    Object.keys(this.userFans).forEach((key) => {
-      this.userFans[key].forEach((user) => {
-        if (get(user, 'user.pid') !== id) return;
-        user.userFollow.isMutual = true;
-      });
-    });
-    this.userFans = { ...this.userFans };
-  }
-
-  @action
-  async setUserFansBeUnFollowed(id) {
-    Object.keys(this.userFans).forEach((key) => {
-      this.userFans[key].forEach((user) => {
-        if (get(user, 'user.pid') !== id) return;
-        user.userFollow.isMutual = false;
-      });
-    });
-    this.userFans = { ...this.userFans };
-  }
-
-  @action
-  async setTargetUserFollowerBeFollowed(id) {
-    Object.keys(this.targetUserFollows).forEach((key) => {
-      this.targetUserFollows[key].forEach((user) => {
-        if (get(user, 'user.pid') !== id) return;
-        user.userFollow.isUnFollowed = false;
-      });
-    });
-    this.targetUserFollows = { ...this.targetUserFollows };
-  }
-
-  @action
-  async setTargetUserFollowerBeUnFollowed(id) {
-    Object.keys(this.targetUserFollows).forEach((key) => {
-      this.targetUserFollows[key].forEach((user) => {
-        if (get(user, 'user.pid') !== id) return;
-        user.userFollow.isUnFollowed = true;
-      });
-    });
-  }
-
-  @action
-  async setTargetUserFansBeFollowed(id) {
-    Object.keys(this.targetUserFans).forEach((key) => {
-      this.targetUserFans[key].forEach((user) => {
-        if (get(user, 'user.pid') !== id) return;
-        user.userFollow.isMutual = true;
-      });
-    });
-    this.targetUserFans = { ...this.targetUserFans };
-  }
-
-  @action
-  async setTargetUserFansBeUnFollowed(id) {
-    Object.keys(this.targetUserFans).forEach((key) => {
-      this.targetUserFans[key].forEach((user) => {
-        if (get(user, 'user.pid') !== id) return;
-        user.userFollow.isMutual = false;
-      });
-    });
-    this.targetUserFans = { ...this.targetUserFans };
-  }
-
-  @action
   setTargetUserDenied() {
     set(this.targetUser, 'isDeny', true);
   }
@@ -497,11 +413,143 @@ class UserAction extends SiteStore {
    */
   @action
   async updateEditedUserInfo() {
-    await updateUsersUpdate({
+    const updateUserInfoRes = await updateUsersUpdate({
       data: {
         signature: this.editSignature,
+        nickname: this.editNickName,
       },
     });
+
+    if (updateUserInfoRes.code === 0) {
+      return updateUserInfoRes.data;
+    }
+
+    throw {};
+  }
+
+  /**
+   * 初次设置用户密码
+   */
+  @action
+  async setUserPassword() {
+    const setUserPasswordRes = await updateUsersUpdate({
+      data: {
+        newPassword: this.newPassword,
+        passwordConfirmation: this.newPasswordRepeat,
+      },
+    });
+
+    if (setUserPasswordRes.code === 0) {
+      return setUserPasswordRes.data;
+    }
+
+    throw {};
+  }
+
+  /**
+   * 重设用户密码
+   */
+  @action
+  async resetUserPassword() {
+    const resetUserPasswordRes = await updateUsersUpdate({
+      data: {
+        password: this.oldPassword,
+        newPassword: this.newPassword,
+        passwordConfirmation: this.newPasswordRepeat,
+      },
+    });
+
+    if (resetUserPasswordRes.code === 0) {
+      return resetUserPasswordRes.data;
+    }
+
+    throw {};
+  }
+
+  @action
+  async sendSmsUpdateCode({
+    mobile,
+    captchaTicket,
+    captchaRandStr,
+  }) {
+    const smsResp = await smsSend({
+      timeout: 3000,
+      data: {
+        mobile,
+        type: 'rebind',
+        captchaTicket,
+        captchaRandStr,
+      },
+    });
+
+    if (smsResp.code === 0) {
+      // 可以利用 interval 获取过期时间
+      return smsResp.data;
+    }
+
+    throw {
+      Code: smsResp.code,
+      Message: smsResp.msg,
+    };
+  }
+
+  @action
+  async sendSmsVerifyCode({
+    mobile,
+    captchaTicket,
+    captchaRandStr,
+  }) {
+    const smsResp = await smsSend({
+      timeout: 3000,
+      data: {
+        mobile,
+        type: 'verify',
+        captchaTicket,
+        captchaRandStr,
+      },
+    });
+
+    if (smsResp.code === 0) {
+      // 可以利用 interval 获取过期时间
+      return smsResp.data;
+    }
+
+    throw {
+      Code: smsResp.code,
+      Message: smsResp.msg,
+    };
+  }
+
+  @action
+  async verifyOldMobile() {
+    const smsVerifyRes = await smsVerify({
+      data: {
+        mobile: this.originalMobile,
+        code: this.oldMobileVerifyCode,
+      },
+    });
+
+    if (smsVerifyRes.code === 0) {
+      return smsVerifyRes.data;
+    }
+
+    throw {};
+  }
+
+  @action
+  async rebindMobile() {
+    const smsRebindRes = await smsRebind({
+      data: {
+        mobile: this.newMobile,
+        code: this.newMobileVerifyCode,
+      },
+    });
+
+    if (smsRebindRes.code === 0) {
+      return smsRebindRes.data;
+    }
+
+    throw {};
   }
 
   /**

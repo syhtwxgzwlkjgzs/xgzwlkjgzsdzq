@@ -10,7 +10,7 @@ export default class VerificationCode extends React.Component {
       initTimeText: props.text ? props.text : '获取验证码',
       buttonDisabled: false, //初始设置按钮是可以点击的
       interval: null,
-      initTimeValue: 60,
+      initTimeValue: props.initTimeValue || 60,
       initTime: 60
     }
   }
@@ -34,7 +34,13 @@ export default class VerificationCode extends React.Component {
       },
       function () {
         this.props.getVerifyCode({
-          calback: function () {
+          calback: function (err) {
+            if (err) {
+              that.setState({
+                buttonDisabled: false
+              })
+              return
+            }
             const { initTimeValue } = that.state
             that.setState({
               interval: setInterval(function () {
@@ -78,6 +84,7 @@ export default class VerificationCode extends React.Component {
 }
 VerificationCode.defaultProps = {
   getVerifyCode: function () { },
-  value_pass_check: true //校验是否可以点击
+  value_pass_check: true, //校验是否可以点击
+  initTimeValue: 60, // 默认倒计时间
 }
 VerificationCode.propTypes = {}
