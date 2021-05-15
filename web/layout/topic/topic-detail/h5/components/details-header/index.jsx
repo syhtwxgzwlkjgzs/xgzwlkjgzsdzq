@@ -2,7 +2,7 @@ import React from 'react';
 import { Icon } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
 import styles from './index.module.scss';
-import Link from 'next/link';
+import { withRouter } from 'next/router';
 
 
 /**
@@ -12,12 +12,16 @@ import Link from 'next/link';
  * @prop {number} contentNum 内容数
  * @prop {function} onClick 全部话题点击事件
  */
-const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop }) => {
+const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop, router }) => {
+  const onClick = () => {
+    router.push('/topic');
+  }
   return (
     <div className={styles.container} >
       <div className={styles.title}>{title && `#${title}#`}</div>
       <div className={styles.allTopic}>
-        <Link href="/topic">全部话题 &gt;</Link>
+        <span onClick={onClick}>全部话题</span>
+        <Icon name="RightOutlined" size={12}></Icon>
       </div>
       <ul className={styles.siteInfo}>
           <li>
@@ -37,4 +41,4 @@ const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop }) => 
   );
 };
 
-export default React.memo(TopicHeader);
+export default withRouter(React.memo(TopicHeader));

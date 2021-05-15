@@ -21,12 +21,13 @@
   .itemH5 {
     height: rem(36);
     border-bottom: rem(1) solid var(--border-line-color);
+    box-sizing: border-box;
     &:last-child{
       border-bottom: none;
     }
     .prefix {
       font-size: rem($font-size-primary);
-      line-height: rem($font-line-height-primary);
+      line-height: rem(34);
       margin-right: rem($padding-4n);
       width: rem(28);
       overflow: hidden;
@@ -35,13 +36,14 @@
     .title {
       flex:1;
       font-size: rem($font-size-primary);
-      line-height: rem($font-line-height-primary);
+      line-height: rem(36);
       .richText{
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
         word-break: break-all;
         font-size: rem(14);
+        line-height: rem(34);
         :global(.qq-emotion){
           height: rem(20);
           width: rem(20);

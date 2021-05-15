@@ -129,9 +129,9 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
         { data && data.map((item, index) => renderContent(item, index)) }
       </div>
       <div className={styles.footer}>
-          <Button className={styles.button} onClick={handleSubmit} type="primary">筛 选</Button>
+          <Button className={styles.button} onClick={handleSubmit} type="primary">筛选</Button>
           <div className={styles.footerBtn} onClick={handleCancel}>
-            取 消
+            取消
           </div>
         </div>
     </Popup>

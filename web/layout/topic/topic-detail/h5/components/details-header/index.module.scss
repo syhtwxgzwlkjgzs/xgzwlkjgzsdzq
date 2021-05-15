@@ -14,12 +14,10 @@
   .allTopic {
     font-size: rem($font-size-primary);
     line-height: rem($font-line-height-primary);
-    color: var(--color-primary3);
+    color: var(--color-primary);
     margin-bottom: rem($margin-10);
-    a {
-      color: var(--color-primary3);
-      text-decoration: none;
-    }
+    display: flex;
+    align-items: center;
   }
   .siteInfo {
     width: 100%;

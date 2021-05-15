@@ -115,7 +115,7 @@ function avatar(props) {
   }
 
   return (
-    <div className={styles.avatarBox}>
+    <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
       <Avatar className={className} circle={circle} text={userName} size={size} onClick={onClick}></Avatar>
       {isShow && userInfoBox}
     </div>
