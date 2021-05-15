@@ -7,9 +7,8 @@
 }
 
 .h5Page {
-  @include im-pagebed;
   position: relative;
-  border-top: var(--border-border);
-  height: 100vh;
-  background-color: var(--comment-content-bg-color);
+  border-top: $border-solid-1;
+  height: calc(100vh - 44px);
+  background-color: $body-bg-color;
 }

@@ -1,4 +1,4 @@
-@import '@common/styles/_variable.scss';
+@import '@common/styles/index.scss';
 
 $im-pagebed-padding: 16px;
 $im-profile-icon-size: 38px;
@@ -11,10 +11,10 @@ $im-space-in-between-btns: var(--padding-3n);
 }
 
 @mixin text-font(
-  $font-size: var(--font-size-middle),
-  $font-weight: var(--font-weight-light),
-  $line-height: var(--font-line-height-middle),
-  $color: var(--color-white)
+  $font-size: $font-size-middle,
+  $font-weight: 400,
+  $line-height: $font-line-height-middle,
+  $color: $white
 ) {
   font-family: 'PingFang SC';
   font-size: $font-size;

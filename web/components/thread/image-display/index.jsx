@@ -94,7 +94,7 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
         } else if (imgData.length === 4) {
             return <Four bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />
         } else if (imgData.length >= 5) {
-            return <Fiv bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} imgData={imgData} onClickMore={onClickMore} />
+            return <Five bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} imgData={imgData} onClickMore={onClickMore} />
         } else {
             return null
         }
@@ -172,7 +172,7 @@ const Three = ({bigImages, smallImages, onClick, style}) => {
     )
 }
 
-const Fiv = ({bigImages, smallImages, onClick, style, imgData = [], onClickMore}) => {
+const Five = ({bigImages, smallImages, onClick, style, imgData = [], onClickMore}) => {
     return (
         <div className={styles[style]}>
             <Row gutter={4} className={styles.bigImages}>

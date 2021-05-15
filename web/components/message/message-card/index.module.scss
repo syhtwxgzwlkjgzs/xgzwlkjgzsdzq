@@ -1,54 +1,44 @@
-@import '@common/styles/index.scss';
+@import "@common/styles/index.scss";
 
 .container {
-  background-color: var(--color-white);
-  border-bottom: rem(10) solid var(--comment-content-bg-color);
+  background-color: $white;
+  margin-bottom: $margin-10;
 }
 
-.notificationItem {
+.item {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   height: 50px;
-  margin: 0 rem($margin-4n);
-  padding: rem($padding-2n) 0;
-  border-bottom: var(--border-border);
-  font-size: var(--font-size-middle);
-  line-height: var(--font-line-height-primary);
+  margin: 0 $padding-4n;
+  padding: $padding-10 0;
+  font-size: $font-size-middle;
+  line-height: $font-line-height-primary;
+  border-bottom: $border-solid-1;
   &:last-child {
     border: none;
   }
-}
 
-.badge {
-  position: absolute;
-  top: -4px;
-  right: -12px;
-  :global {
-    .dzq-badge__info {
-      transform: scale(0.7);
+  .left {
+    flex: 0 0 38px;
+    margin-right: 16px;
+    .icon {
+      background-color: $primary-color;
+      padding: $padding-2n;
+      border-radius: 50%;
+      color: $white;
     }
   }
-}
 
-.iconWrapper {
-  position: relative;
-}
+  .center {
+    flex: 1;
+  }
 
-.icon {
-  position: relative;
-  background-color: var(--color-primary);
-  padding: rem($padding-2n);
-  border-radius: 50%;
-  color: var(--color-white);
-}
-
-.title {
-  flex: 1;
-  padding: rem($padding-4n);
-}
-
-.arrow {
-  padding: rem($padding-4n);
-  padding-right: 0;
+  .right {
+    padding: $padding-4n;
+    padding-right: 0;
+    .right-arrow {
+      color: $icon-color-light;
+    }
+  }
 }

@@ -1,0 +1,9 @@
+.wrapper {
+  width: 100%;
+  overflow: hidden;
+  .list__inner {
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+  }
+}
