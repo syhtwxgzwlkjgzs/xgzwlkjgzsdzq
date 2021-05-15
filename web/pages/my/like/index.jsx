@@ -25,6 +25,7 @@ class Index extends React.Component {
       },
       ctx,
     );
+
     return {
       serverIndex: {
         threads: threads && threads.code === 0 ? threads.data : null,
@@ -49,12 +50,10 @@ class Index extends React.Component {
     this.page = 1;
     if (!hasThreadsData) {
       this.props.index.getReadThreadList({
-        params: {
-          filter: {
-            complex: 2,
-          },
-          perPage: 10,
+        filter: {
+          complex: 2,
         },
+        perPage: 10,
       });
     }
     if (!hasTopics) {

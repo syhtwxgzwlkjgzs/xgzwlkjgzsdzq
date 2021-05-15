@@ -1,7 +1,7 @@
 import React,  { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Flex } from '@discuzq/design';
 import Header from '@components/header';
-import List from '@components/list'
+import List from '@components/list';
 import RefreshView from '@components/list/RefreshView';
 
 import UserCenterHeaderImage from '@components/user-center-header-images';
@@ -16,7 +16,7 @@ import styles from './index.module.scss';
 * @prop {function} footer 底部视图组件
 * @prop {function} isOtherPerson 其他用户
 * @prop other List Props // List组件所有的属性
-* @example 
+* @example
 *     <BaseLayout
         left={(props) => <div>左边</div>}
         right={(props) => <div>右边</div>}
@@ -28,17 +28,17 @@ import styles from './index.module.scss';
 const Index = (props) => {
   const { header = null, left = null, children = null, right = null, footer = null, onSearch, noMore = false, onRefresh, isOtherPerson = false } = props;
 
-  const size = useRef('xl')
+  const size = useRef('xl');
 
   const debounce = (fn, wait) => {
     let timer = null;
     return () => {
-      if(timer !== null){
+      if (timer !== null) {
         clearTimeout(timer);
       }
       timer = setTimeout(fn, wait);
-    }
-  }
+    };
+  };
 
   const updateSize = debounce(() => {
     if (window) {
@@ -50,7 +50,7 @@ const Index = (props) => {
     if (window) {
       window.addEventListener('resize', updateSize);
       return () => {
-          window.removeEventListener('resize', updateSize);
+        window.removeEventListener('resize', updateSize);
       };
     }
   });
@@ -58,37 +58,31 @@ const Index = (props) => {
   const calcSize = (width = 1600) => {
     let size = 'xl';
     if (width < 992) {
-        size = 'sm';
-    }
-    else if (width >= 992 && width < 1100) {
-        size = 'md';
-    }
-    else if (width >= 1100 && width < 1400) {
-        size = 'lg';
-    }
-    else if (width >= 1440 && width < 1880) {
-        size = 'xl';
-    }
-    else {
-        size = 'xxl';
+      size = 'sm';
+    } else if (width >= 992 && width < 1100) {
+      size = 'md';
+    } else if (width >= 1100 && width < 1400) {
+      size = 'lg';
+    } else if (width >= 1440 && width < 1880) {
+      size = 'xl';
+    } else {
+      size = 'xxl';
     }
     return size;
   };
 
-  const showLeft = useMemo(() => {
-    return left && (size.current === 'xl' || size.current === 'xxl')
-  }, [size.current])
+  const showLeft = useMemo(() => left && (size.current === 'xl' || size.current === 'xxl'), [size.current]);
 
-  const showRight = useMemo(() => {
-    return right && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg')
-  }, [size.current])
+  const showRight = useMemo(() => right && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg'), [size.current]);
 
   return (
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
         <div className={styles.headerbox}>
           <div className={styles.userHeader}>
-            <UserCenterHeaderImage isOtherPerson= {isOtherPerson}/>
+            <div className={styles.headImgWrapper}>
+              <UserCenterHeaderImage isOtherPerson= {isOtherPerson}/>
+            </div>
             <UserCenterHead platform='pc'isOtherPerson={isOtherPerson}/>
           </div>
         </div>
