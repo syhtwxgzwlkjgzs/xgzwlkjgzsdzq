@@ -20,6 +20,7 @@
     :global {
       .dzq-icon {
         font-size: rem($font-size-small) !important;
+        color: $text-color-secondary;
       }
       .dzq-input {
         width: 100%;
@@ -93,6 +94,7 @@
     :global {
       .dzq-icon {
         font-size: rem($font-size-small) !important;
+        color: $text-color-secondary;
       }
     }
   }

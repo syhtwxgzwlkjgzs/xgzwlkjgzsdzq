@@ -71,8 +71,8 @@
         align-items: center;
         justify-content: center;
         // 这个颜色没有
-        background: var(--color-primary5);
-        border-color: var(--color-primary5);
+        background: $button-primary-disabled-bg-color;
+        border-color: $button-primary-disabled-bg-color;
         padding-top: rem($padding-1n);
         padding-bottom: rem($padding-1n);
 

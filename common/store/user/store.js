@@ -19,6 +19,8 @@ class UserStore {
   @observable userThreadsTotalCount = 0;
   @observable userThreadsTotalPage = 1;
 
+  @observable userLikes = {};
+
   // 编辑模式下的 username
   @observable editUserName = '';
 
