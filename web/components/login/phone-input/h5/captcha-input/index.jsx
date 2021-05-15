@@ -112,7 +112,7 @@ class CaptchaInput extends React.Component {
             onChange={(e) => {
               this.setChange(index, e);
             }}
-            className={layout['captchaInput-input']}
+            className={`${layout['captchaInput-input']} ${item ? layout['captchaInput-input_val'] : ''}`}
             onFocus={(e) => {
               this.focusInput(index, e);
             }}

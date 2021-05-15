@@ -1,12 +1,8 @@
 export default [
   {
-    label: '默认', // 默认智能排序
-    type: 'sequence',
-    isActive: true,
-  }, {
     label: '所有', // 所有
     type: 'all',
-    isActive: false,
+    isActive: true,
   }, {
     label: '精华', // 精华
     type: 'essence',
@@ -39,11 +35,11 @@ export default [
         value: '102',
         isActive: false,
       },
-      {
-        label: '问答',
-        value: '105',
-        isActive: false,
-      },
+      // {
+      //   label: '问答',
+      //   value: '105',
+      //   isActive: false,
+      // },
       {
         label: '商品',
         value: '104',

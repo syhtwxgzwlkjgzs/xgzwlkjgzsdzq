@@ -26,6 +26,16 @@ class TopicSelect extends Component {
     this.timer = null;
   }
 
+  // 清除关键字
+  clearKeywords = () => {
+    this.setState(
+      { keywords: '', checkUser: [], pageNum: 1 },
+      () => {
+        this.loadTopics();
+      },
+    );
+  }
+
   // 初始化话题请求
   async componentDidMount() {
     const { fetchTopic } = this.props.threadPost;
@@ -95,9 +105,7 @@ class TopicSelect extends Component {
         <div className={styles['item-left']}>
           <div className={styles.name}>#{item.content}#</div>
           {item.recommended === 1
-            && <div className={styles.recommend}>
-              <Icon name="LikeOutlined" size={20} color='#1878f3' />
-            </div>
+            && <Icon name="LikeOutlined" />
           }
         </div>
         <div className={styles['item-right']}>{item.viewCount}热度</div>
@@ -110,12 +118,20 @@ class TopicSelect extends Component {
     const { topics = [] } = threadPost;
     const content = (
       <div className={styles.wrapper}>
-        <Input
-          value={this.state.keywords}
-          icon="SearchOutlined"
-          placeholder='搜索话题'
-          onChange={e => this.updateKeywords(e)}
-        />
+        {/* 搜索框 */}
+        <div className={styles.input}>
+          <Input
+            value={this.state.keywords}
+            icon="SearchOutlined"
+            placeholder='搜索话题'
+            onChange={e => this.updateKeywords(e)}
+          />
+          {this.state.keywords &&
+            <div className={styles.delete} onClick={this.clearKeywords}>
+              <Icon className={styles['delete-icon']} name="CloseOutlined" size={8}></Icon>
+            </div>
+          }
+        </div>
 
         {/* 话题列表 */}
         <div className={styles['topic-wrap']}>
@@ -157,6 +173,7 @@ class TopicSelect extends Component {
         className={styles.pc}
         onClose={this.props.cancelTopic}
         title="添加话题"
+        isCustomBtn={true}
       >
         {content}
       </DDialog>

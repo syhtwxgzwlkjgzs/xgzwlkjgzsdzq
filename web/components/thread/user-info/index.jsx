@@ -5,7 +5,6 @@ import Avatar from '@components/avatar';
 import React from 'react';
 import { diffDate } from '@common/utils/diff-date';
 
-
 UserInfo.propTypes = {
   name: PropTypes.string.isRequired, // 用户名称
   avatar: PropTypes.string.isRequired, // 用户头像
@@ -34,11 +33,13 @@ export default function UserInfo(props) {
         name={props.name || ''}
         onClick={() => props.onClick()}
       ></Avatar>
+
       <div className={styles.right}>
         <div>
           <span className={styles.name}>{props.name}</span>
           {props.groupName && <span className={styles.groupName}>{props.groupName}</span>}
         </div>
+
         <div className={styles.meta}>
           {props.time && <span className={styles.time}>{diffDate(props.time)}</span>}
           {props.location && (
@@ -59,9 +60,9 @@ export default function UserInfo(props) {
       <div className={styles.tags}>
         {props.isEssence && <p className={styles.categoryEssence}>精华</p>}
         {/* {props.isEssence && <Tag type="primary">精华</Tag>} */}
-        {props.isPay && <Tag type="success">付费</Tag>}
-        {props.isReward && <Tag type="warning">悬赏</Tag>}
-        {props.isRed && <Tag type="danger">红包</Tag>}
+        {props.isPay && <p className={styles.pay}>付费</p>}
+        {props.isReward && <p className={styles.reward}>悬赏</p>}
+        {props.isRed && <p className={styles.red}>红包</p>}
       </div>
     </div>
   );

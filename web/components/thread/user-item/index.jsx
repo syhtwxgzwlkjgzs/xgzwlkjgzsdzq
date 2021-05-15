@@ -42,7 +42,7 @@ const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noo
 
           <div className={styles.content}>
               <span className={styles.title}>{title}</span>
-              <span className={styles.subTitle}>{subTitle}</span>
+              {subTitle && <span className={styles.subTitle}>{subTitle}</span>}
           </div>
       </div>
 

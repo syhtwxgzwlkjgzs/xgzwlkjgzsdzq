@@ -1,0 +1,60 @@
+@import '@common/styles/index.scss';
+@import '@common/styles/_variable.scss';
+
+.content {
+  padding: $padding-6n;
+  padding-bottom: 0;
+  h3 {
+    font-size: rem($font-size-large);
+    color: $text-color-primary;
+    margin-bottom: rem($margin-5n);
+    letter-spacing: 1px;
+  }
+  .labelInfo {
+    padding: rem($margin-10) 0 rem($margin-6n);
+    border-bottom: 1px solid $border-color;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: rem($margin-6n);
+    .labelName {
+      color: $text-color-regular;
+      font-size: $font-size-primary;
+      margin-right: rem($margin-4n);
+    }
+    .labelValue {
+      color: $text-color-primary;
+      font-size: $font-size-middle;
+    }
+    .codeBtn {
+      height: rem(36);
+      font-size: rem($font-size-primary);
+    }
+    .labelInput {
+      :global {
+        .dzq-input__inner {
+          border: none;
+
+        }
+        
+      }
+    }
+  }
+  .bindCode {
+    color: $text-color-regular;
+    font-size: $font-size-primary;
+  }
+}
+
+.bottom {
+  position: fixed;
+  bottom: rem(20);
+  width: 100%;
+  border-top: 1px solid $border-color;
+  padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
+  .btn {
+    width: rem(343);
+    height: rem(42);
+    font-size: $font-size-middle;
+  }
+}

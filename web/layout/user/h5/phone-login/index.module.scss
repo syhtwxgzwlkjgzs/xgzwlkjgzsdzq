@@ -17,48 +17,6 @@
   .phoneInput {
     position: relative;
   }
-  .sendCaptcha {
-    width: rem(94);
-    height: rem(36);
-    position: absolute;
-    right: 0;
-    bottom: rem(8);
-    text-align: center;
-    line-height: rem(36);
-    border-radius: rem(5);
-    color: var(--color-white);
-    font-size: rem(14);
-    background: $primary-color;
-  }
-  .captchaInput{
-    margin-top: rem(32);
-    .captchaInput-title {
-      font-weight: normal;
-      font-size: rem(14);
-      line-height: rem(24);
-      text-align: left;
-      color: var(--color-text-secondary);
-    }
-    .captchaInput-input:last-child{
-      margin-right: 0;
-    }
-  }
-  .captchaInput-input {
-    text-align: center;
-    display: inline-block;
-    font-size: rem(14);
-    height: rem(52);
-    width: rem(40);
-    margin-right: rem(16);
-    input {
-      line-height: rem(52);
-      height: rem(52);
-      width: rem(40);
-      border: none;
-      border-radius: 0;
-      border-bottom: rem(1) solid #eee;
-    }
-  }
   .button {
     @include button;
   }
@@ -92,16 +50,9 @@
   @include pc_container;
 }
 .pc_content {
-  width: 300px;
-  margin: 20px auto 0;
+  @include pc_content;
   .pc_title {
-    font-family: 'PingFang SC';
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 30px;
-    color: #0b0b37;
-    text-align: center;
-    padding-bottom: 32px;
+    @include pc_title;
   }
   .pc_button {
     @include pc_button;

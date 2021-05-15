@@ -60,6 +60,7 @@ const List = forwardRef(({
   };
 
   const onTouchMove = throttle(() => {
+
     if (!listWrapper || !listWrapper.current || !onRefresh) {
       return;
     }

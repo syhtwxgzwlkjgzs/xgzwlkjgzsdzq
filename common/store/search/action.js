@@ -70,7 +70,7 @@ class SearchAction extends SearchStore {
   } = {}) {
     let newPerPage = perPage;
     const topicFilter = {
-      hot: search !== '' ? 0 : 1,
+      hot: 1,
       content: search,
     };
 
@@ -85,7 +85,7 @@ class SearchAction extends SearchStore {
       type === 0 ? this.setIndexTopics(code === 0 ? data : {}) : this.setSearchTopics(code === 0 ? data : {});
     }
     if ( !hasUsers ) {
-      const res = await readUsersList({ params: { filter: { nickname: search }, perPage: newPerPage, page: 1 } });
+      const res = await readUsersList({ params: { filter: { hot: 1, nickname: search }, perPage: newPerPage, page: 1 } });
       const { code, data } = res;
       type === 0 ? this.setIndexUsers(code === 0 ? data : {}) : this.setSearchUsers(code === 0 ? data : {});
     }
@@ -130,8 +130,8 @@ class SearchAction extends SearchStore {
    * @returns {object} 处理结果
    */
   @action
-  async getUsersList({ search = '', perPage = 10, page = 1  } = {}) {
-    const result = await readUsersList({ params: { filter: { nickname: search }, perPage, page } });
+  async getUsersList({ search = '', hot = 0, perPage = 10, page = 1  } = {}) {
+    const result = await readUsersList({ params: { filter: { hot, nickname: search }, perPage, page } });
 
     if (result.code === 0 && result.data) {
       if (this.users && result.data.pageData && page !== 1) {
@@ -155,7 +155,7 @@ class SearchAction extends SearchStore {
  */
  @action
   async getThreadList({ search = '', perPage = 10, page = 1 } = {}) {
-    const result = await readThreadList({ params: { filter: { sequence: '0', filter: { sort: '3', search } }, perPage, page } });
+    const result = await readThreadList({ params: { sequence: '0', filter: { sort: '3', search }, perPage, page } });
 
     if (result.code === 0 && result.data) {
       if (this.threads && result.data.pageData && page !== 1) {
