@@ -1,4 +1,5 @@
 import React,  { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { inject, observer } from 'mobx-react';
 import Header from '@components/header';
 import List from '@components/list'
 import BottomNavBar from '@components/bottom-nav-bar'
@@ -23,7 +24,8 @@ import styles from './index.module.scss';
 
 const BaseLayout = (props) => {
   const { showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr } = props;
-  const [height, setHeight] = useState(600)
+  const { jumpToScrollingPos } = props.baselayout;
+  const [height, setHeight] = useState(600);
 
   const debounce = (fn, wait) => {
     let timer = null;
@@ -36,10 +38,14 @@ const BaseLayout = (props) => {
   }
 
   const pullDownWrapper = useRef(null)
+  const listRef = useRef(null);
 
   useEffect(() => {
-    if (pullDownWrapper.current) {
+    if (pullDownWrapper?.current) {
       setHeight(pullDownWrapper.current.clientHeight)
+    }
+    if (listRef?.current && jumpToScrollingPos > 0) {
+      listRef.current.jumpToScrollTop(jumpToScrollingPos);
     }
   }, [])
 
@@ -50,13 +56,13 @@ const BaseLayout = (props) => {
           showPullDown ? (
             <div className={styles.list} ref={pullDownWrapper}>
               <PullDownRefresh onRefresh={onPullDown} isFinished={isFinished} height={height}>
-                  <List {...props} className={styles.listHeight}>
+                  <List {...props} className={styles.listHeight} ref={listRef}>
                       {typeof(children) === 'function' ? children({ ...props }) : children}
                   </List>
               </PullDownRefresh>
             </div>
           ) : (
-            <List {...props} className={styles.list}>
+            <List {...props} className={styles.list} ref={listRef}>
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>
           )
@@ -67,4 +73,4 @@ const BaseLayout = (props) => {
   );
 };
 
-export default BaseLayout;
+export default inject('baselayout')(observer(BaseLayout));

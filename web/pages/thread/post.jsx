@@ -44,6 +44,7 @@ class PostPage extends React.Component {
       curPaySelect: '',
       count: 0,
       draftShow: false,
+      isTitleShow: true,
     };
     this.captcha = ''; // 腾讯云验证码实例
     this.ticket = ''; // 腾讯云验证码返回票据
@@ -227,6 +228,7 @@ class PostPage extends React.Component {
   handleVditorChange = (vditor) => {
     if (vditor) {
       const htmlString = vditor.getHTML();
+      this.setState({ isTitleShow: false });
       this.setPostData({ contentText: htmlString });
     }
   };

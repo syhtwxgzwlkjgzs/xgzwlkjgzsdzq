@@ -63,20 +63,26 @@ class Index extends React.Component {
     const { categoryids, types, essence, sequence, attention, sort } = data;
 
     let newTypes = []
-    if (!!types && !(types instanceof Array)) {
-      newTypes = [types]
-    } else {
-      newTypes = types
+    if (!!types) {
+      if (!(types instanceof Array)) {
+        newTypes = [types]
+      } else {
+        newTypes = types
+      }
     }
 
     let categoryIds = []
-    if (!!categoryids && !(categoryids instanceof Array)) {
-      categoryIds = [categoryids]
-    } else {
-      categoryIds = categoryids
+    if (!!categoryids) {
+      if (!(categoryids instanceof Array)) {
+        categoryIds = [categoryids]
+      } else {
+        categoryIds = categoryids
+      }
     }
+    
 
     if (type === 'click-filter') {
+      
       this.toastInstance = Toast.loading({
         content: '加载中...',
         duration: 0,

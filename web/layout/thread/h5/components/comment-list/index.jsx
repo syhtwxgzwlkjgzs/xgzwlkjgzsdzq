@@ -102,7 +102,7 @@ class CommentList extends React.Component {
               )}
               {!this.state.isShowOne ? (
                 <div className={styles.more} onClick={this.props.onMoreClick}>
-                  <Icon size="16" color="#8590A6" name="MoreVOutlined" className={styles.moreIcon}></Icon>
+                  <Icon size={20} color="#8590A6" name="MoreVOutlined" className={styles.moreIcon}></Icon>
                 </div>
               ) : (
                 ''
