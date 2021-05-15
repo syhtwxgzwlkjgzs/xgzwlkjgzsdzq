@@ -1,0 +1,33 @@
+@import '@common/styles/index.scss';
+
+.container {
+  padding: rem($padding-4n) 0;
+  background-color: $white;
+  border-bottom: 1px solid var(--border-line-color);
+
+  .title {
+    font-size: rem($font-size-middle);
+    line-height: rem($font-line-height-primary);
+    font-weight: var(--font-weight-bold);
+  }
+  .content {
+    display: box;
+    font-size: rem($font-size-middle);
+    line-height: rem(26);
+    max-height: rem(50);
+    margin: rem($padding-4n) 0;
+    @include lamp-clamp($line: 2);
+  }
+  .tags {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .tag {
+      font-size: rem($font-size-base);
+      line-height: rem($font-line-height-small);
+      margin-right: rem($padding-4n);
+      color: $text-color-secondary;
+    }
+  }
+}
+

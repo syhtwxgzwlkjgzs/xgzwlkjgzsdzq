@@ -26,10 +26,12 @@ class UserCenterFans extends React.Component {
     unFollowHandler: async () => {},
     onContainerClick: async ({ id }) => {},
     hasMorePage: false,
+    className: '',
+    styles: {},
   };
 
   constructor(props) {
-    super(props);
+    super(props);2;
     this.state = {
       loading: true,
       fans: {},
@@ -197,10 +199,12 @@ class UserCenterFans extends React.Component {
   render() {
     return (
       <div
+        className={this.props.className}
         ref={this.containerRef}
         style={{
           height: '100%',
           overflow: 'scroll',
+          ...this.props.styles,
         }}
       >
         {followerAdapter(this.state.fans).map((user, index) => {
