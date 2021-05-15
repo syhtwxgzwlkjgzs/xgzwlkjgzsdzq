@@ -7,10 +7,11 @@ const InputPop = (props) => {
   const { visible, onSubmit, onClose, onOperClick, permissions = {}, statuses = {} } = props;
 
   const { canEdit, canDelete, canEssence, canStick, canShare, canCollect } = permissions;
-  const { isEssence, isStick, isCollected } = statuses;
+  const { isEssence, isStick, isCollect } = statuses;
 
   const [essence, setEssence] = useState(isEssence);
   const [stick, setStick] = useState(isStick);
+  const [collect, setCollect] = useState(isCollect);
 
   useEffect(() => {
     setEssence(isEssence);
@@ -19,6 +20,10 @@ const InputPop = (props) => {
   useEffect(() => {
     setStick(isStick);
   }, [isStick]);
+
+  useEffect(() => {
+    setCollect(isCollect);
+  }, [isCollect]);
 
   return (
     <Popup position="bottom" visible={visible} onClose={onClose}>
@@ -42,7 +47,10 @@ const InputPop = (props) => {
               </div>
             )}
             {canEssence && (
-              <div className={className(styles.moreItem, essence && styles.actived)} onClick={() => onOperClick('essence')}>
+              <div
+                className={className(styles.moreItem, essence && styles.actived)}
+                onClick={() => onOperClick('essence')}
+              >
                 <div className={styles.icon}>
                   <Icon name="HotBigOutlined" size={20}></Icon>
                 </div>
@@ -58,7 +66,10 @@ const InputPop = (props) => {
               </div>
             )}
             {canCollect && (
-              <div className={className(styles.moreItem, isCollected && styles.actived)} onClick={() => onOperClick('essence')}>
+              <div
+                className={className(styles.moreItem, collect && styles.actived)}
+                onClick={() => onOperClick('collect')}
+              >
                 <div className={styles.icon}>
                   <Icon name="CollectOutlined" size={20}></Icon>
                 </div>
@@ -66,7 +77,7 @@ const InputPop = (props) => {
               </div>
             )}
             {canShare && (
-              <div className={styles.moreItem} onClick={() => onOperClick('essence')}>
+              <div className={styles.moreItem} onClick={() => onOperClick('share')}>
                 <div className={styles.icon}>
                   <Icon name="ShareAltOutlined" size={20}></Icon>
                 </div>

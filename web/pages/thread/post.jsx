@@ -319,7 +319,7 @@ class PostPage extends React.Component {
   };
 
   async createThread(isDraft) {
-    const { threadPost } = this.props;
+    const { threadPost, thread } = this.props;
     const threadId = this.props.router.query.id || '';
     let ret = {};
     Toast.loading({ content: isDraft ? '保存草稿中...' : '创建中...' });
@@ -327,7 +327,7 @@ class PostPage extends React.Component {
     else ret = await threadPost.createThread();
     const { code, data, msg } = ret;
     if (code === 0) {
-      // thread.setThreadData(data);
+      thread.reset();
       if (!isDraft) this.props.router.replace(`/thread/${data.threadId}`);
       return true;
     }
