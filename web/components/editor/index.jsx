@@ -54,14 +54,14 @@ export default function DVditor(props) {
     });
     if (users.length) {
       setCurrentPositon();
-      vditor && vditor.insertValue(users.join(''));
+      vditor && vditor.insertValue(vditor.html2md(users.join('')));
     }
   }, [atList]);
 
   useEffect(() => {
     if (topic) {
       setCurrentPositon();
-      vditor && vditor.insertValue(`&nbsp;${topic}&nbsp;`);
+      vditor && vditor.insertValue(vditor.html2md(`&nbsp;${topic}&nbsp;`));
     }
   }, [topic]);
 
