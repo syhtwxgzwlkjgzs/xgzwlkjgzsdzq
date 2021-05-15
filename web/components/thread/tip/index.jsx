@@ -21,10 +21,6 @@ const Index = ({ imgs = [], tipData = {}, wholeNum = 1 }) => {
   const onHidden = () => {
     setVisible(false);
   };
-  console.log("Getting into the Tip component: ");
-  console.log("Tipdata", tipData);
-  console.log("Tip imgs", imgs, " whole number: ", wholeNum);
-  console.log('')
 
   return (
     <>

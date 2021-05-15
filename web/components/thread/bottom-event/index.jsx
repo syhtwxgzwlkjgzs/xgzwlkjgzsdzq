@@ -48,7 +48,6 @@ const Index = ({
   const needHeight = useMemo(() => {
     return userImgs.length !== 0 || comment > 0 || sharing > 0
   }, [userImgs, comment, sharing])
-// console.log("Buttom Event userImgs", userImgs);
   return (
     <div>
       <div className={needHeight ? styles.user : styles.users}>
