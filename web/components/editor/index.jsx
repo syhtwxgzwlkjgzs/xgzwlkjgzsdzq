@@ -70,7 +70,11 @@ export default function DVditor(props) {
   }, [contentCount]);
 
   useEffect(() => {
-    if ((vditor && vditor.getValue && vditor.getValue() !== '\n') || !value) return;
+    try {
+      if (!value || (vditor && vditor.getValue && vditor.getValue() !== '\n')) return;
+    } catch (error) {
+      console.log(error);
+    }
     const timer = setTimeout(() => {
       clearTimeout(timer);
       if (vditor && vditor.getValue && vditor.getValue() === '\n' && vditor.getValue() !== value) {
