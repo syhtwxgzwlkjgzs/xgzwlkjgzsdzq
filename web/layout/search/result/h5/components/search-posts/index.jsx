@@ -12,7 +12,10 @@ import styles from './index.module.scss';
 const SearchPosts = ({ data, onItemClick }) => (
   <div className={styles.list}>
     {data.map((item, index) => (
-        <ThreadContent key={index} className={styles.listItem} data={item} onClick={onItemClick} />
+        <div key={index}>
+          <ThreadContent showBottomStyle={false} className={styles.listItem} data={item} key={index} />
+          <div className={styles.hr}></div>
+        </div>
     ))}
   </div>
 );

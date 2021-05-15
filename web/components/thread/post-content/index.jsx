@@ -42,10 +42,8 @@ const Index = ({
   };
   // 过滤内容
   const filterContent = useMemo(() => {
-    console.log(content)
     let newContent = content ? s9e.parse(content) : '暂无内容';
     newContent = xss(newContent);
-    console.log(newContent)
 
     return !loading ? newContent : '内容加载中';
   }, [content, loading]);
@@ -53,7 +51,7 @@ const Index = ({
   const showHideCover = !loading ? (isPayContent && hidePercent > 0) || (useShowMore && !showMore) : false;
 
   const onShowMore = useCallback((e) => {
-    e.stopPropagation();
+    e && e.stopPropagation();
 
     if (contentTooLong) {
       // 内容过长直接跳转到详情页面
@@ -62,6 +60,12 @@ const Index = ({
       setHiddenMore(true);
     }
   }, [contentTooLong]);
+
+  const handleClick = (e) => {
+    e && e.stopPropagation();
+
+    onRedirectToDetail()
+  }
 
   useEffect(() => {
     if (filterContent?.length < 262) {
@@ -76,10 +80,10 @@ const Index = ({
       <div
         ref={contentWrapperRef}
         className={`${styles.contentWrapper} ${showHideCover ? styles.hideCover : ''}`}
-        onClick={!showMore ? onShowMore : onRedirectToDetail}
+        onClick={!showMore ? onShowMore : handleClick}
       >
         <div className={styles.content}>
-          <RichText content={filterContent} />
+          <RichText content={filterContent} onClick={handleClick} />
         </div>
       </div>
       {!loading && useShowMore && !showMore && (

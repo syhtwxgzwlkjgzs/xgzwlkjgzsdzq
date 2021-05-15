@@ -17,11 +17,11 @@
   }
   .sendCaptcha {
     @include mini_captchaBtn;
+    color: $primary-color;
     font-size: $font-size-base;
   }
   .countDown {
     @include mini_captchaBtn;
-    color: #b5b5b5;
   }
   .button {
     @include mini_button;

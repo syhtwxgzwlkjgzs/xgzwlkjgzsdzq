@@ -1,7 +1,13 @@
+@import "@common/styles/index.scss";
 @mixin single-line() {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+@mixin flex() {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .popup {
   :global {
@@ -15,59 +21,83 @@
   position: relative;
   height: 100vh;
 
+  .input {
+    position: relative;
+
+    .delete {
+      position: absolute;
+      top: rem(26);
+      right: rem(32);
+      width: rem(16);
+      height: rem(16);
+      background: $text-color-placeholder;
+      border-radius: $border-radius-circle;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .delete-icon {
+        transform: scale(0.8);
+        color: $white;
+      }
+    }
+  }
+
   :global {
     .dzq-input {
       box-sizing: border-box;
       width: 100%;
-      padding: 10px 16px;
+      padding: rem($padding-4n $padding-4n $padding-2n);
       .dzq-input__inner {
-        height: 40px;
-        padding-left: 35px;
-        padding-right: 5px;
-        font-size: 16px;
-        color: #0b0b37;
-        background: #f6f6f6;
+        height: rem(36);
+        font-weight: normal;
+        font-size: $font-size-base;
+        background: $text-bg-color2;
+        color: $text-color-primary;
+        line-height: $font-line-height-base;
+        padding-left: rem(30);
         border: none;
+        // padding-right: 5px;
+        // text-align: left;
       }
       .dzq-input__icon {
-        left: 16px;
+        left: rem(16);
         top: 50%;
-        margin-top: -18px;
-        color: var(--color-disabled2) !important;
+        margin-top: rem(-14);
+        color: $disabled-color2 !important;
       }
     }
   }
 
   .at-wrap {
-    height: calc(100vh - 125px);
+    height: calc(100vh - rem(125));
     .scroll-view {
       height: 100% !important;
     }
   }
 
   .at-item {
-    display: flex;
-    height: 50px;
-    padding: 0 16px;
+    @include flex();
+    padding: $padding-4n 0;
+    border-bottom: $border-solid-1;
+    margin: 0 $margin-4n;
 
     .avatar {
-      width: 35px;
-      height: 35px;
+      width: rem(38);
+      height: rem(38);
 
       :global {
         .dzq-avatar {
           width: 100%;
           height: 100%;
-          font-size: 22px;
-          color: var(--color-white);
           text-align: center;
-          line-height: 35px;
-          border-radius: 50%;
+          line-height: rem(38);
+          border-radius: $border-radius-circle;
 
           .dzq-avatar__img {
             width: 100%;
             height: 100%;
-            border-radius: 50%;
+            border-radius: $border-radius-circle;
           }
         }
       }
@@ -75,42 +105,44 @@
 
     .info {
       flex: 1;
-      margin: 0 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-      color: #777;
-      border-bottom: var(--border-border);
+      @include flex();
+      margin: 0 $margin-2n;
+      font-size: $font-size-base;
       .username {
-        max-width: 170px;
+        max-width: rem(170);
         @include single-line();
+        font-size: $font-size-base;
+        text-align: left;
+        color: $text-color-primary;
       }
       .group {
-        max-width: 80px;
+        max-width: rem(80);
         @include single-line();
+        font-size: $font-size-small;
+        text-align: left;
+        color: $text-color-secondary;
       }
     }
 
     :global {
       .dzq-checkbox-wrap {
         margin: 0;
-        padding: 13px 0;
+        padding: 0;
         -webkit-tap-highlight-color: transparent;
         .dzq-checkbox {
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
+          width: rem(24);
+          height: rem(24);
+          border-radius: $border-radius-circle;
           &:after {
-            border-radius: 50%;
+            border-radius: $border-radius-circle;
           }
         }
         &.is-checked {
           .dzq-checkbox {
-            background-color: #1878f3;
+            background-color: $primary-color;
           }
           .dzq-icon {
-            color: #fff;
+            color: $white;
           }
         }
       }
@@ -118,41 +150,30 @@
   }
 
   .btn {
-    display: flex;
+    @include flex();
     flex-wrap: nowrap;
-    justify-content: space-between;
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 0;
-    padding: 10px 0;
-    margin: 0 10px;
-    background: #fff;
-    border-top: var(--border-border);
+    bottom: constant(safe-area-inset-bottom);
+    bottom: env(safe-area-inset-bottom);
+    padding: rem($padding-2n) rem($padding-4n);
+    background: $white;
+    justify-content: center;
+    border-top: $border-solid-1;
 
     :global {
       .dzq-button {
-        width: 48%;
-        padding: var(--padding-2n) 0;
-        font-size: var(--font-size-primary);
-        color: #777;
-        line-height: var(--font-line-height-primary);
-        background: #f9fafc;
-        border: none;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        border-radius: var(--border-radius-small);
-        transition: all 0.3s;
+        @include button-default;
+        width: rem(166);
+        height: rem(42);
         -webkit-tap-highlight-color: transparent;
-      }
-
-      .not-selected {
-        color: #7d7979;
-        background-color: var(--color-white);
-      }
-
-      .is-selected {
-        color: var(--color-white);
-        background-color: var(--color-primary);
+        &:first-child {
+          margin-right: rem($margin-10);
+        }
+        &.is-selected {
+          @include button-primary;
+        }
       }
     }
   }
@@ -160,6 +181,14 @@
 .pc {
   .wrapper {
     height: 500px;
+    .btn {
+      border-top: none;
+      :global {
+        .dzq-button {
+          width: rem(116);
+        }
+      }
+    }
   }
   .at-wrap {
     height: calc(500px - 135px);

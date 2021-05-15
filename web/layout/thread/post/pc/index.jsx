@@ -44,7 +44,7 @@ class ThreadPCPage extends React.Component {
     const { freeWords, price, attachmentPrice } = threadPost.postData;
 
     return (
-      <>
+      <div className={styles.container}>
         <Header />
         <div className={styles.wrapper}>
           <div className={styles['wrapper-inner']}>
@@ -206,19 +206,21 @@ class ThreadPCPage extends React.Component {
               <Button type="primary" onClick={() => this.props.handleSubmit()}>发布</Button>
             </div>
           </div>
-          <Copyright />
+          <Copyright center />
           {/* 插入商品 */}
-          <ProductSelect
-            pc
-            visible={currentAttachOperation === THREAD_TYPE.goods}
-            onAnalyseSuccess={
-              (data) => {
-                this.props.handleSetState({ currentAttachOperation: false });
-                this.props.setPostData({ product: data });
+          {currentAttachOperation === THREAD_TYPE.goods && (
+            <ProductSelect
+              pc
+              visible={currentAttachOperation === THREAD_TYPE.goods}
+              onAnalyseSuccess={
+                (data) => {
+                  this.props.handleSetState({ currentAttachOperation: false });
+                  this.props.setPostData({ product: data });
+                }
               }
-            }
-            cancel={() => this.props.handleSetState({ currentAttachOperation: false })}
-          />
+              cancel={() => this.props.handleSetState({ currentAttachOperation: false })}
+            />
+          )}
           {/* 插入付费 */}
           {!!this.props.curPaySelect && (
             <AllPostPaid
@@ -279,7 +281,7 @@ class ThreadPCPage extends React.Component {
             />
           )}
         </div>
-      </>
+      </div>
     );
   }
 }

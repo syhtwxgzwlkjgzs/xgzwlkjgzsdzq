@@ -20,10 +20,10 @@
     justify-content: flex-start;
   }
   .remaining {
-    margin-top: rem(8);
+    margin-top: rem($margin-2n);
     font-weight: 600;
     font-size: rem($font-size-middle);
-    line-height: rem($font-line-height-primary);
+    line-height: rem(22);
     text-align: left;
     color: var(--color-text-primary);
     .count {
@@ -53,6 +53,7 @@
       height: rem(20);
     }
   }
+
   &.bounty {
     .icon {
       margin-top: rem(40);

@@ -30,29 +30,33 @@ const ProductSelect = (props) => {
 
   const content = (
     <div className={styles['parse-goods-box']}>
-      <div className={styles['parse-goods-title']}>现支持以下商品链接</div>
-      <div className={styles['parse-goods-image']}>
-        {goodImages.map(item => (
-          <div className={styles['image-item']} key={item.name}>
-            <img src={item.src} alt={item.name} width={item.width} height={item.height} />
-            <span className={styles['image-text']}>{item.name}</span>
+      <div className={styles.wrapper}>
+        <div className={styles['parse-goods-title']}>现支持以下商品链接</div>
+        <div className={styles['parse-goods-image']}>
+          {goodImages.map(item => (
+            <div className={styles['image-item']} key={item.name}>
+              <img src={item.src} alt={item.name} width={item.width} height={item.height} />
+              <span className={styles['image-text']}>{item.name}</span>
+            </div>
+          ))}
+        </div>
+        <Input.Textarea
+          value={link}
+          placeholder="请粘贴\输入商品链接"
+          maxLength={49999}
+          rows={8}
+          onChange={e => setLink(e.target.value)}
+        />
+        {!props.pc && (
+          <div className={styles['parse-goods-btn']}>
+            <Button onClick={props.cancel}>
+              取消
+            </Button>
+            <Button type="primary" onClick={parseLink}>
+              确定
+            </Button>
           </div>
-        ))}
-      </div>
-      <Input.Textarea
-        value={link}
-        placeholder="请粘贴\输入商品链接"
-        maxLength={49999}
-        rows={8}
-        onChange={e => setLink(e.target.value)}
-      />
-      <div className={styles['parse-goods-btn']}>
-        <Button onClick={props.cancel}>
-          取消
-        </Button>
-        <Button type="primary" onClick={parseLink}>
-          确定
-        </Button>
+        )}
       </div>
     </div>
   );
@@ -65,6 +69,8 @@ const ProductSelect = (props) => {
       className={styles.pc}
       onClose={props.cancel}
       title="添加商品"
+      onCacel={props.cancel}
+      onConfirm={parseLink}
     >
       {content}
     </DDialog>
