@@ -14,7 +14,7 @@
   .containerNum5 {
     .bigImages {
       height: rem(126);
-      margin-bottom: rem(6) !important;
+      margin-bottom: 4px !important;
       .col {
         height: 100%;
         padding-top: 0 !important;
@@ -23,6 +23,7 @@
     }
     .smallImages {
       height: rem(111);
+      margin-top: 0 !important;
       .col {
         position: relative;
         height: 100%;
@@ -45,10 +46,11 @@
   .containerNum3 {
     .bigImages {
       height: rem(126);
-      margin-bottom: rem(6);
+      margin-bottom: 4px;
     }
     .smallImages {
       height: rem(126);
+      margin-top: 0 !important;
       .col {
         height: 100%;
         padding-top: 0 !important;

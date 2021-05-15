@@ -131,8 +131,8 @@ const Two = ({bigImages, onClick, style}) => {
         <Row gutter={4} className={styles[style]}>
             {
                 bigImages.map((item, index) => (
-                    <Col span={6} className={styles.col}>
-                        <img src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />
+                    <Col span={6} className={styles.col} key={index}>
+                        <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
                     </Col>))
             }
         </Row>
@@ -147,7 +147,11 @@ const Four = ({bigImages, smallImages, onClick, style}) => {
             </Col>
             <Col span={4} className={styles.col}>
                 <Row gutter={4}>
-                    { smallImages.map((item, index) => <Col span={12}><img src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} /></Col>)}
+                    { smallImages.map((item, index) => (
+                        <Col span={12} key={index}>
+                            <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
+                        </Col>
+                    ))}
                 </Row>
             </Col>
         </Row>
@@ -163,8 +167,8 @@ const Three = ({bigImages, smallImages, onClick, style}) => {
             <Row gutter={4} className={styles.smallImages}>
                 {
                     smallImages.map((item, index) => (
-                        <Col span={6} className={styles.col}>
-                            <img src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />
+                        <Col span={6} className={styles.col} key={index}>
+                            <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
                         </Col>))
                 }
             </Row>
@@ -178,16 +182,16 @@ const Five = ({bigImages, smallImages, onClick, style, imgData = [], onClickMore
             <Row gutter={4} className={styles.bigImages}>
                 {
                     bigImages.map((item, index) => (
-                        <Col span={6} className={styles.col}>
-                            <img src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />
+                        <Col span={6} className={styles.col} key={index}>
+                            <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
                         </Col>))
                 }
             </Row>
             <Row gutter={4} className={styles.smallImages}>
                 {
                     smallImages.map((item, index) => (
-                        <Col span={4} className={styles.col}>
-                            <img src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />
+                        <Col span={4} className={styles.col} key={index}>
+                            <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
                             {
                                 imgData?.length > 5 && index === smallImages.length - 1 && (
                                     <div className={styles.modalBox} onClick={onClickMore}>{`+${imgData.length - 5}`}</div>

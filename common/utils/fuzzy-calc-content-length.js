@@ -1,6 +1,5 @@
 
 export default function fuzzyCalcContentLength(content) {
-    console.log('start----', content);
     content = '' + content;
     if (!content || content === '') return;
     // 检查表情，表情暂时计算为3个字符
