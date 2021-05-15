@@ -89,6 +89,15 @@ class ThreadH5Page extends React.Component {
   componentDidMount() {
     // 当内容加载完成后，获取评论区所在的位置
     this.position = this.commentDataRef?.current?.offsetTop - 50;
+
+    // 是否定位到评论位置
+    console.log(this.props?.thread?.isPositionToComment);
+    if (this.props?.thread?.isPositionToComment) {
+      // TODO:需要监听帖子内容加载完成事件
+      setTimeout(() => {
+        this.threadBodyRef.current.scrollTo(0, this.position);
+      }, 1000);
+    }
   }
 
   componentDidUpdate() {
@@ -281,7 +290,7 @@ class ThreadH5Page extends React.Component {
     if (success) {
       this.setTopState(params.isStick);
       // TODO:更新首页置顶列表
-      // this.props.index.screenData()
+      this.props.index.screenData({});
       return;
     }
 
