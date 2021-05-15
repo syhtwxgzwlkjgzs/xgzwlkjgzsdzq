@@ -351,6 +351,7 @@ class PostPage extends React.Component {
     if (code === 0) {
       thread.reset();
       if (!isDraft) this.props.router.replace(`/thread/${data.threadId}`);
+      else Router.back();
       return true;
     }
     Toast.error({ content: msg });
