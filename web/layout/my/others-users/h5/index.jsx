@@ -24,9 +24,15 @@ class H5OthersPage extends React.Component {
     const { query } = this.props.router;
     if (query.otherId) {
       await this.props.user.getTargetUserInfo(query.otherId);
-      await this.props.user.getTargetUserThreads(query.otherId);
     }
   };
+
+  fetchTargetUserThreads = async () => {
+    const { query } = this.props.router;
+    if (query.otherId) {
+      await this.props.user.getTargetUserThreads(query.otherId);
+    }
+  }
 
   render() {
     const { site, user } = this.props;
@@ -36,8 +42,8 @@ class H5OthersPage extends React.Component {
       <BaseLayout
         showHeader={false}
         showTabBar={false}
-        onRefresh={user.getTargetUserThreads}
-        noMore={targetUserThreadsTotalPage <= targetUserThreadsPage}
+        onRefresh={this.fetchTargetUserThreads}
+        noMore={targetUserThreadsTotalPage < targetUserThreadsPage}
       >
         <div className={styles.mobileLayout}>
           <UserCenterHeaderImage isOtherPerson={true} />

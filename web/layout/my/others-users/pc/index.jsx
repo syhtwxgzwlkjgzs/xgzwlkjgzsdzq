@@ -1,16 +1,11 @@
 import React from 'react';
-import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import clearLoginStatus from '@common/utils/clear-login-status';
-import UserCenterPost from '@components/user-center-post-pc';
-import UserCenterAction from '@components/user-center-action-pc';
-import UserBaseLaout from '@components/user-center-base-laout-pc';
+import { Button } from '@discuzq/design';
+import UserBaseLaout from '@components/user-center-base-laout-pc'
 import SidebarPanel from '@components/sidebar-panel';
 import ThreadContent from '@components/thread';
 import Copyright from '@components/copyright';
-@inject('site')
-@inject('user')
-@observer
 class PCMyPage extends React.Component {
   loginOut() {
     clearLoginStatus();
@@ -22,46 +17,41 @@ class PCMyPage extends React.Component {
     this.props.router.replace(`/search?keyword=${value}`);
   }
   renderRight = () => {
-    const { pageData } = {};
+    const { pageData = []  } = {};
     return (
       <>
-      <SidebarPanel
+      <SidebarPanel 
         title="粉丝"
+        noData={pageData.length} 
         onShowMore={this.moreFans}
       >
       </SidebarPanel>
       <div className={styles.hr}></div>
-      <SidebarPanel
+      <SidebarPanel 
         title="关注"
         leftNum="2880"
+        noData={pageData.length} 
         onShowMore={this.moreFollow}
       >
       </SidebarPanel>
       <Copyright/>
     </>
-    );
+    )
   }
-  renderContent = () => {
-    const { user } = this.props;
-    const { userThreads, userThreadsTotalCount, userThreadsPage, userThreadsTotalPage } = user;
+  renderContent = (pageData) => {
+    const num = 0;
     return (
       <div className={styles.userContent}>
-        <div className={styles.section}>
-          <UserCenterPost/>
-        </div>
-        <div className={styles.section}>
-          <UserCenterAction/>
-        </div>
-        <SidebarPanel
-          title="主题"
+        <SidebarPanel 
+          title="主题" 
           type='normal'
           bigSize={true}
-          isShowMore={!userThreads}
-          leftNum ={`${userThreadsTotalCount}个主题`}
-          noData={!userThreads?.length}
+          isShowMore={!pageData}
+          leftNum ={`${num}个主题`}
+          noData={!pageData?.length}
         >
           {
-            userThreads?.map((item, index) => (
+            pageData?.map((item, index) => (
               <div>
                   <ThreadContent className={styles.wrapper} showBottom={false} data={item} key={index} />
                   <div className={styles.hr}></div>
@@ -70,16 +60,18 @@ class PCMyPage extends React.Component {
           }
         </SidebarPanel>
       </div>
-    );
+    )
   }
   render() {
+    const { pageData } = {};
     return (
        <UserBaseLaout
+          isOtherPerson={true}
           allowRefresh={false}
           onSearch={this.onSearch}
           right={ this.renderRight }
         >
-          { this.renderContent() }
+          { this.renderContent(pageData) }
         </UserBaseLaout>
     );
   }

@@ -1,0 +1,54 @@
+@import '@common/styles/index.scss';
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: $body-bg-color;
+}
+.headerbox {
+  display: flex;
+  justify-content: center;
+}
+.wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  overflow-y: scroll;
+  // padding: rem(20) 0;
+}
+
+.center {
+  width: rem(750);
+  display: flex;
+  flex-direction: column;
+  margin-top: rem(20);
+}
+
+.left {
+  position: sticky;
+  top: rem(0);
+  margin-right: rem(20);
+  padding-top: rem(20);
+  width: rem(300);
+}
+
+.right {
+  position: sticky;
+  margin-left: rem(20);
+  top: rem(0);
+  padding-top: rem(20);
+  width: rem(330);
+}
+
+.list {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+.userHeader {
+  width: rem(1090);
+}

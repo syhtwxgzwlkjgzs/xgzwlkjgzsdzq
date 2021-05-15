@@ -88,31 +88,9 @@ class index extends Component {
     return (
       <>
         {!isOtherFans ? (
-          <UserCenterFans
-            friends={this.props.user.userFans}
-            loadMorePage={true}
-            loadMoreAction={this.props.user.getUserFans}
-            hasMorePage={this.props.user.userFansTotalPage >= this.props.user.targetUserFansPage}
-            followHandler={this.followHandler}
-            unFollowHandler={this.unFollowHandler}
-            splitElement={this.splitElement()}
-            onContainerClick={this.onContainerClick}
-          />
+          <UserCenterFans onContainerClick={this.onContainerClick} />
         ) : (
-          <UserCenterFans
-            friends={this.props.user.targetUserFans}
-            loadMorePage={true}
-            loadMoreAction={async () => {
-              if (id) {
-                await this.props.user.getTargetUserFans(id);
-              }
-            }}
-            hasMorePage={this.props.user.targetUserFansTotalPage >= this.props.user.targetUserFansPage}
-            followHandler={this.followHandler}
-            unFollowHandler={this.unFollowHandler}
-            splitElement={this.splitElement()}
-            onContainerClick={this.onContainerClick}
-          />
+          <UserCenterFans userId={id} onContainerClick={this.onContainerClick} />
         )}
       </>
     );
