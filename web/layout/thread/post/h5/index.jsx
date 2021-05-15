@@ -69,15 +69,17 @@ class ThreadCreate extends React.Component {
     const height = getVisualViewpost();
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
     const postBottombar = document.querySelector('#post-bottombar');
-    if (!isIOS()) {
+    if (!isIOS() && vditorToolbar) {
       vditorToolbar.style.position = 'fixed';
       vditorToolbar.style.bottom = '90px';
       vditorToolbar.style.top = 'auto';
       return;
     }
     postBottombar.style.top = `${height - 90 + y}px`;
-    vditorToolbar.style.position = 'fixed';
-    vditorToolbar.style.top = `${height - 130 + y}px`;
+    if (vditorToolbar) {
+      vditorToolbar.style.position = 'fixed';
+      vditorToolbar.style.top = `${height - 130 + y}px`;
+    }
     const position = document.querySelector('#post-position');
     if (!position) return;
     position.style.display = 'none';
@@ -173,12 +175,9 @@ class ThreadCreate extends React.Component {
         <div className={styles['post-inner']}>
           {/* 标题 */}
           <Title
-            isDisplay={true}
+            isDisplay={this.props.isTitleShow}
             title={postData.title}
             onChange={title => this.props.setPostData({ title })}
-            onFocus={this.setBottomFixed}
-            onBlur={this.clearBottomFixed}
-            autofocus
           />
           {/* 编辑器 */}
           <DVditor

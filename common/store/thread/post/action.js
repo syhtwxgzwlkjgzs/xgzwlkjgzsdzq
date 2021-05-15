@@ -281,7 +281,7 @@ class ThreadPostAction extends ThreadPostStore {
     const attachmentPrice = Number(detail.attachmentPrice);
     let position = {};
     if (detail.position && detail.position.address) position = detail.position;
-    const contentText = content && content.text;
+    const contentText = content && content.text.replace(/alt="(\w*)"/g, 'alt=\':$1:emoji\'');
     const contentindexes = (content && content.indexes) || {};
     let audio = {};
     let rewardQa = {};
