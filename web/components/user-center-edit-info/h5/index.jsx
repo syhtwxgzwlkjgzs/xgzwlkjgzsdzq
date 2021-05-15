@@ -27,6 +27,8 @@ class index extends Component {
 
   componentDidMount() {
     this.initState()
+    const id = this.props.user?.id
+    this.props.user.updateUserInfo(id)
     this.props.user.initEditInfo()
   }
 
