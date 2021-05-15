@@ -75,7 +75,7 @@ export default function DVditor(props) {
       clearTimeout(timer);
       if (vditor && vditor.getValue && vditor.getValue() === '\n' && vditor.getValue() !== value) {
         // setCurrentPositon();
-        vditor.insertValue && vditor.insertValue(value);
+        vditor.insertValue && vditor.insertValue(value.replace(/alt="(\w*)"/g, "alt=':$1:emoji'"));
       }
     }, 200);
   }, [value]);
