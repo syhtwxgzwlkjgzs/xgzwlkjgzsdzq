@@ -28,8 +28,9 @@
       }
     }
     .more {
-      line-height: rem(50);
-      margin-left: rem($margin-5n);
+      line-height: rem(20);
+      padding-left: rem($padding-2n);
+      color: var(--color-text-secondary);
     }
   }
 }

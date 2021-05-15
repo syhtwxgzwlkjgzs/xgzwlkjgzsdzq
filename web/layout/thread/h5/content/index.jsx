@@ -106,7 +106,7 @@ const RenderThreadContent = inject('user')(
           </div>
           {props?.user?.isLogin() && (
             <div className={styles.more} onClick={onMoreClick}>
-              <Icon size="20" color="#8590A6" name="MoreVOutlined"></Icon>
+              <Icon size={20} color="#8590A6" name="MoreVOutlined"></Icon>
             </div>
           )}
         </div>
