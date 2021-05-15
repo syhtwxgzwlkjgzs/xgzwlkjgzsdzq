@@ -1,0 +1,41 @@
+@import '@common/styles/index.scss';
+
+.money-box {
+  :global {
+    .dzq-tag {
+      @include tag-default;
+      margin-right: rem($margin-4n);
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+    .dzq-icon {
+      transform: scale(.8);
+    }
+  }
+
+  // .editor-count {
+  //   position: absolute;
+  //   bottom: $margin-4n;
+  //   right: $margin-6n;
+  //   font-size: $font-size-label;
+  //   color: $text-color-placeholder;
+  // }
+}
+.money-box.pc {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: $padding-4n $padding-6n;
+  width: calc(892px - 44px);
+  z-index: 1;
+}
+.money-box.h5 {
+  padding: rem($padding-4n);
+  :global {
+    .dzq-tag {
+      margin-bottom: rem($padding-1n);
+    }
+  }
+}
