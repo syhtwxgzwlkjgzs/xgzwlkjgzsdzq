@@ -1,16 +1,30 @@
 import React from 'react';
 import styles from './index.module.scss';
 import clearLoginStatus from '@common/utils/clear-login-status';
+import { inject, observer } from 'mobx-react';
 import { Button } from '@discuzq/design';
-import UserBaseLaout from '@components/user-center-base-laout-pc'
+import UserBaseLaout from '@components/user-center-base-laout-pc';
 import SidebarPanel from '@components/sidebar-panel';
 import ThreadContent from '@components/thread';
 import Copyright from '@components/copyright';
+import { withRouter } from 'next/router';
+
+@inject('site')
+@inject('user')
+@observer
 class PCMyPage extends React.Component {
   loginOut() {
     clearLoginStatus();
     window.location.replace('/');
   }
+
+  componentDidMount() {
+    const { query } = this.props.router;
+    if (query.otherId) {
+      this.props.user.getTargetUserInfo(query.otherId);
+    }
+  }
+
   moreFans = () => {}
   moreFollow = () => {}
   onSearch = (value) => {
@@ -20,30 +34,30 @@ class PCMyPage extends React.Component {
     const { pageData = []  } = {};
     return (
       <>
-      <SidebarPanel 
+      <SidebarPanel
         title="粉丝"
-        noData={pageData.length} 
+        noData={pageData.length}
         onShowMore={this.moreFans}
       >
       </SidebarPanel>
       <div className={styles.hr}></div>
-      <SidebarPanel 
+      <SidebarPanel
         title="关注"
         leftNum="2880"
-        noData={pageData.length} 
+        noData={pageData.length}
         onShowMore={this.moreFollow}
       >
       </SidebarPanel>
       <Copyright/>
     </>
-    )
+    );
   }
   renderContent = (pageData) => {
     const num = 0;
     return (
       <div className={styles.userContent}>
-        <SidebarPanel 
-          title="主题" 
+        <SidebarPanel
+          title="主题"
           type='normal'
           bigSize={true}
           isShowMore={!pageData}
@@ -60,7 +74,7 @@ class PCMyPage extends React.Component {
           }
         </SidebarPanel>
       </div>
-    )
+    );
   }
   render() {
     const { pageData } = {};
@@ -77,4 +91,4 @@ class PCMyPage extends React.Component {
   }
 }
 
-export default PCMyPage;
+export default withRouter(PCMyPage);
