@@ -39,12 +39,24 @@
       .dzq-checkbox {
         border: $border-solid-1;
         border-radius: $border-radius-small !important;
+        background-color: $text-bg-color2;
         &:after {
           border: none !important;
         }
       }
       .dzq-checkbox__label.is-checked {
         color: $text-color-primary;
+      }
+      &.is-checked {
+        background-color: $checkbox-checked-bg-color;
+        border: none;
+        .dzq-checkbox__icon {
+          color: $primary-color;
+          font-size: $font-size-label !important;
+        }
+        .dzq-checkbox {
+          border: none;
+        }
       }
     }
 
