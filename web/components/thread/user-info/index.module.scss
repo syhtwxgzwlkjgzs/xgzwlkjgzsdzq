@@ -94,7 +94,7 @@
 
   p {
     width: rem(40);
-    height: rem(21);
+    height: rem(22);
     margin-left: rem($margin-2n);
     border-radius: rem($border-radius-small);
     font-size: rem($font-size-label);
@@ -102,7 +102,6 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    box-sizing: border-box;
 
     &:after {
       content: '';
