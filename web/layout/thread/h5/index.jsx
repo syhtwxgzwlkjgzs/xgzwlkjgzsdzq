@@ -99,7 +99,7 @@ class ThreadH5Page extends React.Component {
 
   componentWillUnmount() {
     // 清空数据
-    // this.props?.thread && this.props.thread.reset();
+    this.props?.thread && this.props.thread.reset();
   }
 
   // 点击信息icon
@@ -226,6 +226,16 @@ class ThreadH5Page extends React.Component {
     if (type === 'report') {
       this.setState({ showReportPopup: true });
     }
+
+    // 收藏
+    if (type === 'collect') {
+      this.onCollectionClick();
+    }
+
+    // 分享
+    if (type === 'share') {
+      this.onShareClick();
+    }
   };
 
   // 确定举报
@@ -275,7 +285,7 @@ class ThreadH5Page extends React.Component {
     const { success, msg } = await this.props.thread.updateStick(params);
 
     if (success) {
-      this.setTopState(true);
+      this.setTopState(params.isStick);
       return;
     }
 
@@ -495,11 +505,14 @@ class ThreadH5Page extends React.Component {
       canDelete: threadStore?.threadData?.ability?.canDelete,
       canEssence: threadStore?.threadData?.ability?.canEssence,
       canStick: threadStore?.threadData?.ability?.canStick,
+      canShare: this.props.user.isLogin(),
+      canCollect: this.props.user.isLogin(),
     };
     // 更多弹窗界面
     const moreStatuses = {
       isEssence: threadStore?.threadData?.displayTag?.isEssence,
       isStick: threadStore?.threadData?.isStick,
+      isCollect: threadStore?.isFavorite,
     };
 
     const isApproved = threadStore?.threadData?.isApproved || 0;
@@ -588,6 +601,7 @@ class ThreadH5Page extends React.Component {
           ></DeletePopup>
           {/* 举报弹层 */}
 
+          {/* 举报弹窗 */}
           <ReportPopup
             reportContent={this.reportContent}
             inputText={this.inputText}

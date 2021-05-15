@@ -4,7 +4,9 @@ import { withRouter } from 'next/router';
 import BaseLayout from '@components/base-layout';
 import SearchInput from '@components/search-input';
 import TopicHeader from './components/topic-header'
-import TopicItem from './components/topic-item'
+import TopicItem from '@components/topic-item'
+import styles from './index.module.scss';
+
 
 @inject('site')
 @inject('user')
@@ -49,11 +51,13 @@ class TopicH5Page extends React.Component {
       >
         <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} isShowBottom={false} />
         <TopicHeader onClick={this.onFilter} />
-        {
-          pageData?.map((item, index) => (
-            <TopicItem data={item} key={index} onClick={() => this.redirectTopicDetails(item.topicId)}/>  
-          ))
-        }
+        <div className={styles.wrapper}>
+          {
+            pageData?.map((item, index) => (
+              <TopicItem data={item} key={index} onClick={() => this.redirectTopicDetails(item.topicId)}/>  
+            ))
+          }
+        </div>
       </BaseLayout>
     );
   }

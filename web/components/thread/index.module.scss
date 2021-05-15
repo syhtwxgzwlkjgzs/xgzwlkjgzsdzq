@@ -9,11 +9,12 @@
   //   background: rgba(229, 242, 255, 0.3);
   // }
   .title {
+    @include cursor-on-pc;
+    display: inline-flex;
     font-size: rem($font-size-middle);
     font-weight: 600;
     line-height: rem(22);
     color: var(--color-text-primary);
-    cursor: pointer;
     margin-bottom: rem($margin-4n);
   }
 

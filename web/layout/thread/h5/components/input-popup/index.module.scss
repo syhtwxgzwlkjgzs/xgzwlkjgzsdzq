@@ -15,6 +15,7 @@
 
 .main {
   background: var(--color-white);
+  width: 100%;
 }
 
 .button {
@@ -39,7 +40,7 @@
 
 .input {
   margin-bottom: rem($margin-4n);
-  width: 100%;
+  width: 100% !important;
 }
 
 .upload {

@@ -27,8 +27,8 @@ export default function H5Header(props) {
     <div className={styles.header}>
         <div className={styles.headerContent}>
             <div onClick={gobackClickHandle} className={styles.left}>
-              <Icon size={14} className={styles.backIcon} name="LeftOutlined"></Icon>
-              返回
+              <Icon className={styles['left-arrow']} name="RightOutlined" size={6} />
+              <div className={styles.text}>返回</div>
             </div>
             <div className={styles.right}>
                 <Icon className={styles.icon} onClick={() => {
