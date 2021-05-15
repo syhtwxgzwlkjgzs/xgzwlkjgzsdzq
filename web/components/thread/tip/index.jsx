@@ -21,6 +21,10 @@ const Index = ({ imgs = [], tipData = {}, wholeNum = 1 }) => {
   const onHidden = () => {
     setVisible(false);
   };
+  console.log("Getting into the Tip component: ");
+  console.log("Tipdata", tipData);
+  console.log("Tip imgs", imgs, " whole number: ", wholeNum);
+  console.log('')
 
   return (
     <>
@@ -28,6 +32,7 @@ const Index = ({ imgs = [], tipData = {}, wholeNum = 1 }) => {
             {
                 wholeNum !== 0 && imgs?.filter((_, index) => index < 2).map((item, index) => (
                   <div key={index} className={index === 0 ? styles.img : styles.imgAfter}>
+                    
                     <Avatar
                       image={item.avatar}
                       name={item.userName}

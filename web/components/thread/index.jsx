@@ -80,14 +80,18 @@ class Index extends React.Component {
       }
       const { data = {}, user } = this.props;
       const { threadId = '', isLike, postId } = data;
+      console.log("Previous praised data.likeReward: ", data.likeReward);
 
       this.setState({isSendingLike: true});
       this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } }).then(result => {
         if (result.code === 0 && result.data) {
           const { isLiked } = result.data;
+          // console.log("Sending user info");
           this.props.index.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
           this.props.search.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
           this.props.topic.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
+      console.log("Afterward praised data: ", data);
+
         }
         this.setState({isSendingLike: false});
       });
@@ -163,6 +167,8 @@ class Index extends React.Component {
         displayTag,
         payType,
       } = data || {};
+      console.log(`rendering data ${data.threadId}: `, data)
+      console.log(`rendering data likeReward: `, likeReward)
 
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
 

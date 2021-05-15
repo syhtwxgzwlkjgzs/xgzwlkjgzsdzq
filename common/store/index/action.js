@@ -187,15 +187,23 @@ class IndexAction extends IndexStore {
       data.isLike = isLike;
 
       const theUserId = user.userId || user.id;
+      console.log("On Index page")
 
       if (isLike) {
+        console.log("LIKING: ")
+        console.log("BEFORE data.likeReward.users", data.likeReward.users);
+
         const userAdded = { userId: theUserId, avatar: user.avatarUrl, username: user.username };
 
         // 添加当前用户到按过赞的用户列表
         data.likeReward.users = data.likeReward.users.length ?
                                 [userAdded, ...data.likeReward.users]:
                                 [userAdded];
+
       } else {
+        console.log("DISLIKING: ")
+        console.log("BEFORE data.likeReward.users", data.likeReward.users);
+
         // 从按过赞用户列表中删除当前用户
         data.likeReward.users = data.likeReward.users.length ?
                                 [...data.likeReward.users].filter(item => {
@@ -203,6 +211,7 @@ class IndexAction extends IndexStore {
                                 }) :
                                 data.likeReward.users;
       }
+      console.log("AFTER data.likeReward.users", data.likeReward.users);
       data.likeReward.likePayCount = data.likeReward.users.length;
     }
 
