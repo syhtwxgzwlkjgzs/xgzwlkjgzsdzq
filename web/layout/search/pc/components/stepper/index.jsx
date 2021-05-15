@@ -36,7 +36,7 @@ import datas from './data';
 */
 const Steps = ({ data, onClick, selectIndex, index, footer}) => {
 const handleClick = useCallback(() => {
-  onClick && onClick(index, data.iconName);
+  onClick && onClick(index, data.iconName, data);
 }, [index, data, onClick]);
 
 return (
