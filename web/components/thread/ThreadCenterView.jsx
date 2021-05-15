@@ -105,7 +105,7 @@ const Index = (props) => {
                   <div className={styles.pay}>
                     <Button className={styles.button} type="primary" onClick={onPay}>
                         <Icon className={styles.payIcon} name="DollarLOutlined" size={18}></Icon>
-                        {payType === 1 ? `支付${price}元查看剩余内容` : `支付${price}元查看附件内容`}
+                        {payType === 1 ? <p className={styles.payText}>{`支付${price}元查看剩余内容`}</p> : <p className={styles.payText}>{`支付${price}元查看附件内容`}</p>}
                     </Button>                  
                   </div>
                   
