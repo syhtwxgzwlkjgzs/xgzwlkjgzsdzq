@@ -30,6 +30,7 @@ import throttle from '@common/utils/thottle';
 import Header from '@components/header';
 import Router from '@discuzq/sdk/dist/router';
 import VideoDisplay from '@components/thread-post/video-display';
+import MoneyDisplay from '@components/thread-post/money-display';
 
 function isIOS() {
   return /ip[honead]{2,4}(?:.*os\s([\w]+)\slike\smac|;\sopera)/i.test(window.navigator.userAgent.toLowerCase());
@@ -249,33 +250,11 @@ class ThreadCreate extends React.Component {
             || postData.redpacket.price
             || !!(postData.price || postData.attachmentPrice)
           ) && (
-            <div className={styles['reward-qa-box']}>
-              {/* 付费 */}
-              {!!(postData.price || postData.attachmentPrice) && (
-                <div className={styles['reward-qa-box-content']}>
-                  付费总额{postData.price + postData.attachmentPrice}元
-                </div>
-              )}
-              {/* 悬赏问答内容标识 */}
-              {postData.rewardQa.value && postData.rewardQa.times  && (
-                <div
-                  className={styles['reward-qa-box-content']} onClick={() => {
-                    this.props.handleSetState({ currentAttachOperation: THREAD_TYPE.reward });
-                  }}
-                >
-                  {`悬赏金额${postData.rewardQa.value}元\\结束时间${postData.rewardQa.times}`}
-                </div>
-              )}
-              {/* 红包信息 */}
-              {postData.redpacket.price && (
-                <div className={styles['reward-qa-box-content']}
-                  onClick={() => this.props.handleSetState({ currentDefaultOperation: defaultOperation.redpacket })}
-                >
-                  {postData.redpacket.rule === 1 ? '随机红包' : '定额红包'}\总金额&nbsp;{postData.redpacket.price}元\{postData.redpacket.number}个
-                  {postData.redpacket.condition === 1 && `\\集赞个数${postData.redpacket.likenum}`}
-                </div>
-              )}
-            </div>
+            <MoneyDisplay
+              postData={postData}
+              setPostData={this.props.setPostData}
+              handleSetState={this.props.handleSetState}
+            />
           )}
         </div>
         <div id="post-bottombar" className={styles['post-bottombar']}>
