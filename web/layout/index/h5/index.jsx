@@ -167,14 +167,6 @@ class IndexH5Page extends React.Component {
     </div>
   );
 
-  // 下拉刷新
-  onPullDown = () => {
-    this.setState({ isFinished: false });
-    setTimeout(() => {
-      this.setState({ isFinished: true });
-    }, 2000);
-  };
-
   render() {
     const { index } = this.props;
     const { filter, isFinished } = this.state;
@@ -188,7 +180,6 @@ class IndexH5Page extends React.Component {
         showTabBar
         onRefresh={this.onRefresh}
         noMore={currentPage >= totalPage}
-        onScroll={this.onScroll}
         isFinished={isFinished}
         curr="home"
       >
@@ -200,9 +191,7 @@ class IndexH5Page extends React.Component {
 
         {pageData?.length > 0
           && pageData.map((item, index) => (
-            <>
-              <ThreadContent key={index} data={item} className={styles.listItem} />
-            </>
+            <ThreadContent key={index} showBottomStyle={index !== pageData.length - 1} data={item} className={styles.listItem} />
           ))}
 
         <FilterView
