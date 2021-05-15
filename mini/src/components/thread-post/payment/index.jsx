@@ -73,7 +73,7 @@ const Paid = inject('threadPost')(observer((props) => {
               value={price}
               placeholder="金额"
               onChange={e => setPrice(+e.target.value)}
-            />元
+            />&nbsp;元
           </View>
         </View>
         <View className={styles.free}>

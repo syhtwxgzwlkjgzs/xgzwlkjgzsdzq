@@ -1,24 +1,24 @@
 @import "@common/styles/index.scss";
+@mixin setRefreshList($height: 100vh) {
+  :global {
+    .dzq-pull-refresh__list {
+      height: $height !important;
+    }
+  }
+}
 
 .wrapper {
   :global {
-    .dzq-pull-refresh {
-      .dzq-pull-refresh__loading {
-        font-size: 20px;
-      }
-      .dzq-pull-refresh__list {
-        height: 100vh !important;
-      }
+    .dzq-pull-refresh__loading {
+      font-size: $font-size-large;
     }
   }
-  &.wrapper-bar {
-    :global {
-      .dzq-pull-refresh {
-        .dzq-pull-refresh__list {
-          height: calc(100vh - 44px) !important;
-        }
-      }
-    }
+  @include setRefreshList();
+  &.with-top {
+    @include setRefreshList(calc(100vh - 44px));
+  }
+  &.with-bottom {
+    @include setRefreshList(calc(100vh - 65px));
   }
 }
 
