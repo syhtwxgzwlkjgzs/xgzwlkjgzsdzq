@@ -6,7 +6,7 @@ import DVditor from '@components/editor';
 import Title from '@components/thread-post/title';
 import { AttachmentToolbar, DefaultToolbar } from '@components/editor/toolbar';
 import Position from '@components/thread-post/position';
-import { Button, Video, Audio, AudioRecord, Tag } from '@discuzq/design';
+import { Button, Video, Audio, AudioRecord, Tag, Icon } from '@discuzq/design';
 import ClassifyPopup from '@components/thread-post/classify-popup';
 import { withRouter } from 'next/router';
 import Emoji from '@components/editor/emoji';
@@ -22,6 +22,7 @@ import TopicSelect from '@components/thread-post/topic-select';
 import RedpacketSelect from '@components/thread-post/redpacket-select';
 import Copyright from '@components/copyright';
 import ForTheForm from '@components/thread/for-the-form';
+import VideoDisplay from '@components/thread-post/video-display';
 
 @inject('threadPost')
 @inject('index')
@@ -89,7 +90,11 @@ class ThreadPCPage extends React.Component {
 
               {/* 视频组件 */}
               {(postData.video && postData.video.thumbUrl) && (
-                <Video className="dzq-post-video" src={postData.video.thumbUrl} onReady={this.props.onVideoReady} />
+                <VideoDisplay
+                  pc
+                  src={postData.video.thumbUrl}
+                  onDelete={() => this.props.setPostData({ video: {} })}
+                  onReady={this.props.onVideoReady} />
               )}
 
               {/* 附件上传组件 */}
