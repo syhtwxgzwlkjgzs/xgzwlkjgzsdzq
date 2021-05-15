@@ -21,8 +21,13 @@
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      .backIcon {
-        margin-right: rem($padding-2n);
+      .left-arrow {
+        transform: rotate(
+          180deg
+        );
+      }
+      .text {
+        padding-left: $padding-2n;
       }
     }
     .right{
