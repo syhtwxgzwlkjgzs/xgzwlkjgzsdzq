@@ -26,6 +26,8 @@ class UserCenterFollows extends React.Component {
     unFollowHandler: async () => {},
     onContainerClick: async ({ id }) => {},
     hasMorePage: false,
+    className: '',
+    style: {},
   };
 
   constructor(props) {
@@ -197,10 +199,12 @@ class UserCenterFollows extends React.Component {
   render() {
     return (
       <div
+        className={this.props.className}
         ref={this.containerRef}
         style={{
           height: '100%',
           overflow: 'scroll',
+          ...this.props.style,
         }}
       >
         {followerAdapter(this.state.follows).map((user, index) => {

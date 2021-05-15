@@ -7,9 +7,9 @@ import styles from './index.module.scss';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { attachIcon } from '@common/constants/const';
-import { createAttachment, readYundianboSignature } from '@common/server';
+import { createAttachment } from '@common/server';
 import { THREAD_TYPE } from '@common/constants/thread-post';
-
+import { tencentVodUpload } from '@common/utils/tencent-vod';
 
 // TODO: upload 待单独独立出来
 function fileToObject(file) {
@@ -69,39 +69,26 @@ function AttachmentToolbar(props) {
     inputRef.current.click();
   };
 
-  const getYundianboSignature = async () => {
-    const res = await readYundianboSignature();
-    const { code, data } = res;
-    return code === 0 ? data.token : '';
-  };
-
   const uploadFiles = async (files, item = {}) => {
     const { onUploadComplete } = props;
     if (item.type === THREAD_TYPE.video) {
       file = files[0];
-      // 云点播上传视频：https://cloud.tencent.com/document/product/266/9239
-      const TcVod = (await import('vod-js-sdk-v6')).default;
-      new TcVod({
-        getSignature: getYundianboSignature,
-      })
-        // 开始上传
-        .upload({ mediaFile: file })
-        .on('media_progress', () => {
+      tencentVodUpload({
+        file,
+        onUploading: () => {
           toastInstance = Toast.loading({
             content: '上传中...',
             duration: 0,
           });
-        })
-        .done()
-        // 上传完成
-        .then((res) => {
-          onUploadComplete(res, file, item);
+        },
+        onComplete: (res, file) => {
+          onUploadComplete(res, file, item.type);
           toastInstance?.destroy();
-        })
-        // 上传异常
-        .catch((err) => {
-          console.log(err);
-        });
+        },
+        onError: (err) => {
+          Toast.error({ content: err.message });
+        },
+      });
     } else {
       // 其他类型上传
       let cloneList = [...files];

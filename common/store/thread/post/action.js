@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import ThreadPostStore from './store';
-import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread, updateThread } from '@common/server';
+import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread, updateThread, createThreadVideoAudio } from '@common/server';
 import { LOADING_TOTAL_TYPE, THREAD_TYPE } from '@common/constants/thread-post';
 
 class ThreadPostAction extends ThreadPostStore {
@@ -23,6 +23,15 @@ class ThreadPostAction extends ThreadPostStore {
   async updateThread(id) {
     const params = this.getCreateThreadParams();
     const ret = await updateThread({ ...params, threadId: Number(id) });
+    return ret;
+  }
+
+  /**
+   * 创建视频音频
+   */
+  @action.bound
+  async createThreadVideoAudio(params) {
+    const ret = await createThreadVideoAudio(params);
     return ret;
   }
 

@@ -552,6 +552,38 @@ class UserAction extends SiteStore {
     throw {};
   }
 
+  @action
+  async getUserLikes(page = 1) {
+    const userLikesList = await readThreadList({
+      params: {
+        page,
+        filter: {
+          complex: 2,
+        },
+      },
+    });
+
+    console.log(userLikesList);
+
+    return userLikesList;
+  }
+
+  @action
+  async getUserCollections(page = 1) {
+    const userCollectionList = await readThreadList({
+      params: {
+        page,
+        filter: {
+          complex: 2,
+        },
+      },
+    });
+
+    console.log(userCollectionList);
+
+    return userCollectionList;
+  }
+
   /**
    * 四个清理函数，清理用户和目标用户粉丝信息
    */

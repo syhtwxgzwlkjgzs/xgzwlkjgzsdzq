@@ -65,11 +65,15 @@ class Index extends React.Component {
     let newTypes = []
     if (!!types && !(types instanceof Array)) {
       newTypes = [types]
+    } else {
+      newTypes = types
     }
 
     let categoryIds = []
     if (!!categoryids && !(categoryids instanceof Array)) {
       categoryIds = [categoryids]
+    } else {
+      categoryIds = categoryids
     }
 
     if (type === 'click-filter') {

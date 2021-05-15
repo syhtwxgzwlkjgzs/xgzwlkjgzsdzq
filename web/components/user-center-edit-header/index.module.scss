@@ -4,7 +4,7 @@
 .userCenterEditHeader {
   position: relative;
   min-height: rem(284);
-  border-bottom: 1px solid #F4F6F7;
+  border-bottom: 1px solid $spacer-bg-color;
   // background-color: pink;
   .headImgBox{
     position: absolute;
@@ -46,6 +46,10 @@
         }
       }
     }
+    .dzq-icon {
+      color: $text-color-regular;
+      font-size: rem($font-size-middle);
+    }
   }
   .userCenterEditCameraIcon {
     position: absolute;
@@ -55,7 +59,6 @@
     border-radius: 50%;
     right: 0;
     bottom: 0;
-    padding: rem($padding-base/2);
     box-sizing: border-box;
     border: rem(2) solid $white;
     display: flex;

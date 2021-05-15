@@ -1,0 +1,125 @@
+@import '@common/styles/index.scss';
+@import '@common/styles/_variable.scss';
+
+.box {
+    width: 100%;
+    min-height: rem(54);
+    position: relative;
+    margin-top: rem(-$margin-10);
+    background: $white;
+    box-sizing: border-box;
+    border-radius: 0 0 rem($border-radius-small) rem($border-radius-small);
+    
+    .boxTop {
+      position: absolute;
+      width: 100%;
+      top: rem(-81);
+      display: flex;
+      height: rem(136);
+      padding: 0 rem(24) rem(9) rem(65);
+      box-sizing: border-box;
+    }
+    .headImgBox {
+      position: relative;
+      width: rem(120);
+      height: rem(120);
+      .userCenterEditCameraIcon {
+        position: absolute;
+        width: rem(34);
+        height: rem(34);
+        background-color: $primary-color;
+        border-radius: 50%;
+        right: 0;
+        bottom: 0;
+        box-sizing: border-box;
+        border: rem(2) solid $white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        :global {
+          .dzq-icon {
+            color: $white;
+          }
+        }
+      }
+    }
+    .contentBox {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+    }
+    .userNameOrTeam{
+      height: rem(120);
+      padding-top: rem(13);
+      padding-left: rem(24);
+      box-sizing: border-box;
+      .username {
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 22px;
+        color: #fff;
+      }
+      .groupName {
+        font-size: rem(14);
+        line-height: rem(22);
+        color: #fff;
+        margin-top: rem(4);
+      }
+      .text {
+        position: absolute;
+        bottom: rem(16);
+        font-size: rem($font-size-primary);
+        color: var(--color-text-primary);
+        text-overflow: -o-ellipsis-lastline;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        line-height: 1.2;
+        color: $text-color-regular;
+      }
+    }
+    .upload {
+      .uploadIcon {
+        margin-right: rem(6);
+      }
+      padding-top: rem(48);
+      font-size: 12px;
+      line-height: 22px;
+      color: #fff;
+    }
+    .otherUserBtn {
+      padding-top: rem(48);
+      text-align: right;
+      .shieldBtn {
+        font-size: 14px;
+        line-height: 22px;
+        color: #fff;
+      }
+    }
+    .userBtn {
+      margin-top: rem($margin-4n);
+      button {
+        width: rem(113);
+        height: rem(36);
+        font-size: rem($font-size-middle);
+        display: inline-block;
+        :global {
+          .dzq-icon {
+            vertical-align: middle;
+          }
+        }
+      }
+      button:nth-child(2) {
+        margin-left: rem($margin-2n);
+        border-color: $primary-color;
+        color: $primary-color;
+      }
+      .userBtnText {
+        vertical-align: middle;
+        margin-left: rem($margin-2n);
+      }
+    }
+}

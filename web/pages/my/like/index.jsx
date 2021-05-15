@@ -14,13 +14,24 @@ class Index extends React.Component {
   prePage = 10;
   static async getInitialProps(ctx) {
     const result = await readTopicsList();
-    const threads = await readThreadList({ params: { filter: {}, sequence: 0, perPage: 10} }, ctx);
+    const threads = await readThreadList(
+      {
+        params: {
+          filter: {
+            complex: 2,
+          },
+          perPage: 10,
+        },
+      },
+      ctx,
+    );
+
     return {
       serverIndex: {
         threads: threads && threads.code === 0 ? threads.data : null,
       },
       serverSearch: {
-        topics: result?.data
+        topics: result?.data,
       },
     };
   }
@@ -38,9 +49,14 @@ class Index extends React.Component {
     const hasTopics = !!search.topics;
     this.page = 1;
     if (!hasThreadsData) {
-      this.props.index.getReadThreadList();
+      this.props.index.getReadThreadList({
+        filter: {
+          complex: 2,
+        },
+        perPage: 10,
+      });
     }
-    if(!hasTopics){
+    if (!hasTopics) {
       search.getTopicsList();
     }
   }
@@ -54,18 +70,21 @@ class Index extends React.Component {
     await index.getReadThreadList({
       perPage: this.prePage,
       page: this.page,
+      filter: {
+        complex: 2,
+      },
     });
-  }
+  };
 
   render() {
     const { site } = this.props;
     const { platform } = site;
 
     if (platform === 'pc') {
-      return <IndexPCPage dispatch={this.dispatch}/>;
+      return <IndexPCPage dispatch={this.dispatch} />;
     }
 
-    return <IndexH5Page dispatch={this.dispatch}/>;
+    return <IndexH5Page dispatch={this.dispatch} />;
   }
 }
 
