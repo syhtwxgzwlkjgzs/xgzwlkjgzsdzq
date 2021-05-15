@@ -228,7 +228,7 @@ class PostPage extends React.Component {
   handleVditorChange = (vditor) => {
     if (vditor) {
       const htmlString = vditor.getHTML();
-      this.setState({ isTitleShow: false });
+      if (!this.threadPost.postData.title) this.setState({ isTitleShow: false });
       this.setPostData({ contentText: htmlString });
     }
   };
