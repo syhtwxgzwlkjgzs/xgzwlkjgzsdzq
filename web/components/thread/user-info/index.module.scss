@@ -1,9 +1,9 @@
 @import '@common/styles/index.scss';
 
 .contianer {
+  @include cursor-on-pc;
   position: relative;
   display: flex;
-  cursor: pointer;
   font-family: 'PingFangSC-Semibold';
 }
 

@@ -7,9 +7,9 @@
   overflow: hidden;
   .contentWrapper{
     .content {
+      @include cursor-on-pc;
       position: relative;
       display: inline-block;
-      cursor: pointer;
       line-height: rem($font-line-height-middle);
       font-size: rem($font-size-middle) !important;
       color: var( --color-text-primary);
