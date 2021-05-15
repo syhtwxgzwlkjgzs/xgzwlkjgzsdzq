@@ -72,14 +72,15 @@
     width: rem(290);
     height: rem(42);
     margin-bottom: rem(24);
+    font-size: rem($font-size-middle);
     display: inline-block;
   }
   .footerBtn {
     border-top: 1px solid var(--border-line-color);
     position: relative;
-    height: rem(54);
+    height: rem(53);
     text-align: center;
-    line-height: rem(54);
+    line-height: rem(53);
     font-size: rem($font-size-primary);
   }
 }
