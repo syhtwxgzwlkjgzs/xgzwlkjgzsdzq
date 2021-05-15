@@ -3,7 +3,8 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import SearchInput from '@components/search-input';
 import BaseLayout from '@components/base-layout';
-import { Topic } from '@components/search-result-item';
+import TopicItem from '@components/topic-item'
+import styles from './index.module.scss';
 
 @inject('search')
 @observer
@@ -59,11 +60,13 @@ class SearchResultTopicH5Page extends React.Component {
           noMore={currentPage >= totalPage}
         >
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
-          {
-            pageData?.map((item, index) => (
-              <Topic key={index} data={item} onClick={this.onTopicClick} />
-            ))
-          }
+          <div className={styles.wrapper}>
+            {
+              pageData?.map((item, index) => (
+                <TopicItem key={index} data={item} onClick={this.onTopicClick} />
+              ))
+            }
+          </div>
         </BaseLayout>
     );
   }
