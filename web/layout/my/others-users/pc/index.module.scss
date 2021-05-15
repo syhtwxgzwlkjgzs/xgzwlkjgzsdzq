@@ -1,0 +1,16 @@
+@import '@common/styles/index.scss';
+.userContent {
+  .section {
+    background: $white;
+    border-radius: rem($border-radius-small);
+    margin-bottom: rem($margin-10);
+  }
+}
+.wrapper {
+  padding: 0;
+}
+.hr {
+  height: rem(10);
+  background-color: $body-bg-color;
+  margin: 0 rem(-30);
+}

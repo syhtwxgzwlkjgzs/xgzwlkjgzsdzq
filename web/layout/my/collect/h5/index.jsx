@@ -17,7 +17,7 @@ class Index extends React.Component {
   }
   render() {
     const { index, site } = this.props;
-    const { pageData = [], currentPage, totalPage } = index.threads;
+    const { pageData = [], currentPage, totalPage } = index.threads || {};
 
     return (
       <div className={styles.collectBox}>

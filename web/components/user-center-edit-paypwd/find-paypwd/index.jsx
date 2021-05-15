@@ -94,7 +94,7 @@ class index extends Component {
       <div>
         <Header />
         <div className={styles.content}>
-          <h3>找回支付密码</h3>
+          <h3>找回密码</h3>
           <div className={styles.labelInfo}>
             <div>
               <span className={styles.labelName}>手机号</span>
@@ -105,18 +105,18 @@ class index extends Component {
             </div>
           </div>
           <div className={styles.bindCode}>
-            <span>验证码</span>
+            <span>请输入短信验证码</span>
             <CaptchaInput current_step={current_step} updatePwd={this.updatePwd} list={list} is_blur={is_blur} />
           </div>
         </div>
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}><Input onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur} mode="password" placeholder="设置新密码" /></div>
+          <div className={styles.labelValue}><Input onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur} mode="password" placeholder="请输入新密码" /></div>
         </div>
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}><Input onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="确认新密码" /></div>
+          <div className={styles.labelValue}><Input onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="请重复输入新密码" /></div>
         </div>
         <div className={styles.bottom}>
-          <Button onClick={this.handleStepBtn} type={"primary"} className={styles.btn}>确定</Button>
+          <Button onClick={this.handleStepBtn} type={"primary"} className={styles.btn}>提交</Button>
         </div>
       </div>
     )
