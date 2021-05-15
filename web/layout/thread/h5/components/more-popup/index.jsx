@@ -28,7 +28,7 @@ const InputPop = (props) => {
             {canEdit && (
               <div className={styles.moreItem} onClick={() => onOperClick('edit')}>
                 <div className={styles.icon}>
-                  <Icon name="CompileOutlined" size={20}></Icon>
+                  <Icon name="RedactOutlined" size={20}></Icon>
                 </div>
                 <div className={styles.text}>编辑</div>
               </div>
@@ -60,7 +60,7 @@ const InputPop = (props) => {
             {canCollect && (
               <div className={className(styles.moreItem, isCollected && styles.actived)} onClick={() => onOperClick('essence')}>
                 <div className={styles.icon}>
-                  <Icon name="CollectOutlined" size={20}></Icon>
+                  <Icon name="CollectFunOutlined" size={20}></Icon>
                 </div>
                 <div className={styles.text}>收藏</div>
               </div>
