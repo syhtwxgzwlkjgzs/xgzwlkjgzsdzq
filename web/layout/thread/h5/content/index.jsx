@@ -227,7 +227,7 @@ const RenderThreadContent = inject('user')(
             {/* 打赏 */}
             {canBeReward && (
               <div style={{ textAlign: 'center' }}>
-                <Button onClick={onRewardClick} className={styles.rewardButton} type="primary" size="large">
+                <Button onClick={onRewardClick} className={styles.rewardButton} type="primary">
                   <Icon className={styles.payIcon} name="HeartOutlined" size={20}></Icon>
                   <span className={styles.rewardext}>打赏</span>
                 </Button>

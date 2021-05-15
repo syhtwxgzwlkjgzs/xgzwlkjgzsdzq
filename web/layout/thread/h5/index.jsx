@@ -275,7 +275,7 @@ class ThreadH5Page extends React.Component {
     const { success, msg } = await this.props.thread.updateStick(params);
 
     if (success) {
-      this.setTopState(true);
+      this.setTopState(params.isStick);
       return;
     }
 
@@ -588,6 +588,7 @@ class ThreadH5Page extends React.Component {
           ></DeletePopup>
           {/* 举报弹层 */}
 
+          {/* 举报弹窗 */}
           <ReportPopup
             reportContent={this.reportContent}
             inputText={this.inputText}
