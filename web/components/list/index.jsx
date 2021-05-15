@@ -40,6 +40,7 @@ const List = forwardRef(({
     ref,
     () => ({
       onBackTop,
+      jumpToScrollTop,
       isLoading,
     }),
   );
@@ -57,6 +58,12 @@ const List = forwardRef(({
 
   const onBackTop = () => {
     listWrapper.current.scrollTop = 0;
+  };
+
+  const jumpToScrollTop = (scrollTop) => {
+    if(scrollTop && scrollTop > 0) {
+      listWrapper.current.scrollTop = scrollTop;
+    }
   };
 
   const onTouchMove = throttle(() => {
