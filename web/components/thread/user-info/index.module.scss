@@ -29,6 +29,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: rem(20);
 }
 
 .groupName {
@@ -42,10 +43,12 @@
 }
 
 .meta {
+  margin-top: rem(1);
   color: var(--color-text-secondary);
   display: flex;
   align-items: center;
   font-size: rem($font-size-label);
+  line-height: rem(17);
 }
 
 .time {
@@ -54,7 +57,7 @@
 }
 
 .location {
-  margin-right: rem($margin-10);
+  margin-right: rem($margin-2n);
   display: flex;
   align-items: center;
 
@@ -69,13 +72,17 @@
 }
 
 .view {
-  margin-right: rem($margin-10);
+  margin-right: rem($margin-2n);
   display: flex;
   align-items: center;
 
   span {
     margin-left: rem($margin-1n);
     font-size: rem($font-size-label);
+  }
+
+  .viewIcon {
+    color: $text-color-secondary;
   }
 }
 
@@ -84,15 +91,19 @@
   top: 0;
   right: 0;
   display: flex;
+
   p {
     width: rem(40);
     height: rem(21);
     margin-left: rem($margin-2n);
     border-radius: rem($border-radius-small);
     font-size: rem($font-size-label);
-    line-height: rem(21);
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
+    box-sizing: border-box;
+
     &:after {
       content: '';
       position: absolute;
@@ -103,18 +114,43 @@
       left: 0;
     }
   }
+
   .categoryEssence {
-    color:  var(--color-orange);
-    border: rem(1) solid  var(--color-orange);
+    color: var(--color-orange);
+    border: rem(1) solid var(--color-orange);
     &:after {
-      background-color:  var(--color-orange);
+      background-color: var(--color-orange);
     }
   }
-  >div {
+
+  .pay {
+    color: $success-color;
+    border: rem(1) solid $success-color;
+    &:after {
+      background-color: $success-color;
+    }
+  }
+
+  .reward {
+    color: $warn-color;
+    border: rem(1) solid $warn-color;
+    &:after {
+      background-color: $warn-color;
+    }
+  }
+
+  .red {
+    color: $text-color-error;
+    border: rem(1) solid $text-color-error;
+    &:after {
+      background-color: $text-color-error;
+    }
+  }
+  > div {
     margin-left: rem(8);
   }
   :global {
-    .dzq-tag::after {
+    .dzq-tag:after {
       z-index: 1;
     }
   }

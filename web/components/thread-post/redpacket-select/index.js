@@ -18,6 +18,13 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
   const [number, setNumber] = useState(1); // 红包个数
   const [likenum, setLikenum] = useState(1); // 集赞数
 
+  const onMoneyChang = (e) => { // 处理红包金额输入
+    const val = e.target.value;
+    const money = val.replace(/\.\d*$/, $1 => {
+      return $1.slice(0, 3)
+    })
+    setPrice( money )
+  }
   const handleClose = () => {
     cancel();
   };
@@ -66,8 +73,8 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
     <div className={styles['redpacket-box']}>
       {/* 发放规则 */}
       <div className={styles['line-box']}>
-        <div> 发放规则 </div>
-        <div>
+        <div className={styles.label}>发放规则</div>
+        <div className={styles.item}>
           <Radio.Group
             value={rule}
             onChange={(val) => {
@@ -80,22 +87,22 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       </div>
       {/* 红包总金额 */}
       <div className={styles['line-box']}>
-        <div> 红包总金额 </div>
-        <div>
-          <Input mode="number" htmlType="number" value={price} onChange={e => setPrice(+e.target.value)} />元
+        <div className={styles.label}>红包总金额</div>
+        <div className={styles.item}>
+          <Input mode="number" htmlType="number" value={price} onChange={e => onMoneyChang(e)} />元
         </div>
       </div>
       {/* 红包个数 */}
       <div className={styles['line-box']}>
-        <div> 红包个数 </div>
-        <div>
+        <div className={styles.label}>红包个数</div>
+        <div className={styles.item}>
           <Input mode="number" value={number} placeholder="个数" onChange={e => setNumber(+e.target.value)} />个
         </div>
       </div>
       {/* 获利条件 */}
       <div className={styles['line-box']}>
-        <div> 获利条件 </div>
-        <div>
+        <div className={styles.label}>获利条件</div>
+        <div className={styles.item}>
           <Radio.Group
             value={condition}
             onChange={(item) => {
@@ -115,16 +122,18 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
         </div>
       )}
       {/* 按钮 */}
-      <div className={styles.btn}>
-        <Button onClick={() => {
-          handleClose();
-        }}>
-          取消
-        </Button>
-        <Button type="primary" onClick={selectRedpacket}>
-          确定
-        </Button>
-      </div>
+      {!pc && (
+        <div className={styles.btn}>
+          <Button onClick={() => {
+            handleClose();
+          }}>
+            取消
+          </Button>
+          <Button type="primary" onClick={selectRedpacket}>
+            确定
+          </Button>
+        </div>
+      )}
     </div>
   );
 
@@ -134,7 +143,9 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       visible={visible}
       className={styles.pc}
       onClose={handleClose}
-      title="添加商品"
+      title="添加红包"
+      onCacel={handleClose}
+      onConfirm={selectRedpacket}
     >
       {content}
     </DDialog>

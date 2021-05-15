@@ -3,12 +3,10 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import BaseLayout from '@components/base-layout';
 import SearchInput from '@components/search-input';
-import SectionTitle from '@components/section-title'
 import SearchPosts from './components/search-posts';
 import SearchTopics from './components/search-topics';
 import SearchUsers from './components/search-users';
-import NoData from '@components/no-data';
-
+import SidebarPanel from '@components/sidebar-panel';
 
 import styles from './index.module.scss';
 
@@ -58,11 +56,15 @@ class SearchResultH5Page extends React.Component {
     });
   };
 
-  onUserClick = data => console.log('user click', data);
+  onUserClick = ({ userId } = {}) => {
+    this.props.router.push(`/my/others?isOtherPerson=true&otherId=${userId}`);
+  };
 
-  onTopicClick = data => console.log('topic click', data);
-
-  onPostClick = data => console.log('post click', data);
+  // 跳转话题详情
+  onTopicClick = data => {
+    const { topicId = '' } = data
+    this.props.router.push(`/topic/topic-detail/${topicId}`)
+  };
 
   render() {
     const { keyword } = this.state;
@@ -73,40 +75,44 @@ class SearchResultH5Page extends React.Component {
 
     return (
       <BaseLayout allowRefresh={false}>
-        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} />
+        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
 
-        <div className={styles.searchInput}>
-          <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
-        </div>
-        <div className={styles.section}>
-          <SectionTitle title="用户" onShowMore={this.redirectToSearchResultUser} />
-        </div>
-        {
-          usersPageData?.length
-            ? <SearchUsers data={usersPageData} onItemClick={this.onUserClick} />
-            : <NoData />
-        }
+        <SidebarPanel
+          title="用户" 
+          onShowMore={this.redirectToSearchResultUser}
+          isLoading={!usersPageData}
+          noData={!usersPageData?.length}
+          platform='h5'
+        >
+          {
+            usersPageData?.length && <SearchUsers data={usersPageData} onItemClick={this.onUserClick} />
+          }
+        </SidebarPanel>
 
-        <div className={styles.hr}></div>
-        <div className={styles.section}>
-          <SectionTitle title="主题" onShowMore={this.redirectToSearchResultPost} />
-        </div>
-        {
-          threadsPageData?.length
-            ? <SearchPosts data={threadsPageData} onItemClick={this.onPostClick} />
-            : <NoData />
-        }
+        <SidebarPanel
+          title="主题" 
+          onShowMore={this.redirectToSearchResultPost}
+          isLoading={!threadsPageData}
+          noData={!threadsPageData?.length}
+          platform='h5'
+          className={styles.bottom}
+        >
+          {
+            threadsPageData?.length &&<SearchPosts data={threadsPageData.filter((_, index) => index < 3)} onItemClick={this.onPostClick} />
+          }
+        </SidebarPanel>
 
-        <div className={styles.hr}></div>
-        <div className={styles.section}>
-          <SectionTitle title="话题" onShowMore={this.redirectToSearchResultTopic} />
-        </div>
-        {
-          topicsPageData?.length
-            ? <SearchTopics data={topicsPageData} onItemClick={this.onTopicClick} />
-            : <NoData />
-        }
-
+        <SidebarPanel
+          title="话题" 
+          onShowMore={this.redirectToSearchResultTopic}
+          isLoading={!topicsPageData}
+          noData={!topicsPageData?.length}
+          platform='h5'
+        >
+          {
+            topicsPageData?.length && <SearchTopics data={topicsPageData} onItemClick={this.onTopicClick} />
+          }
+        </SidebarPanel>
       </BaseLayout>
     );
   }

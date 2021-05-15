@@ -34,6 +34,14 @@ const Index = (props) => {
       onPay
     } = props
 
+    // 标题显示37个字符
+    const newTitle = useMemo(() => {
+      if (title.length > 37) {
+        return `${title.slice(0, 37)}...`
+      }
+      return title
+    }, [title])
+
     // 帖子属性内容
     const renderThreadContent = ({ content: data, attachmentPrice, payType, paid } = {}) => {
         const {
@@ -88,7 +96,7 @@ const Index = (props) => {
 
     return (
         <>
-            {title && <div className={styles.title} onClick={onClick}>{title}</div>}
+            {title && <div className={styles.title} onClick={onClick}>{newTitle}</div>}
 
             {renderThreadContent(props.data)}
 

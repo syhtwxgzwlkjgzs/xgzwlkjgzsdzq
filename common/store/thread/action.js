@@ -64,7 +64,7 @@ class ThreadAction extends ThreadStore {
     const users = this.threadData?.likeReward?.users;
 
     if (isLiked) {
-      this.threadData.likeReward.users = users?.length ? [...users, userInfo] : [userInfo];
+      this.threadData.likeReward.users = users?.length ? [userInfo, ...users] : [userInfo];
     } else {
       this.threadData.likeReward.users = users.filter((item) => item.userId !== userInfo.userId);
     }
@@ -77,7 +77,7 @@ class ThreadAction extends ThreadStore {
 
   @action
   setThreadDetailField(key, data) {
-    if (this.threadData && this.threadData[key]) this.threadData[key] = data;
+    if (this.threadData && Reflect.has(this.threadData, key)) this.threadData[key] = data;
   }
 
   @action

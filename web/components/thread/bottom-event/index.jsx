@@ -78,7 +78,7 @@ const Index = ({
                 <Icon 
                   className={`${styles.icon} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`} 
                   name={item.icon} 
-                  size={platform === 'pc' ? 16 :14}>  
+                  size={16}>  
                 </Icon>
                 <span className={isLiked && item.name ===  '赞' ? styles.fabulousCancel: styles.fabulousPost}>
                   {item.name}

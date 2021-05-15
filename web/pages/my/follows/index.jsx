@@ -28,7 +28,6 @@ class index extends Component {
     });
   }
 
-
   // 点击关注
   followHandler = async ({ id }) => {
     try {
@@ -48,7 +47,7 @@ class index extends Component {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   // 取消关注
   unFollowHandler = async ({ id }) => {
@@ -69,62 +68,40 @@ class index extends Component {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   onContainerClick = ({ id }) => {
     Router.push({ url: `/my/others?isOtherPerson=${true}&otherId=${id}` });
-  }
+  };
 
   // 分割线
   splitElement = () => (
-      <div className={styles.splitEmelent}>
-        <Divider />
-      </div>
-  )
+    <div className={styles.splitEmelent}>
+      <Divider />
+    </div>
+  );
 
   getRenderComponent() {
     const isOtherFollows = JSON.parse(GetQueryString('isOtherPerson'));
     const id = GetQueryString('otherId');
     return (
       <>
-        {
-          !isOtherFollows ? (
-            <UserCenterFllows
-              friends={this.props.user.userFollows}
-              loadMorePage={true}
-              loadMoreAction={this.props.user.getUserFollow}
-              hasMorePage={this.props.user.userFollowsTotalPage < this.props.user.userFollowsPage}
-              followHandler={this.followHandler}
-              unFollowHandler={this.unFollowHandler}
-              splitElement={this.splitElement()}
-              onContainerClick={this.onContainerClick}
-            />
-          ) : (
-            <UserCenterFllows
-              friends={this.props.user.targetUserFollows}
-              loadMorePage={true}
-              loadMoreAction={async () => {
-                if (id) {
-                  await this.props.user.getTargetUserFollow(id);
-                }
-              }}
-              hasMorePage={this.props.user.targetUserFollowsTotalPage < this.props.user.targetUserFollowsPage}
-              followHandler={this.followHandler}
-              unFollowHandler={this.unFollowHandler}
-              splitElement={this.splitElement()}
-              onContainerClick={this.onContainerClick}
-            />
-          )
-        }
+        {!isOtherFollows ? (
+          <UserCenterFllows onContainerClick={this.onContainerClick} />
+        ) : (
+          <UserCenterFllows onContainerClick={this.onContainerClick} userId={id} />
+        )}
       </>
     );
   }
 
   render() {
     return (
-      <div style={{
-        height: this.state.height,
-      }}>
+      <div
+        style={{
+          height: this.state.height,
+        }}
+      >
         <Header />
         {this.state.renderComponent && this.getRenderComponent()}
       </div>

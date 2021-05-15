@@ -26,7 +26,7 @@ const Index = ({ imgs = [], tipData = {}, wholeNum = 1 }) => {
     <>
         <div className={styles.container} onClick={onClick} style={{ width: imgs.length === 1 ? '0.24rem' : '0.44rem' }}>
             {
-                wholeNum !== 0 && imgs.filter((_, index) => index < 2).map((item, index) => (
+                wholeNum !== 0 && imgs?.filter((_, index) => index < 2).map((item, index) => (
                   <div key={index} className={index === 0 ? styles.img : styles.imgAfter}>
                     <Avatar
                       image={item.avatar}

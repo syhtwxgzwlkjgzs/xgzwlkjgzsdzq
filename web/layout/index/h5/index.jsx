@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { Icon, Tabs } from '@discuzq/design';
 import ThreadContent from '@components/thread';
 import HomeHeader from '@components/home-header';
-import NoData from '@components/no-data';
 import styles from './index.module.scss';
 import TopNew from './components/top-news';
 import FilterView from './components/filter-view';
@@ -18,12 +17,19 @@ class IndexH5Page extends React.Component {
     super(props);
     this.state = {
       visible: false,
-      filter: {},
-      currentIndex: '',
+      filter: {
+        categoryids: this.checkIsOpenDefaultTab() ? ['default'] : ['all'],
+        sequence: this.checkIsOpenDefaultTab() ? 1 : 0
+      },
+      currentIndex: this.checkIsOpenDefaultTab() ? 'default' : 'all',
       isFinished: true
     };
     this.listRef = createRef();
     this.renderItem = this.renderItem.bind(this);
+  }
+
+  checkIsOpenDefaultTab() {
+    return this.props.site.checkSiteIsOpenDefautlThreadListData();
   }
 
   // 点击更多弹出筛选
@@ -41,11 +47,13 @@ class IndexH5Page extends React.Component {
 
   onClickTab = (id = '') => {
     const { dispatch = () => {} } = this.props;
-    dispatch('click-filter', { categoryids: [id] });
+    const currentIndex = this.resetCategoryids(id);
+    dispatch('click-filter', { categoryids: [currentIndex], sequence: id === 'default' ? 1 : 0 });
 
     this.setState({
       filter: {
         categoryids: [id],
+        sequence: id === 'default' ? 1 : 0
       },
       currentIndex: id,
       visible: false,
@@ -55,24 +63,32 @@ class IndexH5Page extends React.Component {
   // 筛选弹框点击筛选按钮后的回调：categoryids-版块 types-类型 essence-筛选
   onClickFilter = ({ categoryids, types, essence, sequence }) => {
     const { dispatch = () => {} } = this.props;
-
-    dispatch('click-filter', { categoryids, types, essence, sequence });
+    const requestCategoryids = categoryids.slice();
+    requestCategoryids[0] = requestCategoryids[0] === 'all' || requestCategoryids[0] === 'default' ? '' : requestCategoryids[0];
+    dispatch('click-filter', { categoryids: requestCategoryids, types, essence, sequence });
     this.setState({
       filter: {
-        categoryids,
+        categoryids: categoryids,
         types,
         essence,
+        sequence: categoryids[0] === 'default' ? 1 : 0
       },
       currentIndex: categoryids[0],
       visible: false,
     });
   }
 
+  resetCategoryids(categoryids) {
+    return categoryids === 'all' || categoryids === 'default' ? '' : categoryids
+  }
+
   // 上拉加载更多
   onRefresh = () => {
     const { dispatch = () => {} } = this.props;
     const { filter } = this.state;
-    return dispatch('moreData', filter);
+    const requestFilter = Object.assign({}, filter);
+    requestFilter.categoryids = this.resetCategoryids(requestFilter.categoryids[0]);
+    return dispatch('moreData', requestFilter);
   }
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
@@ -87,7 +103,13 @@ class IndexH5Page extends React.Component {
     if (tmpCategories?.length) {
       return categories;
     }
-    tmpCategories = [{ name: '全部', pid: '', children: [] }, ...categories];
+
+    tmpCategories = [{ name: '全部', pid: 'all', children: [] }, ...categories];
+
+    // 默认功能的开启
+    if (this.checkIsOpenDefaultTab()) {
+      tmpCategories.unshift({name: '默认分类', pid: 'default', children: []});
+    }
     return tmpCategories;
   }
 
@@ -138,14 +160,6 @@ class IndexH5Page extends React.Component {
     </div>
   )
 
-  // 没有帖子列表数据时的默认展示
-  renderNoData = () => (
-    <>
-      {this.renderHeaderContent(true)}
-      <NoData />
-    </>
-  )
-
   // 下拉刷新
   onPullDown = () => {
     this.setState({ isFinished: false }) 
@@ -180,7 +194,7 @@ class IndexH5Page extends React.Component {
                 </>
               ))
             )
-            : this.renderNoData()
+            : this.renderHeaderContent()
           }
 
           <FilterView

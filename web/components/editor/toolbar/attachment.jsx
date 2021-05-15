@@ -1,7 +1,7 @@
 /**
  * 附件操作栏比如：图片上传、视频上传、语音上传等
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icon, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import classNames from 'classnames';
@@ -60,7 +60,8 @@ function AttachmentToolbar(props) {
     setShowAll(false);
   }
 
-  const handleToggle = () => {
+  const handleToggle = (e) => {
+    e.stopPropagation();
     setShowAll(!showAll);
   };
 
@@ -137,6 +138,18 @@ function AttachmentToolbar(props) {
     }
   };
 
+  const handleClick = () => {
+    setShowAll(false);
+  };
+
+  useEffect(() => {
+    window.document.body.addEventListener('click', handleClick);
+
+    return () => {
+      window.document.body.removeEventListener('click', handleClick);
+    };
+  }, []);
+
   const icons = () => attachIcon.map((item) => {
     const { permission } = props;
     if (props.pc && item.type === THREAD_TYPE.voice) return null;
@@ -180,7 +193,8 @@ function AttachmentToolbar(props) {
   if (props.pc) return icons();
   const styl = !showAll ? { display: 'none' } : {};
   const action = props.currentSelectedToolbar || currentAction;
-  const currentIcon = attachIcon.filter(item => item.type === action)[0]?.name;
+  const currentIcon = attachIcon.filter(item => item.type === action)[0]?.name
+    || attachIcon.filter(item => item.type === THREAD_TYPE.image)[0]?.name;
   return (
     <div className={styles['dvditor-attachment-toolbar']}>
       {!showAll && (

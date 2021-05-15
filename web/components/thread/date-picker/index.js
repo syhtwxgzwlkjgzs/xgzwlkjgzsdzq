@@ -49,6 +49,7 @@ const DatePickers = ({ onCancels, time, onSelects, isOpen }) => {
       dateConfig={dateConfig}
       value={time}
       isOpen={isOpen}
+      showCaption={false}
       onSelect={(e) => {
         handleSelect(e);
       }}

@@ -29,8 +29,8 @@ class IndexAction extends IndexStore {
   async getReadThreadList({ filter = {}, sequence = 0, perPage = 10, page = 1 } = {}) {
     // 过滤空字符串
     const newFilter = filter;
-    if (filter.categoryids) {
-      const newCategoryIds = filter.categoryids.filter(item => item);
+    if (filter.categoryids && (filter.categoryids instanceof Array)) {
+      const newCategoryIds = filter.categoryids?.filter(item => item);
       if (!newCategoryIds.length) {
         delete newFilter.categoryids;
       }
@@ -193,7 +193,7 @@ class IndexAction extends IndexStore {
 
         // 添加当前用户到按过赞的用户列表
         data.likeReward.users = data.likeReward.users.length ?
-                                [...data.likeReward.users, userAdded]:
+                                [userAdded, ...data.likeReward.users]:
                                 [userAdded];
       } else {
         // 从按过赞用户列表中删除当前用户
@@ -288,6 +288,7 @@ class IndexAction extends IndexStore {
   updateRecommendsStatus(status) {
     this.recommendsStatus = status;
   }
+
 }
 
 export default IndexAction;

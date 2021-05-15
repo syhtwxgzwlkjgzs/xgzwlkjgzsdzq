@@ -58,6 +58,7 @@ class WXBindUsernameH5page extends React.Component {
             className={layout.input}
             value={userLogin.username}
             placeholder="输入您的用户名"
+            clearable={true}
             onChange={(e) => {
               userLogin.username = e.target.value;
             }}

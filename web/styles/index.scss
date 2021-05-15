@@ -20,8 +20,12 @@
 }
 // 默认的icon颜色
 .dzq-icon {
-  color: $icon-color;
+  // color: $icon-color;
   cursor: pointer;
+}
+
+.dzq-avatar__img {
+  vertical-align: baseline;
 }
 
 * {

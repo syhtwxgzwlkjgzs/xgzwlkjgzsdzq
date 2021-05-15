@@ -54,6 +54,7 @@
   .content {
     display: flex;
     flex-direction: column;
+    align-items: center;
     font-size: rem($font-size-primary);
     .title {
       color: var(--color-text-primary);
@@ -68,6 +69,8 @@
   .footer {
     font-size: rem($font-size-label);
     color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
     .label {
       margin-right: rem(7);
     }
