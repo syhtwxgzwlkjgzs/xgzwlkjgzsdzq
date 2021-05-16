@@ -55,7 +55,7 @@
   @include cursor-on-pc;
   display: flex;
   align-items: center;
-  padding: $padding-10;
+  padding: $padding-10 0;
   .fabulousPost {
     margin-left: rem(8);
     font-size: rem($font-size-primary);

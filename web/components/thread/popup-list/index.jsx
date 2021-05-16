@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Tabs, Popup, Icon } from '@discuzq/design';
 import UserItem from '../user-item';
 import styles from './index.module.scss';
@@ -106,7 +106,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
     <div className={styles.label}>
       {icon && <Icon name={icon} />}
       <span className={`${styles.title} disable-click`}>{title}</span>
-      {number !== 0 && number !== '0' && <span className="disable-click">{number}</span>}
+      {number !== 0 && number !== '0' && <span className={`disable-click ${styles.num}`}>{number}</span>}
     </div>
   );
 
@@ -156,6 +156,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
                           userId={item.userId}
                           platform={platform}
                           onClick={onUserClick}
+                          icon={item.icon}
                         />
                     ))
                   }
