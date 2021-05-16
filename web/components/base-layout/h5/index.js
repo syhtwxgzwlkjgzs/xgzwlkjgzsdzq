@@ -21,6 +21,7 @@ import styles from './index.module.scss';
         {(props) => <div>中间</div>}
       </BaseLayout>
 */
+const baseLayoutWhiteList = ['home'];
 
 const BaseLayout = (props) => {
   const { showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr } = props;
@@ -44,7 +45,8 @@ const BaseLayout = (props) => {
     if (pullDownWrapper?.current) {
       setHeight(pullDownWrapper.current.clientHeight)
     }
-    if (listRef?.current && jumpToScrollingPos > 0) {
+
+    if (listRef?.current && jumpToScrollingPos > 0 && baseLayoutWhiteList.indexOf(props.pageName) !== -1) {
       listRef.current.jumpToScrollTop(jumpToScrollingPos);
     }
   }, [])

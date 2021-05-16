@@ -128,7 +128,7 @@ const One = ({bigImages, onClick, style}) => {
 
 const Two = ({bigImages, onClick, style}) => {
     return (
-        <Row gutter={4} className={styles[style]}>
+        <Row gutter={4} className={`${styles[style]} ${styles.row}`}>
             {
                 bigImages.map((item, index) => (
                     <Col span={6} className={styles.col} key={index}>

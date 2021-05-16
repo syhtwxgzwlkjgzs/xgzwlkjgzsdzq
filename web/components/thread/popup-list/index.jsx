@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Tabs, Popup, Icon } from '@discuzq/design';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { Tabs, Popup, Icon, Spin } from '@discuzq/design';
 import UserItem from '../user-item';
 import styles from './index.module.scss';
-import NoData from '@components/no-data';
+
 import { readLikedUsers } from '@server';
 import List from '../../list';
 import { withRouter } from 'next/router';
@@ -106,7 +106,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
     <div className={styles.label}>
       {icon && <Icon name={icon} />}
       <span className={`${styles.title} disable-click`}>{title}</span>
-      {number !== 0 && number !== '0' && <span className="disable-click">{number}</span>}
+      {number !== 0 && number !== '0' && <span className={`disable-click ${styles.num}`}>{number}</span>}
     </div>
   );
 
@@ -133,14 +133,14 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
 
   const renderTabPanel = (platform) => (
     tabItems.map((dataSource, index) => {
-      const arr = dataSource?.data?.pageData?.list || [];
+      const arr = dataSource?.data?.pageData?.list;
       return (
         <Tabs.TabPanel
           key={index}
           id={index}
           label={renderHeader({ icon: dataSource.icon, title: dataSource.title, number: dataSource.number })}>
             {
-              arr.length ? (
+              arr?.length ? (
                 <List
                   className={styles.list}
                   onRefresh={loadMoreData}
@@ -156,11 +156,13 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
                           userId={item.userId}
                           platform={platform}
                           onClick={onUserClick}
+                          icon={item.icon}
                         />
                     ))
                   }
                 </List>
-              ) : <NoData className={styles.list} />
+              ) : <Spin className={styles.spinner} type="spinner" /> 
+
             }
         </Tabs.TabPanel>
       );

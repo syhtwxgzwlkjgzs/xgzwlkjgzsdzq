@@ -17,7 +17,8 @@
   }
   :global {
     .dzq-tabs__panel {
-      border-top: 1px solid $border-color;
+      border-top: 1px solid rgba(238, 238, 238, 0.75);
+
     }
     .dzq-tabs__item {
       justify-content: flex-start;
@@ -47,7 +48,15 @@
   justify-content: center;
 
   .title {
-    margin: 0 rem(4);
+    margin-left: rem(8);
     line-height: 20px;
   }
+  .num {
+    margin-left: rem(4);
+  }
+}
+
+.spinner {
+  height: 70vh;
+  width: 100%;
 }
