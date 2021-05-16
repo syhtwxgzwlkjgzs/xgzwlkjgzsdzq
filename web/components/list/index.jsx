@@ -23,6 +23,7 @@ const List = forwardRef(({
   showRefresh = true,
 }, ref) => {
   const listWrapper = useRef(null);
+  const currentScrollTop = useRef(0)
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -41,6 +42,7 @@ const List = forwardRef(({
     () => ({
       onBackTop,
       jumpToScrollTop,
+      currentScrollTop,
       isLoading,
     }),
   );
@@ -77,6 +79,7 @@ const List = forwardRef(({
 
     // 滑动事件
     onScroll({ scrollTop });
+    currentScrollTop.current = scrollTop
 
     // 处理首页筛选，更新数据的时候，会触发一次上拉刷新
     let allowHandleRefresh = true
