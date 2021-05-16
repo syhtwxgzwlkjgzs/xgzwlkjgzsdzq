@@ -49,6 +49,7 @@ class PostPage extends React.Component {
     this.captcha = ''; // 腾讯云验证码实例
     this.ticket = ''; // 腾讯云验证码返回票据
     this.randstr = ''; // 腾讯云验证码返回随机字符串
+    this.vditor = null;
   }
 
   componentDidMount() {
@@ -72,6 +73,7 @@ class PostPage extends React.Component {
   componentWillUnmount() {
     this.captcha = '';
     this.props.threadPost.resetPostData();
+    if (this.vditor && this.vditor.destroy) this.vditor.destroy();
   }
 
   saveDataLocal = () => {
@@ -227,8 +229,14 @@ class PostPage extends React.Component {
   // 编辑器
   handleVditorChange = (vditor) => {
     if (vditor) {
+      this.vditor = vditor;
       const htmlString = vditor.getHTML();
-      if (!this.props.threadPost.postData.title) this.setState({ isTitleShow: false });
+      if (!this.state.isTitleShow || this.props.site.platform === 'pc') return;
+      if (!this.props.threadPost.postData.title) {
+        this.setState({ isTitleShow: false }, () => {
+          vditor.blur();
+        });
+      }
       this.setPostData({ contentText: htmlString });
     }
   };
@@ -423,4 +431,4 @@ class PostPage extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(HOCWithLogin(withRouter(PostPage)));
+export default HOCFetchSiteData((withRouter(PostPage)));

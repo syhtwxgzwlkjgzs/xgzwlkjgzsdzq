@@ -67,29 +67,36 @@ class ThreadCreate extends React.Component {
   }
 
   // 设置底部bar的样式
-  setBottomBarStyle = (y = 0) => {
+  setBottomBarStyle = (y = 0, action) => {
     const height = getVisualViewpost();
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
     const postBottombar = document.querySelector('#post-bottombar');
-    if (!isIOS() && vditorToolbar) {
-      vditorToolbar.style.position = 'fixed';
-      vditorToolbar.style.bottom = '90px';
-      vditorToolbar.style.top = 'auto';
+    if (!isIOS()) {
+      if (vditorToolbar) {
+        vditorToolbar.style.position = 'fixed';
+        vditorToolbar.style.bottom = '90px';
+        vditorToolbar.style.top = 'auto';
+      }
       return;
     }
-    postBottombar.style.top = `${height - 90 + y}px`;
+
+    const position = document.querySelector('#post-position');
+    const top = action === 'select' ? (!position ? 130 : 90) : 130;
+    postBottombar.style.top = `${height - top + y}px`;
     if (vditorToolbar) {
       vditorToolbar.style.position = 'fixed';
       vditorToolbar.style.top = `${height - 130 + y}px`;
     }
-    const position = document.querySelector('#post-position');
+
     if (!position) return;
-    position.style.display = 'none';
+    if (action === 'select') {
+      position.style.display = 'none';
+    } else position.style.display = 'flex';
   }
-  setBottomFixed = () => {
+  setBottomFixed = (action) => {
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
-      this.setBottomBarStyle(0);
+      this.setBottomBarStyle(0, action);
     }, 150);
   }
   clearBottomFixed = () => {
@@ -142,8 +149,8 @@ class ThreadCreate extends React.Component {
             atList={atList}
             topic={topic}
             onChange={this.props.handleVditorChange}
-            onFocus={() => {
-              this.setBottomFixed();
+            onFocus={(action) => {
+              this.setBottomFixed(action);
               this.props.handleSetState({ isVditorFocus: true });
             }}
             onBlur={() => {
@@ -219,7 +226,10 @@ class ThreadCreate extends React.Component {
               position={postData.position}
               onClick={() => this.props.saveDataLocal()}
               onChange={position => this.props.setPostData({ position })} />)}
-
+            {/* <Position
+              position={postData.position}
+              onClick={() => this.props.saveDataLocal()}
+              onChange={position => this.props.setPostData({ position })} /> */}
           </div>
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar
