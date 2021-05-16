@@ -52,7 +52,7 @@ const RenderThreadContent = inject('user')(
     // 是否打赏帖
     const isBeReward = isFree && threadStore?.threadData?.ability.canBeReward && !isRedPack && !isReward;
     // 是否显示打赏按钮： 免费帖 && 不是自己 && 不是红包 && 不是悬赏 && 允许被打赏
-    const canBeReward = isFree && threadStore?.threadData?.ability.canBeReward && !isRedPack && !isReward && !isSelf;
+    const canBeReward = isFree && threadStore?.threadData?.ability.canBeReward && !isRedPack && !isReward;
     // 是否已打赏
     const isRewarded = false;
 
@@ -226,7 +226,7 @@ const RenderThreadContent = inject('user')(
 
             {/* 打赏 */}
             {canBeReward && (
-              <div style={{ textAlign: 'center' }}>
+              <div className={styles.rewardContianer}>
                 <Button onClick={onRewardClick} className={styles.rewardButton} type="primary">
                   <Icon className={styles.payIcon} name="HeartOutlined" size={20}></Icon>
                   <span className={styles.rewardext}>打赏</span>

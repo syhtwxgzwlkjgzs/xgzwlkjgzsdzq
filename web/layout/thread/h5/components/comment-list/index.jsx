@@ -142,7 +142,7 @@ class CommentList extends React.Component {
                       <span onClick={() => this.props.onAboptClick()}>采纳</span>
                     </div>
                   )}
-                  {!this.state.isHideEdit && (
+                  {!this.state.isHideEdit && canDelete && (
                     <div className={styles.extra}>
                       {/* {canEdit && <div className={styles.revise} onClick={() => this.editClick()}>编辑</div>} */}
                       {canDelete && (
