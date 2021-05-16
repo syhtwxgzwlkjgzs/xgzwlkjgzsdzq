@@ -39,29 +39,32 @@ export default function DVditor(props) {
 
   useEffect(() => {
     if (emoji && emoji.code) {
-      setCurrentPositon();
+      // setCurrentPositon();
       // 因为vditor的lute中有一些emoji表情和 emoji.code 重叠了。这里直接先这样处理
-      const value = `<img alt="${emoji.code}emoji" src="${emoji.url}" />`;
-      vditor.insertValue(vditor.html2md(value));
+      const value = `<img alt="${emoji.code}emoji" src="${emoji.url}" class="qq-emotion" />`;
+      const md = vditor.html2md(value);
+      vditor.insertValue(md.substr(0, md.length - 1));
     }
   }, [emoji]);
 
   useEffect(() => {
     if (atList && !atList.length) return;
     const users = atList.map((item) => {
-      if (item.user) return `&nbsp;@${item.user.userName}&nbsp;`;
+      if (item.user) return ` @${item.user.userName} `;
       return '';
     });
     if (users.length) {
-      setCurrentPositon();
-      vditor && vditor.insertValue(vditor.html2md(users.join('')));
+      // setCurrentPositon();
+      const md = vditor.html2md(users.join(''));
+      vditor && vditor.insertValue(md.substr(0, md.length - 1));
     }
   }, [atList]);
 
   useEffect(() => {
     if (topic) {
-      setCurrentPositon();
-      vditor && vditor.insertValue(vditor.html2md(`&nbsp;${topic}&nbsp;`));
+      // setCurrentPositon();
+      const md = vditor.html2md(` ${topic} `);
+      vditor && vditor.insertValue(md.substr(0, md.length - 1));
     }
   }, [topic]);
 
@@ -70,15 +73,12 @@ export default function DVditor(props) {
   }, [contentCount]);
 
   useEffect(() => {
-    try {
-      if (!value || (vditor && vditor.getValue && vditor.getValue() !== '\n')) return;
-    } catch (error) {
-      console.log(error);
-    }
+    if ((vditor && vditor.getValue && vditor.getValue() !== '\n') || !value) return;
     const timer = setTimeout(() => {
       clearTimeout(timer);
       if (vditor && vditor.getValue && vditor.getValue() === '\n' && vditor.getValue() !== value) {
-        vditor.setValue && vditor.setValue(vditor.html2md(value.replace(/ alt="(\w*)" /g, ' alt=":$1:emoji" ')));
+        // setCurrentPositon();
+        vditor.insertValue && vditor.insertValue(value);
       }
     }, 200);
   }, [value]);
@@ -95,11 +95,13 @@ export default function DVditor(props) {
         value,
         focus: () => {
           setIsFocus(false);
+          onFocus('focus');
         },
         input: () => {
           onChange(editor);
         },
         blur: () => {
+          // onChange(editor);
           // 兼容Android的操作栏渲染
           const timer = setTimeout(() => {
             clearTimeout(timer);
@@ -110,17 +112,17 @@ export default function DVditor(props) {
         // 编辑器中选中文字后触发，PC才有效果
         select: (value) => {
           if (value) {
-            onFocus();
+            onFocus('select');
             setIsFocus(true);
-          }
+          } else setIsFocus(false);
         },
         counter: {
           enable: false,
-          // after(count) {
-          //   setContentCount(count);
-          // },
-          // type: 'markdown',
-          // max: MAX_COUNT,
+          after(count) {
+            setContentCount(count);
+          },
+          type: 'markdown',
+          max: MAX_COUNT,
         },
         toolbarConfig: {
           hide: !!pc,
