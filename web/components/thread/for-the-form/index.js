@@ -54,7 +54,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
             mode="number"
             value={value}
             placeholder="金额"
-            onChange={e => setValue(+e.target.value)}
+            onChange={e => setValue(e.target.value)}
           />
           元
         </div>
