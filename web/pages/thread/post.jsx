@@ -431,4 +431,4 @@ class PostPage extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData((withRouter(PostPage)));
+export default HOCFetchSiteData(HOCWithLogin(withRouter(PostPage)));
