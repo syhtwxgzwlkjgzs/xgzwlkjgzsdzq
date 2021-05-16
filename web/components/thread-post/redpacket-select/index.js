@@ -52,7 +52,7 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       });
       return;
     }
-    if (!(/^([1-9][0-9]*)$/.test(+likenum) && +likenum <= 250)) {
+    if (condition === 1 && !(/^([1-9][0-9]*)$/.test(+likenum) && +likenum <= 250)) {
       Toast.warning({
         content: '集赞数错误，请输入整数1-250',
       });

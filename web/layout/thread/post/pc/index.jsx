@@ -129,6 +129,7 @@ class ThreadPCPage extends React.Component {
               <div className={styles['toolbar-left']}>
                 <DefaultToolbar
                   pc
+                  postData={postData}
                   permission={user.threadExtendPermissions}
                   value={currentDefaultOperation}
                   onClick={
@@ -151,6 +152,7 @@ class ThreadPCPage extends React.Component {
                 <div className={styles.divider}></div>
                 <AttachmentToolbar
                   pc
+                  postData={postData}
                   onAttachClick={this.props.handleAttachClick}
                   onUploadComplete={this.props.handleVideoUploadComplete}
                   permission={user.threadExtendPermissions}

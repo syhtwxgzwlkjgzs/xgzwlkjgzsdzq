@@ -8,6 +8,7 @@
   font-family: $font-family;
   color: $text-color-primary;
   background-color: $white;
+  z-index: $zindex-popup;
   .wrapper {
     padding: 0 rem($margin-4n);
   }

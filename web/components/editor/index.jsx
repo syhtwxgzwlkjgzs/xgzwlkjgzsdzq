@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react';
 import Vditor from '@discuzq/vditor';
 import classNames from 'classnames';
 import { baseOptions, baseToolbar } from './options';
-import { MAX_COUNT } from '@common/constants/thread-post';
+// import { MAX_COUNT } from '@common/constants/thread-post';
 import LoadingBox from '@components/loading-box';
 import './index.scss';
 import '@discuzq/vditor/src/assets/scss/index.scss';
@@ -17,7 +17,7 @@ export default function DVditor(props) {
 
   const [isFocus, setIsFocus] = useState(false);
   const [vditor, setVditor] = useState(null);
-  const [contentCount, setContentCount] = useState(0);
+  // const [contentCount, setContentCount] = useState(0);
 
   const setCurrentPositon = () => {
     // https://developer.mozilla.org/zh-CN/docs/Web/API/Selection
@@ -65,9 +65,9 @@ export default function DVditor(props) {
     }
   }, [topic]);
 
-  useEffect(() => {
-    onCountChange(contentCount);
-  }, [contentCount]);
+  // useEffect(() => {
+  //   onCountChange(contentCount);
+  // }, [contentCount]);
 
   useEffect(() => {
     try {
