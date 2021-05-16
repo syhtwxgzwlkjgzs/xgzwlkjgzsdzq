@@ -62,7 +62,8 @@
     }
     .subTitle {
       color: var(--color-text-secondary);
-      line-height: rem(18);
+      line-height: rem(16);
+      font-size: rem($font-size-small);
     }
   }
 

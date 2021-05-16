@@ -70,7 +70,11 @@ export default function DVditor(props) {
   }, [contentCount]);
 
   useEffect(() => {
-    if ((vditor && vditor.getValue && vditor.getValue() !== '\n') || !value) return;
+    try {
+      if (!value || (vditor && vditor.getValue && vditor.getValue() !== '\n')) return;
+    } catch (error) {
+      console.log(error);
+    }
     const timer = setTimeout(() => {
       clearTimeout(timer);
       if (vditor && vditor.getValue && vditor.getValue() === '\n' && vditor.getValue() !== value) {
@@ -111,12 +115,12 @@ export default function DVditor(props) {
           }
         },
         counter: {
-          enable: true,
-          after(count) {
-            setContentCount(count);
-          },
-          type: 'markdown',
-          max: MAX_COUNT,
+          enable: false,
+          // after(count) {
+          //   setContentCount(count);
+          // },
+          // type: 'markdown',
+          // max: MAX_COUNT,
         },
         toolbarConfig: {
           hide: !!pc,

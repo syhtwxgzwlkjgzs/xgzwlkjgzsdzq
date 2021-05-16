@@ -39,6 +39,10 @@
         margin-top: rem(-1);
       }
     }
+
+    :global(.dzq-richText) {
+      overflow: hidden;
+    }
   }
   
   .hideCover {

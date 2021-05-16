@@ -177,7 +177,6 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
           onActive={onClickTab}
           activeId={current}
           className={styles.tabs}
-          scrollable
           tabBarExtraContent={
             tipData?.platform === 'pc' && (
               <div onClick={onClose} className={styles.tabIcon}>
