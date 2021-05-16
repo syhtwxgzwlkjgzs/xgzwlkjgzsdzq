@@ -11,15 +11,11 @@
 .homeContent {
   background: var(--color-white);
   margin-bottom: rem(10);
-  position: sticky;
-  top: 0;
   z-index: 1000;
 }
-.homeContentText {
+.homeContentFix {
   width: 100%;
   background: var(--color-white);
-  border-bottom: rem(1) solid var(--color-text-placeholder);
-  margin-bottom: rem(10);
   position: fixed;
   top: 0;
   left: 0;
@@ -73,7 +69,9 @@
     color: var(--color-text-secondary);
   }
 }
-// .listItem {
-//   margin-bottom: rem(10);
-// }
-// }
+
+// 当tab悬浮后的占位元素样式
+.tabPlaceholder {
+  width: 100%;
+  height: rem(58);
+}

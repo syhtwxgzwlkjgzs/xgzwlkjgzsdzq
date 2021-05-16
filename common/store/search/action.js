@@ -297,16 +297,18 @@ class SearchAction extends SearchStore {
      targetThreads.forEach(targetThread => {
       if (!targetThread) return;
         const { index, data, store } = targetThread;
-    
+
         // 更新点赞
-        const { isLike, isPost, isShare, user } = obj;
-        if (!typeofFn.isUndefined(isLike) && !typeofFn.isNull(isLike) &&
-        user && data.likeReward && data.likeReward.users) {
-          data.isLike = isLike;
+        const { updatedInfo, user } = obj;
+        const { isLiked, isPost, isFavorite:isShare, likeCount, replyCount } = updatedInfo;
+
+        if (!typeofFn.isUndefined(isLiked) && !typeofFn.isNull(isLiked)
+             && user && data.likeReward?.users) {
 
           const theUserId = user.userId || user.id;
+          data.isLike = isLiked;
 
-          if (isLike) {
+          if (isLiked) {
             const userAdded = { userId: theUserId, avatar: user.avatarUrl, username: user.username };
 
             // 添加当前用户到按过赞的用户列表
@@ -321,7 +323,7 @@ class SearchAction extends SearchStore {
                                     }) :
                                     data.likeReward.users;
           }
-          data.likeReward.likePayCount = data.likeReward.users.length;
+          data.likeReward.likePayCount = likeCount;
         }
     
         // 更新评论

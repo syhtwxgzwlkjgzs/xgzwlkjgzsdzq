@@ -11,6 +11,7 @@ import BaseLayout from '@components/base-layout';
 @inject('site')
 @inject('user')
 @inject('index')
+@inject('baselayout')
 @observer
 class IndexH5Page extends React.Component {
   constructor(props) {
@@ -23,8 +24,11 @@ class IndexH5Page extends React.Component {
       },
       currentIndex: this.checkIsOpenDefaultTab() ? 'default' : 'all',
       isFinished: true,
+      fixedTab: false,
     };
     this.listRef = createRef();
+    // 用于获取顶部视图的高度
+    this.headerRef = createRef(null)
     this.renderItem = this.renderItem.bind(this);
   }
 
@@ -91,6 +95,13 @@ class IndexH5Page extends React.Component {
     return dispatch('moreData', requestFilter);
   };
 
+  onScroll = ({ scrollTop } = {}) => {
+    const { height = 180 } = this.headerRef.current?.state || {}
+    this.setState({ fixedTab: scrollTop > height })
+
+    this.props.baselayout.jumpToScrollingPos = scrollTop;
+  }
+
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
   handleCategories = () => {
     const { categories = [] } = this.props.index || {};
@@ -115,14 +126,15 @@ class IndexH5Page extends React.Component {
 
   renderTabs = () => {
     const { index } = this.props;
-    const { currentIndex } = this.state;
+    const { currentIndex, fixedTab } = this.state;
     const { categories = [] } = index;
     const newCategories = this.handleCategories(categories);
 
     return (
       <>
         {categories?.length > 0 && (
-          <div ref={this.listRef} className={styles.homeContent}>
+          <>
+          <div ref={this.listRef} className={`${!fixedTab ? styles.homeContent : styles.homeContentFix}`}>
             <Tabs
               className={styles.tabsBox}
               scrollable
@@ -140,6 +152,8 @@ class IndexH5Page extends React.Component {
               ))}
             </Tabs>
           </div>
+          {fixedTab &&  <div className={styles.tabPlaceholder}></div>}
+          </>
         )}
       </>
     );
@@ -181,9 +195,11 @@ class IndexH5Page extends React.Component {
         onRefresh={this.onRefresh}
         noMore={currentPage >= totalPage}
         isFinished={isFinished}
-        curr="home"
+        onScroll={this.onScroll}
+        curr='home'
+        pageName='home'
       >
-        <HomeHeader />
+        <HomeHeader ref={this.headerRef} />
 
         {this.renderTabs()}
 
