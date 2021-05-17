@@ -93,7 +93,7 @@
   display: flex;
 
   p {
-    width: rem(30);
+    width: rem(28);
     height: rem(22);
     margin-left: rem($margin-2n);
     border-radius: rem($border-radius-small);
@@ -149,8 +149,14 @@
     margin-left: rem(8);
   }
   :global {
-    .dzq-tag:after {
+    .dzq-tag{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:after {
       z-index: 1;
     }
+  }
   }
 }
