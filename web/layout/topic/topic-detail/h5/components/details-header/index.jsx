@@ -14,15 +14,11 @@ import { withRouter } from 'next/router';
  */
 const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop, router }) => {
   const goList = () => {
-    router.push('/topic');
+    router.push('/search/result-user');
   }
   return (
-    <div className={styles.container} >
+    <div className={styles.container} style={{ backgroundImage: `url('/dzq-img/topic-header.png')` }}>
       <div className={styles.title}>{title && `#${title}#`}</div>
-      {/* <div className={styles.allTopic}>
-        <span onClick={onClick}>全部话题</span>
-        <Icon name="RightOutlined" size={12}></Icon>
-      </div> */}
       <ul className={styles.siteInfo}>
           <li>
             <span className={styles.text}>热度</span>
