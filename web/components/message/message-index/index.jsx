@@ -88,7 +88,7 @@ export class MessageIndex extends Component {
 
   render() {
     const { items } = this.state;
-    const {isPC} = this.props.site;
+    const { isPC } = this.props.site;
     const card = <Card cardItems={items} onClick={this.toOtherMessage} />;
     const { dialogList } = this.props.message;
     const newDialogList = this.formatChatDialogList(dialogList.list);
@@ -96,6 +96,8 @@ export class MessageIndex extends Component {
     return (
       <div className={'item ' + styles.wrapper}>
         <Notice
+          infoIdx={0}
+          totalCount={dialogList.totalCount}
           height='calc(100vh - 65px)'
           withBottomBar={true}
           noMore={dialogList.currentPage >= dialogList.totalPage}
