@@ -10,7 +10,6 @@ import PopularContents from './components/popular-contents';
 import NoData from '@components/no-data';
 
 import styles from './index.module.scss';
-import '@discuzq/design/dist/styles/index.scss';
 import { View, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 

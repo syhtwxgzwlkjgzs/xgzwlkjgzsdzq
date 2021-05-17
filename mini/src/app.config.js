@@ -1,12 +1,11 @@
 /**
  * 入口配置文件：https://taro-docs.jd.com/taro/docs/next/tutorial/
  */
-export default {
+const config = {
   // TODO: 分包处理
   // 首页和详情页在主包
   pages: [
-    'pages/index/index',
-    'pages/thread/index',
+    'pages/index/index'
   ],
   subPackages: [
     {
@@ -24,6 +23,7 @@ export default {
         'thread/selectRedpacket/index',
         'thread/selectReward/index',
         'thread/selectPayment/index',
+        'thread/detail/index',
         'search/index',
         'search/result-topic/index',
         'search/result-post/index',
@@ -55,3 +55,6 @@ export default {
   // wx5a3a7366fd07e119 验证码防水墙小程序
   navigateToMiniProgramAppIdList: ["wx5a3a7366fd07e119"]
 };
+
+// export default config;
+module.exports = config;

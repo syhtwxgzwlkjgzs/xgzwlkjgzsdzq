@@ -12,7 +12,7 @@ import { RichText } from '@discuzq/design';
  */
 const TopNews = ({ data = [] }) => {
   const onClick = ({ threadId } = {}) => {
-    Taro.navigateTo({url: `/pages/thread/index?id=${threadId}`});
+    Taro.navigateTo({url: `/subPages/thread/detail/index?id=${threadId}`});
   };
   // 过滤内容
   const filterContent = (content) => {

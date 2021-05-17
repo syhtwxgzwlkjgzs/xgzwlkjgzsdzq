@@ -68,7 +68,7 @@ class Index extends React.Component {
       const { data = {} } = this.props;
       const { threadId = '' } = data;
       if (threadId !== '') {
-        Taro.navigateTo({url: `/pages/thread/index?id=${threadId}`});
+        Taro.navigateTo({url: `/subPages/thread/detail/index?id=${threadId}`});
       } else {
         console.log('帖子不存在');
       }
@@ -86,7 +86,7 @@ class Index extends React.Component {
       }
       const { data = {}, user } = this.props;
       const { threadId = '', isLike, postId } = data;
-      
+
       this.setState({isSendingLike: true});
       this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } }).then(result => {
         if (result.code === 0 && result.data) {
@@ -136,7 +136,7 @@ class Index extends React.Component {
       }
 
       if (threadId !== '') {
-        Taro.navigateTo({url: `/pages/thread/index?id=${threadId}`});
+        Taro.navigateTo({url: `/subPages/thread/detail/index?id=${threadId}`});
       } else {
         console.log('帖子不存在');
       }
