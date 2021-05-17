@@ -116,7 +116,6 @@
     background: $comment-bg-color;
     font-weight: normal;
     font-size: rem(14);
-    line-height: rem(36);
     text-align: left;
     color: $text-color-regular;
   }
@@ -124,15 +123,18 @@
     display: inline-block;
     width: rem(110);
     float: left;
+    line-height: rem(36);
   }
   @mixin inviteListMoney {
     display: inline-block;
     width: rem(96);
     float: left;
+    line-height: rem(36);
   }
   @mixin inviteListTime {
     display: inline-block;
     float: left;
+    line-height: rem(36);
   }
   .invite_list_headerName,.invite_list_itemName{
     @include inviteListName;

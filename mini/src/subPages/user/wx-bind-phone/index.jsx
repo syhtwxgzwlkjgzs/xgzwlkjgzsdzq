@@ -40,6 +40,7 @@ class Index extends Component {
 
   // 验证码滑动成功的回调
   handleCaptchaResult = (result) => {
+    console.log('captcha：', result);
     this.ticket = result.ticket;
     this.randstr = result.randstr;
   }
