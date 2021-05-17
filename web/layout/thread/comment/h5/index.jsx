@@ -213,6 +213,11 @@ class CommentH5Page extends React.Component {
 
   // 创建回复评论+回复回复接口
   async createReply(val) {
+    if (!val) {
+      Toast.info({ content: '请输入内容!' });
+      return;
+    }
+
     const { threadId: id } = this.props.comment;
     if (!id) return;
 

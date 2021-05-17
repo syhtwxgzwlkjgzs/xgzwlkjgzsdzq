@@ -11,7 +11,7 @@ import ImageUpload from '@components/thread-post/image-upload';
 import { defaultOperation } from '@common/constants/const';
 import FileUpload from '@components/thread-post/file-upload';
 import { THREAD_TYPE } from '@common/constants/thread-post';
-import { Video, Audio, AudioRecord } from '@discuzq/design';
+import { Audio, AudioRecord } from '@discuzq/design';
 import ClassifyPopup from '@components/thread-post/classify-popup';
 import ProductSelect from '@components/thread-post/product-select';
 import Product from '@components/thread-post/product';
@@ -29,6 +29,8 @@ import { getVisualViewpost } from '@common/utils/get-client-height';
 import throttle from '@common/utils/thottle';
 import Header from '@components/header';
 import Router from '@discuzq/sdk/dist/router';
+import VideoDisplay from '@components/thread-post/video-display';
+import MoneyDisplay from '@components/thread-post/money-display';
 
 function isIOS() {
   return /ip[honead]{2,4}(?:.*os\s([\w]+)\slike\smac|;\sopera)/i.test(window.navigator.userAgent.toLowerCase());
@@ -65,27 +67,36 @@ class ThreadCreate extends React.Component {
   }
 
   // 设置底部bar的样式
-  setBottomBarStyle = (y = 0) => {
+  setBottomBarStyle = (y = 0, action) => {
     const height = getVisualViewpost();
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
     const postBottombar = document.querySelector('#post-bottombar');
     if (!isIOS()) {
-      vditorToolbar.style.position = 'fixed';
-      vditorToolbar.style.bottom = '90px';
-      vditorToolbar.style.top = 'auto';
+      if (vditorToolbar) {
+        vditorToolbar.style.position = 'fixed';
+        vditorToolbar.style.bottom = '90px';
+        vditorToolbar.style.top = 'auto';
+      }
       return;
     }
-    postBottombar.style.top = `${height - 90 + y}px`;
-    vditorToolbar.style.position = 'fixed';
-    vditorToolbar.style.top = `${height - 130 + y}px`;
+
     const position = document.querySelector('#post-position');
+    const top = action === 'select' ? (!position ? 130 : 90) : 130;
+    postBottombar.style.top = `${height - top + y}px`;
+    if (vditorToolbar) {
+      vditorToolbar.style.position = 'fixed';
+      vditorToolbar.style.top = `${height - 130 + y}px`;
+    }
+
     if (!position) return;
-    position.style.display = 'none';
+    if (action === 'select') {
+      position.style.display = 'none';
+    } else position.style.display = 'flex';
   }
-  setBottomFixed = () => {
+  setBottomFixed = (action) => {
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
-      this.setBottomBarStyle(0);
+      this.setBottomBarStyle(0, action);
     }, 150);
   }
   clearBottomFixed = () => {
@@ -113,54 +124,8 @@ class ThreadCreate extends React.Component {
     const { postData } = threadPost;
     const { emoji, topic, atList, currentDefaultOperation, currentAttachOperation, categoryChooseShow } = this.props;
     const category = ((index.categories && index.categories.slice()) || []).filter(item => item.name !== '全部');
-    // 悬赏问答
-    if (currentAttachOperation === THREAD_TYPE.reward) return (
-      <ForTheForm
-        confirm={(data) => {
-          this.props.setPostData({ rewardQa: data });
-          this.props.handleSetState({ currentAttachOperation: false });
-        }}
-        cancel={() => {
-          this.props.handleSetState({
-            currentAttachOperation: false,
-          });
-        }}
-        data={postData.rewardQa}
-      />
-    );
-    // 插入商品
-    if (currentAttachOperation === THREAD_TYPE.goods) return (
-      <ProductSelect onAnalyseSuccess={
-        (data) => {
-          this.props.handleSetState({ currentAttachOperation: false });
-          this.props.setPostData({ product: data });
-        }}
-        cancel={() => this.props.handleSetState({ currentAttachOperation: false })}
-      />
-    );
-    // 插入红包
-    if (currentDefaultOperation === defaultOperation.redpacket) return (
-      <RedpacketSelect
-        data={postData.redpacket}
-        cancel={() => this.props.handleSetState({ currentDefaultOperation: '' })}
-        confirm={data => this.props.setPostData({ redpacket: data })}
-      />
-    );
     // 付费设置
     const { freeWords, price, attachmentPrice } = threadPost.postData;
-    if (this.props.curPaySelect) return (
-      <AllPostPaid
-        exhibition={this.props.curPaySelect}
-        cancle={() => {
-          this.props.handleSetState({ curPaySelect: '', currentDefaultOperation: '' });
-        }}
-        data={{ freeWords, price, attachmentPrice }}
-        confirm={(data) => {
-          console.log(data);
-          this.props.setPostData({ ...data });
-        }}
-      />
-    );
 
     return (
       <>
@@ -173,12 +138,9 @@ class ThreadCreate extends React.Component {
         <div className={styles['post-inner']}>
           {/* 标题 */}
           <Title
-            isDisplay={true}
+            isDisplay={this.props.isTitleShow}
             title={postData.title}
             onChange={title => this.props.setPostData({ title })}
-            onFocus={this.setBottomFixed}
-            onBlur={this.clearBottomFixed}
-            autofocus
           />
           {/* 编辑器 */}
           <DVditor
@@ -187,8 +149,8 @@ class ThreadCreate extends React.Component {
             atList={atList}
             topic={topic}
             onChange={this.props.handleVditorChange}
-            onFocus={() => {
-              this.setBottomFixed();
+            onFocus={(action) => {
+              this.setBottomFixed(action);
               this.props.handleSetState({ isVditorFocus: true });
             }}
             onBlur={() => {
@@ -224,7 +186,10 @@ class ThreadCreate extends React.Component {
 
           {/* 视频组件 */}
           {(postData.video && postData.video.thumbUrl) && (
-            <Video className="dzq-post-video" src={postData.video.thumbUrl} onReady={this.props.onVideoReady} />
+            <VideoDisplay
+              src={postData.video.thumbUrl}
+              onDelete={() => this.props.setPostData({ video: {} })}
+              onReady={this.props.onVideoReady} />
           )}
           {/* 附件上传组件 */}
           {(currentDefaultOperation === defaultOperation.attach || Object.keys(postData.files).length > 0) && (
@@ -246,33 +211,11 @@ class ThreadCreate extends React.Component {
             || postData.redpacket.price
             || !!(postData.price || postData.attachmentPrice)
           ) && (
-            <div className={styles['reward-qa-box']}>
-              {/* 付费 */}
-              {!!(postData.price || postData.attachmentPrice) && (
-                <div className={styles['reward-qa-box-content']}>
-                  付费总额{postData.price + postData.attachmentPrice}元
-                </div>
-              )}
-              {/* 悬赏问答内容标识 */}
-              {postData.rewardQa.value && postData.rewardQa.times  && (
-                <div
-                  className={styles['reward-qa-box-content']} onClick={() => {
-                    this.props.handleSetState({ currentAttachOperation: THREAD_TYPE.reward });
-                  }}
-                >
-                  {`悬赏金额${postData.rewardQa.value}元\\结束时间${postData.rewardQa.times}`}
-                </div>
-              )}
-              {/* 红包信息 */}
-              {postData.redpacket.price && (
-                <div className={styles['reward-qa-box-content']}
-                  onClick={() => this.props.handleSetState({ currentDefaultOperation: defaultOperation.redpacket })}
-                >
-                  {postData.redpacket.rule === 1 ? '随机红包' : '定额红包'}\总金额&nbsp;{postData.redpacket.price}元\{postData.redpacket.number}个
-                  {postData.redpacket.condition === 1 && `\\集赞个数${postData.redpacket.likenum}`}
-                </div>
-              )}
-            </div>
+            <MoneyDisplay
+              postData={postData}
+              setPostData={this.props.setPostData}
+              handleSetState={this.props.handleSetState}
+            />
           )}
         </div>
         <div id="post-bottombar" className={styles['post-bottombar']}>
@@ -283,10 +226,14 @@ class ThreadCreate extends React.Component {
               position={postData.position}
               onClick={() => this.props.saveDataLocal()}
               onChange={position => this.props.setPostData({ position })} />)}
-
+            {/* <Position
+              position={postData.position}
+              onClick={() => this.props.saveDataLocal()}
+              onChange={position => this.props.setPostData({ position })} /> */}
           </div>
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar
+            postData={postData}
             onAttachClick={this.props.handleAttachClick}
             // onUploadChange={this.handleUploadChange}
             onUploadComplete={this.props.handleVideoUploadComplete}
@@ -299,6 +246,7 @@ class ThreadCreate extends React.Component {
           />
           {/* 默认的操作栏 */}
           <DefaultToolbar
+            postData={postData}
             value={currentDefaultOperation}
             onClick={item => this.props.handleSetState({ currentDefaultOperation: item.id, emoji: {} })}
             permission={threadExtendPermissions}
@@ -353,6 +301,53 @@ class ThreadCreate extends React.Component {
             onClick={val => this.handleDraft(val)}
             cancel={() => this.handleDraft()}
             visible={this.props.draftShow}
+          />
+        )}
+        {/* 悬赏问答 */}
+        {currentAttachOperation === THREAD_TYPE.reward && (
+          <ForTheForm
+            confirm={(data) => {
+              this.props.setPostData({ rewardQa: data });
+              this.props.handleSetState({ currentAttachOperation: false });
+            }}
+            cancel={() => {
+              this.props.handleSetState({
+                currentAttachOperation: false,
+              });
+            }}
+            data={postData.rewardQa}
+          />
+        )}
+        {/* 插入红包 */}
+        {currentDefaultOperation === defaultOperation.redpacket && (
+          <RedpacketSelect
+            data={postData.redpacket}
+            cancel={() => this.props.handleSetState({ currentDefaultOperation: '' })}
+            confirm={data => this.props.setPostData({ redpacket: data })}
+          />
+        )}
+        {/* 插入商品 */}
+        {currentAttachOperation === THREAD_TYPE.goods && (
+          <ProductSelect onAnalyseSuccess={
+            (data) => {
+              this.props.handleSetState({ currentAttachOperation: false });
+              this.props.setPostData({ product: data });
+            }}
+            cancel={() => this.props.handleSetState({ currentAttachOperation: false })}
+          />
+        )}
+        {/* 付费设置 */}
+        {this.props.curPaySelect && (
+          <AllPostPaid
+            exhibition={this.props.curPaySelect}
+            cancle={() => {
+              this.props.handleSetState({ curPaySelect: '', currentDefaultOperation: '' });
+            }}
+            data={{ freeWords, price, attachmentPrice }}
+            confirm={(data) => {
+              console.log(data);
+              this.props.setPostData({ ...data });
+            }}
           />
         )}
       </>

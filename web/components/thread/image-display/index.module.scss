@@ -1,302 +1,190 @@
 @import '@common/styles/index.scss';
 
 .container {
-  display: flex;
-  box-sizing: border-box;
-  height: rem(260);
   width: 100%;
 
-  .bigImages {
-    display: flex;
-    box-sizing: border-box;
-    justify-content: space-between;
-  }
-
-  .smallImages {
-    position: relative;
-    display: flex;
-    box-sizing: border-box;
-    justify-content: space-between;
-  }
-
-  .img {
-    box-sizing: border-box;
+  img {
     border-radius: rem($border-radius-small);
     object-fit: cover;
     background-color: $body-bg-color;
-    cursor: pointer;
-  }
-
-  .modalBox {
-    position: absolute;
-    width: 33%;
+    width: 100%;
     height: 100%;
-    background: var(--color-black);
-    opacity: 0.5;
-    top: 0;
-    right: 0;
-    border-radius: rem($border-radius-small);
   }
 
-  .imgSpan {
-    position: absolute;
-    width: 33%;
-    height: 100%;
-    top: 0;
-    right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: rem($font-size-large);
-    color: var(--color-white);
-    border-radius: rem($border-radius-small);
-  }
-}
-
-.containerH5 {
-  height: rem(260);
-  width: rem(343);
-
-  .containerNum1 {
+  .containerNum5 {
     .bigImages {
-      height: rem(260);
-      width: rem(343);
+      height: rem(126);
+      margin-bottom: 4px !important;
+      .col {
+        height: 100%;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+      }
+    }
+    .smallImages {
+      height: rem(111);
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      .col {
+        position: relative;
+        height: 100%;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+      }
+    }
+  }
 
-      .img {
-        width: 100%;
+  .containerNum4 {
+    height: rem(260);
+    margin-bottom: 0 !important;
+    .col {
+      height: 100%;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+    .smallCol {
+      height: 33.33%;
+    }
+    .smallRow {
+      width: 100%;
+    }
+  }
+
+  .containerNum3 {
+    .bigImages {
+      height: rem(126);
+      margin-bottom: 4px;
+    }
+    .smallImages {
+      height: rem(126);
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      .col {
+        height: 100%;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
       }
     }
   }
 
   .containerNum2 {
-    .bigImages {
+    height: rem(260);
+    margin-bottom: 0 !important;
+    .col {
       height: 100%;
-      width: rem(169);
-
-      .img {
-        height: 100%;
-        width: 100%;
-      }
-    }
-  
-    .smallImages {
-      height: 100%;
-      width: rem(169);
-  
-      .img {
-        height: 100%;
-        width: 100%;
-      }
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
     }
   }
-  .containerNum3 {
-    height: rem(260);
-    width: rem(343);
 
-    .bigImages {
-      height: rem(128);
-      width: 100%;
-
-      .img {
-        width: 100%;
-      }
-    }
-  
-    .smallImages {
-      height: rem(126);
-      width: 100%;
-      flex-direction: row;
-  
-      .img {
-        width: rem(169);
-        height: 100%;
-      }
-    }
-  }
-  
-  .containerNum4 {
+  .containerNum1 {
     height: rem(260);
-    width: rem(343);
-    .bigImages {
-      height: 100%;
-      width: rem(210);
-
-      .img {
-        width: 100%;
-      }
-    }
-  
-    .smallImages {
-      height: 100%;
-      width: rem(129);
-      flex-direction: column;
-      .img {
-        height: rem(84);
-      }
-    }
-  }
-  
-  .containerNum5 {
-    height: rem(260);
-    width: rem(343);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  
-    .bigImages {
-      width: 100%;
-      height: rem(126);
-  
-      .img {
-        width: rem(169);
-      }
-    }
-  
-    .smallImages {
-      width: 100%;
-      flex-direction: row;
-      height: rem(111);
-  
-      .img {
-        width: rem(111);
-      }
-    }
   }
 }
 
 .containerPC {
-  height: rem(532);
-  width: rem(702);
+  width: 100%;
 
-  .containerNum1 {
-  
+  img {
+    border-radius: rem($border-radius-small);
+    object-fit: cover;
+    background-color: $body-bg-color;
+    width: 100%;
+    height: 100%;
+  }
+
+  .containerNum5 {
     .bigImages {
-      height: 100%;
-      width: rem(702);
-
-      .img {
-        width: 100%;
+      height: rem(262);
+      margin-bottom: rem(6) !important;
+      .col {
+        height: 100%;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+      }
+    }
+    .smallImages {
+      height: rem(232);
+      margin-bottom: 0 !important;
+      .col {
+        position: relative;
+        height: 100%;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
       }
     }
   }
 
-  .containerNum2 {
-    .bigImages {
+  .containerNum4 {
+    height: rem(532);
+    margin-bottom: 0 !important;
+    .col {
       height: 100%;
-      width: rem(349);
-
-      .img {
-        height: 100%;
-        width: 100%;
-      }
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
     }
-  
-    .smallImages {
-      height: 100%;
-      width: rem(349);
-  
-      .img {
-        height: 100%;
-        width: 100%;
-      }
+    .smallCol {
+      height: 33.33%;
     }
   }
 
   .containerNum3 {
     .bigImages {
       height: rem(266);
-      width: 100%;
-
-      .img {
-        width: rem(702);
-        height: 100%;
-      }
+      margin-bottom: rem(6);
     }
-  
     .smallImages {
       height: rem(262);
-      width: 100%;
-      flex-direction: row;
-  
-      .img {
-        width: rem(349);
+      margin-bottom: 0 !important;
+      .col {
         height: 100%;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
       }
     }
   }
-  
-  .containerNum4 {
-    .bigImages {
+
+  .containerNum2 {
+    height: rem(532);
+    margin-bottom: 0 !important;
+    .col {
       height: 100%;
-      width: rem(434);
-
-      .img {
-        width: rem(434);
-      }
-    }
-  
-    .smallImages {
-      height: 100%;
-      width: rem(264);
-      flex-direction: column;
-      .img {
-        height: rem(175);
-      }
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
     }
   }
-  
-  .containerNum5 {
-    width: rem(702);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  
-    .bigImages {
-      width: 100%;
-      height: rem(262);
-  
-      .img {
-        width: rem(349);
-        height: rem(263);
-      }
-    }
-  
-    .smallImages {
-      width: 100%;
-      flex-direction: row;
-      height: rem(232);
-  
-      .img {
-        width: rem(232);
-      }
-    }
+
+  .containerNum1 {
+    height: rem(532);
   }
 }
-
-// 根据图片数量，确定排列方向
-.containerRow {
+ 
+.modalBox {
+  position: absolute;
+  top: 0;
+  right: rem(2);
+  left: rem(2);
+  bottom: 0;
   display: flex;
-  flex-direction: row;
-  .bigImages {
-    margin-right: rem(4);
-  }
-  .smallImages {
-    flex-direction: column;
-  }
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: rem($font-size-large);
+  color: var(--color-white);
+  border-radius: rem($border-radius-small);
+  background-color: rgba(0, 0, 0, 0.5);
 }
+  
 
-.containerColumn {
-  display: flex;
-  flex-direction: column;
-  .bigImages {
-    // margin-bottom: rem(4);
-  }
-  .smallImages {
-    flex-direction: row;
-    margin-top: rem(4);
-  }
-}
+
+
+
+
+
+
+
+
+
 
 
 

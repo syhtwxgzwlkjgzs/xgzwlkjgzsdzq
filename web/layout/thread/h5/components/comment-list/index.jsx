@@ -102,7 +102,7 @@ class CommentList extends React.Component {
               )}
               {!this.state.isShowOne ? (
                 <div className={styles.more} onClick={this.props.onMoreClick}>
-                  <Icon size="16" color="#8590A6" name="MoreVOutlined" className={styles.moreIcon}></Icon>
+                  <Icon size={20} color="#8590A6" name="MoreVOutlined" className={styles.moreIcon}></Icon>
                 </div>
               ) : (
                 ''
@@ -137,14 +137,12 @@ class CommentList extends React.Component {
                   <div className={styles.commentReply}>
                     <span onClick={() => this.replyClick()}>回复</span>
                   </div>
-                  {this.props.isShowAdopt ? (
+                  {this.props.isShowAdopt && (
                     <div className={styles.commentAdopt}>
                       <span onClick={() => this.props.onAboptClick()}>采纳</span>
                     </div>
-                  ) : (
-                    ''
                   )}
-                  {!this.state.isHideEdit && (
+                  {!this.state.isHideEdit && canDelete && (
                     <div className={styles.extra}>
                       {/* {canEdit && <div className={styles.revise} onClick={() => this.editClick()}>编辑</div>} */}
                       {canDelete && (

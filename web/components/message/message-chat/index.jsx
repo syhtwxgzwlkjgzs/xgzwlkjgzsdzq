@@ -1,6 +1,8 @@
 import React, { memo, useEffect, useMemo } from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
+
+import Header from '@components/header';
 import InstantMessaging from '../instant-messaging';
 
 const Index = ({ dialogId, message, user }) => {
@@ -38,6 +40,7 @@ const Index = ({ dialogId, message, user }) => {
 
   return (
     <div className={styles.wrapper}>
+      <Header />
       <InstantMessaging
         messagesHistory={messagesHistory}
         onSubmit={async (val) => {

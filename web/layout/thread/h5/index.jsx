@@ -11,6 +11,7 @@ import LoadingTips from './components/loading-tips';
 import styleVar from '@common/styles/theme/default.scss.json';
 import { Icon, Input, Badge, Toast } from '@discuzq/design';
 import Header from '@components/header';
+import goToLoginPage from '@common/utils/go-to-login-page';
 
 import ReportPopup from './components/report-popup';
 import ShowTop from './components/show-top';
@@ -88,6 +89,15 @@ class ThreadH5Page extends React.Component {
   componentDidMount() {
     // 当内容加载完成后，获取评论区所在的位置
     this.position = this.commentDataRef?.current?.offsetTop - 50;
+
+    // 是否定位到评论位置
+    console.log(this.props?.thread?.isPositionToComment);
+    if (this.props?.thread?.isPositionToComment) {
+      // TODO:需要监听帖子内容加载完成事件
+      setTimeout(() => {
+        this.threadBodyRef.current.scrollTo(0, this.position);
+      }, 1000);
+    }
   }
 
   componentDidUpdate() {
@@ -99,7 +109,7 @@ class ThreadH5Page extends React.Component {
 
   componentWillUnmount() {
     // 清空数据
-    // this.props?.thread && this.props.thread.reset();
+    this.props?.thread && this.props.thread.reset();
   }
 
   // 点击信息icon
@@ -113,6 +123,7 @@ class ThreadH5Page extends React.Component {
   async onCollectionClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
       return;
     }
 
@@ -176,6 +187,7 @@ class ThreadH5Page extends React.Component {
   onInputClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
       return;
     }
 
@@ -196,6 +208,7 @@ class ThreadH5Page extends React.Component {
   onOperClick = (type) => {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
       return;
     }
 
@@ -225,6 +238,16 @@ class ThreadH5Page extends React.Component {
     // 举报
     if (type === 'report') {
       this.setState({ showReportPopup: true });
+    }
+
+    // 收藏
+    if (type === 'collect') {
+      this.onCollectionClick();
+    }
+
+    // 分享
+    if (type === 'share') {
+      this.onShareClick();
     }
   };
 
@@ -275,7 +298,9 @@ class ThreadH5Page extends React.Component {
     const { success, msg } = await this.props.thread.updateStick(params);
 
     if (success) {
-      this.setTopState(true);
+      this.setTopState(params.isStick);
+      // TODO:更新首页置顶列表
+      this.props.index.screenData({});
       return;
     }
 
@@ -336,7 +361,10 @@ class ThreadH5Page extends React.Component {
 
   // 点击发布按钮
   async onPublishClick(val) {
-    if (!val) return;
+    if (!val) {
+      Toast.info({ content: '请输入内容!' });
+      return;
+    }
     return this.comment ? await this.updateComment(val) : await this.createComment(val);
   }
 
@@ -412,6 +440,7 @@ class ThreadH5Page extends React.Component {
   async onLikeClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
       return;
     }
 
@@ -452,6 +481,7 @@ class ThreadH5Page extends React.Component {
   onRewardClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
       return;
     }
 
@@ -495,11 +525,14 @@ class ThreadH5Page extends React.Component {
       canDelete: threadStore?.threadData?.ability?.canDelete,
       canEssence: threadStore?.threadData?.ability?.canEssence,
       canStick: threadStore?.threadData?.ability?.canStick,
+      canShare: this.props.user.isLogin(),
+      canCollect: this.props.user.isLogin(),
     };
     // 更多弹窗界面
     const moreStatuses = {
       isEssence: threadStore?.threadData?.displayTag?.isEssence,
       isStick: threadStore?.threadData?.isStick,
+      isCollect: threadStore?.isFavorite,
     };
 
     const isApproved = threadStore?.threadData?.isApproved || 0;
@@ -588,6 +621,7 @@ class ThreadH5Page extends React.Component {
           ></DeletePopup>
           {/* 举报弹层 */}
 
+          {/* 举报弹窗 */}
           <ReportPopup
             reportContent={this.reportContent}
             inputText={this.inputText}

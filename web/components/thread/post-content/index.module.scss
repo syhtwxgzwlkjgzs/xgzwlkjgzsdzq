@@ -4,10 +4,10 @@
 .container {
   width: 100%;
   position: relative;
-  cursor: pointer;
   overflow: hidden;
   .contentWrapper{
     .content {
+      @include cursor-on-pc;
       position: relative;
       display: inline-block;
       line-height: rem($font-line-height-middle);
@@ -38,6 +38,10 @@
         width: rem(30);
         margin-top: rem(-1);
       }
+    }
+
+    :global(.dzq-richText) {
+      overflow: hidden;
     }
   }
   

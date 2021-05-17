@@ -6,12 +6,12 @@ import DVditor from '@components/editor';
 import Title from '@components/thread-post/title';
 import { AttachmentToolbar, DefaultToolbar } from '@components/editor/toolbar';
 import Position from '@components/thread-post/position';
-import { Button, Video, Audio, AudioRecord, Tag } from '@discuzq/design';
+import { Button, Audio, AudioRecord } from '@discuzq/design';
 import ClassifyPopup from '@components/thread-post/classify-popup';
 import { withRouter } from 'next/router';
 import Emoji from '@components/editor/emoji';
 import ImageUpload from '@components/thread-post/image-upload';
-import { defaultOperation, paidOption } from '@common/constants/const';
+import { defaultOperation } from '@common/constants/const';
 import FileUpload from '@components/thread-post/file-upload';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 import Product from '@components/thread-post/product';
@@ -22,6 +22,8 @@ import TopicSelect from '@components/thread-post/topic-select';
 import RedpacketSelect from '@components/thread-post/redpacket-select';
 import Copyright from '@components/copyright';
 import ForTheForm from '@components/thread/for-the-form';
+import VideoDisplay from '@components/thread-post/video-display';
+import MoneyDisplay from '@components/thread-post/money-display';
 
 @inject('threadPost')
 @inject('index')
@@ -44,7 +46,7 @@ class ThreadPCPage extends React.Component {
     const { freeWords, price, attachmentPrice } = threadPost.postData;
 
     return (
-      <>
+      <div className={styles.container}>
         <Header />
         <div className={styles.wrapper}>
           <div className={styles['wrapper-inner']}>
@@ -89,7 +91,11 @@ class ThreadPCPage extends React.Component {
 
               {/* 视频组件 */}
               {(postData.video && postData.video.thumbUrl) && (
-                <Video className="dzq-post-video" src={postData.video.thumbUrl} onReady={this.props.onVideoReady} />
+                <VideoDisplay
+                  pc
+                  src={postData.video.thumbUrl}
+                  onDelete={() => this.props.setPostData({ video: {} })}
+                  onReady={this.props.onVideoReady} />
               )}
 
               {/* 附件上传组件 */}
@@ -112,48 +118,18 @@ class ThreadPCPage extends React.Component {
               )}
 
               {/* 设置的金额相关展示 */}
-              <div className={styles['money-box']}>
-                {/* 付费 */}
-                {!!(postData.price || postData.attachmentPrice) && (
-                  <Tag
-                    closeable
-                    onClose={() => this.props.setPostData({ price: 0, attachmentPrice: 0 })}
-                    onClick={() => {
-                      const curPaySelect = postData.price ? paidOption[0].name : paidOption[1].name;
-                      this.props.handleSetState({ curPaySelect });
-                    }}
-                  >付费总额{postData.price + postData.attachmentPrice}元</Tag>
-                )}
-                {/* 悬赏问答内容标识 */}
-                {(postData.rewardQa.value && postData.rewardQa.times) && (
-                  <Tag closeable
-                    onClose={() => this.props.setPostData({ rewardQa: {} })}
-                    onClick={() => {
-                      this.props.handleSetState({ currentAttachOperation: THREAD_TYPE.reward });
-                    }}
-                  >
-                    {`悬赏金额${postData.rewardQa.value}元\\结束时间${postData.rewardQa.times}`}
-                  </Tag>
-                )}
-                {/* 红包 */}
-                {postData.redpacket.price && (
-                  <Tag closeable
-                    onClose={() => this.props.setPostData({ redpacket: {} })}
-                    onClick={() => this.props.handleSetState({ currentDefaultOperation: defaultOperation.redpacket })}
-                  >
-                    {postData.redpacket.rule === 1 ? '随机红包' : '定额红包'}
-                    \ 总金额{postData.redpacket.price}元\{postData.redpacket.number}个
-                    {postData.redpacket.condition === 1 && `\\集赞个数${postData.redpacket.likenum}`}
-                  </Tag>
-                )}
-                {/* 字数 */}
-                {/* <div className={styles['editor-count']}>还能输入{MAX_COUNT - this.props.count}个字</div> */}
-              </div>
+              <MoneyDisplay
+                pc
+                postData={postData} s
+                etPostData={this.props.setPostData}
+                handleSetState={this.props.handleSetState}
+              />
             </div>
             <div className={styles.toolbar}>
               <div className={styles['toolbar-left']}>
                 <DefaultToolbar
                   pc
+                  postData={postData}
                   permission={user.threadExtendPermissions}
                   value={currentDefaultOperation}
                   onClick={
@@ -176,6 +152,7 @@ class ThreadPCPage extends React.Component {
                 <div className={styles.divider}></div>
                 <AttachmentToolbar
                   pc
+                  postData={postData}
                   onAttachClick={this.props.handleAttachClick}
                   onUploadComplete={this.props.handleVideoUploadComplete}
                   permission={user.threadExtendPermissions}
@@ -206,7 +183,7 @@ class ThreadPCPage extends React.Component {
               <Button type="primary" onClick={() => this.props.handleSubmit()}>发布</Button>
             </div>
           </div>
-          <Copyright />
+          <Copyright center />
           {/* 插入商品 */}
           {currentAttachOperation === THREAD_TYPE.goods && (
             <ProductSelect
@@ -281,7 +258,7 @@ class ThreadPCPage extends React.Component {
             />
           )}
         </div>
-      </>
+      </div>
     );
   }
 }

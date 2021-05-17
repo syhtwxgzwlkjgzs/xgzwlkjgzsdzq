@@ -35,7 +35,6 @@ class Index extends React.Component {
       ],
       funcType: 'readAccountMsgList',
       type: 'accountMsgList', // 账户消息类型 accountMsgList，atMsgList,replyMsgList,likeMsgList
-      isFinished: true, // 下拉刷新是否结束
     }
   }
 
@@ -122,10 +121,8 @@ class Index extends React.Component {
   }
 
   // 触顶下拉刷新
-  onPullDown = async () => {
-    this.setState({ isFinished: false });
-    await this.fetchMessageData(1);
-    this.setState({ isFinished: true });
+  onPullDown = () => {
+    return this.fetchMessageData(1);
   }
 
   // 触底上拉加载 tip: 监听上拉触底之后，一定要返回Promise对象
@@ -146,20 +143,17 @@ class Index extends React.Component {
 
   render() {
     const { message } = this.props;
-    const { type, items, isFinished } = this.state;
-    const data = message[type]
+    const { type, items } = this.state;
+    const data = message[type];
     const renderList = this.handleRenderList(data.list);
-    const card = <Card
-      cardItems={items}
-      redirectCallback={this.toOtherMessage}
-    />
+    const card = <Card cardItems={items} onClick={this.toOtherMessage} />;
 
     return (
       <div className={styles.wrapper}>
         <Header />
         <Notice
-          isFinished={isFinished}
           height='calc(100vh - 44px)'
+          withTopBar={true}
           noMore={data.currentPage >= data.totalPage}
           topCard={type === 'accountMsgList' ? card : null}
           list={renderList}

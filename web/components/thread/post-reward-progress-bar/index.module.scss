@@ -21,7 +21,7 @@
   }
   .remaining {
     margin-top: rem($margin-2n);
-    font-weight: 600;
+    font-weight: bold;
     font-size: rem($font-size-middle);
     line-height: rem(22);
     text-align: left;
@@ -39,7 +39,6 @@
     color: var(--color-text-regular);
   }
   .receive {
-    margin-top: rem($padding-1n);
     font-weight: normal;
     font-size: rem($font-size-label);
     line-height: rem(17);

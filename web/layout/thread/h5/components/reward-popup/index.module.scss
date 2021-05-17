@@ -8,8 +8,8 @@
       font-size: rem($font-size-primary);
       border: none;
       padding: 0;
-      height: rem(20);
-      line-height: rem(20);
+      height: rem(18);
+      line-height: rem(18);
       border-radius: 0;
       text-align: right;
       -webkit-tap-highlight-color: transparent;
@@ -41,7 +41,7 @@
   align-items: center;
   justify-content: flex-start;
   font-size: rem($font-size-middle);
-  font-weight: var(--font-weight-regular);
+  font-weight: bold;
 }
 
 .rewardInput {
@@ -53,10 +53,10 @@
   border-bottom: $border-solid-1;
   padding-bottom: rem($padding-4n);
   color: $text-color-regular;
+  font-size: $font-size-primary;
 
   .prepend {
     word-break: keep-all;
-    line-height: rem(20);
   }
 
   .input {
@@ -66,7 +66,6 @@
 
   .append {
     padding-left: rem($padding-1n);
-    line-height: rem(20);
   }
 }
 
@@ -81,10 +80,16 @@
     align-items: center;
     justify-content: center;
     border-radius: $border-radius-small;
+    font-size: $font-size-primary;
     width: rem(76);
     height: rem(36);
     background: $text-bg-color2;
+    color: $text-color-primary;
     margin-bottom: rem($margin-4n);
+
+    &.actived {
+      color: $primary-color;
+    }
   }
 }
 

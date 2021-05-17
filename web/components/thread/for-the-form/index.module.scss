@@ -1,11 +1,16 @@
 @import '@common/styles/index.scss';
 .rewards {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
+  height: -webkit-fill-available;
+  min-height: 100vh;
+  /* mobile viewport bug fix */
+  min-height: -webkit-fill-available;
   background-color: $white;
+  z-index: $zindex-popup;
   .line-box {
     display: flex;
     margin: 0 rem($margin-4n);
@@ -138,16 +143,15 @@
     bottom: 0;
     display: flex;
     width: rem(343);
-    height: 58px;
-    border-top: 1px solid #eee;
-    padding: 0 rem(16);
+    border-top: $border-solid-1;
+    padding: rem($padding-2n) rem($padding-4n);
     justify-content: space-between;
     align-items: center;
     :global {
       .dzq-button {
         width: rem(166);
-        height: 42px;
         @include button-default;
+        height: rem(42);
 
         &:last-child {
           @include button-primary;

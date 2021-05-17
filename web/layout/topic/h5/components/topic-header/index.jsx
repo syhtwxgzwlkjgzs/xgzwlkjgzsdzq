@@ -19,8 +19,7 @@ const TopicHeader = ({ onClick = noop }) => {
   return (
     <div className={styles.container}>
       <div className={styles.title}>话题列表</div>
-      <Dropdown
-        style={{ display: 'inline-block' }}
+      <div
         menu={menu()}
         placement="right"
         arrow={false}
@@ -28,9 +27,9 @@ const TopicHeader = ({ onClick = noop }) => {
         onChange={onClick}
         className={styles.sortDropdown}
       >
-        <Icon name="SortOutlined" size={18} color='#2469f6'/>
+        <Icon name="SortOutlined" className={styles.icon} size={14} />
         排序
-      </Dropdown>
+      </div>
     </div>
   );
 };

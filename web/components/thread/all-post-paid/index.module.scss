@@ -32,12 +32,13 @@
   padding: $padding-2n $padding-4n $padding-6n;
 }
 .redpacket-box {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   background-color: var(--color-white);
+  z-index: $zindex-popup;
   .line-box {
     display: flex;
     justify-content: space-between;
@@ -81,14 +82,18 @@
   bottom: 0;
   display: flex;
   width: rem(343);
-  height: 52px;
-  padding: 0 rem(16);
+  border-top: $border-solid-1;
+  padding: rem($padding-2n) rem($padding-4n);
   justify-content: space-between;
   align-items: center;
   :global {
     .dzq-button {
       width: rem(166);
-      height: 42px;
+      @include button-default;
+      height: rem(42);
+      &:last-child {
+        @include button-primary;
+      }
     }
   }
 }
@@ -107,6 +112,7 @@
     // margin-bottom: $margin-2n;
     display: block;
     text-align: center;
+    border: none;
   }
   :global {
     .dzq-button {

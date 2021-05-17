@@ -34,6 +34,14 @@ const Index = (props) => {
       onPay
     } = props
 
+    // 标题显示37个字符
+    const newTitle = useMemo(() => {
+      if (title.length > 37) {
+        return `${title.slice(0, 37)}...`
+      }
+      return title
+    }, [title])
+
     // 帖子属性内容
     const renderThreadContent = ({ content: data, attachmentPrice, payType, paid } = {}) => {
         const {
@@ -88,7 +96,7 @@ const Index = (props) => {
 
     return (
         <>
-            {title && <div className={styles.title} onClick={onClick}>{title}</div>}
+            {title && <div className={styles.title} onClick={onClick}>{newTitle}</div>}
 
             {renderThreadContent(props.data)}
 
@@ -97,7 +105,7 @@ const Index = (props) => {
                   <div className={styles.pay}>
                     <Button className={styles.button} type="primary" onClick={onPay}>
                         <Icon className={styles.payIcon} name="DollarLOutlined" size={18}></Icon>
-                        {payType === 1 ? `支付${price}元查看剩余内容` : `支付${price}元查看附件内容`}
+                        {payType === 1 ? <p className={styles.payText}>{`支付${price}元查看剩余内容`}</p> : <p className={styles.payText}>{`支付${price}元查看附件内容`}</p>}
                     </Button>                  
                   </div>
                   

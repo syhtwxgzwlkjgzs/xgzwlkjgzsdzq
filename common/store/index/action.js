@@ -29,8 +29,8 @@ class IndexAction extends IndexStore {
   async getReadThreadList({ filter = {}, sequence = 0, perPage = 10, page = 1 } = {}) {
     // 过滤空字符串
     const newFilter = filter;
-    if (filter.categoryids) {
-      const newCategoryIds = filter.categoryids.filter(item => item);
+    if (filter.categoryids && (filter.categoryids instanceof Array)) {
+      const newCategoryIds = filter.categoryids?.filter(item => item);
       if (!newCategoryIds.length) {
         delete newFilter.categoryids;
       }
@@ -181,14 +181,16 @@ class IndexAction extends IndexStore {
     const { index, data } = targetThread;
 
     // 更新点赞
-    const { isLike, isPost, isShare, user } = obj;
-    if (!typeofFn.isUndefined(isLike) && !typeofFn.isNull(isLike) &&
-        user && data.likeReward && data.likeReward.users) {
-      data.isLike = isLike;
+    const { updatedInfo, user } = obj;
+    const { isLiked, isPost, isFavorite:isShare, likeCount, replyCount } = updatedInfo;
+
+    if (!typeofFn.isUndefined(isLiked) && !typeofFn.isNull(isLiked)
+          && user && data.likeReward?.users) {
 
       const theUserId = user.userId || user.id;
+      data.isLike = isLiked;
 
-      if (isLike) {
+      if (isLiked) {
         const userAdded = { userId: theUserId, avatar: user.avatarUrl, username: user.username };
 
         // 添加当前用户到按过赞的用户列表
@@ -203,7 +205,7 @@ class IndexAction extends IndexStore {
                                 }) :
                                 data.likeReward.users;
       }
-      data.likeReward.likePayCount = data.likeReward.users.length;
+      data.likeReward.likePayCount = likeCount;
     }
 
     // 更新评论

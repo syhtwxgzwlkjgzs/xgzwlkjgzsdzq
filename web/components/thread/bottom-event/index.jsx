@@ -48,7 +48,6 @@ const Index = ({
   const needHeight = useMemo(() => {
     return userImgs.length !== 0 || comment > 0 || sharing > 0
   }, [userImgs, comment, sharing])
-
   return (
     <div>
       <div className={needHeight ? styles.user : styles.users}>
@@ -74,11 +73,11 @@ const Index = ({
       <div className={needHeight ? styles.operation : styles.operations}>
         {
           postList.map((item, index) => (
-              <div key={index} className={styles.fabulous} onClick={item.event} disabled={item.name === '赞' && isSendingLike}>
+              <div key={index} className={styles.fabulous} onClick={item.event}>
                 <Icon 
                   className={`${styles.icon} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`} 
                   name={item.icon} 
-                  size={platform === 'pc' ? 16 :14}>  
+                  size={16}>  
                 </Icon>
                 <span className={isLiked && item.name ===  '赞' ? styles.fabulousCancel: styles.fabulousPost}>
                   {item.name}

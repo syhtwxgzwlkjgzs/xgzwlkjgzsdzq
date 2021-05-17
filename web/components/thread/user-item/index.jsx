@@ -20,6 +20,7 @@ const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noo
     e.stopPropagation();
     onClick(userId);
   };
+
   return (
     <div className={styles.listItem} key={index} onClick={handleClick}>
       <div className={styles.wrapper}>
@@ -42,7 +43,7 @@ const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noo
 
           <div className={styles.content}>
               <span className={styles.title}>{title}</span>
-              <span className={styles.subTitle}>{subTitle}</span>
+              {subTitle && <span className={styles.subTitle}>{subTitle}</span>}
           </div>
       </div>
 
@@ -53,7 +54,7 @@ const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noo
             <Icon className={styles.rightIcon} name="RightOutlined" size={12} />
           </div>
         ) : (
-          <Button type="primary" onClick={handleClick}>查看主页</Button>
+          <Button type="primary" className={styles.button} onClick={handleClick}>查看主页</Button>
         )
       }
     </div>

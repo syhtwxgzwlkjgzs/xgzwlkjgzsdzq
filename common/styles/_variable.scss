@@ -41,6 +41,8 @@ $success-color: var(--color-success) !default;
 $warn-color: var(--color-warn) !default;
 $error-color: var(--color-error) !default;
 $primary-color10: var(--color-primary10);
+$disabled-color: var(--color-disabled);
+$disabled-color2: var(--color-disabled2);
 
 $primary-disabled-color: var(--color-primary5);
 
@@ -105,6 +107,9 @@ $button-info-bg-color: $text-bg-color2;
 $button-primary-bg-color: $primary-color;
 $button-primary-light-bg-color: $primary-color10;
 $button-primary-disabled-bg-color: $primary-disabled-color;
+
+// ----- checkbox color -----
+$checkbox-checked-bg-color: var(--primary-color8);
 
 // ------ border ----------
 $border-radius-small: 5px;

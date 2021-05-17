@@ -32,12 +32,15 @@
           }
         }
         .more {
+          margin-top: rem($margin-2n);
           font-size: rem($font-size-label);
           text-align: left;
           color: var(--color-text-primary);
           margin-left: rem($margin-6n);
           .moreIcon {
-            margin-top: rem($margin-1n);
+            margin-top: rem(1);
+            line-height: rem(20);
+            color: var(--color-text-secondary);
           }
         }
       }
@@ -57,9 +60,8 @@
         background: $body-bg-color;
 
         .commentListName {
-          font-weight: var(--font-weight-regular);
+          font-weight: bold;
           font-size: rem($font-size-primary);
-          font-family: 'PingFangSC-Semibol';
           line-height: rem(20);
           text-align: left;
           color: var(--color-text-primary);
@@ -105,7 +107,8 @@
           }
         }
         .moreReply {
-          font-weight: var(--font-weight-regular);
+          // font-weight: var(--font-weight-regular);
+          font-weight: bold;
           font-size: rem($font-size-primary);
           line-height: rem($font-line-height-middle);
           text-align: left;

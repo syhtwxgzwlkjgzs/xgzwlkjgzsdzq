@@ -8,12 +8,14 @@ import styles from './index.module.scss';
  * @prop {name: string, color: string {}} icon 图标 name: 名称 color: 颜色
  * @prop {string} title 标题
  * @prop {string} leftNum 左侧数字
+ * @prop {boolean} bigSize 大尺寸头部
  * @prop {function} onShowMore 查看更多事件
  * @prop {boolean} isShowMore 是否显示更多
+ * @prop {string} moreText 查看更多的文字
  * @prop {boolean} rightText 右侧描述文字
  */
-const Index = ({ icon = {}, title, leftNum, onShowMore, isShowMore = true, rightText }) => (
-  <div className={styles.container}>
+const Index = ({ icon = {}, title, leftNum, onShowMore, isShowMore = true, rightText, bigSize = false, moreText = '更多' }) => (
+  <div className={bigSize ? styles.wrapper : styles.container}>
     <div className={styles.left}>
       <Icon className={styles[`icon${icon.type}`]} name={icon.name} size={16} color={icon.color}/>
       <div className={`${styles.title} ${JSON.stringify(icon) === '{}' ? styles.noMargin : ''}`}>{title}</div>
@@ -23,7 +25,7 @@ const Index = ({ icon = {}, title, leftNum, onShowMore, isShowMore = true, right
       {
         isShowMore && (
           <div onClick={onShowMore} className={styles.more}>
-          更多
+          {moreText}
           <Icon className={styles.rightIcon} name="RightOutlined" size={10} />
         </div>
         )

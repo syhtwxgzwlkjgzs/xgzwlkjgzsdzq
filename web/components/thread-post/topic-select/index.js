@@ -10,6 +10,7 @@ import { Popup, Input, Button, Icon, ScrollView } from '@discuzq/design';
 import styles from './index.module.scss';
 import DDialog from '@components/dialog';
 import PropTypes from 'prop-types';
+import BaseList from '@components/list';
 
 @inject('threadPost')
 @observer
@@ -22,6 +23,7 @@ class TopicSelect extends Component {
       pageSize: 20,
       meta: {},
       loadingText: 'loading',
+      isLastPage: false,
     };
     this.timer = null;
   }
@@ -29,8 +31,10 @@ class TopicSelect extends Component {
   // 清除关键字
   clearKeywords = () => {
     this.setState(
-      { keywords: '', checkUser: [], page: 1 },
-      () => this.loadTopics()
+      { keywords: '', checkUser: [], pageNum: 1 },
+      () => {
+        this.loadTopics();
+      },
     );
   }
 
@@ -56,7 +60,13 @@ class TopicSelect extends Component {
 
   async loadTopics() {
     // 1 设置参数
+    const { threadPost } = this.props;
     const { fetchTopic } = this.props.threadPost;
+    const { pageNum, pageSize } = this.state;
+    if ((pageNum - 1) * pageSize > threadPost.topics.length) {
+      this.setState({ isLastPage: true });
+      return Promise.reject();
+    }
     const params = {
       page: this.state.pageNum,
       perPage: this.state.pageSize,
@@ -69,15 +79,21 @@ class TopicSelect extends Component {
     }
     // 2 发起请求
     await fetchTopic(params);
+    if (pageNum * pageSize > this.props.threadPost.topics.length) {
+      this.setState({ isLastPage: true });
+      return Promise.reject();
+    }
     // 3 更新页码
     this.setState({ pageNum: this.state.pageNum + 1 });
+    return Promise.reject();
   }
 
   onScrollBottom() {
     console.log('bottom');
     // 忽略页码为1时的触底
     if (this.state.pageNum === 1) return;
-    this.loadTopics();
+    if (this.state.isLastPage) return Promise.reject();
+    return this.loadTopics();
   }
 
   onScrollTop() {
@@ -92,8 +108,8 @@ class TopicSelect extends Component {
     this.props.cancelTopic();
   }
 
-  renderItem({ data = [], index }) {
-    const item = data[index] || {};
+  renderItem({ topics = [], index }) {
+    const item = topics[index] || {};
     return (
       <div
         key={item.id}
@@ -103,9 +119,7 @@ class TopicSelect extends Component {
         <div className={styles['item-left']}>
           <div className={styles.name}>#{item.content}#</div>
           {item.recommended === 1
-            && <div className={styles.recommend}>
-              <Icon name="LikeOutlined" size={20} color='#1878f3' />
-            </div>
+            && <Icon name="LikeOutlined" />
           }
         </div>
         <div className={styles['item-right']}>{item.viewCount}热度</div>
@@ -128,38 +142,41 @@ class TopicSelect extends Component {
           />
           {this.state.keywords &&
             <div className={styles.delete} onClick={this.clearKeywords}>
-              <Icon className={styles['delete-icon']} name="CloseOutlined" size={8} color='#f2f4f5'></Icon>
+              <Icon className={styles['delete-icon']} name="CloseOutlined" size={8}></Icon>
             </div>
           }
         </div>
 
         {/* 话题列表 */}
-        <div className={styles['topic-wrap']}>
-          {/* 新话题 */}
-          {this.state.keywords
-            && <div
-              className={styles['topic-item']}
-              onClick={this.handleItemClick}
-            >
-              <div className={styles['item-left']}>
-                <div className={styles.name}>#{this.state.keywords}#</div>
+        {/* <div className={styles['topic-wrap']}> */}
+          <BaseList className={styles['topic-wrap']} onRefresh={this.onScrollBottom.bind(this)} noMore={this.state.isLastPage}>
+            {/* 新话题 */}
+            {this.state.keywords
+              && <div
+                className={styles['topic-item']}
+                onClick={this.handleItemClick}
+              >
+                <div className={styles['item-left']}>
+                  <div className={styles.name}>#{this.state.keywords}#</div>
+                </div>
+                <div className={styles['item-right']}>新话题</div>
               </div>
-              <div className={styles['item-right']}>新话题</div>
-            </div>
-          }
-          {/* 搜索列表 */}
-          <ScrollView
-            width='100%'
-            rowCount={topics.length}
-            rowData={topics}
-            rowHeight={54}
-            rowRenderer={this.renderItem.bind(this)}
-            onScrollTop={this.onScrollTop.bind(this)}
-            onScrollBottom={this.onScrollBottom.bind(this)}
-            onPullingUp={() => Promise.reject()}
-            isRowLoaded={() => true}
-          />
-        </div>
+            }
+            {/* 搜索列表 */}
+            {/* <ScrollView
+              width='100%'
+              rowCount={topics.length}
+              rowData={topics}
+              rowHeight={54}
+              rowRenderer={this.renderItem.bind(this)}
+              onScrollTop={this.onScrollTop.bind(this)}
+              onScrollBottom={this.onScrollBottom.bind(this)}
+              onPullingUp={() => Promise.reject()}
+              isRowLoaded={() => true}
+            /> */}
+            {topics && topics.map((_, index) => this.renderItem({ topics, index })) }
+          </BaseList>
+        {/* </div> */}
 
         {/* 取消按钮 */}
         <div className='btn-cancel'>

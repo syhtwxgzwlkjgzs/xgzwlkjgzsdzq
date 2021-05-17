@@ -20,7 +20,10 @@ import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 class HomeHeader extends React.Component {
   state = {
     visible: false,
+    height: 180
   }
+
+  domRef = React.createRef(null)
 
   logoImg = '/dzq-img/admin-logo-x2.png';
 
@@ -81,13 +84,22 @@ class HomeHeader extends React.Component {
     this.setState({ visible: false });
   }
 
+  componentDidMount() {
+    if (this.domRef.current) {
+      this.setState({ height: this.domRef.current.clientHeight })
+    }
+  }
+
   render() {
     const { bgColor, hideInfo = false, style = {}, digest = null, mode = '' } = this.props;
     const { visible } = this.state;
     const { countUsers, countThreads } = this.getSiteInfo();
 
     return (
-      <div className={`${styles.container} ${mode ? styles[`container_mode_${mode}`] : ''}`} style={{...style, ...this.getBgHeaderStyle(bgColor)}}>
+      <div ref={this.domRef}
+        className={`${styles.container} ${mode ? styles[`container_mode_${mode}`] : ''}`} 
+        style={{...style, ...this.getBgHeaderStyle(bgColor)}}
+      >
         {hideInfo && <div className={styles.topBar}>
           {
             mode === 'login'

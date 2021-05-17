@@ -4,18 +4,20 @@
   height: 50px;
 
   .container-inner {
-    padding: 16px 0 8px 0;
-    margin: 0 16px;
-    border-bottom: 1px solid var(--border-line-color);
+    padding: $padding-4n 0 $padding-2n;
+    margin: 0 $margin-4n;
+    border-bottom: $border-solid-1;
 
-    .title {
-      width: 100%;
-      border: none;
-      font-size: 20px;
-      color: var(--color-text-primary);
-      line-height: 22px;
-      text-align: left;
-      border: none;
+    :global {
+      .dzq-input {
+        width: 100%;
+        border: none;
+        font-size: 20px;
+        color: $text-color-primary;
+        line-height: 22px;
+        text-align: left;
+        border: none;
+      }
     }
   }
 }

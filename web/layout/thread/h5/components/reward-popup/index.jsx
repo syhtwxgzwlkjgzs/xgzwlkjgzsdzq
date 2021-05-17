@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Popup, Button, Input, Divider } from '@discuzq/design';
 import styles from './index.module.scss';
+import className from 'classnames';
 
 const InputPop = (props) => {
   const { visible, onOkClick, onCancel } = props;
@@ -49,7 +50,11 @@ const InputPop = (props) => {
 
         <div className={styles.rewardList}>
           {rewardList.map((item) => (
-            <div onClick={() => onRewardClick(item)} className={styles.reward} key={item}>
+            <div
+              onClick={() => onRewardClick(item)}
+              className={className(styles.reward, Number(value) === item && styles.actived)}
+              key={item}
+            >
               ￥{item}
             </div>
           ))}

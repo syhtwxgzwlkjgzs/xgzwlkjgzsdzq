@@ -58,22 +58,38 @@ class Index extends React.Component {
   }
 
   dispatch = async (type, data = {}) => {
+
     const { index } = this.props;
     const { categoryids, types, essence, sequence, attention, sort } = data;
 
     let newTypes = []
-    if (types && !(types instanceof Array)) {
-      newTypes = [types]
+    if (!!types) {
+      if (!(types instanceof Array)) {
+        newTypes = [types]
+      } else {
+        newTypes = types
+      }
     }
 
+    let categoryIds = []
+    if (!!categoryids) {
+      if (!(categoryids instanceof Array)) {
+        categoryIds = [categoryids]
+      } else {
+        categoryIds = categoryids
+      }
+    }
+    
+
     if (type === 'click-filter') {
+      
       this.toastInstance = Toast.loading({
         content: '加载中...',
         duration: 0,
       });
 
       this.page = 1;
-      await index.screenData({ filter: { categoryids, types: newTypes, essence, attention, sort }, sequence });
+      await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence });
 
       this.toastInstance?.destroy();
     } else if (type === 'moreData') {
@@ -81,13 +97,13 @@ class Index extends React.Component {
       await index.getReadThreadList({
         perPage: this.prePage,
         page: this.page,
-        filter: { categoryids, types: newTypes, essence, attention, sort },
+        filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort },
         sequence,
       });
 
       return;
     } else if (type === 'refresh-recommend') {
-      await index.getRecommends({ categoryIds: categoryids });
+      await index.getRecommends({ categoryIds });
     }
   }
 

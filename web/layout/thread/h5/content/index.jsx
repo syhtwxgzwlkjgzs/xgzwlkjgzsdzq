@@ -52,7 +52,7 @@ const RenderThreadContent = inject('user')(
     // 是否打赏帖
     const isBeReward = isFree && threadStore?.threadData?.ability.canBeReward && !isRedPack && !isReward;
     // 是否显示打赏按钮： 免费帖 && 不是自己 && 不是红包 && 不是悬赏 && 允许被打赏
-    const canBeReward = isFree && threadStore?.threadData?.ability.canBeReward && !isRedPack && !isReward && !isSelf;
+    const canBeReward = isFree && threadStore?.threadData?.ability.canBeReward && !isRedPack && !isReward;
     // 是否已打赏
     const isRewarded = false;
 
@@ -106,7 +106,7 @@ const RenderThreadContent = inject('user')(
           </div>
           {props?.user?.isLogin() && (
             <div className={styles.more} onClick={onMoreClick}>
-              <Icon size="20" color="#8590A6" name="MoreVOutlined"></Icon>
+              <Icon size={20} color="#8590A6" name="MoreVOutlined"></Icon>
             </div>
           )}
         </div>
@@ -140,7 +140,7 @@ const RenderThreadContent = inject('user')(
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={styles.payButton} type="primary">
                   <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
-                  <span>支付{attachmentPrice}元查看附件内容</span>
+                  <p>支付{attachmentPrice}元查看附件内容</p>
                 </Button>
               </div>
             )}
@@ -226,8 +226,8 @@ const RenderThreadContent = inject('user')(
 
             {/* 打赏 */}
             {canBeReward && (
-              <div style={{ textAlign: 'center' }}>
-                <Button onClick={onRewardClick} className={styles.rewardButton} type="primary" size="large">
+              <div className={styles.rewardContianer}>
+                <Button onClick={onRewardClick} className={styles.rewardButton} type="primary">
                   <Icon className={styles.payIcon} name="HeartOutlined" size={20}></Icon>
                   <span className={styles.rewardext}>打赏</span>
                 </Button>

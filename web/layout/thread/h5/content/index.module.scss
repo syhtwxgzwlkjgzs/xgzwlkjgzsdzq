@@ -36,7 +36,7 @@
 .title {
   color: var(--color-text-primary);
   line-height: 21px;
-  font-weight: var(--font-weight-regular);
+  font-weight: bold;
   font-size: rem($font-size-middle);
 }
 
@@ -53,7 +53,11 @@
 
 .rewardBody {
   text-align: center;
-  margin-bottom: rem($margin-6n);
+  margin-bottom: rem($margin-4n);
+}
+
+.rewardContianer {
+  margin-bottom: rem($margin-6n);;
 }
 
 .rewardButton {
@@ -112,10 +116,10 @@
   color: var(--color-text-regular);
   background: #f0f1f3; // TODO:token
   font-size: rem($font-size-label);
-  padding: rem($padding-1n);
+  padding: rem(6.5) rem($padding-1n);
   border-radius: rem($border-radius-small);
   margin-bottom: rem($padding-4n);
-  line-height: rem(17);
+  line-height: rem(12);
 }
 
 .thumbs {

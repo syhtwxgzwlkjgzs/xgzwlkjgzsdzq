@@ -113,16 +113,16 @@ class Index extends Component {
 
   render() {
     const { type, item = {}, site, onBtnClick } = this.props;
-    const { isPc } = site;
+    const { isPC } = site;
     const avatarUrl = this.getAvatar(item.avatar);
 
     return (
-      <div className={styles.wrapper}>
+      <div className={styles.wrapper} onClick={(e) => this.toDetailOrChat(e, item)}>
         {/* 默认block */}
         <div className={styles.block}>
           {/* 头像 */}
           <div className={styles.avatar} onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}>
-            <Badge info={null}>
+            <Badge info={item.unReadCount > 99 ? '99+' : (item.unReadCount || null)}>
               {avatarUrl ? (
                 <Avatar image={avatarUrl} circle={true} />
               ) : (
@@ -146,8 +146,13 @@ class Index extends Component {
             })}
           >
             {/* 顶部 */}
-            <div className={classNames(styles.top, { [styles.background]: type === 'account' })}>
-              <div className={styles.name} onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}>
+            <div className={styles.top}>
+              <div
+                className={classNames(styles.name, {
+                  [styles['single-line']]: true,
+                })}
+                onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
+              >
                 {item.username || this.filterTag(item.title)}
               </div>
               {['chat', 'thread'].includes(type) && (
@@ -157,18 +162,15 @@ class Index extends Component {
             </div>
 
             {/* 中部 */}
-            <div
-              className={classNames(styles.middle)}
-              onClick={(e) => this.toDetailOrChat(e, item)}
-            >
+            <div className={classNames(styles.middle)}>
               {/* 财务内容 */}
               {type === 'financial' && (
-                <p className={styles['content-html']} style={isPc ? { paddingRight: '20px' } : {}}>
+                <p className={styles['content-html']} style={isPC ? { paddingRight: '20px' } : {}}>
                   在帖子"
                   <span
                     className={styles['single-line']}
                     style={{
-                      maxWidth: `${isPc ? '400px' : '90px'}`,
+                      maxWidth: `${isPC ? '400px' : '90px'}`,
                       display: 'inline-block',
                       verticalAlign: 'bottom',
                     }}
@@ -184,7 +186,7 @@ class Index extends Component {
                     [styles['single-line']]: ['chat'].includes(type),
                     [styles['multiple-line']]: ['thread', 'account'].includes(type),
                   })}
-                  style={isPc ? { paddingRight: '20px' } : {}}
+                  style={isPC ? { paddingRight: '20px' } : {}}
                   dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
                 />
               )}
@@ -197,7 +199,7 @@ class Index extends Component {
           </div>
         </div>
         {/* PC删除 */}
-        {isPc && (
+        {isPC && (
           <div className={styles.delete} onClick={() => onBtnClick(item)}>
             <Icon className={styles.icon} name="DeleteOutlined" size={14} />
           </div>
@@ -216,7 +218,7 @@ Index.propTypes = {
 Index.defaultProps = {
   type: 'thread',
   item: {},
-  onBtnClick: () => {},
+  onBtnClick: () => { },
 };
 
 export default Index;

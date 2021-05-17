@@ -14,9 +14,9 @@ import PropTypes from 'prop-types'; // 类型拦截
 const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
   const [rule, setRule] = useState(1); // 0-定额 1-随机
   const [condition, setCondition] = useState(0); // 0-回复 1-集赞
-  const [price, setPrice] = useState(0); // 金额
-  const [number, setNumber] = useState(1); // 红包个数
-  const [likenum, setLikenum] = useState(1); // 集赞数
+  const [price, setPrice] = useState(''); // 金额
+  const [number, setNumber] = useState(''); // 红包个数
+  const [likenum, setLikenum] = useState(''); // 集赞数
 
   const onMoneyChang = (e) => { // 处理红包金额输入
     const val = e.target.value;
@@ -52,7 +52,7 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       });
       return;
     }
-    if (!(/^([1-9][0-9]*)$/.test(+likenum) && +likenum <= 250)) {
+    if (condition === 1 && !(/^([1-9][0-9]*)$/.test(+likenum) && +likenum <= 250)) {
       Toast.warning({
         content: '集赞数错误，请输入整数1-250',
       });
@@ -73,8 +73,8 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
     <div className={styles['redpacket-box']}>
       {/* 发放规则 */}
       <div className={styles['line-box']}>
-        <div> 发放规则 </div>
-        <div>
+        <div className={styles.label}>发放规则</div>
+        <div className={styles.item}>
           <Radio.Group
             value={rule}
             onChange={(val) => {
@@ -87,22 +87,22 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       </div>
       {/* 红包总金额 */}
       <div className={styles['line-box']}>
-        <div> 红包总金额 </div>
-        <div>
-          <Input mode="number" htmlType="number" value={price} onChange={e => onMoneyChang(e)} />元
+        <div className={styles.label}>红包总金额</div>
+        <div className={styles.item}>
+          <Input mode="number" htmlType="number" placeholder="金额" value={price} onChange={e => onMoneyChang(e)} />元
         </div>
       </div>
       {/* 红包个数 */}
       <div className={styles['line-box']}>
-        <div> 红包个数 </div>
-        <div>
+        <div className={styles.label}>红包个数</div>
+        <div className={styles.item}>
           <Input mode="number" value={number} placeholder="个数" onChange={e => setNumber(+e.target.value)} />个
         </div>
       </div>
       {/* 获利条件 */}
       <div className={styles['line-box']}>
-        <div> 获利条件 </div>
-        <div>
+        <div className={styles.label}>获利条件</div>
+        <div className={styles.item}>
           <Radio.Group
             value={condition}
             onChange={(item) => {
@@ -117,7 +117,7 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       {condition === 1 && (
         <div className={styles.likenum}>
           <div className={styles['likenum-input']}>
-            <Input mode="number" value={likenum} onChange={e => setLikenum(+e.target.value)} />个
+            <Input mode="number" placeholder="个数" value={likenum} onChange={e => setLikenum(+e.target.value)} />个
           </div>
         </div>
       )}

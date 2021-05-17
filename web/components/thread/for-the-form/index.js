@@ -23,8 +23,8 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
   // 时间选择器是否显示
   useEffect(() => {
     if (data !== undefined && Object.keys(data).length > 0) {
-      setValue(data.value);
-      setTimes(data.times);
+      if (data.value) setValue(data.value);
+      if (data.times) setTimes(data.times);
     }
   }, []);
 
@@ -54,7 +54,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
             mode="number"
             value={value}
             placeholder="金额"
-            onChange={e => setValue(+e.target.value)}
+            onChange={e => setValue(e.target.value)}
           />
           元
         </div>
@@ -66,7 +66,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
             ? (
               <>
                 <DatePicker
-                  selected={times}
+                  selected={new Date(times)}
                   minDate={new Date()}
                   onChange={date => setTimes(date)}
                   showTimeSelect
