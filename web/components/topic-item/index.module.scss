@@ -7,8 +7,9 @@
 
   .title {
     font-size: rem($font-size-middle);
-    line-height: rem($font-line-height-primary);
+    line-height: rem($font-line-height-middle);
     font-weight: var(--font-weight-bold);
+    color: $text-color-primary;
   }
   .content {
     display: box;
@@ -24,8 +25,11 @@
     align-items: center;
     .tag {
       font-size: rem($font-size-base);
-      line-height: rem($font-line-height-small);
-      margin-right: rem($padding-4n);
+      line-height: rem($font-line-height-middle);
+      color: $text-color-secondary;
+    }
+    .dot {
+      margin: 0 rem($padding-2n);
       color: $text-color-secondary;
     }
   }
