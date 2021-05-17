@@ -1,4 +1,6 @@
 @import "@common/styles/index.scss";
 .wrapper{
   background: $white;
+  border-radius: $border-radius-small $border-radius-small 0 0;
+  overflow: hidden;
 }

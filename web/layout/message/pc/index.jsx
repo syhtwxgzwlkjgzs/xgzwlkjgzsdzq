@@ -68,7 +68,7 @@ const Index = ({ page, subPage, dialogId, username }) => {
       case 'chat':
         return <MessageChat dialogId={dialogId} username={username} />;
     }
-  }, [page]);
+  }, [page, subPage, dialogId, username]);
 
   const rightContent = () => {
     return (

@@ -7,6 +7,7 @@ import Header from '@components/header';
 import Card from '../message-card';
 import Notice from '../notice';
 
+@inject('site')
 @inject('message')
 @observer
 class Index extends React.Component {
@@ -142,7 +143,8 @@ class Index extends React.Component {
   }
 
   render() {
-    const { message } = this.props;
+    const { site, message } = this.props;
+    const { isPC } = site;
     const { type, items } = this.state;
     const data = message[type];
     const renderList = this.handleRenderList(data.list);
@@ -150,12 +152,12 @@ class Index extends React.Component {
 
     return (
       <div className={styles.wrapper}>
-        <Header />
+        {!isPC && <Header />}
         <Notice
           height='calc(100vh - 44px)'
-          withTopBar={true}
+          withTopBar={!isPC}
           noMore={data.currentPage >= data.totalPage}
-          topCard={type === 'accountMsgList' ? card : null}
+          topCard={(isPC || type === 'accountMsgList') ? card : null}
           list={renderList}
           type='account'
           onPullDown={this.onPullDown}
