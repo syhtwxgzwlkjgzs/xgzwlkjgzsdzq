@@ -21,6 +21,8 @@ const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noo
     onClick(userId);
   };
 
+  const bgColorBasedOnIcon = (icon === "LikeOutlined") ? styles.like : (icon === "HeartOutlined") ? styles.heart : "";
+
   return (
     <div className={styles.listItem} key={index} onClick={handleClick}>
       <div className={styles.wrapper}>
@@ -34,8 +36,8 @@ const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noo
               />
               {
                 icon && (
-                  <div className={styles.icon} style={{ backgroundColor: index % 2 === 0 ? '#e02433' : '#ffc300' }}>
-                      <Icon name={icon} />
+                  <div className={`${styles.icon} ${bgColorBasedOnIcon}`}>
+                      <Icon name={icon} size={12}/>
                   </div>
                 )
               }

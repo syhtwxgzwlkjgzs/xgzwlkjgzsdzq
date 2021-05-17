@@ -171,7 +171,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
                           userId={item.userId}
                           platform={platform}
                           onClick={onUserClick}
-                          icon={item.icon}
+                          icon={item.icon} // 根据用户付费类型选择是'LikeOutlined'还是'HeartOutlined'
                         />
                     ))
                   }
