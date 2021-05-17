@@ -125,15 +125,30 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
     },
     {
       icon: 'HeartOutlined',
-      title: tipData?.payType === 1 ? '付费' : '打赏',
+      title: '付费',
       data: tips,
-      number: tipData?.payType === 1 ? all?.pageData?.raidCount || 0 : all?.pageData?.rewardCount || 0 // [2021.5.14 罗欣然]: all.pageData.raidCount 这个数据应该为all.pageData.paidCount，后端来不及改数据结构了
+      number: all?.pageData?.rewardCount || 0,
+    },
+    {
+      icon: 'HeartOutlined',
+      title: '打赏',
+      data: tips,
+      number: all?.pageData?.raidCount || 0,
     },
   ];
 
   const renderTabPanel = (platform) => (
     tabItems.map((dataSource, index) => {
       const arr = dataSource?.data?.pageData?.list;
+      if(dataSource.number === 0 || dataSource.number === '0') {
+        return null; // 列表数量为0不显示该Tab
+      }
+      if(tipData?.payType > 0) {
+        if(index === 3) return null; // 付费用户不需打赏列表
+      } else {
+        if(index === 2) return null; // 非付费用户不需显示付费列表
+      }
+
       return (
         <Tabs.TabPanel
           key={index}
@@ -166,6 +181,8 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
             }
         </Tabs.TabPanel>
       );
+    }).filter((item) => {
+      return item !== null;
     })
   );
 
