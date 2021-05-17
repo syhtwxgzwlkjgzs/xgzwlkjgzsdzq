@@ -244,7 +244,7 @@ const RenderThreadContent = inject('user')(
               <Icon
                 className={classnames(styles.payIcon, isPayed && styles.actived)}
                 name="DollarLOutlined"
-                size={18}
+                size={20}
               ></Icon>
             )}
             {/* 打赏 */}
@@ -252,7 +252,7 @@ const RenderThreadContent = inject('user')(
               <Icon
                 className={classnames(styles.payIcon, isRewarded && styles.actived)}
                 name="HeartOutlined"
-                size={18}
+                size={20}
               ></Icon>
             )}
             {/* 点赞 */}
@@ -260,7 +260,7 @@ const RenderThreadContent = inject('user')(
               className={classnames(styles.liked, threadStore?.threadData?.isLike && styles.actived)}
               onClick={onLikeClick}
             >
-              <Icon name="LikeOutlined" size={18}></Icon>
+              <Icon name="LikeOutlined" size={20}></Icon>
               {threadStore?.threadData?.likeReward?.likePayCount > 0 && (
                 <span className={styles.likedNumber}>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
               )}
@@ -270,7 +270,7 @@ const RenderThreadContent = inject('user')(
             </div>
           </div>
           {threadStore?.threadData?.likeReward?.shareCount > 0 && (
-            <span className={styles.shareCount}>{threadStore?.threadData?.likeReward?.shareCount}次分享</span>
+            <div className={styles.shareCount}>{threadStore?.threadData?.likeReward?.shareCount}次分享</div>
           )}
         </div>
       </div>
