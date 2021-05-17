@@ -39,8 +39,10 @@ const RenderThreadContent = inject('user')(
     // 是否已付费
     const isPayed = threadStore?.threadData?.paid === true;
     // 是否付费帖子
-    const isThreadPay = threadStore?.threadData?.payType === 1 && threadStore?.threadData?.paid === false;
+    const isThreadPay = threadStore?.threadData?.payType === 1;
     const threadPrice = threadStore?.threadData?.price || 0;
+    // 当前用户是否需要付费
+    const isNeedPay = threadStore?.threadData?.payType === 1 && threadStore?.threadData?.paid === false;
     // 是否作者自己
     const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData?.userId;
 
@@ -215,7 +217,7 @@ const RenderThreadContent = inject('user')(
             )}
 
             {/* 帖子付费 */}
-            {isThreadPay && !isSelf && (
+            {isNeedPay && !isSelf && (
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={styles.payButton} type="primary">
                   <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
