@@ -8,6 +8,7 @@ import CaptchaInput from '../../user-center-edit-mobile/captcha-input'
 import VerifyCode from '../../user-center-edit-mobile/verify-code'
 
 @inject('site')
+@inject('user')
 @observer
 class index extends Component {
 
@@ -90,6 +91,7 @@ class index extends Component {
 
   render() {
     const { current_step, list = [], is_blur } = this.state
+    const mobile = this.props?.user.mobile
     return (
       <div>
         <Header />
@@ -98,7 +100,7 @@ class index extends Component {
           <div className={styles.labelInfo}>
             <div>
               <span className={styles.labelName}>手机号</span>
-              <span className={styles.labelValue} style={{ border: 'none' }}>18270****420</span>
+              <span className={styles.labelValue} style={{ border: 'none' }}>{mobile}</span>
             </div>
             <div>
               <VerifyCode key={current_step} text={"发送验证码"} getVerifyCode={this.getVerifyCode} />
