@@ -41,7 +41,7 @@
       align-items: center;
 
       .delete-icon {
-        transform: scale(0.8);
+        font-size: $font-size-middle;
         color: $white;
       }
     }
@@ -143,9 +143,11 @@
         }
         &.is-checked {
           .dzq-checkbox {
+            border: none;
             background-color: $primary-color;
           }
           .dzq-icon {
+            font-size: $font-size-label;
             color: $white;
           }
         }

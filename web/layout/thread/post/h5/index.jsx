@@ -158,7 +158,22 @@ class ThreadCreate extends React.Component {
               this.clearBottomFixed();
             }}
           />
+          {/* 图片 */}
+          {(currentAttachOperation === THREAD_TYPE.image || Object.keys(postData.images).length > 0) && (
+            <ImageUpload
+              fileList={Object.values(postData.images)}
+              onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.image)}
+              onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.image)}
+            />
+          )}
 
+          {/* 视频组件 */}
+          {(postData.video && postData.video.thumbUrl) && (
+            <VideoDisplay
+              src={postData.video.thumbUrl}
+              onDelete={() => this.props.setPostData({ video: {} })}
+              onReady={this.props.onVideoReady} />
+          )}
           {/* 录音组件 */}
           {(currentAttachOperation === THREAD_TYPE.voice && !postData.audio.mediaUrl) && (
             <div className={styles['audio-record']}>
@@ -176,21 +191,6 @@ class ThreadCreate extends React.Component {
             </div>
           )}
 
-          {(currentAttachOperation === THREAD_TYPE.image || Object.keys(postData.images).length > 0) && (
-            <ImageUpload
-              fileList={Object.values(postData.images)}
-              onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.image)}
-              onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.image)}
-            />
-          )}
-
-          {/* 视频组件 */}
-          {(postData.video && postData.video.thumbUrl) && (
-            <VideoDisplay
-              src={postData.video.thumbUrl}
-              onDelete={() => this.props.setPostData({ video: {} })}
-              onReady={this.props.onVideoReady} />
-          )}
           {/* 附件上传组件 */}
           {(currentDefaultOperation === defaultOperation.attach || Object.keys(postData.files).length > 0) && (
             <FileUpload
