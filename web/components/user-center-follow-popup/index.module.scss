@@ -1,0 +1,32 @@
+@import '@common/styles/index.scss';
+.contaner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.popupWrapper {
+  width: rem(572);
+  height: rem(680);
+  overflow: hidden;
+  background: $white;
+  border-radius: rem($border-radius-small);
+  .title {
+    text-align: center;
+    font-weight: 600;
+    font-size: rem(20);
+    height: rem(76);
+    line-height: rem(76);
+    color: #0b0b37;
+    position: relative;
+  }
+  .closeIcon {
+    position: absolute;
+    top: rem(24);
+    right: rem(24);
+  }
+  .titleHr {
+    height: rem(1);
+    width: 100%;
+    background: #eee;
+  }
+}

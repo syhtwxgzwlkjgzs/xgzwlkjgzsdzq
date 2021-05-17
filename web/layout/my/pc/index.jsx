@@ -10,8 +10,9 @@ import ThreadContent from '@components/thread';
 import Copyright from '@components/copyright';
 import UserCenterFans from '@components/user-center-fans';
 import UserCenterFollow from '@components/user-center-follow';
-import { Icon, Popup} from '@discuzq/design';
 import Router from '@discuzq/sdk/dist/router';
+import UserCenterFansPopup from '@components/user-center-fans-popup';
+import UserCenterFollowPopup from '@components/user-center-follow-popup';
 @inject('site')
 @inject('user')
 @observer
@@ -153,41 +154,16 @@ class PCMyPage extends React.Component {
         <UserBaseLaout allowRefresh={false} onSearch={this.onSearch} right={this.renderRight}>
           {this.renderContent()}
         </UserBaseLaout>
-        <Popup position="center" visible={this.state.showFansPopup} onClose={() => this.setState({ showFansPopup: false })}>
-          <div className={styles.contaner}>
-            <div className={styles.popupWrapper}>
-              <div className={styles.title}>
-                粉丝
-                <Icon
-                  name="CloseOutlined"
-                  className={styles.closeIcon}
-                  size={12}
-                  onClick={() => this.setState({ showFansPopup: false })}
-                />
-              </div>
-              <div className={styles.titleHr}></div>
-              <UserCenterFans onContainerClick={this.onContainerClick} />
-            </div>
-          </div>
-        </Popup>
 
-        <Popup position="center" visible={this.state.showFollowPopup} onClose={() => this.setState({ showFollowPopup: false })}>
-          <div className={styles.contaner}>
-            <div className={styles.popupWrapper}>
-              <div className={styles.title}>
-                关注
-                <Icon
-                  name="CloseOutlined"
-                  className={styles.closeIcon}
-                  size={12}
-                  onClick={() => this.setState({ showFollowPopup: false })}
-                />
-              </div>
-              <div className={styles.titleHr}></div>
-              <UserCenterFollow onContainerClick={this.onContainerClick} />
-            </div>
-          </div>
-        </Popup>
+        <UserCenterFansPopup 
+          visible={this.state.showFansPopup}
+          onClose={() => this.setState({ showFansPopup: false })}
+        />
+
+        <UserCenterFollowPopup
+          visible={this.state.showFollowPopup}
+          onClose={() => this.setState({ showFollowPopup: false })}
+        />
       </>
     );
   }
