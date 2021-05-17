@@ -54,7 +54,8 @@
       left: 0;
       right: 0;
       bottom: 0;
-      height: rem(52px);
+      bottom: constant(safe-area-inset-bottom);
+      bottom: env(safe-area-inset-bottom);
       padding: rem($padding-2n) rem($padding-4n);
       display: flex;
       align-items: center;
@@ -68,7 +69,7 @@
   }
 
   .topic-wrap {
-    height: calc(100vh - 128px);
+    height: calc(100vh - 144px);
   }
   .topic-item {
     display: flex;

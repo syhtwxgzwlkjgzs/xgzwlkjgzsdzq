@@ -60,7 +60,7 @@
   }
 
   .at-wrap {
-    height: calc(100vh - 119px);
+    height: calc(100vh - 144px);
     // .scroll-view {
     //   height: 100% !important;
     // }
@@ -130,9 +130,11 @@
         }
         &.is-checked {
           .dzq-checkbox {
+            border: none;
             background-color: $primary-color;
           }
           .dzq-icon {
+            font-size: $font-size-label;
             color: $white;
           }
         }
@@ -146,6 +148,7 @@
     position: absolute;
     left: 0;
     right: 0;
+    bottom: 0;
     bottom: constant(safe-area-inset-bottom);
     bottom: env(safe-area-inset-bottom);
     padding: rem($padding-2n) rem($padding-4n);

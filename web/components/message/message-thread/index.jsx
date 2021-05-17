@@ -5,6 +5,7 @@ import styles from './index.module.scss';
 import Header from '@components/header';
 import Notice from '../notice';
 
+@inject('site')
 @inject('message')
 @observer
 class Index extends React.Component {
@@ -31,12 +32,15 @@ class Index extends React.Component {
   }
 
   render() {
+    const {isPC} = this.props.site;
     const { threadMsgList: data } = this.props.message;
     return (
       <div className={styles.wrapper}>
-        <Header />
+        {!isPC && <Header />}
         <Notice
-          height='calc(100vh - 44px)'
+          infoIdx={3}
+          totalCount={data.totalCount}
+          height='calc(100vh - 40px)'
           noMore = { data.currentPage >= data.totalPage }
           list={data.list}
           type='thread'

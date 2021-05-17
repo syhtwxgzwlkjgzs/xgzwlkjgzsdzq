@@ -4,6 +4,10 @@
   .vditor-bubble-toolbar {
     display: none !important;
   }
+  .vditor-ir pre.vditor-reset,
+  .vditor-wysiwyg pre.vditor-reset {
+    padding-top: rem($padding-2n) !important;
+  }
 }
 
 .dvditor {
@@ -22,7 +26,7 @@
 
   .vditor-ir pre.vditor-reset,
   .vditor-wysiwyg pre.vditor-reset {
-    height: 178px;
+    // height: 178px;
     padding: rem(16) !important;
     font-size: $font-size-middle;
     color: $text-color-primary;
