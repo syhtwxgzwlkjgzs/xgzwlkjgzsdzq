@@ -38,6 +38,8 @@ class Index extends React.Component {
       <div className={styles.wrapper}>
         {!isPC && <Header />}
         <Notice
+          infoIdx={3}
+          totalCount={data.totalCount}
           height='calc(100vh - 44px)'
           noMore = { data.currentPage >= data.totalPage }
           list={data.list}

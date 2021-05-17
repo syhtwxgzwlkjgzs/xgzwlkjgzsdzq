@@ -8,7 +8,7 @@ import styles from './index.module.scss';
 
 const Index = ({ site, message }) => {
   const { readFinancialMsgList, financialMsgList, deleteMsg } = message;
-  const { list, currentPage, totalPage } = financialMsgList;
+  const { list, currentPage, totalPage, totalCount } = financialMsgList;
 
   // 初始化
   useEffect(() => {
@@ -42,6 +42,8 @@ const Index = ({ site, message }) => {
     <div className={styles.wrapper}>
       {!site.isPC && <Header />}
       <Notice
+        infoIdx={2}
+        totalCount={totalCount}
         height='calc(100vh - 44px)'
         withTopBar={!site.isPC}
         noMore={currentPage >= totalPage}
