@@ -20,18 +20,10 @@
   }
   .itemH5 {
     height: rem(36);
-    // border-bottom: rem(1) solid var(--border-line-color);
-    box-sizing: border-box;
+    border-bottom: rem(1) solid var(--border-line-color);
+    // box-sizing: border-box;
     position: relative;
-    &::after{
-      content: '';
-      width: 100%;
-      height: rem(1);
-      background: var(--border-line-color);
-      position: absolute;
-      left: 0;
-      bottom: 0;
-    }
+    
     &:last-child{
       border-bottom: none;
     }
