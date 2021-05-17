@@ -299,10 +299,10 @@ class SearchAction extends SearchStore {
         const { index, data, store } = targetThread;
 
         // 更新点赞
-        const { updatedInfo, user } = obj;
+        const { updateType, updatedInfo, user } = obj;
         const { isLiked, isPost, isFavorite:isShare, likeCount, replyCount } = updatedInfo;
 
-        if (!typeofFn.isUndefined(isLiked) && !typeofFn.isNull(isLiked)
+        if (updateType === 'like' && !typeofFn.isUndefined(isLiked) && !typeofFn.isNull(isLiked)
              && user && data.likeReward?.users) {
 
           const theUserId = user.userId || user.id;
@@ -327,12 +327,12 @@ class SearchAction extends SearchStore {
         }
     
         // 更新评论
-        if (!typeofFn.isUndefined(isPost) && !typeofFn.isNull(isPost)) {
+        if (updateType === 'comment' && !typeofFn.isUndefined(isPost) && !typeofFn.isNull(isPost)) {
           data.likeReward.postCount = isPost ? data.likeReward.postCount + 1 : data.likeReward.postCount - 1;
         }
     
         // 更新分享
-        if (!typeofFn.isUndefined(isShare) && !typeofFn.isNull(isShare)) {
+        if (updateType === 'share' &&!typeofFn.isUndefined(isShare) && !typeofFn.isNull(isShare)) {
           data.likeReward.shareCount = isShare ? data.likeReward.shareCount + 1 : data.likeReward.shareCount - 1;
         }
     
