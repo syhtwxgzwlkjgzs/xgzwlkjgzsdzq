@@ -219,7 +219,6 @@ export default class index extends Component {
     } else if (current_step === 'second') {
       isSubmit = (list.length !== 6 || !this.validateTel(bind_mobile))
     }
-    console.log(bind_mobile,'ssssssss_bind_mobile');
     return (
       <div className={styles.userMobileWrapper}>
         <Dialog visible={true}>

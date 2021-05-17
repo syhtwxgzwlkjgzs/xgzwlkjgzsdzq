@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react';
 import H5UserCenterEditInfo from './h5/index';
 import UserCenterEditMobile from '../user-center-edit-mobile-pc';
+import UserCenterEditAccountPwd from '../user-center-edit-account-pwd-pc';
 
 @inject('site')
 @inject('user')
@@ -26,7 +27,7 @@ export default class index extends Component {
         }
         {
           platform === 'pc' && (
-            <UserCenterEditMobile />
+            <UserCenterEditAccountPwd />
           )
         }
       </div>
