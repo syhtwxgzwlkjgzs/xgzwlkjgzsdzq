@@ -4,6 +4,7 @@
   :global {
     .dzq-input.is-disabled .dzq-input__inner {
       background-color: var(--comment-box-bg-color);
+      -webkit-appearance: none; // ios下去除上面阴影
     }
   }
   .input {
