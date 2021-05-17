@@ -21,6 +21,7 @@ const List = forwardRef(({
   onRefresh,
   onScroll = noop,
   showRefresh = true,
+  preload = 30
 }, ref) => {
   const listWrapper = useRef(null);
   const currentScrollTop = useRef(0)
@@ -86,8 +87,8 @@ const List = forwardRef(({
     if (!isFirst) {
       allowHandleRefresh = (scrollTop !== 0)
     }
-
-    if ((scrollHeight - 40 <= clientHeight + scrollTop) && !isLoading && allowHandleRefresh) {
+   
+    if ((scrollHeight - preload <= clientHeight + scrollTop) && !isLoading && allowHandleRefresh) {
       setIsLoading(true);
       if (typeof(onRefresh) === 'function' ) {
         const promise = onRefresh();
