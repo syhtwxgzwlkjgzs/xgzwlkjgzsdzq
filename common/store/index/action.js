@@ -9,6 +9,14 @@ class IndexAction extends IndexStore {
   }
 
   /**
+   * 设置过滤项
+   */
+   @action
+  setFilter(data) {
+    this.filter = data
+  }
+
+  /**
    * 触发筛选数据
    * @param {*} param0
    */

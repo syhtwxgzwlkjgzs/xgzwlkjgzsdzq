@@ -29,10 +29,12 @@
     margin-bottom: rem($padding-2n);
     font-weight: normal;
     margin-top: rem(38);
+    line-height: rem(17);
   }
   .money {
     z-index: 2;
     font-size: rem($font-size-large);
-    font-weight: 600;
+    font-weight: bold;
+    line-height: rem(28);
   }
 }

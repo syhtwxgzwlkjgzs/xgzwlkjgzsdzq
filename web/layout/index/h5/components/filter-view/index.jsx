@@ -2,10 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Icon, Popup } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
 import filterData from './data';
+import { withRouter } from 'next/router';
 
 import styles from './index.module.scss';
 
-const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel = noop }) => {
+const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel = noop, router }) => {
   const [first, setFirst] = useState();
   const [firstChildren, setFirstChildren] = useState();
   const [second, setSecond] = useState('');
@@ -56,6 +57,10 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
       setFirstChildren(index);
     }
   };
+
+  const goSearch = () => {
+    router.push(`/search`);
+  }
 
   // 结果数据处理
   const handleSubmit = () => {
@@ -134,7 +139,7 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
     >
       <div className={styles.container}>
         <div className={styles.containerIcon}>
-          <Icon className={styles.searchIcon} name='SearchOutlined' size={20}></Icon>
+          <Icon className={styles.searchIcon} name='SearchOutlined' size={20} onClick={goSearch}></Icon>
         </div>
         { data && data.map((item, index) => renderContent(item, index)) }
       </div>
@@ -148,4 +153,4 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
   );
 };
 
-export default React.memo(Index);
+export default withRouter(React.memo(Index));
