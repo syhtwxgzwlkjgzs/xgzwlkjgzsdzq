@@ -137,11 +137,24 @@ function AttachmentToolbar(props) {
     };
   }, []);
 
+  const getIconCls = (item) => {
+    const cls = styles['dvditor-attachment-toolbar__item'];
+    const activeCls = `${styles['dvditor-attachment-toolbar__item']} ${styles.active}`;
+    const action = props.currentSelectedToolbar || currentAction;
+    if (item.type === action) return activeCls;
+    const { postData } = props;
+    if (item.type === THREAD_TYPE.reward && postData?.rewardQa?.value) return activeCls;
+    if (item.type === THREAD_TYPE.goods && postData?.product?.id) return activeCls;
+    if (item.type === THREAD_TYPE.voice && postData?.audio?.id) return activeCls;
+    if (item.type === THREAD_TYPE.video && postData?.video?.id) return activeCls;
+    if (item.type === THREAD_TYPE.image && Object.values(postData?.images || []).length > 0) return activeCls;
+    return cls;
+  };
+
   const icons = () => attachIcon.map((item) => {
     const { permission } = props;
     if (props.pc && item.type === THREAD_TYPE.voice) return null;
-    const action = props.currentSelectedToolbar || currentAction;
-    const clsName = item.type === action ? `${styles['dvditor-attachment-toolbar__item']} ${styles.active}` : styles['dvditor-attachment-toolbar__item'];
+    const clsName = getIconCls(item);
     if (!item.isUpload) {
       return permission[item.type] ? (
         <Icon
@@ -182,6 +195,7 @@ function AttachmentToolbar(props) {
   const action = props.currentSelectedToolbar || currentAction;
   const currentIcon = attachIcon.filter(item => item.type === action)[0]?.name
     || attachIcon.filter(item => item.type === THREAD_TYPE.image)[0]?.name;
+
   return (
     <div className={styles['dvditor-attachment-toolbar']}>
       {!showAll && (

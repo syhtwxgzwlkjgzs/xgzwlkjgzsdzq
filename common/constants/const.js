@@ -53,12 +53,13 @@ export const defaultIcon = [
     name: 'SmilingFaceOutlined', // emoji
     active: activeColor,
     id: defaultOperation.emoji,
+    type: defaultOperation.emoji,
   },
   {
     name: 'AtOutlined', // @
     active: activeColor,
     id: defaultOperation.at,
-    type: THREAD_TYPE.at
+    type: THREAD_TYPE.at,
   },
   {
     name: 'SharpOutlined', // #

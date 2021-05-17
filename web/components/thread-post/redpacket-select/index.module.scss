@@ -53,13 +53,12 @@
         color: $text-color-primary;
       }
       &.is-checked {
-        background-color: $checkbox-checked-bg-color;
-        border: none;
         .dzq-checkbox__icon {
           color: $primary-color;
           font-size: $font-size-label !important;
         }
         .dzq-checkbox {
+          background-color: $checkbox-checked-bg-color;
           border: none;
         }
       }
