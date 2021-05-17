@@ -215,7 +215,6 @@ class IndexAction extends IndexStore {
 
     // 更新分享
     if (updateType === 'share' && !typeofFn.isUndefined(isShare) && !typeofFn.isNull(isShare)) {
-      console.log(data.likeReward.shareCount);
       data.likeReward.shareCount = isShare ? data.likeReward.shareCount + 1 : data.likeReward.shareCount - 1;
     }
 

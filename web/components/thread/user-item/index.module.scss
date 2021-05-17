@@ -29,16 +29,25 @@
     //   background: $body-bg-color;
     // }
     .icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       position: absolute;
-      bottom: rem(-5);
-      right: rem(-5);
+      bottom: rem(8);
+      right: rem(-3);
       border-radius: rem($border-radius-big);
-      height: rem(20);
-      width: rem(20);
+      height: rem(13); // 设计是20px，大约是rem(13)
+      width: rem(13);
       border: var(--color-white) solid rem(1);
       text-align: center;
       line-height: rem(20);
       color: var(--color-white);
+      &.like {
+        background-color: $error-color;
+      }
+      &.heart {
+        background-color: $warn-color;
+      }
     }
   }
 
