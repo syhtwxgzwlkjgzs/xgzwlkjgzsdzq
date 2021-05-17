@@ -39,18 +39,18 @@ class RegisterH5Page extends React.Component {
       const { webConfig } = this.props.site;
       const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
 
-      // if (!this.captcha) {
-      //   const { TencentCaptcha } = (await import('@discuzq/sdk/dist/common_modules/sliding-captcha'));
-      //   this.captcha = new TencentCaptcha(qcloudCaptchaAppId, (res) => {
-      //     if (res.ret === 0) {
-      //       this.props.userRegister.captchaRandStr = res.randstr;
-      //       this.props.userRegister.captchaTicket = res.ticket;
-      //       this.toRegister();
-      //     }
-      //   });
-      // }
-      // // 显示验证码
-      // this.captcha.show();
+      if (!this.captcha) {
+        const { TencentCaptcha } = (await import('@discuzq/sdk/dist/common_modules/sliding-captcha'));
+        this.captcha = new TencentCaptcha(qcloudCaptchaAppId, (res) => {
+          if (res.ret === 0) {
+            this.props.userRegister.captchaRandStr = res.randstr;
+            this.props.userRegister.captchaTicket = res.ticket;
+            this.toRegister();
+          }
+        });
+      }
+      // 显示验证码
+      this.captcha.show();
     }
 
   toRegister = async () => {
