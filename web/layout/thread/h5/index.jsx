@@ -465,7 +465,7 @@ class ThreadH5Page extends React.Component {
     Toast.info({ content: '复制链接成功' });
 
     const { title = '' } = this.props.thread?.threadData || {};
-    h5Share(title);
+    h5Share({ title, path: `thread/${this.props.thread?.threadData?.threadId}` });
 
     // const id = this.props.thread?.threadData?.id;
 
