@@ -163,20 +163,20 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
                 >
                   {
                     arr.map((item, index) => (
-                        <UserItem 
-                          key={index} 
-                          imgSrc={item.avatar} 
-                          title={item.username} 
-                          subTitle={item.passedAt} 
+                        <UserItem
+                          key={index}
+                          imgSrc={item.avatar}
+                          title={item.nickname || item.username}
+                          subTitle={item.passedAt}
                           userId={item.userId}
                           platform={platform}
                           onClick={onUserClick}
-                          icon={item.icon} // 根据用户付费类型选择是'LikeOutlined'还是'HeartOutlined'
+                          type={item.type}
                         />
                     ))
                   }
                 </List>
-              ) : <Spin className={styles.spinner} type="spinner" /> 
+              ) : <Spin className={styles.spinner} type="spinner" />
 
             }
         </Tabs.TabPanel>

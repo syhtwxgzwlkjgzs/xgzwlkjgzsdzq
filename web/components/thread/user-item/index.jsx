@@ -9,19 +9,25 @@ import { ThreadCommonContext } from '../utils'
  * 用户信息视图
  * @prop {string}  imgSrc 用户头像
  * @prop {string}  title 用户名字
+ * @prop {number}  type 免费还是付费用户
  * @prop {string}  subTitle 额外信息
  * @prop {string}  icon 用户头像右下角图标
  * @prop {string}  label 额外信息
  * @prop {string}  onClick 点击事件
  */
 // TODO 点击穿透问题之后想办法解决
-const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noop, userId, platform }) => {
+const Index = ({ imgSrc, title = '', type = 0, subTitle, label, index, onClick = noop, userId, platform }) => {
   const handleClick = (e) => {
     e.stopPropagation();
     onClick(userId);
   };
 
-  const bgColorBasedOnIcon = (icon === "LikeOutlined") ? styles.like : (icon === "HeartOutlined") ? styles.heart : "";
+  const icon =  (type === 1) ? "LikeOutlined" :
+                (type === 2) ? "HeartOutlined" :
+                (type === 3) ? "HeartOutlined" : "",
+        bgClrBasedOnType =  (type === 1) ? styles.like :
+                              (type === 2) ? styles.heart :
+                              (type === 3) ? styles.heart : "";
 
   return (
     <div className={styles.listItem} key={index} onClick={handleClick}>
@@ -36,7 +42,7 @@ const Index = ({ imgSrc, title = '', icon, subTitle, label, index, onClick = noo
               />
               {
                 icon && (
-                  <div className={`${styles.icon} ${bgColorBasedOnIcon}`}>
+                  <div className={`${styles.icon} ${bgClrBasedOnType}`}>
                       <Icon name={icon} size={12}/>
                   </div>
                 )
