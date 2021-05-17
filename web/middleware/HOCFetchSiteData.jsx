@@ -30,7 +30,7 @@ export default function HOCFetchSiteData(Component) {
         // 服务端
         if (isServer()) {
           const { headers } = ctx.req;
-          platform = headers ? getPlatform(headers['user-agent']) : 'pc';
+          platform = headers ? getPlatform(headers['user-agent']) : 'static';
           // 获取站点信息
           siteConfig = await readForum({}, ctx);
           serverSite = {
@@ -208,6 +208,9 @@ export default function HOCFetchSiteData(Component) {
 
     render() {
       const { isNoSiteData } = this.state;
+      const { site } = this.props;
+      // CSR不渲染任何内容
+      if ( site.platform === 'static' ) return null;
       if (isNoSiteData) {
         return (
           <div className={styles.loadingBox}>
