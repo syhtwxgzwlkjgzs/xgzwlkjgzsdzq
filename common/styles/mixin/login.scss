@@ -91,10 +91,21 @@
   line-height: rem($font-line-height-large);
   text-align: left;
   color: var(--color-text-primary);
+  display: flex;
+  flex-direction: column;
   img {
     width: rem(30);
     height: rem(30);
-    margin: 0 rem($margin-2n);
+  }
+  .tips_user {
+    display: flex;
+    line-height: rem($font-line-height-large);
+    flex-direction: row;
+  }
+  :global(.dzq-avatar), :global(.dzq-avatar__text){
+    width: rem(30);
+    height: rem(30);
+    line-height: rem($font-line-height-large);
   }
 }
 
