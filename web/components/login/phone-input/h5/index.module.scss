@@ -7,6 +7,9 @@
     height: rem(62);
     margin-top: rem($padding-3n);
     padding: rem($padding-4n) 0 rem($padding-6n);
+    :global(.dzq-input__inner) {
+      height: rem(22);
+    }
   }
 }
 @mixin captchaBtn {

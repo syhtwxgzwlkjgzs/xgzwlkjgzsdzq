@@ -21,6 +21,7 @@ export default class commonLoginStore {
     @observable captchaTicket = '';
     @observable captchaRandStr = '';
     @observable captcha = null;
+    @observable isSend = false;
 
     @observable statusCode = null;
     @observable statusMsg = '';
@@ -30,6 +31,11 @@ export default class commonLoginStore {
     @action
     setSessionToken(sessionToken) {
       this.sessionToken = sessionToken;
+    }
+
+    @action
+    setIsSend(isSend) {
+      this.isSend = isSend;
     }
 
     @action
