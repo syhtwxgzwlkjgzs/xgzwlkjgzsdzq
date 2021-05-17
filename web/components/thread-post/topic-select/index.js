@@ -60,39 +60,29 @@ class TopicSelect extends Component {
 
   async loadTopics() {
     // 1 设置参数
-    const { threadPost } = this.props;
     const { fetchTopic } = this.props.threadPost;
-    const { pageNum, pageSize } = this.state;
-    if ((pageNum - 1) * pageSize > threadPost.topics.length) {
-      this.setState({ isLastPage: true });
-      return Promise.reject();
-    }
     const params = {
       page: this.state.pageNum,
       perPage: this.state.pageSize,
-      filter: {
-        recommended: 1,
-      },
+      // filter: {
+      //   recommended: 1,
+      // },
     };
     if (this.state.keywords) {
       params.filter.content = this.state.keywords;
     }
     // 2 发起请求
-    await fetchTopic(params);
-    if (pageNum * pageSize > this.props.threadPost.topics.length) {
-      this.setState({ isLastPage: true });
-      return Promise.reject();
-    }
+    const ret = await fetchTopic(params);
     // 3 更新页码
-    this.setState({ pageNum: this.state.pageNum + 1 });
+    if (ret.code === 0) {
+      this.setState({ pageNum: this.state.pageNum + 1 });
+    }
     return Promise.reject();
   }
 
   onScrollBottom() {
-    console.log('bottom');
-    // 忽略页码为1时的触底
-    if (this.state.pageNum === 1) return;
-    if (this.state.isLastPage) return Promise.reject();
+    if ((this.state.pageNum - 1) * this.state.pageSize
+      > this.props.threadPost.topicTotalCount) return Promise.reject();
     return this.loadTopics();
   }
 
@@ -134,22 +124,21 @@ class TopicSelect extends Component {
       <div className={styles.wrapper}>
         {/* 搜索框 */}
         <div className={styles.input}>
+          <Icon className={styles.inputWrapperIcon} name="SearchOutlined" size={16} />
           <Input
             value={this.state.keywords}
-            icon="SearchOutlined"
             placeholder='搜索话题'
             onChange={e => this.updateKeywords(e)}
           />
           {this.state.keywords &&
-            <div className={styles.delete} onClick={this.clearKeywords}>
-              <Icon className={styles['delete-icon']} name="CloseOutlined" size={8}></Icon>
-            </div>
+            <Icon className={styles.deleteIcon} name="WrongOutlined" size={16}  onClick={this.clearKeywords}></Icon>
           }
         </div>
 
         {/* 话题列表 */}
         {/* <div className={styles['topic-wrap']}> */}
-          <BaseList className={styles['topic-wrap']} onRefresh={this.onScrollBottom.bind(this)} noMore={this.state.isLastPage}>
+          <BaseList className={styles['topic-wrap']} onRefresh={this.onScrollBottom.bind(this)} noMore={(this.state.pageNum - 1) * this.state.pageSize
+            > this.props.threadPost.topicTotalCount}>
             {/* 新话题 */}
             {this.state.keywords
               && <div

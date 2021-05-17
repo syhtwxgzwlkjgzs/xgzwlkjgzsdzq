@@ -1,21 +1,21 @@
 @import '@common/styles/index.scss';
 .post-good-box {
-  margin: 16px;
+  margin: 0 rem($margin-4n) rem($margin-4n);
   background: #fff;
   .title {
-    font-size: 16px;
-    line-height: 22px;
-    color: var(--color-text-primary);
+    font-size: $font-size-middle;
+    line-height: $font-line-height-small;
+    color: $text-color-primary;
   }
   .content {
     display: flex;
-    margin-top: 16px;
-    padding: 16px;
+    padding: rem($padding-4n);
     background: $body-bg-color;
+    border-radius: $border-radius-small;
     .content-left {
       width: 82px;
       height: 82px;
-      border-radius: 5px;
+      border-radius: $border-radius-small;
       .image {
         width: 100%;
         height: 100%;
@@ -23,31 +23,34 @@
     }
     .content-right {
       flex: 1;
-      margin-left: 16px;
-      margin-right: 8px;
+      margin-left: $margin-2n;
+      margin-right: $margin-2n;
       position: relative;
       .content-title {
         height: 44px;
-        font-size: 14px;
-        line-height: 24px;
-        color: var(--color-text-regular);
+        font-size: $font-size-base;
+        line-height: $font-line-height-base;
+        color: $text-color-regular;
         @include lamp-clamp(2);
       }
       .content-price {
         display: inline-block;
-        margin-top: 8px;
-        font-family: PingFangSC-Semibold;
-        font-size: 20px;
-        line-height: 30px;
-        color: #e02433;
+        margin-top: $margin-2n;
+        font-size: $font-size-large;
+        line-height: $font-line-height-large;
+        color: $error-color;
+        font-weight: 700;
       }
     }
   }
   .delete-icon {
     position: absolute;
-    bottom: -3px;
+    bottom: 0;
     right: -14px;
-    padding: 5px;
+    padding: $padding-5;
+    :global {
+      color: $text-color-secondary;
+    }
   }
   .good-add-box {
     display: flex;
@@ -55,12 +58,12 @@
     justify-content: center;
     align-items: center;
     height: 114px;
-    background: var(--background-color-text);
+    background: $text-bg-color;
     border-radius: 5px;
     .good-add-text {
       font-size: 14px;
       line-height: 18px;
-      color: #8590A6;
+      color: $text-color-secondary;
     }
   }
 }

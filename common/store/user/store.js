@@ -142,6 +142,10 @@ class UserStore {
     return get(this.userInfo, 'group');
   }
 
+  // 获取用户是否付费
+  @computed get paid() {
+    return get(this.userInfo, 'paid');
+  }
 
   // 目标用户关注数
   @computed get targetUserFollowCount() {

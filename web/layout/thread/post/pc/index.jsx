@@ -67,16 +67,6 @@ class ThreadPCPage extends React.Component {
                 onFocus={() => { }}
                 onBlur={() => { }}
               />
-              {/* 录音组件 */}
-              {(currentAttachOperation === THREAD_TYPE.voice) && (
-                <AudioRecord duration={60} onUpload={(blob) => {
-                  this.props.handleAudioUpload(blob);
-                }}
-                />
-              )}
-              {/* 语音组件 */}
-              {(Boolean(postData.audio.mediaUrl))
-                && (<Audio src={postData.audio.mediaUrl} />)}
 
               {/* 插入图片 */}
               {(currentAttachOperation === THREAD_TYPE.image
@@ -97,6 +87,17 @@ class ThreadPCPage extends React.Component {
                   onDelete={() => this.props.setPostData({ video: {} })}
                   onReady={this.props.onVideoReady} />
               )}
+
+              {/* 录音组件 */}
+              {(currentAttachOperation === THREAD_TYPE.voice) && (
+                <AudioRecord duration={60} onUpload={(blob) => {
+                  this.props.handleAudioUpload(blob);
+                }}
+                />
+              )}
+              {/* 语音组件 */}
+              {(Boolean(postData.audio.mediaUrl))
+                && (<Audio src={postData.audio.mediaUrl} />)}
 
               {/* 附件上传组件 */}
               {(currentDefaultOperation === defaultOperation.attach || Object.keys(postData.files).length > 0) && (

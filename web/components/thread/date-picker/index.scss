@@ -1,5 +1,6 @@
 @import '@common/styles/index.scss';
 .datepicker-modal {
+  position: fixed !important;
   z-index: $zindex-toast !important;
 }
 

@@ -30,8 +30,8 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
 
   // 点击确定的时候返回参数
   const redbagconfirm = () => {
-    if (value <= 0 || value > 10000) {
-      Toast.warning({ content: '金额数不合理,0<money<10000' });
+    if (value < 0.1 || value > 1000000) {
+      Toast.warning({ content: '金额数不合理,0.1<money<1000000' });
       return;
     }
     const gapTime = new Date(times).getTime() - new Date().getTime();
@@ -68,7 +68,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
                 <DatePicker
                   selected={new Date(times)}
                   minDate={new Date()}
-                  onChange={date => setTimes(date)}
+                  onChange={date => setTimes(formatDate(date, 'yyyy/MM/dd h:mm'))}
                   showTimeSelect
                   dateFormat="yyyy/MM/dd HH:mm:ss"
                   locale="zh"

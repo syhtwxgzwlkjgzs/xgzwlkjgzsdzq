@@ -40,13 +40,13 @@ class Index extends React.Component {
       const { title = '', threadId = '' } = this.props.data || {};
 
       h5Share({title, path: `thread/${threadId}`});
-      this.props.index.updateThreadShare({ threadId }).then(result => {
-        if (result.code === 0) {
-          this.props.index.updateAssignThreadInfo(threadId, { isShare: true });
-          this.props.search.updateAssignThreadInfo(threadId, { isShare: true });
-          this.props.topic.updateAssignThreadInfo(threadId, { isShare: true });
-        }
-      });
+      // this.props.index.updateThreadShare({ threadId }).then(result => {
+      //   if (result.code === 0) {
+      //     this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+      //     this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+      //     this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+      //   }
+      // });
     }
     // 评论
     onComment = (e) => {
@@ -62,6 +62,7 @@ class Index extends React.Component {
       const { data = {} } = this.props;
       const { threadId = '' } = data;
       if (threadId !== '') {
+        this.props.thread.positionToComment()
         this.props.router.push(`/thread/${threadId}`);
       } else {
         console.log('帖子不存在');
@@ -83,9 +84,9 @@ class Index extends React.Component {
       this.setState({isSendingLike: true});
       this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } }).then(result => {
         if (result.code === 0 && result.data) {
-          this.props.index.updateAssignThreadInfo(threadId, { updatedInfo: result.data, user: user.userInfo });
-          this.props.search.updateAssignThreadInfo(threadId, { updatedInfo: result.data, user: user.userInfo });
-          this.props.topic.updateAssignThreadInfo(threadId, { updatedInfo: result.data, user: user.userInfo });
+          this.props.index.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
+          this.props.search.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
+          this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
         }
         this.setState({isSendingLike: false});
       });
