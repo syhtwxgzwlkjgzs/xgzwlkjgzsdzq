@@ -94,24 +94,29 @@ export class MessageIndex extends Component {
     const { dialogList } = this.props.message;
     const newDialogList = this.formatChatDialogList(dialogList.list);
 
+    const mainContent = (
+      <div className={styles.wrapper}>
+        <Notice
+          infoIdx={0}
+          totalCount={dialogList.totalCount}
+          height='calc(100vh - 105px)'
+          withTopBar={true}
+          withBottomBar={true}
+          noMore={dialogList.currentPage >= dialogList.totalPage}
+          topCard={isPC ? null : card}
+          list={newDialogList}
+          type='chat'
+          onPullDown={this.onPullDown}
+          onScrollBottom={this.handleScrollBottom}
+          onBtnClick={this.handleDelete}
+        />
+      </div>);
+
+    if (isPC) return mainContent;
+
     return (
       <BaseLayout showTabBar={true} curr={'message'}>
-        <div className={styles.wrapper}>
-          <Notice
-            infoIdx={0}
-            totalCount={dialogList.totalCount}
-            height='calc(100vh - 105px)'
-            withTopBar={true}
-            withBottomBar={true}
-            noMore={dialogList.currentPage >= dialogList.totalPage}
-            topCard={isPC ? null : card}
-            list={newDialogList}
-            type='chat'
-            onPullDown={this.onPullDown}
-            onScrollBottom={this.handleScrollBottom}
-            onBtnClick={this.handleDelete}
-          />
-        </div>
+        {mainContent}
       </BaseLayout>
     )
   }
