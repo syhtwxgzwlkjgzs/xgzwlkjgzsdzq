@@ -39,8 +39,10 @@ const RenderThreadContent = inject('user')(
     // 是否已付费
     const isPayed = threadStore?.threadData?.paid === true;
     // 是否付费帖子
-    const isThreadPay = threadStore?.threadData?.payType === 1 && threadStore?.threadData?.paid === false;
+    const isThreadPay = threadStore?.threadData?.payType === 1;
     const threadPrice = threadStore?.threadData?.price || 0;
+    // 当前用户是否需要付费
+    const isNeedPay = threadStore?.threadData?.payType === 1 && threadStore?.threadData?.paid === false;
     // 是否作者自己
     const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData?.userId;
 
@@ -215,7 +217,7 @@ const RenderThreadContent = inject('user')(
             )}
 
             {/* 帖子付费 */}
-            {isThreadPay && !isSelf && (
+            {isNeedPay && !isSelf && (
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={styles.payButton} type="primary">
                   <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
@@ -242,7 +244,7 @@ const RenderThreadContent = inject('user')(
               <Icon
                 className={classnames(styles.payIcon, isPayed && styles.actived)}
                 name="DollarLOutlined"
-                size={18}
+                size={20}
               ></Icon>
             )}
             {/* 打赏 */}
@@ -250,7 +252,7 @@ const RenderThreadContent = inject('user')(
               <Icon
                 className={classnames(styles.payIcon, isRewarded && styles.actived)}
                 name="HeartOutlined"
-                size={18}
+                size={20}
               ></Icon>
             )}
             {/* 点赞 */}
@@ -258,7 +260,7 @@ const RenderThreadContent = inject('user')(
               className={classnames(styles.liked, threadStore?.threadData?.isLike && styles.actived)}
               onClick={onLikeClick}
             >
-              <Icon name="LikeOutlined" size={18}></Icon>
+              <Icon name="LikeOutlined" size={20}></Icon>
               {threadStore?.threadData?.likeReward?.likePayCount > 0 && (
                 <span className={styles.likedNumber}>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
               )}
@@ -268,7 +270,7 @@ const RenderThreadContent = inject('user')(
             </div>
           </div>
           {threadStore?.threadData?.likeReward?.shareCount > 0 && (
-            <span className={styles.shareCount}>{threadStore?.threadData?.likeReward?.shareCount}次分享</span>
+            <div className={styles.shareCount}>{threadStore?.threadData?.likeReward?.shareCount}次分享</div>
           )}
         </div>
       </div>
