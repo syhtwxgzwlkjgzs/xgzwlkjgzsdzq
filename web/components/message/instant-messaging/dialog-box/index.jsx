@@ -9,17 +9,19 @@ const DialogBox = (props) => {
 
   return (
     <div className={platform === 'pc' ? styles.pcDialogBox : styles.h5DialogBox} ref={dialogBoxRef}>
-      {shownMessages.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar }, idx) => (
-        <React.Fragment key={idx}>
-          {displayTimePanel && <div className={styles.msgTime}>{diffDate(timestamp)}</div>}
-          <div className={(ownedBy === 'myself' ? `${styles.myself}` : `${styles.itself}`) + ` ${styles.persona}`}>
-            <div className={styles.profileIcon}>
-              <Avatar image={userAvatar || '/favicon.ico'} circle={true} />;
+      <div className={styles['box__inner']}>
+        {shownMessages.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar }, idx) => (
+          <React.Fragment key={idx}>
+            {displayTimePanel && <div className={styles.msgTime}>{diffDate(timestamp)}</div>}
+            <div className={(ownedBy === 'myself' ? `${styles.myself}` : `${styles.itself}`) + ` ${styles.persona}`}>
+              <div className={styles.profileIcon}>
+                <Avatar image={userAvatar || '/favicon.ico'} circle={true} />;
+              </div>
+              <div className={styles.msgContent}>{text}</div>
             </div>
-            <div className={styles.msgContent}>{text}</div>
-          </div>
-        </React.Fragment>
-      ))}
+          </React.Fragment>
+        ))}
+      </div>
     </div>
   );
 };

@@ -110,38 +110,40 @@ class TopicAction extends TopicStore {
     * @returns
     */
    @action
-   updateAssignThreadInfo(threadId, obj = {}) {
-     const targetThread = this.findAssignThread(threadId);
+  updateAssignThreadInfo(threadId, obj = {}) {
+    const targetThread = this.findAssignThread(threadId);
 
-     if (!targetThread) return;
-     const { index, subIndex, data } = targetThread;
- 
-     // 更新点赞
-     const { isLike, isPost, isShare, user } = obj;
-     if (!typeofFn.isUndefined(isLike) && !typeofFn.isNull(isLike) &&
-        user && data.likeReward && data.likeReward.users) {
-        data.isLike = isLike;
+    if (!targetThread) return;
+    const { index, subIndex, data } = targetThread;
 
-        const theUserId = user.userId || user.id;
+    // 更新点赞
+    const { updatedInfo, user } = obj;
+    const { isLiked, isPost, isFavorite:isShare, likeCount, replyCount } = updatedInfo;
 
-        if (isLike) {
-          const userAdded = { userId: theUserId, avatar: user.avatarUrl, username: user.username };
+    if (!typeofFn.isUndefined(isLiked) && !typeofFn.isNull(isLiked)
+          && user && data.likeReward?.users) {
 
-          // 添加当前用户到按过赞的用户列表
-          data.likeReward.users = data.likeReward.users.length ?
-                                  [userAdded, ...data.likeReward.users]:
-                                  [userAdded];
-        } else {
-          // 从按过赞用户列表中删除当前用户
-          data.likeReward.users = data.likeReward.users.length ?
-                                  [...data.likeReward.users].filter(item => {
-                                    return (item.userId !== theUserId)
-                                  }) :
-                                  data.likeReward.users;
-        }
-        data.likeReward.likePayCount = data.likeReward.users.length;
+      const theUserId = user.userId || user.id;
+      data.isLike = isLiked;
+
+      if (isLiked) {
+        const userAdded = { userId: theUserId, avatar: user.avatarUrl, username: user.username };
+
+        // 添加当前用户到按过赞的用户列表
+        data.likeReward.users = data.likeReward.users.length ?
+                                [userAdded, ...data.likeReward.users]:
+                                [userAdded];
+      } else {
+        // 从按过赞用户列表中删除当前用户
+        data.likeReward.users = data.likeReward.users.length ?
+                                [...data.likeReward.users].filter(item => {
+                                  return (item.userId !== theUserId)
+                                }) :
+                                data.likeReward.users;
       }
- 
+      data.likeReward.likePayCount = likeCount;
+    }
+
      // 更新评论
      if (!typeofFn.isUndefined(isPost) && !typeofFn.isNull(isPost)) {
        data.likeReward.postCount = isPost ? data.likeReward.postCount + 1 : data.likeReward.postCount - 1;

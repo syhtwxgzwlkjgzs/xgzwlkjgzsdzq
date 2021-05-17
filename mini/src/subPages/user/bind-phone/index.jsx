@@ -4,9 +4,11 @@ import { getCurrentInstance, navigateTo, redirectTo } from '@tarojs/taro';
 import { withRouter } from 'next/router';
 import { Button, Toast, Input } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
+import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import Page from '@components/page';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import { toTCaptcha } from '@common/utils/to-tcaptcha'
 import { get } from '@common/utils/get';
 import layout from './index.module.scss';
 
@@ -15,8 +17,60 @@ import layout from './index.module.scss';
 @inject('user')
 @inject('wxPhoneBind')
 @inject('mobileBind')
+@inject('commonLogin')
 @observer
 class BindPhoneH5Page extends React.Component {
+  constructor() {
+    super();
+    this.ticket = ''; // 腾讯云验证码返回票据
+    this.randstr = ''; // 腾讯云验证码返回随机字符串
+  }
+
+
+  componentDidMount() {
+    // 监听腾讯验证码事件
+    Taro.eventCenter.on('captchaResult', this.handleCaptchaResult);
+    Taro.eventCenter.on('closeChaReault', this.handleCloseChaReault);
+  }
+
+  componentWillUnmount() {
+    // 卸载监听腾讯验证码事件
+    Taro.eventCenter.off('captchaResult', this.handleCaptchaResult)
+    Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault)
+  }
+
+  // 验证码滑动成功的回调
+  handleCaptchaResult = (result) => {
+    this.ticket = result.ticket;
+    this.randstr = result.randstr;
+  }
+
+  // 验证码点击关闭的回调
+  handleCloseChaReault = () => {
+    this.ticket = '';
+    this.randstr = '';
+  }
+
+  handleSendCodeButtonClick = async () => {
+    try{
+      const { webConfig } = this.props.site;
+      const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
+      await toTCaptcha(qcloudCaptchaAppId);
+
+      // 发送前校验
+      this.props.mobileBind.beforeSendVerify();
+      await this.props.mobileBind.sendCode({
+        captchaRandStr: this.ticket,
+        captchaTicket: this.randstr
+      });
+    }catch(e){
+      Toast.error({
+        content: e.Message,
+        hasMask: false,
+        duration: 1000,
+      });
+    }
+  }
 
   handleBindButtonClick = async () => {
     try {
@@ -88,7 +142,7 @@ class BindPhoneH5Page extends React.Component {
               {mobileBind.codeTimeout ? (
                 <View className={layout.countDown}>{mobileBind.codeTimeout}s后重试</View>
               ) : (
-                <Text size="mini" className={layout.sendCaptcha} onClick={mobileBind.sendCode}>发送验证码</Text>
+                <Text size="mini" className={layout.sendCaptcha} onClick={this.handleSendCodeButtonClick}>发送验证码</Text>
               )}
             </View>
             {/* 输入框 end */}

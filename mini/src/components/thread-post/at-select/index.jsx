@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
-import { Input, Avatar, Checkbox, Button, ScrollView } from '@discuzq/design';
+import { Input, Avatar, Icon, Checkbox, Button, ScrollView } from '@discuzq/design';
 import styles from './index.module.scss';
 
 import stringToColor from '@common/utils/string-to-color';
@@ -16,7 +16,7 @@ class AtSelect extends Component {
       keywords: '', // 搜索关键字
       checkUser: [], // 当前选择的at用户列表
       page: 1,
-      perPage: 10,
+      perPage: 20,
       finish: false,
     };
     this.timer = null;
@@ -50,6 +50,14 @@ class AtSelect extends Component {
     const keywords = e.target.value;
     this.setState({ keywords, checkUser: [], page: 1 });
     this.searchInput();
+  }
+
+  // 清除关键字
+  clearKeywords = () => {
+    this.setState(
+      { keywords: '', checkUser: [], page: 1 },
+      () => this.fetchFollow()
+    );
   }
 
   // 搜索用户
@@ -129,12 +137,19 @@ class AtSelect extends Component {
     return (
       <View className={styles.wrapper}>
         {/* 搜索框 */}
-        <Input
-          value={keywords}
-          icon="SearchOutlined"
-          placeholder='搜索用户'
-          onChange={e => this.updateKeywords(e)}
-        />
+        <View className={styles['input-box']}>
+          <Input
+            value={keywords}
+            icon="SearchOutlined"
+            placeholder='搜索用户'
+            onChange={e => this.updateKeywords(e)}
+          />
+          {keywords &&
+            <View className={styles.delete} onClick={this.clearKeywords}>
+              <Icon className={styles['delete-icon']} name="CloseOutlined" size={12}></Icon>
+            </View>
+          }
+        </View>
         {/* 选择列表 */}
         <Checkbox.Group
           className={styles['check-box']}
@@ -143,6 +158,7 @@ class AtSelect extends Component {
         >
           <View className={styles['at-wrap']}>
             <ScrollView
+              className={'scroll-view'}
               width='100%'
               height={475}
               rowCount={follows.length}
@@ -162,7 +178,7 @@ class AtSelect extends Component {
           <View className={styles.btn}>
             <Button onClick={this.handleCancel}>取消</Button>
             <Button
-              className={checkUser.length > 0 ? 'is-selected' : 'not-selected'}
+              className={checkUser.length > 0 ? styles.selected : ''}
               onClick={() => this.submitSelect()}
             >
               {checkUser.length ? `@ 已选(${checkUser.length})` : '尚未选'}

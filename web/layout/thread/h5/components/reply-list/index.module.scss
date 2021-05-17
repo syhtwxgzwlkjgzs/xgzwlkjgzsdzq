@@ -8,7 +8,7 @@
   .replyListContent {
     width: 100%;
     .replyListContentText {
-      padding: rem($padding-2n);;
+      padding: rem($padding-2n);
       border-radius: rem($border-radius-small);
       background: $body-bg-color;
       .replyListName {
@@ -21,10 +21,21 @@
       .replyListText {
         margin-top: rem($margin-1n);
         font-size: rem($font-size-middle);
-        line-height: rem(22);
+        line-height: rem(24);
         text-align: left;
         color: var(--color-text-primary);
         word-break: break-all;
+        @include lamp-clamp(3);
+
+        p {
+          @include lamp-clamp(3);
+          line-height: rem(24);
+        }
+
+        img {
+          height: rem(22);
+        }
+
         .commentUser {
           display: inline-block;
           .replyedUserName {
@@ -44,6 +55,7 @@
             .avatar {
               width: rem(18);
               height: rem(18);
+              line-height: rem(18);
             }
           }
         }

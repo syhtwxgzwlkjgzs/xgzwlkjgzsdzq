@@ -1,13 +1,18 @@
 @import '@common/styles/index.scss';
 .parse-goods-box {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
+  height: -webkit-fill-available;
+  min-height: 100vh;
+  /* mobile viewport bug fix */
+  min-height: -webkit-fill-available;
   font-family: $font-family;
   color: $text-color-primary;
   background-color: $white;
+  z-index: $zindex-popup;
   .wrapper {
     padding: 0 rem($margin-4n);
   }

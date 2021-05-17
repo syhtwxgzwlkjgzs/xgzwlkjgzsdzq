@@ -10,8 +10,11 @@
 .h5DialogBox {
   display: flex;
   flex-direction: column;
-  height: 90vh;
+  height: calc(100vh - 96px);
   overflow-y: auto;
+  .box__inner{
+    padding: 0 $padding-4n;
+  }
 
   .itself {
     .msgContent {

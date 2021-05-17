@@ -68,12 +68,12 @@ class ParnerInviteH5Page extends React.Component {
           {/* 热门内容预览 start */}
           <div className={layout.hot}>
             <SectionTitle isShowMore={false} icon={{ type: 3, name: 'HotOutlined' }} title="热门内容预览" onShowMore={this.redirectToSearchResultPost} />
+            {
+              threadsPageData?.length
+                ? <PopularContents data={threadsPageData} onItemClick={this.onPostClick} />
+                : <NoData />
+            }
           </div>
-          {
-            threadsPageData?.length
-              ? <PopularContents data={threadsPageData} onItemClick={this.onPostClick} />
-              : <NoData />
-          }
           {/* 热门内容预览 end */}
           <div className={layout.bottom}>
             {
