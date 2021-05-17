@@ -141,7 +141,7 @@ class index extends Component {
             ) : (
               <div className={styles.upload} onClick={this.handleBackgroundUpload}>
                 <input onChange={this.onBackgroundChange} ref={this.backgroundUploaderRef} type="file" style={{ display: 'none' }} />
-                <Icon name="CameraOutlined" size={12} className={styles.uploadIcon}/>
+                <Icon name="UploadingOutlined" size={12} className={styles.uploadIcon}/>
                 上传封面图
               </div>
             )

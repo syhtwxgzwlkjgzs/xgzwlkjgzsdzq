@@ -34,6 +34,17 @@
 
 .friendsWrapper {
   overflow: hidden;
+  >div {
+    border-bottom: 1px solid #eee;
+    &:last-child {
+      border-bottom: none;
+    }
+    >div {
+      >div {
+        padding: rem(16) 0;
+      }
+    }
+  }
 }
 .contaner {
   display: flex;
