@@ -13,28 +13,35 @@ import { withRouter } from 'next/router';
  * @prop {function} onClick 全部话题点击事件
  */
 const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop, router }) => {
-  const onClick = () => {
+  const goList = () => {
     router.push('/topic');
   }
   return (
     <div className={styles.container} >
       <div className={styles.title}>{title && `#${title}#`}</div>
-      <div className={styles.allTopic}>
+      {/* <div className={styles.allTopic}>
         <span onClick={onClick}>全部话题</span>
         <Icon name="RightOutlined" size={12}></Icon>
-      </div>
+      </div> */}
       <ul className={styles.siteInfo}>
           <li>
             <span className={styles.text}>热度</span>
             <span className={styles.content}>{viewNum}</span>
           </li>
+          <li className={styles.hr}></li>
           <li>
             <span className={styles.text}>内容数</span>
             <span className={styles.content}>{contentNum}</span>
           </li>
+          <li className={styles.hr}></li>
           <li onClick={onShare}>
-            <Icon className={styles.shareIcon} color="#8590a6" name="ShareAltOutlined"/>
+            <Icon className={styles.shareIcon}name="ShareAltOutlined" size={14} />
             <span className={styles.text}>分享</span>
+          </li>
+          <li className={styles.hr}></li>
+          <li onClick={goList}>
+            <span className={styles.text}>全部话题</span>
+            <Icon className={styles.rightIcon} name="RightOutlined" size={12} />
           </li>
         </ul>
     </div>
