@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import H5UserCenterEditInfo from './h5/index';
 import UserCenterEditMobile from '../user-center-edit-mobile-pc';
 import UserCenterEditAccountPwd from '../user-center-edit-account-pwd-pc';
+import UserCenterEditPayPwd from '../user-center-edit-paypwd-pc';
 
 @inject('site')
 @inject('user')
@@ -25,11 +26,11 @@ export default class index extends Component {
             <H5UserCenterEditInfo />
           )
         }
-        {
+        {/* {
           platform === 'pc' && (
-            <UserCenterEditAccountPwd />
+            <UserCenterEditPayPwd />
           )
-        }
+        } */}
       </div>
     )
   }
