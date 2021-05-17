@@ -69,10 +69,20 @@
         .commentListText {
           margin-top: rem($margin-1n);
           font-size: rem($font-size-middle);
-          line-height: rem(22);
+          line-height: rem(24);
           text-align: left;
           word-break: break-all;
           color: var(--color-text-primary);
+          @include lamp-clamp(3);
+
+          p {
+            @include lamp-clamp(3);
+            line-height: rem(24);
+          }
+
+          img {
+            height: rem(22);
+          }
         }
       }
       .commentListFooter {
