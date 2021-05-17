@@ -553,6 +553,33 @@ class UserAction extends SiteStore {
   }
 
   /**
+   * 我的屏蔽对应store函数
+   */
+  // 屏蔽
+  @action
+  async postShield() {
+    
+  }
+
+  // 取消屏蔽
+  @action
+  async cancelShield() {
+
+  }
+
+  // 点击屏蔽后需要更新的数据
+  @action
+  async setUserBeShielded() {
+
+  }
+
+  // 点击取消屏蔽后需要更新的数据
+  @action
+  async setUserBeUnShielded() {
+    
+  }
+
+  /**
    * 四个清理函数，清理用户和目标用户粉丝信息
    */
   @action

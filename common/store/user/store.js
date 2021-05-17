@@ -64,6 +64,13 @@ class UserStore {
   newCodeTimer = null;
   @observable newCodeTimeout = null;
 
+  // 我的屏蔽 数据设计
+  @observable userShield = []; // 用户屏蔽列表
+
+  @observable userShieldPage = 1; // 加载页数
+  @observable userShieldTotalPage = 1; // 总页数
+  @observable userShieldTotalCount = 0; // 每页显示条数
+
   // 是否能使用钱包支付
   @computed get canWalletPay() {
     return get(this.userInfo, 'canWalletPay');

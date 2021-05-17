@@ -30,6 +30,7 @@ class index extends Component {
     const id = this.props.user?.id
     this.props.user.updateUserInfo(id)
     this.props.user.initEditInfo()
+    console.log(this.props.user);
   }
 
   // 点击取消
