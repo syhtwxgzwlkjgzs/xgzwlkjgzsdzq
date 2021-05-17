@@ -157,7 +157,6 @@ class ThreadCreate extends React.Component {
               this.props.handleSetState({ isVditorFocus: false });
               this.clearBottomFixed();
             }}
-            onCountChange={count => this.props.handleSetState({ count })}
           />
 
           {/* 录音组件 */}
