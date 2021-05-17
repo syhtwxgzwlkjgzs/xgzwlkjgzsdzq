@@ -11,6 +11,9 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
   const [second, setSecond] = useState('');
   const [third, setThird] = useState('0');
 
+  // 二级分类数据
+  const [subData, setSubData] = useState([])
+
   const data = useMemo(() => {
     const newData = filterData;
     newData[0].data = tmpData;
@@ -29,10 +32,17 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
     }
   }, [current, visible]);
   // 点击一级菜单
-  const onClickFirst = (index, type) => {
+  const onClickFirst = (index, type, contents) => {
     if (type === 1) {
       setFirst(index);
       setFirstChildren('');
+
+      const newSubArr = contents?.filter(item => item.pid === index)
+      if (!newSubArr.length) {
+        setSubData([])
+      } else {
+        setSubData(newSubArr[0].children || [])
+      }
     } else if (type === 2) {
       setSecond(index);
     } else {
@@ -93,7 +103,7 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
               <span
                 className={`${tip === item.pid ? styles.active : ''} ${styles.span}`}
                 key={index}
-                onClick={() => onClickFirst(item.pid, type)}
+                onClick={() => onClickFirst(item.pid, type, contents)}
               >
                 {item.name}
               </span>
@@ -101,10 +111,10 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
           }
         </div>
         {
-          contents[first]?.children?.length ? (
+          type === 1 && subData.length ? (
             <div className={`${styles.wrapper} ${styles.childrenWrapper}`}>
               {
-                contents[first].children.map((item, index) => (
+                subData.map((item, index) => (
                   <span className={`${firstChildren === item.pid ? styles.childrenActive : ''} ${styles.span}`} key={`${index}-${index}`} onClick={() => onClickSecond(item.pid, type)}>{item.name}</span>
                 ))
               }
