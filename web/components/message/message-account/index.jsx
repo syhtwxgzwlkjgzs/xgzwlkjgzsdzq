@@ -143,12 +143,14 @@ class Index extends React.Component {
   }
 
   render() {
-    const { site, message } = this.props;
+    const { site, message, router } = this.props;
     const { isPC } = site;
     const { type, items } = this.state;
+    const { subPage } = router.query;
     const data = message[type];
     const renderList = this.handleRenderList(data.list);
-    const card = <Card cardItems={items} onClick={this.toOtherMessage} />;
+    const card = <Card type={subPage} cardItems={items} onClick={this.toOtherMessage} />;
+
 
     return (
       <div className={styles.wrapper}>

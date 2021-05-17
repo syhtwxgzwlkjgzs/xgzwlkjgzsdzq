@@ -1,11 +1,33 @@
-import React from 'react';
+import React, { memo } from 'react';
+import { inject, observer } from 'mobx-react';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { Badge, Icon } from '@discuzq/design';
 
 import styles from './index.module.scss';
 
 const MessageCard = (props) => {
-  const { cardItems, onClick } = props;
+  const { cardItems, onClick, site, type } = props;
+  const { isPC } = site;
+  if (isPC) {
+    return (
+      <div className={styles['pc-container']}>
+        <div className={styles['container-inner']}>
+          {cardItems.map(({ title, link }, idx) => (
+            <div
+              key={idx}
+              className={classNames(styles.item, {
+                [styles['item-active']]: link.includes(type)
+              })}
+              onClick={() => onClick(link)}
+            >
+              {title}
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
   return (
     <div className={styles.container}>
       {cardItems.map(({ iconName, title, link, totalCount }, idx) => (
@@ -23,6 +45,7 @@ const MessageCard = (props) => {
       ))}
     </div>
   );
+
 };
 
 MessageCard.propTypes = {
@@ -36,4 +59,5 @@ MessageCard.defaultProps = {
   onClick: () => { },
 };
 
-export default MessageCard;
+//  MessageCard;
+export default inject('site')(observer(MessageCard));
