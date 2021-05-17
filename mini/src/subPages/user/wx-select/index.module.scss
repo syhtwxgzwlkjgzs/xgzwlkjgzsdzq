@@ -12,5 +12,6 @@
   }
   .tips{
     @include mini_tips;
+    margin-bottom: 0;
   }
 }

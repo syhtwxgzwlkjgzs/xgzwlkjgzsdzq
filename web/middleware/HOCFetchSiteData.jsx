@@ -170,7 +170,7 @@ export default function HOCFetchSiteData(Component) {
 
     // 检查是否满足渲染条件
     isPass() {
-      const { site, router } = this.props;
+      const { site, router, user } = this.props;
       const { isNoSiteData } = this.state;
       if (site && site.webConfig) {
         isNoSiteData && this.setState({
@@ -180,10 +180,16 @@ export default function HOCFetchSiteData(Component) {
         if (router.asPath !== '/close' && site.closeSiteConfig) {
           Router.redirect({ url: '/close' });
         }
-        // 付费加入
-        if (router.asPath !== '/join' && site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay') {
-          // todo 需要判断登录后是否支付
-          Router.redirect({ url: '/join' });
+        // 付费加入: 付费状态下，未登录的用户、登录了但是没有付费的用户
+        if (
+          (router.asPath !== '/forum/partner-invite' && !user.isLogin() &&  site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay')
+          || (router.asPath !== '/forum/partner-invite' && user.isLogin() && !user.paid && site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay')
+        ) {
+          Router.redirect({ url: '/forum/partner-invite' });
+        }
+        // 绑定昵称：已登录的用户，没有绑定昵称
+        if (router.asPath !== '/bind-nickname'  && user.isLogin() && !user.nickname && !user.username) {
+          Router.redirect({ url: '/user/bind-nickname' });
         }
       }
     }
