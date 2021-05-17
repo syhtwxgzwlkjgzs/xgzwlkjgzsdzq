@@ -29,7 +29,7 @@
   height: rem(16);
   font-family: 'PingFang SC';
   font-weight: normal;
-  font-size: 12px;
+  font-size: rem(12);
   text-align: center;
   line-height: rem(16);
   color: var(--color-white);
@@ -40,4 +40,13 @@
   position: absolute;
   right: -50%;
   top: rem(-8);
+}
+
+.isCricle {
+  width: rem(16);
+  padding-left: rem(4.5);
+}
+
+.isOne {
+  padding-left: rem(5.5); 
 }
