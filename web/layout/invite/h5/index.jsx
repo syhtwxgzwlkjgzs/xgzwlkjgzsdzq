@@ -90,6 +90,13 @@ class InviteH5Page extends React.Component {
                   </div>
                 ))
               }
+              {
+                inviteData?.inviteUsersList?.length
+                  ? <></>
+                  : <div className={layout.refreshView}>
+                      <span>暂无信息</span>
+                    </div>
+              }
             </div>
           </div>
           {/* 邀请列表 end */}

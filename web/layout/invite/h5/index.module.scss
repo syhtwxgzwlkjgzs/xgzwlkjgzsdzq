@@ -224,4 +224,14 @@
     }
   }
   // 邀请朋友 end
+
+  .refreshView {
+    height: rem(40);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: rem($font-size-primary);
+    color: var(--color-text-placeholder);
+  }
+
 }
