@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { ImagePreviewer } from '@discuzq/design';
+import { ImagePreviewer, Flex } from '@discuzq/design';
 import { noop } from '../utils'
 import styles from './index.module.scss';
+
+const { Col, Row } = Flex
 
 // TODO 图片懒加载
 const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) => {
@@ -16,8 +18,8 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
     const imagePreviewers = useMemo(() => imgData.map(item => item.url), [imgData]);
 
     useEffect(() => {
-        if (!imgData?.length) {
-
+        if (imgData.length < 3) {
+            setBigImages(imgData)
         } else if (imgData.length < 5) {
             setBigImages([imgData[0]])
             setSmallImages(imgData.slice(1, imgData.length + 1))
@@ -28,11 +30,11 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
     }, [imgData])
 
     // 设置大于4张图片时的高度
-    useEffect(() => {
-        if (smallImg.current && imgData?.length > 4) {
-            setSmallSty({ height: `${smallImg.current.clientWidth}px`, width: `${smallImg.current.clientWidth}px` })
-        }
-    }, [imgData])
+    // useEffect(() => {
+    //     if (smallImg.current && imgData?.length > 4) {
+    //         setSmallSty({ height: `${smallImg.current.clientWidth}px`, width: `${smallImg.current.clientWidth}px` })
+    //     }
+    // }, [imgData])
 
     const onClick = (id) => {
         if (isPay) {
@@ -58,53 +60,146 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
             setVisible(true);
         }, 0);
     };
-    
-
-    const direction = useMemo(() => {
-        if (imgData?.length > 5) {
-            return styles.containerColumn
-        }
-        if (imgData?.length > 1) {
-            return imgData.length % 2 === 0 ? styles.containerRow : styles.containerColumn
-        }
-        return ''
-    }, [imgData])
 
     const style = useMemo(() => {
         const num = imgData.length > 5 ? 5 : imgData?.length
         return `containerNum${num}`
     }, [imgData])
 
-    return (
-        <>
-            <div className={`${styles.container}  ${platform === 'pc' ? styles.containerPC : styles.containerH5}`}>
-                <div className={`${direction} ${styles[style]}`}>
-                    <div className={styles.bigImages}>
-                        { bigImages.map((item, index) => <img className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />)}
-                    </div>
-                    <div className={styles.smallImages}>
-                        { smallImages.map((item, index) => <img ref={smallImg} className={styles.img} src={item.thumbUrl} onClick={() => onClick(item.id)} key={`1-${index}`} />) }
-                        {
-                            imgData?.length > 5 && (
-                                <>
-                                <div className={styles.modalBox} onClick={onClickMore}></div>
-                                <span className={styles.imgSpan}>{`+${imgData.length - 5}`}</span>
-                                </>
-                            )
-                        }
-                    </div>
-                </div>
-            </div>
+    const handleImages = () => {
+        if (imgData.length < 3) {
+            setBigImages(imgData)
+            return { bigImages: imgData, smallImages: [] }
+        } else if (imgData.length < 5) {
+            setBigImages([imgData[0]])
+            setSmallImages(imgData.slice(1, imgData.length + 1))
 
+            return { bigImages: [imgData[0]], smallImages: imgData.slice(1, imgData.length + 1) }
+        } else {
+            setBigImages([imgData[0], imgData[1]])
+            setSmallImages([imgData[2], imgData[3], imgData[4]])
+
+            return { bigImages: [imgData[0], imgData[1]], smallImages: [imgData[2], imgData[3], imgData[4]] }
+        } 
+    }
+
+    const ImageView = useMemo(() => {
+        const res = handleImages()
+        if (imgData.length === 1) {
+            return <One bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />
+        } else if (imgData.length === 2) {
+            return <Two bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />
+        } else if (imgData.length === 3) {
+            return <Three bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />
+        } else if (imgData.length === 4) {
+            return <Four bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />
+        } else if (imgData.length >= 5) {
+            return <Five bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} imgData={imgData} onClickMore={onClickMore} />
+        } else {
+            return null
+        }
+    }, [imgData])
+
+    
+
+    return (
+        <div className={`${platform === 'h5' ? styles.container : styles.containerPC}`}>
+            {ImageView}
             <ImagePreviewer
                 visible={visible}
                 onClose={() => { setVisible(false); }}
                 imgUrls={imagePreviewers}
                 currentUrl={defaultImg}
             />
-            
-        </>
+        </div>
     )
 }
 
 export default React.memo(Index)
+
+const One = ({bigImages, onClick, style}) => {
+    const item = bigImages[0]
+    return (
+        <div className={styles[style]}>
+            <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
+        </div>
+    )
+}
+
+const Two = ({bigImages, onClick, style}) => {
+    return (
+        <Row gutter={4} className={`${styles[style]} ${styles.row}`}>
+            {
+                bigImages.map((item, index) => (
+                    <Col span={6} className={styles.col} key={index}>
+                        <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
+                    </Col>))
+            }
+        </Row>
+    )
+}
+
+const Four = ({bigImages, smallImages, onClick, style}) => {
+    return (
+        <Row gutter={4} className={styles[style]}>
+            <Col span={8} className={styles.col}>
+                <img src={bigImages[0].thumbUrl} onClick={() => onClick(bigImages[0].id)} />
+            </Col>
+            <Col span={4} className={styles.col}>
+                <Row gutter={4} className={styles.smallRow}>
+                    { smallImages.map((item, index) => (
+                        <Col span={12} key={index} className={styles.smallCol}>
+                            <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
+                        </Col>
+                    ))}
+                </Row>
+            </Col>
+        </Row>
+    )
+}
+
+const Three = ({bigImages, smallImages, onClick, style}) => {
+    return (
+        <div className={styles[style]}>
+            <div className={styles.bigImages}>
+                <img src={bigImages[0].thumbUrl} onClick={() => onClick(bigImages[0].id)} />
+            </div>
+            <Row gutter={4} className={styles.smallImages}>
+                {
+                    smallImages.map((item, index) => (
+                        <Col span={6} className={styles.col} key={index}>
+                            <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
+                        </Col>))
+                }
+            </Row>
+        </div>
+    )
+}
+
+const Five = ({bigImages, smallImages, onClick, style, imgData = [], onClickMore}) => {
+    return (
+        <div className={styles[style]}>
+            <Row gutter={4} className={styles.bigImages}>
+                {
+                    bigImages.map((item, index) => (
+                        <Col span={6} className={styles.col} key={index}>
+                            <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
+                        </Col>))
+                }
+            </Row>
+            <Row gutter={4} className={styles.smallImages}>
+                {
+                    smallImages.map((item, index) => (
+                        <Col span={4} className={styles.col} key={index}>
+                            <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
+                            {
+                                imgData?.length > 5 && index === smallImages.length - 1 && (
+                                    <div className={styles.modalBox} onClick={onClickMore}>{`+${imgData.length - 5}`}</div>
+                                )
+                            }
+                        </Col>))
+                }
+            </Row>
+        </div>
+    )
+}

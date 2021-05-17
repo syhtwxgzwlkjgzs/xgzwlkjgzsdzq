@@ -14,18 +14,12 @@ class UserStore {
   @observable weixinNickName = null;
   @observable permissions = null;
 
-  @observable userFans = {};
-  @observable userFansPage = 1;
-  @observable userFansTotalPage = 1;
-
-  @observable userFollows = {};
-  @observable userFollowsPage = 1;
-  @observable userFollowsTotalPage = 1;
-
   @observable userThreads = [];
   @observable userThreadsPage = 1;
   @observable userThreadsTotalCount = 0;
   @observable userThreadsTotalPage = 1;
+
+  @observable userLikes = {};
 
   // 编辑模式下的 username
   @observable editUserName = '';
@@ -42,19 +36,35 @@ class UserStore {
   // 检索的目标用户id
   @observable targetUserId = null;
 
-  @observable targetUserFans = {};
-  @observable targetUserFansPage = 1;
-  @observable targetUserFansTotalPage = 1;
-
-  @observable targetUserFollows = {};
-  @observable targetUserFollowsPage = 1;
-  @observable targetUserFollowsTotalPage = 1;
-
 
   @observable targetUserThreads = [];
   @observable targetUserThreadsPage = 1;
   @observable targetUserThreadsTotalCount = 0;
   @observable targetUserThreadsTotalPage = 1;
+
+  /**
+   * 重设用户密码时使用
+   */
+  @observable oldPassword = '';
+  @observable newPassword = '';
+  @observable newPasswordRepeat = '';
+
+  /**
+   * 修改用户手机号时使用
+   * 老的手机号使用 computed 中的 mobile
+   * 新的手机号绑定至 newMobile 中
+   * 以下两个验证码分别为验证老手机号的验证码和验证新手机号的验证码
+   */
+  @observable newMobile = '';
+
+  @observable oldMobileVerifyCode = '';
+  @observable newMobileVerifyCode = '';
+
+  oldCodeTimer = null;
+  @observable oldCodeTimeout = null;
+
+  newCodeTimer = null;
+  @observable newCodeTimeout = null;
 
   // 是否能使用钱包支付
   @computed get canWalletPay() {

@@ -1,9 +1,9 @@
 @import '@common/styles/index.scss';
 
 .contianer {
+  @include cursor-on-pc;
   position: relative;
   display: flex;
-  cursor: pointer;
   font-family: 'PingFangSC-Semibold';
 }
 
@@ -93,15 +93,15 @@
   display: flex;
 
   p {
-    width: rem(40);
-    height: rem(21);
+    width: rem(30);
+    height: rem(22);
     margin-left: rem($margin-2n);
     border-radius: rem($border-radius-small);
     font-size: rem($font-size-label);
-    line-height: rem(19);
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
-    box-sizing: border-box;
 
     &:after {
       content: '';
@@ -119,6 +119,30 @@
     border: rem(1) solid var(--color-orange);
     &:after {
       background-color: var(--color-orange);
+    }
+  }
+
+  .pay {
+    color: $success-color;
+    border: rem(1) solid $success-color;
+    &:after {
+      background-color: $success-color;
+    }
+  }
+
+  .reward {
+    color: $warn-color;
+    border: rem(1) solid $warn-color;
+    &:after {
+      background-color: $warn-color;
+    }
+  }
+
+  .red {
+    color: $text-color-error;
+    border: rem(1) solid $text-color-error;
+    &:after {
+      background-color: $text-color-error;
     }
   }
   > div {

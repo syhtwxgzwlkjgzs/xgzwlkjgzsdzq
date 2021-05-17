@@ -80,14 +80,12 @@ class Index extends React.Component {
       }
       const { data = {}, user } = this.props;
       const { threadId = '', isLike, postId } = data;
-
       this.setState({isSendingLike: true});
       this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } }).then(result => {
         if (result.code === 0 && result.data) {
-          const { isLiked } = result.data;
-          this.props.index.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
-          this.props.search.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
-          this.props.topic.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
+          this.props.index.updateAssignThreadInfo(threadId, { updatedInfo: result.data, user: user.userInfo });
+          this.props.search.updateAssignThreadInfo(threadId, { updatedInfo: result.data, user: user.userInfo });
+          this.props.topic.updateAssignThreadInfo(threadId, { updatedInfo: result.data, user: user.userInfo });
         }
         this.setState({isSendingLike: false});
       });
@@ -161,8 +159,8 @@ class Index extends React.Component {
         postId,
         threadId,
         displayTag,
+        payType,
       } = data || {};
-
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
 
       return (
@@ -176,7 +174,7 @@ class Index extends React.Component {
                 groupName={group?.groupName}
                 time={createdAt}
                 isEssence={isEssence}
-                isPrice={isPrice}
+                isPay={isPrice}
                 isRed={isRedPack}
                 isReward={isReward}
                 userId={user?.userId}
@@ -196,7 +194,7 @@ class Index extends React.Component {
             onPraise={this.onPraise}
             isLiked={isLike}
             isSendingLike={this.state.isSendingLike}
-            tipData={{ postId, threadId, platform }}
+            tipData={{ postId, threadId, platform, payType }}
             platform={platform}
           />
         </div>

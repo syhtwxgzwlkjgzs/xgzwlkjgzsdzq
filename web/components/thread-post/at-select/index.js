@@ -6,11 +6,12 @@
  * @prop {function} getAtList 确定
  */
 import React, { Component } from 'react';
-import { Popup, Input, Checkbox, Avatar, Button, ScrollView } from '@discuzq/design';
+import { Popup, Input, Checkbox, Avatar, Button, ScrollView, Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import DDialog from '@components/dialog';
+import BaseList from '@components/list';
 
 import stringToColor from '@common/utils/string-to-color';
 
@@ -38,7 +39,7 @@ class AtSelect extends Component {
     const { page, perPage, keywords } = this.state;
     if ((page - 1) * perPage > threadPost.follows.length) {
       this.setState({ finish: true });
-      return;
+      return Promise.reject();
     }
     const params = { page, perPage };
     if (keywords) {
@@ -47,9 +48,14 @@ class AtSelect extends Component {
       params.filter.type = 0;
     }
     const ret = await threadPost.fetchFollow(params);
+    if (page * perPage > this.props.threadPost.follows.length) {
+      this.setState({ finish: true });
+      return Promise.reject();
+    }
     if (ret.code === 0) {
       this.setState({ page: page + 1 });
     }
+    return Promise.reject();
   }
 
   // 更新搜索关键字,搜索用户
@@ -69,8 +75,8 @@ class AtSelect extends Component {
 
   onScrollBottom() {
     // 没有更多数据时，不再发送请求
-    if (this.state.finish) return;
-    this.fetchFollow();
+    if (this.state.finish) return Promise.reject();
+    return this.fetchFollow();
   }
 
   // 确认选择
@@ -89,13 +95,22 @@ class AtSelect extends Component {
     return stringToColor(character);
   }
 
+  // 清除关键字
+  clearKeywords = () => {
+    this.setState(
+      { keywords: '', checkUser: [], page: 1 },
+      () => this.fetchFollow()
+    );
+  }
+
   renderItem(info) {
     const { data, index } = info;
     const item = data[index] || {};
     const username = item.user?.userName || '';
+    const userId = item.user?.pid || '';
 
     return (
-      <div className={styles['at-item']}>
+      <div className={styles['at-item']} key={userId}>
         <div className={styles.avatar}>
           {item?.user?.avatar
             ? <Avatar image={item.user.avatar} />
@@ -126,33 +141,43 @@ class AtSelect extends Component {
     const content = (
       <div className={styles.wrapper}>
         {/* 搜索框 */}
-        <Input
-          value={this.state.keywords}
-          icon="SearchOutlined"
-          placeholder='搜索用户'
-          onChange={e => this.updateKeywords(e)}
-        />
+        <div className={styles.input}>
+          <Input
+            value={this.state.keywords}
+            icon="SearchOutlined"
+            placeholder='搜索用户'
+            onChange={e => this.updateKeywords(e)}
+          />
+          {this.state.keywords &&
+            <div className={styles.delete} onClick={this.clearKeywords}>
+              <Icon className={styles['delete-icon']} name="CloseOutlined" size={8}></Icon>
+            </div>
+          }
+        </div>
 
         {/* 选择列表 */}
-        <Checkbox.Group
-          value={this.state.checkUser}
-          onChange={val => this.setState({ checkUser: val })}
-        >
-          <div className={styles['at-wrap']}>
-            <ScrollView
-              className={styles['scroll-view']}
-              width='100%'
-              rowCount={data.length}
-              rowData={data}
-              rowHeight={54}
-              rowRenderer={this.renderItem.bind(this)}
-              onScrollBottom={this.onScrollBottom.bind(this)}
-              onPullingUp={() => Promise.reject()}
-              isRowLoaded={() => true}
-              lowerThreshold={100}
-            />
-          </div>
-        </Checkbox.Group>
+          <Checkbox.Group
+            value={this.state.checkUser}
+            onChange={val => this.setState({ checkUser: val })}
+          >
+            {/* <div className={styles['at-wrap']}> */}
+              {/* <ScrollView
+                className={styles['scroll-view']}
+                width='100%'
+                rowCount={data.length}
+                rowData={data}
+                rowHeight={54}
+                rowRenderer={this.renderItem.bind(this)}
+                onScrollBottom={this.onScrollBottom.bind(this)}
+                onPullingUp={() => Promise.reject()}
+                isRowLoaded={() => true}
+                lowerThreshold={100}
+              /> */}
+            {/* </div> */}
+            <BaseList className={styles['at-wrap']} onRefresh={this.onScrollBottom.bind(this)} noMore={this.state.finish}>
+              {data && data.map((_, index) => this.renderItem({ data, index })) }
+            </BaseList>
+          </Checkbox.Group>
 
         {/* 取消按钮 */}
         <div className={styles.btn}>
@@ -172,6 +197,7 @@ class AtSelect extends Component {
         visible={this.props.visible}
         className={styles.pc}
         onClose={this.handleCancel}
+        isCustomBtn={true}
         title="@圈友"
       >
         {content}

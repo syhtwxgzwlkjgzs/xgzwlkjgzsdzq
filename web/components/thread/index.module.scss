@@ -9,11 +9,12 @@
   //   background: rgba(229, 242, 255, 0.3);
   // }
   .title {
+    @include cursor-on-pc;
+    display: inline-flex;
     font-size: rem($font-size-middle);
     font-weight: 600;
     line-height: rem(22);
     color: var(--color-text-primary);
-    cursor: pointer;
     margin-bottom: rem($margin-4n);
   }
 
@@ -56,12 +57,16 @@
     width: 100%;
     height: rem(36);
     font-size: rem($font-size-primary);
-    line-height: rem(36);
     display: flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
     .payIcon {
       margin-right: rem($margin-2n);
+      margin-top: rem(1);
+    }
+    .payText{
+      margin-top: rem(1);
     }
   }
 }
@@ -76,4 +81,8 @@
   .header {
     padding: rem($padding-6n) 0;
   }
+}
+
+.wrapper {
+  overflow: hidden;
 }

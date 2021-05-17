@@ -6,7 +6,7 @@ import filterData from './data';
 import styles from './index.module.scss';
 
 const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel = noop }) => {
-  const [first, setFirst] = useState('');
+  const [first, setFirst] = useState();
   const [firstChildren, setFirstChildren] = useState();
   const [second, setSecond] = useState('');
   const [third, setThird] = useState('0');
@@ -28,7 +28,6 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
       setFirstChildren(categoryids[1]);
     }
   }, [current, visible]);
-
   // 点击一级菜单
   const onClickFirst = (index, type) => {
     if (type === 1) {
@@ -130,9 +129,9 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
         { data && data.map((item, index) => renderContent(item, index)) }
       </div>
       <div className={styles.footer}>
-          <Button className={styles.button} onClick={handleSubmit} type="primary">筛 选</Button>
+          <Button className={styles.button} onClick={handleSubmit} type="primary">筛选</Button>
           <div className={styles.footerBtn} onClick={handleCancel}>
-            取 消
+            取消
           </div>
         </div>
     </Popup>

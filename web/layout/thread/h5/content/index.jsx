@@ -140,7 +140,7 @@ const RenderThreadContent = inject('user')(
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={styles.payButton} type="primary">
                   <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
-                  <span>支付{attachmentPrice}元查看附件内容</span>
+                  <p>支付{attachmentPrice}元查看附件内容</p>
                 </Button>
               </div>
             )}

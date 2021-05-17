@@ -7,14 +7,13 @@ import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import HOCWithLogin from '@middleware/HOCWithLogin';
 import * as localData from '@layout/thread/post/common';
 import { Toast } from '@discuzq/design';
-import { createAttachment } from '@common/server';
-import { THREAD_TYPE, ATTACHMENT_TYPE } from '@common/constants/thread-post';
+import { THREAD_TYPE } from '@common/constants/thread-post';
 import Router from '@discuzq/sdk/dist/router';
 import PayBoxProvider from '@components/payBox/payBoxProvider';
 import PayBox from '@components/payBox/index';
 import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
 import { withRouter } from 'next/router';
-
+import { tencentVodUpload } from '@common/utils/tencent-vod';
 
 @inject('site')
 @inject('threadPost')
@@ -23,6 +22,8 @@ import { withRouter } from 'next/router';
 @inject('user')
 @observer
 class PostPage extends React.Component {
+  toastInstance = null
+
   constructor(props) {
     super(props);
     this.state = {
@@ -39,15 +40,16 @@ class PostPage extends React.Component {
       // 解析完后显示商品信息
       productShow: false,
       // 语音贴上传成功的语音地址
-      audioSrc: '',
       paySelectText: ['帖子付费', '附件付费'],
       curPaySelect: '',
       count: 0,
       draftShow: false,
+      isTitleShow: true,
     };
     this.captcha = ''; // 腾讯云验证码实例
     this.ticket = ''; // 腾讯云验证码返回票据
     this.randstr = ''; // 腾讯云验证码返回随机字符串
+    this.vditor = null;
   }
 
   componentDidMount() {
@@ -71,6 +73,7 @@ class PostPage extends React.Component {
   componentWillUnmount() {
     this.captcha = '';
     this.props.threadPost.resetPostData();
+    if (this.vditor && this.vditor.destroy) this.vditor.destroy();
   }
 
   saveDataLocal = () => {
@@ -128,17 +131,50 @@ class PostPage extends React.Component {
 
   // 处理录音完毕后的音频上传
   handleAudioUpload = async (blob) => {
-    const formData = new FormData();
-    formData.append('file', blob);
-    formData.append('type', ATTACHMENT_TYPE.audio);
-    const res = await createAttachment(formData);
-    const { code, data } = res;
+    tencentVodUpload({
+      file: blob,
+      onUploading: () => {
+        this.toastInstance = Toast.loading({
+          content: '上传中...',
+          duration: 0,
+        });
+      },
+      onComplete: (res, file) => {
+        this.handleVodUploadComplete(res, file, THREAD_TYPE.voice);
+      },
+      onError: (err) => {
+        Toast.error({ content: err.message });
+      },
+    });
+  }
+
+  // 通过云点播上传成功之后处理：主要是针对语音和视频
+  handleVodUploadComplete = async (ret, file, type) => {
+    const { fileId, video } = ret;
+    const result = await this.props.threadPost.createThreadVideoAudio({ fileId });
+    this.toastInstance?.destroy();
+    const { code, data } = result;
     if (code === 0) {
-      const audioSrc = window.URL.createObjectURL(blob);
-      this.setState({
-        audioSrc,
-      });
-      this.setPostData({ audio: { ...data, mediaUrl: audioSrc }, audioSrc });
+      if (type === THREAD_TYPE.video) {
+        this.setPostData({
+          video: {
+            id: data?.id,
+            thumbUrl: video.url,
+            type: file.type,
+          },
+        });
+      } else if (type === THREAD_TYPE.voice) {
+        this.setPostData({
+          audio: {
+            id: data?.id,
+            mediaUrl: video.url,
+            type: file.type,
+          },
+          audioSrc: video.url,
+        });
+      }
+    } else {
+      Toast.error({ content: result.msg });
     }
   }
 
@@ -179,19 +215,6 @@ class PostPage extends React.Component {
     this.setPostData({ images, files });
   }
 
-  // 视频上传成功之后处理
-  handleVideoUploadComplete = (ret, file) => {
-    // 上传视频
-    const { fileId, video } = ret;
-    this.setPostData({
-      video: {
-        id: fileId,
-        thumbUrl: video.url,
-        type: file.type,
-      },
-    });
-  }
-
   // 视频准备上传
   onVideoReady = (player) => {
     const { postData } = this.props.threadPost;
@@ -206,7 +229,14 @@ class PostPage extends React.Component {
   // 编辑器
   handleVditorChange = (vditor) => {
     if (vditor) {
+      this.vditor = vditor;
       const htmlString = vditor.getHTML();
+      if (!this.state.isTitleShow || this.props.site.platform === 'pc') return;
+      if (!this.props.threadPost.postData.title) {
+        this.setState({ isTitleShow: false }, () => {
+          vditor.blur();
+        });
+      }
       this.setPostData({ contentText: htmlString });
     }
   };
@@ -319,7 +349,7 @@ class PostPage extends React.Component {
   };
 
   async createThread(isDraft) {
-    const { threadPost } = this.props;
+    const { threadPost, thread } = this.props;
     const threadId = this.props.router.query.id || '';
     let ret = {};
     Toast.loading({ content: isDraft ? '保存草稿中...' : '创建中...' });
@@ -327,8 +357,9 @@ class PostPage extends React.Component {
     else ret = await threadPost.createThread();
     const { code, data, msg } = ret;
     if (code === 0) {
-      // thread.setThreadData(data);
+      thread.reset();
       if (!isDraft) this.props.router.replace(`/thread/${data.threadId}`);
+      else Router.back();
       return true;
     }
     Toast.error({ content: msg });
@@ -360,7 +391,7 @@ class PostPage extends React.Component {
           <IndexPCPage
             setPostData={data => this.setPostData(data)}
             handleAttachClick={this.handleAttachClick}
-            handleVideoUploadComplete={this.handleVideoUploadComplete}
+            handleVideoUploadComplete={this.handleVodUploadComplete}
             handleUploadChange={this.handleUploadChange}
             handleUploadComplete={this.handleUploadComplete}
             handleAudioUpload={this.handleAudioUpload}
@@ -381,7 +412,7 @@ class PostPage extends React.Component {
         <IndexH5Page
           setPostData={data => this.setPostData(data)}
           handleAttachClick={this.handleAttachClick}
-          handleVideoUploadComplete={this.handleVideoUploadComplete}
+          handleVideoUploadComplete={this.handleVodUploadComplete}
           handleUploadChange={this.handleUploadChange}
           handleUploadComplete={this.handleUploadComplete}
           handleAudioUpload={this.handleAudioUpload}

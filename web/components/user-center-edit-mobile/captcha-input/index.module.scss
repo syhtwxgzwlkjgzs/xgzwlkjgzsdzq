@@ -1,0 +1,26 @@
+@import '@common/styles/index.scss';
+@import '@common/styles/_variable.scss';
+
+.payList{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .payListItem{
+    border-bottom: var(--border-border);
+    width: rem(46);
+    height: rem(49);
+    text-align: center;
+    line-height: rem(49);
+    font-size: rem($font-size-middle);
+    &:not(:last-child) {
+      margin-right: rem($margin-2n);
+    }
+
+    &.curr{
+      border-bottom-color: $border-color-hover;
+    }
+    &.activation{
+      border-bottom-color: $border-color-hover;
+    }
+  }
+}

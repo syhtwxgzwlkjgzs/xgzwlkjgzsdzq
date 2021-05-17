@@ -4,24 +4,26 @@
   justify-content: space-between;
   align-items: center;
   margin: rem(16) 0 rem(8);
-  cursor: pointer;
 }
 .userImg {
+  @include cursor-on-pc;
   display: flex;
+  align-items: center;
   .numText {
     line-height: rem(24);
     font-size: rem($font-size-label);
     color: #8490a6;
-    margin-left: rem(8);
+    margin-left: rem(4);
   }
 }
 .commentSharing {
+  @include cursor-on-pc;
   display: flex;
   .division {
     line-height: rem(24);
     font-size: rem($font-size-label);
     color: #8490a6;
-    margin: 0 rem(4);
+    margin: 0 rem($padding-base);
   }
   .commentNum {
     line-height: rem(24);
@@ -37,8 +39,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: var(--border-line-color) solid rem(1);
-  cursor: pointer;
+  border-top: $border-color solid rem(1);
   box-sizing: border-box;
 }
 .operations {
@@ -47,17 +48,18 @@
   margin-top: rem(16);
   align-items: center;
   justify-content: space-between;
-  border-top: var(--border-line-color) solid rem(1);
-  cursor: pointer;
+  border-top: $border-color solid rem(1);
   box-sizing: border-box;
 }
 .fabulous {
+  @include cursor-on-pc;
   display: flex;
   align-items: center;
+  padding: $padding-10 0;
   .fabulousPost {
     margin-left: rem(8);
     font-size: rem($font-size-primary);
-    color: var(--color-text-secondary);
+    color: $text-color-secondary;
   }
   .fabulousCancel {
     margin-left: rem(8);
@@ -65,7 +67,7 @@
     color: var(--color-primary);
   }
   .icon {
-    color: var(--color-text-secondary);
+    color: $text-color-secondary;
     &.likedColor {
       color: $primary-color;
     }
@@ -76,5 +78,10 @@
   &[disabled] {
     cursor: not-allowed;
     opacity: 0.6;
+  }
+  :global {
+    .dzq-icon {
+      cursor: none;
+    }
   }
 }

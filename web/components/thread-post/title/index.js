@@ -18,7 +18,7 @@ const Title = ({ title, placeholder, isDisplay, onChange,  onFocus, onBlur, ...p
   // hooks
   useEffect(() => {
     // 设置标题回显
-    title && setTitleVal(title);
+    if (!titleVal) title && setTitleVal(title);
   }, [title]);
 
   useEffect(() => {
@@ -26,8 +26,10 @@ const Title = ({ title, placeholder, isDisplay, onChange,  onFocus, onBlur, ...p
     onChange(titleVal);
   }, [titleVal]);
 
+  const clsName = props.pc ? `${styles.wrapper} ${styles.pc}` : styles.wrapper;
+
   return (
-    <div className={`${isDisplay ? styles.wrapper : styles['is-display']}`}>
+    <div id="dzq-threadpost-title" className={`${isDisplay ? clsName : styles['is-display']}`}>
       <Input
         className={`${styles.title} ${isDisplay ? styles['is-display'] : ''}`}
         value={titleVal}
@@ -35,6 +37,7 @@ const Title = ({ title, placeholder, isDisplay, onChange,  onFocus, onBlur, ...p
         onChange={e => setTitleVal(e.target.value)}
         onFocus={onFocus}
         onBlur={onBlur}
+        focus
         {...props}
       />
     </div>

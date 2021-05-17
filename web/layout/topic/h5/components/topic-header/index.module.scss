@@ -9,7 +9,8 @@
   .title {
     font-size: rem($font-size-middle);
     line-height: rem($font-line-height-primary);
-    color: var(--color-text-primary);
+    color: $text-color-primary;
+    font-weight: 600;
   }
   :global(.dzq-dropdown__trigger) {
     font-size: rem($font-size-primary);
@@ -17,5 +18,16 @@
   }
   :global(.dzq-dropdown-menu__item) {
     padding: rem($padding-10) 0;
+  }
+}
+.sortDropdown {
+  color: $text-color-secondary;
+  font-size: $font-size-base;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: rem(20);
+  .icon {
+    margin-right: rem($padding-2n);
   }
 }

@@ -1,7 +1,7 @@
 import { observable, computed, action } from 'mobx';
 import { get } from '../../utils/get';
 import isWeixin from '../../utils/is-weixin';
-import { createOrders, createPayOrder, readOrderDetail, readWalletUser, updateUsersUpdate } from '@server';
+import { createOrders, createPayOrder, readOrderDetail, readWalletUser, updateUsersUpdate, readResetPayPwdToken } from '@server';
 import { STEP_MAP, PAY_MENT_MAP, ORDER_STATUS_MAP, PAY_BOX_ERROR_CODE_MAP } from '../../constants/payBoxStoreConstants';
 
 const noop = () => {};
@@ -62,6 +62,16 @@ class PayBoxStore {
 
   // pc使用的付费二维码是否过期
   @observable qrCodeTimeout = false;
+
+  // 重设支付密码原支付密码
+  @observable oldPayPwd = '';
+
+  // 重设支付密码所需要的 token
+  @observable payPwdResetToken = '';
+
+  @observable newPayPwd = '';
+
+  @observable newPayPwdRepeat = '';
 
   // 用户钱包状态
   @computed get walletStatus() {
@@ -400,6 +410,52 @@ class PayBoxStore {
         error,
       };
     }
+  }
+
+  /**
+   * 获取重设支付密码 token
+   */
+  @action
+  getPayPwdResetToken = async () => {
+    if (!this.oldPayPwd) {
+      // error
+    }
+
+    const getTokenRes = await readResetPayPwdToken({
+      payPassword: this.oldPayPwd,
+    });
+
+    if (getTokenRes.code === 0) {
+      this.payPwdResetToken = get(getTokenRes, 'data.sessionId');
+
+      return this.payPwdResetToken;
+    }
+
+    throw {
+      Code: getTokenRes.code,
+      Msg: getTokenRes.message,
+    };
+  }
+
+
+  /**
+   * 利用原密码重设支付密码
+   */
+  @action
+  resetPayPwd = async () => {
+    const resetPayPwdRes = await updateUsersUpdate({
+      payPassword: this.newPayPwd,
+      payPassword: this.newPayPwdRepeat,
+    });
+
+    if (resetPayPwdRes.code === 0) {
+      return resetPayPwdRes.data;
+    }
+
+    throw {
+      Code: resetPayPwdRes.code,
+      Msg: resetPayPwdRes.message,
+    };
   }
 
   /**

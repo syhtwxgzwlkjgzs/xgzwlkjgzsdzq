@@ -4,7 +4,7 @@
  * 详细案例参考 https://github.com/Hacker0x01/react-datepicker/
  */
 import React, { memo, useState, useEffect } from 'react'; // 性能优化的
-import { Button, Input, Toast } from '@discuzq/design'; // 原来就有的封装
+import { Button, Input, Toast, Icon } from '@discuzq/design'; // 原来就有的封装
 import DatePickers from '@components/thread/date-picker'; // 原来就有的封装
 import DDialog from '@components/dialog';
 import DatePicker from 'react-datepicker';
@@ -23,8 +23,8 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
   // 时间选择器是否显示
   useEffect(() => {
     if (data !== undefined && Object.keys(data).length > 0) {
-      setValue(data.value);
-      setTimes(data.times);
+      if (data.value) setValue(data.value);
+      if (data.times) setTimes(data.times);
     }
   }, []);
 
@@ -42,39 +42,64 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
     }
     confirm({
       value,
-      times: formatDate(times, 'yyyy-MM-dd h:mm'),
+      times: formatDate(times, 'yyyy/MM/dd h:mm'),
     });
   };
   const content = (
     <div className={styles.rewards}>
       <div className={styles['line-box']}>
-        <div> 悬赏金额 </div>
-        <div>
+        <div className={styles.label}>悬赏金额</div>
+        <div className={styles.item}>
           <Input
             mode="number"
             value={value}
             placeholder="金额"
-            onChange={e => setValue(+e.target.value)}
+            onChange={e => setValue(e.target.value)}
           />
           元
         </div>
       </div>
       <div className={styles['line-box']}>
-        <div> 悬赏结束时间 </div>
-        <div>
-          {pc ? <DatePicker selected={times} onChange={date => setTimes(date)} showTimeSelect dateFormat="yyyy-MM-dd h:mm aa" />
-            : <div onClick={() => setShow(true)} > {`${formatDate(times, 'yyyy-MM-dd h:mm')}  >`} </div> }
+        <div className={styles.label}>悬赏结束时间</div>
+        <div className={styles.item}>
+          {pc
+            ? (
+              <>
+                <DatePicker
+                  selected={new Date(times)}
+                  minDate={new Date()}
+                  onChange={date => setTimes(date)}
+                  showTimeSelect
+                  dateFormat="yyyy/MM/dd HH:mm:ss"
+                  locale="zh"
+                />
+                <Icon name="RightOutlined" />
+              </>
+            )
+            : (
+              <>
+                <div onClick={() => setShow(true)} > {`${formatDate(times, 'yyyy/MM/dd h:mm')}`} </div>
+                <Icon name="RightOutlined" />
+              </>
+            )}
         </div>
       </div>
-      {pc ? '' : <DatePickers
-        onSelects={(e) => {
-          setTimes(e);
-          setShow(false);
-        }} isOpen={show} onCancels={() => setShow(false)} />}
-      <div className={styles.btn}>
-        <Button onClick={() => cancel()}>取消</Button>
-        <Button type="primary" onClick={redbagconfirm}>确定</Button>
-      </div>
+      {pc ? '' : (
+        <>
+          <DatePickers
+            onSelects={(e) => {
+              setTimes(e);
+              setShow(false);
+            }}
+            isOpen={show} onCancels={() => setShow(false)}
+          />
+          <div className={styles.btn}>
+            <Button onClick={() => cancel()}>取消</Button>
+            <Button type="primary" onClick={redbagconfirm}>确定</Button>
+          </div>
+        </>
+      )
+      }
     </div>
   );
   if (!pc) return content;
@@ -83,7 +108,9 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
       visible={visible}
       className={styles.pc}
       onClose={cancel}
-      title="悬赏设置"
+      onCacel={cancel}
+      onConfirm={redbagconfirm}
+      title="悬赏问答"
     >
       {content}
     </DDialog>

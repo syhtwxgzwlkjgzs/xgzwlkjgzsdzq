@@ -6,7 +6,6 @@ import { readCategories, readStickList, readThreadList } from '@server';
 import PayBox from '../components/payBox/index';
 import { Toast } from '@discuzq/design'
 import HOCFetchSiteData from '../middleware/HOCFetchSiteData';
-// import HOCWithLogin from '@middleware/HOCWithLogin';
 
 @inject('site')
 @inject('index')
@@ -15,10 +14,12 @@ import HOCFetchSiteData from '../middleware/HOCFetchSiteData';
 class Index extends React.Component {
   page = 1;
   prePage = 10;
-  static async getInitialProps(ctx) {
+  static async getInitialProps(ctx, {user, site}) {
     const categories = await readCategories({}, ctx);
     const sticks = await readStickList({}, ctx);
-    const threads = await readThreadList({ params: { filter: {}, sequence: 0, perPage: 10, page: 1 } }, ctx);
+    const sequence = site && site.webConfig && site.webConfig.setSite ? site.webConfig.setSite.siteOpenSort : 0;
+  
+    const threads = await readThreadList({ params: { filter: {}, sequence, perPage: 10, page: 1 } }, ctx);
 
     return {
       serverIndex: {
@@ -52,27 +53,43 @@ class Index extends React.Component {
       this.props.index.getRreadStickList();
     }
     if (!hasThreadsData) {
-      this.props.index.getReadThreadList();
+      this.props.index.getReadThreadList({sequence: this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0});
     }
   }
 
   dispatch = async (type, data = {}) => {
+
     const { index } = this.props;
     const { categoryids, types, essence, sequence, attention, sort } = data;
 
     let newTypes = []
-    if (types && !(types instanceof Array)) {
-      newTypes = [types]
+    if (!!types) {
+      if (!(types instanceof Array)) {
+        newTypes = [types]
+      } else {
+        newTypes = types
+      }
     }
 
+    let categoryIds = []
+    if (!!categoryids) {
+      if (!(categoryids instanceof Array)) {
+        categoryIds = [categoryids]
+      } else {
+        categoryIds = categoryids
+      }
+    }
+    
+
     if (type === 'click-filter') {
+      
       this.toastInstance = Toast.loading({
         content: '加载中...',
         duration: 0,
       });
 
       this.page = 1;
-      await index.screenData({ filter: { categoryids, types: newTypes, essence, attention, sort }, sequence });
+      await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence });
 
       this.toastInstance?.destroy();
     } else if (type === 'moreData') {
@@ -80,13 +97,13 @@ class Index extends React.Component {
       await index.getReadThreadList({
         perPage: this.prePage,
         page: this.page,
-        filter: { categoryids, types: newTypes, essence, attention, sort },
+        filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort },
         sequence,
       });
 
       return;
     } else if (type === 'refresh-recommend') {
-      await index.getRecommends({ categoryIds: categoryids });
+      await index.getRecommends({ categoryIds });
     }
   }
 
