@@ -1,16 +1,19 @@
 @import '@common/styles/index.scss';
 
 .container {
+  position: relative;
   box-sizing: border-box;
   padding: rem(24) rem($padding-4n);
   background: var( --color-white);
   overflow: hidden;
   height: rem(107);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   .title {
     font-size: rem($font-size-middle);
-    line-height: rem($font-line-height-middle);
+    line-height: rem(22);
     color: var(--color-text-primary);
-    margin-bottom: rem($margin-4n);
     font-weight: 700;
   }
   .siteInfo {
@@ -28,7 +31,7 @@
     .text {
       font-size: rem($font-size-primary);
       color: $text-color-secondary;
-      line-height: rem($font-line-height-middle);
+      line-height: rem(20);
     }
     .content {
       font-size: rem($font-size-primary);
