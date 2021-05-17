@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './index.module.scss';
-import { Button, Toast } from '@discuzq/design';
+import { Button, Toast, Avatar } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import PhoneInput from '@components/login/phone-input';
@@ -80,7 +80,7 @@ class WXBindPhoneH5Page extends React.Component {
   }
 
   render() {
-    const { wxPhoneBind, router } = this.props;
+    const { wxPhoneBind, router, user } = this.props;
     const { nickname } = router.query;
     return (
       <div className={layout.container}>
@@ -88,9 +88,22 @@ class WXBindPhoneH5Page extends React.Component {
         <div className={layout.content}>
           <div className={layout.title}>手机号登陆，并绑定微信账号</div>
           <div className={layout.tips}>
-            hi， 微信用户
-            {nickname}
-            <br />
+            <div className={layout.tips_user}>
+              hi，
+              {
+                nickname
+                  ? <>
+                      亲爱的<Avatar
+                        style={{margin: '0 8px'}}
+                        circle
+                        size='small'
+                        image={user.avatarUrl}
+                        text={nickname && nickname.substring(0, 1)}
+                        />{nickname}
+                    </>
+                  : '微信用户'
+                }
+            </div>
             请您登录，即可完成微信号和手机号的绑定
           </div>
           {/* 手机验证码 start */}
