@@ -24,6 +24,8 @@ class SiteStore {
   @observable isUserLoginVisible = null;
 
   @computed get isRegister() {
+    console.log(this.isSmsOpen);
+    console.log(this.wechatEnv);
     return !this.isSmsOpen && this.wechatEnv === 'none';
   }
 
@@ -41,7 +43,7 @@ class SiteStore {
   }
   // 公众平台是否开启
   @computed get isOpenPlatformOpen() {
-    return Boolean(get(this.webConfig, 'passport.oplatformClose', true));
+    return Boolean(get(this.webConfig, 'passport.offiaccountClose', true));
   }
 
   // 站点 icon 路径
