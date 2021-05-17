@@ -13,20 +13,20 @@
   .title {
     text-align: center;
     font-weight: 600;
-    font-size: rem(20);
+    font-size: rem($font-size-large);
     height: rem(76);
     line-height: rem(76);
-    color: #0b0b37;
+    color: $text-color-primary;
     position: relative;
   }
   .closeIcon {
     position: absolute;
-    top: rem(24);
-    right: rem(24);
+    top: rem($padding-6n);
+    right: rem($padding-6n);
   }
   .titleHr {
     height: rem(1);
     width: 100%;
-    background: #eee;
+    background: $border-color;
   }
 }
