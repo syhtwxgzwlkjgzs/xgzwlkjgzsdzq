@@ -66,6 +66,13 @@ class UserStore {
   newCodeTimer = null;
   @observable newCodeTimeout = null;
 
+  // 我的屏蔽 数据设计
+  @observable userShield = []; // 用户屏蔽列表
+
+  @observable userShieldPage = 1; // 加载页数
+  @observable userShieldTotalPage = 1; // 总页数
+  @observable userShieldTotalCount = 0; // 每页显示条数
+
   // 是否能使用钱包支付
   @computed get canWalletPay() {
     return get(this.userInfo, 'canWalletPay');
@@ -118,6 +125,11 @@ class UserStore {
   // 用户手机号
   @computed get mobile() {
     return get(this.userInfo, 'mobile');
+  }
+
+  // 获取实际用户手机号
+  @computed get originalMobile() {
+    return get(this.userInfo, 'originalMobile')
   }
 
   // 获取绑定微信内容
@@ -179,6 +191,11 @@ class UserStore {
   // 目标用户被屏蔽状态
   @computed get targetUserDenyStatus() {
     return get(this.targetUser, 'isDeny');
+  }
+
+  // 判断用户是否存在用户密码
+  @computed get hasPassword() {
+    return get(this.userInfo, 'hasPassword')
   }
 
 

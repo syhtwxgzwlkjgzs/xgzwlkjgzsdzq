@@ -25,8 +25,10 @@ class index extends Component {
   }
 
   componentDidMount() {
-    this.initState();
-    this.props.user.initEditInfo();
+    this.initState()
+    const id = this.props.user?.id
+    this.props.user.updateUserInfo(id)
+    this.props.user.initEditInfo()
   }
 
   // 点击取消

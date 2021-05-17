@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Button, Input, Toast } from '@discuzq/design';
 import Header from '@components/header';
-import styles from '../index.module.scss';
+import styles from '../../index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
+import { View, Text } from '@tarojs/components';
+
 @inject('payBox')
 @observer
 export default class index extends Component {
@@ -65,7 +67,7 @@ export default class index extends Component {
         hasMask: false,
         duration: 1000,
       })
-      Router.push({url: `/my`})
+      Router.push({url: `/my/index`})
     }).catch((err) => {
       Toast.error({
         content: '修改密码失败',
@@ -80,25 +82,24 @@ export default class index extends Component {
     const { newPayPwd, newPayPwdRepeat } = this.state
     let isSubmit = !newPayPwd || !newPayPwdRepeat
     return (
-      <div>
-        <Header />
-        <div className={styles.content}>
-          <h3>设置新密码</h3>
-          <div className={styles.labelInfo}>
-            <div className={styles.labelValue}>
+      <View>
+        <View className={styles.content}>
+          <Text className={styles.setTtile}>设置新密码</Text>
+          <View className={styles.labelInfo}>
+            <View className={styles.labelValue}>
               <Input value={newPayPwd} onChange={this.handleChangeNewPwd} mode="password" placeholder="请输入新密码" />
-            </div>
-          </div>
-          <div className={styles.labelInfo}>
-            <div className={styles.labelValue}>
+            </View>
+          </View>
+          <View className={styles.labelInfo}>
+            <View className={styles.labelValue}>
               <Input value={newPayPwdRepeat} onChange={this.handleChangeRepeatPwd} mode="password" placeholder="请重复输入新密码" />
-            </div>
-          </div>
-        </div>
-        <div className={styles.bottom}>
+            </View>
+          </View>
+        </View>
+        <View className={styles.bottom}>
           <Button disabled={isSubmit} onClick={this.handleSubmit} type={"primary"} className={styles.btn}>提交</Button>
-        </div>
-      </div>
+        </View>
+      </View>
     )
   }
 }

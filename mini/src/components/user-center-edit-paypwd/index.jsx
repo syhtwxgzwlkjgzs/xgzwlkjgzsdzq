@@ -4,8 +4,8 @@ import { Button, Input, Toast } from '@discuzq/design';
 import Header from '@components/header';
 import styles from './index.module.scss';
 import { withRouter } from 'next/router';
-import HOCFetchSiteData from '../../middleware/HOCFetchSiteData'
 import Router from '@discuzq/sdk/dist/router';
+import { View, Text } from '@tarojs/components';
 
 @inject('user')
 @inject('payBox')
@@ -43,7 +43,7 @@ class index extends Component {
     this.props.payBox.oldPayPwd = oldPayPwd
     this.props.payBox.getPayPwdResetToken().then(res => {
       console.log(res);
-      Router.push({ url: `/my/edit/reset-paypwd` })
+      Router.push({ url: `reset/paypwd/index` })
     }).catch((err) => {
       Toast.error({
         content: '密码错误',
@@ -55,7 +55,7 @@ class index extends Component {
 
   // 点击忘记密码
   handleGoToFindPayPwd = () => {
-    Router.push({ url: `/my/edit/find-paypwd` })
+    Router.push({ url: `/pages/my/edit/find/paypwd/index` })
   }
 
   // 初次设置密码
@@ -83,7 +83,7 @@ class index extends Component {
         hasMask: false,
         duration: 1000,
       })
-      Router.back()
+      Router.push('/my/index')
       this.initState()
     }).catch((err) => {
       Toast.error({
@@ -99,12 +99,12 @@ class index extends Component {
   renderSetPayPwd = () => {
     const { payPassword } = this.state
     return (
-      <div className={styles.content}>
-        <h3>设置支付密码</h3>
-        <div className={styles.paypwdInput}>
+      <View className={styles.content}>
+        <Text className={styles.setTtile}>设置支付密码</Text>
+        <View className={styles.paypwdInput}>
           <Input value={payPassword} onChange={this.handleSetPwd} placeholder="请设置您的支付密码" mode="password" />
-        </div>
-      </div>
+        </View>
+      </View>
     )
   }
 
@@ -112,34 +112,33 @@ class index extends Component {
   renderCanPayPwd = () => {
     const { oldPayPwd } = this.state
     return (
-      <div className={styles.content}>
-        <h3>修改密码</h3>
-        <div className={styles.labelInfo}>
-          <div className={styles.labelValue}>
+      <View className={styles.content}>
+        <Text className={styles.setTtile}>修改密码</Text>
+        <View className={styles.labelInfo}>
+          <View className={styles.labelValue}>
             <Input value={oldPayPwd} mode="password" placeholder="请输入旧密码" onChange={this.handleChangeOldPwd} />
-          </div>
-          <div onClick={this.handleGoToFindPayPwd} className={styles.tips}>忘记旧密码？</div>
-        </div>
-      </div>
+          </View>
+          <View onClick={this.handleGoToFindPayPwd} className={styles.tips}>忘记旧密码？</View>
+        </View>
+      </View>
     )
   }
 
   render() {
     const { payPassword, oldPayPwd } = this.state
     return (
-      <div>
-        <Header />
+      <View>
         {
           this.props.user?.canWalletPay ? this.renderCanPayPwd() : this.renderSetPayPwd()
         }
-        <div className={styles.bottom}>
+        <View className={styles.bottom}>
           {
             this.props.user?.canWalletPay ? <Button disabled={!oldPayPwd} onClick={this.goToResetPayPwd} type={"primary"} className={styles.btn}>下一步</Button> : <Button disabled={!payPassword} onClick={this.handleSubmit} type={"primary"} className={styles.btn}>提交</Button>
           }
-        </div>
-      </div>
+        </View>
+      </View>
     )
   }
 }
 
-export default HOCFetchSiteData(withRouter(index));
+export default withRouter(index);

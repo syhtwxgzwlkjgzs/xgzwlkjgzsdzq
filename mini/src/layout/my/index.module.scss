@@ -9,40 +9,35 @@
     &::before {
         content: '';
         display: block;
-        height: rem(10);
+        height: 10px;
         background: $spacer-bg-color;
     }
 }
 
 .dividerContainer {
-    padding-left: rem($padding-4n);
-    padding-right: rem($padding-4n);
-    :global {
-        .dzq-divider {
-            margin: 0;
-        }
-    }
+    padding-left: $padding-4n;
+    padding-right: $padding-4n;
 }
 
 .divider {
-    margin: rem($margin-2n) 0;
+    margin: $margin-2n 0;
 }
 
 .threadUnit {
-    padding: rem($padding-4n);
+    padding: $padding-4n;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
 
     .threadTitle {
         font-weight: 600;
-        font-size: rem($font-size-middle);
+        font-size: $font-size-middle;
         color: $text-color-primary;
-        margin-right: rem($margin-3n);
+        margin-right: $margin-3n;
     }
 
     .threadCount {
-        font-size: rem($font-size-small);
+        font-size: $font-size-small;
         color: $text-color-secondary;
     }
 }

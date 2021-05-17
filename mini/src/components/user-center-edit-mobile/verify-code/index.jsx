@@ -1,6 +1,6 @@
-import React from 'react'
-import { Button } from '@discuzq/design'
-import styles from './index.module.scss'
+import React from 'react';
+import { Button } from '@discuzq/design';
+import styles from './index.module.scss';
 
 export default class VerificationCode extends React.Component {
 
