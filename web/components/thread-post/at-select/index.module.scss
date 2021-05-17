@@ -12,7 +12,7 @@
 .popup {
   :global {
     .dzq-popup__overlay {
-      background-color: var(--color-white);
+      background-color: $white;
     }
   }
 }
@@ -38,10 +38,10 @@
     border-radius: $border-radius-small;
 
     .inputWrapperIcon {
-      color: var(--color-text-secondary);
+      color: $text-color-secondary;
     }
     .deleteIcon {
-      color: var(--border-color-hover);
+      color: $disabled-colors;
     }
   }
 
@@ -101,7 +101,7 @@
       .username {
         max-width: rem(170);
         @include single-line();
-        line-height: rem(17.8);
+        line-height: $font-line-height-small;
         font-size: $font-size-base;
         text-align: left;
         color: $text-color-primary;
