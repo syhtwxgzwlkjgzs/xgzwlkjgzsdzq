@@ -33,7 +33,7 @@
 }
 
 .friendsWrapper {
-  overflow: hidden;
+  overflow: hidden !important;
   >div {
     border-bottom: 1px solid $border-color;
     &:last-child {
