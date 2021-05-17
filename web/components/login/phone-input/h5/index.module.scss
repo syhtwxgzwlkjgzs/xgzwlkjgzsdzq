@@ -4,6 +4,7 @@
   position: relative;
   .input {
     @include input;
+    height: rem(62);
     margin-top: rem($padding-3n);
     padding: rem($padding-4n) 0 rem($padding-6n);
   }

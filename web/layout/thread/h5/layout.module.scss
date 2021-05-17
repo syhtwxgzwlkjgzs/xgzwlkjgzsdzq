@@ -36,6 +36,7 @@
   left: 0;
   height: rem(50);
   width: 100%;
+  z-index: $zindex-backtotop;
 }
 
 .footer {

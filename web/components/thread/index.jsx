@@ -40,13 +40,13 @@ class Index extends React.Component {
       const { title = '', threadId = '' } = this.props.data || {};
 
       h5Share({title, path: `thread/${threadId}`});
-      this.props.index.updateThreadShare({ threadId }).then(result => {
-        if (result.code === 0) {
-          this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-          this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-          this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-        }
-      });
+      // this.props.index.updateThreadShare({ threadId }).then(result => {
+      //   if (result.code === 0) {
+      //     this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+      //     this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+      //     this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+      //   }
+      // });
     }
     // 评论
     onComment = (e) => {
@@ -62,6 +62,7 @@ class Index extends React.Component {
       const { data = {} } = this.props;
       const { threadId = '' } = data;
       if (threadId !== '') {
+        this.props.thread.positionToComment()
         this.props.router.push(`/thread/${threadId}`);
       } else {
         console.log('帖子不存在');

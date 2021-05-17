@@ -56,7 +56,7 @@ const RenderThreadContent = inject('user')(
     // 是否显示打赏按钮： 免费帖 && 不是自己 && 不是红包 && 不是悬赏 && 允许被打赏
     const canBeReward = isFree && threadStore?.threadData?.ability.canBeReward && !isRedPack && !isReward;
     // 是否已打赏
-    const isRewarded = false;
+    const isRewarded = threadStore?.threadData?.isReward;
 
     const parseContent = parseContentData(indexes);
 
