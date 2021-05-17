@@ -34,6 +34,7 @@ export default class index extends Component {
 
   // 点击忘记密码
   handleResetPwd = () => {
+    Router.push({ url: '/user/reset-password' })
   }
 
   // 输入旧密码
@@ -115,7 +116,7 @@ export default class index extends Component {
     return (
       <>
         <div className={styles.inputItem}>
-          <Input onChange={this.handleSetPwd} mode="password" placeholder="请设置密码" value={newPassword}  />
+          <Input onChange={this.handleSetPwd} mode="password" placeholder="请设置密码" value={newPassword} />
         </div>
         <div className={styles.inputItem}>
           <Input mode="password" placeholder="请确认密码" value={newPasswordRepeat} onChange={this.hadleNewPasswordRepeat} />
@@ -158,9 +159,13 @@ export default class index extends Component {
               <Icon onClick={this.handleClose} name="CloseOutlined" />
             </div>
             {this.props.user?.hasPassword ? this.renderHasPassword() : this.renderHasNoPassword()}
-            <div onClick={this.handleResetPwd} className={styles.tips}>忘记旧密码？</div>
+            {
+              this.props.user?.hasPassword && (
+                <div onClick={this.handleResetPwd} className={styles.tips}>忘记旧密码？</div>
+              )
+            }
             <div className={styles.bottom}>
-              <Button disabled={isSubmit} onClick={this.handleStepBtn} type={"primary"} className={styles.btn}>提交</Button>
+              <Button onClick={this.handleSubmit} disabled={isSubmit} type={"primary"} className={styles.btn}>提交</Button>
             </div>
           </div>
         </Dialog>
