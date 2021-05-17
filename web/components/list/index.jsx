@@ -94,17 +94,16 @@ const List = forwardRef(({
         const promise = onRefresh();
         isPromise(promise) && promise
           .then(() => {
-            setIsLoading(false);
-            // TODO 临时解决，由于页面渲染太慢导致无限触发上拉刷新问题
-            listWrapper.current.scrollTop = listWrapper.current.scrollTop - 50;
+            // 解决因promise和react渲染不同执行顺序导致重复触发加载数据的问题
+            setTimeout(() => {
+              setIsLoading(false);
+              if (noMore) {
+                setIsLoading(true);
+              }
+            }, 0);
           })
           .catch(() => {
             setIsLoading(false);
-          })
-          .finally(() => {
-            if (noMore) {
-              setIsLoading(true);
-            }
           });
       } else {
         console.error('上拉刷新，必须返回promise');
