@@ -106,7 +106,7 @@ class LoginPhoneH5Page extends React.Component {
 
   handleSendCodeButtonClick = async () => {
     try {
-      const { site } = this.props;
+      const { site, commonLogin } = this.props;
       const { webConfig } = site;
       const { TencentCaptcha } = (await import('@discuzq/sdk/dist/common_modules/sliding-captcha'));
       const qcloudCaptchaAppId = get(webConfig, 'qcloud.qcloudCaptchaAppId', false);
@@ -114,12 +114,12 @@ class LoginPhoneH5Page extends React.Component {
       this.props.mobileLogin.beforeSendVerify();
       // 验证码
       const res = await this.props.commonLogin.showCaptcha(qcloudCaptchaAppId, TencentCaptcha);
-      console.log(res);
       if (res.ret === 0) {
         await this.props.mobileLogin.sendCode({
           captchaRandStr: this.props.commonLogin?.captchaRandStr,
           captchaTicket: this.props.commonLogin?.captchaTicket
         });
+        commonLogin.setIsSend(true);
       }
     } catch (e) {
       Toast.error({

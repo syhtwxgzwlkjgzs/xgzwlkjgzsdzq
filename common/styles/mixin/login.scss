@@ -22,12 +22,14 @@
   border-bottom: $border-solid-1;
   display: flex;
   flex-direction: row-reverse;
+  align-items: center;
   :global(.dzq-input__inner) {
     font-size: rem($font-size-middle);
     border: none;
     padding: 0;
-    height: rem(22);
-    line-height: rem($font-line-height-small);
+    height: auto;
+    // height: rem(22);
+    line-height: rem($font-line-height-base);
     border-radius: 0;
     -webkit-tap-highlight-color: transparent;
   }
