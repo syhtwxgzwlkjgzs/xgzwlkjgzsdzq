@@ -1,10 +1,12 @@
 import React from 'react';
+import { inject } from 'mobx-react';
 import layout from './index.module.scss';
 import { Input } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 
 let inputIndex = null;
 
+@inject('commonLogin')
 class CaptchaInput extends React.Component {
   constructor(props) {
     super(props);
@@ -41,7 +43,7 @@ class CaptchaInput extends React.Component {
 
   // 输入事件
   setChange = (index, e) => {
-    const { inputCallback } = this.props;
+    const { inputCallback, commonLogin } = this.props;
     const value = this.getValue();
     const val = e.target.value;
     const v = [...value];
@@ -51,6 +53,7 @@ class CaptchaInput extends React.Component {
       v[index] = val.substring(0, 1);
     }
     inputCallback(v.join(''));
+    commonLogin.setIsSend(false);
     if (index === 5 && !v.includes('')) {
       e.target.blur();
     }
@@ -98,6 +101,13 @@ class CaptchaInput extends React.Component {
       inputRef: i,
     });
   };
+
+  componentDidUpdate() {
+    const { commonLogin } = this.props;
+    if (commonLogin.isSend) {
+      this.state.inputRef[0].focus();
+    }
+  }
 
   render() {
     const value = this.getValue();
