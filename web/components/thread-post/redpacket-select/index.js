@@ -18,13 +18,6 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
   const [number, setNumber] = useState(''); // 红包个数
   const [likenum, setLikenum] = useState(''); // 集赞数
 
-  const onMoneyChang = (e) => { // 处理红包金额输入
-    const val = e.target.value;
-    const money = val.replace(/\.\d*$/, $1 => {
-      return $1.slice(0, 3)
-    })
-    setPrice( money )
-  }
   const handleClose = () => {
     cancel();
   };
@@ -40,19 +33,19 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
 
   const selectRedpacket = () => {
     // 校验红包选择情况
-    if (!(/^(([1-9]\d*(\.\d{1,2})?)|(0\.\d{1,2}))$/.test(+price) && +price >= 0.01 && +price <= 200)) {
+    if (price < 0.1 || price > 200) {
       Toast.warning({
         content: '金额错误，请输入0.1-200￥',
       });
       return;
     }
-    if (!(/^([1-9][0-9]*)$/.test(+number) && +number <= 100)) {
+    if (number > 100 || number < 1) {
       Toast.warning({
         content: '红包数量错误，请输入整数1-100',
       });
       return;
     }
-    if (condition === 1 && !(/^([1-9][0-9]*)$/.test(+likenum) && +likenum <= 250)) {
+    if (condition === 1 && (likenum > 250 || likenum < 1)) {
       Toast.warning({
         content: '集赞数错误，请输入整数1-250',
       });
@@ -63,8 +56,8 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       rule,
       condition,
       price,
-      number,
-      likenum,
+      number: Math.ceil(number),
+      likenum: Math.ceil(likenum),
     });
     handleClose();
   };
@@ -89,14 +82,14 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       <div className={styles['line-box']}>
         <div className={styles.label}>红包总金额</div>
         <div className={styles.item}>
-          <Input mode="number" htmlType="number" placeholder="金额" value={price} onChange={e => onMoneyChang(e)} />元
+          <Input mode="number" htmlType="number" placeholder="金额" value={price} onChange={e => setPrice(e.target.value)} />元
         </div>
       </div>
       {/* 红包个数 */}
       <div className={styles['line-box']}>
         <div className={styles.label}>红包个数</div>
         <div className={styles.item}>
-          <Input mode="number" value={number} placeholder="个数" onChange={e => setNumber(+e.target.value)} />个
+          <Input mode="number" htmlType="number" value={number} placeholder="个数" onChange={e => setNumber(e.target.value)} />个
         </div>
       </div>
       {/* 获利条件 */}
@@ -117,7 +110,7 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       {condition === 1 && (
         <div className={styles.likenum}>
           <div className={styles['likenum-input']}>
-            <Input mode="number" placeholder="个数" value={likenum} onChange={e => setLikenum(+e.target.value)} />个
+            <Input mode="number" htmlType="number" placeholder="个数" value={likenum} onChange={e => setLikenum(e.target.value)} />个
           </div>
         </div>
       )}
