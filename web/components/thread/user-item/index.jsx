@@ -26,8 +26,8 @@ const Index = ({ imgSrc, title = '', type = 0, subTitle, label, index, onClick =
                 (type === 2) ? "HeartOutlined" :
                 (type === 3) ? "HeartOutlined" : "",
         bgClrBasedOnType =  (type === 1) ? styles.like :
-                              (type === 2) ? styles.heart :
-                              (type === 3) ? styles.heart : "";
+                            (type === 2) ? styles.heart :
+                            (type === 3) ? styles.heart : "";
 
   return (
     <div className={styles.listItem} key={index} onClick={handleClick}>
