@@ -15,6 +15,27 @@
     top: rem(193);
     transform: translateX(-50%) translateY(-100%);
   }
+  .userCenterupload {
+    position: absolute;
+    top: rem(120);
+    right: rem(24);
+    font-size: rem($font-size-small);
+    line-height: 22px;
+    color: $text-color-secondary;
+    display: flex;
+    align-items: center;
+    .uploadIcon {
+      margin-right: rem(6);
+    }
+  }
+  .userCenterReturn {
+    top: rem(177);
+    right: rem(24);
+    font-size: rem($font-size-base);
+    .userCenterReturnIcon {
+      margin-right: rem(6);
+    }
+  }
   .userCenterEditDec {
     position: absolute;
     top: rem(221);
@@ -24,14 +45,10 @@
     align-items: center;
     width: 100%;
     color: #0B0B37;
-    font-size: rem(18);
+    font-size: rem($font-size-middle-extra);
     font-weight: 600;
     line-height: rem(25);
     text-align: center;
-    .dzq-icon {
-      color: $text-color-regular;
-      font-size: rem($font-size-middle);
-    }
   }
   .userCenterEditCameraIcon {
     position: absolute;

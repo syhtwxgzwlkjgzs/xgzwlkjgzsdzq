@@ -71,6 +71,16 @@ export default class index extends Component {
               <input onChange={this.onAvatarChange} ref={this.avatarUploaderRef} type="file" style={{ display: 'none' }} multiple={false} accept={ACCEPT_IMAGE_TYPES.join(',')} />
             </div>
           </div>
+          {/* 上传封面图 */}
+          <div className={styles.userCenterupload}>
+            <Icon name="CameraOutlined" size={12} className={styles.userCenteruploadIcon}/>
+            上传封面图
+          </div>
+          {/* 返回我的主页 */}
+          <div className={`${styles.userCenterReturn} ${styles.userCenterupload}`}>
+            <Icon name="ReturnOutlined" size={16} className={styles.userCenterReturnIcon}/>
+            返回我的主页
+          </div>
           {/* 编辑修改说明 */}
           <div className={styles.userCenterEditDec}>
             编辑资料

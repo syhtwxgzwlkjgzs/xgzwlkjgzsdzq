@@ -12,11 +12,12 @@
 }
 .pcEdit {
   width: rem(1100);
+  padding-bottom: rem(93);
   background: $white;
 }
 .pcEditNickname {
   padding-right: rem(194);
-  height: rem(70);
+  min-height: rem(70);
   display: flex;
   justify-content: flex-end;
 }
@@ -63,44 +64,45 @@
     color: $text-color-secondary;
     margin-right: rem(42);
   }
-  .pcEditAutographCall {
+}
+.pcEditAutographCall {
+  width: rem(595);
+  height: rem(146);
+  border-bottom: rem(1) solid $border-color;
+  .pcEditAutographInput {
     width: rem(595);
-    border-bottom: rem(1) solid $border-color;
-    .pcEditAutographInput {
-      width: rem(595);
-      height: rem(46);
-      border-radius: 5px;
-      background-color: $body-bg-color;
-      border: 1px solid $border-color;
-      margin-top: rem($margin-6n);
-      input {
-        width: inherit;
-        height: inherit;
-        background-color: inherit;
-        border: 0;
-        padding: 12px 16px;
-        font-size: rem( $font-size-middle);
-        line-height: rem(22);
-        text-align: left;
-        color: $text-color-primary;
-      }
+    height: rem(46);
+    border-radius: 5px;
+    background-color: $body-bg-color;
+    border: 1px solid $border-color;
+    margin-top: rem($margin-6n);
+    input {
+      width: inherit;
+      height: inherit;
+      background-color: inherit;
+      border: 0;
+      padding: 12px 16px;
+      font-size: rem( $font-size-middle);
+      line-height: rem(22);
+      text-align: left;
+      color: $text-color-primary;
     }
-    .preservation {
-      display: flex;
-      justify-content:flex-end;
-      right: 0;
-      margin-top: rem($margin-4n);
-      .preservationButton {
-        width: rem(60);
-        height: rem(36);
-      }
-      .preservationButton2 {
-        width: rem(60);
-        height: rem(36);
-        background-color: $text-bg-color2;
-        border: 0;
-        margin-left: rem($margin-4n);
-      }
+  }
+  .preservation {
+    display: flex;
+    justify-content:flex-end;
+    right: 0;
+    margin-top: rem($margin-4n);
+    .preservationButton {
+      width: rem(60);
+      height: rem(36);
+    }
+    .preservationButton2 {
+      width: rem(60);
+      height: rem(36);
+      background-color: $text-bg-color2;
+      border: 0;
+      margin-left: rem($margin-4n);
     }
   }
 }

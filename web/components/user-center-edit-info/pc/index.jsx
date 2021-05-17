@@ -8,6 +8,7 @@ import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData';
+import { Suspense } from 'react';
 @inject('site')
 @inject('user')
 @observer
@@ -16,11 +17,91 @@ class index extends Component {
     super(props);
     this.state = {
       isClickNickName: false,
+      contentTitle: [
+        {
+          name: '昵称',
+          type: 1,
+          display: 0
+        },
+        {
+          name: '用户名',
+          type: 2,
+          display: 0
+        },
+        {
+          name: '个性签名',
+          type: 3,
+          display: 0
+        },
+        {
+          name: '手机号码',
+          type: 4,
+          display: 0
+        },
+        {
+          name: '账户密码',
+          type: 5,
+          display: 0
+        },
+        {
+          name: '支付密码',
+          type: 6,
+          display: 0
+        }
+      ]
     };
     this.user = this.props.user || {};
   }
-
+  editorialpresentation(item, type, index) {
+    let textTitle = '';
+    switch (type) {
+      case 1: textTitle = this.user.username;
+      break;
+      case 2: textTitle = this.user.username;
+      break;
+      case 3: textTitle = '不会开飞机的程序员，不是一个好的摄影师';
+      break;
+      case 4: textTitle = this.user.mobile;
+      break;
+      case 5: textTitle = '已设置';
+      break;
+      case 6: textTitle = '已设置';
+      break;
+    }
+    return (
+      <>
+        <div className={styles.pcEditNickname}>
+          <div className={styles.pcEditNicknameText}>{item.name}</div>
+          {
+            item.display === 0 && <div className={styles.pcEditNicknameCall}>
+              <p className={styles.pcEditNicknameCallText}>{textTitle}</p>
+              <p className={styles.pcEditNicknameCallMsodify} onClick={() => this.modifyFun(index, 1)}>修改</p>
+            </div>
+          }
+          {
+            item.display === 1 && <div className={styles.pcEditAutographCall}>
+              <Input
+                className={styles.pcEditAutographInput}
+                placeholder="不会开飞机的程序员，不是一个好的摄影师"
+              />
+              <div className={styles.preservation}>
+                <Button className={styles.preservationButton} type="primary" onClick={() => this.modifyFun(index, 0)}>保存</Button>
+                <Button className={styles.preservationButton2} onClick={() => this.modifyFun(index, 0)}>取消</Button>
+              </div>
+            </div>
+          }
+        </div>
+      </>
+    )
+  }
+  modifyFun = (index, num) => {
+    const todoList = [...this.state.contentTitle];
+    this.setState({
+      contentTitle: todoList.map((item,key)=> key == index ? {...item, display: num } : item)
+    });
+  }
   render() {
+    const {contentTitle} = this.state;
     return (
       <div className={styles.pcEditBox} >
         <Header className={styles.pcEditHeaser}/>
@@ -29,68 +110,23 @@ class index extends Component {
             {/* 头部 */}
             <div><UserCenterEditHeader /></div> 
             {/* 昵称 */}
-            <div className={styles.pcEditNickname}>
-              <div className={styles.pcEditNicknameText}>昵称</div>
-              <div className={styles.pcEditNicknameCall}>
-                <p className={styles.pcEditNicknameCallText}>Users</p>
-                <p className={styles.pcEditNicknameCallMsodify}>修改</p>
-              </div>
-            </div>
-            {/* 用户名 */}
-            <div className={styles.pcEditNickname}>
-              <div className={styles.pcEditNicknameText}>用户名</div>
-              <div className={styles.pcEditNicknameCall}>
-                <p className={styles.pcEditNicknameCallText}>Users</p>
-                <p className={styles.pcEditNicknameCallMsodify}>修改</p>
-              </div>
-            </div>
-            {/* 个性签名 */}
-            <div className={styles.pcEditAutograph}>
-              <div className={styles.pcEditAutographText}>个性签名</div>
-              <div className={styles.pcEditAutographCall}>
-                <Input
-                  className={styles.pcEditAutographInput}
-                  placeholder="不会开飞机的程序员，不是一个好的摄影师"
-                />
-                <div className={styles.preservation}>
-                  <Button className={styles.preservationButton} type="primary">保存</Button>
-                  <Button className={styles.preservationButton2}>取消</Button>
-                </div>
-              </div>
-            </div>
-            {/* 手机号码 */}
-            <div className={styles.pcEditNickname}>
-              <div className={styles.pcEditNicknameText}>手机号码</div>
-              <div className={styles.pcEditNicknameCall}>
-                <p className={styles.pcEditNicknameCallText}>11111111111</p>
-                <p className={styles.pcEditNicknameCallMsodify}>修改</p>
-              </div>
-            </div>
-            {/* 账户密码 */}
-            <div className={styles.pcEditNickname}>
-              <div className={styles.pcEditNicknameText}>账户密码</div>
-              <div className={styles.pcEditNicknameCall}>
-                <p className={styles.pcEditNicknameCallText}>已设置</p>
-                <p className={styles.pcEditNicknameCallMsodify}>修改</p>
-              </div>
-            </div>
-            {/* 支付密码 */}
-            <div className={styles.pcEditNickname}>
-              <div className={styles.pcEditNicknameText}>支付密码</div>
-              <div className={styles.pcEditNicknameCall}>
-                <p className={styles.pcEditNicknameCallText}>已设置</p>
-                <p className={styles.pcEditNicknameCallMsodify}>修改</p>
-              </div>
-            </div>
-            {/* 微信 */}
+            {
+              contentTitle.map((item, index) => {
+                return (
+                  <div key={index}>
+                    {this.editorialpresentation(item, item.type, index)}
+                  </div>
+                )
+              })
+            }
             <div className={styles.pcEditNickname}>
               <div className={styles.pcEditNicknameText}>微信</div>
               <div className={styles.pcEditNicknameCall}>
                 <div className={styles.pcEditNicknameImgs}>
                   <Avatar className={styles.pcEditNicknameImg} image={this.user.avatarUrl} name={this.user.username} />
-                  <p className={styles.pcEditWeiName}>Users</p>
+                  <p className={styles.pcEditWeiName}>{this.user.username}</p>
                 </div>
-                <p className={styles.pcEditNicknameCallMsodify}>修改</p>
+                <p className={styles.pcEditNicknameCallMsodify}>解绑</p>
               </div>
             </div>
           </div>
