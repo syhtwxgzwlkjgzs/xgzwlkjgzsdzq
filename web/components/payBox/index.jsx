@@ -42,8 +42,11 @@ export default class PayBox extends Component {
     const { platform } = this.props.site;
     if (platform === 'pc') {
       return <PCPayBox />;
+    } else if (platform === 'h5') {
+      return <H5PayBox options={this.props.payBox.options} />;
+    } else {
+      return null;
     }
-    return <H5PayBox options={this.props.payBox.options} />;
   }
 }
 

@@ -8,6 +8,7 @@ import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import { Icon } from '@discuzq/design';
+import typeofFn from '@common/utils/typeof';
 import styles from './HOCFetchSiteData.module.scss';
 
 // 获取全站数据
@@ -30,7 +31,7 @@ export default function HOCFetchSiteData(Component) {
         // 服务端
         if (isServer()) {
           const { headers } = ctx.req;
-          platform = headers ? getPlatform(headers['user-agent']) : 'static';
+          platform = (headers && !typeofFn.isEmptyObject(headers)) ? getPlatform(headers['user-agent']) : 'static';
           // 获取站点信息
           siteConfig = await readForum({}, ctx);
           serverSite = {

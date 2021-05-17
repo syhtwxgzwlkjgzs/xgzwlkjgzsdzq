@@ -28,7 +28,7 @@ class WXBindPhoneH5Page extends React.Component {
 
   handleSendCodeButtonClick = async () => {
     try {
-      const { site } = this.props;
+      const { site, commonLogin } = this.props;
       const { webConfig } = site;
       const { TencentCaptcha } = (await import('@discuzq/sdk/dist/common_modules/sliding-captcha'));
       const qcloudCaptchaAppId = get(webConfig, 'qcloud.qcloudCaptchaAppId', false);
@@ -42,6 +42,7 @@ class WXBindPhoneH5Page extends React.Component {
           captchaRandStr: this.props.commonLogin?.captchaRandStr,
           captchaTicket: this.props.commonLogin?.captchaTicket
         });
+        commonLogin.setIsSend(true);
       }
     } catch (e) {
       Toast.error({
