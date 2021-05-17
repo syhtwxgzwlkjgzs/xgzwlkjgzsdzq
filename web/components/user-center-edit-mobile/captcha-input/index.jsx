@@ -5,6 +5,9 @@ class CaptchaInput extends Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      isKeyBoardVisible: false
+    }
   }
 
   validateTel = (value) => {
@@ -17,6 +20,20 @@ class CaptchaInput extends Component {
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  // 点击显示数字键盘
+  handleClickPwdItem = () => {
+    this.setState({
+      isKeyBoardVisible: true
+    })
+  }
+
+  // 点击取消
+  handleCancel = () => {
+    this.setState({
+      isKeyBoardVisible: false
+    })
   }
 
   // 匹配输入的数字
@@ -88,6 +105,26 @@ class CaptchaInput extends Component {
     }
   };
 
+  keyboardClickHander = (e) => {
+    e && e.stopPropagation()
+    const key = e.target.getAttribute('data-key');
+    if (key == null) {
+      return null;
+    }
+    const { list = [] } = this.props;
+
+    if (key === '-1') {
+      if (list.length === 0) {
+        this.handleCancel()
+      } else {
+        this.props.updatePwd && this.props.updatePwd('', 'delete');
+      }
+
+    } else if (list.length < 6) {
+      this.props.updatePwd && this.props.updatePwd(key, 'add');
+    }
+  }
+
   renderPwdItem() {
     const { list = [] } = this.props;
     const nodeList = list.map((item, key) => (
@@ -110,10 +147,69 @@ class CaptchaInput extends Component {
     return nodeList;
   }
 
-  render() {
+  // 渲染键盘
+  renderKeyBoard = () => {
+    const { list = [] } = this.props
     return (
-      <div className={styles.payList}>
-       {this.renderPwdItem()}
+      <div className={styles.keyboard} onClick={this.keyboardClickHander}>
+        <div className={styles.line}>
+          <div data-key="1" className={styles.column}>
+            1
+        </div>
+          <div data-key="2" className={styles.column}>
+            2
+        </div>
+          <div data-key="3" className={styles.column}>
+            3
+        </div>
+        </div>
+        <div className={styles.line}>
+          <div data-key="4" className={styles.column}>
+            4
+        </div>
+          <div data-key="5" className={styles.column}>
+            5
+        </div>
+          <div data-key="6" className={styles.column}>
+            6
+        </div>
+        </div>
+        <div className={styles.line}>
+          <div data-key="7" className={styles.column}>
+            7
+        </div>
+          <div data-key="8" className={styles.column}>
+            8
+        </div>
+          <div data-key="9" className={styles.column}>
+            9
+        </div>
+        </div>
+        <div className={styles.line}>
+          <div className={`${styles.column} ${styles.special}`}></div>
+          <div data-key="0" className={styles.column}>
+            0
+        </div>
+          <div data-key="-1" className={`${styles.column} ${styles.special}`}>
+            {
+              list.length === 0 ? '取消' : '删除'
+            }
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  render() {
+    const { isKeyBoardVisible } = this.state
+    return (
+      <div className={styles.payList} onClick={this.handleClickPwdItem}>
+        {this.renderPwdItem()}
+        {
+          isKeyBoardVisible && (
+            this.renderKeyBoard()
+          )
+        }
       </div>
     )
   }
