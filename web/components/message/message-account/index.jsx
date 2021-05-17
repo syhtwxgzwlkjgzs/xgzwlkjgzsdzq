@@ -156,7 +156,7 @@ class Index extends React.Component {
         <Notice
           infoIdx={3}
           totalCount={data.totalCount}
-          height='calc(100vh - 44px)'
+          height='calc(100vh - 40px)'
           withTopBar={!isPC}
           noMore={data.currentPage >= data.totalPage}
           topCard={(isPC || type === 'accountMsgList') ? card : null}

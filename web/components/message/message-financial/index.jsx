@@ -44,7 +44,7 @@ const Index = ({ site, message }) => {
       <Notice
         infoIdx={2}
         totalCount={totalCount}
-        height='calc(100vh - 44px)'
+        height='calc(100vh - 40px)'
         withTopBar={!site.isPC}
         noMore={currentPage >= totalPage}
         list={renderList}

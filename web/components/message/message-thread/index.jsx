@@ -40,7 +40,7 @@ class Index extends React.Component {
         <Notice
           infoIdx={3}
           totalCount={data.totalCount}
-          height='calc(100vh - 44px)'
+          height='calc(100vh - 40px)'
           noMore = { data.currentPage >= data.totalPage }
           list={data.list}
           type='thread'
