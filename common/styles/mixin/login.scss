@@ -33,6 +33,9 @@
     top: rem(17);
     font-size: rem($font-size-middle) !important;
     color: var(--color-disabled2) !important;
+    width: rem(32);
+    height: rem(36);
+    line-height: rem(36);
     &:hover {
       color: $primary-color !important;
     }
@@ -91,10 +94,22 @@
   line-height: rem($font-line-height-large);
   text-align: left;
   color: var(--color-text-primary);
+  display: flex;
+  flex-direction: column;
   img {
     width: rem(30);
     height: rem(30);
-    margin: 0 rem($margin-2n);
+  }
+  .tips_user {
+    display: flex;
+    line-height: rem($font-line-height-large);
+    flex-direction: row;
+  }
+  :global(.dzq-avatar), :global(.dzq-avatar__text){
+    font-size: rem($font-size-small);
+    width: rem(30);
+    height: rem(30);
+    line-height: rem($font-line-height-large);
   }
 }
 

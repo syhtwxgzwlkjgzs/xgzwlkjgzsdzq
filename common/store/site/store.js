@@ -24,8 +24,6 @@ class SiteStore {
   @observable isUserLoginVisible = null;
 
   @computed get isRegister() {
-    console.log(this.isSmsOpen);
-    console.log(this.wechatEnv);
     return !this.isSmsOpen && this.wechatEnv === 'none';
   }
 
@@ -42,7 +40,7 @@ class SiteStore {
     return Boolean(get(this.webConfig, 'passport.miniprogramClose', true));
   }
   // 公众平台是否开启
-  @computed get isOpenPlatformOpen() {
+  @computed get isOpenOffiaccountClose() {
     return Boolean(get(this.webConfig, 'passport.offiaccountClose', true));
   }
 
@@ -56,7 +54,7 @@ class SiteStore {
       return WECHAT_ENV_MAP.MINI;
     }
 
-    if (this.isOpenPlatformOpen) {
+    if (this.isOpenOffiaccountClose) {
       return WECHAT_ENV_MAP.OPEN;
     }
 

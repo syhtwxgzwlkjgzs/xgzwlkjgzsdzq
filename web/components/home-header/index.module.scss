@@ -14,12 +14,18 @@
     justify-content: space-between;
     padding: rem($padding-4n);
     box-sizing: border-box;
+    :global(.dzq-icon){
+      font-size: rem($font-size-base) !important;
+    }
     .left{
-      font-size: rem($font-size-middle);
+      font-size: rem($font-size-base);
+      line-height: rem($font-line-height-base);
       color: var(--color-white);
       display: flex;
+      align-items: center;
+      flex-direction: row;
       :global(.dzq-icon){
-        margin-right: $margin-2n;
+        margin-right: rem($margin-2n);
       }
     }
     .goback{
