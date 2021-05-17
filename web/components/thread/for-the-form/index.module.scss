@@ -1,11 +1,16 @@
 @import '@common/styles/index.scss';
 .rewards {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
+  height: -webkit-fill-available;
+  min-height: 100vh;
+  /* mobile viewport bug fix */
+  min-height: -webkit-fill-available;
   background-color: $white;
+  z-index: $zindex-popup;
   .line-box {
     display: flex;
     margin: 0 rem($margin-4n);

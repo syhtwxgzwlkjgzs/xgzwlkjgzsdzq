@@ -1,12 +1,17 @@
 @import '@common/styles/index.scss';
 
 .redpacket-box {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
+  height: -webkit-fill-available;
+  min-height: 100vh;
+  /* mobile viewport bug fix */
+  min-height: -webkit-fill-available;
   background-color: $white;
+  z-index: $zindex-popup;
   .line-box {
     display: flex;
     margin: 0 rem($margin-4n);
@@ -48,13 +53,12 @@
         color: $text-color-primary;
       }
       &.is-checked {
-        background-color: $checkbox-checked-bg-color;
-        border: none;
         .dzq-checkbox__icon {
           color: $primary-color;
           font-size: $font-size-label !important;
         }
         .dzq-checkbox {
+          background-color: $checkbox-checked-bg-color;
           border: none;
         }
       }
