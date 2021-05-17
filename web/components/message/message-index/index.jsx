@@ -3,9 +3,11 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import styles from './index.module.scss';
 
+import BaseLayout from '@components/base-layout';
 import Card from '@components/message/message-card';
 import Notice from '@components/message/notice';
 
+@inject('site')
 @inject('message')
 @observer
 export class MessageIndex extends Component {
@@ -87,24 +89,35 @@ export class MessageIndex extends Component {
 
   render() {
     const { items } = this.state;
+    const { isPC } = this.props.site;
     const card = <Card cardItems={items} onClick={this.toOtherMessage} />;
     const { dialogList } = this.props.message;
     const newDialogList = this.formatChatDialogList(dialogList.list);
 
-    return (
+    const mainContent = (
       <div className={styles.wrapper}>
         <Notice
-          height='calc(100vh - 65px)'
+          infoIdx={0}
+          totalCount={dialogList.totalCount}
+          height='calc(100vh - 105px)'
+          withTopBar={true}
           withBottomBar={true}
           noMore={dialogList.currentPage >= dialogList.totalPage}
-          topCard={card}
+          topCard={isPC ? null : card}
           list={newDialogList}
           type='chat'
           onPullDown={this.onPullDown}
           onScrollBottom={this.handleScrollBottom}
           onBtnClick={this.handleDelete}
         />
-      </div>
+      </div>);
+
+    if (isPC) return mainContent;
+
+    return (
+      <BaseLayout showTabBar={true} curr={'message'}>
+        {mainContent}
+      </BaseLayout>
     )
   }
 }

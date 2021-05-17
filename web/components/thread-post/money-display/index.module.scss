@@ -10,9 +10,6 @@
         margin-right: 0;
       }
     }
-    .dzq-icon {
-      transform: scale(.8);
-    }
   }
 
   // .editor-count {
@@ -32,7 +29,7 @@
   z-index: 1;
 }
 .money-box.h5 {
-  padding: rem($padding-4n);
+  padding: 0 rem($padding-4n) rem($padding-4n);
   :global {
     .dzq-tag {
       margin-bottom: rem($padding-1n);

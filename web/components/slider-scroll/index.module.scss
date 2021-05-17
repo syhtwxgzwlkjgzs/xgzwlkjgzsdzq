@@ -11,14 +11,15 @@
   :global {
     .dzq-pull-refresh__loading {
       font-size: $font-size-large;
+      top: -56px !important;
     }
   }
   @include setRefreshList();
   &.with-top {
-    @include setRefreshList(calc(100vh - 44px));
+    @include setRefreshList(calc(100vh - 40px));
   }
   &.with-bottom {
-    @include setRefreshList(calc(100vh - 65px));
+    @include setRefreshList(calc(100vh - 105px));
   }
 }
 
