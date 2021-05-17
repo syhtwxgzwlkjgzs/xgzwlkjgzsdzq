@@ -6,9 +6,9 @@ import Notice from '@components/message/notice';
 
 import styles from './index.module.scss';
 
-const Index = ({ message }) => {
+const Index = ({ site, message }) => {
   const { readFinancialMsgList, financialMsgList, deleteMsg } = message;
-  const { list, currentPage, totalPage } = financialMsgList
+  const { list, currentPage, totalPage } = financialMsgList;
 
   // 初始化
   useEffect(() => {
@@ -40,10 +40,10 @@ const Index = ({ message }) => {
 
   return (
     <div className={styles.wrapper}>
-      <Header />
+      {!site.isPC && <Header />}
       <Notice
         height='calc(100vh - 44px)'
-        withTopBar={true}
+        withTopBar={!site.isPC}
         noMore={currentPage >= totalPage}
         list={renderList}
         type='financial'
@@ -55,4 +55,4 @@ const Index = ({ message }) => {
   );
 };
 
-export default inject('message')(observer(Index));
+export default inject('site', 'message')(observer(Index));

@@ -6,6 +6,7 @@ import styles from './index.module.scss';
 import Card from '@components/message/message-card';
 import Notice from '@components/message/notice';
 
+@inject('site')
 @inject('message')
 @observer
 export class MessageIndex extends Component {
@@ -87,17 +88,18 @@ export class MessageIndex extends Component {
 
   render() {
     const { items } = this.state;
+    const {isPC} = this.props.site;
     const card = <Card cardItems={items} onClick={this.toOtherMessage} />;
     const { dialogList } = this.props.message;
     const newDialogList = this.formatChatDialogList(dialogList.list);
 
     return (
-      <div className={styles.wrapper}>
+      <div className={'item ' + styles.wrapper}>
         <Notice
           height='calc(100vh - 65px)'
           withBottomBar={true}
           noMore={dialogList.currentPage >= dialogList.totalPage}
-          topCard={card}
+          topCard={isPC ? null : card}
           list={newDialogList}
           type='chat'
           onPullDown={this.onPullDown}
