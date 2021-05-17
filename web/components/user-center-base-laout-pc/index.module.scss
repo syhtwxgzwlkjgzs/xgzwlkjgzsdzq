@@ -53,10 +53,13 @@
 
 .userHeader {
   width: rem(1100);
-  margin-top: rem(10);
+  margin-top: rem(20);
 }
 
 .headImgWrapper {
   border-radius: rem($border-radius-small) rem($border-radius-small) 0 0;
   overflow: hidden;
+  >div {
+    height: rem(153);
+  }
 }

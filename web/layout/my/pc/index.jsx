@@ -10,11 +10,19 @@ import ThreadContent from '@components/thread';
 import Copyright from '@components/copyright';
 import UserCenterFans from '@components/user-center-fans';
 import UserCenterFollow from '@components/user-center-follow';
-
+import { Icon, Popup} from '@discuzq/design';
+import Router from '@discuzq/sdk/dist/router';
 @inject('site')
 @inject('user')
 @observer
 class PCMyPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showFansPopup: false, // 是否弹出粉丝框
+      showFollowPopup: false, // 是否弹出关注框
+    };
+  }
   componentDidMount() {
     this.props.user.getUserThreads();
   }
@@ -24,19 +32,31 @@ class PCMyPage extends React.Component {
     window.location.replace('/');
   }
 
-  moreFans = () => {};
-
-  moreFollow = () => {};
+  // 点击粉丝更多
+  moreFans = () => {
+    this.setState({ showFansPopup: true });
+  };
+  // 点击粉丝关注更多
+  moreFollow = () => {
+    this.setState({ showFollowPopup: true });
+  };
 
   onSearch = (value) => {
     this.props.router.replace(`/search?keyword=${value}`);
   };
-
+  onContainerClick = ({ id }) => {
+    Router.push({ url: `/my/others?isOtherPerson=${true}&otherId=${id}` });
+  };
   renderRight = () => {
-    const { pageData } = {};
     return (
       <>
-        <SidebarPanel type="normal" title="个人资料" isShowMore={true} moreText={'编辑资料'}>
+        <SidebarPanel
+          type="normal"
+          title="个人资料"
+          isShowMore={true}
+          moreText={'编辑资料'}
+          onShowMore={() => { Router.push({ url: '/my/edit' }); }} 
+      >
           <div className={styles.userInfoWrapper}>
             <div className={styles.userInfoKey}>手机号码</div>
             <div className={styles.userInfoValue}>{this.props.user.mobile}</div>
@@ -119,6 +139,7 @@ class PCMyPage extends React.Component {
           {userThreads?.map((item, index) => (
             <div key={index}>
               <ThreadContent className={styles.wrapper} showBottom={false} data={item} key={index} />
+              <div className={styles.threadHr}></div>
             </div>
           ))}
         </SidebarPanel>
@@ -128,9 +149,46 @@ class PCMyPage extends React.Component {
 
   render() {
     return (
-      <UserBaseLaout allowRefresh={false} onSearch={this.onSearch} right={this.renderRight}>
-        {this.renderContent()}
-      </UserBaseLaout>
+      <>
+        <UserBaseLaout allowRefresh={false} onSearch={this.onSearch} right={this.renderRight}>
+          {this.renderContent()}
+        </UserBaseLaout>
+        <Popup position="center" visible={this.state.showFansPopup} onClose={() => this.setState({ showFansPopup: false })}>
+          <div className={styles.contaner}>
+            <div className={styles.popupWrapper}>
+              <div className={styles.title}>
+                粉丝
+                <Icon
+                  name="CloseOutlined"
+                  className={styles.closeIcon}
+                  size={12}
+                  onClick={() => this.setState({ showFansPopup: false })}
+                />
+              </div>
+              <div className={styles.titleHr}></div>
+              <UserCenterFans onContainerClick={this.onContainerClick} />
+            </div>
+          </div>
+        </Popup>
+
+        <Popup position="center" visible={this.state.showFollowPopup} onClose={() => this.setState({ showFollowPopup: false })}>
+          <div className={styles.contaner}>
+            <div className={styles.popupWrapper}>
+              <div className={styles.title}>
+                关注
+                <Icon
+                  name="CloseOutlined"
+                  className={styles.closeIcon}
+                  size={12}
+                  onClick={() => this.setState({ showFollowPopup: false })}
+                />
+              </div>
+              <div className={styles.titleHr}></div>
+              <UserCenterFollow onContainerClick={this.onContainerClick} />
+            </div>
+          </div>
+        </Popup>
+      </>
     );
   }
 }

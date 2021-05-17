@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { Button, Icon, Toast } from '@discuzq/design';
-import clearLoginStatus from '@common/utils/clear-login-status';
 import { ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post'
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
@@ -18,6 +17,21 @@ class index extends Component {
 
   static defaultProps = {
     isOtherPerson: false, // 表示是否是其他人
+  }
+
+  avatarUploaderRef = React.createRef(null);
+  backgroundUploaderRef = React.createRef(null);
+  handleAvatarUpload = () => {
+    this.avatarUploaderRef.current.click();
+  }
+  onAvatarChange = (fileList) => {
+    this.props.user.updateAvatar(fileList.target.files);
+  }
+  handleBackgroundUpload = () => {
+    this.backgroundUploaderRef.current.click();
+  }
+  onBackgroundChange = (fileList) => {
+    this.props.user.updateBackground(fileList.target.files);
   }
   // 点击关注
   handleChangeAttention = async (follow) => {
@@ -83,6 +97,7 @@ class index extends Component {
   render() {
     const { targetUser } = this.props.user;
     const user = this.props.isOtherPerson ? targetUser || {} : this.props.user;
+    console.log(this.props.user, 'head');
     return (
       <div className={styles.box}>
         <div className={styles.boxTop}>
@@ -109,22 +124,23 @@ class index extends Component {
             this.props.isOtherPerson ? (
               <div className={styles.otherUserBtn}>
                 <div onClick={() => { this.handleChangeShield(user.isDeny) }} className={styles.shieldBtn}>
-                  <Icon name="ShieldOutlined" />
+                  <Icon name="ShieldOutlined" size={14}/>
                   <span>{user.isDeny ? '解除屏蔽' : '屏蔽'}</span>
                 </div>
                 <div className={styles.userBtn}>
-                <Button onClick={() => { this.handleChangeAttention(user.follow) }} type="primary" className={user.follow === 2 && styles.userFriendsBtn}>
-                  <Icon name={this.renderFollowedStatus(user.follow || 0).icon} />
-                  <span className={styles.userBtnText}>{this.renderFollowedStatus(user.follow || 0).text}</span>
-                </Button>
-                <Button onClick={this.handleMessage}>
-                  <Icon name="NewsOutlined" />
-                  <span className={styles.userBtnText}>发私信</span>
-                </Button>
+                  <Button onClick={() => { this.handleChangeAttention(user.follow) }} type="primary" className={user.follow === 2 && styles.userFriendsBtn}>
+                    <Icon name={this.renderFollowedStatus(user.follow || 0).icon} />
+                    <span className={styles.userBtnText}>{this.renderFollowedStatus(user.follow || 0).text}</span>
+                  </Button>
+                  <Button onClick={this.handleMessage}>
+                    <Icon name="NewsOutlined" />
+                    <span className={styles.userBtnText}>发私信</span>
+                  </Button>
                 </div>
               </div>
             ) : (
-              <div className={styles.upload}>
+              <div className={styles.upload} onClick={this.handleBackgroundUpload}>
+                <input onChange={this.onBackgroundChange} ref={this.backgroundUploaderRef} type="file" style={{ display: 'none' }} />
                 <Icon name="CameraOutlined" size={12} className={styles.uploadIcon}/>
                 上传封面图
               </div>
