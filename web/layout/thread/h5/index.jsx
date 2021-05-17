@@ -661,7 +661,7 @@ class ThreadH5Page extends React.Component {
                 className={footer.icon}
                 onClick={() => this.onCollectionClick()}
                 size="20"
-                name="CollectOutlined"
+                name="CollectOutlinedBig"
               ></Icon>
               <Icon
                 onClick={() => this.onShareClick()}
