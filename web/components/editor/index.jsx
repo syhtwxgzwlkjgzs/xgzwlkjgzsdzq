@@ -68,9 +68,9 @@ export default function DVditor(props) {
     }
   }, [topic]);
 
-  useEffect(() => {
-    onCountChange(contentCount);
-  }, [contentCount]);
+  // useEffect(() => {
+  //   onCountChange(contentCount);
+  // }, [contentCount]);
 
   useEffect(() => {
     if ((vditor && vditor.getValue && vditor.getValue() !== '\n') || !value) return;
