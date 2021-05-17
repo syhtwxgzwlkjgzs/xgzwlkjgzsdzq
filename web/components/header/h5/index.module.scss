@@ -21,11 +21,6 @@
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      .left-arrow {
-        transform: rotate(
-          180deg
-        );
-      }
       .text {
         padding-left: $padding-2n;
       }
@@ -44,5 +39,8 @@
         color: var(--color-text-secondary);
       }
     }
+  }
+  :global(.dzq-icon) {
+    cursor: none;
   }
 }

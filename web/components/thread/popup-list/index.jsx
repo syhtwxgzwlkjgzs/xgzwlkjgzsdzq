@@ -104,7 +104,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
 
   const renderHeader = ({ title, icon, number  }) => (
     <div className={styles.label}>
-      {icon && <Icon name={icon} />}
+      {icon && <Icon className={styles.icon} name={icon} />}
       <span className={`${styles.title} disable-click`}>{title}</span>
       {number !== 0 && number !== '0' && <span className={`disable-click ${styles.num}`}>{number}</span>}
     </div>
@@ -119,7 +119,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
     },
     {
       icon: 'LikeOutlined',
-      title: '点赞',
+      title: '',
       data: likes,
       number: all?.pageData?.likeCount || 0,
     },
