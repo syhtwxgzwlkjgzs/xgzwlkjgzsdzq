@@ -47,8 +47,10 @@
   align-items: center;
   justify-content: center;
 
+  .icon {
+    margin-right: rem(4);
+  }
   .title {
-    margin-left: rem(8);
     line-height: 20px;
   }
   .num {
