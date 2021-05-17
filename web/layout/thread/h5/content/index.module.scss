@@ -62,6 +62,7 @@
 
 .rewardButton {
   margin: 0 auto;
+  padding: 0;
   width: rem(156);
   height: rem(36);
   display: flex;
@@ -71,6 +72,7 @@
 
 .payButton {
   margin: 0 auto;
+  padding: 0;
   width: rem(234);
   height: rem(36);
   display: flex;
@@ -123,6 +125,7 @@
 }
 
 .thumbs {
+  height: 100%;
   display: flex;
   align-items: center;
   font-size: rem($font-size-primary);
@@ -131,6 +134,7 @@
 .liked {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
 }
 
 .actived {
@@ -176,12 +180,10 @@
 }
 
 .likedNumber {
-  line-height: rem(20);
   margin-left: rem($margin-2n);
 }
 
 .shareCount {
-  line-height: rem(17);
   font-size: rem(12);
 }
 

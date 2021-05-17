@@ -17,8 +17,8 @@
 @mixin input {
   width: rem(327);
   box-sizing: border-box;
-  padding: rem($padding-6n) 0 rem($padding-4n);
-  height: rem(62);
+  margin-top: $margin-2n;
+  padding: rem($padding-4n) 0;
   border-bottom: $border-solid-1;
   :global(.dzq-input__inner) {
     font-size: rem($font-size-middle);
@@ -30,9 +30,12 @@
     -webkit-tap-highlight-color: transparent;
   }
   :global(.dzq-input__icon){
-    top: rem(17);
+    top: 0;
     font-size: rem($font-size-middle) !important;
     color: var(--color-disabled2) !important;
+    width: rem(20);
+    height: rem(20);
+    line-height: rem(20);
     &:hover {
       color: $primary-color !important;
     }
@@ -103,6 +106,7 @@
     flex-direction: row;
   }
   :global(.dzq-avatar), :global(.dzq-avatar__text){
+    font-size: rem($font-size-small);
     width: rem(30);
     height: rem(30);
     line-height: rem($font-line-height-large);
