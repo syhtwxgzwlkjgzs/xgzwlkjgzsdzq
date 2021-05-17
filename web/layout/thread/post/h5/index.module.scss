@@ -24,7 +24,7 @@
 }
 
 .audio-record {
-  padding: rem($padding-4n);
+  padding: 0 rem($padding-4n) rem($padding-4n);
 }
 .audio-record-display {
   position: relative;
@@ -46,7 +46,8 @@
     right: rem($padding-5n);
     top: 50%;
     transform: translateY(-50%);
-    color: $icon-color;
+    font-size: $font-size-middle;
+    color: $icon-color-light;
   }
 }
 
