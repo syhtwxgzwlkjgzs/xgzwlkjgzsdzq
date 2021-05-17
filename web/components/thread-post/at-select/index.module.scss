@@ -18,57 +18,43 @@
 }
 
 .wrapper {
-  position: relative;
+  // position: relative;
+  width: 100%;
   height: 100vh;
   height: -webkit-fill-available;
   min-height: 100vh;
   /* mobile viewport bug fix */
   min-height: -webkit-fill-available;
-
+  
   .input {
-    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    background: $text-bg-color2;
+    margin-left: $margin-4n;
+    margin-right: $margin-4n;
+    padding-left: $padding-4n;
+    padding-right: $padding-4n;
+    border-radius: $border-radius-small;
 
-    .delete {
-      position: absolute;
-      top: rem(26);
-      right: rem(32);
-      width: rem(16);
-      height: rem(16);
-      background: $text-color-placeholder;
-      border-radius: $border-radius-circle;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      .delete-icon {
-        transform: scale(0.8);
-        color: $white;
-      }
+    .inputWrapperIcon {
+      color: var(--color-text-secondary);
+    }
+    .deleteIcon {
+      color: var(--border-color-hover);
     }
   }
 
   :global {
     .dzq-input {
-      box-sizing: border-box;
       width: 100%;
-      padding: rem($padding-4n $padding-4n $padding-2n);
       .dzq-input__inner {
-        height: rem(36);
-        font-weight: normal;
-        font-size: $font-size-base;
+        box-sizing: border-box;
+        height: 36px;
+        width: 100%;
         background: $text-bg-color2;
-        color: $text-color-primary;
-        line-height: $font-line-height-base;
-        padding-left: rem(30);
         border: none;
-        // padding-right: 5px;
-        // text-align: left;
-      }
-      .dzq-input__icon {
-        left: rem(16);
-        top: 50%;
-        margin-top: rem(-14);
-        color: $disabled-color2 !important;
+        border-radius: 0;
       }
     }
   }
@@ -115,6 +101,7 @@
       .username {
         max-width: rem(170);
         @include single-line();
+        line-height: rem(17.8);
         font-size: $font-size-base;
         text-align: left;
         color: $text-color-primary;

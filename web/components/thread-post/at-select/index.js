@@ -142,16 +142,14 @@ class AtSelect extends Component {
       <div className={styles.wrapper}>
         {/* 搜索框 */}
         <div className={styles.input}>
+          <Icon className={styles.inputWrapperIcon} name="SearchOutlined" size={16} />
           <Input
             value={this.state.keywords}
-            icon="SearchOutlined"
             placeholder='搜索用户'
             onChange={e => this.updateKeywords(e)}
           />
           {this.state.keywords &&
-            <div className={styles.delete} onClick={this.clearKeywords}>
-              <Icon className={styles['delete-icon']} name="CloseOutlined" size={8}></Icon>
-            </div>
+            <Icon className={styles.deleteIcon} name="WrongOutlined" size={16}  onClick={this.clearKeywords}></Icon>
           }
         </div>
 
