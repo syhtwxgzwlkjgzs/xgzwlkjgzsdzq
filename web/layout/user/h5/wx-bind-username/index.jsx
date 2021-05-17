@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './index.module.scss';
-import { Input, Button, Toast } from '@discuzq/design';
+import { Input, Button, Toast, Avatar } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
@@ -40,7 +40,7 @@ class WXBindUsernameH5page extends React.Component {
     }
   };
   render() {
-    const { userLogin, router } = this.props;
+    const { userLogin, router, user } = this.props;
     const { nickname } = router.query;
     userLogin.sessionToken = router.query.sessionToken;
     return (
@@ -49,8 +49,22 @@ class WXBindUsernameH5page extends React.Component {
         <div className={layout.content}>
           <div className={layout.title}>用户名登录，并绑定微信账号</div>
           <div className={layout.tips}>
-            hi， 微信用户 {nickname}
-            <br />
+            <div className={layout.tips_user}>
+              hi，
+              {
+                nickname
+                  ? <>
+                      亲爱的<Avatar
+                        style={{margin: '0 8px'}}
+                        circle
+                        size='small'
+                        image={user.avatarUrl}
+                        text={nickname && nickname.substring(0, 1)}
+                        />{nickname}
+                    </>
+                  : '微信用户'
+                }
+            </div>
             请您登录，即可完成微信号和用户名的绑定
           </div>
           {/* 输入框 start */}

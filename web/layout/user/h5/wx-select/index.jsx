@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './index.module.scss';
-import { Button, Toast } from '@discuzq/design';
+import { Button, Toast, Avatar } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import { get } from '@common/utils/get';
@@ -16,14 +16,32 @@ import { usernameAutoBind } from '@server';
 @observer
 class WXSelectH5Page extends React.Component {
   render() {
-    const { router } = this.props;
+    const { router, user } = this.props;
     const { sessionToken, nickname } = router.query;
     return (
       <div className={layout.container}>
         <HomeHeader hideInfo mode='login'/>
         <div className={layout.content}>
           <div className={layout.title}>绑定微信号</div>
-          <div className={layout.tips}>微信用户 {nickname}，请选择您要进行的操作</div>
+          <div className={layout.tips}>
+            <div className={layout.tips_user}>
+              hi，
+              {
+                nickname
+                  ? <>
+                      亲爱的<Avatar
+                        style={{margin: '0 8px'}}
+                        circle
+                        size='small'
+                        image={user.avatarUrl}
+                        text={nickname && nickname.substring(0, 1)}
+                        />{nickname}
+                    </>
+                  : '微信用户'
+                }
+            </div>
+            请选择您要进行的操作
+          </div>
           <Button
             className={layout.button}
             type="primary"

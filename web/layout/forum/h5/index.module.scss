@@ -7,23 +7,29 @@
   border: rem(1) solid var(--color-white);
 }
 
+@mixin lineHeight52 {
+  line-height: rem(52);
+}
+
 .content{
   padding: 0 rem(16);
   .list{
     border-bottom: rem(1) solid var(--border-line-color);
     height: rem(52);
-    line-height: rem(52);
     font-size: rem(14);
     font-weight: normal;
     .label{
       float: left;
       color: #4f5a70;
+      @include lineHeight52;
     }
     .right{
       float: right;
+      @include lineHeight52;
     }
   }
   .forum_agent{
+    @include lineHeight52;
     .forum_agent_img{
       @include img;
     }
@@ -32,6 +38,7 @@
     }
   }
   .forum_member{
+    @include lineHeight52;
     .forum_member_img{
       @include img;
     }
