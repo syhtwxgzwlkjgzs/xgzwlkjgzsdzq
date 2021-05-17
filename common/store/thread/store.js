@@ -8,7 +8,7 @@ class ThreadStore {
   @observable commentList = null; // 评论列表数据
   @observable totalCount = 0; // 评论列表总条数
   @observable authorInfo = null; // 作者信息
-  @observable isPositionToComment = true; // 是否定位到评论位置
+  @observable isPositionToComment = false; // 是否定位到评论位置
 
   // 是否帖子数据准备好
   @computed get isReady() {
