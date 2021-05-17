@@ -232,13 +232,13 @@ class PostPage extends React.Component {
     if (vditor) {
       this.vditor = vditor;
       const htmlString = vditor.getHTML();
-      if (!this.state.isTitleShow || this.props.site.platform === 'pc') return;
+      this.setPostData({ contentText: htmlString });
       if (!this.props.threadPost.postData.title) {
+        if (!this.state.isTitleShow || this.props.site.platform === 'pc') return;
         this.setState({ isTitleShow: false }, () => {
           vditor.blur();
         });
       }
-      this.setPostData({ contentText: htmlString });
     }
   };
 
