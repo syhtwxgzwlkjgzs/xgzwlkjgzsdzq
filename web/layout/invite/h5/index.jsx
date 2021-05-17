@@ -1,13 +1,14 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import { Icon, Button, Toast } from '@discuzq/design';
+import { Icon, Button, Toast, Avatar } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import { get } from '@common/utils/get';
 import { ENV_CONFIG } from '@common/constants/site';
 
 @inject('site')
+@inject('user')
 @inject('invite')
 @observer
 class InviteH5Page extends React.Component {
@@ -41,7 +42,13 @@ class InviteH5Page extends React.Component {
           {/* 头部 end */}
           {/* 用户信息 start */}
           <div className={layout.user_info}>
-            <img className={layout.user_info_author} src={inviteData.avatar} alt=""/>
+            <div className={layout.user_info_author}>
+              <Avatar
+                size={'big'}
+                image={inviteData.avatar}
+                text={inviteData.nickname && inviteData.nickname.substring(0, 1)}
+              />
+            </div>
             <div className={layout.user_info_content}>
               <div className={layout.user_info_name}>{inviteData.nickname}</div>
               <div className={layout.user_info_tag}>{inviteData.groupName}</div>

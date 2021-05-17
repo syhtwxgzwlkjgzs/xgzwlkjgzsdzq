@@ -13,15 +13,22 @@
     position: relative;
   }
   .user_info_author{
-    width: rem(118);
-    height: rem(118);
+    width: rem(120);
+    height: rem(120);
+    box-sizing: border-box;
     position: absolute;
     left: rem(128);
     top: rem(-120);
     border-radius: 50%;
     background: var(--color-white);
     border: rem(1) solid var(--color-white);
+    overflow: hidden;
     z-index: 3;
+    :global(.dzq-avatar__img),:global(.dzq-avatar__text) {
+      width: rem(118);
+      height: rem(118);
+      line-height: rem(118);
+    }
   }
   .user_info_content{
     width: rem(343);
