@@ -19,7 +19,7 @@ export default function HOCFetchSiteData(Component) {
     // 应用初始化
     static async getInitialProps(ctx) {
       try {
-        let platform = 'pc';
+        let platform = 'static';
         let siteConfig = {};
         let userInfo;
         let serverSite;
