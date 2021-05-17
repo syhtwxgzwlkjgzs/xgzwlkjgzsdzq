@@ -92,7 +92,6 @@ class ThreadH5Page extends React.Component {
     this.position = this.commentDataRef?.current?.offsetTop - 50;
 
     // 是否定位到评论位置
-    console.log(this.props?.thread?.isPositionToComment);
     if (this.props?.thread?.isPositionToComment) {
       // TODO:需要监听帖子内容加载完成事件
       setTimeout(() => {
