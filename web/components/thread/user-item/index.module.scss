@@ -33,11 +33,11 @@
       justify-content: center;
       align-items: center;
       position: absolute;
-      bottom: rem(8);
-      right: rem(-3);
+      bottom: rem(-4);
+      right: rem(-4);
       border-radius: rem($border-radius-big);
-      height: rem(13); // 设计是20px，大约是rem(13)
-      width: rem(13);
+      height: rem(20);
+      width: rem(20);
       border: var(--color-white) solid rem(1);
       text-align: center;
       line-height: rem(20);
