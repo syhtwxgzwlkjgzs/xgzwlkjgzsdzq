@@ -22,6 +22,8 @@
       align-items: center;
       justify-content: flex-start;
       .text {
+        font-size: rem($font-size-base);
+        line-height: rem($font-line-height-base);
         padding-left: $padding-2n;
       }
     }
