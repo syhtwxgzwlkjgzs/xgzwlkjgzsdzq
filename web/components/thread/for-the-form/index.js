@@ -42,7 +42,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
     }
     confirm({
       value,
-      times: formatDate(times, 'yyyy-MM-dd h:mm'),
+      times: formatDate(times, 'yyyy/MM/dd h:mm'),
     });
   };
   const content = (
@@ -54,7 +54,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
             mode="number"
             value={value}
             placeholder="金额"
-            onChange={e => setValue(+e.target.value)}
+            onChange={e => setValue(e.target.value)}
           />
           元
         </div>
@@ -70,7 +70,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
                   minDate={new Date()}
                   onChange={date => setTimes(date)}
                   showTimeSelect
-                  dateFormat="yyyy-MM-dd HH:mm:ss"
+                  dateFormat="yyyy/MM/dd HH:mm:ss"
                   locale="zh"
                 />
                 <Icon name="RightOutlined" />
@@ -78,7 +78,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
             )
             : (
               <>
-                <div onClick={() => setShow(true)} > {`${formatDate(times, 'yyyy-MM-dd h:mm')}`} </div>
+                <div onClick={() => setShow(true)} > {`${formatDate(times, 'yyyy/MM/dd h:mm')}`} </div>
                 <Icon name="RightOutlined" />
               </>
             )}

@@ -49,6 +49,7 @@ class PostPage extends React.Component {
     this.captcha = ''; // 腾讯云验证码实例
     this.ticket = ''; // 腾讯云验证码返回票据
     this.randstr = ''; // 腾讯云验证码返回随机字符串
+    this.vditor = null;
   }
 
   componentDidMount() {
@@ -72,6 +73,7 @@ class PostPage extends React.Component {
   componentWillUnmount() {
     this.captcha = '';
     this.props.threadPost.resetPostData();
+    if (this.vditor && this.vditor.destroy) this.vditor.destroy();
   }
 
   saveDataLocal = () => {
@@ -129,6 +131,7 @@ class PostPage extends React.Component {
 
   // 处理录音完毕后的音频上传
   handleAudioUpload = async (blob) => {
+    blob.name = `${new Date().getTime()}.mp3`;
     tencentVodUpload({
       file: blob,
       onUploading: () => {
@@ -227,9 +230,15 @@ class PostPage extends React.Component {
   // 编辑器
   handleVditorChange = (vditor) => {
     if (vditor) {
+      this.vditor = vditor;
       const htmlString = vditor.getHTML();
-      if (!this.props.threadPost.postData.title) this.setState({ isTitleShow: false });
       this.setPostData({ contentText: htmlString });
+      if (!this.props.threadPost.postData.title) {
+        if (!this.state.isTitleShow || this.props.site.platform === 'pc') return;
+        this.setState({ isTitleShow: false }, () => {
+          vditor.blur();
+        });
+      }
     }
   };
 
