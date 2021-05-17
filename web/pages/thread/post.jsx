@@ -131,6 +131,7 @@ class PostPage extends React.Component {
 
   // 处理录音完毕后的音频上传
   handleAudioUpload = async (blob) => {
+    blob.name = `${new Date().getTime()}.mp3`;
     tencentVodUpload({
       file: blob,
       onUploading: () => {
