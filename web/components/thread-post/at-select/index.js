@@ -37,10 +37,6 @@ class AtSelect extends Component {
   async fetchFollow() {
     const { threadPost } = this.props;
     const { page, perPage, keywords } = this.state;
-    if ((page - 1) * perPage > threadPost.follows.length) {
-      this.setState({ finish: true });
-      return Promise.reject();
-    }
     const params = { page, perPage };
     if (keywords) {
       params.filter = {};
@@ -48,10 +44,6 @@ class AtSelect extends Component {
       params.filter.type = 0;
     }
     const ret = await threadPost.fetchFollow(params);
-    if (page * perPage > this.props.threadPost.follows.length) {
-      this.setState({ finish: true });
-      return Promise.reject();
-    }
     if (ret.code === 0) {
       this.setState({ page: page + 1 });
     }
@@ -75,7 +67,8 @@ class AtSelect extends Component {
 
   onScrollBottom() {
     // 没有更多数据时，不再发送请求
-    if (this.state.finish) return Promise.reject();
+    const { threadPost } = this.props;
+    if ((this.state.page - 1) * this.state.perPage > threadPost.followsTotalCount) return Promise.reject();
     return this.fetchFollow();
   }
 
@@ -172,7 +165,7 @@ class AtSelect extends Component {
                 lowerThreshold={100}
               /> */}
             {/* </div> */}
-            <BaseList className={styles['at-wrap']} onRefresh={this.onScrollBottom.bind(this)} noMore={this.state.finish}>
+            <BaseList className={styles['at-wrap']} onRefresh={this.onScrollBottom.bind(this)} noMore={(this.state.page - 1) * this.state.perPage > threadPost.followsTotalCount}>
               {data && data.map((_, index) => this.renderItem({ data, index })) }
             </BaseList>
           </Checkbox.Group>

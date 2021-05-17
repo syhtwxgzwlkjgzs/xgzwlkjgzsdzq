@@ -60,39 +60,29 @@ class TopicSelect extends Component {
 
   async loadTopics() {
     // 1 设置参数
-    const { threadPost } = this.props;
     const { fetchTopic } = this.props.threadPost;
-    const { pageNum, pageSize } = this.state;
-    if ((pageNum - 1) * pageSize > threadPost.topics.length) {
-      this.setState({ isLastPage: true });
-      return Promise.reject();
-    }
     const params = {
       page: this.state.pageNum,
       perPage: this.state.pageSize,
-      filter: {
-        recommended: 1,
-      },
+      // filter: {
+      //   recommended: 1,
+      // },
     };
     if (this.state.keywords) {
       params.filter.content = this.state.keywords;
     }
     // 2 发起请求
-    await fetchTopic(params);
-    if (pageNum * pageSize > this.props.threadPost.topics.length) {
-      this.setState({ isLastPage: true });
-      return Promise.reject();
-    }
+    const ret = await fetchTopic(params);
     // 3 更新页码
-    this.setState({ pageNum: this.state.pageNum + 1 });
+    if (ret.code === 0) {
+      this.setState({ pageNum: this.state.pageNum + 1 });
+    }
     return Promise.reject();
   }
 
   onScrollBottom() {
-    console.log('bottom');
-    // 忽略页码为1时的触底
-    if (this.state.pageNum === 1) return;
-    if (this.state.isLastPage) return Promise.reject();
+    if ((this.state.pageNum - 1) * this.state.pageSize
+      > this.props.threadPost.topicTotalCount) return Promise.reject();
     return this.loadTopics();
   }
 
@@ -147,7 +137,8 @@ class TopicSelect extends Component {
 
         {/* 话题列表 */}
         {/* <div className={styles['topic-wrap']}> */}
-          <BaseList className={styles['topic-wrap']} onRefresh={this.onScrollBottom.bind(this)} noMore={this.state.isLastPage}>
+          <BaseList className={styles['topic-wrap']} onRefresh={this.onScrollBottom.bind(this)} noMore={(this.state.pageNum - 1) * this.state.pageSize
+            > this.props.threadPost.topicTotalCount}>
             {/* 新话题 */}
             {this.state.keywords
               && <div
