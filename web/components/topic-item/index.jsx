@@ -32,6 +32,7 @@ export const TopicItem = ({ data, onClick = noop }) => {
         </div>
         <div className={styles.tags}>
           <div className={styles.tag}>热度 {data.viewCount || 0}</div>
+          <span className={styles.dot}>·</span>
           <div className={styles.tag}>内容 {data.threadCount || 0}</div>
         </div>
       </div>
