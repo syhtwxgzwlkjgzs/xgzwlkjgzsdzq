@@ -7,10 +7,16 @@
   font-size: rem($font-size-large);
   padding: rem($padding-4n);
   overflow-y: auto;
-}
 
-.asBtn {
-  border-radius: rem(5) !important;
+  .amountSubmit {
+    .asBtn {
+      border-radius: rem(5);
+      font-size: rem(16);
+      line-height: rem(24);
+      padding-top: rem(10);
+      padding-bottom: rem(10);
+    }
+  }
 }
 
 .payBoxCloseIcon {
