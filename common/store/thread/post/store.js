@@ -17,10 +17,12 @@ class ThreadPostStore {
    * 推荐的话题列表，选择话题的时候需要
    */
   @observable topics = [];
+  @observable topicTotalCount = 0;
   /**
    * 我的关注
    */
   @observable follows = [];
+  @observable followsTotalCount = 0;
   /**
    * 加载状态
    */

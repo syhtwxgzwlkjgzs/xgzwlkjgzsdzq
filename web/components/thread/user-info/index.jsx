@@ -4,6 +4,7 @@ import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import React from 'react';
 import { diffDate } from '@common/utils/diff-date';
+import classNames from 'classnames';
 
 UserInfo.propTypes = {
   name: PropTypes.string.isRequired, // 用户名称
@@ -36,9 +37,9 @@ export default function UserInfo(props) {
       ></Avatar>
 
       <div className={styles.right}>
-        <div>
-          <span className={styles.name}>{props.name}</span>
-          {props.groupName && <span className={styles.groupName}>{props.groupName}</span>}
+        <div className={styles.info}>
+          <div className={styles.name}>{props.name}</div>
+          {props.groupName && <div className={styles.groupName}>{props.groupName}</div>}
         </div>
 
         <div className={styles.meta}>
@@ -59,7 +60,11 @@ export default function UserInfo(props) {
       </div>
 
       <div className={styles.tags}>
-        {props.isEssence && <p className={styles.categoryEssence}>精</p>}
+        {props.isEssence && (
+          <div className={classNames('dzq-tag', styles.categoryEssence)}>
+            <span className="dzq-tag-text">精</span>
+          </div>
+        )}
         {/* {props.isEssence && <Tag type="primary">精华</Tag>} */}
         {props.isPay && <Tag type="success">付</Tag>}
         {props.isReward && <Tag type="warning">悬</Tag>}

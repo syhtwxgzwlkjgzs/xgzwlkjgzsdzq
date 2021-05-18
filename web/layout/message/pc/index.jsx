@@ -12,38 +12,12 @@ import Copyright from '@components/copyright';
 import UserCenterFollow from '@components/user-center-follow';
 import Router from '@discuzq/sdk/dist/router';
 import Stepper from '../../search/pc/components/stepper';
+import { sidebarData } from '@common/constants/message';
 
 const Index = ({ page, subPage, dialogId, username }) => {
   const router = useRouter();
 
   const [sidebarIndex, setSidebarIndex] = useState(9999);
-
-  const sidebarData = [
-    {
-      iconName: "StrongSharpOutlined",
-      iconColor: "#2469f6",
-      content: "我的私信",
-      type: 'index',
-    },
-    {
-      iconName: "MemberOutlined",
-      iconColor: "#3AC15F",
-      content: "帖子通知",
-      type: 'thread',
-    },
-    {
-      iconName: "HotOutlined",
-      iconColor: "#FFC300",
-      content: "财务通知",
-      type: 'financial',
-    },
-    {
-      iconName: "HotOutlined",
-      iconColor: "#E02433",
-      content: "账号消息",
-      type: 'account',
-    }
-  ];
 
   const mainContent = useMemo(() => {
     // 处理侧边栏选中状态
@@ -68,7 +42,7 @@ const Index = ({ page, subPage, dialogId, username }) => {
       case 'chat':
         return <MessageChat dialogId={dialogId} username={username} />;
     }
-  }, [page]);
+  }, [page, subPage, dialogId, username]);
 
   const rightContent = () => {
     return (

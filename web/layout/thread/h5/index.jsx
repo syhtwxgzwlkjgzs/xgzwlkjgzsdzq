@@ -92,7 +92,6 @@ class ThreadH5Page extends React.Component {
     this.position = this.commentDataRef?.current?.offsetTop - 50;
 
     // 是否定位到评论位置
-    console.log(this.props?.thread?.isPositionToComment);
     if (this.props?.thread?.isPositionToComment) {
       // TODO:需要监听帖子内容加载完成事件
       setTimeout(() => {
@@ -465,7 +464,7 @@ class ThreadH5Page extends React.Component {
     Toast.info({ content: '复制链接成功' });
 
     const { title = '' } = this.props.thread?.threadData || {};
-    h5Share(title);
+    h5Share({ title, path: `thread/${this.props.thread?.threadData?.threadId}` });
 
     // const id = this.props.thread?.threadData?.id;
 
@@ -662,7 +661,7 @@ class ThreadH5Page extends React.Component {
                 className={footer.icon}
                 onClick={() => this.onCollectionClick()}
                 size="20"
-                name="CollectOutlined"
+                name="CollectOutlinedBig"
               ></Icon>
               <Icon
                 onClick={() => this.onShareClick()}
