@@ -102,6 +102,11 @@ export default class index extends Component {
     }
   };
 
+  // 转换金额小数
+  transMoneyToFixed = (num) => {
+    return Number(num).toFixed(2);
+  };
+
   renderDiffPaymementContent = () => {
     if (this.props.payBox.payWay === PAYWAY_MAP.WX) {
       return this.renderWechatCodePaymementContent();
@@ -211,14 +216,14 @@ export default class index extends Component {
 
   render() {
     const { options = {} } = this.props?.payBox;
-    const { amount } = options;
+    const { amount = 0 } = options;
     return (
       <div>
         <div className={styles.payconfirmWrapper}>
           {/* 头部 */}
           <div className={styles.payTitle}>支付</div>
           {/* 支付金额显示 */}
-          <div className={styles.payMoney}>支付金额 <span className={styles.payM}>￥{amount}</span></div>
+          <div className={styles.payMoney}>支付金额 <span className={styles.payM}>￥{this.transMoneyToFixed(amount)}</span></div>
           {/* tab切换支付方式 */}
           <div>
             <div className={styles.payTab_top}>
