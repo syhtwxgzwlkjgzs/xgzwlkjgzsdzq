@@ -150,10 +150,11 @@ class index extends Component {
             </div>
             <div><Icon name="RightOutlined" /></div>
           </div> */}
-          <div className={styles.userCenterEditBtn}>
-            <Button onClick={this.handleCancel}>取消</Button>
-            <Button onClick={this.handleUpdateEditedUserInfo} type="primary">保存</Button>
-          </div>
+
+        </div>
+        <div className={styles.userCenterEditBtn}>
+          <Button full onClick={this.handleCancel}>取消</Button>
+          <Button full onClick={this.handleUpdateEditedUserInfo} type="primary">保存</Button>
         </div>
       </div>
     );
