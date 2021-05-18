@@ -55,6 +55,7 @@
   border-top: 1px solid $border-color;
   padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
   display: flex;
+  justify-content: center;
   .btn {
     width: rem(343);
     height: rem(42);
