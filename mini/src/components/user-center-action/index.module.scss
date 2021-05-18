@@ -1,0 +1,44 @@
+@import '@common/styles/index.scss';
+@import '@common/styles/_variable.scss';
+
+.userCenterAction {
+    display: flex;
+    padding: $padding-4n;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    .userCenterActionItemContainer {
+
+        .userCenterActionItem {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-right: 32px;
+            min-width: 60px;
+            cursor: pointer;
+
+            &:last-child {
+                margin-right: 0;
+            }
+
+            .userCenterActionItemIcon {}
+
+            .userCenterActionItemDesc {
+                margin-top: $margin-2n;
+                color: $text-color-regular;
+            }
+        }
+    }
+
+}
+
+.userActionMobile {
+    .userCenterActionItemContainer {
+        display: flex;
+
+        .userCenterActionItem {
+            margin: 0;
+        }
+    }
+}

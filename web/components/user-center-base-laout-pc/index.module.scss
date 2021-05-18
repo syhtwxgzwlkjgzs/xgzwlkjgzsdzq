@@ -25,22 +25,22 @@
   width: rem(750);
   display: flex;
   flex-direction: column;
-  margin-top: rem(10);
+  margin-top: rem($margin-10);
 }
 
 .left {
   position: sticky;
   top: rem(0);
-  margin-right: rem(20);
-  margin-top: rem(10);
+  margin-right: rem($margin-5n);
+  margin-top: rem($margin-10);
   width: rem(300);
 }
 
 .right {
   position: sticky;
-  margin-left: rem(10);
+  margin-left: rem($margin-10);
   top: rem(0);
-  padding-top: rem(10);
+  padding-top: rem($margin-10);
   width: rem(340);
 }
 
@@ -53,10 +53,13 @@
 
 .userHeader {
   width: rem(1100);
-  margin-top: rem(10);
+  margin-top: rem($margin-5n);
 }
 
 .headImgWrapper {
   border-radius: rem($border-radius-small) rem($border-radius-small) 0 0;
   overflow: hidden;
+  >div {
+    height: rem(153);
+  }
 }
