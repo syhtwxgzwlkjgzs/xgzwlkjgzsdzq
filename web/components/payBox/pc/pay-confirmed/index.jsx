@@ -126,7 +126,7 @@ export default class index extends Component {
         {/* 微信支付内容 */}
         <div className={styles.wPaymentDec}>
           <div className={styles.wPayment_01}>
-            <Icon className={styles.icon} name={'WechatPaymentOutlined'} color={'#09bb07'} size={20} />
+            <Icon className={styles.icon} name={'WechatPaymentOutlined'} color={'#09bb07'} size={16} />
           微信支付
         </div>
           <div className={styles.wPayment_02}>
@@ -151,7 +151,7 @@ export default class index extends Component {
     const { options = {} } = this.props.payBox;
     const { amount = 0 } = options;
     return (
-      <div className={styles.walletPayment}>
+      <div className={`${styles.walletPayment} ${this.props.payBox?.walletAvaAmount >= amount && styles.walletPayment_01}`}>
         <div className={styles.walletTitle}>
           <Icon className={styles.icon} name="PurseOutlined" size="20" color={'#1878f3'} />
           钱包支付
@@ -179,7 +179,7 @@ export default class index extends Component {
                 </div>
               ) : (
                 <>
-                  <div className={styles.walletDec}>
+                  <div className={`${styles.walletDec} ${styles.walletPay}`}>
                     <span>钱包余额</span>
                     <span className={styles.walletBalance}>￥{this.props.payBox?.walletAvaAmount}</span>
                   </div>
@@ -208,6 +208,13 @@ export default class index extends Component {
                 确认支付
               </Button>
             </div>
+            {
+              this.props.payBox?.walletAvaAmount >= amount && (
+                <div className={styles.forgetPassword}>
+                  忘记支付密码？
+                </div>
+              )
+            }
           </>
         )}
       </div>
