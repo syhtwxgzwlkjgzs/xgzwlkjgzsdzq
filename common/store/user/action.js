@@ -476,7 +476,7 @@ class UserAction extends SiteStore {
       timeout: 3000,
       data: {
         mobile,
-        type: 'update',
+        type: 'rebind',
         captchaTicket,
         captchaRandStr,
       },
@@ -524,7 +524,7 @@ class UserAction extends SiteStore {
   async verifyOldMobile() {
     const smsVerifyRes = await smsVerify({
       data: {
-        mobile: this.mobile,
+        mobile: this.originalMobile,
         code: this.oldMobileVerifyCode,
       },
     });
@@ -582,6 +582,33 @@ class UserAction extends SiteStore {
     console.log(userCollectionList);
 
     return userCollectionList;
+  }
+
+  /**
+   * 我的屏蔽对应store函数
+   */
+  // 屏蔽
+  @action
+  async postShield() {
+    
+  }
+
+  // 取消屏蔽
+  @action
+  async cancelShield() {
+
+  }
+
+  // 点击屏蔽后需要更新的数据
+  @action
+  async setUserBeShielded() {
+
+  }
+
+  // 点击取消屏蔽后需要更新的数据
+  @action
+  async setUserBeUnShielded() {
+    
   }
 
   /**

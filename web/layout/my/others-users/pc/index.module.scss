@@ -10,7 +10,29 @@
   padding: 0;
 }
 .hr {
-  height: rem(10);
+  height: rem($margin-10);
   background-color: $body-bg-color;
   margin: 0 rem(-30);
+}
+.userInfoWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-top: rem($padding-4n);
+  padding-bottom: rem($padding-4n);
+  justify-content: space-between;
+
+  .userInfoKey {
+    color: $text-color-regular;
+    font-size: rem($font-size-primary);
+  }
+
+  .userInfoValue {
+    color: $text-color-primary;
+  }
+}
+
+.friendsWrapper {
+  overflow: hidden !important;
+  margin: 0 rem(-16);
 }

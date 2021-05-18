@@ -1,6 +1,6 @@
 // @ts-check
 import React, { Component } from 'react';
-import { Popup, Icon } from '@discuzq/design';
+import { Popup, Icon, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import EventEmitter from 'eventemitter3';
 import { View } from '@tarojs/components';
@@ -31,6 +31,12 @@ export default class PayBox extends Component {
   ) => {
     // 每次新的付费创建，需要清空前一次的付费信息
     this.props.payBox.clear();
+    if (Number(get(options, 'data.amount', 0)) < 0.1) {
+      Toast.error({
+        content: '最小支付金额必须大于 0.1 元',
+      });
+      return;
+    }
     this.props.payBox.options = {
       ...options.data,
     };
@@ -42,7 +48,6 @@ export default class PayBox extends Component {
   };
 
   render() {
-    console.log(this.props.payBox.step);
     return (
       <>
         <ToastProvider>

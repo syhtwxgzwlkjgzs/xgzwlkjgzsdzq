@@ -1,0 +1,70 @@
+@import '@common/styles/index.scss';
+@import '@common/styles/_variable.scss';
+
+.content {
+  padding: $padding-6n;
+  padding-bottom: 0;
+  height: 100%;
+  h3 {
+    font-size: $font-size-large;
+    color: $text-color-primary;
+    margin-bottom: $margin-5n;
+    letter-spacing: 1px;
+  }
+  .setTtile {
+    display: block;
+    font-size: $font-size-large;
+    color: $text-color-primary;
+    margin-bottom: $margin-5n;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+  .labelInfo {
+    // padding: $margin-10) 0 $margin-6n;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $margin-6n;
+    height: 62px;
+    line-height: 62px;
+    .labelValue {
+      color: $text-color-primary;
+      font-size: $font-size-middle;
+      border-bottom: 1px solid $border-color;
+      flex: 1;
+      :global {
+        .dzq-input {
+          width: 100%;
+        }
+        .dzq-input__inner {
+          width: 100%;
+          border: none;
+          font-size: $font-size-middle;
+        }
+        .dzq-icon {
+          line-height: 36px;
+        }
+      }
+    }
+  }
+}
+
+.tips {
+  text-align: right;
+  color: $text-color-primary;
+  padding-right: $padding-6n;
+  font-size: $font-size-primary;
+}
+
+.bottom {
+  position: fixed;
+  bottom: 20px;
+  width: 100%;
+  border-top: 1px solid $border-color;
+  padding: $padding-2n $padding-4n $padding-10;
+  .btn {
+    width: 343px;
+    height: 42px;
+    font-size: $font-size-middle;
+  }
+}
