@@ -56,8 +56,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  // padding: rem($padding-4n);
+  
+
   .payListItem{
+
+    &:first-child {
+      border-radius: 5px 0 0 5px;
+    }
+  
+    &:last-child {
+      border-radius: 0 5px 5px 0;
+    }
+
     border-bottom: var(--border-border);
     width: rem(40);
     height: rem(40);
@@ -75,6 +85,7 @@
       border-bottom-color: #C5C6CA;
     }
   }
+  
   .payListItem01 {
     border: var(--border-border);
     width: rem(40);

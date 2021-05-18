@@ -45,6 +45,14 @@
       box-sizing: border-box;
     }
   }
+
+  :global {
+    .dzq-modal__body {
+      padding: 0;
+    }
+  }
+
+  line-height: 21px;
 }
 .paypwdDialogContent {
   display: flex;
@@ -53,6 +61,7 @@
   .paypwdTitle {
     font-size: rem($font-size-middle);
     color: $text-color-primary;
+    margin-top: rem(8);
   }
   .paypwdAmount {
     font-size: rem($font-line-height-large);
@@ -95,5 +104,18 @@
         font-size: rem($font-size-primary) !important;
       }
     }
+  }
+}
+
+.forgetPasswordContainer {
+  width: 100%;
+  margin-top: rem(16);
+  margin-bottom: rem(8);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  span {
+    color: #4F5A70;
   }
 }
