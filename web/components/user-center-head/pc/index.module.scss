@@ -55,22 +55,22 @@
       box-sizing: border-box;
       .username {
         font-weight: 600;
-        font-size: 20px;
-        line-height: 22px;
-        color: #fff;
+        font-size: rem(20);
+        line-height: rem($font-line-height-small);
+        color: $white;
       }
       .groupName {
-        font-size: rem(14);
-        line-height: rem(22);
-        color: #fff;
+        font-size: rem($font-size-base);
+        line-height: rem($font-line-height-small);
+        color: $white;
         margin-top: rem(4);
       }
       .text {
         position: absolute;
         bottom: rem(16);
         font-size: rem($font-size-primary);
-        line-height: rem(22);
-        color: var(--color-text-primary);
+        line-height: rem($font-line-height-small);
+        color: $text-color-primary;
       }
     }
     .upload {
@@ -79,24 +79,24 @@
         margin-right: rem(6);
       }
       padding-top: rem(48);
-      font-size: 12px;
-      line-height: 22px;
-      color: #fff;
+      font-size: rem($font-size-small);
+      line-height: rem(22);
+      color: $white;
     }
     .otherUserBtn {
       position: absolute;
-      right: rem(24);
+      right: rem($margin-6n);
       bottom: rem(9);
       text-align: right;
       .shieldBtn {
-        font-size: 14px;
-        line-height: 22px;
-        color: #fff;
+        font-size: rem($font-size-primary);
+        line-height: rem($font-line-height-small);
+        color: $white;
         cursor: pointer;
         :global {
           .dzq-icon {
             vertical-align: middle;
-            margin-right: rem(8);
+            margin-right: rem($margin-2n);
           }
         }
       }
