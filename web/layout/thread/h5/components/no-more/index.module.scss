@@ -4,6 +4,10 @@
   padding: rem($padding-4n) 0;
   text-align: center;
   color: var(--color-text-placeholder);
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .empty {

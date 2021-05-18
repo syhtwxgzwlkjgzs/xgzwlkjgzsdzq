@@ -198,6 +198,7 @@ class IndexH5Page extends React.Component {
         onScroll={this.onScroll}
         curr='home'
         pageName='home'
+        preload={1000}
       >
         <HomeHeader ref={this.headerRef} />
 

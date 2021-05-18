@@ -44,7 +44,7 @@ export default function UserInfo(props) {
           {props.time && <span className={styles.time}>{diffDate(props.time)}</span>}
           {props.location && (
             <div className={styles.location}>
-              <Icon name="PositionOutlined"></Icon>
+              <Icon name="PositionOutlined" size={14}></Icon>
               <span>{props.location}</span>
             </div>
           )}

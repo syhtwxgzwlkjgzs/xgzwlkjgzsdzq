@@ -73,10 +73,10 @@ class ThreadPostAction extends ThreadPostStore {
     const ret = await readFollow({ params });
     this.setLoadingStatus(LOADING_TOTAL_TYPE.follow, false);
     const { code, data } = ret;
-    const { pageData } = data || {};
+    const { pageData, totalCount = 0 } = data || {};
     if (code === 0) {
-      if (page === 1) this.setFollow(pageData || []);
-      else this.appendFollow(pageData || []);
+      if (page === 1) this.setFollow(pageData || [], totalCount);
+      else this.appendFollow(pageData || [], totalCount);
     }
     return ret;
   }
@@ -106,10 +106,10 @@ class ThreadPostAction extends ThreadPostStore {
     };
     const ret = await readTopics({ params });
     const { code, data } = ret;
-    const { pageData = [] } = data || {};
+    const { pageData = [], totalCount = 0 } = data || {};
     if (code === 0) {
-      if (params.page === 1) this.setTopic(pageData || []);
-      else this.appendTopic(pageData || []);
+      if (params.page === 1) this.setTopic(pageData || [], totalCount);
+      else this.appendTopic(pageData || [], totalCount);
     }
     this.setLoadingStatus(LOADING_TOTAL_TYPE.topic, false);
     return ret;
@@ -129,14 +129,16 @@ class ThreadPostAction extends ThreadPostStore {
 
   // 设置关注
   @action.bound
-  setFollow(data) {
+  setFollow(data, totalCount) {
     this.follows = data || [];
+    this.followsTotalCount = totalCount;
   }
 
   // 附加关注
   @action.bound
-  appendFollow(data) {
+  appendFollow(data, totalCount) {
     this.follows = [...this.follows, ...data];
+    this.followsTotalCount = totalCount;
   }
 
   // 设置商品信息
@@ -147,14 +149,16 @@ class ThreadPostAction extends ThreadPostStore {
 
   // 设置话题列表
   @action.bound
-  setTopic(data) {
+  setTopic(data, totalCount) {
     this.topics = data;
+    this.topicTotalCount = totalCount;
   }
 
   // 附加话题列表
   @action.bound
-  appendTopic(data) {
+  appendTopic(data, totalCount) {
     this.topics = [...this.topics, ...data];
+    this.topicTotalCount = totalCount;
   }
 
   // 同步发帖数据到store

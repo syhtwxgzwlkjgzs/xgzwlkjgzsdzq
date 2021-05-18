@@ -10,6 +10,8 @@
   justify-content: space-between;
   background: var(--color-white);
   border-bottom: var(--border-border);
+  flex: 0 0 rem(54);
+
   .number {
     font-size: rem($font-size-middle);
     text-align: left;

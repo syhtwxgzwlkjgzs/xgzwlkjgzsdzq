@@ -73,14 +73,18 @@ export default function DVditor(props) {
   // }, [contentCount]);
 
   useEffect(() => {
-    if ((vditor && vditor.getValue && vditor.getValue() !== '\n') || !value) return;
-    const timer = setTimeout(() => {
-      clearTimeout(timer);
-      if (vditor && vditor.getValue && vditor.getValue() === '\n' && vditor.getValue() !== value) {
-        // setCurrentPositon();
-        vditor.insertValue && vditor.insertValue(value);
-      }
-    }, 200);
+    try {
+      const timer = setTimeout(() => {
+        clearTimeout(timer);
+        if ((vditor && vditor.getValue && vditor.getValue() !== '\n') || !value) return;
+        if (vditor && vditor.getValue && vditor.getValue() === '\n' && vditor.getValue() !== value) {
+          // setCurrentPositon();
+          vditor.setValue && vditor.setValue(value);
+        }
+      }, 200);
+    } catch (error) {
+      console.log(error);
+    }
   }, [value]);
 
   function initVditor() {
@@ -90,9 +94,12 @@ export default function DVditor(props) {
       {
         _lutePath: 'https://imgcache.qq.com/operation/dianshi/other/lute.min.6cbcbfbacd9fa7cda638f1a6cfde011f7305a071.js?max_age=31536000',
         ...baseOptions,
-        height: pc ? 200 : 178,
+        minHeight: 44,
         // 编辑器初始化值
         value,
+        after: () => {
+          editor.setValue(value);
+        },
         focus: () => {
           setIsFocus(false);
           onFocus('focus');
