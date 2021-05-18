@@ -7,15 +7,15 @@
   @include banner;
 }
 .content {
-  padding: rem(48) rem(24);
+  @include content;
   .button {
     @include button;
   }
   .functionalRegion {
     @include functionalRegion;
-    line-height: rem(24);
+    line-height: rem($font-line-height-base);
     text-align: center;
-    margin-top: rem(60);
+    margin-top: rem(32);
   }
   .icon{
     width: rem(327);
@@ -39,9 +39,9 @@
   .pc_functionalRegion {
     @include functionalRegion;
     font-weight: 600;
-    font-size: 20px;
-    line-height: 30px;
-    color: #0b0b37;
+    font-size: $font-size-large;
+    line-height: $font-line-height-large;
+    color: $text-color-primary;
     text-align: center;
     padding-bottom: 32px;
   }

@@ -202,7 +202,7 @@ class IndexH5Page extends React.Component {
     const { threads = {}, categories = [] } = index;
     const { currentPage, totalPage, pageData } = threads || {};
     const newCategories = this.handleCategories(categories);
-    // TODO 处理key值问题
+
     return (
       <BaseLayout
         showHeader={false}
@@ -223,7 +223,12 @@ class IndexH5Page extends React.Component {
 
         {pageData?.length > 0
           && pageData.map((item, index) => (
-            <ThreadContent key={index} showBottomStyle={index !== pageData.length - 1} data={item} className={styles.listItem} />
+            <ThreadContent 
+              key={index} 
+              showBottomStyle={index !== pageData.length - 1} 
+              data={item} 
+              className={styles.listItem} 
+            />
           ))}
 
         <FilterView

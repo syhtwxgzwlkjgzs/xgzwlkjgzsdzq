@@ -7,7 +7,7 @@
   @include banner;
 }
 .content {
-  padding: rem(48) rem(24);
+  @include content;
   .title {
     @include title;
   }
@@ -41,7 +41,7 @@
   }
   .pc_otherLogin_title {
     @include pc_otherLoginText;
-    font-size: 14px;
+    font-size: $font-size-base;
   }
   .pc_functionalRegion {
     @include pc_functionalRegion;

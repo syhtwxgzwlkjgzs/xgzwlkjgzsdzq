@@ -13,7 +13,7 @@ class UserCenterHeaderImage extends React.Component {
     return (
       <div
         className={styles.box}
-        style={{ backgroundImage: `url(${backgroundUrl})` || 'url(\'/dzq-img/my-default-header-img.jpg\')' }}
+        style={{ backgroundImage: backgroundUrl ? `url(${backgroundUrl})` : 'url(\'/dzq-img/my-default-header-img.jpg\')' }}
         {...this.props}
       />
     );

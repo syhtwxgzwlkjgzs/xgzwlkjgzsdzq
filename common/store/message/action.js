@@ -12,9 +12,9 @@ class MessageAction extends MessageStore {
       const { unreadNotifications, typeUnreadNotifications } = data;
       const { questioned = 0, receiveredpacket = 0, related = 0, replied = 0, system = 0, withdrawal = 0, liked = 0, rewarded = 0 } = typeUnreadNotifications;
       this.totalUnread = unreadNotifications;
-      this.threadUnread = related + replied + liked;
+      this.threadUnread = system;
       this.financialUnread = questioned + receiveredpacket + withdrawal + rewarded;
-      this.accountUnread = system;
+      this.accountUnread = related + replied + liked;
       this.atUnread = related;
       this.replyUnread = replied;
       this.likeUnread = liked;
