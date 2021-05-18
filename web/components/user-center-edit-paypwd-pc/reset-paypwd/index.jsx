@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, Input, Toast } from '@discuzq/design';
-import Header from '@components/header';
+import { Button, Dialog, Input, Toast, Icon } from '@discuzq/design';
 import styles from '../index.module.scss';
-import Router from '@discuzq/sdk/dist/router';
+
 @inject('payBox')
 @observer
-export default class index extends Component {
+class index extends Component {
 
   constructor(props) {
     super(props)
@@ -25,13 +24,13 @@ export default class index extends Component {
     this.props.payBox.newPayPwdRepeat = null
   }
 
-  componentDidMount() {
-    this.initState()
-  }
+  // componentDidMount() {
+  //   this.initState()
+  // }
 
-  componentWillUnmount() {
-    this.initState()
-  }
+  // componentWillUnmount() {
+  //   this.initState()
+  // }
 
   // 设置新密码
   handleChangeNewPwd = (e) => {
@@ -65,7 +64,7 @@ export default class index extends Component {
         hasMask: false,
         duration: 1000,
       })
-      Router.push({url: `/my`})
+      Router.push({ url: `/my` })
     }).catch((err) => {
       Toast.error({
         content: '修改密码失败',
@@ -80,25 +79,19 @@ export default class index extends Component {
     const { newPayPwd, newPayPwdRepeat } = this.state
     let isSubmit = !newPayPwd || !newPayPwdRepeat
     return (
-      <div>
-        <Header />
-        <div className={styles.content}>
-          <h3>设置新密码</h3>
-          <div className={styles.labelInfo}>
-            <div className={styles.labelValue}>
-              <Input value={newPayPwd} onChange={this.handleChangeNewPwd} mode="password" placeholder="请输入新密码" type="number" maxLength={6} />
-            </div>
-          </div>
-          <div className={styles.labelInfo}>
-            <div className={styles.labelValue}>
-              <Input type="number" maxLength={6} value={newPayPwdRepeat} onChange={this.handleChangeRepeatPwd} mode="password" placeholder="请重复输入新密码" />
-            </div>
-          </div>
+      <>
+        <div className={styles.inputItem}>
+          <Input value={newPayPwd} onChange={this.handleChangeNewPwd} mode="password" placeholder="请输入新密码" />
+        </div>
+        <div className={styles.inputItem}>
+          <Input value={newPayPwdRepeat} onChange={this.handleChangeRepeatPwd} mode="password" placeholder="请重复输入新密码" />
         </div>
         <div className={styles.bottom}>
           <Button disabled={isSubmit} onClick={this.handleSubmit} type={"primary"} className={styles.btn}>提交</Button>
         </div>
-      </div>
+      </>
     )
   }
 }
+
+export default index

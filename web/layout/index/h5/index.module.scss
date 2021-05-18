@@ -36,12 +36,10 @@
       .dzq-tabs__label {
         font-size: rem($font-size-primary);
         line-height: rem(20);
-        font-weight: normal;
         margin-top: rem(16);
         // color: $text-color-regular;
       }
       .dzq-tabs__item.is-active {
-        font-weight: 600;
         color: $primary-color;
       }
       .dzq-tabs__item {

@@ -10,11 +10,11 @@ import styles from './index.module.scss';
  * @prop {boolean}       loading
  */
 
-const Index = ({ image, title, amount = 0, loading, className: _className = '', ...props }) => {
+const Index = ({ image, title, amount = 0, loading, className: _className = '', onClick }) => {
   const _title = !loading ? title || '暂无内容' : '内容加载中';
 
   return (
-    <div className={`${styles.container} ${_className}`} {...props}>
+    <div className={`${styles.container} ${_className}`} onClick={onClick}>
       <img className={`${styles.image} ${!image ? styles.empty : ''}`} src={image} />
       <div className={styles.content}>
         <div className={styles.title}>{_title}</div>
