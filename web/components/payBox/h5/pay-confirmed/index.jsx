@@ -95,17 +95,17 @@ export default class PayBox extends React.Component {
 
   // 点击确认支付
   handlePayConfirmed = async () => {
-    const { options = {} } = this.props.payBox;
-    const { amount = 0 } = options;
-    if (this.props.payBox?.walletAvaAmount < amount) {
-      Toast.error({
-        content: '钱包余额不足',
-        duration: 1000,
-      });
-      return;
-    }
 
     if (this.props.payBox.payWay === PAYWAY_MAP.WALLET) {
+      const { options = {} } = this.props.payBox;
+      const { amount = 0 } = options;
+      if (this.props.payBox?.walletAvaAmount < amount) {
+        Toast.error({
+          content: '钱包余额不足',
+          duration: 1000,
+        });
+        return;
+      }
       // 表示钱包支付
       this.props.payBox.walletPayEnsure();
       // this.props.payBox.visible = false;
