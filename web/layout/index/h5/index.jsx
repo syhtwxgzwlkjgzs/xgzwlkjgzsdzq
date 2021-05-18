@@ -32,6 +32,18 @@ class IndexH5Page extends React.Component {
     this.renderItem = this.renderItem.bind(this);
   }
 
+  componentDidMount() {
+    const { filter = {} } = this.props.index
+
+    const newFilter = { ...this.state.filter, ...filter }
+    this.setState({ filter: newFilter })
+  }
+
+  componentWillUnmount() {
+    const { filter } = this.state
+    this.props.index.setFilter(filter)
+  }
+
   checkIsOpenDefaultTab() {
     return this.props.site.checkSiteIsOpenDefautlThreadListData();
   }
@@ -50,6 +62,9 @@ class IndexH5Page extends React.Component {
   };
 
   onClickTab = (id = '') => {
+    if (id === this.state.currentIndex) {
+      return
+    }
     const { dispatch = () => {} } = this.props;
     const currentIndex = this.resetCategoryids(id);
     dispatch('click-filter', { categoryids: [currentIndex], sequence: id === 'default' ? 1 : 0 });

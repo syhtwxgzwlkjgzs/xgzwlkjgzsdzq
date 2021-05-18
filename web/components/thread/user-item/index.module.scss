@@ -29,9 +29,12 @@
     //   background: $body-bg-color;
     // }
     .icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       position: absolute;
-      bottom: rem(-5);
-      right: rem(-5);
+      bottom: rem(-2);
+      right: rem(-4);
       border-radius: rem($border-radius-big);
       height: rem(20);
       width: rem(20);
@@ -39,6 +42,12 @@
       text-align: center;
       line-height: rem(20);
       color: var(--color-white);
+      &.like {
+        background-color: $error-color;
+      }
+      &.heart {
+        background-color: $warn-color;
+      }
     }
   }
 
@@ -49,11 +58,11 @@
     font-size: rem($font-size-primary);
     .title {
       color: var(--color-text-primary);
-      line-height: rem(18);
+      line-height: rem(20);
     }
     .subTitle {
       color: var(--color-text-secondary);
-      line-height: rem(16);
+      line-height: rem(17);
       font-size: rem($font-size-small);
     }
   }

@@ -63,6 +63,9 @@ const Index = ({
   }, [contentTooLong]);
 
   const handleClick = (e) => {
+    if (e.target.localName === 'a') {
+      return
+    }
     e && e.stopPropagation();
 
     onRedirectToDetail()
