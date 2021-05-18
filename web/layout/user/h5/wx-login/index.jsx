@@ -83,14 +83,8 @@ class WXLoginH5Page extends React.Component {
     }, 3000);
   }
 
-  popOpen(type) {
-    const { commonLogin } = this.props;
-    commonLogin.setProtocolVisible(true)
-    commonLogin.setProtocolStatus(type)
-  }
-
   render() {
-    const { site } = this.props;
+    const { site, commonLogin } = this.props;
     const { platform } = site;
     const isAnotherLoginWayAvaliable = this.props.site.isSmsOpen || this.props.site.isUserLoginVisible;
     return (
@@ -135,15 +129,15 @@ class WXLoginH5Page extends React.Component {
           <div className={platform === 'h5' ? layout['otherLogin-outer__tips'] : layout.pc_otherLogin_tips} >
             注册登录即表示您同意
             <span onClick={() => {
-              this.popOpen('register');
+              commonLogin.setProtocolInfo('register');
             }}>《注册协议》</span>
             <span onClick={() => {
-              this.popOpen('privacy');
+              commonLogin.setProtocolInfo('privacy');
             }}>《隐私协议》</span>
           </div>
         </div>
       </div>
-      <PopProtocol/>
+      <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
       </div>
     );
   }

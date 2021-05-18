@@ -11,6 +11,7 @@ import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-sto
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 import { genMiniScheme } from '@server';
+import PopProtocol from '../components/pop-protocol';
 import browser from '../../../../../common/utils/browser';
 
 
@@ -135,7 +136,7 @@ class LoginPhoneH5Page extends React.Component {
   };
 
   render() {
-    const { mobileLogin, site } = this.props;
+    const { mobileLogin, site, commonLogin } = this.props;
     const { platform } = site;
     const isAnotherLoginWayAvaliable = this.props.site.wechatEnv !== 'none' || this.props.site.isUserLoginVisible;
     /**
@@ -198,9 +199,18 @@ class LoginPhoneH5Page extends React.Component {
               </span>
             )}
           </div>
-          <div className={platform === 'h5' ? layout['otherLogin-tips'] : layout.pc_otherLogin_tips} >注册登录即表示您同意<span>《注册协议》</span><span>《隐私协议》</span></div>
+          <div className={platform === 'h5' ? layout['otherLogin-tips'] : layout.pc_otherLogin_tips} >
+            注册登录即表示您同意
+            <span onClick={() => {
+              commonLogin.setProtocolInfo('register');
+            }}>《注册协议》</span>
+            <span onClick={() => {
+              commonLogin.setProtocolInfo('privacy');
+            }}>《隐私协议》</span>
+          </div>
         </div>
       </div>
+      <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
       </div>
     );
   }

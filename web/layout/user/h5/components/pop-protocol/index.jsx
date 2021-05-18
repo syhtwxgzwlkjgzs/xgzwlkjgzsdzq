@@ -7,12 +7,13 @@ import * as protocolType from '../../constants/protocol';
 @inject('commonLogin')
 class PopProtocol extends React.Component {
   render() {
+    const { protocolVisible, protocolStatus } = this.props;
     const { commonLogin } = this.props;
-    const protocolData = protocolType[commonLogin.protocolStatus];
+    const protocolData = protocolType[protocolStatus];
     return (
       <Popup
         position="bottom"
-        visible={commonLogin.protocolVisible}
+        visible={protocolVisible}
         onClose={() => {commonLogin.setProtocolVisible(false)}}
       >
         <div className={layout.content}>
@@ -21,8 +22,8 @@ class PopProtocol extends React.Component {
           </div>
           {
             protocolData?.content?.map((item, index) =>  (
-              <>
-                <div key={index} className={layout.item_title}>
+              <div key={index}>
+                <div className={layout.item_title}>
                   {item.title}
                 </div>
                 {
@@ -32,7 +33,7 @@ class PopProtocol extends React.Component {
                     </div>
                   ))
                 }
-              </>
+              </div>
             )
             )
           }

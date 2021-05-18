@@ -28,6 +28,11 @@ export default class commonLoginStore {
     @observable protocolVisible = false;
     @observable protocolStatus = 'register';
 
+    @action
+    setProtocolInfo(type) {
+      this.setProtocolVisible(true)
+      this.setProtocolStatus(type)
+    }
 
     @action
     setProtocolVisible(protocolVisible) {
