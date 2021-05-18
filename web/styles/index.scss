@@ -2,13 +2,6 @@
 @import '@common/styles/index.scss';
 @import '@common/styles/theme/index.scss'; // 主题样式
 @import './reset.scss';
-.dzq-post-video {
-  margin: rem(16);
-  div[data-vjs-player=true] { /* stylelint-disable-line */
-    width: 100% !important;
-    height: rem(150);
-  }
-}
 .dzq-toast--mask {
   z-index: $zindex-toast;
 }
@@ -31,3 +24,5 @@
 * {
   font-family: $font-family !important;
 }
+
+

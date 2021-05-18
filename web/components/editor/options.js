@@ -17,7 +17,6 @@ export const baseToolbar = [
 // 编辑器基础的选项配置
 export const baseOptions = {
   mode: 'wysiwyg',
-  height: 178,
   placeholder: '请填写您的发布内容…',
   cache: { enable: false },
   toolbar: [...baseToolbar],

@@ -2,6 +2,7 @@
 @import '@common/styles/_variable.scss';
 
 .verifyCodeBtn {
+  min-width: rem(96);
   height: rem(36);
   font-size: rem($font-size-primary);
 }

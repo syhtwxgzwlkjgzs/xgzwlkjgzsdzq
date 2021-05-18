@@ -2,7 +2,7 @@
 @import '@common/styles/index.scss';
 
 .text-grey {
-  color: #8590A6;
+  color: $text-color-secondary;
 }
 
 .flex-column-center {
@@ -31,33 +31,36 @@ $width: rem(169);
   :global {
     .dzq-upload {
       width: auto;
-      padding: rem(16);
+      padding: 0 rem($padding-4n) rem($padding-4n);
 
       &.is-card {
         .dzq-upload-list-card {
-          margin-right: rem(-5);
+          margin-right: rem(-$margin-5);
           font-size: 0;
         }
 
         .dzq-upload__area,
         .dzq-upload-list-card__item {
           padding: 0;
-          margin: 0 rem(5) rem(5) 0;
+          margin: 0 rem($margin-5) rem($margin-5) 0;
           width: $width;
           height: $width;
           font-size: 0;
-          color: #8590A6;
+          color: $text-color-secondary;
           background-color: $background-color;
           border-color: $background-color;
-          border-radius: 5px;
+          border-radius: $border-radius-small;
           overflow: hidden;
+          .dzq-icon-DeleteOutlined {
+            color: $white;
+          }
         }
 
         .dzq-upload-list-card__thumbUrl {
           width: $width;
           height: $width;
           object-fit: cover;
-          border-radius: 5px;
+          border-radius: $border-radius-small;
         }
 
         .dzq-upload-list-card__operate {
@@ -71,7 +74,7 @@ $width: rem(169);
         }
 
         .dzq-upload__btntext {
-          margin-top: rem(8);
+          margin-top: rem($margin-2n);
         }
 
         .dzq-progress-circle__area {
@@ -91,13 +94,13 @@ $width: rem(169);
         }
 
         .dzq-upload__btntext {
-          margin-left: rem(8);
+          margin-left: rem($margin-2n);
         }
 
         .dzq-upload-list-list__item {
           margin-top: 0;
-          margin-bottom: rem(8);
-          border-radius: 5px;
+          margin-bottom: rem($margin-2n);
+          border-radius: $border-radius-small;
           background-color: $background-color;
           border: 0;
         }
@@ -116,25 +119,22 @@ $width: rem(169);
           width: rem(40);
           margin: 0;
           text-align: center;
-        }
-        .dzq-icon-PaperClipOutlined {
-          &::before {
-            content: '\e90e';
-            color: var(--color-success);
+          :global {
+            color: $text-color-secondary;
           }
         }
       }
 
       .dzq-button--text {
-        font-size: var(--font-size-primary);
-        color: #8590A6;
+        font-size: $font-size-base;
+        color: $text-color-secondary;
         background-color: $background-color;
         border: 0;
       }
 
       .dzq-upload__btntext {
         display: inline-block;
-        font-size: var(--font-size-primary);
+        font-size: $font-size-base;
       }
     }
   }

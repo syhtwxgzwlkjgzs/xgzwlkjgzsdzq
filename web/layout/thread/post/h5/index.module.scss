@@ -24,7 +24,31 @@
 }
 
 .audio-record {
-  padding: rem(16);
+  padding: 0 rem($padding-4n) rem($padding-4n);
+}
+.audio-record-display {
+  position: relative;
+  :global {
+    .dzq-audio {
+      .dzq-audio-bg-view__right {
+        padding-right: $padding-5n + $padding-1n;
+        &-text {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          height: 100%;
+        }
+      }
+    }
+  }
+  .delete {
+    position: absolute;
+    right: rem($padding-5n);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: $font-size-middle;
+    color: $icon-color-light;
+  }
 }
 
 .position-box {

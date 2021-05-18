@@ -1,48 +1,97 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
+import { useRouter } from 'next/router';
 import styles from './index.module.scss';
-import { inject, observer } from 'mobx-react';
-import InstantMessaging from '../../../components/message/instant-messaging';
-import MessageCard from '@components/message/message-card';
+import MessageAccount from '@components/message/message-account';
+import MessageIndex from '@components/message/message-index';
+import MessageThread from '@components/message/message-thread';
+import MessageFinancial from '@components/message/message-financial';
+import MessageChat from '@components/message/message-chat';
+import BaseLayout from '@components/base-layout';
+import SidebarPanel from '@components/sidebar-panel';
+import Copyright from '@components/copyright';
+import UserCenterFollow from '@components/user-center-follow';
+import Router from '@discuzq/sdk/dist/router';
+import Stepper from '../../search/pc/components/stepper';
+import { sidebarData } from '@common/constants/message';
 
-import Notice from '@components/message/notice';
-import mock from '../mock.json';
+const Index = ({ page, subPage, dialogId, username }) => {
+  const router = useRouter();
 
-const Index = () => {
-  // props,state
-  const [messagesHistory, setMessagesHistory] = useState([]);
-  const [type, setType] = useState('account'); // chat,thread,financial,account
-  const [list, setList] = useState([]);
+  const [sidebarIndex, setSidebarIndex] = useState(9999);
 
-  // hooks
-  useEffect(() => {
-    setList(mock[type]); // 设置渲染数据
-  }, []);
+  const mainContent = useMemo(() => {
+    // 处理侧边栏选中状态
+    const p = page === 'chat' ? 'index' : page;
+    sidebarData.forEach((item, i) => {
+      if (item.type === p) {
+        console.log(i);
+        setSidebarIndex(i);
+      }
+    });
 
-  // handle
-  const handleDelete = (item) => {
-    const _list = [...list].filter(i => i.id !== item.id);
-    setList(_list);
+    // 处理页面主内容切换
+    switch (page) {
+      case 'index':
+        return <MessageIndex />;
+      case 'account':
+        return <MessageAccount subPage={subPage} />;
+      case 'thread':
+        return <MessageThread />;
+      case 'financial':
+        return <MessageFinancial />;
+      case 'chat':
+        return <MessageChat dialogId={dialogId} username={username} />;
+    }
+  }, [page, subPage, dialogId, username]);
+
+  const rightContent = () => {
+    return (
+      <div className={styles.rightside}>
+        <div className={styles['stepper-container']}>
+          <Stepper onItemClick={sidebarClick} selectIndex={sidebarIndex} data={sidebarData} />
+        </div>
+
+        <SidebarPanel
+          type="normal"
+          isNoData={99 === 0}
+          title="关注"
+          leftNum={99}
+          onShowMore={() => {}}
+        >
+          {99 !== 0 && (
+            <UserCenterFollow
+              style={{
+                overflow: 'hidden',
+              }}
+              // className={styles.friendsWrapper}
+              limit={5}
+            />
+          )}
+        </SidebarPanel>
+        <Copyright />
+      </div>
+    );
   };
 
-  const doSubmit = (val) => {
-    if (!val) return;
-    setMessagesHistory([...messagesHistory, val]);
-    return true;
-  };
+  const sidebarClick = (_index, _iconName, item) => {
+    router.replace(`/message?page=${item.type}`);
+  }
+
 
   return (
-    <div className={styles.container}>
-      <MessageCard />
-      <div>pc test</div>
-      <div className={styles.list}>
-        <div className={styles.left}>
-          <Notice list={list} type={type} onBtnClick={handleDelete} />
-        </div>
-        <div className={styles.right}></div>
-      </div>
-      <InstantMessaging messagesHistory={messagesHistory} onSubmit={doSubmit} />
-    </div>
+    <BaseLayout
+      // onSearch={this.onSearch}
+      // onRefresh={this.onPullingUp}
+      // noMore={currentPage >= totalPage}
+      // onScroll={this.onScroll}
+      // showRefresh={false}
+      // left={ this.renderLeft(countThreads) }
+      right={rightContent}
+    >
+      {mainContent}
+    </BaseLayout>
   );
+
 };
 
-export default inject('site')(observer(Index));
+export default Index;

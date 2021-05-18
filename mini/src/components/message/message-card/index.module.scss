@@ -2,7 +2,7 @@
 @import '@common/styles/_variable.scss';
 
 .container {
-  background-color: var(--color-white);
+  background-color: $white;
   margin-bottom: rem(10);
 }
 
@@ -13,9 +13,9 @@
   height: 80px;
   margin: 0 16px;
   padding: 16px 0;
-  border-bottom: var(--border-border);
-  font-size: var(--font-size-middle);
-  line-height: var(--font-line-height-primary);
+  border-bottom: $border-solid-1;
+  font-size: $font-size-middle;
+  line-height: $font-line-height-base;
   &:last-child {
     border: none;
   }
@@ -38,10 +38,10 @@
 
 .icon {
   position: relative;
-  background-color: var(--color-primary);
+  background-color: $primary-color;
   padding: 11px;
   border-radius: 50%;
-  color: var(--color-white);
+  color: $white;
 }
 
 .title {

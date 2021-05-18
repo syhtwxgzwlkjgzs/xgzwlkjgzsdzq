@@ -4,14 +4,16 @@ import { Avatar, Input, Icon } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import { defaultOperation } from '@common/constants/const';
 import { THREAD_TYPE } from '@common/constants/thread-post';
-
+import Router from '@discuzq/sdk/dist/router';
 // 用户中心发帖模块
 @inject('user')
 @observer
 class UserCenterPost extends React.Component {
   render() {
     return (
-      <div className={styles.userCenterPost}>
+      <div className={styles.userCenterPost} onClick={() => {
+        Router.push({ url: '/thread/post' });
+      }}>
         <div className={styles.userCenterPostTitle}>发帖</div>
         <div className={styles.userCenterPostContent}>
           <div className={styles.userCenterPostAvatar}>

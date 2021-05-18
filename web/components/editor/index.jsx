@@ -8,16 +8,16 @@ import classNames from 'classnames';
 import { baseOptions, baseToolbar } from './options';
 import { MAX_COUNT } from '@common/constants/thread-post';
 import LoadingBox from '@components/loading-box';
+import { emojiVditorCompatibilityDisplay } from '@common/utils/emoji-regexp';
 import './index.scss';
 import '@discuzq/vditor/src/assets/scss/index.scss';
 
 export default function DVditor(props) {
-  const { pc, onChange, emoji = {}, atList = [], topic, onFocus, onBlur, value, onCountChange } = props;
+  const { pc, onChange, emoji = {}, atList = [], topic, onFocus, onBlur, value } = props;
   const vditorId = 'dzq-vditor';
 
   const [isFocus, setIsFocus] = useState(false);
   const [vditor, setVditor] = useState(null);
-  const [contentCount, setContentCount] = useState(0);
 
   const setCurrentPositon = () => {
     // https://developer.mozilla.org/zh-CN/docs/Web/API/Selection
@@ -30,6 +30,16 @@ export default function DVditor(props) {
     if (range) selection.addRange(range);
   };
 
+  const html2mdSetValue = (text) => {
+    const md = vditor.html2md(text);
+    vditor.setValue && vditor.setValue(md.substr(0, md.length - 1));
+  };
+
+  const html2mdInserValue = (text) => {
+    const md = vditor.html2md(text);
+    vditor.insertValue && vditor.insertValue(md.substr(0, md.length - 1));
+  };
+
   useEffect(() => {
     if (!vditor) initVditor();
     return () => {
@@ -39,45 +49,50 @@ export default function DVditor(props) {
 
   useEffect(() => {
     if (emoji && emoji.code) {
-      setCurrentPositon();
+      // setCurrentPositon();
       // 因为vditor的lute中有一些emoji表情和 emoji.code 重叠了。这里直接先这样处理
-      const value = `<img alt=":${emoji.code}:emoji" src="${emoji.url}" />`;
-      vditor.insertValue(value);
+      let value = `<img alt="${emoji.code}emoji" src="${emoji.url}" class="qq-emotion" />`;
+      value = emojiVditorCompatibilityDisplay(value);
+      html2mdInserValue(value);
     }
   }, [emoji]);
 
   useEffect(() => {
     if (atList && !atList.length) return;
     const users = atList.map((item) => {
-      if (item.user) return `&nbsp;@${item.user.userName}&nbsp;`;
+      if (item.user) return ` @${item.user.userName} `;
       return '';
     });
     if (users.length) {
-      setCurrentPositon();
-      vditor && vditor.insertValue(users.join(''));
+      // setCurrentPositon();
+      vditor.insertValue && vditor.insertValue(users.join(''));
     }
   }, [atList]);
 
   useEffect(() => {
     if (topic) {
-      setCurrentPositon();
-      vditor && vditor.insertValue(`&nbsp;${topic}&nbsp;`);
+      // setCurrentPositon();
+      vditor.insertValue && vditor.insertValue(` ${topic} `);
     }
   }, [topic]);
 
-  useEffect(() => {
-    onCountChange(contentCount);
-  }, [contentCount]);
+  // useEffect(() => {
+  //   onCountChange(contentCount);
+  // }, [contentCount]);
 
   useEffect(() => {
-    if ((vditor && vditor.getValue && vditor.getValue() !== '\n') || !value) return;
-    const timer = setTimeout(() => {
-      clearTimeout(timer);
-      if (vditor && vditor.getValue && vditor.getValue() === '\n' && vditor.getValue() !== value) {
-        // setCurrentPositon();
-        vditor.insertValue && vditor.insertValue(value.replace(/alt="(\w*)"/g, "alt=':$1:emoji'"));
-      }
-    }, 200);
+    try {
+      const timer = setTimeout(() => {
+        clearTimeout(timer);
+        if ((vditor && vditor.getValue && vditor.getValue() !== '\n') || !value) return;
+        if (vditor && vditor.getValue && vditor.getValue() === '\n' && vditor.getValue() !== value) {
+          // setCurrentPositon();
+          html2mdSetValue(value);
+        }
+      }, 200);
+    } catch (error) {
+      console.log(error);
+    }
   }, [value]);
 
   function initVditor() {
@@ -87,14 +102,24 @@ export default function DVditor(props) {
       {
         _lutePath: 'https://imgcache.qq.com/operation/dianshi/other/lute.min.6cbcbfbacd9fa7cda638f1a6cfde011f7305a071.js?max_age=31536000',
         ...baseOptions,
-        height: pc ? 200 : 178,
+        minHeight: 44,
         // 编辑器初始化值
+        tab: '  ',
         value,
-        // input: () => {
-        //   onChange(editor);
-        // },
-        blur: () => {
+        // 编辑器异步渲染完成后的回调方法
+        after: () => {
+          console.log('after');
+          editor.setValue(value);
+        },
+        focus: () => {
+          setIsFocus(false);
+          onFocus('focus');
+        },
+        input: () => {
           onChange(editor);
+        },
+        blur: () => {
+          // onChange(editor);
           // 兼容Android的操作栏渲染
           const timer = setTimeout(() => {
             clearTimeout(timer);
@@ -105,15 +130,18 @@ export default function DVditor(props) {
         // 编辑器中选中文字后触发，PC才有效果
         select: (value) => {
           if (value) {
-            onFocus();
+            onFocus('select');
             setIsFocus(true);
-          }
+          } else setIsFocus(false);
+        },
+        outline: {
+          enable: false,
         },
         counter: {
-          enable: true,
-          after(count) {
-            setContentCount(count);
-          },
+          enable: false,
+          // after(count) {
+          //   setContentCount(count);
+          // },
           type: 'markdown',
           max: MAX_COUNT,
         },
@@ -132,8 +160,9 @@ export default function DVditor(props) {
 
   return (
     <>
-      {!vditor && <LoadingBox>编辑器加载中...</LoadingBox>}
-      <div id={vditorId} className={className}></div>
+      <div id={vditorId} className={className}>
+        <LoadingBox>编辑器加载中...</LoadingBox>
+      </div>
       {/* {!pc && isFocus && <div className="dvditor__placeholder"></div>} */}
     </>
   );

@@ -21,17 +21,44 @@
   .itemH5 {
     height: rem(36);
     border-bottom: rem(1) solid var(--border-line-color);
+    // box-sizing: border-box;
+    position: relative;
+    
     &:last-child{
-      border-bottom: none;
+      border-bottom: rem(1) solid transparent;
     }
     .prefix {
       font-size: rem($font-size-primary);
-      line-height: rem($font-line-height-primary);
+      line-height: 1.5;
       margin-right: rem($padding-4n);
+      width: rem(28);
+      overflow: hidden;
+      flex-shrink: 1;
+      position: relative;
+      top: rem(1);
     }
     .title {
+      flex:1;
       font-size: rem($font-size-primary);
-      line-height: rem($font-line-height-primary);
+      line-height: 1.5;
+      position: relative;
+      top: rem(1);
+      .richText{
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        word-break: break-all;
+        font-size: rem(14);
+       
+        :global(.qq-emotion){
+          height: rem(20);
+          width: rem(20);
+          position: relative;
+          top: -1px;
+        }
+        
+      }
+      
     }
   }
   .itemPC {
@@ -45,6 +72,17 @@
     .title {
       font-size: rem($font-size-middle);
       line-height: rem($font-line-height-small);
+      .richText{
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        word-break: break-all;
+        font-size: rem($font-size-middle);
+        :global(.qq-emotion){
+          height: rem(20);
+          width: rem(20);
+        }
+      }
     }
   }
 }

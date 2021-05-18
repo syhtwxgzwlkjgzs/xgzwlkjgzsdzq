@@ -40,8 +40,8 @@ class SiteStore {
     return Boolean(get(this.webConfig, 'passport.miniprogramClose', true));
   }
   // 公众平台是否开启
-  @computed get isOpenPlatformOpen() {
-    return Boolean(get(this.webConfig, 'passport.oplatformClose', true));
+  @computed get isOpenOffiaccountClose() {
+    return Boolean(get(this.webConfig, 'passport.offiaccountClose', true));
   }
 
   // 站点 icon 路径
@@ -54,7 +54,7 @@ class SiteStore {
       return WECHAT_ENV_MAP.MINI;
     }
 
-    if (this.isOpenPlatformOpen) {
+    if (this.isOpenOffiaccountClose) {
       return WECHAT_ENV_MAP.OPEN;
     }
 

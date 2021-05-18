@@ -11,19 +11,17 @@
 .homeContent {
   background: var(--color-white);
   margin-bottom: rem(10);
-  position: sticky;
-  top: 0;
   z-index: 1000;
+  border: 1px solid rgba(238, 238, 238, 0.57);
 }
-.homeContentText {
+.homeContentFix {
   width: 100%;
   background: var(--color-white);
-  border-bottom: rem(1) solid var(--color-text-placeholder);
-  margin-bottom: rem(10);
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
+  border: 1px solid rgba(238, 238, 238, 0.57);
 }
 .homeContentTop {
   padding: 0 rem($padding-4n);
@@ -48,6 +46,7 @@
       }
       .dzq-tabs__item {
         padding: 0 $padding-4n;
+        color: $text-color-regular;
       }
       .dzq-tabs__scroll {
         display: flex;
@@ -72,7 +71,9 @@
     color: var(--color-text-secondary);
   }
 }
-// .listItem {
-//   margin-bottom: rem(10);
-// }
-// }
+
+// 当tab悬浮后的占位元素样式
+.tabPlaceholder {
+  width: 100%;
+  height: rem(58);
+}

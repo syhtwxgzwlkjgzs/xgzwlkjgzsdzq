@@ -17,22 +17,29 @@
 @mixin input {
   width: rem(327);
   box-sizing: border-box;
-  padding: rem($padding-6n) 0 rem($padding-4n);
-  height: rem(62);
+  margin-top: $margin-2n;
+  padding: rem($padding-4n) 0;
   border-bottom: $border-solid-1;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
   :global(.dzq-input__inner) {
     font-size: rem($font-size-middle);
     border: none;
     padding: 0;
-    height: rem(22);
+    height: auto;
+    // height: rem(22);
     line-height: rem($font-line-height-base);
     border-radius: 0;
     -webkit-tap-highlight-color: transparent;
   }
   :global(.dzq-input__icon){
-    top: rem(17);
+    position: relative;
     font-size: rem($font-size-middle) !important;
     color: var(--color-disabled2) !important;
+    width: rem(20);
+    height: rem(20);
+    line-height: rem(20);
     &:hover {
       color: $primary-color !important;
     }
@@ -40,7 +47,6 @@
 }
 @mixin passwordInput {
   :global(.dzq-input__icon){
-    top: rem(17);
     color: var(--color-disabled2) !important;
     &:hover {
       color: $primary-color !important;
@@ -91,10 +97,22 @@
   line-height: rem($font-line-height-large);
   text-align: left;
   color: var(--color-text-primary);
+  display: flex;
+  flex-direction: column;
   img {
     width: rem(30);
     height: rem(30);
-    margin: 0 rem($margin-2n);
+  }
+  .tips_user {
+    display: flex;
+    line-height: rem($font-line-height-large);
+    flex-direction: row;
+  }
+  :global(.dzq-avatar), :global(.dzq-avatar__text){
+    font-size: rem($font-size-small);
+    width: rem(30);
+    height: rem(30);
+    line-height: rem($font-line-height-large);
   }
 }
 

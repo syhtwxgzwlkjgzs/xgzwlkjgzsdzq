@@ -9,6 +9,14 @@ class IndexAction extends IndexStore {
   }
 
   /**
+   * 设置过滤项
+   */
+   @action
+  setFilter(data) {
+    this.filter = data
+  }
+
+  /**
    * 触发筛选数据
    * @param {*} param0
    */
@@ -181,14 +189,16 @@ class IndexAction extends IndexStore {
     const { index, data } = targetThread;
 
     // 更新点赞
-    const { isLike, isPost, isShare, user } = obj;
-    if (!typeofFn.isUndefined(isLike) && !typeofFn.isNull(isLike) &&
-        user && data.likeReward && data.likeReward.users) {
-      data.isLike = isLike;
+    const { updateType, updatedInfo, user } = obj;
+    const { isLiked, isPost, isFavorite:isShare, likeCount, replyCount } = updatedInfo;
+
+    if (updateType === 'like' && !typeofFn.isUndefined(isLiked) && !typeofFn.isNull(isLiked)
+          && user && data.likeReward?.users) {
 
       const theUserId = user.userId || user.id;
+      data.isLike = isLiked;
 
-      if (isLike) {
+      if (isLiked) {
         const userAdded = { userId: theUserId, avatar: user.avatarUrl, username: user.username };
 
         // 添加当前用户到按过赞的用户列表
@@ -203,16 +213,16 @@ class IndexAction extends IndexStore {
                                 }) :
                                 data.likeReward.users;
       }
-      data.likeReward.likePayCount = data.likeReward.users.length;
+      data.likeReward.likePayCount = likeCount;
     }
 
     // 更新评论
-    if (!typeofFn.isUndefined(isPost) && !typeofFn.isNull(isPost)) {
+    if (updateType === 'comment' && !typeofFn.isUndefined(isPost) && !typeofFn.isNull(isPost)) {
       data.likeReward.postCount = isPost ? data.likeReward.postCount + 1 : data.likeReward.postCount - 1;
     }
 
     // 更新分享
-    if (!typeofFn.isUndefined(isShare) && !typeofFn.isNull(isShare)) {
+    if (updateType === 'share' && !typeofFn.isUndefined(isShare) && !typeofFn.isNull(isShare)) {
       data.likeReward.shareCount = isShare ? data.likeReward.shareCount + 1 : data.likeReward.shareCount - 1;
     }
 

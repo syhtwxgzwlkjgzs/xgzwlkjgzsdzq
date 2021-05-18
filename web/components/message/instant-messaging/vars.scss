@@ -13,7 +13,7 @@ $im-msg-space-aside: $im-pagebed-padding + $im-profile-icon-size + $im-gap-btw-i
   $font-size: rem($font-size-primary),
   $font-weight: rem($font-line-height-small),
   $line-height: rem(30),
-  $color: var(--color-white)
+  $color: $white
 ) {
   font-family: 'PingFang SC';
   font-size: $font-size;

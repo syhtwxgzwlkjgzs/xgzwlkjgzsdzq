@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Tabs, Popup, Icon } from '@discuzq/design';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { Tabs, Popup, Icon, Spin } from '@discuzq/design';
 import UserItem from '../user-item';
 import styles from './index.module.scss';
-import NoData from '@components/no-data';
+
 import { readLikedUsers } from '@server';
 import List from '../../list';
 import { withRouter } from 'next/router';
@@ -15,6 +15,8 @@ import { withRouter } from 'next/router';
  */
 
 const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) => {
+  const isClickTab = useRef(false)
+
   const allPageNum = useRef(1);
   const likePageNum = useRef(1);
   const tipPageNum = useRef(1);
@@ -24,6 +26,11 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
   const [tips, setTips] = useState(null);
 
   const [current, setCurrent] = useState(0);
+
+  const TYPE_ALL = 0,
+        TYPE_LIKE = 1,
+        TYPE_REWARD = 2,
+        TYPE_PAID = 3;
 
   useEffect(() => {
     if (visible) {
@@ -40,21 +47,21 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
 
   const singleLoadData = async ({ page = 1, type = 1 } = {}) => {
     const { postId = '', threadId = '' } = tipData;
+    type = (type === TYPE_PAID) ? TYPE_REWARD : type;
     const res = await readLikedUsers({ params: { threadId, postId, page, type } });
-
     const data = res?.data || {};
 
-    if (type === 0) {
+    if (type === TYPE_ALL) {
       if (page !== 1) {
         data?.pageData?.list.unshift(...(all?.pageData?.list || []));
       }
       setAll(data);
-    } else if (type === 1) {
+    } else if (type === TYPE_LIKE) {
       if (page !== 1) {
         data?.pageData?.list.unshift(...(likes?.pageData?.list || []));
       }
       setLikes(data);
-    } else if (type === 2) {
+    } else if (type === TYPE_REWARD || type === TYPE_PAID) {
       if (page !== 1) {
         data?.pageData?.list.unshift(...(tips?.pageData?.list || []));
       }
@@ -63,6 +70,11 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
   };
 
   const loadMoreData = () => {
+    if (isClickTab.current) {
+      isClickTab.current = false;
+      return
+    }
+
     if (current === 0) {
       allPageNum.current += 1;
       return singleLoadData({ page: allPageNum.current, type: current });
@@ -79,10 +91,13 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
     setCurrent(id);
     const hasAll = id === 0 && !all;
     const hasLikes = id === 1 && !likes;
-    const hasTips = id === 2 && !tips;
+    const hasTips = (id === 2 || id === 3) && !tips;
+
+    // TODO 临时解决点击tab时，导致list组件触发上拉刷新的问题
+    isClickTab.current = true
 
     if (hasAll || hasLikes || hasTips) {
-      singleLoadData({ type: id });
+      singleLoadData({ type: id, page: 1 });
     }
   };
 
@@ -104,9 +119,9 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
 
   const renderHeader = ({ title, icon, number  }) => (
     <div className={styles.label}>
-      {icon && <Icon name={icon} />}
+      {icon && <Icon className={styles.icon} name={icon} />}
       <span className={`${styles.title} disable-click`}>{title}</span>
-      {number !== 0 && number !== '0' && <span className="disable-click">{number}</span>}
+      {number !== 0 && number !== '0' && <span className={`disable-click ${styles.num}`}>{number}</span>}
     </div>
   );
 
@@ -119,28 +134,43 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
     },
     {
       icon: 'LikeOutlined',
-      title: '点赞',
+      title: '',
       data: likes,
       number: all?.pageData?.likeCount || 0,
     },
     {
       icon: 'HeartOutlined',
-      title: tipData?.payType === 1 ? '付费' : '打赏',
+      title: '付费',
       data: tips,
-      number: tipData?.payType === 1 ? all?.pageData?.raidCount || 0 : all?.pageData?.rewardCount || 0 // [2021.5.14 罗欣然]: all.pageData.raidCount 这个数据应该为all.pageData.paidCount，后端来不及改数据结构了
+      number: all?.pageData?.raidCount || 0,
+    },
+    {
+      icon: 'HeartOutlined',
+      title: '打赏',
+      data: tips,
+      number: all?.pageData?.rewardCount || 0,
     },
   ];
 
   const renderTabPanel = (platform) => (
     tabItems.map((dataSource, index) => {
-      const arr = dataSource?.data?.pageData?.list || [];
+      const arr = dataSource?.data?.pageData?.list;
+      if(dataSource.number === 0 || dataSource.number === '0') {
+        return null; // 列表数量为0不显示该Tab
+      }
+      if(tipData?.payType > 0) {
+        if(index === 3) return null; // 付费用户不需打赏列表
+      } else {
+        if(index === 2) return null; // 非付费用户不需显示付费列表
+      }
+
       return (
         <Tabs.TabPanel
           key={index}
           id={index}
           label={renderHeader({ icon: dataSource.icon, title: dataSource.title, number: dataSource.number })}>
             {
-              arr.length ? (
+              arr?.length ? (
                 <List
                   className={styles.list}
                   onRefresh={loadMoreData}
@@ -148,22 +178,26 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
                 >
                   {
                     arr.map((item, index) => (
-                        <UserItem 
-                          key={index} 
-                          imgSrc={item.avatar} 
-                          title={item.username} 
-                          subTitle={item.passedAt} 
+                        <UserItem
+                          key={index}
+                          imgSrc={item.avatar}
+                          title={item.nickname || item.username}
+                          subTitle={item.passedAt}
                           userId={item.userId}
                           platform={platform}
                           onClick={onUserClick}
+                          type={item.type}
                         />
                     ))
                   }
                 </List>
-              ) : <NoData className={styles.list} />
+              ) : <Spin className={styles.spinner} type="spinner" />
+
             }
         </Tabs.TabPanel>
       );
+    }).filter((item) => {
+      return item !== null;
     })
   );
 
@@ -177,7 +211,6 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
           onActive={onClickTab}
           activeId={current}
           className={styles.tabs}
-          scrollable
           tabBarExtraContent={
             tipData?.platform === 'pc' && (
               <div onClick={onClose} className={styles.tabIcon}>

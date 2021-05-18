@@ -19,14 +19,7 @@ const TopicHeader = ({ onClick = noop }) => {
   return (
     <div className={styles.container}>
       <div className={styles.title}>话题列表</div>
-      <div
-        menu={menu()}
-        placement="right"
-        arrow={false}
-        trigger="click"
-        onChange={onClick}
-        className={styles.sortDropdown}
-      >
+      <div className={styles.sortDropdown}>
         <Icon name="SortOutlined" className={styles.icon} size={14} />
         排序
       </div>

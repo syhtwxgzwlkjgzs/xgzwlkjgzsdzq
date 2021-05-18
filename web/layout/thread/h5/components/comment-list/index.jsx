@@ -5,6 +5,8 @@ import { Icon } from '@discuzq/design';
 import ReplyList from '../reply-list/index';
 import { diffDate } from '@common/utils/diff-date';
 import { observer } from 'mobx-react';
+import s9e from '@common/utils/s9e';
+import xss from '@common/utils/xss';
 @observer
 class CommentList extends React.Component {
   constructor(props) {
@@ -21,6 +23,14 @@ class CommentList extends React.Component {
       typeof this.props.onCommentClick === 'function' && this.props.onCommentClick();
     }
   };
+
+  filterContent() {
+    let newContent = this.props?.data?.content || '';
+    newContent = s9e.parse(newContent);
+    newContent = xss(newContent);
+
+    return newContent;
+  }
 
   // 点击头像
   avatarClick() {
@@ -102,7 +112,7 @@ class CommentList extends React.Component {
               )}
               {!this.state.isShowOne ? (
                 <div className={styles.more} onClick={this.props.onMoreClick}>
-                  <Icon size="16" color="#8590A6" name="MoreVOutlined" className={styles.moreIcon}></Icon>
+                  <Icon size={20} color="#8590A6" name="MoreVOutlined" className={styles.moreIcon}></Icon>
                 </div>
               ) : (
                 ''
@@ -123,7 +133,7 @@ class CommentList extends React.Component {
               <div className={styles.commentListName}>
                 {this.props.data.user.username || this.props.data.user.userName}
               </div>
-              <div className={styles.commentListText}>{this.props.data.content}</div>
+              <div className={styles.commentListText} dangerouslySetInnerHTML={{ __html: this.filterContent() }}></div>
             </div>
             <div className={styles.commentListFooter}>
               <div className={styles.commentBtn}>
@@ -142,7 +152,7 @@ class CommentList extends React.Component {
                       <span onClick={() => this.props.onAboptClick()}>采纳</span>
                     </div>
                   )}
-                  {!this.state.isHideEdit && (
+                  {!this.state.isHideEdit && canDelete && (
                     <div className={styles.extra}>
                       {/* {canEdit && <div className={styles.revise} onClick={() => this.editClick()}>编辑</div>} */}
                       {canDelete && (

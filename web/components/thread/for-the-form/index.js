@@ -23,15 +23,15 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
   // 时间选择器是否显示
   useEffect(() => {
     if (data !== undefined && Object.keys(data).length > 0) {
-      setValue(data.value);
-      setTimes(data.times);
+      if (data.value) setValue(data.value);
+      if (data.times) setTimes(data.times);
     }
   }, []);
 
   // 点击确定的时候返回参数
   const redbagconfirm = () => {
-    if (value <= 0 || value > 10000) {
-      Toast.warning({ content: '金额数不合理,0<money<10000' });
+    if (value < 0.1 || value > 1000000) {
+      Toast.warning({ content: '金额数不合理,0.1<money<1000000' });
       return;
     }
     const gapTime = new Date(times).getTime() - new Date().getTime();
@@ -42,7 +42,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
     }
     confirm({
       value,
-      times: formatDate(times, 'yyyy-MM-dd h:mm'),
+      times: formatDate(times, 'yyyy/MM/dd h:mm'),
     });
   };
   const content = (
@@ -54,7 +54,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
             mode="number"
             value={value}
             placeholder="金额"
-            onChange={e => setValue(+e.target.value)}
+            onChange={e => setValue(e.target.value)}
           />
           元
         </div>
@@ -66,11 +66,11 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
             ? (
               <>
                 <DatePicker
-                  selected={times}
+                  selected={new Date(times)}
                   minDate={new Date()}
-                  onChange={date => setTimes(date)}
+                  onChange={date => setTimes(formatDate(date, 'yyyy/MM/dd h:mm'))}
                   showTimeSelect
-                  dateFormat="yyyy-MM-dd HH:mm:ss"
+                  dateFormat="yyyy/MM/dd HH:mm:ss"
                   locale="zh"
                 />
                 <Icon name="RightOutlined" />
@@ -78,7 +78,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
             )
             : (
               <>
-                <div onClick={() => setShow(true)} > {`${formatDate(times, 'yyyy-MM-dd h:mm')}`} </div>
+                <div onClick={() => setShow(true)} > {`${formatDate(times, 'yyyy/MM/dd h:mm')}`} </div>
                 <Icon name="RightOutlined" />
               </>
             )}

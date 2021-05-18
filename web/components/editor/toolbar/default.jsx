@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Icon, Dropdown } from '@discuzq/design';
 import styles from './index.module.scss';
 import { defaultIcon, defaultOperation } from '@common/constants/const';
+import { THREAD_TYPE } from '@common/constants/thread-post';
 
 export default function DefaultToolbar(props) {
   const { children, onClick, onSubmit, value, pc, permission } = props;
@@ -27,9 +28,21 @@ export default function DefaultToolbar(props) {
     };
   }, []);
 
+  const getIconCls = (item) => {
+    const cls = styles['dvditor-toolbar__item'];
+    const activeCls = `${styles['dvditor-toolbar__item']} ${styles.active}`;
+    if (item.type === currentAction) return activeCls;
+    const { postData } = props;
+    if (item.type === THREAD_TYPE.file && Object.values(postData?.files || []).length > 0) return activeCls;
+    if (item.type === THREAD_TYPE.redPacket && postData?.redpacket?.price) return activeCls;
+    if (item.type === THREAD_TYPE.paid && (postData?.price || postData?.attachmentPrice)) return activeCls;
+    return cls;
+  };
+
   const icons = (
     <>
       {defaultIcon.map((item) => {
+        const clsName = getIconCls(item);
         const iconItem = permission[item.id] ? (
           <Icon key={item.name}
             onClick={(e) => {
@@ -42,9 +55,8 @@ export default function DefaultToolbar(props) {
                 if (!(pc && item.menu)) onClick(item);
               }
             }}
-            className={styles['dvditor-toolbar__item']}
+            className={clsName}
             name={item.name}
-            color={item.id === currentAction && item.active}
             size="20">
           </Icon>
         ) : null;

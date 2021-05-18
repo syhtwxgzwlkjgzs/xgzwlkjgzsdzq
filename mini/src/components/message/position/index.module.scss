@@ -1,3 +1,5 @@
+@import '@common/styles/index.scss';
+
 .positon {
   display: flex;
   align-items: center;
@@ -7,7 +9,7 @@
   color: #4f5a70;
   padding: 4px 10px;
   margin: 9px 8px 9px 0;
-  font-size: var(--font-size-label);
+  font-size: $font-size-small;
   max-width: 50%;
 
   .text {
@@ -27,6 +29,6 @@
 }
 
 .chose {
-  color: var(--color-primary);
+  color: $primary-color;
   background: #E8F0FE;
 }

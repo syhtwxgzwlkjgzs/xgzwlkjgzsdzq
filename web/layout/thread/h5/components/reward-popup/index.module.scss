@@ -5,18 +5,18 @@
 
   :global {
     .dzq-input__inner {
-      font-size: rem($font-size-primary);
+      font-size: rem($font-size-base);
       border: none;
       padding: 0;
-      height: rem(17);
-      line-height: rem(17);
+      height: rem(18);
+      line-height: rem(18);
       border-radius: 0;
       text-align: right;
       -webkit-tap-highlight-color: transparent;
 
       &::placeholder {
         color: $text-color-placeholder;
-        font-size: rem($font-size-small);
+        font-size: rem($font-size-base);
       }
     }
   }
@@ -53,6 +53,7 @@
   border-bottom: $border-solid-1;
   padding-bottom: rem($padding-4n);
   color: $text-color-regular;
+  font-size: $font-size-primary;
 
   .prepend {
     word-break: keep-all;
@@ -79,10 +80,17 @@
     align-items: center;
     justify-content: center;
     border-radius: $border-radius-small;
+    font-size: rem($font-size-primary);
     width: rem(76);
     height: rem(36);
     background: $text-bg-color2;
+    color: $text-color-primary;
     margin-bottom: rem($margin-4n);
+
+    &.actived {
+      background: $primary-color;
+      color: $white;
+    }
   }
 }
 
@@ -106,12 +114,13 @@
   padding-top: rem($margin-2n);
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 
   .ok {
     width: rem(167);
     height: rem(42);
+    font-size: rem($font-size-middle);
   }
   .cancel {
     width: rem(167);
@@ -119,6 +128,7 @@
     color: $text-color-regular;
     background: $text-bg-color2;
     border: none;
-    margin-right: rem($margin-4n);
+    // margin-right: rem($margin-4n);
+    font-size: rem($font-size-middle);
   }
 }

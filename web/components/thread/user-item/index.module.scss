@@ -8,15 +8,6 @@
   box-sizing: border-box;
   padding: rem($padding-4n) rem($padding-4n);
   background-color: $white;
-  &:before {
-    position: absolute;
-    height: 1px;
-    content: '';
-    right: rem($padding-4n);
-    left: rem($padding-4n);
-    bottom: 0;
-    background-color: var(--border-line-color);
-  }
   .wrapper {
     display: flex;
     align-items: center;
@@ -25,22 +16,25 @@
   .header {
     position: relative;
     height: rem(38);
-    margin-right: rem(8);
+    margin-right: rem(12);
     box-sizing: border-box;
-    .img {
-      display: inline-block;
-      width: rem(38);
-      height: rem(38);
-      border-radius: rem(19);
-      line-height: rem(38);
-      text-align: center;
-      font-size: rem(20);
-      background: $body-bg-color;
-    }
+    // .img {
+    //   display: inline-block;
+    //   width: rem(38);
+    //   height: rem(38);
+    //   border-radius: rem(19);
+    //   line-height: rem(38);
+    //   text-align: center;
+    //   font-size: rem(20);
+    //   background: $body-bg-color;
+    // }
     .icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       position: absolute;
-      bottom: rem(-5);
-      right: rem(-5);
+      bottom: rem(-2);
+      right: rem(-4);
       border-radius: rem($border-radius-big);
       height: rem(20);
       width: rem(20);
@@ -48,21 +42,28 @@
       text-align: center;
       line-height: rem(20);
       color: var(--color-white);
+      &.like {
+        background-color: $error-color;
+      }
+      &.heart {
+        background-color: $warn-color;
+      }
     }
   }
 
   .content {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    justify-content: center;
     font-size: rem($font-size-primary);
     .title {
       color: var(--color-text-primary);
-      line-height: rem(18);
+      line-height: rem(20);
     }
     .subTitle {
       color: var(--color-text-secondary);
-      line-height: rem(18);
+      line-height: rem(17);
+      font-size: rem($font-size-small);
     }
   }
 
@@ -74,5 +75,11 @@
     .label {
       margin-right: rem(7);
     }
+  }
+  .button {
+    height: rem(25);
+    font-size: rem(12);
+    display: flex;
+    align-items: center;
   }
 }

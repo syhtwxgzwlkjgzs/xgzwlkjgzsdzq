@@ -2,6 +2,7 @@ import { action } from 'mobx';
 import ThreadPostStore from './store';
 import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread, updateThread, createThreadVideoAudio } from '@common/server';
 import { LOADING_TOTAL_TYPE, THREAD_TYPE } from '@common/constants/thread-post';
+import { emojiFromEditFormat, emojiFormatForCommit } from '@common/utils/emoji-regexp';
 
 class ThreadPostAction extends ThreadPostStore {
   /**
@@ -73,10 +74,10 @@ class ThreadPostAction extends ThreadPostStore {
     const ret = await readFollow({ params });
     this.setLoadingStatus(LOADING_TOTAL_TYPE.follow, false);
     const { code, data } = ret;
-    const { pageData } = data || {};
+    const { pageData, totalCount = 0 } = data || {};
     if (code === 0) {
-      if (page === 1) this.setFollow(pageData || []);
-      else this.appendFollow(pageData || []);
+      if (page === 1) this.setFollow(pageData || [], totalCount);
+      else this.appendFollow(pageData || [], totalCount);
     }
     return ret;
   }
@@ -106,10 +107,10 @@ class ThreadPostAction extends ThreadPostStore {
     };
     const ret = await readTopics({ params });
     const { code, data } = ret;
-    const { pageData = [] } = data || {};
+    const { pageData = [], totalCount = 0 } = data || {};
     if (code === 0) {
-      if (params.page === 1) this.setTopic(pageData || []);
-      else this.appendTopic(pageData || []);
+      if (params.page === 1) this.setTopic(pageData || [], totalCount);
+      else this.appendTopic(pageData || [], totalCount);
     }
     this.setLoadingStatus(LOADING_TOTAL_TYPE.topic, false);
     return ret;
@@ -129,14 +130,16 @@ class ThreadPostAction extends ThreadPostStore {
 
   // 设置关注
   @action.bound
-  setFollow(data) {
+  setFollow(data, totalCount) {
     this.follows = data || [];
+    this.followsTotalCount = totalCount;
   }
 
   // 附加关注
   @action.bound
-  appendFollow(data) {
+  appendFollow(data, totalCount) {
     this.follows = [...this.follows, ...data];
+    this.followsTotalCount = totalCount;
   }
 
   // 设置商品信息
@@ -147,14 +150,16 @@ class ThreadPostAction extends ThreadPostStore {
 
   // 设置话题列表
   @action.bound
-  setTopic(data) {
+  setTopic(data, totalCount) {
     this.topics = data;
+    this.topicTotalCount = totalCount;
   }
 
   // 附加话题列表
   @action.bound
-  appendTopic(data) {
+  appendTopic(data, totalCount) {
     this.topics = [...this.topics, ...data];
+    this.topicTotalCount = totalCount;
   }
 
   // 同步发帖数据到store
@@ -258,7 +263,7 @@ class ThreadPostAction extends ThreadPostStore {
     const { title, categoryId, contentText, position, price, attachmentPrice, freeWords } = this.postData;
     const params = {
       title, categoryId, content: {
-        text: contentText,
+        text: emojiFormatForCommit(contentText),
       },
     };
     if (position.address) params.position = position;
@@ -323,7 +328,7 @@ class ThreadPostAction extends ThreadPostStore {
       price,
       attachmentPrice,
       position,
-      contentText,
+      contentText: emojiFromEditFormat(contentText),
       audio,
       rewardQa,
       product,

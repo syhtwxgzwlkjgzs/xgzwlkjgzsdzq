@@ -77,32 +77,25 @@ export default class mobileBindStore {
     }
 
     @action
-    sendCode = async ({registerCaptcha, qcloudCaptchaAppId}) => {
-      // 发送前校验
-      this.beforeSendVerify();
-
+    sendCode = async ({captchaRandStr, captchaTicket}) => {
       try {
-        toTCaptcha({
-          registerCaptcha,
-          appid: qcloudCaptchaAppId,
-          resCallback: async () => {
-            const smsResp = await smsSend({
-              timeout: 3000,
-              data: {
-                mobile: this.mobile,
-                type: 'bind',
-              },
-            });
-            if (smsResp.code === 0) {
-              this.setCounter(smsResp.data.interval);
-              return smsResp.data;
-            }
-            throw {
-              Code: smsResp.code,
-              Message: smsResp.msg,
-            };
+        const smsResp = await smsSend({
+          timeout: 3000,
+          data: {
+            mobile: this.mobile,
+            type: 'bind',
+            captchaRandStr,
+            captchaTicket
           },
         });
+        if (smsResp.code === 0) {
+          this.setCounter(smsResp.data.interval);
+          return smsResp.data;
+        }
+        throw {
+          Code: smsResp.code,
+          Message: smsResp.msg,
+        };
       } catch (error) {
         if (error.Code) {
           throw error;

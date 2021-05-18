@@ -11,6 +11,7 @@ import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import DDialog from '@components/dialog';
+import BaseList from '@components/list';
 
 import stringToColor from '@common/utils/string-to-color';
 
@@ -36,10 +37,6 @@ class AtSelect extends Component {
   async fetchFollow() {
     const { threadPost } = this.props;
     const { page, perPage, keywords } = this.state;
-    if ((page - 1) * perPage > threadPost.follows.length) {
-      this.setState({ finish: true });
-      return;
-    }
     const params = { page, perPage };
     if (keywords) {
       params.filter = {};
@@ -50,6 +47,7 @@ class AtSelect extends Component {
     if (ret.code === 0) {
       this.setState({ page: page + 1 });
     }
+    return Promise.reject();
   }
 
   // 更新搜索关键字,搜索用户
@@ -69,8 +67,9 @@ class AtSelect extends Component {
 
   onScrollBottom() {
     // 没有更多数据时，不再发送请求
-    if (this.state.finish) return;
-    this.fetchFollow();
+    const { threadPost } = this.props;
+    if ((this.state.page - 1) * this.state.perPage > threadPost.followsTotalCount) return Promise.reject();
+    return this.fetchFollow();
   }
 
   // 确认选择
@@ -101,9 +100,10 @@ class AtSelect extends Component {
     const { data, index } = info;
     const item = data[index] || {};
     const username = item.user?.userName || '';
+    const userId = item.user?.pid || '';
 
     return (
-      <div className={styles['at-item']}>
+      <div className={styles['at-item']} key={userId}>
         <div className={styles.avatar}>
           {item?.user?.avatar
             ? <Avatar image={item.user.avatar} />
@@ -135,39 +135,40 @@ class AtSelect extends Component {
       <div className={styles.wrapper}>
         {/* 搜索框 */}
         <div className={styles.input}>
+          <Icon className={styles.inputWrapperIcon} name="SearchOutlined" size={16} />
           <Input
             value={this.state.keywords}
-            icon="SearchOutlined"
             placeholder='搜索用户'
             onChange={e => this.updateKeywords(e)}
           />
           {this.state.keywords &&
-            <div className={styles.delete} onClick={this.clearKeywords}>
-              <Icon className={styles['delete-icon']} name="CloseOutlined" size={8}></Icon>
-            </div>
+            <Icon className={styles.deleteIcon} name="WrongOutlined" size={16}  onClick={this.clearKeywords}></Icon>
           }
         </div>
 
         {/* 选择列表 */}
-        <Checkbox.Group
-          value={this.state.checkUser}
-          onChange={val => this.setState({ checkUser: val })}
-        >
-          <div className={styles['at-wrap']}>
-            <ScrollView
-              className={styles['scroll-view']}
-              width='100%'
-              rowCount={data.length}
-              rowData={data}
-              rowHeight={54}
-              rowRenderer={this.renderItem.bind(this)}
-              onScrollBottom={this.onScrollBottom.bind(this)}
-              onPullingUp={() => Promise.reject()}
-              isRowLoaded={() => true}
-              lowerThreshold={100}
-            />
-          </div>
-        </Checkbox.Group>
+          <Checkbox.Group
+            value={this.state.checkUser}
+            onChange={val => this.setState({ checkUser: val })}
+          >
+            {/* <div className={styles['at-wrap']}> */}
+              {/* <ScrollView
+                className={styles['scroll-view']}
+                width='100%'
+                rowCount={data.length}
+                rowData={data}
+                rowHeight={54}
+                rowRenderer={this.renderItem.bind(this)}
+                onScrollBottom={this.onScrollBottom.bind(this)}
+                onPullingUp={() => Promise.reject()}
+                isRowLoaded={() => true}
+                lowerThreshold={100}
+              /> */}
+            {/* </div> */}
+            <BaseList className={styles['at-wrap']} onRefresh={this.onScrollBottom.bind(this)} noMore={(this.state.page - 1) * this.state.perPage > threadPost.followsTotalCount}>
+              {data && data.map((_, index) => this.renderItem({ data, index })) }
+            </BaseList>
+          </Checkbox.Group>
 
         {/* 取消按钮 */}
         <div className={styles.btn}>

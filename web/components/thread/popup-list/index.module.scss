@@ -9,6 +9,29 @@
 .tabs {
   max-width: rem(572);
   margin: 0 auto;
+  border-top-left-radius: rem($border-radius-big);
+  border-top-right-radius: rem($border-radius-big);
+  :global(.dzq-tabs__bar.is-card) {
+    box-shadow: none;
+    padding-left: rem(4);
+  }
+  :global {
+    .dzq-tabs__panel {
+      border-top: 1px solid rgba(238, 238, 238, 0.75);
+
+    }
+    .dzq-tabs__item {
+      justify-content: flex-start;
+      flex: none;
+      padding: 0 rem(12);
+    }
+    .dzq-tabs__item.is-active {
+      font-weight: 600;
+    }
+    .dzq-tabs__scroll {
+      width: auto;
+    }
+  }
 }
 
 .tabIcon {
@@ -24,7 +47,18 @@
   align-items: center;
   justify-content: center;
 
-  .title {
-    margin: 0 rem(4);
+  .icon {
+    margin-right: rem(4);
   }
+  .title {
+    line-height: 20px;
+  }
+  .num {
+    margin-left: rem(4);
+  }
+}
+
+.spinner {
+  height: 70vh;
+  width: 100%;
 }
