@@ -47,7 +47,7 @@
           .dzq-badge__circle{
             padding: 0 rem(6px);
             width: auto;
-            border-radius: $border-radius-middle;
+            border-radius: $border-radius-8;
           }
         }
       }
@@ -92,7 +92,7 @@
       &.item-active{
         color: $primary-color;
         font-weight: 600;
-  
+
         &::after {
           content: '';
           position: absolute;
@@ -106,7 +106,7 @@
         }
       }
     }
-    
+
   }
 
 }
