@@ -125,7 +125,7 @@ export default class PayBox extends React.Component {
     return (
       <div className={styles.payBox}>
         <div className={styles.title}>
-          <p>支付金额：￥{options.amount}</p>
+          <p>￥{options.amount}</p>
         </div>
         <div className={styles.list}>
           <Radio.Group
@@ -156,9 +156,6 @@ export default class PayBox extends React.Component {
         <div className={styles.btnBox}>
           <Button disabled={disabled} className={styles.btn} type="primary" size="large" full onClick={this.handlePayConfirmed}>
             确认支付￥{options.amount} 元
-          </Button>
-          <Button onClick={this.handleCancel} className={styles.btn} size="large" full>
-            取消
           </Button>
         </div>
       </div>
