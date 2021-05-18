@@ -110,7 +110,7 @@ class index extends Component {
       <div className={styles.content}>
         <h3>设置支付密码</h3>
         <div className={styles.paypwdInput}>
-          <Input value={payPassword} onChange={this.handleSetPwd} placeholder="请设置您的支付密码" mode="password" />
+          <Input type="number" maxLength={6} value={payPassword} onChange={this.handleSetPwd} placeholder="请设置您的支付密码" mode="password" />
         </div>
       </div>
     )
@@ -124,7 +124,7 @@ class index extends Component {
         <h3>修改密码</h3>
         <div className={styles.labelInfo}>
           <div className={styles.labelValue}>
-            <Input value={oldPayPwd} mode="password" placeholder="请输入旧密码" onChange={this.handleChangeOldPwd} />
+            <Input type="number" maxLength={6} value={oldPayPwd} mode="password" placeholder="请输入旧密码" onChange={this.handleChangeOldPwd} />
           </div>
           <div onClick={this.handleGoToFindPayPwd} className={styles.tips}>忘记旧密码？</div>
         </div>
