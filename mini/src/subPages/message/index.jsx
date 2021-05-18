@@ -4,22 +4,22 @@ import Page from '@components/page';
 import Message from '@layout/message';
 import { getCurrentInstance } from '@tarojs/taro';
 
-/**
-* ÏûÏ¢Ò³Ãæµ±Ç°ÏÔÊ¾µÄÏûÏ¢Ä£¿é
-*
-* ´Óµ±Ç°Â·ÓÉ params²ÎÊıÖĞÈ¡Öµpage¡¢subPage¡¢dialogId
-* page=index: ÏûÏ¢Ê×Ò³
-* page=thread: Ìû×ÓÍ¨Öª£¬subPage=at/reply/likeÎªÌù×ÓÍ¨ÖªÏÂ@ÎÒµÄ¡¢»Ø¸´ÎÒµÄ¡¢µãÔŞÎÒµÄ3¸ö×ÓÒ³Ãæ
-* page=financial: ²ÆÎñÍ¨Öª
-* page=account: ÕËºÅÏûÏ¢
-* page=chat: ÁÄÌì¶Ô»°£¬dialogId=xxxÎªµ±Ç°¶Ô»°id£¬usernameÎªÁÄÌì¶Ô·½µÄÓÃ»§Ãû
-*
-*/
+ /**
+   * æ¶ˆæ¯é¡µé¢å½“å‰æ˜¾ç¤ºçš„æ¶ˆæ¯æ¨¡å—
+   *
+   * ä»url queryå‚æ•°ä¸­å–å€¼pageã€subPageã€dialogId
+   * page=index: æ¶ˆæ¯é¦–é¡µ
+   * page=thread: å¸–å­é€šçŸ¥ï¼ŒsubPage=at/reply/likeä¸ºè´´å­é€šçŸ¥ä¸‹@æˆ‘çš„ã€å›å¤æˆ‘çš„ã€ç‚¹èµæˆ‘çš„3ä¸ªå­é¡µé¢
+   * page=financial: è´¢åŠ¡é€šçŸ¥
+   * page=account: è´¦å·æ¶ˆæ¯
+   * page=chat: èŠå¤©å¯¹è¯ï¼ŒdialogId=xxxä¸ºå½“å‰å¯¹è¯idï¼Œusernameä¸ºèŠå¤©å¯¹æ–¹çš„ç”¨æˆ·å
+   *
+   */
 const Index = inject('message')(observer(({ message }) => {
-  // Â·ÓÉ
+
   const { router } = getCurrentInstance();
 
-  // ²ÎÊı¹ıÂË
+ // å‚æ•°è¿‡æ»¤
   const params = (({ page, subPage, dialogId, username }) => {
     if (!['index', 'thread', 'financial', 'account', 'chat'].includes(page)) {
       page = 'index';
@@ -32,7 +32,7 @@ const Index = inject('message')(observer(({ message }) => {
     return { page, subPage, dialogId, username };
   })(router.params);
 
-  // ¸üĞÂÎ´¶ÁÏûÏ¢
+  // æ›´æ–°æœªè¯»æ¶ˆæ¯
   useEffect(() => {
     message.readUnreadCount();
   });
