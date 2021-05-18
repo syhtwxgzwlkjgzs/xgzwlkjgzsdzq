@@ -20,7 +20,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: rem($padding-4n) rem($padding-4n);
+        padding: rem($padding-4n) 0;
 
         &:first-child {
           border-bottom: 1px solid $paybox-border-line-color;
@@ -47,7 +47,15 @@
           .subText{
             font-size: rem($font-size-label);
             color: var(--color-text-secondary);
-            margin-right: rem($margin-2n);
+            margin-right: rem($margin-4n);
+          }
+          :global {
+            .dzq-checkbox--radio {
+              border-radius: rem(var(--border-radius-small));
+              &::after {
+                border-radius: rem(var(--border-radius-small));
+              }
+            }
           }
         }
     }
@@ -70,5 +78,19 @@
       border-radius: 5px;
     }
   }
+}
+
+.payBoxCloseIcon {
+  position: absolute;
+  right: rem(16);
+  top: rem(24);
+  // width: rem(40);
+  // height: rem(40);
+  // background-color: pink;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8590A6;
+  cursor: pointer;
 }
 
