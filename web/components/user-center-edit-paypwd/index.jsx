@@ -6,6 +6,7 @@ import styles from './index.module.scss';
 import { withRouter } from 'next/router';
 import HOCFetchSiteData from '../../middleware/HOCFetchSiteData'
 import Router from '@discuzq/sdk/dist/router';
+import GetQueryString from '../../../common/utils/get-query-string';
 
 @inject('user')
 @inject('payBox')
@@ -83,9 +84,16 @@ class index extends Component {
         hasMask: false,
         duration: 1000,
       })
+      const type = GetQueryString('type')
+      if (type === 'paybox') {
+        const { id } = this.props?.user;
+        this.props.payBox.getWalletInfo(id);
+        this.props.payBox.visible = true
+      }
       Router.back()
       this.initState()
     }).catch((err) => {
+      console.log(err);
       Toast.error({
         content: "设置失败请重新设置",
         hasMask: false,

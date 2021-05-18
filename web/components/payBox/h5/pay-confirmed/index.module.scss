@@ -1,9 +1,11 @@
 @import '@common/styles/index.scss';
+@import '@common/styles/mixin/index.scss';
 
 .payBox{
   background: var(--color-white);
   padding: rem($padding-6n) rem($padding-4n) rem($padding-4n) rem($padding-4n);
-
+  height: rem(337);
+  box-sizing: border-box;
   .title{
     text-align: center;
     p{
@@ -68,14 +70,21 @@
   }
 
   .btnBox{
+    position: absolute;
+    bottom: 0;
     margin-top: rem($margin-2n);
-    background: var(--background-color);
+    height: rem(60);
+    margin: 0 rem(-$margin-4n) rem($margin-10);
+    border-top: 1px solid #eee;
+    padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
+    box-sizing: border-box;
+    @include ios-safe-area-inset-bottom;
     .btn{
-      padding-top: rem(10);
-      padding-bottom: rem(10);
-      line-height: rem(24);
+      width: rem(343);
+      height: rem(42);
       font-size: rem(16);
       border-radius: 5px;
+      margin: auto;
     }
   }
 }
