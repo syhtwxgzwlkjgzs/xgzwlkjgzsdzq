@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component} from 'react';
 import { inject, observer } from 'mobx-react';
 import Header from '@components/header';
 import UserCenterFans from '@components/user-center-fans';
@@ -20,7 +20,6 @@ class index extends Component {
     this.props.user.cleanUserFans();
     this.props.user.cleanTargetUserFans();
   }
-
   componentDidMount() {
     this.setState({
       height: window.outerHeight,

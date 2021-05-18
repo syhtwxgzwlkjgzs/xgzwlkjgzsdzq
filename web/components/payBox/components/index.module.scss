@@ -56,13 +56,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: rem($padding-4n);
+  // padding: rem($padding-4n);
   .payListItem{
     border-bottom: var(--border-border);
-    width: rem(46);
-    height: rem(49);
+    width: rem(40);
+    height: rem(40);
     text-align: center;
-    line-height: rem(49);
+    line-height: rem(40);
     font-size: rem(50);
     &:not(:last-child) {
       // margin-right: rem($margin-2n);
@@ -77,11 +77,12 @@
   }
   .payListItem01 {
     border: var(--border-border);
-    width: rem(46);
-    height: rem(49);
+    width: rem(40);
+    height: rem(40);
     text-align: center;
-    line-height: rem(69);
-    font-size: rem(50);
+    line-height: rem(40);
+    font-size: rem($font-size-large);
+    color: $text-color-primary;
     &:not(:last-child) {
       // margin-right: rem($margin-2n);
     }

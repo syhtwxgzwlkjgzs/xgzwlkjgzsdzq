@@ -509,6 +509,7 @@ class ThreadH5Page extends React.Component {
 
   // 点击标签 TODO:带上参数
   onTagClick() {
+    // TODO:待调用首页store
     this.props.router.push('/');
   }
 

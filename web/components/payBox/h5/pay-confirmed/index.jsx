@@ -70,10 +70,8 @@ export default class PayBox extends React.Component {
   }
 
   goSetPayPwa() {
-    // Router.redirect({url: '/test/payoffpwd?title=设置支付密码'});
-    // Router.push('/test/payoffpwd?title=设置支付密码');
-    this.props.payBox.step = STEP_MAP.SET_PASSWORD;
-    // this.props.payBox.visible = false;
+    Router.push({url: `/my/edit/paypwd?type=paybox`});
+    this.props.payBox.visible = false;
   }
 
   /**
@@ -125,7 +123,7 @@ export default class PayBox extends React.Component {
     return (
       <div className={styles.payBox}>
         <div className={styles.title}>
-          <p>支付金额：￥{options.amount}</p>
+          <p>￥{options.amount}</p>
         </div>
         <div className={styles.list}>
           <Radio.Group
@@ -155,11 +153,12 @@ export default class PayBox extends React.Component {
         </div> */}
         <div className={styles.btnBox}>
           <Button disabled={disabled} className={styles.btn} type="primary" size="large" full onClick={this.handlePayConfirmed}>
-            确认支付￥{options.amount} 元
+            确认支付
           </Button>
-          <Button onClick={this.handleCancel} className={styles.btn} size="large" full>
-            取消
-          </Button>
+        </div>
+        {/* 关闭按钮 */}
+        <div className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
+          <Icon name="CloseOutlined" size={14} />
         </div>
       </div>
     );

@@ -16,7 +16,6 @@ class SearchResultPostPage extends React.Component {
     super(props);
 
     // const keyword = this.props.router.query.keyword || '';
-    console.log(this.props);
     const keyword = '';
 
     this.state = {
