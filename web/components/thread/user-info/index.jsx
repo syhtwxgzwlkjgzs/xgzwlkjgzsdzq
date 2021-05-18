@@ -4,6 +4,7 @@ import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import React from 'react';
 import { diffDate } from '@common/utils/diff-date';
+import classNames from 'classnames';
 
 UserInfo.propTypes = {
   name: PropTypes.string.isRequired, // 用户名称
@@ -19,9 +20,17 @@ UserInfo.propTypes = {
   isRed: PropTypes.bool, // 是否红包
   userId: PropTypes.number, // 用户id PC端
   platform: PropTypes.string, // 是否展示pop PC端
+  icon: PropTypes.string, // 图标：点赞或者是付费用户
 };
 
 export default function UserInfo(props) {
+  let tagsNumber = 0;
+
+  props.isEssence && (tagsNumber = tagsNumber + 1);
+  props.isPay && (tagsNumber = tagsNumber + 1);
+  props.isReward && (tagsNumber = tagsNumber + 1);
+  props.isRed && (tagsNumber = tagsNumber + 1);
+
   return (
     <div className={styles.contianer}>
       <Avatar
@@ -35,16 +44,16 @@ export default function UserInfo(props) {
       ></Avatar>
 
       <div className={styles.right}>
-        <div>
-          <span className={styles.name}>{props.name}</span>
-          {props.groupName && <span className={styles.groupName}>{props.groupName}</span>}
+        <div className={styles.info}>
+          <div className={styles.name}>{props.name}</div>
+          {props.groupName && <div className={styles.groupName}>{props.groupName}</div>}
         </div>
 
         <div className={styles.meta}>
           {props.time && <span className={styles.time}>{diffDate(props.time)}</span>}
           {props.location && (
             <div className={styles.location}>
-              <Icon name="PositionOutlined"></Icon>
+              <Icon name="PositionOutlined" size={14}></Icon>
               <span>{props.location}</span>
             </div>
           )}
@@ -58,11 +67,15 @@ export default function UserInfo(props) {
       </div>
 
       <div className={styles.tags}>
-        {props.isEssence && <p className={styles.categoryEssence}>精</p>}
+        {props.isEssence && (
+          <div className={classNames('dzq-tag', styles.categoryEssence)}>
+            <span className="dzq-tag-text">{tagsNumber > 2 ? '精' : '精华'}</span>
+          </div>
+        )}
         {/* {props.isEssence && <Tag type="primary">精华</Tag>} */}
-        {props.isPay && <Tag type="success">付</Tag>}
-        {props.isReward && <Tag type="warning">悬</Tag>}
-        {props.isRed && <Tag type="danger">红</Tag>}
+        {props.isPay && <Tag type="success">{tagsNumber > 2 ? '付' : '付费'}</Tag>}
+        {props.isReward && <Tag type="warning">{tagsNumber > 2 ? '悬' : '悬赏'}</Tag>}
+        {props.isRed && <Tag type="danger">{tagsNumber > 2 ? '红' : '红包'}</Tag>}
       </div>
     </div>
   );

@@ -41,7 +41,7 @@ export default class Page extends React.Component {
 
   // 检查是否满足渲染条件
   isPass() {
-    const { site } = this.props;
+    const { site, user } = this.props;
     const path = getCurrentInstance().router.path;
 
     if (site && site.webConfig) {
@@ -51,7 +51,10 @@ export default class Page extends React.Component {
         return false;
       }
       // 付费加入
-      if ( path !== '/subPage/join/index' && site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay' ) {
+      if (
+        (path !== '/forum/partner-invite' && !user.isLogin() &&  site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay')
+        || (path !== '/forum/partner-invite' && user.isLogin() && !user.paid && site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay')
+      ) {
         // todo 需要判断登录后是否支付
         Router.redirect({url: '/subPages/join/index'});
         return false;

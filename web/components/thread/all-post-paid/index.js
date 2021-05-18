@@ -50,9 +50,10 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition, pc, visible }) => {
             <div className={styles.payNumber}>
               <Input
                 mode="number"
+                htmlType="number"
                 value={price}
                 placeholder="金额"
-                onChange={e => setPrice(+e.target.value)}
+                onChange={e => setPrice(e.target.value)}
               />
               元
             </div>
@@ -76,9 +77,10 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition, pc, visible }) => {
           <div>
             <Input
               mode="number"
+              htmlType="number"
               value={attachmentPrice}
               placeholder="金额"
-              onChange={e => setAttachmentPrice(+e.target.value)}
+              onChange={e => setAttachmentPrice(e.target.value)}
             />
             元
           </div>

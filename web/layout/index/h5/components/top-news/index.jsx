@@ -9,7 +9,10 @@ import xss from '@common/utils/xss';
  * @prop {{prefix:string, title:string}[]} data
  */
 const TopNews = ({ data = [], router, platform = 'h5'}) => {
-  const onClick = ({ threadId } = {}) => {
+  const onClick = ({ threadId } = {}, e) => {
+    if (e.target.localName === 'a') {
+      return
+    }
     router.push(`/thread/${threadId}`);
   };
 
@@ -39,7 +42,7 @@ const TopNews = ({ data = [], router, platform = 'h5'}) => {
           <div className={styles.prefix}>{item.prefix || '置顶'}</div>
           {false && <div className={styles.title}>{handlerTitle(item.title)}</div>}
           <div className={styles.title}>
-              <RichText onClick={() => onClick(item)} className={styles.richText} content={filterContent(item.title)} />
+              <RichText onClick={(e) => onClick(item, e)} className={styles.richText} content={filterContent(item.title)} />
           </div>
         </div>
       ))}

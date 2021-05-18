@@ -8,7 +8,10 @@ import styles from './index.module.scss';
 import {RichText} from '@discuzq/design';
 
 export const TopicItem = ({ data, onClick = noop }) => {
-    const click = useCallback(() => {
+    const click = useCallback((e) => {
+      if (e.target.localName === 'a') {
+        return
+      }
       onClick && onClick(data);
     }, [data, onClick]);
   
@@ -32,6 +35,7 @@ export const TopicItem = ({ data, onClick = noop }) => {
         </div>
         <div className={styles.tags}>
           <div className={styles.tag}>热度 {data.viewCount || 0}</div>
+          <span className={styles.dot}>·</span>
           <div className={styles.tag}>内容 {data.threadCount || 0}</div>
         </div>
       </div>

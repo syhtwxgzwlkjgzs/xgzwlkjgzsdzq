@@ -8,6 +8,7 @@ import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import { Icon } from '@discuzq/design';
+import typeofFn from '@common/utils/typeof';
 import styles from './HOCFetchSiteData.module.scss';
 
 // 获取全站数据
@@ -19,7 +20,7 @@ export default function HOCFetchSiteData(Component) {
     // 应用初始化
     static async getInitialProps(ctx) {
       try {
-        let platform = 'pc';
+        let platform = 'static';
         let siteConfig = {};
         let userInfo;
         let serverSite;
@@ -30,7 +31,7 @@ export default function HOCFetchSiteData(Component) {
         // 服务端
         if (isServer()) {
           const { headers } = ctx.req;
-          platform = headers ? getPlatform(headers['user-agent']) : 'pc';
+          platform = (headers && !typeofFn.isEmptyObject(headers)) ? getPlatform(headers['user-agent']) : 'static';
           // 获取站点信息
           siteConfig = await readForum({}, ctx);
           serverSite = {
@@ -170,7 +171,7 @@ export default function HOCFetchSiteData(Component) {
 
     // 检查是否满足渲染条件
     isPass() {
-      const { site, router } = this.props;
+      const { site, router, user } = this.props;
       const { isNoSiteData } = this.state;
       if (site && site.webConfig) {
         isNoSiteData && this.setState({
@@ -180,10 +181,16 @@ export default function HOCFetchSiteData(Component) {
         if (router.asPath !== '/close' && site.closeSiteConfig) {
           Router.redirect({ url: '/close' });
         }
-        // 付费加入
-        if (router.asPath !== '/join' && site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay') {
-          // todo 需要判断登录后是否支付
-          Router.redirect({ url: '/join' });
+        // 付费加入: 付费状态下，未登录的用户、登录了但是没有付费的用户
+        if (
+          (router.asPath !== '/forum/partner-invite' && !user.isLogin() &&  site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay')
+          || (router.asPath !== '/forum/partner-invite' && user.isLogin() && !user.paid && site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay')
+        ) {
+          Router.redirect({ url: '/forum/partner-invite' });
+        }
+        // 绑定昵称：已登录的用户，没有绑定昵称
+        if (router.asPath !== '/bind-nickname'  && user.isLogin() && !user.nickname && !user.username) {
+          Router.redirect({ url: '/user/bind-nickname' });
         }
       }
     }
@@ -202,6 +209,9 @@ export default function HOCFetchSiteData(Component) {
 
     render() {
       const { isNoSiteData } = this.state;
+      const { site } = this.props;
+      // CSR不渲染任何内容
+      if ( site.platform === 'static' ) return null;
       if (isNoSiteData) {
         return (
           <div className={styles.loadingBox}>

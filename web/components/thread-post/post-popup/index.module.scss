@@ -3,7 +3,6 @@
 .container {
   width: 100%;
   height: rem(168);
-  font-family: 'PingFang SC';
   font-weight: normal;
   border-radius: $border-radius-big $border-radius-big 0 0;
   background: $white;
@@ -15,9 +14,9 @@
   .item {
     text-align: center;
     font-size: $padding-4n;
+    font-weight: normal;
     line-height: $font-line-height-base;
     padding: 16px 0;
-    text-align: center;
     color: $text-color-primary;
     border-bottom: $border-solid-1;
   }
@@ -31,7 +30,7 @@
   font-size: $font-size-base;
   line-height: $font-line-height-small;
   text-align: center;
-  color: var(--color-text-regular);
+  color: $text-color-regular;
   border-top: $border-solid-1;
   padding: $padding-3n 0;
 }
