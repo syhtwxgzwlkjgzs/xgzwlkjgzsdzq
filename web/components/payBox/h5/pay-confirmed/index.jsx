@@ -142,6 +142,11 @@ export default class PayBox extends React.Component {
     this.props.payBox.payWay = null;
   };
 
+    // 转换金额小数
+    transMoneyToFixed = (num) => {
+      return Number(num).toFixed(2);
+    };
+
   render() {
     const { options = {} } = this.props.payBox;
     const { payConfig, paymentType } = this.state;
@@ -153,7 +158,7 @@ export default class PayBox extends React.Component {
     return (
       <div className={styles.payBox}>
         <div className={styles.title}>
-          <p>￥{options.amount}</p>
+          <p>￥{this.transMoneyToFixed(options.amount)}</p>
         </div>
         <div className={styles.list}>
           <Radio.Group
