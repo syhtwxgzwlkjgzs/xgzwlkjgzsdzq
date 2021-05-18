@@ -87,7 +87,7 @@ class index extends Component {
       const type = GetQueryString('type')
       if (type === 'paybox') {
         const { id } = this.props?.user;
-        this.props.payBox.getWalletInfo(id);
+        this.props.user.getAssignUserInfo(id);
         this.props.payBox.visible = true
       }
       Router.back()
