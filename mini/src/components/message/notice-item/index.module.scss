@@ -83,7 +83,7 @@
         font-size: $font-size-middle;
         line-height: 20px;
         text-align: right;
-        color: $text-color-error;
+        color: $error-color;
       }
     }
 
@@ -95,8 +95,8 @@
 
       :global {
         .qq-emotion {
-          width: 20px;
-          height: 20px;
+          width: 14px;
+          height: 14px;
           vertical-align: top;
         }
       }

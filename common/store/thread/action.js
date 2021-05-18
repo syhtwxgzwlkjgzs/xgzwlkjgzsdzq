@@ -46,6 +46,13 @@ class ThreadAction extends ThreadStore {
     this.commentList = null;
     this.totalCount = 0;
     this.authorInfo = null;
+    this.isPositionToComment = false;
+  }
+
+  // 定位到评论位置
+  @action
+  positionToComment() {
+    this.isPositionToComment = true;
   }
 
   @action

@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import isWeiXin from '@common/utils/is-weixin';
+import clearLoginStatus from '@common/utils/clear-login-status';
 import '@discuzq/design/dist/styles/index.scss';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 
@@ -10,6 +11,7 @@ import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util'
 @observer
 class Login extends React.Component {
   componentDidMount() {
+    clearLoginStatus(); // 清除登录态
     if (this.props.site.wechatEnv === 'miniProgram') {
       if (isWeiXin()) {
         const redirectEncodeUrl = encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`);

@@ -1,116 +1,121 @@
 @import '@common/styles/index.scss';
 .avatarBox{
-    position: relative;
-    .userInfoBox{
-        position: absolute;
+  :global(.dzq-avatar--circle) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  position: relative;
+  .userInfoBox{
+    position: absolute;
 
-        z-index: var(--zindex-backtotop);
-        transform: translateY(100%);
-        bottom: 0;
+    z-index: var(--zindex-backtotop);
+    transform: translateY(100%);
+    bottom: 0;
 
-        .userInfoContent{
-            margin-top: rem(16);
-            box-sizing: border-box;
-            padding: rem(24);
-            width: rem(423);
-            height: rem(257);
-            border-radius: rem(5);
-            background: var(--color-white);
-            box-shadow: var(--box-shadow);
-            .header{
-                display: flex;
-                align-items: center;
-                justify-content: flex-start;
-                padding-bottom: rem(16);
-                border-bottom: var(--border-color-dotted-border);
-                overflow: hidden;
-                .left{
-                    width: rem(60);
-                    .customAvatar{
-                        width: rem(60);
-                        height: rem(60);
-                    }
-                }
-                .right{
-                    overflow: hidden;
-                    margin-left: rem(16);
-                    flex: 1;
-                    .name{
-                        width: 100%;
-                        font-weight: 600;
-                        font-size: rem($font-size-middle);
-                        line-height: rem($font-line-height-primary);
-                        text-align: left;
-                        color: var(--color-text-primary);
-                        overflow: hidden;
-                        text-overflow:ellipsis;
-                        white-space: nowrap;
-                    }
-                    .text{
-                        width: 100%;
-                        font-weight: normal;
-                        font-size: rem($font-size-primary);
-                        line-height: rem($font-line-height-small);
-                        text-align: left;
-                        color: var(--color-text-primary);
-                        overflow: hidden;
-                        text-overflow:ellipsis;
-                        white-space: nowrap;
-                    }
-                }
-            }
-            .content{
-                padding-top: rem(16);
-                display: flex;
-                align-items: flex-start;
-                justify-content: space-between;
-                .item{
-                    flex-shrink: 1;
-                    flex: 1;
-                    width: 25%;
-                    display: flex;
-                    flex-direction: column;
-                    overflow: hidden;
-                    .title{
-                        font-weight: normal;
-                        font-size: rem($font-size-primary);
-                        line-height: rem($font-line-height-small);
-                        text-align: center;
-                        color: $text-color-regular;
-                    }
-                    .text{
-                        margin-top: rem($margin-2n);
-                        font-weight: 600;
-                        font-size: rem($font-size-large);
-                        line-height: rem($font-line-height-large);
-                        text-align: center;
-                        color: var(--color-text-primary);
-                        overflow: hidden;
-                        text-overflow:ellipsis;
-                        white-space: nowrap;
-                    }
-                }
-            }
-            .footer{
-                margin-top: rem(24.5);
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                .btn{
-                    width: rem(114);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    .icon{
-                        margin-right: rem($margin-1n);
-                    }
-                }
-                .ghost{
-                    background: var(--color-white);
-                    color: var(--color-primary);
-                }
-            }
+    .userInfoContent{
+      margin-top: rem(16);
+      box-sizing: border-box;
+      padding: rem(24);
+      width: rem(423);
+      height: rem(257);
+      border-radius: rem(5);
+      background: var(--color-white);
+      box-shadow: var(--box-shadow);
+      .header{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding-bottom: rem(16);
+        border-bottom: var(--border-color-dotted-border);
+        overflow: hidden;
+        .left{
+          width: rem(60);
+          .customAvatar{
+            width: rem(60);
+            height: rem(60);
+          }
         }
-
+        .right{
+          overflow: hidden;
+          margin-left: rem(16);
+          flex: 1;
+          .name{
+            width: 100%;
+            font-weight: 600;
+            font-size: rem($font-size-middle);
+            line-height: rem($font-line-height-primary);
+            text-align: left;
+            color: var(--color-text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+          .text{
+            width: 100%;
+            font-weight: normal;
+            font-size: rem($font-size-primary);
+            line-height: rem($font-line-height-small);
+            text-align: left;
+            color: var(--color-text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+      }
+      .content{
+        padding-top: rem(16);
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        .item{
+          flex-shrink: 1;
+          flex: 1;
+          width: 25%;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          .title{
+            font-weight: normal;
+            font-size: rem($font-size-primary);
+            line-height: rem($font-line-height-small);
+            text-align: center;
+            color: $text-color-regular;
+          }
+          .text{
+            margin-top: rem($margin-2n);
+            font-weight: 600;
+            font-size: rem($font-size-large);
+            line-height: rem($font-line-height-large);
+            text-align: center;
+            color: var(--color-text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+      }
+      .footer{
+        margin-top: rem(24.5);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .btn{
+          width: rem(114);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          .icon{
+            margin-right: rem($margin-1n);
+          }
+        }
+        .ghost{
+          background: var(--color-white);
+          color: var(--color-primary);
+        }
+      }
     }
+
+  }
 }

@@ -108,6 +108,9 @@ $button-primary-bg-color: $primary-color;
 $button-primary-light-bg-color: $primary-color10;
 $button-primary-disabled-bg-color: $primary-disabled-color;
 
+// ----- checkbox color -----
+$checkbox-checked-bg-color: var(--color-primary8);
+
 // ------ border ----------
 $border-radius-small: 5px;
 $border-radius-big: 10px;
@@ -151,3 +154,7 @@ $zindex-tooltip: 1200;
 $zindex-popup: 1400;
 $zindex-dialog: 1600;
 $zindex-toast: 1800;
+
+// ------  paybox ------------
+$paybox-pay-text-font-size: 30px;
+$paybox-border-line-color: var(--border-line-color);

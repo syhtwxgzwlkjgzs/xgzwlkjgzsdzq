@@ -20,6 +20,10 @@
 .wrapper {
   position: relative;
   height: 100vh;
+  height: -webkit-fill-available;
+  min-height: 100vh;
+  /* mobile viewport bug fix */
+  min-height: -webkit-fill-available;
 
   .input {
     position: relative;
@@ -70,10 +74,10 @@
   }
 
   .at-wrap {
-    height: calc(100vh - rem(125));
-    .scroll-view {
-      height: 100% !important;
-    }
+    height: calc(100vh - 119px);
+    // .scroll-view {
+    //   height: 100% !important;
+    // }
   }
 
   .at-item {

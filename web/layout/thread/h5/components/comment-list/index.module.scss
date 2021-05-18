@@ -32,12 +32,15 @@
           }
         }
         .more {
+          margin-top: rem($margin-2n);
           font-size: rem($font-size-label);
           text-align: left;
           color: var(--color-text-primary);
           margin-left: rem($margin-6n);
           .moreIcon {
-            margin-top: rem($margin-1n);
+            margin-top: rem(1);
+            line-height: rem(20);
+            color: var(--color-text-secondary);
           }
         }
       }
@@ -66,10 +69,20 @@
         .commentListText {
           margin-top: rem($margin-1n);
           font-size: rem($font-size-middle);
-          line-height: rem(22);
+          line-height: rem(24);
           text-align: left;
           word-break: break-all;
           color: var(--color-text-primary);
+          @include lamp-clamp(3);
+
+          p {
+            @include lamp-clamp(3);
+            line-height: rem(24);
+          }
+
+          img {
+            height: rem(22);
+          }
         }
       }
       .commentListFooter {

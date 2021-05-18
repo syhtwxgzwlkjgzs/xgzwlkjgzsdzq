@@ -13,15 +13,22 @@
     position: relative;
   }
   .user_info_author{
-    width: rem(118);
-    height: rem(118);
+    width: rem(120);
+    height: rem(120);
+    box-sizing: border-box;
     position: absolute;
     left: rem(128);
     top: rem(-120);
     border-radius: 50%;
     background: var(--color-white);
     border: rem(1) solid var(--color-white);
+    overflow: hidden;
     z-index: 3;
+    :global(.dzq-avatar__img),:global(.dzq-avatar__text) {
+      width: rem(118);
+      height: rem(118);
+      line-height: rem(118);
+    }
   }
   .user_info_content{
     width: rem(343);
@@ -116,7 +123,6 @@
     background: $comment-bg-color;
     font-weight: normal;
     font-size: rem(14);
-    line-height: rem(36);
     text-align: left;
     color: $text-color-regular;
   }
@@ -124,15 +130,18 @@
     display: inline-block;
     width: rem(110);
     float: left;
+    line-height: rem(36);
   }
   @mixin inviteListMoney {
     display: inline-block;
     width: rem(96);
     float: left;
+    line-height: rem(36);
   }
   @mixin inviteListTime {
     display: inline-block;
     float: left;
+    line-height: rem(36);
   }
   .invite_list_headerName,.invite_list_itemName{
     @include inviteListName;
@@ -215,4 +224,14 @@
     }
   }
   // 邀请朋友 end
+
+  .refreshView {
+    height: rem(40);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: rem($font-size-primary);
+    color: var(--color-text-placeholder);
+  }
+
 }

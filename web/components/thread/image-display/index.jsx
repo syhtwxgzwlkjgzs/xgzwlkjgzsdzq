@@ -94,7 +94,7 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
         } else if (imgData.length === 4) {
             return <Four bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />
         } else if (imgData.length >= 5) {
-            return <Fiv bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} imgData={imgData} onClickMore={onClickMore} />
+            return <Five bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} imgData={imgData} onClickMore={onClickMore} />
         } else {
             return null
         }
@@ -128,11 +128,11 @@ const One = ({bigImages, onClick, style}) => {
 
 const Two = ({bigImages, onClick, style}) => {
     return (
-        <Row gutter={4} className={styles[style]}>
+        <Row gutter={4} className={`${styles[style]} ${styles.row}`}>
             {
                 bigImages.map((item, index) => (
-                    <Col span={6} className={styles.col}>
-                        <img src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />
+                    <Col span={6} className={styles.col} key={index}>
+                        <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
                     </Col>))
             }
         </Row>
@@ -146,8 +146,12 @@ const Four = ({bigImages, smallImages, onClick, style}) => {
                 <img src={bigImages[0].thumbUrl} onClick={() => onClick(bigImages[0].id)} />
             </Col>
             <Col span={4} className={styles.col}>
-                <Row gutter={4}>
-                    { smallImages.map((item, index) => <Col span={12}><img src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} /></Col>)}
+                <Row gutter={4} className={styles.smallRow}>
+                    { smallImages.map((item, index) => (
+                        <Col span={12} key={index} className={styles.smallCol}>
+                            <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
+                        </Col>
+                    ))}
                 </Row>
             </Col>
         </Row>
@@ -163,8 +167,8 @@ const Three = ({bigImages, smallImages, onClick, style}) => {
             <Row gutter={4} className={styles.smallImages}>
                 {
                     smallImages.map((item, index) => (
-                        <Col span={6} className={styles.col}>
-                            <img src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />
+                        <Col span={6} className={styles.col} key={index}>
+                            <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
                         </Col>))
                 }
             </Row>
@@ -172,22 +176,22 @@ const Three = ({bigImages, smallImages, onClick, style}) => {
     )
 }
 
-const Fiv = ({bigImages, smallImages, onClick, style, imgData = [], onClickMore}) => {
+const Five = ({bigImages, smallImages, onClick, style, imgData = [], onClickMore}) => {
     return (
         <div className={styles[style]}>
             <Row gutter={4} className={styles.bigImages}>
                 {
                     bigImages.map((item, index) => (
-                        <Col span={6} className={styles.col}>
-                            <img src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />
+                        <Col span={6} className={styles.col} key={index}>
+                            <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
                         </Col>))
                 }
             </Row>
             <Row gutter={4} className={styles.smallImages}>
                 {
                     smallImages.map((item, index) => (
-                        <Col span={4} className={styles.col}>
-                            <img src={item.thumbUrl} onClick={() => onClick(item.id)} key={index} />
+                        <Col span={4} className={styles.col} key={index}>
+                            <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
                             {
                                 imgData?.length > 5 && index === smallImages.length - 1 && (
                                     <div className={styles.modalBox} onClick={onClickMore}>{`+${imgData.length - 5}`}</div>

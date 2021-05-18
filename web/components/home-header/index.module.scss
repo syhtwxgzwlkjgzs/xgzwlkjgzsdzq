@@ -18,6 +18,7 @@
       font-size: rem($font-size-middle);
       color: var(--color-white);
       display: flex;
+      flex-direction: row;
       :global(.dzq-icon){
         margin-right: $margin-2n;
       }

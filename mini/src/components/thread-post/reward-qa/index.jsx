@@ -127,7 +127,6 @@ class RewardQa extends Component {
               mode="number"
               miniType="number"
               placeholder="金额"
-              placeholderStyle="color:#c5c6ca"
               maxLength={10}
               onChange={this.onMoneyChang}
             />元
@@ -146,7 +145,9 @@ class RewardQa extends Component {
             >
               {selectedTime || '请选择悬赏时间'}
             </View>
-            <Icon name="RightOutlined" size={10} />
+            <View className={styles['time-arrow']}>
+              <Icon name="RightOutlined" size={10} />
+            </View>
           </View>
         </View>
         {/* 按钮 */}

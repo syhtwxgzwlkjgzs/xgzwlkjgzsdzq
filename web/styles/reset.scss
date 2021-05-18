@@ -7,6 +7,7 @@ html,
 body {
   font-size: .12rem;
   font-weight: 400;
+  line-height: 1;
 }
 body,
 div,
@@ -92,6 +93,7 @@ video {
   padding: 0;
   border: 0;
   vertical-align: baseline;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* make sure to set some focus styles for accessibility */
@@ -414,16 +416,6 @@ input,
 select,
 textarea {
   color: #222;
-}
-
-::selection {
-  background: #b3d4fc;
-  text-shadow: none;
-}
-
-::selection {
-  background: #b3d4fc;
-  text-shadow: none;
 }
 
 img {
