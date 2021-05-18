@@ -110,10 +110,10 @@ class index extends Component {
           </div>
         </div>
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}><Input onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur} mode="password" placeholder="请输入新密码" /></div>
+          <div className={styles.labelValue}><Input onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur} mode="password" placeholder="请输入新密码" type="number" maxLength={6} /></div>
         </div>
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}><Input onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="请重复输入新密码" /></div>
+          <div className={styles.labelValue}><Input onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="请重复输入新密码" type="number" maxLength={6} /></div>
         </div>
         <div className={styles.bottom}>
           <Button onClick={this.handleStepBtn} type={"primary"} className={styles.btn}>提交</Button>

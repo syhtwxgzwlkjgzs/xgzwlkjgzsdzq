@@ -86,12 +86,12 @@ export default class index extends Component {
           <h3>设置新密码</h3>
           <div className={styles.labelInfo}>
             <div className={styles.labelValue}>
-              <Input value={newPayPwd} onChange={this.handleChangeNewPwd} mode="password" placeholder="请输入新密码" />
+              <Input value={newPayPwd} onChange={this.handleChangeNewPwd} mode="password" placeholder="请输入新密码" type="number" maxLength={6} />
             </div>
           </div>
           <div className={styles.labelInfo}>
             <div className={styles.labelValue}>
-              <Input value={newPayPwdRepeat} onChange={this.handleChangeRepeatPwd} mode="password" placeholder="请重复输入新密码" />
+              <Input type="number" maxLength={6} value={newPayPwdRepeat} onChange={this.handleChangeRepeatPwd} mode="password" placeholder="请重复输入新密码" />
             </div>
           </div>
         </div>
