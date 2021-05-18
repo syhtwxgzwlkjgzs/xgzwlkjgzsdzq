@@ -18,16 +18,14 @@
       width: 50%;
       font-size: rem($font-size-base);
       color: $text-color-primary;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
       .icon{
-        font-size: rem($font-size-base);
-        // line-height: rem($font-line-height-base);
+        font-size: rem($font-size-middle);
+        line-height: rem(23);
+        float: left;
       }
       .text {
         font-size: rem($font-size-base);
-        line-height: rem($font-line-height-base);
+        line-height: rem(24);
         padding-left: $padding-2n;
       }
     }

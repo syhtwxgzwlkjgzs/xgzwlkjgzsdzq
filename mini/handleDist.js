@@ -4,7 +4,7 @@ const fs = require('fs'),
   path = require('path');
 
 (async () => {
-  // 往dist目录中添加空文件进行已处理标记
+  // 检查dist目标中是否有标记文件，如无则继续执行
   await new Promise((resolve) => {
     fs.exists("./dist/handled.txt", (exists) => {
       if (exists) {
@@ -21,11 +21,16 @@ const fs = require('fs'),
   const command = util.format('tail -n %d %s', lines2nuke, filename);
   cp.exec(command, (err, stdout, stderr) => {
     if (err) throw err;
-    var to_vanquish = stdout.length;
+    const to_vanquish = stdout.length;
     fs.stat(filename, (err, stats) => {
       if (err) throw err;
       fs.truncate(filename, stats.size - to_vanquish, (err) => {
-        if (err) throw err;
+        if (err) {
+          throw err
+        } else {
+          // 删除成功，往dist目录中添加空文件进行标记
+          fs.writeFile('./dist/handled.txt', '', (error) => {});
+        };
       })
     });
   });
@@ -62,8 +67,5 @@ const fs = require('fs'),
   }
   subPagesAddWxss('./dist/subPages/');
 
-
-  // 往dist目录中添加空文件进行标记
-  fs.writeFile('./dist/handled.txt', '', (error) => {});
   console.log('dist目录处理成功，请在微信开发者工具中进行调试！');
 })();
