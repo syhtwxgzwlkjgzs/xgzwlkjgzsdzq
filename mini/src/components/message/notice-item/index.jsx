@@ -97,7 +97,7 @@ class Index extends Component {
     if (e.target.nodeName === 'A') return;
     const { type } = this.props;
     if (type === 'financial' || type === 'account') {
-      Taro.navigateTo({ url: `/subPages/thread/detail/index?id=${item.id}` })
+      Taro.navigateTo({ url: `/pages/thread/index?id=${item.id}` })
     }
     if (type === 'chat') {
       console.log('去私信页面');

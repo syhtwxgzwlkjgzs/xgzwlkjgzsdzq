@@ -390,7 +390,7 @@ class Index extends Component {
       Taro.hideLoading();
       if (!isDraft) {
         this.postToast('发布成功', 'success');
-        Taro.redirectTo({ url: `/subPages/thread/detail/index?id=${data.threadId}` });
+        Taro.redirectTo({ url: `/pages/thread/index?id=${data.threadId}` });
       }
       return true;
     } else {

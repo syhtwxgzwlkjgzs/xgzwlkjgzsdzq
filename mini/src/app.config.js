@@ -7,7 +7,6 @@ const config = {
   pages: [
     'pages/index/index',
     'pages/thread/index',
-    'pages/message/index'
   ],
   subPackages: [
     {
@@ -25,7 +24,6 @@ const config = {
         'thread/selectRedpacket/index',
         'thread/selectReward/index',
         'thread/selectPayment/index',
-        // 'thread/detail/index',
         'search/index',
         'search/result-topic/index',
         'search/result-post/index',
@@ -46,13 +44,13 @@ const config = {
         'wallet/frozen/index',
         'wallet/withdrawal/index',
         'message/index',
-        'pages/my/index',
-        'pages/my/edit/index',
-        'pages/my/edit/mobile/index',
-        'pages/my/edit/pwd/index',
-        'pages/my/edit/paypwd/index',
-        'pages/my/edit/reset/paypwd/index',
-        'pages/my/edit/find/paypwd/index',
+        'my/index',
+        'my/edit/index',
+        'my/edit/mobile/index',
+        'my/edit/pwd/index',
+        'my/edit/paypwd/index',
+        'my/edit/reset/paypwd/index',
+        'my/edit/find/paypwd/index',
       ]
     }
   ],
