@@ -56,9 +56,7 @@ export default class PayBox extends React.Component {
   }
 
   walletPaySubText() {
-    const { user } = this.props;
-    const { userInfo = {} } = user;
-    const { canWalletPay, walletBalance } = userInfo || {};
+    const canWalletPay = this.props.user?.canWalletPay
     if (!canWalletPay) {
       return (
         <p className={styles.subText} onClick={this.goSetPayPwa}>
@@ -113,9 +111,7 @@ export default class PayBox extends React.Component {
   render() {
     const { options = {} } = this.props.payBox;
     const { payConfig, paymentType } = this.state;
-    const { user } = this.props;
-    const { userInfo = {} } = user;
-    const { canWalletPay } = userInfo || {};
+    const canWalletPay = this.props.user?.canWalletPay
     let disabled = !this.props.payBox.payWay
     if (this.props.payBox.payWay === PAYWAY_MAP.WALLET && !canWalletPay) {
       disabled = true
