@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
 import { inject } from 'mobx-react';
-
-import Dialog from '@components/dialog';
+import DDialog from '@components/dialog';
 import { Popup } from '@discuzq/design';
 
 import styles from './index.module.scss';
@@ -22,7 +21,8 @@ class MapDialog extends React.Component {
 
     if (isPC) {
       return (
-        <Dialog
+        <DDialog
+          pc
           visible={true}
           className={styles.dialog}
           onClose={this.props.onClose}
@@ -30,7 +30,7 @@ class MapDialog extends React.Component {
           isCustomBtn={true}
         >
           <iframe src={this.props.mapUrl} frameBorder="0" scrolling="no" />
-        </Dialog>
+        </DDialog>
       );
     }
 

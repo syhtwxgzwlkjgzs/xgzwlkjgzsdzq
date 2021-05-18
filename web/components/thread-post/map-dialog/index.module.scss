@@ -4,11 +4,9 @@
   :global {
     .dzq-modal__container {
       padding: $padding-6n;
-      min-width: 500px;
-      width: 80vw;
-      max-width: 1000px;
-      min-height: 500px;
-      height: 80vh;
+      width: calc(570px - 48px);
+      min-height: 400px;
+      height: 60vh;
       max-height: 1000px;
       border-radius: $border-radius-small;
 
@@ -24,6 +22,7 @@
   }
 }
 .popup {
+  z-index: $zindex-dialog;
   :global {
     .dzq-popup__container {
       height: 100vh;
