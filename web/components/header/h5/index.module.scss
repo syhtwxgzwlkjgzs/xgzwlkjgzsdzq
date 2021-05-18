@@ -13,7 +13,7 @@
     width: 100%;
     height: rem(40);
     border-bottom: 1px solid var(--border-line-color);
-    z-index: var(--zindex-too0p);
+    z-index: $zindex-tooltip;
     .left{
       width: 50%;
       font-size: rem($font-size-base);

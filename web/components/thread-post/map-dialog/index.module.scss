@@ -1,0 +1,40 @@
+@import '@common/styles/index.scss';
+
+.dialog {
+  :global {
+    .dzq-modal__container {
+      padding: $padding-6n;
+      width: calc(570px - 48px);
+      min-height: 400px;
+      height: 60vh;
+      max-height: 1000px;
+      border-radius: $border-radius-small;
+
+      iframe {
+        height: calc(100% - 20px);
+        width: 100%;
+      }
+    }
+    .dzq-modal__body {
+      padding: 0;
+      height: 100%;
+    }
+  }
+}
+.popup {
+  z-index: $zindex-dialog;
+  :global {
+    .dzq-popup__container {
+      height: 100vh;
+
+      iframe {
+        height: 100%;
+        width: 100%;
+      }
+    }
+    .dzq-popup__body {
+      padding: 0;
+      height: 100%;
+    }
+  }
+}
