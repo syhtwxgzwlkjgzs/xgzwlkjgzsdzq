@@ -94,7 +94,7 @@ export default class Index extends Component {
         className={`${styles.payListItem} ${styles.activation} ${whetherIsShowPwdBox && styles.payListItem01}`}
         key={key}
       >
-        {'*'}
+        {'●'}
       </div>
     ));
     if (nodeList.length < 6) {
