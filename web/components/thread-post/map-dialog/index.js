@@ -1,0 +1,72 @@
+import React, { memo } from 'react';
+import { inject } from 'mobx-react';
+
+import Dialog from '@components/dialog';
+import { Popup } from '@discuzq/design';
+
+import styles from './index.module.scss';
+
+@inject('site')
+@inject('mapUrl')
+@inject('onChange')
+@inject('onClose')
+class MapDialog extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.setLocation = this.setLocation.bind(this)
+  }
+
+  render() {
+    const { site: { isPC } } = this.props;
+
+    if (isPC) {
+      return (
+        <Dialog
+          visible={true}
+          className={styles.dialog}
+          onClose={this.props.onClose}
+          title="你在哪里？"
+          isCustomBtn={true}
+        >
+          <iframe src={this.props.mapUrl} frameBorder="0" scrolling="no" />
+        </Dialog>
+      );
+    }
+
+    return (
+      <Popup
+        className={styles.popup}
+        position="center"
+        visible={true}
+      >
+        <iframe src={this.props.mapUrl} frameBorder="0" scrolling="no" />
+      </Popup>
+    );
+  }
+
+  setLocation(event) {
+    const { data } = event
+    if (data && data.module === 'locationPicker') {
+      const { poiname, poiaddress, latlng: { lat, lng } } = data;
+      const position = {
+        longtitude: lng,
+        latitude: lat,
+        address: poiaddress,
+        location: poiname
+      }
+      this.props.onChange(position)
+      this.props.onClose()
+    }
+  }
+
+  componentDidMount() {
+    window.addEventListener('message', this.setLocation, false)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('message', this.setLocation)
+  }
+};
+
+export default memo(MapDialog);
