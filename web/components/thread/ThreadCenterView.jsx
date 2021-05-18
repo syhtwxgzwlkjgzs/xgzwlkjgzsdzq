@@ -82,6 +82,7 @@ const Index = (props) => {
                     image={goodsData.imagePath}
                     amount={goodsData.price}
                     title={goodsData.title}
+                    onClick={onClick}
                 />}
                 {rewardData && <Packet
                   type={1}
