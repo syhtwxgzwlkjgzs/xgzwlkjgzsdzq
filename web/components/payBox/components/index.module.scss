@@ -106,3 +106,9 @@
     }
   }
 }
+.amountContentPC {
+  margin: rem($margin-4n) 0 rem($margin-4n);
+  .acExplain {
+    line-height: rem($font-line-height-base);
+  }
+}

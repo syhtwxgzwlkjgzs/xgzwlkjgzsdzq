@@ -32,7 +32,8 @@
           display: flex;
           align-items: center;
           justify-content: flex-start;
-          width: 50%;
+          // width: 50%;
+          flex-shrink: 0;
           .icon{
             margin-right: rem($margin-2n);
           }
@@ -45,7 +46,9 @@
           display: flex;
           align-items: center;
           justify-content: flex-end;
-          width: 50%;
+          // width: 50%;
+          flex: 1;
+          word-break: break-all;
           .subText{
             font-size: rem($font-size-label);
             color: var(--color-text-secondary);
