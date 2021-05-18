@@ -32,6 +32,18 @@ class IndexH5Page extends React.Component {
     this.renderItem = this.renderItem.bind(this);
   }
 
+  componentDidMount() {
+    const { filter = {} } = this.props.index
+
+    const newFilter = { ...this.state.filter, ...filter }
+    this.setState({ filter: newFilter })
+  }
+
+  componentWillUnmount() {
+    const { filter } = this.state
+    this.props.index.setFilter(filter)
+  }
+
   checkIsOpenDefaultTab() {
     return this.props.site.checkSiteIsOpenDefautlThreadListData();
   }

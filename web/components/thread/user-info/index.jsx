@@ -20,6 +20,7 @@ UserInfo.propTypes = {
   isRed: PropTypes.bool, // 是否红包
   userId: PropTypes.number, // 用户id PC端
   platform: PropTypes.string, // 是否展示pop PC端
+  icon: PropTypes.string, // 图标：点赞或者是付费用户
 };
 
 export default function UserInfo(props) {
