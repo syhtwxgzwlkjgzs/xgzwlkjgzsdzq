@@ -73,7 +73,7 @@ export default class PayBox extends React.Component {
     }
     if (this.props.payBox?.walletAvaAmount < amount) {
       return (
-        <p className={styles.subText} onClick={this.goSetPayPwa}>
+        <p className={styles.subText}>
           余额不足
         </p>
       );
