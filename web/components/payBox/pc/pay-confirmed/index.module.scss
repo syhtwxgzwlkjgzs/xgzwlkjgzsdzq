@@ -5,37 +5,39 @@
   // min-height: rem(452);
   width: rem(409);
   font-size: rem($font-size-large);
-  padding: rem($padding-4n);
+  padding: rem($padding-6n);
+  box-sizing: border-box;
   .icon {
     margin-right: rem($margin-4n);
   }
   .payTitle {
     font-weight: bold;
     text-align: center;
-    font-size: rem(22);
+    font-size: rem(16);
+    line-height: rem(21);
   }
   .payMoney {
-    width: 100%;
+    margin: rem(24) 0 rem(16);
+    font-size: rem($font-size-base);
     height: rem(60);
-    margin: rem(30) 0;
-    line-height: rem(60);
-    text-align: center;
-    height: 60px;
     border-radius: rem(5);
-    background: #fff9e5;
+    background: var(--color-warn10);
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
-  .payM{
-    color: #E02433;
-    font-size: rem(28);
-    font-weight: bold;
+  .payM {
+    color: $error-color;
+    font-weight: 600;
+    font-size: rem(20);
   }
   .payTab_top {
-    margin-bottom: rem(24);
+    margin-bottom: rem(16);
     text-align: center;
   }
   .payTab {
     margin-right: rem($margin-6n);
-    font-size: rem(16);
+    font-size: rem(14);
     // &:hover {
     //   text-decoration: underline;
     //   color: #333;
@@ -46,6 +48,14 @@
     //   text-decoration: underline;
     //   color: #333;
     // }
+  }
+  :global {
+    .dzq-checkbox-wrap .dzq-checkbox.dzq-checkbox--radio {
+      border-radius: rem(5);
+    }
+    .dzq-checkbox-wrap .dzq-checkbox.dzq-checkbox--radio::after {
+      border-radius: rem(5);
+    }
   }
   .payTabActive {
     text-decoration: underline;
@@ -134,10 +144,10 @@
   }
   .paymentCloseBtn {
     position: absolute;
-    right: rem(46);
-    top: rem(46);
+    right: rem(24);
+    top: rem(22);
     cursor: pointer;
-    color: var(--color-disabled);
+    color: $text-color-secondary;
     text-shadow: 0 -1 0 0;
     &:hover {
       color: #a1aabb;

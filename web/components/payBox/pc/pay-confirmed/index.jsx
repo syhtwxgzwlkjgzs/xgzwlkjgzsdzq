@@ -198,7 +198,7 @@ export default class index extends Component {
           {/* 头部 */}
           <div className={styles.payTitle}>支付</div>
           {/* 支付金额显示 */}
-          <div className={styles.payMoney}>支付金额 <span className={styles.payM}>￥{amount}</span></div>
+          <div className={styles.payMoney}>支付金额： <span className={styles.payM}>￥{amount}</span></div>
           {/* tab切换支付方式 */}
           <div>
             <div className={styles.payTab_top}>
@@ -226,7 +226,7 @@ export default class index extends Component {
             onClick={this.onClose}
             className={styles.paymentCloseBtn}
           >
-            X
+            <Icon name="CloseOutlined" size={12} />
           </div>
         </div>
       </div>
