@@ -69,47 +69,50 @@ class ThreadCreate extends React.Component {
   // 设置底部bar的样式
   setBottomBarStyle = (y = 0, action) => {
     const height = getVisualViewpost();
-    const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
+    const vditorToolbar = document.querySelector('#dzq-vditor .vditor-bubble-toolbar');
     const postBottombar = document.querySelector('#post-bottombar');
+    const position = document.querySelector('#post-position');
+    const gap = position.clientHeight - vditorToolbar.clientHeight;
+    const bottombarHeight = postBottombar.clientHeight;
+    const toolbarTop = height - bottombarHeight + gap;
     if (!isIOS()) {
       if (vditorToolbar) {
+        vditorToolbar.style.display = 'flex';
         vditorToolbar.style.position = 'fixed';
-        vditorToolbar.style.bottom = '90px';
+        vditorToolbar.style.bottom = `${bottombarHeight - position.clientHeight}px`;
         vditorToolbar.style.top = 'auto';
       }
       return;
     }
 
-    const position = document.querySelector('#post-position');
-    const top = action === 'select' ? (!position ? 130 : 90) : 130;
-    postBottombar.style.top = `${height - top + y}px`;
-    if (vditorToolbar) {
+    postBottombar.style.top = `${height - bottombarHeight + y}px`;
+    if (vditorToolbar && action === 'select') {
+      vditorToolbar.style.display = 'flex';
       vditorToolbar.style.position = 'fixed';
-      vditorToolbar.style.top = `${height - 130 + y}px`;
+      vditorToolbar.style.top = `${toolbarTop + y}px`;
     }
 
-    if (!position) return;
-    if (action === 'select') {
-      position.style.display = 'none';
-    } else position.style.display = 'flex';
+    // if (!position) return;
+    // if (action === 'select') {
+    //   position.style.display = 'none';
+    // } else position.style.display = 'flex';
   }
   setBottomFixed = (action) => {
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
       this.setBottomBarStyle(0, action);
-    }, 150);
+    }, 100);
   }
   clearBottomFixed = () => {
     if (!isIOS()) return;
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
+      document.querySelector('#dzq-vditor .vditor-bubble-toolbar').display = 'none';
       const height = getVisualViewpost();
       const postBottombar = document.querySelector('#post-bottombar');
-      const position = document.querySelector('#post-position');
-      if (!position) return;
-      position.style.display = 'flex';
-      postBottombar.style.top = `${height - 134}px`;
-    }, 200);
+      postBottombar.style.top = `calc(${height - postBottombar.clientHeight}px - constant(safe-area-inset-bottom))`;
+      postBottombar.style.top = `calc(${height - postBottombar.clientHeight}px - env(safe-area-inset-bottom))`;
+    }, 100);
   }
 
   // 分类

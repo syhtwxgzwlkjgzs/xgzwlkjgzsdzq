@@ -28,26 +28,22 @@
 .badge {
   min-width: rem(16);
   height: rem(16);
-  font-family: 'PingFang SC';
-  font-weight: normal;
   font-size: rem(12);
   text-align: center;
-  line-height: rem(16);
   color: var(--color-white);
   background: var(--color-error);
   border-radius: rem(8);
   padding: 0 rem(6);
   box-sizing: border-box;
   position: absolute;
-  right: -50%;
+  right: 0;
   top: rem(-8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateX(50%);
 }
 
 .isCricle {
   width: rem(16);
-  padding-left: rem(4.5);
-}
-
-.isOne {
-  padding-left: rem(5.5); 
 }

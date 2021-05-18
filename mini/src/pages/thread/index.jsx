@@ -3,7 +3,7 @@ import { getCurrentInstance } from '@tarojs/taro';
 import Page from '@components/page';
 import { inject } from 'mobx-react';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
-import ThreadMiniPage from '../../layout/thread/index';
+import ThreadMiniPage from '@layout/thread/index';
 import PayBoxProvider from '@components/payBox/payBoxProvider';
 
 const MemoToastProvider = React.memo(ToastProvider)

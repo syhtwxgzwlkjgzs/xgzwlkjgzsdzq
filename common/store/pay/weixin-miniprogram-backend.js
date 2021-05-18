@@ -21,7 +21,7 @@ export const onBridgeReady = data => new Promise((resolve, reject) => {
       });
     },
   });
-});
+}).catch((e) => {console.log(e)});
 
 export const listenWXJsBridgeAndExecCallback = (callback) => {
   callback();

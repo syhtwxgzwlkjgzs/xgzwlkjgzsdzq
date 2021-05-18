@@ -3,7 +3,7 @@ import { Icon, Popup, Textarea, Upload, Button } from '@discuzq/design';
 import styles from './index.module.scss';
 
 const InputPop = (props) => {
-  const { visible, onSubmit, initValue, onClose, inputText = '请输入内容' } = props;
+  const { visible, onSubmit, initValue, onClose, inputText = '写评论...' } = props;
 
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
@@ -13,6 +13,8 @@ const InputPop = (props) => {
   }, [initValue]);
 
   const onSubmitClick = async () => {
+    if (loading) return;
+
     if (typeof onSubmit === 'function') {
       try {
         setLoading(true);
@@ -39,11 +41,12 @@ const InputPop = (props) => {
           <Textarea
             className={styles.input}
             maxLength={5000}
-            rows={5}
-            showLimit={true}
+            rows={4}
+            showLimit={false}
             value={value}
             onChange={(e) => setValue(e.target.value)}
             placeholder={inputText}
+            disabled={loading}
           ></Textarea>
           {/* <Upload listType='card'>
             <Button loading={loading} type='text' className={styles.upload}>
@@ -54,12 +57,15 @@ const InputPop = (props) => {
         </div>
 
         <div className={styles.button}>
-          <Button onClick={onCancel} className={styles.cancel} type="default">
+          {/* <Button onClick={onCancel} className={styles.cancel} type="default">
             取消
-          </Button>
-          <Button loading={loading} type="primary" onClick={onSubmitClick} className={styles.ok}>
+          </Button> */}
+          {/* <Button loading={loading} type="primary" onClick={onSubmitClick} className={styles.ok} type='text'>
             发布
-          </Button>
+          </Button> */}
+          <div onClick={onSubmitClick} className={styles.ok}>
+            发布
+          </div>
         </div>
       </div>
     </Popup>
