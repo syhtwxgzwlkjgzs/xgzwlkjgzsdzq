@@ -56,5 +56,4 @@ const config = {
   navigateToMiniProgramAppIdList: ["wx5a3a7366fd07e119"]
 };
 
-// export default config;
 module.exports = config;
