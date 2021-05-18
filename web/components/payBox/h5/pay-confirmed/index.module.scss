@@ -77,8 +77,9 @@
     width: 100%;
     margin: 0 rem(-$margin-4n) rem($margin-10);
     border-top: 1px solid #eee;
-    padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
+    // padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
     box-sizing: border-box;
+    width: 100%;
     @include ios-safe-area-inset-bottom;
 
     .btn{
