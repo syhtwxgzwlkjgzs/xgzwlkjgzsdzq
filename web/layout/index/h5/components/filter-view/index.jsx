@@ -2,14 +2,18 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Icon, Popup } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
 import filterData from './data';
+import { withRouter } from 'next/router';
 
 import styles from './index.module.scss';
 
-const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel = noop }) => {
+const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel = noop, router }) => {
   const [first, setFirst] = useState();
   const [firstChildren, setFirstChildren] = useState();
   const [second, setSecond] = useState('');
   const [third, setThird] = useState('0');
+
+  // 二级分类数据
+  const [subData, setSubData] = useState([])
 
   const data = useMemo(() => {
     const newData = filterData;
@@ -29,10 +33,17 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
     }
   }, [current, visible]);
   // 点击一级菜单
-  const onClickFirst = (index, type) => {
+  const onClickFirst = (index, type, contents) => {
     if (type === 1) {
       setFirst(index);
       setFirstChildren('');
+
+      const newSubArr = contents?.filter(item => item.pid === index)
+      if (!newSubArr.length) {
+        setSubData([])
+      } else {
+        setSubData(newSubArr[0].children || [])
+      }
     } else if (type === 2) {
       setSecond(index);
     } else {
@@ -46,6 +57,10 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
       setFirstChildren(index);
     }
   };
+
+  const goSearch = () => {
+    router.push(`/search`);
+  }
 
   // 结果数据处理
   const handleSubmit = () => {
@@ -93,7 +108,7 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
               <span
                 className={`${tip === item.pid ? styles.active : ''} ${styles.span}`}
                 key={index}
-                onClick={() => onClickFirst(item.pid, type)}
+                onClick={() => onClickFirst(item.pid, type, contents)}
               >
                 {item.name}
               </span>
@@ -101,10 +116,10 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
           }
         </div>
         {
-          contents[first]?.children?.length ? (
+          type === 1 && subData.length ? (
             <div className={`${styles.wrapper} ${styles.childrenWrapper}`}>
               {
-                contents[first].children.map((item, index) => (
+                subData.map((item, index) => (
                   <span className={`${firstChildren === item.pid ? styles.childrenActive : ''} ${styles.span}`} key={`${index}-${index}`} onClick={() => onClickSecond(item.pid, type)}>{item.name}</span>
                 ))
               }
@@ -124,7 +139,7 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
     >
       <div className={styles.container}>
         <div className={styles.containerIcon}>
-          <Icon className={styles.searchIcon} name='SearchOutlined' size={20}></Icon>
+          <Icon className={styles.searchIcon} name='SearchOutlined' size={20} onClick={goSearch}></Icon>
         </div>
         { data && data.map((item, index) => renderContent(item, index)) }
       </div>
@@ -138,4 +153,4 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
   );
 };
 
-export default React.memo(Index);
+export default withRouter(React.memo(Index));

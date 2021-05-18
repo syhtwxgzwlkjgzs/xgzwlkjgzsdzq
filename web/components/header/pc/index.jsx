@@ -69,7 +69,7 @@ class Header extends React.Component {
             className={styles.avatar}
             name={user.userInfo.username}
             circle={true}
-            image={user.userInfo.avatarUrl}
+            image={user.userInfo?.avatarUrl}
             onClick={() => {}}
           ></Avatar>
           <p className={styles.userName}>{user.userInfo.username || ''}</p>

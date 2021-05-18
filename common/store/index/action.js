@@ -9,6 +9,14 @@ class IndexAction extends IndexStore {
   }
 
   /**
+   * 设置过滤项
+   */
+   @action
+  setFilter(data) {
+    this.filter = data
+  }
+
+  /**
    * 触发筛选数据
    * @param {*} param0
    */
@@ -215,7 +223,6 @@ class IndexAction extends IndexStore {
 
     // 更新分享
     if (updateType === 'share' && !typeofFn.isUndefined(isShare) && !typeofFn.isNull(isShare)) {
-      console.log(data.likeReward.shareCount);
       data.likeReward.shareCount = isShare ? data.likeReward.shareCount + 1 : data.likeReward.shareCount - 1;
     }
 

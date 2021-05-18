@@ -8,7 +8,10 @@ import styles from './index.module.scss';
 import {RichText} from '@discuzq/design';
 
 export const TopicItem = ({ data, onClick = noop }) => {
-    const click = useCallback(() => {
+    const click = useCallback((e) => {
+      if (e.target.localName === 'a') {
+        return
+      }
       onClick && onClick(data);
     }, [data, onClick]);
   
