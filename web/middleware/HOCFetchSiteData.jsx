@@ -183,14 +183,20 @@ export default function HOCFetchSiteData(Component) {
         }
         // 付费加入: 付费状态下，未登录的用户、登录了但是没有付费的用户
         if (
-          (router.asPath !== '/forum/partner-invite' && !user.isLogin() &&  site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay')
-          || (router.asPath !== '/forum/partner-invite' && user.isLogin() && !user.paid && site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay')
+          (router.asPath !== '/forum/partner-invite' && site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay')
+          && (!user.isLogin() || (user.isLogin() && !user.paid))
         ) {
           Router.redirect({ url: '/forum/partner-invite' });
         }
+
         // 绑定昵称：已登录的用户，没有绑定昵称
-        if (router.asPath !== '/bind-nickname'  && user.isLogin() && !user.nickname && !user.username) {
-          Router.redirect({ url: '/user/bind-nickname' });
+        if (user.isLogin()) {
+          if (site.isOpenOffiaccountClose && router.asPath !== '/user/wx-bind-qrcode' && !user.isBindWechat) {
+            Router.redirect({ url: '/user/wx-bind-qrcode' });
+          }
+          if (!site.isOpenOffiaccountClose && router.asPath !== '/bind-nickname' && !user.nickname) {
+            Router.redirect({ url: '/user/bind-nickname' });
+          }
         }
       }
     }

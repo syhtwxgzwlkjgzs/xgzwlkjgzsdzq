@@ -116,19 +116,15 @@ class LoginPhoneH5Page extends React.Component {
       const registerCaptcha = webConfig?.setReg?.registerCaptcha;
       if (registerCaptcha) {
         const res = await this.props.commonLogin.showCaptcha(qcloudCaptchaAppId, TencentCaptcha);
-        if (res.ret === 0) {
-          await this.props.mobileLogin.sendCode({
-            captchaRandStr: this.props.commonLogin?.captchaRandStr,
-            captchaTicket: this.props.commonLogin?.captchaTicket
-          });
-          commonLogin.setIsSend(true);
+        if (res.ret !== 0) {
+          return;
         }
-        return;
       }
       await this.props.mobileLogin.sendCode({
         captchaRandStr: this.props.commonLogin?.captchaRandStr,
         captchaTicket: this.props.commonLogin?.captchaTicket
       });
+      commonLogin.setIsSend(true);
     } catch (e) {
       Toast.error({
         content: e.Message,

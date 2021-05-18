@@ -120,6 +120,11 @@ class UserStore {
     return get(this.userInfo, 'mobile');
   }
 
+  // 用户是否绑定微信
+  @computed get isBindWechat() {
+    return get(this.userInfo, 'isBindWechat');
+  }
+
   // 获取绑定微信内容
   @computed get unionid() {
     return get(this.userInfo, 'unionid');

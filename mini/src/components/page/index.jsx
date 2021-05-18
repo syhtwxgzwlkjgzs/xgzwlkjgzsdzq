@@ -52,12 +52,23 @@ export default class Page extends React.Component {
       }
       // 付费加入
       if (
-        (path !== '/forum/partner-invite' && !user.isLogin() &&  site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay')
-        || (path !== '/forum/partner-invite' && user.isLogin() && !user.paid && site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay')
+        (path !== '/subPages/join/index' && site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay')
+        && (!user.isLogin() || (user.isLogin() && !user.paid))
       ) {
         // todo 需要判断登录后是否支付
         Router.redirect({url: '/subPages/join/index'});
         return false;
+      }
+
+      // 绑定昵称：已登录的用户，没有绑定昵称
+      if (user.isLogin()) {
+        if (site.isOpenOffiaccountClose && path !== '/subPages/user/wx-bind-qrcode/index' && !user.isBindWechat) {
+          Router.redirect({url: '/subPages/user/wx-bind-qrcode/index'});
+          return false;
+        }
+        if (!site.isOpenOffiaccountClose && path !== '/subPages/user/bind-nickname/index' && !user.nickname) {
+          Router.redirect({url: '/subPages/user/bind-nickname/index'});
+        }
       }
     }
 
