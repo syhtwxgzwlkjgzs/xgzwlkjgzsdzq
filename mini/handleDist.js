@@ -48,7 +48,7 @@ const fs = require('fs'),
             if (path.extname(p) === ext) {
               if (p !== './dist/subPages/common.wxss') {
                 const data = fs.readFileSync(p, 'utf8').split(/\r\n|\n|\r/gm);
-                const relativePath = path.relative(p, './dist/subPages/common.wxss');
+                const relativePath = path.relative(p, './dist/subPages/common.wxss').replace(/\\/g, '/');
                 data.push(`@import '${relativePath.replace('../', '')}';`);
                 fs.writeFileSync(p, data.join('\r\n'))
               }
