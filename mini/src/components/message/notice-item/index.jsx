@@ -57,6 +57,11 @@ class Index extends Component {
     }
   };
 
+  // 未读消息数
+  getUnReadCount = (count) => {
+    return count > 99 ? '99+' : (count || null);
+  };
+
   // parse content
   filterTag(html) {
     return html?.replace(/(<p>)|(<\/p>)|(<br>)/g, '');
@@ -113,7 +118,13 @@ class Index extends Component {
             className={styles.avatar}
             onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
           >
-            <Badge info={null}>
+            <Badge
+              className={classNames({
+                [styles.badge]: type === 'chat' && item.unreadCount > 9
+              })}
+              circle
+              info={ type === 'chat' && this.getUnReadCount(item.unreadCount)}
+            >
               {avatarUrl
                 ? <Avatar image={avatarUrl} circle={true} />
                 : <Avatar
