@@ -6,7 +6,12 @@
   width: rem(1100);
   min-height: rem(246);
   .userCenterEditHeaderImg {
+    width: 100%;
     height: rem(153);
+    background:  no-repeat;
+    background-size: 100% 100%;
+    background-size: cover;
+    background-position: center;
   }
   // background-color: pink;
   .headImgBox{
@@ -24,6 +29,7 @@
     color: $text-color-secondary;
     display: flex;
     align-items: center;
+    cursor: pointer;
     .uploadIcon {
       margin-right: rem(6);
     }

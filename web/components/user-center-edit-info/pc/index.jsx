@@ -72,24 +72,26 @@ class index extends Component {
       <>
         <div className={styles.pcEditNickname}>
           <div className={styles.pcEditNicknameText}>{item.name}</div>
-          {
-            item.display === 0 && <div className={styles.pcEditNicknameCall}>
-              <p className={styles.pcEditNicknameCallText}>{textTitle}</p>
-              <p className={styles.pcEditNicknameCallMsodify} onClick={() => this.modifyFun(index, 1)}>修改</p>
-            </div>
-          }
-          {
-            item.display === 1 && <div className={styles.pcEditAutographCall}>
-              <Input
-                className={styles.pcEditAutographInput}
-                placeholder="不会开飞机的程序员，不是一个好的摄影师"
-              />
-              <div className={styles.preservation}>
-                <Button className={styles.preservationButton} type="primary" onClick={() => this.modifyFun(index, 0)}>保存</Button>
-                <Button className={styles.preservationButton2} onClick={() => this.modifyFun(index, 0)}>取消</Button>
+          <div className={styles.box}>
+            {
+              item.display === 0 && <div className={styles.pcEditNicknameCall}>
+                <p className={styles.pcEditNicknameCallText}>{textTitle}</p>
+                <p className={styles.pcEditNicknameCallMsodify} onClick={() => this.modifyFun(index, 1)}>修改</p>
               </div>
-            </div>
-          }
+            }
+            {
+              <div className={item.display === 1 ? styles.pcEditAutographCall : styles.pcEditAutographBox}>
+                <Input
+                  className={styles.pcEditAutographInput}
+                  placeholder="不会开飞机的程序员，不是一个好的摄影师"
+                />
+                <div className={styles.preservation}>
+                  <Button className={styles.preservationButton} type="primary" onClick={() => this.modifyFun(index, 0)}>保存</Button>
+                  <Button className={styles.preservationButton2} onClick={() => this.modifyFun(index, 0)}>取消</Button>
+                </div>
+              </div>
+            }
+          </div>
         </div>
       </>
     )
@@ -109,7 +111,7 @@ class index extends Component {
           <div className={styles.pcEdit}>
             {/* 头部 */}
             <div><UserCenterEditHeader /></div> 
-            {/* 昵称 */}
+            {/* 资料展示 */}
             {
               contentTitle.map((item, index) => {
                 return (
@@ -130,6 +132,7 @@ class index extends Component {
               </div>
             </div>
           </div>
+          <div className={styles.bottomText}>Powered By Discuz! Q © 2021   粤ICP备20008502号-1</div>
         </div>
       </div>
     );

@@ -3,9 +3,11 @@
 
 .pcEditBox {
   background: $body-bg-color;
+  -webkit-tap-highlight-color: transparent;
 }
 .pcEditContent {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-top: rem($margin-5n);
@@ -21,11 +23,19 @@
   display: flex;
   justify-content: flex-end;
 }
+.box {
+  width: rem(595);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
 .pcEditNicknameCall {
   width: rem(595);
   display: flex;
   justify-content: space-between;
   border-bottom: rem(1) solid $border-color;
+  transition: all 1s;
 }
 .pcEditNicknameText {
   font-weight: normal;
@@ -50,6 +60,7 @@
   line-height: rem(70);
   text-align: right;
   color: $primary-color;
+  cursor: pointer;
 }
 .pcEditAutograph {
   padding-right: rem(194);
@@ -69,41 +80,48 @@
   width: rem(595);
   height: rem(146);
   border-bottom: rem(1) solid $border-color;
-  .pcEditAutographInput {
-    width: rem(595);
-    height: rem(46);
-    border-radius: 5px;
-    background-color: $body-bg-color;
-    border: 1px solid $border-color;
-    margin-top: rem($margin-6n);
-    input {
-      width: inherit;
-      height: inherit;
-      background-color: inherit;
-      border: 0;
-      padding: 12px 16px;
-      font-size: rem( $font-size-middle);
-      line-height: rem(22);
-      text-align: left;
-      color: $text-color-primary;
-    }
+  transition: all 0.4s;
+}
+.pcEditAutographBox {
+  width: 0;
+  height: 0;
+  border-bottom: rem(1) solid $border-color;
+  transition: all 0.4s;
+}
+.pcEditAutographInput {
+  width: rem(595);
+  height: rem(46);
+  border-radius: 5px;
+  background-color: $body-bg-color;
+  border: 1px solid $border-color;
+  margin-top: rem($margin-6n);
+  input {
+    width: inherit;
+    height: inherit;
+    background-color: inherit;
+    border: 0;
+    padding: 12px 16px;
+    font-size: rem( $font-size-middle);
+    line-height: rem(22);
+    text-align: left;
+    color: $text-color-primary;
   }
-  .preservation {
-    display: flex;
-    justify-content:flex-end;
-    right: 0;
-    margin-top: rem($margin-4n);
-    .preservationButton {
-      width: rem(60);
-      height: rem(36);
-    }
-    .preservationButton2 {
-      width: rem(60);
-      height: rem(36);
-      background-color: $text-bg-color2;
-      border: 0;
-      margin-left: rem($margin-4n);
-    }
+}
+.preservation {
+  display: flex;
+  justify-content:flex-end;
+  right: 0;
+  margin-top: rem($margin-4n);
+  .preservationButton {
+    width: rem(60);
+    height: rem(36);
+  }
+  .preservationButton2 {
+    width: rem(60);
+    height: rem(36);
+    background-color: $text-bg-color2;
+    border: 0;
+    margin-left: rem($margin-4n);
   }
 }
 .pcEditNicknameImgs {
@@ -122,4 +140,11 @@
   line-height: rem(22);
   text-align: left;
   color: $text-color-primary;
+}
+.bottomText {
+  font-weight: normal;
+  font-size: rem($font-size-small);
+  line-height: rem(22);
+  color: $text-color-secondary;
+  margin: rem($margin-6n) 0 rem(46) 0;
 }
