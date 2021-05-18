@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { inject, observer } from 'mobx-react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
@@ -33,7 +33,13 @@ const MessageCard = (props) => {
       {cardItems.map(({ iconName, title, link, totalCount }, idx) => (
         <div key={idx} className={styles.item} onClick={() => onClick(link)}>
           <div className={styles.left}>
-            <Badge info={totalCount > 99 ? '99+' : totalCount || null}>
+            <Badge
+              className={classNames({
+                [styles.badge]: totalCount > 9
+              })}
+              circle
+              info={totalCount > 99 ? '99+' : totalCount || null}
+            >
               <Icon name={iconName} className={styles.icon} size={20} />
             </Badge>
           </div>

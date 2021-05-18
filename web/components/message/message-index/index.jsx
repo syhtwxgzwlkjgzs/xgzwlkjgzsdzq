@@ -55,12 +55,13 @@ export class MessageIndex extends Component {
       const { dialogMessage, sender } = item;
       newList.push({
         id: item.id,
-        createdAt: item.updatedAt || item.createdAt,
+        createdAt: dialogMessage?.createdAt,
         dialogId: dialogMessage?.dialogId,
         content: dialogMessage?.summary,
         avatar: sender?.avatar,
         userId: sender?.userId,
         username: sender?.username,
+        unreadCount: item.unreadCount,
       });
     });
 

@@ -113,6 +113,7 @@ $checkbox-checked-bg-color: var(--color-primary8);
 
 // ------ border ----------
 $border-radius-small: 5px;
+$border-radius-middle: 8px; // 临时，为调整两位数以上的红点消息添加，薇姐看后面怎么处理8px圆角吧
 $border-radius-big: 10px;
 $border-radius-circle: 50%;
 $border-radius-zero: 0;

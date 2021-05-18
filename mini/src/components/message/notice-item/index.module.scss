@@ -33,6 +33,11 @@
       .dzq-badge {
         width: 100%;
         height: 100%;
+
+        .dzq-badge__circle{
+          top: rem(10px);
+          right: rem(2px);
+        }
       }
       .dzq-avatar {
         width: 100%;
@@ -52,6 +57,16 @@
         .dzq-avatar__text {
           width: 100%;
           height: 100%;
+        }
+      }
+    }
+
+    .badge{
+      :global{
+        .dzq-badge__circle{
+          padding: 0 rem(6px);
+          width: auto;
+          border-radius: $border-radius-middle;
         }
       }
     }
