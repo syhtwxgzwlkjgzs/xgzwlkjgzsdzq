@@ -72,19 +72,30 @@
   .btnBox{
     position: absolute;
     bottom: 0;
+    left: 0;
+    right: 0;
     margin-top: rem($margin-2n);
     height: rem(60);
-    margin: 0 rem(-$margin-4n) rem($margin-10);
-    border-top: 1px solid #eee;
-    padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
     box-sizing: border-box;
+    width: calc(100% - 32px);
+    padding-left: 16px;
+    padding-right: 16px;
     @include ios-safe-area-inset-bottom;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 100%;
+      height: rem(1);
+      background: var(--border-line-color);
+      position: relative;
+      top: rem(-8);
+    }
+
     .btn{
-      width: rem(343);
       height: rem(42);
       font-size: rem(16);
       border-radius: 5px;
-      margin: auto;
     }
   }
 }
@@ -93,9 +104,6 @@
   position: absolute;
   right: rem(16);
   top: rem(24);
-  // width: rem(40);
-  // height: rem(40);
-  // background-color: pink;
   display: flex;
   align-items: center;
   justify-content: center;
