@@ -31,16 +31,16 @@
 }
 
 .footerContainer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
   height: rem(50);
   width: 100%;
-  z-index: $zindex-backtotop;
 }
 
 .footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
   width: 100%;
+  z-index: $zindex-backtotop;
   min-height: rem(50);
   padding-left: rem($padding-4n);
   padding-right: rem($padding-4n);
