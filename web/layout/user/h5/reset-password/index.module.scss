@@ -45,10 +45,10 @@
   }
   .pc_otherLogin_title {
     @include pc_otherLoginText;
-    font-size: 14px;
+    font-size: $font-size-base;
   }
   .pc_otherLogin_button{
-    margin: 16px;
+    margin: $margin-4n;
     .button_left {
       @include pc_otherLoginBtn;
     }

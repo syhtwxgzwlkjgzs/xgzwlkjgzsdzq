@@ -1,26 +1,23 @@
 @import '../../../../../common/styles/mixin/login.scss';
 @import '@common/styles/index.scss';
 .content {
-  padding: 0 rem(24);
+  padding: 0 rem($padding-6n);
 }
 .button{
   @include button;
-  margin-top: rem(16);
+  margin-top: rem($margin-4n);
 }
 @mixin paddingBottom {
-  padding-bottom: rem(16);
+  padding-bottom: rem($padding-4n);
 }
 .title{
-  font-size: rem(14);
-  line-height: rem(26);
-  text-align: left;
-  color: #4f5a70;
+  @include title;
 }
 .input{
   @include paddingBottom;
-  margin-top: rem(8);
+  margin-top: rem($margin-2n);
   input {
-    width: rem(327);
+    width: 100%;
   }
 }
 .imgUpload{
@@ -29,12 +26,12 @@
 .imgUpload-dom{
   width: rem(100);
   height: rem(100);
-  border-radius: rem(5);
+  border-radius: rem($border-radius-small);
   background: var(--background-color);
-  border: rem(1) solid #eee;
+  border: $border-solid-1;
   text-align: center;
   line-height: rem(100);
-  font-size: rem(20);
+  font-size: rem($font-size-large);
   color: var(--color-text-secondary);
 }
 .attachmentsUpload{
@@ -44,15 +41,15 @@
 }
 .attachmentsUpload-left{
   display: inline-block;
-  font-size: rem(14);
-  line-height: rem(26);
+  font-size: rem($font-size-base);
+  line-height: rem($font-line-height-middle);
   text-align: left;
-  color: #4f5a70;
+  color: $text-color-regular;
 }
 .attachmentsUpload-right{
   display: inline-block;
-  font-size: rem(14);
-  line-height: rem(24);
+  font-size: rem($font-size-base);
+  line-height: rem($font-line-height-base);
   color: var(--color-text-primary);
   float: right;
 }

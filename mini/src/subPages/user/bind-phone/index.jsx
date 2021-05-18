@@ -53,12 +53,16 @@ class BindPhoneH5Page extends React.Component {
 
   handleSendCodeButtonClick = async () => {
     try{
-      const { webConfig } = this.props.site;
-      const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
-      await toTCaptcha(qcloudCaptchaAppId);
-
       // 发送前校验
       this.props.mobileBind.beforeSendVerify();
+      // 验证码
+      const { webConfig } = this.props.site;
+      const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
+      if (qcloudCaptcha) {
+        const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
+        await toTCaptcha(qcloudCaptchaAppId)
+      };
+      // 发送
       await this.props.mobileBind.sendCode({
         captchaRandStr: this.ticket,
         captchaTicket: this.randstr
