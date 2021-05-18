@@ -96,7 +96,7 @@ export default class index extends Component {
           </div>
         </div>
         <div className={styles.bottom}>
-          <Button disabled={isSubmit} onClick={this.handleSubmit} type={"primary"} className={styles.btn}>提交</Button>
+          <Button full disabled={isSubmit} onClick={this.handleSubmit} type={"primary"} className={styles.btn}>提交</Button>
         </div>
       </div>
     )
