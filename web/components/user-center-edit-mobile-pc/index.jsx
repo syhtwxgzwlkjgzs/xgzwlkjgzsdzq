@@ -77,7 +77,12 @@ export default class index extends Component {
       this.props.user.verifyOldMobile().then(res => {
         this.setState({
           current_step: 'second',
-          list: []
+          list: [],
+          initTimeValue: null,
+          initTime: 60,
+          interval: null,
+          initTimeText: '发送验证码',
+          buttonDisabled: false
         })
       }).catch((err) => {
         Toast.error({
@@ -85,6 +90,7 @@ export default class index extends Component {
           hasMask: false,
           duration: 1000,
         })
+        this.initState()
         this.props.user.oldMobileVerifyCode = null
       })
     } else if (current_step === 'second') {
@@ -93,10 +99,13 @@ export default class index extends Component {
       await this.props.user.rebindMobile().then(res => {
         this.initState()
         // FIXME_:还差关闭弹窗回调
-      }).catch({
-        content: err.Message || '修改失败',
-        hasMask: false,
-        duration: 1000,
+      }).catch((err) => {
+        Toast.error({
+          content: err.Message || '修改失败',
+          hasMask: false,
+          duration: 1000,
+        })
+        this.initState()
       })
     }
   }
@@ -170,8 +179,8 @@ export default class index extends Component {
 
   // 点击发送验证码
   handleGetVerifyCode = () => {
-    const { buttonDisabled } =  this.state
-    if (buttonDisabled) return
+    const { buttonDisabled, current_step, bind_mobile } = this.state
+    if (buttonDisabled || (current_step === 'second' && !this.validateTel(bind_mobile))) return
     const calback = (err) => {
       if (err) {
         this.setState({
@@ -181,7 +190,7 @@ export default class index extends Component {
       }
       const { initTimeValue } = this.state
       this.setState({
-        interval: setInterval( () => {
+        interval: setInterval(() => {
           const { initTime } = this.state
           this.setState({
             initTime: initTime - 1,
@@ -201,7 +210,7 @@ export default class index extends Component {
         }, 1000)
       })
     }
-    this.getVerifyCode({calback})
+    this.getVerifyCode({ calback })
   }
 
   // 点击关闭
@@ -227,22 +236,22 @@ export default class index extends Component {
               <span className={styles.titleValue}>修改手机号</span>
               <Icon onClick={this.handleClose} name="CloseOutlined" />
             </div>
-            <div key={current_step} className={styles.inputItem}>
+            <div className={styles.inputItem}>
               <div className={styles.labelName}>{current_step === 'first' ? '验证旧手机' : '设置新手机'}</div>
               {
                 current_step === 'first' ? (
                   <Input value={mobile} />
                 ) : (
-                  <Input placeholder="输入新手机号码" onChange={this.handleInputChange} focus={true} onBlur={this.handleInputBlur} onFocus={this.handleInputFocus} value={bind_mobile} />
+                  <Input key={current_step} placeholder="输入新手机号码" onChange={this.handleInputChange} focus={true} onBlur={this.handleInputBlur} onFocus={this.handleInputFocus} value={bind_mobile} />
                 )
               }
               <div className={styles.labelValue}>
                 <div onClick={this.handleGetVerifyCode} className={styles.sendCaptcha}>
-                  {initTimeValue ? `${initTimeText}` : '发送验证码' }
+                  {initTimeValue ? `${initTimeText}` : '发送验证码'}
                 </div>
               </div>
             </div>
-            <div key={current_step} className={styles.inputItem}>
+            <div className={styles.inputItem}>
               <div className={styles.labelName}>请输入短信验证码</div>
               <CaptchaInput current_step={current_step} updatePwd={this.updatePwd} list={list} is_blur={is_blur} />
             </div>
