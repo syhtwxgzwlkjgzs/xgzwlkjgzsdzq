@@ -114,22 +114,25 @@
       color: $text-color-primary;
     }
   }
-  .userCenterEditBtn {
-    width: 90%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    bottom: rem(20);
-    button {
-      width: rem(166);
-      height: rem(42);
-      font-size: rem($font-size-middle);
-      border: none;
-    }
-    button:nth-child(1) {
-      margin-right: rem($margin-10);
-      background-color: $text-bg-color2;
-    }
+
+}
+.userCenterEditBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  bottom: rem(20);
+  padding: 0 rem($padding-4n);
+  button {
+    // width: rem(166);
+    height: rem(42);
+    font-size: rem($font-size-middle);
+    border: none;
+    border-radius: 5px !important;
+  }
+  button:nth-child(1) {
+    margin-right: rem($margin-10);
+    background-color: $text-bg-color2;
   }
 }
