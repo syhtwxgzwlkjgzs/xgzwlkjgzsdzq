@@ -647,7 +647,6 @@ class ThreadH5Page extends React.Component {
                     className={classNames(
                       footer.badge,
                       totalCount < 10 && footer.isCricle,
-                      totalCount === 1 && footer.isOne,
                     )}
                   >
                     {totalCount > 99 ? '99+' : `${totalCount || '0'}`}
