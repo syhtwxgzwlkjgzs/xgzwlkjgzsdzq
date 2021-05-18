@@ -109,55 +109,55 @@ class TopicAction extends TopicStore {
     * @param {boolean} obj.user 当前操作的用户
     * @returns
     */
-   @action
-  updateAssignThreadInfo(threadId, obj = {}) {
-    const targetThread = this.findAssignThread(threadId);
-
-    if (!targetThread) return;
-    const { index, subIndex, data } = targetThread;
-
-    // 更新点赞
-    const { updateType, updatedInfo, user } = obj;
-    const { isLiked, isPost, isFavorite:isShare, likeCount, replyCount } = updatedInfo;
-
-    if (updateType === 'like' && !typeofFn.isUndefined(isLiked) && !typeofFn.isNull(isLiked)
-          && user && data.likeReward?.users) {
-
-      const theUserId = user.userId || user.id;
-      data.isLike = isLiked;
-
-      if (isLiked) {
-        const userAdded = { userId: theUserId, avatar: user.avatarUrl, username: user.username };
-
-        // 添加当前用户到按过赞的用户列表
-        data.likeReward.users = data.likeReward.users.length ?
-                                [userAdded, ...data.likeReward.users]:
-                                [userAdded];
-      } else {
-        // 从按过赞用户列表中删除当前用户
-        data.likeReward.users = data.likeReward.users.length ?
-                                [...data.likeReward.users].filter(item => {
-                                  return (item.userId !== theUserId)
-                                }) :
-                                data.likeReward.users;
+    @action
+    updateAssignThreadInfo(threadId, obj = {}) {
+      const targetThread = this.findAssignThread(threadId);
+      if (!targetThread || targetThread.length === 0) return;
+      
+      const { index, data } = targetThread;
+      const { updateType, updatedInfo, user } = obj;
+  
+      if(!data && !data.likeReward && !data.likeReward.users) return;
+  
+      // 更新点赞
+      if (updateType === 'like' && !typeofFn.isUndefined(updatedInfo.isLiked) &&
+          !typeofFn.isNull(updatedInfo.isLiked) && user) {
+        const { isLiked, likeCount } = updatedInfo;
+        const theUserId = user.userId || user.id;
+        data.isLike = isLiked;
+  
+        if (isLiked) {
+          const userAdded = { userId: theUserId, avatar: user.avatarUrl, username: user.username };
+  
+          // 添加当前用户到按过赞的用户列表
+          data.likeReward.users = data.likeReward.users.length ?
+                                  [userAdded, ...data.likeReward.users]:
+                                  [userAdded];
+        } else {
+          // 从按过赞用户列表中删除当前用户
+          data.likeReward.users = data.likeReward.users.length ?
+                                  [...data.likeReward.users].filter(item => {
+                                    return (item.userId !== theUserId)
+                                  }) :
+                                  data.likeReward.users;
+        }
+        data.likeReward.likePayCount = likeCount;
       }
-      data.likeReward.likePayCount = likeCount;
+  
+      // 更新评论
+      if (updateType === 'comment' && data?.likeReward) {
+        data.likeReward.postCount = data.likeReward.postCount + 1;
+      }
+  
+      // 更新分享
+      if (updateType === 'share') {
+        data.likeReward.shareCount = data.likeReward.shareCount + 1;
+      }
+  
+      if (this.threads?.pageData) {
+        this.threads.pageData[index] = data;
+      }
     }
-
-     // 更新评论
-     if (updateType === 'comment' && !typeofFn.isUndefined(isPost) && !typeofFn.isNull(isPost)) {
-       data.likeReward.postCount = isPost ? data.likeReward.postCount + 1 : data.likeReward.postCount - 1;
-     }
- 
-     // 更新分享
-     if (updateType === 'share' &&!typeofFn.isUndefined(isShare) && !typeofFn.isNull(isShare)) {
-       data.likeReward.shareCount = isShare ? data.likeReward.shareCount + 1 : data.likeReward.shareCount - 1;
-     }
-
-     if (this.topicDetail?.pageData) {
-        this.topicDetail.pageData[index].threads[subIndex] = data;
-      }
-   }
 }
 
 export default TopicAction;
