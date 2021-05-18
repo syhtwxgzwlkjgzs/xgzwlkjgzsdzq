@@ -353,12 +353,13 @@ class PostPage extends React.Component {
     const { threadPost, thread } = this.props;
     const threadId = this.props.router.query.id || '';
     let ret = {};
-    Toast.loading({ content: isDraft ? '保存草稿中...' : '创建中...' });
+    this.toastInstance = Toast.loading({ content: isDraft ? '保存草稿中...' : '创建中...' });
     if (threadId) ret = await threadPost.updateThread(threadId);
     else ret = await threadPost.createThread();
     const { code, data, msg } = ret;
     if (code === 0) {
       thread.reset();
+      this.toastInstance?.destroy();
       if (!isDraft) this.props.router.replace(`/thread/${data.threadId}`);
       else Router.back();
       return true;

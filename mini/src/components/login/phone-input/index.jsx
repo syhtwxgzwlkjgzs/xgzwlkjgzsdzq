@@ -1,6 +1,5 @@
 import React from 'react';
 import { Input } from '@discuzq/design';
-import '@discuzq/design/dist/styles/index.scss';
 import { View } from '@tarojs/components';
 import layout from './index.module.scss';
 import CaptchaInput from './captcha-input';

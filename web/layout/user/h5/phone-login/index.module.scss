@@ -7,7 +7,7 @@
   @include banner;
 }
 .content {
-  padding: rem(48) rem(24);
+  @include content;
   .title {
     @include title;
   }
@@ -22,12 +22,11 @@
   }
   .otherLogin-title {
     @include otherLoginText;
-    margin-top: rem(30);
-    font-size: rem(14);
+    font-size: rem($font-size-base);
   }
   .otherLogin-button{
     text-align: center;
-    margin: rem(16);
+    margin: rem($margin-4n);
   }
   .otherLogin-button-weixin {
     @include otherLoginBtn;
@@ -37,7 +36,6 @@
   }
   .otherLogin-tips{
     @include otherLoginText;
-    margin-top: rem(32);
   }
 }
 
@@ -59,10 +57,10 @@
   }
   .pc_otherLogin_title {
     @include pc_otherLoginText;
-    font-size: 14px;
+    font-size: $font-size-base;
   }
   .pc_otherLogin_button{
-    margin: 16px;
+    margin: $margin-4n;
     .button_left {
       @include pc_otherLoginBtn;
     }

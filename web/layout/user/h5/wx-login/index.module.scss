@@ -8,7 +8,7 @@
   }
 }
 .content {
-  padding: rem(48) rem(24);
+  @include content;
   .button {
     @include button;
   }
@@ -17,7 +17,6 @@
   }
   .otherLogin-title {
     @include otherLoginText;
-    margin-top: rem(30);
     font-size: rem(14);
   }
   .otherLogin-button{
@@ -32,11 +31,6 @@
   }
   .otherLogin-outer__tips{
     @include otherLoginText;
-    margin-top: rem(32);
-  }
-  .otherLogin-within__tips{
-    @include otherLoginText;
-    margin-top: rem(180);
   }
 }
 

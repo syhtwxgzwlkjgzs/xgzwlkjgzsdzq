@@ -12,28 +12,37 @@
 }
 
 .hr {
-  height: rem(10);
+  height: rem($padding-10);
   background-color: $body-bg-color;
+}
+.threadHr {
+  height: rem($padding-10);
+  background-color: $body-bg-color;
+  margin: 0 rem(-24);
 }
 
 .userInfoWrapper {
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding-top: rem(16);
-  padding-bottom: rem(16);
+  padding-top: rem($padding-4n);
+  padding-bottom: rem($padding-4n);
   justify-content: space-between;
-
+  border-bottom: 1px solid $body-bg-color;
+  &:last-child {
+    border-bottom: none;
+  }
   .userInfoKey {
-    color: #4F5A70;
-    font-size: 14px;
+    color: $text-color-regular;
+    font-size: rem($font-size-primary);
   }
 
   .userInfoValue {
-    color: #0B0B37;
+    color: $text-color-primary;
   }
 }
 
 .friendsWrapper {
-  overflow: hidden;
+  overflow: hidden !important;
+  margin: 0 rem(-16);
 }

@@ -67,14 +67,18 @@ class BindPhoneH5Page extends React.Component {
       // 发送前校验
       this.props.mobileBind.beforeSendVerify();
       // 验证码
-      const res = await this.props.commonLogin.showCaptcha(qcloudCaptchaAppId, TencentCaptcha);
-      if (res.ret === 0) {
-        await this.props.mobileBind.sendCode({
-          captchaRandStr: this.props.commonLogin?.captchaRandStr,
-          captchaTicket: this.props.commonLogin?.captchaTicket
-        });
-        commonLogin.setIsSend(true);
+      const registerCaptcha = webConfig?.setReg?.registerCaptcha;
+      if (registerCaptcha) {
+        const res = await this.props.commonLogin.showCaptcha(qcloudCaptchaAppId, TencentCaptcha);
+        if (res.ret !== 0) {
+          return;
+        }
       }
+      await this.props.mobileBind.sendCode({
+        captchaRandStr: this.props.commonLogin?.captchaRandStr,
+        captchaTicket: this.props.commonLogin?.captchaTicket
+      });
+      commonLogin.setIsSend(true);
     } catch (e) {
       Toast.error({
         content: e.Message,
@@ -113,8 +117,8 @@ class BindPhoneH5Page extends React.Component {
           </Button>
           <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
             <span className={layout.clickBtn} onClick={() => {
-              this.props.router.push('login');
-            }} >退出登录</span>
+              window.location.href = '/index';
+            }} >跳过</span>
           </div>
         </div>
       </div>

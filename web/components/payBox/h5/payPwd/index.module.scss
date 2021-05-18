@@ -5,7 +5,7 @@
   position: fixed;
   left: 0;
   bottom: 0;
-  z-index: 1111;
+  z-index: 2000;
   background-color: var(--color-white);
   .line{
     display: flex;
@@ -42,20 +42,32 @@
     .dzq-modal__container {
       width: 80%;
       top: 36%;
+      box-sizing: border-box;
+      border-radius: $border-radius-small;
     }
   }
+
+  :global {
+    .dzq-modal__body {
+      padding: 0;
+    }
+  }
+
+  line-height: 21px;
 }
 .paypwdDialogContent {
   display: flex;
   align-items: center;
   flex-direction: column;
   .paypwdTitle {
-    font-size: rem(20);
+    font-size: rem($font-size-middle);
+    color: $text-color-primary;
+    margin-top: rem(8);
   }
   .paypwdAmount {
-    font-size: rem(26);
+    font-size: rem($font-line-height-large);
     font-weight: bold;
-    margin: rem(32) 0 rem(40);
+    margin: rem($margin-4n) 0;
   }
   .paypwdMesg {
     width: 100%;
@@ -63,25 +75,48 @@
     justify-content: space-between;
     align-items: center;
     font-size: rem(18);
+    margin-bottom: rem($margin-4n);
+    font-size: rem($font-size-base);
+    .payLabel {
+      color: $text-color-regular;
+    }
   }
   .walletIcon {
     color: var(--color-primary2);
     margin-right: rem($margin-2n);
   }
   .paypwdDivider {
-    margin: rem(18) 0 rem(8);
+    margin: 0 0 rem($margin-4n);
   }
   .payBoxCloseIcon {
     position: absolute;
-    right: rem(22);
+    right: rem(24);
     top: rem(20);
-    width: rem(40);
-    height: rem(40);
+    // width: rem(40);
+    // height: rem(40);
     // background-color: pink;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: $icon-color;
+    color: #8590A6;
     cursor: pointer;
+    :global {
+      .dzq-icon {
+        font-size: rem($font-size-primary) !important;
+      }
+    }
+  }
+}
+
+.forgetPasswordContainer {
+  width: 100%;
+  margin-top: rem(16);
+  margin-bottom: rem(8);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  span {
+    color: #4F5A70;
   }
 }

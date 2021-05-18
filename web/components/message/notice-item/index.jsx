@@ -56,6 +56,11 @@ class Index extends Component {
     return stringToColor(character);
   };
 
+  // 未读消息数
+  getUnReadCount = (count) => {
+    return count > 99 ? '99+' : (count || null);
+  };
+
   // 针对财务消息，获取后缀提示语
   getFinancialTips = (item) => {
     if (item.type === 'rewarded') {
@@ -122,7 +127,13 @@ class Index extends Component {
         <div className={styles.block}>
           {/* 头像 */}
           <div className={styles.avatar} onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}>
-            <Badge info={item.unReadCount > 99 ? '99+' : (item.unReadCount || null)}>
+            <Badge
+              className={classNames({
+                [styles.badge]: type === 'chat' && item.unreadCount > 9
+              })}
+              circle
+              info={ type === 'chat' && this.getUnReadCount(item.unreadCount)}
+            >
               {avatarUrl ? (
                 <Avatar image={avatarUrl} circle={true} />
               ) : (

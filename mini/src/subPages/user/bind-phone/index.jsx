@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { getCurrentInstance, navigateTo, redirectTo } from '@tarojs/taro';
 import { withRouter } from 'next/router';
 import { Button, Toast, Input } from '@discuzq/design';
-import '@discuzq/design/dist/styles/index.scss';
 import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import Page from '@components/page';
@@ -53,12 +52,16 @@ class BindPhoneH5Page extends React.Component {
 
   handleSendCodeButtonClick = async () => {
     try{
-      const { webConfig } = this.props.site;
-      const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
-      await toTCaptcha(qcloudCaptchaAppId);
-
       // 发送前校验
       this.props.mobileBind.beforeSendVerify();
+      // 验证码
+      const { webConfig } = this.props.site;
+      const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
+      if (qcloudCaptcha) {
+        const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
+        await toTCaptcha(qcloudCaptchaAppId)
+      };
+      // 发送
       await this.props.mobileBind.sendCode({
         captchaRandStr: this.ticket,
         captchaTicket: this.randstr
@@ -152,9 +155,9 @@ class BindPhoneH5Page extends React.Component {
             <View className={layout.functionalRegion}>
               <Text className={layout.clickBtn} onClick={() => {
                 redirectTo({
-                  url: `/subPages/user/wx-auth/index`
+                  url: `/pages/index/index`
                 });
-              }} >退出登录</Text>
+              }} >跳过</Text>
             </View>
           </View>
         </View>

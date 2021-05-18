@@ -9,6 +9,14 @@ class IndexAction extends IndexStore {
   }
 
   /**
+   * 设置过滤项
+   */
+   @action
+  setFilter(data) {
+    this.filter = data
+  }
+
+  /**
    * 触发筛选数据
    * @param {*} param0
    */
@@ -176,17 +184,17 @@ class IndexAction extends IndexStore {
   @action
   updateAssignThreadInfo(threadId, obj = {}) {
     const targetThread = this.findAssignThread(threadId);
-
-    if (!targetThread) return;
+    if (!targetThread || targetThread.length === 0) return;
+    
     const { index, data } = targetThread;
+    const { updateType, updatedInfo, user } = obj;
+
+    if(!data && !data.likeReward && !data.likeReward.users) return;
 
     // 更新点赞
-    const { updateType, updatedInfo, user } = obj;
-    const { isLiked, isPost, isFavorite:isShare, likeCount, replyCount } = updatedInfo;
-
-    if (updateType === 'like' && !typeofFn.isUndefined(isLiked) && !typeofFn.isNull(isLiked)
-          && user && data.likeReward?.users) {
-
+    if (updateType === 'like' && !typeofFn.isUndefined(updatedInfo.isLiked) &&
+        !typeofFn.isNull(updatedInfo.isLiked) && user) {
+      const { isLiked, likeCount } = updatedInfo;
       const theUserId = user.userId || user.id;
       data.isLike = isLiked;
 
@@ -209,14 +217,13 @@ class IndexAction extends IndexStore {
     }
 
     // 更新评论
-    if (updateType === 'comment' && !typeofFn.isUndefined(isPost) && !typeofFn.isNull(isPost)) {
-      data.likeReward.postCount = isPost ? data.likeReward.postCount + 1 : data.likeReward.postCount - 1;
+    if (updateType === 'comment' && data?.likeReward) {
+      data.likeReward.postCount = data.likeReward.postCount + 1;
     }
 
     // 更新分享
-    if (updateType === 'share' && !typeofFn.isUndefined(isShare) && !typeofFn.isNull(isShare)) {
-      console.log(data.likeReward.shareCount);
-      data.likeReward.shareCount = isShare ? data.likeReward.shareCount + 1 : data.likeReward.shareCount - 1;
+    if (updateType === 'share') {
+      data.likeReward.shareCount = data.likeReward.shareCount + 1;
     }
 
     if (this.threads?.pageData) {

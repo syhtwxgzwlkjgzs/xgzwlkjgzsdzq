@@ -72,7 +72,6 @@ class index extends Component {
   // 点击关注列表
   goToFollowsList = () => {
     const { query } = this.props.router;
-    console.log(this.props.router);
     if (query.otherId) {
       Router.push({ url: `/my/follows?isOtherPerson=${this.props.isOtherPerson}&otherId=${query.otherId}` });
     } else {

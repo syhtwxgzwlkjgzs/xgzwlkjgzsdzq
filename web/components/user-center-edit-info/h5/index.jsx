@@ -25,8 +25,10 @@ class index extends Component {
   }
 
   componentDidMount() {
-    this.initState();
-    this.props.user.initEditInfo();
+    this.initState()
+    const id = this.props.user?.id
+    this.props.user.updateUserInfo(id)
+    this.props.user.initEditInfo()
   }
 
   // 点击取消
@@ -148,10 +150,11 @@ class index extends Component {
             </div>
             <div><Icon name="RightOutlined" /></div>
           </div> */}
-          <div className={styles.userCenterEditBtn}>
-            <Button onClick={this.handleCancel}>取消</Button>
-            <Button onClick={this.handleUpdateEditedUserInfo} type="primary">保存</Button>
-          </div>
+
+        </div>
+        <div className={styles.userCenterEditBtn}>
+          <Button full onClick={this.handleCancel}>取消</Button>
+          <Button full onClick={this.handleUpdateEditedUserInfo} type="primary">保存</Button>
         </div>
       </div>
     );

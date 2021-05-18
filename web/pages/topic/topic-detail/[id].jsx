@@ -39,7 +39,6 @@ class Index extends React.Component {
   async componentDidMount() {
     const { topic, router } = this.props;
     const { id = '' } = router.query;
-    console.log(id, 'sadasdas ', topic.topicDetail)
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasTopics = !!topic.topicDetail;
     if (hasTopics) {

@@ -6,23 +6,28 @@
   min-height: rem(280);
   width: rem(409);
   font-size: rem($font-size-large);
-  padding: rem($padding-4n);
+  line-height: rem(21);
+  padding: rem($padding-6n);
+  box-sizing: border-box;
+  border-radius: $border-radius-small;
   // overflow-y: auto;
   .amountAddUp {
+    font-size: rem($font-size-base);
     height: rem(60);
     border-radius: rem(5);
-    background: #fff9e5;
-    text-align: center;
-    line-height: rem(60);
+    background: var(--color-warn10);
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .amountMoney {
-    color: #E02433;
+    color: $error-color;
     font-weight: 600;
     font-size: rem(20);
   }
   .amountSubmit {
-    width: 80%;
-    margin: rem($margin-5n) auto 0;
+    width: rem(248);
+    margin: rem($margin-6n) auto 0;
     text-align: right;
     font-size: rem($font-size-middle);
     >span {
@@ -31,13 +36,14 @@
   }
   .asBtn {
     border-radius: rem(5) !important;
+    font-size: rem(14);
   }
   .amountCloseBtn {
     position: absolute;
-    right: rem(30);
-    top: rem(45);
+    right: rem(24);
+    top: rem(22);
     cursor: pointer;
-    color: var(--color-disabled);
+    color: $text-color-secondary;
     text-shadow: 0 -1 0 0;
     &:hover {
       color: var(--color-info);

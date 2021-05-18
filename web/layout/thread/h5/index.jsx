@@ -509,6 +509,7 @@ class ThreadH5Page extends React.Component {
 
   // 点击标签 TODO:带上参数
   onTagClick() {
+    // TODO:待调用首页store
     this.props.router.push('/');
   }
 
@@ -535,14 +536,18 @@ class ThreadH5Page extends React.Component {
       isCollect: threadStore?.isFavorite,
     };
 
-    const isApproved = threadStore?.threadData?.isApproved || 0;
+    // 是否审核通过
+    const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
 
     return (
       <div className={layout.container}>
         <div className={layout.header}>
           <Header></Header>
-          {isReady && isApproved !== 1 && (
-            <div className={layout.examine}>内容正在审核中，审核通过后才能正常显示！</div>
+          {isReady && !isApproved && (
+            <div className={layout.examine}>
+              <Icon className={layout.tipsIcon} name="WarnOutlined"></Icon>
+              <span className={layout.tipsText}>内容正在审核中，审核通过后才能正常显示！</span>
+            </div>
           )}
         </div>
 
@@ -571,107 +576,105 @@ class ThreadH5Page extends React.Component {
           )}
 
           {/* 评论列表 */}
-          <div className={`${layout.bottom}`} ref={this.commentDataRef}>
-            {isCommentReady ? (
-              <Fragment>
-                <RenderCommentList
-                  router={this.props.router}
-                  sort={(flag) => this.onSortChange(flag)}
-                  onEditClick={(comment) => this.onEditClick(comment)}
-                ></RenderCommentList>
-                {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
-                {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
-              </Fragment>
-            ) : (
-              <LoadingTips type="init"></LoadingTips>
-            )}
-          </div>
+          {isReady && isApproved && (
+            <div className={`${layout.bottom}`} ref={this.commentDataRef}>
+              {isCommentReady ? (
+                <Fragment>
+                  <RenderCommentList
+                    router={this.props.router}
+                    sort={(flag) => this.onSortChange(flag)}
+                    onEditClick={(comment) => this.onEditClick(comment)}
+                  ></RenderCommentList>
+                  {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
+                  {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
+                </Fragment>
+              ) : (
+                <LoadingTips type="init"></LoadingTips>
+              )}
+            </div>
+          )}
         </div>
 
         {/* 底部操作栏 */}
-        <div className={layout.footerContainer}>
-          <div className={layout.footer}>
-            {/* 评论区触发 */}
-            <div className={footer.inputClick} onClick={() => this.onInputClick()}>
-              <Input className={footer.input} placeholder="写评论" disabled={true} prefixIcon="EditOutlined"></Input>
-            </div>
-
-            {/* 评论弹层 */}
-            <InputPopup
-              visible={this.state.showCommentInput}
-              onClose={() => this.onClose()}
-              initValue={this.state.inputValue}
-              onSubmit={(value) => this.onPublishClick(value)}
-            ></InputPopup>
-
-            {/* 更多弹层 */}
-            <MorePopup
-              permissions={morePermissions}
-              statuses={moreStatuses}
-              visible={this.state.showMorePopup}
-              onClose={() => this.setState({ showMorePopup: false })}
-              onSubmit={() => this.setState({ showMorePopup: false })}
-              onOperClick={(type) => this.onOperClick(type)}
-            ></MorePopup>
-
-            {/* 删除弹层 */}
-            <DeletePopup
-              visible={this.state.showDeletePopup}
-              onClose={() => this.setState({ showDeletePopup: false })}
-              onBtnClick={(type) => this.onBtnClick(type)}
-            ></DeletePopup>
-            {/* 举报弹层 */}
-
-            {/* 举报弹窗 */}
-            <ReportPopup
-              reportContent={this.reportContent}
-              inputText={this.inputText}
-              visible={this.state.showReportPopup}
-              onCancel={() => this.setState({ showReportPopup: false })}
-              onOkClick={(data) => this.onReportOk(data)}
-            ></ReportPopup>
-
-            {/* 打赏弹窗 */}
-            <RewardPopup
-              visible={this.state.showRewardPopup}
-              onCancel={() => this.setState({ showRewardPopup: false })}
-              onOkClick={(value) => this.onRewardSubmit(value)}
-            ></RewardPopup>
-
-            {/* 操作区 */}
-            <div className={footer.operate}>
-              <div className={footer.icon} onClick={() => this.onMessageClick()}>
-                {totalCount > 0 ? (
-                  <div
-                    className={classNames(
-                      footer.badge,
-                      totalCount < 10 && footer.isCricle,
-                      totalCount === 1 && footer.isOne,
-                    )}
-                  >
-                    {totalCount > 99 ? '99+' : `${totalCount || '0'}`}
-                  </div>
-                ) : (
-                  ''
-                )}
-                <Icon size="20" name="MessageOutlined"></Icon>
+        {isReady && isApproved && (
+          <div className={layout.footerContainer}>
+            <div className={layout.footer}>
+              {/* 评论区触发 */}
+              <div className={footer.inputClick} onClick={() => this.onInputClick()}>
+                <Input className={footer.input} placeholder="写评论" disabled={true} prefixIcon="EditOutlined"></Input>
               </div>
-              <Icon
-                color={this.props.thread?.isFavorite ? styleVar['--color-primary'] : ''}
-                className={footer.icon}
-                onClick={() => this.onCollectionClick()}
-                size="20"
-                name="CollectOutlined"
-              ></Icon>
-              <Icon
-                onClick={() => this.onShareClick()}
-                className={footer.icon}
-                size="20"
-                name="ShareAltOutlined"
-              ></Icon>
+
+              {/* 评论弹层 */}
+              <InputPopup
+                visible={this.state.showCommentInput}
+                onClose={() => this.onClose()}
+                initValue={this.state.inputValue}
+                onSubmit={(value) => this.onPublishClick(value)}
+              ></InputPopup>
+
+              {/* 更多弹层 */}
+              <MorePopup
+                permissions={morePermissions}
+                statuses={moreStatuses}
+                visible={this.state.showMorePopup}
+                onClose={() => this.setState({ showMorePopup: false })}
+                onSubmit={() => this.setState({ showMorePopup: false })}
+                onOperClick={(type) => this.onOperClick(type)}
+              ></MorePopup>
+
+              {/* 删除弹层 */}
+              <DeletePopup
+                visible={this.state.showDeletePopup}
+                onClose={() => this.setState({ showDeletePopup: false })}
+                onBtnClick={(type) => this.onBtnClick(type)}
+              ></DeletePopup>
+              {/* 举报弹层 */}
+
+              {/* 举报弹窗 */}
+              <ReportPopup
+                reportContent={this.reportContent}
+                inputText={this.inputText}
+                visible={this.state.showReportPopup}
+                onCancel={() => this.setState({ showReportPopup: false })}
+                onOkClick={(data) => this.onReportOk(data)}
+              ></ReportPopup>
+
+              {/* 打赏弹窗 */}
+              <RewardPopup
+                visible={this.state.showRewardPopup}
+                onCancel={() => this.setState({ showRewardPopup: false })}
+                onOkClick={(value) => this.onRewardSubmit(value)}
+              ></RewardPopup>
+
+              {/* 操作区 */}
+              <div className={footer.operate}>
+                <div className={footer.icon} onClick={() => this.onMessageClick()}>
+                  {totalCount > 0 ? (
+                    <div className={classNames(footer.badge, totalCount < 10 && footer.isCricle)}>
+                      {totalCount > 99 ? '99+' : `${totalCount || '0'}`}
+                    </div>
+                  ) : (
+                    ''
+                  )}
+                  <Icon size="20" name="MessageOutlined"></Icon>
+                </div>
+                <Icon
+                  color={this.props.thread?.isFavorite ? styleVar['--color-primary'] : ''}
+                  className={footer.icon}
+                  onClick={() => this.onCollectionClick()}
+                  size="20"
+                  name="CollectOutlinedBig"
+                ></Icon>
+                <Icon
+                  onClick={() => this.onShareClick()}
+                  className={footer.icon}
+                  size="20"
+                  name="ShareAltOutlined"
+                ></Icon>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }

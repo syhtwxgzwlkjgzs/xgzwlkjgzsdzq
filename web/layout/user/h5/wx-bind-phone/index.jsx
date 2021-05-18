@@ -35,15 +35,18 @@ class WXBindPhoneH5Page extends React.Component {
       // 发送前校验
       this.props.wxPhoneBind.beforeSendVerify();
       // 验证码
-      const res = await this.props.commonLogin.showCaptcha(qcloudCaptchaAppId, TencentCaptcha);
-      console.log(res);
-      if (res.ret === 0) {
-        await this.props.wxPhoneBind.sendCode({
-          captchaRandStr: this.props.commonLogin?.captchaRandStr,
-          captchaTicket: this.props.commonLogin?.captchaTicket
-        });
-        commonLogin.setIsSend(true);
+      const registerCaptcha = webConfig?.setReg?.registerCaptcha;
+      if (registerCaptcha) {
+        const res = await this.props.commonLogin.showCaptcha(qcloudCaptchaAppId, TencentCaptcha);
+        if (res.ret !== 0) {
+          return;
+        }
       }
+      await this.props.wxPhoneBind.sendCode({
+        captchaRandStr: this.props.commonLogin?.captchaRandStr,
+        captchaTicket: this.props.commonLogin?.captchaTicket
+      });
+      commonLogin.setIsSend(true);
     } catch (e) {
       Toast.error({
         content: e.Message,

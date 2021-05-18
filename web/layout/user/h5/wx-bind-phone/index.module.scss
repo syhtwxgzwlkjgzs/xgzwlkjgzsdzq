@@ -7,7 +7,7 @@
   @include banner;
 }
 .content {
-  padding: rem(48) rem(24);
+  @include content;
   .button {
     @include button;
   }
@@ -16,7 +16,6 @@
   }
   .otherLogin-within__tips{
     @include otherLoginText;
-    margin-top: rem(32);
   }
   .functionalRegion {
     @include functionalRegion;

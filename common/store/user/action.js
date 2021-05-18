@@ -443,7 +443,10 @@ class UserAction extends SiteStore {
       return setUserPasswordRes.data;
     }
 
-    throw {};
+    throw {
+      Code: setUserPasswordRes.code,
+      Message: setUserPasswordRes.msg,
+    };
   }
 
   /**
@@ -463,7 +466,10 @@ class UserAction extends SiteStore {
       return resetUserPasswordRes.data;
     }
 
-    throw {};
+    throw {
+      Code: resetUserPasswordRes.code,
+      Message: resetUserPasswordRes.msg,
+    };
   }
 
   @action
@@ -476,7 +482,7 @@ class UserAction extends SiteStore {
       timeout: 3000,
       data: {
         mobile,
-        type: 'update',
+        type: 'rebind',
         captchaTicket,
         captchaRandStr,
       },
@@ -524,7 +530,7 @@ class UserAction extends SiteStore {
   async verifyOldMobile() {
     const smsVerifyRes = await smsVerify({
       data: {
-        mobile: this.mobile,
+        mobile: this.originalMobile,
         code: this.oldMobileVerifyCode,
       },
     });
@@ -533,7 +539,10 @@ class UserAction extends SiteStore {
       return smsVerifyRes.data;
     }
 
-    throw {};
+    throw {
+      Code: smsVerifyRes.code,
+      Message: smsVerifyRes.msg,
+    };
   }
 
   @action
@@ -549,7 +558,10 @@ class UserAction extends SiteStore {
       return smsRebindRes.data;
     }
 
-    throw {};
+    throw {
+      Code: smsRebindRes.code,
+      Message: smsRebindRes.msg,
+    };
   }
 
   @action
@@ -562,8 +574,6 @@ class UserAction extends SiteStore {
         },
       },
     });
-
-    console.log(userLikesList);
 
     return userLikesList;
   }
@@ -579,9 +589,41 @@ class UserAction extends SiteStore {
       },
     });
 
-    console.log(userCollectionList);
-
     return userCollectionList;
+  }
+
+  /**
+   * 我的屏蔽对应store函数
+   */
+  
+  // 获取屏蔽列表数据
+  @action
+  async getUserShieldList() {
+    
+  }
+
+  // 屏蔽
+  @action
+  async postShield() {
+    
+  }
+
+  // 取消屏蔽
+  @action
+  async cancelShield() {
+
+  }
+
+  // 点击屏蔽后需要更新的数据
+  @action
+  async setUserBeShielded() {
+
+  }
+
+  // 点击取消屏蔽后需要更新的数据
+  @action
+  async setUserBeUnShielded() {
+    
   }
 
   /**

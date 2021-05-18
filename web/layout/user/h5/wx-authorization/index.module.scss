@@ -7,11 +7,14 @@
   }
 }
 .content {
-  padding: rem(48) rem(24);
+  @include content;
   .title {
     @include title;
   }
   .tips{
     @include titleTips;
+  }
+  .functionalRegion {
+    @include functionalRegion;
   }
 }

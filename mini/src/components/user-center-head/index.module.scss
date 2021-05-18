@@ -1,0 +1,130 @@
+@import '@common/styles/index.scss';
+@import '@common/styles/_variable.scss';
+
+.h5box {
+    width: 100%;
+    min-height: 196px;
+    position: relative;
+    // top: -10;
+    margin-top: -$margin-10;
+    // border-bottom: var(--border-border;
+    background-color: var(--color-white);
+    // background-color: pink;
+    padding: $padding-4n;
+    box-sizing: border-box;
+    // display: flex;
+    // align-items: flex-end;
+    // justify-content: center;
+    border-radius: $border-radius-big $border-radius-big 0 0;
+    .h5boxTop {
+      position: relative;
+      height: 60px;
+    }
+    .headImgBox{
+        position: absolute;
+        left: 20%;
+        top: 60%;
+        transform: translateX(-50%) translateY(-100%);
+    }
+    .text{
+        display: block;
+        width: 100%;
+        // text-align: center;
+        font-size: $font-size-primary;
+        color: $text-color-primary;
+        text-overflow: -o-ellipsis-lastline;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        line-height: 1.2;
+        color: $text-color-regular;
+        margin-top: 12px;
+    }
+    .userMessageList {
+      display: flex;
+      position: absolute;
+      right: 0;
+      width: 230px;
+      align-items: center;
+      justify-content: center;
+      line-height: $font-line-height-base;
+    }
+    .userMessageListItem {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 76%;
+      >text:nth-child(1) {
+        font-size: $font-size-base;
+        color: $text-color-primary;
+      }
+      >text:nth-child(2) {
+        font-size: $font-size-middle;
+        font-weight: 600;
+        color: $text-color-primary;
+      }
+    }
+    .userNameOrTeam {
+      line-height: $font-line-height-small;
+      >text:nth-child(1) {
+        font-size: $font-size-large;
+        font-weight: 600;
+        color: $text-color-primary;
+        margin-right: $margin-2n;
+      }
+      >text:nth-child(2) {
+        font-size: $font-size-small;
+        color: $text-color-regular;
+      }
+    }
+    .userBtn {
+      margin-top: $margin-4n;
+      button {
+        width: 166px;
+        height: 44px;
+        font-size: $font-size-middle;
+        display: inline-block;
+        :global {
+          .dzq-icon {
+            vertical-align: middle;
+          }
+        }
+      }
+      button:nth-child(2) {
+        margin-left: $margin-2n;
+        border-color: $primary-color;
+        color: $primary-color;
+      }
+      .userBtnText {
+        vertical-align: middle;
+        margin-left: $margin-2n;
+      }
+    }
+    .userFriendsBtn {
+      background: $warn-color;
+      border-color: $warn-color;
+    }
+    .shieldBtn {
+      position: absolute;
+      top: -26;
+      right: 16;
+      display: inline-block;
+      :global {
+        .dzq-icon {
+          vertical-align: middle;
+          font-size: $font-size-base;
+          color: $white;
+        }
+      }
+      text {
+        vertical-align: middle;
+        font-size: $font-size-base;
+        color: $white;
+        margin-left: $margin-2n;
+      }
+    }
+}

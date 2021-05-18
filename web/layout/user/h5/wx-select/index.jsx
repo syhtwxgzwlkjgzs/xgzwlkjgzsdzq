@@ -55,7 +55,8 @@ class WXSelectH5Page extends React.Component {
                 });
                 checkUserStatus(res);
                 Toast.success({
-                  content: res.code + res.msg,
+                  content: res.msg,
+                  duration: 1000,
                 });
                 if (res.code === 0) {
                   const accessToken = get(res, 'data.accessToken', '');
