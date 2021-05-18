@@ -166,7 +166,7 @@ export default class index extends Component {
         ) : (
           <>
             {
-              !this.props.payBox?.walletAvaAmount < amount ? (
+              this.props.payBox?.walletAvaAmount < amount ? (
                 <div className={styles.walletDec}>
                   <span>钱包余额</span>
                   <span className={styles.walletBalance}>￥{this.props.payBox?.walletAvaAmount}</span>
