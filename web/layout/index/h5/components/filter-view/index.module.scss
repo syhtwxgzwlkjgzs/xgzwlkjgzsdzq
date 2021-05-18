@@ -7,12 +7,14 @@
 }
 .container {
   box-sizing: border-box;
-  padding: rem(25) rem(15) rem(16);
+  padding: rem(25) rem(16) 0 rem(16);
+  padding-bottom: constant(safe-area-inset-bottom);  ///兼容 IOS<11.2/
+  padding-bottom: env(safe-area-inset-bottom);  ///兼容 IOS>11.2/
   background-color: var(--color-white);
   border-top-right-radius: rem($border-radius-small);
   border-top-left-radius: rem($border-radius-small);
   position: relative;
-  height: 80vh;
+  height: 90vh;
   display: flex;
   flex-direction: column;
   .content {
@@ -70,6 +72,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    color: $text-color-primary;
   }
 
   .active {
@@ -86,6 +89,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    color: $text-color-primary;
   }
 
   .childrenActive {
@@ -99,7 +103,7 @@
 .footer {
   background-color: var(--color-white);
   text-align: center;
-  height: rem(95);
+  height: rem(120);
   .button {
     width: rem(290);
     height: rem(42);
@@ -108,11 +112,21 @@
     display: inline-block;
   }
   .footerBtn {
-    border-top: 1px solid var(--border-line-color);
     position: relative;
     height: rem(53);
-    text-align: center;
-    line-height: rem(53);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: rem($font-size-primary);
+    color: $text-color-regular;
+    &:before {
+      content: ' ';
+      position: absolute;
+      right: rem(-16);
+      left: rem(-16);
+      height: 1px;
+      top: 0;
+      background-color: var(--border-line-color);
+    }
   }
 }
