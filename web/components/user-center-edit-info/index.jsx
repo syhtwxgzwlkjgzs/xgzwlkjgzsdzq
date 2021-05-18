@@ -26,11 +26,11 @@ export default class index extends Component {
             <H5UserCenterEditInfo />
           )
         }
-        {
+        {/* {
           platform === 'pc' && (
             <UserCenterEditMobile />
           )
-        }
+        } */}
       </div>
     )
   }
