@@ -643,13 +643,7 @@ class ThreadH5Page extends React.Component {
             <div className={footer.operate}>
               <div className={footer.icon} onClick={() => this.onMessageClick()}>
                 {totalCount > 0 ? (
-                  <div
-                    className={classNames(
-                      footer.badge,
-                      totalCount < 10 && footer.isCricle,
-                      totalCount === 1 && footer.isOne,
-                    )}
-                  >
+                  <div className={classNames(footer.badge, totalCount < 10 && footer.isCricle)}>
                     {totalCount > 99 ? '99+' : `${totalCount || '0'}`}
                   </div>
                 ) : (

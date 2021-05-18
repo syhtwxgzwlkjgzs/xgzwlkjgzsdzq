@@ -216,7 +216,7 @@ class UserStore {
       [defaultOperation.emoji]: true,
       [defaultOperation.at]: true,
       [defaultOperation.topic]: true,
-      [defaultOperation.attach]: get(pm, 'insertDoc.enable'),
+      [defaultOperation.attach]: get(pm, 'insertAttachment.enable'),
       [defaultOperation.pay]: get(pm, 'insertPay.enable'),
       [defaultOperation.redpacket]: get(pm, 'insertRedPacket.enable'),
       [THREAD_TYPE.image]: get(pm, 'insertImage.enable'),

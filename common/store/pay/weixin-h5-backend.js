@@ -27,7 +27,7 @@ export const onBridgeReady = data => new Promise((resolve, reject) => {
       reject(PAY_BOX_ERROR_CODE_MAP.WX_PAY_FAIL);
     }
   });
-});
+}).catch((e) => {console.log(e)});
 
 export const listenWXJsBridgeAndExecCallback = (callback) => {
   if (typeof WeixinJSBridge === 'undefined') {

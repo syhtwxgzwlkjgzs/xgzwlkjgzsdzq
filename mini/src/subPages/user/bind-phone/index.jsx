@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { getCurrentInstance, navigateTo, redirectTo } from '@tarojs/taro';
 import { withRouter } from 'next/router';
 import { Button, Toast, Input } from '@discuzq/design';
-import '@discuzq/design/dist/styles/index.scss';
 import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import Page from '@components/page';

@@ -1,13 +1,12 @@
 /**
  * 入口配置文件：https://taro-docs.jd.com/taro/docs/next/tutorial/
  */
-export default {
+const config = {
   // TODO: 分包处理
   // 首页和详情页在主包
   pages: [
     'pages/index/index',
     'pages/thread/index',
-    'pages/message/index'
   ],
   subPackages: [
     {
@@ -45,13 +44,13 @@ export default {
         'wallet/frozen/index',
         'wallet/withdrawal/index',
         'message/index',
-        'pages/my/index',
-        'pages/my/edit/index',
-        'pages/my/edit/mobile/index',
-        'pages/my/edit/pwd/index',
-        'pages/my/edit/paypwd/index',
-        'pages/my/edit/reset/paypwd/index',
-        'pages/my/edit/find/paypwd/index',
+        'my/index',
+        'my/edit/index',
+        'my/edit/mobile/index',
+        'my/edit/pwd/index',
+        'my/edit/paypwd/index',
+        'my/edit/reset/paypwd/index',
+        'my/edit/find/paypwd/index',
       ]
     }
   ],
@@ -63,3 +62,5 @@ export default {
   // wx5a3a7366fd07e119 验证码防水墙小程序
   navigateToMiniProgramAppIdList: ["wx5a3a7366fd07e119"]
 };
+
+module.exports = config;

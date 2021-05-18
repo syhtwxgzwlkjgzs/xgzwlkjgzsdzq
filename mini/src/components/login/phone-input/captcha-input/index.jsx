@@ -1,7 +1,6 @@
 import React from 'react';
 import { Input } from '@discuzq/design';
 import { View } from '@tarojs/components';
-import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 
 let inputIndex = null;

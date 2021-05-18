@@ -14,6 +14,9 @@
     .dzq-popup__overlay {
       background-color: $white;
     }
+    .dzq-popup__container {
+      height: 100%;
+    }
   }
 }
 
@@ -31,8 +34,7 @@
     display: flex;
     align-items: center;
     background: $text-bg-color2;
-    margin-left: $margin-4n;
-    margin-right: $margin-4n;
+    margin: $margin-4n $margin-4n $margin-2n;
     padding-left: $padding-4n;
     padding-right: $padding-4n;
     border-radius: $border-radius-small;
@@ -60,7 +62,7 @@
   }
 
   .at-wrap {
-    height: calc(100vh - 144px);
+    height: calc(100vh - 120px);
     // .scroll-view {
     //   height: 100% !important;
     // }
@@ -185,6 +187,11 @@
     }
   }
   .at-wrap {
-    height: calc(500px - 135px);
+    height: calc(500px - 76px);
+  }
+  :global {
+    .dzq-modal__body {
+      height: 100%;
+    }
   }
 }
