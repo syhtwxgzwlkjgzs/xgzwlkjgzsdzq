@@ -15,4 +15,7 @@
     @include titleTips;
     margin-bottom: 0;
   }
+  .functionalRegion {
+    @include functionalRegion;
+  }
 }

@@ -127,6 +127,11 @@ class UserStore {
     return get(this.userInfo, 'mobile');
   }
 
+  // 用户是否绑定微信
+  @computed get isBindWechat() {
+    return get(this.userInfo, 'isBindWechat');
+  }
+
   // 获取实际用户手机号
   @computed get originalMobile() {
     return get(this.userInfo, 'originalMobile')

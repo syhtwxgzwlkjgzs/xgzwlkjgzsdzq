@@ -15,6 +15,8 @@ import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/
 class WeixinBindH5Page extends React.Component {
   render() {
     const { sessionToken, loginType, code, sessionId, state, nickname }  = this.props.router.query;
+    const { site } = this.props;
+    const { platform } = site;
     return (
       <div className={layout.container}>
         <HomeHeader hideInfo mode='login'/>
@@ -25,16 +27,26 @@ class WeixinBindH5Page extends React.Component {
           </div>
           {
             this.props.h5QrCode.isBtn
-            ? <Button
-                className={layout.button}
-                type="primary"
-                onClick={() => this.bind({
-                  params: { sessionToken, code, sessionId, type: loginType, state },
-                })}
-              >
-                绑定微信，并继续访问
-              </Button>
-            : <></>
+              ? <>
+                <Button
+                  className={layout.button}
+                  type="primary"
+                  onClick={() => this.bind({
+                    params: { sessionToken, code, sessionId, type: loginType, state },
+                  })}
+                >
+                  绑定微信，并继续访问
+                </Button>
+                <div className={layout.functionalRegion}>
+                  <span className={layout.clickBtn} onClick={() => {
+                    this.props.h5QrCode.bindTitle = '已取消绑定';
+                    this.props.h5QrCode.isBtn = false;
+                  }}>
+                    退出
+                  </span>
+                </div>
+                </>
+              : <></>
           }
         </div>
       </div>

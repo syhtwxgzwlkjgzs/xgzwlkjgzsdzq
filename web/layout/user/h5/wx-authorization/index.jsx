@@ -17,6 +17,8 @@ const NEED_BIND_OR_REGISTER_USER = -7016;
 @observer
 class WXAuthorizationPage extends React.Component {
   render() {
+    const { site } = this.props;
+    const { platform } = site;
     return (
       <div className={layout.container}>
         <HomeHeader hideInfo mode='login'/>
@@ -24,13 +26,23 @@ class WXAuthorizationPage extends React.Component {
           <div className={layout.title}>{this.props.h5QrCode.loginTitle}</div>
           {
             this.props.h5QrCode.isBtn
-              ? <Button
-                className={layout.button}
-                type="primary"
-                onClick={this.authorization}
-              >
-                确定
-              </Button>
+              ? <>
+                  <Button
+                    className={layout.button}
+                    type="primary"
+                    onClick={this.authorization}
+                  >
+                    确定
+                  </Button>
+                <div className={layout.functionalRegion}>
+                    <span className={layout.clickBtn} onClick={() => {
+                      this.props.h5QrCode.loginTitle = '已取消登录';
+                      this.props.h5QrCode.isBtn = false;
+                    }}>
+                      退出登录
+                    </span>
+                  </div>
+                </>
               : <></>
           }
         </div>

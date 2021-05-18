@@ -68,7 +68,7 @@ export default class CommonAccountContent extends Component {
         {/* 标题 */}
         <div className={styles.amountTitle} style={{ textAlign: platform === 'pc' ? 'center' : 'left' }}>确认金额</div>
         {/* 主要内容区域 */}
-        <div className={styles.amountContent}>
+        <div className={`${styles.amountContent} ${platform === 'pc' && styles.amountContentPC}`}>
           <div className={styles.acExplain}>
             <span className={styles.acExplainLabel}>交易类型</span>{' '}
             <span className={styles.acExplainValue}>{this.renderDiffTradeType(type)}</span>
@@ -95,7 +95,11 @@ export default class CommonAccountContent extends Component {
                 <Checkbox checked={this.props.payBox.isAnonymous} onChange={this.handleChangeIsAnonymous} /> 隐藏我的付费信息
               </div>
             )}
-          <Divider className={styles.acExplainDivider} />
+            {
+              platform === 'h5' && (
+                <Divider className={styles.acExplainDivider} />
+              )
+            }
         </div>
       </>
     );
