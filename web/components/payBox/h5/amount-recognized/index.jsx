@@ -15,6 +15,7 @@ export default class AmountRecognized extends Component {
     this.props.payBox.visible = false
     this.props.payBox.clear();
   }
+  
 
   // 点击支付去到 选择支付方式页面
   goToThePayConfirmPage = async () => {
