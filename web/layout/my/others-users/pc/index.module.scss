@@ -34,15 +34,5 @@
 
 .friendsWrapper {
   overflow: hidden !important;
-  >div {
-    border-bottom: 1px solid $border-color;
-    &:last-child {
-      border-bottom: none;
-    }
-    >div {
-      >div {
-        padding: rem($padding-4n) 0;
-      }
-    }
-  }
+  margin: 0 rem(-16);
 }
