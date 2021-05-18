@@ -7,7 +7,7 @@
   @include banner;
 }
 .content {
-  padding: rem(48) rem(24);
+  @include content;
   .title {
     @include title;
   }
@@ -18,4 +18,3 @@
     @include button;
   }
 }
- 

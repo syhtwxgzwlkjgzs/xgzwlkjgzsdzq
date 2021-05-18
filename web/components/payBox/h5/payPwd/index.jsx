@@ -161,16 +161,16 @@ class Index extends React.Component {
                 <>
                   <div className={styles.paypwdTitle}>立即支付</div>
                   <div className={styles.paypwdAmount}>￥{options.amount}</div>
+                  <Divider className={styles.paypwdDivider} />
                   <div className={styles.paypwdMesg}>
-                    <span>支付方式</span>
+                    <span className={styles.payLabel}>支付方式</span>
                     <span>
                       <Icon className={styles.walletIcon} name="PurseOutlined" />
                       <span style={{ verticalAlign: 'middle' }}>钱包支付</span>
                     </span>
                   </div>
-                  <Divider className={styles.paypwdDivider} />
                   <div className={styles.paypwdMesg}>
-                    <span>支付密码</span>
+                    <span className={styles.payLabel}>支付密码</span>
                   </div>
 
                   <CommonPayoffPwd list={list} updatePwd={this.updatePwd} whetherIsShowPwdBox={true} />

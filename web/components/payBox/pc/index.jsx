@@ -4,7 +4,7 @@ import { STEP_MAP } from '@common/constants/payBoxStoreConstants';
 import AmountRecognized from './amount-recognized';
 import PayConfirmed from './pay-confirmed';
 import PayPwd from './payPwd';
-import { Popup } from '@discuzq/design';
+import { Dialog } from '@discuzq/design';
 import isServer from '@common/utils/is-server';
 
 @inject('payBox')
@@ -20,12 +20,12 @@ class PayBoxPc extends React.Component {
   render() {
     return (
       !isServer() && (
-        <Popup visible={this.props.payBox.visible} position="center" maskClosable={true} onClose={this.onClose}>
+        <Dialog visible={this.props.payBox.visible} position="center" maskClosable={true} onClose={this.onClose}>
           {this.props.payBox.step === STEP_MAP.SURE && <AmountRecognized />}
           {this.props.payBox.step === STEP_MAP.PAYWAY && <PayConfirmed />}
           {(this.props.payBox.step === STEP_MAP.WALLET_PASSWORD
             || this.props.payBox.step === STEP_MAP.SET_PASSWORD) && <PayPwd />}
-        </Popup>
+        </Dialog>
       )
     );
   }

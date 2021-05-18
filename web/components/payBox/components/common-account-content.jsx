@@ -20,7 +20,7 @@ export default class CommonAccountContent extends Component {
         value = '付费帖';
         break;
       case ORDER_TRADE_TYPE.POST_REWARD: // 表示打赏
-        value = '打赏';
+        value = '悬赏';
         break;
       case ORDER_TRADE_TYPE.REGEISTER_SITE:
         value = '表示付费加入';
@@ -30,6 +30,18 @@ export default class CommonAccountContent extends Component {
         break
       case ORDER_TRADE_TYPE.COMBIE_PAYMENT:
         value = '红包+悬赏'
+        break
+      case ORDER_TRADE_TYPE.REWARD: // 表示打赏
+        value = '打赏'
+        break
+      case ORDER_TRADE_TYPE.AUTHORITY_GROUP:
+        value = '购买权限组'
+        break
+      case ORDER_TRADE_TYPE.ATTACHMEMENT:
+        value = '附件'
+        break
+      case ORDER_TRADE_TYPE.RED_PACKET:
+        value = '红包'
         break
       default:
         break;

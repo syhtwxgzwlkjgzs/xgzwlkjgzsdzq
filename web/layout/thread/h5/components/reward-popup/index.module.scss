@@ -70,10 +70,11 @@
 }
 
 .rewardList {
+  width: 100%;
   margin-top: rem($margin-4n);
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, rem(76));
   justify-content: space-between;
-  flex-wrap: wrap;
 
   .reward {
     display: flex;
@@ -118,17 +119,17 @@
   align-items: center;
 
   .ok {
-    width: rem(167);
+    width: 50%;
     height: rem(42);
     font-size: rem($font-size-middle);
+    margin-left: rem($margin-2n);
   }
   .cancel {
-    width: rem(167);
+    width: 50%;
     height: rem(42);
     color: $text-color-regular;
     background: $text-bg-color2;
     border: none;
-    // margin-right: rem($margin-4n);
     font-size: rem($font-size-middle);
   }
 }

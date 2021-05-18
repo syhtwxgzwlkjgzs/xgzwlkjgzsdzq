@@ -189,7 +189,7 @@ class PayBoxStore {
    * 进入钱包输入密码环节
    */
   @action
-  walletPayEnsure = async () => {
+  walletPayEnsure = () => {
     this.step = STEP_MAP.WALLET_PASSWORD;
   }
 
@@ -388,15 +388,12 @@ class PayBoxStore {
    * 设置支付密码
    */
   @action
-  setPayPassword = async (id) => {
+  setPayPassword = async () => {
     try {
       const setPayPwdRes = await updateUsersUpdate({
         data: {
-          id,
-          data: {
-            payPassword: this.password,
-            payPasswordConfirmation: this.password,
-          },
+          payPassword: this.password,
+          payPasswordConfirmation: this.password,
         },
       });
 
@@ -419,6 +416,7 @@ class PayBoxStore {
   getPayPwdResetToken = async () => {
     if (!this.oldPayPwd) {
       // error
+      return;
     }
 
     const getTokenRes = await readResetPayPwdToken({

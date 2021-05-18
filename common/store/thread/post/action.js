@@ -2,6 +2,7 @@ import { action } from 'mobx';
 import ThreadPostStore from './store';
 import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread, updateThread, createThreadVideoAudio } from '@common/server';
 import { LOADING_TOTAL_TYPE, THREAD_TYPE } from '@common/constants/thread-post';
+import { emojiFromEditFormat, emojiFormatForCommit } from '@common/utils/emoji-regexp';
 
 class ThreadPostAction extends ThreadPostStore {
   /**
@@ -262,7 +263,7 @@ class ThreadPostAction extends ThreadPostStore {
     const { title, categoryId, contentText, position, price, attachmentPrice, freeWords } = this.postData;
     const params = {
       title, categoryId, content: {
-        text: contentText,
+        text: emojiFormatForCommit(contentText),
       },
     };
     if (position.address) params.position = position;
@@ -327,7 +328,7 @@ class ThreadPostAction extends ThreadPostStore {
       price,
       attachmentPrice,
       position,
-      contentText: contentText.replace(/alt="(\w*)"/g, 'alt=":$1:emoji"'),
+      contentText: emojiFromEditFormat(contentText),
       audio,
       rewardQa,
       product,

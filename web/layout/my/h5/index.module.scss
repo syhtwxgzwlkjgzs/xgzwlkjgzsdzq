@@ -15,9 +15,8 @@
 }
 
 .dividerContainer {
-    padding-left: rem(16);
-    padding-right: rem(16);
-
+    padding-left: rem($padding-4n);
+    padding-right: rem($padding-4n);
     :global {
         .dzq-divider {
             margin: 0;

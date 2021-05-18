@@ -62,6 +62,9 @@ class IndexH5Page extends React.Component {
   };
 
   onClickTab = (id = '') => {
+    if (id === this.state.currentIndex) {
+      return
+    }
     const { dispatch = () => {} } = this.props;
     const currentIndex = this.resetCategoryids(id);
     dispatch('click-filter', { categoryids: [currentIndex], sequence: id === 'default' ? 1 : 0 });
@@ -199,7 +202,7 @@ class IndexH5Page extends React.Component {
     const { threads = {}, categories = [] } = index;
     const { currentPage, totalPage, pageData } = threads || {};
     const newCategories = this.handleCategories(categories);
-    // TODO 处理key值问题
+
     return (
       <BaseLayout
         showHeader={false}
@@ -220,7 +223,12 @@ class IndexH5Page extends React.Component {
 
         {pageData?.length > 0
           && pageData.map((item, index) => (
-            <ThreadContent key={index} showBottomStyle={index !== pageData.length - 1} data={item} className={styles.listItem} />
+            <ThreadContent 
+              key={index} 
+              showBottomStyle={index !== pageData.length - 1} 
+              data={item} 
+              className={styles.listItem} 
+            />
           ))}
 
         <FilterView

@@ -14,7 +14,7 @@ import { withRouter } from 'next/router';
  */
 const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop, router }) => {
   const goList = () => {
-    router.push('/search/result-user');
+    router.push('/search/result-topic');
   }
   return (
     <div className={styles.container} style={{ backgroundImage: `url('/dzq-img/topic-header.png')` }}>

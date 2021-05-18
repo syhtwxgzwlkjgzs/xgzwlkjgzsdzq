@@ -47,7 +47,12 @@ export default class PayBox extends React.Component {
     try {
       this.initState()
       await this.props.payBox.getWalletInfo(id);
-    } catch (error) { }
+    } catch (error) {
+      Toast.error({
+        content: '获取用户钱包信息失败',
+        duration: 1000,
+      });
+     }
   }
 
   walletPaySubText() {

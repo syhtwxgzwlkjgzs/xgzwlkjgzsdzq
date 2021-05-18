@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button, Icon, Popup } from '@discuzq/design';
+import { Button, Icon, Popup, Flex } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
 import filterData from './data';
 import { withRouter } from 'next/router';
 
 import styles from './index.module.scss';
+
+const { Col, Row } = Flex
 
 const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel = noop, router }) => {
   const [first, setFirst] = useState();
@@ -100,11 +102,15 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
     }
 
     return (
-      <div key={key}>
-        <div className={styles.title}>{title}</div>
-        <div className={styles.wrapper}>
+      <div className={styles.moduleWrapper} key={key}>
+        <div className={styles.title}>
+          {title}
+          {key === 0 && <Icon className={styles.searchIcon} name='SearchOutlined' size={20} onClick={goSearch}></Icon>}
+        </div>
+        <Row className={styles.wrapper} gutter={10}>
           {
             contents.map((item, index) => (
+              <Col span={3}>
               <span
                 className={`${tip === item.pid ? styles.active : ''} ${styles.span}`}
                 key={index}
@@ -112,18 +118,26 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
               >
                 {item.name}
               </span>
+              </Col>
             ))
           }
-        </div>
+        </Row>
         {
           type === 1 && subData.length ? (
-            <div className={`${styles.wrapper} ${styles.childrenWrapper}`}>
+            <Row className={`${styles.wrapper} ${styles.childrenWrapper}`} gutter={10}>
               {
                 subData.map((item, index) => (
-                  <span className={`${firstChildren === item.pid ? styles.childrenActive : ''} ${styles.span}`} key={`${index}-${index}`} onClick={() => onClickSecond(item.pid, type)}>{item.name}</span>
+                  <Col span={3}>
+                    <span 
+                      className={`${firstChildren === item.pid ? styles.childrenActive : ''} ${styles.childrenSpan}`} 
+                      key={`${index}-${index}`} 
+                      onClick={() => onClickSecond(item.pid, type)}>
+                        {item.name}
+                    </span>
+                  </Col>
                 ))
               }
-            </div>
+            </Row>
           ) : null
         }
       </div>
@@ -137,16 +151,18 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
       visible={visible}
       onClose={handleCancel}
     >
-      <div className={styles.container}>
-        <div className={styles.containerIcon}>
-          <Icon className={styles.searchIcon} name='SearchOutlined' size={20} onClick={goSearch}></Icon>
-        </div>
-        { data && data.map((item, index) => renderContent(item, index)) }
-      </div>
-      <div className={styles.footer}>
-          <Button className={styles.button} onClick={handleSubmit} type="primary">筛选</Button>
-          <div className={styles.footerBtn} onClick={handleCancel}>
-            取消
+        <div className={styles.container}>
+          <div className={styles.content}>
+            <div className={styles.list} >
+             { data && data.map((item, index) => renderContent(item, index)) }
+            </div>
+          </div>
+          
+          <div className={styles.footer}>
+            <Button className={styles.button} onClick={handleSubmit} type="primary">筛选</Button>
+            <div className={styles.footerBtn} onClick={handleCancel}>
+              取消
+            </div>
           </div>
         </div>
     </Popup>

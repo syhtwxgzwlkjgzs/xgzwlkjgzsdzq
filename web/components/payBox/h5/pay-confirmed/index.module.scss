@@ -1,24 +1,33 @@
 @import '@common/styles/index.scss';
+@import '@common/styles/mixin/index.scss';
 
 .payBox{
   background: var(--color-white);
-
+  padding: rem($padding-6n) rem($padding-4n) rem($padding-4n) rem($padding-4n);
+  height: rem(337);
+  box-sizing: border-box;
   .title{
     text-align: center;
-    padding: rem($padding-4n) 0;
-    background-color: #f2f2f2;
     p{
-      font-size: rem($font-size-large);
+      font-size: rem($paybox-pay-text-font-size);
       font-weight: bold;
     }
   }
+
   .list{
     margin-top: rem($margin-2n);
+    margin-bottom: rem(100);
+
     .listItem{
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: rem($padding-2n) rem($padding-4n);
+        padding: rem($padding-4n) 0;
+
+        &:first-child {
+          border-bottom: 1px solid $paybox-border-line-color;
+        }
+
         .left{
           display: flex;
           align-items: center;
@@ -40,7 +49,15 @@
           .subText{
             font-size: rem($font-size-label);
             color: var(--color-text-secondary);
-            margin-right: rem($margin-2n);
+            margin-right: rem($margin-4n);
+          }
+          :global {
+            .dzq-checkbox--radio {
+              border-radius: rem(var(--border-radius-small));
+              &::after {
+                border-radius: rem(var(--border-radius-small));
+              }
+            }
           }
         }
     }
@@ -53,14 +70,44 @@
   }
 
   .btnBox{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     margin-top: rem($margin-2n);
-    background: var(--background-color);
+    height: rem(60);
+    box-sizing: border-box;
+    width: calc(100% - 32px);
+    padding-left: 16px;
+    padding-right: 16px;
+    @include ios-safe-area-inset-bottom;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 100%;
+      height: rem(1);
+      background: var(--border-line-color);
+      position: relative;
+      top: rem(-8);
+    }
+
     .btn{
-      height: rem(50);
-      &:not(:first-child) {
-        margin-top: rem($margin-2n);
-      }
+      height: rem(42);
+      font-size: rem(16);
+      border-radius: 5px;
     }
   }
+}
+
+.payBoxCloseIcon {
+  position: absolute;
+  right: rem(16);
+  top: rem(24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8590A6;
+  cursor: pointer;
 }
 

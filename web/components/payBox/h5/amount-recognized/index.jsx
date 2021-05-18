@@ -13,10 +13,9 @@ export default class AmountRecognized extends Component {
   onClose = () => {
     // FIXME: 延时回调的修复
     this.props.payBox.visible = false
-    setTimeout(() => {
-      this.props.payBox.clear();
-    },1000)
+    this.props.payBox.clear();
   }
+  
 
   // 点击支付去到 选择支付方式页面
   goToThePayConfirmPage = async () => {

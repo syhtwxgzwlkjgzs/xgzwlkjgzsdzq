@@ -67,5 +67,5 @@ export default (thread, user) => {
         resolve({ success: false, data: orderInfo });
       },
     });
-  });
+  }).catch((e) => {console.log(e)});
 };
