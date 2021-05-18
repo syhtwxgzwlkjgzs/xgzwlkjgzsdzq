@@ -117,8 +117,8 @@ class BindPhoneH5Page extends React.Component {
           </Button>
           <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
             <span className={layout.clickBtn} onClick={() => {
-              this.props.router.push('login');
-            }} >退出登录</span>
+              window.location.href = '/index';
+            }} >跳过</span>
           </div>
         </div>
       </div>

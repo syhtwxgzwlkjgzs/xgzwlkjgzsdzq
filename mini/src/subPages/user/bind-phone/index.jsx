@@ -156,9 +156,9 @@ class BindPhoneH5Page extends React.Component {
             <View className={layout.functionalRegion}>
               <Text className={layout.clickBtn} onClick={() => {
                 redirectTo({
-                  url: `/subPages/user/wx-auth/index`
+                  url: `/pages/index/index`
                 });
-              }} >退出登录</Text>
+              }} >跳过</Text>
             </View>
           </View>
         </View>
