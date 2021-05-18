@@ -42,7 +42,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
     if (type === 'XLS' || type === 'XLSX') {
       return 'XLSOutlined'
     } else if (type === 'DOC' || type === 'DOCX') {
-      return 'CloseOutlined'
+      return 'DOCOutlined'
     } else if (type === 'ZIP') {
       return 'DOCOutlined'
     } else if (type === 'PDF') {
