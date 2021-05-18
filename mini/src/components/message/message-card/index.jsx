@@ -1,29 +1,32 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { View } from '@tarojs/components';
+import classNames from 'classnames';
 import { Badge, Icon } from '@discuzq/design';
-import Router from '@discuzq/sdk/dist/router';
+import PropTypes from 'prop-types';
 
 import styles from './index.module.scss';
 
-const MessageCard = (props) => {
-  const { cardItems, redirectCallback } = props;
+const Index = (props) => {
+  const { items, onClick } = props;
 
   return (
     <View className={styles.container}>
-      {cardItems.map(({ iconName, title, link, totalCount }, idx) => (
-        <View key={idx} className={styles.notificationItem} onClick={() => redirectCallback(link)}>
-          {totalCount > 0 ? (
-            <View className={styles.iconWrapper}>
+      {items.map(({ iconName, title, link, totalCount }, idx) => (
+        <View key={idx} className={styles.item} onClick={() => onClick(link)}>
+          <View className={styles.left}>
+            <Badge
+              className={classNames({
+                [styles.badge]: totalCount > 9
+              })}
+              circle
+              info={totalCount > 99 ? '99+' : totalCount || null}
+            >
               <Icon name={iconName} className={styles.icon} size={20} />
-              <Badge info={totalCount > 99 ? '99+' : `${totalCount || '0'}`} className={styles.badge} />
-            </View>
-          ) : (
-            <Icon name={iconName} className={styles.icon} size={20} />
-          )}
-          <View className={styles.title}>{title}</View>
+            </Badge>
+          </View>
+          <View className={styles.center}>{title}</View>
           <View className={styles.arrow}>
-            <Icon name={'RightOutlined'} className={styles.rightArrow} size={10} />
+            <Icon className={styles.right} name={'RightOutlined'} size={10} />
           </View>
         </View>
       ))}
@@ -31,24 +34,15 @@ const MessageCard = (props) => {
   );
 };
 
-MessageCard.propTypes = {
-  cardItems: PropTypes.array.isRequired,
-  redirectCallback: PropTypes.func.isRequired,
+Index.propTypes = {
+  items: PropTypes.array.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 // 设置props默认类型
-MessageCard.defaultProps = {
-  cardItems: [
-    {
-      iconName: '',
-      title: '',
-      link: '',
-      totalCount: 0,
-    },
-  ],
-  redirectCallback: (link) => {
-    Router.push({ url: link });
-  },
+Index.defaultProps = {
+  items: [],
+  onClick: () => {},
 };
 
-export default MessageCard;
+export default Index;
