@@ -75,6 +75,9 @@ export default class index extends Component {
     if (current_step === 'first') {
       this.props.user.oldMobileVerifyCode = list.join("")
       this.props.user.verifyOldMobile().then(res => {
+        if (this.state.interval != null) {
+          clearInterval(this.state.interval)
+        }
         this.setState({
           current_step: 'second',
           list: [],
@@ -136,7 +139,7 @@ export default class index extends Component {
       this.props.user.sendSmsVerifyCode({ mobile: originalMobile })
         .then(res => {
           this.setState({
-            initTimeValue: res.interval
+            initTimeValue: res.interval,
           })
           if (calback && typeof calback === 'function') calback()
         })
@@ -154,6 +157,7 @@ export default class index extends Component {
         })
     } else if (current_step === 'second') {
       const { bind_mobile } = this.state
+      console.log(bind_mobile);
       this.props.user.sendSmsUpdateCode({ mobile: bind_mobile })
         .then(res => {
           this.setState({
@@ -180,6 +184,7 @@ export default class index extends Component {
   // 点击发送验证码
   handleGetVerifyCode = () => {
     const { buttonDisabled, current_step, bind_mobile } = this.state
+    console.log(buttonDisabled,'ssss_buttonDisabled');
     if (buttonDisabled || (current_step === 'second' && !this.validateTel(bind_mobile))) return
     const calback = (err) => {
       if (err) {

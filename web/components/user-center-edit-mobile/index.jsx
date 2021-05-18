@@ -54,9 +54,17 @@ class index extends Component {
     if (current_step === 'first') {
       this.props.user.oldMobileVerifyCode = list.join("")
       this.props.user.verifyOldMobile().then(res => {
+        if (this.state.interval != null) {
+          clearInterval(this.state.interval)
+        }
         this.setState({
           current_step: 'second',
-          list: []
+          list: [],
+          initTimeValue: null,
+          initTime: 60,
+          interval: null,
+          initTimeText: '发送验证码',
+          buttonDisabled: false
         })
       }).catch((err) => {
         Toast.error({
