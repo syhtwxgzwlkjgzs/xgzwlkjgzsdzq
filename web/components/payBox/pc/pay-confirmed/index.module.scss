@@ -122,6 +122,11 @@
     .walletText {
       font-size: rem(14);
     }
+    .walletWarn {
+      color: $text-color-placeholder;
+      font-size: rem(14);
+      margin-left: rem($margin-4n);
+    }
     .walletChangePwd {
       display: inline-block;
       height: rem(40);

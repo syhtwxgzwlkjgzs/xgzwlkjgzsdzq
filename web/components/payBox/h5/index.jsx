@@ -29,7 +29,7 @@ export default class index extends Component {
           {step === STEP_MAP.SURE && <AmountRecognized />}
           {step === STEP_MAP.PAYWAY && <PayConfirmed />}
         </Popup>
-        {(step === STEP_MAP.WALLET_PASSWORD||step === STEP_MAP.SET_PASSWORD) && <PayPwd />}
+        {step === STEP_MAP.WALLET_PASSWORD && <PayPwd />}
       </>
     );
   }

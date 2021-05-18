@@ -39,11 +39,17 @@ $rem-px-only: false !default;
 
     @else if type-of($value) == 'number' and unit($value) == 'px' and $to == 'rem' {
       $result: append($result, $value / $rem-baseline * 1rem, $separator);
+      // $result: append($result, $value / 1rem, $separator);
     }
 
     // 传入为数字的情况，默认为 px
     @else if type-of($value) == 'number' and unit($value) == '' and $to=='rem' {
       $result: append($result, $value * 1px / $rem-baseline * 1rem, $separator);
+      // $result: append($result, $value / 1rem, $separator);
+    }
+
+    @else if type-of($value) == 'number' and unit($value) == '' and $to=='px' {
+      $result: append($result, $value * 1px, $separator);
     }
 
     @else if type-of($value) == 'list' {
@@ -62,14 +68,17 @@ $rem-px-only: false !default;
 }
 
 @function rem($values...) {
-  @if $rem-px-only {
-    @return rem-convert(px, $values...);
-  }
+  // @if $rem-px-only {
+  //   @return rem-convert(px, $values...);
+  // }
 
-  @else {
-    @return rem-convert(rem, $values...);
-  }
+  // @else {
+  //   @return rem-convert(rem, $values...);
+  // }
+  @return rem-convert(px, $values...);
 }
+
+
 
 @mixin rem($properties, $values...) {
   @if type-of($properties) == 'map' {

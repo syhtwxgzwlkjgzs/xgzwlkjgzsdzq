@@ -54,9 +54,17 @@ class index extends Component {
     if (current_step === 'first') {
       this.props.user.oldMobileVerifyCode = list.join("")
       this.props.user.verifyOldMobile().then(res => {
+        if (this.state.interval != null) {
+          clearInterval(this.state.interval)
+        }
         this.setState({
           current_step: 'second',
-          list: []
+          list: [],
+          initTimeValue: null,
+          initTime: 60,
+          interval: null,
+          initTimeText: '发送验证码',
+          buttonDisabled: false
         })
       }).catch((err) => {
         Toast.error({
@@ -70,15 +78,15 @@ class index extends Component {
       this.props.user.newMobile = bind_mobile
       this.props.user.newMobileVerifyCode = list.join("")
       await this.props.user.rebindMobile().then(res => {
-        Router.back()
-      }).catch({
-        content: err.Message || '修改失败',
-        hasMask: false,
-        duration: 1000,
+        Router.push({url: '/my'})
+      }).catch((err) => {
+        Toast.error({
+          content: err.Message || '修改失败',
+          hasMask: false,
+          duration: 1000,
+        })
       })
     }
-
-
   }
 
   handleInputChange = (e) => {
