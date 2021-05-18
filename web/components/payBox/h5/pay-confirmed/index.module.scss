@@ -70,21 +70,21 @@
   }
 
   .btnBox{
-    position: absolute;
+    position: relative;
     bottom: 0;
     margin-top: rem($margin-2n);
     height: rem(60);
+    width: 100%;
     margin: 0 rem(-$margin-4n) rem($margin-10);
     border-top: 1px solid #eee;
     padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
     box-sizing: border-box;
     @include ios-safe-area-inset-bottom;
+
     .btn{
-      width: rem(343);
       height: rem(42);
       font-size: rem(16);
       border-radius: 5px;
-      margin: auto;
     }
   }
 }
