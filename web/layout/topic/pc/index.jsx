@@ -37,7 +37,6 @@ class IndexPCPage extends React.Component {
   };
    // 右侧 - 步骤条
    renderRight = () => {
-     console.log(this.props.search);
     // const { pageData = [] } = this.props.search.indexUsers || { pageData: [] };
     return (
       <>
