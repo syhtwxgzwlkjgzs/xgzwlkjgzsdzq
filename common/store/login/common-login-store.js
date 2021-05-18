@@ -76,6 +76,6 @@ export default class commonLoginStore {
         }
         // 显示验证码
         this.captcha.show();
-      });
+      }).catch((e) => {console.log(e)});
     }
 }
