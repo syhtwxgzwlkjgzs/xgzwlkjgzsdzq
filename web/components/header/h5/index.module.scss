@@ -21,6 +21,10 @@
       display: flex;
       align-items: center;
       justify-content: flex-start;
+      .icon{
+        font-size: rem($font-size-base);
+        line-height: rem($font-line-height-base);
+      }
       .text {
         font-size: rem($font-size-base);
         line-height: rem($font-line-height-base);

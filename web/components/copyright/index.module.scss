@@ -2,6 +2,7 @@
 @import '@common/styles/index.scss';
 .container {
   margin-top: rem($margin-5n);
+  margin-bottom: rem($margin-5n);
   &.center {
     text-align: center;
   }

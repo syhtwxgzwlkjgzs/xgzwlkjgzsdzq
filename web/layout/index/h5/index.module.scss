@@ -12,6 +12,7 @@
   background: var(--color-white);
   margin-bottom: rem(10);
   z-index: 1000;
+  border: 1px solid rgba(238, 238, 238, 0.57);
 }
 .homeContentFix {
   width: 100%;
@@ -20,6 +21,7 @@
   top: 0;
   left: 0;
   z-index: 1000;
+  border: 1px solid rgba(238, 238, 238, 0.57);
 }
 .homeContentTop {
   padding: 0 rem($padding-4n);

@@ -11,6 +11,20 @@
   overflow: hidden;
   padding: rem($padding-4n);
   box-sizing: border-box;
+
+  :global {
+    .dzq-textarea__inner {
+      background: $text-bg-color2;
+      padding: rem($padding-3n) rem($padding-4n);
+      height: 80px !important;
+      resize: none;
+      font-size: $font-size-base;
+
+      &::placeholder {
+        color: var(--border-color-hover);
+      }
+    }
+  }
 }
 
 .main {
@@ -22,25 +36,18 @@
   margin-top: rem($margin-4n);
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
-
-  .ok {
-    width: rem(167);
-    height: rem(42);
-  }
-  .cancel {
-    width: rem(167);
-    height: rem(42);
-    background: $button-info-bg-color;
-    border: none;
-    margin-right: rem($margin-4n);
-  }
 }
 
 .input {
-  margin-bottom: rem($margin-4n);
   width: 100% !important;
+}
+
+.ok {
+  font-size: rem($font-size-base);
+  line-height: rem($font-line-height-base);
+  color: $primary-color;
 }
 
 .upload {

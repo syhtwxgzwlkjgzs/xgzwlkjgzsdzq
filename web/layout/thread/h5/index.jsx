@@ -509,6 +509,7 @@ class ThreadH5Page extends React.Component {
 
   // 点击标签 TODO:带上参数
   onTagClick() {
+    // TODO:待调用首页store
     this.props.router.push('/');
   }
 
@@ -646,7 +647,6 @@ class ThreadH5Page extends React.Component {
                     className={classNames(
                       footer.badge,
                       totalCount < 10 && footer.isCricle,
-                      totalCount === 1 && footer.isOne,
                     )}
                   >
                     {totalCount > 99 ? '99+' : `${totalCount || '0'}`}

@@ -1,10 +1,18 @@
 @import '@common/styles/index.scss';
+@mixin content {
+  padding: rem(48) rem($padding-6n);;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-self: center;
+}
 @mixin title {
   font-weight: 700;
   font-size: rem($font-size-large);
   line-height: rem($font-line-height-large);
   text-align: left;
   color: var(--color-text-primary);
+  place-self: flex-start;
 }
 @mixin banner {
   height: rem(140);
@@ -15,7 +23,7 @@
   }
 }
 @mixin input {
-  width: rem(327);
+  width: 100%;
   box-sizing: border-box;
   margin-top: $margin-2n;
   padding: rem($padding-4n) 0;
@@ -54,7 +62,7 @@
   }
 }
 @mixin button {
-  width: rem(327);
+  width: 100%;
   height: rem(42);
   margin-top: rem(32);
   font-size: rem($font-size-middle);
@@ -92,6 +100,7 @@
   background: $comment-bg-color;
 }
 @mixin titleTips {
+  place-self: flex-start;
   font-size: rem($font-size-middle);
   margin: rem(32) 0;
   line-height: rem($font-line-height-large);

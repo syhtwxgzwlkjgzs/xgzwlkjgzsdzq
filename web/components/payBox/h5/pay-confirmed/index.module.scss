@@ -1,24 +1,33 @@
 @import '@common/styles/index.scss';
+@import '@common/styles/mixin/index.scss';
 
 .payBox{
   background: var(--color-white);
-
+  padding: rem($padding-6n) rem($padding-4n) rem($padding-4n) rem($padding-4n);
+  height: rem(337);
+  box-sizing: border-box;
   .title{
     text-align: center;
-    padding: rem($padding-4n) 0;
-    background-color: #f2f2f2;
     p{
-      font-size: rem($font-size-large);
+      font-size: rem($paybox-pay-text-font-size);
       font-weight: bold;
     }
   }
+
   .list{
     margin-top: rem($margin-2n);
+    margin-bottom: rem(100);
+
     .listItem{
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: rem($padding-2n) rem($padding-4n);
+        padding: rem($padding-4n) 0;
+
+        &:first-child {
+          border-bottom: 1px solid $paybox-border-line-color;
+        }
+
         .left{
           display: flex;
           align-items: center;
@@ -40,7 +49,15 @@
           .subText{
             font-size: rem($font-size-label);
             color: var(--color-text-secondary);
-            margin-right: rem($margin-2n);
+            margin-right: rem($margin-4n);
+          }
+          :global {
+            .dzq-checkbox--radio {
+              border-radius: rem(var(--border-radius-small));
+              &::after {
+                border-radius: rem(var(--border-radius-small));
+              }
+            }
           }
         }
     }
@@ -53,14 +70,36 @@
   }
 
   .btnBox{
+    position: absolute;
+    bottom: 0;
     margin-top: rem($margin-2n);
-    background: var(--background-color);
+    height: rem(60);
+    margin: 0 rem(-$margin-4n) rem($margin-10);
+    border-top: 1px solid #eee;
+    padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
+    box-sizing: border-box;
+    @include ios-safe-area-inset-bottom;
     .btn{
-      height: rem(50);
-      &:not(:first-child) {
-        margin-top: rem($margin-2n);
-      }
+      width: rem(343);
+      height: rem(42);
+      font-size: rem(16);
+      border-radius: 5px;
+      margin: auto;
     }
   }
+}
+
+.payBoxCloseIcon {
+  position: absolute;
+  right: rem(16);
+  top: rem(24);
+  // width: rem(40);
+  // height: rem(40);
+  // background-color: pink;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8590A6;
+  cursor: pointer;
 }
 

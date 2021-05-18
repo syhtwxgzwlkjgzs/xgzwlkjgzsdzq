@@ -16,7 +16,7 @@
       top: rem(-81);
       display: flex;
       height: rem(136);
-      padding: 0 rem(24) rem(9) rem(65);
+      padding: 0 rem(24) 0 rem(65);
       box-sizing: border-box;
     }
     .headImgBox {
@@ -55,52 +55,54 @@
       box-sizing: border-box;
       .username {
         font-weight: 600;
-        font-size: 20px;
-        line-height: 22px;
-        color: #fff;
+        font-size: rem(20);
+        line-height: rem($font-line-height-small);
+        color: $white;
       }
       .groupName {
-        font-size: rem(14);
-        line-height: rem(22);
-        color: #fff;
+        font-size: rem($font-size-base);
+        line-height: rem($font-line-height-small);
+        color: $white;
         margin-top: rem(4);
       }
       .text {
         position: absolute;
         bottom: rem(16);
         font-size: rem($font-size-primary);
-        color: var(--color-text-primary);
-        text-overflow: -o-ellipsis-lastline;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        line-clamp: 2;
-        -webkit-box-orient: vertical;
-        line-height: 1.2;
-        color: $text-color-regular;
+        line-height: rem($font-line-height-small);
+        color: $text-color-primary;
       }
     }
     .upload {
+      cursor: pointer;
       .uploadIcon {
         margin-right: rem(6);
       }
       padding-top: rem(48);
-      font-size: 12px;
-      line-height: 22px;
-      color: #fff;
+      font-size: rem($font-size-small);
+      line-height: rem(22);
+      color: $white;
     }
     .otherUserBtn {
-      padding-top: rem(48);
+      position: absolute;
+      right: rem($margin-6n);
+      bottom: rem(9);
       text-align: right;
       .shieldBtn {
-        font-size: 14px;
-        line-height: 22px;
-        color: #fff;
+        font-size: rem($font-size-primary);
+        line-height: rem($font-line-height-small);
+        color: $white;
+        cursor: pointer;
+        :global {
+          .dzq-icon {
+            vertical-align: middle;
+            margin-right: rem($margin-2n);
+          }
+        }
       }
     }
     .userBtn {
-      margin-top: rem($margin-4n);
+      margin-top: rem(26);
       button {
         width: rem(113);
         height: rem(36);

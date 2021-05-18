@@ -46,7 +46,6 @@ class TopicPage extends React.Component {
   }
   render() {
     const { pageData = [], currentPage = 0, totalPage = 0 } = this.props.topic?.topics || {}
-    console.log(pageData, 'topicWrap');
     return (
       <View className={styles.topicWrap}>
         <View className={styles.topBox}>

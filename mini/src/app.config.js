@@ -5,7 +5,9 @@ const config = {
   // TODO: 分包处理
   // 首页和详情页在主包
   pages: [
-    'pages/index/index'
+    'pages/index/index',
+    'pages/thread/index',
+    'pages/message/index'
   ],
   subPackages: [
     {
@@ -23,7 +25,7 @@ const config = {
         'thread/selectRedpacket/index',
         'thread/selectReward/index',
         'thread/selectPayment/index',
-        'thread/detail/index',
+        // 'thread/detail/index',
         'search/index',
         'search/result-topic/index',
         'search/result-post/index',
@@ -44,6 +46,13 @@ const config = {
         'wallet/frozen/index',
         'wallet/withdrawal/index',
         'message/index',
+        'pages/my/index',
+        'pages/my/edit/index',
+        'pages/my/edit/mobile/index',
+        'pages/my/edit/pwd/index',
+        'pages/my/edit/paypwd/index',
+        'pages/my/edit/reset/paypwd/index',
+        'pages/my/edit/find/paypwd/index',
       ]
     }
   ],

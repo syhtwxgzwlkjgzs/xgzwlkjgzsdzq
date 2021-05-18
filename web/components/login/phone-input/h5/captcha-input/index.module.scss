@@ -1,10 +1,11 @@
 @import '@common/styles/index.scss';
 .container{
+  display: flex;
   .captchaInput-input {
+    flex: 1;
     text-align: center;
     display: inline-block;
     height: rem(52);
-    width: rem(40);
     margin-right: rem($margin-4n);
     box-sizing: border-box;
     padding: rem($padding-4n) 0;

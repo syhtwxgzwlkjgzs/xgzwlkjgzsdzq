@@ -1,5 +1,4 @@
 import React from 'react';
-import LoginPhoneH5Page from '@layout/user/h5/phone-login';
 import { inject } from 'mobx-react';
 import { Toast } from '@discuzq/design';
 import { h5WechatCodeLogin } from '@server';
@@ -19,7 +18,7 @@ class WeixinAuth extends React.Component {
 
     // 如果要进行绑定逻辑，跳转绑定相关的页面
     if (action === 'wx-bind') {
-      router.push(`/user/wx-bind?code=${code}&sessionId=${sessionId}&sessionToken=${sessionToken}&state=${state}&nickname=${nickname}&loginType=${loginType}`);
+      window.location.href = `/user/wx-bind?code=${code}&sessionId=${sessionId}&sessionToken=${sessionToken}&state=${state}&nickname=${nickname}&loginType=${loginType}`;
       return;
     }
 
@@ -38,7 +37,7 @@ class WeixinAuth extends React.Component {
       // 落地页开关打开
       if (res.code === NEED_BIND_OR_REGISTER_USER) {
         const { sessionToken, nickname } = res.data;
-        router.push({ pathname: 'wx-select', query: { sessionToken, nickname } });
+        window.location.href = `/user/wx-select?sessionToken=${sessionToken}&nickname=${nickname}`;
         return;
       }
 
@@ -62,7 +61,7 @@ class WeixinAuth extends React.Component {
       // 跳转状态页
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
-        this.props.router.push(`/user/status?statusCode=${error.Code}&statusMsg=${error.Message}`);
+        window.location.href = `/user/status?statusCode=${error.Code}&statusMsg=${error.Message}`;
         return;
       }
       if (error.Code) {
