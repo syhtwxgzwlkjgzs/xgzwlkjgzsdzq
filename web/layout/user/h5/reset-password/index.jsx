@@ -96,7 +96,7 @@ class ResetPasswordH5Page extends React.Component {
             : <Header/>
         }
         <div className={platform === 'h5' ? layout.content : layout.pc_content}>
-          <div className={platform === 'h5' ? layout.title : layout.pc_title}>找回/重设密码</div>
+          <div className={platform === 'h5' ? layout.title : layout.pc_title}>找回密码</div>
           <PhoneInput
             phoneNum={this.props.resetPassword.mobile}
             captcha={this.props.resetPassword.code}

@@ -2,6 +2,7 @@
 @import '@common/styles/index.scss';
 .phoneInput {
   position: relative;
+  width: 100%;
   .input {
     @include input;
     height: rem(62);
@@ -36,6 +37,7 @@
 }
 .captchaInput{
   margin-top: rem($margin-6n);
+  width: 100%;
   .captchaInput-title {
     font-weight: normal;
     font-size: rem($font-size-base);
