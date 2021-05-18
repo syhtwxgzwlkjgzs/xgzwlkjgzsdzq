@@ -27,6 +27,11 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
 
   const [current, setCurrent] = useState(0);
 
+  const TYPE_ALL = 0,
+        TYPE_LIKE = 1,
+        TYPE_REWARD = 2,
+        TYPE_PAID = 3;
+
   useEffect(() => {
     if (visible) {
       loadData({ type: current });
@@ -42,21 +47,21 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
 
   const singleLoadData = async ({ page = 1, type = 1 } = {}) => {
     const { postId = '', threadId = '' } = tipData;
+    type = (type === TYPE_PAID) ? TYPE_REWARD : type;
     const res = await readLikedUsers({ params: { threadId, postId, page, type } });
-
     const data = res?.data || {};
 
-    if (type === 0) {
+    if (type === TYPE_ALL) {
       if (page !== 1) {
         data?.pageData?.list.unshift(...(all?.pageData?.list || []));
       }
       setAll(data);
-    } else if (type === 1) {
+    } else if (type === TYPE_LIKE) {
       if (page !== 1) {
         data?.pageData?.list.unshift(...(likes?.pageData?.list || []));
       }
       setLikes(data);
-    } else if (type === 2) {
+    } else if (type === TYPE_REWARD || type === TYPE_PAID) {
       if (page !== 1) {
         data?.pageData?.list.unshift(...(tips?.pageData?.list || []));
       }
@@ -86,7 +91,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
     setCurrent(id);
     const hasAll = id === 0 && !all;
     const hasLikes = id === 1 && !likes;
-    const hasTips = id === 2 && !tips;
+    const hasTips = (id === 2 || id === 3) && !tips;
 
     // TODO 临时解决点击tab时，导致list组件触发上拉刷新的问题
     isClickTab.current = true
@@ -137,13 +142,13 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
       icon: 'HeartOutlined',
       title: '付费',
       data: tips,
-      number: all?.pageData?.rewardCount || 0,
+      number: all?.pageData?.raidCount || 0,
     },
     {
       icon: 'HeartOutlined',
       title: '打赏',
       data: tips,
-      number: all?.pageData?.raidCount || 0,
+      number: all?.pageData?.rewardCount || 0,
     },
   ];
 
