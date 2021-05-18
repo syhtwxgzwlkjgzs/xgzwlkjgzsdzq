@@ -108,7 +108,6 @@ export default function DVditor(props) {
         value,
         // 编辑器异步渲染完成后的回调方法
         after: () => {
-          console.log('after');
           editor.setValue(value);
         },
         focus: () => {
