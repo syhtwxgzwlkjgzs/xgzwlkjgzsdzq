@@ -18,10 +18,10 @@
       width: 50%;
       font-size: rem($font-size-base);
       color: $text-color-primary;
-      float: left;
       .icon{
         font-size: rem($font-size-middle);
         line-height: rem(23);
+        float: left;
       }
       .text {
         font-size: rem($font-size-base);
