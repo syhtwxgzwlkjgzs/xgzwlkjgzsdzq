@@ -327,7 +327,7 @@ class ThreadPostAction extends ThreadPostStore {
       price,
       attachmentPrice,
       position,
-      contentText,
+      contentText: contentText.replace(/alt="(\w*)"/g, 'alt=":$1:emoji"'),
       audio,
       rewardQa,
       product,
