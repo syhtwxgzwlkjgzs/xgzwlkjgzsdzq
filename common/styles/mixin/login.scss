@@ -1,4 +1,7 @@
 @import '@common/styles/index.scss';
+@mixin content {
+  padding: rem(48) rem($padding-6n);;
+}
 @mixin title {
   font-weight: 700;
   font-size: rem($font-size-large);
