@@ -3,9 +3,9 @@ module.exports = {
     NODE_ENV: '"development"',
   },
   mini: {
-    miniCssExtractPluginOption: {
-      ignoreOrder: true
-    },
+    // miniCssExtractPluginOption: {
+    //   ignoreOrder: true
+    // },
     webpackChain(chain, webpack) {
       chain.plugin()
         .use(webpack.DefinePlugin, [
