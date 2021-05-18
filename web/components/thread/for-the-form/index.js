@@ -68,7 +68,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
                 <DatePicker
                   selected={new Date(times)}
                   minDate={new Date()}
-                  onChange={date => setTimes(date)}
+                  onChange={date => setTimes(formatDate(date, 'yyyy/MM/dd h:mm'))}
                   showTimeSelect
                   dateFormat="yyyy/MM/dd HH:mm:ss"
                   locale="zh"

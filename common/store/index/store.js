@@ -13,6 +13,7 @@ class IndexStore {
   }
   @observable recommends = null;
   @observable recommendsStatus = 'none'
+  @observable filter = {}
 }
 
 export default IndexStore;

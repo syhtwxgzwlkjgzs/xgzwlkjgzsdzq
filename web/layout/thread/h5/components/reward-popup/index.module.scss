@@ -5,7 +5,7 @@
 
   :global {
     .dzq-input__inner {
-      font-size: rem($font-size-primary);
+      font-size: rem($font-size-base);
       border: none;
       padding: 0;
       height: rem(18);
@@ -16,7 +16,7 @@
 
       &::placeholder {
         color: $text-color-placeholder;
-        font-size: rem($font-size-small);
+        font-size: rem($font-size-base);
       }
     }
   }
@@ -80,7 +80,7 @@
     align-items: center;
     justify-content: center;
     border-radius: $border-radius-small;
-    font-size: $font-size-primary;
+    font-size: rem($font-size-primary);
     width: rem(76);
     height: rem(36);
     background: $text-bg-color2;
@@ -88,7 +88,8 @@
     margin-bottom: rem($margin-4n);
 
     &.actived {
-      color: $primary-color;
+      background: $primary-color;
+      color: $white;
     }
   }
 }
@@ -113,12 +114,13 @@
   padding-top: rem($margin-2n);
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 
   .ok {
     width: rem(167);
     height: rem(42);
+    font-size: rem($font-size-middle);
   }
   .cancel {
     width: rem(167);
@@ -126,6 +128,7 @@
     color: $text-color-regular;
     background: $text-bg-color2;
     border: none;
-    margin-right: rem($margin-4n);
+    // margin-right: rem($margin-4n);
+    font-size: rem($font-size-middle);
   }
 }
