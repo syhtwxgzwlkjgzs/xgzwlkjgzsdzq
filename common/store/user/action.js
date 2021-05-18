@@ -587,6 +587,13 @@ class UserAction extends SiteStore {
   /**
    * 我的屏蔽对应store函数
    */
+  
+  // 获取屏蔽列表数据
+  @action
+  async getUserShieldList() {
+    
+  }
+
   // 屏蔽
   @action
   async postShield() {

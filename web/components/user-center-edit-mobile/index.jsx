@@ -70,15 +70,15 @@ class index extends Component {
       this.props.user.newMobile = bind_mobile
       this.props.user.newMobileVerifyCode = list.join("")
       await this.props.user.rebindMobile().then(res => {
-        Router.back()
-      }).catch({
-        content: err.Message || '修改失败',
-        hasMask: false,
-        duration: 1000,
+        Router.push({url: '/my'})
+      }).catch((err) => {
+        Toast.error({
+          content: err.Message || '修改失败',
+          hasMask: false,
+          duration: 1000,
+        })
       })
     }
-
-
   }
 
   handleInputChange = (e) => {
