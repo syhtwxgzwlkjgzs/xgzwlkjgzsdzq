@@ -52,7 +52,6 @@ class PCMyPage extends React.Component {
     const { query } = this.props.router;
     const { targetUser } = this.props.user;
     const user = targetUser || {} ;
-    console.log(this.props.user, 'targetUser');
     return (
       <>
         <SidebarPanel

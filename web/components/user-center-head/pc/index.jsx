@@ -97,7 +97,6 @@ class index extends Component {
   render() {
     const { targetUser } = this.props.user;
     const user = this.props.isOtherPerson ? targetUser || {} : this.props.user;
-    console.log(this.props.user, 'head');
     return (
       <div className={styles.box}>
         <div className={styles.boxTop}>
