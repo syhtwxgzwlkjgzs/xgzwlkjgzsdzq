@@ -8,6 +8,7 @@ import WeixinQrCode from '@components/login/wx-qr-code';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import { get } from '@common/utils/get';
+import PopProtocol from '../components/pop-protocol';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 
 @inject('site')
@@ -82,6 +83,12 @@ class WXLoginH5Page extends React.Component {
     }, 3000);
   }
 
+  popOpen(type) {
+    const { commonLogin } = this.props;
+    commonLogin.setProtocolVisible(true)
+    commonLogin.setProtocolStatus(type)
+  }
+
   render() {
     const { site } = this.props;
     const { platform } = site;
@@ -125,9 +132,18 @@ class WXLoginH5Page extends React.Component {
               </span>
             )}
           </div>
-          <div className={platform === 'h5' ? layout['otherLogin-outer__tips'] : layout.pc_otherLogin_tips} >注册登录即表示您同意<span>《注册协议》</span><span>《隐私协议》</span></div>
+          <div className={platform === 'h5' ? layout['otherLogin-outer__tips'] : layout.pc_otherLogin_tips} >
+            注册登录即表示您同意
+            <span onClick={() => {
+              this.popOpen('register');
+            }}>《注册协议》</span>
+            <span onClick={() => {
+              this.popOpen('privacy');
+            }}>《隐私协议》</span>
+          </div>
         </div>
       </div>
+      <PopProtocol/>
       </div>
     );
   }

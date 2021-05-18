@@ -22,11 +22,22 @@ export default class commonLoginStore {
     @observable captchaRandStr = '';
     @observable captcha = null;
     @observable isSend = false;
-
     @observable statusCode = null;
     @observable statusMsg = '';
-
     @observable jsCode = '';
+    @observable protocolVisible = false;
+    @observable protocolStatus = 'register';
+
+
+    @action
+    setProtocolVisible(protocolVisible) {
+      this.protocolVisible = protocolVisible;
+    }
+
+    @action
+    setProtocolStatus(protocolStatus) {
+      this.protocolStatus = protocolStatus;
+    }
 
     @action
     setSessionToken(sessionToken) {

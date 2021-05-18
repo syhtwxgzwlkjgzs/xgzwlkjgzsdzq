@@ -59,17 +59,19 @@ export default class Page extends React.Component {
         Router.redirect({url: '/subPages/join/index'});
         return false;
       }
-
-      // 绑定昵称：已登录的用户，没有绑定昵称
-      if (user.isLogin()) {
-        if (site.isOpenOffiaccountClose && path !== '/subPages/user/wx-bind-qrcode/index' && !user.isBindWechat) {
-          Router.redirect({url: '/subPages/user/wx-bind-qrcode/index'});
-          return false;
-        }
-        if (!site.isOpenOffiaccountClose && path !== '/subPages/user/bind-nickname/index' && !user.nickname) {
-          Router.redirect({url: '/subPages/user/bind-nickname/index'});
-        }
-      }
+      // TODO: 强制绑定方案待定
+      // if (user.isLogin()) {
+      //   // 绑定微信：开启微信，没有绑定微信
+      //   if ((site.isOpenOffiaccountClose || site.isMiniProgramOpen) && path !== '/subPages/user/wx-bind-qrcode/index' && !user.isBindWechat) {
+      //     Router.redirect({url: '/subPages/user/wx-bind-qrcode/index'});
+      //     return false;
+      //   }
+      //   // 绑定昵称：已登录的用户，没有绑定昵称
+      //   if (!site.isOpenOffiaccountClose && !site.isMiniProgramOpen && path !== '/subPages/user/bind-nickname/index' && !user.nickname) {
+      //     Router.redirect({url: '/subPages/user/bind-nickname/index'});
+      //     return false;
+      //   }
+      // }
     }
 
     return true;
