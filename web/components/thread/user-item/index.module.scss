@@ -33,7 +33,7 @@
       justify-content: center;
       align-items: center;
       position: absolute;
-      bottom: rem(-4);
+      bottom: rem(-2);
       right: rem(-4);
       border-radius: rem($border-radius-big);
       height: rem(20);
@@ -58,11 +58,11 @@
     font-size: rem($font-size-primary);
     .title {
       color: var(--color-text-primary);
-      line-height: rem(18);
+      line-height: rem(20);
     }
     .subTitle {
       color: var(--color-text-secondary);
-      line-height: rem(16);
+      line-height: rem(17);
       font-size: rem($font-size-small);
     }
   }
