@@ -1,90 +1,96 @@
 @import '@common/styles/index.scss';
 .header{
+  height: rem(60);
+  width: 100%;
+  display: block;
+  .headerFixedBox{
+    display: flex;
+    justify-content: center;
+    padding: rem($padding-2n);
+    box-sizing: border-box;
+    background: var(--color-white);
+    position: fixed;
+    top: 0;
+    left: 0;
     height: rem(60);
+    min-width: rem(1150);
     width: 100%;
-    display: block;
-    .headerFixedBox{
+    border-bottom: 1px solid var(--border-line-color);
+    z-index: $zindex-backtotop;
+    .headerContent{
+      width: rem(1436);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .left{
         display: flex;
-        justify-content: center;
-        padding: rem($padding-2n);
-        box-sizing: border-box;
-        background: var(--color-white);
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: rem(60);
-        min-width: rem(1150);
-        width: 100%;
-        border-bottom: 1px solid var(--border-line-color);
-        z-index: $zindex-backtotop;
-        .headerContent{
-            width: rem(1436);
+        align-items: center;
+        .siteLogo{
+          width: rem(140);
+          height: rem(24);
+          cursor: pointer;
+        }
+
+        .inputBox{
+          margin-left: rem(20);
+        }
+      }
+      .right{
+        display: flex;
+        align-items: center;
+        .iconList{
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          .iconItem{
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            .left{
-                display: flex;
-                align-items: center;
-                .siteLogo{
-                    width: rem(140);
-                    height: rem(24);
-                    cursor: pointer;
-                }
+            cursor: pointer;
+            &:hover{
 
-                .inputBox{
-                    margin-left: rem(20);
-                }
+              p,div{
+                color: var(--color-primary);
+              }
             }
-            .right{
-                display: flex;
-                align-items: center;
-                .iconList{
-                    display: flex;
-                    align-items: center;
-                    justify-content: flex-start;
-                    .iconItem{
-                        display: flex;
-                        align-items: center;
-                        cursor: pointer;
-                        &:hover{
-
-                            p,div{
-                                color: var(--color-primary);
-                            }
-                        }
-                        &:not(:last-child) {
-                            margin-right: rem(32);
-                        }
-                        div{
-                            color: var(--color-text-secondary);
-                        }
-                        p{
-                            font-size: rem($font-size-primary);
-                            margin-left: rem($margin-2n);
-                            color: var(--color-text-regular);
-                        }
-                    }
-                }
-
-                .userInfo{
-                    cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    margin-left: rem(49);
-                    .userName{
-                        margin-left: rem(16);
-                        color: $text-color-regular;
-                        font-size: rem($font-size-primary);
-                    }
-                    .userBtn{
-                        margin-right: rem(16);
-                        &:last-child {
-                            margin-right: 0;
-                        }
-                    }
-                }
+            &:not(:last-child) {
+              margin-right: rem(32);
             }
-
+            div{
+              color: var(--color-text-secondary);
+            }
+            p{
+              font-size: rem($font-size-primary);
+              margin-left: rem($margin-2n);
+              color: var(--color-text-regular);
+            }
+          }
         }
+
+        .userInfo{
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          margin-left: rem(49);
+          .userName{
+            margin-left: rem(16);
+            color: $text-color-regular;
+            font-size: rem($font-size-primary);
+          }
+          .userBtn{
+            margin-right: rem(16);
+            padding: rem($padding-1n) rem(29);
+            line-height: rem(26);
+            &:last-child {
+              margin-right: 0;
+            }
+          }
+          .registerBtn {
+            color: $primary-color;
+            border-color: $primary-color;
+          }
+        }
+      }
+
     }
+  }
 }

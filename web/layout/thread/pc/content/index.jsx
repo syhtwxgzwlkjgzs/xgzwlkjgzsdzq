@@ -182,6 +182,7 @@ export default inject('user')(
                 coverUrl={parseContent.VIDEO.coverUrl}
                 width={400}
                 height={200}
+                status={parseContent.VIDEO.status}
               />
             )}
 
@@ -282,13 +283,7 @@ export default inject('user')(
             <div className={topic.likeReward}>
               <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
             </div>
-            <span>
-              {isBeReward
-                ? threadStore?.threadData?.likeReward?.likePayCount
-                  ? `${threadStore?.threadData?.likeReward?.likePayCount}个赞及打赏`
-                  : ''
-                : threadStore?.threadData?.likeReward?.likePayCount || ''}
-            </span>
+            <span>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
           </div>
           {threadStore?.threadData?.likeReward?.shareCount > 0 && (
             <span className={topic.share}>{threadStore?.threadData?.likeReward?.shareCount}次分享</span>

@@ -17,7 +17,7 @@ import PropTypes from 'prop-types'; // 类型拦截
 const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
   const [value, setValue] = useState('');// 悬赏金额
   // const [times, setTimes] = useState(formatDate(new Date(), 'yyyy-MM-dd h:mm'));// 悬赏的到期时间
-  const [times, setTimes] = useState(new Date());// 悬赏的到期时间
+  const [times, setTimes] = useState(formatDate(new Date().getTime(), 'yyyy/MM/dd h:mm'));// 悬赏的到期时间
   const [show, setShow] = useState(false);// 时间选择器是否显示
 
   // 时间选择器是否显示
@@ -41,7 +41,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
       return;
     }
     confirm({
-      value,
+      value: parseFloat(value),
       times: formatDate(times, 'yyyy/MM/dd h:mm'),
     });
   };
@@ -54,7 +54,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
             mode="number"
             value={value}
             placeholder="金额"
-            onChange={e => setValue(Number(e.target.value))}
+            onChange={e => setValue(e.target.value)}
           />
           元
         </div>
@@ -78,7 +78,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
             )
             : (
               <>
-                <div onClick={() => setShow(true)} > {`${formatDate(times, 'yyyy/MM/dd h:mm')}`} </div>
+                <div onClick={() => setShow(true)} > { times } </div>
                 <Icon name="RightOutlined" />
               </>
             )}

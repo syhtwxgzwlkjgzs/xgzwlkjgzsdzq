@@ -55,7 +55,7 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
     confirm({
       rule,
       condition,
-      price,
+      price: parseFloat(price).toFixed(2),
       number: Math.ceil(number),
       likenum: Math.ceil(likenum),
     });
@@ -82,7 +82,7 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       <div className={styles['line-box']}>
         <div className={styles.label}>红包总金额</div>
         <div className={styles.item}>
-          <Input mode="number" htmlType="number" placeholder="金额" value={price} onChange={e => setPrice(Number(e.target.value))} />元
+          <Input mode="number" htmlType="number" placeholder="金额" value={price} onChange={e => setPrice(e.target.value)} />元
         </div>
       </div>
       {/* 红包个数 */}

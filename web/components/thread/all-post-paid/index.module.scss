@@ -115,7 +115,8 @@
   .redpacket-box {
     position: static;
     width: 100%;
-    height: auto;
+    height: 134px;
+    min-height: 134px;
   }
   .btn {
     padding: 0;

@@ -36,7 +36,10 @@ class IndexH5Page extends React.Component {
     const { filter = {} } = this.props.index
 
     const newFilter = { ...this.state.filter, ...filter }
-    this.setState({ filter: newFilter })
+    const { categoryids } = newFilter
+    const currentIndex = categoryids[0] || ''
+    
+    this.setState({ filter: newFilter, currentIndex })
   }
 
   componentWillUnmount() {

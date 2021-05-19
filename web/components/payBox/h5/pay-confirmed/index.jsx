@@ -72,11 +72,7 @@ export default class PayBox extends React.Component {
       );
     }
     if (this.props.payBox?.walletAvaAmount < amount) {
-      return (
-        <p className={styles.subText}>
-          余额不足
-        </p>
-      );
+      return <p className={styles.subText}>余额不足</p>;
     }
     return <p className={styles.subText}>钱包余额：￥{this.props.payBox?.walletAvaAmount}</p>;
   }
@@ -95,7 +91,6 @@ export default class PayBox extends React.Component {
 
   // 点击确认支付
   handlePayConfirmed = async () => {
-
     if (this.props.payBox.payWay === PAYWAY_MAP.WALLET) {
       const { options = {} } = this.props.payBox;
       const { amount = 0 } = options;
@@ -108,8 +103,6 @@ export default class PayBox extends React.Component {
       }
       // 表示钱包支付
       this.props.payBox.walletPayEnsure();
-      // this.props.payBox.visible = false;
-      // this.goSetPayPwa()
     } else if (this.props.payBox.payWay === PAYWAY_MAP.WX) {
       // FIXME: 增加兜底处理
       // 表示微信支付
@@ -158,7 +151,10 @@ export default class PayBox extends React.Component {
     return (
       <div className={styles.payBox}>
         <div className={styles.title}>
-          <p>￥{this.transMoneyToFixed(options.amount)}</p>
+          <p>
+            <span className={styles.moneyUnit}>￥ </span>
+            {this.transMoneyToFixed(options.amount)}
+          </p>
         </div>
         <div className={styles.list}>
           <Radio.Group
@@ -178,8 +174,8 @@ export default class PayBox extends React.Component {
                     {item.paymentType === PAYWAY_MAP.WALLET && this.walletPaySubText()}
                     {(item.paymentType === PAYWAY_MAP.WX ||
                       (canWalletPay && this.props.payBox?.walletAvaAmount >= options.amount)) && (
-                        <Radio name={item.paymentType} />
-                      )}
+                      <Radio name={item.paymentType} />
+                    )}
                   </div>
                 </div>
               );

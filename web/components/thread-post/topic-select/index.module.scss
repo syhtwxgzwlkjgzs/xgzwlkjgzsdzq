@@ -115,6 +115,7 @@
 .pc {
   .wrapper {
     height: 500px;
+    min-height: 50vh;
     .input {
       margin-top: 0;
       margin-left: 0;
@@ -129,7 +130,7 @@
     }
   }
   .topic-wrap {
-    height: calc(500px - 102px);
+    height: calc(50vh - 102px);
   }
   .topic-item {
     margin-left: 0;

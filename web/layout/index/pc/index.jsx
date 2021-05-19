@@ -45,16 +45,19 @@ class IndexPCPage extends React.Component {
     }
     this.timer = setInterval(() => {
       const { categoryids, types, essence, attention, sort, sequence } = this.filter;
-      readThreadList({ params: { page: 1, filter: { categoryids, types, essence, attention, sort }, sequence } }).then((res) => {
-        const { totalCount = 0 } = res?.data || {};
-        const { totalCount: nowTotal = 0 } = this.props.index?.threads || {};
-        if (totalCount > nowTotal) {
-          this.setState({
-            visible: true,
-            conNum: totalCount - nowTotal,
-          });
-        }
-      });
+      const { totalCount: nowTotal = -1 } = this.props.index?.threads || {};
+
+      if (nowTotal !== -1) {
+        readThreadList({ params: { page: 1, filter: { categoryids, types, essence, attention, sort }, sequence } }).then((res) => {
+          const { totalCount = 0 } = res?.data || {};
+          if (totalCount > nowTotal) {
+            this.setState({
+              visible: true,
+              conNum: totalCount - nowTotal,
+            });
+          }
+        });
+      }
     }, 30000);
   }
 
@@ -202,6 +205,7 @@ class IndexPCPage extends React.Component {
         showRefresh={false}
         left={ this.renderLeft(countThreads) }
         right={ this.renderRight() }
+        pageName='home'
       >
         {this.renderContent(index)}
       </BaseLayout>
