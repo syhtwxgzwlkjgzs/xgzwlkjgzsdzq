@@ -55,7 +55,6 @@ function AttachmentToolbar(props) {
   const inputRef = React.createRef(null);
 
   function handleAttachClick(e, item) {
-    e.stopPropagation();
     setCurrentAction(item.type);
     props.onAttachClick(item);
     setShowAll(false);
@@ -141,7 +140,7 @@ function AttachmentToolbar(props) {
   const getIconCls = (item) => {
     const cls = styles['dvditor-attachment-toolbar__item'];
     const activeCls = `${styles['dvditor-attachment-toolbar__item']} ${styles.active}`;
-    const action = props.currentSelectedToolbar || currentAction;
+    const action = props.currentSelectedToolbar;
     if (item.type === action) return activeCls;
     const { postData } = props;
     if (item.type === THREAD_TYPE.reward && postData?.rewardQa?.value) return activeCls;
