@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: rem($margin-6n) 0 rem($margin-4n);
+  margin: rem($margin-6n) 0 0;
   font-size: rem(14);
   // 交易内容item
   .acExplain {
@@ -41,7 +41,16 @@
     font-weight: 600;
   }
   .acExplainDivider {
-    margin: rem(8) 0;
+    margin: rem($margin-2n) 0;
+  }
+  .ampuntLineWrap {
+    margin: 0 rem(-$margin-4n);
+  }
+  .ampuntLine {
+    width: 100%;
+    height: rem(10);
+    background-color: var(--comment-content-bg-color);
+    margin: rem($margin-2n) 0;
   }
 }
 
