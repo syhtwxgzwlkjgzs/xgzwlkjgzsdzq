@@ -26,6 +26,18 @@
         width: 100%;
         word-break: break-word;
 
+        .isShowOne {
+          @include lamp-clamp(3);
+
+          p {
+            @include lamp-clamp(3);
+          }
+        }
+
+        img {
+          height: rem(22);
+        }
+
         .commentUser {
           display: inline-block;
           word-break: initial;

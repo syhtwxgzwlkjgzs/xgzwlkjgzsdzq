@@ -157,11 +157,12 @@
     background: $white;
     justify-content: center;
     border-top: $border-solid-1;
-
+    width: 100%;
+    box-sizing: border-box;
     :global {
       .dzq-button {
         @include button-default;
-        width: rem(166);
+        flex:1;
         height: rem(42);
         -webkit-tap-highlight-color: transparent;
         &:first-child {
@@ -178,20 +179,34 @@
   .wrapper {
     height: 500px;
     .btn {
+      border-radius: $border-radius-small;
       border-top: none;
+      padding-bottom: $padding-4n;
       :global {
         .dzq-button {
           width: rem(116);
         }
       }
     }
+    .at-item {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .input {
+      margin-top: 0;
+      margin-left: 0;
+      margin-right: 0;
+    }
   }
   .at-wrap {
-    height: calc(500px - 76px);
+    height: calc(50vh - 120px);
   }
+
   :global {
     .dzq-modal__body {
-      height: 100%;
+      height: 50vh;
+      min-height: 50vh;
     }
   }
 }

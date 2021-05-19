@@ -118,8 +118,9 @@ class ThreadCreate extends React.Component {
   };
 
   render() {
-    const { threadPost, index, user } = this.props;
+    const { threadPost, index, user, site } = this.props;
     const { threadExtendPermissions, permissions } = user;
+    const { webConfig = {} } = site;
 
     const { postData } = threadPost;
     const { emoji, topic, atList, currentDefaultOperation, currentAttachOperation, categoryChooseShow } = this.props;
@@ -222,10 +223,13 @@ class ThreadCreate extends React.Component {
           {/* 插入位置 */}
           <div id="post-position" className={styles['position-box']}>
             {/* <div className={styles['post-counter']}>还能输入{MAX_COUNT - this.props.count}个字</div> */}
-            {(permissions?.insertPosition?.enable) && (<Position
-              position={postData.position}
-              // onClick={() => this.props.saveDataLocal()}
-              onChange={position => this.props.setPostData({ position })} />)}
+            {(permissions?.insertPosition?.enable && webConfig?.lbs?.lbs) && (
+              <Position
+                lbskey={webConfig.lbs.qqLbsKey}
+                position={postData.position}
+                // onClick={() => this.props.saveDataLocal()}
+                onChange={position => this.props.setPostData({ position })} />
+            )}
           </div>
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar

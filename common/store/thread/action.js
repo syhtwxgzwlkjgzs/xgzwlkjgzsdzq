@@ -209,11 +209,11 @@ class ThreadAction extends ThreadStore {
         };
         this.setThreadDetailLikedUsers(!!isLiked, user);
       }
-      // 更新首页store
-      IndexStore &&
-        IndexStore.updateAssignThreadInfo(id, {
-          isLike: !!isLiked,
-        });
+      // TODO:更新首页store
+      // IndexStore &&
+      //   IndexStore.updateAssignThreadInfo(id, {
+      //     isLike: !!isLiked,
+      //   });
 
       return {
         msg: '操作成功',

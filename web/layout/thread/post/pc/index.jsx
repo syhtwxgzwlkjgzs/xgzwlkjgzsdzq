@@ -29,6 +29,7 @@ import MoneyDisplay from '@components/thread-post/money-display';
 @inject('index')
 @inject('thread')
 @inject('user')
+@inject('site')
 @observer
 class ThreadPCPage extends React.Component {
   render() {
@@ -36,6 +37,7 @@ class ThreadPCPage extends React.Component {
       threadPost,
       index,
       user,
+      site,
       emoji,
       topic,
       atList,
@@ -44,6 +46,7 @@ class ThreadPCPage extends React.Component {
     } = this.props;
     const { postData } = threadPost;
     const { freeWords, price, attachmentPrice } = threadPost.postData;
+    const { webConfig = {} } = site;
 
     return (
       <div className={styles.container}>
@@ -56,73 +59,73 @@ class ThreadPCPage extends React.Component {
               onChange={title => this.props.setPostData({ title })}
             />
             <div className={styles.editor}>
-              <DVditor
-                pc
-                value={postData.contentText}
-                emoji={emoji}
-                atList={atList}
-                topic={topic}
-                onChange={this.props.handleVditorChange}
-                onCountChange={count => this.props.handleSetState({ count })}
-                onFocus={() => { }}
-                onBlur={() => { }}
-              />
-
-              {/* 插入图片 */}
-              {(currentAttachOperation === THREAD_TYPE.image
-                || Object.keys(postData.images).length > 0) && (
-                <ImageUpload
-                  className={styles['no-padding']}
-                  fileList={Object.values(postData.images)}
-                  onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.image)}
-                  onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.image)}
-                />
-              )}
-
-              {/* 视频组件 */}
-              {(postData.video && postData.video.thumbUrl) && (
-                <VideoDisplay
+              <div className={styles['editor-inner']}>
+                <DVditor
                   pc
-                  src={postData.video.thumbUrl}
-                  onDelete={() => this.props.setPostData({ video: {} })}
-                  onReady={this.props.onVideoReady} />
-              )}
-
-              {/* 录音组件 */}
-              {(currentAttachOperation === THREAD_TYPE.voice) && (
-                <AudioRecord duration={60} onUpload={(blob) => {
-                  this.props.handleAudioUpload(blob);
-                }}
+                  value={postData.contentText}
+                  emoji={emoji}
+                  atList={atList}
+                  topic={topic}
+                  onChange={this.props.handleVditorChange}
+                  onCountChange={count => this.props.handleSetState({ count })}
+                  onFocus={() => { }}
+                  onBlur={() => { }}
                 />
-              )}
-              {/* 语音组件 */}
-              {(Boolean(postData.audio.mediaUrl))
-                && (<Audio src={postData.audio.mediaUrl} />)}
 
-              {/* 附件上传组件 */}
-              {(currentDefaultOperation === defaultOperation.attach || Object.keys(postData.files).length > 0) && (
-                <FileUpload
-                  className={styles['no-padding']}
-                  fileList={Object.values(postData.files)}
-                  onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.file)}
-                  onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.file)}
-                />
-              )}
+                {/* 插入图片 */}
+                {(currentAttachOperation === THREAD_TYPE.image
+                  || Object.keys(postData.images).length > 0) && (
+                  <ImageUpload
+                    className={styles['no-padding']}
+                    fileList={Object.values(postData.images)}
+                    onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.image)}
+                    onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.image)}
+                  />
+                )}
 
-              {/* 商品组件 */}
-              {postData.product && postData.product.readyContent && (
-                <Product
-                  pc
-                  good={postData.product}
-                  onDelete={() => this.props.setPostData({ product: {} })}
-                />
-              )}
+                {/* 视频组件 */}
+                {(postData.video && postData.video.thumbUrl) && (
+                  <VideoDisplay
+                    pc
+                    src={postData.video.thumbUrl}
+                    onDelete={() => this.props.setPostData({ video: {} })}
+                    onReady={this.props.onVideoReady} />
+                )}
 
+                {/* 录音组件 */}
+                {(currentAttachOperation === THREAD_TYPE.voice) && (
+                  <AudioRecord duration={60} onUpload={(blob) => {
+                    this.props.handleAudioUpload(blob);
+                  }}
+                  />
+                )}
+                {/* 语音组件 */}
+                {(Boolean(postData.audio.mediaUrl))
+                  && (<Audio src={postData.audio.mediaUrl} />)}
+
+                {/* 附件上传组件 */}
+                {(currentDefaultOperation === defaultOperation.attach || Object.keys(postData.files).length > 0) && (
+                  <FileUpload
+                    className={styles['no-padding']}
+                    fileList={Object.values(postData.files)}
+                    onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.file)}
+                    onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.file)}
+                  />
+                )}
+
+                {/* 商品组件 */}
+                {postData.product && postData.product.readyContent && (
+                  <Product
+                    pc
+                    good={postData.product}
+                    onDelete={() => this.props.setPostData({ product: {} })}
+                  />
+                )}
+              </div>
               {/* 设置的金额相关展示 */}
               <MoneyDisplay
                 pc
-                postData={postData} s
-                etPostData={this.props.setPostData}
+                postData={postData} setPostData={this.props.setPostData}
                 handleSetState={this.props.handleSetState}
               />
             </div>
@@ -161,8 +164,9 @@ class ThreadPCPage extends React.Component {
                 />
               </div>
               <div className={styles['toolbar-right']}>
-                {user?.permissions?.insertPosition?.enable && (
+                {(user?.permissions?.insertPosition?.enable && webConfig?.lbs?.lbs) && (
                   <Position
+                    lbskey={webConfig?.lbs?.qqLbsKey}
                     position={postData.position}
                     // onClick={() => this.props.saveDataLocal()}
                     onChange={position => this.props.setPostData({ position })}
@@ -196,7 +200,10 @@ class ThreadPCPage extends React.Component {
                   this.props.setPostData({ product: data });
                 }
               }
-              cancel={() => this.props.handleSetState({ currentAttachOperation: false })}
+              cancel={() => {
+                this.props.handleSetState({ currentAttachOperation: false });
+                this.props.threadPost.setCurrentSelectedToolbar(false);
+              }}
             />
           )}
           {/* 插入付费 */}
@@ -254,6 +261,7 @@ class ThreadPCPage extends React.Component {
                 this.props.handleSetState({
                   currentAttachOperation: false,
                 });
+                this.props.threadPost.setCurrentSelectedToolbar(false);
               }}
               data={postData.rewardQa}
             />

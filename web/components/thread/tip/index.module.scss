@@ -17,4 +17,25 @@
     left: rem(-5);
     z-index: 0;
   }
+
+  .moreIcon {
+    position: absolute;
+    right: 0;
+    bottom: rem(2.5);
+    transform: translateX(50%);
+    color: $text-color-secondary;
+    width: rem(20);
+    height: rem(12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $white;
+    border-radius: rem(6);
+    border: $border-solid-1;
+    box-sizing: border-box;
+
+    .icon {
+      transform: rotate(90deg);
+    }
+  }
 }

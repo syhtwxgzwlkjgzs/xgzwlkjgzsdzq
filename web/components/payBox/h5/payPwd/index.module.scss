@@ -1,12 +1,16 @@
 @import '@common/styles/index.scss';
+@import '@common/styles/_variable.scss';
+@import '@common/styles/mixin/index.scss';
+
 
 .keyboard{
   width: 100%;
   position: fixed;
   left: 0;
   bottom: 0;
-  z-index: 2000;
+  z-index: $zindex-toast;
   background-color: var(--color-white);
+  @include ios-safe-area-inset-bottom;
   .line{
     display: flex;
     align-items: center;
@@ -40,10 +44,14 @@
 .paypwdDialogWrapper {
   :global {
     .dzq-modal__container {
-      width: 80%;
+      width: rem(283);
       top: 36%;
       box-sizing: border-box;
       border-radius: $border-radius-small;
+    }
+
+    .dzq-checkbox-wrap {
+      padding: 0;
     }
   }
 
@@ -59,14 +67,15 @@
   display: flex;
   align-items: center;
   flex-direction: column;
+
   .paypwdTitle {
     font-size: rem($font-size-middle);
     color: $text-color-primary;
-    margin-top: rem(8);
+    margin-top: rem($margin-2n);
   }
   .paypwdAmount {
     font-size: rem($font-line-height-large);
-    font-weight: bold;
+    font-weight: 600;
     margin: rem($margin-4n) 0;
   }
   .paypwdMesg {
@@ -74,7 +83,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: rem(18);
+    font-size: rem($font-size-primary);
     margin-bottom: rem($margin-4n);
     font-size: rem($font-size-base);
     .payLabel {
@@ -98,7 +107,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #8590A6;
+    color: $text-color-secondary;
     cursor: pointer;
     :global {
       .dzq-icon {
@@ -110,13 +119,13 @@
 
 .forgetPasswordContainer {
   width: 100%;
-  margin-top: rem(16);
-  margin-bottom: rem(8);
+  margin-top: rem($margin-4n);
+  margin-bottom: rem($margin-2n);
   display: flex;
   justify-content: flex-end;
   align-items: center;
 
   span {
-    color: #4F5A70;
+    color: $text-color-regular;
   }
 }

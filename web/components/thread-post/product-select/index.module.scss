@@ -61,11 +61,13 @@
     padding: rem($padding-2n) rem($padding-4n);
     display: flex;
     justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
     :global {
       .dzq-button {
         -webkit-tap-highlight-color: transparent;
         @include button-default;
-        width: rem(166);
+        flex: 1;
         height: rem(42);
 
         &:first-child {
@@ -91,8 +93,8 @@
   .parse-goods-box {
     position: static;
     padding: 0;
-    width: 100%;
-    height: auto;
+    height: 252px;
+    min-height: 252px;
     border-radius: $border-radius-small;
     :global {
       .dzq-textarea {

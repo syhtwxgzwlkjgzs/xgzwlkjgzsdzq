@@ -6,17 +6,33 @@
   padding: rem($padding-6n) rem($padding-4n) rem($padding-4n) rem($padding-4n);
   height: rem(337);
   box-sizing: border-box;
+
+
   .title{
     text-align: center;
     p{
       font-size: rem($paybox-pay-text-font-size);
-      font-weight: bold;
+      font-weight: 600;
     }
   }
 
   .list{
     margin-top: rem($margin-2n);
     margin-bottom: rem(100);
+
+    :global {
+      .dzq-checkbox-wrap {
+        padding: 0;
+      }
+      .is-checked {
+        border: none;
+        .dzq-checkbox--radio {
+          &::after {
+            border: none;
+          }
+        }
+      }
+    }
 
     .listItem{
         display: flex;
@@ -81,23 +97,24 @@
     height: rem(60);
     box-sizing: border-box;
     width: calc(100% - 32px);
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: rem($padding-4n);
+    padding-right: rem($padding-4n);
     @include ios-safe-area-inset-bottom;
 
     &::before {
       content: '';
       display: block;
-      width: 100%;
+      // width: 100%;
       height: rem(1);
       background: var(--border-line-color);
       position: relative;
       top: rem(-8);
+      margin: 0 rem(-$margin-4n);
     }
 
     .btn{
       height: rem(42);
-      font-size: rem(16);
+      font-size: rem($font-size-middle);
       border-radius: 5px;
     }
   }
@@ -110,7 +127,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #8590A6;
+  color: $text-color-secondary;
   cursor: pointer;
 }
 

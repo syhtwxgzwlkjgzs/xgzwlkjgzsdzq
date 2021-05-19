@@ -11,8 +11,8 @@
   padding-bottom: constant(safe-area-inset-bottom);  ///兼容 IOS<11.2/
   padding-bottom: env(safe-area-inset-bottom);  ///兼容 IOS>11.2/
   background-color: var(--color-white);
-  border-top-right-radius: rem($border-radius-small);
-  border-top-left-radius: rem($border-radius-small);
+  border-top-right-radius: rem($border-radius-big);
+  border-top-left-radius: rem($border-radius-big);
   position: relative;
   height: 90vh;
   display: flex;
@@ -82,8 +82,11 @@
 
   .childrenSpan {
     font-size: rem($font-size-primary);
+    line-height: rem(36);
     width: 100%;
     height: rem(36);
+    display: block;
+    text-align: center;
     border-radius: rem($border-radius-small);
     background: $primary-color10;
     display: flex;

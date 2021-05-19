@@ -8,6 +8,23 @@ import { ORDER_TRADE_TYPE } from '../../../../common/constants/payBoxStoreConsta
 @inject('payBox')
 @observer
 export default class CommonAccountContent extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      tradeContent: [
+        {
+          type: ORDER_TRADE_TYPE.RED_PACKET,
+          name: '红包'
+        },
+        {
+          type: ORDER_TRADE_TYPE.POST_REWARD,
+          name: '悬赏'
+        }
+      ]
+    }
+  }
+
   /**
    * 渲染不同交易类型
    * @param {String} type
@@ -60,46 +77,73 @@ export default class CommonAccountContent extends Component {
 
   render() {
     const { currentPaymentData = {} } = this.props;
-    const { type, amount, isAnonymous, title } = currentPaymentData;
+    const { type, amount, isAnonymous, title, redAmount, rewardAmount } = currentPaymentData;
     const { platform } = this.props?.site;
-
+    const { tradeContent = [] } = this.state
     return (
       <>
         {/* 标题 */}
         <div className={styles.amountTitle} style={{ textAlign: platform === 'pc' ? 'center' : 'left' }}>确认金额</div>
         {/* 主要内容区域 */}
         <div className={`${styles.amountContent} ${platform === 'pc' && styles.amountContentPC}`}>
-          <div className={styles.acExplain}>
-            <span className={styles.acExplainLabel}>交易类型</span>{' '}
-            <span className={styles.acExplainValue}>{this.renderDiffTradeType(type)}</span>
-            {/* {
-              type === ORDER_TRADE_TYPE.COMBIE_PAYMENT && (
-                <span></span>
-              )
-            } */}
-          </div>
-          <Divider className={styles.acExplainDivider} />
-          <div className={styles.acExplain}>
-            <span className={styles.acExplainLabel}>商品名称</span>{' '}
-            <span className={styles.acExplainValue}>{title}</span>
-          </div>
-          <Divider className={styles.acExplainDivider} />
-          <div className={styles.acExplain}>
-            <span className={styles.acExplainLabel}>支付金额</span>
-            <span className={styles.acExplainNum}>￥{this.transMoneyToFixed(amount)}</span>
-          </div>
           {
-            type === ORDER_TRADE_TYPE.REGEISTER_SITE &&
-            (
-              <div className={styles.acExplain}>
-                <Checkbox checked={this.props.payBox.isAnonymous} onChange={this.handleChangeIsAnonymous} /> 隐藏我的付费信息
-              </div>
-            )}
-            {
-              platform === 'h5' && (
+            type === ORDER_TRADE_TYPE.COMBIE_PAYMENT ? (
+              <>
+                {
+                  tradeContent.map((item, index) => {
+                    const amount_ = item.type === ORDER_TRADE_TYPE.RED_PACKET ? redAmount : rewardAmount
+                    return <>
+                      <div className={styles.acExplain}>
+                        <span className={styles.acExplainLabel}>交易类型</span>{' '}
+                        <span className={styles.acExplainValue}>{this.renderDiffTradeType(item.type)}</span>
+                      </div>
+                      <Divider className={styles.acExplainDivider} />
+                      <div className={styles.acExplain}>
+                        <span className={styles.acExplainLabel}>商品名称</span>{' '}
+                        <span className={styles.acExplainValue}>{title}</span>
+                      </div>
+                      <Divider className={styles.acExplainDivider} />
+                      <div className={styles.acExplain}>
+                        <span className={styles.acExplainLabel}>支付金额</span>
+                        <span className={styles.acExplainNum}>￥{this.transMoneyToFixed(amount_)}</span>
+                      </div>
+                      {index === 0 && <div className={styles.ampuntLineWrap}><div className={styles.ampuntLine}></div></div>}
+                      {/* {index === 1 && <Divider className={styles.acExplainDivider} />} */}
+                    </>
+                  })
+                }
+              </>
+            ) : (
+              <>
+                <div className={styles.acExplain}>
+                  <span className={styles.acExplainLabel}>交易类型</span>{' '}
+                  <span className={styles.acExplainValue}>{this.renderDiffTradeType(type)}</span>
+                </div>
                 <Divider className={styles.acExplainDivider} />
-              )
-            }
+                <div className={styles.acExplain}>
+                  <span className={styles.acExplainLabel}>商品名称</span>{' '}
+                  <span className={styles.acExplainValue}>{title}</span>
+                </div>
+                <Divider className={styles.acExplainDivider} />
+                <div className={styles.acExplain}>
+                  <span className={styles.acExplainLabel}>支付金额</span>
+                  <span className={styles.acExplainNum}>￥{this.transMoneyToFixed(amount)}</span>
+                </div>
+                {
+                  type === ORDER_TRADE_TYPE.REGEISTER_SITE &&
+                  (
+                    <div className={`${styles.acExplain} ${platform === 'h5' && styles.acExplainH5}`}>
+                      <Checkbox checked={this.props.payBox.isAnonymous} onChange={this.handleChangeIsAnonymous} /> 隐藏我的付费信息
+                    </div>
+                  )}
+                {/* {
+                  platform === 'h5' && (
+                    <Divider className={styles.acExplainDivider} />
+                  )
+                } */}
+              </>
+            )
+          }
         </div>
       </>
     );
