@@ -36,9 +36,12 @@
 .right {
   position: sticky;
   margin-left: rem(20);
-  top: rem(-140);
+  top: rem(0);
   padding-top: rem(20);
   width: rem(330);
+  &.home-right {
+    top: rem(-136);
+  }
 }
 
 .list {
