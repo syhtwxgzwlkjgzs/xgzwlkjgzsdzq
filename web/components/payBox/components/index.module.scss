@@ -18,10 +18,24 @@
   .acExplain {
     display: flex;
     align-items: center;
-    line-height: rem($font-line-height-base);
+    line-height: rem(24);
     margin: rem($margin-2n) 0;
     font-size: rem(14);
     color: #0B0B37;
+    :global {
+      .dzq-checkbox-wrap {
+        padding: 0;
+      }
+      .dzq-checkbox-wrap .dzq-checkbox {
+        border-radius: 50%;
+      }
+      .dzq-checkbox-wrap .dzq-checkbox::after {
+        border-radius: 50%;
+      }
+    }
+  }
+  .acExplainH5 {
+    margin-bottom: rem(8);
   }
   // 交易类型label提示
   .acExplainLabel{
