@@ -152,7 +152,7 @@ class PostPage extends React.Component {
   // 通过云点播上传成功之后处理：主要是针对语音和视频
   handleVodUploadComplete = async (ret, file, type) => {
     const { fileId, video } = ret;
-    const result = await this.props.threadPost.createThreadVideoAudio({ fileId });
+    const result = await this.props.threadPost.createThreadVideoAudio({ fileId, mediaUrl: video.url });
     this.toastInstance?.destroy();
     const { code, data } = result;
     if (code === 0) {
