@@ -33,11 +33,11 @@ const User = ({ data, onClick, onFollow }) => {
   }
 
   const btnInfo = useMemo(() => {
-    if (data.isFollow) {
-      return { text: '已关注', icon: 'CheckOutlined', className: styles.isFollow }
-    }
     if (data.isMutualFollow) {
       return { text: '互关', icon: 'WithdrawOutlined', className: styles.withdraw }
+    }
+    if (data.isFollow) {
+      return { text: '已关注', icon: 'CheckOutlined', className: styles.isFollow }
     }
     return { text: '关注', icon: 'PlusOutlined', className: styles.follow }
   }, [data.isFollow])
