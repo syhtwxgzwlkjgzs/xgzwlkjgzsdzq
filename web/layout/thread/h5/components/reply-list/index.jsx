@@ -74,9 +74,8 @@ export default class ReplyList extends React.Component {
                 ''
               )}
               <span
-                onClick={() => this.props.toCommentDetail()}
-                className={styles.commentListText}
-                dangerouslySetInnerHTML={{ __html: this.filterContent() }}
+                className={this.props.isShowOne && styles.isShowOne}
+                dangerouslySetInnerHTML={{ __html: this.filterContent()}}
               ></span>
             </div>
           </div>

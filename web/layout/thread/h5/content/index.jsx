@@ -27,7 +27,7 @@ const RenderThreadContent = inject('user')(
       platform: 'h5',
     };
     // 是否合法
-    const isApproved = threadStore?.threadData?.isApproved || 0;
+    const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
     const isEssence = threadStore?.threadData?.displayTag?.isEssence || false;
 
     // 是否免费帖
@@ -106,173 +106,174 @@ const RenderThreadContent = inject('user')(
               isRed={isRedPack}
             ></UserInfo>
           </div>
-          {props?.user?.isLogin() && (
+          {props?.user?.isLogin() && isApproved && (
             <div className={styles.more} onClick={onMoreClick}>
               <Icon size={20} color="#8590A6" name="MoreVOutlined"></Icon>
             </div>
           )}
         </div>
 
-        {isApproved === 1 && (
-          <div className={styles.body}>
-            {/* 标题 */}
-            {threadStore?.threadData?.title && <div className={styles.title}>{threadStore?.threadData?.title}</div>}
+        <div className={styles.body}>
+          {/* 标题 */}
+          {threadStore?.threadData?.title && <div className={styles.title}>{threadStore?.threadData?.title}</div>}
 
-            {/* 文字 */}
-            {text && <PostContent useShowMore={false} content={text || ''} />}
+          {/* 文字 */}
+          {text && <PostContent useShowMore={false} content={text || ''} />}
 
-            {/* 悬赏文案 */}
-            {parseContent.REWARD && (
-              <div className={styles.rewardText}>
-                {/* 悬赏 */}
-                {parseContent.REWARD && (
-                  <div>
-                    <div className={styles.rewardMoney}>
-                      本帖向所有人悬赏
-                      <span className={styles.rewardNumber}>{parseContent.REWARD.remain_money || 0}</span>元
-                    </div>
-                    <div className={styles.rewardTime}>{parseContent.REWARD.expired_at}截止悬赏</div>
+          {/* 悬赏文案 */}
+          {parseContent.REWARD && (
+            <div className={styles.rewardText}>
+              {/* 悬赏 */}
+              {parseContent.REWARD && (
+                <div>
+                  <div className={styles.rewardMoney}>
+                    本帖向所有人悬赏
+                    <span className={styles.rewardNumber}>{parseContent.REWARD.remain_money || 0}</span>元
                   </div>
-                )}
-              </div>
-            )}
+                  <div className={styles.rewardTime}>{parseContent.REWARD.expired_at}截止悬赏</div>
+                </div>
+              )}
+            </div>
+          )}
 
-            {/* 付费附件 */}
-            {isAttachmentPay && !isSelf && (
-              <div style={{ textAlign: 'center' }} onClick={onContentClick}>
-                <Button className={styles.payButton} type="primary">
-                  <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
-                  <p>支付{attachmentPrice}元查看附件内容</p>
-                </Button>
-              </div>
-            )}
+          {/* 付费附件 */}
+          {isAttachmentPay && !isSelf && (
+            <div style={{ textAlign: 'center' }} onClick={onContentClick}>
+              <Button className={styles.payButton} type="primary">
+                <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
+                <p>支付{attachmentPrice}元查看附件内容</p>
+              </Button>
+            </div>
+          )}
 
-            {/* 图片 */}
-            {parseContent.IMAGE && <ImageDisplay imgData={parseContent.IMAGE} />}
+          {/* 图片 */}
+          {parseContent.IMAGE && <ImageDisplay imgData={parseContent.IMAGE} />}
 
-            {/* 视频 */}
-            {parseContent.VIDEO && (
-              <VideoPlay
-                url={parseContent.VIDEO.mediaUrl}
-                coverUrl={parseContent.VIDEO.coverUrl}
-                width={400}
-                height={200}
+          {/* 视频 */}
+          {parseContent.VIDEO && (
+            <VideoPlay
+              url={parseContent.VIDEO.mediaUrl}
+              coverUrl={parseContent.VIDEO.coverUrl}
+              width={400}
+              height={200}
+            />
+          )}
+          {/* 音频 */}
+          {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
+          {/* 附件 */}
+          {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
+          {/* 商品 */}
+          {parseContent.GOODS && (
+            <div>
+              <ProductItem
+                image={parseContent.GOODS.imagePath}
+                amount={parseContent.GOODS.price}
+                title={parseContent.GOODS.title}
+                className={styles.product}
               />
-            )}
-            {/* 音频 */}
-            {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
-            {/* 附件 */}
-            {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
-            {/* 商品 */}
-            {parseContent.GOODS && (
-              <div>
-                <ProductItem
-                  image={parseContent.GOODS.imagePath}
-                  amount={parseContent.GOODS.price}
-                  title={parseContent.GOODS.title}
-                  className={styles.product}
-                />
-                <Button
-                  className={styles.buyBtn}
-                  type="danger"
-                  onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
-                >
-                  <Icon className={styles.payIcon} name="ShoppingCartOutlined" size={20}></Icon>
-                  <span className={styles.buyText}>购买商品</span>
-                </Button>
-              </div>
-            )}
-            {/* 标签 */}
-            {threadStore?.threadData?.categoryName && (
-              <div className={styles.tag} onClick={onTagClick}>
-                {threadStore?.threadData?.categoryName}
-              </div>
-            )}
+              <Button
+                className={styles.buyBtn}
+                type="danger"
+                onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
+              >
+                <Icon className={styles.payIcon} name="ShoppingCartOutlined" size={20}></Icon>
+                <span className={styles.buyText}>购买商品</span>
+              </Button>
+            </div>
+          )}
+          {/* 标签 */}
+          {threadStore?.threadData?.categoryName && (
+            <div className={styles.tag} onClick={onTagClick}>
+              {threadStore?.threadData?.categoryName}
+            </div>
+          )}
 
-            {(parseContent.RED_PACKET || parseContent.REWARD) && (
-              <div className={styles.reward}>
-                {/* 悬赏 */}
-                {parseContent.REWARD && (
-                  <div className={styles.rewardBody}>
-                    <PostRewardProgressBar
-                      type={POST_TYPE.BOUNTY}
-                      remaining={Number(parseContent.REWARD.remain_money || 0)}
-                      received={minus(
-                        Number(parseContent.REWARD.money || 0),
-                        Number(parseContent.REWARD.remain_money || 0),
-                      )}
-                    />
-                  </div>
-                )}
-                {/* 红包 */}
-                {parseContent.RED_PACKET && (
+          {(parseContent.RED_PACKET || parseContent.REWARD) && (
+            <div className={styles.reward}>
+              {/* 悬赏 */}
+              {parseContent.REWARD && (
+                <div className={styles.rewardBody}>
                   <PostRewardProgressBar
-                    remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
-                    received={
-                      Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
-                    }
+                    type={POST_TYPE.BOUNTY}
+                    remaining={Number(parseContent.REWARD.remain_money || 0)}
+                    received={minus(
+                      Number(parseContent.REWARD.money || 0),
+                      Number(parseContent.REWARD.remain_money || 0),
+                    )}
                   />
+                </div>
+              )}
+              {/* 红包 */}
+              {parseContent.RED_PACKET && (
+                <PostRewardProgressBar
+                  remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
+                  received={
+                    Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
+                  }
+                />
+              )}
+            </div>
+          )}
+
+          {/* 帖子付费 */}
+          {isNeedPay && !isSelf && (
+            <div style={{ textAlign: 'center' }} onClick={onContentClick}>
+              <Button className={styles.payButton} type="primary">
+                <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
+                支付{threadPrice}元查看剩余内容
+              </Button>
+            </div>
+          )}
+
+          {/* 打赏 */}
+          {canBeReward && isApproved && (
+            <div className={styles.rewardContianer}>
+              <Button onClick={onRewardClick} className={styles.rewardButton} type="primary">
+                <Icon className={styles.payIcon} name="HeartOutlined" size={20}></Icon>
+                <span className={styles.rewardext}>打赏</span>
+              </Button>
+            </div>
+          )}
+        </div>
+
+        {isApproved && (
+          <div className={styles.footer}>
+            <div className={styles.thumbs}>
+              {/* 付费 */}
+              {isThreadPay && (
+                <Icon
+                  className={classnames(styles.payIcon, isPayed && styles.actived)}
+                  name="DollarLOutlined"
+                  size={20}
+                ></Icon>
+              )}
+              {/* 打赏 */}
+              {isBeReward && (
+                <Icon
+                  className={classnames(styles.payIcon, isRewarded && styles.actived)}
+                  name="HeartOutlined"
+                  size={20}
+                ></Icon>
+              )}
+              {/* 点赞 */}
+              <div
+                className={classnames(styles.liked, threadStore?.threadData?.isLike && styles.actived)}
+                onClick={onLikeClick}
+              >
+                <Icon name="LikeOutlined" size={20}></Icon>
+                {threadStore?.threadData?.likeReward?.likePayCount > 0 && (
+                  <span className={styles.likedNumber}>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
                 )}
               </div>
-            )}
-
-            {/* 帖子付费 */}
-            {isNeedPay && !isSelf && (
-              <div style={{ textAlign: 'center' }} onClick={onContentClick}>
-                <Button className={styles.payButton} type="primary">
-                  <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
-                  支付{threadPrice}元查看剩余内容
-                </Button>
+              <div className={styles.likeReward}>
+                <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []} showMore={true}></Tip>
               </div>
-            )}
-
-            {/* 打赏 */}
-            {canBeReward && (
-              <div className={styles.rewardContianer}>
-                <Button onClick={onRewardClick} className={styles.rewardButton} type="primary">
-                  <Icon className={styles.payIcon} name="HeartOutlined" size={20}></Icon>
-                  <span className={styles.rewardext}>打赏</span>
-                </Button>
-              </div>
+            </div>
+            {threadStore?.threadData?.likeReward?.shareCount > 0 && (
+              <div className={styles.shareCount}>{threadStore?.threadData?.likeReward?.shareCount}次分享</div>
             )}
           </div>
         )}
-        <div className={styles.footer}>
-          <div className={styles.thumbs}>
-            {/* 付费 */}
-            {isThreadPay && (
-              <Icon
-                className={classnames(styles.payIcon, isPayed && styles.actived)}
-                name="DollarLOutlined"
-                size={20}
-              ></Icon>
-            )}
-            {/* 打赏 */}
-            {isBeReward && (
-              <Icon
-                className={classnames(styles.payIcon, isRewarded && styles.actived)}
-                name="HeartOutlined"
-                size={20}
-              ></Icon>
-            )}
-            {/* 点赞 */}
-            <div
-              className={classnames(styles.liked, threadStore?.threadData?.isLike && styles.actived)}
-              onClick={onLikeClick}
-            >
-              <Icon name="LikeOutlined" size={20}></Icon>
-              {threadStore?.threadData?.likeReward?.likePayCount > 0 && (
-                <span className={styles.likedNumber}>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
-              )}
-            </div>
-            <div className={styles.likeReward}>
-              <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
-            </div>
-          </div>
-          {threadStore?.threadData?.likeReward?.shareCount > 0 && (
-            <div className={styles.shareCount}>{threadStore?.threadData?.likeReward?.shareCount}次分享</div>
-          )}
-        </div>
       </div>
     );
   }),

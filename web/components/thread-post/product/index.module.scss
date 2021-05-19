@@ -68,7 +68,12 @@
   }
 }
 
-.pc {
+.post-good-box.pc {
+  margin-left: 0;
+  margin-right: 0;
+  .content-title {
+    max-width: 670px;
+  }
   .delete-icon {
     position: absolute;
     bottom: 50%;

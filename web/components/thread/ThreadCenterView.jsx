@@ -90,7 +90,7 @@ const Index = (props) => {
                   money={rewardData.money}
                   onClick={onClick}
                 />}
-                {redPacketData && <Packet money={redPacketData.money || 0} onClick={onClick} />}
+                {redPacketData && <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} />}
               </div>
           </div>
         );
