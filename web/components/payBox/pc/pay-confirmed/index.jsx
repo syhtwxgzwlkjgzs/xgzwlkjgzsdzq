@@ -166,6 +166,8 @@ export default class index extends Component {
       if (this.state.list.length !== 6) {
         Toast.error({
           content: '请输入支付密码',
+          hasMask: false,
+          duration: 1000,
         });
         return;
       }
@@ -181,11 +183,11 @@ export default class index extends Component {
         await this.props.payBox.clear();
       } catch (error) {
         Toast.error({
-          content: '支付失败，请重新输入',
+          content: error.Message || '支付失败，请重新输入',
           hasMask: false,
           duration: 1000,
         })
-        this.props.payBox.password = null
+        this.initState()
       }
     }
   };
