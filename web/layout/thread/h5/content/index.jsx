@@ -101,7 +101,7 @@ const RenderThreadContent = inject('user')(
               view={`${threadStore?.threadData?.viewCount}` || ''}
               time={`${threadStore?.threadData?.createdAt}` || ''}
               isEssence={isEssence}
-              isPay={isThreadPay}
+              isPay={!isFree}
               isReward={isReward}
               isRed={isRedPack}
             ></UserInfo>

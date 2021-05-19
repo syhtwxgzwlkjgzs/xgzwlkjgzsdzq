@@ -47,7 +47,7 @@ export default inject('user')(
     const isAttachmentPay = threadStore?.threadData?.payType === 2 && threadStore?.threadData?.paid === false;
     const attachmentPrice = threadStore?.threadData?.attachmentPrice || 0;
     // 是否帖子付费
-    const isThreadPay = threadStore?.threadData?.payType === 1 && threadStore?.threadData?.paid === false;
+    const isThreadPay = threadStore?.threadData?.payType === 1;
     const threadPrice = threadStore?.threadData?.price || 0;
     // 是否作者自己
     const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData?.userId;
@@ -111,10 +111,16 @@ export default inject('user')(
               view={`${threadStore?.threadData?.viewCount}` || ''}
               time={`${threadStore?.threadData?.createdAt}` || ''}
               userId={threadStore?.threadData?.user?.userId}
+              isEssence={isEssence}
+              isPay={!isFree}
+              isReward={isReward}
+              isRed={isRedPack}
+              platform='pc'
             ></UserInfo>
           </div>
           {props?.user?.isLogin() && (
             <div className={topic.more}>
+              <Divider mode='vertical' className={topic.moreDivider}></Divider>
               <div className={topic.iconText}>
                 <Dropdown
                   menu={
@@ -138,13 +144,6 @@ export default inject('user')(
               <div className={topic.iconText} onClick={() => onDropdownChange('report')}>
                 <Icon className={topic.icon} name="WarnOutlinedThick"></Icon>
                 <span className={topic.text}>举报</span>
-              </div>
-            </div>
-          )}
-          {isEssence && (
-            <div className={topic.headerTag}>
-              <div className={topic.browseCategory}>
-                <p className={topic.categoryEssence}>精华</p>
               </div>
             </div>
           )}
