@@ -27,6 +27,7 @@ export default class AmountRecognized extends Component {
         hasMask: false,
         duration: 1000,
       });
+      this.onClose()
     }
   };
 
