@@ -72,7 +72,7 @@ class ThreadPostStore {
     const { rule = 1, price = 0, number } = this.postData.redpacket;
     return rule === 1
       ? parseFloat(price)
-      : parseFloat(price) * parseInt(number);
+      : (parseFloat(price) * parseInt(number)).toFixed(2);
   }
 }
 
