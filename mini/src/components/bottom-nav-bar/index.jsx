@@ -16,11 +16,11 @@ const BottomNavBar = ({ router, fixed = true, placeholder = false, curr = 'home'
   }, [curr])
 
   const [tabs, setTabs] = useState([
-    { icon: 'HomeOutlined', text: '首页', active: checkCurrActiveTab(curr, 'home'), router: '/pages/index' },
+    { icon: 'HomeOutlined', text: '首页', active: checkCurrActiveTab(curr, 'home'), router: '/pages/index/index' },
     { icon: 'FindOutlined', text: '发现', active: checkCurrActiveTab(curr, 'search'), router: '/subPages/search/index' },
     { icon: 'PlusOutlined', router: '/subPages/thread/post/index' },
     { icon: 'MailOutlined', text: '消息', active: checkCurrActiveTab(curr, 'message'), router: '/subPages/message/index' },
-    { icon: 'ProfessionOutlined', text: '我的', active: checkCurrActiveTab(curr, 'my'), router: '/pages/my' },
+    { icon: 'ProfessionOutlined', text: '我的', active: checkCurrActiveTab(curr, 'my'), router: '/subPages/my/index' },
   ]);
 
   const handleClick = (i, idx) => {
