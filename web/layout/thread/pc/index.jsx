@@ -46,7 +46,6 @@ class ThreadPCPage extends React.Component {
       isCommentLoading: false, // 列表loading
       setTop: false, // 置顶
       inputValue: '', // 评论内容
-      canDirectToComment: true, // 页面加载后跳转到评论区
     };
 
     this.perPage = 5;
@@ -56,7 +55,8 @@ class ThreadPCPage extends React.Component {
     // 滚动定位相关属性
     this.threadBodyRef = React.createRef();
     this.commentDataRef = React.createRef();
-    this.headerRef = React.createRef();
+
+    this.position = 0;
 
     // 修改评论数据
     this.comment = null;
@@ -449,11 +449,24 @@ class ThreadPCPage extends React.Component {
     }
   }
 
+  // 使用了H5页面的页面加载跳转逻辑
   componentDidMount() {
-    if (this.state.canDirectToComment && this.threadBodyRef?.current) {
-      this.threadBodyRef.current.scrollTop = this.commentDataRef?.current?.offsetTop -
-                                             this.headerRef?.current?.offsetHeight;
-      this.setState({ canDirectToComment: false });
+    // 当内容加载完成后，获取评论区所在的位置
+    this.position = this.commentDataRef?.current?.offsetTop - 50;
+
+    // 是否定位到评论位置
+    if (this.props?.thread?.isPositionToComment) {
+      // TODO:需要监听帖子内容加载完成事件
+      setTimeout(() => {
+        this.threadBodyRef.current.scrollTo(0, this.position);
+      }, 1000);
+    }
+  }
+
+  componentDidUpdate() {
+    // 当内容加载完成后，获取评论区所在的位置
+    if (this.props.thread.isReady) {
+      this.position = this.commentDataRef?.current?.offsetTop - 50;
     }
   }
 
@@ -466,7 +479,7 @@ class ThreadPCPage extends React.Component {
     return (
       <div className={layout.container}>
         <ShowTop showContent={this.props.thread?.threadData?.isStick} setTop={this.state.setTop}></ShowTop>
-        <div className={layout.header} ref={this.headerRef}>
+        <div className={layout.header}>
           <Header></Header>
         </div>
 
