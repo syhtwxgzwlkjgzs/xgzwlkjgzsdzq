@@ -196,9 +196,12 @@ class PostPage extends React.Component {
     const { images, files } = postData;
     const changeData = {};
     (fileList || []).map((item) => {
-      let tmp = images[item.uid];
-      if (type === THREAD_TYPE.file) tmp = files[item.uid];
-      if (tmp) changeData[item.uid] = tmp;
+      let tmp = images[item.id] || images[item.uid];
+      if (type === THREAD_TYPE.file) tmp = files[item.id] || files[item.uid];
+      if (tmp) {
+        if (item.id) changeData[item.id] = tmp;
+        else changeData[item.uid] = tmp;
+      }
       return item;
     });
     if (type === THREAD_TYPE.image) this.setPostData({ images: changeData });
