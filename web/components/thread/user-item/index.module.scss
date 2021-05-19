@@ -8,16 +8,6 @@
   box-sizing: border-box;
   padding: rem($padding-4n) rem($padding-4n);
   background-color: $white;
-  
-  &:after {
-    content: ' ';
-    position: absolute;
-    right: rem(16);
-    left: rem(16);
-    height: 1px;
-    bottom: 0;
-    background-color: rgba(238, 238, 238, 0.75);
-  }
 
   .wrapper {
     display: flex;
@@ -95,5 +85,17 @@
     align-items: center;
     justify-content: center;
     padding: 0;
+  }
+}
+
+.bottomLine {
+  &:after {
+    content: ' ';
+    position: absolute;
+    right: rem(16);
+    left: rem(16);
+    height: 1px;
+    bottom: 0;
+    background-color: rgba(238, 238, 238, 0.75);
   }
 }
