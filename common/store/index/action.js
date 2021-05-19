@@ -16,6 +16,22 @@ class IndexAction extends IndexStore {
     this.filter = data
   }
 
+   /**
+   * 详情页点击标签跳转首页操作
+   */
+    @action
+    async refreshHomeData({ categoryIds = [], perPage = 10, page = 1 } = {}) {
+      if (categoryIds.length) {
+        this.setFilter({ categoryids: categoryIds })
+
+        this.threads = null;
+        this.sticks = null;
+  
+        this.getRreadStickList(categoryIds);
+        this.getReadThreadList({ filter: { categoryids: categoryIds }, sequence: 0, perPage, page });
+      }
+    }
+
   /**
    * 触发筛选数据
    * @param {*} param0
