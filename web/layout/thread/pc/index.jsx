@@ -46,6 +46,7 @@ class ThreadPCPage extends React.Component {
       isCommentLoading: false, // 列表loading
       setTop: false, // 置顶
       inputValue: '', // 评论内容
+      canDirectToComment: true, // 页面加载后跳转到评论区
     };
 
     this.perPage = 5;
@@ -55,6 +56,7 @@ class ThreadPCPage extends React.Component {
     // 滚动定位相关属性
     this.threadBodyRef = React.createRef();
     this.commentDataRef = React.createRef();
+    this.headerRef = React.createRef();
 
     // 修改评论数据
     this.comment = null;
@@ -447,6 +449,14 @@ class ThreadPCPage extends React.Component {
     }
   }
 
+  componentDidMount() {
+    if (this.state.canDirectToComment && this.threadBodyRef?.current) {
+      this.threadBodyRef.current.scrollTop = this.commentDataRef?.current?.offsetTop -
+                                             this.headerRef?.current?.offsetHeight;
+      this.setState({ canDirectToComment: false });
+    }
+  }
+
   render() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
@@ -456,7 +466,7 @@ class ThreadPCPage extends React.Component {
     return (
       <div className={layout.container}>
         <ShowTop showContent={this.props.thread?.threadData?.isStick} setTop={this.state.setTop}></ShowTop>
-        <div className={layout.header}>
+        <div className={layout.header} ref={this.headerRef}>
           <Header></Header>
         </div>
 
