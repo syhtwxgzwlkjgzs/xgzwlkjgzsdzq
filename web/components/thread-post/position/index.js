@@ -16,11 +16,12 @@ import MapDialog from './../map-dialog';
 import PropTypes from 'prop-types';
 
 const Position = (props) => {
-  const { position, key, router, onChange, onClick } = props;
+  const { position, key, router, onChange = () => {}, onClick = () => {} } = props;
   const [currentPosition, setCurrentPosition] = useState({});
 
   const [isShowMap, toggleIsShowMap] = useState(false);
   const [mapUrl, setMapUrl] = useState('');
+  const [geolocation, setGeolocation] = useState(null);
 
   useEffect(() => {
     if (position.address) setCurrentPosition(position);
@@ -37,12 +38,14 @@ const Position = (props) => {
     // if (position.address) {
     //   return;
     // }
-    onClick();
     // 检查腾讯位置服务key值
     if (!key) {
       Toast.error({ content: '请检查配置的腾讯位置服务的key是否设置正确' });
       return;
     }
+    onClick();
+    // 如果初始化失败，再次初始化
+    if (!geolocation) initPosition();
     // 展示地图
     toggleIsShowMap(true);
   };
@@ -51,6 +54,7 @@ const Position = (props) => {
   // 调用腾讯位置服务
   const initPosition = () => {
     const geolocation = new qq.maps.Geolocation(key, 'myapp');
+    setGeolocation(geolocation);
     geolocation.getLocation(showPosition, errorPosition, { timeout: 6000 });
   };
   // 调用位置成功
@@ -75,8 +79,8 @@ const Position = (props) => {
   useEffect(() => {
     // 设置默认地址
     showPosition();
-    // 提前初始化地图
-    initPosition();
+    // 提前初始化地图 TODO: 这里暂时放在一进入就初始化，不过这个会有一个位置授权的操作
+    if (qq) initPosition();
   }, []);
 
   return (
