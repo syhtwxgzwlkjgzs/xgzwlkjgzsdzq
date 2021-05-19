@@ -15,7 +15,7 @@ import { noop } from '../utils';
  * @prop {function} onPay 付费时，蒙层点击事件
  */
 
-
+//TODO 视频转码中和错误状态的蒙层样式有问题，需要调整
 const Index = ({
   isPay = false,
   coverUrl,
