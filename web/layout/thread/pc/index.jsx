@@ -48,7 +48,7 @@ class ThreadPCPage extends React.Component {
       inputValue: '', // 评论内容
     };
 
-    this.perPage = 5;
+    this.perPage = 10;
     this.page = 1; // 页码
     this.commentDataSort = true;
 
@@ -471,7 +471,7 @@ class ThreadPCPage extends React.Component {
             {isReady ? (
               <RenderThreadContent
                 store={threadStore}
-                onOperClick={(type) => this.onOperClick(type)}
+                onOperClick={type => this.onOperClick(type)}
                 onLikeClick={() => this.onLikeClick()}
                 onCollectionClick={() => this.onCollectionClick()}
                 onShareClick={() => this.onShareClick()}
@@ -488,10 +488,10 @@ class ThreadPCPage extends React.Component {
                 <Fragment>
                   <RenderCommentList
                     router={this.props.router}
-                    sort={(flag) => this.onSortChange(flag)}
-                    onEditClick={(comment) => this.onEditClick(comment)}
-                    onPublishClick={(value) => this.onPublishClick(value)}
-                    onReportClick={(comment) => this.onReportClick(comment)}
+                    sort={flag => this.onSortChange(flag)}
+                    onEditClick={comment => this.onEditClick(comment)}
+                    onPublishClick={value => this.onPublishClick(value)}
+                    onReportClick={comment => this.onReportClick(comment)}
                   ></RenderCommentList>
                   {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
                 </Fragment>
@@ -545,7 +545,7 @@ class ThreadPCPage extends React.Component {
             </div>
             <CommentInput
               height="middle"
-              onSubmit={(value) => this.onPublishClick(value)}
+              onSubmit={value => this.onPublishClick(value)}
               initValue={this.state.inputValue}
             ></CommentInput>
           </div>
@@ -564,14 +564,14 @@ class ThreadPCPage extends React.Component {
           inputText={this.inputText}
           visible={this.state.showReportPopup}
           onCancel={() => this.onReportCancel()}
-          onOkClick={(data) => this.onReportOk(data)}
+          onOkClick={data => this.onReportOk(data)}
         ></ReportPopup>
 
         {/* 打赏弹窗 */}
         <RewardPopup
           visible={this.state.showRewardPopup}
           onCancel={() => this.setState({ showRewardPopup: false })}
-          onOkClick={(value) => this.onRewardSubmit(value)}
+          onOkClick={value => this.onRewardSubmit(value)}
         ></RewardPopup>
       </div>
     );
