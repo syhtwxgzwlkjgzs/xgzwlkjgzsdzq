@@ -5,34 +5,20 @@
     padding: 8px 16px;
   }
 
-  :global {
-    .dzq-textarea {
-      width: 100%;
-      border: none;
-
-      .dzq-textarea__inner {
-        padding: 0;
-        font-size: 16px;
-        color: var(--color-text-primary);
-        line-height: 26px;
-        text-align: left;
-        resize: none;
-        min-height: 78px;
-        max-height: 260px;
-      }
-
-      .textarea-placeholder {
-        font-size: 20px;
-        color: $text-color-placeholder;
-      }
-    }
+  .textarea {
+    width: 100%;
+    padding: 0;
+    font-size: 16px;
+    color: $text-color-primary;
+    line-height: 26px;
+    text-align: left;
+    resize: none;
+    min-height: 78px;
+    max-height: 260px;
   }
 
-  .content-length {
-    height: 20px;
-    line-height: 22px;
-    font-size: 12px;
+  .textarea-placeholder {
+    font-size: 20px;
     color: $text-color-placeholder;
-    text-align: right;
   }
 }

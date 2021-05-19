@@ -12,8 +12,7 @@
  * @prop {function} onBlur 失焦事件
  */
 import React, { memo } from 'react';
-import { View } from '@tarojs/components';
-import { Textarea } from '@discuzq/design';
+import { View, Textarea } from '@tarojs/components';
 import styles from './index.module.scss';
 
 import PropTypes from 'prop-types';
@@ -34,18 +33,18 @@ const Index = ({
     <View className={styles.container}>
       <View className={styles['container-inner']}>
         <Textarea
-          className={`${styles.content}`}
+          className={styles.textarea}
+          placeholderClass={styles['textarea-placeholder']}
           value={value}
-          rows={rows}
-          placeholder={placeholder}
           disabled={disabled}
-          maxLength={maxLength}
-          showLimit={showLimit}
-          cursorSpacing={cursorSpacing}
-          onChange={e => onChange(e.target.value, maxLength)}
+          placeholder={placeholder}
+          maxlength={maxLength}
+          autoHeight={true}
+          showConfirmBar={false}
           onFocus={onFocus}
           onBlur={onBlur}
-          autoHeight={true}
+          cursorSpacing={200}
+          onInput={e => onChange(e.target.value, maxLength)}
         />
       </View>
     </View>

@@ -44,6 +44,11 @@ class Index extends Component {
   componentWillMount() { }
 
   async componentDidMount() {
+    // 监听键盘高度变化
+    Taro.onKeyboardHeightChange(res => {
+      this.setState({ bottomHeight: res?.height || 0 });
+    });
+
     this.redirectToHome();
     await this.fetchCategories(); // 请求分类
     const { params } = getCurrentInstance().router;
@@ -70,11 +75,12 @@ class Index extends Component {
     clearInterval(this.timer);
     Taro.eventCenter.off('captchaResult', this.handleCaptchaResult);
     Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault);
+    // Taro.offKeyboardHeightChange(() => {});
   }
 
-  componentDidShow() { }
+  componentDidShow() {}
 
-  componentDidHide() { }
+  componentDidHide() {}
 
   // handle
   postToast = (title, icon = 'none', duration = 2000) => { // toast
@@ -150,9 +156,10 @@ class Index extends Component {
   onContentChange = (contentText, maxLength) => {
     const { setPostData } = this.props.threadPost;
     setPostData({ contentText });
-    this.setState({
-      contentTextLength: maxLength - contentText.length
-    });
+    this.toHideTitle();
+    // this.setState({
+    //   contentTextLength: maxLength - contentText.length
+    // });
   }
 
   // 设置当前选中分类、分类id
@@ -419,18 +426,11 @@ class Index extends Component {
     }
   }
 
-  // 拉起手机键盘
-  showKeyboard = () => {
-    Taro.onKeyboardHeightChange(res => {
-      this.setState({ bottomHeight: res?.height || 0 })
-    })
-  }
-
   // 手动关闭键盘
   hideKeyboard = () => {
     Taro.hideKeyboard({
       complete: res => {
-        this.setState({ bottomHeight: 0 })
+        this.setState({ bottomHeight: 0 });
       }
     })
   }
@@ -439,10 +439,7 @@ class Index extends Component {
   onContentFocus = () => {
     if (this.state.isFirstFocus) {
       this.setState({ isFirstFocus: false });
-    } else {
-      this.showKeyboard();
     }
-    this.toHideTitle();
   }
 
   render() {
@@ -469,7 +466,6 @@ class Index extends Component {
               title={postData.title}
               show={isShowTitle}
               onInput={this.onTitleInput}
-              onBlur={this.showKeyboard}
               onBlur={this.hideKeyboard}
             />
             <Content
