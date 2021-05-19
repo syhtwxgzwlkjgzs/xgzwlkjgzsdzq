@@ -120,10 +120,9 @@ class TopicSelect extends Component {
   }
 
   render() {
-    const { visible = false, cancelTopic, pc } = this.props;
-    const clsName = pc ? `${styles.wrapper} ${styles.pc}` : styles.wrapper;
+    const { visible = false, cancelTopic } = this.props;
     const content = (
-      <div className={clsName}>
+      <div className={styles.wrapper}>
         {/* 搜索框 */}
         <div className={styles.input}>
           <Icon className={styles.inputWrapperIcon} name="SearchOutlined" size={16} />

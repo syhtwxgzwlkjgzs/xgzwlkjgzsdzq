@@ -179,16 +179,28 @@
   .wrapper {
     height: 500px;
     .btn {
+      border-radius: $border-radius-small;
       border-top: none;
+      padding-bottom: $padding-4n;
       :global {
         .dzq-button {
           width: rem(116);
         }
       }
     }
+    .at-item {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .input {
+      margin-top: 0;
+      margin-left: 0;
+      margin-right: 0;
+    }
   }
   .at-wrap {
-    height: calc(500px - 76px);
+    height: 424px;
   }
   :global {
     .dzq-modal__body {
