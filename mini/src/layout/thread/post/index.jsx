@@ -408,7 +408,13 @@ class Index extends Component {
   // 首次发帖，文本框聚焦时，若标题为空，则此次永久隐藏标题输入
   toHideTitle = () => {
     const { postData } = this.props.threadPost;
-    if (this.state.postType === 'isFirst' && postData.title === "") {
+    const { postType, isShowTitle } = this.state;
+    if (
+      postType === 'isFirst'
+      && isShowTitle
+      && postData.contentText !== ""
+      && postData.title === ""
+    ) {
       this.setState({ isShowTitle: false })
     }
   }
