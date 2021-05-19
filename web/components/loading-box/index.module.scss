@@ -8,8 +8,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: $font-size-base;
+    color: $text-color-regular;
 
     .loading{
+      margin-right: $margin-10;
       display: block;
       animation: loading 1s linear infinite;
       color: $loading-text-color;
