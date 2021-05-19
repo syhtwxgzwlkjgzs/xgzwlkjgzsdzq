@@ -79,6 +79,7 @@
   }
 }
 @mixin otherLoginText {
+  margin-top: rem(32);
   font-size: rem($font-size-small);
   text-align: center;
   line-height: rem($font-line-height-middle);

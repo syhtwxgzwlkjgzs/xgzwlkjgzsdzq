@@ -22,7 +22,8 @@ const Index = (props) => {
         title = '',
         payType,
         price,
-        paid
+        paid,
+        attachmentPrice
     } = props.data || {};
 
     const needPay = useMemo(() => {
@@ -82,13 +83,14 @@ const Index = (props) => {
                     image={goodsData.imagePath}
                     amount={goodsData.price}
                     title={goodsData.title}
+                    onClick={onClick}
                 />}
                 {rewardData && <Packet
                   type={1}
                   money={rewardData.money}
                   onClick={onClick}
                 />}
-                {redPacketData && <Packet money={redPacketData.money || 0} onClick={onClick} />}
+                {redPacketData && <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} />}
               </div>
           </div>
         );
@@ -105,7 +107,7 @@ const Index = (props) => {
                   <div className={styles.pay}>
                     <Button className={styles.button} type="primary" onClick={onPay}>
                         <Icon className={styles.payIcon} name="DollarLOutlined" size={18}></Icon>
-                        {payType === 1 ? <p className={styles.payText}>{`支付${price}元查看剩余内容`}</p> : <p className={styles.payText}>{`支付${price}元查看附件内容`}</p>}
+                        {payType === 1 ? <p className={styles.payText}>{`支付${price}元查看剩余内容`}</p> : <p className={styles.payText}>{`支付${attachmentPrice}元查看附件内容`}</p>}
                     </Button>                  
                   </div>
                   

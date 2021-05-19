@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react';
 import H5UserCenterEditInfo from './h5/index'
+import PcUserCenterEditInfo from './pc/index'
 
 @inject('site')
 @inject('user')
@@ -21,6 +22,11 @@ export default class index extends Component {
         {
           platform === 'h5' && (
             <H5UserCenterEditInfo />
+          )
+        }
+        {
+          platform === 'pc' && (
+            <PcUserCenterEditInfo />
           )
         }
       </div>

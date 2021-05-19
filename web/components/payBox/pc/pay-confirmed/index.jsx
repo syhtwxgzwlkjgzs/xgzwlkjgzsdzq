@@ -20,7 +20,7 @@ export default class index extends Component {
     // FIXME: 延时回调的修复
     setTimeout(() => {
       this.props.payBox.clear();
-    },1000)
+    }, 1000)
   }
 
   async componentDidMount() {
@@ -31,7 +31,13 @@ export default class index extends Component {
       const { id } = this.props?.user;
       if (!id) return;
       await this.props.payBox.getWalletInfo(id);
-    } catch (error) { }
+    } catch (error) {
+      console.log(error);
+      Toast.error({
+        content: '获取用户钱包信息失败',
+        duration: 1000,
+      });
+    }
   }
 
   initState = () => {
@@ -96,6 +102,11 @@ export default class index extends Component {
     }
   };
 
+  // 转换金额小数
+  transMoneyToFixed = (num) => {
+    return Number(num).toFixed(2);
+  };
+
   renderDiffPaymementContent = () => {
     if (this.props.payBox.payWay === PAYWAY_MAP.WX) {
       return this.renderWechatCodePaymementContent();
@@ -108,14 +119,14 @@ export default class index extends Component {
   // 渲染微信支付内容
   renderWechatCodePaymementContent = () => (
     <div className={styles.wechatPayment}>
-      <div style={{display: 'flex',alignItems:'center'}}>{/* 二维码 */}
+      <div style={{ display: 'flex', alignItems: 'center' }}>{/* 二维码 */}
         <div className={styles.wPaymentCode}>
           <img src={this.props.payBox.wechatQRCode} alt="二维码" />
         </div>
         {/* 微信支付内容 */}
         <div className={styles.wPaymentDec}>
           <div className={styles.wPayment_01}>
-            <Icon className={styles.icon} name={'WechatPaymentOutlined'} color={'#09bb07'} size={20} />
+            <Icon className={styles.icon} name={'WechatPaymentOutlined'} color={'#09bb07'} size={16} />
           微信支付
         </div>
           <div className={styles.wPayment_02}>
@@ -137,8 +148,10 @@ export default class index extends Component {
     const { user } = this.props;
     const { userInfo = {} } = user;
     const { canWalletPay } = userInfo || {};
+    const { options = {} } = this.props.payBox;
+    const { amount = 0 } = options;
     return (
-      <div className={styles.walletPayment}>
+      <div className={`${styles.walletPayment} ${this.props.payBox?.walletAvaAmount >= amount && styles.walletPayment_01}`}>
         <div className={styles.walletTitle}>
           <Icon className={styles.icon} name="PurseOutlined" size="20" color={'#1878f3'} />
           钱包支付
@@ -157,20 +170,32 @@ export default class index extends Component {
           </>
         ) : (
           <>
-            <div className={styles.walletDec}>
-              <span>钱包余额</span>
-              <span className={styles.walletBalance}>￥{this.props.payBox?.walletAvaAmount}</span>
-            </div>
-            <div className={styles.walletDec}>
-              <span>支付密码</span>
-              <Input
-                mode="password"
-                className={styles.walletChangePwd}
-                placeholder="请输入密码"
-                value={this.props.payBox.password}
-                onChange={this.onPasswordChange}
-              />
-            </div>
+            {
+              this.props.payBox?.walletAvaAmount < amount ? (
+                <div className={styles.walletDec}>
+                  <span>钱包余额</span>
+                  <span className={styles.walletBalance}>￥{this.props.payBox?.walletAvaAmount}</span>
+                  <span className={styles.walletWarn}>余额不足</span>
+                </div>
+              ) : (
+                <>
+                  <div className={`${styles.walletDec} ${styles.walletPay}`}>
+                    <span>钱包余额</span>
+                    <span className={styles.walletBalance}>￥{this.props.payBox?.walletAvaAmount}</span>
+                  </div>
+                  <div className={styles.walletDec}>
+                    <span>支付密码</span>
+                    <Input
+                      mode="password"
+                      className={styles.walletChangePwd}
+                      placeholder="请输入密码"
+                      value={this.props.payBox.password}
+                      onChange={this.onPasswordChange}
+                    />
+                  </div>
+                </>
+              )
+            }
             <div className={styles.walletConfirmBc}>
               <Button
                 onClick={this.handlePayConfirmed}
@@ -183,6 +208,13 @@ export default class index extends Component {
                 确认支付
               </Button>
             </div>
+            {
+              this.props.payBox?.walletAvaAmount >= amount && (
+                <div className={styles.forgetPassword}>
+                  忘记支付密码？
+                </div>
+              )
+            }
           </>
         )}
       </div>
@@ -191,14 +223,15 @@ export default class index extends Component {
 
   render() {
     const { options = {} } = this.props?.payBox;
-    const { amount } = options;
+    const { amount = 0 } = options;
     return (
       <div>
         <div className={styles.payconfirmWrapper}>
           {/* 头部 */}
           <div className={styles.payTitle}>支付</div>
           {/* 支付金额显示 */}
-          <div className={styles.payMoney}>支付金额 <span className={styles.payM}>￥{amount}</span></div>
+
+          <div className={styles.payMoney}>支付金额： <span className={styles.payM}>￥{this.transMoneyToFixed(amount)}</span></div>
           {/* tab切换支付方式 */}
           <div>
             <div className={styles.payTab_top}>
@@ -226,7 +259,7 @@ export default class index extends Component {
             onClick={this.onClose}
             className={styles.paymentCloseBtn}
           >
-            X
+            <Icon name="CloseOutlined" size={12} />
           </div>
         </div>
       </div>

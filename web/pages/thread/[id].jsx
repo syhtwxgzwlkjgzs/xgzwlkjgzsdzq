@@ -5,9 +5,11 @@ import { readThreadDetail, readCommentList, readUser } from '@server';
 import ThreadH5Page from '@layout/thread/h5';
 import ThreadPCPage from '@layout/thread/pc';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import Router from '@discuzq/sdk/dist/router';
 
 @inject('site')
 @inject('thread')
+@inject('user')
 class Detail extends React.Component {
   static async getInitialProps(ctx) {
     const id = ctx?.query?.id;

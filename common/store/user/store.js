@@ -127,6 +127,11 @@ class UserStore {
     return get(this.userInfo, 'mobile');
   }
 
+  // 用户是否绑定微信
+  @computed get isBindWechat() {
+    return get(this.userInfo, 'isBindWechat');
+  }
+
   // 获取实际用户手机号
   @computed get originalMobile() {
     return get(this.userInfo, 'originalMobile')
@@ -211,7 +216,7 @@ class UserStore {
       [defaultOperation.emoji]: true,
       [defaultOperation.at]: true,
       [defaultOperation.topic]: true,
-      [defaultOperation.attach]: get(pm, 'insertDoc.enable'),
+      [defaultOperation.attach]: get(pm, 'insertAttachment.enable'),
       [defaultOperation.pay]: get(pm, 'insertPay.enable'),
       [defaultOperation.redpacket]: get(pm, 'insertRedPacket.enable'),
       [THREAD_TYPE.image]: get(pm, 'insertImage.enable'),

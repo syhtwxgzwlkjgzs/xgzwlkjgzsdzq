@@ -15,7 +15,7 @@ class Index extends React.Component {
     super(props);
     this.state = {
       list: [],
-      isShow: false
+      isShow: false,
     };
     this.keyboardClickHander = this.keyboardClickHander.bind(this);
   }
@@ -23,18 +23,18 @@ class Index extends React.Component {
   initState = () => {
     this.setState({
       list: [],
-      isShow: false
-    })
+      isShow: false,
+    });
   }
 
   componentDidMount() {
     this.setState({
-      isShow: true
-    })
+      isShow: true,
+    });
   }
 
   componentWillUnmount() {
-    this.initState()
+    this.initState();
   }
 
   updatePwd = (set_num, type) => {
@@ -42,7 +42,8 @@ class Index extends React.Component {
     if (type == 'add') {
       let list_ = [...list];
       if (list.length >= 6) {
-        list_ = list_.join('').substring(0, 5).split('');
+        list_ = list_.join('').substring(0, 5)
+          .split('');
       }
       this.setState(
         {
@@ -70,13 +71,12 @@ class Index extends React.Component {
 
     if (key === '-1') {
       if (list.length === 0) {
-        this.handleCancel()
+        this.handleCancel();
       } else {
         this.setState({
           list: list.slice(0, list.length - 1),
         });
       }
-
     } else if (list.length < 6) {
       this.setState(
         {
@@ -92,8 +92,8 @@ class Index extends React.Component {
   }
 
   async submitPwa() {
-    let { list = [] } = this.state;
-    let pwd = list.join('');
+    const { list = [] } = this.state;
+    const pwd = list.join('');
     this.props.payBox.password = pwd;
     if (this.props.payBox.step === STEP_MAP.WALLET_PASSWORD) {
       // 表示钱包支付密码
@@ -116,9 +116,9 @@ class Index extends React.Component {
         });
       }
     } else if (this.props.payBox.step === STEP_MAP.SET_PASSWORD) {
-      //表示设置支付密码
+      // 表示设置支付密码
       try {
-        let id = this.props.user.id;
+        const { id } = this.props.user;
         if (!id) return;
         await this.props.payBox.setPayPassword(id);
         await this.props.user.updateUserInfo(id);
@@ -139,14 +139,14 @@ class Index extends React.Component {
 
   // 点击取消或者关闭---回到上个页面
   handleCancel = () => {
-    this.props.payBox.step = STEP_MAP.PAYWAY
-    this.initState()
+    this.props.payBox.step = STEP_MAP.PAYWAY;
+    this.initState();
   }
 
   // 渲染弹窗形式支付
   renderDialogPayment = () => {
     const { list = [], isShow } = this.state;
-    const { options = {} } = this.props?.payBox
+    const { options = {} } = this.props?.payBox;
     return (
       <div>
         <Dialog className={styles.paypwdDialogWrapper} visible={isShow} position="center" maskClosable={true}>
@@ -174,6 +174,11 @@ class Index extends React.Component {
                   </div>
 
                   <CommonPayoffPwd list={list} updatePwd={this.updatePwd} whetherIsShowPwdBox={true} />
+
+                  {/* TODO: 忘记支付密码的链接添加 */}
+                  <div className={styles.forgetPasswordContainer}>
+                    <span>忘记支付密码?</span>
+                  </div>
                 </>
               )
             }

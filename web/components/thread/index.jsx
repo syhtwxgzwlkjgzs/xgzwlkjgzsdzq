@@ -37,16 +37,16 @@ class Index extends React.Component {
 
       Toast.info({ content: '复制链接成功' });
 
-      const { title = '', threadId = '' } = this.props.data || {};
+      const { title = '', threadId = '', user } = this.props.data || {};
 
-      h5Share({title, path: `thread/${threadId}`});
-      // this.props.index.updateThreadShare({ threadId }).then(result => {
-      //   if (result.code === 0) {
-      //     this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-      //     this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-      //     this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-      //   }
-      // });
+      h5Share({path: `thread/${threadId}`});
+      this.props.index.updateThreadShare({ threadId }).then(result => {
+        if (result.code === 0) {
+          this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+          this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+          this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+        }
+      });
     }
     // 评论
     onComment = (e) => {

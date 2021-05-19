@@ -7,11 +7,20 @@
 }
 .container {
   box-sizing: border-box;
-  padding: rem(25) rem(15) rem(16);
+  padding: rem(25) rem(16) 0 rem(16);
+  padding-bottom: constant(safe-area-inset-bottom);  ///兼容 IOS<11.2/
+  padding-bottom: env(safe-area-inset-bottom);  ///兼容 IOS>11.2/
   background-color: var(--color-white);
   border-top-right-radius: rem($border-radius-small);
   border-top-left-radius: rem($border-radius-small);
   position: relative;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  .content {
+    flex: 1;
+    overflow: hidden;
+  }
   .containerIcon {
     position: absolute;
     right: rem(16);
@@ -20,15 +29,26 @@
   .searchIcon {
     color: var(--color-text-secondary);
   }
+  .moduleWrapper {
+    margin-bottom: rem(8);
+  }
   .wrapper {
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: rem(10);
+    padding-bottom: rem(11);
   }
   .childrenWrapper {
     border-top: 1px solid var(--border-line-color);
-    margin-top: rem(6);
-    padding-top: rem(16);
+    margin-top: rem(5) !important;
+    padding-top: rem(11);
+    padding-bottom: rem(11);
+  }
+
+  .list {
+    overflow-y: scroll;
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
   }
 
   .title {
@@ -38,23 +58,38 @@
     text-align: left;
     color: var(--color-text-primary);
     margin-bottom: rem(16);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .span {
     font-size: rem($font-size-primary);
-    width: rem(76);
+    width: 100%;
     height: rem(36);
-    line-height: rem(36);
-    text-align: center;
     border-radius: rem($border-radius-small);
     background: var(--background-color-text2);
-    margin-right: rem(10);
-    margin-bottom: rem(10);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $text-color-primary;
   }
 
   .active {
     background: var(--color-primary);
     color: var(--color-white);
+  }
+
+  .childrenSpan {
+    font-size: rem($font-size-primary);
+    width: 100%;
+    height: rem(36);
+    border-radius: rem($border-radius-small);
+    background: $primary-color10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $text-color-primary;
   }
 
   .childrenActive {
@@ -68,6 +103,7 @@
 .footer {
   background-color: var(--color-white);
   text-align: center;
+  height: rem(120);
   .button {
     width: rem(290);
     height: rem(42);
@@ -76,11 +112,21 @@
     display: inline-block;
   }
   .footerBtn {
-    border-top: 1px solid var(--border-line-color);
     position: relative;
     height: rem(53);
-    text-align: center;
-    line-height: rem(53);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: rem($font-size-primary);
+    color: $text-color-regular;
+    &:before {
+      content: ' ';
+      position: absolute;
+      right: rem(-16);
+      left: rem(-16);
+      height: 1px;
+      top: 0;
+      background-color: var(--border-line-color);
+    }
   }
 }

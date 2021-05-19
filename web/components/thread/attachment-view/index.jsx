@@ -38,12 +38,29 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
     }
   }
 
+  const handleIcon = (type) => {
+    if (type === 'XLS' || type === 'XLSX') {
+      return 'XLSOutlined'
+    } else if (type === 'DOC' || type === 'DOCX') {
+      return 'DOCOutlined'
+    } else if (type === 'ZIP') {
+      return 'DOCOutlined'
+    } else if (type === 'PDF') {
+      return 'DOCOutlined'
+    } else if (type === 'PPT') {
+      return 'PPTOutlined'
+    } else {
+      return 'DOCOutlined'
+    }
+  }
+
   const Normal = ({ item, index, type }) => {
+    const iconName = handleIcon(type)
     return (
       <div className={styles.container} key={index} onClick={onClick} >
         <div className={styles.wrapper}>
           <div className={styles.left}>
-            <Icon className={styles.containerIcon} size={20} name={type && 'DocOutlined'} />
+            <Icon className={styles.containerIcon} size={20} name={iconName} />
             <div className={styles.containerText}>
               <span className={styles.content}>{item.fileName}</span>
               <span className={styles.size}>{handleFileSize(parseFloat(item.fileSize || 0))}</span>
@@ -60,9 +77,10 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
   }
 
   const Pay = ({ item, index, type }) => {
+    const iconName = handleIcon(type)
     return (
       <div className={`${styles.container} ${styles.containerPay}`} key={index} onClick={onPay}>
-        <Icon className={styles.containerIcon} size={20} name={type && 'DocOutlined'} />
+        <Icon className={styles.containerIcon} size={20} name={iconName} />
         <span className={styles.content}>{item.fileName}</span>
       </div>
     )
