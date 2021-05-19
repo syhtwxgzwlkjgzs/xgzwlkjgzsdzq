@@ -82,7 +82,7 @@ class Header extends React.Component {
         <Button className={styles.userBtn} type="primary" onClick={this.toLogin}>
           登录
         </Button>
-        {site.isRegister && <Button className={styles.userBtn}>注册</Button>}
+        {site.isRegister && <Button className={`${styles.userBtn} ${styles.registerBtn}`}>注册</Button>}
       </div>
     );
   }

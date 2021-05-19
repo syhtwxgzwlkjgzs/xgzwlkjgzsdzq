@@ -15,7 +15,7 @@ import { noop } from '../utils';
  * @prop {function} onPay 付费时，蒙层点击事件
  */
 
-
+//TODO 视频转码中和错误状态的蒙层样式有问题，需要调整
 const Index = ({
   isPay = false,
   coverUrl,
@@ -58,10 +58,10 @@ const Index = ({
         isPay && <div className={styles.payBox} onClick={onPay}></div>
       }
       {
-        status !== 1 && (
+        !isPay && status !== 1 && (
           <div className={styles.payBox}>
             <div className={`${styles.alert} ${status === 0 ? styles.alertWarn : styles.alertError}`}>
-              <Icon className={styles.tipsIcon} size={20} name={status === 0 ? 'WarnOutlined' : 'WrongOutlined'}></Icon>
+              <Icon className={styles.tipsIcon} size={20} name={status === 0 ? 'TipsOutlined' : 'WrongOutlined'}></Icon>
               <span className={styles.tipsText}>{status === 0 ? '视频正在转码中，转码成功后才能正常显示！' : '错误'}</span>
             </div>
           </div>

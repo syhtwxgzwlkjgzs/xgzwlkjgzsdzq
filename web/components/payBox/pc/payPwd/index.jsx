@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
-// import CommonPayoffPwd from '../../components/common-paypwd-content';
 import { STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
 import { Toast, Icon, Input, Button } from '@discuzq/design';
 
@@ -69,7 +68,6 @@ export default class index extends Component {
     const { list = [], payPassword } = this.state;
     return (
       <div className={styles.payPwdWrapper}>
-        {/* <CommonPayoffPwd whetherIsShowPwdBox={true} list={list} updatePwd={this.updatePwd} /> */}
         <div className={styles.payTop}>
           <div className={styles.payTitle}>设置支付密码</div>
           {/* 关闭按钮 */}

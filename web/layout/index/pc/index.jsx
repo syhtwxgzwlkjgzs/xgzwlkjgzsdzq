@@ -205,6 +205,7 @@ class IndexPCPage extends React.Component {
         showRefresh={false}
         left={ this.renderLeft(countThreads) }
         right={ this.renderRight() }
+        pageName='home'
       >
         {this.renderContent(index)}
       </BaseLayout>

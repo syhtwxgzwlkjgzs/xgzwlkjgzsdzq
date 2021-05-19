@@ -108,8 +108,6 @@ export default class PayBox extends React.Component {
       }
       // 表示钱包支付
       this.props.payBox.walletPayEnsure();
-      // this.props.payBox.visible = false;
-      // this.goSetPayPwa()
     } else if (this.props.payBox.payWay === PAYWAY_MAP.WX) {
       // FIXME: 增加兜底处理
       // 表示微信支付

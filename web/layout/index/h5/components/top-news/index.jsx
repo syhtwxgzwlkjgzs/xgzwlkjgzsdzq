@@ -10,7 +10,7 @@ import xss from '@common/utils/xss';
  */
 const TopNews = ({ data = [], router, platform = 'h5'}) => {
   const onClick = ({ threadId } = {}, e) => {
-    if (e.target.localName === 'a') {
+    if (e?.target?.localName === 'a') {
       return
     }
     router.push(`/thread/${threadId}`);
