@@ -1,12 +1,10 @@
-page {
-  --plugin-background-color: #f5f7f8;
-}
+@import '@common/styles/index.scss';
 
 @mixin img {
   height: 169px;
   width: 169px;
   border-radius: 5px;
-  background: var(--plugin-background-color);
+  background: $body-bg-color;
   display: flex;
   align-items: center;
 }
@@ -14,7 +12,7 @@ page {
 @mixin atta {
   height: 52px;
   border-radius: 5px;
-  background: var(--plugin-background-color);
+  background: $body-bg-color;
   display: flex;
   align-items: center;
   margin-bottom: 8px;
@@ -23,7 +21,7 @@ page {
 .upload-atta {
   @include atta;
   justify-content: center;
-  color: #8590A6;
+  color: $text-color-secondary;
 
   .text {
     line-height: 52px;
@@ -36,7 +34,7 @@ page {
   @include img;
   justify-content: center;
   flex-direction: column;
-  color: #8590A6;
+  color: $text-color-secondary;
   margin-bottom: 5px;
 
   .text {
@@ -70,8 +68,7 @@ page {
 
   .size {
     line-height: 52px;
-    color: #4f5a70;
-    margin-left: 8px;
+    color: $text-color-regular;
     font-size: var(--font-size-label);
   }
 }
@@ -93,8 +90,9 @@ page {
     justify-content: center;
     align-items: center;
     position: absolute;
-    color: white;
-    background-color: rgba(0, 0, 0, 0.5);
+    color: $white;
+    background-color: $black;
+    opacity: 0.5;
     height: 40px;
     bottom: 0;
     width: 100%;
@@ -105,7 +103,7 @@ page {
   height: 114px;
   padding: 10px;
   border-radius: 5px;
-  background: var(--plugin-background-color);
+  background: $body-bg-color;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -125,7 +123,7 @@ page {
       font-size: 14px;
       line-height: 24px;
       text-align: left;
-      color: #515a6e;
+      color: $text-color-regular;
       margin-bottom: 8px;
     }
 
@@ -155,8 +153,8 @@ page {
   align-items: center;
   height: 25px;
   border-radius: 5px;
-  background: #f0f1f3;
-  color: #4f5a70;
+  background: $text-bg-color2;
+  color: $text-color-regular;
   padding: 4px;
   margin: 9px 8px 9px 0;
   font-size: var(--font-size-label);
