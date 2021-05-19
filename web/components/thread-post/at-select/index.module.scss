@@ -157,11 +157,12 @@
     background: $white;
     justify-content: center;
     border-top: $border-solid-1;
-
+    width: 100%;
+    box-sizing: border-box;
     :global {
       .dzq-button {
         @include button-default;
-        width: rem(166);
+        flex:1;
         height: rem(42);
         -webkit-tap-highlight-color: transparent;
         &:first-child {
