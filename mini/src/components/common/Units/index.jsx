@@ -9,11 +9,17 @@
  import { Icon } from '@discuzq/design';
 
 const Index = (props) => {
-  const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, onTagClick, tagContent } = props;
+  const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, onTagRemoveClick, onTagClick, tagContent } = props;
 
   // 标签展示
   const tag = (
-    <Text className={styles['tag']} onClick={() => {onTagClick();}}>{tagContent}</Text>
+    <View className={styles['tag']}>
+      <Text onClick={() => {onTagClick();}}>{tagContent}</Text>
+      {onTagRemoveClick && (
+        <Icon className={styles.remove} name='CloseOutlined' size={10} onClick={onTagRemoveClick} />
+      )}
+    </View>
+
   );
 
   // 图片展示

@@ -364,7 +364,6 @@ class Index extends Component {
         });
       });
     }
-
     // 5 loading
     !isDraft && Taro.showLoading({
       title: isDraft ? '保存草稿中...' : '发布中...',
@@ -505,6 +504,10 @@ class Index extends Component {
                     type='tag'
                     tagContent={`付费总额${postData.price + postData.attachmentPrice}元`}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.paid })}
+                    onTagRemoveClick={() => {setPostData({
+                      price: 0,
+                      attachmentPrice: 0
+                    })}}
                   />
                 )}
                 {/* 红包tag */}
@@ -513,6 +516,7 @@ class Index extends Component {
                     type='tag'
                     tagContent={this.redpacketContent()}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
+                    onTagRemoveClick={() => {setPostData({redpacket: {}})}}
                   />
                 }
                 {/* 悬赏tag */}
@@ -521,6 +525,7 @@ class Index extends Component {
                     type='tag'
                     tagContent={`悬赏金额${rewardQa.value}元\\结束时间${rewardQa.expiredAt}`}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
+                    onTagRemoveClick={() => {setPostData({rewardQa: {}})}}
                   />
                 }
               </View>

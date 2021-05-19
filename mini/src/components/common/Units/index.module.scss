@@ -158,4 +158,9 @@
   padding: 4px;
   margin: 9px 8px 9px 0;
   font-size: var(--font-size-label);
+  width: fit-content;
+
+  .remove {
+    margin-left: 8px;
+  }
 }
