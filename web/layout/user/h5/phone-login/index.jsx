@@ -69,6 +69,10 @@ class LoginPhoneH5Page extends React.Component {
       // 微信绑定
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT.Code) {
         const { wechatEnv, platform } = this.props.site;
+        // 设置缓存
+        if (e.uid) {
+          this.props.commonLogin.setUserId(e.uid)
+        }
         if (wechatEnv === 'miniProgram' && platform === 'h5') {
           this.props.commonLogin.needToBindMini = true;
           this.props.commonLogin.sessionToken = e.sessionToken;

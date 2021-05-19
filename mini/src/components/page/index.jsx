@@ -60,18 +60,30 @@ export default class Page extends React.Component {
         return false;
       }
       // TODO: 强制绑定方案待定
-      // if (user.isLogin()) {
-      //   // 绑定微信：开启微信，没有绑定微信
-      //   if ((site.isOpenOffiaccountClose || site.isMiniProgramOpen) && path !== '/subPages/user/wx-bind-qrcode/index' && !user.isBindWechat) {
-      //     Router.redirect({url: '/subPages/user/wx-bind-qrcode/index'});
-      //     return false;
-      //   }
-      //   // 绑定昵称：已登录的用户，没有绑定昵称
-      //   if (!site.isOpenOffiaccountClose && !site.isMiniProgramOpen && path !== '/subPages/user/bind-nickname/index' && !user.nickname) {
-      //     Router.redirect({url: '/subPages/user/bind-nickname/index'});
-      //     return false;
-      //   }
-      // }
+      if (user.isLogin()) {
+        // // 绑定微信：开启微信，没有绑定微信
+        // if ((site.isOpenOffiaccountClose || site.isMiniProgramOpen) && path !== '/subPages/user/wx-bind-qrcode/index' && !user.isBindWechat) {
+        //   Router.redirect({url: '/subPages/user/wx-bind-qrcode/index'});
+        //   return false;
+        // }
+        // 前置：没有开启微信
+        if (!site.isOpenOffiaccountClose && !site.isMiniProgramOpen) {
+          // 绑定手机: 开启短信，没有绑定手机号
+          if (path !== '/subPages/user/bind-phone/index' && site.isSmsOpen && !user.mobile) {
+            Router.redirect({url: '/subPages/user/bind-phone/index'});
+            return false;
+          }
+          // 绑定昵称：没有开启短信，也没有绑定昵称
+          if (
+            path !== '/subPages/user/bind-nickname/index'
+            && !site.isSmsOpen
+            && !user.nickname
+          ) {
+            Router.redirect({url: '/subPages/user/bind-nickname/index'});
+            return false;
+          }
+        }
+      }
     }
 
     return true;
