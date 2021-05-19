@@ -34,9 +34,9 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition, pc, visible }) => {
       return;
     }
     if (exhibition === '帖子付费') {
-      confirm({ price, freeWords: freeWords / 100 });
+      confirm({ price: parseFloat(price), freeWords: freeWords / 100 });
     } else {
-      confirm({ attachmentPrice });
+      confirm({ attachmentPrice: parseFloat(attachmentPrice) });
     }
     cancle();
   };
@@ -53,7 +53,7 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition, pc, visible }) => {
                 htmlType="number"
                 value={price}
                 placeholder="金额"
-                onChange={e => setPrice(Number(e.target.value))}
+                onChange={e => setPrice(e.target.value)}
               />
               元
             </div>
@@ -80,7 +80,7 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition, pc, visible }) => {
               htmlType="number"
               value={attachmentPrice}
               placeholder="金额"
-              onChange={e => setAttachmentPrice(Number(e.target.value))}
+              onChange={e => setAttachmentPrice(e.target.value)}
             />
             元
           </div>
