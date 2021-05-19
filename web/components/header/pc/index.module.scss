@@ -78,10 +78,15 @@
           }
           .userBtn{
             margin-right: rem(16);
-            padding: rem($padding-2n) rem($padding-4n);
+            padding: rem($padding-1n) rem(29);
+            line-height: rem(26);
             &:last-child {
               margin-right: 0;
             }
+          }
+          .registerBtn {
+            color: $primary-color;
+            border-color: $primary-color;
           }
         }
       }

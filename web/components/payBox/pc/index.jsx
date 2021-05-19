@@ -12,9 +12,7 @@ import styles from './index.module.scss';
 class PayBoxPc extends React.Component {
   onClose = () => {
     // FIXME: 延时回调的修复
-    setTimeout(() => {
-      this.props.payBox.clear();
-    }, 1000);
+    this.props.payBox.clear();
   };
 
   render() {

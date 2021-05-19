@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { getCurrentInstance, navigateTo, redirectTo  } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
-import { Button, Toast, Avatar } from '@discuzq/design';
+import { Button, Toast, Avatar, Icon } from '@discuzq/design';
 import Page from '@components/page';
 import { usernameAutoBind } from '@server';
 import setAccessToken from '@common/utils/set-access-token';
@@ -101,14 +101,15 @@ class WXSelect extends Component {
               <View>请选择您要进行的操作</View>
             </View>
             <Button
-              className={layout.button}
+              className={`${layout.button} ${layout.btn_select} ${layout.btn_wx}`}
               type="primary"
               onClick={this.handleAutobindCallback}
             >
+              <Icon name='WechatOutlined' size={16}/>
               创建新账号
             </Button>
             <Button
-              className={layout.button}
+              className={`${layout.button} ${layout.btn_select} ${layout.btn_user}`}
               type="primary"
               onClick={() => {
                 navigateTo({
@@ -116,10 +117,11 @@ class WXSelect extends Component {
                 })
               }}
             >
-              使用用户名密码登录，并绑定微信
+              <Icon name='UserOutlined' size={16}/>
+              绑定已有用户名
             </Button>
             <Button
-              className={layout.button}
+              className={`${layout.button} ${layout.btn_select} ${layout.btn_phone}`}
               type="primary"
               onClick={() => {
                 navigateTo({
@@ -127,7 +129,8 @@ class WXSelect extends Component {
                 })
               }}
             >
-              使用手机号登录，并绑定微信
+              <Icon name='PhoneOutlined' size={16}/>
+              绑定手机号
             </Button>
           </View>
         </View>

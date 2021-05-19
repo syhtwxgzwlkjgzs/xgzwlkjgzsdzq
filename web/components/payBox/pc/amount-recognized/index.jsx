@@ -33,7 +33,7 @@ export default class index extends Component {
     const { amount } = options;
     return (
       <div>
-        {this.props.payBox.visible && (
+        {/* {this.props.payBox.visible && ( */}
           <>
             <div className={styles.amountWrapper}>
               <CommonAccountContent currentPaymentData={options} />
@@ -52,7 +52,7 @@ export default class index extends Component {
               </div>
             </div>
           </>
-        )}
+        {/* )} */}
       </div>
     );
   }

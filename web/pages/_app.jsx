@@ -15,9 +15,9 @@ class DzqApp extends App {
   }
 
   componentDidMount() {
-    if ( process.env.DISCUZ_RUN === 'static' ) {
+    if (process.env.DISCUZ_RUN === 'static') {
       // csr部署时因方便ngixn部署统一指向index.html,所以统一在此重定向一次
-      Router.redirect({url: `${window.location.pathname}${window.location.search}`});
+      Router.redirect({ url: `${window.location.pathname}${window.location.search}` });
     }
   }
 

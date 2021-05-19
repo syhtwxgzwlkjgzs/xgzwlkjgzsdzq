@@ -31,7 +31,7 @@ export default function Emoji(props) {
   },
   };
   if (pc) return (
-    <div id="dzq-toolbar-emoji" className={`${styles['dzq-emoji']} ${styles.pc}`}>
+    <div id="dzq-toolbar-emoji" className={`${styles['dzq-emoji']} ${styles.pc} dzq-toolbar-emoji`}>
       {emojis.map(item => <img className={styles['dzq-emoji__icon']}
         key={item.code}
         src={item.url}

@@ -234,7 +234,7 @@ export default class index extends Component {
   );
 
   renderPwdItem() {
-    const { list = [], whetherIsShowPwdBox } = this.state;
+    const { list = [] } = this.state;
     const nodeList = list.map((item, key) => (
       <div
         className={`${styles.payListItem}`}

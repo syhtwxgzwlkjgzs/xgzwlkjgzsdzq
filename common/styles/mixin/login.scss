@@ -68,6 +68,14 @@
   font-size: rem($font-size-middle);
   padding: rem($padding-10) 0;
   box-sizing: border-box;
+  color: var(--color-white) !important;
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  &:active{
+    color: var(--color-white) !important;
+    background: var(--color-primary6) !important;
+    border-color: var(--color-primary6) !important;
+  }
 }
 @mixin functionalRegion {
   margin-top: rem($margin-6n);
@@ -124,6 +132,28 @@
     height: rem(30);
     line-height: rem($font-line-height-large);
   }
+}
+@mixin btn_select {
+  display: flex;
+  text-align: center;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  :global(.dzq-icon){
+    margin-right: $margin-2n;
+  }
+}
+@mixin btn_wx {
+  background: $success-color;
+}
+@mixin btn_user {
+  background: $primary-color;
+  margin-top: $margin-4n;
+}
+@mixin btn_phone {
+  background: $warn-color;
+  margin-top: $margin-4n;
 }
 
 // ------------PC;

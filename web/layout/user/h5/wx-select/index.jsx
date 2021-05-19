@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './index.module.scss';
-import { Button, Toast, Avatar } from '@discuzq/design';
+import { Button, Toast, Avatar, Icon } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import { get } from '@common/utils/get';
@@ -16,8 +16,8 @@ import { usernameAutoBind } from '@server';
 @observer
 class WXSelectH5Page extends React.Component {
   render() {
-    const { router, user } = this.props;
-    const { sessionToken, nickname } = router.query;
+    const { router } = this.props;
+    const { sessionToken, nickname, avatarUrl } = router.query;
     return (
       <div className={layout.container}>
         <HomeHeader hideInfo mode='login'/>
@@ -33,7 +33,7 @@ class WXSelectH5Page extends React.Component {
                         style={{margin: '0 8px'}}
                         circle
                         size='small'
-                        image={user.avatarUrl}
+                        image={avatarUrl}
                         text={nickname && nickname.substring(0, 1)}
                         />{nickname}
                     </>
@@ -43,7 +43,7 @@ class WXSelectH5Page extends React.Component {
             请选择您要进行的操作
           </div>
           <Button
-            className={layout.button}
+            className={`${layout.button} ${layout.btn_select} ${layout.btn_wx}`}
             type="primary"
             onClick={async () => {
               try {
@@ -91,28 +91,31 @@ class WXSelectH5Page extends React.Component {
               }
             }}
           >
+            <Icon name='WechatOutlined' size={16}/>
             微信登录
           </Button>
           {this.props.site.isUserLoginVisible && (
             <Button
-              className={layout.button}
+              className={`${layout.button} ${layout.btn_select} ${layout.btn_user}`}
               type="primary"
               onClick={() => {
-                router.push({ pathname: 'wx-bind-username', query: { sessionToken, nickname } });
+                router.push({ pathname: 'wx-bind-username', query: { sessionToken, nickname, avatarUrl } });
               }}
             >
-              使用用户名密码登录，并绑定微信
+              <Icon name='UserOutlined' size={16}/>
+              绑定已有用户名
             </Button>
           )}
           {this.props.site.isSmsOpen && (
             <Button
-              className={layout.button}
+              className={`${layout.button} ${layout.btn_select} ${layout.btn_phone}`}
               type="primary"
               onClick={() => {
-                router.push({ pathname: 'wx-bind-phone', query: { sessionToken, nickname } });
+                router.push({ pathname: 'wx-bind-phone', query: { sessionToken, nickname, avatarUrl } });
               }}
             >
-              使用手机号登录，并绑定微信
+              <Icon name='PhoneOutlined' size={16}/>
+              绑定手机号
             </Button>
           )}
         </div>
