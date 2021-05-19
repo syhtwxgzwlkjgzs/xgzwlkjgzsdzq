@@ -5,6 +5,9 @@
 .dzq-toast--mask {
   z-index: $zindex-toast;
 }
+.dzq-modal {
+  z-index: $zindex-dialog;
+}
 
 .dzq-input__inner {
   &::placeholder {
