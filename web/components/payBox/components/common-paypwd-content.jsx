@@ -138,11 +138,11 @@ export default class Index extends Component {
   render() {
     return (
       <div>
-        {
+        {/* {
           this.showTitle() && (
             <p className={styles.title}>{this.showTitle()}</p>
           )
-        }
+        } */}
         <div className={styles.payList}>{this.renderPwdItem()}</div>
       </div>
     );
@@ -150,6 +150,6 @@ export default class Index extends Component {
 }
 
 Index.defaultProps = {
-  updatePwd: function () {}, // 更新密码回调
+  updatePwd: function () { }, // 更新密码回调
   whetherIsShowPwdBox: false, // 是否显示输入密码框 默认显示下划线密码输入（样式）
 };

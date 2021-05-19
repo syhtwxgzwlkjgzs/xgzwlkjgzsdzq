@@ -225,10 +225,11 @@
     height: rem(40);
     text-align: center;
     line-height: rem(40);
-    font-size: rem($font-size-middle);
+    font-size: rem(10);
     color: $text-color-primary;
     &:not(:last-child) {
       // margin-right: rem($margin-2n);
+      border-right: 0px;
     }
 
     // &.curr{

@@ -81,14 +81,15 @@
       border-radius: 0 5px 5px 0;
     }
 
-    border-bottom: var(--border-border);
+    border: var(--border-border);
     width: rem(40);
     height: rem(40);
     text-align: center;
     line-height: rem(40);
-    font-size: rem(50);
+    font-size: rem(10);
     &:not(:last-child) {
       // margin-right: rem($margin-2n);
+      border-right: 0px;
     }
 
     // &.curr{
@@ -105,10 +106,11 @@
     height: rem(40);
     text-align: center;
     line-height: rem(40);
-    font-size: rem($font-size-large);
+    font-size: rem(10);
     color: $text-color-primary;
     &:not(:last-child) {
       // margin-right: rem($margin-2n);
+      border-right: 0px;
     }
 
     // &.curr{
