@@ -58,10 +58,10 @@ const Index = ({
         isPay && <div className={styles.payBox} onClick={onPay}></div>
       }
       {
-        status !== 1 && (
+        !isPay && status !== 1 && (
           <div className={styles.payBox}>
             <div className={`${styles.alert} ${status === 0 ? styles.alertWarn : styles.alertError}`}>
-              <Icon className={styles.tipsIcon} size={20} name={status === 0 ? 'WarnOutlined' : 'WrongOutlined'}></Icon>
+              <Icon className={styles.tipsIcon} size={20} name={status === 0 ? 'TipsOutlined' : 'WrongOutlined'}></Icon>
               <span className={styles.tipsText}>{status === 0 ? '视频正在转码中，转码成功后才能正常显示！' : '错误'}</span>
             </div>
           </div>
