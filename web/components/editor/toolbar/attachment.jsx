@@ -54,7 +54,8 @@ function AttachmentToolbar(props) {
   const [currentAction, setCurrentAction] = useState('');
   const inputRef = React.createRef(null);
 
-  function handleAttachClick(item) {
+  function handleAttachClick(e, item) {
+    e.stopPropagation();
     setCurrentAction(item.type);
     props.onAttachClick(item);
     setShowAll(false);
@@ -159,7 +160,7 @@ function AttachmentToolbar(props) {
       return permission[item.type] ? (
         <Icon
           key={item.name}
-          onClick={() => handleAttachClick(item)}
+          onClick={e => handleAttachClick(e, item)}
           className={clsName}
           name={item.name}
           size="20"
@@ -173,7 +174,7 @@ function AttachmentToolbar(props) {
         className={clsName}
       >
         <Icon
-          onClick={() => handleAttachClick(item)}
+          onClick={e => handleAttachClick(e, item)}
           name={item.name}
           size="20" />
         <input
