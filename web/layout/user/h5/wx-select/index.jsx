@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import layout from './index.module.scss';
-import { Button, Toast, Avatar } from '@discuzq/design';
+import { Button, Toast, Avatar, Icon } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import { get } from '@common/utils/get';
@@ -43,7 +43,7 @@ class WXSelectH5Page extends React.Component {
             请选择您要进行的操作
           </div>
           <Button
-            className={layout.button}
+            className={`${layout.button} ${layout.btn_select} ${layout.btn_wx}`}
             type="primary"
             onClick={async () => {
               try {
@@ -91,28 +91,31 @@ class WXSelectH5Page extends React.Component {
               }
             }}
           >
+            <Icon name='WechatOutlined' size={16}/>
             微信登录
           </Button>
           {this.props.site.isUserLoginVisible && (
             <Button
-              className={layout.button}
+              className={`${layout.button} ${layout.btn_select} ${layout.btn_user}`}
               type="primary"
               onClick={() => {
                 router.push({ pathname: 'wx-bind-username', query: { sessionToken, nickname } });
               }}
             >
-              使用用户名密码登录，并绑定微信
+              <Icon name='UserOutlined' size={16}/>
+              用户名登录绑定微信
             </Button>
           )}
           {this.props.site.isSmsOpen && (
             <Button
-              className={layout.button}
+              className={`${layout.button} ${layout.btn_select} ${layout.btn_phone}`}
               type="primary"
               onClick={() => {
                 router.push({ pathname: 'wx-bind-phone', query: { sessionToken, nickname } });
               }}
             >
-              使用手机号登录，并绑定微信
+              <Icon name='PhoneOutlined' size={16}/>
+              手机号登录绑定微信
             </Button>
           )}
         </div>

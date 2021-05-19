@@ -125,6 +125,28 @@
     line-height: rem($font-line-height-large);
   }
 }
+@mixin btn_select {
+  display: flex;
+  text-align: center;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  :global(.dzq-icon){
+    margin-right: $margin-2n;
+  }
+}
+@mixin btn_wx {
+  background: $success-color;
+}
+@mixin btn_user {
+  background: $primary-color;
+  margin-top: $margin-4n;
+}
+@mixin btn_phone {
+  background: $warn-color;
+  margin-top: $margin-4n;
+}
 
 // ------------PC;
 
