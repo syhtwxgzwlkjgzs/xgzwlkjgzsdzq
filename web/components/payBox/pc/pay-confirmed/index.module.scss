@@ -231,31 +231,12 @@
       // margin-right: rem($margin-2n);
     }
 
-    &.curr{
-      border-color: #C5C6CA;
-    }
-    &.activation{
-      border-color: #C5C6CA;
-    }
+    // &.curr{
+    //   border-color: #C5C6CA;
+    // }
+    // &.activation{
+    //   border-color: #C5C6CA;
+    // }
   }
-  
-  .payListItem01 {
-    border: var(--border-border);
-    width: rem(40);
-    height: rem(40);
-    text-align: center;
-    line-height: rem(40);
-    font-size: rem($font-size-large);
-    color: $text-color-primary;
-    &:not(:last-child) {
-      // margin-right: rem($margin-2n);
-    }
 
-    &.curr{
-      border-color: #C5C6CA;
-    }
-    &.activation{
-      border-color: #C5C6CA;
-    }
-  }
 }

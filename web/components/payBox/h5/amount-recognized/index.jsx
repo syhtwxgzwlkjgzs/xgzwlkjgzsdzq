@@ -43,8 +43,8 @@ export default class AmountRecognized extends Component {
       <div className={styles.amountWrapper}>
         <CommonAccountContent currentPaymentData={options} />
         {/* 按钮区域-提交内容 */}
-        <div className={styles.amountSubmit}>
-          <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.asBtn} full>
+        <div className={styles.btnBox}>
+          <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.btn} full>
             支付 ￥{this.transMoneyToFixed(amount)}
           </Button>
         </div>
