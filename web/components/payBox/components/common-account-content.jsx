@@ -132,7 +132,7 @@ export default class CommonAccountContent extends Component {
                 {
                   type === ORDER_TRADE_TYPE.REGEISTER_SITE &&
                   (
-                    <div className={styles.acExplain}>
+                    <div className={`${styles.acExplain} ${platform === 'h5' && styles.acExplainH5}`}>
                       <Checkbox checked={this.props.payBox.isAnonymous} onChange={this.handleChangeIsAnonymous} /> 隐藏我的付费信息
                     </div>
                   )}

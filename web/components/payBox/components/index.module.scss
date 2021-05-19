@@ -19,10 +19,13 @@
   .acExplain {
     display: flex;
     align-items: center;
-    line-height: rem($font-line-height-large);
+    line-height: rem(24);
     margin: rem($margin-2n) 0;
     font-size: rem($font-size-primary);
     color: $text-color-primary;
+  }
+  .acExplainH5 {
+    margin-bottom: rem($margin-2n);
   }
   // 交易类型label提示
   .acExplainLabel{
