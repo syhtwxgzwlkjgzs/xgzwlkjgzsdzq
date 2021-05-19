@@ -7,6 +7,10 @@
   height: rem(337);
   box-sizing: border-box;
 
+  .moneyUnit {
+    font-size: $font-size-large;
+  }
+
 
   .title{
     text-align: center;
@@ -122,8 +126,10 @@
 
 .payBoxCloseIcon {
   position: absolute;
-  right: rem(16);
-  top: rem(24);
+  right: rem(3);
+  top: rem(5);
+  width: rem(40);
+  height: rem(40);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -25,7 +25,7 @@ class Index extends React.Component {
       list: [],
       isShow: false,
     });
-  }
+  };
 
   componentDidMount() {
     this.setState({
@@ -122,7 +122,7 @@ class Index extends React.Component {
   handleCancel = () => {
     this.props.payBox.step = STEP_MAP.PAYWAY;
     this.initState();
-  }
+  };
 
   // 渲染弹窗形式支付
   renderDialogPayment = () => {
@@ -133,7 +133,10 @@ class Index extends React.Component {
         <Dialog className={styles.paypwdDialogWrapper} visible={isShow} position="center" maskClosable={true}>
           <div className={styles.paypwdDialogContent}>
             <div className={styles.paypwdTitle}>立即支付</div>
-            <div className={styles.paypwdAmount}>￥{options.amount}</div>
+            <div className={styles.paypwdAmount}>
+              <span className={styles.moneyUnit}>￥</span>
+              {Number(options.amount).toFixed(2)}
+            </div>
             <Divider className={styles.paypwdDivider} />
             <div className={styles.paypwdMesg}>
               <span className={styles.payLabel}>支付方式</span>
