@@ -55,7 +55,7 @@ const Index = (props) => {
           rewardData,
           fileData,
         } = handleAttachmentData(data);
-  
+
         return (
           <div className={styles.wrapper}>
               {text && <PostContent content={text} onPay={onPay} onRedirectToDetail={onClick} />}
@@ -66,6 +66,7 @@ const Index = (props) => {
                     coverUrl={videoData.coverUrl}
                     onPay={onPay}
                     isPay={needPay}
+                    status={videoData.status}
                   />
                 )}
                 {imageData && (
