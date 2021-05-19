@@ -8,16 +8,17 @@
  * @prop {string} showLimit 是否显示最大长度，需配合maxLength使用
  * @prop {string} cursorSpacing 指定光标与键盘的距离，单位 px
  * @prop {function} onChange onChange事件，输出当前文本框内容
- * @prop {function} onFocus onChange事件，输出当前文本框内容
+ * @prop {function} onFocus 聚焦事件
+ * @prop {function} onBlur 失焦事件
  */
 import React, { memo } from 'react';
 import { View } from '@tarojs/components';
-import { Input } from '@discuzq/design';
+import { Textarea } from '@discuzq/design';
 import styles from './index.module.scss';
 
 import PropTypes from 'prop-types';
 
-const TextArea = ({
+const Index = ({
   value,
   rows,
   placeholder,
@@ -32,7 +33,7 @@ const TextArea = ({
   return (
     <View className={styles.container}>
       <View className={styles['container-inner']}>
-        <Input.Textarea
+        <Textarea
           className={`${styles.content}`}
           value={value}
           rows={rows}
@@ -51,7 +52,7 @@ const TextArea = ({
   );
 };
 
-TextArea.propTypes = {
+Index.propTypes = {
   value: PropTypes.string,
   rows: PropTypes.number,
   placeholder: PropTypes.string,
@@ -61,10 +62,11 @@ TextArea.propTypes = {
   cursorSpacing: PropTypes.number,
   onChange: PropTypes.func,
   onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
 };
 
 // 设置props默认类型
-TextArea.defaultProps = {
+Index.defaultProps = {
   value: '',
   rows: 4,
   placeholder: '请填写您的发布内容...',
@@ -74,7 +76,7 @@ TextArea.defaultProps = {
   cursorSpacing: 0,
   onChange: () => { },
   onFocus: () => { },
-  onBlur: () => {},
+  onBlur: () => { },
 };
 
-export default memo(TextArea);
+export default memo(Index);
