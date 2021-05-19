@@ -174,7 +174,6 @@ class Index extends Component {
     this.setState({
       operationType: item.type
     });
-
     let nextRoute;
     switch (item.type) {
       // 根据类型分发具体操作
@@ -216,7 +215,7 @@ class Index extends Component {
       case THREAD_TYPE.video:
         this.handleVideoUpload();
         break;
-      case THREAD_TYPE.emoji:
+      case 'emoji':
         this.setState({
           showEmoji: true
         });

@@ -20,8 +20,10 @@
       color: $icon-color;
     }
 
-    Text {
+    .text {
       margin-right: 8px;
+      font-size: $font-size-small;
+      color: $text-color-primary;
     }
   }
 
