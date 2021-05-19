@@ -98,9 +98,11 @@ class TopicSelect extends Component {
     this.props.cancelTopic();
   }
 
-  renderItem({ topics = [], index }) {
-    const item = topics[index] || {};
-    return (
+  renderItem() {
+    const { threadPost } = this.props;
+    const { topics = [] } = threadPost;
+    if (!topics || topics.length === 0) return null;
+    return topics.map((item) => (
       <div
         key={item.id}
         className={styles['topic-item']}
@@ -114,14 +116,14 @@ class TopicSelect extends Component {
         </div>
         <div className={styles['item-right']}>{item.viewCount}热度</div>
       </div>
-    );
+    ));
   }
 
   render() {
-    const { visible = false, threadPost, cancelTopic } = this.props;
-    const { topics = [] } = threadPost;
+    const { visible = false, cancelTopic, pc } = this.props;
+    const clsName = pc ? `${styles.wrapper} ${styles.pc}` : styles.wrapper;
     const content = (
-      <div className={styles.wrapper}>
+      <div className={clsName}>
         {/* 搜索框 */}
         <div className={styles.input}>
           <Icon className={styles.inputWrapperIcon} name="SearchOutlined" size={16} />
@@ -163,7 +165,7 @@ class TopicSelect extends Component {
               onPullingUp={() => Promise.reject()}
               isRowLoaded={() => true}
             /> */}
-            {topics && topics.map((_, index) => this.renderItem({ topics, index })) }
+            {this.renderItem()}
           </BaseList>
         {/* </div> */}
 
