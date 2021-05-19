@@ -4,7 +4,7 @@ import App from 'next/app';
 import initializeStore from '@common/store';
 import Head from 'next/head';
 import PayBoxProvider from '../components/payBox/payBoxProvider';
-
+import Router from '@discuzq/sdk/dist/router';
 import '@discuzq/design/dist/styles/index.scss';
 import '../styles/index.scss';
 
@@ -12,6 +12,13 @@ class DzqApp extends App {
   constructor(props) {
     super(props);
     this.appStore = initializeStore();
+  }
+
+  componentDidMount() {
+    if (process.env.DISCUZ_RUN === 'static') {
+      // csr部署时因方便ngixn部署统一指向index.html,所以统一在此重定向一次
+      Router.redirect({ url: `${window.location.pathname}${window.location.search}` });
+    }
   }
 
   render() {

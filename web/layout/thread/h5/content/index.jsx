@@ -101,7 +101,7 @@ const RenderThreadContent = inject('user')(
               view={`${threadStore?.threadData?.viewCount}` || ''}
               time={`${threadStore?.threadData?.createdAt}` || ''}
               isEssence={isEssence}
-              isPay={isThreadPay}
+              isPay={!isFree}
               isReward={isReward}
               isRed={isRedPack}
             ></UserInfo>
@@ -156,6 +156,7 @@ const RenderThreadContent = inject('user')(
               coverUrl={parseContent.VIDEO.coverUrl}
               width={400}
               height={200}
+              status={parseContent.VIDEO.status}
             />
           )}
           {/* 音频 */}

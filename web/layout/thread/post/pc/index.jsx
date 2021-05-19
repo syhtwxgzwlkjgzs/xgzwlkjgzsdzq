@@ -200,7 +200,10 @@ class ThreadPCPage extends React.Component {
                   this.props.setPostData({ product: data });
                 }
               }
-              cancel={() => this.props.handleSetState({ currentAttachOperation: false })}
+              cancel={() => {
+                this.props.handleSetState({ currentAttachOperation: false });
+                this.props.threadPost.setCurrentSelectedToolbar(false);
+              }}
             />
           )}
           {/* 插入付费 */}
@@ -258,6 +261,7 @@ class ThreadPCPage extends React.Component {
                 this.props.handleSetState({
                   currentAttachOperation: false,
                 });
+                this.props.threadPost.setCurrentSelectedToolbar(false);
               }}
               data={postData.rewardQa}
             />

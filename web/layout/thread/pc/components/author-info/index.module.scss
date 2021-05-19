@@ -102,4 +102,10 @@
     background: var(--color-primary5);
     border-color: var(--color-primary5);
   }
+
+  .with-followed {
+    // TODO:token
+    background: $warn-color;
+    border-color: $warn-color;
+  }
 }

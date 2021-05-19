@@ -66,20 +66,43 @@ class AuthorInfo extends React.Component {
         </div>
         {this.props.isShowBtn ? (
           <div className={styles.btn}>
-            <Button
-              type={this.user.follow ? 'primary' : 'primary'}
-              className={classnames(styles.follow, this.user.follow && styles['is-followed'])}
-              onClick={() => this.onFollowClick()}
-            >
-              <div className={styles.btnItem}>
-                <Icon
-                  name={this.user.follow ? 'CheckOutlined' : 'PlusOutlined'}
-                  size="14"
-                  className={styles.btnIcon}
-                ></Icon>
-                <span>{this.user.follow ? '已关注' : '关注'}</span>
-              </div>
-            </Button>
+            {/* 未关注 */}
+            {!this.user.follow && (
+              <Button type="primary" className={styles.follow} onClick={() => this.onFollowClick()}>
+                <div className={styles.btnItem}>
+                  <Icon name="PlusOutlined" size="14" className={styles.btnIcon}></Icon>
+                  <span>关注</span>
+                </div>
+              </Button>
+            )}
+
+            {/* 已关注 */}
+            {this.user.follow === 1 && (
+              <Button
+                type="primary"
+                className={classnames(styles.follow, styles['is-followed'])}
+                onClick={() => this.onFollowClick()}
+              >
+                <div className={styles.btnItem}>
+                  <Icon name="CheckOutlined" size="14" className={styles.btnIcon}></Icon>
+                  <span>已关注</span>
+                </div>
+              </Button>
+            )}
+
+            {/* 互相关注 */}
+            {this.user.follow === 2 && (
+              <Button
+                type="primary"
+                className={classnames(styles.follow, styles['with-followed'])}
+                onClick={() => this.onFollowClick()}
+              >
+                <div className={styles.btnItem}>
+                  <Icon name="WithdrawOutlined" size="14" className={styles.btnIcon}></Icon>
+                  <span>互关</span>
+                </div>
+              </Button>
+            )}
 
             <Button className={styles.privateLetter} onClick={() => this.onprivateLetter()}>
               <div className={styles.btnItem}>

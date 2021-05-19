@@ -40,8 +40,8 @@ class WXBindUsernameH5page extends React.Component {
     }
   };
   render() {
-    const { userLogin, router, user } = this.props;
-    const { nickname } = router.query;
+    const { userLogin, router } = this.props;
+    const { nickname, avatarUrl } = router.query;
     userLogin.sessionToken = router.query.sessionToken;
     return (
       <div className={layout.container}>
@@ -58,7 +58,7 @@ class WXBindUsernameH5page extends React.Component {
                         style={{margin: '0 8px'}}
                         circle
                         size='small'
-                        image={user.avatarUrl}
+                        image={avatarUrl}
                         text={nickname && nickname.substring(0, 1)}
                         />{nickname}
                     </>

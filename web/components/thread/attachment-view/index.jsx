@@ -24,38 +24,37 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
 
   const onDownLoad = (url) => {
     if (!isPay) {
-      window.open(url, '_self')
+      window.open(url, '_self');
     } else {
-      onPay()
+      onPay();
     }
-  }
+  };
 
   const onPreviewer = (url) => {
     if (!isPay) {
-       window.open(url, '_self')
+      window.open(url, '_self');
     } else {
-      onPay()
+      onPay();
     }
-  }
+  };
 
   const handleIcon = (type) => {
     if (type === 'XLS' || type === 'XLSX') {
-      return 'XLSOutlined'
-    } else if (type === 'DOC' || type === 'DOCX') {
-      return 'DOCOutlined'
-    } else if (type === 'ZIP') {
-      return 'DOCOutlined'
-    } else if (type === 'PDF') {
-      return 'DOCOutlined'
-    } else if (type === 'PPT') {
-      return 'PPTOutlined'
-    } else {
-      return 'DOCOutlined'
+      return 'XLSOutlined';
+    } if (type === 'DOC' || type === 'DOCX') {
+      return 'DOCOutlined';
+    } if (type === 'ZIP') {
+      return 'DOCOutlined';
+    } if (type === 'PDF') {
+      return 'DOCOutlined';
+    } if (type === 'PPT') {
+      return 'PPTOutlined';
     }
-  }
+    return 'DOCOutlined';
+  };
 
   const Normal = ({ item, index, type }) => {
-    const iconName = handleIcon(type)
+    const iconName = handleIcon(type);
     return (
       <div className={styles.container} key={index} onClick={onClick} >
         <div className={styles.wrapper}>
@@ -66,25 +65,25 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
               <span className={styles.size}>{handleFileSize(parseFloat(item.fileSize || 0))}</span>
             </div>
           </div>
-          
+
           <div className={styles.right}>
             <span className={styles.span} onClick={() => onPreviewer(item.url)}>浏览</span>
             <span className={styles.span} onClick={() => onDownLoad(item.url)}>下载</span>
           </div>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   const Pay = ({ item, index, type }) => {
-    const iconName = handleIcon(type)
+    const iconName = handleIcon(type);
     return (
       <div className={`${styles.container} ${styles.containerPay}`} key={index} onClick={onPay}>
         <Icon className={styles.containerIcon} size={20} name={iconName} />
         <span className={styles.content}>{item.fileName}</span>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <div>
@@ -97,7 +96,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
               : 'UNKNOWN';
             return (
               !isPay ? (
-                <Normal key={index} item={item} index={index} type={type} /> 
+                <Normal key={index} item={item} index={index} type={type} />
               ) : (
                 <Pay key={index} item={item} index={index} type={type} />
               )

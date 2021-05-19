@@ -47,7 +47,7 @@ export default inject('user')(
     const isAttachmentPay = threadStore?.threadData?.payType === 2 && threadStore?.threadData?.paid === false;
     const attachmentPrice = threadStore?.threadData?.attachmentPrice || 0;
     // 是否帖子付费
-    const isThreadPay = threadStore?.threadData?.payType === 1 && threadStore?.threadData?.paid === false;
+    const isThreadPay = threadStore?.threadData?.payType === 1;
     const threadPrice = threadStore?.threadData?.price || 0;
     // 是否作者自己
     const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData?.userId;
@@ -111,10 +111,19 @@ export default inject('user')(
               view={`${threadStore?.threadData?.viewCount}` || ''}
               time={`${threadStore?.threadData?.createdAt}` || ''}
               userId={threadStore?.threadData?.user?.userId}
+              isEssence={isEssence}
+              isPay={!isFree}
+              isReward={isReward}
+              isRed={isRedPack}
+              platform="pc"
             ></UserInfo>
           </div>
           {props?.user?.isLogin() && (
             <div className={topic.more}>
+              {/* 当存在任一标签时，显示分割线 */}
+              {(isEssence || !isFree || isReward || isRedPack) && (
+                <Divider mode="vertical" className={topic.moreDivider}></Divider>
+              )}
               <div className={topic.iconText}>
                 <Dropdown
                   menu={
@@ -138,13 +147,6 @@ export default inject('user')(
               <div className={topic.iconText} onClick={() => onDropdownChange('report')}>
                 <Icon className={topic.icon} name="WarnOutlinedThick"></Icon>
                 <span className={topic.text}>举报</span>
-              </div>
-            </div>
-          )}
-          {isEssence && (
-            <div className={topic.headerTag}>
-              <div className={topic.browseCategory}>
-                <p className={topic.categoryEssence}>精华</p>
               </div>
             </div>
           )}
@@ -182,6 +184,7 @@ export default inject('user')(
                 coverUrl={parseContent.VIDEO.coverUrl}
                 width={400}
                 height={200}
+                status={parseContent.VIDEO.status}
               />
             )}
 
@@ -282,13 +285,7 @@ export default inject('user')(
             <div className={topic.likeReward}>
               <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
             </div>
-            <span>
-              {isBeReward
-                ? threadStore?.threadData?.likeReward?.likePayCount
-                  ? `${threadStore?.threadData?.likeReward?.likePayCount}个赞及打赏`
-                  : ''
-                : threadStore?.threadData?.likeReward?.likePayCount || ''}
-            </span>
+            <span>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
           </div>
           {threadStore?.threadData?.likeReward?.shareCount > 0 && (
             <span className={topic.share}>{threadStore?.threadData?.likeReward?.shareCount}次分享</span>

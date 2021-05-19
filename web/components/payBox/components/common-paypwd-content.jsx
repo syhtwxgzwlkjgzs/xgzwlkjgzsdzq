@@ -119,30 +119,9 @@ export default class Index extends Component {
     return nodeList;
   }
 
-  showTitle = () => {
-    const { step } = this.props.payBox;
-    let title = '';
-    switch (step) {
-      case STEP_MAP.WALLET_PASSWORD: // 表示钱包支付
-        // title = '输入支付密码';
-        break;
-      case STEP_MAP.SET_PASSWORD: // 表示设置支付密码
-        title = '设置支付密码';
-        break;
-      default:
-        break;
-    }
-    return title
-  };
-
   render() {
     return (
       <div>
-        {
-          this.showTitle() && (
-            <p className={styles.title}>{this.showTitle()}</p>
-          )
-        }
         <div className={styles.payList}>{this.renderPwdItem()}</div>
       </div>
     );
@@ -150,6 +129,6 @@ export default class Index extends Component {
 }
 
 Index.defaultProps = {
-  updatePwd: function () {}, // 更新密码回调
+  updatePwd: function () { }, // 更新密码回调
   whetherIsShowPwdBox: false, // 是否显示输入密码框 默认显示下划线密码输入（样式）
 };

@@ -5,7 +5,7 @@
   padding-bottom: 44px;
   background: $white;
   z-index: 9;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .title {
   padding: $padding-2n 0 $padding-4n 0;
@@ -27,16 +27,21 @@
   margin-bottom: $margin-6n;
 }
 .bottom {
-  width: calc(100vw - 48px);
-  padding: $padding-3n 0;
-  font-weight: normal;
-  font-size: $font-size-base;
-  line-height: $font-line-height-small;
+  width: 100%;
+  padding: 0 $padding-6n;
+  box-sizing: border-box;
   text-align: center;
-  color: $text-color-regular;
   position: fixed;
   bottom: 0;
-  left: 24px;
+  left: 0;
   background: $white;
-  border-top: $border-solid-1;
+  .bottom_content {
+    padding: $padding-3n 0;
+    font-weight: normal;
+    font-size: $font-size-base;
+    line-height: $font-line-height-small;
+    color: $text-color-regular;
+    border-top: $border-solid-1;
+    cursor: pointer;
+  }
 }
