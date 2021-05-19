@@ -78,7 +78,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
             )
             : (
               <>
-                <div onClick={() => setShow(true)} > {`${formatDate(times, 'yyyy/MM/dd h:mm')}`} </div>
+                <div onClick={() => setShow(true)} > { times.replace(/-/g, '/') } </div>
                 <Icon name="RightOutlined" />
               </>
             )}
