@@ -64,7 +64,6 @@ const BaseLayout = (props) => {
 
   const calcSize = (width = 1600) => {
     let size = 'xl';
-    console.log("size width: ", width)
 
     if (width < 992) {
         size = 'sm';
