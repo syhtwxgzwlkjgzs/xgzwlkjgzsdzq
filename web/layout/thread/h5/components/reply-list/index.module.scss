@@ -25,11 +25,13 @@
         text-align: left;
         color: var(--color-text-primary);
         word-break: break-all;
-        @include lamp-clamp(3);
 
-        p {
+        .isShowOne {
           @include lamp-clamp(3);
-          line-height: rem(24);
+
+          p {
+            @include lamp-clamp(3);
+          }
         }
 
         img {
