@@ -1,4 +1,5 @@
 @import '@common/styles/index.scss';
+@import '@common/styles/_variable.scss';
 
 .payconfirmWrapper {
   background: var(--color-white);
@@ -9,15 +10,17 @@
   box-sizing: border-box;
   .icon {
     margin-right: rem($margin-2n);
+    vertical-align: middle;
   }
   .payTitle {
-    font-weight: bold;
+    font-weight: 600;
     text-align: center;
-    font-size: rem(16);
+    font-size: rem($font-size-middle);
     line-height: rem(21);
+    color: $text-color-primary;
   }
   .payMoney {
-    margin: rem(24) 0 rem(16);
+    margin: rem($margin-6n) 0 rem($margin-6n);
     font-size: rem($font-size-base);
     height: rem(60);
     border-radius: rem(5);
@@ -25,19 +28,21 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    color: $text-color-primary;
   }
   .payM {
     color: $error-color;
     font-weight: 600;
-    font-size: rem(20);
+    font-size: rem($font-size-large);
   }
   .payTab_top {
-    margin-bottom: rem(16);
+    // margin-bottom: rem(16);
     text-align: center;
   }
   .payTab {
     margin-right: rem($margin-6n);
-    font-size: rem(14);
+    font-size: rem($font-size-primary);
+    font-weight: 600;
     // &:hover {
     //   text-decoration: underline;
     //   color: #333;
@@ -53,13 +58,21 @@
     .dzq-checkbox-wrap .dzq-checkbox.dzq-checkbox--radio {
       border-radius: rem(5);
     }
+    .dzq-checkbox-wrap {
+      padding: 0;
+    }
     .dzq-checkbox-wrap .dzq-checkbox.dzq-checkbox--radio::after {
       border-radius: rem(5);
     }
-    .dzq-divider--horizontal {
-      margin: rem(16) 0;
-    }
+    // .dzq-divider--horizontal {
+    //   margin: rem(16) 0;
+    // }
   }
+
+  .payLine {
+    margin: rem($margin-6n) 0;
+  }
+
   .payTabActive {
     text-decoration: underline;
     color: #333;
@@ -76,24 +89,24 @@
       padding-left: rem($margin-4n);
     }
     .wPayment_01 {
-      font-size: rem(16);
+      font-size: rem($font-size-middle);
       line-height: rem(24);
       font-weight: 600;
     }
     .wPayment_02 {
       display: flex;
       align-items: center;
-      margin-top: rem(16);
-      font-size: rem(12);
+      margin-top: rem($margin-4n);
+      font-size: rem($font-size-small);
       line-height: rem(22);
-      color: #4F5A70;
+      color: $text-color-regular;
     }
   }
   .wPayment_03 {
-    font-size: rem(12);
-    color: #8590A6;
+    font-size: rem($font-size-small);
+    color: $text-color-secondary;
     line-height: rem(24);
-    margin-top: rem(16);
+    margin-top: rem($margin-4n);
   }
   .wPaymentCode {
     width: rem(106);
@@ -110,20 +123,24 @@
   .walletPayment {
     padding-left: rem(30);
     .walletTitle {
-      font-size: rem(16);
-      line-height: rem(24);
+      font-size: rem($font-size-middle);
       font-weight: 600;
-      margin: rem(24) 0 rem(16);
+      margin: rem($margin-6n) 0 rem($margin-4n);
+      display: flex;
+      align-items: center;
     }
     .walletDec {
-      line-height: rem(36);
+      font-size: rem($font-size-small);
+      // line-height: rem(36);
+      margin-bottom: rem($margin-4n);
     }
     .walletBalance {
-      font-size: rem(20);
-      font-weight: 800;
-      letter-spacing: rem(1);
+      font-size: rem($font-size-large);
+      font-weight: 600;
+      word-break: break-all;
     }
     .walletSettingPwd {
+      font-size: rem($font-size-primary);
       color: var(--color-primary3);
       cursor: pointer;
       &:hover {
@@ -131,11 +148,12 @@
       }
     }
     .walletText {
-      font-size: rem(14);
+      font-size: rem($font-size-primary);
+      color: $text-color-regular;
     }
     .walletWarn {
       color: $text-color-placeholder;
-      font-size: rem(14);
+      font-size: rem($font-size-primary);
       margin-left: rem($margin-4n);
     }
     .walletChangePwd {
@@ -143,23 +161,23 @@
       height: rem(40);
     }
     .walletConfirmBc {
-      width: 100%;
-      margin-top: rem(24);
-      padding-left: rem(45);
+      width: calc(100% - 55px);
+      margin: auto;
     }
     .walletConfirmBtn {
       display: block;
       width: rem(248);
       border-radius: rem(5);
+      height: rem(36);
     }
   }
   .walletPayment_01 {
     padding-left: 0;
   }
   .walletDec > span:nth-child(1) {
-    color: #4F5A70;
-    margin-right: rem(24);
-    font-size: rem(14);
+    color: $text-color-regular;
+    margin-right: rem($margin-4n);
+    font-size: rem($font-size-small);
   }
   .paymentCloseBtn {
     position: absolute;
@@ -179,4 +197,65 @@
   margin-top: rem($margin-2n);
   text-align: center;
   color: $text-color-regular;
+}
+
+.walletPayPwd {
+  display: flex;
+  align-items: center;
+}
+
+.payList{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+
+  .payListItem{
+
+    &:first-child {
+      border-radius: 5px 0 0 5px;
+    }
+  
+    &:last-child {
+      border-radius: 0 5px 5px 0;
+    }
+
+    border: var(--border-border);
+    width: rem(40);
+    height: rem(40);
+    text-align: center;
+    line-height: rem(40);
+    font-size: rem($font-size-middle);
+    color: $text-color-primary;
+    &:not(:last-child) {
+      // margin-right: rem($margin-2n);
+    }
+
+    &.curr{
+      border-color: #C5C6CA;
+    }
+    &.activation{
+      border-color: #C5C6CA;
+    }
+  }
+  
+  .payListItem01 {
+    border: var(--border-border);
+    width: rem(40);
+    height: rem(40);
+    text-align: center;
+    line-height: rem(40);
+    font-size: rem($font-size-large);
+    color: $text-color-primary;
+    &:not(:last-child) {
+      // margin-right: rem($margin-2n);
+    }
+
+    &.curr{
+      border-color: #C5C6CA;
+    }
+    &.activation{
+      border-color: #C5C6CA;
+    }
+  }
 }
