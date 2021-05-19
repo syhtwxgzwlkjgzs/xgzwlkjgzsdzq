@@ -24,6 +24,14 @@
       .dzq-checkbox-wrap {
         padding: 0;
       }
+      .is-checked {
+        border: none;
+        .dzq-checkbox--radio {
+          &::after {
+            border: none;
+          }
+        }
+      }
     }
 
     .listItem{
