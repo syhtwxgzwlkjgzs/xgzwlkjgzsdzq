@@ -15,7 +15,7 @@ export default class AmountRecognized extends Component {
     this.props.payBox.visible = false
     this.props.payBox.clear();
   }
-  
+
 
   // 点击支付去到 选择支付方式页面
   goToThePayConfirmPage = async () => {
@@ -30,17 +30,22 @@ export default class AmountRecognized extends Component {
     }
   };
 
+  // 转换金额小数
+  transMoneyToFixed = (num) => {
+    return Number(num).toFixed(2);
+  };
+
   // 确认金额内容
   renderAmountRecognizedContent = () => {
     const { options = {} } = this.props.payBox;
-    const { amount } = options;
+    const { amount = 0 } = options;
     return (
       <div className={styles.amountWrapper}>
         <CommonAccountContent currentPaymentData={options} />
         {/* 按钮区域-提交内容 */}
         <div className={styles.amountSubmit}>
           <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.asBtn} full>
-            支付 ￥{amount}
+            支付 ￥{this.transMoneyToFixed(amount)}
           </Button>
         </div>
         {/* 关闭按钮 */}

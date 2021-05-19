@@ -96,11 +96,12 @@
     &::before {
       content: '';
       display: block;
-      width: 100%;
+      // width: 100%;
       height: rem(1);
       background: var(--border-line-color);
       position: relative;
       top: rem(-8);
+      margin: 0 rem(-$margin-4n);
     }
 
     .btn{
