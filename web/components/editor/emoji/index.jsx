@@ -31,7 +31,7 @@ export default function Emoji(props) {
   },
   };
   if (pc) return (
-    <div className={`${styles['dzq-emoji']} ${styles.pc}`}>
+    <div id="dzq-toolbar-emoji" className={`${styles['dzq-emoji']} ${styles.pc}`}>
       {emojis.map(item => <img className={styles['dzq-emoji__icon']}
         key={item.code}
         src={item.url}
@@ -55,7 +55,7 @@ export default function Emoji(props) {
       deviceType="mobile"
       ssr={true}
       infinite={false}
-      containerClass={`first-carousel-container container ${styles['dzq-emoji']}`}
+      containerClass={`first-carousel-container dzq-toolbar-emoji container ${styles['dzq-emoji']}`}
     >
       {page.map((item, index) => (
         <div className={styles['dzq-emoji__slide']} key={index}>
