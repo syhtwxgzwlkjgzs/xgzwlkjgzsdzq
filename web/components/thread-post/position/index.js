@@ -54,7 +54,7 @@ const Position = (props) => {
   // 调用腾讯位置服务
   const initPosition = () => {
     if (!lbskey) return;
-    const geolocation = new qq.maps.Geolocation(lbskey, 'myapp');
+    const geolocation = new window.qq.maps.Geolocation(lbskey, 'myapp');
     setGeolocation(geolocation);
     geolocation.getLocation(showPosition, errorPosition, { timeout: 6000 });
   };
@@ -81,7 +81,7 @@ const Position = (props) => {
     // 设置默认地址
     if (lbskey) showPosition();
     // 提前初始化地图 TODO: 这里暂时放在一进入就初始化，不过这个会有一个位置授权的操作
-    if (qq && lbskey) initPosition();
+    if (window.qq && lbskey) initPosition();
   }, []);
 
   return (
