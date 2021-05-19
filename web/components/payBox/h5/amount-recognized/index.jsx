@@ -42,7 +42,9 @@ export default class AmountRecognized extends Component {
     const { amount = 0 } = options;
     return (
       <div className={styles.amountWrapper}>
-        <CommonAccountContent currentPaymentData={options} />
+        <div className={styles.giftInfo}>
+          <CommonAccountContent currentPaymentData={options} />
+        </div>
         {/* 按钮区域-提交内容 */}
         <div className={styles.btnBox}>
           <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.btn} full>
