@@ -136,7 +136,7 @@ class ThreadH5Page extends React.Component {
 
     if (success) {
       Toast.success({
-        content: '操作成功',
+        content: params.isFavorite ? '收藏成功' : '取消收藏',
       });
       return;
     }
@@ -198,7 +198,6 @@ class ThreadH5Page extends React.Component {
 
   // 点击更多icon
   onMoreClick = () => {
-    console.log('更多');
     // this.setState({
     //   text: !this.state.text,
     // });

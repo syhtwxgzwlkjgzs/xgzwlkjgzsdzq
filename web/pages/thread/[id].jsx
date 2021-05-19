@@ -95,6 +95,18 @@ class Detail extends React.Component {
     if (!this.props?.thread?.threadData) {
       await this.props.thread.fetchThreadDetail(id);
 
+      // 判断是否审核通过
+      const isApproved = (this.props.thread?.threadData?.isApproved || 0) === 1;
+      if(!isApproved) {
+        const currentUserId = this.props.user?.userInfo?.id; // 当前登录用户
+        const userId = this.props.thread?.threadData?.user?.userId; // 帖子作者
+        // 不是作者自己。跳回首页
+        if(!currentUserId || !userId || currentUserId !== userId) {
+          Router.redirect({url: '/'});
+          return
+        }
+      }
+
       // 获取作者信息
       const { site } = this.props;
       const { platform } = site;
