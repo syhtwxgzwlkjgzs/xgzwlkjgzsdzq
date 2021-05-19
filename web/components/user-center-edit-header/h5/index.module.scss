@@ -33,11 +33,12 @@
       line-height: 1.2;
       color: $text-color-primary;
       margin-left: rem($margin-2n);
+      
+    }
+    .userSignatureInput {
+      width: auto;
+      height: rem(16);
       :global {
-        .dzq-input {
-          width: 100%;
-          height: rem(16);
-        }
         .dzq-input__inner {
           width: 100%;
           line-height: 1;

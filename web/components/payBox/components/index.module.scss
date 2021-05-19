@@ -12,16 +12,30 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: rem($margin-6n) 0 rem($margin-4n);
+  margin: rem(8) 0 0;
   font-size: rem(14);
   // 交易内容item
   .acExplain {
     display: flex;
     align-items: center;
-    line-height: rem($font-line-height-large);
+    line-height: rem(24);
     margin: rem($margin-2n) 0;
     font-size: rem(14);
     color: #0B0B37;
+    :global {
+      .dzq-checkbox-wrap {
+        padding: 0;
+      }
+      .dzq-checkbox-wrap .dzq-checkbox {
+        border-radius: 50%;
+      }
+      .dzq-checkbox-wrap .dzq-checkbox::after {
+        border-radius: 50%;
+      }
+    }
+  }
+  .acExplainH5 {
+    margin-bottom: rem(8);
   }
   // 交易类型label提示
   .acExplainLabel{
@@ -41,7 +55,16 @@
     font-weight: 600;
   }
   .acExplainDivider {
-    margin: rem(8) 0;
+    margin: rem($margin-2n) 0;
+  }
+  .ampuntLineWrap {
+    margin: 0 rem(-$margin-4n);
+  }
+  .ampuntLine {
+    width: 100%;
+    height: rem(10);
+    background-color: var(--comment-content-bg-color);
+    margin: rem($margin-2n) 0;
   }
 }
 

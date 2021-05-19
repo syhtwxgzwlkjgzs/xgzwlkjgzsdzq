@@ -6,6 +6,8 @@
   padding: rem($padding-6n) rem($padding-4n) rem($padding-4n) rem($padding-4n);
   height: rem(337);
   box-sizing: border-box;
+
+
   .title{
     text-align: center;
     p{
@@ -17,6 +19,12 @@
   .list{
     margin-top: rem($margin-2n);
     margin-bottom: rem(100);
+
+    :global {
+      .dzq-checkbox-wrap {
+        padding: 0;
+      }
+    }
 
     .listItem{
         display: flex;
@@ -88,11 +96,12 @@
     &::before {
       content: '';
       display: block;
-      width: 100%;
+      // width: 100%;
       height: rem(1);
       background: var(--border-line-color);
       position: relative;
       top: rem(-8);
+      margin: 0 rem(-$margin-4n);
     }
 
     .btn{
