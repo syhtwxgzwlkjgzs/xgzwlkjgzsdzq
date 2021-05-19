@@ -117,10 +117,10 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
     setCurrent(0);
   };
 
-  const renderHeader = ({ title, icon, number  }) => (
+  const renderHeader = ({ title, icon, number }) => (
     <div className={styles.label}>
       {icon && <Icon className={styles.icon} name={icon} />}
-      <span className={`${styles.title} disable-click`}>{title}</span>
+      {title && <span className={`${styles.title} disable-click`}>{title}</span>}
       {number !== 0 && number !== '0' && <span className={`disable-click ${styles.num}`}>{number}</span>}
     </div>
   );
@@ -187,6 +187,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
                           platform={platform}
                           onClick={onUserClick}
                           type={item.type}
+                          isShowBottomLine={false}
                         />
                     ))
                   }
