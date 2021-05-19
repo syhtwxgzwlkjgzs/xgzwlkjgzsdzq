@@ -16,7 +16,7 @@
         min-width: rem(1150);
         width: 100%;
         border-bottom: 1px solid var(--border-line-color);
-        z-index: $zindex-tooltip;
+        z-index: $zindex-backtotop;
         .headerContent{
             width: rem(1436);
             display: flex;

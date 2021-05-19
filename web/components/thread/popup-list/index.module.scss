@@ -48,13 +48,13 @@
   justify-content: center;
 
   .icon {
-    margin-right: rem(4);
+    margin-right: rem(8);
   }
   .title {
-    line-height: 20px;
+    line-height: rem(20);
+    margin-right: rem(5);
   }
   .num {
-    margin-left: rem(4);
   }
 }
 
