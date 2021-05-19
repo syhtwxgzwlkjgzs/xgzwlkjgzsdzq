@@ -159,7 +159,7 @@ class Index extends Component {
                 <View className={styles.time}>{diffDate(new Date(item.createdAt))}</View>
               }
               {type === 'financial' &&
-                <View className={styles.amount}>+{(item.amount).toFixed(2)}</View>
+                <View className={styles.amount}>+{parseFloat(item.amount).toFixed(2)}</View>
               }
             </View>
 
