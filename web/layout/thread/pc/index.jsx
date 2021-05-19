@@ -56,6 +56,8 @@ class ThreadPCPage extends React.Component {
     this.threadBodyRef = React.createRef();
     this.commentDataRef = React.createRef();
 
+    this.position = 0;
+
     // 修改评论数据
     this.comment = null;
 
@@ -444,6 +446,27 @@ class ThreadPCPage extends React.Component {
       if (success && this.props.thread?.threadData?.threadId) {
         this.props.thread.fetchThreadDetail(this.props.thread?.threadData?.threadId);
       }
+    }
+  }
+
+  // 使用了H5页面的页面加载跳转逻辑
+  componentDidMount() {
+    // 当内容加载完成后，获取评论区所在的位置
+    this.position = this.commentDataRef?.current?.offsetTop - 50;
+
+    // 是否定位到评论位置
+    if (this.props?.thread?.isPositionToComment) {
+      // TODO:需要监听帖子内容加载完成事件
+      setTimeout(() => {
+        this.threadBodyRef.current.scrollTo(0, this.position);
+      }, 1000);
+    }
+  }
+
+  componentDidUpdate() {
+    // 当内容加载完成后，获取评论区所在的位置
+    if (this.props.thread.isReady) {
+      this.position = this.commentDataRef?.current?.offsetTop - 50;
     }
   }
 

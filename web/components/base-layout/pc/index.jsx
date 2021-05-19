@@ -24,7 +24,7 @@ import styles from './index.module.scss';
 */
 
 const BaseLayout = (props) => {
-  const { header = null, left = null, children = null, right = null, footer = null, onSearch, noMore = false, onRefresh } = props;
+  const { header = null, left = null, children = null, right = null, footer = null, onSearch, noMore = false, onRefresh, pageName = '' } = props;
 
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
@@ -94,7 +94,7 @@ const BaseLayout = (props) => {
   return (
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
-        
+
         <List {...props} className={styles.list} wrapperClass={styles.wrapper}>
           {
             showLeft && (
@@ -111,7 +111,7 @@ const BaseLayout = (props) => {
 
           {
             showRight && (
-              <div className={styles.right}>
+              <div className={`${styles.right} ${(pageName === "home") ? styles["home-right"] : ""}`}>
                 {typeof(right) === 'function' ? right({ ...props }) : right}
               </div>
             )
