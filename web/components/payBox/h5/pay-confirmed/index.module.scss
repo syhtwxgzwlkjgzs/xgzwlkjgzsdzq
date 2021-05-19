@@ -7,6 +7,10 @@
   height: rem(337);
   box-sizing: border-box;
 
+  .moneyUnit {
+    font-size: $font-size-large;
+  }
+
 
   .title{
     text-align: center;

@@ -62,6 +62,10 @@
   }
 
   line-height: 21px;
+
+  .moneyUnit {
+    font-size: $font-size-large;
+  }
 }
 .paypwdDialogContent {
   display: flex;
