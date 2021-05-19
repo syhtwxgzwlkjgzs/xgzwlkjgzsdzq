@@ -39,7 +39,7 @@ class Index extends React.Component {
 
       const { title = '', threadId = '', user } = this.props.data || {};
 
-      h5Share({title, path: `thread/${threadId}`});
+      h5Share({path: `thread/${threadId}`});
       this.props.index.updateThreadShare({ threadId }).then(result => {
         if (result.code === 0) {
           this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });

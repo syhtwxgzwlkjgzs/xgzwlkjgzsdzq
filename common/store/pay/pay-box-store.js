@@ -189,7 +189,7 @@ class PayBoxStore {
    * 进入钱包输入密码环节
    */
   @action
-  walletPayEnsure = async () => {
+  walletPayEnsure = () => {
     this.step = STEP_MAP.WALLET_PASSWORD;
   }
 

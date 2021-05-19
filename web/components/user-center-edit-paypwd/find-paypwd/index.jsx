@@ -8,6 +8,7 @@ import CaptchaInput from '../../user-center-edit-mobile/captcha-input'
 import VerifyCode from '../../user-center-edit-mobile/verify-code'
 
 @inject('site')
+@inject('user')
 @observer
 class index extends Component {
 
@@ -90,6 +91,7 @@ class index extends Component {
 
   render() {
     const { current_step, list = [], is_blur } = this.state
+    const mobile = this.props?.user.mobile
     return (
       <div>
         <Header />
@@ -98,7 +100,7 @@ class index extends Component {
           <div className={styles.labelInfo}>
             <div>
               <span className={styles.labelName}>手机号</span>
-              <span className={styles.labelValue} style={{ border: 'none' }}>18270****420</span>
+              <span className={styles.labelValue} style={{ border: 'none' }}>{mobile}</span>
             </div>
             <div>
               <VerifyCode key={current_step} text={"发送验证码"} getVerifyCode={this.getVerifyCode} />
@@ -110,13 +112,13 @@ class index extends Component {
           </div>
         </div>
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}><Input onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur} mode="password" placeholder="请输入新密码" /></div>
+          <div className={styles.labelValue}><Input onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur} mode="password" placeholder="请输入新密码" type="number" maxLength={6} /></div>
         </div>
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}><Input onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="请重复输入新密码" /></div>
+          <div className={styles.labelValue}><Input onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="请重复输入新密码" type="number" maxLength={6} /></div>
         </div>
         <div className={styles.bottom}>
-          <Button onClick={this.handleStepBtn} type={"primary"} className={styles.btn}>提交</Button>
+          <Button full onClick={this.handleStepBtn} type={"primary"} className={styles.btn}>提交</Button>
         </div>
       </div>
     )

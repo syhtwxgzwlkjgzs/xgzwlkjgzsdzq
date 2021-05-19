@@ -1,54 +1,69 @@
-@import '@common/styles/fn/rem.scss';
-@import '@common/styles/_variable.scss';
+@import '@common/styles/index.scss';
 
 .container {
   background-color: $white;
-  margin-bottom: rem(10);
-}
+  margin-bottom: $margin-10;
 
-.notificationItem {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  height: 80px;
-  margin: 0 16px;
-  padding: 16px 0;
-  border-bottom: $border-solid-1;
-  font-size: $font-size-middle;
-  line-height: $font-line-height-base;
-  &:last-child {
-    border: none;
-  }
-}
+  .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    margin: 0 $padding-4n;
+    padding: $padding-10 0;
+    font-size: $font-size-middle;
+    line-height: $font-line-height-primary;
+    border-bottom: $border-solid-1;
 
-.badge {
-  position: absolute;
-  top: -4px;
-  right: -12px;
-  :global {
-    .dzq-badge__info {
-      transform: scale(0.7);
+    &:last-child {
+      border: none;
+    }
+
+    .left {
+      flex: 0 0 38px;
+      margin-right: $margin-4n;
+
+      :global{
+        .dzq-badge {
+          width: 100%;
+          height: 100%;
+
+          .dzq-badge__circle{
+            top: 8px;
+            right: 2px;
+          }
+        }
+
+        .dzq-icon {
+          background-color: $primary-color;
+          padding: $padding-2n;
+          border-radius: 50%;
+          color: $white;
+        }
+      }
+
+      .badge{
+        :global{
+          .dzq-badge__circle{
+            padding: 0 6px;
+            width: auto;
+            border-radius: $border-radius-8;
+          }
+        }
+      }
+    }
+
+    .center {
+      flex: 1;
+    }
+
+    .right {
+      padding: $padding-4n;
+      padding-right: 0;
+
+      .right-arrow {
+        color: $icon-color-light;
+      }
     }
   }
-}
-
-.iconWrapper {
-  position: relative;
-}
-
-.icon {
-  position: relative;
-  background-color: $primary-color;
-  padding: 11px;
-  border-radius: 50%;
-  color: $white;
-}
-
-.title {
-  flex: 1;
-  padding: 16px;
-}
-
-.arrow {
-  padding: 16px;
 }

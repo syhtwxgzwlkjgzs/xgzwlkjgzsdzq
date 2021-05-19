@@ -119,17 +119,18 @@ class index extends Component {
   // 渲染未设置密码
   renderHasNoPassword = () => {
     const { newPassword, newPasswordRepeat } = this.state
+    const username = this.props.user.username
     return (
       <>
         <h3>设置密码</h3>
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}>{this.props.user?.username}</div>
+          <div className={styles.labelValue}>{username}</div>
         </div>
         <div className={styles.labelInfo}>
           <div className={styles.labelValue}><Input onChange={this.handleSetPwd} mode="password" placeholder="请设置密码" value={newPassword} /></div>
         </div>
         <div className={styles.labelInfo}>
-          <div onChange={this.hadleNewPasswordRepeat} className={styles.labelValue}><Input mode="password" placeholder="请确认密码" value={newPasswordRepeat} /></div>
+          <div className={styles.labelValue}><Input mode="password" placeholder="请确认密码" value={newPasswordRepeat} onChange={this.hadleNewPasswordRepeat} /></div>
         </div>
       </>
     )
@@ -173,7 +174,7 @@ class index extends Component {
         </div>
         <div onClick={this.handleResetPwd} className={styles.tips}>忘记旧密码？</div>
         <div className={styles.bottom}>
-          <Button onClick={this.handleSubmit} disabled={isSubmit} type={"primary"} className={styles.btn}>提交</Button>
+          <Button full onClick={this.handleSubmit} disabled={isSubmit} type={"primary"} className={styles.btn}>提交</Button>
         </div>
       </div>
     )
