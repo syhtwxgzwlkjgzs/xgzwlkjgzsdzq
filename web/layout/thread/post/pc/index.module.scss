@@ -28,11 +28,13 @@
 .editor {
   position: relative;
   padding: 16px 16px 52px;
-  min-height: 428px;
-  max-height: 550px;
-  overflow-y: scroll;
+  height: 550px;
   border: $border-solid-1;
   border-radius: $border-radius-small;
+  &-inner {
+    height: 550px;
+    overflow-y: scroll;
+  }
   &:hover {
     border-color: $border-color-hover;
   }
