@@ -36,7 +36,7 @@ const InputPop = (props) => {
       <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.title}>举报</div>
-          <div className={styles.reason}>请点击举报理由</div>
+          <div className={styles.reason}>请选择举报理由</div>
         </div>
         <div className={styles.body}>
           <Radio.Group defaultValue="5" onChange={(e) => onChoiceChange(e)}>
