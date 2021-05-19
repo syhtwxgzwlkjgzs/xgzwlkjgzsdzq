@@ -142,6 +142,34 @@
   }
 }
 
+.video-box {
+  position: relative;
+  margin: $margin-4n auto;
+
+  .video-delete {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    height: 40px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    border-top-left-radius: $border-radius-small;
+    border-top-right-radius: $border-radius-small;
+    background-color: rgba($color: #000, $alpha: .5);
+    z-index: 1;
+
+    :global {
+      .dzq-icon {
+        margin-right: $margin-10;
+        color: $white;
+      }
+    }
+  }
+
+}
+
 .video {
   margin-top: 8px;
   width: 100%;

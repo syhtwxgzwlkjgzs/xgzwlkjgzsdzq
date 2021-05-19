@@ -9,7 +9,7 @@
  import { Icon } from '@discuzq/design';
 
 const Index = (props) => {
-  const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, onTagRemoveClick, onTagClick, tagContent } = props;
+  const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, onTagRemoveClick, onTagClick, tagContent, deleteShow = false } = props;
 
   // 标签展示
   const tag = (
@@ -39,7 +39,13 @@ const Index = (props) => {
 
   // 视频展示
   const video = (
-    <Video src={src} className={styles['video']} />
+    <View className={deleteShow && styles['video-box']}>
+      {deleteShow &&
+        <View className={styles['video-delete']} onClick={onDelete}>
+          <Icon name="DeleteOutlined" />
+        </View>}
+      <Video src={src} className={styles['video']} />
+    </View>
   );
 
   // 附件展示
