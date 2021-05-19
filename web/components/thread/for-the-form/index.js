@@ -41,7 +41,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
       return;
     }
     confirm({
-      value,
+      value: parseFloat(value),
       times: formatDate(times, 'yyyy/MM/dd h:mm'),
     });
   };
@@ -54,7 +54,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
             mode="number"
             value={value}
             placeholder="金额"
-            onChange={e => setValue(Number(e.target.value))}
+            onChange={e => setValue(e.target.value)}
           />
           元
         </div>
