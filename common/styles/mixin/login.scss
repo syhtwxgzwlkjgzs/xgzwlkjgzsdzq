@@ -68,6 +68,14 @@
   font-size: rem($font-size-middle);
   padding: rem($padding-10) 0;
   box-sizing: border-box;
+  color: var(--color-white) !important;
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  &:active{
+    color: var(--color-white) !important;
+    background: var(--color-primary6) !important;
+    border-color: var(--color-primary6) !important;
+  }
 }
 @mixin functionalRegion {
   margin-top: rem($margin-6n);

@@ -207,12 +207,11 @@ export default function HOCFetchSiteData(Component) {
             }
             // 绑定昵称：没有开启短信，也没有绑定昵称
             if (
-              router.asPath !== '/user/wx-bind-qrcode'
+              router.asPath !== '/user/bind-nickname'
               && !site.isSmsOpen
-              && router.asPath !== '/bind-nickname'
               && !user.nickname
             ) {
-              Router.redirect({ url: '/user/wx-bind-qrcode' });
+              Router.redirect({ url: '/user/bind-nickname' });
             }
           }
         }
