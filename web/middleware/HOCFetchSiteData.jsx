@@ -189,33 +189,33 @@ export default function HOCFetchSiteData(Component) {
           Router.redirect({ url: '/forum/partner-invite' });
         }
         // TODO: 方案待定
-        // // 前置: 用户已登录
-        // if (user.isLogin()) {
-        //   // 绑定微信：开启微信，没有绑定微信
-        //   if (
-        //     router.asPath !== '/user/wx-bind-qrcode'
-        //       && (site.isOpenOffiaccountClose || site.isMiniProgramOpen)
-        //       && !user.isBindWechat
-        //   ) {
-        //     Router.redirect({ url: '/user/wx-bind-qrcode' });
-        //   }
-        //   // 前置：没有开启微信
-        //   if (!site.isOpenOffiaccountClose && !site.isMiniProgramOpen) {
-        //     // 绑定手机: 开启短信，没有绑定手机号
-        //     if (router.asPath !== '/user/bind-phone' && site.isSmsOpen && !user.mobile) {
-        //       Router.redirect({ url: '/user/bind-phone' });
-        //     }
-        //     // 绑定昵称：没有开启短信，也没有绑定昵称
-        //     if (
-        //       router.asPath !== '/user/wx-bind-qrcode'
-        //       && !site.isSmsOpen
-        //       && router.asPath !== '/bind-nickname'
-        //       && !user.nickname
-        //     ) {
-        //       Router.redirect({ url: '/user/wx-bind-qrcode' });
-        //     }
-        //   }
-        // }
+        // 前置: 用户已登录
+        if (user.isLogin()) {
+          // // 绑定微信：开启微信，没有绑定微信
+          // if (
+          //   router.asPath !== '/user/wx-bind-qrcode'
+          //     && (site.isOpenOffiaccountClose || site.isMiniProgramOpen)
+          //     && !user.isBindWechat
+          // ) {
+          //   Router.redirect({ url: '/user/wx-bind-qrcode' });
+          // }
+          // 前置：没有开启微信
+          if (!site.isOpenOffiaccountClose && !site.isMiniProgramOpen) {
+            // 绑定手机: 开启短信，没有绑定手机号
+            if (router.asPath !== '/user/bind-phone' && site.isSmsOpen && !user.mobile) {
+              Router.redirect({ url: '/user/bind-phone' });
+            }
+            // 绑定昵称：没有开启短信，也没有绑定昵称
+            if (
+              router.asPath !== '/user/wx-bind-qrcode'
+              && !site.isSmsOpen
+              && router.asPath !== '/bind-nickname'
+              && !user.nickname
+            ) {
+              Router.redirect({ url: '/user/wx-bind-qrcode' });
+            }
+          }
+        }
       }
     }
 

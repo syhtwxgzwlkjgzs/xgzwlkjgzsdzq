@@ -118,7 +118,7 @@ class WXSelect extends Component {
               }}
             >
               <Icon name='UserOutlined' size={16}/>
-              用户名登录绑定微信
+              绑定已有用户名
             </Button>
             <Button
               className={`${layout.button} ${layout.btn_select} ${layout.btn_phone}`}
@@ -130,7 +130,7 @@ class WXSelect extends Component {
               }}
             >
               <Icon name='PhoneOutlined' size={16}/>
-              手机号登录绑定微信
+              绑定手机号
             </Button>
           </View>
         </View>

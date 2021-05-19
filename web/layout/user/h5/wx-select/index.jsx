@@ -16,8 +16,8 @@ import { usernameAutoBind } from '@server';
 @observer
 class WXSelectH5Page extends React.Component {
   render() {
-    const { router, user } = this.props;
-    const { sessionToken, nickname } = router.query;
+    const { router } = this.props;
+    const { sessionToken, nickname, avatarUrl } = router.query;
     return (
       <div className={layout.container}>
         <HomeHeader hideInfo mode='login'/>
@@ -33,7 +33,7 @@ class WXSelectH5Page extends React.Component {
                         style={{margin: '0 8px'}}
                         circle
                         size='small'
-                        image={user.avatarUrl}
+                        image={avatarUrl}
                         text={nickname && nickname.substring(0, 1)}
                         />{nickname}
                     </>
@@ -99,11 +99,11 @@ class WXSelectH5Page extends React.Component {
               className={`${layout.button} ${layout.btn_select} ${layout.btn_user}`}
               type="primary"
               onClick={() => {
-                router.push({ pathname: 'wx-bind-username', query: { sessionToken, nickname } });
+                router.push({ pathname: 'wx-bind-username', query: { sessionToken, nickname, avatarUrl } });
               }}
             >
               <Icon name='UserOutlined' size={16}/>
-              用户名登录绑定微信
+              绑定已有用户名
             </Button>
           )}
           {this.props.site.isSmsOpen && (
@@ -111,11 +111,11 @@ class WXSelectH5Page extends React.Component {
               className={`${layout.button} ${layout.btn_select} ${layout.btn_phone}`}
               type="primary"
               onClick={() => {
-                router.push({ pathname: 'wx-bind-phone', query: { sessionToken, nickname } });
+                router.push({ pathname: 'wx-bind-phone', query: { sessionToken, nickname, avatarUrl } });
               }}
             >
               <Icon name='PhoneOutlined' size={16}/>
-              手机号登录绑定微信
+              绑定手机号
             </Button>
           )}
         </div>
