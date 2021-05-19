@@ -13,21 +13,22 @@
   border-bottom: $border-solid-1;
   .item {
     text-align: center;
-    font-size: $padding-4n;
+    font-size: $font-size-middle;
     font-weight: normal;
     line-height: $font-line-height-base;
     padding: 16px 0;
     color: $text-color-primary;
     border-bottom: $border-solid-1;
+    &:last-child {
+      border-bottom: none;
+    }
   }
 }
-.list h2:last-child {
-  border-bottom: none;
-}
+
 
 .cancel {
   width: 100%;
-  font-size: $font-size-base;
+  font-size: $font-size-middle;
   line-height: $font-line-height-small;
   text-align: center;
   color: $text-color-regular;

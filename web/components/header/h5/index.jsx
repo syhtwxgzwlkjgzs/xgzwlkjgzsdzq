@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import Router from '@discuzq/sdk/dist/router';
+import browser from '@common/utils/browser';
 
 export default function H5Header(props) {
   const { isBackCustom } = props;
@@ -27,7 +28,7 @@ export default function H5Header(props) {
     <div className={styles.header}>
         <div className={styles.headerContent}>
             <div onClick={gobackClickHandle} className={styles.left}>
-              <Icon className={styles.icon} name="LeftOutlined" size={14} />
+              <Icon className={browser.env('android') ? styles.icon : ''} name="LeftOutlined" size={16} />
               <div className={styles.text}>返回</div>
             </div>
             <div className={styles.right}>

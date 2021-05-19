@@ -31,17 +31,20 @@ const Index = ({
       icon: 'LikeOutlined',
       name: '赞',
       event: onPraise,
+      type: 'like'
     };
 
     return [praise, {
       icon: 'MessageOutlined',
       name: '评论',
       event: onComment,
+      type: 'commonet'
     },
     {
       icon: 'ShareAltOutlined',
       name: '分享',
       event: onShare,
+      type: 'share'
     }];
   }, [isLiked]);
 
@@ -75,7 +78,7 @@ const Index = ({
           postList.map((item, index) => (
               <div key={index} className={styles.fabulous} onClick={item.event}>
                 <Icon 
-                  className={`${styles.icon} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`} 
+                  className={`${styles.icon} ${item.type} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`} 
                   name={item.icon} 
                   size={16}>  
                 </Icon>
