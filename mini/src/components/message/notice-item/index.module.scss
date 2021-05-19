@@ -17,6 +17,7 @@
   /*内容展示区*/
   .block {
     flex: 1 0 100%;
+    width: 100%;
     padding-top: $margin-4n;
     display: flex;
     justify-content: flex-start;
@@ -42,7 +43,7 @@
       .dzq-avatar {
         width: 100%;
         height: 100%;
-        font-size: 22px;
+        font-size: $font-size-large;
         color: $white;
         text-align: center;
         line-height: 38px;
@@ -57,6 +58,7 @@
         .dzq-avatar__text {
           width: 100%;
           height: 100%;
+          line-height: 38px;
         }
       }
     }
@@ -113,6 +115,10 @@
           width: 14px;
           height: 14px;
           vertical-align: top;
+        }
+
+        a {
+          color: $primary-color;
         }
       }
     }
