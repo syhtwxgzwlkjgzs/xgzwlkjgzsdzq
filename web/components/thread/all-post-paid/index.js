@@ -53,7 +53,7 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition, pc, visible }) => {
                 htmlType="number"
                 value={price}
                 placeholder="金额"
-                onChange={e => setPrice(e.target.value)}
+                onChange={e => setPrice(Number(e.target.value))}
               />
               元
             </div>
@@ -80,7 +80,7 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition, pc, visible }) => {
               htmlType="number"
               value={attachmentPrice}
               placeholder="金额"
-              onChange={e => setAttachmentPrice(e.target.value)}
+              onChange={e => setAttachmentPrice(Number(e.target.value))}
             />
             元
           </div>

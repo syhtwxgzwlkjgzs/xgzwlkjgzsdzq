@@ -15,7 +15,7 @@ import classnames from 'classnames';
 import topic from './index.module.scss';
 import threadPay from '@common/pay-bussiness/thread-pay';
 import { minus } from '@common/utils/calculate';
-import {parseContentData} from '../../utils';
+import { parseContentData } from '../../utils';
 
 // 帖子内容
 export default inject('user')(
@@ -27,7 +27,11 @@ export default inject('user')(
       threadId: threadStore?.threadData?.threadId,
     };
     // 是否合法
-    const isApproved = threadStore?.threadData?.isApproved || 0;
+    const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
+
+    // 是否免费帖
+    const isFree = threadStore?.threadData?.payType === 0;
+
     // 是否加精
     const isEssence = threadStore?.threadData?.displayTag?.isEssence || false;
     // 是否置顶
@@ -48,12 +52,17 @@ export default inject('user')(
     // 是否作者自己
     const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData?.userId;
 
-    // 是否悬赏帖
-    const isRedPack = threadStore?.threadData?.displayTag?.isRedPack;
     // 是否红包帖
+    const isRedPack = threadStore?.threadData?.displayTag?.isRedPack;
+    // 是否悬赏帖
     const isReward = threadStore?.threadData?.displayTag?.isReward;
-    // 是否可以打赏
-    const canReward = props?.user?.isLogin() && !isRedPack && !isReward;
+
+    // 是否打赏帖
+    const isBeReward = isFree && threadStore?.threadData?.ability.canBeReward && !isRedPack && !isReward;
+    // 是否显示打赏按钮： 免费帖 && 不是自己 && 不是红包 && 不是悬赏 && 允许被打赏
+    const canBeReward = isFree && threadStore?.threadData?.ability.canBeReward && !isRedPack && !isReward;
+    // 是否已打赏
+    const isRewarded = threadStore?.threadData?.isReward;
 
     const parseContent = parseContentData(indexes);
 
@@ -143,7 +152,7 @@ export default inject('user')(
 
         <Divider></Divider>
 
-        {isApproved === 1 && (
+        {isApproved && (
           <div className={topic.body}>
             {/* 标题 */}
             {threadStore?.threadData?.title && <div className={topic.title}>{threadStore?.threadData?.title}</div>}
@@ -256,7 +265,7 @@ export default inject('user')(
             )}
 
             {/* 打赏 */}
-            {canReward && (
+            {canBeReward && isApproved && (
               <Button onClick={onRewardClick} className={topic.rewardButton} type="primary" size="large">
                 <div className={topic.buttonIconText}>
                   <Icon className={topic.buttonIcon} name="HeartOutlined" size={19}></Icon>
@@ -273,7 +282,13 @@ export default inject('user')(
             <div className={topic.likeReward}>
               <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
             </div>
-            <span>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
+            <span>
+              {isBeReward
+                ? threadStore?.threadData?.likeReward?.likePayCount
+                  ? `${threadStore?.threadData?.likeReward?.likePayCount}个赞及打赏`
+                  : ''
+                : threadStore?.threadData?.likeReward?.likePayCount || ''}
+            </span>
           </div>
           {threadStore?.threadData?.likeReward?.shareCount > 0 && (
             <span className={topic.share}>{threadStore?.threadData?.likeReward?.shareCount}次分享</span>

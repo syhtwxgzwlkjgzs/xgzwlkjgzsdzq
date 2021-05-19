@@ -177,6 +177,7 @@ class CommentList extends React.Component {
                     <ReplyList
                       data={this.needReply[0]}
                       key={this.needReply[0].id}
+                      isShowOne={true}
                       avatarClick={() => this.reployAvatarClick(this.needReply[0])}
                       likeClick={() => this.replyLikeClick(this.needReply[0])}
                       replyClick={() => this.replyReplyClick(this.needReply[0])}

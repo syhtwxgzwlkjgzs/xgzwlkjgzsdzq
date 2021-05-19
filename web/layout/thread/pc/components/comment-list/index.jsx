@@ -9,6 +9,8 @@ import classnames from 'classnames';
 import CommentInput from '../comment-input/index';
 import RewardDisplay from '@components/thread-detail-pc/reward-display';
 import RedPacketDisplay from '@components/thread-detail-pc/red-packet-display';
+import s9e from '@common/utils/s9e';
+import xss from '@common/utils/xss';
 
 @observer
 class CommentList extends React.Component {
@@ -30,6 +32,14 @@ class CommentList extends React.Component {
       typeof this.props.onCommentClick === 'function' && this.props.onCommentClick();
     }
   };
+
+  filterContent() {
+    let newContent = this.props?.data?.content || '';
+    newContent = s9e.parse(newContent);
+    newContent = xss(newContent);
+
+    return newContent;
+  }
 
   // 点击头像
   avatarClick() {
@@ -142,7 +152,7 @@ class CommentList extends React.Component {
               <div className={styles.commentListName}>
                 {this.props.data.user.username || this.props.data.user.userName}
               </div>
-              <div className={styles.commentListText}>{this.props.data.content}</div>
+              <div className={styles.commentListText} dangerouslySetInnerHTML={{ __html: this.filterContent() }}></div>
             </div>
 
             <div className={styles.commentListFooter}>
@@ -223,6 +233,7 @@ class CommentList extends React.Component {
                     <ReplyList
                       data={this.needReply[0]}
                       key={this.needReply[0].id}
+                      isShowOne={true}
                       avatarClick={() => this.reployAvatarClick(this.needReply[0])}
                       likeClick={() => this.replyLikeClick(this.needReply[0])}
                       replyClick={() => this.replyReplyClick(this.needReply[0])}
