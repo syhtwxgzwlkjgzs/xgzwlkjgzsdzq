@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import styles from './index.module.scss';
-import { Video } from '@discuzq/design';
+import { Video, Icon } from '@discuzq/design';
 import { noop } from '../utils';
 
 /**
@@ -15,13 +15,14 @@ import { noop } from '../utils';
  * @prop {function} onPay 付费时，蒙层点击事件
  */
 
-
+//TODO 视频转码中和错误状态的蒙层样式有问题，需要调整
 const Index = ({
   isPay = false,
   coverUrl,
   url,
   time,
   money = 0,
+  status = 0,
   onPay = noop,
 }) => {
   let player = null;
@@ -55,6 +56,16 @@ const Index = ({
       {/* 视频蒙层 已付费时隐藏 未付费时显示 */}
       {
         isPay && <div className={styles.payBox} onClick={onPay}></div>
+      }
+      {
+        !isPay && status !== 1 && (
+          <div className={styles.payBox}>
+            <div className={`${styles.alert} ${status === 0 ? styles.alertWarn : styles.alertError}`}>
+              <Icon className={styles.tipsIcon} size={20} name={status === 0 ? 'TipsOutlined' : 'WrongOutlined'}></Icon>
+              <span className={styles.tipsText}>{status === 0 ? '视频正在转码中，转码成功后才能正常显示！' : '错误'}</span>
+            </div>
+          </div>
+        )
       }
     </div>
   );

@@ -20,6 +20,7 @@
     :global {
       .dzq-upload {
         padding: 0;
+        padding-bottom: $padding-4n;
       }
     }
   }
@@ -27,9 +28,16 @@
 .editor {
   position: relative;
   padding: 16px 16px 52px;
-  min-height: 428px;
+  height: 550px;
   border: $border-solid-1;
   border-radius: $border-radius-small;
+  &-inner {
+    height: 550px;
+    overflow-y: scroll;
+  }
+  &:hover {
+    border-color: $border-color-hover;
+  }
   :global { /* stylelint-disable-line */
     .vditor {
       border: none;

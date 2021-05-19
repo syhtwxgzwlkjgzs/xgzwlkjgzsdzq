@@ -1,3 +1,4 @@
+import isServer from './is-server';
 const constants = {
     IE: 'ie',
     OPERA: 'opera',
@@ -15,7 +16,10 @@ const constants = {
 
 const browser={
     env: (t, u = null) => {
-        const ua = u || navigator.userAgent;
+        if ( isServer() ) {
+            return false;
+        }
+        const ua = u || navigator ? navigator.userAgent : '';
         switch(t) {
             case constants['IE'] : return ua.indexOf('Trident') > -1;//IE内核
             case constants['OPERA'] : return ua.indexOf('Presto') > -1;//opera内核

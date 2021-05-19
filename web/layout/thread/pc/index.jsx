@@ -48,13 +48,15 @@ class ThreadPCPage extends React.Component {
       inputValue: '', // 评论内容
     };
 
-    this.perPage = 5;
+    this.perPage = 10;
     this.page = 1; // 页码
     this.commentDataSort = true;
 
     // 滚动定位相关属性
     this.threadBodyRef = React.createRef();
     this.commentDataRef = React.createRef();
+
+    this.position = 0;
 
     // 修改评论数据
     this.comment = null;
@@ -447,6 +449,27 @@ class ThreadPCPage extends React.Component {
     }
   }
 
+  // 使用了H5页面的页面加载跳转逻辑
+  componentDidMount() {
+    // 当内容加载完成后，获取评论区所在的位置
+    this.position = this.commentDataRef?.current?.offsetTop - 50;
+
+    // 是否定位到评论位置
+    if (this.props?.thread?.isPositionToComment) {
+      // TODO:需要监听帖子内容加载完成事件
+      setTimeout(() => {
+        this.threadBodyRef.current.scrollTo(0, this.position);
+      }, 1000);
+    }
+  }
+
+  componentDidUpdate() {
+    // 当内容加载完成后，获取评论区所在的位置
+    if (this.props.thread.isReady) {
+      this.position = this.commentDataRef?.current?.offsetTop - 50;
+    }
+  }
+
   render() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
@@ -471,7 +494,7 @@ class ThreadPCPage extends React.Component {
             {isReady ? (
               <RenderThreadContent
                 store={threadStore}
-                onOperClick={(type) => this.onOperClick(type)}
+                onOperClick={type => this.onOperClick(type)}
                 onLikeClick={() => this.onLikeClick()}
                 onCollectionClick={() => this.onCollectionClick()}
                 onShareClick={() => this.onShareClick()}
@@ -488,10 +511,10 @@ class ThreadPCPage extends React.Component {
                 <Fragment>
                   <RenderCommentList
                     router={this.props.router}
-                    sort={(flag) => this.onSortChange(flag)}
-                    onEditClick={(comment) => this.onEditClick(comment)}
-                    onPublishClick={(value) => this.onPublishClick(value)}
-                    onReportClick={(comment) => this.onReportClick(comment)}
+                    sort={flag => this.onSortChange(flag)}
+                    onEditClick={comment => this.onEditClick(comment)}
+                    onPublishClick={value => this.onPublishClick(value)}
+                    onReportClick={comment => this.onReportClick(comment)}
                   ></RenderCommentList>
                   {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
                 </Fragment>
@@ -545,7 +568,7 @@ class ThreadPCPage extends React.Component {
             </div>
             <CommentInput
               height="middle"
-              onSubmit={(value) => this.onPublishClick(value)}
+              onSubmit={value => this.onPublishClick(value)}
               initValue={this.state.inputValue}
             ></CommentInput>
           </div>
@@ -564,14 +587,14 @@ class ThreadPCPage extends React.Component {
           inputText={this.inputText}
           visible={this.state.showReportPopup}
           onCancel={() => this.onReportCancel()}
-          onOkClick={(data) => this.onReportOk(data)}
+          onOkClick={data => this.onReportOk(data)}
         ></ReportPopup>
 
         {/* 打赏弹窗 */}
         <RewardPopup
           visible={this.state.showRewardPopup}
           onCancel={() => this.setState({ showRewardPopup: false })}
-          onOkClick={(value) => this.onRewardSubmit(value)}
+          onOkClick={value => this.onRewardSubmit(value)}
         ></RewardPopup>
       </div>
     );

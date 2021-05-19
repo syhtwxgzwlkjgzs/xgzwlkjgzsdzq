@@ -5,11 +5,10 @@ import styles from './index.module.scss';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-function ShowGood({ good, onDelete, pc }) {
-  const clsName = pc ? classNames(styles.content, styles.pc) : styles.content;
+function ShowGood({ good, onDelete }) {
   return (
     <>
-      <div className={clsName}>
+      <div className={styles.content}>
         <div className={styles['content-left']}>
           <img className={styles.image} src={good.imagePath} alt={good.title} />
         </div>
@@ -44,9 +43,10 @@ const Product = (props) => {
     console.log('添加商品');
     router.push('thread/100');
   };
+  const clsName = props.pc ? classNames(styles['post-good-box'], styles.pc) : styles['post-good-box'];
 
   return (
-    <div className={styles['post-good-box']}>
+    <div className={clsName}>
       {/* 判断当前商品是否存在 */}
       {good.title ? <ShowGood {...props} /> : <AddGood addGood={() => addGood()} />}
     </div>

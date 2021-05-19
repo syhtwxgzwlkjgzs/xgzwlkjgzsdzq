@@ -4,6 +4,7 @@ import { withRouter } from 'next/router';
 import SearchInput from '@components/search-input';
 import ThreadContent from '@components/thread';
 import BaseLayout from '@components/base-layout';
+import styles from './index.module.scss';
 
 @inject('site')
 @inject('search')
@@ -56,7 +57,9 @@ class SearchResultPostH5Page extends React.Component {
           onRefresh={this.fetchMoreData}
           noMore={currentPage >= totalPage}
       >
-        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} isShowBottom={false} />
+        <div className={styles.topBox}>
+          <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} isShowBottom={false} />
+        </div>
         {
           pageData?.map((item, index) => (
             <ThreadContent key={index} data={item} />

@@ -13,8 +13,12 @@ export default function DefaultToolbar(props) {
   }, [value]);
 
 
-  function handleClick() {
-    if (defaultOperation.emoji === currentAction) {
+  const emojiId = 'dzq-toolbar-emoji';
+  function handleClick(e) {
+    const emojiDom = document.querySelector(`.${emojiId}`);
+
+    if (emojiDom
+      && (e.target.id !== emojiId || emojiId.indexOf(e.targe.className) < 0)) {
       setCurrentAction('');
       onClick({ id: '' });
     }

@@ -76,7 +76,7 @@ export default class index extends Component {
             <Icon onClick={this.handleClickSignature} name="CompileOutlined" />
             {
               this.state.isClickSignature ? (
-                <span className={styles.text}><Input maxLength={20} focus={true} onChange={this.handleChangeSignature} onBlur={this.handleBlurSignature} value={this.user.editSignature} placeholder="这个人很懒，什么也没留下~" /></span>
+                <Input className={styles.userSignatureInput} maxLength={20} focus={true} onChange={this.handleChangeSignature} onBlur={this.handleBlurSignature} value={this.user.editSignature} placeholder="这个人很懒，什么也没留下~" />
               ) : (
                 <span className={styles.text}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</span>
               )
