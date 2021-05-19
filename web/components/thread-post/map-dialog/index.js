@@ -50,7 +50,7 @@ class MapDialog extends React.Component {
     if (data && data.module === 'locationPicker') {
       const { poiname, poiaddress, latlng: { lat, lng } } = data;
       const position = {
-        longtitude: lng,
+        longitude: lng,
         latitude: lat,
         address: poiaddress,
         location: poiname
