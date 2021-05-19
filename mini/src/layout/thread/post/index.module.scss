@@ -22,7 +22,9 @@ page {
       }
     }
 
-    .toolbar {
+    .tags{
+      padding-bottom: 90px;
+
       .location-bar {
         padding: 0 16px;
         display: flex;
@@ -45,6 +47,13 @@ page {
         background: var(--color-white);
         border-bottom: 1px solid var(--border-line-color);
       }
+    }
+
+    .toolbar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
     }
   }
 }
