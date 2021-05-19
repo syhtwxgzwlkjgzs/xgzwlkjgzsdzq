@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PopupList from '../popup-list';
 import Avatar from '../../avatar';
+import { Icon } from '@discuzq/design';
 
 import styles from './index.module.scss';
 
@@ -9,7 +10,7 @@ import styles from './index.module.scss';
  * @prop {string}    imgs 头像数据数组
  */
 
-const Index = ({ imgs = [], tipData = {}, wholeNum = 1 }) => {
+const Index = ({ imgs = [], tipData = {}, wholeNum = 1,showMore=false }) => {
   const [visible, setVisible] = useState(false);
 
   const onClick = (e) => {
@@ -35,6 +36,12 @@ const Index = ({ imgs = [], tipData = {}, wholeNum = 1 }) => {
                     />
                   </div>
                 ))
+            }
+            {
+              showMore && imgs?.length > 2 &&
+              <div className={styles.moreIcon} size={20}>
+                <Icon name='MoreBOutlined' className={styles.icon} size={12}></Icon>
+              </div>
             }
         </div>
 
