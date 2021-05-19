@@ -142,10 +142,10 @@ export default class PayBox extends React.Component {
     this.props.payBox.payWay = null;
   };
 
-    // 转换金额小数
-    transMoneyToFixed = (num) => {
-      return Number(num).toFixed(2);
-    };
+  // 转换金额小数
+  transMoneyToFixed = (num) => {
+    return Number(num).toFixed(2);
+  };
 
   render() {
     const { options = {} } = this.props.payBox;
@@ -178,8 +178,8 @@ export default class PayBox extends React.Component {
                     {item.paymentType === PAYWAY_MAP.WALLET && this.walletPaySubText()}
                     {(item.paymentType === PAYWAY_MAP.WX ||
                       (canWalletPay && this.props.payBox?.walletAvaAmount >= options.amount)) && (
-                      <Radio name={item.paymentType} />
-                    )}
+                        <Radio name={item.paymentType} />
+                      )}
                   </div>
                 </div>
               );

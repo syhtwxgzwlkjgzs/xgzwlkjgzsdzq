@@ -104,12 +104,16 @@
   padding: rem($padding-2n) rem($padding-4n);
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  box-sizing: border-box;
   :global {
     .dzq-button {
-      width: rem(166);
+      flex:1;
       @include button-default;
       height: rem(42px);
-
+      &:first-child {
+        margin-right: rem($margin-10);
+      }
       &:last-child {
         @include button-primary;
       }

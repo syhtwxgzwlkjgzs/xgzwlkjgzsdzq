@@ -47,7 +47,7 @@ class AtSelect extends Component {
     if (ret.code === 0) {
       this.setState({ page: page + 1 });
     }
-    return Promise.reject();
+    return ret;
   }
 
   // 更新搜索关键字,搜索用户
@@ -96,32 +96,35 @@ class AtSelect extends Component {
     );
   }
 
-  renderItem(info) {
-    const { data, index } = info;
-    const item = data[index] || {};
-    const username = item.user?.userName || '';
-    const userId = item.user?.pid || '';
+  renderItem() {
+    const { threadPost } = this.props;
+    const data = threadPost.follows || [];
 
-    return (
-      <div className={styles['at-item']} key={userId}>
-        <div className={styles.avatar}>
-          {item?.user?.avatar
-            ? <Avatar image={item.user.avatar} />
-            : <Avatar
-              text={username}
-              style={{
-                backgroundColor: `#${this.getBackgroundColor(username)}`
-              }}
-            />
-          }
+    if (data.length === 0) return null;
+    return data.map((item) => {
+      const username = item.user?.userName || '';
+      const userId = item.user?.pid || '';
+      return (
+        <div className={styles['at-item']} key={userId}>
+          <div className={styles.avatar}>
+            {item?.user?.avatar
+              ? <Avatar image={item.user.avatar} />
+              : <Avatar
+                text={username}
+                style={{
+                  backgroundColor: `#${this.getBackgroundColor(username)}`,
+                }}
+              />
+            }
+          </div>
+          <div className={styles.info}>
+            <div className={styles.username}>{item?.user?.userName}</div>
+            <div className={styles.group}>{item?.group?.groupName}</div>
+          </div>
+          <Checkbox name={item}></Checkbox>
         </div>
-        <div className={styles.info}>
-          <div className={styles.username}>{item?.user?.userName}</div>
-          <div className={styles.group}>{item?.group?.groupName}</div>
-        </div>
-        <Checkbox name={item}></Checkbox>
-      </div>
-    );
+      );
+    });
   }
 
   handleCancel = () => {
@@ -130,7 +133,6 @@ class AtSelect extends Component {
 
   render() {
     const { visible, threadPost } = this.props;
-    const data = threadPost.follows || [];
     const content = (
       <div className={styles.wrapper}>
         {/* 搜索框 */}
@@ -166,7 +168,7 @@ class AtSelect extends Component {
               /> */}
             {/* </div> */}
             <BaseList className={styles['at-wrap']} onRefresh={this.onScrollBottom.bind(this)} noMore={(this.state.page - 1) * this.state.perPage > threadPost.followsTotalCount}>
-              {data && data.map((_, index) => this.renderItem({ data, index })) }
+              { this.renderItem() }
             </BaseList>
           </Checkbox.Group>
 

@@ -14,9 +14,10 @@ import { ThreadCommonContext } from '../utils'
  * @prop {string}  icon 用户头像右下角图标
  * @prop {string}  label 额外信息
  * @prop {string}  onClick 点击事件
+ * @prop {string}  isShowBottomLine 是否显示分割线
  */
 // TODO 点击穿透问题之后想办法解决
-const Index = ({ imgSrc, title = '', type = 0, subTitle, label, index, onClick = noop, userId, platform }) => {
+const Index = ({ imgSrc, title = '', type = 0, subTitle, label, index, onClick = noop, userId, platform, isShowBottomLine = true }) => {
   const handleClick = (e) => {
     e.stopPropagation();
     onClick(userId);
@@ -30,7 +31,7 @@ const Index = ({ imgSrc, title = '', type = 0, subTitle, label, index, onClick =
                             (type === 3) ? styles.heart : "";
 
   return (
-    <div className={styles.listItem} key={index} onClick={handleClick}>
+    <div className={`${styles.listItem} ${isShowBottomLine && styles.bottomLine}`} key={index} onClick={handleClick}>
       <div className={styles.wrapper}>
           <div className={styles.header}>
               <Avatar 

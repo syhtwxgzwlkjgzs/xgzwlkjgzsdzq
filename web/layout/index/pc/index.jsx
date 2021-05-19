@@ -27,7 +27,7 @@ class IndexPCPage extends React.Component {
       visible: false,
       currentIndex: '',
       conNum: 0,
-      visibility: 'hidden',
+      // visibility: 'hidden',
       isShowDefault: this.checkIsOpenDefaultTab()
     };
   }
@@ -93,12 +93,12 @@ class IndexPCPage extends React.Component {
      });
    }
 
-  // 回到顶部
-  onScroll = ({ scrollTop }) => {
-    this.setState({
-      visibility: scrollTop > 10 ? 'visible' : 'hidden',
-    })
-  }
+  // // 回到顶部 // visibility导致了导航栏无法正常显示子目录所以先注释掉
+  // onScroll = ({ scrollTop }) => {
+  //   this.setState({
+  //     visibility: scrollTop > 10 ? 'visible' : 'hidden',
+  //   })
+  // }
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
   handleCategories = () => {
