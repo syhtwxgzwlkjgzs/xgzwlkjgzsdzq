@@ -224,12 +224,8 @@ class ThreadCreate extends React.Component {
             {/* <div className={styles['post-counter']}>还能输入{MAX_COUNT - this.props.count}个字</div> */}
             {(permissions?.insertPosition?.enable) && (<Position
               position={postData.position}
-              onClick={() => this.props.saveDataLocal()}
+              // onClick={() => this.props.saveDataLocal()}
               onChange={position => this.props.setPostData({ position })} />)}
-            {/* <Position
-              position={postData.position}
-              onClick={() => this.props.saveDataLocal()}
-              onChange={position => this.props.setPostData({ position })} /> */}
           </div>
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar

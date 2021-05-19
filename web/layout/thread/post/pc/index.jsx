@@ -164,7 +164,7 @@ class ThreadPCPage extends React.Component {
                 {user?.permissions?.insertPosition?.enable && (
                   <Position
                     position={postData.position}
-                    onClick={() => this.props.saveDataLocal()}
+                    // onClick={() => this.props.saveDataLocal()}
                     onChange={position => this.props.setPostData({ position })}
                   />
                 )}
