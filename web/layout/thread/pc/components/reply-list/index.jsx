@@ -6,6 +6,8 @@ import { observer } from 'mobx-react';
 import classnames from 'classnames'
 import { Icon } from '@discuzq/design'
 import CommentInput from '../comment-input/index';
+import s9e from '@common/utils/s9e';
+import xss from '@common/utils/xss';
 
 @observer
 export default class ReplyList extends React.Component {
@@ -20,6 +22,14 @@ export default class ReplyList extends React.Component {
   // 跳转至评论详情
   toCommentDetail() {
     console.log('跳至评论详情');
+  }
+
+  filterContent() {
+    let newContent = this.props?.data?.content || '';
+    newContent = s9e.parse(newContent);
+    newContent = xss(newContent);
+
+    return newContent;
   }
 
   likeClick() {
@@ -85,7 +95,10 @@ export default class ReplyList extends React.Component {
                     </span>
                   </div> : ''
               }
-              {this.props.data.content}
+              <span
+                className={this.props.isShowOne && styles.isShowOne}
+                dangerouslySetInnerHTML={{ __html: this.filterContent()}}
+              ></span>
             </div>
           </div>
           <div className={styles.replyListFooter}>

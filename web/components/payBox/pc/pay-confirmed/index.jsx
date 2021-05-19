@@ -11,7 +11,8 @@ export default class index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      paymentType: 'wallet'
+      list: [],
+      paymentType: 'wallet',
     };
   }
 
@@ -27,6 +28,7 @@ export default class index extends Component {
     try {
       // this.changePayment();
       this.initState()
+      document.addEventListener('keydown', this.handleKeyDown);
       // 获取钱包用户信息
       const { id } = this.props?.user;
       if (!id) return;
@@ -40,6 +42,100 @@ export default class index extends Component {
     }
   }
 
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  // 匹配输入的数字
+  toMarryNumber = (num) => {
+    let value;
+    switch (num) {
+      case 48:
+      case 96:
+        value = '0';
+        break;
+      case 49:
+      case 97:
+        value = '1';
+        break;
+      case 50:
+      case 98:
+        value = '2';
+        break;
+      case 51:
+      case 99:
+        value = '3';
+        break;
+      case 52:
+      case 100:
+        value = '4';
+        break;
+      case 53:
+      case 101:
+        value = '5';
+        break;
+      case 54:
+      case 102:
+        value = '6';
+        break;
+      case 55:
+      case 103:
+        value = '7';
+        break;
+      case 56:
+      case 104:
+        value = '8';
+        break;
+      case 57:
+      case 105:
+        value = '9';
+        break;
+      default:
+        break;
+    }
+    return value;
+  };
+
+  // 监听键盘事件
+  handleKeyDown = (e) => {
+    if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
+      // 表示输入数字
+      let set_num = this.toMarryNumber(e.keyCode);
+      this.updatePwd(set_num, 'add');
+    } else if (e.keyCode == 13) {
+      // 表示输入回车
+    } else if (e.keyCode == 8) {
+      // 表示回退事件
+      this.updatePwd('', 'delete');
+    } else {
+      // 其他非数字情况
+    }
+  };
+
+  updatePwd = (set_num, type) => {
+    const { list = [] } = this.state;
+    if (type == 'add') {
+      let list_ = [...list];
+      if (list.length >= 6) {
+        list_ = list_.join('').substring(0, 5).split('');
+      }
+      this.setState(
+        {
+          list: [].concat(list_, [set_num]),
+        },
+        () => {
+          if (this.state.list.length === 6) {
+            // this.submitPwa();
+          }
+        },
+      );
+    } else if (type == 'delete') {
+      this.setState({
+        list: list.slice(0, list.length - 1),
+      });
+    }
+  };
+
   initState = () => {
     this.setState({
       paymentType: 'wallet'
@@ -48,17 +144,8 @@ export default class index extends Component {
     this.props.payBox.password = null
   }
 
-  onPasswordChange = (e) => {
-    console.log(e.target.value);
-    if (isNaN(e.target.value)) return;
-    this.props.payBox.password = e.target.value;
-  };
-
   goSetPayPwa = () => {
-    // Router.redirect({url: '/test/payoffpwd?title=设置支付密码'});
-    // Router.push('/test/payoffpwd?title=设置支付密码');
     this.props.payBox.step = STEP_MAP.SET_PASSWORD;
-    // this.props.payBox.visible = false;
   };
 
   /**
@@ -66,7 +153,6 @@ export default class index extends Component {
    */
   handleChangePaymentType = (value) => {
     this.props.payBox.payWay = value
-
     if (this.props.payBox.payWay === PAYWAY_MAP.WX) {
       this.props.payBox.wechatPayOrderQRCode();
     }
@@ -77,12 +163,16 @@ export default class index extends Component {
     if (this.props.payBox.payWay === PAYWAY_MAP.WALLET) {
       // 表示钱包支付
       // await this.props.payBox.walletPayEnsure();
-      if (!this.props.payBox.password) {
+      if (this.state.list.length !== 6) {
         Toast.error({
           content: '请输入支付密码',
+          hasMask: false,
+          duration: 1000,
         });
         return;
       }
+      const { list = [] } = this.state
+      this.props.payBox.password = list.join("")
       try {
         await this.props.payBox.walletPayOrder();
         Toast.success({
@@ -93,11 +183,11 @@ export default class index extends Component {
         await this.props.payBox.clear();
       } catch (error) {
         Toast.error({
-          content: '支付失败，请重新输入',
+          content: error.Message || '支付失败，请重新输入',
           hasMask: false,
           duration: 1000,
         })
-        this.props.payBox.password = null
+        this.initState()
       }
     }
   };
@@ -143,6 +233,37 @@ export default class index extends Component {
     </div>
   );
 
+  renderPwdItem() {
+    const { list = [], whetherIsShowPwdBox } = this.state;
+    const nodeList = list.map((item, key) => (
+      <div
+        className={`${styles.payListItem}`}
+        key={key}
+      >
+        {'●'}
+      </div>
+    ));
+    if (nodeList.length < 6) {
+      let curr = false;
+      for (let i = nodeList.length; i < 6; i++) {
+        if (!curr) {
+          curr = true;
+          nodeList.push(
+            <div
+              className={`${styles.payListItem}`}
+              key={i}
+            ></div>,
+          );
+        } else {
+          nodeList.push(
+            <div className={`${styles.payListItem}`} key={i}></div>,
+          );
+        }
+      }
+    }
+    return nodeList;
+  }
+
   // 渲染钱包支付内容
   renderWalletPaymementContent = () => {
     const { user } = this.props;
@@ -150,14 +271,20 @@ export default class index extends Component {
     const { canWalletPay } = userInfo || {};
     const { options = {} } = this.props.payBox;
     const { amount = 0 } = options;
+    const { list = [] } = this.state
+    const newPassWord = list.join("")
     return (
-      <div className={`${styles.walletPayment} ${this.props.payBox?.walletAvaAmount >= amount && styles.walletPayment_01}`}>
+      <div className={`${styles.walletPayment}`}>
         <div className={styles.walletTitle}>
           <Icon className={styles.icon} name="PurseOutlined" size="20" color={'#1878f3'} />
-          钱包支付
+          <span className={styles.text}>钱包支付</span>
         </div>
         {!canWalletPay ? (
           <>
+            <div className={`${styles.walletDec} ${styles.walletPay}`}>
+              <span>钱包余额</span>
+              <span className={styles.walletBalance}>￥{this.props.payBox?.walletAvaAmount}</span>
+            </div>
             <div className={styles.walletDec}>
               <span>支付密码</span>
               <span>
@@ -171,7 +298,7 @@ export default class index extends Component {
         ) : (
           <>
             {
-              this.props.payBox?.walletAvaAmount < amount ? (
+              (this.props.payBox?.walletAvaAmount < amount) ? (
                 <div className={styles.walletDec}>
                   <span>钱包余额</span>
                   <span className={styles.walletBalance}>￥{this.props.payBox?.walletAvaAmount}</span>
@@ -183,15 +310,9 @@ export default class index extends Component {
                     <span>钱包余额</span>
                     <span className={styles.walletBalance}>￥{this.props.payBox?.walletAvaAmount}</span>
                   </div>
-                  <div className={styles.walletDec}>
+                  <div className={`${styles.walletDec} ${styles.walletPayPwd}`}>
                     <span>支付密码</span>
-                    <Input
-                      mode="password"
-                      className={styles.walletChangePwd}
-                      placeholder="请输入密码"
-                      value={this.props.payBox.password}
-                      onChange={this.onPasswordChange}
-                    />
+                    <div className={styles.payList}>{this.renderPwdItem()}</div>
                   </div>
                 </>
               )
@@ -202,19 +323,12 @@ export default class index extends Component {
                 size="large"
                 className={styles.walletConfirmBtn}
                 type="primary"
-                disabled={!this.props?.payBox?.password}
+                disabled={!newPassWord || newPassWord.length !== 6}
                 full
               >
                 确认支付
               </Button>
             </div>
-            {
-              this.props.payBox?.walletAvaAmount >= amount && (
-                <div className={styles.forgetPassword}>
-                  忘记支付密码？
-                </div>
-              )
-            }
           </>
         )}
       </div>
@@ -250,7 +364,7 @@ export default class index extends Component {
               </Radio>
               </Radio.Group>
             </div>
-            <Divider />
+            <Divider className={styles.payLine} />
             {/* 渲染不同方式的支付内容 */}
             <div className={styles.payTab_bottom}>{this.renderDiffPaymementContent()}</div>
           </div>

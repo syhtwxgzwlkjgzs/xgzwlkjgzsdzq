@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from './index.module.scss';
-import { Dialog, Button, Checkbox, Icon } from '@discuzq/design';
+import { Dialog, Button, Checkbox, Icon, Toast } from '@discuzq/design';
 import CommonAccountContent from '../../components/common-account-content';
 import { inject } from 'mobx-react';
 
@@ -19,6 +19,12 @@ export default class index extends Component {
       await this.props.payBox.createOrder();
     } catch (error) {
       console.error(error);
+      Toast.error({
+        content: error.Message || '创建订单失败',
+        hasMask: false,
+        duration: 1000,
+      })
+      this.onClose()
     }
   };
 
