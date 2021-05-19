@@ -9,12 +9,30 @@
   padding: rem($padding-4n);
   overflow-y: auto;
 
-  .amountSubmit {
+  .btnBox{
+    margin-top: rem($margin-2n);
+    height: rem(60);
+    box-sizing: border-box;
+    width: calc(100% - 32px);
+    padding-left: rem($padding-4n);
+    padding-right: rem($padding-4n);
     @include ios-safe-area-inset-bottom;
-    .asBtn {
-      border-radius: rem(5);
-      font-size: rem(16);
+
+    &::before {
+      content: '';
+      display: block;
+      // width: 100%;
+      height: rem(1);
+      background: var(--border-line-color);
+      position: relative;
+      top: rem(-8);
+      margin: rem($margin-4n) rem(-32) 0;
+    }
+
+    .btn{
       height: rem(42);
+      font-size: rem($font-size-middle);
+      border-radius: 5px;
     }
   }
 }
@@ -29,6 +47,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #8590A6;
+  color: $text-color-regular;
   cursor: pointer;
 }
