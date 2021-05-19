@@ -507,7 +507,7 @@ class Index extends Component {
 
               {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => { }} />}
 
-              {video.videoUrl && <Units type='video' src={video.videoUrl} />}
+              {video.videoUrl && <Units type='video' deleteShow src={video.videoUrl} onDelete={() => setPostData({ video: {} })} />}
 
             </View>
           </View>
