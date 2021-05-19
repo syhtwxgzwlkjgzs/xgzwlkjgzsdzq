@@ -25,7 +25,7 @@ const PostPopup = ({ list, onClick, cancel, visible }) => {
       <div className={styles.container}>
         <div className={styles.list}>
           {list.map(item => (
-              <h2
+              <p
                 className={styles.item}
                 key={item}
                 onClick={() => {
@@ -33,18 +33,18 @@ const PostPopup = ({ list, onClick, cancel, visible }) => {
                 }}
               >
                 {item}
-              </h2>
+              </p>
           ))}
         </div>
         {/* 取消按钮 */}
-        <h3
+        <p
           className={styles.cancel}
           onClick={() => {
             cancel();
           }}
         >
           取消
-        </h3>
+        </p>
       </div>
     </Popup>
   );
