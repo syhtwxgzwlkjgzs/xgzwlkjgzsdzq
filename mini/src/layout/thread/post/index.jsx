@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
+import { Icon } from '@discuzq/design';
 import { observer, inject } from 'mobx-react';
 import { PluginToolbar, DefaultToolbar, GeneralUpload, Title, Content, ClassifyPopup, OptionPopup, Position, Emoji } from '@components/thread-post';
 import { Units } from '@components/common';
@@ -207,10 +208,10 @@ class Index extends Component {
         this.setState({ showDraftOption: true });
         break;
       case THREAD_TYPE.saveDraft:
-        this.handleDraft(THREAD_TYPE.saveDraft);
+        this.setState({ showDraftOption: false }, () => this.handleSaveDraft());
         break;
       case THREAD_TYPE.abandonDraft:
-        this.handleDraft(THREAD_TYPE.abandonDraft);
+        this.setState({ showDraftOption: false }, () => this.handlePageJump(true));
         break;
       case THREAD_TYPE.video:
         this.handleVideoUpload();
@@ -365,7 +366,7 @@ class Index extends Component {
       });
     }
     // 5 loading
-    !isDraft && Taro.showLoading({
+    Taro.showLoading({
       title: isDraft ? '保存草稿中...' : '发布中...',
       mask: true
     });
@@ -383,7 +384,6 @@ class Index extends Component {
       if (!threadId) {
         this.setState({ threadId: data.threadId }); // 新帖首次保存草稿后，获取id
       }
-      // thread.setThreadData(data);
       // 非草稿，跳转主题详情页
       Taro.hideLoading();
       if (!isDraft) {
@@ -399,15 +399,20 @@ class Index extends Component {
 
   }
 
-  handleDraft = (type) => { // 处理保存草稿点击
-    this.setState({ showDraftOption: false });
-    // 点击保存-调用submit方法，点击不保存-重定向首页
-    if (type === THREAD_TYPE.saveDraft) {
-      const { setPostData } = this.props.threadPost;
-      setPostData({ draft: 1 });
-      this.handleSubmit(true);
+  // 处理用户主动点击保存草稿
+  handleSaveDraft = async () => {
+    const { setPostData } = this.props.threadPost;
+    setPostData({ draft: 1 });
+    const isSuccess = await this.handleSubmit(true);
+
+    if (isSuccess) {
+      this.postToast('保存成功', 'success');
+      setTimeout(() => {
+        Taro.hideLoading();
+        this.handlePageJump(true);
+      }, 1000);
     } else {
-      Taro.redirectTo({ url: '/pages/index/index' })
+      this.postToast('保存失败');
     }
   }
 
@@ -441,6 +446,16 @@ class Index extends Component {
     }
   }
 
+  // 处理左上角按钮点击跳路由
+  handlePageJump = async (canJump = false, url) => {
+    if (!canJump) { // 无法跳转时，调用保存草稿选项框
+      this.setState({ showDraftOption: true });
+      return;
+    }
+
+    url ? Taro.redirectTo({ url }) : Taro.navigateBack();
+  }
+
   render() {
     const { permissions } = this.props.user;
     const { categories } = this.props.index;
@@ -459,6 +474,17 @@ class Index extends Component {
     return (
       <>
         <View className={styles['container']}>
+          {/* 自定义顶部导航条 */}
+          <View className={styles.topBar}>
+            <View
+              className={styles['topBar-icon']}
+              onClick={() => this.handlePageJump(false)}
+            >
+              <Icon name="RightOutlined" />
+            </View>
+            发帖
+          </View>
+
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
           <View className={styles['content']}>
             <Title
