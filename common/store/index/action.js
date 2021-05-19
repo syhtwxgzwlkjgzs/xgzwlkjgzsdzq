@@ -18,6 +18,8 @@ class IndexAction extends IndexStore {
 
    /**
    * 详情页点击标签跳转首页操作
+   * @param {array} categoryIds 分类Ids
+   * @returns
    */
     @action
     async refreshHomeData({ categoryIds = [], perPage = 10, page = 1 } = {}) {
@@ -192,9 +194,6 @@ class IndexAction extends IndexStore {
    * 更新帖子列表指定帖子状态
    * @param {number} threadId 帖子id
    * @param {object}  obj 更新数据
-   * @param {boolean} obj.isLike 是否更新点赞
-   * @param {boolean} obj.isPost 是否更新评论数
-   * @param {boolean} obj.user 当前操作的用户
    * @returns
    */
   @action

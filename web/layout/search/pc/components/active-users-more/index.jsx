@@ -9,10 +9,10 @@ import styles from './index.module.scss';
  * @prop {{id:string, image:string, name: string}[]} data 用户数据
  * @prop {function} onItemClick 用户点击事件
  */
-const ActiveUsers = ({ data, onItemClick, onFollow }) => (
+const ActiveUsers = ({ data, onItemClick, onFollow, userId }) => (
   <div className={styles.list}>
     {data?.map((item, index) => (
-      <User key={index} data={item} onFollow={onFollow} onClick={onItemClick} />
+      <User key={index} data={item} onFollow={onFollow} onClick={onItemClick} userId={userId} />
     ))}
   </div>
 );
@@ -22,7 +22,7 @@ const ActiveUsers = ({ data, onItemClick, onFollow }) => (
  * @prop {object} data 用户数据
  * @prop {function} onClick 用户点击事件
  */
-const User = ({ data, onClick, onFollow }) => {
+const User = ({ data, onClick, onFollow, userId }) => {
   const click = useCallback(() => {
     onClick && onClick(data);
   }, [data, onClick]);
@@ -71,7 +71,7 @@ const User = ({ data, onClick, onFollow }) => {
           </div>
         </div>
       </div>
-      <Button type="primary" className={`${styles.button} ${btnInfo.className}`} onClick={handleFollow}>
+      {data?.userId !== userId && <Button type="primary" className={`${styles.button} ${btnInfo.className}`} onClick={handleFollow}>
         {
           btnInfo.text === '关注' ?
           <span className={styles.addText}>+</span>
@@ -79,7 +79,7 @@ const User = ({ data, onClick, onFollow }) => {
           <Icon name={btnInfo.icon} size={10} className={styles.addIcon} />
         }
         {btnInfo.text}
-      </Button>
+      </Button>}
     </div>
   );
 };

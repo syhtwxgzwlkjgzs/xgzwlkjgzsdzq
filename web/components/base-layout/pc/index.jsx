@@ -3,6 +3,7 @@ import { Flex } from '@discuzq/design';
 import Header from '@components/header';
 import List from '@components/list'
 import RefreshView from '@components/list/RefreshView';
+import ErrorView from '@components/list/ErrorView';
 
 import styles from './index.module.scss';
 
