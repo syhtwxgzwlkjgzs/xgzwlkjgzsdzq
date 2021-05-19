@@ -126,6 +126,7 @@
   .redpacket-box {
     position: static;
     width: 100%;
-    height: 100%;
+    height: 50vh;
+    min-height: 50vh;
   }
 }

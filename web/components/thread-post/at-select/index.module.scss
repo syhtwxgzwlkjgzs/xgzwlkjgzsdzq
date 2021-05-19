@@ -200,11 +200,13 @@
     }
   }
   .at-wrap {
-    height: 424px;
+    height: calc(50vh - 120px);
   }
+
   :global {
     .dzq-modal__body {
-      height: 100%;
+      height: 50vh;
+      min-height: 50vh;
     }
   }
 }
