@@ -29,6 +29,7 @@ import MoneyDisplay from '@components/thread-post/money-display';
 @inject('index')
 @inject('thread')
 @inject('user')
+@inject('site')
 @observer
 class ThreadPCPage extends React.Component {
   render() {
@@ -36,6 +37,7 @@ class ThreadPCPage extends React.Component {
       threadPost,
       index,
       user,
+      site,
       emoji,
       topic,
       atList,
@@ -44,6 +46,7 @@ class ThreadPCPage extends React.Component {
     } = this.props;
     const { postData } = threadPost;
     const { freeWords, price, attachmentPrice } = threadPost.postData;
+    const { webConfig = {} } = site;
 
     return (
       <div className={styles.container}>
@@ -161,8 +164,9 @@ class ThreadPCPage extends React.Component {
                 />
               </div>
               <div className={styles['toolbar-right']}>
-                {user?.permissions?.insertPosition?.enable && (
+                {(user?.permissions?.insertPosition?.enable && webConfig?.lbs?.lbs) && (
                   <Position
+                    lbskey={webConfig?.lbs?.qqLbsKey}
                     position={postData.position}
                     // onClick={() => this.props.saveDataLocal()}
                     onChange={position => this.props.setPostData({ position })}
