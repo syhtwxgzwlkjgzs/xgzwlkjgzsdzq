@@ -16,7 +16,7 @@ export default function DVditor(props) {
   const { pc, onChange, emoji = {}, atList = [], topic, onFocus, onBlur, value } = props;
   const vditorId = 'dzq-vditor';
 
-  // const [isFocus, setIsFocus] = useState(false);
+  const [isFocus, setIsFocus] = useState(false);
   const [vditor, setVditor] = useState(null);
 
   const html2mdSetValue = (text) => {
@@ -109,6 +109,7 @@ export default function DVditor(props) {
           editor.vditor[editor.vditor.currentMode].element.blur();
         },
         focus: () => {
+          setIsFocus(false);
           onFocus('focus');
         },
         input: () => {
@@ -119,7 +120,7 @@ export default function DVditor(props) {
           // 兼容Android的操作栏渲染
           const timer = setTimeout(() => {
             clearTimeout(timer);
-            // setIsFocus(false);
+            setIsFocus(false);
             onBlur();
           }, 100);
         },
@@ -127,7 +128,8 @@ export default function DVditor(props) {
         select: (value) => {
           if (value) {
             onFocus('select');
-          }
+            setIsFocus(true);
+          } else setIsFocus(false);
         },
         outline: {
           enable: false,
@@ -141,17 +143,17 @@ export default function DVditor(props) {
           max: MAX_COUNT,
         },
         toolbarConfig: {
-          hide: true,
+          hide: !!pc,
           pin: true,
           bubbleHide: false,
         },
-        bubbleToolbar: [...baseToolbar],
+        bubbleToolbar: pc ? [...baseToolbar] : [],
       },
     );
     setVditor(editor);
   }
 
-  const className = pc ? 'dvditor pc' : 'dvditor h5';
+  const className = pc ? 'dvditor pc' : classNames('dvditor h5', { 'no-focus': !pc && !isFocus });
 
   return (
     <>

@@ -24,6 +24,8 @@
   .bodyLeft {
     width: rem(750);
     margin-right: rem(20);
+    // 修复不能触发触底更新的问题
+    min-height: 101%;
   }
 
   .bodyRigth {

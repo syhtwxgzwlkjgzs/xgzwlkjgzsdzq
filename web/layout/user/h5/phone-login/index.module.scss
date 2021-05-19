@@ -22,7 +22,6 @@
   }
   .otherLogin-title {
     @include otherLoginText;
-    margin-top: rem(30);
     font-size: rem($font-size-base);
   }
   .otherLogin-button{
@@ -37,7 +36,6 @@
   }
   .otherLogin-tips{
     @include otherLoginText;
-    margin-top: rem(32);
   }
 }
 

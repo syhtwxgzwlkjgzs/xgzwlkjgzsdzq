@@ -7,14 +7,15 @@
   height: calc(100vh - 134px - 0.44rem);
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-  background-color: var(--color-white);
+  background-color: $white;
 }
 .post-bottombar {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: var(--color-white);
+  background-color: $white;
+  z-index: $zindex-popup;
 }
 @supports (bottom: constant(safe-area-inset-bottom)) or (bottom: env(safe-area-inset-bottom)) {
   .post-inner {
@@ -24,14 +25,14 @@
 }
 
 .audio-record {
-  padding: 0 rem($padding-4n) rem($padding-4n);
+  margin: 0 rem($padding-4n) rem($padding-4n);
 }
 .audio-record-display {
   position: relative;
   :global {
     .dzq-audio {
       .dzq-audio-bg-view__right {
-        padding-right: $padding-5n + $padding-1n;
+        padding-right: $padding-5n + $padding-4n;
         &-text {
           display: flex;
           align-items: center;
@@ -43,7 +44,7 @@
   }
   .delete {
     position: absolute;
-    right: rem($padding-5n);
+    right: rem($padding-4n);
     top: 50%;
     transform: translateY(-50%);
     font-size: $font-size-middle;

@@ -1,49 +1,14 @@
 /* stylelint-disable */
 @import '@common/styles/index.scss';
+
 .dvditor.h5 {
-  // .vditor-bubble-toolbar {
-  //   display: none !important;
-  // }
+  .vditor-bubble-toolbar {
+    display: none !important;
+  }
+
   .vditor-ir pre.vditor-reset,
   .vditor-wysiwyg pre.vditor-reset {
     padding-top: rem($padding-2n) !important;
-  }
-
-  .vditor-bubble-toolbar {
-    display: none;
-    position: absolute;
-    width: 100%;
-    padding: 0 !important;
-    height: 36px !important;
-    left: 0 !important;
-    top: 177px;
-    background-color: $white;
-    border: 0;
-    border: $border-solid-1;
-
-    &__item {
-      font-size: $font-size-middle;
-
-      button {
-        font-size: $font-size-middle;
-      }
-
-      .dzq-icon {
-        color: $icon-color !important;
-      }
-    }
-
-    .vditor-counter {
-      display: none;
-    }
-    &__bottom {
-      display: none;
-    }
-  }
-
-  .vditor-toolbar__item svg {
-    width: 18px;
-    height: 18px;
   }
 }
 
@@ -51,11 +16,13 @@
   position: relative;
   border: none !important;
   background-color: $white;
+
   &.no-focus {
     .vditor-toolbar {
       display: none !important;
     }
   }
+
   &__placeholder {
     height: 36px;
     width: 100%;
@@ -67,17 +34,22 @@
     padding: rem(16) !important;
     font-size: $font-size-middle;
     color: $text-color-primary;
+
     &:before {
       color: $text-color-placeholder !important;
     }
+
     &:focus {
       background-color: $white;
     }
+
     img[alt^=":"] {
       width: 30px;
     }
   }
+
   .vditor-ir {
+
     p,
     strong,
     span,
@@ -88,11 +60,14 @@
       font-size: $font-size-middle;
       font-family: $font-family;
     }
+
     strong {
       font-weight: bolder;
     }
   }
+
   .vditor-wysiwyg {
+
     p,
     strong,
     span,
@@ -103,19 +78,56 @@
       font-size: $font-size-middle;
       font-family: $font-family;
     }
+
     strong {
       font-weight: bolder;
     }
+
     .vditor-panel {
       display: none !important;
     }
   }
+
   .vditor-toolbar--hide {
     display: none;
   }
 
+  .vditor-toolbar {
+    position: absolute;
+    width: 100%;
+    padding: 0 !important;
+    height: 36px;
+    left: 0;
+    top: 177px;
+    background-color: #fff;
+    border: 0;
+    border-top: $border-solid-1;
+
+    &__item {
+      font-size: $font-size-middle;
+
+      button {
+        font-size: $font-size-middle;
+      }
+
+      .dzq-icon {
+        color: $icon-color;
+      }
+    }
+
+    .vditor-counter {
+      display: none;
+    }
+  }
+
+  .vditor-toolbar__item svg {
+    width: 18px;
+    height: 18px;
+  }
+
   .vditor-ir,
   .vditor-wysiwyg {
+
     .vditor-reset>h1:before,
     .vditor-reset>h2:before,
     .vditor-reset>h3:before,
@@ -125,26 +137,33 @@
     .vditor-toc:before {
       content: '';
     }
+
     .vditor-wysiwyg__block::before {
       content: '';
     }
+
     &::-webkit-scrollbar {
       width: 8px;
       height: 8px;
       background-color: rgba(0, 0, 0, .09);
       border-radius: 100px;
     }
+
     &::-webkit-scrollbar-thumb {
       background: rgba(0, 0, 0, .09);
       border-radius: 100px;
     }
   }
+
   .vditor-content {
     border: none;
   }
 }
+
 .dvditor.pc {
   position: static;
+  padding-bottom: $padding-4n;
+
   .vditor-ir pre.vditor-reset,
   .vditor-wysiwyg pre.vditor-reset {
     padding: 0 !important;

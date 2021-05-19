@@ -4,7 +4,7 @@
   display: block;
   .headerContent{
     display: flex;
-    padding: rem($padding-2n) rem($padding-4n);
+    padding: 0 rem($padding-4n);
     box-sizing: border-box;
     background: var(--color-white);
     position: fixed;
@@ -13,20 +13,23 @@
     width: 100%;
     height: rem(40);
     border-bottom: 1px solid var(--border-line-color);
-    z-index: var(--zindex-too0p);
+    z-index: $zindex-backtotop;
+    align-items: center;
     .left{
       width: 50%;
       font-size: rem($font-size-base);
       color: $text-color-primary;
-      .icon{
-        font-size: rem($font-size-middle);
-        line-height: rem(23);
-        float: left;
-      }
+      display: flex;
+      align-items: center;
+      // .icon{
+      //   font-size: rem($font-size-middle);
+      //   line-height: rem(23);
+      //   float: left;
+      // }
       .text {
         font-size: rem($font-size-base);
-        line-height: rem(24);
-        padding-left: $padding-2n;
+        // line-height: rem(24);
+        padding-left: $padding-base;
       }
     }
     .right{
