@@ -22,7 +22,7 @@ const Index = ({ isPay = false, url, onPay = noop }) => {
           <div className={styles.wrapper}>
             <img src='/dzq-img/pay-audio.png' className={styles.payBox} onClick={onPay}></img>
           </div>
-        ) : <Audio src={url} onPlay={onPlay} />
+        ) : <Audio src={url} onPlay={onPlay} disabled={!url} />
       }
     </div>
   );

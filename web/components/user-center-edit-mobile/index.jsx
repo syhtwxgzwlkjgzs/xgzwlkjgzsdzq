@@ -193,7 +193,7 @@ class index extends Component {
           </div>
         </div>
         <div className={styles.bottom}>
-          <Button disabled={isSubmit} onClick={this.handleStepBtn} type={"primary"} className={styles.btn}>{this.state.current_step === 'first' ? "下一步" : '提交'}</Button>
+          <Button full disabled={isSubmit} onClick={this.handleStepBtn} type={"primary"} className={styles.btn}>{this.state.current_step === 'first' ? "下一步" : '提交'}</Button>
         </div>
       </div>
     )

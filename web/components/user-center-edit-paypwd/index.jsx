@@ -147,11 +147,11 @@ class index extends Component {
         {this.props.user?.canWalletPay ? this.renderCanPayPwd() : this.renderSetPayPwd()}
         <div className={styles.bottom}>
           {this.props.user?.canWalletPay ? (
-            <Button disabled={!oldPayPwd} onClick={this.goToResetPayPwd} type={'primary'} className={styles.btn}>
+            <Button full disabled={!oldPayPwd} onClick={this.goToResetPayPwd} type={'primary'} className={styles.btn}>
               下一步
             </Button>
           ) : (
-            <Button disabled={!payPassword} onClick={this.handleSubmit} type={'primary'} className={styles.btn}>
+            <Button full disabled={!payPassword} onClick={this.handleSubmit} type={'primary'} className={styles.btn}>
               提交
             </Button>
           )}

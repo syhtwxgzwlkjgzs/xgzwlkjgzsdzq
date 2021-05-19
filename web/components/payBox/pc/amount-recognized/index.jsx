@@ -42,7 +42,7 @@ export default class index extends Component {
               </div>
               {/* 关闭按钮 */}
               <div onClick={this.onClose} className={styles.amountCloseBtn}>
-                <Icon name="CloseOutlined" size={14} />
+                <Icon name="CloseOutlined" size={12} />
               </div>
             </div>
           </>

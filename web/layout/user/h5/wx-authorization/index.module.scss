@@ -14,4 +14,7 @@
   .tips{
     @include titleTips;
   }
+  .functionalRegion {
+    @include functionalRegion;
+  }
 }
