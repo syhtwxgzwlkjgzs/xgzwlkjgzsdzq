@@ -1,6 +1,7 @@
 @import '@common/styles/index.scss';
 
 .listItem {
+  @include cursor-on-pc;
   position: relative;
   display: flex;
   align-items: center;
