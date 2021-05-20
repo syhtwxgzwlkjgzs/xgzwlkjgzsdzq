@@ -47,7 +47,7 @@ export default inject('user')(
     const isAttachmentPay = threadStore?.threadData?.payType === 2 && threadStore?.threadData?.paid === false;
     const attachmentPrice = threadStore?.threadData?.attachmentPrice || 0;
     // 是否帖子付费
-    const isThreadPay = threadStore?.threadData?.payType === 1 && threadStore?.threadData?.paid === false;
+    const isThreadPay = threadStore?.threadData?.payType === 1;
     const threadPrice = threadStore?.threadData?.price || 0;
     // 是否作者自己
     const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData?.userId;
@@ -63,6 +63,9 @@ export default inject('user')(
     const canBeReward = isFree && threadStore?.threadData?.ability.canBeReward && !isRedPack && !isReward;
     // 是否已打赏
     const isRewarded = threadStore?.threadData?.isReward;
+
+    // 是否可以免费查看付费帖子
+    const canFreeViewPost = threadStore?.threadData?.ability.canFreeViewPost;
 
     const parseContent = parseContentData(indexes);
 
@@ -111,10 +114,19 @@ export default inject('user')(
               view={`${threadStore?.threadData?.viewCount}` || ''}
               time={`${threadStore?.threadData?.createdAt}` || ''}
               userId={threadStore?.threadData?.user?.userId}
+              isEssence={isEssence}
+              isPay={!isFree}
+              isReward={isReward}
+              isRed={isRedPack}
+              platform="pc"
             ></UserInfo>
           </div>
           {props?.user?.isLogin() && (
             <div className={topic.more}>
+              {/* 当存在任一标签时，显示分割线 */}
+              {(isEssence || !isFree || isReward || isRedPack) && (
+                <Divider mode="vertical" className={topic.moreDivider}></Divider>
+              )}
               <div className={topic.iconText}>
                 <Dropdown
                   menu={
@@ -141,13 +153,6 @@ export default inject('user')(
               </div>
             </div>
           )}
-          {isEssence && (
-            <div className={topic.headerTag}>
-              <div className={topic.browseCategory}>
-                <p className={topic.categoryEssence}>精华</p>
-              </div>
-            </div>
-          )}
         </div>
 
         <Divider></Divider>
@@ -161,7 +166,7 @@ export default inject('user')(
             {text && <PostContent useShowMore={false} content={text || ''} />}
 
             {/* 付费附件 */}
-            {isAttachmentPay && !isSelf && (
+            {!canFreeViewPost && isAttachmentPay && !isSelf && (
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={topic.payButton} type="primary" size="large">
                   <div className={topic.pay}>
@@ -254,7 +259,7 @@ export default inject('user')(
             )}
 
             {/* 帖子付费 */}
-            {isThreadPay && !isSelf && (
+            {!canFreeViewPost && isThreadPay && !isSelf && (
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={topic.payButton} type="primary" size="large">
                   <div className={topic.pay}>

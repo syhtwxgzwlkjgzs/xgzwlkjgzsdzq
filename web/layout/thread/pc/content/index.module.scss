@@ -12,21 +12,35 @@
   background: var(--color-white);
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .headerTag {
-  margin-left: rem(24);
+  margin-left: rem($margin-6n);
 }
 
 .userInfo {
   flex: 1;
 }
 
+.more {
+  margin-left: rem($margin-6n);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: rem(21);
+}
+
+.moreDivider {
+  margin: 0;
+  height: rem(16);
+}
+
 .iconText {
   margin-left: rem($margin-6n);
   display: inline-flex;
   align-items: center;
+  justify-content: flex-start;
   cursor: pointer;
 
   :global {

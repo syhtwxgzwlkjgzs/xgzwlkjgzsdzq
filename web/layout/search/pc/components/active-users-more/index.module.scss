@@ -89,12 +89,15 @@
 
     .follow {
       background-color: var(--color-primary);
+      border-color: var(--color-primary);
     }
     .isFollow {
       background-color: var(--color-primary5);
+      border-color: var(--color-primary5);
     }
     .withdraw {
       background-color: var(--color-warn);
+      border-color: var(--color-warn);
     }
   }
 }

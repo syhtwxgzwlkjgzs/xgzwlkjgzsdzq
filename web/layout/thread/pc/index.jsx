@@ -228,7 +228,7 @@ class ThreadPCPage extends React.Component {
     const { success, msg } = await this.props.thread.updateStick(params);
 
     if (success) {
-      this.setTopState(true);
+      this.setTopState(params.isStick);
       return;
     }
 
