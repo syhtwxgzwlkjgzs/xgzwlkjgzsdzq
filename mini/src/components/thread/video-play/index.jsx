@@ -3,7 +3,6 @@ import styles from './index.module.scss';
 import { Video, Icon } from '@discuzq/design';
 import { noop } from '../utils';
 import { View, Text } from '@tarojs/components'
-import { getElementRect, randomStr } from '../utils'
 
 /**
  * 视频
@@ -17,7 +16,7 @@ import { getElementRect, randomStr } from '../utils'
  * @prop {function} onPay 付费时，蒙层点击事件
  */
 
-
+//TODO 视频转码中和错误状态的蒙层样式有问题，需要调整
 const Index = ({
   isPay = false,
   coverUrl,
@@ -28,7 +27,7 @@ const Index = ({
   onPay = noop,
 }) => {
   let player = null;
-  const videoId = useRef(`video${randomStr()}`);
+  const ref = useRef();
   const [width, setWidth] = useState(null);
 
   const onReady = (ins) => {
@@ -36,14 +35,13 @@ const Index = ({
   };
 
   useEffect(() => {
-    getElementRect(videoId.current).then(res => {
-      setWidth(res?.width || 378);
-    })
-    
+    // const rect = ref.current.getBoundingClientRect();
+    const rect = {width: 343}; // TODO: 需要修改
+    setWidth(rect?.width || 343);
   }, []);
 
   return (
-    <View id={videoId.current} className={styles.container}>
+    <View id="common-video-play" className={styles.container} ref={ref}>
       {
         width && (
           <Video
@@ -62,10 +60,10 @@ const Index = ({
         isPay && <View className={styles.payBox} onClick={onPay}></View>
       }
       {
-        status !== 1 && (
+        !isPay && status !== 1 && (
           <View className={styles.payBox}>
             <View className={`${styles.alert} ${status === 0 ? styles.alertWarn : styles.alertError}`}>
-              <Icon className={styles.tipsIcon} size={20} name={status === 0 ? 'WarnOutlined' : 'WrongOutlined'}></Icon>
+              <Icon className={styles.tipsIcon} size={20} name={status === 0 ? 'TipsOutlined' : 'WrongOutlined'}></Icon>
               <Text className={styles.tipsText}>{status === 0 ? '视频正在转码中，转码成功后才能正常显示！' : '错误'}</Text>
             </View>
           </View>

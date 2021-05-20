@@ -215,7 +215,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
           tabBarExtraContent={
             tipData?.platform === 'pc' && (
               <View onClick={onClose} className={styles.tabIcon}>
-                <Icon name="CloseOutlined" />
+                <Icon name="CloseOutlined" size={12} />
               </View>
             )
           }

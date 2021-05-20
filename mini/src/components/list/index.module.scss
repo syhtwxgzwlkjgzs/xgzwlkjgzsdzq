@@ -5,18 +5,20 @@
 
   .wrapper {
     height: 100%;
+    width: 100%;
     overflow-y: scroll;
+    overflow-y: overlay;
   }
+}
 
-  .footer {
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    color: var(--color-text-placeholder);
-    .spin {
-      margin-right: 4px;
-    }
+.refreshView {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: $text-color-placeholder;
+  .spin {
+    margin-right: 4px;
   }
 }
