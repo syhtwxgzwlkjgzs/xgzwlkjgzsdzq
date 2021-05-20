@@ -41,8 +41,8 @@ import { RichText } from '@discuzq/design';
           className={`${styles.item} ${platform === 'pc' ? styles.itemPC : styles.itemH5}`}
           onClick={() => onClick(item)}
         >
-          <View className={styles.prefix}>{item.prefix || '置顶'}</View>
-          {false && <View className={styles.title}>{handlerTitle(item.title)}</View>}
+          <Text className={styles.prefix}>{item.prefix || '置顶'}</Text>
+          {false && <Text className={styles.title}>{handlerTitle(item.title)}</Text>}
           <View className={styles.title}>
               <RichText onClick={(e) => onClick(item, e)} className={styles.richText} content={filterContent(item.title)} />
           </View>
