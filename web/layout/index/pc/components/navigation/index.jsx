@@ -39,8 +39,8 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop }) 
         {
           categories?.map((item, index) => (item?.children?.length > 0 ? (
               <Menu.SubMenu key={index} index={`${item.pid}`}  title={renderSubMenuTitle(item)}>
-                {item.children.map((children, subIndex) => (
-                    <Menu.Item index={`${item.pid}/${children.pid}`} key={subIndex} onClick={onClick}>{children.name}</Menu.Item>
+                {item.children.map((child, subIndex) => (
+                    <Menu.Item index={`${item.pid}/${child.pid}`} key={subIndex} onClick={onClick}>{renderSubMenuTitle(child)}</Menu.Item>
                 ))}
               </Menu.SubMenu>
           ) : (
