@@ -215,7 +215,7 @@ class PostPage extends React.Component {
   // 附件和图片上传完成之后的处理
   handleUploadComplete = (ret, file, type) => {
     if (ret.code !== 0) {
-      Toast.error({ content: ret.msg });
+      Toast.error({ content: `${ret.msg} 上传失败` });
       return false;
     }
     const { uid } = file;
