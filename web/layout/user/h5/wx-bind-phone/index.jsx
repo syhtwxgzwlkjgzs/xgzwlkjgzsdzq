@@ -69,7 +69,7 @@ class WXBindPhoneH5Page extends React.Component {
       });
 
       setTimeout(() => {
-        router.push('/index');
+        router.push('/');
       }, 1000);
     } catch (error) {
       // 跳转状态页
