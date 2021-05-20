@@ -110,6 +110,10 @@ export default inject('user')(
       typeof props.onRewardClick === 'function' && props.onRewardClick();
     };
 
+    const onTagClick = () => {
+      typeof props.onTagClick === 'function' && props.onTagClick();
+    };
+
     return (
       <div className={`${topic.container}`}>
         <div className={topic.header}>
@@ -227,7 +231,7 @@ export default inject('user')(
 
             {/* 标签 */}
             {threadStore?.threadData?.categoryName && (
-              <div className={topic.tag}>{threadStore?.threadData?.categoryName}</div>
+              <div className={topic.tag} onClick={onTagClick}>{threadStore?.threadData?.categoryName}</div>
             )}
 
             {(parseContent.RED_PACKET || parseContent.REWARD) && (
