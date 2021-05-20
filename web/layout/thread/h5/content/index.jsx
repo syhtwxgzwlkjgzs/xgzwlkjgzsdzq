@@ -57,6 +57,9 @@ const RenderThreadContent = inject('user')(
     const canBeReward = isFree && threadStore?.threadData?.ability.canBeReward && !isRedPack && !isReward;
     // 是否已打赏
     const isRewarded = threadStore?.threadData?.isReward;
+    
+    // 是否可以免费查看付费帖子
+    const canFreeViewPost = threadStore?.threadData?.ability.canFreeViewPost;
 
     const parseContent = parseContentData(indexes);
 
@@ -137,7 +140,7 @@ const RenderThreadContent = inject('user')(
           )}
 
           {/* 付费附件 */}
-          {isAttachmentPay && !isSelf && (
+          {!canFreeViewPost && isAttachmentPay && !isSelf && (
             <div style={{ textAlign: 'center' }} onClick={onContentClick}>
               <Button className={styles.payButton} type="primary">
                 <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
@@ -217,7 +220,7 @@ const RenderThreadContent = inject('user')(
           )}
 
           {/* 帖子付费 */}
-          {isNeedPay && !isSelf && (
+          {!canFreeViewPost && isNeedPay && !isSelf && (
             <div style={{ textAlign: 'center' }} onClick={onContentClick}>
               <Button className={styles.payButton} type="primary">
                 <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
