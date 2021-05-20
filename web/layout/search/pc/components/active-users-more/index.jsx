@@ -27,7 +27,9 @@ const User = ({ data, onClick, onFollow, userId }) => {
     onClick && onClick(data);
   }, [data, onClick]);
 
-  const handleFollow = () => {
+  const handleFollow = (e) => {
+    e && e.stopPropagation();
+
     const type = btnInfo.text === '关注' ? '1' : '0'
     onFollow({ id: data.userId, type })
   }
