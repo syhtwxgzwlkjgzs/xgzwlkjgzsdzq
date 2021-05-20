@@ -30,6 +30,8 @@
     }
     .sortIcon {
       font-size: rem($font-size-primary) !important;
+      position: relative;
+      top: -1.2px;
     }
   }
 }

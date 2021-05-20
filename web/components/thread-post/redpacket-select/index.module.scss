@@ -67,7 +67,7 @@
     .dzq-input {
       display: inline-block;
       margin-right: 3px;
-      width: rem(230);
+      width: rem(200);
       .dzq-input__inner {
         border: none;
         padding: 0;
@@ -126,6 +126,7 @@
   .redpacket-box {
     position: static;
     width: 100%;
-    height: 100%;
+    height: 212px;
+    min-height: 212px;
   }
 }

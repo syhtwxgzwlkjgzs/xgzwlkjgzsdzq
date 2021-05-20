@@ -38,6 +38,16 @@
           text-align: left;
           color: var(--color-text-primary);
           word-break: break-word;
+          @include lamp-clamp(2);
+
+          p {
+            @include lamp-clamp(2);
+            line-height: rem(24);
+          }
+
+          img {
+            height: rem(22);
+          }
         }
       }
 
@@ -126,4 +136,8 @@
 .revise {
   display: flex;
   align-items: center;
+}
+
+.hover {
+  cursor: pointer;
 }

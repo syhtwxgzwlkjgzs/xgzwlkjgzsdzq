@@ -48,13 +48,15 @@ class ThreadPCPage extends React.Component {
       inputValue: '', // 评论内容
     };
 
-    this.perPage = 5;
+    this.perPage = 10;
     this.page = 1; // 页码
     this.commentDataSort = true;
 
     // 滚动定位相关属性
     this.threadBodyRef = React.createRef();
     this.commentDataRef = React.createRef();
+
+    this.position = 0;
 
     // 修改评论数据
     this.comment = null;
@@ -157,20 +159,23 @@ class ThreadPCPage extends React.Component {
   }
 
   onReportClick(comment) {
-    this.comment = comment;
-    this.setState({ showReportPopup: true });
-  }
-
-  // 确定举报
-  async onReportOk(val) {
-    // 对没有登录的先登录
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
       goToLoginPage({ url: '/user/login' });
       return;
     }
 
-    if (!val) return;
+    this.comment = comment;
+    this.setState({ showReportPopup: true });
+  }
+
+  // 确定举报
+  async onReportOk(val) {
+    if (!val) {
+      Toast.info({ content: '请选择或输入举报理由' });
+      return;
+    }
+
     const params = {
       threadId: this.props.thread.threadData.threadId,
       reason: val,
@@ -226,7 +231,7 @@ class ThreadPCPage extends React.Component {
     const { success, msg } = await this.props.thread.updateStick(params);
 
     if (success) {
-      this.setTopState(true);
+      this.setTopState(params.isStick);
       return;
     }
 
@@ -287,7 +292,16 @@ class ThreadPCPage extends React.Component {
 
   // 点击发布按钮
   async onPublishClick(val) {
-    if (!val) return;
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
+    if (!val) {
+      Toast.info({ content: '请输入内容' });
+      return;
+    }
     return this.comment ? await this.updateComment(val) : await this.createComment(val);
   }
 
@@ -347,6 +361,12 @@ class ThreadPCPage extends React.Component {
 
   // 点击编辑评论
   onEditClick(comment) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     this.comment = comment;
     console.log(this.comment);
     this.setState({
@@ -365,6 +385,12 @@ class ThreadPCPage extends React.Component {
 
   // 点赞
   async onLikeClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
@@ -385,21 +411,27 @@ class ThreadPCPage extends React.Component {
     Toast.info({ content: '复制链接成功' });
 
     const { title = '' } = this.props.thread?.threadData || {};
-    h5Share(title);
+    h5Share({ title, path: `thread/${this.props.thread?.threadData?.threadId}` });
 
-    const id = this.props.thread?.threadData?.id;
+    // const id = this.props.thread?.threadData?.id;
 
-    const { success, msg } = await this.props.thread.shareThread(id);
+    // const { success, msg } = await this.props.thread.shareThread(id);
 
-    if (!success) {
-      Toast.error({
-        content: msg,
-      });
-    }
+    // if (!success) {
+    //   Toast.error({
+    //     content: msg,
+    //   });
+    // }
   }
 
   // 点击收藏icon
   async onCollectionClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
@@ -416,6 +448,12 @@ class ThreadPCPage extends React.Component {
 
   // 点击关注
   onFollowClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     if (this.props.thread.threadData.userId) {
       this.props.thread?.authorInfo?.follow === 2 || this.props.thread?.authorInfo?.follow === 1
         ? this.props.thread.cancelFollow({ id: this.props.thread.threadData.userId, type: 1 }, this.props.user)
@@ -425,6 +463,12 @@ class ThreadPCPage extends React.Component {
 
   // 点击打赏
   onRewardClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     this.setState({ showRewardPopup: true });
   }
 
@@ -444,6 +488,27 @@ class ThreadPCPage extends React.Component {
       if (success && this.props.thread?.threadData?.threadId) {
         this.props.thread.fetchThreadDetail(this.props.thread?.threadData?.threadId);
       }
+    }
+  }
+
+  // 使用了H5页面的页面加载跳转逻辑
+  componentDidMount() {
+    // 当内容加载完成后，获取评论区所在的位置
+    this.position = this.commentDataRef?.current?.offsetTop - 50;
+
+    // 是否定位到评论位置
+    if (this.props?.thread?.isPositionToComment) {
+      // TODO:需要监听帖子内容加载完成事件
+      setTimeout(() => {
+        this.threadBodyRef.current.scrollTo(0, this.position);
+      }, 1000);
+    }
+  }
+
+  componentDidUpdate() {
+    // 当内容加载完成后，获取评论区所在的位置
+    if (this.props.thread.isReady) {
+      this.position = this.commentDataRef?.current?.offsetTop - 50;
     }
   }
 

@@ -108,7 +108,7 @@ export default class CommonAccountContent extends Component {
                         <span className={styles.acExplainNum}>￥{this.transMoneyToFixed(amount_)}</span>
                       </div>
                       {index === 0 && <div className={styles.ampuntLineWrap}><div className={styles.ampuntLine}></div></div>}
-                      {index === 1 && <Divider className={styles.acExplainDivider} />}
+                      {/* {index === 1 && <Divider className={styles.acExplainDivider} />} */}
                     </>
                   })
                 }
@@ -136,11 +136,11 @@ export default class CommonAccountContent extends Component {
                       <Checkbox checked={this.props.payBox.isAnonymous} onChange={this.handleChangeIsAnonymous} /> 隐藏我的付费信息
                     </div>
                   )}
-                {
+                {/* {
                   platform === 'h5' && (
                     <Divider className={styles.acExplainDivider} />
                   )
-                }
+                } */}
               </>
             )
           }

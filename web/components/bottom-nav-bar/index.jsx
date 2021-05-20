@@ -16,7 +16,7 @@ const BottomNavBar = ({ router, fixed = true, placeholder = false, curr = 'home'
   }, [curr])
 
   const [tabs, setTabs] = useState([
-    { icon: 'HomeOutlined', text: '首页', active: checkCurrActiveTab(curr, 'home'), router: '/index' },
+    { icon: 'HomeOutlined', text: '首页', active: checkCurrActiveTab(curr, 'home'), router: '/' },
     { icon: 'FindOutlined', text: '发现', active: checkCurrActiveTab(curr, 'search'), router: '/search' },
     { icon: 'PlusOutlined', router: '/thread/post' },
     { icon: 'MailOutlined', text: '消息', active: checkCurrActiveTab(curr, 'message'), router: '/message' },

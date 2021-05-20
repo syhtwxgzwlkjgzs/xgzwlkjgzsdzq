@@ -3,6 +3,7 @@ import { Flex } from '@discuzq/design';
 import Header from '@components/header';
 import List from '@components/list'
 import RefreshView from '@components/list/RefreshView';
+import ErrorView from '@components/list/ErrorView';
 
 import styles from './index.module.scss';
 
@@ -24,8 +25,10 @@ import styles from './index.module.scss';
 */
 
 const BaseLayout = (props) => {
-  const { header = null, left = null, children = null, right = null, footer = null, onSearch, noMore = false, onRefresh } = props;
+  const { header = null, left = null, children = null, right = null, footer = null, onSearch, noMore = false, onRefresh, pageName = '' } = props;
 
+  const [showLeft, setShowLeft] = useState(false);
+  const [showRight, setShowRight] = useState(false);
   const size = useRef('xl')
 
   const debounce = (fn, wait) => {
@@ -41,6 +44,8 @@ const BaseLayout = (props) => {
   const updateSize = debounce(() => {
     if (window) {
       size.current = calcSize(window.innerWidth);
+      setShowLeft(left && (size.current === 'xl' || size.current === 'xxl'));
+      setShowRight(right && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg'));
     }
   }, 50);
 
@@ -53,8 +58,14 @@ const BaseLayout = (props) => {
     }
   });
 
+  useEffect(() => {
+    size.current = calcSize(window.innerWidth);
+    updateSize();
+  }, [size.current])
+
   const calcSize = (width = 1600) => {
     let size = 'xl';
+
     if (width < 992) {
         size = 'sm';
     }
@@ -73,18 +84,18 @@ const BaseLayout = (props) => {
     return size;
   };
 
-  const showLeft = useMemo(() => {
-    return left && (size.current === 'xl' || size.current === 'xxl')
-  }, [size.current])
+  // const showLeft = useMemo(() => {
+  //   return left && (size.current === 'xl' || size.current === 'xxl')
+  // }, [size.current])
 
-  const showRight = useMemo(() => {
-    return right && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg')
-  }, [size.current])
+  // const showRight = useMemo(() => {
+  //   return right && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg')
+  // }, [size.current])
 
   return (
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
-        
+
         <List {...props} className={styles.list} wrapperClass={styles.wrapper}>
           {
             showLeft && (
@@ -101,7 +112,7 @@ const BaseLayout = (props) => {
 
           {
             showRight && (
-              <div className={styles.right}>
+              <div className={`${styles.right} ${(pageName === "home") ? styles["home-right"] : ""}`}>
                 {typeof(right) === 'function' ? right({ ...props }) : right}
               </div>
             )

@@ -16,6 +16,24 @@ class IndexAction extends IndexStore {
     this.filter = data
   }
 
+   /**
+   * 详情页点击标签跳转首页操作
+   * @param {array} categoryIds 分类Ids
+   * @returns
+   */
+    @action
+    async refreshHomeData({ categoryIds = [], perPage = 10, page = 1 } = {}) {
+      if (categoryIds.length) {
+        this.setFilter({ categoryids: categoryIds })
+
+        this.threads = null;
+        this.sticks = null;
+  
+        this.getRreadStickList(categoryIds);
+        this.getReadThreadList({ filter: { categoryids: categoryIds }, sequence: 0, perPage, page });
+      }
+    }
+
   /**
    * 触发筛选数据
    * @param {*} param0
@@ -173,12 +191,25 @@ class IndexAction extends IndexStore {
   }
 
   /**
+   * 更新帖子所有内容，重新编辑
+   * @param {string} threadId 
+   * @param {object} threadInfo 
+   * @returns boolean
+   */
+  @action
+  updateAssignThreadAllData(threadId, threadInfo) {
+    if (!threadId) return false;
+    const targetThread = this.findAssignThread(typeofFn.isNumber(threadId) ? threadId : +threadId);
+    if (!targetThread) return false;
+    const { index, data } = targetThread;
+    this.threads.pageData[index] = threadInfo;
+    return true;
+  }
+
+  /**
    * 更新帖子列表指定帖子状态
    * @param {number} threadId 帖子id
    * @param {object}  obj 更新数据
-   * @param {boolean} obj.isLike 是否更新点赞
-   * @param {boolean} obj.isPost 是否更新评论数
-   * @param {boolean} obj.user 当前操作的用户
    * @returns
    */
   @action
@@ -188,6 +219,11 @@ class IndexAction extends IndexStore {
     
     const { index, data } = targetThread;
     const { updateType, updatedInfo, user } = obj;
+
+    // 更新整个帖子内容
+    if ( data && updateType === 'content' ) {
+      this.threads.pageData[index] = updatedInfo;
+    }
 
     if(!data && !data.likeReward && !data.likeReward.users) return;
 

@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
-import CommonPayoffPwd from '../../components/common-paypwd-content';
 import { STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
-import { Toast, Icon } from '@discuzq/design';
+import { Toast, Icon, Input, Button } from '@discuzq/design';
 
-@inject('site')
 @inject('user')
 @inject('payBox')
 @observer
@@ -13,92 +11,16 @@ export default class index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      list: [],
+      payPassword: null
     };
   }
 
   initState = () => {
     this.setState({
-      list: [],
+      payPassword: null
     })
   }
 
-  componentWillUnmount() {
-    this.setState({
-      list: []
-    })
-  }
-
-  updatePwd = (set_num, type) => {
-    const { list = [] } = this.state;
-    if (type == 'add') {
-      let list_ = [...list];
-      if (list.length >= 6) {
-        list_ = list_.join('').substring(0, 5).split('');
-      }
-      this.setState(
-        {
-          list: [].concat(list_, [set_num]),
-        },
-        () => {
-          if (this.state.list.length === 6) {
-            this.submitPwa();
-          }
-        },
-      );
-    } else if (type == 'delete') {
-      this.setState({
-        list: list.slice(0, list.length - 1),
-      });
-    }
-  };
-
-  async submitPwa() {
-    let { list = [] } = this.state;
-    let pwd = list.join('');
-    this.props.payBox.password = pwd;
-    if (this.props.payBox.step === STEP_MAP.WALLET_PASSWORD) {
-      // 表示钱包支付密码
-      try {
-        await this.props.payBox.walletPayOrder();
-        Toast.success({
-          content: '支付成功',
-          hasMask: false,
-          duration: 1000,
-        });
-        await this.props.payBox.clear();
-      } catch (error) {
-        Toast.error({
-          content: '支付失败，请重新输入',
-          hasMask: false,
-          duration: 1000,
-        });
-        this.setState({
-          list: [],
-        });
-      }
-    } else if (this.props.payBox.step === STEP_MAP.SET_PASSWORD) {
-      //表示设置支付密码
-      try {
-        let id = this.props.user.id;
-        if (!id) return;
-        await this.props.payBox.setPayPassword(id);
-        await this.props.user.updateUserInfo(id);
-        this.props.payBox.step = STEP_MAP.PAYWAY;
-        this.props.payBox.visible = true;
-      } catch (error) {
-        console.log(error, 'sssssssssss_设置支付密码异常回调');
-        Toast.error({
-          content: '设置密码失败',
-          hasMask: false,
-          duration: 1000,
-        })
-        this.setState({
-          list: [],
-        });
-      }
-    }
-  }
 
   // 点击取消或者关闭---回到上个页面
   handleCancel = () => {
@@ -106,15 +28,55 @@ export default class index extends Component {
     this.initState()
   }
 
+  // 初次设置密码
+  handleSetPwd = (e) => {
+    this.setState({
+      payPassword: e.target.value,
+    });
+  };
+
+  // 点击提交
+  handleSubmit = async () => {
+    const { payPassword } = this.state;
+    const { id } = this.props.user;
+    this.props.payBox.password = payPassword;
+    this.props.payBox
+      .setPayPassword(id)
+      .then((res) => {
+        Toast.success({
+          content: '设置密码成功',
+          hasMask: false,
+          duration: 1000,
+        });
+        this.props.user.updateUserInfo(id);
+        this.props.payBox.step = STEP_MAP.PAYWAY;
+        this.props.payBox.visible = true;
+        this.initState();
+      })
+      .catch((err) => {
+        console.log(err);
+        Toast.error({
+          content: '设置失败请重新设置',
+          hasMask: false,
+          duration: 1000,
+        });
+        this.initState();
+      });
+  };
+
   render() {
-    const { list = [] } = this.state;
+    const { list = [], payPassword } = this.state;
     return (
       <div className={styles.payPwdWrapper}>
-        <CommonPayoffPwd whetherIsShowPwdBox={true} list={list} updatePwd={this.updatePwd} />
-        {/* 关闭按钮 */}
-        <div className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
-          <Icon name="PaperClipOutlined" size={16} />
+        <div className={styles.payTop}>
+          <div className={styles.payTitle}>设置支付密码</div>
+          {/* 关闭按钮 */}
+          <div className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
+            <Icon name="CloseOutlined" size={12} />
+          </div>
         </div>
+        <Input type="number" maxLength={6} value={payPassword} onChange={this.handleSetPwd} mode="password" className={styles.payInput} placeholder="请输入支付密码" />
+        <Button onClick={this.handleSubmit} disabled={!payPassword || payPassword.length !== 6} type={'primary'} className={styles.payBtn}>设置支付密码</Button>
       </div>
     );
   }

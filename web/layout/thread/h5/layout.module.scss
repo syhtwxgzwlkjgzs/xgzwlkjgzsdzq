@@ -59,7 +59,13 @@
 }
 
 .input {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
   :global {
+    .dzq-icon{
+      top: rem(-0.5);
+    }
     .dzq-input__inner {
       &::placeholder {
         color: #c5c6ca;

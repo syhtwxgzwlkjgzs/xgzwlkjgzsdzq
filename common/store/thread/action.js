@@ -9,6 +9,7 @@ import {
   readUser,
   createReports,
   reward,
+  deleteThread,
 } from '@server';
 
 class ThreadAction extends ThreadStore {
@@ -209,11 +210,11 @@ class ThreadAction extends ThreadStore {
         };
         this.setThreadDetailLikedUsers(!!isLiked, user);
       }
-      // 更新首页store
-      IndexStore &&
-        IndexStore.updateAssignThreadInfo(id, {
-          isLike: !!isLiked,
-        });
+      // TODO:更新首页store
+      // IndexStore &&
+      //   IndexStore.updateAssignThreadInfo(id, {
+      //     isLike: !!isLiked,
+      //   });
 
       return {
         msg: '操作成功',
@@ -322,12 +323,12 @@ class ThreadAction extends ThreadStore {
     }
 
     const requestParams = {
-      id,
-      isDeleted: 1,
+      threadId: id,
+      // isDeleted: 1,
     };
-    const res = await operateThread({ data: requestParams });
+    const res = await deleteThread({ data: requestParams });
 
-    if (res?.data && res.code === 0) {
+    if (res.code === 0) {
       this.setThreadDetailField('isDelete', 1);
 
       // TODO: 删除帖子列表中的数据

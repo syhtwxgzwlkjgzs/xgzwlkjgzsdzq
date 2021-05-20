@@ -28,12 +28,19 @@ export default class Redpacket extends Component {
     }
   }
 
-  onPriceChang = (e) => { // 对红包金额做仅可输入两位小数的操作
-    const val = e.target.value;
-    const price = val.replace(/\.\d*$/, $1 => {
-      return $1.slice(0, 3)
-    })
-    this.setState({ price })
+  onPriceChang = (val) => { // 对红包金额做仅可输入两位小数的操作
+    const arr = val.match(/([1-9]\d{0,2}|0)(\.\d{0,2})?/);
+    this.setState({ price: arr ? arr[0] : '' })
+  }
+
+  onNumberChang = (val) => {
+    const arr = val.match(/[1-9]\d{0,2}/);
+    this.setState({ number: arr ? arr[0] : '' })
+  }
+
+  onLikenumChang = (val) => {
+    const arr = val.match(/[1-9]\d{1,2}/);
+    this.setState({ likenum: arr ? arr[0] : '' })
   }
 
   redToast = (title) => { // toast
@@ -125,10 +132,9 @@ export default class Redpacket extends Component {
             <Input
               value={price}
               mode="number"
-              miniType="number"
               placeholder="金额"
               maxLength={6}
-              onChange={this.onPriceChang}
+              onChange={e => this.onPriceChang(e.target.value)}
             />元
           </View>
         </View>
@@ -139,10 +145,9 @@ export default class Redpacket extends Component {
             <Input
               value={number}
               mode="number"
-              miniType="number"
               placeholder="个数"
               maxLength={3}
-              onChange={e => this.setState({ number: +e.target.value })}
+              onChange={e => this.onNumberChang(e.target.value)}
             />个
           </View>
         </View>
@@ -165,10 +170,9 @@ export default class Redpacket extends Component {
               <Input
                 value={likenum}
                 mode="number"
-                miniType="number"
                 placeholder="个数"
                 maxLength={3}
-                onChange={e => this.setState({ likenum: +e.target.value })}
+                onChange={e => this.onLikenumChang(e.target.value)}
               />个
             </View>
           </View>

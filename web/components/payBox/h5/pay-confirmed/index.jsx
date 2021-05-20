@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
-import { Popup, Icon, Button, Radio, Toast } from '@discuzq/design';
+import { Popup, Icon, Button, Radio, Toast, Spin } from '@discuzq/design';
 import Router from '@discuzq/sdk/dist/router';
 import { PAY_MENT_MAP, PAYWAY_MAP, STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
 import isWeixin from '@common/utils/is-weixin';
@@ -72,13 +72,20 @@ export default class PayBox extends React.Component {
       );
     }
     if (this.props.payBox?.walletAvaAmount < amount) {
-      return (
-        <p className={styles.subText}>
-          余额不足
-        </p>
-      );
+      return <p className={styles.subText}>余额不足</p>;
     }
-    return <p className={styles.subText}>钱包余额：￥{this.props.payBox?.walletAvaAmount}</p>;
+    return (
+      <>
+        {
+          this.props.payBox?.walletAvaAmount ? (
+            <p className={styles.subText}>钱包余额：￥{this.props.payBox?.walletAvaAmount}</p>
+          ) : (
+            <Spin type="spinner" size={14}></Spin>
+          )
+        }
+      </>
+    )
+
   }
 
   goSetPayPwa() {
@@ -95,7 +102,6 @@ export default class PayBox extends React.Component {
 
   // 点击确认支付
   handlePayConfirmed = async () => {
-
     if (this.props.payBox.payWay === PAYWAY_MAP.WALLET) {
       const { options = {} } = this.props.payBox;
       const { amount = 0 } = options;
@@ -108,8 +114,6 @@ export default class PayBox extends React.Component {
       }
       // 表示钱包支付
       this.props.payBox.walletPayEnsure();
-      // this.props.payBox.visible = false;
-      // this.goSetPayPwa()
     } else if (this.props.payBox.payWay === PAYWAY_MAP.WX) {
       // FIXME: 增加兜底处理
       // 表示微信支付
@@ -158,7 +162,10 @@ export default class PayBox extends React.Component {
     return (
       <div className={styles.payBox}>
         <div className={styles.title}>
-          <p>￥{this.transMoneyToFixed(options.amount)}</p>
+          <p>
+            <span className={styles.moneyUnit}>￥ </span>
+            {this.transMoneyToFixed(options.amount)}
+          </p>
         </div>
         <div className={styles.list}>
           <Radio.Group

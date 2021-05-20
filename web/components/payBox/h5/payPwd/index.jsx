@@ -25,7 +25,7 @@ class Index extends React.Component {
       list: [],
       isShow: false,
     });
-  }
+  };
 
   componentDidMount() {
     this.setState({
@@ -115,25 +115,6 @@ class Index extends React.Component {
           list: [],
         });
       }
-    } else if (this.props.payBox.step === STEP_MAP.SET_PASSWORD) {
-      // 表示设置支付密码
-      try {
-        const { id } = this.props.user;
-        if (!id) return;
-        await this.props.payBox.setPayPassword(id);
-        await this.props.user.updateUserInfo(id);
-        this.props.payBox.step = STEP_MAP.PAYWAY;
-        this.props.payBox.visible = true;
-      } catch (error) {
-        Toast.error({
-          content: '设置密码失败，请重新输入',
-          hasMask: false,
-          duration: 1000,
-        });
-        this.setState({
-          list: [],
-        });
-      }
     }
   }
 
@@ -141,7 +122,7 @@ class Index extends React.Component {
   handleCancel = () => {
     this.props.payBox.step = STEP_MAP.PAYWAY;
     this.initState();
-  }
+  };
 
   // 渲染弹窗形式支付
   renderDialogPayment = () => {
@@ -151,38 +132,28 @@ class Index extends React.Component {
       <div>
         <Dialog className={styles.paypwdDialogWrapper} visible={isShow} position="center" maskClosable={true}>
           <div className={styles.paypwdDialogContent}>
-            {
-              this.props.payBox.step === STEP_MAP.SET_PASSWORD ? (
-                <>
-                  <div className={styles.paypwdTitle}>设置支付密码</div>
-                  <CommonPayoffPwd list={list} updatePwd={this.updatePwd} whetherIsShowPwdBox={true} />
-                </>
-              ) : (
-                <>
-                  <div className={styles.paypwdTitle}>立即支付</div>
-                  <div className={styles.paypwdAmount}>￥{options.amount}</div>
-                  <Divider className={styles.paypwdDivider} />
-                  <div className={styles.paypwdMesg}>
-                    <span className={styles.payLabel}>支付方式</span>
-                    <span>
-                      <Icon className={styles.walletIcon} name="PurseOutlined" />
-                      <span style={{ verticalAlign: 'middle' }}>钱包支付</span>
-                    </span>
-                  </div>
-                  <div className={styles.paypwdMesg}>
-                    <span className={styles.payLabel}>支付密码</span>
-                  </div>
+            <div className={styles.paypwdTitle}>立即支付</div>
+            <div className={styles.paypwdAmount}>
+              <span className={styles.moneyUnit}>￥</span>
+              {Number(options.amount).toFixed(2)}
+            </div>
+            <Divider className={styles.paypwdDivider} />
+            <div className={styles.paypwdMesg}>
+              <span className={styles.payLabel}>支付方式</span>
+              <span>
+                <Icon className={styles.walletIcon} name="PurseOutlined" />
+                <span style={{ verticalAlign: 'middle' }}>钱包支付</span>
+              </span>
+            </div>
+            <div className={styles.paypwdMesg}>
+              <span className={styles.payLabel}>支付密码</span>
+            </div>
 
-                  <CommonPayoffPwd list={list} updatePwd={this.updatePwd} whetherIsShowPwdBox={true} />
-
-                  {/* TODO: 忘记支付密码的链接添加 */}
-                  <div className={styles.forgetPasswordContainer}>
-                    <span>忘记支付密码?</span>
-                  </div>
-                </>
-              )
-            }
-
+            <CommonPayoffPwd list={list} updatePwd={this.updatePwd} whetherIsShowPwdBox={true} />
+            {/* TODO: 忘记支付密码的链接添加 */}
+            <div className={styles.forgetPasswordContainer}>
+              <span>忘记支付密码?</span>
+            </div>
             {/* 关闭按钮 */}
             <div className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
               <Icon name="CloseOutlined" size={16} />
@@ -197,8 +168,6 @@ class Index extends React.Component {
     const { list = [] } = this.state;
     return (
       <div style={{ position: 'relative', zIndex: 1400 }}>
-        {/* <Header /> */}
-        {/* <CommonPayoffPwd list={list} updatePwd={this.updatePwd} /> */}
         {this.renderDialogPayment()}
         <div className={styles.keyboard} onClick={this.keyboardClickHander}>
           <div className={styles.line}>
@@ -240,9 +209,7 @@ class Index extends React.Component {
               0
             </div>
             <div data-key="-1" className={`${styles.column} ${styles.special}`}>
-              {
-                list.length === 0 ? '取消' : '删除'
-              }
+              <Icon name="BackspaceOutlined" size={16} />
             </div>
           </div>
         </div>

@@ -93,8 +93,8 @@
   .parse-goods-box {
     position: static;
     padding: 0;
-    width: 100%;
-    height: auto;
+    height: 252px;
+    min-height: 252px;
     border-radius: $border-radius-small;
     :global {
       .dzq-textarea {
