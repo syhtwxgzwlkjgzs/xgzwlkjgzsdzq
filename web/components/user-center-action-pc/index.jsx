@@ -44,7 +44,7 @@ class UserCenterAction extends React.Component {
     Router.push({ url: '/my/collect' });
   }
   // 点击点赞
-  handleMyCollect = () => {
+  handleMyLike = () => {
     Router.push({ url: '/my/like' });
   }
 
@@ -108,7 +108,7 @@ class UserCenterAction extends React.Component {
         <div onClick={this.handleMyDraft} className={styles.userCenterActionItem}>
           <div className={styles.userCenterActionItemIcon}>
             <Badge>
-              <Icon name={'RecycleBinOutlined'} size={20} />
+              <Icon name={'RetrieveOutlined'} size={20} />
             </Badge>
           </div>
           <div className={styles.userCenterActionItemDesc}>我的草稿箱</div>
