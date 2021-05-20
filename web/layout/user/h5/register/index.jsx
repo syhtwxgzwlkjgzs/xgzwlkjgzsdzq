@@ -7,6 +7,7 @@ import layout from './index.module.scss';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import PopProtocol from '../components/pop-protocol';
 import { get } from '@common/utils/get';
 // import { TencentCaptcha } from '@discuzq/sdk/dist/common_modules/sliding-captcha';
 @inject('site')
@@ -66,7 +67,7 @@ class RegisterH5Page extends React.Component {
       // FIXME: Toast 暂时不支持回调能力
       // TODO: 完善这里的路由跳转逻辑
       setTimeout(() => {
-        window.location.href = '/index';
+        window.location.href = '/';
       }, 1000);
     } catch (e) {
       // 跳转状态页
@@ -84,7 +85,7 @@ class RegisterH5Page extends React.Component {
     }
   };
   render() {
-    const { site } = this.props;
+    const { site, commonLogin } = this.props;
     const { platform } = site;
     return (
       <div className={platform === 'h5' ? '' : layout.pc_body_background}>
@@ -148,9 +149,18 @@ class RegisterH5Page extends React.Component {
               登录
             </span>
           </div>
-          <div className={platform === 'h5' ? layout['otherLogin-tips'] : layout.pc_otherLogin_tips}>注册登录即表示您同意<span>《注册协议》</span><span>《隐私协议》</span></div>
+          <div className={platform === 'h5' ? layout['otherLogin-tips'] : layout.pc_otherLogin_tips} >
+            注册登录即表示您同意
+            <span onClick={() => {
+              commonLogin.setProtocolInfo('register');
+            }}>《注册协议》</span>
+            <span onClick={() => {
+              commonLogin.setProtocolInfo('privacy');
+            }}>《隐私协议》</span>
+          </div>
         </div>
       </div>
+      <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
       </div>
     );
   }

@@ -41,7 +41,7 @@ class BindPhoneH5Page extends React.Component {
         duration: 1000,
       });
       setTimeout(() => {
-        window.location.href = '/index';
+        window.location.href = '/';
       }, 1000);
     } catch (e) {
       // 跳转状态页
@@ -117,7 +117,7 @@ class BindPhoneH5Page extends React.Component {
           </Button>
           <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
             <span className={layout.clickBtn} onClick={() => {
-              window.location.href = '/index';
+              window.location.href = '/';
             }} >跳过</span>
           </div>
         </div>

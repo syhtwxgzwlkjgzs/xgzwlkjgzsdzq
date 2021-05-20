@@ -32,6 +32,10 @@ class UsernameH5Login extends React.Component {
     // 微信绑定
     if (e.Code === NEED_BIND_WEIXIN_FLAG) {
       const { wechatEnv, platform } = this.props.site;
+      // 设置缓存
+      if (e.uid) {
+        this.props.commonLogin.setUserId(e.uid)
+      }
       if (wechatEnv === 'miniProgram' && platform === 'h5') {
         this.props.commonLogin.needToBindMini = true;
         const resp = await genMiniScheme();
@@ -86,7 +90,7 @@ class UsernameH5Login extends React.Component {
       // FIXME: Toast 暂时不支持回调能力
       // FIXME: 使用 window 跳转用来解决，获取 forum 在登录前后不同的问题，后续需要修改 store 完成
       setTimeout(() => {
-        window.location.href = '/index';
+        window.location.href = '/';
         return;
       }, 1000);
     } catch (e) {

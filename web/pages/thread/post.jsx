@@ -214,6 +214,10 @@ class PostPage extends React.Component {
 
   // 附件和图片上传完成之后的处理
   handleUploadComplete = (ret, file, type) => {
+    if (ret.code !== 0) {
+      Toast.error({ content: `${ret.msg} 上传失败` });
+      return false;
+    }
     const { uid } = file;
     const { data } = ret;
     const { postData } = this.props.threadPost;
@@ -365,6 +369,16 @@ class PostPage extends React.Component {
     if (code === 0) {
       thread.reset();
       this.toastInstance?.destroy();
+
+      // 更新帖子到首页列表
+      if ( threadId ) {
+        this.props.index.updateAssignThreadAllData(threadId, data);
+      // 添加帖子到首页数据
+      } else {
+        this.props.index.addThread(data);
+      }
+
+
       if (!isDraft) this.props.router.replace(`/thread/${data.threadId}`);
       else Router.back();
       return true;

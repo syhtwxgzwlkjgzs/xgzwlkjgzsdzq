@@ -38,7 +38,9 @@ class PopProtocol extends React.Component {
             )
           }
           <div className={layout.bottom} onClick={() => commonLogin.setProtocolVisible(false)}>
-            关闭
+            <div className={layout.bottom_content}>
+              关闭
+            </div>
           </div>
         </div>
       </Popup>

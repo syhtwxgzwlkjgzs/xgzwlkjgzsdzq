@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
+import { Icon } from '@discuzq/design';
 import { observer, inject } from 'mobx-react';
 import { PluginToolbar, DefaultToolbar, GeneralUpload, Title, Content, ClassifyPopup, OptionPopup, Position, Emoji } from '@components/thread-post';
 import { Units } from '@components/common';
@@ -9,7 +10,6 @@ import { THREAD_TYPE } from '@common/constants/thread-post';
 import { paidOption, draftOption } from '@common/constants/const';
 import { readYundianboSignature } from '@common/server';
 import VodUploader from 'vod-wx-sdk-v2';
-import Router from '@discuzq/sdk/dist/router';
 import { toTCaptcha } from '@common/utils/to-tcaptcha'
 import PayBox from '@components/payBox/index';
 import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
@@ -34,6 +34,8 @@ class Index extends Component {
       showEmoji: false,
       showPaidOption: false, // 显示付费选项弹框
       showDraftOption: false, // 显示草稿选项弹框
+      bottomHeight: 0,
+      isFirstFocus: true, // textarea首次聚焦(处理调用键盘弹起API首次返回数据不准确的情况)
     }
     this.timer = null;
     this.ticket = ''; // 腾讯云验证码返回票据
@@ -43,6 +45,11 @@ class Index extends Component {
   componentWillMount() { }
 
   async componentDidMount() {
+    // 监听键盘高度变化
+    Taro.onKeyboardHeightChange(res => {
+      this.setState({ bottomHeight: res?.height || 0 });
+    });
+
     this.redirectToHome();
     await this.fetchCategories(); // 请求分类
     const { params } = getCurrentInstance().router;
@@ -67,13 +74,14 @@ class Index extends Component {
     const { resetPostData } = this.props.threadPost;
     resetPostData();
     clearInterval(this.timer);
-    Taro.eventCenter.off('captchaResult', this.handleCaptchaResult)
-    Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault)
+    Taro.eventCenter.off('captchaResult', this.handleCaptchaResult);
+    Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault);
+    // Taro.offKeyboardHeightChange(() => {});
   }
 
-  componentDidShow() { }
+  componentDidShow() {}
 
-  componentDidHide() { }
+  componentDidHide() {}
 
   // handle
   postToast = (title, icon = 'none', duration = 2000) => { // toast
@@ -149,17 +157,10 @@ class Index extends Component {
   onContentChange = (contentText, maxLength) => {
     const { setPostData } = this.props.threadPost;
     setPostData({ contentText });
-    this.setState({
-      contentTextLength: maxLength - contentText.length
-    });
-  }
-
-  onContentFocus = () => {
-    // 首次发帖，文本框聚焦时，若标题为空，则此次永久隐藏标题输入
-    const { postData } = this.props.threadPost;
-    if (this.state.postType === 'isFirst' && postData.title === "") {
-      this.setState({ isShowTitle: false })
-    }
+    this.toHideTitle();
+    // this.setState({
+    //   contentTextLength: maxLength - contentText.length
+    // });
   }
 
   // 设置当前选中分类、分类id
@@ -174,7 +175,6 @@ class Index extends Component {
     this.setState({
       operationType: item.type
     });
-
     let nextRoute;
     switch (item.type) {
       // 根据类型分发具体操作
@@ -208,15 +208,15 @@ class Index extends Component {
         this.setState({ showDraftOption: true });
         break;
       case THREAD_TYPE.saveDraft:
-        this.handleDraft(THREAD_TYPE.saveDraft);
+        this.setState({ showDraftOption: false }, () => this.handleSaveDraft());
         break;
       case THREAD_TYPE.abandonDraft:
-        this.handleDraft(THREAD_TYPE.abandonDraft);
+        this.setState({ showDraftOption: false }, () => this.handlePageJump(true));
         break;
       case THREAD_TYPE.video:
         this.handleVideoUpload();
         break;
-      case THREAD_TYPE.emoji:
+      case 'emoji':
         this.setState({
           showEmoji: true
         });
@@ -365,9 +365,8 @@ class Index extends Component {
         });
       });
     }
-
     // 5 loading
-    !isDraft && Taro.showLoading({
+    Taro.showLoading({
       title: isDraft ? '保存草稿中...' : '发布中...',
       mask: true
     });
@@ -385,7 +384,6 @@ class Index extends Component {
       if (!threadId) {
         this.setState({ threadId: data.threadId }); // 新帖首次保存草稿后，获取id
       }
-      // thread.setThreadData(data);
       // 非草稿，跳转主题详情页
       Taro.hideLoading();
       if (!isDraft) {
@@ -401,16 +399,61 @@ class Index extends Component {
 
   }
 
-  handleDraft = (type) => { // 处理保存草稿点击
-    this.setState({ showDraftOption: false });
-    // 点击保存-调用submit方法，点击不保存-重定向首页
-    if (type === THREAD_TYPE.saveDraft) {
-      const { setPostData } = this.props.threadPost;
-      setPostData({ draft: 1 });
-      this.handleSubmit(true);
+  // 处理用户主动点击保存草稿
+  handleSaveDraft = async () => {
+    const { setPostData } = this.props.threadPost;
+    setPostData({ draft: 1 });
+    const isSuccess = await this.handleSubmit(true);
+
+    if (isSuccess) {
+      this.postToast('保存成功', 'success');
+      setTimeout(() => {
+        Taro.hideLoading();
+        this.handlePageJump(true);
+      }, 1000);
     } else {
-      Taro.redirectTo({ url: '/pages/index/index' })
+      this.postToast('保存失败');
     }
+  }
+
+  // 首次发帖，文本框聚焦时，若标题为空，则此次永久隐藏标题输入
+  toHideTitle = () => {
+    const { postData } = this.props.threadPost;
+    const { postType, isShowTitle } = this.state;
+    if (
+      postType === 'isFirst'
+      && isShowTitle
+      && postData.contentText !== ""
+      && postData.title === ""
+    ) {
+      this.setState({ isShowTitle: false })
+    }
+  }
+
+  // 手动关闭键盘
+  hideKeyboard = () => {
+    Taro.hideKeyboard({
+      complete: res => {
+        this.setState({ bottomHeight: 0 });
+      }
+    })
+  }
+
+  // 处理textarea聚焦
+  onContentFocus = () => {
+    if (this.state.isFirstFocus) {
+      this.setState({ isFirstFocus: false });
+    }
+  }
+
+  // 处理左上角按钮点击跳路由
+  handlePageJump = async (canJump = false, url) => {
+    if (!canJump) { // 无法跳转时，调用保存草稿选项框
+      this.setState({ showDraftOption: true });
+      return;
+    }
+
+    url ? Taro.redirectTo({ url }) : Taro.navigateBack();
   }
 
   render() {
@@ -426,18 +469,36 @@ class Index extends Component {
       showPaidOption,
       showEmoji,
       showDraftOption,
+      bottomHeight,
     } = this.state;
     return (
       <>
         <View className={styles['container']}>
+          {/* 自定义顶部导航条 */}
+          <View className={styles.topBar}>
+            <View
+              className={styles['topBar-icon']}
+              onClick={() => this.handlePageJump(false)}
+            >
+              <Icon name="RightOutlined" />
+            </View>
+            发帖
+          </View>
+
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
           <View className={styles['content']}>
-            <Title title={postData.title} show={isShowTitle} onInput={this.onTitleInput} />
+            <Title
+              title={postData.title}
+              show={isShowTitle}
+              onInput={this.onTitleInput}
+              onBlur={this.hideKeyboard}
+            />
             <Content
               value={postData.contentText}
               maxLength={maxLength}
               onChange={this.onContentChange}
               onFocus={this.onContentFocus}
+              onBlur={this.hideKeyboard}
             />
 
             <View className={styles['plugin']}>
@@ -446,15 +507,13 @@ class Index extends Component {
 
               {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => { }} />}
 
-              {video.videoUrl && <Units type='video' src={video.videoUrl} />}
+              {video.videoUrl && <Units type='video' deleteShow src={video.videoUrl} onDelete={() => setPostData({ video: {} })} />}
 
             </View>
           </View>
 
-          {/* 工具栏区域、include各种插件触发图标、发布等 */}
-          <View className={styles['toolbar']}>
-
-            {/* <Text className={styles['text-length']}>{`还能输入${contentTextLength}个字`}</Text> */}
+          {/* 插入内容tag展示区 */}
+          <View className={styles['tags']}>
             {(permissions?.insertPosition?.enable) &&
               <View className={styles['location-bar']}>
                 <Position currentPosition={position} positionChange={(position) => {
@@ -471,6 +530,10 @@ class Index extends Component {
                     type='tag'
                     tagContent={`付费总额${postData.price + postData.attachmentPrice}元`}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.paid })}
+                    onTagRemoveClick={() => {setPostData({
+                      price: 0,
+                      attachmentPrice: 0
+                    })}}
                   />
                 )}
                 {/* 红包tag */}
@@ -479,6 +542,7 @@ class Index extends Component {
                     type='tag'
                     tagContent={this.redpacketContent()}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
+                    onTagRemoveClick={() => {setPostData({redpacket: {}})}}
                   />
                 }
                 {/* 悬赏tag */}
@@ -487,10 +551,18 @@ class Index extends Component {
                     type='tag'
                     tagContent={`悬赏金额${rewardQa.value}元\\结束时间${rewardQa.expiredAt}`}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
+                    onTagRemoveClick={() => {setPostData({rewardQa: {}})}}
                   />
                 }
               </View>
             )}
+          </View>
+
+          {/* 工具栏区域、include各种插件触发图标、发布等 */}
+          <View
+            className={styles.toolbar}
+            style={{ transform: `translateY(-${bottomHeight}px)` }}
+          >
             <PluginToolbar
               permissions={permissions}
               clickCb={(item) => {

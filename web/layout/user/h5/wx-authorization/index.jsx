@@ -84,7 +84,7 @@ class WXAuthorizationPage extends React.Component {
           accessToken,
         });
         this.props.user.updateUserInfo(uid);
-        window.location.href = '/index';
+        window.location.href = '/';
         return;
       }
       checkUserStatus(res);

@@ -8,7 +8,7 @@ import { Button, Input, Toast, Icon } from '@discuzq/design'; // 原来就有的
 import DatePickers from '@components/thread/date-picker'; // 原来就有的封装
 import DDialog from '@components/dialog';
 import DatePicker from 'react-datepicker';
-import { formatDate } from '@common/utils/format-date.js';
+import { formatDate } from '@common/utils/format-date';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from './index.module.scss'; // 私有样式
@@ -17,7 +17,7 @@ import PropTypes from 'prop-types'; // 类型拦截
 const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
   const [value, setValue] = useState('');// 悬赏金额
   // const [times, setTimes] = useState(formatDate(new Date(), 'yyyy-MM-dd h:mm'));// 悬赏的到期时间
-  const [times, setTimes] = useState(formatDate(new Date().getTime(), 'yyyy/MM/dd h:mm'));// 悬赏的到期时间
+  const [times, setTimes] = useState(formatDate(new Date().getTime(), 'yyyy/MM/dd hh:mm'));// 悬赏的到期时间
   const [show, setShow] = useState(false);// 时间选择器是否显示
 
   // 时间选择器是否显示
@@ -41,8 +41,8 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
       return;
     }
     confirm({
-      value: parseFloat(value),
-      times: formatDate(times, 'yyyy/MM/dd h:mm'),
+      value: parseFloat(value).toFixed(2),
+      times: formatDate(times, 'yyyy/MM/dd hh:mm'),
     });
   };
   const content = (
@@ -68,7 +68,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
                 <DatePicker
                   selected={new Date(times)}
                   minDate={new Date()}
-                  onChange={date => setTimes(formatDate(date, 'yyyy/MM/dd h:mm'))}
+                  onChange={date => setTimes(formatDate(date, 'yyyy/MM/dd hh:mm'))}
                   showTimeSelect
                   dateFormat="yyyy/MM/dd HH:mm:ss"
                   locale="zh"

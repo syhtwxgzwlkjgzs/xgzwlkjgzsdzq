@@ -508,7 +508,11 @@ class ThreadH5Page extends React.Component {
 
   // 点击标签 TODO:带上参数
   onTagClick() {
-    // TODO:待调用首页store
+    // TODO:目前后台只返回了一个子标签，未返回父标签
+    const categoryId = this.props.thread?.threadData?.categoryId;
+    if (categoryId || typeof categoryId === 'number') {
+      this.props.index.refreshHomeData({ categoryIds: [categoryId] });
+    }
     this.props.router.push('/');
   }
 

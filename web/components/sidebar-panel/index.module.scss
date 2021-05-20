@@ -25,6 +25,10 @@
   border-radius: rem($border-radius-small);
 }
 
+.bottom {
+  margin-bottom: rem(10);
+}
+
 .small {
   max-width: rem(330);
   padding: 0 rem($padding-4n);
@@ -35,7 +39,6 @@
 
 .containerH5 {
   padding: 0 rem($padding-4n);
-  margin-bottom: rem(10);
 }
 
 .normal {
@@ -45,3 +48,5 @@
     height: rem(70);
   }
 }
+
+
