@@ -239,6 +239,7 @@
   padding-bottom: $padding-2n;
 }
 @mixin pc_titleTips {
+  margin-bottom: 32px;
   font-size: $font-size-middle;
   line-height: $font-line-height-large;
   text-align: left;
