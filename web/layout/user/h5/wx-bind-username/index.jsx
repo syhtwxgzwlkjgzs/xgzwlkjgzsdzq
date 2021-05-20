@@ -23,7 +23,7 @@ class WXBindUsernameH5page extends React.Component {
       });
       // FIXME: Toast 暂时不支持回调能力
       setTimeout(() => {
-        window.location.href = '/index';
+        window.location.href = '/';
       }, 1000);
     } catch (e) {
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
