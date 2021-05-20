@@ -20,19 +20,22 @@ class WXLoginH5Page extends React.Component {
   timer = null;
   async componentDidMount() {
     try {
-      const { platform, webConfig } = this.props.site;
+      const { site } = this.props;
+
+      if (site?.wechatEnv === 'none') return;
+
       const redirectUri = `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-authorization?type=${platform}`)}`;
       let params;
-
+      const { platform } = site;
       if (platform === 'h5') {
         params = {
           type: 'mobile_browser_login',
           redirectUri,
         };
       }
+      console.log(site.isMiniProgramOpen, site.isOffiaccountOpen);
       if (platform === 'pc') {
-        const { miniprogramClose } = webConfig.passport;
-        const type = miniprogramClose ?  'pc_login_mini' : 'pc_login';
+        const type = site?.isMiniProgramOpen ?  'pc_login_mini' : 'pc_login';
         params = {
           type,
           redirectUri,
@@ -44,8 +47,9 @@ class WXLoginH5Page extends React.Component {
         this.queryLoginState(params.type);
       }
     } catch (e) {
+      console.log(e);
       Toast.error({
-        content: e.Message,
+        content: e.Message || e,
         hasMask: false,
         duration: 1000,
       });
