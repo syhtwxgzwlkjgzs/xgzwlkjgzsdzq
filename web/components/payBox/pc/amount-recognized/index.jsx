@@ -11,7 +11,7 @@ export default class index extends Component {
     this.props.payBox.visible = false;
     setTimeout(() => {
       this.props.payBox.clear();
-    }, 1000);
+    }, 500);
   };
 
   goToThePayConfirmPage = async () => {
