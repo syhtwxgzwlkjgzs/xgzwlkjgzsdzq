@@ -25,6 +25,7 @@ export default inject('user')(
     const tipData = {
       postId: threadStore?.threadData?.postId,
       threadId: threadStore?.threadData?.threadId,
+      platform: 'pc',
     };
     // 是否合法
     const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
