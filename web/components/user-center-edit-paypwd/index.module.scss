@@ -8,7 +8,6 @@
   h3 {
     font-size: rem($font-size-large);
     color: $text-color-primary;
-    margin-bottom: rem($margin-5n);
     letter-spacing: 1px;
   }
   .paypwdInput {
@@ -22,6 +21,7 @@
         line-height: rem(62);
         border: none;
         border-bottom: 1px solid $border-color;
+        padding-left: 0;
       }
       .dzq-input__icon {
         line-height: rem(62);
@@ -46,7 +46,6 @@
 }
 
 .labelInfo {
-  padding-top: rem($margin-10);
   .labelValue {
     :global {
       .dzq-input {
