@@ -86,7 +86,9 @@ class PayPassword extends React.Component {
           hasMask: false,
           duration: 1000,
         });
-        await this.props.payBox.clear();
+        setTimeout(() => {
+          this.props.payBox.clear();
+        }, 500)
       } catch (error) {
         Toast.error({
           content: '支付失败，请重新输入',
@@ -143,7 +145,10 @@ class PayPassword extends React.Component {
           <View className={styles.paypwdDialogContent}>
             <>
               <View className={styles.paypwdTitle}>立即支付</View>
-              <View className={styles.paypwdAmount}>￥{options.amount}</View>
+              <View className={styles.paypwdAmount}>
+                <Text className={styles.moneyUnit}>￥</Text>
+                {Number(options.amount).toFixed(2)}
+              </View>
               <Divider className={styles.paypwdDivider} />
               <View className={styles.paypwdMesg}>
                 <Text>支付方式</Text>
@@ -163,7 +168,7 @@ class PayPassword extends React.Component {
             </View> */}
             {/* 关闭按钮 */}
             <View className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
-              <Icon name="CloseOutlined" size={14} />
+              <Icon name="CloseOutlined" size={12} />
             </View>
           </View>
         </Dialog>

@@ -187,7 +187,7 @@ export default class PayBox extends React.Component {
         </View>
         {/* 关闭按钮 */}
         <View className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
-          <Icon name="CloseOutlined" size={14} />
+          <Icon name="CloseOutlined" size={12} />
         </View>
       </View>
     );
