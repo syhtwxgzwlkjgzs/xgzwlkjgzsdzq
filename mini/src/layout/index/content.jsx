@@ -27,6 +27,7 @@ class IndexH5Page extends React.Component {
       currentIndex: this.checkIsOpenDefaultTab() ? 'default' : 'all',
       isFinished: true,
       fixedTab: false,
+      navBarHeight: 64,
     };
     this.listRef = createRef();
     // 用于获取顶部视图的高度
@@ -115,10 +116,13 @@ class IndexH5Page extends React.Component {
     return dispatch('moreData', requestFilter);
   };
 
-  onScroll = ({ scrollTop } = {}) => {
-    // const { height = 180 } = this.headerRef.current?.state || {}
-    this.setState({ fixedTab: scrollTop > 180 })
+  onScroll = (e) => {
+    // console.log(e.detail);
+    const { scrollTop = 0 } = e?.detail || {}
 
+    // const { height = 180 } = this.headerRef.current?.state || {}
+    this.setState({ fixedTab: !(scrollTop < 160) })
+    console.log(`fixedTab`, this.state.fixedTab)
     this.props.baselayout.jumpToScrollingPos = scrollTop;
   }
 
@@ -154,7 +158,9 @@ class IndexH5Page extends React.Component {
       <>
         {categories?.length > 0 && (
           <>
-          <View ref={this.listRef} className={`${!fixedTab ? styles.homeContent : styles.homeContentFix}`}>
+            {fixedTab &&  <View className={styles.tabPlaceholder}></View>}
+
+          <View ref={this.listRef} className={`${!fixedTab ? styles.homeContent : styles.homeContentFix}`} style={{paddingTop: !fixedTab ? '' : `${this.state.navBarHeight}px`}}>
             <Tabs
               className={styles.tabsBox}
               scrollable
@@ -172,7 +178,6 @@ class IndexH5Page extends React.Component {
               ))}
             </Tabs>
           </View>
-          {fixedTab &&  <View className={styles.tabPlaceholder}></View>}
           </>
         )}
       </>
