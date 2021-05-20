@@ -75,9 +75,9 @@ export default function UserInfo(props) {
           </div>
         )}
         {/* {props.isEssence && <Tag type="primary">精华</Tag>} */}
-        {props.isPay && <Tag type="success">{tagsNumber > 2 && !isPc ? '付' : '付费'}</Tag>}
         {props.isReward && <Tag type="warning">{tagsNumber > 2 && !isPc ? '悬' : '悬赏'}</Tag>}
         {props.isRed && <Tag type="danger">{tagsNumber > 2 && !isPc ? '红' : '红包'}</Tag>}
+        {props.isPay && <Tag type="success">{tagsNumber > 2 && !isPc ? '付' : '付费'}</Tag>}
       </div>
     </div>
   );

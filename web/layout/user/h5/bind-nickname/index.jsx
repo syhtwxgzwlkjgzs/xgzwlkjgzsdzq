@@ -39,7 +39,7 @@ class BindNicknameH5Page extends React.Component {
           return;
         }
         // TODO: 这里的路由堆栈需要再梳理规则
-        window.location.href = '/index';
+        window.location.href = '/';
       }, 1000);
     } catch (e) {
       // 跳转状态页

@@ -6,6 +6,7 @@ import { Button, Toast, Avatar } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import PhoneInput from '@components/login/phone-input';
+import PopProtocol from '../components/pop-protocol';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 
@@ -68,7 +69,7 @@ class WXBindPhoneH5Page extends React.Component {
       });
 
       setTimeout(() => {
-        router.push('/index');
+        router.push('/');
       }, 1000);
     } catch (error) {
       // 跳转状态页
@@ -84,8 +85,8 @@ class WXBindPhoneH5Page extends React.Component {
   }
 
   render() {
-    const { wxPhoneBind, router, user } = this.props;
-    const { nickname } = router.query;
+    const { wxPhoneBind, router, commonLogin } = this.props;
+    const { nickname, avatarUrl } = router.query;
     return (
       <div className={layout.container}>
         <HomeHeader hideInfo mode='login'/>
@@ -101,7 +102,7 @@ class WXBindPhoneH5Page extends React.Component {
                         style={{margin: '0 8px'}}
                         circle
                         size='small'
-                        image={user.avatarUrl}
+                        image={avatarUrl}
                         text={nickname && nickname.substring(0, 1)}
                         />{nickname}
                     </>
@@ -128,8 +129,17 @@ class WXBindPhoneH5Page extends React.Component {
           >
             登录并绑定
           </Button>
-          <div className={layout['otherLogin-within__tips']}>注册登录即表示您同意<span>《注册协议》</span><span>《隐私协议》</span></div>
+          <div className={layout['otherLogin-within__tips']}>
+            注册登录即表示您同意
+            <span onClick={() => {
+              commonLogin.setProtocolInfo('register');
+            }}>《注册协议》</span>
+            <span onClick={() => {
+              commonLogin.setProtocolInfo('privacy');
+            }}>《隐私协议》</span>
+          </div>
         </div>
+        <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
       </div>
     );
   }
