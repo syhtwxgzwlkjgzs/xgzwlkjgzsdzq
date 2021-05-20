@@ -8,7 +8,7 @@ import { Button, Input, Toast, Icon } from '@discuzq/design'; // 原来就有的
 import DatePickers from '@components/thread/date-picker'; // 原来就有的封装
 import DDialog from '@components/dialog';
 import DatePicker from 'react-datepicker';
-import { formatDate } from '@common/utils/format-date.js';
+import { formatDate } from '@common/utils/format-date';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from './index.module.scss'; // 私有样式

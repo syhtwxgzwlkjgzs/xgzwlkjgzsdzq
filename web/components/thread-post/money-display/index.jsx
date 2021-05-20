@@ -3,6 +3,7 @@ import styles from './index.module.scss';
 import { Tag } from '@discuzq/design';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 import { defaultOperation, paidOption } from '@common/constants/const';
+import { formatDate } from '@common/utils/format-date';
 
 export default function MoneyDisplay(props) {
   const {
@@ -30,7 +31,7 @@ export default function MoneyDisplay(props) {
             props.handleSetState({ currentAttachOperation: THREAD_TYPE.reward });
           }}
         >
-          {`悬赏金额${postData.rewardQa.value}元\\结束时间${postData.rewardQa.times.replace(/-/g, '/')}`}
+          {`悬赏金额${postData.rewardQa.value}元\\结束时间${formatDate(new Date(postData.rewardQa.times).getTime(), 'yyyy/MM/dd hh:mm:ss')}`}
         </Tag>
       )}
       {/* 红包 */}

@@ -41,7 +41,6 @@ export default function DzqUpload(props) {
       onSuccess(ret, file);
     } else {
       onFail(ret, file);
-      return null;
     }
     onComplete(ret, file);
     return ret;
