@@ -190,10 +190,51 @@ class PostPage extends React.Component {
   };
 
   // 附件相关icon
-  handleAttachClick = (item) => {
+  /**
+   * 点击附件相关icon
+   * @param {object} item 附件相关icon
+   * @param {object} data 要设置的数据
+   */
+  handleAttachClick = (item, data) => {
+    // 如果是编辑操作
+    const { router, threadPost } = this.props;
+    const { query } = router;
+    const { postData } = threadPost;
+    if (query && query.id) {
+      if (item.type === THREAD_TYPE.reward && postData.rewardQa.money > 0) {
+        Toast.info({ content: '悬赏内容不能再次编辑' });
+        return false;
+      }
+    }
+    if (data) {
+      this.setPostData(data);
+      return false;
+    }
     this.setState({ currentAttachOperation: item.type });
     this.props.threadPost.setCurrentSelectedToolbar(item.type);
   };
+
+  // 表情等icon
+  handleDefaultIconClick = (item, child, data) => {
+    const { router, threadPost } = this.props;
+    const { query } = router;
+    const { postData } = threadPost;
+    if (query && query.id) {
+      if (item.type === THREAD_TYPE.redPacket && postData.redpacket.money > 0) {
+        Toast.info({ content: '红包内容不能再次编辑' });
+        return false;
+      }
+    }
+    if (data) {
+      this.setPostData(data);
+      return false;
+    }
+    if (child && child.id) {
+      this.setState({ curPaySelect: child.id, emoji: {} });
+    } else {
+      this.setState({ currentDefaultOperation: item.id, emoji: {} });
+    }
+  }
 
   // 附件和图片上传
   handleUploadChange = (fileList, type) => {
@@ -332,10 +373,14 @@ class PostPage extends React.Component {
       this.randstr = '';
     }
 
+    const threadId = this.props.router.query?.id || '';
+
     // 支付流程
     const { rewardQa, redpacket } = threadPost.postData;
-    const rewardAmount = plus(rewardQa.value, 0);
-    const redAmount = plus(redpacket.price, 0);
+    // 如果是编辑的悬赏帖子，则不用再次支付
+    const rewardAmount = (threadId && rewardQa.id) ? 0 : plus(rewardQa.value, 0);
+    // 如果是编辑的红包帖子，则不用再次支付
+    const redAmount = (threadId && rewardQa.id) ? 0 : plus(redpacket.price, 0);
     const amount = plus(rewardAmount, redAmount);
     const data = { amount };
     if (!isDraft && amount > 0) {
@@ -420,6 +465,7 @@ class PostPage extends React.Component {
         <IndexPCPage
           setPostData={data => this.setPostData(data)}
           handleAttachClick={this.handleAttachClick}
+          handleDefaultIconClick={this.handleDefaultIconClick}
           handleVideoUploadComplete={this.handleVodUploadComplete}
           handleUploadChange={this.handleUploadChange}
           handleUploadComplete={this.handleUploadComplete}
@@ -441,6 +487,7 @@ class PostPage extends React.Component {
       <IndexH5Page
         setPostData={data => this.setPostData(data)}
         handleAttachClick={this.handleAttachClick}
+        handleDefaultIconClick={this.handleDefaultIconClick}
         handleVideoUploadComplete={this.handleVodUploadComplete}
         handleUploadChange={this.handleUploadChange}
         handleUploadComplete={this.handleUploadComplete}
