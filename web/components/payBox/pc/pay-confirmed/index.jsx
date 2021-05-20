@@ -231,7 +231,7 @@ export default class index extends Component {
       <div style={{ display: 'flex', alignItems: 'center' }}>
         {/* 二维码 */}
         <div className={styles.wPaymentCode}>
-          {!this.state.imageShow && <Spin type="spinner">加载中</Spin>}
+          {!this.state.imageShow && <Spin type="spinner" size={14}>加载中</Spin>}
           <img
             style={{
               display: this.state.imageShow ? 'block' : 'none',
@@ -303,7 +303,12 @@ export default class index extends Component {
           <>
             <div className={`${styles.walletDec} ${styles.walletPay}`}>
               <span>钱包余额</span>
-              <span className={styles.walletBalance}>￥{this.props.payBox?.walletAvaAmount}</span>
+              {this.props.payBox?.walletAvaAmount ? (
+                <span className={styles.walletBalance}>￥{this.props.payBox?.walletAvaAmount}</span>
+              ) : (
+                <Spin type="spinner" size={14}></Spin>
+              )}
+
             </div>
             <div className={styles.walletDec}>
               <span>支付密码</span>
@@ -320,14 +325,22 @@ export default class index extends Component {
             {this.props.payBox?.walletAvaAmount < amount ? (
               <div className={styles.walletDec}>
                 <span>钱包余额</span>
-                <span className={styles.walletBalance}>￥{this.props.payBox?.walletAvaAmount}</span>
+                {this.props.payBox?.walletAvaAmount ? (
+                  <span className={styles.walletBalance}>￥{this.props.payBox?.walletAvaAmount}</span>
+                ) : (
+                  <Spin type="spinner" size={14}></Spin>
+                )}
                 <span className={styles.walletWarn}>余额不足</span>
               </div>
             ) : (
               <>
                 <div className={`${styles.walletDec} ${styles.walletPay}`}>
                   <span>钱包余额</span>
-                  <span className={styles.walletBalance}>￥{this.props.payBox?.walletAvaAmount}</span>
+                  {this.props.payBox?.walletAvaAmount ? (
+                    <span className={styles.walletBalance}>￥{this.props.payBox?.walletAvaAmount}</span>
+                  ) : (
+                    <Spin type="spinner" size={14}></Spin>
+                  )}
                 </div>
                 <div className={`${styles.walletDec} ${styles.walletPayPwd}`}>
                   <span>支付密码</span>
