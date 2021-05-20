@@ -129,7 +129,13 @@ class Index extends React.Component {
       }
 
       if (threadId !== '') {
-        this.props.router.push(`/thread/${threadId}`);
+        const { platform = 'pc' } = this.props.site;
+        if (platform === 'pc') {
+          const baseUrl = window.location.href
+          window.open(`${baseUrl}thread/${threadId}`)
+        } else {
+          this.props.router.push(`/thread/${threadId}`);
+        }
       } else {
         console.log('帖子不存在');
       }

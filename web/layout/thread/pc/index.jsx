@@ -32,6 +32,7 @@ import goToLoginPage from '@common/utils/go-to-login-page';
 @inject('user')
 @inject('thread')
 @inject('comment')
+@inject('index')
 @observer
 class ThreadPCPage extends React.Component {
   constructor(props) {
@@ -48,7 +49,7 @@ class ThreadPCPage extends React.Component {
       inputValue: '', // 评论内容
     };
 
-    this.perPage = 10;
+    this.perPage = 5;
     this.page = 1; // 页码
     this.commentDataSort = true;
 
@@ -159,20 +160,23 @@ class ThreadPCPage extends React.Component {
   }
 
   onReportClick(comment) {
-    this.comment = comment;
-    this.setState({ showReportPopup: true });
-  }
-
-  // 确定举报
-  async onReportOk(val) {
-    // 对没有登录的先登录
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
       goToLoginPage({ url: '/user/login' });
       return;
     }
 
-    if (!val) return;
+    this.comment = comment;
+    this.setState({ showReportPopup: true });
+  }
+
+  // 确定举报
+  async onReportOk(val) {
+    if (!val) {
+      Toast.info({ content: '请选择或输入举报理由' });
+      return;
+    }
+
     const params = {
       threadId: this.props.thread.threadData.threadId,
       reason: val,
@@ -289,7 +293,16 @@ class ThreadPCPage extends React.Component {
 
   // 点击发布按钮
   async onPublishClick(val) {
-    if (!val) return;
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
+    if (!val) {
+      Toast.info({ content: '请输入内容' });
+      return;
+    }
     return this.comment ? await this.updateComment(val) : await this.createComment(val);
   }
 
@@ -349,6 +362,12 @@ class ThreadPCPage extends React.Component {
 
   // 点击编辑评论
   onEditClick(comment) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     this.comment = comment;
     console.log(this.comment);
     this.setState({
@@ -367,6 +386,12 @@ class ThreadPCPage extends React.Component {
 
   // 点赞
   async onLikeClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
@@ -387,21 +412,27 @@ class ThreadPCPage extends React.Component {
     Toast.info({ content: '复制链接成功' });
 
     const { title = '' } = this.props.thread?.threadData || {};
-    h5Share(title);
+    h5Share({ title, path: `thread/${this.props.thread?.threadData?.threadId}` });
 
-    const id = this.props.thread?.threadData?.id;
+    // const id = this.props.thread?.threadData?.id;
 
-    const { success, msg } = await this.props.thread.shareThread(id);
+    // const { success, msg } = await this.props.thread.shareThread(id);
 
-    if (!success) {
-      Toast.error({
-        content: msg,
-      });
-    }
+    // if (!success) {
+    //   Toast.error({
+    //     content: msg,
+    //   });
+    // }
   }
 
   // 点击收藏icon
   async onCollectionClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
@@ -418,6 +449,12 @@ class ThreadPCPage extends React.Component {
 
   // 点击关注
   onFollowClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     if (this.props.thread.threadData.userId) {
       this.props.thread?.authorInfo?.follow === 2 || this.props.thread?.authorInfo?.follow === 1
         ? this.props.thread.cancelFollow({ id: this.props.thread.threadData.userId, type: 1 }, this.props.user)
@@ -427,6 +464,12 @@ class ThreadPCPage extends React.Component {
 
   // 点击打赏
   onRewardClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     this.setState({ showRewardPopup: true });
   }
 
@@ -470,6 +513,16 @@ class ThreadPCPage extends React.Component {
     }
   }
 
+  // 点击标签 TODO:带上参数
+  onTagClick() {
+    // TODO:目前后台只返回了一个子标签，未返回父标签
+    const categoryId = this.props.thread?.threadData?.categoryId;
+    if (categoryId || typeof categoryId === 'number') {
+      this.props.index.refreshHomeData({ categoryIds: [categoryId] });
+    }
+    this.props.router.push('/');
+  }
+
   render() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
@@ -494,12 +547,13 @@ class ThreadPCPage extends React.Component {
             {isReady ? (
               <RenderThreadContent
                 store={threadStore}
-                onOperClick={type => this.onOperClick(type)}
+                onOperClick={(type) => this.onOperClick(type)}
                 onLikeClick={() => this.onLikeClick()}
                 onCollectionClick={() => this.onCollectionClick()}
                 onShareClick={() => this.onShareClick()}
                 onContentClick={() => this.onContentClick()}
                 onRewardClick={() => this.onRewardClick()}
+                onTagClick={() => this.onTagClick()}
               ></RenderThreadContent>
             ) : (
               <LoadingTips type="init"></LoadingTips>
@@ -511,10 +565,10 @@ class ThreadPCPage extends React.Component {
                 <Fragment>
                   <RenderCommentList
                     router={this.props.router}
-                    sort={flag => this.onSortChange(flag)}
-                    onEditClick={comment => this.onEditClick(comment)}
-                    onPublishClick={value => this.onPublishClick(value)}
-                    onReportClick={comment => this.onReportClick(comment)}
+                    sort={(flag) => this.onSortChange(flag)}
+                    onEditClick={(comment) => this.onEditClick(comment)}
+                    onPublishClick={(value) => this.onPublishClick(value)}
+                    onReportClick={(comment) => this.onReportClick(comment)}
                   ></RenderCommentList>
                   {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
                 </Fragment>
@@ -568,7 +622,7 @@ class ThreadPCPage extends React.Component {
             </div>
             <CommentInput
               height="middle"
-              onSubmit={value => this.onPublishClick(value)}
+              onSubmit={(value) => this.onPublishClick(value)}
               initValue={this.state.inputValue}
             ></CommentInput>
           </div>
@@ -587,14 +641,14 @@ class ThreadPCPage extends React.Component {
           inputText={this.inputText}
           visible={this.state.showReportPopup}
           onCancel={() => this.onReportCancel()}
-          onOkClick={data => this.onReportOk(data)}
+          onOkClick={(data) => this.onReportOk(data)}
         ></ReportPopup>
 
         {/* 打赏弹窗 */}
         <RewardPopup
           visible={this.state.showRewardPopup}
           onCancel={() => this.setState({ showRewardPopup: false })}
-          onOkClick={value => this.onRewardSubmit(value)}
+          onOkClick={(value) => this.onRewardSubmit(value)}
         ></RewardPopup>
       </div>
     );

@@ -199,6 +199,7 @@ export default class mobileLoginStore {
 
         if (smsLoginResp.code === NEED_BIND_TOKEN_FLAG) {
           const accessToken = get(smsLoginResp, 'data.accessToken', '');
+          const uid = get(smsLoginResp, 'data.uid', '');
           // 种下 access_token
           setAccessToken({
             accessToken,
@@ -207,6 +208,7 @@ export default class mobileLoginStore {
             ...MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT,
             sessionToken: get(smsLoginResp, 'data.sessionToken'),
             nickname: get(smsLoginResp, 'data.nickname'),
+            uid
           };
         }
 

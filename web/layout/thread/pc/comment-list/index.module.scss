@@ -30,6 +30,9 @@
     font-size: rem($font-size-primary);
     color: var(--color-text-secondary);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 
     .sortText {
       padding-left: rem($padding-2n);

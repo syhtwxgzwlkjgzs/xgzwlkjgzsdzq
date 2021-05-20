@@ -41,7 +41,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
       return;
     }
     confirm({
-      value: parseFloat(value).toFixed(2),
+      value,
       times: formatDate(times, 'yyyy/MM/dd hh:mm'),
     });
   };

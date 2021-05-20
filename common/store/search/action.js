@@ -292,52 +292,58 @@ class SearchAction extends SearchStore {
     */
     @action
     updateAssignThreadInfo(threadId, obj = {}) {
-      const targetThread = this.findAssignThread(threadId);
-      if (!targetThread || targetThread.length === 0) return;
-      
-      const { index, data } = targetThread;
-      const { updateType, updatedInfo, user } = obj;
+      const targetThreads = this.findAssignThread(threadId);
+      if (!targetThreads || targetThreads.length === 0) return;
+
+      targetThreads.forEach(targetThread => {
+        if (!targetThread) return;
+
+        const { index, data } = targetThread; // 这里是数组
+        const { updateType, updatedInfo, user } = obj;
+
+        if(!data && !data?.likeReward && !data?.likeReward?.users) return;
   
-      if(!data && !data.likeReward && !data.likeReward.users) return;
-  
-      // 更新点赞
-      if (updateType === 'like' && !typeofFn.isUndefined(updatedInfo.isLiked) &&
-          !typeofFn.isNull(updatedInfo.isLiked) && user) {
-        const { isLiked, likeCount } = updatedInfo;
-        const theUserId = user.userId || user.id;
-        data.isLike = isLiked;
-  
-        if (isLiked) {
-          const userAdded = { userId: theUserId, avatar: user.avatarUrl, username: user.username };
-  
-          // 添加当前用户到按过赞的用户列表
-          data.likeReward.users = data.likeReward.users.length ?
-                                  [userAdded, ...data.likeReward.users]:
-                                  [userAdded];
-        } else {
-          // 从按过赞用户列表中删除当前用户
-          data.likeReward.users = data.likeReward.users.length ?
-                                  [...data.likeReward.users].filter(item => {
-                                    return (item.userId !== theUserId)
-                                  }) :
-                                  data.likeReward.users;
+        // 更新点赞
+        if (updateType === 'like' && !typeofFn.isUndefined(updatedInfo.isLiked) &&
+            !typeofFn.isNull(updatedInfo.isLiked) && user) {
+          const { isLiked, likePayCount = 0 } = updatedInfo;
+          const theUserId = user.userId || user.id;
+          data.isLike = isLiked;
+    
+          if (isLiked) {
+            const userAdded = { userId: theUserId, avatar: user.avatarUrl, username: user.username };
+    
+            // 添加当前用户到按过赞的用户列表
+            data.likeReward.users = data.likeReward.users.length ?
+                                    [userAdded, ...data.likeReward.users]:
+                                    [userAdded];
+          } else {
+            // 从按过赞用户列表中删除当前用户
+            data.likeReward.users = data.likeReward.users.length ?
+                                    [...data.likeReward.users].filter(item => {
+                                      return (item.userId !== theUserId)
+                                    }) :
+                                    data.likeReward.users;
+          }
+          data.likeReward.likePayCount = likePayCount;
         }
-        data.likeReward.likePayCount = likeCount;
-      }
-  
-      // 更新评论
-      if (updateType === 'comment' && data?.likeReward) {
-        data.likeReward.postCount = data.likeReward.postCount + 1;
-      }
-  
-      // 更新分享
-      if (updateType === 'share') {
-        data.likeReward.shareCount = data.likeReward.shareCount + 1;
-      }
-  
-      if (this.threads?.pageData) {
-        this.threads.pageData[index] = data;
-      }
+
+        // 更新评论
+        if (updateType === 'comment' && data?.likeReward) {
+          data.likeReward.postCount = data.likeReward.postCount + 1;
+        }
+
+        // 更新分享
+        if (updateType === 'share') {
+          data.likeReward.shareCount = data.likeReward.shareCount + 1;
+        }
+
+        if (this.threads?.pageData) {
+          this.threads.pageData[index] = data;
+        }
+      });
+
+
     }
 
    // 获取指定的帖子数据

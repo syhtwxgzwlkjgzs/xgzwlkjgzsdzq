@@ -187,7 +187,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
                           platform={platform}
                           onClick={onUserClick}
                           type={item.type}
-                          isShowBottomLine={false}
+                          isShowBottomLine={tipData?.platform === 'pc'}
                         />
                     ))
                   }
@@ -211,7 +211,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
         <Tabs
           onActive={onClickTab}
           activeId={current}
-          className={styles.tabs}
+          className={`${styles.tabs} ${tipData?.platform === 'pc' && styles.tabsPC}`}
           tabBarExtraContent={
             tipData?.platform === 'pc' && (
               <div onClick={onClose} className={styles.tabIcon}>

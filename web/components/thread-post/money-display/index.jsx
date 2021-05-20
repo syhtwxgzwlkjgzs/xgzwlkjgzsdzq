@@ -4,14 +4,16 @@ import { Tag } from '@discuzq/design';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 import { defaultOperation, paidOption } from '@common/constants/const';
 import { formatDate } from '@common/utils/format-date';
+import { plus } from '@common/utils/calculate';
 
 export default function MoneyDisplay(props) {
   const {
     postData = {},
+    payTotalMoney,
   } = props;
   const clsName = props.pc ? styles.pc : styles.h5;
   return (
-    <div className={`${styles['money-box']} ${clsName}`}>
+    <div className={`${styles['money-box']} ${clsName}`} onClick={e => e.stopPropagation()}>
       {/* 付费 */}
       {!!(postData.price || postData.attachmentPrice) && (
         <Tag
@@ -21,7 +23,7 @@ export default function MoneyDisplay(props) {
             const curPaySelect = postData.price ? paidOption[0].name : paidOption[1].name;
             props.handleSetState({ curPaySelect });
           }}
-        >付费总额{postData.price + postData.attachmentPrice}元</Tag>
+        >付费总额{payTotalMoney}元</Tag>
       )}
       {/* 悬赏问答内容标识 */}
       {(postData.rewardQa.value && postData.rewardQa.times) && (
@@ -31,7 +33,7 @@ export default function MoneyDisplay(props) {
             props.handleSetState({ currentAttachOperation: THREAD_TYPE.reward });
           }}
         >
-          {`悬赏金额${postData.rewardQa.value}元\\结束时间${formatDate(new Date(postData.rewardQa.times).getTime(), 'yyyy/MM/dd hh:mm')}`}
+          {`悬赏金额${plus(postData.rewardQa.value, 0)}元\\结束时间${formatDate(new Date(postData.rewardQa.times).getTime(), 'yyyy/MM/dd hh:mm')}`}
         </Tag>
       )}
       {/* 红包 */}
@@ -41,7 +43,7 @@ export default function MoneyDisplay(props) {
           onClick={() => props.handleSetState({ currentDefaultOperation: defaultOperation.redpacket })}
         >
           {postData.redpacket.rule === 1 ? '随机红包' : '定额红包'}
-          \ 总金额{postData.redpacket.price}元\{postData.redpacket.number}个
+          \总金额{plus(postData.redpacket.price, 0)}元\{postData.redpacket.number}个
           {postData.redpacket.condition === 1 && `\\集赞个数${postData.redpacket.likenum}`}
         </Tag>
       )}
