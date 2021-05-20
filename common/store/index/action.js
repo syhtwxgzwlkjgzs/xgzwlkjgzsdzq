@@ -204,7 +204,6 @@ class IndexAction extends IndexStore {
     if (!targetThread) return false;
     const { index, data } = targetThread;
     this.threads.pageData[index] = threadInfo;
-    console.log(this.threads.pageData[index])
     return true;
   }
 
@@ -227,12 +226,12 @@ class IndexAction extends IndexStore {
       this.threads.pageData[index] = updatedInfo;
     }
 
-    if(!data && !data.likeReward && !data.likeReward.users) return;
+    if(!data && !data?.likeReward && !data?.likeReward?.users) return;
 
     // 更新点赞
     if (updateType === 'like' && !typeofFn.isUndefined(updatedInfo.isLiked) &&
         !typeofFn.isNull(updatedInfo.isLiked) && user) {
-      const { isLiked, likeCount } = updatedInfo;
+      const { isLiked, likePayCount = 0 } = updatedInfo;
       const theUserId = user.userId || user.id;
       data.isLike = isLiked;
 
@@ -251,7 +250,7 @@ class IndexAction extends IndexStore {
                                 }) :
                                 data.likeReward.users;
       }
-      data.likeReward.likePayCount = likeCount;
+      data.likeReward.likePayCount = likePayCount;
     }
 
     // 更新评论
