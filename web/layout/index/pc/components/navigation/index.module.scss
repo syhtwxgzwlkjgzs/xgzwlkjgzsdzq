@@ -20,6 +20,10 @@
   .dzq-submenu > .dzq-menu .dzq-menu-item.is-active {
     font-weight: initial;
   }
+
+  .dzq-submenu > .dzq-menu .dzq-menu-item {
+    padding-right: $padding-5n;
+  }
 }
 
 .activeItem {

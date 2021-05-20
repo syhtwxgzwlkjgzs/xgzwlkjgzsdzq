@@ -12,6 +12,7 @@ import goToLoginPage from '@common/utils/go-to-login-page';
 import Copyright from '@components/copyright';
 import SidebarPanel from '@components/sidebar-panel';
 import { Toast } from '@discuzq/design';
+import TopicItem from '@components/topic-item'
 
 @inject('site')
 @inject('search')
@@ -130,7 +131,11 @@ class SearchPCPage extends React.Component {
             onShowMore={this.redirectToSearchResultTopic}
             icon={{ type: 1, name: 'StrongSharpOutlined' }}
           >
-            <TrendingTopicMore data={topicsPageData} onItemClick={this.onTopicClick}/>
+            <div className={styles.topic}>
+              {topicsPageData?.map((item, index) => (
+                <TopicItem data={item} key={index} onClick={this.onTopicClick} />  
+              ))}
+            </div>
           </SidebarPanel>
         </div>
 
