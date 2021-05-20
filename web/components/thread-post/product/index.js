@@ -46,7 +46,7 @@ const Product = (props) => {
   const clsName = props.pc ? classNames(styles['post-good-box'], styles.pc) : styles['post-good-box'];
 
   return (
-    <div className={clsName}>
+    <div className={clsName} onClick={e => e.stopPropagation()}>
       {/* 判断当前商品是否存在 */}
       {good.title ? <ShowGood {...props} /> : <AddGood addGood={() => addGood()} />}
     </div>

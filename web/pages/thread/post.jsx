@@ -253,6 +253,14 @@ class PostPage extends React.Component {
     }
   };
 
+  handleVditorInit = (vditor) => {
+    if (vditor) this.vditor = vditor;
+  }
+
+  handleVditorFocus = () => {
+    if (this.vditor) this.vditor.focus();
+  }
+
   // 关注列表
   handleAtListChange = (atList) => {
     this.setState({ atList });
@@ -421,6 +429,8 @@ class PostPage extends React.Component {
           saveDataLocal={this.saveDataLocal}
           handleAtListChange={this.handleAtListChange}
           handleVditorChange={this.handleVditorChange}
+          handleVditorFocus={this.handleVditorFocus}
+          handleVditorInit={this.handleVditorInit}
           onVideoReady={this.onVideoReady}
           {...this.state}
         />
@@ -440,6 +450,8 @@ class PostPage extends React.Component {
         saveDataLocal={this.saveDataLocal}
         handleAtListChange={this.handleAtListChange}
         handleVditorChange={this.handleVditorChange}
+        handleVditorFocus={this.handleVditorFocus}
+          handleVditorInit={this.handleVditorInit}
         onVideoReady={this.onVideoReady}
         {...this.state}
       />

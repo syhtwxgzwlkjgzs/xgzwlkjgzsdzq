@@ -158,6 +158,7 @@ class ThreadCreate extends React.Component {
               this.props.handleSetState({ isVditorFocus: false });
               this.clearBottomFixed();
             }}
+            onInit={this.props.handleVditorInit}
           />
           {/* 图片 */}
           {(currentAttachOperation === THREAD_TYPE.image || Object.keys(postData.images).length > 0) && (
