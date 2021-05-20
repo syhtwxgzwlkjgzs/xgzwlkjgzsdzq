@@ -387,17 +387,17 @@ class ThreadPCPage extends React.Component {
     Toast.info({ content: '复制链接成功' });
 
     const { title = '' } = this.props.thread?.threadData || {};
-    h5Share(title);
+    h5Share({ title, path: `thread/${this.props.thread?.threadData?.threadId}` });
 
-    const id = this.props.thread?.threadData?.id;
+    // const id = this.props.thread?.threadData?.id;
 
-    const { success, msg } = await this.props.thread.shareThread(id);
+    // const { success, msg } = await this.props.thread.shareThread(id);
 
-    if (!success) {
-      Toast.error({
-        content: msg,
-      });
-    }
+    // if (!success) {
+    //   Toast.error({
+    //     content: msg,
+    //   });
+    // }
   }
 
   // 点击收藏icon
