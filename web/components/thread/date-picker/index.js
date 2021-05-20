@@ -39,7 +39,7 @@ const DatePickers = ({ onCancels, time, onSelects, isOpen }) => {
     },
   });
   const handleSelect = useCallback((e) => { // 点击确定时候的参数返回和校验
-    onSelects(formatDate(e, 'yyyy-MM-dd hh:mm'));
+    onSelects(formatDate(e, 'yyyy/MM/dd hh:mm'));
   });
   const handleCancel = useCallback((e) => {
     onCancels(e);
