@@ -149,6 +149,7 @@ class ThreadCreate extends React.Component {
             emoji={emoji}
             atList={atList}
             topic={topic}
+            onInput={(vditor) => this.props.handleVditorChange(vditor, 'input')}
             onChange={this.props.handleVditorChange}
             onFocus={(action) => {
               this.setBottomFixed(action);
@@ -218,6 +219,7 @@ class ThreadCreate extends React.Component {
               postData={postData}
               setPostData={this.props.setPostData}
               handleSetState={this.props.handleSetState}
+              onAttachClick={this.props.handleAttachClick}
             />
           )}
         </div>
@@ -250,7 +252,7 @@ class ThreadCreate extends React.Component {
           <DefaultToolbar
             postData={postData}
             value={currentDefaultOperation}
-            onClick={item => this.props.handleSetState({ currentDefaultOperation: item.id, emoji: {} })}
+            onClick={item => this.props.handleDefaultIconClick(item)}
             permission={threadExtendPermissions}
             onSubmit={this.props.handleSubmit}>
             {/* 表情 */}
