@@ -26,6 +26,7 @@ export default inject('user')(
       postId: threadStore?.threadData?.postId,
       threadId: threadStore?.threadData?.threadId,
       platform: 'pc',
+      payType: threadStore?.threadData?.payType,
     };
     // 是否合法
     const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
