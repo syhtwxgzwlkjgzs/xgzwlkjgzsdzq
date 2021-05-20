@@ -1,4 +1,8 @@
-@import '@styles/index.scss';
+@import '@common/styles/index.scss';
+
+@mixin flex() {
+  display: flex;
+}
 
 .wrapper{
   background: var(--color-white);
@@ -13,12 +17,12 @@
 
 .product {
   margin: 24px 18px 16px;
-  display: flex;
+  @include flex;
 
   &-type {
     width: 40px;
     margin-right: 30px;
-    display: flex;
+    @include flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
