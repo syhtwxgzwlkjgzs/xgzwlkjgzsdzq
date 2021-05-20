@@ -5,6 +5,18 @@
   .button {
     @include button;
   }
+  .btn_select {
+    @include btn_select;
+  }
+  .btn_wx {
+    @include btn_wx;
+  }
+  .btn_user {
+    @include btn_user;
+  }
+  .btn_phone {
+    @include btn_phone;
+  }
 }
 .content {
   @include content;

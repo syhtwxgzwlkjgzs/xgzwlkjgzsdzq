@@ -1,4 +1,25 @@
 @import "@common/styles/index.scss";
+@mixin setRefreshList($height: 100vh) {
+  :global {
+    .dzq-pull-refresh__list {
+      height: $height !important;
+    }
+  }
+}
+
+.wrapper {
+  :global {
+    .dzq-pull-refresh__loading {
+      font-size: $font-size-large;
+      top: -56px !important;
+    }
+  }
+  @include setRefreshList();
+
+  &.with-bottom {
+    @include setRefreshList(calc(100vh - 65px));
+  }
+}
 
 .slider {
   background: $white;
@@ -11,6 +32,7 @@
     justify-content: flex-start;
     background: $white;
     transition: all 0.4s;
+    -webkit-tap-highlight-color: transparent;
 
     .slider-content {
       flex: 1 0 100%;

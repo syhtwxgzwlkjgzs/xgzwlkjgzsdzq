@@ -39,8 +39,7 @@ export default class UserLoginStore {
       });
       checkUserStatus(loginResp);
 
-      if (loginResp.code === 0
-          || loginResp.code === NEED_BIND_WEIXIN_FLAG) {
+      if (loginResp.code === 0) {
         const accessToken = get(loginResp, 'data.accessToken', '');
         // 种下 access_token
         setAccessToken({
@@ -62,6 +61,7 @@ export default class UserLoginStore {
 
       if (loginResp.code === NEED_BIND_WEIXIN_FLAG) {
         const accessToken = get(loginResp, 'data.accessToken', '');
+        const uid = get(loginResp, 'data.uid', '');
         setAccessToken({
           accessToken,
         });
@@ -70,6 +70,7 @@ export default class UserLoginStore {
           Message: '需要绑定微信',
           sessionToken: get(loginResp, 'data.sessionToken'),
           nickname: get(loginResp, 'data.nickname'),
+          uid
         };
       }
 

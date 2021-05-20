@@ -13,6 +13,7 @@ import PayBox from '@components/payBox/index';
 import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
 import { withRouter } from 'next/router';
 import { tencentVodUpload } from '@common/utils/tencent-vod';
+import { plus } from '@common/utils/calculate';
 
 @inject('site')
 @inject('threadPost')
@@ -214,6 +215,10 @@ class PostPage extends React.Component {
 
   // 附件和图片上传完成之后的处理
   handleUploadComplete = (ret, file, type) => {
+    if (ret.code !== 0) {
+      Toast.error({ content: `${ret.msg} 上传失败` });
+      return false;
+    }
     const { uid } = file;
     const { data } = ret;
     const { postData } = this.props.threadPost;
@@ -248,6 +253,14 @@ class PostPage extends React.Component {
       }
     }
   };
+
+  handleVditorInit = (vditor) => {
+    if (vditor) this.vditor = vditor;
+  }
+
+  handleVditorFocus = () => {
+    if (this.vditor) this.vditor.focus();
+  }
 
   // 关注列表
   handleAtListChange = (atList) => {
@@ -321,11 +334,11 @@ class PostPage extends React.Component {
 
     // 支付流程
     const { rewardQa, redpacket } = threadPost.postData;
-    const rewardAmount = Number(rewardQa.value) || 0;
-    const redAmount = Number(redpacket.price) || 0;
-    const amount = rewardAmount + redAmount;
+    const rewardAmount = plus(rewardQa.value, 0);
+    const redAmount = plus(redpacket.price, 0);
+    const amount = plus(rewardAmount, redAmount);
     const data = { amount };
-    if (!isDraft && amount) {
+    if (!isDraft && amount > 0) {
       let type = ORDER_TRADE_TYPE.RED_PACKET;
       let title = '支付红包';
       if (redAmount) {
@@ -365,6 +378,16 @@ class PostPage extends React.Component {
     if (code === 0) {
       thread.reset();
       this.toastInstance?.destroy();
+
+      // 更新帖子到首页列表
+      if ( threadId ) {
+        this.props.index.updateAssignThreadAllData(threadId, data);
+      // 添加帖子到首页数据
+      } else {
+        this.props.index.addThread(data);
+      }
+
+
       if (!isDraft) this.props.router.replace(`/thread/${data.threadId}`);
       else Router.back();
       return true;
@@ -407,6 +430,8 @@ class PostPage extends React.Component {
           saveDataLocal={this.saveDataLocal}
           handleAtListChange={this.handleAtListChange}
           handleVditorChange={this.handleVditorChange}
+          handleVditorFocus={this.handleVditorFocus}
+          handleVditorInit={this.handleVditorInit}
           onVideoReady={this.onVideoReady}
           {...this.state}
         />
@@ -426,6 +451,8 @@ class PostPage extends React.Component {
         saveDataLocal={this.saveDataLocal}
         handleAtListChange={this.handleAtListChange}
         handleVditorChange={this.handleVditorChange}
+        handleVditorFocus={this.handleVditorFocus}
+          handleVditorInit={this.handleVditorInit}
         onVideoReady={this.onVideoReady}
         {...this.state}
       />

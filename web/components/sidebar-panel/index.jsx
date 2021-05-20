@@ -20,9 +20,10 @@ const Index = (props) => {
     type = 'small',
     className = '',
     platform = 'pc',
+    isNeedBottom = true
   } = props;
 
-  const isNoData = useMemo(() => !children && !!noData, [noData, children]);
+  const isNoData = useMemo(() => !children || !!noData, [noData, children]);
 
   const pcStyle = useMemo(() => {
     if (platform === 'pc') {
@@ -33,7 +34,7 @@ const Index = (props) => {
   }, [platform, type]);
 
   return (
-    <div className={`${styles.container} ${pcStyle} ${className}`}>
+    <div className={`${styles.container} ${pcStyle} ${className} ${isNeedBottom && styles.bottom}`}>
       {header || <SectionTitle {...props} />}
       {
         isLoading ? (

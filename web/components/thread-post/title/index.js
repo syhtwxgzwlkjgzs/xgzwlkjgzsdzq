@@ -15,7 +15,9 @@ const Title = ({ title, placeholder, isDisplay, onChange,  onFocus, onBlur, ...p
   const clsName = props.pc ? `${styles.wrapper} ${styles.pc}` : styles.wrapper;
 
   return (
-    <div id="dzq-threadpost-title" className={`${isDisplay ? clsName : styles['is-display']}`}>
+    <div id="dzq-threadpost-title" className={`${isDisplay ? clsName : styles['is-display']}`}
+      onClick={e => e.stopPropagation()}
+    >
       <Input
         className={`${styles.title} ${isDisplay ? styles['is-display'] : ''}`}
         value={title}

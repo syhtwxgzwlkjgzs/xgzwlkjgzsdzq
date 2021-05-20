@@ -3,6 +3,7 @@
  */
 import { observable, computed } from 'mobx';
 import { LOADING_TOTAL_TYPE } from '@common/constants/thread-post';
+import { plus } from '@common/utils/calculate';
 
 class ThreadPostStore {
   /**
@@ -58,6 +59,10 @@ class ThreadPostStore {
     randstr: '', // 腾讯云验证码返回随机字符串
   }
 
+  @computed get payTotalMoney() {
+    return plus(this.postData.price, this.postData.attachmentPrice);
+  }
+
   @observable
   categorySelected = { // 选中的帖子类别
     parent: {}, // 选中的帖子父类
@@ -72,7 +77,7 @@ class ThreadPostStore {
     const { rule = 1, price = 0, number } = this.postData.redpacket;
     return rule === 1
       ? parseFloat(price)
-      : parseFloat(price) * parseInt(number);
+      : (parseFloat(price) * parseInt(number)).toFixed(2);
   }
 }
 
