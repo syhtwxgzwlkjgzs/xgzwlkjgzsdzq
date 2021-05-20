@@ -68,11 +68,11 @@ export default class Page extends React.Component {
         // }
         // 前置：没有开启微信
         if (!site.isOpenOffiaccountClose && !site.isMiniProgramOpen) {
-          // 绑定手机: 开启短信，没有绑定手机号
-          if (path !== '/subPages/user/bind-phone/index' && site.isSmsOpen && !user.mobile) {
-            Router.redirect({url: '/subPages/user/bind-phone/index'});
-            return false;
-          }
+          // 绑定手机: 开启短信，没有绑定手机号，小程序可以跳过绑定手机，所以不强制绑定手机号
+          // if (path !== '/subPages/user/bind-phone/index' && site.isSmsOpen && !user.mobile) {
+          //   Router.redirect({url: '/subPages/user/bind-phone/index'});
+          //   return false;
+          // }
           // 绑定昵称：没有开启短信，也没有绑定昵称
           if (
             path !== '/subPages/user/bind-nickname/index'
