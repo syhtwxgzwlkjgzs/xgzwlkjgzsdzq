@@ -9,12 +9,28 @@ import { ORDER_TRADE_TYPE } from '../../../../../common/constants/payBoxStoreCon
 @observer
 export default class AmountRecognized extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      tradeContent: [
+        {
+          type: ORDER_TRADE_TYPE.RED_PACKET,
+          name: '红包'
+        },
+        {
+          type: ORDER_TRADE_TYPE.POST_REWARD,
+          name: '悬赏'
+        }
+      ]
+    }
+  }
+
   onClose = () => {
     // FIXME: 延时回调的修复
     this.props.payBox.visible = false
     setTimeout(() => {
       this.props.payBox.clear();
-    },1000)
+    }, 1000)
   }
 
   /**
@@ -22,7 +38,7 @@ export default class AmountRecognized extends Component {
    * @param {String} type
    * @returns 返回对应交易类型名称
    */
-   renderDiffTradeType = (type) => {
+  renderDiffTradeType = (type) => {
     let value = '';
     switch (type) {
       case ORDER_TRADE_TYPE.THEME: // 表示付费贴
@@ -68,6 +84,7 @@ export default class AmountRecognized extends Component {
         hasMask: false,
         duration: 1000,
       });
+      this.onClose()
     }
   };
 
@@ -77,7 +94,7 @@ export default class AmountRecognized extends Component {
 
   renderContent = () => {
     const { options = {} } = this.props?.payBox;
-    const { type, amount, isAnonymous, title } = options;
+    const { type, amount, isAnonymous, title, redAmount, rewardAmount } = options;
     return (
       <>
         {/* 标题 */}
@@ -85,50 +102,84 @@ export default class AmountRecognized extends Component {
         {/* 主要内容区域 */}
         <View className={styles.amountContent}>
           <>
-            <View className={styles.acExplain}>
-              <Text className={styles.acExplainLabel}>交易类型</Text>{' '}
-              <Text className={styles.acExplainValue}>{this.renderDiffTradeType(type)}</Text>
-            </View>
-            <Divider className={styles.acExplainDivider} />
-            <View className={styles.acExplain}>
-              <Text className={styles.acExplainLabel}>商品名称</Text>{' '}
-              <Text className={styles.acExplainValue}>{title}</Text>
-            </View>
-            <Divider className={styles.acExplainDivider} />
-            <View className={styles.acExplain}>
-              <Text className={styles.acExplainLabel}>支付金额</Text>
-              <Text className={styles.acExplainNum}>￥{amount}</Text>
-            </View>
             {
-              type === ORDER_TRADE_TYPE.REGEISTER_SITE && 
-              (
-                <View className={styles.acExplain}>
-                  <Checkbox style={{ verticalAlign: 'middle', marginRight: 8 }} checked={this.props.payBox.isAnonymous} onChange={this.handleChangeIsAnonymous} />
-                  <Text style={{ verticalAlign: 'middle' }}>隐藏我的付费信息</Text>
-                </View>
-              )}
-            <Divider className={styles.acExplainDivider} />
+              type === ORDER_TRADE_TYPE.COMBIE_PAYMENT ? (
+                <>
+                  {
+                    tradeContent.map((item, index) => {
+                      const amount_ = item.type === ORDER_TRADE_TYPE.RED_PACKET ? redAmount : rewardAmount
+                      return <>
+                        <View className={styles.acExplain}>
+                          <Text className={styles.acExplainLabel}>交易类型</Text>{' '}
+                          <Text className={styles.acExplainValue}>{this.renderDiffTradeType(item.type)}</Text>
+                        </View>
+                        <Divider className={styles.acExplainDivider} />
+                        <View className={styles.acExplain}>
+                          <Text className={styles.acExplainLabel}>商品名称</Text>{' '}
+                          <Text className={styles.acExplainValue}>{title}</Text>
+                        </View>
+                        <Divider className={styles.acExplainDivider} />
+                        <View className={styles.acExplain}>
+                          <Text className={styles.acExplainLabel}>支付金额</Text>
+                          <Text className={styles.acExplainNum}>￥{this.transMoneyToFixed(amount_)}</Text>
+                        </View>
+                        {index === 0 && <View className={styles.ampuntLineWrap}><View className={styles.ampuntLine}></View></View>}
+                      </>
+                    })
+                  }
+                </>
+              ) : (
+                <>
+                  <View className={styles.acExplain}>
+                    <Text className={styles.acExplainLabel}>交易类型</Text>{' '}
+                    <Text className={styles.acExplainValue}>{this.renderDiffTradeType(type)}</Text>
+                  </View>
+                  <Divider className={styles.acExplainDivider} />
+                  <View className={styles.acExplain}>
+                    <Text className={styles.acExplainLabel}>商品名称</Text>{' '}
+                    <Text className={styles.acExplainValue}>{title}</Text>
+                  </View>
+                  <Divider className={styles.acExplainDivider} />
+                  <View className={styles.acExplain}>
+                    <Text className={styles.acExplainLabel}>支付金额</Text>
+                    <Text className={styles.acExplainNum}>￥{this.transMoneyToFixed(amount)}</Text>
+                  </View>
+                  {
+                    type === ORDER_TRADE_TYPE.REGEISTER_SITE &&
+                    (
+                      <View className={`${styles.acExplain} ${platform === 'h5' && styles.acExplainH5}`}>
+                        <Checkbox checked={this.props.payBox.isAnonymous} onChange={this.handleChangeIsAnonymous} /> 隐藏我的付费信息
+                      </View>
+                    )}
+                </>
+              )
+            }
           </>
         </View>
       </>
     );
   };
 
+  // 转换金额小数
+  transMoneyToFixed = (num) => {
+    return Number(num).toFixed(2);
+  };
+
   render() {
     const { options = {} } = this.props.payBox;
-    const { amount } = options;
+    const { amount = 0 } = options;
     return (
       <View className={styles.amountWrapper}>
         {this.renderContent()}
         {/* 按钮区域-提交内容 */}
-        <View className={styles.amountSubmit}>
-          <Button onClick={this.goToThePayConfirmPage} type="primary" className={styles.asBtn} full>
-            支付 ￥{amount}
+        <View className={styles.btnBox}>
+          <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.btn} full>
+            支付 ￥{this.transMoneyToFixed(amount)}
           </Button>
         </View>
         {/* 关闭按钮 */}
         <View onClick={this.onClose} className={styles.payBoxCloseIcon}>
-          <Icon name="CloseOutlined" size={16} />
+          <Icon name="CloseOutlined" size={14} />
         </View>
       </View>
     );

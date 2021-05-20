@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react';
 import { Button, Input, Toast } from '@discuzq/design';
-import Header from '@components/header';
 import styles from './index.module.scss';
-import { withRouter } from 'next/router';
 import Router from '@discuzq/sdk/dist/router';
 import { View, Text } from '@tarojs/components';
+import { getCurrentInstance } from '@tarojs/taro';
 
 @inject('user')
 @inject('payBox')
@@ -83,8 +82,14 @@ class index extends Component {
         hasMask: false,
         duration: 1000,
       })
-      Router.push('/my/index')
-      this.initState()
+      const { type } = getCurrentInstance().router.params
+      if (type === 'paybox') {
+        const { id } = this.props?.user;
+        this.props.user.updateUserInfo(id);
+        this.props.payBox.visible = true;
+      }
+      Taro.navigateBack({ delta: 1});
+      this.initState();
     }).catch((err) => {
       Toast.error({
         content: "设置失败请重新设置",
@@ -102,7 +107,7 @@ class index extends Component {
       <View className={styles.content}>
         <Text className={styles.setTtile}>设置支付密码</Text>
         <View className={styles.paypwdInput}>
-          <Input value={payPassword} onChange={this.handleSetPwd} placeholder="请设置您的支付密码" mode="password" />
+          <Input maxLength={6} value={payPassword} onChange={this.handleSetPwd} placeholder="请设置您的支付密码" mode="password" />
         </View>
       </View>
     )
@@ -133,7 +138,7 @@ class index extends Component {
         }
         <View className={styles.bottom}>
           {
-            this.props.user?.canWalletPay ? <Button disabled={!oldPayPwd} onClick={this.goToResetPayPwd} type={"primary"} className={styles.btn}>下一步</Button> : <Button disabled={!payPassword} onClick={this.handleSubmit} type={"primary"} className={styles.btn}>提交</Button>
+            this.props.user?.canWalletPay ? <Button full disabled={!oldPayPwd} onClick={this.goToResetPayPwd} type={"primary"} className={styles.btn}>下一步</Button> : <Button full disabled={!payPassword || payPassword.length !== 6} onClick={this.handleSubmit} type={"primary"} className={styles.btn}>提交</Button>
           }
         </View>
       </View>
@@ -141,4 +146,4 @@ class index extends Component {
   }
 }
 
-export default withRouter(index);
+export default index;
