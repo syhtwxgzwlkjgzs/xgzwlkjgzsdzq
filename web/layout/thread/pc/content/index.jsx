@@ -9,13 +9,14 @@ import VideoPlay from '@components/thread/video-play';
 import PostRewardProgressBar, { POST_TYPE } from '@components/thread/post-reward-progress-bar';
 import Tip from '@components/thread/tip';
 import AttachmentView from '@components/thread/attachment-view';
-import { Icon, Button, Divider, Dropdown, Tag } from '@discuzq/design';
+import { Icon, Button, Divider, Dropdown, Toast } from '@discuzq/design';
 import UserInfo from '@components/thread/user-info';
 import classnames from 'classnames';
 import topic from './index.module.scss';
 import threadPay from '@common/pay-bussiness/thread-pay';
 import { minus } from '@common/utils/calculate';
 import { parseContentData } from '../../utils';
+import goToLoginPage from '@common/utils/go-to-login-page';
 
 // 帖子内容
 export default inject('user')(
@@ -70,6 +71,12 @@ export default inject('user')(
     const parseContent = parseContentData(indexes);
 
     const onContentClick = async () => {
+      if (!props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        goToLoginPage({ url: '/user/login' });
+        return;
+      }
+
       const thread = props.store.threadData;
       const { success } = await threadPay(thread, props.user?.userInfo);
 
