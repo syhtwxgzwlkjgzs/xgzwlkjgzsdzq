@@ -13,6 +13,7 @@ import PayBox from '@components/payBox/index';
 import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
 import { withRouter } from 'next/router';
 import { tencentVodUpload } from '@common/utils/tencent-vod';
+import { plus } from '@common/utils/calculate';
 
 @inject('site')
 @inject('threadPost')
@@ -333,9 +334,9 @@ class PostPage extends React.Component {
 
     // 支付流程
     const { rewardQa, redpacket } = threadPost.postData;
-    const rewardAmount = Number(rewardQa.value) || 0;
-    const redAmount = Number(redpacket.price) || 0;
-    const amount = rewardAmount + redAmount;
+    const rewardAmount = plus(rewardQa.value, 0);
+    const redAmount = plus(redpacket.price, 0);
+    const amount = plus(rewardAmount, redAmount);
     const data = { amount };
     if (!isDraft && amount) {
       let type = ORDER_TRADE_TYPE.RED_PACKET;

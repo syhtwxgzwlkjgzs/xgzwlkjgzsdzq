@@ -214,6 +214,7 @@ class ThreadCreate extends React.Component {
             || !!(postData.price || postData.attachmentPrice)
           ) && (
             <MoneyDisplay
+              payTotalMoney={threadPost.payTotalMoney}
               postData={postData}
               setPostData={this.props.setPostData}
               handleSetState={this.props.handleSetState}
