@@ -58,7 +58,7 @@ class ThreadPCPage extends React.Component {
               isDisplay={true}
               onChange={title => this.props.setPostData({ title })}
             />
-            <div className={styles.editor}>
+            <div className={styles.editor} onClick={this.props.handleVditorFocus}>
               <div className={styles['editor-inner']}>
                 <DVditor
                   pc
@@ -70,6 +70,7 @@ class ThreadPCPage extends React.Component {
                   onCountChange={count => this.props.handleSetState({ count })}
                   onFocus={() => { }}
                   onBlur={() => { }}
+                  onInit={this.props.handleVditorInit}
                 />
 
                 {/* 插入图片 */}
