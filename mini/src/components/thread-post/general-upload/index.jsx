@@ -135,7 +135,7 @@ export default inject('threadPost')(observer(({type, threadPost, audioUpload}) =
 
   // 录音音频
   const audioPlayer = (audio.id) && (
-    <Audio src={audio.mediaUrl} />
+    <Audio src={audio.mediaUrl} onDelete={() => {setPostData({audio: {}});}} />
   );
 
 
