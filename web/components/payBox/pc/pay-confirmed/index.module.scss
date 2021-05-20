@@ -215,6 +215,8 @@
 .walletPayPwd {
   display: flex;
   align-items: center;
+  margin-bottom: rem($margin-6n) !important;
+  height: rem(40);
 }
 
 .payList{
@@ -232,7 +234,7 @@
     &:last-child {
       border-radius: 0 5px 5px 0;
     }
-
+    box-sizing: border-box;
     border: var(--border-border);
     width: rem(40);
     height: rem(40);
