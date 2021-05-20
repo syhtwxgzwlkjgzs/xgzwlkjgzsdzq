@@ -196,6 +196,18 @@ class PostPage extends React.Component {
    * @param {object} data 要设置的数据
    */
   handleAttachClick = (item, data) => {
+    const { isPc } = this.props.site;
+    if (!isPc && item.type === THREAD_TYPE.voice) {
+      const u = navigator.userAgent;
+      if (u.indexOf('MicroMessenger') > -1 && (u.indexOf('iPhone') > -1 || u.indexOf('iPad') > -1)) {
+        Toast.info({ content: 'iOS版微信暂不支持录音功能' });
+        return;
+      }
+      if (u.indexOf('UCBrowser') > -1) {
+        Toast.info({ content: '此浏览器暂不支持录音功能' });
+        return;
+      }
+    }
     // 如果是编辑操作
     const { router, threadPost } = this.props;
     const { query } = router;
