@@ -12,6 +12,7 @@ import RewardDisplay from '@components/thread-detail-pc/reward-display';
 import RedPacketDisplay from '@components/thread-detail-pc/red-packet-display';
 import DeletePopup from '@components/thread-detail-pc/delete-popup';
 import NoMore from '../../pc/components/no-more';
+import goToLoginPage from '@common/utils/go-to-login-page';
 
 @inject('site')
 @inject('user')
@@ -39,6 +40,12 @@ class CommentPCPage extends React.Component {
 
   // 点击评论的赞
   async likeClick(data) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     if (!data.id) return;
 
     const params = {
@@ -62,6 +69,12 @@ class CommentPCPage extends React.Component {
 
   // 点击关注
   onFollowClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     if (this.props.comment?.commentDetail?.userId) {
       this.props.comment?.authorInfo?.follow === 2 || this.props.comment?.authorInfo?.follow === 1
         ? this.props.comment.cancelFollow({ id: this.props.comment.commentDetail.userId, type: 1 }, this.props.user)
@@ -71,6 +84,12 @@ class CommentPCPage extends React.Component {
 
   // 点击回复的赞
   async replyLikeClick(reply) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     if (!reply.id) return;
 
     const params = {
@@ -94,6 +113,12 @@ class CommentPCPage extends React.Component {
 
   // 点击评论的删除
   async deleteClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     this.commentData = this.props.comment.commentDetail;
     this.setState({
       showDeletePopup: true,
@@ -123,6 +148,12 @@ class CommentPCPage extends React.Component {
 
   // 点击评论的回复
   replyClick(comment) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     this.commentData = comment;
     this.replyData = null;
     this.setState({
@@ -132,6 +163,12 @@ class CommentPCPage extends React.Component {
 
   // 点击回复的回复
   replyReplyClick(reply, comment) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     this.commentData = null;
     this.replyData = reply;
     this.replyData.commentId = comment.id;
@@ -143,6 +180,17 @@ class CommentPCPage extends React.Component {
 
   // 创建回复评论+回复回复接口
   async createReply(val) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
+    if (!val) {
+      Toast.info({ content: '请输入内容' });
+      return;
+    }
+
     const { threadId: id } = this.props.comment;
     if (!id) return;
 

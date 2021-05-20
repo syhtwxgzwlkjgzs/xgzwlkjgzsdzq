@@ -171,7 +171,11 @@ class ThreadPCPage extends React.Component {
 
   // 确定举报
   async onReportOk(val) {
-    if (!val) return;
+    if (!val) {
+      Toast.info({ content: '请选择或输入举报理由' });
+      return;
+    }
+
     const params = {
       threadId: this.props.thread.threadData.threadId,
       reason: val,
