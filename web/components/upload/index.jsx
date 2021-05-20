@@ -24,7 +24,7 @@ export default function DzqUpload(props) {
   } = props;
   const multiple = limit > 1;
 
-  const post = async (file) => { // file, list, updater
+  const post = async (file, list, updater) => { // file, list, updater
     const formData = new FormData();
     formData.append('file', file.originFileObj);
     Object.keys(data).forEach((item) => {
@@ -39,10 +39,16 @@ export default function DzqUpload(props) {
     });
     if (ret.code === 0) {
       onSuccess(ret, file);
+      onComplete(ret, file);
+      file.status = 'success';
+      updater(list);
     } else {
       onFail(ret, file);
+      onComplete(ret, file);
+      file.status = 'error';
+      updater(list);
+      return false;
     }
-    onComplete(ret, file);
     return ret;
   };
 
