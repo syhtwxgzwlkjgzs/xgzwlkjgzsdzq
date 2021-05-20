@@ -15,7 +15,8 @@ import '@discuzq/vditor/src/assets/scss/index.scss';
 export default function DVditor(props) {
   const { pc, emoji = {}, atList = [], topic, value,
     onChange = () => { }, onFocus = () => { }, onBlur = () => { },
-    onInit = () => {},
+    onInit = () => { },
+    onInput = () => {},
   } = props;
   const vditorId = 'dzq-vditor';
 
@@ -117,6 +118,7 @@ export default function DVditor(props) {
           onFocus('focus');
         },
         input: () => {
+          onInput(editor);
           onChange(editor);
         },
         blur: () => {

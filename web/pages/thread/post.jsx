@@ -281,13 +281,13 @@ class PostPage extends React.Component {
   };
 
   // 编辑器
-  handleVditorChange = (vditor) => {
+  handleVditorChange = (vditor, event) => {
     if (vditor) {
       this.vditor = vditor;
       const htmlString = vditor.getHTML();
       this.setPostData({ contentText: htmlString });
       if (!this.props.threadPost.postData.title) {
-        if (!this.state.isTitleShow || this.props.site.platform === 'pc') return;
+        if (!this.state.isTitleShow || this.props.site.platform === 'pc' || !event) return;
         this.setState({ isTitleShow: false }, () => {
           vditor.blur();
         });

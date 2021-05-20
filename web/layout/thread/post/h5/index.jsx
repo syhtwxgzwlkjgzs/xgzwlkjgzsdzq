@@ -149,6 +149,7 @@ class ThreadCreate extends React.Component {
             emoji={emoji}
             atList={atList}
             topic={topic}
+            onInput={(vditor) => this.props.handleVditorChange(vditor, 'input')}
             onChange={this.props.handleVditorChange}
             onFocus={(action) => {
               this.setBottomFixed(action);
