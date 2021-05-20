@@ -39,7 +39,7 @@ export default class Redpacket extends Component {
   }
 
   onLikenumChang = (val) => {
-    const arr = val.match(/[1-9]\d{1,2}/);
+    const arr = val.match(/[1-9]\d{0,2}/);
     this.setState({ likenum: arr ? arr[0] : '' })
   }
 
@@ -55,7 +55,7 @@ export default class Redpacket extends Component {
       return false;
     }
 
-    if (price < 0.1 || price > 200) {
+    if (parseFloat(price) < 0.1 || parseFloat(price) > 200) {
       this.redToast('可输入红包金额为0.1 ~ 200元')
       return false;
     }
@@ -65,8 +65,8 @@ export default class Redpacket extends Component {
       return false;
     }
 
-    if (number < 1 || number > 200) {
-      this.redToast('可输入红包个数为0.1 ~ 200个');
+    if (parseInt(number) < 1 || parseInt(number) > 200) {
+      this.redToast('可输入红包个数为1 ~ 200个');
       return false;
     }
 
@@ -75,7 +75,7 @@ export default class Redpacket extends Component {
       return false;
     }
 
-    if (condition === 1 && likenum > 250) {
+    if (condition === 1 && parseInt(likenum) > 250) {
       this.redToast('可输入点赞数为1 ~ 250个');
       return false;
     }

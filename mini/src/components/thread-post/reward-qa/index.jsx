@@ -76,7 +76,7 @@ class RewardQa extends Component {
       })
       return false;
     }
-    if (money < 0.1 || money > 1000000) {
+    if (parseFloat(money) < 0.1 || parseFloat(money) > 1000000) {
       Taro.showToast({
         title: '可选悬赏金额为0.1 ~ 1000000元',
         icon: 'none',
