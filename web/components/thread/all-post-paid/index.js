@@ -14,12 +14,12 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition, pc, visible }) => {
   const [freeWords, setFreeWords] = useState(0);// 可免费查看数量的百分比数字
   useEffect(() => { // 重显的逻辑
     if (data != undefined && Object.keys(data).length > 0) {
-      if (data.price === 0) {
+      if (!data.price) {
         setPrice('');
       } else {
         setPrice(data.price);
       }
-      if (data.price === 0) {
+      if (!data.attachmentPrice) {
         setAttachmentPrice('');
       } else {
         setAttachmentPrice(data.attachmentPrice);
@@ -29,13 +29,17 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition, pc, visible }) => {
   }, []);
   // 当点击确定是把参数返回去
   const redbagconfirm = () => {
-    if (!(price + attachmentPrice)) {
-      Toast.error({ content: '付费金额必须大于0元' });
-      return;
-    }
     if (exhibition === '帖子付费') {
+      if (price < 0.1) {
+        Toast.error({ content: '付费金额必须大于0.1元' });
+        return;
+      }
       confirm({ price, freeWords: freeWords / 100 });
     } else {
+      if (attachmentPrice < 0.1) {
+        Toast.error({ content: '付费金额必须大于0.1元' });
+        return;
+      }
       confirm({ attachmentPrice });
     }
     cancle();

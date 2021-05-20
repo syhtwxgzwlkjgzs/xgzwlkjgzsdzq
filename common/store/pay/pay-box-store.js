@@ -315,6 +315,15 @@ class PayBoxStore {
   };
 
   /**
+   * 清空订单状态轮询定时器
+   */
+  @action
+  clearOrderStatusTimer = () => {
+    clearInterval(this.timer);
+    clearInterval(this.qrCodeCheckTimer);
+  }
+
+  /**
    * 获取订单详情
    */
   @action

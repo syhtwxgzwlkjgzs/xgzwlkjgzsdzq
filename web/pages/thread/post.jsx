@@ -338,7 +338,7 @@ class PostPage extends React.Component {
     const redAmount = plus(redpacket.price, 0);
     const amount = plus(rewardAmount, redAmount);
     const data = { amount };
-    if (!isDraft && amount) {
+    if (!isDraft && amount > 0) {
       let type = ORDER_TRADE_TYPE.RED_PACKET;
       let title = '支付红包';
       if (redAmount) {

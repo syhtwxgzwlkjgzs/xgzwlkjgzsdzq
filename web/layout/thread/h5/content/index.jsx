@@ -25,6 +25,7 @@ const RenderThreadContent = inject('user')(
       postId: threadStore?.threadData?.postId,
       threadId: threadStore?.threadData?.threadId,
       platform: 'h5',
+      payType: threadStore?.threadData?.payType,
     };
     // 是否合法
     const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
