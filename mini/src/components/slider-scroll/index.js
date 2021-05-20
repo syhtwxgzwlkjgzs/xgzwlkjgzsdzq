@@ -3,16 +3,18 @@
 */
 import React, { Component, PureComponent } from 'react';
 import { View } from '@tarojs/components';
-import { Icon } from '@discuzq/design';
-import throttle from '@common/utils/thottle';
+import { PullDownRefresh, Icon } from '@discuzq/design';
+import classNames from 'classnames';
 import styles from './index.module.scss';
-
+import throttle from '@common/utils/thottle';
 import PropTypes from 'prop-types';
+import List from '@components/list';
+
 /**
  * 左滑列表项
  * @prop {object} item 列表项数据
  * @prop {number} currentId 当前滑动项id
- * @prop {string} offsetLeft 左滑距离 例如：offsetLeft={'-74px'}，左滑74像素
+ * @prop {string} offsetLeft 左滑距离,单位px 例如：offsetLeft={'74px'}，左滑74像素
  * @prop {object} RenderItem 列表项渲染组件
  * @prop {function} onBtnClick 处理左滑按钮点击
  */
@@ -71,7 +73,7 @@ class SlierItem extends PureComponent {
       <View
         className={styles['slider-item']}
         style={{
-          'transform': ` translateX(${currentId === item.id ? this.state.leftValue : 0})`
+          transform: ` translateX(${currentId === item.id ? this.state.leftValue : 0})`
         }}
         onTouchStart={this.handleTouchStart}
         onTouchMove={throttle(this.handleTouchMove.bind(this), 30)}
@@ -128,26 +130,98 @@ class Index extends Component {
     super(props);
     this.state = {
       currentId: 0,
+      isTop: false, // 列表位置
+      damping: 0, // 下拉距离，下拉时将动态改变
+      isFinished: true, // 下拉刷新是否结束
     }
   }
 
+  onScroll = ({ scrollTop }) => {
+    const { isTop } = this.state;
+    const _isTop = scrollTop === 0;
+    isTop !== _isTop && this.setState({
+      isTop: _isTop,
+      damping: _isTop ? 100 : 0,
+    });
+  }
+
+  onPullDownRefresh = async () => {
+    this.setState({ currentId: 0 });
+    if (!this.state.isTop) return;
+    this.setState({ isFinished: false });
+    await this.props.onPullDown();
+    this.setState({ isFinished: true });
+  }
+
   render() {
-    const { list = [], ...other } = this.props;
+    const {
+      list,
+      noMore,
+      height,
+      withBottomBar,
+      topCard,
+      onPullDown,
+      onScrollBottom,
+      ...other
+    } = this.props;
+    const { isFinished, damping, currentId } = this.state;
+
     return (
-      <View className={styles.slider}>
-        {list.map((item, index) => (
-          <SlierItem
-            key={item.id}
-            item={item}
-            index={index}
-            currentId={this.state.currentId}
-            onSliderTouch={(id) => this.setState({ currentId: id })}
-            {...other}
-          />
-        ))}
+      <View className={classNames(styles.wrapper, {
+        [styles['with-bottom']]: withBottomBar,
+      })}>
+        <PullDownRefresh
+          onRefresh={this.onPullDownRefresh}
+          isFinished={isFinished}
+          height={600}
+          damping={damping}
+        >
+          <List
+            height={height}
+            noMore={noMore}
+            onScroll={throttle(this.onScroll, 10)}
+            onRefresh={onScrollBottom}
+          >
+            {/* 顶部导航卡片 */}
+            {topCard}
+            {/* show list */}
+            <View className={styles.slider}>
+              {list.map((item, index) => (
+                <SlierItem
+                  key={item.id}
+                  item={item}
+                  index={index}
+                  currentId={currentId}
+                  onSliderTouch={(id) => this.setState({ currentId: id })}
+                  {...other}
+                />
+              ))}
+            </View>
+          </List>
+        </PullDownRefresh>
       </View>
     );
   }
-};
+}
+
+Index.propsTypes = {
+  height: PropTypes.string,
+  noMore: PropTypes.bool,
+  withBottomBar: PropTypes.bool,
+  topCard: PropTypes.object,
+  list: PropTypes.array,
+  onPullDown: PropTypes.func,
+  onScrollBottom: PropTypes.func,
+}
+
+Index.defaultProps = {
+  height: '100vh',
+  noMore: false,
+  withBottomBar: false,
+  topCard: null,
+  list: [],
+  onPullDown: () => Promise.resolve(true),
+  onScrollBottom: () => { },
+}
 
 export default Index;
