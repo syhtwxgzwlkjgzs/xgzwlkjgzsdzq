@@ -67,7 +67,7 @@ class RegisterH5Page extends React.Component {
       // FIXME: Toast 暂时不支持回调能力
       // TODO: 完善这里的路由跳转逻辑
       setTimeout(() => {
-        window.location.href = '/index';
+        window.location.href = '/';
       }, 1000);
     } catch (e) {
       // 跳转状态页
