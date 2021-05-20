@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } f
 import { noop, isPromise } from '@components/thread/utils';
 import styles from './index.module.scss';
 import RefreshView from './RefreshView';
+import ErrorView from './ErrorView';
 
 /**
  * 列表组件，集成上拉刷新能力
@@ -26,6 +27,7 @@ const List = forwardRef(({
   const listWrapper = useRef(null);
   const currentScrollTop = useRef(0)
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
     if (noMore) {
@@ -103,13 +105,22 @@ const List = forwardRef(({
             }, 0);
           })
           .catch(() => {
-            setIsLoading(false);
+            setIsLoading(true);
+            setIsError(true)
           });
       } else {
         console.error('上拉刷新，必须返回promise');
       }
     }
   }, 0);
+
+  // 网络请求失败
+  const handleError = () => {
+    setIsLoading(false);
+    setTimeout(() => {
+      onTouchMove();
+    }, 0)
+  }
 
   return (
     <div className={`${styles.container} ${className}`} style={{ height }}>
@@ -119,7 +130,8 @@ const List = forwardRef(({
         onScroll={onTouchMove}
       >
         {children}
-        {onRefresh && showRefresh && <RefreshView noMore={noMore} />}
+        {onRefresh && showRefresh && !isError && <RefreshView noMore={noMore} />}
+        {isError && <ErrorView onClick={handleError} />}
       </div>
     </div>
   );

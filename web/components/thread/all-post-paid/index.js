@@ -34,9 +34,9 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition, pc, visible }) => {
       return;
     }
     if (exhibition === '帖子付费') {
-      confirm({ price: parseFloat(price), freeWords: freeWords / 100 });
+      confirm({ price: parseFloat(price).toFixed(2), freeWords: freeWords / 100 });
     } else {
-      confirm({ attachmentPrice: parseFloat(attachmentPrice) });
+      confirm({ attachmentPrice: parseFloat(attachmentPrice).toFixed(2) });
     }
     cancle();
   };
@@ -50,7 +50,6 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition, pc, visible }) => {
             <div className={styles.payNumber}>
               <Input
                 mode="number"
-                htmlType="number"
                 value={price}
                 placeholder="金额"
                 onChange={e => setPrice(e.target.value)}
@@ -77,7 +76,6 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition, pc, visible }) => {
           <div>
             <Input
               mode="number"
-              htmlType="number"
               value={attachmentPrice}
               placeholder="金额"
               onChange={e => setAttachmentPrice(e.target.value)}

@@ -115,12 +115,15 @@ export default inject('user')(
               isPay={!isFree}
               isReward={isReward}
               isRed={isRedPack}
-              platform='pc'
+              platform="pc"
             ></UserInfo>
           </div>
           {props?.user?.isLogin() && (
             <div className={topic.more}>
-              <Divider mode='vertical' className={topic.moreDivider}></Divider>
+              {/* 当存在任一标签时，显示分割线 */}
+              {(isEssence || !isFree || isReward || isRedPack) && (
+                <Divider mode="vertical" className={topic.moreDivider}></Divider>
+              )}
               <div className={topic.iconText}>
                 <Dropdown
                   menu={
