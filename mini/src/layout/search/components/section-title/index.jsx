@@ -2,7 +2,7 @@ import React from 'react';
 import { Icon } from '@discuzq/design';
 
 import styles from './index.module.scss';
-import { View, Text } from '@tarojs/components';
+import { View, Image } from '@tarojs/components';
 
 /**
  * 栏目头部
@@ -14,7 +14,7 @@ import { View, Text } from '@tarojs/components';
 const TrendingTopics = ({ icon, title, onShowMore, isShowMore = true }) => (
   <View className={styles.container}>
     <View className={styles.left}>
-      <img src={icon} />
+      <Image src={icon} />
       <View className={styles.title}>{title}</View>
     </View>
     {

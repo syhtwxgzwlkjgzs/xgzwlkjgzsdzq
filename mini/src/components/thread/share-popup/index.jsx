@@ -2,7 +2,9 @@ import React from 'react';
 import styles from './index.module.scss';
 import { Popup } from '@discuzq/design';
 import { noop } from '../utils';
-import { View, Text } from '@tarojs/components'
+import { View, Image } from '@tarojs/components'
+import sharePointImg from '../../../../../web/public/dzq-img/sharePoint.png';
+import shareKnowImg from '../../../../../web/public/dzq-img/shareKnow.png';
 
 /**
  * 筛选分类组件
@@ -10,8 +12,6 @@ import { View, Text } from '@tarojs/components'
  * @prop {function} onClose 弹框关闭事件
  */
 const SharePopup = ({ visible = false, onClose = noop }) => {
-  const sharePoint = '/dzq-img/sharePoint.png';
-  const shareKnow = '/dzq-img/shareKnow.png';
   return (
     <Popup
       position="top"
@@ -19,8 +19,8 @@ const SharePopup = ({ visible = false, onClose = noop }) => {
       onClose={onClose}
     >
       <View className={styles.container}>
-        <img src={sharePoint} className={styles.sharePoint} />
-        <img src={shareKnow} className={styles.shareKnow} onClick={onClose} />
+        <Image src={sharePointImg} className={styles.sharePoint} />
+        <Image src={shareKnowImg} className={styles.shareKnow} onClick={onClose} />
       </View>
     </Popup>);
 };

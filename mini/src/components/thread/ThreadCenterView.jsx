@@ -72,7 +72,7 @@ const Index = (props) => {
                 )}
                 {imageData && (
                     <ImageDisplay 
-                        platform='h5' 
+                        platform={props.platform} 
                         imgData={imageData} 
                         isPay={needPay}
                         onPay={onPay}

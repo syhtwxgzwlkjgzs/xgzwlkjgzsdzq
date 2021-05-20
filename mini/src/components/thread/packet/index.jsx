@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
 import styles from './index.module.scss';
-import { View, Text } from '@tarojs/components'
+import { View, Text, Image } from '@tarojs/components'
+import redPacketImg from '../../../../../web/public/dzq-img/red-packet.png';
+import rewardQuestion from '../../../../../web/public/dzq-img/reward-question.png'
 
 /**
  * 帖子红包、悬赏视图
@@ -18,13 +20,13 @@ const Index = ({ money = 0, type = 0, onClick, condition = 0 }) => {
   }, [type])
 
   const url = useMemo(() => {
-    return type === 0 ? '/dzq-img/red-packet.png' : '/dzq-img/reward-question.png'
+    return type === 0 ? redPacketImg : rewardQuestion;
   }, [type])
 
   return (
     <View className={styles.container} onClick={onClick}>
       <View className={styles.wrapper}>
-        <img className={styles.img} src={url} />
+        <Image className={styles.img} src={url} />
         <Text className={styles.title}>{title}</Text>
         <Text className={styles.money}>￥{money}</Text>
       </View>

@@ -1,4 +1,5 @@
 import React from 'react';
+import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import { Button, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
@@ -40,7 +41,7 @@ class Index extends React.Component {
 
       const { title = '', threadId = '', user } = this.props.data || {};
 
-      h5Share({path: `thread/${threadId}`});
+      h5Share({path: `/thread/${threadId}`});
       this.props.index.updateThreadShare({ threadId }).then(result => {
         if (result.code === 0) {
           this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
@@ -64,7 +65,7 @@ class Index extends React.Component {
       const { threadId = '' } = data;
       if (threadId !== '') {
         this.props.thread.positionToComment()
-        this.props.router.push(`/thread/${threadId}`);
+        Router.push({url: `/pages/thread/index?id=${threadId}`})
       } else {
         console.log('帖子不存在');
       }
@@ -130,7 +131,7 @@ class Index extends React.Component {
       }
 
       if (threadId !== '') {
-        this.props.router.push(`/thread/${threadId}`);
+        Router.push({url: `/pages/thread/index?id=${threadId}`})
       } else {
         console.log('帖子不存在');
       }
@@ -154,7 +155,7 @@ class Index extends React.Component {
         user = {},
         position = {},
         likeReward = {},
-        ViewCount,
+        viewCount,
         group,
         createdAt,
         isLike,
@@ -172,7 +173,7 @@ class Index extends React.Component {
                 name={user.userName || ''}
                 avatar={user.avatar || ''}
                 location={position.location}
-                View={`${ViewCount}`}
+                view={`${viewCount}`}
                 groupName={group?.groupName}
                 time={createdAt}
                 isEssence={isEssence}
