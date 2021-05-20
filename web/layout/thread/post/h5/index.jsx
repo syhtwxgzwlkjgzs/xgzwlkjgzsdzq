@@ -220,6 +220,7 @@ class ThreadCreate extends React.Component {
               setPostData={this.props.setPostData}
               handleSetState={this.props.handleSetState}
               onAttachClick={this.props.handleAttachClick}
+              onDefaultClick={this.props.handleDefaultIconClick}
             />
           )}
         </div>
