@@ -68,9 +68,9 @@ const Index = ({
           }
         </View> : <View></View>}
         <View className={styles.commentSharing}>
-          {comment > 0 && <p className={styles.commentNum}>{`${comment}条评论`}</p>}
-          {comment > 0 && sharing > 0 && <p className={styles.viewision}>·</p>}
-          {sharing > 0 && <p className={styles.commentNum}>{`${sharing}次分享`}</p>}
+          {comment > 0 && <Text className={styles.commentNum}>{`${comment}条评论`}</Text>}
+          {comment > 0 && sharing > 0 && <Text className={styles.division}>·</Text>}
+          {sharing > 0 && <Text className={styles.commentNum}>{`${sharing}次分享`}</Text>}
         </View>
       </View>
 

@@ -20,13 +20,13 @@
   @include cursor-on-pc;
   display: flex;
   .division {
-    line-height: 24;
+    line-height: 24px;
     font-size: $font-size-label;
     color: #8490a6;
     margin: 0 $padding-base;
   }
   .commentNum {
-    line-height: 24;
+    line-height: 24px;
     font-size: $font-size-label;
     color: #8490a6;
   }

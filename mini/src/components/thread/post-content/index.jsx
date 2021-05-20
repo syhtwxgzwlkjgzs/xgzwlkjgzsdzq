@@ -5,7 +5,7 @@ import { noop } from '../utils'
 import fuzzyCalcContentLength from '@common/utils/fuzzy-calc-content-length';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
-import { View, Text } from '@tarojs/components'
+import { View, Text, Image } from '@tarojs/components'
 import styles from './index.module.scss';
 
 /**
@@ -101,7 +101,7 @@ const Index = ({
         <View className={styles.payInfo}>
           <View className={styles.hidePercent}>{texts.hidePercent}</View>
           {/* <Button type="primary" onClick={onPay} className={styles.payButton}>
-            <img className={styles.payButtonIcon} />
+            <Image className={styles.payButtonIcon} />
             {texts.payButton}
           </Button> */}
         </View>

@@ -6,7 +6,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: $text-bg-color2;
+  background: var(--background-color-text2);
 
   .wrapper {
     display: flex;
@@ -31,7 +31,7 @@
 
   :global {/* stylelint-disable-line */
     .dzq-pull-refresh__loading {
-      font-size: 14px;
+      font-size: $font-size-primary;
       top: -20px;
     }
   }

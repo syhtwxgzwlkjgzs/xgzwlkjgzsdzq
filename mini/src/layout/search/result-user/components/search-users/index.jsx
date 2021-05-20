@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import UserItem from '@components/thread/user-item';
 import List from '../list';
-import { View, Text } from '@tarojs/components';
 
 import styles from './index.module.scss';
 
@@ -20,7 +19,7 @@ const SearchUsers = ({ data = [], refreshing, onRefresh, onFetchMore, onItemClic
       return (
         <UserItem
         key={index}
-        title={item.username}
+        title={item.nickname}
         imgSrc={item.avatar}
         label={item.groupName}
         onClick={onItemClick}
@@ -33,10 +32,10 @@ const SearchUsers = ({ data = [], refreshing, onRefresh, onFetchMore, onItemClic
   return (
     <List
       containerClassName={styles.list}
+      onPullingUp={onFetchMore}
       data={data}
       refreshing={refreshing}
       onRefresh={onRefresh}
-      onScrollBottom={onFetchMore}
       renderItem={renderItem}
     />
   );

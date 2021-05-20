@@ -1,0 +1,84 @@
+@import '@common/styles/index.scss';
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: $padding-6n 0;
+  border-bottom: 1px solid var(--border-line-color);
+  box-sizing: border-box;
+  background-color: $white;
+  .title {
+    font-size: $font-size-middle-extra;
+  }
+}
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: $padding-4n 0;
+  border-bottom: 1px solid var(--border-line-color);
+  box-sizing: border-box;
+  background-color: $white;
+  .title {
+    font-size: $font-size-middle;
+  }
+}
+.title {
+  font-weight: var(--font-weight-regular);
+  line-height: $font-line-height-primary;
+  color: var(--color-text-primary);
+  margin-left: $padding-2n;
+}
+.left {
+  display: flex;
+  align-items: center;
+  height: $font-line-height-primary;
+}
+.right {
+  display: flex;
+  align-items: center;
+  height: $font-line-height-primary;
+  .rightIcon {
+    margin-left: $margin-1n;
+    color: var(--color-text-secondary);
+  }
+}
+.noMargin {
+  margin-left: 0;
+}
+.more {
+  display: flex;
+  align-items: center;
+  @include cursor-on-pc;
+  font-size: $font-size-primary;
+  color: var(--color-text-primary);
+  line-height: $font-line-height-primary;
+  &:hover {
+    color: var(--color-primary);
+    .rightIcon {
+      color: var(--color-primary) !important;
+    }
+  }
+}
+.num {
+  font-size: $font-size-label;
+  color: var(--color-text-secondary);
+  margin-left: $margin-2n;
+  line-height: $font-line-height-primary;
+}
+.text {
+  font-size: $font-size-label;
+  color: $text-color-regular;
+  line-height: $font-line-height-primary;
+}
+.icon1 {
+  color: var(--color-success);
+}
+.icon2 {
+  color: var(--color-warn);
+}
+.icon3 {
+  color: var(--color-error);
+}
