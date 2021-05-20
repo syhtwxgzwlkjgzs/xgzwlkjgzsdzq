@@ -1,15 +1,11 @@
 @import '@common/styles/index.scss';
 
 .container {
-  width: rem(520);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  margin: 0 auto;
+  width: rem(409);
   background: var(--color-white);
   border-radius: rem($border-radius-big);
-  overflow: hidden;
-  padding: 0 rem(24) rem(24) rem(24);
+  margin: 0 auto;
+  padding: 0 rem($padding-6n) rem($padding-6n) rem($padding-6n);
 }
 
 .header {
@@ -35,31 +31,39 @@
 
 .body {
   width: 100%;
-
   .percentage {
     display: flex;
     flex-direction: column;
-
+    border-bottom: var(--border-border);
     .text {
       font-weight: normal;
-      color: var(--pc-user-info-title);
-      font-size: rem($font-size-middle);
+      font-size: rem($font-size-primary);
       line-height: rem(17.8);
       text-align: left;
+      color: $text-color-regular;
       padding: rem($padding-4n) 0 rem($padding-2n) 0;
     }
-
     .slider {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding-bottom: rem($padding-2n);
       .perCent {
+        color: $text-color-primary;
       }
       :global {
         .dzq-slider__progress--active {
           height: rem(4);
+          border-radius: rem(2) 0 0 rem(2);
         }
+        .dzq-slider__progress--stick {
+          height: rem(4);
+        }
+        .dzq-slider__feature {
+          height: rem(4);
+          border-radius: 0 rem(2) rem(2) 0;
+        }
+
         .dzq-slider__progress__button {
           width: rem(10);
           height: rem(10);
@@ -78,14 +82,12 @@
     .text {
       line-height: rem(17.8);
       text-align: left;
-      color: var(--pc-user-info-title);
-      font-size: rem($font-size-middle);
+      color: $text-color-regular;
     }
     .moneyNum {
-      font-family: 'PingFangSC-Regular';
       line-height: rem(16.8);
       text-align: left;
-      color: var(--color-text-primary);
+      color: $text-color-primary;
     }
     :global {
       .dzq-input {
@@ -101,7 +103,6 @@
 }
 
 .button {
-  margin-top: rem($margin-6n);
   width: 100%;
   display: flex;
   justify-content: center;
