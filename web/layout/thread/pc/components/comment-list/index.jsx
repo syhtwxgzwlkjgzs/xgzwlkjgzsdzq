@@ -199,7 +199,7 @@ class CommentList extends React.Component {
                     )}
 
                     <div className={styles.revise} onClick={() => this.reportClick()}>
-                      <Icon className={styles.icon} name="WarnOutlinedThick"></Icon>
+                      <Icon className={styles.icon} name="WarnOutlined"></Icon>
                       <span>举报</span>
                     </div>
                   </div>
