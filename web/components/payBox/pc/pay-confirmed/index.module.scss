@@ -56,7 +56,7 @@
   }
   :global {
     .dzq-checkbox-wrap .dzq-checkbox.dzq-checkbox--radio {
-      border-radius: rem(5);
+      border-radius: rem(3);
     }
     .dzq-checkbox-wrap {
       padding: 0;
@@ -133,6 +133,13 @@
       font-size: rem($font-size-small);
       // line-height: rem(36);
       margin-bottom: rem($margin-4n);
+    }
+    .walletPay {
+      display: flex;
+      align-items: center;
+    }
+    .walletPayPwd {
+      margin-bottom: rem(24);
     }
     .walletBalance {
       font-size: rem($font-size-large);
