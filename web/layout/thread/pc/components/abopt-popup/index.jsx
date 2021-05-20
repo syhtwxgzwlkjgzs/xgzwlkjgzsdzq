@@ -45,7 +45,7 @@ const InputPop = (props) => {
           <div className={styles.header}>
             <div className={styles.headerLeft}>采纳回复悬赏</div>
             <div className={styles.headerIcon}>
-              <Icon size={14} name="CloseOutlined" onClick={onCancel}></Icon>
+              <Icon size={12} name="CloseOutlined" onClick={onCancel}></Icon>
             </div>
           </div>
 
@@ -65,7 +65,7 @@ const InputPop = (props) => {
             </div>
             <div className={styles.rewardMoney}>
               <div className={styles.text}>悬赏金额</div>
-              <div className={styles.text}>{moneyNum}元</div>
+              <div className={styles.money}>{moneyNum}<span className={styles.unit}>元</span></div>
             </div>
           </div>
         </div>
