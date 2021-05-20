@@ -3,6 +3,7 @@
  */
 import { observable, computed } from 'mobx';
 import { LOADING_TOTAL_TYPE } from '@common/constants/thread-post';
+import { plus } from '@common/utils/calculate';
 
 class ThreadPostStore {
   /**
@@ -56,6 +57,10 @@ class ThreadPostStore {
     orderSn: '', // 支付订单号
     ticket: '', // 腾讯云验证码返回票据
     randstr: '', // 腾讯云验证码返回随机字符串
+  }
+
+  @computed get payTotalMoney() {
+    return plus(this.postData.price, this.postData.attachmentPrice);
   }
 
   @observable

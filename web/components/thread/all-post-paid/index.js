@@ -34,9 +34,9 @@ const AllPostPaid = ({ confirm, cancle, data, exhibition, pc, visible }) => {
       return;
     }
     if (exhibition === '帖子付费') {
-      confirm({ price: parseFloat(price).toFixed(2), freeWords: freeWords / 100 });
+      confirm({ price, freeWords: freeWords / 100 });
     } else {
-      confirm({ attachmentPrice: parseFloat(attachmentPrice).toFixed(2) });
+      confirm({ attachmentPrice });
     }
     cancle();
   };

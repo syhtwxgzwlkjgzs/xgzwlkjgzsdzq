@@ -8,10 +8,11 @@ import { formatDate } from '@common/utils/format-date';
 export default function MoneyDisplay(props) {
   const {
     postData = {},
+    payTotalMoney,
   } = props;
   const clsName = props.pc ? styles.pc : styles.h5;
   return (
-    <div className={`${styles['money-box']} ${clsName}`}>
+    <div className={`${styles['money-box']} ${clsName}`} onClick={e => e.stopPropagation()}>
       {/* 付费 */}
       {!!(postData.price || postData.attachmentPrice) && (
         <Tag
@@ -21,7 +22,7 @@ export default function MoneyDisplay(props) {
             const curPaySelect = postData.price ? paidOption[0].name : paidOption[1].name;
             props.handleSetState({ curPaySelect });
           }}
-        >付费总额{postData.price + postData.attachmentPrice}元</Tag>
+        >付费总额{payTotalMoney}元</Tag>
       )}
       {/* 悬赏问答内容标识 */}
       {(postData.rewardQa.value && postData.rewardQa.times) && (

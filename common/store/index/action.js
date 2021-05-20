@@ -198,13 +198,11 @@ class IndexAction extends IndexStore {
    */
   @action
   updateAssignThreadAllData(threadId, threadInfo) {
-    debugger;
     if (!threadId) return false;
-    const targetThread = this.findAssignThread(threadId);
+    const targetThread = this.findAssignThread(typeofFn.isNumber(threadId) ? threadId : +threadId);
     if (!targetThread) return false;
     const { index, data } = targetThread;
     this.threads.pageData[index] = threadInfo;
-    console.log(this.threads.pageData[index])
     return true;
   }
 
