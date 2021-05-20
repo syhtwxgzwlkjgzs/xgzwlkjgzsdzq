@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import styles from './index.module.scss';
-import { View, Text } from '@tarojs/components'
+import { View, Text, Image } from '@tarojs/components'
 
 /**
  * 帖子红包、悬赏视图
@@ -24,7 +24,7 @@ const Index = ({ money = 0, type = 0, onClick, condition = 0 }) => {
   return (
     <View className={styles.container} onClick={onClick}>
       <View className={styles.wrapper}>
-        <img className={styles.img} src={url} />
+        <Image className={styles.img} src={url} />
         <Text className={styles.title}>{title}</Text>
         <Text className={styles.money}>￥{money}</Text>
       </View>

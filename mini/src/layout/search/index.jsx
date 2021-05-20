@@ -52,7 +52,7 @@ class SearchH5Page extends React.Component {
     const { pageData: threadsPageData } = indexThreads || {};
     return (
       <BaseLayout allowRefresh={false} curr='search' showTabBar>
-        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} isShowBottom={false} />
+        <SearchInput onSearch={this.onSearch} onCancel={this.onSearch} isShowBottom={false} />
         <SidebarPanel
           icon={{ type: 1, name: 'StrongSharpOutlined' }} 
           title="潮流话题" 

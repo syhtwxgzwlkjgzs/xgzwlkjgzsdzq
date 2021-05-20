@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './index.module.scss';
 import { Audio } from '@discuzq/design';
 import { noop } from '../utils';
-import { View, Text } from '@tarojs/components'
+import { View, Text, Image } from '@tarojs/components'
 
 /**
  * 语音
@@ -21,7 +21,7 @@ const Index = ({ isPay = false, url, onPay = noop }) => {
       {
         isPay ? (
           <View className={styles.wrapper}>
-            <img src='/dzq-img/pay-audio.png' className={styles.payBox} onClick={onPay}></img>
+            <Image src='/dzq-img/pay-audio.png' className={styles.payBox} onClick={onPay} />
           </View>
         ) : <Audio src={url} onPlay={onPlay} disabled={!url} />
       }

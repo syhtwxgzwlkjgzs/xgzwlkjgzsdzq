@@ -1,7 +1,7 @@
 import React from 'react';
 
 import styles from './index.module.scss';
-import { View, Text } from '@tarojs/components'
+import { View, Text, Image } from '@tarojs/components'
 
 /**
  * 单个商品内容展示
@@ -16,7 +16,7 @@ const Index = ({ image, title, amount = 0, loading, className: _className = '', 
 
   return (
     <View className={`${styles.container} ${_className}`} onClick={onClick}>
-      <img className={`${styles.image} ${!image ? styles.empty : ''}`} src={image} />
+      <Image className={`${styles.image} ${!image ? styles.empty : ''}`} src={image} />
       <View className={styles.content}>
         <View className={styles.title}>{_title}</View>
         <View className={styles.amount}>¥{amount}</View>

@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './index.module.scss';
 import { Popup } from '@discuzq/design';
 import { noop } from '../utils';
-import { View, Text } from '@tarojs/components'
+import { View, Text, Image } from '@tarojs/components'
 
 /**
  * 筛选分类组件
@@ -19,8 +19,8 @@ const SharePopup = ({ visible = false, onClose = noop }) => {
       onClose={onClose}
     >
       <View className={styles.container}>
-        <img src={sharePoint} className={styles.sharePoint} />
-        <img src={shareKnow} className={styles.shareKnow} onClick={onClose} />
+        <Image src={sharePoint} className={styles.sharePoint} />
+        <Image src={shareKnow} className={styles.shareKnow} onClick={onClose} />
       </View>
     </Popup>);
 };

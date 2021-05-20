@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Progress } from '@discuzq/design';
 
 import styles from './index.module.scss';
-import { View, Text } from '@tarojs/components'
+import { View, Text, Image } from '@tarojs/components'
 /**
  * 帖子奖励进度条
  * @prop {POST_TYPE} type 类型
@@ -54,9 +54,9 @@ const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0, conditi
       >
         <View className={styles.content}>
           {type === POST_TYPE.RED_PACK ? (
-            <img className={styles.icon} src="/dzq-img/redpacket-mini.png" />
+            <Image className={styles.icon} src="/dzq-img/redpacket-mini.png" />
           ) : (
-            <img className={styles.icon} src="/dzq-img/coin.png" />
+            <Image className={styles.icon} src="/dzq-img/coin.png" />
           )}
           <View className={styles.remaining}>{texts.remaining}</View>
           <View className={styles.received}>{texts.received}</View>

@@ -3,7 +3,7 @@
 .container {
   width: 100%;
 
-  img {
+  Image {
     border-radius: $border-radius-small;
     object-fit: cover;
     background-color: $body-bg-color;
@@ -85,7 +85,7 @@
 .containerPC {
   width: 100%;
 
-  img {
+  Image {
     border-radius: $border-radius-small;
     object-fit: cover;
     background-color: $body-bg-color;
@@ -96,7 +96,7 @@
   .containerNum5 {
     .bigImages {
       height: 262px;
-      margin-bottom: 6 !important;
+      margin-bottom: 6px !important;
       .col {
         height: 100%;
         padding-top: 0 !important;
