@@ -73,11 +73,12 @@ class IndexPCPage extends React.Component {
      return dispatch('moreData', this.filter);
    }
 
-   onFilterClick = (result) => {
-     const { sequence, essence, attention, filter: { types, sort } } = result;
-     const { dispatch = () => {} } = this.props;
-     this.filter = { ...this.filter, types, essence, sequence, attention, sort };
-     dispatch('click-filter', this.filter);
+  onFilterClick = (result) => {
+    this.setState({ visible: false })
+    const { sequence, filter: { types, sort, essence, attention, } } = result;
+    const { dispatch = () => {} } = this.props;
+    this.filter = { ...this.filter, types, essence, sequence, attention, sort };
+    dispatch('click-filter', this.filter);
    }
 
    onNavigationClick = ({ categoryIds, sequence }) => {

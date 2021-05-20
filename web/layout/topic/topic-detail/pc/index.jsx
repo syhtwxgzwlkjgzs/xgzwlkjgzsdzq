@@ -82,7 +82,7 @@ class IndexPCPage extends React.Component {
 
     return (
       // <List className={styles.topicWrap}>
-      <div className={styles.topicWrap}>
+     
         <BaseLayout
           onSearch={this.onSearch}
           right={ this.renderRight }
@@ -91,7 +91,6 @@ class IndexPCPage extends React.Component {
             pageData?.map((item, index) => this.renderItem(item, index)) || <NoData />
           }
         </BaseLayout>
-        </div>
       // </List>
     );
   }
