@@ -31,7 +31,7 @@ export default function MoneyDisplay(props) {
             props.handleSetState({ currentAttachOperation: THREAD_TYPE.reward });
           }}
         >
-          {`悬赏金额${postData.rewardQa.value}元\\结束时间${formatDate(new Date(postData.rewardQa.times).getTime(), 'yyyy/MM/dd hh:mm:ss')}`}
+          {`悬赏金额${postData.rewardQa.value}元\\结束时间${formatDate(new Date(postData.rewardQa.times).getTime(), 'yyyy/MM/dd hh:mm')}`}
         </Tag>
       )}
       {/* 红包 */}
