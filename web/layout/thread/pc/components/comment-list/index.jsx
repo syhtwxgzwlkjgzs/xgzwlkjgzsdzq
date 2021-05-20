@@ -148,7 +148,7 @@ class CommentList extends React.Component {
           </div>
           <div className={styles.commentListContent}>
             {/* 评论内容 */}
-            <div className={styles.commentListContentText} onClick={() => this.toCommentDetail()}>
+            <div className={classnames(styles.commentListContentText, this.props.isShowOne && styles.hover)} onClick={() => this.toCommentDetail()}>
               <div className={styles.commentListName}>
                 {this.props.data.user.username || this.props.data.user.userName}
               </div>
