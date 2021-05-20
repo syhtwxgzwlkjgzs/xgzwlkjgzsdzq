@@ -1,0 +1,40 @@
+@import '@common/styles/index.scss';
+.container {
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+
+  .wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 193px;
+    width: 144px;
+    color: #ffeea2;
+  }
+
+  .img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .title {
+    z-index: 2;
+    font-size: $font-size-primary;
+    margin-bottom: $padding-2n;
+    font-weight: normal;
+    margin-top: 38px;
+    line-height: 17px;
+  }
+  .money {
+    z-index: 2;
+    font-size: $font-size-large;
+    font-weight: bold;
+    line-height: 28;
+  }
+}

@@ -2,30 +2,22 @@ import React from 'react';
 import { withRouter } from 'next/router';
 import { Button, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
-import ImageContent from './image-content';
-import AudioPlay from './audio-play';
-import PostContent from './post-content';
-import ProductItem from './product-item';
-import RedPacket from './red-packet';
-import RewardQuestion from './reward-question';
-import VideoPlay from './video-play';
 import BottomEvent from './bottom-event';
 import UserInfo from './user-info';
-import AttachmentView from './attachment-view';
 import NoData from '../no-data';
 import styles from './index.module.scss';
-import { handleAttachmentData } from './utils';
+import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import goToLoginPage from '@common/utils/go-to-login-page';
-import Taro from '@tarojs/taro';
-import { View, Text } from '@tarojs/components';
 import threadPay from '@common/pay-bussiness/thread-pay';
+import ThreadCenterView from './ThreadCenterView';
+import { View, Text } from '@tarojs/components'
 
 @inject('site')
 @inject('index')
 @inject('user')
+@inject('thread')
 @inject('search')
 @inject('topic')
-@inject('thread')
 @observer
 class Index extends React.Component {
 
@@ -35,7 +27,7 @@ class Index extends React.Component {
 
     // 分享
     onShare = (e) => {
-      e.stopPropagation();
+      e && e.stopPropagation();
 
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
@@ -44,38 +36,42 @@ class Index extends React.Component {
         return;
       }
 
-      const { title = '', threadId = '' } = this.props.data || {};
+      Toast.info({ content: '复制链接成功' });
 
+      const { title = '', threadId = '', user } = this.props.data || {};
+
+      h5Share({path: `thread/${threadId}`});
       this.props.index.updateThreadShare({ threadId }).then(result => {
         if (result.code === 0) {
-          this.props.index.updateAssignThreadInfo(threadId, { isShare: true });
-          this.props.search.updateAssignThreadInfo(threadId, { isShare: true });
-          this.props.topic.updateAssignThreadInfo(threadId, { isShare: true });
+          this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+          this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+          this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
         }
       });
     }
     // 评论
     onComment = (e) => {
-      e.stopPropagation();
+      e && e.stopPropagation();
 
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        // goToLoginPage();
+        goToLoginPage({ url: '/user/login' });
         return;
       }
 
       const { data = {} } = this.props;
       const { threadId = '' } = data;
       if (threadId !== '') {
-        Taro.navigateTo({url: `/pages/thread/index?id=${threadId}`});
+        this.props.thread.positionToComment()
+        this.props.router.push(`/thread/${threadId}`);
       } else {
         console.log('帖子不存在');
       }
     }
-   // 点赞
-   onPraise = (e) => {
-      e.stopPropagation();
+    // 点赞
+    onPraise = (e) => {
+      e && e.stopPropagation();
       if(this.state.isSendingLike) return;
 
       // 对没有登录的先登录
@@ -86,21 +82,19 @@ class Index extends React.Component {
       }
       const { data = {}, user } = this.props;
       const { threadId = '', isLike, postId } = data;
-
       this.setState({isSendingLike: true});
       this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } }).then(result => {
         if (result.code === 0 && result.data) {
-          const { isLiked } = result.data;
-          this.props.index.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
-          this.props.search.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
-          this.props.topic.updateAssignThreadInfo(threadId, { isLike: isLiked, user: user.userInfo });
+          this.props.index.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
+          this.props.search.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
+          this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
         }
         this.setState({isSendingLike: false});
       });
     }
     // 支付
     onPay = async (e) => {
-      e.stopPropagation();
+      e && e.stopPropagation();
 
       // 对没有登录的先做
       if (!this.props.user.isLogin()) {
@@ -127,7 +121,7 @@ class Index extends React.Component {
       }
     }
 
-    onClick = () => {
+    onClick = (e) => {
       const { threadId = '', ability } = this.props.data || {};
       const { canViewPost } = ability;
 
@@ -136,7 +130,7 @@ class Index extends React.Component {
       }
 
       if (threadId !== '') {
-        Taro.navigateTo({url: `/pages/thread/index?id=${threadId}`});
+        this.props.router.push(`/thread/${threadId}`);
       } else {
         console.log('帖子不存在');
       }
@@ -148,123 +142,49 @@ class Index extends React.Component {
       }
     }
 
-    // 帖子属性内容
-    renderThreadContent = ({ content: data, attachmentPrice, payType, paid } = {}) => {
-      const {
-        text,
-        imageData,
-        audioData,
-        videoData,
-        goodsData,
-        redPacketData,
-        rewardData,
-        fileData,
-      } = handleAttachmentData(data);
-
-      return (
-        <View className={styles.wrapper} ref={this.ref}>
-            {text && <PostContent content={text} onPay={this.onPay} onRedirectToDetail={this.onClick} />}
-            <View className={`${styles.content} ${payType === 2 && styles.payContent}`}>
-              {videoData && (
-                <VideoPlay
-                  url={videoData.mediaUrl}
-                  coverUrl={videoData.coverUrl}
-                  onPay={this.onPay}
-                  isPay={payType !== 0}
-                />
-              )}
-              {imageData && <ImageContent
-                imgData={imageData}
-                isPay={payType !== 0}
-                onPay={this.onPay}
-                onClickMore={this.onClick}
-              />}
-              {rewardData && <RewardQuestion
-                content={rewardData.content || ''}
-                money={rewardData.money}
-                onClick={this.onPay}
-              />}
-              {redPacketData && <RedPacket content={redPacketData.content || ''} onClick={this.onClick} />}
-              {goodsData && <ProductItem
-                  image={goodsData.imagePath}
-                  amount={goodsData.price}
-                  title={goodsData.title}
-                  onClick={this.onClick}
-              />}
-              {audioData && <AudioPlay url={audioData.mediaUrl} isPay={payType !== 0} />}
-              {fileData && <AttachmentView attachments={fileData} onClick={this.onPay} isPay={payType !== 0} />}
-
-              {/* 付费蒙层 */}
-              {
-                !paid && payType !== 0 && (
-                  <View className={styles.cover} onClick={payType === 1 ? this.onClick : this.onPay}>
-                    {
-                      payType === 2 ? (
-                        <Button className={styles.button} type="primary" onClick={this.onPay}>
-                          <Text className={styles.icon}>$</Text>
-                          支付{attachmentPrice}元查看附件内容
-                        </Button>
-                      ) : null
-                    }
-                  </View>
-                )
-              }
-            </View>
-        </View>
-      );
-    }
-
     render() {
-      const { data, className = '' } = this.props;
+      const { data, className = '', site = {}, showBottomStyle = true } = this.props;
+      const { platform = 'pc' } = site;
 
       if (!data) {
         return <NoData />;
       }
 
       const {
-        title = '',
         user = {},
         position = {},
         likeReward = {},
-        payType,
-        viewCount,
-        price,
+        ViewCount,
         group,
         createdAt,
         isLike,
         postId,
         threadId,
         displayTag,
-        paid
+        payType,
       } = data || {};
-
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
 
       return (
-        <View className={`${styles.container} ${className}`}>
-          <View className={styles.header}>
+        <View className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
+          <View className={styles.header} onClick={this.onClick}>
               <UserInfo
-                name={user.userName}
-                avatar={user.avatar}
-                location={position.address}
-                view={`${viewCount}`}
+                name={user.userName || ''}
+                avatar={user.avatar || ''}
+                location={position.location}
+                View={`${ViewCount}`}
                 groupName={group?.groupName}
                 time={createdAt}
                 isEssence={isEssence}
-                isPrice={isPrice}
+                isPay={isPrice}
                 isRed={isRedPack}
                 isReward={isReward}
+                userId={user?.userId}
+                platform={platform}
               />
           </View>
 
-          {title && <View className={styles.title} onClick={this.onClick}>{title}</View>}
-
-          {this.renderThreadContent(data)}
-
-          {!paid && payType === 1 && <Button className={styles.button} type="primary" onClick={this.onPay}>
-            <Text className={styles.icon}>$</Text>
-            支付{price}元查看剩余内容
-          </Button>}
+          <ThreadCenterView data={data} onClick={this.onClick} onPay={this.onPay} platform={platform} />
 
           <BottomEvent
             userImgs={likeReward.users}
@@ -276,7 +196,8 @@ class Index extends React.Component {
             onPraise={this.onPraise}
             isLiked={isLike}
             isSendingLike={this.state.isSendingLike}
-            tipData={{ postId, threadId }}
+            tipData={{ postId, threadId, platform, payType }}
+            platform={platform}
           />
         </View>
       );

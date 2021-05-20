@@ -3,67 +3,92 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  .userImg {
-    display: flex;
-    .numText {
-      line-height: 24px;
-      font-size: 12px;
-      color: var(--color-text-secondary);
-      margin-left: 4px;
-    }
-  }
-  .commentSharing {
-    display: flex;
-    .division {
-      line-height: 24px;
-      font-size: 12px;
-      color: var(--color-text-secondary);
-      margin: 0 4px;
-    }
-    .commentNum {
-      line-height: 24px;
-      font-size: 12px;
-      color: var(--color-text-secondary);
-    }
+  margin: 16px 0 8px;
+}
+.userImg {
+  @include cursor-on-pc;
+  display: flex;
+  align-items: center;
+  .numText {
+    line-height: 24px;
+    font-size: $font-size-label;
+    color: #8490a6;
+    margin-left: 4px;
   }
 }
-
+.commentSharing {
+  @include cursor-on-pc;
+  display: flex;
+  .division {
+    line-height: 24;
+    font-size: $font-size-label;
+    color: #8490a6;
+    margin: 0 $padding-base;
+  }
+  .commentNum {
+    line-height: 24;
+    font-size: $font-size-label;
+    color: #8490a6;
+  }
+}
+.users {
+  margin: 0;
+}
 .operation {
   height: 52px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: var(--border-line-color) solid 1px;
-  margin-top: 12px;
-  .fabulous {
-    line-height: 20px;
-    .fabulousPost {
-      margin-left: 6px;
-      font-size: 14px;
-      line-height: 20px;
-      color: var(--color-text-secondary);
-      font-weight: normal;
+  border-top: $border-color solid 1px;
+  box-sizing: border-box;
+}
+.operations {
+  height: 52px;
+  display: flex;
+  margin-top: 16px;
+  align-items: center;
+  justify-content: space-between;
+  border-top: $border-color solid 1px;
+  box-sizing: border-box;
+}
+.fabulous {
+  @include cursor-on-pc;
+  display: flex;
+  align-items: center;
+  padding: $padding-10 0;
+  .fabulousPost {
+    margin-left: 8px;
+    font-size: $font-size-primary;
+    color: $text-color-secondary;
+  }
+  .fabulousCancel {
+    margin-left: 8px;
+    font-size: $font-size-primary;
+    color: var(--color-primary);
+  }
+  :global{
+    .like, .share{
+      position: relative;
+      top: -1px;
     }
-    .fabulousCancel {
-      margin-left: 6px;
-      font-size: 14px;
-      line-height: 20px;
-      color: var(--color-primary);
-      font-weight: normal;
+  }
+  .icon {
+    color: $text-color-secondary;
+    
+    &.likedColor {
+      color: $primary-color;
     }
-    .icon {
-      margin-bottom: 2px;
-      color: var(--color-text-secondary);
-      &.likedColor {
-        color: $primary-color;
-      }
-      &.dislikedColor {
-        color: $text-color-secondary;
-      }
+    &.dislikedColor {
+      color: $text-color-secondary;
     }
-    &[disabled] {
-      cursor:not-allowed;
-      opacity: 0.6;
+  }
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  :global {
+    .dzq-icon {
+      cursor: none;
     }
   }
 }

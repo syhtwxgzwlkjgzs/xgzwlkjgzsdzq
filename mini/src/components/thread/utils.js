@@ -7,7 +7,7 @@ export const noop = () => {};
 
 // 过滤点击事件
 export const filterClickClassName = (dom) => {
-  const blacklistClass = ['dzq-popup__overlay', 'dzq-audio', 'dzq-avatar', 'dzq-tabs'];
+  const blacklistClass = ['dzq-popup', 'dzq-audio', 'dzq-avatar', 'dzq-tabs', 'dzq-icon', 'disable-click'];
   const blacklistHTML = ['img'];
   // const whitelist = [];
   const { className = '', localName = '' } = dom;
@@ -23,8 +23,8 @@ export const filterClickClassName = (dom) => {
 
 // 处理附件的数据
 export const handleAttachmentData = (data) => {
-  const newData = { text: data.text };
-  const values = Object.values(data.indexes || {});
+  const newData = { text: data?.text || '' };
+  const values = Object.values(data?.indexes || {});
   values.forEach((item) => {
     const { tomId } = item;
     if (tomId === '101') { // 图片
@@ -48,40 +48,6 @@ export const handleAttachmentData = (data) => {
 
   return newData;
 };
-
-import Taro from '@tarojs/taro';
-
-export const toFixed = (number = 0) => 0.01 * Math.floor(100 * number);
-
-// 随机数，获取当前canvas id
-export const randomStr = (len = 16) => {
-  const string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const l = string.length;
-  let str = '';
-  for (let i = 0; i < len; i++) {
-    const index = Math.floor((Math.random() * 100 * l) % l);
-    str += string[index];
-  }
-  return str;
-};
-
-export const getElementRect = async (eleId = '', delay = 200) => new Promise((resovle, reject) => {
-  const t = setTimeout(() => {
-    clearTimeout(t);
-
-    Taro.createSelectorQuery()
-      .select(`#${eleId}`)
-      .boundingClientRect((rect) => {
-        delay
-        if (rect) {
-          resovle(rect);
-        } else {
-          reject('获取不到元素');
-        }
-      })
-      .exec();
-  }, delay);
-});
 
 export const extensionList = [
   '7Z',
