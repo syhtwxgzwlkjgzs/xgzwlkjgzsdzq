@@ -25,10 +25,12 @@ const Index = inject('threadPost')(observer(({ threadPost }) => {
         ))}
       </View>
       <View className={styles['textarea-container']}>
-        <Input.Textarea
-          placeholder='请粘贴\输入商品链接'
+        <Textarea
+          className={styles.textarea}
+          placeholderClass={styles['textarea-placeholder']}
+          placeholder='请粘贴\输入商品分享链接'
           value={url}
-          onChange={(e) => {
+          onInput={(e) => {
             setUrl(e.detail.value);
           }}
         />

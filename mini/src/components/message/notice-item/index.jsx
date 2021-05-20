@@ -25,7 +25,7 @@ const threadTips = {
 @inject('site')
 @observer
 class Index extends Component {
-  // 获取头像地址,非系统使用自己的url头像，系统使用站点logo
+  // 获取头像地址,非帖子使用自己的url头像，帖子使用站点logo
   getAvatar = (avatar) => {
     const { type, site } = this.props;
     const url = site?.webConfig?.setSite?.siteFavicon;
@@ -40,6 +40,11 @@ class Index extends Component {
     const character = name?.charAt(0).toUpperCase() || 'a';
     return stringToColor(character);
   }
+
+  // 未读消息数
+  getUnReadCount = (count) => {
+    return count > 99 ? '99+' : (count || null);
+  };
 
   // 针对财务消息，获取后缀提示语
   getFinancialTips = (item) => {
@@ -57,12 +62,6 @@ class Index extends Component {
     }
   };
 
-  // 未读消息数
-  getUnReadCount = (count) => {
-    return count > 99 ? '99+' : (count || null);
-  };
-
-  // parse content
   filterTag(html) {
     return html?.replace(/(<p>)|(<\/p>)|(<br>)/g, '');
   }
@@ -100,7 +99,7 @@ class Index extends Component {
       Taro.navigateTo({ url: `/pages/thread/index?id=${item.id}` })
     }
     if (type === 'chat') {
-      console.log('去私信页面');
+      Taro.navigateTo({ url: `/subPages/message/index?page=chat&dialogId=${item.dialogId}` });
     }
   }
 
@@ -109,7 +108,7 @@ class Index extends Component {
     const avatarUrl = this.getAvatar(item.avatar);
 
     return (
-      <View className={styles.wrapper}>
+      <View className={styles.wrapper} onClick={(e) => this.toDetailOrChat(e, item)}>
 
         {/* 默认block */}
         <View className={styles.block}>
@@ -123,7 +122,7 @@ class Index extends Component {
                 [styles.badge]: type === 'chat' && item.unreadCount > 9
               })}
               circle
-              info={ type === 'chat' && this.getUnReadCount(item.unreadCount)}
+              info={type === 'chat' && this.getUnReadCount(item.unreadCount)}
             >
               {avatarUrl
                 ? <Avatar image={avatarUrl} circle={true} />
@@ -146,11 +145,11 @@ class Index extends Component {
           })}
           >
             {/* 顶部 */}
-            <View
-              className={classNames(styles.top, { [styles.background]: type === 'account' })}
-            >
+            <View className={styles.top}>
               <View
-                className={styles.name}
+                className={classNames(styles.name, {
+                  [styles['single-line']]: true,
+                })}
                 onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
               >
                 {item.username || this.filterTag(item.title)}
@@ -159,19 +158,16 @@ class Index extends Component {
                 <View className={styles.time}>{diffDate(new Date(item.createdAt))}</View>
               }
               {type === 'financial' &&
-                <View className={styles.amount}>+{(item.amount).toFixed(2)}</View>
+                <View className={styles.amount}>+{parseFloat(item.amount).toFixed(2)}</View>
               }
             </View>
 
             {/* 中部 */}
-            <View
-              className={classNames(styles.middle)}
-              onClick={(e) => this.toDetailOrChat(e, item)}
-            >
+            <View className={classNames(styles.middle)}>
               {/* 财务内容 */}
               {type === 'financial' &&
                 <View
-                className={styles['content-html']}
+                  className={styles['content-html']}
                 >
                   在帖子"
                   <View
