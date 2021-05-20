@@ -120,7 +120,8 @@ export default function DVditor(props) {
           onChange(editor);
         },
         blur: () => {
-          // onChange(editor);
+          // 防止粘贴数据时没有更新内容
+          onChange(editor);
           // 兼容Android的操作栏渲染
           const timer = setTimeout(() => {
             clearTimeout(timer);
