@@ -64,6 +64,9 @@ export default inject('user')(
     // 是否已打赏
     const isRewarded = threadStore?.threadData?.isReward;
 
+    // 是否可以免费查看付费帖子
+    const canFreeViewPost = threadStore?.threadData?.ability.canFreeViewPost;
+
     const parseContent = parseContentData(indexes);
 
     const onContentClick = async () => {
@@ -160,7 +163,7 @@ export default inject('user')(
             {text && <PostContent useShowMore={false} content={text || ''} />}
 
             {/* 付费附件 */}
-            {isAttachmentPay && !isSelf && (
+            {!canFreeViewPost && isAttachmentPay && !isSelf && (
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={topic.payButton} type="primary" size="large">
                   <div className={topic.pay}>
@@ -253,7 +256,7 @@ export default inject('user')(
             )}
 
             {/* 帖子付费 */}
-            {isThreadPay && !isSelf && (
+            {!canFreeViewPost && isThreadPay && !isSelf && (
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={topic.payButton} type="primary" size="large">
                   <div className={topic.pay}>
