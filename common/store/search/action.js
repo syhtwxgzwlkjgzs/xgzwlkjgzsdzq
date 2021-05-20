@@ -129,21 +129,21 @@ class SearchAction extends SearchStore {
    * @param {object} search * 搜索值
    * @returns {object} 处理结果
    */
-  @action
+  @action.bound
   async getUsersList({ search = '', hot = 0, perPage = 10, page = 1  } = {}) {
     const result = await readUsersList({ params: { filter: { hot, nickname: search }, perPage, page } });
-
-    if (result.code === 0 && result.data) {
-      if (this.users && result.data.pageData && page !== 1) {
-        this.users.pageData.push(...result.data.pageData);
+    const {code, data} = result;
+    if (code === 0 && data) {
+      if (this.users && data.pageData && page !== 1) {
+        this.users.pageData.push(...data.pageData);
         const newPageData = this.users.pageData.slice();
-        this.setUsers({ ...result.data, pageData: newPageData });
+        this.setUsers({ ...data, pageData: newPageData });
       } else {
         // 首次加载，先置空，是为了列表回到顶部
         this.setUsers({ pageData: [] });
-        this.setUsers(result.data);
+        this.setUsers(data);
       }
-      return result.data;
+      return result;
     }
     return null;
   };
