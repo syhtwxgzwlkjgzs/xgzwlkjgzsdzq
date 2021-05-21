@@ -25,6 +25,7 @@ const RenderThreadContent = inject('user')(
       postId: threadStore?.threadData?.postId,
       threadId: threadStore?.threadData?.threadId,
       platform: 'h5',
+      payType: threadStore?.threadData?.payType,
     };
     // 是否合法
     const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
@@ -131,9 +132,9 @@ const RenderThreadContent = inject('user')(
                 <div>
                   <div className={styles.rewardMoney}>
                     本帖向所有人悬赏
-                    <span className={styles.rewardNumber}>{parseContent.REWARD.remain_money || 0}</span>元
+                    <span className={styles.rewardNumber}>{parseContent.REWARD.money || 0}</span>元
                   </div>
-                  <div className={styles.rewardTime}>{parseContent.REWARD.expired_at}截止悬赏</div>
+                  <div className={styles.rewardTime}>{parseContent.REWARD.expiredAt}截止悬赏</div>
                 </div>
               )}
             </div>
@@ -199,10 +200,10 @@ const RenderThreadContent = inject('user')(
                 <div className={styles.rewardBody}>
                   <PostRewardProgressBar
                     type={POST_TYPE.BOUNTY}
-                    remaining={Number(parseContent.REWARD.remain_money || 0)}
+                    remaining={Number(parseContent.REWARD.remainMoney || 0)}
                     received={minus(
                       Number(parseContent.REWARD.money || 0),
-                      Number(parseContent.REWARD.remain_money || 0),
+                      Number(parseContent.REWARD.remainMoney || 0),
                     )}
                   />
                 </div>
@@ -210,9 +211,9 @@ const RenderThreadContent = inject('user')(
               {/* 红包 */}
               {parseContent.RED_PACKET && (
                 <PostRewardProgressBar
-                  remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
+                  remaining={Number(parseContent.RED_PACKET.remainNumber || 0)}
                   received={
-                    Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
+                    Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remainNumber || 0)
                   }
                 />
               )}

@@ -3,9 +3,10 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import { Button, Input } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
-import layout from './index.module.scss';
 import HomeHeader from '@components/home-header';
+import clearLoginStatus from '@common/utils/clear-login-status';
 import Header from '@components/header';
+import layout from './index.module.scss';
 
 
 @inject('site')
@@ -36,7 +37,8 @@ class StatusH5Page extends React.Component {
               </span>
           </div>
           <Button className={platform === 'h5' ? layout.button : layout.pc_button } type="primary" onClick={() => {
-            this.props.router.push('login');
+            clearLoginStatus(); // 清除登录态
+            window.location.replace('/');
           }}>
             退出登录
           </Button>

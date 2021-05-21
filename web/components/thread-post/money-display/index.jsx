@@ -4,10 +4,13 @@ import { Tag } from '@discuzq/design';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 import { defaultOperation, paidOption } from '@common/constants/const';
 import { formatDate } from '@common/utils/format-date';
+import { plus } from '@common/utils/calculate';
 
 export default function MoneyDisplay(props) {
   const {
     postData = {},
+    onAttachClick = () => { },
+    onDefaultClick = () => {},
     payTotalMoney,
   } = props;
   const clsName = props.pc ? styles.pc : styles.h5;
@@ -27,22 +30,32 @@ export default function MoneyDisplay(props) {
       {/* 悬赏问答内容标识 */}
       {(postData.rewardQa.value && postData.rewardQa.times) && (
         <Tag closeable
-          onClose={() => props.setPostData({ rewardQa: {} })}
+          onClose={() => onAttachClick({ type: THREAD_TYPE.reward }, { rewardQa: {} }) }
           onClick={() => {
-            props.handleSetState({ currentAttachOperation: THREAD_TYPE.reward });
+            onAttachClick({ type: THREAD_TYPE.reward });
           }}
         >
-          {`悬赏金额${postData.rewardQa.value}元\\结束时间${formatDate(new Date(postData.rewardQa.times).getTime(), 'yyyy/MM/dd hh:mm')}`}
+          {`悬赏金额${plus(postData.rewardQa.value, 0)}元\\结束时间${formatDate(new Date(postData.rewardQa.times).getTime(), 'yyyy/MM/dd hh:mm')}`}
         </Tag>
       )}
       {/* 红包 */}
       {postData.redpacket.price && (
         <Tag closeable
-          onClose={() => props.setPostData({ redpacket: {} })}
-          onClick={() => props.handleSetState({ currentDefaultOperation: defaultOperation.redpacket })}
+          onClose={() => {
+            onDefaultClick({
+              id: defaultOperation.redpacket,
+              type: THREAD_TYPE.redPacket,
+            }, {}, { redpacket: {} });
+          }}
+          onClick={() => {
+            onDefaultClick({
+              id: defaultOperation.redpacket,
+              type: THREAD_TYPE.redPacket,
+            }, {});
+          }}
         >
           {postData.redpacket.rule === 1 ? '随机红包' : '定额红包'}
-          \ 总金额{postData.redpacket.price}元\{postData.redpacket.number}个
+          \总金额{plus(postData.redpacket.price, 0)}元\{postData.redpacket.number}个
           {postData.redpacket.condition === 1 && `\\集赞个数${postData.redpacket.likenum}`}
         </Tag>
       )}

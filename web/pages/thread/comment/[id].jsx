@@ -4,6 +4,8 @@ import { inject } from 'mobx-react';
 import { readCommentDetail } from '@server';
 import CommentH5Page from '@layout/thread/comment/h5';
 import CommentPCPage from '@layout/thread/comment/pc';
+import ErrorPCPage from '@layout/error/pc';
+import ErrorH5Page from '@layout/error/h5';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 @inject('site')
@@ -33,6 +35,10 @@ class CommentDetail extends React.Component {
 
     // 初始化数据到store中
     serverData && comment.setCommentDetail(serverData);
+
+    this.state = {
+      isServerError:false
+    }
   }
 
   async componentDidMount() {
@@ -50,8 +56,13 @@ class CommentDetail extends React.Component {
     }
 
     if (!this.props.serverData && id) {
-      const res = await readCommentDetail({ params: { pid: Number(id) } });
-      this.props.comment.setCommentDetail(res.data);
+      const res =await this.props.comment.fetchCommentDetail(id);
+      if(res.code !== 0) {
+        this.setState({
+          isServerError: true
+        })
+        return
+      }
 
       // 获取作者信息
       const { site } = this.props;
@@ -66,6 +77,9 @@ class CommentDetail extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
+    if(this.state.isServerError) {
+      return platform === 'h5' ? <ErrorH5Page /> : <ErrorPCPage />;
+    }
     return platform === 'h5' ? <CommentH5Page /> : <CommentPCPage />;
   }
 }

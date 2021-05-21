@@ -232,53 +232,87 @@ class Index extends Component {
     const { setPostData } = this.props.threadPost;
     Taro.chooseVideo({
       success: (file) => {
-        Taro.showLoading({
-          title: '上传中',
-          mask: true
-        });
-        // 执行云点播相关的上传工作
-        VodUploader.start({
-          // 必填，把 wx.chooseVideo 回调的参数(file)传进来
-          mediaFile: file,
-          // 必填，获取签名的函数
-          getSignature: async (fn) => {
-            const res = await readYundianboSignature();
-            const { code, data } = res;
-            if (code === 0) {
-              fn(data.token);
-            } else {
-              Taro.showToast({
-                title: '上传失败',
-                duration: 2000
-              });
-            }
-          },
-          // 上传中回调，获取上传进度等信息
-          progress: function (result) {
-            console.log('progress');
-            console.log(result);
-          },
-          // 上传完成回调，获取上传后的视频 URL 等信息
-          finish: function (result) {
-            Taro.hideLoading();
-            result.id = result.fileId;
-            setPostData({
-              video: result
-            });
-          },
-          // 上传错误回调，处理异常
-          error: function (result) {
-            Taro.showToast({
-              title: '上传失败',
-              duration: 2000
-            });
-            console.log('error');
-            console.log(result);
-          },
-        });
+        this.yundianboUpload('video', file);
       }
     });
   }
+
+  // 执行云点播相关的上传工作
+  yundianboUpload(type, file) {
+    const { setPostData, createThreadVideoAudio } = this.props.threadPost;
+    Taro.showLoading({
+      title: '上传中',
+      mask: true
+    });
+
+    let mediaFile = file;
+    if (type === 'audio') {
+      mediaFile = (({fileSize: size, tempFilePath}) => ({size, tempFilePath}))(file);
+    }
+    VodUploader.start({
+      mediaFile,
+      // 必填，获取签名的函数
+      getSignature: async (fn) => {
+        const res = await readYundianboSignature();
+        const { code, data } = res;
+        if (code === 0) {
+          fn(data.token);
+        } else {
+          Taro.showToast({
+            title: '上传失败',
+            duration: 2000
+          });
+        }
+      },
+      // 上传中回调，获取上传进度等信息
+      progress: function (result) {
+        console.log('progress');
+        console.log(result);
+      },
+      // 上传完成回调，获取上传后的视频 URL 等信息
+      finish: async (result) => {
+        const { fileId, videoUrl: mediaUrl } = result;
+        const params = { fileId, mediaUrl };
+        if (type === 'audio') params.type = 1;
+        const res = await createThreadVideoAudio(params);
+        Taro.hideLoading();
+        const { code, data } = res;
+        if (code === 0) {
+          if (type === 'video') {
+            setPostData({
+              video: {
+                id: data?.id,
+                thumbUrl: mediaUrl,
+              },
+            });
+          } else if (type === 'audio') {
+            setPostData({
+              audio: {
+                id: data?.id,
+                mediaUrl: mediaUrl,
+              },
+              audioSrc: mediaUrl,
+            });
+          }
+        } else {
+          Taro.showToast({
+            title: res.msg,
+            duration: 2000
+          });
+        }
+      },
+      // 上传错误回调，处理异常
+      error: function (result) {
+        Taro.showToast({
+          title: '上传失败',
+          duration: 2000
+        });
+        console.log('error');
+        console.log(result);
+      },
+    });
+  }
+
 
   // 红包tag展示
   redpacketContent = () => {
@@ -503,11 +537,11 @@ class Index extends Component {
 
             <View className={styles['plugin']}>
 
-              <GeneralUpload type={operationType} />
+              <GeneralUpload type={operationType} audioUpload={(file) => {this.yundianboUpload('audio', file)}} />
 
               {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => { }} />}
 
-              {video.videoUrl && <Units type='video' deleteShow src={video.videoUrl} onDelete={() => setPostData({ video: {} })} />}
+              {video.thumbUrl && <Units type='video' deleteShow src={video.thumbUrl} onDelete={() => setPostData({ video: {} })} />}
 
             </View>
           </View>

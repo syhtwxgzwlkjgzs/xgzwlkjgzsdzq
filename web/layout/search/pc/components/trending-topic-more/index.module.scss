@@ -32,7 +32,7 @@
       color: var(--color-text-primary);
       font-weight: 700;
       overflow: hidden;
-      text-overflow:ellipsis;
+      text-overflow: ellipsis;
       white-space: nowrap;
     }
     .num {
@@ -59,13 +59,32 @@
       line-height: rem($font-line-height-primary);
       color: var(--color-text-primary);
       height: rem(44);
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
+      display: box;
+      box-orient: vertical;
       -webkit-line-clamp: 2;
       overflow: hidden;
     }
   }
   .item:last-child {
     margin-bottom: 0;
+  }
+
+  .richContent {
+    display: box;
+    font-size: rem($font-size-middle);
+    line-height: rem(26);
+    max-height: rem(50);
+    margin: rem($padding-4n) 0;
+    @include lamp-clamp($line: 2);
+    .richText{
+      text-overflow: -o-ellipsis-lastline;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      box-orient: vertical;
+      font-size: rem($font-size-middle);
+    }
   }
 }

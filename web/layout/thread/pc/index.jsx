@@ -32,6 +32,7 @@ import goToLoginPage from '@common/utils/go-to-login-page';
 @inject('user')
 @inject('thread')
 @inject('comment')
+@inject('index')
 @observer
 class ThreadPCPage extends React.Component {
   constructor(props) {
@@ -48,7 +49,10 @@ class ThreadPCPage extends React.Component {
       inputValue: '', // 评论内容
     };
 
-    this.perPage = 10;
+    this.likedLoading = false;
+    this.collectLoading = false;
+
+    this.perPage = 5;
     this.page = 1; // 页码
     this.commentDataSort = true;
 
@@ -391,6 +395,10 @@ class ThreadPCPage extends React.Component {
       return;
     }
 
+    if (this.likedLoading) return;
+
+    this.likedLoading = true;
+
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
@@ -398,6 +406,8 @@ class ThreadPCPage extends React.Component {
       isLiked: !this.props.thread?.threadData?.isLike,
     };
     const { success, msg } = await this.props.thread.updateLiked(params, this.props.index, this.props.user);
+
+    this.likedLoading = false;
 
     if (!success) {
       Toast.error({
@@ -432,12 +442,18 @@ class ThreadPCPage extends React.Component {
       return;
     }
 
+    if (this.collectLoading) return;
+
+    this.collectLoading = true;
+
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
       isFavorite: !this.props.thread?.isFavorite,
     };
     const { success, msg } = await this.props.thread.updateFavorite(params);
+
+    this.collectLoading = false;
 
     if (!success) {
       Toast.error({
@@ -512,6 +528,16 @@ class ThreadPCPage extends React.Component {
     }
   }
 
+  // 点击标签 TODO:带上参数
+  onTagClick() {
+    // TODO:目前后台只返回了一个子标签，未返回父标签
+    const categoryId = this.props.thread?.threadData?.categoryId;
+    if (categoryId || typeof categoryId === 'number') {
+      this.props.index.refreshHomeData({ categoryIds: [categoryId] });
+    }
+    this.props.router.push('/');
+  }
+
   render() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
@@ -542,6 +568,7 @@ class ThreadPCPage extends React.Component {
                 onShareClick={() => this.onShareClick()}
                 onContentClick={() => this.onContentClick()}
                 onRewardClick={() => this.onRewardClick()}
+                onTagClick={() => this.onTagClick()}
               ></RenderThreadContent>
             ) : (
               <LoadingTips type="init"></LoadingTips>

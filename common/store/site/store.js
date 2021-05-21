@@ -35,13 +35,12 @@ class SiteStore {
     return get(this.webConfig, 'qcloud.qcloudSms', false);
   }
 
-  // FIXME: 以下两个接口，后台的字段是相反的语义，实际表意是 *****Open 的意思，需要推动后台改动
   @computed get isMiniProgramOpen() {
-    return Boolean(get(this.webConfig, 'passport.miniprogramClose', true));
+    return Boolean(get(this.webConfig, 'passport.miniprogramOpen', true));
   }
   // 公众平台是否开启
-  @computed get isOpenOffiaccountClose() {
-    return Boolean(get(this.webConfig, 'passport.offiaccountClose', true));
+  @computed get isOffiaccountOpen() {
+    return Boolean(get(this.webConfig, 'passport.offiaccountOpen', true));
   }
 
   // 站点 icon 路径
@@ -54,7 +53,7 @@ class SiteStore {
       return WECHAT_ENV_MAP.MINI;
     }
 
-    if (this.isOpenOffiaccountClose) {
+    if (this.isOffiaccountOpen) {
       return WECHAT_ENV_MAP.OPEN;
     }
 

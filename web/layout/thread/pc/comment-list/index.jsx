@@ -280,7 +280,7 @@ class RenderCommentList extends React.Component {
         content: msg,
       });
     } else {
-      Toast.success({
+      Toast.info({
         content: '悬赏金额不能为0',
       });
     }

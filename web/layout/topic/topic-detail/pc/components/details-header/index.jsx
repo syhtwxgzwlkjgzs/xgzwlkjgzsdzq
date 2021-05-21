@@ -31,7 +31,7 @@ const TopicHeader = ({ title = '话题', viewNum = 0, contentNum = 0, onShare = 
             <Icon className={styles.shareIcon} color="#8590a6" name="ShareAltOutlined"/>
             <span className={styles.text}>分享</span>
           </li>
-          <li className={styles.allTopic}><Link href="/topic">全部话题</Link></li>
+          <li className={styles.allTopic}><Link href="/search/result-topic">全部话题</Link></li>
         </ul>
     </div>
   );

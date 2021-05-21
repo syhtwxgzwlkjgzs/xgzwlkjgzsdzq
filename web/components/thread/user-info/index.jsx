@@ -34,9 +34,9 @@ export default function UserInfo(props) {
   const isPc = props.platform === 'pc';
 
   return (
-    <div className={styles.contianer}>
+    <div className={classNames(styles.contianer, !props.hideInfoPopip && styles.cursor)}>
       <Avatar
-        isShowUserInfo={props.platform === 'pc'}
+        isShowUserInfo={!props.hideInfoPopip && props.platform === 'pc'}
         userId={props.userId}
         className={styles.avatar}
         circle={true}
