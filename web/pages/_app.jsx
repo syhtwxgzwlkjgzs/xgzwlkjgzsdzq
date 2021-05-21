@@ -15,7 +15,6 @@ class DzqApp extends App {
   }
 
   componentDidMount() {
-    console.log(Router);
     if (process.env.DISCUZ_RUN === 'static') {
       // 当CSR出现末尾是index，会导致不能正确跳转的问题；
       let { pathname } = window.location;
@@ -34,6 +33,7 @@ class DzqApp extends App {
 
   render() {
     const { Component, pageProps } = this.props;
+    const { site } = this.appStore;
     return (
       <div data-dzq-theme="light">
         <Head>
@@ -42,6 +42,7 @@ class DzqApp extends App {
             name="viewport"
             content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover"
           />
+          <title>{(site.envConfig && site.envConfig['TITLE']) || 'Discuz!Q' }</title>
         </Head>
         <Provider {...this.appStore}>
           <PayBoxProvider>
