@@ -24,6 +24,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
   const [all, setAll] = useState(null);
   const [likes, setLikes] = useState(null);
   const [tips, setTips] = useState(null);
+  const [isLoadingPopup, setIsLoadingPopup] = useState(true);
 
   const [current, setCurrent] = useState(0);
 
@@ -36,13 +37,14 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
     if (visible) {
       loadData({ type: current });
     }
-  }, [visible]);
+  }, [visible, isLoadingPopup]);
 
   const loadData = async ({ type }) => {
     const { postId = '', threadId = '' } = tipData;
     const res = await readLikedUsers({ params: { threadId, postId, type, page: 1 } });
 
     setAll(res?.data);
+    setIsLoadingPopup(false);
 
     return res
   };
@@ -167,7 +169,6 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
       } else {
         if(index === 2) return null; // 非付费用户不需显示付费列表
       }
-
       return (
         <Tabs.TabPanel
           key={index}
@@ -212,6 +213,10 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
         visible={visible}
         onClose={onClose}
     >
+    {
+      isLoadingPopup ?
+          <Spin className={styles.spinner} type="spinner" />
+      :
         <Tabs
           onActive={onClickTab}
           activeId={current}
@@ -228,6 +233,9 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
             renderTabPanel(tipData?.platform)
           }
         </Tabs>
+    }
+
+
     </Popup>
   );
 };

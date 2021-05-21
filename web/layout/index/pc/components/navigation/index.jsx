@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, Card } from '@discuzq/design';
 import { noop } from '@components/thread/utils'
+import LoadingTips from '../../../../thread/pc/components/loading-tips';
 import styles from './index.module.scss';
 import isServer from '../../../../../../common/utils/is-server';
 
@@ -8,6 +9,7 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop }) 
   const [fistIndex, setFistIndex] = useState(-1);
   const [pID, setPID] = useState(-1);
   const [secondIndex, setSecondIndex] = useState(-1);
+
   const onClick = (subIndex, index) => {
     let categoryIds = subIndex.split('/')
     let sequence = 0;
@@ -94,7 +96,12 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop }) 
       background: '#fff', overflowY: 'auto',
       maxHeight: windowSize?.innerHeight - 80
     }} bordered={false}>
-      <CategoriesContent />
+      {
+        categories?.length ?
+          <CategoriesContent />
+        :
+          <LoadingTips type="init"></LoadingTips>
+      }
     </Card>
   );
 };
