@@ -65,7 +65,7 @@ class SearchResultTopicPCPage extends React.Component {
       <SidebarPanel 
         title="潮流话题" 
         type='normal'
-        isShowMore={!pageData}
+        isShowMore={false}
         noData={!pageData?.length}
         icon={{ type: 1, name: 'StrongSharpOutlined' }}
       >

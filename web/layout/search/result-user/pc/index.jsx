@@ -100,7 +100,7 @@ class SearchResultUserPcPage extends React.Component {
         <SidebarPanel 
           title="活跃用户" 
           type='normal'
-          isShowMore={!pageData}
+          isShowMore={false}
           noData={!pageData?.length}
           icon={{ type: 2, name: 'MemberOutlined' }}
         >

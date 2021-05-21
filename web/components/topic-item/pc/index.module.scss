@@ -28,8 +28,6 @@
       padding: rem(6) rem($padding-6n) 0;
       flex: 1;
       overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
     .title {
       font-size: rem($font-size-middle);
