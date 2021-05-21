@@ -197,18 +197,37 @@ class PostPage extends React.Component {
    */
   handleAttachClick = (item, data) => {
     const { isPc } = this.props.site;
-    // if (!isPc && item.type === THREAD_TYPE.voice) {
-    //   const u = navigator.userAgent;
-    //   if (u.indexOf('MicroMessenger') > -1 && (u.indexOf('iPhone') > -1 || u.indexOf('iPad') > -1)) {
-    //     Toast.info({ content: 'iOS版微信暂不支持录音功能' });
-    //     return;
-    //   }
-    //   if (u.indexOf('UCBrowser') > -1) {
-    //     Toast.info({ content: '此浏览器暂不支持录音功能' });
-    //     return;
-    //   }
-    //   this.setState({ curPaySelect: THREAD_TYPE.voice })
-    // }
+    if (!isPc && item.type === THREAD_TYPE.voice) {
+      const u = navigator.userAgent.toLocaleLowerCase();
+
+      // iphone设备降级流程
+      if (u.indexOf('iphone') > -1) {
+        // 判断是否在微信内
+        if (u.indexOf('micromessenger') > -1) {
+          Toast.info({ content: 'iOS版微信暂不支持录音功能' });
+          return;
+        }
+
+        // 判断ios版本号
+        const v = u.match(/cpu iphone os (.*?) like mac os/);
+        if (v) {
+          const version = v[1].replace(/_/g, ".").split('.').splice(0, 2).join('.');
+          if ((Number(version) < 14.3) && !(u.indexOf('safari') > -1 && u.indexOf('chrome') < 0 && u.indexOf('qqbrowser') < 0 && u.indexOf('360') < 0)) {
+            Toast.info({ content: 'iOS版本太低，请升级至iOS 14.3及以上版本或使用Safari浏览器访问' });
+            return;
+          }
+        }
+      }
+
+      // uc浏览器降级流程
+      if (u.indexOf('ucbrowser') > -1) {
+        Toast.info({ content: '此浏览器暂不支持录音功能' });
+        return;
+      }
+      // this.setState({ curPaySelect: THREAD_TYPE.voice })
+    }
+
+
     // 如果是编辑操作
     const { router, threadPost } = this.props;
     const { query } = router;
@@ -243,10 +262,45 @@ class PostPage extends React.Component {
       return false;
     }
     if (child && child.id) {
+      const content = '帖子付费和附件付费不能同时设置';
+      if (postData.price && child.id === '附件付费') {
+        Toast.error({ content });
+        return false;
+      }
+      if (postData.attachmentPrice && child.id === '帖子付费') {
+        Toast.error({ content });
+        return false;
+      }
       this.setState({ curPaySelect: child.id, emoji: {} });
     } else {
       this.setState({ currentDefaultOperation: item.id, emoji: {} });
     }
+  }
+
+  // 附件上传之前
+  beforeUpload = (cloneList, showFileList) => {
+    const { webConfig } = this.props.site;
+    if (!webConfig) return false;
+    // 站点支持的文件类型、文件大小
+    const { supportFileExt, supportMaxSize } = webConfig.setAttach;
+    // 当前选择附件的类型大小
+    const fileType = cloneList[0].name.match(/\.(.+)$/)[1];
+    const fileSize = cloneList[0].size;
+    // 判断合法性
+    const isLegalType = supportFileExt.includes(fileType);
+    const isLegalSize = supportMaxSize * 1024 *1024 > fileSize;
+    console.log(`list`, cloneList, showFileList)
+    console.log(`supportFileExt`, webConfig,supportFileExt, supportMaxSize, fileType, fileSize, isLegalType && isLegalSize);
+    if (!isLegalType) {
+      Toast.info({ content: '当前不支持此类型文件' });
+      return false;
+    }
+    if (!isLegalSize) {
+      Toast.info({ content: `当前附件最大支持${supportMaxSize}MB` });
+      return false;
+    }
+
+    return true;
   }
 
   // 附件和图片上传
@@ -393,7 +447,7 @@ class PostPage extends React.Component {
     // 如果是编辑的悬赏帖子，则不用再次支付
     const rewardAmount = (threadId && rewardQa.id) ? 0 : plus(rewardQa.value, 0);
     // 如果是编辑的红包帖子，则不用再次支付
-    const redAmount = (threadId && rewardQa.id) ? 0 : plus(redpacket.price, 0);
+    const redAmount = (threadId && redpacket.id) ? 0 : plus(redpacket.price, 0);
     const amount = plus(rewardAmount, redAmount);
     const data = { amount };
     if (!isDraft && amount > 0) {
@@ -480,6 +534,7 @@ class PostPage extends React.Component {
           handleAttachClick={this.handleAttachClick}
           handleDefaultIconClick={this.handleDefaultIconClick}
           handleVideoUploadComplete={this.handleVodUploadComplete}
+          beforeUpload={this.beforeUpload}
           handleUploadChange={this.handleUploadChange}
           handleUploadComplete={this.handleUploadComplete}
           handleAudioUpload={this.handleAudioUpload}
@@ -502,6 +557,7 @@ class PostPage extends React.Component {
         handleAttachClick={this.handleAttachClick}
         handleDefaultIconClick={this.handleDefaultIconClick}
         handleVideoUploadComplete={this.handleVodUploadComplete}
+        beforeUpload={this.beforeUpload}
         handleUploadChange={this.handleUploadChange}
         handleUploadComplete={this.handleUploadComplete}
         handleAudioUpload={this.handleAudioUpload}

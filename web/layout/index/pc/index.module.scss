@@ -1,6 +1,6 @@
 @import '@common/styles/index.scss';
 .indexLeft {
-  width: 100%;
+  width: rem(300);
   display: flex;
   justify-content: flex-end;
   .indexLeftBox {

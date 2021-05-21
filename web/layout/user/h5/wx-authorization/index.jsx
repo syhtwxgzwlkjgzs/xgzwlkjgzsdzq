@@ -8,14 +8,19 @@ import { h5WechatCodeLogin } from '@server';
 import setAccessToken from '@common/utils/set-access-token';
 import { get } from '@common/utils/get';
 import { checkUserStatus } from '@common/store/login/util';
+import initJSSdk from '@common/utils/initJSSdk.js';
 
 const NEED_BIND_OR_REGISTER_USER = -7016;
+let bindLoading = false;
 @inject('site')
 @inject('user')
 @inject('h5QrCode')
 @inject('commonLogin')
 @observer
 class WXAuthorizationPage extends React.Component {
+  componentDidMount() {
+    initJSSdk(['closeWindow']);
+  }
   render() {
     const { site } = this.props;
     const { platform } = site;
@@ -34,17 +39,18 @@ class WXAuthorizationPage extends React.Component {
                   >
                     确定
                   </Button>
-                <div className={layout.functionalRegion}>
-                    <span className={layout.clickBtn} onClick={() => {
-                      this.props.h5QrCode.loginTitle = '已取消登录';
-                      this.props.h5QrCode.isBtn = false;
-                    }}>
-                      退出登录
-                    </span>
-                  </div>
                 </>
               : <></>
           }
+          <div className={layout.functionalRegion}>
+              <span className={layout.clickBtn} onClick={() => {
+                this.props.h5QrCode.loginTitle = '已取消登录';
+                this.props.h5QrCode.isBtn = false;
+                wx.closeWindow();
+              }}>
+                退出登录
+              </span>
+            </div>
         </div>
       </div>
     );
@@ -54,6 +60,10 @@ class WXAuthorizationPage extends React.Component {
     const { router } = this.props;
     const { code, sessionId, sessionToken, state, type } = router.query;
     try {
+      if (bindLoading) {
+        return;
+      }
+      bindLoading = true;
       const res = await h5WechatCodeLogin({
         timeout: 10000,
         params: {
@@ -63,16 +73,12 @@ class WXAuthorizationPage extends React.Component {
           state,
         },
       });
+      bindLoading = false;
 
       // 落地页开关打开
       if (res.code === NEED_BIND_OR_REGISTER_USER) {
         const { sessionToken, nickname } = res.data;
         router.push({ pathname: 'wx-select', query: { sessionToken, nickname } });
-        return;
-      }
-      if (res.code === 0 && type === 'pc') {
-        this.props.h5QrCode.loginTitle = '已成功登录';
-        this.props.h5QrCode.isBtn = false;
         return;
       }
 
@@ -87,12 +93,20 @@ class WXAuthorizationPage extends React.Component {
         window.location.href = '/';
         return;
       }
+      if (res.code === 0) {
+        this.props.h5QrCode.loginTitle = '已成功登录';
+        this.props.h5QrCode.isBtn = false;
+        return;
+      }
       checkUserStatus(res);
       throw {
         Code: res.code,
         Message: res.msg,
       };
     } catch (error) {
+      bindLoading = false;
+      this.props.h5QrCode.loginTitle = '登录失败，请刷新二维码重新扫码';
+      this.props.h5QrCode.isBtn = false;
       Toast.error({
         content: error.Message,
       });

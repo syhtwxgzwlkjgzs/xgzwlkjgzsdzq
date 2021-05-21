@@ -21,7 +21,13 @@ export default function H5Header(props) {
   const gobackClickHandle = useCallback(() => {
     let isBack = true;
     if (typeof isBackCustom === 'function') isBack = isBackCustom();
-    if (isBack) Router.back();
+    if (isBack) {
+      if ( window.history.length <= 1) {
+        Router.redirect({url: '/'})
+      } else {
+        Router.back();
+      }
+    }
   }, []);
 
   return (
@@ -35,9 +41,9 @@ export default function H5Header(props) {
                 <Icon className={styles.icon} onClick={() => {
                   iconClickHandle('home');
                 }} name="HomeOutlined" />
-                <Icon className={styles.icon} onClick={() => {
+                {false && <Icon className={styles.icon} onClick={() => {
                   iconClickHandle('msg');
-                }} name="MailOutlined" />
+                }} name="MailOutlined" />}
                 <Icon className={styles.icon} onClick={() => {
                   iconClickHandle('user');
                 }} name="ProfessionOutlined" />

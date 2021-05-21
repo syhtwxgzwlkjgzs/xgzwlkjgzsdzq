@@ -14,15 +14,15 @@ function HOCLoginMode(mode) {
         const currentMode = this.getCurrentMode();
 
         // 微信模式页面，不兼容用户名模式和手机号模式
-        if (mode === 'wechat') {
-          if (currentMode !== 'wechat') {
+        if (mode === 'weixin') {
+          if (currentMode !== 'weixin') {
             this.props.router.replace('/user/login');
           }
         }
 
         // 手机号模式页面，不兼容用户名模式
         if (mode === 'phone') {
-          if (currentMode === 'user') {
+          if (currentMode === 'user' && !this.props.site.isSmsOpen) {
             this.props.router.replace('/user/login');
           }
         }
@@ -37,16 +37,15 @@ function HOCLoginMode(mode) {
         // 用户名注册模式下，使用此模式的页面限定只能在用户名模式中开启
         if (mode === 'register') {
           if (currentMode !== 'user') {
-            this.props.router.replace('/user/register');
+            this.props.router.replace('/user/login');
           }
         }
       }
 
       getCurrentMode = () => {
         let currentMode = null;
-
-        if (this.props.site.wechatEnv !== null) {
-          currentMode = 'wechat';
+        if (this.props.site.wechatEnv !== 'none') {
+          currentMode = 'weixin';
           return currentMode;
         }
 

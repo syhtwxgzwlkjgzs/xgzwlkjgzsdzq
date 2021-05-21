@@ -189,7 +189,9 @@
       display: block;
       width: rem(248);
       border-radius: rem(5);
-      height: rem(36);
+      font-size: $font-size-base;
+      padding-top: rem(8);
+      padding-bottom: rem(8);
     }
   }
   .walletPayment_01 {

@@ -41,10 +41,10 @@ class AtSelect extends Component {
     const params = { page, perPage };
     if (page === 1) this.setState({ checkUser: [], finish: false });
     const ret = await threadPost.fetchFollow(params);
-    if (ret.code === 0) {
+    if (ret?.code === 0) {
       this.setState({
         page: page + 1,
-        finish: (this.state.page - 1) * this.state.perPage > threadPost.followsTotalCount,
+        finish: page * this.state.perPage > threadPost.followsTotalCount,
       });
     } else {
       Toast.error({ content: ret.msg });
@@ -57,10 +57,10 @@ class AtSelect extends Component {
     const { page, perPage, keywords } = this.state;
     if (page === 1) this.setState({ checkUser: [], finish: false });
     const ret = await search.getUsersList({ search: keywords, page, perPage });
-    if (ret.code === 0) {
+    if (ret?.code === 0) {
       this.setState({
         page: page + 1,
-        finish: (this.state.page - 1) * this.state.perPage > search.users?.totalCount,
+        finish: page * this.state.perPage > search.users?.totalCount,
       });
     } else {
       Toast.error({ content: ret.msg });

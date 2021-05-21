@@ -30,6 +30,9 @@ class IndexPCPage extends React.Component {
       // visibility: 'hidden',
       isShowDefault: this.checkIsOpenDefaultTab(),
     };
+
+    this.defaultCategoryIds = this.props.index.filter?.categoryids || []
+    console.log(this.defaultCategoryIds)
   }
 
   // 轮询定时器
@@ -116,7 +119,7 @@ class IndexPCPage extends React.Component {
     if (tmpCategories?.length) {
       return categories;
     }
-    tmpCategories = [{ name: '全部', pid: '', children: [] }, ...categories];
+    tmpCategories = [{ name: '全部', pid: '-1', children: [] }, ...categories];
 
     return tmpCategories;
   }
@@ -135,7 +138,12 @@ class IndexPCPage extends React.Component {
     return (
       <div className={styles.indexLeft}>
         <div className={styles.indexLeftBox}>
-          <Navigation categories={newCategories} totalThreads={countThreads} onNavigationClick={this.onNavigationClick} />
+          <Navigation 
+            categories={newCategories} 
+            defaultFisrtIndex={this.defaultCategoryIds[0]} 
+            defaultSecondIndex={this.defaultCategoryIds[1]} 
+            totalThreads={countThreads} 
+            onNavigationClick={this.onNavigationClick} />
         </div>
       </div>
     );

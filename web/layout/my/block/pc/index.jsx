@@ -19,10 +19,7 @@ class LikePCPage extends React.Component {
   redirectToSearchResultPost = () => {
     this.props.router.push(`/search/result-post?keyword=${this.state.value || ''}`);
   };
-  // 头部搜索
-  onSearch = (value) => {
-    this.props.router.replace(`/search?keyword=${value}`);
-  }
+
   // 右侧 - 潮流话题 粉丝 版权信息
   renderRight = () => {
     const { search } = this.props;
@@ -64,7 +61,6 @@ class LikePCPage extends React.Component {
     return (
       <div className={styles.container}>
         <BaseLayout
-          onSearch={this.onSearch}
           right={ this.renderRight }
         >
           { this.renderContent(index) }
