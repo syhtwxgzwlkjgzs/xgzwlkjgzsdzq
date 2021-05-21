@@ -104,7 +104,9 @@ class Index extends React.Component {
           hasMask: false,
           duration: 1000,
         });
-        await this.props.payBox.clear();
+        setTimeout(() => {
+          this.props.payBox.clear();
+        },500)
       } catch (error) {
         Toast.error({
           content: '支付失败，请重新输入',
