@@ -11,7 +11,7 @@ import ImageUpload from '@components/thread-post/image-upload';
 import { defaultOperation } from '@common/constants/const';
 import FileUpload from '@components/thread-post/file-upload';
 import { THREAD_TYPE } from '@common/constants/thread-post';
-import { Audio, AudioRecord, Icon } from '@discuzq/design';
+import { Audio, AudioRecord, Icon, Toast } from '@discuzq/design';
 import ClassifyPopup from '@components/thread-post/classify-popup';
 import ProductSelect from '@components/thread-post/product-select';
 import Product from '@components/thread-post/product';
@@ -305,7 +305,18 @@ class ThreadCreate extends React.Component {
         {currentDefaultOperation === defaultOperation.pay && (
           <PostPopup
             list={this.props.paySelectText}
-            onClick={val => this.props.handleSetState({ curPaySelect: val })}
+            onClick={val => {
+              const content = '帖子付费和附件付费不能同时设置';
+              if (postData.price && val === '附件付费') {
+                Toast.error({ content });
+                return false;
+              }
+              if (postData.attachmentPrice && val === '帖子付费') {
+                Toast.error({ content });
+                return false;
+              }
+              this.props.handleSetState({ curPaySelect: val });
+            }}
             cancel={() => this.props.handleSetState({ currentDefaultOperation: '' })}
             visible={currentDefaultOperation === defaultOperation.pay}
           />
