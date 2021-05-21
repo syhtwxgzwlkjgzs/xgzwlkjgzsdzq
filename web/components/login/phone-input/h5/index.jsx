@@ -28,6 +28,7 @@ class PhoneInputH5 extends React.Component {
             value={phoneNum}
             placeholder="请输入手机号码"
             onChange={this.setPhoneNum}
+            maxLength={11}
           />
           {codeTimeout ? (
             <div className={layout.countDown}>{codeTimeout}秒后再发送</div>

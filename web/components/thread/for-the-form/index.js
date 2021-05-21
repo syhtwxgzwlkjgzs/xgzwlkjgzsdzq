@@ -31,7 +31,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
   // 点击确定的时候返回参数
   const redbagconfirm = () => {
     if (value < 0.1 || value > 1000000) {
-      Toast.warning({ content: '金额数不合理,0.1<money<1000000' });
+      Toast.warning({ content: '输入的金额数需要在0.1元到1000000元之间' });
       return;
     }
     const gapTime = new Date(times).getTime() - new Date().getTime();

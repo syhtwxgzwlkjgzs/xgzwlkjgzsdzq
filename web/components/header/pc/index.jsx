@@ -150,6 +150,7 @@ class Header extends React.Component {
                   <p>发现</p>
                 </div>
               </div>
+              <div className={styles.border}></div>
               {this.renderUserInfo()}
             </div>
           </div>
