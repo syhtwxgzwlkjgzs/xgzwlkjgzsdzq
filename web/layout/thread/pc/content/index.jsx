@@ -125,7 +125,8 @@ export default inject('user')(
               isPay={!isFree}
               isReward={isReward}
               isRed={isRedPack}
-              platform='pc'
+              hideInfoPopip={true}
+              platform="pc"
             ></UserInfo>
           </div>
           {props?.user?.isLogin() && (
