@@ -150,7 +150,7 @@ const Four = ({bigImages, smallImages, onClick, style}) => {
                 <Row gutter={4} className={styles.smallRow}>
                     { smallImages.map((item, index) => (
                         <Col span={12} key={index} className={styles.smallCol}>
-                            <Image src={item.thumbUrl} onClick={() => onClick(item.id)} />
+                            <Image src={item.thumbUrl} mode="center" onClick={() => onClick(item.id)} />
                         </Col>
                     ))}
                 </Row>
