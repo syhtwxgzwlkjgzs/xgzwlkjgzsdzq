@@ -46,10 +46,10 @@ class Index extends React.Component {
     const hasTopics = !!search.topics;
 
     if (!hasUsers) {
-      this.toastInstance = Toast.loading({
-        content: '加载中...',
-        duration: 0,
-      });
+      // this.toastInstance = Toast.loading({
+      //   content: '加载中...',
+      //   duration: 0,
+      // });
 
       this.page = 1;
       await search.getUsersList({ search: keyword });
