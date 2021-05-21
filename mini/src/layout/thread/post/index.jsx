@@ -29,7 +29,6 @@ class Index extends Component {
       isShowTitle: true, // 默认显示标题
       maxLength: 5000, // 文本输入最大长度
       showClassifyPopup: false, // 切换分类弹框show
-      operationType: 0,
       contentTextLength: 5000,
       showEmoji: false,
       showPaidOption: false, // 显示付费选项弹框
@@ -173,9 +172,7 @@ class Index extends Component {
   // 点击发帖插件时回调，如上传图片、视频、附件或艾特、话题等
   handlePluginClick(item) {
     const { postType } = this.state;
-    this.setState({
-      operationType: item.type
-    });
+
     let nextRoute;
     switch (item.type) {
       // 根据类型分发具体操作
@@ -222,6 +219,9 @@ class Index extends Component {
         break;
       case THREAD_TYPE.video:
         this.handleVideoUpload();
+        break;
+      case THREAD_TYPE.voice:
+        nextRoute = `/subPages/thread/selectPayment/index?paidType=${THREAD_TYPE.voice}`;
         break;
       case 'emoji':
         this.setState({
@@ -501,12 +501,11 @@ class Index extends Component {
     const { permissions } = this.props.user;
     const { categories } = this.props.index;
     const { postData, setPostData } = this.props.threadPost;
-    const { rewardQa, redpacket, video, product, position } = postData;
+    const { rewardQa, redpacket, video, audio, product, position } = postData;
     const {
       isShowTitle,
       maxLength,
       showClassifyPopup,
-      operationType,
       showPaidOption,
       showEmoji,
       showDraftOption,
@@ -544,7 +543,10 @@ class Index extends Component {
 
             <View className={styles['plugin']}>
 
-              <GeneralUpload type={operationType} audioUpload={(file) => {this.yundianboUpload('audio', file)}} />
+              <GeneralUpload
+                type={Object.keys(audio).length > 0 ? THREAD_TYPE.voice : 0}
+                audioUpload={(file) => { this.yundianboUpload('audio', file) }}
+              />
 
               {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => { }} />}
 
