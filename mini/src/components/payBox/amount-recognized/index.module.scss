@@ -17,7 +17,7 @@
   .btnBox{
     margin-top: rem($margin-2n);
     box-sizing: border-box;
-    @include ios-safe-area-inset-bottom;
+    // @include ios-safe-area-inset-bottom;
     &::before {
       content: '';
       display: block;
@@ -35,6 +35,11 @@
       border-radius: 5px;
     }
   }
+  .giftInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+  }
 }
 
 // 金额确认标题
@@ -48,7 +53,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: $margin-4n 0;
+  margin: $margin-4n 0 0;
   font-size: $font-size-primary;
   // 交易内容item
   .acExplain {

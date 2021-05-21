@@ -39,7 +39,7 @@
   bottom: 0;
   z-index: $zindex-toast;
   background-color: var(--color-white);
-  @include ios-safe-area-inset-bottom;
+  // @include ios-safe-area-inset-bottom;
   .line{
     display: flex;
     align-items: center;
@@ -136,6 +136,8 @@
     font-size: $font-size-middle;
     color: $text-color-primary;
     margin-top: $margin-2n;
+    width: 100%;
+    text-align: center;
   }
   .paypwdAmount {
     font-size: $font-line-height-large;
@@ -150,6 +152,10 @@
     font-size: $font-size-primary;
     margin-bottom: $margin-4n;
     font-size: $font-size-base;
+    .payText {
+      font-size: $font-size-primary;
+      color: $text-color-regular;
+    }
   }
   .walletIcon {
     color: var(--color-primary2);
@@ -169,7 +175,7 @@
     cursor: pointer;
     :global {
       .dzq-icon {
-        font-size: rem($font-size-primary) !important;
+        // font-size: rem($font-size-primary) !important;
       }
     }
   }
@@ -178,11 +184,11 @@
 .forgetPasswordContainer {
   width: 100%;
   margin-top: $margin-4n;
-  margin-bottom: $margin-2n;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   font-size: $font-size-small;
+  margin-bottom: $margin-2n;
   text {
     color: $text-color-regular;
   }
