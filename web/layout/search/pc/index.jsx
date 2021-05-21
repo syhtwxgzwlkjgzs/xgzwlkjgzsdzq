@@ -13,6 +13,7 @@ import Copyright from '@components/copyright';
 import SidebarPanel from '@components/sidebar-panel';
 import { Toast, Spin } from '@discuzq/design';
 import TopicItem from '@components/topic-item'
+import Nodata from '@components/no-data'
 
 @inject('site')
 @inject('search')
@@ -179,7 +180,7 @@ class SearchPCPage extends React.Component {
           </div>
           <div className={styles.postContent}>
             {
-              threadsPageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />) || <LoadingView />
+              threadsPageData?.length ? threadsPageData.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />) : <LoadingView data={threadsPageData} />
             }
           </div>
         </div>
@@ -200,7 +201,12 @@ class SearchPCPage extends React.Component {
   }
 }
 
-const LoadingView = () => {
+const LoadingView = (data) => {
+  if (data) {
+    return (
+      <Nodata className={styles.noData} />
+    )
+  }
   return (
     <div className={styles.loading}>
       <Spin type="spinner" />

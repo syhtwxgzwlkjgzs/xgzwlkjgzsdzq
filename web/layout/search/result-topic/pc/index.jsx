@@ -42,7 +42,7 @@ class SearchResultTopicPCPage extends React.Component {
 
   searchData = (keyword) => {
     const { dispatch } = this.props;
-    dispatch('search', keyword);
+    dispatch('refresh', keyword);
   };
 
   onSearch = (value) => {
