@@ -11,6 +11,7 @@ import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-sto
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 import { genMiniScheme } from '@server';
+import PcBodyWrap from '../components/pc-body-wrap';
 import PopProtocol from '../components/pop-protocol';
 import browser from '../../../../../common/utils/browser';
 
@@ -147,7 +148,7 @@ class LoginPhoneH5Page extends React.Component {
      * TODO 样式这块待修改，pc、h5分开两个文件，类名保持一直，根据platform来判断加载哪个文件的layout
      */
     return (
-      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
+      <PcBodyWrap>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
@@ -215,7 +216,7 @@ class LoginPhoneH5Page extends React.Component {
         </div>
       </div>
       <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
-      </div>
+      </PcBodyWrap>
     );
   }
 }

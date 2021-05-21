@@ -10,6 +10,7 @@ import Header from '@components/header';
 import { get } from '@common/utils/get';
 import PopProtocol from '../components/pop-protocol';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import PcBodyWrap from '../components/pc-body-wrap';
 
 @inject('site')
 @inject('user')
@@ -92,7 +93,7 @@ class WXLoginH5Page extends React.Component {
     const { platform } = site;
     const isAnotherLoginWayAvaliable = this.props.site.isSmsOpen || this.props.site.isUserLoginVisible;
     return (
-      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
+      <PcBodyWrap>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
@@ -142,7 +143,7 @@ class WXLoginH5Page extends React.Component {
         </div>
       </div>
       <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
-      </div>
+      </PcBodyWrap>
     );
   }
 }

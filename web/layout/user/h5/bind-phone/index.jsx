@@ -8,6 +8,7 @@ import PhoneInput from '@components/login/phone-input';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import clearLoginStatus from '@common/utils/clear-login-status';
+import PcBodyWrap from '../components/pc-body-wrap';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 
@@ -93,7 +94,7 @@ class BindPhoneH5Page extends React.Component {
     const { mobileBind, site } = this.props;
     const { platform, wechatEnv } = site;
     return (
-      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
+      <PcBodyWrap>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
@@ -132,7 +133,7 @@ class BindPhoneH5Page extends React.Component {
           }
         </div>
       </div>
-      </div>
+      </PcBodyWrap>
     );
   }
 }

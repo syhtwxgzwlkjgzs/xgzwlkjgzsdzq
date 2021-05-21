@@ -12,6 +12,7 @@ import { get } from '@common/utils/get';
 import { genMiniScheme } from '@server';
 import PopProtocol from '../components/pop-protocol';
 import browser from '../../../../../common/utils/browser';
+import PcBodyWrap from '../components/pc-body-wrap';
 
 @inject('site')
 @inject('user')
@@ -103,7 +104,7 @@ class UsernameH5Login extends React.Component {
     const { platform } = site;
     const isAnotherLoginWayAvailable = this.props.site.wechatEnv !== 'none' || this.props.site.isSmsOpen;
     return (
-      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
+      <PcBodyWrap>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
@@ -202,7 +203,7 @@ class UsernameH5Login extends React.Component {
         </div>
       </div>
       <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
-      </div>
+      </PcBodyWrap>
     );
   }
 }
