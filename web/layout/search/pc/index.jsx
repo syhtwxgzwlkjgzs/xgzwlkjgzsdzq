@@ -201,7 +201,7 @@ class SearchPCPage extends React.Component {
   }
 }
 
-const LoadingView = (data) => {
+const LoadingView = ({data}) => {
   if (data) {
     return (
       <Nodata className={styles.noData} />
