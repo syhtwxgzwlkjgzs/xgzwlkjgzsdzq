@@ -67,3 +67,16 @@
   font-weight: normal;
   font-size: rem($font-size-base);
 }
+
+.verticalScrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 8px;
+  border-radius: 4px;
+}
+.verticalScrollbar::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background: rgba(0,0,0,0.55);
+}
+.verticalScrollbar::-webkit-scrollbar-track {
+  border-radius: 8px;
+}
