@@ -7,7 +7,7 @@ import { readForum, readUser, readPermissions } from '@server';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
-import { Icon } from '@discuzq/design';
+import { Spin, Icon } from '@discuzq/design';
 import typeofFn from '@common/utils/typeof';
 import styles from './HOCFetchSiteData.module.scss';
 
@@ -234,7 +234,7 @@ export default function HOCFetchSiteData(Component) {
       const { isNoSiteData } = this.state;
       const { site } = this.props;
       // CSR不渲染任何内容
-      if ( site.platform === 'static' ) return null;
+      if (site.platform === 'static') return null;
       if (isNoSiteData) {
         return (
           <div className={styles.loadingBox}>
