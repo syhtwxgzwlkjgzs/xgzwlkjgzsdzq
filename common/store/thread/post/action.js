@@ -239,14 +239,14 @@ class ThreadPostAction extends ThreadPostStore {
       };
     }
 
-    if (redpacket.price) {
+    if (redpacket.price && !redpacket.id) {
       contentIndexes[THREAD_TYPE.redPacket] = {
         tomId: THREAD_TYPE.redPacket,
         body: { orderSn, ...redpacket },
       };
     }
 
-    if (rewardQa.value) {
+    if (rewardQa.value && !rewardQa.id) {
       contentIndexes[THREAD_TYPE.reward] = {
         tomId: THREAD_TYPE.reward,
         body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0, orderSn, ...rewardQa },
