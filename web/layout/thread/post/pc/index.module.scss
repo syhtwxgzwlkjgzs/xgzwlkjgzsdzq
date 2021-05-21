@@ -36,6 +36,9 @@
     overflow-y: scroll;
     overflow-x: hidden;
     @include scrollbar();
+    &:hover {
+      margin-right: -8px;
+    }
   }
   &:hover {
     border-color: $border-color-hover;
