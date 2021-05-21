@@ -26,7 +26,7 @@ class SiteInfo extends Component {
           </div>
           <div className={layout.site_status_list}>
               <span className={layout.site_status_label}>成员</span>
-              <span className={layout.site_status_item}>{userTotal}</span>
+              <span className={layout.site_status_item}>{site?.webConfig?.other?.countUsers}</span>
           </div>
           <div className={layout.site_status_list}>
               <span className={layout.site_status_label}>主题</span>
