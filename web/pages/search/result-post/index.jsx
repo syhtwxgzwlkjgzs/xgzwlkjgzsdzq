@@ -39,10 +39,10 @@ class Index extends React.Component {
     const hasThreads = !!search.threads;
 
     if (!hasThreads) {
-      this.toastInstance = Toast.loading({
-        content: '加载中...',
-        duration: 0,
-      });
+      // this.toastInstance = Toast.loading({
+      //   content: '加载中...',
+      //   duration: 0,
+      // });
 
       this.page = 1;
       await search.getThreadList({ search: keyword });
