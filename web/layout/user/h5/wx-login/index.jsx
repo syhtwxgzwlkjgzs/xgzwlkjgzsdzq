@@ -31,8 +31,8 @@ class WXLoginH5Page extends React.Component {
         };
       }
       if (platform === 'pc') {
-        const { miniprogramClose } = webConfig.passport;
-        const type = miniprogramClose ?  'pc_login_mini' : 'pc_login';
+        const { miniprogramOpen } = webConfig.passport;
+        const type = miniprogramOpen ?  'pc_login_mini' : 'pc_login';
         params = {
           type,
           redirectUri,
