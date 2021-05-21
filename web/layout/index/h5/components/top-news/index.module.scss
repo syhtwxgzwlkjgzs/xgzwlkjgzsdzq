@@ -49,14 +49,14 @@
         overflow: hidden;
         word-break: break-all;
         font-size: rem(14);
-       
-        :global(.qq-emotion){
+
+      }
+      :global {
+        .qq-emotion, .dzq-img {
           height: rem(20);
           width: rem(20);
-          position: relative;
-          top: -1px;
+          margin-bottom: rem(4);
         }
-        
       }
       
     }
@@ -82,9 +82,12 @@
         &:hover {
           color: $primary-color;
         }
-        :global(.qq-emotion){
+      }
+      :global {
+        .qq-emotion, .dzq-img {
           height: rem(20);
           width: rem(20);
+          margin-bottom: rem(3);
         }
       }
     }
