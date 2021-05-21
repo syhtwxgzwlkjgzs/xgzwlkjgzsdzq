@@ -107,6 +107,14 @@ export default class mobileLoginStore {
       setTimeout(() => counter(), 1000);
     }
 
+    // 重置参数
+    @action
+    reset = () => {
+      this.mobile = '';
+      this.code = '';
+      this.codeTimeout = null;
+    }
+
     @action
     sendCode = async ({ captchaRandStr, captchaTicket }) => {
       try {
