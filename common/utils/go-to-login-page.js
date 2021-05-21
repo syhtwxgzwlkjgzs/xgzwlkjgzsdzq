@@ -11,7 +11,7 @@ import config from '../config/index';
 
 function getWeiXinLoginPath(redirectPath) {
   const basePath = '/apiv3/users/wechat/h5.oauth?redirect=';
-  let redirectUri = `${config.COMMOM_BASE_URL}/user/wx-auth`;
+  let redirectUri = `${window.location.origin}/user/wx-auth`;
   redirectUri += (redirectPath ? `?redirectPath=${redirectPath}` : '');
   return basePath + encodeURIComponent(redirectUri);
 }
