@@ -94,11 +94,11 @@ class TopicSelect extends Component {
       >
         <View className={styles['item-left']}>
           <View className={styles.name}>#{item.content}#</View>
-          {item.recommended &&
+          {/* {item.recommended &&
             <View className={styles.recommend}>
               <Icon name="LikeOutlined" size={20} color='#2469f6' />
             </View>
-          }
+          } */}
         </View>
         <View className={styles['item-right']}>{item.viewCount}热度</View>
       </View>
