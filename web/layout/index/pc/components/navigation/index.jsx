@@ -5,10 +5,10 @@ import LoadingTips from '../../../../thread/pc/components/loading-tips';
 import styles from './index.module.scss';
 import isServer from '../../../../../../common/utils/is-server';
 
-const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop }) => {
-  const [fistIndex, setFistIndex] = useState(-1);
+const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, defaultFisrtIndex = -1, defaultSecondIndex = -1 }) => {
+  const [fistIndex, setFistIndex] = useState(defaultFisrtIndex);
   const [pID, setPID] = useState(-1);
-  const [secondIndex, setSecondIndex] = useState(-1);
+  const [secondIndex, setSecondIndex] = useState(defaultSecondIndex);
 
   const onClick = (subIndex, index) => {
     let categoryIds = subIndex.split('/')
