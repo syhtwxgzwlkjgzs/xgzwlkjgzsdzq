@@ -61,7 +61,7 @@ export default function DVditor(props) {
   useEffect(() => {
     if (atList && !atList.length) return;
     const users = atList.map((item) => {
-      if (item.user) return ` @${item.user.userName} `;
+      if (item) return ` @${item} `;
       return '';
     });
     if (users.length) {

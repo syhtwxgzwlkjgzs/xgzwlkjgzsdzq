@@ -82,7 +82,6 @@ class Index extends React.Component {
     
 
     if (type === 'click-filter') {
-      
       this.toastInstance = Toast.loading({
         content: '加载中...',
         duration: 0,
