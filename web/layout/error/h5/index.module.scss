@@ -1,41 +1,54 @@
 @import '@common/styles/index.scss';
 
-.page{
+
+.page {
+    background: $body-bg-color;
+    text-align: center;
     height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.body{
+    background: $white;
+    flex: 1;
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     flex-direction: column;
-    .img{
-        margin-top: rem(105);
-        width: rem(80);
-        height: rem(80);
-    }
-    .main{
-        margin-top: rem(24);
+
+    .icon{
         color: var(--color-text-primary);
-        font-size: rem($font-size-large);
-        line-height: rem($font-line-height-primary);
-        padding: 0 rem(40);
+        font-size: rem(36);
     }
-    .sub{
-        margin-top: rem(8);
-        color: var(--color-text-secondary);
-        font-size: rem($font-size-label);
-        line-height: rem($font-line-height-primary);
-        padding: 0 rem(40);
+
+    .text{
+        margin-top: rem($margin-6n);
+        font-weight: normal;
+        font-size: rem($font-size-middle);
+        line-height: rem(24);
+        text-align: center;
+        color: $text-color-secondary;
     }
-    .fixedBox{
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        padding: rem(8);
-        box-sizing: border-box;
-        border-top: var(--border-border);
-        .btn{
-            width: 100%;
-            height: rem(42);
-        }
+}
+
+.footer {
+    width: 100%;
+    height: rem(65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $white;
+    border-top: $border-solid-1;
+
+    .button{
+        width: rem(342);
+        height: rem(42);
+        border-radius: $border-radius-small;
+        background: $primary-color;
     }
 }
