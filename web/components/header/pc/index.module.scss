@@ -65,14 +65,20 @@
             }
           }
         }
+        .border{
+          height: rem(24);
+          width: rem(1);
+          background-color: $border-color;
+          margin: 0 rem(24);
+        }
 
         .userInfo{
           cursor: pointer;
           display: flex;
           align-items: center;
-          margin-left: rem(49);
+         
           .userName{
-            margin-left: rem(16);
+            margin-left: rem(8);
             color: $text-color-regular;
             font-size: rem($font-size-primary);
           }
