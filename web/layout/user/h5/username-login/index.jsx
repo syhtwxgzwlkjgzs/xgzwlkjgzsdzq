@@ -35,7 +35,7 @@ class UsernameH5Login extends React.Component {
       const { wechatEnv, platform } = this.props.site;
       // 设置缓存
       if (e.uid) {
-        this.props.commonLogin.setUserId(e.uid)
+        this.props.commonLogin.setUserId(e.uid);
       }
       if (wechatEnv === 'miniProgram' && platform === 'h5') {
         this.props.commonLogin.needToBindMini = true;
@@ -72,7 +72,7 @@ class UsernameH5Login extends React.Component {
     }
 
     Toast.error({
-      content: e.Message,
+      content: e.Message || e,
       hasMask: false,
       duration: 1000,
     });

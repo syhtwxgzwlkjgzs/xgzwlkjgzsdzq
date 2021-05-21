@@ -35,11 +35,9 @@ class LoginPhoneH5Page extends React.Component {
 
   handleLoginButtonClick = async () => {
     try {
-      if (!this.props.mobileLogin.isInvalidCode) {
+      if (!this.props.mobileLogin.isInvalidCode || !this.props.mobileLogin.verifyMobile()) {
         return;
       }
-      // 发送前校验
-      this.props.mobileLogin.beforeSendVerify();
       const resp = await this.props.mobileLogin.login();
       const uid = get(resp, 'uid', '');
       this.props.user.updateUserInfo(uid);
@@ -77,7 +75,7 @@ class LoginPhoneH5Page extends React.Component {
         const { wechatEnv, platform } = this.props.site;
         // 设置缓存
         if (e.uid) {
-          this.props.commonLogin.setUserId(e.uid)
+          this.props.commonLogin.setUserId(e.uid);
         }
         if (wechatEnv === 'miniProgram' && platform === 'h5') {
           this.props.commonLogin.needToBindMini = true;
@@ -133,7 +131,7 @@ class LoginPhoneH5Page extends React.Component {
       }
       await this.props.mobileLogin.sendCode({
         captchaRandStr: this.props.commonLogin?.captchaRandStr,
-        captchaTicket: this.props.commonLogin?.captchaTicket
+        captchaTicket: this.props.commonLogin?.captchaTicket,
       });
       commonLogin.setIsSend(true);
     } catch (e) {
@@ -172,7 +170,7 @@ class LoginPhoneH5Page extends React.Component {
           />
           {/* 登录按钮 start */}
           <Button
-            disabled={!mobileLogin.isInvalidCode}
+            disabled={!mobileLogin.isInvalidCode || !mobileLogin.verifyMobile()}
             className={platform === 'h5' ? layout.button : layout.pc_button}
             type="primary"
             onClick={this.handleLoginButtonClick}
