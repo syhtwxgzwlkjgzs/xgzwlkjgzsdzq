@@ -8,7 +8,6 @@
 .wrapper {
   padding: 0 $padding-4n;
   background-color: $white;
-  border-top: $border-solid-1;
 
   :global {
     .dzq-input {
@@ -19,6 +18,11 @@
         text-align: right;
         border: none;
       }
+    }
+
+    .dzq-checkbox-wrap {
+      margin-right: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .dzq-slider {
@@ -57,6 +61,7 @@
     font-family: $font-family;
     font-size: $font-size-primary;
     color: $text-color-primary;
+    border-top: $border-solid-1;
 
     .left {
       width: 130px;
@@ -67,6 +72,7 @@
 
     .right {
       flex: 1;
+      height: 20px;
       @include flex();
       justify-content: flex-end;
     }
@@ -75,7 +81,7 @@
   .free {
     display: flex;
     flex-direction: column;
-    padding: $padding-4n 0;
+
     .free-title {
       font-size: $font-size-primary;
       color: $text-color-regular;

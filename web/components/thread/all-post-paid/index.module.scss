@@ -1,129 +1,151 @@
-@import '@common/styles/index.scss';
-.toview {
+@import "@common/styles/index.scss";
+@mixin flex() {
   display: flex;
-  flex-direction: column;
-  padding: 0 $padding-4n $padding-6n;
-  .toviewone{
-    font-family: 'PingFang SC';
-    font-weight: normal;
-    font-size: $font-size-small;
-    line-height: $font-line-height-small;
-    text-align: left;
-    color: $text-color-secondary;
-    padding: $padding-2n 0;
-  }
-  .slider {
-    :global {
-      .dzq-slider__progress--active {
-        height: rem(4);
-      }
-      .dzq-slider__progress__button {
-        width: rem(10);
-        height: rem(10);
-        border: rem(7) solid var(--color-primary);
-      }
-      .dzq-slider__progress {
-        height: rem(24);
-      }
-    }
-  }
-}
-.toviewPC {
-  padding: $padding-2n $padding-4n $padding-6n;
-}
-.redpacket-box {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  height: -webkit-fill-available;
-  min-height: 100vh;
-  /* mobile viewport bug fix */
-  min-height: -webkit-fill-available;
-  background-color: var(--color-white);
-  z-index: $zindex-popup;
-  .line-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0 $margin-4n;
-    padding-top: $padding-4n;
-    font-size: $font-size-base;
-    .payText {
-      display: flex;
-      align-items: center;
-      font-weight: normal;
-      font-size: $font-size-base;
-      line-height: $font-line-height-base;
-      text-align: left;
-      color: $text-color-regular;
-    }
-    .payNumber {
-      display: flex;
-      align-items: center;
-      font-weight: normal;
-      font-size: $font-size-base;
-      line-height: $font-line-height-base;
-      text-align: left;
-      color: $text-color-primary;
-    }
-  }
-  :global {
-    .dzq-input {
-      display: inline-block;
-      width: rem(190);
-      text-align: right;
-    }
-    .dzq-input__inner {
-      height: rem(20);
-      line-height: $font-size-middle;
-      border: none;
-      padding-right: 5px;
-      text-align: right;
-      padding: 0 $padding-2n;
-    }
-  }
-}
-.btn {
-  position: absolute;
-  bottom: 0;
-  display: flex;
-  width: rem(343);
-  border-top: $border-solid-1;
-  padding: rem($padding-2n) rem($padding-4n);
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  box-sizing: border-box;
+}
+
+.wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 100vh;
+  height: -webkit-fill-available;
+  /* mobile viewport bug fix */
+  min-height: -webkit-fill-available;
+  padding: 0 $padding-4n;
+  background-color: $white;
+  z-index: $zindex-popup;
+
   :global {
-    .dzq-button {
+    .dzq-input {
+      max-width: 200px;
+
+      .dzq-input__inner {
+        padding: $padding-2n 0;
+        text-align: right;
+        border: none;
+      }
+    }
+
+    .dzq-checkbox-wrap {
+      margin-right: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .dzq-slider {
+      .dzq-slider__progress--stick,
+      .dzq-slider__feature {
+        background: $text-bg-color2;
+        height: 4px;
+      }
+      .dzq-slider__progress--active {
+        height: 4px;
+      }
+
+      .dzq-slider__progress__button {
+        width: 24px;
+        height: 24px;
+        background: $primary-color;
+        border: 1px solid $white;
+
+        &::after {
+          content: "";
+          position: absolute;
+          left: 7px;
+          top: 7px;
+          width: 10px;
+          height: 10px;
+          background: $white;
+          border-radius: $border-radius-circle;
+        }
+      }
+    }
+  }
+
+  .paid-item {
+    @include flex();
+    padding: $padding-4n 0;
+    font-family: $font-family;
+    font-size: $font-size-primary;
+    color: $text-color-primary;
+    border-top: $border-solid-1;
+
+    .left {
+      width: 130px;
+      color: $text-color-regular;
+      line-height: 18px;
+      text-align: left;
+    }
+
+    .right {
       flex: 1;
-      @include button-default;
-      height: rem(42);
-      &:first-child {
-        margin-right: rem($margin-10);
+      height: 20px;
+      @include flex();
+      justify-content: flex-end;
+    }
+  }
+
+  .free {
+    display: flex;
+    flex-direction: column;
+    .free-title {
+      font-size: $font-size-primary;
+      color: $text-color-regular;
+      line-height: $font-line-height-small;
+      text-align: left;
+    }
+  }
+
+  .btn {
+    @include flex();
+    flex-wrap: nowrap;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: constant(safe-area-inset-bottom);
+    bottom: env(safe-area-inset-bottom);
+    margin: 0 $margin-10;
+    padding: $padding-2n 0;
+    background: $white;
+    border-top: $border-solid-1;
+
+    :global {
+      .dzq-button {
+        width: 48%;
+        padding: $padding-10 0;
+        font-size: $font-size-middle;
+        color: $text-color-regular;
+        line-height: $font-line-height-small;
+        border: none;
+        border-radius: $border-radius-small;
+        background: $text-bg-color2;
+        -webkit-tap-highlight-color: transparent;
       }
-      &:last-child {
-        @include button-primary;
-      }
+    }
+
+    .btn-confirm {
+      color: $white;
+      background-color: $primary-color;
     }
   }
 }
 
 .pc {
-  .redpacket-box {
+  .wrapper {
     position: static;
     width: 100%;
     height: 134px;
     min-height: 134px;
+    padding: 0;
   }
   .btn {
     padding: 0;
     position: static;
     width: 100%;
     height: rem(36);
-    // margin-bottom: $margin-2n;
     display: block;
     text-align: center;
     border: none;
