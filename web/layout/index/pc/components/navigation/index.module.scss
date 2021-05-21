@@ -1,5 +1,6 @@
 @import '@common/styles/index.scss';
 .container {
+  border-radius: $border-radius-small;
   :global {
     .dzq-card {
       border-radius: rem($border-radius-small);
@@ -66,4 +67,17 @@
   float: right;
   font-weight: normal;
   font-size: rem($font-size-base);
+}
+
+.verticalScrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 8px;
+  border-radius: 4px;
+}
+.verticalScrollbar::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.55);
+}
+.verticalScrollbar::-webkit-scrollbar-track {
+  border-radius: 8px;
 }

@@ -91,8 +91,7 @@ class TopicAction extends TopicStore {
    @action
    updatePayThreadInfo(threadId, obj) {
      const targetThread = this.findAssignThread(threadId);
-     
-     if (!targetThread) return;
+     if (!targetThread || targetThread.length === 0) return;
 
      const { index, subIndex } = targetThread;
      if (this.topicDetail?.pageData) {
