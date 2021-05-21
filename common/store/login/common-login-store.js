@@ -97,7 +97,7 @@ export default class commonLoginStore {
             this.captchaTicket = res.ticket;
             return resolve(res);
           }
-          reject(res);
+          // reject(res);
         });
         // 显示验证码
         this.captcha.show();

@@ -48,6 +48,7 @@ class LoginPhoneH5Page extends React.Component {
       });
       // 暂不实现
       setTimeout(() => {
+        this.props.mobileLogin.reset();
         window.location.href = '/';
       }, 1000);
     } catch (e) {
