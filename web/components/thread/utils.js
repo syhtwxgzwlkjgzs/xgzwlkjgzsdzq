@@ -28,7 +28,7 @@ export const handleAttachmentData = (data) => {
   values.forEach((item) => {
     const { tomId } = item;
     // 统一做一次字符串转换
-    const conversionTomID = '' + tomId;
+    const conversionTomID = tomId ? '' + tomId : 'NULL';
     if (conversionTomID === '101') { // 图片
       newData.imageData = item.body;
     } else if (conversionTomID === '102') { // 音频
