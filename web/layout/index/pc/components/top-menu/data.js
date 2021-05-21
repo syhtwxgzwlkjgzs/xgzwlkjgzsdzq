@@ -67,7 +67,7 @@ export default [
     isActive: false,
     children: [{
       label: '不限', // 不限
-      value: '',
+      value: '1',
       isActive: true,
     }, {
       label: '发布时间', // 发布时间
