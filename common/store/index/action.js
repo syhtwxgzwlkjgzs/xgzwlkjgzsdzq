@@ -40,9 +40,6 @@ class IndexAction extends IndexStore {
    */
   @action
   async screenData({ filter = {}, sequence = 0, perPage = 10, page = 1 } = {}) {
-    this.threads = null;
-    this.sticks = null;
-
     this.getRreadStickList(filter.categoryids);
     this.getReadThreadList({ filter, sequence, perPage, page });
   }
@@ -70,6 +67,7 @@ class IndexAction extends IndexStore {
         this.setThreads({ ...result.data, pageData: newPageData });
       } else {
         // 首次加载
+        this.threads = null;
         this.setThreads(result.data);
       }
       return result.data;
@@ -100,6 +98,7 @@ class IndexAction extends IndexStore {
   async getRreadStickList(categoryIds = []) {
     const result = await readStickList({ params: { categoryIds } });
     if (result.code === 0 && result.data) {
+      this.sticks = null;
       this.setSticks(result.data);
       return this.sticks;
     }
