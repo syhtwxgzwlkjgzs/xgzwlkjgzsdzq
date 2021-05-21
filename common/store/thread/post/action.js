@@ -204,7 +204,6 @@ class ThreadPostAction extends ThreadPostStore {
   @action
   gettContentIndexes() {
     const { images, video, files, product, audio, redpacket, rewardQa, orderSn } = this.postData;
-    console.log(orderSn, 'orderSn');
     const imageIds = Object.values(images).map(item => item.id);
     const docIds = Object.values(files).map(item => item.id);
     const contentIndexes = {};
@@ -311,7 +310,7 @@ class ThreadPostAction extends ThreadPostStore {
         });
       }
       if (tomId === THREAD_TYPE.voice) audio = contentindexes[index].body;
-      if (tomId === THREAD_TYPE.product) product = contentindexes[index].body;
+      if (tomId === THREAD_TYPE.goods) product = contentindexes[index].body;
       if (tomId === THREAD_TYPE.video) {
         video = contentindexes[index].body;
         video.thumbUrl = video.mediaUrl;
