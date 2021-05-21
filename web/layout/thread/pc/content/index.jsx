@@ -244,17 +244,17 @@ export default inject('user')(
                   <div className={topic.rewardBody}>
                     <PostRewardProgressBar
                       type={POST_TYPE.BOUNTY}
-                      remaining={Number(parseContent.REWARD.remain_money || 0)}
+                      remaining={Number(parseContent.REWARD.remainMoney || 0)}
                       received={minus(
                         Number(parseContent.REWARD.money || 0),
-                        Number(parseContent.REWARD.remain_money || 0),
+                        Number(parseContent.REWARD.remainMoney || 0),
                       )}
                     />
                     <div className={topic.rewardMoney}>
                       本帖向所有人悬赏
-                      <span className={topic.rewardNumber}>{parseContent.REWARD.remain_money || 0}</span>元
+                      <span className={topic.rewardNumber}>{parseContent.REWARD.money || 0}</span>元
                     </div>
-                    <div className={topic.rewardTime}>{parseContent.REWARD.expired_at}截止悬赏</div>
+                    <div className={topic.rewardTime}>{parseContent.REWARD.expiredAt}截止悬赏</div>
                   </div>
                 )}
 
@@ -262,9 +262,9 @@ export default inject('user')(
                 {parseContent.RED_PACKET && (
                   <div>
                     <PostRewardProgressBar
-                      remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
+                      remaining={Number(parseContent.RED_PACKET.remainNumber || 0)}
                       received={
-                        Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
+                        Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remainNumber || 0)
                       }
                     />
                   </div>
