@@ -125,9 +125,11 @@
         .dzq-checkbox {
           width: rem(24);
           height: rem(24);
-          border-radius: $border-radius-circle;
+          // border: $border-solid-1;
+          border-radius: $border-radius-small !important;
+          background-color: $text-bg-color2;
           &:after {
-            border-radius: $border-radius-circle;
+            border: none;
           }
         }
         &.is-checked {

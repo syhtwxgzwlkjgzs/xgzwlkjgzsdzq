@@ -5,17 +5,10 @@
   padding: $padding-6n;
   padding-bottom: 0;
   height: 100%;
-  h3 {
-    font-size: $font-size-large;
-    color: $text-color-primary;
-    margin-bottom: $margin-5n;
-    letter-spacing: 1px;
-  }
   .setTtile {
     display: block;
     font-size: $font-size-large;
     color: $text-color-primary;
-    margin-bottom: $margin-5n;
     letter-spacing: 1px;
     font-weight: 600;
   }
@@ -30,6 +23,7 @@
         line-height: 62px;
         border: none;
         border-bottom: 1px solid $border-color;
+        padding-left: 0;
       }
       .dzq-input__icon {
         line-height: 60px;
@@ -44,15 +38,16 @@
   width: 100%;
   border-top: 1px solid $border-color;
   padding: $padding-2n $padding-4n $padding-10;
+  display: flex;
   .btn {
-    width: 343px;
     height: 42px;
     font-size: $font-size-middle;
+    margin: auto;
+    border-radius: $border-radius-small;
   }
 }
 
 .labelInfo {
-  padding-top: $margin-10;
   .labelValue {
     :global {
       .dzq-input {
