@@ -10,6 +10,7 @@ import Router from '@discuzq/sdk/dist/router';
 @observer
 class UserCenterPost extends React.Component {
   render() {
+    const user = this.props.user;
     return (
       <div className={styles.userCenterPost} onClick={() => {
         Router.push({ url: '/thread/post' });
@@ -17,7 +18,8 @@ class UserCenterPost extends React.Component {
         <div className={styles.userCenterPostTitle}>发帖</div>
         <div className={styles.userCenterPostContent}>
           <div className={styles.userCenterPostAvatar}>
-            <Avatar text={'黑'} circle />
+            {/* <Avatar text={'黑'} circle /> */}
+            <Avatar image={user.avatarUrl} name={user.username} circle/>
           </div>
           <div
             style={{

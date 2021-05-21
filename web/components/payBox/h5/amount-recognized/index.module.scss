@@ -1,5 +1,4 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/mixin/index.scss';
 
 // 外部容器
 .amountWrapper {
@@ -17,6 +16,7 @@
   .btnBox{
     margin-top: rem($margin-2n);
     box-sizing: border-box;
+    @include ios-safe-area-inset-bottom;
 
     &::before {
       content: '';
