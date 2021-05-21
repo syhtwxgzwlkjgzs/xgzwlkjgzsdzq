@@ -27,9 +27,9 @@ import styles from './index.module.scss';
 const BaseLayout = (props) => {
   const { header = null, left = null, children = null, right = null, footer = null, onSearch, noMore = false, onRefresh, pageName = '' } = props;
 
-  // 2021.5.21: 暂时关闭响应式样式，默认改为显示
-  const [showLeft, setShowLeft] = useState(true);
-  const [showRight, setShowRight] = useState(true);
+  const [showLeft, setShowLeft] = useState(false);
+  const [showRight, setShowRight] = useState(false);
+  const [isError, setIsError] = useState(false);
   const size = useRef('xl')
 
   const debounce = (fn, wait) => {
@@ -99,11 +99,20 @@ const BaseLayout = (props) => {
   //   return right && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg')
   // }, [size.current])
 
+  const onError = () => {
+    setIsError(true)
+  }
+
+  const handleErrorEvent = () => {
+    setIsError(false)
+    onRefresh()
+  }
+
   return (
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
 
-        <List {...props} className={styles.list} wrapperClass={styles.wrapper}>
+        <List {...props} className={styles.list} wrapperClass={styles.wrapper} onError={onError}>
           {
             showLeft && (
               <div className={styles.left}>
@@ -114,7 +123,8 @@ const BaseLayout = (props) => {
 
           <div className={styles.center}>
             {typeof(children) === 'function' ? children({ ...props }) : children}
-            {onRefresh && <RefreshView noMore={noMore} />}
+            {!isError && onRefresh && <RefreshView noMore={noMore} />}
+            {isError && <ErrorView onClick={handleErrorEvent} />}
           </div>
 
           {

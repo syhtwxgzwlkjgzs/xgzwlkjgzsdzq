@@ -38,7 +38,7 @@
       top: rem(1);
     }
     .title {
-      flex:1;
+      flex: 1;
       font-size: rem($font-size-primary);
       line-height: 1.5;
       position: relative;
@@ -64,6 +64,7 @@
   .itemPC {
     cursor: pointer;
     height: rem(38);
+    
     .prefix {
       font-size: rem($font-size-middle);
       line-height: rem($font-line-height-small);
@@ -78,6 +79,9 @@
         overflow: hidden;
         word-break: break-all;
         font-size: rem($font-size-middle);
+        &:hover {
+          color: $primary-color;
+        }
         :global(.qq-emotion){
           height: rem(20);
           width: rem(20);

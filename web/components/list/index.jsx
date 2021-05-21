@@ -22,7 +22,8 @@ const List = forwardRef(({
   onRefresh,
   onScroll = noop,
   showRefresh = true,
-  preload = 30
+  preload = 30,
+  onError = noop
 }, ref) => {
   const listWrapper = useRef(null);
   const currentScrollTop = useRef(0)
@@ -111,6 +112,7 @@ const List = forwardRef(({
           .catch(() => {
             setIsLoading(true);
             setIsError(true)
+            onError()
           });
       } else {
         console.error('上拉刷新，必须返回promise');
@@ -135,7 +137,7 @@ const List = forwardRef(({
       >
         {children}
         {onRefresh && showRefresh && !isError && <RefreshView noMore={noMore} />}
-        {isError && <ErrorView onClick={handleError} />}
+        {showRefresh && isError && <ErrorView onClick={handleError} />}
       </div>
     </div>
   );
