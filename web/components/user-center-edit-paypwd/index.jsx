@@ -161,4 +161,4 @@ class index extends Component {
   }
 }
 
-export default HOCFetchSiteData(withRouter(index));
+export default withRouter(index);
