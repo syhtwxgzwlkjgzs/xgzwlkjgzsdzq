@@ -15,30 +15,6 @@ class DzqApp extends App {
     this.appStore = initializeStore();
   }
 
-  // 路由跳转时，需要清理图片预览器
-  cleanImgViewer = () => {
-    try {
-      const viewers = document.getElementsByClassName('viewer-container');
-      viewers.forEach((viewer) => {
-        viewer.parentNode.removeChild(viewer);
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-
-  listenRouterChangeAndClean() {
-    // FIXME: 此种写法不好
-    if (!isServer()) {
-      window.addEventListener(
-        'popstate',
-        this.cleanImgViewer,
-        false,
-      );
-    }
-  }
-
   componentDidMount() {
     if (process.env.DISCUZ_RUN === 'static') {
       // 当CSR出现末尾是index，会导致不能正确跳转的问题；
@@ -53,14 +29,6 @@ class DzqApp extends App {
       }
       // csr部署时因方便ngixn部署统一指向index.html,所以统一在此重定向一次
       Router.redirect({ url: `${pathname}${window.location.search}` });
-    }
-
-    this.listenRouterChangeAndClean();
-  }
-
-  componentWillUnmount() {
-    if (!isServer()) {
-      window.removeEventListener('popstate', this.cleanImgViewer);
     }
   }
 
