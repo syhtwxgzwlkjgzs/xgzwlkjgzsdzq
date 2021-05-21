@@ -74,7 +74,7 @@ export default function DzqUpload(props) {
         customRequest={post}
         accept={accept}
       >
-        {!isCustomUploadIcon && (
+        {(!isCustomUploadIcon && fileList.length < limit) && (
           <Button type='text' className={classNames(styles['flex-column-center'], styles['text-grey'])}>
             <Icon name="PlusOutlined" size={16}></Icon>
             <span className="dzq-upload__btntext">{btnText}</span>
