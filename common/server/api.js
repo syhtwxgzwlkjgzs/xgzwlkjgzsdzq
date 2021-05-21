@@ -10,7 +10,7 @@ import isServer from '@common/utils/is-server';
 import Router from '@discuzq/sdk/dist/router';
 
 const api = apiIns({
-  baseURL: ENV_CONFIG.COMMOM_BASE_URL,
+  baseURL: ENV_CONFIG.COMMOM_BASE_URL && ENV_CONFIG.COMMOM_BASE_URL !== '' ? ENV_CONFIG.COMMOM_BASE_URL : isServer() ? '' : window.location.origin,
   timeout: isServer() ? 2000 : 0,
 });
 
@@ -44,7 +44,7 @@ http.interceptors.request.use(
     return {
       code: -1,
       data: null,
-      msg: '',
+      msg: '请求发生错误',
     };
   },
 );
@@ -69,7 +69,7 @@ http.interceptors.response.use((res) => {
   return Promise.resolve({
     code: -1,
     data: null,
-    msg: '',
+    msg: '网络发生错误',
   });
 });
 
