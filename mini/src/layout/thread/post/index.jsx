@@ -29,7 +29,6 @@ class Index extends Component {
       isShowTitle: true, // 默认显示标题
       maxLength: 5000, // 文本输入最大长度
       showClassifyPopup: false, // 切换分类弹框show
-      operationType: 0,
       contentTextLength: 5000,
       showEmoji: false,
       showPaidOption: false, // 显示付费选项弹框
@@ -53,9 +52,9 @@ class Index extends Component {
     this.redirectToHome();
     await this.fetchCategories(); // 请求分类
     const { params } = getCurrentInstance().router;
-    const id = parseInt(params.threadId);
+    const id = parseInt(params.id);
     if (id) { // 请求主题
-      this.setState({ threadId: id })
+      this.setState({ threadId: id, postType: 'isEdit' })
       this.setPostDataById(id);
     } else {
       this.openSaveDraft();
@@ -79,9 +78,9 @@ class Index extends Component {
     // Taro.offKeyboardHeightChange(() => {});
   }
 
-  componentDidShow() {}
+  componentDidShow() { }
 
-  componentDidHide() {}
+  componentDidHide() { }
 
   // handle
   postToast = (title, icon = 'none', duration = 2000) => { // toast
@@ -172,19 +171,24 @@ class Index extends Component {
 
   // 点击发帖插件时回调，如上传图片、视频、附件或艾特、话题等
   handlePluginClick(item) {
-    this.setState({
-      operationType: item.type
-    });
+    const { postType } = this.state;
+
     let nextRoute;
     switch (item.type) {
       // 根据类型分发具体操作
       case THREAD_TYPE.reward:
+        if (postType === 'isEdit') {
+          return this.postToast('再编辑时不可操作悬赏');
+        }
         nextRoute = '/subPages/thread/selectReward/index';
         break;
       case THREAD_TYPE.goods:
         nextRoute = '/subPages/thread/selectProduct/index';
         break;
       case THREAD_TYPE.redPacket:
+        if (postType === 'isEdit') {
+          return this.postToast('再编辑时不可操作红包');
+        }
         nextRoute = '/subPages/thread/selectRedpacket/index';
         break;
       case THREAD_TYPE.paid:
@@ -215,6 +219,9 @@ class Index extends Component {
         break;
       case THREAD_TYPE.video:
         this.handleVideoUpload();
+        break;
+      case THREAD_TYPE.voice:
+        nextRoute = `/subPages/thread/selectPayment/index?paidType=${THREAD_TYPE.voice}`;
         break;
       case 'emoji':
         this.setState({
@@ -494,12 +501,11 @@ class Index extends Component {
     const { permissions } = this.props.user;
     const { categories } = this.props.index;
     const { postData, setPostData } = this.props.threadPost;
-    const { rewardQa, redpacket, video, product, position } = postData;
+    const { rewardQa, redpacket, video, audio, product, position } = postData;
     const {
       isShowTitle,
       maxLength,
       showClassifyPopup,
-      operationType,
       showPaidOption,
       showEmoji,
       showDraftOption,
@@ -537,7 +543,10 @@ class Index extends Component {
 
             <View className={styles['plugin']}>
 
-              <GeneralUpload type={operationType} audioUpload={(file) => {this.yundianboUpload('audio', file)}} />
+              <GeneralUpload
+                type={Object.keys(audio).length > 0 ? THREAD_TYPE.voice : 0}
+                audioUpload={(file) => { this.yundianboUpload('audio', file) }}
+              />
 
               {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => { }} />}
 
@@ -564,10 +573,12 @@ class Index extends Component {
                     type='tag'
                     tagContent={`付费总额${postData.price + postData.attachmentPrice}元`}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.paid })}
-                    onTagRemoveClick={() => {setPostData({
-                      price: 0,
-                      attachmentPrice: 0
-                    })}}
+                    onTagRemoveClick={() => {
+                      setPostData({
+                        price: 0,
+                        attachmentPrice: 0
+                      })
+                    }}
                   />
                 )}
                 {/* 红包tag */}
@@ -576,7 +587,7 @@ class Index extends Component {
                     type='tag'
                     tagContent={this.redpacketContent()}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
-                    onTagRemoveClick={() => {setPostData({redpacket: {}})}}
+                    onTagRemoveClick={() => { setPostData({ redpacket: {} }) }}
                   />
                 }
                 {/* 悬赏tag */}
@@ -585,7 +596,7 @@ class Index extends Component {
                     type='tag'
                     tagContent={`悬赏金额${rewardQa.value}元\\结束时间${rewardQa.expiredAt}`}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
-                    onTagRemoveClick={() => {setPostData({rewardQa: {}})}}
+                    onTagRemoveClick={() => { setPostData({ rewardQa: {} }) }}
                   />
                 }
               </View>

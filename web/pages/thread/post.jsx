@@ -207,6 +207,7 @@ class PostPage extends React.Component {
         Toast.info({ content: '此浏览器暂不支持录音功能' });
         return;
       }
+      this.setState({ curPaySelect: THREAD_TYPE.voice })
     }
     // 如果是编辑操作
     const { router, threadPost } = this.props;
