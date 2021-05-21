@@ -76,17 +76,18 @@ const List = forwardRef(({
   // 判断是否需要处理error情况
   const isNormal = (data) => {
     // 若没有启用Error判断，则走正常逻辑
-    if (!enableError) {
-      return true
-    } else {
-      if (data) {
-        if (data.code) {
-          return data.code === 0
-        }
-        return true
-      }
-      return false
-    }
+    // if (!enableError) {
+    //   return true
+    // } else {
+    //   if (data) {
+    //     if (data.code) {
+    //       return data.code === 0
+    //     }
+    //     return true
+    //   }
+    //   return false
+    // }
+    return true
   }
 
   const onTouchMove = throttle(({ isFirst = false }) => {

@@ -57,7 +57,6 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
     }
 
     const result = handleResult(newDataSource)
-    console.log(result);
     onSubmit(result)
     setDataSource(newDataSource);
   };
