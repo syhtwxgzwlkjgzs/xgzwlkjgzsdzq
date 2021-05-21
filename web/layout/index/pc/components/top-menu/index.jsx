@@ -31,34 +31,53 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
 
   // 点击筛选项，获取目标值
   const onClick = (subIndex, index) => {
+    let isStopRequest = false
     const newDataSource = deepClone(newFilterData);
 
     // 清除「所有」选项选中状态
     newDataSource[0].isActive = false
 
     if (`${index}` !== '-1' && `${subIndex}`.indexOf('/') !== -1) { // 点击二级菜单
+      // 获取二级菜单的下标
       const i = parseInt(subIndex.split('/')[1])
-      const subIndexItems = newDataSource[index]?.children.map(item => {
-        item.isActive = false
-        return item
-      })
-      subIndexItems[i].isActive = true;
 
-      const indexItem = newDataSource[index];
-      indexItem.isActive = true;
-    } else if (`${index}` === '-1') { // 点击一级菜单
-      const indexItems = newDataSource.map(item => {
-        if (!item.children?.length) {
+      // 若当前二级菜单已经是选中状态，则不作处理
+      if (dataSource[index]?.children[i].isActive) {
+        isStopRequest = true
+      } else {
+        // 若当前二级菜单不是选中状态，先清空之前操作，再赋值
+        const subIndexItems = newDataSource[index]?.children.map(item => {
           item.isActive = false
-        }
-        return item
-      })
-      indexItems[subIndex].isActive = true;
+          return item
+        })
+        subIndexItems[i].isActive = true;
+  
+        const indexItem = newDataSource[index];
+        indexItem.isActive = true;
+      }
+    } else if (`${index}` === '-1') { // 点击一级菜单
+      // 若当前一级菜单已经是选中状态，则不作处理
+      if (dataSource[subIndex].isActive) {
+        isStopRequest = true
+      } else {
+         // 若当前一级菜单不是选中状态，先清空之前操作，再赋值
+        const indexItems = newDataSource.map(item => {
+          if (!item.children?.length) {
+            item.isActive = false
+          }
+          return item
+        })
+        indexItems[subIndex].isActive = true;
+      }
     }
 
-    const result = handleResult(newDataSource)
-    onSubmit(result)
-    setDataSource(newDataSource);
+    // 只有当前不是选中状态，才发网络请求
+    if (!isStopRequest) {
+      const result = handleResult(newDataSource)
+      onSubmit(result)
+      setDataSource(newDataSource);
+    }
+    
   };
 
   // 根据isActive为true的选项，组装参数
