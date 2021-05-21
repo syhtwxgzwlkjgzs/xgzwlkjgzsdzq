@@ -183,6 +183,8 @@ class IndexAction extends IndexStore {
   @action
   updatePayThreadInfo(threadId, obj) {
     const targetThread = this.findAssignThread(threadId);
+    if (!targetThread || targetThread.length === 0) return;
+    
     const { index } = targetThread;
     if (this.threads?.pageData) {
       this.threads.pageData[index] = obj;
