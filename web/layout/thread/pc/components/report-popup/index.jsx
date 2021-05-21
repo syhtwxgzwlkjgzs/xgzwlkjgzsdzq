@@ -7,6 +7,7 @@ const InputPop = (props) => {
 
   const [value, setValue] = useState('');
   const [res, setRes] = useState('');
+  const [showInput, setShowInput] = useState(false);
 
   const onChoiceChange = (e) => {
     if (e === 'other') {
@@ -36,14 +37,17 @@ const InputPop = (props) => {
     setRes(val);
   };
 
+  const toggleOther = () => {
+    setShowInput(!showInput);
+  };
+
   return (
     <Popup position="center" visible={visible} onClose={onCancel}>
       <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.headerLeft}>举报</div>
           <div className={styles.headerIcon}>
-            {/* 叉号icon不显示，暂用对号代替 */}
-            <Icon size={14} name="CloseOutlined" onClick={onCancel}></Icon>
+            <Icon size={12} name="CloseOutlined" onClick={onCancel}></Icon>
           </div>
         </div>
         <div className={styles.body}>
@@ -58,21 +62,28 @@ const InputPop = (props) => {
             </div>
             <div className={styles.other}>
               <div className={styles.reportTitle}>
-                <Radio name="other"></Radio>
                 <div className={styles.content}>其他理由</div>
+                <Icon
+                  className={styles.reportIcon}
+                  size={12}
+                  name={showInput ? 'UpwardOutlined' : 'UnderOutlined'}
+                  onClick={toggleOther}
+                ></Icon>
               </div>
             </div>
           </Radio.Group>
-          <div className={styles.textarea}>
-            <Textarea
-              className={styles.input}
-              rows={5}
-              showLimit={true}
-              value={value}
-              onChange={(e) => onChange(e.target.value)}
-              placeholder={inputText}
-            ></Textarea>
-          </div>
+          {showInput && (
+            <div className={styles.textarea}>
+              <Textarea
+                className={styles.input}
+                rows={5}
+                showLimit={true}
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                placeholder={inputText}
+              ></Textarea>
+            </div>
+          )}
         </div>
         <div className={styles.button}>
           <Button onClick={onCancel} className={styles.cancel}>
