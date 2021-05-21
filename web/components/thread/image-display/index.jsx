@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ImagePreviewer, Flex } from '@discuzq/design';
 import { noop } from '../utils';
-import isServer from '@common/utils/is-server';
 import styles from './index.module.scss';
 
 const { Col, Row } = Flex;
@@ -115,16 +114,14 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
   return (
     <div className={`${platform === 'h5' ? styles.container : styles.containerPC}`}>
       {ImageView}
-      {visible && (
-        <ImagePreviewer
-          visible={visible}
-          onClose={() => {
-            setVisible(false);
-          }}
-          imgUrls={imagePreviewers}
-          currentUrl={defaultImg}
-        />
-      )}
+      <ImagePreviewer
+        visible={visible}
+        onClose={() => {
+          setVisible(false);
+        }}
+        imgUrls={imagePreviewers}
+        currentUrl={defaultImg}
+      />
     </div>
   );
 };
