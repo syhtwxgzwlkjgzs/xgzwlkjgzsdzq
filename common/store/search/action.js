@@ -94,7 +94,12 @@ class SearchAction extends SearchStore {
       readUsersList({ params: { filter: { hot: 1, nickname: search }, perPage: newPerPage, page: 1 } })
         .then((res) => {
           const { code, data } = res;
-          type === 0 ? this.setIndexUsers(code === 0 ? data : {}) : this.setSearchUsers(code === 0 ? data : {});
+          // TODO 当接口请求报错，赋值空数组。后续解决正确提示的问题
+          type === 0 ? (
+            this.setIndexUsers(code === 0 ? data : {pageData: []}) 
+          ) : (
+            this.setSearchUsers(code === 0 ? data : {pageData: []})
+          );
         })
         .catch((err) => {
           console.error(err);
