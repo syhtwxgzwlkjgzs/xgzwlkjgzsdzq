@@ -32,8 +32,7 @@ class SearchResultPostH5Page extends React.Component {
       <SidebarPanel 
         title="热门内容" 
         type='normal'
-        isShowMore={false}
-        isLoading={!pageData}
+        isShowMore={!pageData}
         noData={!pageData?.length}
         icon={{ type: 3, name: 'HotOutlined' }}
       >
