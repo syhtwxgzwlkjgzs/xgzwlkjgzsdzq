@@ -42,7 +42,7 @@ import { RichText } from '@discuzq/design';
           onClick={() => onClick(item)}
         >
           <Text className={styles.prefix}>{item.prefix || '置顶'}</Text>
-          {false && <Text className={styles.title}>{handlerTitle(item.title)}</Text>}
+          {false && <View className={styles.title}>{handlerTitle(item.title)}</View>}
           <View className={styles.title}>
               <RichText onClick={(e) => onClick(item, e)} className={styles.richText} content={filterContent(item.title)} />
           </View>
