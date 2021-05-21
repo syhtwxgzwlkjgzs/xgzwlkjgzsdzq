@@ -28,7 +28,7 @@ class Index extends React.Component {
   }
 
   page = 1;
-  perPage = 10;
+  perPage = 20;
 
   constructor(props) {
     super(props);
