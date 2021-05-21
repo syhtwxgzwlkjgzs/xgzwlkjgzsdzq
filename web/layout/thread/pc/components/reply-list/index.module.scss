@@ -14,24 +14,33 @@
       .replyListName {
         font-weight: var(--font-weight-regular);
         font-size: rem($font-size-primary);
-        line-height: rem(18);
+        line-height: rem(22);
         text-align: left;
         color: var(--color-text-primary);
       }
+      
       .replyListText {
+        margin-top: rem(4);
         font-size: rem($font-size-middle);
-        line-height: rem($font-line-height-middle);
         text-align: left;
         color: var(--color-text-primary);
         width: 100%;
         word-break: break-word;
 
-        .isShowOne {
-          @include lamp-clamp(3);
+        .content {
+          display: inline;
 
           p {
-            @include lamp-clamp(3);
+            display: inline;
           }
+        }
+
+        .isShowOne {
+          // @include lamp-clamp(3);
+
+          // p {
+          //   @include lamp-clamp(3);
+          // }
         }
 
         img {
@@ -39,14 +48,14 @@
         }
 
         .commentUser {
-          display: inline-block;
+          display: inline-flex;
           word-break: initial;
+          align-items: center;
+          justify-content: flex-start;
 
           .replyedAvatar {
             display: inline-block;
             margin-right: rem($margin-1n);
-            position: relative;
-            top: rem(4);
 
             .avatar {
               width: rem(18);

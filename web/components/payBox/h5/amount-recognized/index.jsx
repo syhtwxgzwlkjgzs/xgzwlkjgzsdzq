@@ -5,6 +5,7 @@ import styles from './index.module.scss';
 import CommonAccountContent from '../../components/common-account-content';
 import { Toast } from '@discuzq/design';
 import { STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
+import throttle from '@common/utils/thottle.js';
 
 @inject('payBox')
 @observer
@@ -18,7 +19,7 @@ export default class AmountRecognized extends Component {
 
 
   // 点击支付去到 选择支付方式页面
-  goToThePayConfirmPage = async () => {
+  goToThePayConfirmPage = throttle(async () => {
     try {
       await this.props.payBox.createOrder();
     } catch (error) {
@@ -29,7 +30,7 @@ export default class AmountRecognized extends Component {
       });
       this.onClose()
     }
-  };
+  }, 300);
 
   // 转换金额小数
   transMoneyToFixed = (num) => {

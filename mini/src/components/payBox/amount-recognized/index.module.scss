@@ -1,69 +1,110 @@
 @import '@common/styles/index.scss';
+@import '@common/styles/mixin/index.scss';
 
 // 外部容器
 .amountWrapper {
   background: var(--color-white);
   // height: 240px;
-  font-size: 20px;
-  padding: 16px;
+  font-size: rem($font-size-large);
+  padding: rem($padding-4n);
   // overflow-y: auto;
-  padding-bottom: 24px;
+  overflow-y: auto;
+  min-height: 337px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  .btnBox{
+    margin-top: rem($margin-2n);
+    box-sizing: border-box;
+    // @include ios-safe-area-inset-bottom;
+    &::before {
+      content: '';
+      display: block;
+      // width: 100%;
+      height: 1px;
+      background: var(--border-line-color);
+      position: relative;
+      top: -8px;
+      margin: 0 rem(-$margin-4n);
+    }
+
+    .btn{
+      height: 42px;
+      font-size: rem($font-size-middle);
+      border-radius: 5px;
+    }
+  }
+  .giftInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+  }
 }
 
 // 金额确认标题
 .amountTitle {
-  font-weight: 600;
-  font-size: 16px;
-  color: #0B0B37;
+  font-weight: var(--font-weight-regular);
+  font-size: rem($font-size-middle);
+  color: $text-color-primary;
 }
 // 金额确认主要内容
 .amountContent {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 16px 0;
-  font-size: 16px;
+  margin: $margin-4n 0 0;
+  font-size: $font-size-primary;
   // 交易内容item
   .acExplain {
     display: flex;
     align-items: center;
-    line-height: 30px;
-    margin: 8px 0;
+    line-height: var(--font-line-height-primary);
+    margin: $margin-2n 0;
     display: inline-block;
-    font-size: 14px;
-    color: #0B0B37;
+    font-size: $font-size-primary;
+    color: $text-color-primary;
   }
   .acExplainDivider {
-    margin: 8px 0;
+    margin: $margin-2n 0;
   }
   // 交易类型label提示
   .acExplainLabel{
-    color: #4F5A70;
-    margin-right: 16px;
+    color: var(--color-text-regular);
+    margin-right: $margin-4n;
     flex-shrink: 0;
   }
   // 交易内容value
   .acExplainValue {
-    color: #0B0B37;
+    color: $text-color-primary;
     flex-wrap: nowrap;
     @include text-ellipsis();
   }
   .acExplainNum {
     color: var(--color-error);
-    font-size: 20px;
+    font-size: $font-size-middle;
     font-weight: 600;
+  }
+  .acExplainDivider {
+    margin: $margin-2n 0;
+  }
+  .ampuntLineWrap {
+    margin: 0 -$margin-4n;
+  }
+  .ampuntLine {
+    width: 100%;
+    height: 10px;
+    background-color: var(--comment-content-bg-color);
+    margin: $margin-2n 0;
   }
 }
 .payBoxCloseIcon {
   position: absolute;
-  right: 14px;
-  top: 8px;
-  width: 40px;
-  height: 40px;
-  // background-color: pink;
+  right: 16px;
+  top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #8590A6;
+  color: $text-color-secondary;
   cursor: pointer;
 }

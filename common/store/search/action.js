@@ -80,19 +80,37 @@ class SearchAction extends SearchStore {
     }
   
     if ( !hasTopics ) {
-      const res = await readTopicsList({ params: { filter: topicFilter, perPage: newPerPage, page: 1 } });
-      const { code, data } = res;
-      type === 0 ? this.setIndexTopics(code === 0 ? data : {}) : this.setSearchTopics(code === 0 ? data : {});
+      readTopicsList({ params: { filter: topicFilter, perPage: newPerPage, page: 1 } })
+        .then((res) => {
+          const { code, data } = res;
+          type === 0 ? this.setIndexTopics(code === 0 ? data : {}) : this.setSearchTopics(code === 0 ? data : {});
+        })
+        .catch((err) => {
+          console.error(err);
+          this.setSearchTopics({});
+        })
     }
     if ( !hasUsers ) {
-      const res = await readUsersList({ params: { filter: { hot: 1, nickname: search }, perPage: newPerPage, page: 1 } });
-      const { code, data } = res;
-      type === 0 ? this.setIndexUsers(code === 0 ? data : {}) : this.setSearchUsers(code === 0 ? data : {});
+      readUsersList({ params: { filter: { hot: 1, nickname: search }, perPage: newPerPage, page: 1 } })
+        .then((res) => {
+          const { code, data } = res;
+          type === 0 ? this.setIndexUsers(code === 0 ? data : {}) : this.setSearchUsers(code === 0 ? data : {});
+        })
+        .catch((err) => {
+          console.error(err);
+          this.setSearchUsers({});
+        })
     }
     if ( !hasThreads ) {
-      const res = await readThreadList({ params: { filter: { sort: '3', search }, perPage: newPerPage, page: 1 } });
-      const { code, data } = res;
-      type === 0 ? this.setIndexThreads(code === 0 ? data : {}) : this.setSearchThreads(code === 0 ? data : {});
+      readThreadList({ params: { filter: { sort: '3', search }, perPage: newPerPage, page: 1 } })
+        .then((res) => {
+          const { code, data } = res;
+          type === 0 ? this.setIndexThreads(code === 0 ? data : {}) : this.setSearchThreads(code === 0 ? data : {});
+        })
+        .catch((err) => {
+          console.error(err);
+          this.setSearchThreads({});
+        })
     }
   };
 
