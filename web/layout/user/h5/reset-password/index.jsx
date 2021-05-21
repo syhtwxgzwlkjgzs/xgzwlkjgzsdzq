@@ -37,8 +37,8 @@ class ResetPasswordH5Page extends React.Component {
       // 发送前校验
       this.props.resetPassword.beforeSendVerify();
       // 验证码
-      const registerCaptcha = webConfig?.setReg?.registerCaptcha;
-      if (registerCaptcha) {
+      const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
+      if (qcloudCaptcha) {
         const res = await this.props.commonLogin.showCaptcha(qcloudCaptchaAppId, TencentCaptcha);
         if (res.ret !== 0) {
           return;
