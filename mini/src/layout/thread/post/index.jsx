@@ -489,11 +489,12 @@ class Index extends Component {
 
   // 处理左上角按钮点击跳路由
   handlePageJump = async (canJump = false, url) => {
-    if (!canJump) { // 无法跳转时，调用保存草稿选项框
+    const { postData:{contentText} } = this.props.threadPost;
+    if (!canJump && contentText !== '') {
       this.setState({ showDraftOption: true });
-      return;
+      return
     }
-
+  
     url ? Taro.redirectTo({ url }) : Taro.navigateBack();
   }
 

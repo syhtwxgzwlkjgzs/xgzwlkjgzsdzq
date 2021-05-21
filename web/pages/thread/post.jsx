@@ -197,18 +197,37 @@ class PostPage extends React.Component {
    */
   handleAttachClick = (item, data) => {
     const { isPc } = this.props.site;
-    // if (!isPc && item.type === THREAD_TYPE.voice) {
-    //   const u = navigator.userAgent;
-    //   if (u.indexOf('MicroMessenger') > -1 && (u.indexOf('iPhone') > -1 || u.indexOf('iPad') > -1)) {
-    //     Toast.info({ content: 'iOS版微信暂不支持录音功能' });
-    //     return;
-    //   }
-    //   if (u.indexOf('UCBrowser') > -1) {
-    //     Toast.info({ content: '此浏览器暂不支持录音功能' });
-    //     return;
-    //   }
-    //   this.setState({ curPaySelect: THREAD_TYPE.voice })
-    // }
+    if (!isPc && item.type === THREAD_TYPE.voice) {
+      const u = navigator.userAgent.toLocaleLowerCase();
+
+      // iphone设备降级流程
+      if (u.indexOf('iphone') > -1) {
+        // 判断是否在微信内
+        if (u.indexOf('micromessenger') > -1) {
+          Toast.info({ content: 'iOS版微信暂不支持录音功能' });
+          return;
+        }
+
+        // 判断ios版本号
+        const v = u.match(/cpu iphone os (.*?) like mac os/);
+        if (v) {
+          const version = v[1].replace(/_/g, ".").split('.').splice(0, 2).join('.');
+          if ((Number(version) < 14.3) && u.indexOf('safari') < 0) {
+            Toast.info({ content: 'iOS版本太低，请升级至iOS 14.3及以上版本或使用Safari浏览器访问' });
+            return;
+          }
+        }
+      }
+
+      // uc浏览器降级流程
+      if (u.indexOf('ucbrowser') > -1) {
+        Toast.info({ content: '此浏览器暂不支持录音功能' });
+        return;
+      }
+      // this.setState({ curPaySelect: THREAD_TYPE.voice })
+    }
+
+
     // 如果是编辑操作
     const { router, threadPost } = this.props;
     const { query } = router;
