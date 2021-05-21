@@ -185,8 +185,8 @@ class LoginPhoneH5Page extends React.Component {
               <span
                 onClick={() => {
                   if (browser.env('weixin')) {
-                    const redirectEncodeUrl = encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`);
-                    window.location.href = `https://discuzv3-dev.dnspod.dev/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
+                    const redirectEncodeUrl = encodeURIComponent(`https://${window.location.host}/user/wx-auth`);
+                    window.location.href = `https://${window.location.host}/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
                     return;
                   }
 
