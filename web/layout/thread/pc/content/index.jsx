@@ -52,6 +52,8 @@ export default inject('user')(
     // 是否帖子付费
     const isThreadPay = threadStore?.threadData?.payType === 1;
     const threadPrice = threadStore?.threadData?.price || 0;
+    // 是否已经付费
+    const isPayed = threadStore?.threadData?.paid === true;
     // 是否作者自己
     const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData?.userId;
 
@@ -179,8 +181,8 @@ export default inject('user')(
             {/* 文字 */}
             {text && <PostContent useShowMore={false} content={text || ''} />}
 
-            {/* 付费附件 */}
-            {!canFreeViewPost && isAttachmentPay && !isSelf && (
+            {/* 付费附件：不能免费查看付费帖 && 需要付费 && 不是作者 && 没有付费 */}
+            {!canFreeViewPost && isAttachmentPay && !isSelf && !isPayed && (
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={topic.payButton} type="primary" size="large">
                   <div className={topic.pay}>
@@ -234,7 +236,9 @@ export default inject('user')(
 
             {/* 标签 */}
             {threadStore?.threadData?.categoryName && (
-              <div className={topic.tag} onClick={onTagClick}>{threadStore?.threadData?.categoryName}</div>
+              <div className={topic.tag} onClick={onTagClick}>
+                {threadStore?.threadData?.categoryName}
+              </div>
             )}
 
             {(parseContent.RED_PACKET || parseContent.REWARD) && (
@@ -266,14 +270,15 @@ export default inject('user')(
                       received={
                         Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remainNumber || 0)
                       }
+                      condition={parseContent.RED_PACKET.condition}
                     />
                   </div>
                 )}
               </div>
             )}
 
-            {/* 帖子付费 */}
-            {!canFreeViewPost && isThreadPay && !isSelf && (
+            {/* 帖子付费：不能免费查看付费帖 && 需要付费 && 不是作者 && 没有付费 */}
+            {!canFreeViewPost && isThreadPay && !isSelf && !isPayed && (
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={topic.payButton} type="primary" size="large">
                   <div className={topic.pay}>

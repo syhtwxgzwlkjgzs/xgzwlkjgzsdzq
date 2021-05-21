@@ -270,6 +270,10 @@ class RenderCommentList extends React.Component {
       const { success, msg } = await this.props.thread.reward(params);
       if (success) {
         this.setState({ showAboptPopup: false });
+
+        // 重新获取帖子详细
+        this.props.thread.fetchThreadDetail(params.threadId);
+
         Toast.success({
           content: `悬赏${data}元`,
         });

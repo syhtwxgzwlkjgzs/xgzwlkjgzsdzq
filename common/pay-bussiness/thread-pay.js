@@ -27,7 +27,6 @@ import PayBox from '@components/payBox';
  * payeeId	int	N	收款人ID	帖子的作者
  */
 export default (thread, user) => {
-  console.log(user);
   const { threadId, userId, title, group, payType, price, attachmentPrice, paid } = thread;
 
   // 免费或已付费
