@@ -207,13 +207,9 @@ class ThreadPCPage extends React.Component {
             <AllPostPaid
               pc
               visible={!!this.props.curPaySelect}
-              exhibition={this.props.curPaySelect}
-              cancle={() => {
+              paidType={this.props.curPaySelect}
+              cancel={() => {
                 this.props.handleSetState({ curPaySelect: '', currentDefaultOperation: '' });
-              }}
-              data={{ freeWords, price, attachmentPrice }}
-              confirm={(data) => {
-                this.props.setPostData({ ...data });
               }}
             />
           )}
