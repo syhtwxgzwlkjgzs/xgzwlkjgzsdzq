@@ -35,6 +35,11 @@ class LoginPhoneH5Page extends React.Component {
 
   handleLoginButtonClick = async () => {
     try {
+      if (!this.props.mobileLogin.isInvalidCode) {
+        return;
+      }
+      // 发送前校验
+      this.props.mobileLogin.beforeSendVerify();
       const resp = await this.props.mobileLogin.login();
       const uid = get(resp, 'uid', '');
       this.props.user.updateUserInfo(uid);
@@ -207,15 +212,25 @@ class LoginPhoneH5Page extends React.Component {
           <div className={platform === 'h5' ? layout['otherLogin-tips'] : layout.pc_otherLogin_tips} >
             注册登录即表示您同意
             <span onClick={() => {
+              if (platform === 'pc') {
+                window.open('/user/agreement?type=register');
+              }
               commonLogin.setProtocolInfo('register');
             }}>《注册协议》</span>
             <span onClick={() => {
+              if (platform === 'pc') {
+                window.open('/user/agreement?type=privacy');
+              }
               commonLogin.setProtocolInfo('privacy');
             }}>《隐私协议》</span>
           </div>
         </div>
       </div>
-      <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
+      {
+        platform === 'h5'
+          ? <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
+          : <></>
+      }
       </PcBodyWrap>
     );
   }
