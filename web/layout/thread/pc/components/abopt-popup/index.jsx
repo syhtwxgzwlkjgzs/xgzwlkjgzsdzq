@@ -9,17 +9,8 @@ const InputPop = (props) => {
   const [value, setValue] = useState('');
   const [moneyNum, setMoneyNum] = useState('');
 
-  // const onInputChange = (val) => {
-  //   if (Number(val) >= 0 && Number(val) <= 100) {
-  //     setValue(val);
-  //     setMoneyNum(Number(val) * 0.01 * rewardAmount);
-  //   } else {
-  //     Toast.success({
-  //       content: '请输入0-100',
-  //     });
-  //   }
-  // };
   const onInputChange = (val) => {
+    console.log(val);
     setValue(val);
     setMoneyNum((Number(val) * 0.01 * rewardAmount).toFixed(2));
   };
@@ -69,7 +60,6 @@ const InputPop = (props) => {
             </div>
           </div>
         </div>
-
         <div className={styles.button}>
           <Button onClick={onCancel} className={styles.cancel}>
             取消

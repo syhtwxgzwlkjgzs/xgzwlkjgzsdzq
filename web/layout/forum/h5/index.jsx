@@ -19,12 +19,11 @@ class ForumH5Page extends React.Component {
     const usersList = await forum.useRequest('readUsersList', {
       params: {
         filter: {
-          hot: 0
-        }
-      }
+          hot: 0,
+        },
+      },
     });
 
-    console.log(usersList);
     forum.setUsersPageData(usersList);
   }
   render() {
@@ -92,19 +91,11 @@ class ForumH5Page extends React.Component {
             <div className={layout.right} onClick={() => forum.setIsPopup(true)}>
               <div className={layout.forum_member}>
                 {
-                  usersPageData.length
-                    ? usersPageData.map((item, index) => {
-                      if (index > 2) {
-                        return <></>;
-                      }
-
-                      return item.avatar
-                        ? <img key={item.id} className={layout.forum_member_img} src={item.avatar} alt=""/>
-                        : <span key={item.id} className={`${layout.forum_member_img} ${layout.forum_member_char}`} >
+                    usersPageData.slice(0, 3).map(item => (item.avatar
+                      ? <img key={item.userId} className={layout.forum_member_img} src={item.avatar} alt=""/>
+                      : <span key={item.userId} className={`${layout.forum_member_img} ${layout.forum_member_char}`} >
                             {item.nickname.substring(0, 1)}
-                          </span>;
-                    })
-                    : <></>
+                          </span>))
                 }
                 <Icon site={10} color='#8590A6' name='RightOutlined'/>
               </div>
@@ -144,7 +135,10 @@ class ForumH5Page extends React.Component {
                     imgUrl={user.avatar}
                     withHeaderUserInfo={true}
                     userName={user.nickname}
-                    followHandler={()=> {console.log("关注")}}
+                    followHandler={() => {
+                      // TODO
+                      console.log('关注');
+                    }}
                   />
                   <div></div>
                 </div>
@@ -153,7 +147,7 @@ class ForumH5Page extends React.Component {
           </List>
         </Popup>
       </>
-    )
+    );
   }
 }
 

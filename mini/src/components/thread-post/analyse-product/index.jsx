@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import Taro from '@tarojs/taro';
 import { View, Text, Image, Textarea, Button } from '@tarojs/components';
-import { Input } from '@discuzq/design';
 import { Toast } from '@discuzq/design';
 import { observer, inject } from 'mobx-react';
-import styles from './index.module.scss';
 import { goodImages } from '@common/constants/const';
-
+import styles from './index.module.scss';
 
 const Index = inject('threadPost')(observer(({ threadPost }) => {
   const { fetchProductAnalysis, setPostData } = threadPost;
@@ -25,10 +23,12 @@ const Index = inject('threadPost')(observer(({ threadPost }) => {
         ))}
       </View>
       <View className={styles['textarea-container']}>
-        <Input.Textarea
-          placeholder='请粘贴\输入商品链接'
+        <Textarea
+          className={styles.textarea}
+          placeholderClass={styles['textarea-placeholder']}
+          placeholder='请粘贴\输入商品分享链接'
           value={url}
-          onChange={(e) => {
+          onInput={(e) => {
             setUrl(e.detail.value);
           }}
         />

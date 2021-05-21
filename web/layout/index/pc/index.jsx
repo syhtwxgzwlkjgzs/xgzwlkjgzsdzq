@@ -14,7 +14,7 @@ import ThreadContent from '@components/thread';
 import Copyright from '@components/copyright';
 import { readThreadList } from '@server';
 import PayBox from '@components/payBox';
-import { Button } from '@discuzq/design'
+import { Button } from '@discuzq/design';
 
 @inject('site')
 @inject('user')
@@ -28,7 +28,7 @@ class IndexPCPage extends React.Component {
       currentIndex: '',
       conNum: 0,
       // visibility: 'hidden',
-      isShowDefault: this.checkIsOpenDefaultTab()
+      isShowDefault: this.checkIsOpenDefaultTab(),
     };
   }
 
@@ -73,11 +73,12 @@ class IndexPCPage extends React.Component {
      return dispatch('moreData', this.filter);
    }
 
-   onFilterClick = (result) => {
-     const { sequence, essence, attention, filter: { types, sort } } = result;
-     const { dispatch = () => {} } = this.props;
-     this.filter = { ...this.filter, types, essence, sequence, attention, sort };
-     dispatch('click-filter', this.filter);
+  onFilterClick = (result) => {
+    this.setState({ visible: false })
+    const { sequence, filter: { types, sort, essence, attention, } } = result;
+    const { dispatch = () => {} } = this.props;
+    this.filter = { ...this.filter, types, essence, sequence, attention, sort };
+    dispatch('click-filter', this.filter);
    }
 
    onNavigationClick = ({ categoryIds, sequence }) => {
@@ -96,12 +97,12 @@ class IndexPCPage extends React.Component {
      });
    }
 
-  // // 回到顶部 // visibility导致了导航栏无法正常显示子目录所以先注释掉
-  // onScroll = ({ scrollTop }) => {
-  //   this.setState({
-  //     visibility: scrollTop > 10 ? 'visible' : 'hidden',
-  //   })
-  // }
+   // // 回到顶部 // visibility导致了导航栏无法正常显示子目录所以先注释掉
+   // onScroll = ({ scrollTop }) => {
+   //   this.setState({
+   //     visibility: scrollTop > 10 ? 'visible' : 'hidden',
+   //   })
+   // }
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
   handleCategories = () => {
@@ -116,7 +117,7 @@ class IndexPCPage extends React.Component {
       return categories;
     }
     tmpCategories = [{ name: '全部', pid: '', children: [] }, ...categories];
-    
+
     return tmpCategories;
   }
 
@@ -140,17 +141,16 @@ class IndexPCPage extends React.Component {
     );
   }
   // 右侧 -- 二维码 推荐内容
-  renderRight = (data) => (
+  renderRight = data => (
     <div className={styles.indexRight}>
       <QcCode />
       <div className={styles.indexRightCon}>
         <Recommend />
       </div>
       <Copyright/>
-      <PayBox />
     </div>
   )
-  
+
   checkIsOpenDefaultTab() {
     return this.props.site.checkSiteIsOpenDefautlThreadListData();
   }
@@ -171,9 +171,9 @@ class IndexPCPage extends React.Component {
               </Button>
             </div>
           </div>
-          <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
+          {sticks?.length && <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
             <TopNews data={sticks} platform="pc" isShowBorder={false}/>
-          </div>
+          </div>}
           {
             visible && (
               <div className={styles.topNewContent}>
@@ -199,8 +199,8 @@ class IndexPCPage extends React.Component {
     return (
       <BaseLayout
         onSearch={this.onSearch}
-        onRefresh={this.onPullingUp} 
-        noMore={currentPage >= totalPage} 
+        onRefresh={this.onPullingUp}
+        noMore={currentPage >= totalPage}
         onScroll={this.onScroll}
         showRefresh={false}
         left={ this.renderLeft(countThreads) }

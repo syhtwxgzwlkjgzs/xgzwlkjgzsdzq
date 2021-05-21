@@ -26,6 +26,7 @@
       background: var(--border-line-color);
       position: relative;
       top: rem(-8);
+      margin: 0 rem(-$margin-4n);
     }
 
     .btn{
@@ -52,6 +53,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: $text-color-regular;
+  color: $text-color-secondary;
   cursor: pointer;
 }

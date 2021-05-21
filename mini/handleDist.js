@@ -37,6 +37,7 @@ const fs = require('fs'),
 
 
   // 分包中的wxss文件添加对分包中common.wxss的引用
+  fs.writeFile('./dist/subPages/thread/selectProduct/index.wxss', '', (error) => {});
   function subPagesAddWxss(url) {
     const ext = '.wxss';
     fs.readdir(url, function (err, files) {

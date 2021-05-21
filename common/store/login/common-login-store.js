@@ -1,4 +1,6 @@
 import { observable, action } from 'mobx';
+import locals from '@common/utils/local-bridge';
+import { setCookie } from '@common/utils/set-access-token';
 import { get } from '../../utils/get';
 
 
@@ -42,6 +44,14 @@ export default class commonLoginStore {
     @action
     setProtocolStatus(protocolStatus) {
       this.protocolStatus = protocolStatus;
+    }
+
+    @action
+    setUserId(userId) {
+      if (!userId) return;
+      const expireSeconds = 30 * 24 * 60 * 60 * 1000;
+      setCookie('dzq_user_id', userId, 30);
+      locals.set('dzq_user_id', userId, expireSeconds);
     }
 
     @action

@@ -9,11 +9,11 @@ import * as localData from '@layout/thread/post/common';
 import { Toast } from '@discuzq/design';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 import Router from '@discuzq/sdk/dist/router';
-import PayBoxProvider from '@components/payBox/payBoxProvider';
 import PayBox from '@components/payBox/index';
 import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
 import { withRouter } from 'next/router';
 import { tencentVodUpload } from '@common/utils/tencent-vod';
+import { plus } from '@common/utils/calculate';
 
 @inject('site')
 @inject('threadPost')
@@ -22,7 +22,7 @@ import { tencentVodUpload } from '@common/utils/tencent-vod';
 @inject('user')
 @observer
 class PostPage extends React.Component {
-  toastInstance = null
+  toastInstance = null;
 
   constructor(props) {
     super(props);
@@ -147,7 +147,7 @@ class PostPage extends React.Component {
         Toast.error({ content: err.message });
       },
     });
-  }
+  };
 
   // 通过云点播上传成功之后处理：主要是针对语音和视频
   handleVodUploadComplete = async (ret, file, type) => {
@@ -182,7 +182,7 @@ class PostPage extends React.Component {
     } else {
       Toast.error({ content: result.msg });
     }
-  }
+  };
 
   // 表情
   handleEmojiClick = (emoji) => {
@@ -190,10 +190,63 @@ class PostPage extends React.Component {
   };
 
   // 附件相关icon
-  handleAttachClick = (item) => {
+  /**
+   * 点击附件相关icon
+   * @param {object} item 附件相关icon
+   * @param {object} data 要设置的数据
+   */
+  handleAttachClick = (item, data) => {
+    const { isPc } = this.props.site;
+    if (!isPc && item.type === THREAD_TYPE.voice) {
+      const u = navigator.userAgent;
+      if (u.indexOf('MicroMessenger') > -1 && (u.indexOf('iPhone') > -1 || u.indexOf('iPad') > -1)) {
+        Toast.info({ content: 'iOS版微信暂不支持录音功能' });
+        return;
+      }
+      if (u.indexOf('UCBrowser') > -1) {
+        Toast.info({ content: '此浏览器暂不支持录音功能' });
+        return;
+      }
+    }
+    // 如果是编辑操作
+    const { router, threadPost } = this.props;
+    const { query } = router;
+    const { postData } = threadPost;
+    if (query && query.id) {
+      if (item.type === THREAD_TYPE.reward && postData.rewardQa.money > 0) {
+        Toast.info({ content: '悬赏内容不能再次编辑' });
+        return false;
+      }
+    }
+    if (data) {
+      this.setPostData(data);
+      return false;
+    }
     this.setState({ currentAttachOperation: item.type });
     this.props.threadPost.setCurrentSelectedToolbar(item.type);
   };
+
+  // 表情等icon
+  handleDefaultIconClick = (item, child, data) => {
+    const { router, threadPost } = this.props;
+    const { query } = router;
+    const { postData } = threadPost;
+    if (query && query.id) {
+      if (item.type === THREAD_TYPE.redPacket && postData.redpacket.money > 0) {
+        Toast.info({ content: '红包内容不能再次编辑' });
+        return false;
+      }
+    }
+    if (data) {
+      this.setPostData(data);
+      return false;
+    }
+    if (child && child.id) {
+      this.setState({ curPaySelect: child.id, emoji: {} });
+    } else {
+      this.setState({ currentDefaultOperation: item.id, emoji: {} });
+    }
+  }
 
   // 附件和图片上传
   handleUploadChange = (fileList, type) => {
@@ -215,6 +268,10 @@ class PostPage extends React.Component {
 
   // 附件和图片上传完成之后的处理
   handleUploadComplete = (ret, file, type) => {
+    if (ret.code !== 0) {
+      Toast.error({ content: `${ret.msg} 上传失败` });
+      return false;
+    }
     const { uid } = file;
     const { data } = ret;
     const { postData } = this.props.threadPost;
@@ -222,7 +279,7 @@ class PostPage extends React.Component {
     if (type === THREAD_TYPE.image) images[uid] = data;
     if (type === THREAD_TYPE.file) files[uid] = data;
     this.setPostData({ images, files });
-  }
+  };
 
   // 视频准备上传
   onVideoReady = (player) => {
@@ -236,13 +293,13 @@ class PostPage extends React.Component {
   };
 
   // 编辑器
-  handleVditorChange = (vditor) => {
+  handleVditorChange = (vditor, event) => {
     if (vditor) {
       this.vditor = vditor;
       const htmlString = vditor.getHTML();
       this.setPostData({ contentText: htmlString });
       if (!this.props.threadPost.postData.title) {
-        if (!this.state.isTitleShow || this.props.site.platform === 'pc') return;
+        if (!this.state.isTitleShow || this.props.site.platform === 'pc' || !event) return;
         this.setState({ isTitleShow: false }, () => {
           vditor.blur();
         });
@@ -250,16 +307,24 @@ class PostPage extends React.Component {
     }
   };
 
+  handleVditorInit = (vditor) => {
+    if (vditor) this.vditor = vditor;
+  }
+
+  handleVditorFocus = () => {
+    if (this.vditor) this.vditor.focus();
+  }
+
   // 关注列表
   handleAtListChange = (atList) => {
     this.setState({ atList });
-  }
+  };
 
   toTCaptcha = async (qcloudCaptchaAppId) => {
     // 验证码实例为空，则创建实例
     if (!this.captcha) {
       const TencentCaptcha = (await import('@common/utils/tcaptcha')).default;
-      this.captcha = new TencentCaptcha(qcloudCaptchaAppId, res => {
+      this.captcha = new TencentCaptcha(qcloudCaptchaAppId, (res) => {
         if (res.ret === 0) {
           // 验证通过后发布
           this.ticket = res.ticket;
@@ -273,7 +338,7 @@ class PostPage extends React.Component {
     }
     // 显示验证码
     this.captcha.show();
-  }
+  };
 
   // 发布提交
   handleSubmit = async (isDraft) => {
@@ -293,7 +358,6 @@ class PostPage extends React.Component {
     if (isDraft) this.setPostData({ draft: 1 });
     else this.setPostData({ draft: 0 });
     const { threadPost } = this.props;
-
 
     // 2 验证码
     const { webConfig } = this.props.site;
@@ -321,14 +385,17 @@ class PostPage extends React.Component {
       this.randstr = '';
     }
 
+    const threadId = this.props.router.query?.id || '';
 
     // 支付流程
     const { rewardQa, redpacket } = threadPost.postData;
-    const rewardAmount = (Number(rewardQa.value) || 0);
-    const redAmount = (Number(redpacket.price) || 0);
-    const amount = rewardAmount + redAmount;
+    // 如果是编辑的悬赏帖子，则不用再次支付
+    const rewardAmount = (threadId && rewardQa.id) ? 0 : plus(rewardQa.value, 0);
+    // 如果是编辑的红包帖子，则不用再次支付
+    const redAmount = (threadId && rewardQa.id) ? 0 : plus(redpacket.price, 0);
+    const amount = plus(rewardAmount, redAmount);
     const data = { amount };
-    if (!isDraft && amount) {
+    if (!isDraft && amount > 0) {
       let type = ORDER_TRADE_TYPE.RED_PACKET;
       let title = '支付红包';
       if (redAmount) {
@@ -368,6 +435,16 @@ class PostPage extends React.Component {
     if (code === 0) {
       thread.reset();
       this.toastInstance?.destroy();
+
+      // 更新帖子到首页列表
+      if ( threadId ) {
+        this.props.index.updateAssignThreadAllData(threadId, data);
+      // 添加帖子到首页数据
+      } else {
+        this.props.index.addThread(data);
+      }
+
+
       if (!isDraft) this.props.router.replace(`/thread/${data.threadId}`);
       else Router.back();
       return true;
@@ -389,7 +466,7 @@ class PostPage extends React.Component {
       flag = await this.submit(true);
     }
     if (val && flag) Router.back();
-  }
+  };
 
   render() {
     const { site } = this.props;
@@ -397,31 +474,10 @@ class PostPage extends React.Component {
 
     if (platform === 'pc') {
       return (
-        <PayBoxProvider>
-          <IndexPCPage
-            setPostData={data => this.setPostData(data)}
-            handleAttachClick={this.handleAttachClick}
-            handleVideoUploadComplete={this.handleVodUploadComplete}
-            handleUploadChange={this.handleUploadChange}
-            handleUploadComplete={this.handleUploadComplete}
-            handleAudioUpload={this.handleAudioUpload}
-            handleEmojiClick={this.handleEmojiClick}
-            handleSetState={data => this.setState({ ...data })}
-            handleSubmit={this.handleSubmit}
-            saveDataLocal={this.saveDataLocal}
-            handleAtListChange={this.handleAtListChange}
-            handleVditorChange={this.handleVditorChange}
-            onVideoReady={this.onVideoReady}
-            {...this.state}
-          />
-        </PayBoxProvider>
-      );
-    }
-    return (
-      <PayBoxProvider>
-        <IndexH5Page
+        <IndexPCPage
           setPostData={data => this.setPostData(data)}
           handleAttachClick={this.handleAttachClick}
+          handleDefaultIconClick={this.handleDefaultIconClick}
           handleVideoUploadComplete={this.handleVodUploadComplete}
           handleUploadChange={this.handleUploadChange}
           handleUploadComplete={this.handleUploadComplete}
@@ -432,10 +488,33 @@ class PostPage extends React.Component {
           saveDataLocal={this.saveDataLocal}
           handleAtListChange={this.handleAtListChange}
           handleVditorChange={this.handleVditorChange}
+          handleVditorFocus={this.handleVditorFocus}
+          handleVditorInit={this.handleVditorInit}
           onVideoReady={this.onVideoReady}
           {...this.state}
         />
-      </PayBoxProvider>
+      );
+    }
+    return (
+      <IndexH5Page
+        setPostData={data => this.setPostData(data)}
+        handleAttachClick={this.handleAttachClick}
+        handleDefaultIconClick={this.handleDefaultIconClick}
+        handleVideoUploadComplete={this.handleVodUploadComplete}
+        handleUploadChange={this.handleUploadChange}
+        handleUploadComplete={this.handleUploadComplete}
+        handleAudioUpload={this.handleAudioUpload}
+        handleEmojiClick={this.handleEmojiClick}
+        handleSetState={data => this.setState({ ...data })}
+        handleSubmit={this.handleSubmit}
+        saveDataLocal={this.saveDataLocal}
+        handleAtListChange={this.handleAtListChange}
+        handleVditorChange={this.handleVditorChange}
+        handleVditorFocus={this.handleVditorFocus}
+          handleVditorInit={this.handleVditorInit}
+        onVideoReady={this.onVideoReady}
+        {...this.state}
+      />
     );
   }
 }

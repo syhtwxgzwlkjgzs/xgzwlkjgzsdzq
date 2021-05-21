@@ -14,7 +14,7 @@
   border-top-right-radius: rem($border-radius-big);
   border-top-left-radius: rem($border-radius-big);
   position: relative;
-  height: 90vh;
+  height: 80vh;
   display: flex;
   flex-direction: column;
   .content {
@@ -113,6 +113,7 @@
     margin-bottom: rem(24);
     font-size: rem($font-size-middle);
     display: inline-block;
+    margin-top: rem($padding-3n);
   }
   .footerBtn {
     position: relative;

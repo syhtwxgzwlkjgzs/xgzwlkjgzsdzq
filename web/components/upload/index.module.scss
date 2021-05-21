@@ -54,6 +54,10 @@ $width: rem(169);
           .dzq-icon-DeleteOutlined {
             color: $white;
           }
+          &.is-error {
+            border-color: $error-color;
+            color: $error-color;
+          }
         }
 
         .dzq-upload-list-card__thumbUrl {

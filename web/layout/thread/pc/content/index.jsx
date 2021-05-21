@@ -26,6 +26,8 @@ export default inject('user')(
     const tipData = {
       postId: threadStore?.threadData?.postId,
       threadId: threadStore?.threadData?.threadId,
+      platform: 'pc',
+      payType: threadStore?.threadData?.payType,
     };
     // 是否合法
     const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
@@ -110,6 +112,10 @@ export default inject('user')(
       typeof props.onRewardClick === 'function' && props.onRewardClick();
     };
 
+    const onTagClick = () => {
+      typeof props.onTagClick === 'function' && props.onTagClick();
+    };
+
     return (
       <div className={`${topic.container}`}>
         <div className={topic.header}>
@@ -131,7 +137,10 @@ export default inject('user')(
           </div>
           {props?.user?.isLogin() && (
             <div className={topic.more}>
-              <Divider mode='vertical' className={topic.moreDivider}></Divider>
+              {/* 当存在任一标签时，显示分割线 */}
+              {(isEssence || !isFree || isReward || isRedPack) && (
+                <Divider mode="vertical" className={topic.moreDivider}></Divider>
+              )}
               <div className={topic.iconText}>
                 <Dropdown
                   menu={
@@ -225,7 +234,7 @@ export default inject('user')(
 
             {/* 标签 */}
             {threadStore?.threadData?.categoryName && (
-              <div className={topic.tag}>{threadStore?.threadData?.categoryName}</div>
+              <div className={topic.tag} onClick={onTagClick}>{threadStore?.threadData?.categoryName}</div>
             )}
 
             {(parseContent.RED_PACKET || parseContent.REWARD) && (

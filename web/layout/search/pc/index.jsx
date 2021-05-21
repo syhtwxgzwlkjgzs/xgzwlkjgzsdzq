@@ -10,7 +10,9 @@ import ActiveUsersMore from './components/active-users-more';
 import Stepper from './components/stepper';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import Copyright from '@components/copyright';
+import SidebarPanel from '@components/sidebar-panel';
 import { Toast } from '@discuzq/design';
+import TopicItem from '@components/topic-item'
 
 @inject('site')
 @inject('search')
@@ -109,30 +111,47 @@ class SearchPCPage extends React.Component {
   }
   // 中间 -- 潮流话题 活跃用户 热门内容
   renderContent = () => {
-    const { indexTopics, indexUsers, indexThreads } = this.props.search;
 
-    const { pageData: topicsPageData = [] } = indexTopics || {};
-    const { pageData: usersPageData = [] } = indexUsers || {};
-    const { pageData: threadsPageData = [] } = indexThreads || {};
+    const { indexTopics, indexUsers, indexThreads } = this.props.search;
+    const userId = this.props.user?.userInfo?.id
+
+    const { pageData: topicsPageData } = indexTopics || {};
+    const { pageData: usersPageData } = indexUsers || {};
+    const { pageData: threadsPageData } = indexThreads || {};
+
     // TODO 添加活跃用户和当前用户是同一人的判断
     return (
       <div className={styles.searchContent}>
-        <div className={styles.section} id="StrongSharpOutlined">
-          <SectionTitle
-            title="潮流话题"
-            icon={{ type: 1, name: 'StrongSharpOutlined' }}
+        <div id="StrongSharpOutlined">
+          <SidebarPanel 
+            title="潮流话题" 
+            type='normal'
+            isLoading={!topicsPageData}
+            noData={!topicsPageData?.length}
             onShowMore={this.redirectToSearchResultTopic}
-          />
-          <TrendingTopicMore data={topicsPageData} onItemClick={this.onTopicClick}/>
+            icon={{ type: 1, name: 'StrongSharpOutlined' }}
+          >
+            <div className={styles.topic}>
+              {topicsPageData?.map((item, index) => (
+                <TopicItem data={item} key={index} onClick={this.onTopicClick} />  
+              ))}
+            </div>
+          </SidebarPanel>
         </div>
-        <div className={styles.section} id="MemberOutlined">
-          <SectionTitle
-            title="活跃用户"
-            icon={{ type: 2, name: 'MemberOutlined' }}
+
+        <div id="MemberOutlined">
+          <SidebarPanel 
+            title="活跃用户" 
+            type='normal'
+            isLoading={!usersPageData}
+            noData={!usersPageData?.length}
             onShowMore={this.redirectToSearchResultUser}
-          />
-          <ActiveUsersMore data={usersPageData} onItemClick={this.onUserClick} onFollow={this.onFollow} />
+            icon={{ type: 2, name: 'MemberOutlined' }}
+          >
+            <ActiveUsersMore data={usersPageData} onItemClick={this.onUserClick} onFollow={this.onFollow} userId={userId} />
+          </SidebarPanel>
         </div>
+
         <div id="HotOutlined">
           <div className={styles.postTitle}>
             <SectionTitle

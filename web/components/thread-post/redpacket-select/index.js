@@ -55,7 +55,7 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
     confirm({
       rule,
       condition,
-      price: parseFloat(price).toFixed(2),
+      price,
       number: Math.ceil(number),
       likenum: Math.ceil(likenum),
     });
@@ -82,14 +82,14 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       <div className={styles['line-box']}>
         <div className={styles.label}>红包总金额</div>
         <div className={styles.item}>
-          <Input mode="number" htmlType="number" placeholder="金额" value={price} onChange={e => setPrice(e.target.value)} />元
+          <Input mode="number" placeholder="金额" value={price} onChange={e => setPrice(e.target.value)} />元
         </div>
       </div>
       {/* 红包个数 */}
       <div className={styles['line-box']}>
         <div className={styles.label}>红包个数</div>
         <div className={styles.item}>
-          <Input mode="number" htmlType="number" value={number} placeholder="个数" onChange={e => setNumber(Number(e.target.value))} />个
+          <Input mode="number" htmlType="number" value={number} placeholder="个数" onChange={e => setNumber(e.target.value)} />个
         </div>
       </div>
       {/* 获利条件 */}
@@ -110,7 +110,7 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       {condition === 1 && (
         <div className={styles.likenum}>
           <div className={styles['likenum-input']}>
-            <Input mode="number" htmlType="number" placeholder="个数" value={likenum} onChange={e => setLikenum(Number(e.target.value))} />个
+            <Input mode="number" htmlType="number" placeholder="个数" value={likenum} onChange={e => setLikenum(e.target.value)} />个
           </div>
         </div>
       )}

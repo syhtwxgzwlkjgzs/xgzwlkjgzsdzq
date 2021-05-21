@@ -118,4 +118,29 @@
     }
 
   }
+
+  .follow {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    &:hover {
+      border-color: var(--color-primary);
+      background-color: var(--color-primary);
+    }
+  }
+  .isFollow {
+    background-color: var(--color-primary5);
+    border-color: var(--color-primary5);
+    &:hover {
+      border-color: var(--color-primary5);
+      background-color: var(--color-primary5);
+    }
+  }
+  .withdraw {
+    background-color: var(--color-warn);
+    border-color: var(--color-warn);
+    &:hover {
+      border-color: var(--color-warn);
+      background-color: var(--color-warn);
+    }
+  }
 }

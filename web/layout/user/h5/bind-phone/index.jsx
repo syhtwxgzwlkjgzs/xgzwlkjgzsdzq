@@ -41,7 +41,7 @@ class BindPhoneH5Page extends React.Component {
         duration: 1000,
       });
       setTimeout(() => {
-        window.location.href = '/index';
+        window.location.href = '/';
       }, 1000);
     } catch (e) {
       // 跳转状态页
@@ -90,7 +90,7 @@ class BindPhoneH5Page extends React.Component {
 
   render() {
     const { mobileBind, site } = this.props;
-    const { platform } = site;
+    const { platform, wechatEnv } = site;
     return (
       <div className={platform === 'h5' ? '' : layout.pc_body_background}>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
@@ -115,11 +115,15 @@ class BindPhoneH5Page extends React.Component {
           <Button className={platform === 'h5' ? layout.button : layout.pc_button} type="primary" onClick={this.handleBindButtonClick}>
             下一步
           </Button>
-          <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
-            <span className={layout.clickBtn} onClick={() => {
-              window.location.href = '/index';
-            }} >跳过</span>
-          </div>
+          {
+            wechatEnv === 'miniProgram'
+              ? <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
+                  <span className={layout.clickBtn} onClick={() => {
+                    window.location.href = '/';
+                  }} >跳过</span>
+                </div>
+              : <></>
+          }
         </div>
       </div>
       </div>

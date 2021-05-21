@@ -73,7 +73,7 @@ export default function DefaultToolbar(props) {
           return (
             <Dropdown
               key={item.id}
-              trigger="click"
+              trigger="hover"
               menu={menus}
               arrow={false}
               onChange={(key) => {

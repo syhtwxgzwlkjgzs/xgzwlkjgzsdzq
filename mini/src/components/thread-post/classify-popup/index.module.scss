@@ -19,7 +19,7 @@
 
     .dzq-button {
       max-width: 300px;
-      min-width: 76px;
+      min-width: 75px;
       padding: 8px 10px;
       font-size: var(--font-size-primary);
       font-weight: normal;
@@ -44,11 +44,18 @@
   }
 
   .content {
-    width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    gap: 10px;
+    font-size: $font-size-base;
+    text-align: center;
+    :global { /* stylelint-disable-line */
+      .dzq-button {
+        max-width: 310px;
+        margin-right: $margin-10;
+        margin-bottom: $margin-10;
+      }
+    }
   }
 
   .content-parent {
