@@ -3,10 +3,10 @@ import { Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 
 
-const ErrorView = ({ text = '加载失败，点击重新加载', onClick }) => {
+const ErrorView = ({ text = '加载失败...', onClick }) => {
     return (
         <div className={styles.refreshView} onClick={onClick}>
-            <Icon name="RenovateOutlined" className={styles.spin} size={14}/>
+            {/* <Icon name="RenovateOutlined" className={styles.spin} size={14}/> */}
             {text}
         </div>
     )

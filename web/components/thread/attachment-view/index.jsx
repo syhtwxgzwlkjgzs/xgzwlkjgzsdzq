@@ -67,7 +67,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
           </div>
 
           <div className={styles.right}>
-            <span className={styles.span} onClick={() => onPreviewer(item.url)}>浏览</span>
+            {/* <span className={styles.span} onClick={() => onPreviewer(item.url)}>浏览</span> */}
             <span className={styles.span} onClick={() => onDownLoad(item.url)}>下载</span>
           </div>
         </div>

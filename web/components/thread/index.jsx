@@ -62,8 +62,14 @@ class Index extends React.Component {
       const { data = {} } = this.props;
       const { threadId = '' } = data;
       if (threadId !== '') {
+        const { platform = 'pc' } = this.props.site;
         this.props.thread.positionToComment()
-        this.props.router.push(`/thread/${threadId}`);
+        if (platform === 'pc') {
+          const baseUrl = window.location.origin
+          window.open(`${baseUrl}/thread/${threadId}`)
+        } else {
+          this.props.router.push(`/thread/${threadId}`);
+        }
       } else {
         console.log('帖子不存在');
       }
