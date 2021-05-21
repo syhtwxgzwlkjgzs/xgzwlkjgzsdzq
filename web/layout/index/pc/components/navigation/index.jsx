@@ -51,7 +51,7 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop }) 
   );
 
   return (
-    <Card style={{ background: '#fff' }} bordered={false}>
+    <Card className={styles.container} style={{ background: '#fff' }} bordered={false}>
       <CategoriesContent />
     </Card>
   );
