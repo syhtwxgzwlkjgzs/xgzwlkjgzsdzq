@@ -73,9 +73,11 @@ const List = forwardRef(({
 
   const onTouchMove = throttle(({ isFirst = false }) => {
 
-    if (!listWrapper || !listWrapper.current || !onRefresh) {
+    if (!listWrapper || !listWrapper.current) {
+      onScroll();
       return;
     }
+
     const { clientHeight } = listWrapper.current;
     const { scrollHeight } = listWrapper.current;
     const { scrollTop } = listWrapper.current;
@@ -83,6 +85,8 @@ const List = forwardRef(({
     // 滑动事件
     onScroll({ scrollTop });
     currentScrollTop.current = scrollTop
+
+    if(!onRefresh) return;
 
     // 处理首页筛选，更新数据的时候，会触发一次上拉刷新
     let allowHandleRefresh = true
