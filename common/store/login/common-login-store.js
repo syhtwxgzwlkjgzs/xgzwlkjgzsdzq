@@ -91,15 +91,14 @@ export default class commonLoginStore {
     @action
     showCaptcha(qcloudCaptchaAppId, TencentCaptcha) {
       return new Promise(async (resolve, reject) => {
-        if (!this.captcha) {
-          this.captcha = new TencentCaptcha(qcloudCaptchaAppId, (res) => {
-            if (res.ret === 0) {
-              this.captchaRandStr = res.randstr;
-              this.captchaTicket = res.ticket;
-              return resolve(res);
-            }
-          });
-        }
+        this.captcha = new TencentCaptcha(qcloudCaptchaAppId, (res) => {
+          if (res.ret === 0) {
+            this.captchaRandStr = res.randstr;
+            this.captchaTicket = res.ticket;
+            return resolve(res);
+          }
+          reject(res);
+        });
         // 显示验证码
         this.captcha.show();
       }).catch((e) => {console.log(e)});
