@@ -30,7 +30,7 @@ export default async function initJSSdk(jsApiList = []) {
   if (ret.Code === 0) {
     const params = (({ appId, timestamp, nonceStr, signature }) => ({ appId, timestamp, nonceStr, signature }))(ret.Data);
     wx.config({
-      debug: true,
+      debug: false,
       jsApiList,
       ...params,
     });
