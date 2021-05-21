@@ -11,8 +11,8 @@
   }
   .title{
     text-align: center;
-    padding: $padding-4n 0;
     font-size: 30px;
+    font-weight: 600;
   }
 
   .list{
@@ -68,6 +68,9 @@
               &::after {
                 border-radius: var(--border-radius-small);
               }
+            }
+            .dzq-icon {
+              font-size: 10px !important;
             }
           }
         }

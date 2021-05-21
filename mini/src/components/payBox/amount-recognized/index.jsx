@@ -179,7 +179,7 @@ export default class AmountRecognized extends Component {
         </View>
         {/* 关闭按钮 */}
         <View onClick={this.onClose} className={styles.payBoxCloseIcon}>
-          <Icon name="CloseOutlined" size={14} />
+          <Icon name="CloseOutlined" size={12} />
         </View>
       </View>
     );
