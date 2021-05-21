@@ -26,7 +26,7 @@ class DzqApp extends App {
           pathname = pathnameArr.join('/');
         }
       }
-      Router.redirect({ url: `/` });
+      Router.redirect({ url: `${pathname}${window.location.search}` });
 
 
 
