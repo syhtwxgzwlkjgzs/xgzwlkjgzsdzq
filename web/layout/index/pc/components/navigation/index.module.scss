@@ -29,6 +29,9 @@
     }
     .dzq-menu-item {
       padding-right: 0;
+      &:last-child {
+        padding-bottom: rem($padding-4n);
+      }
     }
   }
 }
