@@ -25,6 +25,7 @@ const RenderThreadContent = inject('user')(
       postId: threadStore?.threadData?.postId,
       threadId: threadStore?.threadData?.threadId,
       platform: 'h5',
+      payType: threadStore?.threadData?.payType,
     };
     // 是否合法
     const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
@@ -36,11 +37,11 @@ const RenderThreadContent = inject('user')(
     // 是否附件付费帖
     const isAttachmentPay = threadStore?.threadData?.payType === 2 && threadStore?.threadData?.paid === false;
     const attachmentPrice = threadStore?.threadData?.attachmentPrice || 0;
-    // 是否已付费
-    const isPayed = threadStore?.threadData?.paid === true;
     // 是否付费帖子
     const isThreadPay = threadStore?.threadData?.payType === 1;
     const threadPrice = threadStore?.threadData?.price || 0;
+    // 是否已经付费
+    const isPayed = threadStore?.threadData?.paid === true;
     // 当前用户是否需要付费
     const isNeedPay = threadStore?.threadData?.payType === 1 && threadStore?.threadData?.paid === false;
     // 是否作者自己
@@ -57,7 +58,7 @@ const RenderThreadContent = inject('user')(
     const canBeReward = isFree && threadStore?.threadData?.ability.canBeReward && !isRedPack && !isReward;
     // 是否已打赏
     const isRewarded = threadStore?.threadData?.isReward;
-    
+
     // 是否可以免费查看付费帖子
     const canFreeViewPost = threadStore?.threadData?.ability.canFreeViewPost;
 
@@ -131,16 +132,16 @@ const RenderThreadContent = inject('user')(
                 <div>
                   <div className={styles.rewardMoney}>
                     本帖向所有人悬赏
-                    <span className={styles.rewardNumber}>{parseContent.REWARD.remain_money || 0}</span>元
+                    <span className={styles.rewardNumber}>{parseContent.REWARD.money || 0}</span>元
                   </div>
-                  <div className={styles.rewardTime}>{parseContent.REWARD.expired_at}截止悬赏</div>
+                  <div className={styles.rewardTime}>{parseContent.REWARD.expiredAt}截止悬赏</div>
                 </div>
               )}
             </div>
           )}
 
           {/* 付费附件 */}
-          {!canFreeViewPost && isAttachmentPay && !isSelf && (
+          {!canFreeViewPost && isAttachmentPay && !isSelf && !isPayed && (
             <div style={{ textAlign: 'center' }} onClick={onContentClick}>
               <Button className={styles.payButton} type="primary">
                 <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
@@ -199,10 +200,10 @@ const RenderThreadContent = inject('user')(
                 <div className={styles.rewardBody}>
                   <PostRewardProgressBar
                     type={POST_TYPE.BOUNTY}
-                    remaining={Number(parseContent.REWARD.remain_money || 0)}
+                    remaining={Number(parseContent.REWARD.remainMoney || 0)}
                     received={minus(
                       Number(parseContent.REWARD.money || 0),
-                      Number(parseContent.REWARD.remain_money || 0),
+                      Number(parseContent.REWARD.remainMoney || 0),
                     )}
                   />
                 </div>
@@ -210,17 +211,18 @@ const RenderThreadContent = inject('user')(
               {/* 红包 */}
               {parseContent.RED_PACKET && (
                 <PostRewardProgressBar
-                  remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
+                  remaining={Number(parseContent.RED_PACKET.remainNumber || 0)}
                   received={
-                    Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
+                    Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remainNumber || 0)
                   }
+                  condition={parseContent.RED_PACKET.condition}
                 />
               )}
             </div>
           )}
 
           {/* 帖子付费 */}
-          {!canFreeViewPost && isNeedPay && !isSelf && (
+          {!canFreeViewPost && isThreadPay && !isSelf && !isPayed && (
             <div style={{ textAlign: 'center' }} onClick={onContentClick}>
               <Button className={styles.payButton} type="primary">
                 <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>

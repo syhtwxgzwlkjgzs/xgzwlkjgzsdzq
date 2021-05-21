@@ -239,17 +239,17 @@ class ThreadPostAction extends ThreadPostStore {
       };
     }
 
-    if (redpacket.price) {
+    if (redpacket.price && !redpacket.id) {
       contentIndexes[THREAD_TYPE.redPacket] = {
         tomId: THREAD_TYPE.redPacket,
-        body: { ...redpacket, orderSn },
+        body: { orderSn, ...redpacket },
       };
     }
 
-    if (rewardQa.times) {
+    if (rewardQa.value && !rewardQa.id) {
       contentIndexes[THREAD_TYPE.reward] = {
         tomId: THREAD_TYPE.reward,
-        body: { expiredAt: rewardQa.times, price: Number(rewardQa.value), type: 0, orderSn },
+        body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0, orderSn },
       };
     }
     return contentIndexes;
@@ -310,15 +310,21 @@ class ThreadPostAction extends ThreadPostStore {
           files[item.id] = { ...item, type: item.fileType, name: item.fileName };
         });
       }
-      if (tomId === THREAD_TYPE.audio) audio = contentindexes[index].body;
+      if (tomId === THREAD_TYPE.voice) audio = contentindexes[index].body;
       if (tomId === THREAD_TYPE.product) product = contentindexes[index].body;
-      if (tomId === THREAD_TYPE.video) video = contentindexes[index].body;
-      if (tomId === THREAD_TYPE.redpacket) redpacket = contentindexes[index].body;
+      if (tomId === THREAD_TYPE.video) {
+        video = contentindexes[index].body;
+        video.thumbUrl = video.mediaUrl;
+      }
+      if (tomId === THREAD_TYPE.redPacket) {
+        const price = contentindexes[index]?.body?.money;
+        redpacket = { ...(contentindexes[index]?.body || {}), price };
+      }
       // expiredAt: rewardQa.times, price: rewardQa.value, type: 0
       if (tomId === THREAD_TYPE.reward) rewardQa = {
         ...contentindexes[index].body,
         times: contentindexes[index].body.expiredAt,
-        value: contentindexes[index].body.price || 0,
+        value: contentindexes[index].body.money || '',
       };
     });
     this.setPostData({

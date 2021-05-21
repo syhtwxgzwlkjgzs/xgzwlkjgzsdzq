@@ -2,34 +2,52 @@
 
 .payBox{
   background: var(--color-white);
-  min-height: 240px;
-  padding: 16px;
-  padding-bottom: 24px;
-
+  padding: rem($padding-6n) rem($padding-4n) rem($padding-4n) rem($padding-4n);
+  min-height: 337px;
+  box-sizing: border-box;
+  
+  .moneyUnit {
+    font-size: $font-size-large;
+  }
   .title{
     text-align: center;
-    padding: 16px 0;
-    p{
-      font-size: 20px;
-    }
+    font-size: 30px;
+    font-weight: 600;
   }
+
   .list{
-    margin-top: 8px;
+    margin-top: $margin-2n;
+    :global {
+      .dzq-checkbox-wrap {
+        padding: 0;
+      }
+      .is-checked {
+        border: none;
+        .dzq-checkbox--radio {
+          &::after {
+            border: none;
+          }
+        }
+      }
+    }
     .listItem{
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 8px 16px;
+        padding: $padding-4n 0;
+        &:first-child {
+          border-bottom: 1px solid $paybox-border-line-color;
+        }
         .left{
           display: flex;
           align-items: center;
           justify-content: flex-start;
-          width: 50%;
+          flex-shrink: 0;
           .icon{
-            margin-right: 8px;
+            margin-right: $margin-2n;
           }
           .text{
-            font-size: 16px;
+            font-size: $font-size-primary;
             color: var(--color-text-primary)
           }
         }
@@ -37,37 +55,72 @@
           display: flex;
           align-items: center;
           justify-content: flex-end;
-          width: 50%;
+          flex: 1;
+          word-break: break-all;
           .subText{
-            font-size: 12px;
+            font-size: $font-size-label;
             color: var(--color-text-secondary);
-            margin-right: 8px;
+            margin-right: $margin-4n;
+          }
+          :global {
+            .dzq-checkbox--radio {
+              border-radius: var(--border-radius-small);
+              &::after {
+                border-radius: var(--border-radius-small);
+              }
+            }
+            .dzq-icon {
+              font-size: 10px !important;
+            }
           }
         }
     }
   }
   .tips{
-    padding: 8px 0;
+    padding: $padding-2n 0;
     text-align: center;
-    font-size: 16px;
+    font-size: $font-size-primary;
     color: var(--color-text-secondary);
   }
 
   .btnBox{
-    margin-top: 8px;
-    background: var(--background-color);
+    margin-top: rem($margin-2n);
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: $padding-2n $padding-4n $padding-10;
+    // @include ios-safe-area-inset-bottom;
+    &::before {
+      content: '';
+      display: block;
+      // width: 100%;
+      height: 1px;
+      background: var(--border-line-color);
+      position: relative;
+      top: -8px;
+      margin: 0 rem(-$margin-4n);
+    }
+
     .btn{
-      height: 50px;
-      background-color: var(--color-primary);
-      color: var(--color-white);
-      line-height: 30px;
-      font-size: 16px;
-      &:not(:first-child) {
-        margin-top: 8px;
-        background-color: transparent;
-        color: var(--color-black);
-      }
+      height: 42px;
+      font-size: rem($font-size-middle);
+      border-radius: 5px;
     }
   }
+}
+
+.payBoxCloseIcon {
+  position: absolute;
+  right: 3px;
+  top: 5px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $text-color-secondary;
+  cursor: pointer;
 }
 

@@ -27,10 +27,17 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop }) 
     onNavigationClick({ categoryIds, sequence })
   }
 
-  const renderSubMenuTitle = ({ name, threadCount }) => (
+  const renderMenuTitle = ({ name, threadCount }) => (
     <div>
       <span>{name}</span>
       {threadCount !== 0 && <span className={styles.span}>{name === '全部' ? totalThreads : threadCount}</span>}
+    </div>
+  );
+
+  const renderSubMenuTitle = ({ name, threadCount }) => (
+    <div>
+      <span>{name}</span>
+      {threadCount !== 0 && <span className={styles.subSpan}>{threadCount}</span>}
     </div>
   );
 
@@ -38,20 +45,20 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop }) 
       <Menu defaultOpeneds={[`${fistIndex}`]} defaultSubmenuActives={[`${fistIndex}`]} defaultActives={[`${fistIndex}/${secondIndex}`]}>
         {
           categories?.map((item, index) => (item?.children?.length > 0 ? (
-              <Menu.SubMenu key={index} index={`${item.pid}`}  title={renderSubMenuTitle(item)}>
-                {item.children.map((children, subIndex) => (
-                    <Menu.Item index={`${item.pid}/${children.pid}`} key={subIndex} onClick={onClick}>{children.name}</Menu.Item>
+              <Menu.SubMenu key={index} index={`${item.pid}`}  title={renderMenuTitle(item)}>
+                {item.children.map((child, subIndex) => (
+                    <Menu.Item index={`${item.pid}/${child.pid}`} key={subIndex} onClick={onClick}>{renderSubMenuTitle(child)}</Menu.Item>
                 ))}
               </Menu.SubMenu>
           ) : (
-              <Menu.Item index={`${item.pid}/-1`} key={index} onClick={onClick}>{renderSubMenuTitle(item)}</Menu.Item>
+              <Menu.Item index={`${item.pid}/-1`} key={index} onClick={onClick}>{renderMenuTitle(item)}</Menu.Item>
           )))
         }
       </Menu>
   );
 
   return (
-    <Card style={{ background: '#fff' }} bordered={false}>
+    <Card className={styles.container} style={{ background: '#fff' }} bordered={false}>
       <CategoriesContent />
     </Card>
   );

@@ -15,7 +15,8 @@ import '@discuzq/vditor/src/assets/scss/index.scss';
 export default function DVditor(props) {
   const { pc, emoji = {}, atList = [], topic, value,
     onChange = () => { }, onFocus = () => { }, onBlur = () => { },
-    onInit = () => {},
+    onInit = () => { },
+    onInput = () => {},
   } = props;
   const vditorId = 'dzq-vditor';
 
@@ -60,7 +61,7 @@ export default function DVditor(props) {
   useEffect(() => {
     if (atList && !atList.length) return;
     const users = atList.map((item) => {
-      if (item.user) return ` @${item.user.userName} `;
+      if (item) return ` @${item} `;
       return '';
     });
     if (users.length) {
@@ -117,10 +118,12 @@ export default function DVditor(props) {
           onFocus('focus');
         },
         input: () => {
+          onInput(editor);
           onChange(editor);
         },
         blur: () => {
-          // onChange(editor);
+          // 防止粘贴数据时没有更新内容
+          onChange(editor);
           // 兼容Android的操作栏渲染
           const timer = setTimeout(() => {
             clearTimeout(timer);

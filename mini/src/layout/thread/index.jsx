@@ -221,7 +221,7 @@ class Index extends Component {
     if (type === 'edit') {
       if (!this.props.thread?.threadData?.threadId) return
       Router.redirect({
-        url: `/pages/threadPost/index?id=${this.props.thread.threadData.threadId}`
+        url: `/subPages/thread/post/index?id=${this.props.thread.threadData.threadId}`
       });
     }
   };

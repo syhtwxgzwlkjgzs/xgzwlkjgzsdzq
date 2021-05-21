@@ -29,7 +29,6 @@ class Index extends Component {
       isShowTitle: true, // 默认显示标题
       maxLength: 5000, // 文本输入最大长度
       showClassifyPopup: false, // 切换分类弹框show
-      operationType: 0,
       contentTextLength: 5000,
       showEmoji: false,
       showPaidOption: false, // 显示付费选项弹框
@@ -53,9 +52,9 @@ class Index extends Component {
     this.redirectToHome();
     await this.fetchCategories(); // 请求分类
     const { params } = getCurrentInstance().router;
-    const id = parseInt(params.threadId);
+    const id = parseInt(params.id);
     if (id) { // 请求主题
-      this.setState({ threadId: id })
+      this.setState({ threadId: id, postType: 'isEdit' })
       this.setPostDataById(id);
     } else {
       this.openSaveDraft();
@@ -79,9 +78,9 @@ class Index extends Component {
     // Taro.offKeyboardHeightChange(() => {});
   }
 
-  componentDidShow() {}
+  componentDidShow() { }
 
-  componentDidHide() {}
+  componentDidHide() { }
 
   // handle
   postToast = (title, icon = 'none', duration = 2000) => { // toast
@@ -172,19 +171,24 @@ class Index extends Component {
 
   // 点击发帖插件时回调，如上传图片、视频、附件或艾特、话题等
   handlePluginClick(item) {
-    this.setState({
-      operationType: item.type
-    });
+    const { postType } = this.state;
+
     let nextRoute;
     switch (item.type) {
       // 根据类型分发具体操作
       case THREAD_TYPE.reward:
+        if (postType === 'isEdit') {
+          return this.postToast('再编辑时不可操作悬赏');
+        }
         nextRoute = '/subPages/thread/selectReward/index';
         break;
       case THREAD_TYPE.goods:
         nextRoute = '/subPages/thread/selectProduct/index';
         break;
       case THREAD_TYPE.redPacket:
+        if (postType === 'isEdit') {
+          return this.postToast('再编辑时不可操作红包');
+        }
         nextRoute = '/subPages/thread/selectRedpacket/index';
         break;
       case THREAD_TYPE.paid:
@@ -216,6 +220,9 @@ class Index extends Component {
       case THREAD_TYPE.video:
         this.handleVideoUpload();
         break;
+      case THREAD_TYPE.voice:
+        nextRoute = `/subPages/thread/selectPayment/index?paidType=${THREAD_TYPE.voice}`;
+        break;
       case 'emoji':
         this.setState({
           showEmoji: true
@@ -232,53 +239,87 @@ class Index extends Component {
     const { setPostData } = this.props.threadPost;
     Taro.chooseVideo({
       success: (file) => {
-        Taro.showLoading({
-          title: '上传中',
-          mask: true
-        });
-        // 执行云点播相关的上传工作
-        VodUploader.start({
-          // 必填，把 wx.chooseVideo 回调的参数(file)传进来
-          mediaFile: file,
-          // 必填，获取签名的函数
-          getSignature: async (fn) => {
-            const res = await readYundianboSignature();
-            const { code, data } = res;
-            if (code === 0) {
-              fn(data.token);
-            } else {
-              Taro.showToast({
-                title: '上传失败',
-                duration: 2000
-              });
-            }
-          },
-          // 上传中回调，获取上传进度等信息
-          progress: function (result) {
-            console.log('progress');
-            console.log(result);
-          },
-          // 上传完成回调，获取上传后的视频 URL 等信息
-          finish: function (result) {
-            Taro.hideLoading();
-            result.id = result.fileId;
-            setPostData({
-              video: result
-            });
-          },
-          // 上传错误回调，处理异常
-          error: function (result) {
-            Taro.showToast({
-              title: '上传失败',
-              duration: 2000
-            });
-            console.log('error');
-            console.log(result);
-          },
-        });
+        this.yundianboUpload('video', file);
       }
     });
   }
+
+  // 执行云点播相关的上传工作
+  yundianboUpload(type, file) {
+    const { setPostData, createThreadVideoAudio } = this.props.threadPost;
+    Taro.showLoading({
+      title: '上传中',
+      mask: true
+    });
+
+    let mediaFile = file;
+    if (type === 'audio') {
+      mediaFile = (({fileSize: size, tempFilePath}) => ({size, tempFilePath}))(file);
+    }
+    VodUploader.start({
+      mediaFile,
+      // 必填，获取签名的函数
+      getSignature: async (fn) => {
+        const res = await readYundianboSignature();
+        const { code, data } = res;
+        if (code === 0) {
+          fn(data.token);
+        } else {
+          Taro.showToast({
+            title: '上传失败',
+            duration: 2000
+          });
+        }
+      },
+      // 上传中回调，获取上传进度等信息
+      progress: function (result) {
+        console.log('progress');
+        console.log(result);
+      },
+      // 上传完成回调，获取上传后的视频 URL 等信息
+      finish: async (result) => {
+        const { fileId, videoUrl: mediaUrl } = result;
+        const params = { fileId, mediaUrl };
+        if (type === 'audio') params.type = 1;
+        const res = await createThreadVideoAudio(params);
+        Taro.hideLoading();
+        const { code, data } = res;
+        if (code === 0) {
+          if (type === 'video') {
+            setPostData({
+              video: {
+                id: data?.id,
+                thumbUrl: mediaUrl,
+              },
+            });
+          } else if (type === 'audio') {
+            setPostData({
+              audio: {
+                id: data?.id,
+                mediaUrl: mediaUrl,
+              },
+              audioSrc: mediaUrl,
+            });
+          }
+        } else {
+          Taro.showToast({
+            title: res.msg,
+            duration: 2000
+          });
+        }
+      },
+      // 上传错误回调，处理异常
+      error: function (result) {
+        Taro.showToast({
+          title: '上传失败',
+          duration: 2000
+        });
+        console.log('error');
+        console.log(result);
+      },
+    });
+  }
+
 
   // 红包tag展示
   redpacketContent = () => {
@@ -460,12 +501,11 @@ class Index extends Component {
     const { permissions } = this.props.user;
     const { categories } = this.props.index;
     const { postData, setPostData } = this.props.threadPost;
-    const { rewardQa, redpacket, video, product, position } = postData;
+    const { rewardQa, redpacket, video, audio, product, position } = postData;
     const {
       isShowTitle,
       maxLength,
       showClassifyPopup,
-      operationType,
       showPaidOption,
       showEmoji,
       showDraftOption,
@@ -503,11 +543,14 @@ class Index extends Component {
 
             <View className={styles['plugin']}>
 
-              <GeneralUpload type={operationType} />
+              <GeneralUpload
+                type={Object.keys(audio).length > 0 ? THREAD_TYPE.voice : 0}
+                audioUpload={(file) => { this.yundianboUpload('audio', file) }}
+              />
 
               {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => { }} />}
 
-              {video.videoUrl && <Units type='video' deleteShow src={video.videoUrl} onDelete={() => setPostData({ video: {} })} />}
+              {video.thumbUrl && <Units type='video' deleteShow src={video.thumbUrl} onDelete={() => setPostData({ video: {} })} />}
 
             </View>
           </View>
@@ -530,10 +573,12 @@ class Index extends Component {
                     type='tag'
                     tagContent={`付费总额${postData.price + postData.attachmentPrice}元`}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.paid })}
-                    onTagRemoveClick={() => {setPostData({
-                      price: 0,
-                      attachmentPrice: 0
-                    })}}
+                    onTagRemoveClick={() => {
+                      setPostData({
+                        price: 0,
+                        attachmentPrice: 0
+                      })
+                    }}
                   />
                 )}
                 {/* 红包tag */}
@@ -542,7 +587,7 @@ class Index extends Component {
                     type='tag'
                     tagContent={this.redpacketContent()}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
-                    onTagRemoveClick={() => {setPostData({redpacket: {}})}}
+                    onTagRemoveClick={() => { setPostData({ redpacket: {} }) }}
                   />
                 }
                 {/* 悬赏tag */}
@@ -551,7 +596,7 @@ class Index extends Component {
                     type='tag'
                     tagContent={`悬赏金额${rewardQa.value}元\\结束时间${rewardQa.expiredAt}`}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
-                    onTagRemoveClick={() => {setPostData({rewardQa: {}})}}
+                    onTagRemoveClick={() => { setPostData({ rewardQa: {} }) }}
                   />
                 }
               </View>

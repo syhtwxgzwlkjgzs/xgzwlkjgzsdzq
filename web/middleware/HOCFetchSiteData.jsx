@@ -162,7 +162,7 @@ export default function HOCFetchSiteData(Component) {
           break;
         case -4002:
           clearLoginStatus();
-          reload();
+          window.location.reload();
           break;
         default: Router.redirect({ url: '/500' });
           break;
@@ -194,13 +194,13 @@ export default function HOCFetchSiteData(Component) {
           // // 绑定微信：开启微信，没有绑定微信
           // if (
           //   router.asPath !== '/user/wx-bind-qrcode'
-          //     && (site.isOpenOffiaccountClose || site.isMiniProgramOpen)
+          //     && (site.isOffiaccountOpen || site.isMiniProgramOpen)
           //     && !user.isBindWechat
           // ) {
           //   Router.redirect({ url: '/user/wx-bind-qrcode' });
           // }
           // 前置：没有开启微信
-          if (!site.isOpenOffiaccountClose && !site.isMiniProgramOpen) {
+          if (!site.isOffiaccountOpen && !site.isMiniProgramOpen) {
             // 绑定手机: 开启短信，没有绑定手机号
             if (router.asPath !== '/user/bind-phone' && site.isSmsOpen && !user.mobile) {
               Router.redirect({ url: '/user/bind-phone' });

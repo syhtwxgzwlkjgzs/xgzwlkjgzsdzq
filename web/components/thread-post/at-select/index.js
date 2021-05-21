@@ -6,7 +6,7 @@
  * @prop {function} getAtList 确定
  */
 import React, { Component } from 'react';
-import { Popup, Input, Checkbox, Avatar, Button, ScrollView, Icon } from '@discuzq/design';
+import { Popup, Input, Checkbox, Avatar, Button, ScrollView, Icon, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
@@ -16,6 +16,7 @@ import BaseList from '@components/list';
 import stringToColor from '@common/utils/string-to-color';
 
 @inject('threadPost')
+@inject('search')
 @observer
 class AtSelect extends Component {
   constructor(props) {
@@ -36,18 +37,34 @@ class AtSelect extends Component {
 
   async fetchFollow() {
     const { threadPost } = this.props;
-    const { page, perPage, keywords } = this.state;
+    const { page, perPage } = this.state;
     const params = { page, perPage };
-    if (keywords) {
-      params.filter = {};
-      params.filter.userName = keywords;
-      params.filter.type = 0;
-    }
+    if (page === 1) this.setState({ checkUser: [], finish: false });
     const ret = await threadPost.fetchFollow(params);
     if (ret.code === 0) {
-      this.setState({ page: page + 1 });
+      this.setState({
+        page: page + 1,
+        finish: (this.state.page - 1) * this.state.perPage > threadPost.followsTotalCount,
+      });
+    } else {
+      Toast.error({ content: ret.msg });
     }
     return ret;
+  }
+
+  async fetchAllUser() {
+    const { search } = this.props;
+    const { page, perPage, keywords } = this.state;
+    if (page === 1) this.setState({ checkUser: [], finish: false });
+    const ret = await search.getUsersList({ search: keywords, page, perPage });
+    if (ret.code === 0) {
+      this.setState({
+        page: page + 1,
+        finish: (this.state.page - 1) * this.state.perPage > search.users?.totalCount,
+      });
+    } else {
+      Toast.error({ content: ret.msg });
+    }
   }
 
   // 更新搜索关键字,搜索用户
@@ -61,20 +78,16 @@ class AtSelect extends Component {
   searchInput() {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      this.fetchFollow();
+      this.fetchAllUser();
     }, 300);
   }
 
   onScrollBottom() {
-    // 没有更多数据时，不再发送请求
-    const { threadPost } = this.props;
-    if ((this.state.page - 1) * this.state.perPage > threadPost.followsTotalCount) return Promise.reject();
-    return this.fetchFollow();
+    return this.state.keywords ? this.fetchAllUser() : this.fetchFollow();
   }
 
   // 确认选择
   submitSelect() {
-    console.log(this.state.checkUser);
     if (this.state.checkUser.length === 0) {
       return;
     }
@@ -96,32 +109,39 @@ class AtSelect extends Component {
     );
   }
 
+  formatData = (item) => {
+    const userName = this.state.keywords ? item.nickname : item.user?.userName || '';
+    const userId = this.state.keywords ? item.userId : item.user?.pid || '';
+    const groupName = this.state.keywords ? item.groupName : item.group?.groupName;
+    const avatar = this.state.keywords ? item.avatar : item.user?.avatar;
+    return { userName, userId, groupName, avatar };
+  }
+
   renderItem() {
-    const { threadPost } = this.props;
-    const data = threadPost.follows || [];
+    const { threadPost, search } = this.props;
+    const data = this.state.keywords ? (search.users?.pageData || []) : (threadPost.follows || []);
 
     if (data.length === 0) return null;
     return data.map((item) => {
-      const username = item.user?.userName || '';
-      const userId = item.user?.pid || '';
+      const reItem = this.formatData(item);
       return (
-        <div className={styles['at-item']} key={userId}>
+        <div className={styles['at-item']} key={reItem.userId}>
           <div className={styles.avatar}>
-            {item?.user?.avatar
-              ? <Avatar image={item.user.avatar} />
+            {reItem.avatar
+              ? <Avatar image={reItem.avatar} />
               : <Avatar
-                text={username}
+                text={reItem.userName}
                 style={{
-                  backgroundColor: `#${this.getBackgroundColor(username)}`,
+                  backgroundColor: `#${this.getBackgroundColor(reItem.userName)}`,
                 }}
               />
             }
           </div>
           <div className={styles.info}>
-            <div className={styles.username}>{item?.user?.userName}</div>
-            <div className={styles.group}>{item?.group?.groupName}</div>
+            <div className={styles.username}>{reItem.userName}</div>
+            <div className={styles.group}>{reItem.groupName}</div>
           </div>
-          <Checkbox name={item}></Checkbox>
+          <Checkbox name={reItem.userName}></Checkbox>
         </div>
       );
     });
@@ -132,7 +152,8 @@ class AtSelect extends Component {
   };
 
   render() {
-    const { visible, threadPost } = this.props;
+    const { visible } = this.props;
+
     const content = (
       <div className={styles.wrapper}>
         {/* 搜索框 */}
@@ -167,7 +188,7 @@ class AtSelect extends Component {
                 lowerThreshold={100}
               /> */}
             {/* </div> */}
-            <BaseList className={styles['at-wrap']} onRefresh={this.onScrollBottom.bind(this)} noMore={(this.state.page - 1) * this.state.perPage > threadPost.followsTotalCount}>
+            <BaseList className={styles['at-wrap']} onRefresh={this.onScrollBottom.bind(this)} noMore={this.state.finish}>
               { this.renderItem() }
             </BaseList>
           </Checkbox.Group>

@@ -7,6 +7,7 @@ import layout from './index.module.scss';
 import PhoneInput from '@components/login/phone-input';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
+import clearLoginStatus from '@common/utils/clear-login-status';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 
@@ -90,7 +91,7 @@ class BindPhoneH5Page extends React.Component {
 
   render() {
     const { mobileBind, site } = this.props;
-    const { platform } = site;
+    const { platform, wechatEnv } = site;
     return (
       <div className={platform === 'h5' ? '' : layout.pc_body_background}>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
@@ -115,11 +116,20 @@ class BindPhoneH5Page extends React.Component {
           <Button className={platform === 'h5' ? layout.button : layout.pc_button} type="primary" onClick={this.handleBindButtonClick}>
             下一步
           </Button>
-          <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
-            <span className={layout.clickBtn} onClick={() => {
-              window.location.href = '/';
-            }} >跳过</span>
-          </div>
+          {
+            wechatEnv === 'miniProgram'
+              ? <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
+                  <span className={layout.clickBtn} onClick={() => {
+                    window.location.href = '/';
+                  }} >跳过</span>
+                </div>
+              : <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
+                  <span className={layout.clickBtn} onClick={() => {
+                    clearLoginStatus(); // 清除登录态
+                    window.location.replace('/');
+                  }} >退出登录</span>
+                </div>
+          }
         </div>
       </div>
       </div>

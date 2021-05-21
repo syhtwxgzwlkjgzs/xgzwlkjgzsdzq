@@ -3,7 +3,7 @@
   width: 100%;
 
   .activeItem {
-    color: #0265ff !important;
+    color: $primary-color !important;
     position: relative;
     font-weight: 600;
   }
@@ -24,10 +24,10 @@
 }
 .line {
   position: absolute;
-  bottom: 10px;
+  bottom: rem(12);
   left: 30%;
   width: 40%;
   height: 2px;
-  border-radius: 1px;
-  background: #0265ff;
+  border-radius: rem(1);
+  background: $primary-color;
 }

@@ -3,6 +3,7 @@ import styles from './index.module.scss';
 import { Dialog, Button, Checkbox, Icon, Toast } from '@discuzq/design';
 import CommonAccountContent from '../../components/common-account-content';
 import { inject } from 'mobx-react';
+import throttle from '@common/utils/thottle.js';
 
 @inject('payBox')
 export default class index extends Component {
@@ -14,7 +15,7 @@ export default class index extends Component {
     }, 500);
   };
 
-  goToThePayConfirmPage = async () => {
+  goToThePayConfirmPage = throttle(async () => {
     try {
       await this.props.payBox.createOrder();
     } catch (error) {
@@ -23,10 +24,10 @@ export default class index extends Component {
         content: error.Message || '创建订单失败',
         hasMask: false,
         duration: 1000,
-      })
-      this.onClose()
+      });
+      this.onClose();
     }
-  };
+  }, 300);
 
   // 转换金额小数
   transMoneyToFixed = (num) => {
@@ -49,7 +50,7 @@ export default class index extends Component {
             <div className={styles.amountSubmit}>
               <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.asBtn} full>
                 确认支付
-                </Button>
+              </Button>
             </div>
             {/* 关闭按钮 */}
             <div onClick={this.onClose} className={styles.amountCloseBtn}>

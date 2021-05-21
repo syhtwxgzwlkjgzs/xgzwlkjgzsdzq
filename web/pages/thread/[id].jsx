@@ -6,6 +6,8 @@ import ThreadH5Page from '@layout/thread/h5';
 import ThreadPCPage from '@layout/thread/pc';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import Router from '@discuzq/sdk/dist/router';
+import ErrorPCPage from '@layout/error/pc';
+import ErrorH5Page from '@layout/error/h5';
 
 @inject('site')
 @inject('thread')
@@ -64,6 +66,10 @@ class Detail extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      isServerError:false
+    }
+
     const { thread, serverThread } = this.props;
 
     // 初始化数据到store中
@@ -95,7 +101,14 @@ class Detail extends React.Component {
 
   async getPageDate(id) {
     if (!this.props?.thread?.threadData) {
-      await this.props.thread.fetchThreadDetail(id);
+      const res = await this.props.thread.fetchThreadDetail(id);
+
+      if(res.code !== 0) {
+        this.setState({
+          isServerError: true
+        })
+        return
+      }
 
       // 判断是否审核通过
       const isApproved = (this.props.thread?.threadData?.isApproved || 0) === 1;
@@ -128,6 +141,11 @@ class Detail extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
+
+    if(this.state.isServerError) {
+      return platform === 'h5' ? <ErrorH5Page /> : <ErrorPCPage />;
+    }
+
     return platform === 'h5' ? <ThreadH5Page /> : <ThreadPCPage />;
   }
 }

@@ -121,12 +121,11 @@ class ThreadCreate extends React.Component {
     const { threadPost, index, user, site } = this.props;
     const { threadExtendPermissions, permissions } = user;
     const { webConfig = {} } = site;
-
     const { postData } = threadPost;
+
     const { emoji, topic, atList, currentDefaultOperation, currentAttachOperation, categoryChooseShow } = this.props;
     const category = ((index.categories && index.categories.slice()) || []).filter(item => item.name !== '全部');
-    // 付费设置
-    const { freeWords, price, attachmentPrice } = threadPost.postData;
+
 
     return (
       <>
@@ -149,6 +148,7 @@ class ThreadCreate extends React.Component {
             emoji={emoji}
             atList={atList}
             topic={topic}
+            onInput={(vditor) => this.props.handleVditorChange(vditor, 'input')}
             onChange={this.props.handleVditorChange}
             onFocus={(action) => {
               this.setBottomFixed(action);
@@ -177,13 +177,16 @@ class ThreadCreate extends React.Component {
               onReady={this.props.onVideoReady} />
           )}
           {/* 录音组件 */}
-          {(currentAttachOperation === THREAD_TYPE.voice && !postData.audio.mediaUrl) && (
-            <div className={styles['audio-record']}>
-              <AudioRecord duration={60} onUpload={(blob) => {
-                this.props.handleAudioUpload(blob);
-              }} />
-            </div>
-          )}
+          {(currentAttachOperation === THREAD_TYPE.voice
+            && Object.keys(postData.audio).length > 0
+            && !postData.audio.mediaUrl)
+            && (
+              <div className={styles['audio-record']}>
+                <AudioRecord duration={60} onUpload={(blob) => {
+                  this.props.handleAudioUpload(blob);
+                }} />
+              </div>
+            )}
 
           {/* 语音组件 */}
           {(Boolean(postData.audio.mediaUrl)) && (
@@ -218,6 +221,8 @@ class ThreadCreate extends React.Component {
               postData={postData}
               setPostData={this.props.setPostData}
               handleSetState={this.props.handleSetState}
+              onAttachClick={this.props.handleAttachClick}
+              onDefaultClick={this.props.handleDefaultIconClick}
             />
           )}
         </div>
@@ -250,7 +255,7 @@ class ThreadCreate extends React.Component {
           <DefaultToolbar
             postData={postData}
             value={currentDefaultOperation}
-            onClick={item => this.props.handleSetState({ currentDefaultOperation: item.id, emoji: {} })}
+            onClick={item => this.props.handleDefaultIconClick(item)}
             permission={threadExtendPermissions}
             onSubmit={this.props.handleSubmit}>
             {/* 表情 */}
@@ -341,14 +346,9 @@ class ThreadCreate extends React.Component {
         {/* 付费设置 */}
         {this.props.curPaySelect && (
           <AllPostPaid
-            exhibition={this.props.curPaySelect}
-            cancle={() => {
+            paidType={this.props.curPaySelect}
+            cancel={() => {
               this.props.handleSetState({ curPaySelect: '', currentDefaultOperation: '' });
-            }}
-            data={{ freeWords, price, attachmentPrice }}
-            confirm={(data) => {
-              console.log(data);
-              this.props.setPostData({ ...data });
             }}
           />
         )}
