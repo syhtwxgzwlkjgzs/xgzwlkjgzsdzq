@@ -67,7 +67,7 @@ class ThreadPCPage extends React.Component {
 
     // 举报内容选项
     this.reportContent = ['广告垃圾', '违规内容', '恶意灌水', '重复发帖'];
-    this.inputText = '其他理由...';
+    this.inputText = '请输入其他理由';
   }
 
   // 滚动事件
