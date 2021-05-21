@@ -3,7 +3,7 @@ import Upload from '@components/upload';
 import { ATTACHMENT_TYPE, ACCEPT_FILE_TYPES } from '@common/constants/thread-post';
 
 export default function FileUpload(props) {
-  const { onChange, onComplete, fileList, limit = 9999, ...other } = props;
+  const { onChange, onComplete, fileList, limit = 9, ...other } = props;
   const data = { type: ATTACHMENT_TYPE.file };
   return <Upload
     listType="list"
