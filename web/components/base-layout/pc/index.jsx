@@ -44,8 +44,13 @@ const BaseLayout = (props) => {
   const updateSize = debounce(() => {
     if (window) {
       size.current = calcSize(window.innerWidth);
-      setShowLeft(left && (size.current === 'xl' || size.current === 'xxl'));
-      setShowRight(right && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg'));
+      if (pageName !== 'home') {
+        setShowLeft(left && (size.current === 'xl' || size.current === 'xxl'));
+        setShowRight(right && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg'));
+      } else {
+        setShowRight(right && (size.current === 'xl' || size.current === 'xxl'));
+        setShowLeft(left && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg'));
+      }
     }
   }, 50);
 
