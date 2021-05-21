@@ -47,7 +47,8 @@
 .tabsPC {
   border-radius: rem($border-radius-big);
   .list {
-    height: rem(773);
+    max-height: rem(773);
+    overflow-y: auto;
   }
   .label {
     height: rem(36);
