@@ -16,6 +16,7 @@ const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = tru
   const [value, setValue] = React.useState(defaultValue);
   const [isShow, setIsShow] = React.useState(false);
   const inputChange = (e) => {
+    console.log('e', e.target.value)
     setValue(e.target.value);
     if (e.target.value.length > 0) {
       setIsShow(true)
@@ -44,8 +45,8 @@ const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = tru
       </View>
       {
         isShowCancel && (
-          <View className={styles.cancel} onClick={onCancel}>
-            取消
+          <View className={styles.cancel} onClick={onSearch}>
+            确认
           </View>
         )
       }
