@@ -178,7 +178,7 @@ class ThreadCreate extends React.Component {
           )}
           {/* 录音组件 */}
           {(currentAttachOperation === THREAD_TYPE.voice
-            && Object.keys(postData.audio).length > 0
+            // && Object.keys(postData.audio).length > 0
             && !postData.audio.mediaUrl)
             && (
               <div className={styles['audio-record']}>
