@@ -27,8 +27,9 @@ import styles from './index.module.scss';
 const BaseLayout = (props) => {
   const { header = null, left = null, children = null, right = null, footer = null, onSearch, noMore = false, onRefresh, pageName = '' } = props;
 
-  const [showLeft, setShowLeft] = useState(false);
-  const [showRight, setShowRight] = useState(false);
+  // 2021.5.21: 暂时关闭响应式样式，默认改为显示
+  const [showLeft, setShowLeft] = useState(true);
+  const [showRight, setShowRight] = useState(true);
   const size = useRef('xl')
 
   const debounce = (fn, wait) => {
@@ -54,19 +55,20 @@ const BaseLayout = (props) => {
     }
   }, 50);
 
-  useEffect(() => {
-    if (window) {
-      window.addEventListener('resize', updateSize);
-      return () => {
-          window.removeEventListener('resize', updateSize);
-      };
-    }
-  });
+  // 2021.5.21: 暂时关闭响应式样式
+  // useEffect(() => {
+  //   if (window) {
+  //     window.addEventListener('resize', updateSize);
+  //     return () => {
+  //         window.removeEventListener('resize', updateSize);
+  //     };
+  //   }
+  // });
 
-  useEffect(() => {
-    size.current = calcSize(window.innerWidth);
-    updateSize();
-  }, [size.current])
+  // useEffect(() => {
+  //   size.current = calcSize(window.innerWidth);
+  //   updateSize();
+  // }, [size.current])
 
   const calcSize = (width = 1600) => {
     let size = 'xl';
