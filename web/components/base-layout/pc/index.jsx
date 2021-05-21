@@ -55,19 +55,20 @@ const BaseLayout = (props) => {
     }
   }, 50);
 
-  useEffect(() => {
-    if (window) {
-      window.addEventListener('resize', updateSize);
-      return () => {
-          window.removeEventListener('resize', updateSize);
-      };
-    }
-  });
+  // 2021.5.21: 暂时关闭响应式样式
+  // useEffect(() => {
+  //   if (window) {
+  //     window.addEventListener('resize', updateSize);
+  //     return () => {
+  //         window.removeEventListener('resize', updateSize);
+  //     };
+  //   }
+  // });
 
-  useEffect(() => {
-    size.current = calcSize(window.innerWidth);
-    updateSize();
-  }, [size.current])
+  // useEffect(() => {
+  //   size.current = calcSize(window.innerWidth);
+  //   updateSize();
+  // }, [size.current])
 
   const calcSize = (width = 1600) => {
     let size = 'xl';

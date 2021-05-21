@@ -27,6 +27,8 @@ class SearchPCPage extends React.Component {
       value: keyword,
       stepIndex: 0
     };
+    this.activeUsersRef = React.createRef();
+    this.hotTopicRef = React.createRef();
   }
 
   redirectToSearchResultPost = () => {
@@ -88,8 +90,10 @@ class SearchPCPage extends React.Component {
   itemClick = (index, idName) => {
     const stepIndex = this.state.stepIndex;
     if (stepIndex !== index) {
-      this.setState({stepIndex: index});
       this.scrollToAnchor(idName);
+      setTimeout(() => {
+        this.setState({stepIndex: index});
+      }, 1000); // 等待完成 scrollIntoView();
     }
   }
   scrollToAnchor = (anchorName) => {
@@ -109,6 +113,19 @@ class SearchPCPage extends React.Component {
       </div>
     )
   }
+  handleScroll = ({ scrollTop } = {}) => {
+    const activeUsersPos = this.activeUsersRef.current.offsetTop;
+    const hotTopicPos = this.hotTopicRef.current.offsetTop;
+
+    if(scrollTop < activeUsersPos) {
+      this.setState({stepIndex: 0}); // TODO: 暂时写死index，应该通过steps传回index
+    } else if(scrollTop < hotTopicPos && scrollTop >= activeUsersPos) {
+      this.setState({stepIndex: 1});
+    } else if(scrollTop >= hotTopicPos) {
+      this.setState({stepIndex: 2});
+    }
+  }
+
   // 中间 -- 潮流话题 活跃用户 热门内容
   renderContent = () => {
 
@@ -139,7 +156,7 @@ class SearchPCPage extends React.Component {
           </SidebarPanel>
         </div>
 
-        <div id="MemberOutlined">
+        <div id="MemberOutlined" ref={this.activeUsersRef}>
           <SidebarPanel 
             title="活跃用户" 
             type='normal'
@@ -152,7 +169,7 @@ class SearchPCPage extends React.Component {
           </SidebarPanel>
         </div>
 
-        <div id="HotOutlined">
+        <div id="HotOutlined" ref={this.hotTopicRef}>
           <div className={styles.postTitle}>
             <SectionTitle
               title="热门内容"
@@ -175,6 +192,7 @@ class SearchPCPage extends React.Component {
           allowRefresh={false}
           onSearch={this.onSearch}
           right={ this.renderRight }
+          onScroll={ this.handleScroll }
         >
           { this.renderContent() }
         </BaseLayout>
