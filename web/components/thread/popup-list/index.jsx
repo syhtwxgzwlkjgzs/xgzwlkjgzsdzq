@@ -15,7 +15,7 @@ import { withRouter } from 'next/router';
  */
 
 const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) => {
-  const isClickTab = useRef(false)
+  const isClickTab = useRef(false);
 
   const allPageNum = useRef(1);
   const likePageNum = useRef(1);
@@ -27,10 +27,10 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
 
   const [current, setCurrent] = useState(0);
 
-  const TYPE_ALL = 0,
-        TYPE_LIKE = 1,
-        TYPE_REWARD = 2,
-        TYPE_PAID = 3;
+  const TYPE_ALL = 0;
+  const TYPE_LIKE = 1;
+  const TYPE_REWARD = 2;
+  const TYPE_PAID = 3;
 
   useEffect(() => {
     if (visible) {
@@ -72,7 +72,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
   const loadMoreData = () => {
     if (isClickTab.current) {
       isClickTab.current = false;
-      return
+      return;
     }
 
     if (current === 0) {
@@ -94,7 +94,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
     const hasTips = (id === 2 || id === 3) && !tips;
 
     // TODO 临时解决点击tab时，导致list组件触发上拉刷新的问题
-    isClickTab.current = true
+    isClickTab.current = true;
 
     if (hasAll || hasLikes || hasTips) {
       singleLoadData({ type: id, page: 1 });
@@ -105,7 +105,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
 
   };
 
-  const onUserClick = (userId='') => {
+  const onUserClick = (userId = '') => {
     router.push(`/my/others?isOtherPerson=true&otherId=${userId}`);
   };
 
@@ -152,16 +152,16 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
     },
   ];
 
-  const renderTabPanel = (platform) => (
+  const renderTabPanel = platform => (
     tabItems.map((dataSource, index) => {
       const arr = dataSource?.data?.pageData?.list;
-      if(dataSource.number === 0 || dataSource.number === '0') {
+      if (dataSource.number === 0 || dataSource.number === '0') {
         return null; // 列表数量为0不显示该Tab
       }
-      if(tipData?.payType > 0) {
-        if(index === 3) return null; // 付费用户不需打赏列表
+      if (tipData?.payType > 0) {
+        if (index === 3) return null; // 付费用户不需打赏列表
       } else {
-        if(index === 2) return null; // 非付费用户不需显示付费列表
+        if (index === 2) return null; // 非付费用户不需显示付费列表
       }
 
       return (
@@ -173,6 +173,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
               arr?.length ? (
                 <List
                   className={styles.list}
+                  wrapperClass={styles.listWrapper}
                   onRefresh={loadMoreData}
                   noMore={dataSource.data?.currentPage >= dataSource.data?.totalPage}
                 >
@@ -197,9 +198,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
             }
         </Tabs.TabPanel>
       );
-    }).filter((item) => {
-      return item !== null;
-    })
+    }).filter(item => item !== null)
   );
 
   return (
