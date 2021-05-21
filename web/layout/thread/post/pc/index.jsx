@@ -111,6 +111,7 @@ class ThreadPCPage extends React.Component {
                     fileList={Object.values(postData.files)}
                     onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.file)}
                     onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.file)}
+                    beforeUpload = {(cloneList, showFileList) => this.props.beforeUpload(cloneList, showFileList)}
                   />
                 )}
 

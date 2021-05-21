@@ -66,8 +66,7 @@ export default function DzqUpload(props) {
           onRemove(file);
         }}
         beforeUpload={(cloneList, showFileList) => {
-          beforeUpload(cloneList, showFileList);
-          return true;
+          return beforeUpload(cloneList, showFileList);;
         }}
         onChange={(fileList) => {
           onChange(fileList);
