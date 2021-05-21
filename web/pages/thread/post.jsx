@@ -212,7 +212,7 @@ class PostPage extends React.Component {
         const v = u.match(/cpu iphone os (.*?) like mac os/);
         if (v) {
           const version = v[1].replace(/_/g, ".").split('.').splice(0, 2).join('.');
-          if ((Number(version) < 14.3) && u.indexOf('safari') < 0) {
+          if ((Number(version) < 14.3) && !(u.indexOf('safari') > -1 && u.indexOf('chrome') < 0 && u.indexOf('qqbrowser') < 0 && u.indexOf('360') < 0)) {
             Toast.info({ content: 'iOS版本太低，请升级至iOS 14.3及以上版本或使用Safari浏览器访问' });
             return;
           }
@@ -266,6 +266,32 @@ class PostPage extends React.Component {
     } else {
       this.setState({ currentDefaultOperation: item.id, emoji: {} });
     }
+  }
+
+  // 附件上传之前
+  beforeUpload = (cloneList, showFileList) => {
+    const { webConfig } = this.props.site;
+    if (!webConfig) return false;
+    // 站点支持的文件类型、文件大小
+    const { supportFileExt, supportMaxSize } = webConfig.setAttach;
+    // 当前选择附件的类型大小
+    const fileType = cloneList[0].name.match(/\.(.+)$/)[1];
+    const fileSize = cloneList[0].size;
+    // 判断合法性
+    const isLegalType = supportFileExt.includes(fileType);
+    const isLegalSize = supportMaxSize * 1024 *1024 > fileSize;
+    console.log(`list`, cloneList, showFileList)
+    console.log(`supportFileExt`, webConfig,supportFileExt, supportMaxSize, fileType, fileSize, isLegalType && isLegalSize);
+    if (!isLegalType) {
+      Toast.info({ content: '当前不支持此类型文件' });
+      return false;
+    }
+    if (!isLegalSize) {
+      Toast.info({ content: `当前附件最大支持${supportMaxSize}MB` });
+      return false;
+    }
+
+    return true;
   }
 
   // 附件和图片上传
@@ -499,6 +525,7 @@ class PostPage extends React.Component {
           handleAttachClick={this.handleAttachClick}
           handleDefaultIconClick={this.handleDefaultIconClick}
           handleVideoUploadComplete={this.handleVodUploadComplete}
+          beforeUpload={this.beforeUpload}
           handleUploadChange={this.handleUploadChange}
           handleUploadComplete={this.handleUploadComplete}
           handleAudioUpload={this.handleAudioUpload}
@@ -521,6 +548,7 @@ class PostPage extends React.Component {
         handleAttachClick={this.handleAttachClick}
         handleDefaultIconClick={this.handleDefaultIconClick}
         handleVideoUploadComplete={this.handleVodUploadComplete}
+        beforeUpload={this.beforeUpload}
         handleUploadChange={this.handleUploadChange}
         handleUploadComplete={this.handleUploadComplete}
         handleAudioUpload={this.handleAudioUpload}

@@ -67,7 +67,7 @@ class ThreadPCPage extends React.Component {
 
     // 举报内容选项
     this.reportContent = ['广告垃圾', '违规内容', '恶意灌水', '重复发帖'];
-    this.inputText = '其他理由...';
+    this.inputText = '请输入其他理由';
   }
 
   // 滚动事件
@@ -326,6 +326,15 @@ class ThreadPCPage extends React.Component {
       Toast.success({
         content: '评论成功',
       });
+
+      // 是否红包帖
+      const isRedPack = this.props.thread?.threadData?.displayTag?.isRedPack;
+      // TODO:可以进一步细化判断条件，是否还有红包
+      if (isRedPack) {
+        // 评论获得红包帖，更新帖子数据
+        this.props.thread.fetchThreadDetail(id);
+      }
+
       this.setState({
         showCommentInput: false,
         inputValue: '',
