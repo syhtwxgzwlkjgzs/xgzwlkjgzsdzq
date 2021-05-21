@@ -183,6 +183,7 @@
 }
 
 .likeReward {
+  @include cursor-on-pc;
   margin-right: rem($margin-2n);
 }
 
