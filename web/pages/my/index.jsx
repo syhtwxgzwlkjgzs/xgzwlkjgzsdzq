@@ -19,7 +19,7 @@ class MyCenter extends React.Component {
 
     return (
       <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '30px 0'}}>
-        <Button size='large' type='primary'>退出登录</Button>
+        <Button onClick={() => {this.logout()}} size='large' type='primary'>退出登录</Button>
       </div>
     );
 
