@@ -15,8 +15,8 @@ export default function HOCWeixin(Component) {
       // 如果在微信环境内，则直接拉起登录
       if (isWeiXin()) {
         this.state.isWeiXin = true;
-        const redirectEncodeUrl = encodeURIComponent(`https://${window.location.host}/user/wx-auth`);
-        window.location.href = `https://${window.location.host}/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
+        const redirectEncodeUrl = encodeURIComponent(`${window.location.origin}/user/wx-auth`);
+        window.location.href = `${window.location.origin}/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
       }
     }
 

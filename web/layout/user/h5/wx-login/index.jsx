@@ -25,7 +25,7 @@ class WXLoginH5Page extends React.Component {
 
       if (site?.wechatEnv === 'none') return;
 
-      const redirectUri = `${encodeURIComponent(`https://${window.location.host}/user/wx-authorization?type=${platform}`)}`;
+      const redirectUri = `${encodeURIComponent(`${window.location.origin}/user/wx-authorization?type=${platform}`)}`;
       let params;
       const { platform } = site;
       if (platform === 'h5') {

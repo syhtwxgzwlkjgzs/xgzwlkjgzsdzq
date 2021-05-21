@@ -24,7 +24,7 @@ class WeixinBindQrCodePage extends React.Component {
         params: {
           sessionToken,
           type: wechatEnv === 'miniProgram' ? 'pc_bind_mini' : qrCodeType,
-          redirectUri: `${encodeURIComponent(`https://${window.location.host}/${wechatEnv === 'miniProgram' ? 'pages/' : ''}user/wx-auth${wechatEnv === 'miniProgram' ? '/index' : ''}?loginType=${loginType}&action=wx-bind&nickname=${nickname}`)}`,
+          redirectUri: `${encodeURIComponent(`${window.location.origin}/${wechatEnv === 'miniProgram' ? 'pages/' : ''}user/wx-auth${wechatEnv === 'miniProgram' ? '/index' : ''}?loginType=${loginType}&action=wx-bind&nickname=${nickname}`)}`,
         },
       });
       this.queryLoginState(wechatEnv === 'miniProgram' ? 'pc_bind_mini' : qrCodeType);

@@ -168,8 +168,8 @@ class UsernameH5Login extends React.Component {
               <span
                 onClick={() => {
                   if (browser.env('weixin')) {
-                    const redirectEncodeUrl = encodeURIComponent(`https://${window.location.host}/user/wx-auth`);
-                    window.location.href = `https://${window.location.host}/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
+                    const redirectEncodeUrl = encodeURIComponent(`${window.location.origin}/user/wx-auth`);
+                    window.location.href = `${window.location.origin}/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
                     return;
                   }
 
