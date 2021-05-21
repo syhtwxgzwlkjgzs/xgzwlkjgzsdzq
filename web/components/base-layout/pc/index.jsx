@@ -27,8 +27,8 @@ import styles from './index.module.scss';
 const BaseLayout = (props) => {
   const { header = null, left = null, children = null, right = null, footer = null, onSearch, noMore = false, onRefresh, pageName = '' } = props;
 
-  const [showLeft, setShowLeft] = useState(false);
-  const [showRight, setShowRight] = useState(false);
+  const [showLeft, setShowLeft] = useState(true);
+  const [showRight, setShowRight] = useState(true);
   const [isError, setIsError] = useState(false);
   const size = useRef('xl')
 
