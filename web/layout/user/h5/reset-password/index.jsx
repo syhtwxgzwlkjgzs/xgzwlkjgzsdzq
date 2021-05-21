@@ -3,11 +3,12 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import { Button, Input, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
-import layout from './index.module.scss';
 import PhoneInput from '@components/login/phone-input';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import { get } from '@common/utils/get';
+import PcBodyWrap from '../components/pc-body-wrap';
+import layout from './index.module.scss';
 
 
 @inject('site')
@@ -36,8 +37,8 @@ class ResetPasswordH5Page extends React.Component {
       // 发送前校验
       this.props.resetPassword.beforeSendVerify();
       // 验证码
-      const registerCaptcha = webConfig?.setReg?.registerCaptcha;
-      if (registerCaptcha) {
+      const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
+      if (qcloudCaptcha) {
         const res = await this.props.commonLogin.showCaptcha(qcloudCaptchaAppId, TencentCaptcha);
         if (res.ret !== 0) {
           return;
@@ -84,7 +85,7 @@ class ResetPasswordH5Page extends React.Component {
     const { site } = this.props;
     const { platform } = site;
     return (
-      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
+      <PcBodyWrap>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
@@ -132,7 +133,7 @@ class ResetPasswordH5Page extends React.Component {
           </Button>
         </div>
       </div>
-      </div>
+      </PcBodyWrap>
     );
   }
 }

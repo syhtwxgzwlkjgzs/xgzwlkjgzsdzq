@@ -34,6 +34,7 @@ class DzqApp extends App {
 
   render() {
     const { Component, pageProps } = this.props;
+    const { site } = this.appStore;
     return (
       <div data-dzq-theme="light">
         <Head>
@@ -42,6 +43,7 @@ class DzqApp extends App {
             name="viewport"
             content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover"
           />
+          <title>{(site.envConfig && site.envConfig['TITLE']) || 'Discuz!Q' }</title>
         </Head>
         <Provider {...this.appStore}>
           <PayBoxProvider>

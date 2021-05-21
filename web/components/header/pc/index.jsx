@@ -31,14 +31,21 @@ class Header extends React.Component {
   };
 
   handleSearch = (e) => {
-    const { onSearch = () => {} } = this.props;
-
-    onSearch(e.target?.value || '');
+    const { onSearch } = this.props;
+    if (!onSearch) {
+      Router.push({url: `/search?keyword=${e.target?.value || ''}`});
+    } else {
+      onSearch(e.target?.value || '');
+    }
   };
 
   handleIconClick = () => {
-    const { onSearch = () => {} } = this.props;
-    onSearch(this.state.value || '');
+    const { onSearch } = this.props;
+    if (!onSearch) {
+      Router.push({url: `/search?keyword=${e.target?.value || ''}`});
+    } else {
+      onSearch(e.target?.value || '');
+    }
   };
 
   handleRouter = (url) => {
@@ -150,6 +157,7 @@ class Header extends React.Component {
                   <p>发现</p>
                 </div>
               </div>
+              <div className={styles.border}></div>
               {this.renderUserInfo()}
             </div>
           </div>

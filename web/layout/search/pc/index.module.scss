@@ -33,3 +33,20 @@
   padding: rem(12) 0;
 }
 
+.loading {
+  width: 100%;
+  height: rem(60);
+  background-color: $white;
+  display: flex;
+  justify-content: center;
+  color: var(--color-text-placeholder);
+  border-bottom-left-radius: $border-radius-small;
+  border-bottom-right-radius: $border-radius-small;
+}
+
+.noData {
+  background-color: $white;
+  border-bottom-left-radius: $border-radius-small;
+  border-bottom-right-radius: $border-radius-small;
+}
+

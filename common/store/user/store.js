@@ -9,7 +9,7 @@ class UserStore {
   }
 
   @observable userInfo = null;
-  @observable loginStatus = 'padding';
+  @observable loginStatus = false;
   @observable accessToken = null;
   @observable weixinNickName = null;
   @observable permissions = null;

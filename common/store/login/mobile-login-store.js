@@ -108,7 +108,7 @@ export default class mobileLoginStore {
     }
 
     @action
-    sendCode = async ({captchaRandStr, captchaTicket}) => {
+    sendCode = async ({ captchaRandStr, captchaTicket }) => {
       try {
         const smsResp = await smsSend({
           timeout: 3000,
@@ -116,7 +116,7 @@ export default class mobileLoginStore {
             mobile: this.mobile,
             type: 'login',
             captchaRandStr,
-            captchaTicket
+            captchaTicket,
           },
         });
         if (smsResp.code === 0) {
@@ -126,7 +126,7 @@ export default class mobileLoginStore {
         throw {
           Code: smsResp.code,
           Message: smsResp.msg,
-        }
+        };
       } catch (error) {
         if (error.Code) {
           throw error;
@@ -198,17 +198,18 @@ export default class mobileLoginStore {
         }
 
         if (smsLoginResp.code === NEED_BIND_TOKEN_FLAG) {
-          const accessToken = get(smsLoginResp, 'data.accessToken', '');
           const uid = get(smsLoginResp, 'data.uid', '');
+          // 去除登录态，防止用户携带登录态跳入其他页面
+          // const accessToken = get(smsLoginResp, 'data.accessToken', '');
           // 种下 access_token
-          setAccessToken({
-            accessToken,
-          });
+          // setAccessToken({
+          //   accessToken,
+          // });
           throw {
             ...MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_WECHAT,
             sessionToken: get(smsLoginResp, 'data.sessionToken'),
             nickname: get(smsLoginResp, 'data.nickname'),
-            uid
+            uid,
           };
         }
 

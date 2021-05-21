@@ -264,6 +264,15 @@ class PostPage extends React.Component {
       return false;
     }
     if (child && child.id) {
+      const content = '帖子付费和附件付费不能同时设置';
+      if (postData.price && child.id === '附件付费') {
+        Toast.error({ content });
+        return false;
+      }
+      if (postData.attachmentPrice && child.id === '帖子付费') {
+        Toast.error({ content });
+        return false;
+      }
       this.setState({ curPaySelect: child.id, emoji: {} });
     } else {
       this.setState({ currentDefaultOperation: item.id, emoji: {} });

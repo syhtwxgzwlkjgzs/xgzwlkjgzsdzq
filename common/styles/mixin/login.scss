@@ -166,7 +166,7 @@
   margin: 60px auto 0;
   text-align: center;
   padding-bottom: 50px;
-  min-height: calc(100vh - 190px);
+  min-height: calc(100vh - 198px);
 }
 @mixin pc_content {
   width: 300px;
@@ -253,7 +253,17 @@
 @mixin pc_body_background {
   background: $body-bg-color;
   padding-top: $padding-5n;
-  padding-bottom: 60px;
+}
+@mixin pc_bottom {
+  height: 68px;
+  box-sizing: border-box;
+  padding: $padding-6n 0;
+  text-align: center;
+  font-weight: normal;
+  font-size: $font-size-small;
+  line-height: $font-line-height-small;
+  color: $text-color-secondary;
+  background: $body-bg-color;
 }
 
 // -------------------------------------小程序

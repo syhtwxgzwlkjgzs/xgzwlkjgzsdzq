@@ -11,6 +11,7 @@ import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-sto
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 import { genMiniScheme } from '@server';
+import PcBodyWrap from '../components/pc-body-wrap';
 import PopProtocol from '../components/pop-protocol';
 import browser from '../../../../../common/utils/browser';
 
@@ -34,6 +35,9 @@ class LoginPhoneH5Page extends React.Component {
 
   handleLoginButtonClick = async () => {
     try {
+      if (!this.props.mobileLogin.isInvalidCode || !this.props.mobileLogin.verifyMobile()) {
+        return;
+      }
       const resp = await this.props.mobileLogin.login();
       const uid = get(resp, 'uid', '');
       this.props.user.updateUserInfo(uid);
@@ -71,7 +75,7 @@ class LoginPhoneH5Page extends React.Component {
         const { wechatEnv, platform } = this.props.site;
         // 设置缓存
         if (e.uid) {
-          this.props.commonLogin.setUserId(e.uid)
+          this.props.commonLogin.setUserId(e.uid);
         }
         if (wechatEnv === 'miniProgram' && platform === 'h5') {
           this.props.commonLogin.needToBindMini = true;
@@ -118,8 +122,8 @@ class LoginPhoneH5Page extends React.Component {
       // 发送前校验
       this.props.mobileLogin.beforeSendVerify();
       // 验证码
-      const registerCaptcha = webConfig?.setReg?.registerCaptcha;
-      if (registerCaptcha) {
+      const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
+      if (qcloudCaptcha) {
         const res = await this.props.commonLogin.showCaptcha(qcloudCaptchaAppId, TencentCaptcha);
         if (res.ret !== 0) {
           return;
@@ -127,7 +131,7 @@ class LoginPhoneH5Page extends React.Component {
       }
       await this.props.mobileLogin.sendCode({
         captchaRandStr: this.props.commonLogin?.captchaRandStr,
-        captchaTicket: this.props.commonLogin?.captchaTicket
+        captchaTicket: this.props.commonLogin?.captchaTicket,
       });
       commonLogin.setIsSend(true);
     } catch (e) {
@@ -147,7 +151,7 @@ class LoginPhoneH5Page extends React.Component {
      * TODO 样式这块待修改，pc、h5分开两个文件，类名保持一直，根据platform来判断加载哪个文件的layout
      */
     return (
-      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
+      <PcBodyWrap>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
@@ -166,7 +170,7 @@ class LoginPhoneH5Page extends React.Component {
           />
           {/* 登录按钮 start */}
           <Button
-            disabled={!mobileLogin.isInvalidCode}
+            disabled={!mobileLogin.isInvalidCode || !mobileLogin.verifyMobile()}
             className={platform === 'h5' ? layout.button : layout.pc_button}
             type="primary"
             onClick={this.handleLoginButtonClick}
@@ -206,16 +210,26 @@ class LoginPhoneH5Page extends React.Component {
           <div className={platform === 'h5' ? layout['otherLogin-tips'] : layout.pc_otherLogin_tips} >
             注册登录即表示您同意
             <span onClick={() => {
+              if (platform === 'pc') {
+                window.open('/user/agreement?type=register');
+              }
               commonLogin.setProtocolInfo('register');
             }}>《注册协议》</span>
             <span onClick={() => {
+              if (platform === 'pc') {
+                window.open('/user/agreement?type=privacy');
+              }
               commonLogin.setProtocolInfo('privacy');
             }}>《隐私协议》</span>
           </div>
         </div>
       </div>
-      <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
-      </div>
+      {
+        platform === 'h5'
+          ? <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
+          : <></>
+      }
+      </PcBodyWrap>
     );
   }
 }
