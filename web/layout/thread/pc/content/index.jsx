@@ -270,6 +270,7 @@ export default inject('user')(
                       received={
                         Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remainNumber || 0)
                       }
+                      condition={parseContent.RED_PACKET.condition}
                     />
                   </div>
                 )}

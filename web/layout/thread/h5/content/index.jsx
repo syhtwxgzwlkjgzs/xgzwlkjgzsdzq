@@ -58,7 +58,7 @@ const RenderThreadContent = inject('user')(
     const canBeReward = isFree && threadStore?.threadData?.ability.canBeReward && !isRedPack && !isReward;
     // 是否已打赏
     const isRewarded = threadStore?.threadData?.isReward;
-    
+
     // 是否可以免费查看付费帖子
     const canFreeViewPost = threadStore?.threadData?.ability.canFreeViewPost;
 
@@ -215,6 +215,7 @@ const RenderThreadContent = inject('user')(
                   received={
                     Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remainNumber || 0)
                   }
+                  condition={parseContent.RED_PACKET.condition}
                 />
               )}
             </div>
