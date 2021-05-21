@@ -15,6 +15,7 @@ class DzqApp extends App {
   }
 
   componentDidMount() {
+    console.log(Router);
     if (process.env.DISCUZ_RUN === 'static') {
       // 当CSR出现末尾是index，会导致不能正确跳转的问题；
       let { pathname } = window.location;

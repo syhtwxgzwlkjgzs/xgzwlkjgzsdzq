@@ -107,10 +107,12 @@ class ThreadPCPage extends React.Component {
                 {/* 附件上传组件 */}
                 {(currentDefaultOperation === defaultOperation.attach || Object.keys(postData.files).length > 0) && (
                   <FileUpload
+                    limit={9}
                     className={styles['no-padding']}
                     fileList={Object.values(postData.files)}
                     onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.file)}
                     onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.file)}
+                    beforeUpload = {(cloneList, showFileList) => this.props.beforeUpload(cloneList, showFileList)}
                   />
                 )}
 

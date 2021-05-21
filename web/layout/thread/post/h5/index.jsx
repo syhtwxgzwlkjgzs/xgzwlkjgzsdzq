@@ -120,7 +120,7 @@ class ThreadCreate extends React.Component {
   // 左上角返回按钮回调
   handlePageJump = () => {
     const { postData:{contentText} } = this.props.threadPost;
-    
+
     if (contentText === '') {
       Router.back()
     } else {
@@ -206,9 +206,11 @@ class ThreadCreate extends React.Component {
           {/* 附件上传组件 */}
           {(currentDefaultOperation === defaultOperation.attach || Object.keys(postData.files).length > 0) && (
             <FileUpload
+              limit={9}
               fileList={Object.values(postData.files)}
               onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.file)}
               onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.file)}
+              beforeUpload = {(cloneList, showFileList) => this.props.beforeUpload(cloneList, showFileList)}
             />
           )}
 
