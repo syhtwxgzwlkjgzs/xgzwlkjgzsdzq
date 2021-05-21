@@ -49,6 +49,9 @@ class ThreadPCPage extends React.Component {
       inputValue: '', // 评论内容
     };
 
+    this.likedLoading = false;
+    this.collectLoading = false;
+
     this.perPage = 5;
     this.page = 1; // 页码
     this.commentDataSort = true;
@@ -392,6 +395,10 @@ class ThreadPCPage extends React.Component {
       return;
     }
 
+    if (this.likedLoading) return;
+
+    this.likedLoading = true;
+
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
@@ -399,6 +406,8 @@ class ThreadPCPage extends React.Component {
       isLiked: !this.props.thread?.threadData?.isLike,
     };
     const { success, msg } = await this.props.thread.updateLiked(params, this.props.index, this.props.user);
+
+    this.likedLoading = false;
 
     if (!success) {
       Toast.error({
@@ -433,12 +442,18 @@ class ThreadPCPage extends React.Component {
       return;
     }
 
+    if (this.collectLoading) return;
+
+    this.collectLoading = true;
+
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
       isFavorite: !this.props.thread?.isFavorite,
     };
     const { success, msg } = await this.props.thread.updateFavorite(params);
+
+    this.collectLoading = false;
 
     if (!success) {
       Toast.error({
