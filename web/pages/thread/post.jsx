@@ -212,7 +212,7 @@ class PostPage extends React.Component {
         const v = u.match(/cpu iphone os (.*?) like mac os/);
         if (v) {
           const version = v[1].replace(/_/g, ".").split('.').splice(0, 2).join('.');
-          if ((Number(version) < 14.3) && u.indexOf('safari') < 0) {
+          if ((Number(version) < 14.3) && !(u.indexOf('safari') > -1 && u.indexOf('chrome') < 0 && u.indexOf('qqbrowser') < 0 && u.indexOf('360') < 0)) {
             Toast.info({ content: 'iOS版本太低，请升级至iOS 14.3及以上版本或使用Safari浏览器访问' });
             return;
           }
