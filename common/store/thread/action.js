@@ -11,6 +11,7 @@ import {
   reward,
   deleteThread,
 } from '@server';
+import { plus } from '@common/utils/calculate';
 
 class ThreadAction extends ThreadStore {
   constructor(props) {
@@ -532,7 +533,7 @@ class ThreadAction extends ThreadStore {
       // 更新store
       this.commentList.forEach((comment) => {
         if (comment.id === postId) {
-          comment.rewards = comment.rewards + Number(rewards);
+          comment.rewards = plus(Number(comment.rewards), Number(rewards));
         }
       });
 

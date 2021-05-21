@@ -7,6 +7,7 @@ import layout from './index.module.scss';
 import PhoneInput from '@components/login/phone-input';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
+import clearLoginStatus from '@common/utils/clear-login-status';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 
@@ -122,7 +123,12 @@ class BindPhoneH5Page extends React.Component {
                     window.location.href = '/';
                   }} >跳过</span>
                 </div>
-              : <></>
+              : <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
+                  <span className={layout.clickBtn} onClick={() => {
+                    clearLoginStatus(); // 清除登录态
+                    window.location.replace('/');
+                  }} >退出登录</span>
+                </div>
           }
         </div>
       </div>

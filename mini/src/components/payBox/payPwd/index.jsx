@@ -86,7 +86,9 @@ class PayPassword extends React.Component {
           hasMask: false,
           duration: 1000,
         });
-        await this.props.payBox.clear();
+        setTimeout(() => {
+          this.props.payBox.clear();
+        }, 500)
       } catch (error) {
         Toast.error({
           content: '支付失败，请重新输入',
@@ -96,17 +98,6 @@ class PayPassword extends React.Component {
         this.setState({
           list: [],
         });
-      }
-    } else if (this.props.payBox.step === STEP_MAP.SET_PASSWORD) {
-      //表示设置支付密码
-      try {
-        let id = this.props.user.id;
-        if (!id) return;
-        await this.props.payBox.setPayPassword(id);
-        await this.props.user.updateUserInfo(id);
-        this.props.payBox.step = STEP_MAP.PAYWAY;
-        this.props.payBox.visible = true;
-      } catch (error) {
       }
     }
   }
@@ -119,7 +110,7 @@ class PayPassword extends React.Component {
         className={`${styles.payListItem} ${styles.activation} ${whetherIsShowPwdBox && styles.payListItem01}`}
         key={key}
       >
-        {'*'}
+        {'●'}
       </View>
     ));
     if (nodeList.length < 6) {
@@ -152,35 +143,32 @@ class PayPassword extends React.Component {
       <View>
         <Dialog className={styles.paypwdDialogWrapper} visible={isShow} position="center" maskClosable={true}>
           <View className={styles.paypwdDialogContent}>
-            {
-              this.props.payBox.step === STEP_MAP.SET_PASSWORD ? (
-                <>
-                  <View className={styles.paypwdTitle}>设置支付密码</View>
-                  <View className={styles.payList}>{this.renderPwdItem()}</View>
-                </>
-              ) : (
-                <>
-                  <View className={styles.paypwdTitle}>立即支付</View>
-                  <View className={styles.paypwdAmount}>￥{options.amount}</View>
-                  <View className={styles.paypwdMesg}>
-                    <Text>支付方式</Text>
-                    <Text>
-                      <Icon className={styles.walletIcon} name="PurseOutlined" />
-                      <Text style={{ verticalAlign: 'middle' }}>钱包支付</Text>
-                    </Text>
-                  </View>
-                  <Divider className={styles.paypwdDivider} />
-                  <View className={styles.paypwdMesg}>
-                    <Text>支付密码</Text>
-                  </View>
-                  <View className={styles.payList}>{this.renderPwdItem()}</View>
-                </>
-              )
-            }
-
+            <>
+              <View className={styles.paypwdTitle}>立即支付</View>
+              <View className={styles.paypwdAmount}>
+                <Text className={styles.moneyUnit}>￥</Text>
+                {Number(options.amount).toFixed(2)}
+              </View>
+              <Divider className={styles.paypwdDivider} />
+              <View className={styles.paypwdMesg}>
+                <Text className={styles.payText}>支付方式</Text>
+                <Text>
+                  <Icon className={styles.walletIcon} name="PurseOutlined" />
+                  <Text style={{ verticalAlign: 'middle' }}>钱包支付</Text>
+                </Text>
+              </View>
+              <View className={styles.paypwdMesg}>
+                <Text className={styles.payText}>支付密码</Text>
+              </View>
+              <View className={styles.payList}>{this.renderPwdItem()}</View>
+            </>
+            {/* TODO: 忘记支付密码的链接添加 */}
+            <View className={styles.forgetPasswordContainer}>
+              <Text>忘记支付密码?</Text>
+            </View>
             {/* 关闭按钮 */}
             <View className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
-              <Icon name="CloseOutlined" size={16} />
+              <Icon name="CloseOutlined" size={12} />
             </View>
           </View>
         </Dialog>
@@ -233,7 +221,7 @@ class PayPassword extends React.Component {
               0
             </View>
             <View data-key="-1" className={`${styles.column} ${styles.special}`}>
-              {list.length === 0 ? '取消' : '删除'}
+              <Icon name="BackspaceOutlined" size={16} />
             </View>
           </View>
         </View>

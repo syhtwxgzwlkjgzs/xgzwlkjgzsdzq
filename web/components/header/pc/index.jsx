@@ -5,6 +5,7 @@ import { Icon, Input, Button } from '@discuzq/design';
 import Avatar from '@components/avatar';
 import { withRouter } from 'next/router';
 import goToLoginPage from '@common/utils/go-to-login-page';
+import Router from '@discuzq/sdk/dist/router';
 
 @inject('site')
 @inject('user')
@@ -47,6 +48,10 @@ class Header extends React.Component {
   toLogin = () => {
     goToLoginPage({ url: '/user/login' });
   };
+  toRegister = () => {
+    Router.push({url: '/user/register'});
+  }
+
   renderHeaderLogo() {
     const { site } = this.props;
     if (site.setSite && site.setSite.siteLogo && site.setSite.siteLogo !== '') {
@@ -82,7 +87,7 @@ class Header extends React.Component {
         <Button className={styles.userBtn} type="primary" onClick={this.toLogin}>
           登录
         </Button>
-        {site.isRegister && <Button className={`${styles.userBtn} ${styles.registerBtn}`}>注册</Button>}
+        {site.isRegister && <Button onClick={this.toRegister} className={`${styles.userBtn} ${styles.registerBtn}`}>注册</Button>}
       </div>
     );
   }
@@ -124,7 +129,7 @@ class Header extends React.Component {
                   />
                   <p>首页</p>
                 </div>
-                <div className={styles.iconItem} onClick={() => this.handleRouter('/message')}>
+                {false && <div className={styles.iconItem} onClick={() => this.handleRouter('/message')}>
                   <Icon
                     onClick={() => {
                       this.iconClickHandle('home');
@@ -133,7 +138,7 @@ class Header extends React.Component {
                     size={17}
                   />
                   <p>消息</p>
-                </div>
+                </div>}
                 <div className={styles.iconItem} onClick={() => this.handleRouter('/search')}>
                   <Icon
                     onClick={() => {

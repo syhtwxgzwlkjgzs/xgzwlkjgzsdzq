@@ -1,133 +1,214 @@
 /**
  * 付费表单 - 全部
  */
-import React, { useState, useEffect } from 'react'; // 性能优化的
-import { Button, Input, Slider, Toast } from '@discuzq/design'; // 原来就有的封装
+import React, { useState, useEffect } from 'react';
+import { inject, observer } from 'mobx-react';
+import { Button, Input, Radio, Slider, Toast } from '@discuzq/design';
 import DDialog from '@components/dialog';
-import styles from './index.module.scss'; // 私有样式
-import PropTypes from 'prop-types'; // 类型拦截
+import styles from './index.module.scss';
+import PropTypes from 'prop-types';
 import throttle from '@common/utils/thottle';
+import { THREAD_TYPE } from '@common/constants/thread-post';
 
-const AllPostPaid = ({ confirm, cancle, data, exhibition, pc, visible }) => {
-  const [price, setPrice] = useState('');// 支付的金额数量
-  const [attachmentPrice, setAttachmentPrice] = useState('');
+const Index = inject('threadPost')(observer(({ threadPost, cancel, paidType, pc, visible }) => {
+  const isPost = paidType === "帖子付费" // 全贴付费
+  const isAttach = paidType === "附件付费" //附件付费
+  const isAudio = parseInt(paidType) === THREAD_TYPE.voice // 音频付费
+
+  const [price, setPrice] = useState(''); // 全贴价格\附件价格\音频价格
+  const [freeAudio, setFreeAudio] = useState(false); // 默认音频不免费
   const [freeWords, setFreeWords] = useState(0);// 可免费查看数量的百分比数字
-  useEffect(() => { // 重显的逻辑
-    if (data != undefined && Object.keys(data).length > 0) {
-      if (!data.price) {
-        setPrice('');
-      } else {
-        setPrice(data.price);
-      }
-      if (!data.attachmentPrice) {
-        setAttachmentPrice('');
-      } else {
-        setAttachmentPrice(data.attachmentPrice);
-      }
-      setFreeWords(data.freeWords * 100);
+
+  useEffect(() => { // init
+    const { postData } = threadPost;
+    if (isPost) {
+      postData.price && setPrice(postData.price);
+      setFreeWords(postData.freeWords * 100);
+    }
+    if (isAttach) {
+      postData.attachmentPrice && setPrice(postData.attachmentPrice);
+    }
+
+    if (isAudio) {
+      postData.audio?.price && setPrice(postData.audio?.price);
     }
   }, []);
-  // 当点击确定是把参数返回去
-  const redbagconfirm = () => {
-    if (exhibition === '帖子付费') {
-      if (price < 0.1) {
-        Toast.error({ content: '付费金额必须大于0.1元' });
-        return;
-      }
-      confirm({ price, freeWords: freeWords / 100 });
-    } else {
-      if (attachmentPrice < 0.1) {
-        Toast.error({ content: '付费金额必须大于0.1元' });
-        return;
-      }
-      confirm({ attachmentPrice });
+
+  useEffect(() => {
+    isAudio && price !== "" && freeAudio && setFreeAudio(false);
+  }, [price])
+
+  // handle
+  const handleRadioChange = (val) => { // 切换音频是否付费
+    val && setPrice("");
+    setFreeAudio(val)
+  }
+
+  const handlePrice = (val) => {
+    const arr = val.match(/([1-9]\d{0,6}|0)(\.\d{0,2})?/);
+    setPrice(arr ? arr[0] : '');
+  }
+
+  const checkState = () => { // 检查状态
+    if (isAudio && freeAudio) return true;
+
+    if (!price) {
+      Toast.info({ content: '请输入付费金额', duration: 2000 });
+      return false;
     }
-    cancle();
+
+    if (parseFloat(price) < 0.1) {
+      Toast.info({ content: '付费金额最低0.1元', duration: 2000 });
+      return false;
+    }
+
+    if (parseFloat(price) > 1000000) {
+      Toast.info({ content: '付费金额最高100w元', duration: 2000 });
+      return false;
+    }
+
+    return true;
+  }
+
+  const paidConfirm = () => { // 确认
+    // 1 校验
+    if (!checkState()) return;
+
+    // 2 update store
+    const { setPostData, postData } = threadPost;
+    if (isPost) {
+      setPostData({ price: parseFloat(price), freeWords: freeWords / 100 });
+    }
+    if (isAttach) {
+      setPostData({ attachmentPrice: parseFloat(price) });
+    }
+    if (isAudio) {
+      setPostData({
+        audio: {
+          ...postData.audio,
+          price: price ? parseFloat(price) : 0,
+        }
+      });
+    }
+
+    // 3 go back
+    cancel();
   };
 
-  const content = (
-    <div className={styles['redpacket-box']}>
-      {exhibition === '帖子付费' && (
-        <div>
-          <div className={styles['line-box']}>
-            <div className={styles.payText}> 支付金额 </div>
-            <div className={styles.payNumber}>
-              <Input
-                mode="number"
-                value={price}
-                placeholder="金额"
-                onChange={e => setPrice(e.target.value)}
-              />
-              元
-            </div>
-          </div>
-          <div className={`${pc ? styles.toviewPC : ''} ${styles.toview}`}>
-            <div className={styles.toviewone}> 免费查看字数 </div>
-            <div className={styles.slider}>
-              <Slider
-                value={freeWords}
-                defaultValue={freeWords}
-                formatter={value => `${value} %`}
-                onChange={throttle(e => setFreeWords(e), 100)}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-      {exhibition === '附件付费' && (
-        <div className={styles['line-box']}>
-          <div> 附件内容查看价格 </div>
-          <div>
+  const postComponent = () => {
+    return (
+      <>
+        <div className={styles['paid-item']}>
+          <div className={styles.left}>支付金额</div>
+          <div className={styles.right}>
             <Input
               mode="number"
-              value={attachmentPrice}
+              value={price}
               placeholder="金额"
-              onChange={e => setAttachmentPrice(e.target.value)}
-            />
-            元
+              maxLength={10}
+              onChange={e => handlePrice(e.target.value)}
+            />&nbsp;元
           </div>
         </div>
-      )}
-      {!pc && (
-        <div className={styles.btn}>
-          <Button type="large" className={styles['btn-one']} onClick={cancle}>取消</Button>
-          <Button type="primary" className={styles['btn-two']} onClick={redbagconfirm}>确定</Button>
+        <div className={styles.free}>
+          <div className={styles['free-title']}>免费查看字数</div>
+          <Slider
+            value={freeWords}
+            defaultValue={freeWords}
+            formatter={value => `${value} %`}
+            onChange={throttle(e => setFreeWords(e), 100)}
+          />
         </div>
-      )}
+      </>
+    )
+  }
+
+  const attachmentComponent = () => {
+    return (
+      <div className={styles['paid-item']}>
+        <div className={styles.left}>附件内容查看价格</div>
+        <div className={styles.right}>
+          <Input
+            mode="number"
+            value={price}
+            placeholder="金额"
+            maxLength={10}
+            onChange={e => handlePrice(e.target.value)}
+          />&nbsp;元
+        </div>
+      </div>
+    )
+  }
+
+  const audioComponent = () => {
+    return (
+      <>
+        <div className={styles['paid-item']}>
+          <div className={styles.left}>免费</div>
+          <div className={styles.right}>
+            <Radio value={freeAudio} onChange={item => handleRadioChange(item)} />
+          </div>
+        </div>
+        <div className={styles['paid-item']}>
+          <div className={styles.left}>支付金额</div>
+          <div className={styles.right}>
+            <Input
+              mode="number"
+              value={price}
+              placeholder="金额"
+              maxLength={10}
+              onChange={e => handlePrice(e.target.value)}
+            />&nbsp;元
+          </div>
+        </div>
+      </>
+    )
+  }
+
+  const btnComponent = () => {
+    return (
+      <div className={styles.btn}>
+        <Button onClick={cancel}>取消</Button>
+        <Button className={styles['btn-confirm']} onClick={paidConfirm}>确定</Button>
+      </div>
+    )
+  }
+
+  const content = (
+    <div className={styles.wrapper}>
+      {isPost && postComponent()}
+      {isAttach && attachmentComponent()}
+      {isAudio && audioComponent()}
+      {!pc && btnComponent()}
     </div>
-  );
+  )
+
   if (!pc) return content;
 
   return (
     <DDialog
-      title={exhibition}
+      title={paidType}
       visible={visible}
       className={styles.pc}
-      onClose={cancle}
-      onCacel={cancle}
-      onConfirm={redbagconfirm}
+      onClose={cancel}
+      onCacel={cancel}
+      onConfirm={paidConfirm}
     >
       {content}
     </DDialog>
   );
-};
+}));
 
-AllPostPaid.propTypes = {
-  visible: PropTypes.bool.isRequired, // 限定visible的类型为bool,且是必传的
-  cancle: PropTypes.func.isRequired, // 限定cancle的类型为functon,且是必传的
-  confirm: PropTypes.func.isRequired, // 限定confirm的类型为functon,且是必传的
+Index.propTypes = {
+  visible: PropTypes.bool, // PC端必传
+  cancel: PropTypes.func.isRequired,
 };
 
 // 设置props默认类型
-AllPostPaid.defaultProps = {
-  confirm: (e) => {
-    // 点击确定事件
-    console.log(e);
-  },
-  visible: false, // 是否显示
-  data: { price: 0, freeWords: 0, attachmentPrice: 0 }, // 假设有数据返回重显
-  cancle: () => console.log('cancle'), // 点击取消的事件
-  exhibition: '帖子付费', // 传A就展示第一个，传其他就展示第二个
+Index.defaultProps = {
+  visible: false,
+  paidType: '帖子付费',
+  cancel: () => { },
 };
 
-export default AllPostPaid;
+export default Index;

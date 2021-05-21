@@ -148,14 +148,14 @@ class UserCenterFans extends React.Component {
     this.setState({
       loading: false,
     });
-
+    if (!this.containerRef.current) return;
     this.containerRef.current.addEventListener('scroll', this.loadMore);
   }
 
   // 清理，防止内存泄露
   componentWillUnmount() {
     if (!this.containerRef.current) return;
-    this.containerRef.current.removeEventListener('scroll', this.loadMore);
+    this.containerRef && this.containerRef.current && this.containerRef.current.removeEventListener('scroll', this.loadMore);
   }
 
   // 检查是否满足触底加载更多的条件

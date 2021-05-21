@@ -34,7 +34,7 @@ const List = forwardRef(({
   useEffect(() => {
     if (noMore) {
       setIsLoading(true);
-    }
+    } else setIsLoading(false);
   }, [noMore]);
 
   useEffect(() => {
@@ -112,7 +112,6 @@ const List = forwardRef(({
     if (!isFirst) {
       allowHandleRefresh = (scrollTop !== 0)
     }
-   
     if ((scrollHeight - preload <= clientHeight + scrollTop) && !isLoading && allowHandleRefresh) {
       setIsLoading(true);
       if (typeof(onRefresh) === 'function' ) {

@@ -3,8 +3,7 @@ import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/index/h5';
 import IndexPCPage from '@layout/index/pc';
 import { readCategories, readStickList, readThreadList } from '@server';
-import PayBox from '../components/payBox/index';
-import { Toast } from '@discuzq/design'
+import { Toast } from '@discuzq/design';
 import HOCFetchSiteData from '../middleware/HOCFetchSiteData';
 
 @inject('site')
@@ -14,11 +13,11 @@ import HOCFetchSiteData from '../middleware/HOCFetchSiteData';
 class Index extends React.Component {
   page = 1;
   prePage = 10;
-  static async getInitialProps(ctx, {user, site}) {
+  static async getInitialProps(ctx, { user, site }) {
     const categories = await readCategories({}, ctx);
     const sticks = await readStickList({}, ctx);
     const sequence = site && site.webConfig && site.webConfig.setSite ? site.webConfig.setSite.siteOpenSort : 0;
-  
+
     const threads = await readThreadList({ params: { filter: {}, sequence, perPage: 10, page: 1 } }, ctx);
 
     return {
@@ -53,33 +52,32 @@ class Index extends React.Component {
       this.props.index.getRreadStickList();
     }
     if (!hasThreadsData) {
-      this.props.index.getReadThreadList({sequence: this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0});
+      this.props.index.getReadThreadList({ sequence: this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0 });
     }
   }
 
   dispatch = async (type, data = {}) => {
-
     const { index } = this.props;
     const { categoryids, types, essence, sequence, attention, sort } = data;
 
-    let newTypes = []
-    if (!!types) {
+    let newTypes = [];
+    if (types) {
       if (!(types instanceof Array)) {
-        newTypes = [types]
+        newTypes = [types];
       } else {
-        newTypes = types
+        newTypes = types;
       }
     }
 
-    let categoryIds = []
-    if (!!categoryids) {
+    let categoryIds = [];
+    if (categoryids) {
       if (!(categoryids instanceof Array)) {
-        categoryIds = [categoryids]
+        categoryIds = [categoryids];
       } else {
-        categoryIds = categoryids
+        categoryIds = categoryids;
       }
     }
-    
+
 
     if (type === 'click-filter') {
       this.toastInstance = Toast.loading({

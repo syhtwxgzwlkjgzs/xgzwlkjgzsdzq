@@ -88,8 +88,7 @@
   }
   :global {
     .dzq-icon {
-      @include cursor-on-pc;
-      cursor: none; // 为了移除移动端阴影
+      cursor: initial;
     }
   }
 }

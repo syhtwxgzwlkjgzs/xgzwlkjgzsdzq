@@ -96,7 +96,7 @@ export default class ReplyList extends React.Component {
                   </div> : ''
               }
               <span
-                className={this.props.isShowOne && styles.isShowOne}
+                className={classnames(styles.content,this.props.isShowOne && styles.isShowOne)}
                 dangerouslySetInnerHTML={{ __html: this.filterContent()}}
               ></span>
             </div>
