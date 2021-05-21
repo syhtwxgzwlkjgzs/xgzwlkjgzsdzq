@@ -117,6 +117,18 @@ class ThreadCreate extends React.Component {
     this.props.handleSetState({ categoryChooseShow: true });
   };
 
+  // 左上角返回按钮回调
+  handlePageJump = () => {
+    const { postData:{contentText} } = this.props.threadPost;
+    
+    if (contentText === '') {
+      Router.back()
+    } else {
+      this.props.handleSetState({ draftShow: true });
+      return false
+    }
+  }
+
   render() {
     const { threadPost, index, user, site } = this.props;
     const { threadExtendPermissions, permissions } = user;
@@ -129,12 +141,7 @@ class ThreadCreate extends React.Component {
 
     return (
       <>
-        <Header
-          isBackCustom={() => {
-            this.props.handleSetState({ draftShow: true });
-            return false;
-          }}
-        />
+        <Header isBackCustom={this.handlePageJump} />
         <div className={styles['post-inner']}>
           {/* 标题 */}
           <Title
