@@ -1,12 +1,11 @@
 @import '@common/styles/index.scss';
 
-.list {
-  width: 100%;
-  padding: rem($padding-6n) 0;
-  cursor: pointer;
+
   .item {
     display: flex;
-    margin-bottom: rem(22);
+    padding: rem(12) 0;
+    box-sizing: border-box;
+    cursor: pointer;
     .imgBox {
       width: rem(116);
       height: rem(116);
@@ -17,13 +16,16 @@
       font-size: rem($font-line-height-large);
       color: var(--color-white);
       border-radius: rem($border-radius-small);
+      overflow: hidden;
     }
     .img {
       width: 100%;
       height: 100%;
+      object-fit: cover;
+      vertical-align: baseline;
     }
     .content {
-      padding: rem($padding-1n) rem($padding-6n) 0;
+      padding: rem(6) rem($padding-6n) 0;
       flex: 1;
     }
     .title {
@@ -43,14 +45,18 @@
       color: var(--color-text-secondary);
       margin: rem($margin-2n) 0;
       .numItem {
+        display: flex;
+        align-items: center;
         margin-right: rem($font-size-label);
         .numIcon {
           margin-right: rem($margin-1n);
         }
       }
       .viewBox {
+        display: flex;
+        align-items: center;
         .numIcon {
-          margin-right: rem(6.19);
+          margin-right: rem(6);
         }
       }
     }
@@ -71,20 +77,19 @@
 
   .richContent {
     display: box;
-    font-size: rem($font-size-middle);
+    font-size: rem($font-size-base);
     line-height: rem(26);
     max-height: rem(50);
-    margin: rem($padding-4n) 0;
     @include lamp-clamp($line: 2);
     .richText{
       text-overflow: -o-ellipsis-lastline;
       overflow: hidden;
       text-overflow: ellipsis;
-      display: box;
+      display: -webkit-box;/* stylelint-disable-line */
       -webkit-line-clamp: 2;
       line-clamp: 2;
-      box-orient: vertical;
+      -webkit-box-orient: vertical;/* stylelint-disable-line */
       font-size: rem($font-size-middle);
     }
   }
-}
+

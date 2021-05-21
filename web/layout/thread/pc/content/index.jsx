@@ -9,13 +9,14 @@ import VideoPlay from '@components/thread/video-play';
 import PostRewardProgressBar, { POST_TYPE } from '@components/thread/post-reward-progress-bar';
 import Tip from '@components/thread/tip';
 import AttachmentView from '@components/thread/attachment-view';
-import { Icon, Button, Divider, Dropdown, Tag } from '@discuzq/design';
+import { Icon, Button, Divider, Dropdown, Toast } from '@discuzq/design';
 import UserInfo from '@components/thread/user-info';
 import classnames from 'classnames';
 import topic from './index.module.scss';
 import threadPay from '@common/pay-bussiness/thread-pay';
 import { minus } from '@common/utils/calculate';
 import { parseContentData } from '../../utils';
+import goToLoginPage from '@common/utils/go-to-login-page';
 
 // 帖子内容
 export default inject('user')(
@@ -66,9 +67,18 @@ export default inject('user')(
     // 是否已打赏
     const isRewarded = threadStore?.threadData?.isReward;
 
+    // 是否可以免费查看付费帖子
+    const canFreeViewPost = threadStore?.threadData?.ability.canFreeViewPost;
+
     const parseContent = parseContentData(indexes);
 
     const onContentClick = async () => {
+      if (!props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        goToLoginPage({ url: '/user/login' });
+        return;
+      }
+
       const thread = props.store.threadData;
       const { success } = await threadPay(thread, props.user?.userInfo);
 
@@ -100,6 +110,10 @@ export default inject('user')(
 
     const onRewardClick = () => {
       typeof props.onRewardClick === 'function' && props.onRewardClick();
+    };
+
+    const onTagClick = () => {
+      typeof props.onTagClick === 'function' && props.onTagClick();
     };
 
     return (
@@ -165,7 +179,7 @@ export default inject('user')(
             {text && <PostContent useShowMore={false} content={text || ''} />}
 
             {/* 付费附件 */}
-            {isAttachmentPay && !isSelf && (
+            {!canFreeViewPost && isAttachmentPay && !isSelf && (
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={topic.payButton} type="primary" size="large">
                   <div className={topic.pay}>
@@ -219,7 +233,7 @@ export default inject('user')(
 
             {/* 标签 */}
             {threadStore?.threadData?.categoryName && (
-              <div className={topic.tag}>{threadStore?.threadData?.categoryName}</div>
+              <div className={topic.tag} onClick={onTagClick}>{threadStore?.threadData?.categoryName}</div>
             )}
 
             {(parseContent.RED_PACKET || parseContent.REWARD) && (
@@ -258,7 +272,7 @@ export default inject('user')(
             )}
 
             {/* 帖子付费 */}
-            {isThreadPay && !isSelf && (
+            {!canFreeViewPost && isThreadPay && !isSelf && (
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={topic.payButton} type="primary" size="large">
                   <div className={topic.pay}>

@@ -13,7 +13,12 @@ const TopNews = ({ data = [], router, platform = 'h5'}) => {
     if (e?.target?.localName === 'a') {
       return
     }
-    router.push(`/thread/${threadId}`);
+    if (platform === 'pc') {
+      const baseUrl = window.location.origin
+      window.open(`${baseUrl}/thread/${threadId}`)
+    } else {
+      router.push(`/thread/${threadId}`);
+    }
   };
 
   // 过滤内容

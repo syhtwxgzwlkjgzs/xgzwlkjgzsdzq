@@ -13,7 +13,11 @@ import './index.scss';
 import '@discuzq/vditor/src/assets/scss/index.scss';
 
 export default function DVditor(props) {
-  const { pc, onChange, emoji = {}, atList = [], topic, onFocus, onBlur, value } = props;
+  const { pc, emoji = {}, atList = [], topic, value,
+    onChange = () => { }, onFocus = () => { }, onBlur = () => { },
+    onInit = () => { },
+    onInput = () => {},
+  } = props;
   const vditorId = 'dzq-vditor';
 
   const [isFocus, setIsFocus] = useState(false);
@@ -105,6 +109,7 @@ export default function DVditor(props) {
         value,
         // 编辑器异步渲染完成后的回调方法
         after: () => {
+          onInit(editor);
           editor.setValue(value);
           editor.vditor[editor.vditor.currentMode].element.blur();
         },
@@ -113,10 +118,12 @@ export default function DVditor(props) {
           onFocus('focus');
         },
         input: () => {
+          onInput(editor);
           onChange(editor);
         },
         blur: () => {
-          // onChange(editor);
+          // 防止粘贴数据时没有更新内容
+          onChange(editor);
           // 兼容Android的操作栏渲染
           const timer = setTimeout(() => {
             clearTimeout(timer);

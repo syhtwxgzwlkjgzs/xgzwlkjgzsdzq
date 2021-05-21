@@ -145,14 +145,14 @@
   }
 }
 @mixin btn_wx {
-  background: $success-color;
+  background-color: $success-color !important;
 }
 @mixin btn_user {
-  background: $primary-color;
+  background-color: $primary-color !important;
   margin-top: $margin-4n;
 }
 @mixin btn_phone {
-  background: $warn-color;
+  background-color: $warn-color !important;
   margin-top: $margin-4n;
 }
 
@@ -239,6 +239,7 @@
   padding-bottom: $padding-2n;
 }
 @mixin pc_titleTips {
+  margin-bottom: 32px;
   font-size: $font-size-middle;
   line-height: $font-line-height-large;
   text-align: left;

@@ -13,9 +13,9 @@ const Paid = inject('threadPost')(observer((props) => {
   // props state
   const { params: { paidType } } = getCurrentInstance().router;
   const isPost = parseInt(paidType) === THREAD_TYPE.paidPost; // 是否是全贴付费
-  const [price, setPrice] = useState(''); // 全贴价格
+  const [price, setPrice] = useState(''); // 全贴价格\附件价格
   const [freeWords, setFreeWords] = useState(1); // 免费查看百分比
-  const [attachmentPrice, setAttachmentPrice] = useState(''); // 附件价格
+  const [refresh, setRefresh] = useState(true); // 手动刷新页面
 
   // Hook
   useEffect(() => { // 初始化
@@ -29,13 +29,25 @@ const Paid = inject('threadPost')(observer((props) => {
   }, [])
 
   // handle
+  const handlePrice = (val) => {
+    const arr = val.match(/([1-9]\d{0,6}|0)(\.\d{0,2})?/);
+    setPrice(arr ? arr[0] : '');
+    setRefresh(!refresh);
+  }
+
   const checkState = () => {
-    if ((isPost && !price) || (!isPost && !attachmentPrice)) {
-      Taro.showToast({
-        title: '付费金额必须大于0元',
-        icon: 'none',
-        duration: 2000,
-      })
+    if (!price) {
+      Taro.showToast({ title: '请输入付费金额', icon: 'none', duration: 2000 })
+      return false;
+    }
+
+    if (parseFloat(price) < 0.1) {
+      Taro.showToast({ title: '付费金额最低0.1元', icon: 'none', duration: 2000 })
+      return false;
+    }
+
+    if (parseFloat(price) > 1000000) {
+      Taro.showToast({ title: '付费金额最高1000000元', icon: 'none', duration: 2000 })
       return false;
     }
 
@@ -53,9 +65,9 @@ const Paid = inject('threadPost')(observer((props) => {
     // 2 update store
     const { setPostData } = props.threadPost;
     if (isPost) {
-      setPostData({ price, freeWords: freeWords / 100 });
+      setPostData({ price: parseFloat(price), freeWords: freeWords / 100 });
     } else {
-      setPostData({ attachmentPrice });
+      setPostData({ attachmentPrice: parseFloat(price) });
     }
 
     // 3 go back
@@ -72,7 +84,8 @@ const Paid = inject('threadPost')(observer((props) => {
               mode="number"
               value={price}
               placeholder="金额"
-              onChange={e => setPrice(+e.target.value)}
+              maxLength={10}
+              onChange={e => handlePrice(e.target.value)}
             />&nbsp;元
           </View>
         </View>
@@ -96,10 +109,11 @@ const Paid = inject('threadPost')(observer((props) => {
         <View className={styles.right}>
           <Input
             mode="number"
-            value={attachmentPrice}
+            value={price}
             placeholder="金额"
-            onChange={e => setAttachmentPrice(+e.target.value)}
-          />元
+            maxLength={10}
+            onChange={e => handlePrice(e.target.value)}
+          />&nbsp;元
         </View>
       </View>
     )

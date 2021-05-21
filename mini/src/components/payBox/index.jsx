@@ -9,6 +9,7 @@ import AmountRecognized from './amount-recognized';
 import PayConfirmed from './pay-confirmed';
 import PayPwd from './payPwd';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+import { get } from '../../../../common/utils/get';
 
 class PayBoxEmitter extends EventEmitter {}
 

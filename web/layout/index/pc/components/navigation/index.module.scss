@@ -1,24 +1,35 @@
 @import '@common/styles/index.scss';
-:global {
-  .dzq-card {
-    border-radius: rem($border-radius-small);
-  }
-  .dzq-card__body {
-    padding: 0 rem($padding-4n);
-  }
-
-  .dzq-submenu__title.is-active {
-    font-weight: 600;
-    color: #0265ff;
-  }
-
-  .dzq-menu .dzq-menu-item.is-active {
-    font-weight: 600;
-    color: #0265ff;
-  }
-
-  .dzq-submenu > .dzq-menu .dzq-menu-item.is-active {
-    font-weight: initial;
+.container {
+  :global {
+    .dzq-card {
+      border-radius: rem($border-radius-small);
+    }
+    .dzq-card__body {
+      padding: 0 rem($padding-4n);
+    }
+    .dzq-submenu__title {
+      padding-right: 0;
+    }
+    .dzq-submenu__title.is-active {
+      font-weight: 600;
+      color: $primary-color;
+    }
+  
+    .dzq-menu .dzq-menu-item.is-active {
+      font-weight: 600;
+      color: $primary-color;
+    }
+  
+    .dzq-submenu > .dzq-menu .dzq-menu-item.is-active {
+      font-weight: initial;
+    }
+  
+    .dzq-submenu > .dzq-menu .dzq-menu-item {
+      padding-right: 0;
+    }
+    .dzq-menu-item {
+      padding-right: 0;
+    }
   }
 }
 
@@ -31,4 +42,5 @@
   color: var(--color-text-secondary);
   float: right;
   font-weight: normal;
+  font-size: rem($font-size-base);
 }

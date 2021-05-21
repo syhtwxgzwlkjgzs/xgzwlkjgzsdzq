@@ -3,6 +3,7 @@ import styles from './index.module.scss';
 import { Video, Icon } from '@discuzq/design';
 import { noop } from '../utils';
 import { View, Text } from '@tarojs/components'
+import { getElementRect, randomStr } from '../utils'
 
 /**
  * 视频
@@ -27,21 +28,21 @@ const Index = ({
   onPay = noop,
 }) => {
   let player = null;
-  const ref = useRef();
-  const [width, setWidth] = useState(null);
+  const videoId = useRef(`video${randomStr()}`);
+  const [width, setWidth] = useState(378);
 
   const onReady = (ins) => {
     player = ins;
   };
 
   useEffect(() => {
-    // const rect = ref.current.getBoundingClientRect();
-    const rect = {width: 343}; // TODO: 需要修改
-    setWidth(rect?.width || 343);
+    getElementRect(videoId.current).then(res => {
+      setWidth(res?.width || 378);
+    })
   }, []);
 
   return (
-    <View id="common-video-play" className={styles.container} ref={ref}>
+    <View id={videoId.current} className={styles.container}>
       {
         width && (
           <Video

@@ -7,6 +7,7 @@ import CommentInput from '../components/comment-input/index';
 import DeletePopup from '@components/thread-detail-pc/delete-popup';
 import { Icon, Toast } from '@discuzq/design';
 import classnames from 'classnames';
+import goToLoginPage from '@common/utils/go-to-login-page';
 
 const typeMap = {
   101: 'IMAGE',
@@ -53,6 +54,12 @@ class RenderCommentList extends React.Component {
 
   // 点击评论的赞
   async likeClick(data) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     if (!data.id) return;
 
     const params = {
@@ -76,6 +83,12 @@ class RenderCommentList extends React.Component {
 
   // 点击回复的赞
   async replyLikeClick(reply, comment) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     if (!reply.id) return;
 
     const params = {
@@ -99,6 +112,12 @@ class RenderCommentList extends React.Component {
 
   // 点击评论的删除
   async deleteClick(data) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     this.commentData = data;
     this.setState({
       showDeletePopup: true,
@@ -107,6 +126,12 @@ class RenderCommentList extends React.Component {
 
   // 删除评论
   async deleteComment() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     if (!this.commentData.id) return;
 
     const { success, msg } = await this.props.comment.delete(this.commentData.id, this.props.thread);
@@ -126,6 +151,12 @@ class RenderCommentList extends React.Component {
 
   // 点击评论的回复
   replyClick(comment) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     this.commentData = comment;
     this.replyData = null;
     const userName = comment?.user?.username || comment?.user?.userName;
@@ -138,6 +169,12 @@ class RenderCommentList extends React.Component {
 
   // 点击回复的回复
   replyReplyClick(reply, comment) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     this.commentData = null;
     this.replyData = reply;
     this.replyData.commentId = comment.id;
@@ -152,6 +189,11 @@ class RenderCommentList extends React.Component {
 
   // 创建回复评论+回复回复接口
   async createReply(val) {
+    if (!val) {
+      Toast.info({ content: '请输入内容!' });
+      return;
+    }
+
     const id = this.props.thread?.threadData?.id;
     if (!id) return;
 
@@ -207,6 +249,12 @@ class RenderCommentList extends React.Component {
 
   // 点击采纳
   onAboptClick(data) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     this.commentData = data;
     this.setState({ showAboptPopup: true });
   }
