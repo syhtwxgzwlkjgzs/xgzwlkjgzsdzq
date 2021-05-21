@@ -290,7 +290,7 @@ export default inject('user')(
             )}
 
             {/* 打赏 */}
-            {canBeReward && isApproved && (
+            {canBeReward && isApproved && !isSelf && (
               <Button onClick={onRewardClick} className={topic.rewardButton} type="primary" size="large">
                 <div className={topic.buttonIconText}>
                   <Icon className={topic.buttonIcon} name="HeartOutlined" size={19}></Icon>
