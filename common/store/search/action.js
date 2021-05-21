@@ -290,6 +290,7 @@ class SearchAction extends SearchStore {
    @action
    updatePayThreadInfo(threadId, obj) {
      const targetThreads = this.findAssignThread(threadId);
+     if (!targetThreads || targetThreads.length === 0) return;
 
      targetThreads.forEach(targetThread => {
       const { index, store } = targetThread;

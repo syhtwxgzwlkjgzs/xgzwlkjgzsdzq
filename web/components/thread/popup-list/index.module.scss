@@ -75,7 +75,7 @@
   }
 
   .list {
-    height: rem(773);
+    max-height: rem(773);
     overflow-y: scroll;
 
     &::-webkit-scrollbar {
