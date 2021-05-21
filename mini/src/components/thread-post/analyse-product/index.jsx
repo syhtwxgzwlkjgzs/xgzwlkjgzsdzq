@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import Taro from '@tarojs/taro';
 import { View, Text, Image, Textarea, Button } from '@tarojs/components';
-import { Input } from '@discuzq/design';
 import { Toast } from '@discuzq/design';
 import { observer, inject } from 'mobx-react';
-import styles from './index.module.scss';
 import { goodImages } from '@common/constants/const';
-
+import styles from './index.module.scss';
 
 const Index = inject('threadPost')(observer(({ threadPost }) => {
   const { fetchProductAnalysis, setPostData } = threadPost;

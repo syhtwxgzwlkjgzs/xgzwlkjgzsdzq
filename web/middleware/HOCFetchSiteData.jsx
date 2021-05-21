@@ -162,7 +162,7 @@ export default function HOCFetchSiteData(Component) {
           break;
         case -4002:
           clearLoginStatus();
-          reload();
+          window.location.reload();
           break;
         default: Router.redirect({ url: '/500' });
           break;

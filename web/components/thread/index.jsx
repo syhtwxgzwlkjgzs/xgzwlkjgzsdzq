@@ -131,8 +131,8 @@ class Index extends React.Component {
       if (threadId !== '') {
         const { platform = 'pc' } = this.props.site;
         if (platform === 'pc') {
-          const baseUrl = window.location.href
-          window.open(`${baseUrl}thread/${threadId}`)
+          const baseUrl = window.location.origin
+          window.open(`${baseUrl}/thread/${threadId}`)
         } else {
           this.props.router.push(`/thread/${threadId}`);
         }

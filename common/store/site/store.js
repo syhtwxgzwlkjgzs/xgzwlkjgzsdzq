@@ -35,7 +35,6 @@ class SiteStore {
     return get(this.webConfig, 'qcloud.qcloudSms', false);
   }
 
-  // FIXME: 以下两个接口，后台的字段是相反的语义，实际表意是 *****Open 的意思，需要推动后台改动
   @computed get isMiniProgramOpen() {
     return Boolean(get(this.webConfig, 'passport.miniprogramOpen', true));
   }

@@ -2,14 +2,18 @@
 
 .container {
   width: rem(409);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 0 auto;
   background: var(--color-white);
   border-radius: rem($border-radius-big);
-  margin: 0 auto;
-  padding: 0 rem($padding-6n) rem($padding-6n) rem($padding-6n);
+  overflow: hidden;
+  padding: rem(24);
+  box-sizing: border-box;
 }
 
 .header {
-  height: rem(64);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -17,8 +21,8 @@
   .headerLeft {
     flex: 1;
     font-size: rem($font-size-middle);
+    color: $text-color-primary;
     font-weight: var(--font-weight-regular);
-    line-height: rem(64);
     text-align: center;
   }
   .headerIcon {
@@ -34,20 +38,22 @@
   .percentage {
     display: flex;
     flex-direction: column;
-    border-bottom: var(--border-border);
+    border-bottom: $border-solid-1;
+
     .text {
       font-weight: normal;
-      font-size: rem($font-size-primary);
+      color: $text-color-regular;
+      font-size: rem($font-size-base);
       line-height: rem(17.8);
       text-align: left;
-      color: $text-color-regular;
-      padding: rem($padding-4n) 0 rem($padding-2n) 0;
+      padding: rem($padding-6n) 0 rem($padding-2n) 0;
     }
     .slider {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding-bottom: rem($padding-2n);
+      font-size: rem($font-size-small);
       .perCent {
         color: $text-color-primary;
       }
@@ -69,6 +75,9 @@
           height: rem(10);
           border: rem(7) solid var(--color-primary);
         }
+        .dzq-slider__value {
+          font-size: rem($font-size-small);
+        }
       }
     }
   }
@@ -76,18 +85,28 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: rem($font-size-primary);
+    font-size: rem($font-size-base);
     font-weight: normal;
     padding: rem($padding-4n) 0;
+    border-bottom: $border-solid-1;
+
     .text {
       line-height: rem(17.8);
       text-align: left;
       color: $text-color-regular;
+      font-size: rem($font-size-base);
     }
     .moneyNum {
-      line-height: rem(16.8);
+      font-family: 'PingFangSC-Regular';
       text-align: left;
       color: $text-color-primary;
+    }
+    .money {
+      color: $text-color-primary;
+    }
+    .unit {
+      color: $text-color-primary;
+      padding-left: rem(4);
     }
     :global {
       .dzq-input {
@@ -103,6 +122,7 @@
 }
 
 .button {
+  margin-top: rem($margin-6n);
   width: 100%;
   display: flex;
   justify-content: center;
@@ -118,5 +138,6 @@
     background: $button-info-bg-color;
     border: none;
     margin-right: rem($margin-4n);
+    color: $text-color-regular;
   }
 }
