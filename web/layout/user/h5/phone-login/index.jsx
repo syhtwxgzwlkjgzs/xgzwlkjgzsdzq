@@ -44,7 +44,7 @@ class LoginPhoneH5Page extends React.Component {
       });
       // 暂不实现
       setTimeout(() => {
-        window.location.href = '/index';
+        window.location.href = '/';
       }, 1000);
     } catch (e) {
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME.Code) {

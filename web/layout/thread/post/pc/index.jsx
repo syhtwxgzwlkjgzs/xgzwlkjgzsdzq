@@ -58,7 +58,7 @@ class ThreadPCPage extends React.Component {
               isDisplay={true}
               onChange={title => this.props.setPostData({ title })}
             />
-            <div className={styles.editor}>
+            <div className={styles.editor} onClick={this.props.handleVditorFocus}>
               <div className={styles['editor-inner']}>
                 <DVditor
                   pc
@@ -70,6 +70,7 @@ class ThreadPCPage extends React.Component {
                   onCountChange={count => this.props.handleSetState({ count })}
                   onFocus={() => { }}
                   onBlur={() => { }}
+                  onInit={this.props.handleVditorInit}
                 />
 
                 {/* 插入图片 */}
@@ -125,8 +126,11 @@ class ThreadPCPage extends React.Component {
               {/* 设置的金额相关展示 */}
               <MoneyDisplay
                 pc
+                payTotalMoney={threadPost.payTotalMoney}
                 postData={postData} setPostData={this.props.setPostData}
                 handleSetState={this.props.handleSetState}
+                onAttachClick={this.props.handleAttachClick}
+                onDefaultClick={this.props.handleDefaultIconClick}
               />
             </div>
             <div className={styles.toolbar}>
@@ -136,15 +140,7 @@ class ThreadPCPage extends React.Component {
                   postData={postData}
                   permission={user.threadExtendPermissions}
                   value={currentDefaultOperation}
-                  onClick={
-                    (item, child) => {
-                      if (child && child.id) {
-                        this.props.handleSetState({ curPaySelect: child.id, emoji: {} });
-                      } else {
-                        this.props.handleSetState({ currentDefaultOperation: item.id, emoji: {} });
-                      }
-                    }
-                  }
+                  onClick={(item, child) => this.props.handleDefaultIconClick(item, child)}
                   onSubmit={this.props.handleSubmit}>
                   {/* 表情 */}
                   <Emoji

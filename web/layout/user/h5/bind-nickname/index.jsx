@@ -6,6 +6,7 @@ import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
+import clearLoginStatus from '@common/utils/clear-login-status';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 
 @inject('site')
@@ -39,7 +40,7 @@ class BindNicknameH5Page extends React.Component {
           return;
         }
         // TODO: 这里的路由堆栈需要再梳理规则
-        window.location.href = '/index';
+        window.location.href = '/';
       }, 1000);
     } catch (e) {
       // 跳转状态页
@@ -85,7 +86,8 @@ class BindNicknameH5Page extends React.Component {
           </Button>
           <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
             <span className={layout.clickBtn} onClick={() => {
-              this.props.router.push('login');
+              clearLoginStatus(); // 清除登录态
+              window.location.replace('/');
             }}>
               退出登录
             </span>

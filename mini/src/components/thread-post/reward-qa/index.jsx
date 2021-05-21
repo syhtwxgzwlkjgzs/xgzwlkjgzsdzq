@@ -29,12 +29,9 @@ class RewardQa extends Component {
     })
   }
 
-  onMoneyChang = (e) => { // 处理悬赏金额输入
-    const val = e.target.value;
-    const money = val.replace(/\.\d*$/, $1 => {
-      return $1.slice(0, 3)
-    })
-    this.setState({ money })
+  onMoneyChang = (val) => { // 处理悬赏金额输入
+    const arr = val.match(/([1-9]\d{0,6}|0)(\.\d{0,2})?/);
+    this.setState({ money: arr ? arr[0] : '' })
   }
 
   openTimePicker = () => { // 开启时间选择框
@@ -79,7 +76,7 @@ class RewardQa extends Component {
       })
       return false;
     }
-    if (money < 0.1 || money > 1000000) {
+    if (parseFloat(money) < 0.1 || parseFloat(money) > 1000000) {
       Taro.showToast({
         title: '可选悬赏金额为0.1 ~ 1000000元',
         icon: 'none',
@@ -125,10 +122,9 @@ class RewardQa extends Component {
             <Input
               value={money}
               mode="number"
-              miniType="number"
               placeholder="金额"
               maxLength={10}
-              onChange={this.onMoneyChang}
+              onChange={e => this.onMoneyChang(e.target.value)}
             />元
           </View>
         </View>

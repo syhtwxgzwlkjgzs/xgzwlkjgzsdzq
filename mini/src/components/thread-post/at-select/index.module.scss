@@ -73,14 +73,6 @@
   .check-box {
     flex: 1;
     overflow: hidden;
-    .at-wrap {
-      height: 100%;
-      :global {
-        .scroll-view {
-          height: calc(100% - 59px) !important;
-        }
-      }
-    }
   }
 
   .at-item {
@@ -159,6 +151,7 @@
 
   .btn-container {
     @include ios-safe-area-inset-bottom;
+    flex-basis: 59px;
   }
 
   .btn {

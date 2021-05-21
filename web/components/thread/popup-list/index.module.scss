@@ -16,6 +16,10 @@
     justify-content: space-between;
     box-shadow: none;
     padding-left: rem(4);
+    height: rem(52);
+  }
+  :global(.dzq-tabs__content) {
+    padding: 0;
   }
   :global {
     .dzq-tabs__bar {
@@ -40,6 +44,25 @@
   }
 }
 
+.tabsPC {
+  border-radius: rem($border-radius-big);
+  .list {
+    height: rem(773);
+  }
+  .label {
+    height: rem(36);
+  }
+  :global(.dzq-tabs__content) {
+    padding: 0 rem(8);
+  }
+  :global(.dzq-tabs__bar.is-card) {
+    height: rem(68);
+  }
+  :global(.dzq-tabs__item) {
+    padding: 0 rem(16);
+  }
+}
+
 .tabIcon {
   @include cursor-on-pc;
   display: flex;
@@ -54,6 +77,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  height: rem(20);
 
   .icon {
     margin-right: rem(8);

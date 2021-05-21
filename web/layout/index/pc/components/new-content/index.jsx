@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './index.module.scss';
-import { Icon } from '@discuzq/design';
+import { Spin } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
 
 /**
@@ -15,16 +15,24 @@ const NewContent = (props) => {
     conNum = 0,
     goRefresh = noop
   } = props;
+
+  const [refresh, setRefresh] = useState(false)
+
+  const handleRefresh = () => {
+    setRefresh(true)
+    goRefresh()
+  }
+
   return (
     <div>
       {
         visible && (
-          <div className={styles.container} onClick={goRefresh}>
+          <div className={styles.container} onClick={handleRefresh}>
             <span className={styles.text}>有{conNum}条新发布的内容</span>
             <div className={styles.refreshBtn}>
               点击刷新
             </div>
-            <Icon className={styles.refreshIcon} name="LoadingOutlined" size={14} color='#90b2f8'/>
+            {refresh && <Spin size={14} className={styles.spin} type="spinner" />}
           </div>
         )
       }
