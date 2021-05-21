@@ -74,7 +74,7 @@ class SearchResultUserPcPage extends React.Component {
 
   searchData = (keyword) => {
     const { dispatch } = this.props;
-    dispatch('search', keyword);
+    dispatch('refresh', keyword);
   };
 
   onSearch = (value) => {
@@ -100,7 +100,7 @@ class SearchResultUserPcPage extends React.Component {
         <SidebarPanel 
           title="活跃用户" 
           type='normal'
-          isShowMore={!pageData}
+          isShowMore={false}
           noData={!pageData?.length}
           icon={{ type: 2, name: 'MemberOutlined' }}
         >

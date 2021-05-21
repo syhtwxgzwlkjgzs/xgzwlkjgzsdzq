@@ -7,6 +7,7 @@
     // 整个滚动条
     &::-webkit-scrollbar {
       display: block;
+      margin-right: -8px;
       width: 8px;
       border-radius: $border-radius-small;
     }

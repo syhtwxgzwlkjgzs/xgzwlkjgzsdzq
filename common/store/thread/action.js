@@ -199,7 +199,7 @@ class ThreadAction extends ThreadStore {
 
     if (res?.data && res.code === 0) {
       this.setThreadDetailField('isLike', !!isLiked);
-      this.setThreadDetailLikePayCount(res.data.likeCount);
+      this.setThreadDetailLikePayCount(res.data.likePayCount);
 
       // 更新点赞的用户
       const currentUser = UserStore?.userInfo;

@@ -91,14 +91,12 @@ class Index extends React.Component {
       this.toastInstance?.destroy();
     } else if (type === 'moreData') {
       this.page += 1;
-      await index.getReadThreadList({
+      return await index.getReadThreadList({
         perPage: this.prePage,
         page: this.page,
         filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort },
         sequence,
       });
-
-      return;
     } else if (type === 'refresh-recommend') {
       await index.getRecommends({ categoryIds });
     }

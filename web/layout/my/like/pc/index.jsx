@@ -21,10 +21,7 @@ class LikePCPage extends React.Component {
   redirectToSearchResultTopic = () => {
     this.props.router.push('/search/result-topic');
   };
-  // 头部搜索
-  onSearch = (value) => {
-    this.props.router.replace(`/search?keyword=${value}`);
-  }
+
   fetchMoreData = () => {
     const { dispatch } = this.props;
     return dispatch('moreData');
@@ -60,7 +57,6 @@ class LikePCPage extends React.Component {
     const { pageData, currentPage, totalPage, totalCount } = threads || {};
     return (
       <BaseLayout
-        onSearch={this.onSearch}
         right={ this.renderRight }
         noMore={currentPage >= totalPage}
         showRefresh={false}
