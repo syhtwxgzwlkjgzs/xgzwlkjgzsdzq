@@ -40,7 +40,7 @@ class SiteStore {
     return Boolean(get(this.webConfig, 'passport.miniprogramOpen', true));
   }
   // 公众平台是否开启
-  @computed get isOpenOffiaccountOpen() {
+  @computed get isOffiaccountOpen() {
     return Boolean(get(this.webConfig, 'passport.offiaccountOpen', true));
   }
 
@@ -54,7 +54,7 @@ class SiteStore {
       return WECHAT_ENV_MAP.MINI;
     }
 
-    if (this.isOpenOffiaccountOpen) {
+    if (this.isOffiaccountOpen) {
       return WECHAT_ENV_MAP.OPEN;
     }
 
