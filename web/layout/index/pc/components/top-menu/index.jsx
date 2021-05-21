@@ -3,12 +3,18 @@ import styles from './index.module.scss';
 import { Menu } from '@discuzq/design';
 import { noop } from '@components/thread/utils'
 import filterData from './data';
+import deepClone from '@common/utils/deep-clone';
+import data from '../../../../search/pc/components/stepper/data';
 /**
  * 顶部选择菜单
  * @prop {object} data 筛选数据
  * @prop {number} filterIndex 筛选选中项index
  */
+const orgFilter = {
+  
+}
 const Index = ({ onSubmit = noop, isShowDefault = false }) => {
+
   const title = (name = '导航') => <span>{name}</span>;
   // 选中项index
   const newFilterData = filterData.slice();
@@ -21,17 +27,17 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
     });
   }
   
-  const [dataSource, setDataSource] = useState(newFilterData);
-  // 一级菜单是否可以多选
-  const [multiple, setMultiple] = useState(true)
-  // 二级菜单是否可以多选
-  const [subMultiple, setSubMultiple] = useState(false)
+  const [dataSource, setDataSource] = useState(deepClone(newFilterData));
 
   // 点击筛选项，获取目标值
   const onClick = (subIndex, index) => {
-    const newDataSource = dataSource.slice();
-    if (`${index}` !== '-1' && `${subIndex}`.indexOf('-') !== -1) {
-      const i = parseInt(subIndex.split('-')[1])
+    const newDataSource = deepClone(newFilterData);
+
+    // 清除「所有」选项选中状态
+    newDataSource[0].isActive = false
+
+    if (`${index}` !== '-1' && `${subIndex}`.indexOf('/') !== -1) { // 点击二级菜单
+      const i = parseInt(subIndex.split('/')[1])
       const subIndexItems = newDataSource[index]?.children.map(item => {
         item.isActive = false
         return item
@@ -40,7 +46,7 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
 
       const indexItem = newDataSource[index];
       indexItem.isActive = true;
-    } else if (`${index}` === '-1') {
+    } else if (`${index}` === '-1') { // 点击一级菜单
       const indexItems = newDataSource.map(item => {
         if (!item.children?.length) {
           item.isActive = false
@@ -49,14 +55,23 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
       })
       indexItems[subIndex].isActive = true;
     }
+
     const result = handleResult(newDataSource)
+    console.log(result);
     onSubmit(result)
     setDataSource(newDataSource);
   };
 
+  // 根据isActive为true的选项，组装参数
   const handleResult = (data) => {
     const result = {
-      filter: {}
+      sequence: 0,
+      filter: {
+        sort: 1,
+        attention: 0,
+        types: [],
+        essence: 0
+      }
     }
     data.forEach(item => {
       if (item.value === 'sequence') {
@@ -64,11 +79,15 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
       } else if (item.children?.length) {
         item.children.forEach(sub => {
           if (sub.isActive && sub.value) {
-            result.filter[item.type] = sub.value
+            if (item.type === 'types' && sub.value) {
+              result.filter[item.type] = [sub.value]
+            } else {
+              result.filter[item.type] = sub.value
+            }
           }
         })
-      } else if (item.value !== 'all') {
-        result[item.type] = item.isActive ? '1' : '0'
+      } else if (item.type !== 'all') {
+        result.filter[item.type] = item.isActive ? '1' : '0'
       }
     })
     return result
@@ -77,7 +96,7 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
   return (
     <div className={styles.container}>
       {/* 菜单 */}
-      <Menu mode="horizontal" menuTrigger="hover" multiple={multiple}>
+      <Menu mode="horizontal" menuTrigger="hover" defaultActives={['0']}>
         {
           dataSource?.map((item, index) => (
             item.children ? (
@@ -85,17 +104,15 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
                   key={index} 
                   index={index} 
                   title={title(item.label)} 
-                  // className={item.isActive && styles.activeItem}
                   style={{ padding: '3px 0' }}
                 >
                   {
                     item.children.map((secondItem, secondIndex) => {
                       return (
                         <Menu.Item
-                          // className={secondItem.isActive && styles.activeItem}
                           divided
-                          key={`${index}-${secondIndex}`}
-                          index={`${index}-${secondIndex}`}
+                          key={`${index}/${secondIndex}`}
+                          index={`${index}/${secondIndex}`}
                           style={{ padding: '10px 20px' }}
                           onClick={onClick}
                         >
@@ -105,7 +122,7 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
                   }
                 </Menu.SubMenu>
             ) : (
-                <Menu.Item className={item.isActive && styles.activeItem} onClick={onClick} key={index} index={index} style={{ padding: '0 16px' }}>
+                <Menu.Item onClick={onClick} key={index} index={`${index}`} style={{ padding: '0 16px' }}>
                   {item.label}
                   { item.isActive && <div className={styles.line}></div> }
                 </Menu.Item>

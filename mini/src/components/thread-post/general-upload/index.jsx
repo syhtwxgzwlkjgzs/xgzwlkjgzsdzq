@@ -6,12 +6,12 @@ import React, { useState } from 'react';
 import Taro from '@tarojs/taro';
 import { observer, inject } from 'mobx-react';
 import { View } from '@tarojs/components';
-import { AudioRecord } from '@discuzq/design';
+import { AudioRecord, Audio } from '@discuzq/design';
 import { Units } from '@components/common';
 import styles from './index.module.scss';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 
-export default inject('threadPost')(observer(({type, threadPost}) => {
+export default inject('threadPost')(observer(({type, threadPost, audioUpload}) => {
   const { postData, setPostData } = threadPost;
 
   const localData = JSON.parse(JSON.stringify(postData));
@@ -38,7 +38,7 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
           switch(type) {
             case THREAD_TYPE.image: return 1;
             case THREAD_TYPE.file: return 0;
-            case THREAD_TYPE.voice: return 3;
+            // case THREAD_TYPE.voice: return 3;
           }
         })()
       },
@@ -62,13 +62,13 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
             };
             setPostData({files});
             break;
-          case THREAD_TYPE.voice:
-            audio = {
-              thumbUrl: tempFilePath,
-              ...data,
-            };
-            setPostData({audio});
-            break;
+          // case THREAD_TYPE.voice:
+          //   audio = {
+          //     thumbUrl: tempFilePath,
+          //     ...data,
+          //   };
+          //   setPostData({audio});
+          //   break;
         }
       },
       fail(res) {
@@ -130,12 +130,12 @@ export default inject('threadPost')(observer(({type, threadPost}) => {
 
   // 录音并上传
   const audioRecord = (type === THREAD_TYPE.voice && !audio.id) && (
-    <AudioRecord duration={60} onUpload={(file) => {upload(file)}} />
+    <AudioRecord duration={60} onUpload={(file) => {audioUpload(file)}} />
   );
 
   // 录音音频
   const audioPlayer = (audio.id) && (
-    <Audio src={audio.thumbUrl} />
+    <Audio src={audio.mediaUrl} onDelete={() => {setPostData({audio: {}});}} />
   );
 
 

@@ -26,6 +26,8 @@ export default inject('user')(
     const tipData = {
       postId: threadStore?.threadData?.postId,
       threadId: threadStore?.threadData?.threadId,
+      platform: 'pc',
+      payType: threadStore?.threadData?.payType,
     };
     // 是否合法
     const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
@@ -108,6 +110,10 @@ export default inject('user')(
 
     const onRewardClick = () => {
       typeof props.onRewardClick === 'function' && props.onRewardClick();
+    };
+
+    const onTagClick = () => {
+      typeof props.onTagClick === 'function' && props.onTagClick();
     };
 
     return (
@@ -227,7 +233,7 @@ export default inject('user')(
 
             {/* 标签 */}
             {threadStore?.threadData?.categoryName && (
-              <div className={topic.tag}>{threadStore?.threadData?.categoryName}</div>
+              <div className={topic.tag} onClick={onTagClick}>{threadStore?.threadData?.categoryName}</div>
             )}
 
             {(parseContent.RED_PACKET || parseContent.REWARD) && (

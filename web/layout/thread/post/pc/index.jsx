@@ -129,6 +129,8 @@ class ThreadPCPage extends React.Component {
                 payTotalMoney={threadPost.payTotalMoney}
                 postData={postData} setPostData={this.props.setPostData}
                 handleSetState={this.props.handleSetState}
+                onAttachClick={this.props.handleAttachClick}
+                onDefaultClick={this.props.handleDefaultIconClick}
               />
             </div>
             <div className={styles.toolbar}>
@@ -138,15 +140,7 @@ class ThreadPCPage extends React.Component {
                   postData={postData}
                   permission={user.threadExtendPermissions}
                   value={currentDefaultOperation}
-                  onClick={
-                    (item, child) => {
-                      if (child && child.id) {
-                        this.props.handleSetState({ curPaySelect: child.id, emoji: {} });
-                      } else {
-                        this.props.handleSetState({ currentDefaultOperation: item.id, emoji: {} });
-                      }
-                    }
-                  }
+                  onClick={(item, child) => this.props.handleDefaultIconClick(item, child)}
                   onSubmit={this.props.handleSubmit}>
                   {/* 表情 */}
                   <Emoji

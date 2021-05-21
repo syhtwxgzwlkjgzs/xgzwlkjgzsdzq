@@ -28,7 +28,7 @@ class IndexAction extends IndexStore {
 
         this.threads = null;
         this.sticks = null;
-  
+
         this.getRreadStickList(categoryIds);
         this.getReadThreadList({ filter: { categoryids: categoryIds }, sequence: 0, perPage, page });
       }
@@ -192,8 +192,8 @@ class IndexAction extends IndexStore {
 
   /**
    * 更新帖子所有内容，重新编辑
-   * @param {string} threadId 
-   * @param {object} threadInfo 
+   * @param {string} threadId
+   * @param {object} threadInfo
    * @returns boolean
    */
   @action
@@ -216,7 +216,7 @@ class IndexAction extends IndexStore {
   updateAssignThreadInfo(threadId, obj = {}) {
     const targetThread = this.findAssignThread(threadId);
     if (!targetThread || targetThread.length === 0) return;
-    
+
     const { index, data } = targetThread;
     const { updateType, updatedInfo, user } = obj;
 
@@ -225,12 +225,12 @@ class IndexAction extends IndexStore {
       this.threads.pageData[index] = updatedInfo;
     }
 
-    if(!data && !data.likeReward && !data.likeReward.users) return;
+    if(!data && !data?.likeReward && !data?.likeReward?.users) return;
 
     // 更新点赞
     if (updateType === 'like' && !typeofFn.isUndefined(updatedInfo.isLiked) &&
         !typeofFn.isNull(updatedInfo.isLiked) && user) {
-      const { isLiked, likeCount } = updatedInfo;
+      const { isLiked, likePayCount = 0 } = updatedInfo;
       const theUserId = user.userId || user.id;
       data.isLike = isLiked;
 
@@ -249,7 +249,7 @@ class IndexAction extends IndexStore {
                                 }) :
                                 data.likeReward.users;
       }
-      data.likeReward.likePayCount = likeCount;
+      data.likeReward.likePayCount = likePayCount;
     }
 
     // 更新评论
@@ -273,7 +273,7 @@ class IndexAction extends IndexStore {
    */
   @action
   addThread(threadInfo) {
-    const { pageData } = this.threads;
+    const { pageData } = this.threads || {};
     if (pageData) {
       pageData.unshift(threadInfo);
       this.threads.pageData = this.threads.pageData.slice();
@@ -306,7 +306,7 @@ class IndexAction extends IndexStore {
    * @returns 选中的帖子详细信息
    */
    @action
-   async getRecommends({ categoryIds = [] } = {}) { 
+   async getRecommends({ categoryIds = [] } = {}) {
     this.updateRecommendsStatus('loading');
     try {
       const result = await readRecommends({ params: { categoryIds } })
