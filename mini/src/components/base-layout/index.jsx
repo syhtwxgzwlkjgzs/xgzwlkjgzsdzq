@@ -4,7 +4,7 @@ import { View } from '@tarojs/components';
 import Header from '../header';
 import List from '../list'
 import BottomNavBar from '../bottom-nav-bar'
-import { PullDownRefresh } from "@discuzq/design"
+// import { PullDownRefresh } from "@discuzq/design"
 
 import styles from './index.module.scss';
 
@@ -26,7 +26,6 @@ const baseLayoutWhiteList = ['home'];
 
 const BaseLayout = (props) => {
   const { showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr } = props;
-  const { jumpToScrollingPos } = props.baselayout;
   const [height, setHeight] = useState(600);
 
   const debounce = (fn, wait) => {
@@ -39,18 +38,16 @@ const BaseLayout = (props) => {
     }
   }
 
-  const pullDownWrapper = useRef(null)
+  // const pullDownWrapper = useRef(null)
   const listRef = useRef(null);
 
-  useEffect(() => {
-    if (pullDownWrapper?.current) {
-      setHeight(pullDownWrapper.current.clientHeight)
-    }
+  // useEffect(() => {
+  //   console.log(`pullDownWrapper`, pullDownWrapper)
+  //   if (pullDownWrapper?.current) {
+  //     setHeight(pullDownWrapper.current.clientHeight)
+  //   }
 
-    if (listRef?.current && jumpToScrollingPos > 0 && baseLayoutWhiteList.indexOf(props.pageName) !== -1) {
-      listRef.current.jumpToScrollTop(jumpToScrollingPos);
-    }
-  }, [])
+  // }, [])
 
   return (
     <View className={styles.container}>
@@ -58,11 +55,11 @@ const BaseLayout = (props) => {
         {
           showPullDown ? (
             <View className={styles.list} ref={pullDownWrapper}>
-              <PullDownRefresh onRefresh={onPullDown} isFinished={isFinished} height={height}>
+              {/* <PullDownRefresh onRefresh={onPullDown} isFinished={isFinished} height={height}> */}
                   <List {...props} className={styles.listHeight} ref={listRef}>
                       {typeof(children) === 'function' ? children({ ...props }) : children}
                   </List>
-              </PullDownRefresh>
+              {/* </PullDownRefresh> */}
             </View>
           ) : (
             <List {...props} className={styles.list} ref={listRef}>
