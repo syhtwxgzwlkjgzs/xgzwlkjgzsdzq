@@ -35,7 +35,7 @@
 
     .authorInfo {
       width: 100%;
-      height: rem(306);
+      max-height: rem(306);
       background: var(--color-white);
       margin-bottom: rem(20);
       display: flex;

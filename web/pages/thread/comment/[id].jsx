@@ -5,6 +5,7 @@ import { readCommentDetail } from '@server';
 import CommentH5Page from '@layout/thread/comment/h5';
 import CommentPCPage from '@layout/thread/comment/pc';
 import ErrorPCPage from '@layout/error/pc';
+import ErrorH5Page from '@layout/error/h5';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 @inject('site')
@@ -60,6 +61,7 @@ class CommentDetail extends React.Component {
         this.setState({
           isServerError: true
         })
+        return
       }
 
       // 获取作者信息
@@ -76,7 +78,7 @@ class CommentDetail extends React.Component {
     const { site } = this.props;
     const { platform } = site;
     if(this.state.isServerError) {
-      return <ErrorPCPage></ErrorPCPage>
+      return platform === 'h5' ? <ErrorH5Page /> : <ErrorPCPage />;
     }
     return platform === 'h5' ? <CommentH5Page /> : <CommentPCPage />;
   }
