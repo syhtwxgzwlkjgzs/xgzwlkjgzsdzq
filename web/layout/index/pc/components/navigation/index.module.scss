@@ -9,6 +9,8 @@
     }
     .dzq-submenu__title {
       padding-right: 0;
+      padding-bottom: rem(19);
+      padding-top: rem(19);
     }
     .dzq-submenu__title.is-active {
       font-weight: 600;
@@ -23,12 +25,26 @@
     .dzq-submenu > .dzq-menu .dzq-menu-item.is-active {
       font-weight: initial;
     }
+
+    .dzq-submenu > .dzq-menu .dzq-menu-item {
+      padding-bottom: rem(6);
+      padding-top: rem(6);
+    }
+
+    .dzq-submenu > .dzq-menu {
+      padding-bottom: rem(6);
+      padding-top: rem(6);
+      line-height: rem(20);
+    }
   
     .dzq-submenu > .dzq-menu .dzq-menu-item {
       padding-right: 0;
+      line-height: rem(20);
     }
     .dzq-menu-item {
       padding-right: 0;
+      padding-bottom: rem(14);
+      padding-top: rem(14);
     }
   }
 }
@@ -40,6 +56,13 @@
 
 .span {
   color: var(--color-text-secondary);
+  float: right;
+  font-weight: normal;
+  font-size: rem($font-size-base);
+}
+
+.subSpan {
+  color: var(--border-color-hover);
   float: right;
   font-weight: normal;
   font-size: rem($font-size-base);
