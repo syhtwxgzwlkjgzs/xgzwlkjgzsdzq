@@ -11,7 +11,7 @@ import Stepper from './components/stepper';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import Copyright from '@components/copyright';
 import SidebarPanel from '@components/sidebar-panel';
-import { Toast } from '@discuzq/design';
+import { Toast, Spin } from '@discuzq/design';
 import TopicItem from '@components/topic-item'
 
 @inject('site')
@@ -179,7 +179,7 @@ class SearchPCPage extends React.Component {
           </div>
           <div className={styles.postContent}>
             {
-              threadsPageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)
+              threadsPageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />) || <LoadingView />
             }
           </div>
         </div>
@@ -198,6 +198,14 @@ class SearchPCPage extends React.Component {
         </BaseLayout>
     );
   }
+}
+
+const LoadingView = () => {
+  return (
+    <div className={styles.loading}>
+      <Spin type="spinner" />
+    </div>
+  )
 }
 
 export default withRouter(SearchPCPage);
