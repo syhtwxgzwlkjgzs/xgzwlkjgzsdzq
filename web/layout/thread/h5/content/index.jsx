@@ -232,7 +232,7 @@ const RenderThreadContent = inject('user')(
           )}
 
           {/* 打赏 */}
-          {canBeReward && isApproved && (
+          {canBeReward && isApproved && !isSelf && (
             <div className={styles.rewardContianer}>
               <Button onClick={onRewardClick} className={styles.rewardButton} type="primary">
                 <Icon className={styles.payIcon} name="HeartOutlined" size={20}></Icon>

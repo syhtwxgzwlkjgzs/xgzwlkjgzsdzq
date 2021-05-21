@@ -61,13 +61,12 @@ const InputPop = (props) => {
               ))}
             </div>
             <div className={styles.other}>
-              <div className={styles.reportTitle}>
+              <div className={styles.reportTitle} onClick={toggleOther} style={{cursor:'pointer'}}>
                 <div className={styles.content}>其他理由</div>
                 <Icon
                   className={styles.reportIcon}
                   size={12}
                   name={showInput ? 'UpwardOutlined' : 'UnderOutlined'}
-                  onClick={toggleOther}
                 ></Icon>
               </div>
             </div>
