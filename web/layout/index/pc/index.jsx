@@ -119,7 +119,7 @@ class IndexPCPage extends React.Component {
     if (tmpCategories?.length) {
       return categories;
     }
-    tmpCategories = [{ name: '全部', pid: '', children: [] }, ...categories];
+    tmpCategories = [{ name: '全部', pid: '-1', children: [] }, ...categories];
 
     return tmpCategories;
   }

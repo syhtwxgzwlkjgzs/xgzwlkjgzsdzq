@@ -20,7 +20,7 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
         sequence = 1
       }
 
-      if (categoryIds[0] !== '') { // 全部
+      if (categoryIds[0] !== '-1') { // 全部
         categoryIds = [categoryIds[0]]
       } else {
         categoryIds = []

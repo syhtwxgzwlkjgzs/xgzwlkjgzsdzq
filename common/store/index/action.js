@@ -40,6 +40,9 @@ class IndexAction extends IndexStore {
    */
   @action
   async screenData({ filter = {}, sequence = 0, perPage = 10, page = 1 } = {}) {
+    this.threads = null;
+    this.sticks = null;
+
     this.getRreadStickList(filter.categoryids);
     this.getReadThreadList({ filter, sequence, perPage, page });
   }

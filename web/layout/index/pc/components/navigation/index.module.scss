@@ -1,5 +1,6 @@
 @import '@common/styles/index.scss';
 .container {
+  border-radius: $border-radius-small;
   :global {
     .dzq-card {
       border-radius: rem($border-radius-small);
