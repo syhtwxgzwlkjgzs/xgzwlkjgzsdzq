@@ -112,7 +112,7 @@ const BaseLayout = (props) => {
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
 
-        <List {...props} className={styles.list} wrapperClass={styles.wrapper} onError={onError}>
+        <List {...props} className={styles.list} wrapperClass={styles.wrapper} onError={onError} enableError>
           {
             showLeft && (
               <div className={styles.left}>

@@ -23,7 +23,8 @@ const List = forwardRef(({
   onScroll = noop,
   showRefresh = true,
   preload = 30,
-  onError = noop
+  onError = noop,
+  enableError = false
 }, ref) => {
   const listWrapper = useRef(null);
   const currentScrollTop = useRef(0)
@@ -72,6 +73,22 @@ const List = forwardRef(({
     }
   };
 
+  // 判断是否需要处理error情况
+  const isNormal = (data) => {
+    // 若没有启用Error判断，则走正常逻辑
+    if (!enableError) {
+      return true
+    } else {
+      if (data) {
+        if (data.code) {
+          return data.code === 0
+        }
+        return true
+      }
+      return false
+    }
+  }
+
   const onTouchMove = throttle(({ isFirst = false }) => {
 
     if (!listWrapper || !listWrapper.current) {
@@ -101,7 +118,7 @@ const List = forwardRef(({
         const promise = onRefresh();
         isPromise(promise) && promise
           .then((res) => {
-            if (res && res.code === 0 && res.data) {
+            if (isNormal(res)) {
               // 解决因promise和react渲染不同执行顺序导致重复触发加载数据的问题
               setTimeout(() => {
                 setIsLoading(false);
