@@ -30,8 +30,6 @@ class IndexH5Page extends React.Component {
       navBarHeight: 64,
     };
     this.listRef = createRef();
-    // 用于获取顶部视图的高度
-    this.headerRef = createRef(null)
     this.renderItem = this.renderItem.bind(this);
   }
 
@@ -117,13 +115,9 @@ class IndexH5Page extends React.Component {
   };
 
   onScroll = (e) => {
-    // console.log(e.detail);
     const { scrollTop = 0 } = e?.detail || {}
-
-    // const { height = 180 } = this.headerRef.current?.state || {}
-    this.setState({ fixedTab: !(scrollTop < 160) })
-    console.log(`fixedTab`, this.state.fixedTab)
-    this.props.baselayout.jumpToScrollingPos = scrollTop;
+    const HEADER_HEIGHT = 160;
+    this.setState({ fixedTab: !(scrollTop < HEADER_HEIGHT) })
   }
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
@@ -225,7 +219,7 @@ class IndexH5Page extends React.Component {
         pageName='home'
         preload={1000}
       >
-        <HomeHeader ref={this.headerRef} />
+        <HomeHeader />
 
         {this.renderTabs()}
 
