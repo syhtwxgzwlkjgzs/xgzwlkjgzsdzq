@@ -72,6 +72,9 @@
     .title {
       font-size: rem($font-size-middle);
       line-height: rem($font-line-height-small);
+      &:hover{
+        color: $primary-color;
+      }
       .richText{
         white-space: nowrap;
         text-overflow: ellipsis;
