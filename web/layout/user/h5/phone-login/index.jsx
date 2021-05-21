@@ -48,6 +48,7 @@ class LoginPhoneH5Page extends React.Component {
       });
       // 暂不实现
       setTimeout(() => {
+        this.props.mobileLogin.reset();
         window.location.href = '/';
       }, 1000);
     } catch (e) {
@@ -184,8 +185,8 @@ class LoginPhoneH5Page extends React.Component {
               <span
                 onClick={() => {
                   if (browser.env('weixin')) {
-                    const redirectEncodeUrl = encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`);
-                    window.location.href = `https://discuzv3-dev.dnspod.dev/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
+                    const redirectEncodeUrl = encodeURIComponent(`${window.location.origin}/user/wx-auth`);
+                    window.location.href = `${window.location.origin}/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
                     return;
                   }
 

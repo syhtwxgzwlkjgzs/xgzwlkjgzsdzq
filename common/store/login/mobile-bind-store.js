@@ -56,6 +56,14 @@ export default class mobileBindStore {
       }
     }
 
+    // 重置参数
+    @action
+    reset = () => {
+      this.mobile = '';
+      this.code = '';
+      this.codeTimeout = null;
+    }
+
     // 倒计时
     setCounter = (sec) => {
       this.codeTimeout = sec;

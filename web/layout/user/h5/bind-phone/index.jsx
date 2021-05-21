@@ -43,6 +43,7 @@ class BindPhoneH5Page extends React.Component {
         duration: 1000,
       });
       setTimeout(() => {
+        this.props.mobileBind.reset();
         window.location.href = '/';
       }, 1000);
     } catch (e) {
