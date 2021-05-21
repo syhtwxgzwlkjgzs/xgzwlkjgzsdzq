@@ -43,6 +43,8 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
     const res = await readLikedUsers({ params: { threadId, postId, type, page: 1 } });
 
     setAll(res?.data);
+
+    return res
   };
 
   const singleLoadData = async ({ page = 1, type = 1 } = {}) => {
@@ -67,6 +69,8 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
       }
       setTips(data);
     }
+
+    return res
   };
 
   const loadMoreData = () => {

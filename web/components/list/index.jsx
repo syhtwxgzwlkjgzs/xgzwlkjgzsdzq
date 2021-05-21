@@ -100,7 +100,7 @@ const List = forwardRef(({
       if (typeof(onRefresh) === 'function' ) {
         const promise = onRefresh();
         isPromise(promise) && promise
-          .then(() => {
+          .then((res) => {
             if (res && res.code === 0 && res.data) {
               // 解决因promise和react渲染不同执行顺序导致重复触发加载数据的问题
               setTimeout(() => {
