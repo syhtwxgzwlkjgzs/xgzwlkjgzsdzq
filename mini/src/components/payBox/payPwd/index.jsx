@@ -151,21 +151,21 @@ class PayPassword extends React.Component {
               </View>
               <Divider className={styles.paypwdDivider} />
               <View className={styles.paypwdMesg}>
-                <Text>支付方式</Text>
+                <Text className={styles.payText}>支付方式</Text>
                 <Text>
                   <Icon className={styles.walletIcon} name="PurseOutlined" />
                   <Text style={{ verticalAlign: 'middle' }}>钱包支付</Text>
                 </Text>
               </View>
               <View className={styles.paypwdMesg}>
-                <Text>支付密码</Text>
+                <Text className={styles.payText}>支付密码</Text>
               </View>
               <View className={styles.payList}>{this.renderPwdItem()}</View>
             </>
             {/* TODO: 忘记支付密码的链接添加 */}
-            {/* <View className={styles.forgetPasswordContainer}>
+            <View className={styles.forgetPasswordContainer}>
               <Text>忘记支付密码?</Text>
-            </View> */}
+            </View>
             {/* 关闭按钮 */}
             <View className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
               <Icon name="CloseOutlined" size={12} />

@@ -91,7 +91,7 @@
     left: 0;
     right: 0;
     padding: $padding-2n $padding-4n $padding-10;
-    @include ios-safe-area-inset-bottom;
+    // @include ios-safe-area-inset-bottom;
     &::before {
       content: '';
       display: block;
