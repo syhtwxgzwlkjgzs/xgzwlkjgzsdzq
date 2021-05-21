@@ -25,7 +25,7 @@ import styles from './index.module.scss';
 const baseLayoutWhiteList = ['home'];
 
 const BaseLayout = (props) => {
-  const { showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr } = props;
+  const { showHeader = false, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr } = props;
   const { jumpToScrollingPos } = props.baselayout;
   const [height, setHeight] = useState(600);
 

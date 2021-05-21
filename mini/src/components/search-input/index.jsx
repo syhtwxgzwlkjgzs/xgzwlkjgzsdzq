@@ -44,8 +44,8 @@ const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = tru
       </View>
       {
         isShowCancel && (
-          <View className={styles.cancel} onClick={onCancel}>
-            取消
+          <View className={styles.cancel} onClick={onSearch}>
+            确认
           </View>
         )
       }
