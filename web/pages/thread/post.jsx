@@ -412,7 +412,7 @@ class PostPage extends React.Component {
     // 如果是编辑的悬赏帖子，则不用再次支付
     const rewardAmount = (threadId && rewardQa.id) ? 0 : plus(rewardQa.value, 0);
     // 如果是编辑的红包帖子，则不用再次支付
-    const redAmount = (threadId && rewardQa.id) ? 0 : plus(redpacket.price, 0);
+    const redAmount = (threadId && redpacket.id) ? 0 : plus(redpacket.price, 0);
     const amount = plus(rewardAmount, redAmount);
     const data = { amount };
     if (!isDraft && amount > 0) {
