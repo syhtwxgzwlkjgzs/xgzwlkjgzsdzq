@@ -7,7 +7,6 @@
 
 import Router from '@discuzq/sdk/dist/router';
 import browser from './browser';
-import config from '../config/index';
 
 function getWeiXinLoginPath(redirectPath) {
   const basePath = '/apiv3/users/wechat/h5.oauth?redirect=';
