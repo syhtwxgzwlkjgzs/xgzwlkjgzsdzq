@@ -47,7 +47,7 @@
 .tabsPC {
   border-radius: rem($border-radius-big);
   .list {
-    height: rem(773);
+    max-height: rem(773);
   }
   .label {
     height: rem(36);
@@ -59,6 +59,7 @@
     height: rem(68);
   }
   :global(.dzq-tabs__item) {
+    @include cursor-on-pc;
     padding: 0 rem(16);
   }
 }

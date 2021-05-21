@@ -27,6 +27,15 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop }) 
 
     onNavigationClick({ categoryIds, sequence })
   }
+  const debounce = (fn, wait) => {
+    let timer = null;
+    return () => {
+      if(timer !== null){
+        clearTimeout(timer);
+      }
+      timer = setTimeout(fn, wait);
+    }
+  }
   // 监听浏览器窗口变化
   const getWindowSize = () => {
     if (!isServer()) {
@@ -37,9 +46,9 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop }) 
     }
   };
   const [windowSize, setWindowSize] = useState(getWindowSize());
-  const handleResize = () => {
+  const handleResize = debounce(() => {
     setWindowSize(getWindowSize());
-  };
+  }, 50);
   useEffect(() => {
     if (!isServer()) // 监听
       window.addEventListener("resize", handleResize);
@@ -78,8 +87,10 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop }) 
       }
     </Menu>
   );
+
   return (
     <Card className={`${styles.container} ${styles.verticalScrollbar}`} style={{
+      /* stylelint-disable */
       background: '#fff', overflowY: 'auto',
       maxHeight: windowSize?.innerHeight - 80
     }} bordered={false}>
