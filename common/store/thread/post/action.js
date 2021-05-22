@@ -324,7 +324,7 @@ class ThreadPostAction extends ThreadPostStore {
       // expiredAt: rewardQa.times, price: rewardQa.value, type: 0
       if (tomId === THREAD_TYPE.reward) rewardQa = {
         ...contentindexes[index].body,
-        times: formatDate(contentindexes[index].body.expiredAt, 'yyyy/MM/dd hh:mm'),
+        times: formatDate(contentindexes[index].body.expiredAt?.replace(/-/g, '/'), 'yyyy/MM/dd hh:mm'),
         value: contentindexes[index].body.money || '',
       };
     });

@@ -14,6 +14,7 @@ export default function MoneyDisplay(props) {
     redTotalMoney,
   } = props;
   const clsName = props.pc ? styles.pc : styles.h5;
+
   return (
     <div className={`${styles['money-box']} ${clsName}`} onClick={e => e.stopPropagation()}>
       {/* 付费 */}
@@ -35,7 +36,7 @@ export default function MoneyDisplay(props) {
             onAttachClick({ type: THREAD_TYPE.reward });
           }}
         >
-          {`悬赏金额${plus(postData.rewardQa.value, 0)}元\\结束时间${postData.rewardQa.times}`}
+          {`悬赏金额${plus(postData.rewardQa.value, 0)}元\\结束时间 ${postData.rewardQa.times}`}
         </Tag>
       )}
       {/* 红包 */}
