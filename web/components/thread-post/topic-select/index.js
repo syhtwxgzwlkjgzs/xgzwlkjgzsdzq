@@ -40,9 +40,9 @@ class TopicSelect extends Component {
 
   // 初始化话题请求
   async componentDidMount() {
-    const { fetchTopic } = this.props.threadPost;
-    await fetchTopic();
-    this.setState({ pageNum: this.state.pageNum + 1 });
+    // const { fetchTopic } = this.props.threadPost;
+    // await fetchTopic();
+    // this.setState({ pageNum: this.state.pageNum + 1 });
   }
 
   // 更新搜索关键字
@@ -75,14 +75,14 @@ class TopicSelect extends Component {
     const ret = await fetchTopic(params);
     // 3 更新页码
     if (ret.code === 0) {
-      this.setState({ pageNum: this.state.pageNum + 1 });
+      this.setState({
+        pageNum: this.state.pageNum + 1,
+        isLastPage: this.state.pageNum * this.state.pageSize > this.props.threadPost.topicTotalCount,
+      });
     }
-    return Promise.reject();
   }
 
   onScrollBottom() {
-    if ((this.state.pageNum - 1) * this.state.pageSize
-      > this.props.threadPost.topicTotalCount) return Promise.reject();
     return this.loadTopics();
   }
 
@@ -104,7 +104,7 @@ class TopicSelect extends Component {
     if (!topics || topics.length === 0) return null;
     return topics.map((item) => (
       <div
-        key={item.id}
+        key={item.topicId}
         className={styles['topic-item']}
         onClick={() => this.handleItemClick(item)}
       >
@@ -138,8 +138,7 @@ class TopicSelect extends Component {
 
         {/* 话题列表 */}
         {/* <div className={styles['topic-wrap']}> */}
-          <BaseList className={styles['topic-wrap']} onRefresh={this.onScrollBottom.bind(this)} noMore={(this.state.pageNum - 1) * this.state.pageSize
-            > this.props.threadPost.topicTotalCount}>
+          <BaseList className={styles['topic-wrap']} onRefresh={this.onScrollBottom.bind(this)} noMore={this.state.isLastPage}>
             {/* 新话题 */}
             {this.state.keywords
               && <div
