@@ -69,7 +69,7 @@ export default function DVditor(props) {
       // 因为vditor的lute中有一些emoji表情和 emoji.code 重叠了。这里直接先这样处理
       let value = `<img alt="${emoji.code}emoji" src="${emoji.url}" class="qq-emotion" />`;
       value = emojiVditorCompatibilityDisplay(value);
-      setCursorPosition();
+     // setCursorPosition();
       html2mdInserValue(value);
     }
   }, [emoji]);
@@ -81,14 +81,14 @@ export default function DVditor(props) {
       return '';
     });
     if (users.length) {
-      setCursorPosition();
+     // setCursorPosition();
       vditor.insertValue && vditor.insertValue(users.join(''));
     }
   }, [atList]);
 
   useEffect(() => {
     if (topic) {
-      setCursorPosition();
+      //setCursorPosition();
       vditor.insertValue && vditor.insertValue(` ${topic} `);
     }
   }, [topic]);
