@@ -66,6 +66,21 @@ class TopicAction extends TopicStore {
     return null;
   };
 
+  /**
+   * 删除帖子操作
+   * @param {string} id 帖子id
+   * @returns
+   */
+   @action
+   async deleteThreadsData({ id } = {}) {
+     if (id && this.topicDetail) {
+        const { pageData = [] } = this.topicDetail;
+        this.topicDetail.pageData = pageData.map(data => {
+          return data.threads?.filter(item => item.threadId !== id)
+        })
+     }
+   }
+
     // 获取指定的帖子数据
   findAssignThread(threadId) {
     if (this.topicDetail) {
