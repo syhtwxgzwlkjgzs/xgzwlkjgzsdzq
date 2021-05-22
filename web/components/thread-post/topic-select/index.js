@@ -120,7 +120,7 @@ class TopicSelect extends Component {
   }
 
   render() {
-    const { visible = false, cancelTopic } = this.props;
+    const { visible = false, cancelTopic, threadPost: { topicTotalCount } } = this.props;
     const content = (
       <div className={styles.wrapper}>
         {/* 搜索框 */}
@@ -132,40 +132,32 @@ class TopicSelect extends Component {
             onChange={e => this.updateKeywords(e)}
           />
           {this.state.keywords &&
-            <Icon className={styles.deleteIcon} name="WrongOutlined" size={16}  onClick={this.clearKeywords}></Icon>
+            <Icon className={styles.deleteIcon} name="WrongOutlined" size={16} onClick={this.clearKeywords}></Icon>
           }
         </div>
 
         {/* 话题列表 */}
-        {/* <div className={styles['topic-wrap']}> */}
-          <BaseList className={styles['topic-wrap']} onRefresh={this.onScrollBottom.bind(this)} noMore={this.state.isLastPage}>
-            {/* 新话题 */}
-            {this.state.keywords
-              && <div
-                className={styles['topic-item']}
-                onClick={this.handleItemClick}
-              >
-                <div className={styles['item-left']}>
-                  <div className={styles.name}>#{this.state.keywords}#</div>
-                </div>
-                <div className={styles['item-right']}>新话题</div>
+        <BaseList
+          className={styles['topic-wrap']}
+          wrapperClass={styles['list__inner']}
+          onRefresh={this.onScrollBottom.bind(this)}
+          noMore={(this.state.pageNum - 1) * this.state.pageSize > topicTotalCount}
+        >
+          {/* 新话题 */}
+          {this.state.keywords &&
+            <div
+              className={styles['topic-item']}
+              onClick={this.handleItemClick}
+            >
+              <div className={styles['item-left']}>
+                <div className={styles.name}>#{this.state.keywords}#</div>
               </div>
-            }
-            {/* 搜索列表 */}
-            {/* <ScrollView
-              width='100%'
-              rowCount={topics.length}
-              rowData={topics}
-              rowHeight={54}
-              rowRenderer={this.renderItem.bind(this)}
-              onScrollTop={this.onScrollTop.bind(this)}
-              onScrollBottom={this.onScrollBottom.bind(this)}
-              onPullingUp={() => Promise.reject()}
-              isRowLoaded={() => true}
-            /> */}
-            {this.renderItem()}
-          </BaseList>
-        {/* </div> */}
+              <div className={styles['item-right']}>新话题</div>
+            </div>
+          }
+          {/* 搜索列表 */}
+          {this.renderItem()}
+        </BaseList>
 
         {/* 取消按钮 */}
         <div className='btn-cancel'>
