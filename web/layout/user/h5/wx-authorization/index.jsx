@@ -72,8 +72,6 @@ class WXAuthorizationPage extends React.Component {
           sessionToken,
           state,
         },
-      }, {
-        noSetAuthorization: true
       });
       bindLoading = false;
 
