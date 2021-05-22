@@ -243,7 +243,6 @@ class ThreadCreate extends React.Component {
               <Position
                 lbskey={webConfig.lbs.qqLbsKey}
                 position={postData.position}
-                // onClick={() => this.props.saveDataLocal()}
                 onChange={position => this.props.setPostData({ position })} />
             )}
           </div>
