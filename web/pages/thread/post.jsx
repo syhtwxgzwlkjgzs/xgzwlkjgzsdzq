@@ -210,7 +210,9 @@ class PostPage extends React.Component {
         // 判断ios版本号
         const v = u.match(/cpu iphone os (.*?) like mac os/);
         if (v) {
-          const version = v[1].replace(/_/g, ".").split('.').splice(0, 2).join('.');
+          const version = v[1].replace(/_/g, '.').split('.')
+            .splice(0, 2)
+            .join('.');
           if ((Number(version) < 14.3) && !(u.indexOf('safari') > -1 && u.indexOf('chrome') < 0 && u.indexOf('qqbrowser') < 0 && u.indexOf('360') < 0)) {
             Toast.info({ content: 'iOS版本太低，请升级至iOS 14.3及以上版本或使用Safari浏览器访问' });
             return;
@@ -287,9 +289,9 @@ class PostPage extends React.Component {
     const fileSize = cloneList[0].size;
     // 判断合法性
     const isLegalType = supportFileExt.includes(fileType);
-    const isLegalSize = supportMaxSize * 1024 *1024 > fileSize;
-    console.log(`list`, cloneList, showFileList)
-    console.log(`supportFileExt`, webConfig,supportFileExt, supportMaxSize, fileType, fileSize, isLegalType && isLegalSize);
+    const isLegalSize = supportMaxSize * 1024 * 1024 > fileSize;
+    console.log('list', cloneList, showFileList);
+    console.log('supportFileExt', webConfig, supportFileExt, supportMaxSize, fileType, fileSize, isLegalType && isLegalSize);
     if (!isLegalType) {
       Toast.info({ content: '当前不支持此类型文件' });
       return false;
