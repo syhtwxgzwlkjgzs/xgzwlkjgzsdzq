@@ -72,7 +72,6 @@ export default inject('user')(
 
     const parseContent = parseContentData(indexes);
 
-
     const onContentClick = async () => {
       typeof props.onPayClick === 'function' && props.onPayClick();
     };
@@ -130,26 +129,29 @@ export default inject('user')(
               {(isEssence || !isFree || isReward || isRedPack) && (
                 <Divider mode="vertical" className={topic.moreDivider}></Divider>
               )}
-              <div className={topic.iconText}>
-                <Dropdown
-                  menu={
-                    <Dropdown.Menu>
-                      {canEdit && <Dropdown.Item id="edit">编辑</Dropdown.Item>}
-                      {canStick && <Dropdown.Item id="stick">{isStick ? '取消置顶' : '置顶'}</Dropdown.Item>}
-                      {canEssence && <Dropdown.Item id="essence"> {isEssence ? '取消精华' : '精华'}</Dropdown.Item>}
-                      {canDelete && <Dropdown.Item id="delete">删除</Dropdown.Item>}
-                    </Dropdown.Menu>
-                  }
-                  placement="center"
-                  hideOnClick={true}
-                  arrow={false}
-                  trigger="hover"
-                  onChange={(key) => onDropdownChange(key)}
-                >
-                  <Icon className={topic.icon} name="SettingOutlined"></Icon>
-                  <span className={topic.text}>管理</span>
-                </Dropdown>
-              </div>
+
+              {(canEdit || canStick || canEssence || canDelete) && (
+                <div className={topic.iconText}>
+                  <Dropdown
+                    menu={
+                      <Dropdown.Menu>
+                        {canEdit && <Dropdown.Item id="edit">编辑</Dropdown.Item>}
+                        {canStick && <Dropdown.Item id="stick">{isStick ? '取消置顶' : '置顶'}</Dropdown.Item>}
+                        {canEssence && <Dropdown.Item id="essence"> {isEssence ? '取消精华' : '精华'}</Dropdown.Item>}
+                        {canDelete && <Dropdown.Item id="delete">删除</Dropdown.Item>}
+                      </Dropdown.Menu>
+                    }
+                    placement="center"
+                    hideOnClick={true}
+                    arrow={false}
+                    trigger="hover"
+                    onChange={(key) => onDropdownChange(key)}
+                  >
+                    <Icon className={topic.icon} name="SettingOutlined"></Icon>
+                    <span className={topic.text}>管理</span>
+                  </Dropdown>
+                </div>
+              )}
               <div className={topic.iconText} onClick={() => onDropdownChange('report')}>
                 <Icon className={topic.icon} name="WarnOutlinedThick"></Icon>
                 <span className={topic.text}>举报</span>

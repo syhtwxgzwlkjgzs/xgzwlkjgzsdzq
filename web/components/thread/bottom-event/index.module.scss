@@ -89,7 +89,7 @@
   :global {
     .dzq-icon {
       @include cursor-on-pc;
-      cursor: none;
+      cursor: initial;
     }
   }
 }
