@@ -22,6 +22,7 @@
         border: none;
         border-bottom: 1px solid $border-color;
         padding-left: 0;
+        border-radius: 0;
       }
       .dzq-input__icon {
         line-height: rem(62);
@@ -41,7 +42,7 @@
     height: rem(42);
     font-size: $font-size-middle;
     margin: auto;
-    border-radius: $border-radius-small;
+    border-radius: $border-radius-small !important;
   }
 }
 
@@ -57,6 +58,7 @@
         line-height: rem(62);
         border: none;
         border-bottom: 1px solid $border-color;
+        border-radius: 0;
       }
       .dzq-input__icon {
         line-height: rem(62);

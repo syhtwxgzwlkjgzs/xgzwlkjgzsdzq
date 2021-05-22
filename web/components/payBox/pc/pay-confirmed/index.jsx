@@ -3,6 +3,7 @@ import styles from './index.module.scss';
 import { Dialog, Button, Checkbox, Icon, Input, Toast, Radio, Divider, Spin } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import { PAYWAY_MAP, STEP_MAP, PAY_MENT_MAP } from '../../../../../common/constants/payBoxStoreConstants';
+import throttle from '@common/utils/thottle.js';
 
 @inject('user')
 @inject('payBox')
@@ -140,6 +141,8 @@ export default class index extends Component {
   initState = () => {
     this.setState({
       paymentType: 'wallet',
+      list:[],
+      imageShow: false
     });
     this.props.payBox.payWay = PAYWAY_MAP.WALLET;
     this.props.payBox.password = null;
@@ -162,7 +165,11 @@ export default class index extends Component {
   };
 
   // 点击确认支付
-  handlePayConfirmed = async () => {
+  handlePayConfirmed = throttle(async () => {
+    if (this.state.isSubmit) return
+    this.setState({
+      isSubmit: true
+    })
     if (this.props.payBox.payWay === PAYWAY_MAP.WALLET) {
       // 表示钱包支付
       // await this.props.payBox.walletPayEnsure();
@@ -183,9 +190,12 @@ export default class index extends Component {
           hasMask: false,
           duration: 1000,
         });
+        this.onClose()
         setTimeout(() => {
-          this.props.payBox.clear();
-        }, 500);
+          this.setState({
+            isSubmit: false
+          })
+        },1000)
       } catch (error) {
         Toast.error({
           content: error.Message || '支付失败，请重新输入',
@@ -195,7 +205,7 @@ export default class index extends Component {
         this.initState();
       }
     }
-  };
+  }, 500);
 
   // 转换金额小数
   transMoneyToFixed = (num) => {
@@ -305,7 +315,7 @@ export default class index extends Component {
     const { canWalletPay } = userInfo || {};
     const { options = {} } = this.props.payBox;
     const { amount = 0 } = options;
-    const { list = [] } = this.state;
+    const { list = [], isSubmit } = this.state;
     const newPassWord = list.join('');
     return (
       <div className={`${styles.walletPayment}`}>
@@ -367,7 +377,7 @@ export default class index extends Component {
                 size="large"
                 className={styles.walletConfirmBtn}
                 type="primary"
-                disabled={!newPassWord || newPassWord.length !== 6}
+                disabled={!newPassWord || newPassWord.length !== 6 || isSubmit}
                 full
               >
                 确认支付

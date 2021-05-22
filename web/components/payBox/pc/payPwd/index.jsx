@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import { STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
 import { Toast, Icon, Input, Button } from '@discuzq/design';
-
+import throttle from '@common/utils/thottle.js';
 @inject('user')
 @inject('payBox')
 @observer
@@ -11,13 +11,13 @@ export default class index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      payPassword: null
+      payPassword: null,
     };
   }
 
   initState = () => {
     this.setState({
-      payPassword: null
+      payPassword: null,
     })
   }
 
@@ -36,7 +36,7 @@ export default class index extends Component {
   };
 
   // 点击提交
-  handleSubmit = async () => {
+  handleSubmit = throttle(async () => {
     const { payPassword } = this.state;
     const { id } = this.props.user;
     this.props.payBox.password = payPassword;
@@ -62,7 +62,7 @@ export default class index extends Component {
         });
         this.initState();
       });
-  };
+  },500);
 
   render() {
     const { list = [], payPassword } = this.state;
