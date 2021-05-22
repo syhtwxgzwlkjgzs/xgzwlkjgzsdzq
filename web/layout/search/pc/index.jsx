@@ -63,7 +63,7 @@ class SearchPCPage extends React.Component {
 
   onSearch = (value) => {
     this.props.router.replace(`/search?keyword=${value}`);
-    this.setState({ keyword: value }, () => {
+    this.setState({ value }, () => {
       this.searchData(value);
     });
   }
