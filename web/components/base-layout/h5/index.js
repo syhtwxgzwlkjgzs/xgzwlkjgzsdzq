@@ -4,6 +4,7 @@ import Header from '@components/header';
 import List from '@components/list'
 import BottomNavBar from '@components/bottom-nav-bar'
 import { PullDownRefresh } from "@discuzq/design"
+import { noop } from '@components/thread/utils'
 
 import styles from './index.module.scss';
 
@@ -24,8 +25,7 @@ import styles from './index.module.scss';
 const baseLayoutWhiteList = ['home'];
 
 const BaseLayout = (props) => {
-  const { showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr } = props;
-  const { jumpToScrollingPos } = props.baselayout;
+  const { showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr, onScroll = noop, baselayout } = props;
   const [height, setHeight] = useState(600);
 
   const debounce = (fn, wait) => {
@@ -38,6 +38,17 @@ const BaseLayout = (props) => {
     }
   }
 
+  const throttle = (func, delay) => {
+    let old = 0;
+    return function() {
+      const now = new Date().valueOf();
+      if(now - old > delay) {
+        func();
+        old = now;
+      }
+    }
+  }
+
   const pullDownWrapper = useRef(null)
   const listRef = useRef(null);
 
@@ -45,11 +56,20 @@ const BaseLayout = (props) => {
     if (pullDownWrapper?.current) {
       setHeight(pullDownWrapper.current.clientHeight)
     }
-
-    if (listRef?.current && jumpToScrollingPos > 0 && baseLayoutWhiteList.indexOf(props.pageName) !== -1) {
-      listRef.current.jumpToScrollTop(jumpToScrollingPos);
+    if (listRef?.current && baselayout.jumpToScrollingPos > 0 &&
+        baseLayoutWhiteList.indexOf(props.pageName) !== -1) {
+        listRef.current.jumpToScrollTop(baselayout.jumpToScrollingPos);
     }
   }, [])
+
+  // const handleScroll = throttle(() => {
+    // if(!listRef?.current?.currentScrollTop) {
+    //   onScroll();
+    //   return;
+    // }
+  //   baselayout.jumpToScrollingPos = listRef.current.currentScrollTop.current;
+  //   onScroll({ scrollTop: listRef.current.currentScrollTop.current });
+  // }, 30)
 
   return (
     <div className={styles.container}>
@@ -64,7 +84,7 @@ const BaseLayout = (props) => {
               </PullDownRefresh>
             </div>
           ) : (
-            <List {...props} className={styles.list} ref={listRef}>
+            <List {...props} className={styles.list} ref={listRef} onScroll={onScroll}>
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>
           )
