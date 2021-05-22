@@ -32,6 +32,15 @@
       padding-top: rem(6);
     }
 
+    .dzq-menu,
+    .dzq-menu-item,
+    .dzq-submenu__title,
+    .dzq-submenu {
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
     .dzq-submenu > .dzq-menu {
       padding-bottom: rem(6);
       padding-top: rem(6);
@@ -70,14 +79,14 @@
 }
 
 .verticalScrollbar::-webkit-scrollbar {
-  width: 4px;
-  height: 8px;
-  border-radius: 4px;
+  width: rem(4);
+  height: rem(8);
+  border-radius: rem(4);
 }
 .verticalScrollbar::-webkit-scrollbar-thumb {
-  border-radius: 5px;
-  background: rgba(0, 0, 0, 0.55);
+  border-radius: rem(5);
+  background: $mask-bg-color;
 }
 .verticalScrollbar::-webkit-scrollbar-track {
-  border-radius: 8px;
+  border-radius: rem(8);
 }
