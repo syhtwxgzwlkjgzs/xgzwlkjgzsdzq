@@ -38,6 +38,17 @@ const BaseLayout = (props) => {
     }
   }
 
+  const throttle = (func, delay) => {
+    let old = 0;
+    return function() {
+      const now = new Date().valueOf();
+      if(now - old > delay) {
+        func();
+        old = now;
+      }
+    }
+  }
+
   const pullDownWrapper = useRef(null)
   const listRef = useRef(null);
 
@@ -51,16 +62,14 @@ const BaseLayout = (props) => {
     }
   }, [])
 
-  const handleScroll = () => {
+  const handleScroll = throttle(() => {
     if(!listRef?.current?.currentScrollTop) {
       onScroll();
       return;
     }
-    debounce(() => {
-      baselayout.jumpToScrollingPos = listRef.current.currentScrollTop.current;
-    }, 30);
+    baselayout.jumpToScrollingPos = listRef.current.currentScrollTop.current;
     onScroll({ scrollTop: listRef.current.currentScrollTop.current });
-  }
+  }, 30)
 
   return (
     <div className={styles.container}>
