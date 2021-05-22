@@ -3,6 +3,7 @@ import ThreadPostStore from './store';
 import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread, updateThread, createThreadVideoAudio } from '@common/server';
 import { LOADING_TOTAL_TYPE, THREAD_TYPE } from '@common/constants/thread-post';
 import { emojiFromEditFormat, emojiFormatForCommit } from '@common/utils/emoji-regexp';
+import { formatDate } from '@common/utils/format-date';
 
 class ThreadPostAction extends ThreadPostStore {
   /**
@@ -323,7 +324,7 @@ class ThreadPostAction extends ThreadPostStore {
       // expiredAt: rewardQa.times, price: rewardQa.value, type: 0
       if (tomId === THREAD_TYPE.reward) rewardQa = {
         ...contentindexes[index].body,
-        times: contentindexes[index].body.expiredAt,
+        times: formatDate(contentindexes[index].body.expiredAt, 'yyyy/MM/dd hh:mm'),
         value: contentindexes[index].body.money || '',
       };
     });
