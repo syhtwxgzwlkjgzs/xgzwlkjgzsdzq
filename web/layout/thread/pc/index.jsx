@@ -505,6 +505,7 @@ class ThreadPCPage extends React.Component {
         amount: Number(value),
         threadId: this.props.thread.threadData.threadId,
         payeeId: this.props.thread.threadData.userId,
+        title: this.props.thread?.threadData?.title || '主题打赏'
       };
 
       const { success } = await rewardPay(params);
