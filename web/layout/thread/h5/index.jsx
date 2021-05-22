@@ -320,6 +320,9 @@ class ThreadH5Page extends React.Component {
     };
     const { success, msg } = await this.props.thread.updateEssence(params);
 
+    // 更新列表store数据
+    this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
+
     if (success) {
       Toast.success({
         content: '操作成功',
