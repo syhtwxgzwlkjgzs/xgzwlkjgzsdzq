@@ -58,6 +58,7 @@ class ThreadCreate extends React.Component {
       this.props.setPostData({ draft: 1 });
       flag = await this.props.handleSubmit(true);
     }
+    if (val === '不保存草稿') this.props.threadPost.resetPostData();
     if (val && flag) Router.back();
   }
 
