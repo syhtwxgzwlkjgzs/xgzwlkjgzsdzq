@@ -48,7 +48,7 @@ class WXAuthorizationPage extends React.Component {
                 this.props.h5QrCode.isBtn = false;
                 wx.closeWindow();
               }}>
-                退出登录
+                退出
               </span>
             </div>
         </div>
@@ -105,7 +105,7 @@ class WXAuthorizationPage extends React.Component {
       };
     } catch (error) {
       bindLoading = false;
-      this.props.h5QrCode.loginTitle = `${JSON.stringify(error)}'登录失败，请刷新二维码重新扫码'`;
+      this.props.h5QrCode.loginTitle = '登录失败，请刷新二维码重新扫码';
       this.props.h5QrCode.isBtn = false;
       Toast.error({
         content: error.Message,

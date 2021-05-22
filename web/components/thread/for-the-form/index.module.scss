@@ -53,10 +53,14 @@
       overflow: hidden;
       &__header,
       &-time__header {
+        padding-top: 16px;
         font-size: $font-size-middle;
         border-radius: 0;
         border: $border-solid-1;
         background: $white;
+      }
+      &-time__header {
+        padding-top: 0;
       }
       &__time-container {
         border-left: $border-solid-1;
@@ -65,6 +69,13 @@
       &__day-name {
         font-size: $font-size-middle;
         color: $text-color-primary;
+      }
+      &__time-container,
+      &__time-box {
+        width: 90px;
+      }
+      &__time-list {
+        @include scrollbar();
       }
       &__day--weekend,
       &__time-list-item,
@@ -76,10 +87,14 @@
         font-size: $font-size-base;
         color: $text-color-placeholder;
       }
-      &__day--selected,
-      &__day--today {
+      &__day--selected {
         color: $white;
         background-color: $primary-color;
+        border-radius: $border-radius-small;
+      }
+      &__day--today {
+        color: $white;
+        background-color: $primary-color6;
         border-radius: $border-radius-small;
       }
       &__month {
@@ -89,10 +104,10 @@
     .react-datepicker__day-name,
     .react-datepicker__day,
     .react-datepicker__time-name {
-      width: 20px !important;
-      height: 20px !important;
-      line-height: 20px !important;
-      margin-left: 18px !important;
+      width: 24px !important;
+      height: 24px !important;
+      line-height: 24px !important;
+      margin-left: 10px !important;
       margin-bottom: 8px !important;
     }
 
@@ -130,11 +145,13 @@
     }
     .react-datepicker__input-container {
       input {
+        margin-right: 2px;
         max-width: rem(220px);
         border: 0;
         color: $text-color-primary;
         font-size: $font-size-base;
         cursor: pointer;
+        text-align: right;
       }
     }
   }

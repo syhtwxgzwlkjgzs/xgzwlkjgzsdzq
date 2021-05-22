@@ -16,7 +16,7 @@ class DzqApp extends App {
 
   componentDidMount() {
     if (process.env.DISCUZ_RUN === 'static') {
-      // 当CSR出现末尾是index，会导致不能正确跳转的问题；
+      // // 当CSR出现末尾是index，会导致不能正确跳转的问题；
       let { pathname } = window.location;
 
       if (pathname !== '' || pathname !== '/') {
@@ -26,8 +26,21 @@ class DzqApp extends App {
           pathname = pathnameArr.join('/');
         }
       }
-      // csr部署时因方便ngixn部署统一指向index.html,所以统一在此重定向一次
       Router.redirect({ url: `${pathname}${window.location.search}` });
+
+
+
+      // 处理nginx不能更改，处理动态路由
+      // const threadReg = /\/thread\/[0-9]+/ig;
+      // const threadCommentReg = /\/thread\/comment\/[0-9]+/ig;
+      // const topicReg = /\/topic\/topic-detail\/[0-9]+/ig;
+
+      // if ( threadReg.test(pathname) || threadCommentReg.test(pathname) || topicReg.test(pathname)) {
+      //   Router.redirect({ url: `${pathname}${window.location.search}` });
+      // } else {
+      //   // csr部署时因方便ngixn部署统一指向index.html,所以统一在此重定向一次
+      //   Router.redirect({ url: `/` });
+      // }
     }
   }
 
