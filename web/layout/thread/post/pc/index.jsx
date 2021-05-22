@@ -81,6 +81,7 @@ class ThreadPCPage extends React.Component {
                     fileList={Object.values(postData.images)}
                     onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.image)}
                     onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.image)}
+                    beforeUpload = {(cloneList, showFileList) => this.props.beforeUpload(cloneList, showFileList, THREAD_TYPE.image)}
                   />
                 )}
 
@@ -112,7 +113,7 @@ class ThreadPCPage extends React.Component {
                     fileList={Object.values(postData.files)}
                     onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.file)}
                     onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.file)}
-                    beforeUpload = {(cloneList, showFileList) => this.props.beforeUpload(cloneList, showFileList)}
+                    beforeUpload = {(cloneList, showFileList) => this.props.beforeUpload(cloneList, showFileList, THREAD_TYPE.file)}
                   />
                 )}
 

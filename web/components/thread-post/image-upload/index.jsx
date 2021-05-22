@@ -14,7 +14,6 @@ export default function ImageUpload(props) {
     onChange={onChange}
     onComplete={onComplete}
     fileList={fileList}
-    beforeUpload=''
     {...other}
   />;
 }
