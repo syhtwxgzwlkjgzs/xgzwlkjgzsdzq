@@ -6,10 +6,10 @@ import layout from './layout.module.scss';
 import footer from './footer.module.scss';
 
 import NoMore from './components/no-more';
-import LoadingTips from './components/loading-tips';
+import LoadingTips from '@components/thread-detail-pc/loading-tips';
 
 import styleVar from '@common/styles/theme/default.scss.json';
-import { Icon, Input, Badge, Toast } from '@discuzq/design';
+import { Icon, Input, Toast } from '@discuzq/design';
 import Header from '@components/header';
 import goToLoginPage from '@common/utils/go-to-login-page';
 
@@ -19,10 +19,8 @@ import DeletePopup from '@components/thread-detail-pc/delete-popup';
 import MorePopup from './components/more-popup';
 import InputPopup from './components/input-popup';
 import throttle from '@common/utils/thottle';
-import xss from '@common/utils/xss';
 
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
-import rewardPay from '@common/pay-bussiness/reward-pay';
 import threadPay from '@common/pay-bussiness/thread-pay';
 import RewardPopup from './components/reward-popup';
 
@@ -570,7 +568,7 @@ class ThreadH5Page extends React.Component {
 
   render() {
     const { thread: threadStore } = this.props;
-    const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
+    const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError } = threadStore;
     const fun = {
       moreClick: this.onMoreClick,
     };
@@ -644,7 +642,7 @@ class ThreadH5Page extends React.Component {
                   {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
                 </Fragment>
               ) : (
-                <LoadingTips type="init"></LoadingTips>
+                <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
               )}
             </div>
           )}
@@ -658,48 +656,6 @@ class ThreadH5Page extends React.Component {
               <div className={footer.inputClick} onClick={() => this.onInputClick()}>
                 <Input className={footer.input} placeholder="写评论" disabled={true} prefixIcon="EditOutlined"></Input>
               </div>
-
-              {/* 评论弹层 */}
-              <InputPopup
-                visible={this.state.showCommentInput}
-                onClose={() => this.onClose()}
-                initValue={this.state.inputValue}
-                onSubmit={(value) => this.onPublishClick(value)}
-              ></InputPopup>
-
-              {/* 更多弹层 */}
-              <MorePopup
-                permissions={morePermissions}
-                statuses={moreStatuses}
-                visible={this.state.showMorePopup}
-                onClose={() => this.setState({ showMorePopup: false })}
-                onSubmit={() => this.setState({ showMorePopup: false })}
-                onOperClick={(type) => this.onOperClick(type)}
-              ></MorePopup>
-
-              {/* 删除弹层 */}
-              <DeletePopup
-                visible={this.state.showDeletePopup}
-                onClose={() => this.setState({ showDeletePopup: false })}
-                onBtnClick={(type) => this.onBtnClick(type)}
-              ></DeletePopup>
-              {/* 举报弹层 */}
-
-              {/* 举报弹窗 */}
-              <ReportPopup
-                reportContent={this.reportContent}
-                inputText={this.inputText}
-                visible={this.state.showReportPopup}
-                onCancel={() => this.setState({ showReportPopup: false })}
-                onOkClick={(data) => this.onReportOk(data)}
-              ></ReportPopup>
-
-              {/* 打赏弹窗 */}
-              <RewardPopup
-                visible={this.state.showRewardPopup}
-                onCancel={() => this.setState({ showRewardPopup: false })}
-                onOkClick={(value) => this.onRewardSubmit(value)}
-              ></RewardPopup>
 
               {/* 操作区 */}
               <div className={footer.operate}>
@@ -729,6 +685,52 @@ class ThreadH5Page extends React.Component {
               </div>
             </div>
           </div>
+        )}
+
+        {isReady && (
+          <Fragment>
+            {/* 评论弹层 */}
+            <InputPopup
+              visible={this.state.showCommentInput}
+              onClose={() => this.onClose()}
+              initValue={this.state.inputValue}
+              onSubmit={(value) => this.onPublishClick(value)}
+            ></InputPopup>
+
+            {/* 更多弹层 */}
+            <MorePopup
+              permissions={morePermissions}
+              statuses={moreStatuses}
+              visible={this.state.showMorePopup}
+              onClose={() => this.setState({ showMorePopup: false })}
+              onSubmit={() => this.setState({ showMorePopup: false })}
+              onOperClick={(type) => this.onOperClick(type)}
+            ></MorePopup>
+
+            {/* 删除弹层 */}
+            <DeletePopup
+              visible={this.state.showDeletePopup}
+              onClose={() => this.setState({ showDeletePopup: false })}
+              onBtnClick={(type) => this.onBtnClick(type)}
+            ></DeletePopup>
+            {/* 举报弹层 */}
+
+            {/* 举报弹窗 */}
+            <ReportPopup
+              reportContent={this.reportContent}
+              inputText={this.inputText}
+              visible={this.state.showReportPopup}
+              onCancel={() => this.setState({ showReportPopup: false })}
+              onOkClick={(data) => this.onReportOk(data)}
+            ></ReportPopup>
+
+            {/* 打赏弹窗 */}
+            <RewardPopup
+              visible={this.state.showRewardPopup}
+              onCancel={() => this.setState({ showRewardPopup: false })}
+              onOkClick={(value) => this.onRewardSubmit(value)}
+            ></RewardPopup>
+          </Fragment>
         )}
       </div>
     );

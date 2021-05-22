@@ -24,6 +24,9 @@ class ThreadAction extends ThreadStore {
     const userRes = await readUser({ params: { pid: userId } });
     if (userRes.code === 0) {
       this.authorInfo = userRes.data;
+      this.isAuthorInfoError = false;
+    } else {
+      this.isAuthorInfoError = true;
     }
 
     return userRes;
@@ -489,6 +492,8 @@ class ThreadAction extends ThreadStore {
         success: true,
       };
     }
+
+    this.isCommentListError = true;
 
     return {
       msg: res.msg,
