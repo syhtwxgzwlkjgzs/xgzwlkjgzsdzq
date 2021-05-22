@@ -12,6 +12,7 @@ import {
   deleteThread,
 } from '@server';
 import { plus } from '@common/utils/calculate';
+import rewardPay from '@common/pay-bussiness/reward-pay';
 
 class ThreadAction extends ThreadStore {
   constructor(props) {
@@ -191,6 +192,45 @@ class ThreadAction extends ThreadStore {
     return {
       msg: res.msg,
       success: false,
+    };
+  }
+
+  /**
+   * 打赏帖子
+   */
+  @action
+  async rewardPay(params, UserStore, IndexStore, SearchStore, TopicStore) {
+    const { success, msg } = await rewardPay(params);
+
+    // 支付成功重新请求帖子数据
+    if (success) {
+      this.setThreadDetailField('isReward', true);
+      this.threadData.likeReward.likePayCount = (this.threadData.likeReward.likePayCount || 0) + 1;
+      this.setThreadDetailLikePayCount(this.threadData.likeReward.likePayCount);
+
+      // 更新打赏的用户
+      const currentUser = UserStore?.userInfo;
+      if (currentUser) {
+        const user = {
+          avatar: currentUser.avatarUrl,
+          userId: currentUser.id,
+          userName: currentUser.username,
+        };
+        this.setThreadDetailLikedUsers(true, user);
+      }
+
+      // 更新列表store
+      this.updateListStore(IndexStore, SearchStore, TopicStore);
+
+      return {
+        success: true,
+        msg: '打赏成功',
+      };
+    }
+
+    return {
+      success: false,
+      msg: msg || '打赏失败',
     };
   }
 

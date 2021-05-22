@@ -542,11 +542,18 @@ class ThreadH5Page extends React.Component {
         title: this.props.thread?.threadData?.title || '主题打赏',
       };
 
-      const { success } = await rewardPay(params);
+      const { success, msg } = await this.props.thread.rewardPay(
+        params,
+        this.props.user,
+        this.props.index,
+        this.props.search,
+        this.props.topic,
+      );
 
-      // 支付成功重新请求帖子数据
-      if (success && this.props.thread?.threadData?.threadId) {
-        this.props.thread.fetchThreadDetail(this.props.thread?.threadData?.threadId);
+      if (!success) {
+        Toast.error({
+          content: msg,
+        });
       }
     }
   }
