@@ -233,6 +233,9 @@ class ThreadPCPage extends React.Component {
 
     if (success) {
       this.setTopState(params.isStick);
+      // 更新首页置顶列表
+      this.props?.index?.refreshHomeData && this.props.index.refreshHomeData();
+
       return;
     }
 

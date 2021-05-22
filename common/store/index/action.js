@@ -18,7 +18,7 @@ class IndexAction extends IndexStore {
   }
 
 /**
- * 详情页点击标签跳转首页操作
+ * 详情页点击标签、置顶跳转首页操作
  * @param {array} categoryIds 分类Ids
  * @returns
  */
@@ -26,7 +26,6 @@ class IndexAction extends IndexStore {
   async refreshHomeData({ categoryIds = [] } = {}) {
     if (categoryIds?.length) {
       this.setFilter({ categoryids: categoryIds })
-
       this.screenData({ filter: { categoryids: categoryIds } })
     } else {
       const { categoryids = [], sequence = 0 } = this.filter
