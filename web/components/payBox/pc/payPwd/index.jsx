@@ -12,12 +12,14 @@ export default class index extends Component {
     super(props);
     this.state = {
       payPassword: null,
+      isSubmit: false
     };
   }
 
   initState = () => {
     this.setState({
       payPassword: null,
+      isSubmit: false
     })
   }
 
@@ -37,6 +39,10 @@ export default class index extends Component {
 
   // 点击提交
   handleSubmit = throttle(async () => {
+    if (this.state.isSubmit) return
+    this.setState({
+      isSubmit: true
+    })
     const { payPassword } = this.state;
     const { id } = this.props.user;
     this.props.payBox.password = payPassword;
@@ -65,7 +71,7 @@ export default class index extends Component {
   },500);
 
   render() {
-    const { list = [], payPassword } = this.state;
+    const { list = [], payPassword, isSubmit } = this.state;
     return (
       <div className={styles.payPwdWrapper}>
         <div className={styles.payTop}>
@@ -76,7 +82,7 @@ export default class index extends Component {
           </div>
         </div>
         <Input type="number" maxLength={6} value={payPassword} onChange={this.handleSetPwd} mode="password" className={styles.payInput} placeholder="请输入支付密码" />
-        <Button onClick={this.handleSubmit} disabled={!payPassword || payPassword.length !== 6} type={'primary'} className={styles.payBtn}>设置支付密码</Button>
+        <Button onClick={this.handleSubmit} disabled={!payPassword || payPassword.length !== 6 || isSubmit} type={'primary'} className={styles.payBtn}>设置支付密码</Button>
       </div>
     );
   }

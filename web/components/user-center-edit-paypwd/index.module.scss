@@ -31,21 +31,6 @@
   }
 }
 
-.bottom {
-  position: fixed;
-  bottom: rem(20);
-  width: calc(100% - 32px);
-  border-top: 1px solid $border-color;
-  padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
-  display: flex;
-  .btn {
-    height: rem(42);
-    font-size: $font-size-middle;
-    margin: auto;
-    border-radius: $border-radius-small !important;
-  }
-}
-
 .labelInfo {
   .labelValue {
     :global {
@@ -70,5 +55,22 @@
     width: 100%;
     text-align: right;
     font-size: rem($font-size-primary);
+  }
+}
+
+#setPayPwdContent {
+  .bottom {
+    position: fixed;
+    bottom: rem(20);
+    width: calc(100% - 32px);
+    border-top: 1px solid $border-color;
+    padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
+    display: flex;
+    .btn {
+      height: rem(42);
+      font-size: $font-size-middle;
+      margin: auto;
+      border-radius: $border-radius-small;
+    }
   }
 }

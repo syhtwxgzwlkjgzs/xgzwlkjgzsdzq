@@ -18,6 +18,7 @@ class index extends Component {
     this.state = {
       payPassword: null, // 支付密码
       oldPayPwd: null, // 旧密码
+      isSubmit: false,
     };
   }
 
@@ -25,6 +26,7 @@ class index extends Component {
     this.setState({
       payPassword: null,
       oldPayPwd: null,
+      isSubmit: false
     });
     this.props.payBox.password = null;
   };
@@ -77,7 +79,11 @@ class index extends Component {
 
   // 点击提交
   handleSubmit = throttle(async () => {
-    const { payPassword } = this.state;
+    const { payPassword, isSubmit } = this.state;
+    if (isSubmit) return
+    this.setState({
+      isSubmit: true
+    })
     const { id } = this.props.user;
     this.props.payBox.password = payPassword;
     this.props.payBox
@@ -142,7 +148,7 @@ class index extends Component {
   render() {
     const { payPassword, oldPayPwd } = this.state;
     return (
-      <div>
+      <div id={styles.setPayPwdContent}>
         <Header />
         {this.props.user?.canWalletPay ? this.renderCanPayPwd() : this.renderSetPayPwd()}
         <div className={styles.bottom}>

@@ -29,14 +29,10 @@ export default class index extends Component {
       this.setState({
         isLoading: true
       })
-      const result = await this.props.payBox.createOrder();
-      if (result.code === 0) {
-        setTimeout(() => {
-          this.setState({
-            isLoading: false
-          })
-        }, 1000)
-      }
+      await this.props.payBox.createOrder();
+      this.setState({
+        isLoading: false
+      })
     } catch (error) {
       console.error(error);
       Toast.error({

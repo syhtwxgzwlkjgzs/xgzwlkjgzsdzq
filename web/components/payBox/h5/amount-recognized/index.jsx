@@ -33,14 +33,10 @@ export default class AmountRecognized extends Component {
       this.setState({
         isLoading: true,
       })
-      const result = await this.props.payBox.createOrder();
-      if (result.code === 0) {
-        setTimeout(() => {
-          this.setState({
-            isLoading: false,
-          })
-        }, 1000)
-      }
+      await this.props.payBox.createOrder();
+      this.setState({
+        isLoading: false,
+      })
     } catch (error) {
       Toast.error({
         content: error.Message,

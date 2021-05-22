@@ -194,11 +194,9 @@ export default class index extends Component {
           duration: 1000,
         });
         this.onClose()
-        setTimeout(() => {
-          this.setState({
-            isSubmit: false
-          })
-        },1000)
+        this.setState({
+          isSubmit: false
+        })
       } catch (error) {
         Toast.error({
           content: error.Message || '支付失败，请重新输入',
