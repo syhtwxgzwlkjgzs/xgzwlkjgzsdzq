@@ -165,33 +165,24 @@ class AtSelect extends Component {
             onChange={e => this.updateKeywords(e)}
           />
           {this.state.keywords &&
-            <Icon className={styles.deleteIcon} name="WrongOutlined" size={16}  onClick={this.clearKeywords}></Icon>
+            <Icon className={styles.deleteIcon} name="WrongOutlined" size={16} onClick={this.clearKeywords}></Icon>
           }
         </div>
 
         {/* 选择列表 */}
-          <Checkbox.Group
-            value={this.state.checkUser}
-            onChange={val => this.setState({ checkUser: val })}
+        <Checkbox.Group
+          value={this.state.checkUser}
+          onChange={val => this.setState({ checkUser: val })}
+        >
+          <BaseList
+            className={styles['at-wrap']}
+            wrapperClass={styles['list__inner']}
+            onRefresh={this.onScrollBottom.bind(this)}
+            noMore={this.state.finish}
           >
-            {/* <div className={styles['at-wrap']}> */}
-              {/* <ScrollView
-                className={styles['scroll-view']}
-                width='100%'
-                rowCount={data.length}
-                rowData={data}
-                rowHeight={54}
-                rowRenderer={this.renderItem.bind(this)}
-                onScrollBottom={this.onScrollBottom.bind(this)}
-                onPullingUp={() => Promise.reject()}
-                isRowLoaded={() => true}
-                lowerThreshold={100}
-              /> */}
-            {/* </div> */}
-            <BaseList className={styles['at-wrap']} onRefresh={this.onScrollBottom.bind(this)} noMore={this.state.finish}>
-              { this.renderItem() }
-            </BaseList>
-          </Checkbox.Group>
+            {this.renderItem()}
+          </BaseList>
+        </Checkbox.Group>
 
         {/* 取消按钮 */}
         <div className={styles.btn}>
@@ -240,8 +231,8 @@ AtSelect.propTypes = {
 AtSelect.defaultProps = {
   data: [],
   visible: false,
-  onCancel: () => {},
-  getAtList: () => {},
+  onCancel: () => { },
+  getAtList: () => { },
 };
 
 export default AtSelect;
