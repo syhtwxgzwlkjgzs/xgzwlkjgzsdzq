@@ -4,7 +4,6 @@ import Header from '@components/header';
 import List from '@components/list'
 import BottomNavBar from '@components/bottom-nav-bar'
 import { PullDownRefresh } from "@discuzq/design"
-// import throttle from '@common/utils/thottle';
 
 import styles from './index.module.scss';
 
