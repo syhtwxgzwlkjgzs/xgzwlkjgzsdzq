@@ -5,6 +5,7 @@ import initializeStore from '@common/store';
 import Head from 'next/head';
 import PayBoxProvider from '../components/payBox/payBoxProvider';
 import Router from '@discuzq/sdk/dist/router';
+import isServer from '@common/utils/is-server';
 import '@discuzq/design/dist/styles/index.scss';
 import '../styles/index.scss';
 
@@ -12,6 +13,27 @@ class DzqApp extends App {
   constructor(props) {
     super(props);
     this.appStore = initializeStore();
+  }
+
+  // 路由跳转时，需要清理图片预览器
+  cleanImgViewer = () => {
+    try {
+      const viewers = document.getElementsByClassName('viewer-in');
+      viewers.forEach((viewer) => {
+        viewer.classList.remove('viewer-in');
+        viewer.classList.add('viewer-hide');
+        viewer.setAttribute('aria-modal', false);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  listenRouterChangeAndClean() {
+    // FIXME: 此种写法不好
+    if (!isServer()) {
+      window.addEventListener('popstate', this.cleanImgViewer, false);
+    }
   }
 
   componentDidMount() {
@@ -28,8 +50,6 @@ class DzqApp extends App {
       }
       Router.redirect({ url: `${pathname}${window.location.search}` });
 
-
-
       // 处理nginx不能更改，处理动态路由
       // const threadReg = /\/thread\/[0-9]+/ig;
       // const threadCommentReg = /\/thread\/comment\/[0-9]+/ig;
@@ -41,6 +61,14 @@ class DzqApp extends App {
       //   // csr部署时因方便ngixn部署统一指向index.html,所以统一在此重定向一次
       //   Router.redirect({ url: `/` });
       // }
+    }
+
+    this.listenRouterChangeAndClean();
+  }
+
+  componentWillUnmount() {
+    if (!isServer()) {
+      window.removeEventListener('popstate', this.cleanImgViewer);
     }
   }
 
@@ -55,7 +83,7 @@ class DzqApp extends App {
             name="viewport"
             content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover"
           />
-          <title>{(site.envConfig && site.envConfig['TITLE']) || 'Discuz!Q' }</title>
+          <title>{(site.envConfig && site.envConfig.TITLE) || 'Discuz!Q'}</title>
         </Head>
         <Provider {...this.appStore}>
           <PayBoxProvider>
