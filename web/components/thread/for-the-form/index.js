@@ -17,7 +17,8 @@ import PropTypes from 'prop-types'; // 类型拦截
 const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
   const [value, setValue] = useState('');// 悬赏金额
   // const [times, setTimes] = useState(formatDate(new Date(), 'yyyy-MM-dd h:mm'));// 悬赏的到期时间
-  const [times, setTimes] = useState(formatDate(new Date().getTime(), 'yyyy/MM/dd hh:mm'));// 悬赏的到期时间
+  const now = new Date().getTime() + (25 * 3600 * 1000);
+  const [times, setTimes] = useState(formatDate(now, 'yyyy/MM/dd hh:mm'));// 悬赏的到期时间
   const [show, setShow] = useState(false);// 时间选择器是否显示
 
   // 时间选择器是否显示
