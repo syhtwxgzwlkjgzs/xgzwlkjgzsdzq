@@ -379,7 +379,7 @@ class ThreadAction extends ThreadStore {
    * @returns {object} 处理结果
    */
   @action
-  async delete(id, IndexStore) {
+  async delete(id, IndexStore, SearchStore, TopicStore) {
     if (!id) {
       return {
         msg: '参数不完整',
@@ -396,8 +396,10 @@ class ThreadAction extends ThreadStore {
     if (res.code === 0) {
       this.setThreadDetailField('isDelete', 1);
 
-      // TODO: 删除帖子列表中的数据
-      // IndexStore
+      // 删除帖子列表中的数据
+      IndexStore?.deleteThreadsData && IndexStore.deleteThreadsData({ id });
+      SearchStore?.deleteThreadsData && SearchStore.deleteThreadsData({ id });
+      TopicStore?.deleteThreadsData && TopicStore.deleteThreadsData({ id });
 
       return {
         msg: '操作成功',
