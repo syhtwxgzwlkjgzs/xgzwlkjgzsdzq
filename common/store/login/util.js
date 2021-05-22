@@ -55,9 +55,9 @@ const checkCompleteUserInfo = (resp) => {
     throw COMMON_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME;
   }
 
-  if (isMissRequireInfo) {
-    throw COMMON_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO;
-  }
+  // if (isMissRequireInfo) {
+  //   throw COMMON_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO;
+  // }
 };
 
 /**

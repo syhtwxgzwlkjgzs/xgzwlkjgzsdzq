@@ -129,6 +129,7 @@ class ThreadPCPage extends React.Component {
               <MoneyDisplay
                 pc
                 payTotalMoney={threadPost.payTotalMoney}
+                redTotalMoney={threadPost.redpacketTotalAmount}
                 postData={postData} setPostData={this.props.setPostData}
                 handleSetState={this.props.handleSetState}
                 onAttachClick={this.props.handleAttachClick}
@@ -164,9 +165,8 @@ class ThreadPCPage extends React.Component {
               <div className={styles['toolbar-right']}>
                 {(user?.permissions?.insertPosition?.enable && webConfig?.lbs?.lbs) && (
                   <Position
-                    lbskey={webConfig?.lbs?.qqLbsKey}
+                    lbskey={webConfig.lbs.qqLbsKey}
                     position={postData.position}
-                    // onClick={() => this.props.saveDataLocal()}
                     onChange={position => this.props.setPostData({ position })}
                   />
                 )}

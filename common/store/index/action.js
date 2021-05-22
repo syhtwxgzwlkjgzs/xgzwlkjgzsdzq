@@ -2,6 +2,7 @@ import { action } from 'mobx';
 import IndexStore from './store';
 import { readCategories, readStickList, readThreadList, updatePosts, createThreadShare, readRecommends } from '@server';
 import typeofFn from '@common/utils/typeof';
+import threadReducer from '../thread/reducer';
 
 class IndexAction extends IndexStore {
   constructor(props) {
@@ -251,21 +252,11 @@ class IndexAction extends IndexStore {
       const theUserId = user.userId || user.id;
       data.isLike = isLiked;
 
-      if (isLiked) {
-        const userAdded = { userId: theUserId, avatar: user.avatarUrl, username: user.username };
-
+      const userData = threadReducer.createUpdateLikeUsersData(user, 1);
         // 添加当前用户到按过赞的用户列表
-        data.likeReward.users = data.likeReward.users.length ?
-                                [userAdded, ...data.likeReward.users]:
-                                [userAdded];
-      } else {
-        // 从按过赞用户列表中删除当前用户
-        data.likeReward.users = data.likeReward.users.length ?
-                                [...data.likeReward.users].filter(item => {
-                                  return (item.userId !== theUserId)
-                                }) :
-                                data.likeReward.users;
-      }
+      const newLikeUsers = threadReducer.setThreadDetailLikedUsers(data.likeReward, !!isLiked, userData);
+     
+      data.likeReward.users = newLikeUsers;
       data.likeReward.likePayCount = likePayCount;
     }
 

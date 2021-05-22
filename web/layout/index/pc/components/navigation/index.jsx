@@ -13,16 +13,16 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
     let categoryIds = subIndex.split('/')
     let sequence = 0;
 
-    // 若是点击已选中的项，则不处理
-    if (fistIndex === categoryIds[0]) {
-      if (categoryIds[1] === '-1') {
-        return
-      } else {
-        if (secondIndex === categoryIds[1]) {
-          return
-        }
-      }
-    }
+    // 若是点击已选中的项，则不处理「更新：暂时不需要处理这里」
+    // if (fistIndex === categoryIds[0]) {
+    //   if (categoryIds[1] === '-1') {
+    //     return
+    //   } else {
+    //     if (secondIndex === categoryIds[1]) {
+    //       return
+    //     }
+    //   }
+    // }
 
     setFistIndex(categoryIds[0]);
     setSecondIndex(categoryIds[1]);

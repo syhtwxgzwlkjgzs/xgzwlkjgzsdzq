@@ -190,9 +190,14 @@
         }
       }
     }
+    .at-wrap{
+      .list__inner{
+        @include scrollbar();
+      }
+    }
     .at-item {
       margin-left: 0;
-      margin-right: 0;
+      margin-right: $margin-5n;
     }
 
     .input {

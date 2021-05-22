@@ -73,7 +73,6 @@ class PostPage extends React.Component {
   componentWillUnmount() {
     this.captcha = '';
     this.props.threadPost.resetPostData();
-    if (this.vditor && this.vditor.destroy) this.vditor.destroy();
   }
 
   saveDataLocal = () => {
@@ -211,7 +210,9 @@ class PostPage extends React.Component {
         // 判断ios版本号
         const v = u.match(/cpu iphone os (.*?) like mac os/);
         if (v) {
-          const version = v[1].replace(/_/g, ".").split('.').splice(0, 2).join('.');
+          const version = v[1].replace(/_/g, '.').split('.')
+            .splice(0, 2)
+            .join('.');
           if ((Number(version) < 14.3) && !(u.indexOf('safari') > -1 && u.indexOf('chrome') < 0 && u.indexOf('qqbrowser') < 0 && u.indexOf('360') < 0)) {
             Toast.info({ content: 'iOS版本太低，请升级至iOS 14.3及以上版本或使用Safari浏览器访问' });
             return;
@@ -288,9 +289,9 @@ class PostPage extends React.Component {
     const fileSize = cloneList[0].size;
     // 判断合法性
     const isLegalType = supportFileExt.includes(fileType);
-    const isLegalSize = supportMaxSize * 1024 *1024 > fileSize;
-    console.log(`list`, cloneList, showFileList)
-    console.log(`supportFileExt`, webConfig,supportFileExt, supportMaxSize, fileType, fileSize, isLegalType && isLegalSize);
+    const isLegalSize = supportMaxSize * 1024 * 1024 > fileSize;
+    console.log('list', cloneList, showFileList);
+    console.log('supportFileExt', webConfig, supportFileExt, supportMaxSize, fileType, fileSize, isLegalType && isLegalSize);
     if (!isLegalType) {
       Toast.info({ content: '当前不支持此类型文件' });
       return false;
@@ -444,10 +445,11 @@ class PostPage extends React.Component {
 
     // 支付流程
     const { rewardQa, redpacket } = threadPost.postData;
+    const { redpacketTotalAmount } = threadPost;
     // 如果是编辑的悬赏帖子，则不用再次支付
     const rewardAmount = (threadId && rewardQa.id) ? 0 : plus(rewardQa.value, 0);
     // 如果是编辑的红包帖子，则不用再次支付
-    const redAmount = (threadId && redpacket.id) ? 0 : plus(redpacket.price, 0);
+    const redAmount = (threadId && redpacket.id) ? 0 : plus(redpacketTotalAmount, 0);
     const amount = plus(rewardAmount, redAmount);
     const data = { amount };
     if (!isDraft && amount > 0) {
@@ -491,17 +493,16 @@ class PostPage extends React.Component {
       thread.reset();
       this.toastInstance?.destroy();
 
-      // 更新帖子到首页列表
-      if ( threadId ) {
-        this.props.index.updateAssignThreadAllData(threadId, data);
-      // 添加帖子到首页数据
-      } else {
-        this.props.index.addThread(data);
-      }
-
-
-      if (!isDraft) this.props.router.replace(`/thread/${data.threadId}`);
-      else Router.back();
+      if (!isDraft) {
+        // 更新帖子到首页列表
+        if (threadId) {
+          this.props.index.updateAssignThreadAllData(threadId, data);
+        // 添加帖子到首页数据
+        } else {
+          this.props.index.addThread(data);
+        }
+        this.props.router.replace(`/thread/${data.threadId}`);
+      } else Router.back();
       return true;
     }
     Toast.error({ content: msg });

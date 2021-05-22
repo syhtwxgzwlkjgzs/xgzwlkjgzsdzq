@@ -35,11 +35,12 @@ class BindNicknameH5Page extends React.Component {
         const { router } = this.props;
         const { needToCompleteExtraInfo: isNeedToCompleteExtraInfo } = router.query;
 
+        // TODO: 页面还没做好，暂时不做扩展信息的判断跳转
         const needToCompleteExtraInfo = this.props.commonLogin.needToCompleteExtraInfo || isNeedToCompleteExtraInfo;
-        if (needToCompleteExtraInfo) {
-          this.props.router.push('/user/supplementary');
-          return;
-        }
+        // if (needToCompleteExtraInfo) {
+        //   this.props.router.push('/user/supplementary');
+        //   return;
+        // }
         // TODO: 这里的路由堆栈需要再梳理规则
         window.location.href = '/';
       }, 1000);
