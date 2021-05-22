@@ -16,23 +16,36 @@ class IndexAction extends IndexStore {
     this.filter = data
   }
 
-   /**
+/**
+ * 详情页点击标签跳转首页操作
+ * @param {array} categoryIds 分类Ids
+ * @returns
+ */
+  @action
+  async refreshHomeData({ categoryIds = [] } = {}) {
+    if (categoryIds.length) {
+      this.setFilter({ categoryids: categoryIds })
+
+      this.screenData({ filter: { categoryids: categoryIds } })
+    }
+  }
+
+  /**
    * 详情页点击标签跳转首页操作
    * @param {array} categoryIds 分类Ids
    * @returns
    */
-    @action
-    async refreshHomeData({ categoryIds = [], perPage = 10, page = 1 } = {}) {
-      if (categoryIds.length) {
-        this.setFilter({ categoryids: categoryIds })
+   @action
+   async deleteThreadsData({ id } = {}) {
+     if (id && this.threads) {
+        const { pageData = [] } = this.threads;
+        const newPageData = pageData.filter(item => item.threadId !== id)
 
-        this.threads = null;
-        this.sticks = null;
-
-        this.getRreadStickList(categoryIds);
-        this.getReadThreadList({ filter: { categoryids: categoryIds }, sequence: 0, perPage, page });
-      }
-    }
+        if (this.threads?.pageData) {
+          this.threads.pageData = newPageData;
+        }
+     }
+   }
 
   /**
    * 触发筛选数据
