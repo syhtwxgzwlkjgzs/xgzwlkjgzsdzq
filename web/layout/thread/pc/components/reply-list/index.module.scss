@@ -20,7 +20,7 @@
       }
       
       .replyListText {
-        margin-top: rem(4);
+        margin-top: rem($margin-1n);
         font-size: rem($font-size-middle);
         text-align: left;
         color: var(--color-text-primary);
@@ -33,7 +33,7 @@
           font-family: "PingFang SC";
           font-weight: normal;
           font-size: $font-size-middle;
-          line-height: rem(16px);
+          line-height: rem(16);
           text-align: left;
           color: $text-color-primary;
           vertical-align: super;
@@ -60,7 +60,7 @@
           word-break: initial;
           align-items: center;
           justify-content: flex-start;
-          height: rem(28px);
+          height: rem(28);
 
           .replyedAvatar {
             display: inline-block;
@@ -69,7 +69,7 @@
             .avatar {
               width: rem(18);
               height: rem(18);
-              font-size: rem(10);
+              font-size: rem($font-size-small);
               line-height: rem(18);
             }
           }
