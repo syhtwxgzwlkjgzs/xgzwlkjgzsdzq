@@ -29,6 +29,32 @@ class ThreadAction extends ThreadStore {
   }
 
   /**
+   * 更新列表页store
+   * @param {*} IndexStore 首页store
+   * @param {*} SearchStore 发现store
+   * @param {*} TopicStore 话题store
+   */
+  @action
+  async updateListStore(IndexStore, SearchStore, TopicStore) {
+    const id = this.threadData?.threadId;
+
+    if (id) {
+      IndexStore?.updatePayThreadInfo && IndexStore.updatePayThreadInfo(id, this.threadData);
+      SearchStore?.updatePayThreadInfo && SearchStore.updatePayThreadInfo(id, this.threadData);
+      TopicStore?.updatePayThreadInfo && TopicStore.updatePayThreadInfo(id, this.threadData);
+    }
+  }
+
+  /**
+   * 更新评论数量
+   * @param {number} count
+   */
+  @action
+  updatePostCount(count = 0) {
+    this.threadData?.likeReward && (this.threadData.likeReward.postCount = count);
+  }
+
+  /**
    * 获取帖子详细信息
    * @param {number} id 帖子id
    * @returns 帖子详细信息
@@ -177,7 +203,7 @@ class ThreadAction extends ThreadStore {
    * @returns {object} 处理结果
    */
   @action
-  async updateLiked(params, IndexStore, UserStore) {
+  async updateLiked(params, IndexStore, UserStore, SearchStore, TopicStore) {
     const { id, pid, isLiked } = params;
     if (!id || !pid) {
       return {
@@ -211,11 +237,9 @@ class ThreadAction extends ThreadStore {
         };
         this.setThreadDetailLikedUsers(!!isLiked, user);
       }
-      // TODO:更新首页store
-      // IndexStore &&
-      //   IndexStore.updateAssignThreadInfo(id, {
-      //     isLike: !!isLiked,
-      //   });
+
+      // 更新列表store
+      this.updateListStore(IndexStore, SearchStore, TopicStore);
 
       return {
         msg: '操作成功',
