@@ -95,10 +95,10 @@ export default class ReplyList extends React.Component {
                     </span>
                   </div> : ''
               }
-              <span
+              <div
                 className={classnames(styles.content,this.props.isShowOne && styles.isShowOne)}
                 dangerouslySetInnerHTML={{ __html: this.filterContent()}}
-              ></span>
+              ></div>
             </div>
           </div>
           <div className={styles.replyListFooter}>
