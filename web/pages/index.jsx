@@ -51,8 +51,12 @@ class Index extends React.Component {
     if (!hasSticksData) {
       this.props.index.getRreadStickList();
     }
+   
     if (!hasThreadsData) {
       this.props.index.getReadThreadList({ sequence: this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0 });
+    } else {
+      // 如果store中有值，则需要获取之前的分页数
+      this.page = index.threads.currentPage || 1
     }
   }
 
