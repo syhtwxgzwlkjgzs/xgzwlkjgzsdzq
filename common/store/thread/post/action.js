@@ -203,7 +203,7 @@ class ThreadPostAction extends ThreadPostStore {
    */
   @action
   gettContentIndexes() {
-    const { images, video, files, product, audio, redpacket, rewardQa, orderSn } = this.postData;
+    const { images, video, files, product, audio, redpacket, rewardQa, orderSn, draft } = this.postData;
     const imageIds = Object.values(images).map(item => item.id);
     const docIds = Object.values(files).map(item => item.id);
     const contentIndexes = {};
@@ -238,17 +238,18 @@ class ThreadPostAction extends ThreadPostStore {
       };
     }
 
+    const draftData = draft ? 1 : 0;
     if (redpacket.price && !redpacket.id) {
       contentIndexes[THREAD_TYPE.redPacket] = {
         tomId: THREAD_TYPE.redPacket,
-        body: { orderSn, ...redpacket },
+        body: { orderSn, ...redpacket, draft: draftData },
       };
     }
 
     if (rewardQa.value && !rewardQa.id) {
       contentIndexes[THREAD_TYPE.reward] = {
         tomId: THREAD_TYPE.reward,
-        body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0, orderSn },
+        body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0, orderSn, draft: draftData },
       };
     }
     return contentIndexes;

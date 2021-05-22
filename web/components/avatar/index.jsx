@@ -15,6 +15,7 @@ function avatar(props) {
   const [isShow, changeIsShow] = useState(false);
   const [userInfo, changeUserInfo] = useState('padding');
   const [following, changeFollowStatus] = useState(false);
+  const [isSameWithMe, changeIsSameWithMe] = useState(false);
 
   const onMouseEnterHandler = useCallback(async () => {
     if (!userId) return;
@@ -22,6 +23,7 @@ function avatar(props) {
 
     if (!userInfo || userInfo === 'padding') {
       const userInfo = await props.user.getAssignUserInfo(userId);
+      changeIsSameWithMe(props?.user?.id === userId);
       changeUserInfo(userInfo);
     }
   });
@@ -105,20 +107,23 @@ function avatar(props) {
               <p className={styles.text}>{userInfo.fansCount || 0}</p>
             </div>
           </div>
-          <div className={styles.footer}>
-            <Button 
-              onClick={following ? () => {} : followHandler} 
-              loading={following} 
-              className={[styles.btn, btnInfo.className]} 
-              type='primary'>
-                {!following && (
-                  <Icon className={styles.icon} name={btnInfo.icon} size={12}/>
-                )}
-                {btnInfo.text}
-            </Button>
-            <Button className={[styles.btn, styles.ghost]} type='primary' ghost><Icon className={styles.icon} name="NewsOutlined" size={12}/>发私信</Button>
-            <Button className={styles.btn} type='primary'><Icon className={styles.icon} name="ShieldOutlined" size={12}/>屏蔽</Button>
-          </div>
+          {
+            !isSameWithMe &&
+            <div className={styles.footer}>
+              <Button
+                onClick={following ? () => {} : followHandler}
+                loading={following}
+                className={[styles.btn, btnInfo.className]}
+                type='primary'>
+                  {!following && (
+                    <Icon className={styles.icon} name={btnInfo.icon} size={12}/>
+                  )}
+                  {btnInfo.text}
+              </Button>
+              <Button className={[styles.btn, styles.ghost]} type='primary' ghost><Icon className={styles.icon} name="NewsOutlined" size={12}/>发私信</Button>
+              <Button className={styles.btn} type='primary'><Icon className={styles.icon} name="ShieldOutlined" size={12}/>屏蔽</Button>
+            </div>
+          }
         </div>
       </div>
     );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import PopupList from '../popup-list';
 import Avatar from '../../avatar';
 import { Icon } from '@discuzq/design';
@@ -23,11 +23,21 @@ const Index = ({ imgs = [], tipData = {}, wholeNum = 1,showMore=false }) => {
     setVisible(false);
   };
 
+  const renderUsers = useMemo(() => {
+    const map = {};
+    return imgs.reduce((result, item) => {
+      if (!map[item.userId]) {
+        result.push(item);
+        map[item.userId] = 1;
+      }
+      return result;
+    }, [])
+  }, [imgs]);
   return (
     <>
-        <div className={styles.container} onClick={onClick} style={{ width: imgs.length === 1 ? '0.24rem' : '0.44rem' }}>
+        <div className={styles.container} onClick={onClick} style={{ width: renderUsers.length === 1 ? '0.24rem' : '0.44rem' }}>
             {
-                wholeNum !== 0 && imgs?.filter((_, index) => index < 2).map((item, index) => (
+                wholeNum !== 0 && renderUsers?.filter((_, index) => index < 2).map((item, index) => (
                   <div key={index} className={index === 0 ? styles.img : styles.imgAfter}>
                     <Avatar
                       image={item.avatar}

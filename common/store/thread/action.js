@@ -12,6 +12,8 @@ import {
   deleteThread,
 } from '@server';
 import { plus } from '@common/utils/calculate';
+import threadReducer from './reducer';
+import rewardPay from '@common/pay-bussiness/reward-pay';
 
 class ThreadAction extends ThreadStore {
   constructor(props) {
@@ -26,6 +28,32 @@ class ThreadAction extends ThreadStore {
     }
 
     return userRes;
+  }
+
+  /**
+   * 更新列表页store
+   * @param {*} IndexStore 首页store
+   * @param {*} SearchStore 发现store
+   * @param {*} TopicStore 话题store
+   */
+  @action
+  async updateListStore(IndexStore, SearchStore, TopicStore) {
+    const id = this.threadData?.threadId;
+
+    if (id) {
+      IndexStore?.updatePayThreadInfo && IndexStore.updatePayThreadInfo(id, this.threadData);
+      SearchStore?.updatePayThreadInfo && SearchStore.updatePayThreadInfo(id, this.threadData);
+      TopicStore?.updatePayThreadInfo && TopicStore.updatePayThreadInfo(id, this.threadData);
+    }
+  }
+
+  /**
+   * 更新评论数量
+   * @param {number} count
+   */
+  @action
+  updatePostCount(count = 0) {
+    this.threadData?.likeReward && (this.threadData.likeReward.postCount = count);
   }
 
   /**
@@ -68,15 +96,14 @@ class ThreadAction extends ThreadStore {
     this.threadData.likeReward.likePayCount = data;
   }
 
+  
+  /**
+   * 更新帖子详情的点赞数据
+   * @param {array} data 
+   */
   @action
-  setThreadDetailLikedUsers(isLiked, userInfo) {
-    const users = this.threadData?.likeReward?.users;
-
-    if (isLiked) {
-      this.threadData.likeReward.users = users?.length ? [userInfo, ...users] : [userInfo];
-    } else {
-      this.threadData.likeReward.users = users.filter((item) => item.userId !== userInfo.userId);
-    }
+  updateLikeReward(data) {
+    this.threadData.likeReward.users = data;
   }
 
   @action
@@ -169,6 +196,45 @@ class ThreadAction extends ThreadStore {
   }
 
   /**
+   * 打赏帖子
+   */
+  @action
+  async rewardPay(params, UserStore, IndexStore, SearchStore, TopicStore) {
+    const { success, msg } = await rewardPay(params);
+
+    // 支付成功重新请求帖子数据
+    if (success) {
+      this.setThreadDetailField('isReward', true);
+      this.threadData.likeReward.likePayCount = (this.threadData.likeReward.likePayCount || 0) + 1;
+      this.setThreadDetailLikePayCount(this.threadData.likeReward.likePayCount);
+
+      // 更新打赏的用户
+      const currentUser = UserStore?.userInfo;
+      if (currentUser) {
+        const user = {
+          avatar: currentUser.avatarUrl,
+          userId: currentUser.id,
+          userName: currentUser.username,
+        };
+        this.setThreadDetailLikedUsers(true, user);
+      }
+
+      // 更新列表store
+      this.updateListStore(IndexStore, SearchStore, TopicStore);
+
+      return {
+        success: true,
+        msg: '打赏成功',
+      };
+    }
+
+    return {
+      success: false,
+      msg: msg || '打赏失败',
+    };
+  }
+
+  /**
    * 帖子点赞
    * @param {object} parmas * 参数
    * @param {number} parmas.id * 帖子id
@@ -177,7 +243,7 @@ class ThreadAction extends ThreadStore {
    * @returns {object} 处理结果
    */
   @action
-  async updateLiked(params, IndexStore, UserStore) {
+  async updateLiked(params, IndexStore, UserStore, SearchStore, TopicStore) {
     const { id, pid, isLiked } = params;
     if (!id || !pid) {
       return {
@@ -211,11 +277,9 @@ class ThreadAction extends ThreadStore {
         };
         this.setThreadDetailLikedUsers(!!isLiked, user);
       }
-      // TODO:更新首页store
-      // IndexStore &&
-      //   IndexStore.updateAssignThreadInfo(id, {
-      //     isLike: !!isLiked,
-      //   });
+
+      // 更新列表store
+      this.updateListStore(IndexStore, SearchStore, TopicStore);
 
       return {
         msg: '操作成功',
@@ -315,7 +379,7 @@ class ThreadAction extends ThreadStore {
    * @returns {object} 处理结果
    */
   @action
-  async delete(id, IndexStore) {
+  async delete(id, IndexStore, SearchStore, TopicStore) {
     if (!id) {
       return {
         msg: '参数不完整',
@@ -332,8 +396,10 @@ class ThreadAction extends ThreadStore {
     if (res.code === 0) {
       this.setThreadDetailField('isDelete', 1);
 
-      // TODO: 删除帖子列表中的数据
-      // IndexStore
+      // 删除帖子列表中的数据
+      IndexStore?.deleteThreadsData && IndexStore.deleteThreadsData({ id });
+      SearchStore?.deleteThreadsData && SearchStore.deleteThreadsData({ id });
+      TopicStore?.deleteThreadsData && TopicStore.deleteThreadsData({ id });
 
       return {
         msg: '操作成功',
@@ -557,6 +623,66 @@ class ThreadAction extends ThreadStore {
       }
     });
     return list;
+  }
+
+  
+
+  /**
+   * 帖子点赞
+   * @param {object} parmas * 参数
+   * @param {number} parmas.id * 帖子id
+   * @param {number} parmas.pid * 帖子评论od
+   * @param {boolean} params.isLiked 是否点赞
+   * @returns {object} 处理结果
+   */
+  @action
+  async updateLiked(params, IndexStore, UserStore) {
+    const { id, pid, isLiked } = params;
+    if (!id || !pid) {
+      return {
+        msg: '参数不完整',
+        success: false,
+      };
+    }
+
+    const requestParams = {
+      id,
+      pid,
+      data: {
+        attributes: {
+          isLiked: !!isLiked,
+        },
+      },
+    };
+    const res = await updatePosts({ data: requestParams });
+
+    if (res?.data && res.code === 0) {
+      this.setThreadDetailField('isLike', !!isLiked);
+      this.setThreadDetailLikePayCount(res.data.likePayCount);
+
+      // 更新点赞的用户
+      const currentUser = UserStore?.userInfo;
+      if (currentUser) {
+        const userData = threadReducer.createUpdateLikeUsersData(currentUser, 1);
+        const newLikeUsers = threadReducer.setThreadDetailLikedUsers(this.threadData?.likeReward, !!isLiked, userData);
+        this.updateLikeReward(newLikeUsers);
+      }
+      // TODO:更新首页store
+      // IndexStore &&
+      //   IndexStore.updateAssignThreadInfo(id, {
+      //     isLike: !!isLiked,
+      //   });
+
+      return {
+        msg: '操作成功',
+        success: true,
+      };
+    }
+
+    return {
+      msg: res.msg,
+      success: false,
+    };
   }
 }
 

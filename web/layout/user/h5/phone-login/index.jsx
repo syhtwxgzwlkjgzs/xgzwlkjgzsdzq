@@ -58,11 +58,11 @@ class LoginPhoneH5Page extends React.Component {
         return;
       }
 
-      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
-        this.props.commonLogin.needToCompleteExtraInfo = true;
-        this.props.router.push('/user/supplementary');
-        return;
-      }
+      // if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+      //   this.props.commonLogin.needToCompleteExtraInfo = true;
+      //   this.props.router.push('/user/supplementary');
+      //   return;
+      // }
 
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_ALL_INFO.Code) {
         this.props.commonLogin.needToSetNickname = true;

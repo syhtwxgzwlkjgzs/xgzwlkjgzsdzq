@@ -12,6 +12,7 @@ export default function MoneyDisplay(props) {
     onAttachClick = () => { },
     onDefaultClick = () => {},
     payTotalMoney,
+    redTotalMoney,
   } = props;
   const clsName = props.pc ? styles.pc : styles.h5;
   return (
@@ -55,7 +56,7 @@ export default function MoneyDisplay(props) {
           }}
         >
           {postData.redpacket.rule === 1 ? '随机红包' : '定额红包'}
-          \总金额{plus(postData.redpacket.price, 0)}元\{postData.redpacket.number}个
+          \总金额{redTotalMoney}元\{postData.redpacket.number}个
           {postData.redpacket.condition === 1 && `\\集赞个数${postData.redpacket.likenum}`}
         </Tag>
       )}

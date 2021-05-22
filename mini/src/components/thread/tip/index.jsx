@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import PopupList from '../popup-list';
 import Avatar from '../../avatar';
 import { View, Text, Image } from '@tarojs/components';
@@ -22,11 +22,22 @@ const Index = ({ imgs = [], tipData = {}, wholeNum = 1 }) => {
     setVisible(false);
   };
 
+  const renderUsers = useMemo(() => {
+    const map = {};
+    return imgs.reduce((result, item) => {
+      if (!map[item.userId]) {
+        result.push(item);
+        map[item.userId] = 1;
+      }
+      return result;
+    }, [])
+  }, [imgs]);
+
   return (
     <>
-        <View className={styles.container} onClick={onClick} style={{ width: imgs.length === 1 ? '24px' : '44px' }}>
+        <View className={styles.container} onClick={onClick} style={{ width: renderUsers.length === 1 ? '24px' : '44px' }}>
             {
-                wholeNum !== 0 && imgs.filter((_, index) => index < 2).map((item, index) => (
+                wholeNum !== 0 && renderUsers.filter((_, index) => index < 2).map((item, index) => (
                   <View key={index} className={index === 0 ? styles.img : styles.imgAfter}>
                     <Avatar
                       image={item.avatar}
