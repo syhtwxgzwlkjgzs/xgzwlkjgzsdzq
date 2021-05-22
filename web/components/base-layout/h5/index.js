@@ -58,18 +58,18 @@ const BaseLayout = (props) => {
     }
     if (listRef?.current && baselayout.jumpToScrollingPos > 0 &&
         baseLayoutWhiteList.indexOf(props.pageName) !== -1) {
-      listRef.current.jumpToScrollTop(baselayout.jumpToScrollingPos);
+        listRef.current.jumpToScrollTop(baselayout.jumpToScrollingPos);
     }
   }, [])
 
-  const handleScroll = throttle(() => {
-    if(!listRef?.current?.currentScrollTop) {
-      onScroll();
-      return;
-    }
-    baselayout.jumpToScrollingPos = listRef.current.currentScrollTop.current;
-    onScroll({ scrollTop: listRef.current.currentScrollTop.current });
-  }, 30)
+  // const handleScroll = throttle(() => {
+    // if(!listRef?.current?.currentScrollTop) {
+    //   onScroll();
+    //   return;
+    // }
+  //   baselayout.jumpToScrollingPos = listRef.current.currentScrollTop.current;
+  //   onScroll({ scrollTop: listRef.current.currentScrollTop.current });
+  // }, 30)
 
   return (
     <div className={styles.container}>
@@ -84,7 +84,7 @@ const BaseLayout = (props) => {
               </PullDownRefresh>
             </div>
           ) : (
-            <List {...props} className={styles.list} ref={listRef} onScroll={handleScroll}>
+            <List {...props} className={styles.list} ref={listRef} onScroll={onScroll}>
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>
           )

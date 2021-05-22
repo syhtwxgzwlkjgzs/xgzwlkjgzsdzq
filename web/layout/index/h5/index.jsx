@@ -11,6 +11,7 @@ import BaseLayout from '@components/base-layout';
 @inject('site')
 @inject('user')
 @inject('index')
+@inject('baselayout')
 @observer
 class IndexH5Page extends React.Component {
   constructor(props) {
@@ -112,6 +113,8 @@ class IndexH5Page extends React.Component {
   onScroll = ({ scrollTop } = {}) => {
     const { height = 180 } = this.headerRef.current?.state || {}
     this.setState({ fixedTab: scrollTop > height })
+
+    this.props.baselayout.jumpToScrollingPos = scrollTop;
   }
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
