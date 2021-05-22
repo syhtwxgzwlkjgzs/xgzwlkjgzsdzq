@@ -31,11 +31,31 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
     }
   }, []);
 
+  const onPriceChang = (val) => { // 对红包金额做仅可输入两位小数的操作
+    const arr = val.match(/([1-9]\d{0,2}|0)(\.\d{0,2})?/);
+    setPrice(arr ? arr[0] : '')
+  }
+
+  const onNumberChang = (val) => {
+    const arr = val.match(/[1-9]\d{0,2}/);
+    setNumber(arr ? arr[0] : '')
+  }
+
+  const onLikenumChang = (val) => {
+    const arr = val.match(/[1-9]\d{0,2}/);
+    setLikenum(arr ? arr[0] : '')
+  }
   const selectRedpacket = () => {
     // 校验红包选择情况
     if (price < 0.1 || price > 200) {
       Toast.warning({
         content: '金额错误，请输入0.1-200￥',
+      });
+      return;
+    }
+    if (rule && price * 100 < number) {
+      Toast.warning({
+        content: '单个红包金额不可低于0.1元',
       });
       return;
     }
@@ -82,14 +102,14 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       <div className={styles['line-box']}>
         <div className={styles.label}>红包总金额</div>
         <div className={styles.item}>
-          <Input mode="number" placeholder="金额" value={price} onChange={e => setPrice(e.target.value)} />元
+          <Input mode="number" placeholder="金额" value={price} onChange={e => onPriceChang(e.target.value)} />元
         </div>
       </div>
       {/* 红包个数 */}
       <div className={styles['line-box']}>
         <div className={styles.label}>红包个数</div>
         <div className={styles.item}>
-          <Input mode="number" htmlType="number" value={number} placeholder="个数" onChange={e => setNumber(e.target.value)} />个
+          <Input mode="number" htmlType="number" value={number} placeholder="个数" onChange={e => onNumberChang(e.target.value)} />个
         </div>
       </div>
       {/* 获利条件 */}
@@ -110,7 +130,7 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       {condition === 1 && (
         <div className={styles.likenum}>
           <div className={styles['likenum-input']}>
-            <Input mode="number" htmlType="number" placeholder="个数" value={likenum} onChange={e => setLikenum(e.target.value)} />个
+            <Input mode="number" htmlType="number" placeholder="个数" value={likenum} onChange={e => onLikenumChang(e.target.value)} />个
           </div>
         </div>
       )}
@@ -154,8 +174,8 @@ RedpacketSelect.propTypes = {
 RedpacketSelect.defaultProps = {
   visible: false,
   data: {},
-  confirm: () => {},
-  cancel: () => {},
+  confirm: () => { },
+  cancel: () => { },
 };
 
 export default memo(RedpacketSelect);

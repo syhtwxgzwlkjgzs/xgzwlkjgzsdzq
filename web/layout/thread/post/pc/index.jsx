@@ -129,6 +129,7 @@ class ThreadPCPage extends React.Component {
               <MoneyDisplay
                 pc
                 payTotalMoney={threadPost.payTotalMoney}
+                redTotalMoney={threadPost.redpacketTotalAmount}
                 postData={postData} setPostData={this.props.setPostData}
                 handleSetState={this.props.handleSetState}
                 onAttachClick={this.props.handleAttachClick}
