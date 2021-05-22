@@ -76,7 +76,7 @@ function avatar(props) {
     }
 
     return (
-      <div className={styles.userInfoBox}>
+      <div id="avatar-popup" className={styles.userInfoBox}>
         <div className={styles.userInfoContent}>
           <div className={styles.header}>
             <div className={styles.left}>
