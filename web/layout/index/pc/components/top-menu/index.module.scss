@@ -9,6 +9,16 @@
   }
 
   :global {
+    .dzq-submenu__title {
+      .dzq-icon {
+        font-size: rem(10) !important; // Menu组件里面的icon写死了12px大小
+      }
+    }
+
+    .dzq-menu--horizontal .dzq-submenu > .dzq-menu .dzq-menu-item.is-divided:last-child {
+      border-bottom: none !important; // 组件库中有相应逻辑但被加了important
+    }
+
     .dzq-submenu__title.is-active {
       font-weight: 600;
     }
