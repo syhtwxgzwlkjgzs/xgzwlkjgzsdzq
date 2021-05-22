@@ -4,6 +4,7 @@ import Header from '@components/header';
 import List from '@components/list'
 import BottomNavBar from '@components/bottom-nav-bar'
 import { PullDownRefresh } from "@discuzq/design"
+import { noop } from '@components/thread/utils'
 
 import styles from './index.module.scss';
 
@@ -24,7 +25,7 @@ import styles from './index.module.scss';
 const baseLayoutWhiteList = ['home'];
 
 const BaseLayout = (props) => {
-  const { showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr, onScroll, baselayout } = props;
+  const { showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr, onScroll = noop, baselayout } = props;
   const [height, setHeight] = useState(600);
 
   const debounce = (fn, wait) => {
