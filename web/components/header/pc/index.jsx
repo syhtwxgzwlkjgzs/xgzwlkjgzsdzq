@@ -33,18 +33,18 @@ class Header extends React.Component {
   handleSearch = (e) => {
     const { onSearch } = this.props;
     if (!onSearch) {
-      Router.push({url: `/search?keyword=${e.target?.value || ''}`});
+      Router.push({url: `/search?keyword=${e?.target?.value || ''}`});
     } else {
-      onSearch(e.target?.value || '');
+      onSearch(e?.target?.value || '');
     }
   };
 
-  handleIconClick = () => {
+  handleIconClick = (e) => {
     const { onSearch } = this.props;
     if (!onSearch) {
-      Router.push({url: `/search?keyword=${e.target?.value || ''}`});
+      Router.push({url: `/search?keyword=${e?.target?.value || ''}`});
     } else {
-      onSearch(e.target?.value || '');
+      onSearch(e?.target?.value || '');
     }
   };
 
