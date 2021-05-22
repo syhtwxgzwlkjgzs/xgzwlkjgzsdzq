@@ -35,9 +35,6 @@ http.interceptors.request.use(
   (config) => {
     // eslint-disable-next-line no-param-reassign
     config = setUserAgent(config);
-    if (config?._noSetAuthorization) {
-      return config;
-    }
     const requestData = setAuthorization(config);
     return requestData;
   },
