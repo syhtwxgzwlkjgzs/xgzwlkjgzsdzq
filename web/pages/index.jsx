@@ -62,7 +62,7 @@ class Index extends React.Component {
 
   dispatch = async (type, data = {}) => {
     const { index } = this.props;
-    const { categoryids, types, essence, sequence, attention, sort } = data;
+    const { categoryids, types, essence, sequence, attention, sort, page } = data;
 
     let newTypes = [];
     if (types) {
@@ -83,7 +83,7 @@ class Index extends React.Component {
     }
 
 
-    if (type === 'click-filter') {
+    if (type === 'click-filter') { // 点击tab
       this.toastInstance = Toast.loading({
         content: '加载中...',
         duration: 0,
@@ -103,6 +103,11 @@ class Index extends React.Component {
       });
     } else if (type === 'refresh-recommend') {
       await index.getRecommends({ categoryIds });
+    } else if (type === 'update-page') {// 单独更新页数
+      this.page = page
+    } else if (type === 'refresh-thread') { // 点击帖子更新数的按钮，刷新帖子数据
+      this.page = 1;
+      return await index.getReadThreadList({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence });
     }
   }
 
