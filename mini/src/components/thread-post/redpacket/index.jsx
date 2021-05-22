@@ -70,6 +70,11 @@ export default class Redpacket extends Component {
       return false;
     }
 
+    if (rule === 1 && number * 0.01 > parseFloat(price)) {
+      this.redToast('当前随机模式下红包金额、数量不匹配');
+      return flase;
+    }
+
     if (condition === 1 && !likenum) {
       this.redToast('请输入点赞数');
       return false;
