@@ -179,6 +179,9 @@ export default class index extends Component {
           hasMask: false,
           duration: 1000,
         });
+        this.setState({
+          isSubmit: false
+        })
         return;
       }
       const { list = [] } = this.state;
