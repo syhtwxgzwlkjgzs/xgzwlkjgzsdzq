@@ -21,6 +21,7 @@ import throttle from '@common/utils/thottle';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import Copyright from '@components/copyright';
 import rewardPay from '@common/pay-bussiness/reward-pay';
+import threadPay from '@common/pay-bussiness/thread-pay';
 import Recommend from '@components/recommend';
 import QcCode from '@components/qcCode';
 
@@ -33,6 +34,8 @@ import goToLoginPage from '@common/utils/go-to-login-page';
 @inject('thread')
 @inject('comment')
 @inject('index')
+@inject('topic')
+@inject('search')
 @observer
 class ThreadPCPage extends React.Component {
   constructor(props) {
@@ -81,11 +84,6 @@ class ThreadPCPage extends React.Component {
       this.page = this.page + 1;
       this.loadCommentList();
     }
-  }
-
-  async onContentClick() {
-    const thread = this.props.thread.threadData;
-    // const res = await PayThread(thread);
   }
 
   // 加载评论列表
@@ -327,6 +325,11 @@ class ThreadPCPage extends React.Component {
         content: '评论成功',
       });
 
+      // 更新帖子中的评论数据
+      this.props.thread.updatePostCount(this.props.thread.totalCount);
+      // 更新列表store数据
+      this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
+
       // 是否红包帖
       const isRedPack = this.props.thread?.threadData?.displayTag?.isRedPack;
       // TODO:可以进一步细化判断条件，是否还有红包
@@ -414,7 +417,13 @@ class ThreadPCPage extends React.Component {
       pid: this.props.thread?.threadData?.postId,
       isLiked: !this.props.thread?.threadData?.isLike,
     };
-    const { success, msg } = await this.props.thread.updateLiked(params, this.props.index, this.props.user);
+    const { success, msg } = await this.props.thread.updateLiked(
+      params,
+      this.props.index,
+      this.props.user,
+      this.props.search,
+      this.props.topic,
+    );
 
     this.likedLoading = false;
 
@@ -486,6 +495,25 @@ class ThreadPCPage extends React.Component {
     }
   }
 
+  // 付费支付
+  async onPayClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
+    const thread = this.props.thread.threadData;
+    const { success } = await threadPay(thread, this.props.user?.userInfo);
+
+    // 支付成功重新请求帖子数据
+    if (success && this.props.thread?.threadData?.threadId) {
+      await this.props.thread.fetchThreadDetail(this.props.thread?.threadData?.threadId);
+      // 更新首页store数据
+      this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
+    }
+  }
+
   // 点击打赏
   onRewardClick() {
     if (!this.props.user.isLogin()) {
@@ -505,7 +533,7 @@ class ThreadPCPage extends React.Component {
         amount: Number(value),
         threadId: this.props.thread.threadData.threadId,
         payeeId: this.props.thread.threadData.userId,
-        title: this.props.thread?.threadData?.title || '主题打赏'
+        title: this.props.thread?.threadData?.title || '主题打赏',
       };
 
       const { success } = await rewardPay(params);
@@ -576,9 +604,9 @@ class ThreadPCPage extends React.Component {
                 onLikeClick={() => this.onLikeClick()}
                 onCollectionClick={() => this.onCollectionClick()}
                 onShareClick={() => this.onShareClick()}
-                onContentClick={() => this.onContentClick()}
                 onRewardClick={() => this.onRewardClick()}
                 onTagClick={() => this.onTagClick()}
+                onPayClick={() => this.onPayClick()}
               ></RenderThreadContent>
             ) : (
               <LoadingTips type="init"></LoadingTips>
