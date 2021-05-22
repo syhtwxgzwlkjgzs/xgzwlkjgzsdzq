@@ -205,10 +205,9 @@ export default function HOCFetchSiteData(Component) {
             if (router.asPath !== '/user/bind-phone' && site.isSmsOpen && !user.mobile) {
               Router.redirect({ url: '/user/bind-phone' });
             }
-            // 绑定昵称：没有开启短信，也没有绑定昵称
+            // 绑定昵称：没有昵称
             if (
               router.asPath !== '/user/bind-nickname'
-              && !site.isSmsOpen
               && !user.nickname
             ) {
               Router.redirect({ url: '/user/bind-nickname' });
