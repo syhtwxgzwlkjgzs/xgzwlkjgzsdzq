@@ -73,7 +73,6 @@ class PostPage extends React.Component {
   componentWillUnmount() {
     this.captcha = '';
     this.props.threadPost.resetPostData();
-    if (this.vditor && this.vditor.destroy) this.vditor.destroy();
   }
 
   saveDataLocal = () => {
@@ -493,17 +492,16 @@ class PostPage extends React.Component {
       thread.reset();
       this.toastInstance?.destroy();
 
-      // 更新帖子到首页列表
-      if (threadId) {
-        this.props.index.updateAssignThreadAllData(threadId, data);
-      // 添加帖子到首页数据
-      } else {
-        this.props.index.addThread(data);
-      }
-
-
-      if (!isDraft) this.props.router.replace(`/thread/${data.threadId}`);
-      else Router.back();
+      if (!isDraft) {
+        // 更新帖子到首页列表
+        if (threadId) {
+          this.props.index.updateAssignThreadAllData(threadId, data);
+        // 添加帖子到首页数据
+        } else {
+          this.props.index.addThread(data);
+        }
+        this.props.router.replace(`/thread/${data.threadId}`);
+      } else Router.back();
       return true;
     }
     Toast.error({ content: msg });

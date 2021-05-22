@@ -5,6 +5,7 @@ import { diffDate } from '@common/utils/diff-date';
 import { observer } from 'mobx-react';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
+import classnames from 'classnames';
 
 @observer
 export default class ReplyList extends React.Component {
@@ -74,7 +75,7 @@ export default class ReplyList extends React.Component {
                 ''
               )}
               <span
-                className={this.props.isShowOne && styles.isShowOne}
+                className={classnames(styles.content,this.props.isShowOne && styles.isShowOne)}
                 dangerouslySetInnerHTML={{ __html: this.filterContent()}}
               ></span>
             </div>

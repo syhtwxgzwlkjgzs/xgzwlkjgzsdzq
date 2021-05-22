@@ -16,7 +16,7 @@ export default function ErrorPage() {
       <Header></Header>
 
       <div className={styles.body}>
-      <Icon className={styles.icon}></Icon>
+      <img className={styles.icon} src='/dzq-img/error.png'/>
       <span className={styles.text}>服务器错误 SERVER ERROR</span>
       <Button onClick={onReflush} className={styles.button} type='primary'>点我刷新</Button>
       </div>

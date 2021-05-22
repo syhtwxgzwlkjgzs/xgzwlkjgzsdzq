@@ -27,7 +27,7 @@ import PayBox from '@components/payBox';
  * payeeId	int	N	收款人ID	帖子的作者
  */
 export default (payData) => {
-  const { amount, isAnonymous, threadId, payeeId } = payData;
+  const { amount, isAnonymous, threadId, payeeId, title } = payData;
 
   if (!amount || !threadId || !payeeId) {
     return Promise.resolve({ success: false, data: '参数错误' });
@@ -41,7 +41,7 @@ export default (payData) => {
     payeeId,
     redAmount: 0,
     rewardAmount: 0,
-    title: '打赏',
+    title,
   };
 
   console.log(data);

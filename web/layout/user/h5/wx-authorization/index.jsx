@@ -48,7 +48,7 @@ class WXAuthorizationPage extends React.Component {
                 this.props.h5QrCode.isBtn = false;
                 wx.closeWindow();
               }}>
-                退出登录
+                退出
               </span>
             </div>
         </div>
