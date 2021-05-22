@@ -167,10 +167,11 @@ export default class mobileLoginStore {
         throw MOBILE_LOGIN_STORE_ERRORS.NEED_ALL_INFO;
       }
 
-      if (isMissRequireInfo) {
-        this.needToCompleteExtraInfo = true;
-        throw MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO;
-      }
+      // TODO: 页面还没做好，暂时不做扩展信息的判断跳转
+      // if (isMissRequireInfo) {
+      //   this.needToCompleteExtraInfo = true;
+      //   throw MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO;
+      // }
 
       if (isMissNickname) {
         this.needToSetNickname = true;
