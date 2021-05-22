@@ -219,6 +219,36 @@ class SearchAction extends SearchStore {
     return null;
   };
 
+   /**
+   * 删除帖子操作
+   * @param {string} id 帖子id
+   * @returns
+   */
+    @action
+    async deleteThreadsData({ id } = {}) {
+      if (!id) {
+        return
+      }
+ 
+      if (this.threads) {
+       const { pageData = [] } = this.threads;
+       const newPageData = pageData.filter(item => item.threadId !== id)
+ 
+       if (this.threads?.pageData) {
+         this.threads.pageData = newPageData;
+       }
+     }
+ 
+     if (this.indexThreads) {
+       const { pageData = [] } = this.indexThreads;
+       const newPageData = pageData.filter(item => item.threadId !== id)
+ 
+       if (this.indexThreads?.pageData) {
+         this.indexThreads.pageData = newPageData;
+       }
+     }
+    }
+
   /**
    * 更新用户状态
    * @param {number} userId 用户id

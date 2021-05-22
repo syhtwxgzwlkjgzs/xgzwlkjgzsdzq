@@ -11,7 +11,6 @@ import PostRewardProgressBar, { POST_TYPE } from '@components/thread/post-reward
 import Tip from '@components/thread/tip';
 import AttachmentView from '@components/thread/attachment-view';
 import { minus } from '@common/utils/calculate';
-import threadPay from '@common/pay-bussiness/thread-pay';
 import classnames from 'classnames';
 import UserInfo from '@components/thread/user-info';
 import styles from './index.module.scss';
@@ -65,13 +64,7 @@ const RenderThreadContent = inject('user')(
     const parseContent = parseContentData(indexes);
 
     const onContentClick = async () => {
-      const thread = props.store.threadData;
-      const { success } = await threadPay(thread, props.user?.userInfo);
-
-      // 支付成功重新请求帖子数据
-      if (success && threadStore?.threadData?.threadId) {
-        threadStore.fetchThreadDetail(threadStore?.threadData?.threadId);
-      }
+      typeof props.onPayClick === 'function' && props.onPayClick();
     };
 
     const onTagClick = () => {

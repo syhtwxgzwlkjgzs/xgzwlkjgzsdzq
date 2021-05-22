@@ -66,33 +66,38 @@ class ThreadCreate extends React.Component {
     throttle(this.setBottomBarStyle(window.scrollY), 50);
   }
 
+  positionDisplay = (action) => {
+    const position = document.querySelector('#post-position');
+    if (!position) return;
+    if (action === 'select') {
+      position.style.display = 'none';
+    } else position.style.display = 'flex';
+  };
+
   // 设置底部bar的样式
   setBottomBarStyle = (y = 0, action) => {
-    const height = getVisualViewpost();
+    const winHeight = getVisualViewpost();
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
     const postBottombar = document.querySelector('#post-bottombar');
     if (!isIOS()) {
+      this.positionDisplay(action);
       if (vditorToolbar) {
         vditorToolbar.style.position = 'fixed';
-        vditorToolbar.style.bottom = '90px';
+        vditorToolbar.style.bottom = '88px';
         vditorToolbar.style.top = 'auto';
       }
       return;
     }
 
-    const position = document.querySelector('#post-position');
-    const top = action === 'select' ? (!position ? 130 : 90) : 130;
-    postBottombar.style.top = `${height - top + y}px`;
-    if (vditorToolbar) {
+    this.positionDisplay(action);
+    const bottombarHeight = action === 'select' ? 88 : 132;
+    postBottombar.style.top = `${winHeight - bottombarHeight + y}px`;
+    if (vditorToolbar && action === 'select') {
       vditorToolbar.style.position = 'fixed';
-      vditorToolbar.style.top = `${height - 130 + y}px`;
+      vditorToolbar.style.top = `${winHeight - 132 + y}px`;
     }
-
-    if (!position) return;
-    if (action === 'select') {
-      position.style.display = 'none';
-    } else position.style.display = 'flex';
   }
+
   setBottomFixed = (action) => {
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
@@ -100,15 +105,16 @@ class ThreadCreate extends React.Component {
     }, 150);
   }
   clearBottomFixed = () => {
+    this.positionDisplay();
     if (!isIOS()) return;
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
-      const height = getVisualViewpost();
+      const winHeight = getVisualViewpost();
       const postBottombar = document.querySelector('#post-bottombar');
       const position = document.querySelector('#post-position');
       if (!position) return;
       position.style.display = 'flex';
-      postBottombar.style.top = `${height - 134}px`;
+      postBottombar.style.top = `${winHeight - 133}px`;
     }, 200);
   }
 
@@ -227,6 +233,7 @@ class ThreadCreate extends React.Component {
           ) && (
             <MoneyDisplay
               payTotalMoney={threadPost.payTotalMoney}
+              redTotalMoney={threadPost.redpacketTotalAmount}
               postData={postData}
               setPostData={this.props.setPostData}
               handleSetState={this.props.handleSetState}
@@ -243,7 +250,6 @@ class ThreadCreate extends React.Component {
               <Position
                 lbskey={webConfig.lbs.qqLbsKey}
                 position={postData.position}
-                // onClick={() => this.props.saveDataLocal()}
                 onChange={position => this.props.setPostData({ position })} />
             )}
           </div>
