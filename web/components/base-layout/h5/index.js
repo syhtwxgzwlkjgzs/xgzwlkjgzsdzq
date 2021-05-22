@@ -24,8 +24,7 @@ import styles from './index.module.scss';
 const baseLayoutWhiteList = ['home'];
 
 const BaseLayout = (props) => {
-  const { showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr } = props;
-  const { jumpToScrollingPos } = props.baselayout;
+  const { showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr, onScroll, baselayout } = props;
   const [height, setHeight] = useState(600);
 
   const debounce = (fn, wait) => {
@@ -45,11 +44,20 @@ const BaseLayout = (props) => {
     if (pullDownWrapper?.current) {
       setHeight(pullDownWrapper.current.clientHeight)
     }
-
-    if (listRef?.current && jumpToScrollingPos > 0 && baseLayoutWhiteList.indexOf(props.pageName) !== -1) {
-      listRef.current.jumpToScrollTop(jumpToScrollingPos);
+    if (listRef?.current && props.baselayout.jumpToScrollingPos > 0 &&
+        baseLayoutWhiteList.indexOf(props.pageName) !== -1) {
+      listRef.current.jumpToScrollTop(props.baselayout.jumpToScrollingPos);
     }
   }, [])
+
+  const handleScroll = () => {
+    if(!listRef?.current?.currentScrollTop) {
+      onScroll();
+      return;
+    }
+    baselayout.jumpToScrollingPos = listRef.current.currentScrollTop.current;
+    onScroll(listRef.current.currentScrollTop.current);
+  }
 
   return (
     <div className={styles.container}>
@@ -64,7 +72,7 @@ const BaseLayout = (props) => {
               </PullDownRefresh>
             </div>
           ) : (
-            <List {...props} className={styles.list} ref={listRef}>
+            <List {...props} className={styles.list} ref={listRef} onScroll={handleScroll}>
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>
           )
