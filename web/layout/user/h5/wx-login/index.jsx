@@ -25,9 +25,9 @@ class WXLoginH5Page extends React.Component {
 
       if (site?.wechatEnv === 'none') return;
 
+      const { platform } = site;
       const redirectUri = `${encodeURIComponent(`${window.location.origin}/user/wx-authorization?type=${platform}`)}`;
       let params;
-      const { platform } = site;
       if (platform === 'h5') {
         params = {
           type: 'mobile_browser_login',
