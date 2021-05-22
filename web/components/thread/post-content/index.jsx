@@ -78,7 +78,7 @@ const Index = ({
     } else {
       setHiddenMore(false);
     }
-    if (length > 1000) {
+    if (length > 1200) {
       setContentTooLong(true)
     } else {
       setContentTooLong(false)

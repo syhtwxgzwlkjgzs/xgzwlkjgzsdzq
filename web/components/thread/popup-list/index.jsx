@@ -24,7 +24,6 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
   const [all, setAll] = useState(null);
   const [likes, setLikes] = useState(null);
   const [tips, setTips] = useState(null);
-  const [isLoadingPopup, setIsLoadingPopup] = useState(true);
 
   const [current, setCurrent] = useState(0);
 
@@ -37,14 +36,13 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
     if (visible) {
       loadData({ type: current });
     }
-  }, [visible, isLoadingPopup]);
+  }, [visible]);
 
   const loadData = async ({ type }) => {
     const { postId = '', threadId = '' } = tipData;
     const res = await readLikedUsers({ params: { threadId, postId, type, page: 1 } });
 
     setAll(res?.data);
-    setIsLoadingPopup(false);
 
     return res
   };
@@ -213,8 +211,15 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
         onClose={onClose}
     >
     {
-      isLoadingPopup ?
-          <Spin className={styles.spinner} type="spinner" />
+      !all ?
+          <Tabs
+            activeId={current}
+            className={`${styles.tabs} ${tipData?.platform === 'pc' && styles.tabsPC}`}
+          >
+            <Tabs.TabPanel key={0} id={0}>
+              <Spin className={styles.spinner} type="spinner" />
+            </Tabs.TabPanel>
+          </Tabs>
       :
         <Tabs
           onActive={onClickTab}
