@@ -24,6 +24,7 @@ export default class index extends Component {
   };
 
   goToThePayConfirmPage = throttle(async () => {
+    if (this.state.isLoading) return
     try {
       this.setState({
         isLoading: true

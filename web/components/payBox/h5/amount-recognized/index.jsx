@@ -28,6 +28,7 @@ export default class AmountRecognized extends Component {
 
   // 点击支付去到 选择支付方式页面
   goToThePayConfirmPage = throttle(async () => {
+    if (this.state.isLoading) return
     try {
       this.setState({
         isLoading: true,
