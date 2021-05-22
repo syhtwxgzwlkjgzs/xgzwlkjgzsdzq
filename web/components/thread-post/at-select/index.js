@@ -32,7 +32,7 @@ class AtSelect extends Component {
   }
 
   componentDidMount() {
-    this.fetchFollow();
+    // this.fetchFollow();
   }
 
   async fetchFollow() {
