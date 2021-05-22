@@ -55,29 +55,28 @@ class PostPage extends React.Component {
   componentDidMount() {
     this.fetchPermissions();
     // 如果本地缓存有数据，这个目前主要用于定位跳出的情况
-    const postData = this.getPostDataFromLocal();
-    const { category, emoji } = localData.getCategoryEmoji() || {};
-    if (postData) {
-      this.props.index.setCategories(category);
-      this.props.threadPost.setEmoji(emoji);
-      localData.removeCategoryEmoji();
-      if (postData.categoryId) this.setCategory(postData.categoryId);
-      this.setPostData({ ...postData, position: this.props.threadPost.postData.position });
-    } else {
-      const { fetchEmoji, emojis } = this.props.threadPost;
-      if (emojis.length === 0) fetchEmoji();
-      this.fetchCategories();
-    }
+    // const postData = this.getPostDataFromLocal();
+    // const { category, emoji } = localData.getCategoryEmoji() || {};
+    // if (postData) {
+    //   this.props.index.setCategories(category);
+    //   this.props.threadPost.setEmoji(emoji);
+    //   localData.removeCategoryEmoji();
+    //   if (postData.categoryId) this.setCategory(postData.categoryId);
+    //   this.setPostData({ ...postData, position: this.props.threadPost.postData.position });
+    // } else {
+    const { fetchEmoji, emojis } = this.props.threadPost;
+    if (emojis.length === 0) fetchEmoji();
+    this.fetchCategories();
+    // }
   }
 
   componentWillUnmount() {
     this.captcha = '';
-    this.props.threadPost.resetPostData();
   }
 
   saveDataLocal = () => {
     const { index, threadPost } = this.props;
-    localData.setThreadPostDataLocal(threadPost.postData);
+    // localData.setThreadPostDataLocal(threadPost.postData);
     localData.setCategoryEmoji({ category: index.categoriesNoAll, emoji: threadPost.emojis });
   };
 
@@ -492,7 +491,7 @@ class PostPage extends React.Component {
     if (code === 0) {
       thread.reset();
       this.toastInstance?.destroy();
-
+      this.props.threadPost.resetPostData();
       if (!isDraft) {
         // 更新帖子到首页列表
         if (threadId) {
@@ -512,21 +511,25 @@ class PostPage extends React.Component {
   handleDraft = async (val) => {
     if (this.props.site.platform === 'pc') {
       this.setPostData({ draft: 1 });
-      await this.submit(true);
+      await this.handleSubmit(true);
       return;
     }
     this.setState({ draftShow: false });
     let flag = true;
     if (val === '保存草稿') {
       this.setPostData({ draft: 1 });
-      flag = await this.submit(true);
+      flag = await this.handleSubmit(true);
     }
-    if (val && flag) Router.back();
+    if (val && flag) {
+      this.props.threadPost.resetPostData();
+      Router.back();
+    }
   };
 
   render() {
     const { site } = this.props;
     const { platform } = site;
+    console.log('render', this.props.threadPost.postData);
 
     if (platform === 'pc') {
       return (
