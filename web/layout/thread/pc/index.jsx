@@ -4,7 +4,7 @@ import { withRouter } from 'next/router';
 
 import AuthorInfo from './components/author-info/index';
 import CommentInput from './components/comment-input/index';
-import LoadingTips from './components/loading-tips';
+import LoadingTips from '@components/thread-detail-pc/loading-tips';
 import { Icon, Toast, Popup } from '@discuzq/design';
 import UserInfo from '@components/thread/user-info';
 import Header from '@components/header';
@@ -587,7 +587,7 @@ class ThreadPCPage extends React.Component {
 
   render() {
     const { thread: threadStore } = this.props;
-    const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
+    const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError, isAuthorInfoError } = threadStore;
     // 是否作者自己
     const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === threadStore?.threadData?.userId;
 
@@ -635,7 +635,7 @@ class ThreadPCPage extends React.Component {
                   {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
                 </Fragment>
               ) : (
-                <LoadingTips type="init"></LoadingTips>
+                <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
               )}
             </div>
             {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
@@ -651,7 +651,7 @@ class ThreadPCPage extends React.Component {
                   isShowBtn={!isSelf}
                 ></AuthorInfo>
               ) : (
-                <LoadingTips type="init"></LoadingTips>
+                <LoadingTips type="init" isError={isAuthorInfoError}></LoadingTips>
               )}
             </div>
             <div className={layout.recommend}>
