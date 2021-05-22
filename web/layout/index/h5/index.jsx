@@ -109,7 +109,7 @@ class IndexH5Page extends React.Component {
     return dispatch('moreData', requestFilter);
   };
 
-  onScroll = ({ scrollTop = 0 }) => {
+  onScroll = ({ scrollTop } = {}) => {
     const { height = 180 } = this.headerRef.current?.state || {}
     this.setState({ fixedTab: scrollTop > height })
   }

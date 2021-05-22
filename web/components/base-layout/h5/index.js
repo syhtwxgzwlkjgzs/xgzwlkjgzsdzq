@@ -4,6 +4,7 @@ import Header from '@components/header';
 import List from '@components/list'
 import BottomNavBar from '@components/bottom-nav-bar'
 import { PullDownRefresh } from "@discuzq/design"
+// import throttle from '@common/utils/thottle';
 
 import styles from './index.module.scss';
 
@@ -55,8 +56,10 @@ const BaseLayout = (props) => {
       onScroll();
       return;
     }
-    baselayout.jumpToScrollingPos = listRef.current.currentScrollTop.current;
-    onScroll(listRef.current.currentScrollTop.current);
+    debounce(() => {
+      baselayout.jumpToScrollingPos = listRef.current.currentScrollTop.current;
+    }, 30);
+    onScroll({ scrollTop: listRef.current.currentScrollTop.current });
   }
 
   return (
