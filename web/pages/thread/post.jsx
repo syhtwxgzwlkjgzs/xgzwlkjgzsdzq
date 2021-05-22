@@ -463,15 +463,15 @@ class PostPage extends React.Component {
     if (!isDraft && amount > 0) {
       let type = ORDER_TRADE_TYPE.RED_PACKET;
       let title = '支付红包';
-      if (redAmount) {
+      if (redAmount > 0) {
         data.redAmount = redAmount;
       }
-      if (rewardAmount) {
+      if (rewardAmount > 0) {
         type = ORDER_TRADE_TYPE.POST_REWARD;
         title = '支付悬赏';
         data.rewardAmount = rewardAmount;
       }
-      if (rewardAmount && redAmount) {
+      if (rewardAmount > 0 && redAmount > 0) {
         type = ORDER_TRADE_TYPE.COMBIE_PAYMENT;
         title = '支付红包和悬赏';
       }
@@ -538,7 +538,6 @@ class PostPage extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
-    console.log('render', this.props.threadPost.postData);
 
     if (platform === 'pc') {
       return (
