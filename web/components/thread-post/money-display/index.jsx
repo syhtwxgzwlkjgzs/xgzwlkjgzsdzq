@@ -3,7 +3,6 @@ import styles from './index.module.scss';
 import { Tag } from '@discuzq/design';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 import { defaultOperation, paidOption } from '@common/constants/const';
-import { formatDate } from '@common/utils/format-date';
 import { plus } from '@common/utils/calculate';
 
 export default function MoneyDisplay(props) {
@@ -15,6 +14,7 @@ export default function MoneyDisplay(props) {
     redTotalMoney,
   } = props;
   const clsName = props.pc ? styles.pc : styles.h5;
+
   return (
     <div className={`${styles['money-box']} ${clsName}`} onClick={e => e.stopPropagation()}>
       {/* 付费 */}
@@ -36,7 +36,7 @@ export default function MoneyDisplay(props) {
             onAttachClick({ type: THREAD_TYPE.reward });
           }}
         >
-          {`悬赏金额${plus(postData.rewardQa.value, 0)}元\\结束时间${formatDate(new Date(postData.rewardQa.times).getTime(), 'yyyy/MM/dd hh:mm')}`}
+          {`悬赏金额${plus(postData.rewardQa.value, 0)}元\\结束时间 ${postData.rewardQa.times}`}
         </Tag>
       )}
       {/* 红包 */}

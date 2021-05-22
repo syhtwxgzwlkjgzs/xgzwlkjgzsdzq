@@ -7,7 +7,7 @@ import CommentList from '../../pc/components/comment-list/index';
 import Recommend from '@components/recommend';
 import Header from '@components/header';
 import { Icon, Toast } from '@discuzq/design';
-import LoadingTips from '../../pc/components/loading-tips';
+import LoadingTips from '@components/thread-detail-pc/loading-tips';
 import RewardDisplay from '@components/thread-detail-pc/reward-display';
 import RedPacketDisplay from '@components/thread-detail-pc/red-packet-display';
 import DeletePopup from '@components/thread-detail-pc/delete-popup';
@@ -231,7 +231,7 @@ class CommentPCPage extends React.Component {
   }
 
   render() {
-    const { commentDetail: commentData, isReady } = this.props.comment;
+    const { commentDetail: commentData, isReady, isAuthorInfoError } = this.props.comment;
     const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === commentData?.userId;
 
     return (
@@ -303,7 +303,7 @@ class CommentPCPage extends React.Component {
                   isShowBtn={!isSelf}
                 ></AuthorInfo>
               ) : (
-                <LoadingTips type="init"></LoadingTips>
+                <LoadingTips isError={isAuthorInfoError} type="init"></LoadingTips>
               )}
             </div>
             <div className={styles.recommend}>

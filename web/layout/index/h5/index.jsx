@@ -65,9 +65,6 @@ class IndexH5Page extends React.Component {
   };
 
   onClickTab = (id = '') => {
-    if (id === this.state.currentIndex) {
-      return
-    }
     const { dispatch = () => {} } = this.props;
     const currentIndex = this.resetCategoryids(id);
     dispatch('click-filter', { categoryids: [currentIndex], sequence: id === 'default' ? 1 : 0 });

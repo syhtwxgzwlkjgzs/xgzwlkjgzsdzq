@@ -127,6 +127,13 @@ class Index extends React.Component {
     }
 
     onClick = (e) => {
+      e && e.stopPropagation();
+
+      const avatarPopup = e?.currentTarget.querySelector("#avatar-popup");
+      if( e && avatarPopup && avatarPopup.contains(e.target)) { // 处理来源于Avatar弹框的点击
+        return;
+      }
+
       const { threadId = '', ability } = this.props.data || {};
       const { canViewPost } = ability;
 

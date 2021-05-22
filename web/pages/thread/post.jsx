@@ -55,29 +55,28 @@ class PostPage extends React.Component {
   componentDidMount() {
     this.fetchPermissions();
     // 如果本地缓存有数据，这个目前主要用于定位跳出的情况
-    const postData = this.getPostDataFromLocal();
-    const { category, emoji } = localData.getCategoryEmoji() || {};
-    if (postData) {
-      this.props.index.setCategories(category);
-      this.props.threadPost.setEmoji(emoji);
-      localData.removeCategoryEmoji();
-      if (postData.categoryId) this.setCategory(postData.categoryId);
-      this.setPostData({ ...postData, position: this.props.threadPost.postData.position });
-    } else {
-      const { fetchEmoji, emojis } = this.props.threadPost;
-      if (emojis.length === 0) fetchEmoji();
-      this.fetchCategories();
-    }
+    // const postData = this.getPostDataFromLocal();
+    // const { category, emoji } = localData.getCategoryEmoji() || {};
+    // if (postData) {
+    //   this.props.index.setCategories(category);
+    //   this.props.threadPost.setEmoji(emoji);
+    //   localData.removeCategoryEmoji();
+    //   if (postData.categoryId) this.setCategory(postData.categoryId);
+    //   this.setPostData({ ...postData, position: this.props.threadPost.postData.position });
+    // } else {
+    const { fetchEmoji, emojis } = this.props.threadPost;
+    if (emojis.length === 0) fetchEmoji();
+    this.fetchCategories();
+    // }
   }
 
   componentWillUnmount() {
     this.captcha = '';
-    this.props.threadPost.resetPostData();
   }
 
   saveDataLocal = () => {
     const { index, threadPost } = this.props;
-    localData.setThreadPostDataLocal(threadPost.postData);
+    // localData.setThreadPostDataLocal(threadPost.postData);
     localData.setCategoryEmoji({ category: index.categoriesNoAll, emoji: threadPost.emojis });
   };
 
@@ -278,27 +277,48 @@ class PostPage extends React.Component {
     }
   }
 
-  // 附件上传之前
-  beforeUpload = (cloneList, showFileList) => {
+  // 附件、图片上传之前
+  beforeUpload = (cloneList, showFileList, type) => {
     const { webConfig } = this.props.site;
     if (!webConfig) return false;
     // 站点支持的文件类型、文件大小
-    const { supportFileExt, supportMaxSize } = webConfig.setAttach;
-    // 当前选择附件的类型大小
-    const fileType = cloneList[0].name.match(/\.(.+)$/)[1];
-    const fileSize = cloneList[0].size;
-    // 判断合法性
-    const isLegalType = supportFileExt.includes(fileType);
-    const isLegalSize = supportMaxSize * 1024 * 1024 > fileSize;
-    console.log('list', cloneList, showFileList);
-    console.log('supportFileExt', webConfig, supportFileExt, supportMaxSize, fileType, fileSize, isLegalType && isLegalSize);
-    if (!isLegalType) {
-      Toast.info({ content: '当前不支持此类型文件' });
-      return false;
-    }
-    if (!isLegalSize) {
-      Toast.info({ content: `当前附件最大支持${supportMaxSize}MB` });
-      return false;
+    const { supportFileExt, supportImgExt, supportMaxSize } = webConfig.setAttach;
+
+    if (type === THREAD_TYPE.file) {
+      // 当前选择附件的类型大小
+      const fileType = cloneList[0].name.match(/\.(.+)$/i)[1].toLocaleLowerCase();
+      const fileSize = cloneList[0].size;
+      // 判断合法性
+      const isLegalType = supportFileExt.toLocaleLowerCase().includes(fileType);
+      const isLegalSize = fileSize > 0 && fileSize < supportMaxSize * 1024 * 1024;
+      if (!isLegalType) {
+        Toast.info({ content: '当前文件类型暂不支持' });
+        return false;
+      }
+      if (!isLegalSize) {
+        Toast.info({ content: `上传附件大小范围0 ~ ${supportMaxSize}MB` });
+        return false;
+      }
+    } else if (type === THREAD_TYPE.image) {
+      // 剔除超出数量9的多余图片
+      const remainLength = 9 - showFileList.length; // 剩余可传数量
+      cloneList.splice(remainLength, cloneList.length - remainLength);
+
+      let isAllLegal = true; // 状态：此次上传图片是否全部合法
+      cloneList.forEach((item, index) => {
+        const imageType = item.name.match(/\.(.+)$/)[1].toLocaleLowerCase();
+        const isLegalType = supportImgExt.toLocaleLowerCase().includes(imageType);
+
+        // 存在不合法图片时，从上传图片列表删除
+        if (!isLegalType) {
+          cloneList.splice(index, 1);
+          isAllLegal = false;
+        }
+      })
+
+      !isAllLegal && Toast.info({ content: `仅支持${supportImgExt}类型的图片` });
+
+      return true;
     }
 
     return true;
@@ -411,8 +431,17 @@ class PostPage extends React.Component {
     //   Toast.info({ content: `输入的内容不能超过${MAX_COUNT}字` });
     //   return;
     // }
-    if (isDraft) this.setPostData({ draft: 1 });
-    else this.setPostData({ draft: 0 });
+    if (isDraft) {
+      const {contentText } = postData;
+      if (contentText === '') {
+        return Toast.info({ content: '内容不能为空' });
+      } else {
+        this.setPostData({ draft: 1 });
+      }
+    }
+    else {
+      this.setPostData({ draft: 0 });
+    }
     const { threadPost } = this.props;
 
     // 2 验证码
@@ -455,15 +484,15 @@ class PostPage extends React.Component {
     if (!isDraft && amount > 0) {
       let type = ORDER_TRADE_TYPE.RED_PACKET;
       let title = '支付红包';
-      if (redAmount) {
+      if (redAmount > 0) {
         data.redAmount = redAmount;
       }
-      if (rewardAmount) {
+      if (rewardAmount > 0) {
         type = ORDER_TRADE_TYPE.POST_REWARD;
         title = '支付悬赏';
         data.rewardAmount = rewardAmount;
       }
-      if (rewardAmount && redAmount) {
+      if (rewardAmount > 0 && redAmount > 0) {
         type = ORDER_TRADE_TYPE.COMBIE_PAYMENT;
         title = '支付红包和悬赏';
       }
@@ -492,7 +521,7 @@ class PostPage extends React.Component {
     if (code === 0) {
       thread.reset();
       this.toastInstance?.destroy();
-
+      this.props.threadPost.resetPostData();
       if (!isDraft) {
         // 更新帖子到首页列表
         if (threadId) {
@@ -512,16 +541,19 @@ class PostPage extends React.Component {
   handleDraft = async (val) => {
     if (this.props.site.platform === 'pc') {
       this.setPostData({ draft: 1 });
-      await this.submit(true);
+      await this.handleSubmit(true);
       return;
     }
     this.setState({ draftShow: false });
     let flag = true;
     if (val === '保存草稿') {
       this.setPostData({ draft: 1 });
-      flag = await this.submit(true);
+      flag = await this.handleSubmit(true);
     }
-    if (val && flag) Router.back();
+    if (val && flag) {
+      this.props.threadPost.resetPostData();
+      Router.back();
+    }
   };
 
   render() {
@@ -569,7 +601,7 @@ class PostPage extends React.Component {
         handleAtListChange={this.handleAtListChange}
         handleVditorChange={this.handleVditorChange}
         handleVditorFocus={this.handleVditorFocus}
-          handleVditorInit={this.handleVditorInit}
+        handleVditorInit={this.handleVditorInit}
         onVideoReady={this.onVideoReady}
         {...this.state}
       />

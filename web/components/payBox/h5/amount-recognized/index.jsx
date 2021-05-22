@@ -12,9 +12,11 @@ import throttle from '@common/utils/thottle.js';
 export default class AmountRecognized extends Component {
 
   onClose = () => {
-    // FIXME: 延时回调的修复
-    this.props.payBox.visible = false
-    this.props.payBox.clear();
+    setTimeout(() => {
+      // FIXME: 延时回调的修复
+      this.props.payBox.visible = false
+      this.props.payBox.clear();
+    }, 300)
   }
 
 
