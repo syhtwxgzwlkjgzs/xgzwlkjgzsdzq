@@ -191,6 +191,7 @@ export default function HOCFetchSiteData(Component) {
         // TODO: 方案待定
         // 前置: 用户已登录
         if (user.isLogin()) {
+          // TODO: 需要在微信绑定页获取设置uid的缓存才能开启强制跳转绑定微信
           // // 绑定微信：开启微信，没有绑定微信
           // if (
           //   router.asPath !== '/user/wx-bind-qrcode'
