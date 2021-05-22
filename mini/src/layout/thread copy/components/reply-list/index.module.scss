@@ -1,0 +1,106 @@
+@import '@common/styles/index.scss';
+.replyList {
+  display: flex;
+  padding-top: 16px;
+  .replyListAvatar {
+    margin-right: 8px;
+    .avater {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      image {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+      }
+    }
+  }
+  .replyListContent {
+    width: 100%;
+    .replyListContentText {
+      padding: 8px;
+      border-radius: 5px;
+      background: $comment-bg-color;
+      .replyListName {
+        font-weight: var(--font-weight-regular);
+        font-size: 14px;
+        text-align: left;
+        color: var(--color-text-primary);
+        font-family: 'PingFangSC-Semibol';
+        line-height: 17.8px;
+        padding-bottom: 4px;
+      }
+      .replyListText {
+        font-size: 16px;
+        line-height: 26px;
+        text-align: left;
+        color: var(--color-text-primary);
+        word-break: break-all;
+        .commentUser {
+          display: inline-block;
+          .replyedUserName {
+            font-weight: normal;
+            font-size: 14px;
+            margin-right: 8px;
+            line-height: 18px;
+            text-align: left;
+            color: var(--color-primary);
+          }
+          .replyedAvatar {
+            display: inline-block;
+            margin-right: 4px;
+            position: relative;
+            top: 6px;
+            .avater {
+              width: 24px;
+              height: 24px;
+              border-radius: 50%;
+
+              image {
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+              }
+            }
+          }
+        }
+      }
+    }
+    .replyListFooter {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      text-align: left;
+      color: var(--color-text-secondary);
+      padding-top: 8px;
+      line-height: 16.8px;
+      .replyTime {
+        // flex: 1;
+        font-size: 12px;
+      }
+      .replyLiked {
+        // flex: 1;
+      }
+      .replyLike {
+        // flex: 1;
+        color: var(--color-primary);
+      }
+      .replyReply {
+        // flex: 1;
+      }
+      .replyDelete {
+        // flex: 1;
+      }
+    }
+  }
+
+  .extraBottom {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    > View {
+      margin-left: 24px;
+    }
+  }
+}
