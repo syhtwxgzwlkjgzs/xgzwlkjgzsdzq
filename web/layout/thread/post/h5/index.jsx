@@ -96,7 +96,18 @@ class ThreadCreate extends React.Component {
       vditorToolbar.style.position = 'fixed';
       vditorToolbar.style.top = `${winHeight - 132 + y}px`;
     }
+    this.setPostBox();
   }
+
+  setPostBox = () => {
+    const winHeight = getVisualViewpost();
+    const postBox = document.querySelector('#post-inner');
+    const title = document.querySelector('#dzq-threadpost-title');
+    if (postBox) {
+      if (title?.display === 'none') postBox.style.height = `${winHeight - 134 - 54}px`;
+      else postBox.style.height = `${winHeight - 134}px`;
+    }
+  };
 
   setBottomFixed = (action) => {
     const timer = setTimeout(() => {
@@ -112,6 +123,7 @@ class ThreadCreate extends React.Component {
       const winHeight = getVisualViewpost();
       const postBottombar = document.querySelector('#post-bottombar');
       const position = document.querySelector('#post-position');
+      this.setPostBox();
       if (!position) return;
       position.style.display = 'flex';
       postBottombar.style.top = `${winHeight - 133}px`;
@@ -148,7 +160,7 @@ class ThreadCreate extends React.Component {
     return (
       <>
         <Header isBackCustom={this.handlePageJump} />
-        <div className={styles['post-inner']}>
+        <div className={styles['post-inner']} id="post-inner">
           {/* 标题 */}
           <Title
             isDisplay={this.props.isTitleShow}
@@ -179,6 +191,7 @@ class ThreadCreate extends React.Component {
               fileList={Object.values(postData.images)}
               onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.image)}
               onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.image)}
+              beforeUpload = {(cloneList, showFileList) => this.props.beforeUpload(cloneList, showFileList, THREAD_TYPE.image)}
             />
           )}
 
@@ -216,7 +229,7 @@ class ThreadCreate extends React.Component {
               fileList={Object.values(postData.files)}
               onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.file)}
               onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.file)}
-              beforeUpload = {(cloneList, showFileList) => this.props.beforeUpload(cloneList, showFileList)}
+              beforeUpload = {(cloneList, showFileList) => this.props.beforeUpload(cloneList, showFileList, THREAD_TYPE.file)}
             />
           )}
 
