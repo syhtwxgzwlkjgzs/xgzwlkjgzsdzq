@@ -164,9 +164,8 @@ class ThreadPCPage extends React.Component {
               <div className={styles['toolbar-right']}>
                 {(user?.permissions?.insertPosition?.enable && webConfig?.lbs?.lbs) && (
                   <Position
-                    lbskey={webConfig?.lbs?.qqLbsKey}
+                    lbskey={webConfig.lbs.qqLbsKey}
                     position={postData.position}
-                    // onClick={() => this.props.saveDataLocal()}
                     onChange={position => this.props.setPostData({ position })}
                   />
                 )}
