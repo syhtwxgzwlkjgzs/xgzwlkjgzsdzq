@@ -11,7 +11,7 @@ import styles from './index.module.scss'; // 私有样式
 import DDialog from '@components/dialog';
 import PropTypes from 'prop-types'; // 类型拦截
 
-const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
+const Index = ({ data, confirm, cancel, pc, visible }) => {
   const [rule, setRule] = useState(1); // 0-定额 1-随机
   const [condition, setCondition] = useState(0); // 0-回复 1-集赞
   const [price, setPrice] = useState(''); // 金额
@@ -31,34 +31,74 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
     }
   }, []);
 
-  const selectRedpacket = () => {
-    // 校验红包选择情况
-    if (price < 0.1 || price > 200) {
-      Toast.warning({
-        content: '金额错误，请输入0.1-200￥',
-      });
-      return;
+  const onPriceChang = (val) => { // 对红包金额做仅可输入两位小数的操作
+    const arr = val.match(/([1-9]\d{0,2}|0)(\.\d{0,2})?/);
+    setPrice(arr ? arr[0] : '')
+  }
+
+  const onNumberChang = (val) => {
+    const arr = val.match(/[1-9]\d{0,2}/);
+    setNumber(arr ? arr[0] : '')
+  }
+
+  const onLikenumChang = (val) => {
+    const arr = val.match(/[1-9]\d{0,2}/);
+    setLikenum(arr ? arr[0] : '')
+  }
+  // 校验红包数据
+  const checkConfirm = () => {
+    if (!price) {
+      Toast.warning({ content: '请输入红包金额', duration: 2000 });
+      return false;
     }
-    if (number > 100 || number < 1) {
-      Toast.warning({
-        content: '红包数量错误，请输入整数1-100',
-      });
-      return;
+
+    if (parseFloat(price) < 0.1 || parseFloat(price) > 200) {
+      Toast.warning({ content: '可输入红包金额为0.1 ~ 200元', duration: 2000 });
+      return false;
     }
-    if (condition === 1 && (likenum > 250 || likenum < 1)) {
-      Toast.warning({
-        content: '集赞数错误，请输入整数1-250',
-      });
-      return;
+
+    if (!number) {
+      Toast.warning({ content: '请输入红包个数', duration: 2000 });
+      return false;
     }
-    // 确认选择
+
+    if (parseInt(number) > 100 || parseInt(number) < 1) {
+      Toast.warning({ content: '可输入红包个数为1 ~ 200个', duration: 2000 });
+      return false;
+    }
+
+    if (rule === 1 && parseInt(number) * 0.01 > parseFloat(price)) {
+      Toast.warning({ content: '当前随机模式下红包金额、数量不匹配', duration: 2000 });
+      return false;
+    }
+
+    if (condition === 1 && !likenum) {
+      Toast.warning({ content: '请输入点赞数', duration: 2000 });
+      return false;
+    }
+
+    if (condition === 1 && parseInt(likenum) > 250) {
+      Toast.warning({ content: '可输入点赞数为1 ~ 250个', duration: 2000 });
+      return false;
+    }
+
+    return true;
+  }
+
+  const handleConfirm = () => { // 确认选择
+    // 1 校验数据
+    if (!checkConfirm()) return;
+
+    // 2 准备更新store
     confirm({
       rule,
+      price: parseFloat(price),
+      number: parseInt(number),
       condition,
-      price,
-      number: Math.ceil(number),
-      likenum: Math.ceil(likenum),
+      likenum: parseInt(likenum),
     });
+
+    // 3 关闭弹框
     handleClose();
   };
 
@@ -80,16 +120,16 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       </div>
       {/* 红包总金额 */}
       <div className={styles['line-box']}>
-        <div className={styles.label}>红包总金额</div>
+        <div className={styles.label}>{rule === 1 ? '红包总金额' : '红包单个金额'}</div>
         <div className={styles.item}>
-          <Input mode="number" placeholder="金额" value={price} onChange={e => setPrice(e.target.value)} />元
+          <Input mode="number" placeholder="金额" value={price} onChange={e => onPriceChang(e.target.value)} />元
         </div>
       </div>
       {/* 红包个数 */}
       <div className={styles['line-box']}>
         <div className={styles.label}>红包个数</div>
         <div className={styles.item}>
-          <Input mode="number" htmlType="number" value={number} placeholder="个数" onChange={e => setNumber(e.target.value)} />个
+          <Input mode="number" htmlType="number" value={number} placeholder="个数" onChange={e => onNumberChang(e.target.value)} />个
         </div>
       </div>
       {/* 获利条件 */}
@@ -110,7 +150,7 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       {condition === 1 && (
         <div className={styles.likenum}>
           <div className={styles['likenum-input']}>
-            <Input mode="number" htmlType="number" placeholder="个数" value={likenum} onChange={e => setLikenum(e.target.value)} />个
+            <Input mode="number" htmlType="number" placeholder="个数" value={likenum} onChange={e => onLikenumChang(e.target.value)} />个
           </div>
         </div>
       )}
@@ -122,7 +162,7 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
           }}>
             取消
           </Button>
-          <Button type="primary" onClick={selectRedpacket}>
+          <Button type="primary" onClick={handleConfirm}>
             确定
           </Button>
         </div>
@@ -131,6 +171,7 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
   );
 
   if (!pc) return content;
+
   return (
     <DDialog
       visible={visible}
@@ -138,24 +179,24 @@ const RedpacketSelect = ({ data, confirm, cancel, pc, visible }) => {
       onClose={handleClose}
       title="添加红包"
       onCacel={handleClose}
-      onConfirm={selectRedpacket}
+      onConfirm={handleConfirm}
     >
       {content}
     </DDialog>
   );
 };
 // 设置props默认类型
-RedpacketSelect.propTypes = {
+Index.propTypes = {
   visible: PropTypes.bool.isRequired, // 限定visible的类型为bool,且是必传的
   confirm: PropTypes.func.isRequired, // 限定confirm的类型为functon,且是必传的
 };
 
 // 设置props默认参数
-RedpacketSelect.defaultProps = {
+Index.defaultProps = {
   visible: false,
   data: {},
-  confirm: () => {},
-  cancel: () => {},
+  confirm: () => { },
+  cancel: () => { },
 };
 
-export default memo(RedpacketSelect);
+export default memo(Index);

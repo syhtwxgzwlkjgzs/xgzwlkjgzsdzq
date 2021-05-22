@@ -166,10 +166,12 @@
     line-height: rem(20);
     font-size: rem($font-size-primary);
     color: var(--color-text-primary);
+    text-align: center;
   }
   .rewardNumber {
     line-height: rem(17);
     color: var(--color-error);
+    text-align: center;
   }
 
   .rewardTime {

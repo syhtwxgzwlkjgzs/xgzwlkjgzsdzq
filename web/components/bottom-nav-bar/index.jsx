@@ -39,7 +39,7 @@ const BottomNavBar = ({ router, fixed = true, placeholder = false, curr = 'home'
     <div className={styles.footer} style={{ position: fixed ? 'fixed' : '' }}>
       {tabs.map((i, idx) => (i.text ? (
           <div key={idx} className={styles.item + (i.active ? ` ${styles.active}` : '')} onClick={() => handleClick(i, idx)}>
-            <Icon name={i.icon} size={20} />
+            <Icon name={i.icon} size={i.icon === 'MailOutlined' ? 22 : 20} />
             <div className={styles.text}>{i.text}</div>
           </div>
       ) : (
