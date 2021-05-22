@@ -44,9 +44,9 @@ const BaseLayout = (props) => {
     if (pullDownWrapper?.current) {
       setHeight(pullDownWrapper.current.clientHeight)
     }
-    if (listRef?.current && props.baselayout.jumpToScrollingPos > 0 &&
+    if (listRef?.current && baselayout.jumpToScrollingPos > 0 &&
         baseLayoutWhiteList.indexOf(props.pageName) !== -1) {
-      listRef.current.jumpToScrollTop(props.baselayout.jumpToScrollingPos);
+      listRef.current.jumpToScrollTop(baselayout.jumpToScrollingPos);
     }
   }, [])
 
