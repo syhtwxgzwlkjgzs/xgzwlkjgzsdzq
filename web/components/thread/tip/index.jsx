@@ -48,7 +48,7 @@ const Index = ({ imgs = [], tipData = {}, wholeNum = 1,showMore=false }) => {
                 ))
             }
             {
-              showMore && imgs?.length > 2 &&
+              showMore && renderUsers?.length > 2 && 
               <div className={styles.moreIcon} size={20}>
                 <Icon name='MoreBOutlined' className={styles.icon} size={12}></Icon>
               </div>
