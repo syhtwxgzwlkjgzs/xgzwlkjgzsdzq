@@ -124,6 +124,49 @@ export default function DVditor(props) {
     }, 100);
   };
 
+
+  const getEditorRange = (vditor) => {
+    /**
+      * copy from vditor/src/ts/util/selection.ts
+     **/
+    let range;
+    const { element } = vditor[vditor.currentMode];
+    if (getSelection().rangeCount > 0) {
+      range = getSelection().getRangeAt(0);
+      if (element.isEqualNode(range.startContainer) || element.contains(range.startContainer)) {
+        return range;
+      }
+    }
+    if (vditor[vditor.currentMode].range) {
+      return vditor[vditor.currentMode].range;
+    }
+    element.focus();
+    range = element.ownerDocument.createRange();
+    range.setStart(element, 0);
+    range.collapse(true);
+    return range;
+  };
+
+  const storeLastCursorPosition = (editor) => {
+    /** *
+     * ios 和mac safari，在每一个事件中都记住上次光标的位置
+     * 避免blur后vditor.insertValue的位置不正确
+     * **/
+    // todo 事件需要throttle或者debounce???
+    // todo addEventListener的IE低版本兼容是否要做？
+
+    const { vditor } = editor;
+    const editorElement = vditor[vditor.currentMode]?.element;
+    // todo 需要添加drag事件吗
+    const events = ['mouseup', 'mousedown', 'keyup', 'keydown',
+      'click', 'touchend', 'touchcancel'];
+    events.forEach((event) => {
+      editorElement?.addEventListener(event, () => {
+        vditor[vditor.currentMode].range = getEditorRange(vditor);
+      });
+    });
+  };
+
   function initVditor() {
     // https://ld246.com/article/1549638745630#options
     const editor = new Vditor(
@@ -190,6 +233,8 @@ export default function DVditor(props) {
         },
       },
     );
+
+    storeLastCursorPosition(editor);
     setVditor(editor);
   }
 
