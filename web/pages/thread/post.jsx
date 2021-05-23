@@ -405,7 +405,7 @@ class PostPage extends React.Component {
           // 验证通过后发布
           this.ticket = res.ticket;
           this.randstr = res.randstr;
-          this.handleSubmit();
+          this.handleSubmit(this.props.threadPost.postData.draft);
         }
         if (res.ret === 2) {
           console.log('验证关闭');
@@ -438,8 +438,7 @@ class PostPage extends React.Component {
       } else {
         this.setPostData({ draft: 1 });
       }
-    }
-    else {
+    } else {
       this.setPostData({ draft: 0 });
     }
     const { threadPost } = this.props;
