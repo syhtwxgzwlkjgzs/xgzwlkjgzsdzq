@@ -212,13 +212,11 @@ class ThreadAction extends ThreadStore {
 
       // 更新打赏的用户
       const currentUser = UserStore?.userInfo;
+
       if (currentUser) {
-        const user = {
-          avatar: currentUser.avatarUrl,
-          userId: currentUser.id,
-          userName: currentUser.username,
-        };
-        this.setThreadDetailLikedUsers(true, user);
+        const userData = threadReducer.createUpdateLikeUsersData(currentUser, 2);
+        const newLikeUsers = threadReducer.setThreadDetailLikedUsers(this.threadData?.likeReward, true, userData);
+        this.updateLikeReward(newLikeUsers);
       }
 
       // 更新列表store
