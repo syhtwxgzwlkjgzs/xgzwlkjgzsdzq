@@ -521,8 +521,11 @@ class PostPage extends React.Component {
     if (code === 0) {
       thread.reset();
       this.toastInstance?.destroy();
+      // 防止被清除
+      const _isDraft = isDraft;
       this.props.threadPost.resetPostData();
-      if (!isDraft) {
+
+      if (!_isDraft) {
         // 更新帖子到首页列表
         if (threadId) {
           this.props.index.updateAssignThreadAllData(threadId, data);
