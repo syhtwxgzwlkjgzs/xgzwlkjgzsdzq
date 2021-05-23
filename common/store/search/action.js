@@ -2,6 +2,7 @@ import { action } from 'mobx';
 import SearchStore from './store';
 import { readTopicsList, readUsersList, readThreadList, createFollow, deleteFollow } from '../../server';
 import typeofFn from '@common/utils/typeof';
+import threadReducer from '../thread/reducer';
 
 class SearchAction extends SearchStore {
   constructor(props) {
@@ -218,6 +219,36 @@ class SearchAction extends SearchStore {
     return null;
   };
 
+   /**
+   * 删除帖子操作
+   * @param {string} id 帖子id
+   * @returns
+   */
+    @action
+    async deleteThreadsData({ id } = {}) {
+      if (!id) {
+        return
+      }
+ 
+      if (this.threads) {
+       const { pageData = [] } = this.threads;
+       const newPageData = pageData.filter(item => item.threadId !== id)
+ 
+       if (this.threads?.pageData) {
+         this.threads.pageData = newPageData;
+       }
+     }
+ 
+     if (this.indexThreads) {
+       const { pageData = [] } = this.indexThreads;
+       const newPageData = pageData.filter(item => item.threadId !== id)
+ 
+       if (this.indexThreads?.pageData) {
+         this.indexThreads.pageData = newPageData;
+       }
+     }
+    }
+
   /**
    * 更新用户状态
    * @param {number} userId 用户id
@@ -290,6 +321,7 @@ class SearchAction extends SearchStore {
    @action
    updatePayThreadInfo(threadId, obj) {
      const targetThreads = this.findAssignThread(threadId);
+     if (!targetThreads || targetThreads.length === 0) return;
 
      targetThreads.forEach(targetThread => {
       const { index, store } = targetThread;
@@ -328,21 +360,11 @@ class SearchAction extends SearchStore {
           const theUserId = user.userId || user.id;
           data.isLike = isLiked;
     
-          if (isLiked) {
-            const userAdded = { userId: theUserId, avatar: user.avatarUrl, username: user.username };
-    
-            // 添加当前用户到按过赞的用户列表
-            data.likeReward.users = data.likeReward.users.length ?
-                                    [userAdded, ...data.likeReward.users]:
-                                    [userAdded];
-          } else {
-            // 从按过赞用户列表中删除当前用户
-            data.likeReward.users = data.likeReward.users.length ?
-                                    [...data.likeReward.users].filter(item => {
-                                      return (item.userId !== theUserId)
-                                    }) :
-                                    data.likeReward.users;
-          }
+          const userData = threadReducer.createUpdateLikeUsersData(user, 1);
+          // 添加当前用户到按过赞的用户列表
+          const newLikeUsers = threadReducer.setThreadDetailLikedUsers(data.likeReward, !!isLiked, userData);
+        
+          data.likeReward.users = newLikeUsers;
           data.likeReward.likePayCount = likePayCount;
         }
 

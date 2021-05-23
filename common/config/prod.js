@@ -1,3 +1,4 @@
 module.exports = {
-  COMMOM_BASE_URL: 'https://discuzv3-dev.dnspod.dev',
+  TITLE: 'Discuz!Q',
+  COMMOM_BASE_URL: '',
 };

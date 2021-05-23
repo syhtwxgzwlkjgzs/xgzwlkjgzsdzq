@@ -11,6 +11,10 @@ class Index extends React.Component {
     super(props);
   }
 
+  state = {
+    users: null
+  }
+
   componentDidMount() {
     this.loadData()
   }
@@ -24,14 +28,16 @@ class Index extends React.Component {
   };
 
   loadData = async () => {
-    const { pageData = [] } = this.props.search.users || { pageData: [] };
-    if (!pageData.length) {
-      await this.props.search.getUsersList()
+    const res = await this.props.search.getUsersList()
+    if (res && res.code === 0 && res.data) {
+      this.setState({
+        users: res.data
+      })
     }
   }
 
   render () {
-    const { pageData } = this.props.search.users || {};
+    const { pageData } = this.state.users || {};
 
     return (
       <SidebarPanel

@@ -3,6 +3,7 @@ import ThreadPostStore from './store';
 import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread, updateThread, createThreadVideoAudio } from '@common/server';
 import { LOADING_TOTAL_TYPE, THREAD_TYPE } from '@common/constants/thread-post';
 import { emojiFromEditFormat, emojiFormatForCommit } from '@common/utils/emoji-regexp';
+import { formatDate } from '@common/utils/format-date';
 
 class ThreadPostAction extends ThreadPostStore {
   /**
@@ -203,8 +204,7 @@ class ThreadPostAction extends ThreadPostStore {
    */
   @action
   gettContentIndexes() {
-    const { images, video, files, product, audio, redpacket, rewardQa, orderSn } = this.postData;
-    console.log(orderSn, 'orderSn');
+    const { images, video, files, product, audio, redpacket, rewardQa, orderSn, draft } = this.postData;
     const imageIds = Object.values(images).map(item => item.id);
     const docIds = Object.values(files).map(item => item.id);
     const contentIndexes = {};
@@ -239,17 +239,18 @@ class ThreadPostAction extends ThreadPostStore {
       };
     }
 
+    const draftData = draft ? 1 : 0;
     if (redpacket.price && !redpacket.id) {
       contentIndexes[THREAD_TYPE.redPacket] = {
         tomId: THREAD_TYPE.redPacket,
-        body: { orderSn, ...redpacket },
+        body: { orderSn, ...redpacket, draft: draftData },
       };
     }
 
     if (rewardQa.value && !rewardQa.id) {
       contentIndexes[THREAD_TYPE.reward] = {
         tomId: THREAD_TYPE.reward,
-        body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0, orderSn },
+        body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0, orderSn, draft: draftData },
       };
     }
     return contentIndexes;
@@ -311,7 +312,7 @@ class ThreadPostAction extends ThreadPostStore {
         });
       }
       if (tomId === THREAD_TYPE.voice) audio = contentindexes[index].body;
-      if (tomId === THREAD_TYPE.product) product = contentindexes[index].body;
+      if (tomId === THREAD_TYPE.goods) product = contentindexes[index].body;
       if (tomId === THREAD_TYPE.video) {
         video = contentindexes[index].body;
         video.thumbUrl = video.mediaUrl;
@@ -323,7 +324,7 @@ class ThreadPostAction extends ThreadPostStore {
       // expiredAt: rewardQa.times, price: rewardQa.value, type: 0
       if (tomId === THREAD_TYPE.reward) rewardQa = {
         ...contentindexes[index].body,
-        times: contentindexes[index].body.expiredAt,
+        times: formatDate(contentindexes[index].body.expiredAt?.replace(/-/g, '/'), 'yyyy/MM/dd hh:mm'),
         value: contentindexes[index].body.money || '',
       };
     });

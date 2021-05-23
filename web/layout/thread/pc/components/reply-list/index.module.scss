@@ -20,15 +20,23 @@
       }
       
       .replyListText {
-        margin-top: rem(4);
+        margin-top: rem($margin-1n);
         font-size: rem($font-size-middle);
         text-align: left;
         color: var(--color-text-primary);
         width: 100%;
-        word-break: break-word;
+        word-break: break-all;
+        line-height: $font-line-height-middle;
 
         .content {
           display: inline;
+          font-family: "PingFang SC";
+          font-weight: normal;
+          font-size: $font-size-middle;
+          line-height: rem(16);
+          text-align: left;
+          color: $text-color-primary;
+          vertical-align: super;
 
           p {
             display: inline;
@@ -52,6 +60,7 @@
           word-break: initial;
           align-items: center;
           justify-content: flex-start;
+          height: rem(28);
 
           .replyedAvatar {
             display: inline-block;
@@ -60,7 +69,7 @@
             .avatar {
               width: rem(18);
               height: rem(18);
-              font-size: rem(10);
+              font-size: rem($font-size-small);
               line-height: rem(18);
             }
           }
@@ -84,7 +93,7 @@
       font-size: rem($font-size-primary);
       text-align: left;
       color: var(--color-text-secondary);
-      padding-top: rem($padding-2n);
+      padding-top: rem($padding-2n);     
       .replyTime {
         font-size: rem($font-size-label);
       }

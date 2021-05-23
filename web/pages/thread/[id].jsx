@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'next/router';
 import { inject } from 'mobx-react';
-import { readThreadDetail, readCommentList, readUser } from '@server';
+import { readThreadDetail, readCommentList } from '@server';
 import ThreadH5Page from '@layout/thread/h5';
 import ThreadPCPage from '@layout/thread/pc';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
@@ -45,19 +45,8 @@ class Detail extends React.Component {
         serverThread.commentList = commentRes.data?.pageData || [];
         serverThread.totalCount = commentRes.data?.totalCount || 0;
       }
-
-
-      // 获取作者信息
-      const { site } = this.props;
-      const { platform } = site;
-      const userId = serverThread?.threadData?.userId;
-      if (platform === 'pc' && userId) {
-        const userRes = await readUser({ params: { pid: userId } });
-        if (userRes.code === 0) {
-          serverThread.authorInfo = userRes.data;
-        }
-      }
     }
+
     return {
       serverThread,
     };
@@ -67,8 +56,8 @@ class Detail extends React.Component {
     super(props);
 
     this.state = {
-      isServerError:false
-    }
+      isServerError: false,
+    };
 
     const { thread, serverThread } = this.props;
 
@@ -88,13 +77,13 @@ class Detail extends React.Component {
   async componentDidMount() {
     const { id } = this.props.router.query;
     // 判断缓存
-    const oldId = this.props?.thread?.threadData?.threadId;
-    if (Number(id) === oldId && id && oldId) {
-      return;
-    }
-    this.props.thread.reset();
+    // const oldId = this.props?.thread?.threadData?.threadId;
+    // if (Number(id) === oldId && id && oldId) {
+    //   return;
+    // }
+    // this.props.thread.reset();
 
-    if (id && !this.props?.thread?.threadData?.threadId) {
+    if (id) {
       this.getPageDate(id);
     }
   }
@@ -103,31 +92,23 @@ class Detail extends React.Component {
     if (!this.props?.thread?.threadData) {
       const res = await this.props.thread.fetchThreadDetail(id);
 
-      if(res.code !== 0) {
+      if (res.code !== 0) {
         this.setState({
-          isServerError: true
-        })
-        return
+          isServerError: true,
+        });
+        return;
       }
 
       // 判断是否审核通过
       const isApproved = (this.props.thread?.threadData?.isApproved || 0) === 1;
-      if(!isApproved) {
+      if (!isApproved) {
         const currentUserId = this.props.user?.userInfo?.id; // 当前登录用户
         const userId = this.props.thread?.threadData?.user?.userId; // 帖子作者
         // 不是作者自己。跳回首页
-        if(!currentUserId || !userId || currentUserId !== userId) {
-          Router.redirect({url: '/'});
-          return
+        if (!currentUserId || !userId || currentUserId !== userId) {
+          Router.redirect({ url: '/' });
+          return;
         }
-      }
-
-      // 获取作者信息
-      const { site } = this.props;
-      const { platform } = site;
-      const userId = this.props.thread?.threadData?.user?.userId;
-      if (platform === 'pc' && userId) {
-        this.props.thread.fetchAuthorInfo(userId);
       }
     }
     if (!this.props?.thread?.commentList) {
@@ -136,13 +117,22 @@ class Detail extends React.Component {
       };
       this.props.thread.loadCommentList(params);
     }
+    // 获取作者信息
+    if (!this.props?.thread?.authorInfo) {
+      const { site } = this.props;
+      const { platform } = site;
+      const userId = this.props.thread?.threadData?.user?.userId;
+      if (platform === 'pc' && userId) {
+        this.props.thread.fetchAuthorInfo(userId);
+      }
+    }
   }
 
   render() {
     const { site } = this.props;
     const { platform } = site;
 
-    if(this.state.isServerError) {
+    if (this.state.isServerError) {
       return platform === 'h5' ? <ErrorH5Page /> : <ErrorPCPage />;
     }
 

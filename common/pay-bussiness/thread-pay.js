@@ -46,14 +46,14 @@ export default (thread, user) => {
   if (payType === 1) {
     data.type = 3;
     data.amount = price;
-    data.title = '付费主题';
+    data.title = title || '付费主题';
   }
 
   // 附件付费
   if (payType === 2) {
     data.type = 7;
     data.amount = attachmentPrice;
-    data.title = '附件付费';
+    data.title = title || '附件付费';
   }
 
   return new Promise((resolve, reject) => {
@@ -66,5 +66,7 @@ export default (thread, user) => {
         resolve({ success: false, data: orderInfo });
       },
     });
-  }).catch((e) => {console.log(e)});
+  }).catch((e) => {
+    console.log(e);
+  });
 };

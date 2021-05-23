@@ -20,7 +20,7 @@ class InviteH5Page extends React.Component {
     try {
       await this.props.invite.createInviteLink();
       const clipboardObj = navigator.clipboard;
-      await clipboardObj.writeText(`${ENV_CONFIG.COMMOM_BASE_URL}/forum/partner-invite?code=${this.props.invite.inviteLink}`);
+      await clipboardObj.writeText(`${window.location.origin}/forum/partner-invite?code=${this.props.invite.inviteLink}`);
       Toast.success({
         content: '创建邀请链接成功',
         duration: 1000,

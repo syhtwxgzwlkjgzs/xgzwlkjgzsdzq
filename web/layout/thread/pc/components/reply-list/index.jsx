@@ -77,15 +77,15 @@ export default class ReplyList extends React.Component {
             </div>
             <div className={styles.replyListText}>
               {
-                this.props.data.commentUserId
+                this.props.data.commentUserId && this.props.data?.replyUser
                   ? <div className={styles.commentUser}>
                     <div className={styles.replyedAvatar} onClick={this.props.avatarClick()}>
                       <Avatar
                         className={styles.avatar}
-                        image={this.props.data.user.avatar}
-                        name={this.props.data.user.username || this.props.data.user.userName || ''}
+                        image={this.props.data.replyUser.avatar}
+                        name={this.props.data.replyUser.username || this.props.data.replyUser.userName || ''}
                         circle={true}
-                        userId={this.props.data.user.id}
+                        userId={this.props.data.replyUser.id}
                         isShowUserInfo={true}
                         size='mini'>
                       </Avatar>
@@ -95,10 +95,10 @@ export default class ReplyList extends React.Component {
                     </span>
                   </div> : ''
               }
-              <span
+              <div
                 className={classnames(styles.content,this.props.isShowOne && styles.isShowOne)}
                 dangerouslySetInnerHTML={{ __html: this.filterContent()}}
-              ></span>
+              ></div>
             </div>
           </div>
           <div className={styles.replyListFooter}>

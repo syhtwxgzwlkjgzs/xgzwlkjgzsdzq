@@ -76,7 +76,6 @@ export default class Page extends React.Component {
           // 绑定昵称：没有开启短信，也没有绑定昵称
           if (
             path !== '/subPages/user/bind-nickname/index'
-            && !site.isSmsOpen
             && !user.nickname
           ) {
             Router.redirect({url: '/subPages/user/bind-nickname/index'});

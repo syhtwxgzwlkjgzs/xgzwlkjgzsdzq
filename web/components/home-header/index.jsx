@@ -6,7 +6,7 @@ import Router from '@discuzq/sdk/dist/router';
 import SharePopup from '../thread/share-popup';
 import isWeiXin from '@common/utils/is-weixin';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
-// import goToLoginPage from '@common/utils/go-to-login-page';
+import goToLoginPage from '@common/utils/go-to-login-page';
 
 /**
  * 帖子头部
@@ -67,11 +67,12 @@ class HomeHeader extends React.Component {
   onShare = () => {
     const { user } = this.props;
     if (!user.isLogin()) {
-      // goToLoginPage();
+      goToLoginPage({ url: '/user/login' });
       return;
     }
+
     // 判断是否在微信浏览器
-    if (isWeiXin) {
+    if (isWeiXin()) {
       this.setState({ visible: true });
     } else {
       const title = document?.title || '';

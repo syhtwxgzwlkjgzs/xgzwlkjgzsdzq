@@ -23,10 +23,6 @@
 }
 
 // ------------------PC
-.pc_body_background{
-  @include pc_body_background;
-}
-
 .pc_container {
   @include pc_container;
 }

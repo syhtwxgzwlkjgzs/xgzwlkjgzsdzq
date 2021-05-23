@@ -32,6 +32,8 @@ class CommentAction extends CommentStore {
     const userRes = await readUser({ params: { pid: userId } });
     if (userRes.code === 0) {
       this.authorInfo = userRes.data;
+    } else {
+      this.isAuthorInfoError = true;
     }
 
     return userRes;

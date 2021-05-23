@@ -15,7 +15,7 @@ export default async function initJSSdk(jsApiList = []) {
 
   const ajaxPromise = new Promise((resolve) => {
     const ajax = new XMLHttpRequest();
-    ajax.open('GET', `https://discuzv3-dev.dnspod.dev/apiv3/offiaccount/jssdk?url=${encodeURIComponent(location.href)}`, true);
+    ajax.open('GET', `${window.location.origin}/apiv3/offiaccount/jssdk?url=${encodeURIComponent(location.href)}`, true);
     ajax.send(null);
     ajax.onreadystatechange = () => {
       if (ajax.readyState === 4) {
@@ -30,7 +30,7 @@ export default async function initJSSdk(jsApiList = []) {
   if (ret.Code === 0) {
     const params = (({ appId, timestamp, nonceStr, signature }) => ({ appId, timestamp, nonceStr, signature }))(ret.Data);
     wx.config({
-      debug: true,
+      debug: false,
       jsApiList,
       ...params,
     });

@@ -22,6 +22,7 @@ export default function DVditor(props) {
 
   const [isFocus, setIsFocus] = useState(false);
   const [vditor, setVditor] = useState(null);
+  const [range, setRange] = useState(null);
 
   const html2mdSetValue = (text) => {
     try {
@@ -29,6 +30,21 @@ export default function DVditor(props) {
       vditor.setValue && vditor.setValue(md.substr(0, md.length - 1));
     } catch (error) {
       console.error('html2mdSetValue', error);
+    }
+  };
+
+  const getRange = () => {
+    const selection = window.getSelection();
+    let range = null;
+    if (selection.rangeCount > 0) range = selection.getRangeAt(0);
+    return range;
+  };
+
+  const setCursorPosition = () => {
+    if (range && !pc) {
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
     }
   };
 
@@ -43,17 +59,21 @@ export default function DVditor(props) {
 
   useEffect(() => {
     if (!vditor) initVditor();
-    return () => {
-      if (vditor && vditor.destroy) vditor.destroy();
-    };
+    // return () => {
+    //   try {
+    //     if (vditor && vditor.destroy) vditor.destroy();
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
   }, []);
 
   useEffect(() => {
     if (emoji && emoji.code) {
-      // setCurrentPositon();
       // 因为vditor的lute中有一些emoji表情和 emoji.code 重叠了。这里直接先这样处理
       let value = `<img alt="${emoji.code}emoji" src="${emoji.url}" class="qq-emotion" />`;
       value = emojiVditorCompatibilityDisplay(value);
+      // setCursorPosition();
       html2mdInserValue(value);
     }
   }, [emoji]);
@@ -65,14 +85,14 @@ export default function DVditor(props) {
       return '';
     });
     if (users.length) {
-      // setCurrentPositon();
+      // setCursorPosition();
       vditor.insertValue && vditor.insertValue(users.join(''));
     }
   }, [atList]);
 
   useEffect(() => {
     if (topic) {
-      // setCurrentPositon();
+      // setCursorPosition();
       vditor.insertValue && vditor.insertValue(` ${topic} `);
     }
   }, [topic]);
@@ -96,6 +116,14 @@ export default function DVditor(props) {
     }
   }, [value]);
 
+  const bubbleBarHidden = () => {
+    const timer = setTimeout(() => {
+      clearTimeout(timer);
+      setIsFocus(false);
+      onBlur();
+    }, 100);
+  };
+
   function initVditor() {
     // https://ld246.com/article/1549638745630#options
     const editor = new Vditor(
@@ -118,25 +146,26 @@ export default function DVditor(props) {
           onFocus('focus');
         },
         input: () => {
+          setIsFocus(false);
+          const range = getRange();
+          if (range) setRange(range);
           onInput(editor);
           onChange(editor);
         },
         blur: () => {
+          const range = getRange();
+          if (range) setRange(range);
           // 防止粘贴数据时没有更新内容
           onChange(editor);
           // 兼容Android的操作栏渲染
-          const timer = setTimeout(() => {
-            clearTimeout(timer);
-            setIsFocus(false);
-            onBlur();
-          }, 100);
+          bubbleBarHidden();
         },
         // 编辑器中选中文字后触发，PC才有效果
         select: (value) => {
           if (value) {
             onFocus('select');
             setIsFocus(true);
-          } else setIsFocus(false);
+          } else bubbleBarHidden();
         },
         outline: {
           enable: false,
@@ -155,6 +184,10 @@ export default function DVditor(props) {
           bubbleHide: false,
         },
         bubbleToolbar: pc ? [...baseToolbar] : [],
+        icon: '',
+        preview: {
+          theme: '',
+        },
       },
     );
     setVditor(editor);

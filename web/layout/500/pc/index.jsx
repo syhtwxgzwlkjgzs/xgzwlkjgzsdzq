@@ -11,7 +11,7 @@ class PCCloseSite extends React.Component {
 
     return (
       <div className={styles.page}>
-        <h1 className={styles.main}>关闭站点</h1>
+        <h1 className={styles.main}>网站错误</h1>
         {closeSiteConfig && <p className={styles.sub}>{closeSiteConfig.detail}</p>}
       </div>
     );

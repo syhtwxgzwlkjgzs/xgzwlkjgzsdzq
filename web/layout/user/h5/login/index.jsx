@@ -14,8 +14,8 @@ class Login extends React.Component {
     clearLoginStatus(); // 清除登录态
     if (this.props.site.wechatEnv === 'miniProgram') {
       if (isWeiXin()) {
-        const redirectEncodeUrl = encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`);
-        window.location.href = `https://discuzv3-dev.dnspod.dev/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
+        const redirectEncodeUrl = encodeURIComponent(`${window.location.origin}/user/wx-auth`);
+        window.location.href = `${window.location.origin}/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
         return;
       }
       this.props.router.replace('/user/wx-login');
@@ -24,8 +24,8 @@ class Login extends React.Component {
 
     if (this.props.site.wechatEnv === 'openPlatform') {
       if (isWeiXin()) {
-        const redirectEncodeUrl = encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`);
-        window.location.href = `https://discuzv3-dev.dnspod.dev/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
+        const redirectEncodeUrl = encodeURIComponent(`${window.location.origin}/user/wx-auth`);
+        window.location.href = `${window.location.origin}/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
         return;
       }
       this.props.router.replace('/user/wx-login');

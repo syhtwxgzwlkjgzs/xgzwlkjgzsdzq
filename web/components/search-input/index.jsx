@@ -44,7 +44,7 @@ const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = tru
       </div>
       {
         isShowCancel && (
-          <div className={styles.cancel} onClick={onCancel}>
+          <div className={styles.cancel} onClick={clearInput}>
             取消
           </div>
         )

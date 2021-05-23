@@ -66,8 +66,8 @@ export default function DzqUpload(props) {
           onRemove(file);
         }}
         beforeUpload={(cloneList, showFileList) => {
-          beforeUpload(cloneList, showFileList);
-          return true;
+          if (typeof beforeUpload !== 'function') return true;
+          return beforeUpload(cloneList, showFileList);
         }}
         onChange={(fileList) => {
           onChange(fileList);
@@ -75,7 +75,7 @@ export default function DzqUpload(props) {
         customRequest={post}
         accept={accept}
       >
-        {!isCustomUploadIcon && (
+        {(!isCustomUploadIcon) && (
           <Button type='text' className={classNames(styles['flex-column-center'], styles['text-grey'])}>
             <Icon name="PlusOutlined" size={16}></Icon>
             <span className="dzq-upload__btntext">{btnText}</span>

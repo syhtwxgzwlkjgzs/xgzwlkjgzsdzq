@@ -8,6 +8,7 @@
   .contentWrapper{
     .content {
       @include cursor-on-pc;
+      width: 100%;
       position: relative;
       display: inline-block;
       line-height: rem($font-line-height-middle);
@@ -61,6 +62,7 @@
     }
   }
   .showMore {
+    @include cursor-on-pc;
     display: flex;
     flex-direction: row;
     justify-content: center;

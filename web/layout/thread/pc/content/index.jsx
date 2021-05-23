@@ -13,10 +13,8 @@ import { Icon, Button, Divider, Dropdown, Toast } from '@discuzq/design';
 import UserInfo from '@components/thread/user-info';
 import classnames from 'classnames';
 import topic from './index.module.scss';
-import threadPay from '@common/pay-bussiness/thread-pay';
 import { minus } from '@common/utils/calculate';
 import { parseContentData } from '../../utils';
-import goToLoginPage from '@common/utils/go-to-login-page';
 
 // 帖子内容
 export default inject('user')(
@@ -75,19 +73,7 @@ export default inject('user')(
     const parseContent = parseContentData(indexes);
 
     const onContentClick = async () => {
-      if (!props.user.isLogin()) {
-        Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/user/login' });
-        return;
-      }
-
-      const thread = props.store.threadData;
-      const { success } = await threadPay(thread, props.user?.userInfo);
-
-      // 支付成功重新请求帖子数据
-      if (success && threadStore?.threadData?.threadId) {
-        threadStore.fetchThreadDetail(threadStore?.threadData?.threadId);
-      }
+      typeof props.onPayClick === 'function' && props.onPayClick();
     };
 
     const onLikeClick = () => {
@@ -143,26 +129,29 @@ export default inject('user')(
               {(isEssence || !isFree || isReward || isRedPack) && (
                 <Divider mode="vertical" className={topic.moreDivider}></Divider>
               )}
-              <div className={topic.iconText}>
-                <Dropdown
-                  menu={
-                    <Dropdown.Menu>
-                      {canEdit && <Dropdown.Item id="edit">编辑</Dropdown.Item>}
-                      {canStick && <Dropdown.Item id="stick">{isStick ? '取消置顶' : '置顶'}</Dropdown.Item>}
-                      {canEssence && <Dropdown.Item id="essence"> {isEssence ? '取消精华' : '精华'}</Dropdown.Item>}
-                      {canDelete && <Dropdown.Item id="delete">删除</Dropdown.Item>}
-                    </Dropdown.Menu>
-                  }
-                  placement="center"
-                  hideOnClick={true}
-                  arrow={false}
-                  trigger="hover"
-                  onChange={(key) => onDropdownChange(key)}
-                >
-                  <Icon className={topic.icon} name="SettingOutlined"></Icon>
-                  <span className={topic.text}>管理</span>
-                </Dropdown>
-              </div>
+
+              {(canEdit || canStick || canEssence || canDelete) && (
+                <div className={topic.iconText}>
+                  <Dropdown
+                    menu={
+                      <Dropdown.Menu>
+                        {canEdit && <Dropdown.Item id="edit">编辑</Dropdown.Item>}
+                        {canStick && <Dropdown.Item id="stick">{isStick ? '取消置顶' : '置顶'}</Dropdown.Item>}
+                        {canEssence && <Dropdown.Item id="essence"> {isEssence ? '取消精华' : '精华'}</Dropdown.Item>}
+                        {canDelete && <Dropdown.Item id="delete">删除</Dropdown.Item>}
+                      </Dropdown.Menu>
+                    }
+                    placement="center"
+                    hideOnClick={true}
+                    arrow={false}
+                    trigger="hover"
+                    onChange={(key) => onDropdownChange(key)}
+                  >
+                    <Icon className={topic.icon} name="SettingOutlined"></Icon>
+                    <span className={topic.text}>管理</span>
+                  </Dropdown>
+                </div>
+              )}
               <div className={topic.iconText} onClick={() => onDropdownChange('report')}>
                 <Icon className={topic.icon} name="WarnOutlinedThick"></Icon>
                 <span className={topic.text}>举报</span>
@@ -290,7 +279,7 @@ export default inject('user')(
             )}
 
             {/* 打赏 */}
-            {canBeReward && isApproved && (
+            {canBeReward && isApproved && !isSelf && (
               <Button onClick={onRewardClick} className={topic.rewardButton} type="primary" size="large">
                 <div className={topic.buttonIconText}>
                   <Icon className={topic.buttonIcon} name="HeartOutlined" size={19}></Icon>

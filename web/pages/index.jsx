@@ -3,8 +3,7 @@ import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/index/h5';
 import IndexPCPage from '@layout/index/pc';
 import { readCategories, readStickList, readThreadList } from '@server';
-import PayBox from '../components/payBox/index';
-import { Toast } from '@discuzq/design'
+import { Toast } from '@discuzq/design';
 import HOCFetchSiteData from '../middleware/HOCFetchSiteData';
 
 @inject('site')
@@ -14,11 +13,11 @@ import HOCFetchSiteData from '../middleware/HOCFetchSiteData';
 class Index extends React.Component {
   page = 1;
   prePage = 10;
-  static async getInitialProps(ctx, {user, site}) {
+  static async getInitialProps(ctx, { user, site }) {
     const categories = await readCategories({}, ctx);
     const sticks = await readStickList({}, ctx);
     const sequence = site && site.webConfig && site.webConfig.setSite ? site.webConfig.setSite.siteOpenSort : 0;
-  
+
     const threads = await readThreadList({ params: { filter: {}, sequence, perPage: 10, page: 1 } }, ctx);
 
     return {
@@ -52,36 +51,39 @@ class Index extends React.Component {
     if (!hasSticksData) {
       this.props.index.getRreadStickList();
     }
+   
     if (!hasThreadsData) {
-      this.props.index.getReadThreadList({sequence: this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0});
+      this.props.index.getReadThreadList({ sequence: this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0 });
+    } else {
+      // 如果store中有值，则需要获取之前的分页数
+      this.page = index.threads.currentPage || 1
     }
   }
 
   dispatch = async (type, data = {}) => {
-
     const { index } = this.props;
-    const { categoryids, types, essence, sequence, attention, sort } = data;
+    const { categoryids, types, essence, sequence, attention, sort, page } = data;
 
-    let newTypes = []
-    if (!!types) {
+    let newTypes = [];
+    if (types) {
       if (!(types instanceof Array)) {
-        newTypes = [types]
+        newTypes = [types];
       } else {
-        newTypes = types
+        newTypes = types;
       }
     }
 
-    let categoryIds = []
-    if (!!categoryids) {
+    let categoryIds = [];
+    if (categoryids) {
       if (!(categoryids instanceof Array)) {
-        categoryIds = [categoryids]
+        categoryIds = [categoryids];
       } else {
-        categoryIds = categoryids
+        categoryIds = categoryids;
       }
     }
-    
 
-    if (type === 'click-filter') {
+
+    if (type === 'click-filter') { // 点击tab
       this.toastInstance = Toast.loading({
         content: '加载中...',
         duration: 0,
@@ -93,16 +95,19 @@ class Index extends React.Component {
       this.toastInstance?.destroy();
     } else if (type === 'moreData') {
       this.page += 1;
-      await index.getReadThreadList({
+      return await index.getReadThreadList({
         perPage: this.prePage,
         page: this.page,
         filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort },
         sequence,
       });
-
-      return;
     } else if (type === 'refresh-recommend') {
       await index.getRecommends({ categoryIds });
+    } else if (type === 'update-page') {// 单独更新页数
+      this.page = page
+    } else if (type === 'refresh-thread') { // 点击帖子更新数的按钮，刷新帖子数据
+      this.page = 1;
+      return await index.getReadThreadList({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence });
     }
   }
 
