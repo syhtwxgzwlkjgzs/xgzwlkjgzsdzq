@@ -7,6 +7,8 @@ import styles from './index.module.scss';
 import TopNew from './components/top-news';
 import FilterView from './components/filter-view';
 import BaseLayout from '@components/base-layout';
+import { throttle } from '@common/utils/throttle-debounce.js'
+
 
 @inject('site')
 @inject('user')
@@ -28,7 +30,7 @@ class IndexH5Page extends React.Component {
     };
     this.listRef = createRef();
     // 用于获取顶部视图的高度
-    this.headerRef = createRef(null)
+    this.headerRef = createRef(null);
     this.renderItem = this.renderItem.bind(this);
   }
 
@@ -67,6 +69,8 @@ class IndexH5Page extends React.Component {
   onClickTab = (id = '') => {
     const { dispatch = () => {} } = this.props;
     const currentIndex = this.resetCategoryids(id);
+
+    this.props.baselayout.setJumpingToTop();
     dispatch('click-filter', { categoryids: [currentIndex], sequence: id === 'default' ? 1 : 0 });
 
     this.setState({
@@ -110,12 +114,11 @@ class IndexH5Page extends React.Component {
     return dispatch('moreData', requestFilter);
   };
 
-  onScroll = ({ scrollTop } = {}) => {
+  handleScroll = throttle(({ scrollTop = 0 } = {}) => {
     const { height = 180 } = this.headerRef.current?.state || {}
     this.setState({ fixedTab: scrollTop > height })
-
     this.props.baselayout.jumpToScrollingPos = scrollTop;
-  }
+  }, 0)
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
   handleCategories = () => {
@@ -210,7 +213,7 @@ class IndexH5Page extends React.Component {
         onRefresh={this.onRefresh}
         noMore={currentPage >= totalPage}
         isFinished={isFinished}
-        onScroll={this.onScroll}
+        onScroll={this.handleScroll}
         curr='home'
         pageName='home'
         preload={1000}
