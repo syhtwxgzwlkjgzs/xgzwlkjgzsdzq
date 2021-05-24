@@ -65,6 +65,7 @@ const List = forwardRef(({
 
   const onBackTop = () => {
     listWrapper.current.scrollTop = 0;
+    currentScrollTop.current = 0;
   };
 
   const jumpToScrollTop = (scrollTop) => {
