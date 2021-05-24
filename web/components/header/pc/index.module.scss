@@ -30,9 +30,11 @@
           height: rem(24);
           cursor: pointer;
         }
-
         .inputBox{
           margin-left: rem(20);
+          input{
+            line-height: normal;
+          }
         }
       }
       .right{
