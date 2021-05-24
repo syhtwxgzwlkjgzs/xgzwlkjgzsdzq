@@ -85,8 +85,9 @@ class WXBindPhoneH5Page extends React.Component {
   }
 
   render() {
-    const { wxPhoneBind, router, commonLogin } = this.props;
+    const { wxPhoneBind, router, commonLogin, site } = this.props;
     const { nickname, avatarUrl } = router.query;
+    const { platform } = site;
     return (
       <div className={layout.container}>
         <HomeHeader hideInfo mode='login'/>

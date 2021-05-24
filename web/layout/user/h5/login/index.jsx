@@ -37,18 +37,6 @@ class Login extends React.Component {
       return;
     }
 
-    // 跳转状态页
-    if (
-      this.props.commonLogin.statusCode === BANNED_USER
-      || this.props.commonLogin.statusCode === REVIEWING
-      || this.props.commonLogin.statusCode === REVIEW_REJECT
-    ) {
-      const { statusCode, statusMsg } = this.props.commonLogin;
-      this.props.commonLogin.setStatusMessage(statusCode);
-      this.props.router.push(`/user/status?statusCode=${statusCode}&statusMsg=${statusMsg}`);
-      return;
-    }
-
     this.props.router.replace('/user/username-login');
     return;
   }
