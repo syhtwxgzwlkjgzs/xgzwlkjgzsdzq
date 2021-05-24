@@ -6,7 +6,7 @@
 import React, { memo, useState, useCallback } from 'react';
 import DatePicker from 'react-mobile-datepicker';
 import PropTypes from 'prop-types';
-
+import './index.scss';
 import { formatDate } from '@common/utils/format-date.js';
 
 const DatePickers = ({ onCancels, time, onSelects, isOpen }) => {
@@ -49,6 +49,7 @@ const DatePickers = ({ onCancels, time, onSelects, isOpen }) => {
       dateConfig={dateConfig}
       value={time}
       isOpen={isOpen}
+      showCaption={false}
       onSelect={(e) => {
         handleSelect(e);
       }}

@@ -1,21 +1,19 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import NoData from '@components/no-data';
 import SearchInput from '@components/search-input';
-import List from '@components/list';
 import ThreadContent from '@components/thread';
-import { View, Text } from '@tarojs/components';
-import Page from '@components/page';
+import BaseLayout from '@components/base-layout';
 import styles from './index.module.scss';
+import { View, Text, Image } from '@tarojs/components'
+import Taro from '@tarojs/taro';
 
 @inject('site')
 @inject('search')
 @observer
-class SearchResultPostPage extends React.Component {
+class SearchResultPostH5Page extends React.Component {
   constructor(props) {
     super(props);
 
-    // const keyword = this.props.router.query.keyword || '';
     const keyword = '';
 
     this.state = {
@@ -39,7 +37,7 @@ class SearchResultPostPage extends React.Component {
 
   // event
   onCancel = () => {
-    this.props.router.back();
+    Taro.navigateBack()
   };
 
   onSearch = (keyword) => {
@@ -54,33 +52,23 @@ class SearchResultPostPage extends React.Component {
     const { keyword } = this.state;
     const { threads } = this.props.search;
     const { pageData, currentPage, totalPage } = threads || { pageData: [] };
+
     return (
-      <Page>
-        <View className={styles.page}>
-          <View className={styles.searchInput}>
-            <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
-          </View>
-          {
-            pageData?.length
-              ? (
-                <List
-                  className={styles.list}
-                  onRefresh={this.fetchMoreData}
-                  noMore={currentPage >= totalPage}
-                >
-                  {
-                    pageData?.map((item, index) => (
-                      <ThreadContent className={styles.listItem} key={index} data={item} />
-                    ))
-                  }
-                </List>
-              )
-              : <NoData />
-          }
+      <BaseLayout
+          onRefresh={this.fetchMoreData}
+          noMore={currentPage >= totalPage}
+      >
+        <View className={styles.topBox}>
+          <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} isShowBottom={false} />
         </View>
-      </Page>
+        {
+          pageData?.map((item, index) => (
+            <ThreadContent key={index} data={item} />
+          ))
+        }
+      </BaseLayout>
     );
   }
 }
 
-export default SearchResultPostPage;
+export default SearchResultPostH5Page;

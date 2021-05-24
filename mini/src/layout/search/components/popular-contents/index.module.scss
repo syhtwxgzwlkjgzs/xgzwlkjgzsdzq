@@ -1,8 +1,12 @@
 @import '@common/styles/index.scss';
 .list {
   width: 100%;
-  background: var(--background-color-text2);
-}
-.threadList {
-  margin-bottom: 10px;
+  .bottom {
+    padding: 0;
+  }
+  .hr {
+    height: 10px;
+    background-color: var(--background-color-text2);
+    margin: 0 -16px;
+  }
 }
