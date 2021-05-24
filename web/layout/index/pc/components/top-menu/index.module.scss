@@ -9,6 +9,14 @@
   }
 
   :global {
+    .dzq-menu {
+      box-sizing: border-box;
+      height: rem(68);
+      padding-top: rem(8);
+      border-top-left-radius: rem($border-radius-small);
+      border-top-right-radius: rem($border-radius-small);
+      padding-left: rem($padding-2n);
+    }
     .dzq-submenu__title {
       .dzq-icon {
         font-size: rem(10) !important; // Menu组件里面的icon写死了12px大小
