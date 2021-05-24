@@ -146,11 +146,12 @@ class SearchAction extends SearchStore {
   /**
    * 发现模块 - 更多用户
    * @param {object} search * 搜索值
+   * @param {string} type 搜索类型 username-按用户名，nickname按昵称搜索
    * @returns {object} 处理结果
    */
   @action.bound
-  async getUsersList({ search = '', hot = 0, perPage = 10, page = 1  } = {}) {
-    const result = await readUsersList({ params: { filter: { hot, nickname: search }, perPage, page } });
+  async getUsersList({ type = 'nickname', search = '', hot = 0, perPage = 10, page = 1  } = {}) {
+    const result = await readUsersList({ params: { filter: { hot, [type]: search }, perPage, page } });
     const {code, data} = result;
     if (code === 0 && data) {
       if (this.users && data.pageData && page !== 1) {
