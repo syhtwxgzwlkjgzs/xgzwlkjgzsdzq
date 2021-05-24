@@ -87,7 +87,7 @@ const BaseLayout = (props) => {
               </PullDownRefresh>
             </div>
           ) : (
-            <List {...props} className={styles.list} ref={listRef} onScroll={handleScroll}>
+            <List {...props} immediateCheck={false} className={styles.list} ref={listRef} onScroll={handleScroll}>
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>
           )
