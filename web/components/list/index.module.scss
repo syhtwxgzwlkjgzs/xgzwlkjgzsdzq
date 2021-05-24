@@ -12,12 +12,12 @@
 }
 
 .refreshView {
-  height: rem(40);
+  min-height: rem(60);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: rem($font-size-primary);
-  color: var(--color-text-placeholder);
+  color: $border-shadow-color; // TODO: 设计正在对稿颜色，可能有变
   .spin {
     margin-right: rem(4);
   }
