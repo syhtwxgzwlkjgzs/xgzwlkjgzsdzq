@@ -33,9 +33,14 @@ const Index = ({ imgs = [], tipData = {}, wholeNum = 1,showMore=false }) => {
       return result;
     }, [])
   }, [imgs]);
+
+  const sty = useMemo(() => {
+    return { width: renderUsers.length === 1 ? '0.24rem' : '0.44rem' }
+  }, [renderUsers])
+
   return (
     <>
-        <div className={styles.container} onClick={onClick} style={{ width: renderUsers.length === 1 ? '0.24rem' : '0.44rem' }}>
+        <div className={styles.container} onClick={onClick} style={sty}>
             {
                 wholeNum !== 0 && renderUsers?.filter((_, index) => index < 2).map((item, index) => (
                   <div key={index} className={index === 0 ? styles.img : styles.imgAfter}>
@@ -48,7 +53,7 @@ const Index = ({ imgs = [], tipData = {}, wholeNum = 1,showMore=false }) => {
                 ))
             }
             {
-              showMore && imgs?.length > 2 &&
+              showMore && renderUsers?.length > 2 && 
               <div className={styles.moreIcon} size={20}>
                 <Icon name='MoreBOutlined' className={styles.icon} size={12}></Icon>
               </div>

@@ -75,11 +75,13 @@ class ThreadAction extends ThreadStore {
 
   @action
   reset() {
-    this.threadData = null;
-    this.commentList = null;
-    this.totalCount = 0;
-    this.authorInfo = null;
-    this.isPositionToComment = false;
+    this.threadData = null; // 帖子信息
+    this.commentList = null; // 评论列表数据
+    this.totalCount = 0; // 评论列表总条数
+    this.authorInfo = null; // 作者信息
+    this.isPositionToComment = false; // 是否定位到评论位置
+    this.isCommentListError = false;
+    this.isAuthorInfoError = false;
   }
 
   // 定位到评论位置
@@ -212,13 +214,11 @@ class ThreadAction extends ThreadStore {
 
       // 更新打赏的用户
       const currentUser = UserStore?.userInfo;
+
       if (currentUser) {
-        const user = {
-          avatar: currentUser.avatarUrl,
-          userId: currentUser.id,
-          userName: currentUser.username,
-        };
-        this.setThreadDetailLikedUsers(true, user);
+        const userData = threadReducer.createUpdateLikeUsersData(currentUser, 2);
+        const newLikeUsers = threadReducer.setThreadDetailLikedUsers(this.threadData?.likeReward, true, userData);
+        this.updateLikeReward(newLikeUsers);
       }
 
       // 更新列表store

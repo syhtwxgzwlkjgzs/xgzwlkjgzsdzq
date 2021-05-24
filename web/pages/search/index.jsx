@@ -40,9 +40,9 @@ class Index extends React.Component {
     super(props);
     const { serverSearch, search } = this.props;
     // 初始化数据到store中
-    serverSearch && serverSearch.indexTopics && search.setIndexTopics(serverSearch.indexTopics);
-    serverSearch && serverSearch.indexUsers && search.setIndexUsers(serverSearch.indexUsers);
-    serverSearch && serverSearch.indexThreads && search.setIndexThreads(serverSearch.indexThreads);
+    search.setIndexTopics(null);
+    search.setIndexUsers(null);
+    search.setIndexThreads(null);
   }
 
   async componentDidMount() {
@@ -59,7 +59,7 @@ class Index extends React.Component {
     //   duration: 0,
     // });
 
-    search.getSearchData({ hasTopics: hasIndexTopics, hasUsers: hasIndexUsers, hasThreads: hasIndexThreads, search: keyword });
+    search.getSearchData({ hasTopics: false, hasUsers: false, hasThreads: false, search: keyword });
 
     // this.toastInstance?.destroy();
   }

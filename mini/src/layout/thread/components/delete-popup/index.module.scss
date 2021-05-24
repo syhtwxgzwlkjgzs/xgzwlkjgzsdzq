@@ -12,23 +12,23 @@
     .tips {
       width: 100%;
       font-weight: var(--font-weight-regular);
-      font-size: 16px;
-      line-height: 22px;
+      font-size: $font-size-middle;
+      line-height: $font-line-height-small;
       text-align: center;
-      padding-top: 20px;
+      padding-top: $padding-5n;
     }
     .content {
       width: 100%;
-      font-size: 14px;
-      line-height: 26px;
+      font-size: $font-size-primary;
+      line-height: $font-line-height-middle;
       text-align: center;
-      padding: 10px 0;
+      padding: $padding-10 0;
     }
   }
   .btn {
     display: flex;
-    font-size: 16px;
-    line-height: 30px;
+    font-size: $font-size-middle;
+    line-height: $font-line-height-large;
     text-align: center;
     .close {
       width: 50%;

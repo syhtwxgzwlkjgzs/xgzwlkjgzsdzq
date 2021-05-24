@@ -196,7 +196,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
                     ))
                   }
                 </List>
-              ) : <Spin className={styles.spinner} type="spinner" />
+              ) : <Spin className={`${platform === 'pc' ? styles.spinnerPC : styles.spinner}`} type="spinner" />
 
             }
         </Tabs.TabPanel>
@@ -217,7 +217,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
             className={`${styles.tabs} ${tipData?.platform === 'pc' && styles.tabsPC}`}
           >
             <Tabs.TabPanel key={0} id={0}>
-              <Spin className={styles.spinner} type="spinner" />
+              <Spin className={`${tipData?.platform === 'pc' ? styles.spinnerPC : styles.spinner}`} type="spinner" />
             </Tabs.TabPanel>
           </Tabs>
       :

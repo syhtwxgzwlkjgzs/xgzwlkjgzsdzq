@@ -31,20 +31,22 @@ class Header extends React.Component {
   };
 
   handleSearch = (e) => {
+    const { value = '' } = this.state
     const { onSearch } = this.props;
     if (!onSearch) {
-      Router.push({url: `/search?keyword=${e?.target?.value || ''}`});
+      Router.push({url: `/search?keyword=${value}`});
     } else {
-      onSearch(e?.target?.value || '');
+      onSearch(value);
     }
   };
 
   handleIconClick = (e) => {
+    const { value = '' } = this.state
     const { onSearch } = this.props;
     if (!onSearch) {
-      Router.push({url: `/search?keyword=${e?.target?.value || ''}`});
+      Router.push({url: `/search?keyword=${value}`});
     } else {
-      onSearch(e?.target?.value || '');
+      onSearch(value);
     }
   };
 

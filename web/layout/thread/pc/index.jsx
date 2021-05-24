@@ -85,6 +85,11 @@ class ThreadPCPage extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    // 清空数据
+    this.props?.thread && this.props.thread.reset();
+  }
+
   // 加载评论列表
   async loadCommentList() {
     const { isCommentReady } = this.props.thread;
