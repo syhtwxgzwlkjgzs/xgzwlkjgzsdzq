@@ -34,7 +34,6 @@ class WXLoginH5Page extends React.Component {
           redirectUri,
         };
       }
-      console.log(site.isMiniProgramOpen, site.isOffiaccountOpen);
       if (platform === 'pc') {
         const type = site?.isMiniProgramOpen ?  'pc_login_mini' : 'pc_login';
         params = {

@@ -120,18 +120,20 @@ class WXSelect extends Component {
               <Icon name='UserOutlined' size={16}/>
               绑定已有用户名
             </Button>
-            <Button
-              className={`${layout.button} ${layout.btn_select} ${layout.btn_phone}`}
-              type="primary"
-              onClick={() => {
-                navigateTo({
-                  url: `/subPages/user/wx-bind-phone/index?sessionToken=${sessionToken}&nickname=${nickname}`
-                })
-              }}
-            >
-              <Icon name='PhoneOutlined' size={16}/>
-              绑定手机号
-            </Button>
+            {this.props.site.isSmsOpen && (
+              <Button
+                className={`${layout.button} ${layout.btn_select} ${layout.btn_phone}`}
+                type="primary"
+                onClick={() => {
+                  navigateTo({
+                    url: `/subPages/user/wx-bind-phone/index?sessionToken=${sessionToken}&nickname=${nickname}`
+                  })
+                }}
+              >
+                <Icon name='PhoneOutlined' size={16}/>
+                绑定手机号
+              </Button>
+            )}
           </View>
         </View>
       </Page>
