@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  padding: $padding-4n $padding-4n;
+  padding: $padding-4n 0;
   background-color: $white;
 
   .wrapper {
@@ -98,4 +98,9 @@
     bottom: 0;
     background-color: rgba(238, 238, 238, 0.75);
   }
+}
+
+.sidebarPadding {
+  padding-left: $padding-4n;
+  padding-right: $padding-4n;
 }

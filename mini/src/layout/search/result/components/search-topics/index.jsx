@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text } from '@tarojs/components';
-import { Topic } from '@components/search-result-item';
-
+import TopicItem from '@components/topic-item';
 import styles from './index.module.scss';
 
 /**
@@ -12,7 +11,7 @@ import styles from './index.module.scss';
 const SearchTopics = ({ data = [], onItemClick }) => (
   <View className={styles.list}>
     {data && data.map((item, index) => (
-      <Topic key={index} data={item} onClick={onItemClick} />
+      <TopicItem key={index} data={item} onClick={onItemClick} />
     ))}
   </View>
 );
