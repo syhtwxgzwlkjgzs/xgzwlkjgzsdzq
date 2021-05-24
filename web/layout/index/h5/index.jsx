@@ -66,6 +66,18 @@ class IndexH5Page extends React.Component {
     });
   };
 
+  // 点击底部tabBar
+  onClickTabBar = (data, index) => {
+    if (index !== 0) {
+      return
+    }
+    const { dispatch = () => {} } = this.props;
+    const { filter } = this.state;
+    const requestFilter = Object.assign({}, filter);
+    requestFilter.categoryids = this.resetCategoryids(requestFilter.categoryids[0]);
+    dispatch('click-filter', requestFilter);
+  }
+
   onClickTab = (id = '') => {
     const { dispatch = () => {} } = this.props;
     const currentIndex = this.resetCategoryids(id);
@@ -217,6 +229,7 @@ class IndexH5Page extends React.Component {
         curr='home'
         pageName='home'
         preload={1000}
+        onClickTabBar={this.onClickTabBar}
       >
         <HomeHeader ref={this.headerRef} />
 

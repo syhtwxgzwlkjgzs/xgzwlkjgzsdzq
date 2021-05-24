@@ -26,7 +26,19 @@ import styles from './index.module.scss';
 const baseLayoutWhiteList = ['home'];
 
 const BaseLayout = (props) => {
-  const { showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr, onScroll = noop, baselayout } = props;
+  const { 
+    showHeader = true, 
+    showTabBar = false, 
+    showPullDown = false, 
+    children = null, 
+    onPullDown, 
+    isFinished = true, 
+    curr, 
+    onScroll = noop,
+    baselayout,
+    onClickTabBar = noop
+  } = props;
+
   const [height, setHeight] = useState(600);
 
   // const debounce = (fn, wait) => {
@@ -93,7 +105,7 @@ const BaseLayout = (props) => {
           )
         }
         
-        {showTabBar && <BottomNavBar placeholder curr={curr} />}
+        {showTabBar && <BottomNavBar onClick={onClickTabBar} placeholder curr={curr} />}
     </div>
   );
 };
