@@ -41,24 +41,25 @@
     border-radius: 0;
     -webkit-tap-highlight-color: transparent;
   }
+  // TODO: 眼睛样式问题
   :global(.dzq-input__icon){
     position: relative;
     font-size: rem($font-size-middle) !important;
-    color: var(--color-disabled2) !important;
+    color: var(--color-disabled2);
     width: rem(20);
     height: rem(20);
     line-height: rem(20);
     &:hover {
-      color: $primary-color !important;
+      color: var(--color-disabled2);
+    }
+    &:active {
+      color: $primary-color;
     }
   }
 }
 @mixin passwordInput {
-  :global(.dzq-input__icon){
-    color: var(--color-disabled2) !important;
-    &:hover {
-      color: $primary-color !important;
-    }
+  :global(.is-select){
+    color: $primary-color !important;
   }
 }
 @mixin button {
@@ -214,10 +215,6 @@
   -webkit-tap-highlight-color: transparent;
   :global(.dzq-input__icon){
     font-size: 16px !important;
-    color: var(--border-color-hover) !important;
-    &:hover {
-      color: $primary-color !important;
-    }
   }
 }
 
