@@ -1,16 +1,18 @@
 import React from 'react';
 import styles from './index.module.scss';
-import { Avatar, Input, Icon } from '@discuzq/design';
+import { Input, Icon } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import { defaultOperation } from '@common/constants/const';
 import { THREAD_TYPE } from '@common/constants/thread-post';
+import Avatar from '@components/avatar';
 
 // 用户中心发帖模块
 @inject('user')
 @observer
 class UserCenterPost extends React.Component {
   render() {
+    const { user } = this.props;
     return (
       <div
         className={styles.userCenterPost}
@@ -21,7 +23,7 @@ class UserCenterPost extends React.Component {
         <div className={styles.userCenterPostTitle}>发帖</div>
         <div className={styles.userCenterPostContent}>
           <div className={styles.userCenterPostAvatar}>
-            <Avatar text={'黑'} circle />
+          <Avatar image={user.avatarUrl} name={user.username} circle/>
           </div>
           <div
             style={{

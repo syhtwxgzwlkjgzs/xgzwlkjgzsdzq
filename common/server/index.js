@@ -58,7 +58,6 @@ export { default as transitionSmsBind } from './transitionSmsBind';
 export { default as createOrders } from './pay/createOrders';
 export { default as createPayOrder } from './pay/createPayOrder';
 export { default as readOrderDetail } from './pay/readOrderDetail';
-export { default as readWalletUser } from './wallet/read-walletUser';
 export { default as updatePayPwd } from './pay/updatePayPwd';
 export { default as updateThread } from './thread-post/update-thread';
 export { default as updateUsersUpdate } from './user/updateUsersUpdate';
@@ -87,3 +86,8 @@ export { default as createInviteLink } from './invite/createInviteLink';
 
 export { default as readResetPayPwdToken } from './pay/readResetPayPwdToken';
 export { default as smsRebind } from './user//smsRebind';
+
+
+// 钱包模块
+export { default as readWalletUser } from './wallet/read-walletUser';
+export { default as readWalletLog } from './wallet/read-walletLog';

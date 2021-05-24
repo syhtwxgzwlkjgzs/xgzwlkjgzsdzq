@@ -55,8 +55,14 @@ function AttachmentToolbar(props) {
   const inputRef = React.createRef(null);
 
   function handleAttachClick(e, item) {
-    setCurrentAction(item.type);
-    props.onAttachClick(item);
+    let action = item.type;
+    let actionItem = item;
+    if (currentAction === item.type) {
+      action = '';
+      actionItem = { type: '' };
+    }
+    setCurrentAction(action);
+    props.onAttachClick(actionItem);
     setShowAll(false);
   }
 

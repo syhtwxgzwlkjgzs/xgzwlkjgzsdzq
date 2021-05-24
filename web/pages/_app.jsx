@@ -1,5 +1,6 @@
 import React from 'react';
 import { Provider } from 'mobx-react';
+import { hideInstance } from '@discuzq/design/dist/components/image-previewer/layouts/web';
 import App from 'next/app';
 import initializeStore from '@common/store';
 import Head from 'next/head';
@@ -18,12 +19,9 @@ class DzqApp extends App {
   // 路由跳转时，需要清理图片预览器
   cleanImgViewer = () => {
     try {
-      const viewers = document.getElementsByClassName('viewer-in');
-      viewers.forEach((viewer) => {
-        viewer.classList.remove('viewer-in');
-        viewer.classList.add('viewer-hide');
-        viewer.setAttribute('aria-modal', false);
-      });
+      if (hideInstance) {
+        hideInstance();
+      }
     } catch (e) {
       console.error(e);
     }
