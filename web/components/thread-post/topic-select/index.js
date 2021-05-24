@@ -69,6 +69,7 @@ class TopicSelect extends Component {
       // },
     };
     if (this.state.keywords) {
+      !params.filter && (params.filter = {});
       params.filter.content = this.state.keywords;
     }
     // 2 发起请求
