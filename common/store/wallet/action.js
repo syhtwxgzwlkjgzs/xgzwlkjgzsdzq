@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import WalletStore from './store';
-import { readWalletUser, readWalletLog } from '@server';
+import { readWalletUser, readWalletLog, readWalletCash } from '@server';
 
 const setWalletInfoPageData = (data, obj, {
   type,
@@ -85,6 +85,24 @@ class WalletAction extends WalletStore {
           date,
           page,
         });
+      }
+    }
+
+    // 获取提现明细
+    @action
+    getCashLog = async ({ ...props }) => {
+      const { page = 1, date } = props;
+      const cashInfoRes = await readWalletCash({
+        param: {
+          page,
+        },
+      });
+
+      if (cashInfoRes.code === 0) {
+        if (!this.cashDetail[date]) {
+          this.cashDetail[date] = {};
+        }
+        this.cashDetail[date][page] = cashInfoRes.data;
       }
     }
 }
