@@ -45,6 +45,11 @@ class IndexPCPage extends React.Component {
   newThread = {}
 
   componentDidMount() {
+    // setTimeout(() => {
+    //   this.filter = {} 
+    // }, 500)
+
+
     if (this.timer) {
       clearInterval(this.timer);
     }
@@ -187,14 +192,6 @@ class IndexPCPage extends React.Component {
     return (
       <div className={styles.indexContent}>
         <div className={styles.contnetTop}>
-          <div className={styles.topBox}>
-            <TopMenu onSubmit={this.onFilterClick} isShowDefault={isShowDefault}/>
-            <div className={styles.PostTheme}>
-              <Button type="primary" className={styles.publishBtn} onClick={this.onPostThread}>
-                发布
-              </Button>
-            </div>
-          </div>
           {sticks?.length && <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
             <TopNews data={sticks} platform="pc" isShowBorder={false}/>
           </div>}
@@ -218,7 +215,8 @@ class IndexPCPage extends React.Component {
   render() {
     const { index, site } = this.props;
     const { countThreads = 0 } = site?.webConfig?.other || {};
-    const { currentPage, totalPage } = this.props.index.threads || {};
+    const { currentPage, totalPage } = index.threads || {};
+    const { isShowDefault } = this.state
 
     return (
       <BaseLayout
@@ -231,6 +229,7 @@ class IndexPCPage extends React.Component {
         right={ this.renderRight() }
         pageName='home'
       >
+        <TopFilterView onFilterClick={this.onFilterClick} onPostThread={this.onPostThread} isShowDefault={isShowDefault} />
         {this.renderContent(index)}
       </BaseLayout>
     );
@@ -238,3 +237,18 @@ class IndexPCPage extends React.Component {
 }
 
 export default withRouter(IndexPCPage);
+
+const TopFilterView = ({onFilterClick, isShowDefault, onPostThread}) => {
+  return (
+    <div className={styles.topWrapper}>
+      <div className={styles.topBox}>
+        <TopMenu onSubmit={onFilterClick} isShowDefault={isShowDefault}/>
+        <div className={styles.PostTheme}>
+          <Button type="primary" className={styles.publishBtn} onClick={onPostThread}>
+            发布
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}

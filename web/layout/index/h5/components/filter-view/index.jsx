@@ -110,14 +110,13 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
         <Row className={styles.wrapper} gutter={10}>
           {
             contents.map((item, index) => (
-              <Col span={3}>
-              <span
-                className={`${tip === item.pid ? styles.active : ''} ${styles.span}`}
-                key={index}
-                onClick={() => onClickFirst(item.pid, type, contents)}
-              >
-                {item.name}
-              </span>
+              <Col span={3} key={index}>
+                <span
+                  className={`${tip === item.pid ? styles.active : ''} ${styles.span}`}
+                  onClick={() => onClickFirst(item.pid, type, contents)}
+                >
+                  {item.name}
+                </span>
               </Col>
             ))
           }
@@ -127,10 +126,9 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
             <Row className={`${styles.wrapper} ${styles.childrenWrapper}`} gutter={10}>
               {
                 subData.map((item, index) => (
-                  <Col span={3}>
+                  <Col span={3} key={`${index}-${index}`}>
                     <span 
                       className={`${firstChildren === item.pid ? styles.childrenActive : ''} ${styles.childrenSpan}`} 
-                      key={`${index}-${index}`} 
                       onClick={() => onClickSecond(item.pid, type)}>
                         {item.name}
                     </span>

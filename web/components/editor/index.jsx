@@ -81,7 +81,7 @@ export default function DVditor(props) {
   useEffect(() => {
     if (atList && !atList.length) return;
     const users = atList.map((item) => {
-      if (item) return ` @${item} `;
+      if (item) return `&nbsp;@${item}&nbsp;`;
       return '';
     });
     if (users.length) {
@@ -93,7 +93,7 @@ export default function DVditor(props) {
   useEffect(() => {
     if (topic) {
       // setCursorPosition();
-      vditor.insertValue && vditor.insertValue(` ${topic} `);
+      vditor.insertValue && vditor.insertValue(`&nbsp;${topic}&nbsp;`);
     }
   }, [topic]);
 
@@ -191,15 +191,14 @@ export default function DVditor(props) {
           onFocus('focus');
         },
         input: () => {
+          if (getSelection().rangeCount > 0) {
+            editor.vditor[editor.vditor.currentMode].range = getSelection().getRangeAt(0);
+          }
           setIsFocus(false);
-          const range = getRange();
-          if (range) setRange(range);
           onInput(editor);
           onChange(editor);
         },
         blur: () => {
-          const range = getRange();
-          if (range) setRange(range);
           // 防止粘贴数据时没有更新内容
           onChange(editor);
           // 兼容Android的操作栏渲染
@@ -230,9 +229,6 @@ export default function DVditor(props) {
         },
         bubbleToolbar: pc ? [...baseToolbar] : [],
         icon: '',
-        preview: {
-          theme: '',
-        },
       },
     );
 

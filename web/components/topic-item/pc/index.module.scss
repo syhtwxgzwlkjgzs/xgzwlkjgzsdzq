@@ -25,7 +25,8 @@
       vertical-align: baseline;
     }
     .content {
-      padding: rem(6) rem($padding-6n) 0;
+      padding-top: rem(6);
+      padding-left: rem($padding-6n);
       flex: 1;
       overflow: hidden;
     }
