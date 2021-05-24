@@ -4,6 +4,7 @@ import { noop } from '@components/thread/utils'
 import LoadingTips from '../../../../thread/pc/components/loading-tips';
 import styles from './index.module.scss';
 import isServer from '../../../../../../common/utils/is-server';
+import LoadingBox from '@components/loading-box';
 
 const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, defaultFisrtIndex = -1, defaultSecondIndex = -1 }) => {
   const [fistIndex, setFistIndex] = useState(defaultFisrtIndex);
@@ -111,7 +112,7 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
         categories?.length ?
           <CategoriesContent />
         :
-          <LoadingTips type="init"></LoadingTips>
+          <LoadingBox />
       }
     </Card>
   );
