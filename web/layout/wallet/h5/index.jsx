@@ -13,6 +13,7 @@ import NoMore from './components/no-more';
 import { Tabs, Icon, Button } from '@discuzq/design';
 
 
+@inject('wallet')
 @observer
 class WalletH5Page extends React.Component {
   constructor(props) {
@@ -21,6 +22,10 @@ class WalletH5Page extends React.Component {
     this.state = {
       tabsType: 'income',
     };
+
+    this.props.wallet.getInconmeDetail();
+    this.props.wallet.getExpendDetail();
+    this.props.wallet.getFreezeDetail();
   }
 
   // 点击冻结金额

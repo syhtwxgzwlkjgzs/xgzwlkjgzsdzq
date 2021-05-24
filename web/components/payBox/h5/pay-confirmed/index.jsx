@@ -11,7 +11,7 @@ import {
   wxValidator,
   mode,
 } from '../../../../../common/store/pay/weixin-h5-backend';
-// import browser from '@common/utils/browser';
+import throttle from '@common/utils/thottle.js';
 
 @inject('user')
 @inject('payBox')
@@ -101,7 +101,7 @@ export default class PayBox extends React.Component {
   };
 
   // 点击确认支付
-  handlePayConfirmed = async () => {
+  handlePayConfirmed = throttle(async () => {
     if (this.props.payBox.payWay === PAYWAY_MAP.WALLET) {
       const { options = {} } = this.props.payBox;
       const { amount = 0 } = options;
@@ -137,7 +137,7 @@ export default class PayBox extends React.Component {
       }
       // this.props.payBox.visible = false
     }
-  };
+  }, 500);
 
   // 点击取消
   handleCancel = () => {
@@ -193,9 +193,6 @@ export default class PayBox extends React.Component {
             })}
           </Radio.Group>
         </div>
-        {/* <div className={styles.tips}>
-          <p>asdadsadsd</p>
-        </div> */}
         <div className={styles.btnBox}>
           <Button
             disabled={disabled}
