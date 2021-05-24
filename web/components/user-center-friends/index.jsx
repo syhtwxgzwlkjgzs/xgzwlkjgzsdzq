@@ -55,7 +55,8 @@ class UserCenterFriends extends React.Component {
                   });
                 }}
               >
-                <Icon size={14} name={'PlusOutlined'} />
+                <span>+</span>
+                {/* <Icon size={14} name={'PlusOutlined'} /> */}
                 <span>关注</span>
               </Button>
             )}
@@ -71,7 +72,7 @@ class UserCenterFriends extends React.Component {
                   });
                 }}
               >
-                <Icon size={14} name={'WithdrawOutlined'} />
+                <Icon size={10} name={'WithdrawOutlined'} />
                 <span>互关</span>
               </Button>
             )}
@@ -87,7 +88,7 @@ class UserCenterFriends extends React.Component {
                   });
                 }}
               >
-                <Icon size={14} name={'CheckOutlined'} />
+                <Icon size={10} name={'CheckOutlined'} />
                 <span>已关注</span>
               </Button>
             )}
