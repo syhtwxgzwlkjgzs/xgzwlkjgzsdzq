@@ -18,7 +18,7 @@ export default function DefaultToolbar(props) {
     const emojiDom = document.querySelector(`.${emojiId}`);
 
     if (emojiDom
-      && (e.target.id !== emojiId || emojiId.indexOf(e.targe.className) < 0)) {
+      && (e.target.id !== emojiId || emojiId.indexOf(e.target.className) < 0)) {
       setCurrentAction('');
       onClick({ id: '' });
     }
