@@ -1,15 +1,16 @@
 @import '@common/styles/index.scss';
 
 .setTop {
-  width: 375px;
-  height: 52px;
-  background: var(--color-success4);
+  width: 100%;
+  height: 44px;
+  background: var(--color-success9);
   position: absolute;
   text-align: center;
-  line-height: 52px;
-  color: var(--color-success);
+  line-height: 44px;
+  color: $success-color;
   display: none;
   z-index: var(--zindex-popup);
+  
   .setTopIcon {
     display: inline-block;
     width: 20px;
@@ -17,8 +18,12 @@
     border-radius: $border-radius-circle;
     line-height: 20px;
     color: var(--color-white);
-    background: var(--color-success);
-    margin-right: 8px;
+    background: $success-color;
+    margin-right: $margin-2n;
+
+    .icon {
+      font-size: $font-size-small !important;
+    }
   }
 }
 .inTop {
@@ -32,4 +37,3 @@
   // TODO:
   opacity: 0;
 }
-

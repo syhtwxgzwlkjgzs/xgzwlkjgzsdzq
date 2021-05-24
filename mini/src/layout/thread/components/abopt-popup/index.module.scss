@@ -2,18 +2,17 @@
 
 .container {
   background: var(--color-white);
-  border-radius: 10px 10px 0 0;
+  border-radius: $border-radius-big $border-radius-big 0 0;
 }
 
 .main {
-  padding: 16px 16px 0;
-  border-bottom: var(--border-border);
+  padding: $padding-4n $padding-4n 0;
+  border-bottom: --border-border;
 }
 
 .header {
-  font-family: "PingFang SC";
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: bold;
+  font-size: $font-size-middle;
   line-height: 17.8px;
   text-align: left;
   color: var(--color-text-primary);
@@ -26,20 +25,21 @@
     flex-direction: column;
     border-bottom: var(--border-border);
     .text {
-      font-family: "PingFang SC";
       font-weight: normal;
-      font-size: 14px;
+      font-size: $font-size-primary;
       line-height: 17.8px;
       text-align: left;
-      color: var(--pc-user-info-title);
-      padding: 16px 0 8px 0;
+      color: $text-color-regular;
+      padding: $padding-4n 0 $padding-2n 0;
     }
     .slider {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 8px;
-      
+      padding-bottom: $padding-2n;
+      .perCent {
+        color: $text-color-primary;
+      }
       :global {
         .dzq-slider__progress__button {
           width: 0px;
@@ -61,20 +61,28 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 14px;
+    font-size: $font-size-primary;
     font-weight: normal;
-    padding: 16px 0;
+    padding: $padding-4n 0;
     .text {
-      font-family: 'PingFang SC';
       line-height: 17.8px;
       text-align: left;
-      color: var(--pc-user-info-title);
+      color: $text-color-regular;
     }
     .moneyNum {
-      font-family: 'PingFangSC-Regular';
       line-height: 16.8px;
       text-align: left;
-      color: var(--color-text-primary);
+      color: $text-color-primary;
+    }
+    :global {
+      .dzq-input {
+        width: 90px;
+        height: 30px;
+        .dzq-input__inner {
+          width: 90px;
+          height: 30px;
+        }
+      }
     }
   }
 }
@@ -82,21 +90,21 @@
 .button {
   display: flex;
   justify-content: space-between;
-  padding: 8px 16px 19px;
-  border-bottom: var(--border-border);
+  padding: $padding-2n $padding-4n 19px;
+
   .cancel {
     width: 167px;
     height: 42px;
-    border-radius: 5px;
-    color: var(--pc-user-info-title);
+    line-height: $font-line-height-base;
+    border-radius: $border-radius-small;
+    color: $text-color-primary;
     background: var(--background-color-text2);
-    line-height: 24px;
   }
   .ok {
     width: 167px;
     height: 42px;
-    border-radius: 5px;
+    line-height: $font-line-height-base;
+    border-radius: $border-radius-small;
     background: var(--color-primary);
-    line-height: 24px;
   }
 }
