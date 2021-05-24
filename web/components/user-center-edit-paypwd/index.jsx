@@ -65,15 +65,19 @@ class index extends Component {
 
   // 初次设置密码
   handleSetPwd = (e) => {
+    const security_code = e.target.value.match(/^[0-9]*$/)
+    if (!security_code) return
     this.setState({
-      payPassword: e.target.value,
+      payPassword: security_code[0],
     });
   };
 
   // 点击修改旧密码
   handleChangeOldPwd = (e) => {
+    const security_code = e.target.value.match(/^[0-9]*$/)
+    if (!security_code) return
     this.setState({
-      oldPayPwd: e.target.value,
+      oldPayPwd: security_code[0],
     });
   };
 
