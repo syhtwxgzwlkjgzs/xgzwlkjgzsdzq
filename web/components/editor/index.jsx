@@ -153,7 +153,8 @@ export default function DVditor(props) {
      * 避免blur后vditor.insertValue的位置不正确
      * **/
 
-    if (!/(iPhone|Safari|Mac OS)/i.test(navigator.userAgent)) return;
+    if (/Chrome/i.test(navigator.userAgent)
+      || !/(iPhone|Safari|Mac OS)/i.test(navigator.userAgent)) return;
 
     // todo 事件需要throttle或者debounce??? delay时间控制不好可能导致记录不准确
     const { vditor } = editor;
