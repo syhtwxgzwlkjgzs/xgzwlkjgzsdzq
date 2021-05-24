@@ -130,27 +130,44 @@ class WXBindPhoneH5Page extends React.Component {
           >
             登录并绑定
           </Button>
-          <div className={layout['otherLogin-within__tips']}>
-            注册登录即表示您同意
-            <span onClick={() => {
-              if (platform === 'pc') {
-                window.open('/user/agreement?type=register');
-              }
-              commonLogin.setProtocolInfo('register');
-            }}>《注册协议》</span>
-            <span onClick={() => {
-              if (platform === 'pc') {
-                window.open('/user/agreement?type=privacy');
-              }
-              commonLogin.setProtocolInfo('privacy');
-            }}>《隐私协议》</span>
-          </div>
+          {
+            site?.isAgreementRegister || site?.isAgreementPrivacy
+              ? <>
+                  <div className={layout['otherLogin-within__tips']}>
+                    注册登录即表示您同意
+                    {
+                      site?.isAgreementRegister
+                        ? <span onClick={() => {
+                          if (platform === 'pc') {
+                            window.open('/user/agreement?type=register');
+                          }
+                          commonLogin.setProtocolInfo('register');
+                        }}>《注册协议》</span>
+                        : <></>
+                    }
+                    {
+                      site?.isAgreementPrivacy
+                        ? <span onClick={() => {
+                          if (platform === 'pc') {
+                            window.open('/user/agreement?type=privacy');
+                          }
+                          commonLogin.setProtocolInfo('privacy');
+                        }}>《隐私协议》</span>
+                        : <></>
+                    }
+                  </div>
+                  {
+                    platform === 'h5'
+                      ? <PopProtocol
+                          protocolVisible={commonLogin.protocolVisible}
+                          protocolStatus={commonLogin.protocolStatus}
+                        />
+                      : <></>
+                  }
+                </>
+              : <></>
+          }
         </div>
-        {
-        platform === 'h5'
-          ? <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
-          : <></>
-      }
       </div>
     );
   }

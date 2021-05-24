@@ -6,9 +6,12 @@ import HomeHeader from '@components/home-header';
 import { Button, Toast } from '@discuzq/design';
 import { h5WechatCodeBind } from '@server';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
+import setAccessToken from '@common/utils/set-access-token';
+import { get } from '@common/utils/get';
 import initJSSdk from '@common/utils/initJSSdk.js';
 
 let bindLoading = false;
+const NEED_BIND_OR_REGISTER_USER = -7016;
 
 @inject('site')
 @inject('user')
@@ -66,6 +69,7 @@ class WeixinBindH5Page extends React.Component {
       if (bindLoading) {
         return;
       }
+      const { router } = this.props;
       bindLoading = true;
       const res = await h5WechatCodeBind({
         url: '/apiv3/users/wechat/h5.bind',
@@ -74,6 +78,27 @@ class WeixinBindH5Page extends React.Component {
         ...opts,
       });
       bindLoading = false;
+
+      // 落地页开关打开
+      if (res.code === NEED_BIND_OR_REGISTER_USER) {
+        const { sessionToken, nickname } = res.data;
+        router.push({ pathname: 'wx-select', query: { sessionToken, nickname } });
+        return;
+      }
+      const { loginType }  = this.props.router.query;
+      if (res.code === 0 && loginType === 'h5') {
+        const accessToken = get(res, 'data.accessToken');
+        const uid = get(res, 'data.uid');
+        // 注册成功后，默认登录
+        setAccessToken({
+          accessToken,
+        });
+        this.props.h5QrCode.bindTitle = '已成功绑定，正在跳转到首页';
+        this.props.h5QrCode.isBtn = false;
+        this.props.user.updateUserInfo(uid);
+        window.location.href = '/';
+        return;
+      }
       if (res.code === 0) {
         this.props.h5QrCode.bindTitle = '已成功绑定';
         this.props.h5QrCode.isBtn = false;
