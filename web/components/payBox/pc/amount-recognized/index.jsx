@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
 import styles from './index.module.scss';
-import { Dialog, Button, Checkbox, Icon, Toast } from '@discuzq/design';
+import { Dialog, Button, Checkbox, Icon, Toast, Spin } from '@discuzq/design';
 import CommonAccountContent from '../../components/common-account-content';
 import { inject } from 'mobx-react';
 import throttle from '@common/utils/thottle.js';
 
 @inject('payBox')
 export default class index extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      isLoading: false
+    }
+  }
+
   onClose = () => {
     // FIXME: 延时回调的修复
     this.props.payBox.visible = false;
@@ -16,8 +24,15 @@ export default class index extends Component {
   };
 
   goToThePayConfirmPage = throttle(async () => {
+    if (this.state.isLoading) return
     try {
+      this.setState({
+        isLoading: true
+      })
       await this.props.payBox.createOrder();
+      this.setState({
+        isLoading: false
+      })
     } catch (error) {
       console.error(error);
       Toast.error({
@@ -26,8 +41,11 @@ export default class index extends Component {
         duration: 1000,
       });
       this.onClose();
+      this.setState({
+        isLoading: false
+      })
     }
-  }, 300);
+  }, 500);
 
   // 转换金额小数
   transMoneyToFixed = (num) => {
@@ -35,11 +53,11 @@ export default class index extends Component {
   };
 
   render() {
+    const { isLoading } = this.state
     const { options = {} } = this.props.payBox;
     const { amount } = options;
     return (
       <div>
-        {/* {this.props.payBox.visible && ( */}
         <>
           <div className={styles.amountWrapper}>
             <CommonAccountContent currentPaymentData={options} />
@@ -48,8 +66,8 @@ export default class index extends Component {
               合计：<span className={styles.amountMoney}>￥ {this.transMoneyToFixed(amount)} </span>
             </div>
             <div className={styles.amountSubmit}>
-              <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.asBtn} full>
-                确认支付
+              <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.asBtn} full disabled={isLoading}>
+                {isLoading ? <Spin type="spinner">订单生成中...</Spin> : '确认支付'}
               </Button>
             </div>
             {/* 关闭按钮 */}
