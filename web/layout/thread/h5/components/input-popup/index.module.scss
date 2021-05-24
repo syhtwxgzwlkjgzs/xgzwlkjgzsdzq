@@ -36,8 +36,23 @@
   margin-top: rem($margin-4n);
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
+}
+
+.operates {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  .operate {
+    margin-right: rem(24);
+    color: $text-color-regular;
+
+    &.actived {
+      color: $primary-color;
+    }
+  }
 }
 
 .input {
