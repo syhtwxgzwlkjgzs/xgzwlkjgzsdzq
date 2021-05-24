@@ -35,9 +35,9 @@ export default function UserInfo(props) {
   const isPc = props.platform === 'pc';
 
   return (
-    <View className={styles.contianer}>
+    <View className={classNames(styles.contianer, !props.hideInfoPopip && styles.cursor)}>
       <Avatar
-        isShowUserInfo={props.platform === 'pc'}
+        isShowUserInfo={!props.hideInfoPopip && props.platform === 'pc'}
         userId={props.userId}
         className={styles.avatar}
         circle={true}
@@ -61,8 +61,8 @@ export default function UserInfo(props) {
             </View>
           )}
           {props.view && (
-            <View className={styles.View}>
-              <Icon name="EyeOutlined" className={styles.ViewIcon}></Icon>
+            <View className={styles.view}>
+              <Icon name="EyeOutlined" className={styles.viewIcon}></Icon>
               <Text>{props.view}</Text>
             </View>
           )}

@@ -9,7 +9,7 @@ import styles from './index.module.scss';
  * @prop {string}    imgs 头像数据数组
  */
 
-const Index = ({ imgs = [], tipData = {}, wholeNum = 1 }) => {
+ const Index = ({ imgs = [], tipData = {}, wholeNum = 1,showMore=false }) => {
   const [visible, setVisible] = useState(false);
 
   const onClick = (e) => {
@@ -33,11 +33,15 @@ const Index = ({ imgs = [], tipData = {}, wholeNum = 1 }) => {
     }, [])
   }, [imgs]);
 
+  const sty = useMemo(() => {
+    return { width: renderUsers.length === 1 ? '0.24rem' : '0.44rem' }
+  }, [renderUsers])
+
   return (
     <>
-        <View className={styles.container} onClick={onClick} style={{ width: renderUsers.length === 1 ? '24px' : '44px' }}>
+        <View className={styles.container} onClick={onClick} style={sty}>
             {
-                wholeNum !== 0 && renderUsers.filter((_, index) => index < 2).map((item, index) => (
+                wholeNum !== 0 && renderUsers?.filter((_, index) => index < 2).map((item, index) => (
                   <View key={index} className={index === 0 ? styles.img : styles.imgAfter}>
                     <Avatar
                       image={item.avatar}
@@ -46,6 +50,12 @@ const Index = ({ imgs = [], tipData = {}, wholeNum = 1 }) => {
                     />
                   </View>
                 ))
+            }
+            {
+              showMore && imgs?.length > 2 &&
+              <View className={styles.moreIcon} size={20}>
+                <Icon name='MoreBOutlined' className={styles.icon} size={12}></Icon>
+              </View>
             }
         </View>
 
