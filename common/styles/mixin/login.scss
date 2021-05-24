@@ -69,13 +69,16 @@
   font-size: rem($font-size-middle);
   padding: rem($padding-10) 0;
   box-sizing: border-box;
-  color: var(--color-white) !important;
-  background-color: var(--color-primary) !important;
-  border-color: var(--color-primary) !important;
+  color: var(--color-white);
+  background: var(--color-primary);
+  border: var(--color-primary);
   &:active{
-    color: var(--color-white) !important;
-    background: var(--color-primary6) !important;
-    border-color: var(--color-primary6) !important;
+    background: var(--color-primary6);
+    border-color: var(--color-primary6);
+  }
+  &:global(.is-disabled){
+    background-color: var(--color-disabled);
+    border-color: var(--color-disabled);
   }
 }
 @mixin functionalRegion {
