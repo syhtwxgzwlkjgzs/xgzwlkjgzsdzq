@@ -16,7 +16,6 @@ const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = tru
   const [value, setValue] = React.useState(defaultValue);
   const [isShow, setIsShow] = React.useState(false);
   const inputChange = (e) => {
-    console.log('e', e.target.value)
     setValue(e.target.value);
     if (e.target.value.length > 0) {
       setIsShow(true)
@@ -26,6 +25,9 @@ const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = tru
     setValue('');
     setIsShow(false)
   }
+  const inputClick = () => {
+    onSearch(value)
+  }
   return (
     <View className={`${styles.container} ${!isShowBottom && styles.hiddenBottom}`}>
       <View className={styles.inputWrapper}>
@@ -33,7 +35,7 @@ const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = tru
         <Input
           value={value}
           placeholder='请输入想要搜索的内容...'
-          onEnter={e => onSearch(e.target.value)}
+          onEnter={inputClick}
           onChange={e => inputChange(e)}
           className={styles.input}
         />
@@ -45,7 +47,7 @@ const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = tru
       </View>
       {
         isShowCancel && (
-          <View className={styles.cancel} onClick={onSearch}>
+          <View className={styles.cancel} onClick={inputClick}>
             确认
           </View>
         )

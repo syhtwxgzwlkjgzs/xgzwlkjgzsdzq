@@ -34,9 +34,9 @@ const List = forwardRef(({
     }
   }, [noMore]);
 
-  useEffect(() => {
-    onTouchMove();
-  }, []);
+  // useEffect(() => {
+  //   onTouchMove();
+  // }, []);
 
   useImperativeHandle(
     ref,
@@ -64,7 +64,7 @@ const List = forwardRef(({
   };
 
   const onTouchMove = (e) => {
-    if (e && !isLoading.current) {
+    if (e && !isLoading.current && onRefresh) {
       setIsLoading(true);
       if (typeof(onRefresh) === 'function') {
         const promise = onRefresh()

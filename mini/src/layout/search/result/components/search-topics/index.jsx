@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { View, Text } from '@tarojs/components';
 import { Topic } from '@components/search-result-item';
 
 import styles from './index.module.scss';
@@ -10,11 +10,11 @@ import styles from './index.module.scss';
  * @prop {function} onItemClick 话题点击事件
  */
 const SearchTopics = ({ data = [], onItemClick }) => (
-  <div className={styles.list}>
+  <View className={styles.list}>
     {data && data.map((item, index) => (
       <Topic key={index} data={item} onClick={onItemClick} />
     ))}
-  </div>
+  </View>
 );
 
 export default React.memo(SearchTopics);
