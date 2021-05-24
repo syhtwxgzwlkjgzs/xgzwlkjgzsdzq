@@ -4,6 +4,7 @@ import { inject } from 'mobx-react';
 
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import HOCLoginMode from '@middleware/HOCLoginMode';
+import HOCWithNoLogin from '@middleware/HOCWithNoLogin';
 
 @inject('site')
 class WXSelect extends React.Component {
@@ -15,4 +16,4 @@ class WXSelect extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(HOCLoginMode('weixin')(WXSelect));
+export default HOCFetchSiteData(HOCWithNoLogin(HOCLoginMode('weixin')(WXSelect)));

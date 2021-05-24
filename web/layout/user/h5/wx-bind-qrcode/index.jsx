@@ -8,6 +8,7 @@ import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import { get } from '@common/utils/get';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import PcBodyWrap from '../components/pc-body-wrap';
 
 @inject('site')
 @inject('user')
@@ -23,7 +24,7 @@ class WeixinBindQrCodePage extends React.Component {
         params: {
           sessionToken,
           type: wechatEnv === 'miniProgram' ? 'pc_bind_mini' : qrCodeType,
-          redirectUri: `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/${wechatEnv === 'miniProgram' ? 'pages/' : ''}user/wx-auth${wechatEnv === 'miniProgram' ? '/index' : ''}?loginType=${loginType}&action=wx-bind&nickname=${nickname}`)}`,
+          redirectUri: `${encodeURIComponent(`${window.location.origin}/${wechatEnv === 'miniProgram' ? 'pages/' : ''}user/wx-auth${wechatEnv === 'miniProgram' ? '/index' : ''}?loginType=${loginType}&action=wx-bind&nickname=${nickname}`)}`,
         },
       });
       this.queryLoginState(wechatEnv === 'miniProgram' ? 'pc_bind_mini' : qrCodeType);
@@ -72,7 +73,7 @@ class WeixinBindQrCodePage extends React.Component {
     const { platform } = site;
     const { nickname } = this.props.router.query;
     return (
-      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
+      <PcBodyWrap>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
@@ -92,7 +93,7 @@ class WeixinBindQrCodePage extends React.Component {
           {/* 二维码 end */}
         </div>
       </div>
-      </div>
+      </PcBodyWrap>
     );
   }
 }

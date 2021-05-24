@@ -11,31 +11,31 @@ import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 @inject('search')
 @observer
 class Index extends React.Component {
-  static async getInitialProps(ctx) {
-    const search = ctx?.query?.keyword || '';
-    const topicFilter = {
-      hot: 0,
-      content: search,
-    };
-    const result = await readTopicsList({ params: { filter: topicFilter } });
-    const users = await readUsersList({ params: { filter: { username: search }, perPage: 6 } });
-    return {
-      serverSearch: {
-        topics: result?.data,
-        users: users?.data,
-      },
-    };
-  }
+  // static async getInitialProps(ctx) {
+  //   const search = ctx?.query?.keyword || '';
+  //   const topicFilter = {
+  //     hot: 0,
+  //     content: search,
+  //   };
+  //   const result = await readTopicsList({ params: { filter: topicFilter } });
+  //   const users = await readUsersList({ params: { filter: { username: search }, perPage: 6 } });
+  //   return {
+  //     serverSearch: {
+  //       topics: result?.data,
+  //       users: users?.data,
+  //     },
+  //   };
+  // }
 
   page = 1;
-  perPage = 10;
+  perPage = 20;
 
   constructor(props) {
     super(props);
     const { serverSearch, search } = this.props;
     // 初始化数据到store中
-    serverSearch && serverSearch.topics && search.setTopics(serverSearch.topics);
-    serverSearch && serverSearch.users && search.setUsers(serverSearch.users);
+    search.setTopics(null);
+    search.setUsers(null);
   }
 
   async componentDidMount() {
@@ -45,16 +45,16 @@ class Index extends React.Component {
     const hasTopics = !!search.topics;
     const hasUsers = !!search.users;
 
-    if (!hasTopics) {
-      this.toastInstance = Toast.loading({
-        content: '加载中...',
-        duration: 0,
-      });
+    // if (!hasTopics) {
+      // this.toastInstance = Toast.loading({
+      //   content: '加载中...',
+      //   duration: 0,
+      // });
 
       this.page = 1;
-      await search.getTopicsList({ search: keyword });
+      await search.getTopicsList({ search: keyword, perPage: this.perPage });
       this.toastInstance?.destroy();
-    }
+    // }
     if (!hasUsers) {
       search.getUsersList({ search: keyword, page: 1});
     }

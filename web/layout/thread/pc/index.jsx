@@ -4,7 +4,7 @@ import { withRouter } from 'next/router';
 
 import AuthorInfo from './components/author-info/index';
 import CommentInput from './components/comment-input/index';
-import LoadingTips from './components/loading-tips';
+import LoadingTips from '@components/thread-detail-pc/loading-tips';
 import { Icon, Toast, Popup } from '@discuzq/design';
 import UserInfo from '@components/thread/user-info';
 import Header from '@components/header';
@@ -20,7 +20,7 @@ import DeletePopup from '@components/thread-detail-pc/delete-popup';
 import throttle from '@common/utils/thottle';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import Copyright from '@components/copyright';
-import rewardPay from '@common/pay-bussiness/reward-pay';
+import threadPay from '@common/pay-bussiness/thread-pay';
 import Recommend from '@components/recommend';
 import QcCode from '@components/qcCode';
 
@@ -33,6 +33,8 @@ import goToLoginPage from '@common/utils/go-to-login-page';
 @inject('thread')
 @inject('comment')
 @inject('index')
+@inject('topic')
+@inject('search')
 @observer
 class ThreadPCPage extends React.Component {
   constructor(props) {
@@ -49,6 +51,9 @@ class ThreadPCPage extends React.Component {
       inputValue: '', // 评论内容
     };
 
+    this.likedLoading = false;
+    this.collectLoading = false;
+
     this.perPage = 5;
     this.page = 1; // 页码
     this.commentDataSort = true;
@@ -64,7 +69,7 @@ class ThreadPCPage extends React.Component {
 
     // 举报内容选项
     this.reportContent = ['广告垃圾', '违规内容', '恶意灌水', '重复发帖'];
-    this.inputText = '其他理由...';
+    this.inputText = '请输入其他理由';
   }
 
   // 滚动事件
@@ -80,9 +85,9 @@ class ThreadPCPage extends React.Component {
     }
   }
 
-  async onContentClick() {
-    const thread = this.props.thread.threadData;
-    // const res = await PayThread(thread);
+  componentWillUnmount() {
+    // 清空数据
+    this.props?.thread && this.props.thread.reset();
   }
 
   // 加载评论列表
@@ -233,6 +238,9 @@ class ThreadPCPage extends React.Component {
 
     if (success) {
       this.setTopState(params.isStick);
+      // 更新首页置顶列表
+      this.props?.index?.refreshHomeData && this.props.index.refreshHomeData();
+
       return;
     }
 
@@ -249,6 +257,9 @@ class ThreadPCPage extends React.Component {
       isEssence: !this.props.thread?.threadData?.displayTag?.isEssence,
     };
     const { success, msg } = await this.props.thread.updateEssence(params);
+
+    // 更新列表store数据
+    this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
 
     if (success) {
       Toast.success({
@@ -267,7 +278,7 @@ class ThreadPCPage extends React.Component {
     this.setState({ showDeletePopup: false });
     const id = this.props.thread?.threadData?.id;
 
-    const { success, msg } = await this.props.thread.delete(id, this.props.index);
+    const { success, msg } = await this.props.thread.delete(id, this.props.index, this.props.search, this.props.topic);
 
     if (success) {
       Toast.success({
@@ -323,6 +334,20 @@ class ThreadPCPage extends React.Component {
       Toast.success({
         content: '评论成功',
       });
+
+      // 更新帖子中的评论数据
+      this.props.thread.updatePostCount(this.props.thread.totalCount);
+      // 更新列表store数据
+      this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
+
+      // 是否红包帖
+      const isRedPack = this.props.thread?.threadData?.displayTag?.isRedPack;
+      // TODO:可以进一步细化判断条件，是否还有红包
+      if (isRedPack) {
+        // 评论获得红包帖，更新帖子数据
+        this.props.thread.fetchThreadDetail(id);
+      }
+
       this.setState({
         showCommentInput: false,
         inputValue: '',
@@ -392,13 +417,25 @@ class ThreadPCPage extends React.Component {
       return;
     }
 
+    if (this.likedLoading) return;
+
+    this.likedLoading = true;
+
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
       pid: this.props.thread?.threadData?.postId,
       isLiked: !this.props.thread?.threadData?.isLike,
     };
-    const { success, msg } = await this.props.thread.updateLiked(params, this.props.index, this.props.user);
+    const { success, msg } = await this.props.thread.updateLiked(
+      params,
+      this.props.index,
+      this.props.user,
+      this.props.search,
+      this.props.topic,
+    );
+
+    this.likedLoading = false;
 
     if (!success) {
       Toast.error({
@@ -433,12 +470,18 @@ class ThreadPCPage extends React.Component {
       return;
     }
 
+    if (this.collectLoading) return;
+
+    this.collectLoading = true;
+
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
       isFavorite: !this.props.thread?.isFavorite,
     };
     const { success, msg } = await this.props.thread.updateFavorite(params);
+
+    this.collectLoading = false;
 
     if (!success) {
       Toast.error({
@@ -462,6 +505,25 @@ class ThreadPCPage extends React.Component {
     }
   }
 
+  // 付费支付
+  async onPayClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
+    const thread = this.props.thread.threadData;
+    const { success } = await threadPay(thread, this.props.user?.userInfo);
+
+    // 支付成功重新请求帖子数据
+    if (success && this.props.thread?.threadData?.threadId) {
+      await this.props.thread.fetchThreadDetail(this.props.thread?.threadData?.threadId);
+      // 更新首页store数据
+      this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
+    }
+  }
+
   // 点击打赏
   onRewardClick() {
     if (!this.props.user.isLogin()) {
@@ -481,13 +543,21 @@ class ThreadPCPage extends React.Component {
         amount: Number(value),
         threadId: this.props.thread.threadData.threadId,
         payeeId: this.props.thread.threadData.userId,
+        title: this.props.thread?.threadData?.title || '主题打赏',
       };
 
-      const { success } = await rewardPay(params);
+      const { success, msg } = await this.props.thread.rewardPay(
+        params,
+        this.props.user,
+        this.props.index,
+        this.props.search,
+        this.props.topic,
+      );
 
-      // 支付成功重新请求帖子数据
-      if (success && this.props.thread?.threadData?.threadId) {
-        this.props.thread.fetchThreadDetail(this.props.thread?.threadData?.threadId);
+      if (!success) {
+        Toast.error({
+          content: msg,
+        });
       }
     }
   }
@@ -525,7 +595,7 @@ class ThreadPCPage extends React.Component {
 
   render() {
     const { thread: threadStore } = this.props;
-    const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
+    const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError, isAuthorInfoError } = threadStore;
     // 是否作者自己
     const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === threadStore?.threadData?.userId;
 
@@ -551,9 +621,9 @@ class ThreadPCPage extends React.Component {
                 onLikeClick={() => this.onLikeClick()}
                 onCollectionClick={() => this.onCollectionClick()}
                 onShareClick={() => this.onShareClick()}
-                onContentClick={() => this.onContentClick()}
                 onRewardClick={() => this.onRewardClick()}
                 onTagClick={() => this.onTagClick()}
+                onPayClick={() => this.onPayClick()}
               ></RenderThreadContent>
             ) : (
               <LoadingTips type="init"></LoadingTips>
@@ -573,7 +643,7 @@ class ThreadPCPage extends React.Component {
                   {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
                 </Fragment>
               ) : (
-                <LoadingTips type="init"></LoadingTips>
+                <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
               )}
             </div>
             {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
@@ -589,7 +659,7 @@ class ThreadPCPage extends React.Component {
                   isShowBtn={!isSelf}
                 ></AuthorInfo>
               ) : (
-                <LoadingTips type="init"></LoadingTips>
+                <LoadingTips type="init" isError={isAuthorInfoError}></LoadingTips>
               )}
             </div>
             <div className={layout.recommend}>

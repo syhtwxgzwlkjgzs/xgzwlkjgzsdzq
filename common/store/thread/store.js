@@ -10,6 +10,9 @@ class ThreadStore {
   @observable authorInfo = null; // 作者信息
   @observable isPositionToComment = false; // 是否定位到评论位置
 
+  @observable isCommentListError = false;
+  @observable isAuthorInfoError = false;
+
   // 是否帖子数据准备好
   @computed get isReady() {
     return !!this.threadData?.id;

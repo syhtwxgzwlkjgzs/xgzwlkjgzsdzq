@@ -6,10 +6,10 @@ import layout from './layout.module.scss';
 import footer from './footer.module.scss';
 
 import NoMore from './components/no-more';
-import LoadingTips from './components/loading-tips';
+import LoadingTips from '@components/thread-detail-pc/loading-tips';
 
 import styleVar from '@common/styles/theme/default.scss.json';
-import { Icon, Input, Badge, Toast } from '@discuzq/design';
+import { Icon, Input, Toast } from '@discuzq/design';
 import Header from '@components/header';
 import goToLoginPage from '@common/utils/go-to-login-page';
 
@@ -19,10 +19,9 @@ import DeletePopup from '@components/thread-detail-pc/delete-popup';
 import MorePopup from './components/more-popup';
 import InputPopup from './components/input-popup';
 import throttle from '@common/utils/thottle';
-import xss from '@common/utils/xss';
 
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
-import rewardPay from '@common/pay-bussiness/reward-pay';
+import threadPay from '@common/pay-bussiness/thread-pay';
 import RewardPopup from './components/reward-popup';
 
 import RenderThreadContent from './content';
@@ -34,6 +33,8 @@ import classNames from 'classnames';
 @inject('thread')
 @inject('comment')
 @inject('index')
+@inject('topic')
+@inject('search')
 @observer
 class ThreadH5Page extends React.Component {
   constructor(props) {
@@ -298,8 +299,8 @@ class ThreadH5Page extends React.Component {
 
     if (success) {
       this.setTopState(params.isStick);
-      // TODO:更新首页置顶列表
-      this.props.index.screenData({});
+      // 更新首页置顶列表
+      this.props?.index?.refreshHomeData && this.props.index.refreshHomeData();
       return;
     }
 
@@ -316,6 +317,9 @@ class ThreadH5Page extends React.Component {
       isEssence: !this.props.thread?.threadData?.displayTag?.isEssence,
     };
     const { success, msg } = await this.props.thread.updateEssence(params);
+
+    // 更新列表store数据
+    this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
 
     if (success) {
       Toast.success({
@@ -334,7 +338,7 @@ class ThreadH5Page extends React.Component {
     this.setState({ showDeletePopup: false });
     const id = this.props.thread?.threadData?.id;
 
-    const { success, msg } = await this.props.thread.delete(id, this.props.index);
+    const { success, msg } = await this.props.thread.delete(id, this.props.index, this.props.search, this.props.topic);
 
     if (success) {
       Toast.success({
@@ -379,6 +383,19 @@ class ThreadH5Page extends React.Component {
     };
     const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
+      // 更新帖子中的评论数据
+      this.props.thread.updatePostCount(this.props.thread.totalCount);
+      // 更新列表store数据
+      this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
+
+      // 是否红包帖
+      const isRedPack = this.props.thread?.threadData?.displayTag?.isRedPack;
+      // TODO:可以进一步细化判断条件，是否还有红包
+      if (isRedPack) {
+        // 评论获得红包帖，更新帖子数据
+        this.props.thread.fetchThreadDetail(id);
+      }
+
       Toast.success({
         content: '评论成功',
       });
@@ -449,7 +466,13 @@ class ThreadH5Page extends React.Component {
       pid: this.props.thread?.threadData?.postId,
       isLiked: !this.props.thread?.threadData?.isLike,
     };
-    const { success, msg } = await this.props.thread.updateLiked(params, this.props.index, this.props.user);
+    const { success, msg } = await this.props.thread.updateLiked(
+      params,
+      this.props.index,
+      this.props.user,
+      this.props.search,
+      this.props.topic,
+    );
 
     if (!success) {
       Toast.error({
@@ -476,6 +499,25 @@ class ThreadH5Page extends React.Component {
     // }
   }
 
+  // 付费支付
+  async onPayClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
+    const thread = this.props.thread.threadData;
+    const { success } = await threadPay(thread, this.props.user?.userInfo);
+
+    // 支付成功重新请求帖子数据
+    if (success && this.props.thread?.threadData?.threadId) {
+      await this.props.thread.fetchThreadDetail(this.props.thread?.threadData?.threadId);
+      // 更新列表store数据
+      this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
+    }
+  }
+
   // 点击打赏
   onRewardClick() {
     if (!this.props.user.isLogin()) {
@@ -495,13 +537,21 @@ class ThreadH5Page extends React.Component {
         amount: Number(value),
         threadId: this.props.thread.threadData.threadId,
         payeeId: this.props.thread.threadData.userId,
+        title: this.props.thread?.threadData?.title || '主题打赏',
       };
 
-      const { success } = await rewardPay(params);
+      const { success, msg } = await this.props.thread.rewardPay(
+        params,
+        this.props.user,
+        this.props.index,
+        this.props.search,
+        this.props.topic,
+      );
 
-      // 支付成功重新请求帖子数据
-      if (success && this.props.thread?.threadData?.threadId) {
-        this.props.thread.fetchThreadDetail(this.props.thread?.threadData?.threadId);
+      if (!success) {
+        Toast.error({
+          content: msg,
+        });
       }
     }
   }
@@ -518,7 +568,7 @@ class ThreadH5Page extends React.Component {
 
   render() {
     const { thread: threadStore } = this.props;
-    const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
+    const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError } = threadStore;
     const fun = {
       moreClick: this.onMoreClick,
     };
@@ -570,9 +620,9 @@ class ThreadH5Page extends React.Component {
               onCollectionClick={() => this.onCollectionClick()}
               onShareClick={() => this.onShareClick()}
               onReportClick={() => this.onReportClick()}
-              onContentClick={() => this.onContentClick()}
               onRewardClick={() => this.onRewardClick()}
               onTagClick={() => this.onTagClick()}
+              onPayClick={() => this.onPayClick()}
             ></RenderThreadContent>
           ) : (
             <LoadingTips type="init"></LoadingTips>
@@ -589,10 +639,10 @@ class ThreadH5Page extends React.Component {
                     onEditClick={(comment) => this.onEditClick(comment)}
                   ></RenderCommentList>
                   {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
-                  {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
+                  {isNoMore && <NoMore className={layout.noMore} empty={totalCount === 0}></NoMore>}
                 </Fragment>
               ) : (
-                <LoadingTips type="init"></LoadingTips>
+                <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
               )}
             </div>
           )}
@@ -607,54 +657,12 @@ class ThreadH5Page extends React.Component {
                 <Input className={footer.input} placeholder="写评论" disabled={true} prefixIcon="EditOutlined"></Input>
               </div>
 
-              {/* 评论弹层 */}
-              <InputPopup
-                visible={this.state.showCommentInput}
-                onClose={() => this.onClose()}
-                initValue={this.state.inputValue}
-                onSubmit={(value) => this.onPublishClick(value)}
-              ></InputPopup>
-
-              {/* 更多弹层 */}
-              <MorePopup
-                permissions={morePermissions}
-                statuses={moreStatuses}
-                visible={this.state.showMorePopup}
-                onClose={() => this.setState({ showMorePopup: false })}
-                onSubmit={() => this.setState({ showMorePopup: false })}
-                onOperClick={(type) => this.onOperClick(type)}
-              ></MorePopup>
-
-              {/* 删除弹层 */}
-              <DeletePopup
-                visible={this.state.showDeletePopup}
-                onClose={() => this.setState({ showDeletePopup: false })}
-                onBtnClick={(type) => this.onBtnClick(type)}
-              ></DeletePopup>
-              {/* 举报弹层 */}
-
-              {/* 举报弹窗 */}
-              <ReportPopup
-                reportContent={this.reportContent}
-                inputText={this.inputText}
-                visible={this.state.showReportPopup}
-                onCancel={() => this.setState({ showReportPopup: false })}
-                onOkClick={(data) => this.onReportOk(data)}
-              ></ReportPopup>
-
-              {/* 打赏弹窗 */}
-              <RewardPopup
-                visible={this.state.showRewardPopup}
-                onCancel={() => this.setState({ showRewardPopup: false })}
-                onOkClick={(value) => this.onRewardSubmit(value)}
-              ></RewardPopup>
-
               {/* 操作区 */}
               <div className={footer.operate}>
                 <div className={footer.icon} onClick={() => this.onMessageClick()}>
                   {totalCount > 0 ? (
                     <div className={classNames(footer.badge, totalCount < 10 && footer.isCricle)}>
-                      {totalCount > 99 ? '99+' : `${totalCount || '0'}`}
+                      <p className={footer.text}>{totalCount > 99 ? '99+' : `${totalCount || '0'}`}</p>
                     </div>
                   ) : (
                     ''
@@ -677,6 +685,52 @@ class ThreadH5Page extends React.Component {
               </div>
             </div>
           </div>
+        )}
+
+        {isReady && (
+          <Fragment>
+            {/* 评论弹层 */}
+            <InputPopup
+              visible={this.state.showCommentInput}
+              onClose={() => this.onClose()}
+              initValue={this.state.inputValue}
+              onSubmit={(value) => this.onPublishClick(value)}
+            ></InputPopup>
+
+            {/* 更多弹层 */}
+            <MorePopup
+              permissions={morePermissions}
+              statuses={moreStatuses}
+              visible={this.state.showMorePopup}
+              onClose={() => this.setState({ showMorePopup: false })}
+              onSubmit={() => this.setState({ showMorePopup: false })}
+              onOperClick={(type) => this.onOperClick(type)}
+            ></MorePopup>
+
+            {/* 删除弹层 */}
+            <DeletePopup
+              visible={this.state.showDeletePopup}
+              onClose={() => this.setState({ showDeletePopup: false })}
+              onBtnClick={(type) => this.onBtnClick(type)}
+            ></DeletePopup>
+            {/* 举报弹层 */}
+
+            {/* 举报弹窗 */}
+            <ReportPopup
+              reportContent={this.reportContent}
+              inputText={this.inputText}
+              visible={this.state.showReportPopup}
+              onCancel={() => this.setState({ showReportPopup: false })}
+              onOkClick={(data) => this.onReportOk(data)}
+            ></ReportPopup>
+
+            {/* 打赏弹窗 */}
+            <RewardPopup
+              visible={this.state.showRewardPopup}
+              onCancel={() => this.setState({ showRewardPopup: false })}
+              onOkClick={(value) => this.onRewardSubmit(value)}
+            ></RewardPopup>
+          </Fragment>
         )}
       </div>
     );

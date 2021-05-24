@@ -29,6 +29,7 @@ class PhoneInputPC extends React.Component {
             clearable={true}
             placeholder="请输入您的手机号码"
             onChange={this.setPhoneNum}
+            maxLength={11}
           />
         </div>
         {/* 手机号输入 end */}

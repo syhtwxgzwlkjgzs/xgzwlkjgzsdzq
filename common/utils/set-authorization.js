@@ -25,7 +25,7 @@ export default function setAuthorization(config) {
     }
   }
 
-  if (token) {
+  if (token && !config?._noSetAuthorization) {
     config.headers = config.headers ? { ...config.headers, authorization: `Bearer ${token}` } : { authorization: `Bearer ${token}` };
   }
   return config;

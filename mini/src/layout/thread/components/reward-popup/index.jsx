@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Popup, Button, Input } from '@discuzq/design';
+import { Popup, Button, Input, Viewider } from '@discuzq/design';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
+import className from 'classnames';
 
 const InputPop = (props) => {
   const { visible, onOkClick, onCancel } = props;
@@ -34,27 +35,34 @@ const InputPop = (props) => {
   return (
     <Popup position="bottom" visible={visible} onClose={onCancel}>
       <View className={styles.container}>
-        <View className={styles.header}>打赏</View>
+        <View className={styles.header}>支付作者继续创作</View>
 
-        <View className={styles.percentage}>
-          <Text className={styles.text}>打赏金额</Text>
+        <View className={styles.rewardInput}>
+          <Text className={styles.prepend}>支付金额</Text>
           <Input
-            prefixIcon="RenminbiOutlined"
             mode="number"
-            placeholder="请输入打赏金额"
+            placeholder="金额"
             className={styles.input}
             value={value}
             onChange={(e) => onInputChange(e.target.value)}
           />
+          <Text className={styles.append}>元</Text>
         </View>
 
         <View className={styles.rewardList}>
           {rewardList.map((item) => (
-            <Button onClick={() => onRewardClick(item)} className={styles.reward} key={item}>
+            <View
+              onClick={() => onRewardClick(item)}
+              className={className(styles.reward, Number(value) === item && styles.actived)}
+              key={item}
+            >
               ￥{item}
-            </Button>
+            </View>
           ))}
         </View>
+
+        {/* 使用会报错 */}
+        {/* <Viewider className={styles.Viewider}></Viewider> */}
 
         <View className={styles.button}>
           <Button onClick={onCancel} className={styles.cancel} type="default">

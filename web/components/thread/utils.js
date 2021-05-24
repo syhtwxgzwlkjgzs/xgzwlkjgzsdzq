@@ -21,27 +21,43 @@ export const filterClickClassName = (dom) => {
   return true;
 };
 
+export const debounce = (func, wait) => {
+  let timeout;
+  return () => {
+    const context = this;
+    const args = [...arguments];
+    if (timeout) clearTimeout(timeout);
+    const callNow = !timeout;
+    timeout = setTimeout(() => {
+      timeout = null;
+    }, wait);
+    if (callNow) func.apply(context, args);
+  };
+}
+
 // 处理附件的数据
 export const handleAttachmentData = (data) => {
   const newData = { text: data?.text || '' };
   const values = Object.values(data?.indexes || {});
   values.forEach((item) => {
     const { tomId } = item;
-    if (tomId === '101') { // 图片
+    // 统一做一次字符串转换
+    const conversionTomID = tomId ? '' + tomId : 'NULL';
+    if (conversionTomID === '101') { // 图片
       newData.imageData = item.body;
-    } else if (tomId === '102') { // 音频
+    } else if (conversionTomID === '102') { // 音频
       newData.audioData = item.body;
-    } else if (tomId === '103') { // 视频
+    } else if (conversionTomID === '103') { // 视频
       newData.videoData = item.body;
-    } else if (tomId === '104') { // 商品
+    } else if (conversionTomID === '104') { // 商品
       newData.goodsData = item.body;
-    } else if (tomId === '105') { // 问答
+    } else if (conversionTomID === '105') { // 问答
       newData.qaData = item.body;
-    } else if (tomId === '106') { // 红包
+    } else if (conversionTomID === '106') { // 红包
       newData.redPacketData = item.body;
-    } else if (tomId === '107') { // 悬赏
+    } else if (conversionTomID === '107') { // 悬赏
       newData.rewardData = item.body;
-    } else if (tomId === '108') { // 附件
+    } else if (conversionTomID === '108') { // 附件
       newData.fileData = item.body;
     }
   });

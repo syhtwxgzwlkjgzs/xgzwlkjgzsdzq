@@ -7,6 +7,7 @@ import layout from './index.module.scss';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import clearLoginStatus from '@common/utils/clear-login-status';
+import PcBodyWrap from '../components/pc-body-wrap';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 
 @inject('site')
@@ -34,11 +35,12 @@ class BindNicknameH5Page extends React.Component {
         const { router } = this.props;
         const { needToCompleteExtraInfo: isNeedToCompleteExtraInfo } = router.query;
 
+        // TODO: 页面还没做好，暂时不做扩展信息的判断跳转
         const needToCompleteExtraInfo = this.props.commonLogin.needToCompleteExtraInfo || isNeedToCompleteExtraInfo;
-        if (needToCompleteExtraInfo) {
-          this.props.router.push('/user/supplementary');
-          return;
-        }
+        // if (needToCompleteExtraInfo) {
+        //   this.props.router.push('/user/supplementary');
+        //   return;
+        // }
         // TODO: 这里的路由堆栈需要再梳理规则
         window.location.href = '/';
       }, 1000);
@@ -61,7 +63,7 @@ class BindNicknameH5Page extends React.Component {
     const { site, nicknameBind } = this.props;
     const { platform } = site;
     return (
-      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
+      <PcBodyWrap>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
@@ -94,7 +96,7 @@ class BindNicknameH5Page extends React.Component {
           </div>
         </div>
       </div>
-      </div>
+      </PcBodyWrap>
     );
   }
 }

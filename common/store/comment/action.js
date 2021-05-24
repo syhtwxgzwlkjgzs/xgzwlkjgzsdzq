@@ -1,13 +1,6 @@
 import { action } from 'mobx';
 import CommentStore from './store';
-import {
-  readCommentDetail,
-  updateComment,
-  createPosts,
-  updatePosts,
-  readUser,
-  deleteFollow,
-} from '@server';
+import { readCommentDetail, updateComment, createPosts, updatePosts, readUser, deleteFollow } from '@server';
 import xss from '@common/utils/xss';
 
 class CommentAction extends CommentStore {
@@ -15,11 +8,32 @@ class CommentAction extends CommentStore {
     super(props);
   }
 
+  /**
+   * 获取评论详情
+   * @param {number} id 评论id
+   * @returns 详细信息
+   */
+  @action
+  async fetchCommentDetail(id) {
+    const res = await readCommentDetail({ params: { pid: Number(id) } });
+    if (res?.code === 0) {
+      this.setCommentDetail(res.data);
+    } else {
+      this.reset();
+      this.isServerError = true;
+    }
+    this.isLoading = false;
+
+    return res;
+  }
+
   @action
   async fetchAuthorInfo(userId) {
     const userRes = await readUser({ params: { pid: userId } });
     if (userRes.code === 0) {
       this.authorInfo = userRes.data;
+    } else {
+      this.isAuthorInfoError = true;
     }
 
     return userRes;

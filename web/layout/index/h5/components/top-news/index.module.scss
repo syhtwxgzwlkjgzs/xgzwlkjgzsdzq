@@ -38,7 +38,7 @@
       top: rem(1);
     }
     .title {
-      flex:1;
+      flex: 1;
       font-size: rem($font-size-primary);
       line-height: 1.5;
       position: relative;
@@ -49,14 +49,15 @@
         overflow: hidden;
         word-break: break-all;
         font-size: rem(14);
-       
-        :global(.qq-emotion){
+
+      }
+      :global {
+        .qq-emotion, .dzq-img {
           height: rem(20);
           width: rem(20);
           position: relative;
-          top: -1px;
+          top: rem(-1);
         }
-        
       }
       
     }
@@ -64,6 +65,7 @@
   .itemPC {
     cursor: pointer;
     height: rem(38);
+    
     .prefix {
       font-size: rem($font-size-middle);
       line-height: rem($font-line-height-small);
@@ -72,15 +74,25 @@
     .title {
       font-size: rem($font-size-middle);
       line-height: rem($font-line-height-small);
+      &:hover{
+        color: $primary-color;
+      }
       .richText{
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
         word-break: break-all;
         font-size: rem($font-size-middle);
-        :global(.qq-emotion){
+        &:hover {
+          color: $primary-color;
+        }
+      }
+      :global {
+        .qq-emotion, .dzq-img {
           height: rem(20);
           width: rem(20);
+          position: relative;
+          top: rem(-1);
         }
       }
     }

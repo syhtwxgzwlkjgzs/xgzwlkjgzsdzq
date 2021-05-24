@@ -183,7 +183,9 @@ export default class index extends Component {
           hasMask: false,
           duration: 1000,
         });
-        await this.props.payBox.clear();
+        setTimeout(() => {
+          this.props.payBox.clear();
+        }, 500);
       } catch (error) {
         Toast.error({
           content: error.Message || '支付失败，请重新输入',
@@ -217,13 +219,16 @@ export default class index extends Component {
     });
   };
 
-
   // 处理图片加载中
   handleImgFetching = () => {
     this.setState({
-      imageShow: true
-    })
-  }
+      imageShow: true,
+    });
+  };
+
+  handleTimeoutRefresh = async () => {
+    await this.props.payBox.wechatPayOrderQRCode();
+  };
 
   // 渲染微信支付内容
   renderWechatCodePaymementContent = () => (
@@ -231,7 +236,16 @@ export default class index extends Component {
       <div style={{ display: 'flex', alignItems: 'center' }}>
         {/* 二维码 */}
         <div className={styles.wPaymentCode}>
-          {!this.state.imageShow && <Spin type="spinner" size={14}>加载中</Spin>}
+          {this.props.payBox.qrCodeTimeout && (
+            <div className={styles.timeout} onClick={this.handleTimeoutRefresh}>
+              已超时，点击刷新
+            </div>
+          )}
+          {!this.state.imageShow && (
+            <Spin type="spinner" size={14}>
+              加载中
+            </Spin>
+          )}
           <img
             style={{
               display: this.state.imageShow ? 'block' : 'none',
@@ -308,7 +322,6 @@ export default class index extends Component {
               ) : (
                 <Spin type="spinner" size={14}></Spin>
               )}
-
             </div>
             <div className={styles.walletDec}>
               <span>支付密码</span>
@@ -367,7 +380,7 @@ export default class index extends Component {
   };
 
   render() {
-    const { options = {} } = this.props?.payBox;
+    const { options = {}, qrCodeTimeout } = this.props?.payBox;
     const { amount = 0 } = options;
     return (
       <div>

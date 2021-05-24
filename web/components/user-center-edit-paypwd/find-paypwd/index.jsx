@@ -1,25 +1,24 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Button, Input, Toast } from '@discuzq/design';
 import Header from '@components/header';
-import styles from './index.module.scss'
-import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData'
-import CaptchaInput from '../../user-center-edit-mobile/captcha-input'
-import VerifyCode from '../../user-center-edit-mobile/verify-code'
+import styles from './index.module.scss';
+import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData';
+import CaptchaInput from '../../user-center-edit-mobile/captcha-input';
+import VerifyCode from '../../user-center-edit-mobile/verify-code';
 
 @inject('site')
 @inject('user')
 @observer
 class index extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       list: [],
       current_step: 'second', // 表示当前步骤
       bind_mobile: null,
       is_blur: true, // 表示是否失焦
-    }
+    };
   }
 
   updatePwd = (set_num, type) => {
@@ -27,7 +26,8 @@ class index extends Component {
     if (type == 'add') {
       let list_ = [...list];
       if (list.length >= 6) {
-        list_ = list_.join('').substring(0, 5).split('');
+        list_ = list_.join('').substring(0, 5)
+          .split('');
       }
       this.setState(
         {
@@ -50,48 +50,48 @@ class index extends Component {
   handleStepBtn = () => {
     this.setState({
       current_step: 'second',
-      list: []
-    })
+      list: [],
+    });
   }
 
   handleInputChange = (e) => {
     this.setState({
       bind_mobile: e.target.value,
-      is_blur: false
-    })
+      is_blur: false,
+    });
   }
 
   handleInputFocus = (e) => {
     this.setState({
-      is_blur: false
-    })
+      is_blur: false,
+    });
   }
 
   handleInputBlur = (e) => {
     this.setState({
-      is_blur: true
-    })
+      is_blur: true,
+    });
   }
 
   handleInputFocus1 = () => {
     this.setState({
-      is_blur: false
-    })
+      is_blur: false,
+    });
   }
 
   handleInputBlur1 = (e) => {
     this.setState({
-      is_blur: true
-    })
+      is_blur: true,
+    });
   }
 
   getVerifyCode = ({ calback }) => {
-    if (calback && typeof calback === 'function') calback()
+    if (calback && typeof calback === 'function') calback();
   }
 
   render() {
-    const { current_step, list = [], is_blur } = this.state
-    const mobile = this.props?.user.mobile
+    const { current_step, list = [], is_blur } = this.state;
+    const mobile = this.props?.user.mobile;
     return (
       <div>
         <Header />
@@ -103,7 +103,7 @@ class index extends Component {
               <span className={styles.labelValue} style={{ border: 'none' }}>{mobile}</span>
             </div>
             <div>
-              <VerifyCode key={current_step} text={"发送验证码"} getVerifyCode={this.getVerifyCode} />
+              <VerifyCode key={current_step} text={'发送验证码'} getVerifyCode={this.getVerifyCode} />
             </div>
           </div>
           <div className={styles.bindCode}>
@@ -118,11 +118,11 @@ class index extends Component {
           <div className={styles.labelValue}><Input onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="请重复输入新密码" type="number" maxLength={6} /></div>
         </div>
         <div className={styles.bottom}>
-          <Button full onClick={this.handleStepBtn} type={"primary"} className={styles.btn}>提交</Button>
+          <Button full onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>提交</Button>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default HOCFetchSiteData(index)
+export default index;

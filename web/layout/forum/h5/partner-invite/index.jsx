@@ -13,21 +13,22 @@ import ActiveUsers from '../../../search/h5/components/active-users';
 import PopularContents from '../../../search/h5/components/popular-contents';
 import layout from './index.module.scss';
 import SiteInfo from '../site-info';
+import inviteDetail from '@server';
 
 @inject('site')
 @inject('index')
 @inject('forum')
 @inject('search')
 @observer
-class ParnerInviteH5Page extends React.Component {
+class PartnerInviteH5Page extends React.Component {
   async componentDidMount() {
     const { forum, search } = this.props;
     const usersList = await forum.useRequest('readUsersList', {
       params: {
         filter: {
-          hot: 1
-        }
-      }
+          hot: 1,
+        },
+      },
     });
     const threadList = await search.getThreadList();
 
@@ -92,8 +93,8 @@ class ParnerInviteH5Page extends React.Component {
           </div>
         </div>
       </List>
-    )
+    );
   }
 }
 
-export default withRouter(ParnerInviteH5Page);
+export default withRouter(PartnerInviteH5Page);

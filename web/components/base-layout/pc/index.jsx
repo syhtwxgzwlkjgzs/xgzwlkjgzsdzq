@@ -55,12 +55,12 @@ const BaseLayout = (props) => {
   }, 50);
 
   useEffect(() => {
-    if (window) {
-      window.addEventListener('resize', updateSize);
-      return () => {
-          window.removeEventListener('resize', updateSize);
-      };
-    }
+    // if (window) {
+    //   window.addEventListener('resize', updateSize);
+    //   return () => {
+    //       window.removeEventListener('resize', updateSize);
+    //   };
+    // }
   });
 
   useEffect(() => {
@@ -71,21 +71,21 @@ const BaseLayout = (props) => {
   const calcSize = (width = 1600) => {
     let size = 'xl';
 
-    if (width < 992) {
-        size = 'sm';
-    }
-    else if (width >= 992 && width < 1100) {
-        size = 'md';
-    }
-    else if (width >= 1100 && width < 1400) {
-        size = 'lg';
-    }
-    else if (width >= 1440 && width < 1880) {
-        size = 'xl';
-    }
-    else {
-        size = 'xxl';
-    }
+    // if (width < 992) {
+    //     size = 'sm';
+    // }
+    // else if (width >= 992 && width < 1100) {
+    //     size = 'md';
+    // }
+    // else if (width >= 1100 && width < 1400) {
+    //     size = 'lg';
+    // }
+    // else if (width >= 1440 && width < 1880) {
+    //     size = 'xl';
+    // }
+    // else {
+    //     size = 'xxl';
+    // }
     return size;
   };
 

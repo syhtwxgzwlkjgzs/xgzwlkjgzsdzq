@@ -1,36 +1,22 @@
 @import '@common/styles/index.scss';
 
 .inputClick {
-  width: 176px;
-  height: 36px;
-  background: $comment-bg-color;
-  display: flex;
-  align-items: center;
-  font-family: 'PingFang SC';
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 36px;
-  text-align: left;
-  color: #c5c6ca;
-  border-radius: 5px;
-  border: var(--border-border);
   :global {
     .dzq-input.is-disabled .dzq-input__inner {
       background-color: var(--comment-box-bg-color);
+      -webkit-appearance: none; // ios下去除上面阴影
+    }
+    .dzq-icon {
+      line-height: 36px;
     }
   }
   .input {
-
-  }
-
-  .inputIcon {
-    padding: 0 10px;
-
+    width: 176px;
   }
 }
 
 .icon {
-  margin-left: 24px;
+  margin-left: $margin-6n;
   display: inline-block;
   position: relative;
 
@@ -43,17 +29,24 @@
 }
 
 .badge {
-  width: 20px;
-  height: 20px;
-  font-family: 'PingFang SC';
-  font-weight: normal;
-  font-size: 10px;
+  min-width: 16px;
+  height: 16px;
+  font-size: 12px;
   text-align: center;
-  line-height: 20px;
   color: var(--color-white);
   background: var(--color-error);
-  border-radius: 50%;
+  border-radius: 8px;
+  padding: 0 6px;
+  box-sizing: border-box;
   position: absolute;
-  right: -8px;
+  right: 0;
   top: -8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateX(50%);
+}
+
+.isCricle {
+  width: 16px;
 }

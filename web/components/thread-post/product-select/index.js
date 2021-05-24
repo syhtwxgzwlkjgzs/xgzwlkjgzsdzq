@@ -42,7 +42,7 @@ const ProductSelect = (props) => {
         </div>
         <Input.Textarea
           value={link}
-          placeholder="请粘贴\输入商品链接"
+          placeholder="请粘贴\输入商品的分享链接"
           maxLength={49999}
           rows={8}
           onChange={e => setLink(e.target.value)}

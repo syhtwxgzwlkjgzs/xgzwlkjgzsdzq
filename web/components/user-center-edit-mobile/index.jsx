@@ -1,26 +1,25 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Button, Input, Toast } from '@discuzq/design';
 import Header from '@components/header';
-import styles from './index.module.scss'
-import HOCFetchSiteData from '../../middleware/HOCFetchSiteData'
-import CaptchaInput from './captcha-input/index'
-import VerifyCode from './verify-code/index'
+import styles from './index.module.scss';
+import HOCFetchSiteData from '../../middleware/HOCFetchSiteData';
+import CaptchaInput from './captcha-input/index';
+import VerifyCode from './verify-code/index';
 import Router from '@discuzq/sdk/dist/router';
 
 @inject('site')
 @inject('user')
 @observer
 class index extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       list: [],
       current_step: 'first', // 表示当前步骤
       bind_mobile: null,
       is_blur: false, // 表示是否失焦
-    }
+    };
   }
 
   updatePwd = (set_num, type) => {
@@ -28,7 +27,8 @@ class index extends Component {
     if (type == 'add') {
       let list_ = [...list];
       if (list.length >= 6) {
-        list_ = list_.join('').substring(0, 5).split('');
+        list_ = list_.join('').substring(0, 5)
+          .split('');
       }
       this.setState(
         {
@@ -49,13 +49,13 @@ class index extends Component {
 
   // 点击下一步
   handleStepBtn = async () => {
-    const { list = [], current_step, bind_mobile } = this.state
-    if (list.length !== 6) return
+    const { list = [], current_step, bind_mobile } = this.state;
+    if (list.length !== 6) return;
     if (current_step === 'first') {
-      this.props.user.oldMobileVerifyCode = list.join("")
-      this.props.user.verifyOldMobile().then(res => {
+      this.props.user.oldMobileVerifyCode = list.join('');
+      this.props.user.verifyOldMobile().then((res) => {
         if (this.state.interval != null) {
-          clearInterval(this.state.interval)
+          clearInterval(this.state.interval);
         }
         this.setState({
           current_step: 'second',
@@ -64,59 +64,61 @@ class index extends Component {
           initTime: 60,
           interval: null,
           initTimeText: '发送验证码',
-          buttonDisabled: false
-        })
-      }).catch((err) => {
-        Toast.error({
-          content: err.Message || '验证失败',
-          hasMask: false,
-          duration: 1000,
-        })
-        this.props.user.oldMobileVerifyCode = null
+          buttonDisabled: false,
+        });
       })
+        .catch((err) => {
+          Toast.error({
+            content: err.Message || '验证失败',
+            hasMask: false,
+            duration: 1000,
+          });
+          this.props.user.oldMobileVerifyCode = null;
+        });
     } else if (current_step === 'second') {
-      this.props.user.newMobile = bind_mobile
-      this.props.user.newMobileVerifyCode = list.join("")
-      await this.props.user.rebindMobile().then(res => {
-        Router.push({url: '/my'})
-      }).catch((err) => {
-        Toast.error({
-          content: err.Message || '修改失败',
-          hasMask: false,
-          duration: 1000,
-        })
+      this.props.user.newMobile = bind_mobile;
+      this.props.user.newMobileVerifyCode = list.join('');
+      await this.props.user.rebindMobile().then((res) => {
+        Router.push({ url: '/my' });
       })
+        .catch((err) => {
+          Toast.error({
+            content: err.Message || '修改失败',
+            hasMask: false,
+            duration: 1000,
+          });
+        });
     }
   }
 
   handleInputChange = (e) => {
     this.setState({
-      bind_mobile: e.target.value
-    })
+      bind_mobile: e.target.value,
+    });
   }
 
   handleInputFocus = (e) => {
     this.setState({
-      is_blur: false
-    })
+      is_blur: false,
+    });
   }
 
   handleInputBlur = (e) => {
     this.setState({
-      is_blur: true
-    })
+      is_blur: true,
+    });
   }
 
   getVerifyCode = ({ calback }) => {
-    const { originalMobile } = this.props.user
-    const { current_step } = this.state
+    const { originalMobile } = this.props.user;
+    const { current_step } = this.state;
     if (current_step === 'first') {
       this.props.user.sendSmsVerifyCode({ mobile: originalMobile })
-        .then(res => {
+        .then((res) => {
           this.setState({
-            initTimeValue: res.interval
-          })
-          if (calback && typeof calback === 'function') calback()
+            initTimeValue: res.interval,
+          });
+          if (calback && typeof calback === 'function') calback();
         })
         .catch((err) => {
           console.log(err);
@@ -124,20 +126,20 @@ class index extends Component {
             content: '发送验证码失败',
             hasMask: false,
             duration: 1000,
-          })
+          });
           this.setState({
-            list: []
-          })
-          if (calback && typeof calback === 'function') calback(err)
-        })
+            list: [],
+          });
+          if (calback && typeof calback === 'function') calback(err);
+        });
     } else if (current_step === 'second') {
-      const { bind_mobile } = this.state
+      const { bind_mobile } = this.state;
       this.props.user.sendSmsUpdateCode({ mobile: bind_mobile })
-        .then(res => {
+        .then((res) => {
           this.setState({
-            initTimeValue: res.interval
-          })
-          if (calback && typeof calback === 'function') calback()
+            initTimeValue: res.interval,
+          });
+          if (calback && typeof calback === 'function') calback();
         })
         .catch((err) => {
           console.log(err);
@@ -145,25 +147,23 @@ class index extends Component {
             content: err.Message || '发送验证码失败',
             hasMask: false,
             duration: 1000,
-          })
-          if (calback && typeof calback === 'function') calback(err)
-        })
+          });
+          if (calback && typeof calback === 'function') calback(err);
+        });
     }
   }
 
-  validateTel = (value) => {
-    return (/^[1][3-9]\d{9}$/.test(value))
-  }
+  validateTel = value => (/^[1][3-9]\d{9}$/.test(value))
 
   render() {
-    const { current_step, list = [], is_blur, bind_mobile, initTimeValue } = this.state
-    const { mobile } = this.props?.user
-    let value_pass_check = current_step === 'second' ? this.validateTel(bind_mobile) : true
-    let isSubmit = false
+    const { current_step, list = [], is_blur, bind_mobile, initTimeValue } = this.state;
+    const { mobile } = this.props?.user;
+    const value_pass_check = current_step === 'second' ? this.validateTel(bind_mobile) : true;
+    let isSubmit = false;
     if (current_step === 'first') {
-      isSubmit = list.length !== 6
+      isSubmit = list.length !== 6;
     } else if (current_step === 'second') {
-      isSubmit = (list.length !== 6 || !this.validateTel(bind_mobile))
+      isSubmit = (list.length !== 6 || !this.validateTel(bind_mobile));
     }
     return (
       <div>
@@ -184,7 +184,7 @@ class index extends Component {
               )
             }
             <div>
-              <VerifyCode initTimeValue={this.state.initTimeValue} value_pass_check={value_pass_check} key={current_step} text={"发送验证码"} getVerifyCode={this.getVerifyCode} />
+              <VerifyCode initTimeValue={this.state.initTimeValue} value_pass_check={value_pass_check} key={current_step} text={'发送验证码'} getVerifyCode={this.getVerifyCode} />
             </div>
           </div>
           <div className={styles.bindCode}>
@@ -193,11 +193,11 @@ class index extends Component {
           </div>
         </div>
         <div className={styles.bottom}>
-          <Button full disabled={isSubmit} onClick={this.handleStepBtn} type={"primary"} className={styles.btn}>{this.state.current_step === 'first' ? "下一步" : '提交'}</Button>
+          <Button full disabled={isSubmit} onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>{this.state.current_step === 'first' ? '下一步' : '提交'}</Button>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default HOCFetchSiteData(index)
+export default index;

@@ -27,11 +27,13 @@
         .friendName {
             font-size: rem($font-size-base);
             color: $text-color-primary;
+            line-height: rem(20);
         }
     
         .friendGroup {
             font-size: rem($font-size-small);
             color: $text-color-secondary;
+            line-height: rem(17);
         }
     }
 }

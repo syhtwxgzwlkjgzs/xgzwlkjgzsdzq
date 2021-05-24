@@ -8,6 +8,7 @@ import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import PopProtocol from '../components/pop-protocol';
+import PcBodyWrap from '../components/pc-body-wrap';
 import { get } from '@common/utils/get';
 // import { TencentCaptcha } from '@discuzq/sdk/dist/common_modules/sliding-captcha';
 @inject('site')
@@ -88,7 +89,7 @@ class RegisterH5Page extends React.Component {
     const { site, commonLogin } = this.props;
     const { platform } = site;
     return (
-      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
+      <PcBodyWrap>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
@@ -152,16 +153,26 @@ class RegisterH5Page extends React.Component {
           <div className={platform === 'h5' ? layout['otherLogin-tips'] : layout.pc_otherLogin_tips} >
             注册登录即表示您同意
             <span onClick={() => {
+              if (platform === 'pc') {
+                window.open('/user/agreement?type=register');
+              }
               commonLogin.setProtocolInfo('register');
             }}>《注册协议》</span>
             <span onClick={() => {
+              if (platform === 'pc') {
+                window.open('/user/agreement?type=privacy');
+              }
               commonLogin.setProtocolInfo('privacy');
             }}>《隐私协议》</span>
           </div>
         </div>
       </div>
-      <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
-      </div>
+      {
+        platform === 'h5'
+          ? <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
+          : <></>
+      }
+      </PcBodyWrap>
     );
   }
 }
