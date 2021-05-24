@@ -6,12 +6,14 @@
 .titleBox {
   width: 100%;
   height: rem(53);
+  box-sizing: border-box;
   background-color: var(--color-white);
   font-size: rem($font-size-primary);
   color: $text-color-regular;
   padding: 0 rem($padding-4n);
   line-height: rem(53);
   margin-bottom: rem(10);
+  box-sizing: border-box;
 }
 .list {
   flex: 1;

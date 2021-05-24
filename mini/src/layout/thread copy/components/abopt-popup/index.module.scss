@@ -1,0 +1,102 @@
+@import '@common/styles/index.scss';
+
+.container {
+  background: var(--color-white);
+  border-radius: 10px 10px 0 0;
+}
+
+.main {
+  padding: 16px 16px 0;
+  border-bottom: var(--border-border);
+}
+
+.header {
+  font-family: "PingFang SC";
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 17.8px;
+  text-align: left;
+  color: var(--color-text-primary);
+}
+
+.body {
+  width: 100%;
+  .percentage {
+    display: flex;
+    flex-direction: column;
+    border-bottom: var(--border-border);
+    .text {
+      font-family: "PingFang SC";
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 17.8px;
+      text-align: left;
+      color: var(--pc-user-info-title);
+      padding: 16px 0 8px 0;
+    }
+    .slider {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 8px;
+      
+      :global {
+        .dzq-slider__progress__button {
+          width: 0px;
+          height: 0px;
+          padding: 5px;
+          border-radius: 50%;
+          border: solid 7px var(--color-primary);
+        }
+        .dzq-slider__progress--active {
+          height: 4px;
+        }
+        .dzq-slider__feature {
+          height: 4px;
+        }
+      }
+    }
+  }
+  .rewardMoney {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: normal;
+    padding: 16px 0;
+    .text {
+      font-family: 'PingFang SC';
+      line-height: 17.8px;
+      text-align: left;
+      color: var(--pc-user-info-title);
+    }
+    .moneyNum {
+      font-family: 'PingFangSC-Regular';
+      line-height: 16.8px;
+      text-align: left;
+      color: var(--color-text-primary);
+    }
+  }
+}
+
+.button {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 16px 19px;
+  border-bottom: var(--border-border);
+  .cancel {
+    width: 167px;
+    height: 42px;
+    border-radius: 5px;
+    color: var(--pc-user-info-title);
+    background: var(--background-color-text2);
+    line-height: 24px;
+  }
+  .ok {
+    width: 167px;
+    height: 42px;
+    border-radius: 5px;
+    background: var(--color-primary);
+    line-height: 24px;
+  }
+}

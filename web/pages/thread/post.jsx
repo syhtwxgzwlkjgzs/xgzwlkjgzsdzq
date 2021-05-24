@@ -405,7 +405,7 @@ class PostPage extends React.Component {
           // 验证通过后发布
           this.ticket = res.ticket;
           this.randstr = res.randstr;
-          this.handleSubmit();
+          this.handleSubmit(this.props.threadPost.postData.draft);
         }
         if (res.ret === 2) {
           console.log('验证关闭');
@@ -438,8 +438,7 @@ class PostPage extends React.Component {
       } else {
         this.setPostData({ draft: 1 });
       }
-    }
-    else {
+    } else {
       this.setPostData({ draft: 0 });
     }
     const { threadPost } = this.props;
@@ -521,8 +520,11 @@ class PostPage extends React.Component {
     if (code === 0) {
       thread.reset();
       this.toastInstance?.destroy();
+      // 防止被清除
+      const _isDraft = isDraft;
       this.props.threadPost.resetPostData();
-      if (!isDraft) {
+
+      if (!_isDraft) {
         // 更新帖子到首页列表
         if (threadId) {
           this.props.index.updateAssignThreadAllData(threadId, data);

@@ -39,7 +39,11 @@ class Index extends React.Component {
   constructor(props) {
     super(props);
     const { serverIndex, index, serverSearch, search } = this.props;
-    serverIndex && serverIndex.threads && index.setThreads(serverIndex.threads);
+    if (serverIndex && serverIndex.threads) {
+      index.setThreads(serverIndex.threads);
+    } else {
+      index.setThreads(null);
+    }
     serverSearch && serverSearch.topics && search.setTopics(serverSearch.topics);
   }
 

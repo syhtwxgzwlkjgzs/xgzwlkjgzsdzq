@@ -299,8 +299,8 @@ class ThreadH5Page extends React.Component {
 
     if (success) {
       this.setTopState(params.isStick);
-      // TODO:更新首页置顶列表
-      this.props.index.screenData({});
+      // 更新首页置顶列表
+      this.props?.index?.refreshHomeData && this.props.index.refreshHomeData();
       return;
     }
 
@@ -639,7 +639,7 @@ class ThreadH5Page extends React.Component {
                     onEditClick={(comment) => this.onEditClick(comment)}
                   ></RenderCommentList>
                   {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
-                  {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
+                  {isNoMore && <NoMore className={layout.noMore} empty={totalCount === 0}></NoMore>}
                 </Fragment>
               ) : (
                 <LoadingTips isError={isCommentListError} type="init"></LoadingTips>

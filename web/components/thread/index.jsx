@@ -161,7 +161,7 @@ class Index extends React.Component {
     }
 
     render() {
-      const { data, className = '', site = {}, showBottomStyle = true } = this.props;
+      const { data, className = '', site = {}, showBottomStyle = true ,  collect = '' } = this.props;
       const { platform = 'pc' } = site;
 
       if (!data) {
@@ -199,6 +199,7 @@ class Index extends React.Component {
                 isReward={isReward}
                 userId={user?.userId}
                 platform={platform}
+                collect={collect}
               />
           </div>
 

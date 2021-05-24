@@ -81,7 +81,7 @@ export default function DVditor(props) {
   useEffect(() => {
     if (atList && !atList.length) return;
     const users = atList.map((item) => {
-      if (item) return ` @${item} `;
+      if (item) return `&nbsp;@${item}&nbsp;`;
       return '';
     });
     if (users.length) {
@@ -93,7 +93,7 @@ export default function DVditor(props) {
   useEffect(() => {
     if (topic) {
       // setCursorPosition();
-      vditor.insertValue && vditor.insertValue(` ${topic} `);
+      vditor.insertValue && vditor.insertValue(`&nbsp;${topic}&nbsp;`);
     }
   }, [topic]);
 
@@ -124,6 +124,51 @@ export default function DVditor(props) {
     }, 100);
   };
 
+
+  const getEditorRange = (vditor) => {
+    /**
+      * copy from vditor/src/ts/util/selection.ts
+     **/
+    let range;
+    const { element } = vditor[vditor.currentMode];
+    if (getSelection().rangeCount > 0) {
+      range = getSelection().getRangeAt(0);
+      if (element.isEqualNode(range.startContainer) || element.contains(range.startContainer)) {
+        return range;
+      }
+    }
+    if (vditor[vditor.currentMode].range) {
+      return vditor[vditor.currentMode].range;
+    }
+    element.focus();
+    range = element.ownerDocument.createRange();
+    range.setStart(element, 0);
+    range.collapse(true);
+    return range;
+  };
+
+  const storeLastCursorPosition = (editor) => {
+    /** *
+     * ios 和mac safari，在每一个事件中都记住上次光标的位置
+     * 避免blur后vditor.insertValue的位置不正确
+     * **/
+
+    if (/Chrome/i.test(navigator.userAgent)
+      || !/(iPhone|Safari|Mac OS)/i.test(navigator.userAgent)) return;
+
+    // todo 事件需要throttle或者debounce??? delay时间控制不好可能导致记录不准确
+    const { vditor } = editor;
+    const editorElement = vditor[vditor.currentMode]?.element;
+    // todo 需要添加drag事件吗
+    const events = ['mouseup', 'keyup',
+      'click', 'touchend', 'touchcancel'];
+    events.forEach((event) => {
+      editorElement?.addEventListener(event, () => {
+        vditor[vditor.currentMode].range = getEditorRange(vditor);
+      });
+    });
+  };
+
   function initVditor() {
     // https://ld246.com/article/1549638745630#options
     const editor = new Vditor(
@@ -146,15 +191,14 @@ export default function DVditor(props) {
           onFocus('focus');
         },
         input: () => {
+          if (getSelection().rangeCount > 0) {
+            editor.vditor[editor.vditor.currentMode].range = getSelection().getRangeAt(0);
+          }
           setIsFocus(false);
-          const range = getRange();
-          if (range) setRange(range);
           onInput(editor);
           onChange(editor);
         },
         blur: () => {
-          const range = getRange();
-          if (range) setRange(range);
           // 防止粘贴数据时没有更新内容
           onChange(editor);
           // 兼容Android的操作栏渲染
@@ -185,11 +229,10 @@ export default function DVditor(props) {
         },
         bubbleToolbar: pc ? [...baseToolbar] : [],
         icon: '',
-        preview: {
-          theme: '',
-        },
       },
     );
+
+    storeLastCursorPosition(editor);
     setVditor(editor);
   }
 

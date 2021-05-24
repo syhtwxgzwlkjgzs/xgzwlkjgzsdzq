@@ -1,10 +1,8 @@
 @import '@common/styles/index.scss';
 
 .post-inner {
-  position: absolute;
-  top: rem(44);
   width: 100%;
-  height: calc(100vh - 134px - 0.44rem);
+  height: calc(100vh - 134px - 44px);
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   background-color: $white;
