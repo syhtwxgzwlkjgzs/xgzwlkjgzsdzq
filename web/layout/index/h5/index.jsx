@@ -114,7 +114,7 @@ class IndexH5Page extends React.Component {
     return dispatch('moreData', requestFilter);
   };
 
-  onScroll = throttle(({ scrollTop = 0 } = {}) => {
+  handleScroll = throttle(({ scrollTop = 0 } = {}) => {
     const { height = 180 } = this.headerRef.current?.state || {}
     this.setState({ fixedTab: scrollTop > height })
     this.props.baselayout.jumpToScrollingPos = scrollTop;
@@ -213,7 +213,7 @@ class IndexH5Page extends React.Component {
         onRefresh={this.onRefresh}
         noMore={currentPage >= totalPage}
         isFinished={isFinished}
-        onScroll={this.onScroll}
+        onScroll={this.handleScroll}
         curr='home'
         pageName='home'
         preload={1000}
