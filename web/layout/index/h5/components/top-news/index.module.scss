@@ -83,6 +83,12 @@
         overflow: hidden;
         word-break: break-all;
         font-size: rem($font-size-middle);
+        a {
+          color: $primary-color;
+          &:hover {
+            color: $primary-color6;
+          }
+        }
         &:hover {
           color: $primary-color;
         }
