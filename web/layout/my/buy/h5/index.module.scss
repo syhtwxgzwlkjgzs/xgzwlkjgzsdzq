@@ -6,6 +6,7 @@
 .titleBox {
   width: 100%;
   height: rem(53);
+  box-sizing: border-box;
   background-color: var(--color-white);
   font-size: rem($font-size-primary);
   color: $text-color-regular;
