@@ -4,6 +4,8 @@ class IndexStore {
 
   @observable jumpToScrollingPos = -1;
 
+  @observable search = -1;
+
   @observable isJumpingToTop = false;
 
 }

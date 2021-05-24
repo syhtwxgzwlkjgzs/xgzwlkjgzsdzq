@@ -23,7 +23,7 @@ import styles from './index.module.scss';
         {(props) => <div>中间</div>}
       </BaseLayout>
 */
-const baseLayoutWhiteList = ['home'];
+const baseLayoutWhiteList = ['home', 'search'];
 
 const BaseLayout = (props) => {
   const { 
@@ -36,7 +36,8 @@ const BaseLayout = (props) => {
     curr, 
     onScroll = noop,
     baselayout,
-    onClickTabBar = noop
+    onClickTabBar = noop,
+    pageName = ''
   } = props;
 
   const [height, setHeight] = useState(600);
@@ -69,9 +70,15 @@ const BaseLayout = (props) => {
     if (pullDownWrapper?.current) {
       setHeight(pullDownWrapper.current.clientHeight)
     }
-    if (listRef?.current && baselayout.jumpToScrollingPos > 0 &&
-        baseLayoutWhiteList.indexOf(props.pageName) !== -1) {
-        listRef.current.jumpToScrollTop(baselayout.jumpToScrollingPos);
+    if (listRef?.current && (baselayout.jumpToScrollingPos > 0 || baselayout[pageName] > 0) &&
+        baseLayoutWhiteList.indexOf(pageName) !== -1) {
+        if (pageName === 'home') {
+          listRef.current.jumpToScrollTop(baselayout.jumpToScrollingPos);
+        } else {
+          if (baselayout[pageName]) {
+            listRef.current.jumpToScrollTop(baselayout[pageName]);
+          }
+        }
     }
   }, [])
 
