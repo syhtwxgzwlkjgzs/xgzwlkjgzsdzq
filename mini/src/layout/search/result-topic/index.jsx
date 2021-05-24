@@ -1,19 +1,16 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-
+import { withRouter } from 'next/router';
 import SearchInput from '@components/search-input';
-import SearchTopics from './components/search-topics';
-import NoData from '@components/no-data';
+import BaseLayout from '@components/base-layout';
+import TopicItem from '@components/topic-item'
 import styles from './index.module.scss';
-import { View, Text } from '@tarojs/components';
-import Page from '@components/page';
-import List from '@components/list';
-import { Topic } from '@components/search-result-item';
+import { View, Text, Image } from '@tarojs/components'
 import Taro from '@tarojs/taro';
 
 @inject('search')
 @observer
-class SearchResultPostPage extends React.Component {
+class SearchResultTopicH5Page extends React.Component {
   constructor(props) {
     super(props);
 
@@ -54,38 +51,28 @@ class SearchResultPostPage extends React.Component {
       url: `/subPages/topic/topic-detail/index?id=${data.topicId || ''}`
     })
   }
+
   render() {
     const { keyword } = this.state;
     const { topics } = this.props.search;
     const { pageData = [], currentPage, totalPage } = topics || { pageData: [] };
 
     return (
-      <Page>
-        <View className={styles.page}>
-          <View className={styles.searchInput}>
-            <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
+        <BaseLayout
+          onRefresh={this.fetchMoreData}
+          noMore={currentPage >= totalPage}
+        >
+          <SearchInput onSearch={this.onSearch} onCancel={this.onSearch} defaultValue={keyword} />
+          <View className={styles.wrapper}>
+            {
+              pageData?.map((item, index) => (
+                <TopicItem key={index} data={item} onClick={this.onTopicClick} />
+              ))
+            }
           </View>
-          {
-            pageData?.length
-              ? (
-                <List
-                  className={styles.list}
-                  onRefresh={this.fetchMoreData}
-                  noMore={currentPage >= totalPage}
-                >
-                  {
-                    pageData?.map((item, index) => (
-                      <Topic key={index} data={item} onClick={this.onTopicClick} />
-                    ))
-                  }
-                </List>
-              )
-              : <NoData />
-          }
-        </View>
-        </Page>
+        </BaseLayout>
     );
   }
 }
 
-export default SearchResultPostPage;
+export default SearchResultTopicH5Page;

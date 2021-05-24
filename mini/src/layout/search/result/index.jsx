@@ -32,19 +32,19 @@ class SearchResultPage extends React.Component {
 
   redirectToSearchResultPost = () => {
     Taro.navigateTo({
-      url: `/pages/search/result-post/index?keyword=${this.state.keyword || ''}`
+      url: `/subPages/search/result-post/index?keyword=${this.state.keyword || ''}`
     })
   };
 
   redirectToSearchResultUser = () => {
     Taro.navigateTo({
-      url: `/pages/search/result-user/index?keyword=${this.state.keyword || ''}`
+      url: `/subPages/search/result-user/index?keyword=${this.state.keyword || ''}`
     })
   };
 
   redirectToSearchResultTopic = () => {
     Taro.navigateTo({
-      url: `/pages/search/result-topic/index?keyword=${this.state.keyword || ''}`
+      url: `/subPages/search/result-topic/index?keyword=${this.state.keyword || ''}`
     })
   };
 
