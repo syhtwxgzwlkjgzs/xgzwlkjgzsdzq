@@ -26,6 +26,7 @@ import ForumStore from './forum/action';
 import MessageStore from './message/action';
 import store from './store';
 import BaseLayoutStore from './baselayout/action';
+import WalletStore from './wallet/action';
 
 useStaticRendering(isServer());
 
@@ -61,6 +62,7 @@ export default function initializeStore(initProps = {}) {
       invite: new InviteStore(),
       forum: new ForumStore(),
       baselayout: new BaseLayoutStore(),
+      wallet: new WalletStore(),
     };
   }
   if (store.getStore() === null) {
@@ -92,6 +94,7 @@ export default function initializeStore(initProps = {}) {
       invite: new InviteStore(),
       forum: new ForumStore(),
       baselayout: new BaseLayoutStore(),
+      wallet: new WalletStore(),
     });
   }
 
