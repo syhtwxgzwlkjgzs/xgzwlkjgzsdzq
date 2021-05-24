@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 
-import { Post } from '@components/search-result-item';
+import ThreadContent from '@components/thread';
 import List from '../list';
 
 import styles from './index.module.scss';
-
+import { View, Text, Image } from '@tarojs/components'
 /**
  * 帖子搜索结果
  * @prop {object[]} data 帖子数据
@@ -13,10 +13,14 @@ import styles from './index.module.scss';
  * @prop {function} onFetchMore 上拉加载
  * @prop {boolean} refreshing  刷新中
  */
+// TODO 之后通过样式去掉View
 const SearchPosts = ({ data, refreshing, onRefresh, onFetchMore, onItemClick }) => {
   const renderItem = useCallback(
     ({ data: _data, index }) => (
-      <Post key={index} data={_data[index]} onClick={onItemClick} Viewider={index !== _data.length - 1} />
+      <View key={index}>
+        <ThreadContent data={_data[index]} onClick={onItemClick} />
+        {index !== data.length - 1 && <View className={styles.hr} />}
+      </View>
     ),
     [onItemClick],
   );
