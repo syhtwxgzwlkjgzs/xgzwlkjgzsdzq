@@ -49,7 +49,7 @@ class AtSelect extends Component {
   async fetchUserList() {
     const { getUsersList } = this.props.search;
     const { page, perPage, keywords } = this.state;
-    const params = { page, perPage, search: keywords };
+    const params = { search: keywords, type: 'username', page, perPage };
     const ret = await getUsersList(params);
     if (ret.code === 0) {
       this.setState({ page: page + 1 });
@@ -89,7 +89,7 @@ class AtSelect extends Component {
 
     // 处理已选@ren，更新store
     const { postData, setPostData } = this.props.threadPost;
-    const at = checkUser.map(item => `@${isFollow ? item.user.userName : item.nickname} `).join();
+    const at = checkUser.map(item => `@${isFollow ? item.user.userName : item.nickname} `).join(" ");
     const contentText = `${postData.contentText} ${at}`;
     setPostData({ contentText });
 
