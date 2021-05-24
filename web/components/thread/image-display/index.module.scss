@@ -86,6 +86,7 @@
   width: 100%;
 
   img {
+    @include cursor-on-pc;
     border-radius: rem($border-radius-small);
     object-fit: cover;
     background-color: $body-bg-color;
@@ -175,7 +176,6 @@
   background-color: rgba(0, 0, 0, 0.5);
 }
   
-
 
 
 

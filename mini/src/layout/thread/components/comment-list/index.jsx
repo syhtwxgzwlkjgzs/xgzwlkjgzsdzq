@@ -9,8 +9,8 @@ import { observer } from 'mobx-react';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 
-import redpacketMiniImg from '../../../../../../web/public/dzq-img/redpacket-mini.png';
-
+import redPacketMini from '../../../../../../web/public/dzq-img/redpacket-mini.png';
+import coin from '../../../../../../web/public/dzq-img/coin.png';
 @observer
 class CommentList extends React.Component {
   constructor(props) {
@@ -96,7 +96,7 @@ class CommentList extends React.Component {
             <View className={styles.headerRigth}>
               {this.props.data?.rewards ? (
                 <View className={styles.imageNumber}>
-                  <Image className={styles.rewardImage} src="/dzq-img/coin.png" alt="悬赏图标" />
+                  <Image className={styles.rewardImage} src={coin} alt="悬赏图标" />
                   <View className={styles.showMoneyNum}>
                     获得<Text className={styles.moneyNumber}>{this.props.data.rewards}</Text>元悬赏金
                   </View>
@@ -106,7 +106,7 @@ class CommentList extends React.Component {
               )}
               {this.props.data?.redPacketAmount ? (
                 <View className={`${styles.redpacket} ${styles.imageNumber}`}>
-                  <Image className={styles.image} src={redpacketMiniImg} alt="红包图标" />
+                  <Image className={styles.image} src={redPacketMini} alt="红包图标" />
                   <View className={styles.showMoneyNum}>
                     获得<Text className={styles.moneyNumber}>{this.props.data.redPacketAmount}</Text>元红包
                   </View>
