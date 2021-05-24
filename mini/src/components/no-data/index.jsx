@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Icon } from '@discuzq/design';
+import { Button, Icon, Spin } from '@discuzq/design';
 import { noop } from '../thread/utils';
-import { View, Text } from '@tarojs/components';
+import { View, Text } from '@tarojs/components'
 import styles from './index.module.scss';
 
 /**
@@ -13,7 +13,7 @@ import styles from './index.module.scss';
  * @prop {string} btnText 自定义刷新按钮文字
  */
 
-const NoData = ({ text = '暂无数据', icon = '', onClick = noop, isShowBtn = false, btnText = '点击刷新' }) => {
+const NoData = ({ className = '', text = '暂无数据', icon = '', onClick = noop, isShowBtn = false, btnText = '点击刷新' }) => {
   // 为了防止已进入页面，就出现暂无数据
   const [isHidden, setIsHidden] = useState(true);
   useEffect(() => {
@@ -28,7 +28,7 @@ const NoData = ({ text = '暂无数据', icon = '', onClick = noop, isShowBtn = 
   }, []);
 
   return (
-    <View className={styles.container}>
+    <View className={`${styles.container} ${className}`}>
       <View className={styles.wrapper}>
         {icon && <Icon name={icon} size={48} className={styles.icon} />}
         {!isHidden && <Text>{text}</Text>}
