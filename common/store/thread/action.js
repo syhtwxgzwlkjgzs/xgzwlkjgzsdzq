@@ -75,11 +75,13 @@ class ThreadAction extends ThreadStore {
 
   @action
   reset() {
-    this.threadData = null;
-    this.commentList = null;
-    this.totalCount = 0;
-    this.authorInfo = null;
-    this.isPositionToComment = false;
+    this.threadData = null; // 帖子信息
+    this.commentList = null; // 评论列表数据
+    this.totalCount = 0; // 评论列表总条数
+    this.authorInfo = null; // 作者信息
+    this.isPositionToComment = false; // 是否定位到评论位置
+    this.isCommentListError = false;
+    this.isAuthorInfoError = false;
   }
 
   // 定位到评论位置
@@ -99,10 +101,9 @@ class ThreadAction extends ThreadStore {
     this.threadData.likeReward.likePayCount = data;
   }
 
-  
   /**
    * 更新帖子详情的点赞数据
-   * @param {array} data 
+   * @param {array} data
    */
   @action
   updateLikeReward(data) {
@@ -629,8 +630,6 @@ class ThreadAction extends ThreadStore {
     });
     return list;
   }
-
-  
 
   /**
    * 帖子点赞
