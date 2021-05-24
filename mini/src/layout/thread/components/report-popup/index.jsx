@@ -6,10 +6,8 @@ import styles from './index.module.scss';
 const InputPop = (props) => {
   const { visible, onOkClick, onCancel, inputText, reportContent = [] } = props;
 
-
   const [value, setValue] = useState('');
   const [showTextarea, setShowTextarea] = useState(false);
-
 
   const onChoiceChange = (e) => {
     if (e === 'other') {
@@ -39,44 +37,43 @@ const InputPop = (props) => {
       <View className={styles.container}>
         <View className={styles.header}>
           <View className={styles.title}>举报</View>
-          <View className={styles.reason}>请点击举报理由</View>
+          <View className={styles.reason}>请选择举报理由</View>
         </View>
         <View className={styles.body}>
-          <Radio.Group defaultValue='5' onChange={e => onChoiceChange(e)}>
-            {
-              reportContent.map((val, index) => (
-                <View className={styles.reportTitle} key={index}>
-                  <View className={styles.content}>{val}</View>
-                  <Radio name={`${index}`} className={styles.radio}></Radio>
-                </View>
-              ))
-            }
+          <Radio.Group defaultValue="5" onChange={(e) => onChoiceChange(e)}>
+            {reportContent.map((val, index) => (
+              <View className={styles.reportTitle} key={index}>
+                <View className={styles.content}>{val}</View>
+                <Radio name={`${index}`}></Radio>
+              </View>
+            ))}
             <View className={styles.reportTitle}>
               <View className={styles.content}>其他</View>
               <Radio name="other"></Radio>
             </View>
           </Radio.Group>
-          {
-            showTextarea
-              ? <View className={styles.textarea}>
+          {showTextarea ? (
+            <View className={styles.textarea}>
               <Textarea
                 className={styles.input}
                 rows={5}
-                showLimit
+                showLimit={true}
                 value={value}
-                onChange={e => setValue(e.target.value)}
-                placeholder={inputText}>
-              </Textarea>
-            </View> : ''
-          }
+                onChange={(e) => setValue(e.target.value)}
+                placeholder={inputText}
+              ></Textarea>
+            </View>
+          ) : (
+            ''
+          )}
         </View>
         <View className={styles.button}>
-          <Button full onClick={onSubmitClick} className={styles.ok} type="primary" size="large">
-            确定
-        </Button>
-          <Button full onClick={onCancel} className={styles.cancel} type="primary" size="large">
+          <Button onClick={onCancel} className={styles.cancel}>
             取消
-        </Button>
+          </Button>
+          <Button onClick={onSubmitClick} className={styles.ok} type="primary">
+            确定
+          </Button>
         </View>
       </View>
     </Popup>

@@ -1,0 +1,41 @@
+@import '@common/styles/index.scss';
+.container {
+  background: var(--background-color);
+}
+
+.header {
+  height: 54px;
+  padding: 0 16px;
+  display: flex;
+  justify-content: space-between;
+  background: var(--color-white);
+  border-bottom: var(--border-border);
+  .number {
+    font-size: 16px;
+    text-align: left;
+    color: var(--color-text-primary);
+    line-height: 54px;
+  }
+  .sort {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    line-height: 54px;
+    text-align: left;
+    color: var(--color-text-secondary);
+    .sortText {
+      padding-left: 4px;
+    }
+    .sortIcon {
+      font-size: 14px !important;
+    }
+  }
+}
+
+.body {
+  background: var(--color-white);
+
+  .commentItems {
+    border-bottom: var(--border-border);
+  }
+}
