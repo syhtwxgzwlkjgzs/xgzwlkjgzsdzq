@@ -152,8 +152,10 @@ export default function DVditor(props) {
      * ios 和mac safari，在每一个事件中都记住上次光标的位置
      * 避免blur后vditor.insertValue的位置不正确
      * **/
-    // todo 事件需要throttle或者debounce??? delay时间控制不好可能导致记录不准确
 
+    if (!/(iPhone|Safari|Mac OS)/i.test(navigator.userAgent)) return;
+
+    // todo 事件需要throttle或者debounce??? delay时间控制不好可能导致记录不准确
     const { vditor } = editor;
     const editorElement = vditor[vditor.currentMode]?.element;
     // todo 需要添加drag事件吗
