@@ -3,12 +3,39 @@
 .container {
   position: relative;
   max-width: 44px;
-  .img { }
-  .imgAfter {
-    position: absolute;
-    border: var(--color-white) solid 1px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  .img {
+    border-right: 1px solid var(--color-white);
     border-radius: 50%;
-    right: -1px;
-    top: -1px;
+    z-index: 1;
+  }
+  .imgAfter {
+    position: relative;
+    left: -5px;
+    z-index: 0;
+  }
+
+  .moreIcon {
+    position: absolute;
+    right: 0;
+    bottom: 2.5px;
+    transform: translateX(50%);
+    color: $text-color-secondary;
+    width: 20px;
+    height: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $white;
+    border-radius: 6px;
+    border: $border-solid-1;
+    box-sizing: border-box;
+
+    .icon {
+      transform: rotate(90deg);
+    }
   }
 }
