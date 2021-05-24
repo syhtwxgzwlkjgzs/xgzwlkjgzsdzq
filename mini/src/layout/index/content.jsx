@@ -13,7 +13,6 @@ import styles from './index.module.scss';
 @inject('site')
 @inject('user')
 @inject('index')
-@inject('baselayout')
 @observer
 class IndexH5Page extends React.Component {
   constructor(props) {
@@ -30,6 +29,7 @@ class IndexH5Page extends React.Component {
       navBarHeight: 64,
     };
     this.listRef = createRef();
+    this.headerRef = createRef(null);
     this.renderItem = this.renderItem.bind(this);
   }
 
@@ -114,10 +114,10 @@ class IndexH5Page extends React.Component {
     return dispatch('moreData', requestFilter);
   };
 
-  onScroll = (e) => {
+  handleScroll = (e) => {
     const { scrollTop = 0 } = e?.detail || {}
-    const HEADER_HEIGHT = 160;
-    this.setState({ fixedTab: !(scrollTop < HEADER_HEIGHT) })
+    const { height = 180 } = this.headerRef.current?.state || {}
+    this.setState({ fixedTab: !(scrollTop < height) })
   }
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
@@ -152,8 +152,6 @@ class IndexH5Page extends React.Component {
       <>
         {categories?.length > 0 && (
           <>
-            {fixedTab &&  <View className={styles.tabPlaceholder}></View>}
-
           <View ref={this.listRef} className={`${!fixedTab ? styles.homeContent : styles.homeContentFix}`} style={{paddingTop: !fixedTab ? '' : `${this.state.navBarHeight}px`}}>
             <Tabs
               className={styles.tabsBox}
@@ -172,6 +170,7 @@ class IndexH5Page extends React.Component {
               ))}
             </Tabs>
           </View>
+          {fixedTab &&  <View className={styles.tabPlaceholder}></View>}
           </>
         )}
       </>
@@ -214,12 +213,12 @@ class IndexH5Page extends React.Component {
         onRefresh={this.onRefresh}
         noMore={currentPage >= totalPage}
         isFinished={isFinished}
-        onScroll={this.onScroll}
+        onScroll={this.handleScroll}
         curr='home'
         pageName='home'
         preload={1000}
       >
-        <HomeHeader />
+        <HomeHeader ref={this.headerRef} />
 
         {this.renderTabs()}
 

@@ -66,11 +66,11 @@ class HomeHeader extends React.Component {
   onShare = () => {
     const { user } = this.props;
     if (!user.isLogin()) {
-      // goToLoginPage();
+      goToLoginPage({ url: '/user/login' });
       return;
     }
     // 判断是否在微信浏览器
-    if (isWeiXin) {
+    if (isWeiXin()) {
       this.setState({ visible: true });
     } else {
       const title = document?.title || '';

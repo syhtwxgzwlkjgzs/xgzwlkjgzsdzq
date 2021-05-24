@@ -38,13 +38,13 @@ const BottomNavBar = ({ router, fixed = true, placeholder = false, curr = 'home'
     <View className={styles.footer} style={{ position: fixed ? 'fixed' : '' }}>
       {tabs.map((i, idx) => (i.text ? (
           <View key={idx} className={styles.item + (i.active ? ` ${styles.active}` : '')} onClick={() => handleClick(i, idx)}>
-            <Icon name={i.icon} size={20} />
+            <Icon name={i.icon} size={i.icon === 'MailOutlined' ? 22 : 20} />
             <View className={styles.text}>{i.text}</View>
           </View>
       ) : (
           <View key={idx} style={{ flex: 1, textAlign: 'center' }} onClick={() => handleClick(i, idx)}>
             <View className={styles.addIcon}>
-              <Icon name={i.icon} size={24} color="#fff" />
+              <Icon name={i.icon} size={28} color="#fff" />
             </View>
           </View>
       )))}

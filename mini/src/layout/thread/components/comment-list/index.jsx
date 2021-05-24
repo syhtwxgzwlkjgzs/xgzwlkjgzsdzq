@@ -8,6 +8,9 @@ import { diffDate } from '@common/utils/diff-date';
 import { observer } from 'mobx-react';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
+
+import redpacketMiniImg from '../../../../../../web/public/dzq-img/redpacket-mini.png';
+
 @observer
 class CommentList extends React.Component {
   constructor(props) {
@@ -103,7 +106,7 @@ class CommentList extends React.Component {
               )}
               {this.props.data?.redPacketAmount ? (
                 <View className={`${styles.redpacket} ${styles.imageNumber}`}>
-                  <Image className={styles.image} src="/dzq-img/redpacket-mini.png" alt="红包图标" />
+                  <Image className={styles.image} src={redpacketMiniImg} alt="红包图标" />
                   <View className={styles.showMoneyNum}>
                     获得<Text className={styles.moneyNumber}>{this.props.data.redPacketAmount}</Text>元红包
                   </View>
