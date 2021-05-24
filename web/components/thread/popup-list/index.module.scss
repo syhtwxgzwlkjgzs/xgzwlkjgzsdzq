@@ -28,7 +28,7 @@
     .dzq-tabs__panel {
       border-top: 1px solid rgba(238, 238, 238, 0.75);
       cursor: auto;
-      min-height: rem(300);
+      min-height: rem(608);
     }
     .dzq-tabs__item {
       @include cursor-on-pc;
@@ -140,6 +140,12 @@
   }
   .num {
   }
+}
+
+.spinnerPC {
+  height: rem(773);
+  width: 100%;
+  color: var(--color-text-placeholder);
 }
 
 .spinner {

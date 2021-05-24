@@ -79,7 +79,7 @@ export default class commonLoginStore {
       const causeMes = cause ? `，原因：${cause}` : '';
       this.statusCode = code;
       this.statusMsg = cause;
-      this.statusMessage = `${USER_STATUS_MAP[code]}${causeMes}`;
+      this.statusMessage = `${USER_STATUS_MAP[code] || ''}${causeMes}`;
       return this.statusMessage;
     }
 

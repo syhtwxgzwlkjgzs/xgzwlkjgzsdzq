@@ -24,7 +24,8 @@ const List = forwardRef(({
   showRefresh = true,
   preload = 30,
   onError = noop,
-  enableError = false
+  enableError = false,
+  immediateCheck = true
 }, ref) => {
   const listWrapper = useRef(null);
   const currentScrollTop = useRef(0)
@@ -38,8 +39,10 @@ const List = forwardRef(({
   }, [noMore]);
 
   useEffect(() => {
-    onTouchMove({ isFirst: true });
-    // TODO 判断是处于PC端，且
+    // 初始化的时候，是否立即请求一次
+    if (immediateCheck) {
+      onTouchMove({ isFirst: true });
+    }
   }, []);
 
   useImperativeHandle(
@@ -65,6 +68,7 @@ const List = forwardRef(({
 
   const onBackTop = () => {
     listWrapper.current.scrollTop = 0;
+    currentScrollTop.current = 0;
   };
 
   const jumpToScrollTop = (scrollTop) => {
