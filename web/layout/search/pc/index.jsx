@@ -115,14 +115,18 @@ class SearchPCPage extends React.Component {
     )
   }
   handleScroll = ({ scrollTop } = {}) => {
-    const activeUsersPos = this.activeUsersRef.current.offsetTop;
-    const hotTopicPos = this.hotTopicRef.current.offsetTop;
+    const HEADER_HEIGHT = 57,
+          activeUsersPos = this.activeUsersRef.current.offsetTop,
+          activeUsersScrollTo = activeUsersPos + parseInt(HEADER_HEIGHT / 2);
 
-    if(scrollTop < activeUsersPos) {
+    const hotTopicPos = this.hotTopicRef.current.offsetTop,
+          hotTopicScrollTo = hotTopicPos + parseInt(HEADER_HEIGHT / 2);
+
+    if(scrollTop < activeUsersScrollTo) {
       this.setState({stepIndex: 0}); // TODO: 暂时写死index，应该通过steps传回index
-    } else if(scrollTop < hotTopicPos && scrollTop >= activeUsersPos) {
+    } else if(scrollTop < hotTopicScrollTo && scrollTop >= activeUsersScrollTo) {
       this.setState({stepIndex: 1});
-    } else if(scrollTop >= hotTopicPos) {
+    } else if(scrollTop >= hotTopicScrollTo) {
       this.setState({stepIndex: 2});
     }
   }
