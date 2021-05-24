@@ -3,7 +3,6 @@ import React from 'react';
 import ThreadContent from '@components/thread';
 
 import styles from './index.module.scss';
-import { View, Text } from '@tarojs/components';
 
 /**
  * 帖子搜索结果
@@ -11,11 +10,14 @@ import { View, Text } from '@tarojs/components';
  * @prop {function} onItemClick 帖子点击事件
  */
 const SearchPosts = ({ data, onItemClick }) => (
-  <View className={styles.list}>
-    {data.map((item, index, arr) => (
-      <ThreadContent key={index} className={styles.listItem} data={item} onClick={onItemClick} />
+  <div className={styles.list}>
+    {data.map((item, index) => (
+        <div key={index}>
+          <ThreadContent showBottomStyle={false} className={styles.listItem} data={item} key={index} />
+          <div className={styles.hr}></div>
+        </div>
     ))}
-  </View>
+  </div>
 );
 
 export default React.memo(SearchPosts);

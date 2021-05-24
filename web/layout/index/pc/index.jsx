@@ -38,7 +38,9 @@ class IndexPCPage extends React.Component {
   // 轮询定时器
   timer = null
   // 筛选过滤数据
-  filter = {}
+  filter = {
+    sequence: this.checkIsOpenDefaultTab() ? 1 : 0
+  }
   // List组件ref
   listRef = React.createRef()
   // 存储最新的数据，以便于点击刷新时，可以直接赋值

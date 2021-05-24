@@ -1,7 +1,7 @@
 import React from 'react';
-import { noop } from '../utils'
+
 import styles from './index.module.scss';
-import { View, Text, Image } from '@tarojs/components';
+import { View, Text, Image } from '@tarojs/components'
 
 /**
  * 单个商品内容展示
@@ -11,7 +11,7 @@ import { View, Text, Image } from '@tarojs/components';
  * @prop {boolean}       loading
  */
 
-const Index = ({ image, title, amount = 0, loading, className: _className = '', onClick = noop }) => {
+const Index = ({ image, title, amount = 0, loading, className: _className = '', onClick }) => {
   const _title = !loading ? title || '暂无内容' : '内容加载中';
 
   return (
