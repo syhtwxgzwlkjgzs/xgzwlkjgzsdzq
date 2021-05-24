@@ -91,3 +91,4 @@ export { default as smsRebind } from './user//smsRebind';
 // 钱包模块
 export { default as readWalletUser } from './wallet/read-walletUser';
 export { default as readWalletLog } from './wallet/read-walletLog';
+export { default as readWalletCash } from './wallet/read-walletCash';
