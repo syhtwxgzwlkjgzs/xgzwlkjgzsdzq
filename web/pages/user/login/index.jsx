@@ -1,6 +1,7 @@
 import React from 'react';
 import H5Login from '@layout/user/h5/login';
 import { inject } from 'mobx-react';
+import { withRouter } from 'next/router';
 
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import HOCWithNoLogin from '@middleware/HOCWithNoLogin';
@@ -13,4 +14,4 @@ class Login extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(HOCWithNoLogin(Login));
+export default HOCFetchSiteData(HOCWithNoLogin(withRouter(Login)));
