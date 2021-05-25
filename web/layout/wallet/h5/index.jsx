@@ -29,8 +29,9 @@ class WalletH5Page extends React.Component {
     };
   }
   async componentDidMount() {
-    const { getUserWalletInfo } = this.props.wallet
-    getUserWalletInfo()
+    const { getUserWalletInfo,getInconmeDetail } = this.props.wallet
+    await getUserWalletInfo()
+    await getInconmeDetail()
   }
   // 点击冻结金额
   onFrozenAmountClick() {
@@ -202,7 +203,6 @@ class WalletH5Page extends React.Component {
     ];
 
     const { walletInfo, incomeDetail, expandDetail, freezeDetail, cashDetail } = this.props.wallet
-
     return (
       <div className={layout.container}>
         <div className={layout.scroll}>

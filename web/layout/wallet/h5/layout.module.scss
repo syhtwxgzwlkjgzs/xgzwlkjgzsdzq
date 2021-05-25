@@ -2,11 +2,12 @@
 
 :global {
   .datepicker-modal {
-    z-index: 1!important;
+    z-index: 1 !important;
   }
 }
 
 .container {
+  @include scrollbar();
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -60,9 +61,11 @@
       .dzq-tabs__panel {
         height: 0;
       }
-      .dzq-tabs__list{
+
+      .dzq-tabs__list {
         display: flex;
       }
+
       .dzq-tabs__content {
         padding-left: 0;
         padding-right: 0;
@@ -78,6 +81,8 @@
 
       .dzq-tabs__item {
         height: rem(50);
+        box-sizing: border-box;
+        padding: 0 6px;
         flex: 1;
       }
     }
