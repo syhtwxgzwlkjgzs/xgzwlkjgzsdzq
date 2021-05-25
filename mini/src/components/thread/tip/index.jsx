@@ -33,13 +33,9 @@ import styles from './index.module.scss';
     }, [])
   }, [imgs]);
 
-  const sty = useMemo(() => {
-    return { width: renderUsers.length === 1 ? '24px' : '44px' }
-  }, [renderUsers])
-
   return (
     <>
-        <View className={styles.container} onClick={onClick} style={sty}>
+        <View className={`${styles.container} ${renderUsers.length === 1 ? styles.w24 : styles.w44}`} onClick={onClick}>
             {
                 wholeNum !== 0 && renderUsers?.filter((_, index) => index < 2).map((item, index) => (
                   <View key={index} className={index === 0 ? styles.img : styles.imgAfter}>

@@ -18,6 +18,7 @@ class index extends Component {
       current_step: 'second', // 表示当前步骤
       bind_mobile: null,
       is_blur: true, // 表示是否失焦
+      isKeyBoardVisible: false, // 是否显示键盘
     };
   }
 
@@ -88,9 +89,15 @@ class index extends Component {
   getVerifyCode = ({ calback }) => {
     if (calback && typeof calback === 'function') calback();
   }
+  // 点击切换弹出键盘事件
+  handleKeyBoardVisible = () => {
+    this.setState({
+      isKeyBoardVisible: !this.state.isKeyBoardVisible
+    })
+  }
 
   render() {
-    const { current_step, list = [], is_blur } = this.state;
+    const { current_step, list = [], is_blur, isKeyBoardVisible } = this.state;
     const mobile = this.props?.user.mobile;
     return (
       <div>
@@ -108,7 +115,7 @@ class index extends Component {
           </div>
           <div className={styles.bindCode}>
             <span>请输入短信验证码</span>
-            <CaptchaInput current_step={current_step} updatePwd={this.updatePwd} list={list} is_blur={is_blur} />
+            <CaptchaInput handleKeyBoardVisible={this.handleKeyBoardVisible} isKeyBoardVisible={isKeyBoardVisible} current_step={current_step} updatePwd={this.updatePwd} list={list} is_blur={is_blur} />
           </div>
         </div>
         <div className={styles.labelInfo}>
@@ -117,7 +124,7 @@ class index extends Component {
         <div className={styles.labelInfo}>
           <div className={styles.labelValue}><Input onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="请重复输入新密码" type="number" maxLength={6} /></div>
         </div>
-        <div className={styles.bottom}>
+        <div className={`${styles.bottom} ${isKeyBoardVisible && styles.bootom2}`}>
           <Button full onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>提交</Button>
         </div>
       </div>
