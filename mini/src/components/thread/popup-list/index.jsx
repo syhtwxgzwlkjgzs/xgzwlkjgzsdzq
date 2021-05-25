@@ -191,7 +191,7 @@ import { View, Text } from '@tarojs/components'
                           platform={platform}
                           onClick={onUserClick}
                           type={item.type}
-                          isShowBottomLine={tipData?.platform === 'pc'}
+                          isShowBottomLine={false}
                         />
                     ))
                   }
@@ -206,7 +206,7 @@ import { View, Text } from '@tarojs/components'
 
   return (
     <Popup
-        position={tipData?.platform === 'h5' ? 'bottom' : 'center'}
+        position='bottom'
         visible={visible}
         onClose={onClose}
     >
@@ -214,7 +214,7 @@ import { View, Text } from '@tarojs/components'
       !all ?
           <Tabs
             activeId={current}
-            className={`${styles.tabs} ${tipData?.platform === 'pc' && styles.tabsPC}`}
+            className={styles.tabs}
           >
             <Tabs.TabPanel key={0} id={0}>
               <Spin className={styles.spinner} type="spinner" />
@@ -224,7 +224,7 @@ import { View, Text } from '@tarojs/components'
         <Tabs
           onActive={onClickTab}
           activeId={current}
-          className={`${styles.tabs} ${tipData?.platform === 'pc' && styles.tabsPC}`}
+          className={styles.tabs}
           tabBarExtraContent={
             tipData?.platform === 'pc' && (
               <View onClick={onClose} className={styles.tabIcon}>
