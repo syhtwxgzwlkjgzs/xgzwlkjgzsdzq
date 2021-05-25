@@ -66,14 +66,8 @@ class Index extends React.Component {
       const { data = {} } = this.props;
       const { threadId = '' } = data;
       if (threadId !== '') {
-        const { platform = 'pc' } = this.props.site;
         this.props.thread.positionToComment()
-        if (platform === 'pc') {
-          const baseUrl = window.location.origin
-          window.open(`${baseUrl}/thread/${threadId}`)
-        } else {
-          this.props.router.push(`/thread/${threadId}`);
-        }
+        this.props.router.push(`/thread/${threadId}`);
       } else {
         console.log('帖子不存在');
       }
@@ -154,13 +148,7 @@ class Index extends React.Component {
       }
 
       if (threadId !== '') {
-        const { platform = 'pc' } = this.props.site;
-        if (platform === 'pc') {
-          const baseUrl = window.location.origin
-          window.open(`${baseUrl}/thread/${threadId}`)
-        } else {
-          this.props.router.push(`/thread/${threadId}`);
-        }
+        this.props.router.push(`/thread/${threadId}`);
       } else {
         console.log('帖子不存在');
       }

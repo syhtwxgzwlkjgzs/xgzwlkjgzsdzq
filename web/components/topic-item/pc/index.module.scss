@@ -25,7 +25,8 @@
       vertical-align: baseline;
     }
     .content {
-      padding: rem(6) rem($padding-6n) 0;
+      padding-top: rem(6);
+      padding-left: rem($padding-6n);
       flex: 1;
       overflow: hidden;
     }
@@ -78,7 +79,6 @@
 
   .richContent {
     display: box;
-    font-size: rem($font-size-base);
     line-height: rem(26);
     max-height: rem(50);
     @include lamp-clamp($line: 2);
@@ -90,7 +90,11 @@
       -webkit-line-clamp: 2;
       line-clamp: 2;
       -webkit-box-orient: vertical;/* stylelint-disable-line */
-      font-size: rem($font-size-middle);
+      :global {
+        .dzq-p {
+          font-size: rem($font-size-base);
+        }
+      }
     }
   }
 

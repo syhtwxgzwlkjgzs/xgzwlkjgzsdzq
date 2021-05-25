@@ -4,6 +4,7 @@ import { noop } from '@components/thread/utils'
 import LoadingTips from '../../../../thread/pc/components/loading-tips';
 import styles from './index.module.scss';
 import isServer from '../../../../../../common/utils/is-server';
+import LoadingBox from '@components/loading-box';
 
 const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, defaultFisrtIndex = -1, defaultSecondIndex = -1 }) => {
   const [fistIndex, setFistIndex] = useState(defaultFisrtIndex);
@@ -27,10 +28,6 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
     setFistIndex(categoryIds[0]);
     setSecondIndex(categoryIds[1]);
     if (categoryIds[1] === '-1') {
-      if (categoryIds[0] === '1') { // 默认
-        sequence = 1
-      }
-
       if (categoryIds[0] !== '-1') { // 全部
         categoryIds = [categoryIds[0]]
       } else {
@@ -111,7 +108,7 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
         categories?.length ?
           <CategoriesContent />
         :
-          <LoadingTips type="init"></LoadingTips>
+          <LoadingBox />
       }
     </Card>
   );

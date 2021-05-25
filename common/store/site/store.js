@@ -48,6 +48,26 @@ class SiteStore {
     return get(this.webConfig, 'setSite.siteLogo');
   }
 
+  // 注册协议开关
+  @computed get isAgreementRegister() {
+    return get(this.webConfig, 'agreement.register', true);
+  }
+
+  // 注册协议内容
+  @computed get agreementRegisterContent() {
+    return get(this.webConfig, 'agreement.registerContent', '');
+  }
+
+  // 隐私协议开关
+  @computed get isAgreementPrivacy() {
+    return get(this.webConfig, 'agreement.privacy', true);
+  }
+
+  // 隐私协议内容
+  @computed get agreementPrivacyContent() {
+    return get(this.webConfig, 'agreement.privacyContent', '');
+  }
+
   @computed get wechatEnv() {
     if (this.isMiniProgramOpen) {
       return WECHAT_ENV_MAP.MINI;

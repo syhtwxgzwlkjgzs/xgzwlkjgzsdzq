@@ -4,7 +4,6 @@ import { Topic } from '@components/search-result-item';
 import List from '../list';
 
 import styles from './index.module.scss';
-import { View, Text } from '@tarojs/components';
 
 /**
  * 话题搜索结果
@@ -26,10 +25,10 @@ const SearchTopics = ({ data = [], refreshing, onRefresh, onFetchMore, onItemCli
       data={data}
       refreshing={refreshing}
       onRefresh={onRefresh}
-      onScrollBottom={onFetchMore}
+      onPullingUp={onFetchMore}
       renderItem={renderItem}
     />
   );
 };
 
-export default React.memo(SearchTopics);
+export default SearchTopics;

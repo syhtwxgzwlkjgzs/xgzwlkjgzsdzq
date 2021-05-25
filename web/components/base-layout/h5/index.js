@@ -5,6 +5,7 @@ import List from '@components/list'
 import BottomNavBar from '@components/bottom-nav-bar'
 import { PullDownRefresh } from "@discuzq/design"
 import { noop } from '@components/thread/utils'
+import { throttle } from '@common/utils/throttle-debounce.js'
 
 import styles from './index.module.scss';
 
@@ -22,32 +23,45 @@ import styles from './index.module.scss';
         {(props) => <div>中间</div>}
       </BaseLayout>
 */
-const baseLayoutWhiteList = ['home'];
+const baseLayoutWhiteList = ['home', 'search'];
 
 const BaseLayout = (props) => {
-  const { showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr, onScroll = noop, baselayout } = props;
+  const { 
+    showHeader = true, 
+    showTabBar = false, 
+    showPullDown = false, 
+    children = null, 
+    onPullDown, 
+    isFinished = true, 
+    curr, 
+    onScroll = noop,
+    baselayout,
+    onClickTabBar = noop,
+    pageName = ''
+  } = props;
+
   const [height, setHeight] = useState(600);
 
-  const debounce = (fn, wait) => {
-    let timer = null;
-    return () => {
-      if(timer !== null){
-        clearTimeout(timer);
-      }
-      timer = setTimeout(fn, wait);
-    }
-  }
+  // const debounce = (fn, wait) => {
+  //   let timer = null;
+  //   return () => {
+  //     if(timer !== null){
+  //       clearTimeout(timer);
+  //     }
+  //     timer = setTimeout(fn, wait);
+  //   }
+  // }
 
-  const throttle = (func, delay) => {
-    let old = 0;
-    return function() {
-      const now = new Date().valueOf();
-      if(now - old > delay) {
-        func();
-        old = now;
-      }
-    }
-  }
+  // const throttle = (func, delay) => {
+  //   let old = 0;
+  //   return function() {
+  //     const now = new Date().valueOf();
+  //     if(now - old > delay) {
+  //       func();
+  //       old = now;
+  //     }
+  //   }
+  // }
 
   const pullDownWrapper = useRef(null)
   const listRef = useRef(null);
@@ -56,20 +70,28 @@ const BaseLayout = (props) => {
     if (pullDownWrapper?.current) {
       setHeight(pullDownWrapper.current.clientHeight)
     }
-    if (listRef?.current && baselayout.jumpToScrollingPos > 0 &&
-        baseLayoutWhiteList.indexOf(props.pageName) !== -1) {
-        listRef.current.jumpToScrollTop(baselayout.jumpToScrollingPos);
+    if (listRef?.current && (baselayout.jumpToScrollingPos > 0 || baselayout[pageName] > 0) &&
+        baseLayoutWhiteList.indexOf(pageName) !== -1) {
+        if (pageName === 'home') {
+          listRef.current.jumpToScrollTop(baselayout.jumpToScrollingPos);
+        } else {
+          if (baselayout[pageName]) {
+            listRef.current.jumpToScrollTop(baselayout[pageName]);
+          }
+        }
     }
   }, [])
 
-  // const handleScroll = throttle(() => {
-    // if(!listRef?.current?.currentScrollTop) {
-    //   onScroll();
-    //   return;
-    // }
-  //   baselayout.jumpToScrollingPos = listRef.current.currentScrollTop.current;
-  //   onScroll({ scrollTop: listRef.current.currentScrollTop.current });
-  // }, 30)
+  const handleScroll = throttle(() => {
+    if(!listRef?.current?.currentScrollTop) return;
+
+    if(baselayout.isJumpingToTop) {
+      baselayout.removeJumpingToTop();
+      listRef.current.onBackTop();
+    }
+
+    onScroll({ scrollTop: listRef.current.currentScrollTop.current });
+  }, 50)
 
   return (
     <div className={styles.container}>
@@ -78,19 +100,19 @@ const BaseLayout = (props) => {
           showPullDown ? (
             <div className={styles.list} ref={pullDownWrapper}>
               <PullDownRefresh onRefresh={onPullDown} isFinished={isFinished} height={height}>
-                  <List {...props} className={styles.listHeight} ref={listRef}>
+                  <List {...props} className={styles.listHeight} ref={listRef} onScroll={handleScroll}>
                       {typeof(children) === 'function' ? children({ ...props }) : children}
                   </List>
               </PullDownRefresh>
             </div>
           ) : (
-            <List {...props} className={styles.list} ref={listRef} onScroll={onScroll}>
+            <List {...props} immediateCheck={false} className={styles.list} ref={listRef} onScroll={handleScroll}>
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>
           )
         }
         
-        {showTabBar && <BottomNavBar placeholder curr={curr} />}
+        {showTabBar && <BottomNavBar onClick={onClickTabBar} placeholder curr={curr} />}
     </div>
   );
 };

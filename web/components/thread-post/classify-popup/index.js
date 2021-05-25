@@ -28,7 +28,9 @@ const ClassifyPopup = (props) => {
   const setChildren = (item) => {
     if (item.children && typeofFn.isArray(item.children.slice()) && item.children.length > 0) {
       setCategoryChildren(item.children);
-      setSelectedChild(item.children[0]);
+      if (categorySelected?.child?.pid) {
+        setSelectedChild(categorySelected.child);
+      } else setSelectedChild(item.children[0]);
     } else {
       setCategoryChildren([]);
       setSelectedChild({});
@@ -42,7 +44,7 @@ const ClassifyPopup = (props) => {
   }, [category]);
 
   useEffect(() => {
-    if (selected.pid) return;
+    if (selected.pid && categorySelected?.parent && categorySelected.parent?.pid === selected.pid) return;
     if (categorySelected.parent && categorySelected.parent.pid && categorySelected.parent.pid !== selected.pid) {
       setSelected(categorySelected.parent);
     }

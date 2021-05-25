@@ -1,8 +1,7 @@
 @import '@common/styles/index.scss';
 
 .list {
-  padding: 16px 0;
-  padding-bottom: 0;
+  padding: $padding-4n 0;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -12,18 +11,18 @@
     flex-direction: row;
     align-items: center;
     width: 50%;
-    font-size: 14px;
+    font-size: $font-size-primary;
     margin-bottom: 12px;
     .index {
       font-size: inherit;
-      line-height: 24px;
-      margin-right: 8px;
+      line-height: $font-line-height-primary;
+      margin-right: $padding-2n;
       width: 14px;
       text-align: center;
     }
     .text {
       font-size: inherit;
-      line-height: 24px;
+      line-height: $font-line-height-primary;
       width: 140px;
       overflow: hidden;
       text-overflow: ellipsis;

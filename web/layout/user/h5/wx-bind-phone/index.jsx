@@ -6,7 +6,7 @@ import { Button, Toast, Avatar } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import PhoneInput from '@components/login/phone-input';
-import PopProtocol from '../components/pop-protocol';
+import Protocol from '../components/protocol';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 
@@ -69,7 +69,7 @@ class WXBindPhoneH5Page extends React.Component {
       });
 
       setTimeout(() => {
-        router.push('/');
+        window.location.href = '/';
       }, 1000);
     } catch (error) {
       // 跳转状态页
@@ -85,8 +85,10 @@ class WXBindPhoneH5Page extends React.Component {
   }
 
   render() {
-    const { wxPhoneBind, router, commonLogin } = this.props;
+    const { wxPhoneBind, router, commonLogin, site } = this.props;
     const { nickname, avatarUrl } = router.query;
+    // 接受监听一下协议的数据，不能去掉，去掉后协议的点击无反应
+    const { protocolVisible } = commonLogin;
     return (
       <div className={layout.container}>
         <HomeHeader hideInfo mode='login'/>
@@ -129,27 +131,8 @@ class WXBindPhoneH5Page extends React.Component {
           >
             登录并绑定
           </Button>
-          <div className={layout['otherLogin-within__tips']}>
-            注册登录即表示您同意
-            <span onClick={() => {
-              if (platform === 'pc') {
-                window.open('/user/agreement?type=register');
-              }
-              commonLogin.setProtocolInfo('register');
-            }}>《注册协议》</span>
-            <span onClick={() => {
-              if (platform === 'pc') {
-                window.open('/user/agreement?type=privacy');
-              }
-              commonLogin.setProtocolInfo('privacy');
-            }}>《隐私协议》</span>
-          </div>
+          <Protocol/>
         </div>
-        {
-        platform === 'h5'
-          ? <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
-          : <></>
-      }
       </div>
     );
   }

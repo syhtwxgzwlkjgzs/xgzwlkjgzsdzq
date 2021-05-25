@@ -1,15 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button, Popup } from '@discuzq/design';
+import { Button, Icon, Popup, Flex } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
 import filterData from './data';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
 
-const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel = noop }) => {
-  const [first, setFirst] = useState('');
+const { Col, Row } = Flex;
+
+const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel = noop, router }) => {
+  const [first, setFirst] = useState('all');
   const [firstChildren, setFirstChildren] = useState();
   const [second, setSecond] = useState('');
   const [third, setThird] = useState('0');
+
+  // 二级分类数据
+  const [subData, setSubData] = useState([])
 
   const data = useMemo(() => {
     const newData = filterData;
@@ -20,7 +25,7 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
   useEffect(() => {
     const { categoryids = [], types, essence } = current || {};
 
-    setFirst(categoryids[0] || '');
+    setFirst(categoryids[0] || 'all');
     setSecond(types || '');
     setThird(essence || '0');
 
@@ -28,12 +33,18 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
       setFirstChildren(categoryids[1]);
     }
   }, [current, visible]);
-
   // 点击一级菜单
-  const onClickFirst = (index, type) => {
+  const onClickFirst = (index, type, contents) => {
     if (type === 1) {
       setFirst(index);
       setFirstChildren('');
+
+      const newSubArr = contents?.filter(item => item.pid === index)
+      if (!newSubArr.length) {
+        setSubData([])
+      } else {
+        setSubData(newSubArr[0].children || [])
+      }
     } else if (type === 2) {
       setSecond(index);
     } else {
@@ -48,14 +59,16 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
     }
   };
 
+  const goSearch = () => {
+    router.push(`/search`);
+  }
+
   // 结果数据处理
   const handleSubmit = () => {
     let sequence = 0;
-    tmpData.forEach((item) => {
-      if (item.pid === first && item.name.indexOf('默认分类') !== -1) {
-        sequence = 1;
-      }
-    });
+    if (first === 'default') {
+      sequence = 1;
+    }
 
     const categoryids = [first];
     if (firstChildren) {
@@ -86,30 +99,42 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
     }
 
     return (
-      <View key={key}>
-        <View className={styles.title}>{title}</View>
-        <View className={styles.wrapper}>
+      <View className={styles.moduleWrapper} key={key}>
+        <View className={styles.title}>
+          {title}
+          {key === 0 && <Icon className={styles.searchIcon} name='SearchOutlined' size={20} onClick={goSearch}></Icon>}
+        </View>
+        <Row className={styles.wrapper} gutter={10}>
           {
             contents.map((item, index) => (
+              <Col span={ item.name.length < 6 ? 3 : item.name.length === 6 ? 4 : 5 } key={index}>
               <Text
                 className={`${tip === item.pid ? styles.active : ''} ${styles.span}`}
                 key={index}
-                onClick={() => onClickFirst(item.pid, type)}
+                onClick={() => onClickFirst(item.pid, type, contents)}
               >
-                {item.name}
+                {item.name.length > 6 ? item.name.substr(0, 6) : item.name}
               </Text>
+              </Col>
             ))
           }
-        </View>
+        </Row>
         {
-          contents[first]?.children?.length ? (
-            <View className={`${styles.wrapper} ${styles.childrenWrapper}`}>
+          type === 1 && subData.length ? (
+            <Row className={`${styles.wrapper} ${styles.childrenWrapper}`} gutter={10}>
               {
-                contents[first].children.map((item, index) => (
-                  <Text className={`${firstChildren === item.pid ? styles.childrenActive : ''} ${styles.span}`} key={`${index}-${index}`} onClick={() => onClickSecond(item.pid, type)}>{item.name}</Text>
+                subData.map((item, index) => (
+                  <Col span={3}>
+                    <Text 
+                      className={`${firstChildren === item.pid ? styles.childrenActive : ''} ${styles.childrenSpan}`} 
+                      key={`${index}-${index}`} 
+                      onClick={() => onClickSecond(item.pid, type)}>
+                        {item.name}
+                    </Text>
+                  </Col>
                 ))
               }
-            </View>
+            </Row>
           ) : null
         }
       </View>
@@ -123,13 +148,18 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
       visible={visible}
       onClose={handleCancel}
     >
-      <View className={styles.container}>
-        { data && data.map((item, index) => renderContent(item, index)) }
-      </View>
-      <View className={styles.footer}>
-          <Button className={styles.button} onClick={handleSubmit} type="primary">筛 选</Button>
-          <View className={styles.footerBtn} onClick={handleCancel}>
-            取 消
+        <View className={styles.container}>
+          <View className={styles.content}>
+            <View className={styles.list} >
+             { data && data.map((item, index) => renderContent(item, index)) }
+            </View>
+          </View>
+          
+          <View className={styles.footer}>
+            <Button className={styles.button} onClick={handleSubmit} type="primary">筛选</Button>
+            <View className={styles.footerBtn} onClick={handleCancel}>
+              取消
+            </View>
           </View>
         </View>
     </Popup>

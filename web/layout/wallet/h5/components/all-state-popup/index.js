@@ -1,16 +1,16 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { Button, Icon, Popup, Flex } from '@discuzq/design';
 
 import styles from './index.module.scss';
 
-const { Col, Row } = Flex
+const { Col, Row } = Flex;
 
 export class index extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       choice: '',
-    }
+    };
   }
   onClickFirst = (item) => {
     this.setState({ choice: item.id });
@@ -32,7 +32,7 @@ export class index extends Component {
           <div className={styles.content}>
             <div className={styles.list} >
               <div className={styles.moduleWrapper}>
-                <div className={styles.title}>模块</div>
+                <div className={styles.title}>{this.props.title}</div>
                 <Row className={styles.wrapper} gutter={10}>
                   {
                     data.map((item, index) => (
@@ -52,13 +52,15 @@ export class index extends Component {
             </div>
           </div>
           <div className={styles.footer}>
-            <Button className={styles.button} onClick={() => { this.handleSubmit(choice) }} type="primary">确定</Button>
+            <Button className={styles.button} onClick={() => {
+              this.handleSubmit(choice);
+            }} type="primary">确定</Button>
             <div className={styles.footerBtn} onClick={handleCancel}> 取消 </div>
           </div>
         </div>
       </Popup>
-    )
+    );
   }
 }
 
-export default index
+export default index;
