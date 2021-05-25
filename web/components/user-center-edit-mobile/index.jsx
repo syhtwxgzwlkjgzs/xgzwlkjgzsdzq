@@ -7,6 +7,7 @@ import HOCFetchSiteData from '../../middleware/HOCFetchSiteData';
 import CaptchaInput from './captcha-input/index';
 import VerifyCode from './verify-code/index';
 import Router from '@discuzq/sdk/dist/router';
+import throttle from '@common/utils/thottle.js';
 
 @inject('site')
 @inject('user')
@@ -56,7 +57,7 @@ class index extends Component {
   };
 
   // 点击下一步
-  handleStepBtn = async () => {
+  handleStepBtn = throttle(async () => {
     const { list = [], current_step, bind_mobile } = this.state;
     if (list.length !== 6) return;
     if (current_step === 'first') {
@@ -97,7 +98,7 @@ class index extends Component {
           });
         });
     }
-  }
+  }, 300)
 
   handleInputChange = (e) => {
     this.setState({
@@ -117,7 +118,7 @@ class index extends Component {
     });
   }
 
-  getVerifyCode = ({ calback }) => {
+  getVerifyCode = throttle(({ calback }) => {
     const { originalMobile } = this.props.user;
     const { current_step } = this.state;
     if (current_step === 'first') {
@@ -159,7 +160,7 @@ class index extends Component {
           if (calback && typeof calback === 'function') calback(err);
         });
     }
-  }
+  }, 300)
 
   validateTel = value => (/^[1][3-9]\d{9}$/.test(value))
 

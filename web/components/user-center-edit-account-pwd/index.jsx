@@ -5,6 +5,7 @@ import Header from '@components/header';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
+import throttle from '@common/utils/thottle.js';
 @inject('user')
 @observer
 class index extends Component {
@@ -61,7 +62,7 @@ class index extends Component {
   }
 
   // 点击提交
-  handleSubmit = async () => {
+  handleSubmit = throttle(async () => {
     const { oldPassword, newPassword, newPasswordRepeat } = this.state
     if (newPassword !== newPasswordRepeat) {
       Toast.error({
@@ -112,9 +113,7 @@ class index extends Component {
         this.initState()
       })
     }
-
-
-  }
+  }, 300)
 
   // 渲染未设置密码
   renderHasNoPassword = () => {

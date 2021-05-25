@@ -6,6 +6,7 @@ import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData';
+import throttle from '@common/utils/thottle.js';
 @inject('site')
 @inject('user')
 @observer
@@ -66,10 +67,10 @@ class index extends Component {
     );
   }
 
-  handleUpdateEditedUserInfo = () => {
+  handleUpdateEditedUserInfo = throttle(() => {
     this.props.user.updateEditedUserInfo();
     Router.push({ url: '/my' });
-  }
+  }, 300)
 
   handleGoToEditMobile = () => {
     Router.push({ url: '/my/edit/mobile' });
