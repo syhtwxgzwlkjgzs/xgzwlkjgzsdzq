@@ -72,17 +72,14 @@ class index extends Component {
   }
 
   handleGoToEditMobile = () => {
-    console.log('去到修改手机号页面');
     Router.push({ url: '/my/edit/mobile' });
   }
 
   handleGoToEditAccountPwd = () => {
-    console.log('去到修改账户密码页面');
     Router.push({ url: '/my/edit/pwd' });
   }
 
   handleGoToEditPayPwd = () => {
-    console.log('去到修改支付密码页面');
     Router.push({ url: '/my/edit/paypwd' });
   }
 
@@ -108,12 +105,12 @@ class index extends Component {
               <label>手机号码</label>
               <div>{this.user.mobile}</div>
             </div>
-            <div onClick={this.handleGoToEditMobile}><Icon name="RightOutlined" /></div>
-            {/* {
+            {/* <div onClick={this.handleGoToEditMobile}><Icon name="RightOutlined" /></div> */}
+            {
               this.props.site.isSmsOpen && (
-                <div><Icon name="RightOutlined" /></div>
+                <div onClick={this.handleGoToEditMobile}><Icon name="RightOutlined" /></div>
               )
-            } */}
+            }
           </div>
           <div className={styles.userCenterEditItem}>
             <div className={styles.userCenterEditLabel}>

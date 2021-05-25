@@ -123,9 +123,9 @@ class index extends Component {
     return (
       <>
         <h3>设置密码</h3>
-        <div className={styles.labelInfo}>
+        {/* <div className={styles.labelInfo}>
           <div className={styles.labelValue}>{username}</div>
-        </div>
+        </div> */}
         <div className={styles.labelInfo}>
           <div className={styles.labelValue}><Input onChange={this.handleSetPwd} mode="password" placeholder="请设置密码" value={newPassword} /></div>
         </div>
@@ -142,9 +142,9 @@ class index extends Component {
     return (
       <>
         <h3>修改密码</h3>
-        <div className={styles.labelInfo}>
+        {/* <div className={styles.labelInfo}>
           <div className={styles.labelValue}>{this.props.user?.username}</div>
-        </div>
+        </div> */}
         <div className={styles.labelInfo}>
           <div className={styles.labelValue}><Input onChange={this.handleSetOldPwd} mode="password" placeholder="请输入旧密码" /></div>
         </div>
