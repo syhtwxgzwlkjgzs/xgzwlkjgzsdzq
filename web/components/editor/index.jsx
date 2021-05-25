@@ -159,7 +159,7 @@ export default function DVditor(props) {
     // 从时间绑定修改成轮询记录的方式
     intervalId = setInterval(() => {
       vditor[vditor.currentMode].range = getEditorRange(vditor);
-    }, 100);
+    }, 200);
   };
 
   function initVditor() {
