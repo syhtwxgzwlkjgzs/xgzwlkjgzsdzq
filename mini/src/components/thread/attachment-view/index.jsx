@@ -3,6 +3,8 @@ import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import { extensionList, isPromise, noop } from '../utils';
 import { View, Text } from '@tarojs/components'
+import Downloader from './downloader';
+
 
 /**
  * 附件
@@ -23,9 +25,28 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
     return `${fileSize} B`;
   };
 
+  const downloader = new Downloader();
+
+  const getFileType = (filepath) => {
+    const idx = filepath.lastIndexOf('.');
+    return filepath.substr(idx + 1);
+  }
+
   const onDownLoad = (url) => {
     if (!isPay) {
-      window.open(url, '_self');
+      downloader?.download(url, true).then((path) => {
+        wx.openDocument({
+          filePath: path,
+          fileType: getFileType(url), // 微信支持下载文件类型：doc, docx, xls, xlsx, ppt, pptx, pdf
+          success(res) {
+          },
+          fail(error) {
+            console.error("文件类型不支持：", error.errMsg);
+          },
+        });
+      }).catch((error) => {
+        console.error(error.errMsg)
+      })
     } else {
       onPay();
     }
