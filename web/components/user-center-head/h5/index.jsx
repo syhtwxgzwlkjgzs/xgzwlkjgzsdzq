@@ -20,9 +20,9 @@ class index extends Component {
 
   // 点击屏蔽
   handleChangeShield = (isDeny) => {
-    const { query } = this.props.router;
+    const id= this.props.router.query?.id;
     if (isDeny) {
-      this.props.user.undenyUser(query.otherId);
+      this.props.user.undenyUser(id);
       this.props.user.setTargetUserNotBeDenied();
       Toast.success({
         content: '解除屏蔽成功',
@@ -30,7 +30,7 @@ class index extends Component {
         duration: 1000,
       });
     } else {
-      this.props.user.denyUser(query.otherId);
+      this.props.user.denyUser(id);
       this.props.user.setTargetUserDenied();
       Toast.success({
         content: '屏蔽成功',
@@ -42,14 +42,14 @@ class index extends Component {
 
   // 点击关注
   handleChangeAttention = async (follow) => {
-    const { query } = this.props.router;
-    if (query.otherId) {
+    const id = this.props.router.query?.id;
+    if (id) {
       if (follow !== 0) {
-        await this.props.user.cancelFollow({ id: query.otherId, type: 1 });
-        await this.props.user.getTargetUserInfo(query.otherId);
+        await this.props.user.cancelFollow({ id: id, type: 1 });
+        await this.props.user.getTargetUserInfo(id);
       } else {
-        await this.props.user.postFollow(query.otherId);
-        await this.props.user.getTargetUserInfo(query.otherId);
+        await this.props.user.postFollow(id);
+        await this.props.user.getTargetUserInfo(id);
       }
     }
   };
@@ -61,9 +61,9 @@ class index extends Component {
 
   // 点击粉丝列表
   goToFansList = () => {
-    const { query } = this.props.router;
-    if (query.otherId) {
-      Router.push({ url: `/my/fans?isOtherPerson=${this.props.isOtherPerson}&otherId=${query.otherId}` });
+    const id = this.props.router.query?.id
+    if (id) {
+      Router.push({ url: `/my/fans?isOtherPerson=${this.props.isOtherPerson}&otherId=${id}` });
     } else {
       Router.push({ url: `/my/fans?isOtherPerson=${this.props.isOtherPerson}` });
     }
@@ -71,9 +71,9 @@ class index extends Component {
 
   // 点击关注列表
   goToFollowsList = () => {
-    const { query } = this.props.router;
-    if (query.otherId) {
-      Router.push({ url: `/my/follows?isOtherPerson=${this.props.isOtherPerson}&otherId=${query.otherId}` });
+    const id = this.props.router.query?.id;
+    if (id) {
+      Router.push({ url: `/my/follows?isOtherPerson=${this.props.isOtherPerson}&otherId=${id}` });
     } else {
       Router.push({ url: `/my/follows?isOtherPerson=${this.props.isOtherPerson}` });
     }
