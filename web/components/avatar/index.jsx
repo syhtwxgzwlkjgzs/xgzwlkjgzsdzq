@@ -121,7 +121,7 @@ function avatar(props) {
                   {btnInfo.text}
               </Button>
               <Button className={[styles.btn, styles.ghost]} type='primary' ghost><Icon className={styles.icon} name="NewsOutlined" size={12}/>发私信</Button>
-              <Button className={styles.btn} type='primary'><Icon className={styles.icon} name="ShieldOutlined" size={12}/>屏蔽</Button>
+              <Button className={[styles.btn, styles.block]} type='primary'><Icon className={styles.icon} name="ShieldOutlined" size={12}/>屏蔽</Button>
             </div>
           }
         </div>
