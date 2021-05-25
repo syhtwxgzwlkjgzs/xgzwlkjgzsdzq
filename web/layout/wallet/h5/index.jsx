@@ -28,7 +28,11 @@ class WalletH5Page extends React.Component {
       consumptionTime: '',
     };
   }
-
+  async componentDidMount() {
+    const { getUserWalletInfo,getInconmeDetail } = this.props.wallet
+    await getUserWalletInfo()
+    await getInconmeDetail()
+  }
   // 点击冻结金额
   onFrozenAmountClick() {
     this.props.router.push('/wallet/frozen');
@@ -198,12 +202,13 @@ class WalletH5Page extends React.Component {
       { title: '悬赏问答', id: 8 },
     ];
 
+    const { walletInfo, incomeDetail, expandDetail, freezeDetail, cashDetail } = this.props.wallet
     return (
       <div className={layout.container}>
         <div className={layout.scroll}>
           <div className={layout.header}>
             <WalletInfo
-              walletData={this.props.walletData}
+              walletData={walletInfo}
               webPageType='h5'
               onFrozenAmountClick={() => this.onFrozenAmountClick()}
             >
@@ -211,7 +216,7 @@ class WalletH5Page extends React.Component {
           </div>
           <div className={layout.choiceTime}>
             <div className={layout.status} onClick={() => this.onSelectStatus('all')}>
-              <span className={layout.text}>全部状态</span>
+              <span className={layout.text}>{this.state.tabsType === 'withdrawal' ? '全部状态' : '全部类型'}</span>
               <Icon name='UnderOutlined' size='6' className={layout.icon}></Icon>
             </div>
             <div className={layout.status} onClick={() => this.onSelectStatus('select')}>
