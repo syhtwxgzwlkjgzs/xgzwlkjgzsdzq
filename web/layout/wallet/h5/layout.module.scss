@@ -60,7 +60,9 @@
       .dzq-tabs__panel {
         height: 0;
       }
-
+      .dzq-tabs__list{
+        display: flex;
+      }
       .dzq-tabs__content {
         padding-left: 0;
         padding-right: 0;
@@ -76,6 +78,7 @@
 
       .dzq-tabs__item {
         height: rem(50);
+        flex: 1;
       }
     }
   }
@@ -91,7 +94,7 @@
 }
 
 .tag-active-blue {
-  color: $primary-color;
+  color: $warn-color;
 }
 
 .tag-active-red {
