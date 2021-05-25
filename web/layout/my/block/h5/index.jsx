@@ -18,9 +18,13 @@ class Index extends React.Component {
     this.containerRef = React.createRef(null);
   }
 
+  async componentDidMount() {
+   await this.props.user.getUserShieldList()
+  }
+
   // 点击头像去到他人页面
   handleOnClick = (item) => {
-    Router.push({ url: `/user/${item.userId}` });
+    Router.push({ url: `/user/${item.denyUserId}` });
   };
 
   render() {
@@ -29,10 +33,10 @@ class Index extends React.Component {
     return (
       <div className={styles.shieldBox}>
         <Header />
-        <div className={styles.titleBox}>{`共有${pageData.length}位用户`}</div>
-        {pageData?.length ? (
-          <List className={styles.list} noMore={currentPage >= totalPage}>
-            {pageData.map((item, index) => (
+        <div className={styles.titleBox}>{`共有${userShield.length}位用户`}</div>
+        {userShield?.length ? (
+          <List className={styles.list}>
+            {userShield.map((item, index) => (
               <div className={styles.haieldImg} key={index}>
                 <div
                   className={styles.haieldImgBox}
@@ -41,8 +45,8 @@ class Index extends React.Component {
                   }}
                 >
                   <div className={styles.haieldImgHead}>
-                    <Avatar className={styles.img} image={item.avatar} name={item.nickname} userId={item.userId} />
-                    <p className={styles.haieldName}>{item.nickname}</p>
+                    <Avatar className={styles.img} image={item.avatar} name={item.username} userId={item.denyUserId} />
+                    <p className={styles.haieldName}>{item.username}</p>
                   </div>
                   {/* <div className={styles.haieldName}>
                           <Button className={styles.haieldButton}>解除屏蔽</Button>
