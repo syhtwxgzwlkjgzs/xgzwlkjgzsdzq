@@ -2,7 +2,7 @@
 
 .userCenterAction {
     display: flex;
-    padding: rem(16);
+    padding: rem($padding-4n);
     flex-wrap: wrap;
     justify-content: space-between;
 
@@ -24,8 +24,9 @@
             .userCenterActionItemIcon {}
 
             .userCenterActionItemDesc {
-                margin-top: rem(8);
-                color: var(--color-text-regular);
+                margin-top: rem($margin-2n);
+                color: $text-color-regular;
+                font-size: rem($font-size-small);
             }
         }
     }
