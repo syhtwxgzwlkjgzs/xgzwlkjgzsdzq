@@ -14,7 +14,7 @@ class PcBodyWrap extends React.Component {
         {
           platform === 'h5'
             ? <></>
-            : <div className={layout.pc_bottom}>{site?.setSite?.siteRecord}</div>
+            : <div className={layout.pc_bottom}>{site?.webConfig?.setSite?.siteRecord}</div>
         }
       </div>
     );
