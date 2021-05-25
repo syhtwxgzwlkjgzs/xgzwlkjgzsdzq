@@ -72,7 +72,6 @@ class Index extends Component {
               }}
             />
             <Input
-              clearable
               className={layout.input}
               mode="password"
               value={userLogin.password}

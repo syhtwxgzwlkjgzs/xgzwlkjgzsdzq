@@ -182,12 +182,12 @@ export default function HOCFetchSiteData(Component) {
           Router.redirect({ url: '/close' });
         }
         // 付费加入: 付费状态下，未登录的用户、登录了但是没有付费的用户
-        if (
-          (router.asPath !== '/forum/partner-invite' && site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay')
-          && (!user.isLogin() || (user.isLogin() && !user.paid))
-        ) {
-          Router.redirect({ url: '/forum/partner-invite' });
-        }
+        // if (
+        //   (router.asPath !== '/forum/partner-invite' && site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay')
+        //   && (!user.isLogin() || (user.isLogin() && !user.paid))
+        // ) {
+        //   Router.redirect({ url: '/forum/partner-invite' });
+        // }
         // TODO: 方案待定
         // 前置: 用户已登录
         if (user.isLogin()) {
