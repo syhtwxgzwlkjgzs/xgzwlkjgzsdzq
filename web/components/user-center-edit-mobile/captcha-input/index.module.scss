@@ -29,9 +29,11 @@
   width: 100%;
   position: fixed;
   left: 0;
-  bottom: rem(90);
+  bottom: constant(safe-area-inset-bottom);
+  bottom: env(safe-area-inset-bottom);
   z-index: 1111;
   background-color: $white;
+  // @include ios-safe-area-inset-bottom;
   .line{
     display: flex;
     align-items: center;

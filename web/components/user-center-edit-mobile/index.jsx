@@ -7,6 +7,7 @@ import HOCFetchSiteData from '../../middleware/HOCFetchSiteData';
 import CaptchaInput from './captcha-input/index';
 import VerifyCode from './verify-code/index';
 import Router from '@discuzq/sdk/dist/router';
+import throttle from '@common/utils/thottle.js';
 
 @inject('site')
 @inject('user')
@@ -19,7 +20,15 @@ class index extends Component {
       current_step: 'first', // 表示当前步骤
       bind_mobile: null,
       is_blur: false, // 表示是否失焦
+      isKeyBoardVisible: false, // 表示是否显示键盘
     };
+  }
+
+  // 点击切换弹出键盘事件
+  handleKeyBoardVisible = () => {
+    this.setState({
+      isKeyBoardVisible: !this.state.isKeyBoardVisible
+    })
   }
 
   updatePwd = (set_num, type) => {
@@ -48,7 +57,7 @@ class index extends Component {
   };
 
   // 点击下一步
-  handleStepBtn = async () => {
+  handleStepBtn = throttle(async () => {
     const { list = [], current_step, bind_mobile } = this.state;
     if (list.length !== 6) return;
     if (current_step === 'first') {
@@ -89,7 +98,7 @@ class index extends Component {
           });
         });
     }
-  }
+  }, 300)
 
   handleInputChange = (e) => {
     this.setState({
@@ -109,7 +118,7 @@ class index extends Component {
     });
   }
 
-  getVerifyCode = ({ calback }) => {
+  getVerifyCode = throttle(({ calback }) => {
     const { originalMobile } = this.props.user;
     const { current_step } = this.state;
     if (current_step === 'first') {
@@ -151,12 +160,12 @@ class index extends Component {
           if (calback && typeof calback === 'function') calback(err);
         });
     }
-  }
+  }, 300)
 
   validateTel = value => (/^[1][3-9]\d{9}$/.test(value))
 
   render() {
-    const { current_step, list = [], is_blur, bind_mobile, initTimeValue } = this.state;
+    const { current_step, list = [], is_blur, bind_mobile, initTimeValue, isKeyBoardVisible } = this.state;
     const { mobile } = this.props?.user;
     const value_pass_check = current_step === 'second' ? this.validateTel(bind_mobile) : true;
     let isSubmit = false;
@@ -189,10 +198,10 @@ class index extends Component {
           </div>
           <div className={styles.bindCode}>
             <span>请输入短信验证码</span>
-            <CaptchaInput current_step={current_step} updatePwd={this.updatePwd} list={list} is_blur={is_blur} />
+            <CaptchaInput handleKeyBoardVisible={this.handleKeyBoardVisible} isKeyBoardVisible={isKeyBoardVisible} current_step={current_step} updatePwd={this.updatePwd} list={list} is_blur={is_blur} />
           </div>
         </div>
-        <div className={styles.bottom}>
+        <div className={`${styles.bottom} ${isKeyBoardVisible && styles.bootom2}`}>
           <Button full disabled={isSubmit} onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>{this.state.current_step === 'first' ? '下一步' : '提交'}</Button>
         </div>
       </div>

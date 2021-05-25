@@ -87,9 +87,9 @@ class index extends Component {
     return (
       <>
         {!isOtherFollows ? (
-          <UserCenterFllows onContainerClick={this.onContainerClick} />
+          <UserCenterFllows onContainerClick={this.onContainerClick} splitElement={this.splitElement()} />
         ) : (
-          <UserCenterFllows onContainerClick={this.onContainerClick} userId={id} />
+          <UserCenterFllows onContainerClick={this.onContainerClick} userId={id} splitElement={this.splitElement()} />
         )}
       </>
     );

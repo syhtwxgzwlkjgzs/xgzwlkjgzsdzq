@@ -4,6 +4,7 @@ import { Button, Input, Toast } from '@discuzq/design';
 import Header from '@components/header';
 import styles from '../index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
+import throttle from '@common/utils/thottle.js';
 @inject('payBox')
 @observer
 export default class index extends Component {
@@ -47,7 +48,7 @@ export default class index extends Component {
     })
   }
 
-  handleSubmit = () => {
+  handleSubmit = throttle(() => {
     const { newPayPwd, newPayPwdRepeat } = this.state
     if (newPayPwd !== newPayPwdRepeat) {
       Toast.error({
@@ -65,7 +66,7 @@ export default class index extends Component {
         hasMask: false,
         duration: 1000,
       })
-      Router.push({url: `/my`})
+      Router.push({ url: `/my` })
     }).catch((err) => {
       Toast.error({
         content: '修改密码失败',
@@ -74,7 +75,7 @@ export default class index extends Component {
       })
       this.initState()
     })
-  }
+  }, 300)
 
   render() {
     const { newPayPwd, newPayPwdRepeat } = this.state
