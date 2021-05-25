@@ -18,9 +18,9 @@ class H5CloseSite extends React.Component {
         <img className={styles.img} src='/dzq-img/close.png'/>
         <h1 className={styles.main}>关闭已站点</h1>
         {closeSiteConfig && <p className={styles.sub}>{closeSiteConfig.detail}</p>}
-        <div className={styles.fixedBox}>
+        {false && <div className={styles.fixedBox}>
           <Button onClick={() => {Router.push({url: '/user/login'});}} size='large' className={styles.btn} type='primary'>管理员登录</Button>
-        </div>
+        </div>}
       </div>
     );
   }
