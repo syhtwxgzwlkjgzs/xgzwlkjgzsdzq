@@ -19,6 +19,7 @@ export default function DVditor(props) {
     onInput = () => {},
   } = props;
   const vditorId = 'dzq-vditor';
+  let intervalId = null;
 
   const [isFocus, setIsFocus] = useState(false);
   const [vditor, setVditor] = useState(null);
@@ -50,6 +51,7 @@ export default function DVditor(props) {
     //     console.log(error);
     //   }
     // };
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
@@ -139,18 +141,25 @@ export default function DVditor(props) {
 
     if (/Chrome/i.test(navigator.userAgent)
       || !/(iPhone|Safari|Mac OS)/i.test(navigator.userAgent)) return;
+    const { vditor } = editor;
 
     // todo 事件需要throttle或者debounce??? delay时间控制不好可能导致记录不准确
-    const { vditor } = editor;
-    const editorElement = vditor[vditor.currentMode]?.element;
-    // todo 需要添加drag事件吗
-    const events = ['mouseup', 'keyup',
-      'click', 'touchend', 'touchcancel'];
-    events.forEach((event) => {
-      editorElement?.addEventListener(event, () => {
-        vditor[vditor.currentMode].range = getEditorRange(vditor);
-      });
-    });
+    // const editorElement = vditor[vditor.currentMode]?.element;
+    // // todo 需要添加drag事件吗
+    // const events = ['mouseup', 'click', 'touchend', 'touchcancel', 'input'];
+    // events.forEach((event) => {
+    //   editorElement?.addEventListener(event, () => {
+    //     setTimeout(() => {
+    //       vditor[vditor.currentMode].range = getEditorRange(vditor);
+    //       console.log(vditor[vditor.currentMode].range);
+    //     }, 0);
+    //   });
+    // });
+
+    // 从时间绑定修改成轮询记录的方式
+    intervalId = setInterval(() => {
+      vditor[vditor.currentMode].range = getEditorRange(vditor);
+    }, 100);
   };
 
   function initVditor() {
