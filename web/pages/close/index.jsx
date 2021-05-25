@@ -15,9 +15,9 @@ class CloseSite extends React.Component {
     const { site } = this.props;
     const { closeSiteConfig, platform } = site;
 
-    if (!isServer() && !closeSiteConfig) {
-      Router.redirect({url: '/'});
-    }
+    // if (!isServer() && !closeSiteConfig) {
+    //   Router.redirect({url: '/'});
+    // }
     
     if (platform === 'pc') {
       return (
