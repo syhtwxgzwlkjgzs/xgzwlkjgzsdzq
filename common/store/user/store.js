@@ -69,9 +69,9 @@ class UserStore {
   // 我的屏蔽 数据设计
   @observable userShield = []; // 用户屏蔽列表
 
-  @observable userShieldPage = 1; // 加载页数
+  // 触底加载条件 当加载的页数超过总页数的时候就没有更多了 
   @observable userShieldTotalPage = 1; // 总页数
-  @observable userShieldTotalCount = 0; // 每页显示条数 
+  @observable userShieldTotalCount = 0; // 总条数
 
   // 是否能使用钱包支付
   @computed get canWalletPay() {
