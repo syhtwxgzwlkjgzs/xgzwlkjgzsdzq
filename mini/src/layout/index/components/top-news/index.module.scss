@@ -24,6 +24,7 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       .richText{
+        display: flex;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
