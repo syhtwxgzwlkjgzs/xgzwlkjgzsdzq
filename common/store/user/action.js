@@ -16,6 +16,7 @@ import {
   smsSend,
   smsRebind,
   smsVerify,
+  readUsersDeny,
 } from '@server';
 import { get } from '../../utils/get';
 import set from '../../utils/set';
@@ -595,35 +596,32 @@ class UserAction extends SiteStore {
   /**
    * 我的屏蔽对应store函数
    */
-  
+
   // 获取屏蔽列表数据
   @action
   async getUserShieldList() {
-    
-  }
+    const userShieldList = await readUsersDeny({
+      params: {
+        page: this.userShieldPage, // 页码
+      },
+    });
+    const pageData = get(userShieldList, 'data.pageData', []);
+    const totalPage = get(userShieldList, 'data.totalPage', 1);
+    this.userShieldTotalPage = totalPage;
+    this.userShield = [...this.userShield, ...pageData];
+    this.userShieldTotalCount = get(userShieldList, 'data.totalCount', 0);
 
-  // 屏蔽
-  @action
-  async postShield() {
-    
-  }
+    if (this.userShieldPage <= this.userShieldTotalPage) {
+      this.userShieldPage += 1;
+    }
 
-  // 取消屏蔽
-  @action
-  async cancelShield() {
-
-  }
-
-  // 点击屏蔽后需要更新的数据
-  @action
-  async setUserBeShielded() {
-
-  }
-
-  // 点击取消屏蔽后需要更新的数据
-  @action
-  async setUserBeUnShielded() {
-    
+    if (userShieldList.code !== 0) {
+      throw {
+        Code: userShieldList.code,
+        Message: userShieldList.msg,
+      };
+    }
+    return this.userShield;
   }
 
   /**
