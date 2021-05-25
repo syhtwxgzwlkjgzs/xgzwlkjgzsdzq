@@ -33,8 +33,7 @@ export const TopicItem = ({ data, onClick = noop }) => {
       <View className={styles.container} onClick={click}>
         <View className={styles.title}>{`#${data.content}#` || '暂无内容'}</View>
         <View className={styles.content}>
-          {/* <RichText onClick={click} className={styles.richText} content={filterContent} /> */}
-          {/* <View dangerouslySetInnerHTML={{__html: {filterContent}}} onClick={click} className={styles.richText} /> */}
+          <RichText onClick={click} className={styles.richText} content={filterContent} />
         </View>
         <View className={styles.tags}>
           <View className={styles.tag}>热度 {data.viewCount || 0}</View>

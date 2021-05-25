@@ -47,11 +47,6 @@ class IndexPCPage extends React.Component {
   newThread = {}
 
   componentDidMount() {
-    // setTimeout(() => {
-    //   this.filter = {} 
-    // }, 500)
-
-
     if (this.timer) {
       clearInterval(this.timer);
     }
@@ -92,13 +87,23 @@ class IndexPCPage extends React.Component {
     const { sequence, filter: { types, sort, essence, attention, } } = result;
     const { dispatch = () => {} } = this.props;
     this.filter = { ...this.filter, types, essence, sequence, attention, sort };
+
+    // 保存操作至store
+    this.props.index.setFilter(this.filter)
+
+    // 发起网络请求
     dispatch('click-filter', this.filter);
    }
 
-   onNavigationClick = ({ categoryIds, sequence }) => {
-     const { dispatch = () => {} } = this.props;
-     this.filter = { ...this.filter, categoryids: categoryIds, sequence };
-     dispatch('click-filter', this.filter);
+  onNavigationClick = ({ categoryIds, sequence }) => {
+    const { dispatch = () => {} } = this.props;
+    this.filter = { ...this.filter, categoryids: categoryIds, sequence };
+
+     // 保存操作至store
+    this.props.index.setFilter(this.filter)
+
+    // 发起网络请求
+    dispatch('click-filter', this.filter);
    }
 
    goRefresh = () => {
