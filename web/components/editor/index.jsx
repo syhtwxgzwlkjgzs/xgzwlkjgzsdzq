@@ -191,9 +191,6 @@ export default function DVditor(props) {
           onFocus('focus');
         },
         input: () => {
-          if (/(iPhone|Safari|Mac OS)/i.test(navigator.userAgent) && getSelection().rangeCount > 0) {
-            editor.vditor[editor.vditor.currentMode].range = getSelection().getRangeAt(0);
-          }
           setIsFocus(false);
           onInput(editor);
           onChange(editor);

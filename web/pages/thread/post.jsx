@@ -376,9 +376,7 @@ class PostPage extends React.Component {
       this.setPostData({ contentText: htmlString });
       if (!this.props.threadPost.postData.title) {
         if (!this.state.isTitleShow || this.props.site.platform === 'pc' || !event) return;
-        this.setState({ isTitleShow: false }, () => {
-          vditor.blur();
-        });
+        this.setState({ isTitleShow: false });
       }
     }
   };
