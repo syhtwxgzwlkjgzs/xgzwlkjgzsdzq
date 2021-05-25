@@ -57,6 +57,7 @@ class SearchResultPostH5Page extends React.Component {
       <BaseLayout
           onRefresh={this.fetchMoreData}
           noMore={currentPage >= totalPage}
+          showHeader={false}
       >
         <View className={styles.topBox}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} isShowBottom={false} />

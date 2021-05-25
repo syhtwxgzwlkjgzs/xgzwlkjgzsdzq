@@ -18,7 +18,8 @@ import { View, Text } from '@tarojs/components'
 const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
   const [value, setValue] = useState('');// 悬赏金额
   // const [times, setTimes] = useState(formatDate(new Date(), 'yyyy-MM-dd h:mm'));// 悬赏的到期时间
-  const [times, setTimes] = useState(new Date());// 悬赏的到期时间
+  const now = new Date().getTime() + (25 * 3600 * 1000);
+  const [times, setTimes] = useState(formatDate(now, 'yyyy/MM/dd hh:mm'));// 悬赏的到期时间
   const [show, setShow] = useState(false);// 时间选择器是否显示
 
   // 时间选择器是否显示
@@ -32,7 +33,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
   // 点击确定的时候返回参数
   const redbagconfirm = () => {
     if (value < 0.1 || value > 1000000) {
-      Toast.warning({ content: '金额数不合理,0.1<money<1000000' });
+      Toast.warning({ content: '输入的金额数需要在0.1元到1000000元之间' });
       return;
     }
     const gapTime = new Date(times).getTime() - new Date().getTime();
@@ -43,7 +44,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
     }
     confirm({
       value,
-      times: formatDate(times, 'yyyy/MM/dd h:mm'),
+      times: formatDate(times, 'yyyy/MM/dd hh:mm'),
     });
   };
   const content = (
@@ -55,7 +56,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
             mode="number"
             value={value}
             placeholder="金额"
-            onChange={e => setValue(Number(e.target.value))}
+            onChange={e => setValue(e.target.value)}
           />
           元
         </View>
@@ -69,7 +70,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
                 <DatePicker
                   selected={new Date(times)}
                   minDate={new Date()}
-                  onChange={date => setTimes(formatDate(date, 'yyyy/MM/dd h:mm'))}
+                  onChange={date => setTimes(formatDate(date, 'yyyy/MM/dd hh:mm'))}
                   showTimeSelect
                   dateFormat="yyyy/MM/dd HH:mm:ss"
                   locale="zh"
@@ -79,7 +80,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
             )
             : (
               <>
-                <View onClick={() => setShow(true)} > { times.replace(/-/g, '/') } </View>
+                <View onClick={() => setShow(true)} > { times } </View>
                 <Icon name="RightOutlined" />
               </>
             )}
