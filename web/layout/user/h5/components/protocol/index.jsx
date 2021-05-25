@@ -7,7 +7,7 @@ import PopProtocol from '../pop-protocol';
 @inject('commonLogin')
 class Protocol extends React.Component {
   render() {
-    const { site, commonLogin, clickCallback } = this.props;
+    const { site, commonLogin } = this.props;
     const { platform } = site;
     return (
       <>
@@ -21,7 +21,7 @@ class Protocol extends React.Component {
                       if (platform === 'pc') {
                         window.open('/user/agreement?type=register');
                       }
-                      clickCallback('register')
+                      commonLogin.setProtocolInfo('register');
                     }}>《注册协议》</span>
                     : <></>
                 }
