@@ -5,6 +5,7 @@ import Header from '@components/header';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
+import throttle from '@common/utils/thottle.js';
 @inject('user')
 @observer
 class index extends Component {
@@ -61,7 +62,7 @@ class index extends Component {
   }
 
   // 点击提交
-  handleSubmit = async () => {
+  handleSubmit = throttle(async () => {
     const { oldPassword, newPassword, newPasswordRepeat } = this.state
     if (newPassword !== newPasswordRepeat) {
       Toast.error({
@@ -112,9 +113,7 @@ class index extends Component {
         this.initState()
       })
     }
-
-
-  }
+  }, 300)
 
   // 渲染未设置密码
   renderHasNoPassword = () => {
@@ -123,9 +122,9 @@ class index extends Component {
     return (
       <>
         <h3>设置密码</h3>
-        <div className={styles.labelInfo}>
+        {/* <div className={styles.labelInfo}>
           <div className={styles.labelValue}>{username}</div>
-        </div>
+        </div> */}
         <div className={styles.labelInfo}>
           <div className={styles.labelValue}><Input onChange={this.handleSetPwd} mode="password" placeholder="请设置密码" value={newPassword} /></div>
         </div>
@@ -142,9 +141,9 @@ class index extends Component {
     return (
       <>
         <h3>修改密码</h3>
-        <div className={styles.labelInfo}>
+        {/* <div className={styles.labelInfo}>
           <div className={styles.labelValue}>{this.props.user?.username}</div>
-        </div>
+        </div> */}
         <div className={styles.labelInfo}>
           <div className={styles.labelValue}><Input onChange={this.handleSetOldPwd} mode="password" placeholder="请输入旧密码" /></div>
         </div>

@@ -1,6 +1,5 @@
 import { observable, computed } from 'mobx';
 import { get } from '../../utils/get';
-
 class WalletStore {
     // 钱包明细
     @observable walletInfo = {}

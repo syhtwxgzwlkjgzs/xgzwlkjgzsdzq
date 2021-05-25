@@ -3,9 +3,7 @@ import { Icon } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
-import Router from '@discuzq/sdk/dist/router';
-    // style={{ backgroundImage: `url(\'/dzq-img/topic-header.jpg\')`}}
-
+import TopicHeaderImg from '../../../../../../../web/public/dzq-img/topic-header.png';
 
 /**
  * 用户组件
@@ -19,7 +17,7 @@ const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop }) => 
     Router.push({url: '/subPages/search/result-topic/index'});
   }
   return (
-    <View className={styles.container}>
+    <View className={styles.container} style={{ backgroundImage: `url('${TopicHeaderImg}')` }}>
       <View className={styles.title}>{title && `#${title}#`}</View>
       <View className={styles.siteInfo}>
           <View>

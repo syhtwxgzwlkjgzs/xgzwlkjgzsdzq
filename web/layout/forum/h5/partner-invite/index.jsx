@@ -40,7 +40,7 @@ class PartnerInviteH5Page extends React.Component {
       });
       const threadList = await search.getThreadList();
       const { inviteCode } = this.props.router.query;
-      const { user: nickname = '' } = await inviteDetail({ code: inviteCode });
+      const { user: {nickname = ''} } = await inviteDetail({ code: inviteCode });
       this.invitorName = nickname;
 
       forum.setUsersPageData(usersList);
