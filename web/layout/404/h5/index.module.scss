@@ -28,6 +28,7 @@
         padding: rem(8);
         box-sizing: border-box;
         border-top: var(--border-border);
+        @include ios-safe-area-inset-bottom;s
         .btn{
             width: 100%;
             height: rem(42);
