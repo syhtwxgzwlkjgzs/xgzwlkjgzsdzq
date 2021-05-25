@@ -48,7 +48,7 @@ export default class Redpacket extends Component {
   }
 
   checkConfirm = () => { // 更新红包store前校验数据合法性
-    const { price, number, condition, likenum } = this.state;
+    const { rule, price, number, condition, likenum } = this.state;
 
     if (!price) {
       this.redToast('请输入红包金额')

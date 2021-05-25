@@ -73,6 +73,7 @@
       font-size: $font-size-middle;
       line-height: $font-line-height-small;
       .richText{
+        display: flex;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;

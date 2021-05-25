@@ -108,12 +108,12 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
         <Row className={styles.wrapper} gutter={10}>
           {
             contents.map((item, index) => (
-              <Col span={3} key={index}>
+              <Col span={ item.name.length < 6 ? 3 : item.name.length === 6 ? 4 : 5 } key={index}>
                 <span
                   className={`${tip === item.pid ? styles.active : ''} ${styles.span}`}
                   onClick={() => onClickFirst(item.pid, type, contents)}
                 >
-                  {item.name}
+                  {item.name.length > 6 ? item.name.substr(0, 6) : item.name}
                 </span>
               </Col>
             ))

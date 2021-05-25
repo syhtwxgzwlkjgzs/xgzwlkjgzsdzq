@@ -5,7 +5,7 @@ export default function avatar(props) {
   const { image = '', name = '匿', onClick = () => {}, className = '', circle = true, size = 'primary' } = props;
 
   const userName = useMemo(() => {
-    const newName = name.toLocaleUpperCase()[0];
+    const newName = name?.toLocaleUpperCase()[0];
     return newName;
   }, [name]);
 

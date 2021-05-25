@@ -1,7 +1,15 @@
 import { observable, computed, action } from 'mobx';
 import { get } from '../../utils/get';
 import isWeixin from '../../utils/is-weixin';
-import { createOrders, createPayOrder, readOrderDetail, readWalletUser, updateUsersUpdate, readResetPayPwdToken } from '@server';
+import {
+  createOrders,
+  createPayOrder,
+  readOrderDetail,
+  readWalletUser,
+  updateUsersUpdate,
+  readResetPayPwdToken,
+  updatePayPwd,
+} from '@server';
 import { STEP_MAP, PAY_MENT_MAP, ORDER_STATUS_MAP, PAY_BOX_ERROR_CODE_MAP } from '../../constants/payBoxStoreConstants';
 
 const noop = () => {};
@@ -453,7 +461,8 @@ class PayBoxStore {
   resetPayPwd = async () => {
     const resetPayPwdRes = await updateUsersUpdate({
       payPassword: this.newPayPwd,
-      payPassword: this.newPayPwdRepeat,
+      payPasswordConfirmation: this.newPayPwdRepeat,
+      payPasswordToken: this.payPwdResetToken,
     });
 
     if (resetPayPwdRes.code === 0) {
@@ -463,6 +472,35 @@ class PayBoxStore {
     throw {
       Code: resetPayPwdRes.code,
       Msg: resetPayPwdRes.message,
+    };
+  }
+
+  /**
+   * 忘记支付密码，利用手机号进行支付密码的重置
+   */
+  @action
+  forgetPayPwd = async ({
+    mobile,
+    code,
+    payPassword,
+    payPasswordConfirmation,
+  }) => {
+    const forgetPayPwdRes = await updateUsersUpdate({
+      data: {
+        mobile,
+        code,
+        payPassword,
+        payPasswordConfirmation,
+      },
+    });
+
+    if (forgetPayPwdRes.code === 0) {
+      return true;
+    }
+
+    throw {
+      Code: forgetPayPwdRes.code,
+      Msg: forgetPayPwdRes.message,
     };
   }
 
