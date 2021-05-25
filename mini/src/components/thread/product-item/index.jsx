@@ -1,7 +1,7 @@
 import React from 'react';
 
 import styles from './index.module.scss';
-import { View, Text, Image } from '@tarojs/components'
+import { View, Image } from '@tarojs/components'
 
 /**
  * 单个商品内容展示

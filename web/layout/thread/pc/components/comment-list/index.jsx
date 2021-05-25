@@ -140,10 +140,10 @@ class CommentList extends React.Component {
         <div className={styles.content}>
           <div className={styles.commentListAvatar} onClick={() => this.avatarClick()}>
             <Avatar
-              image={this.props.data.user.avatar}
-              name={this.props.data.user.username || this.props.data.user.userName || ''}
+              image={this.props.data?.user?.avatar}
+              name={this.props.data?.user?.username || this.props.data?.user?.userName || ''}
               circle={true}
-              userId={this.props.data.user.id}
+              userId={this.props.data?.user?.id}
               isShowUserInfo={this.props.isShowOne}
             ></Avatar>
           </div>
@@ -154,7 +154,7 @@ class CommentList extends React.Component {
               onClick={() => this.toCommentDetail()}
             >
               <div className={styles.commentListName}>
-                {this.props.data.user.username || this.props.data.user.userName}
+                {this.props.data?.user?.username || this.props.data?.user?.userName || '用户异常，请联系管理员'}
               </div>
               <div className={styles.commentListText} dangerouslySetInnerHTML={{ __html: this.filterContent() }}></div>
               {/* 图片展示 */}
@@ -165,109 +165,111 @@ class CommentList extends React.Component {
               )}
             </div>
 
-            <div className={styles.commentListFooter}>
-              {/* 操作按钮 */}
-              {!this.props.isFirstDivider && (
-                <div className={styles.commentBtn}>
-                  <div className={styles.commentTime}>{diffDate(this.props.data.createdAt)}</div>
-                  <div className={styles.extraBottom}>
-                    <div
-                      className={classnames(styles.commentLike, this.props?.data?.isLiked && styles.active)}
-                      onClick={() => this.likeClick(canLike)}
-                    >
-                      <Icon className={styles.icon} name="LikeOutlined"></Icon>
-                      赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
-                    </div>
-                    <div
-                      className={classnames(
-                        styles.commentReply,
-                        this.props.isShowInput && this.state.isShowInput && styles.active,
-                      )}
-                      onClick={() => this.replyClick()}
-                    >
-                      <Icon className={styles.icon} name="MessageOutlined"></Icon>
-                      <span>回复</span>
-                    </div>
-                    {this.props.isShowAdopt ? (
-                      <div className={styles.commentAdopt}>
-                        <Icon className={styles.icon} name="ExactnessOutlined"></Icon>
-                        <span onClick={() => this.props.onAboptClick()}>采纳</span>
+            {this.props.data?.user && (
+              <div className={styles.commentListFooter}>
+                {/* 操作按钮 */}
+                {!this.props.isFirstDivider && (
+                  <div className={styles.commentBtn}>
+                    <div className={styles.commentTime}>{diffDate(this.props.data.createdAt)}</div>
+                    <div className={styles.extraBottom}>
+                      <div
+                        className={classnames(styles.commentLike, this.props?.data?.isLiked && styles.active)}
+                        onClick={() => this.likeClick(canLike)}
+                      >
+                        <Icon className={styles.icon} name="LikeOutlined"></Icon>
+                        赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
                       </div>
-                    ) : (
-                      ''
-                    )}
-                    {/* {canEdit && (
+                      <div
+                        className={classnames(
+                          styles.commentReply,
+                          this.props.isShowInput && this.state.isShowInput && styles.active,
+                        )}
+                        onClick={() => this.replyClick()}
+                      >
+                        <Icon className={styles.icon} name="MessageOutlined"></Icon>
+                        <span>回复</span>
+                      </div>
+                      {this.props.isShowAdopt ? (
+                        <div className={styles.commentAdopt}>
+                          <Icon className={styles.icon} name="ExactnessOutlined"></Icon>
+                          <span onClick={() => this.props.onAboptClick()}>采纳</span>
+                        </div>
+                      ) : (
+                        ''
+                      )}
+                      {/* {canEdit && (
                           <div className={styles.revise} onClick={() => this.editClick()}>
                             编辑
                           </div>
                         )} */}
-                    {canDelete && (
-                      <div className={styles.revise} onClick={() => this.deleteClick()}>
-                        <Icon className={styles.icon} name="DeleteOutlined"></Icon>
-                        <span>删除</span>
-                      </div>
-                    )}
+                      {canDelete && (
+                        <div className={styles.revise} onClick={() => this.deleteClick()}>
+                          <Icon className={styles.icon} name="DeleteOutlined"></Icon>
+                          <span>删除</span>
+                        </div>
+                      )}
 
-                    <div className={styles.revise} onClick={() => this.reportClick()}>
-                      <Icon className={styles.icon} name="WarnOutlined"></Icon>
-                      <span>举报</span>
+                      <div className={styles.revise} onClick={() => this.reportClick()}>
+                        <Icon className={styles.icon} name="WarnOutlined"></Icon>
+                        <span>举报</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* 回复输入框 */}
-              {this.props.isShowInput && this.state.isShowInput && (
-                <div className={styles.commentInput}>
-                  <CommentInput
-                    height="label"
-                    onSubmit={(value) => this.onSubmit(value)}
-                    placeholder={this.state.placeholder}
-                  ></CommentInput>
-                </div>
-              )}
-              {this.props.data?.replyCount - 1 > 0 && this.state.isShowOne ? (
-                <div className={styles.moreReply} onClick={() => this.toCommentDetail()}>
-                  查看之前{this.props.data?.replyCount - 1}条回复...
-                </div>
-              ) : (
-                ''
-              )}
-
-              {this.props.isFirstDivider && <Divider className={styles.divider}></Divider>}
-
-              {/* 回复列表 */}
-              {this.needReply?.length > 0 && (
-                <div className={styles.replyList}>
-                  {this.state.isShowOne ? (
-                    <ReplyList
-                      data={this.needReply[0]}
-                      key={this.needReply[0].id}
-                      isShowOne={true}
-                      avatarClick={() => this.reployAvatarClick(this.needReply[0])}
-                      likeClick={() => this.replyLikeClick(this.needReply[0])}
-                      replyClick={() => this.replyReplyClick(this.needReply[0])}
-                      toCommentDetail={() => this.toCommentDetail()}
+                {/* 回复输入框 */}
+                {this.props.isShowInput && this.state.isShowInput && (
+                  <div className={styles.commentInput}>
+                    <CommentInput
+                      height="label"
                       onSubmit={(value) => this.onSubmit(value)}
-                      isShowInput={this.state.replyId && this.state.replyId === this.needReply[0].id}
-                    ></ReplyList>
-                  ) : (
-                    (this.needReply || []).map((val, index) => (
+                      placeholder={this.state.placeholder}
+                    ></CommentInput>
+                  </div>
+                )}
+                {this.props.data?.replyCount - 1 > 0 && this.state.isShowOne ? (
+                  <div className={styles.moreReply} onClick={() => this.toCommentDetail()}>
+                    查看之前{this.props.data?.replyCount - 1}条回复...
+                  </div>
+                ) : (
+                  ''
+                )}
+
+                {this.props.isFirstDivider && <Divider className={styles.divider}></Divider>}
+
+                {/* 回复列表 */}
+                {this.needReply?.length > 0 && (
+                  <div className={styles.replyList}>
+                    {this.state.isShowOne ? (
                       <ReplyList
-                        data={val}
-                        key={val.id || index}
-                        avatarClick={() => this.reployAvatarClick(val)}
-                        likeClick={() => this.replyLikeClick(val)}
-                        replyClick={() => this.replyReplyClick(val)}
+                        data={this.needReply[0]}
+                        key={this.needReply[0].id}
+                        isShowOne={true}
+                        avatarClick={() => this.reployAvatarClick(this.needReply[0])}
+                        likeClick={() => this.replyLikeClick(this.needReply[0])}
+                        replyClick={() => this.replyReplyClick(this.needReply[0])}
                         toCommentDetail={() => this.toCommentDetail()}
                         onSubmit={(value) => this.onSubmit(value)}
-                        isShowInput={this.state.replyId && this.state.replyId === val.id}
+                        isShowInput={this.state.replyId && this.state.replyId === this.needReply[0].id}
                       ></ReplyList>
-                    ))
-                  )}
-                </div>
-              )}
-            </div>
+                    ) : (
+                      (this.needReply || []).map((val, index) => (
+                        <ReplyList
+                          data={val}
+                          key={val.id || index}
+                          avatarClick={() => this.reployAvatarClick(val)}
+                          likeClick={() => this.replyLikeClick(val)}
+                          replyClick={() => this.replyReplyClick(val)}
+                          toCommentDetail={() => this.toCommentDetail()}
+                          onSubmit={(value) => this.onSubmit(value)}
+                          isShowInput={this.state.replyId && this.state.replyId === val.id}
+                        ></ReplyList>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

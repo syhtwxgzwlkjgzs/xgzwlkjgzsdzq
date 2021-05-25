@@ -22,7 +22,6 @@ export default function DVditor(props) {
 
   const [isFocus, setIsFocus] = useState(false);
   const [vditor, setVditor] = useState(null);
-  const [range, setRange] = useState(null);
 
   const html2mdSetValue = (text) => {
     try {
@@ -30,21 +29,6 @@ export default function DVditor(props) {
       vditor.setValue && vditor.setValue(md.substr(0, md.length - 1));
     } catch (error) {
       console.error('html2mdSetValue', error);
-    }
-  };
-
-  const getRange = () => {
-    const selection = window.getSelection();
-    let range = null;
-    if (selection.rangeCount > 0) range = selection.getRangeAt(0);
-    return range;
-  };
-
-  const setCursorPosition = () => {
-    if (range && !pc) {
-      const selection = window.getSelection();
-      selection.removeAllRanges();
-      selection.addRange(range);
     }
   };
 
@@ -191,9 +175,6 @@ export default function DVditor(props) {
           onFocus('focus');
         },
         input: () => {
-          if (/(iPhone|Safari|Mac OS)/i.test(navigator.userAgent) && getSelection().rangeCount > 0) {
-            editor.vditor[editor.vditor.currentMode].range = getSelection().getRangeAt(0);
-          }
           setIsFocus(false);
           onInput(editor);
           onChange(editor);
