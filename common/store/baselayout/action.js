@@ -11,7 +11,8 @@ class IndexAction extends IndexStore {
    */
   @action
   setJumpingToTop() {
-    this.jumpToScrollingPos = -1;
+    this.home = -1;
+    this.search = -1;
     this.isJumpingToTop = true;
   }
 
@@ -23,13 +24,6 @@ class IndexAction extends IndexStore {
     this.isJumpingToTop = false;
   }
 
-  /**
-   * 设置跳回页面头部
-   */
-   @action
-   setSearch(data) {
-     this.search = data;
-   }
 }
 
 export default IndexAction;
