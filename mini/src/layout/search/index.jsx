@@ -36,7 +36,7 @@ class SearchH5Page extends React.Component {
   // 跳转话题详情
   onTopicClick = data => {
     const { topicId = '' } = data
-    Taro.navigateTo({url: `/subPages/topic/topic-detail/${topicId}`})
+    Taro.navigateTo({url: `/subPages/topic/topic-detail/index?id=${topicId}`})
   };
 
   onPostClick = data => console.log('post click', data);
@@ -51,7 +51,7 @@ class SearchH5Page extends React.Component {
     const { pageData: usersPageData } = indexUsers || {};
     const { pageData: threadsPageData } = indexThreads || {};
     return (
-      <BaseLayout allowRefresh={false} curr='search' showTabBar>
+      <BaseLayout showHeader={false} allowRefresh={false} curr='search' showTabBar>
         <SearchInput onSearch={this.onSearch} onCancel={this.onSearch} isShowBottom={false} />
         <SidebarPanel
           icon={{ type: 1, name: 'StrongSharpOutlined' }} 

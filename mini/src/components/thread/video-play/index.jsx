@@ -17,7 +17,7 @@ import { getElementRect, randomStr } from '../utils'
  * @prop {function} onPay 付费时，蒙层点击事件
  */
 
-
+//TODO 视频转码中和错误状态的蒙层样式有问题，需要调整
 const Index = ({
   isPay = false,
   coverUrl,
@@ -29,7 +29,7 @@ const Index = ({
 }) => {
   let player = null;
   const videoId = useRef(`video${randomStr()}`);
-  const [width, setWidth] = useState(null);
+  const [width, setWidth] = useState(378);
 
   const onReady = (ins) => {
     player = ins;
@@ -39,7 +39,6 @@ const Index = ({
     getElementRect(videoId.current).then(res => {
       setWidth(res?.width || 378);
     })
-    
   }, []);
 
   return (
@@ -62,10 +61,10 @@ const Index = ({
         isPay && <View className={styles.payBox} onClick={onPay}></View>
       }
       {
-        status !== 1 && (
+        !isPay && status !== 1 && (
           <View className={styles.payBox}>
             <View className={`${styles.alert} ${status === 0 ? styles.alertWarn : styles.alertError}`}>
-              <Icon className={styles.tipsIcon} size={20} name={status === 0 ? 'WarnOutlined' : 'WrongOutlined'}></Icon>
+              <Icon className={styles.tipsIcon} size={20} name={status === 0 ? 'TipsOutlined' : 'WrongOutlined'}></Icon>
               <Text className={styles.tipsText}>{status === 0 ? '视频正在转码中，转码成功后才能正常显示！' : '错误'}</Text>
             </View>
           </View>

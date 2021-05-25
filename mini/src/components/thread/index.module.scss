@@ -23,9 +23,9 @@
   }
   .content {
     position: relative;
-    // >* {
-    //   margin-top: $margin-4n;
-    // }
+    >view {
+      margin-top: $margin-4n;
+    }
 
     .cover {
       position: absolute;

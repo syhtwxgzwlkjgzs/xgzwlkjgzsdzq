@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { View, Text } from '@tarojs/components';
 import UserItem from '@components/thread/user-item';
 
 import styles from './index.module.scss';
@@ -10,11 +10,11 @@ import styles from './index.module.scss';
  * @prop {function} onItemClick 用户点击事件
  */
 const SearchUsers = ({ data = [], onItemClick }) => (
-  <div className={styles.list}>
+  <View className={styles.list}>
     {data.map((item, index) => (
-      <UserItem key={index} imgSrc={item.avatar} title={item.nickname} label={item.groupName} onClick={onItemClick} />
+      <UserItem key={index} imgSrc={item.avatar} title={item.nickname} needPadding={false} label={item.groupName} onClick={onItemClick} />
     ))}
-  </div>
+  </View>
 );
 
 export default React.memo(SearchUsers);
