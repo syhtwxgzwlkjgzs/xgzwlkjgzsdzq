@@ -124,7 +124,7 @@ class CommentAction extends CommentStore {
       }
 
       // 尾部添加评论
-      if (sort === true && isNoMore === false) {
+      if (sort === true && isNoMore === true) {
         commentList.push(newData);
         ThreadStore && ThreadStore.setCommentList(commentList);
       }

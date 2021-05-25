@@ -3,11 +3,12 @@ import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { diffDate } from '@common/utils/diff-date';
 import { observer } from 'mobx-react';
-import classnames from 'classnames'
-import { Icon } from '@discuzq/design'
+import classnames from 'classnames';
+import { Icon } from '@discuzq/design';
 import CommentInput from '../comment-input/index';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
+import ImageDisplay from '@components/thread/image-display';
 
 @observer
 export default class ReplyList extends React.Component {
@@ -67,38 +68,44 @@ export default class ReplyList extends React.Component {
             circle={true}
             userId={this.props.data.user.id}
             isShowUserInfo={true}
-            size='small'>
-          </Avatar>
+            size="small"
+          ></Avatar>
         </div>
         <div className={styles.replyListContent}>
           <div className={styles.replyListContentText}>
-            <div className={styles.replyListName}>
-              {this.props.data.user.username || this.props.data.user.userName}
-            </div>
+            <div className={styles.replyListName}>{this.props.data.user.username || this.props.data.user.userName}</div>
             <div className={styles.replyListText}>
-              {
-                this.props.data.commentUserId && this.props.data?.replyUser
-                  ? <div className={styles.commentUser}>
-                    <div className={styles.replyedAvatar} onClick={this.props.avatarClick()}>
-                      <Avatar
-                        className={styles.avatar}
-                        image={this.props.data.replyUser.avatar}
-                        name={this.props.data.replyUser.username || this.props.data.replyUser.userName || ''}
-                        circle={true}
-                        userId={this.props.data.replyUser.id}
-                        isShowUserInfo={true}
-                        size='mini'>
-                      </Avatar>
-                    </div>
-                    <span className={styles.replyedUserName}>
-                      {this.props.data.replyUser.username || this.props.data.replyUser.userName}
-                    </span>
-                  </div> : ''
-              }
+              {this.props.data.commentUserId && this.props.data?.replyUser ? (
+                <div className={styles.commentUser}>
+                  <div className={styles.replyedAvatar} onClick={this.props.avatarClick()}>
+                    <Avatar
+                      className={styles.avatar}
+                      image={this.props.data.replyUser.avatar}
+                      name={this.props.data.replyUser.username || this.props.data.replyUser.userName || ''}
+                      circle={true}
+                      userId={this.props.data.replyUser.id}
+                      isShowUserInfo={true}
+                      size="mini"
+                    ></Avatar>
+                  </div>
+                  <span className={styles.replyedUserName}>
+                    {this.props.data.replyUser.username || this.props.data.replyUser.userName}
+                  </span>
+                </div>
+              ) : (
+                ''
+              )}
               <div
-                className={classnames(styles.content,this.props.isShowOne && styles.isShowOne)}
-                dangerouslySetInnerHTML={{ __html: this.filterContent()}}
+                className={classnames(styles.content, this.props.isShowOne && styles.isShowOne)}
+                dangerouslySetInnerHTML={{ __html: this.filterContent() }}
               ></div>
+
+              {/* 图片展示 */}
+              {this.props.data?.images && (
+                <div className={styles.imageDisplay}>
+                  <ImageDisplay platform="pc" imgData={this.props.data?.images} />
+                </div>
+              )}
             </div>
           </div>
           <div className={styles.replyListFooter}>
@@ -108,30 +115,34 @@ export default class ReplyList extends React.Component {
             <div className={styles.extraBottom}>
               <div
                 className={classnames(styles.commentLike, this.props?.data?.isLiked && styles.active)}
-                onClick={() => this.likeClick(canLike)}>
+                onClick={() => this.likeClick(canLike)}
+              >
                 <Icon className={styles.icon} name="LikeOutlined"></Icon>
-                    赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
+                赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
               </div>
-              <div className=
-                {classnames(styles.commentReply, this.props.isShowInput && this.state.isShowInput && styles.active)}
-                onClick={() => this.replyClick()}>
+              <div
+                className={classnames(
+                  styles.commentReply,
+                  this.props.isShowInput && this.state.isShowInput && styles.active,
+                )}
+                onClick={() => this.replyClick()}
+              >
                 <Icon className={styles.icon} name="MessageOutlined"></Icon>
                 <span>回复</span>
               </div>
             </div>
           </div>
 
-
           {/* 回复输入框 */}
-          {this.props.isShowInput && this.state.isShowInput
-            && <div className={styles.commentInput}>
+          {this.props.isShowInput && this.state.isShowInput && (
+            <div className={styles.commentInput}>
               <CommentInput
-                height='label'
-                onSubmit={value => this.props.onSubmit(value)}
-                placeholder={this.state.placeholder}>
-              </CommentInput>
+                height="label"
+                onSubmit={(value) => this.props.onSubmit(value)}
+                placeholder={this.state.placeholder}
+              ></CommentInput>
             </div>
-          }
+          )}
         </div>
       </div>
     );

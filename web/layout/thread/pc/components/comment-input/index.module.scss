@@ -4,7 +4,6 @@
   background: var(--color-white);
   border: var(--border-border);
   border-radius: rem($border-radius-small);
-  overflow: hidden;
 }
 
 .main {
@@ -52,6 +51,7 @@
   height: rem(52);
   padding: 0 rem(16);
   border-top: var(--border-border);
+  position: relative;
 
   .linkBtn {
     display: flex;

@@ -382,8 +382,6 @@ class ThreadH5Page extends React.Component {
       attachments: [],
     };
 
-    console.log(imageList);
-
     if (imageList?.length) {
       params.attachments = imageList
         .filter((item) => item.status === 'success' && item.response)
