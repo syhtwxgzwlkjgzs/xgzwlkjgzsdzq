@@ -25,6 +25,7 @@ export default function DVditor(props) {
 
   const html2mdSetValue = (text) => {
     try {
+      if (!vditor) return;
       const md = vditor.html2md(text);
       vditor.setValue && vditor.setValue(md.substr(0, md.length - 1));
     } catch (error) {
@@ -34,6 +35,7 @@ export default function DVditor(props) {
 
   const html2mdInserValue = (text) => {
     try {
+      if (!vditor) return;
       const md = vditor.html2md && vditor.html2md(text);
       vditor.insertValue && vditor.insertValue(md.substr(0, md.length - 1));
     } catch (error) {
