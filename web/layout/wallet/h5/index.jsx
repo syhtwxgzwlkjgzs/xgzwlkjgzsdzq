@@ -12,6 +12,7 @@ import FilterView from './components/all-state-popup';
 import DatePickers from '@components/thread/date-picker';
 import { formatDate } from '@common/utils/format-date.js';
 import { INCOME_DETAIL_CONSTANTS, EXPAND_DETAIL_CONSTANTS, CASH_DETAIL_CONSTANTS } from '@common/constants/wallet';
+import List from '@components/list';
 
 import layout from './layout.module.scss';
 
@@ -60,12 +61,12 @@ class WalletH5Page extends React.Component {
   };
 
   // 关闭全部状态的弹框
-  handleStateCancel = () => {
+  handleState = () => {
     this.setState({ visibleshow: false });
   };
 
   // 点击确定后对时间选择的弹框的操作
-  handleMoneyTimeCancel = (time) => {
+  handleMoneyTime = (time) => {
     const gapTime = new Date(time).getTime() - new Date().getTime();
     if (gapTime < 0) {
       this.setState({ consumptionTime: formatDate(time, 'yyyy年MM月') });
@@ -257,18 +258,48 @@ class WalletH5Page extends React.Component {
             </div>
           </div>
           <div className={layout.tabs}>
-            <Tabs scrollable={true} className={layout.tabList} onActive={val => this.onTabActive(val)}>
+            <Tabs
+              scrollable={true}
+              className={layout.tabList}
+              onActive={val => this.onTabActive(val)}
+            >
               {tabList.map(([id, label, badge, icon]) => (
-                <Tabs.TabPanel key={id} id={id} label={label} name={icon.name}>
-                  {this.state.tabsType === 'income'
-                    && incomeData.map(value => <IncomeList key={value.id} incomeVal={value}></IncomeList>)}
-                  {this.state.tabsType === 'pay'
-                    && payData.map(value => <PayList key={value.id} payVal={value}></PayList>)}
-                  {this.state.tabsType === 'withdrawal'
-                    && withdrawalData.map(value => (
-                      <WithdrawalList key={value.id} withdrawalVal={value}></WithdrawalList>
-                    ))}
-                  <NoMore></NoMore>
+                <Tabs.TabPanel
+                  key={id}
+                  id={id}
+                  label={label}
+                  name={icon.name}
+                >
+                  {
+                    this.state.tabsType === 'income'
+                      ? <List
+                        className={layout.list}
+                        onRefresh={() => {
+                          console.log('触底了');
+                        }}>
+                        {incomeData.map(value => <IncomeList key={value.id} incomeVal={value}></IncomeList>)}
+                        </List> : ''
+                  }
+                  {
+                    this.state.tabsType === 'pay'
+                      ? <List
+                      className={layout.list}
+                      onRefresh={() => {
+                        console.log('触底了');
+                      }}>
+                      {payData.map(value => <PayList key={value.id} payVal={value}></PayList>)}
+                      </List> : ''
+                  }
+                  {
+                    this.state.tabsType === 'withdrawal'
+                      ? <List
+                      className={layout.list}
+                      onRefresh={() => {
+                        console.log('触底了');
+                      }}>
+                      {withdrawalData.map(value => <WithdrawalList key={value.id} withdrawalVal={value}></WithdrawalList>)}
+                      </List> : ''
+                  }
                 </Tabs.TabPanel>
               ))}
             </Tabs>
@@ -296,7 +327,7 @@ class WalletH5Page extends React.Component {
             this.setState({ consumptionTimeshow: !this.state.consumptionTimeshow });
           }}
           onSelects={(time) => {
-            this.handleMoneyTimeCancel(time);
+            this.handleMoneyTime(time);
           }}
           dateConfig={{
             year: {
