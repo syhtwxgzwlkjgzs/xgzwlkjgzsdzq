@@ -119,7 +119,7 @@ class index extends Component {
 
   render() {
     const { targetUser } = this.props.user;
-    const user = this.props.isOtherPerson ? targetUser || {} : this.props.user;
+    const user = this.props.router.query?.id ? targetUser || {} : this.props.user;
     return (
       <div className={styles.h5box}>
         {/* 上 */}
