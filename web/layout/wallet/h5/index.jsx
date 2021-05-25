@@ -241,6 +241,7 @@ class WalletH5Page extends React.Component {
           data={data}
           visible={this.state.visibleshow}
           handleCancel={() => { this.handleCancel() }}
+          handleSubmit={(id) => { console.log(id); }}
         />
       </div>
     );

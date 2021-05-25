@@ -9,14 +9,19 @@ export class index extends Component {
   constructor(props) {
     super(props)
     this.state = {
-
+      choice: '',
     }
   }
   onClickFirst = (item) => {
-    console.log(item);
+    this.setState({ choice: item.id });
+  }
+  handleSubmit = (id) => {
+    this.props.handleSubmit(id);
+    this.props.handleCancel();
   }
   render() {
-    const { visible, handleCancel, handleSubmit, data } = this.props;
+    const { visible, handleCancel, data } = this.props;
+    const { choice } = this.state;
     return (
       <Popup
         position="bottom"
@@ -33,7 +38,7 @@ export class index extends Component {
                     data.map((item, index) => (
                       <Col span={3}>
                         <span
-                          className={styles.span}
+                          className={`${choice == item.id ? styles.active : ''} ${styles.span}`}
                           key={index}
                           onClick={() => this.onClickFirst(item)}
                         >
@@ -47,7 +52,7 @@ export class index extends Component {
             </div>
           </div>
           <div className={styles.footer}>
-            <Button className={styles.button} onClick={handleSubmit} type="primary">确定</Button>
+            <Button className={styles.button} onClick={() => { this.handleSubmit(choice) }} type="primary">确定</Button>
             <div className={styles.footerBtn} onClick={handleCancel}> 取消 </div>
           </div>
         </div>
