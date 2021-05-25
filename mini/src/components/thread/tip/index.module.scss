@@ -1,5 +1,11 @@
 @import '@common/styles/index.scss';
+.w24 {
+  width: 24px;
+}
 
+.w44 {
+  width: 44px;
+}
 .container {
   position: relative;
   max-width: 44px;
@@ -17,6 +23,8 @@
     left: -5px;
     z-index: 0;
   }
+
+
 
   .moreIcon {
     position: absolute;
