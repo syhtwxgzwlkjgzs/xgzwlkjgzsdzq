@@ -103,7 +103,7 @@ const BaseLayout = (props) => {
 
         <List {...props} immediateCheck={false} className={styles.list} wrapperClass={styles.wrapper}>
           {
-            showLeft && (
+            (pageName === 'home' || showLeft) && (
               <div className={styles.left}>
                 {typeof(left) === 'function' ? useCallback(left({ ...props }), []) : left}
               </div>
@@ -116,7 +116,7 @@ const BaseLayout = (props) => {
           </div>
 
           {
-            showRight && (
+            (pageName === 'home' || showRight) && (
               <div className={`${styles.right} ${(pageName === "home") ? styles["home-right"] : ""}`}>
                 {typeof(right) === 'function' ? right({ ...props }) : right}
               </div>
