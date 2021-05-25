@@ -1,4 +1,5 @@
 import React from 'react';
+import { View, Text } from '@tarojs/components';
 
 import ThreadContent from '@components/thread';
 
@@ -10,14 +11,14 @@ import styles from './index.module.scss';
  * @prop {function} onItemClick 帖子点击事件
  */
 const SearchPosts = ({ data, onItemClick }) => (
-  <div className={styles.list}>
+  <View className={styles.list}>
     {data.map((item, index) => (
-        <div key={index}>
+        <View key={index}>
           <ThreadContent showBottomStyle={false} className={styles.listItem} data={item} key={index} />
-          <div className={styles.hr}></div>
-        </div>
+          <View className={styles.hr}></View>
+        </View>
     ))}
-  </div>
+  </View>
 );
 
 export default React.memo(SearchPosts);
