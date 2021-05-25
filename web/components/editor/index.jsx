@@ -144,22 +144,22 @@ export default function DVditor(props) {
     const { vditor } = editor;
 
     // todo 事件需要throttle或者debounce??? delay时间控制不好可能导致记录不准确
-    // const editorElement = vditor[vditor.currentMode]?.element;
+    const editorElement = vditor[vditor.currentMode]?.element;
     // // todo 需要添加drag事件吗
-    // const events = ['mouseup', 'click', 'touchend', 'touchcancel', 'input'];
-    // events.forEach((event) => {
-    //   editorElement?.addEventListener(event, () => {
-    //     setTimeout(() => {
-    //       vditor[vditor.currentMode].range = getEditorRange(vditor);
-    //       console.log(vditor[vditor.currentMode].range);
-    //     }, 0);
-    //   });
-    // });
+    const events = ['mouseup', 'click', 'keyup', 'touchend', 'touchcancel', 'input'];
+    events.forEach((event) => {
+      editorElement?.addEventListener(event, () => {
+        setTimeout(() => {
+          vditor[vditor.currentMode].range = getEditorRange(vditor);
+          console.log(vditor[vditor.currentMode].range);
+        }, 0);
+      });
+    });
 
     // 从事件绑定方式修改成轮询记录的方式，以达到更实时更精确的记录方式，可解决iphone下输入中文光标会被重置到位置0的问题（性能需关注）
-    intervalId = setInterval(() => {
-      vditor[vditor.currentMode].range = getEditorRange(vditor);
-    }, 200);
+    // intervalId = setInterval(() => {
+    //   vditor[vditor.currentMode].range = getEditorRange(vditor);
+    // }, 200);
   };
 
   function initVditor() {
