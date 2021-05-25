@@ -22,7 +22,7 @@ class PCCloseSite extends React.Component {
           <img className={styles.img} src='/dzq-img/close.png'/>
           <h1 className={styles.main}>关闭已站点</h1>
           {closeSiteConfig && <p className={styles.sub}>{closeSiteConfig.detail}</p>}
-          <Button onClick={() => {Router.push({url: '/user/login'});}} size='large' className={styles.btn} type='primary'>管理员登录</Button>
+          {false && <Button onClick={() => {Router.push({url: '/user/login'});}} size='large' className={styles.btn} type='primary'>管理员登录</Button>}
         </div>
         <Copyright center line/>
       </>
