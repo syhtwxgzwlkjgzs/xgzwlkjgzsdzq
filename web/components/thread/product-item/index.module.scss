@@ -1,6 +1,7 @@
 @import '@common/styles/index.scss';
 
 .container {
+  @include cursor-on-pc;
   width: 100%;
   padding: rem($padding-4n);
   display: flex;
