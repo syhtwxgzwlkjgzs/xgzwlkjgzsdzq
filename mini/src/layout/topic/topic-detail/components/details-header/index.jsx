@@ -3,7 +3,7 @@ import { Icon } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
-
+import TopicHeaderImg from '../../../../../../../web/public/dzq-img/topic-header.png';
 
 /**
  * 用户组件
@@ -14,7 +14,7 @@ import { View, Text } from '@tarojs/components';
  */
 const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop }) => {
   return (
-    <View className={styles.container} >
+    <View className={styles.container} style={{ backgroundImage: `url('${TopicHeaderImg}')` }}>
       <View className={styles.title}>{title && `#${title}#`}</View>
       <View className={styles.allTopic}>
         <a href="/topic">全部话题 &gt;</a>

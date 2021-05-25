@@ -34,7 +34,7 @@ import styles from './index.module.scss';
   }, [imgs]);
 
   const sty = useMemo(() => {
-    return { width: renderUsers.length === 1 ? '0.24rem' : '0.44rem' }
+    return { width: renderUsers.length === 1 ? '24px' : '44px' }
   }, [renderUsers])
 
   return (
