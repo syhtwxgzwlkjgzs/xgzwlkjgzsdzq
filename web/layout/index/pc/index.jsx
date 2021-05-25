@@ -83,7 +83,9 @@ class IndexPCPage extends React.Component {
    }
 
   onFilterClick = (result) => {
+    // 隐藏刷新按钮
     this.setState({ visible: false })
+
     const { sequence, filter: { types, sort, essence, attention, } } = result;
     const { dispatch = () => {} } = this.props;
     this.filter = { ...this.filter, types, essence, sequence, attention, sort };
@@ -96,6 +98,9 @@ class IndexPCPage extends React.Component {
    }
 
   onNavigationClick = ({ categoryIds, sequence }) => {
+    // 隐藏刷新按钮
+    this.setState({ visible: false })
+
     const { dispatch = () => {} } = this.props;
     this.filter = { ...this.filter, categoryids: categoryIds, sequence };
 
