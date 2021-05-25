@@ -156,7 +156,7 @@ export default function DVditor(props) {
     //   });
     // });
 
-    // 从时间绑定修改成轮询记录的方式
+    // 从事件绑定方式修改成轮询记录的方式，以达到更实时更精确的记录方式，可解决iphone下输入中文光标会被重置到位置0的问题（性能需关注）
     intervalId = setInterval(() => {
       vditor[vditor.currentMode].range = getEditorRange(vditor);
     }, 200);
