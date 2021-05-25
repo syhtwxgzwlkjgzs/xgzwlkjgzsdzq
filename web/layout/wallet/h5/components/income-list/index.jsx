@@ -1,6 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
+import { time } from '@discuzq/sdk/dist/index';
 
 import Avatar from '@components/avatar';
 import { diffDate } from '@common/utils/diff-date';
@@ -38,9 +39,9 @@ class IncomeList extends React.Component {
                     }
                     <span>{this.showText[this.props.incomeVal.type]}</span>
                 </div>
-                <div className={styles.money}>+{this.props.incomeVal.money}</div>
+                <div className={styles.money}>+{this.props.incomeVal.amount}</div>
             </div>
-            <div className={styles.time}>{diffDate(this.props.incomeVal.time)}</div>
+            <div className={styles.time}>{diffDate(time.formatDate(this.props.incomeVal.createdAt, 'YYYY-MM-DD'))}</div>
         </div>
     );
   }

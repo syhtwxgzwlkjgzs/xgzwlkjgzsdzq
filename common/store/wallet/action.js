@@ -2,6 +2,7 @@ import { action } from 'mobx';
 import WalletStore from './store';
 import { readWalletUser, readWalletLog, readWalletCash } from '@server';
 import { time } from '@discuzq/sdk/dist/index';
+import { get } from '@common/utils/get';
 
 const setWalletInfoPageData = (data, obj, {
   type,
@@ -15,7 +16,7 @@ const setWalletInfoPageData = (data, obj, {
     obj[type][date] = {};
   }
   if (!obj[type][date][page]) {
-    obj[type][date][page] = data;
+    obj[type][date][page] = get(data, 'pageData', []);
   }
 };
 
@@ -36,6 +37,7 @@ class WalletAction extends WalletStore {
       const param = {
         walletLogType: 'income',
         page,
+        perPage: 20,
       };
       const filter = {
         startTime: time.getMonthStartAndEnd(date)[0],
@@ -49,7 +51,7 @@ class WalletAction extends WalletStore {
         filter,
       });
       const detailInfoRes = await readWalletLog({
-        param,
+        params: param,
       });
 
       if (detailInfoRes.code === 0) {
@@ -68,6 +70,7 @@ class WalletAction extends WalletStore {
       const param = {
         walletLogType: 'expend',
         page,
+        perPage: 20,
       };
       const filter = {
         startTime: time.getMonthStartAndEnd(date)[0],
@@ -81,7 +84,7 @@ class WalletAction extends WalletStore {
       });
 
       const detailInfoRes = await readWalletLog({
-        param,
+        params: param,
       });
 
       if (detailInfoRes.code === 0) {
@@ -98,9 +101,10 @@ class WalletAction extends WalletStore {
     getFreezeDetail = async ({ ...props }) => {
       const { page = 1, date, type = 'all' } = props;
       const detailInfoRes = await readWalletLog({
-        param: {
+        params: {
           walletLogType: 'freeze',
           page,
+          perPage: 20,
         },
       });
 
@@ -109,7 +113,7 @@ class WalletAction extends WalletStore {
           if (!this.freezeDetail[date]) {
             this.freezeDetail[date] = {};
           }
-          this.freezeDetail[date][page] = detailInfoRes.data;
+          this.freezeDetail[date][page] = get(detailInfoRes, 'data.pageData', []);
         }
       }
     }
@@ -117,9 +121,10 @@ class WalletAction extends WalletStore {
     // 获取提现明细
     @action
     getCashLog = async ({ ...props }) => {
-      const { page = 1, date, type = 'all' } = props;
+      const { page = 1, date = time.formatDate(new Date(), 'YYYY-MM'), type = 'all' } = props;
       const param = {
         page,
+        perPage: 20,
       };
 
       const filter = {
@@ -135,7 +140,7 @@ class WalletAction extends WalletStore {
       });
 
       const cashInfoRes = await readWalletCash({
-        param,
+        params: param,
       });
 
       setWalletInfoPageData(cashInfoRes.data, this.cashDetail, {
