@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  padding: $padding-3n $padding-4n;
+  padding: $padding-3n 0;
   background-color: $white;
 
   .wrapper {
@@ -92,8 +92,8 @@
   &:after {
     content: ' ';
     position: absolute;
-    right: 16px;
-    left: 16px;
+    right: 0;
+    left: 0;
     height: 1px;
     bottom: 0;
     background-color: rgba(238, 238, 238, 0.75);
@@ -103,4 +103,14 @@
 .sidebarPadding {
   padding-left: $padding-4n;
   padding-right: $padding-4n;
+
+  &:after {
+    content: ' ';
+    position: absolute;
+    right: rem(16);
+    left: rem(16);
+    height: 1px;
+    bottom: 0;
+    background-color: rgba(238, 238, 238, 0.75);
+  }
 }
