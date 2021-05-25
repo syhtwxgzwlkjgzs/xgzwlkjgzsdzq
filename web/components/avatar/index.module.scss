@@ -12,7 +12,7 @@
     z-index: var(--zindex-backtotop);
     transform: translateY(100%);
     bottom: 0;
-    box-shadow: 0px 0px 8px $border-shadow-color;
+    // box-shadow: 0px 0px 8px $border-shadow-color;
 
     .userInfoContent{
       margin-top: rem(16);
