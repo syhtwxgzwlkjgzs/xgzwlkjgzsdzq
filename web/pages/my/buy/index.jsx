@@ -34,7 +34,11 @@ class Index extends React.Component {
   constructor(props) {
     super(props);
     const { serverIndex, index } = this.props;
-    serverIndex && serverIndex.threads && index.setThreads(serverIndex.threads);
+    if (serverIndex && serverIndex.threads) {
+      index.setThreads(serverIndex.threads);
+    } else {
+      index.setThreads(null);
+    }
   }
 
   componentDidMount() {
@@ -50,7 +54,7 @@ class Index extends React.Component {
       });
     }
   }
-  dispatch = async (type, data = {}) => {
+  dispatch = async () => {
     const { index } = this.props;
     await index.getReadThreadList({
       filter: {

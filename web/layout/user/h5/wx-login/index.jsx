@@ -8,7 +8,7 @@ import WeixinQrCode from '@components/login/wx-qr-code';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import { get } from '@common/utils/get';
-import PopProtocol from '../components/pop-protocol';
+import Protocol from '../components/protocol';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import PcBodyWrap from '../components/pc-body-wrap';
 
@@ -34,7 +34,6 @@ class WXLoginH5Page extends React.Component {
           redirectUri,
         };
       }
-      console.log(site.isMiniProgramOpen, site.isOffiaccountOpen);
       if (platform === 'pc') {
         const type = site?.isMiniProgramOpen ?  'pc_login_mini' : 'pc_login';
         params = {
@@ -92,6 +91,8 @@ class WXLoginH5Page extends React.Component {
     const { site, commonLogin } = this.props;
     const { platform } = site;
     const isAnotherLoginWayAvaliable = this.props.site.isSmsOpen || this.props.site.isUserLoginVisible;
+    // 接受监听一下协议的数据，不能去掉，去掉后协议的点击无反应
+    const { protocolVisible } = commonLogin;
     return (
       <PcBodyWrap>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
@@ -131,28 +132,9 @@ class WXLoginH5Page extends React.Component {
               </span>
             )}
           </div>
-          <div className={platform === 'h5' ? layout['otherLogin-outer__tips'] : layout.pc_otherLogin_tips} >
-            注册登录即表示您同意
-            <span onClick={() => {
-              if (platform === 'pc') {
-                window.open('/user/agreement?type=register');
-              }
-              commonLogin.setProtocolInfo('register');
-            }}>《注册协议》</span>
-            <span onClick={() => {
-              if (platform === 'pc') {
-                window.open('/user/agreement?type=privacy');
-              }
-              commonLogin.setProtocolInfo('privacy');
-            }}>《隐私协议》</span>
-          </div>
+          <Protocol/>
         </div>
       </div>
-      {
-        platform === 'h5'
-          ? <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
-          : <></>
-      }
       </PcBodyWrap>
     );
   }

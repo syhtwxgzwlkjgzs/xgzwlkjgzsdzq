@@ -78,11 +78,19 @@ const InputPop = (props) => {
               </View>
             )}
             {canShare && (
-              <View className={styles.moreItem} onClick={() => onOperClick('share')}>
+              <View className={styles.moreItem} onClick={() => onOperClick('posterShare')}>
                 <View className={styles.icon}>
-                  <Icon name="ShareAltOutlined" size={20}></Icon>
+                  <Icon name="PictureOutlinedBig" size={20}></Icon>
                 </View>
-                <View className={styles.text}>分享</View>
+                <View className={styles.text}>生成海报</View>
+              </View>
+            )}
+            {canShare && (
+              <View className={styles.moreItem} onClick={() => onOperClick('weixinShare')}>
+                <View className={styles.icon}>
+                  <Icon name="WechatOutlined" size={20}></Icon>
+                </View>
+                <View className={styles.text}>微信分享</View>
               </View>
             )}
 
