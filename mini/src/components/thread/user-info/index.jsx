@@ -32,10 +32,12 @@ export default function UserInfo(props) {
   props.isReward && (tagsNumber = tagsNumber + 1);
   props.isRed && (tagsNumber = tagsNumber + 1);
 
+  const isPc = props.platform === 'pc';
+
   return (
-    <View className={styles.contianer}>
+    <View className={classNames(styles.contianer, !props.hideInfoPopip && styles.cursor)}>
       <Avatar
-        isShowUserInfo={props.platform === 'pc'}
+        isShowUserInfo={!props.hideInfoPopip && props.platform === 'pc'}
         userId={props.userId}
         className={styles.avatar}
         circle={true}
@@ -58,10 +60,10 @@ export default function UserInfo(props) {
               <Text>{props.location}</Text>
             </View>
           )}
-          {props.View && (
-            <View className={styles.View}>
-              <Icon name="EyeOutlined" className={styles.ViewIcon}></Icon>
-              <Text>{props.View}</Text>
+          {props.view && (
+            <View className={styles.view}>
+              <Icon name="EyeOutlined" className={styles.viewIcon}></Icon>
+              <Text>{props.view}</Text>
             </View>
           )}
         </View>
@@ -70,13 +72,13 @@ export default function UserInfo(props) {
       <View className={styles.tags}>
         {props.isEssence && (
           <View className={classNames('dzq-tag', styles.categoryEssence)}>
-            <Text className="dzq-tag-text">{tagsNumber > 2 ? '精' : '精华'}</Text>
+            <Text className="dzq-tag-text">{tagsNumber > 2 && !isPc ? '精' : '精华'}</Text>
           </View>
         )}
         {/* {props.isEssence && <Tag type="primary">精华</Tag>} */}
-        {props.isPay && <Tag type="success">{tagsNumber > 2 ? '付' : '付费'}</Tag>}
-        {props.isReward && <Tag type="warning">{tagsNumber > 2 ? '悬' : '悬赏'}</Tag>}
-        {props.isRed && <Tag type="danger">{tagsNumber > 2 ? '红' : '红包'}</Tag>}
+        {props.isReward && <Tag type="warning">{tagsNumber > 2 && !isPc ? '悬' : '悬赏'}</Tag>}
+        {props.isRed && <Tag type="danger">{tagsNumber > 2 && !isPc ? '红' : '红包'}</Tag>}
+        {props.isPay && <Tag type="success">{tagsNumber > 2 && !isPc ? '付' : '付费'}</Tag>}
       </View>
     </View>
   );

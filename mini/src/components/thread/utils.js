@@ -21,6 +21,20 @@ export const filterClickClassName = (dom) => {
   return true;
 };
 
+export const debounce = (func, wait) => {
+  let timeout;
+  return () => {
+    const context = this;
+    const args = [...arguments];
+    if (timeout) clearTimeout(timeout);
+    const callNow = !timeout;
+    timeout = setTimeout(() => {
+      timeout = null;
+    }, wait);
+    if (callNow) func.apply(context, args);
+  };
+}
+
 // 处理附件的数据
 export const handleAttachmentData = (data) => {
   const newData = { text: data?.text || '' };
@@ -94,7 +108,6 @@ export const getElementRect = async (eleId = '', delay = 200) => new Promise((re
     Taro.createSelectorQuery()
       .select(`#${eleId}`)
       .boundingClientRect((rect) => {
-        delay
         if (rect) {
           resovle(rect);
         } else {

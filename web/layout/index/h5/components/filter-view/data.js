@@ -10,7 +10,7 @@ export default [
     data: [
       {
         name: '所有',
-        pid: '',
+        pid: 'all',
       },
       {
         name: '视频',
