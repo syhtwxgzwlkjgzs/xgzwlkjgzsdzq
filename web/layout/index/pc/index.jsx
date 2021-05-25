@@ -30,6 +30,10 @@ class IndexPCPage extends React.Component {
       conNum: 0,
       // visibility: 'hidden',
       isShowDefault: this.checkIsOpenDefaultTab(),
+      // 筛选过滤数据
+      filter: {
+        sequence: this.checkIsOpenDefaultTab() ? 1 : 0
+      }
     };
 
     this.defaultCategoryIds = this.props.index.filter?.categoryids || []
@@ -37,24 +41,18 @@ class IndexPCPage extends React.Component {
 
   // 轮询定时器
   timer = null
-  // 筛选过滤数据
-  filter = {}
+  
   // List组件ref
   listRef = React.createRef()
   // 存储最新的数据，以便于点击刷新时，可以直接赋值
   newThread = {}
 
   componentDidMount() {
-    // setTimeout(() => {
-    //   this.filter = {} 
-    // }, 500)
-
-
     if (this.timer) {
       clearInterval(this.timer);
     }
     this.timer = setInterval(() => {
-      const { categoryids, types, essence, attention, sort, sequence } = this.filter;
+      const { categoryids, types, essence, attention, sort, sequence } = this.state.filter;
       const { totalCount: nowTotal = -1 } = this.props.index?.threads || {};
 
       if (nowTotal !== -1) {
@@ -82,21 +80,39 @@ class IndexPCPage extends React.Component {
    // 上拉加载更多
    onPullingUp = () => {
      const { dispatch = () => {} } = this.props;
-     return dispatch('moreData', this.filter);
+     return dispatch('moreData', this.state.filter);
    }
 
   onFilterClick = (result) => {
+    // 隐藏刷新按钮
     this.setState({ visible: false })
+
     const { sequence, filter: { types, sort, essence, attention, } } = result;
     const { dispatch = () => {} } = this.props;
-    this.filter = { ...this.filter, types, essence, sequence, attention, sort };
-    dispatch('click-filter', this.filter);
+    const newFilter = { ...this.state.filter, types, essence, sequence, attention, sort };
+    this.setState({ filter: newFilter })
+
+    // 保存操作至store
+    this.props.index.setFilter(newFilter)
+
+    // 发起网络请求
+    dispatch('click-filter', newFilter);
    }
 
-   onNavigationClick = ({ categoryIds, sequence }) => {
-     const { dispatch = () => {} } = this.props;
-     this.filter = { ...this.filter, categoryids: categoryIds, sequence };
-     dispatch('click-filter', this.filter);
+  onNavigationClick = ({ categoryIds, sequence }) => {
+
+    // 隐藏刷新按钮
+    this.setState({ visible: false })
+
+    const { dispatch = () => {} } = this.props;
+    const newFilter = { ...this.state.filter, categoryids: categoryIds, sequence };
+    this.setState({ filter: newFilter })
+
+     // 保存操作至store
+    this.props.index.setFilter(newFilter)
+
+    // 发起网络请求
+    dispatch('click-filter', newFilter);
    }
 
    goRefresh = () => {
@@ -112,7 +128,7 @@ class IndexPCPage extends React.Component {
         conNum: 0,
       });
     } else { // 没有缓存值，直接请求网络
-      dispatch('refresh-thread', this.filter).then((res) => {
+      dispatch('refresh-thread', this.state.filter).then((res) => {
         this.setState({
           visible: false,
           conNum: 0,

@@ -11,6 +11,7 @@ import SidebarPanel from '@components/sidebar-panel';
 
 @inject('site')
 @inject('search')
+@inject('baselayout')
 @observer
 class SearchH5Page extends React.Component {
   onSearch = (keyword) => {
@@ -45,6 +46,21 @@ class SearchH5Page extends React.Component {
     this.props.router.back();
   };
 
+  // 点击底部tabBar
+  onClickTabBar = (data, index) => {
+    if (index !== 1) {
+      return
+    }
+    this.props.baselayout.setSearch(0);
+
+    const { dispatch = () => {} } = this.props;
+    dispatch('refresh', {});
+  }
+
+  onScroll = ({ scrollTop }) => {
+    this.props.baselayout.setSearch(scrollTop);
+  }
+
   render() {
     const { indexTopics, indexUsers, indexThreads } = this.props.search;
     const { pageData: topicsPageData } = indexTopics || {};
@@ -52,7 +68,7 @@ class SearchH5Page extends React.Component {
     const { pageData: threadsPageData } = indexThreads || {};
 
     return (
-      <BaseLayout allowRefresh={false} curr='search' showTabBar>
+      <BaseLayout allowRefresh={false} curr='search' showTabBar onClickTabBar={this.onClickTabBar} pageName="search" onScroll={this.onScroll}>
         <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} isShowBottom={false} />
         <SidebarPanel
           icon={{ type: 1, name: 'StrongSharpOutlined' }} 

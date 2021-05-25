@@ -82,7 +82,6 @@ class Index extends React.Component {
       }
     }
 
-
     if (type === 'click-filter') { // 点击tab
       this.toastInstance = Toast.loading({
         content: '加载中...',

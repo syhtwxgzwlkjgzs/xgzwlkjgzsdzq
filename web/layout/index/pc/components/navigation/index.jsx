@@ -28,10 +28,6 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
     setFistIndex(categoryIds[0]);
     setSecondIndex(categoryIds[1]);
     if (categoryIds[1] === '-1') {
-      if (categoryIds[0] === '1') { // 默认
-        sequence = 1
-      }
-
       if (categoryIds[0] !== '-1') { // 全部
         categoryIds = [categoryIds[0]]
       } else {

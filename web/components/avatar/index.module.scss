@@ -12,6 +12,7 @@
     z-index: var(--zindex-backtotop);
     transform: translateY(100%);
     bottom: 0;
+    box-shadow: 0px 0px 8px $border-shadow-color;
 
     .userInfoContent{
       margin-top: rem(16);
@@ -119,6 +120,12 @@
             background-color: $primary-color10;
           }
         }
+        .block {
+          background-color: $primary-color3;
+          &:hover {
+            background-color: $primary-color6;
+          }
+        }
       }
     }
 
@@ -128,7 +135,6 @@
     background-color: $primary-color;
     border-color: $primary-color;
     &:hover {
-      border-color: $primary-color6;
       background-color: $primary-color6;
     }
   }
