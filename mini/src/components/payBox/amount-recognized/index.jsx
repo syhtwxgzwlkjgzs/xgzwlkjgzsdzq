@@ -96,7 +96,7 @@ export default class AmountRecognized extends Component {
     const { options = {} } = this.props?.payBox;
     const { type, amount, isAnonymous, title, redAmount, rewardAmount } = options;
     return (
-      <>
+      <View className={styles.giftInfo}>
         {/* 标题 */}
         <View className={styles.amountTitle}>确认金额</View>
         {/* 主要内容区域 */}
@@ -156,7 +156,7 @@ export default class AmountRecognized extends Component {
             }
           </>
         </View>
-      </>
+      </View>
     );
   };
 
@@ -179,7 +179,7 @@ export default class AmountRecognized extends Component {
         </View>
         {/* 关闭按钮 */}
         <View onClick={this.onClose} className={styles.payBoxCloseIcon}>
-          <Icon name="CloseOutlined" size={14} />
+          <Icon name="CloseOutlined" size={12} />
         </View>
       </View>
     );

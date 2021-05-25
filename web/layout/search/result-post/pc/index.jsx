@@ -33,7 +33,6 @@ class SearchResultPostH5Page extends React.Component {
         title="热门内容" 
         type='normal'
         isShowMore={false}
-        isLoading={!pageData}
         noData={!pageData?.length}
         icon={{ type: 3, name: 'HotOutlined' }}
       >
@@ -51,7 +50,7 @@ class SearchResultPostH5Page extends React.Component {
 
   searchData = (keyword) => {
     const { dispatch } = this.props;
-    dispatch('search', keyword);
+    dispatch('refresh', keyword);
   };
 
   onSearch = (value) => {

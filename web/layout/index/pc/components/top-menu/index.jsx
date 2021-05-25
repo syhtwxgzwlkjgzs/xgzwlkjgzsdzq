@@ -37,7 +37,9 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
     newDataSource[0].isActive = false
 
     if (`${index}` !== '-1' && `${subIndex}`.indexOf('/') !== -1) { // 点击二级菜单
+      // 获取二级菜单的下标
       const i = parseInt(subIndex.split('/')[1])
+      // 若当前二级菜单不是选中状态，先清空之前操作，再赋值
       const subIndexItems = newDataSource[index]?.children.map(item => {
         item.isActive = false
         return item
@@ -47,6 +49,7 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
       const indexItem = newDataSource[index];
       indexItem.isActive = true;
     } else if (`${index}` === '-1') { // 点击一级菜单
+        // 若当前一级菜单不是选中状态，先清空之前操作，再赋值
       const indexItems = newDataSource.map(item => {
         if (!item.children?.length) {
           item.isActive = false
@@ -57,7 +60,6 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
     }
 
     const result = handleResult(newDataSource)
-    console.log(result);
     onSubmit(result)
     setDataSource(newDataSource);
   };

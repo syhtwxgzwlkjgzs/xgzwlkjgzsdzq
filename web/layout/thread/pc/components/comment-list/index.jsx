@@ -143,7 +143,7 @@ class CommentList extends React.Component {
               name={this.props.data.user.username || this.props.data.user.userName || ''}
               circle={true}
               userId={this.props.data.user.id}
-              isShowUserInfo={true}
+              isShowUserInfo={this.props.isShowOne}
             ></Avatar>
           </div>
           <div className={styles.commentListContent}>

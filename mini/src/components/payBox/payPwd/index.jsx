@@ -86,7 +86,9 @@ class PayPassword extends React.Component {
           hasMask: false,
           duration: 1000,
         });
-        await this.props.payBox.clear();
+        setTimeout(() => {
+          this.props.payBox.clear();
+        }, 500)
       } catch (error) {
         Toast.error({
           content: '支付失败，请重新输入',
@@ -143,27 +145,30 @@ class PayPassword extends React.Component {
           <View className={styles.paypwdDialogContent}>
             <>
               <View className={styles.paypwdTitle}>立即支付</View>
-              <View className={styles.paypwdAmount}>￥{options.amount}</View>
+              <View className={styles.paypwdAmount}>
+                <Text className={styles.moneyUnit}>￥</Text>
+                {Number(options.amount).toFixed(2)}
+              </View>
               <Divider className={styles.paypwdDivider} />
               <View className={styles.paypwdMesg}>
-                <Text>支付方式</Text>
+                <Text className={styles.payText}>支付方式</Text>
                 <Text>
                   <Icon className={styles.walletIcon} name="PurseOutlined" />
                   <Text style={{ verticalAlign: 'middle' }}>钱包支付</Text>
                 </Text>
               </View>
               <View className={styles.paypwdMesg}>
-                <Text>支付密码</Text>
+                <Text className={styles.payText}>支付密码</Text>
               </View>
               <View className={styles.payList}>{this.renderPwdItem()}</View>
             </>
             {/* TODO: 忘记支付密码的链接添加 */}
-            {/* <View className={styles.forgetPasswordContainer}>
+            <View className={styles.forgetPasswordContainer}>
               <Text>忘记支付密码?</Text>
-            </View> */}
+            </View>
             {/* 关闭按钮 */}
             <View className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
-              <Icon name="CloseOutlined" size={14} />
+              <Icon name="CloseOutlined" size={12} />
             </View>
           </View>
         </Dialog>

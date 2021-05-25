@@ -119,6 +119,7 @@
     margin-top: rem($margin-4n);
   }
   .wPaymentCode {
+    position: relative;
     width: rem(106);
     height: rem(106);
     border: 1px solid #eee;
@@ -188,7 +189,9 @@
       display: block;
       width: rem(248);
       border-radius: rem(5);
-      height: rem(36);
+      font-size: $font-size-base;
+      padding-top: rem(8);
+      padding-bottom: rem(8);
     }
   }
   .walletPayment_01 {
@@ -262,4 +265,17 @@
     // }
   }
 
+}
+
+.timeout {
+  cursor: pointer;
+  position: absolute;
+  background: rgba(0, 0, 0, .5);
+  width: 100%;
+  height: 100%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: $font-size-small;
 }

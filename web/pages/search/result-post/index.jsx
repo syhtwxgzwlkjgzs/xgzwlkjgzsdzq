@@ -11,16 +11,16 @@ import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 @inject('search')
 @observer
 class Index extends React.Component {
-  static async getInitialProps(ctx) {
-    const search = ctx?.query?.keyword || '';
-    const result = await readThreadList({ params: { filter: { sequence: '0', filter: { sort: '3', search } } } }, ctx);
+  // static async getInitialProps(ctx) {
+  //   const search = ctx?.query?.keyword || '';
+  //   const result = await readThreadList({ params: { filter: { sequence: '0', filter: { sort: '3', search } } } }, ctx);
 
-    return {
-      serverSearch: {
-        threads: result?.data,
-      },
-    };
-  }
+  //   return {
+  //     serverSearch: {
+  //       threads: result?.data,
+  //     },
+  //   };
+  // }
 
   page = 1;
   perPage = 10;
@@ -29,7 +29,7 @@ class Index extends React.Component {
     super(props);
     const { serverSearch, search } = this.props;
     // 初始化数据到store中
-    serverSearch && serverSearch.threads && search.setThreads(serverSearch.threads);
+    search.setThreads(null);
   }
 
   async componentDidMount() {
@@ -38,17 +38,17 @@ class Index extends React.Component {
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasThreads = !!search.threads;
 
-    if (!hasThreads) {
-      this.toastInstance = Toast.loading({
-        content: '加载中...',
-        duration: 0,
-      });
+    // if (!hasThreads) {
+      // this.toastInstance = Toast.loading({
+      //   content: '加载中...',
+      //   duration: 0,
+      // });
 
       this.page = 1;
       await search.getThreadList({ search: keyword });
 
-      this.toastInstance?.destroy();
-    }
+    //   this.toastInstance?.destroy();
+    // }
   }
 
   dispatch = async (type, data) => {

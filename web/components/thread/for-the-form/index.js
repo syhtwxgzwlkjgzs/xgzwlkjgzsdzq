@@ -17,7 +17,8 @@ import PropTypes from 'prop-types'; // 类型拦截
 const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
   const [value, setValue] = useState('');// 悬赏金额
   // const [times, setTimes] = useState(formatDate(new Date(), 'yyyy-MM-dd h:mm'));// 悬赏的到期时间
-  const [times, setTimes] = useState(formatDate(new Date().getTime(), 'yyyy/MM/dd hh:mm'));// 悬赏的到期时间
+  const now = new Date().getTime() + (25 * 3600 * 1000);
+  const [times, setTimes] = useState(formatDate(now, 'yyyy/MM/dd hh:mm'));// 悬赏的到期时间
   const [show, setShow] = useState(false);// 时间选择器是否显示
 
   // 时间选择器是否显示
@@ -31,7 +32,7 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
   // 点击确定的时候返回参数
   const redbagconfirm = () => {
     if (value < 0.1 || value > 1000000) {
-      Toast.warning({ content: '金额数不合理,0.1<money<1000000' });
+      Toast.warning({ content: '输入的金额数需要在0.1元到1000000元之间' });
       return;
     }
     const gapTime = new Date(times).getTime() - new Date().getTime();

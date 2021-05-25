@@ -24,7 +24,7 @@ export default inject('threadPost')(observer(({type, threadPost, audioUpload}) =
     const tempFilePath = file.path || file.tempFilePath;
     console.log(tempFilePath);
     Taro.uploadFile({
-      url: 'https://discuzv3-dev.dnspod.dev/apiv3/attachments',
+      url: `${window.location.origin}/apiv3/attachments`,
       filePath: tempFilePath,
       name: 'file',
       header: {

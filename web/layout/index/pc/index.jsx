@@ -15,6 +15,7 @@ import Copyright from '@components/copyright';
 import { readThreadList } from '@server';
 import PayBox from '@components/payBox';
 import { Button } from '@discuzq/design';
+import deepClone from '@common/utils/deep-clone';
 
 @inject('site')
 @inject('user')
@@ -30,6 +31,8 @@ class IndexPCPage extends React.Component {
       // visibility: 'hidden',
       isShowDefault: this.checkIsOpenDefaultTab(),
     };
+
+    this.defaultCategoryIds = this.props.index.filter?.categoryids || []
   }
 
   // 轮询定时器
@@ -38,6 +41,8 @@ class IndexPCPage extends React.Component {
   filter = {}
   // List组件ref
   listRef = React.createRef()
+  // 存储最新的数据，以便于点击刷新时，可以直接赋值
+  newThread = {}
 
   componentDidMount() {
     if (this.timer) {
@@ -55,6 +60,8 @@ class IndexPCPage extends React.Component {
               visible: true,
               conNum: totalCount - nowTotal,
             });
+            // 缓存新数据
+            this.newThread = res?.data
           }
         });
       }
@@ -88,13 +95,25 @@ class IndexPCPage extends React.Component {
    }
 
    goRefresh = () => {
-     const { dispatch = () => {} } = this.props;
-     dispatch('click-filter', this.filter).then((res) => {
-       this.setState({
-         visible: false,
-         conNum: 0,
-       });
-     });
+    const { dispatch = () => {} } = this.props;
+
+    if (this.newThread?.pageData?.length) { // 若有缓存值，就取缓存值
+      dispatch('update-page', { page: 1 })
+      this.props.index.setThreads(deepClone(this.newThread))
+      // 清空缓存
+      this.newThread = {}
+      this.setState({
+        visible: false,
+        conNum: 0,
+      });
+    } else { // 没有缓存值，直接请求网络
+      dispatch('refresh-thread', this.filter).then((res) => {
+        this.setState({
+          visible: false,
+          conNum: 0,
+        });
+      });
+    }
    }
 
    // // 回到顶部 // visibility导致了导航栏无法正常显示子目录所以先注释掉
@@ -116,7 +135,7 @@ class IndexPCPage extends React.Component {
     if (tmpCategories?.length) {
       return categories;
     }
-    tmpCategories = [{ name: '全部', pid: '', children: [] }, ...categories];
+    tmpCategories = [{ name: '全部', pid: '-1', children: [] }, ...categories];
 
     return tmpCategories;
   }
@@ -135,7 +154,12 @@ class IndexPCPage extends React.Component {
     return (
       <div className={styles.indexLeft}>
         <div className={styles.indexLeftBox}>
-          <Navigation categories={newCategories} totalThreads={countThreads} onNavigationClick={this.onNavigationClick} />
+          <Navigation 
+            categories={newCategories} 
+            defaultFisrtIndex={this.defaultCategoryIds[0]} 
+            defaultSecondIndex={this.defaultCategoryIds[1]} 
+            totalThreads={countThreads} 
+            onNavigationClick={this.onNavigationClick} />
         </div>
       </div>
     );

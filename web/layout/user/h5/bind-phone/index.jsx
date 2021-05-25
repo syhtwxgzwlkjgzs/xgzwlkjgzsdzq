@@ -7,6 +7,8 @@ import layout from './index.module.scss';
 import PhoneInput from '@components/login/phone-input';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
+import clearLoginStatus from '@common/utils/clear-login-status';
+import PcBodyWrap from '../components/pc-body-wrap';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 
@@ -41,6 +43,7 @@ class BindPhoneH5Page extends React.Component {
         duration: 1000,
       });
       setTimeout(() => {
+        this.props.mobileBind.reset();
         window.location.href = '/';
       }, 1000);
     } catch (e) {
@@ -67,8 +70,8 @@ class BindPhoneH5Page extends React.Component {
       // 发送前校验
       this.props.mobileBind.beforeSendVerify();
       // 验证码
-      const registerCaptcha = webConfig?.setReg?.registerCaptcha;
-      if (registerCaptcha) {
+      const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
+      if (qcloudCaptcha) {
         const res = await this.props.commonLogin.showCaptcha(qcloudCaptchaAppId, TencentCaptcha);
         if (res.ret !== 0) {
           return;
@@ -92,7 +95,7 @@ class BindPhoneH5Page extends React.Component {
     const { mobileBind, site } = this.props;
     const { platform, wechatEnv } = site;
     return (
-      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
+      <PcBodyWrap>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
@@ -122,11 +125,16 @@ class BindPhoneH5Page extends React.Component {
                     window.location.href = '/';
                   }} >跳过</span>
                 </div>
-              : <></>
+              : <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>
+                  <span className={layout.clickBtn} onClick={() => {
+                    clearLoginStatus(); // 清除登录态
+                    window.location.replace('/');
+                  }} >退出登录</span>
+                </div>
           }
         </div>
       </div>
-      </div>
+      </PcBodyWrap>
     );
   }
 }

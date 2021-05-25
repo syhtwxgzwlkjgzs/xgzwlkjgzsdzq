@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { ImagePreviewer } from '@discuzq/design';
 import img from './index.module.scss';
 import { View, Text, Image } from '@tarojs/components';
@@ -8,7 +8,7 @@ const Index = ({ imgData = [] }) => {
   const [visible, setVisible] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
 
-  const imagePreviewers = useMemo(() => imgData.map(item => item.url), [imgData]);
+  const imagePreviewers = useMemo(() => imgData.map((item) => item.url), [imgData]);
 
   const onClick = (id) => {
     imgData.forEach((item) => {
@@ -38,7 +38,12 @@ const Index = ({ imgData = [] }) => {
       return (
         <View className={img[`images${imgData.length}`]}>
           {imgData.map((item, index) => (
-            <Image key={index} className={img[`imagesBox${imgData.length}`]} src={item.thumbUrl} onClick={() => onClick(item.id)} ></Image>
+            <Image
+              key={index}
+              className={img[`imagesBox${imgData.length}`]}
+              src={item.thumbUrl}
+              onClick={() => onClick(item.id)}
+            ></Image>
           ))}
         </View>
       );
@@ -58,25 +63,37 @@ const Index = ({ imgData = [] }) => {
     }
 
     return (
-        <View className={img[`images${imgData.length > 5 ? 5 : imgData.length}`]}>
-          <View className={img[`imagesTop${imgData.length > 5 ? 5 : imgData.length}`]}>
-            {imageList.map((item, index) => (
-                <Image key={index} className={img[`imagesTopData${imgData.length > 5 ? 5 : imgData.length}`]} src={item.thumbUrl} alt="" mode="aspectFill" onClick={() => onClick(item.id)} />
-            ))}
-          </View>
-          <View className={img[`imagesBotom${imgData.length > 5 ? 5 : imgData.length}`]}>
-            {otherImage.map((item, index) => (
-                <View key={index} className={img[`imagesBotomData${imgData.length > 5 ? 5 : imgData.length}`]}>
-                  <Image className={img[`imagesBotomDataPath${imgData.length > 5 ? 5 : imgData.length}`]} src={item.thumbUrl} alt="" onClick={() => onClick(item.id)} />
-                  {imgData.length > 5 && index === 2 && (
-                    <View className={img.modalBox} onClick={onClickMore}>
-                      <Text className={img.imgSpan}>{`+${numContent}`}</Text>
-                    </View>
-                  )}
-                </View>
-            ))}
-          </View>
+      <View className={img[`images${imgData.length > 5 ? 5 : imgData.length}`]}>
+        <View className={img[`imagesTop${imgData.length > 5 ? 5 : imgData.length}`]}>
+          {imageList.map((item, index) => (
+            <Image
+              key={index}
+              className={img[`imagesTopData${imgData.length > 5 ? 5 : imgData.length}`]}
+              src={item.thumbUrl}
+              alt=""
+              mode="aspectFill"
+              onClick={() => onClick(item.id)}
+            />
+          ))}
         </View>
+        <View className={img[`imagesBotom${imgData.length > 5 ? 5 : imgData.length}`]}>
+          {otherImage.map((item, index) => (
+            <View key={index} className={img[`imagesBotomData${imgData.length > 5 ? 5 : imgData.length}`]}>
+              <Image
+                className={img[`imagesBotomDataPath${imgData.length > 5 ? 5 : imgData.length}`]}
+                src={item.thumbUrl}
+                alt=""
+                onClick={() => onClick(item.id)}
+              />
+              {imgData.length > 5 && index === 2 && (
+                <View className={img.modalBox} onClick={onClickMore}>
+                  <Text className={img.imgSpan}>{`+${numContent}`}</Text>
+                </View>
+              )}
+            </View>
+          ))}
+        </View>
+      </View>
     );
   };
   return (

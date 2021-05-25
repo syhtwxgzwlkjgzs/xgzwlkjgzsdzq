@@ -11,8 +11,8 @@
   }
   .title{
     text-align: center;
-    padding: $padding-4n 0;
     font-size: 30px;
+    font-weight: 600;
   }
 
   .list{
@@ -69,6 +69,9 @@
                 border-radius: var(--border-radius-small);
               }
             }
+            .dzq-icon {
+              font-size: 10px !important;
+            }
           }
         }
     }
@@ -88,7 +91,7 @@
     left: 0;
     right: 0;
     padding: $padding-2n $padding-4n $padding-10;
-    @include ios-safe-area-inset-bottom;
+    // @include ios-safe-area-inset-bottom;
     &::before {
       content: '';
       display: block;

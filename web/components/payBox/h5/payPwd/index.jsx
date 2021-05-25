@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react';
 import CommonPayoffPwd from '../../components/common-paypwd-content';
 import { Dialog, Divider, Icon, Toast } from '@discuzq/design';
 import { PAY_BOX_ERROR_CODE_MAP, STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
+import throttle from '@common/utils/thottle.js';
 
 @inject('site')
 @inject('user')
@@ -51,7 +52,7 @@ class Index extends React.Component {
         },
         () => {
           if (this.state.list.length === 6) {
-            this.submitPwa();
+            throttle(this.submitPwa(),500);
           }
         },
       );
@@ -84,7 +85,7 @@ class Index extends React.Component {
         },
         () => {
           if (this.state.list.length === 6) {
-            this.submitPwa();
+            throttle(this.submitPwa(),500);
           }
         },
       );
@@ -104,7 +105,9 @@ class Index extends React.Component {
           hasMask: false,
           duration: 1000,
         });
-        await this.props.payBox.clear();
+        setTimeout(() => {
+          this.props.payBox.clear();
+        },500)
       } catch (error) {
         Toast.error({
           content: '支付失败，请重新输入',

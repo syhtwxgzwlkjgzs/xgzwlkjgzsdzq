@@ -6,10 +6,10 @@ import layout from './index.module.scss';
 class WeixinQrCode extends React.Component {
   render() {
     const { orCodeImg, orCodeTips, site } = this.props;
-    const { platform } = site;
+    const { platform, wechatEnv } = site;
     return (
       <div className={platform === 'h5' ? layout.orCode : layout.pc_orCode}>
-        <div className={platform === 'h5' ? layout.orCode__img : layout.pc_orCode__img}>
+        <div className={platform === 'h5' ? layout.orCode__img : `${layout.pc_orCode__img} ${wechatEnv === 'miniProgram' ? layout.pc_orCode_mini : ''}`}>
           {
             orCodeImg
               ? <img src={orCodeImg} alt=""/>

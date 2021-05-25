@@ -2,83 +2,85 @@
 @import '@common/styles/_variable.scss';
 
 .friendItem {
-    display: flex;
-    flex-direction: row;
-    position: relative;
-    justify-content: space-between;
-    align-items: center;
-    flex-shrink: 0;
-    padding: rem($padding-4n);
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  padding: rem($padding-4n);
 }
 
 .friendInfo {
+  display: flex;
+  .friendAvatar {
+      
+  }
+
+  .friendTextInfo {
+    padding-left: rem($padding-4n);
     display: flex;
-    .friendAvatar {
-        
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    .friendName {
+      font-size: rem($font-size-base);
+      color: $text-color-primary;
+      line-height: rem(20);
     }
 
-    .friendTextInfo {
-        padding-left: rem($padding-4n);
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
-
-        .friendName {
-            font-size: rem($font-size-base);
-            color: $text-color-primary;
-        }
-    
-        .friendGroup {
-            font-size: rem($font-size-small);
-            color: $text-color-secondary;
-        }
+    .friendGroup {
+      font-size: rem($font-size-small);
+      color: $text-color-secondary;
+      line-height: rem(17);
     }
+  }
 }
 
 .friendAction {
+  .friendActionFollow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: rem(72);
+    height: rem(25);
 
-    .friendActionFollow {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding-top: rem($padding-1n);
-        padding-bottom: rem($padding-1n);
-
-        span {
-            padding-left: rem($padding-2n);
-            font-size: rem($font-size-small);
-        }
+    span {
+      font-size: rem($font-size-small);
+      &:last-child {
+        padding-left: rem($padding-5);
+      }
     }
+  }
 
-    .friendActionFriend {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: $warn-color;
-        border-color: $warn-color;
-        padding-top: rem($padding-1n);
-        padding-bottom: rem($padding-1n);
+  .friendActionFriend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $warn-color;
+    border-color: $warn-color;
+    width: rem(72);
+    height: rem(25);
 
-        span {
-            padding-left: rem($padding-2n);
-            font-size: rem($font-size-small);
-        }
-    }   
-
-    .friendActionFollowed {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        // 这个颜色没有
-        background: $button-primary-disabled-bg-color;
-        border-color: $button-primary-disabled-bg-color;
-        padding-top: rem($padding-1n);
-        padding-bottom: rem($padding-1n);
-
-        span {
-            padding-left: rem($padding-2n);
-            font-size: rem($font-size-small);
-        }
+    span {
+      padding-left: rem($padding-5);
+      font-size: rem($font-size-small);
     }
+  }
+
+  .friendActionFollowed {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $button-primary-disabled-bg-color;
+    border-color: $button-primary-disabled-bg-color;
+    width: rem(72);
+    height: rem(25);
+
+    span {
+      padding-left: rem($padding-5);
+      font-size: rem($font-size-small);
+    }
+  }
 }

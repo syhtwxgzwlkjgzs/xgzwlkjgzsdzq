@@ -1,10 +1,13 @@
 @import '@common/styles/index.scss';
 
 .contianer {
-  @include cursor-on-pc;
   position: relative;
   display: flex;
   font-family: 'PingFangSC-Semibold';
+}
+
+.cursor {
+  @include cursor-on-pc;
 }
 
 .avatar {
@@ -46,6 +49,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: rem(20);
 }
 
 .meta {
@@ -145,4 +149,7 @@
     }
   }
   }
+}
+.listItemIcon {
+  color: $primary-color;
 }

@@ -85,18 +85,14 @@
     .userBtn {
       margin-top: rem($margin-4n);
       display: flex;
-      align-items: center;
-      .btn {
-        // width: rem(167);
-        height: rem(42);
+      justify-content: flex-start;
+      button {
+        width: 100%;
+        height: rem(44);
         font-size: rem($font-size-middle);
-        display: inline-block;
-        border-radius: 5px;
-        :global {
-          .dzq-icon {
-            vertical-align: middle;
-          }
-        }
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       button:nth-child(2) {
         margin-left: rem($margin-2n);
@@ -104,7 +100,6 @@
         color: $primary-color;
       }
       .userBtnText {
-        vertical-align: middle;
         margin-left: rem($margin-2n);
       }
     }

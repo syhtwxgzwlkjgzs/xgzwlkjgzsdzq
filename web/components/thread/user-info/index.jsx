@@ -21,6 +21,7 @@ UserInfo.propTypes = {
   userId: PropTypes.number, // 用户id PC端
   platform: PropTypes.string, // 是否展示pop PC端
   icon: PropTypes.string, // 图标：点赞或者是付费用户
+  collect: PropTypes.string,
 };
 
 export default function UserInfo(props) {
@@ -34,9 +35,9 @@ export default function UserInfo(props) {
   const isPc = props.platform === 'pc';
 
   return (
-    <div className={styles.contianer}>
+    <div className={classNames(styles.contianer, !props.hideInfoPopip && styles.cursor)}>
       <Avatar
-        isShowUserInfo={props.platform === 'pc'}
+        isShowUserInfo={!props.hideInfoPopip && props.platform === 'pc'}
         userId={props.userId}
         className={styles.avatar}
         circle={true}
@@ -78,6 +79,7 @@ export default function UserInfo(props) {
         {props.isReward && <Tag type="warning">{tagsNumber > 2 && !isPc ? '悬' : '悬赏'}</Tag>}
         {props.isRed && <Tag type="danger">{tagsNumber > 2 && !isPc ? '红' : '红包'}</Tag>}
         {props.isPay && <Tag type="success">{tagsNumber > 2 && !isPc ? '付' : '付费'}</Tag>}
+        {props.collect === 'collect' &&  <Icon className={styles.listItemIcon} name='CollectOutlined' size={20} />}
       </div>
     </div>
   );

@@ -32,29 +32,32 @@ const InputPop = (props) => {
   return (
     <Popup position="center" visible={visible} onClose={onCancel}>
       <div className={styles.container}>
-        <div className={styles.header}>
-          <div className={styles.headerLeft}>采纳回复悬赏</div>
-          <div className={styles.headerIcon}>
-            <Icon size={14} name="CloseOutlined" onClick={onCancel}></Icon>
-          </div>
-        </div>
-        <div className={styles.body}>
-          <div className={styles.percentage}>
-            <div className={styles.text}>悬赏百分比</div>
-            <div className={styles.slider}>
-              <Slider
-                defaultValue={0}
-                max={100}
-                min={0}
-                step={1}
-                onChange={throttle((val) => onInputChange(val), 500)}
-              />
-              <div className={styles.perCent}>%</div>
+        <div className={styles.main}>
+          <div className={styles.header}>
+            <div className={styles.headerLeft}>采纳回复悬赏</div>
+            <div className={styles.headerIcon}>
+              <Icon size={12} name="CloseOutlined" onClick={onCancel}></Icon>
             </div>
           </div>
-          <div className={styles.rewardMoney}>
-            <div className={styles.text}>悬赏金额</div>
-            <div className={styles.moneyNum}>{moneyNum}元</div>
+
+          <div className={styles.body}>
+            <div className={styles.percentage}>
+              <div className={styles.text}>悬赏百分比</div>
+              <div className={styles.slider}>
+                <Slider
+                  defaultValue={0}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onChange={throttle((val) => onInputChange(val), 500)}
+                />
+                <div className={styles.perCent}>%</div>
+              </div>
+            </div>
+            <div className={styles.rewardMoney}>
+              <div className={styles.text}>悬赏金额</div>
+              <div className={styles.money}>{moneyNum}<span className={styles.unit}>元</span></div>
+            </div>
           </div>
         </div>
         <div className={styles.button}>

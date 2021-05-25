@@ -22,7 +22,9 @@ const List = forwardRef(({
   onRefresh,
   onScroll = noop,
   showRefresh = true,
-  preload = 30
+  preload = 30,
+  onError = noop,
+  enableError = false
 }, ref) => {
   const listWrapper = useRef(null);
   const currentScrollTop = useRef(0)
@@ -32,7 +34,7 @@ const List = forwardRef(({
   useEffect(() => {
     if (noMore) {
       setIsLoading(true);
-    }
+    } else setIsLoading(false);
   }, [noMore]);
 
   useEffect(() => {
@@ -71,11 +73,30 @@ const List = forwardRef(({
     }
   };
 
+  // 判断是否需要处理error情况
+  const isNormal = (data) => {
+    // 若没有启用Error判断，则走正常逻辑
+    // if (!enableError) {
+    //   return true
+    // } else {
+    //   if (data) {
+    //     if (data.code) {
+    //       return data.code === 0
+    //     }
+    //     return true
+    //   }
+    //   return false
+    // }
+    return true
+  }
+
   const onTouchMove = throttle(({ isFirst = false }) => {
 
-    if (!listWrapper || !listWrapper.current || !onRefresh) {
+    if (!listWrapper || !listWrapper.current) {
+      onScroll();
       return;
     }
+
     const { clientHeight } = listWrapper.current;
     const { scrollHeight } = listWrapper.current;
     const { scrollTop } = listWrapper.current;
@@ -84,29 +105,37 @@ const List = forwardRef(({
     onScroll({ scrollTop });
     currentScrollTop.current = scrollTop
 
+    if(!onRefresh) return;
+
     // 处理首页筛选，更新数据的时候，会触发一次上拉刷新
     let allowHandleRefresh = true
     if (!isFirst) {
       allowHandleRefresh = (scrollTop !== 0)
     }
-   
     if ((scrollHeight - preload <= clientHeight + scrollTop) && !isLoading && allowHandleRefresh) {
       setIsLoading(true);
       if (typeof(onRefresh) === 'function' ) {
         const promise = onRefresh();
         isPromise(promise) && promise
-          .then(() => {
-            // 解决因promise和react渲染不同执行顺序导致重复触发加载数据的问题
-            setTimeout(() => {
-              setIsLoading(false);
-              if (noMore) {
-                setIsLoading(true);
-              }
-            }, 0);
+          .then((res) => {
+            if (isNormal(res)) {
+              // 解决因promise和react渲染不同执行顺序导致重复触发加载数据的问题
+              setTimeout(() => {
+                setIsLoading(false);
+                if (noMore) {
+                  setIsLoading(true);
+                }
+              }, 0);
+            } else {
+              setIsLoading(true);
+              setIsError(true)
+              onError()
+            }
           })
           .catch(() => {
             setIsLoading(true);
             setIsError(true)
+            onError()
           });
       } else {
         console.error('上拉刷新，必须返回promise');
@@ -131,7 +160,7 @@ const List = forwardRef(({
       >
         {children}
         {onRefresh && showRefresh && !isError && <RefreshView noMore={noMore} />}
-        {isError && <ErrorView onClick={handleError} />}
+        {showRefresh && isError && <ErrorView onClick={handleError} />}
       </div>
     </div>
   );
