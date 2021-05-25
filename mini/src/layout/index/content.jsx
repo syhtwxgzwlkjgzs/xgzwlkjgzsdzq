@@ -137,7 +137,7 @@ class IndexH5Page extends React.Component {
 
     // 默认功能的开启
     if (this.checkIsOpenDefaultTab()) {
-      tmpCategories.unshift({ name: '默认分类', pid: 'default', children: [] });
+      tmpCategories.unshift({ name: '默认', pid: 'default', children: [] });
     }
     return tmpCategories;
   };
