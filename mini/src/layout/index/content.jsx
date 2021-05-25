@@ -1,80 +1,74 @@
 import React, { createRef } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Icon, Tabs } from '@discuzq/design';
-import ThreadContent from '@components/thread';
-import HomeHeader from '@components/home-header';
-import NoData from '@components/no-data';
-import styles from './index.module.scss';
-import List from '@components/list';
-import TopNew from './components/top-news';
-import BottomNavBar from '@components/bottom-nav-bar';
+import { View } from '@tarojs/components'
+import ThreadContent from '../../components/thread';
+import HomeHeader from '../../components/home-header';
 import FilterView from './components/filter-view';
-import { View, Text } from '@tarojs/components';
-import PayBox from '@components/payBox'
-import NavBar from './components/nav-bar'
-import Taro from '@tarojs/taro';
+import BaseLayout from '../../components/base-layout';
 
+import TopNew from './components/top-news';
 
+import styles from './index.module.scss';
 @inject('site')
 @inject('user')
 @inject('index')
 @observer
-class IndexPageContent extends React.Component {
+class IndexH5Page extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       visible: false,
       filter: {
         categoryids: this.checkIsOpenDefaultTab() ? ['default'] : ['all'],
-        sequence: this.checkIsOpenDefaultTab() ? 1 : 0
+        sequence: this.checkIsOpenDefaultTab() ? 1 : 0,
       },
       currentIndex: this.checkIsOpenDefaultTab() ? 'default' : 'all',
+      isFinished: true,
       fixedTab: false,
-      showNavBar: false,
-      navBarHeight: 64
+      navBarHeight: 64,
     };
+    this.listRef = createRef();
+    this.headerRef = createRef(null);
     this.renderItem = this.renderItem.bind(this);
   }
-  
-  navBarRef = React.createRef(null)
 
   componentDidMount() {
-    try {
-      const res = Taro.getSystemInfoSync()
-      const height = res?.statusBarHeight || 20
-      this.setState({
-        navBarHeight: height + 44
-      })
-    } catch (e) {
-      // Do something when catch error
-    }
+    const { filter = {} } = this.props.index
+
+    const newFilter = { ...this.state.filter, ...filter }
+    const { categoryids } = newFilter
+    const currentIndex = categoryids[0] || ''
+    
+    this.setState({ filter: newFilter, currentIndex })
+  }
+
+  componentWillUnmount() {
+    const { filter } = this.state
+    this.props.index.setFilter(filter)
   }
 
   checkIsOpenDefaultTab() {
     return this.props.site.checkSiteIsOpenDefautlThreadListData();
   }
 
-  onScroll = (e) => {
-    const { scrollTop = 0 } = e?.detail || {}
-    this.setState({
-      fixedTab: !(scrollTop < 160),
-      showNavBar: !(scrollTop < 160),
-    })
-  }
   // 点击更多弹出筛选
   searchClick = () => {
     this.setState({
       visible: true,
     });
-  }
+  };
   // 关闭筛选框
   onClose = () => {
     this.setState({
       visible: false,
     });
-  }
+  };
 
   onClickTab = (id = '') => {
+    if (id === this.state.currentIndex) {
+      return
+    }
     const { dispatch = () => {} } = this.props;
     const currentIndex = this.resetCategoryids(id);
     dispatch('click-filter', { categoryids: [currentIndex], sequence: id === 'default' ? 1 : 0 });
@@ -82,35 +76,33 @@ class IndexPageContent extends React.Component {
     this.setState({
       filter: {
         categoryids: [id],
-        sequence: id === 'default' ? 1 : 0
+        sequence: id === 'default' ? 1 : 0,
       },
       currentIndex: id,
       visible: false,
-      showNavBar: false,
-      fixedTab: false,
     });
-  }
+  };
 
   // 筛选弹框点击筛选按钮后的回调：categoryids-版块 types-类型 essence-筛选
   onClickFilter = ({ categoryids, types, essence, sequence }) => {
     const { dispatch = () => {} } = this.props;
     const requestCategoryids = categoryids.slice();
-    requestCategoryids[0] = requestCategoryids[0] === 'all' || requestCategoryids[0] === 'default' ? '' : requestCategoryids[0];
+    requestCategoryids[0] =      requestCategoryids[0] === 'all' || requestCategoryids[0] === 'default' ? '' : requestCategoryids[0];
     dispatch('click-filter', { categoryids: requestCategoryids, types, essence, sequence });
     this.setState({
       filter: {
         categoryids,
         types,
         essence,
-        sequence: categoryids[0] === 'default' ? 1 : 0
+        sequence: categoryids[0] === 'default' ? 1 : 0,
       },
       currentIndex: categoryids[0],
       visible: false,
     });
-  }
+  };
 
   resetCategoryids(categoryids) {
-    return categoryids === 'all' || categoryids === 'default' ? '' : categoryids
+    return categoryids === 'all' || categoryids === 'default' ? '' : categoryids;
   }
 
   // 上拉加载更多
@@ -120,6 +112,12 @@ class IndexPageContent extends React.Component {
     const requestFilter = Object.assign({}, filter);
     requestFilter.categoryids = this.resetCategoryids(requestFilter.categoryids[0]);
     return dispatch('moreData', requestFilter);
+  };
+
+  handleScroll = (e) => {
+    const { scrollTop = 0 } = e?.detail || {}
+    const { height = 180 } = this.headerRef.current?.state || {}
+    this.setState({ fixedTab: !(scrollTop < height) })
   }
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
@@ -134,106 +132,107 @@ class IndexPageContent extends React.Component {
     if (tmpCategories?.length) {
       return categories;
     }
+
     tmpCategories = [{ name: '全部', pid: 'all', children: [] }, ...categories];
 
     // 默认功能的开启
     if (this.checkIsOpenDefaultTab()) {
-      tmpCategories.unshift({name: '默认分类', pid: 'default', children: []});
+      tmpCategories.unshift({ name: '默认', pid: 'default', children: [] });
     }
     return tmpCategories;
-  }
+  };
 
-  renderHeaderContent = (fixedTab = false) => {
+  renderTabs = () => {
     const { index } = this.props;
-    const { currentIndex } = this.state;
-    const { sticks = [] } = index;
-    const newCategories = this.handleCategories();
+    const { currentIndex, fixedTab } = this.state;
+    const { categories = [] } = index;
+    const newCategories = this.handleCategories(categories);
+
     return (
-      <View>
-        <HomeHeader/>
-        {newCategories?.length > 0 && (
-            <View 
-              className={!fixedTab ? styles.homeContent : styles.homeContentText}
-              style={{top: !fixedTab ? '' : `${this.state.navBarHeight}px`}}
-            >
+      <>
+        {categories?.length > 0 && (
+          <>
+          <View ref={this.listRef} className={`${!fixedTab ? styles.homeContent : styles.homeContentFix}`} style={{paddingTop: !fixedTab ? '' : `${this.state.navBarHeight}px`}}>
             <Tabs
               className={styles.tabsBox}
               scrollable
-              type='primary'
+              type="primary"
               onActive={this.onClickTab}
               activeId={currentIndex}
               external={
                 <View onClick={this.searchClick} className={styles.tabIcon}>
-                  <Icon className={styles.moreIcon} name="SecondaryMenuOutlined" />
+                  <Icon name="SecondaryMenuOutlined" className={styles.buttonIcon} size={16} />
                 </View>
               }
             >
-              {
-                newCategories.map((item, index) => (
-                  <Tabs.TabPanel
-                    key={index}
-                    id={item.pid}
-                    label={item.name}
-                  />
-                ))
-              }
+              {newCategories?.map((item, index) => (
+                <Tabs.TabPanel key={index} id={item.pid} label={item.name} />
+              ))}
             </Tabs>
           </View>
+          {fixedTab &&  <View className={styles.tabPlaceholder}></View>}
+          </>
         )}
-        {sticks && sticks.length > 0 && <View className={styles.homeContent}>
-          <TopNew data={sticks}/>
-        </View>}
-      </View>
+      </>
     );
-  }
+  };
+
+  renderHeaderContent = () => {
+    const { index } = this.props;
+    const { sticks = [] } = index;
+
+    return (
+      <>
+        {sticks && sticks.length > 0 && (
+          <View className={styles.homeContentTop}>
+            <TopNew data={sticks} itemMargin="1" />
+          </View>
+        )}
+      </>
+    );
+  };
 
   renderItem = ({ index, data }) => (
     <View key={index}>
-      { index === 0 && this.renderHeaderContent()}
+      {index === 0 && this.renderHeaderContent()}
       <ThreadContent data={data[index]} className={styles.listItem} />
     </View>
-  )
-
-  // 没有帖子列表数据时的默认展示
-  renderNoData = () => (
-    <>
-      {this.renderHeaderContent()}
-      <NoData />
-    </>
-  )
-
+  );
 
   render() {
-    const { index, site } = this.props;
-    const { filter , fixedTab, showNavBar } = this.state;
-    const { threads = {} } = index;
-    const { webConfig } = site
+    const { index } = this.props;
+    const { filter, isFinished } = this.state;
+    const { threads = {}, categories = [] } = index;
     const { currentPage, totalPage, pageData } = threads || {};
-    const newCategories = this.handleCategories() 
+    const newCategories = this.handleCategories(categories);
 
     return (
-      <View className={styles.container}>
-        <NavBar ref={this.navBarRef} title={webConfig?.setSite?.siteName} isShow={showNavBar} />
-        { pageData?.length > 0
-          ? (
-            <List
-              className={styles.list}
-              onRefresh={this.onRefresh}
-              noMore={currentPage >= totalPage}
-              onScroll={this.onScroll}
-            >
-             {
-                pageData.map((item, index) => (
-                  <View key={index}>
-                    { index === 0 && this.renderHeaderContent(fixedTab)}
-                    <ThreadContent data={item} className={styles.listItem} />
-                  </View>
-                ))
-              }
-            </List>
-          )
-          : this.renderNoData()
-        }
+      <BaseLayout
+        showHeader={false}
+        showTabBar
+        onRefresh={this.onRefresh}
+        noMore={currentPage >= totalPage}
+        isFinished={isFinished}
+        onScroll={this.handleScroll}
+        curr='home'
+        pageName='home'
+        preload={1000}
+      >
+        <HomeHeader ref={this.headerRef} />
+
+        {this.renderTabs()}
+
+        {this.renderHeaderContent()}
+
+        {pageData?.length > 0
+          && pageData.map((item, index) => (
+            <ThreadContent 
+              key={index} 
+              showBottomStyle={index !== pageData.length - 1} 
+              data={item} 
+              className={styles.listItem} 
+            />
+          ))}
 
         <FilterView
           data={newCategories}
@@ -242,10 +241,9 @@ class IndexPageContent extends React.Component {
           visible={this.state.visible}
           onSubmit={this.onClickFilter}
         />
-       <BottomNavBar placeholder />
-       <PayBox />
-      </View>
+      </BaseLayout>
     );
   }
 }
-export default IndexPageContent;
+
+export default IndexH5Page;

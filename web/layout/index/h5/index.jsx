@@ -99,14 +99,14 @@ class IndexH5Page extends React.Component {
   onClickFilter = ({ categoryids, types, essence, sequence }) => {
     const { dispatch = () => {} } = this.props;
     const requestCategoryids = categoryids.slice();
-    requestCategoryids[0] =      requestCategoryids[0] === 'all' || requestCategoryids[0] === 'default' ? '' : requestCategoryids[0];
+    requestCategoryids[0] = (requestCategoryids[0] === 'all' || requestCategoryids[0] === 'default') ? [] : requestCategoryids[0];
     dispatch('click-filter', { categoryids: requestCategoryids, types, essence, sequence });
     this.setState({
       filter: {
         categoryids,
         types,
         essence,
-        sequence: categoryids[0] === 'default' ? 1 : 0,
+        sequence,
       },
       currentIndex: categoryids[0],
       visible: false,
@@ -149,7 +149,7 @@ class IndexH5Page extends React.Component {
 
     // 默认功能的开启
     if (this.checkIsOpenDefaultTab()) {
-      tmpCategories.unshift({ name: '默认分类', pid: 'default', children: [] });
+      tmpCategories.unshift({ name: '默认', pid: 'default', children: [] });
     }
     return tmpCategories;
   };

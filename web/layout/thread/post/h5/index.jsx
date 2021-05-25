@@ -114,7 +114,7 @@ class ThreadCreate extends React.Component {
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
       this.setBottomBarStyle(0, action);
-    }, 300);
+    }, 150);
   }
   clearBottomFixed = () => {
     this.positionDisplay();
