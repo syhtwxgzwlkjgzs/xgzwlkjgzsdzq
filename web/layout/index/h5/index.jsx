@@ -66,6 +66,18 @@ class IndexH5Page extends React.Component {
     });
   };
 
+  // 点击底部tabBar
+  onClickTabBar = (data, index) => {
+    if (index !== 0) {
+      return
+    }
+    const { dispatch = () => {} } = this.props;
+    const { filter } = this.state;
+    const requestFilter = Object.assign({}, filter);
+    requestFilter.categoryids = this.resetCategoryids(requestFilter.categoryids[0]);
+    dispatch('click-filter', requestFilter);
+  }
+
   onClickTab = (id = '') => {
     const { dispatch = () => {} } = this.props;
     const currentIndex = this.resetCategoryids(id);
@@ -87,14 +99,14 @@ class IndexH5Page extends React.Component {
   onClickFilter = ({ categoryids, types, essence, sequence }) => {
     const { dispatch = () => {} } = this.props;
     const requestCategoryids = categoryids.slice();
-    requestCategoryids[0] =      requestCategoryids[0] === 'all' || requestCategoryids[0] === 'default' ? '' : requestCategoryids[0];
+    requestCategoryids[0] = (requestCategoryids[0] === 'all' || requestCategoryids[0] === 'default') ? [] : requestCategoryids[0];
     dispatch('click-filter', { categoryids: requestCategoryids, types, essence, sequence });
     this.setState({
       filter: {
         categoryids,
         types,
         essence,
-        sequence: categoryids[0] === 'default' ? 1 : 0,
+        sequence,
       },
       currentIndex: categoryids[0],
       visible: false,
@@ -137,7 +149,7 @@ class IndexH5Page extends React.Component {
 
     // 默认功能的开启
     if (this.checkIsOpenDefaultTab()) {
-      tmpCategories.unshift({ name: '默认分类', pid: 'default', children: [] });
+      tmpCategories.unshift({ name: '默认', pid: 'default', children: [] });
     }
     return tmpCategories;
   };
@@ -217,6 +229,7 @@ class IndexH5Page extends React.Component {
         curr='home'
         pageName='home'
         preload={1000}
+        onClickTabBar={this.onClickTabBar}
       >
         <HomeHeader ref={this.headerRef} />
 

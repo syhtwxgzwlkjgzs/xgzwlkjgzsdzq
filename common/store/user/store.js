@@ -71,7 +71,7 @@ class UserStore {
 
   @observable userShieldPage = 1; // 加载页数
   @observable userShieldTotalPage = 1; // 总页数
-  @observable userShieldTotalCount = 0; // 每页显示条数
+  @observable userShieldTotalCount = 0; // 每页显示条数 
 
   // 是否能使用钱包支付
   @computed get canWalletPay() {

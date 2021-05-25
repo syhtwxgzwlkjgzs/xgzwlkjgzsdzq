@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
+import { View, Text } from '@tarojs/components';
 
 import styles from './index.module.scss';
-import { View, Text } from '@tarojs/components';
 
 /**
  * 潮流话题
@@ -32,7 +32,7 @@ const Topic = ({ data, onClick, index, footer }) => {
   return (
     <View className={`${styles.item} ${footer ? styles.footerItem : ''}`} onClick={click}>
       <Text className={`${styles.index} ${styles[`itemIndex${index + 1}`]}`}>{index + 1}</Text>
-      <Text className={styles.text}>{data.content ? `#${data.content}#`: '暂无话题'}</Text>
+      <Text className={styles.text}>{`#${data.content}#`}</Text>
     </View>
   );
 };

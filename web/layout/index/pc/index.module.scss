@@ -16,14 +16,13 @@
   }
 }
 .indexContent {
-  margin-top: rem(80);
+  margin-top: rem(68);
   width: 100%;
   min-width: rem(652);
   .contnetTop {
     width: 100%;
     background: var(--color-white);
     box-sizing: border-box;
-    border-radius: rem($border-radius-small);
   }
 }
 .publishBtn {
@@ -42,17 +41,26 @@
 }
 .topWrapper {
   width: rem(750);
+  height: rem(68);
   position: fixed;
   top: 60px;
   padding-top: rem(20);
   display: flex;
   z-index: 1000;
   background: $body-bg-color;
+  &:after {
+    content: '';
+    background-color: var(--border-line-color);
+    height: 1px;
+    position: absolute;
+    right: rem(24);
+    left: rem(24);
+    bottom: 0;
+  }
 }
 .TopNewsBox {
   padding: rem($padding-2n) 0;
   margin: 0 rem($margin-6n);
-  border-top: 1px solid var(--border-line-color);
   border-bottom: 1px solid var(--border-line-color);
 }
 .noBorder {

@@ -51,7 +51,7 @@ export default function HOCFetchSiteData(Component) {
             userPermissions = (userPermissions && userPermissions.code === 0) ? userPermissions.data : null;
           }
 
-
+          console.log(Component.getInitialProps)
           // 传入组件的私有数据
           if (siteConfig && siteConfig.code === 0 && Component.getInitialProps) {
             __props = await Component.getInitialProps(ctx, { user: userData, site: serverSite });

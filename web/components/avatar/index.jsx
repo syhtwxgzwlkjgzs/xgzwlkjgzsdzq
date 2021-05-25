@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { Avatar, Button, Icon } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'next/router';
 import LoadingBox from '@components/loading-box';
 import styles from './index.module.scss';
 
@@ -51,6 +52,15 @@ function avatar(props) {
     changeFollowStatus(false);
     changeUserInfo({ ...userInfo });
   }, [userInfo]);
+
+  const messagingHandler = useCallback(() => {
+    const username = props?.user?.userInfo.username;
+    if(username) {
+      props.router.push(`/message?page=chat&username=${username}`);
+    } else {
+      console.error("用户名错误");
+    }
+  })
 
   const btnInfo = useMemo(() => {
     const index = userInfo.follow
@@ -120,8 +130,13 @@ function avatar(props) {
                   )}
                   {btnInfo.text}
               </Button>
-              <Button className={[styles.btn, styles.ghost]} type='primary' ghost><Icon className={styles.icon} name="NewsOutlined" size={12}/>发私信</Button>
-              <Button className={styles.btn} type='primary'><Icon className={styles.icon} name="ShieldOutlined" size={12}/>屏蔽</Button>
+              <Button
+                onClick={messagingHandler}
+                className={[styles.btn, styles.ghost]}
+                type='primary' ghost>
+                  <Icon className={styles.icon} name="NewsOutlined" size={12}/>发私信
+              </Button>
+              <Button className={[styles.btn, styles.block]} type='primary'><Icon className={styles.icon} name="ShieldOutlined" size={12}/>屏蔽</Button>
             </div>
           }
         </div>
@@ -146,4 +161,4 @@ function avatar(props) {
     </div>
   );
 }
-export default inject('user')(avatar);
+export default inject('user')(withRouter(avatar));

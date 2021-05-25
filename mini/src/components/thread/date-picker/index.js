@@ -6,7 +6,7 @@
 import React, { memo, useState, useCallback } from 'react';
 import DatePicker from 'react-mobile-datepicker';
 import PropTypes from 'prop-types';
-
+import './index.scss';
 import { formatDate } from '@common/utils/format-date.js';
 
 const DatePickers = ({ onCancels, time, onSelects, isOpen }) => {
@@ -39,7 +39,7 @@ const DatePickers = ({ onCancels, time, onSelects, isOpen }) => {
     },
   });
   const handleSelect = useCallback((e) => { // 点击确定时候的参数返回和校验
-    onSelects(formatDate(e, 'yyyy-MM-dd hh:mm'));
+    onSelects(formatDate(e, 'yyyy/MM/dd hh:mm'));
   });
   const handleCancel = useCallback((e) => {
     onCancels(e);
@@ -49,6 +49,7 @@ const DatePickers = ({ onCancels, time, onSelects, isOpen }) => {
       dateConfig={dateConfig}
       value={time}
       isOpen={isOpen}
+      showCaption={false}
       onSelect={(e) => {
         handleSelect(e);
       }}

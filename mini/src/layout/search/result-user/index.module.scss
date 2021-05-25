@@ -3,13 +3,16 @@
 .page {
   height: 100vh;
   display: flex;
-  padding-top: 16px;
+  padding-top: $padding-4n;
   flex-direction: column;
   box-sizing: border-box;
   overflow: hidden;
-  background: var(--color-white);
+  background-color: var(--color-white);
+  .list {
+    flex: 1;
+  }
 }
 .searchInput {
-  padding: 0 16px;
-  margin-bottom: 16px;
+  padding: 0 $padding-4n;
+  margin-bottom: $padding-4n;
 }
