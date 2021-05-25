@@ -16,11 +16,11 @@
     .userInfoContent{
       margin-top: rem(16);
       box-sizing: border-box;
-      padding: rem(24);
+      padding: rem(16) rem(24) rem(24);
       width: rem(423);
-      height: rem(257);
+      // height: rem(257);
       border-radius: rem(5);
-      background: var(--color-white);
+      background: $white;
       box-shadow: var(--box-shadow);
       .header{
         display: flex;
@@ -103,6 +103,7 @@
         justify-content: space-between;
         .btn{
           width: rem(114);
+          height: rem(36);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -111,11 +112,40 @@
           }
         }
         .ghost{
-          background: var(--color-white);
-          color: var(--color-primary);
+          background: $white;
+          color: $primary-color;
+          &:hover {
+            border-color: $primary-color;
+            background-color: $primary-color10;
+          }
         }
       }
     }
 
+  }
+
+  .follow {
+    background-color: $primary-color;
+    border-color: $primary-color;
+    &:hover {
+      border-color: $primary-color6;
+      background-color: $primary-color6;
+    }
+  }
+  .isFollow {
+    background-color: $primary-disabled-color;
+    border-color: $primary-disabled-color;
+    &:hover {
+      border-color: $primary-disabled-color;
+      background-color: $primary-disabled-color;
+    }
+  }
+  .withdraw {
+    background-color: $warn-color;
+    border-color: $warn-color;
+    &:hover {
+      border-color: $warn-color;
+      background-color: $warn-color;
+    }
   }
 }

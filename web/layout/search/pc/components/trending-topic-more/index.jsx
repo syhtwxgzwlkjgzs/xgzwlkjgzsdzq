@@ -1,20 +1,27 @@
-import React, { useCallback } from 'react';
-import { Icon } from '@discuzq/design';
+import React, { useCallback, useMemo } from 'react';
+import { Icon, RichText } from '@discuzq/design';
 import styles from './index.module.scss';
 import { handleAttachmentData, noop } from '@components/thread/utils';
-import PostContent from '@components/thread/post-content';
+import replaceSearchResultContent from '@common/utils/replace-search-result-content';
+import s9e from '@common/utils/s9e';
+import xss from '@common/utils/xss';
+import TopicItem from '@components/topic-item'
+
 /**
  * 潮流话题
  * @prop {string[]} data 话题数据
  * @prop {function} onItemClick 话题点击事件
  */
-const TrendingTopics = ({ data, onItemClick }) => (
+const TrendingTopics = ({ data = [], onItemClick }) => {
+
+  return(
     <div className={styles.list}>
     {data?.map((item, index, arr) => (
-      <Topic key={index} index={index} data={item} onClick={onItemClick} footer={arr.length - index < 3} />
+      <TopicItem data={item} key={index}  />  
+      // <Topic key={index} index={index} data={item} onClick={onItemClick} footer={arr.length - index < 3} />
     ))}
   </div>
-);
+)};
 
 
 /**
@@ -23,14 +30,27 @@ const TrendingTopics = ({ data, onItemClick }) => (
  * @prop {function} onClick 话题点击事件
  * @prop {number} index
  */
-const Topic = ({ data, onClick, index, footer }) => {
+const Topic = ({ data, onClick = noop, index, footer }) => {
   const click = useCallback(() => {
     onClick && onClick(data);
   }, [data, onClick]);
+  
+  const { threads = [] } = data
+
   const {
-    text = '',
+    text = '暂无内容',
     imageData = []
   } = handleAttachmentData(data?.threads[0]?.content);
+
+  
+  const filterContent = useMemo(() => {
+    let newContent = replaceSearchResultContent(text);
+    newContent = s9e.parse(newContent);
+    newContent = xss(newContent);
+
+    return newContent;
+  }, [threads]);
+
   return (
     <div className={styles.item} onClick={click}>
       <div className={styles.imgBox}>
@@ -53,7 +73,8 @@ const Topic = ({ data, onClick, index, footer }) => {
         </div>
         {
           text ? (
-          <PostContent content={text} className={styles.text} />
+          // <PostContent content={text} className={styles.text} />
+          <TopicItem data={data} key={index} platform='pc' />  
           ) : (
             <div className={styles.text}>{text || '暂无内容'}</div>
           )

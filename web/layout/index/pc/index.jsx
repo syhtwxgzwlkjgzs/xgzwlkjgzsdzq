@@ -15,6 +15,7 @@ import Copyright from '@components/copyright';
 import { readThreadList } from '@server';
 import PayBox from '@components/payBox';
 import { Button } from '@discuzq/design';
+import deepClone from '@common/utils/deep-clone';
 
 @inject('site')
 @inject('user')
@@ -30,6 +31,8 @@ class IndexPCPage extends React.Component {
       // visibility: 'hidden',
       isShowDefault: this.checkIsOpenDefaultTab(),
     };
+
+    this.defaultCategoryIds = this.props.index.filter?.categoryids || []
   }
 
   // 轮询定时器
@@ -38,8 +41,15 @@ class IndexPCPage extends React.Component {
   filter = {}
   // List组件ref
   listRef = React.createRef()
+  // 存储最新的数据，以便于点击刷新时，可以直接赋值
+  newThread = {}
 
   componentDidMount() {
+    // setTimeout(() => {
+    //   this.filter = {} 
+    // }, 500)
+
+
     if (this.timer) {
       clearInterval(this.timer);
     }
@@ -55,6 +65,8 @@ class IndexPCPage extends React.Component {
               visible: true,
               conNum: totalCount - nowTotal,
             });
+            // 缓存新数据
+            this.newThread = res?.data
           }
         });
       }
@@ -73,11 +85,12 @@ class IndexPCPage extends React.Component {
      return dispatch('moreData', this.filter);
    }
 
-   onFilterClick = (result) => {
-     const { sequence, essence, attention, filter: { types, sort } } = result;
-     const { dispatch = () => {} } = this.props;
-     this.filter = { ...this.filter, types, essence, sequence, attention, sort };
-     dispatch('click-filter', this.filter);
+  onFilterClick = (result) => {
+    this.setState({ visible: false })
+    const { sequence, filter: { types, sort, essence, attention, } } = result;
+    const { dispatch = () => {} } = this.props;
+    this.filter = { ...this.filter, types, essence, sequence, attention, sort };
+    dispatch('click-filter', this.filter);
    }
 
    onNavigationClick = ({ categoryIds, sequence }) => {
@@ -87,13 +100,25 @@ class IndexPCPage extends React.Component {
    }
 
    goRefresh = () => {
-     const { dispatch = () => {} } = this.props;
-     dispatch('click-filter', this.filter).then((res) => {
-       this.setState({
-         visible: false,
-         conNum: 0,
-       });
-     });
+    const { dispatch = () => {} } = this.props;
+
+    if (this.newThread?.pageData?.length) { // 若有缓存值，就取缓存值
+      dispatch('update-page', { page: 1 })
+      this.props.index.setThreads(deepClone(this.newThread))
+      // 清空缓存
+      this.newThread = {}
+      this.setState({
+        visible: false,
+        conNum: 0,
+      });
+    } else { // 没有缓存值，直接请求网络
+      dispatch('refresh-thread', this.filter).then((res) => {
+        this.setState({
+          visible: false,
+          conNum: 0,
+        });
+      });
+    }
    }
 
    // // 回到顶部 // visibility导致了导航栏无法正常显示子目录所以先注释掉
@@ -115,7 +140,7 @@ class IndexPCPage extends React.Component {
     if (tmpCategories?.length) {
       return categories;
     }
-    tmpCategories = [{ name: '全部', pid: '', children: [] }, ...categories];
+    tmpCategories = [{ name: '全部', pid: '-1', children: [] }, ...categories];
 
     return tmpCategories;
   }
@@ -134,7 +159,12 @@ class IndexPCPage extends React.Component {
     return (
       <div className={styles.indexLeft}>
         <div className={styles.indexLeftBox}>
-          <Navigation categories={newCategories} totalThreads={countThreads} onNavigationClick={this.onNavigationClick} />
+          <Navigation 
+            categories={newCategories} 
+            defaultFisrtIndex={this.defaultCategoryIds[0]} 
+            defaultSecondIndex={this.defaultCategoryIds[1]} 
+            totalThreads={countThreads} 
+            onNavigationClick={this.onNavigationClick} />
         </div>
       </div>
     );
@@ -162,17 +192,9 @@ class IndexPCPage extends React.Component {
     return (
       <div className={styles.indexContent}>
         <div className={styles.contnetTop}>
-          <div className={styles.topBox}>
-            <TopMenu onSubmit={this.onFilterClick} isShowDefault={isShowDefault}/>
-            <div className={styles.PostTheme}>
-              <Button type="primary" className={styles.publishBtn} onClick={this.onPostThread}>
-                发布
-              </Button>
-            </div>
-          </div>
-          <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
+          {sticks?.length && <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
             <TopNews data={sticks} platform="pc" isShowBorder={false}/>
-          </div>
+          </div>}
           {
             visible && (
               <div className={styles.topNewContent}>
@@ -193,7 +215,8 @@ class IndexPCPage extends React.Component {
   render() {
     const { index, site } = this.props;
     const { countThreads = 0 } = site?.webConfig?.other || {};
-    const { currentPage, totalPage } = this.props.index.threads || {};
+    const { currentPage, totalPage } = index.threads || {};
+    const { isShowDefault } = this.state
 
     return (
       <BaseLayout
@@ -206,6 +229,7 @@ class IndexPCPage extends React.Component {
         right={ this.renderRight() }
         pageName='home'
       >
+        <TopFilterView onFilterClick={this.onFilterClick} onPostThread={this.onPostThread} isShowDefault={isShowDefault} />
         {this.renderContent(index)}
       </BaseLayout>
     );
@@ -213,3 +237,18 @@ class IndexPCPage extends React.Component {
 }
 
 export default withRouter(IndexPCPage);
+
+const TopFilterView = ({onFilterClick, isShowDefault, onPostThread}) => {
+  return (
+    <div className={styles.topWrapper}>
+      <div className={styles.topBox}>
+        <TopMenu onSubmit={onFilterClick} isShowDefault={isShowDefault}/>
+        <div className={styles.PostTheme}>
+          <Button type="primary" className={styles.publishBtn} onClick={onPostThread}>
+            发布
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}

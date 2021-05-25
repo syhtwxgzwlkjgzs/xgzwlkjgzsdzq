@@ -19,7 +19,7 @@
   /* mobile viewport bug fix */
   min-height: -webkit-fill-available;
 
-.input {
+  .input {
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -36,7 +36,6 @@
       color: $disabled-color;
     }
   }
-
 
   :global {
     .dzq-input {
@@ -130,10 +129,14 @@
     }
   }
   .topic-wrap {
-    height: calc(50vh - 102px);
+    height: 398px;
+    min-height: calc(50vh - 102px);
+    .list__inner {
+      @include scrollbar();
+    }
   }
   .topic-item {
     margin-left: 0;
-    margin-right: 0;
+    margin-right: $margin-5n;
   }
 }

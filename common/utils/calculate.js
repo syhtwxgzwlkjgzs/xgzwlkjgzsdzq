@@ -23,7 +23,7 @@ export const plus = (num1, num2) => {
 
   const result = (n1 + n2) / Math.pow(10, p);
 
-  return result;
+  return result.toFixed(2);
 };
 
 export const minus = (num1, num2) => {

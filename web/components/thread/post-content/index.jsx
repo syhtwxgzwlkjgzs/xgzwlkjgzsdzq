@@ -75,8 +75,13 @@ const Index = ({
     const length = fuzzyCalcContentLength(filterContent)
     if (length < 262) {
       setHiddenMore(true);
-    } else if (length > 1000) {
+    } else {
+      setHiddenMore(false);
+    }
+    if (length > 1200) {
       setContentTooLong(true)
+    } else {
+      setContentTooLong(false)
     }
   }, [filterContent]);
 

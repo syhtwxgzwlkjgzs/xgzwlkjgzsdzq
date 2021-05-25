@@ -74,7 +74,7 @@ class SearchResultUserPcPage extends React.Component {
 
   searchData = (keyword) => {
     const { dispatch } = this.props;
-    dispatch('search', keyword);
+    dispatch('refresh', keyword);
   };
 
   onSearch = (value) => {
@@ -87,6 +87,7 @@ class SearchResultUserPcPage extends React.Component {
     // const { keyword } = this.state;
     const { users } = this.props.search;
     const { pageData, currentPage, totalPage } = users || {};
+    const userId = this.props.user?.userInfo?.id
 
     return (
       <BaseLayout
@@ -99,11 +100,11 @@ class SearchResultUserPcPage extends React.Component {
         <SidebarPanel 
           title="活跃用户" 
           type='normal'
-          isShowMore={!pageData}
+          isShowMore={false}
           noData={!pageData?.length}
           icon={{ type: 2, name: 'MemberOutlined' }}
         >
-          <ActiveUsersMore data={pageData} onFollow={this.onFollow} onItemClick={this.onUserClick}/>
+          <ActiveUsersMore data={pageData} onFollow={this.onFollow} onItemClick={this.onUserClick} userId={userId} />
         </SidebarPanel>
       </BaseLayout>
     );

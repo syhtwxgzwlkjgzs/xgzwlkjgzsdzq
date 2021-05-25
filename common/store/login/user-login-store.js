@@ -60,15 +60,18 @@ export default class UserLoginStore {
       }
 
       if (loginResp.code === NEED_BIND_WEIXIN_FLAG) {
-        const accessToken = get(loginResp, 'data.accessToken', '');
-        setAccessToken({
-          accessToken,
-        });
+        // 去除登录态，防止用户携带登录态跳入其他页面
+        // const accessToken = get(loginResp, 'data.accessToken', '');
+        // setAccessToken({
+        //   accessToken,
+        // });
+        const uid = get(loginResp, 'data.uid', '');
         throw {
           Code: 8000,
           Message: '需要绑定微信',
           sessionToken: get(loginResp, 'data.sessionToken'),
           nickname: get(loginResp, 'data.nickname'),
+          uid
         };
       }
 

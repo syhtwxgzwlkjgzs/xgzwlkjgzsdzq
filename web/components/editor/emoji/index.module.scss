@@ -22,7 +22,8 @@
     justify-content: flex-start;
   }
 }
-.pc {
+.pc,
+.h5 {
   padding: $padding-2n;
   margin: 0;
   margin-left: 2px;
@@ -46,4 +47,9 @@
     background: rgba(0, 0, 0, .09);
     border-radius: 100px;
   }
+}
+.h5 {
+  width: calc(100vw - 8px * 2);
+  margin-left: 0;
+  bottom: 48px;
 }

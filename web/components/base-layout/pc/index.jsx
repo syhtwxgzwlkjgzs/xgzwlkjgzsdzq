@@ -44,18 +44,23 @@ const BaseLayout = (props) => {
   const updateSize = debounce(() => {
     if (window) {
       size.current = calcSize(window.innerWidth);
-      setShowLeft(left && (size.current === 'xl' || size.current === 'xxl'));
-      setShowRight(right && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg'));
+      if (pageName !== 'home') {
+        setShowLeft(left && (size.current === 'xl' || size.current === 'xxl'));
+        setShowRight(right && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg'));
+      } else {
+        setShowRight(right && (size.current === 'xl' || size.current === 'xxl'));
+        setShowLeft(left && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg'));
+      }
     }
   }, 50);
 
   useEffect(() => {
-    if (window) {
-      window.addEventListener('resize', updateSize);
-      return () => {
-          window.removeEventListener('resize', updateSize);
-      };
-    }
+    // if (window) {
+    //   window.addEventListener('resize', updateSize);
+    //   return () => {
+    //       window.removeEventListener('resize', updateSize);
+    //   };
+    // }
   });
 
   useEffect(() => {
@@ -66,21 +71,21 @@ const BaseLayout = (props) => {
   const calcSize = (width = 1600) => {
     let size = 'xl';
 
-    if (width < 992) {
-        size = 'sm';
-    }
-    else if (width >= 992 && width < 1100) {
-        size = 'md';
-    }
-    else if (width >= 1100 && width < 1400) {
-        size = 'lg';
-    }
-    else if (width >= 1440 && width < 1880) {
-        size = 'xl';
-    }
-    else {
-        size = 'xxl';
-    }
+    // if (width < 992) {
+    //     size = 'sm';
+    // }
+    // else if (width >= 992 && width < 1100) {
+    //     size = 'md';
+    // }
+    // else if (width >= 1100 && width < 1400) {
+    //     size = 'lg';
+    // }
+    // else if (width >= 1440 && width < 1880) {
+    //     size = 'xl';
+    // }
+    // else {
+    //     size = 'xxl';
+    // }
     return size;
   };
 

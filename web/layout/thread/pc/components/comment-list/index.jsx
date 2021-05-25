@@ -143,12 +143,12 @@ class CommentList extends React.Component {
               name={this.props.data.user.username || this.props.data.user.userName || ''}
               circle={true}
               userId={this.props.data.user.id}
-              isShowUserInfo={true}
+              isShowUserInfo={this.props.isShowOne}
             ></Avatar>
           </div>
           <div className={styles.commentListContent}>
             {/* 评论内容 */}
-            <div className={styles.commentListContentText} onClick={() => this.toCommentDetail()}>
+            <div className={classnames(styles.commentListContentText, this.props.isShowOne && styles.hover)} onClick={() => this.toCommentDetail()}>
               <div className={styles.commentListName}>
                 {this.props.data.user.username || this.props.data.user.userName}
               </div>
@@ -199,7 +199,7 @@ class CommentList extends React.Component {
                     )}
 
                     <div className={styles.revise} onClick={() => this.reportClick()}>
-                      <Icon className={styles.icon} name="WarnOutlinedThick"></Icon>
+                      <Icon className={styles.icon} name="WarnOutlined"></Icon>
                       <span>举报</span>
                     </div>
                   </div>

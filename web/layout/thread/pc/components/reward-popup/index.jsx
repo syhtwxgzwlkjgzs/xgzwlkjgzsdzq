@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Popup, Button, Input, Icon } from '@discuzq/design';
 import styles from './index.module.scss';
+import className from 'classnames';
 
 const InputPop = (props) => {
   const { visible, onOkClick, onCancel } = props;
@@ -9,6 +10,12 @@ const InputPop = (props) => {
 
   const onInputChange = (val) => {
     setValue(val);
+  };
+
+  const rewardList = [1, 2, 5, 10, 20, 50, 88, 128];
+
+  const onRewardClick = (item) => {
+    setValue(item);
   };
 
   const onSubmitClick = async () => {
@@ -24,37 +31,35 @@ const InputPop = (props) => {
     }
   };
 
-  const rewardList = [1, 2, 5, 10, 20, 50, 88, 128];
-
-  const onRewardClick = (item) => {
-    setValue(item);
-  };
-
   return (
     <Popup position="center" visible={visible} onClose={onCancel}>
       <div className={styles.container}>
         <div className={styles.header}>
-          <div className={styles.headerLeft}>打赏</div>
+          <div className={styles.headerLeft}>支付作者继续创作</div>
           <Icon className={styles.headerIcon} size={14} name="CloseOutlined" onClick={onCancel}></Icon>
         </div>
 
-        <div className={styles.percentage}>
-          <span className={styles.text}>打赏金额</span>
+        <div className={styles.rewardInput}>
+          <span className={styles.prepend}>支付金额</span>
           <Input
-            prefixIcon="RenminbiOutlined"
             mode="number"
-            placeholder="请输入打赏金额"
+            placeholder="金额"
             className={styles.input}
             value={value}
             onChange={(e) => onInputChange(e.target.value)}
           />
+          <span className={styles.append}>元</span>
         </div>
 
         <div className={styles.rewardList}>
           {rewardList.map((item) => (
-            <Button onClick={() => onRewardClick(item)} className={styles.reward} key={item}>
+            <div
+              onClick={() => onRewardClick(item)}
+              className={className(styles.reward, Number(value) === item && styles.actived)}
+              key={item}
+            >
               ￥{item}
-            </Button>
+            </div>
           ))}
         </div>
 

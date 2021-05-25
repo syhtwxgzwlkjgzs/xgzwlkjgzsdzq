@@ -7,7 +7,7 @@ import { readForum, readUser, readPermissions } from '@server';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
-import { Icon } from '@discuzq/design';
+import { Spin, Icon } from '@discuzq/design';
 import typeofFn from '@common/utils/typeof';
 import styles from './HOCFetchSiteData.module.scss';
 
@@ -162,7 +162,7 @@ export default function HOCFetchSiteData(Component) {
           break;
         case -4002:
           clearLoginStatus();
-          reload();
+          window.location.reload();
           break;
         default: Router.redirect({ url: '/500' });
           break;
@@ -191,28 +191,28 @@ export default function HOCFetchSiteData(Component) {
         // TODO: 方案待定
         // 前置: 用户已登录
         if (user.isLogin()) {
+          // TODO: 需要在微信绑定页获取设置uid的缓存才能开启强制跳转绑定微信
           // // 绑定微信：开启微信，没有绑定微信
           // if (
           //   router.asPath !== '/user/wx-bind-qrcode'
-          //     && (site.isOpenOffiaccountClose || site.isMiniProgramOpen)
+          //     && (site.isOffiaccountOpen || site.isMiniProgramOpen)
           //     && !user.isBindWechat
           // ) {
           //   Router.redirect({ url: '/user/wx-bind-qrcode' });
           // }
           // 前置：没有开启微信
-          if (!site.isOpenOffiaccountClose && !site.isMiniProgramOpen) {
+          if (!site.isOffiaccountOpen && !site.isMiniProgramOpen) {
             // 绑定手机: 开启短信，没有绑定手机号
             if (router.asPath !== '/user/bind-phone' && site.isSmsOpen && !user.mobile) {
               Router.redirect({ url: '/user/bind-phone' });
             }
-            // 绑定昵称：没有开启短信，也没有绑定昵称
-            if (
-              router.asPath !== '/user/bind-nickname'
-              && !site.isSmsOpen
-              && !user.nickname
-            ) {
-              Router.redirect({ url: '/user/bind-nickname' });
-            }
+          }
+          // 绑定昵称：没有昵称
+          if (
+            router.asPath !== '/user/bind-nickname'
+            && !user.nickname
+          ) {
+            Router.redirect({ url: '/user/bind-nickname' });
           }
         }
       }
@@ -234,7 +234,7 @@ export default function HOCFetchSiteData(Component) {
       const { isNoSiteData } = this.state;
       const { site } = this.props;
       // CSR不渲染任何内容
-      if ( site.platform === 'static' ) return null;
+      if (site.platform === 'static') return null;
       if (isNoSiteData) {
         return (
           <div className={styles.loadingBox}>

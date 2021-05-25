@@ -12,6 +12,7 @@ import { get } from '@common/utils/get';
 import { genMiniScheme } from '@server';
 import PopProtocol from '../components/pop-protocol';
 import browser from '../../../../../common/utils/browser';
+import PcBodyWrap from '../components/pc-body-wrap';
 
 @inject('site')
 @inject('user')
@@ -34,7 +35,7 @@ class UsernameH5Login extends React.Component {
       const { wechatEnv, platform } = this.props.site;
       // 设置缓存
       if (e.uid) {
-        this.props.commonLogin.setUserId(e.uid)
+        this.props.commonLogin.setUserId(e.uid);
       }
       if (wechatEnv === 'miniProgram' && platform === 'h5') {
         this.props.commonLogin.needToBindMini = true;
@@ -71,7 +72,7 @@ class UsernameH5Login extends React.Component {
     }
 
     Toast.error({
-      content: e.Message,
+      content: e.Message || e,
       hasMask: false,
       duration: 1000,
     });
@@ -90,7 +91,7 @@ class UsernameH5Login extends React.Component {
       // FIXME: Toast 暂时不支持回调能力
       // FIXME: 使用 window 跳转用来解决，获取 forum 在登录前后不同的问题，后续需要修改 store 完成
       setTimeout(() => {
-        window.location.href = '/index';
+        window.location.href = '/';
         return;
       }, 1000);
     } catch (e) {
@@ -103,7 +104,7 @@ class UsernameH5Login extends React.Component {
     const { platform } = site;
     const isAnotherLoginWayAvailable = this.props.site.wechatEnv !== 'none' || this.props.site.isSmsOpen;
     return (
-      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
+      <PcBodyWrap>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
@@ -167,8 +168,8 @@ class UsernameH5Login extends React.Component {
               <span
                 onClick={() => {
                   if (browser.env('weixin')) {
-                    const redirectEncodeUrl = encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`);
-                    window.location.href = `https://discuzv3-dev.dnspod.dev/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
+                    const redirectEncodeUrl = encodeURIComponent(`${window.location.origin}/user/wx-auth`);
+                    window.location.href = `${window.location.origin}/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
                     return;
                   }
 
@@ -193,16 +194,26 @@ class UsernameH5Login extends React.Component {
           <div className={platform === 'h5' ? layout['otherLogin-tips'] : layout.pc_otherLogin_tips} >
             注册登录即表示您同意
             <span onClick={() => {
+              if (platform === 'pc') {
+                window.open('/user/agreement?type=register');
+              }
               commonLogin.setProtocolInfo('register');
             }}>《注册协议》</span>
             <span onClick={() => {
+              if (platform === 'pc') {
+                window.open('/user/agreement?type=privacy');
+              }
               commonLogin.setProtocolInfo('privacy');
             }}>《隐私协议》</span>
           </div>
         </div>
       </div>
-      <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
-      </div>
+      {
+        platform === 'h5'
+          ? <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
+          : <></>
+      }
+      </PcBodyWrap>
     );
   }
 }

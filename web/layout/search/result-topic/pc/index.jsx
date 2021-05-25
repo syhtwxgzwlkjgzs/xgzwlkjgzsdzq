@@ -6,6 +6,10 @@ import ActiveUsers from '@components/active-users'
 import { withRouter } from 'next/router';
 import Copyright from '@components/copyright';
 import SidebarPanel from '@components/sidebar-panel';
+import TopicItem from '@components/topic-item'
+import styles from './index.module.scss';
+
+
 @inject('site')
 @inject('search')
 @observer
@@ -38,7 +42,7 @@ class SearchResultTopicPCPage extends React.Component {
 
   searchData = (keyword) => {
     const { dispatch } = this.props;
-    dispatch('search', keyword);
+    dispatch('refresh', keyword);
   };
 
   onSearch = (value) => {
@@ -61,11 +65,16 @@ class SearchResultTopicPCPage extends React.Component {
       <SidebarPanel 
         title="潮流话题" 
         type='normal'
-        isShowMore={!pageData}
+        isShowMore={false}
         noData={!pageData?.length}
         icon={{ type: 1, name: 'StrongSharpOutlined' }}
       >
-        <TrendingTopicMore data={pageData} onItemClick={this.onTopicClick}/>
+        <div className={styles.topic}>
+          {pageData?.map((item, index) => (
+            <TopicItem data={item} key={index} onClick={this.onTopicClick} />  
+          ))}
+        </div>
+        
       </SidebarPanel>
     )
   }

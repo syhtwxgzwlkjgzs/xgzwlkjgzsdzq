@@ -79,7 +79,7 @@ export default class commonLoginStore {
       const causeMes = cause ? `，原因：${cause}` : '';
       this.statusCode = code;
       this.statusMsg = cause;
-      this.statusMessage = `${USER_STATUS_MAP[code]}${causeMes}`;
+      this.statusMessage = `${USER_STATUS_MAP[code] || ''}${causeMes}`;
       return this.statusMessage;
     }
 
@@ -91,15 +91,14 @@ export default class commonLoginStore {
     @action
     showCaptcha(qcloudCaptchaAppId, TencentCaptcha) {
       return new Promise(async (resolve, reject) => {
-        if (!this.captcha) {
-          this.captcha = new TencentCaptcha(qcloudCaptchaAppId, (res) => {
-            if (res.ret === 0) {
-              this.captchaRandStr = res.randstr;
-              this.captchaTicket = res.ticket;
-              return resolve(res);
-            }
-          });
-        }
+        this.captcha = new TencentCaptcha(qcloudCaptchaAppId, (res) => {
+          if (res.ret === 0) {
+            this.captchaRandStr = res.randstr;
+            this.captchaTicket = res.ticket;
+            return resolve(res);
+          }
+          // reject(res);
+        });
         // 显示验证码
         this.captcha.show();
       }).catch((e) => {console.log(e)});

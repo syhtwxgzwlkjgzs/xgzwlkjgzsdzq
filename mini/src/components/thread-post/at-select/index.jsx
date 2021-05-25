@@ -5,9 +5,13 @@ import { View } from '@tarojs/components';
 import { Input, Avatar, Icon, Checkbox, Button, ScrollView } from '@discuzq/design';
 import styles from './index.module.scss';
 
+import List from '@components/list';
+import throttle from '@common/utils/thottle';
+
 import stringToColor from '@common/utils/string-to-color';
 
 @inject('threadPost')
+@inject('search')
 @observer
 class AtSelect extends Component {
   constructor(props) {
@@ -17,60 +21,59 @@ class AtSelect extends Component {
       checkUser: [], // 当前选择的at用户列表
       page: 1,
       perPage: 20,
-      finish: false,
+      isFollow: true, // 当前列表是否为粉丝
+      finish: false, // 粉丝列表加载结束
     };
-    this.timer = null;
   }
 
   componentDidMount() { // 初始化
     this.fetchFollow();
   }
 
-  async fetchFollow() { // 请求
+  // 请求粉丝
+  async fetchFollow() {
     const { threadPost } = this.props;
-    const { page, perPage, keywords } = this.state;
+    const { page, perPage } = this.state;
     if ((page - 1) * perPage > threadPost.follows.length) {
       this.setState({ finish: true });
       return;
     }
-    const params = { page, perPage };
-    if (keywords) {
-      params.filter = {};
-      params.filter.userName = keywords;
-      params.filter.type = 0;
-    }
-    const ret = await threadPost.fetchFollow(params);
+    const ret = await threadPost.fetchFollow({ page, perPage });
     if (ret.code === 0) {
       this.setState({ page: page + 1 });
     }
+    return ret;
+  }
+
+  // 请求全站用户
+  async fetchUserList() {
+    const { getUsersList } = this.props.search;
+    const { page, perPage, keywords } = this.state;
+    const params = { search: keywords, type: 'username', page, perPage };
+    const ret = await getUsersList(params);
+    if (ret.code === 0) {
+      this.setState({ page: page + 1 });
+    }
+    return ret;
   }
 
   // 更新搜索关键字,搜索用户
-  updateKeywords = (e) => {
-    const keywords = e.target.value;
-    this.setState({ keywords, checkUser: [], page: 1 });
-    this.searchInput();
+  updateKeywords = (val = "") => {
+    this.setState({
+      keywords: val,
+      checkUser: [],
+      page: 1,
+      isFollow: val === "",
+      finish: false,
+    }, () => {
+      this.state.isFollow ? this.fetchFollow() : this.fetchUserList();
+    });
   }
 
-  // 清除关键字
-  clearKeywords = () => {
-    this.setState(
-      { keywords: '', checkUser: [], page: 1 },
-      () => this.fetchFollow()
-    );
-  }
-
-  // 搜索用户
-  searchInput = () => {
-    clearTimeout(this.timer);
-    this.timer = setTimeout(() => {
-      this.fetchFollow();
-    }, 300);
-  }
-
-  onScrollBottom = () => {
-    // 没有更多数据时，不再发送请求
-    !this.state.finish && this.fetchFollow();
+  onScrollBottom = (e) => {
+    const { isFollow, finish, } = this.state;
+    if (isFollow && finish) return;
+    return isFollow ? this.fetchFollow() : this.fetchUserList();
   }
 
   // 取消选择
@@ -80,15 +83,13 @@ class AtSelect extends Component {
 
   // 确认选择
   submitSelect = () => {
-    const { checkUser } = this.state;
+    const { checkUser, isFollow } = this.state;
     // 未选@人，不操作
-    if (checkUser.length === 0) {
-      return;
-    }
+    if (checkUser.length === 0) return;
 
     // 处理已选@ren，更新store
     const { postData, setPostData } = this.props.threadPost;
-    const at = checkUser.map(item => `@${item.user.userName}`).join(' ');
+    const at = checkUser.map(item => `@${isFollow ? item.user.userName : item.nickname} `).join(" ");
     const contentText = `${postData.contentText} ${at}`;
     setPostData({ contentText });
 
@@ -98,21 +99,22 @@ class AtSelect extends Component {
 
   // 获取显示文字头像的背景色
   getBackgroundColor = (name) => {
-    const character = name.charAt(0).toUpperCase()
+    const character = name ? name.charAt(0).toUpperCase() : "";
     return stringToColor(character);
   }
 
   // 渲染列表内容
-  renderItem = (info) => {
-    const { data, index } = info;
-    const item = data[index] || {};
-    const username = item.user?.userName || '';
+  renderItem = (item) => {
+    const isFollow = this.state.keywords === "";
+    const avatar = isFollow ? item?.user?.avatar : item.avatar;
+    const username = isFollow ? item?.user?.userName : item.nickname;
+    const groupName = isFollow ? item?.group?.groupName : item.groupName;
 
     return (
       <View className={styles['at-item']}>
         <View className={styles.avatar}>
-          {item?.user?.avatar
-            ? <Avatar image={item.user.avatar} />
+          {avatar
+            ? <Avatar image={avatar} />
             : <Avatar
                 text={username}
                 style={{
@@ -123,7 +125,7 @@ class AtSelect extends Component {
         </View>
         <View className={styles.info}>
           <View className={styles.username}>{username}</View>
-          <View className={styles.group}>{item?.group?.groupName}</View>
+          <View className={styles.group}>{groupName}</View>
         </View>
         <Checkbox name={item}></Checkbox>
       </View>
@@ -131,8 +133,9 @@ class AtSelect extends Component {
   }
 
   render() {
-    const { keywords, checkUser } = this.state;
-    const { follows = [] } = this.props.threadPost;
+    const { keywords, checkUser, isFollow } = this.state;
+    const { threadPost: { follows }, search: { users } } = this.props;
+    const data = isFollow ? (follows || []) : (users?.pageData || []);
 
     return (
       <View className={styles.wrapper}>
@@ -142,10 +145,10 @@ class AtSelect extends Component {
             value={keywords}
             icon="SearchOutlined"
             placeholder='搜索用户'
-            onChange={e => this.updateKeywords(e)}
+            onChange={e => throttle(this.updateKeywords(e.target.value), 30)}
           />
           {keywords &&
-            <View className={styles.delete} onClick={this.clearKeywords}>
+            <View className={styles.delete} onClick={() => this.updateKeywords()}>
               <Icon className={styles['delete-icon']} name="CloseOutlined" size={12}></Icon>
             </View>
           }
@@ -156,21 +159,21 @@ class AtSelect extends Component {
           value={checkUser}
           onChange={val => this.setState({ checkUser: val })}
         >
-          <View className={styles['at-wrap']}>
-            <ScrollView
-              className={'scroll-view'}
-              width='100%'
-              height={475}
-              rowCount={follows.length}
-              rowData={follows}
-              rowHeight={54}
-              rowRenderer={this.renderItem}
-              onScrollBottom={this.onScrollBottom}
-              onPullingUp={() => Promise.reject()}
-              isRowLoaded={() => true}
-              lowerThreshold={10}
-            />
-          </View>
+          <List
+            height={'calc(100vh - 120px)'}
+            noMore={false}
+            onRefresh={this.onScrollBottom}
+            allowRefresh={false}
+          >
+            {data.map(item => {
+              return (
+                <View key={item}>
+                  {this.renderItem(item)}
+                </View>
+              )
+            })
+            }
+          </List>
         </Checkbox.Group>
 
         {/* 取消按钮 */}

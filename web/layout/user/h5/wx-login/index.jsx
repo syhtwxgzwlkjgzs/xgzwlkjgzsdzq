@@ -10,6 +10,7 @@ import Header from '@components/header';
 import { get } from '@common/utils/get';
 import PopProtocol from '../components/pop-protocol';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import PcBodyWrap from '../components/pc-body-wrap';
 
 @inject('site')
 @inject('user')
@@ -20,19 +21,22 @@ class WXLoginH5Page extends React.Component {
   timer = null;
   async componentDidMount() {
     try {
-      const { platform, webConfig } = this.props.site;
-      const redirectUri = `${encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-authorization?type=${platform}`)}`;
-      let params;
+      const { site } = this.props;
 
+      if (site?.wechatEnv === 'none') return;
+
+      const { platform } = site;
+      const redirectUri = `${encodeURIComponent(`${window.location.origin}/user/wx-authorization?type=${platform}`)}`;
+      let params;
       if (platform === 'h5') {
         params = {
           type: 'mobile_browser_login',
           redirectUri,
         };
       }
+      console.log(site.isMiniProgramOpen, site.isOffiaccountOpen);
       if (platform === 'pc') {
-        const { miniprogramClose } = webConfig.passport;
-        const type = miniprogramClose ?  'pc_login_mini' : 'pc_login';
+        const type = site?.isMiniProgramOpen ?  'pc_login_mini' : 'pc_login';
         params = {
           type,
           redirectUri,
@@ -44,8 +48,9 @@ class WXLoginH5Page extends React.Component {
         this.queryLoginState(params.type);
       }
     } catch (e) {
+      console.log(e);
       Toast.error({
-        content: e.Message,
+        content: e.Message || e,
         hasMask: false,
         duration: 1000,
       });
@@ -66,7 +71,7 @@ class WXLoginH5Page extends React.Component {
         const uid = get(res, 'data.uid');
         this.props.user.updateUserInfo(uid);
         // FIXME: 使用 window 跳转用来解决，获取 forum 在登录前后不同的问题，后续需要修改 store 完成
-        window.location.href = '/index';
+        window.location.href = '/';
         clearInterval(this.timer);
       } catch (e) {
         if (this.props.h5QrCode.countDown) {
@@ -88,7 +93,7 @@ class WXLoginH5Page extends React.Component {
     const { platform } = site;
     const isAnotherLoginWayAvaliable = this.props.site.isSmsOpen || this.props.site.isUserLoginVisible;
     return (
-      <div className={platform === 'h5' ? '' : layout.pc_body_background}>
+      <PcBodyWrap>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
         {
           platform === 'h5'
@@ -129,16 +134,26 @@ class WXLoginH5Page extends React.Component {
           <div className={platform === 'h5' ? layout['otherLogin-outer__tips'] : layout.pc_otherLogin_tips} >
             注册登录即表示您同意
             <span onClick={() => {
+              if (platform === 'pc') {
+                window.open('/user/agreement?type=register');
+              }
               commonLogin.setProtocolInfo('register');
             }}>《注册协议》</span>
             <span onClick={() => {
+              if (platform === 'pc') {
+                window.open('/user/agreement?type=privacy');
+              }
               commonLogin.setProtocolInfo('privacy');
             }}>《隐私协议》</span>
           </div>
         </div>
       </div>
-      <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
-      </div>
+      {
+        platform === 'h5'
+          ? <PopProtocol protocolVisible={commonLogin.protocolVisible} protocolStatus={commonLogin.protocolStatus}/>
+          : <></>
+      }
+      </PcBodyWrap>
     );
   }
 }

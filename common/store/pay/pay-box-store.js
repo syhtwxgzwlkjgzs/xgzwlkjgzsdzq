@@ -124,6 +124,7 @@ class PayBoxStore {
     this.qrCodeCheckTimer = setTimeout(() => {
       clearTimeout(this.timer);
       this.qrCodeTimeout = true;
+    // 超时时间
     }, 1000 * 5 * 60);
   }
 
@@ -315,6 +316,15 @@ class PayBoxStore {
   };
 
   /**
+   * 清空订单状态轮询定时器
+   */
+  @action
+  clearOrderStatusTimer = () => {
+    clearInterval(this.timer);
+    clearInterval(this.qrCodeCheckTimer);
+  }
+
+  /**
    * 获取订单详情
    */
   @action
@@ -347,7 +357,7 @@ class PayBoxStore {
         // FIXME: 暂时使用延时 clear
         setTimeout(() => {
           this.clear();
-        }, 1000);
+        }, 300);
       }
 
       if (orderStatus === ORDER_STATUS_MAP.OUT_DATE_PAY) {
@@ -359,7 +369,7 @@ class PayBoxStore {
         // FIXME: 暂时使用延时 clear
         setTimeout(() => {
           this.clear();
-        }, 1000);
+        }, 300);
       }
 
       if (orderStatus === ORDER_STATUS_MAP.FAIL_PAY) {
@@ -371,7 +381,7 @@ class PayBoxStore {
         // FIXME: 暂时使用延时 clear
         setTimeout(() => {
           this.clear();
-        }, 1000);
+        }, 300);
       }
     } catch (error) {
       if (error.Code) {
@@ -474,6 +484,7 @@ class PayBoxStore {
     this.password = null;
     this.walletInfo = null;
     this.wechatQRCode = null;
+    this.qrCodeTimeout = false;
   }
 }
 

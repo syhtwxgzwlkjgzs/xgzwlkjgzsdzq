@@ -6,7 +6,7 @@ import Router from '@discuzq/sdk/dist/router';
 import SharePopup from '../thread/share-popup';
 import isWeiXin from '@common/utils/is-weixin';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
-// import goToLoginPage from '@common/utils/go-to-login-page';
+import goToLoginPage from '@common/utils/go-to-login-page';
 
 /**
  * 帖子头部
@@ -20,7 +20,7 @@ import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 class HomeHeader extends React.Component {
   state = {
     visible: false,
-    height: 180
+    height: 180,
   }
 
   domRef = React.createRef(null)
@@ -67,11 +67,12 @@ class HomeHeader extends React.Component {
   onShare = () => {
     const { user } = this.props;
     if (!user.isLogin()) {
-      // goToLoginPage();
+      goToLoginPage({ url: '/user/login' });
       return;
     }
+
     // 判断是否在微信浏览器
-    if (isWeiXin) {
+    if (isWeiXin()) {
       this.setState({ visible: true });
     } else {
       const title = document?.title || '';
@@ -86,7 +87,7 @@ class HomeHeader extends React.Component {
 
   componentDidMount() {
     if (this.domRef.current) {
-      this.setState({ height: this.domRef.current.clientHeight })
+      this.setState({ height: this.domRef.current.clientHeight });
     }
   }
 
@@ -97,8 +98,8 @@ class HomeHeader extends React.Component {
 
     return (
       <div ref={this.domRef}
-        className={`${styles.container} ${mode ? styles[`container_mode_${mode}`] : ''}`} 
-        style={{...style, ...this.getBgHeaderStyle(bgColor)}}
+        className={`${styles.container} ${mode ? styles[`container_mode_${mode}`] : ''}`}
+        style={{ ...style, ...this.getBgHeaderStyle(bgColor) }}
       >
         {hideInfo && <div className={styles.topBar}>
           {
@@ -110,7 +111,7 @@ class HomeHeader extends React.Component {
           }
           <div>
             <Icon onClick={() => {
-              Router.redirect({url:'/'});
+              Router.redirect({ url: '/' });
             }} name="HomeOutlined" color="#fff" size={20} />
           </div>
         </div>}

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
-import { Popup, Icon, Button, Radio, Toast } from '@discuzq/design';
+import { Popup, Icon, Button, Radio, Toast, Spin } from '@discuzq/design';
 import Router from '@discuzq/sdk/dist/router';
 import { PAY_MENT_MAP, PAYWAY_MAP, STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
 import isWeixin from '@common/utils/is-weixin';
@@ -11,7 +11,7 @@ import {
   wxValidator,
   mode,
 } from '../../../../../common/store/pay/weixin-h5-backend';
-// import browser from '@common/utils/browser';
+import throttle from '@common/utils/thottle.js';
 
 @inject('user')
 @inject('payBox')
@@ -74,7 +74,18 @@ export default class PayBox extends React.Component {
     if (this.props.payBox?.walletAvaAmount < amount) {
       return <p className={styles.subText}>余额不足</p>;
     }
-    return <p className={styles.subText}>钱包余额：￥{this.props.payBox?.walletAvaAmount}</p>;
+    return (
+      <>
+        {
+          this.props.payBox?.walletAvaAmount ? (
+            <p className={styles.subText}>钱包余额：￥{this.props.payBox?.walletAvaAmount}</p>
+          ) : (
+            <Spin type="spinner" size={14}></Spin>
+          )
+        }
+      </>
+    )
+
   }
 
   goSetPayPwa() {
@@ -90,7 +101,7 @@ export default class PayBox extends React.Component {
   };
 
   // 点击确认支付
-  handlePayConfirmed = async () => {
+  handlePayConfirmed = throttle(async () => {
     if (this.props.payBox.payWay === PAYWAY_MAP.WALLET) {
       const { options = {} } = this.props.payBox;
       const { amount = 0 } = options;
@@ -126,7 +137,7 @@ export default class PayBox extends React.Component {
       }
       // this.props.payBox.visible = false
     }
-  };
+  }, 500);
 
   // 点击取消
   handleCancel = () => {
@@ -174,17 +185,14 @@ export default class PayBox extends React.Component {
                     {item.paymentType === PAYWAY_MAP.WALLET && this.walletPaySubText()}
                     {(item.paymentType === PAYWAY_MAP.WX ||
                       (canWalletPay && this.props.payBox?.walletAvaAmount >= options.amount)) && (
-                      <Radio name={item.paymentType} />
-                    )}
+                        <Radio name={item.paymentType} />
+                      )}
                   </div>
                 </div>
               );
             })}
           </Radio.Group>
         </div>
-        {/* <div className={styles.tips}>
-          <p>asdadsadsd</p>
-        </div> */}
         <div className={styles.btnBox}>
           <Button
             disabled={disabled}

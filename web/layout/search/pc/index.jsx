@@ -11,7 +11,9 @@ import Stepper from './components/stepper';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import Copyright from '@components/copyright';
 import SidebarPanel from '@components/sidebar-panel';
-import { Toast } from '@discuzq/design';
+import { Toast, Spin } from '@discuzq/design';
+import TopicItem from '@components/topic-item'
+import Nodata from '@components/no-data'
 
 @inject('site')
 @inject('search')
@@ -26,6 +28,8 @@ class SearchPCPage extends React.Component {
       value: keyword,
       stepIndex: 0
     };
+    this.activeUsersRef = React.createRef();
+    this.hotTopicRef = React.createRef();
   }
 
   redirectToSearchResultPost = () => {
@@ -59,7 +63,7 @@ class SearchPCPage extends React.Component {
 
   onSearch = (value) => {
     this.props.router.replace(`/search?keyword=${value}`);
-    this.setState({ keyword: value }, () => {
+    this.setState({ value }, () => {
       this.searchData(value);
     });
   }
@@ -87,8 +91,10 @@ class SearchPCPage extends React.Component {
   itemClick = (index, idName) => {
     const stepIndex = this.state.stepIndex;
     if (stepIndex !== index) {
-      this.setState({stepIndex: index});
       this.scrollToAnchor(idName);
+      setTimeout(() => {
+        this.setState({stepIndex: index});
+      }, 1000); // 等待完成 scrollIntoView();
     }
   }
   scrollToAnchor = (anchorName) => {
@@ -108,6 +114,23 @@ class SearchPCPage extends React.Component {
       </div>
     )
   }
+  handleScroll = ({ scrollTop } = {}) => {
+    const HEADER_HEIGHT = 57,
+          activeUsersPos = this.activeUsersRef.current.offsetTop,
+          activeUsersScrollTo = activeUsersPos + parseInt(HEADER_HEIGHT / 2);
+
+    const hotTopicPos = this.hotTopicRef.current.offsetTop,
+          hotTopicScrollTo = hotTopicPos + parseInt(HEADER_HEIGHT / 2);
+
+    if(scrollTop < activeUsersScrollTo) {
+      this.setState({stepIndex: 0}); // TODO: 暂时写死index，应该通过steps传回index
+    } else if(scrollTop < hotTopicScrollTo && scrollTop >= activeUsersScrollTo) {
+      this.setState({stepIndex: 1});
+    } else if(scrollTop >= hotTopicScrollTo) {
+      this.setState({stepIndex: 2});
+    }
+  }
+
   // 中间 -- 潮流话题 活跃用户 热门内容
   renderContent = () => {
 
@@ -130,11 +153,15 @@ class SearchPCPage extends React.Component {
             onShowMore={this.redirectToSearchResultTopic}
             icon={{ type: 1, name: 'StrongSharpOutlined' }}
           >
-            <TrendingTopicMore data={topicsPageData} onItemClick={this.onTopicClick}/>
+            <div className={styles.topic}>
+              {topicsPageData?.map((item, index) => (
+                <TopicItem data={item} key={index} onClick={this.onTopicClick} />  
+              ))}
+            </div>
           </SidebarPanel>
         </div>
 
-        <div id="MemberOutlined">
+        <div id="MemberOutlined" ref={this.activeUsersRef}>
           <SidebarPanel 
             title="活跃用户" 
             type='normal'
@@ -147,7 +174,7 @@ class SearchPCPage extends React.Component {
           </SidebarPanel>
         </div>
 
-        <div id="HotOutlined">
+        <div id="HotOutlined" ref={this.hotTopicRef}>
           <div className={styles.postTitle}>
             <SectionTitle
               title="热门内容"
@@ -157,7 +184,7 @@ class SearchPCPage extends React.Component {
           </div>
           <div className={styles.postContent}>
             {
-              threadsPageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)
+              threadsPageData?.length ? threadsPageData.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />) : <LoadingView data={threadsPageData} />
             }
           </div>
         </div>
@@ -170,11 +197,25 @@ class SearchPCPage extends React.Component {
           allowRefresh={false}
           onSearch={this.onSearch}
           right={ this.renderRight }
+          onScroll={ this.handleScroll }
         >
           { this.renderContent() }
         </BaseLayout>
     );
   }
+}
+
+const LoadingView = ({data}) => {
+  if (data) {
+    return (
+      <Nodata className={styles.noData} />
+    )
+  }
+  return (
+    <div className={styles.loading}>
+      <Spin type="spinner" />
+    </div>
+  )
 }
 
 export default withRouter(SearchPCPage);

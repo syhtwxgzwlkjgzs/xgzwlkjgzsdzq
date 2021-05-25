@@ -16,11 +16,11 @@ const BottomNavBar = ({ router, fixed = true, placeholder = false, curr = 'home'
   }, [curr])
 
   const [tabs, setTabs] = useState([
-    { icon: 'HomeOutlined', text: '首页', active: checkCurrActiveTab(curr, 'home'), router: '/pages/index' },
+    { icon: 'HomeOutlined', text: '首页', active: checkCurrActiveTab(curr, 'home'), router: '/pages/index/index' },
     { icon: 'FindOutlined', text: '发现', active: checkCurrActiveTab(curr, 'search'), router: '/subPages/search/index' },
     { icon: 'PlusOutlined', router: '/subPages/thread/post/index' },
     { icon: 'MailOutlined', text: '消息', active: checkCurrActiveTab(curr, 'message'), router: '/subPages/message/index' },
-    { icon: 'ProfessionOutlined', text: '我的', active: checkCurrActiveTab(curr, 'my'), router: '/pages/my' },
+    { icon: 'ProfessionOutlined', text: '我的', active: checkCurrActiveTab(curr, 'my'), router: '/subPages/my/index' },
   ]);
 
   const handleClick = (i, idx) => {
@@ -38,13 +38,13 @@ const BottomNavBar = ({ router, fixed = true, placeholder = false, curr = 'home'
     <View className={styles.footer} style={{ position: fixed ? 'fixed' : '' }}>
       {tabs.map((i, idx) => (i.text ? (
           <View key={idx} className={styles.item + (i.active ? ` ${styles.active}` : '')} onClick={() => handleClick(i, idx)}>
-            <Icon name={i.icon} size={20} />
+            <Icon name={i.icon} size={i.icon === 'MailOutlined' ? 22 : 20} />
             <View className={styles.text}>{i.text}</View>
           </View>
       ) : (
           <View key={idx} style={{ flex: 1, textAlign: 'center' }} onClick={() => handleClick(i, idx)}>
             <View className={styles.addIcon}>
-              <Icon name={i.icon} size={24} color="#fff" />
+              <Icon name={i.icon} size={28} color="#fff" />
             </View>
           </View>
       )))}

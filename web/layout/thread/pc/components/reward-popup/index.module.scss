@@ -1,19 +1,44 @@
 @import '@common/styles/index.scss';
 
+@mixin input {
+  box-sizing: border-box;
+
+  :global {
+    .dzq-input__inner {
+      font-size: rem($font-size-base);
+      border: none;
+      padding: 0;
+      height: rem(18);
+      line-height: rem(18);
+      border-radius: 0;
+      text-align: right;
+      -webkit-tap-highlight-color: transparent;
+
+      &::placeholder {
+        color: $text-color-placeholder;
+        font-size: rem($font-size-base);
+      }
+    }
+  }
+}
+
 .container {
-  width: rem(520);
+  width: rem(409);
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   justify-content: flex-start;
-  margin: 0 auto;
   background: var(--color-white);
   border-radius: rem($border-radius-big);
   overflow: hidden;
-  padding: 0 rem(24) rem(24) rem(24);
+  padding:  0 rem($padding-6n) rem($padding-6n);
+  box-sizing: border-box;
 }
 
 .header {
   height: rem(64);
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -33,18 +58,55 @@
   }
 }
 
-.rewardList {
+.rewardInput {
   margin-top: rem($margin-4n);
+  width: 100%;
   display: flex;
-  flex-wrap: wrap;
-  padding-left: rem(60);
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: $border-solid-1;
+  padding-bottom: rem($padding-4n);
+  color: $text-color-regular;
+  font-size: $font-size-primary;
+
+  .prepend {
+    word-break: keep-all;
+  }
+
+  .input {
+    flex: 1;
+    @include input;
+  }
+
+  .append {
+    padding-left: rem($padding-1n);
+  }
+}
+
+.rewardList {
+  width: 100%;
+  margin-top: rem($margin-4n);
+  display: grid;
+  grid-template-columns: repeat(4, rem(76));
+  justify-content: space-between;
 
   .reward {
-    width: rem(60);
-    height: rem(35);
-    border: $border-solid-1;
-    margin-right: rem($margin-2n);
-    margin-bottom: rem($margin-2n);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $border-radius-small;
+    font-size: rem($font-size-primary);
+    width: rem(76);
+    height: rem(36);
+    background: $text-bg-color2;
+    color: $text-color-primary;
+    margin-bottom: rem($margin-4n);
+    cursor: pointer;
+
+    &.actived {
+      background: $primary-color;
+      color: $white;
+    }
   }
 }
 
@@ -53,14 +115,13 @@
   align-items: center;
 
   .text {
-    margin-right: rem($margin-2n);;
-    font-size: rem($font-size-primary);;
+    margin-right: rem($margin-2n);
+    font-size: rem($font-size-primary);
   }
 }
 
-
 .button {
-  margin-top: rem($margin-6n);
+  margin-top: rem($margin-2n);
   width: 100%;
   display: flex;
   justify-content: center;
@@ -76,5 +137,6 @@
     background: $button-info-bg-color;
     border: none;
     margin-right: rem($margin-4n);
+    color: $text-color-regular;
   }
 }

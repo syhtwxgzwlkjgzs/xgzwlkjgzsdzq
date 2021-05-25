@@ -1,6 +1,6 @@
 @import '@common/styles/index.scss';
 .indexLeft {
-  width: 100%;
+  width: rem(300);
   display: flex;
   justify-content: flex-end;
   .indexLeftBox {
@@ -16,6 +16,7 @@
   }
 }
 .indexContent {
+  margin-top: rem(80);
   width: 100%;
   min-width: rem(652);
   .contnetTop {
@@ -31,12 +32,22 @@
 }
 .topBox {
   position: relative;
-  padding: rem(7) 0  rem(7) rem($margin-2n);
+  width: rem(750);
+  // padding: rem(7) 0  rem(7) rem($margin-2n);
   .PostTheme {
     position: absolute;
     right: rem($padding-6n);
     top: rem($padding-4n);
   }
+}
+.topWrapper {
+  width: rem(750);
+  position: fixed;
+  top: 60px;
+  padding-top: rem(20);
+  display: flex;
+  z-index: 1000;
+  background: $body-bg-color;
 }
 .TopNewsBox {
   padding: rem($padding-2n) 0;

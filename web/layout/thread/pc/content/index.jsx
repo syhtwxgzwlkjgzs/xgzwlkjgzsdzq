@@ -9,11 +9,10 @@ import VideoPlay from '@components/thread/video-play';
 import PostRewardProgressBar, { POST_TYPE } from '@components/thread/post-reward-progress-bar';
 import Tip from '@components/thread/tip';
 import AttachmentView from '@components/thread/attachment-view';
-import { Icon, Button, Divider, Dropdown, Tag } from '@discuzq/design';
+import { Icon, Button, Divider, Dropdown, Toast } from '@discuzq/design';
 import UserInfo from '@components/thread/user-info';
 import classnames from 'classnames';
 import topic from './index.module.scss';
-import threadPay from '@common/pay-bussiness/thread-pay';
 import { minus } from '@common/utils/calculate';
 import { parseContentData } from '../../utils';
 
@@ -51,6 +50,8 @@ export default inject('user')(
     // 是否帖子付费
     const isThreadPay = threadStore?.threadData?.payType === 1;
     const threadPrice = threadStore?.threadData?.price || 0;
+    // 是否已经付费
+    const isPayed = threadStore?.threadData?.paid === true;
     // 是否作者自己
     const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData?.userId;
 
@@ -66,16 +67,13 @@ export default inject('user')(
     // 是否已打赏
     const isRewarded = threadStore?.threadData?.isReward;
 
+    // 是否可以免费查看付费帖子
+    const canFreeViewPost = threadStore?.threadData?.ability.canFreeViewPost;
+
     const parseContent = parseContentData(indexes);
 
     const onContentClick = async () => {
-      const thread = props.store.threadData;
-      const { success } = await threadPay(thread, props.user?.userInfo);
-
-      // 支付成功重新请求帖子数据
-      if (success && threadStore?.threadData?.threadId) {
-        threadStore.fetchThreadDetail(threadStore?.threadData?.threadId);
-      }
+      typeof props.onPayClick === 'function' && props.onPayClick();
     };
 
     const onLikeClick = () => {
@@ -102,6 +100,10 @@ export default inject('user')(
       typeof props.onRewardClick === 'function' && props.onRewardClick();
     };
 
+    const onTagClick = () => {
+      typeof props.onTagClick === 'function' && props.onTagClick();
+    };
+
     return (
       <div className={`${topic.container}`}>
         <div className={topic.header}>
@@ -117,6 +119,7 @@ export default inject('user')(
               isPay={!isFree}
               isReward={isReward}
               isRed={isRedPack}
+              hideInfoPopip={true}
               platform="pc"
             ></UserInfo>
           </div>
@@ -126,26 +129,29 @@ export default inject('user')(
               {(isEssence || !isFree || isReward || isRedPack) && (
                 <Divider mode="vertical" className={topic.moreDivider}></Divider>
               )}
-              <div className={topic.iconText}>
-                <Dropdown
-                  menu={
-                    <Dropdown.Menu>
-                      {canEdit && <Dropdown.Item id="edit">编辑</Dropdown.Item>}
-                      {canStick && <Dropdown.Item id="stick">{isStick ? '取消置顶' : '置顶'}</Dropdown.Item>}
-                      {canEssence && <Dropdown.Item id="essence"> {isEssence ? '取消精华' : '精华'}</Dropdown.Item>}
-                      {canDelete && <Dropdown.Item id="delete">删除</Dropdown.Item>}
-                    </Dropdown.Menu>
-                  }
-                  placement="center"
-                  hideOnClick={true}
-                  arrow={false}
-                  trigger="hover"
-                  onChange={(key) => onDropdownChange(key)}
-                >
-                  <Icon className={topic.icon} name="SettingOutlined"></Icon>
-                  <span className={topic.text}>管理</span>
-                </Dropdown>
-              </div>
+
+              {(canEdit || canStick || canEssence || canDelete) && (
+                <div className={topic.iconText}>
+                  <Dropdown
+                    menu={
+                      <Dropdown.Menu>
+                        {canEdit && <Dropdown.Item id="edit">编辑</Dropdown.Item>}
+                        {canStick && <Dropdown.Item id="stick">{isStick ? '取消置顶' : '置顶'}</Dropdown.Item>}
+                        {canEssence && <Dropdown.Item id="essence"> {isEssence ? '取消精华' : '精华'}</Dropdown.Item>}
+                        {canDelete && <Dropdown.Item id="delete">删除</Dropdown.Item>}
+                      </Dropdown.Menu>
+                    }
+                    placement="center"
+                    hideOnClick={true}
+                    arrow={false}
+                    trigger="hover"
+                    onChange={(key) => onDropdownChange(key)}
+                  >
+                    <Icon className={topic.icon} name="SettingOutlined"></Icon>
+                    <span className={topic.text}>管理</span>
+                  </Dropdown>
+                </div>
+              )}
               <div className={topic.iconText} onClick={() => onDropdownChange('report')}>
                 <Icon className={topic.icon} name="WarnOutlinedThick"></Icon>
                 <span className={topic.text}>举报</span>
@@ -164,8 +170,8 @@ export default inject('user')(
             {/* 文字 */}
             {text && <PostContent useShowMore={false} content={text || ''} />}
 
-            {/* 付费附件 */}
-            {isAttachmentPay && !isSelf && (
+            {/* 付费附件：不能免费查看付费帖 && 需要付费 && 不是作者 && 没有付费 */}
+            {!canFreeViewPost && isAttachmentPay && !isSelf && !isPayed && (
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={topic.payButton} type="primary" size="large">
                   <div className={topic.pay}>
@@ -219,7 +225,9 @@ export default inject('user')(
 
             {/* 标签 */}
             {threadStore?.threadData?.categoryName && (
-              <div className={topic.tag}>{threadStore?.threadData?.categoryName}</div>
+              <div className={topic.tag} onClick={onTagClick}>
+                {threadStore?.threadData?.categoryName}
+              </div>
             )}
 
             {(parseContent.RED_PACKET || parseContent.REWARD) && (
@@ -229,17 +237,17 @@ export default inject('user')(
                   <div className={topic.rewardBody}>
                     <PostRewardProgressBar
                       type={POST_TYPE.BOUNTY}
-                      remaining={Number(parseContent.REWARD.remain_money || 0)}
+                      remaining={Number(parseContent.REWARD.remainMoney || 0)}
                       received={minus(
                         Number(parseContent.REWARD.money || 0),
-                        Number(parseContent.REWARD.remain_money || 0),
+                        Number(parseContent.REWARD.remainMoney || 0),
                       )}
                     />
                     <div className={topic.rewardMoney}>
                       本帖向所有人悬赏
-                      <span className={topic.rewardNumber}>{parseContent.REWARD.remain_money || 0}</span>元
+                      <span className={topic.rewardNumber}>{parseContent.REWARD.money || 0}</span>元
                     </div>
-                    <div className={topic.rewardTime}>{parseContent.REWARD.expired_at}截止悬赏</div>
+                    <div className={topic.rewardTime}>{parseContent.REWARD.expiredAt}截止悬赏</div>
                   </div>
                 )}
 
@@ -247,18 +255,19 @@ export default inject('user')(
                 {parseContent.RED_PACKET && (
                   <div>
                     <PostRewardProgressBar
-                      remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
+                      remaining={Number(parseContent.RED_PACKET.remainNumber || 0)}
                       received={
-                        Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
+                        Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remainNumber || 0)
                       }
+                      condition={parseContent.RED_PACKET.condition}
                     />
                   </div>
                 )}
               </div>
             )}
 
-            {/* 帖子付费 */}
-            {isThreadPay && !isSelf && (
+            {/* 帖子付费：不能免费查看付费帖 && 需要付费 && 不是作者 && 没有付费 */}
+            {!canFreeViewPost && isThreadPay && !isSelf && !isPayed && (
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={topic.payButton} type="primary" size="large">
                   <div className={topic.pay}>
@@ -270,7 +279,7 @@ export default inject('user')(
             )}
 
             {/* 打赏 */}
-            {canBeReward && isApproved && (
+            {canBeReward && isApproved && !isSelf && (
               <Button onClick={onRewardClick} className={topic.rewardButton} type="primary" size="large">
                 <div className={topic.buttonIconText}>
                   <Icon className={topic.buttonIcon} name="HeartOutlined" size={19}></Icon>

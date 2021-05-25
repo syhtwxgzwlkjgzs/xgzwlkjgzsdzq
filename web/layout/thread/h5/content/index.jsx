@@ -11,7 +11,6 @@ import PostRewardProgressBar, { POST_TYPE } from '@components/thread/post-reward
 import Tip from '@components/thread/tip';
 import AttachmentView from '@components/thread/attachment-view';
 import { minus } from '@common/utils/calculate';
-import threadPay from '@common/pay-bussiness/thread-pay';
 import classnames from 'classnames';
 import UserInfo from '@components/thread/user-info';
 import styles from './index.module.scss';
@@ -37,11 +36,11 @@ const RenderThreadContent = inject('user')(
     // 是否附件付费帖
     const isAttachmentPay = threadStore?.threadData?.payType === 2 && threadStore?.threadData?.paid === false;
     const attachmentPrice = threadStore?.threadData?.attachmentPrice || 0;
-    // 是否已付费
-    const isPayed = threadStore?.threadData?.paid === true;
     // 是否付费帖子
     const isThreadPay = threadStore?.threadData?.payType === 1;
     const threadPrice = threadStore?.threadData?.price || 0;
+    // 是否已经付费
+    const isPayed = threadStore?.threadData?.paid === true;
     // 当前用户是否需要付费
     const isNeedPay = threadStore?.threadData?.payType === 1 && threadStore?.threadData?.paid === false;
     // 是否作者自己
@@ -59,16 +58,13 @@ const RenderThreadContent = inject('user')(
     // 是否已打赏
     const isRewarded = threadStore?.threadData?.isReward;
 
+    // 是否可以免费查看付费帖子
+    const canFreeViewPost = threadStore?.threadData?.ability.canFreeViewPost;
+
     const parseContent = parseContentData(indexes);
 
     const onContentClick = async () => {
-      const thread = props.store.threadData;
-      const { success } = await threadPay(thread, props.user?.userInfo);
-
-      // 支付成功重新请求帖子数据
-      if (success && threadStore?.threadData?.threadId) {
-        threadStore.fetchThreadDetail(threadStore?.threadData?.threadId);
-      }
+      typeof props.onPayClick === 'function' && props.onPayClick();
     };
 
     const onTagClick = () => {
@@ -129,16 +125,16 @@ const RenderThreadContent = inject('user')(
                 <div>
                   <div className={styles.rewardMoney}>
                     本帖向所有人悬赏
-                    <span className={styles.rewardNumber}>{parseContent.REWARD.remain_money || 0}</span>元
+                    <span className={styles.rewardNumber}>{parseContent.REWARD.money || 0}</span>元
                   </div>
-                  <div className={styles.rewardTime}>{parseContent.REWARD.expired_at}截止悬赏</div>
+                  <div className={styles.rewardTime}>{parseContent.REWARD.expiredAt}截止悬赏</div>
                 </div>
               )}
             </div>
           )}
 
           {/* 付费附件 */}
-          {isAttachmentPay && !isSelf && (
+          {!canFreeViewPost && isAttachmentPay && !isSelf && !isPayed && (
             <div style={{ textAlign: 'center' }} onClick={onContentClick}>
               <Button className={styles.payButton} type="primary">
                 <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
@@ -197,10 +193,10 @@ const RenderThreadContent = inject('user')(
                 <div className={styles.rewardBody}>
                   <PostRewardProgressBar
                     type={POST_TYPE.BOUNTY}
-                    remaining={Number(parseContent.REWARD.remain_money || 0)}
+                    remaining={Number(parseContent.REWARD.remainMoney || 0)}
                     received={minus(
                       Number(parseContent.REWARD.money || 0),
-                      Number(parseContent.REWARD.remain_money || 0),
+                      Number(parseContent.REWARD.remainMoney || 0),
                     )}
                   />
                 </div>
@@ -208,17 +204,18 @@ const RenderThreadContent = inject('user')(
               {/* 红包 */}
               {parseContent.RED_PACKET && (
                 <PostRewardProgressBar
-                  remaining={Number(parseContent.RED_PACKET.remain_number || 0)}
+                  remaining={Number(parseContent.RED_PACKET.remainNumber || 0)}
                   received={
-                    Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remain_number || 0)
+                    Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remainNumber || 0)
                   }
+                  condition={parseContent.RED_PACKET.condition}
                 />
               )}
             </div>
           )}
 
           {/* 帖子付费 */}
-          {isNeedPay && !isSelf && (
+          {!canFreeViewPost && isThreadPay && !isSelf && !isPayed && (
             <div style={{ textAlign: 'center' }} onClick={onContentClick}>
               <Button className={styles.payButton} type="primary">
                 <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
@@ -228,7 +225,7 @@ const RenderThreadContent = inject('user')(
           )}
 
           {/* 打赏 */}
-          {canBeReward && isApproved && (
+          {canBeReward && isApproved && !isSelf && (
             <div className={styles.rewardContianer}>
               <Button onClick={onRewardClick} className={styles.rewardButton} type="primary">
                 <Icon className={styles.payIcon} name="HeartOutlined" size={20}></Icon>

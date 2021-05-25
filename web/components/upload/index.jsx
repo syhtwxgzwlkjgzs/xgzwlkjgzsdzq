@@ -24,7 +24,7 @@ export default function DzqUpload(props) {
   } = props;
   const multiple = limit > 1;
 
-  const post = async (file) => { // file, list, updater
+  const post = async (file, list, updater) => { // file, list, updater
     const formData = new FormData();
     formData.append('file', file.originFileObj);
     Object.keys(data).forEach((item) => {
@@ -39,11 +39,16 @@ export default function DzqUpload(props) {
     });
     if (ret.code === 0) {
       onSuccess(ret, file);
+      onComplete(ret, file);
+      file.status = 'success';
+      updater(list);
     } else {
       onFail(ret, file);
-      return null;
+      onComplete(ret, file);
+      file.status = 'error';
+      updater(list);
+      return false;
     }
-    onComplete(ret, file);
     return ret;
   };
 
@@ -61,8 +66,8 @@ export default function DzqUpload(props) {
           onRemove(file);
         }}
         beforeUpload={(cloneList, showFileList) => {
-          beforeUpload(cloneList, showFileList);
-          return true;
+          if (typeof beforeUpload !== 'function') return true;
+          return beforeUpload(cloneList, showFileList);
         }}
         onChange={(fileList) => {
           onChange(fileList);
@@ -70,7 +75,7 @@ export default function DzqUpload(props) {
         customRequest={post}
         accept={accept}
       >
-        {!isCustomUploadIcon && (
+        {(!isCustomUploadIcon) && (
           <Button type='text' className={classNames(styles['flex-column-center'], styles['text-grey'])}>
             <Icon name="PlusOutlined" size={16}></Icon>
             <span className="dzq-upload__btntext">{btnText}</span>

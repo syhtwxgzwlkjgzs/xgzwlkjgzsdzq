@@ -16,6 +16,10 @@
     justify-content: space-between;
     box-shadow: none;
     padding-left: rem(4);
+    height: rem(52);
+  }
+  :global(.dzq-tabs__content) {
+    padding: 0;
   }
   :global {
     .dzq-tabs__bar {
@@ -24,6 +28,7 @@
     .dzq-tabs__panel {
       border-top: 1px solid rgba(238, 238, 238, 0.75);
       cursor: auto;
+      min-height: rem(608);
     }
     .dzq-tabs__item {
       @include cursor-on-pc;
@@ -37,6 +42,76 @@
     .dzq-tabs__scroll {
       width: auto;
     }
+  }
+}
+
+.tabsPC {
+  border-radius: rem($border-radius-big);
+
+  .listWrapper {
+    &::-webkit-scrollbar {
+      margin-right: -5px;
+      border-radius: $border-radius-small;
+      width: 8px;
+    }
+  
+    &:hover {
+      // 整个滚动条
+      &::-webkit-scrollbar {
+        margin-right: -5px;
+        border-radius: $border-radius-small;
+      }
+    }
+  
+    // 滚动条轨道
+    &::-webkit-scrollbar-track {
+      opacity: 1;
+    }
+  
+    // 滚动条上的滚动滑块
+    &::-webkit-scrollbar-thumb {
+      background: $border-shadow-color;
+      border-radius: 4px;
+    }
+  }
+
+  .list {
+    max-height: rem(773);
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  
+    &:hover {
+      // 整个滚动条
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  
+    // 滚动条轨道
+    &::-webkit-scrollbar-track {
+      display: none;
+    }
+  
+    // 滚动条上的滚动滑块
+    &::-webkit-scrollbar-thumb {
+      display: none;
+    }
+  }
+
+  .label {
+    height: rem(36);
+  }
+  :global(.dzq-tabs__content) {
+    padding: 0 rem(8);
+  }
+  :global(.dzq-tabs__bar.is-card) {
+    height: rem(68);
+  }
+  :global(.dzq-tabs__item) {
+    padding: 0 rem(16);
   }
 }
 
@@ -54,6 +129,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  height: rem(20);
 
   .icon {
     margin-right: rem(8);
@@ -64,6 +140,12 @@
   }
   .num {
   }
+}
+
+.spinnerPC {
+  height: rem(773);
+  width: 100%;
+  color: var(--color-text-placeholder);
 }
 
 .spinner {

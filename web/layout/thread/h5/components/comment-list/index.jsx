@@ -122,16 +122,19 @@ class CommentList extends React.Component {
         </div>
         <div className={styles.content}>
           <div className={styles.commentListAvatar} onClick={() => this.avatarClick()}>
-            <Avatar
-              image={this.props.data.user.avatar}
-              name={this.props.data.user.username || this.props.data.user.userName || ''}
-              circle={true}
-            ></Avatar>
+            {this.props?.data?.user && (
+              <Avatar
+                image={this.props.data.user.avatar}
+                name={this.props.data.user.username || this.props.data.user.userName || ''}
+                circle={true}
+              ></Avatar>
+            )}
           </div>
+
           <div className={styles.commentListContent}>
             <div className={styles.commentListContentText} onClick={() => this.toCommentDetail()}>
               <div className={styles.commentListName}>
-                {this.props.data.user.username || this.props.data.user.userName}
+                {this.props.data?.user?.username || this.props.data?.user?.userName || '未知用户'}
               </div>
               <div className={styles.commentListText} dangerouslySetInnerHTML={{ __html: this.filterContent() }}></div>
             </div>

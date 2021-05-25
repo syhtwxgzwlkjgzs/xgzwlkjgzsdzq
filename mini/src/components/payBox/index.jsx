@@ -1,5 +1,7 @@
-// @ts-check
+// @ts-nocheck
 import React, { Component } from 'react';
+// @ts-ignore
+import styles from './index.module.scss';
 import { Popup, Icon, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import EventEmitter from 'eventemitter3';
@@ -9,6 +11,7 @@ import AmountRecognized from './amount-recognized';
 import PayConfirmed from './pay-confirmed';
 import PayPwd from './payPwd';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+import { get } from '../../../../common/utils/get';
 
 class PayBoxEmitter extends EventEmitter {}
 
@@ -59,13 +62,13 @@ export default class PayBox extends Component {
               onClose={() => {
                 this.props.payBox.visible = false;
               }}
+              className={styles.payPopup}
             >
               {this.props.payBox.step === STEP_MAP.SURE && <AmountRecognized />}
               {this.props.payBox.step === STEP_MAP.PAYWAY && <PayConfirmed />}
             </Popup>
           </View>
-          {(this.props.payBox.step === STEP_MAP.WALLET_PASSWORD ||
-            this.props.payBox.step === STEP_MAP.SET_PASSWORD) && <PayPwd />}
+          {this.props.payBox.step === STEP_MAP.WALLET_PASSWORD  && <PayPwd />}
         </ToastProvider>
       </>
     );

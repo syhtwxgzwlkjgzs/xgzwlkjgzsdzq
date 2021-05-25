@@ -11,7 +11,7 @@ import ImageUpload from '@components/thread-post/image-upload';
 import { defaultOperation } from '@common/constants/const';
 import FileUpload from '@components/thread-post/file-upload';
 import { THREAD_TYPE } from '@common/constants/thread-post';
-import { Audio, AudioRecord, Icon } from '@discuzq/design';
+import { Audio, AudioRecord, Icon, Toast } from '@discuzq/design';
 import ClassifyPopup from '@components/thread-post/classify-popup';
 import ProductSelect from '@components/thread-post/product-select';
 import Product from '@components/thread-post/product';
@@ -58,6 +58,7 @@ class ThreadCreate extends React.Component {
       this.props.setPostData({ draft: 1 });
       flag = await this.props.handleSubmit(true);
     }
+    if (val === '不保存草稿') this.props.threadPost.resetPostData();
     if (val && flag) Router.back();
   }
 
@@ -66,33 +67,49 @@ class ThreadCreate extends React.Component {
     throttle(this.setBottomBarStyle(window.scrollY), 50);
   }
 
+  positionDisplay = (action) => {
+    const position = document.querySelector('#post-position');
+    if (!position) return;
+    if (action === 'select') {
+      position.style.display = 'none';
+    } else position.style.display = 'flex';
+  };
+
   // 设置底部bar的样式
   setBottomBarStyle = (y = 0, action) => {
-    const height = getVisualViewpost();
+    const winHeight = getVisualViewpost();
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
     const postBottombar = document.querySelector('#post-bottombar');
     if (!isIOS()) {
+      this.positionDisplay(action);
       if (vditorToolbar) {
         vditorToolbar.style.position = 'fixed';
-        vditorToolbar.style.bottom = '90px';
+        vditorToolbar.style.bottom = '88px';
         vditorToolbar.style.top = 'auto';
       }
       return;
     }
 
-    const position = document.querySelector('#post-position');
-    const top = action === 'select' ? (!position ? 130 : 90) : 130;
-    postBottombar.style.top = `${height - top + y}px`;
-    if (vditorToolbar) {
+    this.positionDisplay(action);
+    const bottombarHeight = action === 'select' ? 88 : 132;
+    postBottombar.style.top = `${winHeight - bottombarHeight + y}px`;
+    if (vditorToolbar && action === 'select') {
       vditorToolbar.style.position = 'fixed';
-      vditorToolbar.style.top = `${height - 130 + y}px`;
+      vditorToolbar.style.top = `${winHeight - 132 + y}px`;
     }
-
-    if (!position) return;
-    if (action === 'select') {
-      position.style.display = 'none';
-    } else position.style.display = 'flex';
+    this.setPostBox();
   }
+
+  setPostBox = () => {
+    const winHeight = getVisualViewpost();
+    const postBox = document.querySelector('#post-inner');
+    const title = document.querySelector('#dzq-threadpost-title');
+    if (postBox) {
+      if (title?.display === 'none') postBox.style.height = `${winHeight - 134 - 54}px`;
+      else postBox.style.height = `${winHeight - 134}px`;
+    }
+  };
+
   setBottomFixed = (action) => {
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
@@ -100,15 +117,17 @@ class ThreadCreate extends React.Component {
     }, 150);
   }
   clearBottomFixed = () => {
+    this.positionDisplay();
     if (!isIOS()) return;
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
-      const height = getVisualViewpost();
+      const winHeight = getVisualViewpost();
       const postBottombar = document.querySelector('#post-bottombar');
       const position = document.querySelector('#post-position');
+      this.setPostBox();
       if (!position) return;
       position.style.display = 'flex';
-      postBottombar.style.top = `${height - 134}px`;
+      postBottombar.style.top = `${winHeight - 133}px`;
     }, 200);
   }
 
@@ -117,26 +136,32 @@ class ThreadCreate extends React.Component {
     this.props.handleSetState({ categoryChooseShow: true });
   };
 
+  // 左上角返回按钮回调
+  handlePageJump = () => {
+    const { postData:{contentText} } = this.props.threadPost;
+
+    if (contentText === '') {
+      Router.back()
+    } else {
+      this.props.handleSetState({ draftShow: true });
+      return false
+    }
+  }
+
   render() {
     const { threadPost, index, user, site } = this.props;
     const { threadExtendPermissions, permissions } = user;
     const { webConfig = {} } = site;
-
     const { postData } = threadPost;
+
     const { emoji, topic, atList, currentDefaultOperation, currentAttachOperation, categoryChooseShow } = this.props;
     const category = ((index.categories && index.categories.slice()) || []).filter(item => item.name !== '全部');
-    // 付费设置
-    const { freeWords, price, attachmentPrice } = threadPost.postData;
+
 
     return (
       <>
-        <Header
-          isBackCustom={() => {
-            this.props.handleSetState({ draftShow: true });
-            return false;
-          }}
-        />
-        <div className={styles['post-inner']}>
+        <Header isBackCustom={this.handlePageJump} />
+        <div className={styles['post-inner']} id="post-inner">
           {/* 标题 */}
           <Title
             isDisplay={this.props.isTitleShow}
@@ -149,6 +174,7 @@ class ThreadCreate extends React.Component {
             emoji={emoji}
             atList={atList}
             topic={topic}
+            onInput={(vditor) => this.props.handleVditorChange(vditor, 'input')}
             onChange={this.props.handleVditorChange}
             onFocus={(action) => {
               this.setBottomFixed(action);
@@ -158,6 +184,7 @@ class ThreadCreate extends React.Component {
               this.props.handleSetState({ isVditorFocus: false });
               this.clearBottomFixed();
             }}
+            onInit={this.props.handleVditorInit}
           />
           {/* 图片 */}
           {(currentAttachOperation === THREAD_TYPE.image || Object.keys(postData.images).length > 0) && (
@@ -165,6 +192,7 @@ class ThreadCreate extends React.Component {
               fileList={Object.values(postData.images)}
               onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.image)}
               onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.image)}
+              beforeUpload = {(cloneList, showFileList) => this.props.beforeUpload(cloneList, showFileList, THREAD_TYPE.image)}
             />
           )}
 
@@ -176,13 +204,16 @@ class ThreadCreate extends React.Component {
               onReady={this.props.onVideoReady} />
           )}
           {/* 录音组件 */}
-          {(currentAttachOperation === THREAD_TYPE.voice && !postData.audio.mediaUrl) && (
-            <div className={styles['audio-record']}>
-              <AudioRecord duration={60} onUpload={(blob) => {
-                this.props.handleAudioUpload(blob);
-              }} />
-            </div>
-          )}
+          {(currentAttachOperation === THREAD_TYPE.voice
+            // && Object.keys(postData.audio).length > 0
+            && !postData.audio.mediaUrl)
+            && (
+              <div className={styles['audio-record']}>
+                <AudioRecord duration={60} onUpload={(blob) => {
+                  this.props.handleAudioUpload(blob);
+                }} />
+              </div>
+            )}
 
           {/* 语音组件 */}
           {(Boolean(postData.audio.mediaUrl)) && (
@@ -195,9 +226,11 @@ class ThreadCreate extends React.Component {
           {/* 附件上传组件 */}
           {(currentDefaultOperation === defaultOperation.attach || Object.keys(postData.files).length > 0) && (
             <FileUpload
+              limit={9}
               fileList={Object.values(postData.files)}
               onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.file)}
               onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.file)}
+              beforeUpload = {(cloneList, showFileList) => this.props.beforeUpload(cloneList, showFileList, THREAD_TYPE.file)}
             />
           )}
 
@@ -213,9 +246,13 @@ class ThreadCreate extends React.Component {
             || !!(postData.price || postData.attachmentPrice)
           ) && (
             <MoneyDisplay
+              payTotalMoney={threadPost.payTotalMoney}
+              redTotalMoney={threadPost.redpacketTotalAmount}
               postData={postData}
               setPostData={this.props.setPostData}
               handleSetState={this.props.handleSetState}
+              onAttachClick={this.props.handleAttachClick}
+              onDefaultClick={this.props.handleDefaultIconClick}
             />
           )}
         </div>
@@ -227,7 +264,6 @@ class ThreadCreate extends React.Component {
               <Position
                 lbskey={webConfig.lbs.qqLbsKey}
                 position={postData.position}
-                // onClick={() => this.props.saveDataLocal()}
                 onChange={position => this.props.setPostData({ position })} />
             )}
           </div>
@@ -248,7 +284,7 @@ class ThreadCreate extends React.Component {
           <DefaultToolbar
             postData={postData}
             value={currentDefaultOperation}
-            onClick={item => this.props.handleSetState({ currentDefaultOperation: item.id, emoji: {} })}
+            onClick={item => this.props.handleDefaultIconClick(item)}
             permission={threadExtendPermissions}
             onSubmit={this.props.handleSubmit}>
             {/* 表情 */}
@@ -289,7 +325,18 @@ class ThreadCreate extends React.Component {
         {currentDefaultOperation === defaultOperation.pay && (
           <PostPopup
             list={this.props.paySelectText}
-            onClick={val => this.props.handleSetState({ curPaySelect: val })}
+            onClick={val => {
+              const content = '帖子付费和附件付费不能同时设置';
+              if (postData.price && val === '附件付费') {
+                Toast.error({ content });
+                return false;
+              }
+              if (postData.attachmentPrice && val === '帖子付费') {
+                Toast.error({ content });
+                return false;
+              }
+              this.props.handleSetState({ curPaySelect: val });
+            }}
             cancel={() => this.props.handleSetState({ currentDefaultOperation: '' })}
             visible={currentDefaultOperation === defaultOperation.pay}
           />
@@ -339,14 +386,9 @@ class ThreadCreate extends React.Component {
         {/* 付费设置 */}
         {this.props.curPaySelect && (
           <AllPostPaid
-            exhibition={this.props.curPaySelect}
-            cancle={() => {
+            paidType={this.props.curPaySelect}
+            cancel={() => {
               this.props.handleSetState({ curPaySelect: '', currentDefaultOperation: '' });
-            }}
-            data={{ freeWords, price, attachmentPrice }}
-            confirm={(data) => {
-              console.log(data);
-              this.props.setPostData({ ...data });
             }}
           />
         )}

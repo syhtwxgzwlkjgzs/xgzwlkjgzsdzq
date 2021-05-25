@@ -11,12 +11,12 @@ export default function HOCWeixin(Component) {
       this.state = {
         isWeiXin: false,
       };
-      if (isServer() || !this.props.site.isOpenOffiaccountClose) return;
+      if (isServer() || !this.props.site.isOffiaccountOpen) return;
       // 如果在微信环境内，则直接拉起登录
       if (isWeiXin()) {
         this.state.isWeiXin = true;
-        const redirectEncodeUrl = encodeURIComponent(`${this.props.site.envConfig.COMMOM_BASE_URL}/user/wx-auth`);
-        window.location.href = `https://discuzv3-dev.dnspod.dev/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
+        const redirectEncodeUrl = encodeURIComponent(`${window.location.origin}/user/wx-auth`);
+        window.location.href = `${window.location.origin}/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
       }
     }
 

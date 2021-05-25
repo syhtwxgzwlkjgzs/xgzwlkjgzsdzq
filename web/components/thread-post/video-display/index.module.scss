@@ -41,6 +41,8 @@
 .post-video.pc {
   width: 700px;
   height: 460px;
+  margin-top: 0;
+  margin-left: 0;
   border-radius: $border-radius-small;
   :global {
     .dzq-video {
