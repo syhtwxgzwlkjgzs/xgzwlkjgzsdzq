@@ -2,7 +2,7 @@ import { observable } from 'mobx';
 class IndexStore {
   constructor() {}
 
-  @observable jumpToScrollingPos = -1;
+  @observable home = -1;
 
   @observable search = -1;
 
