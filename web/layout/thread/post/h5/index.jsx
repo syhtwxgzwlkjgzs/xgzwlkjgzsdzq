@@ -33,7 +33,9 @@ import VideoDisplay from '@components/thread-post/video-display';
 import MoneyDisplay from '@components/thread-post/money-display';
 
 function isIOS() {
-  return /ip[honead]{2,4}(?:.*os\s([\w]+)\slike\smac|;\sopera)/i.test(window.navigator.userAgent.toLowerCase());
+  const ua = window.navigator.userAgent.toLowerCase();
+  // 判断是否是ios，或者小米默认浏览器
+  return /ip[honead]{2,4}(?:.*os\s([\w]+)\slike\smac|;\sopera)/i.test(ua) || /miuibrowser/i.test(ua);
 }
 
 @inject('threadPost')
