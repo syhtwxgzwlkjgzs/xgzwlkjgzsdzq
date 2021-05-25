@@ -539,7 +539,9 @@ class ThreadH5Page extends React.Component {
     if (categoryId || typeof categoryId === 'number') {
       this.props.index.refreshHomeData({ categoryIds: [categoryId] });
     }
-    this.props.router.push('/');
+    Taro.redirectTo({
+      url: '/pages/index/index',
+    });
   }
 
   render() {
@@ -590,43 +592,45 @@ class ThreadH5Page extends React.Component {
           scrollIntoView={this.state.toView}
           onScroll={(e) => throttle(this.handleOnScroll(e), 500)}
         >
-          <ShowTop showContent={this.state.showContent} setTop={this.state.setTop}></ShowTop>
-          {/* 帖子内容 */}
-          {isReady ? (
-            <RenderThreadContent
-              store={threadStore}
-              fun={fun}
-              onLikeClick={() => this.onLikeClick()}
-              onOperClick={(type) => this.onOperClick(type)}
-              onCollectionClick={() => this.onCollectionClick()}
-              onShareClick={() => this.onShareClick()}
-              onReportClick={() => this.onReportClick()}
-              onContentClick={() => this.onContentClick()}
-              onRewardClick={() => this.onRewardClick()}
-              onTagClick={() => this.onTagClick()}
-            ></RenderThreadContent>
-          ) : (
-            <LoadingTips type="init"></LoadingTips>
-          )}
+          <View className={layout['view-inner']} >
+            <ShowTop showContent={this.state.showContent} setTop={this.state.setTop}></ShowTop>
+            {/* 帖子内容 */}
+            {isReady ? (
+              <RenderThreadContent
+                store={threadStore}
+                fun={fun}
+                onLikeClick={() => this.onLikeClick()}
+                onOperClick={(type) => this.onOperClick(type)}
+                onCollectionClick={() => this.onCollectionClick()}
+                onShareClick={() => this.onShareClick()}
+                onReportClick={() => this.onReportClick()}
+                onContentClick={() => this.onContentClick()}
+                onRewardClick={() => this.onRewardClick()}
+                onTagClick={() => this.onTagClick()}
+              ></RenderThreadContent>
+            ) : (
+              <LoadingTips type="init"></LoadingTips>
+            )}
 
-          {/* 评论列表 */}
-          {isReady && isApproved && (
-            <View className={`${layout.bottom}`} ref={this.commentDataRef} id='commentId'>
-              {isCommentReady ? (
-                <Fragment>
-                  <RenderCommentList
-                    router={this.props.router}
-                    sort={(flag) => this.onSortChange(flag)}
-                    onEditClick={(comment) => this.onEditClick(comment)}
-                  ></RenderCommentList>
-                  {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
-                  {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
-                </Fragment>
-              ) : (
-                <LoadingTips type="init"></LoadingTips>
-              )}
-            </View>
-          )}
+            {/* 评论列表 */}
+            {isReady && isApproved && (
+              <View className={`${layout.bottom}`} ref={this.commentDataRef} id='commentId'>
+                {isCommentReady ? (
+                  <Fragment>
+                    <RenderCommentList
+                      router={this.props.router}
+                      sort={(flag) => this.onSortChange(flag)}
+                      onEditClick={(comment) => this.onEditClick(comment)}
+                    ></RenderCommentList>
+                    {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
+                    {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
+                  </Fragment>
+                ) : (
+                  <LoadingTips type="init"></LoadingTips>
+                )}
+              </View>
+            )}
+          </View>
         </ScrollView>
 
         {/* 底部操作栏 */}

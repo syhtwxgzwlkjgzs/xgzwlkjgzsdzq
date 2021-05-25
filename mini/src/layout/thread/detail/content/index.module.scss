@@ -28,9 +28,9 @@
 .body {
   margin-top: $margin-6n;
 
-  // > * {
-  //   margin-bottom: $margin-4n;
-  // }
+  > View {
+    margin-bottom: $margin-4n;
+  }
 }
 
 .title {

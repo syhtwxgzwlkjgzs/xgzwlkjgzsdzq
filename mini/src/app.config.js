@@ -14,6 +14,7 @@ const config = {
       pages: [
         '404/index',
         '500/index',
+        'error/index',
         'close/index',
         'join/index',
         'thread/comment/index',
