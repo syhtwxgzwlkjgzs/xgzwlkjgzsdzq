@@ -27,6 +27,10 @@ class MyDocument extends Document {
           ` }} />
           {/* <!--腾讯地图定位组件--> */}
           <script async src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+          <script src="https://pub.idqqimg.com/pc/misc/sentry/raven.min.js" crossorigin="anonymous"></script>
+          <script dangerouslySetInnerHTML={{__html: `
+            window.Raven && Raven.config('https://75fbce6450d711eb93f25254006a1931@sentry.oa.com/sentry/discuz-q').install();
+          `}}/>    
         </Head>
         <body>
           <Main />
