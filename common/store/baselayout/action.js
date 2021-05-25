@@ -22,6 +22,14 @@ class IndexAction extends IndexStore {
   removeJumpingToTop() {
     this.isJumpingToTop = false;
   }
+
+  /**
+   * 设置跳回页面头部
+   */
+   @action
+   setSearch(data) {
+     this.search = data;
+   }
 }
 
 export default IndexAction;

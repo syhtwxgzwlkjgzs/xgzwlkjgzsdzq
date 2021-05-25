@@ -6,7 +6,7 @@
  */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Popup, Input, Button, Icon, ScrollView } from '@discuzq/design';
+import { Popup, Input, Button, Icon, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import DDialog from '@components/dialog';
 import PropTypes from 'prop-types';
@@ -80,6 +80,9 @@ class TopicSelect extends Component {
         pageNum: this.state.pageNum + 1,
         isLastPage: this.state.pageNum * this.state.pageSize > this.props.threadPost.topicTotalCount,
       });
+    } else {
+      Toast.error({ content: ret.msg });
+      return Promise.reject();
     }
   }
 

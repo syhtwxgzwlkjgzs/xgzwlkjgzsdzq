@@ -1,8 +1,8 @@
 import React, { createRef } from 'react';
 import { PullDownRefresh, ScrollView } from '@discuzq/design';
+import { View, Text, Image } from '@tarojs/components'
 
 import styles from './index.module.scss';
-import { View, Text } from '@tarojs/components';
 
 /**
  * 列表组件
@@ -42,7 +42,7 @@ class List extends React.PureComponent {
 
   emptyFunction() {}
 
-  renderView() {
+  renderDiv() {
     return <View />;
   }
 
@@ -55,10 +55,11 @@ class List extends React.PureComponent {
       renderItem,
       onScrollBottom,
       containerClassName,
+      onPullingUp,
       ...props
     } = this.props;
     const { height } = this.state;
-    const { emptyFunction, renderView } = this;
+    const { emptyFunction, renderDiv } = this;
     const composeClassName = `${styles.container} ${containerClassName || styles.list}`;
 
     return (
@@ -69,10 +70,10 @@ class List extends React.PureComponent {
               height={height}
               rowCount={data.length}
               rowData={data}
-              rowRenderer={renderItem || renderView}
-              renderBottom={renderView}
+              rowRenderer={renderItem || renderDiv}
+              renderBottom={renderDiv}
               isRowLoaded={emptyFunction}
-              onPullingUp={emptyFunction}
+              onPullingUp={onPullingUp}
               onScrollBottom={onScrollBottom}
               {...props}
             >

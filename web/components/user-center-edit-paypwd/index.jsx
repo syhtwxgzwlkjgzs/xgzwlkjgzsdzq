@@ -7,6 +7,7 @@ import { withRouter } from 'next/router';
 import HOCFetchSiteData from '../../middleware/HOCFetchSiteData';
 import Router from '@discuzq/sdk/dist/router';
 import GetQueryString from '../../../common/utils/get-query-string';
+import throttle from '@common/utils/thottle.js';
 
 @inject('user')
 @inject('payBox')
@@ -17,6 +18,7 @@ class index extends Component {
     this.state = {
       payPassword: null, // 支付密码
       oldPayPwd: null, // 旧密码
+      isSubmit: false,
     };
   }
 
@@ -24,6 +26,7 @@ class index extends Component {
     this.setState({
       payPassword: null,
       oldPayPwd: null,
+      isSubmit: false
     });
     this.props.payBox.password = null;
   };
@@ -39,7 +42,6 @@ class index extends Component {
   // 点击去到下一步
   goToResetPayPwd = () => {
     const { oldPayPwd } = this.state;
-    console.log(oldPayPwd);
     this.props.payBox.oldPayPwd = oldPayPwd;
     this.props.payBox
       .getPayPwdResetToken()
@@ -63,21 +65,29 @@ class index extends Component {
 
   // 初次设置密码
   handleSetPwd = (e) => {
+    const securityCode = e.target.value.match(/^[0-9]*$/)
+    if (!securityCode) return
     this.setState({
-      payPassword: e.target.value,
+      payPassword: securityCode[0],
     });
   };
 
   // 点击修改旧密码
   handleChangeOldPwd = (e) => {
+    const securityCode = e.target.value.match(/^[0-9]*$/)
+    if (!securityCode) return
     this.setState({
-      oldPayPwd: e.target.value,
+      oldPayPwd: securityCode[0],
     });
   };
 
   // 点击提交
-  handleSubmit = async () => {
-    const { payPassword } = this.state;
+  handleSubmit = throttle(async () => {
+    const { payPassword, isSubmit } = this.state;
+    if (isSubmit) return
+    this.setState({
+      isSubmit: true
+    })
     const { id } = this.props.user;
     this.props.payBox.password = payPassword;
     this.props.payBox
@@ -106,7 +116,7 @@ class index extends Component {
         });
         this.initState();
       });
-  };
+  }, 500);
 
   // 如果没有设置支付密码 显示设置支付密码
   renderSetPayPwd = () => {
@@ -142,7 +152,7 @@ class index extends Component {
   render() {
     const { payPassword, oldPayPwd } = this.state;
     return (
-      <div>
+      <div id={styles.setPayPwdContent}>
         <Header />
         {this.props.user?.canWalletPay ? this.renderCanPayPwd() : this.renderSetPayPwd()}
         <div className={styles.bottom}>
@@ -151,11 +161,11 @@ class index extends Component {
               下一步
             </Button>
           ) : (
-        <Button full disabled={!payPassword || payPassword.length !== 6} onClick={this.handleSubmit} type={'primary'} className={styles.btn}>
-          提交
+            <Button full disabled={!payPassword || payPassword.length !== 6} onClick={this.handleSubmit} type={'primary'} className={styles.btn}>
+              提交
             </Button>
           )}
-      </div>
+        </div>
       </div >
     );
   }

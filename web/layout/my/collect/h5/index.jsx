@@ -35,10 +35,7 @@ class Index extends React.Component {
                 {
                   pageData?.map((item, index) => (
                     <div className={styles.listItem} key={index}>
-                      <ThreadContent data={item}/>
-                      <div className={styles.listItemBox}>
-                        <Icon className={styles.listItemIcon} name='CollectOutlined' size={20} />
-                      </div>
+                      <ThreadContent data={item} collect={'collect'}/>
                     </div>
                   ))
                 }

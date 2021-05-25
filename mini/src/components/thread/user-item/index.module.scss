@@ -6,16 +6,9 @@
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  padding: 8px 16px;
-  &:before {
-    position: absolute;
-    height: 1px;
-    content: '';
-    right: 16px;
-    left: 16px;
-    bottom: 0;
-    background-color: $body-bg-color;
-  }
+  padding: $padding-4n $padding-4n;
+  background-color: $white;
+
   .wrapper {
     display: flex;
     align-items: center;
@@ -23,53 +16,86 @@
 
   .header {
     position: relative;
+    height: 38px;
     margin-right: 12px;
-    .img {
-      display: inline-block;
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      line-height: 38px;
-      text-align: center;
-      font-size: 20px;
-      background: $body-bg-color;
-      overflow: hidden;
-      image {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-      }
-    }
+    box-sizing: border-box;
+    // .img {
+    //   display: inline-block;
+    //   width: 38);
+    //   height: 38);
+    //   border-radius: 19);
+    //   line-height: 38);
+    //   text-align: center;
+    //   font-size: 20);
+    //   background: $body-bg-color;
+    // }
     .icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       position: absolute;
-      bottom: -5px;
-      right: -5px;
-      border-radius: 10px;
+      bottom: -2px;
+      right: -4px;
+      border-radius: 50%;
       height: 20px;
       width: 20px;
       border: var(--color-white) solid 1px;
       text-align: center;
       line-height: 20px;
       color: var(--color-white);
+      &.like {
+        background-color: $error-color;
+      }
+      &.heart {
+        background-color: $warn-color;
+      }
     }
   }
 
   .content {
     display: flex;
     flex-direction: column;
-    font-size: 14px;
+    justify-content: center;
+    font-size: $font-size-primary;
     .title {
       color: var(--color-text-primary);
-      line-height: 18px;
+      line-height: 20px;
     }
     .subTitle {
       color: var(--color-text-secondary);
-      line-height: 18px;
+      line-height: 17px;
+      font-size: $font-size-small;
     }
   }
 
   .footer {
-    font-size: 12px;
+    font-size: $font-size-label;
     color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    .label {
+      margin-right: 7;
+    }
+  }
+  .button {
+    height: 25px;
+    width: 72px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+}
+
+.bottomLine {
+  &:after {
+    content: ' ';
+    position: absolute;
+    right: 16px;
+    left: 16px;
+    height: 1px;
+    bottom: 0;
+    background-color: rgba(238, 238, 238, 0.75);
   }
 }

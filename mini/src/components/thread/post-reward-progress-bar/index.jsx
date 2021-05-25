@@ -2,8 +2,7 @@ import React, { useMemo } from 'react';
 import { Progress } from '@discuzq/design';
 
 import styles from './index.module.scss';
-import { View, Text, Image } from '@tarojs/components';
-
+import { View, Text, Image } from '@tarojs/components'
 /**
  * 帖子奖励进度条
  * @prop {POST_TYPE} type 类型
@@ -11,7 +10,7 @@ import { View, Text, Image } from '@tarojs/components';
  * @prop {string | number} received 红包帖子：已领取数量 , 赏金帖子：已发放多少元
  */
 
-const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0 }) => {
+const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0, condition = 0 }) => {
   const percent = useMemo(() => (received > 0 ? (received / (received + remaining)) * 100 : 0), [remaining, received]);
   let texts = {};
   let className = '';
@@ -25,7 +24,7 @@ const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0 }) => {
         </>
       ),
       received: `已领取${received}个`,
-      receive: '评论领红包',
+      receive: condition ? '集赞领红包' : '评论领红包',
     };
     className = styles.redPack;
     progressTheme = 'danger';
@@ -47,13 +46,18 @@ const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0 }) => {
       <Progress
         type="circle"
         percent={percent}
-        className={styles.progress}
         theme={progressTheme}
         lineWidth={12}
+        className={styles.progress}
         isShowText={false}
+        lineCap="round"
       >
         <View className={styles.content}>
-          <Image className={styles.icon} />
+          {type === POST_TYPE.RED_PACK ? (
+            <Image className={styles.icon} src="/dzq-img/redpacket-mini.png" />
+          ) : (
+            <Image className={styles.icon} src="/dzq-img/coin.png" />
+          )}
           <View className={styles.remaining}>{texts.remaining}</View>
           <View className={styles.received}>{texts.received}</View>
           {texts.receive && <View className={styles.receive}>{texts.receive}</View>}

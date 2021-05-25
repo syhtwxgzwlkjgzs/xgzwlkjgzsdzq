@@ -2,37 +2,41 @@
 
 .container {
   width: 100%;
-  padding: 16px;
+  padding: $padding-4n;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   box-sizing: border-box;
   border-radius: 5px;
-  background: var(--background-color-text);
+  background: $body-bg-color;
   .image {
     flex: none;
     width: 82px;
     height: 82px;
     object-fit: cover;
+    border-radius: 5px;
     &.empty{
       background-color: var(--mask-background-color);
     }
   }
   .content {
     flex: 1;
-    margin-left: 16px;
+    margin-left: $padding-4n;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     .title {
       font-weight: normal;
-      font-size: 14px;
-      line-height: 22px;
+      font-size: $font-size-primary;
+      line-height: $font-line-height-primary;
       text-align: left;
       color: var(--color-text-regular);
-      height: 44px;
+      max-height: 44px;
       overflow: hidden;
     }
     .amount {
-      margin-top: 8px;
-      font-weight: normal;
+      margin-top: $padding-2n;
+      font-weight: 600;
       font-size: 20px;
       line-height: 30px;
       text-align: left;

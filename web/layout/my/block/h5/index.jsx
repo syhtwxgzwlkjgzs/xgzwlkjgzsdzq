@@ -17,8 +17,8 @@ class Index extends React.Component {
   }
   render() {
     const { search } = this.props;
-    const { pageData = [], currentPage, totalPage } = search.users;
-   
+    const { pageData = [], currentPage, totalPage } = search.users || {};
+
     return (
       <div className={styles.shieldBox}>
         <Header />
@@ -37,7 +37,7 @@ class Index extends React.Component {
                     <div className={styles.haieldImg} key={index}>
                       <div className={styles.haieldImgBox}>
                         <div className={styles.haieldImgHead}>
-                          <Avatar 
+                          <Avatar
                             className={styles.img}
                             image={item.avatar}
                             name={item.nickname}
