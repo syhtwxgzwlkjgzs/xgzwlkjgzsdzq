@@ -28,8 +28,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
   const downloader = new Downloader();
 
   const getFileType = (filepath) => {
-    const idx = filepath.lastIndexOf('.');
-    return filepath.substr(idx + 1);
+    return filepath.substr(filepath.lastIndexOf('.') + 1);
   }
 
   const onDownLoad = (url) => {
