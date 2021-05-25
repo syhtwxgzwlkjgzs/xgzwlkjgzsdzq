@@ -2,7 +2,7 @@ import Router from '@discuzq/sdk/dist/router';
 import typeofFn from '@common/utils/typeof';
 
 export default function csrRouterRedirect() {
-    if ( process.env.DISCUZ_RUN === 'static') {
+    if (process.env.DISCUZ_RUN === 'static') {
         let routerMap = process.env.ROUTER_MAP;
         if ( typeofFn.isString(routerMap) ) {
           routerMap = JSON.parse(routerMap);
@@ -39,6 +39,7 @@ export default function csrRouterRedirect() {
                     res.push(pathArr[i]);
                 } else {
                     Router.redirect({ url: `/404` });
+                    return;
                 }
             }
         }
