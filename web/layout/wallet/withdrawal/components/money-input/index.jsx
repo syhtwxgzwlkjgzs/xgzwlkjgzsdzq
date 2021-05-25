@@ -4,7 +4,7 @@ import { Input } from '@discuzq/design';
 import styles from './index.module.scss';
 
 const MoneyInput = (props) => {
-  const { getmoneyNum, visible } = props;
+  const { getmoneyNum, visible,minmoney=1 } = props;
 
   const [value, setValue] = useState('');
 
@@ -29,7 +29,7 @@ const MoneyInput = (props) => {
           mode='number'
         />
      </div>
-     <div className={styles.leastMoney}>提现金额最低1元</div>
+     <div className={styles.leastMoney}>提现金额最低{minmoney}元</div>
     </div>);
 };
 

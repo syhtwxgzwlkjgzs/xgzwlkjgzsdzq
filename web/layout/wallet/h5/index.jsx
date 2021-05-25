@@ -1,16 +1,18 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-
-import layout from './layout.module.scss';
-
+import { Tabs, Icon, Button, Toast } from '@discuzq/design';
 import WalletInfo from './components/wallet-info/index';
 import IncomeList from './components/income-list/index';
 import PayList from './components/pay-list/index';
 import WithdrawalList from './components/withdrawal-list/index';
 import NoMore from './components/no-more';
+import classNames from 'classnames';
+import FilterView from './components/all-state-popup';
+import DatePickers from '@components/thread/date-picker';
+import { formatDate } from '@common/utils/format-date.js';
 
-import { Tabs, Icon, Button } from '@discuzq/design';
+import layout from './layout.module.scss';
 
 
 @inject('wallet')
@@ -21,6 +23,9 @@ class WalletH5Page extends React.Component {
 
     this.state = {
       tabsType: 'income',
+      visibleshow: false,
+      consumptionTimeshow: false,
+      consumptionTime: '',
     };
   }
 
@@ -43,16 +48,57 @@ class WalletH5Page extends React.Component {
   onSelectStatus = (type) => {
     if (type === 'select') {
       console.log('选择时间');
+      this.setState({ consumptionTimeshow: true })
     } else {
       console.log('点击了全部状态');
+      this.setState({ visibleshow: true })
     }
   }
+  // 关闭全部状态的弹框
+  handleStateCancel = () => {
+    this.setState({ visibleshow: false });
+  }
+  // 点击确定后对时间选择的弹框的操作
+  handleMoneyTimeCancel = (time) => {
+    const gapTime = new Date(time).getTime() - new Date().getTime();
+    if (gapTime < 0) {
+      this.setState({ consumptionTime: formatDate(time, 'yyyy年MM月') });
+      this.setState({ consumptionTimeshow: false });
+    } else {
+      Toast.warning({ content: '时间要小于当前时间' });
+      return;
+    }
 
+  }
   render() {
     const tabList = [
-      ['income', '收入明细', null, { name: 'RedPacketOutlined' }],
-      ['pay', '支出明细', null, { name: 'RedPacketOutlined' }],
-      ['withdrawal', '提现记录', null, { name: 'RedPacketOutlined' }],
+      ['income', <div className={layout.tagbox}>
+        <Icon
+          name='TicklerOutlined'
+          className={classNames(layout.tag, {
+            [layout['tag-active-green']]: this.state.tabsType != 'income'
+          })}
+        />
+        收入明细
+        </div>, null, { name: 'TicklerOutlined' }],
+      ['pay', <div className={layout.tagbox}>
+        <Icon
+          name='WallOutlined'
+          className={classNames(layout.tag, {
+            [layout['tag-active-blue']]: this.state.tabsType != 'pay'
+          })}
+        />
+        支出明细
+        </div>, null, { name: 'WallOutlined' }],
+      ['withdrawal', <div className={layout.tagbox}>
+        <Icon
+          name='TransferOutOutlined'
+          className={classNames(layout.tag, {
+            [layout['tag-active-red']]: this.state.tabsType != 'withdrawal'
+          })}
+        />
+        提现记录
+     </div>, null, { name: 'TransferOutOutlined' }],
     ];
 
     // 伪造的数据incomeData、payData、withdrawalData
@@ -141,33 +187,45 @@ class WalletH5Page extends React.Component {
       },
     ];
 
+    const data = [
+      { title: '所有', id: 1 },
+      { title: '视频', id: 2 },
+      { title: '图片', id: 3 },
+      { title: '语音', id: 4 },
+      { title: '商品', id: 5 },
+      { title: '红包', id: 6 },
+      { title: '悬赏', id: 7 },
+      { title: '悬赏问答', id: 8 },
+    ];
+
     return (
-        <div className={layout.container}>
-          <div className={layout.scroll}>
-            <div className={layout.header}>
-              <WalletInfo
-                walletData={this.props.walletData}
-                webPageType='h5'
-                onFrozenAmountClick={() => this.onFrozenAmountClick()}
-                >
-              </WalletInfo>
+      <div className={layout.container}>
+        <div className={layout.scroll}>
+          <div className={layout.header}>
+            <WalletInfo
+              walletData={this.props.walletData}
+              webPageType='h5'
+              onFrozenAmountClick={() => this.onFrozenAmountClick()}
+            >
+            </WalletInfo>
+          </div>
+          <div className={layout.choiceTime}>
+            <div className={layout.status} onClick={() => this.onSelectStatus('all')}>
+              <span className={layout.text}>全部状态</span>
+              <Icon name='UnderOutlined' size='6' className={layout.icon}></Icon>
             </div>
-            <div className={layout.choiceTime}>
-              <div className={layout.status} onClick={() => this.onSelectStatus('all')}>
-                <span className={layout.text}>全部状态</span>
-                <Icon name='UnderOutlined' size='6' className={layout.icon}></Icon>
-              </div>
-              <div className={layout.status} onClick={() => this.onSelectStatus('select')}>
-                <span className={layout.text}>2012年4月</span>
-                <Icon name='UnderOutlined' size='6' className={layout.icon}></Icon>
-              </div>
+            <div className={layout.status} onClick={() => this.onSelectStatus('select')}>
+              <span className={layout.text}>{this.state.consumptionTime || formatDate(new Date(), 'yyyy年MM月')}</span>
+              <Icon name='UnderOutlined' size='6' className={layout.icon}></Icon>
             </div>
-            <div className={layout.tabs}>
-              <Tabs
-                scrollable={true}
-                className={layout.tabList}
-                onActive={val => this.onTabActive(val)}
-              >
+          </div>
+          <div className={layout.tabs}>
+
+            <Tabs
+              scrollable={true}
+              className={layout.tabList}
+              onActive={val => this.onTabActive(val)}
+            >
               {tabList.map(([id, label, badge, icon]) => (
                 <Tabs.TabPanel
                   key={id}
@@ -190,13 +248,36 @@ class WalletH5Page extends React.Component {
                   <NoMore></NoMore>
                 </Tabs.TabPanel>
               ))}
-              </Tabs>
-            </div>
-          </div>
-          <div className={layout.footer}>
-            <Button className={layout.button} onClick={this.toWithrawal}>提现</Button>
+            </Tabs>
           </div>
         </div>
+        <div className={layout.footer}>
+          <Button className={layout.button} onClick={this.toWithrawal}>提现</Button>
+        </div>
+        <FilterView
+          data={data}
+          visible={this.state.visibleshow}
+          handleCancel={() => { this.handleStateCancel() }}
+          handleSubmit={(id) => { console.log(id); }}
+        />
+        <DatePickers
+          isOpen={this.state.consumptionTimeshow}
+          onCancels={() => { this.setState({ consumptionTimeshow: !this.state.consumptionTimeshow }) }}
+          onSelects={(time) => { this.handleMoneyTimeCancel(time) }}
+          dateConfig={{
+            year: {
+              format: 'YYYY',
+              caption: 'Year',
+              step: 1,
+            },
+            month: {
+              format: 'MM',
+              caption: 'Mon',
+              step: 1,
+            }
+          }}
+        />
+      </div>
     );
   }
 }
