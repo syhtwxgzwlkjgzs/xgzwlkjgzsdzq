@@ -1,5 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import Header from '@components/header';
 import List from '@components/list';
@@ -14,11 +15,17 @@ import Avatar from '@components/avatar';
 class Index extends React.Component {
   constructor(props) {
     super(props);
+    this.containerRef = React.createRef(null);
   }
+
+  // 点击头像去到他人页面
+  handleOnClick = (item) => {
+    Router.push({ url: `/user/${item.userId}` })
+  }
+
   render() {
     const { search } = this.props;
     const { pageData = [], currentPage, totalPage } = search.users || {};
-
     return (
       <div className={styles.shieldBox}>
         <Header />
@@ -35,7 +42,7 @@ class Index extends React.Component {
                 {
                   pageData.map((item, index) => (
                     <div className={styles.haieldImg} key={index}>
-                      <div className={styles.haieldImgBox}>
+                      <div className={styles.haieldImgBox} onClick={() => { this.handleOnClick(item) }}>
                         <div className={styles.haieldImgHead}>
                           <Avatar
                             className={styles.img}
@@ -45,9 +52,9 @@ class Index extends React.Component {
                           />
                           <p className={styles.haieldName}>{item.nickname}</p>
                         </div>
-                        <div className={styles.haieldName}>
+                        {/* <div className={styles.haieldName}>
                           <Button className={styles.haieldButton}>解除屏蔽</Button>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   ))

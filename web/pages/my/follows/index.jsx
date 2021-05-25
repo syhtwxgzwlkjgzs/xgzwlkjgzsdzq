@@ -71,7 +71,7 @@ class index extends Component {
   };
 
   onContainerClick = ({ id }) => {
-    Router.push({ url: `/my/others?isOtherPerson=${true}&otherId=${id}` });
+    Router.push({ url: `/user/${id}` });
   };
 
   // 分割线

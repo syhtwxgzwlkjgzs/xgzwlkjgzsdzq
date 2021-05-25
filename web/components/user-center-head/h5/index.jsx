@@ -119,7 +119,7 @@ class index extends Component {
 
   render() {
     const { targetUser } = this.props.user;
-    const user = this.props.isOtherPerson ? targetUser || {} : this.props.user;
+    const user = this.props.router.query?.id ? targetUser || {} : this.props.user;
     return (
       <div className={styles.h5box}>
         {/* 上 */}
@@ -160,23 +160,24 @@ class index extends Component {
                   this.handleChangeAttention(user.follow);
                 }}
                 type="primary"
-                className={user.follow === 2 && styles.userFriendsBtn}
+                className={`${styles.btn} ${user.follow === 2 && styles.userFriendsBtn}`}
+                full
               >
                 <Icon name={this.renderFollowedStatus(user.follow).icon} />
                 <span className={styles.userBtnText}>{this.renderFollowedStatus(user.follow).text}</span>
               </Button>
-              <Button onClick={this.handleMessage}>
+              <Button full className={styles.btn} onClick={this.handleMessage}>
                 <Icon name="NewsOutlined" />
                 <span className={styles.userBtnText}>发私信</span>
               </Button>
             </>
           ) : (
             <>
-              <Button onClick={this.goToMyEditInfo} type="primary">
+              <Button full className={styles.btn} onClick={this.goToMyEditInfo} type="primary">
                 <Icon name="CompileOutlined" />
                 <span className={styles.userBtnText}>编辑资料</span>
               </Button>
-              <Button onClick={this.logout}>
+              <Button full className={styles.btn} onClick={this.logout}>
                 <Icon name="PoweroffOutlined" />
                 <span className={styles.userBtnText}>退出登录</span>
               </Button>
