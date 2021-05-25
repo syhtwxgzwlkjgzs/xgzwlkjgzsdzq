@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import { Tabs, Icon, Button } from '@discuzq/design';
+import { Tabs, Icon, Button, Toast } from '@discuzq/design';
 import WalletInfo from './components/wallet-info/index';
 import IncomeList from './components/income-list/index';
 import PayList from './components/pay-list/index';
@@ -9,6 +9,8 @@ import WithdrawalList from './components/withdrawal-list/index';
 import NoMore from './components/no-more';
 import classNames from 'classnames';
 import FilterView from './components/all-state-popup';
+import DatePickers from '@components/thread/date-picker';
+import { formatDate } from '@common/utils/format-date.js';
 
 import layout from './layout.module.scss';
 
@@ -22,6 +24,8 @@ class WalletH5Page extends React.Component {
     this.state = {
       tabsType: 'income',
       visibleshow: false,
+      consumptionTimeshow: false,
+      consumptionTime: '',
     };
   }
 
@@ -44,14 +48,26 @@ class WalletH5Page extends React.Component {
   onSelectStatus = (type) => {
     if (type === 'select') {
       console.log('选择时间');
+      this.setState({ consumptionTimeshow: true })
     } else {
       console.log('点击了全部状态');
       this.setState({ visibleshow: true })
     }
   }
   // 关闭全部状态的弹框
-  handleCancel = () => {
-    this.setState({ visibleshow: false })
+  handleStateCancel = () => {
+    this.setState({ visibleshow: false });
+  }
+  // 点击确定后对时间选择的弹框的操作
+  handleMoneyTimeCancel = (time) => {
+    const gapTime = new Date(time).getTime() - new Date().getTime();
+    if (gapTime < 0) {
+      this.setState({ consumptionTime: formatDate(time, 'yyyy年MM月') });
+      this.setState({ consumptionTimeshow: false });
+    } else {
+      Toast.warning({ content: '时间要小于当前时间' });
+      return;
+    }
 
   }
   render() {
@@ -181,6 +197,7 @@ class WalletH5Page extends React.Component {
       { title: '悬赏', id: 7 },
       { title: '悬赏问答', id: 8 },
     ];
+
     return (
       <div className={layout.container}>
         <div className={layout.scroll}>
@@ -198,7 +215,7 @@ class WalletH5Page extends React.Component {
               <Icon name='UnderOutlined' size='6' className={layout.icon}></Icon>
             </div>
             <div className={layout.status} onClick={() => this.onSelectStatus('select')}>
-              <span className={layout.text}>2012年4月</span>
+              <span className={layout.text}>{this.state.consumptionTime || formatDate(new Date(), 'yyyy年MM月')}</span>
               <Icon name='UnderOutlined' size='6' className={layout.icon}></Icon>
             </div>
           </div>
@@ -240,8 +257,25 @@ class WalletH5Page extends React.Component {
         <FilterView
           data={data}
           visible={this.state.visibleshow}
-          handleCancel={() => { this.handleCancel() }}
+          handleCancel={() => { this.handleStateCancel() }}
           handleSubmit={(id) => { console.log(id); }}
+        />
+        <DatePickers
+          isOpen={this.state.consumptionTimeshow}
+          onCancels={() => { this.setState({ consumptionTimeshow: !this.state.consumptionTimeshow }) }}
+          onSelects={(time) => { this.handleMoneyTimeCancel(time) }}
+          dateConfig={{
+            year: {
+              format: 'YYYY',
+              caption: 'Year',
+              step: 1,
+            },
+            month: {
+              format: 'MM',
+              caption: 'Mon',
+              step: 1,
+            }
+          }}
         />
       </div>
     );
