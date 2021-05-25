@@ -33,6 +33,17 @@
   }
 }
 
+.view-inner{
+  width: 100%;
+  min-height: calc(100vh - 50px);
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
 .footerContainer {
   height: 50px;
   width: 100%;
