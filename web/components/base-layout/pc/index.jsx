@@ -101,7 +101,7 @@ const BaseLayout = (props) => {
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
 
-        <List {...props} className={styles.list} wrapperClass={styles.wrapper}>
+        <List {...props} immediateCheck={false} className={styles.list} wrapperClass={styles.wrapper}>
           {
             showLeft && (
               <div className={styles.left}>

@@ -7,6 +7,8 @@ import styles from './index.module.scss';
 import TopNew from './components/top-news';
 import FilterView from './components/filter-view';
 import BaseLayout from '@components/base-layout';
+import { throttle } from '@common/utils/throttle-debounce.js'
+
 
 @inject('site')
 @inject('user')
@@ -28,7 +30,7 @@ class IndexH5Page extends React.Component {
     };
     this.listRef = createRef();
     // 用于获取顶部视图的高度
-    this.headerRef = createRef(null)
+    this.headerRef = createRef(null);
     this.renderItem = this.renderItem.bind(this);
   }
 
@@ -64,9 +66,23 @@ class IndexH5Page extends React.Component {
     });
   };
 
+  // 点击底部tabBar
+  onClickTabBar = (data, index) => {
+    if (index !== 0) {
+      return
+    }
+    const { dispatch = () => {} } = this.props;
+    const { filter } = this.state;
+    const requestFilter = Object.assign({}, filter);
+    requestFilter.categoryids = this.resetCategoryids(requestFilter.categoryids[0]);
+    dispatch('click-filter', requestFilter);
+  }
+
   onClickTab = (id = '') => {
     const { dispatch = () => {} } = this.props;
     const currentIndex = this.resetCategoryids(id);
+
+    this.props.baselayout.setJumpingToTop();
     dispatch('click-filter', { categoryids: [currentIndex], sequence: id === 'default' ? 1 : 0 });
 
     this.setState({
@@ -83,14 +99,14 @@ class IndexH5Page extends React.Component {
   onClickFilter = ({ categoryids, types, essence, sequence }) => {
     const { dispatch = () => {} } = this.props;
     const requestCategoryids = categoryids.slice();
-    requestCategoryids[0] =      requestCategoryids[0] === 'all' || requestCategoryids[0] === 'default' ? '' : requestCategoryids[0];
+    requestCategoryids[0] = (requestCategoryids[0] === 'all' || requestCategoryids[0] === 'default') ? [] : requestCategoryids[0];
     dispatch('click-filter', { categoryids: requestCategoryids, types, essence, sequence });
     this.setState({
       filter: {
         categoryids,
         types,
         essence,
-        sequence: categoryids[0] === 'default' ? 1 : 0,
+        sequence,
       },
       currentIndex: categoryids[0],
       visible: false,
@@ -110,12 +126,11 @@ class IndexH5Page extends React.Component {
     return dispatch('moreData', requestFilter);
   };
 
-  onScroll = ({ scrollTop } = {}) => {
+  handleScroll = throttle(({ scrollTop = 0 } = {}) => {
     const { height = 180 } = this.headerRef.current?.state || {}
     this.setState({ fixedTab: scrollTop > height })
-
     this.props.baselayout.jumpToScrollingPos = scrollTop;
-  }
+  }, 0)
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
   handleCategories = () => {
@@ -134,7 +149,7 @@ class IndexH5Page extends React.Component {
 
     // 默认功能的开启
     if (this.checkIsOpenDefaultTab()) {
-      tmpCategories.unshift({ name: '默认分类', pid: 'default', children: [] });
+      tmpCategories.unshift({ name: '默认', pid: 'default', children: [] });
     }
     return tmpCategories;
   };
@@ -210,10 +225,11 @@ class IndexH5Page extends React.Component {
         onRefresh={this.onRefresh}
         noMore={currentPage >= totalPage}
         isFinished={isFinished}
-        onScroll={this.onScroll}
+        onScroll={this.handleScroll}
         curr='home'
         pageName='home'
         preload={1000}
+        onClickTabBar={this.onClickTabBar}
       >
         <HomeHeader ref={this.headerRef} />
 

@@ -45,6 +45,7 @@ class PostPage extends React.Component {
       count: 0,
       draftShow: false,
       isTitleShow: true,
+      jumpLink: '', // 退出页面时的跳转路径,默认返回上一页
     };
     this.captcha = ''; // 腾讯云验证码实例
     this.ticket = ''; // 腾讯云验证码返回票据
@@ -376,9 +377,7 @@ class PostPage extends React.Component {
       this.setPostData({ contentText: htmlString });
       if (!this.props.threadPost.postData.title) {
         if (!this.state.isTitleShow || this.props.site.platform === 'pc' || !event) return;
-        this.setState({ isTitleShow: false }, () => {
-          vditor.blur();
-        });
+        this.setState({ isTitleShow: false });
       }
     }
   };
@@ -530,39 +529,50 @@ class PostPage extends React.Component {
           this.props.index.updateAssignThreadAllData(threadId, data);
         // 添加帖子到首页数据
         } else {
-          this.props.index.addThread(data);
+          const { categoryids = [] } = this.props.index?.filter || {}
+          const { categoryId = '' } = data
+          // 首页如果是全部或者是当前分类，则执行数据添加操作
+          if (!categoryids.length || categoryids.indexOf(categoryId) !== -1) {
+            this.props.index.addThread(data);
+          }
         }
         this.props.router.replace(`/thread/${data.threadId}`);
-      } else Router.back();
+      } else {
+        const { jumpLink } = this.state;
+        jumpLink ? Router.push({ url: jumpLink }) : Router.back();
+
+      };
       return true;
     }
     Toast.error({ content: msg });
   }
 
   // 保存草稿
-  handleDraft = async (val) => {
-    if (this.props.site.platform === 'pc') {
+  handleDraft = (val) => {
+    const { site: { isPC }, threadPost: { resetPostData } } = this.props;
+    this.setState({ draftShow: false });
+    
+    if (isPC) {
       this.setPostData({ draft: 1 });
-      await this.handleSubmit(true);
+      this.handleSubmit(true);
       return;
     }
-    this.setState({ draftShow: false });
-    let flag = true;
+
     if (val === '保存草稿') {
       this.setPostData({ draft: 1 });
-      flag = await this.handleSubmit(true);
+      this.handleSubmit(true);
     }
-    if (val && flag) {
-      this.props.threadPost.resetPostData();
-      Router.back();
+    if (val === '不保存草稿') {
+      resetPostData();
+      const { jumpLink } = this.state;
+      jumpLink ? Router.push({ url: jumpLink }) : Router.back();
     }
-  };
+  }
 
   render() {
-    const { site } = this.props;
-    const { platform } = site;
+    const { isPC } = this.props.site;
 
-    if (platform === 'pc') {
+    if (isPC) {
       return (
         <IndexPCPage
           setPostData={data => this.setPostData(data)}
@@ -605,6 +615,7 @@ class PostPage extends React.Component {
         handleVditorFocus={this.handleVditorFocus}
         handleVditorInit={this.handleVditorInit}
         onVideoReady={this.onVideoReady}
+        handleDraft={this.handleDraft}
         {...this.state}
       />
     );

@@ -1,19 +1,38 @@
 @import '@common/styles/index.scss';
 
 .page{
-    height: 100vh;
-    width: 100%;
+    width: 1100px;
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-direction: column;
-    .main{
-        color: var(--color-text-primary);
-        font-size: rem(36);
+    justify-content: center;
+    margin: rem(21) auto 0;
+    background: $white;
+    .img{
+        width: rem(234);
+        height: rem(156);
     }
-    .sub{
-        color: var(--color-text-primary);
-        font-size: rem($font-size-large);
-        margin-top: rem($margin-4n);
+    .text{
+        padding: 0 rem(40);
+        margin-top: rem(24);
+        font-weight: normal;
+        font-size: rem($font-size-primary);
+        line-height: rem($font-line-height-primary);
+        text-align: center;
+        color: var(--color-text-secondary);
     }
+    .btn{
+        margin-top: rem(40);
+        width: 100%;
+        height: rem(42);
+        width: rem(343);
+    }
+}
+.text{
+    margin: rem(24) 0;
+    font-weight: normal;
+    font-size: rem(12);
+    line-height: rem(22);
+    color: $text-color-placeholder;
+    text-align: center;
 }

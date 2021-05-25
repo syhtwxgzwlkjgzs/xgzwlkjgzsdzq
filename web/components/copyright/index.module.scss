@@ -6,6 +6,20 @@
   &.center {
     text-align: center;
   }
+  &.line{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    .text {
+      font-size: rem($font-size-label);
+      line-height: rem($font-line-height-small);
+      color: $text-color-secondary;
+      &:not(:last-child){
+        margin-right: rem(20);
+      }
+    }
+  }
   .text {
     font-size: rem($font-size-label);
     line-height: rem($font-line-height-small);

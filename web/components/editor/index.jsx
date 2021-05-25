@@ -22,7 +22,6 @@ export default function DVditor(props) {
 
   const [isFocus, setIsFocus] = useState(false);
   const [vditor, setVditor] = useState(null);
-  const [range, setRange] = useState(null);
 
   const html2mdSetValue = (text) => {
     try {
@@ -30,21 +29,6 @@ export default function DVditor(props) {
       vditor.setValue && vditor.setValue(md.substr(0, md.length - 1));
     } catch (error) {
       console.error('html2mdSetValue', error);
-    }
-  };
-
-  const getRange = () => {
-    const selection = window.getSelection();
-    let range = null;
-    if (selection.rangeCount > 0) range = selection.getRangeAt(0);
-    return range;
-  };
-
-  const setCursorPosition = () => {
-    if (range && !pc) {
-      const selection = window.getSelection();
-      selection.removeAllRanges();
-      selection.addRange(range);
     }
   };
 
@@ -81,7 +65,7 @@ export default function DVditor(props) {
   useEffect(() => {
     if (atList && !atList.length) return;
     const users = atList.map((item) => {
-      if (item) return ` @${item} `;
+      if (item) return `&nbsp;@${item}&nbsp;`;
       return '';
     });
     if (users.length) {
@@ -93,7 +77,7 @@ export default function DVditor(props) {
   useEffect(() => {
     if (topic) {
       // setCursorPosition();
-      vditor.insertValue && vditor.insertValue(` ${topic} `);
+      vditor.insertValue && vditor.insertValue(`&nbsp;${topic}&nbsp;`);
     }
   }, [topic]);
 
@@ -152,8 +136,11 @@ export default function DVditor(props) {
      * ios 和mac safari，在每一个事件中都记住上次光标的位置
      * 避免blur后vditor.insertValue的位置不正确
      * **/
-    // todo 事件需要throttle或者debounce??? delay时间控制不好可能导致记录不准确
 
+    if (/Chrome/i.test(navigator.userAgent)
+      || !/(iPhone|Safari|Mac OS)/i.test(navigator.userAgent)) return;
+
+    // todo 事件需要throttle或者debounce??? delay时间控制不好可能导致记录不准确
     const { vditor } = editor;
     const editorElement = vditor[vditor.currentMode]?.element;
     // todo 需要添加drag事件吗
@@ -189,14 +176,10 @@ export default function DVditor(props) {
         },
         input: () => {
           setIsFocus(false);
-          const range = getRange();
-          if (range) setRange(range);
           onInput(editor);
           onChange(editor);
         },
         blur: () => {
-          const range = getRange();
-          if (range) setRange(range);
           // 防止粘贴数据时没有更新内容
           onChange(editor);
           // 兼容Android的操作栏渲染
@@ -227,9 +210,6 @@ export default function DVditor(props) {
         },
         bubbleToolbar: pc ? [...baseToolbar] : [],
         icon: '',
-        preview: {
-          theme: '',
-        },
       },
     );
 

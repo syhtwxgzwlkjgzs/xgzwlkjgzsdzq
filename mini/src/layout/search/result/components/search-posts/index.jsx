@@ -1,9 +1,9 @@
 import React from 'react';
+import { View, Text } from '@tarojs/components';
 
 import ThreadContent from '@components/thread';
 
 import styles from './index.module.scss';
-import { View, Text } from '@tarojs/components';
 
 /**
  * 帖子搜索结果
@@ -12,8 +12,11 @@ import { View, Text } from '@tarojs/components';
  */
 const SearchPosts = ({ data, onItemClick }) => (
   <View className={styles.list}>
-    {data.map((item, index, arr) => (
-      <ThreadContent key={index} className={styles.listItem} data={item} onClick={onItemClick} />
+    {data.map((item, index) => (
+        <View key={index}>
+          <ThreadContent showBottomStyle={false} className={styles.listItem} data={item} key={index} />
+          <View className={styles.hr}></View>
+        </View>
     ))}
   </View>
 );

@@ -6,7 +6,7 @@ import { get } from '../../utils/get';
 
 const USER_STATUS_MAP = {
   '-4009': '您的账号已禁用',
-  2: '您的账号注册正在审核中，请耐心等待',
+  2: '恭喜您！已成功登录。先随便逛逛等待账号审核通过！',
   '-4007': '您的账号注册审核不通过',
 };
 
@@ -18,6 +18,7 @@ export default class commonLoginStore {
     @observable needToBindMini = false;
     @observable sessionToken = '';
     @observable statusMessage = '';
+    @observable statusCountDown = 5;
     @observable nickName = '';
     @observable avatarUrl = '';
     @observable captchaTicket = '';
@@ -29,6 +30,11 @@ export default class commonLoginStore {
     @observable jsCode = '';
     @observable protocolVisible = false;
     @observable protocolStatus = 'register';
+
+    @action
+    setStatusCountDown(countDown) {
+      this.statusCountDown = countDown;
+    }
 
     @action
     setProtocolInfo(type) {
@@ -79,7 +85,7 @@ export default class commonLoginStore {
       const causeMes = cause ? `，原因：${cause}` : '';
       this.statusCode = code;
       this.statusMsg = cause;
-      this.statusMessage = `${USER_STATUS_MAP[code]}${causeMes}`;
+      this.statusMessage = `${USER_STATUS_MAP[code] || ''}${causeMes}`;
       return this.statusMessage;
     }
 

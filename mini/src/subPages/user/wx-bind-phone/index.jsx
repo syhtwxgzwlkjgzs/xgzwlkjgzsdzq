@@ -134,7 +134,6 @@ class Index extends Component {
             />
             <View className={layout.captchaInput}>
               <Input
-                clearable={false}
                 className={layout.input}
                 mode="number"
                 appendWidth="auto"

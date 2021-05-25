@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
+import classnames from 'classnames';
 
 @inject('site')
 @observer
@@ -9,10 +10,13 @@ class CopyRight extends React.Component {
     super(props)
   }
   render() {
-    const { site } = this.props;
-    if ( !site || !site.webConfig) return null;
+    const { site, center, line } = this.props;
+    if ( !site || !site.webConfig || !site.webConfig.setSite) return null;
     const { setSite } = site.webConfig;
-    const clsName = this.props.center ? `${styles.container} ${styles.center}` : styles.container;
+    const clsName = classnames(styles.container, {
+      [`${styles.center}`]: center,
+      [`${styles.line}`]: line,
+    })
     return (
       <div className={clsName}>
         {setSite.siteRecord && <div className={styles.text}>{setSite.siteRecord}</div>}
