@@ -32,8 +32,14 @@
   width: 100%;
 }
 
+.divider {
+  margin: 0 -50% 0 -50% !important;
+  width: 200% !important;
+  // transform: translateX(-50%);
+}
+
 .button {
-  margin-top: rem($margin-4n);
+  padding-top: rem($margin-4n);
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -72,5 +78,21 @@
 
   span {
     margin-top: rem($margin-1n);
+  }
+}
+
+.imageUpload {
+  margin: rem(8) 0;
+
+  :global {
+    .dzq-upload.is-card {
+      padding: 0;
+    }
+    .dzq-upload__area,
+    .dzq-upload-list-card__item {
+      width: rem(109) !important;
+      height: rem(109) !important;
+      margin: 0 rem(8) rem(8) 0;
+    }
   }
 }

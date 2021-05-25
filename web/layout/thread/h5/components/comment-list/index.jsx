@@ -7,6 +7,8 @@ import { diffDate } from '@common/utils/diff-date';
 import { observer } from 'mobx-react';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
+import ImageDisplay from '@components/thread/image-display';
+
 @observer
 class CommentList extends React.Component {
   constructor(props) {
@@ -137,6 +139,12 @@ class CommentList extends React.Component {
                 {this.props.data?.user?.username || this.props.data?.user?.userName || '未知用户'}
               </div>
               <div className={styles.commentListText} dangerouslySetInnerHTML={{ __html: this.filterContent() }}></div>
+              {/* 图片展示 */}
+              {this.props.data?.images && (
+                <div className={styles.imageDisplay}>
+                  <ImageDisplay platform="h5" imgData={this.props.data?.images} />
+                </div>
+              )}
             </div>
             <div className={styles.commentListFooter}>
               <div className={styles.commentBtn}>

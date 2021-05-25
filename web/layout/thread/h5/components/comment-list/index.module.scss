@@ -84,6 +84,10 @@
             height: rem(22);
           }
         }
+
+        .imageDisplay {
+          margin-top: rem($margin-2n);
+        }
       }
       .commentListFooter {
         .commentBtn {

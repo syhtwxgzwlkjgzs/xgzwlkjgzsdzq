@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Icon, Popup, Textarea, Upload } from '@discuzq/design';
+import React, { useEffect, useRef, useState, Fragment } from 'react';
+import { Icon, Popup, Textarea, Divider } from '@discuzq/design';
 import styles from './index.module.scss';
 import classnames from 'classnames';
 import ImageUpload from '@components/thread-post/image-upload';
@@ -32,7 +32,7 @@ const InputPop = (props) => {
     if (typeof onSubmit === 'function') {
       try {
         setLoading(true);
-        const success = await onSubmit(value);
+        const success = await onSubmit(value, imageList);
         if (success) {
           setValue('');
         }
@@ -53,6 +53,7 @@ const InputPop = (props) => {
     setShowAt(false);
     setShowPicture(false);
 
+    // 请求表情地址
     if (!emojis?.length) {
       const ret = await readEmoji();
       const { code, data = [] } = ret;
@@ -80,21 +81,23 @@ const InputPop = (props) => {
   };
 
   const onAtListChange = (atList) => {
-    const atListStr = atList.map((atUser) => `@${atUser}`);
+    const atListStr = atList.map((atUser) => ` @${atUser} `).join('');
     setValue(value + atListStr || '');
     setShowEmojis(false);
   };
 
   const handleUploadChange = async (list) => {
-    console.log(list);
+    setImageList(list);
   };
 
   const beforeUpload = (value) => {
-    console.log('beforeUpload', value);
+    return true;
   };
 
-  const onComplete = (value) => {
-    console.log('onComplete', value);
+  const onComplete = (value, file) => {
+    if (value.code === 0) {
+      file.response = value.data;
+    }
   };
 
   return (
@@ -113,20 +116,19 @@ const InputPop = (props) => {
             disabled={loading}
           ></Textarea>
         </div>
-        {/* <Upload listType="card" customRequest={handleUploadChange} multiple={true}>
-          <Button type="text" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Icon name="PlusOutlined" size={20}></Icon>
-            <span>上传附件</span>
-          </Button>
-        </Upload> */}
 
         {showPicture && (
-          <ImageUpload
-            fileList={imageList}
-            onChange={handleUploadChange}
-            onComplete={onComplete}
-            beforeUpload={beforeUpload}
-          />
+          <Fragment>
+            <div className={styles.imageUpload}>
+              <ImageUpload
+                fileList={imageList}
+                onChange={handleUploadChange}
+                onComplete={onComplete}
+                beforeUpload={beforeUpload}
+              />
+            </div>
+            <Divider className={styles.divider}></Divider>
+          </Fragment>
         )}
 
         {showAt && <AtSelect visible={showAt} getAtList={onAtListChange} onCancel={onAtIconClick} />}
