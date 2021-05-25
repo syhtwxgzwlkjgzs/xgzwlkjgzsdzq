@@ -600,7 +600,28 @@ class UserAction extends SiteStore {
   // 获取屏蔽列表数据
   @action
   async getUserShieldList() {
+    const userShieldList = await readUsersDeny({
+      params: {
+        page: this.userShieldPage, // 页码
+      },
+    });
+    const pageData = get(userShieldList, 'data.pageData', []);
+    const totalPage = get(userShieldList, 'data.totalPage', 1);
+    this.userShieldTotalPage = totalPage;
+    this.userShield = [...this.userShield, ...pageData];
+    this.userShieldTotalCount = get(userShieldList, 'data.totalCount', 0);
 
+    if (this.userShieldPage <= this.userShieldTotalPage) {
+      this.userShieldPage += 1;
+    }
+
+    if (userShieldList.code !== 0) {
+      throw {
+        Code: userShieldList.code,
+        Message: userShieldList.msg,
+      };
+    }
+    return this.userShield;
   }
 
   /**
