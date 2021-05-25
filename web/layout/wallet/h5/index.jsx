@@ -11,6 +11,7 @@ import classNames from 'classnames';
 import FilterView from './components/all-state-popup';
 import DatePickers from '@components/thread/date-picker';
 import { formatDate } from '@common/utils/format-date.js';
+import List from '@components/list';
 
 import layout from './layout.module.scss';
 
@@ -29,7 +30,7 @@ class WalletH5Page extends React.Component {
     };
   }
   async componentDidMount() {
-    const { getUserWalletInfo,getInconmeDetail } = this.props.wallet
+    const { getUserWalletInfo, getInconmeDetail } = this.props.wallet
     await getUserWalletInfo()
     await getInconmeDetail()
   }
@@ -59,11 +60,11 @@ class WalletH5Page extends React.Component {
     }
   }
   // 关闭全部状态的弹框
-  handleStateCancel = () => {
+  handleState = () => {
     this.setState({ visibleshow: false });
   }
   // 点击确定后对时间选择的弹框的操作
-  handleMoneyTimeCancel = (time) => {
+  handleMoneyTime = (time) => {
     const gapTime = new Date(time).getTime() - new Date().getTime();
     if (gapTime < 0) {
       this.setState({ consumptionTime: formatDate(time, 'yyyy年MM月') });
@@ -225,7 +226,6 @@ class WalletH5Page extends React.Component {
             </div>
           </div>
           <div className={layout.tabs}>
-
             <Tabs
               scrollable={true}
               className={layout.tabList}
@@ -240,17 +240,28 @@ class WalletH5Page extends React.Component {
                 >
                   {
                     this.state.tabsType === 'income'
-                      ? incomeData.map(value => <IncomeList key={value.id} incomeVal={value}></IncomeList>) : ''
+                      ? <List
+                        className={layout.list}
+                        onRefresh={() => { console.log('触底了'); }}>
+                        {incomeData.map(value => <IncomeList key={value.id} incomeVal={value}></IncomeList>)} 
+                        </List> : ''
                   }
                   {
                     this.state.tabsType === 'pay'
-                      ? payData.map(value => <PayList key={value.id} payVal={value}></PayList>) : ''
+                      ? <List
+                      className={layout.list}
+                      onRefresh={() => { console.log('触底了'); }}>
+                      {payData.map(value => <PayList key={value.id} payVal={value}></PayList>)}
+                      </List> : ''
                   }
                   {
                     this.state.tabsType === 'withdrawal'
-                      ? withdrawalData.map(value => <WithdrawalList key={value.id} withdrawalVal={value}></WithdrawalList>) : ''
+                      ? <List
+                      className={layout.list}
+                      onRefresh={() => { console.log('触底了'); }}>
+                      {withdrawalData.map(value => <WithdrawalList key={value.id} withdrawalVal={value}></WithdrawalList>)}
+                      </List> : ''
                   }
-                  <NoMore></NoMore>
                 </Tabs.TabPanel>
               ))}
             </Tabs>
@@ -262,13 +273,13 @@ class WalletH5Page extends React.Component {
         <FilterView
           data={data}
           visible={this.state.visibleshow}
-          handleCancel={() => { this.handleStateCancel() }}
+          handleCancel={() => { this.handleState() }}
           handleSubmit={(id) => { console.log(id); }}
         />
         <DatePickers
           isOpen={this.state.consumptionTimeshow}
           onCancels={() => { this.setState({ consumptionTimeshow: !this.state.consumptionTimeshow }) }}
-          onSelects={(time) => { this.handleMoneyTimeCancel(time) }}
+          onSelects={(time) => { this.handleMoneyTime(time) }}
           dateConfig={{
             year: {
               format: 'YYYY',
