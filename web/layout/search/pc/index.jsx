@@ -155,7 +155,6 @@ class SearchPCPage extends React.Component {
     const { pageData: usersPageData } = indexUsers || {};
     const { pageData: threadsPageData } = indexThreads || {};
 
-    // TODO 添加活跃用户和当前用户是同一人的判断
     return (
       <div className={styles.searchContent}>
         <div ref={this.treadingTopicRef}>
