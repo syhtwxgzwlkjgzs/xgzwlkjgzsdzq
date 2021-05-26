@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import styles from './index.module.scss';
 import Tip from '../tip';
-import { Icon } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import { View, Text } from '@tarojs/components'
 
 /**
@@ -78,10 +78,10 @@ const Index = ({
         {
           postList.map((item, index) => (
               <View key={index} className={styles.fabulous} onClick={item.event}>
-                <Icon 
-                  className={`${styles.icon} ${item.type} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`} 
-                  name={item.icon} 
-                  size={16}>  
+                <Icon
+                  className={`${styles.icon} ${item.type} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`}
+                  name={item.icon}
+                  size={16}>
                 </Icon>
                 <Text className={isLiked && item.name ===  '赞' ? styles.fabulousCancel: styles.fabulousPost}>
                   {item.name}

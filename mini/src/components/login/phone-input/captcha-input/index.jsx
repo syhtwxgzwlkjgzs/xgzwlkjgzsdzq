@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input } from '@discuzq/design';
+import Input from '@discuzq/design/dist/components/input/index';
 import { View } from '@tarojs/components';
 import layout from './index.module.scss';
 

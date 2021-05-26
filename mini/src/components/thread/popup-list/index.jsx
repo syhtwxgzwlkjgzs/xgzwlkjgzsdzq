@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Tabs, Popup, Icon, Spin } from '@discuzq/design';
+import Tabs from '@discuzq/design/dist/components/tabs/index';
+import Popup from '@discuzq/design/dist/components/popup/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Spin from '@discuzq/design/dist/components/spin/index';
 import UserItem from '../user-item';
 import styles from './index.module.scss';
 

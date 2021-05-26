@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { getCurrentInstance, navigateTo } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
-import { Button, Input, Toast, Avatar } from '@discuzq/design';
+import Button from '@discuzq/design/dist/components/button/index';
+import Input from '@discuzq/design/dist/components/input/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
+import Avatar from '@discuzq/design/dist/components/avatar/index';
 import Taro from '@tarojs/taro';
 import { toTCaptcha } from '@common/utils/to-tcaptcha'
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';

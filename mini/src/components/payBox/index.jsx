@@ -2,7 +2,9 @@
 import React, { Component } from 'react';
 // @ts-ignore
 import styles from './index.module.scss';
-import { Popup, Icon, Toast } from '@discuzq/design';
+import Popup from '@discuzq/design/dist/components/popup/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import { inject, observer } from 'mobx-react';
 import EventEmitter from 'eventemitter3';
 import { View } from '@tarojs/components';

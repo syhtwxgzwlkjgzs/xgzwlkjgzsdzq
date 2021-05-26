@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './index.module.scss';
-import { Icon } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import { extensionList, isPromise, noop } from '../utils';
 import { View, Text } from '@tarojs/components'
 import Downloader from './downloader';

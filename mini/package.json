@@ -68,7 +68,8 @@
     "stylelint-config-rational-order": "0.1.2",
     "stylelint-config-standard": "21.0.0",
     "stylelint-prettier": "1.2.0",
-    "webpack": "4.46.0"
+    "webpack": "4.46.0",
+    "webpack-bundle-analyzer": "^4.4.2"
   },
   "config": {
     "commitizen": {

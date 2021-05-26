@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
-import { Icon } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import { observer, inject } from 'mobx-react';
 import { PluginToolbar, DefaultToolbar, GeneralUpload, Title, Content, ClassifyPopup, OptionPopup, Position, Emoji } from '@components/thread-post';
 import { Units } from '@components/common';
@@ -508,7 +508,7 @@ class Index extends Component {
       this.setState({ showDraftOption: true });
       return
     }
-  
+
     url ? Taro.redirectTo({ url }) : Taro.navigateBack();
   }
 

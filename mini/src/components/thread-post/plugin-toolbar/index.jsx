@@ -6,7 +6,7 @@ import React, { useState, useMemo, memo, useCallback } from 'react';
 import { observer, inject } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
-import { Icon } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import { attachIcon } from '@common/constants/const';
 import { Units } from '@components/common';
 
