@@ -1,6 +1,5 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'next/router';
 import SearchInput from '@components/search-input';
 import BaseLayout from '@components/base-layout';
 import UserItem from '@components/thread/user-item';
@@ -76,4 +75,4 @@ class SearchResultUserH5Page extends React.Component {
   }
 }
 
-export default withRouter(SearchResultUserH5Page);
+export default SearchResultUserH5Page;
