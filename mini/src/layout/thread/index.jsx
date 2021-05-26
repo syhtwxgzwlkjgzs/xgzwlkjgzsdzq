@@ -581,6 +581,7 @@ class ThreadH5Page extends React.Component {
             </View>
           )}
         </View>
+        <View className={layout['scrollView-outer']} >
         <ScrollView
           className={layout.body}
           ref={this.hreadBodyRef}
@@ -632,6 +633,7 @@ class ThreadH5Page extends React.Component {
             )}
           </View>
         </ScrollView>
+        </View>
 
         {/* 底部操作栏 */}
         {isReady && isApproved && (
