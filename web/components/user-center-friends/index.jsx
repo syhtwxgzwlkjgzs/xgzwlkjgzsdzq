@@ -14,12 +14,13 @@ class UserCenterFriends extends React.Component {
     withHeaderUserInfo: false,
     userName: null,
     userGroup: null,
-    followHandler: async () => {},
-    unFollowHandler: async () => {},
-    onContainerClick: async ({ id }) => {},
+    followHandler: async () => { },
+    unFollowHandler: async () => { },
+    onContainerClick: async ({ id }) => { },
   };
 
   render() {
+    const myid = this.props.user.id;
     return (
       <div onClick={async () => {
         await this.props.onContainerClick({
@@ -43,7 +44,7 @@ class UserCenterFriends extends React.Component {
             </div>
           </div>
 
-          <div className={styles.friendAction}>
+          {this.props.id != myid && <div className={styles.friendAction}>
             {this.props.type === 'follow' && (
               <Button
                 type={'primary'}
@@ -92,7 +93,7 @@ class UserCenterFriends extends React.Component {
                 <span>已关注</span>
               </Button>
             )}
-          </div>
+          </div>}
         </div>
       </div>
     );
