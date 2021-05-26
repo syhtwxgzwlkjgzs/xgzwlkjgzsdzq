@@ -62,6 +62,7 @@ class AtSelect extends Component {
         finish: page * perPage >= data?.totalCount,
       });
     } else {
+      this.setState({ finish: true });
       Taro.showToast({ title: ret.msg, icon: 'none' })
     }
   }
