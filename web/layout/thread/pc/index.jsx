@@ -451,15 +451,15 @@ class ThreadPCPage extends React.Component {
     const { title = '' } = this.props.thread?.threadData || {};
     h5Share({ title, path: `thread/${this.props.thread?.threadData?.threadId}` });
 
-    // const id = this.props.thread?.threadData?.id;
+    const id = this.props.thread?.threadData?.id;
 
-    // const { success, msg } = await this.props.thread.shareThread(id);
+    const { success, msg } = await this.props.thread.shareThread(id);
 
-    // if (!success) {
-    //   Toast.error({
-    //     content: msg,
-    //   });
-    // }
+    if (!success) {
+      Toast.error({
+        content: msg,
+      });
+    }
   }
 
   // 点击收藏icon
@@ -683,7 +683,7 @@ class ThreadPCPage extends React.Component {
             <div className={layout.title}>编辑评论</div>
             <div className={layout.user}>
               <UserInfo
-                name={this?.comment?.user?.username || ''}
+                name={this?.comment?.user?.nickname || ''}
                 avatar={this?.comment?.user?.avatar || ''}
                 time={`${this?.comment?.updatedAt}` || ''}
                 userId={this?.comment?.user?.userId}

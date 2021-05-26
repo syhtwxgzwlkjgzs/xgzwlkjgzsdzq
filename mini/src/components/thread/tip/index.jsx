@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import PopupList from '../popup-list';
 import Avatar from '../../avatar';
 import { View, Text, Image } from '@tarojs/components';
+import Icon from '@discuzq/design/dist/components/icon/index'
 import styles from './index.module.scss';
 
 /**
@@ -41,7 +42,7 @@ import styles from './index.module.scss';
                   <View key={index} className={index === 0 ? styles.img : styles.imgAfter}>
                     <Avatar
                       image={item.avatar}
-                      name={item.userName}
+                      name={item.nickname}
                       size='small'
                     />
                   </View>

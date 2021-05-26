@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, PickerView, PickerViewColumn, } from '@tarojs/components';
-import { Button } from '@discuzq/design';
+import Button from '@discuzq/design/dist/components/button/index';
 import styles from './index.module.scss';
 
 import {

@@ -8,7 +8,7 @@ import CommentList from '../components/comment-list/index';
 import MorePopup from '../components/more-popup';
 import DeletePopup from '../components/delete-popup';
 import Header from '@components/header';
-import { Toast } from '@discuzq/design';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import InputPopup from '../components/input-popup';
 import ReportPopup from '../components/report-popup';
 
@@ -196,7 +196,7 @@ class CommentH5Page extends React.Component {
     this.replyData = null;
     this.setState({
       showCommentInput: true,
-      inputText: comment?.user?.username ? `回复${comment.user.username}` : '请输入内容',
+      inputText: comment?.user?.nickname ? `回复${comment.user.nickname}` : '请输入内容',
     });
   }
 
@@ -208,7 +208,7 @@ class CommentH5Page extends React.Component {
 
     this.setState({
       showCommentInput: true,
-      inputText: reply?.user?.username ? `回复${reply.user.username}` : '请输入内容',
+      inputText: reply?.user?.nickname ? `回复${reply.user.nickname}` : '请输入内容',
     });
   }
 

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Icon, Toast, Button, Divider } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
+import Button from '@discuzq/design/dist/components/button/index';
+import Divider from '@discuzq/design/dist/components/divider/index';
 import styles from './index.module.scss';
 import { View, Text, Checkbox } from '@tarojs/components';
 import { ORDER_TRADE_TYPE } from '../../../../../common/constants/payBoxStoreConstants';

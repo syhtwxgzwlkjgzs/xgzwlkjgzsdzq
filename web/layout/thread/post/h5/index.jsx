@@ -31,6 +31,7 @@ import Header from '@components/header';
 import Router from '@discuzq/sdk/dist/router';
 import VideoDisplay from '@components/thread-post/video-display';
 import MoneyDisplay from '@components/thread-post/money-display';
+import toolbarStyles from '@components/editor/toolbar/index.module.scss';
 
 function isIOS() {
   const ua = window.navigator.userAgent.toLowerCase();
@@ -58,6 +59,7 @@ class ThreadCreate extends React.Component {
     throttle(this.setBottomBarStyle(window.scrollY), 50);
   }
 
+  // 定位的显示与影藏
   positionDisplay = (action) => {
     const position = document.querySelector('#post-position');
     if (!position) return;
@@ -66,13 +68,21 @@ class ThreadCreate extends React.Component {
     } else position.style.display = 'flex';
   };
 
+  // 设置悬赏等之后显示的金额的显示和影藏
+  moneyboxDisplay = (isShow) => {
+    const moneybox = document.querySelector('#dzq-money-box');
+    if (!moneybox) return;
+    if (isShow) moneybox.style.display = 'flex';
+    else moneybox.style.display = 'none';
+  }
+
   // 设置底部bar的样式
   setBottomBarStyle = (y = 0, action) => {
     const winHeight = getVisualViewpost();
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
-    const postBottombar = document.querySelector('#post-bottombar');
+    this.moneyboxDisplay(false);
+    this.positionDisplay(action);
     if (!isIOS()) {
-      this.positionDisplay(action);
       if (vditorToolbar) {
         vditorToolbar.style.position = 'fixed';
         vditorToolbar.style.bottom = '88px';
@@ -80,25 +90,50 @@ class ThreadCreate extends React.Component {
       }
       return;
     }
-
-    this.positionDisplay(action);
-    const bottombarHeight = action === 'select' ? 88 : 132;
-    postBottombar.style.top = `${winHeight - bottombarHeight + y}px`;
+    this.setPostBottombar(action, y);
     if (vditorToolbar && action === 'select') {
       vditorToolbar.style.position = 'fixed';
       vditorToolbar.style.top = `${winHeight - 132 + y}px`;
     }
-    this.setPostBox();
+    this.setPostBox(action);
   }
 
-  setPostBox = () => {
+  setPostBox = (action) => {
+    const timer = setTimeout(() => {
+      clearTimeout(timer);
+      const winHeight = getVisualViewpost();
+      const postBox = document.querySelector('#post-inner');
+      const title = document.querySelector('#dzq-threadpost-title');
+      const bottombarHeight = this.getBottombarHeight(action);
+      if (postBox) {
+        if (title?.display !== 'none') postBox.style.height = `${winHeight - bottombarHeight - 54}px`;
+        else postBox.style.height = `${winHeight - bottombarHeight}px`;
+      }
+    }, 0);
+  };
+
+  // 获取底部工具栏的高度
+  getBottombarHeight = (action) => {
+    const position = document.querySelector('#post-position');
+    const toolbar = document.querySelector('#dvditor-toolbar');
+    const moneybox = document.querySelector('#dzq-money-box');
+    let bottombarHeight = 133;
+    if (action === 'select') bottombarHeight = 88;
+    if (!position) bottombarHeight = 88;
+    // 当表情显示的时候
+    if (this.props.currentDefaultOperation === defaultOperation.emoji) {
+      bottombarHeight += 218;
+      toolbar.className += ` ${toolbarStyles.emoji}`;
+    } else toolbar.className = toolbarStyles['dvditor-toolbar'];
+    if (moneybox) bottombarHeight += 65; // 直接算最高的高度
+    return bottombarHeight;
+  }
+
+  setPostBottombar = (action, y) => {
     const winHeight = getVisualViewpost();
-    const postBox = document.querySelector('#post-inner');
-    const title = document.querySelector('#dzq-threadpost-title');
-    if (postBox) {
-      if (title?.display === 'none') postBox.style.height = `${winHeight - 134 - 54}px`;
-      else postBox.style.height = `${winHeight - 134}px`;
-    }
+    const postBottombar = document.querySelector('#post-bottombar');
+    const bottombarHeight = this.getBottombarHeight(action);
+    postBottombar.style.top = `${winHeight - bottombarHeight + y}px`;
   };
 
   setBottomFixed = (action) => {
@@ -108,17 +143,15 @@ class ThreadCreate extends React.Component {
     }, 150);
   }
   clearBottomFixed = () => {
-    this.positionDisplay();
+    this.moneyboxDisplay(true);
     if (!isIOS()) return;
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
-      const winHeight = getVisualViewpost();
       const postBottombar = document.querySelector('#post-bottombar');
-      const position = document.querySelector('#post-position');
+      this.positionDisplay();
       this.setPostBox();
-      if (!position) return;
-      position.style.display = 'flex';
-      postBottombar.style.top = `${winHeight - 133}px`;
+      postBottombar.style.top = 'auto';
+      postBottombar.style.bottom = '0px';
     }, 200);
   }
 
@@ -129,7 +162,7 @@ class ThreadCreate extends React.Component {
 
   // 顶部导航栏点击后拦截回调
   handlePageJump = (link = '') => {
-    const { postData: { contentText } } = this.props.threadPost;
+    const { postData: { contentText }, resetPostData } = this.props.threadPost;
 
     if (contentText !== '') {
       this.props.handleSetState({ draftShow: true, jumpLink: link });
@@ -137,6 +170,7 @@ class ThreadCreate extends React.Component {
     }
 
     if (link) {
+      resetPostData();
       Router.push({ url: link });
     } else {
       window.history.length <= 1 ? Router.redirect({ url: '/' }) : Router.back();
@@ -180,6 +214,7 @@ class ThreadCreate extends React.Component {
               this.clearBottomFixed();
             }}
             onInit={this.props.handleVditorInit}
+            setState={this.props.handleSetState}
           />
           {/* 图片 */}
           {(currentAttachOperation === THREAD_TYPE.image || Object.keys(postData.images).length > 0) && (
@@ -203,7 +238,7 @@ class ThreadCreate extends React.Component {
             // && Object.keys(postData.audio).length > 0
             && !postData.audio.mediaUrl)
             && (
-              <div className={styles['audio-record']}>
+              <div className={styles['audio-record']} id="dzq-post-audio-record">
                 <AudioRecord duration={60} onUpload={(blob) => {
                   this.props.handleAudioUpload(blob);
                 }} />
@@ -236,6 +271,18 @@ class ThreadCreate extends React.Component {
               onDelete={() => this.props.setPostData({ product: {} })}
             />
           )}
+        </div>
+        <div id="post-bottombar" className={styles['post-bottombar']}>
+          {/* 插入位置 */}
+          {(permissions?.insertPosition?.enable && webConfig?.lbs?.lbs) && (
+            <div id="post-position" className={styles['position-box']}>
+            {/* <div className={styles['post-counter']}>还能输入{MAX_COUNT - this.props.count}个字</div> */}
+              <Position
+                lbskey={webConfig.lbs.qqLbsKey}
+                position={postData.position}
+                onChange={position => this.props.setPostData({ position })} />
+            </div>
+          )}
           {((postData.rewardQa.value && postData.rewardQa.times)
             || postData.redpacket.price
             || !!(postData.price || postData.attachmentPrice)
@@ -250,18 +297,6 @@ class ThreadCreate extends React.Component {
               onDefaultClick={this.props.handleDefaultIconClick}
             />
           )}
-        </div>
-        <div id="post-bottombar" className={styles['post-bottombar']}>
-          {/* 插入位置 */}
-          <div id="post-position" className={styles['position-box']}>
-            {/* <div className={styles['post-counter']}>还能输入{MAX_COUNT - this.props.count}个字</div> */}
-            {(permissions?.insertPosition?.enable && webConfig?.lbs?.lbs) && (
-              <Position
-                lbskey={webConfig.lbs.qqLbsKey}
-                position={postData.position}
-                onChange={position => this.props.setPostData({ position })} />
-            )}
-          </div>
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar
             postData={postData}
@@ -279,15 +314,22 @@ class ThreadCreate extends React.Component {
           <DefaultToolbar
             postData={postData}
             value={currentDefaultOperation}
-            onClick={item => this.props.handleDefaultIconClick(item)}
+            onClick={(item) => {
+              this.props.handleDefaultIconClick(item);
+              this.setPostBox();
+            }}
             permission={threadExtendPermissions}
             onSubmit={this.props.handleSubmit}>
-            {/* 表情 */}
-            <Emoji
-              show={currentDefaultOperation === defaultOperation.emoji}
-              emojis={threadPost.emojis}
-              onClick={this.props.handleEmojiClick} />
           </DefaultToolbar>
+            {/* 表情 */}
+          <Emoji
+            show={currentDefaultOperation === defaultOperation.emoji}
+            emojis={threadPost.emojis}
+            onClick={
+              (emoji) => {
+                this.props.handleEmojiClick(emoji);
+              }}
+            />
         </div>
         {/* 选择帖子类别 */}
         <ClassifyPopup

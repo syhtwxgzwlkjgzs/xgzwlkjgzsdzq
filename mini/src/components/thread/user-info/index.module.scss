@@ -67,7 +67,7 @@
   display: flex;
   align-items: center;
 
-  span {
+  Text {
     margin-left: $margin-1n;
     font-size: $font-size-label;
     max-width: 100px;
@@ -82,13 +82,14 @@
   display: flex;
   align-items: center;
 
-  span {
+  Text {
     margin-left: $margin-1n;
     font-size: $font-size-label;
   }
 
   .viewIcon {
     color: $text-color-secondary;
+    margin-top: 1px;
   }
 }
 

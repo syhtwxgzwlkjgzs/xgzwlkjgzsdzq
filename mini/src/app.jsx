@@ -6,7 +6,6 @@ import Router from '@discuzq/sdk/dist/router';
 import { View } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 import clearLoginStatus from '@common/utils/clear-login-status';
-import {Toast} from '@discuzq/design';
 
 import './app.scss';
 
@@ -100,7 +99,7 @@ class App extends Component {
   setAppCommonStatus(result) {
     const { site } = this.store;
     switch (result.code) {
-      case 0: 
+      case 0:
         break;
       case -3005: site.setCloseSiteConfig(result.data);// 关闭站点
         Router.redirect({

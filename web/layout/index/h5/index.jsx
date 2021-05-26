@@ -38,8 +38,8 @@ class IndexH5Page extends React.Component {
     const { filter = {} } = this.props.index
 
     const newFilter = { ...this.state.filter, ...filter }
-    const { categoryids } = newFilter
-    const currentIndex = categoryids[0] || ''
+    const { categoryids = [] } = newFilter
+    const currentIndex = this.resetCurrentIndex(categoryids[0] || 'all')
     
     this.setState({ filter: newFilter, currentIndex })
   }
@@ -81,13 +81,24 @@ class IndexH5Page extends React.Component {
   onClickTab = (id = '') => {
     const { dispatch = () => {} } = this.props;
     const currentIndex = this.resetCategoryids(id);
+    const { categories = [] } = this.props.index
+
+    // 若选中的一级标签，存在二级标签，则将一级id和所有二级id全都传给后台
+    let newCategoryIds = [currentIndex]
+    const tmp = categories.filter(item => item.pid === currentIndex)
+    if (tmp.length && tmp[0]?.children?.length) {
+      newCategoryIds = [currentIndex]
+      tmp[0]?.children?.forEach(item => {
+        newCategoryIds.push(item.pid)
+      })
+    }
 
     this.props.baselayout.setJumpingToTop();
-    dispatch('click-filter', { categoryids: [currentIndex], sequence: id === 'default' ? 1 : 0 });
+    dispatch('click-filter', { categoryids: newCategoryIds, sequence: id === 'default' ? 1 : 0 });
 
     this.setState({
       filter: {
-        categoryids: [id],
+        categoryids: newCategoryIds,
         sequence: id === 'default' ? 1 : 0,
       },
       currentIndex: id,
@@ -101,6 +112,8 @@ class IndexH5Page extends React.Component {
     const requestCategoryids = categoryids.slice();
     requestCategoryids[0] = (requestCategoryids[0] === 'all' || requestCategoryids[0] === 'default') ? [] : requestCategoryids[0];
     dispatch('click-filter', { categoryids: requestCategoryids, types, essence, sequence });
+
+    let newCurrentIndex = this.resetCurrentIndex(categoryids[0])
     this.setState({
       filter: {
         categoryids,
@@ -108,13 +121,31 @@ class IndexH5Page extends React.Component {
         essence,
         sequence,
       },
-      currentIndex: categoryids[0],
+      currentIndex: newCurrentIndex,
       visible: false,
     });
   };
 
   resetCategoryids(categoryids) {
     return categoryids === 'all' || categoryids === 'default' ? '' : categoryids;
+  }
+
+  resetCurrentIndex = (id) => {
+    let newCurrentIndex = id
+    const newId = this.resetCategoryids(id)
+    if (newId) {
+      const { categories = [] } = this.props.index
+      categories.forEach(item => {
+        if (item.children?.length) {
+          const tmp = item.children.filter(children => children.pid === newId)
+          // TODO H5首页暂时不显示二级标题
+          if (tmp.length) {
+            newCurrentIndex = item.pid
+          }
+        }
+      })
+    }
+    return newCurrentIndex
   }
 
   // 上拉加载更多

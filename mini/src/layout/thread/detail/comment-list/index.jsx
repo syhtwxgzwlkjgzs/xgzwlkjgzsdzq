@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Icon, Toast } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import { View, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import CommentList from '../../components/comment-list/index';
@@ -164,7 +165,7 @@ class RenderCommentList extends React.Component {
   replyClick(comment) {
     this.commentData = comment;
     this.replyData = null;
-    const userName = comment?.user?.username || comment?.user?.userName;
+    const userName = comment?.user?.nickname || comment?.user?.userName;
     this.setState({
       showCommentInput: true,
       inputText: userName ? `回复${userName}` : '请输入内容',
@@ -176,7 +177,7 @@ class RenderCommentList extends React.Component {
     this.commentData = null;
     this.replyData = reply;
     this.replyData.commentId = comment.id;
-    const userName = reply?.user?.username || reply?.user?.userName;
+    const userName = reply?.user?.nickname || reply?.user?.userName;
 
     this.setState({
       showCommentInput: true,
@@ -267,7 +268,7 @@ class RenderCommentList extends React.Component {
       const { success, msg } = await this.props.thread.reward(params);
       if (success) {
         this.setState({ showAboptPopup: false });
-        
+
         // 重新获取帖子详细
         this.props.thread.fetchThreadDetail(params.threadId)
 

@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View } from '@tarojs/components';
-import { Icon, Popup, Textarea, Upload, Button } from '@discuzq/design';
+import Popup from '@discuzq/design/dist/components/popup/index';
+import Textarea from '@discuzq/design/dist/components/textarea/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Upload from '@discuzq/design/dist/components/upload/index';
+import Button from '@discuzq/design/dist/components/button/index';
+
 import styles from './index.module.scss';
 
 const InputPop = (props) => {
@@ -52,7 +57,7 @@ const InputPop = (props) => {
           {/* <Upload listType='card'>
             <Button loading={loading} type='text' className={styles.upload}>
               <Icon name="PlusOutlined" size={20}></Icon>
-              <span>上传附件</span>
+              <Text>上传附件</Text>
             </Button>
           </Upload> */}
         </View>

@@ -2,7 +2,11 @@ import React from 'react';
 import styles from './index.module.scss';
 import Taro from '@tarojs/taro';
 import { inject, observer } from 'mobx-react';
-import { Icon, Radio, Button, Spin, Toast } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Radio from '@discuzq/design/dist/components/radio/index';
+import Button from '@discuzq/design/dist/components/button/index';
+import Spin from '@discuzq/design/dist/components/spin/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import { View, Text } from '@tarojs/components';
 import { PAY_MENT_MAP, PAYWAY_MAP, STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants.js';
 import { listenWXJsBridgeAndExecCallback, onBridgeReady, wxValidator, mode } from '../../../../../common/store/pay/weixin-miniprogram-backend.js';
@@ -71,7 +75,7 @@ export default class PayBox extends React.Component {
         </Text>
       );
     }
-    if (this.props.payBox?.walletAvaAmount < amount) {
+    if (Number(this.props.payBox?.walletAvaAmount) < Number(amount)) {
       return <Text className={styles.subText}>余额不足</Text>;
     }
     return (
@@ -166,7 +170,7 @@ export default class PayBox extends React.Component {
                   </View>
                   <View className={styles.right}>
                     {item.paymentType === PAYWAY_MAP.WALLET && this.walletPaySubText()}
-                    {(item.paymentType === PAYWAY_MAP.WX || canWalletPay) && <Radio name={item.paymentType} />}
+                    {(item.paymentType === PAYWAY_MAP.WX || (canWalletPay && Number(this.props.payBox?.walletAvaAmount) >= Number(options.amount))) && <Radio name={item.paymentType} />}
                   </View>
                 </View>
               );

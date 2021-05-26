@@ -31,12 +31,22 @@
           display: inline;
           font-weight: normal;
           font-size: $font-size-middle;
-          line-height: 16px;
+          line-height: 26px;
           text-align: left;
           color: $text-color-primary;
-          vertical-align: super;
+          vertical-align: text-bottom;
 
-          p {
+          :global {
+            .qq-emotion {
+              width: 30px;
+              height: 30px;
+            }
+          }
+
+          View {
+            display: inline;
+          }
+          .p {
             display: inline;
           }
         }

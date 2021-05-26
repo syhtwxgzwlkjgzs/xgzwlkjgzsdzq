@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import UserCenterHeaderImage from '@components/user-center-header-images';
-import { Icon, Input } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Input from '@discuzq/design/dist/components/input/index';
 import { inject, observer } from 'mobx-react';
 import { ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post'
 import { View, Text } from '@tarojs/components';

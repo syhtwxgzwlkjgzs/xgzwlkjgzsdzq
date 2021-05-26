@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Avatar } from '@discuzq/design';
+import Avatar from '@discuzq/design/dist/components/avatar/index';
 
 export default function avatar(props) {
   const { image = '', name = '匿', onClick = () => {}, className = '', circle = true, size = 'primary' } = props;

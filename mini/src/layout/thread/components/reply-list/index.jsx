@@ -48,14 +48,14 @@ export default class ReplyList extends React.Component {
         <View className={styles.replyListAvatar} onClick={this.props.avatarClick('2')}>
           <Avatar
             image={this.props.data.user.avatar}
-            name={this.props.data.user.username || this.props.data.user.userName || ''}
+            name={this.props.data.user.nickname || this.props.data.user.userName || ''}
             circle={true}
             size="small"
           ></Avatar>
         </View>
         <View className={styles.replyListContent}>
           <View className={styles.replyListContentText}>
-            <View className={styles.replyListName}>{this.props.data.user.username || this.props.data.user.userName}</View>
+            <View className={styles.replyListName}>{this.props.data.user.nickname || this.props.data.user.userName}</View>
             <View className={styles.replyListText}>
               {this.props.data.commentUserId ? (
                 <View className={styles.commentUser}>
@@ -63,22 +63,22 @@ export default class ReplyList extends React.Component {
                     <Avatar
                       className={styles.avatar}
                       image={this.props.data.replyUser.avatar}
-                      name={this.props.data.replyUser.username || this.props.data.replyUser.userName || ''}
+                      name={this.props.data.replyUser.nickname || this.props.data.replyUser.userName || ''}
                       circle={true}
                       size="small"
                     ></Avatar>
                   </View>
                   <Text className={styles.replyedUserName}>
-                    {this.props.data.replyUser.username || this.props.data.replyUser.userName}
+                    {this.props.data.replyUser.nickname || this.props.data.replyUser.userName}
                   </Text>
                 </View>
               ) : (
                 ''
               )}
-              <Text
+              <View
                 className={classnames(styles.content,this.props.isShowOne && styles.isShowOne)}
                 dangerouslySetInnerHTML={{ __html: this.filterContent()}}
-              ></Text>
+              ></View>
             </View>
           </View>
           <View className={styles.replyListFooter}>

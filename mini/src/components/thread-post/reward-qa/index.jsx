@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
-import { Input, Button, Icon } from '@discuzq/design';
+import Input from '@discuzq/design/dist/components/input/index';
+import Button from '@discuzq/design/dist/components/button/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import { observer, inject } from 'mobx-react';
 import classNames from 'classnames';
 import styles from './index.module.scss';

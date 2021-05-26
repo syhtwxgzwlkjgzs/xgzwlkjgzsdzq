@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
-import { Button, Icon } from '@discuzq/design';
+import Button from '@discuzq/design/dist/components/button/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import AudioPlay from './audio-play';
 import PostContent from './post-content';
 import ProductItem from './product-item';
@@ -71,9 +72,9 @@ const Index = (props) => {
                   />
                 )}
                 {imageData && (
-                    <ImageDisplay 
-                        platform='h5' 
-                        imgData={imageData} 
+                    <ImageDisplay
+                        platform='h5'
+                        imgData={imageData}
                         isPay={needPay}
                         onPay={onPay}
                         onClickMore={onClick} />
@@ -110,9 +111,9 @@ const Index = (props) => {
                     <Button className={styles.button} type="primary" onClick={onPay}>
                         <Icon className={styles.payIcon} name="DollarLOutlined" size={18}></Icon>
                         {payType === 1 ? <Text className={styles.payText}>{`支付${price}元查看剩余内容`}</Text> : <Text className={styles.payText}>{`支付${attachmentPrice}元查看附件内容`}</Text>}
-                    </Button>                  
+                    </Button>
                   </View>
-                  
+
                 )
             }
         </>
