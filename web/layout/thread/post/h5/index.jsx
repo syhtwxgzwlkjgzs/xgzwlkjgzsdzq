@@ -116,7 +116,7 @@ class ThreadCreate extends React.Component {
         const clientY = event?.clientY;
         const offsetTop = event?.target?.offsetTop || 0;
         if (offsetTop) {
-          if (offsetTop > postBoxHeight * 1.5) {
+          if (offsetTop > postBoxHeight) {
             const top = (offsetTop - postBoxHeight >= 0 && clientY > winHeight)
               ? offsetTop - postBoxHeight + 30 : offsetTop;
             // TODO: 这里的计算有问题，
