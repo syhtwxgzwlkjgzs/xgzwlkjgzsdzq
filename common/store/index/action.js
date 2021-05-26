@@ -25,8 +25,9 @@ class IndexAction extends IndexStore {
   @action
   async refreshHomeData({ categoryIds = [] } = {}) {
     if (categoryIds?.length) {
+      this.threads = null;
+      this.sticks = null;
       this.setFilter({ categoryids: categoryIds })
-      this.screenData({ filter: { categoryids: categoryIds } })
     } else {
       const { categoryids = [], sequence = 0 } = this.filter
       this.screenData({ filter: { categoryids }, sequence })
@@ -91,7 +92,7 @@ class IndexAction extends IndexStore {
       }
       return result.data;
     }
-    return null;
+    return Promise.reject();
   }
 
   /**

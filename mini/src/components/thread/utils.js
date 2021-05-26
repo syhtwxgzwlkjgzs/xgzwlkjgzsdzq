@@ -111,7 +111,8 @@ export const getElementRect = async (eleId = '', delay = 200) => new Promise((re
         if (rect) {
           resovle(rect);
         } else {
-          reject('获取不到元素');
+          // reject('获取不到元素');
+          resovle({ width: 378 });
         }
       })
       .exec();

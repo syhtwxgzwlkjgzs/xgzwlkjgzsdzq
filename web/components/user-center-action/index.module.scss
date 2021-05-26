@@ -8,6 +8,14 @@
 
     .userCenterActionItemContainer {
 
+        :global {
+            .dzq-badge__circle {
+                min-width: rem(26);
+                height: rem(16);
+                border-radius: rem(8);
+            }
+        }
+
         .userCenterActionItem {
             display: flex;
             flex-direction: column;

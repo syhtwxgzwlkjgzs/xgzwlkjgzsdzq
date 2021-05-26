@@ -23,7 +23,7 @@ class Index extends React.Component {
       <div className={styles.collectBox}>
         <Header />
         <div className={styles.titleBox}>
-          {`${pageData?.length}条收藏`}
+          {`${pageData?.length} 条收藏`}
         </div>
         {
           pageData?.length

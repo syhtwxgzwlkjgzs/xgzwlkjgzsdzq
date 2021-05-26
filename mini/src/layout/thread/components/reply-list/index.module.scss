@@ -36,6 +36,13 @@
           color: $text-color-primary;
           vertical-align: text-bottom;
 
+          :global {
+            .qq-emotion {
+              width: 30px;
+              height: 30px;
+            }
+          }
+
           View {
             display: inline;
           }
