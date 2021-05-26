@@ -95,7 +95,7 @@ class SearchResultH5Page extends React.Component {
           isLoading={!threadsPageData}
           noData={!threadsPageData?.length}
           platform='h5'
-          className={styles.bottom}
+          className={threadsPageData?.length && styles.bottom}
         >
           {
             threadsPageData?.length &&<SearchPosts data={threadsPageData.filter((_, index) => index < 3)} onItemClick={this.onPostClick} />
