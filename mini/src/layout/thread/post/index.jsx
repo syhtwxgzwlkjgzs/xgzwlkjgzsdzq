@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
-import { View, Text } from '@tarojs/components';
+import { View } from '@tarojs/components';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import { observer, inject } from 'mobx-react';
 import { PluginToolbar, DefaultToolbar, GeneralUpload, Title, Content, ClassifyPopup, OptionPopup, Position, Emoji } from '@components/thread-post';
@@ -148,7 +148,7 @@ class Index extends Component {
   }
 
   // 监听title输入
-  onTitleInput = (title) => {
+  onTitleChange = (title) => {
     const { setPostData } = this.props.threadPost;
     setPostData({ title });
   }
@@ -544,9 +544,9 @@ class Index extends Component {
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
           <View className={styles['content']}>
             <Title
-              title={postData.title}
+              value={postData.title}
               show={isShowTitle}
-              onInput={this.onTitleInput}
+              onChange={this.onTitleChange}
               onBlur={this.hideKeyboard}
             />
             <Content
