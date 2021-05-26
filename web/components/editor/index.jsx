@@ -157,7 +157,11 @@ export default function DVditor(props) {
     //     }, 0);
     //   });
     // });
-
+    const editorElement = vditor[vditor.currentMode]?.element;
+    editorElement?.addEventListener('click', () => {
+      setIsFocus(false);
+      onFocus('focus');
+    });
     // 从事件绑定方式修改成轮询记录的方式，以达到更实时更精确的记录方式，可解决iphone下输入中文光标会被重置到位置0的问题（性能需关注）
     const timeoutRecord = () => {
       timeoutId = setTimeout(() => {
@@ -185,10 +189,7 @@ export default function DVditor(props) {
           editor.setValue(value);
           editor.vditor[editor.vditor.currentMode].element.blur();
         },
-        focus: () => {
-          setIsFocus(false);
-          onFocus('focus');
-        },
+        focus: () => {},
         input: () => {
           setIsFocus(false);
           onInput(editor);

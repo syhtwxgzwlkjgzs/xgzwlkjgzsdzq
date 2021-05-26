@@ -34,7 +34,7 @@ class Index extends React.Component {
       });
 
       this.page = 1;
-      await index.screenData({ filter: { categoryids, types, essence }, sequence, perPage: 5 });
+      await index.screenData({ filter: { categoryids, types, essence }, sequence, perPage: 5, page: this.page, });
     } else if (type === 'moreData') {
       this.page += 1;
       await index.getReadThreadList({
