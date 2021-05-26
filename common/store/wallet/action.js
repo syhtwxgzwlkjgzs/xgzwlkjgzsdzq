@@ -57,7 +57,7 @@ class WalletAction extends WalletStore {
       if (detailInfoRes.code === 0) {
         setWalletInfoPageData(detailInfoRes.data, this.incomeDetail, {
           type,
-          date,
+          date: time.formatDate(date, 'YYYY-MM'),
           page,
         });
       }
@@ -90,7 +90,7 @@ class WalletAction extends WalletStore {
       if (detailInfoRes.code === 0) {
         setWalletInfoPageData(detailInfoRes.data, this.expandDetail, {
           type,
-          date,
+          date: time.formatDate(date, 'YYYY-MM'),
           page,
         });
       }
@@ -145,7 +145,7 @@ class WalletAction extends WalletStore {
 
       setWalletInfoPageData(cashInfoRes.data, this.cashDetail, {
         type,
-        date,
+        date: time.formatDate(date, 'YYYY-MM'),
         page,
       });
     }

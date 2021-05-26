@@ -42,6 +42,7 @@ class H5OthersPage extends React.Component {
       <BaseLayout
         showHeader={false}
         showTabBar={false}
+        immediateCheck={true}
         onRefresh={this.fetchTargetUserThreads}
         noMore={targetUserThreadsTotalPage < targetUserThreadsPage}
       >
