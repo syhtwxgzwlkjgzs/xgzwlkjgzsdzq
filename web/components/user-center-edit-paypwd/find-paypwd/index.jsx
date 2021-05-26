@@ -18,8 +18,8 @@ class index extends Component {
     super(props);
     this.state = {
       list: [],
-      current_step: 'second', // 表示当前步骤
-      is_blur: true, // 表示是否失焦
+      currentStep: 'second', // 表示当前步骤
+      isBlur: true, // 表示是否失焦
       isKeyBoardVisible: false, // 是否显示键盘
       initTimeValue: null,
       payPassword: null,
@@ -30,8 +30,8 @@ class index extends Component {
   initState = () => {
     this.setState({
       list: [],
-      current_step: 'second', // 表示当前步骤
-      is_blur: true, // 表示是否失焦
+      currentStep: 'second', // 表示当前步骤
+      isBlur: true, // 表示是否失焦
       isKeyBoardVisible: false, // 是否显示键盘
       initTimeValue: null,
       payPassword: null,
@@ -97,40 +97,40 @@ class index extends Component {
   handleInputChange = (e) => {
     this.setState({
       payPassword: e.target.value,
-      is_blur: false,
+      isBlur: false,
     });
   }
 
   handleInputChange1 = (e) => {
     this.setState({
       payPasswordConfirmation: e.target.value,
-      is_blur: false,
+      isBlur: false,
     });
   }
 
   handleInputFocus = (e) => {
     this.setState({
-      is_blur: false,
+      isBlur: false,
     });
   }
 
   handleInputBlur = (e) => {
     this.setState({
       payPassword: e.target.value,
-      is_blur: true,
+      isBlur: true,
     });
   }
 
   handleInputFocus1 = () => {
     this.setState({
-      is_blur: false,
+      isBlur: false,
     });
   }
 
   handleInputBlur1 = (e) => {
     this.setState({
       payPasswordConfirmation: e.target.value,
-      is_blur: true,
+      isBlur: true,
     });
   }
 
@@ -164,7 +164,7 @@ class index extends Component {
   }
 
   render() {
-    const { current_step, list = [], is_blur, isKeyBoardVisible, initTimeValue, payPassword, payPasswordConfirmation } = this.state;
+    const { currentStep, list = [], isBlur, isKeyBoardVisible, initTimeValue, payPassword, payPasswordConfirmation } = this.state;
     const mobile = this.props?.user.mobile;
     const disabled = !payPassword || !payPasswordConfirmation || list.length !== 6
     return (
@@ -178,12 +178,12 @@ class index extends Component {
               <span className={styles.labelValue} style={{ border: 'none' }}>{mobile}</span>
             </div>
             <div>
-              <VerifyCode key={initTimeValue} initTimeValue={initTimeValue} key={current_step} text={'发送验证码'} getVerifyCode={this.getVerifyCode} />
+              <VerifyCode key={initTimeValue} initTimeValue={initTimeValue} key={currentStep} text={'发送验证码'} getVerifyCode={this.getVerifyCode} />
             </div>
           </div>
           <div className={styles.bindCode}>
             <span>请输入短信验证码</span>
-            <CaptchaInput handleKeyBoardVisible={this.handleKeyBoardVisible} isKeyBoardVisible={isKeyBoardVisible} current_step={current_step} updatePwd={this.updatePwd} list={list} is_blur={is_blur} />
+            <CaptchaInput handleKeyBoardVisible={this.handleKeyBoardVisible} isKeyBoardVisible={isKeyBoardVisible} currentStep={currentStep} updatePwd={this.updatePwd} list={list} isBlur={isBlur} />
           </div>
         </div>
         <div className={styles.labelInfo}>

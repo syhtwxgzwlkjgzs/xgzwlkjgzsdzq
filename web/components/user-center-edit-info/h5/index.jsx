@@ -4,8 +4,7 @@ import { Button, Icon, Input } from '@discuzq/design';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
-import Router from '@discuzq/sdk/dist/router';
-import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData';
+import Router from '@discuzq/sdk/dist/router'
 import throttle from '@common/utils/thottle.js';
 @inject('site')
 @inject('user')
@@ -60,10 +59,14 @@ class index extends Component {
   renderInputNickName = () => {
     const { isClickNickName } = this.state;
     return (
-      <div className={styles.userCenterEditLabel}>
+      <>
         <label>昵称</label>
-        <div>{isClickNickName ? <Input focus={true} maxLength={10} value={this.user.editNickName} onChange={this.handleChangeNickName} onBlur={this.handleBlurNickName} /> : this.user.editNickName}</div>
-      </div>
+        <div className={styles.uerInputItem}>
+          {isClickNickName ?
+            <Input focus={true} maxLength={10} value={this.user.editNickName} onChange={this.handleChangeNickName} onBlur={this.handleBlurNickName} />
+            : this.user.editNickName}
+        </div>
+      </>
     );
   }
 
@@ -92,7 +95,7 @@ class index extends Component {
         {/* middle */}
         <div className={styles.userCenterEditMiddle}>
           <h3>个人信息</h3>
-          <div onClick={this.handleClickNickName} className={styles.userCenterEditItem}>
+          <div onClick={this.handleClickNickName} className={styles.userInputContent}>
             {this.renderInputNickName()}
           </div>
           <div className={styles.userCenterEditItem}>
@@ -101,31 +104,36 @@ class index extends Component {
               <div>{this.user.editUserName}</div>
             </div>
           </div>
-          <div className={styles.userCenterEditItem}>
-            <div className={styles.userCenterEditLabel}>
-              <label>手机号码</label>
-              <div>{this.user.mobile}</div>
-            </div>
-            {/* <div onClick={this.handleGoToEditMobile}><Icon name="RightOutlined" /></div> */}
-            {
-              this.props.site?.isSmsOpen && (
-                <div onClick={this.handleGoToEditMobile}><Icon name="RightOutlined" /></div>
-              )
-            }
-          </div>
+          {
+            this.props.site?.isSmsOpen && (
+              <div className={styles.userCenterEditItem}>
+                <div className={styles.userCenterEditLabel}>
+                  <label>手机号码</label>
+                </div>
+                <div className={styles.userCenterEditValue} onClick={this.handleGoToEditMobile}>
+                  <div className={styles.ucText}>{this.user.mobile}</div>
+                  <Icon name="RightOutlined" />
+                </div>
+              </div>
+            )
+          }
           <div className={styles.userCenterEditItem}>
             <div className={styles.userCenterEditLabel}>
               <label>账户密码</label>
-              <div>修改</div>
             </div>
-            <div onClick={this.handleGoToEditAccountPwd}><Icon name="RightOutlined" /></div>
+            <div className={styles.userCenterEditValue} onClick={this.handleGoToEditAccountPwd}>
+              <div className={styles.ucText}>修改</div>
+              <Icon name="RightOutlined" />
+            </div>
           </div>
           <div className={styles.userCenterEditItem}>
             <div className={styles.userCenterEditLabel}>
               <label>支付密码</label>
-              <div>修改</div>
             </div>
-            <div onClick={this.handleGoToEditPayPwd}><Icon name="RightOutlined" /></div>
+            <div className={styles.userCenterEditValue} onClick={this.handleGoToEditPayPwd}>
+              <div className={styles.ucText}>修改</div>
+              <Icon name="RightOutlined" />
+            </div>
           </div>
           {
             this.props.wechatEnv !== 'none' && (
@@ -162,4 +170,4 @@ class index extends Component {
   }
 }
 
-export default HOCFetchSiteData(index);
+export default index;
