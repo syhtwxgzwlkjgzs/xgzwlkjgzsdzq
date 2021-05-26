@@ -70,6 +70,7 @@ class UserStore {
   @observable userShield = []; // 用户屏蔽列表
 
   // 触底加载条件 当加载的页数超过总页数的时候就没有更多了 
+  @observable userShieldPage = 1; // 页码
   @observable userShieldTotalPage = 1; // 总页数
   @observable userShieldTotalCount = 0; // 总条数
 
