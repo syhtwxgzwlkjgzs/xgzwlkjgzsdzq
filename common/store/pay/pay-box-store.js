@@ -9,7 +9,7 @@ import {
   updateUsersUpdate,
   readResetPayPwdToken,
   updatePayPwd,
-  smsSend
+  smsSend,
 } from '@server';
 import { STEP_MAP, PAY_MENT_MAP, ORDER_STATUS_MAP, PAY_BOX_ERROR_CODE_MAP } from '../../constants/payBoxStoreConstants';
 
@@ -438,7 +438,9 @@ class PayBoxStore {
       return;
     }
     const getTokenRes = await readResetPayPwdToken({
-      payPassword: this.oldPayPwd,
+      data: {
+        payPassword: this.oldPayPwd,
+      },
     });
     if (getTokenRes.code === 0) {
       this.payPwdResetToken = get(getTokenRes, 'data.sessionId');
@@ -476,8 +478,8 @@ class PayBoxStore {
 
   /**
    * 重设支付密码 手机号验证
-   * @param {*} param0 
-   * @returns 
+   * @param {*} param0
+   * @returns
    */
   @action
   async sendSmsVerifyCode({
