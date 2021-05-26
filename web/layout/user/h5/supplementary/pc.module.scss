@@ -1,0 +1,73 @@
+@import '@common/styles/mixin/login.scss';
+@import '@common/styles/index.scss';
+.container {
+  @include pc_container;
+}
+.input{
+  .input_value{
+    width: 100%;
+  }
+}
+.title {
+  padding: $padding-5n 0 32px;
+  text-align: center;
+  font-weight: 600;
+  font-size: $font-size-large;
+  line-height: $font-line-height-large;
+  color: $text-color-primary;
+}
+.content {
+  @include pc_content;
+  margin-top: 0;
+  width: 327px;
+  text-align: left;
+  .item {
+    padding: rem($margin-2n) 0;
+  }
+  .label {
+    font-weight: normal;
+    font-size: $font-size-base;
+    line-height: $font-line-height-middle;
+    text-align: left;
+    color: $text-color-regular;
+    padding-bottom: rem($margin-2n);
+  }
+  .textarea{
+    .textarea_item{
+      width: rem(327);
+      box-sizing: border-box;
+      :global(.dzq-textarea__limit){
+        position: absolute;
+        bottom: 0;
+      }
+    }
+  }
+  .attachmentsUpload{
+    float: left;
+    width: 100%;
+    .attachmentsUpload-left{
+      display: inline-block;
+      font-size: rem($font-size-base);
+      line-height: rem($font-line-height-middle);
+      text-align: left;
+      color: $text-color-regular;
+    }
+    .attachmentsUpload-right{
+      cursor: pointer;
+      display: inline-block;
+      font-size: rem($font-size-base);
+      line-height: rem($font-line-height-base);
+      color: var(--color-text-primary);
+      float: right;
+    }
+  }
+  .button{
+    @include pc_button;
+    margin-top: rem(24);
+  }
+  .checkbox{
+    :global(.dzq-checkbox-wrap) {
+      margin-right: $margin-4n;
+    }
+  }
+}

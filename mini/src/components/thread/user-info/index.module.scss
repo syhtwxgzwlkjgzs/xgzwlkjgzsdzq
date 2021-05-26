@@ -82,7 +82,7 @@
   display: flex;
   align-items: center;
 
-  span {
+  Text {
     margin-left: $margin-1n;
     font-size: $font-size-label;
   }
@@ -131,7 +131,7 @@
     }
   }
 
-  > div {
+  > View {
     margin-left: 8px;
   }
   :global {

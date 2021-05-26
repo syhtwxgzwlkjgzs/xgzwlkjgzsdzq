@@ -1,6 +1,7 @@
 import { action } from 'mobx';
 import WalletStore from './store';
 import { readWalletUser, readWalletLog, readWalletCash } from '@server';
+import { time } from '@discuzq/sdk/dist/index';
 
 const setWalletInfoPageData = (data, obj, {
   type,
@@ -31,12 +32,24 @@ class WalletAction extends WalletStore {
     // 获取收入明细
     @action
     getInconmeDetail = async ({ ...props }) => {
-      const { page = 1, date, type = 'all' } = props;
+      const { page = 1, date = time.formatDate(new Date(), 'YYYY-MM'), type = 'all' } = props;
+      const param = {
+        walletLogType: 'income',
+        page,
+      };
+      const filter = {
+        startTime: time.getMonthStartAndEnd(date)[0],
+        endTime: time.getMonthStartAndEnd(date)[1],
+      };
+      if (type !== 'all') {
+        filter.changeType = type;
+      }
+
+      Object.assign(param, {
+        filter,
+      });
       const detailInfoRes = await readWalletLog({
-        param: {
-          walletLogType: 'income',
-          page,
-        },
+        param,
       });
 
       if (detailInfoRes.code === 0) {
@@ -51,12 +64,24 @@ class WalletAction extends WalletStore {
     // 获取支出明细
     @action
     getExpendDetail = async ({ ...props }) => {
-      const { page = 1, date, type = 'all' } = props;
+      const { page = 1, date = time.formatDate(new Date(), 'YYYY-MM'), type = 'all' } = props;
+      const param = {
+        walletLogType: 'expend',
+        page,
+      };
+      const filter = {
+        startTime: time.getMonthStartAndEnd(date)[0],
+        endTime: time.getMonthStartAndEnd(date)[1],
+      };
+      if (type !== 'all') {
+        filter.changeType = type;
+      }
+      Object.assign(param, {
+        filter,
+      });
+
       const detailInfoRes = await readWalletLog({
-        param: {
-          walletLogType: 'expend',
-          page,
-        },
+        param,
       });
 
       if (detailInfoRes.code === 0) {
@@ -80,30 +105,44 @@ class WalletAction extends WalletStore {
       });
 
       if (detailInfoRes.code === 0) {
-        setWalletInfoPageData(detailInfoRes.data, this.freezeDetail, {
-          type,
-          date,
-          page,
-        });
+        if (detailInfoRes.code === 0) {
+          if (!this.freezeDetail[date]) {
+            this.freezeDetail[date] = {};
+          }
+          this.freezeDetail[date][page] = detailInfoRes.data;
+        }
       }
     }
 
     // 获取提现明细
     @action
     getCashLog = async ({ ...props }) => {
-      const { page = 1, date } = props;
-      const cashInfoRes = await readWalletCash({
-        param: {
-          page,
-        },
+      const { page = 1, date, type = 'all' } = props;
+      const param = {
+        page,
+      };
+
+      const filter = {
+        start_time: time.getMonthStartAndEnd(date)[0],
+        end_time: time.getMonthStartAndEnd(date)[1],
+      };
+      if (type !== 'all') {
+        filter.cash_status = type;
+      }
+
+      Object.assign(param, {
+        filter,
       });
 
-      if (cashInfoRes.code === 0) {
-        if (!this.cashDetail[date]) {
-          this.cashDetail[date] = {};
-        }
-        this.cashDetail[date][page] = cashInfoRes.data;
-      }
+      const cashInfoRes = await readWalletCash({
+        param,
+      });
+
+      setWalletInfoPageData(cashInfoRes.data, this.cashDetail, {
+        type,
+        date,
+        page,
+      });
     }
 }
 

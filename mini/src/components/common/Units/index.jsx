@@ -68,7 +68,7 @@ const Index = (props) => {
         <Text className={styles['desc']}>{productDesc}</Text>
         <View className={styles['opera']}>
           <Text className={styles['price']}>{`￥${productPrice}`}</Text>
-          <Icon name='MailOutlined' size={16} onClick={onDelete} />
+          <Icon name='DeleteOutlined' size={16} onClick={onDelete} />
         </View>
       </View>
     </View>

@@ -435,7 +435,12 @@ class Index extends Component {
           this.props.index.updateAssignThreadAllData(threadId, data);
         // 添加帖子到首页数据
         } else {
-          this.props.index.addThread(data);
+          const { categoryids = [] } = this.props.index?.filter || {}
+          const { categoryId = '' } = data
+          // 首页如果是全部或者是当前分类，则执行数据添加操作
+          if (!categoryids.length || categoryids.indexOf(categoryId) !== -1) {
+            this.props.index.addThread(data);
+          }
         }
         this.postToast('发布成功', 'success');
         Taro.redirectTo({ url: `/pages/thread/index?id=${data.threadId}` });
@@ -556,7 +561,7 @@ class Index extends Component {
 
               <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }} />
 
-              {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => { }} />}
+              {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => setPostData({ product: {} })} />}
 
               {video.thumbUrl && <Units type='video' deleteShow src={video.thumbUrl} onDelete={() => setPostData({ video: {} })} />}
 

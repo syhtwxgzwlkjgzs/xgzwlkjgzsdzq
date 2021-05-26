@@ -1,0 +1,73 @@
+@import '@common/styles/mixin/login.scss';
+@import '@common/styles/index.scss';
+.content {
+  padding: 0 $padding-6n;
+  height: 100%;
+  background: $white;
+  .item {
+    padding: $margin-2n 0;
+  }
+  .input{
+    .input_value{
+      width: 100%;
+    }
+  }
+  .button{
+    @include button;
+    margin: $margin-6n 0;
+  }
+  .imgUpload {
+    .imgUpload-dom {
+      width: 100px;
+      height: 100px;
+      border-radius: $border-radius-small;
+      background: $body-bg-color;
+      border: $border-solid-1;
+      text-align: center;
+      line-height: 100px;
+      font-size: $font-size-large;
+      color: $text-color-secondary;
+    }
+  }
+  .label{
+    font-size: $font-size-base;
+    line-height: $font-line-height-middle;
+    text-align: left;
+    color: $text-color-regular;
+    padding-bottom: $margin-2n;
+  }
+  .attachmentsUpload{
+    float: left;
+    width: 100%;
+    .attachmentsUpload-left{
+      display: inline-block;
+      font-size: $font-size-base;
+      line-height: $font-line-height-middle;
+      text-align: left;
+      color: $text-color-regular;
+    }
+    .attachmentsUpload-right{
+      cursor: pointer;
+      display: inline-block;
+      font-size: $font-size-base;
+      line-height: $font-line-height-base;
+      color: $text-color-primary;
+      float: right;
+    }
+  }
+  .textarea{
+    .textarea_item{
+      width: 327px;
+      box-sizing: border-box;
+      :global(.dzq-textarea__limit){
+        position: absolute;
+        bottom: 0;
+      }
+    }
+  }
+  .checkbox{
+    :global(.dzq-checkbox-wrap) {
+      margin-right: $margin-4n;
+    }
+  }
+}

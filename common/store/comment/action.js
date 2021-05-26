@@ -50,7 +50,8 @@ class CommentAction extends CommentStore {
   setCommentDetail(data) {
     this.commentDetail = data;
     if (this.commentDetail) {
-      this.commentDetail.lastThreeComments = this?.commentDetail?.commentPosts || [];
+      this.commentDetail.commentPosts = this?.commentDetail?.commentPosts || [];
+      this.commentDetail.lastThreeComments = this.commentDetail.commentPosts;
     }
   }
 

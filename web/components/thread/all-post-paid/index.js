@@ -103,6 +103,7 @@ const Index = inject('threadPost')(observer(({ threadPost, cancel, paidType, pc,
           <div className={styles.right}>
             <Input
               mode="number"
+              htmlType="number"
               value={price}
               placeholder="金额"
               maxLength={10}
@@ -130,6 +131,7 @@ const Index = inject('threadPost')(observer(({ threadPost, cancel, paidType, pc,
         <div className={styles.right}>
           <Input
             mode="number"
+            htmlType="number"
             value={price}
             placeholder="金额"
             maxLength={10}

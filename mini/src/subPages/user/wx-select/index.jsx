@@ -105,7 +105,7 @@ class WXSelect extends Component {
               type="primary"
               onClick={this.handleAutobindCallback}
             >
-              <Icon name='WechatOutlined' size={16}/>
+              <Icon name='IncreaseOutlined' size={16}/>
               创建新账号
             </Button>
             <Button
@@ -120,18 +120,20 @@ class WXSelect extends Component {
               <Icon name='UserOutlined' size={16}/>
               绑定已有用户名
             </Button>
-            <Button
-              className={`${layout.button} ${layout.btn_select} ${layout.btn_phone}`}
-              type="primary"
-              onClick={() => {
-                navigateTo({
-                  url: `/subPages/user/wx-bind-phone/index?sessionToken=${sessionToken}&nickname=${nickname}`
-                })
-              }}
-            >
-              <Icon name='PhoneOutlined' size={16}/>
-              绑定手机号
-            </Button>
+            {this.props.site.isSmsOpen && (
+              <Button
+                className={`${layout.button} ${layout.btn_select} ${layout.btn_phone}`}
+                type="primary"
+                onClick={() => {
+                  navigateTo({
+                    url: `/subPages/user/wx-bind-phone/index?sessionToken=${sessionToken}&nickname=${nickname}`
+                  })
+                }}
+              >
+                <Icon name='PhoneOutlined' size={16}/>
+                绑定手机号
+              </Button>
+            )}
           </View>
         </View>
       </Page>

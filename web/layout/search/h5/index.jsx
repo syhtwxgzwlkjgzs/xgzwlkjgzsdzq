@@ -51,15 +51,12 @@ class SearchH5Page extends React.Component {
     if (index !== 1) {
       return
     }
-    this.props.baselayout.setSearch(0);
+    this.props.baselayout.setJumpingToTop();
 
     const { dispatch = () => {} } = this.props;
     dispatch('refresh', {});
   }
 
-  onScroll = ({ scrollTop }) => {
-    this.props.baselayout.setSearch(scrollTop);
-  }
 
   render() {
     const { indexTopics, indexUsers, indexThreads } = this.props.search;
@@ -68,7 +65,13 @@ class SearchH5Page extends React.Component {
     const { pageData: threadsPageData } = indexThreads || {};
 
     return (
-      <BaseLayout allowRefresh={false} curr='search' showTabBar onClickTabBar={this.onClickTabBar} pageName="search" onScroll={this.onScroll}>
+      <BaseLayout
+        allowRefresh={false}
+        curr='search'
+        showTabBar
+        onClickTabBar={this.onClickTabBar}
+        pageName="search"
+      >
         <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} isShowBottom={false} />
         <SidebarPanel
           icon={{ type: 1, name: 'StrongSharpOutlined' }} 

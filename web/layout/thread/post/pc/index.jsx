@@ -71,6 +71,7 @@ class ThreadPCPage extends React.Component {
                   onFocus={() => { }}
                   onBlur={() => { }}
                   onInit={this.props.handleVditorInit}
+                  setState={this.props.handleSetState}
                 />
 
                 {/* 插入图片 */}

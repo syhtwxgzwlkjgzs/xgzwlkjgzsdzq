@@ -1,17 +1,20 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-
-import layout from './layout.module.scss';
-
+import { Tabs, Icon, Button, Toast } from '@discuzq/design';
 import WalletInfo from './components/wallet-info/index';
 import IncomeList from './components/income-list/index';
 import PayList from './components/pay-list/index';
 import WithdrawalList from './components/withdrawal-list/index';
 import NoMore from './components/no-more';
+import classNames from 'classnames';
+import FilterView from './components/all-state-popup';
+import DatePickers from '@components/thread/date-picker';
+import { formatDate } from '@common/utils/format-date.js';
+import { INCOME_DETAIL_CONSTANTS, EXPAND_DETAIL_CONSTANTS, CASH_DETAIL_CONSTANTS } from '@common/constants/wallet';
+import List from '@components/list';
 
-import { Tabs, Icon, Button } from '@discuzq/design';
-
+import layout from './layout.module.scss';
 
 @inject('wallet')
 @observer
@@ -21,9 +24,16 @@ class WalletH5Page extends React.Component {
 
     this.state = {
       tabsType: 'income',
+      visibleshow: false,
+      consumptionTimeshow: false,
+      consumptionTime: '',
     };
   }
-
+  async componentDidMount() {
+    const { getUserWalletInfo, getInconmeDetail } = this.props.wallet;
+    await getUserWalletInfo();
+    await getInconmeDetail();
+  }
   // 点击冻结金额
   onFrozenAmountClick() {
     this.props.router.push('/wallet/frozen');
@@ -37,22 +47,107 @@ class WalletH5Page extends React.Component {
   // 点击提现
   toWithrawal = () => {
     this.props.router.push('/wallet/withdrawal');
-  }
+  };
 
   // 点击时间选择
   onSelectStatus = (type) => {
     if (type === 'select') {
       console.log('选择时间');
+      this.setState({ consumptionTimeshow: true });
     } else {
       console.log('点击了全部状态');
+      this.setState({ visibleshow: true });
+    }
+  };
+
+  // 关闭全部状态的弹框
+  handleState = () => {
+    this.setState({ visibleshow: false });
+  };
+
+  // 点击确定后对时间选择的弹框的操作
+  handleMoneyTime = (time) => {
+    const gapTime = new Date(time).getTime() - new Date().getTime();
+    if (gapTime < 0) {
+      this.setState({ consumptionTime: formatDate(time, 'yyyy年MM月') });
+      this.setState({ consumptionTimeshow: false });
+    } else {
+      Toast.warning({ content: '时间要小于当前时间' });
+      return;
+    }
+  };
+
+  // 根据当前选项渲染下拉选择器内容
+  renderSelectContent = () => {
+    let dataSource = {};
+    switch (this.state.tabsType) {
+      case 'income':
+        dataSource = INCOME_DETAIL_CONSTANTS;
+        break;
+      case 'pay':
+        dataSource = EXPAND_DETAIL_CONSTANTS;
+        break;
+      case 'withdrawal':
+        dataSource = CASH_DETAIL_CONSTANTS;
+    }
+
+    return Object.values(dataSource).map(item => ({ title: item.text, id: item.id }));
+  };
+
+  renderSelectTitle = () => {
+    switch (this.state.tabsType) {
+      case 'income':
+      case 'pay':
+        return '选择类型';
+      case 'withdrawal':
+        return '选择状态';
     }
   }
 
   render() {
     const tabList = [
-      ['income', '收入明细', null, { name: 'RedPacketOutlined' }],
-      ['pay', '支出明细', null, { name: 'RedPacketOutlined' }],
-      ['withdrawal', '提现记录', null, { name: 'RedPacketOutlined' }],
+      [
+        'income',
+        <div className={layout.tagbox}>
+          <Icon
+            name="TicklerOutlined"
+            className={classNames(layout.tag, {
+              [layout['tag-active-green']]: this.state.tabsType != 'income',
+            })}
+          />
+          收入明细
+        </div>,
+        null,
+        { name: 'TicklerOutlined' },
+      ],
+      [
+        'pay',
+        <div className={layout.tagbox}>
+          <Icon
+            name="WallOutlined"
+            className={classNames(layout.tag, {
+              [layout['tag-active-blue']]: this.state.tabsType != 'pay',
+            })}
+          />
+          支出明细
+        </div>,
+        null,
+        { name: 'WallOutlined' },
+      ],
+      [
+        'withdrawal',
+        <div className={layout.tagbox}>
+          <Icon
+            name="TransferOutOutlined"
+            className={classNames(layout.tag, {
+              [layout['tag-active-red']]: this.state.tabsType != 'withdrawal',
+            })}
+          />
+          提现记录
+        </div>,
+        null,
+        { name: 'TransferOutOutlined' },
+      ],
     ];
 
     // 伪造的数据incomeData、payData、withdrawalData
@@ -141,33 +236,33 @@ class WalletH5Page extends React.Component {
       },
     ];
 
+    const { walletInfo, incomeDetail, expandDetail, freezeDetail, cashDetail } = this.props.wallet;
     return (
-        <div className={layout.container}>
-          <div className={layout.scroll}>
-            <div className={layout.header}>
-              <WalletInfo
-                walletData={this.props.walletData}
-                webPageType='h5'
-                onFrozenAmountClick={() => this.onFrozenAmountClick()}
-                >
-              </WalletInfo>
+      <div className={layout.container}>
+        <div className={layout.scroll}>
+          <div className={layout.header}>
+            <WalletInfo
+              walletData={walletInfo}
+              webPageType="h5"
+              onFrozenAmountClick={() => this.onFrozenAmountClick()}
+            ></WalletInfo>
+          </div>
+          <div className={layout.choiceTime}>
+            <div className={layout.status} onClick={() => this.onSelectStatus('all')}>
+              <span className={layout.text}>{this.state.tabsType === 'withdrawal' ? '全部状态' : '全部类型'}</span>
+              <Icon name="UnderOutlined" size="6" className={layout.icon}></Icon>
             </div>
-            <div className={layout.choiceTime}>
-              <div className={layout.status} onClick={() => this.onSelectStatus('all')}>
-                <span className={layout.text}>全部状态</span>
-                <Icon name='UnderOutlined' size='6' className={layout.icon}></Icon>
-              </div>
-              <div className={layout.status} onClick={() => this.onSelectStatus('select')}>
-                <span className={layout.text}>2012年4月</span>
-                <Icon name='UnderOutlined' size='6' className={layout.icon}></Icon>
-              </div>
+            <div className={layout.status} onClick={() => this.onSelectStatus('select')}>
+              <span className={layout.text}>{this.state.consumptionTime || formatDate(new Date(), 'yyyy年MM月')}</span>
+              <Icon name="UnderOutlined" size="6" className={layout.icon}></Icon>
             </div>
-            <div className={layout.tabs}>
-              <Tabs
-                scrollable={true}
-                className={layout.tabList}
-                onActive={val => this.onTabActive(val)}
-              >
+          </div>
+          <div className={layout.tabs}>
+            <Tabs
+              scrollable={true}
+              className={layout.tabList}
+              onActive={val => this.onTabActive(val)}
+            >
               {tabList.map(([id, label, badge, icon]) => (
                 <Tabs.TabPanel
                   key={id}
@@ -177,26 +272,77 @@ class WalletH5Page extends React.Component {
                 >
                   {
                     this.state.tabsType === 'income'
-                      ? incomeData.map(value => <IncomeList key={value.id} incomeVal={value}></IncomeList>) : ''
+                      ? <List
+                        className={layout.list}
+                        onRefresh={() => {
+                          console.log('触底了');
+                        }}>
+                        {incomeData.map(value => <IncomeList key={value.id} incomeVal={value}></IncomeList>)}
+                        </List> : ''
                   }
                   {
                     this.state.tabsType === 'pay'
-                      ? payData.map(value => <PayList key={value.id} payVal={value}></PayList>) : ''
+                      ? <List
+                      className={layout.list}
+                      onRefresh={() => {
+                        console.log('触底了');
+                      }}>
+                      {payData.map(value => <PayList key={value.id} payVal={value}></PayList>)}
+                      </List> : ''
                   }
                   {
                     this.state.tabsType === 'withdrawal'
-                      ? withdrawalData.map(value => <WithdrawalList key={value.id} withdrawalVal={value}></WithdrawalList>) : ''
+                      ? <List
+                      className={layout.list}
+                      onRefresh={() => {
+                        console.log('触底了');
+                      }}>
+                      {withdrawalData.map(value => <WithdrawalList key={value.id} withdrawalVal={value}></WithdrawalList>)}
+                      </List> : ''
                   }
-                  <NoMore></NoMore>
                 </Tabs.TabPanel>
               ))}
-              </Tabs>
-            </div>
-          </div>
-          <div className={layout.footer}>
-            <Button className={layout.button} onClick={this.toWithrawal}>提现</Button>
+            </Tabs>
           </div>
         </div>
+        <div className={layout.footer}>
+          <Button className={layout.button} onClick={this.toWithrawal}>
+            提现
+          </Button>
+        </div>
+        <FilterView
+          data={this.renderSelectContent()}
+          title={this.renderSelectTitle()}
+          visible={this.state.visibleshow}
+          handleCancel={() => {
+            this.handleStateCancel();
+          }}
+          handleSubmit={(id) => {
+            console.log(id);
+          }}
+        />
+        <DatePickers
+          isOpen={this.state.consumptionTimeshow}
+          onCancels={() => {
+            this.setState({ consumptionTimeshow: !this.state.consumptionTimeshow });
+          }}
+          onSelects={(time) => {
+            this.handleMoneyTime(time);
+          }}
+          dateConfig={{
+            year: {
+              format: 'YYYY',
+              caption: 'Year',
+              step: 1,
+            },
+            month: {
+              format: 'MM',
+              caption: 'Mon',
+              step: 1,
+            },
+          }}
+        />
+      </div>
     );
   }
 }

@@ -49,7 +49,11 @@
   }
 }
 .h5 {
-  width: calc(100vw - 8px * 2);
+  position: static !important;
+  display: flex;
+  flex-flow: wrap;
+  padding: $padding-2n $padding-4n;
+  width: calc(100vw - 16px * 2);
+  height: 200px;
   margin-left: 0;
-  bottom: 48px;
 }
