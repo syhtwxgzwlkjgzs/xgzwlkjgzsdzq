@@ -6,6 +6,12 @@ import layout from './index.module.scss';
 import CaptchaInput from './captcha-input';
 
 class PhoneInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isFocus: false
+    };
+  }
   setCaptcha = (code) => {
     const { phoneCodeCallback = () => {} } = this.props;
     phoneCodeCallback(code);
@@ -16,8 +22,23 @@ class PhoneInput extends React.Component {
     phoneNumCallback(val);
   };
 
+  setIsFocus = (isFocus) => {
+    this.setState({
+      isFocus
+    })
+  };
+
+  handleSendCode = () => {
+    const { sendCodeCallback = () => {} } = this.props;
+    sendCodeCallback(() => {
+      this.setState({
+        isFocus: true
+      })
+    });
+  }
+
   render() {
-    const { phoneNum, captcha, codeTimeout, sendCodeCallback = () => {} } = this.props;
+    const { phoneNum, captcha, codeTimeout } = this.props;
     return (
       <>
         {/* 手机号输入 start */}
@@ -33,7 +54,7 @@ class PhoneInput extends React.Component {
           {codeTimeout ? (
             <View className={layout.countDown}>{codeTimeout}秒后再发送</View>
           ) : (
-            <View className={layout.sendCaptcha} onClick={sendCodeCallback}>
+            <View className={layout.sendCaptcha} onClick={this.handleSendCode}>
               发送验证码
             </View>
           )}
@@ -42,7 +63,7 @@ class PhoneInput extends React.Component {
         {/* 验证码 start */}
         <View className={layout.captchaInput}>
           <View className={layout['captchaInput-title']}>短信验证码</View>
-          <CaptchaInput captcha={captcha} inputCallback={this.setCaptcha} />
+          <CaptchaInput captcha={captcha} setCaptcha={this.setCaptcha} isFocus={this.state.isFocus} setIsFocus={this.setIsFocus}/>
         </View>
         {/* 验证码 end */}
       </>

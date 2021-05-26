@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getCurrentInstance, navigateTo } from '@tarojs/taro';
+import Taro, { getCurrentInstance, navigateTo } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import Button from '@discuzq/design/dist/components/button/index';
@@ -10,9 +10,10 @@ import Taro from '@tarojs/taro';
 import { toTCaptcha } from '@common/utils/to-tcaptcha'
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
-import layout from './index.module.scss';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
+import PhoneInput from '@components/login/phone-input'
+import layout from './index.module.scss';
 
 const MemoToastProvider = React.memo(ToastProvider)
 
@@ -54,7 +55,7 @@ class Index extends Component {
     this.randstr = '';
   }
 
-  handleSendCodeButtonClick = async () => {
+  handleSendCodeButtonClick = async (onFocus) => {
     try{
       // 发送前校验
       this.props.wxPhoneBind.beforeSendVerify();
@@ -70,6 +71,7 @@ class Index extends Component {
         captchaRandStr: this.ticket,
         captchaTicket: this.randstr
       });
+      onFocus();
     }catch(e){
       Toast.error({
         content: e.Message,
@@ -110,6 +112,16 @@ class Index extends Component {
     }
   }
 
+  handlePhoneNumCallback = (phoneNum) => {
+    const { wxPhoneBind } = this.props;
+    wxPhoneBind.mobile = phoneNum;
+  };
+
+  handlePhoneCodeCallback = (code) => {
+    const { wxPhoneBind } = this.props;
+    wxPhoneBind.code = code;
+  };
+
   render() {
     const { wxPhoneBind, commonLogin } = this.props;
     const { nickname } = getCurrentInstance().router.params;
@@ -124,34 +136,14 @@ class Index extends Component {
               <View style={{display: 'flex' }}>hi， 微信用户<Avatar style={{margin: '0 8px'}} circle size='small' image={commonLogin.avatarUrl}/>{nickname}</View>
               <View>请您登录，即可完成微信号和用户名的绑定</View>
             </View>
-            {/* 输入框 start */}
-            <Input
-              className={layout.input}
-              value={wxPhoneBind.mobile}
-              mode="number"
-              clearable
-              placeholder="输入您的手机号"
-              onChange={(e) => {
-                wxPhoneBind.mobile = e.target.value;
-              }}
+            <PhoneInput
+              phoneNum={wxPhoneBind.mobile}
+              captcha={wxPhoneBind.code}
+              phoneNumCallback={this.handlePhoneNumCallback}
+              phoneCodeCallback={this.handlePhoneCodeCallback}
+              sendCodeCallback={this.handleSendCodeButtonClick}
+              codeTimeout={wxPhoneBind.codeTimeout}
             />
-            <View className={layout.captchaInput}>
-              <Input
-                className={layout.input}
-                mode="number"
-                appendWidth="auto"
-                value={wxPhoneBind.code}
-                placeholder="输入您的验证码"
-                onChange={(e) => {
-                  wxPhoneBind.code = e.target.value;
-                }}
-              />
-              {wxPhoneBind.codeTimeout ? (
-                <View className={layout.countDown}>{wxPhoneBind.codeTimeout}s后重试</View>
-              ) : (
-                <Text size="mini" className={layout.sendCaptcha} onClick={wxPhoneBind.sendCode}>发送验证码</Text>
-              )}
-            </View>
             {/* 输入框 end */}
             {/* 登录按钮 start */}
             <Button className={layout.button} type="primary" onClick={this.handleBindButtonClick}>

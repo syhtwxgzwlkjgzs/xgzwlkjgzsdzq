@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Taro, { getCurrentInstance, redirectTo, navigateTo  } from '@tarojs/taro';
-import { View } from '@tarojs/components';
+import { View, Navigator } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import Button from '@discuzq/design/dist/components/button/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
@@ -71,7 +71,7 @@ class WXBind extends Component {
         <MemoToastProvider>
           <View className={layout.container}>
             <View className={layout.content}>
-              <View className={layout.title}>绑定微信</View>
+              <View className={layout.title}>绑定小程序</View>
               <View className={layout.tips}>
                 {nickname ? `${nickname}，` : ''}{this.props.h5QrCode.bindTitle}
               </View>
@@ -82,10 +82,18 @@ class WXBind extends Component {
                   type="primary"
                   onClick={() => {getUserProfile(this.getUserProfileCallback)}}
                 >
-                  点此，绑定微信，并继续访问
+                  点此，绑定小程序，并继续访问
                 </Button>
                 : <></>
               }
+              <View className={layout.functionalRegion}>
+                <Navigator openType='exit' target='miniProgram' className={layout.clickBtn} onClick={() => {
+                  this.props.h5QrCode.bindTitle = '已取消绑定';
+                  this.props.h5QrCode.isBtn = false;
+                }}>
+                  退出
+                </Navigator>
+              </View>
             </View>
           </View>
         </MemoToastProvider>

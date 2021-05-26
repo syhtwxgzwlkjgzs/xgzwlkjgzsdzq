@@ -9,9 +9,9 @@ const showTop = (props) => {
 
   return (
     <View className={`${styles.setTop} ${setTop ? styles.inTop : styles.outTop}`}>
-      <Text className={styles.setTopIcon}>
+      <View className={styles.setTopIcon}>
         <Icon className={styles.icon} name='CheckOutlined'></Icon>
-      </Text>
+      </View>
       {
         showContent ? '置顶成功' : '已取消置顶'
       }

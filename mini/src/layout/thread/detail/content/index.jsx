@@ -4,7 +4,7 @@ import { View, Text } from '@tarojs/components';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Button from '@discuzq/design/dist/components/button/index';
 import { parseContentData } from '../../utils';
-// import ImageDisplay from '@components/thread/image-display'; // components中暂时没有
+import ImageDisplay from '@components/thread/image-content';
 import AudioPlay from '@components/thread/audio-play';
 import PostContent from '@components/thread/post-content';
 import ProductItem from '@components/thread/product-item';
@@ -147,14 +147,13 @@ const RenderThreadContent = inject('user')(
             <View style={{ textAlign: 'center' }} onClick={onContentClick}>
               <Button className={styles.payButton} type="primary">
                 <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
-                <p>支付{attachmentPrice}元查看附件内容</p>
+                <View>支付{attachmentPrice}元查看附件内容</View>
               </Button>
             </View>
           )}
 
           {/* 图片 */}
-          {/* 暂无该组件 */}
-          {/* {parseContent.IMAGE && <ImageDisplay imgData={parseContent.IMAGE} />} */}
+          {parseContent.IMAGE && <ImageDisplay imgData={parseContent.IMAGE} />}
 
           {/* 视频 */}
           {parseContent.VIDEO && (

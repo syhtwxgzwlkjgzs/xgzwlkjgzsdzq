@@ -108,7 +108,7 @@ class WXSelect extends Component {
               type="primary"
               onClick={this.handleAutobindCallback}
             >
-              <Icon name='WechatOutlined' size={16}/>
+              <Icon name='IncreaseOutlined' size={16}/>
               创建新账号
             </Button>
             <Button
