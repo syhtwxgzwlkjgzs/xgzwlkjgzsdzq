@@ -14,6 +14,7 @@ import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
 import { withRouter } from 'next/router';
 import { tencentVodUpload } from '@common/utils/tencent-vod';
 import { plus } from '@common/utils/calculate';
+import { defaultOperation } from '@common/constants/const';
 
 @inject('site')
 @inject('threadPost')
@@ -168,6 +169,7 @@ class PostPage extends React.Component {
             type: file.type,
           },
         });
+        this.scrollIntoView('#dzq-post-video');
       } else if (type === THREAD_TYPE.voice) {
         this.setPostData({
           audio: {
@@ -243,9 +245,29 @@ class PostPage extends React.Component {
       this.setPostData(data);
       return false;
     }
-    this.setState({ currentAttachOperation: item.type });
     this.props.threadPost.setCurrentSelectedToolbar(item.type);
+    this.setState({ currentAttachOperation: item.type }, () => {
+      if (item.type === THREAD_TYPE.image) {
+        this.scrollIntoView('.dzq-post-image-upload');
+      }
+      if (item.type === THREAD_TYPE.voice) {
+        this.scrollIntoView('#dzq-post-audio-record');
+      }
+    });
   };
+
+  // 滚动到可视区
+  scrollIntoView = (id) => {
+    const timer = setTimeout(() => {
+      clearTimeout(timer);
+      let rect = {};
+      const elem = document.querySelector(id);
+      if (elem) rect = elem.getBoundingClientRect();
+      const top = rect.y || 0;
+      this.handleEditorBoxScroller(top);
+    }, 0);
+  }
+
 
   // 表情等icon
   handleDefaultIconClick = (item, child, data) => {
@@ -274,7 +296,11 @@ class PostPage extends React.Component {
       }
       this.setState({ curPaySelect: child.id, emoji: {} });
     } else {
-      this.setState({ currentDefaultOperation: item.id, emoji: {} });
+      this.setState({ currentDefaultOperation: item.id, emoji: {} }, () => {
+        if (item.id === defaultOperation.attach) {
+          this.scrollIntoView('.dzq-post-file-upload');
+        }
+      });
     }
   }
 
@@ -569,6 +595,13 @@ class PostPage extends React.Component {
     }
   }
 
+  handleEditorBoxScroller = (top = 0) => {
+    const editorbox = document.querySelector('#post-inner');
+    const rect = editorbox.getBoundingClientRect();
+    const gap = this.props.site?.isPc ? top - rect.top : top;
+    editorbox.scrollTo({ top: gap, behavior: 'smooth' });
+  };
+
   render() {
     const { isPC } = this.props.site;
 
@@ -623,4 +656,4 @@ class PostPage extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData((withRouter(PostPage)));
+export default HOCFetchSiteData(HOCWithLogin(withRouter(PostPage)));
