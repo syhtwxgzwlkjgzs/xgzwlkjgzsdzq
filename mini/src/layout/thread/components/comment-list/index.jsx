@@ -128,14 +128,14 @@ class CommentList extends React.Component {
           <View className={styles.commentListAvatar} onClick={() => this.avatarClick()}>
             <Avatar
               image={this.props.data.user.avatar}
-              name={this.props.data.user.username || this.props.data.user.userName || ''}
+              name={this.props.data.user.nickname || this.props.data.user.userName || ''}
               circle={true}
             ></Avatar>
           </View>
           <View className={styles.commentListContent}>
             <View className={styles.commentListContentText} onClick={() => this.toCommentDetail()}>
               <View className={styles.commentListName}>
-                {this.props.data.user.username || this.props.data.user.userName}
+                {this.props.data.user.nickname || this.props.data.user.userName}
               </View>
               <View className={styles.commentListText} dangerouslySetInnerHTML={{ __html: this.filterContent() }}></View>
             </View>
