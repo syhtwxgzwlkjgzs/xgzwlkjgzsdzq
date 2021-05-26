@@ -28,17 +28,6 @@ export default function MoneyDisplay(props) {
           }}
         >付费总额{payTotalMoney}元</Tag>
       )}
-      {/* 悬赏问答内容标识 */}
-      {(postData.rewardQa.value && postData.rewardQa.times) && (
-        <Tag closeable
-          onClose={() => onAttachClick({ type: THREAD_TYPE.reward }, { rewardQa: {} }) }
-          onClick={() => {
-            onAttachClick({ type: THREAD_TYPE.reward });
-          }}
-        >
-          {`悬赏金额${plus(postData.rewardQa.value, 0)}元\\结束时间 ${postData.rewardQa.times}`}
-        </Tag>
-      )}
       {/* 红包 */}
       {postData.redpacket.price && (
         <Tag closeable
@@ -58,6 +47,17 @@ export default function MoneyDisplay(props) {
           {postData.redpacket.rule === 1 ? '随机红包' : '定额红包'}
           \总金额{redTotalMoney}元\{postData.redpacket.number}个
           {postData.redpacket.condition === 1 && `\\集赞个数${postData.redpacket.likenum}`}
+        </Tag>
+      )}
+      {/* 悬赏问答内容标识 */}
+      {(postData.rewardQa.value && postData.rewardQa.times) && (
+        <Tag closeable
+          onClose={() => onAttachClick({ type: THREAD_TYPE.reward }, { rewardQa: {} }) }
+          onClick={() => {
+            onAttachClick({ type: THREAD_TYPE.reward });
+          }}
+        >
+          {`悬赏金额${plus(postData.rewardQa.value, 0)}元\\结束时间 ${postData.rewardQa.times}`}
         </Tag>
       )}
       {/* 字数 */}

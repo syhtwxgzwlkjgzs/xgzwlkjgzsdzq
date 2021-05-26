@@ -59,6 +59,7 @@ class ThreadCreate extends React.Component {
     throttle(this.setBottomBarStyle(window.scrollY), 50);
   }
 
+  // 定位的显示与影藏
   positionDisplay = (action) => {
     const position = document.querySelector('#post-position');
     if (!position) return;
@@ -67,12 +68,21 @@ class ThreadCreate extends React.Component {
     } else position.style.display = 'flex';
   };
 
+  // 设置悬赏等之后显示的金额的显示和影藏
+  moneyboxDisplay = (isShow) => {
+    const moneybox = document.querySelector('#dzq-money-box');
+    if (!moneybox) return;
+    if (isShow) moneybox.style.display = 'flex';
+    else moneybox.style.display = 'none';
+  }
+
   // 设置底部bar的样式
   setBottomBarStyle = (y = 0, action) => {
     const winHeight = getVisualViewpost();
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
+    this.moneyboxDisplay(false);
+    this.positionDisplay(action);
     if (!isIOS()) {
-      this.positionDisplay(action);
       if (vditorToolbar) {
         vditorToolbar.style.position = 'fixed';
         vditorToolbar.style.bottom = '88px';
@@ -80,7 +90,6 @@ class ThreadCreate extends React.Component {
       }
       return;
     }
-    this.positionDisplay(action);
     this.setPostBottombar(action, y);
     if (vditorToolbar && action === 'select') {
       vditorToolbar.style.position = 'fixed';
@@ -132,6 +141,7 @@ class ThreadCreate extends React.Component {
     }, 150);
   }
   clearBottomFixed = () => {
+    this.moneyboxDisplay(true);
     if (!isIOS()) return;
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
@@ -259,6 +269,18 @@ class ThreadCreate extends React.Component {
               onDelete={() => this.props.setPostData({ product: {} })}
             />
           )}
+        </div>
+        <div id="post-bottombar" className={styles['post-bottombar']}>
+          {/* 插入位置 */}
+          {(permissions?.insertPosition?.enable && webConfig?.lbs?.lbs) && (
+            <div id="post-position" className={styles['position-box']}>
+            {/* <div className={styles['post-counter']}>还能输入{MAX_COUNT - this.props.count}个字</div> */}
+              <Position
+                lbskey={webConfig.lbs.qqLbsKey}
+                position={postData.position}
+                onChange={position => this.props.setPostData({ position })} />
+            </div>
+          )}
           {((postData.rewardQa.value && postData.rewardQa.times)
             || postData.redpacket.price
             || !!(postData.price || postData.attachmentPrice)
@@ -272,18 +294,6 @@ class ThreadCreate extends React.Component {
               onAttachClick={this.props.handleAttachClick}
               onDefaultClick={this.props.handleDefaultIconClick}
             />
-          )}
-        </div>
-        <div id="post-bottombar" className={styles['post-bottombar']}>
-          {/* 插入位置 */}
-          {(permissions?.insertPosition?.enable && webConfig?.lbs?.lbs) && (
-            <div id="post-position" className={styles['position-box']}>
-            {/* <div className={styles['post-counter']}>还能输入{MAX_COUNT - this.props.count}个字</div> */}
-              <Position
-                lbskey={webConfig.lbs.qqLbsKey}
-                position={postData.position}
-                onChange={position => this.props.setPostData({ position })} />
-            </div>
           )}
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar
