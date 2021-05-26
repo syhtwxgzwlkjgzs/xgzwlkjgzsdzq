@@ -16,7 +16,7 @@ class PCCloseSite extends React.Component {
     const { closeSiteConfig } = site;
     const height = isServer() ? '100vh' : `${window.innerHeight - 160}px`;
     return (
-      <>
+      <div className={styles.body}>
         <Header/>
         <div className={styles.page} style={{height: height}}>
           <img className={styles.img} src='/dzq-img/close.png'/>
@@ -25,7 +25,7 @@ class PCCloseSite extends React.Component {
           {false && <Button onClick={() => {Router.push({url: '/user/login'});}} size='large' className={styles.btn} type='primary'>管理员登录</Button>}
         </div>
         <Copyright center line/>
-      </>
+      </div>
       
     );
   }

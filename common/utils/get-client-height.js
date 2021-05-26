@@ -24,8 +24,6 @@ export function getVisualViewpost() {
     visualHeight = Math.max(
       document.body.scrollHeight,
       document.documentElement.scrollHeight,
-      document.documentElement.scrollTop,
-      document.body.scrollTop,
     );
   }
   return visualHeight;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { getCurrentInstance, redirectTo  } from '@tarojs/taro';
-import { View } from '@tarojs/components';
+import { View, Navigator } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import { Button, Toast } from '@discuzq/design';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
@@ -74,6 +74,7 @@ class WXAuthorization extends Component {
         <MemoToastProvider>
           <View className={layout.container}>
             <View className={layout.content}>
+              <View className={layout.title}>授权登录小程序</View>
               <View className={layout.tips}>
                 {nickname ? `${nickname}，` : ''}{this.props.h5QrCode.loginTitle}
               </View>
@@ -88,6 +89,14 @@ class WXAuthorization extends Component {
                 </Button>
                 : <></>
               }
+              <View className={layout.functionalRegion}>
+                <Navigator openType='exit' target='miniProgram' className={layout.clickBtn} onClick={() => {
+                  this.props.h5QrCode.loginTitle = '已取消登录';
+                  this.props.h5QrCode.isBtn = false;
+                }}>
+                  退出
+                </Navigator>
+              </View>
             </View>
           </View>
         </MemoToastProvider>
