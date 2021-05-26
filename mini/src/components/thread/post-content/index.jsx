@@ -1,5 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
-import { Button, Icon, RichText } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import RichText from '@discuzq/design/dist/components/rich-text/index';
+import Button from '@discuzq/design/dist/components/button/index';
 import { noop } from '../utils'
 
 import fuzzyCalcContentLength from '@common/utils/fuzzy-calc-content-length';

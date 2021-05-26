@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Toast, Popup, Button, Input, Slider } from '@discuzq/design';
+import Popup from '@discuzq/design/dist/components/popup/index';
+import Button from '@discuzq/design/dist/components/button/index';
+import Slider from '@discuzq/design/dist/components/slider/index';
 import throttle from '@common/utils/thottle';
 import { View } from '@tarojs/components';
 import styles from './index.module.scss';

@@ -6,7 +6,8 @@
  import Taro from '@tarojs/taro';
  import { View, Text, Image, Video } from '@tarojs/components';
  import styles from './index.module.scss';
- import { Icon } from '@discuzq/design';
+//  import Icon from '@discuzq/design/dist/components/icon/index';
+ import Icon from '@discuzq/design/dist/components/icon/index';
 
 const Index = (props) => {
   const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, onTagRemoveClick, onTagClick, tagContent, deleteShow = false } = props;

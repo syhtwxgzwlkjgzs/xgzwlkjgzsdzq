@@ -5,7 +5,7 @@ import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import { noop } from '@components/thread/utils';
 import styles from './index.module.scss';
-import {RichText} from '@discuzq/design';
+import RichText from '@discuzq/design/dist/components/rich-text/index';
 import { View, Text } from '@tarojs/components';
 
 
@@ -16,15 +16,15 @@ export const TopicItem = ({ data, onClick = noop }) => {
       }
       onClick && onClick(data);
     }, [data, onClick]);
-  
+
     const { threads = [] } = data
-  
+
     const filterContent = useMemo(() => {
       const content = threads[0]?.content?.text || '暂无内容'
       let newContent = replaceSearchResultContent(content);
       newContent = s9e.parse(newContent);
       newContent = xss(newContent);
-  
+
       return newContent;
     }, [threads]);
 

@@ -185,7 +185,7 @@ class PostPage extends React.Component {
 
   // 表情
   handleEmojiClick = (emoji) => {
-    this.setState({ emojiShow: false, emoji, currentDefaultOperation: '' });
+    this.setState({ emoji });
   };
 
   // 附件相关icon
@@ -551,7 +551,7 @@ class PostPage extends React.Component {
   handleDraft = (val) => {
     const { site: { isPC }, threadPost: { resetPostData } } = this.props;
     this.setState({ draftShow: false });
-    
+
     if (isPC) {
       this.setPostData({ draft: 1 });
       this.handleSubmit(true);
@@ -623,4 +623,4 @@ class PostPage extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(HOCWithLogin(withRouter(PostPage)));
+export default HOCFetchSiteData((withRouter(PostPage)));

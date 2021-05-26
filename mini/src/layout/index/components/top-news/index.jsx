@@ -4,7 +4,7 @@ import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
-import { RichText } from '@discuzq/design';
+import RichText from '@discuzq/design/dist/components/rich-text/index';
 
 /**
  * 置顶消息

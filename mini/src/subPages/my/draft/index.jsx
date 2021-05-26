@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import Page from '@components/page';
-import { Toast } from '@discuzq/design';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import List from '@components/list';
 import { inject, observer } from 'mobx-react';
 import SliderScroll from '@components/slider-scroll';

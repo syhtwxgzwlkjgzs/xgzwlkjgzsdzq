@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { getCurrentInstance, navigateTo, redirectTo  } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
-import { Button, Toast, Avatar, Icon } from '@discuzq/design';
+import Button from '@discuzq/design/dist/components/button/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
+import Avatar from '@discuzq/design/dist/components/avatar/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import Page from '@components/page';
 import { usernameAutoBind } from '@server';
 import setAccessToken from '@common/utils/set-access-token';
@@ -105,7 +108,7 @@ class WXSelect extends Component {
               type="primary"
               onClick={this.handleAutobindCallback}
             >
-              <Icon name='WechatOutlined' size={16}/>
+              <Icon name='IncreaseOutlined' size={16}/>
               创建新账号
             </Button>
             <Button

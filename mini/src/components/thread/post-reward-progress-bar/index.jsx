@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Progress } from '@discuzq/design';
+import Progress from '@discuzq/design/dist/components/progress/index';
 
 import styles from './index.module.scss';
 import { View, Text, Image } from '@tarojs/components'

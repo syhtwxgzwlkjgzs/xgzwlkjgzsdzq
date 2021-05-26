@@ -1,6 +1,7 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import styles from './index.module.scss';
-import { Video, Icon } from '@discuzq/design';
+import Video from '@discuzq/design/dist/components/video/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import { noop } from '../utils';
 import { View, Text } from '@tarojs/components'
 import { getElementRect, randomStr } from '../utils'
