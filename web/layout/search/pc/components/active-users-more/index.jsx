@@ -23,7 +23,14 @@ const ActiveUsers = ({ data, onItemClick, onFollow, userId }) => (
  * @prop {function} onClick 用户点击事件
  */
 const User = ({ data, onClick, onFollow, userId }) => {
-  const click = useCallback(() => {
+  const click = useCallback((e) => {
+    e && e.stopPropagation();
+
+    const avatarPopup = e?.currentTarget.querySelector("#avatar-popup");
+    if( e && avatarPopup && avatarPopup.contains(e.target)) { // 处理来源于Avatar弹框的点击
+      return;
+    }
+
     onClick && onClick(data);
   }, [data, onClick]);
 
