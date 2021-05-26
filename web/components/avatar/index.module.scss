@@ -119,7 +119,13 @@
             background-color: $primary-color10;
           }
         }
-        .block {
+        .unblocked {
+          background-color: $primary-color;
+          &:hover {
+            background-color: $primary-color6;
+          }
+        }
+        .blocked {
           background-color: $primary-color3;
           &:hover {
             background-color: $primary-color6;
