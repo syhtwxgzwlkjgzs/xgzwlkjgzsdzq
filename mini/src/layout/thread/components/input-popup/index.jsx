@@ -5,7 +5,6 @@ import Textarea from '@discuzq/design/dist/components/textarea/index';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Upload from '@discuzq/design/dist/components/upload/index';
 import Button from '@discuzq/design/dist/components/button/index';
-import Text from '@discuzq/design/dist/components/text/index';
 
 import styles from './index.module.scss';
 
