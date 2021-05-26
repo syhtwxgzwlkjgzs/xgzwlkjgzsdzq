@@ -41,7 +41,7 @@ class Index extends React.Component {
         return;
       }
 
-      Toast.info({ content: '复制链接成功' });
+      // Toast.info({ content: '复制链接成功' });
 
       const { title = '', threadId = '', user } = this.props.data || {};
 
