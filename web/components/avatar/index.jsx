@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import { Avatar, Button, Icon } from '@discuzq/design';
+import { Avatar, Button, Icon, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import LoadingBox from '@components/loading-box';
@@ -16,6 +16,7 @@ function avatar(props) {
   const [isShow, changeIsShow] = useState(false);
   const [userInfo, changeUserInfo] = useState('padding');
   const [following, changeFollowStatus] = useState(false);
+  const [blocking, changeBlockStatus] = useState(false);
   const [isSameWithMe, changeIsSameWithMe] = useState(false);
 
   const onMouseEnterHandler = useCallback(async () => {
@@ -61,6 +62,35 @@ function avatar(props) {
       console.error("用户名错误");
     }
   })
+
+  const blockingHandler = useCallback(async () => {
+    changeBlockStatus(true);
+    try {
+      if (userInfo.isDeny) {
+        await props.user.undenyUser(userId);
+        await props.user.setTargetUserNotBeDenied();
+        userInfo.isDeny = false;
+        Toast.success({
+          content: '解除屏蔽成功',
+          hasMask: false,
+          duration: 1000,
+        })
+      } else {
+        await props.user.denyUser(userId);
+        await props.user.setTargetUserDenied();
+        userInfo.isDeny = true;
+        Toast.success({
+          content: '屏蔽成功',
+          hasMask: false,
+          duration: 1000,
+        })
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    changeBlockStatus(false);
+    changeUserInfo({ ...userInfo });
+  }, [userInfo])
 
   const btnInfo = useMemo(() => {
     const index = userInfo.follow
@@ -136,7 +166,20 @@ function avatar(props) {
                 type='primary' ghost>
                   <Icon className={styles.icon} name="NewsOutlined" size={12}/>发私信
               </Button>
-              <Button className={[styles.btn, styles.block]} type='primary'><Icon className={styles.icon} name="ShieldOutlined" size={12}/>屏蔽</Button>
+              <Button 
+                onClick={blocking ? () => {} : blockingHandler}
+                loading={blocking}
+                className={[styles.btn, styles.block]}
+                className={`${styles.btn} ${userInfo.isDeny ? styles.blocked : styles.unblocked}`}
+                type='primary'
+              >
+                {
+                  !blocking && userInfo.isDeny && (
+                    <Icon className={styles.icon} name="ShieldOutlined" size={12}/>
+                  )
+                }
+                屏蔽
+              </Button>
             </div>
           }
         </div>

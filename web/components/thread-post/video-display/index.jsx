@@ -11,7 +11,7 @@ export default function VideoDisplay(props) {
   } = props;
   const clsName = pc ? styles.pc : styles.h5;
   return (
-    <div className={`${styles['post-video']} ${clsName}`} onClick={e => e.stopPropagation()}>
+    <div id="dzq-post-video" className={`${styles['post-video']} ${clsName}`} onClick={e => e.stopPropagation()}>
       <Video src={src} onReady={onReady} />
       <div className={styles['post-video__delete']} onClick={onDelete}>
         <Icon name="DeleteOutlined" />

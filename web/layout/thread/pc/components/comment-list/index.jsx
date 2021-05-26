@@ -53,7 +53,7 @@ class CommentList extends React.Component {
 
   // 点击评论回复
   replyClick() {
-    const userName = this.props.data?.user?.username || this.props.data?.user?.userName;
+    const userName = this.props.data?.user?.nickname || this.props.data?.user?.userName;
 
     this.setState({
       isShowInput: !this.state.isShowInput,
@@ -140,7 +140,7 @@ class CommentList extends React.Component {
           <div className={styles.commentListAvatar} onClick={() => this.avatarClick()}>
             <Avatar
               image={this.props.data?.user?.avatar}
-              name={this.props.data?.user?.username || this.props.data?.user?.userName || ''}
+              name={this.props.data?.user?.nickname || this.props.data?.user?.userName || ''}
               circle={true}
               userId={this.props.data?.user?.id}
               isShowUserInfo={this.props.isShowOne}
@@ -153,7 +153,7 @@ class CommentList extends React.Component {
               onClick={() => this.toCommentDetail()}
             >
               <div className={styles.commentListName}>
-                {this.props.data?.user?.username || this.props.data?.user?.userName || '用户异常，请联系管理员'}
+                {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常，请联系管理员'}
               </div>
               <div className={styles.commentListText} dangerouslySetInnerHTML={{ __html: this.filterContent() }}></div>
             </div>

@@ -134,7 +134,7 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
     const item = bigImages[0];
     return (
       <View className={styles[style]}>
-        <Image src={item.thumbUrl} onClick={() => onClick(item.id)} />
+        <Image src={item.thumbUrl} mode='aspectFill' onClick={() => onClick(item.id)} />
       </View>
     );
   };
@@ -143,7 +143,7 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
     <Row gutter={4} className={`${styles[style]} ${styles.row}`}>
       {bigImages.map((item, index) => (
         <Col span={6} className={styles.col} key={index}>
-          <Image src={item.thumbUrl} onClick={() => onClick(item.id)} />
+          <Image src={item.thumbUrl} mode='aspectFill' onClick={() => onClick(item.id)} />
         </Col>
       ))}
     </Row>
@@ -152,13 +152,13 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
   const Four = ({ bigImages, smallImages, onClick, style }) => (
     <Row gutter={4} className={styles[style]}>
       <Col span={8} className={styles.col}>
-        <Image src={bigImages[0].thumbUrl} onClick={() => onClick(bigImages[0].id)} />
+        <Image src={bigImages[0].thumbUrl} mode='aspectFill' onClick={() => onClick(bigImages[0].id)} />
       </Col>
       <Col span={4} className={styles.col}>
         <Row gutter={4} className={styles.smallRow}>
           {smallImages.map((item, index) => (
             <Col span={12} key={index} className={styles.smallCol}>
-              <Image src={item.thumbUrl} onClick={() => onClick(item.id)} />
+              <Image src={item.thumbUrl} mode='aspectFill' onClick={() => onClick(item.id)} />
             </Col>
           ))}
         </Row>
@@ -169,12 +169,12 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
   const Three = ({ bigImages, smallImages, onClick, style }) => (
     <View className={styles[style]}>
       <View className={styles.bigImages}>
-        <Image src={bigImages[0].thumbUrl} onClick={() => onClick(bigImages[0].id)} />
+        <Image src={bigImages[0].thumbUrl} mode='aspectFill' onClick={() => onClick(bigImages[0].id)} />
       </View>
       <Row gutter={4} className={styles.smallImages}>
         {smallImages.map((item, index) => (
           <Col span={6} className={styles.col} key={index}>
-            <Image src={item.thumbUrl} onClick={() => onClick(item.id)} />
+            <Image src={item.thumbUrl} mode='aspectFill' onClick={() => onClick(item.id)} />
           </Col>
         ))}
       </Row>
@@ -186,14 +186,14 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
       <Row gutter={4} className={styles.bigImages}>
         {bigImages.map((item, index) => (
           <Col span={6} className={styles.col} key={index}>
-            <Image src={item.thumbUrl} onClick={() => onClick(item.id)} />
+            <Image src={item.thumbUrl} mode='aspectFill' onClick={() => onClick(item.id)} />
           </Col>
         ))}
       </Row>
       <Row gutter={4} className={styles.smallImages}>
         {smallImages.map((item, index) => (
           <Col span={4} className={styles.col} key={index}>
-            <Image src={item.thumbUrl} onClick={() => onClick(item.id)} />
+            <Image src={item.thumbUrl} mode='aspectFill' onClick={() => onClick(item.id)} />
             {imgData?.length > 5 && index === smallImages.length - 1 && (
               <View className={styles.modalBox} onClick={onClickMore}>{`+${imgData.length - 5}`}</View>
             )}

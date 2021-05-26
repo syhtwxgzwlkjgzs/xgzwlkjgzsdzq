@@ -46,7 +46,7 @@ const Index = ({ imgs = [], tipData = {}, wholeNum = 1,showMore=false }) => {
                   <div key={index} className={index === 0 ? styles.img : styles.imgAfter}>
                     <Avatar
                       image={item.avatar}
-                      name={item.userName}
+                      name={item.nickname}
                       size='small'
                     />
                   </div>

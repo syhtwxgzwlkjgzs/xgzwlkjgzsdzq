@@ -6,7 +6,6 @@ import Button from '@discuzq/design/dist/components/button/index';
 import Input from '@discuzq/design/dist/components/input/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
-import Taro from '@tarojs/taro';
 import { toTCaptcha } from '@common/utils/to-tcaptcha'
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';

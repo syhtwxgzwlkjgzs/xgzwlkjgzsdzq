@@ -8,6 +8,7 @@
   .contentWrapper{
     .content {
       @include cursor-on-pc;
+      width: 100%;
       position: relative;
       display: inline-block;
       line-height: $font-line-height-middle;
@@ -30,6 +31,10 @@
           max-height: 2px;
           overflow: hidden;
         }
+      }
+
+      :global(.dzq-img) {
+        width: 100%;
       }
 
       
