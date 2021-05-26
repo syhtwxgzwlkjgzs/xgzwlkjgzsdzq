@@ -109,7 +109,7 @@ export default inject('user')(
         <div className={topic.header}>
           <div className={topic.userInfo}>
             <UserInfo
-              name={threadStore?.threadData?.user?.userName || ''}
+              name={threadStore?.threadData?.user?.nickname || ''}
               avatar={threadStore?.threadData?.user?.avatar || ''}
               location={threadStore?.threadData?.position.location || ''}
               view={`${threadStore?.threadData?.viewCount}` || ''}

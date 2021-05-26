@@ -9,9 +9,10 @@ export default {
     return {
       avatar: currentUser.avatarUrl,
       userId: currentUser.id,
-      userName: currentUser.username,
+      userName: currentUser.nickname,
       type,
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      nickname: currentUser?.nickname || '',
     }
   },
 

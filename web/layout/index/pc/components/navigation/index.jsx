@@ -102,7 +102,7 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
     <Card className={`${styles.container} ${styles.verticalScrollbar}`} style={{
       /* stylelint-disable */
       background: '#fff', overflowY: 'auto',
-      maxHeight: windowSize?.innerHeight - 80
+      maxHeight: (windowSize?.innerHeight - 80) || '600px'
     }} bordered={false}>
       {
         categories?.length ?
