@@ -133,7 +133,11 @@ const InputPop = (props) => {
 
         {showAt && <AtSelect visible={showAt} getAtList={onAtListChange} onCancel={onAtIconClick} />}
 
-        {showEmojis && <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />}
+        {showEmojis && (
+          <div className={styles.emojis}>
+            <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />
+          </div>
+        )}
 
         <div className={styles.button}>
           <div className={styles.operates}>

@@ -30,6 +30,7 @@
 .main {
   background: var(--color-white);
   width: 100%;
+  position: relative;
 }
 
 .divider {
@@ -59,6 +60,12 @@
       color: $primary-color;
     }
   }
+}
+
+.emojis {
+  position: absolute;
+  left: 0;
+  bottom: rem(50);
 }
 
 .input {

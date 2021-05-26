@@ -7,6 +7,8 @@ import Emoji from '@components/editor/emoji';
 import AtSelect from '@components/thread-detail-pc/at-select';
 import TopicSelect from '@components/thread-post/topic-select';
 
+import classnames from 'classnames';
+
 const CommentInput = (props) => {
   const { onSubmit, onClose, height, initValue = '', placeholder = '写下我的评论...' } = props;
 
@@ -111,9 +113,24 @@ const CommentInput = (props) => {
         {showEmojis && <Emoji pc show={showEmojis} emojis={emojis} onClick={onEmojiClick} />}
 
         <div className={styles.linkBtn}>
-          <Icon name="SmilingFaceOutlined" size="20" className={styles.btnIcon} onClick={onEmojiIconClick}></Icon>
-          <Icon name="AtOutlined" size="20" className={styles.btnIcon} onClick={onAtIconClick}></Icon>
-          <Icon name="SharpOutlined" size="20" className={styles.btnIcon} onClick={onTopicIconClick}></Icon>
+          <Icon
+            name="SmilingFaceOutlined"
+            size="20"
+            className={classnames(styles.btnIcon, showEmojis && styles.actived)}
+            onClick={onEmojiIconClick}
+          ></Icon>
+          <Icon
+            name="AtOutlined"
+            size="20"
+            className={classnames(styles.btnIcon, showAt && styles.actived)}
+            onClick={onAtIconClick}
+          ></Icon>
+          <Icon
+            name="SharpOutlined"
+            size="20"
+            className={classnames(styles.btnIcon, showTopic && styles.actived)}
+            onClick={onTopicIconClick}
+          ></Icon>
         </div>
         <Button loading={loading} onClick={onSubmitClick} className={styles.button} type="primary" size="large">
           发布
