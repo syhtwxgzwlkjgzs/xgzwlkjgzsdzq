@@ -23,6 +23,11 @@ class FrozenAmount extends React.Component {
     };
   }
 
+  async componentDidMount() {
+    const { getUserWalletInfo } = this.props.wallet;
+    await getUserWalletInfo();
+  }
+
   listRenderDataFilter = () => {
     if (Object.values(this.props.wallet.freezeDetail).length === 0) return [];
     return Object.values(this.props.wallet.freezeDetail).reduce((fullData, pageData) => [...fullData, ...pageData]);
@@ -48,7 +53,7 @@ class FrozenAmount extends React.Component {
         <div className={styles.header}>
           <div className={styles.record}>共有{this.state.totalCount}条记录</div>
           {/* TODO: 后台未返回涉及金额字段 */}
-          <div className={styles.totalMoney}>涉及金额 {15.0}元</div>
+          <div className={styles.totalMoney}>涉及金额 {this.props.wallet.walletInfo.freezeAmount} 元</div>
         </div>
         <List
           className={styles.body}
