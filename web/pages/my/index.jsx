@@ -15,6 +15,16 @@ class MyCenter extends React.Component {
     window.location.replace('/');
   };
   render() {
+    // return (
+    //   <div style={{marginTop: '100px', display: 'flex', flexDirection:'column',alignItems: 'center', justifyContent: 'center', padding: '30px 0'}}>
+    //     <h2>功能开发中！</h2>
+    //     <div style={{marginTop: '30px'}}>
+    //       <Button style={{marginRight: '20px'}} onClick={() => {Router.back()}} size='large' type='primary'>返回</Button>
+    //       <Button onClick={() => {this.logout()}} size='large' type='primary'>退出登录</Button>
+    //     </div>
+    //   </div>
+    // );
+
     const { site } = this.props;
     const { platform } = site;
 

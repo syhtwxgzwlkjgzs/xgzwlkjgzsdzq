@@ -30,7 +30,7 @@ class MyDocument extends Document {
         </Head>
         <body>
           <Main />
-          <NextScript crossOrigin='anonymous'/>
+          <NextScript/>
         </body>
         <script dangerouslySetInnerHTML={{__html: `
             // 微信设置字体最大，布局乱的补丁

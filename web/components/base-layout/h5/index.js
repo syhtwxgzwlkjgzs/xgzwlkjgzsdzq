@@ -1,11 +1,11 @@
 import React,  { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { inject, observer } from 'mobx-react';
 import Header from '@components/header';
-import List from '@components/list'
-import BottomNavBar from '@components/bottom-nav-bar'
-import { PullDownRefresh } from "@discuzq/design"
-import { noop } from '@components/thread/utils'
-import { throttle } from '@common/utils/throttle-debounce.js'
+import List from '@components/list';
+import BottomNavBar from '@components/bottom-nav-bar';
+import { PullDownRefresh } from '@discuzq/design';
+import { noop } from '@components/thread/utils';
+import { throttle } from '@common/utils/throttle-debounce.js';
 
 import styles from './index.module.scss';
 
@@ -18,7 +18,7 @@ import styles from './index.module.scss';
 * @prop {function} onPullDown 下拉刷新事件
 * @prop {function} isFinished 是否完成下拉刷新
 * @prop other List Props // List组件所有的属性
-* @example 
+* @example
 *     <BaseLayout>
         {(props) => <div>中间</div>}
       </BaseLayout>
@@ -26,18 +26,18 @@ import styles from './index.module.scss';
 const baseLayoutWhiteList = ['home', 'search'];
 
 const BaseLayout = (props) => {
-  const { 
-    showHeader = true, 
-    showTabBar = false, 
-    showPullDown = false, 
-    children = null, 
-    onPullDown, 
-    isFinished = true, 
-    curr, 
+  const {
+    showHeader = true,
+    showTabBar = false,
+    showPullDown = false,
+    children = null,
+    onPullDown,
+    isFinished = true,
+    curr,
     onScroll = noop,
     baselayout,
     onClickTabBar = noop,
-    pageName = ''
+    pageName = '',
   } = props;
 
   const [height, setHeight] = useState(600);
@@ -63,35 +63,30 @@ const BaseLayout = (props) => {
   //   }
   // }
 
-  const pullDownWrapper = useRef(null)
+  const pullDownWrapper = useRef(null);
   const listRef = useRef(null);
 
   useEffect(() => {
     if (pullDownWrapper?.current) {
-      setHeight(pullDownWrapper.current.clientHeight)
+      setHeight(pullDownWrapper.current.clientHeight);
     }
-    if (listRef?.current && (baselayout.jumpToScrollingPos > 0 || baselayout[pageName] > 0) &&
-        baseLayoutWhiteList.indexOf(pageName) !== -1) {
-        if (pageName === 'home') {
-          listRef.current.jumpToScrollTop(baselayout.jumpToScrollingPos);
-        } else {
-          if (baselayout[pageName]) {
-            listRef.current.jumpToScrollTop(baselayout[pageName]);
-          }
-        }
+
+    if (listRef?.current && pageName && baselayout[pageName] > 0
+        && baseLayoutWhiteList.indexOf(pageName) !== -1) {
+      listRef.current.jumpToScrollTop(baselayout[pageName]);
     }
-  }, [])
+  }, []);
 
-  const handleScroll = throttle(() => {
-    if(!listRef?.current?.currentScrollTop) return;
+  const handleScroll = throttle(({ scrollTop = 0 } = {}) => {
+    if (!listRef?.current?.currentScrollTop) return;
 
-    if(baselayout.isJumpingToTop) {
+    if (baselayout.isJumpingToTop) {
       baselayout.removeJumpingToTop();
       listRef.current.onBackTop();
     }
-
-    onScroll({ scrollTop: listRef.current.currentScrollTop.current });
-  }, 50)
+    if (scrollTop) baselayout[pageName] = scrollTop;
+    onScroll({ scrollTop });
+  }, 50);
 
   return (
     <div className={styles.container}>
@@ -106,12 +101,12 @@ const BaseLayout = (props) => {
               </PullDownRefresh>
             </div>
           ) : (
-            <List {...props} immediateCheck={false} className={styles.list} ref={listRef} onScroll={handleScroll}>
+            <List immediateCheck={false} className={styles.list} ref={listRef} onScroll={handleScroll} {...props}>
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>
           )
         }
-        
+
         {showTabBar && <BottomNavBar onClick={onClickTabBar} placeholder curr={curr} />}
     </div>
   );

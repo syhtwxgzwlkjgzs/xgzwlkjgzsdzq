@@ -80,7 +80,7 @@ class AtSelect extends Component {
   searchInput() {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      this.fetchAllUser();
+      this.onScrollBottom();
     }, 300);
   }
 

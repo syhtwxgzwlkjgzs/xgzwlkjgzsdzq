@@ -19,12 +19,14 @@ export default function DVditor(props) {
     onInput = () => {},
   } = props;
   const vditorId = 'dzq-vditor';
+  let timeoutId = null;
 
   const [isFocus, setIsFocus] = useState(false);
   const [vditor, setVditor] = useState(null);
 
   const html2mdSetValue = (text) => {
     try {
+      if (!vditor) return;
       const md = vditor.html2md(text);
       vditor.setValue && vditor.setValue(md.substr(0, md.length - 1));
     } catch (error) {
@@ -34,6 +36,7 @@ export default function DVditor(props) {
 
   const html2mdInserValue = (text) => {
     try {
+      if (!vditor) return;
       const md = vditor.html2md && vditor.html2md(text);
       vditor.insertValue && vditor.insertValue(md.substr(0, md.length - 1));
     } catch (error) {
@@ -50,6 +53,7 @@ export default function DVditor(props) {
     //     console.log(error);
     //   }
     // };
+    return () => clearTimeout(timeoutId);
   }, []);
 
   useEffect(() => {
@@ -139,18 +143,33 @@ export default function DVditor(props) {
 
     if (/Chrome/i.test(navigator.userAgent)
       || !/(iPhone|Safari|Mac OS)/i.test(navigator.userAgent)) return;
+    const { vditor } = editor;
 
     // todo 事件需要throttle或者debounce??? delay时间控制不好可能导致记录不准确
-    const { vditor } = editor;
+    // const editorElement = vditor[vditor.currentMode]?.element;
+    // // // todo 需要添加drag事件吗
+    // const events = ['mouseup', 'click', 'keyup', 'touchend', 'touchcancel', 'input'];
+    // events.forEach((event) => {
+    //   editorElement?.addEventListener(event, () => {
+    //     setTimeout(() => {
+    //       vditor[vditor.currentMode].range = getEditorRange(vditor);
+    //       console.log(vditor[vditor.currentMode].range);
+    //     }, 0);
+    //   });
+    // });
     const editorElement = vditor[vditor.currentMode]?.element;
-    // todo 需要添加drag事件吗
-    const events = ['mouseup', 'keyup',
-      'click', 'touchend', 'touchcancel'];
-    events.forEach((event) => {
-      editorElement?.addEventListener(event, () => {
-        vditor[vditor.currentMode].range = getEditorRange(vditor);
-      });
+    editorElement?.addEventListener('click', () => {
+      setIsFocus(false);
+      onFocus('focus');
     });
+    // 从事件绑定方式修改成轮询记录的方式，以达到更实时更精确的记录方式，可解决iphone下输入中文光标会被重置到位置0的问题（性能需关注）
+    const timeoutRecord = () => {
+      timeoutId = setTimeout(() => {
+        vditor[vditor.currentMode].range = getEditorRange(vditor);
+        timeoutRecord();
+      }, 200);
+    };
+    timeoutRecord();
   };
 
   function initVditor() {
@@ -170,10 +189,7 @@ export default function DVditor(props) {
           editor.setValue(value);
           editor.vditor[editor.vditor.currentMode].element.blur();
         },
-        focus: () => {
-          setIsFocus(false);
-          onFocus('focus');
-        },
+        focus: () => {},
         input: () => {
           setIsFocus(false);
           onInput(editor);

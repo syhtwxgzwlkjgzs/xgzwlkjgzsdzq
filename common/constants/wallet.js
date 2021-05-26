@@ -18,7 +18,7 @@ export const INCOME_DETAIL_CONSTANTS = {
   },
   OFFER_REWARD_INCOME: {
     text: '悬赏收入',
-    code: 161,
+    code: '161,121,123',
   },
   OFFER_REWARD_RETURN: {
     text: '悬赏退回',
@@ -27,6 +27,7 @@ export const INCOME_DETAIL_CONSTANTS = {
   // TODO: 后台需要补充该类型
   PAID_INCOME: {
     text: '付费收入',
+    code: '60,62,63,64',
   },
 };
 
@@ -46,7 +47,7 @@ export const EXPAND_DETAIL_CONSTANTS = {
   },
   PAID_EXPAND: {
     text: '付费支出',
-    // TODO: 后台需要补充该类型
+    code: '52,61',
   },
   REDPACK_EXPAND: {
     text: '红包支出',
@@ -55,6 +56,7 @@ export const EXPAND_DETAIL_CONSTANTS = {
   OFFER_REWARD_RETURN: {
     text: '悬赏支出',
     // TODO: 后台需要补充该类型
+    code: 164,
   },
 };
 
