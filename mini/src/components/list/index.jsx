@@ -64,13 +64,19 @@ const List = forwardRef(({
   };
 
   const onTouchMove = (e) => {
-    if (e && !isLoading.current && onRefresh) {
+    if (e && !isLoading.current && onRefresh && !isLoading) {
       setIsLoading(true);
       if (typeof(onRefresh) === 'function') {
         const promise = onRefresh()
         isPromise(promise) && promise
           .then(() => {
-            setIsLoading(false);
+            // 解决因promise和react渲染不同执行顺序导致重复触发加载数据的问题
+            setTimeout(() => {
+              setIsLoading(false);
+              if (noMore) {
+                setIsLoading(true);
+              }
+            }, 0);
           })
           .catch(() => {
             setIsLoading(false);
