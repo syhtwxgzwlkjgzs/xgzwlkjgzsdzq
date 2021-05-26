@@ -15,6 +15,12 @@ export default class VerificationCode extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.setState({
+      initTimeValue: this.props.initTimeValue || 60
+    })
+  }
+
   buttonClick = () => {
     this.buttonClickAction()
   }

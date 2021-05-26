@@ -17,11 +17,21 @@ class index extends Component {
     super(props);
     this.state = {
       list: [],
-      current_step: 'first', // 表示当前步骤
-      bind_mobile: null,
-      is_blur: false, // 表示是否失焦
+      currentStep: 'first', // 表示当前步骤
+      bindMobile: null,
+      isBlur: false, // 表示是否失焦
       isKeyBoardVisible: false, // 表示是否显示键盘
     };
+  }
+
+  initState = () => {
+    this.setState({
+      list: [],
+      currentStep: 'first', // 表示当前步骤
+      bindMobile: null,
+      isBlur: false, // 表示是否失焦
+      isKeyBoardVisible: false, // 表示是否显示键盘
+    })
   }
 
   // 点击切换弹出键盘事件
@@ -46,6 +56,7 @@ class index extends Component {
         () => {
           if (this.state.list.length === 6) {
             // this.submitPwa();
+            this.handleKeyBoardVisible()
           }
         },
       );
@@ -58,16 +69,16 @@ class index extends Component {
 
   // 点击下一步
   handleStepBtn = throttle(async () => {
-    const { list = [], current_step, bind_mobile } = this.state;
+    const { list = [], currentStep, bindMobile } = this.state;
     if (list.length !== 6) return;
-    if (current_step === 'first') {
+    if (currentStep === 'first') {
       this.props.user.oldMobileVerifyCode = list.join('');
       this.props.user.verifyOldMobile().then((res) => {
         if (this.state.interval != null) {
           clearInterval(this.state.interval);
         }
         this.setState({
-          current_step: 'second',
+          currentStep: 'second',
           list: [],
           initTimeValue: null,
           initTime: 60,
@@ -82,13 +93,22 @@ class index extends Component {
             hasMask: false,
             duration: 1000,
           });
+          this.initState()
           this.props.user.oldMobileVerifyCode = null;
         });
-    } else if (current_step === 'second') {
-      this.props.user.newMobile = bind_mobile;
+    } else if (currentStep === 'second') {
+      this.props.user.newMobile = bindMobile;
       this.props.user.newMobileVerifyCode = list.join('');
       await this.props.user.rebindMobile().then((res) => {
+        Toast.success({
+          content: '绑定成功',
+          hasMask: false,
+          duration: 1000,
+        })
         Router.push({ url: '/my' });
+        setTimeout(() => {
+          this.initState()
+        }, 1000)
       })
         .catch((err) => {
           Toast.error({
@@ -96,32 +116,35 @@ class index extends Component {
             hasMask: false,
             duration: 1000,
           });
+          this.setState({
+            list: []
+          })
         });
     }
   }, 300)
 
   handleInputChange = (e) => {
     this.setState({
-      bind_mobile: e.target.value,
+      bindMobile: e.target.value,
     });
   }
 
   handleInputFocus = (e) => {
     this.setState({
-      is_blur: false,
+      isBlur: false,
     });
   }
 
   handleInputBlur = (e) => {
     this.setState({
-      is_blur: true,
+      isBlur: true,
     });
   }
 
   getVerifyCode = throttle(({ calback }) => {
     const { originalMobile } = this.props.user;
-    const { current_step } = this.state;
-    if (current_step === 'first') {
+    const { currentStep } = this.state;
+    if (currentStep === 'first') {
       this.props.user.sendSmsVerifyCode({ mobile: originalMobile })
         .then((res) => {
           this.setState({
@@ -141,9 +164,9 @@ class index extends Component {
           });
           if (calback && typeof calback === 'function') calback(err);
         });
-    } else if (current_step === 'second') {
-      const { bind_mobile } = this.state;
-      this.props.user.sendSmsUpdateCode({ mobile: bind_mobile })
+    } else if (currentStep === 'second') {
+      const { bindMobile } = this.state;
+      this.props.user.sendSmsUpdateCode({ mobile: bindMobile })
         .then((res) => {
           this.setState({
             initTimeValue: res.interval,
@@ -165,44 +188,44 @@ class index extends Component {
   validateTel = value => (/^[1][3-9]\d{9}$/.test(value))
 
   render() {
-    const { current_step, list = [], is_blur, bind_mobile, initTimeValue, isKeyBoardVisible } = this.state;
+    const { currentStep, list = [], isBlur, bindMobile, initTimeValue, isKeyBoardVisible } = this.state;
     const { mobile } = this.props?.user;
-    const value_pass_check = current_step === 'second' ? this.validateTel(bind_mobile) : true;
+    const value_pass_check = currentStep === 'second' ? this.validateTel(bindMobile) : true;
     let isSubmit = false;
-    if (current_step === 'first') {
+    if (currentStep === 'first') {
       isSubmit = list.length !== 6;
-    } else if (current_step === 'second') {
-      isSubmit = (list.length !== 6 || !this.validateTel(bind_mobile));
+    } else if (currentStep === 'second') {
+      isSubmit = (list.length !== 6 || !this.validateTel(bindMobile));
     }
     return (
       <div>
         <Header />
         <div className={styles.content}>
-          <h3>{current_step === 'first' ? '验证旧手机' : '设置新手机'}</h3>
+          <h3>{currentStep === 'first' ? '验证旧手机' : '设置新手机'}</h3>
           <div className={styles.labelInfo}>
             {
-              current_step === 'first' ? (
+              currentStep === 'first' ? (
                 <div>
                   <span className={styles.labelName}>原手机号</span>
                   <span className={styles.labelValue}>{mobile}</span>
                 </div>
               ) : (
                 <div className={styles.labelInput}>
-                  <Input placeholder="输入新手机号码" onChange={this.handleInputChange} focus={true} onBlur={this.handleInputBlur} onFocus={this.handleInputFocus} value={bind_mobile} />
+                  <Input placeholder="输入新手机号码" onChange={this.handleInputChange} focus={true} onBlur={this.handleInputBlur} onFocus={this.handleInputFocus} value={bindMobile} />
                 </div>
               )
             }
             <div>
-              <VerifyCode initTimeValue={this.state.initTimeValue} value_pass_check={value_pass_check} key={current_step} text={'发送验证码'} getVerifyCode={this.getVerifyCode} />
+              <VerifyCode initTimeValue={this.state.initTimeValue} value_pass_check={value_pass_check} key={currentStep} text={'发送验证码'} getVerifyCode={this.getVerifyCode} />
             </div>
           </div>
           <div className={styles.bindCode}>
             <span>请输入短信验证码</span>
-            <CaptchaInput handleKeyBoardVisible={this.handleKeyBoardVisible} isKeyBoardVisible={isKeyBoardVisible} current_step={current_step} updatePwd={this.updatePwd} list={list} is_blur={is_blur} />
+            <CaptchaInput handleKeyBoardVisible={this.handleKeyBoardVisible} isKeyBoardVisible={isKeyBoardVisible} currentStep={currentStep} updatePwd={this.updatePwd} list={list} isBlur={isBlur} />
           </div>
         </div>
         <div className={`${styles.bottom} ${isKeyBoardVisible && styles.bootom2}`}>
-          <Button full disabled={isSubmit} onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>{this.state.current_step === 'first' ? '下一步' : '提交'}</Button>
+          <Button full disabled={isSubmit} onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>{this.state.currentStep === 'first' ? '下一步' : '提交'}</Button>
         </div>
       </div>
     );

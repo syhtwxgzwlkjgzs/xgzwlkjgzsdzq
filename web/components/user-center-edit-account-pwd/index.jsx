@@ -70,6 +70,7 @@ class index extends Component {
         hasMask: false,
         duration: 1000,
       })
+      this.initState()
       return
     }
     this.props.user.oldPassword = oldPassword
@@ -100,6 +101,7 @@ class index extends Component {
           hasMask: false,
           duration: 1000,
         })
+        this.initState()
         Router.back()
       }).catch((err) => {
         Toast.error({
@@ -137,7 +139,7 @@ class index extends Component {
 
   // 渲染已设置密码
   renderHasPassword = () => {
-    const { newPassword, newPasswordRepeat } = this.state
+    const { newPassword, newPasswordRepeat, oldPassword } = this.state
     return (
       <>
         <h3>修改密码</h3>
@@ -145,7 +147,7 @@ class index extends Component {
           <div className={styles.labelValue}>{this.props.user?.username}</div>
         </div> */}
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}><Input onChange={this.handleSetOldPwd} mode="password" placeholder="请输入旧密码" /></div>
+          <div className={styles.labelValue}><Input value={oldPassword} onChange={this.handleSetOldPwd} mode="password" placeholder="请输入旧密码" /></div>
         </div>
         <div className={styles.labelInfo}>
           <div className={styles.labelValue}><Input value={newPassword} onChange={this.handleSetPwd} mode="password" placeholder="请输入新密码" /></div>
