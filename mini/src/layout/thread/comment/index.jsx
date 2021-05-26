@@ -1,6 +1,5 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'next/router';
 import { View } from '@tarojs/components';
 import Router from '@discuzq/sdk/dist/router';
 import styles from './index.module.scss';
@@ -386,4 +385,4 @@ class CommentH5Page extends React.Component {
   }
 }
 
-export default withRouter(CommentH5Page);
+export default CommentH5Page;
