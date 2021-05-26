@@ -52,7 +52,6 @@ class Index extends Component {
   }
 
   handleSendCodeButtonClick = async (onFocus) => {
-    console.log(onFocus)
     try{
       // 发送前校验
       this.props.wxPhoneBind.beforeSendVerify();
