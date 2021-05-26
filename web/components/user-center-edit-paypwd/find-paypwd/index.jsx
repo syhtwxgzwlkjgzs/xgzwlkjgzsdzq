@@ -6,9 +6,12 @@ import styles from './index.module.scss';
 import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData';
 import CaptchaInput from '../../user-center-edit-mobile/captcha-input';
 import VerifyCode from '../../user-center-edit-mobile/verify-code';
+import throttle from '@common/utils/thottle.js';
+import Router from '@discuzq/sdk/dist/router';
 
 @inject('site')
 @inject('user')
+@inject('payBox')
 @observer
 class index extends Component {
   constructor(props) {
@@ -16,10 +19,24 @@ class index extends Component {
     this.state = {
       list: [],
       current_step: 'second', // 表示当前步骤
-      bind_mobile: null,
       is_blur: true, // 表示是否失焦
       isKeyBoardVisible: false, // 是否显示键盘
+      initTimeValue: null,
+      payPassword: null,
+      payPasswordConfirmation: null
     };
+  }
+
+  initState = () => {
+    this.setState({
+      list: [],
+      current_step: 'second', // 表示当前步骤
+      is_blur: true, // 表示是否失焦
+      isKeyBoardVisible: false, // 是否显示键盘
+      initTimeValue: null,
+      payPassword: null,
+      payPasswordConfirmation: null
+    })
   }
 
   updatePwd = (set_num, type) => {
@@ -37,6 +54,9 @@ class index extends Component {
         () => {
           if (this.state.list.length === 6) {
             // this.submitPwa();
+            this.setState({
+              isKeyBoardVisible: false
+            })
           }
         },
       );
@@ -49,15 +69,41 @@ class index extends Component {
 
   // 点击下一步
   handleStepBtn = () => {
-    this.setState({
-      current_step: 'second',
-      list: [],
-    });
+    const { list = [], payPassword, payPasswordConfirmation } = this.state
+    const mobile = this.props?.user.originalMobile;
+    const code = list.join("")
+    this.props.payBox.forgetPayPwd({
+      mobile,
+      code,
+      payPassword,
+      payPasswordConfirmation
+    }).then(res => {
+      Toast.success({
+        content: "重置密码成功",
+        hasMask: false,
+        duration: 1000,
+      })
+      Router.push({ url: `/my` })
+    }).catch((err) => {
+      console.log(err);
+      Toast.error({
+        content: err.Msg || "重置密码失败",
+        hasMask: false,
+        duration: 1000,
+      })
+    })
   }
 
   handleInputChange = (e) => {
     this.setState({
-      bind_mobile: e.target.value,
+      payPassword: e.target.value,
+      is_blur: false,
+    });
+  }
+
+  handleInputChange1 = (e) => {
+    this.setState({
+      payPasswordConfirmation: e.target.value,
       is_blur: false,
     });
   }
@@ -70,6 +116,7 @@ class index extends Component {
 
   handleInputBlur = (e) => {
     this.setState({
+      payPassword: e.target.value,
       is_blur: true,
     });
   }
@@ -82,13 +129,33 @@ class index extends Component {
 
   handleInputBlur1 = (e) => {
     this.setState({
+      payPasswordConfirmation: e.target.value,
       is_blur: true,
     });
   }
 
-  getVerifyCode = ({ calback }) => {
-    if (calback && typeof calback === 'function') calback();
-  }
+  getVerifyCode = throttle(({ calback }) => {
+    const mobile = this.props?.user.originalMobile;
+    this.props.payBox.sendSmsVerifyCode({ mobile }).then(res => {
+      this.setState({
+        initTimeValue: res.interval,
+      }, () => {
+        if (calback && typeof calback === 'function') calback();
+      });
+    }).catch((err) => {
+      Toast.error({
+        content: err.Message || '获取验证码失败',
+        hasMask: false,
+        duration: 1000,
+      })
+      this.setState({
+        list: [],
+        initTimeValue: null
+      });
+      if (calback && typeof calback === 'function') calback(err);
+    })
+  }, 300)
+
   // 点击切换弹出键盘事件
   handleKeyBoardVisible = () => {
     this.setState({
@@ -97,20 +164,21 @@ class index extends Component {
   }
 
   render() {
-    const { current_step, list = [], is_blur, isKeyBoardVisible } = this.state;
+    const { current_step, list = [], is_blur, isKeyBoardVisible, initTimeValue, payPassword, payPasswordConfirmation } = this.state;
     const mobile = this.props?.user.mobile;
+    const disabled = !payPassword || !payPasswordConfirmation || list.length !== 6
     return (
       <div>
         <Header />
         <div className={styles.content}>
-          <h3>找回密码</h3>
+          <h3>找回支付密码</h3>
           <div className={styles.labelInfo}>
             <div>
               <span className={styles.labelName}>手机号</span>
               <span className={styles.labelValue} style={{ border: 'none' }}>{mobile}</span>
             </div>
             <div>
-              <VerifyCode key={current_step} text={'发送验证码'} getVerifyCode={this.getVerifyCode} />
+              <VerifyCode key={initTimeValue} initTimeValue={initTimeValue} key={current_step} text={'发送验证码'} getVerifyCode={this.getVerifyCode} />
             </div>
           </div>
           <div className={styles.bindCode}>
@@ -119,13 +187,13 @@ class index extends Component {
           </div>
         </div>
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}><Input onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur} mode="password" placeholder="请输入新密码" type="number" maxLength={6} /></div>
+          <div className={styles.labelValue}><Input value={payPassword} onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur} mode="password" placeholder="请输入新密码" type="number" maxLength={6} /></div>
         </div>
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}><Input onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="请重复输入新密码" type="number" maxLength={6} /></div>
+          <div className={styles.labelValue}><Input value={payPasswordConfirmation} onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="请重复输入新密码" type="number" maxLength={6} /></div>
         </div>
         <div className={`${styles.bottom} ${isKeyBoardVisible && styles.bootom2}`}>
-          <Button full onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>提交</Button>
+          <Button disabled={disabled} full onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>提交</Button>
         </div>
       </div>
     );

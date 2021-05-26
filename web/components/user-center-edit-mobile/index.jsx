@@ -24,6 +24,16 @@ class index extends Component {
     };
   }
 
+  initState = () => {
+    this.setState({
+      list: [],
+      current_step: 'first', // 表示当前步骤
+      bind_mobile: null,
+      is_blur: false, // 表示是否失焦
+      isKeyBoardVisible: false, // 表示是否显示键盘
+    })
+  }
+
   // 点击切换弹出键盘事件
   handleKeyBoardVisible = () => {
     this.setState({
@@ -46,6 +56,7 @@ class index extends Component {
         () => {
           if (this.state.list.length === 6) {
             // this.submitPwa();
+            this.handleKeyBoardVisible()
           }
         },
       );
@@ -82,13 +93,22 @@ class index extends Component {
             hasMask: false,
             duration: 1000,
           });
+          this.initState()
           this.props.user.oldMobileVerifyCode = null;
         });
     } else if (current_step === 'second') {
       this.props.user.newMobile = bind_mobile;
       this.props.user.newMobileVerifyCode = list.join('');
       await this.props.user.rebindMobile().then((res) => {
+        Toast.success({
+          content: '绑定成功',
+          hasMask: false,
+          duration: 1000,
+        })
         Router.push({ url: '/my' });
+        setTimeout(() => {
+          this.initState()
+        }, 1000)
       })
         .catch((err) => {
           Toast.error({
@@ -96,6 +116,9 @@ class index extends Component {
             hasMask: false,
             duration: 1000,
           });
+          this.setState({
+            list: []
+          })
         });
     }
   }, 300)

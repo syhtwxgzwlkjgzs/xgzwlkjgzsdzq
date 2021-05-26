@@ -108,7 +108,7 @@ class index extends Component {
             </div>
             {/* <div onClick={this.handleGoToEditMobile}><Icon name="RightOutlined" /></div> */}
             {
-              this.props.site.isSmsOpen && (
+              this.props.site?.isSmsOpen && (
                 <div onClick={this.handleGoToEditMobile}><Icon name="RightOutlined" /></div>
               )
             }
@@ -127,16 +127,19 @@ class index extends Component {
             </div>
             <div onClick={this.handleGoToEditPayPwd}><Icon name="RightOutlined" /></div>
           </div>
-          <div className={styles.userCenterEditItem} style={{ border: 'none' }}>
-            <div className={styles.userCenterEditLabel}>
-              <label>微信</label>
-              <div className={styles.userCenterEditWeChat}>{
-                this.user.unionid ? <>
-                  <Avatar size="small" image={this.user.avatarUrl} name={this.user.username} /> <span>{this.user.nickname}（解绑）</span>
-                </> : '暂未绑定'
-              }</div>
-            </div>
-          </div>
+          {
+            this.props.wechatEnv !== 'none' && (
+              <div className={styles.userCenterEditItem} style={{ border: 'none' }}>
+                <div className={styles.userCenterEditLabel}>
+                  <label>微信</label>
+                  <div className={styles.userCenterEditWeChat}>
+                    <Avatar size="small" image={this.user.avatarUrl} name={this.user.username} />
+                    <span>{this.user.nickname}</span>
+                  </div>
+                </div>
+              </div>
+            )
+          }
         </div>
         {/* bottom */}
         <div className={styles.userCenterEditBottom}>
@@ -159,4 +162,4 @@ class index extends Component {
   }
 }
 
-export default index;
+export default HOCFetchSiteData(index);
