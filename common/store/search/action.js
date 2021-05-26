@@ -71,13 +71,14 @@ class SearchAction extends SearchStore {
   } = {}) {
     let newPerPage = perPage;
     const topicFilter = {
-      hot: 1,
+      hot: search ? 0 : 1,
       content: search,
     };
 
-    // 如果存在search字段，说明是在结果页发起的网络请求，此时只需要后台返回三条数据
+    // type = 1,搜索结果
     if (type === 1) {
       newPerPage = 3;
+      topicFilter.hot = 0;
     }
   
     if ( !hasTopics ) {

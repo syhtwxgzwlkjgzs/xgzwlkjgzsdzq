@@ -5,6 +5,8 @@
   height: rem(18);
   border-radius: 50%;
   border: rem(1) solid var(--color-white);
+  background: var(--color-text-secondary);
+  display: inline-block;
 }
 
 @mixin lineHeight52 {
@@ -30,6 +32,9 @@
   }
   .forum_agent{
     @include lineHeight52;
+    height: rem(52);
+    display: flex;
+    align-items: center;
     .forum_agent_img{
       @include img;
     }
@@ -39,6 +44,9 @@
   }
   .forum_member{
     @include lineHeight52;
+    height: rem(52);
+    display: flex;
+    align-items: center;
     .forum_member_img{
       @include img;
     }
