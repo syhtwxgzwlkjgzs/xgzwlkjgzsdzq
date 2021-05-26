@@ -43,7 +43,7 @@ const Index = ({
   }, []);
 
   return (
-    <View id={videoId.current} className={styles.container}>
+    <View id={videoId.current} className={styles.container} style={{height: `${9 * (width) / 16 || '224'}px`}}>
       {
         width && (
           <Video

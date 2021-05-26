@@ -11,7 +11,8 @@ export default {
       userId: currentUser.id,
       userName: currentUser.nickname,
       type,
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      nickname: currentUser?.nickname || '',
     }
   },
 

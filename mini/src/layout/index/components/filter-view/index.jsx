@@ -73,9 +73,17 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
       sequence = 1;
     }
 
-    const categoryids = [first];
+    let categoryids = [first];
     if (firstChildren) {
-      categoryids.push(firstChildren);
+      categoryids = [firstChildren];
+    } else {
+      const tmp = data[0]?.data?.filter(item => item.pid === first)
+      if (tmp.length && tmp[0]?.children?.length) {
+        categoryids = [first]
+        tmp[0]?.children?.forEach(item => {
+          categoryids.push(item.pid)
+        })
+      }
     }
 
     const params = { categoryids, types: second, essence: third, sequence };
@@ -104,7 +112,7 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
     return (
       <View className={styles.moduleWrapper} key={key}>
         <View className={styles.title}>
-          {title}
+          <Text>{title}</Text>
           {key === 0 && <Icon className={styles.searchIcon} name='SearchOutlined' size={20} onClick={goSearch}></Icon>}
         </View>
         <Row className={styles.wrapper} gutter={10}>

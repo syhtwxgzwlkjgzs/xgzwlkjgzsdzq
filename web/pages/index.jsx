@@ -40,6 +40,8 @@ class Index extends React.Component {
 
   async componentDidMount() {
     const { index } = this.props;
+    const { categoryids, types, essence, sequence, attention, sort } = index.filter;
+
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasCategoriesData = !!index.categories;
     const hasSticksData = !!index.sticks;
@@ -49,11 +51,14 @@ class Index extends React.Component {
       this.props.index.getReadCategories();
     }
     if (!hasSticksData) {
-      this.props.index.getRreadStickList();
+      this.props.index.getRreadStickList(categoryids);
     }
    
     if (!hasThreadsData) {
-      this.props.index.getReadThreadList({ sequence: this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0 });
+      this.props.index.getReadThreadList({
+        sequence: sequence || (this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0), 
+        filter: { categoryids, types, essence, attention, sort } 
+      });
     } else {
       // 如果store中有值，则需要获取之前的分页数
       this.page = index.threads.currentPage || 1
