@@ -116,6 +116,7 @@ class ThreadCreate extends React.Component {
   getBottombarHeight = (action) => {
     const position = document.querySelector('#post-position');
     const toolbar = document.querySelector('#dvditor-toolbar');
+    const moneybox = document.querySelector('#dzq-money-box');
     let bottombarHeight = 133;
     if (action === 'select') bottombarHeight = 88;
     if (!position) bottombarHeight = 88;
@@ -124,6 +125,7 @@ class ThreadCreate extends React.Component {
       bottombarHeight += 218;
       toolbar.className += ` ${toolbarStyles.emoji}`;
     } else toolbar.className = toolbarStyles['dvditor-toolbar'];
+    if (moneybox) bottombarHeight += 65; // 直接算最高的高度
     return bottombarHeight;
   }
 
