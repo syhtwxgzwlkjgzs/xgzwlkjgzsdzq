@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from '@tarojs/components';
-import { Avatar } from '@discuzq/design';
+import Avatar from '@discuzq/design/dist/components/avatar/index';
 import { diffDate } from '@common/utils/diff-date';
 
 import styles from './index.module.scss';

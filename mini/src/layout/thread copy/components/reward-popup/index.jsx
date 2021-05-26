@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Popup, Button, Input } from '@discuzq/design';
+import Popup from '@discuzq/design/dist/components/popup/index';
+import Button from '@discuzq/design/dist/components/button/index';
+import Input from '@discuzq/design/dist/components/input/index';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
 

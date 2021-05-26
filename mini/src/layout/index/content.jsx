@@ -1,6 +1,7 @@
 import React, { createRef } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Icon, Tabs } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Tabs from '@discuzq/design/dist/components/tabs/index';
 import { View } from '@tarojs/components'
 import ThreadContent from '../../components/thread';
 import HomeHeader from '../../components/home-header';
@@ -39,7 +40,7 @@ class IndexH5Page extends React.Component {
     const newFilter = { ...this.state.filter, ...filter }
     const { categoryids } = newFilter
     const currentIndex = categoryids[0] || ''
-    
+
     this.setState({ filter: newFilter, currentIndex })
   }
 
@@ -226,11 +227,11 @@ class IndexH5Page extends React.Component {
 
         {pageData?.length > 0
           && pageData.map((item, index) => (
-            <ThreadContent 
-              key={index} 
-              showBottomStyle={index !== pageData.length - 1} 
-              data={item} 
-              className={styles.listItem} 
+            <ThreadContent
+              key={index}
+              showBottomStyle={index !== pageData.length - 1}
+              data={item}
+              className={styles.listItem}
             />
           ))}
 

@@ -14,6 +14,7 @@ const config = {
       pages: [
         '404/index',
         '500/index',
+        'error/index',
         'close/index',
         'join/index',
         'thread/comment/index',
@@ -39,6 +40,7 @@ const config = {
         'user/bind-phone/index',
         'user/wx-auth/index',
         'user/wx-authorization/index',
+        'user/supplementary/index',
         'my/draft/index',
         'wallet/index',
         'wallet/frozen/index',

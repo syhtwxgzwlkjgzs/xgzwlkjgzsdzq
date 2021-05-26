@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import styles from './index.module.scss';
-import { Icon } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import Router from '@discuzq/sdk/dist/router';
 import browser from '@common/utils/browser';
 import { View, Text } from '@tarojs/components'

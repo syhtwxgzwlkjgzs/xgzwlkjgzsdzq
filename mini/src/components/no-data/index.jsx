@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Icon, Spin } from '@discuzq/design';
+import Button from '@discuzq/design/dist/components/button/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import { noop } from '../thread/utils';
 import { View, Text } from '@tarojs/components'
 import styles from './index.module.scss';

@@ -4,7 +4,8 @@
 import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
-import { Avatar, Badge, Icon } from '@discuzq/design';
+import Badge from '@discuzq/design/dist/components/badge/index';
+import Avatar from '@discuzq/design/dist/components/avatar/index';
 import { inject, observer } from 'mobx-react';
 import classNames from 'classnames';
 import styles from './index.module.scss';

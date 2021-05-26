@@ -7,7 +7,7 @@ import DetailsHeader from './components/details-header'
 import ThreadContent from '@components/thread';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import goToLoginPage from '@common/utils/go-to-login-page';
-import { Toast } from '@discuzq/design';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import { View, Text } from '@tarojs/components';
 
 @inject('site')
@@ -58,7 +58,7 @@ class TopicH5Page extends React.Component {
       <BaseLayout showHeader={false} allowRefresh={false}>
         {
           pageData?.map((item, index) => (
-            this.renderItem(item, index))  
+            this.renderItem(item, index))
           )
         }
       </BaseLayout>

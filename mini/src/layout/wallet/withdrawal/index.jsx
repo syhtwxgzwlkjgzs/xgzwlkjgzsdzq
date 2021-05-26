@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import { Button } from '@discuzq/design';
+import Button from '@discuzq/design/dist/components/button/index';
 import { View } from '@tarojs/components';
 
 import MoneyInput from './components/money-input';

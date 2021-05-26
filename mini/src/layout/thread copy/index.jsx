@@ -3,7 +3,9 @@ import { View, Text, ScrollView } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 
-import { Icon, Badge, Toast } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
+
 
 import styleVar from '@common/styles/theme/default.scss.json';
 import throttle from '@common/utils/thottle';

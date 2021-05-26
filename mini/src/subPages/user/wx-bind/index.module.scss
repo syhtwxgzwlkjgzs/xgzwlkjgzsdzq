@@ -14,4 +14,7 @@
     @include mini_tips;
     margin-bottom: 0;
   }
+  .functionalRegion {
+    @include functionalRegion;
+  }
 }

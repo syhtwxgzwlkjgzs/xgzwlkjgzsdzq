@@ -2,63 +2,72 @@
 @import '@common/styles/index.scss';
 .content {
   padding: 0 rem($padding-6n);
-}
-.button{
-  @include button;
-  margin-top: rem($margin-4n);
-}
-@mixin paddingBottom {
-  padding-bottom: rem($padding-4n);
-}
-.title{
-  @include title;
-}
-.input{
-  @include paddingBottom;
-  margin-top: rem($margin-2n);
-  input {
-    width: 100%;
+  height: 100%;
+  background: $white;
+  .item {
+    padding: rem($margin-2n) 0;
   }
-}
-.imgUpload{
-  @include paddingBottom;
-}
-.imgUpload-dom{
-  width: rem(100);
-  height: rem(100);
-  border-radius: rem($border-radius-small);
-  background: var(--background-color);
-  border: $border-solid-1;
-  text-align: center;
-  line-height: rem(100);
-  font-size: rem($font-size-large);
-  color: var(--color-text-secondary);
-}
-.attachmentsUpload{
-  @include paddingBottom;
-  float: left;
-  width: 100%;
-}
-.attachmentsUpload-left{
-  display: inline-block;
-  font-size: rem($font-size-base);
-  line-height: rem($font-line-height-middle);
-  text-align: left;
-  color: $text-color-regular;
-}
-.attachmentsUpload-right{
-  display: inline-block;
-  font-size: rem($font-size-base);
-  line-height: rem($font-line-height-base);
-  color: var(--color-text-primary);
-  float: right;
-}
-.textarea{
-  @include paddingBottom;
-}
-.radio{
-  @include paddingBottom;
-}
-.checkbox{
-  @include paddingBottom;
+  .input{
+    .input_value{
+      width: 100%;
+    }
+  }
+  .button{
+    @include button;
+    margin: rem(24) 0;
+  }
+  .label{
+    font-size: $font-size-base;
+    line-height: $font-line-height-middle;
+    text-align: left;
+    color: $text-color-regular;
+    padding-bottom: rem($margin-2n);
+  }
+  .imgUpload{
+    .imgUpload-dom{
+      width: rem(100);
+      height: rem(100);
+      border-radius: rem($border-radius-small);
+      background: var(--background-color);
+      border: $border-solid-1;
+      text-align: center;
+      line-height: rem(100);
+      font-size: rem($font-size-large);
+      color: var(--color-text-secondary);
+    }
+  }
+  .attachmentsUpload{
+    float: left;
+    width: 100%;
+    .attachmentsUpload-left{
+      display: inline-block;
+      font-size: rem($font-size-base);
+      line-height: rem($font-line-height-middle);
+      text-align: left;
+      color: $text-color-regular;
+    }
+    .attachmentsUpload-right{
+      cursor: pointer;
+      display: inline-block;
+      font-size: rem($font-size-base);
+      line-height: rem($font-line-height-base);
+      color: var(--color-text-primary);
+      float: right;
+    }
+  }
+  .textarea{
+    .textarea_item{
+      width: rem(327);
+      box-sizing: border-box;
+      :global(.dzq-textarea__limit){
+        position: absolute;
+        bottom: 0;
+      }
+    }
+  }
+  .checkbox{
+    :global(.dzq-checkbox-wrap) {
+      margin-right: $margin-4n;
+    }
+  }
 }

@@ -39,7 +39,9 @@ const List = forwardRef(({
   useEffect(() => {
     if (noMore) {
       setIsLoading(true);
-    } else setIsLoading(false);
+    } else {
+      setIsLoading(false);
+    }
   }, [noMore]);
 
   useEffect(() => {
