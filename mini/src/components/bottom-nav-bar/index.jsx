@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import styles from './index.module.scss';
-import { Icon } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon';
 import { noop } from '@components/thread/utils';
 import { View } from '@tarojs/components';
 import Router from '@discuzq/sdk/dist/router';

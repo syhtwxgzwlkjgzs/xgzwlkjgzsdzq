@@ -8,7 +8,6 @@ import styles from './index.module.scss';
 
 import { readLikedUsers } from '@server';
 import List from '../../list';
-import { withRouter } from 'next/router';
 import { View, Text } from '@tarojs/components'
 
 /**
@@ -247,4 +246,4 @@ import { View, Text } from '@tarojs/components'
   );
 };
 
-export default withRouter(React.memo(Index));
+export default React.memo(Index);

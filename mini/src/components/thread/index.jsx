@@ -1,6 +1,5 @@
 import React from 'react';
 import Router from '@discuzq/sdk/dist/router';
-import { withRouter } from 'next/router';
 import Button from '@discuzq/design/dist/components/button/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import { inject, observer } from 'mobx-react';
@@ -217,4 +216,4 @@ class Index extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default withRouter(Index);
+export default Index;

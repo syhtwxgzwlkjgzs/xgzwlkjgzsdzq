@@ -1,7 +1,12 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
-import { Input, Checkbox, Radio, Upload, Button, Icon } from '@discuzq/design';
+import Input from '@discuzq/design/dist/components/input';
+import Icon from '@discuzq/design/dist/components/icon';
+import Checkbox from '@discuzq/design/dist/components/checkbox';
+import Radio from '@discuzq/design/dist/components/radio';
+import Upload from '@discuzq/design/dist/components/upload';
+import Button from '@discuzq/design/dist/components/button';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 
