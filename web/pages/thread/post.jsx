@@ -72,7 +72,6 @@ class PostPage extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.threadPost.resetPostData();
     this.captcha = '';
   }
 
@@ -287,18 +286,19 @@ class PostPage extends React.Component {
     const { supportFileExt, supportImgExt, supportMaxSize } = webConfig.setAttach;
 
     if (type === THREAD_TYPE.file) {
+      const tempFile = cloneList[0]; // 附件上传一次只允许传一个
       // 当前选择附件的类型大小
-      const fileType = cloneList[0].name.match(/\.(.+)$/i)[1].toLocaleLowerCase();
-      const fileSize = cloneList[0].size;
+      const fileType = tempFile.name.match(/\.([^\.]+)$/)[1].toLocaleLowerCase();
+      const fileSize = tempFile.size;
       // 判断合法性
       const isLegalType = supportFileExt.toLocaleLowerCase().includes(fileType);
       const isLegalSize = fileSize > 0 && fileSize < supportMaxSize * 1024 * 1024;
       if (!isLegalType) {
-        Toast.info({ content: '当前文件类型暂不支持' });
+        Toast.info({ content: `仅支持${supportFileExt}格式的附件` });
         return false;
       }
       if (!isLegalSize) {
-        Toast.info({ content: `上传附件大小范围0 ~ ${supportMaxSize}MB` });
+        Toast.info({ content: `仅支持0 ~ ${supportMaxSize}MB的附件` });
         return false;
       }
     } else if (type === THREAD_TYPE.image) {
@@ -307,17 +307,19 @@ class PostPage extends React.Component {
       cloneList.splice(remainLength, cloneList.length - remainLength);
 
       let isAllLegal = true; // 状态：此次上传图片是否全部合法
-      cloneList.forEach((item, index) => {
-        const imageType = item.name.match(/\.(.+)$/)[1].toLocaleLowerCase();
+      for (let i = 0; i < cloneList.length; i++) {
+        const imageType = cloneList[i].name.match(/\.([^\.]+)$/)[1].toLocaleLowerCase();
+        const imageSize = cloneList[i].size;
         const isLegalType = supportImgExt.toLocaleLowerCase().includes(imageType);
+        const isLegalSize = imageSize > 0 && imageSize < supportMaxSize * 1024 * 1024;
 
         // 存在不合法图片时，从上传图片列表删除
-        if (!isLegalType) {
-          cloneList.splice(index, 1);
+        if (!isLegalType || !isLegalSize) {
+          cloneList.splice(i, 1);
+          i--;
           isAllLegal = false;
         }
-      })
-
+      }
       !isAllLegal && Toast.info({ content: `仅支持${supportImgExt}类型的图片` });
 
       return true;
@@ -432,7 +434,7 @@ class PostPage extends React.Component {
     //   return;
     // }
     if (isDraft) {
-      const {contentText } = postData;
+      const { contentText } = postData;
       if (contentText === '') {
         return Toast.info({ content: '内容不能为空' });
       } else {
@@ -522,12 +524,13 @@ class PostPage extends React.Component {
       this.toastInstance?.destroy();
       // 防止被清除
       const _isDraft = isDraft;
+      this.props.threadPost.resetPostData();
 
       if (!_isDraft) {
         // 更新帖子到首页列表
         if (threadId) {
           this.props.index.updateAssignThreadAllData(threadId, data);
-        // 添加帖子到首页数据
+          // 添加帖子到首页数据
         } else {
           const { categoryids = [] } = this.props.index?.filter || {}
           const { categoryId = '' } = data
@@ -549,7 +552,7 @@ class PostPage extends React.Component {
 
   // 保存草稿
   handleDraft = (val) => {
-    const { isPC } = this.props.site;
+    const { site: { isPC }, threadPost: { resetPostData } } = this.props;
     this.setState({ draftShow: false });
 
     if (isPC) {
@@ -563,6 +566,7 @@ class PostPage extends React.Component {
       this.handleSubmit(true);
     }
     if (val === '不保存草稿') {
+      resetPostData();
       const { jumpLink } = this.state;
       jumpLink ? Router.push({ url: jumpLink }) : Router.back();
     }
