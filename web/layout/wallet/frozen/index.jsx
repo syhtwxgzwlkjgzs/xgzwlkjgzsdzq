@@ -1,6 +1,8 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
+import List from '@components/list';
+import NoData from '@components/no-data';
 
 import styles from './index.module.scss';
 
@@ -52,7 +54,7 @@ class FrozenAmount extends React.Component {
             <div className={styles.record}>共有{3}条记录</div>
             <div className={styles.totalMoney}>涉及金额 {15.00}元</div>
           </div>
-          <div className={styles.body}>
+          <List className={styles.body}>
           {
             frozenData.map(value => (
               <div className={styles.content} key={value.id}>
@@ -66,7 +68,7 @@ class FrozenAmount extends React.Component {
                 </div>
               </div>
             ))}
-          </div>
+          </List>
         </div>
     );
   }

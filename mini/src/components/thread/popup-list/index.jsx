@@ -110,7 +110,7 @@ import { View, Text } from '@tarojs/components'
   };
 
   const onUserClick = (userId = '') => {
-    router.push(`/my/others?isOtherPerson=true&otherId=${userId}`);
+    router.push(`/user/${userId}`);
   };
 
   const onClose = () => {

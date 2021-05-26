@@ -44,7 +44,7 @@ class WalletAction extends WalletStore {
         endTime: time.getMonthStartAndEnd(date)[1],
       };
       if (type !== 'all') {
-        filter.changeType = type;
+        filter.changeType = String(type).split(',');
       }
 
       Object.assign(param, {
@@ -60,7 +60,14 @@ class WalletAction extends WalletStore {
           date: time.formatDate(date, 'YYYY-MM'),
           page,
         });
+
+        return detailInfoRes.data;
       }
+
+      throw {
+        Code: detailInfoRes.code,
+        Msg: detailInfoRes.Msg,
+      };
     }
 
     // 获取支出明细
@@ -77,7 +84,7 @@ class WalletAction extends WalletStore {
         endTime: time.getMonthStartAndEnd(date)[1],
       };
       if (type !== 'all') {
-        filter.changeType = type;
+        filter.changeType = String(type).split(',');
       }
       Object.assign(param, {
         filter,
@@ -93,7 +100,14 @@ class WalletAction extends WalletStore {
           date: time.formatDate(date, 'YYYY-MM'),
           page,
         });
+
+        return detailInfoRes.data;
       }
+
+      throw {
+        Code: detailInfoRes.code,
+        Msg: detailInfoRes.Msg,
+      };
     }
 
     // 获取冻结明细
@@ -109,13 +123,18 @@ class WalletAction extends WalletStore {
       });
 
       if (detailInfoRes.code === 0) {
-        if (detailInfoRes.code === 0) {
-          if (!this.freezeDetail[date]) {
-            this.freezeDetail[date] = {};
-          }
-          this.freezeDetail[date][page] = get(detailInfoRes, 'data.pageData', []);
+        if (!this.freezeDetail[date]) {
+          this.freezeDetail[date] = {};
         }
+        this.freezeDetail[date][page] = get(detailInfoRes, 'data.pageData', []);
+
+        return detailInfoRes.data;
       }
+
+      throw {
+        Code: detailInfoRes.code,
+        Msg: detailInfoRes.Msg,
+      };
     }
 
     // 获取提现明细
@@ -132,7 +151,7 @@ class WalletAction extends WalletStore {
         end_time: time.getMonthStartAndEnd(date)[1],
       };
       if (type !== 'all') {
-        filter.cash_status = type;
+        filter.cash_status = [type];
       }
 
       Object.assign(param, {
@@ -143,11 +162,20 @@ class WalletAction extends WalletStore {
         params: param,
       });
 
-      setWalletInfoPageData(cashInfoRes.data, this.cashDetail, {
-        type,
-        date: time.formatDate(date, 'YYYY-MM'),
-        page,
-      });
+      if (cashInfoRes.code === 0) {
+        setWalletInfoPageData(cashInfoRes.data, this.cashDetail, {
+          type,
+          date: time.formatDate(date, 'YYYY-MM'),
+          page,
+        });
+
+        return cashInfoRes.data;
+      }
+
+      throw {
+        Code: cashInfoRes.code,
+        Msg: cashInfoRes.Msg,
+      };
     }
 }
 

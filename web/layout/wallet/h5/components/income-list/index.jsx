@@ -37,7 +37,7 @@ class IncomeList extends React.Component {
                     {
                         this.props.incomeVal.type === 0 ? <span className={styles.name}>{'打赏用户名'} </span> : ''
                     }
-                    <span>{this.showText[this.props.incomeVal.type]}</span>
+                    <span>{this.props.incomeVal.title || this.props.incomeVal.changeDesc}</span>
                 </div>
                 <div className={styles.money}>+{this.props.incomeVal.amount}</div>
             </div>

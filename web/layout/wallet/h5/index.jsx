@@ -60,14 +60,24 @@ class WalletH5Page extends React.Component {
     this.setState({
       tabsType: val,
     });
-    this.initStateAndFetch();
+    this.initSelectType(() => {
+      this.initStateAndFetch();
+    });
+  };
+
+  initSelectType = (callback) => {
+    this.setState(
+      {
+        selectType: 'all',
+      },
+      callback,
+    );
   };
 
   initStateAndFetch = () => {
     this.setState(
       {
         page: 1,
-        selectType: 'all',
         totalPage: 1,
       },
       () => {
@@ -102,6 +112,22 @@ class WalletH5Page extends React.Component {
   // 关闭全部状态的弹框
   handleStateCancel = () => {
     this.setState({ visibleshow: false });
+  };
+
+  handleTypeChange = (id) => {
+    console.log(id);
+    this.setState(
+      {
+        selectType: id,
+      },
+      () => {
+        this.initStateAndFetch();
+      },
+    );
+  };
+
+  handleDataPickerCancel = () => {
+    this.setState({ consumptionTimeshow: !this.state.consumptionTimeshow });
   };
 
   // 点击确定后对时间选择的弹框的操作
@@ -147,37 +173,56 @@ class WalletH5Page extends React.Component {
 
   fetchIncomeDetail = async () => {
     try {
-      await this.props.wallet.getInconmeDetail({
+      console.log(this.state.selectType);
+      const detailRes = await this.props.wallet.getInconmeDetail({
         page: this.state.page,
         type: this.state.selectType,
         date: this.state.consumptionTime,
       });
-      this.setState({
-        page: this.state.page + 1,
-      });
+      const pageState = {
+        totalPage: detailRes.totalPage,
+      };
+      if (this.state.page <= pageState.totalPage) {
+        Object.assign(pageState, {
+          page: this.state.page + 1,
+        });
+      }
+      this.setState(pageState);
     } catch (e) {}
   };
 
   fetchExpendDetail = async () => {
-    await this.props.wallet.getExpendDetail({
+    const detailRes = await this.props.wallet.getExpendDetail({
       page: this.state.page,
       type: this.state.selectType,
       date: this.state.consumptionTime,
     });
-    this.setState({
-      page: this.state.page + 1,
-    });
+    const pageState = {
+      totalPage: detailRes.totalPage,
+    };
+    if (this.state.page <= pageState.totalPage) {
+      Object.assign(pageState, {
+        page: this.state.page + 1,
+      });
+    }
+    this.setState(pageState);
   };
 
   fetchCashDetail = async () => {
-    await this.props.wallet.getCashLog({
+    const detailRes = await this.props.wallet.getCashLog({
       page: this.state.page,
       type: this.state.selectType,
       date: this.state.consumptionTime,
     });
-    this.setState({
-      page: this.state.page + 1,
-    });
+    const pageState = {
+      totalPage: detailRes.totalPage,
+    };
+    if (this.state.page <= pageState.totalPage) {
+      Object.assign(pageState, {
+        page: this.state.page + 1,
+      });
+    }
+    this.setState(pageState);
   };
 
   listRenderDataFilter = (data) => {
@@ -200,7 +245,6 @@ class WalletH5Page extends React.Component {
           />
           收入明细
         </div>,
-        null,
         { name: 'TicklerOutlined' },
       ],
       [
@@ -214,7 +258,6 @@ class WalletH5Page extends React.Component {
           />
           支出明细
         </div>,
-        null,
         { name: 'WallOutlined' },
       ],
       [
@@ -228,7 +271,6 @@ class WalletH5Page extends React.Component {
           />
           提现记录
         </div>,
-        null,
         { name: 'TransferOutOutlined' },
       ],
     ];
@@ -258,7 +300,7 @@ class WalletH5Page extends React.Component {
           </div>
           <div className={layout.tabs}>
             <Tabs scrollable={true} className={layout.tabList} onActive={this.onTabActive}>
-              {tabList.map(([id, label, badge, icon]) => (
+              {tabList.map(([id, label, icon]) => (
                 <Tabs.TabPanel key={id} id={id} label={label} name={icon.name}>
                   {this.state.tabsType === 'income' && (
                     <List
@@ -267,7 +309,7 @@ class WalletH5Page extends React.Component {
                       onRefresh={this.fetchIncomeDetail}
                     >
                       {this.listRenderDataFilter(incomeDetail).map(value => (
-                        <IncomeList key={value.id} incomeVal={value}></IncomeList>
+                        <IncomeList key={value.id} incomeVal={value} />
                       ))}
                     </List>
                   )}
@@ -278,7 +320,7 @@ class WalletH5Page extends React.Component {
                       onRefresh={this.fetchExpendDetail}
                     >
                       {this.listRenderDataFilter(expandDetail).map(value => (
-                        <PayList key={value.id} payVal={value}></PayList>
+                        <PayList key={value.id} payVal={value} />
                       ))}
                     </List>
                   )}
@@ -289,7 +331,7 @@ class WalletH5Page extends React.Component {
                       onRefresh={this.fetchCashDetail}
                     >
                       {this.listRenderDataFilter(cashDetail).map(value => (
-                        <WithdrawalList key={value.id} withdrawalVal={value}></WithdrawalList>
+                        <WithdrawalList key={value.id} withdrawalVal={value} />
                       ))}
                     </List>
                   )}
@@ -309,18 +351,11 @@ class WalletH5Page extends React.Component {
           title={this.renderSelectTitle()}
           visible={this.state.visibleshow}
           handleCancel={this.handleStateCancel}
-          handleSubmit={(id) => {
-            this.setState({
-              selectType: id,
-            });
-            this.initStateAndFetch();
-          }}
+          handleSubmit={this.handleTypeChange}
         />
         <DatePickers
           isOpen={this.state.consumptionTimeshow}
-          onCancels={() => {
-            this.setState({ consumptionTimeshow: !this.state.consumptionTimeshow });
-          }}
+          onCancels={this.handleDataPickerCancel}
           onSelects={this.handleMoneyTime}
           dateConfig={DATE_PICKER_CONFIG}
         />

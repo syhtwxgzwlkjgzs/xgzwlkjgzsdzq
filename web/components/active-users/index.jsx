@@ -1,5 +1,5 @@
 import React from 'react';
-import ActiveUsers from '@layout/search/pc/components/active-users'
+import ActiveUsers from '@layout/search/pc/components/active-users';
 import SidebarPanel from '@components/sidebar-panel';
 import { withRouter } from 'next/router';
 import { inject, observer } from 'mobx-react';
@@ -12,11 +12,11 @@ class Index extends React.Component {
   }
 
   state = {
-    users: null
+    users: null,
   }
 
   componentDidMount() {
-    this.loadData()
+    this.loadData();
   }
 
   redirectToSearchResultUser = () => {
@@ -24,25 +24,25 @@ class Index extends React.Component {
   }
 
   onUserClick = ({ userId } = {}) => {
-    this.props.router.push(`/my/others?isOtherPerson=true&otherId=${userId}`);
+    this.props.router.push(`/user/${userId}`);
   };
 
   loadData = async () => {
-    const res = await this.props.search.getUsersList()
+    const res = await this.props.search.getUsersList();
     if (res && res.code === 0 && res.data) {
       this.setState({
-        users: res.data
-      })
+        users: res.data,
+      });
     }
   }
 
-  render () {
+  render() {
     const { pageData } = this.state.users || {};
 
     return (
       <SidebarPanel
-        title="活跃用户" 
-        onShowMore={this.redirectToSearchResultUser} 
+        title="活跃用户"
+        onShowMore={this.redirectToSearchResultUser}
         isLoading={!pageData}
         noData={!pageData?.length}
       >
@@ -50,6 +50,6 @@ class Index extends React.Component {
       </SidebarPanel>
     );
   }
-};
+}
 
 export default withRouter(Index);

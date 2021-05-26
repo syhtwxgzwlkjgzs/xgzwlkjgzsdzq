@@ -44,7 +44,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
 
     setAll(res?.data);
 
-    return res
+    return res;
   };
 
   const singleLoadData = async ({ page = 1, type = 1 } = {}) => {
@@ -70,7 +70,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
       setTips(data);
     }
 
-    return res
+    return res;
   };
 
   const loadMoreData = () => {
@@ -110,7 +110,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
   };
 
   const onUserClick = (userId = '') => {
-    router.push(`/my/others?isOtherPerson=true&otherId=${userId}`);
+    router.push(`/user/${userId}`);
   };
 
   const onClose = () => {
@@ -211,8 +211,8 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
         onClose={onClose}
     >
     {
-      !all ?
-          <Tabs
+      !all
+        ? <Tabs
             activeId={current}
             className={`${styles.tabs} ${tipData?.platform === 'pc' && styles.tabsPC}`}
           >
@@ -220,8 +220,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
               <Spin className={`${tipData?.platform === 'pc' ? styles.spinnerPC : styles.spinner}`} type="spinner" />
             </Tabs.TabPanel>
           </Tabs>
-      :
-        <Tabs
+        :        <Tabs
           onActive={onClickTab}
           activeId={current}
           className={`${styles.tabs} ${tipData?.platform === 'pc' && styles.tabsPC}`}
