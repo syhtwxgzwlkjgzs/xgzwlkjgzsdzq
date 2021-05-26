@@ -101,10 +101,11 @@ class AtSelect extends Component {
     if (checkUser.length === 0) return;
 
     // 处理已选@ren，更新store
-    const { postData, setPostData } = this.props.threadPost;
+    const { postData: { contentText: text }, setPostData, cursorPosition, setCursorPosition } = this.props.threadPost;
     const at = checkUser.map(item => `@${item} `).join(" ");
-    const contentText = `${postData.contentText} ${at}`;
+    const contentText = text.slice(0, cursorPosition) + at + text.slice(cursorPosition);
     setPostData({ contentText });
+    setCursorPosition(cursorPosition + at.length);
 
     // 返回发帖页
     this.handleCancel();

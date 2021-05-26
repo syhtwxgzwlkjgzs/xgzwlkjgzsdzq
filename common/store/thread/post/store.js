@@ -6,6 +6,8 @@ import { LOADING_TOTAL_TYPE } from '@common/constants/thread-post';
 import { plus } from '@common/utils/calculate';
 
 class ThreadPostStore {
+  // 鼠标索引位置
+  @observable cursorPosition = 0;
   /**
    * 表情列表
    */

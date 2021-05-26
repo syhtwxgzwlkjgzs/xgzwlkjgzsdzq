@@ -517,7 +517,7 @@ class Index extends Component {
   render() {
     const { permissions } = this.props.user;
     const { categories } = this.props.index;
-    const { postData, setPostData } = this.props.threadPost;
+    const { postData, setPostData, setCursorPosition } = this.props.threadPost;
     const { rewardQa, redpacket, video, product, position } = postData;
     const {
       isShowTitle,
@@ -556,7 +556,11 @@ class Index extends Component {
               maxLength={maxLength}
               onChange={this.onContentChange}
               onFocus={this.onContentFocus}
-              onBlur={this.hideKeyboard}
+              onBlur={(e) => {
+                console.log('set', e.detail.cursor);
+                setCursorPosition(e.detail.cursor);
+                this.hideKeyboard();
+              }}
             />
 
             <View className={styles['plugin']}>
