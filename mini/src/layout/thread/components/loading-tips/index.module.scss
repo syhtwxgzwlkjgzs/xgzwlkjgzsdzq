@@ -9,15 +9,15 @@
 .init {
   font-size: $font-size-primary;
   color: $loading-text-color;
-  // * {
-  //   color: $loading-text-color;
-  // }
+  View {
+    color: $loading-text-color;
+  }
 }
 
 .loadMore {
   font-size: $font-size-label;
   color: $loading-text-color;
-  // * {
-  //   color: $loading-text-color;
-  // }
+  View {
+    color: $loading-text-color;
+  }
 }

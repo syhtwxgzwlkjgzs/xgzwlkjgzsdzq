@@ -642,54 +642,12 @@ class ThreadH5Page extends React.Component {
                 <Input className={footer.input} placeholder="写评论" disabled={true} prefixIcon="EditOutlined"></Input>
               </View>
 
-              {/* 评论弹层 */}
-              <InputPopup
-                visible={this.state.showCommentInput}
-                onClose={() => this.onClose()}
-                initValue={this.state.inputValue}
-                onSubmit={(value) => this.onPublishClick(value)}
-              ></InputPopup>
-
-              {/* 更多弹层 */}
-              <MorePopup
-                permissions={morePermissions}
-                statuses={moreStatuses}
-                visible={this.state.showMorePopup}
-                onClose={() => this.setState({ showMorePopup: false })}
-                onSubmit={() => this.setState({ showMorePopup: false })}
-                onOperClick={(type) => this.onOperClick(type)}
-              ></MorePopup>
-
-              {/* 删除弹层 */}
-              <DeletePopup
-                visible={this.state.showDeletePopup}
-                onClose={() => this.setState({ showDeletePopup: false })}
-                onBtnClick={(type) => this.onBtnClick(type)}
-              ></DeletePopup>
-              {/* 举报弹层 */}
-
-              {/* 举报弹窗 */}
-              <ReportPopup
-                reportContent={this.reportContent}
-                inputText={this.inputText}
-                visible={this.state.showReportPopup}
-                onCancel={() => this.setState({ showReportPopup: false })}
-                onOkClick={(data) => this.onReportOk(data)}
-              ></ReportPopup>
-
-              {/* 打赏弹窗 */}
-              <RewardPopup
-                visible={this.state.showRewardPopup}
-                onCancel={() => this.setState({ showRewardPopup: false })}
-                onOkClick={(value) => this.onRewardSubmit(value)}
-              ></RewardPopup>
-
               {/* 操作区 */}
               <View className={footer.operate}>
                 <View className={footer.icon} onClick={() => this.onMessageClick()}>
                   {totalCount > 0 ? (
                     <View className={classNames(footer.badge, totalCount < 10 && footer.isCricle)}>
-                      {totalCount > 99 ? '99+' : `${totalCount || '0'}`}
+                      <View className={footer.text}>{totalCount > 99 ? '99+' : `${totalCount || '0'}`}</View>
                     </View>
                   ) : (
                     ''
@@ -712,6 +670,52 @@ class ThreadH5Page extends React.Component {
               </View>
             </View>
           </View>
+        )}
+
+        {isReady && (
+          <Fragment>
+            {/* 评论弹层 */}
+            <InputPopup
+              visible={this.state.showCommentInput}
+              onClose={() => this.onClose()}
+              initValue={this.state.inputValue}
+              onSubmit={(value) => this.onPublishClick(value)}
+            ></InputPopup>
+
+            {/* 更多弹层 */}
+            <MorePopup
+              permissions={morePermissions}
+              statuses={moreStatuses}
+              visible={this.state.showMorePopup}
+              onClose={() => this.setState({ showMorePopup: false })}
+              onSubmit={() => this.setState({ showMorePopup: false })}
+              onOperClick={(type) => this.onOperClick(type)}
+            ></MorePopup>
+
+            {/* 删除弹层 */}
+            <DeletePopup
+              visible={this.state.showDeletePopup}
+              onClose={() => this.setState({ showDeletePopup: false })}
+              onBtnClick={(type) => this.onBtnClick(type)}
+            ></DeletePopup>
+            {/* 举报弹层 */}
+
+            {/* 举报弹窗 */}
+            <ReportPopup
+              reportContent={this.reportContent}
+              inputText={this.inputText}
+              visible={this.state.showReportPopup}
+              onCancel={() => this.setState({ showReportPopup: false })}
+              onOkClick={(data) => this.onReportOk(data)}
+            ></ReportPopup>
+
+            {/* 打赏弹窗 */}
+            <RewardPopup
+              visible={this.state.showRewardPopup}
+              onCancel={() => this.setState({ showRewardPopup: false })}
+              onOkClick={(value) => this.onRewardSubmit(value)}
+            ></RewardPopup>
+          </Fragment>
         )}
       </View>
     );
