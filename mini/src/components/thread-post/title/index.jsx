@@ -8,7 +8,7 @@
  */
 import React, { memo } from 'react';
 import { View } from '@tarojs/components';
-import { Input } from '@discuzq/design';
+import Input from '@discuzq/design/dist/components/input/index';
 import styles from './index.module.scss';
 
 import PropTypes from 'prop-types';
