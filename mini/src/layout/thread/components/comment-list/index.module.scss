@@ -75,6 +75,13 @@
           color: var(--color-text-primary);
           @include lamp-clamp(3);
 
+          :global {
+            .qq-emotion {
+              width: 30px;
+              height: 30px;
+            }
+          }
+
           p {
             @include lamp-clamp(3);
             line-height: $font-line-height-base;
