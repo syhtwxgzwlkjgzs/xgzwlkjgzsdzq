@@ -18,7 +18,7 @@
   }
 
   .friendTextInfo {
-    padding-left: rem($padding-4n);
+    padding-left: rem($padding-2n);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -81,6 +81,11 @@
     span {
       padding-left: rem($padding-5);
       font-size: rem($font-size-small);
+    }
+  }
+  :global{
+    .dzq-button  {
+      padding: 0 ;
     }
   }
 }
