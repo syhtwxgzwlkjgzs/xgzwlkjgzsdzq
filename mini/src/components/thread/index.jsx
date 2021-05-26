@@ -53,7 +53,7 @@ class Index extends React.Component {
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
         }
       });
-    }, 2000);
+    }, 1000);
     // 评论
     onComment = (e) => {
       e && e.stopPropagation();
@@ -107,9 +107,7 @@ class Index extends React.Component {
       e && e.stopPropagation();
       this.handlePay()
     }
-    handlePay = debounce(async (e) => {
-      e && e.stopPropagation();
-
+    handlePay = debounce(async () => {
       // 对没有登录的先做
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
@@ -183,7 +181,7 @@ class Index extends React.Component {
         <View className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
           <View className={styles.header} onClick={this.onClick}>
               <UserInfo
-                name={user.userName || ''}
+                name={user.nickname || ''}
                 avatar={user.avatar || ''}
                 location={position.location}
                 view={`${viewCount}`}
