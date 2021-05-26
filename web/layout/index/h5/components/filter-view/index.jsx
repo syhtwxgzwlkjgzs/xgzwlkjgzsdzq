@@ -102,7 +102,7 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
     return (
       <div className={styles.moduleWrapper} key={key}>
         <div className={styles.title}>
-          {title}
+          <span>{title}</span>
           {key === 0 && <Icon className={styles.searchIcon} name='SearchOutlined' size={20} onClick={goSearch}></Icon>}
         </div>
         <Row className={styles.wrapper} gutter={10}>

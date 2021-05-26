@@ -45,7 +45,7 @@
   }
 
   .list {
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 100%;
     width: 100%;
     overflow-x: hidden;
@@ -106,7 +106,7 @@
 .footer {
   background-color: $white;
   text-align: center;
-  height: 120px;
+  height: 132px;
   .button {
     width: 290px;
     height: 42px;

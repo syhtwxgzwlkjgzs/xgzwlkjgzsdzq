@@ -38,7 +38,7 @@ import { RichText } from '@discuzq/design';
       {data?.map((item, index) => (
         <View
           key={index}
-          className={`${styles.item} ${platform === 'pc' ? styles.itemPC : styles.itemH5}`}
+          className={`${styles.item} ${styles.itemH5}`}
           onClick={() => onClick(item)}
         >
           <Text className={styles.prefix}>{item.prefix || '置顶'}</Text>
