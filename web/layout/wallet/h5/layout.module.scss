@@ -1,12 +1,14 @@
 @import '@common/styles/index.scss';
 
-:global {
-  .datepicker-modal {
-    z-index: 1 !important;
-  }
-}
 
 .container {
+
+  :global {
+    .datepicker-modal {
+      z-index: 1 !important;
+    }
+  }
+
   @include scrollbar();
   height: 100vh;
   width: 100vw;
@@ -49,7 +51,7 @@
   .tabs {
     width: 100%;
     border-bottom: var(--border-border);
-    
+
     .tagbox {
       display: flex;
       justify-content: center;
@@ -72,7 +74,6 @@
       }
 
       .dzq-tabs__label {
-
         padding-bottom: rem(10) !important;
         font-family: "PingFang SC";
         font-weight: 600;
@@ -82,10 +83,9 @@
       .dzq-tabs__item {
         height: rem(50);
         box-sizing: border-box;
-        // padding: 0 6px;
-        padding: 0 !important;
         flex: 1;
-        &::after{
+
+        &::after {
           width: rem(82);
           margin: auto;
         }
