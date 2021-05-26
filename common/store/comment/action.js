@@ -88,7 +88,7 @@ class CommentAction extends CommentStore {
    * @param {string} params.content * 评论内容
    * @param {array} params.attachments 附件内容
    * @param {boolen} params.sort 当前排序  ture 评论从旧到新 false 评论从新到旧
-   * @param {boolen} params.isNoMore 是否还有更多
+   * @param {boolen} params.isNoMore 是否没有更多
    * @returns {object} 处理结果
    */
   @action
@@ -117,7 +117,7 @@ class CommentAction extends CommentStore {
       ThreadStore && ThreadStore.setTotalCount(newTotalCount);
       const newData = res.data;
       newData.lastThreeComments = [];
-
+      console.log(sort, isNoMore);
       // 头部添加评论
       if (sort === false) {
         commentList.unshift(newData);

@@ -400,7 +400,7 @@ class ThreadH5Page extends React.Component {
       id,
       content: val,
       sort: this.commentDataSort, // 目前的排序
-      isNoMore: false,
+      isNoMore: this.props?.thread?.isNoMore,
       attachments: [],
     };
     const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
