@@ -72,19 +72,23 @@
       }
 
       .dzq-tabs__label {
-        width: rem(101px);
-        margin-top: rem(14px);
+
+        padding-bottom: rem(10) !important;
         font-family: "PingFang SC";
         font-weight: 600;
         font-size: rem($font-size-primary);
-        padding-bottom: rem(11px) !important;
       }
 
       .dzq-tabs__item {
         height: rem(50);
         box-sizing: border-box;
         // padding: 0 6px;
+        padding: 0 !important;
         flex: 1;
+        &::after{
+          width: rem(82);
+          margin: auto;
+        }
       }
     }
   }
