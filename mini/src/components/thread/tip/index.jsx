@@ -41,7 +41,7 @@ import styles from './index.module.scss';
                   <View key={index} className={index === 0 ? styles.img : styles.imgAfter}>
                     <Avatar
                       image={item.avatar}
-                      name={item.userName}
+                      name={item.nickname}
                       size='small'
                     />
                   </View>

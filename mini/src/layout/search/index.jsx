@@ -30,7 +30,7 @@ class SearchH5Page extends React.Component {
   };
 
   onUserClick = ({ userId } = {}) => {
-    Taro.navigateTo({url: `/subPages/my/others?isOtherPerson=true&otherId=${userId}`});
+    Taro.navigateTo({url: `/subPages/user/${userId}`});
   };
 
   // 跳转话题详情
