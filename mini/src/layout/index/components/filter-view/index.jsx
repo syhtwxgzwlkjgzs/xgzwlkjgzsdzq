@@ -7,6 +7,8 @@ import { noop } from '@components/thread/utils';
 import filterData from './data';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
+import Router from '@discuzq/sdk/dist/router';
+
 
 const { Col, Row } = Flex;
 
@@ -63,7 +65,7 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
   };
 
   const goSearch = () => {
-    router.push(`/search`);
+    Router.push({ url: '/subPages/search/index' });
   }
 
   // 结果数据处理

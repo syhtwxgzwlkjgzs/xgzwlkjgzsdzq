@@ -77,8 +77,10 @@ class ThreadCreate extends React.Component {
   }
 
   // 设置底部bar的样式
-  setBottomBarStyle = (y = 0, action) => {
+  setBottomBarStyle = (y = 0, action, event) => {
     const winHeight = getVisualViewpost();
+    // 如果可视窗口不变，即没有弹起键盘不进行任何设置
+    if (window.innerHeight === winHeight) return;
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
     this.moneyboxDisplay(false);
     this.positionDisplay(action);
@@ -95,19 +97,33 @@ class ThreadCreate extends React.Component {
       vditorToolbar.style.position = 'fixed';
       vditorToolbar.style.top = `${winHeight - 132 + y}px`;
     }
-    this.setPostBox(action);
+    this.setPostBox(action, event);
   }
 
-  setPostBox = (action) => {
+  setPostBox = (action, event) => {
     const timer = setTimeout(() => {
       clearTimeout(timer);
       const winHeight = getVisualViewpost();
       const postBox = document.querySelector('#post-inner');
       const title = document.querySelector('#dzq-threadpost-title');
       const bottombarHeight = this.getBottombarHeight(action);
+      let postBoxHeight = winHeight - bottombarHeight;
       if (postBox) {
-        if (title?.display !== 'none') postBox.style.height = `${winHeight - bottombarHeight - 54}px`;
-        else postBox.style.height = `${winHeight - bottombarHeight}px`;
+        if (title?.display !== 'none') postBoxHeight = winHeight - bottombarHeight - 54;
+        postBox.style.height = `${postBoxHeight}px`;
+      }
+      if (event) {
+        const clientY = event?.clientY;
+        const offsetTop = event?.target?.offsetTop || 0;
+        if (offsetTop) {
+          if (offsetTop > postBoxHeight) {
+            const top = (offsetTop - postBoxHeight >= 0 && clientY > winHeight)
+              ? offsetTop - postBoxHeight + 30 : offsetTop;
+            // TODO: 这里的计算有问题，
+            postBox.style.paddingBottom = `${window.innerHeight - winHeight}px`;
+            this.props.handleEditorBoxScroller(top);
+          }
+        }
       }
     }, 0);
   };
@@ -136,10 +152,10 @@ class ThreadCreate extends React.Component {
     postBottombar.style.top = `${winHeight - bottombarHeight + y}px`;
   };
 
-  setBottomFixed = (action) => {
+  setBottomFixed = (action, event) => {
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
-      this.setBottomBarStyle(0, action);
+      this.setBottomBarStyle(0, action, event);
     }, 150);
   }
   clearBottomFixed = () => {
@@ -188,7 +204,7 @@ class ThreadCreate extends React.Component {
 
 
     return (
-      <>
+      <div className={styles['dzq-post-body']}>
         <Header allowJump={false} customJum={this.handlePageJump} />
         <div className={styles['post-inner']} id="post-inner">
           {/* 标题 */}
@@ -205,8 +221,8 @@ class ThreadCreate extends React.Component {
             topic={topic}
             onInput={(vditor) => this.props.handleVditorChange(vditor, 'input')}
             onChange={this.props.handleVditorChange}
-            onFocus={(action) => {
-              this.setBottomFixed(action);
+            onFocus={(action, event) => {
+              this.setBottomFixed(action, event);
               this.props.handleSetState({ isVditorFocus: true });
             }}
             onBlur={() => {
@@ -429,7 +445,7 @@ class ThreadCreate extends React.Component {
             }}
           />
         )}
-      </>
+      </div>
     );
   }
 }

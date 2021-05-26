@@ -90,7 +90,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
         {
           attachments.map((item, index) => {
             // 获取文件类型
-            const extension = item.fileName.split('.')[item.fileName.split('.').length - 1];
+            const extension = item?.fileName?.split('.')[item.fileName.split('.').length - 1] || '';
             const type = extensionList.indexOf(extension.toUpperCase()) > 0
               ? extension.toUpperCase()
               : 'UNKNOWN';

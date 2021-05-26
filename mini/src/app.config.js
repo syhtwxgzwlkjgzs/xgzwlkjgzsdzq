@@ -6,7 +6,6 @@ const config = {
   // 首页和详情页在主包
   pages: [
     'pages/index/index',
-    'pages/thread/index',
   ],
   subPackages: [
     {
@@ -17,6 +16,7 @@ const config = {
         'error/index',
         'close/index',
         'join/index',
+        'thread/index',
         'thread/comment/index',
         'thread/post/index',
         'thread/selectAt/index',
