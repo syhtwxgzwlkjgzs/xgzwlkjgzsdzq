@@ -1,14 +1,12 @@
 import React from 'react';
-import SupplementaryH5Page from '@layout/user/h5/supplementary';
+import SupplementaryPage from '@layout/user/h5/supplementary';
 import { inject } from 'mobx-react';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 @inject('site')
 class Supplementary extends React.Component {
   render() {
-    const { site } = this.props;
-    const { platform } = site;
-    return platform === 'h5' ? <SupplementaryH5Page /> : <></>;
+    return <SupplementaryPage />;
   }
 }
 

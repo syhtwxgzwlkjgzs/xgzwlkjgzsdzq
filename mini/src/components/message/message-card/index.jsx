@@ -1,7 +1,8 @@
 import React from 'react';
 import { View } from '@tarojs/components';
 import classNames from 'classnames';
-import { Badge, Icon } from '@discuzq/design';
+import Badge from '@discuzq/design/dist/components/badge/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import PropTypes from 'prop-types';
 
 import styles from './index.module.scss';

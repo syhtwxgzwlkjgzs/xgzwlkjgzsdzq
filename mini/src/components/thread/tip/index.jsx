@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import PopupList from '../popup-list';
 import Avatar from '../../avatar';
-import { View, Text, Image } from '@tarojs/components';
+import { View, Text, Image, Icon } from '@tarojs/components';
 import styles from './index.module.scss';
 
 /**

@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/search/result-user';
-import { Toast } from '@discuzq/design';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import Page from '@components/page';
 import { getCurrentInstance } from '@tarojs/taro';
 
@@ -38,7 +38,7 @@ class Index extends React.Component {
     } else if (type === 'moreData') {
       this.page += 1;
     }
-  
+
     await search.getUsersList({ search: data, perPage: this.perPage, page: this.page });
     return;
   }

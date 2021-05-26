@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { Popup } from '@discuzq/design';
+// import Popup from '@discuzq/design/dist/components/popup/index';
+import Popup from '@discuzq/design/dist/components/popup/index';
 import { View } from '@tarojs/components';
 import styles from './index.module.scss';
 

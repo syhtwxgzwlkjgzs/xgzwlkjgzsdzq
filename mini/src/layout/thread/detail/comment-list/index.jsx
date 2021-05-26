@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Icon, Toast } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import { View, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import CommentList from '../../components/comment-list/index';
@@ -267,7 +268,7 @@ class RenderCommentList extends React.Component {
       const { success, msg } = await this.props.thread.reward(params);
       if (success) {
         this.setState({ showAboptPopup: false });
-        
+
         // 重新获取帖子详细
         this.props.thread.fetchThreadDetail(params.threadId)
 
