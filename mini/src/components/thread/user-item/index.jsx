@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { Button, Icon } from '@discuzq/design';
+import Button from '@discuzq/design/dist/components/button/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import Avatar from '../../avatar';
 import { noop } from '../utils';
 import styles from './index.module.scss';
@@ -35,10 +36,10 @@ const Index = ({ imgSrc, title = '', type = 0, subTitle, label, index, onClick =
     <View className={`${styles.listItem} ${isShowBottomLine && styles.bottomLine} ${needPadding && styles.sidebarPadding}`} key={index} onClick={handleClick}>
       <View className={styles.wrapper}>
           <View className={styles.header}>
-              <Avatar 
-                className={styles.img} 
-                image={imgSrc} 
-                name={title} 
+              <Avatar
+                className={styles.img}
+                image={imgSrc}
+                name={title}
                 isShowUserInfo={platform === 'pc'}
                 userId={userId}
               />

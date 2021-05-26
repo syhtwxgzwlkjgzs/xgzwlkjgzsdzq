@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
 import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
-import { Toast, Icon } from '@discuzq/design';
+import Toast from '@discuzq/design/dist/components/toast/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
 
 import Taro from '@tarojs/taro';
 import CommentList from '../../components/comment-list/index';

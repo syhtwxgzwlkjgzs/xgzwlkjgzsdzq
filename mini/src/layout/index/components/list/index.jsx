@@ -1,5 +1,6 @@
 import React, { createRef } from 'react';
-import { PullDownRefresh, ScrollView } from '@discuzq/design';
+import PullDownRefresh from '@discuzq/design/dist/components/pullDownRefresh/index';
+import ScrollView from '@discuzq/design/dist/components/scrollView/index';
 import BaseList from '@components/list';
 
 import styles from './index.module.scss';

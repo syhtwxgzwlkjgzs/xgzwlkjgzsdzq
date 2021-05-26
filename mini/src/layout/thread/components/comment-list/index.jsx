@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
-import { Icon } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import { View, Text, Image } from '@tarojs/components';
 import ReplyList from '../reply-list/index';
 import { diffDate } from '@common/utils/diff-date';
@@ -80,13 +80,13 @@ class CommentList extends React.Component {
       canApprove: data.canApprove || false,
       canDelete: data.canDelete || false,
       canEdit: data.canEdit || false,
-      canHide: data.canLike || false,
+      canHide: data.canHide || false,
       canLike: data.canLike || false,
     };
   }
 
   render() {
-    const { canDelete, canEdit, canLike } = this.generatePermissions(this.props.data);
+    const { canDelete, canEdit, canLike, canHide } = this.generatePermissions(this.props.data);
 
     return (
       <View className={styles.commentList}>
@@ -156,10 +156,10 @@ class CommentList extends React.Component {
                       <Text onClick={() => this.props.onAboptClick()}>采纳</Text>
                     </View>
                   )}
-                  {!this.state.isHideEdit && canDelete && (
+                  {!this.state.isHideEdit && canHide && (
                     <View className={styles.extra}>
                       {/* {canEdit && <View className={styles.revise} onClick={() => this.editClick()}>编辑</View>} */}
-                      {canDelete && (
+                      {canHide && (
                         <View className={styles.revise} onClick={() => this.deleteClick()}>
                           删除
                         </View>

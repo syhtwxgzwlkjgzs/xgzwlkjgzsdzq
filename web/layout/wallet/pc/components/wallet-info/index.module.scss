@@ -7,7 +7,8 @@
 .containerPC {
     width: rem(330);
     height: 100%;
-    background: var(--color-primary);
+    background: url('/dzq-img/walletbackground.png') 100%  no-repeat padding-box;
+    background-size: cover;
     border-radius: rem($border-radius-small);
 }
 

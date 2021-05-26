@@ -31,12 +31,15 @@
           display: inline;
           font-weight: normal;
           font-size: $font-size-middle;
-          line-height: 16px;
+          line-height: 26px;
           text-align: left;
           color: $text-color-primary;
-          vertical-align: super;
+          vertical-align: text-bottom;
 
-          p {
+          View {
+            display: inline;
+          }
+          .p {
             display: inline;
           }
         }
