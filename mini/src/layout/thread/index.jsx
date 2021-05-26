@@ -581,7 +581,6 @@ class ThreadH5Page extends React.Component {
             </View>
           )}
         </View>
-        <View className={layout['scrollView-outer']} >
         <ScrollView
           className={layout.body}
           ref={this.hreadBodyRef}
@@ -624,7 +623,7 @@ class ThreadH5Page extends React.Component {
                       onEditClick={(comment) => this.onEditClick(comment)}
                     ></RenderCommentList>
                     {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
-                    {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
+                    {isNoMore && <View className={layout.noMore}><NoMore empty={totalCount === 0}></NoMore></View>}
                   </Fragment>
                 ) : (
                   <LoadingTips type="init"></LoadingTips>
@@ -633,7 +632,6 @@ class ThreadH5Page extends React.Component {
             )}
           </View>
         </ScrollView>
-        </View>
 
         {/* 底部操作栏 */}
         {isReady && isApproved && (
