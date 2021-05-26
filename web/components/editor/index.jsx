@@ -162,9 +162,9 @@ export default function DVditor(props) {
     //   });
     // });
     const editorElement = vditor[vditor.currentMode]?.element;
-    editorElement?.addEventListener('click', () => {
+    editorElement?.addEventListener('click', (e) => {
       setIsFocus(false);
-      onFocus('focus');
+      onFocus('focus', e);
     });
     // 从事件绑定方式修改成轮询记录的方式，以达到更实时更精确的记录方式，可解决iphone下输入中文光标会被重置到位置0的问题（性能需关注）
     const timeoutRecord = () => {

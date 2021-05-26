@@ -150,7 +150,7 @@ class ThreadCreate extends React.Component {
 
   // 顶部导航栏点击后拦截回调
   handlePageJump = (link = '') => {
-    const { postData: { contentText } } = this.props.threadPost;
+    const { postData: { contentText }, resetPostData } = this.props.threadPost;
 
     if (contentText !== '') {
       this.props.handleSetState({ draftShow: true, jumpLink: link });
@@ -158,6 +158,7 @@ class ThreadCreate extends React.Component {
     }
 
     if (link) {
+      resetPostData();
       Router.push({ url: link });
     } else {
       window.history.length <= 1 ? Router.redirect({ url: '/' }) : Router.back();
@@ -225,7 +226,7 @@ class ThreadCreate extends React.Component {
             // && Object.keys(postData.audio).length > 0
             && !postData.audio.mediaUrl)
             && (
-              <div className={styles['audio-record']}>
+              <div className={styles['audio-record']} id="dzq-post-audio-record">
                 <AudioRecord duration={60} onUpload={(blob) => {
                   this.props.handleAudioUpload(blob);
                 }} />
