@@ -43,14 +43,19 @@
       line-height: 1.5;
       position: relative;
       top: 1px;
-      overflow-x: scroll;
 
       :global {
         .dzq-richText--mini {
           font-size: 14px;
-          display: flex;
-          align-items: center;
-          overflow-x: scroll;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          word-break: break-all;
+          View, Image {
+            display: inline-block;
+            vertical-align: middle;
+          }
+
           .qq-emotion {
             height: 20px;
             width: 20px;
@@ -61,29 +66,5 @@
 
     }
   }
-  .itemPC {
-    cursor: pointer;
-    height: 38px;
-    .prefix {
-      font-size: $font-size-middle;
-      line-height: $font-line-height-small;
-      margin-right: 12px;
-    }
-    .title {
-      font-size: $font-size-middle;
-      line-height: $font-line-height-small;
-      .richText{
-        display: flex;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        word-break: break-all;
-        font-size: $font-size-middle;
-        :global(.qq-emotion){
-          height: 20px;
-          width: 20px;
-        }
-      }
-    }
-  }
+
 }
