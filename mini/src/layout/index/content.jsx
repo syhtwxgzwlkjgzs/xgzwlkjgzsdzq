@@ -7,7 +7,7 @@ import ThreadContent from '../../components/thread';
 import HomeHeader from '../../components/home-header';
 import FilterView from './components/filter-view';
 import BaseLayout from '../../components/base-layout';
-
+import { throttle } from '@common/utils/throttle-debounce.js'
 import TopNew from './components/top-news';
 
 import styles from './index.module.scss';
@@ -115,11 +115,11 @@ class IndexH5Page extends React.Component {
     return dispatch('moreData', requestFilter);
   };
 
-  handleScroll = (e) => {
+  handleScroll = throttle((e) => {
     const { scrollTop = 0 } = e?.detail || {}
-    const { height = 180 } = this.headerRef.current?.state || {}
+    const { height = 165 } = this.headerRef.current?.state || {}
     this.setState({ fixedTab: !(scrollTop < height) })
-  }
+  }, 0)
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
   handleCategories = () => {
