@@ -9,7 +9,7 @@
     margin-right: rem($margin-4n);
     box-sizing: border-box;
     padding: rem($padding-4n) 0;
-    border-bottom: rem(1) solid var(--border-line-color);
+    border-bottom: rem(1) solid $border-color;
     -webkit-tap-highlight-color: transparent;
     :global(.dzq-input__inner) {
       text-align: center;
@@ -24,7 +24,7 @@
     }
   }
   .captchaInput-input_val {
-    border-bottom: rem(1) solid var(--border-color-hover);
+    border-bottom: rem(1) solid $text-color-placeholder;
   }
   .captchaInput-input:last-child {
     margin-right: 0;
