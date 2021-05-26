@@ -90,9 +90,11 @@ class Index extends Component {
 
   redirectToHome = () => { // 检查发帖权限，没有则重定向首页
     const { permissions } = this.props.user;
-    if (permissions && !permissions.createThread?.enable) {
-      this.postToast('暂无发帖权限');
-      Taro.redirectTo({ url: '/pages/index/index' })
+    if (!permissions || (permissions && !permissions.createThread?.enable)) {
+      this.postToast('暂无发帖权限, 即将回到首页');
+      setTimeout(() => {
+        Taro.redirectTo({ url: '/pages/index/index' })
+      }, 1000)
     }
   }
 
