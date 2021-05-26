@@ -1,6 +1,5 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'next/router';
 import SearchInput from '@components/search-input';
 import BaseLayout from '@components/base-layout';
 import TopicItem from '@components/topic-item'
