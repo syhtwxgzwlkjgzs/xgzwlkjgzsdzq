@@ -3,7 +3,7 @@
  * @prop {string} title 输入标题值
  * @prop {string} placeholder
  * @prop {boolean} show 是否显示标题
- * @prop {function} onChange input事件，输出当前标题值
+ * @prop {function} onChange change事件
  * @prop {function} onBlur 失焦事件
  */
 import React, { memo } from 'react';
