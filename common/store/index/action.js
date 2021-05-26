@@ -92,7 +92,7 @@ class IndexAction extends IndexStore {
       }
       return result.data;
     }
-    return null;
+    return Promise.reject();
   }
 
   /**
