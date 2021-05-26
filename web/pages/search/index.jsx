@@ -81,7 +81,7 @@ class Index extends React.Component {
 
     if (type === 'refresh') {
       search.getSearchData({ hasTopics: false, hasUsers: false, hasThreads: false });
-    } else {
+    } else if (type === 'search') {
       search.getSearchData({ search: data });
     }
   }
