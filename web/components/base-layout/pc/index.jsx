@@ -42,6 +42,7 @@ const BaseLayout = (props) => {
   const [showRight, setShowRight] = useState(false);
   const size = useRef('xl');
   const listRef = useRef(null);
+  const [isError, setIsError] = useState(false)
 
   const debounce = (fn, wait) => {
     let timer = null;
@@ -112,11 +113,16 @@ const BaseLayout = (props) => {
   //   return right && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg')
   // }, [size.current])
 
+  // list组件，接口请求出错回调
+  const onError = () => {
+    setIsError(true)
+  }
+
   return (
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
 
-        <List {...props} immediateCheck={false} className={styles.list} wrapperClass={styles.wrapper} ref={listRef}>
+        <List {...props} immediateCheck={false} className={styles.list} wrapperClass={styles.wrapper} ref={listRef} onError={onError}>
           {
             (pageName === 'home' || showLeft) && (
               <div className={styles.left}>
@@ -127,7 +133,8 @@ const BaseLayout = (props) => {
 
           <div className={styles.center}>
             {typeof(children) === 'function' ? children({ ...props }) : children}
-            {onRefresh && <RefreshView noMore={noMore} />}
+            {!isError && onRefresh && <RefreshView noMore={noMore} />}
+            {isError && <ErrorView />}
           </div>
 
           {
