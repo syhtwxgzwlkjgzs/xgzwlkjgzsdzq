@@ -115,7 +115,6 @@ class WalletH5Page extends React.Component {
   };
 
   handleTypeChange = (id) => {
-    console.log(id);
     this.setState(
       {
         selectType: id,
@@ -146,19 +145,30 @@ class WalletH5Page extends React.Component {
 
   // 根据当前选项渲染下拉选择器内容
   renderSelectContent = () => {
+    const defaultType = {
+      id: 'all',
+    };
+
     let dataSource = {};
     switch (this.state.tabsType) {
       case 'income':
         dataSource = INCOME_DETAIL_CONSTANTS;
+        defaultType.title = '全部类型';
         break;
       case 'pay':
         dataSource = EXPAND_DETAIL_CONSTANTS;
+        defaultType.title = '全部类型';
         break;
       case 'withdrawal':
         dataSource = CASH_DETAIL_CONSTANTS;
+        defaultType.title = '全部状态';
     }
 
-    return Object.values(dataSource).map(item => ({ title: item.text, id: item.code }));
+    const dataSourceArray = Object.values(dataSource).map(item => ({ title: item.text, id: item.code }));
+
+    dataSourceArray.unshift(defaultType);
+
+    return dataSourceArray;
   };
 
   renderSelectTitle = () => {
@@ -173,7 +183,6 @@ class WalletH5Page extends React.Component {
 
   fetchIncomeDetail = async () => {
     try {
-      console.log(this.state.selectType);
       const detailRes = await this.props.wallet.getInconmeDetail({
         page: this.state.page,
         type: this.state.selectType,
@@ -188,7 +197,15 @@ class WalletH5Page extends React.Component {
         });
       }
       this.setState(pageState);
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+      if (e.Code) {
+        Toast.error({
+          content: e.Msg,
+          duration: 1000,
+        });
+      }
+    }
   };
 
   fetchExpendDetail = async () => {
@@ -240,7 +257,7 @@ class WalletH5Page extends React.Component {
           <Icon
             name="TicklerOutlined"
             className={classNames(layout.tag, {
-              [layout['tag-active-green']]: this.state.tabsType != 'income',
+              [layout['tag-active-green']]: this.state.tabsType !== 'income',
             })}
           />
           收入明细
@@ -253,7 +270,7 @@ class WalletH5Page extends React.Component {
           <Icon
             name="WallOutlined"
             className={classNames(layout.tag, {
-              [layout['tag-active-blue']]: this.state.tabsType != 'pay',
+              [layout['tag-active-blue']]: this.state.tabsType !== 'pay',
             })}
           />
           支出明细
@@ -266,7 +283,7 @@ class WalletH5Page extends React.Component {
           <Icon
             name="TransferOutOutlined"
             className={classNames(layout.tag, {
-              [layout['tag-active-red']]: this.state.tabsType != 'withdrawal',
+              [layout['tag-active-red']]: this.state.tabsType !== 'withdrawal',
             })}
           />
           提现记录
@@ -275,7 +292,7 @@ class WalletH5Page extends React.Component {
       ],
     ];
 
-    const { walletInfo, incomeDetail = {}, expandDetail, freezeDetail, cashDetail } = this.props.wallet;
+    const { walletInfo, incomeDetail = {}, expandDetail, cashDetail } = this.props.wallet;
     return (
       <div className={layout.container}>
         <div className={layout.scroll}>

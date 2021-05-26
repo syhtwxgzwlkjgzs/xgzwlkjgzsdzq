@@ -1,7 +1,7 @@
 @import '@common/styles/index.scss';
 
 .containerH5 {
-    background: url('/dzq-img/walletbackground.png') 100%  no-repeat padding-box;
+    background:$primary-color url('/dzq-img/walletbackground.png') 100%  no-repeat padding-box;
     background-size: cover;
     padding: rem($padding-4n);
 }
