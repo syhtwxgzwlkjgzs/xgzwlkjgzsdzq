@@ -3,9 +3,10 @@ import Upload from '@components/upload';
 import { ATTACHMENT_TYPE, ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post';
 
 export default function ImageUpload(props) {
-  const { onChange, onComplete, fileList, ...other } = props;
+  const { onChange, onComplete, fileList, className, ...other } = props;
   const data = { type: ATTACHMENT_TYPE.image };
   return <Upload
+    className={`dzq-post-image-upload ${className}`}
     listType="card"
     btnText="上传图片"
     data={data}

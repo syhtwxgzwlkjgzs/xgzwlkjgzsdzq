@@ -43,18 +43,16 @@ class index extends Component {
   goToResetPayPwd = throttle(() => {
     const { oldPayPwd } = this.state;
     this.props.payBox.oldPayPwd = oldPayPwd;
-    this.props.payBox
-      .getPayPwdResetToken()
-      .then((res) => {
+    this.props.payBox.getPayPwdResetToken().then((res) => {
         Router.push({ url: '/my/edit/reset-paypwd' });
-      })
-      .catch((err) => {
-        console.error(err);
+      }).catch((err) => {
+        console.error(err,'ssss_err');
         Toast.error({
           content: '密码错误',
           hasMask: false,
           duration: 1000,
         });
+        this.initState()
       });
   }, 300);
 

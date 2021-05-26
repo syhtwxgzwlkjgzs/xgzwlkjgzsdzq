@@ -15,30 +15,11 @@
     justify-content: space-between;
     border-bottom: 1px solid #F4F6F7;
     padding: rem($padding-4n) 0;
-    >div:nth-child(2) {
-      margin-left: rem($margin-2n);
-    }
-    :global {
-      .dzq-icon {
-        font-size: rem($font-size-small) !important;
-        color: $text-color-secondary;
-      }
-      .dzq-input {
-        width: 100%;
-        height: 0;
-        line-height: 1;
-      }
-      .dzq-input__inner {
-        text-align: right;
-        border: none;
-        font-size: rem($font-size-base);
-        height: 0;
-        line-height: 1;
-        margin-top: rem(-$margin-2n);
-        padding-right: 0;
-        display: block;
-      }
-    }
+    height: rem(52);
+    box-sizing: border-box;
+    // >div:nth-child(2) {
+    //   margin-left: rem($margin-2n);
+    // }
   }
   .userCenterEditLabel {
     flex: 1;
@@ -60,6 +41,58 @@
       align-items: center;
       span {
         margin-left: rem($margin-4n);
+      }
+    }
+  }
+}
+
+.userCenterEditValue {
+  display: flex;
+  align-items: center;
+  .ucText {
+    margin-right: rem($margin-2n);
+  }
+  :global {
+    .dzq-icon {
+      font-size: rem($font-size-small) !important;
+      color: $text-color-secondary;
+    }
+  }
+}
+
+.userInputContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--comment-content-bg-color);
+  box-sizing: border-box;
+  height: rem(52);
+  .uerInputItem {
+    height: rem(52);
+    line-height: rem(51);
+    font-size: rem($font-size-base);
+    :global {
+      .dzq-icon {
+        color: $text-color-secondary;
+      }
+      .dzq-input {
+        width: 100%;
+        height: rem(51);
+        display: flex;
+        align-items: center;
+        font-size: rem($font-size-base);
+        padding: 0;
+      }
+      .dzq-input__inner {
+        text-align: right;
+        border: none;
+        font-size: rem($font-size-base);
+        margin-top: 0;
+        padding-right: 0;
+        display: block;
+        height: rem(51);
+        line-height: rem(51);
+        padding: 0;
       }
     }
   }
@@ -89,6 +122,8 @@
     padding: rem($padding-4n) rem($padding-5n);
     border-bottom: 1px solid #F4F6F7;
     margin: 0 rem(-$margin-5n) rem($margin-2n);
+    height: rem(52);
+    box-sizing: border-box;
     >div:nth-child(2) {
       margin-left: rem($margin-2n);
     }
