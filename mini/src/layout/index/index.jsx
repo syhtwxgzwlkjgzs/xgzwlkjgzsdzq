@@ -22,29 +22,46 @@ class Index extends React.Component {
     this.props.index.getReadThreadList({sequence: this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0});
   }
 
-
   dispatch = async (type, data = {}) => {
     const { index } = this.props;
-    const { categoryids, types, essence, sequence } = data;
+    const { categoryids, types, essence, sequence, attention, sort, page } = data;
 
-    if (type === 'click-filter') {
-      this.toastInstance = Toast.loading({
-        content: '加载中...',
-        duration: 1000,
-      });
+    let newTypes = [];
+    if (types) {
+      if (!(types instanceof Array)) {
+        newTypes = [types];
+      } else {
+        newTypes = types;
+      }
+    }
 
+    let categoryIds = [];
+    if (categoryids) {
+      if (!(categoryids instanceof Array)) {
+        categoryIds = [categoryids];
+      } else {
+        categoryIds = categoryids;
+      }
+    }
+
+    if (type === 'click-filter') { // 点击tab
       this.page = 1;
-      await index.screenData({ filter: { categoryids, types, essence }, sequence, perPage: 5, page: this.page, });
+      await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
     } else if (type === 'moreData') {
       this.page += 1;
-      await index.getReadThreadList({
+      return await index.getReadThreadList({
         perPage: this.prePage,
         page: this.page,
-        filter: { categoryids, types, essence },
+        filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort },
         sequence,
       });
-
-      return;
+    } else if (type === 'refresh-recommend') {
+      await index.getRecommends({ categoryIds });
+    } else if (type === 'update-page') {// 单独更新页数
+      this.page = page
+    } else if (type === 'refresh-thread') { // 点击帖子更新数的按钮，刷新帖子数据
+      this.page = 1;
+      return await index.getReadThreadList({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
     }
   }
 
