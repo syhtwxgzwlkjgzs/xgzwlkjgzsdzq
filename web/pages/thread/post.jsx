@@ -72,6 +72,7 @@ class PostPage extends React.Component {
   }
 
   componentWillUnmount() {
+    this.props.threadPost.resetPostData();
     this.captcha = '';
   }
 
@@ -521,7 +522,6 @@ class PostPage extends React.Component {
       this.toastInstance?.destroy();
       // 防止被清除
       const _isDraft = isDraft;
-      this.props.threadPost.resetPostData();
 
       if (!_isDraft) {
         // 更新帖子到首页列表
@@ -549,7 +549,7 @@ class PostPage extends React.Component {
 
   // 保存草稿
   handleDraft = (val) => {
-    const { site: { isPC }, threadPost: { resetPostData } } = this.props;
+    const { isPC } = this.props.site;
     this.setState({ draftShow: false });
 
     if (isPC) {
@@ -563,7 +563,6 @@ class PostPage extends React.Component {
       this.handleSubmit(true);
     }
     if (val === '不保存草稿') {
-      resetPostData();
       const { jumpLink } = this.state;
       jumpLink ? Router.push({ url: jumpLink }) : Router.back();
     }
