@@ -198,7 +198,7 @@ class index extends Component {
       isSubmit = (list.length !== 6 || !this.validateTel(bindMobile));
     }
     return (
-      <div>
+      <div id={styles.editMobileContent}>
         <Header />
         <div className={styles.content}>
           <h3>{currentStep === 'first' ? '验证旧手机' : '设置新手机'}</h3>

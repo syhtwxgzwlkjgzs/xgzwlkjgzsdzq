@@ -168,7 +168,7 @@ class index extends Component {
       isSubmit = (!newPassword || !newPasswordRepeat)
     }
     return (
-      <div>
+      <div id={styles.accountPwdContent}>
         <Header />
         <div className={styles.content}>
           {this.props.user?.hasPassword ? this.renderHasPassword() : this.renderHasNoPassword()}
