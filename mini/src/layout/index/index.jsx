@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexPageContent from './content';
-import { Toast } from '@discuzq/design'
+import Toast from '@discuzq/design/dist/components/toast/index';
 import { View } from '@tarojs/components';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 

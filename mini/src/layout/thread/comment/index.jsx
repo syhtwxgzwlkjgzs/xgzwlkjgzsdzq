@@ -8,7 +8,7 @@ import CommentList from '../components/comment-list/index';
 import MorePopup from '../components/more-popup';
 import DeletePopup from '../components/delete-popup';
 import Header from '@components/header';
-import { Toast } from '@discuzq/design';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import InputPopup from '../components/input-popup';
 import ReportPopup from '../components/report-popup';
 

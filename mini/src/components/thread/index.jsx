@@ -1,7 +1,8 @@
 import React from 'react';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
-import { Button, Toast } from '@discuzq/design';
+import Button from '@discuzq/design/dist/components/button/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import { inject, observer } from 'mobx-react';
 import BottomEvent from './bottom-event';
 import UserInfo from './user-info';

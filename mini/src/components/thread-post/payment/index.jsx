@@ -3,7 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
 import { View } from '@tarojs/components';
-import { Button, Input, Radio, Slider } from '@discuzq/design';
+import Button from '@discuzq/design/dist/components/button/index';
+import Input from '@discuzq/design/dist/components/input/index';
+import Radio from '@discuzq/design/dist/components/radio/index';
+import Slider from '@discuzq/design/dist/components/slider/index';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 import throttle from '@common/utils/thottle';
 

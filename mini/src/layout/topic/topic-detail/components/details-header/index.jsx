@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import { noop } from '@components/thread/utils';
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';

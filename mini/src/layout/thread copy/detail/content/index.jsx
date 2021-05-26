@@ -2,7 +2,8 @@ import React from 'react';
 import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import classnames from 'classnames';
-import { Icon, Button } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Button from '@discuzq/design/dist/components/button/index';
 
 import UserInfo from '@components/thread/user-info';
 import ImageContent from '@components/thread/image-content';
