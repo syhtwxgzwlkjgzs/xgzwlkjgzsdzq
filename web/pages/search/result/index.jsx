@@ -52,11 +52,6 @@ class Index extends React.Component {
     const hasSearchUsers = !!search.searchUsers;
     const hasSearchThreads = !!search.searchThreads;
 
-    this.toastInstance = Toast.loading({
-      content: '加载中...',
-      duration: 0,
-    });
-
     await search.getSearchData({
       hasTopics: false,
       hasUsers: false,
@@ -64,8 +59,6 @@ class Index extends React.Component {
       search: keyword,
       type: 1,
     });
-
-    this.toastInstance?.destroy();
   }
 
   dispatch = async (type, data = '') => {
