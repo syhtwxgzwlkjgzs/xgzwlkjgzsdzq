@@ -45,7 +45,7 @@ class SupplementaryPage extends React.Component {
         <div className={layout.item}>
           <div className={layout.input}>
             <div className={layout.label}>{index}.姓名</div>
-            <Input className={layout.input_value} focus={true} value={supplementary.name} placeholder="请输入姓名" onChange={this.handleNameChange} />
+            <Input className={layout.input_value} value={supplementary.name} placeholder="请输入姓名" onChange={this.handleNameChange} />
           </div>
         </div>
     );
