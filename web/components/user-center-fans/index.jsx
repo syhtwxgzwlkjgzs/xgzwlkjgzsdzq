@@ -215,7 +215,7 @@ class UserCenterFans extends React.Component {
                 id={user.id}
                 type={this.judgeFollowsStatus(user)}
                 imgUrl={user.avatar}
-                withHeaderUserInfo={true}
+                withHeaderUserInfo={false}
                 onContainerClick={this.props.onContainerClick}
                 userName={user.userName}
                 userGroup={user.groupName}
