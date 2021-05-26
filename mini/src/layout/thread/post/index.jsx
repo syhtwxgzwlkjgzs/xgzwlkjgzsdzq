@@ -58,7 +58,7 @@ class Index extends Component {
       this.setState({ threadId: id, postType: 'isEdit' })
       this.setPostDataById(id);
     } else {
-      this.openSaveDraft();
+      // this.openSaveDraft(); // 现阶段，自动保存功能关闭
     }
     // 监听腾讯验证码事件
     Taro.eventCenter.on('captchaResult', this.handleCaptchaResult);
@@ -121,7 +121,7 @@ class Index extends Component {
       this.setCategory(categoryId);
       threadPost.formatThreadDetailToPostData(ret.data);
       this.setState({ postType: isDraft === 1 ? 'isDraft' : 'isEdit' });
-      isDraft === 1 && this.openSaveDraft();
+      // isDraft === 1 && this.openSaveDraft(); // 现阶段，自动保存功能关闭
     } else {
       // 请求失败，弹出错误消息
       this.postToast(ret.msg);
