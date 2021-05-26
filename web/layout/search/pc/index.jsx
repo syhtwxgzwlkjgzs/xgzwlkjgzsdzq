@@ -213,6 +213,7 @@ class SearchPCPage extends React.Component {
           right={ this.renderRight }
           onScroll={ this.handleScroll }
           jumpTo={this.state.position}
+          pageName="search"
         >
           { this.renderContent() }
         </BaseLayout>
