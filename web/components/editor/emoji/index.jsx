@@ -38,7 +38,7 @@ export default function Emoji(props) {
         src={item.url}
         onClick={(e) => {
           e.stopPropagation();
-          setVisible(false);
+          // setVisible(false);
           onClick(item);
         }}
       />)}
