@@ -68,7 +68,7 @@ class Index extends React.Component {
       const { threadId = '' } = data;
       if (threadId !== '') {
         this.props.thread.positionToComment()
-        Router.push({url: `/pages/thread/index?id=${threadId}`})
+        Router.push({url: `/subPages/thread/index?id=${threadId}`})
       } else {
         console.log('帖子不存在');
       }
@@ -141,7 +141,7 @@ class Index extends React.Component {
       }
 
       if (threadId !== '') {
-        Router.push({url: `/pages/thread/index?id=${threadId}`})
+        Router.push({url: `/subPages/thread/index?id=${threadId}`})
       } else {
         console.log('帖子不存在');
       }
