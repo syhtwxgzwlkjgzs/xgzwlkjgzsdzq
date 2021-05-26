@@ -28,7 +28,7 @@ class Index extends React.Component {
     this.setState({
       loading: false,
     });
-    // await this.props.user.getUserShieldList()
+    await this.props.user.getUserShieldList()
   }
 
   // 点击头像去到他人页面
