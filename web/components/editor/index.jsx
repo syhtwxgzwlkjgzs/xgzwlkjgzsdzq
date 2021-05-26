@@ -16,7 +16,8 @@ export default function DVditor(props) {
   const { pc, emoji = {}, atList = [], topic, value,
     onChange = () => { }, onFocus = () => { }, onBlur = () => { },
     onInit = () => { },
-    onInput = () => {},
+    onInput = () => { },
+    setState = () => { },
   } = props;
   const vditorId = 'dzq-vditor';
   let timeoutId = null;
@@ -28,7 +29,7 @@ export default function DVditor(props) {
     try {
       if (!vditor) return;
       const md = vditor.html2md(text);
-      vditor.setValue && vditor.setValue(md.substr(0, md.length - 1));
+      vditor.setValue && vditor.setValue(md);
     } catch (error) {
       console.error('html2mdSetValue', error);
     }
@@ -58,6 +59,7 @@ export default function DVditor(props) {
 
   useEffect(() => {
     if (emoji && emoji.code) {
+      setState({ emoji: {} });
       // 因为vditor的lute中有一些emoji表情和 emoji.code 重叠了。这里直接先这样处理
       let value = `<img alt="${emoji.code}emoji" src="${emoji.url}" class="qq-emotion" />`;
       value = emojiVditorCompatibilityDisplay(value);
@@ -72,6 +74,7 @@ export default function DVditor(props) {
       if (item) return `&nbsp;@${item}&nbsp;`;
       return '';
     });
+    setState({ atList: [] });
     if (users.length) {
       // setCursorPosition();
       vditor.insertValue && vditor.insertValue(users.join(''));
@@ -80,6 +83,7 @@ export default function DVditor(props) {
 
   useEffect(() => {
     if (topic) {
+      setState({ topic: '' });
       // setCursorPosition();
       vditor.insertValue && vditor.insertValue(`&nbsp;${topic}&nbsp;`);
     }
@@ -157,7 +161,11 @@ export default function DVditor(props) {
     //     }, 0);
     //   });
     // });
-
+    const editorElement = vditor[vditor.currentMode]?.element;
+    editorElement?.addEventListener('click', (e) => {
+      setIsFocus(false);
+      onFocus('focus', e);
+    });
     // 从事件绑定方式修改成轮询记录的方式，以达到更实时更精确的记录方式，可解决iphone下输入中文光标会被重置到位置0的问题（性能需关注）
     const timeoutRecord = () => {
       timeoutId = setTimeout(() => {
@@ -185,10 +193,7 @@ export default function DVditor(props) {
           editor.setValue(value);
           editor.vditor[editor.vditor.currentMode].element.blur();
         },
-        focus: () => {
-          setIsFocus(false);
-          onFocus('focus');
-        },
+        focus: () => {},
         input: () => {
           setIsFocus(false);
           onInput(editor);

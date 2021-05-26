@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, Image  } from '@tarojs/components';
 import Page from '@components/page';
-import { Button} from '@discuzq/design';
+import Button from '@discuzq/design/dist/components/button/index';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import imgClose from '../../../../web/public/dzq-img/close.png';

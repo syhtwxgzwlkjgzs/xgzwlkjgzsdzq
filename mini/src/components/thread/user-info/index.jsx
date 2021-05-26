@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { Icon, Tag } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Tag from '@discuzq/design/dist/components/tag/index';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import React from 'react';

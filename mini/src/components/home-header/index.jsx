@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import styles from './index.module.scss';
-import { Icon } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import { inject, observer } from 'mobx-react';
 import { View, Text, Image } from '@tarojs/components';
 import Router from '@discuzq/sdk/dist/router';
@@ -96,7 +96,7 @@ class HomeHeader extends React.Component {
 
     return (
       <View ref={this.domRef}
-        className={`${styles.container} ${mode ? styles[`container_mode_${mode}`] : ''}`} 
+        className={`${styles.container} ${mode ? styles[`container_mode_${mode}`] : ''}`}
         style={{...style, ...this.getBgHeaderStyle(bgColor)}}
       >
         {hideInfo && <View className={styles.topBar}>

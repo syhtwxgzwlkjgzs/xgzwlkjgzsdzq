@@ -45,7 +45,6 @@ class ThreadPCPage extends React.Component {
       currentAttachOperation,
     } = this.props;
     const { postData } = threadPost;
-    const { freeWords, price, attachmentPrice } = threadPost.postData;
     const { webConfig = {} } = site;
 
     return (
@@ -59,7 +58,7 @@ class ThreadPCPage extends React.Component {
               onChange={title => this.props.setPostData({ title })}
             />
             <div className={styles.editor} onClick={this.props.handleVditorFocus}>
-              <div className={styles['editor-inner']}>
+              <div className={styles['editor-inner']} id="post-inner">
                 <DVditor
                   pc
                   value={postData.contentText}
@@ -71,6 +70,7 @@ class ThreadPCPage extends React.Component {
                   onFocus={() => { }}
                   onBlur={() => { }}
                   onInit={this.props.handleVditorInit}
+                  setState={this.props.handleSetState}
                 />
 
                 {/* 插入图片 */}
@@ -96,10 +96,13 @@ class ThreadPCPage extends React.Component {
 
                 {/* 录音组件 */}
                 {(currentAttachOperation === THREAD_TYPE.voice) && (
-                  <AudioRecord duration={60} onUpload={(blob) => {
-                    this.props.handleAudioUpload(blob);
-                  }}
-                  />
+                  <div id="dzq-post-audio-record">
+                    <AudioRecord duration={60}
+                      onUpload={(blob) => {
+                        this.props.handleAudioUpload(blob);
+                      }}
+                    />
+                  </div>
                 )}
                 {/* 语音组件 */}
                 {(Boolean(postData.audio.mediaUrl))

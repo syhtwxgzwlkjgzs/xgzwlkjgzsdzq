@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from '@tarojs/components';
-import { Icon, Badge } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Badge from '@discuzq/design/dist/components/badge/index';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 

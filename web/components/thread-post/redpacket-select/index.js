@@ -122,7 +122,7 @@ const Index = ({ data, confirm, cancel, pc, visible }) => {
       <div className={styles['line-box']}>
         <div className={styles.label}>{rule === 1 ? '红包总金额' : '红包单个金额'}</div>
         <div className={styles.item}>
-          <Input mode="number" placeholder="金额" value={price} onChange={e => onPriceChang(e.target.value)} />元
+          <Input htmlType="number" mode="number" placeholder="金额" value={price} onChange={e => onPriceChang(e.target.value)} />元
         </div>
       </div>
       {/* 红包个数 */}

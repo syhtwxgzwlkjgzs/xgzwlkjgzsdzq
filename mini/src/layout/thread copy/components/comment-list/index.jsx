@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { View, Text, Image } from '@tarojs/components';
-import { Icon } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import Avatar from '@components/avatar';
 import { diffDate } from '@common/utils/diff-date';
 import styles from './index.module.scss';

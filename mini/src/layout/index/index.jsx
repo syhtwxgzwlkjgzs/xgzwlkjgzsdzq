@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexPageContent from './content';
-import { Toast } from '@discuzq/design'
+import Toast from '@discuzq/design/dist/components/toast/index';
 import { View } from '@tarojs/components';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 
@@ -34,7 +34,7 @@ class Index extends React.Component {
       });
 
       this.page = 1;
-      await index.screenData({ filter: { categoryids, types, essence }, sequence, perPage: 5 });
+      await index.screenData({ filter: { categoryids, types, essence }, sequence, perPage: 5, page: this.page, });
     } else if (type === 'moreData') {
       this.page += 1;
       await index.getReadThreadList({

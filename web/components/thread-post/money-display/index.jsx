@@ -16,7 +16,7 @@ export default function MoneyDisplay(props) {
   const clsName = props.pc ? styles.pc : styles.h5;
 
   return (
-    <div className={`${styles['money-box']} ${clsName}`} onClick={e => e.stopPropagation()}>
+    <div id="dzq-money-box" className={`${styles['money-box']} ${clsName}`} onClick={e => e.stopPropagation()}>
       {/* 付费 */}
       {!!(postData.price || postData.attachmentPrice) && (
         <Tag
