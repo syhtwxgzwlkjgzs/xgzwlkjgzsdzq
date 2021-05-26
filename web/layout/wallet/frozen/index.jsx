@@ -3,73 +3,74 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import List from '@components/list';
 import NoData from '@components/no-data';
+import { time } from '@discuzq/sdk/dist/index';
+import { diffDate } from '@common/utils/diff-date';
 
 import styles from './index.module.scss';
 
 import Header from '@components/header/h5';
 
-// import { Tabs, Icon, Button } from '@discuzq/design';
-
-
+@inject('wallet')
 @observer
 class FrozenAmount extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
-    this.frozenType = [
-      '问答冻结',
-      '长文贴红包冻结',
-      '文字红包贴冻结',
-    ];
+    this.state = {
+      page: 1,
+      totalCount: 0,
+      totalPage: 1,
+    };
   }
 
-  render() {
-    // 伪造的数据
-    const frozenData = [
-      {
-        id: 1,
-        type: 1,
-        time: '2021-3-25 14:50',
-        ID: 123456789,
-      },
-      {
-        id: 2,
-        type: 2,
-        time: '2021-3-25 14:50',
-        ID: 123456789,
-      },
-      {
-        id: 3,
-        type: 3,
-        time: '2021-3-25 14:50',
-        ID: 123456789,
-      },
-    ];
+  listRenderDataFilter = () => {
+    if (Object.values(this.props.wallet.freezeDetail).length === 0) return [];
+    return Object.values(this.props.wallet.freezeDetail).reduce((fullData, pageData) => [...fullData, ...pageData]);
+  };
 
+  fetchFreezeDetail = async () => {
+    const freezeRes = await this.props.wallet.getFreezeDetail();
+    const { totalCount, totalPage } = freezeRes;
+    const pageData = {
+      totalCount,
+      totalPage,
+    };
+    if (this.state.page <= totalPage) {
+      pageData.page = this.state.page + 1;
+    }
+    this.setState(pageData);
+  };
+
+  render() {
     return (
-        <div className={styles.container}>
-          <Header></Header>
-          <div className={styles.header}>
-            <div className={styles.record}>共有{3}条记录</div>
-            <div className={styles.totalMoney}>涉及金额 {15.00}元</div>
-          </div>
-          <List className={styles.body}>
-          {
-            frozenData.map(value => (
-              <div className={styles.content} key={value.id}>
-                <div className={styles.upper}>
-                  <div>问答冻结</div>
-                  <div>1.00</div>
-                </div>
-                <div className={styles.lower}>
-                  <div>2021-3-25 14:50</div>
-                  <div>ID: <span>180617</span></div>
+      <div className={styles.container}>
+        <Header></Header>
+        <div className={styles.header}>
+          <div className={styles.record}>共有{this.state.totalCount}条记录</div>
+          {/* TODO: 后台未返回涉及金额字段 */}
+          <div className={styles.totalMoney}>涉及金额 {15.0}元</div>
+        </div>
+        <List
+          className={styles.body}
+          onRefresh={this.fetchFreezeDetail}
+          noMore={this.state.page > this.state.totalPage}
+        >
+          {this.listRenderDataFilter().map(value => (
+            <div className={styles.content} key={value.id}>
+              <div className={styles.upper}>
+                <div>{value.title || value.changeDesc}</div>
+                <div>{value.amount}</div>
+              </div>
+              <div className={styles.lower}>
+                <div>{diffDate(time.formatDate(value.createdAt, 'YYYY-MM-DD'))}</div>
+                <div>
+                  ID: <span>{value.id}</span>
                 </div>
               </div>
-            ))}
-          </List>
-        </div>
+            </div>
+          ))}
+        </List>
+      </div>
     );
   }
 }

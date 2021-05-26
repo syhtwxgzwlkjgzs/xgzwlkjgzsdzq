@@ -113,7 +113,7 @@ class WalletAction extends WalletStore {
     // 获取冻结明细
     @action
     getFreezeDetail = async ({ ...props }) => {
-      const { page = 1, date, type = 'all' } = props;
+      const { page = 1 } = props;
       const detailInfoRes = await readWalletLog({
         params: {
           walletLogType: 'freeze',
@@ -123,10 +123,11 @@ class WalletAction extends WalletStore {
       });
 
       if (detailInfoRes.code === 0) {
-        if (!this.freezeDetail[date]) {
-          this.freezeDetail[date] = {};
-        }
-        this.freezeDetail[date][page] = get(detailInfoRes, 'data.pageData', []);
+        this.freezeDetail[page] = get(detailInfoRes, 'data.pageData', []);
+
+        this.freezeDetail = {
+          ...this.freezeDetail,
+        };
 
         return detailInfoRes.data;
       }
