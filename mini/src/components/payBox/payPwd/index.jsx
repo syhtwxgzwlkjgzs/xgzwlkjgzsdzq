@@ -1,6 +1,9 @@
 import React from 'react';
 import styles from './index.module.scss';
-import { Toast, Dialog, Icon, Divider } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
+import Dialog from '@discuzq/design/dist/components/dialog/index';
+import Divider from '@discuzq/design/dist/components/divider/index';
 import { inject, observer } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import { STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';

@@ -16,7 +16,8 @@ export default function DVditor(props) {
   const { pc, emoji = {}, atList = [], topic, value,
     onChange = () => { }, onFocus = () => { }, onBlur = () => { },
     onInit = () => { },
-    onInput = () => {},
+    onInput = () => { },
+    setState = () => { },
   } = props;
   const vditorId = 'dzq-vditor';
   let timeoutId = null;
@@ -28,7 +29,7 @@ export default function DVditor(props) {
     try {
       if (!vditor) return;
       const md = vditor.html2md(text);
-      vditor.setValue && vditor.setValue(md.substr(0, md.length - 1));
+      vditor.setValue && vditor.setValue(md);
     } catch (error) {
       console.error('html2mdSetValue', error);
     }
@@ -58,6 +59,7 @@ export default function DVditor(props) {
 
   useEffect(() => {
     if (emoji && emoji.code) {
+      setState({ emoji: {} });
       // 因为vditor的lute中有一些emoji表情和 emoji.code 重叠了。这里直接先这样处理
       let value = `<img alt="${emoji.code}emoji" src="${emoji.url}" class="qq-emotion" />`;
       value = emojiVditorCompatibilityDisplay(value);
@@ -72,6 +74,7 @@ export default function DVditor(props) {
       if (item) return `&nbsp;@${item}&nbsp;`;
       return '';
     });
+    setState({ atList: [] });
     if (users.length) {
       // setCursorPosition();
       vditor.insertValue && vditor.insertValue(users.join(''));
@@ -80,6 +83,7 @@ export default function DVditor(props) {
 
   useEffect(() => {
     if (topic) {
+      setState({ topic: '' });
       // setCursorPosition();
       vditor.insertValue && vditor.insertValue(`&nbsp;${topic}&nbsp;`);
     }

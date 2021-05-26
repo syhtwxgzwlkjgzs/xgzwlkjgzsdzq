@@ -2,7 +2,9 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import { View, Text } from '@tarojs/components';
-import { Tabs, Button, Icon } from '@discuzq/design';
+import Tabs from '@discuzq/design/dist/components/tabs/index';
+import Button from '@discuzq/design/dist/components/button/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import Taro from '@tarojs/taro';
 
 import layout from './layout.module.scss';
@@ -19,22 +21,22 @@ import NoMore from './components/no-more';
 class WalletH5Page extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       tabsType: 'income',
     };
   }
-  
+
   // 点击冻结金额
   onFrozenAmountClick() {
     Taro.navigateTo({url: '/subPages/wallet/frozen/index'});
   }
-  
+
   // 切换选项卡
   onTabActive(val) {
     this.setState({ tabsType: val });
   }
-  
+
   // 点击提现
   toWithrawal = () => {
     Taro.navigateTo({url: '/subPages/wallet/withdrawal/index'});

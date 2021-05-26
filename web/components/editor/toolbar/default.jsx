@@ -98,7 +98,7 @@ export default function DefaultToolbar(props) {
   );
 
   return (
-    <div className={styles['dvditor-toolbar']}>
+    <div className={styles['dvditor-toolbar']} id="dvditor-toolbar">
       <div className={styles['dvditor-toolbar__left']}>
         {icons}
       </div>

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, Popup, Button } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Popup from '@discuzq/design/dist/components/popup/index';
+import Button from '@discuzq/design/dist/components/button/index';
 import { View } from '@tarojs/components';
 import styles from './index.module.scss';
 import className from 'classnames';

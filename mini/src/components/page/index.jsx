@@ -2,7 +2,7 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { View } from '@tarojs/components';
 import styles from './index.module.scss';
-import { Icon } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import Router from '@discuzq/sdk/dist/router';
 import { getCurrentInstance } from '@tarojs/taro';
 import PayBoxProvider from '@components/payBox/payBoxProvider';

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Spin } from '@discuzq/design';
+import Spin from '@discuzq/design/dist/components/spin/index';
 import SectionTitle from '@components/section-title';
 import NoData from '@components/no-data';
 import styles from './index.module.scss';
