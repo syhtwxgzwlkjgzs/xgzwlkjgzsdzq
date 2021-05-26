@@ -168,7 +168,7 @@ class index extends Component {
     const mobile = this.props?.user.mobile;
     const disabled = !payPassword || !payPasswordConfirmation || list.length !== 6
     return (
-      <div>
+      <div id={styles.findPayPwdContent}>
         <Header />
         <div className={styles.content}>
           <h3>找回支付密码</h3>
@@ -182,15 +182,15 @@ class index extends Component {
             </div>
           </div>
           <div className={styles.bindCode}>
-            <span>请输入短信验证码</span>
+            <span>验证码</span>
             <CaptchaInput handleKeyBoardVisible={this.handleKeyBoardVisible} isKeyBoardVisible={isKeyBoardVisible} currentStep={currentStep} updatePwd={this.updatePwd} list={list} isBlur={isBlur} />
           </div>
         </div>
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}><Input value={payPassword} onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur} mode="password" placeholder="请输入新密码" type="number" maxLength={6} /></div>
+          <div className={styles.labelValue}><Input value={payPassword} onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur} mode="password" placeholder="设置新密码" type="number" maxLength={6} /></div>
         </div>
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}><Input value={payPasswordConfirmation} onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="请重复输入新密码" type="number" maxLength={6} /></div>
+          <div className={styles.labelValue}><Input value={payPasswordConfirmation} onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="重复新密码" type="number" maxLength={6} /></div>
         </div>
         <div className={`${styles.bottom} ${isKeyBoardVisible && styles.bootom2}`}>
           <Button disabled={disabled} full onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>提交</Button>
