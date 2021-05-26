@@ -70,27 +70,22 @@ const BaseLayout = (props) => {
     if (pullDownWrapper?.current) {
       setHeight(pullDownWrapper.current.clientHeight);
     }
-    if (listRef?.current && (baselayout.jumpToScrollingPos > 0 || baselayout[pageName] > 0)
+
+    if (listRef?.current && pageName && baselayout[pageName] > 0
         && baseLayoutWhiteList.indexOf(pageName) !== -1) {
-      if (pageName === 'home') {
-        listRef.current.jumpToScrollTop(baselayout.jumpToScrollingPos);
-      } else {
-        if (baselayout[pageName]) {
-          listRef.current.jumpToScrollTop(baselayout[pageName]);
-        }
-      }
+      listRef.current.jumpToScrollTop(baselayout[pageName]);
     }
   }, []);
 
-  const handleScroll = throttle(() => {
+  const handleScroll = throttle(({ scrollTop = 0 } = {}) => {
     if (!listRef?.current?.currentScrollTop) return;
 
     if (baselayout.isJumpingToTop) {
       baselayout.removeJumpingToTop();
       listRef.current.onBackTop();
     }
-
-    onScroll({ scrollTop: listRef.current.currentScrollTop.current });
+    if (scrollTop) baselayout[pageName] = scrollTop;
+    onScroll({ scrollTop });
   }, 50);
 
   return (

@@ -44,6 +44,9 @@
   height: rem(68);
   position: fixed;
   top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-left: rem(-15);
   padding-top: rem(20);
   display: flex;
   z-index: 1000;
