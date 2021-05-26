@@ -36,7 +36,7 @@ class Index extends React.Component {
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/user/login' });
+        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
         return;
       }
 
@@ -60,7 +60,7 @@ class Index extends React.Component {
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/user/login' });
+        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
         return;
       }
 
@@ -85,7 +85,7 @@ class Index extends React.Component {
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/user/login' });
+        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
         return;
       }
       const { data = {}, user } = this.props;
@@ -110,7 +110,7 @@ class Index extends React.Component {
       // 对没有登录的先做
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/user/login' });
+        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
         return;
       }
 
