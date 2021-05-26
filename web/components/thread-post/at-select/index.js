@@ -6,7 +6,7 @@
  * @prop {function} getAtList 确定
  */
 import React, { Component } from 'react';
-import { Popup, Input, Checkbox, Avatar, Button, ScrollView, Icon, Toast } from '@discuzq/design';
+import { Popup, Input, Checkbox, Avatar, Button, Icon, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
@@ -48,6 +48,7 @@ class AtSelect extends Component {
       });
     } else {
       Toast.error({ content: ret.msg });
+      return Promise.reject();
     }
     return ret;
   }
@@ -64,6 +65,7 @@ class AtSelect extends Component {
       });
     } else {
       Toast.error({ content: ret.msg });
+      return Promise.reject();
     }
   }
 
@@ -78,7 +80,7 @@ class AtSelect extends Component {
   searchInput() {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      this.fetchAllUser();
+      this.onScrollBottom();
     }, 300);
   }
 
@@ -110,7 +112,7 @@ class AtSelect extends Component {
   }
 
   formatData = (item) => {
-    const userName = this.state.keywords ? item.nickname : item.user?.userName || '';
+    const userName = this.state.keywords ? item.username : item.user?.userName || '';
     const userId = this.state.keywords ? item.userId : item.user?.pid || '';
     const groupName = this.state.keywords ? item.groupName : item.group?.groupName;
     const avatar = this.state.keywords ? item.avatar : item.user?.avatar;

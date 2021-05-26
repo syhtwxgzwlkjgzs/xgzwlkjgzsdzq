@@ -1,8 +1,10 @@
 import React from 'react';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
-import { extensionList, noop } from '../utils';
-import { View, Text } from '@tarojs/components';
+import { extensionList, isPromise, noop } from '../utils';
+import { View, Text } from '@tarojs/components'
+import Downloader from './downloader';
+
 
 /**
  * 附件
@@ -10,7 +12,7 @@ import { View, Text } from '@tarojs/components';
  * @prop {Boolean} isHidden 是否隐藏删除按钮
  */
 
-const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noop }) => {
+const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noop, onPay = noop }) => {
   // 处理文件大小的显示
   const handleFileSize = (fileSize) => {
     if (fileSize > 1000000) {
@@ -22,6 +24,88 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
 
     return `${fileSize} B`;
   };
+
+  const downloader = new Downloader();
+
+  const getFileType = (filepath) => {
+    return filepath.substr(filepath.lastIndexOf('.') + 1);
+  }
+
+  const onDownLoad = (url) => {
+    if (!isPay) {
+      downloader?.download(url, true).then((path) => {
+        wx.openDocument({
+          filePath: path,
+          fileType: getFileType(url), // 微信支持下载文件类型：doc, docx, xls, xlsx, ppt, pptx, pdf
+          success(res) {
+          },
+          fail(error) {
+            console.error("文件类型不支持：", error.errMsg);
+          },
+        });
+      }).catch((error) => {
+        console.error(error.errMsg)
+      })
+    } else {
+      onPay();
+    }
+  };
+
+  const onPreviewer = (url) => {
+    if (!isPay) {
+      window.open(url, '_self');
+    } else {
+      onPay();
+    }
+  };
+
+  const handleIcon = (type) => {
+    if (type === 'XLS' || type === 'XLSX') {
+      return 'XLSOutlined';
+    } if (type === 'DOC' || type === 'DOCX') {
+      return 'DOCOutlined';
+    } if (type === 'ZIP') {
+      return 'DOCOutlined';
+    } if (type === 'PDF') {
+      return 'DOCOutlined';
+    } if (type === 'PPT') {
+      return 'PPTOutlined';
+    }
+    return 'DOCOutlined';
+  };
+
+  const Normal = ({ item, index, type }) => {
+    const iconName = handleIcon(type);
+    return (
+      <View className={styles.container} key={index} onClick={onClick} >
+        <View className={styles.wrapper}>
+          <View className={styles.left}>
+            <Icon className={styles.containerIcon} size={20} name={iconName} />
+            <View className={styles.containerText}>
+              <Text className={styles.content}>{item.fileName}</Text>
+              <Text className={styles.size}>{handleFileSize(parseFloat(item.fileSize || 0))}</Text>
+            </View>
+          </View>
+
+          <View className={styles.right}>
+            {/* <Text className={styles.Text} onClick={() => onPreviewer(item.url)}>浏览</Text> */}
+            <Text className={styles.Text} onClick={() => onDownLoad(item.url)}>下载</Text>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  const Pay = ({ item, index, type }) => {
+    const iconName = handleIcon(type);
+    return (
+      <View className={`${styles.container} ${styles.containerPay}`} key={index} onClick={onPay}>
+        <Icon className={styles.containerIcon} size={20} name={iconName} />
+        <Text className={styles.content}>{item.fileName}</Text>
+      </View>
+    );
+  };
+
   return (
     <View>
         {
@@ -32,18 +116,11 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
               ? extension.toUpperCase()
               : 'UNKNOWN';
             return (
-              <View className={styles.container} key={index} onClick={onClick} >
-                <View className={styles.wrapper}>
-                  {/* TODO 此处逻辑接口确定之后再改 */}
-                  <Icon name={type && 'PaperClipOutlined'} />
-                  <Text className={styles.content}>{item.fileName}</Text>
-                  <Text className={styles.size}>{handleFileSize(parseFloat(item.fileSize || 0))}</Text>
-                </View>
-
-                {!isHidden && <Icon name="CloseOutlined" />}
-
-                {!isPay && <a href={item.url} className={styles.a}></a>}
-              </View>
+              !isPay ? (
+                <Normal key={index} item={item} index={index} type={type} />
+              ) : (
+                <Pay key={index} item={item} index={index} type={type} />
+              )
             );
           })
         }

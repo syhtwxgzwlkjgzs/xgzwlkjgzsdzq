@@ -1,55 +1,77 @@
 @import '@common/styles/index.scss';
 .text {
-  font-size: 12px;
-  color: var(--color-error);
+  font-size: $font-size-label;
+  color: $error-color;
 }
-.container {
-  background: var(--background-color-text2);
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  .homeContent {
-    background: var(--color-white);
-    margin-bottom: 10px;
-  }
-  .homeContentText {
-    width: 100%;
-    background: var(--color-white);
-    border-bottom: 1px solid var(--color-text-placeholder);
-    margin-bottom: 10px;
-    position: fixed;
-    top: 64px;
-    left: 0;
-    z-index: 2;
-  }
-  .tabsBox {
-    height: 52px;
-    :global {
-      .dzq-tabs__bar {
-        height: 52px;
-        .dzq-tabs__label {
-          font-size: 14px;
-          line-height: 20px;
-          margin-top: 16px;
-          font-weight: normal;
-        }
+// .container {
+//   background: var(--background-color-text2);
+//   display: flex;
+//   flex-direction: column;
+//   height: 100vh;
+.homeContent {
+  background: $white;
+  margin-bottom: 10px;
+  z-index: 1000;
+  border: 1px solid rgba(238, 238, 238, 0.57);
+}
+.homeContentFix {
+  width: 100%;
+  background: $white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  border: 1px solid rgba(238, 238, 238, 0.57);
+}
+.homeContentTop {
+  padding: 0 $padding-4n;
+  background: var(--color-white);
+  margin-bottom: 10px;
+}
+.tabsBox {
+  height: 52px;
+  :global {
+    .dzq-tabs__bar {
+      height: 52px;
+      .dzq-tabs__label {
+        font-size: $font-size-primary;
+        line-height: 20px;
+        margin-top: 16px;
+        // color: $text-color-regular;
+      }
+      .dzq-tabs__item.is-active {
+        color: $primary-color;
+      }
+      .dzq-tabs__item {
+        padding: 0 $padding-4n;
+        color: $text-color-regular;
+      }
+      .dzq-tabs__scroll {
+        display: flex;
       }
     }
-    .moreIcon {
-      color: var(--color-text-secondary);
+    .dzq-tabs__panel {
+      height: 0;
     }
   }
-  .list {
-    flex: 1;
+}
+// .list {
+//   flex: 1;
+// }
+.tabIcon {
+  margin-left: $padding-2n;
+  margin-right: $padding-4n;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .buttonIcon {
+    color: $text-color-secondary;
   }
-  .tabIcon {
-    width: 50px;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .listItem {
-    margin-bottom: 10px;
-  }
+}
+
+// 当tab悬浮后的占位元素样式
+.tabPlaceholder {
+  width: 100%;
+  height: 58px;
 }

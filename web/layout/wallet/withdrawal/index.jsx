@@ -6,7 +6,7 @@ import MoneyInput from './components/money-input';
 
 import styles from './index.module.scss';
 
-import { Icon, Button } from '@discuzq/design';
+import { Icon, Button, Toast } from '@discuzq/design';
 
 
 @observer
@@ -15,6 +15,7 @@ class Withdrawal extends React.Component {
     super(props);
     this.state = {
       visible: true,
+      minmoney: 1,
     };
     this.withdrawalAmount = null;
   }
@@ -30,27 +31,29 @@ class Withdrawal extends React.Component {
 
   // 提现到微信钱包
   moneyToWeixin = () => {
-    if (!this.withdrawalAmount) return;
-    console.log('提现的金额', this.withdrawalAmount);
+    if (!this.withdrawalAmount) {
+      return Toast.warning({ content: '不得小于最低提现金额' });
+    }
+    console.log('提现的金额', this.withdrawalAmount,);
     this.setState({ visible: !this.state.visible });
   }
 
   render() {
     return (
-        <div className={styles.container}>
-          <div className={styles.main}>
-            <div className={styles.totalAmount}>
-                <div className={styles.moneyTitle}>可提现金额</div>
-                <div className={styles.moneyNum}>{this.props.walletData?.availableAmount}</div>
-            </div>
-            <div className={styles.moneyInput}>
-              <MoneyInput getmoneyNum={data => this.getmoneyNum(data)} visible={this.state.visible} />
-            </div>
+      <div className={styles.container}>
+        <div className={styles.main}>
+          <div className={styles.totalAmount}>
+            <div className={styles.moneyTitle}>可提现金额</div>
+            <div className={styles.moneyNum}>{this.props.walletData?.availableAmount}</div>
           </div>
-            <div className={styles.footer}>
-              <Button type={'primary'} className={styles.button} onClick={() => this.moneyToWeixin()}>提现到微信钱包</Button>
-            </div>
+          <div className={styles.moneyInput}>
+            <MoneyInput getmoneyNum={data => this.getmoneyNum(data)} visible={this.state.visible} minmoney={this.state.minmoney} />
+          </div>
         </div>
+        <div className={styles.footer}>
+          <Button type={'primary'} className={styles.button} onClick={() => this.moneyToWeixin()}>提现到微信钱包</Button>
+        </div>
+      </div>
     );
   }
 }

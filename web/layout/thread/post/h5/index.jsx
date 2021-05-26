@@ -33,7 +33,9 @@ import VideoDisplay from '@components/thread-post/video-display';
 import MoneyDisplay from '@components/thread-post/money-display';
 
 function isIOS() {
-  return /ip[honead]{2,4}(?:.*os\s([\w]+)\slike\smac|;\sopera)/i.test(window.navigator.userAgent.toLowerCase());
+  const ua = window.navigator.userAgent.toLowerCase();
+  // 判断是否是ios，或者小米默认浏览器
+  return /ip[honead]{2,4}(?:.*os\s([\w]+)\slike\smac|;\sopera)/i.test(ua) || /miuibrowser/i.test(ua);
 }
 
 @inject('threadPost')
@@ -49,17 +51,6 @@ class ThreadCreate extends React.Component {
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handler);
-  }
-
-  handleDraft = async (val) => {
-    this.props.handleSetState({ draftShow: false });
-    let flag = true;
-    if (val === '保存草稿') {
-      this.props.setPostData({ draft: 1 });
-      flag = await this.props.handleSubmit(true);
-    }
-    if (val === '不保存草稿') this.props.threadPost.resetPostData();
-    if (val && flag) Router.back();
   }
 
   handler = () => {
@@ -136,15 +127,19 @@ class ThreadCreate extends React.Component {
     this.props.handleSetState({ categoryChooseShow: true });
   };
 
-  // 左上角返回按钮回调
-  handlePageJump = () => {
-    const { postData:{contentText} } = this.props.threadPost;
+  // 顶部导航栏点击后拦截回调
+  handlePageJump = (link = '') => {
+    const { postData: { contentText } } = this.props.threadPost;
 
-    if (contentText === '') {
-      Router.back()
+    if (contentText !== '') {
+      this.props.handleSetState({ draftShow: true, jumpLink: link });
+      return;
+    }
+
+    if (link) {
+      Router.push({ url: link });
     } else {
-      this.props.handleSetState({ draftShow: true });
-      return false
+      window.history.length <= 1 ? Router.redirect({ url: '/' }) : Router.back();
     }
   }
 
@@ -160,7 +155,7 @@ class ThreadCreate extends React.Component {
 
     return (
       <>
-        <Header isBackCustom={this.handlePageJump} />
+        <Header allowJump={false} customJum={this.handlePageJump} />
         <div className={styles['post-inner']} id="post-inner">
           {/* 标题 */}
           <Title
@@ -345,8 +340,8 @@ class ThreadCreate extends React.Component {
         {this.props.draftShow && (
           <PostPopup
             list={['保存草稿', '不保存草稿']}
-            onClick={val => this.handleDraft(val)}
-            cancel={() => this.handleDraft()}
+            onClick={val => this.props.handleDraft(val)}
+            cancel={() => this.props.handleDraft()}
             visible={this.props.draftShow}
           />
         )}

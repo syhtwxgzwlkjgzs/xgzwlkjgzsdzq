@@ -1,9 +1,7 @@
 import React from 'react';
-
-import { Topic } from '@components/search-result-item';
-
-import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
+import TopicItem from '@components/topic-item';
+import styles from './index.module.scss';
 
 /**
  * 话题搜索结果
@@ -12,8 +10,8 @@ import { View, Text } from '@tarojs/components';
  */
 const SearchTopics = ({ data = [], onItemClick }) => (
   <View className={styles.list}>
-    {data.map((item, index) => (
-      <Topic key={index} data={item} onClick={onItemClick} />
+    {data && data.map((item, index) => (
+      <TopicItem key={index} data={item} onClick={onItemClick} />
     ))}
   </View>
 );

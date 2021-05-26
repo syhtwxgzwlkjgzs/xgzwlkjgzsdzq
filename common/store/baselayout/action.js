@@ -11,7 +11,8 @@ class IndexAction extends IndexStore {
    */
   @action
   setJumpingToTop() {
-    this.jumpToScrollingPos = -1;
+    this.home = -1;
+    this.search = -1;
     this.isJumpingToTop = true;
   }
 
@@ -22,6 +23,7 @@ class IndexAction extends IndexStore {
   removeJumpingToTop() {
     this.isJumpingToTop = false;
   }
+
 }
 
 export default IndexAction;

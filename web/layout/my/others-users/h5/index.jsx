@@ -22,15 +22,15 @@ class H5OthersPage extends React.Component {
 
   componentDidMount = async () => {
     const { query } = this.props.router;
-    if (query.otherId) {
-      await this.props.user.getTargetUserInfo(query.otherId);
+    if (query.id) {
+      await this.props.user.getTargetUserInfo(query.id);
     }
   };
 
   fetchTargetUserThreads = async () => {
     const { query } = this.props.router;
-    if (query.otherId) {
-      await this.props.user.getTargetUserThreads(query.otherId);
+    if (query.id) {
+      await this.props.user.getTargetUserThreads(query.id);
     }
   }
 

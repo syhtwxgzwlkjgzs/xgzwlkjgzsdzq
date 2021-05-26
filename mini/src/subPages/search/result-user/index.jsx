@@ -11,7 +11,7 @@ import { getCurrentInstance } from '@tarojs/taro';
 class Index extends React.Component {
 
   page = 1;
-  perPage = 10;
+  perPage = 20;
 
   async componentDidMount() {
     const { search } = this.props;
@@ -25,7 +25,7 @@ class Index extends React.Component {
     // });
 
     this.page = 1;
-    await search.getUsersList({ search: keyword });
+    await search.getUsersList({ search: keyword, perPage: this.perPage });
 
     // this.toastInstance?.destroy();
   }
@@ -38,7 +38,7 @@ class Index extends React.Component {
     } else if (type === 'moreData') {
       this.page += 1;
     }
-
+  
     await search.getUsersList({ search: data, perPage: this.perPage, page: this.page });
     return;
   }

@@ -1,37 +1,44 @@
 @import '@common/styles/index.scss';
 .container {
   box-sizing: border-box;
-  padding: 0 16px;
+  padding: 0 $padding-4n;
   padding-bottom: 0;
   background: var(--color-white);
-  content-visibility: auto;
+
+  // &:hover {
+  //   background: rgba(229, 242, 255, 0.3);
+  // }
   .title {
-    font-size: 16px;
-    line-height: 26px;
-    text-align: left;
+    @include cursor-on-pc;
+    display: inline-flex;
+    font-size: $font-size-middle;
+    font-weight: bold;
+    line-height: 22px;
     color: var(--color-text-primary);
+    margin-bottom: $margin-4n;
+    width: 100%;
   }
 
   .header {
-    padding-bottom: 24px;
-    padding-top: 16px;
+    padding: $padding-4n 0;
   }
   .content {
     position: relative;
-    // >* {
-    //   margin-top: 16px;
-    // }
+    >view {
+      margin-top: $margin-4n;
+    }
 
     .cover {
       position: absolute;
       right: 0;
       left: 0;
-      top: 0;
+      top: -16px;
       bottom: 0;
-      // background-color: rgba($color: #000, $alpha: 0.5);
+      background-color: rgba($color: #000, $alpha: 0.5);
       z-index: 10;
       display: flex;
       align-items: center;
+      cursor: pointer;
     }
   }
   .payContent {
@@ -44,16 +51,39 @@
     border-top: var(--border-line-color) solid 1px;
     margin-top: 12px;
   }
+  .pay {
+    margin: 16px 50px 0 50px;
+  }
   .button {
     width: 100%;
     height: 36px;
-    font-size: 14px;
-    line-height: 36px;
-    padding: 0;
-    margin-bottom: 16px;
-    .icon {
-      font-size: 14px;
-      margin-right: 10px;
+    font-size: $font-size-primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    .payIcon {
+      margin-right: $margin-2n;
+      margin-top: 1px;
+    }
+    .payText{
+      margin-top: 1px;
     }
   }
+}
+
+.containerBottom {
+  margin-bottom: 10px;
+}
+
+.containerPC {
+  padding: 0 $padding-6n;
+  border-radius: 5px;
+  .header {
+    padding: $padding-6n 0;
+  }
+}
+
+.wrapper {
+  overflow: hidden;
 }

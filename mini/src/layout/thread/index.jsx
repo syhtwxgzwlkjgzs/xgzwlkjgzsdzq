@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import { View, Text, ScrollView } from '@tarojs/components';
+import Taro from '@tarojs/taro';
 
 import layout from './layout.module.scss';
 import footer from './footer.module.scss';
@@ -245,7 +246,9 @@ class ThreadH5Page extends React.Component {
     // 编辑
     if (type === 'edit') {
       if (!this.props.thread?.threadData?.id) return;
-      this.props.router.push(`/thread/post?id=${this.props.thread?.threadData?.id}`);
+      Taro.navigateTo({
+        url: `/subPages/thread/post/index?id=${this.props.thread?.threadData?.id}}`,
+      });
     }
 
     // 举报
@@ -258,9 +261,16 @@ class ThreadH5Page extends React.Component {
       this.onCollectionClick();
     }
 
-    // 分享
-    if (type === 'share') {
-      this.onShareClick();
+    // 生成海报
+    if (type === 'posterShare') {
+      Toast.info({ content: '生成海报' });
+      // this.onShareClick();
+    }
+
+    // 微信分享
+    if (type === 'weixinShare') {
+      Toast.info({ content: '微信分享' });
+      // this.onShareClick();
     }
   };
 
@@ -356,7 +366,9 @@ class ThreadH5Page extends React.Component {
       });
 
       setTimeout(() => {
-        this.props.router.push('/');
+        Taro.redirectTo({
+          url: '/pages/index/index',
+        });
       }, 1000);
 
       return;
