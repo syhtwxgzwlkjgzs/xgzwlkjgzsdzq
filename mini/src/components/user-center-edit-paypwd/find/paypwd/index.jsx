@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react';
-import { Button, Input, Toast } from '@discuzq/design';
+import Button from '@discuzq/design/dist/components/button/index';
+import Input from '@discuzq/design/dist/components/input/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import Header from '@components/header';
 import styles from './index.module.scss';
 import CaptchaInput from '../../../user-center-edit-mobile/captcha-input';

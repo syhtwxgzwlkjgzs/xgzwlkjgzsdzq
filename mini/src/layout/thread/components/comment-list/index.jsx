@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
-import { Icon } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import { View, Text, Image } from '@tarojs/components';
 import ReplyList from '../reply-list/index';
 import { diffDate } from '@common/utils/diff-date';

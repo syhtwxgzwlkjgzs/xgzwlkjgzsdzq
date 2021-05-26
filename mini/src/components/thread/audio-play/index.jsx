@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './index.module.scss';
-import { Audio } from '@discuzq/design';
+import Audio from '@discuzq/design/dist/components/audio/index';
 import { noop } from '../utils';
 import { View, Image } from '@tarojs/components'
 import parAudioImg from '../../../../../web/public/dzq-img/pay-audio.png';

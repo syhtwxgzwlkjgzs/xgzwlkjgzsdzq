@@ -1,7 +1,8 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
-import { Icon, Button } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Button from '@discuzq/design/dist/components/button/index';
 import { parseContentData } from '../../utils';
 import ImageDisplay from '@components/thread/image-content';
 import AudioPlay from '@components/thread/audio-play';

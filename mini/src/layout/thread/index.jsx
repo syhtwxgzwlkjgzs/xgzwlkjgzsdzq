@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import { View, Text, ScrollView } from '@tarojs/components';
+
 import Taro from '@tarojs/taro';
 
 import layout from './layout.module.scss';
@@ -11,7 +12,9 @@ import NoMore from './components/no-more';
 import LoadingTips from './components/loading-tips';
 
 import styleVar from '@common/styles/theme/default.scss.json';
-import { Icon, Input, Badge, Toast } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Input from '@discuzq/design/dist/components/input/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import Header from '@components/header';
 import goToLoginPage from '@common/utils/go-to-login-page';
 

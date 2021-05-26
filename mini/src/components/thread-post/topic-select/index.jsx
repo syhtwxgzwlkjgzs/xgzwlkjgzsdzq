@@ -5,7 +5,10 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
-import { Input, Button, Icon, ScrollView } from '@discuzq/design';
+import Input from '@discuzq/design/dist/components/input/index';
+import Button from '@discuzq/design/dist/components/button/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import ScrollView from '@discuzq/design/dist/components/scroll-view/index';
 import styles from './index.module.scss';
 
 @inject('threadPost')

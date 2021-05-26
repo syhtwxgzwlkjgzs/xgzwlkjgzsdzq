@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import UserCenterEditHeader from '../user-center-edit-header'
-import { Button, Icon, Input } from '@discuzq/design';
+import Button from '@discuzq/design/dist/components/button/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Input from '@discuzq/design/dist/components/input/index';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
-import { Divider } from '@discuzq/design';
+import Divider from '@discuzq/design/dist/components/divider/index';
 import UserCenterHeaderImage from '@components/user-center-header-images';
 import UserCenterHead from '@components/user-center-head';
 import UserCenterAction from '@components/user-center-action';
