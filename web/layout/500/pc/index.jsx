@@ -12,7 +12,7 @@ class PCCloseSite extends React.Component {
   render() {
     const height = isServer() ? '100vh' : `${window.innerHeight - 160}px`;
     return (
-      <>
+      <div className={styles.body}>
         <Header/>
         <div className={styles.page} style={{height: height}}>
           <img className={styles.img} src='/dzq-img/error.png'/>
@@ -20,7 +20,7 @@ class PCCloseSite extends React.Component {
           <Button onClick={() => {Router.redirect({url: '/'});}} size='large' className={styles.btn} type='primary'>回到首页</Button>
         </div>
         <Copyright center line/>
-      </>
+      </div>
       
     );
   }

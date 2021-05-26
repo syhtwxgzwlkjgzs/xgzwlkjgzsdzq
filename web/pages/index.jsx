@@ -89,7 +89,7 @@ class Index extends React.Component {
       });
 
       this.page = 1;
-      await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence });
+      await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
 
       this.toastInstance?.destroy();
     } else if (type === 'moreData') {
@@ -106,7 +106,7 @@ class Index extends React.Component {
       this.page = page
     } else if (type === 'refresh-thread') { // 点击帖子更新数的按钮，刷新帖子数据
       this.page = 1;
-      return await index.getReadThreadList({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence });
+      return await index.getReadThreadList({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
     }
   }
 

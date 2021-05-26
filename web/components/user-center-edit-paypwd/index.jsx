@@ -40,7 +40,7 @@ class index extends Component {
   }
 
   // 点击去到下一步
-  goToResetPayPwd = () => {
+  goToResetPayPwd = throttle(() => {
     const { oldPayPwd } = this.state;
     this.props.payBox.oldPayPwd = oldPayPwd;
     this.props.payBox
@@ -56,7 +56,7 @@ class index extends Component {
           duration: 1000,
         });
       });
-  };
+  }, 300);
 
   // 点击忘记密码
   handleGoToFindPayPwd = () => {

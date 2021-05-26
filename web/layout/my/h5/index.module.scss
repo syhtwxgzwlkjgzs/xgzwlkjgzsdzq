@@ -33,6 +33,8 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+    height: rem(52);
+    box-sizing: border-box;
 
     .threadTitle {
         font-weight: 600;

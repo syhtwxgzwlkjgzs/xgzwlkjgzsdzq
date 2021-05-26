@@ -16,16 +16,16 @@ class PCCloseSite extends React.Component {
     const { closeSiteConfig } = site;
     const height = isServer() ? '100vh' : `${window.innerHeight - 160}px`;
     return (
-      <>
+      <div className={styles.body}>
         <Header/>
         <div className={styles.page} style={{height: height}}>
           <img className={styles.img} src='/dzq-img/close.png'/>
           <h1 className={styles.main}>关闭已站点</h1>
           {closeSiteConfig && <p className={styles.sub}>{closeSiteConfig.detail}</p>}
-          <Button onClick={() => {Router.push({url: '/user/login'});}} size='large' className={styles.btn} type='primary'>管理员登录</Button>
+          {false && <Button onClick={() => {Router.push({url: '/user/login'});}} size='large' className={styles.btn} type='primary'>管理员登录</Button>}
         </div>
         <Copyright center line/>
-      </>
+      </div>
       
     );
   }

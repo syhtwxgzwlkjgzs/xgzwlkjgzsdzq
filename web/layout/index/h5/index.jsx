@@ -129,7 +129,6 @@ class IndexH5Page extends React.Component {
   handleScroll = throttle(({ scrollTop = 0 } = {}) => {
     const { height = 180 } = this.headerRef.current?.state || {}
     this.setState({ fixedTab: scrollTop > height })
-    this.props.baselayout.jumpToScrollingPos = scrollTop;
   }, 0)
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
