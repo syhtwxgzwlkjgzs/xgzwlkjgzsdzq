@@ -2,7 +2,7 @@
 /**
  * 通用上传组件、支持图片、附件、录音等的上传和展示
  */
-import React, { useState } from 'react';
+import React from 'react';
 import Taro from '@tarojs/taro';
 import { observer, inject } from 'mobx-react';
 import { View } from '@tarojs/components';
@@ -10,6 +10,8 @@ import AudioRecord from '@discuzq/design/dist/components/audio-record/index';
 import Audio from '@discuzq/design/dist/components/audio/index';
 import { Units } from '@components/common';
 import styles from './index.module.scss';
+import locals from '@common/utils/local-bridge';
+import constants from '@common/constants';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 
 export default inject('threadPost', 'site')(observer(({ type, threadPost, site, audioUpload }) => {
@@ -78,6 +80,7 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
   const upload = (file) => {
     console.log('upload', file);
     const tempFilePath = file.path || file.tempFilePath;
+    const token = locals.get(constants.ACCESS_TOKEN_NAME);
     console.log(tempFilePath);
     Taro.uploadFile({
       url: `${window.location.origin}/apiv3/attachments`,
@@ -85,7 +88,7 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
       name: 'file',
       header: {
         'Content-Type': 'multipart/form-data',
-        authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIiLCJqdGkiOiIxNmUxZTAyNTEzZmNmNmI3YzAwYTIyZGIxNDY3NmQ0ZTIwMWZkYmQ5NzM0YTQ0Y2RiZWE3NjZhOGQ3YzZiMzUxYWMyYTI0MjVkZWVmZWQwNiIsImlhdCI6MTYxOTM0MjEyNSwibmJmIjoxNjE5MzQyMTI1LCJleHAiOjE2MjE5MzQxMjUsInN1YiI6IjEiLCJzY29wZXMiOltudWxsXX0.RZrWPw5xNljl8jexv6CCVni0wEGhb6g5zzsgCULa_3fHvCzrUSF0YMhCduCCTdnbKmbegVsVNMCVqDzJdMexgPD-hIUL9zouB4H7Ohy5dE6KIQpyrV08NP-27A5CUyVG-T7r1hMKkAVn0hBKY4zF3-q0RsN16jV4hLJtzyPfuOSeA92umoBFqsNnn-9tR5TTppkHs1-jJPgbGn4FPpxFbrEbIB9kMdYh_kShQ2IQLGTX-xGlNZBuxNigOY7xvB2xWp9LFW9X9DlbkDLRKbU_E5Q-MMNY0laa_9tgddCzEjzE2P1TeKIOVlB_JLql9sdCWb7OaVXi8xXTZuVAxphe0w'
+        authorization: `Bearer ${token}`
       },
       formData: {
         'type': (() => {
