@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Button, Input, Toast } from '@discuzq/design';
 import Header from '@components/header';
-import styles from '../index.module.scss';
+import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 import throttle from '@common/utils/thottle.js';
 @inject('payBox')
@@ -38,6 +38,8 @@ export default class index extends Component {
   handleChangeNewPwd = (e) => {
     this.setState({
       newPayPwd: e.target.value
+    }, () => {
+      this.props.payBox.newPayPwd = e.target.value
     })
   }
 
@@ -45,6 +47,8 @@ export default class index extends Component {
   handleChangeRepeatPwd = (e) => {
     this.setState({
       newPayPwdRepeat: e.target.value
+    }, () => {
+      this.props.payBox.newPayPwdRepeat = e.target.value
     })
   }
 
@@ -56,10 +60,9 @@ export default class index extends Component {
         hasMask: false,
         duration: 1000,
       })
+      this.initState()
       return
     }
-    this.props.payBox.newPayPwd = newPayPwd
-    this.props.payBox.newPayPwdRepeat = newPayPwdRepeat
     this.props.payBox.resetPayPwd().then(res => {
       Toast.success({
         content: '修改密码成功',
@@ -81,7 +84,7 @@ export default class index extends Component {
     const { newPayPwd, newPayPwdRepeat } = this.state
     let isSubmit = !newPayPwd || !newPayPwdRepeat
     return (
-      <div>
+      <div id={styles.resetPayPwdContent}>
         <Header />
         <div className={styles.content}>
           <h3>设置新密码</h3>

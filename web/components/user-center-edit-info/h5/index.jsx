@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import UserCenterEditHeader from '../../user-center-edit-header/index';
-import { Button, Icon, Input } from '@discuzq/design';
+import { Button, Icon, Input, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
@@ -71,8 +71,21 @@ class index extends Component {
   }
 
   handleUpdateEditedUserInfo = throttle(() => {
-    this.props.user.updateEditedUserInfo();
-    Router.push({ url: '/my' });
+    this.props.user.updateEditedUserInfo().then(res => {
+      Toast.success({
+        content: "更新信息成功",
+        hasMask: false,
+        duration: 1000,
+      })
+      Router.push({ url: '/my' });
+    }).catch((error) => {
+      Toast.error({
+        content: error.message || '更新用户信息失败',
+        hasMask: false,
+        duration: 1000,
+      })
+      Router.push({ url: '/my' });
+    });
   }, 300)
 
   handleGoToEditMobile = () => {
