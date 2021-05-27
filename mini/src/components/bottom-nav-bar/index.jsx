@@ -69,8 +69,9 @@ const routes = [
     if (routeIndex === -1) {
       Router.push({url: i.router});
     } else {
-      if (current?.length !== 1 && routeIndex !== current.length - 1) {
-        Taro.navigateBack({delta: routeIndex});
+      const num = current.length - 1 - routeIndex
+      if (current?.length !== 1 && routeIndex !== current.length - 1 && num >= 0) {
+        Taro.navigateBack({delta: current.length - 1 - routeIndex});
       }
     }
     // 

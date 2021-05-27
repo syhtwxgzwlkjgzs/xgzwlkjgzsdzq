@@ -26,15 +26,18 @@ const Index = (props) => {
 
   // 选择定位
   const chooseLocation = () => {
-    Taro.chooseLocation({
-      ...positon,
-      success(ret) {
-        setPosition(ret);
-        setIsChose(true);
-        positionChange(positon);
-      },
-      fail(res) {
-
+    Taro.authorize({
+      scope: 'scope.userLocation',
+      success: function () {
+        // 用户已经同意小程序使用定位功能，后续调用 Taro.chooseLocation 接口不会弹窗询问
+        Taro.chooseLocation({
+          ...positon,
+          success(ret) {
+            setPosition(ret);
+            setIsChose(true);
+            positionChange(positon);
+          }
+        });
       }
     });
   };

@@ -56,13 +56,24 @@ const config = {
       ]
     }
   ],
+  permission: {
+    "scope.userLocation": {
+      "desc": "小程序将获取您的位置信息"
+    }
+  },
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',
     navigationBarTextStyle: 'black',
   },
   // wx5a3a7366fd07e119 验证码防水墙小程序
-  navigateToMiniProgramAppIdList: ["wx5a3a7366fd07e119"]
+  navigateToMiniProgramAppIdList: ["wx5a3a7366fd07e119"],
+  "preloadRule": {
+    "pages/index/index": {
+      "network": "all",
+      "packages": ["subPages"]
+    }
+  }
 };
 
 module.exports = config;
