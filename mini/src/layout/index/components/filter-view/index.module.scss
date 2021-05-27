@@ -15,8 +15,6 @@
   height: 80vh;
   display: flex;
   flex-direction: column;
-  // 解决小程序中，被tabBar遮挡的问题
-  margin-bottom: 70px;
   .content {
     flex: 1;
     overflow: hidden;

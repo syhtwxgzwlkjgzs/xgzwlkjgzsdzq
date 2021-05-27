@@ -17,6 +17,7 @@
   align-items: center;
   padding: rem($padding-6n) 0;
   border-bottom: var(--border-border);
+
   :global {
     .dzq-input__inner {
       border: none;
@@ -27,6 +28,7 @@
       color: #c5c6ca;
     }
   }
+
   .moneyIcon {
     font-family: 'PingFang SC';
     font-weight: 600;
