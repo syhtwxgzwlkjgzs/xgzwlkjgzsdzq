@@ -25,6 +25,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    overflow: hidden;
     .title {
       font-weight: normal;
       font-size: $font-size-primary;
@@ -32,6 +33,8 @@
       text-align: left;
       color: var(--color-text-regular);
       max-height: 44px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
       overflow: hidden;
     }
     .amount {
