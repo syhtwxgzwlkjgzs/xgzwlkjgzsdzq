@@ -17,6 +17,14 @@ class IndexAction extends IndexStore {
     this.filter = data
   }
 
+  /**
+   * 设置tabBar隐藏or显示
+   */
+   @action
+  setHiddenTabBar(data) {
+    this.hiddenTabBar = data
+  }
+
 /**
  * 详情页点击标签、置顶跳转首页操作
  * @param {array} categoryIds 分类Ids
