@@ -38,16 +38,25 @@
           text-align: left;
           color: var(--color-text-primary);
           word-break: break-word;
-          @include lamp-clamp(2);
 
           p {
-            @include lamp-clamp(2);
             line-height: rem(24);
           }
 
           img {
             height: rem(22);
           }
+
+          &.isShowOne {
+            @include lamp-clamp(2);
+
+            p {
+              @include lamp-clamp(2);
+            }
+          }
+        }
+        .imageDisplay {
+          margin-top: rem($margin-2n);
         }
       }
 

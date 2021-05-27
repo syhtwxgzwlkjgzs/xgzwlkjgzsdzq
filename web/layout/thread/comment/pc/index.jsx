@@ -179,7 +179,7 @@ class CommentPCPage extends React.Component {
   }
 
   // 创建回复评论+回复回复接口
-  async createReply(val) {
+  async createReply(val, imageList) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
       goToLoginPage({ url: '/user/login' });
@@ -211,6 +211,18 @@ class CommentPCPage extends React.Component {
       params.replyId = this.commentData.id;
       params.isComment = true;
       params.commentId = this.commentData.id;
+    }
+
+    if (imageList?.length) {
+      params.attachments = imageList
+        .filter((item) => item.status === 'success' && item.response)
+        .map((item) => {
+          const { id } = item.response;
+          return {
+            id,
+            type: 'attachments',
+          };
+        });
     }
 
     const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
@@ -284,7 +296,7 @@ class CommentPCPage extends React.Component {
                   isHideEdit={true}
                   isFirstDivider={true}
                   isShowInput={this.state.commentId === commentData.id}
-                  onSubmit={(value) => this.createReply(value)}
+                  onSubmit={(value, imageList) => this.createReply(value, imageList)}
                 ></CommentList>
               ) : (
                 <LoadingTips type="init"></LoadingTips>

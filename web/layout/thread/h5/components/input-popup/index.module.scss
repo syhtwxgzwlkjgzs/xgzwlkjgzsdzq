@@ -30,14 +30,42 @@
 .main {
   background: var(--color-white);
   width: 100%;
+  position: relative;
+}
+
+.divider {
+  margin: 0 -50% 0 -50% !important;
+  width: 200% !important;
+  // transform: translateX(-50%);
 }
 
 .button {
-  margin-top: rem($margin-4n);
+  padding-top: rem($margin-4n);
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
+}
+
+.operates {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  .operate {
+    margin-right: rem(24);
+    color: $text-color-regular;
+
+    &.actived {
+      color: $primary-color;
+    }
+  }
+}
+
+.emojis {
+  position: absolute;
+  left: 0;
+  bottom: rem(50);
 }
 
 .input {
@@ -57,5 +85,21 @@
 
   span {
     margin-top: rem($margin-1n);
+  }
+}
+
+.imageUpload {
+  margin: rem(8) 0;
+
+  :global {
+    .dzq-upload.is-card {
+      padding: 0;
+    }
+    .dzq-upload__area,
+    .dzq-upload-list-card__item {
+      width: rem(109) !important;
+      height: rem(109) !important;
+      margin: 0 rem(8) rem(8) 0;
+    }
   }
 }
