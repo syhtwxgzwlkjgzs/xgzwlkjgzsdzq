@@ -3,8 +3,9 @@ import styles from './index.module.scss';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import { noop } from '@components/thread/utils';
 import { View } from '@tarojs/components';
-import Router from '@discuzq/sdk/dist/router';
+import Taro from '@tarojs/taro'
 import { inject, observer } from 'mobx-react';
+import Router from '@discuzq/sdk/dist/router';
 
 
 /**
@@ -12,6 +13,14 @@ import { inject, observer } from 'mobx-react';
  * @prop {boolean} placeholder 固定在底部时，是否在标签位置生成一个等高的占位元素
  * @prop {boolean} curr 常亮icon
  */
+
+const routes = [
+  'pages/index/index',
+  'subPages/search/index',
+  'subPages/thread/post/index',
+  'subPages/message/index',
+  'subPages/my/index'
+]
 
  @inject('index')
  @observer
@@ -45,11 +54,26 @@ import { inject, observer } from 'mobx-react';
     onClick(i, idx)
     const temp = [...tabs];
     if (i.text) {
-      temp.find(i => i.active).active = false;
-      temp[idx].active = true;
+      // temp.find(i => i.active).active = false;
+      // temp[idx].active = true;
       this.setState({ tabs: temp })
     }
-    Router.push({url: i.router});
+
+    const current = Taro.getCurrentPages()
+    let routeIndex = -1
+    current?.forEach((item, index) => {
+      if (`/${item.route}` === i.router) {
+        routeIndex = index
+      }
+    })
+    if (routeIndex === -1) {
+      Router.push({url: i.router});
+    } else {
+      if (current?.length !== 1 && routeIndex !== current.length - 1) {
+        Taro.navigateBack({delta: routeIndex});
+      }
+    }
+    // 
   };
 
 
