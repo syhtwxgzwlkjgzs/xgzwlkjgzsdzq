@@ -1,10 +1,10 @@
-import api from '../api';
+import {readFollow} from '@discuzq/sdk/dist/api/user/read-follow';;
 import set from '../../utils/set';
 import deepClone from '../../utils/deep-clone';
 
-export default async function getUserFollow(opts, ctx) {
+export default async function _getUserFollow(opts, ctx) {
   const options = deepClone(opts);
   set(options, 'params.filter.type', 1);
-  const res = await api.readFollow({ ...options, __context: ctx });
+  const res = await readFollow({ ...options, __context: ctx });
   return res;
 }

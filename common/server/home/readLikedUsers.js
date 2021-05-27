@@ -1,4 +1,4 @@
-import api from '../api';
+// import {readCategories} from '@discuzq/sdk/dist/api/content/read-categories';
 
 /** 获取点赞、打赏用户列表
  * @param {object} params
@@ -15,7 +15,7 @@ export default async function readLikedUsers(opts, ctx = null) {
       __context: ctx,
       ...others,
     };
-    const result = await api.http(options);
+    const result = await http(options);
     return result;
   } catch (error) {
     return error;

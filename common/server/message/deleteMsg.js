@@ -1,11 +1,11 @@
-import api from '../api';
+// import {createOrdersCreate} from '@discuzq/sdk/dist/api/pay/create-orderscreate';
 
 /**
  * 删除消息
  * TODO: 待更新到sdk
  */
-export default async function deleteMsg(params) {
-  const res = await api.http({
+export default async function _deleteMsg(params) {
+  const res = await http({
     url: 'apiv3/notification.delete',
     method: 'post',
     data: params,

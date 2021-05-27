@@ -1,11 +1,11 @@
-import api from '../api';
+// import {createOrdersCreate} from '@discuzq/sdk/dist/api/pay/create-orderscreate';
 
 /**
  * 删除私信对话
  * TODO: 待更新到sdk
  */
-export default async function deleteDialog(params) {
-  const res = await api.http({
+export default async function _deleteDialog(params) {
+  const res = await http({
     url: 'apiv3/dialog.delete',
     method: 'post',
     data: params,

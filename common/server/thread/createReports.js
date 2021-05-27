@@ -1,6 +1,7 @@
-import api from '../api';
+// import {deleteDeny} from '@discuzq/sdk/dist/api/user/delete-deny';
 
-export default async function createReports(opts, ctx = null) {
+
+export default async function _createReports(opts, ctx = null) {
   try {
     const { params = {}, data = {}, ...others } = opts;
     const options = {
@@ -11,7 +12,7 @@ export default async function createReports(opts, ctx = null) {
       __context: ctx,
       ...others,
     };
-    const result = await api.http(options);
+    const result = await http(options);
     return result;
   } catch (error) {
     return error;
