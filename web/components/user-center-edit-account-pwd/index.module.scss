@@ -18,7 +18,7 @@
     height: rem(62);
     line-height: rem(62);
     box-sizing: border-box;
-    padding-top: rem($padding-6n);
+    // padding-top: rem($padding-6n);
     .labelValue {
       color: $text-color-primary;
       font-size: $font-size-middle;
@@ -47,7 +47,7 @@
 
 .tips {
   text-align: right;
-  color: $text-color-primary;
+  color: $primary-color;
   padding-right: $padding-6n;
   font-size: $font-size-primary;
   margin-top: rem($margin-6n);
