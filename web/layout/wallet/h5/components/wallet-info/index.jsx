@@ -15,7 +15,9 @@ class WalletInfo extends React.Component {
     super(props);
     this.state = {};
   }
-
+  moneyFormat = (freezeAmount, availableAmount) => {
+    return (parseFloat(freezeAmount) + parseFloat(availableAmount)).toFixed(2);
+  }
   render() {
     return (
         <div className={`${this.props.webPageType === 'h5' ? styles.containerH5 : styles.containerPC}`}>
@@ -37,7 +39,7 @@ class WalletInfo extends React.Component {
                 {
                   this.props.walletData?.freezeAmount && this.props.walletData?.availableAmount
                     ? <div className={styles.moneyNum}>
-                    {Number(this.props.walletData?.freezeAmount) + Number(this.props.walletData?.availableAmount)}
+                    {this.moneyFormat(this.props.walletData?.freezeAmount,this.props.walletData?.availableAmount)}
                   </div> : <div className={styles.moneyNum}></div>
                 }
             </div>

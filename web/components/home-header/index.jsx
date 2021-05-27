@@ -45,7 +45,7 @@ class HomeHeader extends React.Component {
     const { site } = this.props;
     const siteData = site.webConfig;
     if (siteData && siteData.setSite && siteData.setSite.siteLogo) {
-      return siteData.siteLogo;
+      return siteData.setSite.siteLogo;
     }
     return this.logoImg;
   }
@@ -163,7 +163,7 @@ class HomeHeader extends React.Component {
             </li>
           </ul>
         }
-        {isWeiXin && <SharePopup visible={visible} onClose={this.onClose} />}
+        {isWeiXin() && <SharePopup visible={visible} onClose={this.onClose} />}
       </div>
     );
   }

@@ -42,27 +42,6 @@ const BaseLayout = (props) => {
 
   const [height, setHeight] = useState(600);
 
-  // const debounce = (fn, wait) => {
-  //   let timer = null;
-  //   return () => {
-  //     if(timer !== null){
-  //       clearTimeout(timer);
-  //     }
-  //     timer = setTimeout(fn, wait);
-  //   }
-  // }
-
-  // const throttle = (func, delay) => {
-  //   let old = 0;
-  //   return function() {
-  //     const now = new Date().valueOf();
-  //     if(now - old > delay) {
-  //       func();
-  //       old = now;
-  //     }
-  //   }
-  // }
-
   const pullDownWrapper = useRef(null);
   const listRef = useRef(null);
 
@@ -84,9 +63,9 @@ const BaseLayout = (props) => {
       baselayout.removeJumpingToTop();
       listRef.current.onBackTop();
     }
-    if (scrollTop) baselayout[pageName] = scrollTop;
-    onScroll({ scrollTop });
-  }, 50);
+    if(scrollTop && pageName) baselayout[pageName] = scrollTop;
+    onScroll({ scrollTop: scrollTop });
+  }, 50)
 
   return (
     <div className={styles.container}>

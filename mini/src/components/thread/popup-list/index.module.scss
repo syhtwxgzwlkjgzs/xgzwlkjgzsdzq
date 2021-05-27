@@ -9,8 +9,6 @@
 .tabs {
   max-width: 572px;
   margin: 0 auto;
-  // 解决小程序中，被tabBar遮挡的问题
-  margin-bottom: 70px;
   border-top-left-radius: $border-radius-big;
   border-top-right-radius: $border-radius-big;
   :global(.dzq-tabs__bar.is-card) {

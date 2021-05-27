@@ -7,7 +7,6 @@ import styles from './index.module.scss';
 import TopNew from './components/top-news';
 import FilterView from './components/filter-view';
 import BaseLayout from '@components/base-layout';
-import { throttle } from '@common/utils/throttle-debounce.js'
 
 
 @inject('site')
@@ -157,10 +156,17 @@ class IndexH5Page extends React.Component {
     return dispatch('moreData', requestFilter);
   };
 
-  handleScroll = throttle(({ scrollTop = 0 } = {}) => {
+  handleScroll = ({ scrollTop = 0 } = {}) => {
     const { height = 180 } = this.headerRef.current?.state || {}
-    this.setState({ fixedTab: scrollTop > height })
-  }, 0)
+    const { fixedTab } = this.state;
+
+    // 只需要滚到临界点触发setState，而不是每一次滚动都触发
+    if(!fixedTab && scrollTop >= height) {
+      this.setState({ fixedTab: true })
+    } else if(fixedTab && scrollTop < height) {
+      this.setState({ fixedTab: false })
+    }
+  }
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
   handleCategories = () => {
@@ -194,7 +200,7 @@ class IndexH5Page extends React.Component {
       <>
         {categories?.length > 0 && (
           <>
-          <div ref={this.listRef} className={`${!fixedTab ? styles.homeContent : styles.homeContentFix}`}>
+          <div ref={this.listRef} className={`${styles.homeContent} ${fixedTab && styles.fixed}`}>
             <Tabs
               className={styles.tabsBox}
               scrollable

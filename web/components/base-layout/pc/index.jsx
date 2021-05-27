@@ -1,9 +1,12 @@
 import React,  { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { inject, observer } from 'mobx-react';
 import { Flex } from '@discuzq/design';
 import Header from '@components/header';
 import List from '@components/list'
 import RefreshView from '@components/list/RefreshView';
 import ErrorView from '@components/list/ErrorView';
+import { noop } from '@components/thread/utils'
+import { throttle } from '@common/utils/throttle-debounce.js'
 
 import styles from './index.module.scss';
 
@@ -24,6 +27,8 @@ import styles from './index.module.scss';
       </BaseLayout>
 */
 
+const baseLayoutWhiteList = ['home', 'search'];
+
 const BaseLayout = (props) => {
   const {
     header = null,
@@ -36,6 +41,8 @@ const BaseLayout = (props) => {
     onRefresh,
     pageName = '',
     jumpTo = -1,
+    onScroll = noop,
+    baselayout,
   } = props;
 
   const [showLeft, setShowLeft] = useState(false);
@@ -76,6 +83,10 @@ const BaseLayout = (props) => {
     // }
     if(jumpTo > 0) {
       listRef.current.jumpToScrollTop(jumpTo);
+    }
+    if (listRef?.current && pageName && baselayout[pageName] > 0 &&
+        baseLayoutWhiteList.indexOf(pageName) !== -1) {
+      listRef.current.jumpToScrollTop(baselayout[pageName]);
     }
   }, [jumpTo]);
 
@@ -118,11 +129,22 @@ const BaseLayout = (props) => {
     setIsError(true)
   }
 
+  const handleScroll = throttle(({ scrollTop = 0 } = {}) => {
+    if(!listRef?.current?.currentScrollTop) return;
+
+    if(baselayout.isJumpingToTop) {
+      baselayout.removeJumpingToTop();
+      listRef.current.onBackTop();
+    }
+    if(scrollTop && pageName) baselayout[pageName] = scrollTop;
+    onScroll({ scrollTop: scrollTop });
+  }, 50)
+
   return (
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
 
-        <List {...props} immediateCheck={false} className={styles.list} wrapperClass={styles.wrapper} ref={listRef} onError={onError}>
+        <List {...props} immediateCheck={false} className={styles.list} wrapperClass={styles.wrapper} ref={listRef} onError={onError} onScroll={handleScroll}>
           {
             (pageName === 'home' || showLeft) && (
               <div className={styles.left}>
@@ -151,4 +173,4 @@ const BaseLayout = (props) => {
   );
 };
 
-export default BaseLayout;
+export default inject('baselayout')(observer(BaseLayout));

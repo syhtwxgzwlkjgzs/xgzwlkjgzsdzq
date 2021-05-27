@@ -1,9 +1,8 @@
-import api from '../api';
-
+import {readEmoji} from '@discuzq/sdk/dist/api/other/read-emoji';
 /**
  * 获取表情
  */
-export default async function readEmoji() {
-  const res = await api.readEmoji({ url: '/apiv3/emoji' });
+export default async function _readEmoji() {
+  const res = await readEmoji({ url: '/apiv3/emoji' });
   return res;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import Router from '@discuzq/sdk/dist/router';
-import Button from '@discuzq/design/dist/components/button/index';
-import Toast from '@discuzq/design/dist/components/toast/index';
+import Toast from '@discuzq/design/dist/components/toast';
+import Button from '@discuzq/design/dist/components/button';
 import { inject, observer } from 'mobx-react';
 import BottomEvent from './bottom-event';
 import UserInfo from './user-info';
@@ -33,10 +33,11 @@ class Index extends React.Component {
       this.handleShare()
     }
     handleShare = debounce(() => {
+      
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+        goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
         return;
       }
 
@@ -52,7 +53,7 @@ class Index extends React.Component {
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
         }
       });
-    }, 1000);
+    }, 2000);
     // 评论
     onComment = (e) => {
       e && e.stopPropagation();
@@ -60,7 +61,7 @@ class Index extends React.Component {
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+        goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
         return;
       }
 
@@ -81,11 +82,10 @@ class Index extends React.Component {
     handlePraise = debounce(() => {
 
       if(this.state.isSendingLike) return;
-
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+        goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
         return;
       }
       const { data = {}, user } = this.props;
@@ -103,14 +103,16 @@ class Index extends React.Component {
 
     // 支付
     onPay = (e) => {
-      e && e.stopPropagation();
+      //e && e.stopPropagation();
       this.handlePay()
     }
-    handlePay = debounce(async () => {
+    handlePay = debounce(async (e) => {
+      //e && e.stopPropagation();
+
       // 对没有登录的先做
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+        goToLoginPage({ url: '/user/login' });
         return;
       }
 

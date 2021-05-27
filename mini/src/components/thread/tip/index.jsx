@@ -4,22 +4,26 @@ import Avatar from '../../avatar';
 import { View, Text, Image } from '@tarojs/components';
 import Icon from '@discuzq/design/dist/components/icon/index'
 import styles from './index.module.scss';
+import { inject, observer } from 'mobx-react';
 
 /**
  * 帖子点赞、打赏视图
  * @prop {string}    imgs 头像数据数组
  */
 
- const Index = ({ imgs = [], tipData = {}, wholeNum = 1,showMore=false }) => {
+ const Index = inject('index')(
+  observer(({ imgs = [], tipData = {}, wholeNum = 1,showMore=false, index }) => {
   const [visible, setVisible] = useState(false);
 
   const onClick = (e) => {
     e.stopPropagation();
-
+    index.setHiddenTabBar(true)
     setVisible(true);
   };
 
   const onHidden = () => {
+    index.setHiddenTabBar(false)
+
     setVisible(false);
   };
 
@@ -59,6 +63,6 @@ import styles from './index.module.scss';
         <PopupList tipData={tipData} visible={visible} onHidden={onHidden} />
     </>
   );
-};
+}));
 
 export default React.memo(Index);

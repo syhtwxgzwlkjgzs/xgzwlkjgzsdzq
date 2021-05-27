@@ -1,6 +1,7 @@
+// import {deleteDeny} from '@discuzq/sdk/dist/api/user/delete-deny';
 import api from '../api';
 
-export default async function createPosts(opts, ctx = null) {
+export default async function _createPosts(opts, ctx = null) {
   try {
     const { params = {}, data = {}, ...others } = opts;
     const options = {

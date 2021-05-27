@@ -1,6 +1,6 @@
-import api from '../api';
-export default async function h5WechatCodeLogin(opts, ctx) {
+import {h5WechatCodeLogin} from '@discuzq/sdk/dist/api/login/h5-wechat-code-login';
+export default async function _h5WechatCodeLogin(opts, ctx) {
   // 不需要设置登录态
-  const res = await api.h5WechatCodeLogin({ ...opts, __context: ctx, _noSetAuthorization: true });
+  const res = await h5WechatCodeLogin({ ...opts, __context: ctx, _noSetAuthorization: true });
   return res;
 }
