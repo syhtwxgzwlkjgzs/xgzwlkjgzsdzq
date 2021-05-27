@@ -1,6 +1,6 @@
-import api from '../api';
+import {smsRebind} from '@discuzq/sdk/dist/api/login/smsrebind';
 
-export default async function smsRebind(opts, ctx) {
-  const res = await api.smsRebind({ ...opts, __context: ctx });
+export default async function _smsRebind(opts, ctx) {
+  const res = await smsRebind({ ...opts, __context: ctx });
   return res;
 }

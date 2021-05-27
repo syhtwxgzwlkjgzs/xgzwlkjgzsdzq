@@ -1,5 +1,6 @@
-import api from './api';
-export default async function setNickname(opts, ctx = null) {
-  const res = await api.setNickname({ ...opts, __context: ctx });
+import {setNickname} from '@discuzq/sdk/dist/api/login/setnickname';
+
+export default async function _setNickname(opts, ctx = null) {
+  const res = await setNickname({ ...opts, __context: ctx });
   return res;
 }

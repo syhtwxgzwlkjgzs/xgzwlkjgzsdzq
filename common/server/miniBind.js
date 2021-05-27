@@ -1,5 +1,6 @@
-import api from './api';
-export default async function miniBind(opts, ctx) {
-  const res = await api.miniBind({ ...opts, __context: ctx });
+import {miniBind} from '@discuzq/sdk/dist/api/login/mini-bind';
+
+export default async function _miniBind(opts, ctx) {
+  const res = await miniBind({ ...opts, __context: ctx });
   return res;
 }

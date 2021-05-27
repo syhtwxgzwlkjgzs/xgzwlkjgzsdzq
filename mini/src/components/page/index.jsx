@@ -56,8 +56,8 @@ export default class Page extends React.Component {
         && (!user.isLogin() || (user.isLogin() && !user.paid))
       ) {
         // todo 需要判断登录后是否支付
-        Router.redirect({url: '/subPages/join/index'});
-        return false;
+        // Router.redirect({url: '/subPages/join/index'});
+        // return false;
       }
       // TODO: 强制绑定方案待定
       if (user.isLogin()) {

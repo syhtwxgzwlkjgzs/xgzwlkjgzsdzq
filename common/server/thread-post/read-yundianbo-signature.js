@@ -1,10 +1,10 @@
-import api from '../api';
+// import {deleteDeny} from '@discuzq/sdk/dist/api/user/delete-deny';
 
 /**
  * 云点播前端上传签名
  * TODO: 待更新到sdk
  */
-export default async function readYundianboSignature(params = {}) {
+export default async function _readYundianboSignature(params = {}) {
   const res = await api.http({
     url: 'apiv3/signature',
     method: 'get',

@@ -1,5 +1,6 @@
-import api from '../api';
-export default async function readWalletUser(opts, ctx = null) {
-  const res = await api.readWalletUser({ ...opts, __context: ctx });
+import {readWalletUser} from '@discuzq/sdk/dist/api/wallet/read-walletuser';
+
+export default async function _readWalletUser(opts, ctx = null) {
+  const res = await readWalletUser({ ...opts, __context: ctx });
   return res;
 }

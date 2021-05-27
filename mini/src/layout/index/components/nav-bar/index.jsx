@@ -7,7 +7,7 @@ import { View, Text } from '@tarojs/components';
  * 导航栏
  * @prop {string} title
  */
-const NavBar = forwardRef(({ title = '', isShow = true }, ref) => {
+const NavBar = forwardRef(({ title = 'Discuz Q!', isShow = true }, ref) => {
   const [statusBarHeight, setStatusBarHeight] = useState(20)
   const navBarHeight = useRef(64)
 

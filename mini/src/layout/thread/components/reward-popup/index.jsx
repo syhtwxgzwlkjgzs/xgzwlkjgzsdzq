@@ -47,6 +47,7 @@ const InputPop = (props) => {
             className={styles.input}
             value={value}
             onChange={(e) => onInputChange(e.target.value)}
+            placeholderClass={styles.inputPlaceholder}
           />
           <Text className={styles.append}>元</Text>
         </View>

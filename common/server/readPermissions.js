@@ -1,5 +1,5 @@
-import api from './api';
-export default async function readPermissions(opts, ctx = null) {
-  const res = await api.readPermissions({ ...opts, __context: ctx });
+import {readPermissions} from '@discuzq/sdk/dist/api/user/read-permissions.js';
+export default async function _readPermissions(opts, ctx = null) {
+  const res = await readPermissions({ ...opts, __context: ctx });
   return res;
 }

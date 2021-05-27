@@ -1,6 +1,7 @@
-import api from '../api';
+import {readUsersDeny} from '@discuzq/sdk/dist/api/user/read-usersdeny';
 
-export default async function readUsersDeny(opts, ctx) {
-  const res = await api.readUsersDeny({ ...opts, __context: ctx });
+
+export default async function _readUsersDeny(opts, ctx) {
+  const res = await readUsersDeny({ ...opts, __context: ctx });
   return res;
 }

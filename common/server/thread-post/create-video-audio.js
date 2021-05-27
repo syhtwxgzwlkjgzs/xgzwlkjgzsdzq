@@ -8,7 +8,7 @@ import api from '../api';
  * @param {string} params.fileName 排序情况【不必须】
  * TODO: 待更新到sdk
  */
-export default async function createThreadVideoAudio(params) {
+export default async function _createThreadVideoAudio(params) {
   const res = await api.http({
     url: '/apiv3/thread/video',
     method: 'post',
