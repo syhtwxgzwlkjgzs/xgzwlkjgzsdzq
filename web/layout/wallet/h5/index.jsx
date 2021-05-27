@@ -249,7 +249,15 @@ class WalletH5Page extends React.Component {
     return Object.values(targetDateData).reduce((fullData, pageData) => [...fullData, ...pageData]);
   };
 
-  renderSelectedType = (ids) => {
+  // 点击切换tag的显示
+  renderSelectedType = () => {
+    if (this.state.selectType === 'all') {
+      if (this.state.tabsType === 'withdrawal') {
+        return '全部状态'
+      } else {
+        return '全部类型'
+      }
+    }
     let arr = {};
     switch (this.state.tabsType) {
       case 'income':
@@ -262,21 +270,9 @@ class WalletH5Page extends React.Component {
         arr = CASH_DETAIL_CONSTANTS;
     }
     for (let key in arr) {
-      if (arr[key].code === ids) {
+      if (arr[key].code === this.state.selectType) {
         return arr[key].text || '';
       }
-    }
-  }
-
-  handleTriggerWithSelectedType = () => {
-    if (this.state.selectType === 'all') {
-      if (this.state.tabsType === 'withdrawal') {
-        return '全部状态'
-      } else {
-        return '全部类型'
-      }
-    } else {
-      return this.renderSelectedType(this.state.selectType)
     }
   }
 
@@ -336,7 +332,7 @@ class WalletH5Page extends React.Component {
           <div className={layout.choiceTime}>
             <div className={layout.status} onClick={this.handleTypeSelectorClick}>
               <span className={layout.text}>
-                {this.handleTriggerWithSelectedType()}
+                {this.renderSelectedType()}
               </span>
               <Icon name="UnderOutlined" size="6" className={layout.icon}></Icon>
             </div>
