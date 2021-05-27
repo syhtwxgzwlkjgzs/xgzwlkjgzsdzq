@@ -18,17 +18,17 @@ import { inject, observer } from 'mobx-react';
  class BottomNavBar extends React.Component {
 
   state = {
-    tabs: []
+    tabs: [],
   }
 
   componentDidMount() {
-    const { curr = 'home' } = this.props
+    const { curr = 'home' } = this.props;
     const tabs = [
-      { icon: 'HomeOutlined', text: '首页', active: this.checkCurrActiveTab(curr, 'home'), router: '/pages/index/index' },
-      { icon: 'FindOutlined', text: '发现', active: this.checkCurrActiveTab(curr, 'search'), router: '/subPages/search/index' },
-      { icon: 'PlusOutlined', router: '/subPages/thread/post/index' },
-      { icon: 'MailOutlined', text: '消息', active: this.checkCurrActiveTab(curr, 'message'), router: '/subPages/message/index' },
-      { icon: 'ProfessionOutlined', text: '我的', active: this.checkCurrActiveTab(curr, 'my'), router: '/subPages/my/index' },
+      { type: 'home', icon: 'HomeOutlined', text: '首页', active: this.checkCurrActiveTab(curr, 'home'), router: '/pages/index/index' },
+      { type: 'search', icon: 'FindOutlined', text: '发现', active: this.checkCurrActiveTab(curr, 'search'), router: '/subPages/search/index' },
+      { type: 'add', icon: 'PlusOutlined', router: '/subPages/thread/post/index' },
+      { type: 'msg', icon: 'MailOutlined', text: '消息', active: this.checkCurrActiveTab(curr, 'message'), router: '/subPages/message/index' },
+      { type: 'my', icon: 'ProfessionOutlined', text: '我的', active: this.checkCurrActiveTab(curr, 'my'), router: '/subPages/my/index' },
     ]
 
     this.setState({ tabs })
@@ -49,7 +49,7 @@ import { inject, observer } from 'mobx-react';
       temp[idx].active = true;
       this.setState({ tabs: temp })
     }
-    Router.push({url: i.router});
+    Router.redirect({url: i.router});
   };
 
 
