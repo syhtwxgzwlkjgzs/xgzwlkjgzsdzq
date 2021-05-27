@@ -125,7 +125,7 @@ class index extends Component {
         {/* 上 */}
         <div className={styles.h5boxTop}>
           <div className={styles.headImgBox}>
-            <Avatar image={user.avatarUrl} size="big" name={user.username} />
+            <Avatar image={user.avatarUrl} size="big" name={user.nickname} />
           </div>
           {/* 粉丝|关注|点赞 */}
           <div className={styles.userMessageList}>
@@ -146,7 +146,7 @@ class index extends Component {
         {/* 中 用户昵称和他所在的用户组名称 */}
         <div>
           <div className={styles.userNameOrTeam}>
-            <span>{user.username}</span>
+            <span>{user.nickname}</span>
             <span>{user.group?.groupName}</span>
           </div>
           <p className={styles.text}>{user.signature || '这个人很懒，什么也没留下~'}</p>
