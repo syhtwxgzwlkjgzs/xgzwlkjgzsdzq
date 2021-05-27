@@ -351,6 +351,11 @@ class ThreadPostAction extends ThreadPostStore {
   setCurrentSelectedToolbar(type) {
     this.currentSelectedToolbar = type;
   }
+
+  @action.bound
+  setCursorPosition(val) {
+    this.cursorPosition = val;
+  }
 }
 
 export default ThreadPostAction;

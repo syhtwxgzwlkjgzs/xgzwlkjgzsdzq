@@ -4,7 +4,6 @@ import { inject } from 'mobx-react';
 
 import HOCLoginMode from '@middleware/HOCLoginMode';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
-import HOCWithNoLogin from '@middleware/HOCWithNoLogin';
 
 @inject('site')
 class ResetPassword extends React.Component {
@@ -14,4 +13,4 @@ class ResetPassword extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(HOCWithNoLogin(HOCLoginMode('phone')(ResetPassword)));
+export default HOCFetchSiteData(HOCLoginMode('phone')(ResetPassword));
