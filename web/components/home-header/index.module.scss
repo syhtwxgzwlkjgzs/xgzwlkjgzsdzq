@@ -96,6 +96,12 @@
       box-sizing: border-box;
     }
   }
+  .joinInfo {
+    justify-content: center;
+    .item {
+      padding: 0 $padding-2n;
+    }
+  }
 }
 .container_mode_login {
   height: rem(128);

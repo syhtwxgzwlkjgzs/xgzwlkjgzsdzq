@@ -5,7 +5,7 @@ import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import List from '@components/list';
-import { Button, Toast } from '@discuzq/design';
+import { Button, Toast, Avatar } from '@discuzq/design';
 import NoData from '@components/no-data';
 import SectionTitle from '@components/section-title';
 import { get } from '@common/utils/get';
@@ -26,7 +26,10 @@ import PayBox from '@components/payBox';
 class PartnerInviteH5Page extends React.Component {
   constructor(props) {
     super(props);
-    this.invitorName = '';
+    this.state = {
+      invitorName: '',
+      invitorAvatar: '/dzq-img/login-user.png',
+    }
   }
   async componentDidMount() {
     try {
@@ -40,9 +43,17 @@ class PartnerInviteH5Page extends React.Component {
       });
       const threadList = await search.getThreadList();
       const { inviteCode } = this.props.router.query;
-      const inviteResp = await inviteDetail({ code: inviteCode });
+      const inviteResp = await inviteDetail({
+        params: {
+          code: inviteCode
+        }
+      });
       const nickname = get(inviteResp, 'data.user.nickname', '');
-      this.setState({ invitorName: nickname });
+      const avatar = get(inviteResp, 'data.user.avatar', '');
+      this.setState({
+        invitorName: nickname,
+        invitorAvatar: avatar
+      });
 
       forum.setUsersPageData(usersList);
       forum.setThreadsPageData(threadList);
@@ -105,11 +116,15 @@ class PartnerInviteH5Page extends React.Component {
     const { platform, webConfig } = site;
     const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
     const { usersPageData, threadsPageData } = forum;
+    const { invitorName, invitorAvatar } = this.state;
     return (
       <List className={layout.page} allowRefresh={false}>
         {
           platform === 'h5'
-            ? <HomeHeader/>
+            ? <>
+                <Header/>
+                <HomeHeader hideInfo mode='join'/>
+              </>
             : <Header/>
         }
         <div className={layout.content}>
@@ -140,9 +155,14 @@ class PartnerInviteH5Page extends React.Component {
             {
               inviteCode
                 ? <div className={layout.bottom_tips}>
-                    <img className={layout.bottom_tips_img} src="/dzq-img/login-user.png" alt=""/>
+                    {/* <img className={layout.bottom_tips_img} src={ invitorAvatar } alt=""/> */}
+                    <Avatar
+                      size='small'
+                      text={ invitorName?.substring(0, 1)}
+                      className={layout.bottom_tips_img}
+                      image={ invitorAvatar }/>
                     <span className={layout.bottom_tips_text}>
-                      <span>{this.invitorName} 邀请您加入站点</span>
+                      <span>{ invitorName } 邀请您加入站点</span>
                       {siteMode === 'pay' ? <span>，可获得返现 ¥{((10 - siteMasterScale) * sitePrice / 10).toFixed(2)}</span> : ''}
                     </span>
                     <span className={layout.bottom_tips_arrows}></span>
