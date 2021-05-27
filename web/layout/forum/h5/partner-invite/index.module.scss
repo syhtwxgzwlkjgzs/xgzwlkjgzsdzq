@@ -53,6 +53,7 @@
   .bottom_tips{
     display: flex;
     justify-content: center;
+    align-items: center;
     position: absolute;
     top: rem(-46);
     padding: rem($padding-2n) 0;
@@ -67,9 +68,9 @@
     .bottom_tips_img{
       width: rem(18);
       height: rem(18);
+      border-radius: $border-radius-circle;
     }
     .bottom_tips_text{
-      line-height: rem(18);
       padding-left: rem($padding-2n);
     }
     .bottom_tips_arrows{

@@ -43,6 +43,11 @@ const networkRequestCatcher = async () => {
   }
 };
 
+const isExtFieldsOpen = (site) => {
+  const { setSite: { openExtFields } = {} } = site.webConfig;
+  return openExtFields === '0' ;
+};
+
 const checkCompleteUserInfo = (resp) => {
   const isMissNickname = get(resp, 'data.isMissNickname', false);
   const isMissRequireInfo = get(resp, 'data.userStatus') === 10;
@@ -88,7 +93,7 @@ const checkUserStatus = (resp) => {
  * 防水墙设置
  * @param {*} param0
  */
-const toTCaptcha = async ({registerCaptcha, appid, resCallback = () => {}, quitCallback = () => {}}) => {
+const toTCaptcha = async ({ registerCaptcha, appid, resCallback = () => {}, quitCallback = () => {} }) => {
   console.log(registerCaptcha);
   if (!registerCaptcha) {
     resCallback();
@@ -111,4 +116,4 @@ const toTCaptcha = async ({registerCaptcha, appid, resCallback = () => {}, quitC
   captcha.show();
 };
 
-export { throwFormattedError, networkRequestCatcher, checkCompleteUserInfo, checkUserStatus, toTCaptcha };
+export { throwFormattedError, networkRequestCatcher, checkCompleteUserInfo, checkUserStatus, toTCaptcha, isExtFieldsOpen };
