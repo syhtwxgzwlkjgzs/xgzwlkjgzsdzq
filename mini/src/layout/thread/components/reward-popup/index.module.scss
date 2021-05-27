@@ -22,6 +22,11 @@
   }
 }
 
+.inputPlaceholder {
+  color: $text-color-placeholder;
+  font-size: $font-size-base;
+}
+
 .container {
   width: 100%;
   display: flex;
@@ -74,7 +79,7 @@
   margin-top: $margin-4n;
   display: grid;
   grid-template-columns: repeat(4, 76px);
-  justify-content:space-between;
+  justify-content: space-between;
 
   .reward {
     display: flex;
