@@ -132,10 +132,10 @@ const List = forwardRef(({
 
   // 网络请求失败
   const handleError = () => {
-    setIsLoading(false);
-    setTimeout(() => {
-      onTouchMove();
-    }, 0)
+    // setIsLoading(false);
+    // setTimeout(() => {
+    //   onTouchMove();
+    // }, 0)
   }
 
   return (
