@@ -6,6 +6,7 @@ import { View, Text, Image, Button } from '@tarojs/components';
 import Router from '@discuzq/sdk/dist/router';
 import SharePopup from '../thread/share-popup';
 import isWeiXin from '@common/utils/is-weixin';
+import goToLoginPage from '@common/utils/go-to-login-page';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import logoImg from '../../../../web/public/dzq-img/admin-logo-x2.png'
 import Taro from '@tarojs/taro'
@@ -44,7 +45,7 @@ class HomeHeader extends React.Component {
     const { site } = this.props;
     const siteData = site.webConfig;
     if (siteData && siteData.setSite && siteData.setSite.siteLogo) {
-      return siteData.siteLogo;
+      return siteData.setSite.siteLogo;
     }
     return logoImg;
   }
