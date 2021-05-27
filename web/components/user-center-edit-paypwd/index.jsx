@@ -41,6 +41,7 @@ class index extends Component {
 
   // 点击去到下一步
   goToResetPayPwd = throttle(() => {
+    if (this.getDisabledWithButton()) return
     const { oldPayPwd } = this.state;
     this.props.payBox.oldPayPwd = oldPayPwd;
     this.props.payBox
@@ -49,7 +50,6 @@ class index extends Component {
         Router.push({ url: '/my/edit/reset-paypwd' });
       })
       .catch((err) => {
-        console.error(err, 'ssss_err');
         Toast.error({
           content: '密码错误',
           hasMask: false,
@@ -85,7 +85,7 @@ class index extends Component {
   // 点击提交
   handleSubmit = throttle(async () => {
     const { payPassword, isSubmit } = this.state;
-    if (isSubmit) return;
+    if (isSubmit || this.getDisabledWithButton()) return;
     this.setState({
       isSubmit: true,
     });
@@ -118,6 +118,21 @@ class index extends Component {
         this.initState();
       });
   }, 500);
+
+  /**
+   * 获取按钮禁用状态
+   * @returns true 表示禁用 false表示不禁用
+   */
+   getDisabledWithButton = () => {
+    const { payPassword, oldPayPwd } = this.state;
+    let disabled = false
+    if (this.props.user?.canWalletPay) {
+      disabled = !oldPayPwd || oldPayPwd.length !== 6
+    } else {
+      disabled = !payPassword || payPassword.length !== 6
+    }
+    return disabled
+   }
 
   // 如果没有设置支付密码 显示设置支付密码
   renderSetPayPwd = () => {
@@ -174,7 +189,7 @@ class index extends Component {
           {this.props.user?.canWalletPay ? (
             <Button
               full
-              disabled={!oldPayPwd || oldPayPwd.length !== 6}
+              disabled={this.getDisabledWithButton()}
               onClick={this.goToResetPayPwd}
               type={'primary'}
               className={styles.btn}
@@ -184,7 +199,7 @@ class index extends Component {
           ) : (
             <Button
               full
-              disabled={!payPassword || payPassword.length !== 6}
+              disabled={this.getDisabledWithButton()}
               onClick={this.handleSubmit}
               type={'primary'}
               className={styles.btn}

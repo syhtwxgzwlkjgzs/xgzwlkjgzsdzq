@@ -69,6 +69,7 @@ class index extends Component {
 
   // 点击下一步
   handleStepBtn = throttle(async () => {
+    if (this.getDisabledWithButton()) return
     const { list = [], currentStep, bindMobile } = this.state;
     if (list.length !== 6) return;
     if (currentStep === 'first') {
@@ -187,16 +188,25 @@ class index extends Component {
 
   validateTel = value => (/^[1][3-9]\d{9}$/.test(value))
 
-  render() {
-    const { currentStep, list = [], isBlur, bindMobile, initTimeValue, isKeyBoardVisible } = this.state;
-    const { mobile } = this.props?.user;
-    const value_pass_check = currentStep === 'second' ? this.validateTel(bindMobile) : true;
+  /**
+* 获取按钮禁用状态
+* @returns true 表示禁用 false表示不禁用
+*/
+  getDisabledWithButton = () => {
+    const { currentStep, list = [], bindMobile } = this.state;
     let isSubmit = false;
     if (currentStep === 'first') {
       isSubmit = list.length !== 6;
     } else if (currentStep === 'second') {
       isSubmit = (list.length !== 6 || !this.validateTel(bindMobile));
     }
+    return isSubmit
+  }
+
+  render() {
+    const { currentStep, list = [], isBlur, bindMobile, initTimeValue, isKeyBoardVisible } = this.state;
+    const { mobile } = this.props?.user;
+    const value_pass_check = currentStep === 'second' ? this.validateTel(bindMobile) : true;
     return (
       <div id={styles.editMobileContent}>
         <Header />
@@ -225,7 +235,7 @@ class index extends Component {
           </div>
         </div>
         <div className={`${styles.bottom} ${isKeyBoardVisible && styles.bootom2}`}>
-          <Button full disabled={isSubmit} onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>{this.state.currentStep === 'first' ? '下一步' : '提交'}</Button>
+          <Button full disabled={this.getDisabledWithButton()} onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>{this.state.currentStep === 'first' ? '下一步' : '提交'}</Button>
         </div>
       </div>
     );

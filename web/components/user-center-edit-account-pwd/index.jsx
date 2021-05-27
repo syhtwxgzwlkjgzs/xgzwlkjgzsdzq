@@ -63,6 +63,7 @@ class index extends Component {
 
   // 点击提交
   handleSubmit = throttle(async () => {
+    if (this.getDisabledWithButton()) return
     const { oldPassword, newPassword, newPasswordRepeat } = this.state
     if (newPassword !== newPasswordRepeat) {
       Toast.error({
@@ -159,7 +160,11 @@ class index extends Component {
     )
   }
 
-  render() {
+  /**
+   * 获取禁用按钮状态
+   * @returns true 表示禁用 false 表示不禁用
+   */
+  getDisabledWithButton = () => {
     const { oldPassword, newPassword, newPasswordRepeat } = this.state
     let isSubmit = false
     if (this.props.user?.hasPassword) {
@@ -167,6 +172,10 @@ class index extends Component {
     } else {
       isSubmit = (!newPassword || !newPasswordRepeat)
     }
+    return isSubmit
+  }
+
+  render() {
     return (
       <div id={styles.accountPwdContent}>
         <Header />
@@ -179,7 +188,7 @@ class index extends Component {
           )
         }
         <div className={styles.bottom}>
-          <Button full onClick={this.handleSubmit} disabled={isSubmit} type={"primary"} className={styles.btn}>提交</Button>
+          <Button full onClick={this.handleSubmit} disabled={this.getDisabledWithButton()} type={"primary"} className={styles.btn}>提交</Button>
         </div>
       </div>
     )
