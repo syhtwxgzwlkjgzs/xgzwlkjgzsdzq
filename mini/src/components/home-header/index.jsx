@@ -44,7 +44,7 @@ class HomeHeader extends React.Component {
     const { site } = this.props;
     const siteData = site.webConfig;
     if (siteData && siteData.setSite && siteData.setSite.siteLogo) {
-      return siteData.siteLogo;
+      return siteData.setSite.siteLogo;
     }
     return logoImg;
   }
