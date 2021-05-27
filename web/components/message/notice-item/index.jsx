@@ -167,7 +167,7 @@ class Index extends Component {
                 {item.username || this.filterTag(item.title)}
               </div>
               {['chat', 'thread'].includes(type) && (
-                <div className={styles.time}>{diffDate(new Date(item.createdAt))}</div>
+                <div className={styles.time}>{diffDate(item.createdAt)}</div>
               )}
               {type === 'financial' && <div className={styles.amount}>+{parseFloat(item.amount).toFixed(2)}</div>}
             </div>
@@ -205,7 +205,7 @@ class Index extends Component {
 
             {/* 底部 */}
             {['financial', 'account'].includes(type) && (
-              <div className={`${styles.bottom} ${styles.time}`}>{diffDate(new Date(item.createdAt))}</div>
+              <div className={`${styles.bottom} ${styles.time}`}>{diffDate(item.createdAt)}</div>
             )}
           </div>
         </div>
