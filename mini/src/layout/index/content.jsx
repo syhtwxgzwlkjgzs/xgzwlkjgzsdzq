@@ -14,6 +14,7 @@ import styles from './index.module.scss';
 @inject('site')
 @inject('user')
 @inject('index')
+@inject('baselayout')
 @observer
 class IndexH5Page extends React.Component {
   constructor(props) {

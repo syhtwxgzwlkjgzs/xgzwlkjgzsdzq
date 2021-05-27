@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './index.module.scss';
-import {Icon,Button} from '@discuzq/design'
+import Button from '@discuzq/design/dist/components/button';
+import Icon from '@discuzq/design/dist/components/icon';
 import Header from '@components/header';
 import { View, Text, Image } from '@tarojs/components';
 import Taro, { getLaunchOptionsSync } from '@tarojs/taro';
