@@ -194,7 +194,7 @@ const InputPop = (props) => {
 
         <div className={styles.button}>
           <div className={styles.operates}>
-            <Icon
+            {/* <Icon
               className={classnames(styles.operate, showEmojis && styles.actived)}
               name="SmilingFaceOutlined"
               size={20}
@@ -211,7 +211,7 @@ const InputPop = (props) => {
               name="PictureOutlinedBig"
               size={20}
               onClick={onPcitureIconClick}
-            ></Icon>
+            ></Icon> */}
           </div>
 
           <div onClick={onSubmitClick} className={styles.ok}>
