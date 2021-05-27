@@ -163,7 +163,7 @@ class HomeHeader extends React.Component {
             </li>
           </ul>
         }
-        {isWeiXin && <SharePopup visible={visible} onClose={this.onClose} />}
+        {isWeiXin() && <SharePopup visible={visible} onClose={this.onClose} />}
       </div>
     );
   }
