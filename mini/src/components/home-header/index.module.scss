@@ -65,6 +65,11 @@
     box-sizing: border-box;
     position: absolute;
     bottom: $font-line-height-primary;
+    Button {
+      margin:0;
+      padding:0;
+      border: 0;
+    }
     .item {
       display: flex;
       align-items: center;

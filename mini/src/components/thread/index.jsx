@@ -1,7 +1,7 @@
 import React from 'react';
 import Router from '@discuzq/sdk/dist/router';
-import Button from '@discuzq/design/dist/components/button/index';
-import Toast from '@discuzq/design/dist/components/toast/index';
+import { withRouter } from 'next/router';
+import { Button, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import BottomEvent from './bottom-event';
 import UserInfo from './user-info';
@@ -33,14 +33,15 @@ class Index extends React.Component {
       this.handleShare()
     }
     handleShare = debounce(() => {
+      
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+        goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
         return;
       }
 
-      // Toast.info({ content: '复制链接成功' });
+      Toast.info({ content: '复制链接成功' });
 
       const { title = '', threadId = '', user } = this.props.data || {};
 
@@ -52,7 +53,7 @@ class Index extends React.Component {
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
         }
       });
-    }, 1000);
+    }, 2000);
     // 评论
     onComment = (e) => {
       e && e.stopPropagation();
@@ -60,7 +61,7 @@ class Index extends React.Component {
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+        goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
         return;
       }
 
@@ -81,11 +82,10 @@ class Index extends React.Component {
     handlePraise = debounce(() => {
 
       if(this.state.isSendingLike) return;
-
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+        goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
         return;
       }
       const { data = {}, user } = this.props;
@@ -103,14 +103,16 @@ class Index extends React.Component {
 
     // 支付
     onPay = (e) => {
-      e && e.stopPropagation();
+      //e && e.stopPropagation();
       this.handlePay()
     }
-    handlePay = debounce(async () => {
+    handlePay = debounce(async (e) => {
+      //e && e.stopPropagation();
+
       // 对没有登录的先做
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+        goToLoginPage({ url: '/user/login' });
         return;
       }
 
@@ -180,7 +182,7 @@ class Index extends React.Component {
         <View className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
           <View className={styles.header} onClick={this.onClick}>
               <UserInfo
-                name={user.nickname || ''}
+                name={user.userName || ''}
                 avatar={user.avatar || ''}
                 location={position.location}
                 view={`${viewCount}`}
@@ -216,4 +218,4 @@ class Index extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default Index;
+export default withRouter(Index);
