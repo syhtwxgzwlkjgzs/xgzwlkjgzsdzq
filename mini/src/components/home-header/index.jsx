@@ -2,13 +2,14 @@ import React, { useMemo } from 'react';
 import styles from './index.module.scss';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import { inject, observer } from 'mobx-react';
-import { View, Text, Image } from '@tarojs/components';
+import { View, Text, Image, Button } from '@tarojs/components';
 import Router from '@discuzq/sdk/dist/router';
 import SharePopup from '../thread/share-popup';
 import isWeiXin from '@common/utils/is-weixin';
+import goToLoginPage from '@common/utils/go-to-login-page';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import logoImg from '../../../../web/public/dzq-img/admin-logo-x2.png'
-
+import Taro from '@tarojs/taro'
 /**
  * 帖子头部
  * @prop {string} bgColor 背景颜色
@@ -18,6 +19,7 @@ import logoImg from '../../../../web/public/dzq-img/admin-logo-x2.png'
  @inject('site')
  @inject('user')
  @observer
+
 class HomeHeader extends React.Component {
   state = {
     visible: false,
@@ -43,7 +45,7 @@ class HomeHeader extends React.Component {
     const { site } = this.props;
     const siteData = site.webConfig;
     if (siteData && siteData.setSite && siteData.setSite.siteLogo) {
-      return siteData.siteLogo;
+      return siteData.setSite.siteLogo;
     }
     return logoImg;
   }
@@ -63,22 +65,6 @@ class HomeHeader extends React.Component {
     };
   }
 
-  onShare = () => {
-    const { user } = this.props;
-    if (!user.isLogin()) {
-      goToLoginPage({ url: '/user/login' });
-      return;
-    }
-    // 判断是否在微信浏览器
-    if (isWeiXin()) {
-      this.setState({ visible: true });
-    } else {
-      const title = document?.title || '';
-      h5Share(title);
-      Toast.info({ content: '复制链接成功' });
-    }
-  }
-
   onClose = () => {
     this.setState({ visible: false });
   }
@@ -88,7 +74,6 @@ class HomeHeader extends React.Component {
       this.setState({ height: this.domRef.current.clientHeight })
     }
   }
-
   render() {
     const { bgColor, hideInfo = false, style = {}, digest = null, mode = '' } = this.props;
     const { visible } = this.state;
@@ -96,7 +81,7 @@ class HomeHeader extends React.Component {
 
     return (
       <View ref={this.domRef}
-        className={`${styles.container} ${mode ? styles[`container_mode_${mode}`] : ''}`}
+        className={`${styles.container} ${mode ? styles[`container_mode_${mode}`] : ''}`} 
         style={{...style, ...this.getBgHeaderStyle(bgColor)}}
       >
         {hideInfo && <View className={styles.topBar}>
@@ -133,10 +118,10 @@ class HomeHeader extends React.Component {
             <Text className={styles.text}>内容</Text>
             <Text className={styles.content}>{countThreads}</Text>
           </View>
-          <View className={styles.item}>
+          <Button className={styles.item} openType="share" plain='true'>
             <Icon className={styles.shareIcon} name="ShareAltOutlined"/>
             <Text className={styles.text}>分享</Text>
-          </View>
+          </Button>
         </View>}
         {isWeiXin && <SharePopup visible={visible} onClose={this.onClose} />}
       </View>

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import styles from './index.module.scss';
 import Tip from '../tip';
 import Icon from '@discuzq/design/dist/components/icon/index';
-import { View, Text } from '@tarojs/components'
+import { View, Text, Button } from '@tarojs/components'
 
 /**
  * 帖子底部内容
@@ -77,16 +77,28 @@ const Index = ({
       <View className={needHeight ? styles.operation : styles.operations}>
         {
           postList.map((item, index) => (
-              <View key={index} className={styles.fabulous} onClick={item.event}>
-                <Icon
+              item.name === '分享'?(
+                <Button plain='true' className={styles.fabulous} openType='share'>
+                  <Icon
                   className={`${styles.icon} ${item.type} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`}
+                  name={item.icon}
+                  size={16}>
+                </Icon>
+                  <Text className={styles.fabulousPost}>
+                  {item.name}
+                </Text>
+                </Button>
+              ):
+              (<View key={index} className={styles.fabulous} onClick={item.event}>
+                <Icon
+                  className={`${styles.icon} ${item.type} ${styles.dislikedColor}`}
                   name={item.icon}
                   size={16}>
                 </Icon>
                 <Text className={isLiked && item.name ===  '赞' ? styles.fabulousCancel: styles.fabulousPost}>
                   {item.name}
                 </Text>
-              </View>
+              </View>)
           ))
         }
       </View>
