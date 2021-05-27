@@ -8,6 +8,7 @@ import filterData from './data';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
+import { ScrollView } from '@tarojs/components';
 
 
 const { Col, Row } = Flex;
@@ -88,7 +89,7 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
       }
     }
 
-    const params = { categoryids, types: second, essence: third, sequence };
+    const params = { categoryids, types: second === 'all' ? [] : second, essence: third, sequence };
 
     onSubmit(params);
   };
@@ -162,11 +163,11 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
       onClose={handleCancel}
     >
         <View className={styles.container}>
-          <View className={styles.content}>
+          <ScrollView className={styles.content} scrollY>
             <View className={styles.list} >
              { data && data.map((item, index) => renderContent(item, index)) }
             </View>
-          </View>
+          </ScrollView>
 
           <View className={styles.footer}>
             <Button className={styles.button} onClick={handleSubmit} type="primary">筛选</Button>

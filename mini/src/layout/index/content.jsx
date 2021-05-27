@@ -7,7 +7,6 @@ import ThreadContent from '../../components/thread';
 import HomeHeader from '../../components/home-header';
 import FilterView from './components/filter-view';
 import BaseLayout from '../../components/base-layout';
-import { throttle } from '@common/utils/throttle-debounce.js'
 import TopNew from './components/top-news';
 import NavBar from './components/nav-bar';
 import Taro from '@tarojs/taro';
@@ -67,12 +66,16 @@ class IndexH5Page extends React.Component {
 
   // 点击更多弹出筛选
   searchClick = () => {
+    this.props.index.setHiddenTabBar(true)
+
     this.setState({
       visible: true,
     });
   };
   // 关闭筛选框
   onClose = () => {
+    this.props.index.setHiddenTabBar(false)
+
     this.setState({
       visible: false,
     });
@@ -158,9 +161,16 @@ class IndexH5Page extends React.Component {
   };
 
   handleScroll = (e) => {
-    const { scrollTop = 0 } = e?.detail || {}
-    const { navBarHeight } = this.state || {}
-    this.setState({ fixedTab: !(scrollTop < navBarHeight) })
+    const { scrollTop = 0 } = e?.detail || {};
+    const { height = 165 } = this.headerRef.current?.state || {};
+    const { fixedTab } = this.state;
+
+    // 只需要滚到临界点触发setState，而不是每一次滚动都触发
+    if(!fixedTab && scrollTop >= height) {
+      this.setState({ fixedTab: true })
+    } else if(fixedTab && scrollTop < height) {
+      this.setState({ fixedTab: false })
+    }
   }
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
@@ -188,14 +198,18 @@ class IndexH5Page extends React.Component {
   renderTabs = () => {
     const { index } = this.props;
     const { currentIndex, fixedTab, navBarHeight } = this.state;
-    const { categories = [] } = index;
+    const { categories = [], hiddenTabBar } = index;
     const newCategories = this.handleCategories(categories);
 
     return (
       <>
         {categories?.length > 0 && (
           <>
-          <View ref={this.listRef} className={`${!fixedTab ? styles.homeContent : styles.homeContentFix}`} style={{top: `${navBarHeight}px`}}>
+          <View 
+            ref={this.listRef}
+            className={`${styles.homeContent} ${fixedTab && styles.fixed}`}
+            style={{top: `${navBarHeight}px`}}
+          >
             <Tabs
               className={styles.tabsBox}
               scrollable
@@ -265,6 +279,7 @@ class IndexH5Page extends React.Component {
         curr='home'
         pageName='home'
         preload={1000}
+        requestError={this.props.isError}
       >
         <HomeHeader ref={this.headerRef} />
 

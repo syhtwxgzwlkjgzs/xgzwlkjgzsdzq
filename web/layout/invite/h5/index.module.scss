@@ -17,7 +17,8 @@
     height: rem(120);
     box-sizing: border-box;
     position: absolute;
-    left: rem(128);
+    left: 50%;
+    margin-left: -60px;
     top: rem(-120);
     border-radius: 50%;
     background: var(--color-white);
@@ -34,7 +35,8 @@
     width: rem(343);
     height: rem(213);
     position: absolute;
-    left: rem(16);
+    margin-left: -171.5px;
+    left: 50%;
     top: rem(-60);
     background: var(--color-white);
     border-radius: rem(5);
@@ -213,7 +215,7 @@
     background: var(--color-white);
     border-top: rem(1) solid var(--border-line-color);
     .invite_bottom_button{
-      width: rem(343);
+      width: 100%;
       height: rem(42);
       background: var(--color-primary);
       font-weight: normal;

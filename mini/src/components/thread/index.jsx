@@ -1,6 +1,5 @@
 import React from 'react';
 import Router from '@discuzq/sdk/dist/router';
-import { withRouter } from 'next/router';
 import { Button, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import BottomEvent from './bottom-event';
@@ -41,7 +40,7 @@ class Index extends React.Component {
         return;
       }
 
-      Toast.info({ content: '复制链接成功' });
+      // Toast.info({ content: '复制链接成功' });
 
       const { title = '', threadId = '', user } = this.props.data || {};
 
@@ -218,4 +217,4 @@ class Index extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default withRouter(Index);
+export default Index;

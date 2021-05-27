@@ -613,7 +613,7 @@ class Index extends Component {
                 {rewardQa.value &&
                   <Units
                     type='tag'
-                    tagContent={`悬赏金额${rewardQa.value}元\\结束时间${rewardQa.expiredAt}`}
+                    tagContent={`悬赏金额${rewardQa.value}元\\结束时间${rewardQa.times}`}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
                     onTagRemoveClick={() => { setPostData({ rewardQa: {} }) }}
                   />
