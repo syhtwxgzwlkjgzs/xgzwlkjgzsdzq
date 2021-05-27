@@ -42,6 +42,15 @@ class Index extends React.Component {
     const { index } = this.props;
     const { categoryids, types, essence, sequence, attention, sort } = index.filter;
 
+    let newTypes = [];
+    if (types) {
+      if (!(types instanceof Array)) {
+        newTypes = types === 'all' ? [] : [types];
+      } else {
+        newTypes = types.filter(item => item !== 'all');
+      }
+    }
+
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasCategoriesData = !!index.categories;
     const hasSticksData = !!index.sticks;
@@ -57,7 +66,7 @@ class Index extends React.Component {
     if (!hasThreadsData) {
       this.props.index.getReadThreadList({
         sequence: sequence || (this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0), 
-        filter: { categoryids, types, essence, attention, sort } 
+        filter: { categoryids, types: newTypes, essence, attention, sort } 
       });
     } else {
       // 如果store中有值，则需要获取之前的分页数
@@ -72,9 +81,9 @@ class Index extends React.Component {
     let newTypes = [];
     if (types) {
       if (!(types instanceof Array)) {
-        newTypes = [types];
+        newTypes = types === 'all' ? [] : [types];
       } else {
-        newTypes = types;
+        newTypes = types.filter(item => item !== 'all');
       }
     }
 
