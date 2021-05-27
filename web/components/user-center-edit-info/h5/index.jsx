@@ -135,7 +135,7 @@ class index extends Component {
               <label>账户密码</label>
             </div>
             <div className={styles.userCenterEditValue} onClick={this.handleGoToEditAccountPwd}>
-              <div className={styles.ucText}>修改</div>
+              <div className={styles.ucText}>{this.props.user?.hasPassword ? '修改' : '设置'}</div>
               <Icon name="RightOutlined" />
             </div>
           </div>
@@ -144,7 +144,7 @@ class index extends Component {
               <label>支付密码</label>
             </div>
             <div className={styles.userCenterEditValue} onClick={this.handleGoToEditPayPwd}>
-              <div className={styles.ucText}>修改</div>
+              <div className={styles.ucText}>{this.props.user?.canWalletPay ? "修改" : "设置"}</div>
               <Icon name="RightOutlined" />
             </div>
           </div>
