@@ -57,7 +57,7 @@ class SearchResultH5Page extends React.Component {
   };
 
   onUserClick = ({ userId } = {}) => {
-    this.props.router.push(`/my/others?isOtherPerson=true&otherId=${userId}`);
+    this.props.router.push(`/user/${userId}`);
   };
 
   // 跳转话题详情
