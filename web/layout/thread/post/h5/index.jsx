@@ -136,8 +136,10 @@ class ThreadCreate extends React.Component {
     // 当表情显示的时候
     if (this.props.currentDefaultOperation === defaultOperation.emoji) {
       bottombarHeight += 218;
-      toolbar.className += ` ${toolbarStyles.emoji}`;
-    } else toolbar.className = toolbarStyles['dvditor-toolbar'];
+      if (toolbar) toolbar.className += ` ${toolbarStyles.emoji}`;
+    } else {
+      if (toolbar) toolbar.className = toolbarStyles['dvditor-toolbar'];
+    }
     if (moneybox && !action) bottombarHeight += 65; // 直接算最高的高度
     return bottombarHeight;
   }
