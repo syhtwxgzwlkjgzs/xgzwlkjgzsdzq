@@ -1,9 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button, Icon, Popup, Flex } from '@discuzq/design';
+import Button from '@discuzq/design/dist/components/button/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Popup from '@discuzq/design/dist/components/popup/index';
+import Flex from '@discuzq/design/dist/components/flex/index';
 import { noop } from '@components/thread/utils';
 import filterData from './data';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
+import Router from '@discuzq/sdk/dist/router';
+
 
 const { Col, Row } = Flex;
 
@@ -60,7 +65,7 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
   };
 
   const goSearch = () => {
-    router.push(`/search`);
+    Router.push({ url: '/subPages/search/index' });
   }
 
   // 结果数据处理
@@ -70,9 +75,17 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
       sequence = 1;
     }
 
-    const categoryids = [first];
+    let categoryids = [first];
     if (firstChildren) {
-      categoryids.push(firstChildren);
+      categoryids = [firstChildren];
+    } else {
+      const tmp = data[0]?.data?.filter(item => item.pid === first)
+      if (tmp.length && tmp[0]?.children?.length) {
+        categoryids = [first]
+        tmp[0]?.children?.forEach(item => {
+          categoryids.push(item.pid)
+        })
+      }
     }
 
     const params = { categoryids, types: second, essence: third, sequence };
@@ -101,7 +114,7 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
     return (
       <View className={styles.moduleWrapper} key={key}>
         <View className={styles.title}>
-          {title}
+          <Text>{title}</Text>
           {key === 0 && <Icon className={styles.searchIcon} name='SearchOutlined' size={20} onClick={goSearch}></Icon>}
         </View>
         <Row className={styles.wrapper} gutter={10}>
@@ -125,9 +138,9 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
               {
                 subData.map((item, index) => (
                   <Col span={3}>
-                    <Text 
-                      className={`${firstChildren === item.pid ? styles.childrenActive : ''} ${styles.childrenSpan}`} 
-                      key={`${index}-${index}`} 
+                    <Text
+                      className={`${firstChildren === item.pid ? styles.childrenActive : ''} ${styles.childrenSpan}`}
+                      key={`${index}-${index}`}
                       onClick={() => onClickSecond(item.pid, type)}>
                         {item.name}
                     </Text>
@@ -154,7 +167,7 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
              { data && data.map((item, index) => renderContent(item, index)) }
             </View>
           </View>
-          
+
           <View className={styles.footer}>
             <Button className={styles.button} onClick={handleSubmit} type="primary">筛选</Button>
             <View className={styles.footerBtn} onClick={handleCancel}>

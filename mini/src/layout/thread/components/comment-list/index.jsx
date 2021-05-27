@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
-import { Icon } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import { View, Text, Image } from '@tarojs/components';
 import ReplyList from '../reply-list/index';
 import { diffDate } from '@common/utils/diff-date';
@@ -128,14 +128,14 @@ class CommentList extends React.Component {
           <View className={styles.commentListAvatar} onClick={() => this.avatarClick()}>
             <Avatar
               image={this.props.data.user.avatar}
-              name={this.props.data.user.username || this.props.data.user.userName || ''}
+              name={this.props.data.user.nickname || this.props.data.user.userName || ''}
               circle={true}
             ></Avatar>
           </View>
           <View className={styles.commentListContent}>
             <View className={styles.commentListContentText} onClick={() => this.toCommentDetail()}>
               <View className={styles.commentListName}>
-                {this.props.data.user.username || this.props.data.user.userName}
+                {this.props.data.user.nickname || this.props.data.user.userName}
               </View>
               <View className={styles.commentListText} dangerouslySetInnerHTML={{ __html: this.filterContent() }}></View>
             </View>

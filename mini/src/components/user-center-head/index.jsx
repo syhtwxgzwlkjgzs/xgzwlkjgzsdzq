@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
-import { Button, Icon, Toast } from '@discuzq/design';
+import Button from '@discuzq/design/dist/components/button/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import Router from '@discuzq/sdk/dist/router';
-import { withRouter } from 'next/router';
 import { View, Text } from '@tarojs/components';
 
 @inject('user')
@@ -192,4 +193,4 @@ class index extends Component {
   }
 }
 
-export default withRouter(index)
+export default index

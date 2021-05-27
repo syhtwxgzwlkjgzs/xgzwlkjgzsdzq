@@ -1,7 +1,9 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
-import { Icon, Button } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Button from '@discuzq/design/dist/components/button/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import { parseContentData } from '../../utils';
 import ImageDisplay from '@components/thread/image-content';
 import AudioPlay from '@components/thread/audio-play';
@@ -16,6 +18,8 @@ import threadPay from '@common/pay-bussiness/thread-pay';
 import classnames from 'classnames';
 import UserInfo from '@components/thread/user-info';
 import styles from './index.module.scss';
+import { setClipboardData, hideToast } from '@tarojs/taro';
+import goToLoginPage from '@common/utils/go-to-login-page';
 
 // 帖子内容
 const RenderThreadContent = inject('user')(
@@ -66,6 +70,12 @@ const RenderThreadContent = inject('user')(
     const parseContent = parseContentData(indexes);
 
     const onContentClick = async () => {
+      if (!props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        goToLoginPage({ url: '/user/login' });
+        return;
+      }
+
       const thread = props.store.threadData;
       const { success } = await threadPay(thread, props.user?.userInfo);
 
@@ -88,7 +98,15 @@ const RenderThreadContent = inject('user')(
     };
 
     const onBuyClick = (url) => {
-      url && window.open(url);
+      setClipboardData({
+        data: url,
+        success: () => {
+          hideToast();
+          Toast.info({
+            content: '商品地址已复制，请在浏览器上黏贴访问',
+          });
+        },
+      });
     };
 
     const onRewardClick = () => {
@@ -100,7 +118,7 @@ const RenderThreadContent = inject('user')(
         <View className={styles.header}>
           <View className={styles.userInfo}>
             <UserInfo
-              name={threadStore?.threadData?.user?.userName || ''}
+              name={threadStore?.threadData?.user?.nickname || ''}
               avatar={threadStore?.threadData?.user?.avatar || ''}
               location={threadStore?.threadData?.position.location || ''}
               view={`${threadStore?.threadData?.viewCount}` || ''}

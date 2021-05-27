@@ -2,7 +2,10 @@
  * 付费表单 - 全部
  */
 import React, { useState, useEffect } from 'react'; // 性能优化的
-import { Button, Input, Slider, Toast } from '@discuzq/design'; // 原来就有的封装
+import Button from '@discuzq/design/dist/components/button/index';
+import Input from '@discuzq/design/dist/components/input/index';
+import Slider from '@discuzq/design/dist/components/slider/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import DDialog from '@components/dialog';
 import styles from './index.module.scss'; // 私有样式
 import PropTypes from 'prop-types'; // 类型拦截

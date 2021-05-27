@@ -1,15 +1,18 @@
 import React, { useState, useCallback } from 'react';
 import styles from './index.module.scss';
-import { Icon } from '@discuzq/design';
-import { View, Text } from '@tarojs/components';
-import Taro from '@tarojs/taro';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import { noop } from '@components/thread/utils';
+import { View } from '@tarojs/components';
+import Router from '@discuzq/sdk/dist/router';
+
 
 /**
  * BottomNavBar组件
  * @prop {boolean} placeholder 固定在底部时，是否在标签位置生成一个等高的占位元素
+ * @prop {boolean} curr 常亮icon
  */
 
-const BottomNavBar = ({ router, fixed = true, placeholder = false, curr = 'home' }) => {
+const BottomNavBar = ({ router, fixed = true, placeholder = false, curr = 'home', onClick = noop }) => {
 
   const checkCurrActiveTab = useCallback((curr, target) => {
     return curr === target;
@@ -24,13 +27,14 @@ const BottomNavBar = ({ router, fixed = true, placeholder = false, curr = 'home'
   ]);
 
   const handleClick = (i, idx) => {
+    onClick(i, idx)
     const temp = [...tabs];
     if (i.text) {
       temp.find(i => i.active).active = false;
       temp[idx].active = true;
       setTabs(temp);
     }
-    Taro.navigateTo({url: i.router });
+    Router.push({url: i.router});
   };
 
   return (

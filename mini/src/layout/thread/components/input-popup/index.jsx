@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View } from '@tarojs/components';
-import { Icon, Popup, Textarea, Upload, Button, Text } from '@discuzq/design';
+import Popup from '@discuzq/design/dist/components/popup/index';
+import Textarea from '@discuzq/design/dist/components/textarea/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Upload from '@discuzq/design/dist/components/upload/index';
+import Button from '@discuzq/design/dist/components/button/index';
+
 import styles from './index.module.scss';
 
 const InputPop = (props) => {

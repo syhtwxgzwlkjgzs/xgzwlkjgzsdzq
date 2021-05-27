@@ -2,7 +2,7 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { View } from '@tarojs/components';
 import styles from './index.module.scss';
-import { Icon } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import Router from '@discuzq/sdk/dist/router';
 import { getCurrentInstance } from '@tarojs/taro';
 import PayBoxProvider from '@components/payBox/payBoxProvider';
@@ -56,8 +56,8 @@ export default class Page extends React.Component {
         && (!user.isLogin() || (user.isLogin() && !user.paid))
       ) {
         // todo 需要判断登录后是否支付
-        Router.redirect({url: '/subPages/join/index'});
-        return false;
+        // Router.redirect({url: '/subPages/join/index'});
+        // return false;
       }
       // TODO: 强制绑定方案待定
       if (user.isLogin()) {

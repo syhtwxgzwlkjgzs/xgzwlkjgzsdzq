@@ -126,7 +126,7 @@ class CommentList extends React.Component {
           <div className={styles.commentListAvatar} onClick={() => this.avatarClick()}>
             <Avatar
               image={this.props.data?.user?.avatar}
-              name={this.props.data?.user?.username || this.props.data?.user?.userName || ''}
+              name={this.props.data?.user?.nickname || this.props.data?.user?.userName || ''}
               circle={true}
             ></Avatar>
           </div>
@@ -134,7 +134,7 @@ class CommentList extends React.Component {
           <div className={styles.commentListContent}>
             <div className={styles.commentListContentText} onClick={() => this.toCommentDetail()}>
               <div className={styles.commentListName}>
-                {this.props.data?.user?.username || this.props.data?.user?.userName || '用户异常，请联系管理员'}
+                {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常，请联系管理员'}
               </div>
               <div className={styles.commentListText} dangerouslySetInnerHTML={{ __html: this.filterContent() }}></div>
               {/* 图片展示 */}

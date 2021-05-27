@@ -684,7 +684,7 @@ class ThreadPCPage extends React.Component {
             <div className={layout.title}>编辑评论</div>
             <div className={layout.user}>
               <UserInfo
-                name={this?.comment?.user?.username || ''}
+                name={this?.comment?.user?.nickname || ''}
                 avatar={this?.comment?.user?.avatar || ''}
                 time={`${this?.comment?.updatedAt}` || ''}
                 userId={this?.comment?.user?.userId}

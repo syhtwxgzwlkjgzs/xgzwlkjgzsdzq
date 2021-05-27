@@ -4,7 +4,7 @@
 import React, { memo, useState, useEffect } from 'react';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
-import { Icon } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Taro from '@tarojs/taro';
@@ -45,12 +45,16 @@ const Index = (props) => {
 
 
   return (
-    <View className={classNames(styles['positon'], {
+    <View onClick={chooseLocation} className={classNames(styles['positon'], {
       [styles['chose']]: isChose,
     })}>
-      <Icon name='PositionOutlined' size={10} onClick={chooseLocation} />
-      <Text className={styles['text']} onClick={chooseLocation}>{positon.name || '你在哪里？'}</Text>
-      {isChose && <Icon className={styles['remove-icon']} name='CloseOutlined' size={10} onClick={removeLocation} />}
+      <Icon name='PositionOutlined' size={10} />
+      <Text className={styles['text']}>{positon.name || '你在哪里？'}</Text>
+      {isChose && <Icon className={styles['remove-icon']} name='CloseOutlined' size={10} onClick={(e) => {
+        removeLocation();
+        e.stopPropagation();
+        return false;
+      }} />}
     </View>
   );
 };

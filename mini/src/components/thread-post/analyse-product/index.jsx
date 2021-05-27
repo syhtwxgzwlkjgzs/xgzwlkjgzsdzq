@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Taro from '@tarojs/taro';
 import { View, Text, Image, Textarea, Button } from '@tarojs/components';
-import { Toast } from '@discuzq/design';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import { observer, inject } from 'mobx-react';
 import { goodImages } from '@common/constants/const';
 import styles from './index.module.scss';
@@ -17,7 +17,7 @@ const Index = inject('threadPost')(observer(({ threadPost }) => {
       <View className={styles['product']}>
         {goodImages.map((item) => (
           <View className={styles['product-type']}>
-            <Image src={`${window.location.origin}${item.src}`} style={{width: `${item.width}px`, height: `${item.height}px`}} />
+            <Image src={`https://discuzv3-dev.dnspod.dev/${item.src}`} style={{width: `${item.width}px`, height: `${item.height}px`}} />
             <Text>{item.name}</Text>
           </View>
         ))}

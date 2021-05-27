@@ -163,7 +163,7 @@ class RenderCommentList extends React.Component {
   replyClick(comment) {
     this.commentData = comment;
     this.replyData = null;
-    const userName = comment?.user?.username || comment?.user?.userName;
+    const userName = comment?.user?.nickname || comment?.user?.userName;
     this.setState({
       showCommentInput: true,
       inputText: userName ? `回复${userName}` : '请输入内容',
@@ -175,7 +175,7 @@ class RenderCommentList extends React.Component {
     this.commentData = null;
     this.replyData = reply;
     this.replyData.commentId = comment.id;
-    const userName = reply?.user?.username || reply?.user?.userName;
+    const userName = reply?.user?.nickname || reply?.user?.userName;
 
     this.setState({
       showCommentInput: true,

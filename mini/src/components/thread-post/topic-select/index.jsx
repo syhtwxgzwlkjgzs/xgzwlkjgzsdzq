@@ -5,7 +5,10 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
-import { Input, Button, Icon, ScrollView } from '@discuzq/design';
+import Input from '@discuzq/design/dist/components/input/index';
+import Button from '@discuzq/design/dist/components/button/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import ScrollView from '@discuzq/design/dist/components/scroll-view/index';
 import styles from './index.module.scss';
 
 @inject('threadPost')
@@ -75,10 +78,11 @@ class TopicSelect extends Component {
   // 点击话题，选中项没有话题内容，则采用当前关键字为新话题
   handleItemClick = (item) => {
     const { keywords } = this.state;
-    const { postData, setPostData } = this.props.threadPost;
-    const topic = `#${item.content || keywords}#`
-    const contentText = `${postData.contentText} ${topic}`;
+    const { postData: { contentText: text }, setPostData, cursorPosition, setCursorPosition } = this.props.threadPost;
+    const topic = ` #${item.content || keywords}# `
+    const contentText = text.slice(0, cursorPosition) + topic + text.slice(cursorPosition);;
     setPostData({ contentText });
+    setCursorPosition(cursorPosition + topic.length);
     this.cancel();
   }
 

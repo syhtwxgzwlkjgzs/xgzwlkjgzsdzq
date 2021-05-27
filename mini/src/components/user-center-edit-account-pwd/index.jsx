@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react';
-import { Button, Input, Toast } from '@discuzq/design';
+import Button from '@discuzq/design/dist/components/button/index';
+import Input from '@discuzq/design/dist/components/input/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import Header from '@components/header';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
-import { withRouter } from 'next/router';
 import { View, Text } from '@tarojs/components';
 
 @inject('user')
@@ -181,4 +182,4 @@ class index extends Component {
   }
 }
 
-export default withRouter(index)
+export default index

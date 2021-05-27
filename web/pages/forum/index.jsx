@@ -1,6 +1,7 @@
 import React from 'react';
 import ForumPCPage from '@layout/forum/pc';
 import ForumH5Page from '@layout/forum/h5';
+import { withRouter } from 'next/router';
 import { inject } from 'mobx-react';
 
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
@@ -19,4 +20,4 @@ class Forum extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(Forum);
+export default HOCFetchSiteData(withRouter(Forum));

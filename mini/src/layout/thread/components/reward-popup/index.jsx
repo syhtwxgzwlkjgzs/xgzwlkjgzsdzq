@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Popup, Button, Input, Viewider } from '@discuzq/design';
+import Popup from '@discuzq/design/dist/components/popup/index';
+import Button from '@discuzq/design/dist/components/button/index';
+import Input from '@discuzq/design/dist/components/input/index';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
 import className from 'classnames';
@@ -45,6 +47,7 @@ const InputPop = (props) => {
             className={styles.input}
             value={value}
             onChange={(e) => onInputChange(e.target.value)}
+            placeholderClass={styles.inputPlaceholder}
           />
           <Text className={styles.append}>元</Text>
         </View>

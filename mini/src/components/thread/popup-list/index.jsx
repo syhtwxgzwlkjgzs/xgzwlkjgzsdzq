@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Tabs, Popup, Icon, Spin } from '@discuzq/design';
+import Tabs from '@discuzq/design/dist/components/tabs/index';
+import Popup from '@discuzq/design/dist/components/popup/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Spin from '@discuzq/design/dist/components/spin/index';
 import UserItem from '../user-item';
 import styles from './index.module.scss';
+import Router from '@discuzq/sdk/dist/router';
 
 import { readLikedUsers } from '@server';
 import List from '../../list';
-import { withRouter } from 'next/router';
 import { View, Text } from '@tarojs/components'
 
 /**
@@ -110,7 +113,7 @@ import { View, Text } from '@tarojs/components'
   };
 
   const onUserClick = (userId = '') => {
-    router.push(`/my/others?isOtherPerson=true&otherId=${userId}`);
+    Router.push({url: `/user/${userId}`});
   };
 
   const onClose = () => {
@@ -244,4 +247,4 @@ import { View, Text } from '@tarojs/components'
   );
 };
 
-export default withRouter(React.memo(Index));
+export default React.memo(Index);

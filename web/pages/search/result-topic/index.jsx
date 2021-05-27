@@ -53,7 +53,6 @@ class Index extends React.Component {
 
       this.page = 1;
       await search.getTopicsList({ search: keyword, perPage: this.perPage });
-      this.toastInstance?.destroy();
     // }
     if (!hasUsers) {
       search.getUsersList({ search: keyword, page: 1});

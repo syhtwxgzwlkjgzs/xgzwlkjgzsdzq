@@ -1,5 +1,6 @@
 import React from 'react';
-import { Input } from '@discuzq/design';
+// import Input from '@discuzq/design/dist/components/input/index';
+import Input from '@discuzq/design/dist/components/input/index';
 import { View } from '@tarojs/components';
 import layout from './index.module.scss';
 import CaptchaInput from './captcha-input';
@@ -43,8 +44,8 @@ class PhoneInput extends React.Component {
         {/* 手机号输入 start */}
         <View className={layout.phoneInput}>
           <Input
-            mode="number"
-            htmlType="number"
+            miniType="number"
+            maxLength={11}
             className={layout.input}
             value={phoneNum}
             placeholder="请输入手机号码"

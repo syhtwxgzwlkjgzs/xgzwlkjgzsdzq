@@ -1,8 +1,8 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'next/router';
 import { View, Text } from '@tarojs/components';
-import { Icon, Button } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Button from '@discuzq/design/dist/components/button/index';
 
 import Avatar from '@components/avatar';
 
@@ -46,4 +46,4 @@ class WalletInfo extends React.Component {
   }
 }
 
-export default withRouter(WalletInfo);
+export default WalletInfo;

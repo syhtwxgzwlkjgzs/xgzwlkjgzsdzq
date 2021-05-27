@@ -27,8 +27,8 @@ export default function DVditor(props) {
 
   const html2mdSetValue = (text) => {
     try {
-      if (!vditor) return;
-      const md = vditor.html2md(text);
+      if (!vditor) return '';
+      const md = !text ? '' : vditor.html2md(text);
       vditor.setValue && vditor.setValue(md);
     } catch (error) {
       console.error('html2mdSetValue', error);
@@ -162,9 +162,9 @@ export default function DVditor(props) {
     //   });
     // });
     const editorElement = vditor[vditor.currentMode]?.element;
-    editorElement?.addEventListener('click', () => {
+    editorElement?.addEventListener('click', (e) => {
       setIsFocus(false);
-      onFocus('focus');
+      onFocus('focus', e);
     });
     // 从事件绑定方式修改成轮询记录的方式，以达到更实时更精确的记录方式，可解决iphone下输入中文光标会被重置到位置0的问题（性能需关注）
     const timeoutRecord = () => {
@@ -190,7 +190,8 @@ export default function DVditor(props) {
         // 编辑器异步渲染完成后的回调方法
         after: () => {
           onInit(editor);
-          editor.setValue(value);
+          const md = !value ? '' : editor.html2md(value);
+          editor.setValue(md);
           editor.vditor[editor.vditor.currentMode].element.blur();
         },
         focus: () => {},

@@ -1,5 +1,6 @@
 import React, { createRef } from 'react';
-import { PullDownRefresh, ScrollView } from '@discuzq/design';
+import PullDownRefresh from '@discuzq/design/dist/components/pull-down-refresh/index';
+import ScrollView from '@discuzq/design/dist/components/scroll-view/index';
 import { View, Text, Image } from '@tarojs/components'
 
 import styles from './index.module.scss';

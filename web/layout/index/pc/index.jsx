@@ -51,24 +51,57 @@ class IndexPCPage extends React.Component {
     if (this.timer) {
       clearInterval(this.timer);
     }
-    this.timer = setInterval(() => {
-      const { categoryids, types, essence, attention, sort, sequence } = this.state.filter;
-      const { totalCount: nowTotal = -1 } = this.props.index?.threads || {};
 
-      if (nowTotal !== -1) {
-        readThreadList({ params: { page: 1, filter: { categoryids, types, essence, attention, sort }, sequence } }).then((res) => {
-          const { totalCount = 0 } = res?.data || {};
-          if (totalCount > nowTotal) {
-            this.setState({
-              visible: true,
-              conNum: totalCount - nowTotal,
-            });
-            // 缓存新数据
-            this.newThread = res?.data
+    const { filter = {} } = this.props.index
+
+    const newFilter = { ...this.state.filter, ...filter }
+    const { categoryids = [] } = newFilter
+    const currentIndex = this.resetCurrentIndex(categoryids[0] || 'all')
+    
+    this.setState({ filter: newFilter, currentIndex }, () => {
+
+      this.timer = setInterval(() => {
+        const { categoryids, types, essence, attention, sort, sequence } = this.state.filter;
+        const { totalCount: nowTotal = -1 } = this.props.index?.threads || {};
+  
+        if (nowTotal !== -1) {
+          readThreadList({ params: { page: 1, filter: { categoryids, types, essence, attention, sort }, sequence } }).then((res) => {
+            const { totalCount = 0 } = res?.data || {};
+            if (totalCount > nowTotal) {
+              this.setState({
+                visible: true,
+                conNum: totalCount - nowTotal,
+              });
+              // 缓存新数据
+              this.newThread = res?.data
+            }
+          });
+        }
+      }, 30000);
+
+    })
+  }
+
+  resetCategoryids(categoryids) {
+    return categoryids === 'all' || categoryids === 'default' ? '' : categoryids;
+  }
+
+  resetCurrentIndex = (id) => {
+    let newCurrentIndex = id
+    const newId = this.resetCategoryids(id)
+    if (newId) {
+      const { categories = [] } = this.props.index
+      categories.forEach(item => {
+        if (item.children?.length) {
+          const tmp = item.children.filter(children => children.pid === newId)
+          // TODO H5首页暂时不显示二级标题
+          if (tmp.length) {
+            newCurrentIndex = item.pid
           }
-        });
-      }
-    }, 30000);
+        }
+      })
+    }
+    return newCurrentIndex
   }
 
   onSearch = (value) => {

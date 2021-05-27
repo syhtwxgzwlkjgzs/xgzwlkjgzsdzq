@@ -195,7 +195,7 @@ class CommentH5Page extends React.Component {
     this.replyData = null;
     this.setState({
       showCommentInput: true,
-      inputText: comment?.user?.username ? `回复${comment.user.username}` : '请输入内容',
+      inputText: comment?.user?.nickname ? `回复${comment.user.username}` : '请输入内容',
     });
   }
 
@@ -207,7 +207,7 @@ class CommentH5Page extends React.Component {
 
     this.setState({
       showCommentInput: true,
-      inputText: reply?.user?.username ? `回复${reply.user.username}` : '请输入内容',
+      inputText: reply?.user?.nickname ? `回复${reply.user.username}` : '请输入内容',
     });
   }
 

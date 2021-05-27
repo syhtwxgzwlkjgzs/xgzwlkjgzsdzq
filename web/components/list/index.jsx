@@ -6,11 +6,15 @@ import ErrorView from './ErrorView';
 
 /**
  * 列表组件，集成上拉刷新能力
- * @prop {function} height 容器高度
- * @prop {function} className 容器样式
+ * @prop {function} className 容器样式，用于确定list高度；必传
  * @param {string} noMore 无更多数据
- * @prop {function} onRefresh 触底触发事件，需返回promise；若没有声明onRefresh，不触发上拉刷新
+ * @prop {function} onRefresh 触底触发事件，需返回promise；若没有声明onRefresh，不触发上拉刷新。
  * @prop {function} onScroll 滑动事件
+ * @prop {function} wrapperClass 内部元素className
+ * @prop {function} showRefresh 是否展示loading视图
+ * @prop {function} onError 当onRefresh返回reject时，触发回调
+ * @prop {function} enableError 是否启用reject捕获
+ * @prop {function} immediateCheck 初始化的时候，是否立即请求一次
  */
 
 const List = forwardRef(({
@@ -35,7 +39,9 @@ const List = forwardRef(({
   useEffect(() => {
     if (noMore) {
       setIsLoading(true);
-    } else setIsLoading(false);
+    } else {
+      setIsLoading(false);
+    }
   }, [noMore]);
 
   useEffect(() => {
@@ -77,23 +83,6 @@ const List = forwardRef(({
     }
   };
 
-  // 判断是否需要处理error情况
-  const isNormal = (data) => {
-    // 若没有启用Error判断，则走正常逻辑
-    // if (!enableError) {
-    //   return true
-    // } else {
-    //   if (data) {
-    //     if (data.code) {
-    //       return data.code === 0
-    //     }
-    //     return true
-    //   }
-    //   return false
-    // }
-    return true
-  }
-
   const onTouchMove = throttle(({ isFirst = false }) => {
 
     if (!listWrapper || !listWrapper.current) {
@@ -121,20 +110,14 @@ const List = forwardRef(({
       if (typeof(onRefresh) === 'function' ) {
         const promise = onRefresh();
         isPromise(promise) && promise
-          .then((res) => {
-            if (isNormal(res)) {
-              // 解决因promise和react渲染不同执行顺序导致重复触发加载数据的问题
-              setTimeout(() => {
-                setIsLoading(false);
-                if (noMore) {
-                  setIsLoading(true);
-                }
-              }, 0);
-            } else {
-              setIsLoading(true);
-              setIsError(true)
-              onError()
-            }
+          .then(() => {
+            // 解决因promise和react渲染不同执行顺序导致重复触发加载数据的问题
+            setTimeout(() => {
+              setIsLoading(false);
+              if (noMore) {
+                setIsLoading(true);
+              }
+            }, 0);
           })
           .catch(() => {
             setIsLoading(true);
@@ -149,10 +132,10 @@ const List = forwardRef(({
 
   // 网络请求失败
   const handleError = () => {
-    setIsLoading(false);
-    setTimeout(() => {
-      onTouchMove();
-    }, 0)
+    // setIsLoading(false);
+    // setTimeout(() => {
+    //   onTouchMove();
+    // }, 0)
   }
 
   return (

@@ -1,7 +1,8 @@
 import React from 'react';
 import Taro, { getCurrentInstance, redirectTo  } from '@tarojs/taro';
 import { inject } from 'mobx-react';
-import { Toast, Popup } from '@discuzq/design';
+import Toast from '@discuzq/design/dist/components/toast/index';
+import Popup from '@discuzq/design/dist/components/popup/index';
 import { Button, View } from '@tarojs/components';
 import { miniLogin } from '@server';
 import setAccessToken from '@common/utils/set-access-token';

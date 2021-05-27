@@ -12,13 +12,24 @@ export class index extends Component {
       choice: '',
     };
   }
+
   onClickFirst = (item) => {
     this.setState({ choice: item.id });
   }
+
   handleSubmit = (id) => {
     this.props.handleSubmit(id);
     this.props.handleCancel();
   }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.value !== this.props.value) {
+      this.setState({
+        choice: this.props.value,
+      });
+    }
+  }
+
   render() {
     const { visible, handleCancel, data } = this.props;
     const { choice } = this.state;

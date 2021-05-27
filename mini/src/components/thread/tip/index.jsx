@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import PopupList from '../popup-list';
 import Avatar from '../../avatar';
-import { View, Text, Image, Icon } from '@tarojs/components';
+import { View, Text, Image } from '@tarojs/components';
+import Icon from '@discuzq/design/dist/components/icon/index'
 import styles from './index.module.scss';
 
 /**
@@ -41,14 +42,14 @@ import styles from './index.module.scss';
                   <View key={index} className={index === 0 ? styles.img : styles.imgAfter}>
                     <Avatar
                       image={item.avatar}
-                      name={item.userName}
+                      name={item.nickname}
                       size='small'
                     />
                   </View>
                 ))
             }
             {
-              showMore && imgs?.length > 2 &&
+              showMore && renderUsers?.length > 2 &&
               <View className={styles.moreIcon} size={20}>
                 <Icon name='MoreBOutlined' className={styles.icon} size={12}></Icon>
               </View>

@@ -7,7 +7,8 @@
  */
 import React, { memo, useState, useEffect } from 'react';
 import { View } from '@tarojs/components';
-import { Popup, Button } from '@discuzq/design';
+import Popup from '@discuzq/design/dist/components/popup/index';
+import Button from '@discuzq/design/dist/components/button/index';
 import styles from './index.module.scss';
 
 import PropTypes from 'prop-types';

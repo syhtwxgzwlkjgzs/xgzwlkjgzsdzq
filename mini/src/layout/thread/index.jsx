@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'next/router';
 import { View, Text, ScrollView } from '@tarojs/components';
+
 import Taro from '@tarojs/taro';
 
 import layout from './layout.module.scss';
@@ -11,7 +11,9 @@ import NoMore from './components/no-more';
 import LoadingTips from './components/loading-tips';
 
 import styleVar from '@common/styles/theme/default.scss.json';
-import { Icon, Input, Badge, Toast } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Input from '@discuzq/design/dist/components/input/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import Header from '@components/header';
 import goToLoginPage from '@common/utils/go-to-login-page';
 
@@ -83,7 +85,7 @@ class ThreadH5Page extends React.Component {
     if (this.flag) {
       this.nextPosition = e.detail?.scrollTop || 0;
     }
-  }
+  };
 
   // 触底事件
   scrollToLower = () => {
@@ -92,12 +94,11 @@ class ThreadH5Page extends React.Component {
       this.page = this.page + 1;
       this.loadCommentList();
     }
-  }
+  };
 
   componentDidMount() {
     // 当内容加载完成后，获取评论区所在的位置
     //this.position = this.commentDataRef?.current?.offsetTop - 50;
-
     // 是否定位到评论位置
     // if (this.props?.thread?.isPositionToComment) {
     //   // TODO:需要监听帖子内容加载完成事件
@@ -491,15 +492,15 @@ class ThreadH5Page extends React.Component {
     const { title = '' } = this.props.thread?.threadData || {};
     h5Share({ title, path: `thread/${this.props.thread?.threadData?.threadId}` });
 
-    // const id = this.props.thread?.threadData?.id;
+    const id = this.props.thread?.threadData?.id;
 
-    // const { success, msg } = await this.props.thread.shareThread(id);
+    const { success, msg } = await this.props.thread.shareThread(id);
 
-    // if (!success) {
-    //   Toast.error({
-    //     content: msg,
-    //   });
-    // }
+    if (!success) {
+      Toast.error({
+        content: msg,
+      });
+    }
   }
 
   // 点击打赏
@@ -546,7 +547,7 @@ class ThreadH5Page extends React.Component {
 
   render() {
     const { thread: threadStore } = this.props;
-    const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
+    const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError } = threadStore;
     const fun = {
       moreClick: this.onMoreClick,
     };
@@ -584,7 +585,7 @@ class ThreadH5Page extends React.Component {
         <ScrollView
           className={layout.body}
           ref={this.hreadBodyRef}
-          id='hreadBodyId'
+          id="hreadBodyId"
           scrollY
           scrollTop={this.position}
           lowerThreshold={50}
@@ -592,7 +593,7 @@ class ThreadH5Page extends React.Component {
           scrollIntoView={this.state.toView}
           onScroll={(e) => throttle(this.handleOnScroll(e), 500)}
         >
-          <View className={layout['view-inner']} >
+          <View className={layout['view-inner']}>
             <ShowTop showContent={this.state.showContent} setTop={this.state.setTop}></ShowTop>
             {/* 帖子内容 */}
             {isReady ? (
@@ -614,7 +615,7 @@ class ThreadH5Page extends React.Component {
 
             {/* 评论列表 */}
             {isReady && isApproved && (
-              <View className={`${layout.bottom}`} ref={this.commentDataRef} id='commentId'>
+              <View className={`${layout.bottom}`} ref={this.commentDataRef} id="commentId">
                 {isCommentReady ? (
                   <Fragment>
                     <RenderCommentList
@@ -623,10 +624,14 @@ class ThreadH5Page extends React.Component {
                       onEditClick={(comment) => this.onEditClick(comment)}
                     ></RenderCommentList>
                     {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
-                    {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
+                    {isNoMore && (
+                      <View className={layout.noMore}>
+                        <NoMore empty={totalCount === 0}></NoMore>
+                      </View>
+                    )}
                   </Fragment>
                 ) : (
-                  <LoadingTips type="init"></LoadingTips>
+                  <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
                 )}
               </View>
             )}
@@ -639,7 +644,13 @@ class ThreadH5Page extends React.Component {
             <View className={layout.footer}>
               {/* 评论区触发 */}
               <View className={footer.inputClick} onClick={() => this.onInputClick()}>
-                <Input className={footer.input} placeholder="写评论" disabled={true} prefixIcon="EditOutlined"></Input>
+                <Input
+                  className={footer.input}
+                  placeholder="写评论"
+                  disabled={true}
+                  prefixIcon="EditOutlined"
+                  placeholderClass={footer.inputPlaceholder}
+                ></Input>
               </View>
 
               {/* 操作区 */}
@@ -722,4 +733,4 @@ class ThreadH5Page extends React.Component {
   }
 }
 
-export default withRouter(ThreadH5Page);
+export default ThreadH5Page;

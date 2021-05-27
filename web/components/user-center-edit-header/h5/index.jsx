@@ -73,14 +73,16 @@ export default class index extends Component {
           </div>
           {/* 编辑修改说明 */}
           <div className={styles.userCenterEditDec}>
-            <Icon onClick={this.handleClickSignature} name="CompileOutlined" />
-            {
-              this.state.isClickSignature ? (
-                <Input className={styles.userSignatureInput} maxLength={20} focus={true} onChange={this.handleChangeSignature} onBlur={this.handleBlurSignature} value={this.user.editSignature} placeholder="这个人很懒，什么也没留下~" />
-              ) : (
-                <span className={styles.text}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</span>
-              )
-            }
+            <div onClick={this.handleClickSignature} className={styles.userCenterEditDecItem}>
+              <Icon name="CompileOutlined" />
+              {
+                this.state.isClickSignature ? (
+                  <Input className={styles.userSignatureInput} maxLength={50}  focus={true} onChange={this.handleChangeSignature} onBlur={this.handleBlurSignature} value={this.user.editSignature} placeholder="这个人很懒，什么也没留下~" />
+                ) : (
+                  <span className={styles.text}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</span>
+                )
+              }
+            </div>
           </div>
         </div>
       </>

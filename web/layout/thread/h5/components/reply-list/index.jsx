@@ -47,14 +47,14 @@ export default class ReplyList extends React.Component {
         <div className={styles.replyListAvatar} onClick={this.props.avatarClick('2')}>
           <Avatar
             image={this.props.data.user.avatar}
-            name={this.props.data.user.username || this.props.data.user.userName || ''}
+            name={this.props.data.user.nickname || this.props.data.user.userName || ''}
             circle={true}
             size="small"
           ></Avatar>
         </div>
         <div className={styles.replyListContent}>
           <div className={styles.replyListContentText}>
-            <div className={styles.replyListName}>{this.props.data.user.username || this.props.data.user.userName}</div>
+            <div className={styles.replyListName}>{this.props.data.user.nickname || this.props.data.user.userName}</div>
             <div className={styles.replyListText}>
               {this.props.data.commentUserId ? (
                 <div className={styles.commentUser}>
@@ -62,13 +62,13 @@ export default class ReplyList extends React.Component {
                     <Avatar
                       className={styles.avatar}
                       image={this.props.data.replyUser.avatar}
-                      name={this.props.data.replyUser.username || this.props.data.replyUser.userName || ''}
+                      name={this.props.data.replyUser.nickname || this.props.data.replyUser.userName || ''}
                       circle={true}
                       size="small"
                     ></Avatar>
                   </div>
                   <span className={styles.replyedUserName}>
-                    {this.props.data.replyUser.username || this.props.data.replyUser.userName}
+                    {this.props.data.replyUser.nickname || this.props.data.replyUser.userName}
                   </span>
                 </div>
               ) : (
