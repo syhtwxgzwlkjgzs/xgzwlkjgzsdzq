@@ -22,6 +22,10 @@ class IndexH5Page extends React.Component {
       filter: {
         categoryids: this.checkIsOpenDefaultTab() ? ['default'] : ['all'],
         sequence: this.checkIsOpenDefaultTab() ? 1 : 0,
+        sort: 1,
+        attention: 0,
+        types: 'all',
+        essence: 0
       },
       currentIndex: this.checkIsOpenDefaultTab() ? 'default' : 'all',
       isFinished: true,
@@ -93,13 +97,13 @@ class IndexH5Page extends React.Component {
     }
 
     this.props.baselayout.setJumpingToTop();
-    dispatch('click-filter', { categoryids: newCategoryIds, sequence: id === 'default' ? 1 : 0 });
+
+    const newFilter = { ...this.state.filter, categoryids: newCategoryIds, sequence: id === 'default' ? 1 : 0, }
+
+    dispatch('click-filter', newFilter);
 
     this.setState({
-      filter: {
-        categoryids: newCategoryIds,
-        sequence: id === 'default' ? 1 : 0,
-      },
+      filter: newFilter,
       currentIndex: id,
       visible: false,
     });

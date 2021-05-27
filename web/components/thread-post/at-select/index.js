@@ -1,6 +1,5 @@
 /**
  * at选择弹框组件。默认展示相互关注人员，搜索关键字按照站点全体人员查询
- * @prop {array} data 数据
  * @prop {boolean} visible 是否显示弹出层
  * @prop {function} onCancel 取消
  * @prop {function} getAtList 确定
@@ -11,7 +10,7 @@ import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import DDialog from '@components/dialog';
-import BaseList from '@components/list';
+import List from '@components/list';
 
 import stringToColor from '@common/utils/string-to-color';
 
@@ -32,47 +31,47 @@ class AtSelect extends Component {
   }
 
   componentDidMount() {
-    // this.fetchFollow();
+    this.fetchFollow();
   }
 
   async fetchFollow() {
     const { threadPost } = this.props;
     const { page, perPage } = this.state;
-    const params = { page, perPage };
-    if (page === 1) this.setState({ checkUser: [], finish: false });
-    const ret = await threadPost.fetchFollow(params);
+    const ret = await threadPost.fetchFollow({ page, perPage });
     if (ret?.code === 0) {
       this.setState({
         page: page + 1,
-        finish: page * this.state.perPage > threadPost.followsTotalCount,
+        finish: page * perPage > threadPost.followsTotalCount,
       });
     } else {
+      this.setState({ finish: true })
       Toast.error({ content: ret.msg });
-      return Promise.reject();
     }
-    return ret;
   }
 
   async fetchAllUser() {
     const { search } = this.props;
     const { page, perPage, keywords } = this.state;
-    if (page === 1) this.setState({ checkUser: [], finish: false });
     const ret = await search.getUsersList({ search: keywords, type: 'username', page, perPage });
-    if (ret?.code === 0) {
+    const { code, data } = ret;
+    if (code === 0) {
       this.setState({
         page: page + 1,
-        finish: page * this.state.perPage > search.users?.totalCount,
+        finish: page * perPage >= data?.totalCount,
       });
     } else {
+      this.setState({ finish: true });
       Toast.error({ content: ret.msg });
-      return Promise.reject();
     }
   }
 
   // 更新搜索关键字,搜索用户
-  updateKeywords(e) {
-    const keywords = e.target.value;
-    this.setState({ keywords, page: 1 });
+  updateKeywords(val = "") {
+    this.setState({
+      keywords: val,
+      checkUser: [],
+      page: 1,
+    });
     this.searchInput();
   }
 
@@ -84,9 +83,14 @@ class AtSelect extends Component {
     }, 300);
   }
 
-  onScrollBottom() {
+  onScrollBottom = () => {
     return this.state.keywords ? this.fetchAllUser() : this.fetchFollow();
   }
+
+  // 取消选择
+  handleCancel = () => {
+    this.props.onCancel();
+  };
 
   // 确认选择
   submitSelect() {
@@ -99,24 +103,17 @@ class AtSelect extends Component {
 
   // 获取显示文字头像的背景色
   getBackgroundColor = (name) => {
-    const character = name.charAt(0).toUpperCase()
+    const character = name ? name.charAt(0).toUpperCase() : "";
     return stringToColor(character);
   }
 
-  // 清除关键字
-  clearKeywords = () => {
-    this.setState(
-      { keywords: '', checkUser: [], page: 1 },
-      () => this.fetchFollow()
-    );
-  }
-
   formatData = (item) => {
-    const userName = this.state.keywords ? item.username : item.user?.userName || '';
-    const userId = this.state.keywords ? item.userId : item.user?.pid || '';
-    const groupName = this.state.keywords ? item.groupName : item.group?.groupName;
-    const avatar = this.state.keywords ? item.avatar : item.user?.avatar;
-    return { userName, userId, groupName, avatar };
+    const isFollow = this.state.keywords === '';
+    const avatar = isFollow ? item?.user?.avatar : item.avatar;
+    const username = isFollow ? item?.user?.userName : item.nickname;
+    const groupName = isFollow ? item?.group?.groupName : item.groupName;
+    const userId = isFollow ? item.user?.pid : item.userId;
+    return { avatar, username, groupName, userId };
   }
 
   renderItem() {
@@ -125,83 +122,89 @@ class AtSelect extends Component {
 
     if (data.length === 0) return null;
     return data.map((item) => {
-      const reItem = this.formatData(item);
+      const { avatar, username, groupName, userId } = this.formatData(item);
       return (
-        <div className={styles['at-item']} key={reItem.userId}>
+        <div className={styles['at-item']} key={userId}>
           <div className={styles.avatar}>
-            {reItem.avatar
-              ? <Avatar image={reItem.avatar} />
+            {avatar
+              ? <Avatar image={avatar} />
               : <Avatar
-                text={reItem.userName}
+                text={username}
                 style={{
-                  backgroundColor: `#${this.getBackgroundColor(reItem.userName)}`,
+                  backgroundColor: `#${this.getBackgroundColor(username)}`,
                 }}
               />
             }
           </div>
           <div className={styles.info}>
-            <div className={styles.username}>{reItem.userName}</div>
-            <div className={styles.group}>{reItem.groupName}</div>
+            <div className={styles.username}>{username}</div>
+            <div className={styles.group}>{groupName}</div>
           </div>
-          <Checkbox name={reItem.userName}></Checkbox>
+          <Checkbox name={username}></Checkbox>
         </div>
       );
     });
   }
 
-  handleCancel = () => {
-    this.props.onCancel();
-  };
-
   render() {
-    const { visible } = this.props;
+    const { pc, visible } = this.props;
+    const { keywords, checkUser, finish } = this.state;
 
     const content = (
       <div className={styles.wrapper}>
-        {/* 搜索框 */}
-        <div className={styles.input}>
-          <Icon className={styles.inputWrapperIcon} name="SearchOutlined" size={16} />
-          <Input
-            value={this.state.keywords}
-            placeholder='搜索用户'
-            onChange={e => this.updateKeywords(e)}
-          />
-          {this.state.keywords &&
-            <Icon className={styles.deleteIcon} name="WrongOutlined" size={16} onClick={this.clearKeywords}></Icon>
+
+        {/* top */}
+        <div className={styles.header}>
+          <div className={styles['input-box']}>
+            <Input
+              value={keywords}
+              icon="SearchOutlined"
+              placeholder='搜索用户'
+              onChange={e => this.updateKeywords(e.target.value)}
+            />
+            {!pc && keywords &&
+              <div className={styles.delete} onClick={() => this.updateKeywords()}>
+                <Icon className={styles['delete-icon']} name="WrongOutlined" size={16}></Icon>
+              </div>
+            }
+          </div>
+          {!pc &&
+            <div className={styles['btn-cancel']} onClick={this.handleCancel}>取消</div>
           }
         </div>
 
         {/* 选择列表 */}
         <Checkbox.Group
-          value={this.state.checkUser}
+          className={styles['check-box']}
+          value={checkUser}
           onChange={val => this.setState({ checkUser: val })}
         >
-          <BaseList
-            className={styles['at-wrap']}
+          <List
+            className={styles.list}
             wrapperClass={styles['list__inner']}
-            onRefresh={this.onScrollBottom.bind(this)}
-            noMore={this.state.finish}
+            height={pc ? 'auto' : 'calc(100vh - 120px)'}
+            noMore={finish}
+            onRefresh={this.onScrollBottom}
           >
             {this.renderItem()}
-          </BaseList>
+          </List>
         </Checkbox.Group>
 
-        {/* 取消按钮 */}
-        <div className={styles.btn}>
-          <Button onClick={this.handleCancel}>取消</Button>
+        {/* 确认按钮 */}
+        <div className={styles['btn-container']}>
           <Button
-            className={this.state.checkUser.length > 0 ? 'is-selected' : 'not-selected'}
+            className={checkUser.length > 0 ? styles.selected : ''}
             onClick={() => this.submitSelect()}
           >
-            {this.state.checkUser.length ? `@ 已选(${this.state.checkUser.length})` : '尚未选'}
+            {checkUser.length ? `@ 已选(${checkUser.length})` : '尚未选'}
           </Button>
         </div>
       </div >
     );
 
-    if (this.props.pc) return (
+    if (pc) return (
       <DDialog
-        visible={this.props.visible}
+        visible={visible}
         className={styles.pc}
         onClose={this.handleCancel}
         isCustomBtn={true}
@@ -224,14 +227,12 @@ class AtSelect extends Component {
 }
 
 AtSelect.propTypes = {
-  data: PropTypes.array.isRequired,
   visible: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
   getAtList: PropTypes.func.isRequired,
 };
 
 AtSelect.defaultProps = {
-  data: [],
   visible: false,
   onCancel: () => { },
   getAtList: () => { },
