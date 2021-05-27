@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'next/router';
 import { View, Text, ScrollView } from '@tarojs/components';
 
 import Taro from '@tarojs/taro';
@@ -725,4 +724,4 @@ class ThreadH5Page extends React.Component {
   }
 }
 
-export default withRouter(ThreadH5Page);
+export default ThreadH5Page;

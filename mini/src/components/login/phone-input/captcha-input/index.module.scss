@@ -29,10 +29,10 @@
   }
   .hide_input {
     float: left;
-    width: 0;
-    height: 0;
+    width: 1px;
+    height: 1px;
     min-height: 0;
-    position: absolute;
+    margin-left: -100%;
     box-sizing: border-box;
   }
 }
