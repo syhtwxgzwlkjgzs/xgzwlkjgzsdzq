@@ -14,12 +14,19 @@
 
 .init {
   font-size: $font-size-primary;
+
+  view {
+    color: $loading-text-color;
+  }
 }
 
 .loadMore {
   font-size: $font-size-label;
-}
 
+  view {
+    color: $loading-text-color;
+  }
+}
 
 .error {
   display: flex;

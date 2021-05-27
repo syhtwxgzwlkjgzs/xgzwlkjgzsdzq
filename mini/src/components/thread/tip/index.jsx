@@ -53,7 +53,7 @@ import { inject, observer } from 'mobx-react';
                 ))
             }
             {
-              showMore && imgs?.length > 2 &&
+              showMore && renderUsers?.length > 2 &&
               <View className={styles.moreIcon} size={20}>
                 <Icon name='MoreBOutlined' className={styles.icon} size={12}></Icon>
               </View>
