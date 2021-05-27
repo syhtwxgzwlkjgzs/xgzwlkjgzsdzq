@@ -51,19 +51,19 @@ const activeColor = '#2469f6';
 export const defaultIcon = [
   {
     name: 'SmilingFaceOutlined', // emoji
-    active: activeColor,
+    // active: activeColor, // 这3个图标永远不需要上颜色
     id: defaultOperation.emoji,
     type: defaultOperation.emoji,
   },
   {
     name: 'AtOutlined', // @
-    active: activeColor,
+    // active: activeColor,
     id: defaultOperation.at,
     type: THREAD_TYPE.at,
   },
   {
     name: 'SharpOutlined', // #
-    active: activeColor,
+    // active: activeColor,
     id: defaultOperation.topic,
     type: THREAD_TYPE.topic,
   },
