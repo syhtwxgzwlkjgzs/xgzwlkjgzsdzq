@@ -80,7 +80,6 @@ class ThreadCreate extends React.Component {
   setBottomBarStyle = (y = 0, action, event) => {
     const winHeight = getVisualViewpost();
     // 如果可视窗口不变，即没有弹起键盘不进行任何设置
-    if (window.innerHeight === winHeight) return;
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
     this.moneyboxDisplay(false);
     this.positionDisplay(action);
@@ -92,11 +91,13 @@ class ThreadCreate extends React.Component {
       }
       return;
     }
-    this.setPostBottombar(action, y);
     if (vditorToolbar && action === 'select') {
       vditorToolbar.style.position = 'fixed';
       vditorToolbar.style.top = `${winHeight - 132 + y}px`;
     }
+    // 阻止页面上拉带动操作栏位置变化。放这里便于本地开发调试
+    if (window.innerHeight === winHeight) return;
+    this.setPostBottombar(action, y);
     this.setPostBox(action, event);
   }
 
