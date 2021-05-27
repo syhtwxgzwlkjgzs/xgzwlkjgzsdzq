@@ -320,12 +320,13 @@ class ThreadPCPage extends React.Component {
   // 创建评论
   async createComment(val) {
     const id = this.props.thread?.threadData?.id;
+
     const params = {
       id,
       content: val,
       postId: this.props.thread?.threadData?.postId,
       sort: this.commentDataSort, // 目前的排序
-      isNoMore: false,
+      isNoMore: this.props?.thread?.isNoMore,
       attachments: [],
     };
 

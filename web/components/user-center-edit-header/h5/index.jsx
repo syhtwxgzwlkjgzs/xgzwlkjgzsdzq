@@ -30,12 +30,12 @@ export default class index extends Component {
     this.backgroundUploaderRef.current.click();
   }
 
-  onAvatarChange = (fileList) => {
-    this.props.user.updateAvatar(fileList.target.files);
+  onAvatarChange = async (fileList) => {
+    await this.props.user.updateAvatar(fileList.target.files);
   }
 
-  onBackgroundChange = (fileList) => {
-    this.props.user.updateBackground(fileList.target.files);
+  onBackgroundChange = async (fileList) => {
+    await this.props.user.updateBackground(fileList.target.files);
   }
 
   // 点击编辑签名
@@ -77,6 +77,7 @@ export default class index extends Component {
               <Icon name="CompileOutlined" />
               {
                 this.state.isClickSignature ? (
+                  // true ? (
                   <Input className={styles.userSignatureInput} maxLength={50}  focus={true} onChange={this.handleChangeSignature} onBlur={this.handleBlurSignature} value={this.user.editSignature} placeholder="这个人很懒，什么也没留下~" />
                 ) : (
                   <span className={styles.text}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</span>
