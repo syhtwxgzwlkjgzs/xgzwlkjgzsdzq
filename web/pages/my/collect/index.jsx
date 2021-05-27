@@ -34,24 +34,31 @@ class Index extends React.Component {
   constructor(props) {
     super(props);
     const { serverIndex, index } = this.props;
+    this.state = {
+      firstLoading: true, // 首次加载状态判断
+    }
     if (serverIndex && serverIndex.threads) {
       index.setThreads(serverIndex.threads);
+      this.state.firstLoading = false;
     } else {
       index.setThreads(null);
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { index } = this.props;
     const hasThreadsData = !!index.threads;
     if (!hasThreadsData) {
-      this.props.index.getReadThreadList({
+     await this.props.index.getReadThreadList({
         perPage: this.prePage,
         page: this.page,
         filter: {
           complex: 3,
         },
       });
+      this.setState({
+        firstLoading: false
+      })
     }
     this.listenRouterChangeAndClean();
   }
@@ -89,12 +96,13 @@ class Index extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
+    const { firstLoading } = this.state;
 
     if (platform === 'pc') {
-      return <IndexPCPage dispatch={this.dispatch} />;
+      return <IndexPCPage firstLoading={firstLoading} dispatch={this.dispatch} />;
     }
 
-    return <IndexH5Page dispatch={this.dispatch} />;
+    return <IndexH5Page firstLoading={firstLoading} dispatch={this.dispatch} />;
   }
 }
 

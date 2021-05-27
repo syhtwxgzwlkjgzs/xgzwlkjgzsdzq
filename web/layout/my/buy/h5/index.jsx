@@ -5,7 +5,7 @@ import Header from '@components/header';
 import List from '@components/list';
 import NoData from '@components/no-data';
 import ThreadContent from '@components/thread';
-import { Icon } from '@discuzq/design';
+import { Spin } from '@discuzq/design';
 import styles from './index.module.scss';
 
 @inject('site')
@@ -25,6 +25,11 @@ class Index extends React.Component {
           {`${pageData?.length}条购买`}
         </div>
         {
+          this.props.firstLoading && (
+            <div className={styles.spinLoading}><Spin type="spinner">加载中...</Spin></div>
+          )
+        }
+        {
           pageData?.length
             ? (
               <List
@@ -38,7 +43,7 @@ class Index extends React.Component {
                 }
               </List>
             )
-            : <NoData />
+            : <>{!this.props.firstLoading && <NoData className={styles.noDataList} />}</>
         }
       </div>
     );

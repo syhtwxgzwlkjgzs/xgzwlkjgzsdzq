@@ -6,7 +6,7 @@ import { observer } from 'mobx-react';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import classnames from 'classnames';
-
+import ImageDisplay from '@components/thread/image-display';
 @observer
 export default class ReplyList extends React.Component {
   // 跳转至评论详情
@@ -75,9 +75,16 @@ export default class ReplyList extends React.Component {
                 ''
               )}
               <span
-                className={classnames(styles.content,this.props.isShowOne && styles.isShowOne)}
-                dangerouslySetInnerHTML={{ __html: this.filterContent()}}
+                className={classnames(styles.content, this.props.isShowOne && styles.isShowOne)}
+                dangerouslySetInnerHTML={{ __html: this.filterContent() }}
               ></span>
+
+              {/* 图片展示 */}
+              {this.props.data?.images && (
+                <div className={styles.imageDisplay}>
+                  <ImageDisplay platform="h5" imgData={this.props.data?.images} />
+                </div>
+              )}
             </div>
           </div>
           <div className={styles.replyListFooter}>

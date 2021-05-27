@@ -38,6 +38,14 @@
 
           p {
             display: inline;
+
+            img {
+              height: rem(22);
+            }
+          }
+
+          img {
+            height: rem(22);
           }
         }
 
@@ -47,10 +55,6 @@
           // p {
           //   @include lamp-clamp(3);
           // }
-        }
-
-        img {
-          height: rem(22);
         }
 
         .commentUser {

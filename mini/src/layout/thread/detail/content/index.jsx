@@ -72,7 +72,7 @@ const RenderThreadContent = inject('user')(
     const onContentClick = async () => {
       if (!props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/user/login' });
+        goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
         return;
       }
 
