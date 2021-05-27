@@ -1,6 +1,5 @@
 import React from 'react';
 import Router from '@discuzq/sdk/dist/router';
-import { withRouter } from 'next/router';
 import Button from '@discuzq/design/dist/components/button/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import { inject, observer } from 'mobx-react';
@@ -37,11 +36,11 @@ class Index extends React.Component {
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/user/login' });
+        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
         return;
       }
 
-      Toast.info({ content: '复制链接成功' });
+      // Toast.info({ content: '复制链接成功' });
 
       const { title = '', threadId = '', user } = this.props.data || {};
 
@@ -53,7 +52,7 @@ class Index extends React.Component {
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
         }
       });
-    }, 2000);
+    }, 1000);
     // 评论
     onComment = (e) => {
       e && e.stopPropagation();
@@ -61,7 +60,7 @@ class Index extends React.Component {
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/user/login' });
+        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
         return;
       }
 
@@ -69,7 +68,7 @@ class Index extends React.Component {
       const { threadId = '' } = data;
       if (threadId !== '') {
         this.props.thread.positionToComment()
-        Router.push({url: `/pages/thread/index?id=${threadId}`})
+        Router.push({url: `/subPages/thread/index?id=${threadId}`})
       } else {
         console.log('帖子不存在');
       }
@@ -86,7 +85,7 @@ class Index extends React.Component {
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/user/login' });
+        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
         return;
       }
       const { data = {}, user } = this.props;
@@ -107,13 +106,11 @@ class Index extends React.Component {
       e && e.stopPropagation();
       this.handlePay()
     }
-    handlePay = debounce(async (e) => {
-      e && e.stopPropagation();
-
+    handlePay = debounce(async () => {
       // 对没有登录的先做
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/user/login' });
+        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
         return;
       }
 
@@ -144,7 +141,7 @@ class Index extends React.Component {
       }
 
       if (threadId !== '') {
-        Router.push({url: `/pages/thread/index?id=${threadId}`})
+        Router.push({url: `/subPages/thread/index?id=${threadId}`})
       } else {
         console.log('帖子不存在');
       }
@@ -183,7 +180,7 @@ class Index extends React.Component {
         <View className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
           <View className={styles.header} onClick={this.onClick}>
               <UserInfo
-                name={user.userName || ''}
+                name={user.nickname || ''}
                 avatar={user.avatar || ''}
                 location={position.location}
                 view={`${viewCount}`}
@@ -219,4 +216,4 @@ class Index extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default withRouter(Index);
+export default Index;

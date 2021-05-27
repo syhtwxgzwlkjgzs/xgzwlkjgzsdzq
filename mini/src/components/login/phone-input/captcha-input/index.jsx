@@ -29,8 +29,7 @@ class CaptchaInput extends React.Component {
         }}
       >
         <Input
-          mode="number"
-          htmlType="number"
+          type="number"
           value={captcha}
           className={layout.hide_input}
           focus={isFocus}

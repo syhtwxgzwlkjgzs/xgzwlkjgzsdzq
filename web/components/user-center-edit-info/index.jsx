@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import H5UserCenterEditInfo from './h5/index';
 import PcUserCenterEditInfo from './pc/index';
-import HOCFetchSiteData from '../../middleware/HOCFetchSiteData';
 
 @inject('site')
 @inject('user')
@@ -14,10 +13,11 @@ class index extends Component {
       this.props.user.updateUserInfo(this.props.user.id);
     }
   }
-  
+
   render() {
     const { site } = this.props;
     const { platform } = site;
+
     return (
       <div>
         {
@@ -31,9 +31,9 @@ class index extends Component {
           )
         }
       </div>
-    )
+    );
   }
 }
 
-export default HOCFetchSiteData(index)
+export default index;
 

@@ -15,7 +15,7 @@ import RichText from '@discuzq/design/dist/components/rich-text/index';
     if (e?.target?.localName === 'a') {
       return
     }
-    Taro.navigateTo({url: `/pages/thread/index?id=${threadId}`});
+    Taro.navigateTo({url: `/subPages/thread/index?id=${threadId}`});
   };
 
   // 过滤内容
@@ -38,7 +38,7 @@ import RichText from '@discuzq/design/dist/components/rich-text/index';
       {data?.map((item, index) => (
         <View
           key={index}
-          className={`${styles.item} ${platform === 'pc' ? styles.itemPC : styles.itemH5}`}
+          className={`${styles.item} ${styles.itemH5}`}
           onClick={() => onClick(item)}
         >
           <Text className={styles.prefix}>{item.prefix || '置顶'}</Text>

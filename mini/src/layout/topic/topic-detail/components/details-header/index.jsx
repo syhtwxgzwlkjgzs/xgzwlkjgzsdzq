@@ -4,6 +4,7 @@ import { noop } from '@components/thread/utils';
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
 import TopicHeaderImg from '../../../../../../../web/public/dzq-img/topic-header.png';
+import Router from '@discuzq/sdk/dist/router';
 
 /**
  * 用户组件
@@ -30,7 +31,7 @@ const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop }) => 
             <Text className={styles.content}>{contentNum}</Text>
           </View>
           <View className={styles.hr}></View>
-          <View onClick={onShare}>
+          <View>
             <Icon className={styles.shareIcon}name="ShareAltOutlined" size={14} />
             <Text className={styles.text}>分享</Text>
           </View>

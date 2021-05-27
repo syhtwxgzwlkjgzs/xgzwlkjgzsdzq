@@ -4,6 +4,7 @@ import IndexH5Page from '@layout/my/collect/h5';
 import IndexPCPage from '@layout/my/collect/pc';
 import { readThreadList } from '@server';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import isServer from '@common/utils/is-server';
 
 @inject('site')
 @inject('index')
@@ -51,6 +52,26 @@ class Index extends React.Component {
           complex: 3,
         },
       });
+    }
+    this.listenRouterChangeAndClean();
+  }
+
+  clearStoreThreads = () => {
+    const { index } = this.props;
+    index.setThreads(null);
+  }
+
+  listenRouterChangeAndClean() {
+    // FIXME: 此种写法不好
+    if (!isServer()) {
+      window.addEventListener('popstate', this.clearStoreThreads, false);
+    }
+  }
+
+  componentWillUnmount() {
+    this.clearStoreThreads();
+    if (!isServer()) {
+      window.removeEventListener('popstate', this.clearStoreThreads);
     }
   }
 

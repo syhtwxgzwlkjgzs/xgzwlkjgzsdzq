@@ -7,13 +7,14 @@ import ThreadContent from '../../components/thread';
 import HomeHeader from '../../components/home-header';
 import FilterView from './components/filter-view';
 import BaseLayout from '../../components/base-layout';
-
+import { throttle } from '@common/utils/throttle-debounce.js'
 import TopNew from './components/top-news';
 
 import styles from './index.module.scss';
 @inject('site')
 @inject('user')
 @inject('index')
+@inject('baselayout')
 @observer
 class IndexH5Page extends React.Component {
   constructor(props) {
@@ -67,16 +68,26 @@ class IndexH5Page extends React.Component {
   };
 
   onClickTab = (id = '') => {
-    if (id === this.state.currentIndex) {
-      return
-    }
     const { dispatch = () => {} } = this.props;
     const currentIndex = this.resetCategoryids(id);
-    dispatch('click-filter', { categoryids: [currentIndex], sequence: id === 'default' ? 1 : 0 });
+    const { categories = [] } = this.props.index
+
+    // 若选中的一级标签，存在二级标签，则将一级id和所有二级id全都传给后台
+    let newCategoryIds = [currentIndex]
+    const tmp = categories.filter(item => item.pid === currentIndex)
+    if (tmp.length && tmp[0]?.children?.length) {
+      newCategoryIds = [currentIndex]
+      tmp[0]?.children?.forEach(item => {
+        newCategoryIds.push(item.pid)
+      })
+    }
+
+    this.props.baselayout.setJumpingToTop();
+    dispatch('click-filter', { categoryids: newCategoryIds, sequence: id === 'default' ? 1 : 0 });
 
     this.setState({
       filter: {
-        categoryids: [id],
+        categoryids: newCategoryIds,
         sequence: id === 'default' ? 1 : 0,
       },
       currentIndex: id,
@@ -90,20 +101,40 @@ class IndexH5Page extends React.Component {
     const requestCategoryids = categoryids.slice();
     requestCategoryids[0] = (requestCategoryids[0] === 'all' || requestCategoryids[0] === 'default') ? [] : requestCategoryids[0];
     dispatch('click-filter', { categoryids: requestCategoryids, types, essence, sequence });
+
+    let newCurrentIndex = this.resetCurrentIndex(categoryids[0])
     this.setState({
       filter: {
         categoryids,
         types,
         essence,
-        sequence: categoryids[0] === 'default' ? 1 : 0,
+        sequence,
       },
-      currentIndex: categoryids[0],
+      currentIndex: newCurrentIndex,
       visible: false,
     });
   };
 
   resetCategoryids(categoryids) {
     return categoryids === 'all' || categoryids === 'default' ? '' : categoryids;
+  }
+
+  resetCurrentIndex = (id) => {
+    let newCurrentIndex = id
+    const newId = this.resetCategoryids(id)
+    if (newId) {
+      const { categories = [] } = this.props.index
+      categories.forEach(item => {
+        if (item.children?.length) {
+          const tmp = item.children.filter(children => children.pid === newId)
+          // TODO H5首页暂时不显示二级标题
+          if (tmp.length) {
+            newCurrentIndex = item.pid
+          }
+        }
+      })
+    }
+    return newCurrentIndex
   }
 
   // 上拉加载更多
@@ -115,11 +146,11 @@ class IndexH5Page extends React.Component {
     return dispatch('moreData', requestFilter);
   };
 
-  handleScroll = (e) => {
+  handleScroll = throttle((e) => {
     const { scrollTop = 0 } = e?.detail || {}
-    const { height = 180 } = this.headerRef.current?.state || {}
+    const { height = 165 } = this.headerRef.current?.state || {}
     this.setState({ fixedTab: !(scrollTop < height) })
-  }
+  }, 0)
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
   handleCategories = () => {

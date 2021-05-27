@@ -14,6 +14,7 @@ import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
 import { withRouter } from 'next/router';
 import { tencentVodUpload } from '@common/utils/tencent-vod';
 import { plus } from '@common/utils/calculate';
+import { defaultOperation } from '@common/constants/const';
 
 @inject('site')
 @inject('threadPost')
@@ -168,6 +169,7 @@ class PostPage extends React.Component {
             type: file.type,
           },
         });
+        this.scrollIntoView('#dzq-post-video');
       } else if (type === THREAD_TYPE.voice) {
         this.setPostData({
           audio: {
@@ -243,9 +245,29 @@ class PostPage extends React.Component {
       this.setPostData(data);
       return false;
     }
-    this.setState({ currentAttachOperation: item.type });
     this.props.threadPost.setCurrentSelectedToolbar(item.type);
+    this.setState({ currentAttachOperation: item.type }, () => {
+      if (item.type === THREAD_TYPE.image) {
+        this.scrollIntoView('.dzq-post-image-upload');
+      }
+      if (item.type === THREAD_TYPE.voice) {
+        this.scrollIntoView('#dzq-post-audio-record');
+      }
+    });
   };
+
+  // 滚动到可视区
+  scrollIntoView = (id) => {
+    const timer = setTimeout(() => {
+      clearTimeout(timer);
+      let rect = {};
+      const elem = document.querySelector(id);
+      if (elem) rect = elem.getBoundingClientRect();
+      const top = rect.y || 0;
+      this.handleEditorBoxScroller(top);
+    }, 0);
+  }
+
 
   // 表情等icon
   handleDefaultIconClick = (item, child, data) => {
@@ -274,7 +296,11 @@ class PostPage extends React.Component {
       }
       this.setState({ curPaySelect: child.id, emoji: {} });
     } else {
-      this.setState({ currentDefaultOperation: item.id, emoji: {} });
+      this.setState({ currentDefaultOperation: item.id, emoji: {} }, () => {
+        if (item.id === defaultOperation.attach) {
+          this.scrollIntoView('.dzq-post-file-upload');
+        }
+      });
     }
   }
 
@@ -286,18 +312,19 @@ class PostPage extends React.Component {
     const { supportFileExt, supportImgExt, supportMaxSize } = webConfig.setAttach;
 
     if (type === THREAD_TYPE.file) {
+      const tempFile = cloneList[0]; // 附件上传一次只允许传一个
       // 当前选择附件的类型大小
-      const fileType = cloneList[0].name.match(/\.(.+)$/i)[1].toLocaleLowerCase();
-      const fileSize = cloneList[0].size;
+      const fileType = tempFile.name.match(/\.([^\.]+)$/)[1].toLocaleLowerCase();
+      const fileSize = tempFile.size;
       // 判断合法性
       const isLegalType = supportFileExt.toLocaleLowerCase().includes(fileType);
       const isLegalSize = fileSize > 0 && fileSize < supportMaxSize * 1024 * 1024;
       if (!isLegalType) {
-        Toast.info({ content: '当前文件类型暂不支持' });
+        Toast.info({ content: `仅支持${supportFileExt}格式的附件` });
         return false;
       }
       if (!isLegalSize) {
-        Toast.info({ content: `上传附件大小范围0 ~ ${supportMaxSize}MB` });
+        Toast.info({ content: `仅支持0 ~ ${supportMaxSize}MB的附件` });
         return false;
       }
     } else if (type === THREAD_TYPE.image) {
@@ -306,17 +333,19 @@ class PostPage extends React.Component {
       cloneList.splice(remainLength, cloneList.length - remainLength);
 
       let isAllLegal = true; // 状态：此次上传图片是否全部合法
-      cloneList.forEach((item, index) => {
-        const imageType = item.name.match(/\.(.+)$/)[1].toLocaleLowerCase();
+      for (let i = 0; i < cloneList.length; i++) {
+        const imageType = cloneList[i].name.match(/\.([^\.]+)$/)[1].toLocaleLowerCase();
+        const imageSize = cloneList[i].size;
         const isLegalType = supportImgExt.toLocaleLowerCase().includes(imageType);
+        const isLegalSize = imageSize > 0 && imageSize < supportMaxSize * 1024 * 1024;
 
         // 存在不合法图片时，从上传图片列表删除
-        if (!isLegalType) {
-          cloneList.splice(index, 1);
+        if (!isLegalType || !isLegalSize) {
+          cloneList.splice(i, 1);
+          i--;
           isAllLegal = false;
         }
-      })
-
+      }
       !isAllLegal && Toast.info({ content: `仅支持${supportImgExt}类型的图片` });
 
       return true;
@@ -431,7 +460,7 @@ class PostPage extends React.Component {
     //   return;
     // }
     if (isDraft) {
-      const {contentText } = postData;
+      const { contentText } = postData;
       if (contentText === '') {
         return Toast.info({ content: '内容不能为空' });
       } else {
@@ -527,7 +556,7 @@ class PostPage extends React.Component {
         // 更新帖子到首页列表
         if (threadId) {
           this.props.index.updateAssignThreadAllData(threadId, data);
-        // 添加帖子到首页数据
+          // 添加帖子到首页数据
         } else {
           const { categoryids = [] } = this.props.index?.filter || {}
           const { categoryId = '' } = data
@@ -568,6 +597,13 @@ class PostPage extends React.Component {
       jumpLink ? Router.push({ url: jumpLink }) : Router.back();
     }
   }
+
+  handleEditorBoxScroller = (top = 0) => {
+    const editorbox = document.querySelector('#post-inner');
+    const rect = editorbox.getBoundingClientRect();
+    const gap = this.props.site?.isPc ? top - rect.top : top;
+    editorbox.scrollTo({ top: gap, behavior: 'smooth' });
+  };
 
   render() {
     const { isPC } = this.props.site;
@@ -616,6 +652,7 @@ class PostPage extends React.Component {
         handleVditorInit={this.handleVditorInit}
         onVideoReady={this.onVideoReady}
         handleDraft={this.handleDraft}
+        handleEditorBoxScroller={this.handleEditorBoxScroller}
         {...this.state}
       />
     );
@@ -623,4 +660,4 @@ class PostPage extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData((withRouter(PostPage)));
+export default HOCFetchSiteData(HOCWithLogin(withRouter(PostPage)));
