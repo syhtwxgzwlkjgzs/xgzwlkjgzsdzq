@@ -8,11 +8,16 @@
     }
     .dzq-icon {
       line-height: 36px;
+      color: $disabled-color;
     }
   }
   .input {
     width: 176px;
   }
+}
+
+.inputPlaceholder {
+  color: $disabled-color;
 }
 
 .icon {
@@ -45,7 +50,7 @@
   align-items: center;
   justify-content: center;
   transform: translateX(50%);
-  .text{
+  .text {
     font-size: $font-size-small;
     line-height: 18px;
     position: absolute;
