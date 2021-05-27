@@ -1,6 +1,5 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'next/router';
 import { View } from '@tarojs/components';
 import { diffDate } from '@common/utils/diff-date';
 
@@ -41,4 +40,4 @@ class IncomeList extends React.Component {
   }
 }
 
-export default withRouter(IncomeList);
+export default IncomeList;

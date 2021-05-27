@@ -40,8 +40,9 @@ class PartnerInviteH5Page extends React.Component {
       });
       const threadList = await search.getThreadList();
       const { inviteCode } = this.props.router.query;
-      const { user: {nickname = ''} } = await inviteDetail({ code: inviteCode });
-      this.invitorName = nickname;
+      const inviteResp = await inviteDetail({ code: inviteCode });
+      const nickname = get(inviteResp, 'data.user.nickname', '');
+      this.setState({ invitorName: nickname });
 
       forum.setUsersPageData(usersList);
       forum.setThreadsPageData(threadList);
@@ -100,7 +101,7 @@ class PartnerInviteH5Page extends React.Component {
 
   render() {
     const { site, forum } = this.props;
-    const inviteCode = this.inviteCode || '1';
+    const { inviteCode } = this.props.router.query;
     const { platform, webConfig } = site;
     const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
     const { usersPageData, threadsPageData } = forum;

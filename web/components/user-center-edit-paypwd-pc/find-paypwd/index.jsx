@@ -14,9 +14,9 @@ export default class index extends Component {
       newPayPwd: null,
       newPayPwdRepeat: null,
       list: [],
-      current_step: 'second', // 表示当前步骤
-      bind_mobile: null,
-      is_blur: true, // 表示是否失焦
+      currentStep: 'second', // 表示当前步骤
+      bindMobile: null,
+      isBlur: true, // 表示是否失焦
       initTimeValue: null,
       initTime: 60,
       interval: null,
@@ -65,13 +65,13 @@ export default class index extends Component {
 
   handleInputFocus = (e) => {
     this.setState({
-      is_blur: false
+      isBlur: false
     })
   }
 
   handleInputBlur = (e) => {
     this.setState({
-      is_blur: true
+      isBlur: true
     })
   }
 
@@ -83,13 +83,13 @@ export default class index extends Component {
 
   handleInputFocus1 = () => {
     this.setState({
-      is_blur: false
+      isBlur: false
     })
   }
 
   handleInputBlur1 = (e) => {
     this.setState({
-      is_blur: true
+      isBlur: true
     })
   }
 
@@ -98,7 +98,7 @@ export default class index extends Component {
   }
 
   render() {
-    const { newPayPwd, newPayPwdRepeat, list = [], is_blur, initTimeValue, initTimeText } = this.state
+    const { newPayPwd, newPayPwdRepeat, list = [], isBlur, initTimeValue, initTimeText } = this.state
     let isSubmit = !newPayPwd || !newPayPwdRepeat
     const mobile = this.props.user?.mobile
     console.log(mobile,'ss_01');
@@ -119,7 +119,7 @@ export default class index extends Component {
           </div>
           <div className={styles.inputItem}>
             <div className={styles.labelName}>请输入短信验证码</div>
-            <CaptchaInput current_step={'second'} updatePwd={this.updatePwd} list={list} is_blur={is_blur} />
+            <CaptchaInput currentStep={'second'} updatePwd={this.updatePwd} list={list} isBlur={isBlur} />
           </div>
           <div className={styles.inputItem}>
             <Input onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur} mode="password" placeholder="请输入新支付密码" />

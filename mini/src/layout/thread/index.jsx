@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'next/router';
 import { View, Text, ScrollView } from '@tarojs/components';
 
 import Taro from '@tarojs/taro';
@@ -494,15 +493,15 @@ class ThreadH5Page extends React.Component {
     const { title = '' } = this.props.thread?.threadData || {};
     h5Share({ title, path: `thread/${this.props.thread?.threadData?.threadId}` });
 
-    // const id = this.props.thread?.threadData?.id;
+    const id = this.props.thread?.threadData?.id;
 
-    // const { success, msg } = await this.props.thread.shareThread(id);
+    const { success, msg } = await this.props.thread.shareThread(id);
 
-    // if (!success) {
-    //   Toast.error({
-    //     content: msg,
-    //   });
-    // }
+    if (!success) {
+      Toast.error({
+        content: msg,
+      });
+    }
   }
 
   // 点击打赏
@@ -549,7 +548,7 @@ class ThreadH5Page extends React.Component {
 
   render() {
     const { thread: threadStore } = this.props;
-    const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
+    const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError } = threadStore;
     const fun = {
       moreClick: this.onMoreClick,
     };
@@ -626,10 +625,10 @@ class ThreadH5Page extends React.Component {
                       onEditClick={(comment) => this.onEditClick(comment)}
                     ></RenderCommentList>
                     {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
-                    {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
+                    {isNoMore && <View className={layout.noMore}><NoMore empty={totalCount === 0}></NoMore></View>}
                   </Fragment>
                 ) : (
-                  <LoadingTips type="init"></LoadingTips>
+                  <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
                 )}
               </View>
             )}
@@ -725,4 +724,4 @@ class ThreadH5Page extends React.Component {
   }
 }
 
-export default withRouter(ThreadH5Page);
+export default ThreadH5Page;

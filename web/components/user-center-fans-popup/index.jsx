@@ -17,7 +17,7 @@ const Index = (props) => {
     id
   } = props;
   const onContainerClick = ({ id }) => {
-    Router.push({ url: `/my/others?isOtherPerson=${true}&otherId=${id}` });
+    Router.push({ url: `/users/${id}` });
   };
   return (
     <Popup

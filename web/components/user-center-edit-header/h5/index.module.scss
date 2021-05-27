@@ -19,9 +19,12 @@
     padding: 0;
     justify-content: center;
     align-items: center;
-    width: 100%;
+    left: 0;
+    right: 0;
+    height: rem(20);
+    line-height: rem(20);
     .text {
-      text-align: center;
+      // text-align: center;
       font-size: rem($font-size-base);
       text-overflow: -o-ellipsis-lastline;
       overflow: hidden;
@@ -33,17 +36,28 @@
       line-height: 1.2;
       color: $text-color-primary;
       margin-left: rem($margin-2n);
-      
+      min-width: rem(200);
+    }
+    .userCenterEditDecItem {
+      display: flex;
+      padding: 0;
+      justify-content: center;
+      align-items: center;
     }
     .userSignatureInput {
       width: auto;
-      height: rem(16);
+      height: rem(20);
+      min-width: rem(200);
+      line-height: rem(20);
+      display: flex;
+      align-items: center;
       :global {
         .dzq-input__inner {
           width: 100%;
           line-height: 1;
-          height: rem(16);
+          height: rem(20);
           border: none;
+          line-height: rem(20);
         }
       }
     }

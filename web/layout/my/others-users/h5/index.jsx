@@ -10,6 +10,7 @@ import UserCenterThreads from '@components/user-center-threads';
 import BaseLayout from '@components/base-layout';
 import NoData from '@components/no-data';
 import { withRouter } from 'next/router';
+import Router from '@discuzq/sdk/dist/router';
 
 @inject('site')
 @inject('user')
@@ -22,6 +23,11 @@ class H5OthersPage extends React.Component {
 
   componentDidMount = async () => {
     const { query } = this.props.router;
+    const id = this.props.user?.id
+    if (String(id) === query.id) {
+      Router.push({ url: '/my' })
+      return
+    }
     if (query.id) {
       await this.props.user.getTargetUserInfo(query.id);
     }
@@ -42,6 +48,7 @@ class H5OthersPage extends React.Component {
       <BaseLayout
         showHeader={false}
         showTabBar={false}
+        immediateCheck={true}
         onRefresh={this.fetchTargetUserThreads}
         noMore={targetUserThreadsTotalPage < targetUserThreadsPage}
       >
