@@ -29,23 +29,22 @@ class BindNicknameH5Page extends React.Component {
         content: '昵称设置成功',
         hasMask: false,
         duration: 1000,
-      });
+        onClose: () => {
+          const { router, site } = this.props;
+          const { needToCompleteExtraInfo: isNeedToCompleteExtraInfo } = router.query;
 
-      setTimeout(() => {
-        const { router, site } = this.props;
-        const { needToCompleteExtraInfo: isNeedToCompleteExtraInfo } = router.query;
+          // 扩展信息的判断跳转
+          if (!isExtFieldsOpen(site)) return;
 
-        // 扩展信息的判断跳转
-        if (!isExtFieldsOpen(site)) return;
-
-        const needToCompleteExtraInfo = this.props.commonLogin.needToCompleteExtraInfo || isNeedToCompleteExtraInfo;
-        if (needToCompleteExtraInfo) {
-          this.props.router.push('/user/supplementary');
-          return;
+          const needToCompleteExtraInfo = this.props.commonLogin.needToCompleteExtraInfo || isNeedToCompleteExtraInfo;
+          if (needToCompleteExtraInfo) {
+            this.props.router.push('/user/supplementary');
+            return;
+          }
+          // TODO: 这里的路由堆栈需要再梳理规则
+          window.location.href = '/';
         }
-        // TODO: 这里的路由堆栈需要再梳理规则
-        window.location.href = '/';
-      }, 1000);
+      });
     } catch (e) {
       // 跳转状态页
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {

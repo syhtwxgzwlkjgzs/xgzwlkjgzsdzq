@@ -3,8 +3,12 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import { Button, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
-import layout from './index.module.scss';
+import h5layout from './index.module.scss';
+import pclayout from './pc.module.scss';
 import { getSignInFields, setSignInFields } from '@server';
+import PcBodyWrap from '../components/pc-body-wrap';
+import HomeHeader from '@components/home-header';
+import Header from '@components/header';
 
 import { InputType, CreateFunctions } from './components';
 
@@ -42,10 +46,13 @@ class SupplementaryH5Page extends React.Component {
   }
 
   createComponent(field) {
+    const { site } = this.props;
+    const { platform } = site;
+    const layout = platform === 'h5' ? h5layout : pclayout;
     field.onChange = this.onChange;
     const f = CreateFunctions[field.type];
     if (!f) return (<></>);
-    return f(field);
+    return f(field, layout);
   }
 
   onChange = (index, value) => {
@@ -91,35 +98,50 @@ class SupplementaryH5Page extends React.Component {
 
   render() {
     const { values } = this.props.supplementary;
+    const { site } = this.props;
+    const { platform } = site;
+    const layout = platform === 'h5' ? h5layout : pclayout;
     return (
-      <div className={layout.content}>
-        {values?.map((item, index) => this.createComponent(values[index]))}
-        <Button className={layout.button} type='primary' onClick={() => {
-          try {
-            const data = this.processData(values);
-            console.log(data);
-            return;
-            setSignInFields({ data })
-              .then(() => {
-                Toast.success({
-                  content: '提交成功',
+      <PcBodyWrap>
+        <div className={layout.container}>
+          {
+            platform === 'h5'
+              ? <HomeHeader hideInfo mode='login'/>
+              : <>
+                  <Header/>
+                  <div className={layout.title}>填写补充信息</div>
+                </>
+          }
+          <div className={layout.content}>
+            {values?.map((item, index) => this.createComponent(values[index]))}
+            <Button className={layout.button} type='primary' onClick={() => {
+              try {
+                const data = this.processData(values);
+                console.log(data);
+                return;
+                setSignInFields({ data })
+                  .then(() => {
+                    Toast.success({
+                      content: '提交成功',
+                      duration: 2000,
+                    });
+                    setTimeout(() => {
+                      // todo 跳转逻辑
+                    }, 2000);
+                  });
+              } catch (e) {
+                // todo 优化错误处理
+                Toast.error({
+                  content: e.message,
                   duration: 2000,
                 });
-                setTimeout(() => {
-                  // todo 跳转逻辑
-                }, 2000);
-              });
-          } catch (e) {
-            // todo 优化错误处理
-            Toast.error({
-              content: e.message,
-              duration: 2000,
-            });
-          }
-        }}>
-          提交
-        </Button>
-      </div>
+              }
+            }}>
+              提交
+            </Button>
+          </div>
+        </div>
+      </PcBodyWrap>
     );
   }
 }

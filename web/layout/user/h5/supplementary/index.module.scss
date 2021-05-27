@@ -6,6 +6,14 @@
   background: $white;
   .item {
     padding: rem($margin-2n) 0;
+    &:after {
+      content: '';
+      height: 0;
+      width: 0;
+      visibility: hidden;
+      clear: both;
+      display: block;
+    }
   }
   .input{
     .input_value{
@@ -35,10 +43,16 @@
       font-size: rem($font-size-large);
       color: var(--color-text-secondary);
     }
+    :global(.dzq-upload) {
+      padding: 0;
+    }
   }
   .attachmentsUpload{
     float: left;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     .attachmentsUpload-left{
       display: inline-block;
       font-size: rem($font-size-base);
@@ -53,6 +67,19 @@
       line-height: rem($font-line-height-base);
       color: var(--color-text-primary);
       float: right;
+      :global(.dzq-upload) {
+        padding: 0;
+      }
+      :global(.dzq-button--text) {
+        background-color: $white;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+      }
+      :global(.dzq-icon) {
+        padding-right: $padding-2n;
+      }
     }
   }
   .textarea{
