@@ -88,7 +88,7 @@ class CommentAction extends CommentStore {
    * @param {string} params.content * 评论内容
    * @param {array} params.attachments 附件内容
    * @param {boolen} params.sort 当前排序  ture 评论从旧到新 false 评论从新到旧
-   * @param {boolen} params.isNoMore 是否还有更多
+   * @param {boolen} params.isNoMore 是否没有更多
    * @returns {object} 处理结果
    */
   @action
@@ -125,7 +125,7 @@ class CommentAction extends CommentStore {
       }
 
       // 尾部添加评论
-      if (sort === true && isNoMore === false) {
+      if (sort === true && isNoMore === true) {
         commentList.push(newData);
         ThreadStore && ThreadStore.setCommentList(commentList);
       }
