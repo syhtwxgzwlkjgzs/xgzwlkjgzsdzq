@@ -45,7 +45,7 @@ export { default as h5WechatCodeLogin } from './login/h5WechatCodeLogin';
 export { default as h5QrcodeLogin } from './login/h5QrcodeLogin';
 export { default as h5QrcodeBind } from './login/h5QrcodeBind';
 export { default as getSignInFields } from './login/getSignInFields';
-export { default as setSignInField } from './login/setSignInFields';
+export { default as setSignInFields } from './login/setSignInFields';
 export { default as h5WechatCodeBind } from './h5WechatCodeBind';
 export { default as miniQrcodeLogin } from './login/miniQrcodeLogin';
 export { default as miniQrcodeBind } from './login/miniQrcodeBind';
