@@ -56,6 +56,11 @@ const config = {
       ]
     }
   ],
+  permission: {
+    "scope.userLocation": {
+      "desc": "小程序将获取您的位置信息"
+    }
+  },
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',
