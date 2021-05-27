@@ -97,6 +97,8 @@ class index extends Component {
   };
 
   gotoLikeList = () => {
+    const isVisitOtherUser = this.props.router.query?.id;
+    if (isVisitOtherUser) return;
     Router.push({ url: '/my/like' });
   };
 
