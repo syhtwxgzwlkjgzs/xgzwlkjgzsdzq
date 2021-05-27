@@ -42,7 +42,10 @@ class ForumH5Page extends React.Component {
       <>
         {
           platform === 'h5'
-            ? <HomeHeader/>
+            ? <>
+                <Header/>
+                <HomeHeader/>
+              </>
             : <Header/>
         }
         <div className={layout.content}>
