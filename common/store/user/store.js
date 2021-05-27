@@ -103,7 +103,7 @@ class UserStore {
     return get(this.userInfo, 'username');
   }
 
-  // 微信昵称
+  // 昵称
   @computed get nickname() {
     return get(this.userInfo, 'nickname');
   }
@@ -153,6 +153,16 @@ class UserStore {
     return get(this.userInfo, 'paid');
   }
 
+  // 获取用户微信昵称
+  @computed get wxNickname() {
+    return get(this.userInfo, 'wxNickname')
+  }
+
+  // 获取用户微信头像
+  @computed get wxHeadImgUrl() {
+    return get(this.userInfo, 'wxHeadImgUrl')
+  }
+
   // 目标用户关注数
   @computed get targetUserFollowCount() {
     return get(this.targetUser, 'followCount');
@@ -173,7 +183,7 @@ class UserStore {
     return get(this.targetUser, 'username');
   }
 
-  // 目标用户微信昵称
+  // 目标用户昵称
   @computed get targetUserNickname() {
     return get(this.targetUser, 'nickname');
   }
