@@ -45,7 +45,7 @@ class TopicAction extends TopicStore {
       }
       return result.data;
     }
-    return null;
+    return Promise.reject();
   };
 
   /**
