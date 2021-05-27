@@ -249,6 +249,26 @@ class WalletH5Page extends React.Component {
     return Object.values(targetDateData).reduce((fullData, pageData) => [...fullData, ...pageData]);
   };
 
+  onTypeChange = (ids) => {
+    let arr = {};
+    let name = '';
+    switch (this.state.tabsType) {
+      case 'income':
+        arr = INCOME_DETAIL_CONSTANTS;
+        break;
+      case 'pay':
+        arr = EXPAND_DETAIL_CONSTANTS;
+        break;
+      case 'withdrawal':
+        arr = CASH_DETAIL_CONSTANTS;
+    }
+    for (let key in arr) {
+      if (arr[key].code === ids) {
+        name = arr[key].text;
+      }
+    }
+    return name
+  }
   render() {
     const tabList = [
       [
@@ -291,7 +311,6 @@ class WalletH5Page extends React.Component {
         { name: 'TransferOutOutlined' },
       ],
     ];
-
     const { walletInfo, incomeDetail = {}, expandDetail, cashDetail } = this.props.wallet;
     return (
       <div className={layout.container}>
@@ -305,7 +324,10 @@ class WalletH5Page extends React.Component {
           </div>
           <div className={layout.choiceTime}>
             <div className={layout.status} onClick={this.handleTypeSelectorClick}>
-              <span className={layout.text}>{this.state.tabsType === 'withdrawal' ? '全部状态' : '全部类型'}</span>
+              <span className={layout.text}>
+                {this.state.selectType === 'all' ? this.state.tabsType === 'withdrawal' ? '全部状态' : '全部类型'
+                  : this.onTypeChange(this.state.selectType)}
+              </span>
               <Icon name="UnderOutlined" size="6" className={layout.icon}></Icon>
             </div>
             <div className={layout.status} onClick={this.handleTimeSelectorClick}>
