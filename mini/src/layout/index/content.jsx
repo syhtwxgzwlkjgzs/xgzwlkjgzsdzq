@@ -67,12 +67,16 @@ class IndexH5Page extends React.Component {
 
   // 点击更多弹出筛选
   searchClick = () => {
+    this.props.index.setHiddenTabBar(true)
+
     this.setState({
       visible: true,
     });
   };
   // 关闭筛选框
   onClose = () => {
+    this.props.index.setHiddenTabBar(false)
+
     this.setState({
       visible: false,
     });
@@ -188,7 +192,7 @@ class IndexH5Page extends React.Component {
   renderTabs = () => {
     const { index } = this.props;
     const { currentIndex, fixedTab, navBarHeight } = this.state;
-    const { categories = [] } = index;
+    const { categories = [], hiddenTabBar } = index;
     const newCategories = this.handleCategories(categories);
 
     return (
@@ -265,6 +269,7 @@ class IndexH5Page extends React.Component {
         curr='home'
         pageName='home'
         preload={1000}
+        requestError={this.props.isError}
       >
         <HomeHeader ref={this.headerRef} />
 

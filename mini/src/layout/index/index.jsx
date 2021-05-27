@@ -14,11 +14,19 @@ class Index extends React.Component {
   page = 1;
   prePage = 10;
 
+  state = {
+    isError: false
+  }
+
   async componentDidMount() {
     const { site } = this.props;
     this.props.index.getReadCategories();
     this.props.index.getRreadStickList();
-    this.props.index.getReadThreadList({sequence: this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0});
+    try {
+      await this.props.index.getReadThreadList({sequence: this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0});
+    } catch (error) {
+      this.setState({ isError: true })
+    }
   }
 
   dispatch = async (type, data = {}) => {
@@ -68,7 +76,7 @@ class Index extends React.Component {
     return (
       <View>
         <MemoToastProvider>
-          <IndexPageContent dispatch={this.dispatch} />
+          <IndexPageContent dispatch={this.dispatch} isError={this.state.isError} />
         </MemoToastProvider>
       </View>
     );

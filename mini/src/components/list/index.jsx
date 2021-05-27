@@ -22,7 +22,8 @@ const List = forwardRef(({
   onRefresh,
   onScroll = noop,
   showRefresh = true,
-  preload = 30
+  preload = 30,
+  requestError = false
 }, ref) => {
   const listWrapper = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,6 +34,10 @@ const List = forwardRef(({
       setIsLoading(true);
     }
   }, [noMore]);
+
+  useEffect(() => {
+    setIsError(requestError)
+  }, [requestError])
 
   // useEffect(() => {
   //   onTouchMove();
@@ -64,7 +69,7 @@ const List = forwardRef(({
   };
 
   const onTouchMove = (e) => {
-    if (e && !isLoading.current && onRefresh && !isLoading) {
+    if (e && !isLoading.current && onRefresh && !isLoading && !requestError) {
       setIsLoading(true);
       if (typeof(onRefresh) === 'function') {
         const promise = onRefresh()
