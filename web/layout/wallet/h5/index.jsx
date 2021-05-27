@@ -6,7 +6,6 @@ import WalletInfo from './components/wallet-info/index';
 import IncomeList from './components/income-list/index';
 import PayList from './components/pay-list/index';
 import WithdrawalList from './components/withdrawal-list/index';
-import NoMore from './components/no-more';
 import classNames from 'classnames';
 import FilterView from './components/all-state-popup';
 import DatePickers from '@components/thread/date-picker';
@@ -399,6 +398,7 @@ class WalletH5Page extends React.Component {
           handleSubmit={this.handleTypeChange}
         />
         <DatePickers
+          time={new Date(this.state.consumptionTime) || new Date}
           isOpen={this.state.consumptionTimeshow}
           onCancels={this.handleDataPickerCancel}
           onSelects={this.handleMoneyTime}
