@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, Fragment } from 'react';
+import React, { useEffect, createRef, useState, Fragment } from 'react';
 import { Icon, Popup, Textarea, Divider, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import classnames from 'classnames';
@@ -12,7 +12,7 @@ import { THREAD_TYPE } from '@common/constants/thread-post';
 const InputPop = (props) => {
   const { visible, onSubmit, initValue, onClose, inputText = '写评论...', site } = props;
 
-  const textareaRef = useRef(null);
+  const textareaRef = createRef();
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -26,10 +26,6 @@ const InputPop = (props) => {
   useEffect(() => {
     setValue(initValue || '');
   }, [initValue]);
-
-  // useEffect(() => {
-  //   console.log(textareaRef);
-  // }, []);
 
   const onSubmitClick = async () => {
     if (loading) return;
@@ -80,14 +76,24 @@ const InputPop = (props) => {
     setShowAt(false);
   };
 
+  // 完成表情选择
   const onEmojiClick = (emoji) => {
-    setValue(value + emoji.code || '');
+    // 在光标位置插入
+    const insertPosition = textareaRef?.current?.selectionStart || 0;
+    const newValue = value.substr(0, insertPosition) + (emoji.code || '') + value.substr(insertPosition);
+    setValue(newValue);
+
     setShowEmojis(false);
   };
 
+  // 完成@人员选择
   const onAtListChange = (atList) => {
+    // 在光标位置插入
     const atListStr = atList.map((atUser) => ` @${atUser} `).join('');
-    setValue(value + atListStr || '');
+    const insertPosition = textareaRef?.current?.selectionStart || 0;
+    const newValue = value.substr(0, insertPosition) + (atListStr || '') + value.substr(insertPosition);
+    setValue(newValue);
+
     setShowEmojis(false);
   };
 
@@ -154,7 +160,6 @@ const InputPop = (props) => {
           <Textarea
             className={styles.input}
             maxLength={5000}
-            ref={textareaRef}
             rows={4}
             showLimit={false}
             value={value}

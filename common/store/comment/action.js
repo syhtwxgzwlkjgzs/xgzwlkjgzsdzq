@@ -117,7 +117,7 @@ class CommentAction extends CommentStore {
       ThreadStore && ThreadStore.setTotalCount(newTotalCount);
       const newData = res.data;
       newData.lastThreeComments = [];
-      console.log(sort, isNoMore);
+
       // 头部添加评论
       if (sort === false) {
         commentList.unshift(newData);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import { Textarea, Toast, Upload, Button, Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 import { readEmoji } from '@common/server';
@@ -11,6 +11,8 @@ import classnames from 'classnames';
 
 const CommentInput = (props) => {
   const { onSubmit, onClose, height, initValue = '', placeholder = '写下我的评论...' } = props;
+
+  const textareaRef = createRef();
 
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
@@ -72,20 +74,34 @@ const CommentInput = (props) => {
     setShowAt(false);
   };
 
+  // 完成选择表情
   const onEmojiClick = (emoji) => {
-    setValue(value + emoji.code || '');
+    // 在光标位置插入
+    const insertPosition = textareaRef?.current?.selectionStart || 0;
+    const newValue = value.substr(0, insertPosition) + (emoji.code || '') + value.substr(insertPosition);
+    setValue(newValue);
+
     setShowEmojis(false);
   };
 
+  // 完成选择@人员
   const onAtListChange = (atList) => {
+    // 在光标位置插入
     const atListStr = atList.map((atUser) => ` @${atUser} `).join('');
-    setValue(value + atListStr || '');
+    const insertPosition = textareaRef?.current?.selectionStart || 0;
+    const newValue = value.substr(0, insertPosition) + (atListStr || '') + value.substr(insertPosition);
+    setValue(newValue);
+
     setShowEmojis(false);
   };
 
+  // 完成选择话题
   const onTopicClick = (topic) => {
-    console.log(topic);
-    setValue(value + (topic ? ` ${topic} ` : ''));
+    // 在光标位置插入
+    const insertPosition = textareaRef?.current?.selectionStart || 0;
+    const newValue = value.substr(0, insertPosition) + (topic ? ` ${topic} ` : '') + value.substr(insertPosition);
+    setValue(newValue);
+
     setShowTopic(false);
   };
 
@@ -100,6 +116,7 @@ const CommentInput = (props) => {
           onChange={(e) => setValue(e.target.value)}
           placeholder={placeholderState}
           disabled={loading}
+          forwardedRef={textareaRef}
         ></Textarea>
       </div>
 

@@ -12,6 +12,7 @@ import RedPacketDisplay from '@components/thread-detail-pc/red-packet-display';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import ImageDisplay from '@components/thread/image-display';
+import classNames from 'classnames';
 
 @observer
 class CommentList extends React.Component {
@@ -156,7 +157,10 @@ class CommentList extends React.Component {
               <div className={styles.commentListName}>
                 {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常，请联系管理员'}
               </div>
-              <div className={styles.commentListText} dangerouslySetInnerHTML={{ __html: this.filterContent() }}></div>
+              <div
+                className={classNames(styles.commentListText, this.props.isShowOne && styles.isShowOne)}
+                dangerouslySetInnerHTML={{ __html: this.filterContent() }}
+              ></div>
               {/* 图片展示 */}
               {this.props.data?.images && (
                 <div className={styles.imageDisplay}>
