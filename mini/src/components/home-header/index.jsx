@@ -123,7 +123,7 @@ class HomeHeader extends React.Component {
             <Text className={styles.text}>分享</Text>
           </Button>
         </View>}
-        {isWeiXin() && <SharePopup visible={visible} onClose={this.onClose} />}
+        {isWeiXin && <SharePopup visible={visible} onClose={this.onClose} />}
       </View>
     );
   }
