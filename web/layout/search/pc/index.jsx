@@ -48,7 +48,7 @@ class SearchPCPage extends React.Component {
 
   // TODO 处理用户是自己的数据
   onUserClick = ({ userId } = {}) => {
-    this.props.router.push(`/my/others?isOtherPerson=true&otherId=${userId}`);
+    this.props.router.push(`/user/${userId}`);
   };
 
   onTopicClick = data => {

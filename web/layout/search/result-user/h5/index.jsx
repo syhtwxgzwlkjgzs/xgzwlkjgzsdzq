@@ -44,8 +44,8 @@ class SearchResultUserH5Page extends React.Component {
     });
   };
 
-  onUserClick = ({ userId } = {}) => {
-    this.props.router.push(`/my/others?isOtherPerson=true&otherId=${userId}`);
+  onUserClick = (id) => {
+    this.props.router.push(`/user/${id}`);
   };
 
   render() {
@@ -66,6 +66,7 @@ class SearchResultUserH5Page extends React.Component {
               title={item.nickname}
               imgSrc={item.avatar}
               label={item.groupName}
+              userId={item.userId}
               onClick={this.onUserClick}
             />
           ))
