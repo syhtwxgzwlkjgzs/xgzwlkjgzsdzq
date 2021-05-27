@@ -1,5 +1,5 @@
-import api from '../api';
-export default async function createPayOrder(opts, ctx = null) {
-  const res = await api.createPayOrder({ ...opts, __context: ctx });
+import {createOrdersCreate} from '@discuzq/sdk/dist/api/pay/create-payorder';
+export default async function _createPayOrder(opts, ctx = null) {
+  const res = await createOrdersCreate({ ...opts, __context: ctx });
   return res;
 }

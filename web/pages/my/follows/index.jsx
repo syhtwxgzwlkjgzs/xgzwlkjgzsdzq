@@ -23,7 +23,7 @@ class index extends Component {
 
   componentDidMount() {
     this.setState({
-      height: window.outerHeight,
+      height: window.outerHeight - 38,
       renderComponent: true,
     });
   }

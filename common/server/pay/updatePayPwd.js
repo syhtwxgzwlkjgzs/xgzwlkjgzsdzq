@@ -1,5 +1,5 @@
-import api from '../api';
-export default async function updatePayPwd(opts, ctx = null) {
-  const res = await api.updatePayPwd({ ...opts, __context: ctx });
+import {updatePayPwd} from '@discuzq/sdk/dist/api/pay/update-paypwd';
+export default async function _updatePayPwd(opts, ctx = null) {
+  const res = await updatePayPwd({ ...opts, __context: ctx });
   return res;
 }

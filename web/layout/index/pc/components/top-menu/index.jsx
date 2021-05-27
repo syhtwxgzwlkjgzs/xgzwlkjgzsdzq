@@ -76,7 +76,7 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
       }
     }
     data.forEach(item => {
-      if (item.value === 'sequence') {
+      if (item.type === 'sequence') {
         result['sequence'] = item.isActive ? '1' : '0'
       } else if (item.children?.length) {
         item.children.forEach(sub => {

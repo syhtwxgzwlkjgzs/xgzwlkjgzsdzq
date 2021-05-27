@@ -1,10 +1,11 @@
+// import {createOrdersCreate} from '@discuzq/sdk/dist/api/pay/create-orderscreate';
 import api from '../api';
 
 /**
  * 获取消息列表
  * TODO: 待更新到sdk
  */
-export default async function readMsgList(opts, ctx = null) {
+export default async function _readMsgList(opts, ctx = null) {
   try {
     const { params = {}, data = {}, ...others } = opts;
     const options = {

@@ -25,11 +25,16 @@
         display: flex;
         padding-top: rem($padding-4n);
 
+        input {
+            -webkit-appearance: none;
+        }
+
 
         .userCenterPostInput {
             width: 100%;
-             input{
-                padding-left: $padding-4n ;
+
+            input {
+                padding-left: $padding-4n;
             }
         }
     }
