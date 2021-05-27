@@ -73,16 +73,26 @@
           text-align: left;
           word-break: break-all;
           color: var(--color-text-primary);
-          @include lamp-clamp(3);
 
           p {
-            @include lamp-clamp(3);
             line-height: rem(24);
           }
 
           img {
             height: rem(22);
           }
+
+          &.isShowOne {
+            @include lamp-clamp(3);
+
+            p {
+              @include lamp-clamp(3);
+            }
+          }
+        }
+
+        .imageDisplay {
+          margin-top: rem($margin-2n);
         }
       }
       .commentListFooter {
