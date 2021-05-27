@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import UserCenterEditHeader from '../../user-center-edit-header/index';
-import { Button, Icon, Input } from '@discuzq/design';
+import { Button, Icon, Input, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
@@ -71,8 +71,21 @@ class index extends Component {
   }
 
   handleUpdateEditedUserInfo = throttle(() => {
-    this.props.user.updateEditedUserInfo();
-    Router.push({ url: '/my' });
+    this.props.user.updateEditedUserInfo().then(res => {
+      Toast.success({
+        content: "更新信息成功",
+        hasMask: false,
+        duration: 1000,
+      })
+      Router.push({ url: '/my' });
+    }).catch((error) => {
+      Toast.error({
+        content: error.message || '更新用户信息失败',
+        hasMask: false,
+        duration: 1000,
+      })
+      Router.push({ url: '/my' });
+    });
   }, 300)
 
   handleGoToEditMobile = () => {
@@ -122,7 +135,7 @@ class index extends Component {
               <label>账户密码</label>
             </div>
             <div className={styles.userCenterEditValue} onClick={this.handleGoToEditAccountPwd}>
-              <div className={styles.ucText}>修改</div>
+              <div className={styles.ucText}>{this.props.user?.hasPassword ? '修改' : '设置'}</div>
               <Icon name="RightOutlined" />
             </div>
           </div>
@@ -131,7 +144,7 @@ class index extends Component {
               <label>支付密码</label>
             </div>
             <div className={styles.userCenterEditValue} onClick={this.handleGoToEditPayPwd}>
-              <div className={styles.ucText}>修改</div>
+              <div className={styles.ucText}>{this.props.user?.canWalletPay ? "修改" : "设置"}</div>
               <Icon name="RightOutlined" />
             </div>
           </div>
