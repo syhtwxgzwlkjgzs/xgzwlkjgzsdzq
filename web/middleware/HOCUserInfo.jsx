@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject } from 'mobx-react';
 
-export default function HOCWeixin(Component) {
+export default function HOCUserInfo(Component) {
   @inject('user')
   class HOCUserInfoComponent extends React.Component {
     constructor(props) {
