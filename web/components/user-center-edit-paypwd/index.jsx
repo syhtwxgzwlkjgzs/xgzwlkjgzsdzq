@@ -21,19 +21,19 @@ class index extends Component {
   }
 
   componentDidMount() {
-    this.props.payBox.clearPayPassword()
+    this.props.payBox.clearPayPassword();
   }
 
   // 点击去到下一步
   goToResetPayPwd = throttle(() => {
-    if (this.getDisabledWithButton()) return
+    if (this.getDisabledWithButton()) return;
     this.props.payBox
       .getPayPwdResetToken()
       .then(() => {
         Router.push({ url: '/my/edit/reset-paypwd' });
         this.props.payBox.oldPayPwd = null;
       })
-      .catch((err) => {
+      .catch(() => {
         Toast.error({
           content: '密码错误',
           hasMask: false,
@@ -52,14 +52,14 @@ class index extends Component {
   handleSetPwd = (e) => {
     const securityCode = e.target.value.match(/^[0-9]*$/);
     if (!securityCode) return;
-    this.props.payBox.payPassword = securityCode[0]
+    this.props.payBox.payPassword = securityCode[0];
   };
 
   // 点击修改旧密码
   handleChangeOldPwd = (e) => {
     const securityCode = e.target.value.match(/^[0-9]*$/);
     if (!securityCode) return;
-    this.props.payBox.oldPayPwd = securityCode[0]
+    this.props.payBox.oldPayPwd = securityCode[0];
   };
 
   // 点击提交
@@ -103,20 +103,19 @@ class index extends Component {
    * @returns true 表示禁用 false表示不禁用
    */
    getDisabledWithButton = () => {
-    const payPassword = this.props.payBox?.payPassword
-    const oldPayPwd = this.props.payBox?.oldPayPwd
-    let disabled = false
-    if (this.props.user?.canWalletPay) {
-      disabled = !oldPayPwd || oldPayPwd.length !== 6
-    } else {
-      disabled = !payPassword || payPassword.length !== 6
-    }
-    return disabled
+     const payPassword = this.props.payBox?.payPassword;
+     const oldPayPwd = this.props.payBox?.oldPayPwd;
+     let disabled = false;
+     if (this.props.user?.canWalletPay) {
+       disabled = !oldPayPwd || oldPayPwd.length !== 6;
+     } else {
+       disabled = !payPassword || payPassword.length !== 6;
+     }
+     return disabled;
    }
 
   // 如果没有设置支付密码 显示设置支付密码
-  renderSetPayPwd = () => {
-    return (
+  renderSetPayPwd = () => (
       <div className={styles.content}>
         <h3>设置支付密码</h3>
         <div className={styles.paypwdInput}>
@@ -130,12 +129,10 @@ class index extends Component {
           />
         </div>
       </div>
-    );
-  };
+  );
 
   // 渲染已经设置了支付密码内容
-  renderCanPayPwd = () => {
-    return (
+  renderCanPayPwd = () => (
       <div className={styles.content}>
         <h3>修改密码</h3>
         <div className={styles.labelInfo}>
@@ -154,8 +151,7 @@ class index extends Component {
           </div>
         </div>
       </div>
-    );
-  };
+  );
 
   render() {
     return (

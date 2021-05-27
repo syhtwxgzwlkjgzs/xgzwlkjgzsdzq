@@ -30,12 +30,13 @@ export default class index extends Component {
     this.backgroundUploaderRef.current.click();
   }
 
-  onAvatarChange = (fileList) => {
-    this.props.user.updateAvatar(fileList.target.files);
+  onAvatarChange = async (fileList) => {
+    await this.props.user.updateAvatar(fileList.target.files);
+
   }
 
-  onBackgroundChange = (fileList) => {
-    this.props.user.updateBackground(fileList.target.files);
+  onBackgroundChange = async (fileList) => {
+    await this.props.user.updateBackground(fileList.target.files);
   }
 
   // 点击编辑签名

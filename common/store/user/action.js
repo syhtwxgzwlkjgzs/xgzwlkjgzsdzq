@@ -377,7 +377,7 @@ class UserAction extends SiteStore {
     const param = new FormData();
     param.append('avatar', fileList[0]);// 通过append向form对象添加数据
     param.append('pid', this.id);
-    await updateAvatar({
+    const updateAvatarRes = await updateAvatar({
       transformRequest: [function (data) {
         return data;
       }],
@@ -386,7 +386,11 @@ class UserAction extends SiteStore {
       },
       data: param,
     });
-    await this.updateUserInfo(this.id);
+
+    if (updateAvatarRes.code === 0) {
+      this.userInfo.avatarUrl = updateAvatarRes.data.avatarUrl;
+      this.userInfo = { ...this.userInfo };
+    }
   }
 
   /**
@@ -396,7 +400,7 @@ class UserAction extends SiteStore {
   async updateBackground(fileList) {
     const param = new FormData();
     param.append('background', fileList[0]);// 通过append向form对象添加数据
-    await updateBackground({
+    const updateBackgroundRes = await updateBackground({
       transformRequest: [function (data) {
         return data;
       }],
@@ -405,7 +409,16 @@ class UserAction extends SiteStore {
       },
       data: param,
     });
-    await this.updateUserInfo(this.id);
+
+    this.userInfo.backgroundUrl = '';
+
+    if (updateBackgroundRes.code === 0) {
+      // 因为背景图 url 是一致的，所以会导致不更新，这里进行先赋予空值，再延时赋值
+      setTimeout(() => {
+        this.userInfo.backgroundUrl = updateBackgroundRes.data.backgroundUrl;
+        this.userInfo = { ...this.userInfo };
+      }, 300);
+    }
   }
 
   // FIXME: 这里报接口参数错误
