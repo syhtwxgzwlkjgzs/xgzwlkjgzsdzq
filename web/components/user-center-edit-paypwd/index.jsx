@@ -16,38 +16,22 @@ class index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      payPassword: null, // 支付密码
-      oldPayPwd: null, // 旧密码
       isSubmit: false,
     };
   }
 
-  initState = () => {
-    this.setState({
-      payPassword: null,
-      oldPayPwd: null,
-      isSubmit: false,
-    });
-    this.props.payBox.password = null;
-  };
-
   componentDidMount() {
-    this.initState();
-  }
-
-  componentWillUnmount() {
-    this.initState();
+    this.props.payBox.clearPayPassword()
   }
 
   // 点击去到下一步
   goToResetPayPwd = throttle(() => {
     if (this.getDisabledWithButton()) return
-    const { oldPayPwd } = this.state;
-    this.props.payBox.oldPayPwd = oldPayPwd;
     this.props.payBox
       .getPayPwdResetToken()
       .then(() => {
         Router.push({ url: '/my/edit/reset-paypwd' });
+        this.props.payBox.oldPayPwd = null;
       })
       .catch((err) => {
         Toast.error({
@@ -55,7 +39,7 @@ class index extends Component {
           hasMask: false,
           duration: 1000,
         });
-        this.initState();
+        this.props.payBox.oldPayPwd = null;
       });
   }, 300);
 
@@ -68,29 +52,24 @@ class index extends Component {
   handleSetPwd = (e) => {
     const securityCode = e.target.value.match(/^[0-9]*$/);
     if (!securityCode) return;
-    this.setState({
-      payPassword: securityCode[0],
-    });
+    this.props.payBox.payPassword = securityCode[0]
   };
 
   // 点击修改旧密码
   handleChangeOldPwd = (e) => {
     const securityCode = e.target.value.match(/^[0-9]*$/);
     if (!securityCode) return;
-    this.setState({
-      oldPayPwd: securityCode[0],
-    });
+    this.props.payBox.oldPayPwd = securityCode[0]
   };
 
   // 点击提交
   handleSubmit = throttle(async () => {
-    const { payPassword, isSubmit } = this.state;
+    const { isSubmit } = this.state;
     if (isSubmit || this.getDisabledWithButton()) return;
     this.setState({
       isSubmit: true,
     });
     const { id } = this.props.user;
-    this.props.payBox.password = payPassword;
     this.props.payBox
       .setPayPassword(id)
       .then((res) => {
@@ -124,7 +103,8 @@ class index extends Component {
    * @returns true 表示禁用 false表示不禁用
    */
    getDisabledWithButton = () => {
-    const { payPassword, oldPayPwd } = this.state;
+    const payPassword = this.props.payBox?.payPassword
+    const oldPayPwd = this.props.payBox?.oldPayPwd
     let disabled = false
     if (this.props.user?.canWalletPay) {
       disabled = !oldPayPwd || oldPayPwd.length !== 6
@@ -136,7 +116,6 @@ class index extends Component {
 
   // 如果没有设置支付密码 显示设置支付密码
   renderSetPayPwd = () => {
-    const { payPassword } = this.state;
     return (
       <div className={styles.content}>
         <h3>设置支付密码</h3>
@@ -144,7 +123,7 @@ class index extends Component {
           <Input
             type="number"
             maxLength={6}
-            value={payPassword}
+            value={this.props.payBox?.payPassword}
             onChange={this.handleSetPwd}
             placeholder="请设置您的支付密码"
             mode="password"
@@ -156,7 +135,6 @@ class index extends Component {
 
   // 渲染已经设置了支付密码内容
   renderCanPayPwd = () => {
-    const { oldPayPwd } = this.state;
     return (
       <div className={styles.content}>
         <h3>修改密码</h3>
@@ -165,7 +143,7 @@ class index extends Component {
             <Input
               type="number"
               maxLength={6}
-              value={oldPayPwd}
+              value={this.props.payBox?.oldPayPwd}
               mode="password"
               placeholder="请输入旧密码"
               onChange={this.handleChangeOldPwd}
@@ -180,7 +158,6 @@ class index extends Component {
   };
 
   render() {
-    const { payPassword, oldPayPwd } = this.state;
     return (
       <div id={styles.setPayPwdContent}>
         <Header />

@@ -17,51 +17,31 @@ export default class index extends Component {
     }
   }
 
-  initState = () => {
-    this.setState({
-      newPayPwd: null,
-      newPayPwdRepeat: null,
-    })
-    this.props.payBox.newPayPwd = null
-    this.props.payBox.newPayPwdRepeat = null
-  }
-
   componentDidMount() {
-    this.initState()
-  }
-
-  componentWillUnmount() {
-    this.initState()
+    this.props.payBox.clearPayPassword()
   }
 
   // 设置新密码
   handleChangeNewPwd = (e) => {
-    this.setState({
-      newPayPwd: e.target.value
-    }, () => {
-      this.props.payBox.newPayPwd = e.target.value
-    })
+    this.props.payBox.newPayPwd = e.target.value
   }
 
   // 确认新密码
   handleChangeRepeatPwd = (e) => {
-    this.setState({
-      newPayPwdRepeat: e.target.value
-    }, () => {
-      this.props.payBox.newPayPwdRepeat = e.target.value
-    })
+    this.props.payBox.newPayPwdRepeat = e.target.value
   }
 
   handleSubmit = throttle(() => {
     if (this.getDisabledWithButton()) return
-    const { newPayPwd, newPayPwdRepeat } = this.state
+    const newPayPwd = this.props.payBox?.newPayPwd
+    const newPayPwdRepeat = this.props.payBox?.newPayPwdRepeat
     if (newPayPwd !== newPayPwdRepeat) {
       Toast.error({
         content: '两次密码输入有误',
         hasMask: false,
         duration: 1000,
       })
-      this.initState()
+      this.props.payBox.clearPayPassword()
       return
     }
     this.props.payBox.resetPayPwd().then(res => {
@@ -71,13 +51,14 @@ export default class index extends Component {
         duration: 1000,
       })
       Router.push({ url: `/my` })
+      this.props.payBox.clearPayPassword()
     }).catch((err) => {
       Toast.error({
         content: '修改密码失败',
         hasMask: false,
         duration: 1000,
       })
-      this.initState()
+      this.props.payBox.clearPayPassword()
     })
   }, 300)
 
@@ -86,12 +67,14 @@ export default class index extends Component {
   * @returns true 表示禁用 false表示不禁用
   */
   getDisabledWithButton = () => {
-    const { newPayPwd, newPayPwdRepeat } = this.state
-    return !newPayPwd || !newPayPwdRepeat
+    const newPayPwd = this.props.payBox?.newPayPwd
+    const newPayPwdRepeat = this.props.payBox?.newPayPwdRepeat
+    return !newPayPwd || !newPayPwdRepeat || newPayPwd !== newPayPwdRepeat
   }
 
   render() {
-    const { newPayPwd, newPayPwdRepeat } = this.state
+    const newPayPwd = this.props.payBox?.newPayPwd
+    const newPayPwdRepeat = this.props.payBox?.newPayPwdRepeat
     return (
       <div id={styles.resetPayPwdContent}>
         <Header />

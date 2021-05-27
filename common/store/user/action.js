@@ -625,6 +625,16 @@ class UserAction extends SiteStore {
   }
 
   /**
+   * 清理对应用户密码函数
+   */
+  @action
+  clearUserAccountPassword = () => {
+    this.oldPassword = null;
+    this.newPassword = null;
+    this.newPasswordRepeat = null;
+  }
+
+  /**
    * 四个清理函数，清理用户和目标用户粉丝信息
    */
   @action
