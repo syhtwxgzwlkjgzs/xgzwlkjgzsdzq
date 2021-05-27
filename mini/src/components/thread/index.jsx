@@ -1,6 +1,7 @@
 import React from 'react';
 import Router from '@discuzq/sdk/dist/router';
-import { Button, Toast } from '@discuzq/design';
+import Toast from '@discuzq/design/dist/components/toast';
+import Button from '@discuzq/design/dist/components/button';
 import { inject, observer } from 'mobx-react';
 import BottomEvent from './bottom-event';
 import UserInfo from './user-info';
@@ -181,7 +182,7 @@ class Index extends React.Component {
         <View className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
           <View className={styles.header} onClick={this.onClick}>
               <UserInfo
-                name={user.userName || ''}
+                name={user.nickname || ''}
                 avatar={user.avatar || ''}
                 location={position.location}
                 view={`${viewCount}`}

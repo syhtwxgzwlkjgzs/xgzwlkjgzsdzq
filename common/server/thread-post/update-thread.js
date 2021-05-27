@@ -1,4 +1,5 @@
 // import {deleteDeny} from '@discuzq/sdk/dist/api/user/delete-deny';
+import api from '../api';
 /**
  * 发帖接口
  * TODO: 待更新到sdk

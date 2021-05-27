@@ -10,6 +10,7 @@ import Header from '@components/header';
 import { Toast } from '@discuzq/design';
 import InputPopup from '../../h5/components/input-popup';
 import ReportPopup from '../../h5/components/report-popup';
+import goToLoginPage from '@common/utils/go-to-login-page';
 
 @inject('site')
 @inject('user')
@@ -56,6 +57,7 @@ class CommentH5Page extends React.Component {
   onOperClick = (type) => {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
       return;
     }
 
@@ -109,6 +111,7 @@ class CommentH5Page extends React.Component {
   async likeClick(data) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
       return;
     }
 
@@ -147,6 +150,7 @@ class CommentH5Page extends React.Component {
   async replyLikeClick(reply) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
       return;
     }
 
@@ -191,6 +195,12 @@ class CommentH5Page extends React.Component {
 
   // 点击评论的回复
   replyClick(comment) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     this.commentData = comment;
     this.replyData = null;
     this.setState({
@@ -201,6 +211,12 @@ class CommentH5Page extends React.Component {
 
   // 点击回复的回复
   replyReplyClick(reply, comment) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     this.commentData = null;
     this.replyData = reply;
     this.replyData.commentId = comment.id;

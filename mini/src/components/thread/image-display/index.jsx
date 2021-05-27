@@ -118,7 +118,7 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
         {ImageView}
         <ImagePreviewer
           visible={visible}
-          onClose={() => {
+          onComplete={() => {
             setVisible(false);
           }}
           imgUrls={imagePreviewers}
