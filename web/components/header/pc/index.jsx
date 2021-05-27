@@ -138,7 +138,7 @@ class Header extends React.Component {
                   />
                   <p>首页</p>
                 </div>
-                {false && <div className={styles.iconItem} onClick={() => this.handleRouter('/message')}>
+                <div className={styles.iconItem} onClick={() => this.handleRouter('/message')}>
                   <Icon
                     onClick={() => {
                       this.iconClickHandle('home');
@@ -147,7 +147,7 @@ class Header extends React.Component {
                     size={17}
                   />
                   <p>消息</p>
-                </div>}
+                </div>
                 <div className={styles.iconItem} onClick={() => this.handleRouter('/search')}>
                   <Icon
                     onClick={() => {
