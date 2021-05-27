@@ -56,25 +56,13 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
           filePath: path,
           fileType: getFileType(url), // 微信支持下载文件类型：doc, docx, xls, xlsx, ppt, pptx, pdf
           success(res) {
-            Toast.info({
-              content: '下载完成。',
-              duration: 1000,
-            });
           },
           fail(error) {
-            console.error("文件类型不支持下载。", error.errMsg);
-            Toast.error({
-              content: '文件类型不支持下载。',
-              duration: 1000,
-            });
+            console.error("文件类型不支持下载", error.errMsg);
           },
         });
       }).catch((error) => {
         console.error(error.errMsg)
-        Toast.error({
-          content: '下载遇到困难。',
-          duration: 1000,
-        });
       }).finally(() => {
         downloading[index] = false;
         setDownloading([...downloading]);

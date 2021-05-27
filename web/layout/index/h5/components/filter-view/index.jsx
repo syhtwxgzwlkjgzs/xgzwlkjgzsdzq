@@ -27,7 +27,7 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
     const { categoryids = [], types, essence } = current || {};
 
     setFirst(categoryids[0] || 'all');
-    setSecond(types || '');
+    setSecond(types || 'all');
     setThird(essence || '0');
 
     if (categoryids[1]) {
