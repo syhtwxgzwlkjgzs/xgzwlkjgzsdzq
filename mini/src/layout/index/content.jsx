@@ -9,6 +9,7 @@ import FilterView from './components/filter-view';
 import BaseLayout from '../../components/base-layout';
 import { throttle } from '@common/utils/throttle-debounce.js'
 import TopNew from './components/top-news';
+// import NavBar from './components/nav-bar';
 
 import styles from './index.module.scss';
 @inject('site')
@@ -184,7 +185,7 @@ class IndexH5Page extends React.Component {
       <>
         {categories?.length > 0 && (
           <>
-          <View ref={this.listRef} className={`${!fixedTab ? styles.homeContent : styles.homeContentFix}`} style={{paddingTop: !fixedTab ? '' : `${this.state.navBarHeight}px`}}>
+          <View ref={this.listRef} className={`${!fixedTab ? styles.homeContent : styles.homeContentFix}`}>
             <Tabs
               className={styles.tabsBox}
               scrollable
@@ -202,7 +203,12 @@ class IndexH5Page extends React.Component {
               ))}
             </Tabs>
           </View>
-          {fixedTab &&  <View className={styles.tabPlaceholder}></View>}
+          {fixedTab &&  (
+            <>
+             {/* <NavBar isShow={fixedTab} /> */}
+             <View className={styles.tabPlaceholder}></View>
+            </>
+          )}
           </>
         )}
       </>
