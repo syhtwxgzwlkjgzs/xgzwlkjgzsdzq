@@ -1,12 +1,8 @@
 @import "@common/styles/index.scss";
 
 .wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: stretch;
   height: 100vh;
-  background: $white;
+  background: $body-bg-color;
   border-top: $border-solid-1;
 
   .header {
@@ -14,7 +10,8 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: $padding-10 $padding-5n;
+    padding: $padding-4n $padding-4n $padding-2n;
+    background: $white;
 
     .input-box {
       flex: 1;
@@ -75,36 +72,30 @@
   .topic-item {
     display: flex;
     justify-content: space-between;
-    padding: 16px 20px;
+    align-items: center;
+    padding: $padding-4n;
     line-height: 20px;
+    background: $white;
     border-bottom: $border-solid-1;
 
     .item-left {
       display: flex;
       align-items: center;
-      max-width: 235px;
+      max-width: 240px;
+      @include text-ellipsis;
 
       .name {
         max-width: 197px;
         line-height: 20px;
         font-size: $font-size-primary;
-        font-weight: 600;
-        color: #333;
+        color: $text-color-primary;
         word-break: break-all;
-      }
-
-      .recommend {
-        width: 20px;
-        height: 20px;
-        margin-left: margin-5n;
-        margin-bottom: margin-2n;
-        font-size: 22px;
       }
     }
 
     .item-right {
       font-size: $font-size-small;
-      color: rgb(51, 51, 51);
+      color: $text-color-secondary;
       white-space: nowrap;
     }
   }
