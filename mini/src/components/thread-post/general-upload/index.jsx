@@ -83,7 +83,7 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
     const token = locals.get(constants.ACCESS_TOKEN_NAME);
     console.log(tempFilePath);
     Taro.uploadFile({
-      url: `${window.location.origin}/apiv3/attachments`,
+      url: `https://discuzv3-dev.dnspod.dev//apiv3/attachments`,
       filePath: tempFilePath,
       name: 'file',
       header: {

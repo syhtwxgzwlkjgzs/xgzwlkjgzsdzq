@@ -1,7 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { getCurrentInstance, navigateTo, redirectTo } from '@tarojs/taro';
-import { withRouter } from 'next/router';
 import Button from '@discuzq/design/dist/components/button/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Input from '@discuzq/design/dist/components/input/index';
@@ -160,4 +159,4 @@ class BindPhoneH5Page extends React.Component {
   }
 }
 
-export default withRouter(BindPhoneH5Page);
+export default BindPhoneH5Page;

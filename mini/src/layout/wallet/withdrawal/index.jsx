@@ -1,6 +1,5 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'next/router';
 import Button from '@discuzq/design/dist/components/button/index';
 import { View } from '@tarojs/components';
 
@@ -62,4 +61,4 @@ class Withdrawal extends React.Component {
   }
 }
 
-export default withRouter(Withdrawal);
+export default Withdrawal;

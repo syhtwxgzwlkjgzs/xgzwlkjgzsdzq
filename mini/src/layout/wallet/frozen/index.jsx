@@ -1,6 +1,5 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'next/router';
 import { View, Text } from '@tarojs/components';
 
 import styles from './index.module.scss';
@@ -67,4 +66,4 @@ class FrozenAmount extends React.Component {
   }
 }
 
-export default withRouter(FrozenAmount);
+export default FrozenAmount;
