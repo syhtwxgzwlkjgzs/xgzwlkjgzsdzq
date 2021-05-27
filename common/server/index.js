@@ -1,12 +1,12 @@
 export { default as readUser } from './readUser';
 export { default as readForum } from './readForum';
 export { default as readPermissions } from './readPermissions';
-export { default as usernameLogin } from './usernameLogin';
+export { default as usernameLogin } from './login/usernameLogin';
 export { default as usernameRegister } from './usernameRegister';
-export { default as genH5Qrcode } from './genH5QrCode';
-export { default as genMiniQrcode } from './genMiniQrcode';
+export { default as genH5Qrcode } from './login/genH5QrCode';
+export { default as genMiniQrcode } from './login/genMiniQrcode';
 export { default as smsSend } from './smsSend';
-export { default as smsLogin } from './smsLogin';
+export { default as smsLogin } from './login/smsLogin';
 export { default as readThreadDetail } from './thread/readThreadDetail';
 export { default as updateThreads } from './thread/updateThreads';
 export { default as readCommentList } from './thread/readCommentList';
@@ -50,12 +50,12 @@ export { default as h5WechatCodeBind } from './h5WechatCodeBind';
 export { default as miniQrcodeLogin } from './login/miniQrcodeLogin';
 export { default as miniQrcodeBind } from './login/miniQrcodeBind';
 export { default as genMiniScheme } from './genMiniScheme';
-export { default as miniBind } from './miniBind';
-export { default as miniLogin } from './miniLogin';
+export { default as miniBind } from './login/miniBind';
+export { default as miniLogin } from './login/miniLogin';
 export { default as usernameAutoBind } from './wx-username-auto-bind';
 export { default as createThread } from './thread-post/create-thread';
 export { default as readYundianboSignature } from './thread-post/read-yundianbo-signature';
-export { default as setNickname } from './setNickname';
+export { default as setNickname } from './login/setNickname';
 export { default as transitionSmsBind } from './transitionSmsBind';
 
 // 支付
