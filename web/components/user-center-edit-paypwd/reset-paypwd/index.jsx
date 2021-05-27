@@ -53,6 +53,7 @@ export default class index extends Component {
   }
 
   handleSubmit = throttle(() => {
+    if (this.getDisabledWithButton()) return
     const { newPayPwd, newPayPwdRepeat } = this.state
     if (newPayPwd !== newPayPwdRepeat) {
       Toast.error({
@@ -80,9 +81,17 @@ export default class index extends Component {
     })
   }, 300)
 
+  /**
+  * 获取按钮禁用状态
+  * @returns true 表示禁用 false表示不禁用
+  */
+  getDisabledWithButton = () => {
+    const { newPayPwd, newPayPwdRepeat } = this.state
+    return !newPayPwd || !newPayPwdRepeat
+  }
+
   render() {
     const { newPayPwd, newPayPwdRepeat } = this.state
-    let isSubmit = !newPayPwd || !newPayPwdRepeat
     return (
       <div id={styles.resetPayPwdContent}>
         <Header />
@@ -100,7 +109,7 @@ export default class index extends Component {
           </div>
         </div>
         <div className={styles.bottom}>
-          <Button full disabled={isSubmit} onClick={this.handleSubmit} type={"primary"} className={styles.btn}>提交</Button>
+          <Button full disabled={this.getDisabledWithButton()} onClick={this.handleSubmit} type={"primary"} className={styles.btn}>提交</Button>
         </div>
       </div>
     )
