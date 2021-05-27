@@ -11,6 +11,12 @@
     left: 50%;
     top: rem(228);
     transform: translateX(-50%) translateY(-100%);
+    :global {
+      .dzq-avatar {
+        border: rem(3) solid;
+        box-sizing: border-box;
+      }
+    }
   }
   .userCenterEditDec {
     position: absolute;

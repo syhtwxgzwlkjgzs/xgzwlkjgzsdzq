@@ -69,6 +69,7 @@ class index extends Component {
 
   // 点击下一步
   handleStepBtn = () => {
+    if (this.getDisabledWithButton()) return
     const { list = [], payPassword, payPasswordConfirmation } = this.state
     const mobile = this.props?.user.originalMobile;
     const code = list.join("")
@@ -111,6 +112,7 @@ class index extends Component {
   handleInputFocus = (e) => {
     this.setState({
       isBlur: false,
+      isKeyBoardVisible: false
     });
   }
 
@@ -124,6 +126,7 @@ class index extends Component {
   handleInputFocus1 = () => {
     this.setState({
       isBlur: false,
+      isKeyBoardVisible: false
     });
   }
 
@@ -163,10 +166,20 @@ class index extends Component {
     })
   }
 
+  /**
+ * 获取按钮禁用状态
+ * @returns true 表示禁用 false表示不禁用
+ */
+  getDisabledWithButton = () => {
+    const { list = [], payPassword, payPasswordConfirmation } = this.state;
+    let disabled = false
+    disabled = !payPassword || !payPasswordConfirmation || list.length !== 6
+    return disabled
+  }
+
   render() {
     const { currentStep, list = [], isBlur, isKeyBoardVisible, initTimeValue, payPassword, payPasswordConfirmation } = this.state;
     const mobile = this.props?.user.mobile;
-    const disabled = !payPassword || !payPasswordConfirmation || list.length !== 6
     return (
       <div id={styles.findPayPwdContent}>
         <Header />
@@ -193,7 +206,7 @@ class index extends Component {
           <div className={styles.labelValue}><Input value={payPasswordConfirmation} onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="重复新密码" type="number" maxLength={6} /></div>
         </div>
         <div className={`${styles.bottom} ${isKeyBoardVisible && styles.bootom2}`}>
-          <Button disabled={disabled} full onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>提交</Button>
+          <Button disabled={this.getDisabledWithButton()} full onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>提交</Button>
         </div>
       </div>
     );
