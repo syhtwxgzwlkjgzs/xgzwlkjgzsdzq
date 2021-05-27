@@ -267,6 +267,19 @@ class WalletH5Page extends React.Component {
       }
     }
   }
+
+  handleTriggerWithSelectedType = () => {
+    if (this.state.selectType === 'all') {
+      if (this.state.tabsType === 'withdrawal') {
+        return '全部状态'
+      } else {
+        return '全部类型'
+      }
+    } else {
+      return this.renderSelectedType(this.state.selectType)
+    }
+  }
+
   render() {
     const tabList = [
       [
@@ -323,8 +336,7 @@ class WalletH5Page extends React.Component {
           <div className={layout.choiceTime}>
             <div className={layout.status} onClick={this.handleTypeSelectorClick}>
               <span className={layout.text}>
-                {this.state.selectType === 'all' ? this.state.tabsType === 'withdrawal' ? '全部状态' : '全部类型'
-                  : this.renderSelectedType(this.state.selectType)}
+                {this.handleTriggerWithSelectedType()}
               </span>
               <Icon name="UnderOutlined" size="6" className={layout.icon}></Icon>
             </div>
