@@ -20,8 +20,7 @@ const BottomNavBar = ({ router, fixed = true, placeholder = false, curr = 'home'
     { icon: 'HomeOutlined', text: '首页', active: checkCurrActiveTab(curr, 'home'), router: '/' },
     { icon: 'FindOutlined', text: '发现', active: checkCurrActiveTab(curr, 'search'), router: '/search' },
     { icon: 'PlusOutlined', router: '/thread/post' },
-    { icon: 'MailOutlined', text: '消息', active: checkCurrActiveTab(curr, 'message'), router: '/' },
-    // { icon: 'MailOutlined', text: '消息', active: checkCurrActiveTab(curr, 'message'), router: '/message' },
+    { icon: 'MailOutlined', text: '消息', active: checkCurrActiveTab(curr, 'message'), router: '/message' },
     { icon: 'ProfessionOutlined', text: '我的', active: checkCurrActiveTab(curr, 'my'), router: '/my' },
   ]);
 

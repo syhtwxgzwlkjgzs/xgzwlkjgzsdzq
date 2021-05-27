@@ -6,6 +6,8 @@ import { LOADING_TOTAL_TYPE } from '@common/constants/thread-post';
 import { plus } from '@common/utils/calculate';
 
 class ThreadPostStore {
+  // 鼠标索引位置
+  @observable cursorPosition = 0;
   /**
    * 表情列表
    */
@@ -48,7 +50,7 @@ class ThreadPostStore {
     position: {}, // 定位信息。longtitude，latitude，address，location
     contentText: '', // 文本内容
     audio: {}, // 语音
-    rewardQa: {}, // 悬赏问答 price-价格，expiredAt-悬赏结束时间
+    rewardQa: {}, // 悬赏问答 value-价格，times-悬赏结束时间
     product: {}, // 商品
     redpacket: {}, // 红包 rule-规则，price-金额，number-个数，condition-领取条件，likenum-点赞数
     video: {}, // 视频
