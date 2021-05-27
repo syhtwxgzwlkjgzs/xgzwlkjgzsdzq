@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState }from 'react';
 import styles from './index.module.scss';
+import { inject, observer } from 'mobx-react';
 import Icon from '@discuzq/design/dist/components/icon/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
+import Spin from '@discuzq/design/dist/components/spin/index';
 import { extensionList, isPromise, noop } from '../utils';
 import { View, Text } from '@tarojs/components'
 import Downloader from './downloader';
@@ -12,7 +15,7 @@ import Downloader from './downloader';
  * @prop {Boolean} isHidden 是否隐藏删除按钮
  */
 
-const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noop, onPay = noop }) => {
+const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noop, onPay = noop, user }) => {
   // 处理文件大小的显示
   const handleFileSize = (fileSize) => {
     if (fileSize > 1000000) {
@@ -26,26 +29,55 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
   };
 
   const downloader = new Downloader();
+  const [downloading, setDownloading] =
+        useState(Array.from({length: attachments.length}, () => false));
 
   const getFileType = (filepath) => {
     return filepath.substr(filepath.lastIndexOf('.') + 1);
   }
 
-  const onDownLoad = (url) => {
+  const onDownLoad = (url, index) => {
+    // 下载中
+    if(downloading?.length && downloading[index]) return;
+
+    // 对没有登录的先登录
+    if (!user?.isLogin()) {
+      Toast.info({ content: '请先登录。' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+      return;
+    }
+
     if (!isPay) {
+      downloading[index] = true;
+      setDownloading([...downloading]);
       downloader?.download(url, true).then((path) => {
         wx.openDocument({
           filePath: path,
           fileType: getFileType(url), // 微信支持下载文件类型：doc, docx, xls, xlsx, ppt, pptx, pdf
           success(res) {
+            Toast.info({
+              content: '下载完成。',
+              duration: 1000,
+            });
           },
           fail(error) {
-            console.error("文件类型不支持：", error.errMsg);
+            console.error("文件类型不支持下载。", error.errMsg);
+            Toast.error({
+              content: '文件类型不支持下载。',
+              duration: 1000,
+            });
           },
         });
       }).catch((error) => {
         console.error(error.errMsg)
-      })
+        Toast.error({
+          content: '下载遇到困难。',
+          duration: 1000,
+        });
+      }).finally(() => {
+        downloading[index] = false;
+        setDownloading([...downloading]);
+      });
     } else {
       onPay();
     }
@@ -89,7 +121,10 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
 
           <View className={styles.right}>
             {/* <Text className={styles.Text} onClick={() => onPreviewer(item.url)}>浏览</Text> */}
-            <Text className={styles.Text} onClick={() => onDownLoad(item.url)}>下载</Text>
+            { downloading[index] ?
+              <Spin type="spinner" /> :
+              <Text onClick={() => onDownLoad(item.url, index)}>下载</Text>
+            }
           </View>
         </View>
       </View>
@@ -128,4 +163,4 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
   );
 };
 
-export default React.memo(Index);
+export default inject('user')(observer(Index));
