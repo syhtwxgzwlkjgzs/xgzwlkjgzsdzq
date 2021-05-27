@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import { usernameLogin } from '@server';
+import { usernameLogin } from '@server/login';
 import { get } from '../../utils/get';
 import setAccessToken from '../../utils/set-access-token';
 import { checkUserStatus } from '@common/store/login/util';
