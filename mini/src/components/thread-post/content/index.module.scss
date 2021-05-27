@@ -10,6 +10,18 @@
     padding: 0;
     font-size: 16px;
     color: $text-color-primary;
+    line-height: 16px;
+    text-align: left;
+    resize: none;
+    min-height: 78px;
+    max-height: 260px;
+  }
+
+  .textarea-editing {
+    width: 100%;
+    padding: 0;
+    font-size: 16px;
+    color: $text-color-primary;
     line-height: 26px;
     text-align: left;
     resize: none;
@@ -18,7 +30,7 @@
   }
 
   .textarea-placeholder {
-    font-size: 20px;
+    font-size: 16px;
     color: $text-color-placeholder;
   }
 }

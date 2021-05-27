@@ -8,7 +8,7 @@
   align-items: center;
   font-size: var(--font-size-label);
   background: var(--background-color);
-  @include ios-safe-area-inset-bottom;
+  // @include ios-safe-area-inset-bottom;
 
   .plug-icon {
     margin-right: 24px;

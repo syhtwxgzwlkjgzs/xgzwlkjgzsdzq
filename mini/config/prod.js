@@ -37,7 +37,7 @@ module.exports = {
 
     },
     webpackChain (chain, webpack) {
-      chain.plugin('analyzer').use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin, []);
+      // chain.plugin('analyzer').use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin, []);
       chain.plugin().use(webpack.DefinePlugin, [{
         'process.env.DISCUZ_ENV': JSON.stringify('mini')
       }]);
