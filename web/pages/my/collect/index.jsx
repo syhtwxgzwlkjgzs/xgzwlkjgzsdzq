@@ -39,6 +39,7 @@ class Index extends React.Component {
     }
     if (serverIndex && serverIndex.threads) {
       index.setThreads(serverIndex.threads);
+      this.state.firstLoading = false;
     } else {
       index.setThreads(null);
     }
@@ -95,7 +96,7 @@ class Index extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
-    const { firstLoading } = this.state
+    const { firstLoading } = this.state;
 
     if (platform === 'pc') {
       return <IndexPCPage firstLoading={firstLoading} dispatch={this.dispatch} />;

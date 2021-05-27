@@ -26,10 +26,15 @@ class Index extends React.Component {
           {`${pageData?.length} 条收藏`}
         </div>
         {
+          this.props.firstLoading && (
+            <div className={styles.spinLoading}><Spin type="spinner">加载中...</Spin></div>
+          )
+        }
+        {
           pageData?.length
             ? (
               <List
-                className={styles.list}
+                className={`${styles.list} ${styles.noDataList}`}
                 noMore={currentPage >= totalPage}
               >
                 {
@@ -41,7 +46,7 @@ class Index extends React.Component {
                 }
               </List>
             )
-            : <>{<div className={styles.spinLoading}>{this.props.firstLoading ? <Spin type="spinner">加载中...</Spin> : "暂无数据"}</div>}</>
+            : <>{!this.props.firstLoading && <NoData className={styles.noDataList} />}</>
         }
       </div>
     );

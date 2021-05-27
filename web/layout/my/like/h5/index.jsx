@@ -25,6 +25,11 @@ class Index extends React.Component {
           loading && <Spin type="spinner" size={14}></Spin>
         }
         {
+          this.props.firstLoading && (
+            <div className={styles.spinLoading}><Spin type="spinner">加载中...</Spin></div>
+          )
+        }
+        {
           pageData?.length
             ? (
               <List
@@ -38,7 +43,7 @@ class Index extends React.Component {
                 }
               </List>
             )
-            : <NoData />
+            : <>{!this.props.firstLoading && <NoData className={styles.noDataList} />}</>
         }
       </div>
     );
