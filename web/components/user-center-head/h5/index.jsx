@@ -18,6 +18,11 @@ class index extends Component {
     isOtherPerson: false, // 表示是否是其他人
   };
 
+  componentDidMount() {
+    const id = this.props.user?.id
+    this.props.user.updateUserInfo(id)
+  }
+
   // 点击屏蔽
   handleChangeShield = (isDeny) => {
     const id= this.props.router.query?.id;
