@@ -6,6 +6,7 @@ import { View, Text, Image } from '@tarojs/components';
 import Router from '@discuzq/sdk/dist/router';
 import SharePopup from '../thread/share-popup';
 import isWeiXin from '@common/utils/is-weixin';
+import goToLoginPage from '@common/utils/go-to-login-page';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import logoImg from '../../../../web/public/dzq-img/admin-logo-x2.png'
 

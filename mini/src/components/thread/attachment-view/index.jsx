@@ -5,6 +5,7 @@ import Icon from '@discuzq/design/dist/components/icon/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Spin from '@discuzq/design/dist/components/spin/index';
 import { extensionList, isPromise, noop } from '../utils';
+import goToLoginPage from '@common/utils/go-to-login-page';
 import { View, Text } from '@tarojs/components'
 import Downloader from './downloader';
 
@@ -42,7 +43,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
 
     // 对没有登录的先登录
     if (!user?.isLogin()) {
-      Toast.info({ content: '请先登录。' });
+      Toast.info({ content: '请先登录！' });
       goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
