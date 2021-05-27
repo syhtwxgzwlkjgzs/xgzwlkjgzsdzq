@@ -12,6 +12,7 @@ import DeletePopup from '@components/thread-detail-pc/delete-popup';
 @inject('thread')
 @inject('comment')
 @inject('user')
+@inject('site')
 @observer
 class RenderCommentList extends React.Component {
   constructor(props) {
@@ -353,6 +354,7 @@ class RenderCommentList extends React.Component {
           inputText={this.state.inputText}
           onClose={() => this.setState({ showCommentInput: false })}
           onSubmit={(value, imgList) => this.createReply(value, imgList)}
+          site={this.props.site}
         ></InputPopup>
 
         {/* 删除弹层 */}

@@ -708,6 +708,7 @@ class ThreadH5Page extends React.Component {
               onClose={() => this.onClose()}
               initValue={this.state.inputValue}
               onSubmit={(value, imgList) => this.onPublishClick(value, imgList)}
+              site={this.props.site}
             ></InputPopup>
 
             {/* 更多弹层 */}

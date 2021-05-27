@@ -352,6 +352,7 @@ class CommentH5Page extends React.Component {
             inputText={this.state.inputText}
             onClose={() => this.setState({ showCommentInput: false })}
             onSubmit={(value) => this.createReply(value)}
+            site={this.props.site}
           ></InputPopup>
 
           {/* 更多弹层 */}
