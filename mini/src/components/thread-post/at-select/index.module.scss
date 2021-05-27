@@ -15,13 +15,14 @@
   flex-direction: column;
   align-items: stretch;
   height: 100vh;
-  background: $white;
+  background: $body-bg-color;
   border-top: $border-solid-1;
 
   .header {
     @include flex();
     width: 100%;
-    padding: $padding-10 $padding-5n;
+    padding: $padding-10 $padding-4n;
+    background: $white;
     .input-box {
       flex: 1;
       position: relative;
@@ -61,7 +62,7 @@
         padding: 0 40px;
         font-size: $font-size-middle;
         color: $text-color-primary;
-        background: $text-bg-color2;
+        background: $text-bg-color;
         border: none;
       }
 
@@ -87,11 +88,12 @@
   .at-item {
     @include flex();
     height: 50px;
-    padding: 0 $padding-5n;
+    padding: 0 $padding-4n;
+    background: $white;
 
     .avatar {
-      width: 35px;
-      height: 35px;
+      width: 38px;
+      height: 38px;
 
       :global {
         .dzq-avatar {
@@ -100,7 +102,7 @@
           font-size: 22px;
           color: $white;
           text-align: center;
-          line-height: 35px;
+          line-height: 38px;
           border-radius: $border-radius-circle;
 
           .dzq-avatar__img {
@@ -117,17 +119,21 @@
       @include flex();
       height: 50px;
       padding: 0 $padding-2n;
-      font-size: $font-size-primary;
-      color: $text-color-primary;
-      line-height: 50px;
       border-bottom: $border-solid-1;
       .username {
         max-width: 170px;
         @include single-line();
+        line-height: $font-line-height-small;
+        font-size: $font-size-primary;
+        color: $text-color-primary;
+        text-align: left;
       }
       .group {
         max-width: 80px;
         @include single-line();
+        font-size: $font-size-small;
+        color: $text-color-secondary;
+        text-align: left;
       }
     }
 
@@ -139,14 +145,16 @@
         .dzq-checkbox {
           width: 24px;
           height: 24px;
-          border-radius: $border-radius-circle;
+          border-radius: $border-radius-small;
+          background-color: $text-bg-color2;
           &::after {
-            border-radius: $border-radius-circle;
+            border: none;
             color: $white;
           }
         }
         &.is-checked {
           .dzq-checkbox {
+            border: none;
             background-color: $primary-color;
           }
           .dzq-icon {
@@ -165,24 +173,25 @@
     padding-bottom: calc(8px + env(safe-area-inset-bottom));
     background: $white;
     border-top: $border-solid-1;
-  }
 
-  :global {
-    .dzq-button {
-      width: 100%;
-      padding: $padding-10 0;
-      font-size: $font-size-middle;
-      color: $text-color-regular;
-      line-height: $font-line-height-small;
-      border: none;
-      border-radius: $border-radius-small;
-      background: $text-bg-color2;
-      -webkit-tap-highlight-color: transparent;
+    :global {
+      .dzq-button {
+        width: 100%;
+        padding: $padding-10 0;
+        font-size: $font-size-middle;
+        color: $text-color-regular;
+        line-height: $font-line-height-small;
+        border: none;
+        border-radius: $border-radius-small;
+        background: $text-bg-color2;
+        -webkit-tap-highlight-color: transparent;
+      }
+    }
+
+    .selected {
+      color: $white;
+      background-color: $primary-color;
     }
   }
 
-  .selected {
-    color: $white;
-    background-color: $primary-color;
-  }
 }
