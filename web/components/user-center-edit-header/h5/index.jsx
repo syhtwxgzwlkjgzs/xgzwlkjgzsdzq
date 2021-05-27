@@ -32,7 +32,6 @@ export default class index extends Component {
 
   onAvatarChange = async (fileList) => {
     await this.props.user.updateAvatar(fileList.target.files);
-
   }
 
   onBackgroundChange = async (fileList) => {
@@ -78,6 +77,7 @@ export default class index extends Component {
               <Icon name="CompileOutlined" />
               {
                 this.state.isClickSignature ? (
+                  // true ? (
                   <Input className={styles.userSignatureInput} maxLength={50}  focus={true} onChange={this.handleChangeSignature} onBlur={this.handleBlurSignature} value={this.user.editSignature} placeholder="这个人很懒，什么也没留下~" />
                 ) : (
                   <span className={styles.text}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</span>
