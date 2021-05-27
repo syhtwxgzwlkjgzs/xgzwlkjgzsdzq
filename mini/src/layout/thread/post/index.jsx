@@ -443,7 +443,7 @@ class Index extends Component {
           }
         }
         this.postToast('发布成功', 'success');
-        Taro.redirectTo({ url: `/pages/thread/index?id=${data.threadId}` });
+        Taro.redirectTo({ url: `/subPages/thread/index?id=${data.threadId}` });
       }
       return true;
     } else {
