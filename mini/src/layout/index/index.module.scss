@@ -1,32 +1,21 @@
 @import '@common/styles/index.scss';
-.text {
-  font-size: $font-size-label;
-  color: $error-color;
-}
-// .container {
-//   background: var(--background-color-text2);
-//   display: flex;
-//   flex-direction: column;
-//   height: 100vh;
+
 .homeContent {
   background: $white;
   margin-bottom: 10px;
-  z-index: 1000;
-  border-bottom: 1px solid rgba(238, 238, 238, 0.57);
+  z-index: $zindex-backtotop;
+  border: 1px solid $border-color;
 }
-.homeContentFix {
+.fixed {
   width: 100%;
-  background: $white;
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
-  border-bottom: 1px solid rgba(238, 238, 238, 0.57);
   transition: all 0.2s ease-out;
 }
 .homeContentTop {
   padding: 0 $padding-4n;
-  background: var(--color-white);
+  background: $white;
   margin-bottom: 10px;
 }
 .tabsBox {

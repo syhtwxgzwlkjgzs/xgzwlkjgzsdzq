@@ -97,7 +97,10 @@ const List = forwardRef(({
       }
     }
   };
-  const handleScroll = throttle(onScroll, 0)
+  
+  const handleScroll = (e) => {
+    onScroll(e);
+  }
 
     // 网络请求失败
     const handleError = () => {
