@@ -4,7 +4,6 @@ import { View } from '@tarojs/components';
 import Header from '../header';
 import List from '../list'
 import BottomNavBar from '../bottom-nav-bar'
-// import { PullDownRefresh } from "@discuzq/design"
 
 import styles from './index.module.scss';
 

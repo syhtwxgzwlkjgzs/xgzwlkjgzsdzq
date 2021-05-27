@@ -97,7 +97,7 @@ class Index extends Component {
     if (e.target.nodeName === 'A') return;
     const { type } = this.props;
     if (type === 'financial' || type === 'account') {
-      Taro.navigateTo({ url: `/pages/thread/index?id=${item.id}` })
+      Taro.navigateTo({ url: `/subPages/thread/index?id=${item.id}` })
     }
     if (type === 'chat') {
       Taro.navigateTo({ url: `/subPages/message/index?page=chat&dialogId=${item.dialogId}` });
@@ -156,7 +156,7 @@ class Index extends Component {
                 {item.username || this.filterTag(item.title)}
               </View>
               {['chat', 'thread'].includes(type) &&
-                <View className={styles.time}>{diffDate(new Date(item.createdAt))}</View>
+                <View className={styles.time}>{diffDate(item.createdAt)}</View>
               }
               {type === 'financial' &&
                 <View className={styles.amount}>+{parseFloat(item.amount).toFixed(2)}</View>
@@ -198,7 +198,7 @@ class Index extends Component {
             {/* 底部 */}
             {['financial', 'account'].includes(type) &&
               <View className={`${styles.bottom} ${styles.time}`}>
-                {diffDate(new Date(item.createdAt))}
+                {diffDate(item.createdAt)}
               </View>
             }
           </View>

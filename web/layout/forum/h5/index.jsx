@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import { Popup, Icon } from '@discuzq/design';
+import { Popup, Icon, Avatar } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
@@ -42,7 +42,10 @@ class ForumH5Page extends React.Component {
       <>
         {
           platform === 'h5'
-            ? <HomeHeader/>
+            ? <>
+                <Header/>
+                <HomeHeader/>
+              </>
             : <Header/>
         }
         <div className={layout.content}>
@@ -77,7 +80,7 @@ class ForumH5Page extends React.Component {
               <div className={layout.forum_agent}>
                 {
                   siteAuthor.avatar
-                    ? <img className={layout.forum_agent_img} src={siteAuthor.avatar} alt=""/>
+                    ? <Avatar size='small' className={layout.forum_agent_img} image={siteAuthor.avatar}/>
                     : <></>
                 }
                 <span className={layout.forum_agent_name}>{siteAuthor.username}</span>
@@ -91,11 +94,9 @@ class ForumH5Page extends React.Component {
             <div className={layout.right} onClick={() => forum.setIsPopup(true)}>
               <div className={layout.forum_member}>
                 {
-                    usersPageData.slice(0, 3).map(item => (item.avatar
-                      ? <img key={item.userId} className={layout.forum_member_img} src={item.avatar} alt=""/>
-                      : <span key={item.userId} className={`${layout.forum_member_img} ${layout.forum_member_char}`} >
-                            {item.nickname.substring(0, 1)}
-                          </span>))
+                    usersPageData.slice(0, 3).map(item => (
+                      <Avatar size='small' key={item.userId} text={item.nickname.substring(0, 1)} className={layout.forum_member_img} image={item.avatar}/>
+                    ))
                 }
                 <Icon site={10} color='#8590A6' name='RightOutlined'/>
               </div>
@@ -135,10 +136,6 @@ class ForumH5Page extends React.Component {
                     imgUrl={user.avatar}
                     withHeaderUserInfo={true}
                     userName={user.nickname}
-                    followHandler={() => {
-                      // TODO
-                      console.log('关注');
-                    }}
                   />
                   <div></div>
                 </div>

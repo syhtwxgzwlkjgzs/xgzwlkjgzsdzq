@@ -652,6 +652,7 @@ class PostPage extends React.Component {
         handleVditorInit={this.handleVditorInit}
         onVideoReady={this.onVideoReady}
         handleDraft={this.handleDraft}
+        handleEditorBoxScroller={this.handleEditorBoxScroller}
         {...this.state}
       />
     );

@@ -1,62 +1,51 @@
-/**
- * 侧滑删除组件详情参考 https://github.com/sandstreamdev/react-swipeable-list
- */
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
-import BaseLayout from '@components/base-layout';
-import ThreadCenterView from '@components/thread/ThreadCenterView';
-import NoData from '@components/no-data';
 import styles from './index.module.scss';
-import '@sandstreamdev/react-swipeable-list/dist/styles.css';
+
+import Header from '@components/header';
+import SliderScroll from '@components/slider-scroll';
+import ThreadCenterView from '@components/thread/ThreadCenterView';
 
 @inject('index')
 @observer
-class H5 extends React.Component {
-  renderContent = () => {
-    const { index } = this.props;
-    const list = (index.threads && index.threads.pageData) || [];
+class Index extends React.Component {
+  // 渲染单项草稿组件
+  renderItem = ({ item, onEdit }) => {
     return (
-      <div className={styles.wrapper}>
-        <div className={styles.header}>
-          { this.props.index.threads?.totalCount || 0 }&nbsp;条草稿
-        </div>
-        <div className={styles.content}>
-          {list.length === 0 && <NoData />}
-          {list.map((item, index) => (
-            <SwipeableListItem
-              key={index}
-              swipeLeft={{
-                content: <div className={styles['item-delete']}>删除</div>,
-                action: () => {
-                  this.props.onDelete(item);
-                },
-              }}
-            >
-              <div className={styles.item} onClick={() => this.props.onEdit(item)}>
-                <ThreadCenterView data={item} />
-                <div className={styles['item-time']}>编辑于&nbsp;{item.diffTime}</div>
-              </div>
-            </SwipeableListItem>
-          ))}
-        </div>
+      <div className={styles.item} onClick={() => onEdit(item)}>
+        <ThreadCenterView data={item} onClick={() => onEdit(item)} />
+        <div className={styles['item-time']}>编辑于&nbsp;{item.diffTime}</div>
       </div>
-    );
+    )
+  }
+
+  getRenderList = (data = []) => {
+    return data.map(item => ({ id: item.threadId, ...item }));
   }
 
   render() {
-    const { index } = this.props;
-    const { currentPage, totalPage } = index.threads || {};
+    const { index, dispatch, onDelete, onEdit } = this.props;
+    const { currentPage, totalPage, totalCount, pageData } = index?.threads || {};
+    const topCard = (<div className={styles.header}>{totalCount || 0}&nbsp;条草稿</div>)
+
     return (
-      <BaseLayout
-        onRefresh={() => this.props.dispatch(true)}
-        noMore={currentPage >= totalPage}
-        showRefresh={false}
-      >
-        {this.renderContent()}
-      </BaseLayout>
+      <div className={styles.wrapper}>
+        <Header />
+        <SliderScroll
+          height='calc(100vh - 40px)'
+          withTopBar={true}
+          topCard={topCard}
+          list={this.getRenderList(pageData)}
+          RenderItem={this.renderItem}
+          noMore={currentPage >= totalPage}
+          onPullDown={() => dispatch(false)}
+          onScrollBottom={() => dispatch(true)}
+          onBtnClick={onDelete}
+          onEdit={onEdit}
+        />
+      </div>
     );
   }
 }
 
-export default H5;
+export default Index;

@@ -44,8 +44,8 @@ class PhoneInput extends React.Component {
         {/* 手机号输入 start */}
         <View className={layout.phoneInput}>
           <Input
-            mode="number"
-            htmlType="number"
+            miniType="number"
+            maxLength={11}
             className={layout.input}
             value={phoneNum}
             placeholder="请输入手机号码"

@@ -15,7 +15,7 @@ import RichText from '@discuzq/design/dist/components/rich-text/index';
     if (e?.target?.localName === 'a') {
       return
     }
-    Taro.navigateTo({url: `/pages/thread/index?id=${threadId}`});
+    Taro.navigateTo({url: `/subPages/thread/index?id=${threadId}`});
   };
 
   // 过滤内容
