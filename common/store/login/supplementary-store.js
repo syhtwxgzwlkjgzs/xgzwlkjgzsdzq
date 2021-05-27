@@ -47,4 +47,9 @@ export default class supplementaryStore {
     @observable photo = '';
     // 附件
     @observable attachment = '';
+
+    @observable fields = [];
+    @observable values = [];
+
+
 }
