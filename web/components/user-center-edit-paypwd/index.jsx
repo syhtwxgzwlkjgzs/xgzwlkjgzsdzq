@@ -26,7 +26,7 @@ class index extends Component {
     this.setState({
       payPassword: null,
       oldPayPwd: null,
-      isSubmit: false
+      isSubmit: false,
     });
     this.props.payBox.password = null;
   };
@@ -43,16 +43,19 @@ class index extends Component {
   goToResetPayPwd = throttle(() => {
     const { oldPayPwd } = this.state;
     this.props.payBox.oldPayPwd = oldPayPwd;
-    this.props.payBox.getPayPwdResetToken().then((res) => {
+    this.props.payBox
+      .getPayPwdResetToken()
+      .then(() => {
         Router.push({ url: '/my/edit/reset-paypwd' });
-      }).catch((err) => {
-        console.error(err,'ssss_err');
+      })
+      .catch((err) => {
+        console.error(err, 'ssss_err');
         Toast.error({
           content: '密码错误',
           hasMask: false,
           duration: 1000,
         });
-        this.initState()
+        this.initState();
       });
   }, 300);
 
@@ -63,8 +66,8 @@ class index extends Component {
 
   // 初次设置密码
   handleSetPwd = (e) => {
-    const securityCode = e.target.value.match(/^[0-9]*$/)
-    if (!securityCode) return
+    const securityCode = e.target.value.match(/^[0-9]*$/);
+    if (!securityCode) return;
     this.setState({
       payPassword: securityCode[0],
     });
@@ -72,8 +75,8 @@ class index extends Component {
 
   // 点击修改旧密码
   handleChangeOldPwd = (e) => {
-    const securityCode = e.target.value.match(/^[0-9]*$/)
-    if (!securityCode) return
+    const securityCode = e.target.value.match(/^[0-9]*$/);
+    if (!securityCode) return;
     this.setState({
       oldPayPwd: securityCode[0],
     });
@@ -82,10 +85,10 @@ class index extends Component {
   // 点击提交
   handleSubmit = throttle(async () => {
     const { payPassword, isSubmit } = this.state;
-    if (isSubmit) return
+    if (isSubmit) return;
     this.setState({
-      isSubmit: true
-    })
+      isSubmit: true,
+    });
     const { id } = this.props.user;
     this.props.payBox.password = payPassword;
     this.props.payBox
@@ -123,7 +126,14 @@ class index extends Component {
       <div className={styles.content}>
         <h3>设置支付密码</h3>
         <div className={styles.paypwdInput}>
-          <Input type="number" maxLength={6} value={payPassword} onChange={this.handleSetPwd} placeholder="请设置您的支付密码" mode="password" />
+          <Input
+            type="number"
+            maxLength={6}
+            value={payPassword}
+            onChange={this.handleSetPwd}
+            placeholder="请设置您的支付密码"
+            mode="password"
+          />
         </div>
       </div>
     );
@@ -137,7 +147,14 @@ class index extends Component {
         <h3>修改密码</h3>
         <div className={styles.labelInfo}>
           <div className={styles.labelValue}>
-            <Input type="number" maxLength={6} value={oldPayPwd} mode="password" placeholder="请输入旧密码" onChange={this.handleChangeOldPwd} />
+            <Input
+              type="number"
+              maxLength={6}
+              value={oldPayPwd}
+              mode="password"
+              placeholder="请输入旧密码"
+              onChange={this.handleChangeOldPwd}
+            />
           </div>
           <div onClick={this.handleGoToFindPayPwd} className={styles.tips}>
             忘记旧密码？
@@ -155,16 +172,28 @@ class index extends Component {
         {this.props.user?.canWalletPay ? this.renderCanPayPwd() : this.renderSetPayPwd()}
         <div className={styles.bottom}>
           {this.props.user?.canWalletPay ? (
-            <Button full disabled={!oldPayPwd || oldPayPwd.length !== 6} onClick={this.goToResetPayPwd} type={'primary'} className={styles.btn}>
+            <Button
+              full
+              disabled={!oldPayPwd || oldPayPwd.length !== 6}
+              onClick={this.goToResetPayPwd}
+              type={'primary'}
+              className={styles.btn}
+            >
               下一步
             </Button>
           ) : (
-            <Button full disabled={!payPassword || payPassword.length !== 6} onClick={this.handleSubmit} type={'primary'} className={styles.btn}>
+            <Button
+              full
+              disabled={!payPassword || payPassword.length !== 6}
+              onClick={this.handleSubmit}
+              type={'primary'}
+              className={styles.btn}
+            >
               提交
             </Button>
           )}
         </div>
-      </div >
+      </div>
     );
   }
 }

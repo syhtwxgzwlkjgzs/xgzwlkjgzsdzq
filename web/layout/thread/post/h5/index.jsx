@@ -141,7 +141,7 @@ class ThreadCreate extends React.Component {
       bottombarHeight += 218;
       toolbar.className += ` ${toolbarStyles.emoji}`;
     } else toolbar.className = toolbarStyles['dvditor-toolbar'];
-    if (moneybox) bottombarHeight += 65; // 直接算最高的高度
+    if (moneybox && !action) bottombarHeight += 65; // 直接算最高的高度
     return bottombarHeight;
   }
 

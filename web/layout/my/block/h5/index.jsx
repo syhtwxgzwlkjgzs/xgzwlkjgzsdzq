@@ -21,14 +21,14 @@ class Index extends React.Component {
       isTop: false, // 列表位置
       loading: false,
       perPage: 20, // 定义每页显示条数
-    }
+    };
   }
 
   async componentDidMount() {
     this.setState({
       loading: false,
     });
-    await this.props.user.getUserShieldList()
+    await this.props.user.getUserShieldList();
   }
 
   // 点击头像去到他人页面
@@ -47,17 +47,21 @@ class Index extends React.Component {
 
   // 加载更多函数
   loadMore = async () => {
-    await this.props.user.getUserShieldList()
-    return
+    await this.props.user.getUserShieldList();
+    return;
   };
-
 
   render() {
     const { user } = this.props;
     const { userShield = [], userShieldPage, userShieldTotalCount, userShieldTotalPage } = user || {};
-    // 
+    //
     return (
-      <BaseLayout immediateCheck={false} showPullDown={false} onRefresh={this.loadMore} noMore={userShieldTotalPage < userShieldPage}>
+      <BaseLayout
+        immediateCheck={false}
+        showPullDown={false}
+        onRefresh={this.loadMore}
+        noMore={userShieldTotalPage < userShieldPage}
+      >
         <div className={styles.titleBox}>{`共有${userShield.length}位用户`}</div>
         {userShield.map((item, index) => (
           <div className={styles.haieldImg} key={index}>
@@ -75,36 +79,6 @@ class Index extends React.Component {
           </div>
         ))}
       </BaseLayout>
-    )
-    return (
-      <div className={styles.shieldBox}>
-        <Header />
-        <div className={styles.titleBox}>{`共有${userShield.length}位用户`}</div>
-        {userShield?.length ? (
-          <List className={styles.list} onRefresh={this.loadMore} noMore={false}>
-            {userShield.map((item, index) => (
-              <div className={styles.haieldImg} key={index}>
-                <div
-                  className={styles.haieldImgBox}
-                  onClick={() => {
-                    this.handleOnClick(item);
-                  }}
-                >
-                  <div className={styles.haieldImgHead}>
-                    <Avatar className={styles.img} image={item.avatar} name={item.username} userId={item.denyUserId} />
-                    <p className={styles.haieldName}>{item.username}</p>
-                  </div>
-                  {/* <div className={styles.haieldName}>
-                          <Button className={styles.haieldButton}>解除屏蔽</Button>
-                        </div> */}
-                </div>
-              </div>
-            ))}
-          </List>
-        ) : (
-          <NoData />
-        )}
-      </div>
     );
   }
 }
