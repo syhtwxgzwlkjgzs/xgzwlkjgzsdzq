@@ -56,9 +56,9 @@
 .position-box {
   display: flex;
   // flex-direction: row-reverse;
-  height: 45px;
+  height: 35px;
   padding: 0 rem(16);
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   :global { /* stylelint-disable-line */
     .dzq-tag {
