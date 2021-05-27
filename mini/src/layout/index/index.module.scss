@@ -12,7 +12,7 @@
   background: $white;
   margin-bottom: 10px;
   z-index: 1000;
-  border: 1px solid rgba(238, 238, 238, 0.57);
+  border-bottom: 1px solid rgba(238, 238, 238, 0.57);
 }
 .homeContentFix {
   width: 100%;
@@ -21,7 +21,7 @@
   top: 0;
   left: 0;
   z-index: 1000;
-  border: 1px solid rgba(238, 238, 238, 0.57);
+  border-bottom: 1px solid rgba(238, 238, 238, 0.57);
   transition: all 0.2s ease-out;
 }
 .homeContentTop {

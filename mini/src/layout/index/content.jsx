@@ -9,7 +9,8 @@ import FilterView from './components/filter-view';
 import BaseLayout from '../../components/base-layout';
 import { throttle } from '@common/utils/throttle-debounce.js'
 import TopNew from './components/top-news';
-// import NavBar from './components/nav-bar';
+import NavBar from './components/nav-bar';
+import Taro from '@tarojs/taro';
 
 import styles from './index.module.scss';
 @inject('site')
@@ -43,7 +44,16 @@ class IndexH5Page extends React.Component {
     const { categoryids } = newFilter
     const currentIndex = categoryids[0] || ''
 
-    this.setState({ filter: newFilter, currentIndex })
+    let navBarHeight = 64
+    try {
+      const res = Taro.getSystemInfoSync()
+      const height = res?.statusBarHeight || 20
+      navBarHeight = 44 + height
+    } catch (e) {
+      // Do something when catch error
+    }
+
+    this.setState({ filter: newFilter, currentIndex, navBarHeight })
   }
 
   componentWillUnmount() {
@@ -147,11 +157,11 @@ class IndexH5Page extends React.Component {
     return dispatch('moreData', requestFilter);
   };
 
-  handleScroll = throttle((e) => {
+  handleScroll = (e) => {
     const { scrollTop = 0 } = e?.detail || {}
-    const { height = 165 } = this.headerRef.current?.state || {}
-    this.setState({ fixedTab: !(scrollTop < height) })
-  }, 0)
+    const { navBarHeight } = this.state || {}
+    this.setState({ fixedTab: !(scrollTop < navBarHeight) })
+  }
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
   handleCategories = () => {
@@ -177,7 +187,7 @@ class IndexH5Page extends React.Component {
 
   renderTabs = () => {
     const { index } = this.props;
-    const { currentIndex, fixedTab } = this.state;
+    const { currentIndex, fixedTab, navBarHeight } = this.state;
     const { categories = [] } = index;
     const newCategories = this.handleCategories(categories);
 
@@ -185,7 +195,7 @@ class IndexH5Page extends React.Component {
       <>
         {categories?.length > 0 && (
           <>
-          <View ref={this.listRef} className={`${!fixedTab ? styles.homeContent : styles.homeContentFix}`}>
+          <View ref={this.listRef} className={`${!fixedTab ? styles.homeContent : styles.homeContentFix}`} style={{top: `${navBarHeight}px`}}>
             <Tabs
               className={styles.tabsBox}
               scrollable
@@ -205,7 +215,7 @@ class IndexH5Page extends React.Component {
           </View>
           {fixedTab &&  (
             <>
-             {/* <NavBar isShow={fixedTab} /> */}
+             <NavBar isShow={fixedTab} />
              <View className={styles.tabPlaceholder}></View>
             </>
           )}
