@@ -65,7 +65,7 @@ class TopicSelect extends Component {
       });
     } else {
       this.setState({ finish: true });
-      Taro.showToast({ title: ret.msg, icon: 'none' })
+      Taro.showToast({ title: ret.msg, icon: 'none' });
     }
   }
 
@@ -85,7 +85,7 @@ class TopicSelect extends Component {
     this.cancel();
   }
 
-  // 渲染项列表
+  // 渲染项
   renderItem = (item) => (
     <View className={styles['topic-item']} onClick={() => this.handleItemClick(item)}>
       <View className={styles['item-left']}>

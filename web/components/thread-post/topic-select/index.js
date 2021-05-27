@@ -6,11 +6,12 @@
  */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Popup, Input, Button, Icon, Toast } from '@discuzq/design';
+import { Popup, Input, Icon, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
-import DDialog from '@components/dialog';
 import PropTypes from 'prop-types';
-import BaseList from '@components/list';
+
+import List from '@components/list';
+import DDialog from '@components/dialog';
 
 @inject('threadPost')
 @observer
@@ -19,167 +20,133 @@ class TopicSelect extends Component {
     super(props);
     this.state = {
       keywords: '', // 搜索关键字
-      pageNum: 1,
-      pageSize: 20,
-      meta: {},
-      loadingText: 'loading',
-      isLastPage: false,
+      page: 1,
+      perPage: 20,
+      finish: false,
     };
     this.timer = null;
   }
 
-  // 清除关键字
-  clearKeywords = () => {
-    this.setState(
-      { keywords: '', checkUser: [], pageNum: 1 },
-      () => {
-        this.loadTopics();
-      },
-    );
-  }
-
   // 初始化话题请求
   async componentDidMount() {
-    // const { fetchTopic } = this.props.threadPost;
-    // await fetchTopic();
-    // this.setState({ pageNum: this.state.pageNum + 1 });
+    this.fetchTopics();
   }
 
   // 更新搜索关键字
-  updateKeywords(e) {
-    this.setState({ keywords: e.target.value }, this.searchInput);
+  updateKeywords = (val = "") => {
+    this.setState({ keywords: val, page: 1 });
+    this.searchInput();
   }
 
   // 搜索话题
-  searchInput() {
+  searchInput = () => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      this.setState({ pageNum: 1 }, this.loadTopics);
+      this.fetchTopics();
     }, 300);
   }
 
-  async loadTopics() {
+  // 请求
+  async fetchTopics() {
     // 1 设置参数
     const { fetchTopic } = this.props.threadPost;
-    const params = {
-      page: this.state.pageNum,
-      perPage: this.state.pageSize,
-      // filter: {
-      //   recommended: 1,
-      // },
-    };
-    if (this.state.keywords) {
-      !params.filter && (params.filter = {});
-      params.filter.content = this.state.keywords;
+    const { page, perPage, keywords } = this.state;
+    const params = { page, perPage };
+    if (keywords) {
+      params.filter = {};
+      params.filter.content = keywords;
     }
     // 2 发起请求
     const ret = await fetchTopic(params);
-    // 3 更新页码
-    if (ret.code === 0) {
+    const { code, data } = ret;
+    // 3 请求完成
+    if (code === 0) {
       this.setState({
-        pageNum: this.state.pageNum + 1,
-        isLastPage: this.state.pageNum * this.state.pageSize > this.props.threadPost.topicTotalCount,
+        page: page + 1,
+        finish: page >= data.totalPage
       });
     } else {
+      this.setState({ finish: true });
       Toast.error({ content: ret.msg });
-      return Promise.reject();
     }
   }
 
-  onScrollBottom() {
-    return this.loadTopics();
-  }
-
-  onScrollTop() {
-    console.log('top');
-  }
-
   handleItemClick = (item) => {
-    const { keywords } = this.state;
-    let val = keywords;
-    if (item.content) val = item.content;
-    this.props.clickTopic(`#${val}#`);
+    const topic = ` #${item.content}# `;
+    this.props.clickTopic(topic);
     this.props.cancelTopic();
   }
 
-  renderItem() {
-    const { threadPost } = this.props;
-    const { topics = [] } = threadPost;
-    if (!topics || topics.length === 0) return null;
-    return topics.map((item) => (
-      <div
-        key={item.topicId}
-        className={styles['topic-item']}
-        onClick={() => this.handleItemClick(item)}
-      >
-        <div className={styles['item-left']}>
-          <div className={styles.name}>#{item.content}#</div>
-          {item.recommended === 1
-            && <Icon name="LikeOutlined" />
-          }
-        </div>
-        <div className={styles['item-right']}>{item.viewCount}热度</div>
+  // 渲染项
+  renderItem = (item) => (
+    <div className={styles['topic-item']} onClick={() => this.handleItemClick(item)}>
+      <div className={styles['item-left']}>
+        <div className={styles.name}>#{item.content}#</div>
       </div>
-    ));
-  }
+      <div className={styles['item-right']}>
+        {item.newTopic ? item.newTopic : `${item.viewCount}热度`}
+      </div>
+    </div>
+  );
 
   render() {
-    const { visible = false, cancelTopic, threadPost: { topicTotalCount } } = this.props;
+    const { pc, visible = false, cancelTopic, threadPost } = this.props;
+    const { topics = [] } = threadPost;
+    const { finish, keywords } = this.state;
+
     const content = (
       <div className={styles.wrapper}>
-        {/* 搜索框 */}
-        <div className={styles.input}>
-          <Icon className={styles.inputWrapperIcon} name="SearchOutlined" size={16} />
-          <Input
-            value={this.state.keywords}
-            placeholder='搜索话题'
-            onChange={e => this.updateKeywords(e)}
-          />
-          {this.state.keywords &&
-            <Icon className={styles.deleteIcon} name="WrongOutlined" size={16} onClick={this.clearKeywords}></Icon>
-          }
-        </div>
 
-        {/* 话题列表 */}
-        <BaseList
-          className={styles['topic-wrap']}
-          wrapperClass={styles['list__inner']}
-          onRefresh={this.onScrollBottom.bind(this)}
-          noMore={(this.state.pageNum - 1) * this.state.pageSize > topicTotalCount}
-        >
-          {/* 新话题 */}
-          {this.state.keywords &&
-            <div
-              className={styles['topic-item']}
-              onClick={this.handleItemClick}
-            >
-              <div className={styles['item-left']}>
-                <div className={styles.name}>#{this.state.keywords}#</div>
+        {/* top */}
+        <div className={styles.header}>
+          <div className={styles['input-box']}>
+            <Input
+              value={keywords}
+              icon="SearchOutlined"
+              placeholder='请选择或直接输入话题'
+              onChange={e => this.updateKeywords(e.target.value)}
+            />
+            {!pc && keywords &&
+              <div className={styles.delete} onClick={() => this.updateKeywords()}>
+                <Icon className={styles['delete-icon']} name="WrongOutlined" size={16}></Icon>
               </div>
-              <div className={styles['item-right']}>新话题</div>
-            </div>
+            }
+          </div>
+          {!pc &&
+            <div className={styles['btn-cancel']} onClick={cancelTopic}>取消</div>
           }
-          {/* 搜索列表 */}
-          {this.renderItem()}
-        </BaseList>
-
-        {/* 取消按钮 */}
-        <div className='btn-cancel'>
-          <Button onClick={cancelTopic}>取消</Button>
         </div>
+
+        {/* list */}
+        <List
+          className={styles.list}
+          wrapperClass={styles['list__inner']}
+          height={pc ? 'auto' : 'calc(100vh - 50px)'}
+          noMore={finish}
+          onRefresh={() => this.fetchTopics()}
+        >
+          {keywords && this.renderItem({ content: keywords, newTopic: '新话题' })}
+          {topics.map(item => (
+            <React.Fragment key={item.topicId}>
+              {this.renderItem(item)}
+            </React.Fragment>
+          ))}
+        </List>
       </div >
     );
-    if (this.props.pc) return (
+
+    if (pc) return (
       <DDialog
         visible={visible}
         className={styles.pc}
-        onClose={this.props.cancelTopic}
-        title="添加话题"
+        onClose={cancelTopic}
+        title="#添加话题#"
         isCustomBtn={true}
       >
         {content}
       </DDialog>
     );
+
     return (
       <Popup
         className={styles.popup}
