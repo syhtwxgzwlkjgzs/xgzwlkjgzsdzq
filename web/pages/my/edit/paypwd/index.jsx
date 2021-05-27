@@ -1,10 +1,14 @@
 import React from 'react'
-import UserCenterEditPayPwd from '../../../../components/user-center-edit-paypwd'
+import UserCenterEditPayPwd from '../../../../components/user-center-edit-paypwd';
+import HOCUserInfo from '@middleware/HOCUserInfo';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
-export default function index() {
+function index() {
   return (
     <div>
       <UserCenterEditPayPwd />
     </div>
   )
 }
+
+export default HOCFetchSiteData(HOCUserInfo(index));
