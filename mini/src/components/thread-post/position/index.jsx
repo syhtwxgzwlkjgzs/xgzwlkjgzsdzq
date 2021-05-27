@@ -32,6 +32,9 @@ const Index = (props) => {
         setPosition(ret);
         setIsChose(true);
         positionChange(positon);
+      },
+      fail(res) {
+
       }
     });
   };

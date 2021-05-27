@@ -42,10 +42,7 @@ page {
             color: $black;
           }
         }
-
       }
-
-
     }
 
     .content {
@@ -92,6 +89,8 @@ page {
       left: 0;
       right: 0;
       bottom: 0;
+      bottom: calc(constant(safe-area-inset-bottom));
+      bottom: calc(env(safe-area-inset-bottom));
     }
   }
 }
