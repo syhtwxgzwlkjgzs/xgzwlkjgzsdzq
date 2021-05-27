@@ -4,6 +4,7 @@ import IndexH5Page from '@layout/my/like/h5';
 import IndexPCPage from '@layout/my/like/pc';
 import { readThreadList, readTopicsList } from '@server';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import isServer from '@common/utils/is-server';
 
 @inject('site')
 @inject('index')
@@ -63,7 +64,28 @@ class Index extends React.Component {
     if (!hasTopics) {
       search.getTopicsList();
     }
+    this.listenRouterChangeAndClean();
   }
+
+  clearStoreThreads = () => {
+    const { index } = this.props;
+    index.setThreads(null);
+  }
+
+  listenRouterChangeAndClean() {
+    // FIXME: 此种写法不好
+    if (!isServer()) {
+      window.addEventListener('popstate', this.clearStoreThreads, false);
+    }
+  }
+
+  componentWillUnmount() {
+    this.clearStoreThreads();
+    if (!isServer()) {
+      window.removeEventListener('popstate', this.clearStoreThreads);
+    }
+  }
+
   dispatch = async (type, data = {}) => {
     const { index } = this.props;
     if (type === 'refresh') {

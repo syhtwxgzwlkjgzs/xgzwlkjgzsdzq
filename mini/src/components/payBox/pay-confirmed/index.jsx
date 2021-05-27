@@ -109,7 +109,7 @@ export default class PayBox extends React.Component {
     if (this.props.payBox.payWay === PAYWAY_MAP.WALLET) {
       const { options = {} } = this.props.payBox;
       const { amount = 0 } = options;
-      if (this.props.payBox?.walletAvaAmount < amount) {
+      if (Number(this.props.payBox?.walletAvaAmount) < Number(amount)) {
         Toast.error({
           content: '钱包余额不足',
           duration: 1000,

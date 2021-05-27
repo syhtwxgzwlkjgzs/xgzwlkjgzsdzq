@@ -1,3 +1,4 @@
+// import {readCategories} from '@discuzq/sdk/dist/api/content/read-categories';
 import api from '../api';
 
 /** 获取点赞、打赏用户列表

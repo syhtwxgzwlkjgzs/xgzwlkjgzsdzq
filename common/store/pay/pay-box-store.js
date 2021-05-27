@@ -539,6 +539,16 @@ class PayBoxStore {
   }
 
   /**
+   * 清空支付密码对应函数
+   */
+  @action
+  clearPayPassword = () => {
+    this.oldPayPwd = null;
+    this.payPassword = null;
+    this.newPayPwdRepeat = null;
+  }
+
+  /**
    * 清空所有状态
    */
   @action

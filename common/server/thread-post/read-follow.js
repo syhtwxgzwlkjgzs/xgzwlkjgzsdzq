@@ -1,9 +1,9 @@
-import api from '../api';
+import {readFollow} from '@discuzq/sdk/dist/api/user/read-follow';
 
 /**
  * 获取粉丝关注
  */
-export default async function readFollow(opt = {}) {
-  const res = await api.readFollow({ ...opt, url: '/apiv3/follow' });
+export default async function _readFollow(opt = {}) {
+  const res = await readFollow({ ...opt });
   return res;
 }

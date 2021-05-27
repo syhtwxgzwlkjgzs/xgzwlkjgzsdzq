@@ -1,5 +1,5 @@
-import api from './api';
-export default async function readUserLoginDisplay(opts, ctx = null) {
-  const res = await api.readUserLoginDisplay({ ...opts, __context: ctx });
+import {readUserLoginDisplay} from '@discuzq/sdk/dist/api/login/read-userlogindisplay';
+export default async function _readUserLoginDisplay(opts, ctx = null) {
+  const res = await readUserLoginDisplay({ ...opts, __context: ctx });
   return res;
 }
