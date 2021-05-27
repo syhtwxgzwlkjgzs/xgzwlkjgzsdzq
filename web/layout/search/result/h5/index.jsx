@@ -56,7 +56,7 @@ class SearchResultH5Page extends React.Component {
     });
   };
 
-  onUserClick = ({ userId } = {}) => {
+  onUserClick = (userId) => {
     this.props.router.push(`/user/${userId}`);
   };
 

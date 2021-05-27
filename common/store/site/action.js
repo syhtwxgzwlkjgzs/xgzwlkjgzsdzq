@@ -63,10 +63,10 @@ class SiteAction extends SiteStore {
 
   // 检查是否开启默认数据
   checkSiteIsOpenDefautlThreadListData() {
-    if (this.webConfig && this.webConfig.setSite && this.webConfig.setSite.siteOpenSort) {
-      return true;
-    }
-    return false;
+    // if (this.webConfig && this.webConfig.setSite && this.webConfig.setSite.siteOpenSort) {
+    //   return true;
+    // }
+    return true;
   }
 
 }
