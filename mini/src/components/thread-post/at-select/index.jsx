@@ -81,7 +81,7 @@ class AtSelect extends Component {
   searchInput() {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      this.fetchUserList();
+      this.state.keywords === '' ? this.fetchFollow() : this.fetchUserList();
     }, 300);
   }
 
