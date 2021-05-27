@@ -33,3 +33,16 @@
     color: var(--color-primary);
   }
 }
+
+.spinLoading {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: rem($padding-4n);
+  padding-left: 0;
+  color: $text-color-secondary;
+  font-size: rem($font-size-base);
+  height: rem(46);
+  box-sizing: border-box;
+}

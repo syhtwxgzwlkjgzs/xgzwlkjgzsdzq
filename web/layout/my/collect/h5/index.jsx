@@ -5,7 +5,7 @@ import Header from '@components/header';
 import List from '@components/list';
 import NoData from '@components/no-data';
 import ThreadContent from '@components/thread';
-import { Icon } from '@discuzq/design';
+import { Spin } from '@discuzq/design';
 import styles from './index.module.scss';
 
 @inject('site')
@@ -35,13 +35,13 @@ class Index extends React.Component {
                 {
                   pageData?.map((item, index) => (
                     <div className={styles.listItem} key={index}>
-                      <ThreadContent data={item} collect={'collect'}/>
+                      <ThreadContent data={item} collect={'collect'} />
                     </div>
                   ))
                 }
               </List>
             )
-            : <NoData />
+            : <>{<div className={styles.spinLoading}>{this.props.firstLoading ? <Spin type="spinner">加载中...</Spin> : "暂无数据"}</div>}</>
         }
       </div>
     );
