@@ -19,6 +19,12 @@
         left: rem(60);
         top: 60%;
         transform: translateX(-50%) translateY(-100%);
+        :global {
+          .dzq-avatar {
+            border: rem(3) solid;
+            box-sizing: border-box;
+          }
+        }
     }
     .text{
         width: 100%;
@@ -64,8 +70,8 @@
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
-        -webkit-line-clamp: 2;
-        line-clamp: 2;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
         -webkit-box-orient: vertical;
       }
     }

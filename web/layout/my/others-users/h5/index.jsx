@@ -46,7 +46,7 @@ class H5OthersPage extends React.Component {
     const { targetUserThreads, targetUserThreadsTotalCount, targetUserThreadsPage, targetUserThreadsTotalPage } = user;
     return (
       <BaseLayout
-        showHeader={false}
+        showHeader={true}
         showTabBar={false}
         immediateCheck={true}
         onRefresh={this.fetchTargetUserThreads}

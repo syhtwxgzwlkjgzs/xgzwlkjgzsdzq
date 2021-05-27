@@ -1,6 +1,7 @@
-import api from '../api';
+import {updateDeny} from '@discuzq/sdk/dist/api/user/update-deny';
 
-export default async function denyUser(opts, ctx) {
-  const res = await api.updateDeny({ ...opts, __context: ctx });
+
+export default async function _updateDeny(opts, ctx) {
+  const res = await updateDeny({ ...opts, __context: ctx });
   return res;
 }

@@ -1,4 +1,4 @@
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Header from '@components/header';
 import UserCenterFans from '@components/user-center-fans';
@@ -22,7 +22,8 @@ class index extends Component {
   }
   componentDidMount() {
     this.setState({
-      height: window.outerHeight,
+      // header 是 40px，留出 2px ，用以触发下拉事件
+      height: window.outerHeight - 38,
       renderComponent: true,
     });
   }

@@ -154,8 +154,8 @@ class index extends Component {
                 <div className={styles.userCenterEditLabel}>
                   <label>微信</label>
                   <div className={styles.userCenterEditWeChat}>
-                    <Avatar size="small" image={this.user.avatarUrl} name={this.user.username} />
-                    <span>{this.user.nickname}</span>
+                    <Avatar size="small" image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />
+                    <span>{this.user.wxNickname}</span>
                   </div>
                 </div>
               </div>

@@ -50,6 +50,7 @@
   display: flex;
   align-items: center;
   .ucText {
+    font-size: rem($font-size-base);
     margin-right: rem($margin-2n);
   }
   :global {

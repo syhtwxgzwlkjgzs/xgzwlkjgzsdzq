@@ -97,11 +97,10 @@ class ThreadCreate extends React.Component {
     }
     // 阻止页面上拉带动操作栏位置变化。放这里便于本地开发调试
     if (window.innerHeight === winHeight) return;
-    this.setPostBottombar(action, y);
-    this.setPostBox(action, event);
+    this.setPostBox(action, event, y);
   }
 
-  setPostBox = (action, event) => {
+  setPostBox = (action, event, y) => {
     const timer = setTimeout(() => {
       clearTimeout(timer);
       const winHeight = getVisualViewpost();
@@ -116,25 +115,22 @@ class ThreadCreate extends React.Component {
       if (event) {
         const clientY = event?.clientY;
         const offsetTop = event?.target?.offsetTop || 0;
-        if (offsetTop) {
-          if (offsetTop > postBoxHeight) {
-            const top = (offsetTop - postBoxHeight >= 0 && clientY > winHeight)
-              ? offsetTop - postBoxHeight + 30 : offsetTop;
-            // TODO: 这里的计算有问题，
-            postBox.style.paddingBottom = `${window.innerHeight - winHeight}px`;
-            this.props.handleEditorBoxScroller(top);
-          }
+        if (clientY > postBoxHeight) {
+          this.props.handleEditorBoxScroller(offsetTop);
+          // 解决focus在编辑器之后页面被弹出导致底部工具栏上移的问题
+          window.scrollTo(0, 0);
         }
       }
+      this.setPostBottombar(action, y);
     }, 0);
   };
 
   // 获取底部工具栏的高度
   getBottombarHeight = (action) => {
-    const position = document.querySelector('#post-position');
+    const position = document.querySelector('#post-position'); // 高度35px
     const toolbar = document.querySelector('#dvditor-toolbar');
     const moneybox = document.querySelector('#dzq-money-box');
-    let bottombarHeight = 133;
+    let bottombarHeight = 123;
     if (action === 'select') bottombarHeight = 88;
     if (!position) bottombarHeight = 88;
     // 当表情显示的时候
@@ -146,7 +142,7 @@ class ThreadCreate extends React.Component {
     return bottombarHeight;
   }
 
-  setPostBottombar = (action, y) => {
+  setPostBottombar = (action, y = 0) => {
     const winHeight = getVisualViewpost();
     const postBottombar = document.querySelector('#post-bottombar');
     const bottombarHeight = this.getBottombarHeight(action);

@@ -1,12 +1,12 @@
 import React from 'react';
 import UserCenterFriends from '../user-center-friends';
-import { inject, observer } from 'mobx-react';
 import { Spin } from '@discuzq/design';
 import { followerAdapter } from './adapter';
 import styles from './index.module.scss';
-import { createFollow, deleteFollow, getUserFollow, getUserFans } from '@server';
+import { createFollow, deleteFollow, getUserFollow } from '@server';
 import { get } from '@common/utils/get';
 import deepClone from '@common/utils/deep-clone';
+import NoData from '@components/no-data';
 
 class UserCenterFollows extends React.Component {
   firstLoaded = false;
@@ -197,6 +197,7 @@ class UserCenterFollows extends React.Component {
   };
 
   render() {
+    const isNoData = followerAdapter(this.state.follows).length === 0 && !this.state.loading;
     return (
       <div
         className={this.props.className}
@@ -226,6 +227,7 @@ class UserCenterFollows extends React.Component {
             </div>
           );
         })}
+        {isNoData && <NoData />}
         <div className={styles.loadMoreContainer}>{this.state.loading && <Spin type={'spinner'}>加载中 ...</Spin>}</div>
       </div>
     );

@@ -1,7 +1,7 @@
 import { action } from 'mobx';
 import WalletStore from './store';
 import { readWalletUser, readWalletLog, readWalletCash } from '@server';
-import { time } from '@discuzq/sdk/dist/index';
+import time from '@discuzq/sdk/dist/time';
 import { get } from '@common/utils/get';
 
 const setWalletInfoPageData = (data, obj, {
