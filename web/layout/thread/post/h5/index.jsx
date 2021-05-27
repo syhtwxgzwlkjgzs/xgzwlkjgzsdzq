@@ -78,6 +78,7 @@ class ThreadCreate extends React.Component {
 
   // 设置底部bar的样式
   setBottomBarStyle = (y = 0, action, event) => {
+    console.log('event', event);
     const winHeight = getVisualViewpost();
     // 如果可视窗口不变，即没有弹起键盘不进行任何设置
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
@@ -115,15 +116,12 @@ class ThreadCreate extends React.Component {
       }
       if (event) {
         const clientY = event?.clientY;
-        const offsetTop = event?.target?.offsetTop || 0;
-        if (offsetTop) {
-          if (offsetTop > postBoxHeight) {
-            const top = (offsetTop - postBoxHeight >= 0 && clientY > winHeight)
-              ? offsetTop - postBoxHeight + 30 : offsetTop;
-            // TODO: 这里的计算有问题，
-            postBox.style.paddingBottom = `${window.innerHeight - winHeight}px`;
-            this.props.handleEditorBoxScroller(top);
-          }
+        // const offsetTop = event?.target?.offsetTop || 0;
+        // const editorTextBox = document.querySelector('#dzq-vditor .vditor-wysiwyg');
+        // const editorTextBoxHeight = editorTextBox?.clientHeight;
+        if (clientY > postBoxHeight) {
+          const top = clientY - postBoxHeight;
+          this.props.handleEditorBoxScroller(top);
         }
       }
     }, 0);
