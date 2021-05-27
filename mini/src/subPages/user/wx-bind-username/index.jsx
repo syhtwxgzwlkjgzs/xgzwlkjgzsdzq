@@ -4,7 +4,7 @@ import { View } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import Input from '@discuzq/design/dist/components/input/index';
 import Button from '@discuzq/design/dist/components/button/index';
-import Toast from '@discuzq/design/dist/components/Toast/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
