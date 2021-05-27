@@ -14,6 +14,9 @@ class IndexStore {
   @observable recommends = null;
   @observable recommendsStatus = 'none'
   @observable filter = {}
+
+  // 解决小程序popup被tabBar遮挡的问题
+  @observable hiddenTabBar = false
 }
 
 export default IndexStore;

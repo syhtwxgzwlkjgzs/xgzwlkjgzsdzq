@@ -1,42 +1,60 @@
 @import '@common/styles/index.scss';
 
 .container {
-  width: 245px;
-  height: 125px;
-  border-radius: var(--border-radius-small);
+  padding: $padding-6n;
+  width: 364px;
+  border-radius: $border-radius-small;
   background: var(--color-white);
   margin: 0 auto;
+  box-sizing: border-box;
+
   .deleteTips {
     color: var(--color-text-primary);
-    border-bottom: var(--border-border);
     .tips {
       width: 100%;
-      font-weight: var(--font-weight-regular);
+      font-weight: 600;
       font-size: $font-size-middle;
-      line-height: $font-line-height-small;
       text-align: center;
-      padding-top: $padding-5n;
+      line-height: 22px;
     }
     .content {
       width: 100%;
+      font-weight: normal;
       font-size: $font-size-primary;
-      line-height: $font-line-height-middle;
       text-align: center;
-      padding: $padding-10 0;
+      margin-top: $margin-2n;
+      line-height: 20px;
     }
   }
   .btn {
+    margin-top: 16px;
     display: flex;
-    font-size: $font-size-middle;
-    line-height: $font-line-height-large;
-    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-weight: normal;
+    font-size: $font-size-primary;
+    line-height: 36px;
+
     .close {
-      width: 50%;
-      border-right: var(--border-border);
+      width: 116px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: $button-info-bg-color;
+      margin-right: $margin-5n;
+      border: none;
+      color: $text-color-regular;
+      padding: 0;
     }
+
     .ok {
-      width: 50%;
-      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 116px;
+      height: 36px;
+      padding: 0;
     }
   }
 }

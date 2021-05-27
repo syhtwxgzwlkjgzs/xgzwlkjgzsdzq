@@ -1,9 +1,9 @@
 
+// import {createInviteLink} from '@discuzq/sdk/dist/api/invite/create-invite-link';
 import api from '../api';
-
 // export default async function share(opts, ctx = null) {
 //   // , url: '/apiv3/sticks'
-//   const res = await api.readStickList({ ...opts, __context: ctx, url: '/apiv3/thread.share' });
+//   const res = await readStickList({ ...opts, __context: ctx, url: '/apiv3/thread.share' });
 //   return res;
 // }
 

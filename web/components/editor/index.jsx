@@ -27,8 +27,8 @@ export default function DVditor(props) {
 
   const html2mdSetValue = (text) => {
     try {
-      if (!vditor) return;
-      const md = vditor.html2md(text);
+      if (!vditor) return '';
+      const md = !text ? '' : vditor.html2md(text);
       vditor.setValue && vditor.setValue(md);
     } catch (error) {
       console.error('html2mdSetValue', error);
@@ -190,7 +190,8 @@ export default function DVditor(props) {
         // 编辑器异步渲染完成后的回调方法
         after: () => {
           onInit(editor);
-          editor.setValue(value);
+          const md = !value ? '' : editor.html2md(value);
+          editor.setValue(md);
           editor.vditor[editor.vditor.currentMode].element.blur();
         },
         focus: () => {},

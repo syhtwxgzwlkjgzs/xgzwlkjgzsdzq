@@ -1,9 +1,9 @@
-import api from '../api';
+import {readTopicsList} from '@discuzq/sdk/dist/api/content/read-topicslist';
 
 /**
  * 获取话题列表
  */
-export default async function readTopics(opt = {}) {
-  const res = await api.readTopicsList({ ...opt, url: '/apiv3/topics.list' });
+export default async function _readTopics(opt = {}) {
+  const res = await readTopicsList({ ...opt, url: '/apiv3/topics.list' });
   return res;
 }

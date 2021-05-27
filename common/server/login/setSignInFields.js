@@ -1,4 +1,5 @@
-import api from '../api';
-export default async function setSignInFields(opts, ctx) {
-  return await api.setSignInFields({ ...opts, __context: ctx });
+import {setSignInFields} from '@discuzq/sdk/dist/api/login/set-sign-in-fields';
+
+export default async function _setSignInFields(opts, ctx) {
+  return await setSignInFields({ ...opts, __context: ctx });
 }
