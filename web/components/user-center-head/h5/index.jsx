@@ -6,6 +6,7 @@ import { Button, Icon, Toast } from '@discuzq/design';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
+import { numberFormat } from '@common/utils/number-format';
 @inject('user')
 @observer
 class index extends Component {
@@ -25,7 +26,7 @@ class index extends Component {
 
   // 点击屏蔽
   handleChangeShield = (isDeny) => {
-    const id= this.props.router.query?.id;
+    const id = this.props.router.query?.id;
     if (isDeny) {
       this.props.user.undenyUser(id);
       this.props.user.setTargetUserNotBeDenied();
@@ -136,15 +137,15 @@ class index extends Component {
           <div className={styles.userMessageList}>
             <div onClick={this.goToFansList} className={styles.userMessageListItem}>
               <span>粉丝</span>
-              <span>{user.fansCount || 0}</span>
+              <span>{numberFormat(user.fansCount) || 0}</span>
             </div>
             <div onClick={this.goToFollowsList} className={styles.userMessageListItem}>
               <span>关注</span>
-              <span>{user.followCount || 0}</span>
+              <span>{numberFormat(user.followCount) || 0}</span>
             </div>
             <div onClick={this.gotoLikeList} className={styles.userMessageListItem}>
               <span>点赞</span>
-              <span>{user.likedCount || 0}</span>
+              <span>{numberFormat(user.likedCount) || 0}</span>
             </div>
           </div>
         </div>
