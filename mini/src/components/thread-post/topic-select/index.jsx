@@ -27,7 +27,7 @@ class TopicSelect extends Component {
 
   // 初始化话题请求
   async componentDidMount() {
-    this.loadTopics();
+    this.fetchTopics();
   }
 
   // 更新搜索关键字
@@ -40,12 +40,12 @@ class TopicSelect extends Component {
   searchInput = () => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      this.loadTopics();
+      this.fetchTopics();
     }, 300);
   }
 
   // 请求
-  async loadTopics() {
+  async fetchTopics() {
     // 1 设置参数
     const { fetchTopic } = this.props.threadPost;
     const { page, perPage, keywords } = this.state;
@@ -126,7 +126,7 @@ class TopicSelect extends Component {
         <List
           height={'calc(100vh - 50px)'}
           noMore={finish}
-          onRefresh={() => this.loadTopics()}
+          onRefresh={() => this.fetchTopics()}
         >
           {keywords && this.renderItem({ content: keywords, newTopic: '新话题' })}
           {topics.map(item => (
