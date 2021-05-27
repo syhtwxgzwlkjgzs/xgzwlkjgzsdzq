@@ -81,7 +81,6 @@ class ThreadCreate extends React.Component {
     const winHeight = getVisualViewpost();
     // 如果可视窗口不变，即没有弹起键盘不进行任何设置
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
-    this.moneyboxDisplay(false);
     this.positionDisplay(action);
     if (!isIOS()) {
       if (vditorToolbar) {
@@ -97,6 +96,7 @@ class ThreadCreate extends React.Component {
     }
     // 阻止页面上拉带动操作栏位置变化。放这里便于本地开发调试
     if (window.innerHeight === winHeight) return;
+    this.moneyboxDisplay(false);
     this.setPostBox(action, event, y);
   }
 
