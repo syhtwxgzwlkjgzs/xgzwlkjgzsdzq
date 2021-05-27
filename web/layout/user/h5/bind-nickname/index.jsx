@@ -8,7 +8,7 @@ import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import PcBodyWrap from '../components/pc-body-wrap';
-import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT, isExtFieldsOpen } from '@common/store/login/util';
 
 @inject('site')
 @inject('user')
@@ -32,15 +32,17 @@ class BindNicknameH5Page extends React.Component {
       });
 
       setTimeout(() => {
-        const { router } = this.props;
+        const { router, site } = this.props;
         const { needToCompleteExtraInfo: isNeedToCompleteExtraInfo } = router.query;
 
-        // TODO: 页面还没做好，暂时不做扩展信息的判断跳转
+        // 扩展信息的判断跳转
+        if (!isExtFieldsOpen(site)) return;
+
         const needToCompleteExtraInfo = this.props.commonLogin.needToCompleteExtraInfo || isNeedToCompleteExtraInfo;
-        // if (needToCompleteExtraInfo) {
-        //   this.props.router.push('/user/supplementary');
-        //   return;
-        // }
+        if (needToCompleteExtraInfo) {
+          this.props.router.push('/user/supplementary');
+          return;
+        }
         // TODO: 这里的路由堆栈需要再梳理规则
         window.location.href = '/';
       }, 1000);

@@ -10,7 +10,7 @@ import Popup from '@discuzq/design/dist/components/popup/index';
 
 
 const Index = inject('threadPost')(observer(({ threadPost, show = false, onHide }) => {
-  const { fetchEmoji, emojis, postData, setPostData } = threadPost;
+  const { fetchEmoji, emojis, postData: { contentText = '' }, setPostData, cursorPosition, setCursorPosition } = threadPost;
 
   useEffect(async () => {
     !emojis.length && fetchEmoji();
@@ -25,8 +25,9 @@ const Index = inject('threadPost')(observer(({ threadPost, show = false, onHide 
       <View className={styles['emoji-container']}>
         {emojis.map((item, index) => <Image className={styles['emoji-item']} key={index} src={item.url} onClick={() => {
           setPostData({
-            contentText: postData.contentText + item.code
+            contentText: contentText.slice(0, cursorPosition) + item.code + contentText.slice(cursorPosition)
           });
+          setCursorPosition(cursorPosition + item.code.length);
           onHide();
         }} />)}
       </View>

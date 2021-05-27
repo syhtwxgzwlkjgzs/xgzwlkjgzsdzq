@@ -141,7 +141,7 @@ class SearchAction extends SearchStore {
       }
       return result.data;
     }
-    return null;
+    return Promise.reject();
   };
 
   /**
@@ -166,7 +166,7 @@ class SearchAction extends SearchStore {
       }
       return result;
     }
-    return null;
+    return Promise.reject();
   };
 
   /**
@@ -190,7 +190,7 @@ class SearchAction extends SearchStore {
       }
       return result.data;
     }
-    return null;
+    return Promise.reject();
   };
 
 /**
