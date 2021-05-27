@@ -5,6 +5,14 @@
     background: $white;
 }
 
+.spinLoading {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding: rem($padding-4n);
+}
+
 .unit {
     &::before {
         content: '';

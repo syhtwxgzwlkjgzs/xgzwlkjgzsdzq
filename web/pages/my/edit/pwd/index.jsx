@@ -1,10 +1,14 @@
-import React from 'react'
-import UserCenterEditAccountPwd from '../../../../components/user-center-edit-account-pwd'
+import React from 'react';
+import UserCenterEditAccountPwd from '../../../../components/user-center-edit-account-pwd';
+import HOCUserInfo from '@middleware/HOCUserInfo';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
-export default function index() {
+function index() {
   return (
     <div>
       <UserCenterEditAccountPwd />
     </div>
   )
 }
+
+export default HOCFetchSiteData(HOCUserInfo(index));
