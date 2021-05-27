@@ -23,7 +23,7 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
   const { images, files, audio } = localData;
 
   // 检查选中附件、图片的合法性，合法则可以上传
-  const checkWithUpload = (tempFiles, type) => {
+  const checkWithUpload = async (tempFiles, type) => {
     // 站点支持的附件类型、图片类型、尺寸大小
     const { supportFileExt, supportImgExt, supportMaxSize } = webConfig?.setAttach;
 
@@ -42,8 +42,12 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
         Taro.showToast({ title: `仅支持0 ~ ${supportMaxSize}MB的附件`, icon: 'none' });
         return;
       }
-
-      upload(tempFile);
+      Taro.showLoading({
+        title: '上传中',
+        mask: true
+      });
+      await upload(tempFile);
+      Taro.hideLoading();
 
     } else if (type === THREAD_TYPE.image) {
       // 剔除超出数量9的多余图片
@@ -52,6 +56,7 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
       tempFiles.splice(remainLength, tempFiles.length - remainLength);
 
       let isAllLegal = true; // 状态：此次上传图片是否全部合法
+      const uploadPromise = [];
       tempFiles.forEach((item, index) => {
         const imageType = item.path.match(/\.([^\.]+)$/)[1].toLocaleLowerCase();
         const imageSize = item.size;
@@ -64,10 +69,14 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
           isAllLegal = false;
           return;
         }
-
-        upload(item);
+        Taro.showLoading({
+          title: '上传中',
+          mask: true
+        });
+        uploadPromise.push(upload(item));
       });
-
+      await Promise.all(uploadPromise);
+      Taro.hideLoading();
       !isAllLegal && Taro.showToast({
         title: `仅支持${supportImgExt}格式，且0~${supportMaxSize}MB的图片`, icon: 'none'
       });
@@ -78,63 +87,53 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
 
   // 执行上传
   const upload = (file) => {
-    console.log('upload', file);
-    const tempFilePath = file.path || file.tempFilePath;
-    const token = locals.get(constants.ACCESS_TOKEN_NAME);
-    console.log(tempFilePath);
-    Taro.uploadFile({
-      url: `https://discuzv3-dev.dnspod.dev//apiv3/attachments`,
-      filePath: tempFilePath,
-      name: 'file',
-      header: {
-        'Content-Type': 'multipart/form-data',
-        authorization: `Bearer ${token}`
-      },
-      formData: {
-        'type': (() => {
-          console.log(type);
-          console.log(THREAD_TYPE.voice);
+    return new Promise((resolve, reject) => {
+      const tempFilePath = file.path || file.tempFilePath;
+      const token = locals.get(constants.ACCESS_TOKEN_NAME);
+      Taro.uploadFile({
+        url: `https://discuzv3-dev.dnspod.dev//apiv3/attachments`,
+        filePath: tempFilePath,
+        name: 'file',
+        header: {
+          'Content-Type': 'multipart/form-data',
+          'authorization': `Bearer ${token}`
+        },
+        formData: {
+          'type': (() => {
+            switch(type) {
+              case THREAD_TYPE.image: return 1;
+              case THREAD_TYPE.file: return 0;
+            }
+          })()
+        },
+        success(res) {
+          const data = JSON.parse(res.data).Data;
           switch(type) {
-            case THREAD_TYPE.image: return 1;
-            case THREAD_TYPE.file: return 0;
-            // case THREAD_TYPE.voice: return 3;
+            case THREAD_TYPE.image:
+              images[data.id] = {
+                thumbUrl: tempFilePath,
+                ...data,
+              };
+              setPostData({images});
+              break;
+            case THREAD_TYPE.file:
+              files[data.id] = {
+                thumbUrl: tempFilePath,
+                name: file.name,
+                size: file.size,
+                ...data,
+              };
+              setPostData({files});
+              break;
           }
-        })()
-      },
-      success(res) {
-        console.log(res);
-        const data = JSON.parse(res.data).Data;
-        switch(type) {
-          case THREAD_TYPE.image:
-            images[data.id] = {
-              thumbUrl: tempFilePath,
-              ...data,
-            };
-            setPostData({images});
-            break;
-          case THREAD_TYPE.file:
-            files[data.id] = {
-              thumbUrl: tempFilePath,
-              name: file.name,
-              size: file.size,
-              ...data,
-            };
-            setPostData({files});
-            break;
-          // case THREAD_TYPE.voice:
-          //   audio = {
-          //     thumbUrl: tempFilePath,
-          //     ...data,
-          //   };
-          //   setPostData({audio});
-          //   break;
+          resolve();
+        },
+        fail(res) {
+          console.log(res);
         }
-      },
-      fail(res) {
-        console.log(res);
-      }
+      });
     });
-  }
+  };
 
   // 选择图片
   const chooseImage = () => {

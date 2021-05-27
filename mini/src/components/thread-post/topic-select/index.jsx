@@ -6,10 +6,10 @@ import { inject, observer } from 'mobx-react';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import Input from '@discuzq/design/dist/components/input/index';
-import Button from '@discuzq/design/dist/components/button/index';
 import Icon from '@discuzq/design/dist/components/icon/index';
-import ScrollView from '@discuzq/design/dist/components/scroll-view/index';
 import styles from './index.module.scss';
+
+import List from '@components/list';
 
 @inject('threadPost')
 @observer
@@ -18,56 +18,55 @@ class TopicSelect extends Component {
     super(props);
     this.state = {
       keywords: '', // 搜索关键字
-      pageNum: 1,
-      pageSize: 20,
-      meta: {},
+      page: 1,
+      perPage: 20,
+      finish: false,
     };
     this.timer = null;
   }
 
   // 初始化话题请求
   async componentDidMount() {
-    const { fetchTopic } = this.props.threadPost;
-    await fetchTopic();
-    this.setState({ pageNum: this.state.pageNum + 1 });
+    this.loadTopics();
   }
 
   // 更新搜索关键字
-  updateKeywords = (e) => {
-    this.setState({ keywords: e.target.value }, this.searchInput);
+  updateKeywords = (val = "") => {
+    this.setState({ keywords: val, page: 1 });
+    this.searchInput();
   }
 
   // 搜索话题
   searchInput = () => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      this.setState({ pageNum: 1 }, this.loadTopics);
+      this.loadTopics();
     }, 300);
   }
 
+  // 请求
   async loadTopics() {
     // 1 设置参数
     const { fetchTopic } = this.props.threadPost;
-    const params = {
-      page: this.state.pageNum,
-      perPage: this.state.pageSize,
-      filter: {
-        recommended: 1,
-      },
-    };
-    if (this.state.keywords) {
-      params.filter.content = this.state.keywords;
+    const { page, perPage, keywords } = this.state;
+    const params = { page, perPage };
+    if (keywords) {
+      params.filter = {};
+      params.filter.content = keywords;
     }
     // 2 发起请求
-    await fetchTopic(params);
-    // 3 更新页码
-    this.setState({ pageNum: this.state.pageNum + 1 });
-  }
-
-  onScrollBottom = () => {
-    // 忽略页码为1时的触底
-    if (this.state.pageNum === 1) return;
-    this.loadTopics();
+    const ret = await fetchTopic(params);
+    const { code, data } = ret;
+    // 3 请求完成
+    if (code === 0) {
+      this.setState({
+        page: page + 1,
+        finish: page >= data.totalPage
+      });
+    } else {
+      this.setState({ finish: true });
+      Taro.showToast({ title: ret.msg, icon: 'none' })
+    }
   }
 
   // 返回发帖页
@@ -87,75 +86,56 @@ class TopicSelect extends Component {
   }
 
   // 渲染项列表
-  renderItem = ({ data = [], index }) => {
-    const item = data[index] || {};
-
-    return (
-      <View
-        key={item.id}
-        className={styles['topic-item']}
-        onClick={() => this.handleItemClick(item)}
-      >
-        <View className={styles['item-left']}>
-          <View className={styles.name}>#{item.content}#</View>
-          {/* {item.recommended &&
-            <View className={styles.recommend}>
-              <Icon name="LikeOutlined" size={20} color='#2469f6' />
-            </View>
-          } */}
-        </View>
-        <View className={styles['item-right']}>{item.viewCount}热度</View>
+  renderItem = (item) => (
+    <View className={styles['topic-item']} onClick={() => this.handleItemClick(item)}>
+      <View className={styles['item-left']}>
+        <View className={styles.name}>#{item.content}#</View>
       </View>
-    );
-  }
+      <View className={styles['item-right']}>
+        {item.newTopic ? item.newTopic : `${item.viewCount}热度`}
+      </View>
+    </View>
+  );
 
   render() {
     const { topics = [] } = this.props.threadPost;
+    const { keywords, finish } = this.state;
 
     return (
       <View className={styles.wrapper}>
-        <Input
-          value={this.state.keywords}
-          icon="SearchOutlined"
-          placeholder='搜索话题'
-          onChange={e => this.updateKeywords(e)}
-        />
 
-        {/* 话题列表 */}
-        <View className={styles['topic-wrap']}>
-          {/* 新话题 */}
-          {this.state.keywords !== '' &&
-            <View
-              className={styles['topic-item']}
-              onClick={this.handleItemClick}
-            >
-              <View className={styles['item-left']}>
-                <View className={styles.name}>#{this.state.keywords}#</View>
+        {/* top */}
+        <View className={styles.header}>
+          <View className={styles['input-box']}>
+            <Input
+              value={keywords}
+              icon="SearchOutlined"
+              placeholder='搜索话题'
+              onChange={e => this.updateKeywords(e.target.value)}
+            />
+            {keywords &&
+              <View className={styles.delete} onClick={() => this.updateKeywords()}>
+                <Icon className={styles['delete-icon']} name="WrongOutlined" size={16}></Icon>
               </View>
-              <View className={styles['item-right']}>新话题</View>
-            </View>
-          }
-          {/* 搜索列表 */}
-          <ScrollView
-            className={'scroll-view'}
-            width='100%'
-            height={450}
-            rowCount={topics.length}
-            rowData={topics}
-            rowHeight={54}
-            rowRenderer={this.renderItem}
-            onScrollBottom={this.onScrollBottom}
-            onPullingUp={() => Promise.reject()}
-            isRowLoaded={() => true}
-          />
+            }
+          </View>
+          <View className={styles['btn-cancel']} onClick={this.cancel}>取消</View>
         </View>
 
-        {/* 取消按钮 */}
-        <View className={styles['btn-container']}>
-          <View className={styles.btn}>
-            <Button onClick={this.cancel}>取消</Button>
-          </View>
-        </View>
+        {/* list */}
+        <List
+          height={'calc(100vh - 50px)'}
+          noMore={finish}
+          onRefresh={() => this.loadTopics()}
+        >
+          {keywords && this.renderItem({ content: keywords, newTopic: '新话题' })}
+          {topics.map(item => (
+            <React.Fragment key={item.topicId}>
+              {this.renderItem(item)}
+            </React.Fragment>
+          ))}
+        </List>
+
       </View >
     );
   }
