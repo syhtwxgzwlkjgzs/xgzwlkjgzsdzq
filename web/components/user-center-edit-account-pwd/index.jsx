@@ -173,7 +173,11 @@ class index extends Component {
         <div className={styles.content}>
           {this.props.user?.hasPassword ? this.renderHasPassword() : this.renderHasNoPassword()}
         </div>
-        <div onClick={this.handleResetPwd} className={styles.tips}>忘记旧密码？</div>
+        {
+          this.props.user?.hasPassword && (
+            <div onClick={this.handleResetPwd} className={styles.tips}>忘记旧密码？</div>
+          )
+        }
         <div className={styles.bottom}>
           <Button full onClick={this.handleSubmit} disabled={isSubmit} type={"primary"} className={styles.btn}>提交</Button>
         </div>
