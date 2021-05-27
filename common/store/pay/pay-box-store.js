@@ -461,9 +461,11 @@ class PayBoxStore {
   @action
   resetPayPwd = async () => {
     const resetPayPwdRes = await updateUsersUpdate({
-      payPassword: this.newPayPwd,
-      payPasswordConfirmation: this.newPayPwdRepeat,
-      payPasswordToken: this.payPwdResetToken,
+      data: {
+        payPassword: this.newPayPwd,
+        payPasswordConfirmation: this.newPayPwdRepeat,
+        payPasswordToken: this.payPwdResetToken,
+      }
     });
 
     if (resetPayPwdRes.code === 0) {
