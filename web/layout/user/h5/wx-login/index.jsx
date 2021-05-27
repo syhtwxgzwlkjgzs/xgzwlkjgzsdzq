@@ -67,11 +67,11 @@ class WXLoginH5Page extends React.Component {
           type,
           params: { sessionToken: this.props.h5QrCode.sessionToken },
         });
+        clearInterval(this.timer);
         const uid = get(res, 'data.uid');
         this.props.user.updateUserInfo(uid);
         // FIXME: 使用 window 跳转用来解决，获取 forum 在登录前后不同的问题，后续需要修改 store 完成
         window.location.href = '/';
-        clearInterval(this.timer);
       } catch (e) {
         if (this.props.h5QrCode.countDown) {
           this.props.h5QrCode.countDown = this.props.h5QrCode.countDown - 3;
