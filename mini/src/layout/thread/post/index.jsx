@@ -77,6 +77,7 @@ class Index extends Component {
     Taro.eventCenter.off('captchaResult', this.handleCaptchaResult);
     Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault);
     // Taro.offKeyboardHeightChange(() => {});
+    this.props.thread.reset();
   }
 
   componentDidShow() { }

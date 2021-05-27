@@ -82,12 +82,12 @@ class AtSelect extends Component {
   searchInput() {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      this.state.keywords === '' ? this.fetchFollow() : this.fetchUserList();
+      this.onScrollBottom();
     }, 300);
   }
 
   onScrollBottom = () => {
-    return this.state.keywords === '' ? this.fetchFollow() : this.fetchUserList();
+    return this.state.keywords ? this.fetchUserList() : this.fetchFollow();
   }
 
   // 取消选择
@@ -132,29 +132,28 @@ class AtSelect extends Component {
     const { threadPost, search } = this.props;
     const data = this.state.keywords ? (search?.users?.pageData || []) : (threadPost.follows || []);
 
+    if (data.length === 0) return null;
     return data.map(item => {
       const { avatar, username, groupName, userId } = this.formatData(item);
 
       return (
-        <View key={userId}>
-          <View className={styles['at-item']}>
-            <View className={styles.avatar}>
-              {avatar
-                ? <Avatar image={avatar} />
-                : <Avatar
-                  text={username}
-                  style={{
-                    backgroundColor: `#${this.getBackgroundColor(username)}`
-                  }}
-                />
-              }
-            </View>
-            <View className={styles.info}>
-              <View className={styles.username}>{username}</View>
-              <View className={styles.group}>{groupName}</View>
-            </View>
-            <Checkbox name={username}></Checkbox>
+        <View className={styles['at-item']} key={userId}>
+          <View className={styles.avatar}>
+            {avatar
+              ? <Avatar image={avatar} />
+              : <Avatar
+                text={username}
+                style={{
+                  backgroundColor: `#${this.getBackgroundColor(username)}`
+                }}
+              />
+            }
           </View>
+          <View className={styles.info}>
+            <View className={styles.username}>{username}</View>
+            <View className={styles.group}>{groupName}</View>
+          </View>
+          <Checkbox name={username}></Checkbox>
         </View>
       )
     })
@@ -165,7 +164,7 @@ class AtSelect extends Component {
 
     return (
       <View className={styles.wrapper}>
-        {/* top*/}
+        {/* top */}
         <View className={styles.header}>
           <View className={styles['input-box']}>
             <Input
