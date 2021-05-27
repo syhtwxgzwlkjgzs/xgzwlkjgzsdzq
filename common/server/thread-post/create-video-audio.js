@@ -9,7 +9,7 @@ import api from '../api';
  * TODO: 待更新到sdk
  */
 export default async function _createThreadVideoAudio(params) {
-  const res = await http({
+  const res = await api.http({
     url: '/apiv3/thread/video',
     method: 'post',
     data: params,

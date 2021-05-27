@@ -1,11 +1,12 @@
 // import {createOrdersCreate} from '@discuzq/sdk/dist/api/pay/create-orderscreate';
+import api from '../api';
 
 /**
  * 创建新的私信对话
  * TODO: 待更新到sdk
  */
 export default async function _createDialog(params) {
-  const res = await http({
+  const res = await api.http({
     url: '/apiv3/dialog.create',
     method: 'post',
     data: params,

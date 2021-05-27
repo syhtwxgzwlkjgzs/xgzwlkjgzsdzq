@@ -1,4 +1,5 @@
 // import {createOrdersCreate} from '@discuzq/sdk/dist/api/pay/create-orderscreate';
+import api from '../api';
 
 /**
  * 获取未读消息数量
@@ -15,7 +16,7 @@ export default async function _readUnreadCount(opts = {}, ctx = null) {
       __context: ctx,
       ...others,
     };
-    const result = await http(options);
+    const result = await api.http(options);
     return result;
   } catch (error) {
     return error;

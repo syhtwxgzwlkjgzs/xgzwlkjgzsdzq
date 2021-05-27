@@ -1,4 +1,5 @@
 // import {readCategories} from '@discuzq/sdk/dist/api/content/read-categories';
+import api from '../api';
 
 /** 当前用户所拥有的权限
  * @param {object} params
@@ -15,7 +16,7 @@ export default async function groupPermissionList(opts, ctx = null) {
       __context: ctx,
       ...others,
     };
-    const result = await http(options);
+    const result = await api.http(options);
     return result;
   } catch (error) {
     return error;

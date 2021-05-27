@@ -5,7 +5,7 @@
  * TODO: 待更新到sdk
  */
 export default async function _readYundianboSignature(params = {}) {
-  const res = await http({
+  const res = await api.http({
     url: 'apiv3/signature',
     method: 'get',
     data: params,
