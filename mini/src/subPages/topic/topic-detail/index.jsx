@@ -40,7 +40,13 @@ class Index extends React.Component {
       menus: ['shareAppMessage', 'shareTimeline'],
     });
   }
-
+  onShareTimeline(){
+    const { topic } = this.props
+    const topicTitle = topic.topicDetail?.pageData[0]?.content || ''    
+    return {
+      title: topicTitle
+    }
+  }
   onShareAppMessage = (res) => {
     const { user, index, topic } = this.props;
     const thread = index.threads?.pageData || []

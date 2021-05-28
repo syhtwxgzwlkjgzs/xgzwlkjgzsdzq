@@ -29,6 +29,10 @@ const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = tru
   const inputClick = () => {
     onSearch(value)
   }
+  const handleInput = (e) => {
+    console.log(111)
+    console.log(e)
+  }
   return (
     <View className={`${styles.container} ${!isShowBottom && styles.hiddenBottom}`}>
       <View className={styles.inputWrapper}>
@@ -39,6 +43,7 @@ const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = tru
           onEnter={inputClick}
           onChange={e => inputChange(e)}
           className={styles.input}
+          onInput={inputClick}
         />
         {
           isShow && (

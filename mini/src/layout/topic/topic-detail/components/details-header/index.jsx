@@ -2,7 +2,7 @@ import React from 'react';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import { noop } from '@components/thread/utils';
 import styles from './index.module.scss';
-import { View, Text, Button } from '@tarojs/components';
+import { View, Text, Button, Image } from '@tarojs/components';
 import TopicHeaderImg from '../../../../../../../web/public/dzq-img/topic-header.png';
 import Router from '@discuzq/sdk/dist/router';
 
@@ -18,27 +18,30 @@ const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop }) => 
     Router.push({url: '/subPages/search/result-topic/index'});
   }
   return (
-    <View className={styles.container} style={{ backgroundImage: `url('${TopicHeaderImg}')` }}>
-      <View className={styles.title}>{title && `#${title}#`}</View>
-      <View className={styles.siteInfo}>
-          <View>
-            <Text className={styles.text}>热度</Text>
-            <Text className={styles.content}>{viewNum}</Text>
-          </View>
-          <View className={styles.hr}></View>
-          <View>
-            <Text className={styles.text}>内容数</Text>
-            <Text className={styles.content}>{contentNum}</Text>
-          </View>
-          <View className={styles.hr}></View>
-          <Button plain='true' openType='share' data-from='head'>
-            <Icon className={styles.shareIcon}name="ShareAltOutlined" size={14} />
-            <Text className={styles.text}>分享</Text>
-          </Button>
-          <View className={styles.hr}></View>
-          <View onClick={goList}>
-            <Text className={styles.text}>全部话题</Text>
-            <Icon className={styles.rightIcon} name="RightOutlined" size={12} />
+    <View className={styles.contain}>
+      <Image src={TopicHeaderImg}></Image>
+      <View className={styles.container}>
+        <View className={styles.title}>{title && `#${title}#`}</View>
+        <View className={styles.siteInfo}>
+            <View>
+              <Text className={styles.text}>热度</Text>
+              <Text className={styles.content}>{viewNum}</Text>
+            </View>
+            <View className={styles.hr}></View>
+            <View>
+              <Text className={styles.text}>内容数</Text>
+              <Text className={styles.content}>{contentNum}</Text>
+            </View>
+            <View className={styles.hr}></View>
+            <Button plain='true' openType='share' data-from='head'>
+              <Icon className={styles.shareIcon}name="ShareAltOutlined" size={14} />
+              <Text className={styles.text}>分享</Text>
+            </Button>
+            <View className={styles.hr}></View>
+            <View onClick={goList}>
+              <Text className={styles.text}>全部话题</Text>
+              <Icon className={styles.rightIcon} name="RightOutlined" size={12} />
+            </View>
           </View>
         </View>
     </View>

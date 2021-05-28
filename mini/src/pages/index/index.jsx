@@ -20,7 +20,13 @@ class Index extends React.Component {
       menus: ['shareAppMessage', 'shareTimeline'],
     });
   }
-
+  onShareTimeline(){
+    const { site } = this.props
+    const defaultTitle = site.webConfig?.setSite?.siteName || ''
+    return {
+      title: defaultTitle
+    }
+  }
   onShareAppMessage = (res) => {
     const { user, site, index } = this.props;
     const defaultTitle = site.webConfig?.setSite?.siteName || ''

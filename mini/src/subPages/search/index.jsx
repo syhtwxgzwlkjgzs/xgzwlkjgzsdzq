@@ -25,7 +25,7 @@ class Index extends React.Component {
   componentWillMount() {
     Taro.showShareMenu({
       withShareTicket: true,
-      menus: ['shareAppMessage', 'shareTimeline'],
+      menus: ['shareAppMessage' ],
     });
   }
 
