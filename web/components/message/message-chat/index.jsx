@@ -25,18 +25,14 @@ const Index = ({ dialogId, message, user }) => {
     }, 10000);
   };
 
-  const messagesHistory = useMemo(() => {
-    return dialogMsgList.list
-      .map((item) => ({
-        timestamp: item.createdAt,
-        userAvatar: item.user.avatar,
-        displayTimePanel: true,
-        textType: 'string',
-        text: item.summary,
-        ownedBy: user.id === item.userId ? 'myself' : 'itself',
-      }))
-      .reverse();
-  }, [dialogMsgList]);
+  const messagesHistory = useMemo(() => dialogMsgList.list.map(item => ({
+    timestamp: item.createdAt,
+    userAvatar: item.user.avatar,
+    displayTimePanel: true,
+    textType: 'string',
+    text: item.summary,
+    ownedBy: user.id === item.userId ? 'myself' : 'itself',
+  })).reverse(), [dialogMsgList]);
 
   return (
     <div className={styles.wrapper}>
