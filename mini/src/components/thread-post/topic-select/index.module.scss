@@ -1,45 +1,70 @@
 @import "@common/styles/index.scss";
 
 .wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: stretch;
   height: 100vh;
-  background: $white;
+  background: $body-bg-color;
   border-top: $border-solid-1;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: $padding-4n $padding-4n $padding-2n;
+    background: $white;
+
+    .input-box {
+      flex: 1;
+      position: relative;
+
+      .delete {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 40px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+
+        .delete-icon {
+          margin-left: 8px;
+          padding-top: 3px;
+          color: $text-color-placeholder;
+        }
+      }
+    }
+  }
+
+  .btn-cancel {
+    flex-basis: 44px;
+    font-size: $font-size-primary;
+    color: #8490a8;
+    text-align: right;
+  }
 
   :global {
     .dzq-input {
-      box-sizing: border-box;
       width: 100%;
-      padding: 10px 20px;
+      box-sizing: border-box;
 
       .dzq-input__inner {
         height: 40px;
-        padding-left: 35px;
-        padding-right: $padding-5;
+        padding: 0 40px;
         font-size: $font-size-middle;
         color: $text-color-primary;
         background: $text-bg-color2;
         border: none;
       }
 
-      .dzq-input__icon {
-        left: 20px;
+      .dzq-icon-SearchOutlined {
+        left: 8px;
         top: 50%;
         margin-top: -18px;
         color: $icon-color-light !important;
       }
-    }
-  }
 
-  .topic-wrap {
-    flex: 1;
-    overflow: hidden;
-    :global {
-      .scroll-view {
-        height: 100% !important;
+      .input-placeholder {
+        color: $text-color-placeholder;
       }
     }
   }
@@ -47,61 +72,31 @@
   .topic-item {
     display: flex;
     justify-content: space-between;
-    padding: 16px 20px;
+    align-items: center;
+    padding: $padding-4n;
     line-height: 20px;
+    background: $white;
     border-bottom: $border-solid-1;
 
     .item-left {
       display: flex;
       align-items: center;
-      max-width: 235px;
+      max-width: 240px;
+      @include text-ellipsis;
 
       .name {
         max-width: 197px;
         line-height: 20px;
         font-size: $font-size-primary;
-        font-weight: 600;
-        color: #333;
+        color: $text-color-primary;
         word-break: break-all;
-      }
-
-      .recommend {
-        width: 20px;
-        height: 20px;
-        margin-left: margin-5n;
-        margin-bottom: margin-2n;
-        font-size: 22px;
       }
     }
 
     .item-right {
       font-size: $font-size-small;
-      color: rgb(51, 51, 51);
+      color: $text-color-secondary;
       white-space: nowrap;
-    }
-  }
-
-  .btn-container {
-    @include ios-safe-area-inset-bottom;
-  }
-  .btn {
-    margin: 0 $margin-10;
-    padding: $padding-2n 0;
-    border-top: $border-solid-1;
-    background: $white;
-
-    :global {
-      .dzq-button {
-        width: 100%;
-        padding: $padding-10 0;
-        font-size: $font-size-middle;
-        color: $text-color-regular;
-        line-height: $font-line-height-small;
-        background: $text-bg-color2;
-        border: none;
-        border-radius: $border-radius-small;
-        transition: all 0.3s;
-      }
     }
   }
 }

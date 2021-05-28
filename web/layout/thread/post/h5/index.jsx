@@ -81,7 +81,6 @@ class ThreadCreate extends React.Component {
     const winHeight = getVisualViewpost();
     // 如果可视窗口不变，即没有弹起键盘不进行任何设置
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
-    this.moneyboxDisplay(false);
     this.positionDisplay(action);
     if (!isIOS()) {
       if (vditorToolbar) {
@@ -97,6 +96,7 @@ class ThreadCreate extends React.Component {
     }
     // 阻止页面上拉带动操作栏位置变化。放这里便于本地开发调试
     if (window.innerHeight === winHeight) return;
+    this.moneyboxDisplay(false);
     this.setPostBox(action, event, y);
   }
 
@@ -121,7 +121,8 @@ class ThreadCreate extends React.Component {
           window.scrollTo(0, 0);
         }
       }
-      this.setPostBottombar(action, y);
+      // 这个需要放在这里的原因是避免滚动造成底部bar显示问题
+      if (action !== 'clear') this.setPostBottombar(action, y);
     }, 0);
   };
 
@@ -136,8 +137,10 @@ class ThreadCreate extends React.Component {
     // 当表情显示的时候
     if (this.props.currentDefaultOperation === defaultOperation.emoji) {
       bottombarHeight += 218;
-      toolbar.className += ` ${toolbarStyles.emoji}`;
-    } else toolbar.className = toolbarStyles['dvditor-toolbar'];
+      if (toolbar) toolbar.className += ` ${toolbarStyles.emoji}`;
+    } else {
+      if (toolbar) toolbar.className = toolbarStyles['dvditor-toolbar'];
+    }
     if (moneybox && !action) bottombarHeight += 65; // 直接算最高的高度
     return bottombarHeight;
   }
@@ -162,7 +165,7 @@ class ThreadCreate extends React.Component {
       if (timer) clearTimeout(timer);
       const postBottombar = document.querySelector('#post-bottombar');
       this.positionDisplay();
-      this.setPostBox();
+      this.setPostBox('clear');
       postBottombar.style.top = 'auto';
       postBottombar.style.bottom = '0px';
     }, 200);
@@ -304,10 +307,21 @@ class ThreadCreate extends React.Component {
               payTotalMoney={threadPost.payTotalMoney}
               redTotalMoney={threadPost.redpacketTotalAmount}
               postData={postData}
-              setPostData={this.props.setPostData}
-              handleSetState={this.props.handleSetState}
-              onAttachClick={this.props.handleAttachClick}
-              onDefaultClick={this.props.handleDefaultIconClick}
+              setPostData={(data) => {
+                this.props.setPostData(data);
+                this.clearBottomFixed();
+              }}
+              handleSetState={(data) => {
+                this.props.handleSetState(data);
+              }}
+              onAttachClick={(item, data) => {
+                this.props.handleAttachClick(item, data);
+                this.clearBottomFixed();
+              }}
+              onDefaultClick={(item, child, data) => {
+                this.props.handleDefaultIconClick(item, child, data);
+                this.clearBottomFixed();
+              }}
             />
           )}
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
@@ -406,6 +420,7 @@ class ThreadCreate extends React.Component {
             confirm={(data) => {
               this.props.setPostData({ rewardQa: data });
               this.props.handleSetState({ currentAttachOperation: false });
+              this.clearBottomFixed();
             }}
             cancel={() => {
               this.props.handleSetState({
@@ -420,7 +435,10 @@ class ThreadCreate extends React.Component {
           <RedpacketSelect
             data={postData.redpacket}
             cancel={() => this.props.handleSetState({ currentDefaultOperation: '' })}
-            confirm={data => this.props.setPostData({ redpacket: data })}
+            confirm={data => {
+              this.props.setPostData({ redpacket: data });
+              this.clearBottomFixed();
+            }}
           />
         )}
         {/* 插入商品 */}
@@ -439,6 +457,7 @@ class ThreadCreate extends React.Component {
             paidType={this.props.curPaySelect}
             cancel={() => {
               this.props.handleSetState({ curPaySelect: '', currentDefaultOperation: '' });
+              this.clearBottomFixed();
             }}
           />
         )}

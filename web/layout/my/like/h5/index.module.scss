@@ -1,9 +1,32 @@
 @import '@common/styles/index.scss';
 
+@mixin loadMoreStyles {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: $body-bg-color;
+  z-index: -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .list {
   flex: 1;
-  background-color: var(--background-color);
+  background-color: $body-bg-color;
 }
 .listItem {
   margin-bottom: rem(10);
+}
+
+.spinLoading {
+  @include loadMoreStyles();
+}
+
+.noDataList {
+  @include loadMoreStyles();
 }

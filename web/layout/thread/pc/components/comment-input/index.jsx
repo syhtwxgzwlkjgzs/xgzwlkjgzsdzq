@@ -1,15 +1,29 @@
-
-import React, { useEffect, useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import { Textarea, Toast, Upload, Button, Icon } from '@discuzq/design';
 import styles from './index.module.scss';
+import { readEmoji } from '@common/server';
+
+import Emoji from '@components/editor/emoji';
+import AtSelect from '@components/thread-detail-pc/at-select';
+import TopicSelect from '@components/thread-post/topic-select';
+
+import classnames from 'classnames';
 
 const CommentInput = (props) => {
-  const { visible, onSubmit, onClose, height, initValue, placeholder = '写下我的评论...' } = props;
+  const { onSubmit, onClose, height, initValue = '', placeholder = '写下我的评论...' } = props;
+
+  const textareaRef = createRef();
 
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
 
   const [placeholderState, setPlaceholder] = useState('');
+
+  const [emojis, setEmojis] = useState([]);
+
+  const [showEmojis, setShowEmojis] = useState(false);
+  const [showAt, setShowAt] = useState(false);
+  const [showTopic, setShowTopic] = useState(false);
 
   useEffect(() => {
     setPlaceholder(placeholder);
@@ -34,20 +48,61 @@ const CommentInput = (props) => {
       }
     }
   };
-  const onEmojiClick = async () => {
-    Toast.success({
-      content: '表情',
-    });
+
+  const onEmojiIconClick = async () => {
+    setShowEmojis(!showEmojis);
+    setShowAt(false);
+
+    // 请求表情地址
+    if (!emojis?.length) {
+      const ret = await readEmoji();
+      const { code, data = [] } = ret;
+      if (code === 0) {
+        setEmojis(data.map((item) => ({ code: item.code, url: item.url })));
+      }
+    }
   };
-  const onFindFriendsClick = async () => {
-    Toast.success({
-      content: '@朋友',
-    });
+
+  const onAtIconClick = () => {
+    setShowAt(!showAt);
+    setShowEmojis(false);
   };
-  const onTopicClick = async () => {
-    Toast.success({
-      content: '#话题#',
-    });
+
+  const onTopicIconClick = () => {
+    setShowTopic(!showTopic);
+    setShowEmojis(false);
+    setShowAt(false);
+  };
+
+  // 完成选择表情
+  const onEmojiClick = (emoji) => {
+    // 在光标位置插入
+    const insertPosition = textareaRef?.current?.selectionStart || 0;
+    const newValue = value.substr(0, insertPosition) + (emoji.code || '') + value.substr(insertPosition);
+    setValue(newValue);
+
+    setShowEmojis(false);
+  };
+
+  // 完成选择@人员
+  const onAtListChange = (atList) => {
+    // 在光标位置插入
+    const atListStr = atList.map((atUser) => ` @${atUser} `).join('');
+    const insertPosition = textareaRef?.current?.selectionStart || 0;
+    const newValue = value.substr(0, insertPosition) + (atListStr || '') + value.substr(insertPosition);
+    setValue(newValue);
+
+    setShowEmojis(false);
+  };
+
+  // 完成选择话题
+  const onTopicClick = (topic) => {
+    // 在光标位置插入
+    const insertPosition = textareaRef?.current?.selectionStart || 0;
+    const newValue = value.substr(0, insertPosition) + (topic ? ` ${topic} ` : '') + value.substr(insertPosition);
+    setValue(newValue);
+
+    setShowTopic(false);
   };
 
   return (
@@ -58,41 +113,48 @@ const CommentInput = (props) => {
           rows={5}
           showLimit={true}
           value={value}
-          onChange={e => setValue(e.target.value)}
+          onChange={(e) => setValue(e.target.value)}
           placeholder={placeholderState}
-          disabled={loading}>
-        </Textarea>
-        {/* <Upload listType='card'>
-            <Button loading={loading} type='text' className={styles.upload}>
-              <Icon name="PlusOutlined" size={20}></Icon>
-              <span>上传附件</span>
-            </Button>
-          </Upload> */}
+          disabled={loading}
+          forwardedRef={textareaRef}
+        ></Textarea>
       </div>
+
+      {showAt && <AtSelect pc visible={showAt} getAtList={onAtListChange} onCancel={onAtIconClick} />}
+
+      {showTopic && (
+        <TopicSelect pc visible={showTopic} cancelTopic={() => setShowTopic(false)} clickTopic={onTopicClick} />
+      )}
+
       <div className={styles.footer}>
+        {showEmojis && <Emoji pc show={showEmojis} emojis={emojis} onClick={onEmojiClick} />}
+
         <div className={styles.linkBtn}>
           {/* <Icon
-            name='SmilingFaceOutlined'
-            size='20'
-            className={styles.btnIcon}
-            onClick={onEmojiClick}>
-          </Icon>
+            name="SmilingFaceOutlined"
+            size="20"
+            className={classnames(styles.btnIcon, showEmojis && styles.actived)}
+            onClick={onEmojiIconClick}
+          ></Icon>
           <Icon
-            name='AtOutlined'
-            size='20'
-            className={styles.btnIcon}
-            onClick={onFindFriendsClick}>
-          </Icon>
+            name="AtOutlined"
+            size="20"
+            className={classnames(styles.btnIcon, showAt && styles.actived)}
+            onClick={onAtIconClick}
+          ></Icon>
           <Icon
-            name='SharpOutlined'
-            size='20'
-            className={styles.btnIcon}
-            onClick={onTopicClick}>
-          </Icon> */}
+            name="SharpOutlined"
+            size="20"
+            className={classnames(styles.btnIcon, showTopic && styles.actived)}
+            onClick={onTopicIconClick}
+          ></Icon> */}
         </div>
-        <Button loading={loading} onClick={onSubmitClick} className={styles.button} type='primary' size='large'>发布</Button>
+        <Button loading={loading} onClick={onSubmitClick} className={styles.button} type="primary" size="large">
+          发布
+        </Button>
       </div>
-    </div>);
+    </div>
+  );
 };
 
 export default CommentInput;

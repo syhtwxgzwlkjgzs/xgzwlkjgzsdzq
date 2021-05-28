@@ -26,7 +26,7 @@ import throttle from '@common/utils/thottle';
 import xss from '@common/utils/xss';
 
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
-import rewardPay from '@common/pay-bussiness/reward-pay';
+import threadPay from '@common/pay-bussiness/thread-pay';
 import RewardPopup from './components/reward-popup';
 
 import RenderThreadContent from './detail/content';
@@ -38,6 +38,8 @@ import classNames from 'classnames';
 @inject('thread')
 @inject('comment')
 @inject('index')
+@inject('topic')
+@inject('search')
 @observer
 class ThreadH5Page extends React.Component {
   constructor(props) {
@@ -139,7 +141,7 @@ class ThreadH5Page extends React.Component {
   async onCollectionClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/user/login' });
+      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
       return;
     }
 
@@ -203,7 +205,7 @@ class ThreadH5Page extends React.Component {
   onInputClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/user/login' });
+      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
       return;
     }
 
@@ -223,7 +225,7 @@ class ThreadH5Page extends React.Component {
   onOperClick = (type) => {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/user/login' });
+      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
       return;
     }
 
@@ -401,7 +403,7 @@ class ThreadH5Page extends React.Component {
       id,
       content: val,
       sort: this.commentDataSort, // 目前的排序
-      isNoMore: false,
+      isNoMore: this.props?.thread?.isNoMore,
       attachments: [],
     };
     const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
@@ -466,7 +468,7 @@ class ThreadH5Page extends React.Component {
   async onLikeClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/user/login' });
+      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
       return;
     }
 
@@ -503,11 +505,30 @@ class ThreadH5Page extends React.Component {
     }
   }
 
+  // 付费支付
+  async onPayClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      return;
+    }
+
+    const thread = this.props.thread.threadData;
+    const { success } = await threadPay(thread, this.props.user?.userInfo);
+
+    // 支付成功重新请求帖子数据
+    if (success && this.props.thread?.threadData?.threadId) {
+      await this.props.thread.fetchThreadDetail(this.props.thread?.threadData?.threadId);
+      // 更新列表store数据
+      this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
+    }
+  }
+
   // 点击打赏
   onRewardClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/user/login' });
+      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
       return;
     }
 
@@ -522,13 +543,21 @@ class ThreadH5Page extends React.Component {
         amount: Number(value),
         threadId: this.props.thread.threadData.threadId,
         payeeId: this.props.thread.threadData.userId,
+        title: this.props.thread?.threadData?.title || '主题打赏',
       };
 
-      const { success } = await rewardPay(params);
+      const { success, msg } = await this.props.thread.rewardPay(
+        params,
+        this.props.user,
+        this.props.index,
+        this.props.search,
+        this.props.topic,
+      );
 
-      // 支付成功重新请求帖子数据
-      if (success && this.props.thread?.threadData?.threadId) {
-        this.props.thread.fetchThreadDetail(this.props.thread?.threadData?.threadId);
+      if (!success) {
+        Toast.error({
+          content: msg,
+        });
       }
     }
   }
@@ -608,6 +637,7 @@ class ThreadH5Page extends React.Component {
                 onContentClick={() => this.onContentClick()}
                 onRewardClick={() => this.onRewardClick()}
                 onTagClick={() => this.onTagClick()}
+                onPayClick={() => this.onPayClick()}
               ></RenderThreadContent>
             ) : (
               <LoadingTips type="init"></LoadingTips>

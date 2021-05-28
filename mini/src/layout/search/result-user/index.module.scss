@@ -12,7 +12,11 @@
     flex: 1;
   }
 }
-.searchInput {
-  padding: 0 $padding-4n;
-  margin-bottom: $padding-4n;
+.search {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: $white;
+  padding: $padding-4n;
+  padding-bottom: $padding-2n;
 }

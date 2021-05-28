@@ -122,7 +122,7 @@ class UserCenterAction extends React.Component {
             <div onClick={this.handleMyDraft} className={styles.userCenterActionItem}>
               <div className={styles.userCenterActionItemIcon}>
                 <Badge>
-                  <Icon name={'RecycleBinOutlined'} color={'#4F5A70'} size={20} />
+                  <Icon name={'RetrieveOutlined'} color={'#4F5A70'} size={20} />
                 </Badge>
               </div>
               <div className={styles.userCenterActionItemDesc}>我的草稿箱</div>

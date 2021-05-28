@@ -1,10 +1,14 @@
 import React from 'react'
-import UserCenterEditMobile from '../../../../components/user-center-edit-mobile/index'
+import UserCenterEditMobile from '../../../../components/user-center-edit-mobile/index';
+import HOCUserInfo from '@middleware/HOCUserInfo';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
-export default function index() {
+function index() {
   return (
     <div>
       <UserCenterEditMobile />
     </div>
   )
 }
+
+export default HOCFetchSiteData(HOCUserInfo(index));

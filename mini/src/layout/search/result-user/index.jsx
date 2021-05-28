@@ -3,7 +3,9 @@ import { inject, observer } from 'mobx-react';
 import SearchInput from '@components/search-input';
 import BaseLayout from '@components/base-layout';
 import UserItem from '@components/thread/user-item';
-import Taro from '@tarojs/taro'
+import Taro from '@tarojs/taro';
+
+import styles from './index.module.scss';
 @inject('site')
 @inject('search')
 @observer

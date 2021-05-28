@@ -14,12 +14,10 @@ import PostRewardProgressBar, { POST_TYPE } from '@components/thread/post-reward
 import Tip from '@components/thread/tip';
 import AttachmentView from '@components/thread/attachment-view';
 import { minus } from '@common/utils/calculate';
-import threadPay from '@common/pay-bussiness/thread-pay';
 import classnames from 'classnames';
 import UserInfo from '@components/thread/user-info';
 import styles from './index.module.scss';
 import { setClipboardData, hideToast } from '@tarojs/taro';
-import goToLoginPage from '@common/utils/go-to-login-page';
 
 // 帖子内容
 const RenderThreadContent = inject('user')(
@@ -70,19 +68,7 @@ const RenderThreadContent = inject('user')(
     const parseContent = parseContentData(indexes);
 
     const onContentClick = async () => {
-      if (!props.user.isLogin()) {
-        Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/user/login' });
-        return;
-      }
-
-      const thread = props.store.threadData;
-      const { success } = await threadPay(thread, props.user?.userInfo);
-
-      // 支付成功重新请求帖子数据
-      if (success && threadStore?.threadData?.threadId) {
-        threadStore.fetchThreadDetail(threadStore?.threadData?.threadId);
-      }
+      typeof props.onPayClick === 'function' && props.onPayClick();
     };
 
     const onTagClick = () => {

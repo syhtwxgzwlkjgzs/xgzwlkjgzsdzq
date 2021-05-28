@@ -77,6 +77,7 @@ class Index extends Component {
     Taro.eventCenter.off('captchaResult', this.handleCaptchaResult);
     Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault);
     // Taro.offKeyboardHeightChange(() => {});
+    this.props.thread.reset();
   }
 
   componentDidShow() { }
@@ -90,7 +91,7 @@ class Index extends Component {
 
   redirectToHome = () => { // 检查发帖权限，没有则重定向首页
     const { permissions } = this.props.user;
-    if (!permissions || (permissions && !permissions.createThread?.enable)) {
+    if (permissions && permissions.createThread && !permissions.createThread.enable) {
       this.postToast('暂无发帖权限, 即将回到首页');
       setTimeout(() => {
         Taro.redirectTo({ url: '/pages/index/index' })
@@ -501,6 +502,9 @@ class Index extends Component {
     if (this.state.isFirstFocus) {
       this.setState({ isFirstFocus: false });
     }
+    this.setState({
+      showEmoji: false
+    });
   }
 
   // 处理左上角按钮点击跳路由
@@ -575,7 +579,7 @@ class Index extends Component {
           </View>
 
           {/* 插入内容tag展示区 */}
-          <View className={styles['tags']}>
+          <View className={styles['tags']} style={{ display: bottomHeight ? 'none' : 'block' }}>
             {(permissions?.insertPosition?.enable) &&
               <View className={styles['location-bar']}>
                 <Position currentPosition={position} positionChange={(position) => {
@@ -625,7 +629,7 @@ class Index extends Component {
           {/* 工具栏区域、include各种插件触发图标、发布等 */}
           <View
             className={styles.toolbar}
-            style={{ transform: `translateY(-${bottomHeight}px)` }}
+            style={{ transform: `translateY(-${bottomHeight}px)`, bottom: bottomHeight ? 0 : '' }}
           >
             <PluginToolbar
               permissions={permissions}
@@ -641,6 +645,12 @@ class Index extends Component {
               }}
               onSubmit={() => this.handleSubmit()}
             />
+            <Emoji show={showEmoji} onHide={() => {
+              this.setState({
+                showEmoji: false
+              });
+            }} />
+
           </View>
         </View>
 
@@ -665,13 +675,6 @@ class Index extends Component {
           onClick={(item) => this.handlePluginClick(item)}
           onHide={() => this.setState({ showDraftOption: false })}
         />
-
-        {/* 表情类型弹框 */}
-        <Emoji show={showEmoji} onHide={() => {
-          this.setState({
-            showEmoji: false
-          });
-        }} />
       </>
     );
   }

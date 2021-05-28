@@ -1,4 +1,5 @@
 import React from 'react';
+import { Spin } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import Header from '@components/header';
@@ -15,11 +16,19 @@ class Index extends React.Component {
     super(props);
   }
   render() {
-    const { index, site } = this.props;
+    const { index, loading } = this.props;
     const { pageData = [], currentPage, totalPage } = index.threads || {};
     return (
       <div>
         <Header />
+        {
+          loading && <Spin type="spinner" size={14}></Spin>
+        }
+        {
+          this.props.firstLoading && (
+            <div className={styles.spinLoading}><Spin type="spinner">加载中...</Spin></div>
+          )
+        }
         {
           pageData?.length
             ? (
@@ -34,7 +43,7 @@ class Index extends React.Component {
                 }
               </List>
             )
-            : <NoData />
+            : <>{!this.props.firstLoading && <NoData className={styles.noDataList} />}</>
         }
       </div>
     );

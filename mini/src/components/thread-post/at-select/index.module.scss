@@ -15,26 +15,59 @@
   flex-direction: column;
   align-items: stretch;
   height: 100vh;
-  background: $white;
+  background: $body-bg-color;
   border-top: $border-solid-1;
+
+  .header {
+    @include flex();
+    width: 100%;
+    padding: $padding-10 $padding-4n;
+    background: $white;
+    .input-box {
+      flex: 1;
+      position: relative;
+
+      .delete {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 40px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+
+        .delete-icon {
+          margin-left: 8px;
+          padding-top: 3px;
+          color: $text-color-placeholder;
+        }
+      }
+    }
+
+    .btn-cancel {
+      flex-basis: 44px;
+      font-size: $font-size-primary;
+      color: #8490a8;
+      text-align: right;
+    }
+  }
 
   :global {
     .dzq-input {
       width: 100%;
-      padding: $padding-10 $padding-5n;
       box-sizing: border-box;
 
       .dzq-input__inner {
         height: 40px;
-        padding: 0 35px;
+        padding: 0 40px;
         font-size: $font-size-middle;
         color: $text-color-primary;
-        background: $text-bg-color2;
+        background: $text-bg-color;
         border: none;
       }
 
       .dzq-icon-SearchOutlined {
-        left: 20px;
+        left: 8px;
         top: 50%;
         margin-top: -18px;
         line-height: 36px;
@@ -43,29 +76,6 @@
 
       .input-placeholder {
         color: $text-color-placeholder;
-      }
-    }
-  }
-  .input-box {
-    position: relative;
-
-    .delete {
-      position: absolute;
-      top: 50%;
-      right: 30px;
-      margin-top: -10px;
-      width: 20px;
-      height: 20px;
-      background: transparent;
-      border: 1px solid $icon-color-light;
-      border-radius: $border-radius-circle;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      .delete-icon {
-        color: $icon-color-light;
-        transform: scale(0.8);
       }
     }
   }
@@ -78,11 +88,12 @@
   .at-item {
     @include flex();
     height: 50px;
-    padding: 0 $padding-5n;
+    padding: 0 $padding-4n;
+    background: $white;
 
     .avatar {
-      width: 35px;
-      height: 35px;
+      width: 38px;
+      height: 38px;
 
       :global {
         .dzq-avatar {
@@ -91,7 +102,7 @@
           font-size: 22px;
           color: $white;
           text-align: center;
-          line-height: 35px;
+          line-height: 38px;
           border-radius: $border-radius-circle;
 
           .dzq-avatar__img {
@@ -108,17 +119,21 @@
       @include flex();
       height: 50px;
       padding: 0 $padding-2n;
-      font-size: $font-size-primary;
-      color: $text-color-primary;
-      line-height: 50px;
       border-bottom: $border-solid-1;
       .username {
         max-width: 170px;
         @include single-line();
+        line-height: $font-line-height-small;
+        font-size: $font-size-primary;
+        color: $text-color-primary;
+        text-align: left;
       }
       .group {
         max-width: 80px;
         @include single-line();
+        font-size: $font-size-small;
+        color: $text-color-secondary;
+        text-align: left;
       }
     }
 
@@ -130,14 +145,16 @@
         .dzq-checkbox {
           width: 24px;
           height: 24px;
-          border-radius: $border-radius-circle;
+          border-radius: $border-radius-small;
+          background-color: $text-bg-color2;
           &::after {
-            border-radius: $border-radius-circle;
+            border: none;
             color: $white;
           }
         }
         &.is-checked {
           .dzq-checkbox {
+            border: none;
             background-color: $primary-color;
           }
           .dzq-icon {
@@ -150,26 +167,16 @@
   }
 
   .btn-container {
-    @include ios-safe-area-inset-bottom;
-    flex-basis: 59px;
-  }
-
-  .btn {
-    @include flex();
-    flex-wrap: nowrap;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: constant(safe-area-inset-bottom);
-    bottom: env(safe-area-inset-bottom);
-    margin: 0 $margin-10;
-    padding: $padding-2n 0;
+    flex-basis: 60px;
+    padding: $padding-2n $padding-4n;
+    padding-bottom: calc(8px + constant(safe-area-inset-bottom));
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
     background: $white;
     border-top: $border-solid-1;
 
     :global {
       .dzq-button {
-        width: 48%;
+        width: 100%;
         padding: $padding-10 0;
         font-size: $font-size-middle;
         color: $text-color-regular;
@@ -186,4 +193,5 @@
       background-color: $primary-color;
     }
   }
+
 }
