@@ -11,18 +11,22 @@ import styles from './index.module.scss';
 @observer
 class InstantMessaging extends React.Component {
   state = {
-    dialogBoxRef: React.createRef(),
+    showEmoji: false
   };
 
   render() {
-    const { messagesHistory = [], onSubmit, site } = this.props;
-    const { dialogBoxRef } = this.state;
+    const { messagesHistory = [], onSubmit, site, dialogId } = this.props;
+    const { showEmoji } = this.state;
     const { platform } = site;
 
     return (
       <div className={platform === 'h5' ? styles.h5Page : styles.pcPage}>
-        <DialogBox shownMessages={messagesHistory} dialogBoxRef={dialogBoxRef} platform={platform} />
-        <InteractionBox onSubmit={onSubmit} dialogBoxRef={dialogBoxRef} platform={platform} />
+        <DialogBox platform={platform} dialogId={dialogId} showEmoji={showEmoji} />
+        <InteractionBox platform={platform} dialogId={dialogId} showEmoji={showEmoji} setShowEmoji={(show) => {
+          this.setState({
+            showEmoji: show
+          });
+        }} />
       </div>
     );
   }
