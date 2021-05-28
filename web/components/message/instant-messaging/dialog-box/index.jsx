@@ -29,7 +29,7 @@ const DialogBox = (props) => {
       dialogBoxRef.current.scrollTop = dialogBoxRef?.current?.scrollHeight;
     }
   };
-
+  
   // 每2秒轮询一次
   const updateMsgList = () => {
     readDialogMsgList(dialogId);
