@@ -38,6 +38,7 @@ class WXSelect extends Component {
         timeout: 10000,
         params: {
           sessionToken,
+          type: 1, // 公众号0 (默认)， 小程序1
         },
       });
       checkUserStatus(res);
