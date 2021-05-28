@@ -60,7 +60,7 @@ const InteractionBox = (props) => {
       });
       if (ret.code === 0) {
         setTypingValue('');
-        Router.push(`/message?page=chat&dialogId=${ret.data.dialogId}`);
+        Router.push({url: `/message?page=chat&dialogId=${ret.data.dialogId}`});
       }
     }
   };

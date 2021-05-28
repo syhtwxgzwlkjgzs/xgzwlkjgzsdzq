@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Avatar, ImagePreviewer } from '@discuzq/design';
 import { diffDate } from '@common/utils/diff-date';
 import { inject, observer } from 'mobx-react';
+import { useRouter } from 'next/router';
 
 import styles from './index.module.scss';
 
@@ -12,6 +13,8 @@ const DialogBox = (props) => {
   const [previewerVisibled, setPreviewerVisibled] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
 
+  // const router = useRouter();
+  // const dialogId = router.query.dialogId;
   const dialogBoxRef = useRef();
   let timeoutId = null;
   useEffect(() => {
