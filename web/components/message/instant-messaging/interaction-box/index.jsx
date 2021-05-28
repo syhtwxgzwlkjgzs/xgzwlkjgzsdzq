@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import { Button, Textarea, Icon, Input } from '@discuzq/design';
+import React, { createElement, useState } from 'react';
+import { Button, Textarea, Icon, Input, Upload } from '@discuzq/design';
+import ImageUpload from '@components/thread-post/image-upload';
+import { ATTACHMENT_TYPE, ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post';
+// import Upload from '@components/upload';
 
 import styles from './index.module.scss';
 
@@ -13,10 +16,11 @@ const InteractionBox = (props) => {
   };
 
   const checkToShowCurrentMsgTime = (curTimestamp) => {
-    const DISPLAY_GAP_IN_MINS = 3,
-      diff = new Date(curTimestamp).getMinutes() - new Date(lastTimestamp).getMinutes();
+    const DISPLAY_GAP_IN_MINS = 3;
+    const diff = new Date(curTimestamp).getMinutes() - new Date(lastTimestamp).getMinutes();
     if (diff < DISPLAY_GAP_IN_MINS) {
       return false;
+    // eslint-disable-next-line no-else-return
     } else {
       setLastTimestamp(curTimestamp);
       return true;
@@ -25,14 +29,14 @@ const InteractionBox = (props) => {
 
   const doSubmitClick = async () => {
     if (!typingValue || typeof onSubmit !== 'function') return;
-    const currentTime = new Date().getTime(),
-      msgPiece = {
-        timestamp: currentTime,
-        displayTimePanel: checkToShowCurrentMsgTime(currentTime),
-        textType: 'string',
-        text: typingValue,
-        ownedBy: 'myself',
-      };
+    const currentTime = new Date().getTime();
+    const msgPiece = {
+      timestamp: currentTime,
+      displayTimePanel: checkToShowCurrentMsgTime(currentTime),
+      textType: 'string',
+      text: typingValue,
+      ownedBy: 'myself',
+    };
 
     try {
       const success = await onSubmit(msgPiece);
@@ -50,6 +54,26 @@ const InteractionBox = (props) => {
     doSubmitClick();
   };
 
+
+  // 发送图片
+  const uploadImage = (
+    <Upload
+      accept={ACCEPT_IMAGE_TYPES.join(',')}
+      limit={1}
+      fileList={[]}
+      onComplete={() => {
+        debugger;
+      }}
+      onChange={(e) => {
+        console.log(e);
+        debugger;
+      }}
+      isCustomUploadIcon={true}
+    >
+      <Icon name="PictureOutlinedBig" size={20} />
+    </Upload>
+  );
+
   return (
     <>
       {platform === 'h5' && (
@@ -61,7 +85,7 @@ const InteractionBox = (props) => {
                 <Icon name="SmilingFaceOutlined" size={20} />
               </div>
               <div className={styles.pictureUpload}>
-                <Icon name="PictureOutlinedBig" size={20} />
+                {uploadImage}
               </div>
             </div>
           </div>
@@ -79,7 +103,12 @@ const InteractionBox = (props) => {
               <Icon name="SmilingFaceOutlined" size={20} />
             </div>
             <div className={styles.pictureUpload}>
-              <Icon name="PictureOutlinedBig" size={20} />
+              <Upload
+                handleUploadChange={() => {}}
+                isCustomUploadIcon={true}
+              >
+                <Icon name="PictureOutlinedBig" size={20} />
+              </Upload>
             </div>
           </div>
           <Textarea

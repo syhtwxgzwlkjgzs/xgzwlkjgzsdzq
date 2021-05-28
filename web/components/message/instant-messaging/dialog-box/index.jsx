@@ -15,9 +15,11 @@ const DialogBox = (props) => {
             {displayTimePanel && <div className={styles.msgTime}>{diffDate(timestamp)}</div>}
             <div className={`${ownedBy === 'myself' ? `${styles.myself}` : `${styles.itself}`} ${styles.persona}`}>
               <div className={styles.profileIcon}>
-                <Avatar image={userAvatar || '/favicon.ico'} circle={true} />;
+                <Avatar image={userAvatar || '/favicon.ico'} circle={true} />
               </div>
-              <div className={styles.msgContent}>{text}</div>
+              <div className={styles.msgContent} dangerouslySetInnerHTML={{
+                __html: text,
+              }}></div>
             </div>
           </React.Fragment>
         ))}

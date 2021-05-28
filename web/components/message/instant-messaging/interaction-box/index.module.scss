@@ -94,3 +94,9 @@
 .submit {
   display: flex;
 }
+
+:global {
+  .dzq-upload {
+    padding: 0 !important;
+  }
+}
