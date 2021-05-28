@@ -47,8 +47,8 @@ class Index extends React.Component {
           title: '帖子详情',
           path: `/subPages/thread/index?id=${res.target.id}`
         }
-        
       }
+    }
   }
   render() {
     return (
