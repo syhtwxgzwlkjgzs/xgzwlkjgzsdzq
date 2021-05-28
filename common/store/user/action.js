@@ -685,6 +685,19 @@ class UserAction extends SiteStore {
     this.targetUserFollowsPage = 1;
     this.targetUserFollowsTotalPage = 1;
   }
+
+  /**
+   * 清理我的屏蔽数据内容
+   */
+  @action
+  clearUserShield = () => {
+    // 我的屏蔽 数据设计
+    this.userShield = []; // 用户屏蔽列表
+    // 触底加载条件 当加载的页数超过总页数的时候就没有更多了 
+    this.userShieldPage = 1; // 页码
+    this.userShieldTotalPage = 1; // 总页数
+    this.userShieldTotalCount = 0; // 总条数
+  }
 }
 
 export default UserAction;
