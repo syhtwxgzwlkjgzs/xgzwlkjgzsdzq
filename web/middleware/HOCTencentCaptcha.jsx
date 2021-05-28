@@ -9,26 +9,34 @@ export default function HOCTencentCaptcha(Component) {
       super(props);
     }
 
-    showCaptcha = () => new Promise((resolve, reject) => {
+    showCaptcha = () => new Promise((resolve) => {
       // 验证码实例为空，则创建实例
       const { webConfig } = this.props.site;
+      const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
       const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
 
-      import('@discuzq/sdk/dist/common_modules/sliding-captcha').then(({
-        TencentCaptcha,
-      }) => {
-        if (!this.captcha) {
-          this.captcha = new TencentCaptcha(qcloudCaptchaAppId, (res) => {
-            if (res.ret === 0) {
-              resolve({
-                captchaRandStr: res.randstr,
-                captchaTicket: res.ticket,
-              });
-            }
-          });
-        }
-        // 显示验证码
-        this.captcha.show();
+      if (qcloudCaptcha) {
+        import('@discuzq/sdk/dist/common_modules/sliding-captcha').then(({
+          TencentCaptcha,
+        }) => {
+          if (!this.captcha) {
+            this.captcha = new TencentCaptcha(qcloudCaptchaAppId, (res) => {
+              if (res.ret === 0) {
+                resolve({
+                  captchaRandStr: res.randstr,
+                  captchaTicket: res.ticket,
+                });
+              }
+            });
+          }
+          // 显示验证码
+          this.captcha.show();
+        });
+      }
+
+      resolve({
+        captchaRandStr: null,
+        captchaTicket: null,
       });
     })
 
