@@ -46,10 +46,10 @@
 #findPayPwdContent {
   .bottom {
     position: fixed;
-    bottom: rem(20);
+    bottom: 0;
     width: calc(100% - 32px);
     border-top: 1px solid $border-color;
-    padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
+    padding: rem($padding-2n) rem($padding-4n) rem($padding-4n);
     display: flex;
     justify-content: center;
     background-color: $white;

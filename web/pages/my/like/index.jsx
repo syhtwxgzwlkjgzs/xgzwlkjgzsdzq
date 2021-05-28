@@ -41,7 +41,7 @@ class Index extends React.Component {
     super(props);
     this.state = {
       firstLoading: true, // 首次加载状态判断
-    }
+    };
     const { serverIndex, index, serverSearch, search } = this.props;
     if (serverIndex && serverIndex.threads) {
       index.setThreads(serverIndex.threads);
@@ -58,7 +58,7 @@ class Index extends React.Component {
     const hasTopics = !!search.topics;
     this.page = 1;
     if (!hasThreadsData) {
-     await this.props.index.getReadThreadList({
+      await this.props.index.getReadThreadList({
         filter: {
           complex: 2,
         },
@@ -66,8 +66,8 @@ class Index extends React.Component {
       });
     }
     this.setState({
-      firstLoading: false
-    })
+      firstLoading: false,
+    });
     if (!hasTopics) {
       search.getTopicsList();
     }
@@ -93,13 +93,9 @@ class Index extends React.Component {
     }
   }
 
-  dispatch = async (type, data = {}) => {
+  dispatch = async () => {
     const { index } = this.props;
-    if (type === 'refresh') {
-      this.page = 1;
-    } else if (type === 'moreData') {
-      this.page += 1;
-    }
+    this.page += 1;
     await index.getReadThreadList({
       perPage: this.prePage,
       page: this.page,

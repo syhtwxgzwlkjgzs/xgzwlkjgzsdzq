@@ -34,6 +34,7 @@ class Index extends React.Component {
             ? (
               <List
                 className={styles.list}
+                onRefresh={this.props.dispatch}
                 noMore={currentPage >= totalPage}
               >
                 {
