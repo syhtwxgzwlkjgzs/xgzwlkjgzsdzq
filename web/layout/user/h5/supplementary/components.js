@@ -165,8 +165,10 @@ export function CreateFileUploader(field, layout) {
   return (
     <div className={layout.item} key={name}>
       <div className={layout.attachmentsUpload}>
+        <span className={layout['attachmentsUpload-left']}>
           {required && <span className={layout.required}>* </span>}
-        <span className={layout['attachmentsUpload-left']}>{name}</span>
+          {name}
+        </span>
         <FileUpload
           className={layout['attachmentsUpload-right']}
           listType='text'
