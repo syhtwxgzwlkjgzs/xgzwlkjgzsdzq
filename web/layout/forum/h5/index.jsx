@@ -12,10 +12,12 @@ import UserCenterFriends from '@components/user-center-friends';
 
 @inject('site')
 @inject('forum')
+@inject('user')
 @observer
 class ForumH5Page extends React.Component {
   async componentDidMount() {
-    const { forum } = this.props;
+    const { forum ,site,user} = this.props;
+    console.log(forum,site,user);
     const usersList = await forum.useRequest('readUsersList', {
       params: {
         filter: {
@@ -106,7 +108,7 @@ class ForumH5Page extends React.Component {
           {/* 我的角色 start */}
           <div className={layout.list}>
             <div className={layout.label}>我的角色</div>
-            <div className={layout.right}>UI专用</div>
+            <div className={layout.right}>{this.props.user?.userInfo?.group?.groupName}</div>
           </div>
           {/* 我的角色 end */}
           {/* 当前版本 start */}
