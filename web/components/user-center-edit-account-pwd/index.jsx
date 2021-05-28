@@ -6,6 +6,7 @@ import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import throttle from '@common/utils/thottle.js';
+@inject('site')
 @inject('user')
 @observer
 class index extends Component {
@@ -184,7 +185,7 @@ class index extends Component {
         <div className={styles.content}>
           {this.props.user?.hasPassword ? this.renderHasPassword() : this.renderHasNoPassword()}
         </div>
-        {this.props.user?.hasPassword && (
+        {(this.props.site?.isSmsOpen && this.props.user?.hasPassword) && (
           <div onClick={this.handleResetPwd} className={styles.tips}>
             忘记旧密码？
           </div>
