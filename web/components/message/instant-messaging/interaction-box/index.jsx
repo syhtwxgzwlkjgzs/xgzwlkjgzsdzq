@@ -58,9 +58,9 @@ const InteractionBox = (props) => {
         recipientUsername: username,
         ...data,
       });
-      const { code, data } = ret;
-      if (code === 0) {
-        Router.push(`/message?page=chat&dialogId=${data.dialogId}`);
+      if (ret.code === 0) {
+        setTypingValue('');
+        Router.push(`/message?page=chat&dialogId=${ret.data.dialogId}`);
       }
     }
   };
