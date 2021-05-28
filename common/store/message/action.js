@@ -126,8 +126,7 @@ class MessageAction extends MessageStore {
   // 创建新的私信对话
   @action.bound
   async createDialog(params) {
-    const ret = await createDialog(params);
-    console.log('创建新的私信对话', ret);
+    return createDialog(params);
   }
 
   // 私信对话发送新的消息
