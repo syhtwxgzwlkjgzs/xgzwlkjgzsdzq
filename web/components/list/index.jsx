@@ -29,12 +29,12 @@ const List = forwardRef(({
   preload = 30,
   onError = noop,
   enableError = false,
-  immediateCheck = true
+  immediateCheck = true,
 }, ref) => {
   const listWrapper = useRef(null);
-  const currentScrollTop = useRef(0)
+  const currentScrollTop = useRef(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false)
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     if (noMore) {
@@ -78,13 +78,12 @@ const List = forwardRef(({
   };
 
   const jumpToScrollTop = (scrollTop) => {
-    if(scrollTop && scrollTop > 0) {
+    if (scrollTop && scrollTop > 0) {
       listWrapper.current.scrollTop = scrollTop;
     }
   };
 
   const onTouchMove = throttle(({ isFirst = false }) => {
-
     if (!listWrapper || !listWrapper.current) {
       onScroll();
       return;
@@ -96,18 +95,18 @@ const List = forwardRef(({
 
     // 滑动事件
     onScroll({ scrollTop });
-    currentScrollTop.current = scrollTop
+    currentScrollTop.current = scrollTop;
 
-    if(!onRefresh) return;
+    if (!onRefresh) return;
 
     // 处理首页筛选，更新数据的时候，会触发一次上拉刷新
-    let allowHandleRefresh = true
+    let allowHandleRefresh = true;
     if (!isFirst) {
-      allowHandleRefresh = (scrollTop !== 0)
+      allowHandleRefresh = (scrollTop !== 0);
     }
     if ((scrollHeight - preload <= clientHeight + scrollTop) && !isLoading && allowHandleRefresh) {
       setIsLoading(true);
-      if (typeof(onRefresh) === 'function' ) {
+      if (typeof(onRefresh) === 'function') {
         const promise = onRefresh();
         isPromise(promise) && promise
           .then(() => {
@@ -121,8 +120,8 @@ const List = forwardRef(({
           })
           .catch(() => {
             setIsLoading(true);
-            setIsError(true)
-            onError()
+            setIsError(true);
+            onError();
           });
       } else {
         console.error('上拉刷新，必须返回promise');
@@ -136,7 +135,7 @@ const List = forwardRef(({
     // setTimeout(() => {
     //   onTouchMove();
     // }, 0)
-  }
+  };
 
   return (
     <div className={`${styles.container} ${className}`} style={{ height }}>
