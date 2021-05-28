@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { Button, Input, Toast } from '@discuzq/design';
 import Header from '@components/header';
 import styles from './index.module.scss';
-import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData';
 import CaptchaInput from '../../user-center-edit-mobile/captcha-input';
 import VerifyCode from '../../user-center-edit-mobile/verify-code';
 import throttle from '@common/utils/thottle.js';
@@ -84,14 +83,15 @@ class index extends Component {
         hasMask: false,
         duration: 1000,
       })
-      Router.push({ url: `/my` })
+      Router.push({ url: `/my` });
+      this.initState()
     }).catch((err) => {
-      console.log(err);
       Toast.error({
         content: err.Msg || "重置密码失败",
         hasMask: false,
         duration: 1000,
       })
+      this.initState();
     })
   }
 
