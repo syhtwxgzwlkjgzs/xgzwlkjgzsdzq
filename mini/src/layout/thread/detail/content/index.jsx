@@ -107,6 +107,7 @@ const RenderThreadContent = inject('user')(
               name={threadStore?.threadData?.user?.nickname || ''}
               avatar={threadStore?.threadData?.user?.avatar || ''}
               location={threadStore?.threadData?.position.location || ''}
+              groupName={threadStore?.threadData?.group?.groupName || ''}
               view={`${threadStore?.threadData?.viewCount}` || ''}
               time={`${threadStore?.threadData?.createdAt}` || ''}
               isEssence={isEssence}
