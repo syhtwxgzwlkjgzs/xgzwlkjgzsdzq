@@ -29,6 +29,12 @@ class UserStore {
 
   // 编辑模式下的签名
   @observable editSignature = '';
+  
+  // 用户头像
+  @observable editAvatarUrl = null;
+
+  // 用户背景图
+  @observable editBackgroundUrl = null;
 
   // 检索的目标用户，非自己
   @observable targetUser = null;
