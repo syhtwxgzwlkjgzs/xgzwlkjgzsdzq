@@ -120,7 +120,7 @@ class HomeHeader extends React.Component {
           </View>
           <Button className={styles.item} openType="share" plain='true' data-from='head'>
             <Icon className={styles.shareIcon} name="ShareAltOutlined"/>
-            <Text className={styles.text}>分享</Text>
+            <Text className={styles.shareText}>分享</Text>
           </Button>
         </View>}
         {isWeiXin && <SharePopup visible={visible} onClose={this.onClose} />}

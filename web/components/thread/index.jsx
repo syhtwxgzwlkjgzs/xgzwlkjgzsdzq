@@ -132,6 +132,13 @@ class Index extends React.Component {
       }
     }, 1000)
 
+    onClickUser = (e) => {
+      e && e.stopPropagation()
+
+      const { user = {} } = this.props.data || {};
+      this.props.router.push(`/user/${user?.userId}`);
+    }
+
     onClick = (e) => {
       e && e.stopPropagation();
 
@@ -200,6 +207,7 @@ class Index extends React.Component {
                 userId={user?.userId}
                 platform={platform}
                 collect={collect}
+                onClick={this.onClickUser}
               />
           </div>
 
