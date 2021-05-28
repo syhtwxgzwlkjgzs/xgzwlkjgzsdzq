@@ -385,8 +385,8 @@ class WalletH5Page extends React.Component {
           </div>
         </div>
         <div className={layout.footer}>
-          <Button className={layout.button} onClick={this.toWithrawal}>
-            提现
+          <Button className={layout.button} onClick={this.toWithrawal} disabled={true}>
+            提现(敬请期待)
           </Button>
         </div>
         <FilterView
