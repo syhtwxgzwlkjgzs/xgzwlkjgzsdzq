@@ -59,7 +59,7 @@ export class MessageIndex extends Component {
         dialogId: dialogMessage?.dialogId,
         content: dialogMessage?.summary,
         avatar: recipient?.avatar,
-        userId: sender?.userId,
+        userId: recipient?.id,
         username: sender?.username,
         unreadCount: item.unreadCount,
       });
