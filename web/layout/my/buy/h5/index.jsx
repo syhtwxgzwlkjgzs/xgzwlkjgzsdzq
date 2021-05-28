@@ -22,7 +22,7 @@ class Index extends React.Component {
   componentDidMount() {
     this.setState({
       // header 是 40px，留出 2px ，用以触发下拉事件
-      height: window.outerHeight - 40,
+      height: window.outerHeight - 95,
     });
   }
 

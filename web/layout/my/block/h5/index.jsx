@@ -28,7 +28,7 @@ class Index extends React.Component {
   async componentDidMount() {
     this.setState({
       loading: false,
-      height: window.outerHeight - 40,// header 是 40px，留出 2px ，用以触发下拉事件
+      height: window.outerHeight - 95,// header 是 40px，留出 2px ，用以触发下拉事件
     });
     await this.props.user.getUserShieldList();
   }
@@ -65,7 +65,7 @@ class Index extends React.Component {
         <Header />
         <div className={styles.titleBox}>{`共有${userShield.length}位用户`}</div>
         {
-          !this.props.firstLoading && (
+          this.props.firstLoading && (
             <div className={styles.spinLoading}><Spin type="spinner">加载中...</Spin></div>
           )
         }
