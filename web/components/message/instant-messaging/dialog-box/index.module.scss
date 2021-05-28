@@ -21,20 +21,23 @@
   flex-direction: column;
   height: calc(100vh - 314px);
   overflow-y: auto;
+
 }
 
 .box__inner{
   padding: 0 $padding-4n;
-}
 
-.itself {
-  .msgContent {
-    background-color: $white;
-    &:before {
-      border-right-color: $white;
+  .itself {
+    .msgContent {
+      background-color: $white;
+      &:before {
+        border-right-color: $white;
+      }
     }
   }
 }
+
+
 
 .msgTime {
   @include text-font($color: $text-color-secondary);
@@ -67,6 +70,12 @@
   padding: rem($padding-2n);
   overflow-wrap: anywhere;
   border-radius: rem($border-radius-small);
+  :global {
+    .qq-emotion {
+      width: 30px;
+      height: 30px;
+    }
+  }
 
   &:before {
     content: '';
@@ -105,11 +114,6 @@
   }
 }
 
-:global {
-  .qq-emotion {
-    width: 30px;
-    height: 30px;
-  }
-}
+
 
 
