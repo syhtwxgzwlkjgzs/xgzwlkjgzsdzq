@@ -211,7 +211,7 @@ class index extends Component {
       <div id={styles.editMobileContent}>
         <Header />
         <div className={styles.content}>
-          <h3>{currentStep === 'first' ? '验证旧手机' : '设置新手机'}</h3>
+          {currentStep === 'first' && <h3>验证旧手机</h3>}
           <div className={styles.labelInfo}>
             {
               currentStep === 'first' ? (
@@ -221,7 +221,7 @@ class index extends Component {
                 </div>
               ) : (
                 <div className={styles.labelInput}>
-                  <Input placeholder="输入新手机号码" onChange={this.handleInputChange} focus={true} onBlur={this.handleInputBlur} onFocus={this.handleInputFocus} value={bindMobile} />
+                  <Input placeholder="请输入新手机号" onChange={this.handleInputChange} focus={true} onBlur={this.handleInputBlur} onFocus={this.handleInputFocus} value={bindMobile} />
                 </div>
               )
             }
@@ -230,12 +230,12 @@ class index extends Component {
             </div>
           </div>
           <div className={styles.bindCode}>
-            <span>请输入短信验证码</span>
+            <span>请输入验证码</span>
             <CaptchaInput handleKeyBoardVisible={this.handleKeyBoardVisible} isKeyBoardVisible={isKeyBoardVisible} currentStep={currentStep} updatePwd={this.updatePwd} list={list} isBlur={isBlur} />
           </div>
         </div>
         <div className={`${styles.bottom} ${isKeyBoardVisible && styles.bootom2}`}>
-          <Button full disabled={this.getDisabledWithButton()} onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>{this.state.currentStep === 'first' ? '下一步' : '提交'}</Button>
+          <Button full disabled={this.getDisabledWithButton()} onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>提交</Button>
         </div>
       </div>
     );
