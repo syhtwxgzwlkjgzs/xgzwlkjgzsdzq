@@ -48,6 +48,7 @@ class H5OthersPage extends React.Component {
     if (query.id) {
       await this.props.user.getTargetUserThreads(query.id);
     }
+    return;
   };
 
   render() {

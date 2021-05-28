@@ -66,9 +66,9 @@ const BaseLayout = (props) => {
       baselayout.removeJumpingToTop();
       listRef.current.onBackTop();
     } else {
-      if(scrollTop && pageName) baselayout[pageName] = scrollTop;
+      if (scrollTop && pageName) baselayout[pageName] = scrollTop;
     }
-    onScroll({ scrollTop: scrollTop });
+    onScroll({ scrollTop });
   };
 
   const handleScroll = quickScroll ? quickScrolling : throttle(quickScrolling, 50);
@@ -92,11 +92,11 @@ const BaseLayout = (props) => {
             </div>
           ) : (
             <List
-              {...props}
               immediateCheck={false}
               className={styles.list}
               ref={listRef}
               onScroll={handleScroll}
+              {...props}
             >
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>
