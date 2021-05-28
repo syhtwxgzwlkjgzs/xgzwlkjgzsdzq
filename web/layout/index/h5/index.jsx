@@ -114,16 +114,13 @@ class IndexH5Page extends React.Component {
     const { dispatch = () => {} } = this.props;
     const requestCategoryids = categoryids.slice();
     requestCategoryids[0] = (requestCategoryids[0] === 'all' || requestCategoryids[0] === 'default') ? [] : requestCategoryids[0];
-    dispatch('click-filter', { categoryids: requestCategoryids, types, essence, sequence });
+    
+    const newFilter = { ...this.state.filter, categoryids: requestCategoryids, types, essence, sequence }
+    dispatch('click-filter', newFilter);
 
     let newCurrentIndex = this.resetCurrentIndex(categoryids[0])
     this.setState({
-      filter: {
-        categoryids,
-        types,
-        essence,
-        sequence,
-      },
+      filter: newFilter,
       currentIndex: newCurrentIndex,
       visible: false,
     });
