@@ -82,12 +82,13 @@ const BaseLayout = (props) => {
     //       window.removeEventListener('resize', updateSize);
     //   };
     // }
-    if(jumpTo > 0) {
-      listRef.current.jumpToScrollTop(jumpTo);
-    }
-    if (listRef?.current && pageName && baselayout[pageName] > 0 &&
-        baseLayoutWhiteList.indexOf(pageName) !== -1) {
-      listRef.current.jumpToScrollTop(baselayout[pageName]);
+    if (listRef?.current && pageName && baselayout[pageName] > 0) {
+      if(jumpTo > 0) {
+        baselayout[pageName] = jumpTo;
+        listRef.current.jumpToScrollTop(jumpTo);
+      } else if (baseLayoutWhiteList.indexOf(pageName) !== -1) {
+        listRef.current.jumpToScrollTop(baselayout[pageName]);
+      }
     }
   }, [jumpTo]);
 
