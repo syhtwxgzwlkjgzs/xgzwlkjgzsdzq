@@ -34,7 +34,7 @@ class TopicSelect extends Component {
 
   // 更新搜索关键字
   updateKeywords = (val = "") => {
-    this.setState({ keywords: val, page: 1 });
+    this.setState({ keywords: val, page: 1, finish: false });
     this.searchInput();
   }
 
@@ -80,11 +80,13 @@ class TopicSelect extends Component {
   // 渲染项
   renderItem = (item) => (
     <div className={styles['topic-item']} onClick={() => this.handleItemClick(item)}>
-      <div className={styles['item-left']}>
-        <div className={styles.name}>#{item.content}#</div>
-      </div>
-      <div className={styles['item-right']}>
-        {item.newTopic ? item.newTopic : `${item.viewCount}热度`}
+      <div className={styles['topic-item__inner']} >
+        <div className={styles['item-left']}>
+          <div className={styles.name}>#{item.content}#</div>
+        </div>
+        <div className={styles['item-right']}>
+          {item.newTopic ? item.newTopic : `${item.viewCount}热度`}
+        </div>
       </div>
     </div>
   );
@@ -100,14 +102,16 @@ class TopicSelect extends Component {
         {/* top */}
         <div className={styles.header}>
           <div className={styles['input-box']}>
+            {!pc && <div className={styles['icon-box']}>
+              <Icon className={styles['search-icon']} name="SearchOutlined" size={16}></Icon>
+            </div>}
             <Input
               value={keywords}
-              icon="SearchOutlined"
               placeholder='请选择或直接输入话题'
               onChange={e => this.updateKeywords(e.target.value)}
             />
             {!pc && keywords &&
-              <div className={styles.delete} onClick={() => this.updateKeywords()}>
+              <div className={styles['icon-box']} onClick={() => this.updateKeywords()}>
                 <Icon className={styles['delete-icon']} name="WrongOutlined" size={16}></Icon>
               </div>
             }
