@@ -51,7 +51,7 @@ class WXSelectH5Page extends React.Component {
                   timeout: 10000,
                   params: {
                     sessionToken,
-                    type: 0, // 公众号0 (默认)， 小程序1
+                    type: 0, // 公众号0 (默认)， 小程序1，临时方案，测试环境的公众号/小程序没有关联起来
                   },
                 });
                 checkUserStatus(res);
