@@ -78,6 +78,7 @@
   .list {
     max-height: rem(773);
     overflow-y: scroll;
+    scrollbar-width: none; // 火狐浏览器无滑动条
 
     &::-webkit-scrollbar {
       display: none;

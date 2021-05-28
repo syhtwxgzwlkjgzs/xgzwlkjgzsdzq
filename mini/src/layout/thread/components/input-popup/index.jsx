@@ -78,4 +78,9 @@ const InputPop = (props) => {
   );
 };
 
+
+InputPop.options = {
+  addGlobalClass: true
+}
+
 export default InputPop;

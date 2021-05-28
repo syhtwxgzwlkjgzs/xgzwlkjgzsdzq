@@ -467,14 +467,13 @@ class PayBoxStore {
         payPasswordToken: this.payPwdResetToken,
       }
     });
-
     if (resetPayPwdRes.code === 0) {
       return resetPayPwdRes.data;
     }
 
     throw {
       Code: resetPayPwdRes.code,
-      Msg: resetPayPwdRes.message,
+      Msg: resetPayPwdRes.msg,
     };
   }
 
@@ -543,9 +542,10 @@ class PayBoxStore {
    */
   @action
   clearPayPassword = () => {
-    this.oldPayPwd = null;
-    this.payPassword = null;
-    this.newPayPwdRepeat = null;
+    this.password = null; // 设置支付密码状态
+    this.oldPayPwd = null; // 旧密码
+    this.newPayPwd = null; // 新密码
+    this.newPayPwdRepeat = null; // 确认新密码
   }
 
   /**

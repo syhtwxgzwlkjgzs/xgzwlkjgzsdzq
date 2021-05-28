@@ -43,6 +43,7 @@ const BaseLayout = (props) => {
     jumpTo = -1,
     onScroll = noop,
     baselayout,
+    quickScroll = false,
   } = props;
 
   const [showLeft, setShowLeft] = useState(false);
@@ -81,12 +82,14 @@ const BaseLayout = (props) => {
     //       window.removeEventListener('resize', updateSize);
     //   };
     // }
-    if(jumpTo > 0) {
-      listRef.current.jumpToScrollTop(jumpTo);
-    }
-    if (listRef?.current && pageName && baselayout[pageName] > 0 &&
-        baseLayoutWhiteList.indexOf(pageName) !== -1) {
-      listRef.current.jumpToScrollTop(baselayout[pageName]);
+    if (listRef?.current && pageName) {
+      if(jumpTo > 0) {
+        baselayout[pageName] = jumpTo;
+        listRef.current.jumpToScrollTop(jumpTo);
+      } else if (baselayout[pageName] > 0 &&
+          baseLayoutWhiteList.indexOf(pageName) !== -1) {
+        listRef.current.jumpToScrollTop(baselayout[pageName]);
+      }
     }
   }, [jumpTo]);
 
@@ -129,16 +132,22 @@ const BaseLayout = (props) => {
     setIsError(true)
   }
 
-  const handleScroll = throttle(({ scrollTop = 0 } = {}) => {
-    if(!listRef?.current?.currentScrollTop) return;
+  const quickScrolling = ({ scrollTop = 0 } = {}) => {
+    if (!listRef?.current?.currentScrollTop) {
+      onScroll();
+      return;
+    }
 
     if(baselayout.isJumpingToTop) {
       baselayout.removeJumpingToTop();
       listRef.current.onBackTop();
+    } else {
+      if(scrollTop && pageName) baselayout[pageName] = scrollTop;
     }
-    if(scrollTop && pageName) baselayout[pageName] = scrollTop;
     onScroll({ scrollTop: scrollTop });
-  }, 50)
+  }
+
+  const handleScroll = quickScroll ? quickScrolling : throttle(quickScrolling, 50);
 
   return (
     <div className={styles.container}>

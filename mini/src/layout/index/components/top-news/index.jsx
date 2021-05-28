@@ -15,6 +15,8 @@ import RichText from '@discuzq/design/dist/components/rich-text/index';
     if (e?.target?.localName === 'a') {
       return
     }
+    e && e.stopPropagation();
+    
     Taro.navigateTo({url: `/subPages/thread/index?id=${threadId}`});
   };
 
