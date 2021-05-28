@@ -26,6 +26,13 @@ class UserAction extends SiteStore {
     super(props);
   }
 
+  @action
+  removeUserInfo() {
+    this.userInfo = null;
+    this.loginStatus = false;
+    this.accessToken = null;
+  }
+
   // 写入用户数据
   @action
   setUserInfo(data) {
