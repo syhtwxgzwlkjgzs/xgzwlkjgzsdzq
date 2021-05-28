@@ -101,7 +101,9 @@ const routes = [
       </View>
       {
         fixed && placeholder && (
-          <View className={styles.placeholder} style={{ display: `${hiddenTabBar ? 'none' : 'block'}` }} />
+          <View className={styles.placeholder} style={{ display: `${hiddenTabBar ? 'none' : 'block'}` }}>
+            <View className={styles.addIcon}></View>
+          </View>
         )
       }
       </>

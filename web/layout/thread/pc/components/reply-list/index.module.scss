@@ -37,6 +37,8 @@
           text-align: left;
           color: $text-color-primary;
           vertical-align: super;
+          position: relative;
+          top: rem(3);
 
           p {
             display: inline;

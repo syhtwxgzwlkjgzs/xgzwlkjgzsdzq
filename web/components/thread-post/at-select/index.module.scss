@@ -21,6 +21,9 @@
 }
 
 .wrapper {
+  @include flex();
+  flex-direction: column;
+  align-items: stretch;
   height: 100vh;
   height: -webkit-fill-available;
   min-height: 100vh;
@@ -31,36 +34,39 @@
   .header {
     @include flex();
     width: 100%;
-    padding: $padding-10 $padding-4n;
-    background: $white;
+    padding: $padding-4n $padding-4n $padding-2n;
     background: $white;
     box-sizing: border-box;
 
     .input-box {
       flex: 1;
-      position: relative;
+      @include flex();
+      padding: 0 $padding-2n;
+      background: $text-bg-color2;
+      opacity: 0.78;
+      border-radius: $border-radius-small;
+      box-sizing: border-box;
 
-      .delete {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 40px;
+      .icon-box {
+        flex: 0 0 32px;
+        height: 32px;
         height: 36px;
         display: flex;
-        align-items: center;
-
-        .delete-icon {
-          margin-left: 8px;
-          padding-top: 3px;
-          color: $text-color-placeholder;
-        }
+      }
+      .search-icon {
+        margin: auto;
+        color: $icon-color-light;
+      }
+      .delete-icon {
+        margin: auto;
+        color: $disabled-color;
       }
     }
 
     .btn-cancel {
       flex-basis: 44px;
       font-size: $font-size-primary;
-      color: #8490a8;
+      color: $text-color-secondary;
       text-align: right;
     }
   }
@@ -68,23 +74,17 @@
   :global {
     .dzq-input {
       width: 100%;
-      box-sizing: border-box;
+      background: $text-bg-color2;
+      opacity: 0.78;
 
       .dzq-input__inner {
-        height: 40px;
-        padding: 0 40px;
+        height: 36px;
+        padding: 0;
         font-size: $font-size-middle;
         color: $text-color-primary;
-        background: $text-bg-color;
+        background: $text-bg-color2;
+        opacity: 0.78;
         border: none;
-      }
-
-      .dzq-icon-SearchOutlined {
-        left: 8px;
-        top: 50%;
-        margin-top: -18px;
-        line-height: 36px;
-        color: $icon-color-light !important;
       }
 
       .input-placeholder {
@@ -99,10 +99,19 @@
   }
 
   .at-item {
-    @include flex();
-    height: 50px;
-    padding: 0 $padding-4n;
     background: $white;
+
+    .at-item__inner {
+      @include flex();
+      height: 60px;
+      padding: $padding-4n 0;
+      margin: 0 $margin-4n;
+      border-top: $border-solid-1;
+      box-sizing: border-box;
+    }
+    &:first-child .at-item__inner {
+      border-top: none;
+    }
 
     .avatar {
       width: rem(38);
@@ -130,9 +139,9 @@
     .info {
       flex: 1;
       @include flex();
-      height: 50px;
+      height: 100%;
       padding: 0 $padding-2n;
-      border-bottom: $border-solid-1;
+      box-sizing: border-box;
       .username {
         max-width: rem(170);
         @include single-line();
@@ -153,25 +162,26 @@
     :global {
       .dzq-checkbox-wrap {
         margin: 0;
-        padding: 0;
+        padding: $padding-3n 0;
         -webkit-tap-highlight-color: transparent;
+        box-sizing: border-box;
         .dzq-checkbox {
-          width: rem(24);
-          height: rem(24);
+          width: rem(20);
+          height: rem(20);
           border-radius: $border-radius-small;
-          background-color: $text-bg-color2;
+          background-color: $text-bg-color;
+          border: $border-solid-1;
           &:after {
             border: none;
           }
         }
         &.is-checked {
           .dzq-checkbox {
-            border: none;
-            background-color: $primary-color;
+            background-color: $checkbox-checked-bg-color;
           }
           .dzq-icon {
-            font-size: $font-size-label;
-            color: $white;
+            font-size: $font-size-small !important;
+            color: $primary-color;
           }
         }
       }
@@ -185,6 +195,7 @@
     padding-bottom: calc(8px + env(safe-area-inset-bottom));
     background: $white;
     border-top: $border-solid-1;
+    box-sizing: border-box;
 
     :global {
       .dzq-button {
@@ -197,6 +208,7 @@
         border-radius: $border-radius-small;
         background: $text-bg-color2;
         -webkit-tap-highlight-color: transparent;
+        box-sizing: border-box;
       }
     }
 
@@ -212,13 +224,21 @@
     height: 500px;
     min-height: 50vh;
 
-    .input-box {
-      border-bottom: $border-solid-1;
+    .header {
+      padding-bottom: 0;
+      .input-box {
+        width: 100%;
+        background: $white;
+        padding: 0 0 $padding-2n 0;
+        border-bottom: $border-solid-1;
+        opacity: 1;
+      }
     }
 
     :global {
       .dzq-input {
         box-sizing: border-box;
+        background: $white;
 
         .dzq-input__inner {
           background: $white;
@@ -227,20 +247,20 @@
     }
 
     .list {
-      height: 398px !important;
+      height: 378px !important;
       .list__inner {
         @include scrollbar();
       }
     }
 
     .at-item {
-      padding-right: $margin-4n;
+      padding-right: $padding-2n;
     }
-  }
 
-  :global {
-    // .dzq-modal__overlay {
-    //   background: transparent;
-    // }
+    .btn-container {
+      flex-basis: 60px;
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 }

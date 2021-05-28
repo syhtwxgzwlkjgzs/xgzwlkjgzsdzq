@@ -34,6 +34,7 @@ class index extends Component {
   // 点击取消
   handleCancel = () => {
     Router.back();
+    this.props.user.initEditInfo();
   };
 
   handleClickNickName = () => {

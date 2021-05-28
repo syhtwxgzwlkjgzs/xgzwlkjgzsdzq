@@ -20,6 +20,7 @@ import deepClone from '@common/utils/deep-clone';
 @inject('site')
 @inject('user')
 @inject('index')
+@inject('baselayout')
 @observer
 class IndexPCPage extends React.Component {
   constructor(props) {
@@ -32,7 +33,10 @@ class IndexPCPage extends React.Component {
       isShowDefault: this.checkIsOpenDefaultTab(),
       // 筛选过滤数据
       filter: {
-        sequence: this.checkIsOpenDefaultTab() ? 1 : 0
+        sequence: this.checkIsOpenDefaultTab() ? 1 : 0,
+        sort: 1,
+        attention: 0,
+        essence: 0
       }
     };
 
@@ -65,7 +69,7 @@ class IndexPCPage extends React.Component {
         const { totalCount: nowTotal = -1 } = this.props.index?.threads || {};
   
         if (nowTotal !== -1) {
-          readThreadList({ params: { page: 1, filter: { categoryids, types, essence, attention, sort }, sequence } }).then((res) => {
+          readThreadList({ params: { perPage: 10, page: 1, filter: { categoryids, types, essence, attention, sort }, sequence } }).then((res) => {
             const { totalCount = 0 } = res?.data || {};
             if (totalCount > nowTotal) {
               this.setState({
@@ -146,6 +150,7 @@ class IndexPCPage extends React.Component {
 
     // 发起网络请求
     dispatch('click-filter', newFilter);
+    this.props.baselayout.setJumpingToTop();
    }
 
    goRefresh = () => {
@@ -273,6 +278,7 @@ class IndexPCPage extends React.Component {
         onRefresh={this.onPullingUp}
         noMore={currentPage >= totalPage}
         onScroll={this.onScroll}
+        quickScroll={true}
         showRefresh={false}
         left={ this.renderLeft(countThreads) }
         right={ this.renderRight() }
