@@ -32,7 +32,6 @@ const Index = inject('site', 'message')(observer(({ site, message }) => {
 
     return { page, subPage, dialogId, username };
   })(router.query);
-
   // 更新未读消息
   useEffect(() => {
     message.readUnreadCount();

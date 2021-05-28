@@ -126,8 +126,7 @@ class MessageAction extends MessageStore {
   // 创建新的私信对话
   @action.bound
   async createDialog(params) {
-    const ret = await createDialog(params);
-    console.log('创建新的私信对话', ret);
+    return await createDialog(params);
   }
 
   // 私信对话发送新的消息
@@ -150,6 +149,11 @@ class MessageAction extends MessageStore {
     const ret = await deleteMsg({ id });
     const { code } = ret;
     if (code === 0) this.deleteListItem(storeKey, id);
+  }
+
+  @action
+  clearMessage() {
+    this.dialogMsgList = this.initList
   }
 
   // 从store数据中删除消息

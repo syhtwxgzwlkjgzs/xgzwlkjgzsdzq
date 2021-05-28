@@ -8,11 +8,16 @@ import InteractionBox from './interaction-box';
 import styles from './index.module.scss';
 
 @inject('site')
+@inject('message')
 @observer
 class InstantMessaging extends React.Component {
   state = {
     showEmoji: false
   };
+
+  componentWillUnmount() {
+    this.props.message.clearMessage();
+  }
 
   render() {
     const { messagesHistory = [], onSubmit, site, dialogId, username } = this.props;

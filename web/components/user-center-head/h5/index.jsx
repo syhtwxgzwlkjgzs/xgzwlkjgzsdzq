@@ -92,7 +92,7 @@ class index extends Component {
 
   // 点击发送私信
   handleMessage = () => {
-    const { username } = this.props.user;
+    const { username } = this.props.user.targetUser;
     Router.push({ url: `/message?page=chat&username=${username}` });
   };
 
