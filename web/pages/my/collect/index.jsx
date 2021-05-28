@@ -101,7 +101,6 @@ class Index extends React.Component {
 
   dispatch = async () => {
     const { index } = this.props;
-    console.log(this.state.page);
     const threadsResp = await index.getReadThreadList({
       perPage: 10,
       page: this.state.page,
