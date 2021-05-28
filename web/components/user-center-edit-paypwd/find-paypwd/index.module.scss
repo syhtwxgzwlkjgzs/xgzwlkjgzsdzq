@@ -1,5 +1,4 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/_variable.scss';
 
 .content {
   padding: rem($padding-6n);
@@ -53,6 +52,7 @@
     padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
     display: flex;
     justify-content: center;
+    background-color: $white;
     .btn {
       height: rem(42);
       font-size: $font-size-middle;

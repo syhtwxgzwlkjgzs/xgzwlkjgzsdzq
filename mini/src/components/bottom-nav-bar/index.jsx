@@ -3,8 +3,9 @@ import styles from './index.module.scss';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import { noop } from '@components/thread/utils';
 import { View } from '@tarojs/components';
-import Router from '@discuzq/sdk/dist/router';
+import Taro from '@tarojs/taro'
 import { inject, observer } from 'mobx-react';
+import Router from '@discuzq/sdk/dist/router';
 
 
 /**
@@ -13,22 +14,30 @@ import { inject, observer } from 'mobx-react';
  * @prop {boolean} curr 常亮icon
  */
 
+const routes = [
+  'pages/index/index',
+  'subPages/search/index',
+  'subPages/thread/post/index',
+  'subPages/message/index',
+  'subPages/my/index'
+]
+
  @inject('index')
  @observer
  class BottomNavBar extends React.Component {
 
   state = {
-    tabs: [],
+    tabs: []
   }
 
   componentDidMount() {
-    const { curr = 'home' } = this.props;
+    const { curr = 'home' } = this.props
     const tabs = [
-      { type: 'home', icon: 'HomeOutlined', text: '首页', active: this.checkCurrActiveTab(curr, 'home'), router: '/pages/index/index' },
-      { type: 'search', icon: 'FindOutlined', text: '发现', active: this.checkCurrActiveTab(curr, 'search'), router: '/subPages/search/index' },
-      { type: 'add', icon: 'PlusOutlined', router: '/subPages/thread/post/index' },
-      { type: 'msg', icon: 'MailOutlined', text: '消息', active: this.checkCurrActiveTab(curr, 'message'), router: '/subPages/message/index' },
-      { type: 'my', icon: 'ProfessionOutlined', text: '我的', active: this.checkCurrActiveTab(curr, 'my'), router: '/subPages/my/index' },
+      { icon: 'HomeOutlined', text: '首页', active: this.checkCurrActiveTab(curr, 'home'), router: '/pages/index/index' },
+      { icon: 'FindOutlined', text: '发现', active: this.checkCurrActiveTab(curr, 'search'), router: '/subPages/search/index' },
+      { icon: 'PlusOutlined', router: '/subPages/thread/post/index' },
+      { icon: 'MailOutlined', text: '消息', active: this.checkCurrActiveTab(curr, 'message'), router: '/subPages/message/index' },
+      { icon: 'ProfessionOutlined', text: '我的', active: this.checkCurrActiveTab(curr, 'my'), router: '/subPages/my/index' },
     ]
 
     this.setState({ tabs })
@@ -45,11 +54,27 @@ import { inject, observer } from 'mobx-react';
     onClick(i, idx)
     const temp = [...tabs];
     if (i.text) {
-      temp.find(i => i.active).active = false;
-      temp[idx].active = true;
+      // temp.find(i => i.active).active = false;
+      // temp[idx].active = true;
       this.setState({ tabs: temp })
     }
-    Router.redirect({url: i.router});
+
+    const current = Taro.getCurrentPages()
+    let routeIndex = -1
+    current?.forEach((item, index) => {
+      if (`/${item.route}` === i.router) {
+        routeIndex = index
+      }
+    })
+    if (routeIndex === -1) {
+      Router.push({url: i.router});
+    } else {
+      const num = current.length - 1 - routeIndex
+      if (current?.length !== 1 && routeIndex !== current.length - 1 && num >= 0) {
+        Taro.navigateBack({delta: current.length - 1 - routeIndex});
+      }
+    }
+    // 
   };
 
 
