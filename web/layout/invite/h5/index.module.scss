@@ -156,6 +156,8 @@
   }
   .invite_list_item{
     position: relative;
+    align-items: center;
+    display: flex;
     height: rem(54);
     line-height: rem(54);
     padding: 0 rem(8);
@@ -197,7 +199,7 @@
   }
   .invite_list_itemLine{
     height: rem(1);
-    width: rem(311);
+    width: calc(100vw - 64px);
     background: var(--border-line-color);
     position: absolute;
     left: rem(16);
