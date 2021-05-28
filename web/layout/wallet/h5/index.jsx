@@ -1,6 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
+import Header from '@components/header';
 import { Tabs, Icon, Button, Toast } from '@discuzq/design';
 import WalletInfo from './components/wallet-info/index';
 import IncomeList from './components/income-list/index';
@@ -320,6 +321,7 @@ class WalletH5Page extends React.Component {
     const { walletInfo, incomeDetail = {}, expandDetail, cashDetail } = this.props.wallet;
     return (
       <div className={layout.container}>
+        <Header></Header>
         <div className={layout.scroll}>
           <div className={layout.header}>
             <WalletInfo
