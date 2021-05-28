@@ -10,11 +10,12 @@ import ErrorView from './ErrorView';
  * @param {string} noMore 无更多数据
  * @prop {function} onRefresh 触底触发事件，需返回promise；若没有声明onRefresh，不触发上拉刷新。
  * @prop {function} onScroll 滑动事件
- * @prop {function} wrapperClass 内部元素className
- * @prop {function} showRefresh 是否展示loading视图
+ * @prop {string} wrapperClass 内部元素className
+ * @prop {boolean} showRefresh 是否展示loading视图
  * @prop {function} onError 当onRefresh返回reject时，触发回调
- * @prop {function} enableError 是否启用reject捕获
- * @prop {function} immediateCheck 初始化的时候，是否立即请求一次
+ * @prop {boolean} enableError 是否启用reject捕获
+ * @prop {boolean} immediateCheck 初始化的时候，是否立即请求一次
+ * @prop {function} resetList 初始化list状态
  */
 
 const List = forwardRef(({
@@ -29,7 +30,7 @@ const List = forwardRef(({
   preload = 30,
   onError = noop,
   enableError = false,
-  immediateCheck = true
+  immediateCheck = true,
 }, ref) => {
   const listWrapper = useRef(null);
   const currentScrollTop = useRef(0)
@@ -58,8 +59,14 @@ const List = forwardRef(({
       jumpToScrollTop,
       currentScrollTop,
       isLoading,
+      resetList
     }),
   );
+
+  const resetList = () => {
+    setIsLoading(false)
+    setIsError(false)
+  }
 
   const throttle = (fn, delay) => {
     let timer = null;
