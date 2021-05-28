@@ -32,12 +32,12 @@ export default function HOCTencentCaptcha(Component) {
           // 显示验证码
           this.captcha.show();
         });
+      } else {
+        resolve({
+          captchaRandStr: null,
+          captchaTicket: null,
+        });
       }
-
-      resolve({
-        captchaRandStr: null,
-        captchaTicket: null,
-      });
     })
 
     render() {
