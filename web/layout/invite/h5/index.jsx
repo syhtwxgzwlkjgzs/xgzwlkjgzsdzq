@@ -5,8 +5,6 @@ import { Icon, Button, Toast, Avatar } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import Header from '@components/header';
 import layout from './index.module.scss';
-import { get } from '@common/utils/get';
-import { ENV_CONFIG } from '@common/constants/site';
 
 @inject('site')
 @inject('user')
@@ -14,14 +12,20 @@ import { ENV_CONFIG } from '@common/constants/site';
 @observer
 class InviteH5Page extends React.Component {
   async componentDidMount() {
-    await this.props.invite.getInviteUsersList();
+    try {
+      await this.props.invite.getInviteUsersList();
+    } catch (e) {
+      Toast.error({
+        content: e.Message,
+      });
+    }
   }
 
   createInviteLink = async () => {
     try {
       await this.props.invite.createInviteLink();
       const clipboardObj = navigator.clipboard;
-      await clipboardObj.writeText(`${window.location.origin}/forum/partner-invite?inviteCode=${this.props.invite.inviteLink}`);
+      await clipboardObj.writeText(`${window.location.origin}/forum/partner-invite?inviteCode=${this.props.invite.inviteCode}`);
       Toast.success({
         content: '创建邀请链接成功',
         duration: 1000,

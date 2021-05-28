@@ -9,6 +9,7 @@ import List from '@components/list';
 import { get } from '@common/utils/get';
 import layout from './index.module.scss';
 import UserCenterFriends from '@components/user-center-friends';
+import { simpleRequest } from '@common/utils/simple-request';
 
 @inject('site')
 @inject('forum')
@@ -16,9 +17,8 @@ import UserCenterFriends from '@components/user-center-friends';
 @observer
 class ForumH5Page extends React.Component {
   async componentDidMount() {
-    const { forum ,site,user} = this.props;
-    console.log(forum,site,user);
-    const usersList = await forum.useRequest('readUsersList', {
+    const { forum} = this.props;
+    const usersList = await simpleRequest('readUsersList', {
       params: {
         filter: {
           hot: 0,
