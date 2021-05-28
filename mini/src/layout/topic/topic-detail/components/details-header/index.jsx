@@ -2,7 +2,7 @@ import React from 'react';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import { noop } from '@components/thread/utils';
 import styles from './index.module.scss';
-import { View, Text } from '@tarojs/components';
+import { View, Text, Button } from '@tarojs/components';
 import TopicHeaderImg from '../../../../../../../web/public/dzq-img/topic-header.png';
 import Router from '@discuzq/sdk/dist/router';
 
@@ -31,10 +31,10 @@ const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop }) => 
             <Text className={styles.content}>{contentNum}</Text>
           </View>
           <View className={styles.hr}></View>
-          <View>
+          <Button plain='true' openType='share' data-from='head'>
             <Icon className={styles.shareIcon}name="ShareAltOutlined" size={14} />
             <Text className={styles.text}>分享</Text>
-          </View>
+          </Button>
           <View className={styles.hr}></View>
           <View onClick={goList}>
             <Text className={styles.text}>全部话题</Text>
