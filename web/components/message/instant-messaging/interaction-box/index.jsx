@@ -10,12 +10,13 @@ import Emoji from '@components/editor/emoji';
 import styles from './index.module.scss';
 
 const InteractionBox = (props) => {
-  const { onSubmit, dialogBoxRef, platform, dialogId, threadPost } = props;
+  const { onSubmit, dialogBoxRef, platform, dialogId, threadPost, showEmoji, setShowEmoji } = props;
   const { readDialogMsgList, dialogMsgList, createDialogMsg } = props.message;
 
   const [lastTimestamp, setLastTimestamp] = useState(0);
   const [typingValue, setTypingValue] = useState('');
-  const [showEmoji, setShowEmoji] = useState(false);
+  const [cursorPosition, setCursorPosition] = useState(0);
+  // const [showEmoji, setShowEmoji] = useState(false);
 
 
   const uploadRef = useRef(null);
@@ -68,6 +69,10 @@ const InteractionBox = (props) => {
     uploadRef.current.click();
   };
 
+  const recordCursor = (e) => {
+    setCursorPosition(e.target.selectionStart);
+  };
+
   return (
     <>
       <input
@@ -95,10 +100,15 @@ const InteractionBox = (props) => {
         <>
           <div className={styles.h5InteractionBox} style={{bottom: showEmoji ? '200px' : 0}}>
           <div className={styles.inputWrapper}>
-            <Input value={typingValue} placeholder=" 请输入内容" onChange={(e) => setTypingValue(e.target.value)} />
+            <Input value={typingValue} placeholder=" 请输入内容" onChange={(e) => {
+              setTypingValue(e.target.value);
+              recordCursor(e);
+            }} onBlur={(e) => {
+              recordCursor(e);
+            }} />
             <div className={styles.tools}>
               <div>
-                <Icon name="SmilingFaceOutlined" size={20} onClick={() => {setShowEmoji(true);}} />
+                <Icon name="SmilingFaceOutlined" size={20} onClick={() => {setShowEmoji(!showEmoji);}} />
               </div>
               <div className={styles.pictureUpload}>
                 <Icon name="PictureOutlinedBig" size={20} onClick={uploadImage} />
@@ -111,14 +121,19 @@ const InteractionBox = (props) => {
             </Button>
           </div>
         </div>
-        <Emoji
-          show={showEmoji}
-          emojis={threadPost.emojis}
-          onClick={
-            (emoji) => {
-              this.props.handleEmojiClick(emoji);
-            }}
-          />
+        <div className={styles.emoji}>
+          <Emoji
+            show={showEmoji}
+            emojis={threadPost.emojis}
+            onClick={
+              (emoji) => {
+                const text = typingValue.slice(0, cursorPosition) + emoji.code + typingValue.slice(cursorPosition);
+                setTypingValue(text);
+                setCursorPosition(cursorPosition + emoji.code.length);
+                setShowEmoji(!showEmoji);
+              }}
+            />
+          </div>
         </>
       )}
       {platform === 'pc' && (

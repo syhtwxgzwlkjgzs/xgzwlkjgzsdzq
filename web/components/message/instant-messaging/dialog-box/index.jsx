@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 
 const DialogBox = (props) => {
-  const { shownMessages, platform, message, user, dialogId } = props;
+  const { shownMessages, platform, message, user, dialogId, showEmoji } = props;
   const { readDialogMsgList, dialogMsgList, createDialogMsg } = message;
   const dialogBoxRef = useRef();
   let timeoutId = null;
@@ -41,13 +41,13 @@ const DialogBox = (props) => {
       userAvatar: item.user.avatar,
       displayTimePanel: true,
       textType: 'string',
-      text: item.summary,
+      text: item.messageTextHtml,
       ownedBy: user.id === item.userId ? 'myself' : 'itself',
     })).reverse();
   }, [dialogMsgList]);
 
   return (
-    <div className={platform === 'pc' ? styles.pcDialogBox : styles.h5DialogBox} ref={dialogBoxRef}>
+    <div className={platform === 'pc' ? styles.pcDialogBox : (showEmoji ? styles['h5DialogBox-emoji'] : styles.h5DialogBox)} ref={dialogBoxRef}>
       <div className={styles.box__inner}>
         {messagesHistory.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar }, idx) => (
           <React.Fragment key={idx}>

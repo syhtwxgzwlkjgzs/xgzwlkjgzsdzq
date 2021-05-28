@@ -2,7 +2,7 @@
 
 .h5InteractionBox {
   display: flex;
-  position: absolute;
+  // position: absolute;
   justify-content: space-between;
   bottom: 0;
   left: 0;
@@ -99,4 +99,8 @@
   .dzq-upload {
     padding: 0 !important;
   }
+}
+
+.emoji {
+  overflow: hidden;
 }

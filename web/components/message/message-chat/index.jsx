@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useMemo } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 
@@ -6,7 +6,7 @@ import Header from '@components/header';
 import InstantMessaging from '../instant-messaging';
 
 const Index = ({ dialogId, message, user }) => {
-  const { readDialogMsgList, dialogMsgList, createDialogMsg } = message;
+  // const { readDialogMsgList, dialogMsgList, createDialogMsg } = message;
 
   // let timeoutId = null;
   // useEffect(() => {
@@ -33,6 +33,8 @@ const Index = ({ dialogId, message, user }) => {
   //   text: item.summary,
   //   ownedBy: user.id === item.userId ? 'myself' : 'itself',
   // })).reverse(), [dialogMsgList]);
+
+
 
   return (
     <div className={styles.wrapper}>
