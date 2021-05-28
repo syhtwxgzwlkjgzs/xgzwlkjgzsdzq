@@ -6,7 +6,7 @@ import { ATTACHMENT_TYPE, ACCEPT_IMAGE_TYPES } from '@common/constants/thread-po
 import { createAttachment } from '@common/server';
 import { inject, observer } from 'mobx-react';
 import Emoji from '@components/editor/emoji';
-
+import Router from '@discuzq/sdk/dist/router';
 import styles from './index.module.scss';
 
 const InteractionBox = (props) => {
@@ -47,6 +47,10 @@ const InteractionBox = (props) => {
         dialogId,
         ...data,
       });
+      if (ret.code === 0) {
+        setTypingValue('');
+        readDialogMsgList(dialogId);
+      }
     }
 
     if (!dialogId && username) {
@@ -54,11 +58,10 @@ const InteractionBox = (props) => {
         recipientUsername: username,
         ...data,
       });
-    }
-
-    if (ret.code === 0) {
-      setTypingValue('');
-      readDialogMsgList(dialogId);
+      const { code, data } = ret;
+      if (code === 0) {
+        Router.push(`/message?page=chat&dialogId=${data.dialogId}`);
+      }
     }
   };
 
