@@ -12,7 +12,6 @@ const DialogBox = (props) => {
 
   const [previewerVisibled, setPreviewerVisibled] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
-
   // const router = useRouter();
   // const dialogId = router.query.dialogId;
   const dialogBoxRef = useRef();
@@ -24,12 +23,17 @@ const DialogBox = (props) => {
     };
   }, []);
 
+  useEffect(() => {
+    clearTimeout(timeoutId);
+    updateMsgList();
+  }, [dialogId]);
+
   const scrollEnd = () => {
     if (dialogBoxRef.current) {
       dialogBoxRef.current.scrollTop = dialogBoxRef?.current?.scrollHeight;
     }
   };
-  
+
   // 每2秒轮询一次
   const updateMsgList = () => {
     readDialogMsgList(dialogId);

@@ -1,5 +1,5 @@
 import React, { createElement, useState, useRef, useEffect } from 'react';
-import { Button, Textarea, Icon, Input, Upload } from '@discuzq/design';
+import { Button, Textarea, Icon, Input, Upload, Toast } from '@discuzq/design';
 import ImageUpload from '@components/thread-post/image-upload';
 import { ATTACHMENT_TYPE, ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post';
 // import Upload from '@components/upload';
@@ -17,6 +17,8 @@ const InteractionBox = (props) => {
   const [typingValue, setTypingValue] = useState('');
   const [cursorPosition, setCursorPosition] = useState(0);
   // const [showEmoji, setShowEmoji] = useState(false);
+
+  let toastInstance = null;
 
 
   const uploadRef = useRef(null);
@@ -50,6 +52,9 @@ const InteractionBox = (props) => {
       if (ret.code === 0) {
         setTypingValue('');
         readDialogMsgList(dialogId);
+        toastInstance?.destroy();
+      } else {
+        Toast.error({ content: ret.message });
       }
     }
 
@@ -60,7 +65,7 @@ const InteractionBox = (props) => {
       });
       if (ret.code === 0) {
         setTypingValue('');
-        Router.push({url: `/message?page=chat&dialogId=${ret.data.dialogId}`});
+        Router.replace({url: `/message?page=chat&dialogId=${ret.data.dialogId}`});
       }
     }
   };
@@ -92,6 +97,10 @@ const InteractionBox = (props) => {
         type="file"
         ref={uploadRef}
         onChange={async (e) => {
+          toastInstance = Toast.loading({
+            content: '图片发送中...',
+            duration: 0,
+          });
           const formData = new FormData();
           formData.append('file', e.target.files[0]);
           formData.append('type', 1);
@@ -99,7 +108,9 @@ const InteractionBox = (props) => {
           const { code, data } = ret;
           if (code === 0) {
             submit({ imageUrl: data.url });
-          } else {}
+          } else {
+            Toast.error({ content: ret.message });
+          }
         }}
         // multiple='1'
         accept={ACCEPT_IMAGE_TYPES.join(',')}
