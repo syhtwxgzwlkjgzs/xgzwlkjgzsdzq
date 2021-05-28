@@ -10,8 +10,9 @@
 .wrapper {
   :global {
     .dzq-pull-refresh__loading {
-      font-size: $font-size-large;
-      top: -56px !important;
+      padding: 0;
+      font-size: $font-size-middle;
+      top: -40px !important;
     }
   }
   @include setRefreshList();
@@ -19,7 +20,7 @@
     @include setRefreshList(calc(100vh - 40px));
   }
   &.with-bottom {
-    @include setRefreshList(calc(100vh - 105px));
+    @include setRefreshList(calc(100vh - 64px));
   }
 }
 

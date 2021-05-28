@@ -12,7 +12,7 @@
   padding-top: 8px;
   padding-bottom: constant(safe-area-inset-bottom);  ///兼容 IOS<11.2/
   padding-bottom: env(safe-area-inset-bottom);  ///兼容 IOS>11.2/
-  height: 64px;
+  min-height: 64px;
   .item {
     margin-top: 2px;
     flex: 1;
@@ -44,5 +44,14 @@
   padding-top: 8px;
   padding-bottom: constant(safe-area-inset-bottom);  ///兼容 IOS<11.2/
   padding-bottom: env(safe-area-inset-bottom);  ///兼容 IOS>11.2/
-  height: 64px;
+  min-height: 64px;
+  .addIcon {
+    height: 44px;
+    line-height: 48px;
+    width: 48px;
+    background: var(--color-primary);
+    text-align: center;
+    border-radius: 50%;
+    display: inline-block;
+  }
 }

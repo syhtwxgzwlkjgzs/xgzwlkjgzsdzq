@@ -1,5 +1,4 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/_variable.scss';
 
 .payList{
   display: flex;
@@ -29,8 +28,9 @@
   width: 100%;
   position: fixed;
   left: 0;
-  bottom: constant(safe-area-inset-bottom);
-  bottom: env(safe-area-inset-bottom);
+  bottom: 0;
+  // bottom: constant(safe-area-inset-bottom);
+  // bottom: env(safe-area-inset-bottom);
   z-index: 1111;
   background-color: $white;
   // @include ios-safe-area-inset-bottom;

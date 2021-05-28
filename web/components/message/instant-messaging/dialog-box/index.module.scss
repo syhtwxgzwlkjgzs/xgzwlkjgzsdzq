@@ -7,21 +7,31 @@
   overflow-y: auto;
 }
 
+
+
 .h5DialogBox {
   display: flex;
   flex-direction: column;
   height: calc(100vh - 96px);
   overflow-y: auto;
-  .box__inner{
-    padding: 0 $padding-4n;
-  }
+}
 
-  .itself {
-    .msgContent {
-      background-color: $white;
-      &:before {
-        border-right-color: $white;
-      }
+.h5DialogBox-emoji {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 314px);
+  overflow-y: auto;
+}
+
+.box__inner{
+  padding: 0 $padding-4n;
+}
+
+.itself {
+  .msgContent {
+    background-color: $white;
+    &:before {
+      border-right-color: $white;
     }
   }
 }
@@ -45,10 +55,9 @@
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  color: blue;
   width: $im-profile-icon-size;
   height: $im-profile-icon-size;
-  background-color: $primary-color;
+  // background-color: $primary-color;
 }
 
 .msgContent {
@@ -95,3 +104,12 @@
     }
   }
 }
+
+:global {
+  .qq-emotion {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+

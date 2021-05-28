@@ -33,6 +33,10 @@ class H5OthersPage extends React.Component {
     }
   };
 
+  componentWillUnmount() {
+    this.props.user.removeTargetUserInfo()
+  }
+
   fetchTargetUserThreads = async () => {
     const { query } = this.props.router;
     if (query.id) {

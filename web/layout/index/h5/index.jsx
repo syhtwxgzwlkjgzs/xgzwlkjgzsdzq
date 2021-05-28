@@ -114,16 +114,13 @@ class IndexH5Page extends React.Component {
     const { dispatch = () => {} } = this.props;
     const requestCategoryids = categoryids.slice();
     requestCategoryids[0] = (requestCategoryids[0] === 'all' || requestCategoryids[0] === 'default') ? [] : requestCategoryids[0];
-    dispatch('click-filter', { categoryids: requestCategoryids, types, essence, sequence });
+    
+    const newFilter = { ...this.state.filter, categoryids: requestCategoryids, types, essence, sequence }
+    dispatch('click-filter', newFilter);
 
     let newCurrentIndex = this.resetCurrentIndex(categoryids[0])
     this.setState({
-      filter: {
-        categoryids,
-        types,
-        essence,
-        sequence,
-      },
+      filter: newFilter,
       currentIndex: newCurrentIndex,
       visible: false,
     });
@@ -163,7 +160,6 @@ class IndexH5Page extends React.Component {
   handleScroll = ({ scrollTop = 0 } = {}) => {
     const { height = 180 } = this.headerRef.current?.state || {}
     const { fixedTab } = this.state;
-
     // 只需要滚到临界点触发setState，而不是每一次滚动都触发
     if(!fixedTab && scrollTop >= height) {
       this.setState({ fixedTab: true })
@@ -266,6 +262,7 @@ class IndexH5Page extends React.Component {
         noMore={currentPage >= totalPage}
         isFinished={isFinished}
         onScroll={this.handleScroll}
+        quickScroll={true}
         curr='home'
         pageName='home'
         preload={1000}

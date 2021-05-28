@@ -6,6 +6,8 @@ import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import throttle from '@common/utils/thottle.js';
+import { trimLR } from '@common/utils/get-trimly.js';
+@inject('site')
 @inject('user')
 @observer
 class index extends Component {
@@ -24,16 +26,28 @@ class index extends Component {
 
   // 输入旧密码
   handleSetOldPwd = (e) => {
+    if (trimLR(e.target.value) === "" || !e.target.value) {
+      this.props.user.oldPassword = null;
+      return
+    }
     this.props.user.oldPassword = e.target.value;
   };
 
   // 设置账户密码
   handleSetPwd = (e) => {
+    if (trimLR(e.target.value) === "" || !e.target.value) {
+      this.props.user.newPassword = null;
+      return
+    }
     this.props.user.newPassword = e.target.value;
   };
 
   // 确认新密码
   hadleNewPasswordRepeat = (e) => {
+    if (trimLR(e.target.value) === "" || !e.target.value) {
+      this.props.user.newPasswordRepeat = null;
+      return
+    }
     this.props.user.newPasswordRepeat = e.target.value;
   };
 
@@ -177,14 +191,13 @@ class index extends Component {
   };
 
   render() {
-    console.log(this.getDisabledWithButton());
     return (
       <div id={styles.accountPwdContent}>
         <Header />
         <div className={styles.content}>
           {this.props.user?.hasPassword ? this.renderHasPassword() : this.renderHasNoPassword()}
         </div>
-        {this.props.user?.hasPassword && (
+        {(this.props.site?.isSmsOpen && this.props.user?.hasPassword) && (
           <div onClick={this.handleResetPwd} className={styles.tips}>
             忘记旧密码？
           </div>
