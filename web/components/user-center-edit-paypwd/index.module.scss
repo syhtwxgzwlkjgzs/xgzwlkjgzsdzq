@@ -37,25 +37,21 @@
 
 .labelInfo {
   .labelValue {
-    height: rem(62);
-    padding-top:rem(24) ;
-    box-sizing: border-box;
-    border-bottom: 1px solid $border-color;
     :global {
       .dzq-input {
         width: 100%;
       }
       .dzq-input__inner {
         width: 100%;
-        height: rem(22);
-        line-height: rem(22);
+        height: rem(62);
+        line-height: rem(62);
         border: none;
+        border-bottom: 1px solid $border-color;
         border-radius: 0;
         padding-left: 0;
       }
       .dzq-input__icon {
-        height: rem(22);
-        line-height: rem(22);
+        line-height: rem(62);
       }
     }
   }
