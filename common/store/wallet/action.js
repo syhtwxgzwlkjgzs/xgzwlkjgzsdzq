@@ -194,7 +194,7 @@ class WalletAction extends WalletStore {
 
       throw {
         Code: res.code,
-        Msg: res.message,
+        Msg: res.msg,
       };
     }
 }
