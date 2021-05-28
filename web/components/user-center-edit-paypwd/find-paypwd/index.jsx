@@ -70,6 +70,14 @@ class index extends Component {
   handleStepBtn = () => {
     if (this.getDisabledWithButton()) return
     const { list = [], payPassword, payPasswordConfirmation } = this.state
+    if (payPassword !== payPasswordConfirmation) {
+      Toast.error({
+        content: '两次密码输入有误',
+        hasMask: false,
+        duration: 1000,
+      });
+      return
+    }
     const mobile = this.props?.user.originalMobile;
     const code = list.join("")
     this.props.payBox.forgetPayPwd({
@@ -137,9 +145,10 @@ class index extends Component {
     });
   }
 
-  getVerifyCode = throttle(({ calback }) => {
+  getVerifyCode = throttle(async ({ calback }) => {
+    let { captchaRandStr, captchaTicket } = await this.props.showCaptcha()
     const mobile = this.props?.user.originalMobile;
-    this.props.payBox.sendSmsVerifyCode({ mobile }).then(res => {
+    this.props.payBox.sendSmsVerifyCode({ mobile, captchaRandStr, captchaTicket }).then(res => {
       this.setState({
         initTimeValue: res.interval,
       }, () => {
