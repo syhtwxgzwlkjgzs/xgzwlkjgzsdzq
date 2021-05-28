@@ -698,6 +698,17 @@ class UserAction extends SiteStore {
     this.userShieldTotalPage = 1; // 总页数
     this.userShieldTotalCount = 0; // 总条数
   }
+
+  /**
+   * 清理他人用户数据函数
+   */
+  @action
+  removeTargetUserInfo = () => {
+    this.targetUser = null;
+    this.cleanTargetUserThreads();
+    this.cleanTargetUserFans();
+    this.cleanTargetUserFollows();
+  }
 }
 
 export default UserAction;
