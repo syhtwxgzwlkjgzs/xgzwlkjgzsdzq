@@ -318,6 +318,7 @@
   border-bottom: $border-solid-1;
   -webkit-tap-highlight-color: transparent;
   :global(.dzq-input__inner) {
+    width: calc(100% - 36px);
     font-size: $font-size-middle;
     border: none;
     padding: 0;

@@ -94,22 +94,16 @@ class Index extends React.Component {
     let categoryIds = [];
     if (categoryids) {
       if (!(categoryids instanceof Array)) {
-        categoryIds = [categoryids];
+        categoryIds = [categoryids].filter(item => item !== '');
       } else {
-        categoryIds = categoryids;
+        categoryIds = categoryids.filter(item => item !== '');
       }
     }
 
     if (type === 'click-filter') { // 点击tab
-      this.toastInstance = Toast.loading({
-        content: '加载中...',
-        duration: 0,
-      });
-
+      
       this.page = 1;
       await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
-
-      this.toastInstance?.destroy();
     } else if (type === 'moreData') {
       this.page += 1;
       return await index.getReadThreadList({

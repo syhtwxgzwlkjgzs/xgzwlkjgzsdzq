@@ -39,7 +39,7 @@ class BindNicknameH5Page extends React.Component {
             return;
           }
           window.location.href = '/';
-        }
+        },
       });
     } catch (e) {
       // 跳转状态页

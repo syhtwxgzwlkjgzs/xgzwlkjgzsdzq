@@ -5,7 +5,7 @@ import { View, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 
 export default function index() {
-  
+
   useEffect(() => {
     Taro.hideHomeButton();
   });
