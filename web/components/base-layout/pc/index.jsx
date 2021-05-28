@@ -43,6 +43,7 @@ const BaseLayout = (props) => {
     jumpTo = -1,
     onScroll = noop,
     baselayout,
+    baseScrollHandler = noop,
   } = props;
 
   const [showLeft, setShowLeft] = useState(false);
@@ -130,7 +131,10 @@ const BaseLayout = (props) => {
   }
 
   const handleScroll = throttle(({ scrollTop = 0 } = {}) => {
-    if(!listRef?.current?.currentScrollTop) return;
+    if (!listRef?.current?.currentScrollTop) {
+      onScroll();
+      return;
+    }
 
     if(baselayout.isJumpingToTop) {
       baselayout.removeJumpingToTop();
