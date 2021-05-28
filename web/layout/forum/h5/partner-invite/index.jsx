@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
-import Header from '@components/header';
 import List from '@components/list';
 import { Button, Toast, Avatar } from '@discuzq/design';
 import NoData from '@components/no-data';
@@ -119,14 +118,7 @@ class PartnerInviteH5Page extends React.Component {
     const { invitorName, invitorAvatar } = this.state;
     return (
       <List className={layout.page} allowRefresh={false}>
-        {
-          platform === 'h5'
-            ? <>
-                <Header/>
-                <HomeHeader hideInfo mode='join'/>
-              </>
-            : <Header/>
-        }
+        <HomeHeader hideInfo mode='join'/>
         <div className={layout.content}>
           {/* 站点信息 start */}
           <SiteInfo/>
