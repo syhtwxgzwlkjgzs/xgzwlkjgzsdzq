@@ -23,6 +23,7 @@ import { inject, observer } from 'mobx-react';
 import classNames from 'classnames';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
+import Toast from '@discuzq/design/dist/components/toast';
 
 import stringToColor from '@common/utils/string-to-color';
 import { diffDate } from '@common/utils/diff-date';
@@ -100,8 +101,17 @@ class Index extends Component {
   // 跳转用户中心
   toUserCenter = (e, canJump, item) => {
     e.stopPropagation();
-    // 后续用户中心做好后，需拼接用户id
-    canJump && Router.push({ url: `/user/${item.userId}` });
+    if (!item.userId) {
+      Toast.error({
+        content: '没有用户id',
+        hasMask: false,
+        duration: 1000,
+      });
+    } else {
+      // 后续用户中心做好后，需拼接用户id
+      canJump && Router.push({ url: `/user/${item.userId}` });
+    }
+    
   };
 
   // 跳转主题详情or私信

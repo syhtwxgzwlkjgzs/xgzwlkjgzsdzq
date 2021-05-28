@@ -2,13 +2,14 @@ import React from 'react';
 import UserCenterEditFindPayPwd from '../../../../components/user-center-edit-paypwd/find-paypwd/index';
 import HOCUserInfo from '@middleware/HOCUserInfo';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import HOCTencentCaptcha from '@middleware/HOCTencentCaptcha';
 
-function index() {
+function index(props) {
   return (
     <div>
-      <UserCenterEditFindPayPwd />
+      <UserCenterEditFindPayPwd {...props} />
     </div>
   )
 }
 
-export default HOCFetchSiteData(HOCUserInfo(index));
+export default HOCFetchSiteData(HOCUserInfo(HOCTencentCaptcha(index)));
