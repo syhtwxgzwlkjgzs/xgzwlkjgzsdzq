@@ -1,5 +1,4 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/_variable.scss';
 
 .content {
   padding: rem($padding-6n);
@@ -36,6 +35,7 @@
           line-height: rem(37);
           border-bottom: rem(1) solid $border-color;
           border-radius: 0;
+          padding-left: 0;
         }
         .dzq-icon {
           line-height: rem(50);
