@@ -25,7 +25,8 @@ class Index extends React.Component {
     const { user, site, index } = this.props;
     const defaultTitle = site.webConfig?.setSite?.siteName || ''
     const thread = index.threads?.pageData || []
-    const threadId = parseInt(res.target.id)
+    const from = res.target.dataset.from || ''
+    const threadId = parseInt(res.target.dataset.threadId)
     let threadTitle = ''
     for(let i of thread) {
       if(i.threadId == threadId) {
@@ -37,12 +38,12 @@ class Index extends React.Component {
     if (!user.isLogin()) {
       Toast.info({ content: '请先登录!' });
       goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
-      const promise = new Promise((res, rej) => {rej()})
+      const promise = Promise.reject()
       return {
         promise
       }
     } else {
-      if(res.target.offsetTop === 0) {
+      if(from && from === 'head') {
         return {
           title: defaultTitle,
           path: '/pages/index/index'
