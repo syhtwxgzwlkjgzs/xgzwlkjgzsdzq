@@ -80,6 +80,7 @@ const List = forwardRef(({
   const jumpToScrollTop = (scrollTop) => {
     if(scrollTop && scrollTop > 0) {
       listWrapper.current.scrollTop = scrollTop;
+      currentScrollTop.current = scrollTop;
     }
   };
 
