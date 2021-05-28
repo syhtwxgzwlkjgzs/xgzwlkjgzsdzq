@@ -149,7 +149,7 @@ const RenderThreadContent = inject('user')(
           {!canFreeViewPost && isAttachmentPay && !isSelf && !isPayed && (
             <View style={{ textAlign: 'center' }} onClick={onContentClick}>
               <Button className={styles.payButton} type="primary">
-                <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
+                <Icon className={styles.payIcon} name="GoldCoinOutlined" size={20}></Icon>
                 <View>支付{attachmentPrice}元查看附件内容</View>
               </Button>
             </View>
@@ -230,7 +230,7 @@ const RenderThreadContent = inject('user')(
           {!canFreeViewPost && isThreadPay && !isSelf && !isPayed && (
             <View style={{ textAlign: 'center' }} onClick={onContentClick}>
               <Button className={styles.payButton} type="primary">
-                <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
+                <Icon className={styles.payIcon} name="GoldCoinOutlined" size={20}></Icon>
                 支付{threadPrice}元查看剩余内容
               </Button>
             </View>
@@ -254,7 +254,7 @@ const RenderThreadContent = inject('user')(
               {isThreadPay && (
                 <Icon
                   className={classnames(styles.payIcon, isPayed && styles.actived)}
-                  name="DollarLOutlined"
+                  name="GoldCoinOutlined"
                   size={20}
                 ></Icon>
               )}
