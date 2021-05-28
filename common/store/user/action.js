@@ -392,13 +392,13 @@ class UserAction extends SiteStore {
     if (updateAvatarRes.code === 0) {
       this.userInfo.avatarUrl = updateAvatarRes.data.avatarUrl;
       this.userInfo = { ...this.userInfo };
-      return updateAvatarRes.data
+      return updateAvatarRes.data;
     }
 
     throw {
       Code: updateAvatarRes.code,
-      Msg: updateAvatarRes.msg
-    }
+      Msg: updateAvatarRes.msg,
+    };
   }
 
   /**
@@ -426,13 +426,13 @@ class UserAction extends SiteStore {
         this.userInfo.backgroundUrl = updateBackgroundRes.data.backgroundUrl;
         this.userInfo = { ...this.userInfo };
       }, 300);
-      return updateBackgroundRes.data
+      return updateBackgroundRes.data;
     }
 
     throw {
       Code: updateBackgroundRes.code,
-      Msg: updateBackgroundRes.msg
-    }
+      Msg: updateBackgroundRes.msg,
+    };
   }
 
   // FIXME: 这里报接口参数错误
