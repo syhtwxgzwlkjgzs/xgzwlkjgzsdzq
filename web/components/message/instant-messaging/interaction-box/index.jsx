@@ -10,8 +10,8 @@ import Emoji from '@components/editor/emoji';
 import styles from './index.module.scss';
 
 const InteractionBox = (props) => {
-  const { onSubmit, dialogBoxRef, platform, dialogId, threadPost, showEmoji, setShowEmoji } = props;
-  const { readDialogMsgList, dialogMsgList, createDialogMsg } = props.message;
+  const { onSubmit, dialogBoxRef, platform, dialogId, threadPost, showEmoji, setShowEmoji, username } = props;
+  const { readDialogMsgList, dialogMsgList, createDialogMsg, createDialog } = props.message;
 
   const [lastTimestamp, setLastTimestamp] = useState(0);
   const [typingValue, setTypingValue] = useState('');
@@ -41,16 +41,25 @@ const InteractionBox = (props) => {
 
 
   const submit = async (data) => {
-    const ret = await createDialogMsg({
-      dialogId,
-      ...data
-    });
+    let ret = {};
+    if (dialogId) {
+      ret = await createDialogMsg({
+        dialogId,
+        ...data,
+      });
+    }
+
+    if (!dialogId && username) {
+      ret = await createDialog({
+        recipientUsername: username,
+        ...data,
+      });
+    }
 
     if (ret.code === 0) {
       setTypingValue('');
       readDialogMsgList(dialogId);
     }
-
   };
 
   const doSubmitClick = async () => {
@@ -86,7 +95,7 @@ const InteractionBox = (props) => {
           const ret = await createAttachment(formData);
           const { code, data } = ret;
           if (code === 0) {
-            const url = `${data.file_path}${data.attachment}`;
+            const url = `https://discuzv3-dev.dnspod.dev/${data.file_path}${data.attachment}`;
             submit({imageUrl: url});
           } else {
 

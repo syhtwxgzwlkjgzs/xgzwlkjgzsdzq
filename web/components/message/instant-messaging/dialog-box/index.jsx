@@ -35,7 +35,7 @@ const DialogBox = (props) => {
   const messagesHistory = useMemo(() => {
     setTimeout(() => {
       scrollEnd();
-    }, 300);
+    }, 100);
     return dialogMsgList.list.map(item => ({
       timestamp: item.createdAt,
       userAvatar: item.user.avatar,
