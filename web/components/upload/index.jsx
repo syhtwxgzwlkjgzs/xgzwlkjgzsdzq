@@ -69,7 +69,6 @@ export default function DzqUpload(props) {
           return beforeUpload(cloneList, showFileList);
         }}
         onChange={(fileList) => {
-          debugger;
           onChange(fileList);
         }}
         customRequest={post}

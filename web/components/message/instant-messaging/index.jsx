@@ -15,14 +15,14 @@ class InstantMessaging extends React.Component {
   };
 
   render() {
-    const { messagesHistory = [], onSubmit, site } = this.props;
+    const { messagesHistory = [], onSubmit, site, dialogId } = this.props;
     const { dialogBoxRef } = this.state;
     const { platform } = site;
 
     return (
       <div className={platform === 'h5' ? styles.h5Page : styles.pcPage}>
-        <DialogBox shownMessages={messagesHistory} dialogBoxRef={dialogBoxRef} platform={platform} />
-        <InteractionBox onSubmit={onSubmit} dialogBoxRef={dialogBoxRef} platform={platform} />
+        <DialogBox platform={platform} dialogId={dialogId} />
+        <InteractionBox platform={platform} dialogId={dialogId} />
       </div>
     );
   }

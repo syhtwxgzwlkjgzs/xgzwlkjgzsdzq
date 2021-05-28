@@ -1,52 +1,60 @@
-import React, { createElement, useState } from 'react';
+import React, { createElement, useState, useRef, useEffect } from 'react';
 import { Button, Textarea, Icon, Input, Upload } from '@discuzq/design';
 import ImageUpload from '@components/thread-post/image-upload';
 import { ATTACHMENT_TYPE, ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post';
 // import Upload from '@components/upload';
+import { createAttachment } from '@common/server';
+import { inject, observer } from 'mobx-react';
+import Emoji from '@components/editor/emoji';
 
 import styles from './index.module.scss';
 
 const InteractionBox = (props) => {
-  const { onSubmit, dialogBoxRef, platform } = props;
+  const { onSubmit, dialogBoxRef, platform, dialogId, threadPost } = props;
+  const { readDialogMsgList, dialogMsgList, createDialogMsg } = props.message;
+
   const [lastTimestamp, setLastTimestamp] = useState(0);
   const [typingValue, setTypingValue] = useState('');
+  const [showEmoji, setShowEmoji] = useState(false);
 
-  const scrollEnd = () => {
-    dialogBoxRef.current.scrollTop = dialogBoxRef.current.scrollHeight;
-  };
 
-  const checkToShowCurrentMsgTime = (curTimestamp) => {
-    const DISPLAY_GAP_IN_MINS = 3;
-    const diff = new Date(curTimestamp).getMinutes() - new Date(lastTimestamp).getMinutes();
-    if (diff < DISPLAY_GAP_IN_MINS) {
-      return false;
-    // eslint-disable-next-line no-else-return
-    } else {
-      setLastTimestamp(curTimestamp);
-      return true;
+  const uploadRef = useRef(null);
+
+  // const checkToShowCurrentMsgTime = (curTimestamp) => {
+  //   const DISPLAY_GAP_IN_MINS = 3;
+  //   const diff = new Date(curTimestamp).getMinutes() - new Date(lastTimestamp).getMinutes();
+  //   if (diff < DISPLAY_GAP_IN_MINS) {
+  //     return false;
+  //   // eslint-disable-next-line no-else-return
+  //   } else {
+  //     setLastTimestamp(curTimestamp);
+  //     return true;
+  //   }
+  // };
+
+  useEffect(() => {
+    if (!threadPost.emojis.length) {
+      threadPost.fetchEmoji();
     }
+  }, []);
+
+
+  const submit = async (data) => {
+    const ret = await createDialogMsg({
+      dialogId,
+      ...data
+    });
+
+    if (ret.code === 0) {
+      setTypingValue('');
+      readDialogMsgList(dialogId);
+    }
+
   };
 
   const doSubmitClick = async () => {
-    if (!typingValue || typeof onSubmit !== 'function') return;
-    const currentTime = new Date().getTime();
-    const msgPiece = {
-      timestamp: currentTime,
-      displayTimePanel: checkToShowCurrentMsgTime(currentTime),
-      textType: 'string',
-      text: typingValue,
-      ownedBy: 'myself',
-    };
-
-    try {
-      const success = await onSubmit(msgPiece);
-      if (success) {
-        setTypingValue('');
-        scrollEnd();
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    if (!typingValue) return;
+    submit({messageText: typingValue});
   };
 
   const doPressEnter = (e) => {
@@ -55,37 +63,45 @@ const InteractionBox = (props) => {
   };
 
 
-  // 发送图片
-  const uploadImage = (
-    <Upload
-      accept={ACCEPT_IMAGE_TYPES.join(',')}
-      limit={1}
-      fileList={[]}
-      onComplete={() => {
-        debugger;
-      }}
-      onChange={(e) => {
-        console.log(e);
-        debugger;
-      }}
-      isCustomUploadIcon={true}
-    >
-      <Icon name="PictureOutlinedBig" size={20} />
-    </Upload>
-  );
+  // 触发图片选择
+  const uploadImage = () => {
+    uploadRef.current.click();
+  };
 
   return (
     <>
+      <input
+        style={{display: 'none'}}
+        type="file"
+        ref={uploadRef}
+        onChange={async (e) => {
+          const formData = new FormData();
+          formData.append('file', e.target.files[0]);
+          formData.append('type', 1);
+          const ret = await createAttachment(formData);
+          const { code, data } = ret;
+          if (code === 0) {
+            const url = `${data.file_path}${data.attachment}`;
+            submit({imageUrl: url});
+          } else {
+
+          }
+        }}
+        // multiple='1'
+        accept={ACCEPT_IMAGE_TYPES.join(',')}
+      />
+
       {platform === 'h5' && (
-        <div className={styles.h5InteractionBox}>
+        <>
+          <div className={styles.h5InteractionBox} style={{bottom: showEmoji ? '200px' : 0}}>
           <div className={styles.inputWrapper}>
             <Input value={typingValue} placeholder=" 请输入内容" onChange={(e) => setTypingValue(e.target.value)} />
             <div className={styles.tools}>
               <div>
-                <Icon name="SmilingFaceOutlined" size={20} />
+                <Icon name="SmilingFaceOutlined" size={20} onClick={() => {setShowEmoji(true);}} />
               </div>
               <div className={styles.pictureUpload}>
-                {uploadImage}
+                <Icon name="PictureOutlinedBig" size={20} onClick={uploadImage} />
               </div>
             </div>
           </div>
@@ -95,6 +111,15 @@ const InteractionBox = (props) => {
             </Button>
           </div>
         </div>
+        <Emoji
+          show={showEmoji}
+          emojis={threadPost.emojis}
+          onClick={
+            (emoji) => {
+              this.props.handleEmojiClick(emoji);
+            }}
+          />
+        </>
       )}
       {platform === 'pc' && (
         <div className={styles.pcInteractionBox}>
@@ -107,7 +132,7 @@ const InteractionBox = (props) => {
                 handleUploadChange={() => {}}
                 isCustomUploadIcon={true}
               >
-                <Icon name="PictureOutlinedBig" size={20} />
+                <Icon name="PictureOutlinedBig" size={20} onClick={uploadImage} />
               </Upload>
             </div>
           </div>
@@ -132,4 +157,4 @@ const InteractionBox = (props) => {
   );
 };
 
-export default InteractionBox;
+export default inject('message', 'user', 'threadPost')(observer(InteractionBox));
