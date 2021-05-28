@@ -28,6 +28,8 @@ class Index extends React.Component {
     return {
       serverIndex: {
         threads: threads && threads.code === 0 ? threads.data : null,
+        totalPage: threads && threads.code === 0 ? threads.data.totalPage : null,
+        totalCount: threads && threads.code === 0 ? threads.data.totalCount : null,
       },
     };
   }
@@ -36,10 +38,15 @@ class Index extends React.Component {
     super(props);
     this.state = {
       firstLoading: true, // 首次加载状态判断
+      totalCount: 0,
+      page: 1,
     }
     const { serverIndex, index } = this.props;
     if (serverIndex && serverIndex.threads) {
       index.setThreads(serverIndex.threads);
+      this.state.page = 2;
+      this.state.totalPage = serverIndex.totalPage;
+      this.state.totalCount = serverIndex.totalCount;
       this.state.firstLoading = false;
     } else {
       index.setThreads(null);
@@ -50,13 +57,23 @@ class Index extends React.Component {
     const { index } = this.props;
     const hasThreadsData = !!index.threads;
     if (!hasThreadsData) {
-      await index.getReadThreadList({
+      const threadsResp = await index.getReadThreadList({
         filter: {
           complex: 4,
         },
         perPage: this.perPage,
         page: 1,
       });
+      this.setState({
+        totalCount: threadsResp.totalCount,
+        totalPage: threadsResp.totalPage,
+      });
+
+      if (this.state.page <= threadsResp.totalPage) {
+        this.setState({
+          page: this.state.page + 1,
+        });
+      }
       this.setState({
         firstLoading: false
       })
@@ -85,13 +102,18 @@ class Index extends React.Component {
 
   dispatch = async () => {
     const { index } = this.props;
-    await index.getReadThreadList({
+    const threadsResp = await index.getReadThreadList({
       filter: {
         complex: 4,
       },
       perPage: this.perPage,
       page: this.page,
     });
+    if (this.state.page <= threadsResp.totalPage) {
+      this.setState({
+        page: this.state.page + 1,
+      });
+    }
   };
 
   render() {
@@ -103,7 +125,15 @@ class Index extends React.Component {
       return <IndexPCPage firstLoading={firstLoading} dispatch={this.dispatch} />;
     }
 
-    return <IndexH5Page firstLoading={firstLoading} dispatch={this.dispatch} />;
+    return (
+      <IndexH5Page
+        firstLoading={firstLoading}
+        page={this.state.page}
+        totalPage={this.state.totalPage}
+        totalCount={this.state.totalCount}
+        dispatch={this.dispatch}
+      />
+    );
   }
 }
 

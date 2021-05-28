@@ -5,7 +5,7 @@ import { withRouter } from 'next/router';
 import Header from '@components/header';
 import List from '@components/list';
 import NoData from '@components/no-data';
-import { Button } from '@discuzq/design';
+import { Button, Spin } from '@discuzq/design';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import throttle from '@common/utils/thottle';
@@ -21,12 +21,14 @@ class Index extends React.Component {
       isTop: false, // 列表位置
       loading: false,
       perPage: 20, // 定义每页显示条数
+      height: '100%',
     };
   }
 
   async componentDidMount() {
     this.setState({
       loading: false,
+      height: window.outerHeight - 40,// header 是 40px，留出 2px ，用以触发下拉事件
     });
     await this.props.user.getUserShieldList();
   }
@@ -58,31 +60,45 @@ class Index extends React.Component {
   render() {
     const { user } = this.props;
     const { userShield = [], userShieldPage, userShieldTotalCount, userShieldTotalPage } = user || {};
-    //
     return (
-      <BaseLayout
-        immediateCheck={false}
-        showPullDown={false}
-        onRefresh={this.loadMore}
-        noMore={userShieldTotalPage < userShieldPage}
-      >
+      <div className={styles.shieldBox}>
+        <Header />
         <div className={styles.titleBox}>{`共有${userShield.length}位用户`}</div>
-        {userShield.map((item, index) => (
-          <div className={styles.haieldImg} key={index}>
-            <div
-              className={styles.haieldImgBox}
-              onClick={() => {
-                this.handleOnClick(item);
-              }}
-            >
-              <div className={styles.haieldImgHead}>
-                <Avatar className={styles.img} image={item.avatar} name={item.username} userId={item.denyUserId} />
-                <p className={styles.haieldName}>{item.username}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </BaseLayout>
+        {
+          !this.props.firstLoading && (
+            <div className={styles.spinLoading}><Spin type="spinner">加载中...</Spin></div>
+          )
+        }
+        {
+          userShield?.length
+            ? (
+              <List
+                height={this.state.height}
+                immediateCheck={false}
+                showPullDown={false}
+                onRefresh={this.loadMore}
+                noMore={userShieldTotalPage < userShieldPage}
+              >
+                {userShield.map((item, index) => (
+                  <div className={styles.haieldImg} key={index}>
+                    <div
+                      className={styles.haieldImgBox}
+                      onClick={() => {
+                        this.handleOnClick(item);
+                      }}
+                    >
+                      <div className={styles.haieldImgHead}>
+                        <Avatar className={styles.img} image={item.avatar} name={item.username} userId={item.denyUserId} />
+                        <p className={styles.haieldName}>{item.username}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </List>
+            )
+            : <>{!this.props.firstLoading && <NoData className={styles.noDataList} />}</>
+        }
+      </div>
     );
   }
 }
