@@ -59,7 +59,7 @@ class H5OthersPage extends React.Component {
         showHeader={true}
         showTabBar={false}
         immediateCheck={true}
-        onRefresh={this.fetchTargetUserThreads}
+        onRefresh={targetUserThreads && targetUserThreads.length > 0 ? this.fetchTargetUserThreads : null}
         noMore={targetUserThreadsTotalPage < targetUserThreadsPage}
       >
         <div className={styles.mobileLayout}>
