@@ -6,7 +6,7 @@ import { ATTACHMENT_TYPE, ACCEPT_IMAGE_TYPES } from '@common/constants/thread-po
 import { createAttachment } from '@common/server';
 import { inject, observer } from 'mobx-react';
 import Emoji from '@components/editor/emoji';
-
+import Router from '@discuzq/sdk/dist/router';
 import styles from './index.module.scss';
 
 const InteractionBox = (props) => {
@@ -47,6 +47,10 @@ const InteractionBox = (props) => {
         dialogId,
         ...data,
       });
+      if (ret.code === 0) {
+        setTypingValue('');
+        readDialogMsgList(dialogId);
+      }
     }
 
     if (!dialogId && username) {
@@ -54,11 +58,10 @@ const InteractionBox = (props) => {
         recipientUsername: username,
         ...data,
       });
-    }
-
-    if (ret.code === 0) {
-      setTypingValue('');
-      readDialogMsgList(dialogId);
+      if (ret.code === 0) {
+        setTypingValue('');
+        Router.push(`/message?page=chat&dialogId=${ret.data.dialogId}`);
+      }
     }
   };
 
@@ -95,11 +98,8 @@ const InteractionBox = (props) => {
           const ret = await createAttachment(formData);
           const { code, data } = ret;
           if (code === 0) {
-            const url = `https://discuzv3-dev.dnspod.dev/${data.file_path}${data.attachment}`;
-            submit({imageUrl: url});
-          } else {
-
-          }
+            submit({ imageUrl: data.url });
+          } else {}
         }}
         // multiple='1'
         accept={ACCEPT_IMAGE_TYPES.join(',')}
