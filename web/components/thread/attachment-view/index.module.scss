@@ -49,11 +49,12 @@
   .size {
     color: var(--color-text-regular);
     font-size: rem($font-size-label);
-    margin-top: rem(4);
+    line-height: rem(17);
   }
   .containerIcon {
     color: var(--color-success);
     font-size: rem(20);
+    line-height: rem(17);
   }
   .content {
     color: var(--color-text-primary);
