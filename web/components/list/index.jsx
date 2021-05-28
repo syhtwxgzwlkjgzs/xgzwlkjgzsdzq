@@ -37,6 +37,8 @@ const List = forwardRef(({
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
+  console.log(immediateCheck);
+
   useEffect(() => {
     if (noMore) {
       setIsLoading(true);
@@ -47,6 +49,7 @@ const List = forwardRef(({
 
   useEffect(() => {
     // 初始化的时候，是否立即请求一次
+    console.log(immediateCheck);
     if (immediateCheck) {
       onTouchMove({ isFirst: true });
     }
@@ -59,14 +62,14 @@ const List = forwardRef(({
       jumpToScrollTop,
       currentScrollTop,
       isLoading,
-      resetList
+      resetList,
     }),
   );
 
   const resetList = () => {
-    setIsLoading(false)
-    setIsError(false)
-  }
+    setIsLoading(false);
+    setIsError(false);
+  };
 
   const throttle = (fn, delay) => {
     let timer = null;
