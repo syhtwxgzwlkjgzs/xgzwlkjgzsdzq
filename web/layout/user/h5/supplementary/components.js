@@ -37,7 +37,6 @@ export function CreateInput(field, layout) {
         </div>
         <Input
           className={layout.input_value}
-          focus={true}
           value={field.value}
           placeholder={fieldsDesc}
           onChange={(e) => {
