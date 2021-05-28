@@ -670,8 +670,8 @@ class ThreadH5Page extends React.Component {
 
         {/* 底部操作栏 */}
         {isReady && isApproved && (
-          <View className={layout.footerContainer}>
-            <View className={layout.footer}>
+          <View className={classNames(layout.footerContainer, this.state.showCommentInput && layout.zindex)}>
+            <View className={classNames(layout.footer, this.state.showCommentInput && layout.zindex)}>
               {/* 评论区触发 */}
               <View className={footer.inputClick} onClick={() => this.onInputClick()}>
                 <Input
