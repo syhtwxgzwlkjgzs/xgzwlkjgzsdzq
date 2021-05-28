@@ -23,20 +23,22 @@ page {
       justify-content: flex-start;
       align-items: center;
       width: 100%;
-      height: 44px;
-      margin-top: $margin-5n;
+      height: 64px;
+      padding-top: $padding-5n;
       font-size: $font-size-middle;
       color: $black;
       background: $white;
 
-      .topBar-icon {
-        width: 40px;
+      .btn-back {
         height: 100%;
         display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding-right: 20px;
 
-        :global{
-          .dzq-icon{
-            margin:auto;
+        :global {
+          .dzq-icon {
+            padding: 0 10px;
             transform: rotate(180deg);
             font-size: $font-size-middle;
             color: $black;

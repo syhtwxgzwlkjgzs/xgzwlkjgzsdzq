@@ -538,13 +538,9 @@ class Index extends Component {
         <View className={styles['container']}>
           {/* 自定义顶部导航条 */}
           <View className={styles.topBar}>
-            <View
-              className={styles['topBar-icon']}
-              onClick={() => this.handlePageJump(false)}
-            >
-              <Icon name="RightOutlined" />
+            <View className={styles['btn-back']} onClick={() => this.handlePageJump(false)}>
+              <Icon name="RightOutlined" />发帖
             </View>
-            发帖
           </View>
 
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
