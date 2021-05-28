@@ -10,7 +10,6 @@ import Button from '@discuzq/design/dist/components/button/index';
 import styles from './index.module.scss';
 
 import List from '@components/list';
-import throttle from '@common/utils/thottle';
 
 import stringToColor from '@common/utils/string-to-color';
 
@@ -74,6 +73,7 @@ class AtSelect extends Component {
       keywords: val,
       checkUser: [],
       page: 1,
+      finish: false,
     });
     this.searchInput();
   }
@@ -138,22 +138,24 @@ class AtSelect extends Component {
 
       return (
         <View className={styles['at-item']} key={userId}>
-          <View className={styles.avatar}>
-            {avatar
-              ? <Avatar image={avatar} />
-              : <Avatar
-                text={username}
-                style={{
-                  backgroundColor: `#${this.getBackgroundColor(username)}`
-                }}
-              />
-            }
+          <View className={styles['at-item__inner']} >
+            <View className={styles.avatar}>
+              {avatar
+                ? <Avatar image={avatar} />
+                : <Avatar
+                  text={username}
+                  style={{
+                    backgroundColor: `#${this.getBackgroundColor(username)}`
+                  }}
+                />
+              }
+            </View>
+            <View className={styles.info}>
+              <View className={styles.username}>{username}</View>
+              <View className={styles.group}>{groupName}</View>
+            </View>
+            <Checkbox name={username}></Checkbox>
           </View>
-          <View className={styles.info}>
-            <View className={styles.username}>{username}</View>
-            <View className={styles.group}>{groupName}</View>
-          </View>
-          <Checkbox name={username}></Checkbox>
         </View>
       )
     })
@@ -167,14 +169,16 @@ class AtSelect extends Component {
         {/* top */}
         <View className={styles.header}>
           <View className={styles['input-box']}>
+            <View className={styles['icon-box']}>
+              <Icon className={styles['search-icon']} name="SearchOutlined" size={16}></Icon>
+            </View>
             <Input
               value={keywords}
-              icon="SearchOutlined"
-              placeholder='搜索用户'
-              onChange={e => throttle(this.updateKeywords(e.target.value), 30)}
+              placeholder='选择好友或直接输入圈友'
+              onChange={e => this.updateKeywords(e.target.value)}
             />
             {keywords &&
-              <View className={styles.delete} onClick={() => this.updateKeywords()}>
+              <View className={styles['icon-box']} onClick={() => this.updateKeywords()}>
                 <Icon className={styles['delete-icon']} name="WrongOutlined" size={16}></Icon>
               </View>
             }
@@ -197,13 +201,13 @@ class AtSelect extends Component {
           </List>
         </Checkbox.Group>
 
-        {/* 选择按钮 */}
+        {/* 确认按钮 */}
         <View className={styles['btn-container']}>
           <Button
             className={checkUser.length > 0 ? styles.selected : ''}
             onClick={() => this.submitSelect()}
           >
-            {checkUser.length ? `@ 已选(${checkUser.length})` : '尚未选'}
+            {checkUser.length ? `@ 已选 (${checkUser.length})` : '尚未选'}
           </Button>
         </View>
       </View >

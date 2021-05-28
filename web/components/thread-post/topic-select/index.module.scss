@@ -1,4 +1,9 @@
 @import "@common/styles/index.scss";
+@mixin flex() {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .popup {
   :global {
     .dzq-popup__overlay {
@@ -19,9 +24,7 @@
   background: $body-bg-color;
 
   .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include flex();
     width: 100%;
     padding: $padding-4n $padding-4n $padding-2n;
     background: $white;
@@ -29,29 +32,32 @@
 
     .input-box {
       flex: 1;
-      position: relative;
+      @include flex();
+      padding: 0 $padding-2n;
+      background: $text-bg-color2;
+      opacity: 0.78;
+      border-radius: $border-radius-small;
 
-      .delete {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 40px;
+      .icon-box {
+        flex: 0 0 32px;
+        height: 32px;
         height: 36px;
         display: flex;
-        align-items: center;
-
-        .delete-icon {
-          margin-left: 8px;
-          padding-top: 3px;
-          color: $text-color-placeholder;
-        }
+      }
+      .search-icon {
+        margin: auto;
+        color: $icon-color-light;
+      }
+      .delete-icon {
+        margin: auto;
+        color: $disabled-color;
       }
     }
 
     .btn-cancel {
       flex-basis: 44px;
       font-size: $font-size-primary;
-      color: #8490a8;
+      color: $text-color-secondary;
       text-align: right;
     }
   }
@@ -59,23 +65,17 @@
   :global {
     .dzq-input {
       width: 100%;
-      box-sizing: border-box;
+      background: $text-bg-color2;
+      opacity: 0.78;
 
       .dzq-input__inner {
         width: 100%;
-        height: 40px;
-        padding: 0 40px;
+        padding: 0;
         font-size: $font-size-middle;
         color: $text-color-primary;
         background: $text-bg-color2;
+        opacity: 0.78;
         border: none;
-      }
-
-      .dzq-icon-SearchOutlined {
-        left: 8px;
-        top: 50%;
-        margin-top: -18px;
-        color: $icon-color-light !important;
       }
 
       .input-placeholder {
@@ -85,26 +85,26 @@
   }
 
   .topic-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: rem($padding-4n);
-    line-height: 20px;
     background: $white;
-    border-bottom: $border-solid-1;
+
+    .topic-item__inner {
+      @include flex();
+      padding: rem($padding-4n) 0;
+      margin: 0 rem($margin-4n);
+      border-top: $border-solid-1;
+    }
+    &:first-child .topic-item__inner {
+      border-top: none;
+    }
 
     .item-left {
-      display: flex;
-      align-items: center;
       max-width: rem(240px);
-      @include text-ellipsis;
 
       .name {
-        max-width: 197px;
         line-height: 20px;
         font-size: $font-size-primary;
         color: $text-color-primary;
-        word-break: break-all;
+        @include lamp-clamp(2);
       }
     }
 
@@ -121,13 +121,21 @@
     height: 500px;
     min-height: 50vh;
 
-    .input-box {
-      border-bottom: $border-solid-1;
+    .header {
+      padding-bottom: 0;
+      .input-box {
+        width: 100%;
+        background: $white;
+        padding: 0 0 $padding-2n 0;
+        border-bottom: $border-solid-1;
+        opacity: 1;
+      }
     }
 
     :global {
       .dzq-input {
         box-sizing: border-box;
+        background: $white;
 
         .dzq-input__inner {
           background: $white;
@@ -144,7 +152,7 @@
     }
 
     .topic-item {
-      padding-right: $margin-4n;
+      padding-right: $padding-2n;
     }
   }
 }
