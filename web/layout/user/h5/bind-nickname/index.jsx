@@ -36,10 +36,8 @@ class BindNicknameH5Page extends React.Component {
         const { needToCompleteExtraInfo: isNeedToCompleteExtraInfo } = router.query;
 
         // 扩展信息的判断跳转
-        if (!isExtFieldsOpen(site)) return;
-
         const needToCompleteExtraInfo = this.props.commonLogin.needToCompleteExtraInfo || isNeedToCompleteExtraInfo;
-        if (needToCompleteExtraInfo) {
+        if (isExtFieldsOpen(site) && needToCompleteExtraInfo) {
           this.props.router.push('/user/supplementary');
           return;
         }
