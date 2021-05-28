@@ -82,11 +82,12 @@ const BaseLayout = (props) => {
     //       window.removeEventListener('resize', updateSize);
     //   };
     // }
-    if (listRef?.current && pageName && baselayout[pageName] > 0) {
+    if (listRef?.current && pageName) {
       if(jumpTo > 0) {
         baselayout[pageName] = jumpTo;
         listRef.current.jumpToScrollTop(jumpTo);
-      } else if (baseLayoutWhiteList.indexOf(pageName) !== -1) {
+      } else if (baselayout[pageName] > 0 &&
+          baseLayoutWhiteList.indexOf(pageName) !== -1) {
         listRef.current.jumpToScrollTop(baselayout[pageName]);
       }
     }
