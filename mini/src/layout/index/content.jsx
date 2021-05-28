@@ -198,7 +198,7 @@ class IndexH5Page extends React.Component {
   renderTabs = () => {
     const { index } = this.props;
     const { currentIndex, fixedTab, navBarHeight } = this.state;
-    const { categories = [], hiddenTabBar } = index;
+    const { categories = [] } = index;
     const newCategories = this.handleCategories(categories);
 
     return (

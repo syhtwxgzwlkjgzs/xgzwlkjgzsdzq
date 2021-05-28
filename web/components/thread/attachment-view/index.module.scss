@@ -49,7 +49,7 @@
   .size {
     color: var(--color-text-regular);
     font-size: rem($font-size-label);
-    margin-top: rem(4);
+    line-height: rem(17);
   }
   .containerIcon {
     color: var(--color-success);
@@ -61,6 +61,7 @@
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: rem(17);
   }
   .a {
     position: absolute;
