@@ -85,13 +85,22 @@
 }
 
 .errorMsgWrapper {
+  width: 100%;
+  height: 44px;
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: var(--color-error9);
+  .tipsIcon {
+    color: $error-color;
+  }
   .errorMessage {
-    color: $text-color-error;
+    color: $error-color;
     font-size: $font-size-base;
     line-height: $font-line-height-base;
-    margin-bottom: 16px;
-    padding: 0 32px;
+    margin-left: $margin-2n;
   }
 }
