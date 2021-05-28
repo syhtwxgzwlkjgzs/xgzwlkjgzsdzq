@@ -121,6 +121,7 @@
   .uploadBgUrl {
     @include uploadStyles();
     z-index: 0;
+    border-radius: 0;
     .uploadText {
       margin-left: rem($margin-2n);
     }
