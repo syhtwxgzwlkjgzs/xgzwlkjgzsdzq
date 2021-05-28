@@ -7,8 +7,34 @@
 }
 
 .tabs {
-  width: 100%;;
+  max-width: 572px;
   margin: 0 auto;
+  border-top-left-radius: $border-radius-big;
+  border-top-right-radius: $border-radius-big;
+  :global(.dzq-tabs__bar.is-card) {
+    display: flex;
+    justify-content: space-between;
+    box-shadow: none;
+    padding-left: 4px;
+    height: 48px;
+  }
+  :global {
+    .dzq-tabs__panel {
+      border-top: 1px solid rgba(238, 238, 238, 0.75);
+
+    }
+    .dzq-tabs__item {
+      justify-content: flex-start;
+      flex: none;
+      padding: 0 12px;
+    }
+    .dzq-tabs__item.is-active {
+      font-weight: 600;
+    }
+    .dzq-tabs__scroll {
+      width: auto;
+    }
+  }
 }
 
 .tabIcon {
@@ -23,8 +49,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  height: rem(16);
 
-  .title {
-    margin: 0 4px;
+  .icon {
+    margin-right: 8px;
   }
+  .title {
+    line-height: 20px;
+    margin-right: 5px;
+  }
+  .num {
+  }
+}
+
+.spinner {
+  height: 70vh;
+  width: 100%;
+  color: var(--color-text-placeholder);
 }

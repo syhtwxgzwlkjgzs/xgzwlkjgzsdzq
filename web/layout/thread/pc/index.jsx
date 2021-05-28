@@ -85,6 +85,11 @@ class ThreadPCPage extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    // 清空数据
+    this.props?.thread && this.props.thread.reset();
+  }
+
   // 加载评论列表
   async loadCommentList() {
     const { isCommentReady } = this.props.thread;
@@ -315,12 +320,13 @@ class ThreadPCPage extends React.Component {
   // 创建评论
   async createComment(val) {
     const id = this.props.thread?.threadData?.id;
+
     const params = {
       id,
       content: val,
       postId: this.props.thread?.threadData?.postId,
       sort: this.commentDataSort, // 目前的排序
-      isNoMore: false,
+      isNoMore: this.props?.thread?.isNoMore,
       attachments: [],
     };
 
@@ -446,15 +452,15 @@ class ThreadPCPage extends React.Component {
     const { title = '' } = this.props.thread?.threadData || {};
     h5Share({ title, path: `thread/${this.props.thread?.threadData?.threadId}` });
 
-    // const id = this.props.thread?.threadData?.id;
+    const id = this.props.thread?.threadData?.id;
 
-    // const { success, msg } = await this.props.thread.shareThread(id);
+    const { success, msg } = await this.props.thread.shareThread(id);
 
-    // if (!success) {
-    //   Toast.error({
-    //     content: msg,
-    //   });
-    // }
+    if (!success) {
+      Toast.error({
+        content: msg,
+      });
+    }
   }
 
   // 点击收藏icon
@@ -678,7 +684,7 @@ class ThreadPCPage extends React.Component {
             <div className={layout.title}>编辑评论</div>
             <div className={layout.user}>
               <UserInfo
-                name={this?.comment?.user?.username || ''}
+                name={this?.comment?.user?.nickname || ''}
                 avatar={this?.comment?.user?.avatar || ''}
                 time={`${this?.comment?.updatedAt}` || ''}
                 userId={this?.comment?.user?.userId}

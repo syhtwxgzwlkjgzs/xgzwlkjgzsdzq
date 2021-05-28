@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
-import { Input, Button, Icon } from '@discuzq/design';
+import Input from '@discuzq/design/dist/components/input/index';
+import Button from '@discuzq/design/dist/components/button/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import { observer, inject } from 'mobx-react';
 import classNames from 'classnames';
 import styles from './index.module.scss';
@@ -15,17 +17,17 @@ class RewardQa extends Component {
     super();
     this.state = {
       money: '', // 悬赏金额
-      selectedTime: '', // 悬赏时间
+      times: '', // 悬赏时间
       initValue: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 时间选择框初始值
     };
     this.timeRef = React.createRef();
   }
 
   componentDidMount() { // 回显悬赏信息
-    const { rewardQa: { value, expiredAt } } = this.props.threadPost.postData;
-    value && expiredAt && this.setState({
+    const { rewardQa: { value, times } } = this.props.threadPost.postData;
+    value && times && this.setState({
       money: value,
-      selectedTime: expiredAt,
+      times: times,
     })
   }
 
@@ -41,7 +43,7 @@ class RewardQa extends Component {
 
   onConfirm = (val) => { // 监听时间选中
     this.setState({
-      selectedTime: val
+      times: val
     });
   };
 
@@ -52,12 +54,12 @@ class RewardQa extends Component {
   handleConfirm = () => { // 确认悬赏
     if (this.checkMoney() && this.checkTime()) {
       // 更新store
-      const { money, selectedTime } = this.state;
+      const { money, times } = this.state;
       const { setPostData } = this.props.threadPost;
       setPostData({
         rewardQa: {
           value: parseFloat(money),
-          expiredAt: selectedTime,
+          times: times,
         }
       })
       // 返回上一页
@@ -88,8 +90,8 @@ class RewardQa extends Component {
   }
 
   checkTime = () => {
-    const { selectedTime } = this.state;
-    if (!selectedTime) {
+    const { times } = this.state;
+    if (!times) {
       Taro.showToast({
         title: '请选择悬赏时间',
         icon: 'none',
@@ -97,7 +99,7 @@ class RewardQa extends Component {
       })
       return false;
     }
-    const selectTime = (new Date(selectedTime)).getTime();
+    const selectTime = (new Date(times)).getTime();
     const diffTime = selectTime - Date.now();
     if (diffTime < 86400000) {
       Taro.showToast({
@@ -111,7 +113,7 @@ class RewardQa extends Component {
   }
 
   render() {
-    const { money, selectedTime } = this.state;
+    const { money, times } = this.state;
 
     return (
       <View className={styles.wrapper}>
@@ -135,11 +137,11 @@ class RewardQa extends Component {
             <View
               className={classNames(
                 styles['selected-time'],
-                !selectedTime && styles['default-time']
+                !times && styles['default-time']
               )}
               onClick={this.openTimePicker}
             >
-              {selectedTime || '请选择悬赏时间'}
+              {times || '请选择悬赏时间'}
             </View>
             <View className={styles['time-arrow']}>
               <Icon name="RightOutlined" size={10} />

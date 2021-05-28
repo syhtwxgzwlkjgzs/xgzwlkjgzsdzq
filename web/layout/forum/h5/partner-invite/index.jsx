@@ -5,7 +5,7 @@ import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import List from '@components/list';
-import { Button } from '@discuzq/design';
+import { Button, Toast, Avatar } from '@discuzq/design';
 import NoData from '@components/no-data';
 import SectionTitle from '@components/section-title';
 import { get } from '@common/utils/get';
@@ -13,43 +13,118 @@ import ActiveUsers from '../../../search/h5/components/active-users';
 import PopularContents from '../../../search/h5/components/popular-contents';
 import layout from './index.module.scss';
 import SiteInfo from '../site-info';
-import inviteDetail from '@server';
+import { inviteDetail } from '@server';
+import goToLoginPage from '@common/utils/go-to-login-page';
+import PayBox from '@components/payBox';
 
 @inject('site')
 @inject('index')
 @inject('forum')
 @inject('search')
+@inject('user')
 @observer
 class PartnerInviteH5Page extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      invitorName: '',
+      invitorAvatar: '/dzq-img/login-user.png',
+    }
+  }
   async componentDidMount() {
-    const { forum, search } = this.props;
-    const usersList = await forum.useRequest('readUsersList', {
-      params: {
-        filter: {
-          hot: 1,
+    try {
+      const { forum, search } = this.props;
+      const usersList = await forum.useRequest('readUsersList', {
+        params: {
+          filter: {
+            hot: 1,
+          },
         },
-      },
-    });
-    const threadList = await search.getThreadList();
+      });
+      const threadList = await search.getThreadList();
+      const { inviteCode } = this.props.router.query;
+      const inviteResp = await inviteDetail({
+        params: {
+          code: inviteCode
+        }
+      });
+      const nickname = get(inviteResp, 'data.user.nickname', '');
+      const avatar = get(inviteResp, 'data.user.avatar', '');
+      this.setState({
+        invitorName: nickname,
+        invitorAvatar: avatar
+      });
 
-    forum.setUsersPageData(usersList);
-    forum.setThreadsPageData(threadList);
+      forum.setUsersPageData(usersList);
+      forum.setThreadsPageData(threadList);
+    } catch (e) {
+      Toast.error({
+        content: e.Message,
+        hasMask: false,
+        duration: 1000,
+      });
+    }
   }
 
   onPostClick = data => console.log('post click', data);
 
   onUserClick = data => console.log('user click', data);
 
+  handleJoinSite = () => {
+    const { user, site } = this.props;
+    if (!user?.isLogin()) {
+      goToLoginPage({ url: '/user/login', query: { inviteCode: this.inviteCode } });
+      return;
+    }
+    const { setSite: { siteMode, sitePrice, siteName } = {} } = site.webConfig;
+
+    if (siteMode === 'pay' && user.paid === false) {
+      PayBox.createPayBox({
+        data: {      // data 中传递后台参数
+          amount: sitePrice,
+          title: siteName,
+          type: 1, // 付费注册
+        },
+        isAnonymous: false, // 是否匿名
+        success: (orderInfo) => {
+          Toast.success({
+            content: `订单 ${orderInfo.orderSn} 支付成功, 即将进入站点`,
+            hasMask: false,
+            duration: 3000,
+          });
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 3100);
+        }, // 支付成功回调
+        failed: (orderInfo) => {
+          Toast.error({
+            content: `订单 ${orderInfo.orderSn} 支付失败`,
+            hasMask: false,
+            duration: 2000,
+          });
+        }, // 支付失败回调
+        completed: (orderInfo) => {}, // 支付完成回调(成功或失败)
+      });
+      return;
+    }
+    window.location.href = '/';
+  }
+
   render() {
-    const { site, forum, router } = this.props;
-    const { inviteCode = '我是邀请码' } = router.query;
-    const { platform } = site;
+    const { site, forum } = this.props;
+    const { inviteCode } = this.props.router.query;
+    const { platform, webConfig } = site;
+    const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
     const { usersPageData, threadsPageData } = forum;
+    const { invitorName, invitorAvatar } = this.state;
     return (
       <List className={layout.page} allowRefresh={false}>
         {
           platform === 'h5'
-            ? <HomeHeader/>
+            ? <>
+                <Header/>
+                <HomeHeader hideInfo mode='join'/>
+              </>
             : <Header/>
         }
         <div className={layout.content}>
@@ -80,15 +155,23 @@ class PartnerInviteH5Page extends React.Component {
             {
               inviteCode
                 ? <div className={layout.bottom_tips}>
-                    <img className={layout.bottom_tips_img} src="/dzq-img/login-user.png" alt=""/>
-                    <span className={layout.bottom_tips_text}>奶罩 邀请您加入站点，可获得返现 ¥120</span>
+                    {/* <img className={layout.bottom_tips_img} src={ invitorAvatar } alt=""/> */}
+                    <Avatar
+                      size='small'
+                      text={ invitorName?.substring(0, 1)}
+                      className={layout.bottom_tips_img}
+                      image={ invitorAvatar }/>
+                    <span className={layout.bottom_tips_text}>
+                      <span>{ invitorName } 邀请您加入站点</span>
+                      {siteMode === 'pay' ? <span>，可获得返现 ¥{((10 - siteMasterScale) * sitePrice / 10).toFixed(2)}</span> : ''}
+                    </span>
                     <span className={layout.bottom_tips_arrows}></span>
                 </div>
                 : <></>
             }
-            <div className={layout.bottom_title}>有效期：<span>20天</span></div>
-            <Button className={layout.bottom_button}>
-              ¥1266 立即加入
+            {siteMode === 'pay' ? <div className={layout.bottom_title}>有效期：{siteExpire}<span>天</span></div> : <></>}
+            <Button className={layout.bottom_button} onClick={this.handleJoinSite}>
+              {siteMode === 'pay' ? `¥${sitePrice}` : ''} 立即加入
             </Button>
           </div>
         </div>

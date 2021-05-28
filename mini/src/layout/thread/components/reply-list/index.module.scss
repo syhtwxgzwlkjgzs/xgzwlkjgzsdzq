@@ -1,66 +1,94 @@
 @import '@common/styles/index.scss';
 .replyList {
   display: flex;
-  padding-top: 16px;
+  padding-top: $padding-4n;
   .replyListAvatar {
-    margin-right: 8px;
-    .avater {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      image {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-      }
-    }
+    margin-right: $margin-2n;
   }
   .replyListContent {
     width: 100%;
     .replyListContentText {
-      padding: 8px;
-      border-radius: 5px;
-      background: $comment-bg-color;
+      padding: $padding-2n;
+      border-radius: $border-radius-small;
+      background: $body-bg-color;
       .replyListName {
-        font-weight: var(--font-weight-regular);
-        font-size: 14px;
+        font-size: $font-size-primary;
+        font-weight: bold;
+        line-height: 20px;
         text-align: left;
         color: var(--color-text-primary);
-        font-family: 'PingFangSC-Semibol';
-        line-height: 17.8px;
-        padding-bottom: 4px;
       }
       .replyListText {
-        font-size: 16px;
-        line-height: 26px;
+        margin-top: $margin-1n;
+        font-size: $font-size-middle;
         text-align: left;
         color: var(--color-text-primary);
+        width: 100%;
         word-break: break-all;
+        line-height: $font-line-height-middle;
+
+        .content {
+          display: inline;
+          font-weight: normal;
+          font-size: $font-size-middle;
+          line-height: 26px;
+          text-align: left;
+          color: $text-color-primary;
+          vertical-align: text-bottom;
+
+          :global {
+            .qq-emotion {
+              width: 22px;
+              height: 22px;
+              position: relative;
+              top: 6px;
+            }
+          }
+
+          View {
+            display: inline;
+          }
+          .p {
+            display: inline;
+          }
+        }
+
+        .isShowOne {
+          // @include lamp-clamp(3);
+
+          // p {
+          //   @include lamp-clamp(3);
+          // }
+        }
+
+        img {
+          height: 22px;
+        }
+
         .commentUser {
-          display: inline-block;
+          display: inline-flex;
+          word-break: initial;
+          align-items: center;
+          justify-content: flex-start;
+          height: 28px;
+
           .replyedUserName {
-            font-weight: normal;
-            font-size: 14px;
-            margin-right: 8px;
+            font-weight: bold;
+            font-size: $font-size-primary;
+            margin-right: $margin-2n;
             line-height: 18px;
             text-align: left;
             color: var(--color-primary);
           }
           .replyedAvatar {
             display: inline-block;
-            margin-right: 4px;
-            position: relative;
-            top: 6px;
-            .avater {
-              width: 24px;
-              height: 24px;
-              border-radius: 50%;
+            margin-right: $margin-1n;
 
-              image {
-                width: 24px;
-                height: 24px;
-                border-radius: 50%;
-              }
+            .avatar {
+              width: 18px;
+              height: 18px;
+              font-size: $font-size-small;
+              line-height: 18px;
             }
           }
         }
@@ -70,14 +98,14 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 14px;
+      font-size: $font-size-primary;
+      line-height: 16.8px;
       text-align: left;
       color: var(--color-text-secondary);
-      padding-top: 8px;
-      line-height: 16.8px;
+      padding-top: $padding-2n;
       .replyTime {
         // flex: 1;
-        font-size: 12px;
+        font-size: $font-size-label;
       }
       .replyLiked {
         // flex: 1;
@@ -100,7 +128,7 @@
     align-items: center;
     justify-content: flex-end;
     > View {
-      margin-left: 24px;
+      margin-left: $margin-6n;
     }
   }
 }

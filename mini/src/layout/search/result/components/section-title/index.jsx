@@ -1,8 +1,7 @@
 import React from 'react';
-import { Icon } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
 
 import styles from './index.module.scss';
-import { View, Text } from '@tarojs/components';
 
 /**
  * 栏目头部
@@ -10,17 +9,17 @@ import { View, Text } from '@tarojs/components';
  * @prop {function} onShowMore 查看更多事件
  */
 const TrendingTopics = ({  title, onShowMore }) => (
-  <View className={styles.container}>
-    <View className={styles.left}>
-      <View className={styles.title}>{title}</View>
-    </View>
-    <View className={styles.right}>
-      <View onClick={onShowMore} className={styles.more}>
+  <div className={styles.container}>
+    <div className={styles.left}>
+      <div className={styles.title}>{title}</div>
+    </div>
+    <div className={styles.right}>
+      <div onClick={onShowMore} className={styles.more}>
         更多
-      </View>
+      </div>
       <Icon name="RightOutlined" size={10} />
-    </View>
-  </View>
+    </div>
+  </div>
 );
 
 export default React.memo(TrendingTopics);

@@ -6,7 +6,8 @@
  import Taro from '@tarojs/taro';
  import { View, Text, Image, Video } from '@tarojs/components';
  import styles from './index.module.scss';
- import { Icon } from '@discuzq/design';
+//  import Icon from '@discuzq/design/dist/components/icon/index';
+ import Icon from '@discuzq/design/dist/components/icon/index';
 
 const Index = (props) => {
   const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, onTagRemoveClick, onTagClick, tagContent, deleteShow = false } = props;
@@ -52,7 +53,7 @@ const Index = (props) => {
   const atta = (
     <View className={styles['atta']}>
       <View src={src} className={styles['left']}>
-        <Icon name='DocOutlined' size={16} color={'#3ac15f'} />
+        <Icon name='DOCOutlined' size={16} color={'#3ac15f'} />
         <Text className={styles['name']}>{filename}</Text>
         <Text className={styles['size']}>{size}</Text>
       </View>
@@ -68,7 +69,7 @@ const Index = (props) => {
         <Text className={styles['desc']}>{productDesc}</Text>
         <View className={styles['opera']}>
           <Text className={styles['price']}>{`￥${productPrice}`}</Text>
-          <Icon name='MailOutlined' size={16} onClick={onDelete} />
+          <Icon name='DeleteOutlined' size={16} onClick={onDelete} />
         </View>
       </View>
     </View>

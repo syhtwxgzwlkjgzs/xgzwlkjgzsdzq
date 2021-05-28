@@ -1,15 +1,6 @@
 @import '@common/styles/index.scss';
 
-.page {
-  height: 100vh;
-  display: flex;
-  padding-top: 16px;
-  flex-direction: column;
-  box-sizing: border-box;
-  overflow: hidden;
-  background: var(--color-white);
-}
-.searchInput {
-  padding: 0 16px;
-  margin-bottom: 16px;
+.wrapper {
+  padding: 0 $padding-4n;
+  background-color: $white;
 }

@@ -9,7 +9,7 @@ import styles from './index.module.scss';
 const { Col, Row } = Flex
 
 const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel = noop, router }) => {
-  const [first, setFirst] = useState();
+  const [first, setFirst] = useState('all');
   const [firstChildren, setFirstChildren] = useState();
   const [second, setSecond] = useState('');
   const [third, setThird] = useState('0');
@@ -24,16 +24,17 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
   }, [tmpData]);
 
   useEffect(() => {
-    const { categoryids = [], types, essence } = current || {};
+    const { categoryids = [], types = 'all', essence } = current || {};
 
-    setFirst(categoryids[0] || '');
-    setSecond(types || '');
+    setFirst(categoryids[0] || 'all');
+    setSecond(types || 'all');
     setThird(essence || '0');
 
     if (categoryids[1]) {
       setFirstChildren(categoryids[1]);
     }
   }, [current, visible]);
+
   // 点击一级菜单
   const onClickFirst = (index, type, contents) => {
     if (type === 1) {
@@ -67,15 +68,21 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
   // 结果数据处理
   const handleSubmit = () => {
     let sequence = 0;
-    tmpData.forEach((item) => {
-      if (item.pid === first && item.name.indexOf('默认分类') !== -1) {
-        sequence = 1;
-      }
-    });
+    if (first === 'default') {
+      sequence = 1;
+    }
 
-    const categoryids = [first];
+    let categoryids = [first];
     if (firstChildren) {
-      categoryids.push(firstChildren);
+      categoryids = [firstChildren];
+    } else {
+      const tmp = data[0]?.data?.filter(item => item.pid === first)
+      if (tmp.length && tmp[0]?.children?.length) {
+        categoryids = [first]
+        tmp[0]?.children?.forEach(item => {
+          categoryids.push(item.pid)
+        })
+      }
     }
 
     const params = { categoryids, types: second, essence: third, sequence };
@@ -104,20 +111,19 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
     return (
       <div className={styles.moduleWrapper} key={key}>
         <div className={styles.title}>
-          {title}
+          <span>{title}</span>
           {key === 0 && <Icon className={styles.searchIcon} name='SearchOutlined' size={20} onClick={goSearch}></Icon>}
         </div>
         <Row className={styles.wrapper} gutter={10}>
           {
             contents.map((item, index) => (
-              <Col span={3}>
-              <span
-                className={`${tip === item.pid ? styles.active : ''} ${styles.span}`}
-                key={index}
-                onClick={() => onClickFirst(item.pid, type, contents)}
-              >
-                {item.name}
-              </span>
+              <Col span={ item.name.length < 6 ? 3 : item.name.length === 6 ? 4 : 5 } key={index}>
+                <span
+                  className={`${tip === item.pid ? styles.active : ''} ${styles.span}`}
+                  onClick={() => onClickFirst(item.pid, type, contents)}
+                >
+                  {item.name.length > 6 ? item.name.substr(0, 6) : item.name}
+                </span>
               </Col>
             ))
           }
@@ -127,10 +133,9 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
             <Row className={`${styles.wrapper} ${styles.childrenWrapper}`} gutter={10}>
               {
                 subData.map((item, index) => (
-                  <Col span={3}>
+                  <Col span={3} key={`${index}-${index}`}>
                     <span 
                       className={`${firstChildren === item.pid ? styles.childrenActive : ''} ${styles.childrenSpan}`} 
-                      key={`${index}-${index}`} 
                       onClick={() => onClickSecond(item.pid, type)}>
                         {item.name}
                     </span>

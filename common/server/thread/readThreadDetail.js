@@ -1,6 +1,7 @@
+// import {deleteDeny} from '@discuzq/sdk/dist/api/user/delete-deny';
 import api from '../api';
 
-export default async function readThreadDetail(opts, ctx = null) {
+export default async function _readThreadDetail(opts, ctx = null) {
   try {
     const { params = {}, data = {}, ...others } = opts;
     const options = {
@@ -14,6 +15,7 @@ export default async function readThreadDetail(opts, ctx = null) {
     const result = await api.http(options);
     return result;
   } catch (error) {
+    console.log(error);
     return error;
   }
 }

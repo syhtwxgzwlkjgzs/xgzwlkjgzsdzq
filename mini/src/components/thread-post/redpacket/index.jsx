@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
-import { Radio, Input, Button } from '@discuzq/design';
+import Radio from '@discuzq/design/dist/components/radio/index';
+import Input from '@discuzq/design/dist/components/input/index';
+import Button from '@discuzq/design/dist/components/button/index';
 import { observer, inject } from 'mobx-react';
 import styles from './index.module.scss';
 
@@ -48,7 +50,7 @@ export default class Redpacket extends Component {
   }
 
   checkConfirm = () => { // 更新红包store前校验数据合法性
-    const { price, number, condition, likenum } = this.state;
+    const { rule, price, number, condition, likenum } = this.state;
 
     if (!price) {
       this.redToast('请输入红包金额')

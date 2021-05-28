@@ -28,10 +28,6 @@ class Index extends React.Component {
         indexTopics: topics?.data,
         indexUsers: users?.data,
         indexThreads: threads?.data,
-
-        indexTopics: null,
-        indexUsers: null,
-        indexThreads: null,
       },
     };
   }
@@ -40,9 +36,17 @@ class Index extends React.Component {
     super(props);
     const { serverSearch, search } = this.props;
     // 初始化数据到store中
-    search.setIndexTopics(null);
-    search.setIndexUsers(null);
-    search.setIndexThreads(null);
+    const { platform } = this.props.site || {};
+
+    if (platform === 'pc') {
+      search.setIndexTopics(null);
+      search.setIndexUsers(null);
+      search.setIndexThreads(null);
+    } else {
+      serverSearch && serverSearch.indexTopics && search.setIndexTopics(serverSearch.indexTopics);
+      serverSearch && serverSearch.indexUsers && search.setIndexUsers(serverSearch.indexUsers);
+      serverSearch && serverSearch.indexThreads && search.setIndexThreads(serverSearch.indexThreads);
+    }
   }
 
   async componentDidMount() {
@@ -50,16 +54,24 @@ class Index extends React.Component {
     const { keyword = '' } = router?.query;
 
     // 当服务器无法获取数据时，触发浏览器渲染
-    const hasIndexTopics = !!search.indexTopics;
-    const hasIndexUsers = !!search.indexUsers;
-    const hasIndexThreads = !!search.indexThreads;
+    
 
     // this.toastInstance = Toast.loading({
     //   content: '加载中...',
     //   duration: 0,
     // });
 
-    search.getSearchData({ hasTopics: false, hasUsers: false, hasThreads: false, search: keyword });
+    const { platform } = this.props.site || {};
+
+    if (platform === 'pc') {
+      search.getSearchData({ hasTopics: false, hasUsers: false, hasThreads: false, search: keyword });
+    } else {
+      const hasIndexTopics = !!search.indexTopics;
+      const hasIndexUsers = !!search.indexUsers;
+      const hasIndexThreads = !!search.indexThreads;
+      search.getSearchData({ hasTopics: hasIndexTopics, hasUsers: hasIndexUsers, hasThreads: hasIndexThreads, search: keyword });
+    }
+    
 
     // this.toastInstance?.destroy();
   }
@@ -67,7 +79,11 @@ class Index extends React.Component {
   dispatch = async (type, data = '') => {
     const { search } = this.props;
 
-    search.getSearchData({ search: data });
+    if (type === 'refresh') {
+      search.getSearchData({ hasTopics: false, hasUsers: false, hasThreads: false });
+    } else if (type === 'search') {
+      search.getSearchData({ search: data });
+    }
   }
 
   render() {
@@ -78,7 +94,7 @@ class Index extends React.Component {
       return <IndexPCPage dispatch={this.dispatch} />;
     }
 
-    return <IndexH5Page />;
+    return <IndexH5Page dispatch={this.dispatch} />;
   }
 }
 

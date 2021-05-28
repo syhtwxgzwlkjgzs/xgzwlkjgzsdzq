@@ -66,14 +66,8 @@ class Index extends React.Component {
       const { data = {} } = this.props;
       const { threadId = '' } = data;
       if (threadId !== '') {
-        const { platform = 'pc' } = this.props.site;
         this.props.thread.positionToComment()
-        if (platform === 'pc') {
-          const baseUrl = window.location.origin
-          window.open(`${baseUrl}/thread/${threadId}`)
-        } else {
-          this.props.router.push(`/thread/${threadId}`);
-        }
+        this.props.router.push(`/thread/${threadId}`);
       } else {
         console.log('帖子不存在');
       }
@@ -154,13 +148,7 @@ class Index extends React.Component {
       }
 
       if (threadId !== '') {
-        const { platform = 'pc' } = this.props.site;
-        if (platform === 'pc') {
-          const baseUrl = window.location.origin
-          window.open(`${baseUrl}/thread/${threadId}`)
-        } else {
-          this.props.router.push(`/thread/${threadId}`);
-        }
+        this.props.router.push(`/thread/${threadId}`);
       } else {
         console.log('帖子不存在');
       }
@@ -173,7 +161,7 @@ class Index extends React.Component {
     }
 
     render() {
-      const { data, className = '', site = {}, showBottomStyle = true } = this.props;
+      const { data, className = '', site = {}, showBottomStyle = true ,  collect = '' } = this.props;
       const { platform = 'pc' } = site;
 
       if (!data) {
@@ -199,7 +187,7 @@ class Index extends React.Component {
         <div className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
           <div className={styles.header} onClick={this.onClick}>
               <UserInfo
-                name={user.userName || ''}
+                name={user.nickname || ''}
                 avatar={user.avatar || ''}
                 location={position.location}
                 view={`${viewCount}`}
@@ -211,6 +199,7 @@ class Index extends React.Component {
                 isReward={isReward}
                 userId={user?.userId}
                 platform={platform}
+                collect={collect}
               />
           </div>
 

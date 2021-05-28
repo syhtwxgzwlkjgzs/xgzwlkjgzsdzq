@@ -2,49 +2,58 @@ import React from 'react';
 import { Icon, Badge } from '@discuzq/design';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
+import { observer, inject } from 'mobx-react';
 
+@inject('message')
+@observer
 class UserCenterAction extends React.Component {
   // 点击我的消息
   handleMyMessage = () => {
     Router.push({ url: '/message' });
-  }
+  };
 
   // 点击我的钱包
   handleMyWallet = () => {
     Router.push({ url: '/wallet' });
-  }
+  };
 
   // 点击站点信息
   handleMySiteInfo = () => {
     Router.push({ url: '/forum' });
-  }
+  };
 
   // 点击推广信息
   handleMyInvite = () => {
     Router.push({ url: '/invite' });
-  }
+  };
 
   // 点击我的屏蔽
   handleMyBan = () => {
     Router.push({ url: '/my/block' });
-  }
+  };
 
   // 点击我的购买
   handleMyBuy = () => {
     Router.push({ url: '/my/buy' });
-  }
+  };
 
   // 点击我的草稿箱
   handleMyDraft = () => {
     Router.push({ url: '/my/draft' });
-  }
+  };
 
   // 点击我的收藏
   handleMyCollect = () => {
     Router.push({ url: '/my/collect' });
+  };
+
+  componentDidMount() {
+    this.props.message.readUnreadCount();
   }
 
   render() {
+    const { message } = this.props;
+    const { totalUnread } = message;
     return (
       //   移动端实现
       <div className={styles.userActionMobile}>
@@ -52,9 +61,13 @@ class UserCenterAction extends React.Component {
           <div className={styles.userCenterActionItemContainer}>
             <div onClick={this.handleMyMessage} className={styles.userCenterActionItem}>
               <div className={styles.userCenterActionItemIcon}>
-                <Badge info={12}>
+                {totalUnread ? (
+                  <Badge info={totalUnread} circle>
+                    <Icon name={'MailOutlined'} color={'#4F5A70'} size={20} />
+                  </Badge>
+                ) : (
                   <Icon name={'MailOutlined'} color={'#4F5A70'} size={20} />
-                </Badge>
+                )}
               </div>
               <div className={styles.userCenterActionItemDesc}>我的消息</div>
             </div>
@@ -109,7 +122,7 @@ class UserCenterAction extends React.Component {
             <div onClick={this.handleMyDraft} className={styles.userCenterActionItem}>
               <div className={styles.userCenterActionItemIcon}>
                 <Badge>
-                  <Icon name={'RecycleBinOutlined'} color={'#4F5A70'} size={20} />
+                  <Icon name={'RetrieveOutlined'} color={'#4F5A70'} size={20} />
                 </Badge>
               </div>
               <div className={styles.userCenterActionItemDesc}>我的草稿箱</div>

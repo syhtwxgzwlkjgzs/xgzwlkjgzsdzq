@@ -1,8 +1,9 @@
 import React from 'react';
 import styles from './index.module.scss';
-import { View, Text } from '@tarojs/components';
-import { Audio } from '@discuzq/design';
+import Audio from '@discuzq/design/dist/components/audio/index';
 import { noop } from '../utils';
+import { View, Image } from '@tarojs/components'
+import parAudioImg from '../../../../../web/public/dzq-img/pay-audio.png';
 
 /**
  * 语音
@@ -12,16 +13,18 @@ import { noop } from '../utils';
  * @prop {function} goCheckAudio 音频点击事件
  */
 
-const Index = ({ isPay = false, url, goCheckAudio = noop }) => {
+const Index = ({ isPay = false, url, onPay = noop }) => {
   const onPlay = () => {
     console.log('正在播放');
   };
   return (
     <View className={styles.container}>
-      <Audio src={url} onPlay={onPlay} />
-      {/* 音频蒙层 已付费时隐藏 未付费时显示 */}
       {
-        isPay && <View className={styles.payBox} onClick={goCheckAudio}></View>
+        isPay ? (
+          <View className={styles.wrapper}>
+            <Image src={parAudioImg} className={styles.payBox} onClick={onPay}></Image>
+          </View>
+        ) : <Audio src={url} onPlay={onPlay} disabled={!url} />
       }
     </View>
   );

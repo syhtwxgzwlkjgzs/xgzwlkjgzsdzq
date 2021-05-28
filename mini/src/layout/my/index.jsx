@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
-import { Divider } from '@discuzq/design';
+import Divider from '@discuzq/design/dist/components/divider/index';
 import UserCenterHeaderImage from '@components/user-center-header-images';
 import UserCenterHead from '@components/user-center-head';
 import UserCenterAction from '@components/user-center-action';
 import UserCenterThreads from '@components/user-center-threads';
 import NoData from '@components/no-data';
+import BottomNavBar from '@components/bottom-nav-bar';
+
 @inject('user')
 @observer
 export default class index extends Component {
@@ -42,6 +44,7 @@ export default class index extends Component {
             </View>
           </View>
         </View>
+        <BottomNavBar curr='my' />
       </View>
     )
   }

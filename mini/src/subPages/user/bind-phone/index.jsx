@@ -1,13 +1,15 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { getCurrentInstance, navigateTo, redirectTo } from '@tarojs/taro';
-import { withRouter } from 'next/router';
-import { Button, Toast, Input } from '@discuzq/design';
+import Button from '@discuzq/design/dist/components/button/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
+import Input from '@discuzq/design/dist/components/input/index';
 import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import Page from '@components/page';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { toTCaptcha } from '@common/utils/to-tcaptcha'
+import PhoneInput from '@components/login/phone-input'
 import { get } from '@common/utils/get';
 import layout from './index.module.scss';
 
@@ -50,7 +52,7 @@ class BindPhoneH5Page extends React.Component {
     this.randstr = '';
   }
 
-  handleSendCodeButtonClick = async () => {
+  handleSendCodeButtonClick = async (onFocus) => {
     try{
       // 发送前校验
       this.props.mobileBind.beforeSendVerify();
@@ -66,6 +68,7 @@ class BindPhoneH5Page extends React.Component {
         captchaRandStr: this.ticket,
         captchaTicket: this.randstr
       });
+      onFocus();
     }catch(e){
       Toast.error({
         content: e.Message,
@@ -108,6 +111,16 @@ class BindPhoneH5Page extends React.Component {
     }
   }
 
+  handlePhoneNumCallback = (phoneNum) => {
+    const { mobileBind } = this.props;
+    mobileBind.mobile = phoneNum;
+  };
+
+  handlePhoneCodeCallback = (code) => {
+    const { mobileBind } = this.props;
+    mobileBind.code = code;
+  };
+
   render() {
     const { mobileBind } = this.props;
     return (
@@ -120,34 +133,14 @@ class BindPhoneH5Page extends React.Component {
               请绑定您的手机号
             </View>
             {/* 输入框 start */}
-            <Input
-              className={layout.input}
-              value={mobileBind.mobile}
-              mode="number"
-              clearable
-              placeholder="输入您的手机号"
-              onChange={(e) => {
-                mobileBind.mobile = e.target.value;
-              }}
+            <PhoneInput
+              phoneNum={mobileBind.mobile}
+              captcha={mobileBind.code}
+              phoneNumCallback={this.handlePhoneNumCallback}
+              phoneCodeCallback={this.handlePhoneCodeCallback}
+              sendCodeCallback={this.handleSendCodeButtonClick}
+              codeTimeout={mobileBind.codeTimeout}
             />
-            <View className={layout.captchaInput}>
-              <Input
-                clearable={false}
-                className={layout.input}
-                mode="number"
-                appendWidth="auto"
-                value={mobileBind.code}
-                placeholder="输入您的验证码"
-                onChange={(e) => {
-                  mobileBind.code = e.target.value;
-                }}
-              />
-              {mobileBind.codeTimeout ? (
-                <View className={layout.countDown}>{mobileBind.codeTimeout}s后重试</View>
-              ) : (
-                <Text size="mini" className={layout.sendCaptcha} onClick={this.handleSendCodeButtonClick}>发送验证码</Text>
-              )}
-            </View>
             {/* 输入框 end */}
             <Button className={layout.button} type="primary" onClick={this.handleBindButtonClick}>
               下一步
@@ -166,4 +159,4 @@ class BindPhoneH5Page extends React.Component {
   }
 }
 
-export default withRouter(BindPhoneH5Page);
+export default BindPhoneH5Page;

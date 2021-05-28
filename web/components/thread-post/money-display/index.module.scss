@@ -29,10 +29,16 @@
   z-index: 1;
 }
 .money-box.h5 {
-  padding: 0 rem($padding-4n) rem($padding-4n);
+  display: flex;
+  flex-flow: wrap;
+  align-items: center;
+  min-height: 40px;
+  padding: $padding-1n rem($padding-4n) 0;
+  border-top: $border-solid-1;
   :global {
     .dzq-tag {
-      margin-bottom: rem($padding-1n);
+      margin-bottom: rem($margin-1n);
+      margin-right: $margin-2n;
     }
   }
 }

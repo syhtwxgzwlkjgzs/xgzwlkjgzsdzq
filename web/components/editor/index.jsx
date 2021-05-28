@@ -16,40 +16,28 @@ export default function DVditor(props) {
   const { pc, emoji = {}, atList = [], topic, value,
     onChange = () => { }, onFocus = () => { }, onBlur = () => { },
     onInit = () => { },
-    onInput = () => {},
+    onInput = () => { },
+    setState = () => { },
   } = props;
   const vditorId = 'dzq-vditor';
+  let timeoutId = null;
 
   const [isFocus, setIsFocus] = useState(false);
   const [vditor, setVditor] = useState(null);
-  const [range, setRange] = useState(null);
 
   const html2mdSetValue = (text) => {
     try {
-      const md = vditor.html2md(text);
-      vditor.setValue && vditor.setValue(md.substr(0, md.length - 1));
+      if (!vditor) return '';
+      const md = !text ? '' : vditor.html2md(text);
+      vditor.setValue && vditor.setValue(md);
     } catch (error) {
       console.error('html2mdSetValue', error);
     }
   };
 
-  const getRange = () => {
-    const selection = window.getSelection();
-    let range = null;
-    if (selection.rangeCount > 0) range = selection.getRangeAt(0);
-    return range;
-  };
-
-  const setCursorPosition = () => {
-    if (range && !pc) {
-      const selection = window.getSelection();
-      selection.removeAllRanges();
-      selection.addRange(range);
-    }
-  };
-
   const html2mdInserValue = (text) => {
     try {
+      if (!vditor) return;
       const md = vditor.html2md && vditor.html2md(text);
       vditor.insertValue && vditor.insertValue(md.substr(0, md.length - 1));
     } catch (error) {
@@ -66,10 +54,12 @@ export default function DVditor(props) {
     //     console.log(error);
     //   }
     // };
+    return () => clearTimeout(timeoutId);
   }, []);
 
   useEffect(() => {
     if (emoji && emoji.code) {
+      setState({ emoji: {} });
       // 因为vditor的lute中有一些emoji表情和 emoji.code 重叠了。这里直接先这样处理
       let value = `<img alt="${emoji.code}emoji" src="${emoji.url}" class="qq-emotion" />`;
       value = emojiVditorCompatibilityDisplay(value);
@@ -81,9 +71,10 @@ export default function DVditor(props) {
   useEffect(() => {
     if (atList && !atList.length) return;
     const users = atList.map((item) => {
-      if (item) return ` @${item} `;
+      if (item) return `&nbsp;@${item}&nbsp;`;
       return '';
     });
+    setState({ atList: [] });
     if (users.length) {
       // setCursorPosition();
       vditor.insertValue && vditor.insertValue(users.join(''));
@@ -92,8 +83,9 @@ export default function DVditor(props) {
 
   useEffect(() => {
     if (topic) {
+      setState({ topic: '' });
       // setCursorPosition();
-      vditor.insertValue && vditor.insertValue(` ${topic} `);
+      vditor.insertValue && vditor.insertValue(`&nbsp;${topic}&nbsp;`);
     }
   }, [topic]);
 
@@ -124,6 +116,66 @@ export default function DVditor(props) {
     }, 100);
   };
 
+
+  const getEditorRange = (vditor) => {
+    /**
+      * copy from vditor/src/ts/util/selection.ts
+     **/
+    let range;
+    const { element } = vditor[vditor.currentMode];
+    if (getSelection().rangeCount > 0) {
+      range = getSelection().getRangeAt(0);
+      if (element.isEqualNode(range.startContainer) || element.contains(range.startContainer)) {
+        return range;
+      }
+    }
+    if (vditor[vditor.currentMode].range) {
+      return vditor[vditor.currentMode].range;
+    }
+    element.focus();
+    range = element.ownerDocument.createRange();
+    range.setStart(element, 0);
+    range.collapse(true);
+    return range;
+  };
+
+  const storeLastCursorPosition = (editor) => {
+    /** *
+     * ios 和mac safari，在每一个事件中都记住上次光标的位置
+     * 避免blur后vditor.insertValue的位置不正确
+     * **/
+
+    if (/Chrome/i.test(navigator.userAgent)
+      || !/(iPhone|Safari|Mac OS)/i.test(navigator.userAgent)) return;
+    const { vditor } = editor;
+
+    // todo 事件需要throttle或者debounce??? delay时间控制不好可能导致记录不准确
+    // const editorElement = vditor[vditor.currentMode]?.element;
+    // // // todo 需要添加drag事件吗
+    // const events = ['mouseup', 'click', 'keyup', 'touchend', 'touchcancel', 'input'];
+    // events.forEach((event) => {
+    //   editorElement?.addEventListener(event, () => {
+    //     setTimeout(() => {
+    //       vditor[vditor.currentMode].range = getEditorRange(vditor);
+    //       console.log(vditor[vditor.currentMode].range);
+    //     }, 0);
+    //   });
+    // });
+    const editorElement = vditor[vditor.currentMode]?.element;
+    editorElement?.addEventListener('click', (e) => {
+      setIsFocus(false);
+      onFocus('focus', e);
+    });
+    // 从事件绑定方式修改成轮询记录的方式，以达到更实时更精确的记录方式，可解决iphone下输入中文光标会被重置到位置0的问题（性能需关注）
+    const timeoutRecord = () => {
+      timeoutId = setTimeout(() => {
+        vditor[vditor.currentMode].range = getEditorRange(vditor);
+        timeoutRecord();
+      }, 200);
+    };
+    timeoutRecord();
+  };
+
   function initVditor() {
     // https://ld246.com/article/1549638745630#options
     const editor = new Vditor(
@@ -138,23 +190,17 @@ export default function DVditor(props) {
         // 编辑器异步渲染完成后的回调方法
         after: () => {
           onInit(editor);
-          editor.setValue(value);
+          const md = !value ? '' : editor.html2md(value);
+          editor.setValue(md);
           editor.vditor[editor.vditor.currentMode].element.blur();
         },
-        focus: () => {
-          setIsFocus(false);
-          onFocus('focus');
-        },
+        focus: () => {},
         input: () => {
           setIsFocus(false);
-          const range = getRange();
-          if (range) setRange(range);
           onInput(editor);
           onChange(editor);
         },
         blur: () => {
-          const range = getRange();
-          if (range) setRange(range);
           // 防止粘贴数据时没有更新内容
           onChange(editor);
           // 兼容Android的操作栏渲染
@@ -185,11 +231,10 @@ export default function DVditor(props) {
         },
         bubbleToolbar: pc ? [...baseToolbar] : [],
         icon: '',
-        preview: {
-          theme: '',
-        },
       },
     );
+
+    storeLastCursorPosition(editor);
     setVditor(editor);
   }
 

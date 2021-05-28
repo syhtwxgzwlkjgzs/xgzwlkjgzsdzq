@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { getCurrentInstance, navigateTo } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
-import { Input, Button, Toast, Avatar } from '@discuzq/design';
+import Input from '@discuzq/design/dist/components/input/index';
+import Button from '@discuzq/design/dist/components/button/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
+import Avatar from '@discuzq/design/dist/components/avatar/index';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
@@ -72,7 +75,6 @@ class Index extends Component {
               }}
             />
             <Input
-              clearable
               className={layout.input}
               mode="password"
               value={userLogin.password}

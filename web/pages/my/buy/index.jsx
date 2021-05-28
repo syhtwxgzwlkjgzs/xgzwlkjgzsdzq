@@ -4,6 +4,7 @@ import IndexH5Page from '@layout/my/buy/h5';
 import IndexPCPage from '@layout/my/buy/pc';
 import { readThreadList } from '@server';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import isServer from '@common/utils/is-server';
 
 @inject('site')
 @inject('index')
@@ -33,24 +34,56 @@ class Index extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      firstLoading: true, // 首次加载状态判断
+    }
     const { serverIndex, index } = this.props;
-    serverIndex && serverIndex.threads && index.setThreads(serverIndex.threads);
+    if (serverIndex && serverIndex.threads) {
+      index.setThreads(serverIndex.threads);
+      this.state.firstLoading = false;
+    } else {
+      index.setThreads(null);
+    }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { index } = this.props;
     const hasThreadsData = !!index.threads;
     if (!hasThreadsData) {
-      index.getReadThreadList({
+      await index.getReadThreadList({
         filter: {
           complex: 4,
         },
         perPage: this.perPage,
         page: 1,
       });
+      this.setState({
+        firstLoading: false
+      })
+    }
+    this.listenRouterChangeAndClean();
+  }
+
+  clearStoreThreads = () => {
+    const { index } = this.props;
+    index.setThreads(null);
+  }
+
+  listenRouterChangeAndClean() {
+    // FIXME: 此种写法不好
+    if (!isServer()) {
+      window.addEventListener('popstate', this.clearStoreThreads, false);
     }
   }
-  dispatch = async (type, data = {}) => {
+
+  componentWillUnmount() {
+    this.clearStoreThreads();
+    if (!isServer()) {
+      window.removeEventListener('popstate', this.clearStoreThreads);
+    }
+  }
+
+  dispatch = async () => {
     const { index } = this.props;
     await index.getReadThreadList({
       filter: {
@@ -64,12 +97,13 @@ class Index extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
+    const { firstLoading } = this.state;
 
     if (platform === 'pc') {
-      return <IndexPCPage dispatch={this.dispatch} />;
+      return <IndexPCPage firstLoading={firstLoading} dispatch={this.dispatch} />;
     }
 
-    return <IndexH5Page dispatch={this.dispatch} />;
+    return <IndexH5Page firstLoading={firstLoading} dispatch={this.dispatch} />;
   }
 }
 

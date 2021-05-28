@@ -1,35 +1,46 @@
 @import '@common/styles/index.scss';
+
 .userCenterPost {
-    padding: rem(16);
+    padding: rem($padding-4n);
     cursor: pointer;
+    padding-bottom: rem($padding-6n);
 
     .userCenterPostContent {
         display: flex;
         width: 100%;
 
         .userCenterPostAvatar {
-            padding-top: rem(16);
-            margin-right: rem(8);
+            padding-top: rem($padding-4n);
+            margin-right: rem($margin-2n);
         }
     }
 
     .userCenterPostTitle {
-        font-size: 18px;
-        color: var(--color-text-primary);
+        font-size: rem($font-size-middle);
+        color: $text-color-primary;
+        font-weight: 600;
     }
 
     .userCenterPostInfo {
         display: flex;
-        padding-top: rem(16);
+        padding-top: rem($padding-4n);
+
+        input {
+            -webkit-appearance: none;
+        }
 
 
         .userCenterPostInput {
             width: 100%;
+
+            input {
+                padding-left: $padding-4n;
+            }
         }
     }
 
     .userCenterPostList {
-        padding-top: rem(24);
+        padding-top: rem($padding-6n);
         display: flex;
         justify-content: space-between;
     }

@@ -20,8 +20,8 @@
       width: rem(423);
       // height: rem(257);
       border-radius: rem(5);
-      background: var(--color-white);
-      box-shadow: var(--box-shadow);
+      background: $white;
+      box-shadow: 0 0 rem(8) $border-shadow-color;
       .header{
         display: flex;
         align-items: center;
@@ -112,8 +112,24 @@
           }
         }
         .ghost{
-          background: var(--color-white);
-          color: var(--color-primary);
+          background: $white;
+          color: $primary-color;
+          &:hover {
+            border-color: $primary-color;
+            background-color: $primary-color10;
+          }
+        }
+        .unblocked {
+          background-color: $primary-color;
+          &:hover {
+            background-color: $primary-color6;
+          }
+        }
+        .blocked {
+          background-color: $primary-color3;
+          &:hover {
+            background-color: $primary-color6;
+          }
         }
       }
     }
@@ -121,27 +137,26 @@
   }
 
   .follow {
-    background-color: var(--color-primary);
-    border-color: var(--color-primary);
+    background-color: $primary-color;
+    border-color: $primary-color;
     &:hover {
-      border-color: var(--color-primary);
-      background-color: var(--color-primary);
+      background-color: $primary-color6;
     }
   }
   .isFollow {
-    background-color: var(--color-primary5);
-    border-color: var(--color-primary5);
+    background-color: $primary-disabled-color;
+    border-color: $primary-disabled-color;
     &:hover {
-      border-color: var(--color-primary5);
-      background-color: var(--color-primary5);
+      border-color: $primary-disabled-color;
+      background-color: $primary-disabled-color;
     }
   }
   .withdraw {
-    background-color: var(--color-warn);
-    border-color: var(--color-warn);
+    background-color: $warn-color;
+    border-color: $warn-color;
     &:hover {
-      border-color: var(--color-warn);
-      background-color: var(--color-warn);
+      border-color: $warn-color;
+      background-color: $warn-color;
     }
   }
 }

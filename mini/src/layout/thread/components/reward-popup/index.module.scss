@@ -1,5 +1,32 @@
 @import '@common/styles/index.scss';
 
+@mixin input {
+  box-sizing: border-box;
+
+  :global {
+    .dzq-input__inner {
+      font-size: $font-size-base;
+      border: none;
+      padding: 0;
+      height: 18px;
+      line-height: 18px;
+      border-radius: 0;
+      text-align: right;
+      -webkit-tap-highlight-color: transparent;
+
+      &::placeholder {
+        color: $text-color-placeholder;
+        font-size: $font-size-base;
+      }
+    }
+  }
+}
+
+.inputPlaceholder {
+  color: $text-color-placeholder;
+  font-size: $font-size-base;
+}
+
 .container {
   width: 100%;
   display: flex;
@@ -7,9 +34,9 @@
   align-items: flex-start;
   justify-content: flex-start;
   background: var(--color-white);
-  border-radius: 10px 10px 0 0;
+  border-radius: $border-radius-big $border-radius-big 0 0;
   overflow: hidden;
-  padding: 16px;
+  padding: $padding-4n;
   box-sizing: border-box;
 }
 
@@ -17,32 +44,59 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: var(--font-weight-regular);
+  justify-content: flex-start;
+  font-size: $font-size-middle;
+  font-weight: 600;
 }
 
-.percentage {
-  margin-top: 16px;
-  :global {
-    .dzq-input__prefix-icon {
-      top: 9px;
-    }
+.rewardInput {
+  margin-top: $margin-4n;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: $border-solid-1;
+  padding-bottom: $padding-4n;
+  color: $text-color-regular;
+  font-size: $font-size-primary;
+
+  .prepend {
+    word-break: keep-all;
+  }
+
+  .input {
+    flex: 1;
+    @include input;
+  }
+
+  .append {
+    padding-left: $padding-1n;
   }
 }
 
 .rewardList {
-  margin-top: 16px;
-  display: flex;
-  flex-wrap: wrap;
-  padding-left: 60px;
+  width: 100%;
+  margin-top: $margin-4n;
+  display: grid;
+  grid-template-columns: repeat(4, 76px);
+  justify-content: space-between;
 
   .reward {
-    width: 60px;
-    height: 35px;
-    border: $border-solid-1;
-    margin-right: 8px;
-    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $border-radius-small;
+    font-size: rem($font-size-primary);
+    width: 76px;
+    height: 36px;
+    background: $text-bg-color2;
+    color: $text-color-primary;
+    margin-bottom: $margin-4n;
+
+    &.actived {
+      background: $primary-color;
+      color: $white;
+    }
   }
 }
 
@@ -51,30 +105,38 @@
   align-items: center;
 
   .text {
-    margin-right: 8px;
-    font-size: 14px;
+    margin-right: $margin-2n;
+    font-size: $font-size-primary;
   }
+}
+
+.divider {
+  margin: 0;
+  width: 200%;
+  margin-left: -40px;
 }
 
 .button {
-  margin-top: 24px;
+  padding-top: $margin-2n;
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 
   .ok {
-    width: 167px;
+    width: 50%;
     height: 42px;
-    line-height: 24px;
+    line-height: $font-line-height-base;
+    font-size: $font-size-middle;
+    margin-left: $margin-2n;
   }
   .cancel {
-    width: 167px;
+    width: 50%;
     height: 42px;
-    background: $button-info-bg-color;
+    line-height: $font-line-height-base;
+    color: $text-color-regular;
+    background: $text-bg-color2;
     border: none;
-    margin-right: 16px;
-    line-height: 24px;
+    font-size: $font-size-middle;
   }
 }
-

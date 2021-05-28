@@ -14,12 +14,13 @@ class UserCenterFriends extends React.Component {
     withHeaderUserInfo: false,
     userName: null,
     userGroup: null,
-    followHandler: async () => {},
-    unFollowHandler: async () => {},
-    onContainerClick: async ({ id }) => {},
+    followHandler: async () => { },
+    unFollowHandler: async () => { },
+    onContainerClick: async ({ id }) => { },
   };
 
   render() {
+    const myid = this.props.user.id;
     return (
       <div onClick={async () => {
         await this.props.onContainerClick({
@@ -43,7 +44,7 @@ class UserCenterFriends extends React.Component {
             </div>
           </div>
 
-          <div className={styles.friendAction}>
+          {this.props.id != myid && <div className={styles.friendAction}>
             {this.props.type === 'follow' && (
               <Button
                 type={'primary'}
@@ -55,7 +56,8 @@ class UserCenterFriends extends React.Component {
                   });
                 }}
               >
-                <Icon size={14} name={'PlusOutlined'} />
+                <span>+</span>
+                {/* <Icon size={14} name={'PlusOutlined'} /> */}
                 <span>关注</span>
               </Button>
             )}
@@ -71,7 +73,7 @@ class UserCenterFriends extends React.Component {
                   });
                 }}
               >
-                <Icon size={14} name={'WithdrawOutlined'} />
+                <Icon size={10} name={'WithdrawOutlined'} />
                 <span>互关</span>
               </Button>
             )}
@@ -87,11 +89,11 @@ class UserCenterFriends extends React.Component {
                   });
                 }}
               >
-                <Icon size={14} name={'CheckOutlined'} />
+                <Icon size={10} name={'CheckOutlined'} />
                 <span>已关注</span>
               </Button>
             )}
-          </div>
+          </div>}
         </div>
       </div>
     );

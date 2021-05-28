@@ -4,30 +4,52 @@
 .container {
   width: 100%;
   position: relative;
-  margin-bottom: 16px;
-  .content {
-    position: relative;
-    display: inline-block;
-    line-height: 26px;
-    font-size: 16px !important;
-    color: var( --color-text-primary);
-    margin-top: 4px;
-    word-break: break-all;
-    p,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      font-size: 16px !important;
+  overflow: hidden;
+  .contentWrapper{
+    .content {
+      @include cursor-on-pc;
+      width: 100%;
+      position: relative;
+      display: inline-block;
+      line-height: $font-line-height-middle;
+      font-size: $font-size-middle !important;
+      color: var( --color-text-primary);
+      // margin-top: $padding-1n;
+      word-break: break-all;
+      p,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-size: $font-size-middle !important;
+      }
+      img {
+        &:not(:global(.qq-emotion)) {
+          max-width: 100%;
+          max-height: 2px;
+          overflow: hidden;
+        }
+      }
+
+      :global(.dzq-img) {
+        width: 100%;
+      }
+
+      
+      :global(.qq-emotion) {
+        height: 30px;
+        width: 30px;
+        margin-top: -1px;
+      }
     }
-    img {
-      max-width: 100%;
-      max-height: 2px;
+
+    :global(.dzq-richText) {
       overflow: hidden;
     }
   }
+  
   .hideCover {
     position: relative;
     overflow: hidden;
@@ -49,8 +71,8 @@
     justify-content: center;
     align-items: center;
     font-weight: normal;
-    font-size: 14px;
-    line-height: 24px;
+    font-size: $font-size-primary;
+    line-height: $font-line-height-primary;
     color: var(--color-primary);
     .icon {
       margin-left: 9px;
@@ -63,17 +85,17 @@
     align-items: center;
     .hidePercent {
       font-weight: normal;
-      font-size: 14px;
-      line-height: 24px;
+      font-size: $font-size-primary;
+      line-height: $font-line-height-primary;
       text-align: left;
       color: var(--color-primary);;
     }
     .payButton {
-      margin-top: 16px;
+      margin-top: $padding-4n;
       line-height: 16.8px;
     }
     .payButtonIcon {
-      margin-right: 8px;
+      margin-right: $padding-2n;
       width: 13.93px;
       height: 16.62px;
       background-color: var(--color-white);

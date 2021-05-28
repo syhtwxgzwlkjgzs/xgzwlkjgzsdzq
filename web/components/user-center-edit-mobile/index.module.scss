@@ -1,6 +1,4 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/_variable.scss';
-@import '@common/styles/mixin/index.scss';
 
 .content {
   padding: $padding-6n;
@@ -46,19 +44,27 @@
     font-size: $font-size-primary;
   }
 }
+#editMobileContent {
+  .bottom {
+    position: fixed;
+    bottom: rem(20);
+    width: calc(100% - 32px);
+    border-top: 1px solid $border-color;
+    padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
+    background-color: $white;
+    @include ios-safe-area-inset-bottom;
+    display: flex;
+    .btn {
+      height: rem(42);
+      font-size: $font-size-middle;
+      margin: auto;
+      border-radius: $border-radius-small;
+    }
+  }
+}
 
-.bottom {
-  position: fixed;
-  bottom: rem(20);
-  width: calc(100% - 32px);
-  border-top: 1px solid $border-color;
-  padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
-  @include ios-safe-area-inset-bottom;
-  display: flex;
-  .btn {
-    height: rem(42);
-    font-size: $font-size-middle;
-    margin: auto;
-    border-radius: $border-radius-small;
+#editMobileContent {
+  .bootom2 {
+    bottom: rem(214);
   }
 }

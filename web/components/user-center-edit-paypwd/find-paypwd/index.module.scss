@@ -1,5 +1,4 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/_variable.scss';
 
 .content {
   padding: rem($padding-6n);
@@ -11,7 +10,7 @@
     letter-spacing: 1px;
   }
   .labelInfo {
-    padding: rem($margin-10) 0 rem($margin-6n);
+    padding: rem($margin-3n) 0 rem($margin-4n);
     border-bottom: 1px solid $border-color;
     display: flex;
     align-items: center;
@@ -44,41 +43,59 @@
   }
 }
 
-.bottom {
-  position: fixed;
-  bottom: rem(20);
-  width: calc(100% - 32px);
-  border-top: 1px solid $border-color;
-  padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
-  display: flex;
-  justify-content: center;
-  .btn {
-    height: rem(42);
-    font-size: $font-size-middle;
-    border-radius: $border-radius-small;
+#findPayPwdContent {
+  .bottom {
+    position: fixed;
+    bottom: rem(20);
+    width: calc(100% - 32px);
+    border-top: 1px solid $border-color;
+    padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
+    display: flex;
+    justify-content: center;
+    background-color: $white;
+    .btn {
+      height: rem(42);
+      font-size: $font-size-middle;
+      border-radius: $border-radius-small;
+    }
   }
 }
 
 .labelInfo {
-  padding: rem($padding-6n);
+  padding: rem($padding-6n) rem($padding-6n) rem($padding-4n);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: rem(62);
+  box-sizing: border-box;
   .labelValue {
     color: $text-color-primary;
     font-size: $font-size-middle;
     border-bottom: 1px solid $border-color;
     flex: 1;
+    line-height: rem(62);
     :global {
+      .dzq-icon {
+        line-height: rem(62);
+      }
       .dzq-input {
+        height: rem(61);
         width: 100%;
       }
       .dzq-input__inner {
         width: 100%;
         border: none;
         font-size: rem($font-size-middle);
+        padding-left: 0;
       }
     }
   }
 }
+
+#findPayPwdContent {
+  .bootom2 {
+    bottom: rem(200);
+  }
+}
+
 

@@ -21,7 +21,10 @@ export function getVisualViewpost() {
   if (window.visualViewport) {
     visualHeight = window.visualViewport.height;
   } else {
-    visualHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+    visualHeight = Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight,
+    );
   }
   return visualHeight;
 }

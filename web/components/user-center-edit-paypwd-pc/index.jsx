@@ -3,7 +3,8 @@ import { inject, observer } from 'mobx-react';
 import { Button, Dialog, Input, Toast, Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 import ResetPassword from './reset-paypwd/index';
-import FindPassword from './find-paypwd/index'
+import FindPassword from './find-paypwd/index';
+import throttle from '@common/utils/thottle.js';
 
 @inject('user')
 @inject('payBox')
@@ -74,7 +75,7 @@ class index extends Component {
   }
 
   // 点击提交
-  handleSubmit = async () => {
+  handleSubmit = throttle(async () => {
     const { payPassword } = this.state
     const id = this.props.user.id
     this.props.payBox.password = payPassword
@@ -93,7 +94,7 @@ class index extends Component {
       })
       this.initState()
     })
-  }
+  }, 500)
 
   // 如果没有设置支付密码 显示设置支付密码
   renderSetPayPwd = () => {

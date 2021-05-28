@@ -1,17 +1,41 @@
 @import '@common/styles/index.scss';
 
 .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $padding-6n 0;
+  border-radius: var(--border-radius-small);
+}
+
+.initContainer {
   background: var(--color-white);
-  text-align: center;
-  padding: 16px 0;
 }
 
 .init {
-  font-size: 14px;
-  color: $loading-text-color;
+  font-size: $font-size-primary;
+
+  view {
+    color: $loading-text-color;
+  }
 }
 
 .loadMore {
-  font-size: 14px;
+  font-size: $font-size-label;
+
+  view {
+    color: $loading-text-color;
+  }
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-primary;
   color: $loading-text-color;
+
+  .text {
+    margin-left: $margin-2n;
+  }
 }

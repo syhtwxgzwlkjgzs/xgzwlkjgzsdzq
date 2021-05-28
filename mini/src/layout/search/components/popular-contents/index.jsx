@@ -1,9 +1,9 @@
 import React from 'react';
 
 import ThreadContent from '@components/thread';
+import { View, Text } from '@tarojs/components'
 
 import styles from './index.module.scss';
-import { View, Text } from '@tarojs/components';
 
 /**
  * 热门内容
@@ -12,7 +12,12 @@ import { View, Text } from '@tarojs/components';
 const PopularContents = ({ data, onItemClick }) => (
   <View className={styles.list}>
     {
-      data.map((item, index) => <ThreadContent className={styles.threadList} data={item} key={index} />)
+      data.map((item, index) => (
+        <View key={index}>
+          <ThreadContent showBottomStyle={false} className={styles.bottom} data={item} key={index} />
+          <View className={styles.hr}></View>
+        </View>
+      ))
     }
   </View>
 );

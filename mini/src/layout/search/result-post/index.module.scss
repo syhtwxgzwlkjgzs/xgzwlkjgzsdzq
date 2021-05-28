@@ -1,17 +1,15 @@
 @import '@common/styles/index.scss';
 
-.page {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  overflow: hidden;
-  background: var(--background-color-text2);
-}
-.searchInput {
-  background: var(--color-white);
-  padding: 16px;
+
+.list {
+  flex: 1;
+  background-color: var(--background-color);
 }
 .listItem {
   margin-bottom: 10px;
+}
+
+.topBox {
+  padding-bottom: 16px;
+  background: $white;
 }

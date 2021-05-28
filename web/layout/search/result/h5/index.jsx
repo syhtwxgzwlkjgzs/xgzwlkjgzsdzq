@@ -56,8 +56,8 @@ class SearchResultH5Page extends React.Component {
     });
   };
 
-  onUserClick = ({ userId } = {}) => {
-    this.props.router.push(`/my/others?isOtherPerson=true&otherId=${userId}`);
+  onUserClick = (userId) => {
+    this.props.router.push(`/user/${userId}`);
   };
 
   // 跳转话题详情
@@ -69,9 +69,9 @@ class SearchResultH5Page extends React.Component {
   render() {
     const { keyword } = this.state;
     const { searchTopics, searchUsers, searchThreads } = this.props.search;
-    const { pageData: topicsPageData = [] } = searchTopics || {};
-    const { pageData: usersPageData = [] } = searchUsers || {};
-    const { pageData: threadsPageData = [] } = searchThreads || {};
+    const { pageData: topicsPageData } = searchTopics || {};
+    const { pageData: usersPageData } = searchUsers || {};
+    const { pageData: threadsPageData } = searchThreads || {};
 
     return (
       <BaseLayout allowRefresh={false}>
@@ -95,7 +95,7 @@ class SearchResultH5Page extends React.Component {
           isLoading={!threadsPageData}
           noData={!threadsPageData?.length}
           platform='h5'
-          className={styles.bottom}
+          className={threadsPageData?.length && styles.bottom}
         >
           {
             threadsPageData?.length &&<SearchPosts data={threadsPageData.filter((_, index) => index < 3)} onItemClick={this.onPostClick} />

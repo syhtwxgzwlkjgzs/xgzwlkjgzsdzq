@@ -2,14 +2,12 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 
 import SearchInput from '@components/search-input';
-import List from '@components/list';
-import SectionTitle from './components/section-title';
+import BaseLayout from '@components/base-layout';
 import SearchPosts from './components/search-posts';
 import SearchTopics from './components/search-topics';
 import SearchUsers from './components/search-users';
-import NoData from '@components/no-data';
+import SidebarPanel from '@components/sidebar-panel';
 import { View, Text } from '@tarojs/components';
-import Page from '@components/page';
 import styles from './index.module.scss';
 import Taro from '@tarojs/taro';
 import { getCurrentInstance } from '@tarojs/taro';
@@ -21,7 +19,7 @@ class SearchResultPage extends React.Component {
   constructor(props) {
     super(props);
     const { keyword = '' } = getCurrentInstance().router.params;
-
+  
     this.state = {
       keyword,
     };
@@ -32,19 +30,19 @@ class SearchResultPage extends React.Component {
 
   redirectToSearchResultPost = () => {
     Taro.navigateTo({
-      url: `/pages/search/result-post/index?keyword=${this.state.keyword || ''}`
+      url: `/subPages/search/result-post/index?keyword=${this.state.keyword || ''}`
     })
   };
 
   redirectToSearchResultUser = () => {
     Taro.navigateTo({
-      url: `/pages/search/result-user/index?keyword=${this.state.keyword || ''}`
+      url: `/subPages/search/result-user/index?keyword=${this.state.keyword || ''}`
     })
   };
 
   redirectToSearchResultTopic = () => {
     Taro.navigateTo({
-      url: `/pages/search/result-topic/index?keyword=${this.state.keyword || ''}`
+      url: `/subPages/search/result-topic/index?keyword=${this.state.keyword || ''}`
     })
   };
 
@@ -58,8 +56,6 @@ class SearchResultPage extends React.Component {
   };
 
   onSearch = (keyword) => {
-    // query 更新
-    this.props.router.replace(`/search/result?keyword=${keyword}`);
     this.setState({ keyword }, () => {
       this.searchData(keyword);
     });
@@ -73,48 +69,53 @@ class SearchResultPage extends React.Component {
 
   render() {
     const { keyword } = this.state;
+
     const { searchTopics, searchUsers, searchThreads } = this.props.search;
-    const { pageData: topicsPageData = [] } = searchTopics || {};
-    const { pageData: usersPageData = [] } = searchUsers || {};
-    const { pageData: threadsPageData = [] } = searchThreads || {};
-    console.log(threadsPageData, 'usersPageData')
+    const { pageData: topicsPageData } = searchTopics || {};
+    const { pageData: usersPageData } = searchUsers || {};
+    const { pageData: threadsPageData } = searchThreads || {};
+
     return (
-      <Page>
-        <List className={styles.page} allowRefresh={false}>
-          <View className={styles.searchInput}>
-            <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
-          </View>
-          <View className={styles.section}>
-            <SectionTitle title="用户" onShowMore={this.redirectToSearchResultUser} />
-          </View>
-          {
-            usersPageData?.length
-              ? <SearchUsers data={usersPageData} onItemClick={this.onUserClick} />
-              : <NoData />
-          }
+      <BaseLayout allowRefresh={false} showHeader={false}>
+        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
 
-          <View className={styles.hr}></View>
-          <View className={styles.section}>
-            <SectionTitle title="主题" onShowMore={this.redirectToSearchResultPost} />
-          </View>
+        <SidebarPanel
+          title="用户" 
+          onShowMore={this.redirectToSearchResultUser}
+          isLoading={!usersPageData}
+          noData={!usersPageData?.length}
+          platform='h5'
+        >
           {
-            threadsPageData?.length
-              ? <SearchPosts data={threadsPageData} onItemClick={this.onPostClick} />
-              : <NoData />
+            usersPageData?.length && <SearchUsers data={usersPageData} onItemClick={this.onUserClick} />
           }
+        </SidebarPanel>
 
-          <View className={styles.hr}></View>
-          <View className={styles.section}>
-            <SectionTitle title="话题" onShowMore={this.redirectToSearchResultTopic} />
-          </View>
+        <SidebarPanel
+          title="主题" 
+          onShowMore={this.redirectToSearchResultPost}
+          isLoading={!threadsPageData}
+          noData={!threadsPageData?.length}
+          platform='h5'
+          className={threadsPageData?.length && styles.bottom}
+        >
           {
-            topicsPageData?.length
-              ? <SearchTopics data={topicsPageData} onItemClick={this.onTopicClick} />
-              : <NoData />
+            threadsPageData?.length &&<SearchPosts data={threadsPageData.filter((_, index) => index < 3)} onItemClick={this.onPostClick} />
           }
+        </SidebarPanel>
 
-        </List>
-      </Page>
+        <SidebarPanel
+          title="话题" 
+          onShowMore={this.redirectToSearchResultTopic}
+          isLoading={!topicsPageData}
+          noData={!topicsPageData?.length}
+          platform='h5'
+        >
+          {
+            topicsPageData?.length && <SearchTopics data={topicsPageData} onItemClick={this.onTopicClick} />
+          }
+        </SidebarPanel>
+      </BaseLayout>
     );
   }
 }

@@ -1,9 +1,6 @@
 import React from 'react';
-import { Input } from '@discuzq/design';
-import { View } from '@tarojs/components';
+import { View, Input} from '@tarojs/components';
 import layout from './index.module.scss';
-
-let inputIndex = null;
 
 class CaptchaInput extends React.Component {
   constructor(props) {
@@ -13,118 +10,49 @@ class CaptchaInput extends React.Component {
     };
   }
 
-  getValue = () => {
-    const value = ['', '', '', '', '', ''];
-    const { captcha = '' } = this.props;
-    captcha.split('').map((item, index) => {
-      value[index] = item;
-    });
-    return value;
-  };
-
-  // 点击输入框聚焦到最前端未填写的地方
-  focusInput = (index, eve) => {
-    const value = this.getValue();
-    const { inputRef } = this.state;
-    if (index === inputIndex) {
-      return;
+  indexClass(index) {
+    const { captcha, isFocus } = this.props;
+    let indexClass = '';
+    if((((index === 0) || captcha[index - 1]) && isFocus) || captcha[index]){
+      indexClass = layout['captchaInput-input_val'];
     }
-    eve.target.blur();
-    for (let i = 0; i < value.length; i += 1) {
-      if (value[i] === '' || i === 5) {
-        inputIndex = i;
-        inputRef[i].focus();
-        break;
-      }
-    }
-  };
-
-  // 输入事件
-  setChange = (index, e) => {
-    const { inputCallback } = this.props;
-    const value = this.getValue();
-    const val = e.target.value;
-    const v = [...value];
-    if (index < 5 && val.length === 2) {
-      v[index + 1] = val.substring(2, 1);
-    } else {
-      v[index] = val.substring(0, 1);
-    }
-    inputCallback(v.join(''));
-    if (index === 5 && !v.includes('')) {
-      e.target.blur();
-    }
-    if (val === '' || (index === 5 && !v.includes('')) || (v.indexOf('') - 1 !== index)) {
-      return;
-    }
-    this.nextFocus(e, index + val.length - 1);
-    return;
-  };
-
-  // 删除事件
-  setBackspace = (index, e) => {
-    const val = e.target.value;
-    if (val === '') {
-      this.lastFocus(e, index);
-    }
-  };
-
-  // 切换到上一个输入框获取焦点
-  lastFocus = (e, index) => {
-    const { inputRef } = this.state;
-    e.target.blur();
-    if (index > 0) {
-      inputIndex = index - 1;
-      inputRef[index - 1].focus();
-    }
-  };
-
-  // 切换到下一个输入框获取焦点
-  nextFocus = (e, index) => {
-    const { inputRef } = this.state;
-    e.target.blur();
-    if (index < 5) {
-      inputIndex = index + 1;
-      inputRef[index + 1].focus();
-    }
-  };
-
-  // 设置对应下标的输入框获取焦点
-  getInputDom = (e, index) => {
-    const { inputRef } = this.state;
-    const i = inputRef;
-    i[index] = e;
-    this.setState({
-      inputRef: i,
-    });
-  };
+    return `${layout['captchaInput-input']} ${indexClass}`;
+  }
 
   render() {
-    const value = this.getValue();
+    const { inputRef } = this.state;
+    const { captcha, setCaptcha, isFocus, setIsFocus } = this.props;
     return (
-      <View className={layout.container}>
-        {value.map((item, index) => (
-          <Input
-            mode="number"
-            htmlType="number"
-            key={index}
-            value={value[index]}
-            onChange={(e) => {
-              this.setChange(index, e);
-            }}
-            className={`${layout['captchaInput-input']} ${item ? layout['captchaInput-input_val'] : ''}`}
-            onFocus={(e) => {
-              this.focusInput(index, e);
-            }}
-            maxLength={2}
-            onBackspace={(e) => {
-              this.setBackspace(index, e);
-            }}
-            useRef={(e) => {
-              this.getInputDom(e, index);
-            }}
-          />
-        ))}
+      <View className={layout.container}
+        onClick={() => {
+          setIsFocus(true);
+        }}
+      >
+        <Input
+          type="number"
+          value={captcha}
+          className={layout.hide_input}
+          focus={isFocus}
+          onBlur={() => {
+            setIsFocus(false);
+          }}
+          maxlength={6}
+          onInput={(e) => {
+            const val = e?.detail?.value;
+            if(val.length === 6 || val.length === 0){
+              setIsFocus(false);
+            }
+            setCaptcha(e?.detail?.value)
+          }}
+        />
+        {inputRef.map((item, index) => {
+          const className = this.indexClass(index);
+          return (
+            <View
+              key={index}
+              className={className}
+            >{captcha[index] || ''}</View>
+        )})}
       </View>
     );
   }

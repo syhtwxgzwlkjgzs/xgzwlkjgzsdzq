@@ -26,8 +26,10 @@ class SearchPCPage extends React.Component {
     const keyword = this.props.router.query.keyword || '';
     this.state = {
       value: keyword,
-      stepIndex: 0
+      stepIndex: 0,
+      position: -1,
     };
+    this.treadingTopicRef = React.createRef();
     this.activeUsersRef = React.createRef();
     this.hotTopicRef = React.createRef();
   }
@@ -46,7 +48,7 @@ class SearchPCPage extends React.Component {
 
   // TODO 处理用户是自己的数据
   onUserClick = ({ userId } = {}) => {
-    this.props.router.push(`/my/others?isOtherPerson=true&otherId=${userId}`);
+    this.props.router.push(`/user/${userId}`);
   };
 
   onTopicClick = data => {
@@ -88,23 +90,33 @@ class SearchPCPage extends React.Component {
       })
     }
   }
-  itemClick = (index, idName) => {
+  itemClick = (index) => {
+    const HEADER_HEIGHT = 57;
+    const STEPPER_PADDING = 24;
+    let pos = -1, scrollTo = -1;
+
+    switch (index) {
+      case 0:
+        pos = this.treadingTopicRef.current.offsetTop;
+        break;
+      case 1:
+        pos = this.activeUsersRef.current.offsetTop;
+        break;
+      case 2:
+        pos = this.hotTopicRef.current.offsetTop;
+        break;
+      default:
+        return;
+    }
+    scrollTo = pos + parseInt(HEADER_HEIGHT / 2) - STEPPER_PADDING;
+
     const stepIndex = this.state.stepIndex;
     if (stepIndex !== index) {
-      this.scrollToAnchor(idName);
-      setTimeout(() => {
-        this.setState({stepIndex: index});
-      }, 1000); // 等待完成 scrollIntoView();
+      this.setState({position: scrollTo});
+      this.setState({stepIndex: index});
     }
   }
-  scrollToAnchor = (anchorName) => {
-    if (anchorName) {
-      // 找到锚点
-      let anchorElement = document.getElementById(anchorName);
-      // 如果对应id的锚点存在，就跳转到锚点
-      if(anchorElement) { anchorElement.scrollIntoView({block: 'start', behavior: 'smooth'}); }
-    }
-  }
+
   // 右侧 - 步骤条
   renderRight = () => {
     return (
@@ -115,14 +127,20 @@ class SearchPCPage extends React.Component {
     )
   }
   handleScroll = ({ scrollTop } = {}) => {
-    const activeUsersPos = this.activeUsersRef.current.offsetTop;
-    const hotTopicPos = this.hotTopicRef.current.offsetTop;
+    const HEADER_HEIGHT = 57;
+    const STEPPER_PADDING = 24;
 
-    if(scrollTop < activeUsersPos) {
+    const activeUsersPos = this.activeUsersRef.current.offsetTop,
+          activeUsersScrollTo = activeUsersPos + parseInt(HEADER_HEIGHT / 2) - STEPPER_PADDING;
+
+    const hotTopicPos = this.hotTopicRef.current.offsetTop,
+          hotTopicScrollTo = hotTopicPos + parseInt(HEADER_HEIGHT / 2) - STEPPER_PADDING;
+
+    if(scrollTop < activeUsersScrollTo) {
       this.setState({stepIndex: 0}); // TODO: 暂时写死index，应该通过steps传回index
-    } else if(scrollTop < hotTopicPos && scrollTop >= activeUsersPos) {
+    } else if(scrollTop < hotTopicScrollTo && scrollTop >= activeUsersScrollTo) {
       this.setState({stepIndex: 1});
-    } else if(scrollTop >= hotTopicPos) {
+    } else if(scrollTop >= hotTopicScrollTo) {
       this.setState({stepIndex: 2});
     }
   }
@@ -137,10 +155,9 @@ class SearchPCPage extends React.Component {
     const { pageData: usersPageData } = indexUsers || {};
     const { pageData: threadsPageData } = indexThreads || {};
 
-    // TODO 添加活跃用户和当前用户是同一人的判断
     return (
       <div className={styles.searchContent}>
-        <div id="StrongSharpOutlined">
+        <div ref={this.treadingTopicRef}>
           <SidebarPanel 
             title="潮流话题" 
             type='normal'
@@ -157,7 +174,7 @@ class SearchPCPage extends React.Component {
           </SidebarPanel>
         </div>
 
-        <div id="MemberOutlined" ref={this.activeUsersRef}>
+        <div ref={this.activeUsersRef}>
           <SidebarPanel 
             title="活跃用户" 
             type='normal'
@@ -170,7 +187,7 @@ class SearchPCPage extends React.Component {
           </SidebarPanel>
         </div>
 
-        <div id="HotOutlined" ref={this.hotTopicRef}>
+        <div ref={this.hotTopicRef}>
           <div className={styles.postTitle}>
             <SectionTitle
               title="热门内容"
@@ -194,6 +211,8 @@ class SearchPCPage extends React.Component {
           onSearch={this.onSearch}
           right={ this.renderRight }
           onScroll={ this.handleScroll }
+          jumpTo={this.state.position}
+          pageName="search"
         >
           { this.renderContent() }
         </BaseLayout>

@@ -2,86 +2,145 @@
 /**
  * 通用上传组件、支持图片、附件、录音等的上传和展示
  */
-import React, { useState } from 'react';
+import React from 'react';
 import Taro from '@tarojs/taro';
 import { observer, inject } from 'mobx-react';
 import { View } from '@tarojs/components';
-import { AudioRecord, Audio } from '@discuzq/design';
+import AudioRecord from '@discuzq/design/dist/components/audio-record/index';
+import Audio from '@discuzq/design/dist/components/audio/index';
 import { Units } from '@components/common';
 import styles from './index.module.scss';
+import locals from '@common/utils/local-bridge';
+import constants from '@common/constants';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 
-export default inject('threadPost')(observer(({type, threadPost, audioUpload}) => {
+export default inject('threadPost', 'site')(observer(({ type, threadPost, site, audioUpload }) => {
   const { postData, setPostData } = threadPost;
+  const { webConfig } = site;
 
   const localData = JSON.parse(JSON.stringify(postData));
 
   const { images, files, audio } = localData;
 
+  // 检查选中附件、图片的合法性，合法则可以上传
+  const checkWithUpload = async (tempFiles, type) => {
+    // 站点支持的附件类型、图片类型、尺寸大小
+    const { supportFileExt, supportImgExt, supportMaxSize } = webConfig?.setAttach;
+
+    if (type === THREAD_TYPE.file) {
+      const tempFile = tempFiles[0]; // 附件上传一次只能传一个
+      const fileType = tempFile.name.match(/\.([^\.]+)$/)[1].toLocaleLowerCase();
+      const fileSize = tempFile.size;
+      const isLegalType = supportFileExt.toLocaleLowerCase().includes(fileType);
+      const isLegalSize = supportMaxSize * 1024 * 1024 > fileSize;
+
+      if (!isLegalType) {
+        Taro.showToast({ title: `仅支持${supportFileExt}格式的附件`, icon: 'none' });
+        return;
+      }
+      if (!isLegalSize) {
+        Taro.showToast({ title: `仅支持0 ~ ${supportMaxSize}MB的附件`, icon: 'none' });
+        return;
+      }
+      Taro.showLoading({
+        title: '上传中',
+        mask: true
+      });
+      await upload(tempFile);
+      Taro.hideLoading();
+
+    } else if (type === THREAD_TYPE.image) {
+      // 剔除超出数量9的多余图片
+      console.log(`images`, images, Object.keys(images).length)
+      const remainLength = 9 - Object.keys(images).length; // 剩余可传数量
+      tempFiles.splice(remainLength, tempFiles.length - remainLength);
+
+      let isAllLegal = true; // 状态：此次上传图片是否全部合法
+      const uploadPromise = [];
+      tempFiles.forEach((item, index) => {
+        const imageType = item.path.match(/\.([^\.]+)$/)[1].toLocaleLowerCase();
+        const imageSize = item.size;
+        const isLegalType = supportImgExt.toLocaleLowerCase().includes(imageType);
+        const isLegalSize = supportMaxSize * 1024 * 1024 > imageSize;
+
+        // 存在不合法图片时，从上传图片列表删除
+        if (!isLegalType || !isLegalSize) {
+          tempFiles.splice(index, 1);
+          isAllLegal = false;
+          return;
+        }
+        Taro.showLoading({
+          title: '上传中',
+          mask: true
+        });
+        uploadPromise.push(upload(item));
+      });
+      await Promise.all(uploadPromise);
+      Taro.hideLoading();
+      !isAllLegal && Taro.showToast({
+        title: `仅支持${supportImgExt}格式，且0~${supportMaxSize}MB的图片`, icon: 'none'
+      });
+    }
+
+    return true;
+  }
+
   // 执行上传
   const upload = (file) => {
-    console.log('upload', file);
-    const tempFilePath = file.path || file.tempFilePath;
-    console.log(tempFilePath);
-    Taro.uploadFile({
-      url: `${window.location.origin}/apiv3/attachments`,
-      filePath: tempFilePath,
-      name: 'file',
-      header: {
-        'Content-Type': 'multipart/form-data',
-        authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIiLCJqdGkiOiIxNmUxZTAyNTEzZmNmNmI3YzAwYTIyZGIxNDY3NmQ0ZTIwMWZkYmQ5NzM0YTQ0Y2RiZWE3NjZhOGQ3YzZiMzUxYWMyYTI0MjVkZWVmZWQwNiIsImlhdCI6MTYxOTM0MjEyNSwibmJmIjoxNjE5MzQyMTI1LCJleHAiOjE2MjE5MzQxMjUsInN1YiI6IjEiLCJzY29wZXMiOltudWxsXX0.RZrWPw5xNljl8jexv6CCVni0wEGhb6g5zzsgCULa_3fHvCzrUSF0YMhCduCCTdnbKmbegVsVNMCVqDzJdMexgPD-hIUL9zouB4H7Ohy5dE6KIQpyrV08NP-27A5CUyVG-T7r1hMKkAVn0hBKY4zF3-q0RsN16jV4hLJtzyPfuOSeA92umoBFqsNnn-9tR5TTppkHs1-jJPgbGn4FPpxFbrEbIB9kMdYh_kShQ2IQLGTX-xGlNZBuxNigOY7xvB2xWp9LFW9X9DlbkDLRKbU_E5Q-MMNY0laa_9tgddCzEjzE2P1TeKIOVlB_JLql9sdCWb7OaVXi8xXTZuVAxphe0w'
-      },
-      formData: {
-        'type': (() => {
-          console.log(type);
-          console.log(THREAD_TYPE.voice);
+    return new Promise((resolve, reject) => {
+      const tempFilePath = file.path || file.tempFilePath;
+      const token = locals.get(constants.ACCESS_TOKEN_NAME);
+      Taro.uploadFile({
+        url: `https://discuzv3-dev.dnspod.dev//apiv3/attachments`,
+        filePath: tempFilePath,
+        name: 'file',
+        header: {
+          'Content-Type': 'multipart/form-data',
+          'authorization': `Bearer ${token}`
+        },
+        formData: {
+          'type': (() => {
+            switch(type) {
+              case THREAD_TYPE.image: return 1;
+              case THREAD_TYPE.file: return 0;
+            }
+          })()
+        },
+        success(res) {
+          const data = JSON.parse(res.data).Data;
           switch(type) {
-            case THREAD_TYPE.image: return 1;
-            case THREAD_TYPE.file: return 0;
-            // case THREAD_TYPE.voice: return 3;
+            case THREAD_TYPE.image:
+              images[data.id] = {
+                thumbUrl: tempFilePath,
+                ...data,
+              };
+              setPostData({images});
+              break;
+            case THREAD_TYPE.file:
+              files[data.id] = {
+                thumbUrl: tempFilePath,
+                name: file.name,
+                size: file.size,
+                ...data,
+              };
+              setPostData({files});
+              break;
           }
-        })()
-      },
-      success(res) {
-        console.log(res);
-        const data = JSON.parse(res.data).Data;
-        switch(type) {
-          case THREAD_TYPE.image:
-            images[data.id] = {
-              thumbUrl: tempFilePath,
-              ...data,
-            };
-            setPostData({images});
-            break;
-          case THREAD_TYPE.file:
-            files[data.id] = {
-              thumbUrl: tempFilePath,
-              name: file.name,
-              size: file.size,
-              ...data,
-            };
-            setPostData({files});
-            break;
-          // case THREAD_TYPE.voice:
-          //   audio = {
-          //     thumbUrl: tempFilePath,
-          //     ...data,
-          //   };
-          //   setPostData({audio});
-          //   break;
+          resolve();
+        },
+        fail(res) {
+          console.log(res);
         }
-      },
-      fail(res) {
-        console.log(res);
-      }
+      });
     });
-  }
+  };
 
   // 选择图片
   const chooseImage = () => {
     Taro.chooseImage({
+      count: 9,
       success(res) {
-        upload(res.tempFiles[0]);
+        checkWithUpload(res.tempFiles, THREAD_TYPE.image)
       }
     });
   }
@@ -89,8 +148,9 @@ export default inject('threadPost')(observer(({type, threadPost, audioUpload}) =
   // 选择附件
   const chooseFile = () => {
     Taro.chooseMessageFile({
+      count: 1,
       success(res) {
-        upload(res.tempFiles[0]);
+        checkWithUpload(res.tempFiles, THREAD_TYPE.file)
       }
     });
   }

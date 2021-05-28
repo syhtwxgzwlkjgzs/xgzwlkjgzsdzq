@@ -1,6 +1,6 @@
-import api from './api';
+import {smsVerify} from '@discuzq/sdk/dist/api/login/smsverify';
 
-export default async function smsVerify(opts, ctx = null) {
-  const res = await api.smsVerify({ ...opts, __context: ctx });
+export default async function _smsVerify(opts, ctx = null) {
+  const res = await smsVerify({ ...opts, __context: ctx });
   return res;
 }

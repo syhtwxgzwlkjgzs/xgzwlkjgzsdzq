@@ -23,7 +23,7 @@ class index extends Component {
 
   componentDidMount() {
     this.setState({
-      height: window.outerHeight,
+      height: window.outerHeight - 38,
       renderComponent: true,
     });
   }
@@ -71,7 +71,7 @@ class index extends Component {
   };
 
   onContainerClick = ({ id }) => {
-    Router.push({ url: `/my/others?isOtherPerson=${true}&otherId=${id}` });
+    Router.push({ url: `/user/${id}` });
   };
 
   // 分割线
@@ -87,9 +87,9 @@ class index extends Component {
     return (
       <>
         {!isOtherFollows ? (
-          <UserCenterFllows onContainerClick={this.onContainerClick} />
+          <UserCenterFllows onContainerClick={this.onContainerClick} splitElement={this.splitElement()} />
         ) : (
-          <UserCenterFllows onContainerClick={this.onContainerClick} userId={id} />
+          <UserCenterFllows onContainerClick={this.onContainerClick} userId={id} splitElement={this.splitElement()} />
         )}
       </>
     );

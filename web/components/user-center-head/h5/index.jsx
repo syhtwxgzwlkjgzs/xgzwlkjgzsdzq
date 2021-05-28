@@ -6,6 +6,7 @@ import { Button, Icon, Toast } from '@discuzq/design';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
+import { numberFormat } from '@common/utils/number-format';
 @inject('user')
 @observer
 class index extends Component {
@@ -18,11 +19,16 @@ class index extends Component {
     isOtherPerson: false, // 表示是否是其他人
   };
 
+  componentDidMount() {
+    const id = this.props.user?.id
+    this.props.user.updateUserInfo(id)
+  }
+
   // 点击屏蔽
   handleChangeShield = (isDeny) => {
-    const { query } = this.props.router;
+    const id = this.props.router.query?.id;
     if (isDeny) {
-      this.props.user.undenyUser(query.otherId);
+      this.props.user.undenyUser(id);
       this.props.user.setTargetUserNotBeDenied();
       Toast.success({
         content: '解除屏蔽成功',
@@ -30,7 +36,7 @@ class index extends Component {
         duration: 1000,
       });
     } else {
-      this.props.user.denyUser(query.otherId);
+      this.props.user.denyUser(id);
       this.props.user.setTargetUserDenied();
       Toast.success({
         content: '屏蔽成功',
@@ -42,14 +48,14 @@ class index extends Component {
 
   // 点击关注
   handleChangeAttention = async (follow) => {
-    const { query } = this.props.router;
-    if (query.otherId) {
+    const id = this.props.router.query?.id;
+    if (id) {
       if (follow !== 0) {
-        await this.props.user.cancelFollow({ id: query.otherId, type: 1 });
-        await this.props.user.getTargetUserInfo(query.otherId);
+        await this.props.user.cancelFollow({ id: id, type: 1 });
+        await this.props.user.getTargetUserInfo(id);
       } else {
-        await this.props.user.postFollow(query.otherId);
-        await this.props.user.getTargetUserInfo(query.otherId);
+        await this.props.user.postFollow(id);
+        await this.props.user.getTargetUserInfo(id);
       }
     }
   };
@@ -61,9 +67,9 @@ class index extends Component {
 
   // 点击粉丝列表
   goToFansList = () => {
-    const { query } = this.props.router;
-    if (query.otherId) {
-      Router.push({ url: `/my/fans?isOtherPerson=${this.props.isOtherPerson}&otherId=${query.otherId}` });
+    const id = this.props.router.query?.id
+    if (id) {
+      Router.push({ url: `/my/fans?isOtherPerson=${this.props.isOtherPerson}&otherId=${id}` });
     } else {
       Router.push({ url: `/my/fans?isOtherPerson=${this.props.isOtherPerson}` });
     }
@@ -71,9 +77,9 @@ class index extends Component {
 
   // 点击关注列表
   goToFollowsList = () => {
-    const { query } = this.props.router;
-    if (query.otherId) {
-      Router.push({ url: `/my/follows?isOtherPerson=${this.props.isOtherPerson}&otherId=${query.otherId}` });
+    const id = this.props.router.query?.id;
+    if (id) {
+      Router.push({ url: `/my/follows?isOtherPerson=${this.props.isOtherPerson}&otherId=${id}` });
     } else {
       Router.push({ url: `/my/follows?isOtherPerson=${this.props.isOtherPerson}` });
     }
@@ -91,6 +97,8 @@ class index extends Component {
   };
 
   gotoLikeList = () => {
+    const isVisitOtherUser = this.props.router.query?.id;
+    if (isVisitOtherUser) return;
     Router.push({ url: '/my/like' });
   };
 
@@ -119,34 +127,34 @@ class index extends Component {
 
   render() {
     const { targetUser } = this.props.user;
-    const user = this.props.isOtherPerson ? targetUser || {} : this.props.user;
+    const user = this.props.router.query?.id ? targetUser || {} : this.props.user;
     return (
       <div className={styles.h5box}>
         {/* 上 */}
         <div className={styles.h5boxTop}>
           <div className={styles.headImgBox}>
-            <Avatar image={user.avatarUrl} size="big" name={user.username} />
+            <Avatar image={user.avatarUrl} size="big" name={user.nickname} />
           </div>
           {/* 粉丝|关注|点赞 */}
           <div className={styles.userMessageList}>
             <div onClick={this.goToFansList} className={styles.userMessageListItem}>
               <span>粉丝</span>
-              <span>{user.fansCount || 0}</span>
+              <span>{numberFormat(user.fansCount) || 0}</span>
             </div>
             <div onClick={this.goToFollowsList} className={styles.userMessageListItem}>
               <span>关注</span>
-              <span>{user.followCount || 0}</span>
+              <span>{numberFormat(user.followCount) || 0}</span>
             </div>
             <div onClick={this.gotoLikeList} className={styles.userMessageListItem}>
               <span>点赞</span>
-              <span>{user.likedCount || 0}</span>
+              <span>{numberFormat(user.likedCount) || 0}</span>
             </div>
           </div>
         </div>
         {/* 中 用户昵称和他所在的用户组名称 */}
         <div>
           <div className={styles.userNameOrTeam}>
-            <span>{user.username}</span>
+            <span>{user.nickname}</span>
             <span>{user.group?.groupName}</span>
           </div>
           <p className={styles.text}>{user.signature || '这个人很懒，什么也没留下~'}</p>
@@ -160,23 +168,24 @@ class index extends Component {
                   this.handleChangeAttention(user.follow);
                 }}
                 type="primary"
-                className={user.follow === 2 && styles.userFriendsBtn}
+                className={`${styles.btn} ${user.follow === 2 && styles.userFriendsBtn}`}
+                full
               >
                 <Icon name={this.renderFollowedStatus(user.follow).icon} />
                 <span className={styles.userBtnText}>{this.renderFollowedStatus(user.follow).text}</span>
               </Button>
-              <Button onClick={this.handleMessage}>
+              <Button full className={styles.btn} onClick={this.handleMessage}>
                 <Icon name="NewsOutlined" />
                 <span className={styles.userBtnText}>发私信</span>
               </Button>
             </>
           ) : (
             <>
-              <Button onClick={this.goToMyEditInfo} type="primary">
+              <Button full className={styles.btn} onClick={this.goToMyEditInfo} type="primary">
                 <Icon name="CompileOutlined" />
                 <span className={styles.userBtnText}>编辑资料</span>
               </Button>
-              <Button onClick={this.logout}>
+              <Button full className={styles.btn} onClick={this.logout}>
                 <Icon name="PoweroffOutlined" />
                 <span className={styles.userBtnText}>退出登录</span>
               </Button>

@@ -1,3 +1,4 @@
+// import {readCategories} from '@discuzq/sdk/dist/api/content/read-categories';
 import api from '../api';
 
 export default async function readRecommends(opts, ctx = null) {

@@ -1,16 +1,16 @@
 import React, { Fragment } from 'react';
+import { inject, observer } from 'mobx-react';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import { View, Text } from '@tarojs/components';
-import { observer, inject } from 'mobx-react';
-import { Toast, Icon } from '@discuzq/design';
-
 import Taro from '@tarojs/taro';
 import CommentList from '../../components/comment-list/index';
 import AboptPopup from '../../components/abopt-popup';
-import DeletePopup from '../../components/delete-popup';
-import InputPopup from '../../components/input-popup/index';
-
 import comment from './index.module.scss';
 import { parseContentData } from '../../utils';
+import InputPopup from '../../components/input-popup';
+import DeletePopup from '../../components/delete-popup';
+import goToLoginPage from '@common/utils/go-to-login-page';
 
 // 评论列表
 @inject('thread')
@@ -30,29 +30,60 @@ class RenderCommentList extends React.Component {
 
     this.commentData = null;
     this.replyData = null;
-  }
 
-  componentDidMount() {
-    console.log('componentDidMount', this.props.thread);
+    this.recordCommentLike = {
+      // 记录当前评论点赞状态
+      id: null,
+      status: null,
+    };
+    this.recordReplyLike = {
+      // 记录当前评论点赞状态
+      id: null,
+      status: null,
+    };
   }
 
   // 评论列表排序
-  onSortClick = () => {
-    this.setState({
-      commentSort: !this.state.commentSort,
-    });
-    typeof this.props.sort === 'function' && this.props.sort(!this.state.commentSort);
+  onSortClick = async () => {
+    if (typeof this.props.sort === 'function') {
+      try {
+        const success = await this.props.sort(!this.state.commentSort);
+        if (success) {
+          this.setState({
+            commentSort: !this.state.commentSort,
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   // 点击评论的赞
   async likeClick(data) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      return;
+    }
+
     if (!data.id) return;
+
+    if (this.recordCommentLike.id !== data.id) {
+      this.recordCommentLike.status = null;
+    }
+    if (this.recordCommentLike.status !== data.isLiked) {
+      this.recordCommentLike.status = data.isLiked;
+      this.recordCommentLike.id = data.id;
+    } else {
+      return;
+    }
 
     const params = {
       id: data.id,
       isLiked: !data.isLiked,
     };
-    const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
+    const { success, msg } = await this.props.comment.updateLiked(params);
 
     if (success) {
       this.props.thread.setCommentListDetailField(data.id, 'isLiked', params.isLiked);
@@ -69,13 +100,34 @@ class RenderCommentList extends React.Component {
 
   // 点击回复的赞
   async replyLikeClick(reply, comment) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      return;
+    }
+
     if (!reply.id) return;
+
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      return;
+    }
+
+    if (this.recordReplyLike.id !== reply.id) {
+      this.recordReplyLike.status = null;
+    }
+    if (this.recordReplyLike.status !== reply.isLiked) {
+      this.recordReplyLike.status = reply.isLiked;
+      this.recordReplyLike.id = reply.id;
+    } else {
+      return;
+    }
 
     const params = {
       id: reply.id,
       isLiked: !reply.isLiked,
     };
-    const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
+    const { success, msg } = await this.props.comment.updateLiked(params);
 
     if (success) {
       this.props.thread.setReplyListDetailField(comment.id, reply.id, 'isLiked', params.isLiked);
@@ -119,9 +171,15 @@ class RenderCommentList extends React.Component {
 
   // 点击评论的回复
   replyClick(comment) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      return;
+    }
+
     this.commentData = comment;
     this.replyData = null;
-    const userName = comment?.user?.username || comment?.user?.userName;
+    const userName = comment?.user?.nickname || comment?.user?.userName;
     this.setState({
       showCommentInput: true,
       inputText: userName ? `回复${userName}` : '请输入内容',
@@ -130,10 +188,16 @@ class RenderCommentList extends React.Component {
 
   // 点击回复的回复
   replyReplyClick(reply, comment) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      return;
+    }
+
     this.commentData = null;
     this.replyData = reply;
     this.replyData.commentId = comment.id;
-    const userName = reply?.user?.username || reply?.user?.userName;
+    const userName = reply?.user?.nickname || reply?.user?.userName;
 
     this.setState({
       showCommentInput: true,
@@ -143,6 +207,11 @@ class RenderCommentList extends React.Component {
 
   // 创建回复评论+回复回复接口
   async createReply(val) {
+    if (!val) {
+      Toast.info({ content: '请输入内容!' });
+      return;
+    }
+
     const id = this.props.thread?.threadData?.id;
     if (!id) return;
 
@@ -189,14 +258,22 @@ class RenderCommentList extends React.Component {
   }
 
   // 跳转评论详情
-  onCommentClick = (data) => {
-    Taro.navigateTo({
-      url: `/subPages/thread/comment/index?id=${data.id}&threadId=${this.props.thread?.threadData?.id}`,
-    });
-  };
+  onCommentClick(data) {
+    if (data.id && this.props.thread?.threadData?.id) {
+      Taro.navigateTo({
+        url: `/subPages/thread/comment/index?id=${data.id}&threadId=${this.props.thread?.threadData?.id}`,
+      });
+    }
+  }
 
   // 点击采纳
   onAboptClick(data) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      return;
+    }
+
     this.commentData = data;
     this.setState({ showAboptPopup: true });
   }
@@ -205,7 +282,7 @@ class RenderCommentList extends React.Component {
   async onAboptOk(data) {
     if (data > 0) {
       const params = {
-        postId: this.props.thread?.threadData?.postId,
+        postId: this.commentData?.id,
         rewards: data,
         threadId: this.props.thread?.threadData?.threadId,
       };
@@ -213,8 +290,11 @@ class RenderCommentList extends React.Component {
       if (success) {
         this.setState({ showAboptPopup: false });
 
+        // 重新获取帖子详细
+        this.props.thread.fetchThreadDetail(params.threadId)
+
         Toast.success({
-          content: `成功悬赏${data}元`,
+          content: `悬赏${data}元`,
         });
         return true;
       }
@@ -222,13 +302,11 @@ class RenderCommentList extends React.Component {
       Toast.error({
         content: msg,
       });
-
-      return;
+    } else {
+      Toast.info({
+        content: '悬赏金额不能为0',
+      });
     }
-
-    Toast.success({
-      content: '悬赏金额不能为0',
-    });
   }
 
   // 悬赏弹框取消
@@ -240,14 +318,15 @@ class RenderCommentList extends React.Component {
   render() {
     const { totalCount, commentList } = this.props.thread;
 
-    const { indexes } = this.props.thread?.threadData?.content || {};
-    const parseContent = parseContentData(indexes);
-
     // 是否作者自己
     const isSelf =
       this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === this.props.thread?.threadData?.userId;
-    // 是否是悬赏帖
+
     const isReward = this.props.thread?.threadData?.displayTag?.isReward;
+
+    const { indexes } = this.props.thread?.threadData?.content || {};
+
+    const parseContent = parseContentData(indexes);
 
     return (
       <Fragment>
@@ -273,7 +352,10 @@ class RenderCommentList extends React.Component {
                 onCommentClick={() => this.onCommentClick(val)}
                 onAboptClick={() => this.onAboptClick(val)}
                 isShowOne={true}
-                isShowAdopt={isSelf && isReward && this.props.thread?.threadData?.userId !== val.userId} // 是帖子作者 && 是悬赏帖 && 评论人不是作者本人
+                isShowAdopt={
+                  // 是帖子作者 && 是悬赏帖 && 评论人不是作者本人
+                  isSelf && isReward && this.props.thread?.threadData?.userId !== val.userId
+                }
               ></CommentList>
             </View>
           ))}

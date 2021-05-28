@@ -1,5 +1,4 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/_variable.scss';
 
 .content {
   padding: $padding-6n;
@@ -11,37 +10,28 @@
     letter-spacing: 1px;
   }
   .paypwdInput {
+    height: rem(62);
+    box-sizing: border-box;
+    padding: rem($padding-6n) 0 rem($padding-4n);
     :global {
       .dzq-input {
         width: 100%;
+        height: rem(38);
       }
       .dzq-input__inner {
         width: 100%;
-        height: rem(62);
-        line-height: rem(62);
+        height: rem(38);
+        line-height: rem(38);
         border: none;
         border-bottom: 1px solid $border-color;
         padding-left: 0;
+        border-radius: 0;
+        padding-bottom: rem($padding-4n);
       }
       .dzq-input__icon {
-        line-height: rem(62);
+        line-height: rem(32);
       }
     }
-  }
-}
-
-.bottom {
-  position: fixed;
-  bottom: rem(20);
-  width: calc(100% - 32px);
-  border-top: 1px solid $border-color;
-  padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
-  display: flex;
-  .btn {
-    height: rem(42);
-    font-size: $font-size-middle;
-    margin: auto;
-    border-radius: $border-radius-small;
   }
 }
 
@@ -57,6 +47,8 @@
         line-height: rem(62);
         border: none;
         border-bottom: 1px solid $border-color;
+        border-radius: 0;
+        padding-left: 0;
       }
       .dzq-input__icon {
         line-height: rem(62);
@@ -68,5 +60,22 @@
     width: 100%;
     text-align: right;
     font-size: rem($font-size-primary);
+  }
+}
+
+#setPayPwdContent {
+  .bottom {
+    position: fixed;
+    bottom: rem(20);
+    width: calc(100% - 32px);
+    border-top: 1px solid $border-color;
+    padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
+    display: flex;
+    .btn {
+      height: rem(42);
+      font-size: $font-size-middle;
+      margin: auto;
+      border-radius: $border-radius-small;
+    }
   }
 }

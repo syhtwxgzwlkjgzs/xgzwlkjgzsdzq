@@ -26,9 +26,7 @@ class Index extends React.Component {
 
   recommendDetails = (item) => {
     const { threadId } = item
-    
-    const baseUrl = window.location.origin
-    window.open(`${baseUrl}/thread/${threadId}`)
+    this.props.router.push(`/thread/${threadId}`);
   }
 
   render () {

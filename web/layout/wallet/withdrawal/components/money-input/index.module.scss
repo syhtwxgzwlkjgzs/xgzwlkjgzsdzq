@@ -18,8 +18,10 @@
   align-items: center;
   padding: rem($padding-6n) 0;
   border-bottom: var(--border-border);
+
   :global {
     .dzq-input__inner {
+      height: 44px;
       border: none;
       font-family: 'PingFang SC';
       font-weight: 600;
@@ -27,13 +29,21 @@
       text-align: left;
       color: #c5c6ca;
     }
+    .is-focus>input{
+      color: var(--color-text-primary)
+    }
   }
+
   .moneyIcon {
     font-family: 'PingFang SC';
     font-weight: 600;
     font-size: rem(30);
     text-align: left;
     color: var(--color-text-primary);
+  }
+
+  .InputColor>input {
+    color: var(--color-text-primary) !important;
   }
 }
 

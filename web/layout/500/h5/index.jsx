@@ -11,7 +11,7 @@ class H5500Page extends React.Component {
         <img className={styles.img} src='/dzq-img/error.png'/>
         <p className={styles.text}>服务器错误 SERVER ERROR</p>
         <div className={styles.fixedBox}>
-          <Button onClick={() => {Router.redirect({url: '/500'});}} size='large' className={styles.btn} type='primary'>回到首页</Button>
+          <Button onClick={() => {Router.redirect({url: '/'});}} size='large' className={styles.btn} type='primary'>回到首页</Button>
         </div>
       </div>
     );

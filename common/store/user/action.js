@@ -16,6 +16,7 @@ import {
   smsSend,
   smsRebind,
   smsVerify,
+  readUsersDeny,
 } from '@server';
 import { get } from '../../utils/get';
 import set from '../../utils/set';
@@ -376,7 +377,7 @@ class UserAction extends SiteStore {
     const param = new FormData();
     param.append('avatar', fileList[0]);// 通过append向form对象添加数据
     param.append('pid', this.id);
-    await updateAvatar({
+    const updateAvatarRes = await updateAvatar({
       transformRequest: [function (data) {
         return data;
       }],
@@ -385,7 +386,11 @@ class UserAction extends SiteStore {
       },
       data: param,
     });
-    await this.updateUserInfo(this.id);
+
+    if (updateAvatarRes.code === 0) {
+      this.userInfo.avatarUrl = updateAvatarRes.data.avatarUrl;
+      this.userInfo = { ...this.userInfo };
+    }
   }
 
   /**
@@ -395,7 +400,7 @@ class UserAction extends SiteStore {
   async updateBackground(fileList) {
     const param = new FormData();
     param.append('background', fileList[0]);// 通过append向form对象添加数据
-    await updateBackground({
+    const updateBackgroundRes = await updateBackground({
       transformRequest: [function (data) {
         return data;
       }],
@@ -404,7 +409,16 @@ class UserAction extends SiteStore {
       },
       data: param,
     });
-    await this.updateUserInfo(this.id);
+
+    this.userInfo.backgroundUrl = '';
+
+    if (updateBackgroundRes.code === 0) {
+      // 因为背景图 url 是一致的，所以会导致不更新，这里进行先赋予空值，再延时赋值
+      setTimeout(() => {
+        this.userInfo.backgroundUrl = updateBackgroundRes.data.backgroundUrl;
+        this.userInfo = { ...this.userInfo };
+      }, 300);
+    }
   }
 
   // FIXME: 这里报接口参数错误
@@ -595,35 +609,42 @@ class UserAction extends SiteStore {
   /**
    * 我的屏蔽对应store函数
    */
-  
+
   // 获取屏蔽列表数据
   @action
   async getUserShieldList() {
-    
+    const userShieldList = await readUsersDeny({
+      params: {
+        page: this.userShieldPage, // 页码
+      },
+    });
+    const pageData = get(userShieldList, 'data.pageData', []);
+    const totalPage = get(userShieldList, 'data.totalPage', 1);
+    this.userShieldTotalPage = totalPage;
+    this.userShield = [...this.userShield, ...pageData];
+    this.userShieldTotalCount = get(userShieldList, 'data.totalCount', 0);
+
+    if (this.userShieldPage <= this.userShieldTotalPage) {
+      this.userShieldPage += 1;
+    }
+
+    if (userShieldList.code !== 0) {
+      throw {
+        Code: userShieldList.code,
+        Message: userShieldList.msg,
+      };
+    }
+    return this.userShield;
   }
 
-  // 屏蔽
+  /**
+   * 清理对应用户密码函数
+   */
   @action
-  async postShield() {
-    
-  }
-
-  // 取消屏蔽
-  @action
-  async cancelShield() {
-
-  }
-
-  // 点击屏蔽后需要更新的数据
-  @action
-  async setUserBeShielded() {
-
-  }
-
-  // 点击取消屏蔽后需要更新的数据
-  @action
-  async setUserBeUnShielded() {
-    
+  clearUserAccountPassword = () => {
+    this.oldPassword = null;
+    this.newPassword = null;
+    this.newPasswordRepeat = null;
   }
 
   /**

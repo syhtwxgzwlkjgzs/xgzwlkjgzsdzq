@@ -1,20 +1,20 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
-import List from '@components/list';
+import BaseLayout from '@components/base-layout';
 import NoData from '@components/no-data';
 import DetailsHeader from './components/details-header'
 import ThreadContent from '@components/thread';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import goToLoginPage from '@common/utils/go-to-login-page';
-import { Toast } from '@discuzq/design';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import { View, Text } from '@tarojs/components';
 
 @inject('site')
 @inject('user')
 @inject('topic')
 @observer
-class TopicPage extends React.Component {
+class TopicH5Page extends React.Component {
 
   // 分享
   onShare = (e) => {
@@ -29,9 +29,8 @@ class TopicPage extends React.Component {
 
     Toast.info({ content: '复制链接成功' });
 
-    const { content = '' } = this.props.topic?.topicDetail?.pageData[0] || {};
-    h5Share(content);
-
+    const { content = '', topicId = '' } = this.props.topic?.topicDetail?.pageData[0] || {};
+    h5Share({ title: content, path: `/topic/topic-detail/index?id=${topicId}` });
   }
 
   renderItem = ({ content = '', threadCount = 0, viewCount = 0, threads = [] }, index) => {
@@ -54,15 +53,16 @@ class TopicPage extends React.Component {
   }
 
   render() {
-    const { pageData = [] } = this.props.topic?.topicDetail || {};
-    console.log(pageData, 'renderItem');
+    const { pageData } = this.props.topic?.topicDetail || {};
     return (
-      <List className={styles.topicWrap} allowRefresh={false}>
+      <BaseLayout showHeader={false} allowRefresh={false}>
         {
-          pageData?.map((item, index) => this.renderItem(item, index)) || <NoData />
+          pageData?.map((item, index) => (
+            this.renderItem(item, index))
+          )
         }
-      </List>
+      </BaseLayout>
     );
   }
 }
-export default TopicPage;
+export default TopicH5Page;

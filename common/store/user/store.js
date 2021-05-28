@@ -69,9 +69,10 @@ class UserStore {
   // 我的屏蔽 数据设计
   @observable userShield = []; // 用户屏蔽列表
 
-  @observable userShieldPage = 1; // 加载页数
+  // 触底加载条件 当加载的页数超过总页数的时候就没有更多了 
+  @observable userShieldPage = 1; // 页码
   @observable userShieldTotalPage = 1; // 总页数
-  @observable userShieldTotalCount = 0; // 每页显示条数
+  @observable userShieldTotalCount = 0; // 总条数
 
   // 是否能使用钱包支付
   @computed get canWalletPay() {
@@ -102,7 +103,7 @@ class UserStore {
     return get(this.userInfo, 'username');
   }
 
-  // 微信昵称
+  // 昵称
   @computed get nickname() {
     return get(this.userInfo, 'nickname');
   }
@@ -152,6 +153,16 @@ class UserStore {
     return get(this.userInfo, 'paid');
   }
 
+  // 获取用户微信昵称
+  @computed get wxNickname() {
+    return get(this.userInfo, 'wxNickname')
+  }
+
+  // 获取用户微信头像
+  @computed get wxHeadImgUrl() {
+    return get(this.userInfo, 'wxHeadImgUrl')
+  }
+
   // 目标用户关注数
   @computed get targetUserFollowCount() {
     return get(this.targetUser, 'followCount');
@@ -172,7 +183,7 @@ class UserStore {
     return get(this.targetUser, 'username');
   }
 
-  // 目标用户微信昵称
+  // 目标用户昵称
   @computed get targetUserNickname() {
     return get(this.targetUser, 'nickname');
   }

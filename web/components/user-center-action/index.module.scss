@@ -2,11 +2,19 @@
 
 .userCenterAction {
     display: flex;
-    padding: rem(16);
+    padding: rem($padding-4n);
     flex-wrap: wrap;
     justify-content: space-between;
 
     .userCenterActionItemContainer {
+
+        :global {
+            .dzq-badge__circle {
+                min-width: rem(26);
+                height: rem(16);
+                border-radius: rem(8);
+            }
+        }
 
         .userCenterActionItem {
             display: flex;
@@ -24,8 +32,9 @@
             .userCenterActionItemIcon {}
 
             .userCenterActionItemDesc {
-                margin-top: rem(8);
-                color: var(--color-text-regular);
+                margin-top: rem($margin-2n);
+                color: $text-color-regular;
+                font-size: rem($font-size-small);
             }
         }
     }

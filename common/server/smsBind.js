@@ -1,5 +1,5 @@
-import api from './api';
-export default async function smsBind(opts, ctx) {
-  const res = await api.smsBind({ ...opts, __context: ctx });
+import {smsBind} from '@discuzq/sdk/dist/api/login/smsbind';
+export default async function _smsBind(opts, ctx) {
+  const res = await smsBind({ ...opts, __context: ctx });
   return res;
 }

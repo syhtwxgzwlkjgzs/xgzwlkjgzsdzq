@@ -1,8 +1,9 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '../../layout/search';
-import { Toast } from '@discuzq/design';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import Page from '@components/page';
+import Taro from '@tarojs/taro'
 
 @inject('site')
 @inject('search')
@@ -15,7 +16,7 @@ class Index extends React.Component {
 
   async componentDidMount() {
     const { search } = this.props;
-
+    Taro.hideHomeButton();
     await search.getSearchData();
   }
 

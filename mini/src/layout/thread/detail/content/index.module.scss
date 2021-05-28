@@ -2,7 +2,7 @@
 
 .container {
   background: var(--color-white);
-  padding: 16px;
+  padding: $padding-4n;
 }
 
 .header {
@@ -16,19 +16,28 @@
 }
 
 .more {
-  padding-left: 8px;
+  line-height: 20px;
+  padding-left: $padding-2n;
+  color: var(--color-text-secondary);
 }
 
 .essence {
-  margin-right: 8px;
+  margin-right: $margin-2n;
 }
 
 .body {
-  margin-top: 16px;
+  margin-top: $margin-6n;
 
-  // {
-  //   margin-bottom: 20px;
-  // }
+  > View {
+    margin-bottom: $margin-4n;
+  }
+}
+
+.title {
+  color: var(--color-text-primary);
+  line-height: 21px;
+  font-weight: bold;
+  font-size: $font-size-middle;
 }
 
 .image {
@@ -39,107 +48,149 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: $margin-6n;
+}
+
+.rewardBody {
+  text-align: center;
+  margin-bottom: $margin-4n;
+}
+
+.rewardContianer {
+  margin-bottom: $margin-6n;
 }
 
 .rewardButton {
   margin: 0 auto;
+  padding: 0;
   width: 156px;
+  height: 36px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+}
+
+.payButton {
+  margin: 0 auto;
+  padding: 0;
+  width: 234px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-base;
+  font-weight: normal;
+}
+
+.payIcon {
+  margin-right: $margin-2n;
+}
+
+.rewardext {
+  font-size: $font-size-base;
 }
 
 .footer {
-  margin-top: 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   color: var(--color-text-secondary);
-  font-size: 14px;
+  font-size: $font-size-primary;
+  height: 24px;
 }
 
 .buyBtn {
-  margin-top: 16px;
+  margin-top: $margin-4n;
+  padding: 0;
   width: 100%;
   height: 36px;
+  box-sizing: border-box;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+
+  .buyText {
+    // margin-left: $margin-2n;
+    line-height: 20px;
+  }
 }
 
 .tag {
   display: inline-block;
   color: var(--color-text-regular);
-  background: var(--background-color);
-  font-size: 12px;
+  background: #f0f1f3; // TODO:token
+  font-size: $font-size-label;
+  padding: 6.5px $padding-1n;
+  border-radius: $border-radius-small;
+  margin-bottom: $padding-4n;
   line-height: 12px;
-  padding: 4px;
-  border-radius: 5px;
-  margin: 24px 0 16px 0;
 }
 
 .thumbs {
+  height: 100%;
   display: flex;
   align-items: center;
-  font-size: 14px;
+  font-size: $font-size-primary;
 }
 
 .liked {
   display: flex;
   align-items: center;
-
-  Text {
-    margin-left: 8px;
-  }
+  justify-content: flex-start;
 }
 
-.isLiked {
+.actived {
   color: var(--color-primary);
 }
 
 .likeReward {
-  margin-left: 16px;
+  margin-left: $margin-4n;
+}
+
+.examine {
+  padding: $padding-2n 0;
+  background: var(--color-error);
+  color: var(--color-white);
+  text-align: center;
+  font-size: $font-size-base;
 }
 
 .rewardText {
-  padding: 16px 0;
-  background: var(--background-color-text);
+  padding: $padding-4n;
+  background: $body-bg-color;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: 5px;
-  margin-top: 16px;
+  border-radius: $border-radius-small;
+  text-align: center;
+
   .rewardMoney {
-    line-height: 24px;
-    font-size: 14px;
+    line-height: 20px;
+    font-size: $font-size-primary;
     color: var(--color-text-primary);
   }
   .rewardNumber {
+    line-height: 17px;
     color: var(--color-error);
   }
-  
+
   .rewardTime {
-    margin-top: 4px;
-    font-size: 12px;
+    margin-top: $margin-1n;
+    font-size: $font-size-label;
     color: var(--color-text-secondary);
     text-align: center;
   }
 }
 
-.buttonIcon {
-  margin-right: 8px;
-}
-.rewardext {
-  font-size: 14px;
+.likedNumber {
+  margin-left: $margin-2n;
 }
 
-.payButton {
-  padding: 8px 36px 8px 39px;
+.shareCount {
+  font-size: $font-size-small;
 }
 
-.pay {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.product {
+  padding: 0;
+  background: none;
 }

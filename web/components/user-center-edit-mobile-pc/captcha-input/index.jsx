@@ -88,9 +88,9 @@ class CaptchaInput extends Component {
 
   // 监听键盘事件
   handleKeyDown = (e) => {
-    const { is_blur, current_step } = this.props
+    const { isBlur, currentStep } = this.props
     // 只有当input失去焦点的时候才能进行更新
-    if (current_step === 'second' && !is_blur) return
+    if (currentStep === 'second' && !isBlur) return
     if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
       // 表示输入数字
       let set_num = this.toMarryNumber(e.keyCode);

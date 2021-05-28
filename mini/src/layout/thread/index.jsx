@@ -1,39 +1,47 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
+import { inject, observer } from 'mobx-react';
 import { View, Text, ScrollView } from '@tarojs/components';
-import { observer, inject } from 'mobx-react';
-import Router from '@discuzq/sdk/dist/router';
 
-import { Icon, Badge, Toast } from '@discuzq/design';
-
-import styleVar from '@common/styles/theme/default.scss.json';
-import throttle from '@common/utils/thottle';
-
-import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
-import rewardPay from '@common/pay-bussiness/reward-pay';
+import Taro from '@tarojs/taro';
 
 import layout from './layout.module.scss';
 import footer from './footer.module.scss';
 
-import LoadingTips from './components/loading-tips/index';
-import InputPopup from './components/input-popup/index';
-import DeletePopup from './components/delete-popup';
-import MorePopup from './components/more-popup';
-import ShowTop from './components/show-top';
 import NoMore from './components/no-more';
+import LoadingTips from './components/loading-tips';
+
+import styleVar from '@common/styles/theme/default.scss.json';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Input from '@discuzq/design/dist/components/input/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
+import Header from '@components/header';
+import goToLoginPage from '@common/utils/go-to-login-page';
 
 import ReportPopup from './components/report-popup';
+import ShowTop from './components/show-top';
+import DeletePopup from './components/delete-popup';
+import MorePopup from './components/more-popup';
+import InputPopup from './components/input-popup';
+import throttle from '@common/utils/thottle';
+import xss from '@common/utils/xss';
+
+import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
+import threadPay from '@common/pay-bussiness/thread-pay';
 import RewardPopup from './components/reward-popup';
 
-import RenderCommentList from './detail/comment-list'
-import RenderThreadContent from './detail/content'
+import RenderThreadContent from './detail/content';
+import RenderCommentList from './detail/comment-list';
+import classNames from 'classnames';
 
 @inject('site')
 @inject('user')
 @inject('thread')
 @inject('comment')
 @inject('index')
+@inject('topic')
+@inject('search')
 @observer
-class Index extends Component {
+class ThreadH5Page extends React.Component {
   constructor(props) {
     super(props);
 
@@ -45,7 +53,8 @@ class Index extends Component {
       showRewardPopup: false, // 打赏弹窗
       isCommentLoading: false, // 列表loading
       setTop: false, // 置顶
-      inputValue: '', // 评论内容
+      showContent: '',
+      // inputValue: '', // 评论内容
       toView: '', // 接收元素id用来滚动定位
     };
 
@@ -68,10 +77,37 @@ class Index extends Component {
     this.inputText = '其他理由...';
   }
 
+  // 滚动事件
+  handleOnScroll = (e) => {
+    // 加载评论列表
+    if (this.state.toView !== '') {
+      this.setState({ toView: '' });
+    }
+
+    if (this.flag) {
+      this.nextPosition = e.detail?.scrollTop || 0;
+    }
+  };
+
+  // 触底事件
+  scrollToLower = () => {
+    const { isCommentReady, isNoMore } = this.props.thread;
+    if (!this.state.isCommentLoading && isCommentReady && !isNoMore) {
+      this.page = this.page + 1;
+      this.loadCommentList();
+    }
+  };
+
   componentDidMount() {
     // 当内容加载完成后，获取评论区所在的位置
-    // this.position = this.commentDataRef?.current?.offsetTop - 50;
-    this.loadCommentList();
+    //this.position = this.commentDataRef?.current?.offsetTop - 50;
+    // 是否定位到评论位置
+    // if (this.props?.thread?.isPositionToComment) {
+    //   // TODO:需要监听帖子内容加载完成事件
+    //   setTimeout(() => {
+    //     this.threadBodyRef.current.scrollTo(0, this.position);
+    //   }, 1000);
+    // }
   }
 
   componentDidUpdate() {
@@ -83,33 +119,12 @@ class Index extends Component {
 
   componentWillUnmount() {
     // 清空数据
-  }
-
-  // 滚动事件
-  handleOnScroll = (e) => {
-    // 加载评论列表
-    if (this.state.toView !== '') {
-      this.setState({ toView: '' });
-    }
-
-    if (this.flag) {
-      this.nextPosition = e.detail?.scrollTop || 0;
-    }
-  }
-
-  // 触底事件
-  scrollToLower = () => {
-    const { isCommentReady, isNoMore } = this.props.thread;
-    if (!this.state.isCommentLoading && isCommentReady && !isNoMore) {
-      this.page = this.page + 1;
-      this.loadCommentList();
-    }
+    this.props?.thread && this.props.thread.reset();
   }
 
   // 点击信息icon
-  onMessageClick = () => {
+  onMessageClick() {
     this.setState({ toView: 'commentId' });
-    console.log(this.flag);
     if (this.flag) {
       this.flag = !this.flag;
     } else {
@@ -119,12 +134,17 @@ class Index extends Component {
         this.position = this.nextPosition - 1;
       }
       this.flag = !this.flag;
-
     }
   }
 
   // 点击收藏icon
   async onCollectionClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      return;
+    }
+
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
@@ -134,7 +154,7 @@ class Index extends Component {
 
     if (success) {
       Toast.success({
-        content: '操作成功',
+        content: params.isFavorite ? '收藏成功' : '取消收藏',
       });
       return;
     }
@@ -167,7 +187,7 @@ class Index extends Component {
       isCommentLoading: false,
     });
     if (success) {
-      return;
+      return true;
     }
     Toast.error({
       content: msg,
@@ -178,11 +198,17 @@ class Index extends Component {
   onSortChange(isCreateAt) {
     this.commentDataSort = isCreateAt;
     this.page = 1;
-    this.loadCommentList();
+    return this.loadCommentList();
   }
 
   // 点击评论
-  onInputClick = () => {
+  onInputClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      return;
+    }
+
     this.setState({
       showCommentInput: true,
     });
@@ -190,14 +216,22 @@ class Index extends Component {
 
   // 点击更多icon
   onMoreClick = () => {
+    // this.setState({
+    //   text: !this.state.text,
+    // });
     this.setState({ showMorePopup: true });
   };
 
-  // 更多中的操作
   onOperClick = (type) => {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      return;
+    }
+
     this.setState({ showMorePopup: false });
 
-    // 置顶
+    // 举报
     if (type === 'stick') {
       this.updateStick();
     }
@@ -212,23 +246,41 @@ class Index extends Component {
       this.setState({ showDeletePopup: true });
     }
 
+    // 编辑
+    if (type === 'edit') {
+      if (!this.props.thread?.threadData?.id) return;
+      Taro.navigateTo({
+        url: `/subPages/thread/post/index?id=${this.props.thread?.threadData?.id}}`,
+      });
+    }
+
     // 举报
     if (type === 'report') {
       this.setState({ showReportPopup: true });
     }
 
-    // 编辑
-    if (type === 'edit') {
-      if (!this.props.thread?.threadData?.threadId) return
-      Router.redirect({
-        url: `/subPages/thread/post/index?id=${this.props.thread.threadData.threadId}`
-      });
+    // 收藏
+    if (type === 'collect') {
+      this.onCollectionClick();
+    }
+
+    // 生成海报
+    if (type === 'posterShare') {
+      Toast.info({ content: '生成海报' });
+      // this.onShareClick();
+    }
+
+    // 微信分享
+    if (type === 'weixinShare') {
+      Toast.info({ content: '微信分享' });
+      // this.onShareClick();
     }
   };
 
   // 确定举报
   async onReportOk(val) {
     if (!val) return;
+
     const params = {
       threadId: this.props.thread.threadData.threadId,
       type: 1,
@@ -252,8 +304,9 @@ class Index extends Component {
   }
 
   // 置顶提示
-  setTopState() {
+  setTopState(isStick) {
     this.setState({
+      showContent: isStick,
       setTop: !this.state.setTop,
     });
     setTimeout(() => {
@@ -271,7 +324,9 @@ class Index extends Component {
     const { success, msg } = await this.props.thread.updateStick(params);
 
     if (success) {
-      this.setTopState();
+      this.setTopState(params.isStick);
+      // TODO:更新首页置顶列表
+      this.props.index.screenData({});
       return;
     }
 
@@ -314,7 +369,9 @@ class Index extends Component {
       });
 
       setTimeout(() => {
-        this.props.router.push('/');
+        Taro.redirectTo({
+          url: '/pages/index/index',
+        });
       }, 1000);
 
       return;
@@ -331,8 +388,12 @@ class Index extends Component {
   }
 
   // 点击发布按钮
-  onPublishClick(val) {
-    this.comment ? this.updateComment(val) : this.createComment(val);
+  async onPublishClick(val) {
+    if (!val) {
+      Toast.info({ content: '请输入内容!' });
+      return;
+    }
+    return this.comment ? await this.updateComment(val) : await this.createComment(val);
   }
 
   // 创建评论
@@ -342,7 +403,7 @@ class Index extends Component {
       id,
       content: val,
       sort: this.commentDataSort, // 目前的排序
-      isNoMore: false,
+      isNoMore: this.props?.thread?.isNoMore,
       attachments: [],
     };
     const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
@@ -352,7 +413,6 @@ class Index extends Component {
       });
       this.setState({
         showCommentInput: false,
-        inputValue: '',
       });
       return true;
     }
@@ -379,7 +439,6 @@ class Index extends Component {
       });
       this.setState({
         showCommentInput: false,
-        inputValue: '',
       });
       return true;
     }
@@ -407,6 +466,12 @@ class Index extends Component {
 
   // 点赞
   async onLikeClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      return;
+    }
+
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
@@ -427,48 +492,91 @@ class Index extends Component {
     Toast.info({ content: '复制链接成功' });
 
     const { title = '' } = this.props.thread?.threadData || {};
-    h5Share(title);
+    h5Share({ title, path: `thread/${this.props.thread?.threadData?.threadId}` });
 
-    // const id = this.props.thread?.threadData?.id;
+    const id = this.props.thread?.threadData?.id;
 
-    // const { success, msg } = await this.props.thread.shareThread(id);
+    const { success, msg } = await this.props.thread.shareThread(id);
 
-    // if (!success) {
-    //   Toast.error({
-    //     content: msg,
-    //   });
-    // }
+    if (!success) {
+      Toast.error({
+        content: msg,
+      });
+    }
   }
 
+  // 付费支付
+  async onPayClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      return;
+    }
+
+    const thread = this.props.thread.threadData;
+    const { success } = await threadPay(thread, this.props.user?.userInfo);
+
+    // 支付成功重新请求帖子数据
+    if (success && this.props.thread?.threadData?.threadId) {
+      await this.props.thread.fetchThreadDetail(this.props.thread?.threadData?.threadId);
+      // 更新列表store数据
+      this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
+    }
+  }
 
   // 点击打赏
   onRewardClick() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      return;
+    }
+
     this.setState({ showRewardPopup: true });
   }
 
   // 确认打赏
   async onRewardSubmit(value) {
-    console.log(!isNaN(Number(value)) && this.props.thread?.threadData?.threadId && this.props.thread?.threadData?.userId)
     if (!isNaN(Number(value)) && this.props.thread?.threadData?.threadId && this.props.thread?.threadData?.userId) {
       this.setState({ showRewardPopup: false });
       const params = {
         amount: Number(value),
         threadId: this.props.thread.threadData.threadId,
         payeeId: this.props.thread.threadData.userId,
+        title: this.props.thread?.threadData?.title || '主题打赏',
       };
 
-      const { success } = await rewardPay(params);
+      const { success, msg } = await this.props.thread.rewardPay(
+        params,
+        this.props.user,
+        this.props.index,
+        this.props.search,
+        this.props.topic,
+      );
 
-      // 支付成功重新请求帖子数据
-      if (success && this.props.thread?.threadData?.threadId) {
-        this.props.thread.fetchThreadDetail(this.props.thread?.threadData?.threadId);
+      if (!success) {
+        Toast.error({
+          content: msg,
+        });
       }
     }
   }
 
+  // 点击标签 TODO:带上参数
+  onTagClick() {
+    // TODO:目前后台只返回了一个子标签，未返回父标签
+    const categoryId = this.props.thread?.threadData?.categoryId;
+    if (categoryId || typeof categoryId === 'number') {
+      this.props.index.refreshHomeData({ categoryIds: [categoryId] });
+    }
+    Taro.redirectTo({
+      url: '/pages/index/index',
+    });
+  }
+
   render() {
     const { thread: threadStore } = this.props;
-    const { isReady, isCommentReady, isNoMore, totalCount } = threadStore;
+    const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError } = threadStore;
     const fun = {
       moreClick: this.onMoreClick,
     };
@@ -479,22 +587,34 @@ class Index extends Component {
       canDelete: threadStore?.threadData?.ability?.canDelete,
       canEssence: threadStore?.threadData?.ability?.canEssence,
       canStick: threadStore?.threadData?.ability?.canStick,
+      canShare: this.props.user.isLogin(),
+      canCollect: this.props.user.isLogin(),
     };
-
     // 更多弹窗界面
     const moreStatuses = {
       isEssence: threadStore?.threadData?.displayTag?.isEssence,
       isStick: threadStore?.threadData?.isStick,
+      isCollect: threadStore?.isFavorite,
     };
 
-    return (
+    // 是否审核通过
+    const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
 
+    return (
       <View className={layout.container}>
-        <ShowTop showContent={moreStatuses.isStick} setTop={this.state.setTop}></ShowTop>
+        <View className={layout.header}>
+          {/* <Header></Header> */}
+          {isReady && !isApproved && (
+            <View className={layout.examine}>
+              <Icon className={layout.tipsIcon} name="WarnOutlined"></Icon>
+              <Text className={layout.tipsText}>内容正在审核中，审核通过后才能正常显示！</Text>
+            </View>
+          )}
+        </View>
         <ScrollView
           className={layout.body}
           ref={this.hreadBodyRef}
-          id='hreadBodyId'
+          id="hreadBodyId"
           scrollY
           scrollTop={this.position}
           lowerThreshold={50}
@@ -502,117 +622,145 @@ class Index extends Component {
           scrollIntoView={this.state.toView}
           onScroll={(e) => throttle(this.handleOnScroll(e), 500)}
         >
-          {/* 帖子内容 */}
-          {isReady ? (
-            <RenderThreadContent
-              store={threadStore}
-              fun={fun}
-              onLikeClick={() => this.onLikeClick()}
-              onShareClick={() => this.onShareClick()}
-              onReportClick={() => this.onReportClick()}
-              onContentClick={() => this.onContentClick()}
-              onRewardClick={() => this.onRewardClick()}
-            ></RenderThreadContent>
-          ) : (
-            <LoadingTips type="init"></LoadingTips>
-          )}
-          <View className={`${layout.bottom}`} ref={this.commentDataRef} id='commentId'>
-            {isCommentReady ? (
-              <Fragment>
-                <RenderCommentList
-                  router={this.props.router}
-                  sort={flag => this.onSortChange(flag)}
-                  onEditClick={comment => this.onEditClick(comment)}>
-                </RenderCommentList>
-                {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
-                {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
-              </Fragment>
+          <View className={layout['view-inner']}>
+            <ShowTop showContent={this.state.showContent} setTop={this.state.setTop}></ShowTop>
+            {/* 帖子内容 */}
+            {isReady ? (
+              <RenderThreadContent
+                store={threadStore}
+                fun={fun}
+                onLikeClick={() => this.onLikeClick()}
+                onOperClick={(type) => this.onOperClick(type)}
+                onCollectionClick={() => this.onCollectionClick()}
+                onShareClick={() => this.onShareClick()}
+                onReportClick={() => this.onReportClick()}
+                onContentClick={() => this.onContentClick()}
+                onRewardClick={() => this.onRewardClick()}
+                onTagClick={() => this.onTagClick()}
+                onPayClick={() => this.onPayClick()}
+              ></RenderThreadContent>
             ) : (
               <LoadingTips type="init"></LoadingTips>
+            )}
+
+            {/* 评论列表 */}
+            {isReady && isApproved && (
+              <View className={`${layout.bottom}`} ref={this.commentDataRef} id="commentId">
+                {isCommentReady ? (
+                  <Fragment>
+                    <RenderCommentList
+                      router={this.props.router}
+                      sort={(flag) => this.onSortChange(flag)}
+                      onEditClick={(comment) => this.onEditClick(comment)}
+                    ></RenderCommentList>
+                    {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
+                    {isNoMore && (
+                      <View className={layout.noMore}>
+                        <NoMore empty={totalCount === 0}></NoMore>
+                      </View>
+                    )}
+                  </Fragment>
+                ) : (
+                  <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
+                )}
+              </View>
             )}
           </View>
         </ScrollView>
 
         {/* 底部操作栏 */}
-        <View className={layout.footer}>
-          {/* 评论区触发 */}
-          <View className={footer.inputClick} onClick={this.onInputClick}>
-            <Icon size="16" name="EditOutlined" className={footer.inputIcon}></Icon>
-            <View className={footer.input}>写评论</View>
-          </View>
-          {/* 操作区 */}
-          <View className={footer.operate}>
-            {/* <View className={footer.icon} onClick={() => this.onMessageClick()}>
-              {totalCount > 0
-                ? (
-                  <Badge info={totalCount > 99 ? '99+' : `${totalCount || '0'}`}>
-                    <Icon size="20" name="MessageOutlined"></Icon>
-                  </Badge>
-                )
-                : <Icon size="20" name="MessageOutlined"></Icon>
-              }
-            </View> */}
-            <View className={footer.icon} onClick={this.onMessageClick}>
-              {totalCount > 0
-                ? <View className={footer.badge}>{totalCount > 99 ? '99+' : `${totalCount || '0'}`}</View>
-                : ''
-              }
-              <Icon size="20" name="MessageOutlined"></Icon>
+        {isReady && isApproved && (
+          <View className={layout.footerContainer}>
+            <View className={layout.footer}>
+              {/* 评论区触发 */}
+              <View className={footer.inputClick} onClick={() => this.onInputClick()}>
+                <Input
+                  className={footer.input}
+                  placeholder="写评论"
+                  disabled={true}
+                  prefixIcon="EditOutlined"
+                  placeholderClass={footer.inputPlaceholder}
+                ></Input>
+              </View>
+
+              {/* 操作区 */}
+              <View className={footer.operate}>
+                <View className={footer.icon} onClick={() => this.onMessageClick()}>
+                  {totalCount > 0 ? (
+                    <View className={classNames(footer.badge, totalCount < 10 && footer.isCricle)}>
+                      <View className={footer.text}>{totalCount > 99 ? '99+' : `${totalCount || '0'}`}</View>
+                    </View>
+                  ) : (
+                    ''
+                  )}
+                  <Icon size="20" name="MessageOutlined"></Icon>
+                </View>
+                <Icon
+                  color={this.props.thread?.isFavorite ? styleVar['--color-primary'] : ''}
+                  className={footer.icon}
+                  onClick={() => this.onCollectionClick()}
+                  size="20"
+                  name="CollectOutlinedBig"
+                ></Icon>
+                <Icon
+                  onClick={() => this.onShareClick()}
+                  className={footer.icon}
+                  size="20"
+                  name="ShareAltOutlined"
+                ></Icon>
+              </View>
             </View>
-            <Icon
-              color={this.props.thread?.isFavorite ? styleVar['--color-primary'] : ''}
-              className={footer.icon}
-              onClick={() => this.onCollectionClick()}
-              size="20"
-              name="CollectOutlined"
-            ></Icon>
-            <Icon onClick={() => this.onShareClick()} className={footer.icon} size="20" name="ShareAltOutlined"></Icon>
           </View>
-        </View>
+        )}
 
-        {/* 评论弹层 */}
-        <InputPopup
-          visible={this.state.showCommentInput}
-          onClose={() => this.onClose()}
-          initValue={this.state.inputValue}
-          onSubmit={value => this.onPublishClick(value)}
-        />
+        {isReady && (
+          <Fragment>
+            {/* 评论弹层 */}
+            <InputPopup
+              visible={this.state.showCommentInput}
+              onClose={() => this.onClose()}
+              initValue={this.state.inputValue}
+              onSubmit={(value) => this.onPublishClick(value)}
+            ></InputPopup>
 
-        {/* 更多弹层 */}
-        <MorePopup
-          permissions={morePermissions}
-          statuses={moreStatuses}
-          visible={this.state.showMorePopup}
-          onClose={() => this.setState({ showMorePopup: false })}
-          onSubmit={() => this.setState({ showMorePopup: false })}
-          onOperClick={type => this.onOperClick(type)}
-        />
+            {/* 更多弹层 */}
+            <MorePopup
+              permissions={morePermissions}
+              statuses={moreStatuses}
+              visible={this.state.showMorePopup}
+              onClose={() => this.setState({ showMorePopup: false })}
+              onSubmit={() => this.setState({ showMorePopup: false })}
+              onOperClick={(type) => this.onOperClick(type)}
+            ></MorePopup>
 
-        {/* 删除弹层 */}
-        <DeletePopup
-          visible={this.state.showDeletePopup}
-          onClose={() => this.setState({ showDeletePopup: false })}
-          onBtnClick={type => this.onBtnClick(type)}
-        />
+            {/* 删除弹层 */}
+            <DeletePopup
+              visible={this.state.showDeletePopup}
+              onClose={() => this.setState({ showDeletePopup: false })}
+              onBtnClick={(type) => this.onBtnClick(type)}
+            ></DeletePopup>
+            {/* 举报弹层 */}
 
-        {/* 举报弹层 */}
-        <ReportPopup
-          reportContent={this.reportContent}
-          inputText={this.inputText}
-          visible={this.state.showReportPopup}
-          onCancel={() => this.setState({ showReportPopup: false })}
-          onOkClick={data => this.onReportOk(data)}
-        />
+            {/* 举报弹窗 */}
+            <ReportPopup
+              reportContent={this.reportContent}
+              inputText={this.inputText}
+              visible={this.state.showReportPopup}
+              onCancel={() => this.setState({ showReportPopup: false })}
+              onOkClick={(data) => this.onReportOk(data)}
+            ></ReportPopup>
 
-        {/* 打赏弹窗 */}
-        <RewardPopup
-          visible={this.state.showRewardPopup}
-          onCancel={() => this.setState({ showRewardPopup: false })}
-          onOkClick={value => this.onRewardSubmit(value)}
-        ></RewardPopup>
+            {/* 打赏弹窗 */}
+            <RewardPopup
+              visible={this.state.showRewardPopup}
+              onCancel={() => this.setState({ showRewardPopup: false })}
+              onOkClick={(value) => this.onRewardSubmit(value)}
+            ></RewardPopup>
+          </Fragment>
+        )}
       </View>
     );
   }
 }
 
-export default Index;
+export default ThreadH5Page;

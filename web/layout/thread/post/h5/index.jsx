@@ -31,9 +31,12 @@ import Header from '@components/header';
 import Router from '@discuzq/sdk/dist/router';
 import VideoDisplay from '@components/thread-post/video-display';
 import MoneyDisplay from '@components/thread-post/money-display';
+import toolbarStyles from '@components/editor/toolbar/index.module.scss';
 
 function isIOS() {
-  return /ip[honead]{2,4}(?:.*os\s([\w]+)\slike\smac|;\sopera)/i.test(window.navigator.userAgent.toLowerCase());
+  const ua = window.navigator.userAgent.toLowerCase();
+  // 判断是否是ios，或者小米默认浏览器
+  return /ip[honead]{2,4}(?:.*os\s([\w]+)\slike\smac|;\sopera)/i.test(ua) || /miuibrowser/i.test(ua);
 }
 
 @inject('threadPost')
@@ -51,22 +54,12 @@ class ThreadCreate extends React.Component {
     window.removeEventListener('scroll', this.handler);
   }
 
-  handleDraft = async (val) => {
-    this.props.handleSetState({ draftShow: false });
-    let flag = true;
-    if (val === '保存草稿') {
-      this.props.setPostData({ draft: 1 });
-      flag = await this.props.handleSubmit(true);
-    }
-    if (val === '不保存草稿') this.props.threadPost.resetPostData();
-    if (val && flag) Router.back();
-  }
-
   handler = () => {
     if (!isIOS()) return;
     throttle(this.setBottomBarStyle(window.scrollY), 50);
   }
 
+  // 定位的显示与影藏
   positionDisplay = (action) => {
     const position = document.querySelector('#post-position');
     if (!position) return;
@@ -75,13 +68,21 @@ class ThreadCreate extends React.Component {
     } else position.style.display = 'flex';
   };
 
+  // 设置悬赏等之后显示的金额的显示和影藏
+  moneyboxDisplay = (isShow) => {
+    const moneybox = document.querySelector('#dzq-money-box');
+    if (!moneybox) return;
+    if (isShow) moneybox.style.display = 'flex';
+    else moneybox.style.display = 'none';
+  }
+
   // 设置底部bar的样式
-  setBottomBarStyle = (y = 0, action) => {
+  setBottomBarStyle = (y = 0, action, event) => {
     const winHeight = getVisualViewpost();
+    // 如果可视窗口不变，即没有弹起键盘不进行任何设置
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
-    const postBottombar = document.querySelector('#post-bottombar');
+    this.positionDisplay(action);
     if (!isIOS()) {
-      this.positionDisplay(action);
       if (vditorToolbar) {
         vditorToolbar.style.position = 'fixed';
         vditorToolbar.style.bottom = '88px';
@@ -89,45 +90,84 @@ class ThreadCreate extends React.Component {
       }
       return;
     }
-
-    this.positionDisplay(action);
-    const bottombarHeight = action === 'select' ? 88 : 132;
-    postBottombar.style.top = `${winHeight - bottombarHeight + y}px`;
     if (vditorToolbar && action === 'select') {
       vditorToolbar.style.position = 'fixed';
       vditorToolbar.style.top = `${winHeight - 132 + y}px`;
     }
-    this.setPostBox();
+    // 阻止页面上拉带动操作栏位置变化。放这里便于本地开发调试
+    if (window.innerHeight === winHeight) return;
+    this.moneyboxDisplay(false);
+    this.setPostBox(action, event, y);
   }
 
-  setPostBox = () => {
-    const winHeight = getVisualViewpost();
-    const postBox = document.querySelector('#post-inner');
-    const title = document.querySelector('#dzq-threadpost-title');
-    if (postBox) {
-      if (title?.display === 'none') postBox.style.height = `${winHeight - 134 - 54}px`;
-      else postBox.style.height = `${winHeight - 134}px`;
-    }
+  setPostBox = (action, event, y) => {
+    const timer = setTimeout(() => {
+      clearTimeout(timer);
+      const winHeight = getVisualViewpost();
+      const postBox = document.querySelector('#post-inner');
+      const title = document.querySelector('#dzq-threadpost-title');
+      const bottombarHeight = this.getBottombarHeight(action);
+      let postBoxHeight = winHeight - bottombarHeight;
+      if (postBox) {
+        if (title?.display !== 'none') postBoxHeight = winHeight - bottombarHeight - 54;
+        postBox.style.height = `${postBoxHeight}px`;
+      }
+      if (event) {
+        const clientY = event?.clientY;
+        const offsetTop = event?.target?.offsetTop || 0;
+        if (clientY > postBoxHeight) {
+          this.props.handleEditorBoxScroller(offsetTop);
+          // 解决focus在编辑器之后页面被弹出导致底部工具栏上移的问题
+          window.scrollTo(0, 0);
+        }
+      }
+      // 这个需要放在这里的原因是避免滚动造成底部bar显示问题
+      if (action !== 'clear') this.setPostBottombar(action, y);
+    }, 0);
   };
 
-  setBottomFixed = (action) => {
+  // 获取底部工具栏的高度
+  getBottombarHeight = (action) => {
+    const position = document.querySelector('#post-position'); // 高度35px
+    const toolbar = document.querySelector('#dvditor-toolbar');
+    const moneybox = document.querySelector('#dzq-money-box');
+    let bottombarHeight = 123;
+    if (action === 'select') bottombarHeight = 88;
+    if (!position) bottombarHeight = 88;
+    // 当表情显示的时候
+    if (this.props.currentDefaultOperation === defaultOperation.emoji) {
+      bottombarHeight += 218;
+      if (toolbar) toolbar.className += ` ${toolbarStyles.emoji}`;
+    } else {
+      if (toolbar) toolbar.className = toolbarStyles['dvditor-toolbar'];
+    }
+    if (moneybox && !action) bottombarHeight += 65; // 直接算最高的高度
+    return bottombarHeight;
+  }
+
+  setPostBottombar = (action, y = 0) => {
+    const winHeight = getVisualViewpost();
+    const postBottombar = document.querySelector('#post-bottombar');
+    const bottombarHeight = this.getBottombarHeight(action);
+    postBottombar.style.top = `${winHeight - bottombarHeight + y}px`;
+  };
+
+  setBottomFixed = (action, event) => {
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
-      this.setBottomBarStyle(0, action);
+      this.setBottomBarStyle(0, action, event);
     }, 150);
   }
   clearBottomFixed = () => {
-    this.positionDisplay();
+    this.moneyboxDisplay(true);
     if (!isIOS()) return;
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
-      const winHeight = getVisualViewpost();
       const postBottombar = document.querySelector('#post-bottombar');
-      const position = document.querySelector('#post-position');
-      this.setPostBox();
-      if (!position) return;
-      position.style.display = 'flex';
-      postBottombar.style.top = `${winHeight - 133}px`;
+      this.positionDisplay();
+      this.setPostBox('clear');
+      postBottombar.style.top = 'auto';
+      postBottombar.style.bottom = '0px';
     }, 200);
   }
 
@@ -136,15 +176,20 @@ class ThreadCreate extends React.Component {
     this.props.handleSetState({ categoryChooseShow: true });
   };
 
-  // 左上角返回按钮回调
-  handlePageJump = () => {
-    const { postData:{contentText} } = this.props.threadPost;
+  // 顶部导航栏点击后拦截回调
+  handlePageJump = (link = '') => {
+    const { postData: { contentText }, resetPostData } = this.props.threadPost;
 
-    if (contentText === '') {
-      Router.back()
+    if (contentText !== '') {
+      this.props.handleSetState({ draftShow: true, jumpLink: link });
+      return;
+    }
+
+    if (link) {
+      resetPostData();
+      Router.push({ url: link });
     } else {
-      this.props.handleSetState({ draftShow: true });
-      return false
+      window.history.length <= 1 ? Router.redirect({ url: '/' }) : Router.back();
     }
   }
 
@@ -159,8 +204,8 @@ class ThreadCreate extends React.Component {
 
 
     return (
-      <>
-        <Header isBackCustom={this.handlePageJump} />
+      <div className={styles['dzq-post-body']}>
+        <Header allowJump={false} customJum={this.handlePageJump} />
         <div className={styles['post-inner']} id="post-inner">
           {/* 标题 */}
           <Title
@@ -176,8 +221,8 @@ class ThreadCreate extends React.Component {
             topic={topic}
             onInput={(vditor) => this.props.handleVditorChange(vditor, 'input')}
             onChange={this.props.handleVditorChange}
-            onFocus={(action) => {
-              this.setBottomFixed(action);
+            onFocus={(action, event) => {
+              this.setBottomFixed(action, event);
               this.props.handleSetState({ isVditorFocus: true });
             }}
             onBlur={() => {
@@ -185,6 +230,7 @@ class ThreadCreate extends React.Component {
               this.clearBottomFixed();
             }}
             onInit={this.props.handleVditorInit}
+            setState={this.props.handleSetState}
           />
           {/* 图片 */}
           {(currentAttachOperation === THREAD_TYPE.image || Object.keys(postData.images).length > 0) && (
@@ -208,7 +254,7 @@ class ThreadCreate extends React.Component {
             // && Object.keys(postData.audio).length > 0
             && !postData.audio.mediaUrl)
             && (
-              <div className={styles['audio-record']}>
+              <div className={styles['audio-record']} id="dzq-post-audio-record">
                 <AudioRecord duration={60} onUpload={(blob) => {
                   this.props.handleAudioUpload(blob);
                 }} />
@@ -241,6 +287,18 @@ class ThreadCreate extends React.Component {
               onDelete={() => this.props.setPostData({ product: {} })}
             />
           )}
+        </div>
+        <div id="post-bottombar" className={styles['post-bottombar']}>
+          {/* 插入位置 */}
+          {(permissions?.insertPosition?.enable && webConfig?.lbs?.lbs) && (
+            <div id="post-position" className={styles['position-box']}>
+            {/* <div className={styles['post-counter']}>还能输入{MAX_COUNT - this.props.count}个字</div> */}
+              <Position
+                lbskey={webConfig.lbs.qqLbsKey}
+                position={postData.position}
+                onChange={position => this.props.setPostData({ position })} />
+            </div>
+          )}
           {((postData.rewardQa.value && postData.rewardQa.times)
             || postData.redpacket.price
             || !!(postData.price || postData.attachmentPrice)
@@ -249,24 +307,23 @@ class ThreadCreate extends React.Component {
               payTotalMoney={threadPost.payTotalMoney}
               redTotalMoney={threadPost.redpacketTotalAmount}
               postData={postData}
-              setPostData={this.props.setPostData}
-              handleSetState={this.props.handleSetState}
-              onAttachClick={this.props.handleAttachClick}
-              onDefaultClick={this.props.handleDefaultIconClick}
+              setPostData={(data) => {
+                this.props.setPostData(data);
+                this.clearBottomFixed();
+              }}
+              handleSetState={(data) => {
+                this.props.handleSetState(data);
+              }}
+              onAttachClick={(item, data) => {
+                this.props.handleAttachClick(item, data);
+                this.clearBottomFixed();
+              }}
+              onDefaultClick={(item, child, data) => {
+                this.props.handleDefaultIconClick(item, child, data);
+                this.clearBottomFixed();
+              }}
             />
           )}
-        </div>
-        <div id="post-bottombar" className={styles['post-bottombar']}>
-          {/* 插入位置 */}
-          <div id="post-position" className={styles['position-box']}>
-            {/* <div className={styles['post-counter']}>还能输入{MAX_COUNT - this.props.count}个字</div> */}
-            {(permissions?.insertPosition?.enable && webConfig?.lbs?.lbs) && (
-              <Position
-                lbskey={webConfig.lbs.qqLbsKey}
-                position={postData.position}
-                onChange={position => this.props.setPostData({ position })} />
-            )}
-          </div>
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar
             postData={postData}
@@ -284,15 +341,22 @@ class ThreadCreate extends React.Component {
           <DefaultToolbar
             postData={postData}
             value={currentDefaultOperation}
-            onClick={item => this.props.handleDefaultIconClick(item)}
+            onClick={(item) => {
+              this.props.handleDefaultIconClick(item);
+              this.setPostBox();
+            }}
             permission={threadExtendPermissions}
             onSubmit={this.props.handleSubmit}>
-            {/* 表情 */}
-            <Emoji
-              show={currentDefaultOperation === defaultOperation.emoji}
-              emojis={threadPost.emojis}
-              onClick={this.props.handleEmojiClick} />
           </DefaultToolbar>
+            {/* 表情 */}
+          <Emoji
+            show={currentDefaultOperation === defaultOperation.emoji}
+            emojis={threadPost.emojis}
+            onClick={
+              (emoji) => {
+                this.props.handleEmojiClick(emoji);
+              }}
+            />
         </div>
         {/* 选择帖子类别 */}
         <ClassifyPopup
@@ -345,8 +409,8 @@ class ThreadCreate extends React.Component {
         {this.props.draftShow && (
           <PostPopup
             list={['保存草稿', '不保存草稿']}
-            onClick={val => this.handleDraft(val)}
-            cancel={() => this.handleDraft()}
+            onClick={val => this.props.handleDraft(val)}
+            cancel={() => this.props.handleDraft()}
             visible={this.props.draftShow}
           />
         )}
@@ -356,6 +420,7 @@ class ThreadCreate extends React.Component {
             confirm={(data) => {
               this.props.setPostData({ rewardQa: data });
               this.props.handleSetState({ currentAttachOperation: false });
+              this.clearBottomFixed();
             }}
             cancel={() => {
               this.props.handleSetState({
@@ -370,7 +435,10 @@ class ThreadCreate extends React.Component {
           <RedpacketSelect
             data={postData.redpacket}
             cancel={() => this.props.handleSetState({ currentDefaultOperation: '' })}
-            confirm={data => this.props.setPostData({ redpacket: data })}
+            confirm={data => {
+              this.props.setPostData({ redpacket: data });
+              this.clearBottomFixed();
+            }}
           />
         )}
         {/* 插入商品 */}
@@ -389,10 +457,11 @@ class ThreadCreate extends React.Component {
             paidType={this.props.curPaySelect}
             cancel={() => {
               this.props.handleSetState({ curPaySelect: '', currentDefaultOperation: '' });
+              this.clearBottomFixed();
             }}
           />
         )}
-      </>
+      </div>
     );
   }
 }

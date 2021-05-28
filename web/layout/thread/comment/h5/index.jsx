@@ -10,6 +10,7 @@ import Header from '@components/header';
 import { Toast } from '@discuzq/design';
 import InputPopup from '../../h5/components/input-popup';
 import ReportPopup from '../../h5/components/report-popup';
+import goToLoginPage from '@common/utils/go-to-login-page';
 
 @inject('site')
 @inject('user')
@@ -56,6 +57,7 @@ class CommentH5Page extends React.Component {
   onOperClick = (type) => {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
       return;
     }
 
@@ -109,6 +111,7 @@ class CommentH5Page extends React.Component {
   async likeClick(data) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
       return;
     }
 
@@ -147,6 +150,7 @@ class CommentH5Page extends React.Component {
   async replyLikeClick(reply) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
       return;
     }
 
@@ -191,28 +195,40 @@ class CommentH5Page extends React.Component {
 
   // 点击评论的回复
   replyClick(comment) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     this.commentData = comment;
     this.replyData = null;
     this.setState({
       showCommentInput: true,
-      inputText: comment?.user?.username ? `回复${comment.user.username}` : '请输入内容',
+      inputText: comment?.user?.nickname ? `回复${comment.user.nickname}` : '请输入内容',
     });
   }
 
   // 点击回复的回复
   replyReplyClick(reply, comment) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     this.commentData = null;
     this.replyData = reply;
     this.replyData.commentId = comment.id;
 
     this.setState({
       showCommentInput: true,
-      inputText: reply?.user?.username ? `回复${reply.user.username}` : '请输入内容',
+      inputText: reply?.user?.nickname ? `回复${reply.user.nickname}` : '请输入内容',
     });
   }
 
   // 创建回复评论+回复回复接口
-  async createReply(val) {
+  async createReply(val, imageList) {
     if (!val) {
       Toast.info({ content: '请输入内容!' });
       return;
@@ -238,6 +254,18 @@ class CommentH5Page extends React.Component {
       params.replyId = this.commentData.id;
       params.isComment = true;
       params.commentId = this.commentData.id;
+    }
+
+    if (imageList?.length) {
+      params.attachments = imageList
+        .filter((item) => item.status === 'success' && item.response)
+        .map((item) => {
+          const { id } = item.response;
+          return {
+            id,
+            type: 'attachments',
+          };
+        });
     }
 
     const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
@@ -351,7 +379,8 @@ class CommentH5Page extends React.Component {
             visible={this.state.showCommentInput}
             inputText={this.state.inputText}
             onClose={() => this.setState({ showCommentInput: false })}
-            onSubmit={(value) => this.createReply(value)}
+            onSubmit={(value, imageList) => this.createReply(value, imageList)}
+            site={this.props.site}
           ></InputPopup>
 
           {/* 更多弹层 */}

@@ -17,6 +17,14 @@ class IndexAction extends IndexStore {
     this.filter = data
   }
 
+  /**
+   * 设置tabBar隐藏or显示
+   */
+   @action
+  setHiddenTabBar(data) {
+    this.hiddenTabBar = data
+  }
+
 /**
  * 详情页点击标签、置顶跳转首页操作
  * @param {array} categoryIds 分类Ids
@@ -25,8 +33,9 @@ class IndexAction extends IndexStore {
   @action
   async refreshHomeData({ categoryIds = [] } = {}) {
     if (categoryIds?.length) {
+      this.threads = null;
+      this.sticks = null;
       this.setFilter({ categoryids: categoryIds })
-      this.screenData({ filter: { categoryids: categoryIds } })
     } else {
       const { categoryids = [], sequence = 0 } = this.filter
       this.screenData({ filter: { categoryids }, sequence })
@@ -91,7 +100,7 @@ class IndexAction extends IndexStore {
       }
       return result.data;
     }
-    return null;
+    return Promise.reject();
   }
 
   /**

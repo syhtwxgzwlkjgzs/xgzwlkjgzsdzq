@@ -42,10 +42,7 @@ page {
             color: $black;
           }
         }
-
       }
-
-
     }
 
     .content {
@@ -60,6 +57,8 @@ page {
 
     .tags{
       padding-bottom: 90px;
+      padding-bottom: calc(90px + constant(safe-area-inset-bottom));
+      padding-bottom: calc(90px + env(safe-area-inset-bottom));
 
       .location-bar {
         padding: 0 16px;
@@ -90,6 +89,8 @@ page {
       left: 0;
       right: 0;
       bottom: 0;
+      bottom: calc(constant(safe-area-inset-bottom));
+      bottom: calc(env(safe-area-inset-bottom));
     }
   }
 }

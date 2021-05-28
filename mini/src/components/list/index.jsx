@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Spin } from '@discuzq/design';
-import { View, Text, ScrollView } from '@tarojs/components';
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
+import { ScrollView } from '@tarojs/components';
 import { noop, isPromise } from '@components/thread/utils'
 import styles from './index.module.scss';
+import RefreshView from './RefreshView';
+import ErrorView from './ErrorView';
 
 /**
  * 列表组件，集成上拉刷新能力
@@ -10,29 +11,49 @@ import styles from './index.module.scss';
  * @prop {function} className 容器样式
  * @param {string} noMore 无更多数据
  * @prop {function} onRefresh 触底触发事件，需返回promise
- * @prop {function} allowRefresh 是否启用上拉刷新
+ * @prop {function} showRefresh 是否启用上拉刷新
  */
-
-const List = ({ height, className = '', children, noMore = false, onRefresh, allowRefresh = true, onScroll = noop }) => {
+const List = forwardRef(({
+  height,
+  className = '',
+  wrapperClass = '',
+  children,
+  noMore,
+  onRefresh,
+  onScroll = noop,
+  showRefresh = true,
+  preload = 30,
+  requestError = false
+}, ref) => {
   const listWrapper = useRef(null);
-  const isLoading = useRef(false);
-  const [loadText, setLoadText] = useState('加载更多...');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     if (noMore) {
-      setLoadText('没有更多数据');
-      isLoading.current = true;
+      setIsLoading(true);
     }
   }, [noMore]);
 
   useEffect(() => {
-    onTouchMove();
-  }, []);
+    setIsError(requestError)
+  }, [requestError])
+
+  // useEffect(() => {
+  //   onTouchMove();
+  // }, []);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      onBackTop,
+      isLoading,
+    }),
+  );
 
   const throttle = (fn, delay) => {
     return args => {
         if (fn.id) return
-
         fn.id = setTimeout(() => {
             fn.call(this, args)
             clearTimeout(fn.id)
@@ -41,25 +62,34 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
     }
   }
 
+  const onBackTop = () => {
+    if(!listWrapper) {
+      listWrapper.current.scrollTop = 0;
+    }
+  };
+
   const onTouchMove = (e) => {
-    if (e && !isLoading.current) {
-      isLoading.current = true;
-      setLoadText('加载更多...');
+    if (e && !isLoading.current && onRefresh && !isLoading && !requestError) {
+      setIsLoading(true);
       if (typeof(onRefresh) === 'function') {
         const promise = onRefresh()
         isPromise(promise) && promise
           .then(() => {
-            setLoadText('加载更多...');
-            isLoading.current = false;
+            // 解决因promise和react渲染不同执行顺序导致重复触发加载数据的问题
+            setTimeout(() => {
+              setIsLoading(false);
+              if (noMore) {
+                setIsLoading(true);
+              }
+            }, 0);
           })
           .catch(() => {
-            setLoadText('加载失败');
-            isLoading.current = false;
+            setIsLoading(false);
+            setIsError(true);
           })
           .finally(() => {
             if (noMore) {
-              setLoadText('没有更多数据');
-              isLoading.current = true;
+              setIsLoading(true);
             }
           });
       } else {
@@ -67,9 +97,19 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
       }
     }
   };
+  
+  const handleScroll = (e) => {
+    onScroll(e);
+  }
 
-  const handleScroll = throttle(onScroll, 0)
- 
+    // 网络请求失败
+    const handleError = () => {
+      setIsLoading(false);
+      setTimeout(() => {
+        onTouchMove();
+      }, 0)
+    }
+
   return (
     <ScrollView 
       scrollY 
@@ -80,14 +120,9 @@ const List = ({ height, className = '', children, noMore = false, onRefresh, all
       onScroll={handleScroll}
     >
       {children}
-      {allowRefresh && (
-            <View className={styles.footer}>
-              { loadText === '加载更多...' && <Spin className={styles.spin} type="spinner" /> }
-              { loadText }
-            </View>
-      )}
+      {onRefresh && showRefresh && !isError && <RefreshView noMore={noMore} />}
+      {isError && <ErrorView onClick={handleError} />}
     </ScrollView>
   );
-};
-
+});
 export default React.memo(List);

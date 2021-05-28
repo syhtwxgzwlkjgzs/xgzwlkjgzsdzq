@@ -1,13 +1,11 @@
-import React, { Component } from 'react'
-import styles from './index.module.scss'
+import React, { Component } from 'react';
+import styles from './index.module.scss';
+import { Icon } from '@discuzq/design';
 
 class CaptchaInput extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      isKeyBoardVisible: false
-    }
   }
 
   validateTel = (value) => {
@@ -24,16 +22,12 @@ class CaptchaInput extends Component {
 
   // 点击显示数字键盘
   handleClickPwdItem = () => {
-    this.setState({
-      isKeyBoardVisible: true
-    })
+    this.props.handleKeyBoardVisible && this.props.handleKeyBoardVisible()
   }
 
   // 点击取消
   handleCancel = () => {
-    this.setState({
-      isKeyBoardVisible: false
-    })
+    this.props.handleKeyBoardVisible && this.props.handleKeyBoardVisible()
   }
 
   // 匹配输入的数字
@@ -88,9 +82,9 @@ class CaptchaInput extends Component {
 
   // 监听键盘事件
   handleKeyDown = (e) => {
-    const { is_blur, current_step } = this.props
+    const { isBlur, currentStep } = this.props
     // 只有当input失去焦点的时候才能进行更新
-    if (current_step === 'second' && !is_blur) return
+    if (currentStep === 'second' && !isBlur) return
     if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
       // 表示输入数字
       let set_num = this.toMarryNumber(e.keyCode);
@@ -149,7 +143,6 @@ class CaptchaInput extends Component {
 
   // 渲染键盘
   renderKeyBoard = () => {
-    const { list = [] } = this.props
     return (
       <div className={styles.keyboard} onClick={this.keyboardClickHander}>
         <div className={styles.line}>
@@ -191,9 +184,7 @@ class CaptchaInput extends Component {
             0
         </div>
           <div data-key="-1" className={`${styles.column} ${styles.special}`}>
-            {
-              list.length === 0 ? '取消' : '删除'
-            }
+            <Icon name="BackspaceOutlined" size={16} />
           </div>
         </div>
       </div>
@@ -201,7 +192,7 @@ class CaptchaInput extends Component {
   }
 
   render() {
-    const { isKeyBoardVisible } = this.state
+    const { isKeyBoardVisible } = this.props
     return (
       <div className={styles.payList} onClick={this.handleClickPwdItem}>
         {this.renderPwdItem()}

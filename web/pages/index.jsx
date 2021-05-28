@@ -40,6 +40,17 @@ class Index extends React.Component {
 
   async componentDidMount() {
     const { index } = this.props;
+    const { categoryids, types, essence, sequence, attention, sort } = index.filter;
+
+    let newTypes = [];
+    if (types) {
+      if (!(types instanceof Array)) {
+        newTypes = types === 'all' ? [] : [types];
+      } else {
+        newTypes = types.filter(item => item !== 'all');
+      }
+    }
+
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasCategoriesData = !!index.categories;
     const hasSticksData = !!index.sticks;
@@ -49,11 +60,14 @@ class Index extends React.Component {
       this.props.index.getReadCategories();
     }
     if (!hasSticksData) {
-      this.props.index.getRreadStickList();
+      this.props.index.getRreadStickList(categoryids);
     }
    
     if (!hasThreadsData) {
-      this.props.index.getReadThreadList({ sequence: this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0 });
+      this.props.index.getReadThreadList({
+        sequence: sequence || (this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0), 
+        filter: { categoryids, types: newTypes, essence, attention, sort } 
+      });
     } else {
       // 如果store中有值，则需要获取之前的分页数
       this.page = index.threads.currentPage || 1
@@ -67,9 +81,9 @@ class Index extends React.Component {
     let newTypes = [];
     if (types) {
       if (!(types instanceof Array)) {
-        newTypes = [types];
+        newTypes = types === 'all' ? [] : [types];
       } else {
-        newTypes = types;
+        newTypes = types.filter(item => item !== 'all');
       }
     }
 
@@ -82,7 +96,6 @@ class Index extends React.Component {
       }
     }
 
-
     if (type === 'click-filter') { // 点击tab
       this.toastInstance = Toast.loading({
         content: '加载中...',
@@ -90,7 +103,7 @@ class Index extends React.Component {
       });
 
       this.page = 1;
-      await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence });
+      await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
 
       this.toastInstance?.destroy();
     } else if (type === 'moreData') {
@@ -107,7 +120,7 @@ class Index extends React.Component {
       this.page = page
     } else if (type === 'refresh-thread') { // 点击帖子更新数的按钮，刷新帖子数据
       this.page = 1;
-      return await index.getReadThreadList({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence });
+      return await index.getReadThreadList({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
     }
   }
 

@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
+import { noop } from '@components/thread/utils';
 import { withRouter } from 'next/router';
 
 /**
@@ -9,7 +10,7 @@ import { withRouter } from 'next/router';
  * @prop {boolean} curr 常亮icon
  */
 
-const BottomNavBar = ({ router, fixed = true, placeholder = false, curr = 'home' }) => {
+const BottomNavBar = ({ router, fixed = true, placeholder = false, curr = 'home', onClick = noop }) => {
 
   const checkCurrActiveTab = useCallback((curr, target) => {
     return curr === target;
@@ -19,12 +20,12 @@ const BottomNavBar = ({ router, fixed = true, placeholder = false, curr = 'home'
     { icon: 'HomeOutlined', text: '首页', active: checkCurrActiveTab(curr, 'home'), router: '/' },
     { icon: 'FindOutlined', text: '发现', active: checkCurrActiveTab(curr, 'search'), router: '/search' },
     { icon: 'PlusOutlined', router: '/thread/post' },
-    { icon: 'MailOutlined', text: '消息', active: checkCurrActiveTab(curr, 'message'), router: '/' },
-    // { icon: 'MailOutlined', text: '消息', active: checkCurrActiveTab(curr, 'message'), router: '/message' },
+    { icon: 'MailOutlined', text: '消息', active: checkCurrActiveTab(curr, 'message'), router: '/message' },
     { icon: 'ProfessionOutlined', text: '我的', active: checkCurrActiveTab(curr, 'my'), router: '/my' },
   ]);
 
   const handleClick = (i, idx) => {
+    onClick(i, idx)
     const temp = [...tabs];
     if (i.text) {
       temp.find(i => i.active).active = false;

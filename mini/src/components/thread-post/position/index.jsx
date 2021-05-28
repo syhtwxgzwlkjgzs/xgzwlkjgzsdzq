@@ -4,7 +4,7 @@
 import React, { memo, useState, useEffect } from 'react';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
-import { Icon } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Taro from '@tarojs/taro';
@@ -26,12 +26,18 @@ const Index = (props) => {
 
   // 选择定位
   const chooseLocation = () => {
-    Taro.chooseLocation({
-      ...positon,
-      success(ret) {
-        setPosition(ret);
-        setIsChose(true);
-        positionChange(positon);
+    Taro.authorize({
+      scope: 'scope.userLocation',
+      success: function () {
+        // 用户已经同意小程序使用定位功能，后续调用 Taro.chooseLocation 接口不会弹窗询问
+        Taro.chooseLocation({
+          ...positon,
+          success(ret) {
+            setPosition(ret);
+            setIsChose(true);
+            positionChange(positon);
+          }
+        });
       }
     });
   };
@@ -45,12 +51,16 @@ const Index = (props) => {
 
 
   return (
-    <View className={classNames(styles['positon'], {
+    <View onClick={chooseLocation} className={classNames(styles['positon'], {
       [styles['chose']]: isChose,
     })}>
-      <Icon name='PositionOutlined' size={10} onClick={chooseLocation} />
-      <Text className={styles['text']} onClick={chooseLocation}>{positon.name || '你在哪里？'}</Text>
-      {isChose && <Icon className={styles['remove-icon']} name='CloseOutlined' size={10} onClick={removeLocation} />}
+      <Icon name='PositionOutlined' size={10} />
+      <Text className={styles['text']}>{positon.name || '你在哪里？'}</Text>
+      {isChose && <Icon className={styles['remove-icon']} name='CloseOutlined' size={10} onClick={(e) => {
+        removeLocation();
+        e.stopPropagation();
+        return false;
+      }} />}
     </View>
   );
 };

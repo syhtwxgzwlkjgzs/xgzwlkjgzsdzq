@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Button, Input, Toast } from '@discuzq/design';
 import Header from '@components/header';
-import styles from '../index.module.scss';
+import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
+import throttle from '@common/utils/thottle.js';
 @inject('payBox')
 @observer
 export default class index extends Component {
@@ -16,71 +17,67 @@ export default class index extends Component {
     }
   }
 
-  initState = () => {
-    this.setState({
-      newPayPwd: null,
-      newPayPwdRepeat: null,
-    })
-    this.props.payBox.newPayPwd = null
-    this.props.payBox.newPayPwdRepeat = null
-  }
-
   componentDidMount() {
-    this.initState()
+    this.props.payBox.clearPayPassword()
   }
 
-  componentWillUnmount() {
-    this.initState()
-  }
-
-  // 设置新密码
+  // 设置新密码 newPayPwd
   handleChangeNewPwd = (e) => {
-    this.setState({
-      newPayPwd: e.target.value
-    })
+    this.props.payBox.newPayPwd = e.target.value
   }
 
-  // 确认新密码
+  // 确认新密码 newPayPwdRepeat
   handleChangeRepeatPwd = (e) => {
-    this.setState({
-      newPayPwdRepeat: e.target.value
-    })
+    this.props.payBox.newPayPwdRepeat = e.target.value
   }
 
-  handleSubmit = () => {
-    const { newPayPwd, newPayPwdRepeat } = this.state
+  // 点击确认 ---> 清空对应密码状态
+  handleSubmit = throttle(() => {
+    if (this.getDisabledWithButton()) return
+    const newPayPwd = this.props.payBox?.newPayPwd
+    const newPayPwdRepeat = this.props.payBox?.newPayPwdRepeat
     if (newPayPwd !== newPayPwdRepeat) {
       Toast.error({
         content: '两次密码输入有误',
         hasMask: false,
         duration: 1000,
       })
+      this.props.payBox.clearPayPassword()
       return
     }
-    this.props.payBox.newPayPwd = newPayPwd
-    this.props.payBox.newPayPwdRepeat = newPayPwdRepeat
     this.props.payBox.resetPayPwd().then(res => {
       Toast.success({
         content: '修改密码成功',
         hasMask: false,
         duration: 1000,
       })
-      Router.push({url: `/my`})
+      Router.push({ url: `/my` })
+      this.props.payBox.clearPayPassword()
     }).catch((err) => {
       Toast.error({
-        content: '修改密码失败',
+        content: err.Msg || '修改密码失败',
         hasMask: false,
         duration: 1000,
       })
-      this.initState()
+      this.props.payBox.clearPayPassword()
     })
+  }, 300)
+
+  /**
+  * 获取按钮禁用状态
+  * @returns true 表示禁用 false表示不禁用
+  */
+  getDisabledWithButton = () => {
+    const newPayPwd = this.props.payBox?.newPayPwd
+    const newPayPwdRepeat = this.props.payBox?.newPayPwdRepeat
+    return !newPayPwd || !newPayPwdRepeat
   }
 
   render() {
-    const { newPayPwd, newPayPwdRepeat } = this.state
-    let isSubmit = !newPayPwd || !newPayPwdRepeat
+    const newPayPwd = this.props.payBox?.newPayPwd
+    const newPayPwdRepeat = this.props.payBox?.newPayPwdRepeat
     return (
-      <div>
+      <div id={styles.resetPayPwdContent}>
         <Header />
         <div className={styles.content}>
           <h3>设置新密码</h3>
@@ -96,7 +93,7 @@ export default class index extends Component {
           </div>
         </div>
         <div className={styles.bottom}>
-          <Button full disabled={isSubmit} onClick={this.handleSubmit} type={"primary"} className={styles.btn}>提交</Button>
+          <Button full disabled={this.getDisabledWithButton()} onClick={this.handleSubmit} type={"primary"} className={styles.btn}>提交</Button>
         </div>
       </div>
     )

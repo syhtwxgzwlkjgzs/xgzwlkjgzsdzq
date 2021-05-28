@@ -33,12 +33,12 @@ const Index = ({
     <View className={styles.container}>
       <View className={styles['container-inner']}>
         <Textarea
-          className={styles.textarea}
+          className={value ? styles['textarea-editing'] : styles.textarea}
           placeholderClass={styles['textarea-placeholder']}
           value={value}
           disabled={disabled}
           placeholder={placeholder}
-          maxlength={maxLength}
+          maxLength={maxLength}
           autoHeight={true}
           showConfirmBar={false}
           onFocus={onFocus}

@@ -1,5 +1,8 @@
 @import '@common/styles/index.scss';
-
+.dzq-post-body {
+  height: 100vh;
+  width: 100vw;
+}
 .post-inner {
   width: 100%;
   height: calc(100vh - 134px - 44px);
@@ -16,7 +19,7 @@
   z-index: $zindex-popup;
 }
 @supports (bottom: constant(safe-area-inset-bottom)) or (bottom: env(safe-area-inset-bottom)) {
-  .post-inner {
+  .post-bottombar {
     max-height: calc(100vh - 134px - constant(safe-area-inset-bottom));
     max-height: calc(100vh - 134px - env(safe-area-inset-bottom));
   }
@@ -53,9 +56,9 @@
 .position-box {
   display: flex;
   // flex-direction: row-reverse;
-  height: 45px;
+  height: 35px;
   padding: 0 rem(16);
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   :global { /* stylelint-disable-line */
     .dzq-tag {

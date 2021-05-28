@@ -6,7 +6,7 @@ import { observer } from 'mobx-react';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import classnames from 'classnames';
-
+import ImageDisplay from '@components/thread/image-display';
 @observer
 export default class ReplyList extends React.Component {
   // 跳转至评论详情
@@ -47,14 +47,14 @@ export default class ReplyList extends React.Component {
         <div className={styles.replyListAvatar} onClick={this.props.avatarClick('2')}>
           <Avatar
             image={this.props.data.user.avatar}
-            name={this.props.data.user.username || this.props.data.user.userName || ''}
+            name={this.props.data.user.nickname || this.props.data.user.userName || ''}
             circle={true}
             size="small"
           ></Avatar>
         </div>
         <div className={styles.replyListContent}>
           <div className={styles.replyListContentText}>
-            <div className={styles.replyListName}>{this.props.data.user.username || this.props.data.user.userName}</div>
+            <div className={styles.replyListName}>{this.props.data.user.nickname || this.props.data.user.userName}</div>
             <div className={styles.replyListText}>
               {this.props.data.commentUserId ? (
                 <div className={styles.commentUser}>
@@ -62,22 +62,29 @@ export default class ReplyList extends React.Component {
                     <Avatar
                       className={styles.avatar}
                       image={this.props.data.replyUser.avatar}
-                      name={this.props.data.replyUser.username || this.props.data.replyUser.userName || ''}
+                      name={this.props.data.replyUser.nickname || this.props.data.replyUser.userName || ''}
                       circle={true}
                       size="small"
                     ></Avatar>
                   </div>
                   <span className={styles.replyedUserName}>
-                    {this.props.data.replyUser.username || this.props.data.replyUser.userName}
+                    {this.props.data.replyUser.nickname || this.props.data.replyUser.userName}
                   </span>
                 </div>
               ) : (
                 ''
               )}
               <span
-                className={classnames(styles.content,this.props.isShowOne && styles.isShowOne)}
-                dangerouslySetInnerHTML={{ __html: this.filterContent()}}
+                className={classnames(styles.content, this.props.isShowOne && styles.isShowOne)}
+                dangerouslySetInnerHTML={{ __html: this.filterContent() }}
               ></span>
+
+              {/* 图片展示 */}
+              {this.props.data?.images && (
+                <div className={styles.imageDisplay}>
+                  <ImageDisplay platform="h5" imgData={this.props.data?.images} />
+                </div>
+              )}
             </div>
           </div>
           <div className={styles.replyListFooter}>

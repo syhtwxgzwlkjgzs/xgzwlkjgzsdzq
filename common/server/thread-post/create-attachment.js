@@ -14,7 +14,7 @@ import typeofFn from '@common/utils/typeof';
  * formData.append('type', 1);
  * const ret = await createAttachment(formData); // 在 async 方法中
  */
-export default async function createAttachment(params, progress = () => {}) {
+export default async function _createAttachment(params, progress = () => {}) {
   const res = await api.http({
     url: '/apiv3/attachments',
     method: 'post',

@@ -1,10 +1,19 @@
 import { observable, computed, action } from 'mobx';
 import { get } from '../../utils/get';
 import isWeixin from '../../utils/is-weixin';
-import { createOrders, createPayOrder, readOrderDetail, readWalletUser, updateUsersUpdate, readResetPayPwdToken } from '@server';
+import {
+  createOrders,
+  createPayOrder,
+  readOrderDetail,
+  readWalletUser,
+  updateUsersUpdate,
+  readResetPayPwdToken,
+  updatePayPwd,
+  smsSend,
+} from '@server';
 import { STEP_MAP, PAY_MENT_MAP, ORDER_STATUS_MAP, PAY_BOX_ERROR_CODE_MAP } from '../../constants/payBoxStoreConstants';
 
-const noop = () => {};
+const noop = () => { };
 
 class PayBoxStore {
   // 成功回调
@@ -124,7 +133,7 @@ class PayBoxStore {
     this.qrCodeCheckTimer = setTimeout(() => {
       clearTimeout(this.timer);
       this.qrCodeTimeout = true;
-    // 超时时间
+      // 超时时间
     }, 1000 * 5 * 60);
   }
 
@@ -428,11 +437,11 @@ class PayBoxStore {
       // error
       return;
     }
-
     const getTokenRes = await readResetPayPwdToken({
-      payPassword: this.oldPayPwd,
+      data: {
+        payPassword: this.oldPayPwd,
+      },
     });
-
     if (getTokenRes.code === 0) {
       this.payPwdResetToken = get(getTokenRes, 'data.sessionId');
 
@@ -452,18 +461,91 @@ class PayBoxStore {
   @action
   resetPayPwd = async () => {
     const resetPayPwdRes = await updateUsersUpdate({
-      payPassword: this.newPayPwd,
-      payPassword: this.newPayPwdRepeat,
+      data: {
+        payPassword: this.newPayPwd,
+        payPasswordConfirmation: this.newPayPwdRepeat,
+        payPasswordToken: this.payPwdResetToken,
+      }
     });
-
     if (resetPayPwdRes.code === 0) {
       return resetPayPwdRes.data;
     }
 
     throw {
       Code: resetPayPwdRes.code,
-      Msg: resetPayPwdRes.message,
+      Msg: resetPayPwdRes.msg,
     };
+  }
+
+  /**
+   * 重设支付密码 手机号验证
+   * @param {*} param0
+   * @returns
+   */
+  @action
+  async sendSmsVerifyCode({
+    mobile,
+    captchaTicket,
+    captchaRandStr,
+  }) {
+    const smsResp = await smsSend({
+      timeout: 3000,
+      data: {
+        mobile,
+        type: 'reset_pay_pwd',
+        captchaTicket,
+        captchaRandStr,
+      },
+    });
+    if (smsResp.code === 0) {
+      // 可以利用 interval 获取过期时间
+      return smsResp.data;
+    }
+
+    throw {
+      Code: smsResp.code,
+      Message: smsResp.msg,
+    };
+  }
+
+  /**
+   * 忘记支付密码，利用手机号进行支付密码的重置
+   */
+  @action
+  forgetPayPwd = async ({
+    mobile,
+    code,
+    payPassword,
+    payPasswordConfirmation,
+  }) => {
+    const forgetPayPwdRes = await updatePayPwd({
+      data: {
+        mobile,
+        code,
+        payPassword,
+        payPasswordConfirmation,
+      },
+    });
+
+    if (forgetPayPwdRes.code === 0) {
+      return forgetPayPwdRes.data;
+    }
+
+    throw {
+      Code: forgetPayPwdRes.code,
+      Msg: forgetPayPwdRes.msg,
+    };
+  }
+
+  /**
+   * 清空支付密码对应函数
+   */
+  @action
+  clearPayPassword = () => {
+    this.password = null; // 设置支付密码状态
+    this.oldPayPwd = null; // 旧密码
+    this.newPayPwd = null; // 新密码
+    this.newPayPwdRepeat = null; // 确认新密码
   }
 
   /**

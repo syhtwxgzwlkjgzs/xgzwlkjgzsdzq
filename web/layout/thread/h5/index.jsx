@@ -363,24 +363,37 @@ class ThreadH5Page extends React.Component {
   }
 
   // 点击发布按钮
-  async onPublishClick(val) {
+  async onPublishClick(val, imageList) {
     if (!val) {
       Toast.info({ content: '请输入内容!' });
       return;
     }
-    return this.comment ? await this.updateComment(val) : await this.createComment(val);
+    return this.comment ? await this.updateComment(val, imageList) : await this.createComment(val, imageList);
   }
 
   // 创建评论
-  async createComment(val) {
+  async createComment(val, imageList) {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
       content: val,
       sort: this.commentDataSort, // 目前的排序
-      isNoMore: false,
+      isNoMore: this.props?.thread?.isNoMore,
       attachments: [],
     };
+
+    if (imageList?.length) {
+      params.attachments = imageList
+        .filter((item) => item.status === 'success' && item.response)
+        .map((item) => {
+          const { id } = item.response;
+          return {
+            id,
+            type: 'attachments',
+          };
+        });
+    }
+
     const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
       // 更新帖子中的评论数据
@@ -488,15 +501,15 @@ class ThreadH5Page extends React.Component {
     const { title = '' } = this.props.thread?.threadData || {};
     h5Share({ title, path: `thread/${this.props.thread?.threadData?.threadId}` });
 
-    // const id = this.props.thread?.threadData?.id;
+    const id = this.props.thread?.threadData?.id;
 
-    // const { success, msg } = await this.props.thread.shareThread(id);
+    const { success, msg } = await this.props.thread.shareThread(id);
 
-    // if (!success) {
-    //   Toast.error({
-    //     content: msg,
-    //   });
-    // }
+    if (!success) {
+      Toast.error({
+        content: msg,
+      });
+    }
   }
 
   // 付费支付
@@ -694,7 +707,8 @@ class ThreadH5Page extends React.Component {
               visible={this.state.showCommentInput}
               onClose={() => this.onClose()}
               initValue={this.state.inputValue}
-              onSubmit={(value) => this.onPublishClick(value)}
+              onSubmit={(value, imgList) => this.onPublishClick(value, imgList)}
+              site={this.props.site}
             ></InputPopup>
 
             {/* 更多弹层 */}

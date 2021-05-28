@@ -1,6 +1,6 @@
 @import '@common/styles/index.scss';
 .commentList {
-  padding: 6px 16px 16px;
+  padding: $padding-2n $padding-4n $padding-4n;
   .header {
     display: flex;
     justify-content: flex-end;
@@ -12,77 +12,86 @@
       justify-content: space-between;
 
       .revise {
-        font-size: 14px;
+        font-size: $font-size-primary;
         text-align: left;
         color: var(--color-text-secondary);
-        margin-right: 10px;
       }
 
       .headerRigth {
         display: flex;
         .redpacket {
-          margin-left: 16px;
+          margin-left: $margin-4n;
         }
         .showMoneyNum {
-          font-size: 12px;
+          font-size: $font-size-label;
           text-align: left;
           color: var(--color-text-primary);
-          margin-left: 9px;
+          margin-left: $margin-2n;
           .moneyNumber {
             color: var(--color-error);
           }
         }
         .more {
-          font-size: 12px;
+          margin-top: $margin-2n;
+          font-size: $font-size-label;
           text-align: left;
           color: var(--color-text-primary);
-          margin-left: 24px;
+          margin-left: $margin-6n;
           .moreIcon {
-            margin-top: 4px;
+            margin-top: 1px;
+            line-height: 20px;
+            color: var(--color-text-secondary);
           }
         }
       }
-
     }
   }
   .content {
     display: flex;
-    padding-top: 10px;
+    padding-top: $padding-2n;
     .commentListAvatar {
-      margin-right: 8px;
-      .avater {
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        image {
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-        }
-      }
+      margin-right: $margin-2n;
     }
     .commentListContent {
       width: 100%;
       .commentListContentText {
-        padding: 8px;
-        border-radius: 5px;
-        background: $comment-bg-color;
+        padding: $padding-2n;
+        border-radius: $border-radius-small;
+        background: $body-bg-color;
+
         .commentListName {
-          font-weight: var(--font-weight-regular);
-          font-size: 14px;
+          font-weight: bold;
+          font-size: $font-size-primary;
+          line-height: 20px;
           text-align: left;
           color: var(--color-text-primary);
-          font-family: 'PingFangSC-Semibol';
-          line-height: 17.8px;
-          padding-bottom: 4px;
         }
         .commentListText {
-          font-size: 16px;
-          line-height: 26px;
+          margin-top: $margin-1n;
+          font-size: $font-size-middle;
+          line-height: $font-line-height-base;
           text-align: left;
-          color: var(--color-text-primary);
-          font-family: "PingFang SC";
           word-break: break-all;
+          color: var(--color-text-primary);
+          @include lamp-clamp(3);
+
+          :global {
+            .qq-emotion {
+              width: 22px;
+              height: 22px;
+              position: relative;
+              top: 6px
+            }
+          }
+
+          p {
+            @include lamp-clamp(3);
+            line-height: $font-line-height-base;
+          }
+
+          img {
+            height: 22px;
+          }
         }
       }
       .commentListFooter {
@@ -90,14 +99,14 @@
           display: flex;
           align-items: center;
           justify-content: space-between;
-          font-size: 14px;
+          font-size: rem($font-size-primary);
+          line-height: 16.8px;
           text-align: left;
           color: var(--color-text-secondary);
-          padding-top: 8px;
-          line-height: 16.8px;
+          padding-top: rem($padding-2n);
           .commentTime {
             // flex: 1;
-            font-size: 12px;
+            font-size: $font-size-label;
           }
           .commentLiked {
             // flex: 1;
@@ -117,12 +126,13 @@
           }
         }
         .moreReply {
-          font-weight: var(--font-weight-regular);
-          font-size: 14px;
+          // font-weight: var(--font-weight-regular);
+          font-weight: bold;
+          font-size: $font-size-primary;
+          line-height: $font-line-height-middle;
           text-align: left;
           color: var(--color-text-primary);
-          padding-top: 16px;
-          line-height: 26px;
+          padding-top: $padding-4n;
         }
       }
     }
@@ -131,16 +141,13 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    > View {
-      margin-right: 8px;
-    }
   }
   .extraBottom {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     > View {
-      margin-left: 24px;
+      margin-left: $margin-6n;
     }
   }
 }
@@ -149,13 +156,11 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  line-height: 16.8px;
-  padding-top: 4px;
 }
 
 .image {
-  width: 15px;
-  height: 20px;
+  width: 13px;
+  height: 18px;
 }
 
 .rewardImage {

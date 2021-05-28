@@ -8,6 +8,7 @@ import TopNew from './components/top-news';
 import FilterView from './components/filter-view';
 import BaseLayout from '@components/base-layout';
 
+
 @inject('site')
 @inject('user')
 @inject('index')
@@ -21,6 +22,10 @@ class IndexH5Page extends React.Component {
       filter: {
         categoryids: this.checkIsOpenDefaultTab() ? ['default'] : ['all'],
         sequence: this.checkIsOpenDefaultTab() ? 1 : 0,
+        sort: 1,
+        attention: 0,
+        types: 'all',
+        essence: 0
       },
       currentIndex: this.checkIsOpenDefaultTab() ? 'default' : 'all',
       isFinished: true,
@@ -28,7 +33,7 @@ class IndexH5Page extends React.Component {
     };
     this.listRef = createRef();
     // 用于获取顶部视图的高度
-    this.headerRef = createRef(null)
+    this.headerRef = createRef(null);
     this.renderItem = this.renderItem.bind(this);
   }
 
@@ -36,8 +41,8 @@ class IndexH5Page extends React.Component {
     const { filter = {} } = this.props.index
 
     const newFilter = { ...this.state.filter, ...filter }
-    const { categoryids } = newFilter
-    const currentIndex = categoryids[0] || ''
+    const { categoryids = [] } = newFilter
+    const currentIndex = this.resetCurrentIndex(categoryids[0] || 'all')
     
     this.setState({ filter: newFilter, currentIndex })
   }
@@ -64,16 +69,41 @@ class IndexH5Page extends React.Component {
     });
   };
 
+  // 点击底部tabBar
+  onClickTabBar = (data, index) => {
+    if (index !== 0) {
+      return
+    }
+    const { dispatch = () => {} } = this.props;
+    const { filter } = this.state;
+    const requestFilter = Object.assign({}, filter);
+    requestFilter.categoryids = this.resetCategoryids(requestFilter.categoryids[0]);
+    dispatch('click-filter', requestFilter);
+  }
+
   onClickTab = (id = '') => {
     const { dispatch = () => {} } = this.props;
     const currentIndex = this.resetCategoryids(id);
-    dispatch('click-filter', { categoryids: [currentIndex], sequence: id === 'default' ? 1 : 0 });
+    const { categories = [] } = this.props.index
+
+    // 若选中的一级标签，存在二级标签，则将一级id和所有二级id全都传给后台
+    let newCategoryIds = [currentIndex]
+    const tmp = categories.filter(item => item.pid === currentIndex)
+    if (tmp.length && tmp[0]?.children?.length) {
+      newCategoryIds = [currentIndex]
+      tmp[0]?.children?.forEach(item => {
+        newCategoryIds.push(item.pid)
+      })
+    }
+
+    this.props.baselayout.setJumpingToTop();
+
+    const newFilter = { ...this.state.filter, categoryids: newCategoryIds, sequence: id === 'default' ? 1 : 0, }
+
+    dispatch('click-filter', newFilter);
 
     this.setState({
-      filter: {
-        categoryids: [id],
-        sequence: id === 'default' ? 1 : 0,
-      },
+      filter: newFilter,
       currentIndex: id,
       visible: false,
     });
@@ -83,22 +113,42 @@ class IndexH5Page extends React.Component {
   onClickFilter = ({ categoryids, types, essence, sequence }) => {
     const { dispatch = () => {} } = this.props;
     const requestCategoryids = categoryids.slice();
-    requestCategoryids[0] =      requestCategoryids[0] === 'all' || requestCategoryids[0] === 'default' ? '' : requestCategoryids[0];
+    requestCategoryids[0] = (requestCategoryids[0] === 'all' || requestCategoryids[0] === 'default') ? [] : requestCategoryids[0];
     dispatch('click-filter', { categoryids: requestCategoryids, types, essence, sequence });
+
+    let newCurrentIndex = this.resetCurrentIndex(categoryids[0])
     this.setState({
       filter: {
         categoryids,
         types,
         essence,
-        sequence: categoryids[0] === 'default' ? 1 : 0,
+        sequence,
       },
-      currentIndex: categoryids[0],
+      currentIndex: newCurrentIndex,
       visible: false,
     });
   };
 
   resetCategoryids(categoryids) {
     return categoryids === 'all' || categoryids === 'default' ? '' : categoryids;
+  }
+
+  resetCurrentIndex = (id) => {
+    let newCurrentIndex = id
+    const newId = this.resetCategoryids(id)
+    if (newId) {
+      const { categories = [] } = this.props.index
+      categories.forEach(item => {
+        if (item.children?.length) {
+          const tmp = item.children.filter(children => children.pid === newId)
+          // TODO H5首页暂时不显示二级标题
+          if (tmp.length) {
+            newCurrentIndex = item.pid
+          }
+        }
+      })
+    }
+    return newCurrentIndex
   }
 
   // 上拉加载更多
@@ -110,11 +160,16 @@ class IndexH5Page extends React.Component {
     return dispatch('moreData', requestFilter);
   };
 
-  onScroll = ({ scrollTop } = {}) => {
+  handleScroll = ({ scrollTop = 0 } = {}) => {
     const { height = 180 } = this.headerRef.current?.state || {}
-    this.setState({ fixedTab: scrollTop > height })
+    const { fixedTab } = this.state;
 
-    this.props.baselayout.jumpToScrollingPos = scrollTop;
+    // 只需要滚到临界点触发setState，而不是每一次滚动都触发
+    if(!fixedTab && scrollTop >= height) {
+      this.setState({ fixedTab: true })
+    } else if(fixedTab && scrollTop < height) {
+      this.setState({ fixedTab: false })
+    }
   }
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
@@ -134,7 +189,7 @@ class IndexH5Page extends React.Component {
 
     // 默认功能的开启
     if (this.checkIsOpenDefaultTab()) {
-      tmpCategories.unshift({ name: '默认分类', pid: 'default', children: [] });
+      tmpCategories.unshift({ name: '默认', pid: 'default', children: [] });
     }
     return tmpCategories;
   };
@@ -149,7 +204,7 @@ class IndexH5Page extends React.Component {
       <>
         {categories?.length > 0 && (
           <>
-          <div ref={this.listRef} className={`${!fixedTab ? styles.homeContent : styles.homeContentFix}`}>
+          <div ref={this.listRef} className={`${styles.homeContent} ${fixedTab && styles.fixed}`}>
             <Tabs
               className={styles.tabsBox}
               scrollable
@@ -210,10 +265,11 @@ class IndexH5Page extends React.Component {
         onRefresh={this.onRefresh}
         noMore={currentPage >= totalPage}
         isFinished={isFinished}
-        onScroll={this.onScroll}
+        onScroll={this.handleScroll}
         curr='home'
         pageName='home'
         preload={1000}
+        onClickTabBar={this.onClickTabBar}
       >
         <HomeHeader ref={this.headerRef} />
 

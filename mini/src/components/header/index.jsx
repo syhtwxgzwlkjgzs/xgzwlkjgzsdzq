@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react';
 import styles from './index.module.scss';
-import { Icon } from '@discuzq/design';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import Router from '@discuzq/sdk/dist/router';
-import { View, Text } from '@tarojs/components';
+import browser from '@common/utils/browser';
+import { View, Text } from '@tarojs/components'
 
 export default function H5Header(props) {
   const { isBackCustom } = props;
@@ -27,17 +28,20 @@ export default function H5Header(props) {
   return (
     <View className={styles.header}>
         <View className={styles.headerContent}>
-            <View onClick={gobackClickHandle} className={styles.left}>返回</View>
+            <View onClick={gobackClickHandle} className={styles.left}>
+              <Icon className={browser.env('android') ? styles.icon : ''} name="LeftOutlined" size={16} />
+              <View className={styles.text}>返回</View>
+            </View>
             <View className={styles.right}>
-                <Icon onClick={() => {
+                <Icon className={styles.icon} onClick={() => {
                   iconClickHandle('home');
-                }} name="HomeOutlined" color="#C4C9D6" size={20} />
-                <Icon onClick={() => {
+                }} name="HomeOutlined" />
+                <Icon className={styles.icon} onClick={() => {
                   iconClickHandle('msg');
-                }} name="MessageOutlined" color="#C4C9D6" size={20} />
-                <Icon onClick={() => {
+                }} name="MailOutlined" />
+                <Icon className={styles.icon} onClick={() => {
                   iconClickHandle('user');
-                }} name="ProfessionOutlined" color="#C4C9D6" size={20} />
+                }} name="ProfessionOutlined" />
             </View>
         </View>
     </View>

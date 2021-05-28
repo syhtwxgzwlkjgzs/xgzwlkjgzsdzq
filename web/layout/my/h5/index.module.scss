@@ -1,8 +1,15 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/_variable.scss';
 
 .mobileLayout {
     background: $white;
+}
+
+.spinLoading {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding: rem($padding-4n);
 }
 
 .unit {
@@ -33,6 +40,8 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+    height: rem(52);
+    box-sizing: border-box;
 
     .threadTitle {
         font-weight: 600;

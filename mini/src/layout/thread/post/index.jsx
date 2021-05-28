@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
-import { View, Text } from '@tarojs/components';
-import { Icon } from '@discuzq/design';
+import { View } from '@tarojs/components';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import { observer, inject } from 'mobx-react';
 import { PluginToolbar, DefaultToolbar, GeneralUpload, Title, Content, ClassifyPopup, OptionPopup, Position, Emoji } from '@components/thread-post';
 import { Units } from '@components/common';
@@ -29,6 +29,7 @@ class Index extends Component {
       isShowTitle: true, // 默认显示标题
       maxLength: 5000, // 文本输入最大长度
       showClassifyPopup: false, // 切换分类弹框show
+      operationType: 0,
       contentTextLength: 5000,
       showEmoji: false,
       showPaidOption: false, // 显示付费选项弹框
@@ -57,7 +58,7 @@ class Index extends Component {
       this.setState({ threadId: id, postType: 'isEdit' })
       this.setPostDataById(id);
     } else {
-      this.openSaveDraft();
+      // this.openSaveDraft(); // 现阶段，自动保存功能关闭
     }
     // 监听腾讯验证码事件
     Taro.eventCenter.on('captchaResult', this.handleCaptchaResult);
@@ -76,6 +77,7 @@ class Index extends Component {
     Taro.eventCenter.off('captchaResult', this.handleCaptchaResult);
     Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault);
     // Taro.offKeyboardHeightChange(() => {});
+    this.props.thread.reset();
   }
 
   componentDidShow() { }
@@ -89,9 +91,11 @@ class Index extends Component {
 
   redirectToHome = () => { // 检查发帖权限，没有则重定向首页
     const { permissions } = this.props.user;
-    if (permissions && !permissions.createThread?.enable) {
-      this.postToast('暂无发帖权限');
-      Taro.redirectTo({ url: '/pages/index/index' })
+    if (permissions && permissions.createThread && !permissions.createThread.enable) {
+      this.postToast('暂无发帖权限, 即将回到首页');
+      setTimeout(() => {
+        Taro.redirectTo({ url: '/pages/index/index' })
+      }, 1000)
     }
   }
 
@@ -120,7 +124,7 @@ class Index extends Component {
       this.setCategory(categoryId);
       threadPost.formatThreadDetailToPostData(ret.data);
       this.setState({ postType: isDraft === 1 ? 'isDraft' : 'isEdit' });
-      isDraft === 1 && this.openSaveDraft();
+      // isDraft === 1 && this.openSaveDraft(); // 现阶段，自动保存功能关闭
     } else {
       // 请求失败，弹出错误消息
       this.postToast(ret.msg);
@@ -147,7 +151,7 @@ class Index extends Component {
   }
 
   // 监听title输入
-  onTitleInput = (title) => {
+  onTitleChange = (title) => {
     const { setPostData } = this.props.threadPost;
     setPostData({ title });
   }
@@ -172,6 +176,10 @@ class Index extends Component {
   // 点击发帖插件时回调，如上传图片、视频、附件或艾特、话题等
   handlePluginClick(item) {
     const { postType } = this.state;
+    // 匹配附件、图片、语音上传
+    this.setState({
+      operationType: item.type
+    });
 
     let nextRoute;
     switch (item.type) {
@@ -219,9 +227,6 @@ class Index extends Component {
         break;
       case THREAD_TYPE.video:
         this.handleVideoUpload();
-        break;
-      case THREAD_TYPE.voice:
-        nextRoute = `/subPages/thread/selectPayment/index?paidType=${THREAD_TYPE.voice}`;
         break;
       case 'emoji':
         this.setState({
@@ -428,8 +433,20 @@ class Index extends Component {
       // 非草稿，跳转主题详情页
       Taro.hideLoading();
       if (!isDraft) {
+        // 更新帖子到首页列表
+        if (threadId) {
+          this.props.index.updateAssignThreadAllData(threadId, data);
+        // 添加帖子到首页数据
+        } else {
+          const { categoryids = [] } = this.props.index?.filter || {}
+          const { categoryId = '' } = data
+          // 首页如果是全部或者是当前分类，则执行数据添加操作
+          if (!categoryids.length || categoryids.indexOf(categoryId) !== -1) {
+            this.props.index.addThread(data);
+          }
+        }
         this.postToast('发布成功', 'success');
-        Taro.redirectTo({ url: `/pages/thread/index?id=${data.threadId}` });
+        Taro.redirectTo({ url: `/subPages/thread/index?id=${data.threadId}` });
       }
       return true;
     } else {
@@ -485,6 +502,9 @@ class Index extends Component {
     if (this.state.isFirstFocus) {
       this.setState({ isFirstFocus: false });
     }
+    this.setState({
+      showEmoji: false
+    });
   }
 
   // 处理左上角按钮点击跳路由
@@ -494,19 +514,20 @@ class Index extends Component {
       this.setState({ showDraftOption: true });
       return
     }
-  
+
     url ? Taro.redirectTo({ url }) : Taro.navigateBack();
   }
 
   render() {
     const { permissions } = this.props.user;
     const { categories } = this.props.index;
-    const { postData, setPostData } = this.props.threadPost;
-    const { rewardQa, redpacket, video, audio, product, position } = postData;
+    const { postData, setPostData, setCursorPosition } = this.props.threadPost;
+    const { rewardQa, redpacket, video, product, position } = postData;
     const {
       isShowTitle,
       maxLength,
       showClassifyPopup,
+      operationType,
       showPaidOption,
       showEmoji,
       showDraftOption,
@@ -529,9 +550,9 @@ class Index extends Component {
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
           <View className={styles['content']}>
             <Title
-              title={postData.title}
+              value={postData.title}
               show={isShowTitle}
-              onInput={this.onTitleInput}
+              onChange={this.onTitleChange}
               onBlur={this.hideKeyboard}
             />
             <Content
@@ -539,17 +560,18 @@ class Index extends Component {
               maxLength={maxLength}
               onChange={this.onContentChange}
               onFocus={this.onContentFocus}
-              onBlur={this.hideKeyboard}
+              onBlur={(e) => {
+                console.log('set', e.detail.cursor);
+                setCursorPosition(e.detail.cursor);
+                this.hideKeyboard();
+              }}
             />
 
             <View className={styles['plugin']}>
 
-              <GeneralUpload
-                type={Object.keys(audio).length > 0 ? THREAD_TYPE.voice : 0}
-                audioUpload={(file) => { this.yundianboUpload('audio', file) }}
-              />
+              <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }} />
 
-              {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => { }} />}
+              {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => setPostData({ product: {} })} />}
 
               {video.thumbUrl && <Units type='video' deleteShow src={video.thumbUrl} onDelete={() => setPostData({ video: {} })} />}
 
@@ -557,7 +579,7 @@ class Index extends Component {
           </View>
 
           {/* 插入内容tag展示区 */}
-          <View className={styles['tags']}>
+          <View className={styles['tags']} style={{ display: bottomHeight ? 'none' : 'block' }}>
             {(permissions?.insertPosition?.enable) &&
               <View className={styles['location-bar']}>
                 <Position currentPosition={position} positionChange={(position) => {
@@ -595,7 +617,7 @@ class Index extends Component {
                 {rewardQa.value &&
                   <Units
                     type='tag'
-                    tagContent={`悬赏金额${rewardQa.value}元\\结束时间${rewardQa.expiredAt}`}
+                    tagContent={`悬赏金额${rewardQa.value}元\\结束时间${rewardQa.times}`}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
                     onTagRemoveClick={() => { setPostData({ rewardQa: {} }) }}
                   />
@@ -607,7 +629,7 @@ class Index extends Component {
           {/* 工具栏区域、include各种插件触发图标、发布等 */}
           <View
             className={styles.toolbar}
-            style={{ transform: `translateY(-${bottomHeight}px)` }}
+            style={{ transform: `translateY(-${bottomHeight}px)`, bottom: bottomHeight ? 0 : '' }}
           >
             <PluginToolbar
               permissions={permissions}
@@ -623,6 +645,12 @@ class Index extends Component {
               }}
               onSubmit={() => this.handleSubmit()}
             />
+            <Emoji show={showEmoji} onHide={() => {
+              this.setState({
+                showEmoji: false
+              });
+            }} />
+
           </View>
         </View>
 
@@ -647,13 +675,6 @@ class Index extends Component {
           onClick={(item) => this.handlePluginClick(item)}
           onHide={() => this.setState({ showDraftOption: false })}
         />
-
-        {/* 表情类型弹框 */}
-        <Emoji show={showEmoji} onHide={() => {
-          this.setState({
-            showEmoji: false
-          });
-        }} />
       </>
     );
   }

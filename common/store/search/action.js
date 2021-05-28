@@ -71,13 +71,14 @@ class SearchAction extends SearchStore {
   } = {}) {
     let newPerPage = perPage;
     const topicFilter = {
-      hot: 1,
+      hot: search ? 0 : 1,
       content: search,
     };
 
-    // 如果存在search字段，说明是在结果页发起的网络请求，此时只需要后台返回三条数据
+    // type = 1,搜索结果
     if (type === 1) {
       newPerPage = 3;
+      topicFilter.hot = 0;
     }
   
     if ( !hasTopics ) {
@@ -140,17 +141,18 @@ class SearchAction extends SearchStore {
       }
       return result.data;
     }
-    return null;
+    return Promise.reject();
   };
 
   /**
    * 发现模块 - 更多用户
    * @param {object} search * 搜索值
+   * @param {string} type 搜索类型 username-按用户名，nickname按昵称搜索
    * @returns {object} 处理结果
    */
   @action.bound
-  async getUsersList({ search = '', hot = 0, perPage = 10, page = 1  } = {}) {
-    const result = await readUsersList({ params: { filter: { hot, nickname: search }, perPage, page } });
+  async getUsersList({ type = 'nickname', search = '', hot = 0, perPage = 10, page = 1  } = {}) {
+    const result = await readUsersList({ params: { filter: { hot, [type]: search }, perPage, page } });
     const {code, data} = result;
     if (code === 0 && data) {
       if (this.users && data.pageData && page !== 1) {
@@ -164,7 +166,7 @@ class SearchAction extends SearchStore {
       }
       return result;
     }
-    return null;
+    return Promise.reject();
   };
 
   /**
@@ -188,7 +190,7 @@ class SearchAction extends SearchStore {
       }
       return result.data;
     }
-    return null;
+    return Promise.reject();
   };
 
 /**
