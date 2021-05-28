@@ -23,6 +23,7 @@ const routes = [
 ]
 
  @inject('index')
+ @inject('user')
  @observer
  class BottomNavBar extends React.Component {
 
@@ -48,6 +49,14 @@ const routes = [
   }
 
   handleClick = (i, idx) => {
+    if (i.router === '/subPages/thread/post/index') {
+      const { permissions } = this.props.user;
+      if (permissions && permissions.createThread && !permissions.createThread.enable) {
+        Taro.showToast({ title: '您暂无发帖权限', icon: 'none' });
+        return;
+      }
+    }
+
     const { onClick = noop } = this.props
     const { tabs } = this.state
 
@@ -74,7 +83,7 @@ const routes = [
         Taro.navigateBack({delta: current.length - 1 - routeIndex});
       }
     }
-    // 
+    //
   };
 
 
