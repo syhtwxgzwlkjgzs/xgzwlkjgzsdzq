@@ -31,6 +31,10 @@ class Index extends React.Component {
     await this.props.user.getUserShieldList();
   }
 
+  componentWillUnmount() {
+    this.props.user.clearUserShield()
+  }
+
   // 点击头像去到他人页面
   handleOnClick = (item) => {
     Router.push({ url: `/user/${item.denyUserId}` });

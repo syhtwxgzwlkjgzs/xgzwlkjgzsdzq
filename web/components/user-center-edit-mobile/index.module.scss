@@ -47,12 +47,12 @@
 #editMobileContent {
   .bottom {
     position: fixed;
-    bottom: rem(20);
+    bottom: rem(0);
     width: calc(100% - 32px);
-    border-top: 1px solid $border-color;
-    padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
+    // border-top: 1px solid $border-color;
+    padding: rem($padding-2n) rem($padding-4n) rem($padding-4n);
     background-color: $white;
-    @include ios-safe-area-inset-bottom;
+    // @include ios-safe-area-inset-bottom;
     display: flex;
     .btn {
       height: rem(42);
@@ -65,6 +65,6 @@
 
 #editMobileContent {
   .bootom2 {
-    bottom: rem(214);
+    bottom: rem(200);
   }
 }

@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
-import Header from '@components/header';
 import List from '@components/list';
 import { Button, Toast, Avatar } from '@discuzq/design';
 import NoData from '@components/no-data';
@@ -119,14 +118,7 @@ class PartnerInviteH5Page extends React.Component {
     const { invitorName, invitorAvatar } = this.state;
     return (
       <List className={layout.page} allowRefresh={false}>
-        {
-          platform === 'h5'
-            ? <>
-                <Header/>
-                <HomeHeader hideInfo mode='join'/>
-              </>
-            : <Header/>
-        }
+        <HomeHeader hideInfo mode='join'/>
         <div className={layout.content}>
           {/* 站点信息 start */}
           <SiteInfo/>
@@ -169,7 +161,7 @@ class PartnerInviteH5Page extends React.Component {
                 </div>
                 : <></>
             }
-            {siteMode === 'pay' ? <div className={layout.bottom_title}>有效期：{siteExpire}<span>天</span></div> : <></>}
+            {siteMode === 'pay' ? <div className={layout.bottom_title}>有效期：<span>{siteExpire}天</span></div> : <></>}
             <Button className={layout.bottom_button} onClick={this.handleJoinSite}>
               {siteMode === 'pay' ? `¥${sitePrice}` : ''} 立即加入
             </Button>
