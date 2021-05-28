@@ -71,6 +71,7 @@ class AtSelect extends Component {
       keywords: val,
       checkUser: [],
       page: 1,
+      finish: false,
     });
     this.searchInput();
   }
@@ -123,24 +124,27 @@ class AtSelect extends Component {
     if (data.length === 0) return null;
     return data.map((item) => {
       const { avatar, username, groupName, userId } = this.formatData(item);
+
       return (
         <div className={styles['at-item']} key={userId}>
-          <div className={styles.avatar}>
-            {avatar
-              ? <Avatar image={avatar} />
-              : <Avatar
-                text={username}
-                style={{
-                  backgroundColor: `#${this.getBackgroundColor(username)}`,
-                }}
-              />
-            }
+          <div className={styles['at-item__inner']} >
+            <div className={styles.avatar}>
+              {avatar
+                ? <Avatar image={avatar} />
+                : <Avatar
+                  text={username}
+                  style={{
+                    backgroundColor: `#${this.getBackgroundColor(username)}`,
+                  }}
+                />
+              }
+            </div>
+            <div className={styles.info}>
+              <div className={styles.username}>{username}</div>
+              <div className={styles.group}>{groupName}</div>
+            </div>
+            <Checkbox name={username}></Checkbox>
           </div>
-          <div className={styles.info}>
-            <div className={styles.username}>{username}</div>
-            <div className={styles.group}>{groupName}</div>
-          </div>
-          <Checkbox name={username}></Checkbox>
         </div>
       );
     });
@@ -156,14 +160,16 @@ class AtSelect extends Component {
         {/* top */}
         <div className={styles.header}>
           <div className={styles['input-box']}>
+            {!pc && <div className={styles['icon-box']}>
+              <Icon className={styles['search-icon']} name="SearchOutlined" size={16}></Icon>
+            </div>}
             <Input
               value={keywords}
-              icon="SearchOutlined"
-              placeholder='搜索用户'
+              placeholder='选择好友或直接输入圈友'
               onChange={e => this.updateKeywords(e.target.value)}
             />
             {!pc && keywords &&
-              <div className={styles.delete} onClick={() => this.updateKeywords()}>
+              <div className={styles['icon-box']} onClick={() => this.updateKeywords()}>
                 <Icon className={styles['delete-icon']} name="WrongOutlined" size={16}></Icon>
               </div>
             }
@@ -173,7 +179,7 @@ class AtSelect extends Component {
           }
         </div>
 
-        {/* 选择列表 */}
+        {/* list */}
         <Checkbox.Group
           className={styles['check-box']}
           value={checkUser}

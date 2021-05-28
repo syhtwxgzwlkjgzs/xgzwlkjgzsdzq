@@ -22,7 +22,18 @@
   width: 327px;
   text-align: left;
   .item {
-    padding: rem($margin-2n) 0;
+    padding: $margin-2n 0;
+    &:after {
+      content: '';
+      height: 0;
+      width: 0;
+      visibility: hidden;
+      clear: both;
+      display: block;
+    }
+  }
+  .required {
+    color:$text-color-error;
   }
   .label {
     font-weight: normal;
@@ -30,11 +41,11 @@
     line-height: $font-line-height-middle;
     text-align: left;
     color: $text-color-regular;
-    padding-bottom: rem($margin-2n);
+    padding-bottom: $margin-2n;
   }
   .textarea{
     .textarea_item{
-      width: rem(327);
+      width: 327;
       box-sizing: border-box;
       :global(.dzq-textarea__limit){
         position: absolute;
@@ -42,28 +53,49 @@
       }
     }
   }
+  .imgUpload{
+    :global(.dzq-upload) {
+      padding: 0;
+    }
+  }
   .attachmentsUpload{
     float: left;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     .attachmentsUpload-left{
       display: inline-block;
-      font-size: rem($font-size-base);
-      line-height: rem($font-line-height-middle);
+      font-size: $font-size-base;
+      line-height: $font-line-height-middle;
       text-align: left;
       color: $text-color-regular;
     }
     .attachmentsUpload-right{
       cursor: pointer;
       display: inline-block;
-      font-size: rem($font-size-base);
-      line-height: rem($font-line-height-base);
+      font-size: $font-size-base;
+      line-height: $font-line-height-base;
       color: var(--color-text-primary);
       float: right;
+      :global(.dzq-upload) {
+        padding: 0;
+      }
+      :global(.dzq-button--text) {
+        background-color: $white;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+      }
+      :global(.dzq-icon) {
+        padding-right: $padding-2n;
+      }
     }
   }
   .button{
     @include pc_button;
-    margin-top: rem(24);
+    margin-top: $margin-6n;
   }
   .checkbox{
     :global(.dzq-checkbox-wrap) {

@@ -111,6 +111,7 @@ export default inject('user')(
             <UserInfo
               name={threadStore?.threadData?.user?.nickname || ''}
               avatar={threadStore?.threadData?.user?.avatar || ''}
+              groupName={threadStore?.threadData?.group?.groupName || ''}
               location={threadStore?.threadData?.position.location || ''}
               view={`${threadStore?.threadData?.viewCount}` || ''}
               time={`${threadStore?.threadData?.createdAt}` || ''}

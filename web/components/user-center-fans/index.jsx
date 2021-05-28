@@ -187,13 +187,15 @@ class UserCenterFans extends React.Component {
 
   // 判断关注状态
   judgeFollowsStatus = (user) => {
+    if (!user.isFollow) {
+      return 'follow';
+    }
     if (user.isMutual) {
       return 'friend';
     }
     if (user.isFollow) {
       return 'followed';
     }
-    return 'follow';
   };
 
   render() {

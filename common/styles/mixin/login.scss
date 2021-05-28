@@ -40,6 +40,9 @@
     line-height: rem($font-line-height-base);
     border-radius: 0;
     -webkit-tap-highlight-color: transparent;
+    &::placeholder {
+      color: $text-color-placeholder;
+    }
   }
   // TODO: 眼睛样式问题
   :global(.dzq-input__icon){
@@ -321,6 +324,9 @@
     height: 22px;
     line-height: $font-line-height-base;
     border-radius: 0;
+    &::placeholder {
+      color: $text-color-placeholder;
+    }
   }
   :global(.dzq-icon-EyeOutlined) {
     top: 17px;

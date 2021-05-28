@@ -15,7 +15,7 @@ class SiteInfo extends Component {
     const siteIntroduction = get(site, 'webConfig.setSite.siteIntroduction', '');
     return (
       <div className={layout.site}>
-        <SectionTitle isShowMore={false} icon={{ color: '#2469F6', name: 'NotepadOutlined' }} title="站点介绍" onShowMore={this.redirectToSearchResultUser} />
+        <SectionTitle isShowMore={false} icon={{ color: '#2469F6', name: 'IntroduceOutlined' }} title="站点介绍" onShowMore={this.redirectToSearchResultUser} />
         <div className={layout.site_introduce}>
           {siteIntroduction}
         </div>

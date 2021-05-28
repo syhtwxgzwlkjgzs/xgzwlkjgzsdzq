@@ -38,6 +38,7 @@ const BaseLayout = (props) => {
     baselayout,
     onClickTabBar = noop,
     pageName = '',
+    quickScroll = false,
   } = props;
 
   const [height, setHeight] = useState(600);
@@ -49,23 +50,28 @@ const BaseLayout = (props) => {
     if (pullDownWrapper?.current) {
       setHeight(pullDownWrapper.current.clientHeight);
     }
-
     if (listRef?.current && pageName && baselayout[pageName] > 0
         && baseLayoutWhiteList.indexOf(pageName) !== -1) {
       listRef.current.jumpToScrollTop(baselayout[pageName]);
     }
   }, []);
 
-  const handleScroll = throttle(({ scrollTop = 0 } = {}) => {
-    if (!listRef?.current?.currentScrollTop) return;
+  const quickScrolling = ({ scrollTop = 0 } = {}) => {
+    if (!listRef?.current?.currentScrollTop) {
+      onScroll();
+      return;
+    }
 
     if (baselayout.isJumpingToTop) {
       baselayout.removeJumpingToTop();
       listRef.current.onBackTop();
+    } else {
+      if(scrollTop && pageName) baselayout[pageName] = scrollTop;
     }
-    if(scrollTop && pageName) baselayout[pageName] = scrollTop;
     onScroll({ scrollTop: scrollTop });
-  }, 50)
+  };
+
+  const handleScroll = quickScroll ? quickScrolling : throttle(quickScrolling, 50);
 
   return (
     <div className={styles.container}>
@@ -74,13 +80,24 @@ const BaseLayout = (props) => {
           showPullDown ? (
             <div className={styles.list} ref={pullDownWrapper}>
               <PullDownRefresh onRefresh={onPullDown} isFinished={isFinished} height={height}>
-                  <List {...props} className={styles.listHeight} ref={listRef} onScroll={handleScroll}>
+                  <List
+                    {...props}
+                    className={styles.listHeight}
+                    ref={listRef}
+                    onScroll={handleScroll}
+                  >
                       {typeof(children) === 'function' ? children({ ...props }) : children}
                   </List>
               </PullDownRefresh>
             </div>
           ) : (
-            <List immediateCheck={false} className={styles.list} ref={listRef} onScroll={handleScroll} {...props}>
+            <List
+              {...props}
+              immediateCheck={false}
+              className={styles.list}
+              ref={listRef}
+              onScroll={handleScroll}
+            >
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>
           )
