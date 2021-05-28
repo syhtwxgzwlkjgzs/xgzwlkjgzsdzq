@@ -15,17 +15,19 @@ const DialogBox = (props) => {
   // const router = useRouter();
   // const dialogId = router.query.dialogId;
   const dialogBoxRef = useRef();
-  let timeoutId = null;
+  const timeoutId = useRef();
   useEffect(() => {
     updateMsgList();
     return () => {
-      clearTimeout(timeoutId);
+      clearTimeout(timeoutId.current);
     };
   }, []);
 
   useEffect(() => {
-    clearTimeout(timeoutId);
-    updateMsgList();
+    if (dialogId) {
+      clearTimeout(timeoutId.current);
+      updateMsgList();
+    }
   }, [dialogId]);
 
   const scrollEnd = () => {
@@ -37,10 +39,10 @@ const DialogBox = (props) => {
   // 每2秒轮询一次
   const updateMsgList = () => {
     readDialogMsgList(dialogId);
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
+    clearTimeout(timeoutId.current);
+    timeoutId.current = setTimeout(() => {
       updateMsgList();
-    }, 10000);
+    }, 4000);
   };
 
   const messagesHistory = useMemo(() => {
