@@ -43,22 +43,29 @@ const DialogBox = (props) => {
       textType: 'string',
       text: item.messageTextHtml,
       ownedBy: user.id === item.userId ? 'myself' : 'itself',
+      imageUrl: item.imageUrl,
     })).reverse();
   }, [dialogMsgList]);
 
   return (
     <div className={platform === 'pc' ? styles.pcDialogBox : (showEmoji ? styles['h5DialogBox-emoji'] : styles.h5DialogBox)} ref={dialogBoxRef}>
       <div className={styles.box__inner}>
-        {messagesHistory.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar }, idx) => (
+        {messagesHistory.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl }, idx) => (
           <React.Fragment key={idx}>
             {displayTimePanel && <div className={styles.msgTime}>{diffDate(timestamp)}</div>}
             <div className={`${ownedBy === 'myself' ? `${styles.myself}` : `${styles.itself}`} ${styles.persona}`}>
               <div className={styles.profileIcon}>
                 <Avatar image={userAvatar || '/favicon.ico'} circle={true} />
               </div>
-              <div className={styles.msgContent} dangerouslySetInnerHTML={{
-                __html: text,
-              }}></div>
+              {imageUrl ? (
+                <div className={styles.msgContent}>
+                  {imageUrl && <img style={{ width: '200px' }} src={imageUrl} />}
+                </div>
+              ) : (
+                <div className={styles.msgContent} dangerouslySetInnerHTML={{
+                  __html: '',
+                }}></div>
+              )}
             </div>
           </React.Fragment>
         ))}

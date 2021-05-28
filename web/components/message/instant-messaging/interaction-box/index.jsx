@@ -98,11 +98,8 @@ const InteractionBox = (props) => {
           const ret = await createAttachment(formData);
           const { code, data } = ret;
           if (code === 0) {
-            const url = `https://discuzv3-dev.dnspod.dev/${data.file_path}${data.attachment}`;
-            submit({imageUrl: url});
-          } else {
-
-          }
+            submit({ imageUrl: data.url });
+          } else {}
         }}
         // multiple='1'
         accept={ACCEPT_IMAGE_TYPES.join(',')}
