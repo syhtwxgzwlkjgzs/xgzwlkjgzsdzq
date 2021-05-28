@@ -1,5 +1,7 @@
 @import '@common/styles/index.scss';
 
+$tabs-list-min-height: 70vh;
+
 .list {
   overflow-y: auto;
   height: 70vh;
@@ -28,7 +30,7 @@
     .dzq-tabs__panel {
       border-top: 1px solid rgba(238, 238, 238, 0.75);
       cursor: auto;
-      min-height: rem(608);
+      min-height: rem($tabs-list-min-height);
     }
     .dzq-tabs__item {
       @include cursor-on-pc;
@@ -138,7 +140,7 @@
 }
 
 .spinnerPC {
-  height: rem(608);
+  height: rem($tabs-list-min-height);
   width: 100%;
   color: var(--color-text-placeholder);
 }

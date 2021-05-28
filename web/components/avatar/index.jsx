@@ -3,10 +3,12 @@ import { Avatar, Button, Icon, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import LoadingBox from '@components/loading-box';
+import goToLoginPage from '@common/utils/go-to-login-page';
+
 import styles from './index.module.scss';
 
 function avatar(props) {
-  const { image = '', name = '匿', onClick = () => {}, className = '', circle = true, size = 'primary', isShowUserInfo = false, userId = null } = props;
+  const { image = '', name = '匿', onClick = () => {}, className = '', circle = true, size = 'primary', isShowUserInfo = false, userId = null, user: myself } = props;
 
   const userName = useMemo(() => {
     const newName = (name || '').toLocaleUpperCase()[0];
@@ -24,8 +26,8 @@ function avatar(props) {
     changeIsShow(true);
 
     if (!userInfo || userInfo === 'padding') {
-      const userInfo = await props.user.getAssignUserInfo(userId);
-      changeIsSameWithMe(props?.user?.id === userId);
+      const userInfo = await myself.getAssignUserInfo(userId);
+      changeIsSameWithMe(myself?.id === userId);
       changeUserInfo(userInfo);
     }
   });
@@ -36,15 +38,23 @@ function avatar(props) {
   });
 
   const followHandler = useCallback(async () => {
+
+    // 对没有登录的先登录
+    if (!myself.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     changeFollowStatus(true);
     if (userInfo.follow === 0) {
-      const res = await props.user.postFollow(userId);
+      const res = await myself.postFollow(userId);
       if (res.success) {
         userInfo.follow = res.data.isMutual ? 2 : 1;
         userInfo.fansCount = userInfo.fansCount + 1;
       }
     } else {
-      const res = await props.user.cancelFollow({ id: userId, type: 1 });
+      const res = await myself.cancelFollow({ id: userId, type: 1 });
       if (res.success) {
         userInfo.follow = 0;
         userInfo.fansCount = userInfo.fansCount - 1;
@@ -55,7 +65,15 @@ function avatar(props) {
   }, [userInfo]);
 
   const messagingHandler = useCallback(() => {
-    const username = props?.user?.userInfo.username;
+    
+    // 对没有登录的先登录
+    if (!myself.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
+    const username = myself?.userInfo.username;
     if(username) {
       props.router.push(`/message?page=chat&username=${username}`);
     } else {
@@ -64,11 +82,19 @@ function avatar(props) {
   })
 
   const blockingHandler = useCallback(async () => {
+    
+    // 对没有登录的先登录
+    if (!myself.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     changeBlockStatus(true);
     try {
       if (userInfo.isDeny) {
-        await props.user.undenyUser(userId);
-        await props.user.setTargetUserNotBeDenied();
+        await myself.undenyUser(userId);
+        await myself.setTargetUserNotBeDenied();
         userInfo.isDeny = false;
         Toast.success({
           content: '解除屏蔽成功',
@@ -76,8 +102,8 @@ function avatar(props) {
           duration: 1000,
         })
       } else {
-        await props.user.denyUser(userId);
-        await props.user.setTargetUserDenied();
+        await myself.denyUser(userId);
+        await myself.setTargetUserDenied();
         userInfo.isDeny = true;
         Toast.success({
           content: '屏蔽成功',
