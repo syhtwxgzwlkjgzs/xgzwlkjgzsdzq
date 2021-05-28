@@ -27,9 +27,6 @@ export const getSiteUpdateTime = function (startTime) {
   const end = new Date(Date.now())
   // 计算时间戳的差
   const diffValue = end - start;
-  console.log(start)
-  console.log(end)
-  console.log(diffValue)
   // 获取年
   const startYear = start.getFullYear();
   const endYear = end.getFullYear();
