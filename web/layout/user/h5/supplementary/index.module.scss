@@ -15,9 +15,15 @@
       display: block;
     }
   }
-  .input{
-    .input_value{
-      width: 100%;
+  .input_value{
+    width: 100%;
+    :global(.dzq-input__inner) {
+      font-size: rem($font-size-base);
+      line-height: rem($font-line-height-base);
+      -webkit-appearance: none;
+      &::placeholder {
+        color: $text-color-placeholder;
+      }
     }
   }
   .button{
@@ -87,11 +93,13 @@
   }
   .textarea{
     .textarea_item{
-      width: rem(327);
+      width: 100%;
       box-sizing: border-box;
       :global(.dzq-textarea__limit){
+        width: calc(100% - 15px);
         position: absolute;
         bottom: 0;
+        padding-right: 0;
       }
     }
   }
