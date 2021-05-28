@@ -117,7 +117,7 @@ class Index extends Component {
   };
 
   render() {
-    const { type, item = {}, site, onBtnClick } = this.props;
+    const { type, item = {}, site, onBtnClick, isLast } = this.props;
     const { isPC } = site;
     const avatarUrl = this.getAvatar(item.avatar);
 
@@ -154,6 +154,7 @@ class Index extends Component {
               [styles['detail-thread']]: type === 'thread',
               [styles['detail-financial']]: type === 'financial',
               [styles['detail-account']]: type === 'account',
+              [styles['border-none']]: isLast,
             })}
           >
             {/* 顶部 */}
