@@ -24,7 +24,7 @@ export default class Page extends React.Component {
     // 是否必须登录
     if ( withLogin && !user.isLogin()) {
       Router.redirect({
-        url: '/subPages/user/login/index'
+        url: '/subPages/user/wx-auth/index'
       });
     }
 
