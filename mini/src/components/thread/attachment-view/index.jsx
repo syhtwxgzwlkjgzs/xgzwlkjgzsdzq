@@ -32,6 +32,8 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
   const downloader = new Downloader();
   const [downloading, setDownloading] =
         useState(Array.from({length: attachments.length}, () => false));
+  const [errorMsg, setErrorMsg] =
+        useState(Array.from({length: attachments.length}, () => ""));
 
   const getFileType = (filepath) => {
     return filepath.substr(filepath.lastIndexOf('.') + 1);
@@ -58,10 +60,22 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
           success(res) {
           },
           fail(error) {
-            console.error("文件类型不支持下载", error.errMsg);
+            errorMsg[index] = "微信小程序暂不支持此文件类型下载";
+            setErrorMsg([...errorMsg]);
+            setTimeout(() => {
+              errorMsg[index] = "";
+              setErrorMsg([...errorMsg]);
+            }, 3000);
+            console.error(error.errMsg);
           },
         });
       }).catch((error) => {
+        errorMsg[index] = "下载失败";
+        setErrorMsg([...errorMsg]);
+        setTimeout(() => {
+          errorMsg[index] = "";
+          setErrorMsg([...errorMsg]);
+        }, 3000);
         console.error(error.errMsg)
       }).finally(() => {
         downloading[index] = false;
@@ -98,6 +112,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
   const Normal = ({ item, index, type }) => {
     const iconName = handleIcon(type);
     return (
+      <>
       <View className={styles.container} key={index} onClick={onClick} >
         <View className={styles.wrapper}>
           <View className={styles.left}>
@@ -117,6 +132,13 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
           </View>
         </View>
       </View>
+      { errorMsg[index] !== "" && (
+          <View className={styles.errorMsgWrapper}>
+            <Text className={styles.errorMessage}>{errorMsg[index]}</Text> 
+          </View>
+        )
+      }
+      </>
     );
   };
 
