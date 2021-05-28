@@ -5,7 +5,7 @@ import styles from './index.module.scss';
 import Header from '@components/header';
 import InstantMessaging from '../instant-messaging';
 
-const Index = ({ dialogId, message, user }) => {
+const Index = ({ dialogId, message, user, username }) => {
   // const { readDialogMsgList, dialogMsgList, createDialogMsg } = message;
 
   // let timeoutId = null;
@@ -39,7 +39,7 @@ const Index = ({ dialogId, message, user }) => {
   return (
     <div className={styles.wrapper}>
       <Header />
-      <InstantMessaging dialogId={dialogId} />
+      <InstantMessaging dialogId={dialogId} username={username} />
     </div>
   );
 };
