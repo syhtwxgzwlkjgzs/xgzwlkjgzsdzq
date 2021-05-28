@@ -69,7 +69,7 @@ class IndexPCPage extends React.Component {
         const { totalCount: nowTotal = -1 } = this.props.index?.threads || {};
   
         if (nowTotal !== -1) {
-          readThreadList({ params: { page: 1, filter: { categoryids, types, essence, attention, sort }, sequence } }).then((res) => {
+          readThreadList({ params: { perPage: 10, page: 1, filter: { categoryids, types, essence, attention, sort }, sequence } }).then((res) => {
             const { totalCount = 0 } = res?.data || {};
             if (totalCount > nowTotal) {
               this.setState({
