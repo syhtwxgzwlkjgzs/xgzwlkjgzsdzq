@@ -48,17 +48,17 @@
 .tips {
   text-align: right;
   color: $primary-color;
-  padding-right: $padding-6n;
-  font-size: $font-size-primary;
+  padding-right: rem($padding-6n);
+  font-size: rem($font-size-primary);
   margin-top: rem($margin-6n);
 }
 #accountPwdContent {
   .bottom {
     position: fixed;
-    bottom: rem(20);
+    bottom: rem(0);
     width: calc(100% - 32px);
-    border-top: 1px solid $border-color;
-    padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
+    // border-top: 1px solid $border-color;
+    padding: rem($padding-2n) rem($padding-4n) rem($padding-4n);
     display: flex;
     justify-content: center;
     .btn {

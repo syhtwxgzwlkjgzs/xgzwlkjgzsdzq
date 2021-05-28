@@ -10,6 +10,9 @@
     padding: rem($padding-4n) 0 rem($padding-6n);
     :global(.dzq-input__inner) {
       height: rem(22);
+      &::placeholder {
+        color: $text-color-placeholder;
+      }
     }
   }
 }

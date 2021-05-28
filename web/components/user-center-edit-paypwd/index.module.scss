@@ -56,20 +56,23 @@
     }
   }
   .tips {
-    margin-top: rem($margin-6n);
     width: 100%;
     text-align: right;
     font-size: rem($font-size-primary);
+    text-align: right;
+    color: $primary-color;
+    padding-right: rem($padding-6n);
+    margin-top: rem($margin-6n);
   }
 }
 
 #setPayPwdContent {
   .bottom {
     position: fixed;
-    bottom: rem(20);
+    bottom: 0;
     width: calc(100% - 32px);
-    border-top: 1px solid $border-color;
-    padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
+    // border-top: 1px solid $border-color;
+    padding: rem($padding-2n) rem($padding-4n) rem($padding-4n);
     display: flex;
     .btn {
       height: rem(42);

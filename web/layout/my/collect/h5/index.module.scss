@@ -6,7 +6,6 @@
   position: absolute;
   right: 0;
   left: 0;
-  top: rem(90);
   bottom: 0;
   background-color: $body-bg-color;
   z-index: -1;
@@ -33,6 +32,7 @@
 }
 .list {
   flex: 1;
+  height: 100%;
   background-color: $body-bg-color;
 }
 .listItem {
