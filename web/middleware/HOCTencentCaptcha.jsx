@@ -19,16 +19,14 @@ export default function HOCTencentCaptcha(Component) {
         import('@discuzq/sdk/dist/common_modules/sliding-captcha').then(({
           TencentCaptcha,
         }) => {
-          if (!this.captcha) {
-            this.captcha = new TencentCaptcha(qcloudCaptchaAppId, (res) => {
-              if (res.ret === 0) {
-                resolve({
-                  captchaRandStr: res.randstr,
-                  captchaTicket: res.ticket,
-                });
-              }
-            });
-          }
+          this.captcha = new TencentCaptcha(qcloudCaptchaAppId, (res) => {
+            if (res.ret === 0) {
+              resolve({
+                captchaRandStr: res.randstr,
+                captchaTicket: res.ticket,
+              });
+            }
+          });
           // 显示验证码
           this.captcha.show();
         });
