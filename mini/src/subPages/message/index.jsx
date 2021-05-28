@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import Page from '@components/page';
 import Message from '@layout/message';
 import { getCurrentInstance } from '@tarojs/taro';
+import Taro from '@tarojs/taro'
 
  /**
    * 消息页面当前显示的消息模块
@@ -35,6 +36,7 @@ const Index = inject('message')(observer(({ message }) => {
   // 更新未读消息
   useEffect(() => {
     message.readUnreadCount();
+    Taro.hideHomeButton();
   });
 
   console.log('params :>> ', params);

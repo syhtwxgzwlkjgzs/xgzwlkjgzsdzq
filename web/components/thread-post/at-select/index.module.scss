@@ -21,58 +21,97 @@
 }
 
 .wrapper {
-  // position: relative;
-  width: 100%;
+  @include flex();
+  flex-direction: column;
+  align-items: stretch;
   height: 100vh;
   height: -webkit-fill-available;
   min-height: 100vh;
   /* mobile viewport bug fix */
   min-height: -webkit-fill-available;
+  background: $body-bg-color;
 
-  .input {
+  .header {
+    @include flex();
+    width: 100%;
+    padding: $padding-4n $padding-4n $padding-2n;
+    background: $white;
     box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    background: $text-bg-color2;
-    margin: $margin-4n $margin-4n $margin-2n;
-    padding-left: $padding-4n;
-    padding-right: $padding-4n;
-    border-radius: $border-radius-small;
 
-    .inputWrapperIcon {
-      color: $text-color-secondary;
+    .input-box {
+      flex: 1;
+      @include flex();
+      padding: 0 $padding-2n;
+      background: $text-bg-color2;
+      opacity: 0.78;
+      border-radius: $border-radius-small;
+      box-sizing: border-box;
+
+      .icon-box {
+        flex: 0 0 32px;
+        height: 32px;
+        height: 36px;
+        display: flex;
+      }
+      .search-icon {
+        margin: auto;
+        color: $icon-color-light;
+      }
+      .delete-icon {
+        margin: auto;
+        color: $disabled-color;
+      }
     }
-    .deleteIcon {
-      color: $disabled-color;
+
+    .btn-cancel {
+      flex-basis: 44px;
+      font-size: $font-size-primary;
+      color: $text-color-secondary;
+      text-align: right;
     }
   }
 
   :global {
     .dzq-input {
       width: 100%;
+      background: $text-bg-color2;
+      opacity: 0.78;
+
       .dzq-input__inner {
-        box-sizing: border-box;
         height: 36px;
-        width: 100%;
+        padding: 0;
+        font-size: $font-size-middle;
+        color: $text-color-primary;
         background: $text-bg-color2;
+        opacity: 0.78;
         border: none;
-        border-radius: 0;
+      }
+
+      .input-placeholder {
+        color: $text-color-placeholder;
       }
     }
   }
 
-  .at-wrap {
-    height: calc(100vh - 120px);
-    // .scroll-view {
-    //   height: 100% !important;
-    // }
+  .check-box {
+    flex: 1;
+    overflow: hidden;
   }
 
   .at-item {
-    @include flex();
-    padding: $padding-4n 0;
-    border-bottom: $border-solid-1;
-    margin: 0 $margin-4n;
+    background: $white;
+
+    .at-item__inner {
+      @include flex();
+      height: 60px;
+      padding: $padding-4n 0;
+      margin: 0 $margin-4n;
+      border-top: $border-solid-1;
+      box-sizing: border-box;
+    }
+    &:first-child .at-item__inner {
+      border-top: none;
+    }
 
     .avatar {
       width: rem(38);
@@ -82,6 +121,8 @@
         .dzq-avatar {
           width: 100%;
           height: 100%;
+          font-size: 22px;
+          color: $white;
           text-align: center;
           line-height: rem(38);
           border-radius: $border-radius-circle;
@@ -98,122 +139,128 @@
     .info {
       flex: 1;
       @include flex();
-      margin: 0 $margin-2n;
-      font-size: $font-size-base;
+      height: 100%;
+      padding: 0 $padding-2n;
+      box-sizing: border-box;
       .username {
         max-width: rem(170);
         @include single-line();
         line-height: $font-line-height-small;
-        font-size: $font-size-base;
-        text-align: left;
+        font-size: $font-size-primary;
         color: $text-color-primary;
+        text-align: left;
       }
       .group {
         max-width: rem(80);
         @include single-line();
         font-size: $font-size-small;
-        text-align: left;
         color: $text-color-secondary;
+        text-align: right;
       }
     }
 
     :global {
       .dzq-checkbox-wrap {
         margin: 0;
-        padding: 0;
+        padding: $padding-3n 0;
         -webkit-tap-highlight-color: transparent;
+        box-sizing: border-box;
         .dzq-checkbox {
-          width: rem(24);
-          height: rem(24);
-          // border: $border-solid-1;
-          border-radius: $border-radius-small !important;
-          background-color: $text-bg-color2;
+          width: rem(20);
+          height: rem(20);
+          border-radius: $border-radius-small;
+          background-color: $text-bg-color;
+          border: $border-solid-1;
           &:after {
             border: none;
           }
         }
         &.is-checked {
           .dzq-checkbox {
-            border: none;
-            background-color: $primary-color;
+            background-color: $checkbox-checked-bg-color;
           }
           .dzq-icon {
-            font-size: $font-size-label;
-            color: $white;
+            font-size: $font-size-small !important;
+            color: $primary-color;
           }
         }
       }
     }
   }
 
-  .btn {
-    @include flex();
-    flex-wrap: nowrap;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    bottom: constant(safe-area-inset-bottom);
-    bottom: env(safe-area-inset-bottom);
-    padding: rem($padding-2n) rem($padding-4n);
+  .btn-container {
+    flex-basis: 60px;
+    padding: $padding-2n $padding-4n;
+    padding-bottom: calc(8px + constant(safe-area-inset-bottom));
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
     background: $white;
-    justify-content: center;
     border-top: $border-solid-1;
-    width: 100%;
     box-sizing: border-box;
+
     :global {
       .dzq-button {
-        @include button-default;
-        flex:1;
-        height: rem(42);
+        width: 100%;
+        padding: $padding-10 0;
+        font-size: $font-size-middle;
+        color: $text-color-regular;
+        line-height: $font-line-height-small;
+        border: none;
+        border-radius: $border-radius-small;
+        background: $text-bg-color2;
         -webkit-tap-highlight-color: transparent;
-        &:first-child {
-          margin-right: rem($margin-10);
-        }
-        &.is-selected {
-          @include button-primary;
-        }
+        box-sizing: border-box;
       }
+    }
+
+    .selected {
+      color: $white;
+      background-color: $primary-color;
     }
   }
 }
+
 .pc {
   .wrapper {
     height: 500px;
-    .btn {
-      border-radius: $border-radius-small;
-      border-top: none;
-      padding-bottom: $padding-4n;
-      :global {
-        .dzq-button {
-          width: rem(116);
+    min-height: 50vh;
+
+    .header {
+      padding-bottom: 0;
+      .input-box {
+        width: 100%;
+        background: $white;
+        padding: 0 0 $padding-2n 0;
+        border-bottom: $border-solid-1;
+        opacity: 1;
+      }
+    }
+
+    :global {
+      .dzq-input {
+        box-sizing: border-box;
+        background: $white;
+
+        .dzq-input__inner {
+          background: $white;
         }
       }
     }
-    .at-wrap{
-      .list__inner{
+
+    .list {
+      height: 378px !important;
+      .list__inner {
         @include scrollbar();
       }
     }
+
     .at-item {
-      margin-left: 0;
-      margin-right: $margin-5n;
+      padding-right: $padding-2n;
     }
 
-    .input {
-      margin-top: 0;
-      margin-left: 0;
-      margin-right: 0;
-    }
-  }
-  .at-wrap {
-    height: calc(50vh - 120px);
-  }
-
-  :global {
-    .dzq-modal__body {
-      height: 50vh;
-      min-height: 50vh;
+    .btn-container {
+      flex-basis: 60px;
+      padding-left: 0;
+      padding-right: 0;
     }
   }
 }

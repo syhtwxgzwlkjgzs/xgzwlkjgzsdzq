@@ -19,6 +19,9 @@
       padding: 0;
       border: none;
       border-radius: $border-radius-zero;
+      &::placeholder {
+        color: $text-color-placeholder;
+      }
     }
   }
   .captchaInput-input_val {

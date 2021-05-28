@@ -27,12 +27,12 @@ class TopicSelect extends Component {
 
   // 初始化话题请求
   async componentDidMount() {
-    this.loadTopics();
+    this.fetchTopics();
   }
 
   // 更新搜索关键字
   updateKeywords = (val = "") => {
-    this.setState({ keywords: val, page: 1 });
+    this.setState({ keywords: val, page: 1, finish: false });
     this.searchInput();
   }
 
@@ -40,12 +40,12 @@ class TopicSelect extends Component {
   searchInput = () => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      this.loadTopics();
+      this.fetchTopics();
     }, 300);
   }
 
   // 请求
-  async loadTopics() {
+  async fetchTopics() {
     // 1 设置参数
     const { fetchTopic } = this.props.threadPost;
     const { page, perPage, keywords } = this.state;
@@ -65,7 +65,7 @@ class TopicSelect extends Component {
       });
     } else {
       this.setState({ finish: true });
-      Taro.showToast({ title: ret.msg, icon: 'none' })
+      Taro.showToast({ title: ret.msg, icon: 'none' });
     }
   }
 
@@ -85,14 +85,16 @@ class TopicSelect extends Component {
     this.cancel();
   }
 
-  // 渲染项列表
+  // 渲染项
   renderItem = (item) => (
     <View className={styles['topic-item']} onClick={() => this.handleItemClick(item)}>
-      <View className={styles['item-left']}>
-        <View className={styles.name}>#{item.content}#</View>
-      </View>
-      <View className={styles['item-right']}>
-        {item.newTopic ? item.newTopic : `${item.viewCount}热度`}
+      <View className={styles['topic-item__inner']} >
+        <View className={styles['item-left']}>
+          <View className={styles.name}>#{item.content}#</View>
+        </View>
+        <View className={styles['item-right']}>
+          {item.newTopic ? item.newTopic : `${item.viewCount}热度`}
+        </View>
       </View>
     </View>
   );
@@ -107,14 +109,16 @@ class TopicSelect extends Component {
         {/* top */}
         <View className={styles.header}>
           <View className={styles['input-box']}>
+            <View className={styles['icon-box']}>
+              <Icon className={styles['search-icon']} name="SearchOutlined" size={16}></Icon>
+            </View>
             <Input
               value={keywords}
-              icon="SearchOutlined"
-              placeholder='搜索话题'
+              placeholder='请选择或直接输入话题'
               onChange={e => this.updateKeywords(e.target.value)}
             />
             {keywords &&
-              <View className={styles.delete} onClick={() => this.updateKeywords()}>
+              <View className={styles['icon-box']} onClick={() => this.updateKeywords()}>
                 <Icon className={styles['delete-icon']} name="WrongOutlined" size={16}></Icon>
               </View>
             }
@@ -124,9 +128,10 @@ class TopicSelect extends Component {
 
         {/* list */}
         <List
-          height={'calc(100vh - 50px)'}
+          className={styles.list}
+          height={'calc(100vh - 60px)'}
           noMore={finish}
-          onRefresh={() => this.loadTopics()}
+          onRefresh={() => this.fetchTopics()}
         >
           {keywords && this.renderItem({ content: keywords, newTopic: '新话题' })}
           {topics.map(item => (

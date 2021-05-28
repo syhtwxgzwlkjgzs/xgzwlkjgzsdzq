@@ -1,8 +1,13 @@
 @import "@common/styles/index.scss";
+@mixin flex() {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .popup {
   :global {
     .dzq-popup__overlay {
-      background-color: $white;
+      background-color: $body-bg-color;
     }
     .dzq-popup__container {
       height: 100%;
@@ -11,102 +16,102 @@
 }
 
 .wrapper {
-  // position: relative;
-  width: 100%;
   height: 100vh;
   height: -webkit-fill-available;
   min-height: 100vh;
   /* mobile viewport bug fix */
   min-height: -webkit-fill-available;
+  background: $body-bg-color;
 
-  .input {
+  .header {
+    @include flex();
+    width: 100%;
+    padding: $padding-4n $padding-4n $padding-2n;
+    background: $white;
     box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    background: $text-bg-color2;
-    margin: $margin-4n $margin-4n $margin-2n;
-    padding-left: $padding-4n;
-    padding-right: $padding-4n;
-    border-radius: $border-radius-small;
 
-    .inputWrapperIcon {
-      color: $text-color-secondary;
+    .input-box {
+      flex: 1;
+      @include flex();
+      padding: 0 $padding-2n;
+      background: $text-bg-color2;
+      opacity: 0.78;
+      border-radius: $border-radius-small;
+
+      .icon-box {
+        flex: 0 0 32px;
+        height: 32px;
+        height: 36px;
+        display: flex;
+      }
+      .search-icon {
+        margin: auto;
+        color: $icon-color-light;
+      }
+      .delete-icon {
+        margin: auto;
+        color: $disabled-color;
+      }
     }
-    .deleteIcon {
-      color: $disabled-color;
+
+    .btn-cancel {
+      flex-basis: 44px;
+      font-size: $font-size-primary;
+      color: $text-color-secondary;
+      text-align: right;
     }
   }
 
   :global {
     .dzq-input {
       width: 100%;
+      background: $text-bg-color2;
+      opacity: 0.78;
+
       .dzq-input__inner {
-        box-sizing: border-box;
-        height: 36px;
         width: 100%;
+        padding: 0;
+        font-size: $font-size-middle;
+        color: $text-color-primary;
         background: $text-bg-color2;
+        opacity: 0.78;
         border: none;
-        border-radius: 0;
       }
-    }
 
-    .btn-cancel {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      bottom: constant(safe-area-inset-bottom);
-      bottom: env(safe-area-inset-bottom);
-      padding: rem($padding-2n) rem($padding-4n);
-      display: flex;
-      align-items: center;
-      background: $white;
-      .dzq-button {
-        @include button-default;
-        width: 100%;
-        height: rem(42);
+      .input-placeholder {
+        color: $text-color-placeholder;
       }
     }
   }
 
-  .topic-wrap {
-    height: calc(100vh - 118px);
-  }
   .topic-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: rem($padding-4n) 0;
-    border-bottom: $border-solid-1;
-    margin: 0 rem($margin-4n);
+    background: $white;
+
+    .topic-item__inner {
+      @include flex();
+      padding: rem($padding-4n) 0;
+      margin: 0 rem($margin-4n);
+      border-top: $border-solid-1;
+    }
+    &:first-child .topic-item__inner {
+      border-top: none;
+    }
+
     .item-left {
-      display: flex;
-      align-items: center;
       max-width: rem(240px);
-      font-size: $font-size-base;
-      color: $text-color-primary;
-      @include text-ellipsis;
 
       .name {
-        max-width: 197px;
         line-height: 20px;
-        font-size: $font-size-base;
+        font-size: $font-size-primary;
         color: $text-color-primary;
-        word-break: break-all;
-      }
-      :global {
-        .dzq-icon {
-          margin-left: rem($margin-1n);
-          font-size: $font-size-base;
-          color: $primary-color;
-        }
+        @include lamp-clamp(2);
       }
     }
+
     .item-right {
-      white-space: nowrap;
       font-size: $font-size-small;
-      text-align: left;
       color: $text-color-secondary;
+      white-space: nowrap;
     }
   }
 }
@@ -115,28 +120,39 @@
   .wrapper {
     height: 500px;
     min-height: 50vh;
-    .input {
-      margin-top: 0;
-      margin-left: 0;
-      margin-right: 0;
+
+    .header {
+      padding-bottom: 0;
+      .input-box {
+        width: 100%;
+        background: $white;
+        padding: 0 0 $padding-2n 0;
+        border-bottom: $border-solid-1;
+        opacity: 1;
+      }
     }
-  }
-  :global {
-    .btn-cancel {
-      position: static;
-      padding: 0;
-      padding-top: $padding-4n;
+
+    :global {
+      .dzq-input {
+        box-sizing: border-box;
+        background: $white;
+
+        .dzq-input__inner {
+          background: $white;
+        }
+      }
     }
-  }
-  .topic-wrap {
-    height: 398px;
-    min-height: calc(50vh - 102px);
-    .list__inner {
-      @include scrollbar();
+    
+    .list {
+      height: 398px !important;
+      min-height: 436px !important;
+      .list__inner {
+        @include scrollbar();
+      }
     }
-  }
-  .topic-item {
-    margin-left: 0;
-    margin-right: $margin-5n;
+
+    .topic-item {
+      padding-right: $padding-2n;
+    }
   }
 }

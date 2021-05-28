@@ -1,5 +1,5 @@
 import { action } from 'mobx';
-import { readUserLoginDisplay } from '@server';
+import { readUserLoginDisplay, readForum } from '@server';
 import SiteStore from './store';
 import { get } from '../../utils/get';
 
@@ -13,6 +13,12 @@ class SiteAction extends SiteStore {
     if (platform !== this.platform) {
       this.platform = platform;
     }
+  }
+
+  @action
+  async getSiteInfo() {
+    const siteResult = await readForum({});
+    siteResult.data && site.setSiteConfig(siteResult.data);
   }
 
   @action
@@ -68,7 +74,6 @@ class SiteAction extends SiteStore {
     }
     return false;
   }
-
 }
 
 export default SiteAction;

@@ -1,56 +1,45 @@
-import React, { memo, useEffect, useMemo } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 
 import Header from '@components/header';
 import InstantMessaging from '../instant-messaging';
 
-const Index = ({ dialogId, message, user }) => {
-  const { readDialogMsgList, dialogMsgList, createDialogMsg } = message;
+const Index = ({ dialogId, message, user, username }) => {
+  // const { readDialogMsgList, dialogMsgList, createDialogMsg } = message;
 
-  let timeoutId = null;
-  useEffect(() => {
-    updateMsgList();
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, []);
+  // let timeoutId = null;
+  // useEffect(() => {
+  //   updateMsgList();
+  //   return () => {
+  //     clearTimeout(timeoutId);
+  //   };
+  // }, []);
 
-  // 每2秒轮询一次
-  const updateMsgList = () => {
-    readDialogMsgList(dialogId);
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      updateMsgList();
-    }, 10000);
-  };
+  // // 每2秒轮询一次
+  // const updateMsgList = () => {
+  //   readDialogMsgList(dialogId);
+  //   clearTimeout(timeoutId);
+  //   timeoutId = setTimeout(() => {
+  //     updateMsgList();
+  //   }, 10000);
+  // };
 
-  const messagesHistory = useMemo(() => {
-    return dialogMsgList.list
-      .map((item) => ({
-        timestamp: item.createdAt,
-        userAvatar: item.user.avatar,
-        displayTimePanel: true,
-        textType: 'string',
-        text: item.summary,
-        ownedBy: user.id === item.userId ? 'myself' : 'itself',
-      }))
-      .reverse();
-  }, [dialogMsgList]);
+  // const messagesHistory = useMemo(() => dialogMsgList.list.map(item => ({
+  //   timestamp: item.createdAt,
+  //   userAvatar: item.user.avatar,
+  //   displayTimePanel: true,
+  //   textType: 'string',
+  //   text: item.summary,
+  //   ownedBy: user.id === item.userId ? 'myself' : 'itself',
+  // })).reverse(), [dialogMsgList]);
+
+
 
   return (
     <div className={styles.wrapper}>
       <Header />
-      <InstantMessaging
-        messagesHistory={messagesHistory}
-        onSubmit={async (val) => {
-          const ret = await createDialogMsg({
-            messageText: val.text,
-            dialogId,
-          });
-          if (ret.code === 0) updateMsgList();
-        }}
-      />
+      <InstantMessaging dialogId={dialogId} username={username} />
     </div>
   );
 };

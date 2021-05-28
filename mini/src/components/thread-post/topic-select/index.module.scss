@@ -1,69 +1,66 @@
 @import "@common/styles/index.scss";
+@mixin flex() {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
 .wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: stretch;
   height: 100vh;
-  background: $white;
-  border-top: $border-solid-1;
+  background: $body-bg-color;
 
   .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include flex();
     width: 100%;
-    padding: $padding-10 $padding-5n;
+    padding: $padding-4n $padding-4n $padding-2n;
+    background: $white;
 
     .input-box {
       flex: 1;
-      position: relative;
+      @include flex();
+      padding: 0 $padding-2n;
+      background: $text-bg-color2;
+      opacity: 0.78;
+      border-radius: $border-radius-small;
 
-      .delete {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 40px;
+      .icon-box {
+        flex: 0 0 32px;
+        height: 32px;
         height: 36px;
         display: flex;
-        align-items: center;
-
-        .delete-icon {
-          margin-left: 8px;
-          padding-top: 3px;
-          color: $text-color-placeholder;
-        }
+      }
+      .search-icon {
+        margin: auto;
+        color: $icon-color-light;
+      }
+      .delete-icon {
+        margin: auto;
+        color: $disabled-color;
       }
     }
-  }
 
-  .btn-cancel {
-    flex-basis: 44px;
-    font-size: $font-size-primary;
-    color: #8490a8;
-    text-align: right;
+    .btn-cancel {
+      flex-basis: 44px;
+      font-size: $font-size-primary;
+      color: $text-color-secondary;
+      text-align: right;
+    }
   }
 
   :global {
     .dzq-input {
       width: 100%;
-      box-sizing: border-box;
+      background: $text-bg-color2;
+      opacity: 0.78;
 
       .dzq-input__inner {
-        height: 40px;
-        padding: 0 40px;
+        height: 36px;
+        padding: 0;
         font-size: $font-size-middle;
         color: $text-color-primary;
         background: $text-bg-color2;
+        opacity: 0.78;
         border: none;
-      }
-
-      .dzq-icon-SearchOutlined {
-        left: 8px;
-        top: 50%;
-        margin-top: -18px;
-        color: $icon-color-light !important;
       }
 
       .input-placeholder {
@@ -73,38 +70,32 @@
   }
 
   .topic-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 16px 20px;
-    line-height: 20px;
-    border-bottom: $border-solid-1;
+    background: $white;
+
+    .topic-item__inner {
+      @include flex();
+      padding: rem($padding-4n) 0;
+      margin: 0 rem($margin-4n);
+      border-top: $border-solid-1;
+    }
+    &:first-child .topic-item__inner {
+      border-top: none;
+    }
 
     .item-left {
-      display: flex;
-      align-items: center;
-      max-width: 235px;
+      max-width: 240px;
 
       .name {
-        max-width: 197px;
         line-height: 20px;
         font-size: $font-size-primary;
-        font-weight: 600;
-        color: #333;
-        word-break: break-all;
-      }
-
-      .recommend {
-        width: 20px;
-        height: 20px;
-        margin-left: margin-5n;
-        margin-bottom: margin-2n;
-        font-size: 22px;
+        color: $text-color-primary;
+        @include lamp-clamp(2);
       }
     }
 
     .item-right {
       font-size: $font-size-small;
-      color: rgb(51, 51, 51);
+      color: $text-color-secondary;
       white-space: nowrap;
     }
   }

@@ -55,29 +55,31 @@ export default class ReplyList extends React.Component {
         </View>
         <View className={styles.replyListContent}>
           <View className={styles.replyListContentText}>
-            <View className={styles.replyListName}>{this.props.data.user.nickname || this.props.data.user.userName}</View>
+            <View className={styles.replyListName}>
+              {this.props.data.user.nickname || this.props.data.user.userName}
+            </View>
             <View className={styles.replyListText}>
-              {this.props.data.commentUserId ? (
+              {this.props.data.commentUserId && this.props?.data?.commentUser ? (
                 <View className={styles.commentUser}>
                   <View className={styles.replyedAvatar} onClick={this.props.avatarClick('3')}>
                     <Avatar
                       className={styles.avatar}
-                      image={this.props.data.replyUser.avatar}
-                      name={this.props.data.replyUser.nickname || this.props.data.replyUser.userName || ''}
+                      image={this.props.data.commentUser.avatar}
+                      name={this.props.data.commentUser.nickname || this.props.data.commentUser.userName || ''}
                       circle={true}
                       size="small"
                     ></Avatar>
                   </View>
                   <Text className={styles.replyedUserName}>
-                    {this.props.data.replyUser.nickname || this.props.data.replyUser.userName}
+                    {this.props.data.commentUser.nickname || this.props.data.commentUser.userName}
                   </Text>
                 </View>
               ) : (
                 ''
               )}
               <View
-                className={classnames(styles.content,this.props.isShowOne && styles.isShowOne)}
-                dangerouslySetInnerHTML={{ __html: this.filterContent()}}
+                className={classnames(styles.content, this.props.isShowOne && styles.isShowOne)}
+                dangerouslySetInnerHTML={{ __html: this.filterContent() }}
               ></View>
             </View>
           </View>

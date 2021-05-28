@@ -3,8 +3,9 @@ import styles from './index.module.scss';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import { noop } from '@components/thread/utils';
 import { View } from '@tarojs/components';
-import Router from '@discuzq/sdk/dist/router';
+import Taro from '@tarojs/taro'
 import { inject, observer } from 'mobx-react';
+import Router from '@discuzq/sdk/dist/router';
 
 
 /**
@@ -13,7 +14,16 @@ import { inject, observer } from 'mobx-react';
  * @prop {boolean} curr 常亮icon
  */
 
+const routes = [
+  'pages/index/index',
+  'subPages/search/index',
+  'subPages/thread/post/index',
+  'subPages/message/index',
+  'subPages/my/index'
+]
+
  @inject('index')
+ @inject('user')
  @observer
  class BottomNavBar extends React.Component {
 
@@ -39,17 +49,41 @@ import { inject, observer } from 'mobx-react';
   }
 
   handleClick = (i, idx) => {
+    if (i.router === '/subPages/thread/post/index') {
+      const { permissions } = this.props.user;
+      if (permissions && permissions.createThread && !permissions.createThread.enable) {
+        Taro.showToast({ title: '您暂无发帖权限', icon: 'none' });
+        return;
+      }
+    }
+
     const { onClick = noop } = this.props
     const { tabs } = this.state
 
     onClick(i, idx)
     const temp = [...tabs];
     if (i.text) {
-      temp.find(i => i.active).active = false;
-      temp[idx].active = true;
+      // temp.find(i => i.active).active = false;
+      // temp[idx].active = true;
       this.setState({ tabs: temp })
     }
-    Router.push({url: i.router});
+
+    const current = Taro.getCurrentPages()
+    let routeIndex = -1
+    current?.forEach((item, index) => {
+      if (`/${item.route}` === i.router) {
+        routeIndex = index
+      }
+    })
+    if (routeIndex === -1) {
+      Router.push({url: i.router});
+    } else {
+      const num = current.length - 1 - routeIndex
+      if (current?.length !== 1 && routeIndex !== current.length - 1 && num >= 0) {
+        Taro.navigateBack({delta: current.length - 1 - routeIndex});
+      }
+    }
+    //
   };
 
 
@@ -76,7 +110,9 @@ import { inject, observer } from 'mobx-react';
       </View>
       {
         fixed && placeholder && (
-          <View className={styles.placeholder} style={{ display: `${hiddenTabBar ? 'none' : 'block'}` }} />
+          <View className={styles.placeholder} style={{ display: `${hiddenTabBar ? 'none' : 'block'}` }}>
+            <View className={styles.addIcon}></View>
+          </View>
         )
       }
       </>

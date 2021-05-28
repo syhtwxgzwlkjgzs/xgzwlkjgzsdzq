@@ -14,12 +14,10 @@ import PostRewardProgressBar, { POST_TYPE } from '@components/thread/post-reward
 import Tip from '@components/thread/tip';
 import AttachmentView from '@components/thread/attachment-view';
 import { minus } from '@common/utils/calculate';
-import threadPay from '@common/pay-bussiness/thread-pay';
 import classnames from 'classnames';
 import UserInfo from '@components/thread/user-info';
 import styles from './index.module.scss';
 import { setClipboardData, hideToast } from '@tarojs/taro';
-import goToLoginPage from '@common/utils/go-to-login-page';
 
 // 帖子内容
 const RenderThreadContent = inject('user')(
@@ -70,19 +68,7 @@ const RenderThreadContent = inject('user')(
     const parseContent = parseContentData(indexes);
 
     const onContentClick = async () => {
-      if (!props.user.isLogin()) {
-        Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
-        return;
-      }
-
-      const thread = props.store.threadData;
-      const { success } = await threadPay(thread, props.user?.userInfo);
-
-      // 支付成功重新请求帖子数据
-      if (success && threadStore?.threadData?.threadId) {
-        threadStore.fetchThreadDetail(threadStore?.threadData?.threadId);
-      }
+      typeof props.onPayClick === 'function' && props.onPayClick();
     };
 
     const onTagClick = () => {
@@ -121,6 +107,7 @@ const RenderThreadContent = inject('user')(
               name={threadStore?.threadData?.user?.nickname || ''}
               avatar={threadStore?.threadData?.user?.avatar || ''}
               location={threadStore?.threadData?.position.location || ''}
+              groupName={threadStore?.threadData?.group?.groupName || ''}
               view={`${threadStore?.threadData?.viewCount}` || ''}
               time={`${threadStore?.threadData?.createdAt}` || ''}
               isEssence={isEssence}
@@ -163,7 +150,7 @@ const RenderThreadContent = inject('user')(
           {!canFreeViewPost && isAttachmentPay && !isSelf && !isPayed && (
             <View style={{ textAlign: 'center' }} onClick={onContentClick}>
               <Button className={styles.payButton} type="primary">
-                <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
+                <Icon className={styles.payIcon} name="GoldCoinOutlined" size={20}></Icon>
                 <View>支付{attachmentPrice}元查看附件内容</View>
               </Button>
             </View>
@@ -244,7 +231,7 @@ const RenderThreadContent = inject('user')(
           {!canFreeViewPost && isThreadPay && !isSelf && !isPayed && (
             <View style={{ textAlign: 'center' }} onClick={onContentClick}>
               <Button className={styles.payButton} type="primary">
-                <Icon className={styles.payIcon} name="DollarLOutlined" size={20}></Icon>
+                <Icon className={styles.payIcon} name="GoldCoinOutlined" size={20}></Icon>
                 支付{threadPrice}元查看剩余内容
               </Button>
             </View>
@@ -268,7 +255,7 @@ const RenderThreadContent = inject('user')(
               {isThreadPay && (
                 <Icon
                   className={classnames(styles.payIcon, isPayed && styles.actived)}
-                  name="DollarLOutlined"
+                  name="GoldCoinOutlined"
                   size={20}
                 ></Icon>
               )}

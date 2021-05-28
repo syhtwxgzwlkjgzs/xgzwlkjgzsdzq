@@ -13,6 +13,9 @@
       position: absolute;
       left: 0;
       bottom: 22px;
+      &::placeholder {
+        color: $text-color-placeholder;
+      }
     }
   }
 }

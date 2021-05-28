@@ -155,7 +155,7 @@ class Index extends Component {
     const _isTop = scrollTop === 0;
     isTop !== _isTop && this.setState({
       isTop: _isTop,
-      damping: _isTop ? 100 : 0,
+      damping: _isTop ? 80 : 0,
     });
   }
 

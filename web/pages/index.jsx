@@ -18,7 +18,11 @@ class Index extends React.Component {
     const sticks = await readStickList({}, ctx);
     const sequence = site && site.webConfig && site.webConfig.setSite ? site.webConfig.setSite.siteOpenSort : 0;
 
-    const threads = await readThreadList({ params: { filter: {}, sequence, perPage: 10, page: 1 } }, ctx);
+    const threads = await readThreadList({ params: { filter: {
+      sort: 1,
+      attention: 0,
+      essence: 0
+    }, sequence, perPage: 10, page: 1 } }, ctx);
 
     return {
       serverIndex: {
@@ -40,7 +44,16 @@ class Index extends React.Component {
 
   async componentDidMount() {
     const { index } = this.props;
-    const { categoryids, types, essence, sequence, attention, sort } = index.filter;
+    const { categoryids, types, essence = 0, sequence = 0, attention = 0, sort = 1 } = index.filter;
+
+    let newTypes = [];
+    if (types) {
+      if (!(types instanceof Array)) {
+        newTypes = types === 'all' ? [] : [types];
+      } else {
+        newTypes = types.filter(item => item !== 'all');
+      }
+    }
 
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasCategoriesData = !!index.categories;
@@ -57,7 +70,7 @@ class Index extends React.Component {
     if (!hasThreadsData) {
       this.props.index.getReadThreadList({
         sequence: sequence || (this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0), 
-        filter: { categoryids, types, essence, attention, sort } 
+        filter: { categoryids, types: newTypes, essence, attention, sort } 
       });
     } else {
       // 如果store中有值，则需要获取之前的分页数
@@ -72,31 +85,25 @@ class Index extends React.Component {
     let newTypes = [];
     if (types) {
       if (!(types instanceof Array)) {
-        newTypes = [types];
+        newTypes = types === 'all' ? [] : [types];
       } else {
-        newTypes = types;
+        newTypes = types.filter(item => item !== 'all');
       }
     }
 
     let categoryIds = [];
     if (categoryids) {
       if (!(categoryids instanceof Array)) {
-        categoryIds = [categoryids];
+        categoryIds = [categoryids].filter(item => item !== '');
       } else {
-        categoryIds = categoryids;
+        categoryIds = categoryids.filter(item => item !== '');
       }
     }
 
     if (type === 'click-filter') { // 点击tab
-      this.toastInstance = Toast.loading({
-        content: '加载中...',
-        duration: 0,
-      });
-
+      
       this.page = 1;
       await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
-
-      this.toastInstance?.destroy();
     } else if (type === 'moreData') {
       this.page += 1;
       return await index.getReadThreadList({
