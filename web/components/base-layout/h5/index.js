@@ -38,6 +38,7 @@ const BaseLayout = (props) => {
     baselayout,
     onClickTabBar = noop,
     pageName = '',
+    quickScroll = false,
   } = props;
 
   const [height, setHeight] = useState(600);
@@ -55,7 +56,7 @@ const BaseLayout = (props) => {
     }
   }, []);
 
-  const handleScroll = throttle(({ scrollTop = 0 } = {}) => {
+  const quickScrolling = ({ scrollTop = 0 } = {}) => {
     if (!listRef?.current?.currentScrollTop) {
       onScroll();
       return;
@@ -64,10 +65,13 @@ const BaseLayout = (props) => {
     if (baselayout.isJumpingToTop) {
       baselayout.removeJumpingToTop();
       listRef.current.onBackTop();
+    } else {
+      if(scrollTop && pageName) baselayout[pageName] = scrollTop;
     }
-    if(scrollTop && pageName) baselayout[pageName] = scrollTop;
     onScroll({ scrollTop: scrollTop });
-  }, 50)
+  };
+
+  const handleScroll = quickScroll ? quickScrolling : throttle(quickScrolling, 50);
 
   return (
     <div className={styles.container}>

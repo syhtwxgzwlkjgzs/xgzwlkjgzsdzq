@@ -265,6 +265,7 @@ class IndexH5Page extends React.Component {
         noMore={currentPage >= totalPage}
         isFinished={isFinished}
         onScroll={this.handleScroll}
+        quickScroll={true}
         curr='home'
         pageName='home'
         preload={1000}
