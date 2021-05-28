@@ -32,6 +32,9 @@
       display: block;
     }
   }
+  .required {
+    color:$text-color-error;
+  }
   .label {
     font-weight: normal;
     font-size: $font-size-base;

@@ -5,7 +5,7 @@ import { ATTACHMENT_TYPE, ACCEPT_FILE_TYPES, ACCEPT_IMAGE_TYPES } from '@common/
 import DZQUpload from '@components/upload';
 import ImageUpload from '../../../../components/thread-post/image-upload';
 import FileUpload from '../../../../components/thread-post/file-upload';
-
+import { toJS, set } from 'mobx';
 
 
 export const InputType = {
@@ -27,11 +27,14 @@ export const CreateFunctions = {
 };
 
 export function CreateInput(field, layout) {
-  const { fieldsDesc, name } = field;
+  const { fieldsDesc, name, required } = field;
   return (
     <div className={layout.item} key={name}>
       <div className={layout.input}>
-        <div className={layout.label}>{name}</div>
+        <div className={layout.label}>
+          {required && <span className={layout.required}>* </span>}
+          {name}
+        </div>
         <Input
           className={layout.input_value}
           focus={true}
@@ -47,11 +50,13 @@ export function CreateInput(field, layout) {
 }
 
 export function CreateTextArea(field, layout) {
-  const { fieldsDesc, name } = field;
+  const { fieldsDesc, name, required } = field;
   return (
     <div className={layout.item} key={name}>
       <div className={layout.textarea}>
-        <div className={layout.label}>{name}</div>
+        <div className={layout.label}>
+          {required && <span className={layout.required}>* </span>}{name}
+        </div>
         <Input.Textarea
           autoHeight={true}
           showLimit={true}
@@ -70,12 +75,14 @@ export function CreateTextArea(field, layout) {
 }
 
 export function CreateRadioGroup(field, layout) {
-  const { fieldsExt, name } = field;
+  const { fieldsExt, name, required } = field;
   const { options } = JSON.parse(fieldsExt);
   return (
     <div className={layout.item} key={name}>
       <div className={layout.checkbox}>
-        <div className={layout.label}>{name}</div>
+        <div className={layout.label}>
+          {required && <span className={layout.required}>* </span>}{name}
+        </div>
         <Radio.Group
           value={field.value}
           onChange={(checked) => {
@@ -90,12 +97,14 @@ export function CreateRadioGroup(field, layout) {
 }
 
 export function CreateCheckBoxGroup(field, layout) {
-  const { fieldsExt, name } = field;
+  const { fieldsExt, name, required } = field;
   const { options } = JSON.parse(fieldsExt);
   return (
     <div className={layout.item} key={name}>
       <div className={layout.checkbox}>
-        <div className={layout.label}>{name}</div>
+        <div className={layout.label}>
+          {required && <span className={layout.required}>* </span>}{name}
+        </div>
         <Checkbox.Group value={field.value} onChange={(checked) => {
           field.value = checked;
         }}>
@@ -106,35 +115,38 @@ export function CreateCheckBoxGroup(field, layout) {
   );
 }
 
-const getFilePath = (ret) => {
+const getAttachment = (ret) => {
   if (ret.code !== 0) {
     Toast.error({ content: `${ret.msg} 上传失败` });
     return false;
   }
-  const { data: { file_path, attachment } } = ret;
+  const { data: { file_path, attachment, id, uuid } } = ret;
 
-  return `${file_path}${attachment}`;
+  return { url: `${file_path}${attachment}`, id, uuid };
 };
 
 export function CreatePhotoUploader(field, layout) {
-  const { name } = field;
+  const { name, required } = field;
   const data = { type: ATTACHMENT_TYPE.image };
   return (
     <div className={layout.item} key={name}>
       <div className={layout.imgUpload}>
-        <div className={layout.label}>{name}</div>
+        <div className={layout.label}>
+          {required && <span className={layout.required}>* </span>}{name}
+        </div>
         <ImageUpload
           listType='card'
-          btnText='上传图片'
+          btnText=''
           data={data}
-          limit={1}
+          limit={9}
           accept={ACCEPT_IMAGE_TYPES.join(',')}
           onChange={(fileList) => {
             field.value = fileList;
           }}
           onComplete={
-            (ret) => {
-              field.value[field.value.length - 1].thumbUrl =  getFilePath(ret);
+            (ret, file) => {
+              const att = getAttachment(ret);
+              Object.assign(file, att);
             }
           }
           beforeUpload={() => true}
@@ -148,11 +160,12 @@ export function CreatePhotoUploader(field, layout) {
 }
 
 export function CreateFileUploader(field, layout) {
-  const { name } = field;
+  const { name, required } = field;
   const data = { type: ATTACHMENT_TYPE.file };
   return (
     <div className={layout.item} key={name}>
       <div className={layout.attachmentsUpload}>
+          {required && <span className={layout.required}>* </span>}
         <span className={layout['attachmentsUpload-left']}>{name}</span>
         <FileUpload
           className={layout['attachmentsUpload-right']}
@@ -160,15 +173,15 @@ export function CreateFileUploader(field, layout) {
           multiple={true}
           btnText='上传文件'
           data={data}
-          limit={1}
+          limit={9}
           accept={ACCEPT_FILE_TYPES.join(',')}
           onChange={(fileList) => {
             field.value = fileList;
           }}
           onComplete={
-            (ret) => {
-              field.value[field.value.length - 1].filePath =  getFilePath(ret);
-              console.log(field.value[field.value.length - 1].filePath);
+            (ret, file) => {
+              const att = getAttachment(ret);
+              Object.assign(file, att);
             }
           }
           beforeUpload={() => true}

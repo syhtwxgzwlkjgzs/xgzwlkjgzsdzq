@@ -24,6 +24,9 @@
     @include button;
     margin: rem(24) 0;
   }
+  .required {
+    color: $text-color-error;
+  }
   .label{
     font-size: $font-size-base;
     line-height: $font-line-height-middle;
