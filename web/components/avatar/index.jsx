@@ -216,16 +216,16 @@ function avatar(props) {
 
   if (image && image !== '') {
     return (
-      <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
-        <Avatar className={className} circle={circle} image={image} size={size} onClick={onClick}></Avatar>
+      <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler} onClick={onClick}>
+        <Avatar className={className} circle={circle} image={image} size={size}></Avatar>
         {isShow && userInfoBox}
       </div>
     );
   }
 
   return (
-    <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
-      <Avatar className={className} circle={circle} text={userName} size={size} onClick={onClick}></Avatar>
+    <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler} onClick={onClick}>
+      <Avatar className={className} circle={circle} text={userName} size={size}></Avatar>
       {isShow && userInfoBox}
     </div>
   );
