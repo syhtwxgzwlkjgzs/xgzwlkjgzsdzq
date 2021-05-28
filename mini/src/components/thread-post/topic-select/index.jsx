@@ -32,7 +32,7 @@ class TopicSelect extends Component {
 
   // 更新搜索关键字
   updateKeywords = (val = "") => {
-    this.setState({ keywords: val, page: 1 });
+    this.setState({ keywords: val, page: 1, finish: false });
     this.searchInput();
   }
 
@@ -88,11 +88,13 @@ class TopicSelect extends Component {
   // 渲染项
   renderItem = (item) => (
     <View className={styles['topic-item']} onClick={() => this.handleItemClick(item)}>
-      <View className={styles['item-left']}>
-        <View className={styles.name}>#{item.content}#</View>
-      </View>
-      <View className={styles['item-right']}>
-        {item.newTopic ? item.newTopic : `${item.viewCount}热度`}
+      <View className={styles['topic-item__inner']} >
+        <View className={styles['item-left']}>
+          <View className={styles.name}>#{item.content}#</View>
+        </View>
+        <View className={styles['item-right']}>
+          {item.newTopic ? item.newTopic : `${item.viewCount}热度`}
+        </View>
       </View>
     </View>
   );
@@ -107,14 +109,16 @@ class TopicSelect extends Component {
         {/* top */}
         <View className={styles.header}>
           <View className={styles['input-box']}>
+            <View className={styles['icon-box']}>
+              <Icon className={styles['search-icon']} name="SearchOutlined" size={16}></Icon>
+            </View>
             <Input
               value={keywords}
-              icon="SearchOutlined"
-              placeholder='搜索话题'
+              placeholder='请选择或直接输入话题'
               onChange={e => this.updateKeywords(e.target.value)}
             />
             {keywords &&
-              <View className={styles.delete} onClick={() => this.updateKeywords()}>
+              <View className={styles['icon-box']} onClick={() => this.updateKeywords()}>
                 <Icon className={styles['delete-icon']} name="WrongOutlined" size={16}></Icon>
               </View>
             }
@@ -124,7 +128,8 @@ class TopicSelect extends Component {
 
         {/* list */}
         <List
-          height={'calc(100vh - 50px)'}
+          className={styles.list}
+          height={'calc(100vh - 60px)'}
           noMore={finish}
           onRefresh={() => this.fetchTopics()}
         >
