@@ -6,9 +6,12 @@
   margin: rem(16) 0 rem(8);
 }
 .userImg {
-  @include cursor-on-pc;
   display: flex;
   align-items: center;
+  cursor: default;
+  .portrait {
+    @include cursor-on-pc;
+  }
   .numText {
     line-height: rem(24);
     font-size: rem($font-size-label);
