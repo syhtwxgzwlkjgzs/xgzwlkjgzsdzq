@@ -73,6 +73,10 @@ const Index = ({
     onRedirectToDetail()
   }
 
+  const onLinkClick = (e) => {
+
+  }
+
   useEffect(() => {
     const length = fuzzyCalcContentLength(filterContent)
     if (length < 262) {
@@ -95,7 +99,7 @@ const Index = ({
         onClick={!showMore ? onShowMore : handleClick}
       >
         <View className={styles.content}>
-          <RichText content={filterContent} onClick={handleClick} />
+          <RichText content={filterContent} onClick={handleClick} onLinkClick={onLinkClick} />
         </View>
       </View>
       {!loading && useShowMore && !showMore && (

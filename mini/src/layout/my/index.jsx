@@ -8,6 +8,8 @@ import UserCenterHead from '@components/user-center-head';
 import UserCenterAction from '@components/user-center-action';
 import UserCenterThreads from '@components/user-center-threads';
 import NoData from '@components/no-data';
+import BottomNavBar from '@components/bottom-nav-bar';
+
 @inject('user')
 @observer
 export default class index extends Component {
@@ -42,6 +44,7 @@ export default class index extends Component {
             </View>
           </View>
         </View>
+        <BottomNavBar curr='my' />
       </View>
     )
   }

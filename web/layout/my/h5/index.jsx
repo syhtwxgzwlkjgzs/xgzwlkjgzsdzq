@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './index.module.scss';
-import { Divider } from '@discuzq/design';
+import { Divider, Spin } from '@discuzq/design';
 import UserCenterHeaderImage from '@components/user-center-header-images';
 import UserCenterHead from '@components/user-center-head';
 import { inject, observer } from 'mobx-react';
@@ -16,16 +16,22 @@ import NoData from '@components/no-data';
 class H5MyPage extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      firstLoading: true,
+    };
   }
 
   componentDidMount = async () => {
     await this.props.user.getUserThreads();
+    this.setState({
+      firstLoading: false,
+    });
   };
 
   render() {
     const { site, user } = this.props;
     const { platform } = site;
-    const { userThreads, userThreadsTotalCount, userThreadsPage, userThreadsTotalPage } = user;
+    const { userThreads, userThreadsTotalCount, userThreadsPage, userThreadsTotalPage, userInfo } = user;
 
     return (
       <BaseLayout
@@ -55,6 +61,7 @@ class H5MyPage extends React.Component {
             </div>
 
             <div className={styles.threadItemContainer}>
+              {this.state.firstLoading && <div className={styles.spinLoading}><Spin type="spinner">加载中...</Spin></div>}
               {userThreads && userThreads.length > 0 ? <UserCenterThreads data={userThreads} /> : <NoData />}
             </div>
           </div>

@@ -13,6 +13,7 @@ import goToLoginPage from '@common/utils/go-to-login-page';
 @inject('thread')
 @inject('comment')
 @inject('user')
+@inject('site')
 @observer
 class RenderCommentList extends React.Component {
   constructor(props) {
@@ -198,7 +199,7 @@ class RenderCommentList extends React.Component {
   }
 
   // 创建回复评论+回复回复接口
-  async createReply(val) {
+  async createReply(val, imageList) {
     if (!val) {
       Toast.info({ content: '请输入内容!' });
       return;
@@ -224,6 +225,18 @@ class RenderCommentList extends React.Component {
       params.replyId = this.commentData.id;
       params.isComment = true;
       params.commentId = this.commentData.id;
+    }
+
+    if (imageList?.length) {
+      params.attachments = imageList
+        .filter((item) => item.status === 'success' && item.response)
+        .map((item) => {
+          const { id } = item.response;
+          return {
+            id,
+            type: 'attachments',
+          };
+        });
     }
 
     const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
@@ -279,9 +292,9 @@ class RenderCommentList extends React.Component {
       const { success, msg } = await this.props.thread.reward(params);
       if (success) {
         this.setState({ showAboptPopup: false });
-        
+
         // 重新获取帖子详细
-        this.props.thread.fetchThreadDetail(params.threadId)
+        this.props.thread.fetchThreadDetail(params.threadId);
 
         Toast.success({
           content: `悬赏${data}元`,
@@ -356,7 +369,8 @@ class RenderCommentList extends React.Component {
           visible={this.state.showCommentInput}
           inputText={this.state.inputText}
           onClose={() => this.setState({ showCommentInput: false })}
-          onSubmit={(value) => this.createReply(value)}
+          onSubmit={(value, imgList) => this.createReply(value, imgList)}
+          site={this.props.site}
         ></InputPopup>
 
         {/* 删除弹层 */}

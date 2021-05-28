@@ -81,7 +81,6 @@ class ThreadCreate extends React.Component {
     const winHeight = getVisualViewpost();
     // 如果可视窗口不变，即没有弹起键盘不进行任何设置
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
-    this.moneyboxDisplay(false);
     this.positionDisplay(action);
     if (!isIOS()) {
       if (vditorToolbar) {
@@ -97,8 +96,8 @@ class ThreadCreate extends React.Component {
     }
     // 阻止页面上拉带动操作栏位置变化。放这里便于本地开发调试
     if (window.innerHeight === winHeight) return;
+    this.moneyboxDisplay(false);
     this.setPostBox(action, event, y);
-    this.setPostBottombar(action, y);
   }
 
   setPostBox = (action, event, y) => {
@@ -122,6 +121,8 @@ class ThreadCreate extends React.Component {
           window.scrollTo(0, 0);
         }
       }
+      // 这个需要放在这里的原因是避免滚动造成底部bar显示问题
+      if (action !== 'clear') this.setPostBottombar(action, y);
     }, 0);
   };
 
@@ -164,7 +165,7 @@ class ThreadCreate extends React.Component {
       if (timer) clearTimeout(timer);
       const postBottombar = document.querySelector('#post-bottombar');
       this.positionDisplay();
-      this.setPostBox();
+      this.setPostBox('clear');
       postBottombar.style.top = 'auto';
       postBottombar.style.bottom = '0px';
     }, 200);

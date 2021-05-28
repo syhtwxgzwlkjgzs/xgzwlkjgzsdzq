@@ -2,7 +2,7 @@
 .popup {
   :global {
     .dzq-popup__overlay {
-      background-color: $white;
+      background-color: $body-bg-color;
     }
     .dzq-popup__container {
       height: 100%;
@@ -11,102 +11,107 @@
 }
 
 .wrapper {
-  // position: relative;
-  width: 100%;
   height: 100vh;
   height: -webkit-fill-available;
   min-height: 100vh;
   /* mobile viewport bug fix */
   min-height: -webkit-fill-available;
+  background: $body-bg-color;
 
-  .input {
-    box-sizing: border-box;
+  .header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    background: $text-bg-color2;
-    margin: $margin-4n $margin-4n $margin-2n;
-    padding-left: $padding-4n;
-    padding-right: $padding-4n;
-    border-radius: $border-radius-small;
+    width: 100%;
+    padding: $padding-4n $padding-4n $padding-2n;
+    background: $white;
+    box-sizing: border-box;
 
-    .inputWrapperIcon {
-      color: $text-color-secondary;
+    .input-box {
+      flex: 1;
+      position: relative;
+
+      .delete {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 40px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+
+        .delete-icon {
+          margin-left: 8px;
+          padding-top: 3px;
+          color: $text-color-placeholder;
+        }
+      }
     }
-    .deleteIcon {
-      color: $disabled-color;
+
+    .btn-cancel {
+      flex-basis: 44px;
+      font-size: $font-size-primary;
+      color: #8490a8;
+      text-align: right;
     }
   }
 
   :global {
     .dzq-input {
       width: 100%;
+      box-sizing: border-box;
+
       .dzq-input__inner {
-        box-sizing: border-box;
-        height: 36px;
         width: 100%;
+        height: 40px;
+        padding: 0 40px;
+        font-size: $font-size-middle;
+        color: $text-color-primary;
         background: $text-bg-color2;
         border: none;
-        border-radius: 0;
       }
-    }
 
-    .btn-cancel {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      bottom: constant(safe-area-inset-bottom);
-      bottom: env(safe-area-inset-bottom);
-      padding: rem($padding-2n) rem($padding-4n);
-      display: flex;
-      align-items: center;
-      background: $white;
-      .dzq-button {
-        @include button-default;
-        width: 100%;
-        height: rem(42);
+      .dzq-icon-SearchOutlined {
+        left: 8px;
+        top: 50%;
+        margin-top: -18px;
+        color: $icon-color-light !important;
+      }
+
+      .input-placeholder {
+        color: $text-color-placeholder;
       }
     }
   }
 
-  .topic-wrap {
-    height: calc(100vh - 118px);
-  }
   .topic-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: rem($padding-4n) 0;
+    padding: rem($padding-4n);
+    line-height: 20px;
+    background: $white;
     border-bottom: $border-solid-1;
-    margin: 0 rem($margin-4n);
+
     .item-left {
       display: flex;
       align-items: center;
       max-width: rem(240px);
-      font-size: $font-size-base;
-      color: $text-color-primary;
       @include text-ellipsis;
 
       .name {
         max-width: 197px;
         line-height: 20px;
-        font-size: $font-size-base;
+        font-size: $font-size-primary;
         color: $text-color-primary;
         word-break: break-all;
       }
-      :global {
-        .dzq-icon {
-          margin-left: rem($margin-1n);
-          font-size: $font-size-base;
-          color: $primary-color;
-        }
-      }
     }
+
     .item-right {
-      white-space: nowrap;
       font-size: $font-size-small;
-      text-align: left;
       color: $text-color-secondary;
+      white-space: nowrap;
     }
   }
 }
@@ -115,28 +120,31 @@
   .wrapper {
     height: 500px;
     min-height: 50vh;
-    .input {
-      margin-top: 0;
-      margin-left: 0;
-      margin-right: 0;
+
+    .input-box {
+      border-bottom: $border-solid-1;
     }
-  }
-  :global {
-    .btn-cancel {
-      position: static;
-      padding: 0;
-      padding-top: $padding-4n;
+
+    :global {
+      .dzq-input {
+        box-sizing: border-box;
+
+        .dzq-input__inner {
+          background: $white;
+        }
+      }
     }
-  }
-  .topic-wrap {
-    height: 398px;
-    min-height: calc(50vh - 102px);
-    .list__inner {
-      @include scrollbar();
+    
+    .list {
+      height: 398px !important;
+      min-height: 436px !important;
+      .list__inner {
+        @include scrollbar();
+      }
     }
-  }
-  .topic-item {
-    margin-left: 0;
-    margin-right: $margin-5n;
+
+    .topic-item {
+      padding-right: $margin-4n;
+    }
   }
 }

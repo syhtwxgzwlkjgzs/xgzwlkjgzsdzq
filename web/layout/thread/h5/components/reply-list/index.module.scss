@@ -35,9 +35,19 @@
           text-align: left;
           color: $text-color-primary;
           vertical-align: super;
+          position: relative;
+          top: rem(3);
 
           p {
             display: inline;
+
+            img {
+              height: rem(22);
+            }
+          }
+
+          img {
+            height: rem(22);
           }
         }
 
@@ -47,10 +57,6 @@
           // p {
           //   @include lamp-clamp(3);
           // }
-        }
-
-        img {
-          height: rem(22);
         }
 
         .commentUser {

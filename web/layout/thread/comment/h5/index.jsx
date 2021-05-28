@@ -205,7 +205,7 @@ class CommentH5Page extends React.Component {
     this.replyData = null;
     this.setState({
       showCommentInput: true,
-      inputText: comment?.user?.nickname ? `回复${comment.user.username}` : '请输入内容',
+      inputText: comment?.user?.nickname ? `回复${comment.user.nickname}` : '请输入内容',
     });
   }
 
@@ -223,12 +223,12 @@ class CommentH5Page extends React.Component {
 
     this.setState({
       showCommentInput: true,
-      inputText: reply?.user?.nickname ? `回复${reply.user.username}` : '请输入内容',
+      inputText: reply?.user?.nickname ? `回复${reply.user.nickname}` : '请输入内容',
     });
   }
 
   // 创建回复评论+回复回复接口
-  async createReply(val) {
+  async createReply(val, imageList) {
     if (!val) {
       Toast.info({ content: '请输入内容!' });
       return;
@@ -254,6 +254,18 @@ class CommentH5Page extends React.Component {
       params.replyId = this.commentData.id;
       params.isComment = true;
       params.commentId = this.commentData.id;
+    }
+
+    if (imageList?.length) {
+      params.attachments = imageList
+        .filter((item) => item.status === 'success' && item.response)
+        .map((item) => {
+          const { id } = item.response;
+          return {
+            id,
+            type: 'attachments',
+          };
+        });
     }
 
     const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
@@ -367,7 +379,8 @@ class CommentH5Page extends React.Component {
             visible={this.state.showCommentInput}
             inputText={this.state.inputText}
             onClose={() => this.setState({ showCommentInput: false })}
-            onSubmit={(value) => this.createReply(value)}
+            onSubmit={(value, imageList) => this.createReply(value, imageList)}
+            site={this.props.site}
           ></InputPopup>
 
           {/* 更多弹层 */}

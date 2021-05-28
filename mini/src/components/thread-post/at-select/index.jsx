@@ -45,6 +45,7 @@ class AtSelect extends Component {
         finish: page * perPage >= threadPost.followsTotalCount,
       });
     } else {
+      this.setState({ finish: true })
       Taro.showToast({ title: ret.msg, icon: 'none' })
     }
   }
@@ -81,12 +82,12 @@ class AtSelect extends Component {
   searchInput() {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      this.state.keywords === '' ? this.fetchFollow() : this.fetchUserList();
+      this.onScrollBottom();
     }, 300);
   }
 
   onScrollBottom = () => {
-    return this.state.keywords === '' ? this.fetchFollow() : this.fetchUserList();
+    return this.state.keywords ? this.fetchUserList() : this.fetchFollow();
   }
 
   // 取消选择
@@ -131,29 +132,28 @@ class AtSelect extends Component {
     const { threadPost, search } = this.props;
     const data = this.state.keywords ? (search?.users?.pageData || []) : (threadPost.follows || []);
 
+    if (data.length === 0) return null;
     return data.map(item => {
       const { avatar, username, groupName, userId } = this.formatData(item);
 
       return (
-        <View key={userId}>
-          <View className={styles['at-item']}>
-            <View className={styles.avatar}>
-              {avatar
-                ? <Avatar image={avatar} />
-                : <Avatar
-                  text={username}
-                  style={{
-                    backgroundColor: `#${this.getBackgroundColor(username)}`
-                  }}
-                />
-              }
-            </View>
-            <View className={styles.info}>
-              <View className={styles.username}>{username}</View>
-              <View className={styles.group}>{groupName}</View>
-            </View>
-            <Checkbox name={username}></Checkbox>
+        <View className={styles['at-item']} key={userId}>
+          <View className={styles.avatar}>
+            {avatar
+              ? <Avatar image={avatar} />
+              : <Avatar
+                text={username}
+                style={{
+                  backgroundColor: `#${this.getBackgroundColor(username)}`
+                }}
+              />
+            }
           </View>
+          <View className={styles.info}>
+            <View className={styles.username}>{username}</View>
+            <View className={styles.group}>{groupName}</View>
+          </View>
+          <Checkbox name={username}></Checkbox>
         </View>
       )
     })
@@ -164,21 +164,25 @@ class AtSelect extends Component {
 
     return (
       <View className={styles.wrapper}>
-        {/* 搜索框 */}
-        <View className={styles['input-box']}>
-          <Input
-            value={keywords}
-            icon="SearchOutlined"
-            placeholder='搜索用户'
-            onChange={e => throttle(this.updateKeywords(e.target.value), 30)}
-          />
-          {keywords &&
-            <View className={styles.delete} onClick={() => this.updateKeywords()}>
-              <Icon className={styles['delete-icon']} name="CloseOutlined" size={12}></Icon>
-            </View>
-          }
+        {/* top */}
+        <View className={styles.header}>
+          <View className={styles['input-box']}>
+            <Input
+              value={keywords}
+              icon="SearchOutlined"
+              placeholder='搜索用户'
+              onChange={e => throttle(this.updateKeywords(e.target.value), 30)}
+            />
+            {keywords &&
+              <View className={styles.delete} onClick={() => this.updateKeywords()}>
+                <Icon className={styles['delete-icon']} name="WrongOutlined" size={16}></Icon>
+              </View>
+            }
+          </View>
+          <View className={styles['btn-cancel']} onClick={this.handleCancel}>取消</View>
         </View>
-        {/* 选择列表 */}
+
+        {/* list */}
         <Checkbox.Group
           className={styles['check-box']}
           value={checkUser}
@@ -193,17 +197,14 @@ class AtSelect extends Component {
           </List>
         </Checkbox.Group>
 
-        {/* 取消按钮 */}
+        {/* 选择按钮 */}
         <View className={styles['btn-container']}>
-          <View className={styles.btn}>
-            <Button onClick={this.handleCancel}>取消</Button>
-            <Button
-              className={checkUser.length > 0 ? styles.selected : ''}
-              onClick={() => this.submitSelect()}
-            >
-              {checkUser.length ? `@ 已选(${checkUser.length})` : '尚未选'}
-            </Button>
-          </View>
+          <Button
+            className={checkUser.length > 0 ? styles.selected : ''}
+            onClick={() => this.submitSelect()}
+          >
+            {checkUser.length ? `@ 已选(${checkUser.length})` : '尚未选'}
+          </Button>
         </View>
       </View >
     );
