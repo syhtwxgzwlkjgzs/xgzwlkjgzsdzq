@@ -207,6 +207,7 @@ class Index extends Component {
                   key={item.id}
                   item={item}
                   index={index}
+                  isLast={list.length === (index + 1)}
                   currentId={currentId}
                   onSliderTouch={(id) => this.setState({ currentId: id })}
                   {...other}

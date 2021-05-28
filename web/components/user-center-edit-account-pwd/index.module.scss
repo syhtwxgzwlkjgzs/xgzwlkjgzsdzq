@@ -10,11 +10,14 @@
     letter-spacing: 1px;
   }
   .labelInfo {
+    // padding: rem($margin-10) 0 rem($margin-6n);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     height: rem(62);
     line-height: rem(62);
-    padding-top: rem(24);
     box-sizing: border-box;
-    border-bottom: $border-solid-1;
+    // padding-top: rem($padding-6n);
     .labelValue {
       color: $text-color-primary;
       font-size: $font-size-middle;
@@ -22,28 +25,20 @@
       :global {
         .dzq-input {
           width: 100%;
-          display: flex;
-          align-items: center;
-          box-sizing: border-box;
+          height: rem(37);
         }
         .dzq-input__inner {
           width: 100%;
           border: none;
           font-size: rem($font-size-middle);
-          height: rem(22);
+          height: rem(37);
+          line-height: rem(37);
+          border-bottom: rem(1) solid $border-color;
           border-radius: 0;
           padding-left: 0;
         }
         .dzq-icon {
-          height: rem(22);
-          line-height: rem(22);
-          &:hover {
-            color: $disabled-color;
-          }
-  
-          &:active {
-            color: $primary-color;
-          }
+          line-height: rem(50);
         }
       }
     }

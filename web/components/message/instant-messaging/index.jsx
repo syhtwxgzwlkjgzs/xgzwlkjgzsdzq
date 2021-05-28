@@ -23,7 +23,6 @@ class InstantMessaging extends React.Component {
     const { messagesHistory = [], onSubmit, site, dialogId, username } = this.props;
     const { showEmoji } = this.state;
     const { platform } = site;
-
     return (
       <div className={platform === 'h5' ? styles.h5Page : styles.pcPage}>
         <DialogBox platform={platform} dialogId={dialogId} showEmoji={showEmoji} />
