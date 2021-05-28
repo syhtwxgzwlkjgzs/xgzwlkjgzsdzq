@@ -16,14 +16,13 @@ let bindLoading = false;
 @inject('user')
 @inject('h5QrCode')
 @inject('commonLogin')
+@inject('invite')
 @observer
 class WXAuthorizationPage extends React.Component {
   componentDidMount() {
     initJSSdk(['closeWindow']);
   }
   render() {
-    const { site } = this.props;
-    const { platform } = site;
     return (
       <div className={layout.container}>
         <HomeHeader hideInfo mode='login'/>
@@ -57,7 +56,7 @@ class WXAuthorizationPage extends React.Component {
   }
 
   authorization = async () => {
-    const { router } = this.props;
+    const { router, invite } = this.props;
     const { code, sessionId, sessionToken, state, type } = router.query;
     try {
       if (bindLoading) {
@@ -71,6 +70,7 @@ class WXAuthorizationPage extends React.Component {
           sessionId,
           sessionToken,
           state,
+          inviteCode: invite.getInviteCode(router),
         },
       });
       bindLoading = false;

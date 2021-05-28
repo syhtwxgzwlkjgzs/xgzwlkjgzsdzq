@@ -51,6 +51,7 @@ export default class mobileLoginStore {
     @observable mobile = '';
     @observable code = '';
     @observable codeTimeout = null;
+    @observable inviteCode = null;
 
     @observable needToSetNickname = false;
     @observable needToCompleteExtraInfo = false;
@@ -189,6 +190,7 @@ export default class mobileLoginStore {
           data: {
             mobile: this.mobile,
             code: this.code,
+            inviteCode: this.inviteCode,
             type: 'mobilebrowser_sms_login',
           },
         });

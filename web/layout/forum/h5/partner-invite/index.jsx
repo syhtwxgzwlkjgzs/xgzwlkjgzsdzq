@@ -22,6 +22,7 @@ import { simpleRequest } from '@common/utils/simple-request';
 @inject('forum')
 @inject('search')
 @inject('user')
+@inject('invite')
 @observer
 class PartnerInviteH5Page extends React.Component {
   constructor(props) {
@@ -43,6 +44,7 @@ class PartnerInviteH5Page extends React.Component {
       });
       const threadList = await search.getThreadList();
       const { inviteCode } = this.props.router.query;
+      if (inviteCode) this.props.invite.setInviteCode(inviteCode);
       const inviteResp = await inviteDetail({
         params: {
           code: inviteCode,
