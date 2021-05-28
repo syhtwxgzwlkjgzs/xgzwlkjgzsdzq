@@ -56,6 +56,8 @@ class UserAction extends SiteStore {
     this.editNickName = get(this.userInfo, 'nickname');
     this.editUserName = get(this.userInfo, 'username');
     this.editSignature = get(this.userInfo, 'signature');
+    // this.editAvatarUrl = get(this.userInfo, 'avatarUrl');
+    // this.editBackgroundUrl = get(this.userInfo, 'backgroundUrl');
   }
 
   // 登录后获取新的用户信息
@@ -397,7 +399,13 @@ class UserAction extends SiteStore {
     if (updateAvatarRes.code === 0) {
       this.userInfo.avatarUrl = updateAvatarRes.data.avatarUrl;
       this.userInfo = { ...this.userInfo };
+      return updateAvatarRes.data;
     }
+
+    throw {
+      Code: updateAvatarRes.code,
+      Msg: updateAvatarRes.msg,
+    };
   }
 
   /**
@@ -425,7 +433,13 @@ class UserAction extends SiteStore {
         this.userInfo.backgroundUrl = updateBackgroundRes.data.backgroundUrl;
         this.userInfo = { ...this.userInfo };
       }, 300);
+      return updateBackgroundRes.data;
     }
+
+    throw {
+      Code: updateBackgroundRes.code,
+      Msg: updateBackgroundRes.msg,
+    };
   }
 
   // FIXME: 这里报接口参数错误
