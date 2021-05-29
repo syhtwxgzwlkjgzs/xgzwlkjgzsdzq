@@ -43,7 +43,7 @@ export default function UserInfo(props) {
         circle={true}
         image={props.avatar}
         name={props.name || ''}
-        onClick={() => props.onClick()}
+        onClick={(e) => props.onClick(e)}
       ></Avatar>
 
       <div className={styles.right}>

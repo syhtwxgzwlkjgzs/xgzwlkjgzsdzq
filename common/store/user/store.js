@@ -14,7 +14,7 @@ class UserStore {
   @observable weixinNickName = null;
   @observable permissions = null;
 
-  @observable userThreads = [];
+  @observable userThreads = {};
   @observable userThreadsPage = 1;
   @observable userThreadsTotalCount = 0;
   @observable userThreadsTotalPage = 1;
@@ -30,6 +30,12 @@ class UserStore {
   // 编辑模式下的签名
   @observable editSignature = '';
 
+  // 用户头像
+  @observable editAvatarUrl = null;
+
+  // 用户背景图
+  @observable editBackgroundUrl = null;
+
   // 检索的目标用户，非自己
   @observable targetUser = null;
 
@@ -37,7 +43,7 @@ class UserStore {
   @observable targetUserId = null;
 
 
-  @observable targetUserThreads = [];
+  @observable targetUserThreads = {};
   @observable targetUserThreadsPage = 1;
   @observable targetUserThreadsTotalCount = 0;
   @observable targetUserThreadsTotalPage = 1;
@@ -69,7 +75,7 @@ class UserStore {
   // 我的屏蔽 数据设计
   @observable userShield = []; // 用户屏蔽列表
 
-  // 触底加载条件 当加载的页数超过总页数的时候就没有更多了 
+  // 触底加载条件 当加载的页数超过总页数的时候就没有更多了
   @observable userShieldPage = 1; // 页码
   @observable userShieldTotalPage = 1; // 总页数
   @observable userShieldTotalCount = 0; // 总条数
@@ -135,7 +141,7 @@ class UserStore {
 
   // 获取实际用户手机号
   @computed get originalMobile() {
-    return get(this.userInfo, 'originalMobile')
+    return get(this.userInfo, 'originalMobile');
   }
 
   // 获取绑定微信内容
@@ -155,12 +161,19 @@ class UserStore {
 
   // 获取用户微信昵称
   @computed get wxNickname() {
-    return get(this.userInfo, 'wxNickname')
+    return get(this.userInfo, 'wxNickname');
   }
 
   // 获取用户微信头像
   @computed get wxHeadImgUrl() {
-    return get(this.userInfo, 'wxHeadImgUrl')
+    return get(this.userInfo, 'wxHeadImgUrl');
+  }
+
+
+  // 用户是否可以编辑用户名
+  // 规则为一年一次
+  @computed get canEditUsername() {
+    return get(this.userInfo, 'canEditUsername');
   }
 
   // 目标用户关注数
@@ -215,7 +228,7 @@ class UserStore {
 
   // 判断用户是否存在用户密码
   @computed get hasPassword() {
-    return get(this.userInfo, 'hasPassword')
+    return get(this.userInfo, 'hasPassword');
   }
 
 

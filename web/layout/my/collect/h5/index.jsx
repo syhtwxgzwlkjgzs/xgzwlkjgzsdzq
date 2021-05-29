@@ -34,7 +34,7 @@ class Index extends React.Component {
     return (
       <div className={styles.collectBox}>
         <Header />
-        <div className={styles.titleBox}>{`${this.props.totalCount} 条收藏`}</div>
+        {pageData?.length !== 0 && <div className={styles.titleBox}>{`${this.props.totalCount} 条收藏`}</div>}
         {this.props.firstLoading && (
           <div className={styles.spinLoading}>
             <Spin type="spinner">加载中...</Spin>
