@@ -4,7 +4,7 @@ import { withRouter } from 'next/router';
 import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import List from '@components/list';
-import { Button, Toast, Avatar } from '@discuzq/design';
+import { Button, Toast, Avatar, Spin } from '@discuzq/design';
 import NoData from '@components/no-data';
 import SectionTitle from '@components/section-title';
 import { get } from '@common/utils/get';
@@ -56,6 +56,7 @@ class PartnerInviteH5Page extends React.Component {
 
       forum.setUsersPageData(usersList);
       forum.setThreadsPageData(threadList);
+      forum.setIsLoading(false);
     } catch (e) {
       Toast.error({
         content: e.Message,
@@ -114,7 +115,7 @@ class PartnerInviteH5Page extends React.Component {
     const { inviteCode } = this.props.router.query;
     const { platform, webConfig } = site;
     const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
-    const { usersPageData, threadsPageData } = forum;
+    const { usersPageData, threadsPageData, isLoading } = forum;
     const { invitorName, invitorAvatar } = this.state;
     return (
       <List className={layout.page} allowRefresh={false}>
@@ -127,9 +128,16 @@ class PartnerInviteH5Page extends React.Component {
           <div className={layout.users}>
           <SectionTitle isShowMore={false} icon={{ type: 2, name: 'MemberOutlined' }} title="活跃用户" onShowMore={this.redirectToSearchResultUser} />
             {
-              usersPageData?.length
+              !isLoading && usersPageData?.length
                 ? <ActiveUsers data={usersPageData} onItemClick={this.onUserClick} />
                 : <NoData />
+            }
+            {
+              isLoading
+                ? <div className={layout.spinner}>
+                    <Spin type="spinner" />
+                  </div>
+                : <></>
             }
           </div>
           {/* 站点用户 end */}
@@ -137,9 +145,16 @@ class PartnerInviteH5Page extends React.Component {
           <div className={layout.hot}>
             <SectionTitle isShowMore={false} icon={{ type: 3, name: 'HotOutlined' }} title="热门内容预览" onShowMore={this.redirectToSearchResultPost} />
             {
-              threadsPageData?.length
+              !isLoading && threadsPageData?.length
                 ? <PopularContents data={threadsPageData} onItemClick={this.onPostClick} />
                 : <NoData />
+            }
+            {
+              isLoading
+                ? <div className={layout.spinner}>
+                    <Spin type="spinner" />
+                  </div>
+                : <></>
             }
           </div>
           {/* 热门内容预览 end */}

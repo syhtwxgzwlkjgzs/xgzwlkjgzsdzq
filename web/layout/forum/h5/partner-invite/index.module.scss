@@ -13,6 +13,14 @@
     padding-bottom: 0;
   }
 }
+.spinner {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $text-color-placeholder;
+  height: rem(60);
+}
 .bottom{
   position: fixed;
   bottom: 0;
