@@ -21,6 +21,7 @@ import browser from '../../../../../common/utils/browser';
 @inject('thread')
 @inject('commonLogin')
 @inject('mobileLogin')
+@inject('invite')
 @observer
 class LoginPhoneH5Page extends React.Component {
   handlePhoneNumCallback = (phoneNum) => {
@@ -35,9 +36,11 @@ class LoginPhoneH5Page extends React.Component {
 
   handleLoginButtonClick = async () => {
     try {
-      if (!this.props.mobileLogin.isInvalidCode || !this.props.mobileLogin.verifyMobile()) {
+      const { mobileLogin, router, invite } = this.props;
+      if (!mobileLogin.isInvalidCode || !mobileLogin.verifyMobile()) {
         return;
       }
+      this.props.mobileLogin.inviteCode = invite.getInviteCode(router);
       const resp = await this.props.mobileLogin.login();
       const uid = get(resp, 'uid', '');
       this.props.user.updateUserInfo(uid);
@@ -45,12 +48,11 @@ class LoginPhoneH5Page extends React.Component {
         content: '登录成功',
         hasMask: false,
         duration: 1000,
+        onClose: () => {
+          mobileLogin.reset();
+          window.location.href = '/';
+        },
       });
-      // 暂不实现
-      setTimeout(() => {
-        this.props.mobileLogin.reset();
-        window.location.href = '/';
-      }, 1000);
     } catch (e) {
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME.Code) {
         this.props.commonLogin.needToSetNickname = true;
@@ -145,7 +147,7 @@ class LoginPhoneH5Page extends React.Component {
   };
 
   render() {
-    const { mobileLogin, site, commonLogin } = this.props;
+    const { mobileLogin, site, commonLogin, invite, router } = this.props;
     const { platform } = site;
     const isAnotherLoginWayAvaliable = this.props.site.wechatEnv !== 'none' || this.props.site.isUserLoginVisible;
     // 接受监听一下协议的数据，不能去掉，去掉后协议的点击无反应
@@ -187,7 +189,9 @@ class LoginPhoneH5Page extends React.Component {
               <span
                 onClick={() => {
                   if (browser.env('weixin')) {
-                    const redirectEncodeUrl = encodeURIComponent(`${window.location.origin}/user/wx-auth`);
+                    let inviteCode = invite.getInviteCode(router);
+                    if (inviteCode) inviteCode = `?inviteCode=${inviteCode}`;
+                    const redirectEncodeUrl = encodeURIComponent(`${window.location.origin}/user/wx-auth${inviteCode}`);
                     window.location.href = `${window.location.origin}/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
                     return;
                   }

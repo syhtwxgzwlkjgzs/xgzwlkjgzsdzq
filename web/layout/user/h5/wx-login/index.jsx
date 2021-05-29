@@ -11,29 +11,44 @@ import { get } from '@common/utils/get';
 import Protocol from '../components/protocol';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import PcBodyWrap from '../components/pc-body-wrap';
+import { genMiniScheme } from '@common/server';
 
 @inject('site')
 @inject('user')
 @inject('h5QrCode')
 @inject('commonLogin')
+@inject('invite')
 @observer
 class WXLoginH5Page extends React.Component {
   timer = null;
   async componentDidMount() {
     try {
-      const { site } = this.props;
+      const { site, invite, router } = this.props;
 
       if (site?.wechatEnv === 'none') return;
 
       const { platform } = site;
-      const redirectUri = `${encodeURIComponent(`${window.location.origin}/user/wx-authorization?type=${platform}`)}`;
+
+      let inviteCode = invite.getInviteCode(router);
+      if (inviteCode) inviteCode = `&inviteCode=${inviteCode}`;
+
+      const redirectUri = `${encodeURIComponent(`${window.location.origin}/user/wx-authorization?type=${platform}${inviteCode}`)}`;
       let params;
-      if (platform === 'h5') {
-        params = {
-          type: 'mobile_browser_login',
-          redirectUri,
-        };
-      }
+      // if (platform === 'h5' && site?.isMiniProgramOpen) {
+      //   // 在h5 浏览器中 且小程序设置打开 通过小程序schema跳转
+      //   const resp = await genMiniScheme();
+      //   if (resp.code === 0) {
+      //     window.location.href = `${get(resp, 'data.openLink', '')}?${inviteCode.substr(1)}`;
+      //     return;
+      //   }
+      // }
+
+      // 在h5浏览器中，且公众号设置打开
+      params = {
+        type: 'mobile_browser_login',
+        redirectUri,
+      };
+
       if (platform === 'pc') {
         const type = site?.isMiniProgramOpen ?  'pc_login_mini' : 'pc_login';
         params = {

@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
 import { usernameRegister } from '@server';
-import { get } from '../../utils/get';
+import { get } from '@common/utils/get';
 import setAccessToken from '../../utils/set-access-token';
 import { checkUserStatus } from '@common/store/login/util';
 export default class UserRegisterStore {
@@ -48,6 +48,7 @@ export default class UserRegisterStore {
           passwordConfirmation: this.passwordConfirmation,
           captchaRandStr: this.captchaRandStr,
           captchaTicket: this.captchaTicket,
+          code: this.code,
         },
       });
       checkUserStatus(registerResp);
