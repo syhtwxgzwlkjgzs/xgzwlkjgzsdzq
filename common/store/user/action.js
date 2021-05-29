@@ -17,6 +17,7 @@ import {
   smsRebind,
   smsVerify,
   readUsersDeny,
+  createAttachment
 } from '@server';
 import { get } from '../../utils/get';
 import set from '../../utils/set';
@@ -337,7 +338,10 @@ class UserAction extends SiteStore {
     const pageData = get(userThreadList, 'data.pageData', []);
     const totalPage = get(userThreadList, 'data.totalPage', 1);
     this.userThreadsTotalPage = totalPage;
-    this.userThreads = [...this.userThreads, ...pageData];
+    this.userThreads = {
+      ...this.userThreads,
+      [this.userThreadsPage]: pageData,
+    };
     this.userThreadsTotalCount = get(userThreadList, 'data.totalCount', 0);
 
     if (this.userThreadsPage <= this.userThreadsTotalPage) {
@@ -368,7 +372,10 @@ class UserAction extends SiteStore {
     const pageData = get(targetUserThreadList, 'data.pageData', []);
     const totalPage = get(targetUserThreadList, 'data.totalPage', 1);
     this.targetUserThreadsTotalPage = totalPage;
-    this.targetUserThreads = [...this.targetUserThreads, ...pageData];
+    this.targetUserThreads = {
+      ...this.targetUserThreads,
+      [this.targetUserThreads]: pageData,
+    };
     this.targetUserThreadsTotalCount = get(targetUserThreadList, 'data.totalCount', 0);
 
     if (this.targetUserThreadsPage <= this.targetUserThreadsTotalPage) {
@@ -384,8 +391,16 @@ class UserAction extends SiteStore {
   @action
   async updateAvatar(fileList) {
     const param = new FormData();
+    const param2 = new FormData();
     param.append('avatar', fileList[0]);// 通过append向form对象添加数据
     param.append('pid', this.id);
+
+    console.log(fileList[0]);
+    param2.append('file', fileList[0]);// 通过append向form对象添加数据
+    param2.append('type', 1);// 通过append向form对象添加数据
+
+
+    const res = await createAttachment(param2);
     const updateAvatarRes = await updateAvatar({
       transformRequest: [function (data) {
         return data;
@@ -395,6 +410,11 @@ class UserAction extends SiteStore {
       },
       data: param,
     });
+
+    console.log(updateAvatarRes)
+    console.log(res)
+
+    updateAvatarRes.data.avatarUrl = res.data.url;
 
     if (updateAvatarRes.code === 0) {
       this.userInfo.avatarUrl = updateAvatarRes.data.avatarUrl;
