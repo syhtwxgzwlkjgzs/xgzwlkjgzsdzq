@@ -62,7 +62,7 @@ class PartnerInviteH5Page extends React.Component {
       forum.setIsLoading(false);
     } catch (e) {
       Toast.error({
-        content: e?.Message,
+        content: e?.Message || e,
         hasMask: false,
         duration: 1000,
       });
