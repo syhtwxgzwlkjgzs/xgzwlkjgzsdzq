@@ -40,15 +40,7 @@ export default class index extends Component {
     this.setState({
       isUploadAvatarUrl: true,
     });
-    let fixedImg;
-
-    const IS_IMG_AUTO_ROTATE = await detectImageAutomaticRotation();
-
-    if (IS_IMG_AUTO_ROTATE) {
-      fixedImg = fileList.target.files[0];
-    } else {
-      fixedImg = await fixImageOrientation(fileList.target.files[0]);
-    }
+    let fixedImg = await fixImageOrientation(fileList.target.files[0]);
 
     this.props.user
       .updateAvatar(fixedImg)
