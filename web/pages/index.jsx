@@ -78,34 +78,32 @@ class Index extends React.Component {
     }
   }
 
-  handleArr = (arr = []) => {
+  // 将字符串转成数组，且过滤掉不必要的参数
+  handleString2Arr = (dic, key) => {
+    if (!dic || !dic[key]) {
+      return
+    }
+
+    const target = dic[key]
+    let arr = [];
+    if (target) {
+      if (!(target instanceof Array)) {
+        arr = [target];
+      } else {
+        arr = target;
+      }
+    }
+
     return arr.filter(item => item !== 'all' && item !== 'default' && item !== '')
   }
 
   dispatch = async (type, data = {}) => {
     const { index } = this.props;
-    const { categoryids, types, essence, sequence, attention, sort, page } = data;
+    const { essence, sequence, attention, sort, page } = data;
 
-    let newTypes = [];
-    if (types) {
-      if (!(types instanceof Array)) {
-        newTypes = [types];
-      } else {
-        newTypes = types;
-      }
-    }
-    newTypes = this.handleArr(newTypes)
+    let newTypes = this.handleString2Arr(data, 'types');
 
-    let categoryIds = [];
-    if (categoryids) {
-      if (!(categoryids instanceof Array)) {
-        categoryIds = [categoryids];
-      } else {
-        categoryIds = categoryids;
-      }
-    }
-    categoryIds = this.handleArr(categoryIds)
-
+    let categoryIds = this.handleString2Arr(data, 'categoryids');
 
     if (type === 'click-filter') { // 点击tab
       
