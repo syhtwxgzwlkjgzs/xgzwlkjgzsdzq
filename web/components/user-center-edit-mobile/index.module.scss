@@ -63,6 +63,14 @@
   }
 }
 
+.bgBtnColor {
+  :global {
+    .dzq-button--primary.is-mouseenter {
+      @include button-primary()
+    }
+  }
+}
+
 #editMobileContent {
   .bootom2 {
     bottom: rem(200);
