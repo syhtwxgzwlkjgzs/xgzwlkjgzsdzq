@@ -490,6 +490,24 @@ class UserAction extends SiteStore {
     };
   }
 
+  @action
+  async updateUsername() {
+    const updateUserInfoRes = await updateUsersUpdate({
+      data: {
+        username: this.editUserName,
+      },
+    });
+
+    if (updateUserInfoRes.code === 0) {
+      return updateUserInfoRes.data;
+    }
+
+    throw {
+      Code: updateUserInfoRes.code,
+      Msg: updateUserInfoRes.msg,
+    };
+  }
+
   /**
    * 重设用户密码
    */
