@@ -167,7 +167,6 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
           <ScrollView className={styles.content} scrollY>
             <View className={styles.list} >
              { data && data.map((item, index) => renderContent(item, index)) }
-             { data && data.map((item, index) => renderContent(item, index)) }
             </View>
             
           </ScrollView>
