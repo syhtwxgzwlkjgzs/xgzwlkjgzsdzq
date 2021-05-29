@@ -7,38 +7,33 @@ import '@discuzq/design/dist/styles/index.scss';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 
 @inject('site')
+@inject('invite')
 @inject('commonLogin')
 @observer
 class Login extends React.Component {
   componentDidMount() {
+    const { site, invite, router } = this.props;
+
+
     clearLoginStatus(); // 清除登录态
-    if (this.props.site.wechatEnv === 'miniProgram') {
+    if (site.wechatEnv !== 'none') {
       if (isWeiXin()) {
-        const redirectEncodeUrl = encodeURIComponent(`${window.location.origin}/user/wx-auth`);
+        let inviteCode = invite.getInviteCode(router);
+        if (inviteCode) inviteCode = `?inviteCode=${inviteCode}`;
+        const redirectEncodeUrl = encodeURIComponent(`${window.location.origin}/user/wx-auth${inviteCode}`);
         window.location.href = `${window.location.origin}/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
         return;
       }
-      this.props.router.replace('/user/wx-login');
+      router.replace('/user/wx-login');
       return;
     }
 
-    if (this.props.site.wechatEnv === 'openPlatform') {
-      if (isWeiXin()) {
-        const redirectEncodeUrl = encodeURIComponent(`${window.location.origin}/user/wx-auth`);
-        window.location.href = `${window.location.origin}/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
-        return;
-      }
-      this.props.router.replace('/user/wx-login');
+    if (site.isSmsOpen) {
+      router.replace('/user/phone-login');
       return;
     }
 
-    if (this.props.site.isSmsOpen) {
-      this.props.router.replace('/user/phone-login');
-      return;
-    }
-
-    this.props.router.replace('/user/username-login');
-    return;
+    router.replace('/user/username-login');
   }
 
   render() {

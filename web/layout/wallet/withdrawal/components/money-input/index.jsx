@@ -4,15 +4,21 @@ import { Input } from '@discuzq/design';
 import styles from './index.module.scss';
 
 const MoneyInput = (props) => {
-  const { getmoneyNum, visible, minmoney = 1, maxmoney } = props;
+  const { getmoneyNum, visible, minmoney = 1, maxmoney, inputValue: value, updateState, onChange } = props;
 
-  const [value, setValue] = useState('');
+  // const [value, setValue] = useState('');
   
-  const onChange = (data) => {
-    const datas = data.match(/([1-9]\d{0,9}|0)(\.\d{0,2})?/);
-    setValue(datas ? datas[0] : '');
-    getmoneyNum(datas ? datas[0] : '');
-  };
+  // const onChange = (data) => {
+  //   const datas = data.match(/([1-9]\d{0,9}|0)(\.\d{0,2})?/);
+  //   setValue(datas ? datas[0] : '');
+  //   getmoneyNum(datas ? datas[0] : '');
+  // };
+
+  const handleChange = (data) => {
+   if (typeof onChange === 'function') {
+    onChange(data)
+   }
+  }
   
   const getColorShow = useMemo(() => {
     if (value == 0.00) {
@@ -27,7 +33,7 @@ const MoneyInput = (props) => {
 
 
   useEffect(() => {
-    setValue('');
+    updateState({name: 'inputValue', value: ""});
   }, [visible]);
 
 
@@ -40,7 +46,7 @@ const MoneyInput = (props) => {
           className={getColorShow}
           value={value}
           placeholder="0.00"
-          onChange={e => onChange(e.target.value)}
+          onChange={e => handleChange(e.target.value)}
           mode='number'
         />
       </div>

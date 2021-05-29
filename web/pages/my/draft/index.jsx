@@ -24,6 +24,7 @@ class Draft extends React.Component {
     if (isMore) this.page += 1;
     else this.page = 1;
     await index.getReadThreadList({
+      isDraft: true,
       page: this.page,
       perPage: this.perPage,
       filter: { complex: THREAD_LIST_FILTER_COMPLEX.draft },
@@ -42,8 +43,8 @@ class Draft extends React.Component {
     const res = await thread.delete(item.threadId);
     this.toastInstance?.destroy();
     if (res.code === 0) {
-      const data = (index.threads?.postData || []).filter(elem => elem.threadId !== item.threadId);
-      index.setThreads(data);
+      const data = (index.drafts?.pageData || []).filter(elem => elem.threadId !== item.threadId);
+      index.setDrafts({...index.drafts, pageData: data});
     } else {
       Toast.error({ content: res.msg });
     }

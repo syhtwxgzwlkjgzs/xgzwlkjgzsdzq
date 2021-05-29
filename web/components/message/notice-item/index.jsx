@@ -65,7 +65,7 @@ class Index extends Component {
   // 针对财务消息，获取后缀提示语
   getFinancialTips = (item) => {
     if (item.type === 'rewarded') {
-      return '支付了你';
+      return '打赏了你';
     }
     if (item.type === 'questioned') {
       return '悬赏了你';
@@ -79,7 +79,7 @@ class Index extends Component {
   };
 
   filterTag(html) {
-    return html?.replace(/(<p>)|(<\/p>)|(<br>)/g, '');
+    return html?.replace(/<(\/)?(p|r|t|br)[^>]*>|[\r\n]/g, '');
   }
 
   // parse content

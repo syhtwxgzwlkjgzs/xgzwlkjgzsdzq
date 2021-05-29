@@ -31,7 +31,7 @@ const Index = ({ imgSrc, title = '', type = 0, subTitle, label, index, onClick =
                             (type === 3) ? styles.heart : "";
 
   return (
-    <div className={`${styles.listItem} ${isShowBottomLine && styles.bottomLine} ${needPadding && styles.sidebarPadding}`} key={index} onClick={handleClick}>
+    <div className={`${styles.listItem} ${platform === 'pc' ? styles.pcItem : styles.h5Item} ${isShowBottomLine && styles.bottomLine} ${needPadding && styles.sidebarPadding}`} key={index} onClick={handleClick}>
       <div className={styles.wrapper}>
           <div className={styles.header}>
               <Avatar 

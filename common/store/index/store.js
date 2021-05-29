@@ -8,6 +8,8 @@ class IndexStore {
 
   @observable threads = null;
 
+  @observable drafts = null;
+
   @computed get categoriesNoAll() {
     return (this.categories || []).filter(item => item.name !== '全部');
   }
