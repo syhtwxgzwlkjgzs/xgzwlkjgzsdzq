@@ -32,7 +32,7 @@ class Index extends React.Component {
   onShareAppMessage = (res) => {
     const { user, index } = this.props;
     const thread = index.threads?.pageData || []
-    const threadId = parseInt(res.target.dataset.threadId)
+    const threadId = parseInt(res.target?.dataset?.threadId)
     let threadTitle = ''
     for(let i of thread) {
       if(i.threadId == threadId) {

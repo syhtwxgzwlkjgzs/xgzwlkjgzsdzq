@@ -441,7 +441,7 @@ class UserAction extends SiteStore {
       setTimeout(() => {
         this.userInfo.backgroundUrl = updateBackgroundRes.data.backgroundUrl;
         this.userInfo = { ...this.userInfo };
-      }, 300);
+      }, 500);
       return updateBackgroundRes.data;
     }
 
@@ -770,6 +770,7 @@ class UserAction extends SiteStore {
   @action
   updateAssignThreadInfo(threadId, obj = {}) {
     const targetThreads = this.findAssignThread(threadId);
+
     if (!targetThreads || targetThreads.length === 0) return;
 
     targetThreads.forEach((targetThread) => {
@@ -828,14 +829,14 @@ class UserAction extends SiteStore {
       });
     }
 
-    if (this.targetuserThreads) {
-      const keys = Object.keys(this.targetuserThreads);
+    if (this.targetUserThreads) {
+      const keys = Object.keys(this.targetUserThreads);
       keys.forEach((item) => {
-        const pageData = this.targetuserThreads[item];
+        const pageData = this.targetUserThreads[item];
 
         for (let i = 0; i < pageData.length; i++) {
           if (pageData[i].threadId === threadId) {
-            threadArr.push({ key: item, index: i, data: pageData[i], store: this.targetuserThreads });
+            threadArr.push({ key: item, index: i, data: pageData[i], store: this.targetUserThreads });
           }
         }
       });

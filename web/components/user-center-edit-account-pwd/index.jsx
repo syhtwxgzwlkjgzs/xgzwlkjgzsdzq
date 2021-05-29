@@ -121,6 +121,7 @@ class index extends Component {
             mode="password"
             placeholder="请设置密码"
             value={this.props.user?.newPassword}
+            trim
           />
         </div>
       </div>
@@ -132,6 +133,7 @@ class index extends Component {
             placeholder="请确认密码"
             value={this.props.user?.newPasswordRepeat}
             onChange={this.hadleNewPasswordRepeat}
+            trim
           />
         </div>
       </div>
@@ -150,6 +152,7 @@ class index extends Component {
             onChange={this.handleSetOldPwd}
             mode="password"
             placeholder="请输入旧密码"
+            trim
           />
         </div>
       </div>
@@ -161,6 +164,7 @@ class index extends Component {
             onChange={this.handleSetPwd}
             mode="password"
             placeholder="请输入新密码"
+            trim
           />
         </div>
       </div>
@@ -172,6 +176,7 @@ class index extends Component {
             mode="password"
             value={this.props.user?.newPasswordRepeat}
             placeholder="请重复输入新密码"
+            trim
           />
         </div>
       </div>

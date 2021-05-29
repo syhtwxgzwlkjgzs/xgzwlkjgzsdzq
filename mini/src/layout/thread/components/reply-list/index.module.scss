@@ -54,11 +54,11 @@
         }
 
         .isShowOne {
-          // @include lamp-clamp(3);
+          @include lamp-clamp(3);
 
-          // p {
-          //   @include lamp-clamp(3);
-          // }
+          p {
+            @include lamp-clamp(3);
+          }
         }
 
         img {

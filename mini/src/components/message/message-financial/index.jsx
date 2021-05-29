@@ -42,7 +42,6 @@ const Index = ({ message }) => {
       <Notice
         infoIdx={2}
         totalCount={totalCount}
-        height='calc(100vh - 40px)'
         noMore={currentPage >= totalPage}
         list={renderList}
         type='financial'

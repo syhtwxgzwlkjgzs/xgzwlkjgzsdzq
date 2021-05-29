@@ -8,7 +8,13 @@ import PayBoxProvider from '../components/payBox/payBoxProvider';
 import isServer from '@common/utils/is-server';
 import '@discuzq/design/dist/styles/index.scss';
 import csrRouterRedirect from '@common/utils/csr-router-redirect';
+import Router from '@discuzq/sdk/dist/router';
+import sentry from '@common/utils/sentry';
 import '../styles/index.scss';
+
+if ( !isServer() ) {
+  sentry();
+}
 
 class DzqApp extends App {
   constructor(props) {
@@ -43,6 +49,11 @@ class DzqApp extends App {
     if (!isServer()) {
       window.removeEventListener('popstate', this.cleanImgViewer);
     }
+  }
+
+  // 出错捕获
+  componentDidCatch(error, info) {
+    Router.replace({url: '/render-error'});
   }
 
   render() {

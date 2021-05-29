@@ -59,6 +59,9 @@
 
     .center {
       flex: 1;
+      font-size: $font-size-middle;
+      text-align: left;
+      color: $text-color-primary;
     }
 
     .right {
