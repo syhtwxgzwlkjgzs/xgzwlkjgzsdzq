@@ -390,9 +390,9 @@ class UserAction extends SiteStore {
    * 上传新的头像
    */
   @action
-  async updateAvatar(fileList) {
+  async updateAvatar(file) {
     const param = new FormData();
-    param.append('avatar', fileList[0]);// 通过append向form对象添加数据
+    param.append('avatar', file);// 通过append向form对象添加数据
     param.append('pid', this.id);
 
     const updateAvatarRes = await updateAvatar({
@@ -421,9 +421,9 @@ class UserAction extends SiteStore {
    * 上传新的背景图
    */
   @action
-  async updateBackground(fileList) {
+  async updateBackground(file) {
     const param = new FormData();
-    param.append('background', fileList[0]);// 通过append向form对象添加数据
+    param.append('background', file);// 通过append向form对象添加数据
     const updateBackgroundRes = await updateBackground({
       transformRequest: [function (data) {
         return data;
