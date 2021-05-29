@@ -77,7 +77,7 @@ class IndexAction extends IndexStore {
    * @returns
    */
   @action
-  async getReadThreadList({ filter = {}, sequence = 0, perPage = 10, page = 1 } = {}) {
+  async getReadThreadList({ filter = {}, sequence = 0, perPage = 10, page = 1, isDraft = false } = {}) {
     // 过滤空字符串
     const newFilter = filter;
     if (filter.categoryids && (filter.categoryids instanceof Array)) {
@@ -86,21 +86,36 @@ class IndexAction extends IndexStore {
         delete newFilter.categoryids;
       }
     }
-
     const result = await readThreadList({ params: { perPage, page, filter: newFilter, sequence } });
     if (result.code === 0 && result.data) {
-      if (this.threads && result.data.pageData && page !== 1) {
-        this.threads.pageData.push(...result.data.pageData);
-        const newPageData = this.threads.pageData.slice();
-        this.setThreads({
-          ...result.data,
-          currentPage: result.data.currentPage,
-          pageData: newPageData
-        });
+      if (isDraft) {
+        if (this.drafts && result.data.pageData && page !== 1) {
+          this.drafts.pageData.push(...result.data.pageData);
+          const newPageData = this.drafts.pageData.slice();
+          this.setDrafts({
+            ...result.data,
+            currentPage: result.data.currentPage,
+            pageData: newPageData,
+          });
+        } else {
+          // 首次加载
+          this.drafts = null;
+          this.setDrafts(result.data);
+        }
       } else {
-        // 首次加载
-        this.threads = null;
-        this.setThreads(result.data);
+        if (this.threads && result.data.pageData && page !== 1) {
+          this.threads.pageData.push(...result.data.pageData);
+          const newPageData = this.threads.pageData.slice();
+          this.setThreads({
+            ...result.data,
+            currentPage: result.data.currentPage,
+            pageData: newPageData
+          });
+        } else {
+          // 首次加载
+          this.threads = null;
+          this.setThreads(result.data);
+        }
       }
       return result.data;
     }
@@ -207,6 +222,12 @@ class IndexAction extends IndexStore {
     this.threads = data;
   }
 
+
+  @action
+  setDrafts(data) {
+    this.drafts = data;
+  }
+
   /**
    * 支付成功后，更新帖子列表指定帖子状态
    * @param {number} threadId 帖子id
@@ -217,7 +238,7 @@ class IndexAction extends IndexStore {
   updatePayThreadInfo(threadId, obj) {
     const targetThread = this.findAssignThread(threadId);
     if (!targetThread || targetThread.length === 0) return;
-    
+
     const { index } = targetThread;
     if (this.threads?.pageData) {
       this.threads.pageData[index] = obj;
@@ -271,7 +292,7 @@ class IndexAction extends IndexStore {
       const userData = threadReducer.createUpdateLikeUsersData(user, 1);
         // 添加当前用户到按过赞的用户列表
       const newLikeUsers = threadReducer.setThreadDetailLikedUsers(data.likeReward, !!isLiked, userData);
-     
+
       data.likeReward.users = newLikeUsers;
       data.likeReward.likePayCount = likePayCount;
     }
