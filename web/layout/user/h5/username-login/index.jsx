@@ -100,7 +100,7 @@ class UsernameH5Login extends React.Component {
   };
 
   render() {
-    const { site, commonLogin } = this.props;
+    const { site, commonLogin, invite, router } = this.props;
     const { platform } = site;
     const isAnotherLoginWayAvailable = this.props.site.wechatEnv !== 'none' || this.props.site.isSmsOpen;
     // 接受监听一下协议的数据，不能去掉，去掉后协议的点击无反应
@@ -144,19 +144,19 @@ class UsernameH5Login extends React.Component {
               <span
                 className={layout.clickBtn}
                 onClick={() => {
-                  this.props.router.push('register');
+                  router.push('register');
                 }}
               >
                 注册用户
               </span>
             )}
-            {this.props.site.isSmsOpen && (
+            {site.isSmsOpen && (
               <>
                 <span> 忘记密码? </span>
                 <span
                   className={layout.clickBtn}
                   onClick={() => {
-                    this.props.router.push('reset-password');
+                    router.push('reset-password');
                   }}
                 >
                   找回密码
@@ -166,26 +166,28 @@ class UsernameH5Login extends React.Component {
           </div>
           {isAnotherLoginWayAvailable && <div className={platform === 'h5' ? layout['otherLogin-title'] : layout.pc_otherLogin_title}>其他登录方式</div>}
           <div className={platform === 'h5' ? layout['otherLogin-button'] : layout.pc_otherLogin_button}>
-            {this.props.site.wechatEnv !== 'none' && (
+            {site.wechatEnv !== 'none' && (
               <span
                 onClick={() => {
                   if (browser.env('weixin')) {
-                    const redirectEncodeUrl = encodeURIComponent(`${window.location.origin}/user/wx-auth`);
+                    let inviteCode = invite.getInviteCode(router);
+                    if (inviteCode) inviteCode = `?inviteCode=${inviteCode}`;
+                    const redirectEncodeUrl = encodeURIComponent(`${window.location.origin}/user/wx-auth${inviteCode}`);
                     window.location.href = `${window.location.origin}/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
                     return;
                   }
 
-                  this.props.router.replace('wx-login');
+                  router.replace('wx-login');
                 }}
                 className={platform === 'h5' ? layout['otherLogin-button-weixin'] : layout.button_left}
               >
                 <Icon size={20} name='WechatOutlined' color='#04C160'/>
               </span>
             )}
-            {this.props.site.isSmsOpen && (
+            {site.isSmsOpen && (
               <span
                 onClick={() => {
-                  this.props.router.replace('phone-login');
+                  router.replace('phone-login');
                 }}
                 className={platform === 'h5' ? layout['otherLogin-button-phone'] : layout.button_right}
               >

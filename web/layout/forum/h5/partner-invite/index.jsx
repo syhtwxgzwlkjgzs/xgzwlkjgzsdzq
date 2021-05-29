@@ -22,6 +22,7 @@ import { simpleRequest } from '@common/utils/simple-request';
 @inject('forum')
 @inject('search')
 @inject('user')
+@inject('invite')
 @observer
 class PartnerInviteH5Page extends React.Component {
   constructor(props) {
@@ -33,7 +34,7 @@ class PartnerInviteH5Page extends React.Component {
   }
   async componentDidMount() {
     try {
-      const { forum, search } = this.props;
+      const { forum, search, router, invite } = this.props;
       const usersList = await simpleRequest('readUsersList', {
         params: {
           filter: {
@@ -42,7 +43,8 @@ class PartnerInviteH5Page extends React.Component {
         },
       });
       const threadList = await search.getThreadList();
-      const { inviteCode } = this.props.router.query;
+      const { inviteCode } = router.query;
+      if (inviteCode) invite.setInviteCode(inviteCode);
       const inviteResp = await inviteDetail({
         params: {
           code: inviteCode,
@@ -60,7 +62,7 @@ class PartnerInviteH5Page extends React.Component {
       forum.setIsLoading(false);
     } catch (e) {
       Toast.error({
-        content: e.Message,
+        content: e?.Message,
         hasMask: false,
         duration: 1000,
       });
@@ -78,7 +80,6 @@ class PartnerInviteH5Page extends React.Component {
       return;
     }
     const { setSite: { siteMode, sitePrice, siteName } = {} } = site.webConfig;
-
     if (siteMode === 'pay' && user.paid === false) {
       PayBox.createPayBox({
         data: {      // data 中传递后台参数

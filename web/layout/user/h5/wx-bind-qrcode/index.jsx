@@ -69,9 +69,8 @@ class WeixinBindQrCodePage extends React.Component {
   }
 
   render() {
-    const { site } = this.props;
-    const { platform } = site;
-    const { nickname } = this.props.router.query;
+    const { site: { platform }, router, h5QrCode } = this.props;
+    const { nickname } = router.query;
     return (
       <PcBodyWrap>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
@@ -87,7 +86,7 @@ class WeixinBindQrCodePage extends React.Component {
           </div>
           {/* 二维码 start */}
           <WeixinQrCode
-            orCodeImg={this.props.h5QrCode.qrCode}
+            orCodeImg={h5QrCode.qrCode}
             orCodeTips={platform === 'h5' ? '长按保存二维码，并在微信中识别此二维码，即可完成登录' : '请使用微信，扫码登录'}
           />
           {/* 二维码 end */}
