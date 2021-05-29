@@ -318,6 +318,9 @@ class WalletH5Page extends React.Component {
       ],
     ];
     const { walletInfo, incomeDetail = {}, expandDetail, cashDetail } = this.props.wallet;
+    const incomeData = this.listRenderDataFilter(incomeDetail) || []
+    const expandData = this.listRenderDataFilter(expandDetail) || []
+    const cashData = this.listRenderDataFilter(cashDetail) || []
     return (
       <div className={layout.container}>
         <Header></Header>
@@ -353,8 +356,8 @@ class WalletH5Page extends React.Component {
                       noMore={this.state.page > this.state.totalPage}
                       onRefresh={this.fetchIncomeDetail}
                     >
-                      {this.listRenderDataFilter(incomeDetail).map(value => (
-                        <IncomeList key={value.id} incomeVal={value} />
+                      {incomeData.map((value,index) => (
+                        <IncomeList key={value.id} incomeVal={value} itemKey={index} dataLength={incomeData.length} />
                       ))}
                     </List>
                   )}
@@ -364,8 +367,8 @@ class WalletH5Page extends React.Component {
                       noMore={this.state.page > this.state.totalPage}
                       onRefresh={this.fetchExpendDetail}
                     >
-                      {this.listRenderDataFilter(expandDetail).map(value => (
-                        <PayList key={value.id} payVal={value} />
+                      {expandData.map((value,index) => (
+                        <PayList key={value.id} payVal={value} itemKey={index} dataLength={expandData.length}  />
                       ))}
                     </List>
                   )}
@@ -375,8 +378,13 @@ class WalletH5Page extends React.Component {
                       noMore={this.state.page > this.state.totalPage}
                       onRefresh={this.fetchCashDetail}
                     >
-                      {this.listRenderDataFilter(cashDetail).map(value => (
-                        <WithdrawalList key={value.id} withdrawalVal={value} />
+                      {cashData.map((value,index) => (
+                        <WithdrawalList 
+                        key={value.id} 
+                        withdrawalVal={value}
+                        itemKey={index}
+                        dataLength={cashData.length} 
+                        />
                       ))}
                     </List>
                   )}
