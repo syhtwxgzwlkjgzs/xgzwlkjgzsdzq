@@ -66,8 +66,10 @@ class HomeHeader extends React.Component {
     };
     const siteAuthor = get(webConfig, 'setSite.siteAuthor.username', '');
     const siteInstall = get(webConfig, 'setSite.siteInstall', '');
-    const  startDate = Date.parse(siteInstall);
-    const  endDate = Date.parse(new Date());
+    // 兼容ios
+    const [siteTimer] = siteInstall.split(' ');
+    const startDate = Date.parse(siteTimer);
+    const endDate = Date.parse(new Date());
     const days = numberFormat(parseInt(Math.abs(startDate  -  endDate) / 1000 / 60 / 60 / 24, 10));
 
     siteInfo.siteAuthor = siteAuthor;
