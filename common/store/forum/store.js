@@ -5,6 +5,7 @@ class ForumStore {
   constructor() {}
   @observable isPopup = false;
   @observable usersPageData = [];
+  @observable isLoading = true;
   @observable userTotal = 0;
   @observable threadsPageData = [];
   @observable threadTotal = 0;
@@ -13,6 +14,11 @@ class ForumStore {
   @action
   setIsPopup(is) {
     this.isPopup = is;
+  }
+
+  @action
+  setIsLoading(is) {
+    this.isLoading = is;
   }
 
   @action

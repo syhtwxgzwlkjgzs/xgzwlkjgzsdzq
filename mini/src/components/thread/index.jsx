@@ -53,7 +53,7 @@ class Index extends React.Component {
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
         }
       });
-    }, 2000);
+    }, 1000);
     // 评论
     onComment = (e) => {
       e && e.stopPropagation();
