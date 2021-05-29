@@ -28,7 +28,7 @@ class H5OthersPage extends React.Component {
     const { query } = this.props.router;
     const id = this.props.user?.id;
     if (String(id) === query.id) {
-      Router.push({ url: '/my' });
+      Router.replace({ url: '/my' });
       return;
     }
     if (query.id) {
