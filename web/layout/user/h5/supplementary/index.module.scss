@@ -1,7 +1,7 @@
 @import '../../../../../common/styles/mixin/login.scss';
 @import '@common/styles/index.scss';
 .content {
-  padding: 0 rem($padding-6n);
+  padding: rem($padding-4n) rem($padding-6n) rem($padding-6n);
   height: 100%;
   background: $white;
   .item {
@@ -28,7 +28,7 @@
   }
   .button{
     @include button;
-    margin: rem(24) 0;
+    margin-top: rem($margin-6n);
   }
   .required {
     color: $text-color-error;

@@ -31,8 +31,8 @@ class Index extends React.Component {
     const { user, site, index } = this.props;
     const defaultTitle = site.webConfig?.setSite?.siteName || ''
     const thread = index.threads?.pageData || []
-    const from = res.target.dataset.from || ''
-    const threadId = parseInt(res.target.dataset.threadId)
+    const from = res.target?.dataset?.from || ''
+    const threadId = parseInt(res.target?.dataset?.threadId)
     let threadTitle = ''
     for(let i of thread) {
       if(i.threadId == threadId) {
