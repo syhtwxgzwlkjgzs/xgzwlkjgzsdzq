@@ -337,7 +337,10 @@ class UserAction extends SiteStore {
     const pageData = get(userThreadList, 'data.pageData', []);
     const totalPage = get(userThreadList, 'data.totalPage', 1);
     this.userThreadsTotalPage = totalPage;
-    this.userThreads = [...this.userThreads, ...pageData];
+    this.userThreads = {
+      ...this.userThreads,
+      [this.userThreadsPage]: pageData,
+    };
     this.userThreadsTotalCount = get(userThreadList, 'data.totalCount', 0);
 
     if (this.userThreadsPage <= this.userThreadsTotalPage) {
@@ -368,7 +371,10 @@ class UserAction extends SiteStore {
     const pageData = get(targetUserThreadList, 'data.pageData', []);
     const totalPage = get(targetUserThreadList, 'data.totalPage', 1);
     this.targetUserThreadsTotalPage = totalPage;
-    this.targetUserThreads = [...this.targetUserThreads, ...pageData];
+    this.targetUserThreads = {
+      ...this.targetUserThreads,
+      [this.targetUserThreads]: pageData,
+    };
     this.targetUserThreadsTotalCount = get(targetUserThreadList, 'data.totalCount', 0);
 
     if (this.targetUserThreadsPage <= this.targetUserThreadsTotalPage) {

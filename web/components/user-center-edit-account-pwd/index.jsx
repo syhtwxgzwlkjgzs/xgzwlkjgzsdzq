@@ -115,6 +115,7 @@ class index extends Component {
       <div className={styles.labelInfo}>
         <div className={styles.labelValue}>
           <Input
+            className={styles.input}
             onChange={this.handleSetPwd}
             mode="password"
             placeholder="请设置密码"
@@ -125,6 +126,7 @@ class index extends Component {
       <div className={styles.labelInfo}>
         <div className={styles.labelValue}>
           <Input
+            className={styles.input}
             mode="password"
             placeholder="请确认密码"
             value={this.props.user?.newPasswordRepeat}
@@ -142,6 +144,7 @@ class index extends Component {
       <div className={styles.labelInfo}>
         <div className={styles.labelValue}>
           <Input
+            className={styles.input}
             value={this.props.user?.oldPassword}
             onChange={this.handleSetOldPwd}
             mode="password"
@@ -152,6 +155,7 @@ class index extends Component {
       <div className={styles.labelInfo}>
         <div className={styles.labelValue}>
           <Input
+            className={styles.input}
             value={this.props.user?.newPassword}
             onChange={this.handleSetPwd}
             mode="password"
@@ -162,6 +166,7 @@ class index extends Component {
       <div className={styles.labelInfo}>
         <div className={styles.labelValue}>
           <Input
+            className={styles.input}
             onChange={this.hadleNewPasswordRepeat}
             mode="password"
             value={this.props.user?.newPasswordRepeat}
@@ -183,7 +188,7 @@ class index extends Component {
 
     let isSubmit = false;
     if (this.props.user?.hasPassword) {
-      isSubmit = !oldPassword || !newPassword || !newPasswordRepeat || newPassword !== newPasswordRepeat;
+      isSubmit = !oldPassword || !newPassword || !newPasswordRepeat
     } else {
       isSubmit = !newPassword || !newPasswordRepeat;
     }
