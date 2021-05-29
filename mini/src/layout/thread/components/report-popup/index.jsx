@@ -60,10 +60,13 @@ const InputPop = (props) => {
               <Textarea
                 className={styles.input}
                 rows={5}
-                showLimit={true}
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 placeholder={inputText}
+                placeholderClass={styles.placeholder}
+                fixed={true}
+                adjustPosition={true}
+                cursorSpacing={200}
               ></Textarea>
             </View>
           ) : (
