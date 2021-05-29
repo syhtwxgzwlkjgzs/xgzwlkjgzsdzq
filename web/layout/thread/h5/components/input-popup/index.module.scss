@@ -15,7 +15,7 @@
   :global {
     .dzq-textarea__inner {
       background: $text-bg-color2;
-      padding: rem($padding-3n) rem($padding-4n);
+      padding: rem($padding-2n) rem($padding-3n);
       height: 80px !important;
       resize: none;
       font-size: $font-size-base;
@@ -66,6 +66,10 @@
   position: absolute;
   left: 0;
   bottom: rem(50);
+  height: rem(218);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .input {
@@ -102,4 +106,8 @@
       margin: 0 rem(8) rem(8) 0;
     }
   }
+}
+
+.disabled {
+  color: $disabled-color;
 }
