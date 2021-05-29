@@ -19,8 +19,6 @@ class Index extends React.Component {
     return readThreadMsgList(initPage || currentPage + 1);
   }
 
-
-
   // 处理帖子消息删除
   handleThreadDelete = (item) => {
     const { deleteMsg } = this.props.message;
