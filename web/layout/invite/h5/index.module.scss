@@ -4,7 +4,10 @@
   // 头部
   .header{
     height: rem(164);
-    background: var(--color-primary);
+    background-color: $primary-color;
+    background-image: url('/dzq-img/invite-banner-bg.png');
+    background-size: auto 100%;
+    background-repeat: no-repeat;
   }
   // 用户信息 start
   .user_info{

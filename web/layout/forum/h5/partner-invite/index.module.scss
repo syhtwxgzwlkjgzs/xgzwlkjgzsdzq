@@ -8,10 +8,12 @@
 .hot,.users{
   padding: rem($padding-4n);
   padding-top: 0;
-  border-bottom: rem(10) solid $text-bg-color2;
   &.popularContents{
     padding-bottom: 0;
   }
+}
+.users{
+  border-bottom: rem(10) solid $text-bg-color2;
 }
 .spinner {
   width: 100%;
@@ -20,6 +22,14 @@
   align-items: center;
   color: $text-color-placeholder;
   height: rem(60);
+}
+.maskLayer{
+  height: calc(100vh - 59px);
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: $zindex-toast;
+  pointer-events: auto;
 }
 .bottom{
   position: fixed;
