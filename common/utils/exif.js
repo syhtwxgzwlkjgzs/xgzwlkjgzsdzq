@@ -17,7 +17,6 @@ export function fixImageOrientation(file) {
         EXIF.getData(img, function () {
         // 获取图片旋转标志位
           const orientation = EXIF.getTag(this, 'Orientation');
-          console.log(orientation);
           // 根据旋转角度，在画布上对图片进行旋转
           if (orientation === 3 || orientation === 6 || orientation === 8) {
             const canvas = document.createElement('canvas');

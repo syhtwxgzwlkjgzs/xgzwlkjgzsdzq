@@ -22,7 +22,6 @@ import { get } from '../../utils/get';
 import set from '../../utils/set';
 import typeofFn from '@common/utils/typeof';
 import threadReducer from '../thread/reducer';
-import { fixImageOrientation } from '@common/utils/exif';
 
 class UserAction extends SiteStore {
   constructor(props) {
@@ -391,10 +390,9 @@ class UserAction extends SiteStore {
    * 上传新的头像
    */
   @action
-  async updateAvatar(fileList) {
+  async updateAvatar(file) {
     const param = new FormData();
-    const fixedImg = await fixImageOrientation(fileList[0]);
-    param.append('avatar', fixedImg);// 通过append向form对象添加数据
+    param.append('avatar', file);// 通过append向form对象添加数据
     param.append('pid', this.id);
 
     const updateAvatarRes = await updateAvatar({
@@ -423,10 +421,9 @@ class UserAction extends SiteStore {
    * 上传新的背景图
    */
   @action
-  async updateBackground(fileList) {
+  async updateBackground(file) {
     const param = new FormData();
-    const fixedImg = await fixImageOrientation(fileList[0]);
-    param.append('background', fixedImg);// 通过append向form对象添加数据
+    param.append('background', file);// 通过append向form对象添加数据
     const updateBackgroundRes = await updateBackground({
       transformRequest: [function (data) {
         return data;
