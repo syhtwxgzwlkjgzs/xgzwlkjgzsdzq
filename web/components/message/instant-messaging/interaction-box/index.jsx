@@ -77,7 +77,7 @@ const InteractionBox = (props) => {
   };
 
   const doSubmitClick = async () => {
-    if (!typingValue) return;
+    if (!typingValue.trim()) return;
     submit({messageText: typingValue});
   };
 
