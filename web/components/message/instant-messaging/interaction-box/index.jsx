@@ -39,6 +39,10 @@ const InteractionBox = (props) => {
     if (!threadPost.emojis.length) {
       threadPost.fetchEmoji();
     }
+
+    return () => {
+      toastInstance?.destroy();
+    };
   }, []);
 
 
@@ -49,10 +53,10 @@ const InteractionBox = (props) => {
         dialogId,
         ...data,
       });
+      toastInstance?.destroy();
       if (ret.code === 0) {
         setTypingValue('');
         readDialogMsgList(dialogId);
-        toastInstance?.destroy();
       } else {
         Toast.error({ content: ret.message });
       }
@@ -66,6 +70,8 @@ const InteractionBox = (props) => {
       if (ret.code === 0) {
         setTypingValue('');
         Router.replace({url: `/message?page=chat&dialogId=${ret.data.dialogId}`});
+      } else {
+        Toast.error({ content: ret.message });
       }
     }
   };
