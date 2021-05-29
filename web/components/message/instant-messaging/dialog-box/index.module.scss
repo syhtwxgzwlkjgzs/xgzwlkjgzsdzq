@@ -12,7 +12,7 @@
 .h5DialogBox {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 96px);
+  height: calc(100vh - 93px);
   overflow-y: auto;
 }
 
@@ -68,7 +68,7 @@
   position: relative;
   align-items: center;
   padding: rem($padding-2n);
-  overflow-wrap: anywhere;
+  word-break: break-word;
   border-radius: rem($border-radius-small);
   :global {
     .qq-emotion {

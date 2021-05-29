@@ -7,7 +7,6 @@
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  padding: rem($padding-3n) 0;
   background-color: $white;
 
   .wrapper {
@@ -88,6 +87,18 @@
     padding: 0;
     line-height: 25px;
   }
+}
+
+.pcItem {
+  padding: rem($padding-4n) 0;
+  padding-left: $padding-4n;
+  padding-right: $padding-4n;
+}
+
+.h5Item {
+  padding: rem($padding-2n) 0;
+  padding-left: $padding-4n;
+  padding-right: $padding-4n;
 }
 
 .bottomLine {
