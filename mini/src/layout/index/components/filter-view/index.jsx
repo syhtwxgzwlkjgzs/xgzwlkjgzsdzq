@@ -161,6 +161,7 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
       position="bottom"
       visible={visible}
       onClose={handleCancel}
+      customScroll
     >
         <View className={styles.container}>
           <ScrollView className={styles.content} scrollY>
