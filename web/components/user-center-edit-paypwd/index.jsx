@@ -130,6 +130,7 @@ class index extends Component {
           onChange={this.handleSetPwd}
           placeholder="请设置您的支付密码"
           mode="password"
+          trim
         />
       </div>
     </div>
@@ -149,6 +150,7 @@ class index extends Component {
             mode="password"
             placeholder="请输入旧密码"
             onChange={this.handleChangeOldPwd}
+            trim
           />
         </div>
         {
