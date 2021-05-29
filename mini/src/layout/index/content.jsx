@@ -25,6 +25,10 @@ class IndexH5Page extends React.Component {
       filter: {
         categoryids: this.checkIsOpenDefaultTab() ? ['default'] : ['all'],
         sequence: this.checkIsOpenDefaultTab() ? 1 : 0,
+        sort: 1,
+        attention: 0,
+        types: 'all',
+        essence: 0
       },
       currentIndex: this.checkIsOpenDefaultTab() ? 'default' : 'all',
       isFinished: true,
@@ -83,7 +87,7 @@ class IndexH5Page extends React.Component {
 
   onClickTab = (id = '') => {
     const { dispatch = () => {} } = this.props;
-    const currentIndex = this.resetCategoryids(id);
+    const currentIndex = this.resetCurrentIndex(id);
     const { categories = [] } = this.props.index
 
     // 若选中的一级标签，存在二级标签，则将一级id和所有二级id全都传给后台
@@ -113,17 +117,13 @@ class IndexH5Page extends React.Component {
   onClickFilter = ({ categoryids, types, essence, sequence }) => {
     const { dispatch = () => {} } = this.props;
     const requestCategoryids = categoryids.slice();
-    requestCategoryids[0] = (requestCategoryids[0] === 'all' || requestCategoryids[0] === 'default') ? [] : requestCategoryids[0];
-    dispatch('click-filter', { categoryids: requestCategoryids, types, essence, sequence });
+    
+    const newFilter = { ...this.state.filter, categoryids: requestCategoryids, types, essence, sequence }
+    dispatch('click-filter', newFilter);
 
     let newCurrentIndex = this.resetCurrentIndex(categoryids[0])
     this.setState({
-      filter: {
-        categoryids,
-        types,
-        essence,
-        sequence,
-      },
+      filter: newFilter,
       currentIndex: newCurrentIndex,
       visible: false,
     });
@@ -156,7 +156,6 @@ class IndexH5Page extends React.Component {
     const { dispatch = () => {} } = this.props;
     const { filter } = this.state;
     const requestFilter = Object.assign({}, filter);
-    requestFilter.categoryids = this.resetCategoryids(requestFilter.categoryids[0]);
     return dispatch('moreData', requestFilter);
   };
 

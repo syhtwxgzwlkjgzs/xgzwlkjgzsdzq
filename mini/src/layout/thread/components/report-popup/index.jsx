@@ -36,7 +36,7 @@ const InputPop = (props) => {
   };
 
   return (
-    <Popup position="bottom" visible={visible} onClose={onCancel}>
+    <Popup position="bottom" visible={visible} onClose={onCancel} customScroll={true}>
       <View className={styles.container}>
         <View className={styles.header}>
           <View className={styles.title}>举报</View>
