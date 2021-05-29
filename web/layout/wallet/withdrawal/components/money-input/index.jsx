@@ -13,11 +13,7 @@ const MoneyInput = (props) => {
     setValue(datas ? datas[0] : '');
     getmoneyNum(datas ? datas[0] : '');
   };
-
-  useEffect(() => {
-
-  }, [value])
-
+  
   const getColorShow = useMemo(() => {
     if (value == 0.00) {
       return ''
