@@ -98,6 +98,7 @@
       color: $white;
       padding-right: $padding-2n;
       box-sizing: border-box;
+      opacity: 0.6;
     }
   }
 }
@@ -106,4 +107,8 @@
 }
 .container_mode_invite {
   height: 156px;
+}
+
+.topBarForMini {
+  height: 44px;
 }
