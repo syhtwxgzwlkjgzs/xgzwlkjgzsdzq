@@ -48,15 +48,16 @@ class PCMyPage extends React.Component {
   onContainerClick = ({ id }) => {
     Router.push({ url: `/my/others?isOtherPerson=${true}&otherId=${id}` });
   };
-  renderRight = () => {
-    return (
+  renderRight = () => (
       <>
         <SidebarPanel
           type="normal"
           title="个人资料"
           isShowMore={true}
           moreText={'编辑资料'}
-          onShowMore={() => { Router.push({ url: '/my/edit' }); }} 
+          onShowMore={() => {
+            Router.push({ url: '/my/edit' });
+          }}
       >
           <div className={styles.userInfoWrapper}>
             <div className={styles.userInfoKey}>手机号码</div>
@@ -116,8 +117,7 @@ class PCMyPage extends React.Component {
         </SidebarPanel>
         <Copyright />
       </>
-    );
-  };
+  );
   renderContent = () => {
     const { user } = this.props;
     const { userThreads, userThreadsTotalCount } = user;
@@ -137,12 +137,13 @@ class PCMyPage extends React.Component {
           leftNum={`${userThreadsTotalCount}个主题`}
           noData={!userThreads?.length}
         >
-          {userThreads?.map((item, index) => (
+          {/* FIXME: PC 切换至新逻辑 */}
+          {/* {userThreads?.map((item, index) => (
             <div key={index}>
               <ThreadContent className={styles.wrapper} showBottom={false} data={item} key={index} />
               <div className={styles.threadHr}></div>
             </div>
-          ))}
+          ))} */}
         </SidebarPanel>
       </div>
     );
@@ -155,7 +156,7 @@ class PCMyPage extends React.Component {
           {this.renderContent()}
         </UserBaseLaout>
 
-        <UserCenterFansPopup 
+        <UserCenterFansPopup
           visible={this.state.showFansPopup}
           onClose={() => this.setState({ showFansPopup: false })}
         />
