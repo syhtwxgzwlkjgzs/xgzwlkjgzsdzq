@@ -8,6 +8,7 @@ import styles from './index.module.scss';
 
 import { Icon, Button, Toast } from '@discuzq/design';
 
+@inject('wallet')
 @observer
 class Withdrawal extends React.Component {
   constructor(props) {
@@ -41,12 +42,23 @@ class Withdrawal extends React.Component {
   };
 
   // 提现到微信钱包
-  moneyToWeixin = () => {
+  moneyToWeixin = async () => {
     if (!this.state.withdrawalAmount) {
       return Toast.warning({ content: '不得小于最低提现金额' });
     }
-    console.log('提现的金额', this.state.withdrawalAmount);
-    this.setState({ visible: !this.state.visible });
+    try {
+      await this.props.wallet.createWalletCash({
+        money: this.state.withdrawalAmount,
+      });
+    } catch (err) {
+      if (err.Code) {
+        Toast.error({
+          content: err.Msg,
+          duration: 1000,
+        });
+      }
+    }
+    // this.setState({ visible: !this.state.visible });
   };
 
   render() {

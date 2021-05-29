@@ -122,6 +122,10 @@ class Index extends Component {
       // 请求成功，设置分类，发帖数据,发帖状态，草稿状态开启自动保存
       const { categoryId, isDraft } = ret.data;
       this.setCategory(categoryId);
+      const { content: { text } } = ret.data;
+      // 小程序编辑帖子，要把内容中的img标签去掉。/todo: 防止把其他有效的img标签也去掉
+      const realText = text.replace(/<img.*?alt="(\w+)".*?>/g, `:$1:`);
+      ret.data.content.text = realText;
       threadPost.formatThreadDetailToPostData(ret.data);
       this.setState({ postType: isDraft === 1 ? 'isDraft' : 'isEdit' });
       // isDraft === 1 && this.openSaveDraft(); // 现阶段，自动保存功能关闭

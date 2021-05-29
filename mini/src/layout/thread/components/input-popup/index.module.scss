@@ -28,6 +28,10 @@
   }
 }
 
+.placeholder {
+  color: $disabled-color;
+}
+
 .main {
   background: var(--color-white);
   width: 100%;
