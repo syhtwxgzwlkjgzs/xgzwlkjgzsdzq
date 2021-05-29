@@ -55,6 +55,13 @@ class MessageStore {
   @observable dialogMsgList = this.initList;
 
   /**
+   * 单个私信对话内的消息列表
+   */
+  @computed get dialogMsgListLength() {
+    return this.dialogMsgList.totalCount;
+  }
+
+  /**
    * 财务通知列表
    */
   @observable financialMsgList = this.initList;
