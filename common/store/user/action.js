@@ -16,8 +16,7 @@ import {
   smsSend,
   smsRebind,
   smsVerify,
-  readUsersDeny,
-  createAttachment
+  readUsersDeny
 } from '@server';
 import { get } from '../../utils/get';
 import set from '../../utils/set';
@@ -391,16 +390,9 @@ class UserAction extends SiteStore {
   @action
   async updateAvatar(fileList) {
     const param = new FormData();
-    const param2 = new FormData();
     param.append('avatar', fileList[0]);// 通过append向form对象添加数据
     param.append('pid', this.id);
 
-    console.log(fileList[0]);
-    param2.append('file', fileList[0]);// 通过append向form对象添加数据
-    param2.append('type', 1);// 通过append向form对象添加数据
-
-
-    const res = await createAttachment(param2);
     const updateAvatarRes = await updateAvatar({
       transformRequest: [function (data) {
         return data;
@@ -410,11 +402,6 @@ class UserAction extends SiteStore {
       },
       data: param,
     });
-
-    console.log(updateAvatarRes)
-    console.log(res)
-
-    updateAvatarRes.data.avatarUrl = res.data.url;
 
     if (updateAvatarRes.code === 0) {
       this.userInfo.avatarUrl = updateAvatarRes.data.avatarUrl;
