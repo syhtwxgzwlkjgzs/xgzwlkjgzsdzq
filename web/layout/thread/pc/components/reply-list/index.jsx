@@ -101,9 +101,9 @@ export default class ReplyList extends React.Component {
               ></div>
 
               {/* 图片展示 */}
-              {this.props.data?.images && (
+              {(this.props.data?.images || this.props.data?.attachments) && (
                 <div className={styles.imageDisplay}>
-                  <ImageDisplay platform="pc" imgData={this.props.data?.images} />
+                  <ImageDisplay platform="pc" imgData={this.props.data?.images || this.props.data?.attachments} />
                 </div>
               )}
             </div>
