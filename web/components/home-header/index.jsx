@@ -127,13 +127,23 @@ class HomeHeader extends React.Component {
             }} name="HomeOutlined" color="#fff" size={20} />
           </div>
         </div>}
-        <div className={styles.logoBox}>
-          <img
-              className={styles.logo}
-              mode="aspectFit"
-              src={this.getLogo()}
-          />
-        </div>
+        {
+          mode === 'join'
+            ? <div className={styles.joinLog}>
+                <img
+                    className={styles.logo}
+                    mode="aspectFit"
+                    src='/dzq-img/join-banner-bg.png'
+                />
+              </div>
+            : <div className={styles.logoBox}>
+                <img
+                    className={styles.logo}
+                    mode="aspectFit"
+                    src={this.getLogo()}
+                />
+              </div>
+        }
         {digest && <div className={styles.digest}>
             <div className={styles.left}>站长 {digest.admin}</div>
             <div className={styles.right}>已创建 {digest.day}天</div>
