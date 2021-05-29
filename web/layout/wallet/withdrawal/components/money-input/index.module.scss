@@ -29,9 +29,6 @@
       text-align: left;
       color: #c5c6ca;
     }
-    .is-focus>input{
-      color: var(--color-text-primary)
-    }
   }
 
   .moneyIcon {
@@ -39,12 +36,30 @@
     font-weight: 600;
     font-size: rem(30);
     text-align: left;
-    color: var(--color-text-primary);
+    color: $text-color-primary;
+
+  }
+
+  .moneyIcon-Red {
+    font-family: 'PingFang SC';
+    font-weight: 600;
+    font-size: rem(30);
+    text-align: left;
+    color: $error-color;
   }
 
   .InputColor>input {
-    color: var(--color-text-primary) !important;
+    color: $text-color-primary;
   }
+
+  .InputRedColor>input {
+    color: $error-color;
+  }
+}
+
+.leasterr {
+  color: $error-color;
+  padding-bottom: rem(8);
 }
 
 .leastMoney {

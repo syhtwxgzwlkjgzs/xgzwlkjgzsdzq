@@ -5,6 +5,7 @@ import UserCenterHeaderImage from '@components/user-center-header-images';
 import { Icon, Input, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import { ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post'
+import { fixImageOrientation } from '@common/utils/exif';
 
 
 @inject('user')
@@ -40,7 +41,8 @@ export default class index extends Component {
     this.setState({
       isUploadAvatarUrl: true
     })
-    this.props.user.updateAvatar(fileList.target.files).then(res => {
+    const fixedImg = await fixImageOrientation(fileList.target.files[0]);
+    this.props.user.updateAvatar(fixedImg).then(res => {
       const id = this.user.id
       if (id === res.id && res.avatarUrl) {
         // this.user.editAvatarUrl = res.avatarUrl;
@@ -72,7 +74,8 @@ export default class index extends Component {
     this.setState({
       isUploadBackgroundUrl: true
     })
-    this.props.user.updateBackground(fileList.target.files).then(res => {
+    const fixedImg = await fixImageOrientation(fileList.target.files[0]);
+    this.props.user.updateBackground(fixedImg).then(res => {
       const id = this.user.id
       if (id === res.id && res.backgroundUrl) {
         Toast.success({
