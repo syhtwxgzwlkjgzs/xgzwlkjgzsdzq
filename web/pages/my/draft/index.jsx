@@ -44,7 +44,8 @@ class Draft extends React.Component {
     this.toastInstance?.destroy();
     if (res.code === 0) {
       const data = (index.drafts?.pageData || []).filter(elem => elem.threadId !== item.threadId);
-      index.setDrafts({...index.drafts, pageData: data});
+      const total = index.drafts?.totalCount - 1;
+      index.setDrafts({ ...index.drafts, totalCount: total, pageData: data });
     } else {
       Toast.error({ content: res.msg });
     }
