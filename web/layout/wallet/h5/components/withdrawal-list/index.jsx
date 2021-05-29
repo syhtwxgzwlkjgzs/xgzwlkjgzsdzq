@@ -26,6 +26,7 @@ class IncomeList extends React.Component {
   }
 
   render() {
+    const { itemKey, dataLength } = this.props
     const { cashApplyAmount, tradeTime, cashStatus, tradeNo } = this.props.withdrawalVal
     return (
       <div className={styles.container}>
@@ -35,14 +36,15 @@ class IncomeList extends React.Component {
         </div>
         <div className={styles.footer}>
           <div className={styles.time}>
-            {tradeTime ?diffDate(tradeTime) : ''}
+            {tradeTime ? diffDate(tradeTime) : ''}
           </div>
           <div className={styles[`withdrawalStatus${cashStatus}`]}>
             {STATUS_MAP[cashStatus]}
           </div>
         </div>
-        <div className={styles.serialNumber}>
-          <span>流水号:</span><span>{tradeNo || ''}</span>
+        {/* // FIXME:这里的结构有问题 怪怪的 所以只能用数组长度取消底部边框线 */}
+        <div className={styles.serialNumber} style={{borderBottom: itemKey === dataLength - 1 && 0}}>
+          <span>流水号:</span><span>{tradeNo || '暂无'}</span>
         </div>
       </div>
     );
