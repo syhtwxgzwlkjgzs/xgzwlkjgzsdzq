@@ -37,8 +37,8 @@ class CommentDetail extends React.Component {
     serverData && comment.setCommentDetail(serverData);
 
     this.state = {
-      isServerError:false
-    }
+      isServerError: false,
+    };
   }
 
   async componentDidMount() {
@@ -56,12 +56,12 @@ class CommentDetail extends React.Component {
     }
 
     if (!this.props.serverData && id) {
-      const res =await this.props.comment.fetchCommentDetail(id);
-      if(res.code !== 0) {
+      const res = await this.props.comment.fetchCommentDetail(id);
+      if (res.code !== 0) {
         this.setState({
-          isServerError: true
-        })
-        return
+          isServerError: true,
+        });
+        return;
       }
 
       // 获取作者信息
@@ -77,7 +77,7 @@ class CommentDetail extends React.Component {
   render() {
     const { site } = this.props;
     const { platform } = site;
-    if(this.state.isServerError) {
+    if (this.state.isServerError) {
       return platform === 'h5' ? <ErrorH5Page /> : <ErrorPCPage />;
     }
     return platform === 'h5' ? <CommentH5Page /> : <CommentPCPage />;

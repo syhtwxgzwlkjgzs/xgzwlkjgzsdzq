@@ -30,7 +30,7 @@ const InputPop = (props) => {
 
   return (
     <Popup position="bottom" visible={visible} onClose={onClose}>
-      <View>
+      <View className={styles.body}>
         <View className={styles.container}>
           <View className={styles.more}>
             {canEdit && (
