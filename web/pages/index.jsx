@@ -11,6 +11,11 @@ import HOCFetchSiteData from '../middleware/HOCFetchSiteData';
 @inject('user')
 @observer
 class Index extends React.Component {
+
+  state = {
+    isError: false
+  }
+
   page = 1;
   prePage = 10;
   static async getInitialProps(ctx, { user, site }) {
@@ -44,16 +49,11 @@ class Index extends React.Component {
 
   async componentDidMount() {
     const { index } = this.props;
-    const { categoryids, types, essence = 0, sequence = 0, attention = 0, sort = 1 } = index.filter;
+    const { essence = 0, sequence = 0, attention = 0, sort = 1 } = index.filter;
 
-    let newTypes = [];
-    if (types) {
-      if (!(types instanceof Array)) {
-        newTypes = types === 'all' ? [] : [types];
-      } else {
-        newTypes = types.filter(item => item !== 'all');
-      }
-    }
+    let newTypes = this.handleString2Arr(index.filter, 'types');
+
+    let categoryIds = this.handleString2Arr(index.filter, 'categoryids');
 
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasCategoriesData = !!index.categories;
@@ -64,14 +64,18 @@ class Index extends React.Component {
       this.props.index.getReadCategories();
     }
     if (!hasSticksData) {
-      this.props.index.getRreadStickList(categoryids);
+      this.props.index.getRreadStickList(categoryIds);
     }
    
     if (!hasThreadsData) {
-      this.props.index.getReadThreadList({
-        sequence: sequence || (this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0), 
-        filter: { categoryids, types: newTypes, essence, attention, sort } 
-      });
+      try {
+        await this.props.index.getReadThreadList({
+          sequence: sequence || (this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0), 
+          filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
+        });
+      } catch (error) {
+        this.setState({ isError: true })
+      }
     } else {
       // 如果store中有值，则需要获取之前的分页数
       this.page = index.threads.currentPage || 1
@@ -94,7 +98,7 @@ class Index extends React.Component {
       }
     }
 
-    return arr.filter(item => item !== 'all' && item !== 'default' && item !== '')
+    return arr?.filter(item => item !== 'all' && item !== 'default' && item !== '') || []
   }
 
   dispatch = async (type, data = {}) => {
@@ -133,7 +137,7 @@ class Index extends React.Component {
     if (platform === 'pc') {
       return <IndexPCPage dispatch={this.dispatch} />;
     }
-    return <IndexH5Page dispatch={this.dispatch} />;
+    return <IndexH5Page dispatch={this.dispatch} isError={this.state.isError} />;
   }
 }
 
