@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import styles from './index.module.scss';
 
-import Header from '@components/header';
 import Card from '../message-card';
 import Notice from '../notice';
 
@@ -121,16 +120,6 @@ class Index extends React.Component {
     return list;
   }
 
-  // 触顶下拉刷新
-  onPullDown = () => {
-    return this.fetchMessageData(1);
-  }
-
-  // 触底上拉加载 tip: 监听上拉触底之后，一定要返回Promise对象
-  handleAccountBottom = () => {
-    return this.fetchMessageData();
-  }
-
   // 跳转其它账户消息
   toOtherMessage = (link) => {
     this.props.router.push(link);
@@ -143,29 +132,25 @@ class Index extends React.Component {
   }
 
   render() {
-    const { site, message, router } = this.props;
-    const { isPC } = site;
+    const { site: { isPC }, message, router } = this.props;
     const { type, items } = this.state;
     const { subPage } = router.query;
-    const data = message[type];
-    const renderList = this.handleRenderList(data.list);
+    const { list, currentPage, totalPage, totalCount } = message[type];
+    const renderList = this.handleRenderList(list);
     const card = <Card type={subPage} cardItems={items} onClick={this.toOtherMessage} />;
 
-
     return (
-      <div className={styles.wrapper}>
-        {!isPC && <Header />}
+      <div className={`${styles.wrapper} ${isPC ? styles.pc : ""}`}>
         <Notice
           infoIdx={3}
-          totalCount={data.totalCount}
-          height='calc(100vh - 40px)'
-          withTopBar={!isPC}
-          noMore={data.currentPage >= data.totalPage}
+          totalCount={totalCount}
+          noMore={currentPage >= totalPage}
+          showHeader={!isPC}
           topCard={(isPC || type === 'accountMsgList') ? card : null}
           list={renderList}
           type='account'
-          onPullDown={this.onPullDown}
-          onScrollBottom={this.handleAccountBottom}
+          onPullDown={() => this.fetchMessageData(1)}
+          onScrollBottom={() => this.fetchMessageData()}
           onBtnClick={this.handleAccountDelete}
         />
       </div>

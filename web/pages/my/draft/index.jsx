@@ -42,8 +42,8 @@ class Draft extends React.Component {
     const res = await thread.delete(item.threadId);
     this.toastInstance?.destroy();
     if (res.code === 0) {
-      const data = (index.threads?.postData || []).filter(elem => elem.threadId !== item.threadId);
-      index.setThreads(data);
+      const data = (index.threads?.pageData || []).filter(elem => elem.threadId !== item.threadId);
+      index.setThreads({...index.threads, pageData: data});
     } else {
       Toast.error({ content: res.msg });
     }
