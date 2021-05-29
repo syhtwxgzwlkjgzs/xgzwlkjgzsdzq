@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import styles from './index.module.scss';
 
-import Header from '@components/header';
 import Card from '../message-card';
 import Notice from '../notice';
 
@@ -143,24 +142,20 @@ class Index extends React.Component {
   }
 
   render() {
-    const { site, message, router } = this.props;
-    const { isPC } = site;
+    const { site: { isPC }, message, router } = this.props;
     const { type, items } = this.state;
     const { subPage } = router.query;
-    const data = message[type];
-    const renderList = this.handleRenderList(data.list);
+    const { list, currentPage, totalPage, totalCount } = message[type];
+    const renderList = this.handleRenderList(list);
     const card = <Card type={subPage} cardItems={items} onClick={this.toOtherMessage} />;
 
-
     return (
-      <div className={styles.wrapper}>
-        {!isPC && <Header />}
+      <div className={`${styles.wrapper} ${isPC ? styles.pc : ""}`}>
         <Notice
           infoIdx={3}
-          totalCount={data.totalCount}
-          height='calc(100vh - 40px)'
-          withTopBar={!isPC}
-          noMore={data.currentPage >= data.totalPage}
+          totalCount={totalCount}
+          noMore={list.length === 0 || currentPage >= totalPage}
+          showHeader={!isPC}
           topCard={(isPC || type === 'accountMsgList') ? card : null}
           list={renderList}
           type='account'

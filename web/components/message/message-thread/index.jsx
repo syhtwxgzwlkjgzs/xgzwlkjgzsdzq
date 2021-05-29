@@ -2,7 +2,6 @@ import React from 'react'
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 
-import Header from '@components/header';
 import Notice from '../notice';
 
 @inject('site')
@@ -32,17 +31,17 @@ class Index extends React.Component {
   }
 
   render() {
-    const {isPC} = this.props.site;
-    const { threadMsgList: data } = this.props.message;
+    const { site: { isPC }, message: { threadMsgList } } = this.props;
+    const { list, currentPage, totalPage, totalCount } = threadMsgList;
+
     return (
-      <div className={styles.wrapper}>
-        {!isPC && <Header />}
+      <div className={`${styles.wrapper} ${isPC ? styles.pc : ""}`}>
         <Notice
           infoIdx={1}
-          totalCount={data.totalCount}
-          height='calc(100vh - 40px)'
-          noMore = { data.currentPage >= data.totalPage }
-          list={data.list}
+          totalCount={totalCount}
+          noMore={list.length === 0 || currentPage >= totalPage}
+          showHeader={!isPC}
+          list={list}
           type='thread'
           onScrollBottom={this.handleThreadBottom}
           onBtnClick={this.handleThreadDelete}

@@ -86,7 +86,7 @@ class SlierItem extends PureComponent {
         </View>
         {/* 滑块操作按钮 */}
         <View
-          className={styles['slider-brn']}
+          className={styles['slider-btn']}
           style={{
             flexBasis: offsetLeft,
             color: Color,
@@ -169,6 +169,7 @@ class Index extends Component {
 
     return (
       <View className={classNames(styles.wrapper, {
+        [styles['not-bottom']]: !withBottomBar,
         [styles['with-bottom']]: withBottomBar,
       })}>
         <PullDownRefresh
@@ -178,7 +179,7 @@ class Index extends Component {
           damping={damping}
         >
           <List
-            height={height}
+            className={styles.list}
             noMore={noMore}
             onScroll={throttle(this.onScroll, 10)}
             onRefresh={onScrollBottom}

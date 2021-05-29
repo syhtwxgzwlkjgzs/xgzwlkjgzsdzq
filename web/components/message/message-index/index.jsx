@@ -90,21 +90,20 @@ export class MessageIndex extends Component {
 
   render() {
     const { items } = this.state;
-    const { isPC } = this.props.site;
+    const { site: { isPC }, message: { dialogList } } = this.props;
+    const { list, currentPage, totalPage, totalCount } = dialogList;
     const card = <Card cardItems={items} onClick={this.toOtherMessage} />;
-    const { dialogList } = this.props.message;
-    const newDialogList = this.formatChatDialogList(dialogList.list);
 
     return (
-      <div className={styles.wrapper}>
+      <div className={`${styles.wrapper} ${isPC ? styles.pc : ""}`}>
         <Notice
           infoIdx={0}
-          totalCount={dialogList.totalCount}
-          height='calc(100vh - 64px)'
+          totalCount={totalCount}
           withBottomBar={true}
-          noMore={dialogList.length === 0 || dialogList.currentPage >= dialogList.totalPage}
+          noMore={list.length === 0 || currentPage >= totalPage}
+          showHeader={!isPC}
           topCard={isPC ? null : card}
-          list={newDialogList}
+          list={this.formatChatDialogList(list)}
           type='chat'
           onPullDown={this.onPullDown}
           onScrollBottom={this.handleScrollBottom}

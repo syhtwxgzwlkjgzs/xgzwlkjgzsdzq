@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { inject, observer } from 'mobx-react';
 
-import Header from '@components/header';
 import Notice from '@components/message/notice';
 
 import styles from './index.module.scss';
@@ -39,14 +38,12 @@ const Index = ({ site, message }) => {
   }, [list])
 
   return (
-    <div className={styles.wrapper}>
-      {!site.isPC && <Header />}
+    <div className={`${styles.wrapper} ${isPC ? styles.pc : ""}`}>
       <Notice
         infoIdx={2}
         totalCount={totalCount}
-        height='calc(100vh - 40px)'
-        withTopBar={!site.isPC}
-        noMore={currentPage >= totalPage}
+        noMore={list.length === 0 || currentPage >= totalPage}
+        showHeader={!site.isPC}
         list={renderList}
         type='financial'
         onPullDown={() => readFinancialMsgList(1)}
