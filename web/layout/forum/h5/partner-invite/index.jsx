@@ -116,7 +116,7 @@ class PartnerInviteH5Page extends React.Component {
     const { inviteCode } = this.props.router.query;
     const { platform, webConfig } = site;
     const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
-    const { usersPageData, threadsPageData, isLoading } = forum;
+    const { usersPageData = [], threadsPageData = [], isLoading } = forum;
     const { invitorName, invitorAvatar } = this.state;
     return (
       <List className={layout.page} allowRefresh={false}>
