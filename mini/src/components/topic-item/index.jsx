@@ -3,18 +3,22 @@ import PostContent from '@components/thread/post-content';
 import replaceSearchResultContent from '@common/utils/replace-search-result-content';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
-import { noop } from '@components/thread/utils';
+import { noop, handleLink } from '@components/thread/utils';
 import styles from './index.module.scss';
 import RichText from '@discuzq/design/dist/components/rich-text/index';
 import { View, Text } from '@tarojs/components';
+import Router from '@discuzq/sdk/dist/router';
 
 
 export const TopicItem = ({ data, onClick = noop }) => {
-    const click = useCallback((e) => {
-      if (e.target.localName === 'a') {
-        return
+    const click = useCallback((e, node) => {
+      e && e.stopPropagation();
+      const url = handleLink(node)
+      if (url) {
+        Router.push({url}) 
+      } else {
+        onClick && onClick(data);
       }
-      onClick && onClick(data);
     }, [data, onClick]);
 
     const { threads = [] } = data
