@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './index.module.scss';
-import { inject, observer } from 'mobx-react'
+import { inject, observer } from 'mobx-react';
 import UserBaseLaout from '@components/user-center-base-laout-pc';
 import SidebarPanel from '@components/sidebar-panel';
 import ThreadContent from '@components/thread';
@@ -97,7 +97,7 @@ class PCMyPage extends React.Component {
   }
   renderContent = () => {
     const { user } = this.props;
-    const { targetUserThreads, targetUserThreadsTotalCount} = user;
+    const { targetUserThreads, targetUserThreadsTotalCount } = user;
     return (
       <div className={styles.userContent}>
         <SidebarPanel
@@ -108,14 +108,15 @@ class PCMyPage extends React.Component {
           leftNum ={`${targetUserThreadsTotalCount}个主题`}
           noData={!targetUserThreads?.length}
         >
-          {
+          {/* FIXME: pc 切换到新逻辑 */}
+          {/* {
             targetUserThreads?.map((item, index) => (
               <div>
                   <ThreadContent className={styles.wrapper} showBottom={false} data={item} key={index} />
                   <div className={styles.hr}></div>
               </div>
             ))
-          }
+          } */}
         </SidebarPanel>
       </div>
     );
@@ -123,7 +124,7 @@ class PCMyPage extends React.Component {
   render() {
     const { user } = this.props;
     const { targetUserThreadsPage, targetUserThreadsTotalPage } = user;
-    const {pageData } = [];
+    const { pageData } = [];
     const { query } = this.props.router;
     return (
       <>
@@ -139,7 +140,7 @@ class PCMyPage extends React.Component {
           { this.renderContent() }
         </UserBaseLaout>
 
-        <UserCenterFansPopup 
+        <UserCenterFansPopup
           visible={this.state.showFansPopup}
           onClose={() => this.setState({ showFansPopup: false })}
           isOtherFans={true}

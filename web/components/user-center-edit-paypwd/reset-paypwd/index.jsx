@@ -5,6 +5,7 @@ import Header from '@components/header';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 import throttle from '@common/utils/thottle.js';
+import classNames from 'classnames';
 @inject('payBox')
 @observer
 export default class index extends Component {
@@ -92,7 +93,11 @@ export default class index extends Component {
             </div>
           </div>
         </div>
-        <div className={styles.bottom}>
+        <div
+          className={classNames(styles.bottom,{
+            [styles.bgBtnColor]: !this.getDisabledWithButton()
+          })}
+        >
           <Button full disabled={this.getDisabledWithButton()} onClick={this.handleSubmit} type={"primary"} className={styles.btn}>提交</Button>
         </div>
       </div>

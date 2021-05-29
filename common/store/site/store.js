@@ -68,6 +68,10 @@ class SiteStore {
     return get(this.webConfig, 'agreement.privacyContent', '');
   }
 
+  @computed get cashMinSum() {
+    return get(this.webConfig, 'setCash.cashMinSum', 1);
+  }
+
   @computed get wechatEnv() {
     if (this.isMiniProgramOpen) {
       return WECHAT_ENV_MAP.MINI;
