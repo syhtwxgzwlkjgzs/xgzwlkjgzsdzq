@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import { Tabs, Icon, Button, Toast } from '@discuzq/design';
+import Header from '@components/header';
 import WalletInfo from './components/wallet-info/index';
 import IncomeList from './components/income-list/index';
 import PayList from './components/pay-list/index';
@@ -252,10 +253,9 @@ class WalletH5Page extends React.Component {
   renderSelectedType = () => {
     if (this.state.selectType === 'all') {
       if (this.state.tabsType === 'withdrawal') {
-        return '全部状态'
-      } else {
-        return '全部类型'
+        return '全部状态';
       }
+      return '全部类型';
     }
     let arr = {};
     switch (this.state.tabsType) {
@@ -268,7 +268,7 @@ class WalletH5Page extends React.Component {
       case 'withdrawal':
         arr = CASH_DETAIL_CONSTANTS;
     }
-    for (let key in arr) {
+    for (const key in arr) {
       if (arr[key].code === this.state.selectType) {
         return arr[key].text || '';
       }
@@ -320,6 +320,7 @@ class WalletH5Page extends React.Component {
     const { walletInfo, incomeDetail = {}, expandDetail, cashDetail } = this.props.wallet;
     return (
       <div className={layout.container}>
+        <Header></Header>
         <div className={layout.scroll}>
           <div className={layout.header}>
             <WalletInfo
@@ -385,8 +386,8 @@ class WalletH5Page extends React.Component {
           </div>
         </div>
         <div className={layout.footer}>
-          <Button className={layout.button} onClick={this.toWithrawal} disabled={true}>
-            提现(敬请期待)
+          <Button className={layout.button} onClick={this.toWithrawal} >
+            提现
           </Button>
         </div>
         <FilterView

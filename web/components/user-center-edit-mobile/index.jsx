@@ -142,11 +142,12 @@ class index extends Component {
     });
   }
 
-  getVerifyCode = throttle(({ calback }) => {
+  getVerifyCode = throttle(async ({ calback }) => {
     const { originalMobile } = this.props.user;
     const { currentStep } = this.state;
     if (currentStep === 'first') {
-      this.props.user.sendSmsVerifyCode({ mobile: originalMobile })
+      let { captchaRandStr, captchaTicket } = await this.props.showCaptcha()
+      this.props.user.sendSmsVerifyCode({ mobile: originalMobile, captchaRandStr, captchaTicket })
         .then((res) => {
           this.setState({
             initTimeValue: res.interval,
@@ -165,9 +166,11 @@ class index extends Component {
           });
           if (calback && typeof calback === 'function') calback(err);
         });
+
     } else if (currentStep === 'second') {
       const { bindMobile } = this.state;
-      this.props.user.sendSmsUpdateCode({ mobile: bindMobile })
+      let { captchaRandStr, captchaTicket } = await this.props.showCaptcha()
+      this.props.user.sendSmsUpdateCode({ mobile: bindMobile, captchaRandStr, captchaTicket })
         .then((res) => {
           this.setState({
             initTimeValue: res.interval,

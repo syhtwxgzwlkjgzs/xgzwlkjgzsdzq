@@ -20,8 +20,8 @@ class index extends Component {
   };
 
   componentDidMount() {
-    const id = this.props.user?.id
-    this.props.user.updateUserInfo(id)
+    const id = this.props.user?.id;
+    this.props.user.updateUserInfo(id);
   }
 
   // 点击屏蔽
@@ -51,7 +51,7 @@ class index extends Component {
     const id = this.props.router.query?.id;
     if (id) {
       if (follow !== 0) {
-        await this.props.user.cancelFollow({ id: id, type: 1 });
+        await this.props.user.cancelFollow({ id, type: 1 });
         await this.props.user.getTargetUserInfo(id);
       } else {
         await this.props.user.postFollow(id);
@@ -67,7 +67,7 @@ class index extends Component {
 
   // 点击粉丝列表
   goToFansList = () => {
-    const id = this.props.router.query?.id
+    const id = this.props.router.query?.id;
     if (id) {
       Router.push({ url: `/my/fans?isOtherPerson=${this.props.isOtherPerson}&otherId=${id}` });
     } else {
@@ -92,8 +92,8 @@ class index extends Component {
 
   // 点击发送私信
   handleMessage = () => {
-    const { username } = this.props.user;
-    Router.push({ url: `/message?page=chat&username=${username}` });
+    const { username } = this.props.user.targetUser;
+    Router.replace({ url: `/message?page=chat&username=${username}` });
   };
 
   gotoLikeList = () => {

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Avatar, ImagePreviewer } from '@discuzq/design';
 import { diffDate } from '@common/utils/diff-date';
 import { inject, observer } from 'mobx-react';
+import { useRouter } from 'next/router';
 
 import styles from './index.module.scss';
 
@@ -11,15 +12,23 @@ const DialogBox = (props) => {
 
   const [previewerVisibled, setPreviewerVisibled] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
-
+  // const router = useRouter();
+  // const dialogId = router.query.dialogId;
   const dialogBoxRef = useRef();
-  let timeoutId = null;
+  const timeoutId = useRef();
   useEffect(() => {
     updateMsgList();
     return () => {
-      clearTimeout(timeoutId);
+      clearTimeout(timeoutId.current);
     };
   }, []);
+
+  useEffect(() => {
+    if (dialogId) {
+      clearTimeout(timeoutId.current);
+      updateMsgList();
+    }
+  }, [dialogId]);
 
   const scrollEnd = () => {
     if (dialogBoxRef.current) {
@@ -30,10 +39,10 @@ const DialogBox = (props) => {
   // 每2秒轮询一次
   const updateMsgList = () => {
     readDialogMsgList(dialogId);
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
+    clearTimeout(timeoutId.current);
+    timeoutId.current = setTimeout(() => {
       updateMsgList();
-    }, 10000);
+    }, 4000);
   };
 
   const messagesHistory = useMemo(() => {

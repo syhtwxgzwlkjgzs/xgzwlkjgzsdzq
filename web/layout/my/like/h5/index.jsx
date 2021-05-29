@@ -14,16 +14,24 @@ import styles from './index.module.scss';
 class Index extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      height: '100%',
+    };
   }
+
+  componentDidMount() {
+    this.setState({
+      // header 是 40px，留出 2px ，用以触发下拉事件
+      height: window.outerHeight - 38,
+    });
+  }
+
   render() {
-    const { index, loading } = this.props;
-    const { pageData = [], currentPage, totalPage } = index.threads || {};
+    const { index, page, totalPage } = this.props;
+    const { pageData = [] } = index.threads || {};
     return (
       <div>
         <Header />
-        {
-          loading && <Spin type="spinner" size={14}></Spin>
-        }
         {
           this.props.firstLoading && (
             <div className={styles.spinLoading}><Spin type="spinner">加载中...</Spin></div>
@@ -33,9 +41,10 @@ class Index extends React.Component {
           pageData?.length
             ? (
               <List
+                height={this.state.height}
                 className={styles.list}
                 onRefresh={this.props.dispatch}
-                noMore={currentPage >= totalPage}
+                noMore={page > totalPage}
               >
                 {
                   pageData?.map((item, index) => (

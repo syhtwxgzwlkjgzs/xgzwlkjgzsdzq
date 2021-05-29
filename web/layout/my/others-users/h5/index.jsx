@@ -28,7 +28,7 @@ class H5OthersPage extends React.Component {
     const { query } = this.props.router;
     const id = this.props.user?.id;
     if (String(id) === query.id) {
-      Router.push({ url: '/my' });
+      Router.replace({ url: '/my' });
       return;
     }
     if (query.id) {
@@ -48,6 +48,12 @@ class H5OthersPage extends React.Component {
     if (query.id) {
       await this.props.user.getTargetUserThreads(query.id);
     }
+    return;
+  };
+
+  formatUserThreadsData = (targetUserThreads) => {
+    if (Object.keys(targetUserThreads).length === 0) return [];
+    return Object.values(targetUserThreads).reduce((fullData, pageData) => [...fullData, ...pageData]);
   };
 
   render() {
@@ -59,7 +65,7 @@ class H5OthersPage extends React.Component {
         showHeader={true}
         showTabBar={false}
         immediateCheck={true}
-        onRefresh={this.fetchTargetUserThreads}
+        onRefresh={targetUserThreads && targetUserThreads.length > 0 ? this.fetchTargetUserThreads : null}
         noMore={targetUserThreadsTotalPage < targetUserThreadsPage}
       >
         <div className={styles.mobileLayout}>
@@ -86,11 +92,12 @@ class H5OthersPage extends React.Component {
             </div>
 
             <div className={styles.threadItemContainer}>
-              {targetUserThreads && targetUserThreads.length > 0 ? (
-                <UserCenterThreads data={targetUserThreads} />
-              ) : (
+              {this.formatUserThreadsData(targetUserThreads)
+              && this.formatUserThreadsData(targetUserThreads).length > 0 ? (
+                <UserCenterThreads data={this.formatUserThreadsData(targetUserThreads)} />
+                ) : (
                 <NoData />
-              )}
+                )}
             </div>
           </div>
         </div>

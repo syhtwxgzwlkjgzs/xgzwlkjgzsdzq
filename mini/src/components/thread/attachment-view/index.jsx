@@ -32,6 +32,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
   const downloader = new Downloader();
   const [downloading, setDownloading] =
         useState(Array.from({length: attachments.length}, () => false));
+  const [errorMsg, setErrorMsg] = useState("");
 
   const getFileType = (filepath) => {
     return filepath.substr(filepath.lastIndexOf('.') + 1);
@@ -58,10 +59,19 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
           success(res) {
           },
           fail(error) {
-            console.error("文件类型不支持下载", error.errMsg);
+            setErrorMsg("微信小程序暂不支持此文件类型下载");
+            setTimeout(() => {
+              setErrorMsg("");
+            }, 3000);
+            console.error(error.errMsg);
           },
         });
       }).catch((error) => {
+        setErrorMsg(["下载失败"]);
+        setTimeout(() => {
+          errorMsg = "";
+          setErrorMsg([""]);
+        }, 3000);
         console.error(error.errMsg)
       }).finally(() => {
         downloading[index] = false;
@@ -132,6 +142,13 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
 
   return (
     <View>
+        { errorMsg !== "" && (
+            <View className={styles.errorMsgWrapper}>
+              <Icon className={styles.tipsIcon} size={20} name={'WrongOutlined'}></Icon>
+              <Text className={styles.errorMessage}>{errorMsg}</Text> 
+            </View>
+          )
+        }
         {
           attachments.map((item, index) => {
             // 获取文件类型

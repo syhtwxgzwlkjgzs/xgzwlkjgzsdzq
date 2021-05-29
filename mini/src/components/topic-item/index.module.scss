@@ -16,7 +16,7 @@
     font-size: $font-size-middle;
     line-height: 26px;
     max-height: 50px;
-    margin: $padding-4n 0;
+    margin: 16px 0 8px ;
     @include lamp-clamp($line: 2);
     .richText{
       display: inline-block;
@@ -41,7 +41,7 @@
       color: $text-color-secondary;
     }
     .dot {
-      margin: 0 $padding-2n;
+      margin: 0 9px;
       color: $text-color-secondary;
     }
   }

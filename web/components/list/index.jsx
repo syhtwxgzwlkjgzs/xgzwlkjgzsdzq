@@ -59,14 +59,14 @@ const List = forwardRef(({
       jumpToScrollTop,
       currentScrollTop,
       isLoading,
-      resetList
+      resetList,
     }),
   );
 
   const resetList = () => {
-    setIsLoading(false)
-    setIsError(false)
-  }
+    setIsLoading(false);
+    setIsError(false);
+  };
 
   const throttle = (fn, delay) => {
     let timer = null;

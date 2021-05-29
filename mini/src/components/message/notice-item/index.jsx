@@ -105,7 +105,7 @@ class Index extends Component {
   }
 
   render() {
-    const { type, item = {} } = this.props;
+    const { type, item = {}, isLast } = this.props;
     const avatarUrl = this.getAvatar(item.avatar);
 
     return (
@@ -143,6 +143,7 @@ class Index extends Component {
             [styles['detail-thread']]: type === 'thread',
             [styles['detail-financial']]: type === 'financial',
             [styles['detail-account']]: type === 'account',
+            [styles['border-none']]: isLast,
           })}
           >
             {/* 顶部 */}
