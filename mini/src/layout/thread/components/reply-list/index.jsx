@@ -47,8 +47,8 @@ export default class ReplyList extends React.Component {
       <View className={styles.replyList}>
         <View className={styles.replyListAvatar} onClick={this.props.avatarClick('2')}>
           <Avatar
-            image={this.props.data.user.avatar}
-            name={this.props.data.user.nickname || this.props.data.user.userName || ''}
+            image={this.props?.data?.user?.avatar}
+            name={this.props?.data?.user?.nickname || this?.props?.data?.user?.userName || ''}
             circle={true}
             size="small"
           ></Avatar>
@@ -56,9 +56,10 @@ export default class ReplyList extends React.Component {
         <View className={styles.replyListContent}>
           <View className={styles.replyListContentText}>
             <View className={styles.replyListName}>
-              {this.props.data.user.nickname || this.props.data.user.userName}
+              {this.props.data?.user?.nickname || this.props.data?.user?.userName || '未知用户'}
             </View>
             <View className={styles.replyListText}>
+              {/* 二级回复用户 */}
               {this.props.data.commentUserId && this.props?.data?.commentUser ? (
                 <View className={styles.commentUser}>
                   <View className={styles.replyedAvatar} onClick={this.props.avatarClick('3')}>
@@ -77,25 +78,29 @@ export default class ReplyList extends React.Component {
               ) : (
                 ''
               )}
+              {/* 回复内容 */}
               <View
                 className={classnames(styles.content, this.props.isShowOne && styles.isShowOne)}
                 dangerouslySetInnerHTML={{ __html: this.filterContent() }}
               ></View>
             </View>
           </View>
-          <View className={styles.replyListFooter}>
-            <View className={styles.replyTime}>{diffDate(this.props.data.createdAt)}</View>
-            <View className={styles.extraBottom}>
-              <View className={this.props?.data?.isLiked ? styles.replyLike : styles.replyLiked}>
-                <Text onClick={() => this.likeClick(canLike)}>
-                  赞&nbsp;{this.props?.data?.likeCount === 0 ? '' : this.props.data.likeCount}
-                </Text>
-              </View>
-              <View className={styles.replyReply}>
-                <Text onClick={() => this.replyClick()}>回复</Text>
+
+          {this.props?.data?.user && (
+            <View className={styles.replyListFooter}>
+              <View className={styles.replyTime}>{diffDate(this.props.data.createdAt)}</View>
+              <View className={styles.extraBottom}>
+                <View className={this.props?.data?.isLiked ? styles.replyLike : styles.replyLiked}>
+                  <Text onClick={() => this.likeClick(canLike)}>
+                    赞&nbsp;{this.props?.data?.likeCount === 0 ? '' : this.props.data.likeCount}
+                  </Text>
+                </View>
+                <View className={styles.replyReply}>
+                  <Text onClick={() => this.replyClick()}>回复</Text>
+                </View>
               </View>
             </View>
-          </View>
+          )}
         </View>
       </View>
     );

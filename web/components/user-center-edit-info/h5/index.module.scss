@@ -95,6 +95,12 @@
       }
     }
   }
+  >label {
+    color: $text-color-regular;
+  }
+  >div {
+    color: $text-color-primary;
+  }
 }
 
 .userCenterEditBottom {

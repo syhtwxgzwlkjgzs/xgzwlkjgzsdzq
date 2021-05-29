@@ -15,6 +15,7 @@ import SiteInfo from '../site-info';
 import { inviteDetail } from '@server';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import PayBox from '@components/payBox';
+import { simpleRequest } from '@common/utils/simple-request';
 
 @inject('site')
 @inject('index')
@@ -28,12 +29,12 @@ class PartnerInviteH5Page extends React.Component {
     this.state = {
       invitorName: '',
       invitorAvatar: '/dzq-img/login-user.png',
-    }
+    };
   }
   async componentDidMount() {
     try {
       const { forum, search } = this.props;
-      const usersList = await forum.useRequest('readUsersList', {
+      const usersList = await simpleRequest('readUsersList', {
         params: {
           filter: {
             hot: 1,
@@ -44,14 +45,14 @@ class PartnerInviteH5Page extends React.Component {
       const { inviteCode } = this.props.router.query;
       const inviteResp = await inviteDetail({
         params: {
-          code: inviteCode
-        }
+          code: inviteCode,
+        },
       });
       const nickname = get(inviteResp, 'data.user.nickname', '');
       const avatar = get(inviteResp, 'data.user.avatar', '');
       this.setState({
         invitorName: nickname,
-        invitorAvatar: avatar
+        invitorAvatar: avatar,
       });
 
       forum.setUsersPageData(usersList);
@@ -73,7 +74,7 @@ class PartnerInviteH5Page extends React.Component {
   handleJoinSite = () => {
     const { user, site } = this.props;
     if (!user?.isLogin()) {
-      goToLoginPage({ url: '/user/login', query: { inviteCode: this.inviteCode } });
+      goToLoginPage({ url: '/user/login' });
       return;
     }
     const { setSite: { siteMode, sitePrice, siteName } = {} } = site.webConfig;
@@ -83,7 +84,7 @@ class PartnerInviteH5Page extends React.Component {
         data: {      // data 中传递后台参数
           amount: sitePrice,
           title: siteName,
-          type: 1, // 付费注册
+          type: 1, // 站点付费注册
         },
         isAnonymous: false, // 是否匿名
         success: (orderInfo) => {

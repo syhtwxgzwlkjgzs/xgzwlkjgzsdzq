@@ -5,7 +5,7 @@ import { Icon, Button, Toast, Avatar } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import Header from '@components/header';
 import layout from './index.module.scss';
-import h5Share from '@discuzq/sdk/dist/common_modules/share/h5'
+import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 
 @inject('site')
 @inject('user')
@@ -13,13 +13,22 @@ import h5Share from '@discuzq/sdk/dist/common_modules/share/h5'
 @observer
 class InviteH5Page extends React.Component {
   async componentDidMount() {
-    await this.props.invite.getInviteUsersList();
+    try {
+      await this.props.invite.getInviteUsersList();
+    } catch (e) {
+      Toast.error({
+        content: e.Message,
+      });
+    }
   }
 
   createInviteLink = async () => {
     try {
+      const { site: { setSite: { siteTitle } = {} } = {}, invite } = this.props;
       await this.props.invite.createInviteLink();
-      h5Share({title: `${window.location.origin}`, path: `/forum/partner-invite?inviteCode=${this.props.invite.inviteLink}`});
+      const clipboardObj = navigator.clipboard;
+      await clipboardObj.writeText(`${window.location.origin}/forum/partner-invite?inviteCode=${invite.inviteCode}`);
+      h5Share({ title: `邀请您加入${siteTitle || ''}`, path: `/forum/partner-invite?inviteCode=${invite.inviteCode}` });
       Toast.success({
         content: '创建邀请链接成功',
         duration: 1000,
