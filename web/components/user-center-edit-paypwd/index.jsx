@@ -122,6 +122,7 @@ class index extends Component {
       <h3>设置支付密码</h3>
       <div className={styles.paypwdInput}>
         <Input
+          className={styles.input}
           type="number"
           maxLength={6}
           value={this.props.payBox?.password}
@@ -140,6 +141,7 @@ class index extends Component {
       <div className={styles.labelInfo}>
         <div className={styles.labelValue}>
           <Input
+            className={styles.input}
             type="number"
             maxLength={6}
             value={this.props.payBox?.oldPayPwd}
