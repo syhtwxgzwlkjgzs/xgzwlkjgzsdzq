@@ -114,7 +114,7 @@ class WXLoginH5Page extends React.Component {
             {this.props.site.isUserLoginVisible && (
               <span
                 onClick={() => {
-                  this.props.router.push('/user/username-login');
+                  this.props.router.replace('/user/username-login');
                 }}
                 className={platform === 'h5' ? layout['otherLogin-button-weixin'] : layout.button_left}
               >
@@ -124,7 +124,7 @@ class WXLoginH5Page extends React.Component {
             {this.props.site.isSmsOpen && (
               <span
                 onClick={() => {
-                  this.props.router.push('/user/phone-login');
+                  this.props.router.replace('/user/phone-login');
                 }}
                 className={platform === 'h5' ? layout['otherLogin-button-user'] : layout.button_right}
               >

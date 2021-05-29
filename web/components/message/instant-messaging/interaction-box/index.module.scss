@@ -2,7 +2,7 @@
 
 .h5InteractionBox {
   display: flex;
-  position: absolute;
+  // position: absolute;
   justify-content: space-between;
   bottom: 0;
   left: 0;
@@ -16,13 +16,15 @@
     background-color: $text-bg-color2;
     border-radius: rem($border-radius-small);
     flex: 2;
-    justify-content: space-between;
+    // justify-content: space-between;
     margin-left: $im-pagebed-padding;
     :global {
       .dzq-input {
-        width: auto;
+        width: 100%;
+
       }
       .dzq-input__inner {
+        border: none;
         background-color: $text-bg-color2;
         border-top-right-radius: unset;
         border-bottom-right-radius: unset;
@@ -93,4 +95,8 @@
 
 .submit {
   display: flex;
+}
+
+.emoji {
+  overflow: hidden;
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './index.module.scss';
-import { Divider } from '@discuzq/design';
+import { Divider, Spin } from '@discuzq/design';
 import UserCenterHeaderImage from '@components/user-center-header-images';
 import UserCenterHead from '@components/user-center-head';
 import { inject, observer } from 'mobx-react';
@@ -19,26 +19,37 @@ class H5OthersPage extends React.Component {
   constructor(props) {
     super(props);
     this.props.user.cleanTargetUserThreads();
+    this.state = {
+      fetchUserInfoLoading: true,
+    };
   }
 
   componentDidMount = async () => {
     const { query } = this.props.router;
-    const id = this.props.user?.id
+    const id = this.props.user?.id;
     if (String(id) === query.id) {
-      Router.push({ url: '/my' })
-      return
+      Router.push({ url: '/my' });
+      return;
     }
     if (query.id) {
       await this.props.user.getTargetUserInfo(query.id);
+      this.setState({
+        fetchUserInfoLoading: false,
+      });
     }
   };
+
+  componentWillUnmount() {
+    this.props.user.removeTargetUserInfo();
+  }
 
   fetchTargetUserThreads = async () => {
     const { query } = this.props.router;
     if (query.id) {
       await this.props.user.getTargetUserThreads(query.id);
     }
-  }
+    return;
+  };
 
   render() {
     const { site, user } = this.props;
@@ -49,12 +60,22 @@ class H5OthersPage extends React.Component {
         showHeader={true}
         showTabBar={false}
         immediateCheck={true}
-        onRefresh={this.fetchTargetUserThreads}
+        onRefresh={targetUserThreads && targetUserThreads.length > 0 ? this.fetchTargetUserThreads : null}
         noMore={targetUserThreadsTotalPage < targetUserThreadsPage}
       >
         <div className={styles.mobileLayout}>
-          <UserCenterHeaderImage isOtherPerson={true} />
-          <UserCenterHead platform={platform} isOtherPerson={true} />
+          {this.state.fetchUserInfoLoading && (
+            <div className={styles.loadingSpin}>
+              <Spin type="spinner">加载中...</Spin>
+            </div>
+          )}
+          {!this.state.fetchUserInfoLoading && (
+            <>
+              <UserCenterHeaderImage isOtherPerson={true} />
+              <UserCenterHead platform={platform} isOtherPerson={true} />
+            </>
+          )}
+
           <div className={styles.unit}>
             <div className={styles.threadUnit}>
               <div className={styles.threadTitle}>主题</div>

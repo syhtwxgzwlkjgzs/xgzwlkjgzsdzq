@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import WalletStore from './store';
-import { readWalletUser, readWalletLog, readWalletCash } from '@server';
+import { readWalletUser, readWalletLog, readWalletCash, createWalletCash } from '@server';
 import time from '@discuzq/sdk/dist/time';
 import { get } from '@common/utils/get';
 
@@ -176,6 +176,25 @@ class WalletAction extends WalletStore {
       throw {
         Code: cashInfoRes.code,
         Msg: cashInfoRes.Msg,
+      };
+    }
+
+    // 发起提现
+    @action
+    createWalletCash = async ({ money }) => {
+      const res = await createWalletCash({
+        data: {
+          cashApplyAmount: money,
+        },
+      });
+
+      if (res.code === 0) {
+        return res.data;
+      }
+
+      throw {
+        Code: res.code,
+        Msg: res.msg,
       };
     }
 }

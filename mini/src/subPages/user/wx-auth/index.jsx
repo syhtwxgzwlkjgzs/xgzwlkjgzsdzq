@@ -24,12 +24,12 @@ class MiniAuth extends React.Component {
   }
   async componentDidMount() {
     const { action, sessionToken } = getCurrentInstance().router.params;
+    await getParamCode(this.props.commonLogin)
     // 其他地方跳入的小程序绑定流程
     if(action === 'mini-bind'){
       redirectTo({
         url: `/subPages/user/wx-bind/index?sessionToken=${sessionToken}`
       })
-      return;
     }
   }
 
@@ -41,7 +41,6 @@ class MiniAuth extends React.Component {
     commonLogin.setAvatarUrl(avatarUrl);
     commonLogin.setNickname(nickName);
     try {
-      await getParamCode(this.props.commonLogin);
       // 小程序登录
       const resp = await miniLogin({
         timeout: 10000,

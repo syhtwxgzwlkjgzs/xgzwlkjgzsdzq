@@ -155,7 +155,7 @@ class Index extends Component {
     const _isTop = scrollTop === 0;
     isTop !== _isTop && this.setState({
       isTop: _isTop,
-      damping: _isTop ? 100 : 0,
+      damping: _isTop ? 80 : 0,
     });
   }
 
@@ -207,6 +207,7 @@ class Index extends Component {
                   key={item.id}
                   item={item}
                   index={index}
+                  isLast={list.length === (index + 1)}
                   currentId={currentId}
                   onSliderTouch={(id) => this.setState({ currentId: id })}
                   {...other}

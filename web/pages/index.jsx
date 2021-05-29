@@ -18,7 +18,11 @@ class Index extends React.Component {
     const sticks = await readStickList({}, ctx);
     const sequence = site && site.webConfig && site.webConfig.setSite ? site.webConfig.setSite.siteOpenSort : 0;
 
-    const threads = await readThreadList({ params: { filter: {}, sequence, perPage: 10, page: 1 } }, ctx);
+    const threads = await readThreadList({ params: { filter: {
+      sort: 1,
+      attention: 0,
+      essence: 0
+    }, sequence, perPage: 10, page: 1 } }, ctx);
 
     return {
       serverIndex: {
@@ -40,7 +44,7 @@ class Index extends React.Component {
 
   async componentDidMount() {
     const { index } = this.props;
-    const { categoryids, types, essence, sequence, attention, sort } = index.filter;
+    const { categoryids, types, essence = 0, sequence = 0, attention = 0, sort = 1 } = index.filter;
 
     let newTypes = [];
     if (types) {
@@ -90,22 +94,16 @@ class Index extends React.Component {
     let categoryIds = [];
     if (categoryids) {
       if (!(categoryids instanceof Array)) {
-        categoryIds = [categoryids];
+        categoryIds = [categoryids].filter(item => item !== '');
       } else {
-        categoryIds = categoryids;
+        categoryIds = categoryids.filter(item => item !== '');
       }
     }
 
     if (type === 'click-filter') { // 点击tab
-      this.toastInstance = Toast.loading({
-        content: '加载中...',
-        duration: 0,
-      });
-
+      
       this.page = 1;
       await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
-
-      this.toastInstance?.destroy();
     } else if (type === 'moreData') {
       this.page += 1;
       return await index.getReadThreadList({
