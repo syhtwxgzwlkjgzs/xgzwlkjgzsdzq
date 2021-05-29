@@ -149,7 +149,12 @@ class PartnerInviteH5Page extends React.Component {
             {
               !isLoading && threadsPageData?.length
                 ? <PopularContents data={threadsPageData} onItemClick={this.onPostClick} />
-                : <NoData />
+                : <></>
+            }
+            {
+              !isLoading && !threadsPageData?.length
+                ? <NoData />
+                : <></>
             }
             {
               isLoading
@@ -160,6 +165,7 @@ class PartnerInviteH5Page extends React.Component {
             }
           </div>
           {/* 热门内容预览 end */}
+          <div className={layout.maskLayer}></div>
           <div className={layout.bottom}>
             {
               inviteCode
