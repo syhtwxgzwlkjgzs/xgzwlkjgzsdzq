@@ -1,7 +1,11 @@
 @import "@common/styles/index.scss";
-.wrapper{
+.wrapper {
   height: 100%;
-  background: $white;
+  background: $body-bg-color;
   border-radius: $border-radius-small $border-radius-small 0 0;
   overflow: hidden;
+
+  &.pc {
+    height: 850px;
+  }
 }

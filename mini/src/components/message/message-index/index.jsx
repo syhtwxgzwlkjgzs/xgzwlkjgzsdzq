@@ -81,7 +81,6 @@ const Index = ({ message }) => {
     <View className={styles.container}>
       <Notice
         type='chat'
-        height='calc(100vh - 65px)'
         withBottomBar={true}
         noMore={currentPage >= totalPage}
         topCard={<Card items={items} onClick={toOtherMessage} />}
