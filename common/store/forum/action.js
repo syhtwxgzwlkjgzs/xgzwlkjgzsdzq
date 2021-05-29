@@ -44,6 +44,11 @@ class ForumAction extends ForumStore {
   }
 
   @action
+  setIsLoading(is) {
+    this.isLoading = is;
+  }
+
+  @action
   setUsersPageData(res) {
     const data = get(res, 'pageData', []);
     const total = get(res, 'totalCount', 0);
