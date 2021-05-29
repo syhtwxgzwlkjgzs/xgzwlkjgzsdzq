@@ -8,6 +8,7 @@ import { diffDate } from '@common/utils/diff-date';
 import { observer } from 'mobx-react';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
+import classNames from 'classnames';
 
 import redPacketMini from '../../../../../../web/public/dzq-img/redpacket-mini.png';
 import coin from '../../../../../../web/public/dzq-img/coin.png';
@@ -140,7 +141,7 @@ class CommentList extends React.Component {
               </View>
               {/* 评论内容 */}
               <View
-                className={styles.commentListText}
+                className={classNames(styles.commentListText, this.state.isShowOne && styles.isShowOne)}
                 dangerouslySetInnerHTML={{ __html: this.filterContent() }}
               ></View>
             </View>

@@ -78,22 +78,26 @@ const Index = ({
           postList.map((item, index) => (
               item.name === '分享'?(
                 <Button  plain='true' className={styles.fabulous} openType='share' data-threadId={tipData.threadId} >
-                  <Icon
-                  className={`${styles.icon} ${item.type}`}
-                  name={item.icon}
-                  size={16}>
-                </Icon>
+                  <View className={styles.fabulousIcon}>
+                    <Icon
+                    className={`${styles.icon} ${item.type}`}
+                    name={item.icon}
+                    >
+                  </Icon>
+                  </View>
                   <Text className={styles.fabulousPost}>
                   {item.name}
                 </Text>
                 </Button>
               ):
               (<View key={index} className={styles.fabulous} onClick={item.event}>
-                <Icon
-                  className={`${styles.icon} ${item.type} ${item.name === '赞' ? '' : styles.m3} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`}
-                  name={item.icon}
-                  size={16}>
-                </Icon>
+                 <View className={styles.fabulousIcon}>
+                    <Icon
+                    className={`${styles.icon} ${item.type}`}
+                    name={item.icon}
+                    size={16}>
+                  </Icon>
+                </View>
                 <Text className={isLiked && item.name ===  '赞' ? styles.fabulousCancel: styles.fabulousPost}>
                   {item.name}
                 </Text>
