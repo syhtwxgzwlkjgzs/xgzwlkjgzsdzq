@@ -1,5 +1,4 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/mixin/login.scss';
 
 .content {
   padding: $padding-6n;
@@ -10,35 +9,30 @@
     color: $text-color-primary;
     letter-spacing: 1px;
   }
-  .paypwdInput {
-    height: rem(62);
-    box-sizing: border-box;
-    .input {
-      @include input;
-      @include passwordInput;
-    }
-  }
 }
 
 .labelInfo {
   .labelValue {
-    .input {
-      @include input;
-      @include passwordInput;
+    :global {
+      .dzq-input {
+        width: 100%;
+      }
+      .dzq-input__inner {
+        width: 100%;
+        height: rem(62);
+        line-height: rem(62);
+        border: none;
+        border-bottom: 1px solid $border-color;
+        border-radius: 0;
+      }
+      .dzq-input__icon {
+        line-height: rem(62);
+      }
     }
-  }
-  .tips {
-    width: 100%;
-    text-align: right;
-    font-size: rem($font-size-primary);
-    text-align: right;
-    color: $primary-color;
-    padding-right: rem($padding-6n);
-    margin-top: rem($margin-6n);
   }
 }
 
-#setPayPwdContent {
+#resetUserName {
   .bottom {
     position: fixed;
     bottom: 0;
