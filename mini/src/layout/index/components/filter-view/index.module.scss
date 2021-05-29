@@ -45,10 +45,10 @@
   }
 
   .list {
-    overflow-y: auto;
-    height: 100%;
-    width: 100%;
-    overflow-x: hidden;
+    // overflow-y: auto;
+    // height: 100%;
+    // width: 100%;
+    // overflow-x: hidden;
   }
 
   .title {
@@ -69,12 +69,18 @@
     height: 36px;
     border-radius: $border-radius-small;
     background: $text-bg-color2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    line-height: 36px;
+    text-align: center;
     color: $text-color-primary;
   }
-
+  Text:after {
+    content: ' ';
+    display: inline-block;
+    width: 0;
+    height: 100%;
+    vertical-align: middle;
+    margin-top: 4px;
+  }
   .active {
     background: $primary-color;
     color: $white;

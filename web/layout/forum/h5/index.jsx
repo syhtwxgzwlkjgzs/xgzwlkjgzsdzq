@@ -9,14 +9,16 @@ import List from '@components/list';
 import { get } from '@common/utils/get';
 import layout from './index.module.scss';
 import UserCenterFriends from '@components/user-center-friends';
+import { simpleRequest } from '@common/utils/simple-request';
 
 @inject('site')
 @inject('forum')
+@inject('user')
 @observer
 class ForumH5Page extends React.Component {
   async componentDidMount() {
-    const { forum } = this.props;
-    const usersList = await forum.useRequest('readUsersList', {
+    const { forum} = this.props;
+    const usersList = await simpleRequest('readUsersList', {
       params: {
         filter: {
           hot: 0,
@@ -106,7 +108,7 @@ class ForumH5Page extends React.Component {
           {/* 我的角色 start */}
           <div className={layout.list}>
             <div className={layout.label}>我的角色</div>
-            <div className={layout.right}>UI专用</div>
+            <div className={layout.right}>{this.props.user?.userInfo?.group?.groupName}</div>
           </div>
           {/* 我的角色 end */}
           {/* 当前版本 start */}

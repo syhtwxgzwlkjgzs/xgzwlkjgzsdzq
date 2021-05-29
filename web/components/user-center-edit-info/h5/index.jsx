@@ -104,6 +104,17 @@ class index extends Component {
     Router.push({ url: '/my/edit/mobile' });
   };
 
+  handleGoToEditUserName = () => {
+    if (!this.props.user.canEditUsername) {
+      Toast.error({
+        content: '用户名一年只能修改一次',
+        duration: 1000,
+      });
+      return;
+    }
+    Router.push({ url: '/my/edit/username' });
+  };
+
   handleGoToEditAccountPwd = () => {
     Router.push({ url: '/my/edit/pwd' });
   };
@@ -113,6 +124,8 @@ class index extends Component {
   };
 
   render() {
+    // 条件都满足时才显示微信
+    const IS_WECHAT_ACCESSABLE = this.props.wechatEnv !== 'none' && !!this.user.wxNickname
     return (
       <div>
         {/* 头部 */}
@@ -128,7 +141,11 @@ class index extends Component {
           <div className={styles.userCenterEditItem}>
             <div className={styles.userCenterEditLabel}>
               <label>用户名</label>
-              <div>{this.user.editUserName}</div>
+
+              <div className={styles.userCenterEditValue} onClick={this.handleGoToEditUserName}>
+                <div className={styles.ucText}>{this.user.username}</div>
+                <Icon name="RightOutlined" />
+              </div>
             </div>
           </div>
           {this.props.site?.isSmsOpen && (
@@ -160,7 +177,7 @@ class index extends Component {
               <Icon name="RightOutlined" />
             </div>
           </div>
-          {this.props.wechatEnv !== 'none' && (
+          {IS_WECHAT_ACCESSABLE && (
             <div className={styles.userCenterEditItem} style={{ border: 'none' }}>
               <div className={styles.userCenterEditLabel}>
                 <label>微信</label>

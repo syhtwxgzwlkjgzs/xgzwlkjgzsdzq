@@ -104,7 +104,8 @@ class IndexAction extends IndexStore {
       }
       return result.data;
     }
-    return Promise.reject();
+
+    return Promise.reject(result?.msg || '');
   }
 
   /**

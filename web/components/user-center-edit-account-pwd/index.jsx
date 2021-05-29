@@ -7,6 +7,7 @@ import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import throttle from '@common/utils/thottle.js';
 import { trimLR } from '@common/utils/get-trimly.js';
+import classNames from 'classnames';
 @inject('site')
 @inject('user')
 @observer
@@ -115,20 +116,24 @@ class index extends Component {
       <div className={styles.labelInfo}>
         <div className={styles.labelValue}>
           <Input
+            className={styles.input}
             onChange={this.handleSetPwd}
             mode="password"
             placeholder="请设置密码"
             value={this.props.user?.newPassword}
+            trim
           />
         </div>
       </div>
       <div className={styles.labelInfo}>
         <div className={styles.labelValue}>
           <Input
+            className={styles.input}
             mode="password"
             placeholder="请确认密码"
             value={this.props.user?.newPasswordRepeat}
             onChange={this.hadleNewPasswordRepeat}
+            trim
           />
         </div>
       </div>
@@ -142,30 +147,36 @@ class index extends Component {
       <div className={styles.labelInfo}>
         <div className={styles.labelValue}>
           <Input
+            className={styles.input}
             value={this.props.user?.oldPassword}
             onChange={this.handleSetOldPwd}
             mode="password"
             placeholder="请输入旧密码"
+            trim
           />
         </div>
       </div>
       <div className={styles.labelInfo}>
         <div className={styles.labelValue}>
           <Input
+            className={styles.input}
             value={this.props.user?.newPassword}
             onChange={this.handleSetPwd}
             mode="password"
             placeholder="请输入新密码"
+            trim
           />
         </div>
       </div>
       <div className={styles.labelInfo}>
         <div className={styles.labelValue}>
           <Input
+            className={styles.input}
             onChange={this.hadleNewPasswordRepeat}
             mode="password"
             value={this.props.user?.newPasswordRepeat}
             placeholder="请重复输入新密码"
+            trim
           />
         </div>
       </div>
@@ -183,7 +194,7 @@ class index extends Component {
 
     let isSubmit = false;
     if (this.props.user?.hasPassword) {
-      isSubmit = !oldPassword || !newPassword || !newPasswordRepeat || newPassword !== newPasswordRepeat;
+      isSubmit = !oldPassword || !newPassword || !newPasswordRepeat
     } else {
       isSubmit = !newPassword || !newPasswordRepeat;
     }
@@ -202,7 +213,11 @@ class index extends Component {
             忘记旧密码？
           </div>
         )}
-        <div className={styles.bottom}>
+        <div
+          className={classNames(styles.bottom,{
+            [styles.bgBtnColor]: !this.getDisabledWithButton(),
+          })}
+        >
           <Button
             full
             onClick={this.handleSubmit}

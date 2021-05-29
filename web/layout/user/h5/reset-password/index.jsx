@@ -105,6 +105,7 @@ class ResetPasswordH5Page extends React.Component {
           { platform === 'h5' ? <></> : <div className={layout.tips}>新密码</div> }
           <Input
             clearable={false}
+            trim
             className={platform === 'h5' ? layout.input : layout.pc_input}
             mode="password"
             value={this.props.resetPassword.newPassword}
@@ -116,6 +117,7 @@ class ResetPasswordH5Page extends React.Component {
           { platform === 'h5' ? <></> : <div className={layout.tips}>重复新密码</div> }
           <Input
             clearable={false}
+            trim
             className={platform === 'h5' ? layout.input : layout.pc_input}
             mode="password"
             value={this.props.resetPassword.newPasswordRepeat}

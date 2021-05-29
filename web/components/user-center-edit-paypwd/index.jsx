@@ -8,6 +8,7 @@ import HOCFetchSiteData from '../../middleware/HOCFetchSiteData';
 import Router from '@discuzq/sdk/dist/router';
 import GetQueryString from '../../../common/utils/get-query-string';
 import throttle from '@common/utils/thottle.js';
+import classNames from 'classnames';
 
 @inject('site')
 @inject('user')
@@ -122,12 +123,14 @@ class index extends Component {
       <h3>设置支付密码</h3>
       <div className={styles.paypwdInput}>
         <Input
+          className={styles.input}
           type="number"
           maxLength={6}
           value={this.props.payBox?.password}
           onChange={this.handleSetPwd}
           placeholder="请设置您的支付密码"
           mode="password"
+          trim
         />
       </div>
     </div>
@@ -140,12 +143,14 @@ class index extends Component {
       <div className={styles.labelInfo}>
         <div className={styles.labelValue}>
           <Input
+            className={styles.input}
             type="number"
             maxLength={6}
             value={this.props.payBox?.oldPayPwd}
             mode="password"
             placeholder="请输入旧密码"
             onChange={this.handleChangeOldPwd}
+            trim
           />
         </div>
         {
@@ -164,7 +169,11 @@ class index extends Component {
       <div id={styles.setPayPwdContent}>
         <Header />
         {this.props.user?.canWalletPay ? this.renderCanPayPwd() : this.renderSetPayPwd()}
-        <div className={styles.bottom}>
+        <div className={styles.bottom}
+          className={classNames(styles.bottom,{
+            [styles.bgBtnColor]: !this.getDisabledWithButton()
+          })}
+        >
           {this.props.user?.canWalletPay ? (
             <Button
               full

@@ -80,6 +80,8 @@ class HomeHeader extends React.Component {
     const { countUsers, countThreads } = this.getSiteInfo();
 
     return (
+      <>
+      <View className={styles.topBarForMini} style={this.getBgHeaderStyle(bgColor)}></View>
       <View ref={this.domRef}
         className={`${styles.container} ${mode ? styles[`container_mode_${mode}`] : ''}`} 
         style={{...style, ...this.getBgHeaderStyle(bgColor)}}
@@ -125,6 +127,7 @@ class HomeHeader extends React.Component {
         </View>}
         {isWeiXin && <SharePopup visible={visible} onClose={this.onClose} />}
       </View>
+      </>
     );
   }
 }

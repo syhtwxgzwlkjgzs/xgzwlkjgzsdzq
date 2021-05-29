@@ -20,6 +20,8 @@ import {
 } from '@server';
 import { get } from '../../utils/get';
 import set from '../../utils/set';
+import typeofFn from '@common/utils/typeof';
+import threadReducer from '../thread/reducer';
 
 class UserAction extends SiteStore {
   constructor(props) {
@@ -337,7 +339,10 @@ class UserAction extends SiteStore {
     const pageData = get(userThreadList, 'data.pageData', []);
     const totalPage = get(userThreadList, 'data.totalPage', 1);
     this.userThreadsTotalPage = totalPage;
-    this.userThreads = [...this.userThreads, ...pageData];
+    this.userThreads = {
+      ...this.userThreads,
+      [this.userThreadsPage]: pageData,
+    };
     this.userThreadsTotalCount = get(userThreadList, 'data.totalCount', 0);
 
     if (this.userThreadsPage <= this.userThreadsTotalPage) {
@@ -368,7 +373,10 @@ class UserAction extends SiteStore {
     const pageData = get(targetUserThreadList, 'data.pageData', []);
     const totalPage = get(targetUserThreadList, 'data.totalPage', 1);
     this.targetUserThreadsTotalPage = totalPage;
-    this.targetUserThreads = [...this.targetUserThreads, ...pageData];
+    this.targetUserThreads = {
+      ...this.targetUserThreads,
+      [this.targetUserThreads]: pageData,
+    };
     this.targetUserThreadsTotalCount = get(targetUserThreadList, 'data.totalCount', 0);
 
     if (this.targetUserThreadsPage <= this.targetUserThreadsTotalPage) {
@@ -382,10 +390,11 @@ class UserAction extends SiteStore {
    * 上传新的头像
    */
   @action
-  async updateAvatar(fileList) {
+  async updateAvatar(file) {
     const param = new FormData();
-    param.append('avatar', fileList[0]);// 通过append向form对象添加数据
+    param.append('avatar', file);// 通过append向form对象添加数据
     param.append('pid', this.id);
+
     const updateAvatarRes = await updateAvatar({
       transformRequest: [function (data) {
         return data;
@@ -412,9 +421,9 @@ class UserAction extends SiteStore {
    * 上传新的背景图
    */
   @action
-  async updateBackground(fileList) {
+  async updateBackground(file) {
     const param = new FormData();
-    param.append('background', fileList[0]);// 通过append向form对象添加数据
+    param.append('background', file);// 通过append向form对象添加数据
     const updateBackgroundRes = await updateBackground({
       transformRequest: [function (data) {
         return data;
@@ -432,7 +441,7 @@ class UserAction extends SiteStore {
       setTimeout(() => {
         this.userInfo.backgroundUrl = updateBackgroundRes.data.backgroundUrl;
         this.userInfo = { ...this.userInfo };
-      }, 300);
+      }, 500);
       return updateBackgroundRes.data;
     }
 
@@ -481,6 +490,24 @@ class UserAction extends SiteStore {
     throw {
       Code: setUserPasswordRes.code,
       Message: setUserPasswordRes.msg,
+    };
+  }
+
+  @action
+  async updateUsername() {
+    const updateUserInfoRes = await updateUsersUpdate({
+      data: {
+        username: this.editUserName,
+      },
+    });
+
+    if (updateUserInfoRes.code === 0) {
+      return updateUserInfoRes.data;
+    }
+
+    throw {
+      Code: updateUserInfoRes.code,
+      Msg: updateUserInfoRes.msg,
     };
   }
 
@@ -729,6 +756,93 @@ class UserAction extends SiteStore {
     this.cleanTargetUserThreads();
     this.cleanTargetUserFans();
     this.cleanTargetUserFollows();
+  }
+
+  /**
+    * 更新帖子列表指定帖子状态
+    * @param {number} threadId 帖子id
+    * @param {object}  obj 更新数据
+    * @param {boolean} obj.isLike 是否更新点赞
+    * @param {boolean} obj.isPost 是否更新评论数
+    * @param {boolean} obj.user 当前操作的用户
+    * @returns
+    */
+  @action
+  updateAssignThreadInfo(threadId, obj = {}) {
+    const targetThreads = this.findAssignThread(threadId);
+
+    if (!targetThreads || targetThreads.length === 0) return;
+
+    targetThreads.forEach((targetThread) => {
+      if (!targetThread) return;
+
+      const { index, key, data, store } = targetThread; // 这里是数组
+      const { updateType, updatedInfo, user } = obj;
+
+      if (!data && !data?.likeReward && !data?.likeReward?.users) return;
+
+      // 更新点赞
+      if (updateType === 'like' && !typeofFn.isUndefined(updatedInfo.isLiked)
+        && !typeofFn.isNull(updatedInfo.isLiked) && user) {
+        const { isLiked, likePayCount = 0 } = updatedInfo;
+        const theUserId = user.userId || user.id;
+        data.isLike = isLiked;
+
+        const userData = threadReducer.createUpdateLikeUsersData(user, 1);
+        // 添加当前用户到按过赞的用户列表
+        const newLikeUsers = threadReducer.setThreadDetailLikedUsers(data.likeReward, !!isLiked, userData);
+
+        data.likeReward.users = newLikeUsers;
+        data.likeReward.likePayCount = likePayCount;
+      }
+
+      // 更新评论
+      if (updateType === 'comment' && data?.likeReward) {
+        data.likeReward.postCount = data.likeReward.postCount + 1;
+      }
+
+      // 更新分享
+      if (updateType === 'share') {
+        data.likeReward.shareCount = data.likeReward.shareCount + 1;
+      }
+
+      if (store[key] && store[key][index]) {
+        store[key][index] = data;
+      }
+    });
+  }
+
+  // 获取指定的帖子数据
+  findAssignThread(threadId) {
+    const threadArr = [];
+
+    if (this.userThreads) {
+      const keys = Object.keys(this.userThreads);
+      keys.forEach((item) => {
+        const pageData = this.userThreads[item];
+
+        for (let i = 0; i < pageData.length; i++) {
+          if (pageData[i].threadId === threadId) {
+            threadArr.push({ key: item, index: i, data: pageData[i], store: this.userThreads });
+          }
+        }
+      });
+    }
+
+    if (this.targetUserThreads) {
+      const keys = Object.keys(this.targetUserThreads);
+      keys.forEach((item) => {
+        const pageData = this.targetUserThreads[item];
+
+        for (let i = 0; i < pageData.length; i++) {
+          if (pageData[i].threadId === threadId) {
+            threadArr.push({ key: item, index: i, data: pageData[i], store: this.targetUserThreads });
+          }
+        }
+      });
+    }
+
+    return threadArr;
   }
 }
 

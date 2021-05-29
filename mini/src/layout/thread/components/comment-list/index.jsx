@@ -8,6 +8,7 @@ import { diffDate } from '@common/utils/diff-date';
 import { observer } from 'mobx-react';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
+import classNames from 'classnames';
 
 import redPacketMini from '../../../../../../web/public/dzq-img/redpacket-mini.png';
 import coin from '../../../../../../web/public/dzq-img/coin.png';
@@ -125,83 +126,91 @@ class CommentList extends React.Component {
           </View>
         </View>
         <View className={styles.content}>
+          {/* 评论用户头像 */}
           <View className={styles.commentListAvatar} onClick={() => this.avatarClick()}>
             <Avatar
-              image={this.props.data.user.avatar}
-              name={this.props.data.user.nickname || this.props.data.user.userName || ''}
+              image={this.props?.data?.user?.avatar}
+              name={this.props.data?.user?.nickname || this.props.data?.user?.userName || ''}
               circle={true}
             ></Avatar>
           </View>
           <View className={styles.commentListContent}>
             <View className={styles.commentListContentText} onClick={() => this.toCommentDetail()}>
               <View className={styles.commentListName}>
-                {this.props.data.user.nickname || this.props.data.user.userName}
+                {this.props.data?.user?.nickname || this.props.data?.user?.userName || '未知用户'}
               </View>
-              <View className={styles.commentListText} dangerouslySetInnerHTML={{ __html: this.filterContent() }}></View>
+              {/* 评论内容 */}
+              <View
+                className={classNames(styles.commentListText, this.state.isShowOne && styles.isShowOne)}
+                dangerouslySetInnerHTML={{ __html: this.filterContent() }}
+              ></View>
             </View>
-            <View className={styles.commentListFooter}>
-              <View className={styles.commentBtn}>
-                <View className={styles.commentTime}>{diffDate(this.props.data.createdAt)}</View>
-                <View className={styles.extraBottom}>
-                  <View className={this.props?.data?.isLiked ? styles.commentLike : styles.commentLiked}>
-                    <Text onClick={() => this.likeClick(canLike)}>
-                      赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
-                    </Text>
-                  </View>
-                  <View className={styles.commentReply}>
-                    <Text onClick={() => this.replyClick()}>回复</Text>
-                  </View>
-                  {this.props.isShowAdopt && (
-                    <View className={styles.commentAdopt}>
-                      <Text onClick={() => this.props.onAboptClick()}>采纳</Text>
+            {/* 底部操作栏 */}
+            {this.props.data?.user && (
+              <View className={styles.commentListFooter}>
+                <View className={styles.commentBtn}>
+                  <View className={styles.commentTime}>{diffDate(this.props.data.createdAt)}</View>
+                  <View className={styles.extraBottom}>
+                    <View className={this.props?.data?.isLiked ? styles.commentLike : styles.commentLiked}>
+                      <Text onClick={() => this.likeClick(canLike)}>
+                        赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
+                      </Text>
                     </View>
-                  )}
-                  {!this.state.isHideEdit && canHide && (
-                    <View className={styles.extra}>
-                      {/* {canEdit && <View className={styles.revise} onClick={() => this.editClick()}>编辑</View>} */}
-                      {canHide && (
-                        <View className={styles.revise} onClick={() => this.deleteClick()}>
-                          删除
-                        </View>
-                      )}
+                    <View className={styles.commentReply}>
+                      <Text onClick={() => this.replyClick()}>回复</Text>
                     </View>
-                  )}
+                    {this.props.isShowAdopt && (
+                      <View className={styles.commentAdopt}>
+                        <Text onClick={() => this.props.onAboptClick()}>采纳</Text>
+                      </View>
+                    )}
+                    {!this.state.isHideEdit && canHide && (
+                      <View className={styles.extra}>
+                        {/* {canEdit && <View className={styles.revise} onClick={() => this.editClick()}>编辑</View>} */}
+                        {canHide && (
+                          <View className={styles.revise} onClick={() => this.deleteClick()}>
+                            删除
+                          </View>
+                        )}
+                      </View>
+                    )}
+                  </View>
                 </View>
-              </View>
-              {this.props.data?.replyCount - 1 > 0 && this.state.isShowOne ? (
-                <View className={styles.moreReply} onClick={() => this.toCommentDetail()}>
-                  查看之前{this.props.data?.replyCount - 1}条回复...
-                </View>
-              ) : (
-                ''
-              )}
-              {this.needReply?.length > 0 && (
-                <View className={styles.replyList}>
-                  {this.state.isShowOne ? (
-                    <ReplyList
-                      data={this.needReply[0]}
-                      key={this.needReply[0].id}
-                      isShowOne={true}
-                      avatarClick={() => this.reployAvatarClick(this.needReply[0])}
-                      likeClick={() => this.replyLikeClick(this.needReply[0])}
-                      replyClick={() => this.replyReplyClick(this.needReply[0])}
-                      toCommentDetail={() => this.toCommentDetail()}
-                    ></ReplyList>
-                  ) : (
-                    (this.needReply || []).map((val, index) => (
+                {this.props.data?.replyCount - 1 > 0 && this.state.isShowOne ? (
+                  <View className={styles.moreReply} onClick={() => this.toCommentDetail()}>
+                    查看之前{this.props.data?.replyCount - 1}条回复...
+                  </View>
+                ) : (
+                  ''
+                )}
+                {this.needReply?.length > 0 && (
+                  <View className={styles.replyList}>
+                    {this.state.isShowOne ? (
                       <ReplyList
-                        data={val}
-                        key={val.id || index}
-                        avatarClick={() => this.reployAvatarClick(val)}
-                        likeClick={() => this.replyLikeClick(val)}
-                        replyClick={() => this.replyReplyClick(val)}
+                        data={this.needReply[0]}
+                        key={this.needReply[0].id}
+                        isShowOne={true}
+                        avatarClick={() => this.reployAvatarClick(this.needReply[0])}
+                        likeClick={() => this.replyLikeClick(this.needReply[0])}
+                        replyClick={() => this.replyReplyClick(this.needReply[0])}
                         toCommentDetail={() => this.toCommentDetail()}
                       ></ReplyList>
-                    ))
-                  )}
-                </View>
-              )}
-            </View>
+                    ) : (
+                      (this.needReply || []).map((val, index) => (
+                        <ReplyList
+                          data={val}
+                          key={val.id || index}
+                          avatarClick={() => this.reployAvatarClick(val)}
+                          likeClick={() => this.replyLikeClick(val)}
+                          replyClick={() => this.replyReplyClick(val)}
+                          toCommentDetail={() => this.toCommentDetail()}
+                        ></ReplyList>
+                      ))
+                    )}
+                  </View>
+                )}
+              </View>
+            )}
           </View>
         </View>
       </View>

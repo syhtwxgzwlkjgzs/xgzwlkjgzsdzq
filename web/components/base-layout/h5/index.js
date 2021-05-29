@@ -39,6 +39,7 @@ const BaseLayout = (props) => {
     onClickTabBar = noop,
     pageName = '',
     quickScroll = false,
+    immediateCheck = false
   } = props;
 
   const [height, setHeight] = useState(600);
@@ -92,11 +93,11 @@ const BaseLayout = (props) => {
             </div>
           ) : (
             <List
-              immediateCheck={false}
+              {...props} // props的位置必须要在第一个，否则后面的参数可能被覆盖
+              immediateCheck={immediateCheck}
               className={styles.list}
               ref={listRef}
               onScroll={handleScroll}
-              {...props}
             >
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>

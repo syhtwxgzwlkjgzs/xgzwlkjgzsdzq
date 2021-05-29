@@ -32,7 +32,7 @@
   }
 }
 
-#resetPayPwdContent {
+#resetUserName {
   .bottom {
     position: fixed;
     bottom: 0;
@@ -45,14 +45,6 @@
       font-size: $font-size-middle;
       margin: auto;
       border-radius: $border-radius-small;
-    }
-  }
-}
-
-.bgBtnColor {
-  :global {
-    .dzq-button--primary.is-mouseenter {
-      @include button-primary()
     }
   }
 }

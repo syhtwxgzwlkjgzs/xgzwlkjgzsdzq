@@ -192,6 +192,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
                           onClick={onUserClick}
                           type={item.type}
                           isShowBottomLine={tipData?.platform === 'pc'}
+                          needPadding={false}
                         />
                     ))
                   }

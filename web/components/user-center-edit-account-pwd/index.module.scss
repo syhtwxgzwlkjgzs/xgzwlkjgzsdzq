@@ -1,4 +1,5 @@
 @import '@common/styles/index.scss';
+@import '@common/styles/mixin/login.scss';
 
 .content {
   padding: rem($padding-6n);
@@ -22,26 +23,12 @@
       color: $text-color-primary;
       font-size: $font-size-middle;
       flex: 1;
-      :global {
-        .dzq-input {
-          width: 100%;
-          height: rem(37);
-        }
-        .dzq-input__inner {
-          width: 100%;
-          border: none;
-          font-size: rem($font-size-middle);
-          height: rem(37);
-          line-height: rem(37);
-          border-bottom: rem(1) solid $border-color;
-          border-radius: 0;
-          padding-left: 0;
-        }
-        .dzq-icon {
-          line-height: rem(50);
-        }
+      .input {
+        @include input;
+        @include passwordInput;
       }
     }
+
   }
 }
 
@@ -65,6 +52,14 @@
       height: rem(42);
       font-size: $font-size-middle;
       border-radius: $border-radius-small;
+    }
+  }
+}
+
+.bgBtnColor {
+  :global {
+    .dzq-button--primary.is-mouseenter {
+      @include button-primary()
     }
   }
 }
