@@ -183,7 +183,7 @@ class index extends Component {
 
     let isSubmit = false;
     if (this.props.user?.hasPassword) {
-      isSubmit = !oldPassword || !newPassword || !newPasswordRepeat || newPassword !== newPasswordRepeat;
+      isSubmit = !oldPassword || !newPassword || !newPasswordRepeat
     } else {
       isSubmit = !newPassword || !newPasswordRepeat;
     }
