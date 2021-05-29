@@ -57,13 +57,17 @@
       line-height: 1.2;
       color: $text-color-primary;
       margin-left: rem($margin-2n);
-      min-width: rem(200);
     }
     .userCenterEditDecItem {
       display: flex;
       padding: 0 rem($padding-4n);
       justify-content: center;
       align-items: center;
+      :global {
+        .dzq-input {
+          width: 100%;
+        }
+      }
     }
     .userSignatureInput {
       height: rem(20);
@@ -126,5 +130,14 @@
       margin-left: rem($margin-2n);
     }
   }
+}
+
+.hiddenElement {
+  position: absolute;
+  z-index: -1;
+  visibility: hidden;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
