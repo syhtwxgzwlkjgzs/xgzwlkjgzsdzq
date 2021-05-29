@@ -26,7 +26,7 @@ class Index extends React.Component {
   render() {
     const { index, dispatch, onDelete, onEdit } = this.props;
     const { currentPage, totalPage, totalCount, pageData } = index?.drafts || {};
-    const topCard = (<div className={styles.header}>{totalCount || 0}&nbsp;条草稿</div>)
+    const topCard = (<div className={styles.header}>{totalCount || 0}&nbsp;条草稿</div>);
 
     return (
       <div className={styles.wrapper}>
