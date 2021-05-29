@@ -19,7 +19,6 @@ class H5MyPage extends React.Component {
     this.state = {
       firstLoading: true,
     };
-    console.log(this.props.site);
   }
 
   componentDidMount = async () => {
