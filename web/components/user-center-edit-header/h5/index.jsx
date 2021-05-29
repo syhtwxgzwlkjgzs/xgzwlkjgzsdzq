@@ -88,11 +88,7 @@ export default class index extends Component {
 
     const IS_IMG_AUTO_ROTATE = await detectImageAutomaticRotation();
 
-    if (IS_IMG_AUTO_ROTATE) {
-      fixedImg = fileList.target.files[0];
-    } else {
       fixedImg = await fixImageOrientation(fileList.target.files[0]);
-    }
     this.props.user
       .updateBackground(fixedImg)
       .then((res) => {
