@@ -7,7 +7,7 @@ import CaptchaInput from '../../user-center-edit-mobile/captcha-input';
 import VerifyCode from '../../user-center-edit-mobile/verify-code';
 import throttle from '@common/utils/thottle.js';
 import Router from '@discuzq/sdk/dist/router';
-
+import classNames from 'classnames';
 @inject('site')
 @inject('user')
 @inject('payBox')
@@ -76,6 +76,7 @@ class index extends Component {
         hasMask: false,
         duration: 1000,
       });
+      this.initState()
       return
     }
     const mobile = this.props?.user.originalMobile;
@@ -214,7 +215,10 @@ class index extends Component {
         <div className={styles.labelInfo}>
           <div className={styles.labelValue}><Input className={styles.input} value={payPasswordConfirmation} onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="重复新密码" type="number" maxLength={6} /></div>
         </div>
-        <div className={`${styles.bottom} ${isKeyBoardVisible && styles.bootom2}`}>
+        <div className={classNames(styles.bottom, {
+            [styles.btnPosition]: !!isKeyBoardVisible,
+            [styles.bgBtnColor]: !this.getDisabledWithButton(),
+          })}>
           <Button disabled={this.getDisabledWithButton()} full onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>提交</Button>
         </div>
       </div>

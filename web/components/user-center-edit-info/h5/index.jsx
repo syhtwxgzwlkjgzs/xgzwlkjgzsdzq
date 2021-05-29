@@ -104,6 +104,17 @@ class index extends Component {
     Router.push({ url: '/my/edit/mobile' });
   };
 
+  handleGoToEditUserName = () => {
+    if (!this.props.user.canEditUsername) {
+      Toast.error({
+        content: '用户名一年只能修改一次',
+        duration: 1000,
+      });
+      return;
+    }
+    Router.push({ url: '/my/edit/username' });
+  };
+
   handleGoToEditAccountPwd = () => {
     Router.push({ url: '/my/edit/pwd' });
   };
@@ -128,7 +139,11 @@ class index extends Component {
           <div className={styles.userCenterEditItem}>
             <div className={styles.userCenterEditLabel}>
               <label>用户名</label>
-              <div>{this.user.editUserName}</div>
+
+              <div className={styles.userCenterEditValue} onClick={this.handleGoToEditUserName}>
+                <div className={styles.ucText}>{this.user.username}</div>
+                <Icon name="RightOutlined" />
+              </div>
             </div>
           </div>
           {this.props.site?.isSmsOpen && (

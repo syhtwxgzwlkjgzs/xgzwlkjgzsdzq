@@ -62,6 +62,14 @@
   }
 }
 
+.bgBtnColor {
+  :global {
+    .dzq-button--primary.is-mouseenter {
+      @include button-primary()
+    }
+  }
+}
+
 .labelInfo {
   padding: rem($padding-6n) rem($padding-6n) rem($padding-4n);
   display: flex;
@@ -84,7 +92,7 @@
 }
 
 #findPayPwdContent {
-  .bootom2 {
+  .btnPosition {
     bottom: rem(200);
   }
 }

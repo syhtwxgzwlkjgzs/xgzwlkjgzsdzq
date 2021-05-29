@@ -3,7 +3,6 @@ import { usernameRegister } from '@server';
 import { get } from '../../utils/get';
 import setAccessToken from '../../utils/set-access-token';
 import { checkUserStatus } from '@common/store/login/util';
-
 export default class UserRegisterStore {
   @observable username = '';
   @observable password = '';

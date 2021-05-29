@@ -169,6 +169,13 @@ class UserStore {
     return get(this.userInfo, 'wxHeadImgUrl');
   }
 
+
+  // 用户是否可以编辑用户名
+  // 规则为一年一次
+  @computed get canEditUsername() {
+    return get(this.userInfo, 'canEditUsername');
+  }
+
   // 目标用户关注数
   @computed get targetUserFollowCount() {
     return get(this.targetUser, 'followCount');

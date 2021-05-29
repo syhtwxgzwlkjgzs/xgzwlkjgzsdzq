@@ -92,11 +92,11 @@ const BaseLayout = (props) => {
             </div>
           ) : (
             <List
+              {...props} // props的位置必须要在第一个，否则后面的参数可能被覆盖
               immediateCheck={false}
               className={styles.list}
               ref={listRef}
               onScroll={handleScroll}
-              {...props}
             >
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>

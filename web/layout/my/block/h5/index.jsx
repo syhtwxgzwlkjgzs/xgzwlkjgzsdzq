@@ -63,7 +63,7 @@ class Index extends React.Component {
     return (
       <div className={styles.shieldBox}>
         <Header />
-        <div className={styles.titleBox}>{`共有${userShield.length}位用户`}</div>
+        {userShield.length > 0 && <div className={styles.titleBox}>{`共有${userShield.length}位用户`}</div>}
         {
           this.props.firstLoading && (
             <div className={styles.spinLoading}><Spin type="spinner">加载中...</Spin></div>

@@ -8,6 +8,7 @@ import CaptchaInput from './captcha-input/index';
 import VerifyCode from './verify-code/index';
 import Router from '@discuzq/sdk/dist/router';
 import throttle from '@common/utils/thottle.js';
+import classNames from 'classnames';
 
 @inject('site')
 @inject('user')
@@ -86,6 +87,7 @@ class index extends Component {
           interval: null,
           initTimeText: '发送验证码',
           buttonDisabled: false,
+          isKeyBoardVisible: false
         });
       })
         .catch((err) => {
@@ -184,6 +186,9 @@ class index extends Component {
             hasMask: false,
             duration: 1000,
           });
+          this.setState({
+            bindMobile: null
+          });
           if (calback && typeof calback === 'function') calback(err);
         });
     }
@@ -237,7 +242,12 @@ class index extends Component {
             <CaptchaInput handleKeyBoardVisible={this.handleKeyBoardVisible} isKeyBoardVisible={isKeyBoardVisible} currentStep={currentStep} updatePwd={this.updatePwd} list={list} isBlur={isBlur} />
           </div>
         </div>
-        <div className={`${styles.bottom} ${isKeyBoardVisible && styles.bootom2}`}>
+        <div
+          className={classNames(styles.bottom, {
+            [styles.btnPosition]: !!isKeyBoardVisible,
+            [styles.bgBtnColor]: !this.getDisabledWithButton(),
+          })}
+        >
           <Button full disabled={this.getDisabledWithButton()} onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>提交</Button>
         </div>
       </div>
