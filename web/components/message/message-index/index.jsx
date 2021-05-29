@@ -9,6 +9,7 @@ import BottomNavBar from '@components/bottom-nav-bar';
 
 @inject('site')
 @inject('message')
+@inject('user')
 @observer
 export class MessageIndex extends Component {
   constructor(props) {
@@ -58,14 +59,20 @@ export class MessageIndex extends Component {
     const newList = [];
     data.forEach((item) => {
       const { id, dialogMessage, sender, recipient, unreadCount } = item;
+      let chatPerson = null;
+      if (sender?.id === this.props.user.id) {
+        chatPerson = recipient;
+      } else {
+        chatPerson = sender;
+      }
       newList.push({
         id: id,
         createdAt: dialogMessage?.createdAt,
         dialogId: dialogMessage?.dialogId,
         content: dialogMessage?.imageUrl ? '[图片]' : dialogMessage?.summary,
-        avatar: recipient?.avatar,
-        userId: recipient?.id,
-        username: recipient?.username,
+        avatar: chatPerson?.avatar,
+        userId: chatPerson?.id,
+        username: chatPerson?.username,
         unreadCount: unreadCount,
       });
     });
