@@ -7,6 +7,7 @@ import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import throttle from '@common/utils/thottle.js';
 import { trimLR } from '@common/utils/get-trimly.js';
+import classNames from 'classnames';
 @inject('site')
 @inject('user')
 @observer
@@ -207,7 +208,11 @@ class index extends Component {
             忘记旧密码？
           </div>
         )}
-        <div className={styles.bottom}>
+        <div
+          className={classNames(styles.bottom,{
+            [styles.bgBtnColor]: !this.getDisabledWithButton(),
+          })}
+        >
           <Button
             full
             onClick={this.handleSubmit}

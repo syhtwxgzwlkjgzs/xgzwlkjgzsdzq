@@ -54,3 +54,11 @@
     }
   }
 }
+
+.bgBtnColor {
+  :global {
+    .dzq-button--primary.is-mouseenter {
+      @include button-primary()
+    }
+  }
+}
