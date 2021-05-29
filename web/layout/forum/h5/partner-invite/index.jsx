@@ -132,7 +132,12 @@ class PartnerInviteH5Page extends React.Component {
             {
               !isLoading && usersPageData?.length
                 ? <ActiveUsers data={usersPageData} onItemClick={this.onUserClick} />
-                : <NoData />
+                : <></>
+            }
+            {
+              !isLoading && !threadsPageData?.length
+                ? <NoData />
+                : <></>
             }
             {
               isLoading
