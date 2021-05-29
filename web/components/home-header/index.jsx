@@ -66,8 +66,10 @@ class HomeHeader extends React.Component {
     };
     const siteAuthor = get(webConfig, 'setSite.siteAuthor.username', '');
     const siteInstall = get(webConfig, 'setSite.siteInstall', '');
-    const  startDate = Date.parse(siteInstall);
-    const  endDate = Date.parse(new Date());
+    // 兼容ios
+    const [siteTimer] = siteInstall.split(' ');
+    const startDate = Date.parse(siteTimer);
+    const endDate = Date.parse(new Date());
     const days = numberFormat(parseInt(Math.abs(startDate  -  endDate) / 1000 / 60 / 60 / 24, 10));
 
     siteInfo.siteAuthor = siteAuthor;
@@ -127,13 +129,23 @@ class HomeHeader extends React.Component {
             }} name="HomeOutlined" color="#fff" size={20} />
           </div>
         </div>}
-        <div className={styles.logoBox}>
-          <img
-              className={styles.logo}
-              mode="aspectFit"
-              src={this.getLogo()}
-          />
-        </div>
+        {
+          mode === 'join'
+            ? <div className={styles.joinLog}>
+                <img
+                    className={styles.logo}
+                    mode="aspectFit"
+                    src='/dzq-img/join-banner-bg.png'
+                />
+              </div>
+            : <div className={styles.logoBox}>
+                <img
+                    className={styles.logo}
+                    mode="aspectFit"
+                    src={this.getLogo()}
+                />
+              </div>
+        }
         {digest && <div className={styles.digest}>
             <div className={styles.left}>站长 {digest.admin}</div>
             <div className={styles.right}>已创建 {digest.day}天</div>
