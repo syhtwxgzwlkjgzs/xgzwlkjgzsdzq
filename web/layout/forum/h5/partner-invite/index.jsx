@@ -62,7 +62,7 @@ class PartnerInviteH5Page extends React.Component {
       forum.setIsLoading(false);
     } catch (e) {
       Toast.error({
-        content: e?.Message,
+        content: e?.Message || e,
         hasMask: false,
         duration: 1000,
       });
@@ -117,7 +117,7 @@ class PartnerInviteH5Page extends React.Component {
     const { inviteCode } = this.props.router.query;
     const { platform, webConfig } = site;
     const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
-    const { usersPageData, threadsPageData, isLoading } = forum;
+    const { usersPageData = [], threadsPageData = [], isLoading } = forum;
     const { invitorName, invitorAvatar } = this.state;
     return (
       <List className={layout.page} allowRefresh={false}>

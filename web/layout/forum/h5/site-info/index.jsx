@@ -24,7 +24,7 @@ class SiteInfo extends Component {
         <div className={layout.site_status}>
           <div className={layout.site_status_list}>
               <span className={layout.site_status_label}>更新</span>
-              <span className={layout.site_status_item}>{getSiteUpdateTime(updataTime)}</span>
+              <span className={layout.site_status_item}>{updataTime && getSiteUpdateTime(updataTime)}</span>
           </div>
           <div className={layout.site_status_list}>
               <span className={layout.site_status_label}>成员</span>

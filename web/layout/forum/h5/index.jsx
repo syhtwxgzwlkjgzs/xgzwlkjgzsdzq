@@ -6,9 +6,10 @@ import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import List from '@components/list';
+import UserItem from '@components/thread/user-item';
 import { get } from '@common/utils/get';
 import layout from './index.module.scss';
-import UserCenterFriends from '@components/user-center-friends';
+// import UserCenterFriends from '@components/user-center-friends';
 import { simpleRequest } from '@common/utils/simple-request';
 
 @inject('site')
@@ -17,21 +18,35 @@ import { simpleRequest } from '@common/utils/simple-request';
 @observer
 class ForumH5Page extends React.Component {
   async componentDidMount() {
+    await this.setUsersPageData(1);
+  }
+
+  nextUsersPage = async () => {
     const { forum} = this.props;
+    return await this.setUsersPageData(forum.userPage + 1);
+  }
+
+  setUsersPageData = async (page = 1) => {
+    const { forum } = this.props;
     const usersList = await simpleRequest('readUsersList', {
       params: {
+        page,
         filter: {
           hot: 0,
         },
       },
     });
-
     forum.setUsersPageData(usersList);
   }
+
+  onUserClick = (id) => {
+    this.props.router.push(`/user/${id}`);
+  };
+
   render() {
     const { site, forum } = this.props;
     const { platform } = site;
-    const { usersPageData = [] } = forum;
+    const { usersPageData = [], isNoMore } = forum;
     // 站点介绍
     const siteIntroduction = get(site, 'webConfig.setSite.siteIntroduction', '');
     // 创建时间
@@ -96,7 +111,7 @@ class ForumH5Page extends React.Component {
             <div className={layout.right} onClick={() => forum.setIsPopup(true)}>
               <div className={layout.forum_member}>
                 {
-                    usersPageData.slice(0, 3).map(item => (
+                    usersPageData?.slice(0, 3).map(item => (
                       <Avatar size='small' key={item.userId} text={item.nickname.substring(0, 1)} className={layout.forum_member_img} image={item.avatar}/>
                     ))
                 }
@@ -127,20 +142,29 @@ class ForumH5Page extends React.Component {
         >
           <List
             className={layout.forum_users_list}
+            onRefresh={this.nextUsersPage}
+            noMore={isNoMore}
+            immediateCheck={false}
           >
-            {usersPageData.map((user, index) => {
+            {usersPageData?.map((user, index) => {
               if (index + 1 > this.props.limit) return null;
               return (
-                <div key={index}>
-                  <UserCenterFriends
-                    id={user.id}
-                    type='follow'
-                    imgUrl={user.avatar}
-                    withHeaderUserInfo={true}
-                    userName={user.nickname}
+                  <UserItem
+                    key={index}
+                    title={user.nickname}
+                    imgSrc={user.avatar}
+                    label={user.groupName}
+                    userId={user.userId}
+                    onClick={this.onUserClick}
                   />
-                  <div></div>
-                </div>
+                  // <UserCenterFriends
+                  //   id={user.userId}
+                  //   type='follow'
+                  //   imgUrl={user.avatar}
+                  //   withHeaderUserInfo={true}
+                  //   userName={user.nickname}
+                  //   followHandler={this.followUser}
+                  // />
               );
             })}
           </List>
