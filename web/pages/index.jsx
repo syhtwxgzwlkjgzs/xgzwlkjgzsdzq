@@ -78,6 +78,10 @@ class Index extends React.Component {
     }
   }
 
+  handleArr = (arr = []) => {
+    return arr.filter(item => item !== 'all' && item !== 'default' && item !== '')
+  }
+
   dispatch = async (type, data = {}) => {
     const { index } = this.props;
     const { categoryids, types, essence, sequence, attention, sort, page } = data;
@@ -85,20 +89,23 @@ class Index extends React.Component {
     let newTypes = [];
     if (types) {
       if (!(types instanceof Array)) {
-        newTypes = types === 'all' ? [] : [types];
+        newTypes = [types];
       } else {
-        newTypes = types.filter(item => item !== 'all');
+        newTypes = types;
       }
     }
+    newTypes = this.handleArr(newTypes)
 
     let categoryIds = [];
     if (categoryids) {
       if (!(categoryids instanceof Array)) {
-        categoryIds = [categoryids].filter(item => item !== '');
+        categoryIds = [categoryids];
       } else {
-        categoryIds = categoryids.filter(item => item !== '');
+        categoryIds = categoryids;
       }
     }
+    categoryIds = this.handleArr(categoryIds)
+
 
     if (type === 'click-filter') { // 点击tab
       
