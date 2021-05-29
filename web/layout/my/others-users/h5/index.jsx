@@ -51,6 +51,11 @@ class H5OthersPage extends React.Component {
     return;
   };
 
+  formatUserThreadsData = (targetUserThreads) => {
+    if (Object.keys(targetUserThreads).length === 0) return [];
+    return Object.values(targetUserThreads).reduce((fullData, pageData) => [...fullData, ...pageData]);
+  };
+
   render() {
     const { site, user } = this.props;
     const { platform } = site;
@@ -87,11 +92,12 @@ class H5OthersPage extends React.Component {
             </div>
 
             <div className={styles.threadItemContainer}>
-              {targetUserThreads && targetUserThreads.length > 0 ? (
-                <UserCenterThreads data={targetUserThreads} />
-              ) : (
+              {this.formatUserThreadsData(targetUserThreads)
+              && this.formatUserThreadsData(targetUserThreads).length > 0 ? (
+                <UserCenterThreads data={this.formatUserThreadsData(targetUserThreads)} />
+                ) : (
                 <NoData />
-              )}
+                )}
             </div>
           </div>
         </div>
