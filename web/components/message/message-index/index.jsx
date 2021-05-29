@@ -39,7 +39,7 @@ export class MessageIndex extends Component {
   }
 
   async componentDidMount() {
-    await this.props.message.readDialogList(1);
+    await this.fetchDialogData(1);
     const { threadUnread, financialUnread, accountUnread } = this.props.message;
     const items = [...this.state.items];
     items[0].totalCount = threadUnread;
@@ -47,6 +47,11 @@ export class MessageIndex extends Component {
     items[2].totalCount = accountUnread;
 
     this.setState({ items });
+  }
+
+  fetchDialogData(initPage = 0) {
+    const { readDialogList, dialogList: { currentPage } } = this.props.message;
+    return readDialogList(initPage || currentPage + 1);
   }
 
   formatChatDialogList = (data = []) => {
@@ -73,16 +78,6 @@ export class MessageIndex extends Component {
     message.deleteDialog(item.id);
   };
 
-  onPullDown = () => {
-    const { message } = this.props;
-    return message.readDialogList(1);
-  };
-
-  handleScrollBottom = () => {
-    const { message } = this.props;
-    return message.readDialogList(message.dialogList.currentPage + 1);
-  };
-
   // 跳转其它消息类型
   toOtherMessage = (link) => {
     this.props.router.push(link);
@@ -100,13 +95,13 @@ export class MessageIndex extends Component {
           infoIdx={0}
           totalCount={totalCount}
           withBottomBar={true}
-          noMore={list.length === 0 || currentPage >= totalPage}
+          noMore={currentPage >= totalPage}
           showHeader={!isPC}
           topCard={isPC ? null : card}
           list={this.formatChatDialogList(list)}
           type='chat'
-          onPullDown={this.onPullDown}
-          onScrollBottom={this.handleScrollBottom}
+          onPullDown={() => this.fetchDialogData(1)}
+          onScrollBottom={() => this.fetchDialogData()}
           onBtnClick={this.handleDelete}
         />
         {!isPC && <BottomNavBar placeholder={false} curr={'message'} />}

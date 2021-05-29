@@ -19,10 +19,7 @@ class Index extends React.Component {
     return readThreadMsgList(initPage || currentPage + 1);
   }
 
-  // 触底请求数据
-  handleThreadBottom = () => {
-    return this.fetchMessageData();
-  }
+
 
   // 处理帖子消息删除
   handleThreadDelete = (item) => {
@@ -39,11 +36,12 @@ class Index extends React.Component {
         <Notice
           infoIdx={1}
           totalCount={totalCount}
-          noMore={list.length === 0 || currentPage >= totalPage}
+          noMore={currentPage >= totalPage}
           showHeader={!isPC}
           list={list}
           type='thread'
-          onScrollBottom={this.handleThreadBottom}
+          onPullDown={() => this.fetchMessageData(1)}
+          onScrollBottom={() => this.fetchMessageData()}
           onBtnClick={this.handleThreadDelete}
         />
       </div>

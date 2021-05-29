@@ -38,11 +38,11 @@ const Index = ({ site, message }) => {
   }, [list])
 
   return (
-    <div className={`${styles.wrapper} ${isPC ? styles.pc : ""}`}>
+    <div className={`${styles.wrapper} ${site.isPC ? styles.pc : ""}`}>
       <Notice
         infoIdx={2}
         totalCount={totalCount}
-        noMore={list.length === 0 || currentPage >= totalPage}
+        noMore={currentPage >= totalPage}
         showHeader={!site.isPC}
         list={renderList}
         type='financial'

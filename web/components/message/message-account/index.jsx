@@ -120,16 +120,6 @@ class Index extends React.Component {
     return list;
   }
 
-  // 触顶下拉刷新
-  onPullDown = () => {
-    return this.fetchMessageData(1);
-  }
-
-  // 触底上拉加载 tip: 监听上拉触底之后，一定要返回Promise对象
-  handleAccountBottom = () => {
-    return this.fetchMessageData();
-  }
-
   // 跳转其它账户消息
   toOtherMessage = (link) => {
     this.props.router.push(link);
@@ -154,13 +144,13 @@ class Index extends React.Component {
         <Notice
           infoIdx={3}
           totalCount={totalCount}
-          noMore={list.length === 0 || currentPage >= totalPage}
+          noMore={currentPage >= totalPage}
           showHeader={!isPC}
           topCard={(isPC || type === 'accountMsgList') ? card : null}
           list={renderList}
           type='account'
-          onPullDown={this.onPullDown}
-          onScrollBottom={this.handleAccountBottom}
+          onPullDown={() => this.fetchMessageData(1)}
+          onScrollBottom={() => this.fetchMessageData()}
           onBtnClick={this.handleAccountDelete}
         />
       </div>
