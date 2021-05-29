@@ -56,3 +56,11 @@
         border-radius: rem($border-radius-small);
     }
 }
+
+.bgBtnColor {
+    :global {
+      .dzq-button--primary.is-mouseenter {
+        @include button-primary()
+      }
+    }
+  }
