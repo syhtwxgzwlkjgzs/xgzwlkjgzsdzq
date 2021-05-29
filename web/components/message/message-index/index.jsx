@@ -52,16 +52,16 @@ export class MessageIndex extends Component {
   formatChatDialogList = (data = []) => {
     const newList = [];
     data.forEach((item) => {
-      const { dialogMessage, sender, recipient } = item;
+      const { id, dialogMessage, sender, recipient, unreadCount } = item;
       newList.push({
-        id: item.id,
+        id: id,
         createdAt: dialogMessage?.createdAt,
         dialogId: dialogMessage?.dialogId,
-        content: dialogMessage?.summary,
+        content: dialogMessage?.imageUrl ? '[图片]' : dialogMessage?.summary,
         avatar: recipient?.avatar,
         userId: recipient?.id,
-        username: sender?.username,
-        unreadCount: item.unreadCount,
+        username: recipient?.username,
+        unreadCount: unreadCount,
       });
     });
 
