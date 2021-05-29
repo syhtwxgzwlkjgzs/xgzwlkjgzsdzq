@@ -42,7 +42,9 @@ export default class index extends Component {
     });
     let fixedImg;
 
-    if (detectImageAutomaticRotation()) {
+    const IS_IMG_AUTO_ROTATE = await detectImageAutomaticRotation();
+
+    if (IS_IMG_AUTO_ROTATE) {
       fixedImg = fileList.target.files[0];
     } else {
       fixedImg = await fixImageOrientation(fileList.target.files[0]);
@@ -84,7 +86,9 @@ export default class index extends Component {
     });
     let fixedImg;
 
-    if (detectImageAutomaticRotation()) {
+    const IS_IMG_AUTO_ROTATE = await detectImageAutomaticRotation();
+
+    if (IS_IMG_AUTO_ROTATE) {
       fixedImg = fileList.target.files[0];
     } else {
       fixedImg = await fixImageOrientation(fileList.target.files[0]);
