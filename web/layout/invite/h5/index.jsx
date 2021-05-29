@@ -81,12 +81,16 @@ class InviteH5Page extends React.Component {
                 inviteData?.inviteUsersList?.map((item, index) => (
                   <div key={index} className={layout.invite_list_item}>
                       <div className={layout.invite_list_itemName}>
-                        <img src={item.avatar} alt=""/>
+                        <Avatar
+                          className={layout.invite_list_itemAvatar}
+                          image={item.avatar}
+                          size='small'
+                          text={item?.nickname?.substring(0, 1)}
+                        />
                         <span>{item.nickname}</span>
                       </div>
                       <span className={layout.invite_list_itemMoney}>+{item.bounty}</span>
                       <span className={layout.invite_list_itemTime}>{item.joinedAt}</span>
-                      <span className={layout.invite_list_itemLine}></span>
                   </div>
                 ))
               }
