@@ -1,7 +1,6 @@
 import React from 'react';
 import Icon from '@discuzq/design/dist/components/icon/index';
-import Input from '@discuzq/design/dist/components/input/index';
-import { View, Text } from '@tarojs/components'
+import { View, Input } from '@tarojs/components'
 import styles from './index.module.scss';
 
 /**
@@ -23,15 +22,12 @@ const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = tru
     }
   }
   const clearInput = () => {
+    console.log(111)
     setValue('');
     setIsShow(false)
   }
   const inputClick = () => {
     onSearch(value)
-  }
-  const handleInput = (e) => {
-    console.log(111)
-    console.log(e)
   }
   return (
     <View className={`${styles.container} ${!isShowBottom && styles.hiddenBottom}`}>
@@ -41,20 +37,21 @@ const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = tru
           value={value}
           placeholder='请输入想要搜索的内容...'
           onEnter={inputClick}
-          onChange={e => inputChange(e)}
+          onInput={e => inputChange(e)}
           className={styles.input}
-          onInput={inputClick}
+          confirmType='search'
+          onConfirm={inputClick}
         />
         {
           isShow && (
-            <Icon className={styles.deleteIcon} name="WrongOutlined" size={16} onClick={clearInput}/>
+              <Icon className={styles.deleteIcon} name="WrongOutlined" size={16} onClick={clearInput}/>
           )
         }
       </View>
       {
         isShowCancel && (
-          <View className={styles.cancel} onClick={inputClick}>
-            确认
+          <View className={styles.cancel} onClick={onCancel}>
+            取消
           </View>
         )
       }
