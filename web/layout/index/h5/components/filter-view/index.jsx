@@ -39,10 +39,10 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
         setFirst(pid)
         setTwo(pid, tmpData)
       } else { // 若是等于1，则说明点击的是没有二级分类的一级分类或者是二级分类
-        const tmp = tmpData.filter(item => item.pid === pid)
+        const tmp = tmpData?.filter(item => item.pid === pid) || []
         if (!tmp.length) { // 不存在，则说明点击的二级分类
           setFirstChildren(pid);
-          tmpData.filter(item => item.children?.length).forEach(item => { // 根据二级分类id，去找对应的一级分类
+          tmpData?.filter(item => item.children?.length).forEach(item => { // 根据二级分类id，去找对应的一级分类
             item.children.forEach(children => {
               if (children.pid === pid) {
                 setFirst(item.pid)

@@ -264,6 +264,7 @@ class IndexH5Page extends React.Component {
         pageName='home'
         preload={1000}
         onClickTabBar={this.onClickTabBar}
+        requestError={this.props.isError}
       >
         <HomeHeader ref={this.headerRef} />
 
