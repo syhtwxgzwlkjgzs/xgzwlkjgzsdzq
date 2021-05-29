@@ -44,6 +44,7 @@ const config = {
         path.resolve(__dirname, '../../common'),
       ],
     },
+    baseLevel: 20,
     postcss: {
       pxtransform: {
         enable: true,

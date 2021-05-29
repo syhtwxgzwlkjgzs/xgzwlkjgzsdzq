@@ -44,7 +44,7 @@ class H5MyPage extends React.Component {
         curr={'my'}
         showHeader={false}
         showTabBar={true}
-        onRefresh={user.getUserThreads}
+        onRefresh={userThreads && userThreads.length > 0 ? user.getUserThreads : null}
         noMore={userThreadsTotalPage <= userThreadsPage}
       >
         <div className={styles.mobileLayout}>
