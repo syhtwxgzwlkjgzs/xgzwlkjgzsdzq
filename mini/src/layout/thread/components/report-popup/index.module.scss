@@ -46,6 +46,17 @@
       }
     }
   }
+
+  :global {
+    .dzq-textarea__inner {
+      background: $text-bg-color2;
+      padding: $padding-2n $padding-3n;
+      height: 80px !important;
+      resize: none;
+      font-size: $font-size-base;
+      -webkit-appearance: none; // ios下去除上面阴影
+    }
+  }
 }
 
 .input {
@@ -77,4 +88,8 @@
     border: none;
     margin-right: $margin-4n;
   }
+}
+
+.placeholder {
+  color: $disabled-color;
 }
