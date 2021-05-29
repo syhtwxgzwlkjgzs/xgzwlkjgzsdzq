@@ -1,7 +1,7 @@
-import React from 'react'
-import { Button } from '@discuzq/design'
-import styles from './index.module.scss'
-
+import React from 'react';
+import { Button } from '@discuzq/design';
+import styles from './index.module.scss';
+import classNames from 'classnames';
 export default class VerificationCode extends React.Component {
 
   constructor(props) {
@@ -73,14 +73,20 @@ export default class VerificationCode extends React.Component {
     const { value_pass_check } = this.props
     const { buttonDisabled } = this.state
     return (
-      <Button
-        className={`${styles.verifyCodeBtn} ${buttonDisabled && styles.verifyCodeDisabled}`}
-        type={!buttonDisabled ? 'primary' : 'text'}
-        disabled={buttonDisabled || !value_pass_check}
-        onClick={this.buttonClickAction.bind(this)}
+      <div
+        className={classNames(styles.verifyCodeBtn, {
+          [styles.verifyCodeBgColor]: !(buttonDisabled || !value_pass_check),
+        })}
       >
-        {this.state.initTimeText}
-      </Button>
+        <Button
+          className={styles.btn}
+          type={!buttonDisabled ? 'primary' : 'text'}
+          disabled={buttonDisabled || !value_pass_check}
+          onClick={this.buttonClickAction.bind(this)}
+        >
+          {this.state.initTimeText}
+        </Button>
+      </div>
     )
   }
 }
