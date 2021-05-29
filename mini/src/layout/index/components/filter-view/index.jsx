@@ -161,14 +161,16 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
       position="bottom"
       visible={visible}
       onClose={handleCancel}
+      customScroll
     >
         <View className={styles.container}>
           <ScrollView className={styles.content} scrollY>
             <View className={styles.list} >
              { data && data.map((item, index) => renderContent(item, index)) }
+             { data && data.map((item, index) => renderContent(item, index)) }
             </View>
+            
           </ScrollView>
-
           <View className={styles.footer}>
             <Button className={styles.button} onClick={handleSubmit} type="primary">筛选</Button>
             <View className={styles.footerBtn} onClick={handleCancel}>
