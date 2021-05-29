@@ -212,6 +212,7 @@ import { View, Text } from '@tarojs/components'
         position='bottom'
         visible={visible}
         onClose={onClose}
+        customScroll
     >
     {
       !all ?

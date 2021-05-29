@@ -50,7 +50,7 @@ class Index extends React.Component {
   onShareAppMessage = (res) => {
     const { user, index, topic } = this.props;
     const thread = index.threads?.pageData || []
-    const threadId = parseInt(res.target.dataset.threadId)
+    const threadId = parseInt(res.target?.dataset?.threadId)
     let threadTitle = ''
     for(let i of thread) {
       if(i.threadId == threadId) {
@@ -60,7 +60,7 @@ class Index extends React.Component {
     }
     const topicTitle = topic.topicDetail?.pageData[0]?.content || ''
     const topicId = topic.topicDetail?.pageData[0]?.topicId || ''
-    const from = res.target.dataset.from || ''
+    const from = res.target?.dataset?.from || ''
     //是否必须登录
     if (!user.isLogin()) {
       Toast.info({ content: '请先登录!' });
