@@ -41,6 +41,7 @@ const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = tru
           className={styles.input}
           confirmType='search'
           onConfirm={inputClick}
+          placeholderStyle={'color:#C5C6CA'}
         />
         {
           isShow && (
