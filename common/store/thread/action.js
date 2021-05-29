@@ -345,12 +345,14 @@ class ThreadAction extends ThreadStore {
       TopicStore?.deleteThreadsData && TopicStore.deleteThreadsData({ id });
 
       return {
+        code:  res.code,
         msg: '操作成功',
         success: true,
       };
     }
 
     return {
+      code: res.code,
       msg: res.msg,
       success: false,
     };
