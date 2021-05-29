@@ -88,6 +88,18 @@
   }
 }
 
+.pcItem {
+  padding: rem($padding-4n) 0;
+  padding-left: $padding-4n;
+  padding-right: $padding-4n;
+}
+
+.h5Item {
+  padding: rem($padding-2n) 0;
+  padding-left: $padding-4n;
+  padding-right: $padding-4n;
+}
+
 .bottomLine {
   &:after {
     content: ' ';

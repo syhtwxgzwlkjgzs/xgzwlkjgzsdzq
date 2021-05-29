@@ -390,9 +390,9 @@ class UserAction extends SiteStore {
    * 上传新的头像
    */
   @action
-  async updateAvatar(fileList) {
+  async updateAvatar(file) {
     const param = new FormData();
-    param.append('avatar', fileList[0]);// 通过append向form对象添加数据
+    param.append('avatar', file);// 通过append向form对象添加数据
     param.append('pid', this.id);
 
     const updateAvatarRes = await updateAvatar({
@@ -421,9 +421,9 @@ class UserAction extends SiteStore {
    * 上传新的背景图
    */
   @action
-  async updateBackground(fileList) {
+  async updateBackground(file) {
     const param = new FormData();
-    param.append('background', fileList[0]);// 通过append向form对象添加数据
+    param.append('background', file);// 通过append向form对象添加数据
     const updateBackgroundRes = await updateBackground({
       transformRequest: [function (data) {
         return data;
@@ -770,6 +770,7 @@ class UserAction extends SiteStore {
   @action
   updateAssignThreadInfo(threadId, obj = {}) {
     const targetThreads = this.findAssignThread(threadId);
+
     if (!targetThreads || targetThreads.length === 0) return;
 
     targetThreads.forEach((targetThread) => {
@@ -828,14 +829,14 @@ class UserAction extends SiteStore {
       });
     }
 
-    if (this.targetuserThreads) {
-      const keys = Object.keys(this.targetuserThreads);
+    if (this.targetUserThreads) {
+      const keys = Object.keys(this.targetUserThreads);
       keys.forEach((item) => {
-        const pageData = this.targetuserThreads[item];
+        const pageData = this.targetUserThreads[item];
 
         for (let i = 0; i < pageData.length; i++) {
           if (pageData[i].threadId === threadId) {
-            threadArr.push({ key: item, index: i, data: pageData[i], store: this.targetuserThreads });
+            threadArr.push({ key: item, index: i, data: pageData[i], store: this.targetUserThreads });
           }
         }
       });

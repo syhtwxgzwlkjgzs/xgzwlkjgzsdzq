@@ -31,26 +31,47 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
   useEffect(() => {
     const { categoryids = [], types, essence } = current || {};
 
-    setFirst(categoryids[0] || 'all');
+    handleCategoryIds(categoryids);
     setSecond(types || 'all');
     setThird(essence || '0');
 
-    if (categoryids[1]) {
-      setFirstChildren(categoryids[1]);
-    }
   }, [current, visible]);
+
+  const handleCategoryIds = (arr) => {
+    if (arr?.length) {
+      const pid = arr[0]
+      if (arr.length > 1) { // 若是大于1，则说明点击的是一级分类
+        setFirst(pid)
+        setTwo(pid, tmpData)
+      } else { // 若是等于1，则说明点击的是没有二级分类的一级分类或者是二级分类
+        const tmp = tmpData?.filter(item => item.pid === pid) || []
+        if (!tmp.length) { // 不存在，则说明点击的二级分类
+          setFirstChildren(pid);
+          tmpData?.filter(item => item.children?.length).forEach(item => { // 根据二级分类id，去找对应的一级分类
+            item.children.forEach(children => {
+              if (children.pid === pid) {
+                setFirst(item.pid)
+                setTwo(item.pid, tmpData)
+              }
+            })
+          })
+        } else { // 存在，说明点击的是没有二级分类的一级分类
+          setFirst(pid)
+          setTwo(pid, tmpData)
+        }
+      }
+    } else {
+      setFirst('all')
+    }
+  }
+
   // 点击一级菜单
   const onClickFirst = (index, type, contents) => {
     if (type === 1) {
       setFirst(index);
       setFirstChildren('');
 
-      const newSubArr = contents?.filter(item => item.pid === index)
-      if (!newSubArr.length) {
-        setSubData([])
-      } else {
-        setSubData(newSubArr[0].children || [])
-      }
+      setTwo(index, contents)
     } else if (type === 2) {
       setSecond(index);
     } else {
@@ -64,6 +85,16 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
       setFirstChildren(index);
     }
   };
+
+  // 设置二级分类数据
+  const setTwo = (id, contents) => {
+    const newSubArr = contents?.filter(item => item.pid === id)
+    if (!newSubArr.length) {
+      setSubData([])
+    } else {
+      setSubData(newSubArr[0].children || [])
+    }
+  }
 
   const goSearch = () => {
     Router.push({ url: '/subPages/search/index' });
@@ -89,7 +120,7 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
       }
     }
 
-    const params = { categoryids, types: second === 'all' ? [] : second, essence: third, sequence };
+    const params = { categoryids, types: second, essence: third, sequence };
 
     onSubmit(params);
   };

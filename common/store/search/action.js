@@ -141,7 +141,8 @@ class SearchAction extends SearchStore {
       }
       return result.data;
     }
-    return Promise.reject();
+
+    return Promise.reject(result?.msg || '');
   };
 
   /**
@@ -166,7 +167,8 @@ class SearchAction extends SearchStore {
       }
       return result;
     }
-    return Promise.reject();
+
+    return Promise.reject(result?.msg || '');
   };
 
   /**
@@ -190,7 +192,8 @@ class SearchAction extends SearchStore {
       }
       return result.data;
     }
-    return Promise.reject();
+    
+    return Promise.reject(result?.msg || '');
   };
 
 /**

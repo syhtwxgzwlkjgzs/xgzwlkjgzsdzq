@@ -31,6 +31,7 @@ const List = forwardRef(({
   onError = noop,
   enableError = false,
   immediateCheck = true,
+  requestError = false
 }, ref) => {
   const listWrapper = useRef(null);
   const currentScrollTop = useRef(0);
@@ -51,6 +52,10 @@ const List = forwardRef(({
       onTouchMove({ isFirst: true });
     }
   }, []);
+
+  useEffect(() => {
+    setIsError(requestError)
+  }, [requestError])
 
   useImperativeHandle(
     ref,
