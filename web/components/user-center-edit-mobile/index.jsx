@@ -244,7 +244,7 @@ class index extends Component {
         </div>
         <div
           className={classNames(styles.bottom, {
-            [styles.bootom2]: !!isKeyBoardVisible,
+            [styles.btnPosition]: !!isKeyBoardVisible,
             [styles.bgBtnColor]: !this.getDisabledWithButton(),
           })}
         >

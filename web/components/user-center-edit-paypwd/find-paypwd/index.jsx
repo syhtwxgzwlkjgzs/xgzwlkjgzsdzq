@@ -216,7 +216,7 @@ class index extends Component {
           <div className={styles.labelValue}><Input className={styles.input} value={payPasswordConfirmation} onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="重复新密码" type="number" maxLength={6} /></div>
         </div>
         <div className={classNames(styles.bottom, {
-            [styles.bootom2]: !!isKeyBoardVisible,
+            [styles.btnPosition]: !!isKeyBoardVisible,
             [styles.bgBtnColor]: !this.getDisabledWithButton(),
           })}>
           <Button disabled={this.getDisabledWithButton()} full onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>提交</Button>
