@@ -441,7 +441,7 @@ class UserAction extends SiteStore {
       setTimeout(() => {
         this.userInfo.backgroundUrl = updateBackgroundRes.data.backgroundUrl;
         this.userInfo = { ...this.userInfo };
-      }, 300);
+      }, 500);
       return updateBackgroundRes.data;
     }
 
