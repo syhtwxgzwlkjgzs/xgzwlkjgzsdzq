@@ -29,7 +29,7 @@ const InputPop = (props) => {
   }, [isCollect]);
 
   return (
-    <Popup position="bottom" visible={visible} onClose={onClose}>
+    <Popup position="bottom" visible={visible} onClose={onClose} customScroll={true}>
       <View className={styles.body}>
         <View className={styles.container}>
           <View className={styles.more}>
