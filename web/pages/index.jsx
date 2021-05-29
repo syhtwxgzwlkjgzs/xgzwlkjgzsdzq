@@ -18,7 +18,11 @@ class Index extends React.Component {
     const sticks = await readStickList({}, ctx);
     const sequence = site && site.webConfig && site.webConfig.setSite ? site.webConfig.setSite.siteOpenSort : 0;
 
-    const threads = await readThreadList({ params: { filter: {}, sequence, perPage: 10, page: 1 } }, ctx);
+    const threads = await readThreadList({ params: { filter: {
+      sort: 1,
+      attention: 0,
+      essence: 0
+    }, sequence, perPage: 10, page: 1 } }, ctx);
 
     return {
       serverIndex: {
@@ -40,7 +44,7 @@ class Index extends React.Component {
 
   async componentDidMount() {
     const { index } = this.props;
-    const { categoryids, types, essence, sequence, attention, sort } = index.filter;
+    const { categoryids, types, essence = 0, sequence = 0, attention = 0, sort = 1 } = index.filter;
 
     let newTypes = [];
     if (types) {

@@ -28,17 +28,23 @@ class H5MyPage extends React.Component {
     });
   };
 
+  formatUserThreadsData = (userThreads) => {
+    if (Object.keys(userThreads).length === 0) return [];
+    return Object.values(userThreads).reduce((fullData, pageData) => [...fullData, ...pageData]);
+  };
+
   render() {
     const { site, user } = this.props;
     const { platform } = site;
-    const { userThreads, userThreadsTotalCount, userThreadsPage, userThreadsTotalPage, userInfo } = user;
+    const { userThreads, userThreadsTotalCount, userThreadsPage, userThreadsTotalPage } = user;
+    const formattedUserThreads = this.formatUserThreadsData(userThreads);
 
     return (
       <BaseLayout
         curr={'my'}
         showHeader={false}
         showTabBar={true}
-        onRefresh={user.getUserThreads}
+        onRefresh={userThreads && userThreads.length > 0 ? user.getUserThreads : null}
         noMore={userThreadsTotalPage <= userThreadsPage}
       >
         <div className={styles.mobileLayout}>
@@ -61,8 +67,16 @@ class H5MyPage extends React.Component {
             </div>
 
             <div className={styles.threadItemContainer}>
-              {this.state.firstLoading && <div className={styles.spinLoading}><Spin type="spinner">加载中...</Spin></div>}
-              {userThreads && userThreads.length > 0 ? <UserCenterThreads data={userThreads} /> : <NoData />}
+              {this.state.firstLoading && (
+                <div className={styles.spinLoading}>
+                  <Spin type="spinner">加载中...</Spin>
+                </div>
+              )}
+              {formattedUserThreads && formattedUserThreads.length > 0 ? (
+                <UserCenterThreads data={formattedUserThreads} />
+              ) : (
+                <NoData />
+              )}
             </div>
           </div>
         </div>

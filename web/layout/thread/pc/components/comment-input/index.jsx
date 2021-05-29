@@ -130,7 +130,7 @@ const CommentInput = (props) => {
         {showEmojis && <Emoji pc show={showEmojis} emojis={emojis} onClick={onEmojiClick} />}
 
         <div className={styles.linkBtn}>
-          {/* <Icon
+          <Icon
             name="SmilingFaceOutlined"
             size="20"
             className={classnames(styles.btnIcon, showEmojis && styles.actived)}
@@ -147,7 +147,7 @@ const CommentInput = (props) => {
             size="20"
             className={classnames(styles.btnIcon, showTopic && styles.actived)}
             onClick={onTopicIconClick}
-          ></Icon> */}
+          ></Icon>
         </div>
         <Button loading={loading} onClick={onSubmitClick} className={styles.button} type="primary" size="large">
           发布

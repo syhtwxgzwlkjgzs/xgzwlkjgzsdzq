@@ -3,6 +3,7 @@ import { Upload, Button, Icon } from '@discuzq/design';
 import { createAttachment } from '@common/server';
 import styles from './index.module.scss';
 import classNames from 'classnames';
+import ProgressRender from './progress-render';
 
 export default function DzqUpload(props) {
   const {
@@ -31,11 +32,12 @@ export default function DzqUpload(props) {
       formData.append(item, data[item]);
     });
     // TODO:进度条目前有问题
-    const ret = await createAttachment(formData, () => { // progressEvent
-      // const complete = (progressEvent.loaded / progressEvent.total * 100 | 1);
-      // file.status = 'uploading';
-      // // file.percent += complete;
-      // updater(list);
+    const ret = await createAttachment(formData, (progressEvent) => {
+      // progressEvent
+      const complete = (progressEvent.loaded / progressEvent.total * 100 | 0);
+      file.status = 'uploading';
+      file.percent = complete;
+      updater(list);
     });
     if (ret.code === 0) {
       onSuccess(ret, file);
@@ -54,10 +56,10 @@ export default function DzqUpload(props) {
 
   // TODO: 因为上传组件不支持传class和style，所以在外面增加了一层dom
   const clsName = isCustomUploadIcon ? `${styles['dzq-custom-upload']} ${styles['dzq-upload-reset']} ${className}` : `${styles['dzq-upload-reset']}  ${className}`;
-
   return (
     <div className={clsName}>
       <Upload
+        progressRender={(file) => <ProgressRender file={file} />}
         listType={listType}
         fileList={fileList}
         limit={limit}

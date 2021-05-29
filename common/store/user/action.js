@@ -26,6 +26,13 @@ class UserAction extends SiteStore {
     super(props);
   }
 
+  @action
+  removeUserInfo() {
+    this.userInfo = null;
+    this.loginStatus = false;
+    this.accessToken = null;
+  }
+
   // 写入用户数据
   @action
   setUserInfo(data) {
@@ -49,6 +56,8 @@ class UserAction extends SiteStore {
     this.editNickName = get(this.userInfo, 'nickname');
     this.editUserName = get(this.userInfo, 'username');
     this.editSignature = get(this.userInfo, 'signature');
+    // this.editAvatarUrl = get(this.userInfo, 'avatarUrl');
+    // this.editBackgroundUrl = get(this.userInfo, 'backgroundUrl');
   }
 
   // 登录后获取新的用户信息
@@ -328,7 +337,10 @@ class UserAction extends SiteStore {
     const pageData = get(userThreadList, 'data.pageData', []);
     const totalPage = get(userThreadList, 'data.totalPage', 1);
     this.userThreadsTotalPage = totalPage;
-    this.userThreads = [...this.userThreads, ...pageData];
+    this.userThreads = {
+      ...this.userThreads,
+      [this.userThreadsPage]: pageData,
+    };
     this.userThreadsTotalCount = get(userThreadList, 'data.totalCount', 0);
 
     if (this.userThreadsPage <= this.userThreadsTotalPage) {
@@ -359,7 +371,10 @@ class UserAction extends SiteStore {
     const pageData = get(targetUserThreadList, 'data.pageData', []);
     const totalPage = get(targetUserThreadList, 'data.totalPage', 1);
     this.targetUserThreadsTotalPage = totalPage;
-    this.targetUserThreads = [...this.targetUserThreads, ...pageData];
+    this.targetUserThreads = {
+      ...this.targetUserThreads,
+      [this.targetUserThreads]: pageData,
+    };
     this.targetUserThreadsTotalCount = get(targetUserThreadList, 'data.totalCount', 0);
 
     if (this.targetUserThreadsPage <= this.targetUserThreadsTotalPage) {
@@ -390,7 +405,13 @@ class UserAction extends SiteStore {
     if (updateAvatarRes.code === 0) {
       this.userInfo.avatarUrl = updateAvatarRes.data.avatarUrl;
       this.userInfo = { ...this.userInfo };
+      return updateAvatarRes.data;
     }
+
+    throw {
+      Code: updateAvatarRes.code,
+      Msg: updateAvatarRes.msg,
+    };
   }
 
   /**
@@ -418,7 +439,13 @@ class UserAction extends SiteStore {
         this.userInfo.backgroundUrl = updateBackgroundRes.data.backgroundUrl;
         this.userInfo = { ...this.userInfo };
       }, 300);
+      return updateBackgroundRes.data;
     }
+
+    throw {
+      Code: updateBackgroundRes.code,
+      Msg: updateBackgroundRes.msg,
+    };
   }
 
   // FIXME: 这里报接口参数错误
@@ -684,6 +711,30 @@ class UserAction extends SiteStore {
     this.targetUserFollows = {};
     this.targetUserFollowsPage = 1;
     this.targetUserFollowsTotalPage = 1;
+  }
+
+  /**
+   * 清理我的屏蔽数据内容
+   */
+  @action
+  clearUserShield = () => {
+    // 我的屏蔽 数据设计
+    this.userShield = []; // 用户屏蔽列表
+    // 触底加载条件 当加载的页数超过总页数的时候就没有更多了
+    this.userShieldPage = 1; // 页码
+    this.userShieldTotalPage = 1; // 总页数
+    this.userShieldTotalCount = 0; // 总条数
+  }
+
+  /**
+   * 清理他人用户数据函数
+   */
+  @action
+  removeTargetUserInfo = () => {
+    this.targetUser = null;
+    this.cleanTargetUserThreads();
+    this.cleanTargetUserFans();
+    this.cleanTargetUserFollows();
   }
 }
 

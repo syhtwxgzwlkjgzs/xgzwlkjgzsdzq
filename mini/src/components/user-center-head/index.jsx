@@ -9,6 +9,7 @@ import clearLoginStatus from '@common/utils/clear-login-status';
 import Router from '@discuzq/sdk/dist/router';
 import { View, Text } from '@tarojs/components';
 
+@inject('site')
 @inject('user')
 @observer
 class index extends Component {
@@ -60,7 +61,9 @@ class index extends Component {
 
   logout = () => {
     clearLoginStatus();
-    window.location.replace('/');
+    this.props.user.removeUserInfo();
+    this.props.site.getSiteInfo();
+    Router.reLaunch({url: '/pages/index/index'});
   }
 
   // 点击粉丝列表
@@ -90,7 +93,7 @@ class index extends Component {
 
   // 点击发送私信
   handleMessage = () => {
-    const username = this.props.user.username
+    const {username} = this.props.user.targetUser;
     Router.push({ url: `/message?page=chat&username=${username}` })
   }
 

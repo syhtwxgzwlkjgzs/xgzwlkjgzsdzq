@@ -1,5 +1,20 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/_variable.scss';
+
+@mixin uploadStyles {
+  transition: all .5s;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: $mask-bg-color;
+  color: #fff;
+}
 
 .userCenterEditHeader {
   position: relative;
@@ -83,6 +98,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 1;
     :global {
       .dzq-icon {
         color: $white;
@@ -90,3 +106,25 @@
     }
   }
 }
+
+// 上传样式
+.uploadAvatar {
+  @include uploadStyles();
+  z-index: 0;
+  .uploadText {
+    margin-left: rem($margin-2n);
+  }
+}
+.bgContent {
+  position: relative;
+  // 上传背景图片样式
+  .uploadBgUrl {
+    @include uploadStyles();
+    z-index: 0;
+    border-radius: 0;
+    .uploadText {
+      margin-left: rem($margin-2n);
+    }
+  }
+}
+

@@ -10,8 +10,6 @@ import isServer from '@common/utils/is-server';
 @inject('index')
 @observer
 class Index extends React.Component {
-  page = 1;
-  prePage = 10;
   static async getInitialProps(ctx) {
     const threads = await readThreadList(
       {
@@ -27,6 +25,8 @@ class Index extends React.Component {
     return {
       serverIndex: {
         threads: threads && threads.code === 0 ? threads.data : null,
+        totalPage: threads && threads.code === 0 ? threads.data.totalPage : null,
+        totalCount: threads && threads.code === 0 ? threads.data.totalCount : null,
       },
     };
   }
@@ -36,9 +36,14 @@ class Index extends React.Component {
     const { serverIndex, index } = this.props;
     this.state = {
       firstLoading: true, // 首次加载状态判断
-    }
+      totalCount: 0,
+      page: 1,
+    };
     if (serverIndex && serverIndex.threads) {
       index.setThreads(serverIndex.threads);
+      this.state.page = 2;
+      this.state.totalPage = serverIndex.totalPage;
+      this.state.totalCount = serverIndex.totalCount;
       this.state.firstLoading = false;
     } else {
       index.setThreads(null);
@@ -49,16 +54,28 @@ class Index extends React.Component {
     const { index } = this.props;
     const hasThreadsData = !!index.threads;
     if (!hasThreadsData) {
-     await this.props.index.getReadThreadList({
-        perPage: this.prePage,
-        page: this.page,
+      const threadsResp = await this.props.index.getReadThreadList({
+        perPage: 10,
+        page: this.state.page,
         filter: {
           complex: 3,
         },
       });
+
       this.setState({
-        firstLoading: false
-      })
+        totalCount: threadsResp.totalCount,
+        totalPage: threadsResp.totalPage,
+      });
+
+      if (this.state.page <= threadsResp.totalPage) {
+        this.setState({
+          page: this.state.page + 1,
+        });
+      }
+
+      this.setState({
+        firstLoading: false,
+      });
     }
     this.listenRouterChangeAndClean();
   }
@@ -66,7 +83,7 @@ class Index extends React.Component {
   clearStoreThreads = () => {
     const { index } = this.props;
     index.setThreads(null);
-  }
+  };
 
   listenRouterChangeAndClean() {
     // FIXME: 此种写法不好
@@ -84,13 +101,19 @@ class Index extends React.Component {
 
   dispatch = async () => {
     const { index } = this.props;
-    await index.getReadThreadList({
-      perPage: this.prePage,
-      page: this.page,
+    const threadsResp = await index.getReadThreadList({
+      perPage: 10,
+      page: this.state.page,
       filter: {
         complex: 3,
       },
     });
+
+    if (this.state.page <= threadsResp.totalPage) {
+      this.setState({
+        page: this.state.page + 1,
+      });
+    }
   };
 
   render() {
@@ -102,7 +125,15 @@ class Index extends React.Component {
       return <IndexPCPage firstLoading={firstLoading} dispatch={this.dispatch} />;
     }
 
-    return <IndexH5Page firstLoading={firstLoading} dispatch={this.dispatch} />;
+    return (
+      <IndexH5Page
+        firstLoading={firstLoading}
+        page={this.state.page}
+        totalPage={this.state.totalPage}
+        totalCount={this.state.totalCount}
+        dispatch={this.dispatch}
+      />
+    );
   }
 }
 

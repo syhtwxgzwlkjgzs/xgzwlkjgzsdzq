@@ -21,6 +21,9 @@
       border: none;
       border-radius: $border-radius-zero;
       -webkit-tap-highlight-color: transparent;
+      &::placeholder {
+        color: $text-color-placeholder;
+      }
     }
   }
   .captchaInput-input_val {

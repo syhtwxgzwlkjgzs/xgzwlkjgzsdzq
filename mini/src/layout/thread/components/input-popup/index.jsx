@@ -53,6 +53,8 @@ const InputPop = (props) => {
             onChange={(e) => setValue(e.target.value)}
             placeholder={inputText}
             disabled={loading}
+            placeholderClass={styles.placeholder}
+            fixed={true}
           ></Textarea>
           {/* <Upload listType='card'>
             <Button loading={loading} type='text' className={styles.upload}>
@@ -76,6 +78,10 @@ const InputPop = (props) => {
       </View>
     </Popup>
   );
+};
+
+InputPop.options = {
+  addGlobalClass: true,
 };
 
 export default InputPop;

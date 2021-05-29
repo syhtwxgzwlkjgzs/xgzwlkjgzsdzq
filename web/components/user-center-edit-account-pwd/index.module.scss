@@ -1,5 +1,5 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/_variable.scss';
+@import '@common/styles/mixin/login.scss';
 
 .content {
   padding: rem($padding-6n);
@@ -23,42 +23,29 @@
       color: $text-color-primary;
       font-size: $font-size-middle;
       flex: 1;
-      :global {
-        .dzq-input {
-          width: 100%;
-          height: rem(37);
-        }
-        .dzq-input__inner {
-          width: 100%;
-          border: none;
-          font-size: rem($font-size-middle);
-          height: rem(37);
-          line-height: rem(37);
-          border-bottom: rem(1) solid $border-color;
-          border-radius: 0;
-        }
-        .dzq-icon {
-          line-height: rem(50);
-        }
+      .input {
+        @include input;
+        @include passwordInput;
       }
     }
+
   }
 }
 
 .tips {
   text-align: right;
   color: $primary-color;
-  padding-right: $padding-6n;
-  font-size: $font-size-primary;
+  padding-right: rem($padding-6n);
+  font-size: rem($font-size-primary);
   margin-top: rem($margin-6n);
 }
 #accountPwdContent {
   .bottom {
     position: fixed;
-    bottom: rem(20);
+    bottom: rem(0);
     width: calc(100% - 32px);
-    border-top: 1px solid $border-color;
-    padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
+    // border-top: 1px solid $border-color;
+    padding: rem($padding-2n) rem($padding-4n) rem($padding-4n);
     display: flex;
     justify-content: center;
     .btn {

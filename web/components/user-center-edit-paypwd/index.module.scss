@@ -1,5 +1,5 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/_variable.scss';
+@import '@common/styles/mixin/login.scss';
 
 .content {
   padding: $padding-6n;
@@ -13,63 +13,38 @@
   .paypwdInput {
     height: rem(62);
     box-sizing: border-box;
-    padding: rem($padding-6n) 0 rem($padding-4n);
-    :global {
-      .dzq-input {
-        width: 100%;
-        height: rem(38);
-      }
-      .dzq-input__inner {
-        width: 100%;
-        height: rem(38);
-        line-height: rem(38);
-        border: none;
-        border-bottom: 1px solid $border-color;
-        padding-left: 0;
-        border-radius: 0;
-        padding-bottom: rem($padding-4n);
-      }
-      .dzq-input__icon {
-        line-height: rem(32);
-      }
+    .input {
+      @include input;
+      @include passwordInput;
     }
   }
 }
 
 .labelInfo {
   .labelValue {
-    :global {
-      .dzq-input {
-        width: 100%;
-      }
-      .dzq-input__inner {
-        width: 100%;
-        height: rem(62);
-        line-height: rem(62);
-        border: none;
-        border-bottom: 1px solid $border-color;
-        border-radius: 0;
-      }
-      .dzq-input__icon {
-        line-height: rem(62);
-      }
+    .input {
+      @include input;
+      @include passwordInput;
     }
   }
   .tips {
-    margin-top: rem($margin-6n);
     width: 100%;
     text-align: right;
     font-size: rem($font-size-primary);
+    text-align: right;
+    color: $primary-color;
+    padding-right: rem($padding-6n);
+    margin-top: rem($margin-6n);
   }
 }
 
 #setPayPwdContent {
   .bottom {
     position: fixed;
-    bottom: rem(20);
+    bottom: 0;
     width: calc(100% - 32px);
-    border-top: 1px solid $border-color;
-    padding: rem($padding-2n) rem($padding-4n) rem($padding-10);
+    // border-top: 1px solid $border-color;
+    padding: rem($padding-2n) rem($padding-4n) rem($padding-4n);
     display: flex;
     .btn {
       height: rem(42);

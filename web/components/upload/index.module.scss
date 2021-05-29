@@ -61,10 +61,12 @@ $width: rem(169);
         }
 
         .dzq-upload-list-card__thumbUrl {
-          width: $width;
-          height: $width;
+          // width: $width;
+          // height: $width;
           object-fit: cover;
           border-radius: $border-radius-small;
+          width: 100%;
+          height: 100%;
         }
 
         .dzq-upload-list-card__operate {

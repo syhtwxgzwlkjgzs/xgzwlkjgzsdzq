@@ -3,18 +3,12 @@
 .content{
   padding-top: rem($padding-4n);
   background-color: var(--color-white);
-  padding-bottom: rem(93);
+  padding-bottom: rem(63);
 }
-.users{
+.hot,.users{
   padding: rem($padding-4n);
   padding-top: 0;
-  &.popularContents{
-    padding-bottom: 0;
-  }
-}
-.hot{
-  padding: rem($padding-4n);
-  padding-top: 0;
+  border-bottom: rem(10) solid $text-bg-color2;
   &.popularContents{
     padding-bottom: 0;
   }
@@ -45,6 +39,7 @@
   .bottom_button{
     width: 100%;
     height: rem(42);
+    border-color: var(--color-primary);
     background-color: var(--color-primary);
     border-radius: rem($border-radius-small);
     font-size: rem($font-size-middle);
@@ -69,6 +64,7 @@
       width: rem(18);
       height: rem(18);
       border-radius: $border-radius-circle;
+      line-height: rem(18);
     }
     .bottom_tips_text{
       padding-left: rem($padding-2n);

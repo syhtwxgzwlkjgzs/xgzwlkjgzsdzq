@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
+import { observer, inject } from 'mobx-react';
 import styles from './index.module.scss';
-import { Icon } from '@discuzq/design';
+import { Icon, Toast } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
 import { withRouter } from 'next/router';
 
@@ -10,7 +11,7 @@ import { withRouter } from 'next/router';
  * @prop {boolean} curr 常亮icon
  */
 
-const BottomNavBar = ({ router, fixed = true, placeholder = false, curr = 'home', onClick = noop }) => {
+const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 'home', onClick = noop }) => {
 
   const checkCurrActiveTab = useCallback((curr, target) => {
     return curr === target;
@@ -25,6 +26,14 @@ const BottomNavBar = ({ router, fixed = true, placeholder = false, curr = 'home'
   ]);
 
   const handleClick = (i, idx) => {
+    if (i.router === '/thread/post') {
+      const { permissions } = user;
+      if (permissions && permissions.createThread && !permissions.createThread.enable) {
+        Toast.info({ content: '您暂无发帖权限' });
+        return;
+      }
+    }
+
     onClick(i, idx)
     const temp = [...tabs];
     if (i.text) {
@@ -60,4 +69,4 @@ const BottomNavBar = ({ router, fixed = true, placeholder = false, curr = 'home'
   );
 };
 
-export default withRouter(BottomNavBar);
+export default inject('user')(observer(withRouter(BottomNavBar)));

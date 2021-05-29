@@ -8,6 +8,7 @@ import isWeiXin from '@common/utils/is-weixin';
 import { get } from '@common/utils/get';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import goToLoginPage from '@common/utils/go-to-login-page';
+import { numberFormat } from '@common/utils/number-format';
 
 /**
  * 帖子头部
@@ -67,7 +68,7 @@ class HomeHeader extends React.Component {
     const siteInstall = get(webConfig, 'setSite.siteInstall', '');
     const  startDate = Date.parse(siteInstall);
     const  endDate = Date.parse(new Date());
-    const days = parseInt(Math.abs(startDate  -  endDate) / 1000 / 60 / 60 / 24);
+    const days = numberFormat(parseInt(Math.abs(startDate  -  endDate) / 1000 / 60 / 60 / 24, 10));
 
     siteInfo.siteAuthor = siteAuthor;
     siteInfo.createDays = days;

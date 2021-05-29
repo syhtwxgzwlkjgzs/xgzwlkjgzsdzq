@@ -7,14 +7,25 @@
   overflow-y: auto;
 }
 
+
+
 .h5DialogBox {
   display: flex;
   flex-direction: column;
   height: calc(100vh - 96px);
   overflow-y: auto;
-  .box__inner{
-    padding: 0 $padding-4n;
-  }
+}
+
+.h5DialogBox-emoji {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 314px);
+  overflow-y: auto;
+
+}
+
+.box__inner{
+  padding: 0 $padding-4n;
 
   .itself {
     .msgContent {
@@ -25,6 +36,8 @@
     }
   }
 }
+
+
 
 .msgTime {
   @include text-font($color: $text-color-secondary);
@@ -45,10 +58,9 @@
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  color: blue;
   width: $im-profile-icon-size;
   height: $im-profile-icon-size;
-  background-color: $primary-color;
+  // background-color: $primary-color;
 }
 
 .msgContent {
@@ -58,6 +70,12 @@
   padding: rem($padding-2n);
   overflow-wrap: anywhere;
   border-radius: rem($border-radius-small);
+  :global {
+    .qq-emotion {
+      width: 30px;
+      height: 30px;
+    }
+  }
 
   &:before {
     content: '';
@@ -95,3 +113,7 @@
     }
   }
 }
+
+
+
+

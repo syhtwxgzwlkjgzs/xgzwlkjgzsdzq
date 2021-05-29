@@ -6,6 +6,8 @@ import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import throttle from '@common/utils/thottle.js';
+import { trimLR } from '@common/utils/get-trimly.js';
+@inject('site')
 @inject('user')
 @observer
 class index extends Component {
@@ -24,16 +26,28 @@ class index extends Component {
 
   // 输入旧密码
   handleSetOldPwd = (e) => {
+    if (trimLR(e.target.value) === "" || !e.target.value) {
+      this.props.user.oldPassword = null;
+      return
+    }
     this.props.user.oldPassword = e.target.value;
   };
 
   // 设置账户密码
   handleSetPwd = (e) => {
+    if (trimLR(e.target.value) === "" || !e.target.value) {
+      this.props.user.newPassword = null;
+      return
+    }
     this.props.user.newPassword = e.target.value;
   };
 
   // 确认新密码
   hadleNewPasswordRepeat = (e) => {
+    if (trimLR(e.target.value) === "" || !e.target.value) {
+      this.props.user.newPasswordRepeat = null;
+      return
+    }
     this.props.user.newPasswordRepeat = e.target.value;
   };
 
@@ -101,6 +115,7 @@ class index extends Component {
       <div className={styles.labelInfo}>
         <div className={styles.labelValue}>
           <Input
+            className={styles.input}
             onChange={this.handleSetPwd}
             mode="password"
             placeholder="请设置密码"
@@ -111,6 +126,7 @@ class index extends Component {
       <div className={styles.labelInfo}>
         <div className={styles.labelValue}>
           <Input
+            className={styles.input}
             mode="password"
             placeholder="请确认密码"
             value={this.props.user?.newPasswordRepeat}
@@ -128,6 +144,7 @@ class index extends Component {
       <div className={styles.labelInfo}>
         <div className={styles.labelValue}>
           <Input
+            className={styles.input}
             value={this.props.user?.oldPassword}
             onChange={this.handleSetOldPwd}
             mode="password"
@@ -138,6 +155,7 @@ class index extends Component {
       <div className={styles.labelInfo}>
         <div className={styles.labelValue}>
           <Input
+            className={styles.input}
             value={this.props.user?.newPassword}
             onChange={this.handleSetPwd}
             mode="password"
@@ -148,6 +166,7 @@ class index extends Component {
       <div className={styles.labelInfo}>
         <div className={styles.labelValue}>
           <Input
+            className={styles.input}
             onChange={this.hadleNewPasswordRepeat}
             mode="password"
             value={this.props.user?.newPasswordRepeat}
@@ -169,7 +188,7 @@ class index extends Component {
 
     let isSubmit = false;
     if (this.props.user?.hasPassword) {
-      isSubmit = !oldPassword || !newPassword || !newPasswordRepeat || newPassword !== newPasswordRepeat;
+      isSubmit = !oldPassword || !newPassword || !newPasswordRepeat
     } else {
       isSubmit = !newPassword || !newPasswordRepeat;
     }
@@ -177,14 +196,13 @@ class index extends Component {
   };
 
   render() {
-    console.log(this.getDisabledWithButton());
     return (
       <div id={styles.accountPwdContent}>
         <Header />
         <div className={styles.content}>
           {this.props.user?.hasPassword ? this.renderHasPassword() : this.renderHasNoPassword()}
         </div>
-        {this.props.user?.hasPassword && (
+        {(this.props.site?.isSmsOpen && this.props.user?.hasPassword) && (
           <div onClick={this.handleResetPwd} className={styles.tips}>
             忘记旧密码？
           </div>

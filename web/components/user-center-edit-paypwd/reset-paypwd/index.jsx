@@ -21,16 +21,17 @@ export default class index extends Component {
     this.props.payBox.clearPayPassword()
   }
 
-  // 设置新密码
+  // 设置新密码 newPayPwd
   handleChangeNewPwd = (e) => {
     this.props.payBox.newPayPwd = e.target.value
   }
 
-  // 确认新密码
+  // 确认新密码 newPayPwdRepeat
   handleChangeRepeatPwd = (e) => {
     this.props.payBox.newPayPwdRepeat = e.target.value
   }
 
+  // 点击确认 ---> 清空对应密码状态
   handleSubmit = throttle(() => {
     if (this.getDisabledWithButton()) return
     const newPayPwd = this.props.payBox?.newPayPwd
@@ -54,7 +55,7 @@ export default class index extends Component {
       this.props.payBox.clearPayPassword()
     }).catch((err) => {
       Toast.error({
-        content: '修改密码失败',
+        content: err.Msg || '修改密码失败',
         hasMask: false,
         duration: 1000,
       })
@@ -69,7 +70,7 @@ export default class index extends Component {
   getDisabledWithButton = () => {
     const newPayPwd = this.props.payBox?.newPayPwd
     const newPayPwdRepeat = this.props.payBox?.newPayPwdRepeat
-    return !newPayPwd || !newPayPwdRepeat || newPayPwd !== newPayPwdRepeat
+    return !newPayPwd || !newPayPwdRepeat
   }
 
   render() {

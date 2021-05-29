@@ -9,6 +9,7 @@ import Router from '@discuzq/sdk/dist/router';
 import GetQueryString from '../../../common/utils/get-query-string';
 import throttle from '@common/utils/thottle.js';
 
+@inject('site')
 @inject('user')
 @inject('payBox')
 @observer
@@ -24,7 +25,7 @@ class index extends Component {
     this.props.payBox.clearPayPassword();
   }
 
-  // 点击去到下一步
+  // 点击去到下一步 ---> 清空旧密码oldPayPwd状态
   goToResetPayPwd = throttle(() => {
     if (this.getDisabledWithButton()) return;
     this.props.payBox
@@ -48,21 +49,21 @@ class index extends Component {
     Router.push({ url: '/my/edit/find-paypwd' });
   };
 
-  // 初次设置密码
+  // 初次设置密码 password
   handleSetPwd = (e) => {
     const securityCode = e.target.value.match(/^[0-9]*$/);
     if (!securityCode) return;
-    this.props.payBox.payPassword = securityCode[0];
+    this.props.payBox.password = securityCode[0];
   };
 
-  // 点击修改旧密码
+  // 点击修改旧密码 oldPayPwd
   handleChangeOldPwd = (e) => {
     const securityCode = e.target.value.match(/^[0-9]*$/);
     if (!securityCode) return;
     this.props.payBox.oldPayPwd = securityCode[0];
   };
 
-  // 点击提交
+  // 点击提交 ----> 设置密码password成功 ---> 清空 password状态
   handleSubmit = throttle(async () => {
     const { isSubmit } = this.state;
     if (isSubmit || this.getDisabledWithButton()) return;
@@ -83,9 +84,10 @@ class index extends Component {
           const { id } = this.props?.user;
           this.props.user.updateUserInfo(id);
           this.props.payBox.visible = true;
+          this.props.payBox.password = null;
         }
         Router.back();
-        this.initState();
+        this.props.payBox.password = null;
       })
       .catch((err) => {
         console.log(err);
@@ -94,7 +96,7 @@ class index extends Component {
           hasMask: false,
           duration: 1000,
         });
-        this.initState();
+        this.props.payBox.password = null;
       });
   }, 500);
 
@@ -102,55 +104,61 @@ class index extends Component {
    * 获取按钮禁用状态
    * @returns true 表示禁用 false表示不禁用
    */
-   getDisabledWithButton = () => {
-     const payPassword = this.props.payBox?.payPassword;
-     const oldPayPwd = this.props.payBox?.oldPayPwd;
-     let disabled = false;
-     if (this.props.user?.canWalletPay) {
-       disabled = !oldPayPwd || oldPayPwd.length !== 6;
-     } else {
-       disabled = !payPassword || payPassword.length !== 6;
-     }
-     return disabled;
-   }
+  getDisabledWithButton = () => {
+    const payPassword = this.props.payBox?.password;
+    const oldPayPwd = this.props.payBox?.oldPayPwd;
+    let disabled = false;
+    if (this.props.user?.canWalletPay) {
+      disabled = !oldPayPwd || oldPayPwd.length !== 6;
+    } else {
+      disabled = !payPassword || payPassword.length !== 6;
+    }
+    return disabled;
+  }
 
   // 如果没有设置支付密码 显示设置支付密码
   renderSetPayPwd = () => (
-      <div className={styles.content}>
-        <h3>设置支付密码</h3>
-        <div className={styles.paypwdInput}>
-          <Input
-            type="number"
-            maxLength={6}
-            value={this.props.payBox?.payPassword}
-            onChange={this.handleSetPwd}
-            placeholder="请设置您的支付密码"
-            mode="password"
-          />
-        </div>
+    <div className={styles.content}>
+      <h3>设置支付密码</h3>
+      <div className={styles.paypwdInput}>
+        <Input
+          className={styles.input}
+          type="number"
+          maxLength={6}
+          value={this.props.payBox?.password}
+          onChange={this.handleSetPwd}
+          placeholder="请设置您的支付密码"
+          mode="password"
+        />
       </div>
+    </div>
   );
 
   // 渲染已经设置了支付密码内容
   renderCanPayPwd = () => (
-      <div className={styles.content}>
-        <h3>修改密码</h3>
-        <div className={styles.labelInfo}>
-          <div className={styles.labelValue}>
-            <Input
-              type="number"
-              maxLength={6}
-              value={this.props.payBox?.oldPayPwd}
-              mode="password"
-              placeholder="请输入旧密码"
-              onChange={this.handleChangeOldPwd}
-            />
-          </div>
-          <div onClick={this.handleGoToFindPayPwd} className={styles.tips}>
-            忘记旧密码？
-          </div>
+    <div className={styles.content}>
+      <h3>修改密码</h3>
+      <div className={styles.labelInfo}>
+        <div className={styles.labelValue}>
+          <Input
+            className={styles.input}
+            type="number"
+            maxLength={6}
+            value={this.props.payBox?.oldPayPwd}
+            mode="password"
+            placeholder="请输入旧密码"
+            onChange={this.handleChangeOldPwd}
+          />
         </div>
+        {
+          this.props.site?.isSmsOpen && (
+            <div onClick={this.handleGoToFindPayPwd} className={styles.tips}>
+              忘记旧密码？
+            </div>
+          )
+        }
       </div>
+    </div>
   );
 
   render() {

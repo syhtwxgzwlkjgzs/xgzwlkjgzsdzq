@@ -175,7 +175,7 @@ class UsernameH5Login extends React.Component {
                     return;
                   }
 
-                  this.props.router.push('wx-login');
+                  this.props.router.replace('wx-login');
                 }}
                 className={platform === 'h5' ? layout['otherLogin-button-weixin'] : layout.button_left}
               >
@@ -185,7 +185,7 @@ class UsernameH5Login extends React.Component {
             {this.props.site.isSmsOpen && (
               <span
                 onClick={() => {
-                  this.props.router.push('phone-login');
+                  this.props.router.replace('phone-login');
                 }}
                 className={platform === 'h5' ? layout['otherLogin-button-phone'] : layout.button_right}
               >

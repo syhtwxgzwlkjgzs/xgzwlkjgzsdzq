@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { Button, Input, Toast } from '@discuzq/design';
 import Header from '@components/header';
 import styles from './index.module.scss';
-import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData';
 import CaptchaInput from '../../user-center-edit-mobile/captcha-input';
 import VerifyCode from '../../user-center-edit-mobile/verify-code';
 import throttle from '@common/utils/thottle.js';
@@ -71,6 +70,14 @@ class index extends Component {
   handleStepBtn = () => {
     if (this.getDisabledWithButton()) return
     const { list = [], payPassword, payPasswordConfirmation } = this.state
+    if (payPassword !== payPasswordConfirmation) {
+      Toast.error({
+        content: '两次密码输入有误',
+        hasMask: false,
+        duration: 1000,
+      });
+      return
+    }
     const mobile = this.props?.user.originalMobile;
     const code = list.join("")
     this.props.payBox.forgetPayPwd({
@@ -84,14 +91,15 @@ class index extends Component {
         hasMask: false,
         duration: 1000,
       })
-      Router.push({ url: `/my` })
+      Router.push({ url: `/my` });
+      this.initState()
     }).catch((err) => {
-      console.log(err);
       Toast.error({
         content: err.Msg || "重置密码失败",
         hasMask: false,
         duration: 1000,
       })
+      this.initState();
     })
   }
 
@@ -137,9 +145,10 @@ class index extends Component {
     });
   }
 
-  getVerifyCode = throttle(({ calback }) => {
+  getVerifyCode = throttle(async ({ calback }) => {
+    let { captchaRandStr, captchaTicket } = await this.props.showCaptcha()
     const mobile = this.props?.user.originalMobile;
-    this.props.payBox.sendSmsVerifyCode({ mobile }).then(res => {
+    this.props.payBox.sendSmsVerifyCode({ mobile, captchaRandStr, captchaTicket }).then(res => {
       this.setState({
         initTimeValue: res.interval,
       }, () => {
@@ -200,10 +209,10 @@ class index extends Component {
           </div>
         </div>
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}><Input value={payPassword} onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur} mode="password" placeholder="设置新密码" type="number" maxLength={6} /></div>
+          <div className={styles.labelValue}><Input className={styles.input} value={payPassword} onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur} mode="password" placeholder="设置新密码" type="number" maxLength={6} /></div>
         </div>
         <div className={styles.labelInfo}>
-          <div className={styles.labelValue}><Input value={payPasswordConfirmation} onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="重复新密码" type="number" maxLength={6} /></div>
+          <div className={styles.labelValue}><Input className={styles.input} value={payPasswordConfirmation} onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="重复新密码" type="number" maxLength={6} /></div>
         </div>
         <div className={`${styles.bottom} ${isKeyBoardVisible && styles.bootom2}`}>
           <Button disabled={this.getDisabledWithButton()} full onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>提交</Button>

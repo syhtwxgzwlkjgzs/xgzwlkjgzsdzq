@@ -122,6 +122,10 @@ class Index extends Component {
       // 请求成功，设置分类，发帖数据,发帖状态，草稿状态开启自动保存
       const { categoryId, isDraft } = ret.data;
       this.setCategory(categoryId);
+      const { content: { text } } = ret.data;
+      // 小程序编辑帖子，要把内容中的img标签去掉。/todo: 防止把其他有效的img标签也去掉
+      const realText = text.replace(/<img.*?alt="(\w+)".*?>/g, `:$1:`);
+      ret.data.content.text = realText;
       threadPost.formatThreadDetailToPostData(ret.data);
       this.setState({ postType: isDraft === 1 ? 'isDraft' : 'isEdit' });
       // isDraft === 1 && this.openSaveDraft(); // 现阶段，自动保存功能关闭
@@ -538,13 +542,9 @@ class Index extends Component {
         <View className={styles['container']}>
           {/* 自定义顶部导航条 */}
           <View className={styles.topBar}>
-            <View
-              className={styles['topBar-icon']}
-              onClick={() => this.handlePageJump(false)}
-            >
-              <Icon name="RightOutlined" />
+            <View className={styles['btn-back']} onClick={() => this.handlePageJump(false)}>
+              <Icon name="RightOutlined" />发帖
             </View>
-            发帖
           </View>
 
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
