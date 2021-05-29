@@ -11,7 +11,7 @@ import { get } from '@common/utils/get';
 import Protocol from '../components/protocol';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import PcBodyWrap from '../components/pc-body-wrap';
-import { genMiniScheme } from '@/common/server';
+import { genMiniScheme } from '@common/server';
 
 @inject('site')
 @inject('user')
@@ -34,14 +34,14 @@ class WXLoginH5Page extends React.Component {
 
       const redirectUri = `${encodeURIComponent(`${window.location.origin}/user/wx-authorization?type=${platform}${inviteCode}`)}`;
       let params;
-      if (platform === 'h5' && site?.isMiniProgramOpen) {
-        // 在h5 浏览器中 且小程序设置打开 通过小程序schema跳转
-        const resp = await genMiniScheme();
-        if (resp.code === 0) {
-          window.location.href = `${get(resp, 'data.openLink', '')}?${inviteCode.substr(1)}`;
-          return;
-        }
-      }
+      // if (platform === 'h5' && site?.isMiniProgramOpen) {
+      //   // 在h5 浏览器中 且小程序设置打开 通过小程序schema跳转
+      //   const resp = await genMiniScheme();
+      //   if (resp.code === 0) {
+      //     window.location.href = `${get(resp, 'data.openLink', '')}?${inviteCode.substr(1)}`;
+      //     return;
+      //   }
+      // }
 
       // 在h5浏览器中，且公众号设置打开
       params = {
