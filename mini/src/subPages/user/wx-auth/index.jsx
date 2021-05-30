@@ -91,8 +91,8 @@ class MiniAuth extends React.Component {
         });
       }
       throw {
-        Code: 'ulg_9999',
-        Message: '网络错误',
+        Code: error.Code,
+        Message:  error.Message,
         error,
       };
     }

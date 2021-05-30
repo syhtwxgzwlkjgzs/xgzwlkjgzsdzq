@@ -97,7 +97,6 @@
       }
 
       .amount {
-        font-weight: 600;
         font-size: $font-size-middle;
         line-height: rem(20);
         text-align: right;
@@ -151,6 +150,13 @@
     /*财务详情*/
     &.detail-financial {
       top: 0;
+      .middle {
+        .content-html {
+          .financial-content {
+            height: 20px;
+          }
+        }
+      }
     }
     /*账号详情*/
     &.detail-account {

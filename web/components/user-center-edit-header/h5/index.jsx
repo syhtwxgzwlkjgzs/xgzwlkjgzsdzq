@@ -4,7 +4,7 @@ import Avatar from '@components/avatar';
 import UserCenterHeaderImage from '@components/user-center-header-images';
 import { Icon, Input, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
-import { ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post';
+import { USER_IMAGE_TYPES } from '@common/constants/user-center-image-pattern';
 import { fixImageOrientation } from '@common/utils/exif';
 import { detectImageAutomaticRotation } from '@common/utils/detect-image-automatic-rotation';
 
@@ -42,13 +42,7 @@ export default class index extends Component {
     this.setState({
       isUploadAvatarUrl: true,
     });
-    let fixedImg;
-
-    if (detectImageAutomaticRotation()) {
-      fixedImg = fileList.target.files[0];
-    } else {
-      fixedImg = await fixImageOrientation(fileList.target.files[0]);
-    }
+    let fixedImg = await fixImageOrientation(fileList.target.files[0]);
 
     this.props.user
       .updateAvatar(fixedImg)
@@ -86,11 +80,9 @@ export default class index extends Component {
     });
     let fixedImg;
 
-    if (detectImageAutomaticRotation()) {
-      fixedImg = fileList.target.files[0];
-    } else {
+    const IS_IMG_AUTO_ROTATE = await detectImageAutomaticRotation();
+
       fixedImg = await fixImageOrientation(fileList.target.files[0]);
-    }
     this.props.user
       .updateBackground(fixedImg)
       .then((res) => {
@@ -153,6 +145,7 @@ export default class index extends Component {
               ref={this.backgroundUploaderRef}
               type="file"
               style={{ display: 'none' }}
+              accept={USER_IMAGE_TYPES.join(',')}
             />
             {/* 背景图加载状态 */}
             {isUploadBackgroundUrl && (
@@ -173,7 +166,7 @@ export default class index extends Component {
                 type="file"
                 style={{ display: 'none' }}
                 multiple={false}
-                accept={ACCEPT_IMAGE_TYPES.join(',')}
+                accept={USER_IMAGE_TYPES.join(',')}
               />
             </div>
             {/* 上传中样式处理 */}

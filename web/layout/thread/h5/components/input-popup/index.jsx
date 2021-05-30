@@ -23,12 +23,14 @@ const InputPop = (props) => {
 
   const [imageList, setImageList] = useState([]);
 
+  const [imageUploading, setImageUploading] = useState(false);
+
   useEffect(() => {
     setValue(initValue || '');
   }, [initValue]);
 
   const onSubmitClick = async () => {
-    if (loading) return;
+    if (loading || imageUploading) return;
 
     if (typeof onSubmit === 'function') {
       try {
@@ -141,6 +143,8 @@ const InputPop = (props) => {
 
       !isAllLegal && Toast.info({ content: `仅支持${supportImgExt}类型的图片` });
 
+      setImageUploading(true);
+
       return true;
     }
 
@@ -151,6 +155,8 @@ const InputPop = (props) => {
     if (value.code === 0) {
       file.response = value.data;
     }
+
+    setImageUploading(imageList?.length && imageList.some((image) => image.status === 'uploading'));
   };
 
   return (
@@ -214,7 +220,10 @@ const InputPop = (props) => {
             ></Icon>
           </div>
 
-          <div onClick={onSubmitClick} className={styles.ok}>
+          <div
+            onClick={onSubmitClick}
+            className={classnames(styles.ok, (loading || imageUploading) && styles.disabled)}
+          >
             发布
           </div>
         </div>

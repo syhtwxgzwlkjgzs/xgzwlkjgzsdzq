@@ -92,7 +92,11 @@ class IndexAction extends IndexStore {
       if (this.threads && result.data.pageData && page !== 1) {
         this.threads.pageData.push(...result.data.pageData);
         const newPageData = this.threads.pageData.slice();
-        this.setThreads({ ...result.data, pageData: newPageData });
+        this.setThreads({
+          ...result.data,
+          currentPage: result.data.currentPage,
+          pageData: newPageData
+        });
       } else {
         // 首次加载
         this.threads = null;
@@ -100,7 +104,8 @@ class IndexAction extends IndexStore {
       }
       return result.data;
     }
-    return Promise.reject();
+
+    return Promise.reject(result?.msg || '');
   }
 
   /**

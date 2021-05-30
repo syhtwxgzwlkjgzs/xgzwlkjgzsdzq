@@ -13,7 +13,8 @@ class IncomeList extends React.Component {
     this.state = {};
   }
 
-  render() {
+  render() {    
+    const { itemKey, dataLength } = this.props
     return (
         <div className={styles.container}>
             <div className={styles.content}>
@@ -25,7 +26,8 @@ class IncomeList extends React.Component {
                 </div>
                 <div className={styles.money}>+{this.props.incomeVal.amount}</div>
             </div>
-            <div className={styles.time}>{diffDate(time.formatDate(this.props.incomeVal.createdAt, 'YYYY-MM-DD'))}</div>
+            {/* // FIXME:这里的结构有问题 怪怪的 所以只能用数组长度取消底部边框线 */}
+            <div className={styles.time} style={{borderBottom: itemKey === dataLength - 1 && 0}}>{diffDate(time.formatDate(this.props.incomeVal.createdAt, 'YYYY-MM-DD'))}</div>
         </div>
     );
   }

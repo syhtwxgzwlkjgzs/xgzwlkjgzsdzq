@@ -9,6 +9,7 @@ import classNames from 'classnames';
 import styles from './index.module.scss';
 import throttle from '@common/utils/thottle';
 import PropTypes from 'prop-types';
+import Header from '@components/header';
 import List from '@components/list';
 
 /**
@@ -85,7 +86,7 @@ class SlierItem extends PureComponent {
         <div className={styles['slider-content']}>{RenderItem && <RenderItem item={item} {...other} />}</div>
         {/* 滑块操作按钮 */}
         <div
-          className={styles['slider-brn']}
+          className={styles['slider-btn']}
           style={{
             flexBasis: offsetLeft,
             color: Color,
@@ -172,7 +173,7 @@ class Index extends Component {
       list,
       noMore,
       height,
-      withTopBar,
+      showHeader,
       withBottomBar,
       topCard,
       onPullDown,
@@ -183,22 +184,23 @@ class Index extends Component {
 
     return (
       <div className={classNames(styles.wrapper, {
-        [styles['with-top']]: withTopBar,
+        [styles['not-bottom']]: !withBottomBar,
         [styles['with-bottom']]: withBottomBar,
       })}>
         <PullDownRefresh
           onRefresh={this.onPullDownRefresh}
           isFinished={isFinished}
-          height={600}
           damping={damping}
         >
           <List
-            height={height}
+            className={styles.list}
             noMore={noMore}
             onScroll={throttle(this.onScroll, 10)}
             onRefresh={onScrollBottom}
           >
-            {/* 顶部导航卡片 */}
+            {/* 导航条 */}
+            {showHeader && <Header />}
+            {/* 组件内top卡片 */}
             {topCard}
             {/* show list */}
             <div className={styles.slider}>
@@ -222,9 +224,8 @@ class Index extends Component {
 }
 
 Index.propsTypes = {
-  height: PropTypes.string,
   noMore: PropTypes.bool,
-  withTopBar: PropTypes.bool,
+  showHeader: PropTypes.bool,
   withBottomBar: PropTypes.bool,
   topCard: PropTypes.object,
   list: PropTypes.array,
@@ -233,9 +234,8 @@ Index.propsTypes = {
 }
 
 Index.defaultProps = {
-  height: '100vh',
   noMore: false,
-  withTopBar: false,
+  showHeader: false,
   withBottomBar: false,
   topCard: null,
   list: [],

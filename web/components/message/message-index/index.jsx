@@ -39,7 +39,7 @@ export class MessageIndex extends Component {
   }
 
   async componentDidMount() {
-    await this.props.message.readDialogList(1);
+    await this.fetchDialogData(1);
     const { threadUnread, financialUnread, accountUnread } = this.props.message;
     const items = [...this.state.items];
     items[0].totalCount = threadUnread;
@@ -47,6 +47,11 @@ export class MessageIndex extends Component {
     items[2].totalCount = accountUnread;
 
     this.setState({ items });
+  }
+
+  fetchDialogData(initPage = 0) {
+    const { readDialogList, dialogList: { currentPage } } = this.props.message;
+    return readDialogList(initPage || currentPage + 1);
   }
 
   formatChatDialogList = (data = []) => {
@@ -73,16 +78,6 @@ export class MessageIndex extends Component {
     message.deleteDialog(item.id);
   };
 
-  onPullDown = () => {
-    const { message } = this.props;
-    return message.readDialogList(1);
-  };
-
-  handleScrollBottom = () => {
-    const { message } = this.props;
-    return message.readDialogList(message.dialogList.currentPage + 1);
-  };
-
   // 跳转其它消息类型
   toOtherMessage = (link) => {
     this.props.router.push(link);
@@ -90,24 +85,23 @@ export class MessageIndex extends Component {
 
   render() {
     const { items } = this.state;
-    const { isPC } = this.props.site;
+    const { site: { isPC }, message: { dialogList } } = this.props;
+    const { list, currentPage, totalPage, totalCount } = dialogList;
     const card = <Card cardItems={items} onClick={this.toOtherMessage} />;
-    const { dialogList } = this.props.message;
-    const newDialogList = this.formatChatDialogList(dialogList.list);
 
     return (
-      <div className={styles.wrapper}>
+      <div className={`${styles.wrapper} ${isPC ? styles.pc : ""}`}>
         <Notice
           infoIdx={0}
-          totalCount={dialogList.totalCount}
-          height='calc(100vh - 64px)'
+          totalCount={totalCount}
           withBottomBar={true}
-          noMore={dialogList.length === 0 || dialogList.currentPage >= dialogList.totalPage}
+          noMore={currentPage >= totalPage}
+          showHeader={!isPC}
           topCard={isPC ? null : card}
-          list={newDialogList}
+          list={this.formatChatDialogList(list)}
           type='chat'
-          onPullDown={this.onPullDown}
-          onScrollBottom={this.handleScrollBottom}
+          onPullDown={() => this.fetchDialogData(1)}
+          onScrollBottom={() => this.fetchDialogData()}
           onBtnClick={this.handleDelete}
         />
         {!isPC && <BottomNavBar placeholder={false} curr={'message'} />}
