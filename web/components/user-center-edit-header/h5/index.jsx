@@ -187,19 +187,22 @@ export default class index extends Component {
           {/* 编辑修改说明 */}
           <div className={styles.userCenterEditDec}>
             <div className={styles.userCenterEditDecItem}>
-              <Icon onClick={this.handleClickSignature} name="CompileOutlined" />
+              <Icon className={styles.compileIcon} onClick={this.handleClickSignature} name="CompileOutlined" />
               {
-                !this.state.isClickSignature ? (
+                this.state.isClickSignature ? (
                   // true ? (
-                  <div style={{width: inputWidth + 20}}>
-                    <Input className={styles.userSignatureInput} maxLength={50} focus={true} onChange={this.handleChangeSignature} onBlur={this.handleBlurSignature} value={this.user.editSignature} placeholder="这个人很懒，什么也没留下~" />
+                  <div 
+                    style={{width: inputWidth + 10, minWidth: !this.user.editSignature && '180px'}}
+                  
+                  >
+                    <Input trim className={styles.userSignatureInput} maxLength={50} focus={true} onChange={this.handleChangeSignature} onBlur={this.handleBlurSignature} value={this.user.editSignature} placeholder="这个人很懒，什么也没留下~" />
                   </div>
                 ) : (
-                  <span className={styles.text}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</span>
+                  <div style={{ minWidth: !this.user.editSignature && '180px'}} className={styles.text}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</div>
                 )
               }
               {/* 隐藏span--获取该内容宽度--赋值给input */}
-              <div ref={this.hiddenElement} className={styles.hiddenElement}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</div>
+              <div style={{maxWidth: '80%'}} ref={this.hiddenElement} className={styles.hiddenElement}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</div>
             </div>
           </div>
         </div>
