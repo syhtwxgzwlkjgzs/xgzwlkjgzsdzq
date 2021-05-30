@@ -30,6 +30,12 @@ const DialogBox = (props) => {
     }
   }, [dialogId]);
 
+  useEffect(() => {
+    if (showEmoji) {
+      scrollEnd();
+    }
+  }, [showEmoji]);
+
   const scrollEnd = () => {
     if (dialogBoxRef.current) {
       dialogBoxRef.current.scrollTop = dialogBoxRef?.current?.scrollHeight;
