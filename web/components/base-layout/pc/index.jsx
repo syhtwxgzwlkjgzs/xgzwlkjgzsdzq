@@ -154,33 +154,43 @@ const BaseLayout = (props) => {
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
 
-        <List {...props} immediateCheck={immediateCheck} className={styles.list} wrapperClass={styles.wrapper} ref={listRef} onError={onError} onScroll={handleScroll}>
-          {
-            (pageName === 'home' || showLeft) && (
-              <div className={styles.left}>
-                {typeof(left) === 'function' ? useCallback(left({ ...props }), []) : left}
-              </div>
-            )
-          }
+        <div className={styles.body}>
 
-          <div className={styles.center}>
-            {typeof(children) === 'function' ? children({ ...props }) : children}
-            {!isError && onRefresh && <RefreshView noMore={noMore} />}
-            {isError && <ErrorView />}
-          </div>
 
-          {
-            (pageName === 'home' || showRight) && (
-              <div className={`${styles.right} ${(pageName === "home") ? styles["home-right"] : ""}`}>
-                {typeof(right) === 'function' ? right({ ...props }) : right}
-              </div>
-            )
-          }
-        </List>
+          <div className={styles.left}></div>
+          <div className={styles.center}></div>
+          <div className={styles.right}></div>
+
+        </div>
+        
 
       {typeof(footer) === 'function' ? footer({ ...props }) : footer}
     </div>
   );
 };
+
+// <List {...props} immediateCheck={immediateCheck} className={styles.list} wrapperClass={styles.wrapper} ref={listRef} onError={onError} onScroll={handleScroll}>
+//             {
+//               (pageName === 'home' || showLeft) && (
+//                 <div className={styles.left}>
+//                   {typeof(left) === 'function' ? useCallback(left({ ...props }), []) : left}
+//                 </div>
+//               )
+//             }
+
+//             <div className={styles.center}>
+//               {typeof(children) === 'function' ? children({ ...props }) : children}
+//               {!isError && onRefresh && <RefreshView noMore={noMore} />}
+//               {isError && <ErrorView />}
+//             </div>
+
+//             {
+//               (pageName === 'home' || showRight) && (
+//                 <div className={`${styles.right} ${(pageName === "home") ? styles["home-right"] : ""}`}>
+//                   {typeof(right) === 'function' ? right({ ...props }) : right}
+//                 </div>
+//               )
+//             }
+//           </List>
 
 export default inject('baselayout')(observer(BaseLayout));
