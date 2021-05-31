@@ -2,6 +2,9 @@ import React from 'react';
 import { inject } from 'mobx-react';
 import isServer from '@common/utils/is-server';
 
+/** *
+ * 在不同登录模式下，限制可以进入的登录路由
+ */
 function HOCLoginMode(mode) {
   return (Component) => {
     @inject('site')
