@@ -291,7 +291,7 @@ class CommentH5Page extends React.Component {
     if (!val) return;
 
     const params = {
-      threadId: this.props.thread.threadData.threadId,
+      threadId: this.props.comment.threadId,
       type: 2,
       reason: val,
       userId: this.props.user.userInfo.id,
