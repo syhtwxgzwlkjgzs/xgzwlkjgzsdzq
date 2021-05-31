@@ -19,14 +19,7 @@ class IndexH5Page extends React.Component {
     super(props);
     this.state = {
       visible: false,
-      filter: {
-        categoryids: ['all'],
-        sequence: 0,
-        sort: 1,
-        attention: 0,
-        types: 'all',
-        essence: 0
-      },
+      filter: {},
       currentIndex: 'all',
       isFinished: true,
       fixedTab: false,

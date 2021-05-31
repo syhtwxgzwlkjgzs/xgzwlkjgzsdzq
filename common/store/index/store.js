@@ -15,7 +15,15 @@ class IndexStore {
   }
   @observable recommends = null;
   @observable recommendsStatus = 'none'
-  @observable filter = {}
+
+  @observable filter = {
+    categoryids: ['all'],
+    sequence: 0,
+    sort: 1,
+    attention: 0,
+    types: 'all',
+    essence: 0
+  }
 
   // 解决小程序popup被tabBar遮挡的问题
   @observable hiddenTabBar = false
