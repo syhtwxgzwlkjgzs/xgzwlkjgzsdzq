@@ -465,10 +465,15 @@ class UserAction extends SiteStore {
     });
 
     if (updateUserInfoRes.code === 0) {
+      this.userInfo.signature = this.editSignature;
+      this.userInfo.nickname = this.editNickName;
       return updateUserInfoRes.data;
     }
 
-    throw {};
+    throw {
+      Code: updateUserInfoRes.code,
+      Message: updateUserInfoRes.msg,
+    };
   }
 
    @action
@@ -480,10 +485,14 @@ class UserAction extends SiteStore {
     });
 
     if (updateUserInfoRes.code === 0) {
+      this.userInfo.nickname = this.editNickName;
       return updateUserInfoRes.data;
     }
 
-    throw {};
+    throw {
+      Code: updateUserInfoRes.code,
+      Message: updateUserInfoRes.msg,
+    };
   }
 
 
@@ -496,10 +505,14 @@ class UserAction extends SiteStore {
      });
 
      if (updateUserInfoRes.code === 0) {
+       this.userInfo.signature = this.editSignature;
        return updateUserInfoRes.data;
      }
 
-     throw {};
+     throw {
+       Code: updateUserInfoRes.code,
+       Message: updateUserInfoRes.msg,
+     };
    }
 
   /**
