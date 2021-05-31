@@ -119,3 +119,22 @@ export const getElementRect = async (eleId = '', delay = 200) => new Promise((re
   }, delay);
 });
 
+export const handleLink = (e) => {
+  const href = e?.attribs?.href
+  if (href) {
+    const urls = href.split('/')
+    let url = '/subPages'
+    urls?.filter(item => item).forEach((item, index, arr) => {
+      if (index !== arr.length - 1) {
+        url += `/${item}`
+      } else {
+        url += `/index?id=${item}`
+      }
+    })
+
+    return url
+  }
+
+  return ''
+}
+

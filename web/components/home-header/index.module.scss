@@ -4,6 +4,9 @@
   overflow: hidden;
   height: rem(165);
   position: relative;
+  :global(.dzq-popup__container) {
+    bottom: 0;
+  }
   .topBar {
     position: absolute;
     top: 0;

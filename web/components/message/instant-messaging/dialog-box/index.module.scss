@@ -69,6 +69,7 @@
   align-items: center;
   padding: rem($padding-2n);
   word-break: break-word;
+  flex-wrap: wrap;
   border-radius: rem($border-radius-small);
   :global {
     .qq-emotion {
