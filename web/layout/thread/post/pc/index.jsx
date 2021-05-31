@@ -159,6 +159,7 @@ class ThreadPCPage extends React.Component {
                 <div className={styles.divider}></div>
                 <AttachmentToolbar
                   pc
+                  isOpenQcloudVod={this.props.site.isOpenQcloudVod}
                   postData={postData}
                   onAttachClick={this.props.handleAttachClick}
                   onVideoUpload={this.props.handleVideoUpload}

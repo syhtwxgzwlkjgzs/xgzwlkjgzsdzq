@@ -79,12 +79,16 @@ class Index extends Component {
   };
 
   filterTag(html) {
-    return html?.replace(/<(\/)?(p|r|t|br)[^>]*>|[\r\n]/g, '');
+    return html?.replace(/<(\/)?([b-z]|br)[^>]*>|[\r\n]/gi, '');
   }
 
   // parse content
   parseHTML = () => {
     const { type, item } = this.props;
+    if (type === 'chat') {
+      return xss(s9e.parse(item.content));
+    }
+
     // 1 获取基础内容，财务信息、账户信息优先使用title展示
     let _content = ['financial', 'account'].includes(type) ? item.title || item.content : item.content;
     // 2 过滤内容
@@ -111,7 +115,7 @@ class Index extends Component {
       // 后续用户中心做好后，需拼接用户id
       canJump && Router.push({ url: `/user/${item.userId}` });
     }
-    
+
   };
 
   // 跳转主题详情or私信

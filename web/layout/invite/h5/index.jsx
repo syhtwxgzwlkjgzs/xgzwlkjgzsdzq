@@ -4,6 +4,7 @@ import { withRouter } from 'next/router';
 import { Icon, Button, Toast, Avatar } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import Header from '@components/header';
+import { copyToClipboard } from '@common/utils/copyToClipboard';
 import layout from './index.module.scss';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 
@@ -26,17 +27,17 @@ class InviteH5Page extends React.Component {
     try {
       const { site: { setSite: { siteTitle } = {} } = {}, invite } = this.props;
       await this.props.invite.createInviteLink();
-      const clipboardObj = navigator.clipboard;
-      await clipboardObj.writeText(`${window.location.origin}/forum/partner-invite?inviteCode=${invite.inviteCode}`);
+      copyToClipboard(`${window.location.origin}/forum/partner-invite?inviteCode=${invite.inviteCode}`);
       h5Share({ title: `邀请您加入${siteTitle || ''}`, path: `/forum/partner-invite?inviteCode=${invite.inviteCode}` });
       Toast.success({
         content: '创建邀请链接成功',
         duration: 1000,
       });
     } catch (e) {
-      Toast.error({
-        content: e.Message,
-      });
+      console.log(e);
+      // Toast.error({
+      // content: e.Message||e,
+      // });
     }
   }
 

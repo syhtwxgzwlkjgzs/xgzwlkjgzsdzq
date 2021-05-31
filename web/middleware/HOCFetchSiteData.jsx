@@ -10,6 +10,7 @@ import clearLoginStatus from '@common/utils/clear-login-status';
 import { Spin, Icon } from '@discuzq/design';
 import typeofFn from '@common/utils/typeof';
 import styles from './HOCFetchSiteData.module.scss';
+import { WEB_SITE_JOIN_WHITE_LIST } from '@common/constants/site';
 
 // 获取全站数据
 export default function HOCFetchSiteData(Component) {
@@ -181,13 +182,14 @@ export default function HOCFetchSiteData(Component) {
         if (router.asPath !== '/close' && site.closeSiteConfig) {
           Router.redirect({ url: '/close' });
         }
-        // 付费加入: 付费状态下，未登录的用户、登录了但是没有付费的用户
-        // if (
-        //   (router.asPath !== '/forum/partner-invite' && site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay')
-        //   && (!user.isLogin() || (user.isLogin() && !user.paid))
-        // ) {
-        //   Router.redirect({ url: '/forum/partner-invite' });
-        // }
+        // 付费加入: 付费状态下，未登录的用户、登录了但是没有付费的用户，访问不是白名单的页面会跳入到付费加入
+        if (
+          (router.asPath !== '/forum/partner-invite' && site?.webConfig?.setSite?.siteMode === 'pay')
+          && (!user.isLogin() || (user.isLogin() && !user.paid))
+          && !WEB_SITE_JOIN_WHITE_LIST.includes(router.asPath)
+        ) {
+          Router.redirect({ url: '/forum/partner-invite' });
+        }
         // TODO: 方案待定
         // 前置: 用户已登录
         if (user.isLogin()) {
