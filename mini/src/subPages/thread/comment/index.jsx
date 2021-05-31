@@ -4,6 +4,8 @@ import { readCommentDetail } from '@server';
 import { getCurrentInstance } from '@tarojs/taro';
 import CommentMiniPage from '../../../layout/thread/comment/index';
 import ErrorMiniPage from '../../../layout/error/index';
+import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+import Page from '@components/page';
 
 @inject('site')
 @inject('comment')
@@ -41,7 +43,15 @@ class CommentDetail extends React.Component {
   }
 
   render() {
-    return this.state.isServerError ? <ErrorMiniPage /> : <CommentMiniPage />;
+    return this.state.isServerError ? (
+      <ErrorMiniPage />
+    ) : (
+      <Page>
+        <ToastProvider>
+          <CommentMiniPage />
+        </ToastProvider>
+      </Page>
+    );
   }
 }
 
