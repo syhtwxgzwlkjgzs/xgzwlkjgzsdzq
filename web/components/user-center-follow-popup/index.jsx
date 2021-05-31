@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './index.module.scss';
-import { Icon, Popup} from '@discuzq/design';
+import { Icon, Popup } from '@discuzq/design';
 import UserCenterFllows from '@components/user-center-follow';
 import { noop } from '@components/thread/utils';
 import Router from '@discuzq/sdk/dist/router';
@@ -14,7 +14,7 @@ const Index = (props) => {
     visible = false,
     onClose = noop,
     isOtherFans = false,
-    id
+    id,
   } = props;
   const onContainerClick = ({ id }) => {
     Router.push({ url: `/my/others?isOtherPerson=${true}&otherId=${id}` });
@@ -37,7 +37,7 @@ const Index = (props) => {
             />
           </div>
           <div className={styles.titleHr}></div>
-          {!isOtherFans ? (
+          {!id ? (
             <UserCenterFllows onContainerClick={onContainerClick} />
           ) : (
             <UserCenterFllows userId={id} onContainerClick={onContainerClick} />

@@ -8,12 +8,13 @@ import UserBaseLaout from '@components/user-center-base-laout-pc';
 import SidebarPanel from '@components/sidebar-panel';
 import Avatar from '@components/avatar';
 import Copyright from '@components/copyright';
-import UserCenterFollow from '@components/user-center-follow';
+import List from '@components/list';
 import Router from '@discuzq/sdk/dist/router';
 import UserCenterFollowPopup from '@components/user-center-follow-popup';
 import UserCenterThreads from '@components/user-center-threads';
 import NoData from '@components/no-data';
 import UserCenterFansPc from '@components/user-center/fans-pc';
+import UserCenterFollowsPc from '../../../components/user-center/follows-pc';
 
 @inject('site')
 @inject('user')
@@ -26,8 +27,8 @@ class PCMyPage extends React.Component {
       showFollowPopup: false, // 是否弹出关注框
     };
   }
-  componentDidMount() {
-    // this.props.user.getUserThreads();
+  async componentDidMount() {
+    await this.props.user.getUserThreads();
   }
 
   loginOut() {
@@ -100,23 +101,7 @@ class PCMyPage extends React.Component {
         <div className={styles.hr}></div>
         <UserCenterFansPc />
         <div className={styles.hr}></div>
-        <SidebarPanel
-          type="normal"
-          noData={Number(this.props.user.followCount) === 0}
-          title="关注"
-          leftNum={this.props.user.followCount}
-          onShowMore={this.moreFollow}
-        >
-          {Number(this.props.user.followCount) !== 0 && (
-            <UserCenterFollow
-              style={{
-                overflow: 'hidden',
-              }}
-              className={styles.friendsWrapper}
-              limit={5}
-            />
-          )}
-        </SidebarPanel>
+        <UserCenterFollowsPc />
         <Copyright />
       </>
     );
@@ -125,6 +110,7 @@ class PCMyPage extends React.Component {
   renderContent = () => {
     const { user } = this.props;
     const { userThreads, userThreadsTotalCount } = user;
+    const { userThreadsPage, userThreadsTotalPage } = user;
     const formattedUserThreads = this.formatUserThreadsData(userThreads);
 
     return (
@@ -145,34 +131,27 @@ class PCMyPage extends React.Component {
           noData={!formattedUserThreads?.length}
         >
           {/* FIXME: PC 切换至新逻辑 */}
-          {formattedUserThreads && formattedUserThreads.length > 0 ? (
-            <UserCenterThreads data={formattedUserThreads} />
-          ) : (
-            <NoData />
-          )}
+          <List immediateCheck={false} noMore={userThreadsTotalPage <= userThreadsPage} onRefresh={user.getUserThreads}>
+            {formattedUserThreads && formattedUserThreads.length > 0 ? (
+              <UserCenterThreads data={formattedUserThreads} />
+            ) : (
+              <NoData />
+            )}
+          </List>
         </SidebarPanel>
       </div>
     );
   };
 
   render() {
-    const { user } = this.props;
-    const { userThreadsPage, userThreadsTotalPage } = user;
     return (
       <>
-        <UserBaseLaout
-          noMore={userThreadsTotalPage <= userThreadsPage}
-          onRefresh={user.getUserThreads}
-          allowRefresh={false}
-          onSearch={this.onSearch}
-          right={this.renderRight}
-        >
+        <UserBaseLaout allowRefresh={false} onSearch={this.onSearch} right={this.renderRight}>
           {this.renderContent()}
         </UserBaseLaout>
 
         {/* 两个粉丝 popup */}
         <>
-
           <UserCenterFollowPopup
             visible={this.state.showFollowPopup}
             onClose={() => this.setState({ showFollowPopup: false })}

@@ -1,39 +1,39 @@
 import React from 'react';
 import SidebarPanel from '@components/sidebar-panel';
-import UserCenterFans from '@components/user-center-fans';
-import UserCenterFansPopup from '@components/user-center-fans-popup';
+import UserCenterFollowPopup from '@components/user-center-follow-popup';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import styles from './index.module.scss';
+import UserCenterFollows from '../../user-center-follow';
 
 @inject('user')
 @observer
-class UserCenterFansPc extends React.Component {
+class UserCenterFollowsPc extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showFansPopup: false,
+      showFollowsPopup: false,
     };
   }
 
   // 点击粉丝更多
-  moreFans = () => {
-    this.setState({ showFansPopup: true });
+  moreFollow = () => {
+    this.setState({ showFollowsPopup: true });
   };
 
   render() {
-    const fansCount = this.props.userId ? this.props.user.targetUserFansCount : this.props.user.followCount;
+    const followCount = this.props.userId ? this.props.user.targetUserFollowCount : this.props.user.followCount;
     return (
       <>
         <SidebarPanel
           type="normal"
-          noData={Number(fansCount) === 0}
-          title="粉丝"
-          leftNum={fansCount}
-          onShowMore={this.moreFans}
+          noData={Number(followCount) === 0}
+          title="关注"
+          leftNum={followCount}
+          onShowMore={this.moreFollow}
         >
-          {Number(fansCount) !== 0 && (
-            <UserCenterFans
+          {Number(followCount) !== 0 && (
+            <UserCenterFollows
               style={{
                 overflow: 'hidden',
               }}
@@ -47,14 +47,14 @@ class UserCenterFansPc extends React.Component {
           )}
         </SidebarPanel>
 
-        <UserCenterFansPopup
+        <UserCenterFollowPopup
           id={this.props.userId}
-          visible={this.state.showFansPopup}
-          onClose={() => this.setState({ showFansPopup: false })}
+          visible={this.state.showFollowsPopup}
+          onClose={() => this.setState({ showFollowsPopup: false })}
         />
       </>
     );
   }
 }
 
-export default UserCenterFansPc;
+export default UserCenterFollowsPc;
