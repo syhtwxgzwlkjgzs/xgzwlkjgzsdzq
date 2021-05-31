@@ -36,7 +36,7 @@ import toolbarStyles from '@components/editor/toolbar/index.module.scss';
 function isIOS() {
   const ua = window.navigator.userAgent.toLowerCase();
   // 判断是否是ios，或者小米默认浏览器
-  return /ip[honead]{2,4}(?:.*os\s([\w]+)\slike\smac|;\sopera)/i.test(ua) || /miuibrowser/i.test(ua);
+  return /ip[honead]{2,4}(?:.*os\s([\w]+)\slike\smac|;\sopera)/i.test(ua);
 }
 
 @inject('threadPost')
@@ -83,15 +83,16 @@ class ThreadCreate extends React.Component {
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
     this.positionDisplay(action);
     if (!isIOS()) {
-      if (vditorToolbar) {
+      if (vditorToolbar && action === 'select') {
         vditorToolbar.style.position = 'fixed';
         vditorToolbar.style.bottom = '88px';
         vditorToolbar.style.top = 'auto';
       }
-    }
-    if (vditorToolbar && action === 'select') {
-      vditorToolbar.style.position = 'fixed';
-      vditorToolbar.style.top = `${winHeight - 132 + y}px`;
+    } else {
+      if (vditorToolbar && action === 'select') {
+        vditorToolbar.style.position = 'fixed';
+        vditorToolbar.style.top = `${winHeight - 132 + y}px`;
+      }
     }
     this.moneyboxDisplay(false);
     // 阻止页面上拉带动操作栏位置变化。放这里便于本地开发调试
@@ -106,12 +107,12 @@ class ThreadCreate extends React.Component {
       const postBox = document.querySelector('#post-inner');
       const title = document.querySelector('#dzq-threadpost-title');
       const bottombarHeight = this.getBottombarHeight(action);
-      let postBoxHeight = winHeight - bottombarHeight;
+      let postBoxHeight = winHeight - bottombarHeight - 10; // 多减去10像素
       if (postBox) {
         if (title?.display !== 'none') postBoxHeight = winHeight - bottombarHeight - 54;
         postBox.style.height = `${postBoxHeight}px`;
       }
-      if (event) {
+      if (event && isIOS()) {
         const clientY = event?.clientY;
         const offsetTop = event?.target?.offsetTop || 0;
         if (clientY > postBoxHeight) {
@@ -140,17 +141,20 @@ class ThreadCreate extends React.Component {
     } else {
       if (toolbar) toolbar.className = toolbarStyles['dvditor-toolbar'];
     }
-    if (moneybox && !action) bottombarHeight += 65; // 直接算最高的高度
+    if (moneybox?.style?.display !== 'none') bottombarHeight += 65; // 直接算最高的高度
     return bottombarHeight;
   }
 
   setPostBottombar = (action, y = 0) => {
-    const winHeight = getVisualViewpost();
-    const postBottombar = document.querySelector('#post-bottombar');
-    if (isIOS()) {
-      const bottombarHeight = this.getBottombarHeight(action);
-      postBottombar.style.top = `${winHeight - bottombarHeight + y}px`;
-    }
+    const timer = setTimeout(() => {
+      clearTimeout(timer);
+      const winHeight = getVisualViewpost();
+      const postBottombar = document.querySelector('#post-bottombar');
+      if (isIOS()) {
+        const bottombarHeight = this.getBottombarHeight(action);
+        postBottombar.style.top = `${winHeight - bottombarHeight + y}px`;
+      }
+    }, 100);
   };
 
   setBottomFixed = (action, event) => {
