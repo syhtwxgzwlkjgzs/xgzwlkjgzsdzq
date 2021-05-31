@@ -5,6 +5,19 @@
   flex-direction: column;
   height: 60vh;
   overflow-y: auto;
+
+  .box__inner{
+    padding: 0 $padding-4n;
+
+    .itself {
+      .msgContent {
+        background-color: var(--comment-box-bg-color);
+        &:before {
+          border-right-color: $white;
+        }
+      }
+    }
+  }
 }
 
 
