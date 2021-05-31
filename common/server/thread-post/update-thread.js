@@ -1,15 +1,10 @@
-// import {deleteDeny} from '@discuzq/sdk/dist/api/user/delete-deny';
-import api from '../api';
+import { updateThreads } from '@discuzq/sdk/dist/api/content/update-threads';
 /**
  * 发帖接口
- * TODO: 待更新到sdk
  */
 export default async function _updateThread(params) {
-  const res = await api.http({
-    url: '/apiv3/thread.update',
-    method: 'post',
+  const res = await updateThreads({
     data: params,
-    timeout: 5000,
   });
   return res;
 }
