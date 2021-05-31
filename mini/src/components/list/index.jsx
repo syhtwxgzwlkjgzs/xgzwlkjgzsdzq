@@ -20,6 +20,7 @@ const List = forwardRef(({
   children,
   noMore,
   onRefresh,
+  onScroll = noop,
   hasOnScrollToLower = false,
   showRefresh = true,
   preload = 30,
@@ -98,6 +99,10 @@ const List = forwardRef(({
     }
   };
 
+  const handleScroll = (e) => {
+    onScroll(e);
+  }
+
     // 网络请求失败
     const handleError = () => {
       setIsLoading(false);
@@ -113,6 +118,7 @@ const List = forwardRef(({
       style={{ height }}
       onScrollToLower={hasOnScrollToLower ? onTouchMove : null}
       lowerThreshold={80}
+      onScroll={handleScroll}
     >
       {children}
       {onRefresh && showRefresh && !isError && <RefreshView noMore={noMore} />}
