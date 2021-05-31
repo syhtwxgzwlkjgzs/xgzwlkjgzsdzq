@@ -18,6 +18,7 @@
 .collectBox {
   background-color: $body-bg-color;
 }
+
 .titleBox {
   width: 100%;
   height: rem(53);
@@ -27,18 +28,27 @@
   color: $text-color-regular;
   padding: 0 rem($padding-4n);
   line-height: rem(53);
-  margin-bottom: rem(10);
   box-sizing: border-box;
 }
+
+.collectSplitLine {
+  width: 100%;
+  height: rem(10);
+  background-color: $body-bg-color;
+}
+
 .list {
   flex: 1;
   height: 100%;
   background-color: $body-bg-color;
+  -webkit-overflow-scrolling:touch
 }
+
 .listItem {
   margin-bottom: rem(10);
   position: relative;
 }
+
 .listItemBox {
   width: rem(20);
   height: rem(20);
