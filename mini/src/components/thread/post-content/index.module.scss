@@ -46,6 +46,15 @@
       }
     }
 
+    :global(.dzq-code) {
+      word-break: normal;
+      width:auto;
+      display:block;
+      white-space:pre-wrap;
+      word-wrap : break-word;
+      overflow: hidden;
+    }
+
     :global(.dzq-richText) {
       overflow: hidden;
     }

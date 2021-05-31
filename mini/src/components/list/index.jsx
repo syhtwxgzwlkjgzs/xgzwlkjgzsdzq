@@ -70,7 +70,7 @@ const List = forwardRef(({
   };
 
   const onTouchMove = (e) => {
-    if (e && !isLoading.current && onRefresh && !isLoading && !requestError) {
+    if (e && onRefresh && !isLoading && !requestError) {
       setIsLoading(true);
       if (typeof(onRefresh) === 'function') {
         const promise = onRefresh()
