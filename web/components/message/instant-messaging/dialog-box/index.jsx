@@ -81,7 +81,7 @@ const DialogBox = (props) => {
                 <Avatar image={userAvatar || '/favicon.ico'} circle={true} />
               </div>
               {imageUrl ? (
-                <div className={styles.msgContent}>
+                <div className={`${styles.msgContent} ${styles.msgImgContent}`}>
                   {imageUrl && <img style={{ width: '200px' }} src={imageUrl} onClick={() => {
                     setDefaultImg(imageUrl);
                     setPreviewerVisibled(true);
