@@ -6,6 +6,11 @@ import clearLoginStatus from '@common/utils/clear-login-status';
 import '@discuzq/design/dist/styles/index.scss';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 
+/** *
+    根据目前的登录模式设置默认的登录页面
+ ***/
+
+
 @inject('site')
 @inject('invite')
 @inject('commonLogin')
@@ -13,7 +18,6 @@ import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util'
 class Login extends React.Component {
   componentDidMount() {
     const { site, invite, router } = this.props;
-
 
     clearLoginStatus(); // 清除登录态
     if (site.wechatEnv !== 'none') {

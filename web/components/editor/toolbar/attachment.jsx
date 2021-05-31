@@ -53,6 +53,7 @@ function AttachmentToolbar(props) {
   const [showAll, setShowAll] = useState(false);
   const [currentAction, setCurrentAction] = useState('');
   const inputRef = React.createRef(null);
+  const { onVideoUpload = () => { } } = props;
 
   function handleAttachClick(e, item) {
     let action = item.type;
@@ -79,6 +80,7 @@ function AttachmentToolbar(props) {
     const { onUploadComplete } = props;
     if (item.type === THREAD_TYPE.video) {
       file = files[0];
+      onVideoUpload();
       tencentVodUpload({
         file,
         onUploading: () => {
