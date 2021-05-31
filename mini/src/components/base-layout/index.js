@@ -24,7 +24,7 @@ import styles from './index.module.scss';
 const baseLayoutWhiteList = ['home'];
 
 const BaseLayout = (props) => {
-  const { showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr } = props;
+  const { index, showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr, onScroll = () => {} } = props;
   const [height, setHeight] = useState(600);
 
   const debounce = (fn, wait) => {
@@ -47,7 +47,7 @@ const BaseLayout = (props) => {
   //   }
 
   // }, [])
-
+console.log(index?.isScroll);
   return (
     <View className={styles.container}>
         {showHeader && <Header />}
@@ -61,7 +61,7 @@ const BaseLayout = (props) => {
               {/* </PullDownRefresh> */}
             </View>
           ) : (
-            <List {...props} className={styles.list} ref={listRef}>
+            <List {...props} className={styles.list} ref={listRef} onScroll={ null }>
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>
           )
@@ -72,4 +72,4 @@ const BaseLayout = (props) => {
   );
 };
 
-export default inject('baselayout')(observer(BaseLayout));
+export default inject('baselayout', 'index')(observer(BaseLayout));

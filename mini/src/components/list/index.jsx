@@ -69,6 +69,7 @@ const List = forwardRef(({
   };
 
   const onTouchMove = (e) => {
+    console.log(e);
     if (e && !isLoading.current && onRefresh && !isLoading && !requestError) {
       setIsLoading(true);
       if (typeof(onRefresh) === 'function') {
@@ -99,6 +100,7 @@ const List = forwardRef(({
   };
   
   const handleScroll = (e) => {
+    console.log(e);
     onScroll(e);
   }
 
@@ -117,7 +119,7 @@ const List = forwardRef(({
       style={{ height }} 
       onScrollToLower={onTouchMove}
       lowerThreshold={80}
-      onScroll={handleScroll}
+      onScroll={onScroll}
     >
       {children}
       {onRefresh && showRefresh && !isError && <RefreshView noMore={noMore} />}

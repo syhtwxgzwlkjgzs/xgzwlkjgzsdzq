@@ -45,6 +45,12 @@ import { View, Text } from '@tarojs/components'
     const { postId = '', threadId = '' } = tipData;
     const res = await readLikedUsers({ params: { threadId, postId, type, page: 1 } });
 
+    let arr = res.data?.pageData?.list;
+    
+    arr = [...arr, ...arr, ...arr, ...arr, ...arr, ...arr, ...arr, ...arr, ...arr, ...arr, ...arr ]
+
+    res.data.pageData.list = arr
+
     setAll(res?.data);
 
     return res
@@ -178,6 +184,7 @@ import { View, Text } from '@tarojs/components'
             {
               arr?.length ? (
                 <List
+                onScroll={() => { console.log(123); }}
                   className={styles.list}
                   wrapperClass={styles.listWrapper}
                   onRefresh={loadMoreData}

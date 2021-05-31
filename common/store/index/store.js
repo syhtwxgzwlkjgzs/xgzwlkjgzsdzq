@@ -19,6 +19,8 @@ class IndexStore {
 
   // 解决小程序popup被tabBar遮挡的问题
   @observable hiddenTabBar = false
+
+  @observable isScroll = true
 }
 
 export default IndexStore;
