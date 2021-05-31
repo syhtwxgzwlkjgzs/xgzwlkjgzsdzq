@@ -220,7 +220,8 @@ export default class index extends Component {
 
   // 点击关闭
   handleClose = () => {
-    this.initState()
+    this.initState();
+    this.props.onClose();
   }
 
   render() {
@@ -235,11 +236,11 @@ export default class index extends Component {
     }
     return (
       <div className={styles.userMobileWrapper}>
-        <Dialog visible={true}>
+        <Dialog visible={this.props.visible} onClose={this.props.onClose}>
           <div className={styles.userMobileContent}>
             <div className={styles.title}>
               <span className={styles.titleValue}>修改手机号</span>
-              <Icon onClick={this.handleClose} name="CloseOutlined" />
+              <Icon onClick={this.handleClose} name="CloseOutlined"/>
             </div>
             <div className={styles.inputItem}>
               <div className={styles.labelName}>{currentStep === 'first' ? '验证旧手机' : '设置新手机'}</div>

@@ -170,11 +170,11 @@ export default class index extends Component {
     }
     return (
       <div className={styles.userMobileWrapper}>
-        <Dialog visible={this.props.visible} position="center" maskClosable={true} onClose={this.props.onClick}>
+        <Dialog visible={this.props.visible} position="center" maskClosable={true} onClose={this.props.onClose}>
           <div className={styles.userMobileContent}>
             <div className={styles.title}>
               {this.props.user?.hasPassword ? '修改密码' : '设置密码'}
-              <Icon onClick={this.handleClose} name="CloseOutlined" onClick={this.props.onClick} />
+              <Icon onClick={this.props.onClose} name="CloseOutlined" />
             </div>
             {this.props.user?.hasPassword ? this.renderHasPassword() : this.renderHasNoPassword()}
             {this.props.user?.hasPassword && (
