@@ -23,6 +23,9 @@ class WeixinAuth extends React.Component {
       return;
     }
 
+    const inviteCode = invite.getInviteCode(router);
+    if (inviteCode) invite.setInviteCode(inviteCode);
+
     try {
       const res = await h5WechatCodeLogin({
         timeout: 10000,
@@ -31,7 +34,7 @@ class WeixinAuth extends React.Component {
           sessionId,
           sessionToken,
           state,
-          inviteCode: invite.getInviteCode(router),
+          inviteCode,
         },
       });
       checkUserStatus(res);
