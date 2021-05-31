@@ -42,7 +42,7 @@ export default function H5Header(props) {
           />
           <Icon
             className={styles.icon}
-            onClick={() => iconClickHandle('/my/notice')}
+            onClick={() => iconClickHandle('/message')}
             name="MailOutlined"
           />
           <Icon
