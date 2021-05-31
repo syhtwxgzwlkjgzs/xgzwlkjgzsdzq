@@ -96,7 +96,7 @@ class ThreadCreate extends React.Component {
     }
     this.moneyboxDisplay(false);
     // 阻止页面上拉带动操作栏位置变化。放这里便于本地开发调试
-    if (window.innerHeight === winHeight) return;
+    if (window.innerHeight === winHeight && isIOS()) return;
     this.setPostBox(action, event, y);
   }
 
@@ -112,13 +112,13 @@ class ThreadCreate extends React.Component {
         if (title?.display !== 'none') postBoxHeight = winHeight - bottombarHeight - 54;
         postBox.style.height = `${postBoxHeight}px`;
       }
-      if (event && isIOS()) {
+      if (event) {
         const clientY = event?.clientY;
         const offsetTop = event?.target?.offsetTop || 0;
         if (clientY > postBoxHeight) {
           this.props.handleEditorBoxScroller(offsetTop);
           // 解决focus在编辑器之后页面被弹出导致底部工具栏上移的问题
-          window.scrollTo(0, 0);
+          if (isIOS()) window.scrollTo(0, 0);
         }
       }
       // 这个需要放在这里的原因是避免滚动造成底部bar显示问题

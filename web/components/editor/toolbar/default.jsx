@@ -47,7 +47,7 @@ export default function DefaultToolbar(props) {
     <>
       {defaultIcon.map((item) => {
         const clsName = getIconCls(item);
-        const iconItem = true ? (
+        const iconItem = permission[item.id] ? (
           <Icon key={item.name}
             onClick={(e) => {
               if (!item.menu) e.stopPropagation();
