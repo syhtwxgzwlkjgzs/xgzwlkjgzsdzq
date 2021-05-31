@@ -88,15 +88,14 @@ class ThreadCreate extends React.Component {
         vditorToolbar.style.bottom = '88px';
         vditorToolbar.style.top = 'auto';
       }
-      return;
     }
     if (vditorToolbar && action === 'select') {
       vditorToolbar.style.position = 'fixed';
       vditorToolbar.style.top = `${winHeight - 132 + y}px`;
     }
+    this.moneyboxDisplay(false);
     // 阻止页面上拉带动操作栏位置变化。放这里便于本地开发调试
     if (window.innerHeight === winHeight) return;
-    this.moneyboxDisplay(false);
     this.setPostBox(action, event, y);
   }
 
@@ -148,8 +147,10 @@ class ThreadCreate extends React.Component {
   setPostBottombar = (action, y = 0) => {
     const winHeight = getVisualViewpost();
     const postBottombar = document.querySelector('#post-bottombar');
-    const bottombarHeight = this.getBottombarHeight(action);
-    postBottombar.style.top = `${winHeight - bottombarHeight + y}px`;
+    if (isIOS()) {
+      const bottombarHeight = this.getBottombarHeight(action);
+      postBottombar.style.top = `${winHeight - bottombarHeight + y}px`;
+    }
   };
 
   setBottomFixed = (action, event) => {
@@ -160,7 +161,7 @@ class ThreadCreate extends React.Component {
   }
   clearBottomFixed = () => {
     this.moneyboxDisplay(true);
-    if (!isIOS()) return;
+    // if (!isIOS()) return;
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
       const postBottombar = document.querySelector('#post-bottombar');
@@ -329,6 +330,7 @@ class ThreadCreate extends React.Component {
             postData={postData}
             onAttachClick={this.props.handleAttachClick}
             // onUploadChange={this.handleUploadChange}
+            onVideoUpload={this.props.handleVideoUpload}
             onUploadComplete={this.props.handleVideoUploadComplete}
             category={
               <ToolsCategory
