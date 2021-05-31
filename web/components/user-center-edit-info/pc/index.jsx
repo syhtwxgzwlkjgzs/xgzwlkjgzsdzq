@@ -29,8 +29,14 @@ class index extends Component {
           display: 'show',
           condition: () => true,
           render: () => this.props.user.nickname,
-          operation: () => <p className={styles.pcEditNicknameCallMsodify}>修改</p>,
-          onSave: () => {},
+          operation: () => <p onClick={() => this.openInputEditor('昵称')} className={styles.pcEditNicknameCallMsodify}>修改</p>,
+          inputEditor: () => <Input className={styles.pcEditAutographInput} />,
+          onSave: () => {
+            console.log('on save');
+          },
+          onCancel: () => {
+            this.closeInputEditor('昵称');
+          },
         },
         {
           name: '用户名',
@@ -41,17 +47,29 @@ class index extends Component {
             if (this.props.user.canEditUsername) {
               return <p className={styles.pcEditNicknameCallMsodifyDisable}>暂无法修改（一年一次）</p>;
             }
-            return <p className={styles.pcEditNicknameCallMsodify}>修改</p>;
+            return <p onClick={() => this.openInputEditor('用户名')} className={styles.pcEditNicknameCallMsodify}>修改</p>;
           },
-          onSave: () => {},
+          inputEditor: () => <Input className={styles.pcEditAutographInput} />,
+          onSave: () => {
+            console.log('on save');
+          },
+          onCancel: () => {
+            this.closeInputEditor('用户名');
+          },
         },
         {
           name: '个性签名',
           display: 'show',
           condition: () => true,
           render: () => this.props.user.signature,
-          operation: () => <p className={styles.pcEditNicknameCallMsodify}>修改</p>,
-          onSave: () => {},
+          operation: () => <p onClick={() => this.openInputEditor('个性签名')} className={styles.pcEditNicknameCallMsodify}>修改</p>,
+          inputEditor: () => <Input className={styles.pcEditAutographInput} />,
+          onSave: () => {
+            console.log('on save');
+          },
+          onCancel: () => {
+            this.closeInputEditor('个性签名');
+          },
         },
         {
           name: '手机号码',
@@ -59,6 +77,7 @@ class index extends Component {
           render: () => this.props.user.mobile,
           condition: () => this.props.site?.isSmsOpen,
           operation: () => <p className={styles.pcEditNicknameCallMsodify}>修改</p>,
+          inputEditor: () => null,
         },
         {
           name: '账户密码',
@@ -82,6 +101,7 @@ class index extends Component {
               {this.props.user?.hasPassword ? '修改' : '设置'}
             </p>
           ),
+          inputEditor: () => null,
         },
         {
           name: '支付密码',
@@ -105,6 +125,7 @@ class index extends Component {
               {this.props.user?.canWalletPay ? '修改' : '设置'}
             </p>
           ),
+          inputEditor: () => null,
         },
         {
           name: '微信',
@@ -117,12 +138,40 @@ class index extends Component {
             </div>
           ),
           operation: () => <p className={styles.pcEditNicknameCallMsodify}>换绑</p>,
+          inputEditor: () => null,
         },
       ],
     };
     this.user = this.props.user || {};
   }
-  editorialpresentation(item, type, index) {
+
+  openInputEditor(name) {
+    const { editorConfig } = this.state;
+    const targetConfig = editorConfig.filter(item => item.name === name);
+    if (targetConfig.length) {
+      targetConfig[0].display = 'edit';
+      this.setState({
+        editorConfig: [
+          ...editorConfig,
+        ],
+      });
+    }
+  }
+
+  closeInputEditor(name) {
+    const { editorConfig } = this.state;
+    const targetConfig = editorConfig.filter(item => item.name === name);
+    if (targetConfig.length) {
+      targetConfig[0].display = 'show';
+      this.setState({
+        editorConfig: [
+          ...editorConfig,
+        ],
+      });
+    }
+  }
+
+  editorialpresentation(item) {
     // render content
     const content = item.render() || null;
     // 如果不满足条件，不渲染
@@ -139,13 +188,13 @@ class index extends Component {
               </div>
             )}
             {item.display === 'edit' && (
-              <div className={item.display === 1 ? styles.pcEditAutographCall : styles.pcEditAutographBox}>
-                <Input className={styles.pcEditAutographInput} placeholder="这个人很懒，什么也没留下~" />
+              <div className={item.display === 'edit' ? styles.pcEditAutographCall : styles.pcEditAutographBox}>
+                {item.inputEditor()}
                 <div className={styles.preservation}>
-                  <Button className={styles.preservationButton} type="primary" onClick={() => item.onSave}>
+                  <Button className={styles.preservationButton} type="primary" onClick={() => item.onSave()}>
                     保存
                   </Button>
-                  <Button className={styles.preservationButton2} onClick={() => this.modifyFun(index, 0)}>
+                  <Button className={styles.preservationButton2} onClick={() => item.onCancel()}>
                     取消
                   </Button>
                 </div>
