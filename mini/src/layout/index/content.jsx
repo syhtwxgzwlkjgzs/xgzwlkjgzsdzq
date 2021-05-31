@@ -23,14 +23,14 @@ class IndexH5Page extends React.Component {
     this.state = {
       visible: false,
       filter: {
-        categoryids: this.checkIsOpenDefaultTab() ? ['default'] : ['all'],
-        sequence: this.checkIsOpenDefaultTab() ? 1 : 0,
+        categoryids: ['all'],
+        sequence: 0,
         sort: 1,
         attention: 0,
         types: 'all',
         essence: 0
       },
-      currentIndex: this.checkIsOpenDefaultTab() ? 'default' : 'all',
+      currentIndex: 'all',
       isFinished: true,
       fixedTab: false,
       navBarHeight: 64,
@@ -180,18 +180,13 @@ class IndexH5Page extends React.Component {
       return categories;
     }
 
-    let tmpCategories = categories.filter(item => item.name === '全部');
-    if (tmpCategories?.length) {
-      return categories;
-    }
+    let tmpCategories = [{ name: '全部', pid: 'all', children: [] }]
 
-    tmpCategories = [{ name: '全部', pid: 'all', children: [] }, ...categories];
-
-    // 默认功能的开启
     if (this.checkIsOpenDefaultTab()) {
-      tmpCategories.unshift({ name: '默认', pid: 'default', children: [] });
+      tmpCategories.push({ name: '推荐', pid: 'default', children: [] });
     }
-    return tmpCategories;
+
+    return [...tmpCategories, ...categories];
   };
 
   renderTabs = () => {

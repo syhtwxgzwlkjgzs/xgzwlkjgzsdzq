@@ -33,14 +33,14 @@ class IndexPCPage extends React.Component {
       isShowDefault: this.checkIsOpenDefaultTab(),
       // 筛选过滤数据
       filter: {
-        sequence: this.checkIsOpenDefaultTab() ? 1 : 0,
+        sequence: 0,
         sort: 1,
         attention: 0,
         essence: 0
       }
     };
 
-    this.defaultCategoryIds = this.props.index.filter?.categoryids || []
+    this.defaultCategoryIds = this.props.index.filter?.categoryids || ['all']
   }
 
   // 轮询定时器
