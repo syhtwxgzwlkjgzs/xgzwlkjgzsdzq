@@ -645,7 +645,8 @@ class Index extends Component {
               }}
               onSubmit={() => this.handleSubmit()}
             />
-            <Emoji show={showEmoji} onHide={() => {
+            {/* 通过键盘改变的高度一起来控制表情的显示和隐藏，直接通过 showEmoji 来进行数据的改变，渲染慢 */}
+            <Emoji show={bottomHeight === 0 && showEmoji} onHide={() => {
               this.setState({
                 showEmoji: false
               });
