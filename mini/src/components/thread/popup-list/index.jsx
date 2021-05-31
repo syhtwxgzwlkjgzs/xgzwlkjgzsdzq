@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { inject, observer } from 'mobx-react';
 import Tabs from '@discuzq/design/dist/components/tabs/index';
 import Popup from '@discuzq/design/dist/components/popup/index';
 import Icon from '@discuzq/design/dist/components/icon/index';
@@ -17,7 +18,7 @@ import { View, Text } from '@tarojs/components'
  * @prop {string}  onHidden 关闭视图的回调
  */
 
- const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) => {
+ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router, index }) => {
   const isClickTab = useRef(false);
 
   const allPageNum = useRef(1);
@@ -38,6 +39,8 @@ import { View, Text } from '@tarojs/components'
   useEffect(() => {
     if (visible) {
       loadData({ type: current });
+    } else {
+      index.setHasOnScrollToLower(true);
     }
   }, [visible]);
 
@@ -182,6 +185,7 @@ import { View, Text } from '@tarojs/components'
                   wrapperClass={styles.listWrapper}
                   onRefresh={loadMoreData}
                   noMore={dataSource.data?.currentPage >= dataSource.data?.totalPage}
+                  hasOnScrollToLower={true}
                 >
                   {
                     arr.map((item, index) => (
@@ -195,6 +199,7 @@ import { View, Text } from '@tarojs/components'
                           onClick={onUserClick}
                           type={item.type}
                           isShowBottomLine={false}
+                          needPadding={false}
                         />
                     ))
                   }
@@ -248,4 +253,4 @@ import { View, Text } from '@tarojs/components'
   );
 };
 
-export default React.memo(Index);
+export default inject('index')(observer(Index));
