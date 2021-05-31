@@ -98,7 +98,6 @@ function withShare(opts = {}) {
             }
           }
           if(from && from === 'thread') {
-            console.log(threadId)
             this.props.index.updateThreadShare({ threadId }).then(result => {
                 if (result.code === 0) {
                     this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
