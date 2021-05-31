@@ -47,6 +47,7 @@ const InteractionBox = (props) => {
 
 
   const submit = async (data) => {
+    setShowEmoji(false);
     let ret = {};
     if (dialogId) {
       ret = await createDialogMsg({
@@ -78,7 +79,7 @@ const InteractionBox = (props) => {
 
   const doSubmitClick = async () => {
     if (!typingValue.trim()) return;
-    submit({messageText: typingValue});
+    submit({ messageText: typingValue });
   };
 
   const doPressEnter = (e) => {
@@ -126,7 +127,9 @@ const InteractionBox = (props) => {
         <>
           <div className={styles.h5InteractionBox} style={{bottom: showEmoji ? '200px' : 0}}>
           <div className={styles.inputWrapper}>
-            <Input value={typingValue} placeholder=" 请输入内容" onChange={(e) => {
+            <Input value={typingValue} placeholder=" 请输入内容" onFocus={() => {
+              setShowEmoji(false);
+            }} onChange={(e) => {
               setTypingValue(e.target.value);
               recordCursor(e);
             }} onBlur={(e) => {
@@ -137,7 +140,10 @@ const InteractionBox = (props) => {
                 <Icon name="SmilingFaceOutlined" size={20} onClick={() => {setShowEmoji(!showEmoji);}} />
               </div>
               <div className={styles.pictureUpload}>
-                <Icon name="PictureOutlinedBig" size={20} onClick={uploadImage} />
+                <Icon name="PictureOutlinedBig" size={20} onClick={() => {
+                  setShowEmoji(false);
+                  uploadImage();
+                }} />
               </div>
             </div>
           </div>
@@ -156,7 +162,6 @@ const InteractionBox = (props) => {
                 const text = typingValue.slice(0, cursorPosition) + emoji.code + typingValue.slice(cursorPosition);
                 setTypingValue(text);
                 setCursorPosition(cursorPosition + emoji.code.length);
-                setShowEmoji(!showEmoji);
               }}
             />
           </div>

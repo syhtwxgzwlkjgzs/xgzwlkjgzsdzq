@@ -11,9 +11,10 @@ const NEED_BIND_OR_REGISTER_USER = -7016;
 @inject('site')
 @inject('user')
 @inject('commonLogin')
+@inject('invite')
 class WeixinAuth extends React.Component {
   async componentDidMount() {
-    const { router } = this.props;
+    const { router, invite } = this.props;
     const { code, sessionId, sessionToken, state, loginType, action, nickname } = router.query;
 
     // 如果要进行绑定逻辑，跳转绑定相关的页面
@@ -30,6 +31,7 @@ class WeixinAuth extends React.Component {
           sessionId,
           sessionToken,
           state,
+          inviteCode: invite.getInviteCode(router),
         },
       });
       checkUserStatus(res);

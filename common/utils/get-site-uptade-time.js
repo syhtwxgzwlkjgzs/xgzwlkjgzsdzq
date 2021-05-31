@@ -23,7 +23,9 @@ export const getSiteUpdateTime = function (startTime) {
     }
     return days;
   }
-  const start = new Date(startTime)
+  // 兼容ios
+  const [siteTimer] = startTime.split(' ');
+  const start = new Date(siteTimer)
   const end = new Date(Date.now())
   // 计算时间戳的差
   const diffValue = end - start;

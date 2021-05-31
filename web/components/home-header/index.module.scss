@@ -4,6 +4,9 @@
   overflow: hidden;
   height: rem(165);
   position: relative;
+  :global(.dzq-popup__container) {
+    bottom: 0;
+  }
   .topBar {
     position: absolute;
     top: 0;
@@ -41,6 +44,16 @@
       display: block;
       max-height: rem(40);
       margin: 0 auto;
+    }
+  }
+  .joinLog {
+    margin-top: rem(36.1);
+    max-height: rem(69);
+    overflow: hidden;
+    .logo {
+      display: block;
+      max-height: rem(69);
+      margin: 0 calc(50% - 202px);
     }
   }
   .digest{

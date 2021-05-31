@@ -7,7 +7,7 @@ export const numberFormat = (number = 0) => {
     return targetNumber;
   }
   if (Number.isInteger(number)) {
-    return `${number / 10000}W`;
+    return `${(number / 10000).toFixed(1)}W`;
   }
   return `${(number / 10000).toFixed(1)}W`;
 };
