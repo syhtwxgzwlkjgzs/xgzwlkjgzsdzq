@@ -62,7 +62,7 @@ class PartnerInviteH5Page extends React.Component {
       forum.setIsLoading(false);
     } catch (e) {
       Toast.error({
-        content: e?.Message,
+        content: e?.Message || e,
         hasMask: false,
         duration: 1000,
       });
@@ -117,7 +117,7 @@ class PartnerInviteH5Page extends React.Component {
     const { inviteCode } = this.props.router.query;
     const { platform, webConfig } = site;
     const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
-    const { usersPageData, threadsPageData, isLoading } = forum;
+    const { usersPageData = [], threadsPageData = [], isLoading } = forum;
     const { invitorName, invitorAvatar } = this.state;
     return (
       <List className={layout.page} allowRefresh={false}>
@@ -132,7 +132,12 @@ class PartnerInviteH5Page extends React.Component {
             {
               !isLoading && usersPageData?.length
                 ? <ActiveUsers data={usersPageData} onItemClick={this.onUserClick} />
-                : <NoData />
+                : <></>
+            }
+            {
+              !isLoading && !threadsPageData?.length
+                ? <NoData />
+                : <></>
             }
             {
               isLoading
@@ -149,7 +154,12 @@ class PartnerInviteH5Page extends React.Component {
             {
               !isLoading && threadsPageData?.length
                 ? <PopularContents data={threadsPageData} onItemClick={this.onPostClick} />
-                : <NoData />
+                : <></>
+            }
+            {
+              !isLoading && !threadsPageData?.length
+                ? <NoData />
+                : <></>
             }
             {
               isLoading
@@ -160,6 +170,7 @@ class PartnerInviteH5Page extends React.Component {
             }
           </div>
           {/* 热门内容预览 end */}
+          <div className={layout.maskLayer}></div>
           <div className={layout.bottom}>
             {
               inviteCode

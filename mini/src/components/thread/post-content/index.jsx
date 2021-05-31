@@ -2,7 +2,8 @@ import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react'
 import Icon from '@discuzq/design/dist/components/icon/index';
 import RichText from '@discuzq/design/dist/components/rich-text/index';
 import Button from '@discuzq/design/dist/components/button/index';
-import { noop } from '../utils'
+import { noop, handleLink } from '../utils'
+import Router from '@discuzq/sdk/dist/router';
 
 import fuzzyCalcContentLength from '@common/utils/fuzzy-calc-content-length';
 import s9e from '@common/utils/s9e';
@@ -64,17 +65,14 @@ const Index = ({
     }
   }, [contentTooLong]);
 
-  const handleClick = (e) => {
-    if (e.target.localName === 'a') {
-      return
-    }
+  const handleClick = (e, node) => {
     e && e.stopPropagation();
-
-    onRedirectToDetail()
-  }
-
-  const onLinkClick = (e) => {
-
+    const url = handleLink(node)
+    if (url) {
+      Router.push({url}) 
+    } else {
+      onRedirectToDetail()
+    }
   }
 
   useEffect(() => {
@@ -99,7 +97,7 @@ const Index = ({
         onClick={!showMore ? onShowMore : handleClick}
       >
         <View className={styles.content}>
-          <RichText content={filterContent} onClick={handleClick} onLinkClick={onLinkClick} />
+          <RichText content={filterContent} onClick={handleClick} />
         </View>
       </View>
       {!loading && useShowMore && !showMore && (

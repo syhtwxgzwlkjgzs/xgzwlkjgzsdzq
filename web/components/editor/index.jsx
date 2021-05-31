@@ -71,7 +71,7 @@ export default function DVditor(props) {
   useEffect(() => {
     if (atList && !atList.length) return;
     const users = atList.map((item) => {
-      if (item) return `&nbsp;@${item}&nbsp;`;
+      if (item) return ` @${item} &nbsp;`;
       return '';
     });
     setState({ atList: [] });
@@ -85,7 +85,7 @@ export default function DVditor(props) {
     if (topic) {
       setState({ topic: '' });
       // setCursorPosition();
-      vditor.insertValue && vditor.insertValue(`&nbsp;${topic}&nbsp;`);
+      vditor.insertValue && vditor.insertValue(` ${topic} &nbsp;`);
     }
   }, [topic]);
 

@@ -1,26 +1,44 @@
 @import "@common/styles/index.scss";
-@mixin setRefreshList($height: 100vh) {
-  :global {
-    .dzq-pull-refresh__list {
-      height: $height !important;
-    }
-  }
-}
 
 .wrapper {
+  box-sizing: content-box;
+
+  &.not-bottom {
+    height: 100vh;
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
+    .list {
+      padding-bottom: constant(safe-area-inset-bottom);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+  }
+
+  &.with-bottom {
+    height: calc(100vh - 64px);
+    padding-bottom: 64px;
+    padding-bottom: calc(64px + constant(safe-area-inset-bottom));
+    padding-bottom: calc(64px + env(safe-area-inset-bottom));
+
+    .list {
+      padding-bottom: constant(safe-area-inset-bottom);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+  }
+
   :global {
     .dzq-pull-refresh__loading {
       padding: 0;
       font-size: $font-size-middle;
-      top: -40px !important;
+      top: 0 !important;
+    }
+
+    .dzq-pull-refresh__list {
+      height: 100% !important;
     }
   }
-  @include setRefreshList();
-  &.with-top {
-    @include setRefreshList(calc(100vh - 40px));
-  }
-  &.with-bottom {
-    @include setRefreshList(calc(100vh - 64px));
+
+  .list {
+    height: 100% !important;
   }
 }
 
@@ -39,13 +57,12 @@
     .slider-content {
       flex: 1 0 100%;
       width: 100%;
-      padding-top: $margin-4n;
       display: flex;
       justify-content: flex-start;
       transition: all 0.5s;
     }
 
-    .slider-brn {
+    .slider-btn {
       flex: 0 0 74px;
       align-items: stretch;
       display: flex;
