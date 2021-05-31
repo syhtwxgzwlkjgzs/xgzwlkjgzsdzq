@@ -21,6 +21,7 @@ const List = forwardRef(({
   noMore,
   onRefresh,
   onScroll = noop,
+  hasOnScrollToLower = false,
   showRefresh = true,
   preload = 30,
   requestError = false
@@ -97,7 +98,7 @@ const List = forwardRef(({
       }
     }
   };
-  
+
   const handleScroll = (e) => {
     onScroll(e);
   }
@@ -111,11 +112,11 @@ const List = forwardRef(({
     }
 
   return (
-    <ScrollView 
-      scrollY 
-      className={`${styles.container} ${className}`} 
-      style={{ height }} 
-      onScrollToLower={onTouchMove}
+    <ScrollView
+      scrollY
+      className={`${styles.container} ${className}`}
+      style={{ height }}
+      onScrollToLower={hasOnScrollToLower ? onTouchMove : null}
       lowerThreshold={80}
       onScroll={handleScroll}
     >
