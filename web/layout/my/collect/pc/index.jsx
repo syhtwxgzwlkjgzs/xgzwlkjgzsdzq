@@ -6,6 +6,8 @@ import SectionTitle from '@components/section-title';
 import BaseLayout from '@components/base-layout';
 import ThreadContent from '@components/thread';
 import Copyright from '@components/copyright';
+import PopTopic from '@components/pop-topic';
+import UserCenterFansPc from '@components/user-center/fans-pc';
 // import data from './data';
 
 @inject('site')
@@ -28,6 +30,8 @@ class CollectPCPage extends React.Component {
   // 右侧 - 潮流话题 粉丝 版权信息
   renderRight = () => (
     <div className={styles.right}>
+      <PopTopic />
+      <UserCenterFansPc />
       <Copyright />
     </div>
   );

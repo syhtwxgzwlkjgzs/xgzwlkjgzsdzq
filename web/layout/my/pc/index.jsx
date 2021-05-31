@@ -8,13 +8,12 @@ import UserBaseLaout from '@components/user-center-base-laout-pc';
 import SidebarPanel from '@components/sidebar-panel';
 import Avatar from '@components/avatar';
 import Copyright from '@components/copyright';
-import UserCenterFans from '@components/user-center-fans';
 import UserCenterFollow from '@components/user-center-follow';
 import Router from '@discuzq/sdk/dist/router';
-import UserCenterFansPopup from '@components/user-center-fans-popup';
 import UserCenterFollowPopup from '@components/user-center-follow-popup';
 import UserCenterThreads from '@components/user-center-threads';
 import NoData from '@components/no-data';
+import UserCenterFansPc from '@components/user-center/fans-pc';
 
 @inject('site')
 @inject('user')
@@ -99,23 +98,7 @@ class PCMyPage extends React.Component {
           </div>
         </SidebarPanel>
         <div className={styles.hr}></div>
-        <SidebarPanel
-          type="normal"
-          noData={Number(this.props.user.fansCount) === 0}
-          title="粉丝"
-          leftNum={this.props.user.fansCount}
-          onShowMore={this.moreFans}
-        >
-          {Number(this.props.user.fansCount) !== 0 && (
-            <UserCenterFans
-              style={{
-                overflow: 'hidden',
-              }}
-              className={styles.friendsWrapper}
-              limit={5}
-            />
-          )}
-        </SidebarPanel>
+        <UserCenterFansPc />
         <div className={styles.hr}></div>
         <SidebarPanel
           type="normal"
@@ -189,10 +172,6 @@ class PCMyPage extends React.Component {
 
         {/* 两个粉丝 popup */}
         <>
-          <UserCenterFansPopup
-            visible={this.state.showFansPopup}
-            onClose={() => this.setState({ showFansPopup: false })}
-          />
 
           <UserCenterFollowPopup
             visible={this.state.showFollowPopup}

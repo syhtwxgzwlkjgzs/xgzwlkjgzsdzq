@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import Header from '@components/header';
 import UserCenterEditHeader from '../../user-center-edit-header/index';
 import BaseLaout from '@components/base-layout';
@@ -8,7 +8,7 @@ import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData';
-import { Suspense } from 'react';
+
 @inject('site')
 @inject('user')
 @observer
@@ -21,34 +21,34 @@ class index extends Component {
         {
           name: '昵称',
           type: 1,
-          display: 0
+          display: 0,
         },
         {
           name: '用户名',
           type: 2,
-          display: 0
+          display: 0,
         },
         {
           name: '个性签名',
           type: 3,
-          display: 0
+          display: 0,
         },
         {
           name: '手机号码',
           type: 4,
-          display: 0
+          display: 0,
         },
         {
           name: '账户密码',
           type: 5,
-          display: 0
+          display: 0,
         },
         {
           name: '支付密码',
           type: 6,
-          display: 0
-        }
-      ]
+          display: 0,
+        },
+      ],
     };
     this.user = this.props.user || {};
   }
@@ -56,17 +56,17 @@ class index extends Component {
     let textTitle = '';
     switch (type) {
       case 1: textTitle = this.user.username;
-      break;
+        break;
       case 2: textTitle = this.user.username;
-      break;
-      case 3: textTitle = '不会开飞机的程序员，不是一个好的摄影师';
-      break;
+        break;
+      case 3: textTitle = '这个人很懒，什么也没留下~';
+        break;
       case 4: textTitle = this.user.mobile;
-      break;
+        break;
       case 5: textTitle = '已设置';
-      break;
+        break;
       case 6: textTitle = '已设置';
-      break;
+        break;
     }
     return (
       <>
@@ -83,7 +83,7 @@ class index extends Component {
               <div className={item.display === 1 ? styles.pcEditAutographCall : styles.pcEditAutographBox}>
                 <Input
                   className={styles.pcEditAutographInput}
-                  placeholder="不会开飞机的程序员，不是一个好的摄影师"
+                  placeholder="这个人很懒，什么也没留下~"
                 />
                 <div className={styles.preservation}>
                   <Button className={styles.preservationButton} type="primary" onClick={() => this.modifyFun(index, 0)}>保存</Button>
@@ -94,32 +94,30 @@ class index extends Component {
           </div>
         </div>
       </>
-    )
+    );
   }
   modifyFun = (index, num) => {
     const todoList = [...this.state.contentTitle];
     this.setState({
-      contentTitle: todoList.map((item,key)=> key == index ? {...item, display: num } : item)
+      contentTitle: todoList.map((item, key) => (key == index ? { ...item, display: num } : item)),
     });
   }
   render() {
-    const {contentTitle} = this.state;
+    const { contentTitle } = this.state;
     return (
       <div className={styles.pcEditBox} >
         <Header className={styles.pcEditHeaser}/>
         <div className={styles.pcEditContent}>
           <div className={styles.pcEdit}>
             {/* 头部 */}
-            <div><UserCenterEditHeader /></div> 
+            <div><UserCenterEditHeader /></div>
             {/* 资料展示 */}
             {
-              contentTitle.map((item, index) => {
-                return (
+              contentTitle.map((item, index) => (
                   <div key={index}>
                     {this.editorialpresentation(item, item.type, index)}
                   </div>
-                )
-              })
+              ))
             }
             <div className={styles.pcEditNickname}>
               <div className={styles.pcEditNicknameText}>微信</div>

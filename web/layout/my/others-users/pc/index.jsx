@@ -10,7 +10,8 @@ import UserCenterFans from '@components/user-center-fans';
 import UserCenterFollow from '@components/user-center-follow';
 import UserCenterFansPopup from '@components/user-center-fans-popup';
 import UserCenterFollowPopup from '@components/user-center-follow-popup';
-
+import Router from '@discuzq/sdk/dist/router';
+import UserCenterThreads from '@components/user-center-threads';
 
 @inject('site')
 @inject('user')
@@ -26,16 +27,32 @@ class PCMyPage extends React.Component {
   }
   componentDidMount = async () => {
     const { query } = this.props.router;
-    if (query.otherId) {
-      await this.props.user.getTargetUserInfo(query.otherId);
+    const id = this.props.user?.id;
+    if (String(id) === query.id) {
+      Router.replace({ url: '/my' });
+      return;
     }
-  }
+    if (query.id) {
+      await this.props.user.getTargetUserInfo(query.id);
+      this.setState({
+        fetchUserInfoLoading: false,
+      });
+    }
+  };
+
   fetchTargetUserThreads = async () => {
     const { query } = this.props.router;
-    if (query.otherId) {
-      await this.props.user.getTargetUserThreads(query.otherId);
+    if (query.id) {
+      await this.props.user.getTargetUserThreads(query.id);
     }
-  }
+    return;
+  };
+
+  formatUserThreadsData = (targetUserThreads) => {
+    if (Object.keys(targetUserThreads).length === 0) return [];
+    return Object.values(targetUserThreads).reduce((fullData, pageData) => [...fullData, ...pageData]);
+  };
+
   // 点击粉丝更多
   moreFans = () => {
     this.setState({ showFansPopup: true });
@@ -47,11 +64,11 @@ class PCMyPage extends React.Component {
 
   onSearch = (value) => {
     this.props.router.replace(`/search?keyword=${value}`);
-  }
+  };
   renderRight = () => {
     const { query } = this.props.router;
     const { targetUser } = this.props.user;
-    const user = targetUser || {} ;
+    const user = targetUser || {};
     return (
       <>
         <SidebarPanel
@@ -91,36 +108,32 @@ class PCMyPage extends React.Component {
             />
           )}
         </SidebarPanel>
-        <Copyright/>
-    </>
+        <Copyright />
+      </>
     );
-  }
+  };
   renderContent = () => {
     const { user } = this.props;
-    const { targetUserThreads, targetUserThreadsTotalCount } = user;
+    const { targetUserThreads, targetUserThreadsTotalCount, targetUserThreadsPage, targetUserThreadsTotalPage } = user;
     return (
       <div className={styles.userContent}>
         <SidebarPanel
           title="主题"
-          type='normal'
+          type="normal"
           bigSize={true}
-          isShowMore={!targetUserThreads}
-          leftNum ={`${targetUserThreadsTotalCount}个主题`}
+          isShowMore={!this.formatUserThreadsData(targetUserThreads).length}
+          leftNum={`${targetUserThreadsTotalCount}个主题`}
           noData={!targetUserThreads?.length}
         >
           {/* FIXME: pc 切换到新逻辑 */}
-          {/* {
-            targetUserThreads?.map((item, index) => (
-              <div>
-                  <ThreadContent className={styles.wrapper} showBottom={false} data={item} key={index} />
-                  <div className={styles.hr}></div>
-              </div>
-            ))
-          } */}
+          {this.formatUserThreadsData(targetUserThreads)
+              && this.formatUserThreadsData(targetUserThreads).length > 0 && (
+                <UserCenterThreads data={this.formatUserThreadsData(targetUserThreads)} />
+          )}
         </SidebarPanel>
       </div>
     );
-  }
+  };
   render() {
     const { user } = this.props;
     const { targetUserThreadsPage, targetUserThreadsTotalPage } = user;
@@ -135,9 +148,9 @@ class PCMyPage extends React.Component {
           noMore={targetUserThreadsTotalPage < targetUserThreadsPage}
           showRefresh={false}
           onSearch={this.onSearch}
-          right={ this.renderRight }
+          right={this.renderRight}
         >
-          { this.renderContent() }
+          {this.renderContent()}
         </UserBaseLaout>
 
         <UserCenterFansPopup
