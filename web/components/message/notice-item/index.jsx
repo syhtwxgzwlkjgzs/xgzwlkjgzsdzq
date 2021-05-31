@@ -85,6 +85,10 @@ class Index extends Component {
   // parse content
   parseHTML = () => {
     const { type, item } = this.props;
+    if (type === 'chat') {
+      return xss(s9e.parse(item.content));
+    }
+
     // 1 获取基础内容，财务信息、账户信息优先使用title展示
     let _content = ['financial', 'account'].includes(type) ? item.title || item.content : item.content;
     // 2 过滤内容
