@@ -27,7 +27,7 @@ class Index extends React.Component {
           totalCount: 0,
         },
         {
-          iconName: 'LikeOutlined',
+          iconName: 'PraiseOutlined',
           title: '点赞我的',
           link: '/message?page=account&subPage=like',
           totalCount: 0,
