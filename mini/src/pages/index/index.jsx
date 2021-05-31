@@ -40,35 +40,42 @@ class Index extends React.Component {
         break
       }
     }
-    //是否必须登录
-    if (!user.isLogin()) {
-      Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
-      const promise = Promise.reject()
+    if (res.from === 'menu') {
       return {
-        promise
+        title: defaultTitle,
+        path: '/pages/index/index' 
       }
     } else {
-      if(from && from === 'head') {
+      //是否必须登录
+      if (!user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+        const promise = Promise.reject()
         return {
-          title: defaultTitle,
-          path: '/pages/index/index'
-        } 
+          promise
+        }
       } else {
-        this.props.index.updateThreadShare({ threadId }).then(result => {
+        if(from && from === 'head') {
+          return {
+            title: defaultTitle,
+            path: '/pages/index/index'
+          } 
+        } else {
+          this.props.index.updateThreadShare({ threadId }).then(result => {
 
-          if (result.code === 0) {
-            this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-            this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-            this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+            if (result.code === 0) {
+              this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+              this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+              this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+            }
+          });
+          return {
+            title: threadTitle,
+            path: `/subPages/thread/index?id=${threadId}`
           }
-        });
-        return {
-          title: threadTitle,
-          path: `/subPages/thread/index?id=${threadId}`
         }
       }
-    }
+    } 
   }
   render() {
     return (

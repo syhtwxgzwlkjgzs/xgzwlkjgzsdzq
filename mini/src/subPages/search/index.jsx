@@ -30,9 +30,10 @@ class Index extends React.Component {
   }
 
   onShareAppMessage = (res) => {
-    const { user, index } = this.props;
+    const { user, index, site } = this.props;
     const thread = index.threads?.pageData || []
     const threadId = parseInt(res.target?.dataset?.threadId)
+    const defaultTitle = site.webConfig?.setSite?.siteName || ''
     let threadTitle = ''
     for(let i of thread) {
       if(i.threadId == threadId) {
@@ -40,29 +41,37 @@ class Index extends React.Component {
         break
       }
     }
-    //是否必须登录
-    if (!user.isLogin()) {
-      Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
-      const promise = Promise.reject()
+    console.log(res.from)
+    if (res.from === 'menu') { 
       return {
-        promise
+        title: defaultTitle,
+        path: 'subPages/search/index'
       }
     } else {
-      {
-        this.props.index.updateThreadShare({ threadId }).then(result => {
-          if (result.code === 0) {
-            this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-            this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-            this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-          }
-        });
+      //是否必须登录
+      if (!user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+        const promise = Promise.reject()
         return {
-          title: threadTitle,
-          path: `/subPages/thread/index?id=${threadId}`
+          promise
         }
-      }
-    }
+      } else {
+        {
+          this.props.index.updateThreadShare({ threadId }).then(result => {
+            if (result.code === 0) {
+              this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+              this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+              this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+            }
+          });
+          return {
+            title: threadTitle,
+            path: `/subPages/thread/index?id=${threadId}`
+          }
+        }
+      } 
+    } 
   };
   render() {
     return (

@@ -165,10 +165,8 @@ class IndexH5Page extends React.Component {
       
       // 只需要滚到临界点触发setState，而不是每一次滚动都触发
       if(!fixedTab && scrollTop >= height) {
-        console.log(scrollTop)
         this.setState({ fixedTab: true })
       } else if(fixedTab && scrollTop < height) {
-        console.log(scrollTop)
         this.setState({ fixedTab: false })
       }
     }

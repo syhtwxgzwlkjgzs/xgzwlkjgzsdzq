@@ -61,32 +61,39 @@ class Index extends React.Component {
     const topicTitle = topic.topicDetail?.pageData[0]?.content || ''
     const topicId = topic.topicDetail?.pageData[0]?.topicId || ''
     const from = res.target?.dataset?.from || ''
-    //是否必须登录
-    if (!user.isLogin()) {
-      Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
-      const promise = Promise.reject()
+    if(res.from === 'menu') {
       return {
-        promise
+        title: topicTitle,
+        path: `/subPages/topic/topic-detail/index?id=${topicId}`
       }
     } else {
-      {
-        if(from && from === 'head') {
-          return {
-            title: topicTitle,
-            path: `/subPages/topic/topic-detail/index?id=${topicId}`
-          } 
-        } else {
-          this.props.index.updateThreadShare({ threadId }).then(result => {
-            if (result.code === 0) {
-              this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-              this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-              this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+      //是否必须登录
+      if (!user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+        const promise = Promise.reject()
+        return {
+          promise
+        }
+      } else {
+        {
+          if(from && from === 'head') {
+            return {
+              title: topicTitle,
+              path: `/subPages/topic/topic-detail/index?id=${topicId}`
             }
-          });
-          return {
-            title: threadTitle,
-            path: `/subPages/thread/index?id=${threadId}`
+          } else {
+            this.props.index.updateThreadShare({ threadId }).then(result => {
+              if (result.code === 0) {
+                this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+                this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+                this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+              }
+            });
+            return {
+              title: threadTitle,
+              path: `/subPages/thread/index?id=${threadId}`
+            }
           }
         }
       }
