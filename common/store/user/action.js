@@ -471,6 +471,37 @@ class UserAction extends SiteStore {
     throw {};
   }
 
+   @action
+  async updateEditedUserNickname() {
+    const updateUserInfoRes = await updateUsersUpdate({
+      data: {
+        nickname: this.editNickName,
+      },
+    });
+
+    if (updateUserInfoRes.code === 0) {
+      return updateUserInfoRes.data;
+    }
+
+    throw {};
+  }
+
+
+  @action
+   async updateEditedUserSignature() {
+     const updateUserInfoRes = await updateUsersUpdate({
+       data: {
+         signature: this.editSignature,
+       },
+     });
+
+     if (updateUserInfoRes.code === 0) {
+       return updateUserInfoRes.data;
+     }
+
+     throw {};
+   }
+
   /**
    * 初次设置用户密码
    */

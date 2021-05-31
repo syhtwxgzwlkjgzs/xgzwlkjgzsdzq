@@ -2,7 +2,7 @@ import React, { Component, Suspense } from 'react';
 import Header from '@components/header';
 import UserCenterEditHeader from '../../user-center-edit-header/index';
 import BaseLaout from '@components/base-layout';
-import { Button, Icon, Input } from '@discuzq/design';
+import { Button, Icon, Input, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
@@ -18,6 +18,7 @@ import UserCenterEditPaypwd from '../../user-center-edit-paypwd-pc';
 class index extends Component {
   constructor(props) {
     super(props);
+    this.props.user.initEditInfo();
     this.state = {
       isClickNickName: false,
       accountEditorVisible: false,
@@ -29,10 +30,27 @@ class index extends Component {
           display: 'show',
           condition: () => true,
           render: () => this.props.user.nickname,
-          operation: () => <p onClick={() => this.openInputEditor('昵称')} className={styles.pcEditNicknameCallMsodify}>修改</p>,
-          inputEditor: () => <Input className={styles.pcEditAutographInput} />,
-          onSave: () => {
-            console.log('on save');
+          operation: () => (
+            <p onClick={() => this.openInputEditor('昵称')} className={styles.pcEditNicknameCallMsodify}>
+              修改
+            </p>
+          ),
+          inputEditor: () => (
+            <Input
+              value={this.props.user.editNickName}
+              onChange={(e) => {
+                this.props.user.editNickName = e.target.value;
+              }}
+              className={styles.pcEditAutographInput}
+            />
+          ),
+          onSave: async () => {
+            await this.props.user.updateEditedUserNickname();
+            Toast.success({
+              content: '更新昵称成功',
+              duration: 1000,
+            });
+            this.closeInputEditor('昵称');
           },
           onCancel: () => {
             this.closeInputEditor('昵称');
@@ -47,11 +65,28 @@ class index extends Component {
             if (this.props.user.canEditUsername) {
               return <p className={styles.pcEditNicknameCallMsodifyDisable}>暂无法修改（一年一次）</p>;
             }
-            return <p onClick={() => this.openInputEditor('用户名')} className={styles.pcEditNicknameCallMsodify}>修改</p>;
+            return (
+              <p onClick={() => this.openInputEditor('用户名')} className={styles.pcEditNicknameCallMsodify}>
+                修改
+              </p>
+            );
           },
-          inputEditor: () => <Input className={styles.pcEditAutographInput} />,
-          onSave: () => {
-            console.log('on save');
+          inputEditor: () => (
+            <Input
+              value={this.props.user.editUserName}
+              onChange={(e) => {
+                this.props.user.editUserName = e.target.value;
+              }}
+              className={styles.pcEditAutographInput}
+            />
+          ),
+          onSave: async () => {
+            await this.props.user.updateUsername();
+            Toast.success({
+              content: '更新用户名成功',
+              duration: 1000,
+            });
+            this.closeInputEditor('用户名');
           },
           onCancel: () => {
             this.closeInputEditor('用户名');
@@ -62,10 +97,27 @@ class index extends Component {
           display: 'show',
           condition: () => true,
           render: () => this.props.user.signature,
-          operation: () => <p onClick={() => this.openInputEditor('个性签名')} className={styles.pcEditNicknameCallMsodify}>修改</p>,
-          inputEditor: () => <Input className={styles.pcEditAutographInput} />,
-          onSave: () => {
-            console.log('on save');
+          operation: () => (
+            <p onClick={() => this.openInputEditor('个性签名')} className={styles.pcEditNicknameCallMsodify}>
+              修改
+            </p>
+          ),
+          inputEditor: () => (
+            <Input
+              value={this.props.user.editSignature}
+              onChange={(e) => {
+                this.props.user.editSignature = e.target.value;
+              }}
+              className={styles.pcEditAutographInput}
+            />
+          ),
+          onSave: async () => {
+            await this.props.user.updateEditedUserSignature();
+            Toast.success({
+              content: '更新个性签名成功',
+              duration: 1000,
+            });
+            this.closeInputEditor('个性签名');
           },
           onCancel: () => {
             this.closeInputEditor('个性签名');
@@ -151,9 +203,7 @@ class index extends Component {
     if (targetConfig.length) {
       targetConfig[0].display = 'edit';
       this.setState({
-        editorConfig: [
-          ...editorConfig,
-        ],
+        editorConfig: [...editorConfig],
       });
     }
   }
@@ -164,9 +214,7 @@ class index extends Component {
     if (targetConfig.length) {
       targetConfig[0].display = 'show';
       this.setState({
-        editorConfig: [
-          ...editorConfig,
-        ],
+        editorConfig: [...editorConfig],
       });
     }
   }
