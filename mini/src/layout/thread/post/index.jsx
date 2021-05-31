@@ -632,6 +632,7 @@ class Index extends Component {
             style={{ transform: `translateY(-${bottomHeight}px)`, bottom: bottomHeight ? 0 : '' }}
           >
             <PluginToolbar
+              isOpenQcloudVod={this.props.site.isOpenQcloudVod}
               permissions={permissions}
               clickCb={(item) => {
                 this.handlePluginClick(item);
