@@ -26,6 +26,7 @@ class PCMyPage extends React.Component {
       showFollowPopup: false, // 是否弹出关注框
     };
   }
+
   componentDidMount = async () => {
     const { query } = this.props.router;
     const id = this.props.user?.id;

@@ -5,6 +5,7 @@ import UserCenterFansPopup from '@components/user-center-fans-popup';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import styles from './index.module.scss';
+import { withRouter } from 'next/router';
 
 @inject('user')
 @observer
@@ -39,7 +40,12 @@ class UserCenterFansPc extends React.Component {
               }}
               userId={this.props.userId}
               onContainerClick={({ id }) => {
-                Router.push({ url: `/user/${id}` });
+                this.props.router.push({
+                  pathname: '/user/[id]',
+                  query: {
+                    id,
+                  },
+                });
               }}
               className={styles.friendsWrapper}
               limit={5}
@@ -50,6 +56,14 @@ class UserCenterFansPc extends React.Component {
         <UserCenterFansPopup
           id={this.props.userId}
           visible={this.state.showFansPopup}
+          onContainerClick={({ id }) => {
+            this.props.router.push({
+              pathname: '/user/[id]',
+              query: {
+                id,
+              },
+            });
+          }}
           onClose={() => this.setState({ showFansPopup: false })}
         />
       </>
@@ -57,4 +71,4 @@ class UserCenterFansPc extends React.Component {
   }
 }
 
-export default UserCenterFansPc;
+export default withRouter(UserCenterFansPc);

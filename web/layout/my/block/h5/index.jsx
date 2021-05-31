@@ -28,13 +28,13 @@ class Index extends React.Component {
   async componentDidMount() {
     this.setState({
       loading: false,
-      height: window.outerHeight - 95,// header 是 40px，留出 2px ，用以触发下拉事件
+      height: window.outerHeight - 95, // header 是 40px，留出 2px ，用以触发下拉事件
     });
     await this.props.user.getUserShieldList();
   }
 
   componentWillUnmount() {
-    this.props.user.clearUserShield()
+    this.props.user.clearUserShield();
   }
 
   // 点击头像去到他人页面

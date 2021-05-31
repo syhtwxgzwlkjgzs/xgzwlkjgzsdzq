@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import styles from './index.module.scss';
 import UserCenterFollows from '../../user-center-follow';
+import { withRouter } from 'next/router';
 
 @inject('user')
 @observer
@@ -39,7 +40,12 @@ class UserCenterFollowsPc extends React.Component {
               }}
               userId={this.props.userId}
               onContainerClick={({ id }) => {
-                Router.push({ url: `/user/${id}` });
+                this.props.router.push({
+                  pathname: '/user/[id]',
+                  query: {
+                    id,
+                  },
+                });
               }}
               className={styles.friendsWrapper}
               limit={5}
@@ -50,6 +56,14 @@ class UserCenterFollowsPc extends React.Component {
         <UserCenterFollowPopup
           id={this.props.userId}
           visible={this.state.showFollowsPopup}
+          onContainerClick={({ id }) => {
+            this.props.router.push({
+              pathname: '/user/[id]',
+              query: {
+                id,
+              },
+            });
+          }}
           onClose={() => this.setState({ showFollowsPopup: false })}
         />
       </>
@@ -57,4 +71,4 @@ class UserCenterFollowsPc extends React.Component {
   }
 }
 
-export default UserCenterFollowsPc;
+export default withRouter(UserCenterFollowsPc);
