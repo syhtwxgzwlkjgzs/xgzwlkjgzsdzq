@@ -6,6 +6,7 @@ import Icon from '@discuzq/design/dist/components/icon/index';
 import Router from '@discuzq/sdk/dist/router';
 import { getCurrentInstance } from '@tarojs/taro';
 import PayBoxProvider from '@components/payBox/payBoxProvider';
+import { MINI_SITE_JOIN_WHITE_LIST } from '@common/constants/site';
 
 @inject('user')
 @inject('site')
@@ -42,7 +43,6 @@ export default class Page extends React.Component {
   isPass() {
     const { site, user } = this.props;
     const path = getCurrentInstance().router.path;
-
     if (site && site.webConfig) {
       // 关闭站点
       if (path !== '/subPage/close/index' && site.closeSiteConfig) {
@@ -51,12 +51,12 @@ export default class Page extends React.Component {
       }
       // 付费加入
       if (
-        (path !== '/subPages/join/index' && site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay')
+        (path !== '/subPages/forum/partner-invite/index' && site?.webConfig?.setSite?.siteMode === 'pay')
         && (!user.isLogin() || (user.isLogin() && !user.paid))
+        && !MINI_SITE_JOIN_WHITE_LIST.includes(path)
       ) {
-        // todo 需要判断登录后是否支付
-        // Router.redirect({url: '/subPages/join/index'});
-        // return false;
+        Router.redirect({url: '/subPages/forum/partner-invite/index'});
+        return false;
       }
       // TODO: 强制绑定方案待定
       if (user.isLogin()) {
@@ -67,11 +67,6 @@ export default class Page extends React.Component {
         // }
         // 前置：没有开启微信
         if (!site.isOffiaccountOpen && !site.isMiniProgramOpen) {
-          // 绑定手机: 开启短信，没有绑定手机号，小程序可以跳过绑定手机，所以不强制绑定手机号
-          // if (path !== '/subPages/user/bind-phone/index' && site.isSmsOpen && !user.mobile) {
-          //   Router.redirect({url: '/subPages/user/bind-phone/index'});
-          //   return false;
-          // }
           // 绑定昵称：没有开启短信，也没有绑定昵称
           if (
             path !== '/subPages/user/bind-nickname/index'
