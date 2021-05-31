@@ -20,7 +20,7 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
   const newFilterData = filterData.slice();
   if ( isShowDefault ) {
     newFilterData.splice(1, 0, {
-      label: '默认', // 默认智能排序
+      label: '推荐', // 默认智能排序
       type: 'sequence',
       isActive: false,
     });
