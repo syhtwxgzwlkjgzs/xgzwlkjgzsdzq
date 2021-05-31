@@ -101,6 +101,7 @@
         line-height: rem(20);
         text-align: right;
         color: $error-color;
+        font-weight: bold;
       }
     }
 
@@ -169,6 +170,7 @@
         padding: rem(8);
         padding-top: rem(4);
         font-size: $font-size-middle;
+        color: $text-color-primary;
         line-height: rem(24);
         background: $body-bg-color;
         border-radius: 0 0 rem(5) rem(5);

@@ -21,7 +21,7 @@ const InteractionBox = (props) => {
   let toastInstance = null;
 
 
-  const uploadRef = useRef(null);
+  const uploadRef = useRef();
 
   // const checkToShowCurrentMsgTime = (curTimestamp) => {
   //   const DISPLAY_GAP_IN_MINS = 3;
@@ -35,11 +35,11 @@ const InteractionBox = (props) => {
   //   }
   // };
 
+
   useEffect(() => {
     if (!threadPost.emojis.length) {
       threadPost.fetchEmoji();
     }
-
     return () => {
       toastInstance?.destroy();
     };
@@ -47,7 +47,6 @@ const InteractionBox = (props) => {
 
 
   const submit = async (data) => {
-    setShowEmoji(false);
     let ret = {};
     if (dialogId) {
       ret = await createDialogMsg({
@@ -97,6 +96,12 @@ const InteractionBox = (props) => {
     setCursorPosition(e.target.selectionStart);
   };
 
+  const insertEmoji = (emoji) => {
+    const text = typingValue.slice(0, cursorPosition) + emoji.code + typingValue.slice(cursorPosition);
+    setTypingValue(text);
+    setCursorPosition(cursorPosition + emoji.code.length);
+  };
+
   return (
     <>
       <input
@@ -127,21 +132,25 @@ const InteractionBox = (props) => {
         <>
           <div className={styles.h5InteractionBox} style={{bottom: showEmoji ? '200px' : 0}}>
           <div className={styles.inputWrapper}>
-            <Input value={typingValue} placeholder=" 请输入内容" onFocus={() => {
-              setShowEmoji(false);
-            }} onChange={(e) => {
-              setTypingValue(e.target.value);
-              recordCursor(e);
-            }} onBlur={(e) => {
-              recordCursor(e);
-            }} />
+            <Input
+              value={typingValue}
+              placeholder=" 请输入内容"
+              onChange={(e) => {
+                setTypingValue(e.target.value);
+                recordCursor(e);
+              }}
+              onBlur={(e) => {
+                recordCursor(e);
+              }}
+            />
             <div className={styles.tools}>
               <div>
-                <Icon name="SmilingFaceOutlined" size={20} onClick={() => {setShowEmoji(!showEmoji);}} />
+                <Icon name="SmilingFaceOutlined" size={20} onClick={() => {
+                  setShowEmoji(!showEmoji);
+                }} />
               </div>
               <div className={styles.pictureUpload}>
                 <Icon name="PictureOutlinedBig" size={20} onClick={() => {
-                  setShowEmoji(false);
                   uploadImage();
                 }} />
               </div>
@@ -155,14 +164,10 @@ const InteractionBox = (props) => {
         </div>
         <div className={styles.emoji}>
           <Emoji
+            onEmojiBlur={() => setShowEmoji(false)}
             show={showEmoji}
             emojis={threadPost.emojis}
-            onClick={
-              (emoji) => {
-                const text = typingValue.slice(0, cursorPosition) + emoji.code + typingValue.slice(cursorPosition);
-                setTypingValue(text);
-                setCursorPosition(cursorPosition + emoji.code.length);
-              }}
+            onClick={insertEmoji}
             />
           </div>
         </>
@@ -170,8 +175,17 @@ const InteractionBox = (props) => {
       {platform === 'pc' && (
         <div className={styles.pcInteractionBox}>
           <div className={styles.tools}>
+            <Emoji
+              onEmojiBlur={() => setShowEmoji(false)}
+              pc
+              show={showEmoji}
+              emojis={threadPost.emojis}
+              onClick={insertEmoji}
+            />
             <div className={styles.emoj}>
-              <Icon name="SmilingFaceOutlined" size={20} />
+              <Icon name="SmilingFaceOutlined" size={20} onClick={() => {
+                setShowEmoji(!showEmoji);
+              }} />
             </div>
             <div className={styles.pictureUpload}>
               <Upload
@@ -188,7 +202,13 @@ const InteractionBox = (props) => {
             focus={true}
             maxLength={5000}
             rows={3}
-            onChange={(e) => setTypingValue(e.target.value)}
+            onChange={(e) => {
+              setTypingValue(e.target.value);
+              recordCursor(e);
+            }}
+            onBlur={(e) => {
+              recordCursor(e);
+            }}
             onKeyDown={doPressEnter}
             placeholder={' 请输入内容'}
           />
