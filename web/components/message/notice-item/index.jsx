@@ -79,7 +79,7 @@ class Index extends Component {
   };
 
   filterTag(html) {
-    return html?.replace(/<(\/)?(p|r|t|br)[^>]*>|[\r\n]/g, '');
+    return html?.replace(/<(\/)?([b-z]|br)[^>]*>|[\r\n]/gi, '');
   }
 
   // parse content
@@ -111,7 +111,7 @@ class Index extends Component {
       // 后续用户中心做好后，需拼接用户id
       canJump && Router.push({ url: `/user/${item.userId}` });
     }
-    
+
   };
 
   // 跳转主题详情or私信
