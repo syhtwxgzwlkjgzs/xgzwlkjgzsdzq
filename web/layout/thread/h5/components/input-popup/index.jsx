@@ -6,7 +6,7 @@ import ImageUpload from '@components/thread-post/image-upload';
 import { readEmoji } from '@common/server';
 
 import Emoji from '@components/editor/emoji';
-import AtSelect from '@components/thread-detail-pc/at-select';
+import AtSelect from '@components/thread-post/at-select';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 
 const InputPop = (props) => {
@@ -48,6 +48,9 @@ const InputPop = (props) => {
   };
 
   const onCancel = () => {
+    setShowAt(false);
+    setShowEmojis(false);
+    setShowPicture(false);
     onClose();
   };
 
@@ -160,75 +163,78 @@ const InputPop = (props) => {
   };
 
   return (
-    <Popup position="bottom" visible={visible} onClose={onClose}>
-      <div className={styles.container}>
-        <div className={styles.main}>
-          <Textarea
-            className={styles.input}
-            maxLength={5000}
-            rows={4}
-            showLimit={false}
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder={inputText}
-            disabled={loading}
-            forwardedRef={textareaRef}
-          ></Textarea>
-        </div>
+    <div>
+      <Popup position="bottom" visible={visible} onClose={onCancel}>
+        <div className={styles.container}>
+          <div className={styles.main}>
+            <Textarea
+              className={styles.input}
+              maxLength={5000}
+              rows={4}
+              showLimit={false}
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder={inputText}
+              disabled={loading}
+              forwardedRef={textareaRef}
+              autofocus={true}
+            ></Textarea>
+          </div>
 
-        {showPicture && (
-          <Fragment>
-            <div className={styles.imageUpload}>
-              <ImageUpload
-                fileList={imageList}
-                onChange={handleUploadChange}
-                onComplete={onComplete}
-                beforeUpload={(cloneList, showFileList) => beforeUpload(cloneList, showFileList, THREAD_TYPE.image)}
-              />
+          {showPicture && (
+            <Fragment>
+              <div className={styles.imageUpload}>
+                <ImageUpload
+                  fileList={imageList}
+                  onChange={handleUploadChange}
+                  onComplete={onComplete}
+                  beforeUpload={(cloneList, showFileList) => beforeUpload(cloneList, showFileList, THREAD_TYPE.image)}
+                />
+              </div>
+              <Divider className={styles.divider}></Divider>
+            </Fragment>
+          )}
+
+          <div className={styles.button}>
+            <div className={styles.operates}>
+              <Icon
+                className={classnames(styles.operate, showEmojis && styles.actived)}
+                name="SmilingFaceOutlined"
+                size={20}
+                onClick={onEmojiIconClick}
+              ></Icon>
+              <Icon
+                className={classnames(styles.operate, showAt && styles.actived)}
+                name="AtOutlined"
+                size={20}
+                onClick={onAtIconClick}
+              ></Icon>
+              <Icon
+                className={classnames(styles.operate, showPicture && styles.actived)}
+                name="PictureOutlinedBig"
+                size={20}
+                onClick={onPcitureIconClick}
+              ></Icon>
             </div>
-            <Divider className={styles.divider}></Divider>
-          </Fragment>
-        )}
 
-        {showAt && <AtSelect visible={showAt} getAtList={onAtListChange} onCancel={onAtIconClick} />}
-
-        {showEmojis && (
-          <div className={styles.emojis}>
-            <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />
-          </div>
-        )}
-
-        <div className={styles.button}>
-          <div className={styles.operates}>
-            <Icon
-              className={classnames(styles.operate, showEmojis && styles.actived)}
-              name="SmilingFaceOutlined"
-              size={20}
-              onClick={onEmojiIconClick}
-            ></Icon>
-            <Icon
-              className={classnames(styles.operate, showAt && styles.actived)}
-              name="AtOutlined"
-              size={20}
-              onClick={onAtIconClick}
-            ></Icon>
-            <Icon
-              className={classnames(styles.operate, showPicture && styles.actived)}
-              name="PictureOutlinedBig"
-              size={20}
-              onClick={onPcitureIconClick}
-            ></Icon>
-          </div>
-
-          <div
-            onClick={onSubmitClick}
-            className={classnames(styles.ok, (loading || imageUploading) && styles.disabled)}
-          >
-            发布
+            <div
+              onClick={onSubmitClick}
+              className={classnames(styles.ok, (loading || imageUploading) && styles.disabled)}
+            >
+              发布
+            </div>
           </div>
         </div>
-      </div>
-    </Popup>
+      </Popup>
+
+      {showAt && <AtSelect visible={showAt} getAtList={onAtListChange} onCancel={onAtIconClick} />}
+
+      {showEmojis && (
+        <div className={styles.emojis}>
+          <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />
+        </div>
+      )}
+    </div>
   );
 };
 
