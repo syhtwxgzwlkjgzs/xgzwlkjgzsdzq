@@ -8,6 +8,7 @@ import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData';
+import UserCenterEditAccountPwd from '../../user-center-edit-account-pwd-pc';
 
 @inject('site')
 @inject('user')
@@ -132,6 +133,7 @@ class index extends Component {
           </div>
           <div className={styles.bottomText}>Powered By Discuz! Q © 2021   粤ICP备20008502号-1</div>
         </div>
+        <UserCenterEditAccountPwd />
       </div>
     );
   }
