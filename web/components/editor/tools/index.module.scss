@@ -10,6 +10,8 @@
     color: $text-color-regular;
   }
   &__tag {
+    max-width: 200px;
     @include tag-default;
+    @include text-ellipsis;
   }
 }

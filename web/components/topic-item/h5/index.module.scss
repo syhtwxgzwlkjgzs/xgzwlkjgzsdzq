@@ -6,6 +6,7 @@
   border-bottom: 1px solid var(--border-line-color);
 
   .title {
+    @include text-ellipsis();
     font-size: rem($font-size-middle);
     line-height: rem($font-line-height-middle);
     font-weight: var(--font-weight-bold);

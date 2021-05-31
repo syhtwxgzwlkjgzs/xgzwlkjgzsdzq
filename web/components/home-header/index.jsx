@@ -23,6 +23,7 @@ class HomeHeader extends React.Component {
   state = {
     visible: false,
     height: 180,
+    loadWeiXin: false
   }
 
   domRef = React.createRef(null)
@@ -100,6 +101,7 @@ class HomeHeader extends React.Component {
   }
 
   componentDidMount() {
+    this.setState({ loadWeiXin: isWeiXin() })
     if (this.domRef.current) {
       this.setState({ height: this.domRef.current.clientHeight });
     }
@@ -107,7 +109,7 @@ class HomeHeader extends React.Component {
 
   render() {
     const { bgColor, hideInfo = false, style = {}, digest = null, mode = '' } = this.props;
-    const { visible } = this.state;
+    const { visible, loadWeiXin } = this.state;
     const { countUsers, countThreads, siteAuthor, createDays } = this.getSiteInfo();
 
     return (
@@ -176,7 +178,7 @@ class HomeHeader extends React.Component {
             </li>
           </ul>
         }
-        {isWeiXin && <SharePopup visible={visible} onClose={this.onClose} />}
+        {loadWeiXin && <SharePopup visible={visible} onClose={this.onClose} />}
       </div>
     );
   }

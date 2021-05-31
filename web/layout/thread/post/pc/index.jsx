@@ -161,6 +161,7 @@ class ThreadPCPage extends React.Component {
                   pc
                   postData={postData}
                   onAttachClick={this.props.handleAttachClick}
+                  onVideoUpload={this.props.handleVideoUpload}
                   onUploadComplete={this.props.handleVideoUploadComplete}
                   permission={user.threadExtendPermissions}
                   currentSelectedToolbar={threadPost.currentSelectedToolbar}
