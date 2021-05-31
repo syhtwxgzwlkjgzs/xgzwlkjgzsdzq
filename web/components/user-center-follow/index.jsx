@@ -20,6 +20,7 @@ class UserCenterFollows extends React.Component {
     // 加载更多页面
     loadMorePage: true,
     splitElement: <div></div>,
+    isPc: false,
     friends: [],
     loadMoreAction: async () => {},
     followHandler: async () => {},
@@ -216,7 +217,7 @@ class UserCenterFollows extends React.Component {
                 id={user.id}
                 type={this.judgeFollowsStatus(user)}
                 imgUrl={user.avatar}
-                withHeaderUserInfo={false}
+                withHeaderUserInfo={this.props.isPc}
                 onContainerClick={this.props.onContainerClick}
                 userName={user.userName}
                 userGroup={user.groupName}

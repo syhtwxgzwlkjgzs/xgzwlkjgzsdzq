@@ -32,12 +32,7 @@ class IndexPCPage extends React.Component {
       // visibility: 'hidden',
       isShowDefault: this.checkIsOpenDefaultTab(),
       // 筛选过滤数据
-      filter: {
-        sequence: 0,
-        sort: 1,
-        attention: 0,
-        essence: 0
-      }
+      filter: {}
     };
 
     this.defaultCategoryIds = this.props.index.filter?.categoryids || ['all']

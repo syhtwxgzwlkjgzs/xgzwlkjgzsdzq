@@ -93,7 +93,7 @@ const Index = ({
               (<View key={index} className={styles.fabulous} onClick={item.event}>
                  <View className={styles.fabulousIcon}>
                     <Icon
-                    className={`${styles.icon} ${item.type} ${isLiked && item.name ===  '赞' ? styles.likedColor : styles.disLikeColor}`}
+                    className={`${styles.icon} ${item.type} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`} 
                     name={item.icon}
                     size={16}>
                   </Icon>

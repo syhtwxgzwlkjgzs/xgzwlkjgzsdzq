@@ -632,6 +632,7 @@ class Index extends Component {
             style={{ transform: `translateY(-${bottomHeight}px)`, bottom: bottomHeight ? 0 : '' }}
           >
             <PluginToolbar
+              isOpenQcloudVod={this.props.site.isOpenQcloudVod}
               permissions={permissions}
               clickCb={(item) => {
                 this.handlePluginClick(item);
@@ -645,7 +646,8 @@ class Index extends Component {
               }}
               onSubmit={() => this.handleSubmit()}
             />
-            <Emoji show={showEmoji} onHide={() => {
+            {/* 通过键盘改变的高度一起来控制表情的显示和隐藏，直接通过 showEmoji 来进行数据的改变，渲染慢 */}
+            <Emoji show={bottomHeight === 0 && showEmoji} onHide={() => {
               this.setState({
                 showEmoji: false
               });

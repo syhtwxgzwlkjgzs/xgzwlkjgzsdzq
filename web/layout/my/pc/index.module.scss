@@ -39,6 +39,13 @@
 
   .userInfoValue {
     color: $text-color-primary;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .wecahtNickname {
+    margin-left: rem(8);
   }
 }
 

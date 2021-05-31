@@ -36,7 +36,7 @@ import toolbarStyles from '@components/editor/toolbar/index.module.scss';
 function isIOS() {
   const ua = window.navigator.userAgent.toLowerCase();
   // 判断是否是ios，或者小米默认浏览器
-  return /ip[honead]{2,4}(?:.*os\s([\w]+)\slike\smac|;\sopera)/i.test(ua) || /miuibrowser/i.test(ua);
+  return /ip[honead]{2,4}(?:.*os\s([\w]+)\slike\smac|;\sopera)/i.test(ua);
 }
 
 @inject('threadPost')
@@ -83,20 +83,20 @@ class ThreadCreate extends React.Component {
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
     this.positionDisplay(action);
     if (!isIOS()) {
-      if (vditorToolbar) {
+      if (vditorToolbar && action === 'select') {
         vditorToolbar.style.position = 'fixed';
         vditorToolbar.style.bottom = '88px';
         vditorToolbar.style.top = 'auto';
       }
-      return;
+    } else {
+      if (vditorToolbar && action === 'select') {
+        vditorToolbar.style.position = 'fixed';
+        vditorToolbar.style.top = `${winHeight - 132 + y}px`;
+      }
     }
-    if (vditorToolbar && action === 'select') {
-      vditorToolbar.style.position = 'fixed';
-      vditorToolbar.style.top = `${winHeight - 132 + y}px`;
-    }
-    // 阻止页面上拉带动操作栏位置变化。放这里便于本地开发调试
-    if (window.innerHeight === winHeight) return;
     this.moneyboxDisplay(false);
+    // 阻止页面上拉带动操作栏位置变化。放这里便于本地开发调试
+    if (window.innerHeight === winHeight && isIOS()) return;
     this.setPostBox(action, event, y);
   }
 
@@ -107,7 +107,7 @@ class ThreadCreate extends React.Component {
       const postBox = document.querySelector('#post-inner');
       const title = document.querySelector('#dzq-threadpost-title');
       const bottombarHeight = this.getBottombarHeight(action);
-      let postBoxHeight = winHeight - bottombarHeight;
+      let postBoxHeight = winHeight - bottombarHeight - 10; // 多减去10像素
       if (postBox) {
         if (title?.display !== 'none') postBoxHeight = winHeight - bottombarHeight - 54;
         postBox.style.height = `${postBoxHeight}px`;
@@ -118,7 +118,7 @@ class ThreadCreate extends React.Component {
         if (clientY > postBoxHeight) {
           this.props.handleEditorBoxScroller(offsetTop);
           // 解决focus在编辑器之后页面被弹出导致底部工具栏上移的问题
-          window.scrollTo(0, 0);
+          if (isIOS()) window.scrollTo(0, 0);
         }
       }
       // 这个需要放在这里的原因是避免滚动造成底部bar显示问题
@@ -141,15 +141,20 @@ class ThreadCreate extends React.Component {
     } else {
       if (toolbar) toolbar.className = toolbarStyles['dvditor-toolbar'];
     }
-    if (moneybox && !action) bottombarHeight += 65; // 直接算最高的高度
+    if (moneybox && moneybox?.style?.display !== 'none') bottombarHeight += 65; // 直接算最高的高度
     return bottombarHeight;
   }
 
   setPostBottombar = (action, y = 0) => {
-    const winHeight = getVisualViewpost();
-    const postBottombar = document.querySelector('#post-bottombar');
-    const bottombarHeight = this.getBottombarHeight(action);
-    postBottombar.style.top = `${winHeight - bottombarHeight + y}px`;
+    const timer = setTimeout(() => {
+      clearTimeout(timer);
+      const winHeight = getVisualViewpost();
+      const postBottombar = document.querySelector('#post-bottombar');
+      if (isIOS()) {
+        const bottombarHeight = this.getBottombarHeight(action);
+        postBottombar.style.top = `${winHeight - bottombarHeight + y}px`;
+      }
+    }, 100);
   };
 
   setBottomFixed = (action, event) => {
@@ -160,7 +165,7 @@ class ThreadCreate extends React.Component {
   }
   clearBottomFixed = () => {
     this.moneyboxDisplay(true);
-    if (!isIOS()) return;
+    // if (!isIOS()) return;
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
       const postBottombar = document.querySelector('#post-bottombar');
@@ -206,9 +211,10 @@ class ThreadCreate extends React.Component {
     return (
       <div className={styles['dzq-post-body']}>
         <Header allowJump={false} customJum={this.handlePageJump} />
-        <div className={styles['post-inner']} id="post-inner">
+        <div className={styles['post-inner']} id="post-inner" onClick={this.props.handleVditorFocus}>
           {/* 标题 */}
           <Title
+            onClick={e => e.stopPropagation() }
             isDisplay={this.props.isTitleShow}
             title={postData.title}
             onChange={title => this.props.setPostData({ title })}
@@ -254,7 +260,7 @@ class ThreadCreate extends React.Component {
             // && Object.keys(postData.audio).length > 0
             && !postData.audio.mediaUrl)
             && (
-              <div className={styles['audio-record']} id="dzq-post-audio-record">
+              <div className={styles['audio-record']} id="dzq-post-audio-record" onClick={e => e.stopPropagation()}>
                 <AudioRecord duration={60} onUpload={(blob) => {
                   this.props.handleAudioUpload(blob);
                 }} />
@@ -263,7 +269,7 @@ class ThreadCreate extends React.Component {
 
           {/* 语音组件 */}
           {(Boolean(postData.audio.mediaUrl)) && (
-            <div className={`${styles['audio-record']} ${styles['audio-record-display']}`}>
+            <div className={`${styles['audio-record']} ${styles['audio-record-display']}`} onClick={e => e.stopPropagation()}>
               <Audio src={postData.audio.mediaUrl} />
               <Icon className={styles.delete} name="DeleteOutlined" onClick={() => this.props.setPostData({ audio: {} })} />
             </div>
@@ -326,9 +332,11 @@ class ThreadCreate extends React.Component {
           )}
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar
+            isOpenQcloudVod={this.props.site.isOpenQcloudVod}
             postData={postData}
             onAttachClick={this.props.handleAttachClick}
             // onUploadChange={this.handleUploadChange}
+            onVideoUpload={this.props.handleVideoUpload}
             onUploadComplete={this.props.handleVideoUploadComplete}
             category={
               <ToolsCategory

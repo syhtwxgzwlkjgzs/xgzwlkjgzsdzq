@@ -1,5 +1,5 @@
-import api from '../api';
 import typeofFn from '@common/utils/typeof';
+import { createAttachments } from '@discuzq/sdk/dist/api/content/create-attachments';
 
 /**
  * 附件、图片等上传接口 [先放到这里]
@@ -15,17 +15,9 @@ import typeofFn from '@common/utils/typeof';
  * const ret = await createAttachment(formData); // 在 async 方法中
  */
 export default async function _createAttachment(params, progress = () => {}) {
-  const res = await api.http({
-    url: '/apiv3/attachments',
-    method: 'post',
-    transformRequest: [function (data) {
-      return data;
-    }],
+  const res = await createAttachments({
     onUploadProgress: (progressEvent) => {
       if (typeofFn.isFunction(progress)) progress(progressEvent);
-    },
-    headers: {
-      'Content-Type': 'multipart/form-data',
     },
     data: params,
   });
