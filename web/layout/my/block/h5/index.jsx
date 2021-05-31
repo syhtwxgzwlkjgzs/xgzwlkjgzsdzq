@@ -79,6 +79,7 @@ class Index extends React.Component {
                 onRefresh={this.loadMore}
                 noMore={userShieldTotalPage < userShieldPage}
               >
+                <div className={styles.blockSplitLine}/>
                 {userShield.map((item, index) => (
                   <div className={styles.haieldImg} key={index}>
                     <div

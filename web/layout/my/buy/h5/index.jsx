@@ -22,7 +22,7 @@ class Index extends React.Component {
   componentDidMount() {
     this.setState({
       // header 是 40px，留出 2px ，用以触发下拉事件
-      height: window.outerHeight - 95,
+      height: window.outerHeight - 94,
     });
   }
 
@@ -32,7 +32,7 @@ class Index extends React.Component {
     return (
       <div className={styles.collectBox}>
         <Header />
-        {pageData?.length !== 0 && <div className={styles.titleBox}>{`${pageData?.length}条购买`}</div>}
+        {pageData?.length !== 0 && <div className={styles.titleBox}>{`${this.props.totalCount}条购买`}</div>}
         {this.props.firstLoading && (
           <div className={styles.spinLoading}>
             <Spin type="spinner">加载中...</Spin>
@@ -45,6 +45,7 @@ class Index extends React.Component {
             noMore={page > totalPage}
             onRefresh={this.props.dispatch}
           >
+            <div className={styles.buySplitLine}/>
             {pageData?.map((item, index) => (
               <ThreadContent className={styles.listItem} key={index} data={item} />
             ))}
