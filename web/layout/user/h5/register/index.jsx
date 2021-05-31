@@ -16,12 +16,14 @@ import { get } from '@common/utils/get';
 @inject('thread')
 @inject('userRegister')
 @inject('commonLogin')
+@inject('invite')
 @observer
 class RegisterH5Page extends React.Component {
     handleRegisterBtnClick = async () => {
       try {
+        const { router, site: { webConfig } = {} } = this.props;
+        this.props.userRegister.code = this.props.invite.getInviteCode(router);
         this.props.userRegister.verifyForm();
-        const { webConfig } = this.props.site;
         const registerCaptcha = webConfig?.setReg?.registerCaptcha;
         if (registerCaptcha) {
           return this.showCaptcha();
@@ -57,19 +59,17 @@ class RegisterH5Page extends React.Component {
 
   toRegister = async () => {
     try {
+      this.props.invite.inviteCode;
       const resp = await this.props.userRegister.register();
       const uid = get(resp, 'uid', '');
       this.props.user.updateUserInfo(uid);
       Toast.success({
         content: '注册成功',
         hasMask: false,
-        duration: 1000,
+        onClose: (() => {
+          window.location.href = '/';
+        }),
       });
-      // FIXME: Toast 暂时不支持回调能力
-      // TODO: 完善这里的路由跳转逻辑
-      setTimeout(() => {
-        window.location.href = '/';
-      }, 1000);
     } catch (e) {
       // 跳转状态页
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
@@ -81,7 +81,6 @@ class RegisterH5Page extends React.Component {
       Toast.error({
         content: e.Message,
         hasMask: false,
-        duration: 1000,
       });
     }
   };

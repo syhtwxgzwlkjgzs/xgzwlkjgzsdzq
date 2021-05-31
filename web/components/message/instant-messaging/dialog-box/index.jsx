@@ -8,7 +8,7 @@ import styles from './index.module.scss';
 
 const DialogBox = (props) => {
   const { shownMessages, platform, message, user, dialogId, showEmoji } = props;
-  const { readDialogMsgList, dialogMsgList, createDialogMsg } = message;
+  const { readDialogMsgList, dialogMsgList, dialogMsgListLength } = message;
 
   const [previewerVisibled, setPreviewerVisibled] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
@@ -30,19 +30,25 @@ const DialogBox = (props) => {
     }
   }, [dialogId]);
 
+  useEffect(() => {
+    if (showEmoji) {
+      scrollEnd();
+    }
+  }, [showEmoji]);
+
   const scrollEnd = () => {
     if (dialogBoxRef.current) {
       dialogBoxRef.current.scrollTop = dialogBoxRef?.current?.scrollHeight;
     }
   };
 
-  // 每2秒轮询一次
+  // 每5秒轮询一次
   const updateMsgList = () => {
     readDialogMsgList(dialogId);
     clearTimeout(timeoutId.current);
     timeoutId.current = setTimeout(() => {
       updateMsgList();
-    }, 4000);
+    }, 5000);
   };
 
   const messagesHistory = useMemo(() => {
@@ -58,7 +64,7 @@ const DialogBox = (props) => {
       ownedBy: user.id === item.userId ? 'myself' : 'itself',
       imageUrl: item.imageUrl,
     })).reverse();
-  }, [dialogMsgList]);
+  }, [dialogMsgListLength]);
 
   const imagePreviewerUrls = useMemo(() => {
     return dialogMsgList.list.filter(item => !!item.imageUrl).map(item => item.imageUrl).reverse();

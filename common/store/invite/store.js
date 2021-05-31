@@ -1,8 +1,18 @@
 import { observable, action } from 'mobx';
 import { simpleRequest } from '@common/utils/simple-request';
+import { get } from '../../utils/get';
 export default class InviteStore {
   @observable inviteData = { };
-  @observable inviteCode = null;
+  @observable inviteCode = '';
+
+  @action getInviteCode(router) {
+    return this.inviteCode || sessionStorage.getItem('inviteCode') || router?.query?.inviteCode || '';
+  }
+
+  @action setInviteCode(code) {
+    this.inviteCode = code;
+    sessionStorage.setItem('inviteCode', code);
+  }
 
   @action
   async getInviteUsersList() {

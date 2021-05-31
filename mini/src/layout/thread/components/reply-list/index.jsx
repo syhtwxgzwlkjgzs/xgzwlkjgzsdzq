@@ -7,6 +7,7 @@ import { observer } from 'mobx-react';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import classnames from 'classnames';
+import ImageDisplay from '@components/thread/image-display';
 
 @observer
 export default class ReplyList extends React.Component {
@@ -83,6 +84,13 @@ export default class ReplyList extends React.Component {
                 className={classnames(styles.content, this.props.isShowOne && styles.isShowOne)}
                 dangerouslySetInnerHTML={{ __html: this.filterContent() }}
               ></View>
+
+              {/* 图片展示 */}
+              {(this.props.data?.images || this.props.data?.attachments) && (
+                <View className={styles.imageDisplay}>
+                  <ImageDisplay platform="h5" imgData={this.props.data.images || this.props.data.attachments} />
+                </View>
+              )}
             </View>
           </View>
 

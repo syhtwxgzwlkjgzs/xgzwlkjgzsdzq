@@ -23,6 +23,7 @@ class HomeHeader extends React.Component {
   state = {
     visible: false,
     height: 180,
+    loadWeiXin: false
   }
 
   domRef = React.createRef(null)
@@ -66,8 +67,10 @@ class HomeHeader extends React.Component {
     };
     const siteAuthor = get(webConfig, 'setSite.siteAuthor.username', '');
     const siteInstall = get(webConfig, 'setSite.siteInstall', '');
-    const  startDate = Date.parse(siteInstall);
-    const  endDate = Date.parse(new Date());
+    // 兼容ios
+    const [siteTimer] = siteInstall.split(' ');
+    const startDate = Date.parse(siteTimer);
+    const endDate = Date.parse(new Date());
     const days = numberFormat(parseInt(Math.abs(startDate  -  endDate) / 1000 / 60 / 60 / 24, 10));
 
     siteInfo.siteAuthor = siteAuthor;
@@ -98,6 +101,7 @@ class HomeHeader extends React.Component {
   }
 
   componentDidMount() {
+    this.setState({ loadWeiXin: isWeiXin() })
     if (this.domRef.current) {
       this.setState({ height: this.domRef.current.clientHeight });
     }
@@ -105,7 +109,7 @@ class HomeHeader extends React.Component {
 
   render() {
     const { bgColor, hideInfo = false, style = {}, digest = null, mode = '' } = this.props;
-    const { visible } = this.state;
+    const { visible, loadWeiXin } = this.state;
     const { countUsers, countThreads, siteAuthor, createDays } = this.getSiteInfo();
 
     return (
@@ -127,13 +131,23 @@ class HomeHeader extends React.Component {
             }} name="HomeOutlined" color="#fff" size={20} />
           </div>
         </div>}
-        <div className={styles.logoBox}>
-          <img
-              className={styles.logo}
-              mode="aspectFit"
-              src={this.getLogo()}
-          />
-        </div>
+        {
+          mode === 'join'
+            ? <div className={styles.joinLog}>
+                <img
+                    className={styles.logo}
+                    mode="aspectFit"
+                    src='/dzq-img/join-banner-bg.png'
+                />
+              </div>
+            : <div className={styles.logoBox}>
+                <img
+                    className={styles.logo}
+                    mode="aspectFit"
+                    src={this.getLogo()}
+                />
+              </div>
+        }
         {digest && <div className={styles.digest}>
             <div className={styles.left}>站长 {digest.admin}</div>
             <div className={styles.right}>已创建 {digest.day}天</div>
@@ -164,7 +178,7 @@ class HomeHeader extends React.Component {
             </li>
           </ul>
         }
-        {isWeiXin && <SharePopup visible={visible} onClose={this.onClose} />}
+        {loadWeiXin && <SharePopup visible={visible} onClose={this.onClose} />}
       </div>
     );
   }

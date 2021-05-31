@@ -52,6 +52,8 @@ const InputPop = (props) => {
             disabled={loading}
             placeholderClass={styles.placeholder}
             fixed={true}
+            adjustPosition={true}
+            cursorSpacing={200}
           ></Textarea>
           {/* <Upload listType='card'>
             <Button loading={loading} type='text' className={styles.upload}>

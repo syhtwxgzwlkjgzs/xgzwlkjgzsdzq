@@ -22,16 +22,19 @@
         color: var(--color-text-secondary);
     }
     .fixedBox{
-        @include ios-safe-area-inset-bottom;
         position: fixed;
         bottom: 0;
         width: 100%;
-        padding: rem(8);
+        padding-top: rem(8);
+        padding-left: rem(8);
+        padding-right: rem(8);
+        @include ios-safe-area-inset-bottom;
         box-sizing: border-box;
         border-top: var(--border-border);
         .btn{
             width: 100%;
             height: rem(42);
+            margin-bottom: rem(8);
         }
     }
 }
