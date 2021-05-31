@@ -96,8 +96,6 @@ class IndexH5Page extends React.Component {
       })
     }
 
-    this.props.baselayout.setJumpingToTop();
-
     const newFilter = { ...this.state.filter, categoryids: newCategoryIds, sequence: id === 'default' ? 1 : 0, }
 
     dispatch('click-filter', newFilter);
