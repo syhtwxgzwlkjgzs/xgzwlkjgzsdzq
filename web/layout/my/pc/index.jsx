@@ -6,13 +6,16 @@ import UserCenterPost from '@components/user-center-post-pc';
 import UserCenterAction from '@components/user-center-action-pc';
 import UserBaseLaout from '@components/user-center-base-laout-pc';
 import SidebarPanel from '@components/sidebar-panel';
-import ThreadContent from '@components/thread';
+import Avatar from '@components/avatar';
 import Copyright from '@components/copyright';
 import UserCenterFans from '@components/user-center-fans';
 import UserCenterFollow from '@components/user-center-follow';
 import Router from '@discuzq/sdk/dist/router';
 import UserCenterFansPopup from '@components/user-center-fans-popup';
 import UserCenterFollowPopup from '@components/user-center-follow-popup';
+import UserCenterThreads from '@components/user-center-threads';
+import NoData from '@components/no-data';
+
 @inject('site')
 @inject('user')
 @observer
@@ -25,7 +28,7 @@ class PCMyPage extends React.Component {
     };
   }
   componentDidMount() {
-    this.props.user.getUserThreads();
+    // this.props.user.getUserThreads();
   }
 
   loginOut() {
@@ -45,29 +48,45 @@ class PCMyPage extends React.Component {
   onSearch = (value) => {
     this.props.router.replace(`/search?keyword=${value}`);
   };
+
   onContainerClick = ({ id }) => {
     Router.push({ url: `/my/others?isOtherPerson=${true}&otherId=${id}` });
   };
-  renderRight = () => (
+
+  formatUserThreadsData = (userThreads) => {
+    if (Object.keys(userThreads).length === 0) return [];
+    return Object.values(userThreads).reduce((fullData, pageData) => [...fullData, ...pageData]);
+  };
+
+  renderRight = () => {
+    // 条件都满足时才显示微信
+    const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.props.user.wxNickname;
+    return (
       <>
         <SidebarPanel
           type="normal"
           title="个人资料"
           isShowMore={true}
+          noData={false}
           moreText={'编辑资料'}
           onShowMore={() => {
             Router.push({ url: '/my/edit' });
           }}
-      >
+        >
           <div className={styles.userInfoWrapper}>
             <div className={styles.userInfoKey}>手机号码</div>
             <div className={styles.userInfoValue}>{this.props.user.mobile}</div>
           </div>
 
-          <div className={styles.userInfoWrapper}>
-            <div className={styles.userInfoKey}>微信</div>
-            <div className={styles.userInfoValue}>{this.props.user.nickname}</div>
-          </div>
+          {IS_WECHAT_ACCESSABLE && (
+            <div className={styles.userInfoWrapper}>
+              <div className={styles.userInfoKey}>微信</div>
+              <div className={styles.userInfoValue}>
+                <Avatar size="small" image={this.props.user.wxHeadImgUrl} name={this.props.user.wxNickname} />
+                <span className={styles.wecahtNickname}>{this.props.user.wxNickname}</span>
+              </div>
+            </div>
+          )}
 
           <div className={styles.userInfoWrapper}>
             <div className={styles.userInfoKey}>实名认证</div>
@@ -82,7 +101,7 @@ class PCMyPage extends React.Component {
         <div className={styles.hr}></div>
         <SidebarPanel
           type="normal"
-          isNoData={Number(this.props.user.fansCount) === 0}
+          noData={Number(this.props.user.fansCount) === 0}
           title="粉丝"
           leftNum={this.props.user.fansCount}
           onShowMore={this.moreFans}
@@ -100,7 +119,7 @@ class PCMyPage extends React.Component {
         <div className={styles.hr}></div>
         <SidebarPanel
           type="normal"
-          isNoData={Number(this.props.user.followCount) === 0}
+          noData={Number(this.props.user.followCount) === 0}
           title="关注"
           leftNum={this.props.user.followCount}
           onShowMore={this.moreFollow}
@@ -117,10 +136,14 @@ class PCMyPage extends React.Component {
         </SidebarPanel>
         <Copyright />
       </>
-  );
+    );
+  };
+
   renderContent = () => {
     const { user } = this.props;
     const { userThreads, userThreadsTotalCount } = user;
+    const formattedUserThreads = this.formatUserThreadsData(userThreads);
+
     return (
       <div className={styles.userContent}>
         <div className={styles.section}>
@@ -134,37 +157,48 @@ class PCMyPage extends React.Component {
           type="normal"
           bigSize={true}
           isShowMore={!userThreads}
+          showRefresh={false}
           leftNum={`${userThreadsTotalCount}个主题`}
-          noData={!userThreads?.length}
+          noData={!formattedUserThreads?.length}
         >
           {/* FIXME: PC 切换至新逻辑 */}
-          {/* {userThreads?.map((item, index) => (
-            <div key={index}>
-              <ThreadContent className={styles.wrapper} showBottom={false} data={item} key={index} />
-              <div className={styles.threadHr}></div>
-            </div>
-          ))} */}
+          {formattedUserThreads && formattedUserThreads.length > 0 ? (
+            <UserCenterThreads data={formattedUserThreads} />
+          ) : (
+            <NoData />
+          )}
         </SidebarPanel>
       </div>
     );
   };
 
   render() {
+    const { user } = this.props;
+    const { userThreadsPage, userThreadsTotalPage } = user;
     return (
       <>
-        <UserBaseLaout allowRefresh={false} onSearch={this.onSearch} right={this.renderRight}>
+        <UserBaseLaout
+          noMore={userThreadsTotalPage <= userThreadsPage}
+          onRefresh={user.getUserThreads}
+          allowRefresh={false}
+          onSearch={this.onSearch}
+          right={this.renderRight}
+        >
           {this.renderContent()}
         </UserBaseLaout>
 
-        <UserCenterFansPopup
-          visible={this.state.showFansPopup}
-          onClose={() => this.setState({ showFansPopup: false })}
-        />
+        {/* 两个粉丝 popup */}
+        <>
+          <UserCenterFansPopup
+            visible={this.state.showFansPopup}
+            onClose={() => this.setState({ showFansPopup: false })}
+          />
 
-        <UserCenterFollowPopup
-          visible={this.state.showFollowPopup}
-          onClose={() => this.setState({ showFollowPopup: false })}
-        />
+          <UserCenterFollowPopup
+            visible={this.state.showFollowPopup}
+            onClose={() => this.setState({ showFollowPopup: false })}
+          />
+        </>
       </>
     );
   }
