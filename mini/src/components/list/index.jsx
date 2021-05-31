@@ -20,7 +20,7 @@ const List = forwardRef(({
   children,
   noMore,
   onRefresh,
-  onScroll = noop,
+  hasOnScrollToLower = false,
   showRefresh = true,
   preload = 30,
   requestError = false
@@ -69,7 +69,6 @@ const List = forwardRef(({
   };
 
   const onTouchMove = (e) => {
-    console.log(e);
     if (e && !isLoading.current && onRefresh && !isLoading && !requestError) {
       setIsLoading(true);
       if (typeof(onRefresh) === 'function') {
@@ -98,11 +97,6 @@ const List = forwardRef(({
       }
     }
   };
-  
-  const handleScroll = (e) => {
-    console.log(e);
-    onScroll(e);
-  }
 
     // 网络请求失败
     const handleError = () => {
@@ -113,13 +107,12 @@ const List = forwardRef(({
     }
 
   return (
-    <ScrollView 
-      scrollY 
-      className={`${styles.container} ${className}`} 
-      style={{ height }} 
-      onScrollToLower={onTouchMove}
+    <ScrollView
+      scrollY
+      className={`${styles.container} ${className}`}
+      style={{ height }}
+      onScrollToLower={hasOnScrollToLower ? onTouchMove : null}
       lowerThreshold={80}
-      onScroll={onScroll}
     >
       {children}
       {onRefresh && showRefresh && !isError && <RefreshView noMore={noMore} />}

@@ -24,7 +24,7 @@ import styles from './index.module.scss';
 const baseLayoutWhiteList = ['home'];
 
 const BaseLayout = (props) => {
-  const { index, showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr, onScroll = () => {} } = props;
+  const { index, showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr } = props;
   const [height, setHeight] = useState(600);
 
   const debounce = (fn, wait) => {
@@ -47,7 +47,6 @@ const BaseLayout = (props) => {
   //   }
 
   // }, [])
-console.log(index?.isScroll);
   return (
     <View className={styles.container}>
         {showHeader && <Header />}
@@ -55,13 +54,13 @@ console.log(index?.isScroll);
           showPullDown ? (
             <View className={styles.list} ref={pullDownWrapper}>
               {/* <PullDownRefresh onRefresh={onPullDown} isFinished={isFinished} height={height}> */}
-                  <List {...props} className={styles.listHeight} ref={listRef}>
+                  <List {...props} className={styles.listHeight} ref={listRef} hasOnScrollToLower={index.hasOnScrollToLower}>
                       {typeof(children) === 'function' ? children({ ...props }) : children}
                   </List>
               {/* </PullDownRefresh> */}
             </View>
           ) : (
-            <List {...props} className={styles.list} ref={listRef} onScroll={ null }>
+            <List {...props} className={styles.list} ref={listRef} hasOnScrollToLower={index.hasOnScrollToLower}>
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>
           )

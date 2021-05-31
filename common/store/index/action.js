@@ -25,9 +25,9 @@ class IndexAction extends IndexStore {
     this.hiddenTabBar = data
   }
 
-   @action
-  setIsScroll(data) {
-    this.isScroll = data
+  @action
+  setHasOnScrollToLower(data) {
+    this.hasOnScrollToLower = data
   }
 
 /**
