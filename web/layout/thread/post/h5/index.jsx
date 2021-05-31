@@ -332,6 +332,7 @@ class ThreadCreate extends React.Component {
           )}
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar
+            isOpenQcloudVod={this.props.site.isOpenQcloudVod}
             postData={postData}
             onAttachClick={this.props.handleAttachClick}
             // onUploadChange={this.handleUploadChange}
