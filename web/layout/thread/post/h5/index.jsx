@@ -329,6 +329,7 @@ class ThreadCreate extends React.Component {
             postData={postData}
             onAttachClick={this.props.handleAttachClick}
             // onUploadChange={this.handleUploadChange}
+            onVideoUpload={this.props.handleVideoUpload}
             onUploadComplete={this.props.handleVideoUploadComplete}
             category={
               <ToolsCategory
