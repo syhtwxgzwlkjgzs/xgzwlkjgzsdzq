@@ -44,6 +44,7 @@ const BaseLayout = (props) => {
     onScroll = noop,
     baselayout,
     quickScroll = false,
+    immediateCheck=false
   } = props;
 
   const [showLeft, setShowLeft] = useState(false);
@@ -153,7 +154,7 @@ const BaseLayout = (props) => {
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
 
-        <List {...props} immediateCheck={false} className={styles.list} wrapperClass={styles.wrapper} ref={listRef} onError={onError} onScroll={handleScroll}>
+        <List {...props} immediateCheck={immediateCheck} className={styles.list} wrapperClass={styles.wrapper} ref={listRef} onError={onError} onScroll={handleScroll}>
           {
             (pageName === 'home' || showLeft) && (
               <div className={styles.left}>
