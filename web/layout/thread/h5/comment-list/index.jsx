@@ -23,6 +23,8 @@ class RenderCommentList extends React.Component {
       showCommentInput: false, // 是否弹出评论框
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
+      showDeletePopup1: false, // 是否弹出回复删除弹框
+
       inputText: '请输入内容', // 默认回复框placeholder内容
     };
 
@@ -56,6 +58,8 @@ class RenderCommentList extends React.Component {
       }
     }
   };
+
+
 
   // 点击评论的赞
   async likeClick(data) {
@@ -146,6 +150,7 @@ class RenderCommentList extends React.Component {
   // 删除评论
   async deleteComment() {
     if (!this.commentData.id) return;
+    console.log('thread,comment',this.props.thread)
 
     const { success, msg } = await this.props.comment.delete(this.commentData.id, this.props.thread);
     this.setState({
@@ -161,6 +166,40 @@ class RenderCommentList extends React.Component {
       content: msg,
     });
   }
+
+
+  //----------------------------
+  // 点击回复的删除
+  async replyDeleteClick(reply,comment) {
+    console.log("我点击了删除--1");
+    // console.log(reply);//relay是点击回复删除的回复内容
+    // console.log(comment);//comment是父级评论的内容
+    this.replyData = reply;
+    console.log(this.replyData)
+    this.setState({
+      showDeletePopup1: true,
+    });
+  }
+
+  //删除回复评论
+  async replyDeleteComment() {
+    if (!this.replyData.id) return;
+    const { success, msg } = await this.props.comment.delete(this.replyData.id, this.props.thread);
+    this.setState({
+      showDeletePopup1: false,
+    });
+    if (success) {
+      Toast.success({
+        content: '删除成功',
+      });
+      return;
+    }
+    Toast.error({
+      content: msg,
+    });
+  }
+
+  // ------------------------------------------------------
 
   // 点击评论的回复
   replyClick(comment) {
@@ -320,7 +359,6 @@ class RenderCommentList extends React.Component {
 
   render() {
     const { totalCount, commentList } = this.props.thread;
-
     // 是否作者自己
     const isSelf =
       this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === this.props.thread?.threadData?.userId;
@@ -350,8 +388,9 @@ class RenderCommentList extends React.Component {
                 replyClick={() => this.replyClick(val)}
                 deleteClick={() => this.deleteClick(val)}
                 editClick={() => this.editClick(val)}
-                replyLikeClick={(reploy) => this.replyLikeClick(reploy, val)}
-                replyReplyClick={(reploy) => this.replyReplyClick(reploy, val)}
+                replyLikeClick={(reply) => this.replyLikeClick(reply, val)}
+                replyReplyClick={(reply) => this.replyReplyClick(reply, val)}
+                replyDeleteClick={(reply) => this.replyDeleteClick(reply, val)}
                 onCommentClick={() => this.onCommentClick(val)}
                 onAboptClick={() => this.onAboptClick(val)}
                 isShowOne={true}
@@ -379,6 +418,14 @@ class RenderCommentList extends React.Component {
           onClose={() => this.setState({ showDeletePopup: false })}
           onBtnClick={() => this.deleteComment()}
         ></DeletePopup>
+
+        {/*-------------------------------------------------------------*/}
+        <DeletePopup
+            visible={this.state.showDeletePopup1}
+            onClose={() => this.setState({ showDeletePopup1: false })}
+            onBtnClick={() => this.replyDeleteComment()}
+        />
+        {/*-------------------------------------------------------------*/}
 
         {/* 采纳弹层 */}
         {parseContent?.REWARD?.money && (

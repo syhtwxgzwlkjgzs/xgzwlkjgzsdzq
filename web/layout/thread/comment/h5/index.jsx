@@ -3,9 +3,11 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import Router from '@discuzq/sdk/dist/router';
 import styles from './index.module.scss';
+import comment from './index.module.scss';
 import CommentList from '../../h5/components/comment-list/index';
 import MorePopup from '../../h5/components/more-popup';
-import DeletePopup from '../../h5/components/delete-popup';
+// import DeletePopup from '../../h5/components/delete-popup';
+import DeletePopup from '@components/thread-detail-pc/delete-popup';
 import Header from '@components/header';
 import { Toast } from '@discuzq/design';
 import InputPopup from '../../h5/components/input-popup';
@@ -80,32 +82,6 @@ class CommentH5Page extends React.Component {
       this.setState({ showReportPopup: true });
     }
   };
-
-  // 删除评论
-  async deleteComment() {
-    if (!this.props?.comment?.commentDetail?.id) return;
-
-    const { success, msg } = await this.props.comment.delete(this.props.comment.commentDetail.id, this.props.thread);
-    this.setState({
-      showDeletePopup: false,
-    });
-    if (success) {
-      Toast.success({
-        content: '删除成功',
-      });
-      Router.back();
-      return;
-    }
-    Toast.error({
-      content: msg,
-    });
-  }
-
-  // 确定删除
-  onBtnClick() {
-    this.deleteComment();
-    this.setState({ showDeletePopup: false });
-  }
 
   // 点击评论的赞
   async likeClick(data) {
@@ -192,6 +168,64 @@ class CommentH5Page extends React.Component {
       showDeletePopup: true,
     });
   }
+
+  // 确定删除
+  onBtnClick() {
+    this.deleteComment();
+    this.setState({ showDeletePopup: false });
+  }
+
+  // 删除评论
+  async deleteComment() {
+    if (!this.props?.comment?.commentDetail?.id) return;
+    const { success, msg } = await this.props.comment.delete(this.props.comment.commentDetail.id, this.props.thread);
+    this.setState({
+      showDeletePopup: false,
+    });
+    if (success) {
+      Toast.success({
+        content: '删除成功',
+      });
+      Router.back();
+      return;
+    }
+    Toast.error({
+      content: msg,
+    });
+  }
+
+
+
+  //------------------------------------------------------------------
+  // 点击回复的删除
+  async replyDeleteClick(reply,comment) {
+    console.log("我点击了删除--2");
+    this.replyData = reply;
+    console.log(this.replyData)
+    this.setState({
+      showDeletePopup: true,
+    });
+  }
+
+  //删除回复评论
+  async replyDeleteComment() {
+    if (!this.replyData.id) return;
+    console.log('thread,reply',this.props.thread)
+    const { success, msg } = await this.props.comment.delete(this.replyData.id, this.props.thread);
+    this.setState({
+      showDeletePopup: false,
+    });
+    if (success) {
+      Toast.success({
+        content: '删除成功',
+      });
+      return;
+    }
+    Toast.error({
+      content: msg,
+    });
+  }
+  //------------------------------------------------------------------
 
   // 点击评论的回复
   replyClick(comment) {
@@ -365,8 +399,9 @@ class CommentH5Page extends React.Component {
               likeClick={() => this.likeClick(commentData)}
               replyClick={() => this.replyClick(commentData)}
               deleteClick={() => this.deleteClick(commentData)}
-              replyLikeClick={(reploy) => this.replyLikeClick(reploy, commentData)}
-              replyReplyClick={(reploy) => this.replyReplyClick(reploy, commentData)}
+              replyLikeClick={(reply) => this.replyLikeClick(reply, commentData)}
+              replyReplyClick={(reply) => this.replyReplyClick(reply, commentData)}
+              replyDeleteClick={(reply) => this.replyDeleteClick(reply, commentData)}
               onMoreClick={() => this.onMoreClick()}
               isHideEdit={true}
             ></CommentList>
@@ -397,7 +432,7 @@ class CommentH5Page extends React.Component {
           <DeletePopup
             visible={this.state.showDeletePopup}
             onClose={() => this.setState({ showDeletePopup: false })}
-            onBtnClick={(type) => this.onBtnClick(type)}
+            onBtnClick={() => this.replyDeleteComment()}
           />
 
           {/* 举报弹层 */}

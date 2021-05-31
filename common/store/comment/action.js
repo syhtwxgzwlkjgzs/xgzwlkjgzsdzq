@@ -343,6 +343,52 @@ class CommentAction extends CommentStore {
     };
   }
 
+  //------------------------------------------------------------------------------
+  /**
+   * 删除回复评论
+   * @param {number} commentId * 评论id
+   * @returns {object} 处理结果
+   */
+  @action
+  async deleteReplyComment(replyId, ThreadStore) {
+    if (!replyId) {
+      return {
+        success: false,
+        msg: '回复评论id不存在',
+      };
+    }
+    const requestParams = {
+      pid: replyId,
+      data: {
+        attributes: {
+          isDeleted: 1,
+        },
+      },
+    };
+
+    const res = await updateReplyComment({ data: requestParams });
+    if (res.code === 0 && ThreadStore) {
+      // 更新评论列表
+      const { commentList, totalCount } = ThreadStore;
+      if (commentList?.length) {
+        const index = commentList.findIndex((comment) => commentId === comment.id);
+        commentList.splice(index, 1);
+        const newTotalCount = totalCount - 1;
+        ThreadStore.setTotalCount(newTotalCount);
+      }
+
+      return {
+        success: true,
+        msg: '删除成功',
+      };
+    }
+
+    return {
+      msg: res.msg,
+      success: false,
+    };
+  }
+  //------------------------------------------------------------------------------
   /**
    * 获取回复详情
    * @param {object} parmas * 参数
