@@ -71,7 +71,7 @@ class index extends Component {
   handleChangeShield = (isDeny) => {
     const { query } = this.props.router;
     if (isDeny) {
-      this.props.user.undenyUser(query.otherId);
+      this.props.user.undenyUser(query.id);
       this.props.user.setTargetUserNotBeDenied();
       Toast.success({
         content: '解除屏蔽成功',
@@ -79,7 +79,7 @@ class index extends Component {
         duration: 1000,
       });
     } else {
-      this.props.user.denyUser(query.otherId);
+      this.props.user.denyUser(query.id);
       this.props.user.setTargetUserDenied();
       Toast.success({
         content: '屏蔽成功',
