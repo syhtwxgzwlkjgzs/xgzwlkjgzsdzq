@@ -1,4 +1,22 @@
 @import "@common/styles/index.scss";
-.wrapper{
+.wrapper {
   background: $white;
+
+  .pc-header {
+    background: $white;
+    padding: 0 $padding-4n;
+
+    .pc-header__inner {
+      height: rem(73px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: "PingFang SC";
+      font-size: $font-size-large;
+      color: $text-color-primary;
+      font-weight: 600;
+      text-align: left;
+      border-bottom: $border-solid-1;
+    }
+  }
 }

@@ -5,6 +5,11 @@
   flex-direction: column;
   height: 60vh;
   overflow-y: auto;
+  @include scrollbar();
+  &::-webkit-scrollbar {
+    display: block;
+    width: 8px;
+  }
 
   .box__inner{
     padding: 0 $padding-4n;
