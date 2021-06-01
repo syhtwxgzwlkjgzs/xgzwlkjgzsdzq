@@ -34,11 +34,15 @@
   color: var(--color-text-primary);
   font-size: rem($font-size-primary);
   font-weight: bold;
-  max-width: rem(210);
+  max-width: rem(100);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: rem(20);
+
+  &.pc {
+    max-width: rem(210);
+  }
 }
 
 .groupName {
