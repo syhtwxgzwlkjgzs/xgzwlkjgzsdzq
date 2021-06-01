@@ -8,12 +8,10 @@ import MessageThread from '@components/message/message-thread';
 import MessageFinancial from '@components/message/message-financial';
 import MessageChat from '@components/message/message-chat';
 import BaseLayout from '@components/base-layout';
-import SidebarPanel from '@components/sidebar-panel';
 import Copyright from '@components/copyright';
-import UserCenterFollow from '@components/user-center-follow';
-import Router from '@discuzq/sdk/dist/router';
 import Stepper from '../../search/pc/components/stepper';
 import { sidebarData as sidebarDataOriginal } from '@common/constants/message';
+import UserCenterFollowsPc from '@components/user-center/follows-pc';
 
 const Index = ({ page, subPage, dialogId, username, message }) => {
   const router = useRouter();
@@ -29,7 +27,6 @@ const Index = ({ page, subPage, dialogId, username, message }) => {
     const p = page === 'chat' ? 'index' : page;
     sidebarData.forEach((item, i) => {
       if (item.type === p) {
-        console.log(i);
         setSidebarIndex(i);
       }
     });
@@ -50,7 +47,7 @@ const Index = ({ page, subPage, dialogId, username, message }) => {
   }, [page, subPage, dialogId, username]);
 
 
-  // 更新未读消息
+  // 更新未读消息到视图中
   useEffect(() => {
     setSidebarData(sidebarData.map((item) => {
       const newItem = { ...item };
@@ -65,41 +62,17 @@ const Index = ({ page, subPage, dialogId, username, message }) => {
       <div className={styles['stepper-container']}>
         <Stepper onItemClick={sidebarClick} selectIndex={sidebarIndex} data={sidebarData} />
       </div>
-
-      <SidebarPanel
-        type="normal"
-        isNoData={99 === 0}
-        title="关注"
-        leftNum={99}
-        onShowMore={() => {}}
-      >
-        {99 !== 0 && (
-          <UserCenterFollow
-            style={{
-              overflow: 'hidden',
-            }}
-            // className={styles.friendsWrapper}
-            limit={5}
-          />
-        )}
-      </SidebarPanel>
+      <UserCenterFollowsPc />
       <Copyright />
     </div>
-  );;
+  );
 
   const sidebarClick = (_index, _iconName, item) => {
     router.replace(`/message?page=${item.type}`);
   };
 
-
   return (
     <BaseLayout
-      // onSearch={this.onSearch}
-      // onRefresh={this.onPullingUp}
-      // noMore={currentPage >= totalPage}
-      // onScroll={this.onScroll}
-      // showRefresh={false}
-      // left={ this.renderLeft(countThreads) }
       right={rightContent}
     >
       {mainContent}
