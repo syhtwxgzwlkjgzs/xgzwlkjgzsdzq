@@ -51,7 +51,7 @@ class Withdrawal extends React.Component {
         withdrawalAmount: data,
       });
 
-      if (Number(this.state.withdrawalAmount) > this.props.walletData.availableAmount) {
+      if (Number(this.state.withdrawalAmount) > this.props.wallet?.availableAmount) {
         this.setState({
           moneyOverThanAmount: true,
         });
@@ -93,7 +93,7 @@ class Withdrawal extends React.Component {
 
   render() {
     const { inputValue } = this.state;
-    const btnDisabled = !inputValue || parseFloat(this.state.withdrawalAmount) > parseFloat(this.props.walletData?.availableAmount)
+    const btnDisabled = !inputValue || parseFloat(this.state.withdrawalAmount) > parseFloat(this.props.wallet?.availableAmount)
     return (
       <>
         <Header />

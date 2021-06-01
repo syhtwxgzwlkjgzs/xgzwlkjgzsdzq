@@ -5,6 +5,7 @@ import { Popup, Toast } from '@discuzq/design';
 import { Icon, Button } from '@discuzq/design';
 import styles from './index.module.scss';
 import MoneyInput from '../money-input';
+import classNames from 'classnames';
 @inject('wallet')
 @inject('site')
 class WithdrawalPop extends Component {
@@ -13,8 +14,6 @@ class WithdrawalPop extends Component {
     super(props);
     this.state = {
       visible: true,
-      moneyOverThanAmount: false, // 是否超过当前可提现金额
-      withdrawalAmount: 0,
       inputValue: "", // 金额输入内容
     };
   }
@@ -30,47 +29,31 @@ class WithdrawalPop extends Component {
     this.setState({
       inputValue: datas ? datas[0] : ''
     })
-    this.getmoneyNum(datas ? datas[0] : '');
   };
 
   initState = () => {
     this.setState({
       visible: true,
-      moneyOverThanAmount: false, // 是否超过当前可提现金额
-      withdrawalAmount: 0,
       inputValue: "",
     })
     this.props.onClose && this.props.onClose()
   }
 
-  // 获得输入的提现金额
-  getmoneyNum = (data) => {
-    if (Number(data) >= 1) {
-      this.setState({
-        withdrawalAmount: data,
-      });
-
-      if (Number(this.state?.withdrawalAmount) > this.props.walletData?.availableAmount) {
-        this.setState({
-          moneyOverThanAmount: true,
-        });
-      }
-    } else {
-      this.setState({
-        withdrawalAmount: 0,
-        moneyOverThanAmount: false,
-      });
-    }
-  };
+  // 获取禁用逻辑
+  getDisabeledButton = () => {
+    const { inputValue } = this.state;
+    const btnDisabled = !inputValue || parseFloat(inputValue) > parseFloat(this.props.wallet?.walletAvaAmount) || parseFloat(inputValue) < parseFloat(this.props.site?.cashMinSum)
+    return btnDisabled
+  }
 
   // 提现到微信钱包
   moneyToWeixin = async () => {
-    if (!this.state.withdrawalAmount || parseFloat(this.state.withdrawalAmount) < parseFloat(this.props.site?.cashMinSum)) {
-      return Toast.warning({ content: '不得小于最低提现金额' });
-    }
-
+    // if (!this.state.inputValue || parseFloat(this.state.inputValue) < parseFloat(this.props.site?.cashMinSum)) {
+    //   return Toast.warning({ content: '不得小于最低提现金额' });
+    // }
+    if (this.getDisabeledButton()) return
     this.props.wallet.createWalletCash({
-      money: this.state.withdrawalAmount,
+      money: this.state.inputValue,
     }).then(res => {
       Toast.success({
         content: res.Msg || '申请提现成功',
@@ -93,6 +76,7 @@ class WithdrawalPop extends Component {
     const { visible: popupVisible, onClose, moneyToWixin } = this.props;
     const walletAvaAmount = this.props.wallet.walletAvaAmount
     const cashMinSum = this.props.site?.cashMinSum
+
     return (
       <Popup
         position="center"
@@ -121,8 +105,17 @@ class WithdrawalPop extends Component {
               maxAmount={walletAvaAmount}>
             </MoneyInput>
           </div>
-          <div className={styles.button}>
-            <Button type='primary' onClick={this.moneyToWeixin}>提现到微信钱包</Button>
+          <div className={
+            classNames(styles.button,{
+              [styles.bgBtnColor]: !this.getDisabeledButton()
+            })
+          }>
+            <Button
+              type={'primary'}
+              onClick={this.moneyToWeixin}
+              disabled={this.getDisabeledButton()}>
+              提现到微信钱包
+          </Button>
           </div>
         </div>
       </Popup>
