@@ -8,6 +8,7 @@ import Toast from '@discuzq/design/dist/components/toast/index';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
+import { get } from '@common/utils/get';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import layout from './index.module.scss';
 
@@ -21,7 +22,9 @@ const MemoToastProvider = React.memo(ToastProvider)
 class Index extends Component {
   handleBindButtonClick = async () => {
     try {
-      await this.props.userLogin.login();
+      const resp = await this.props.userLogin.login();
+      const uid = get(resp, 'uid', '');
+      this.props.user.updateUserInfo(uid);
       Toast.success({
         content: '登录成功',
         hasMask: false,
