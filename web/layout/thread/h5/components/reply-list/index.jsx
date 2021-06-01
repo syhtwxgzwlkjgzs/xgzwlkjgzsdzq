@@ -29,8 +29,7 @@ export default class ReplyList extends React.Component {
   generatePermissions(data = {}) {
     return {
       canApprove: data.canApprove || false,
-      canDelete: true,
-      // canDelete: data.canDelete || false,
+      canDelete: data.canDelete || false,
       canEdit: data.canEdit || false,
       canHide: data.canLike || false,
       canLike: data.canLike || false,

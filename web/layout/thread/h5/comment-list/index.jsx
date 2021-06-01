@@ -151,7 +151,6 @@ class RenderCommentList extends React.Component {
   async deleteComment() {
     if (!this.commentData.id) return;
     console.log('thread,comment',this.props.thread)
-
     const { success, msg } = await this.props.comment.delete(this.commentData.id, this.props.thread);
     this.setState({
       showDeletePopup: false,
@@ -172,10 +171,9 @@ class RenderCommentList extends React.Component {
   // 点击回复的删除
   async replyDeleteClick(reply,comment) {
     console.log("我点击了删除--1");
-    // console.log(reply);//relay是点击回复删除的回复内容
-    // console.log(comment);//comment是父级评论的内容
+    console.log('thread111',this.props.thread)
+    console.log('comment',this.props.comment)
     this.replyData = reply;
-    console.log(this.replyData)
     this.setState({
       showDeletePopup1: true,
     });
@@ -184,7 +182,8 @@ class RenderCommentList extends React.Component {
   //删除回复评论
   async replyDeleteComment() {
     if (!this.replyData.id) return;
-    const { success, msg } = await this.props.comment.delete(this.replyData.id, this.props.thread);
+
+    const { success, msg } = await this.props.comment.deleteReplyComment1(this.replyData.id, this.props.thread);
     this.setState({
       showDeletePopup1: false,
     });

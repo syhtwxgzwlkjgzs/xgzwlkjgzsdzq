@@ -146,7 +146,7 @@ class CommentH5Page extends React.Component {
       id: reply.id,
       isLiked: !reply.isLiked,
     };
-    const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
+    const { success, msg } = await this.props.comment.updateLiked(params, this.props.comment);
 
     if (success) {
       this.props.comment.setReplyListDetailField(reply.id, 'isLiked', params.isLiked);
@@ -201,7 +201,7 @@ class CommentH5Page extends React.Component {
   async replyDeleteClick(reply,comment) {
     console.log("我点击了删除--2");
     this.replyData = reply;
-    console.log(this.replyData)
+    console.log('replyData',this.replyData)
     this.setState({
       showDeletePopup: true,
     });
@@ -210,8 +210,7 @@ class CommentH5Page extends React.Component {
   //删除回复评论
   async replyDeleteComment() {
     if (!this.replyData.id) return;
-    console.log('thread,reply',this.props.thread)
-    const { success, msg } = await this.props.comment.delete(this.replyData.id, this.props.thread);
+    const { success, msg } = await this.props.comment.deleteReplyComment(this.replyData.id, this.props.comment.replyList);
     this.setState({
       showDeletePopup: false,
     });

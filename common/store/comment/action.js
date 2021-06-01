@@ -319,7 +319,6 @@ class CommentAction extends CommentStore {
         },
       },
     };
-
     const res = await updateComment({ data: requestParams });
     if (res.code === 0 && ThreadStore) {
       // 更新评论列表
@@ -344,13 +343,61 @@ class CommentAction extends CommentStore {
   }
 
   //------------------------------------------------------------------------------
+
+
+
+
   /**
-   * 删除回复评论
-   * @param {number} commentId * 评论id
+   * 删除回复评论1
+   * @param {number} replyId * 评论回复id
    * @returns {object} 处理结果
    */
   @action
-  async deleteReplyComment(replyId, ThreadStore) {
+  async deleteReplyComment1(replyId, ThreadStore) {
+    console.log('ThreadStore',ThreadStore)
+    if (!replyId) {
+      return {
+        success: false,
+        msg: '回复评论id不存在',
+      };
+    }
+    const requestParams = {
+      pid: replyId,
+      data: {
+        attributes: {
+          isDeleted: 1,
+        },
+      },
+    };
+    const { commentList } = ThreadStore
+    const res = await updateComment({ data: requestParams });
+    if (res.code === 0) {
+      console.log('commentList',commentList)
+      // 更新评论回复列表
+      commentList.map((v) => {
+        const index = v.lastThreeComments.findIndex((val) => replyId === val.id)
+        v.replyCount = v.replyCount - 1;
+        v.lastThreeComments.splice(index,1)
+      })
+      return {
+        success: true,
+        msg: '删除成功',
+      };
+    }
+    return {
+      msg: res.msg,
+      success: false,
+    };
+  }
+
+  /**
+   * 删除回复评论
+   * @param {number} replyId * 评论回复id
+   * @returns {object} 处理结果
+   */
+  @action
+  async deleteReplyComment(replyId, ReplyList) {
+    // console.log('replylist',ReplyList)
     if (!replyId) {
       return {
         success: false,
@@ -366,15 +413,12 @@ class CommentAction extends CommentStore {
       },
     };
 
-    const res = await updateReplyComment({ data: requestParams });
-    if (res.code === 0 && ThreadStore) {
-      // 更新评论列表
-      const { commentList, totalCount } = ThreadStore;
-      if (commentList?.length) {
-        const index = commentList.findIndex((comment) => commentId === comment.id);
-        commentList.splice(index, 1);
-        const newTotalCount = totalCount - 1;
-        ThreadStore.setTotalCount(newTotalCount);
+    const res = await updateComment({ data: requestParams });
+    if (res.code === 0 && ReplyList) {
+      // 更新评论回复列表
+      if (ReplyList?.length) {
+        const index = ReplyList.findIndex((reply) => replyId === reply.id);
+        ReplyList.splice(index, 1);
       }
 
       return {
@@ -388,6 +432,7 @@ class CommentAction extends CommentStore {
       success: false,
     };
   }
+
   //------------------------------------------------------------------------------
   /**
    * 获取回复详情
