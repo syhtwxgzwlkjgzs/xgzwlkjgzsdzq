@@ -9,7 +9,7 @@ import Header from '@components/header';
 import { get } from '@common/utils/get';
 import PcBodyWrap from '../components/pc-body-wrap';
 import layout from './index.module.scss';
-
+import HOCTencentCaptcha from '@middleware/HOCTencentCaptcha';
 
 @inject('site')
 @inject('user')
@@ -30,23 +30,14 @@ class ResetPasswordH5Page extends React.Component {
 
   handleSendCodeButtonClick = async () => {
     try {
-      const { site, commonLogin } = this.props;
-      const { webConfig } = site;
-      const { TencentCaptcha } = (await import('@discuzq/sdk/dist/common_modules/sliding-captcha'));
-      const qcloudCaptchaAppId = get(webConfig, 'qcloud.qcloudCaptchaAppId', false);
+      const { commonLogin } = this.props;
       // 发送前校验
       this.props.resetPassword.beforeSendVerify();
       // 验证码
-      const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
-      if (qcloudCaptcha) {
-        const res = await this.props.commonLogin.showCaptcha(qcloudCaptchaAppId, TencentCaptcha);
-        if (res.ret !== 0) {
-          return;
-        }
-      }
+      const { captchaRandStr, captchaTicket } = await this.props.showCaptcha();
       await this.props.resetPassword.sendCode({
-        captchaRandStr: this.props.commonLogin?.captchaRandStr,
-        captchaTicket: this.props.commonLogin?.captchaTicket
+        captchaRandStr,
+        captchaTicket,
       });
       commonLogin.setIsSend(true);
     } catch (e) {
@@ -139,5 +130,4 @@ class ResetPasswordH5Page extends React.Component {
     );
   }
 }
-
-export default withRouter(ResetPasswordH5Page);
+export default HOCTencentCaptcha(withRouter(ResetPasswordH5Page));
