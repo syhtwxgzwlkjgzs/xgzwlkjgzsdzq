@@ -86,12 +86,32 @@
     }
 
   }
+  .pc_bottom_tips {
+    display: flex;
+    height: 20px;
+    justify-content: center;
+    align-items: center;
+    padding-top: $padding-4n;
+    .pc_bottom_img {
+      width: 20px;
+      height: 20px;
+      border-radius: $border-radius-circle;
+    }
+    .pc_bottom_text {
+      font-weight: 600;
+      font-size: $font-size-base;
+      line-height: $font-line-height-base;
+      padding-left: $padding-2n;
+      color: $text-color-regular;
+      opacity: 1;
+    }
+  }
   .user_card_button {
     width: 292px;
     height: 36px;
     border-radius: $border-radius-small;
     background: $primary-color;
-    margin-top: $margin-5n;
+    margin-top: $margin-4n;
     font-size: $font-size-base;
     line-height: $font-line-height-base;
     color: $white;

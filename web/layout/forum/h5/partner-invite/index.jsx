@@ -127,10 +127,12 @@ class PartnerInviteH5Page extends React.Component {
   // 右侧 - 潮流话题 粉丝 版权信息
   renderRight = () => {
     const { inviteData } = this.props.invite;
-    const { site, forum } = this.props;
-    const { platform } = site;
+    const { site: { platform, webConfig }, forum } = this.props;
+    const { invitorName, invitorAvatar } = this.state;
+    const { setSite: { siteMode, sitePrice, siteMasterScale } = {} } = webConfig;
     const { threadTotal, updataTime } = forum;
     const layout = platform === 'h5' ? mlayout : pclayout;
+    const { inviteCode } = this.props.router.query;
     if (platform === 'h5') {
       return <></>;
     }
@@ -156,7 +158,7 @@ class PartnerInviteH5Page extends React.Component {
                 </div>
                 <div className={layout.site_status_list}>
                     <span className={layout.site_status_label}>成员</span>
-                    <span className={layout.site_status_item}>{numberFormat(site?.webConfig?.other?.countUsers)}</span>
+                    <span className={layout.site_status_item}>{numberFormat(webConfig?.other?.countUsers)}</span>
                 </div>
                 <div className={layout.site_status_list}>
                     <span className={layout.site_status_label}>主题</span>
@@ -165,6 +167,21 @@ class PartnerInviteH5Page extends React.Component {
               </div>
             </div>
           </div>
+          {
+            inviteCode
+              ? <div className={layout.pc_bottom_tips}>
+                  <Avatar
+                    size='small'
+                    text={ invitorName?.substring(0, 1)}
+                    className={layout.pc_bottom_img}
+                    image={ invitorAvatar }/>
+                  <span className={layout.pc_bottom_text}>
+                    <span>{ invitorName } 邀请您加入站点</span>
+                    {siteMode === 'pay' ? <span>，可获得返现 ¥{((10 - siteMasterScale) * sitePrice / 10).toFixed(2)}</span> : ''}
+                  </span>
+              </div>
+              : <></>
+          }
           <div className={layout.user_card_button}>¥1266 立即加入</div>
           <div className={layout.bottom_title}>有效期：<span>200天</span></div>
         </div>
