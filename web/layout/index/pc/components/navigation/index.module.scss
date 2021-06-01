@@ -59,9 +59,20 @@
       padding-left: 4%;
     }
     .dzq-submenu{
-      padding: 0 4%;
+      padding-left: 4%;
+      padding-right: 0;
+      .dzq-submenu__title{
+        line-height: 1;
+      }
     }
   }
+}
+
+.subMenuBox{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .activeItem {

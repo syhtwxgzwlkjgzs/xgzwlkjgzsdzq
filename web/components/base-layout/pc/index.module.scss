@@ -28,7 +28,9 @@
     display: none; /* Chrome Safari */
   }
   &.col-1{}
-  &.col-2{}
+  &.col-2{
+    max-width: rem(1100);
+  }
   &.col-3{
     max-width: rem(1420);
   }
@@ -97,7 +99,15 @@
 
 @media only screen and (min-width: 1080px) and (max-width: 1419px){
   .col-1{}
-  .col-2{}
+  .col-2{
+    .center {
+      width: 66%;
+    }
+    .right {
+      margin-left: 0.9%;
+      width: 27%;
+    }
+  }
   .col-3{
     .center {
       width: 53%;
@@ -115,7 +125,15 @@
 
 @media only screen and (min-width: 800px) and (max-width: 1079px) {
   .col-1{}
-  .col-2{}
+  .col-2{
+    .center {
+      width: 66%;
+    }
+    .right {
+      margin-left: 0.9%;
+      width: 27%;
+    }
+  }
   .col-3{
     .center {
       width: 46%;
