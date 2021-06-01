@@ -8,6 +8,7 @@ import BaseLayout from '@components/base-layout';
 import Copyright from '@components/copyright';
 import TrendingTopic from '@layout/search/pc/components/trending-topics';
 import SidebarPanel from '@components/sidebar-panel';
+import UserCenterUsersPc from '@components/user-center/users-pc';
 import { COMMON_PERMISSION, PERMISSION_PLATE } from '@common/constants/site';
 import { simpleRequest } from '@common/utils/simple-request';
 import { get } from '@common/utils/get';
@@ -50,14 +51,15 @@ class ForumPCPage extends React.Component {
     console.log(usersPageData);
     return (
       <>
-        <SidebarPanel
+        {/* <SidebarPanel
           title="成员"
           leftNum="2880"
           noData={isNoMore}
           onShowMore={() => {console.log('onShowMore')}}
         >
           <TrendingTopic data={usersPageData} onItemClick={() => {console.log('onItemClick')}}/>
-        </SidebarPanel>
+        </SidebarPanel> */}
+        <UserCenterUsersPc/>
         <Copyright/>
       </>
     );

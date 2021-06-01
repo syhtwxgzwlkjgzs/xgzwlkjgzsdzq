@@ -38,7 +38,7 @@ class PartnerInviteH5Page extends React.Component {
   }
   async componentDidMount() {
     try {
-      const { forum, router, search, invite } = this.props;
+      const { forum, router, search, invite, site } = this.props;
       const { platform } = site;
       const perPage = platform === 'pc' ? 5 : 20
 

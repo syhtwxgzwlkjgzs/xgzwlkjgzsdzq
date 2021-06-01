@@ -8,6 +8,7 @@ import { get } from '@common/utils/get';
 import List from '@components/list';
 import BaseLayout from '@components/base-layout';
 import TrendingTopic from '@layout/search/pc/components/trending-topics';
+import UserCenterFansPc from '@components/user-center/fans-pc';
 import SidebarPanel from '@components/sidebar-panel';
 import Copyright from '@components/copyright';
 
@@ -77,15 +78,7 @@ class InvitePCPage extends React.Component {
         >
           <TrendingTopic data={pageData} onItemClick={this.onTopicClick}/>
         </SidebarPanel>
-        <SidebarPanel
-          title="粉丝"
-          leftNum="2880"
-          noData={true}
-          isLoading={false}
-          onShowMore={this.redirectToSearchResultTopic}
-        >
-          <TrendingTopic data={pageData} onItemClick={this.onTopicClick}/>
-        </SidebarPanel>
+        <UserCenterFansPc />
         <Copyright/>
       </>
     );
