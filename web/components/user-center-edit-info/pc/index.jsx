@@ -11,6 +11,7 @@ import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData';
 import UserCenterEditAccountPwd from '../../user-center-edit-account-pwd-pc';
 import UserCenterEditMobile from '../../user-center-edit-mobile-pc';
 import UserCenterEditPaypwd from '../../user-center-edit-paypwd-pc';
+import WechatRebindDialog from '../../user-center/rebind-wechat';
 
 @inject('site')
 @inject('user')
@@ -19,12 +20,12 @@ class index extends Component {
   constructor(props) {
     super(props);
     this.props.user.initEditInfo();
-    this.props.user.genRebindQrCode();
     this.state = {
       isClickNickName: false,
       accountEditorVisible: false,
       payPwdEditorVisible: false,
       mobileEditorVisible: false,
+      wechatRebindEditorVisible: false,
       editorConfig: [
         {
           name: '昵称',
@@ -190,7 +191,18 @@ class index extends Component {
               <p className={styles.pcEditWeiName}>{this.user.wxNickname}</p>
             </div>
           ),
-          operation: () => <p className={styles.pcEditNicknameCallMsodify}>换绑</p>,
+          operation: () => (
+            <p
+              onClick={() => {
+                this.setState({
+                  wechatRebindEditorVisible: true,
+                });
+              }}
+              className={styles.pcEditNicknameCallMsodify}
+            >
+              换绑
+            </p>
+          ),
           inputEditor: () => null,
         },
       ],
@@ -297,6 +309,14 @@ class index extends Component {
             onClose={() => {
               this.setState({
                 payPwdEditorVisible: false,
+              });
+            }}
+          />
+          <WechatRebindDialog
+            visible={this.state.wechatRebindEditorVisible}
+            onClose={() => {
+              this.setState({
+                wechatRebindEditorVisible: false,
               });
             }}
           />
