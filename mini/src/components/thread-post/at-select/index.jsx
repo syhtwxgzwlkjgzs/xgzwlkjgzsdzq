@@ -92,6 +92,10 @@ class AtSelect extends Component {
 
   // 取消选择
   handleCancel = () => {
+    if (typeof this.props.onCancel === 'function') {
+      this.props.onCancel();
+      return;
+    }
     Taro.navigateBack();
   };
 
@@ -100,6 +104,11 @@ class AtSelect extends Component {
     const { checkUser } = this.state;
     // 未选@人，不操作
     if (checkUser.length === 0) return;
+
+    // 外部选择事件
+    if (typeof this.props.getAtList === 'function') {
+      this.props.getAtList(checkUser);
+    }
 
     // 处理已选@ren，更新store
     const { postData: { contentText: text }, setPostData, cursorPosition, setCursorPosition } = this.props.threadPost;
