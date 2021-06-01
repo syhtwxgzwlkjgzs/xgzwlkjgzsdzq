@@ -1,139 +1,305 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import Header from '@components/header';
 import UserCenterEditHeader from '../../user-center-edit-header/index';
 import BaseLaout from '@components/base-layout';
-import { Button, Icon, Input } from '@discuzq/design';
+import { Button, Icon, Input, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData';
-import { Suspense } from 'react';
+import UserCenterEditAccountPwd from '../../user-center-edit-account-pwd-pc';
+import UserCenterEditMobile from '../../user-center-edit-mobile-pc';
+import UserCenterEditPaypwd from '../../user-center-edit-paypwd-pc';
+
 @inject('site')
 @inject('user')
 @observer
 class index extends Component {
   constructor(props) {
     super(props);
+    this.props.user.initEditInfo();
     this.state = {
       isClickNickName: false,
-      contentTitle: [
+      accountEditorVisible: false,
+      payPwdEditorVisible: false,
+      mobileEditorVisible: false,
+      editorConfig: [
         {
           name: '昵称',
-          type: 1,
-          display: 0
+          display: 'show',
+          condition: () => true,
+          render: () => this.props.user.nickname,
+          operation: () => (
+            <p onClick={() => this.openInputEditor('昵称')} className={styles.pcEditNicknameCallMsodify}>
+              修改
+            </p>
+          ),
+          inputEditor: () => (
+            <Input
+              value={this.props.user.editNickName}
+              onChange={(e) => {
+                this.props.user.editNickName = e.target.value;
+              }}
+              className={styles.pcEditAutographInput}
+            />
+          ),
+          onSave: async () => {
+            await this.props.user.updateEditedUserNickname();
+            Toast.success({
+              content: '更新昵称成功',
+              duration: 1000,
+            });
+            this.closeInputEditor('昵称');
+          },
+          onCancel: () => {
+            this.closeInputEditor('昵称');
+          },
         },
         {
           name: '用户名',
-          type: 2,
-          display: 0
+          display: 'show',
+          condition: () => true,
+          render: () => this.props.user.username,
+          operation: () => {
+            if (this.props.user.canEditUsername) {
+              return <p className={styles.pcEditNicknameCallMsodifyDisable}>暂无法修改（一年一次）</p>;
+            }
+            return (
+              <p onClick={() => this.openInputEditor('用户名')} className={styles.pcEditNicknameCallMsodify}>
+                修改
+              </p>
+            );
+          },
+          inputEditor: () => (
+            <Input
+              value={this.props.user.editUserName}
+              onChange={(e) => {
+                this.props.user.editUserName = e.target.value;
+              }}
+              className={styles.pcEditAutographInput}
+            />
+          ),
+          onSave: async () => {
+            await this.props.user.updateUsername();
+            Toast.success({
+              content: '更新用户名成功',
+              duration: 1000,
+            });
+            this.closeInputEditor('用户名');
+          },
+          onCancel: () => {
+            this.closeInputEditor('用户名');
+          },
         },
         {
           name: '个性签名',
-          type: 3,
-          display: 0
+          display: 'show',
+          condition: () => true,
+          render: () => this.props.user.signature,
+          operation: () => (
+            <p onClick={() => this.openInputEditor('个性签名')} className={styles.pcEditNicknameCallMsodify}>
+              修改
+            </p>
+          ),
+          inputEditor: () => (
+            <Input
+              value={this.props.user.editSignature}
+              onChange={(e) => {
+                this.props.user.editSignature = e.target.value;
+              }}
+              className={styles.pcEditAutographInput}
+            />
+          ),
+          onSave: async () => {
+            await this.props.user.updateEditedUserSignature();
+            Toast.success({
+              content: '更新个性签名成功',
+              duration: 1000,
+            });
+            this.closeInputEditor('个性签名');
+          },
+          onCancel: () => {
+            this.closeInputEditor('个性签名');
+          },
         },
         {
           name: '手机号码',
-          type: 4,
-          display: 0
+          display: 'show',
+          render: () => this.props.user.mobile,
+          condition: () => this.props.site?.isSmsOpen,
+          operation: () => <p className={styles.pcEditNicknameCallMsodify}>修改</p>,
+          inputEditor: () => null,
         },
         {
           name: '账户密码',
-          type: 5,
-          display: 0
+          display: 'show',
+          condition: () => true,
+          render: () => {
+            if (this.props.user.hasPassword) {
+              return '已设置';
+            }
+            return '未设置';
+          },
+          operation: () => (
+            <p
+              onClick={() => {
+                this.setState({
+                  accountEditorVisible: true,
+                });
+              }}
+              className={styles.pcEditNicknameCallMsodify}
+            >
+              {this.props.user?.hasPassword ? '修改' : '设置'}
+            </p>
+          ),
+          inputEditor: () => null,
         },
         {
           name: '支付密码',
-          type: 6,
-          display: 0
-        }
-      ]
+          display: 'show',
+          condition: () => true,
+          render: () => {
+            if (this.props.user.canWalletPay) {
+              return '已设置';
+            }
+            return '未设置';
+          },
+          operation: () => (
+            <p
+              onClick={() => {
+                this.setState({
+                  payPwdEditorVisible: true,
+                });
+              }}
+              className={styles.pcEditNicknameCallMsodify}
+            >
+              {this.props.user?.canWalletPay ? '修改' : '设置'}
+            </p>
+          ),
+          inputEditor: () => null,
+        },
+        {
+          name: '微信',
+          display: 'show',
+          condition: () => true,
+          render: () => (
+            <div className={styles.pcEditNicknameImgs}>
+              <Avatar className={styles.pcEditNicknameImg} image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />
+              <p className={styles.pcEditWeiName}>{this.user.wxNickname}</p>
+            </div>
+          ),
+          operation: () => <p className={styles.pcEditNicknameCallMsodify}>换绑</p>,
+          inputEditor: () => null,
+        },
+      ],
     };
     this.user = this.props.user || {};
   }
-  editorialpresentation(item, type, index) {
-    let textTitle = '';
-    switch (type) {
-      case 1: textTitle = this.user.username;
-      break;
-      case 2: textTitle = this.user.username;
-      break;
-      case 3: textTitle = '不会开飞机的程序员，不是一个好的摄影师';
-      break;
-      case 4: textTitle = this.user.mobile;
-      break;
-      case 5: textTitle = '已设置';
-      break;
-      case 6: textTitle = '已设置';
-      break;
+
+  openInputEditor(name) {
+    const { editorConfig } = this.state;
+    const targetConfig = editorConfig.filter(item => item.name === name);
+    if (targetConfig.length) {
+      targetConfig[0].display = 'edit';
+      this.setState({
+        editorConfig: [...editorConfig],
+      });
     }
+  }
+
+  closeInputEditor(name) {
+    const { editorConfig } = this.state;
+    const targetConfig = editorConfig.filter(item => item.name === name);
+    if (targetConfig.length) {
+      targetConfig[0].display = 'show';
+      this.setState({
+        editorConfig: [...editorConfig],
+      });
+    }
+  }
+
+  editorialpresentation(item) {
+    // render content
+    const content = item.render() || null;
+    // 如果不满足条件，不渲染
+    if (!item.condition()) return null;
     return (
       <>
         <div className={styles.pcEditNickname}>
           <div className={styles.pcEditNicknameText}>{item.name}</div>
           <div className={styles.box}>
-            {
-              item.display === 0 && <div className={styles.pcEditNicknameCall}>
-                <p className={styles.pcEditNicknameCallText}>{textTitle}</p>
-                <p className={styles.pcEditNicknameCallMsodify} onClick={() => this.modifyFun(index, 1)}>修改</p>
+            {item.display === 'show' && (
+              <div className={styles.pcEditNicknameCall}>
+                <p className={styles.pcEditNicknameCallText}>{content}</p>
+                {item.operation() || null}
               </div>
-            }
-            {
-              <div className={item.display === 1 ? styles.pcEditAutographCall : styles.pcEditAutographBox}>
-                <Input
-                  className={styles.pcEditAutographInput}
-                  placeholder="不会开飞机的程序员，不是一个好的摄影师"
-                />
+            )}
+            {item.display === 'edit' && (
+              <div className={item.display === 'edit' ? styles.pcEditAutographCall : styles.pcEditAutographBox}>
+                {item.inputEditor()}
                 <div className={styles.preservation}>
-                  <Button className={styles.preservationButton} type="primary" onClick={() => this.modifyFun(index, 0)}>保存</Button>
-                  <Button className={styles.preservationButton2} onClick={() => this.modifyFun(index, 0)}>取消</Button>
+                  <Button className={styles.preservationButton} type="primary" onClick={() => item.onSave()}>
+                    保存
+                  </Button>
+                  <Button className={styles.preservationButton2} onClick={() => item.onCancel()}>
+                    取消
+                  </Button>
                 </div>
               </div>
-            }
+            )}
           </div>
         </div>
       </>
-    )
+    );
   }
-  modifyFun = (index, num) => {
-    const todoList = [...this.state.contentTitle];
-    this.setState({
-      contentTitle: todoList.map((item,key)=> key == index ? {...item, display: num } : item)
-    });
-  }
+
   render() {
-    const {contentTitle} = this.state;
+    const { editorConfig } = this.state;
     return (
-      <div className={styles.pcEditBox} >
-        <Header className={styles.pcEditHeaser}/>
+      <div className={styles.pcEditBox}>
+        <Header className={styles.pcEditHeaser} />
         <div className={styles.pcEditContent}>
           <div className={styles.pcEdit}>
             {/* 头部 */}
-            <div><UserCenterEditHeader /></div> 
-            {/* 资料展示 */}
-            {
-              contentTitle.map((item, index) => {
-                return (
-                  <div key={index}>
-                    {this.editorialpresentation(item, item.type, index)}
-                  </div>
-                )
-              })
-            }
-            <div className={styles.pcEditNickname}>
-              <div className={styles.pcEditNicknameText}>微信</div>
-              <div className={styles.pcEditNicknameCall}>
-                <div className={styles.pcEditNicknameImgs}>
-                  <Avatar className={styles.pcEditNicknameImg} image={this.user.avatarUrl} name={this.user.username} />
-                  <p className={styles.pcEditWeiName}>{this.user.username}</p>
-                </div>
-                <p className={styles.pcEditNicknameCallMsodify}>解绑</p>
-              </div>
+            <div>
+              <UserCenterEditHeader />
             </div>
+            {/* 资料展示 */}
+            {editorConfig.map((item, index) => (
+              <div key={index}>{this.editorialpresentation(item, item.type, index)}</div>
+            ))}
           </div>
-          <div className={styles.bottomText}>Powered By Discuz! Q © 2021   粤ICP备20008502号-1</div>
+          <div className={styles.bottomText}>Powered By Discuz! Q © 2021 粤ICP备20008502号-1</div>
         </div>
+
+        {/* Popups */}
+        <>
+          <UserCenterEditAccountPwd
+            visible={this.state.accountEditorVisible}
+            onClose={() => {
+              this.setState({
+                accountEditorVisible: false,
+              });
+            }}
+          />
+          <UserCenterEditMobile
+            visible={this.state.mobileEditorVisible}
+            onClose={() => {
+              this.setState({
+                mobileEditorVisible: false,
+              });
+            }}
+          />
+          <UserCenterEditPaypwd
+            visible={this.state.payPwdEditorVisible}
+            onClose={() => {
+              this.setState({
+                payPwdEditorVisible: false,
+              });
+            }}
+          />
+        </>
       </div>
     );
   }

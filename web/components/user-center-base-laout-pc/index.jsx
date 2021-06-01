@@ -97,7 +97,7 @@ const Index = (props) => {
 
             <div className={styles.center}>
               {typeof(children) === 'function' ? children({ ...props }) : children}
-              {onRefresh && <RefreshView noMore={noMore} />}
+              {/* {onRefresh && <RefreshView noMore={noMore} />} */}
             </div>
 
             {

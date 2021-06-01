@@ -211,9 +211,10 @@ class ThreadCreate extends React.Component {
     return (
       <div className={styles['dzq-post-body']}>
         <Header allowJump={false} customJum={this.handlePageJump} />
-        <div className={styles['post-inner']} id="post-inner">
+        <div className={styles['post-inner']} id="post-inner" onClick={this.props.handleVditorFocus}>
           {/* 标题 */}
           <Title
+            onClick={e => e.stopPropagation() }
             isDisplay={this.props.isTitleShow}
             title={postData.title}
             onChange={title => this.props.setPostData({ title })}
@@ -259,7 +260,7 @@ class ThreadCreate extends React.Component {
             // && Object.keys(postData.audio).length > 0
             && !postData.audio.mediaUrl)
             && (
-              <div className={styles['audio-record']} id="dzq-post-audio-record">
+              <div className={styles['audio-record']} id="dzq-post-audio-record" onClick={e => e.stopPropagation()}>
                 <AudioRecord duration={60} onUpload={(blob) => {
                   this.props.handleAudioUpload(blob);
                 }} />
@@ -268,7 +269,7 @@ class ThreadCreate extends React.Component {
 
           {/* 语音组件 */}
           {(Boolean(postData.audio.mediaUrl)) && (
-            <div className={`${styles['audio-record']} ${styles['audio-record-display']}`}>
+            <div className={`${styles['audio-record']} ${styles['audio-record-display']}`} onClick={e => e.stopPropagation()}>
               <Audio src={postData.audio.mediaUrl} />
               <Icon className={styles.delete} name="DeleteOutlined" onClick={() => this.props.setPostData({ audio: {} })} />
             </div>
@@ -331,6 +332,7 @@ class ThreadCreate extends React.Component {
           )}
           {/* 调整了一下结构，因为这里的工具栏需要固定 */}
           <AttachmentToolbar
+            isOpenQcloudVod={this.props.site.isOpenQcloudVod}
             postData={postData}
             onAttachClick={this.props.handleAttachClick}
             // onUploadChange={this.handleUploadChange}
