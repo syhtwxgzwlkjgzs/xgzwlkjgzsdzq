@@ -108,7 +108,7 @@ class Index extends React.Component {
         id: item.id,
         createdAt: item.createdAt,
         threadId: item.threadId,
-        content: item.threadTitle || item.postContent,
+        content: item.isFirst ? (item.threadTitle || item.postContent) : item.postContent,
         type: item.type,
         avatar: item.userAvatar,
         userId: item.userId,
