@@ -5,7 +5,7 @@ import { readTopicsList } from '@server';
 // import Toast from '@discuzq/design/dist/components/toast/index';
 import { getCurrentInstance } from '@tarojs/taro';
 import Page from '@components/page';
-import withShare from '@common/utils/withShare'
+import withShare from '@common/utils/withShare/withShare'
 @inject('topic')
 @observer
 @withShare({

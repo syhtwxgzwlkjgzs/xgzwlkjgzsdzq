@@ -1,7 +1,7 @@
 import React from 'react';
 import IndexPage from '@layout/index';
 import Page from '@components/page';
-import withShare from '@common/utils/withShare'
+import withShare from '@common/utils/withShare/withShare'
 @withShare({
   needLogin: true
 })
