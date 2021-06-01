@@ -5,7 +5,7 @@ import BaseLayout from '@components/base-layout';
 import TopicItem from '@components/topic-item'
 import styles from './index.module.scss';
 import { View, Text, Image } from '@tarojs/components'
-import Taro from '@tarojs/taro';
+import Taro, { getCurrentInstance } from '@tarojs/taro';
 
 @inject('search')
 @observer
@@ -13,7 +13,7 @@ class SearchResultTopicH5Page extends React.Component {
   constructor(props) {
     super(props);
 
-    const keyword = '';
+    const { keyword = '' } = getCurrentInstance().router.params;
 
     this.state = {
       keyword,
