@@ -81,7 +81,7 @@ const Index = (props) => {
         <div className={styles.headerbox}>
           <div className={styles.userHeader}>
             <div className={styles.headImgWrapper}>
-              <UserCenterHeaderImage isOtherPerson= {isOtherPerson}/>
+              <UserCenterHeaderImage isOtherPerson={isOtherPerson}/>
             </div>
             <UserCenterHead platform='pc'isOtherPerson={isOtherPerson}/>
           </div>

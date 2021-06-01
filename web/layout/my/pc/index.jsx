@@ -50,7 +50,7 @@ class PCMyPage extends React.Component {
   };
 
   onContainerClick = ({ id }) => {
-    Router.push({ url: `/my/others?isOtherPerson=${true}&otherId=${id}` });
+    Router.push({ url: `/user/${id}` });
   };
 
   formatUserThreadsData = (userThreads) => {

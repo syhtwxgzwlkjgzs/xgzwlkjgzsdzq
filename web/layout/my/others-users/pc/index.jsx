@@ -18,6 +18,7 @@ import List from '@components/list';
 @inject('user')
 @observer
 class PCMyPage extends React.Component {
+  targetUserId = null;
   constructor(props) {
     super(props);
     this.props.user.cleanTargetUserThreads();
@@ -35,7 +36,29 @@ class PCMyPage extends React.Component {
       return;
     }
     if (query.id) {
+      this.targetUserId = query.id;
       await this.props.user.getTargetUserInfo(query.id);
+      this.setState({
+        fetchUserInfoLoading: false,
+      });
+    }
+  };
+
+  componentDidUpdate = async () => {
+    const { query } = this.props.router;
+    const id = this.props.user?.id;
+
+    if (String(id) === query.id) {
+      Router.replace({ url: '/my' });
+      return;
+    }
+
+    if (String(this.targetUserId) === String(query.id)) return;
+    this.targetUserId = query.id;
+    if (query.id) {
+      this.props.user.removeTargetUserInfo();
+      await this.props.user.getTargetUserInfo(query.id);
+      await this.fetchTargetUserThreads();
       this.setState({
         fetchUserInfoLoading: false,
       });
@@ -81,6 +104,7 @@ class PCMyPage extends React.Component {
       </>
     );
   };
+
   renderContent = () => {
     const { user } = this.props;
     const { targetUserThreads, targetUserThreadsTotalCount, targetUserThreadsPage, targetUserThreadsTotalPage } = user;
@@ -109,6 +133,7 @@ class PCMyPage extends React.Component {
       </div>
     );
   };
+
   render() {
     const { user } = this.props;
     const { targetUserThreadsPage, targetUserThreadsTotalPage } = user;
