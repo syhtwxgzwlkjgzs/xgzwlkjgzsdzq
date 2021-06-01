@@ -30,15 +30,15 @@ const MessageCard = (props) => {
   }
   return (
     <div className={styles.container}>
-      {cardItems.map(({ iconName, title, link, totalCount }, idx) => (
+      {cardItems.map(({ iconName, title, link, unreadCount }, idx) => (
         <div key={idx} className={styles.item} onClick={() => onClick(link)}>
           <div className={styles.left}>
             <Badge
               className={classNames({
-                [styles.badge]: totalCount > 9
+                [styles.badge]: unreadCount > 9
               })}
               circle
-              info={totalCount > 99 ? '99+' : totalCount || null}
+              info={unreadCount > 99 ? '99+' : unreadCount || null}
             >
               <Icon name={iconName} className={styles.icon} size={20} />
             </Badge>

@@ -1,9 +1,8 @@
 import React, { useCallback } from 'react';
 import styles from './index.module.scss';
-import { Icon } from '@discuzq/design';
+import { Icon, Badge } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
 import datas from './data';
-
 /**
  * 潮流话题
  * @prop {string[]} data 步骤数据
@@ -55,6 +54,14 @@ return (
     }
     <Icon className={styles.icon} name={data.iconName} size={20} color={`${selectIndex === index ? '#2469f6' : data.iconColor}`}/>
     <div className={`${styles.content} ${selectIndex === index ? styles.itemActive : ''}`}>{data.content}</div>
+
+    {/* 渲染未读消息红点 */}
+    {!!data.unreadCount && (
+      <div className={styles.badgeMargin}>
+        <Badge circle info={data.unreadCount > 99 ? '99+' : data.unreadCount} className={data.unreadCount > 9 ? styles.badge : ''} />
+      </div>
+    )}
+
   </div>
 );
 };

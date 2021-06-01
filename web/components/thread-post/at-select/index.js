@@ -155,7 +155,7 @@ class AtSelect extends Component {
     const { keywords, checkUser, finish } = this.state;
 
     const content = (
-      <div className={styles.wrapper}>
+      <div className={styles.wrapper} onClick={e => e.stopPropagation()}>
 
         {/* top */}
         <div className={styles.header}>
