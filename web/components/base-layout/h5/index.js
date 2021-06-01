@@ -1,11 +1,9 @@
-import React,  { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { inject, observer } from 'mobx-react';
+import React,  { useCallback, useEffect, useImperativeHandle, useRef, useState, forwardRef } from 'react';
 import Header from '@components/header';
 import List from '@components/list';
 import BottomNavBar from '@components/bottom-nav-bar';
 import { PullDownRefresh } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
-import { throttle } from '@common/utils/throttle-debounce.js';
 
 import styles from './index.module.scss';
 
@@ -23,9 +21,8 @@ import styles from './index.module.scss';
         {(props) => <div>中间</div>}
       </BaseLayout>
 */
-const baseLayoutWhiteList = ['home', 'search'];
 
-const BaseLayout = (props) => {
+const BaseLayout = forwardRef((props, ref) => {
   const {
     showHeader = true,
     showTabBar = false,
@@ -35,10 +32,7 @@ const BaseLayout = (props) => {
     isFinished = true,
     curr,
     onScroll = noop,
-    baselayout,
     onClickTabBar = noop,
-    pageName = '',
-    quickScroll = false,
     immediateCheck = false
   } = props;
 
@@ -47,32 +41,13 @@ const BaseLayout = (props) => {
   const pullDownWrapper = useRef(null);
   const listRef = useRef(null);
 
-  useEffect(() => {
-    if (pullDownWrapper?.current) {
-      setHeight(pullDownWrapper.current.clientHeight);
-    }
-    if (listRef?.current && pageName && baselayout[pageName] > 0
-        && baseLayoutWhiteList.indexOf(pageName) !== -1) {
-      listRef.current.jumpToScrollTop(baselayout[pageName]);
-    }
-  }, []);
+  useImperativeHandle(
+    ref,
+    () => ({
+      listRef
+    }),
+  );
 
-  const quickScrolling = ({ scrollTop = 0 } = {}) => {
-    if (!listRef?.current?.currentScrollTop) {
-      onScroll();
-      return;
-    }
-
-    if (baselayout.isJumpingToTop) {
-      baselayout.removeJumpingToTop();
-      listRef.current.onBackTop();
-    } else {
-      if (scrollTop && pageName) baselayout[pageName] = scrollTop;
-    }
-    onScroll({ scrollTop });
-  };
-
-  const handleScroll = quickScroll ? quickScrolling : throttle(quickScrolling, 50);
 
   return (
     <div className={styles.container}>
@@ -85,7 +60,7 @@ const BaseLayout = (props) => {
                     {...props}
                     className={styles.listHeight}
                     ref={listRef}
-                    onScroll={handleScroll}
+                    onScroll={onScroll}
                   >
                       {typeof(children) === 'function' ? children({ ...props }) : children}
                   </List>
@@ -97,7 +72,7 @@ const BaseLayout = (props) => {
               immediateCheck={immediateCheck}
               className={styles.list}
               ref={listRef}
-              onScroll={handleScroll}
+              onScroll={onScroll}
             >
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>
@@ -107,6 +82,6 @@ const BaseLayout = (props) => {
         {showTabBar && <BottomNavBar onClick={onClickTabBar} placeholder curr={curr} />}
     </div>
   );
-};
+});
 
-export default inject('baselayout')(observer(BaseLayout));
+export default BaseLayout;
