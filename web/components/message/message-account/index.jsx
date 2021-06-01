@@ -108,8 +108,7 @@ class Index extends React.Component {
         id: item.id,
         createdAt: item.createdAt,
         threadId: item.threadId,
-        content: item.postContent,
-        title: item.threadTitle,
+        content: item.isFirst ? (item.threadTitle || item.postContent) : item.postContent,
         type: item.type,
         avatar: item.userAvatar,
         userId: item.userId,
@@ -146,7 +145,8 @@ class Index extends React.Component {
           totalCount={totalCount}
           noMore={currentPage >= totalPage}
           showHeader={!isPC}
-          topCard={(isPC || type === 'accountMsgList') ? card : null}
+          // topCard={(isPC || type === 'accountMsgList') ? card : null}
+          topCard={isPC ? card : null}
           list={renderList}
           type='account'
           onPullDown={() => this.fetchMessageData(1)}

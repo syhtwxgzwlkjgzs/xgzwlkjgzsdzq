@@ -7,7 +7,7 @@ import H5Page from '@layout/message/h5';
 import PCPage from '@layout/message/pc';
 import { useRouter } from 'next/router';
 
-const Index = inject('site', 'message')(observer(({ site, message }) => {
+const Index = inject('site')(observer(({ site }) => {
   /**
    * 消息页面当前显示的消息模块
    *
@@ -32,10 +32,6 @@ const Index = inject('site', 'message')(observer(({ site, message }) => {
 
     return { page, subPage, dialogId, username };
   })(router.query);
-  // 更新未读消息
-  useEffect(() => {
-    message.readUnreadCount();
-  });
 
   const { isPC } = site;
   if (isPC) {

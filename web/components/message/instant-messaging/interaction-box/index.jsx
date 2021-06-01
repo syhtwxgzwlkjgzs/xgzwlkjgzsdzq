@@ -71,7 +71,7 @@ const InteractionBox = (props) => {
         setTypingValue('');
         Router.replace({ url: `/message?page=chat&dialogId=${ret.data.dialogId}` });
       } else {
-        Toast.error({ content: ret.message });
+        Toast.error({ content: ret.msg });
       }
     }
   };
@@ -136,7 +136,7 @@ const InteractionBox = (props) => {
     if (code === 0) {
       await submit({ imageUrl: data.url });
     } else {
-      Toast.error({ content: ret.message });
+      Toast.error({ content: ret.msg });
     }
     uploadRef.current.value = '';
   }

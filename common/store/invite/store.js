@@ -6,12 +6,15 @@ export default class InviteStore {
   @observable inviteCode = '';
 
   @action getInviteCode(router) {
-    return this.inviteCode || sessionStorage?.getItem('inviteCode') || router?.query?.inviteCode || '';
+    return this.inviteCode || wx?.getStorage('inviteCode') || window?.sessionStorage?.getItem('inviteCode') || router?.query?.inviteCode || '';
   }
 
   @action setInviteCode(code) {
     this.inviteCode = code;
-    sessionStorage?.setItem('inviteCode', code);
+
+    wx?.setStorage('inviteCode', code)
+    window?.sessionStorage?.setItem('inviteCode', code);
+    // storage?.setItem('inviteCode', code)
   }
 
   @action

@@ -63,7 +63,7 @@ class Detail extends React.Component {
 
     // 初始化数据到store中
     serverThread?.threadData && thread.setThreadData(serverThread.threadData);
-    // serverThread?.commentList && thread.setCommentList(serverThread.commentList);
+    serverThread?.commentList && thread.setCommentList(serverThread.commentList);
     serverThread?.totalCount && thread.setTotalCount(serverThread.totalCount);
   }
 
@@ -76,12 +76,6 @@ class Detail extends React.Component {
 
   async componentDidMount() {
     const { id } = this.props.router.query;
-    // 判断缓存
-    const oldId = this.props?.thread?.threadData?.threadId;
-    if (Number(id) === oldId && id && oldId) {
-      return;
-    }
-    this.props.thread.reset();
 
     if (id) {
       this.getPageDate(id);
@@ -89,7 +83,11 @@ class Detail extends React.Component {
   }
 
   async getPageDate(id) {
-    if (!this.props?.thread?.threadData) {
+    // 获取帖子数据
+    if (!this.props?.thread?.threadData || !this.hasMaybeCache()) {
+      // TODO:这里可以做精细化重置
+      this.props.thread.reset();
+
       const res = await this.props.thread.fetchThreadDetail(id);
 
       if (res.code !== 0) {
@@ -111,14 +109,17 @@ class Detail extends React.Component {
         }
       }
     }
-    if (!this.props?.thread?.commentList) {
+
+    // 获取评论列表
+    if (!this.props?.thread?.commentList || !this.hasMaybeCache()) {
       const params = {
         id,
       };
       this.props.thread.loadCommentList(params);
     }
+
     // 获取作者信息
-    if (!this.props?.thread?.authorInfo) {
+    if (!this.props?.thread?.authorInfo || !this.hasMaybeCache()) {
       const { site } = this.props;
       const { platform } = site;
       const userId = this.props.thread?.threadData?.user?.userId;
@@ -126,6 +127,14 @@ class Detail extends React.Component {
         this.props.thread.fetchAuthorInfo(userId);
       }
     }
+  }
+
+  // 判断是否可能存在缓存
+  hasMaybeCache() {
+    const { id } = this.props.router.query;
+    const oldId = this.props?.thread?.threadData?.threadId;
+
+    return id && oldId && Number(id) === oldId;
   }
 
   render() {
