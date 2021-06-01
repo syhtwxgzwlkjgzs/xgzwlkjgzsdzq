@@ -19,11 +19,10 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
   // 选中项index
   const newFilterData = filterData.slice();
   if ( isShowDefault ) {
-    newFilterData[0].isActive = false;
-    newFilterData.unshift({
-      label: '默认', // 默认智能排序
+    newFilterData.splice(1, 0, {
+      label: '推荐', // 默认智能排序
       type: 'sequence',
-      isActive: true,
+      isActive: false,
     });
   }
   

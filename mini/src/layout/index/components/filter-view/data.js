@@ -9,7 +9,7 @@ export default [
     type: 2,
     data: [
       {
-        name: '所有',
+        name: '全部',
         pid: 'all',
       },
       {
@@ -51,7 +51,7 @@ export default [
     type: 3,
     data: [
       {
-        name: '所有',
+        name: '全部',
         pid: '0',
       },
       {
