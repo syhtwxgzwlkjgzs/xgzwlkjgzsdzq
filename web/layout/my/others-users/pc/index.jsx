@@ -98,7 +98,7 @@ class PCMyPage extends React.Component {
     return (
       <>
         <UserCenterFansPc userId={id} />
-        <div className={styles.hr}></div>
+
         <UserCenterFollowsPc userId={id} />
         <Copyright />
       </>
@@ -114,21 +114,15 @@ class PCMyPage extends React.Component {
           title="主题"
           type="normal"
           bigSize={true}
-          isShowMore={!this.formatUserThreadsData(targetUserThreads).length}
+          isShowMore={false}
+          isLoading={!targetUserThreads}
           leftNum={`${targetUserThreadsTotalCount}个主题`}
           noData={!this.formatUserThreadsData(targetUserThreads)?.length}
         >
-          <List
-            immediateCheck={false}
-            onRefresh={this.fetchTargetUserThreads}
-            noMore={targetUserThreadsTotalPage < targetUserThreadsPage}
-          >
-            {/* FIXME: pc 切换到新逻辑 */}
-            {this.formatUserThreadsData(targetUserThreads)
+          {this.formatUserThreadsData(targetUserThreads)
               && this.formatUserThreadsData(targetUserThreads).length > 0 && (
                 <UserCenterThreads data={this.formatUserThreadsData(targetUserThreads)} />
-            )}
-          </List>
+          )}
         </SidebarPanel>
       </div>
     );
@@ -136,7 +130,7 @@ class PCMyPage extends React.Component {
 
   render() {
     const { user } = this.props;
-    const { targetUserThreadsPage, targetUserThreadsTotalPage } = user;
+    const { targetUserThreadsPage, targetUserThreadsTotalPage, targetUserThreads } = user;
     return (
       <>
         <UserBaseLaout
@@ -147,6 +141,8 @@ class PCMyPage extends React.Component {
           showRefresh={false}
           onSearch={this.onSearch}
           right={this.renderRight}
+          immediateCheck={false}
+          showLayoutRefresh={!!this.formatUserThreadsData(targetUserThreads)?.length}
         >
           {this.renderContent()}
         </UserBaseLaout>
