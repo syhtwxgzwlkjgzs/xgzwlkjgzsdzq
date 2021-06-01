@@ -72,7 +72,8 @@ const Index = ({
   }
 
   useEffect(() => {
-    const length = fuzzyCalcContentLength(filterContent)
+    const lengthInLine = parseInt(contentWrapperRef.current.offsetWidth / 16);
+    const length = fuzzyCalcContentLength(filterContent, lengthInLine);
     if (length < 262) {
       setHiddenMore(true);
     } else {
