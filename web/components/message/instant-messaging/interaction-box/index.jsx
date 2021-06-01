@@ -221,12 +221,7 @@ const InteractionBox = (props) => {
               }} />
             </div>
             <div className={styles.pictureUpload}>
-              <Upload
-                handleUploadChange={() => { }}
-                isCustomUploadIcon={true}
-              >
-                <Icon name="PictureOutlinedBig" size={20} onClick={uploadImage} />
-              </Upload>
+              <Icon name="PictureOutlinedBig" size={20} onClick={uploadImage} />
             </div>
           </div>
           <Textarea
