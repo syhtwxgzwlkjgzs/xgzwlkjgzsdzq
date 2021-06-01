@@ -17,16 +17,21 @@ class Index extends React.Component {
   constructor(props) {
     super(props);
   }
-  $callBack (data) {
-    const { user } = this.props
-    const { threadId } = data
-    this.props.index.updateThreadShare({ threadId }).then(result => {
+  $getShareData (data) {
+    const shareData = data.target.dataset.shareData
+    const { from } = shareData
+    if(from && from === 'thread') {
+      const { user } = this.props
+      const { threadId } = shareData
+      this.props.index.updateThreadShare({ threadId }).then(result => {
       if (result.code === 0) {
           this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
           this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
       }
     });
+    }
+    return shareData
   }
   async componentDidMount() {
     const { search } = this.props;

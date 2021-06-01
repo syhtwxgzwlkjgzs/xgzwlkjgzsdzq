@@ -11,8 +11,8 @@ function withShare(opts = {}) {
   
   // 设置默认
   const defalut = {
-      Title:'Discez!Q',
-      Path: 'pages/index/index'
+      title:'Discez!Q',
+      path: 'pages/index/index'
   }
   let menus = []
   const { needShareline = true, needLogin = true } = opts
@@ -36,20 +36,13 @@ function withShare(opts = {}) {
       }
       onShareTimeline(){
         if (this.$getShareData && typeof this.$getShareData === 'function') {
-          var { menuData = defalut } = this.$getShareData()
-          return menuData
+          const  shareData  = this.$getShareData()
+          return shareData
         }
         return defalut
       }
       onShareAppMessage = (res) => {
           const { user } = this.props
-          const { shareData } = res.target.dataset
-          if (this.$getShareData && typeof this.$getShareData === 'function') {
-            var { menuData = defalut} = this.$getShareData()
-          }
-          if (res.from === 'menu') {
-            return menuData
-          }
           //是否必须登录
           if (needLogin && !user.isLogin()) {
             Toast.info({ content: '请先登录!' });
@@ -59,8 +52,9 @@ function withShare(opts = {}) {
                 promise
             }
           }
-          if (this.$callBack && typeof this.$callBack === 'function') {
-            this.$callBack(shareData)
+          let shareData = ''
+          if (this.$getShareData && typeof this.$getShareData === 'function') {
+             shareData = this.$getShareData(res)
           }
           return shareData || defalut
           

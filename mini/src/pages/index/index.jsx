@@ -13,28 +13,36 @@ import { inject, observer} from 'mobx-react'
   needLogin: true
 })
 class Index extends React.Component {
-  $getShareData () {
+  $getShareData (data) {
     const { site } = this.props 
-    const Title = site.webConfig?.setSite?.siteName || ''
-    const Path='pages/index/index'
-    return {
-      menuData: {
-        title: Title,
-        path: Path,
-        image: ''
+    const title = site.webConfig?.setSite?.siteName || ''
+    const path='pages/index/index'
+    if(!data) {
+      return {
+        title,
+        path
       }
     }
-  }
-  $callBack (data) {
-    const { user } = this.props
-    const { threadId } = data
-    this.props.index.updateThreadShare({ threadId }).then(result => {
+    if (data.from === 'menu') {
+      return {
+        title:title,
+        path:path
+      }
+    }
+    const shareData = data.target.dataset.shareData
+    const { from } = shareData
+    if(from && from === 'thread') {
+      const { user } = this.props
+      const { threadId } = shareData
+      this.props.index.updateThreadShare({ threadId }).then(result => {
       if (result.code === 0) {
           this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
           this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
       }
     });
+    }
+    return shareData
   }
   render() {
     return (
