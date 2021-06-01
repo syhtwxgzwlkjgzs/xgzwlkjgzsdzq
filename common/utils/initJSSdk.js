@@ -4,6 +4,12 @@
  * 初始化微信jssdk
  * 参数传入你需要用到的js接口名称，具体参照微信开发文档
  *
+ * initJSSdk(['checkJsApi']);
+ * wx.ready({
+ *   wx.checkJsApi();
+ * });
+ *
+ *
  */
 export default async function initJSSdk(jsApiList = []) {
   const scriptPromise = new Promise((resolve) => {
