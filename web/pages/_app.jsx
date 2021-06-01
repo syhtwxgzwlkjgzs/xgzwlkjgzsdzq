@@ -20,6 +20,7 @@ class DzqApp extends App {
   constructor(props) {
     super(props);
     this.appStore = initializeStore();
+    this.updateSize = this.updateSize.bind(this);
   }
 
   // 路由跳转时，需要清理图片预览器
@@ -41,12 +42,14 @@ class DzqApp extends App {
   }
 
   componentDidMount() {
+    window.addEventListener('resize', this.updateSize);
     csrRouterRedirect();
     this.listenRouterChangeAndClean();
   }
 
   componentWillUnmount() {
     if (!isServer()) {
+      window.removeEventListener('resize', this.updateSize);
       window.removeEventListener('popstate', this.cleanImgViewer);
     }
   }
@@ -54,6 +57,24 @@ class DzqApp extends App {
   // 出错捕获
   componentDidCatch(error, info) {
     Router.replace({url: '/render-error'});
+  }
+
+  updateSize() {
+    const current = window.innerWidth;
+    console.log(this.appStore)
+    if ( this.appStore.site ) {
+
+      if ( this.appStore.site.platform === 'pc' && current < 800 ) {
+        this.appStore.site.setPlatform('h5');
+        return;
+      }
+
+      if ( this.appStore.site.platform === 'h5' && current >= 800 ) {
+        this.appStore.site.setPlatform('pc');
+        return;
+      }
+
+    }
   }
 
   render() {

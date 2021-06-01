@@ -17,7 +17,7 @@
 .recommendBox {
   cursor: pointer;
   width: 100%;
-  height: rem(82);
+  padding-bottom: rem(10);
   border-top: var(--border-border);
   .recommendTitle {
     display: flex;
@@ -43,10 +43,12 @@
     margin-top: rem($margin-10);
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
     .browseBox {
       font-size: rem($font-size-label);
       line-height: rem($font-line-height-small);
       color: var(--color-text-secondary);
+      flex-shrink: 0;
       .browseIcon {
         margin-right: rem($margin-1n);
       }

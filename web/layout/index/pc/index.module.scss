@@ -16,41 +16,32 @@
   }
 }
 .indexContent {
-  margin-top: rem(68);
+  // margin-top: rem(68);
   width: 100%;
-  min-width: rem(652);
+  position: relative;
+  // min-width: rem(652);
   .contnetTop {
     width: 100%;
     background: var(--color-white);
     box-sizing: border-box;
+    border-radius: rem(5);
   }
 }
 .publishBtn {
   width: rem(88);
   height: rem(36);
 }
-.topBox {
-  position: relative;
-  width: rem(750);
-  // padding: rem(7) 0  rem(7) rem($margin-2n);
-  .PostTheme {
-    position: absolute;
-    right: rem($padding-6n);
-    top: rem($padding-4n);
-  }
-}
+
 .topWrapper {
-  width: rem(750);
-  height: rem(68);
-  position: fixed;
-  top: 60px;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-left: rem(-15);
-  padding-top: rem(20);
+  width: 100%;
+  position: sticky;
+  top: rem(-1);
+  left: 0;
   display: flex;
   z-index: 1000;
   background: $body-bg-color;
+  border-radius: rem(5);
+
   &:after {
     content: '';
     background-color: var(--border-line-color);
@@ -59,6 +50,37 @@
     right: rem(24);
     left: rem(24);
     bottom: 0;
+  }
+
+  .topBox {
+    position: relative;
+    width: 100%;
+    padding: rem(6.5) rem(24);
+    display: flex;
+    align-items: center;
+    background: var(--color-white);
+    border-radius: rem(5);
+    flex-wrap: wrap;
+    justify-content: center;
+
+   
+    @media only screen and (min-width: 800px) and (max-width: 990px) {
+      align-items: flex-start;
+      flex-direction: column;
+      .PostTheme {
+        flex-shrink: 0;
+        width: 100%;
+        :global {
+          .dzq-button{
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    .PostTheme {
+      flex-shrink: 0;
+    }
   }
 }
 .TopNewsBox {
@@ -72,6 +94,7 @@
 .topNewContent {
   padding: rem($padding-10) 0;
   margin: 0 rem($margin-6n);
+  border-radius: rem(5);
 }
 .themeBox {
   overflow: hidden;

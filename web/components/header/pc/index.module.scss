@@ -13,16 +13,17 @@
     top: 0;
     left: 0;
     height: rem(60);
-    min-width: rem(1150);
     width: 100%;
     border-bottom: 1px solid var(--border-line-color);
     z-index: $zindex-backtotop;
     .headerContent{
-      width: rem(1436);
+      max-width: rem(1420);
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
       .left{
+        width: 50%;
         display: flex;
         align-items: center;
         .siteLogo{
@@ -32,8 +33,16 @@
         }
         .inputBox{
           margin-left: rem(20);
-          input{
-            line-height: normal;
+          flex:1;
+          :global{
+            .dzq-input{
+              width: 100%;
+            }
+            input{
+              line-height: normal;
+              max-width: rem(580);
+              width: 100%;
+            }
           }
         }
       }

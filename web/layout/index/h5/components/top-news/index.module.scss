@@ -65,6 +65,7 @@
   .itemPC {
     cursor: pointer;
     height: rem(38);
+    border-radius: rem(5);
     
     .prefix {
       font-size: rem($font-size-middle);

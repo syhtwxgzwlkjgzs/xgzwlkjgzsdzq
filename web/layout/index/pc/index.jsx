@@ -240,6 +240,8 @@ class IndexPCPage extends React.Component {
     const { pageData, currentPage, totalPage } = threads || {};
     return (
       <div className={styles.indexContent}>
+        <TopFilterView onFilterClick={this.onFilterClick} onPostThread={this.onPostThread} isShowDefault={isShowDefault} />
+
         <div className={styles.contnetTop}>
           {sticks?.length && <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
             <TopNews data={sticks} platform="pc" isShowBorder={false}/>
@@ -279,7 +281,6 @@ class IndexPCPage extends React.Component {
         right={ this.renderRight() }
         pageName='home'
       >
-        <TopFilterView onFilterClick={this.onFilterClick} onPostThread={this.onPostThread} isShowDefault={isShowDefault} />
         {this.renderContent(index)}
       </BaseLayout>
     );

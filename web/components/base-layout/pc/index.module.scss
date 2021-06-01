@@ -8,20 +8,56 @@
   flex-direction: column;
   align-items: center;
   background: $body-bg-color;
-  overflow-x: auto;
+  overflow-x: hidden;
 }
 
 .body{
-  position: relative;
-  width: rem(1420);
+  width: 100%;
+  min-width: rem(800);
+  padding-top: rem(20);
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  flex-direction: column;
+  flex-direction: row;
   background: $body-bg-color;
-  overflow-x: auto;
+  overflow-y: auto;
+  border-radius: rem(5);
   ::-webkit-scrollbar {
     display: none; /* Chrome Safari */
+  }
+  &.col-1{}
+  &.col-2{}
+  &.col-3{
+    max-width: rem(1420);
+  }
+  .center {
+    position: relative;
+    max-width: rem(750);
+    display: flex;
+    flex-direction: column;
+    flex: -1;
+    flex-shrink: 0;
+  }
+  
+  .left {
+    position: sticky;
+    top: rem(0);
+    max-width: rem(300);
+    flex: -1;
+    flex-shrink: 0;
+  }
+  
+  .right {
+    position: sticky;
+    top: rem(0);
+    max-width: rem(330);
+    flex: -1;
+    flex-shrink: 0;
+    &.home-right {
+      top: rem(-136);
+    }
   }
 }
 
@@ -33,32 +69,65 @@
   // padding: rem(20) 0;
 }
 
-.center {
-  width: rem(750);
-  min-width: rem(750);
-  display: flex;
-  flex-direction: column;
-  margin-top: rem(20);
+@media only screen and (min-width: 1080px){
+  .col-1{}
+  .col-2{
+    .center {
+      width: rem(731);
+    }
+    .right {
+      margin-left: rem(10);
+      width: rem(300);
+    }
+  }
+  .col-3{
+    .center {
+      width: rem(750);
+    }
+    .left {
+      margin-right: rem(20);
+      width: rem(300);
+    }
+    .right {
+      margin-left: rem(20);
+      width: rem(330);
+    }
+  }
 }
 
-.left {
-  position: sticky;
-  top: rem(0);
-  margin-right: rem(20);
-  padding-top: rem(20);
-  width: 21%;
-  min-width: rem(300);
+@media only screen and (min-width: 1080px) and (max-width: 1419px){
+  .col-1{}
+  .col-2{}
+  .col-3{
+    .center {
+      width: 53%;
+    }
+    .left {
+      margin-right: 1.4%;
+      width: 21%;
+    }
+    .right {
+      margin-left: 1.4%;
+      width: 23%;
+    }
+  }
 }
 
-.right {
-  position: sticky;
-  margin-left: rem(20);
-  top: rem(0);
-  padding-top: rem(20);
-  width: rem(330);
-  min-width: rem(330);
-  &.home-right {
-    top: rem(-136);
+@media only screen and (min-width: 800px) and (max-width: 1079px) {
+  .col-1{}
+  .col-2{}
+  .col-3{
+    .center {
+      width: 46%;
+    }
+    .left {
+      margin-right: 0.9%;
+      width: 24%;
+    }
+    .right {
+      margin-left: 0.9%;
+      width: 28%;
+    }
   }
 }
 

@@ -1,7 +1,6 @@
 @import '@common/styles/index.scss';
 .container {
-  width: 100%;
-
+  flex: 1;
   .activeItem {
     color: $primary-color !important;
     position: relative;
@@ -9,13 +8,16 @@
   }
 
   :global {
+    .dzq-menu-item:first-child{
+      padding-left: 0!important;
+    }
     .dzq-menu--horizontal {
       box-sizing: border-box;
-      height: rem(68);
-      padding-top: rem(8);
+      // padding-top: rem(8);
       border-top-left-radius: rem($border-radius-small);
       border-top-right-radius: rem($border-radius-small);
-      padding-left: rem($padding-2n);
+      display: flex;
+      align-items: center;
     }
     .dzq-submenu__title {
       .dzq-icon {
@@ -40,12 +42,18 @@
     }
   }
 }
-.line {
-  position: absolute;
-  bottom: rem(12);
-  left: 30%;
-  width: 40%;
-  height: 2px;
-  border-radius: rem(1);
-  background: $primary-color;
+
+.label{
+  position: relative;
+  .line {
+    position: absolute;
+    bottom: rem(12);
+    left: 50%;
+    width: 90%;
+    transform: translateX(-50%);
+    height: 2px;
+    border-radius: rem(1);
+    background: $primary-color;
+  }
+  
 }

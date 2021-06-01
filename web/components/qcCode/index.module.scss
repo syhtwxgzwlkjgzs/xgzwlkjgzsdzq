@@ -2,7 +2,7 @@
 @import '@common/styles/index.scss';
 .code {
   width: 100%;
-  height: rem(115);
+  // height: rem(115);
   background: var(--color-white);
   display: flex;
   border-radius: rem($border-radius-small);
@@ -10,7 +10,6 @@
   box-sizing: border-box;
   align-items: center;
   .codeBox {
-    width: rem(83);
     height: rem(83);
     margin-right: rem($margin-4n);
     .codeBoxImg {

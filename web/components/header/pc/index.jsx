@@ -117,7 +117,6 @@ class Header extends React.Component {
               <div className={styles.inputBox}>
                 <Input
                   placeholder="搜索"
-                  style={{ width: '580px' }}
                   icon="SearchOutlined"
                   value={this.state.value}
                   onEnter={this.handleSearch}
