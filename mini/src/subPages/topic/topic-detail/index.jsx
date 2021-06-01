@@ -17,28 +17,23 @@ class Index extends React.Component {
   perPage = 10;
   $getShareData (data) {
     const { topic } = this.props 
-    const title = topic.topicDetail?.pageData[0]?.content || ''
-    const path = `/subPages/topic/topic-detail/index?id=${topicId}`
     const topicId = topic.topicDetail?.pageData[0]?.topicId || ''
-    if(!data) {
+    const defalutTitle = topic.topicDetail?.pageData[0]?.content || ''
+    const defalutPath = `/subPages/topic/topic-detail/index?id=${topicId}`
+    if(data.from === 'timeLine') {
       return {
-        title,
+        title:defalutTitle
       }
     }
     if (data.from === 'menu') {
       return {
-        title:title,
-        path:path
+        title:defalutTitle,
+        path:defalutPath
       }
     }
-    const shareData = data.target?.dataset?.shareData
-    if(!shareData) {
-      return {}
-    }
-    const { from } = shareData
-    if(from && from === 'thread') {
+    const { title, path, comeFrom, threadId } = data
+    if(comeFrom && comeFrom === 'thread') {
       const { user } = this.props
-      const { threadId } = shareData
       this.props.index.updateThreadShare({ threadId }).then(result => {
       if (result.code === 0) {
           this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
@@ -47,7 +42,10 @@ class Index extends React.Component {
       }
     });
     }
-    return shareData
+    return {
+      title,
+      path
+    }
   }
   async componentDidMount() {
     const { topic } = this.props;

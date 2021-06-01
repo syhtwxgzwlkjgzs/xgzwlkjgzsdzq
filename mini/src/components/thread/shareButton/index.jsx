@@ -19,7 +19,7 @@ const Index = ({
         }
     }
     const shareData = {
-        from:'thread',
+        comeFrom:'thread',
         threadId: threadId,
         title:threadTitle,
         path: `/subPages/thread/index?id=${threadId}`

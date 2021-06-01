@@ -25,14 +25,13 @@ class Index extends React.Component {
   }
   $getShareData (data) {
     const shareData = data.target?.dataset?.shareData
-    if(!shareData) {
+    if(data.from === 'menu') {
       return {
       }
     }
-    const { from } = shareData
-    if(from && from === 'thread') {
+    const { title, path, comeFrom, threadId } = data
+    if(comeFrom && comeFrom === 'thread') {
       const { user } = this.props
-      const { threadId } = shareData
       this.props.index.updateThreadShare({ threadId }).then(result => {
       if (result.code === 0) {
           this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
@@ -41,7 +40,10 @@ class Index extends React.Component {
       }
     });
     }
-    return shareData
+    return {
+      title,
+      path
+    }
   }
   dispatch = async (type, data) => {
     const { search } = this.props;
