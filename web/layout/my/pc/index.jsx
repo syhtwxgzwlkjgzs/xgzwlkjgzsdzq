@@ -124,20 +124,19 @@ class PCMyPage extends React.Component {
           <UserCenterAction />
         </div>
 
-        <div className={styles.postTitle}>
-          <SectionTitle
-            title="主题"
-            isShowMore={false}
-            leftNum={`${userThreadsTotalCount}个主题`}
-          />
-        </div>
-        <div className={styles.postContent}>
-          {
-            formattedUserThreads?.length ? formattedUserThreads.map(
+        <SidebarPanel 
+          title="主题" 
+          type='normal'
+          isShowMore={false}
+          noData={!formattedUserThreads?.length}
+          isLoading={!formattedUserThreads}
+          leftNum={`${userThreadsTotalCount}个主题`}
+          mold='plane'
+        >
+          {formattedUserThreads?.map(
               (item, index) => <Thread data={item} key={index} className={index === 0 && styles.threadStyle} />
-            ) : null
-          }
-        </div>
+          )}
+        </SidebarPanel>
       </div>
     );
   };

@@ -10,6 +10,7 @@ import Copyright from '@components/copyright';
 import ShieldList from './components/shield-list';
 import UserCenterFansPc from '@components/user-center/fans-pc';
 import UserCenterFollowsPc from '@components/user-center/follows-pc';
+import SidebarPanel from '@components/sidebar-panel';
 
 @inject('site')
 @inject('user')
@@ -45,38 +46,31 @@ class BlockPcPage extends React.Component {
       <Copyright />
     </div>
   );
-  // 中间 -- 我的屏蔽
-  renderContent = (data) => {
-    const { user } = this.props;
-    const { userShield = [], userShieldPage, userShieldTotalCount, userShieldTotalPage } = user || {};
-    console.log(userShield);
-    return (
-      <div className={styles.content}>
-        <div className={styles.section}>
-          <SectionTitle
-            title="我的屏蔽"
-            icon={{ type: 3, name: 'LikeOutlined' }}
-            isShowMore={false}
-            rightText={`共有${userShieldTotalCount}位用户`}
-          />
-          <List
-            immediateCheck={false}
-            showPullDown={false}
-            onRefresh={this.loadMore}
-            noMore={userShieldTotalPage < userShieldPage}
-          >
-            <ShieldList data={userShield} />
-          </List>
-        </div>
-      </div>
-    );
-  };
+
   render() {
-    const { index, site } = this.props;
+    const { user } = this.props;
+    const { userShieldPage, userShieldTotalPage, userShield, userShieldTotalCount } = user;
+
     return (
-      <div className={styles.container}>
-        <BaseLayout right={this.renderRight}>{this.renderContent(index)}</BaseLayout>
-      </div>
+      <BaseLayout 
+        right={this.renderRight}
+        immediateCheck={false}
+        onRefresh={this.loadMore}
+        showRefresh={false}
+        noMore={userShieldTotalPage < userShieldPage}
+      >
+        <SidebarPanel 
+          title="我的屏蔽" 
+          type='normal'
+          isShowMore={false}
+          noData={!userShield?.length}
+          isLoading={!userShield}
+          icon={{ type: 3, name: 'LikeOutlined' }}
+          rightText={`共有${userShieldTotalCount}位用户`}
+        >
+          <ShieldList data={userShield} />
+        </SidebarPanel>
+      </BaseLayout>
     );
   }
 }

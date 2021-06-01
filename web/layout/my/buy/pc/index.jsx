@@ -2,12 +2,12 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import styles from './index.module.scss';
-import SectionTitle from '@components/section-title';
 import BaseLayout from '@components/base-layout';
 import ThreadContent from '@components/thread';
 import Copyright from '@components/copyright';
 import PopTopic from '@components/pop-topic';
 import UserCenterFansPc from '@components/user-center/fans-pc';
+import SidebarPanel from '@components/sidebar-panel';
 
 @inject('site')
 @inject('index')
@@ -29,35 +29,33 @@ class BuyPCPage extends React.Component {
       <Copyright />
     </div>
   );
-  // 中间 -- 我的购买
-  renderContent = (data) => {
-    const num = 8;
-    const { threads } = data;
-    const { pageData } = threads || {};
-    return (
-      <div className={styles.content}>
-        <div className={styles.title}>
-          <SectionTitle
-            title="我的购买"
-            icon={{ type: 3, name: 'ShoppingCartOutlined' }}
-            isShowMore={false}
-            rightText={`共有${this.props.totalCount}条购买`}
-          />
-        </div>
-        {pageData?.map((item, index) => (
-          <ThreadContent className={styles.threadContent} data={item} key={index} />
-        ))}
-      </div>
-    );
-  };
+ 
   render() {
-    const { index, page, totalPage } = this.props;
+    const { index } = this.props;
+    const { pageData, currentPage, totalPage   } = index.threads || {};
+
     return (
-      <div className={styles.container}>
-        <BaseLayout right={this.renderRight} noMore={page > totalPage} onRefresh={this.props.dispatch}>
-          {this.renderContent(index)}
-        </BaseLayout>
-      </div>
+      <BaseLayout 
+        right={this.renderRight} 
+        noMore={currentPage >= totalPage} 
+        onRefresh={this.props.dispatch} 
+        showRefresh={false}
+      >
+        <SidebarPanel 
+          title="我的购买" 
+          type='normal'
+          isShowMore={false}
+          noData={!pageData?.length}
+          isLoading={!pageData}
+          icon={{ type: 3, name: 'ShoppingCartOutlined' }}
+          rightText={`共有${this.props.totalCount}条购买`}
+          mold='plane'
+        >
+          {pageData?.map((item, index) => (
+            <ThreadContent className={index === 0 && styles.threadStyle} data={item} key={index} />
+          ))}
+        </SidebarPanel>
+      </BaseLayout>
     );
   }
 }
