@@ -9,16 +9,17 @@ export default function HOCTencentCaptcha(Component) {
       super(props);
     }
 
-    showCaptcha = () => new Promise((resolve) => {
+    showCaptcha = () => new Promise((resolve, reject) => {
       // 验证码实例为空，则创建实例
       const { webConfig } = this.props.site;
       const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
       const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
 
       if (qcloudCaptcha) {
-        import('@discuzq/sdk/dist/common_modules/sliding-captcha').then(({
-          TencentCaptcha,
+        import('@common/utils/tcaptcha').then(({
+          default: TencentCaptcha,
         }) => {
+          //todo 避免每次都import
           this.captcha = new TencentCaptcha(qcloudCaptchaAppId, (res) => {
             if (res.ret === 0) {
               resolve({
@@ -29,6 +30,9 @@ export default function HOCTencentCaptcha(Component) {
           });
           // 显示验证码
           this.captcha.show();
+        }).catch((e) => {
+          console.log(e);
+          reject({ Message: '获取防水墙验证码错误' });
         });
       } else {
         resolve({
