@@ -6,6 +6,7 @@ import React from 'react';
 import { diffDate } from '@common/utils/diff-date';
 import classNames from 'classnames';
 
+
 UserInfo.propTypes = {
   name: PropTypes.string.isRequired, // 用户名称
   avatar: PropTypes.string.isRequired, // 用户头像
@@ -25,8 +26,11 @@ UserInfo.propTypes = {
 };
 
 export default function UserInfo(props) {
+/*  useEffect(() => {
+    // 使用浏览器的 API 更新页面标题
+    console.log(props)
+  });*/
   let tagsNumber = 0;
-
   props.isEssence && (tagsNumber = tagsNumber + 1);
   props.isPay && (tagsNumber = tagsNumber + 1);
   props.isReward && (tagsNumber = tagsNumber + 1);
