@@ -120,7 +120,7 @@ class HomeHeader extends React.Component {
             <Text className={styles.text}>内容</Text>
             <Text className={styles.content}>{countThreads}</Text>
           </View>
-          <Button className={styles.item} openType="share" plain='true' data-from='head'>
+          <Button className={styles.item} openType="share" plain='true' data-from='indexHead'>
             <Icon className={styles.shareIcon} name="ShareAltOutlined"/>
             <Text className={styles.shareText}>分享</Text>
           </Button>
