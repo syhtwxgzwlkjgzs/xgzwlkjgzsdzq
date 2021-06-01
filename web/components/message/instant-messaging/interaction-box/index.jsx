@@ -69,7 +69,7 @@ const InteractionBox = (props) => {
       });
       if (ret.code === 0) {
         setTypingValue('');
-        Router.replace({url: `/message?page=chat&dialogId=${ret.data.dialogId}`});
+        Router.replace({ url: `/message?page=chat&dialogId=${ret.data.dialogId}` });
       } else {
         Toast.error({ content: ret.message });
       }
@@ -92,6 +92,51 @@ const InteractionBox = (props) => {
     uploadRef.current.click();
   };
 
+  // 图片上传之前，true-允许上传，false-取消上传
+  const beforeUpload = (cloneList) => {
+    const { webConfig } = props.site;
+    if (!webConfig) return false;
+
+    const file = cloneList[0];
+    const { supportImgExt, supportMaxSize } = webConfig.setAttach;
+    const imageType = file.name.match(/\.([^\.]+)$/)[1].toLocaleLowerCase();
+    const imageSize = file.size;
+    const isLegalType = supportImgExt.toLocaleLowerCase().includes(imageType);
+    const isLegalSize = imageSize > 0 && imageSize < supportMaxSize * 1024 * 1024;
+
+    if (!isLegalType) {
+      Toast.info({ content: `仅支持${supportImgExt}类型的图片` });
+      return false;
+    }
+
+    if (!isLegalSize) {
+      Toast.info({ content: `仅支持0 ~ ${supportMaxSize}MB的图片` });
+      return false;
+    }
+
+    return true;
+  }
+
+  const onImgChange = async (e) => {
+    const files = e.target.files;
+    if (!beforeUpload(files)) return; // 图片上传前校验
+
+    toastInstance = Toast.loading({
+      content: '图片发送中...',
+      duration: 0,
+    });
+    const formData = new FormData();
+    formData.append('file', files[0]);
+    formData.append('type', 1);
+    const ret = await createAttachment(formData);
+    const { code, data } = ret;
+    if (code === 0) {
+      submit({ imageUrl: data.url });
+    } else {
+      Toast.error({ content: ret.message });
+    }
+  }
+
   const recordCursor = (e) => {
     setCursorPosition(e.target.selectionStart);
   };
@@ -108,66 +153,50 @@ const InteractionBox = (props) => {
         style={{display: 'none'}}
         type="file"
         ref={uploadRef}
-        onChange={async (e) => {
-          toastInstance = Toast.loading({
-            content: '图片发送中...',
-            duration: 0,
-          });
-          const formData = new FormData();
-          formData.append('file', e.target.files[0]);
-          formData.append('type', 1);
-          const ret = await createAttachment(formData);
-          const { code, data } = ret;
-          if (code === 0) {
-            submit({ imageUrl: data.url });
-          } else {
-            Toast.error({ content: ret.message });
-          }
-        }}
-        // multiple='1'
+        onChange={onImgChange}
         accept={ACCEPT_IMAGE_TYPES.join(',')}
       />
 
       {platform === 'h5' && (
         <>
-          <div className={styles.h5InteractionBox} style={{bottom: showEmoji ? '200px' : 0}}>
-          <div className={styles.inputWrapper}>
-            <Input
-              value={typingValue}
-              placeholder=" 请输入内容"
-              onChange={(e) => {
-                setTypingValue(e.target.value);
-                recordCursor(e);
-              }}
-              onBlur={(e) => {
-                recordCursor(e);
-              }}
-            />
-            <div className={styles.tools}>
-              <div>
-                <Icon name="SmilingFaceOutlined" size={20} onClick={() => {
-                  setShowEmoji(!showEmoji);
-                }} />
-              </div>
-              <div className={styles.pictureUpload}>
-                <Icon name="PictureOutlinedBig" size={20} onClick={() => {
-                  uploadImage();
-                }} />
+          <div className={styles.h5InteractionBox} style={{ bottom: showEmoji ? '200px' : 0 }}>
+            <div className={styles.inputWrapper}>
+              <Input
+                value={typingValue}
+                placeholder=" 请输入内容"
+                onChange={(e) => {
+                  setTypingValue(e.target.value);
+                  recordCursor(e);
+                }}
+                onBlur={(e) => {
+                  recordCursor(e);
+                }}
+              />
+              <div className={styles.tools}>
+                <div>
+                  <Icon name="SmilingFaceOutlined" size={20} onClick={() => {
+                    setShowEmoji(!showEmoji);
+                  }} />
+                </div>
+                <div className={styles.pictureUpload}>
+                  <Icon name="PictureOutlinedBig" size={20} onClick={() => {
+                    uploadImage();
+                  }} />
+                </div>
               </div>
             </div>
+            <div className={styles.submit}>
+              <Button type="primary" onClick={doSubmitClick}>
+                发送
+              </Button>
+            </div>
           </div>
-          <div className={styles.submit}>
-            <Button type="primary" onClick={doSubmitClick}>
-              发送
-            </Button>
-          </div>
-        </div>
-        <div className={styles.emoji}>
-          <Emoji
-            onEmojiBlur={() => setShowEmoji(false)}
-            show={showEmoji}
-            emojis={threadPost.emojis}
-            onClick={insertEmoji}
+          <div className={styles.emoji}>
+            <Emoji
+              onEmojiBlur={() => setShowEmoji(false)}
+              show={showEmoji}
+              emojis={threadPost.emojis}
+              onClick={insertEmoji}
             />
           </div>
         </>
@@ -189,7 +218,7 @@ const InteractionBox = (props) => {
             </div>
             <div className={styles.pictureUpload}>
               <Upload
-                handleUploadChange={() => {}}
+                handleUploadChange={() => { }}
                 isCustomUploadIcon={true}
               >
                 <Icon name="PictureOutlinedBig" size={20} onClick={uploadImage} />
@@ -223,4 +252,4 @@ const InteractionBox = (props) => {
   );
 };
 
-export default inject('message', 'user', 'threadPost')(observer(InteractionBox));
+export default inject('message', 'user', 'threadPost', 'site')(observer(InteractionBox));
