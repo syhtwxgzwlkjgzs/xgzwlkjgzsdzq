@@ -39,14 +39,20 @@ export class MessageIndex extends Component {
     };
   }
 
-  async componentDidMount() {
-    await this.fetchDialogData(1);
+  componentDidMount() {
+    this.updateUnread();
+  }
+
+  componentWillReveiceProps() {
+    this.updateUnread();
+  }
+
+  updateUnread() {
     const { threadUnread, financialUnread, accountUnread } = this.props.message;
     const items = [...this.state.items];
     items[0].totalCount = threadUnread;
     items[1].totalCount = financialUnread;
     items[2].totalCount = accountUnread;
-
     this.setState({ items });
   }
 
