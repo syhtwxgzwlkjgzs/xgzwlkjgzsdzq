@@ -35,14 +35,30 @@
 .main {
   background: var(--color-white);
   width: 100%;
+  position: relative;
 }
 
 .button {
-  margin-top: $margin-4n;
+  padding-top: rem($margin-4n);
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
+}
+
+.operates {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  .operate {
+    margin-right: rem($margin-6n);
+    color: $text-color-regular;
+
+    &.actived {
+      color: $primary-color;
+    }
+  }
 }
 
 .input {
@@ -63,4 +79,51 @@
   Text {
     margin-top: $margin-1n;
   }
+}
+
+
+.emojis {
+  position: absolute;
+  left: 0;
+  bottom: 50px;
+  height: 218px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: $zindex-dialog;
+  overflow-y: scroll
+}
+
+.atSelect {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: $zindex-dialog;
+  overflow-y: scroll
+}
+
+.imageUpload {
+  margin: $margin-2n 0;
+
+  :global {
+    .dzq-upload.is-card {
+      padding: 0;
+    }
+    .dzq-upload__area,
+    .dzq-upload-list-card__item {
+      width: rem(109) !important;
+      height: rem(109) !important;
+      margin: 0 rem(8) rem(8) 0;
+    }
+  }
+}
+
+.disabled {
+  color: $disabled-color;
 }
