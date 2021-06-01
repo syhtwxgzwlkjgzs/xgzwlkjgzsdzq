@@ -40,12 +40,11 @@ export default function H5Header(props) {
             onClick={() => iconClickHandle('/')}
             name="HomeOutlined"
           />
-          {false &&
-            <Icon
-              className={styles.icon}
-              onClick={() => iconClickHandle('/my/notice')}
-              name="MailOutlined"
-            />}
+          <Icon
+            className={styles.icon}
+            onClick={() => iconClickHandle('/message')}
+            name="MailOutlined"
+          />
           <Icon
             className={styles.icon}
             onClick={() => iconClickHandle('/my')}

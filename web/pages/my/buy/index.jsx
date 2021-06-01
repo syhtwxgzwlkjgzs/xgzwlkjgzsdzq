@@ -40,7 +40,7 @@ class Index extends React.Component {
       firstLoading: true, // 首次加载状态判断
       totalCount: 0,
       page: 1,
-    }
+    };
     const { serverIndex, index } = this.props;
     if (serverIndex && serverIndex.threads) {
       index.setThreads(serverIndex.threads);
@@ -75,8 +75,8 @@ class Index extends React.Component {
         });
       }
       this.setState({
-        firstLoading: false
-      })
+        firstLoading: false,
+      });
     }
     this.listenRouterChangeAndClean();
   }
@@ -84,7 +84,7 @@ class Index extends React.Component {
   clearStoreThreads = () => {
     const { index } = this.props;
     index.setThreads(null);
-  }
+  };
 
   listenRouterChangeAndClean() {
     // FIXME: 此种写法不好
@@ -107,7 +107,7 @@ class Index extends React.Component {
         complex: 4,
       },
       perPage: this.perPage,
-      page: this.page,
+      page: this.state.page,
     });
     if (this.state.page <= threadsResp.totalPage) {
       this.setState({
@@ -122,7 +122,15 @@ class Index extends React.Component {
     const { firstLoading } = this.state;
 
     if (platform === 'pc') {
-      return <IndexPCPage firstLoading={firstLoading} dispatch={this.dispatch} />;
+      return (
+        <IndexPCPage
+          firstLoading={firstLoading}
+          page={this.state.page}
+          totalPage={this.state.totalPage}
+          totalCount={this.state.totalCount}
+          dispatch={this.dispatch}
+        />
+      );
     }
 
     return (

@@ -38,9 +38,13 @@ class PartnerInviteH5Page extends React.Component {
   }
   async componentDidMount() {
     try {
-      const { forum, search, router, invite, site } = this.props;
+      const { forum, router, search, invite } = this.props;
       const { platform } = site;
       const perPage = platform === 'pc' ? 5 : 20
+
+      const { inviteCode } = invite.getInviteCode(router);
+      if (inviteCode) invite.setInviteCode(inviteCode);
+
       const usersList = await simpleRequest('readUsersList', {
         params: {
           perPage,
@@ -49,9 +53,11 @@ class PartnerInviteH5Page extends React.Component {
           },
         },
       });
+      forum.setUsersPageData(usersList);
+
       const threadList = await search.getThreadList();
-      const { inviteCode } = router.query;
-      if (inviteCode) invite.setInviteCode(inviteCode);
+      forum.setThreadsPageData(threadList);
+
       const inviteResp = await inviteDetail({
         params: {
           code: inviteCode,
@@ -59,13 +65,12 @@ class PartnerInviteH5Page extends React.Component {
       });
       const nickname = get(inviteResp, 'data.user.nickname', '');
       const avatar = get(inviteResp, 'data.user.avatar', '');
+
       this.setState({
         invitorName: nickname,
         invitorAvatar: avatar,
       });
 
-      forum.setUsersPageData(usersList);
-      forum.setThreadsPageData(threadList);
       forum.setIsLoading(false);
     } catch (e) {
       Toast.error({
@@ -87,7 +92,7 @@ class PartnerInviteH5Page extends React.Component {
       return;
     }
     const { setSite: { siteMode, sitePrice, siteName } = {} } = site.webConfig;
-    if (siteMode === 'pay' && user.paid === false) {
+    if (siteMode === 'pay' && user.paid === true) {
       PayBox.createPayBox({
         data: {      // data 中传递后台参数
           amount: sitePrice,

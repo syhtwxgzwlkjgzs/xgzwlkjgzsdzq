@@ -57,7 +57,7 @@ export default function DzqUpload(props) {
   // TODO: 因为上传组件不支持传class和style，所以在外面增加了一层dom
   const clsName = isCustomUploadIcon ? `${styles['dzq-custom-upload']} ${styles['dzq-upload-reset']} ${className}` : `${styles['dzq-upload-reset']}  ${className}`;
   return (
-    <div className={clsName}>
+    <div className={clsName} onClick={e => e.stopPropagation() }>
       <Upload
         progressRender={(file) => <ProgressRender file={file} />}
         listType={listType}

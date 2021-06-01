@@ -21,13 +21,13 @@ class Index extends React.Component {
           totalCount: 0,
         },
         {
-          iconName: 'MessageOutlined',
+          iconName: 'DiscussOutlined',
           title: '回复我的',
           link: '/message?page=account&subPage=reply',
           totalCount: 0,
         },
         {
-          iconName: 'LikeOutlined',
+          iconName: 'PraiseOutlined',
           title: '点赞我的',
           link: '/message?page=account&subPage=like',
           totalCount: 0,

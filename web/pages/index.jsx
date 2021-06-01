@@ -21,13 +21,12 @@ class Index extends React.Component {
   static async getInitialProps(ctx, { user, site }) {
     const categories = await readCategories({}, ctx);
     const sticks = await readStickList({}, ctx);
-    const sequence = site && site.webConfig && site.webConfig.setSite ? site.webConfig.setSite.siteOpenSort : 0;
 
     const threads = await readThreadList({ params: { filter: {
       sort: 1,
       attention: 0,
       essence: 0
-    }, sequence, perPage: 10, page: 1 } }, ctx);
+    }, sequence: 0, perPage: 10, page: 1 } }, ctx);
 
     return {
       serverIndex: {
@@ -70,7 +69,7 @@ class Index extends React.Component {
     if (!hasThreadsData) {
       try {
         await this.props.index.getReadThreadList({
-          sequence: sequence || (this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0), 
+          sequence, 
           filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
         });
       } catch (error) {

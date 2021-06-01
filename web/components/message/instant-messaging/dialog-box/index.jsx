@@ -3,7 +3,8 @@ import { Avatar, ImagePreviewer } from '@discuzq/design';
 import { diffDate } from '@common/utils/diff-date';
 import { inject, observer } from 'mobx-react';
 import { useRouter } from 'next/router';
-
+import s9e from '@common/utils/s9e';
+import xss from '@common/utils/xss';
 import styles from './index.module.scss';
 
 const DialogBox = (props) => {
@@ -81,7 +82,7 @@ const DialogBox = (props) => {
                 <Avatar image={userAvatar || '/favicon.ico'} circle={true} />
               </div>
               {imageUrl ? (
-                <div className={styles.msgContent}>
+                <div className={`${styles.msgContent} ${styles.msgImgContent}`}>
                   {imageUrl && <img style={{ width: '200px' }} src={imageUrl} onClick={() => {
                     setDefaultImg(imageUrl);
                     setPreviewerVisibled(true);
@@ -89,7 +90,7 @@ const DialogBox = (props) => {
                 </div>
               ) : (
                 <div className={styles.msgContent} dangerouslySetInnerHTML={{
-                  __html: text,
+                  __html: xss(s9e.parse(text)),
                 }}></div>
               )}
             </div>

@@ -52,6 +52,7 @@
   position: static !important;
   display: flex;
   flex-flow: wrap;
+  justify-content: space-around;
   padding: $padding-2n $padding-4n;
   width: calc(100vw - 16px * 2);
   height: 200px;

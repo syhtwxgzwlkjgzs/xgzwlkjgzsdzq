@@ -465,11 +465,55 @@ class UserAction extends SiteStore {
     });
 
     if (updateUserInfoRes.code === 0) {
+      this.userInfo.signature = this.editSignature;
+      this.userInfo.nickname = this.editNickName;
       return updateUserInfoRes.data;
     }
 
-    throw {};
+    throw {
+      Code: updateUserInfoRes.code,
+      Message: updateUserInfoRes.msg,
+    };
   }
+
+   @action
+  async updateEditedUserNickname() {
+    const updateUserInfoRes = await updateUsersUpdate({
+      data: {
+        nickname: this.editNickName,
+      },
+    });
+
+    if (updateUserInfoRes.code === 0) {
+      this.userInfo.nickname = this.editNickName;
+      return updateUserInfoRes.data;
+    }
+
+    throw {
+      Code: updateUserInfoRes.code,
+      Message: updateUserInfoRes.msg,
+    };
+  }
+
+
+  @action
+   async updateEditedUserSignature() {
+     const updateUserInfoRes = await updateUsersUpdate({
+       data: {
+         signature: this.editSignature,
+       },
+     });
+
+     if (updateUserInfoRes.code === 0) {
+       this.userInfo.signature = this.editSignature;
+       return updateUserInfoRes.data;
+     }
+
+     throw {
+       Code: updateUserInfoRes.code,
+       Message: updateUserInfoRes.msg,
+     };
+   }
 
   /**
    * 初次设置用户密码

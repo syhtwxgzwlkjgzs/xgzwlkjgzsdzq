@@ -21,6 +21,7 @@ class UserCenterFans extends React.Component {
     loadMorePage: true,
     splitElement: <div></div>,
     friends: [],
+    isPc: false,
     loadMoreAction: async () => {},
     followHandler: async () => {},
     unFollowHandler: async () => {},
@@ -31,7 +32,7 @@ class UserCenterFans extends React.Component {
   };
 
   constructor(props) {
-    super(props);2;
+    super(props);
     this.state = {
       loading: true,
       fans: {},
@@ -218,7 +219,7 @@ class UserCenterFans extends React.Component {
                 id={user.id}
                 type={this.judgeFollowsStatus(user)}
                 imgUrl={user.avatar}
-                withHeaderUserInfo={false}
+                withHeaderUserInfo={this.props.isPc}
                 onContainerClick={this.props.onContainerClick}
                 userName={user.userName}
                 userGroup={user.groupName}
