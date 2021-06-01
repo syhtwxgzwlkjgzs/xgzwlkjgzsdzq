@@ -26,7 +26,18 @@ import styles from './index.module.scss';
 */
 
 const Index = (props) => {
-  const { header = null, left = null, children = null, right = null, footer = null, onSearch, noMore = false, onRefresh, isOtherPerson = false } = props;
+  const { 
+    header = null, 
+    left = null, 
+    children = null, 
+    right = null, 
+    footer = null, 
+    onSearch, 
+    noMore = false, 
+    onRefresh, 
+    isOtherPerson = false,
+    showLayoutRefresh = true
+  } = props;
 
   const size = useRef('xl');
 
@@ -78,15 +89,17 @@ const Index = (props) => {
   return (
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
-        <div className={styles.headerbox}>
-          <div className={styles.userHeader}>
-            <div className={styles.headImgWrapper}>
-              <UserCenterHeaderImage isOtherPerson={isOtherPerson}/>
-            </div>
-            <UserCenterHead platform='pc'isOtherPerson={isOtherPerson}/>
-          </div>
-        </div>
         <List {...props} className={styles.list} wrapperClass={styles.wrapper}>
+          <div className={styles.headerbox}>
+            <div className={styles.userHeader}>
+              <div className={styles.headImgWrapper}>
+                <UserCenterHeaderImage isOtherPerson={isOtherPerson}/>
+              </div>
+              <UserCenterHead platform='pc'isOtherPerson={isOtherPerson}/>
+            </div>
+          </div>
+
+          <div className={styles.content}>
             {
               showLeft && (
                 <div className={styles.left}>
@@ -97,7 +110,7 @@ const Index = (props) => {
 
             <div className={styles.center}>
               {typeof(children) === 'function' ? children({ ...props }) : children}
-              {/* {onRefresh && <RefreshView noMore={noMore} />} */}
+              {onRefresh && showLayoutRefresh && <RefreshView noMore={noMore} />}
             </div>
 
             {
@@ -107,7 +120,7 @@ const Index = (props) => {
                 </div>
               )
             }
-
+          </div>
         </List>
 
       {typeof(footer) === 'function' ? footer({ ...props }) : footer}
