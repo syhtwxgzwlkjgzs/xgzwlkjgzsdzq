@@ -19,6 +19,7 @@ class index extends Component {
   constructor(props) {
     super(props);
     this.props.user.initEditInfo();
+    this.props.user.genRebindQrCode();
     this.state = {
       isClickNickName: false,
       accountEditorVisible: false,
