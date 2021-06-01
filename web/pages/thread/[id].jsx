@@ -77,11 +77,11 @@ class Detail extends React.Component {
   async componentDidMount() {
     const { id } = this.props.router.query;
     // 判断缓存
-    // const oldId = this.props?.thread?.threadData?.threadId;
-    // if (Number(id) === oldId && id && oldId) {
-    //   return;
-    // }
-    // this.props.thread.reset();
+    const oldId = this.props?.thread?.threadData?.threadId;
+    if (Number(id) === oldId && id && oldId) {
+      return;
+    }
+    this.props.thread.reset();
 
     if (id) {
       this.getPageDate(id);

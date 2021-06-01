@@ -21,6 +21,11 @@ class ThreadAction extends ThreadStore {
   }
 
   @action
+  setScrollDistance(scrollDistance) {
+    this.scrollDistance = scrollDistance;
+  }
+
+  @action
   async fetchAuthorInfo(userId) {
     const userRes = await readUser({ params: { pid: userId } });
     if (userRes.code === 0) {
