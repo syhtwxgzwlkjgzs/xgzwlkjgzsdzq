@@ -2,7 +2,6 @@ import Taro from '@tarojs/taro';
 import Toast from '@discuzq/design/dist/components/toast';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import { inject, observer} from 'mobx-react'
-import { type } from 'os';
 /**
  * @param {boolean} needShareline 是否需要分享到朋友圈
  * @param {boolean} needLogin 是否需要登录
@@ -36,16 +35,17 @@ function withShare(opts = {}) {
         }
       }
       onShareTimeline(){
-        if (this.$getData && typeof this.$getData === 'function') {
-          var { menuData = defalut } = this.$getData()
+        if (this.$getShareData && typeof this.$getShareData === 'function') {
+          var { menuData = defalut } = this.$getShareData()
           return menuData
         }
+        return defalut
       }
       onShareAppMessage = (res) => {
           const { user } = this.props
           const { shareData } = res.target.dataset
-          if (this.$getData && typeof this.$getData === 'function') {
-            var { menuData = defalut} = this.$getData(shareData)
+          if (this.$getShareData && typeof this.$getShareData === 'function') {
+            var { menuData = defalut} = this.$getShareData()
           }
           if (res.from === 'menu') {
             return menuData

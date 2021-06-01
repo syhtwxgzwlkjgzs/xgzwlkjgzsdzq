@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import styles from './index.module.scss';
 import Tip from '../tip';
 import Icon from '@discuzq/design/dist/components/icon/index';
-import { View, Text, Button } from '@tarojs/components'
-
+import { View, Text } from '@tarojs/components'
+import ShareButton from '../shareButton'
 /**
  * 帖子底部内容
  * @prop {array}    userImgs 点赞分享用户信息
@@ -52,20 +52,7 @@ const Index = ({
   const needHeight = useMemo(() => {
     return userImgs.length !== 0 || comment > 0 || sharing > 0
   }, [userImgs, comment, sharing])
-  const threadId = tipData.threadId
-  const thread = index.threads?.pageData || []
-  let threadTitle = ''
-  for(let i of thread) {
-    if(i.threadId == threadId) {
-        threadTitle =  i.title
-        break
-    }
-  }
-  const shareData = {
-    threadId: threadId,
-    title:threadTitle,
-    path: `/subPages/thread/index?id=${threadId}`
-  }
+  const thread = index
   return (
     <View>
       <View className={needHeight ? styles.user : styles.users}>
@@ -92,18 +79,9 @@ const Index = ({
         {
           postList.map((item, index) => (
               item.name === '分享'?(
-                <Button  plain='true' className={styles.fabulous} openType='share' data-shareData={shareData}>
-                  <View className={styles.fabulousIcon}>
-                    <Icon
-                    className={`${styles.icon} ${item.type}`}
-                    name={item.icon}
-                    >
-                  </Icon>
-                  </View>
-                  <Text className={styles.fabulousPost}>
-                  {item.name}
-                </Text>
-                </Button>
+                <ShareButton  tipData={tipData} key={index} index={thread} item={item}>
+                  
+                </ShareButton>
               ):
               (<View key={index} className={styles.fabulous} onClick={item.event}>
                  <View className={styles.fabulousIcon}>
@@ -123,4 +101,4 @@ const Index = ({
     </View>
   );
 };
-export default React.memo(Index);
+export default  React.memo(Index);

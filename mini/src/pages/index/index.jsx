@@ -13,7 +13,7 @@ import { inject, observer} from 'mobx-react'
   needLogin: true
 })
 class Index extends React.Component {
-  $getShareData ({}) {
+  $getShareData () {
     const { site } = this.props 
     const Title = site.webConfig?.setSite?.siteName || ''
     const Path='pages/index/index'
