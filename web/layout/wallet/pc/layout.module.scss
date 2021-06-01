@@ -63,6 +63,18 @@
           font-weight: normal;
           font-size: rem($font-size-primary);
           color: var(--color-text-primary);
+          box-sizing: border-box;
+          display: flex;
+          align-items: center;
+          justify-content: space-around;
+          :global {
+            .dzq-dropdown {
+              width: 100%;
+            }
+            .dzq-dropdown__trigger {
+              justify-content: space-around;
+            }
+          }
         }
       }
 

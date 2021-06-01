@@ -1,20 +1,21 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-
 import Header from '@components/header';
 import Copyright from '@components/copyright';
-import { Icon } from '@discuzq/design';
-
+import { Dropdown, Icon } from '@discuzq/design';
 import WalletInfo from './components/wallet-info/index';
 import RecordList from './components/record-list/index';
 import NoMore from './components/no-more';
 import Tabs from './components/tabs';
 import WithdrawalPop from './components/withdrawal-popup';
-
 import layout from './layout.module.scss';
+import { INCOME_DETAIL_CONSTANTS, EXPAND_DETAIL_CONSTANTS, CASH_DETAIL_CONSTANTS } from '@common/constants/wallet';
+import { typeFilter } from './adapter';
+import { formatDate } from '@common/utils/format-date.js';
 
 @inject('site')
+@inject('wallet')
 @observer
 class ThreadPCPage extends React.Component {
   constructor(props) {
@@ -23,155 +24,122 @@ class ThreadPCPage extends React.Component {
       recordData: [],
       type: 'income',
       showWithdrawalPopup: false, // 提现弹框是否显示
+      page: 1,
+      totalPage: 1,
+      selectType: 'all', // 筛选类型
     };
-    // 伪造的数据incomeData、payData、withdrawalData
-    this.incomeData = [
-      {
-        id: 1,
-        type: 0,
-        money: 106,
-        time: '2021-05-07 14:11:50',
-      },
-      {
-        id: 7,
-        type: 1,
-        money: 86,
-        time: '2021-05-01 14:11:50',
-      },
-      {
-        id: 2,
-        type: 2,
-        money: 86,
-        time: '2021-05-01 14:11:50',
-      },
-      {
-        id: 3,
-        type: 3,
-        money: 1446,
-        time: '2021-04-07 14:11:50',
-      },
-      {
-        id: 4,
-        type: 4,
-        money: 1446,
-        time: '2021-04-07 14:11:50',
-      },
-      {
-        id: 5,
-        type: 5,
-        money: 1446,
-        time: '2021-04-07 14:11:50',
-      },
-      {
-        id: 6,
-        type: 6,
-        money: 1446,
-        time: '2021-04-07 14:02:10',
-      },
-    ];
-    this.payData = [
-      {
-        id: 1,
-        type: 0,
-        money: 106,
-        time: '2021-05-07 14:11:50',
-        payStatus: false,
-      },
-      {
-        id: 2,
-        type: 1,
-        money: 86,
-        time: '2021-05-01 14:11:50',
-        payStatus: true,
-      },
-      {
-        id: 3,
-        type: 2,
-        money: 1446,
-        time: '2021-04-07 14:11:50',
-        payStatus: false,
-      },
-      {
-        id: 4,
-        type: 3,
-        money: 106,
-        time: '2021-05-07 14:11:50',
-        payStatus: false,
-      },
-      {
-        id: 5,
-        type: 4,
-        money: 86,
-        time: '2021-05-01 14:11:50',
-        payStatus: true,
-      },
-      {
-        id: 6,
-        type: 5,
-        money: 1446,
-        time: '2021-04-07 14:11:50',
-        payStatus: false,
-      },
-    ];
-    this.withdrawalData = [
-      {
-        id: 1,
-        money: 106,
-        time: '2021-05-07 14:11:50',
-        withdrawalStatus: 1,
-        serialNumber: 123456789951,
-      },
-      {
-        id: 2,
-        money: 86,
-        time: '2021-05-01 14:11:50',
-        withdrawalStatus: 2,
-        serialNumber: 1234541515951,
-      },
-      {
-        id: 3,
-        money: 1446,
-        time: '2021-04-07 14:11:50',
-        withdrawalStatus: 3,
-        serialNumber: 123456654951,
-      },
-      {
-        id: 4,
-        money: 146,
-        time: '2021-04-07 14:11:50',
-        withdrawalStatus: 0,
-        serialNumber: 123456654951,
-      },
-    ];
   }
 
   async componentDidMount() {
-    this.setState({
-      recordData: this.incomeData,
-    });
+    const { getUserWalletInfo } = this.props.wallet;
+    // 获取钱包信息
+    await getUserWalletInfo();
+    await this.initStateAndFetch()
   }
 
-  // 点击选择列表种类
-  selectClick = (val) => {
-    console.log(val);
-    if (val === 'income') {
-      this.setState({
-        recordData: this.incomeData,
-        type: val,
+  initStateAndFetch = () => {
+    this.setState(
+      {
+        page: 1,
+        totalPage: 1,
+      },
+      () => {
+        switch (this.state.type) {
+          case 'income':
+            this.fetchIncomeDetail();
+            break;
+          case 'pay':
+            this.fetchExpendDetail();
+            break;
+          case 'withdrawal':
+            this.fetchCashDetail();
+            break;
+        }
+      },
+    );
+  };
+
+  fetchIncomeDetail = async () => {
+    try {
+      const detailRes = await this.props.wallet.getInconmeDetail({
+        page: this.state.page,
+        type: this.state.selectType,
+        date: this.state.consumptionTime,
       });
-    } else if (val === 'pay') {
-      this.setState({
-        recordData: this.payData,
-        type: val,
-      });
-    } else {
-      this.setState({
-        recordData: this.withdrawalData,
-        type: val,
+      const pageState = {
+        totalPage: detailRes.totalPage,
+      };
+      if (this.state.page <= pageState.totalPage) {
+        Object.assign(pageState, {
+          page: this.state.page + 1,
+        });
+      }
+      this.setState(pageState);
+    } catch (e) {
+      console.error(e);
+      if (e.Code) {
+        Toast.error({
+          content: e.Msg,
+          duration: 1000,
+        });
+      }
+    }
+  };
+
+  fetchExpendDetail = async () => {
+    const detailRes = await this.props.wallet.getExpendDetail({
+      page: this.state.page,
+      type: this.state.selectType,
+      date: this.state.consumptionTime,
+    });
+    const pageState = {
+      totalPage: detailRes.totalPage,
+    };
+    if (this.state.page <= pageState.totalPage) {
+      Object.assign(pageState, {
+        page: this.state.page + 1,
       });
     }
-    return true;
-  }
+    this.setState(pageState);
+  };
+
+  fetchCashDetail = async () => {
+    const detailRes = await this.props.wallet.getCashLog({
+      page: this.state.page,
+      type: this.state.selectType,
+      date: this.state.consumptionTime,
+    });
+    const pageState = {
+      totalPage: detailRes.totalPage,
+    };
+    if (this.state.page <= pageState.totalPage) {
+      Object.assign(pageState, {
+        page: this.state.page + 1,
+      });
+    }
+    this.setState(pageState);
+  };
+
+  // 切换选项卡
+  selectClick = (val) => {
+    console.log(val);
+    this.setState({
+      type: val,
+    });
+    this.initSelectType(() => {
+      this.initStateAndFetch();
+    });
+  };
+
+  initSelectType = (callback) => {
+    this.setState(
+      {
+        selectType: 'all',
+      },
+      callback,
+    );
+  };
+
   // 点击提现
   showWithrawal = () => {
     this.setState({ showWithdrawalPopup: true });
@@ -183,13 +151,114 @@ class ThreadPCPage extends React.Component {
     this.setState({ showWithdrawalPopup: false });
   }
 
+  listRenderDataFilter = (data) => {
+    const targetTypeData = typeFilter(data, this.state.selectType);
+    const targetDateData = typeFilter(targetTypeData, formatDate(this.state.consumptionTime, 'yyyy-MM'));
+    if (Object.keys(targetDateData).length === 0) return [];
+    return Object.values(targetDateData).reduce((fullData, pageData) => [...fullData, ...pageData]);
+  };
+
+  // 获取recordData
+  getRecordData = () => {
+    const { incomeDetail = {}, expandDetail = {}, cashDetail = {} } = this.props.wallet;
+    const incomeData = this.listRenderDataFilter(incomeDetail) || []
+    const expandData = this.listRenderDataFilter(expandDetail) || []
+    const cashData = this.listRenderDataFilter(cashDetail) || []
+    if (this.state.type === 'income') { // 收入
+      return incomeData
+    } else if (this.state.type === 'pay') {
+      return expandData
+    } else if (this.state.type === 'withdrawal') {
+      return cashData
+    }
+  }
+
+  // 点击冻结金额
+  onFrozenAmountClick = () => {
+
+  }
+
+  // 点击菜单 选择不同类型
+  handleChangeSelectedType = (value) => {
+    this.setState({
+      selectType: value
+    })
+  }
+
+  renderDropdownMenu = () => {
+    const data = this.renderSelectContent()
+    return (
+      <Dropdown.Menu defaultKey={['all']}>
+        {
+          data.map(item => {
+            return <Dropdown.Item id={item.id} >{item.title}</Dropdown.Item>
+          })
+        }
+      </Dropdown.Menu>
+    )
+  }
+
+  // 根据当前选项渲染下拉选择器内容
+  renderSelectContent = () => {
+    const defaultType = {
+      id: 'all',
+    };
+
+    let dataSource = {};
+    switch (this.state.type) {
+      case 'income':
+        dataSource = INCOME_DETAIL_CONSTANTS;
+        defaultType.title = '全部类型';
+        break;
+      case 'pay':
+        dataSource = EXPAND_DETAIL_CONSTANTS;
+        defaultType.title = '全部类型';
+        break;
+      case 'withdrawal':
+        dataSource = CASH_DETAIL_CONSTANTS;
+        defaultType.title = '全部状态';
+    }
+
+    const dataSourceArray = Object.values(dataSource).map(item => ({ title: item.text, id: item.code }));
+
+    dataSourceArray.unshift(defaultType);
+
+    return dataSourceArray;
+  };
+
+  // 点击切换tag的显示
+  renderSelectedType = () => {
+    if (this.state.selectType === 'all') {
+      if (this.state.type === 'withdrawal') {
+        return '全部状态';
+      }
+      return '全部类型';
+    }
+    let arr = {};
+    switch (this.state.type) {
+      case 'income':
+        arr = INCOME_DETAIL_CONSTANTS;
+        break;
+      case 'pay':
+        arr = EXPAND_DETAIL_CONSTANTS;
+        break;
+      case 'withdrawal':
+        arr = CASH_DETAIL_CONSTANTS;
+    }
+    for (const key in arr) {
+      if (arr[key].code === this.state.selectType) {
+        return arr[key].text || '';
+      }
+    }
+  }
+
   render() {
-    console.log(this.props.walletData);
     const recordType = {
       income: '收入明细',
       pay: '支出明细',
       withdrawal: '提现记录',
     };
+    const { walletInfo } = this.props.wallet;
     return (
       <div className={layout.container}>
         <div className={layout.header}>
@@ -200,26 +269,32 @@ class ThreadPCPage extends React.Component {
           <div className={layout.bodyLeft}>
             <div className={layout.header}>
               {
-                this.state.type === 'income' ? <Icon name='EditOutlined' size='18' color='#3ac15f'></Icon> : ''
+                this.state.type === 'income' ? <Icon name='TicklerOutlined' size='18' color='#3ac15f'></Icon> : ''
               }
               {
-                this.state.type === 'pay' ? <Icon name='EditOutlined' size='18' color='#2469f6'></Icon> : ''
+                this.state.type === 'pay' ? <Icon name='WallOutlined' size='18' color='#2469f6'></Icon> : ''
               }
               {
-                this.state.type === 'withdrawal' ? <Icon name='EditOutlined' size='18' color='#e02433'></Icon> : ''
+                this.state.type === 'withdrawal' ? <Icon name='TransferOutOutlined' size='18' color='#e02433'></Icon> : ''
               }
               <div className={layout.title}>{recordType[this.state.type]}</div>
             </div>
             <div className={layout.choice}>
               <div className={layout.choiceLeft}>
                 <div className={layout.choiceType}>2020年10月</div>
-                <div className={layout.choiceType}>全部类型</div>
+                <div className={layout.choiceType}>
+                  <Dropdown onChange={this.handleChangeSelectedType} placement="right" trigger="click" menu={this.renderDropdownMenu()} >
+                    <div>
+                      {this.renderSelectedType()}
+                    </div>
+                  </Dropdown>
+                </div>
               </div>
               <div className={layout.recordNumber}>共有{16}条记录</div>
             </div>
             <div className={layout.recordList}>
-              <RecordList data={this.state.recordData} type={this.state.type}></RecordList>
-              <NoMore></NoMore>
+              <RecordList data={this.getRecordData()} type={this.state.type}></RecordList>
+              {/* <NoMore></NoMore> */}
             </div>
           </div>
 
@@ -227,9 +302,10 @@ class ThreadPCPage extends React.Component {
           <div className={layout.bodyRigth}>
             <div className={layout.walletInfo}>
               <WalletInfo
-                walletData={this.props.walletData}
+                walletData={walletInfo}
                 webPageType='PC'
                 showWithrawal={() => this.showWithrawal()}
+                onFrozenAmountClick={this.onFrozenAmountClick}
               >
               </WalletInfo>
             </div>

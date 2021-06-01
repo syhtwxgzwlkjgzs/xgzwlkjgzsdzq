@@ -34,7 +34,7 @@ export default function NoMore(props) {
           </div>
         </div>
         <div className={styles.rigth} onClick={() => onSelectClick('income')}>
-          <Icon name='EditOutlined' size='14' color='#3ac15f'></Icon>
+          <Icon name='TicklerOutlined' size='14' color='#3ac15f'></Icon>
           <span className={`${selected === 'income' ? styles.textColor : ''} ${styles.text}`}>收入明细</span>
         </div>
       </div>
@@ -45,7 +45,7 @@ export default function NoMore(props) {
           </div>
         </div>
         <div className={styles.rigth} onClick={() => onSelectClick('pay')}>
-          <Icon name='EditOutlined' size='14' color='#2469f6'></Icon>
+          <Icon name='WallOutlined' size='14' color='#2469f6'></Icon>
           <span className={`${selected === 'pay' ? styles.textColor : ''} ${styles.text}`}>支出明细</span>
         </div>
       </div>
@@ -56,7 +56,7 @@ export default function NoMore(props) {
           </div>
         </div>
         <div className={styles.rigth} onClick={() => onSelectClick('withdrawal')}>
-          <Icon name='EditOutlined' size='14' color='#e02433'></Icon>
+          <Icon name='TransferOutOutlined' size='14' color='#e02433'></Icon>
           <span className={`${selected === 'withdrawal' ? styles.textColor : ''} ${styles.text}`}>提现记录</span>
         </div>
       </div>
