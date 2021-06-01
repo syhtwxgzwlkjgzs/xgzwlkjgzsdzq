@@ -10,10 +10,9 @@ import { inject, observer} from 'mobx-react'
 function withShare(opts = {}) {
   
   // 设置默认
-  const defalut = {
-      title:'Discez!Q',
-      path: 'pages/index/index'
-  }
+  const defalutTitle = 'Discez!Q'
+  const defalutPath = 'pages/index/index'
+  
   let menus = []
   const { needShareline = true, needLogin = true } = opts
   if(needShareline) {
@@ -28,7 +27,7 @@ function withShare(opts = {}) {
       componentDidMount() {
         Taro.showShareMenu({
           withShareTicket: true,
-          menus :menus
+          menus :['shareAppMessage']
         });
         if (super.componentWillMount) {
           super.componentWillMount();
@@ -37,7 +36,11 @@ function withShare(opts = {}) {
       onShareTimeline(){
         if (this.$getShareData && typeof this.$getShareData === 'function') {
           const  shareData  = this.$getShareData()
-          return shareData
+          const { title=defalutTitle, imageUrl=''} = shareData
+          return {
+            title,
+            imageUrl
+          }
         }
         return defalut
       }
@@ -56,7 +59,11 @@ function withShare(opts = {}) {
           if (this.$getShareData && typeof this.$getShareData === 'function') {
              shareData = this.$getShareData(res)
           }
-          return shareData || defalut
+          const { title=defalutTitle, path=defalutPath } = shareData
+          return {
+            title,
+            path
+          }
           
     }
 

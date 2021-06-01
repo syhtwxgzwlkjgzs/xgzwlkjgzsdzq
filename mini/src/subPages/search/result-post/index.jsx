@@ -24,7 +24,11 @@ class Index extends React.Component {
       await search.getThreadList({ search: keyword });
   }
   $getShareData (data) {
-    const shareData = data.target.dataset.shareData
+    const shareData = data.target?.dataset?.shareData
+    if(!shareData) {
+      return {
+      }
+    }
     const { from } = shareData
     if(from && from === 'thread') {
       const { user } = this.props

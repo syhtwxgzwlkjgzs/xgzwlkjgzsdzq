@@ -20,16 +20,18 @@ class Index extends React.Component {
     if(!data) {
       return {
         title,
-        path
       }
     }
     if (data.from === 'menu') {
       return {
-        title:title,
-        path:path
+        title,
+        path
       }
     }
-    const shareData = data.target.dataset.shareData
+    const shareData = data.target?.dataset?.shareData
+    if(!shareData) {
+      return {}
+    }   
     const { from } = shareData
     if(from && from === 'thread') {
       const { user } = this.props
