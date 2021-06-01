@@ -119,7 +119,7 @@ class Index extends Component {
       Router.push({ url: `/thread/${item.threadId}` });
     }
     if (type === 'chat') {
-      Router.push({ url: `/message?page=chat&dialogId=${item.dialogId}` });
+      Router.push({ url: `/message?page=chat&dialogId=${item.dialogId}&username=${item.username}` });
     }
   };
 
@@ -139,7 +139,7 @@ class Index extends Component {
                 [styles.badge]: type === 'chat' && item.unreadCount > 9
               })}
               circle
-              info={ type === 'chat' && this.getUnReadCount(item.unreadCount)}
+              info={type === 'chat' && this.getUnReadCount(item.unreadCount)}
             >
               {avatarUrl ? (
                 <Avatar image={avatarUrl} circle={true} />
