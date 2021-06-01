@@ -5,17 +5,21 @@ import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import List from '@components/list';
 import { Button, Toast, Avatar, Spin } from '@discuzq/design';
-import NoData from '@components/no-data';
-import SectionTitle from '@components/section-title';
 import { get } from '@common/utils/get';
-import ActiveUsers from '../../../search/h5/components/active-users';
 import PopularContents from '../../../search/h5/components/popular-contents';
-import layout from './index.module.scss';
-import SiteInfo from '../site-info';
+import SiteInfo from './site-info';
 import { inviteDetail } from '@server';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import PayBox from '@components/payBox';
 import { simpleRequest } from '@common/utils/simple-request';
+import { numberFormat } from '@common/utils/number-format';
+import { getSiteUpdateTime } from '@common/utils/get-site-uptade-time';
+import PartnerInviteWrap from './partner-invite-wrap';
+import Copyright from '@components/copyright';
+import PartnerInviteHot from './partner-invite-hot';
+import PartnerInviteUser from './partner-invite-user';
+import pclayout from './pc.module.scss';
+import mlayout from './index.module.scss';
 
 @inject('site')
 @inject('index')
@@ -34,9 +38,12 @@ class PartnerInviteH5Page extends React.Component {
   }
   async componentDidMount() {
     try {
-      const { forum, search, router, invite } = this.props;
+      const { forum, search, router, invite, site } = this.props;
+      const { platform } = site;
+      const perPage = platform === 'pc' ? 5 : 20
       const usersList = await simpleRequest('readUsersList', {
         params: {
+          perPage,
           filter: {
             hot: 1,
           },
@@ -112,90 +119,107 @@ class PartnerInviteH5Page extends React.Component {
     window.location.href = '/';
   }
 
-  render() {
+  // 右侧 - 潮流话题 粉丝 版权信息
+  renderRight = () => {
+    const { inviteData } = this.props.invite;
     const { site, forum } = this.props;
-    const { inviteCode } = this.props.router.query;
-    const { platform, webConfig } = site;
-    const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
-    const { usersPageData = [], threadsPageData = [], isLoading } = forum;
-    const { invitorName, invitorAvatar } = this.state;
+    const { platform } = site;
+    const { threadTotal, updataTime } = forum;
+    const layout = platform === 'h5' ? mlayout : pclayout;
+    if (platform === 'h5') {
+      return <></>;
+    }
+    // 站点介绍
     return (
-      <List className={layout.page} allowRefresh={false}>
-        <HomeHeader hideInfo mode='join'/>
+      <>
+        <div className={layout.user_card_wrap}>
+          <div className={layout.user_card_main}>
+            <div className={layout.user_card_avatar}>
+              <Avatar
+                size={'big'}
+                image={inviteData.avatar}
+                text={inviteData.nickname && inviteData.nickname.substring(0, 1)}
+              />
+            </div>
+            <div className={layout.user_card_info}>
+              <div className={layout.user_info_name}>奶罩</div>
+              <div className={layout.user_info_tag}>站长</div>
+              <div className={layout.site_info}>
+                <div className={layout.site_status_list}>
+                    <span className={layout.site_status_label}>更新</span>
+                    <span className={layout.site_status_item}>{updataTime && getSiteUpdateTime(updataTime)}</span>
+                </div>
+                <div className={layout.site_status_list}>
+                    <span className={layout.site_status_label}>成员</span>
+                    <span className={layout.site_status_item}>{numberFormat(site?.webConfig?.other?.countUsers)}</span>
+                </div>
+                <div className={layout.site_status_list}>
+                    <span className={layout.site_status_label}>主题</span>
+                    <span className={layout.site_status_item}>{numberFormat(threadTotal)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className={layout.user_card_button}>¥1266 立即加入</div>
+          <div className={layout.bottom_title}>有效期：<span>200天</span></div>
+        </div>
+        <Copyright/>
+      </>
+    );
+  }
+
+  render() {
+    const { site: { platform, webConfig }, forum: { threadTotal, updataTime} } = this.props;
+    const { inviteCode } = this.props.router.query;
+    const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
+    const { invitorName, invitorAvatar } = this.state;
+    const layout = platform === 'h5' ? mlayout : pclayout;
+    return (
+      <PartnerInviteWrap renderRight={this.renderRight}>
         <div className={layout.content}>
           {/* 站点信息 start */}
-          <SiteInfo/>
+          <SiteInfo threadTotal={threadTotal} updataTime={ updataTime }/>
           {/* 站点信息 end */}
           {/* 站点用户 start */}
-          <div className={layout.users}>
-          <SectionTitle isShowMore={false} icon={{ type: 2, name: 'MemberOutlined' }} title="活跃用户" onShowMore={this.redirectToSearchResultUser} />
-            {
-              !isLoading && usersPageData?.length
-                ? <ActiveUsers data={usersPageData} onItemClick={this.onUserClick} />
-                : <></>
-            }
-            {
-              !isLoading && !threadsPageData?.length
-                ? <NoData />
-                : <></>
-            }
-            {
-              isLoading
-                ? <div className={layout.spinner}>
-                    <Spin type="spinner" />
-                  </div>
-                : <></>
-            }
-          </div>
+          <PartnerInviteUser/>
           {/* 站点用户 end */}
           {/* 热门内容预览 start */}
-          <div className={layout.hot}>
-            <SectionTitle isShowMore={false} icon={{ type: 3, name: 'HotOutlined' }} title="热门内容预览" onShowMore={this.redirectToSearchResultPost} />
-            {
-              !isLoading && threadsPageData?.length
-                ? <PopularContents data={threadsPageData} onItemClick={this.onPostClick} />
-                : <></>
-            }
-            {
-              !isLoading && !threadsPageData?.length
-                ? <NoData />
-                : <></>
-            }
-            {
-              isLoading
-                ? <div className={layout.spinner}>
-                    <Spin type="spinner" />
-                  </div>
-                : <></>
-            }
-          </div>
+          <PartnerInviteHot/>
           {/* 热门内容预览 end */}
-          <div className={layout.maskLayer}></div>
-          <div className={layout.bottom}>
-            {
-              inviteCode
-                ? <div className={layout.bottom_tips}>
-                    {/* <img className={layout.bottom_tips_img} src={ invitorAvatar } alt=""/> */}
-                    <Avatar
-                      size='small'
-                      text={ invitorName?.substring(0, 1)}
-                      className={layout.bottom_tips_img}
-                      image={ invitorAvatar }/>
-                    <span className={layout.bottom_tips_text}>
-                      <span>{ invitorName } 邀请您加入站点</span>
-                      {siteMode === 'pay' ? <span>，可获得返现 ¥{((10 - siteMasterScale) * sitePrice / 10).toFixed(2)}</span> : ''}
-                    </span>
-                    <span className={layout.bottom_tips_arrows}></span>
+          {
+            platform === 'h5'
+              ? (
+                <>
+                <div className={layout.maskLayer}></div>
+                <div className={layout.bottom}>
+                  {
+                    inviteCode
+                      ? <div className={layout.bottom_tips}>
+                          {/* <img className={layout.bottom_tips_img} src={ invitorAvatar } alt=""/> */}
+                          <Avatar
+                            size='small'
+                            text={ invitorName?.substring(0, 1)}
+                            className={layout.bottom_tips_img}
+                            image={ invitorAvatar }/>
+                          <span className={layout.bottom_tips_text}>
+                            <span>{ invitorName } 邀请您加入站点</span>
+                            {siteMode === 'pay' ? <span>，可获得返现 ¥{((10 - siteMasterScale) * sitePrice / 10).toFixed(2)}</span> : ''}
+                          </span>
+                          <span className={layout.bottom_tips_arrows}></span>
+                      </div>
+                      : <></>
+                  }
+                  {siteMode === 'pay' ? <div className={layout.bottom_title}>有效期：<span>{siteExpire}天</span></div> : <></>}
+                  <Button className={layout.bottom_button} onClick={this.handleJoinSite}>
+                    {siteMode === 'pay' ? `¥${sitePrice}` : ''} 立即加入
+                  </Button>
                 </div>
-                : <></>
-            }
-            {siteMode === 'pay' ? <div className={layout.bottom_title}>有效期：<span>{siteExpire}天</span></div> : <></>}
-            <Button className={layout.bottom_button} onClick={this.handleJoinSite}>
-              {siteMode === 'pay' ? `¥${sitePrice}` : ''} 立即加入
-            </Button>
-          </div>
+                </>
+              )
+              : <></>
+          }
         </div>
-      </List>
+      </PartnerInviteWrap>
     );
   }
 }

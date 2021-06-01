@@ -9,10 +9,17 @@ import styles from './index.module.scss';
  * @prop {{id:string, image:string, name: string}[]} data 用户数据
  * @prop {function} onItemClick 用户点击事件
  */
-const ActiveUsers = ({ data, onItemClick, onFollow, userId }) => (
+const ActiveUsers = ({ data, onItemClick, onFollow, userId, noOperation = false }) => (
   <div className={styles.list}>
     {data?.map((item, index) => (
-      <User key={index} data={item} onFollow={onFollow} onClick={onItemClick} userId={userId} />
+      <User
+        key={index}
+        data={item}
+        onFollow={onFollow}
+        onClick={onItemClick}
+        userId={userId}
+        noOperation={noOperation}
+      />
     ))}
   </div>
 );
@@ -22,7 +29,7 @@ const ActiveUsers = ({ data, onItemClick, onFollow, userId }) => (
  * @prop {object} data 用户数据
  * @prop {function} onClick 用户点击事件
  */
-const User = ({ data, onClick, onFollow, userId }) => {
+const User = ({ data, onClick, onFollow, userId, noOperation }) => {
   const click = useCallback((e) => {
     e && e.stopPropagation();
 
@@ -80,7 +87,7 @@ const User = ({ data, onClick, onFollow, userId }) => {
           </div>
         </div>
       </div>
-      {data?.userId !== userId && <Button type="primary" className={`${styles.button} ${btnInfo.className}`} onClick={handleFollow}>
+      {!noOperation && data?.userId !== userId && <Button type="primary" className={`${styles.button} ${btnInfo.className}`} onClick={handleFollow}>
         {
           btnInfo.text === '关注' ?
           <span className={styles.addText}>+</span>

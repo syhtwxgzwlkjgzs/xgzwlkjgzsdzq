@@ -1,48 +1,165 @@
 @import '@common/styles/index.scss';
-@mixin img {
-  width: rem(18);
-  height: rem(18);
-  border-radius: 50%;
-  border: rem(1) solid var(--color-white);
+@mixin titlePaddingTop {
+  padding-top: $padding-4n;
 }
 
-.content{
-  padding: 0 rem(16);
-  .list{
-    border-bottom: rem(1) solid var(--border-line-color);
-    height: rem(52);
-    line-height: rem(52);
-    font-size: rem(14);
-    font-weight: normal;
-    .label{
-      float: left;
-      color: #4f5a70;
+// 模块标题
+.mode_title {
+  font-size: $font-size-base;
+  line-height: 17.8px;
+  color: $text-color-secondary;
+}
+// 模块文本
+.mode_text {
+  padding-top: $padding-2n;
+  padding-bottom: $padding-4n;
+  font-size: $font-size-base;
+  border-bottom: $border-solid-1;
+}
+// 用户信息标签一栏
+.user_info_label {
+  width: 100%;
+  border-radius: 5px 5px 0 0;
+  height: 36px;
+  background: $body-bg-color;
+  box-sizing: border-box;
+  padding: $padding-2n $padding-4n;
+  display: flex;
+  .user_label_item{
+    display: flex;
+    align-items: center;
+    flex: 1;
+    text-align: center;
+    font-size: $font-size-base;
+    line-height: 18px;
+    color: $text-color-regular;
+  }
+}
+// 用户信息内容一栏
+.user_info_value {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: 54px;
+  box-sizing: border-box;
+  padding: $padding-2n $padding-4n;
+  border-bottom: $border-solid-1;
+  .user_value_item {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    line-height: $font-line-height-base;
+    color: $text-color-primary;
+    .user_value_avatar {
+      border-radius: $border-radius-circle;
+      width: 38px;
+      height: 38px;
+      line-height: 38px;
     }
-    .right{
-      float: right;
+    .user_value_name {
+      padding-left: $padding-4n;
     }
   }
-  .forum_agent{
-    .forum_agent_img{
-      @include img;
-    }
-    .forum_agent_name{
-      padding-left: rem(8);
+}
+
+.container {
+  width: 100%;
+  background-color: var(--color-white);
+  box-sizing: border-box;
+  padding: $padding-6n;
+  margin-bottom: $margin-4n;
+  .title {
+    padding-bottom: $padding-6n;
+    display: flex;
+    align-items: center;
+    font-size: $font-size-middle;
+    line-height: $font-line-height-base;
+    font-weight: 600;
+    color: $text-color-primary;
+    .title_text {
+      padding-left: $padding-2n;
     }
   }
-  .forum_member{
-    .forum_member_img{
-      @include img;
+  .forum_agent {
+  }
+  .site_introduction,.site_mode,.my_role,.my_permission {
+    @include titlePaddingTop;
+  }
+  .site_mode {
+  }
+  .my_role {
+    .user_info_label {
+      margin-top: $margin-4n;
     }
-    .forum_member_img:nth-child(2){
-      position: relative;
-      left: rem(-4);
-      z-index: 2;
+  }
+  .my_permission {
+    @mixin item {
+      padding: $padding-2n 14px;
     }
-    .forum_member_img:nth-child(3){
-      position: relative;
-      left: rem(-8);
-      z-index: 3;
+    .my_permission_plate {
+      width: 100%;
+      height: 543px;
+      border-radius: $border-radius-small;
+      background: $body-bg-color;
+      margin-top: $margin-4n;
+      @include scrollbar;
+    }
+    .my_permission_title {
+      background: $body-bg-color;
+    }
+    .my_permission_common {
+      width: 100%;
+      margin-top: $margin-4n;
+      display: flex;
+      border-bottom: $border-solid-1;
+    }
+    .permission_common_left {
+      background: $body-bg-color;
+      display: flex;
+      width: 84px;
+      justify-content: center;
+      align-items: center;
+      border-top: $border-solid-1;
+      border-left: $border-solid-1;
+    }
+    .permission_common_right {
+      width: 100%;
+      display: flex;
+    }
+    .common_label_item {
+      width: 420px;
+      height: 48px;
+      padding: $font-size-base;
+      line-height: $font-line-height-middle;
+      text-align: left;
+      box-sizing: border-box;
+      display: flex;
+      color: $text-color-primary;
+      align-items: center;
+      border: $border-solid-1;
+      border-right: none;
+      border-bottom: none;
+    }
+    .permission_common_value {
+      flex: 1;
+    }
+    .common_value_item {
+      width: 100%;
+      height: 48px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: $border-solid-1;
+      border-right: none;
+      border-bottom: none;
+    }
+    .permission_common_scroll {
+      width: 18px;
+      background: $body-bg-color;
+      border-radius: 0 $border-radius-small $border-radius-small 0;
+      border: $border-solid-1;
+      border-bottom: none;
     }
   }
 }

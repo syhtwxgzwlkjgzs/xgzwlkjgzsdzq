@@ -57,14 +57,8 @@ class ForumH5Page extends React.Component {
     const siteAuthor = get(site, 'webConfig.setSite.siteAuthor', '');
     return (
       <>
-        {
-          platform === 'h5'
-            ? <>
-                <Header/>
-                <HomeHeader/>
-              </>
-            : <Header/>
-        }
+        <Header/>
+        <HomeHeader/>
         <div className={layout.content}>
           {/* 站点介绍 start */}
           <div className={layout.list}>

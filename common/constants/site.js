@@ -50,3 +50,31 @@ export const MINI_SITE_JOIN_WHITE_LIST = [
   '/subPages/my/index', // 个人中心
   '/subPages/forum/partner-invite/index', // 站点加入
 ];
+
+export const PERMISSION_PLATE = [
+  '发布帖子',
+  '插入图片',
+  '插入视频',
+  '插入语音',
+  '插入附件',
+  '插入商品',
+  '插入付费',
+  '插入悬赏',
+  '插入红包',
+  '插入位置',
+  '允许匿名',
+  '查看主题列表',
+  '查看主题详情',
+  '免费查看付费内容',
+  '回复主题'
+]
+
+export const COMMON_PERMISSION = [
+  '申请提现',
+  '创建订单',
+  '帖子收藏',
+  '帖子点赞',
+  '订单支付',
+  '查看某个用户信息权限',
+  '关注/取关用户'
+]
