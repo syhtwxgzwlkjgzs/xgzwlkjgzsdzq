@@ -294,7 +294,7 @@ class ThreadCreate extends React.Component {
             />
           )}
         </div>
-        <div id="post-bottombar" className={styles['post-bottombar']}>
+        <div id="post-bottombar" className={styles['post-bottombar']} onClick={e => e.stopPropagation()}>
           {/* 插入位置 */}
           {(permissions?.insertPosition?.enable && webConfig?.lbs?.lbs) && (
             <div id="post-position" className={styles['position-box']}>
@@ -351,7 +351,7 @@ class ThreadCreate extends React.Component {
             value={currentDefaultOperation}
             onClick={(item) => {
               this.props.handleDefaultIconClick(item);
-              this.setPostBox();
+              if (item.type === THREAD_TYPE.emoji) this.setPostBox();
             }}
             permission={threadExtendPermissions}
             onSubmit={this.props.handleSubmit}>
