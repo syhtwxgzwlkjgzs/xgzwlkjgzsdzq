@@ -49,7 +49,7 @@ export default function UserInfo(props) {
       <div className={styles.right}>
         <div className={styles.info}>
           <div className={classNames(styles.name, props.platform === 'pc' && styles.pc)}>{props.name}</div>
-          {props.groupName && <div className={styles.groupName}>{props.groupName}</div>}
+          {props.groupName && <div className={`${styles.groupName} ${tagsNumber > 3 ? styles.groupNameText : ''}`}>{props.groupName}</div>}
         </div>
 
         <div className={styles.meta}>

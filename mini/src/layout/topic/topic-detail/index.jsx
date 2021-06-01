@@ -38,7 +38,6 @@ class TopicH5Page extends React.Component {
   }
 
   render() {
-    debugger
     const { pageData } = this.props.topic?.topicDetail || {};
     return (
       <BaseLayout showHeader={false} allowRefresh={false}>

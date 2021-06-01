@@ -45,7 +45,6 @@ class TopicPage extends React.Component {
     return dispatch('moreData', this.state);
   }
   render() {
-    debugger
     const { pageData = [], currentPage = 0, totalPage = 0 } = this.props.topic?.topics || {}
     return (
       <View className={styles.topicWrap}>
