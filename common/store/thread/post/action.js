@@ -356,6 +356,11 @@ class ThreadPostAction extends ThreadPostStore {
   setCursorPosition(val) {
     this.cursorPosition = val;
   }
+
+  @action
+  setNavInfo(info) {
+    if (info) this.navInfo = info;
+  }
 }
 
 export default ThreadPostAction;

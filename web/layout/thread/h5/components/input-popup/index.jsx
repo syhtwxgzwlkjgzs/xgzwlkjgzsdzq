@@ -146,7 +146,7 @@ const InputPop = (props) => {
 
       !isAllLegal && Toast.info({ content: `仅支持${supportImgExt}类型的图片` });
 
-      setImageUploading(true);
+      cloneList?.length && setImageUploading(true);
 
       return true;
     }
@@ -177,7 +177,7 @@ const InputPop = (props) => {
               placeholder={inputText}
               disabled={loading}
               forwardedRef={textareaRef}
-              autofocus={true}
+              autoFocus={true}
             ></Textarea>
           </div>
 

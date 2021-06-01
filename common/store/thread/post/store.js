@@ -81,6 +81,13 @@ class ThreadPostStore {
       ? parseFloat(price)
       : (parseFloat(price) * parseInt(number)).toFixed(2);
   }
+
+  @observable
+  navInfo = {
+    statusBarHeight: 44, // 默认的状态栏高度
+    navHeight: 40, // 默认的导航栏高度
+    menubtnWidth: 80, // 胶囊按钮的宽度
+  }
 }
 
 export default ThreadPostStore;
