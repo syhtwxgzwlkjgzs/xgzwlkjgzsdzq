@@ -5,6 +5,7 @@ import UserCenterHeaderImage from '@components/user-center-header-images';
 import { Icon, Input } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import { ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post'
+import Router from '@discuzq/sdk/dist/router';
 
 
 @inject('user')
@@ -77,7 +78,9 @@ export default class index extends Component {
             上传封面图
           </div>
           {/* 返回我的主页 */}
-          <div className={`${styles.userCenterReturn} ${styles.userCenterupload}`}>
+          <div className={`${styles.userCenterReturn} ${styles.userCenterupload}`} onClick={() => {
+            Router.back();
+          }}>
             <Icon name="ReturnOutlined" size={16} className={styles.userCenterReturnIcon}/>
             返回我的主页
           </div>

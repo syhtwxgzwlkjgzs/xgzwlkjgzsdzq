@@ -35,9 +35,9 @@ class InviteH5Page extends React.Component {
       });
     } catch (e) {
       console.log(e);
-      // Toast.error({
-      // content: e.Message||e,
-      // });
+      Toast.error({
+        content: e.Message || e,
+      });
     }
   }
 

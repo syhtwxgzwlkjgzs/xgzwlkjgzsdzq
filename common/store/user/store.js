@@ -8,6 +8,8 @@ class UserStore {
     this.userInfo = props.userInfo ? props.userInfo : null;
   }
 
+  rebindTimer = null;
+
   @observable userInfo = null;
   @observable loginStatus = false;
   @observable accessToken = null;
@@ -35,6 +37,9 @@ class UserStore {
 
   // 用户背景图
   @observable editBackgroundUrl = null;
+
+  // 换绑 QRCode
+  @observable rebindQRCode = null;
 
   // 检索的目标用户，非自己
   @observable targetUser = null;
@@ -176,7 +181,7 @@ class UserStore {
     return get(this.userInfo, 'canEditUsername');
   }
 
-  // 目标用户关注数
+  // 目标用户关注数editorConfig
   @computed get targetUserFollowCount() {
     return get(this.targetUser, 'followCount');
   }

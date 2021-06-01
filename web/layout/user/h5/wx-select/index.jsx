@@ -13,10 +13,11 @@ import { usernameAutoBind } from '@server';
 @inject('site')
 @inject('user')
 @inject('commonLogin')
+@inject('invite')
 @observer
 class WXSelectH5Page extends React.Component {
   render() {
-    const { router } = this.props;
+    const { router, invite } = this.props;
     const { sessionToken, nickname, avatarUrl } = router.query;
     return (
       <div className={layout.container}>
@@ -46,12 +47,14 @@ class WXSelectH5Page extends React.Component {
             className={`${layout.button} ${layout.btn_select} ${layout.btn_wx}`}
             type="primary"
             onClick={async () => {
+              const inviteCode = invite.getInviteCode(router);
               try {
                 const res = await usernameAutoBind({
                   timeout: 10000,
                   params: {
                     sessionToken,
                     type: 0, // 公众号0 (默认)， 小程序1，临时方案，测试环境的公众号/小程序没有关联起来
+                    inviteCode,
                   },
                 });
                 checkUserStatus(res);

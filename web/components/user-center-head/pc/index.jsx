@@ -35,13 +35,13 @@ class index extends Component {
   // 点击关注
   handleChangeAttention = async (follow) => {
     const { query } = this.props.router;
-    if (query.otherId) {
+    if (query.id) {
       if (follow !== 0) {
-        await this.props.user.cancelFollow({ id: query.otherId, type: 1 });
-        await this.props.user.getTargetUserInfo(query.otherId);
+        await this.props.user.cancelFollow({ id: query.id, type: 1 });
+        await this.props.user.getTargetUserInfo(query.id);
       } else {
-        await this.props.user.postFollow(query.otherId);
-        await this.props.user.getTargetUserInfo(query.otherId);
+        await this.props.user.postFollow(query.id);
+        await this.props.user.getTargetUserInfo(query.id);
       }
     }
   };
@@ -90,7 +90,7 @@ class index extends Component {
   };
   // 点击发送私信
   handleMessage = () => {
-    const { username } = this.props.user;
+    const { username } = this.props.user.targetUser;
     Router.push({ url: `/message?page=chat&username=${username}` });
   };
   render() {
