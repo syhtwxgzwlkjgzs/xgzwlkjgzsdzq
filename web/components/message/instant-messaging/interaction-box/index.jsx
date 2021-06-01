@@ -119,7 +119,10 @@ const InteractionBox = (props) => {
 
   const onImgChange = async (e) => {
     const files = e.target.files;
-    if (!beforeUpload(files)) return; // 图片上传前校验
+    if (!beforeUpload(files)) {
+      uploadRef.current.value = '';
+      return; // 图片上传前校验
+    }
 
     toastInstance = Toast.loading({
       content: '图片发送中...',
@@ -131,10 +134,11 @@ const InteractionBox = (props) => {
     const ret = await createAttachment(formData);
     const { code, data } = ret;
     if (code === 0) {
-      submit({ imageUrl: data.url });
+      await submit({ imageUrl: data.url });
     } else {
       Toast.error({ content: ret.message });
     }
+    uploadRef.current.value = '';
   }
 
   const recordCursor = (e) => {
