@@ -75,10 +75,13 @@ class HomeHeader extends React.Component {
     }
   }
   render() {
-    const { bgColor, hideInfo = false, style = {}, digest = null, mode = '' } = this.props;
+    const { bgColor, hideInfo = false, style = {}, digest = null, mode = '', site } = this.props;
     const { visible } = this.state;
     const { countUsers, countThreads } = this.getSiteInfo();
-
+    const shareData = {
+      title: site.webConfig?.setSite?.siteName || '',
+      path: 'pages/index/index'
+    }
     return (
       <>
       <View className={styles.topBarForMini} style={this.getBgHeaderStyle(bgColor)}></View>
@@ -120,7 +123,7 @@ class HomeHeader extends React.Component {
             <Text className={styles.text}>内容</Text>
             <Text className={styles.content}>{countThreads}</Text>
           </View>
-          <Button className={styles.item} openType="share" plain='true' data-from='indexHead'>
+          <Button className={styles.item} openType="share" plain='true' data-shareData={shareData}>
             <Icon className={styles.shareIcon} name="ShareAltOutlined"/>
             <Text className={styles.shareText}>分享</Text>
           </Button>

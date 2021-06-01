@@ -23,6 +23,7 @@ const Index = ({
   isSendingLike = false,
   tipData,
   platform,
+  index,
   onShare = () => {},
   onComment = () => {},
   onPraise = () => {},
@@ -51,6 +52,20 @@ const Index = ({
   const needHeight = useMemo(() => {
     return userImgs.length !== 0 || comment > 0 || sharing > 0
   }, [userImgs, comment, sharing])
+  const threadId = tipData.threadId
+  const thread = index.threads?.pageData || []
+  let threadTitle = ''
+  for(let i of thread) {
+    if(i.threadId == threadId) {
+        threadTitle =  i.title
+        break
+    }
+  }
+  const shareData = {
+    threadId: threadId,
+    title:threadTitle,
+    path: `/subPages/thread/index?id=${threadId}`
+  }
   return (
     <View>
       <View className={needHeight ? styles.user : styles.users}>
@@ -77,7 +92,7 @@ const Index = ({
         {
           postList.map((item, index) => (
               item.name === '分享'?(
-                <Button  plain='true' className={styles.fabulous} openType='share' data-threadId={tipData.threadId} data-from='thread'>
+                <Button  plain='true' className={styles.fabulous} openType='share' data-shareData={shareData}>
                   <View className={styles.fabulousIcon}>
                     <Icon
                     className={`${styles.icon} ${item.type}`}
