@@ -177,6 +177,7 @@
         }
         &.is-checked {
           .dzq-checkbox {
+            border: none;
             background-color: $checkbox-checked-bg-color;
           }
           .dzq-icon {
