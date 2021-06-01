@@ -151,7 +151,7 @@ function avatar(props) {
               <Avatar className={styles.customAvatar} circle={true} image={userInfo.avatarUrl} siz='primary'></Avatar>
             </div>
             <div className={styles.right}>
-              <p className={styles.name}>{userInfo.username}</p>
+              <p className={styles.name}>{userInfo.nickname}</p>
               <p className={styles.text}>{userInfo.signature && userInfo.signature !== '' ? userInfo.signature : '暂无签名'}</p>
             </div>
           </div>
@@ -195,7 +195,6 @@ function avatar(props) {
               <Button 
                 onClick={blocking ? () => {} : blockingHandler}
                 loading={blocking}
-                className={[styles.btn, styles.block]}
                 className={`${styles.btn} ${userInfo.isDeny ? styles.blocked : styles.unblocked}`}
                 type='primary'
               >

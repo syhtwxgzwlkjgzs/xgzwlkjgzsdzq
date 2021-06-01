@@ -34,6 +34,13 @@
     padding: rem(16) !important;
     font-size: $font-size-middle;
     color: $text-color-primary;
+    &:empty::before {
+      display: block;
+      line-height: $font-line-height-middle;
+      font-size: $font-size-middle;
+      font-family: $font-family;
+      color: $text-color-primary;
+    }
 
     &:before {
       color: $text-color-placeholder !important;

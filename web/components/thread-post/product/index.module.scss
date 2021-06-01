@@ -22,12 +22,14 @@
       }
     }
     .content-right {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
       flex: 1;
       margin-left: $margin-2n;
       margin-right: $margin-2n;
       position: relative;
       .content-title {
-        height: 44px;
         font-size: $font-size-base;
         line-height: $font-line-height-base;
         color: $text-color-regular;
