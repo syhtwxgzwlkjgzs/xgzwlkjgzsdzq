@@ -31,13 +31,6 @@ import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import PropTypes from 'prop-types';
 
-// 账户信息前置语
-const threadTips = {
-  replied: '回复了你',
-  related: '@了你',
-  liked: '点赞了你',
-};
-
 @inject('site')
 @observer
 class Index extends Component {
@@ -78,6 +71,18 @@ class Index extends Component {
     }
   };
 
+  // 账号信息前置语
+  getAccountTips = (item) => {
+    switch (item.type) {
+      case 'replied':
+        return `回复了你的${item.isFirst ? '主题' : '评论'}`;
+      case 'related':
+        return `@了你`;
+      case 'liked':
+        return `点赞了你的${item.isFirst ? '主题' : '评论'}`;
+    }
+  };
+
   filterTag(html) {
     return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '');
   }
@@ -88,7 +93,7 @@ class Index extends Component {
     let _content = item.content;
 
     if (type === 'account') {
-      const tip = `<span class=\"${styles.tip}\">${threadTips[item.type]}</span>`;
+      const tip = `<span class=\"${styles.tip}\">${this.getAccountTips(item)}</span>`;
       _content = tip + item.content;
     }
 
