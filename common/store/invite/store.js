@@ -1,20 +1,29 @@
 import { observable, action } from 'mobx';
 import { simpleRequest } from '@common/utils/simple-request';
 import { get } from '../../utils/get';
+import isWeiXin from '../../utils/is-wechat-browser';
 export default class InviteStore {
   @observable inviteData = { };
   @observable inviteCode = '';
 
   @action getInviteCode(router) {
-    return this.inviteCode || wx?.getStorage('inviteCode') || window?.sessionStorage?.getItem('inviteCode') || router?.query?.inviteCode || '';
+    let inviteCode;
+    if (isWeiXin()) {
+      inviteCode = wx.getStorage('inviteCode');
+    } else {
+      inviteCode = window?.sessionStorage?.getItem('inviteCode') || router?.query?.inviteCode || '';
+    }
+
+    return inviteCode || this.inviteCode;
   }
 
   @action setInviteCode(code) {
     this.inviteCode = code;
-
-    wx?.setStorage('inviteCode', code)
-    window?.sessionStorage?.setItem('inviteCode', code);
-    // storage?.setItem('inviteCode', code)
+    if (isWeiXin()) {
+      wx.setStorage('inviteCode', code);
+    } else {
+      window?.sessionStorage?.setItem('inviteCode', code);
+    }
   }
 
   @action
