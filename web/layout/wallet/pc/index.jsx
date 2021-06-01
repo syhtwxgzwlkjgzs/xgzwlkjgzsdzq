@@ -185,6 +185,13 @@ class ThreadPCPage extends React.Component {
     })
   }
 
+  // 提现关闭
+  onClose = () => {
+    this.setState({
+      showWithdrawalPopup: false
+    })
+  }
+
   renderDropdownMenu = () => {
     const data = this.renderSelectContent()
     return (
@@ -304,7 +311,7 @@ class ThreadPCPage extends React.Component {
               <WalletInfo
                 walletData={walletInfo}
                 webPageType='PC'
-                showWithrawal={() => this.showWithrawal()}
+                showWithrawal={this.showWithrawal}
                 onFrozenAmountClick={this.onFrozenAmountClick}
               >
               </WalletInfo>
@@ -321,9 +328,7 @@ class ThreadPCPage extends React.Component {
         {/* 提现弹框 */}
         <WithdrawalPop
           visible={this.state.showWithdrawalPopup}
-          onClose={() => this.setState({ showWithdrawalPopup: false })}
-          moneyNumber={this.props.walletData?.availableAmount}
-          moneyToWixin={moneyNum => this.moneyToWixin(moneyNum)}
+          onClose={this.onClose}
         />
       </div>
     );

@@ -15,6 +15,12 @@ class WalletStore {
 
     // 体现明细
     @observable cashDetail = {}
+
+    // 用户钱包可用余额
+    @computed get walletAvaAmount() {
+        return get(this.walletInfo, 'availableAmount');
+    }
+
 }
 
 export default WalletStore;
