@@ -53,3 +53,15 @@
   overflow: hidden !important;
   margin: 0 rem(-16);
 }
+
+.threadStyle {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.postTitle {
+  padding: 0 rem($padding-6n);
+  border-top-left-radius: rem($border-radius-small);
+  border-top-right-radius: rem($border-radius-small);
+  background: var(--color-white);
+}
