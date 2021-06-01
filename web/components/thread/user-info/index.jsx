@@ -48,7 +48,7 @@ export default function UserInfo(props) {
 
       <div className={styles.right}>
         <div className={styles.info}>
-          <div className={styles.name}>{props.name}</div>
+          <div className={classNames(styles.name, props.platform === 'pc' && styles.pc)}>{props.name}</div>
           {props.groupName && <div className={styles.groupName}>{props.groupName}</div>}
         </div>
 
