@@ -65,6 +65,12 @@
   width: 100% !important;
 }
 
+.divider {
+  margin: 0 -50% 0 -50% !important;
+  width: 200% !important;
+  // transform: translateX(-50%);
+}
+
 .ok {
   font-size: $font-size-base;
   line-height: $font-line-height-base;

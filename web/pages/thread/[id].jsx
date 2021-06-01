@@ -63,7 +63,7 @@ class Detail extends React.Component {
 
     // 初始化数据到store中
     serverThread?.threadData && thread.setThreadData(serverThread.threadData);
-    // serverThread?.commentList && thread.setCommentList(serverThread.commentList);
+    serverThread?.commentList && thread.setCommentList(serverThread.commentList);
     serverThread?.totalCount && thread.setTotalCount(serverThread.totalCount);
   }
 
@@ -77,11 +77,12 @@ class Detail extends React.Component {
   async componentDidMount() {
     const { id } = this.props.router.query;
     // 判断缓存
-    // const oldId = this.props?.thread?.threadData?.threadId;
-    // if (Number(id) === oldId && id && oldId) {
-    //   return;
-    // }
-    // this.props.thread.reset();
+    const oldId = this.props?.thread?.threadData?.threadId;
+
+    if (Number(id) === oldId && id && oldId) {
+      return;
+    }
+    this.props.thread.reset();
 
     if (id) {
       this.getPageDate(id);
