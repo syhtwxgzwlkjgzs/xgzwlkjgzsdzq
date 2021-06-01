@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/search/result-post';
 import Page from '@components/page';
 import { getCurrentInstance } from '@tarojs/taro';
-import withShare from '@common/utils/withShare'
+import withShare from '@common/utils/withShare/withShare'
 @inject('search')
 @observer
 @withShare({
