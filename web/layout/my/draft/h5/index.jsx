@@ -14,7 +14,7 @@ class Index extends React.Component {
     return (
       <div className={styles.item} onClick={() => onEdit(item)}>
         <ThreadCenterView data={item} onClick={() => onEdit(item)} />
-        <div className={styles['item-time']}>编辑于&nbsp;{item.diffTime}</div>
+        <div className={styles['item-time']}>编辑于&nbsp;{item.updatedAt}</div>
       </div>
     )
   }
@@ -27,7 +27,6 @@ class Index extends React.Component {
     const { index, dispatch, onDelete, onEdit } = this.props;
     const { currentPage, totalPage, totalCount, pageData } = index?.drafts || {};
     const topCard = (<div className={styles.header}>{totalCount || 0}&nbsp;条草稿</div>);
-
     return (
       <div className={styles.wrapper}>
         <Header />
