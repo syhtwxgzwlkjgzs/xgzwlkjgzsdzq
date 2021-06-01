@@ -21,25 +21,26 @@ export class MessageIndex extends Component {
           iconName: 'RemindOutlined',
           title: '帖子通知',
           link: '/message/?page=thread',
-          totalCount: 0,
+          unreadCount: 0,
         },
         {
           iconName: 'RenminbiOutlined',
           title: '财务通知',
           link: '/message/?page=financial',
-          totalCount: 0,
+          unreadCount: 0,
         },
         {
           iconName: 'LeaveWordOutlined',
           title: '账号消息',
           link: '/message/?page=account',
-          totalCount: 0,
+          unreadCount: 0,
         },
       ],
     };
   }
 
   componentDidMount() {
+    this.fetchDialogData(1);
     this.updateUnread();
   }
 
@@ -50,9 +51,9 @@ export class MessageIndex extends Component {
   updateUnread() {
     const { threadUnread, financialUnread, accountUnread } = this.props.message;
     const items = [...this.state.items];
-    items[0].totalCount = threadUnread;
-    items[1].totalCount = financialUnread;
-    items[2].totalCount = accountUnread;
+    items[0].unreadCount = threadUnread;
+    items[1].unreadCount = financialUnread;
+    items[2].unreadCount = accountUnread;
     this.setState({ items });
   }
 

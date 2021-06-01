@@ -58,7 +58,7 @@ return (
     {/* 渲染未读消息红点 */}
     {!!data.unreadCount && (
       <div className={styles.badgeMargin}>
-        <Badge circle info={data.unreadCount} className={data.unreadCount > 9 ? styles.badge : ''} />
+        <Badge circle info={data.unreadCount > 99 ? '99+' : data.unreadCount} className={data.unreadCount > 9 ? styles.badge : ''} />
       </div>
     )}
 
