@@ -77,7 +77,7 @@ const Index = ({
         {
           postList.map((item, index) => (
               item.name === '分享'?(
-                <Button  plain='true' className={styles.fabulous} openType='share' data-threadId={tipData.threadId} >
+                <Button  plain='true' className={styles.fabulous} openType='share' data-threadId={tipData.threadId} data-from='thread'>
                   <View className={styles.fabulousIcon}>
                     <Icon
                     className={`${styles.icon} ${item.type}`}

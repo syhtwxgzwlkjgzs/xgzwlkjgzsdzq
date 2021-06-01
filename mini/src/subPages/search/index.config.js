@@ -1,4 +1,5 @@
 export default {
   navigationBarTitleText: '搜索',
-  enableShareAppMessage: true
+  enableShareAppMessage: true,
+  enableShareTimeline: true
 };
