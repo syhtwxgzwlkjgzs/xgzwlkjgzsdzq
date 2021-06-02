@@ -36,16 +36,15 @@
       }
 
       .dzq-slider__progress__button {
-        width: 24px;
-        height: 24px;
         background: $primary-color;
         border: 1px solid $white;
 
         &::after {
           content: "";
           position: absolute;
-          left: 6px;
-          top: 6px;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
           width: 10px;
           height: 10px;
           background: $white;
