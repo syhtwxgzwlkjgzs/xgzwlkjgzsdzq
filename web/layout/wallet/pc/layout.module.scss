@@ -145,7 +145,7 @@
       }
       &__time-container,
       &__month-text {
-        width: 90px;
+        width: 90px !important;
       }
       &__time-list {
         @include scrollbar();

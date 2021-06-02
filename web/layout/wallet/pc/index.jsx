@@ -40,7 +40,6 @@ class ThreadPCPage extends React.Component {
     const { getUserWalletInfo } = this.props.wallet;
     // 获取钱包信息
     await getUserWalletInfo();
-    await this.initStateAndFetch();
   }
 
   initStateAndFetch = () => {
@@ -299,6 +298,23 @@ class ThreadPCPage extends React.Component {
     }
   };
 
+  fetcher = () => {
+    switch (this.state.activeType) {
+      case 'income':
+        this.fetchIncomeDetail();
+        break;
+      case 'pay':
+        this.fetchExpendDetail();
+        break;
+      case 'withdrawal':
+        this.fetchCashDetail();
+        break;
+      case 'frozen':
+        this.fetchFreezeDetail();
+        break;
+    }
+  };
+
   render() {
     const recordType = {
       income: '收入明细',
@@ -364,10 +380,7 @@ class ThreadPCPage extends React.Component {
             </div>
             <div className={layout.recordList}>
               <List
-                // onRefresh={this.initStateAndFetch}
-                onRefresh={async () => {
-                  console.log('refresh');
-                }}
+                onRefresh={this.fetcher}
                 noMore={this.state.page > this.state.totalPage}
               >
                 <RecordList data={this.getRecordData()} activeType={this.state.activeType}></RecordList>
