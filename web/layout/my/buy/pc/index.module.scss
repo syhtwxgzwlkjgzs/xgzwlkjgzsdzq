@@ -25,3 +25,7 @@
   border-top-right-radius: rem($border-radius-small);
   background: var(--color-white);
 }
+
+.rightSide {
+  position: relative !important;
+}

@@ -47,6 +47,7 @@ class LikePCPage extends React.Component {
         noMore={currentPage >= totalPage}
         showRefresh={false}
         onRefresh={this.fetchMoreData}
+        rightClass={styles.rightSide}
       >
         <SidebarPanel
           title="我的点赞"
