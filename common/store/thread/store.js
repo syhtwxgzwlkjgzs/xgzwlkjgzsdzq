@@ -13,6 +13,8 @@ class ThreadStore {
   @observable isCommentListError = false;
   @observable isAuthorInfoError = false;
 
+  @observable scrollDistance = 0;
+
   // 是否帖子数据准备好
   @computed get isReady() {
     return !!this.threadData?.id;

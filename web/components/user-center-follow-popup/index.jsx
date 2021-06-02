@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './index.module.scss';
-import { Icon, Popup } from '@discuzq/design';
+import { Icon, Popup, Divider } from '@discuzq/design';
 import UserCenterFllows from '@components/user-center-follow';
 import { noop } from '@components/thread/utils';
 import Router from '@discuzq/sdk/dist/router';
@@ -14,6 +14,17 @@ const Index = (props) => {
   const onContainerClick = ({ id }) => {
     Router.push({ url: `/user/${id}` });
   };
+
+  const splitElement = React.useMemo(
+    () => (
+      <div className={styles.splitEmelent}>
+        <Divider />
+      </div>
+    ),
+    [],
+  );
+
+
   return (
     <Popup position="center" visible={visible} onClose={onClose}>
       <div className={styles.contaner}>
@@ -24,9 +35,9 @@ const Index = (props) => {
           </div>
           <div className={styles.titleHr}></div>
           {!id ? (
-            <UserCenterFllows onContainerClick={onContainerClick} />
+            <UserCenterFllows onContainerClick={onContainerClick} splitElement={splitElement}/>
           ) : (
-            <UserCenterFllows userId={id} onContainerClick={onContainerClick} />
+            <UserCenterFllows userId={id} onContainerClick={onContainerClick} splitElement={splitElement} />
           )}
         </div>
       </div>

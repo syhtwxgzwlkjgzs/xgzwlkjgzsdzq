@@ -107,14 +107,11 @@
   text-align: center;
   :global { /* stylelint-disable-line */
     .dzq-button {
-      @include button-default;
       width: 130px;
       height: 36px;
       &:first-child {
+        @include button-default;
         margin-right: $margin-6n;
-      }
-      &:last-child {
-        @include button-primary;
       }
     }
   }

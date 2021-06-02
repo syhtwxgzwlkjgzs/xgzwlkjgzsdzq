@@ -42,11 +42,6 @@
   justify-content: space-between;
   border-top: $border-color solid 1px;
   box-sizing: border-box;
-  Button {
-    margin:0;
-    padding:0;
-    border:0;
-  }
 }
 .operations {
   height: 52px;
@@ -56,11 +51,6 @@
   justify-content: space-between;
   border-top: $border-color solid 1px;
   box-sizing: border-box;
-  Button {
-    margin:0;
-    padding:0;
-    border:0;
-  }
 }
 .fabulous {
   @include cursor-on-pc;
@@ -68,19 +58,27 @@
   align-items: center;
   padding: $padding-10 0;
   .fabulousIcon {
-    :global(View) {
-      font-size: $font-size-primary !important;
-    }
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: $font-size-primary ;
   }
   .fabulousPost {
     margin-left: 8px;
     font-size: $font-size-primary;
     color: $text-color-secondary;
+    height: 35px;
+    display: flex;
+    align-items: center;
   }
   .fabulousCancel {
     margin-left: 8px;
     font-size: $font-size-primary;
     color: var(--color-primary);
+    height: 35px;
+    display: flex;
+    align-items: center;
   }
   :global{
     .like, .share{

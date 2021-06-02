@@ -61,4 +61,18 @@
       border-radius: 50%;
     }
   }
+
+  .badge {
+    :global {
+      .dzq-badge__circle {
+        padding: 0 rem(6px);
+        width: auto;
+        border-radius: $border-radius-8;
+      }
+    }
+  }
+  .badgeMargin {
+    margin-left: 32px;
+    margin-bottom: 3px;
+  }
 }

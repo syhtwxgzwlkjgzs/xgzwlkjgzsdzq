@@ -32,7 +32,7 @@ function RenderList({ columns = [], data = [], className = '' }) {
   return (
     <div className={classnames('renderList', className)}>
       <div
-        className={'listTitle'}
+        className={'listTitleWrapper'}
         style={{
           display: 'flex',
         }}
@@ -49,7 +49,7 @@ function RenderList({ columns = [], data = [], className = '' }) {
           </div>
         ))}
       </div>
-      <div className={'listBody'}>
+      <div className={'listItemWrapper'}>
         {data.map((item, idx) => (
           <div
             key={idx}

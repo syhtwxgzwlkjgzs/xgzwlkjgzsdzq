@@ -210,6 +210,7 @@ export default inject('user')(
                   image={parseContent?.GOODS?.imagePath}
                   amount={parseContent?.GOODS?.price}
                   title={parseContent?.GOODS?.title}
+                  onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
                 />
                 <Button
                   className={topic.buyBtn}

@@ -12,7 +12,6 @@ import InputPopup from '../components/input-popup';
 import ReportPopup from '../components/report-popup';
 import goToLoginPage from '@common/utils/go-to-login-page';
 
-
 @inject('site')
 @inject('user')
 @inject('comment')
@@ -26,7 +25,6 @@ class CommentH5Page extends React.Component {
       showReportPopup: false, // 举报弹框
       showMorePopup: false, // 是否弹出更多弹框
       showCommentInput: false, // 是否弹出评论框
-      commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
       inputText: '请输入内容', // 默认回复框placeholder内容
     };
@@ -229,7 +227,7 @@ class CommentH5Page extends React.Component {
   }
 
   // 创建回复评论+回复回复接口
-  async createReply(val) {
+  async createReply(val, imageList) {
     if (!val) {
       Toast.info({ content: '请输入内容!' });
       return;
@@ -257,8 +255,20 @@ class CommentH5Page extends React.Component {
       params.commentId = this.commentData.id;
     }
 
-    const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
+    if (imageList?.length) {
+      params.attachments = imageList
+        .filter((item) => item.status === 'success' && item.response)
+        .map((item) => {
+          const { id } = item.response;
+          return {
+            id,
+            type: 'attachments',
+          };
+        });
+    }
 
+    const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
+    console.log(this.props.comment.commentDetail)
     if (success) {
       this.setState({
         showCommentInput: false,
@@ -306,7 +316,6 @@ class CommentH5Page extends React.Component {
 
     // 更多弹窗权限
     const morePermissions = {
-      // canEdit: commentData?.canEdit,
       canEdit: false,
       canDelete: commentData?.canDelete,
       canEssence: false,
@@ -367,7 +376,8 @@ class CommentH5Page extends React.Component {
             visible={this.state.showCommentInput}
             inputText={this.state.inputText}
             onClose={() => this.setState({ showCommentInput: false })}
-            onSubmit={(value) => this.createReply(value)}
+            onSubmit={(value, imageList) => this.createReply(value, imageList)}
+            site={this.props.site}
           ></InputPopup>
 
           {/* 更多弹层 */}
