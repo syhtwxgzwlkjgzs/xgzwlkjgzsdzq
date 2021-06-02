@@ -81,6 +81,9 @@
   .check-box {
     flex: 1;
     overflow: hidden;
+    .list {
+      height: 100%;
+    }
   }
 
   .at-item {

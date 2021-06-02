@@ -202,7 +202,7 @@ class AtSelect extends Component {
           onChange={val => this.setState({ checkUser: val })}
         >
           <List
-            height={'calc(100vh - 120px)'}
+            className={styles.list}
             noMore={finish}
             onRefresh={this.onScrollBottom}
             hasOnScrollToLower={true}
