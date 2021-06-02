@@ -173,7 +173,7 @@ class Index extends Component {
                 >
                   在帖子"
                   <View
-                    className={styles['single-line']}
+                    className={`${styles['financial-content']} ${styles['single-line']}`}
                     style={{
                       maxWidth: `90px`,
                       display: 'inline-block',

@@ -25,10 +25,9 @@
       border-bottom: var(--border-border);
     }
     .btn {
-      padding: 13px 0;
-      margin-bottom: 12px;
-      color: #4f5a70;
-      @include ios-safe-area-inset-bottom;
+      line-height: 54px;
+      color: $text-color-regular;
+      @include ios-safe-area-inset-bottom();
     }
   }
 }
