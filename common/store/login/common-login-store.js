@@ -38,8 +38,8 @@ export default class commonLoginStore {
 
     @action
     setProtocolInfo(type) {
-      this.setProtocolVisible(true)
-      this.setProtocolStatus(type)
+      this.setProtocolVisible(true);
+      this.setProtocolStatus(type);
     }
 
     @action
@@ -92,21 +92,5 @@ export default class commonLoginStore {
     @action
     setJsCode(code) {
       this.jsCode = code;
-    }
-
-    @action
-    showCaptcha(qcloudCaptchaAppId, TencentCaptcha) {
-      return new Promise(async (resolve, reject) => {
-        this.captcha = new TencentCaptcha(qcloudCaptchaAppId, (res) => {
-          if (res.ret === 0) {
-            this.captchaRandStr = res.randstr;
-            this.captchaTicket = res.ticket;
-            return resolve(res);
-          }
-          // reject(res);
-        });
-        // 显示验证码
-        this.captcha.show();
-      }).catch((e) => {console.log(e)});
     }
 }

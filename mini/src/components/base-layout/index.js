@@ -4,6 +4,7 @@ import { View } from '@tarojs/components';
 import Header from '../header';
 import List from '../list'
 import BottomNavBar from '../bottom-nav-bar'
+import { useDidShow } from '@tarojs/taro'
 
 import styles from './index.module.scss';
 
@@ -26,6 +27,12 @@ const baseLayoutWhiteList = ['home'];
 const BaseLayout = (props) => {
   const { index, showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr } = props;
   const [height, setHeight] = useState(600);
+
+  // 避免小程序通过手势返回上一页时，无法重置参数
+  useDidShow(() => {
+    index.setHiddenTabBar(false)
+    index.setHasOnScrollToLower(true)
+  })
 
   const debounce = (fn, wait) => {
     let timer = null;

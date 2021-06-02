@@ -18,7 +18,6 @@ const DialogBox = (props) => {
   const dialogBoxRef = useRef();
   const timeoutId = useRef();
   useEffect(() => {
-    updateMsgList();
     return () => {
       clearTimeout(timeoutId.current);
     };

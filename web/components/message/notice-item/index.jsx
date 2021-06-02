@@ -31,13 +31,6 @@ import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import PropTypes from 'prop-types';
 
-// 账户信息前置语
-const threadTips = {
-  replied: '回复了你',
-  related: '@了你',
-  liked: '点赞了你',
-};
-
 @inject('site')
 @observer
 class Index extends Component {
@@ -67,39 +60,44 @@ class Index extends Component {
     if (item.type === 'rewarded') {
       return '打赏了你';
     }
-    if (item.type === 'questioned') {
-      return '悬赏了你';
-    }
     if (item.type === 'receiveredpacket') {
       return '获取红包';
+    }
+    if (item.type === 'threadrewarded') {
+      return '悬赏了你';
     }
     if (item.type === 'withdrawal') {
       return '获取提现';
     }
   };
 
+  // 账号信息前置语
+  getAccountTips = (item) => {
+    switch (item.type) {
+      case 'replied':
+        return `回复了你的${item.isFirst ? '主题' : '评论'}`;
+      case 'related':
+        return `@了你`;
+      case 'liked':
+        return `点赞了你的${item.isFirst ? '主题' : '评论'}`;
+    }
+  };
+
   filterTag(html) {
-    return html?.replace(/<(\/)?([b-z]|br)[^>]*>|[\r\n]/gi, '');
+    return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '');
   }
 
-  // parse content
+  // parse content 对于需要显示title作为内容的消息，在对应组件内做预处理后统一传入content属性
   parseHTML = () => {
     const { type, item } = this.props;
-    if (type === 'chat') {
-      return xss(s9e.parse(item.content));
+    let _content = item.content;
+
+    if (type === 'account') {
+      const tip = `<span class=\"${styles.tip}\">${this.getAccountTips(item)}</span>`;
+      _content = tip + item.content;
     }
 
-    // 1 获取基础内容，财务信息、账户信息优先使用title展示
-    let _content = ['financial', 'account'].includes(type) ? item.title || item.content : item.content;
-    // 2 过滤内容
-    _content = this.filterTag(_content);
-    // 3 拼接account前置tip
-    if (type === 'account') {
-      const tip = `<span class=\"${styles.tip}\">${threadTips[item.type]}</span>`;
-      _content = tip + _content;
-    }
-    // 4 return
-    return _content ? xss(s9e.parse(_content)) : '加载中...';
+    return this.filterTag(xss(s9e.parse(this.filterTag(_content))));
   };
 
   // 跳转用户中心
@@ -126,7 +124,7 @@ class Index extends Component {
       Router.push({ url: `/thread/${item.threadId}` });
     }
     if (type === 'chat') {
-      Router.push({ url: `/message?page=chat&dialogId=${item.dialogId}` });
+      Router.push({ url: `/message?page=chat&dialogId=${item.dialogId}&username=${item.username}` });
     }
   };
 
@@ -146,7 +144,7 @@ class Index extends Component {
                 [styles.badge]: type === 'chat' && item.unreadCount > 9
               })}
               circle
-              info={ type === 'chat' && this.getUnReadCount(item.unreadCount)}
+              info={type === 'chat' && this.getUnReadCount(item.unreadCount)}
             >
               {avatarUrl ? (
                 <Avatar image={avatarUrl} circle={true} />
@@ -179,6 +177,7 @@ class Index extends Component {
                 })}
                 onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
               >
+                {/* 仅帖子通知没有username，使用title代替显示 */}
                 {item.username || this.filterTag(item.title)}
               </div>
               {['chat', 'thread'].includes(type) && (
@@ -226,7 +225,13 @@ class Index extends Component {
         </div>
         {/* PC删除 */}
         {isPC && (
-          <div className={styles.delete} onClick={() => onBtnClick(item)}>
+          <div
+            className={styles.delete}
+            onClick={(e) => {
+              e.stopPropagation();
+              onBtnClick(item);
+            }}
+          >
             <Icon className={styles.icon} name="DeleteOutlined" size={14} />
           </div>
         )}

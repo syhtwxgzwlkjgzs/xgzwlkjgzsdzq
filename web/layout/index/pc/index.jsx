@@ -20,7 +20,6 @@ import deepClone from '@common/utils/deep-clone';
 @inject('site')
 @inject('user')
 @inject('index')
-@inject('baselayout')
 @observer
 class IndexPCPage extends React.Component {
   constructor(props) {
@@ -145,7 +144,6 @@ class IndexPCPage extends React.Component {
 
     // 发起网络请求
     dispatch('click-filter', newFilter);
-    this.props.baselayout.setJumpingToTop();
    }
 
    goRefresh = () => {

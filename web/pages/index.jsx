@@ -9,6 +9,7 @@ import HOCFetchSiteData from '../middleware/HOCFetchSiteData';
 @inject('site')
 @inject('index')
 @inject('user')
+@inject('baselayout')
 @observer
 class Index extends React.Component {
 
@@ -101,7 +102,7 @@ class Index extends React.Component {
   }
 
   dispatch = async (type, data = {}) => {
-    const { index } = this.props;
+    const { index, baselayout } = this.props;
     const { essence, sequence, attention, sort, page } = data;
 
     let newTypes = this.handleString2Arr(data, 'types');
@@ -109,9 +110,9 @@ class Index extends React.Component {
     let categoryIds = this.handleString2Arr(data, 'categoryids');
 
     if (type === 'click-filter') { // 点击tab
-      
       this.page = 1;
       await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
+      this.props.baselayout.setJumpingToTop();
     } else if (type === 'moreData') {
       this.page += 1;
       return await index.getReadThreadList({

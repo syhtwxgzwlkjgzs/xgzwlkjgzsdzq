@@ -63,6 +63,7 @@ class Index extends React.Component {
     const { search } = this.props;
     if (type === 'refresh') {
       this.page = 1;
+      search.setTopics(null);
     } else if (type === 'moreData') {
       this.page += 1;
     }
