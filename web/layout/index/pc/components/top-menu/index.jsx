@@ -112,7 +112,7 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
                   key={index} 
                   index={index} 
                   title={title(item.label)} 
-                  style={{ padding: '3px 0' }}
+                  style={{ padding: '0 16px' }}
                   onClick={onClickSubmenu}
                 >
                   {

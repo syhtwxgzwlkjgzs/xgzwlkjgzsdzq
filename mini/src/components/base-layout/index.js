@@ -26,7 +26,7 @@ import styles from './index.module.scss';
 const baseLayoutWhiteList = ['home'];
 
 const BaseLayout = (props) => {
-  const { index, showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr } = props;
+  const { index, showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr, onScroll = () => {} } = props;
   const [height, setHeight] = useState(600);
 
   // 避免小程序通过手势返回上一页时，无法重置参数
@@ -56,7 +56,10 @@ const BaseLayout = (props) => {
 
   // }, [])
 
-  const handleScroll = ({ detail }) => {
+  const handleScroll = (e) => {
+
+    onScroll(e);
+
     const { baselayout } = props;
     const playingVideoDom = baselayout.playingVideoDom;
 
