@@ -50,7 +50,7 @@ export default function UserInfo(props) {
       <View className={styles.right}>
         <View className={styles.info}>
           <View className={styles.name}>{props.name}</View>
-          {props.groupName && <View className={styles.groupName}>{props.groupName}</View>}
+          {props.groupName && <View className={`${styles.groupName} ${tagsNumber > 3 ? styles.groupNameText : ''}`}>{props.groupName}</View>}
         </View>
 
         <View className={styles.meta}>

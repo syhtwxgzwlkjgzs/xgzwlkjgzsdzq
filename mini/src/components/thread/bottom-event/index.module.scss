@@ -42,11 +42,6 @@
   justify-content: space-between;
   border-top: $border-color solid 1px;
   box-sizing: border-box;
-  Button {
-    margin:0;
-    padding:0;
-    border:0;
-  }
 }
 .operations {
   height: 52px;
@@ -56,11 +51,6 @@
   justify-content: space-between;
   border-top: $border-color solid 1px;
   box-sizing: border-box;
-  Button {
-    margin:0;
-    padding:0;
-    border:0;
-  }
 }
 .fabulous {
   @include cursor-on-pc;
