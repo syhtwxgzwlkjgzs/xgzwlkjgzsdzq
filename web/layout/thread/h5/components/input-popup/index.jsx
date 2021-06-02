@@ -154,12 +154,17 @@ const InputPop = (props) => {
     return true;
   };
 
-  const onComplete = (value, file) => {
+  const onComplete = (value, file, list) => {
     if (value.code === 0) {
       file.response = value.data;
     }
+    setImageUploading(list?.length && list.some((image) => image.status === 'uploading'));
+  };
 
-    setImageUploading(imageList?.length && imageList.some((image) => image.status === 'uploading'));
+  const onFail = () => {
+    Toast.error({
+      content: '图片上传失败',
+    });
   };
 
   return (
@@ -189,6 +194,7 @@ const InputPop = (props) => {
                   onChange={handleUploadChange}
                   onComplete={onComplete}
                   beforeUpload={(cloneList, showFileList) => beforeUpload(cloneList, showFileList, THREAD_TYPE.image)}
+                  onFail={onFail}
                 />
               </div>
               <Divider className={styles.divider}></Divider>
