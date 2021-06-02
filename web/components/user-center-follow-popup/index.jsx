@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './index.module.scss';
-import { Icon, Popup, Divider } from '@discuzq/design';
+import { Icon, Dialog, Divider } from '@discuzq/design';
 import UserCenterFllows from '@components/user-center-follow';
 import { noop } from '@components/thread/utils';
 import Router from '@discuzq/sdk/dist/router';
@@ -26,7 +26,7 @@ const Index = (props) => {
 
 
   return (
-    <Popup position="center" visible={visible} onClose={onClose}>
+    <Dialog position="center" visible={visible} onClose={onClose}>
       <div className={styles.contaner}>
         <div className={styles.popupWrapper}>
           <div className={styles.title}>
@@ -41,7 +41,7 @@ const Index = (props) => {
           )}
         </div>
       </div>
-    </Popup>
+    </Dialog>
   );
 };
 

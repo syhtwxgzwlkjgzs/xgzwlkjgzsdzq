@@ -13,7 +13,7 @@ class UserCenterAction extends React.Component {
 
   // 点击我的钱包
   handleMyWallet = () => {
-    Router.push({ url: '/wallet' });
+    Router.push({ url: '/subPages/wallet/index' });
   }
 
   // 点击站点信息

@@ -47,11 +47,21 @@ class index extends Component {
             />
           ),
           onSave: async () => {
-            await this.props.user.updateEditedUserNickname();
-            Toast.success({
-              content: '更新昵称成功',
-              duration: 1000,
-            });
+            try {
+              await this.props.user.updateEditedUserNickname();
+              Toast.success({
+                content: '更新昵称成功',
+                duration: 1000,
+              });
+            } catch (e) {
+              console.error(e);
+              if (e.Code) {
+                Toast.error({
+                  content: e.Msg,
+                  duration: 1000,
+                });
+              }
+            }
             this.closeInputEditor('昵称');
           },
           onCancel: () => {
@@ -83,11 +93,21 @@ class index extends Component {
             />
           ),
           onSave: async () => {
-            await this.props.user.updateUsername();
-            Toast.success({
-              content: '更新用户名成功',
-              duration: 1000,
-            });
+            try {
+              await this.props.user.updateUsername();
+              Toast.success({
+                content: '更新用户名成功',
+                duration: 1000,
+              });
+            } catch (e) {
+              console.error(e);
+              if (e.Code) {
+                Toast.error({
+                  content: e.Msg,
+                  duration: 1000,
+                });
+              }
+            }
             this.closeInputEditor('用户名');
           },
           onCancel: () => {
@@ -98,7 +118,7 @@ class index extends Component {
           name: '个性签名',
           display: 'show',
           condition: () => true,
-          render: () => this.props.user.signature,
+          render: () => this.props.user.signature || '这个人很懒，什么也没留下~',
           operation: () => (
             <p onClick={() => this.openInputEditor('个性签名')} className={styles.pcEditNicknameCallMsodify}>
               修改
@@ -114,11 +134,21 @@ class index extends Component {
             />
           ),
           onSave: async () => {
-            await this.props.user.updateEditedUserSignature();
-            Toast.success({
-              content: '更新个性签名成功',
-              duration: 1000,
-            });
+            try {
+              await this.props.user.updateEditedUserSignature();
+              Toast.success({
+                content: '更新个性签名成功',
+                duration: 1000,
+              });
+            } catch (e) {
+              console.error(e);
+              if (e.Code) {
+                Toast.error({
+                  content: e.Msg,
+                  duration: 1000,
+                });
+              }
+            }
             this.closeInputEditor('个性签名');
           },
           onCancel: () => {
@@ -130,7 +160,32 @@ class index extends Component {
           display: 'show',
           render: () => this.props.user.mobile,
           condition: () => this.props.site?.isSmsOpen,
-          operation: () => <p className={styles.pcEditNicknameCallMsodify}>修改</p>,
+          operation: () => {
+            if (!this.props.user.mobile) {
+              return (
+                <p
+                  onClick={() => {
+                    Router.push({ url: '/user/bind-phone' });
+                  }}
+                  className={styles.pcEditNicknameCallMsodify}
+                >
+                  去绑定
+                </p>
+              );
+            }
+            return (
+              <p
+                onClick={() => {
+                  this.setState({
+                    mobileEditorVisible: true,
+                  });
+                }}
+                className={styles.pcEditNicknameCallMsodify}
+              >
+                修改
+              </p>
+            );
+          },
           inputEditor: () => null,
         },
         {
@@ -184,7 +239,11 @@ class index extends Component {
         {
           name: '微信',
           display: 'show',
-          condition: () => true,
+          condition: () => {
+            // 条件都满足时才显示微信
+            const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
+            return IS_WECHAT_ACCESSABLE;
+          },
           render: () => (
             <div className={styles.pcEditNicknameImgs}>
               <Avatar className={styles.pcEditNicknameImg} image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />

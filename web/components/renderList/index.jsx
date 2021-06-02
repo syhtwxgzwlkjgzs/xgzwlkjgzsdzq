@@ -7,19 +7,25 @@ import classnames from 'classnames';
 ```js
 const columns = [
   {
-    title: '123',
-    key: '',
-    render: item => item.money,
+    title: '金额1',
+    key: 'money1',
+        render: (item) => {
+        return <div>{item.money1}</div>
+    },
   },
   {
-    title: '234',
-    key: '',
-    render: (item) => {},
+    title: '金额2',
+    key: 'money2',
+            render: (item) => {
+        return <div>{item.money2}</div>
+    },
   },
   {
-    title: '345',
-    key: '',
-    render: (item) => {},
+    title: '金额3',
+    key: 'money3',
+    render: (item) => {
+        return <div>{item.money3}</div>
+    },
   },
 ];
 ```

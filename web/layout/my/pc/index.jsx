@@ -98,7 +98,7 @@ class PCMyPage extends React.Component {
 
           <div className={styles.userInfoWrapper}>
             <div className={styles.userInfoKey}>签名</div>
-            <div className={styles.userInfoValue}>{this.props.user.signature}</div>
+            <div className={styles.userInfoValue}>{this.props.user.signature || '这个人很懒，什么也没留下~'}</div>
           </div>
         </SidebarPanel>
 

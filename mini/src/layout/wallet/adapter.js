@@ -1,7 +1,7 @@
 export const typeFilter = (data, type) => {
   let targetData = {};
   Object.keys(data).forEach((key) => {
-    if (String(type) === String(key)) {
+    if (type === key) {
       targetData = data[key];
     }
   });

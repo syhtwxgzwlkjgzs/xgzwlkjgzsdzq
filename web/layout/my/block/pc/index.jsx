@@ -52,20 +52,20 @@ class BlockPcPage extends React.Component {
     const { userShieldPage, userShieldTotalPage, userShield, userShieldTotalCount } = user;
 
     return (
-      <BaseLayout 
+      <BaseLayout
         right={this.renderRight}
         immediateCheck={false}
         onRefresh={this.loadMore}
         showRefresh={false}
         noMore={userShieldTotalPage < userShieldPage}
       >
-        <SidebarPanel 
-          title="我的屏蔽" 
+        <SidebarPanel
+          title="我的屏蔽"
           type='normal'
           isShowMore={false}
           noData={!userShield?.length}
           isLoading={!userShield}
-          icon={{ type: 3, name: 'LikeOutlined' }}
+          icon={{ type: 3, name: 'ScreenOutlined' }}
           rightText={`共有${userShieldTotalCount}位用户`}
         >
           <ShieldList data={userShield} />
