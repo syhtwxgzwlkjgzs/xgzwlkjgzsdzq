@@ -158,6 +158,9 @@ class UserCenterFans extends React.Component {
     if (prevProps.userId !== this.props.userId) {
       this.page = 1;
       this.totalPage = 1;
+      this.setState({
+        fans: {},
+      });
       await this.loadMore();
     }
   }
