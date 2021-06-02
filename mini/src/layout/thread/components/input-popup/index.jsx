@@ -26,7 +26,6 @@ const InputPop = (props) => {
   const [showPicture, setShowPicture] = useState(false);
   const [imageList, setImageList] = useState([]);
   const [imageUploading, setImageUploading] = useState(false);
-  const [isComplete, setIsComplete] = useState(true);
 
   // 输入框光标位置
   const [cursorPos, setCursorPos] = useState(0);
@@ -38,9 +37,9 @@ const InputPop = (props) => {
     setValue(initValue || '');
   }, [initValue]);
 
+  // 点击发布
   const onSubmitClick = async () => {
-    if (loading) return;
-    if (!isComplete) return;
+    if (loading || imageUploading) return;
 
     if (typeof onSubmit === 'function') {
       try {
@@ -120,7 +119,6 @@ const InputPop = (props) => {
 
   // 附件、图片上传之前
   const beforeUpload = (cloneList, showFileList, type) => {
-    setIsComplete(false);
     const { webConfig } = site;
     if (!webConfig) return false;
     // 站点支持的文件类型、文件大小
@@ -167,13 +165,17 @@ const InputPop = (props) => {
     return true;
   };
 
-  const onComplete = (value, file) => {
+  const onComplete = (value, file, list) => {
     if (value.code === 0) {
       file.response = value.data;
     }
+    setImageUploading(list?.length && list.some((image) => image.status === 'uploading'));
+  };
 
-    setImageUploading(imageList?.length && imageList.some((image) => image.status === 'uploading'));
-    setIsComplete(true);
+  const onFail = () => {
+    Toast.error({
+      content: '图片上传失败',
+    });
   };
 
   return (
@@ -208,6 +210,7 @@ const InputPop = (props) => {
                     onChange={handleUploadChange}
                     onComplete={onComplete}
                     beforeUpload={(cloneList, showFileList) => beforeUpload(cloneList, showFileList, THREAD_TYPE.image)}
+                    onFail={onFail}
                   />
                 </View>
                 <Divider className={styles.divider}></Divider>

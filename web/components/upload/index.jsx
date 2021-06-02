@@ -40,15 +40,15 @@ export default function DzqUpload(props) {
       updater(list);
     });
     if (ret.code === 0) {
-      onSuccess(ret, file);
-      onComplete(ret, file);
       file.status = 'success';
       updater(list);
+      onSuccess(ret, file);
+      onComplete(ret, file, list);
     } else {
-      onFail(ret, file);
-      onComplete(ret, file);
       file.status = 'error';
       updater(list);
+      onFail(ret, file);
+      onComplete(ret, file, list);
       return false;
     }
     return ret;
