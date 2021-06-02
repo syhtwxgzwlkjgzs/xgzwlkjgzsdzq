@@ -7,7 +7,7 @@ import styles from './index.module.scss';
 
 const Index = ({ message }) => {
   const { readFinancialMsgList, financialMsgList, deleteMsg } = message;
-  const { list, currentPage, totalPage, totalCount } = financialMsgList;
+  const { list, currentPage, totalPage } = financialMsgList;
 
   // 初始化
   useEffect(() => {
@@ -38,10 +38,8 @@ const Index = ({ message }) => {
   }, [list])
 
   return (
-    <View className={styles.wrapper}>
+    <View className={styles.container}>
       <Notice
-        infoIdx={2}
-        totalCount={totalCount}
         noMore={currentPage >= totalPage}
         list={renderList}
         type='financial'

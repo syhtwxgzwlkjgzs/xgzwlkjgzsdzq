@@ -142,7 +142,6 @@ class PCMyPage extends React.Component {
   render() {
     const { user } = this.props;
     const { userThreadsPage, userThreadsTotalPage, getUserThreads, userThreads } = user;
-    const formattedUserThreads = this.formatUserThreadsData(userThreads);
 
     // store中，userThreadsPage会比真实页数多1
     let currentPageNum = userThreadsPage;

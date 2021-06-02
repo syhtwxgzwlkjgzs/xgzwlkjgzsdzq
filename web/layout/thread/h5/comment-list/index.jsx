@@ -21,7 +21,7 @@ class RenderCommentList extends React.Component {
     this.state = {
       showAboptPopup: false, // 是否弹出采纳弹框
       showCommentInput: false, // 是否弹出评论框
-      commentSort: true, // ture 评论从旧到新 false 评论从新到旧
+      commentSort: true, // true 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
       inputText: '请输入内容', // 默认回复框placeholder内容
     };
@@ -337,7 +337,7 @@ class RenderCommentList extends React.Component {
           <div className={comment.number}>共{totalCount}条评论</div>
           <div className={comment.sort} onClick={() => this.onSortClick()}>
             <Icon className={comment.sortIcon} name="SortOutlined"></Icon>
-            <span className={comment.sortText}>{this.state.commentSort ? '评论从新到旧' : '评论从旧到新'}</span>
+            <span className={comment.sortText}>{this.state.commentSort ? '评论从旧到新' : '评论从新到旧'}</span>
           </div>
         </div>
         <div className={comment.body}>
