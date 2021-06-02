@@ -26,6 +26,7 @@ const InputPop = (props) => {
   const [showPicture, setShowPicture] = useState(false);
   const [imageList, setImageList] = useState([]);
   const [imageUploading, setImageUploading] = useState(false);
+  const [isComplete, setIsComplete] = useState(true);
 
   // 输入框光标位置
   const [cursorPos, setCursorPos] = useState(0);
@@ -39,6 +40,7 @@ const InputPop = (props) => {
 
   const onSubmitClick = async () => {
     if (loading) return;
+    if (!isComplete) return;
 
     if (typeof onSubmit === 'function') {
       try {
@@ -46,6 +48,8 @@ const InputPop = (props) => {
         const success = await onSubmit(value, imageList);
         if (success) {
           setValue('');
+          setShowPicture(false);
+          setImageList([]);
         }
       } catch (error) {
         console.log(error);
@@ -116,6 +120,7 @@ const InputPop = (props) => {
 
   // 附件、图片上传之前
   const beforeUpload = (cloneList, showFileList, type) => {
+    setIsComplete(false);
     const { webConfig } = site;
     if (!webConfig) return false;
     // 站点支持的文件类型、文件大小
@@ -168,6 +173,7 @@ const InputPop = (props) => {
     }
 
     setImageUploading(imageList?.length && imageList.some((image) => image.status === 'uploading'));
+    setIsComplete(true);
   };
 
   return (
