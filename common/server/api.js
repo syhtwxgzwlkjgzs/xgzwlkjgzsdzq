@@ -7,8 +7,9 @@ import setAuthorization from '@common/utils/set-authorization';
 import setUserAgent from '@common/utils/set-user-agent';
 import { ENV_CONFIG } from '@common/constants/site';
 import isServer from '@common/utils/is-server';
+import Toast from '@discuzq/design/dist/components/toast';
 import Router from '@discuzq/sdk/dist/router';
-
+let globalToast = null;
 const api = apiIns({
   baseURL: ENV_CONFIG.COMMOM_BASE_URL && ENV_CONFIG.COMMOM_BASE_URL !== '' ? ENV_CONFIG.COMMOM_BASE_URL : isServer() ? '' : window.location.origin,
   timeout: isServer() ? 2000 : 0,
@@ -41,6 +42,14 @@ http.interceptors.request.use(
   (error) => {
     // 对请求错误做些什么
     console.error('request', error);
+    if ( globalToast ) {
+      globalToast.hide();
+      globalToast = null;
+    }
+    globalToast = Toast.error({
+      title: '请求错误',
+      content: err.message || '未知错误',
+    });
     return {
       code: -1,
       data: null,
@@ -65,6 +74,14 @@ http.interceptors.response.use((res) => {
   if (window) {
     console.error('response', err.stack);
     console.error('response', err.message);
+    if ( globalToast ) {
+      globalToast.hide();
+      globalToast = null;
+    }
+    globalToast = Toast.error({
+      title: '接口错误',
+      content: err.message || '未知错误',
+    });
   }
   return Promise.resolve({
     code: -1,

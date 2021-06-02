@@ -87,6 +87,10 @@ const RenderThreadContent = inject('user')(
       typeof props.onRewardClick === 'function' && props.onRewardClick();
     };
 
+    const onClickUser = (e) => {
+      typeof props.onClickUser === 'function' && props.onClickUser(e);
+    }
+
     return (
       <div className={`${styles.container}`}>
         <div className={styles.header}>
@@ -102,6 +106,7 @@ const RenderThreadContent = inject('user')(
               isPay={!isFree}
               isReward={isReward}
               isRed={isRedPack}
+              onClick={onClickUser}
             ></UserInfo>
           </div>
           {props?.user?.isLogin() && isApproved && (
