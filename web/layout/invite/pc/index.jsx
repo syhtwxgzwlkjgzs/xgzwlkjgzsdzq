@@ -8,6 +8,7 @@ import BaseLayout from '@components/base-layout';
 import UserCenterFansPc from '@components/user-center/fans-pc';
 import UserCenterFriendPc from '@components/user-center/friend-pc';
 import Copyright from '@components/copyright';
+import { copyToClipboard } from '@common/utils/copyToClipboard';
 
 @inject('site')
 @inject('forum')
@@ -25,8 +26,25 @@ class InvitePCPage extends React.Component {
     }
   }
 
+  createInviteLink = async () => {
+    try {
+      const { invite } = this.props;
+      await this.props.invite.createInviteLink();
+      copyToClipboard(`${window.location.origin}/forum/partner-invite?inviteCode=${invite.inviteCode}`);
+      Toast.success({
+        content: '创建邀请链接成功',
+        duration: 1000,
+      });
+    } catch (e) {
+      Toast.error({
+        content: e.Message,
+      });
+    }
+  }
+
+
   nextUsersPage = async () => {
-    const { forum} = this.props;
+    const { forum } = this.props;
     return await this.setUsersPageData(forum.userPage + 1);
   }
 
@@ -64,7 +82,7 @@ class InvitePCPage extends React.Component {
               </div>
             </div>
           </div>
-          <div className={layout.user_card_button}>邀请朋友</div>
+          <div className={layout.user_card_button} onClick={this.createInviteLink}>邀请朋友</div>
         </div>
         <UserCenterFriendPc className={layout.user_center_wrap}/>
         <UserCenterFansPc  className={layout.user_center_wrap}/>
@@ -111,7 +129,7 @@ class InvitePCPage extends React.Component {
           </div>
         </div>
       </BaseLayout>
-    )
+    );
   }
 }
 
