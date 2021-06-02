@@ -32,14 +32,14 @@ class index extends Component {
       bindMobile: null,
       isBlur: false, // 表示是否失焦
       isKeyBoardVisible: false, // 表示是否显示键盘
-    })
+    });
   }
 
   // 点击切换弹出键盘事件
   handleKeyBoardVisible = () => {
     this.setState({
-      isKeyBoardVisible: !this.state.isKeyBoardVisible
-    })
+      isKeyBoardVisible: !this.state.isKeyBoardVisible,
+    });
   }
 
   updatePwd = (set_num, type) => {
@@ -57,7 +57,7 @@ class index extends Component {
         () => {
           if (this.state.list.length === 6) {
             // this.submitPwa();
-            this.handleKeyBoardVisible()
+            this.handleKeyBoardVisible();
           }
         },
       );
@@ -70,7 +70,7 @@ class index extends Component {
 
   // 点击下一步
   handleStepBtn = throttle(async () => {
-    if (this.getDisabledWithButton()) return
+    if (this.getDisabledWithButton()) return;
     const { list = [], currentStep, bindMobile } = this.state;
     if (list.length !== 6) return;
     if (currentStep === 'first') {
@@ -87,7 +87,7 @@ class index extends Component {
           interval: null,
           initTimeText: '发送验证码',
           buttonDisabled: false,
-          isKeyBoardVisible: false
+          isKeyBoardVisible: false,
         });
       })
         .catch((err) => {
@@ -96,7 +96,7 @@ class index extends Component {
             hasMask: false,
             duration: 1000,
           });
-          this.initState()
+          this.initState();
           this.props.user.oldMobileVerifyCode = null;
         });
     } else if (currentStep === 'second') {
@@ -107,11 +107,11 @@ class index extends Component {
           content: '绑定成功',
           hasMask: false,
           duration: 1000,
-        })
+        });
         Router.push({ url: '/my' });
         setTimeout(() => {
-          this.initState()
-        }, 1000)
+          this.initState();
+        }, 1000);
       })
         .catch((err) => {
           Toast.error({
@@ -120,8 +120,8 @@ class index extends Component {
             duration: 1000,
           });
           this.setState({
-            list: []
-          })
+            list: [],
+          });
         });
     }
   }, 300)
@@ -148,7 +148,7 @@ class index extends Component {
     const { originalMobile } = this.props.user;
     const { currentStep } = this.state;
     if (currentStep === 'first') {
-      let { captchaRandStr, captchaTicket } = await this.props.showCaptcha()
+      const { captchaRandStr, captchaTicket } = await this.props.showCaptcha();
       this.props.user.sendSmsVerifyCode({ mobile: originalMobile, captchaRandStr, captchaTicket })
         .then((res) => {
           this.setState({
@@ -168,10 +168,9 @@ class index extends Component {
           });
           if (calback && typeof calback === 'function') calback(err);
         });
-
     } else if (currentStep === 'second') {
       const { bindMobile } = this.state;
-      let { captchaRandStr, captchaTicket } = await this.props.showCaptcha()
+      const { captchaRandStr, captchaTicket } = await this.props.showCaptcha();
       this.props.user.sendSmsUpdateCode({ mobile: bindMobile, captchaRandStr, captchaTicket })
         .then((res) => {
           this.setState({
@@ -187,7 +186,7 @@ class index extends Component {
             duration: 1000,
           });
           this.setState({
-            bindMobile: null
+            bindMobile: null,
           });
           if (calback && typeof calback === 'function') calback(err);
         });
@@ -208,7 +207,7 @@ class index extends Component {
     } else if (currentStep === 'second') {
       isSubmit = (list.length !== 6 || !this.validateTel(bindMobile));
     }
-    return isSubmit
+    return isSubmit;
   }
 
   render() {

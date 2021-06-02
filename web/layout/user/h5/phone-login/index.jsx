@@ -55,6 +55,7 @@ class LoginPhoneH5Page extends React.Component {
         },
       });
     } catch (e) {
+      console.log(e);
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME.Code) {
         this.props.commonLogin.needToSetNickname = true;
         this.props.router.push('/user/bind-nickname');
@@ -139,8 +140,24 @@ class LoginPhoneH5Page extends React.Component {
     }
   };
 
+  goToWechatLogin = () => {
+    if (browser.env('weixin')) {
+      let inviteCode = this.props.invite.getInviteCode(this.props.router);
+      if (inviteCode) inviteCode = `?inviteCode=${inviteCode}`;
+      const redirectEncodeUrl = encodeURIComponent(`${window.location.origin}/user/wx-auth${inviteCode}`);
+      window.location.href = `${window.location.origin}/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
+      return;
+    }
+
+    this.props.router.replace('wx-login');
+  }
+
+  goToUsernameLogin = () => {
+    this.props.router.replace('username-login');
+  }
+
   render() {
-    const { mobileLogin, site, commonLogin, invite, router } = this.props;
+    const { mobileLogin, site, commonLogin} = this.props;
     const { platform } = site;
     const isAnotherLoginWayAvaliable = this.props.site.wechatEnv !== 'none' || this.props.site.isUserLoginVisible;
     // 接受监听一下协议的数据，不能去掉，去掉后协议的点击无反应
@@ -180,17 +197,7 @@ class LoginPhoneH5Page extends React.Component {
           <div className={platform === 'h5' ? layout['otherLogin-button'] : layout.pc_otherLogin_button}>
             {this.props.site.wechatEnv !== 'none' && (
               <span
-                onClick={() => {
-                  if (browser.env('weixin')) {
-                    let inviteCode = invite.getInviteCode(router);
-                    if (inviteCode) inviteCode = `?inviteCode=${inviteCode}`;
-                    const redirectEncodeUrl = encodeURIComponent(`${window.location.origin}/user/wx-auth${inviteCode}`);
-                    window.location.href = `${window.location.origin}/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
-                    return;
-                  }
-
-                  this.props.router.replace('wx-login');
-                }}
+                onClick={this.goToWechatLogin}
                 className={platform === 'h5' ? layout['otherLogin-button-weixin'] : layout.button_left}
               >
                 <Icon size={20} name='WechatOutlined' color='#04C160'/>
@@ -198,9 +205,7 @@ class LoginPhoneH5Page extends React.Component {
             )}
             {this.props.site.isUserLoginVisible && (
               <span
-                onClick={() => {
-                  this.props.router.replace('username-login');
-                }}
+                onClick={this.goToUsernameLogin}
                 className={platform === 'h5' ? layout['otherLogin-button-user'] : layout.button_right}
               >
                 <Icon size={20} name='UserOutlined' color='#4084FF'/>

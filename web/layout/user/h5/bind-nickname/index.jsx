@@ -43,7 +43,7 @@ class BindNicknameH5Page extends React.Component {
       });
     } catch (e) {
       // 跳转状态页
-      if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
+      if ([BANNED_USER, REVIEWING, REVIEW_REJECT].includes(e.Code)) {
         this.props.commonLogin.setStatusMessage(e.Code, e.Message);
         this.props.router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
         return;

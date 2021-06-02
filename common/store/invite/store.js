@@ -1,7 +1,6 @@
 import { observable, action } from 'mobx';
 import { simpleRequest } from '@common/utils/simple-request';
-import { get } from '../../utils/get';
-import isWeiXin from '../../utils/is-wechat-browser';
+import isWeiXin from '../../utils/is-weixin';
 export default class InviteStore {
   @observable inviteData = { };
   @observable inviteCode = '';
