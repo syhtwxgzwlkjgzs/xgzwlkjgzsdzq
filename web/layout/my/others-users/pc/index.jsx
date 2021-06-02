@@ -18,6 +18,7 @@ import List from '@components/list';
 @inject('user')
 @observer
 class PCMyPage extends React.Component {
+  targetUserId = null;
   constructor(props) {
     super(props);
     this.props.user.cleanTargetUserThreads();
@@ -35,12 +36,38 @@ class PCMyPage extends React.Component {
       return;
     }
     if (query.id) {
+      this.targetUserId = query.id;
       await this.props.user.getTargetUserInfo(query.id);
       this.setState({
         fetchUserInfoLoading: false,
       });
     }
   };
+
+  componentDidUpdate = async () => {
+    const { query } = this.props.router;
+    const id = this.props.user?.id;
+
+    if (String(id) === query.id) {
+      Router.replace({ url: '/my' });
+      return;
+    }
+
+    if (String(this.targetUserId) === String(query.id)) return;
+    this.targetUserId = query.id;
+    if (query.id) {
+      this.props.user.removeTargetUserInfo();
+      await this.props.user.getTargetUserInfo(query.id);
+      await this.fetchTargetUserThreads();
+      this.setState({
+        fetchUserInfoLoading: false,
+      });
+    }
+  };
+
+  componentWillUnmount() {
+    this.props.user.removeTargetUserInfo();
+  }
 
   fetchTargetUserThreads = async () => {
     const { query } = this.props.router;
@@ -75,12 +102,13 @@ class PCMyPage extends React.Component {
     return (
       <>
         <UserCenterFansPc userId={id} />
-        <div className={styles.hr}></div>
+
         <UserCenterFollowsPc userId={id} />
         <Copyright />
       </>
     );
   };
+
   renderContent = () => {
     const { user } = this.props;
     const { targetUserThreads, targetUserThreadsTotalCount, targetUserThreadsPage, targetUserThreadsTotalPage } = user;
@@ -90,28 +118,23 @@ class PCMyPage extends React.Component {
           title="主题"
           type="normal"
           bigSize={true}
-          isShowMore={!this.formatUserThreadsData(targetUserThreads).length}
+          isShowMore={false}
+          isLoading={!targetUserThreads}
           leftNum={`${targetUserThreadsTotalCount}个主题`}
           noData={!this.formatUserThreadsData(targetUserThreads)?.length}
         >
-          <List
-            immediateCheck={false}
-            onRefresh={this.fetchTargetUserThreads}
-            noMore={targetUserThreadsTotalPage < targetUserThreadsPage}
-          >
-            {/* FIXME: pc 切换到新逻辑 */}
-            {this.formatUserThreadsData(targetUserThreads)
-              && this.formatUserThreadsData(targetUserThreads).length > 0 && (
-                <UserCenterThreads data={this.formatUserThreadsData(targetUserThreads)} />
-            )}
-          </List>
+          {this.formatUserThreadsData(targetUserThreads)
+            && this.formatUserThreadsData(targetUserThreads).length > 0 && (
+              <UserCenterThreads data={this.formatUserThreadsData(targetUserThreads)} />
+          )}
         </SidebarPanel>
       </div>
     );
   };
+
   render() {
     const { user } = this.props;
-    const { targetUserThreadsPage, targetUserThreadsTotalPage } = user;
+    const { targetUserThreadsPage, targetUserThreadsTotalPage, targetUserThreads } = user;
     return (
       <>
         <UserBaseLaout
@@ -122,6 +145,8 @@ class PCMyPage extends React.Component {
           showRefresh={false}
           onSearch={this.onSearch}
           right={this.renderRight}
+          immediateCheck={true}
+          showLayoutRefresh={!!this.formatUserThreadsData(targetUserThreads)?.length}
         >
           {this.renderContent()}
         </UserBaseLaout>

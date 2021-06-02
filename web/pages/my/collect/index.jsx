@@ -114,6 +114,8 @@ class Index extends React.Component {
         page: this.state.page + 1,
       });
     }
+
+    return
   };
 
   render() {
