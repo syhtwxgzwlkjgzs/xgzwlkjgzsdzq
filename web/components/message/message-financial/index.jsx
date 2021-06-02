@@ -23,10 +23,18 @@ const Index = ({ site, message }) => {
   const formatFinancialList = (list = []) => {
     const newList = [];
     list.forEach(({
-      amount, content, createdAt, id, threadId, type, userAvatar: avatar, userId, username
+      amount, content, createdAt, id, threadId, threadTitle, type, userAvatar, userId, username
     }) => {
       newList.push({
-        amount, content, createdAt, id, threadId, type, avatar, userId, username
+        amount,
+        content: threadTitle || content,
+        createdAt,
+        id,
+        threadId,
+        type,
+        avatar: userAvatar,
+        userId,
+        username
       });
     });
     return newList;

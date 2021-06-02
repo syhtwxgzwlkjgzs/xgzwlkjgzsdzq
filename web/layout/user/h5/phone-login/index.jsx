@@ -14,6 +14,7 @@ import { genMiniScheme } from '@server';
 import PcBodyWrap from '../components/pc-body-wrap';
 import Protocol from '../components/protocol';
 import browser from '../../../../../common/utils/browser';
+import HOCTencentCaptcha from '@middleware/HOCTencentCaptcha';
 
 
 @inject('site')
@@ -118,23 +119,15 @@ class LoginPhoneH5Page extends React.Component {
 
   handleSendCodeButtonClick = async () => {
     try {
-      const { site, commonLogin } = this.props;
-      const { webConfig } = site;
-      const { TencentCaptcha } = (await import('@discuzq/sdk/dist/common_modules/sliding-captcha'));
-      const qcloudCaptchaAppId = get(webConfig, 'qcloud.qcloudCaptchaAppId', false);
+      const { commonLogin } = this.props;
       // 发送前校验
       this.props.mobileLogin.beforeSendVerify();
       // 验证码
-      const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
-      if (qcloudCaptcha) {
-        const res = await this.props.commonLogin.showCaptcha(qcloudCaptchaAppId, TencentCaptcha);
-        if (res.ret !== 0) {
-          return;
-        }
-      }
+      const { captchaRandStr, captchaTicket } = await this.props.showCaptcha();
+
       await this.props.mobileLogin.sendCode({
-        captchaRandStr: this.props.commonLogin?.captchaRandStr,
-        captchaTicket: this.props.commonLogin?.captchaTicket,
+        captchaRandStr,
+        captchaTicket,
       });
       commonLogin.setIsSend(true);
     } catch (e) {
@@ -222,4 +215,4 @@ class LoginPhoneH5Page extends React.Component {
   }
 }
 
-export default withRouter(LoginPhoneH5Page);
+export default HOCTencentCaptcha(withRouter(LoginPhoneH5Page));

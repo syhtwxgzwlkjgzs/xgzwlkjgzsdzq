@@ -38,7 +38,7 @@ class Index extends React.Component {
     } else if (type === 'moreData') {
       this.page += 1;
     }
-
+    search.setUsers(null);
     await search.getUsersList({ search: data, perPage: this.perPage, page: this.page });
     return;
   }

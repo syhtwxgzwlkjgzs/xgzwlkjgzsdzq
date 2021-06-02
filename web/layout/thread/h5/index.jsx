@@ -78,6 +78,8 @@ class ThreadH5Page extends React.Component {
     const offsetHeight = this.threadBodyRef?.current?.offsetHeight;
     const scrollHeight = this.threadBodyRef?.current?.scrollHeight;
     const { isCommentReady, isNoMore } = this.props.thread;
+    // 记录当前的滚动位置
+    this.props.thread.setScrollDistance(scrollDistance);
     if (scrollDistance + offsetHeight >= scrollHeight && !this.state.isCommentLoading && isCommentReady && !isNoMore) {
       this.page = this.page + 1;
       this.loadCommentList();
@@ -98,7 +100,10 @@ class ThreadH5Page extends React.Component {
       setTimeout(() => {
         this.threadBodyRef.current.scrollTo(0, this.position);
       }, 1000);
+      return;
     }
+    // 滚动到记录的指定位置
+    this.threadBodyRef.current.scrollTo(0, this.props.thread.scrollDistance);
   }
 
   componentDidUpdate() {
@@ -110,7 +115,7 @@ class ThreadH5Page extends React.Component {
 
   componentWillUnmount() {
     // 清空数据
-    this.props?.thread && this.props.thread.reset();
+    // this.props?.thread && this.props.thread.reset();
   }
 
   // 点击信息icon
