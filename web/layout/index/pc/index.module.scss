@@ -57,6 +57,14 @@
     position: absolute;
     right: rem(24);
     left: rem(24);
+    @include media('l-pc') {
+      right: rem(16);
+      left: rem(16);
+    }
+    @include media('s-pc') {
+      right: rem(16);
+      left: rem(16);
+    }
     bottom: 0;
   }
 
