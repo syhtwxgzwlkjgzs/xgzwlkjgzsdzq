@@ -15,6 +15,9 @@ import UserCenterThreads from '@components/user-center-threads';
 import NoData from '@components/no-data';
 import UserCenterFansPc from '@components/user-center/fans-pc';
 import UserCenterFollowsPc from '../../../components/user-center/follows-pc';
+import Thread from '@components/thread';
+import SectionTitle from '@components/section-title';
+
 
 @inject('site')
 @inject('user')
@@ -50,7 +53,7 @@ class PCMyPage extends React.Component {
   };
 
   onContainerClick = ({ id }) => {
-    Router.push({ url: `/my/others?isOtherPerson=${true}&otherId=${id}` });
+    Router.push({ url: `/user/${id}` });
   };
 
   formatUserThreadsData = (userThreads) => {
@@ -95,12 +98,12 @@ class PCMyPage extends React.Component {
 
           <div className={styles.userInfoWrapper}>
             <div className={styles.userInfoKey}>签名</div>
-            <div className={styles.userInfoValue}>{this.props.user.signature}</div>
+            <div className={styles.userInfoValue}>{this.props.user.signature || '这个人很懒，什么也没留下~'}</div>
           </div>
         </SidebarPanel>
-        <div className={styles.hr}></div>
+
         <UserCenterFansPc />
-        <div className={styles.hr}></div>
+
         <UserCenterFollowsPc />
         <Copyright />
       </>
@@ -110,7 +113,6 @@ class PCMyPage extends React.Component {
   renderContent = () => {
     const { user } = this.props;
     const { userThreads, userThreadsTotalCount } = user;
-    const { userThreadsPage, userThreadsTotalPage } = user;
     const formattedUserThreads = this.formatUserThreadsData(userThreads);
 
     return (
@@ -121,32 +123,42 @@ class PCMyPage extends React.Component {
         <div className={styles.section}>
           <UserCenterAction />
         </div>
+
         <SidebarPanel
           title="主题"
-          type="normal"
-          bigSize={true}
-          isShowMore={!userThreads}
-          showRefresh={false}
-          leftNum={`${userThreadsTotalCount}个主题`}
+          type='normal'
+          isShowMore={false}
           noData={!formattedUserThreads?.length}
+          isLoading={!formattedUserThreads}
+          leftNum={`${userThreadsTotalCount}个主题`}
+          mold='plane'
         >
-          {/* FIXME: PC 切换至新逻辑 */}
-          <List immediateCheck={false} noMore={userThreadsTotalPage <= userThreadsPage} onRefresh={user.getUserThreads}>
-            {formattedUserThreads && formattedUserThreads.length > 0 ? (
-              <UserCenterThreads data={formattedUserThreads} />
-            ) : (
-              <NoData />
-            )}
-          </List>
+          {formattedUserThreads?.map((item, index) => <Thread data={item} key={index} className={index === 0 && styles.threadStyle} />)}
         </SidebarPanel>
       </div>
     );
   };
 
   render() {
+    const { user } = this.props;
+    const { userThreadsPage, userThreadsTotalPage, getUserThreads, userThreads } = user;
+
+    // store中，userThreadsPage会比真实页数多1
+    let currentPageNum = userThreadsPage;
+    if (userThreadsTotalPage > 1) {
+      currentPageNum -= 1;
+    }
+
     return (
       <>
-        <UserBaseLaout allowRefresh={false} onSearch={this.onSearch} right={this.renderRight}>
+        <UserBaseLaout
+          showRefresh={false}
+          onSearch={this.onSearch}
+          right={this.renderRight}
+          immediateCheck={false}
+          noMore={userThreadsTotalPage <= currentPageNum}
+          onRefresh={getUserThreads}
+        >
           {this.renderContent()}
         </UserBaseLaout>
 

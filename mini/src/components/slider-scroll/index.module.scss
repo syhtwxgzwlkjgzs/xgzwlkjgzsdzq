@@ -1,36 +1,18 @@
 @import "@common/styles/index.scss";
 
 .wrapper {
-  box-sizing: content-box;
-
-  &.not-bottom {
-    height: 100vh;
-    padding-bottom: constant(safe-area-inset-bottom);
-    padding-bottom: env(safe-area-inset-bottom);
-    .list {
-      padding-bottom: constant(safe-area-inset-bottom);
-      padding-bottom: env(safe-area-inset-bottom);
-    }
-  }
-
-  &.with-bottom {
-    height: calc(100vh - 64px);
-    padding-bottom: 64px;
-    padding-bottom: calc(64px + constant(safe-area-inset-bottom));
-    padding-bottom: calc(64px + env(safe-area-inset-bottom));
-
-    .list {
-      padding-bottom: constant(safe-area-inset-bottom);
-      padding-bottom: env(safe-area-inset-bottom);
-    }
-  }
+  height: 100%;
 
   :global {
     .dzq-pull-refresh {
+      height: 100%;
+
       .dzq-pull-refresh__loading {
-        font-size: $font-size-large;
-        top: -56px !important;
+        padding: 0;
+        font-size: $font-size-middle;
+        top: 0 !important;
       }
+
       .dzq-pull-refresh__list {
         height: 100% !important;
       }
@@ -47,7 +29,6 @@
   overflow: hidden;
 
   .slider-item {
-    transform: translateX(0);
     display: flex;
     flex-wrap: nowrap;
     justify-content: flex-start;

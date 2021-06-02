@@ -6,6 +6,8 @@ import Icon from '@discuzq/design/dist/components/icon/index';
 import { noop } from '../utils';
 import { View, Text } from '@tarojs/components'
 import { getElementRect, randomStr } from '../utils'
+import Taro from '@tarojs/taro';
+
 
 /**
  * 视频
@@ -41,10 +43,10 @@ const Index = ({
   const onPlay = (e) => {
     if(baselayout) {
       if(baselayout.playingVideoDom) {
-        wx.createVideoContext(baselayout.playingVideoDom)?.pause(); // 暂停之前正在播放的音频
+        Taro.createVideoContext(baselayout.playingVideoDom)?.pause(); // 暂停之前正在播放的音频
       }
   
-      wx.createSelectorQuery()
+      Taro.createSelectorQuery()
         .select(`#${e.target.id}`)
         .boundingClientRect((rect) => { 
           baselayout.playingVideoDom = e.target.id;

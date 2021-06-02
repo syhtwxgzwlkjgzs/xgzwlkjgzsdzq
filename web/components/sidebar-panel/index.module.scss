@@ -10,19 +10,28 @@
     display: flex;
     align-items: center;
   }
+}
 
-  .spinner {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: $text-color-placeholder;
-    height: rem(60);
-  }
+.spinner {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $text-color-placeholder;
+  height: rem(60);
+  background-color: var(--color-white);
 }
 
 .containerPC {
   border-radius: rem($border-radius-small);
+}
+
+.containerPlane {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  max-width: rem(750);
+  padding: 0 rem($padding-6n);
+  background-color: var(--color-white);
 }
 
 .bottom {
