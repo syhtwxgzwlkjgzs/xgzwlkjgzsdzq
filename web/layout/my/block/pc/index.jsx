@@ -58,6 +58,7 @@ class BlockPcPage extends React.Component {
         onRefresh={this.loadMore}
         showRefresh={false}
         noMore={userShieldTotalPage < userShieldPage}
+        rightClass={styles.rightSide}
       >
         <SidebarPanel
           title="我的屏蔽"

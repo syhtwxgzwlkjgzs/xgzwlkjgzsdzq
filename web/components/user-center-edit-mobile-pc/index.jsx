@@ -157,7 +157,6 @@ export default class index extends Component {
         })
     } else if (currentStep === 'second') {
       const { bindMobile } = this.state
-      console.log(bindMobile);
       this.props.user.sendSmsUpdateCode({ mobile: bindMobile })
         .then(res => {
           this.setState({
@@ -184,7 +183,6 @@ export default class index extends Component {
   // 点击发送验证码
   handleGetVerifyCode = () => {
     const { buttonDisabled, currentStep, bindMobile } = this.state
-    console.log(buttonDisabled,'ssss_buttonDisabled');
     if (buttonDisabled || (currentStep === 'second' && !this.validateTel(bindMobile))) return
     const calback = (err) => {
       if (err) {
@@ -246,9 +244,9 @@ export default class index extends Component {
               <div className={styles.labelName}>{currentStep === 'first' ? '验证旧手机' : '设置新手机'}</div>
               {
                 currentStep === 'first' ? (
-                  <Input value={mobile} />
+                  <Input trim value={mobile} />
                 ) : (
-                  <Input key={currentStep} placeholder="输入新手机号码" onChange={this.handleInputChange} focus={true} onBlur={this.handleInputBlur} onFocus={this.handleInputFocus} value={bindMobile} />
+                  <Input trim key={currentStep} placeholder="输入新手机号码" onChange={this.handleInputChange} focus={true} onBlur={this.handleInputBlur} onFocus={this.handleInputFocus} value={bindMobile} />
                 )
               }
               <div className={styles.labelValue}>

@@ -8,12 +8,16 @@ import styles from './index.module.scss';
 
 import { Icon, Button } from '@discuzq/design';
 
-
+@inject('user')
 @observer
 class WalletInfo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  moneyFormat = (freezeAmount, availableAmount) => {
+    return (parseFloat(freezeAmount) + parseFloat(availableAmount)).toFixed(2);
   }
 
   render() {
@@ -23,13 +27,13 @@ class WalletInfo extends React.Component {
                 this.props.webPageType === 'PC'
                   ? <div className={styles.header}>
                     <Avatar
-                      image=''
-                      name='头像'
+                      image={this.props.user?.avatarUrl}
+                      name={this.props.user?.username}
                       circle={true}
                       size={'large'}
                       className={styles.avatar}>
                     </Avatar>
-                    <div className={styles.name}>Amber</div>
+                    <div className={styles.name}>{this.props.user?.username}</div>
                 </div> : ''
             }
             <div className={`${this.props.webPageType === 'h5' ? styles.totalAmountH5 : styles.totalAmountPC}`}>
@@ -37,7 +41,7 @@ class WalletInfo extends React.Component {
                 {
                   this.props.walletData?.freezeAmount && this.props.walletData?.availableAmount
                     ? <div className={styles.moneyNum}>
-                    {Number(this.props.walletData?.freezeAmount) + Number(this.props.walletData?.availableAmount)}
+                    {this.moneyFormat(this.props.walletData?.freezeAmount,this.props.walletData?.availableAmount)}
                   </div> : <div className={styles.moneyNum}></div>
                 }
             </div>
