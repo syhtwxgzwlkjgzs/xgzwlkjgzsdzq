@@ -11,6 +11,9 @@
 
 在需要注入的页面通过`@withShare({})` 的方式引入,并将需要的参数传入
 
+如果设置的分享给朋友无效,可以在页面的config.js中配置  `enableShareAppMessage: true`, 同理如果分享到朋友圈无效，可以配置enableShareTimeline: true` 
+
+
 需要定义`$getShareData` 方法,将必要的参数返回
 
 参数`Object:object` 
