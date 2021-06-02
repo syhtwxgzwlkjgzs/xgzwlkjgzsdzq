@@ -135,10 +135,9 @@ class Index extends React.Component {
     }, 1000)
 
     onClickUser = (e) => {
-      e && e.stopPropagation()
-
-      const { user = {} } = this.props.data || {};
-      this.props.router.push(`/user/${user?.userId}`);
+        e && e.stopPropagation()
+        const { user = {} } = this.props.data || {};
+        this.props.router.push(`/user/${user?.userId}`);
     }
 
     onClick = (e) => {

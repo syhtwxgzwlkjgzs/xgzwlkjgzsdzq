@@ -10,7 +10,7 @@ import Router from '@discuzq/sdk/dist/router';
  * @prop {function} onClose 弹框关闭事件
  */
 const Index = (props) => {
-  const { visible = false, onClose = noop, isOtherFans = false, id } = props;
+  const { visible = false, onClose = noop, isOtherFans = false, id, title = '关注', } = props;
   const onContainerClick = ({ id }) => {
     Router.push({ url: `/user/${id}` });
   };
@@ -30,7 +30,7 @@ const Index = (props) => {
       <div className={styles.contaner}>
         <div className={styles.popupWrapper}>
           <div className={styles.title}>
-            关注
+            {title}
             <Icon name="CloseOutlined" className={styles.closeIcon} size={12} onClick={onClose} />
           </div>
           <div className={styles.titleHr}></div>

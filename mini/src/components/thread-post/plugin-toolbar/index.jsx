@@ -2,7 +2,7 @@
 /**
  * 发帖页底部分类、图片等工具栏
  */
-import React, { useState, useMemo, memo, useCallback } from 'react';
+import React, { useState, useMemo, memo, useCallback, useEffect } from 'react';
 import { observer, inject } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
@@ -12,12 +12,14 @@ import { Units } from '@components/common';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 
 const Index = inject('user', 'threadPost')(observer((props) => {
-  const { threadPost, clickCb, onCategoryClick, user } = props;
+  const { threadPost, clickCb, onCategoryClick, user, operationType } = props;
 
   // 控制插件icon的显示/隐藏
   const [plugShow, setplugShow] = useState(false);
   // 设置当前选中的插件
   const [currentplug, setCurrentplug] = useState({});
+
+  const [canInsertplugsin, setCanInsertplugsin] = useState({});
 
   const content = useCallback(
     () => {
@@ -30,26 +32,32 @@ const Index = inject('user', 'threadPost')(observer((props) => {
   // 插件icon元素
   const { threadExtendPermissions: tep } = user;
   const plug = useMemo(() => {
-    const plugs = attachIcon.map((item, index) => {
-      // 是否有权限
+    // 筛选出有权限的插件
+    const canInsert = attachIcon.filter((item) => {
       let canInsert = tep[item.type];
       if (item.type === THREAD_TYPE.video || item.type === THREAD_TYPE.voice) {
         canInsert = tep[item.type] && props?.isOpenQcloudVod;
       }
-      return canInsert ? (
+      return canInsert;
+    });
+    setCanInsertplugsin(canInsert);
+
+    // 根据筛选后的插件渲染图标
+    const plugs = canInsert.map((item, index) => {
+      return (
         <Icon
           key={index}
           className={styles['plug-icon']}
           onClick={() => {
             setplugShow(false);
-            setCurrentplug(item);
+            // setCurrentplug(item);
             clickCb(item);
           }}
           name={item.name}
-          color={item.name === currentplug.name && item.active}
+          color={item.type === operationType && item.active}
           size='20'
         />
-      ) : null;
+      );
     });
 
     return (
@@ -62,7 +70,18 @@ const Index = inject('user', 'threadPost')(observer((props) => {
         </View>
       </View>
     );
-  }, [tep, currentplug])
+  }, [tep, currentplug, operationType])
+
+  useEffect(() => {
+    if (!operationType) {
+      setCurrentplug({});
+    }
+    attachIcon.forEach((item) => {
+      if (item.type === operationType) {
+        setCurrentplug(item);
+      }
+    });
+  }, [operationType]);
 
   // 分类元素
   const category = (
@@ -83,7 +102,7 @@ const Index = inject('user', 'threadPost')(observer((props) => {
         { plugShow ? plug : category }
       </View>
       <View onClick={() => {setplugShow(!plugShow);}}>
-        { (!plugShow) && (<Icon className={styles['icon-color']} name={currentplug.name || 'PictureOutlinedBig'} size='20' />) }
+        { (!plugShow) && (<Icon className={styles['icon-color']} name={currentplug.name || canInsertplugsin[0]?.name} size='20' />) }
         <Icon name="MoreBOutlined" size='20' />
       </View>
     </View>

@@ -56,6 +56,7 @@ class ThreadH5Page extends React.Component {
       showContent: '',
       // inputValue: '', // 评论内容
       toView: '', // 接收元素id用来滚动定位
+      position: 0,
     };
 
     this.perPage = 5;
@@ -65,9 +66,9 @@ class ThreadH5Page extends React.Component {
     // 滚动定位相关属性
     this.threadBodyRef = React.createRef();
     this.commentDataRef = React.createRef();
-    this.position = 0;
     this.nextPosition = 0;
     this.flag = true;
+    this.currentPosition = 0;
 
     // 修改评论数据
     this.comment = null;
@@ -87,6 +88,7 @@ class ThreadH5Page extends React.Component {
     if (this.flag) {
       this.nextPosition = e.detail?.scrollTop || 0;
     }
+    this.currentPosition = e.detail?.scrollTop || 0;
   };
 
   // 触底事件
@@ -128,20 +130,26 @@ class ThreadH5Page extends React.Component {
     if (this.flag) {
       this.flag = !this.flag;
     } else {
-      if (this.position <= 0) {
-        this.position = this.nextPosition + 1;
+      if (this.state.position <= 0) {
+        this.setState({ position: this.nextPosition + 1});
       } else {
-        this.position = this.nextPosition - 1;
+        this.setState({ position: this.nextPosition - 1});
       }
       this.flag = !this.flag;
     }
   }
 
+  // 保持当前位置
+  keepCurrentPosition = () => {
+    this.setState({ position: this.currentPosition });
+  }
+
   // 点击收藏icon
   async onCollectionClick() {
+    this.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -203,9 +211,10 @@ class ThreadH5Page extends React.Component {
 
   // 点击评论
   onInputClick() {
+    this.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -216,6 +225,7 @@ class ThreadH5Page extends React.Component {
 
   // 点击更多icon
   onMoreClick = () => {
+    this.keepCurrentPosition();
     // this.setState({
     //   text: !this.state.text,
     // });
@@ -225,7 +235,7 @@ class ThreadH5Page extends React.Component {
   onOperClick = (type) => {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -481,7 +491,7 @@ class ThreadH5Page extends React.Component {
   async onLikeClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -502,6 +512,7 @@ class ThreadH5Page extends React.Component {
 
   // 分享
   async onShareClick() {
+    this.keepCurrentPosition();
     Toast.info({ content: '复制链接成功' });
 
     const { title = '' } = this.props.thread?.threadData || {};
@@ -522,7 +533,7 @@ class ThreadH5Page extends React.Component {
   async onPayClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -541,7 +552,7 @@ class ThreadH5Page extends React.Component {
   onRewardClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -629,7 +640,7 @@ class ThreadH5Page extends React.Component {
           ref={this.hreadBodyRef}
           id="hreadBodyId"
           scrollY
-          scrollTop={this.position}
+          scrollTop={this.state.position}
           lowerThreshold={50}
           onScrollToLower={() => this.scrollToLower()}
           scrollIntoView={this.state.toView}
@@ -665,6 +676,7 @@ class ThreadH5Page extends React.Component {
                       router={this.props.router}
                       sort={(flag) => this.onSortChange(flag)}
                       onEditClick={(comment) => this.onEditClick(comment)}
+                      keepCurrentPosition={() => this.keepCurrentPosition()}
                     ></RenderCommentList>
                     {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
                     {isNoMore && (

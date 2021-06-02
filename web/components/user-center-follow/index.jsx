@@ -211,7 +211,6 @@ class UserCenterFollows extends React.Component {
   };
 
   render() {
-    const isNoData = followerAdapter(this.state.follows).length === 0 && !this.state.loading;
     return (
       <div
         className={this.props.className}
@@ -242,7 +241,7 @@ class UserCenterFollows extends React.Component {
             </div>
           );
         })}
-        {isNoData && <NoData />}
+        {followerAdapter(this.state.follows).length === 0 && !this.state.loading && <NoData />}
         <div className={styles.loadMoreContainer}>{this.state.loading && <Spin type={'spinner'}>加载中 ...</Spin>}</div>
       </div>
     );
