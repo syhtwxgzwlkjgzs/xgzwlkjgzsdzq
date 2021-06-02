@@ -15,7 +15,7 @@ import styles from './index.module.scss';
  * @prop {boolean} rightText 右侧描述文字
  */
 const Index = ({ icon = {}, title, leftNum, onShowMore, isShowMore = true, rightText, bigSize = false, moreText = '更多', titleStyle = {} }) => (
-  <div className={`${bigSize ? styles.wrapper : styles.container}`} style={titleStyle}>
+  <div className={bigSize ? styles.wrapper : styles.container} style={titleStyle}>
     <div className={styles.left}>
       <Icon className={styles[`icon${icon.type}`]} name={icon.name} size={16} color={icon.color}/>
       <div className={`${styles.title} ${JSON.stringify(icon) === '{}' ? styles.noMargin : ''}`}>{title}</div>
