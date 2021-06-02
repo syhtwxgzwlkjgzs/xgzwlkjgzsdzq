@@ -276,6 +276,8 @@ class IndexPCPage extends React.Component {
         left={ this.renderLeft(countThreads) }
         right={ this.renderRight() }
         pageName='home'
+        requestError={this.props.isError}
+        errorText={this.props.errorText}
       >
         <TopFilterView onFilterClick={this.onFilterClick} onPostThread={this.onPostThread} isShowDefault={isShowDefault} />
         {this.renderContent(index)}
