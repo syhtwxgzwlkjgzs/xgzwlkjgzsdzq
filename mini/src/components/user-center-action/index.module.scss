@@ -14,9 +14,12 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            margin-right: 32px;
-            min-width: 60px;
+            min-width: 80px;
             cursor: pointer;
+
+            & + .userCenterActionItem {
+                margin-left: 32px;
+            }
 
             &:last-child {
                 margin-right: 0;

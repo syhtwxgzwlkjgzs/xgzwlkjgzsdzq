@@ -18,7 +18,6 @@ class WalletPage extends React.Component {
     if (res.code === 0) {
       await this.setState({ walletData: res.data });
     }
-    console.log(res);
   }
 
   componentDidMount() {

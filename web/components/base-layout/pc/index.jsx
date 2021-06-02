@@ -1,10 +1,10 @@
 import React,  { useCallback, useEffect, useImperativeHandle, useRef, useState, forwardRef } from 'react';
 import { Flex } from '@discuzq/design';
 import Header from '@components/header';
-import List from '@components/list'
+import List from '@components/list';
 import RefreshView from '@components/list/RefreshView';
 import ErrorView from '@components/list/ErrorView';
-import { noop } from '@components/thread/utils'
+import { noop } from '@components/thread/utils';
 
 import styles from './index.module.scss';
 
@@ -16,7 +16,7 @@ import styles from './index.module.scss';
 * @prop {function} right 内容区域右部视图组件
 * @prop {function} footer 底部视图组件
 * @prop other List Props // List组件所有的属性
-* @example 
+* @example
 *     <BaseLayout
         left={(props) => <div>左边</div>}
         right={(props) => <div>右边</div>}
@@ -39,29 +39,32 @@ const BaseLayout = forwardRef((props, ref) => {
     onRefresh,
     pageName = '',
     onScroll = noop,
-    immediateCheck=false
+    immediateCheck=false,
+    requestError=false,
+    errorText='',
+    rightClass = '',
   } = props;
 
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
   const size = useRef('xl');
   const listRef = useRef(null);
-  const [isError, setIsError] = useState(false)
+  const [isError, setIsError] = useState(false);
 
   const debounce = (fn, wait) => {
     let timer = null;
     return () => {
-      if(timer !== null){
+      if (timer !== null) {
         clearTimeout(timer);
       }
       timer = setTimeout(fn, wait);
-    }
-  }
+    };
+  };
 
   useImperativeHandle(
     ref,
     () => ({
-      listRef
+      listRef,
     }),
   );
 
@@ -90,10 +93,10 @@ const BaseLayout = forwardRef((props, ref) => {
   useEffect(() => {
     size.current = calcSize(window.innerWidth);
     updateSize();
-  }, [size.current])
+  }, [size.current]);
 
   const calcSize = (width = 1600) => {
-    let size = 'xl';
+    const size = 'xl';
 
     // if (width < 992) {
     //     size = 'sm';
@@ -123,8 +126,8 @@ const BaseLayout = forwardRef((props, ref) => {
 
   // list组件，接口请求出错回调
   const onError = () => {
-    setIsError(true)
-  }
+    setIsError(true);
+  };
 
   return (
     <div className={styles.container}>
@@ -141,13 +144,13 @@ const BaseLayout = forwardRef((props, ref) => {
 
           <div className={styles.center}>
             {typeof(children) === 'function' ? children({ ...props }) : children}
-            {!isError && onRefresh && <RefreshView noMore={noMore} />}
-            {isError && <ErrorView />}
+            {!isError && !requestError && onRefresh && <RefreshView noMore={noMore} />}
+            {(isError || requestError) && <ErrorView text={errorText || '加载失败'} />}
           </div>
 
           {
             (pageName === 'home' || showRight) && (
-              <div className={`${styles.right} ${(pageName === "home") ? styles["home-right"] : ""}`}>
+              <div className={`${styles.right} ${(pageName === 'home') ? styles['home-right'] : ''} ${rightClass}`}>
                 {typeof(right) === 'function' ? right({ ...props }) : right}
               </div>
             )

@@ -109,7 +109,7 @@ export default class AmountRecognized extends Component {
               type === ORDER_TRADE_TYPE.COMBIE_PAYMENT ? (
                 <>
                   {
-                    tradeContent.map((item, index) => {
+                    this.state.tradeContent.map((item, index) => {
                       const amount_ = item.type === ORDER_TRADE_TYPE.RED_PACKET ? redAmount : rewardAmount
                       return <>
                         <View className={styles.acExplain}>

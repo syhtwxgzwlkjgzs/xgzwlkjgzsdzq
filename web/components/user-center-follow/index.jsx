@@ -161,8 +161,15 @@ class UserCenterFollows extends React.Component {
   }
 
   // TODO: 增加这里对于 ID 的处理，感应 ID 变化时发生及时更新
-  componentDidUpdate() {
-
+  async componentDidUpdate(prevProps) {
+    if (prevProps.userId !== this.props.userId) {
+      this.page = 1;
+      this.totalPage = 1;
+      this.setState({
+        follows: {},
+      });
+      await this.loadMore();
+    }
   }
 
   // 检查是否满足触底加载更多的条件
