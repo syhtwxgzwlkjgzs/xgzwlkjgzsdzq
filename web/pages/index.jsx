@@ -112,7 +112,11 @@ class Index extends React.Component {
 
     if (type === 'click-filter') { // 点击tab
       this.page = 1;
-      await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
+      try {
+        await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
+      } catch (error) {
+        this.setState({ isError: true, errorText: error })
+      }
       this.props.baselayout.setJumpingToTop();
     } else if (type === 'moreData') {
       this.page += 1;
