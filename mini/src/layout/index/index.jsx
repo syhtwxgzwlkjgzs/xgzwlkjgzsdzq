@@ -15,7 +15,8 @@ class Index extends React.Component {
   prePage = 10;
 
   state = {
-    isError: false
+    isError: false,
+    errorText: '加载失败'
   }
 
   async componentDidMount() {
@@ -34,7 +35,7 @@ class Index extends React.Component {
         filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
       });
     } catch (error) {
-      this.setState({ isError: true })
+      this.setState({ isError: true, errorText: error })
     }
   }
 
@@ -90,7 +91,7 @@ class Index extends React.Component {
     return (
       <View>
         <MemoToastProvider>
-          <IndexPageContent dispatch={this.dispatch} isError={this.state.isError} />
+          <IndexPageContent dispatch={this.dispatch} isError={this.state.isError} errorText={this.state.errorText} />
         </MemoToastProvider>
       </View>
     );

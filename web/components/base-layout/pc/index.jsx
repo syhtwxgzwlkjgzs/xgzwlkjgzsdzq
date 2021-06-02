@@ -39,7 +39,9 @@ const BaseLayout = forwardRef((props, ref) => {
     onRefresh,
     pageName = '',
     onScroll = noop,
-    immediateCheck = false,
+    immediateCheck=false,
+    requestError=false,
+    errorText='',
     rightClass = '',
   } = props;
 
@@ -142,8 +144,8 @@ const BaseLayout = forwardRef((props, ref) => {
 
           <div className={styles.center}>
             {typeof(children) === 'function' ? children({ ...props }) : children}
-            {!isError && onRefresh && <RefreshView noMore={noMore} />}
-            {isError && <ErrorView />}
+            {!isError && !requestError && onRefresh && <RefreshView noMore={noMore} />}
+            {(isError || requestError) && <ErrorView text={errorText || '加载失败'} />}
           </div>
 
           {

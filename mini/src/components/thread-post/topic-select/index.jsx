@@ -129,7 +129,6 @@ class TopicSelect extends Component {
         {/* list */}
         <List
           className={styles.list}
-          height={'calc(100vh - 60px)'}
           noMore={finish}
           onRefresh={() => this.fetchTopics()}
           hasOnScrollToLower={true}
