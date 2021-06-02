@@ -21,8 +21,7 @@ class ThreadPCPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      recordData: [],
-      type: 'income',
+      activeType: 'income', // 当前激活的状态类型
       showWithdrawalPopup: false, // 提现弹框是否显示
       page: 1,
       totalPage: 1,
@@ -44,7 +43,7 @@ class ThreadPCPage extends React.Component {
         totalPage: 1,
       },
       () => {
-        switch (this.state.type) {
+        switch (this.state.activeType) {
           case 'income':
             this.fetchIncomeDetail();
             break;
@@ -76,7 +75,6 @@ class ThreadPCPage extends React.Component {
       }
       this.setState(pageState);
     } catch (e) {
-      console.error(e);
       if (e.Code) {
         Toast.error({
           content: e.Msg,
@@ -121,10 +119,9 @@ class ThreadPCPage extends React.Component {
   };
 
   // 切换选项卡
-  selectClick = (val) => {
-    console.log(val);
+  handleTriggerSelectedTypes = (val) => {
     this.setState({
-      type: val,
+      activeType: val,
     });
     this.initSelectType(() => {
       this.initStateAndFetch();
@@ -147,7 +144,6 @@ class ThreadPCPage extends React.Component {
 
   // 提现到微信钱包
   moneyToWixin = (moneyNum) => {
-    console.log('钱数', moneyNum);
     this.setState({ showWithdrawalPopup: false });
   }
 
@@ -164,18 +160,18 @@ class ThreadPCPage extends React.Component {
     const incomeData = this.listRenderDataFilter(incomeDetail) || []
     const expandData = this.listRenderDataFilter(expandDetail) || []
     const cashData = this.listRenderDataFilter(cashDetail) || []
-    if (this.state.type === 'income') { // 收入
+    if (this.state.activeType === 'income') { // 收入
       return incomeData
-    } else if (this.state.type === 'pay') {
+    } else if (this.state.activeType === 'pay') {
       return expandData
-    } else if (this.state.type === 'withdrawal') {
+    } else if (this.state.activeType === 'withdrawal') {
       return cashData
     }
   }
 
   // 点击冻结金额
   onFrozenAmountClick = () => {
-
+    this.handleTriggerSelectedTypes("frozen")
   }
 
   // 点击菜单 选择不同类型
@@ -212,7 +208,7 @@ class ThreadPCPage extends React.Component {
     };
 
     let dataSource = {};
-    switch (this.state.type) {
+    switch (this.state.activeType) {
       case 'income':
         dataSource = INCOME_DETAIL_CONSTANTS;
         defaultType.title = '全部类型';
@@ -236,13 +232,13 @@ class ThreadPCPage extends React.Component {
   // 点击切换tag的显示
   renderSelectedType = () => {
     if (this.state.selectType === 'all') {
-      if (this.state.type === 'withdrawal') {
+      if (this.state.activeType === 'withdrawal') {
         return '全部状态';
       }
       return '全部类型';
     }
     let arr = {};
-    switch (this.state.type) {
+    switch (this.state.activeType) {
       case 'income':
         arr = INCOME_DETAIL_CONSTANTS;
         break;
@@ -276,15 +272,15 @@ class ThreadPCPage extends React.Component {
           <div className={layout.bodyLeft}>
             <div className={layout.header}>
               {
-                this.state.type === 'income' ? <Icon name='TicklerOutlined' size='18' color='#3ac15f'></Icon> : ''
+                this.state.activeType === 'income' ? <Icon name='TicklerOutlined' size='18' color='#3ac15f'></Icon> : ''
               }
               {
-                this.state.type === 'pay' ? <Icon name='WallOutlined' size='18' color='#2469f6'></Icon> : ''
+                this.state.activeType === 'pay' ? <Icon name='WallOutlined' size='18' color='#2469f6'></Icon> : ''
               }
               {
-                this.state.type === 'withdrawal' ? <Icon name='TransferOutOutlined' size='18' color='#e02433'></Icon> : ''
+                this.state.activeType === 'withdrawal' ? <Icon name='TransferOutOutlined' size='18' color='#e02433'></Icon> : ''
               }
-              <div className={layout.title}>{recordType[this.state.type]}</div>
+              <div className={layout.title}>{recordType[this.state.activeType]}</div>
             </div>
             <div className={layout.choice}>
               <div className={layout.choiceLeft}>
@@ -300,7 +296,7 @@ class ThreadPCPage extends React.Component {
               <div className={layout.recordNumber}>共有{16}条记录</div>
             </div>
             <div className={layout.recordList}>
-              <RecordList data={this.getRecordData()} type={this.state.type}></RecordList>
+              <RecordList data={this.getRecordData()} activeType={this.state.activeType}></RecordList>
               {/* <NoMore></NoMore> */}
             </div>
           </div>
@@ -317,10 +313,13 @@ class ThreadPCPage extends React.Component {
               </WalletInfo>
             </div>
             <div className={layout.tabs}>
-              <Tabs selectClick={type => this.selectClick(type)}></Tabs>
+              <Tabs  
+                activeType={this.state.activeType}
+                handleTriggerSelectedTypes={this.handleTriggerSelectedTypes}
+              />
             </div>
             <div className={layout.copyright}>
-              <Copyright></Copyright>
+              <Copyright />
             </div>
           </div>
         </div>
