@@ -5,6 +5,7 @@ import Header from '../header';
 import List from '../list'
 import BottomNavBar from '../bottom-nav-bar'
 import { useDidShow } from '@tarojs/taro'
+import Taro from '@tarojs/taro';
 
 import styles from './index.module.scss';
 
@@ -59,15 +60,15 @@ const BaseLayout = (props) => {
     const { baselayout } = props;
     const playingVideoDom = baselayout.playingVideoDom;
 
-    wx.getSystemInfo({
+    Taro.getSystemInfo({
       success(res) {
 
         if (playingVideoDom) {
-          wx.createSelectorQuery()
+          Taro.createSelectorQuery()
           .select(`#${playingVideoDom}`)
           .boundingClientRect((rect) => { 
             if(rect.top > res.windowHeight || rect.bottom < 0) {
-              wx.createVideoContext(playingVideoDom)?.pause();
+              Taro.createVideoContext(playingVideoDom)?.pause();
               baselayout.playingVideoDom = "";
             }
           }).exec();
