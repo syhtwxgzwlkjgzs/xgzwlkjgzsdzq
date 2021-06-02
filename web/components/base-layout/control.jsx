@@ -14,8 +14,8 @@ import PCBaseLayout from './pc';
 * @prop {boolean} hasListChild 页面是否有List组件
 * @prop {boolean} jumpTo 跳转到List组件什么位置
 * @prop {string} pageName 'home'是主页, 'search'是搜索页，用于记录当前页面阅读位置
-* @prop {function} 
-* @example 
+* @prop {function}
+* @example
 *     <BaseLayout>
         <BaseLayoutControl>
         </BaseLayoutControl>
@@ -68,23 +68,23 @@ const BaseLayoutControl = (props) => {
       if (scrollTop && pageName) baselayout[pageName] = scrollTop;
     }
 
-    const playingVideoDom = baselayout.playingVideoDom;
+    const { playingVideoDom } = baselayout;
 
-    if(playingVideoDom) {
+    if (playingVideoDom) {
       const playingVideoTop = baselayout.playingVideoPos;
       const playingVideoBottom = playingVideoDom?.offsetHeight + playingVideoTop;
 
-      if(playingVideoTop > 0 &&
-        (playingVideoBottom < scrollTop || // 视频在视窗下面
-          playingVideoTop > window.innerHeight + scrollTop )) { // 视频在视窗上面
-        playingVideoDom.querySelector("video")?.pause();
+      if (playingVideoTop > 0
+        && (playingVideoBottom < scrollTop // 视频在视窗下面
+          || playingVideoTop > window.innerHeight + scrollTop)) { // 视频在视窗上面
+        playingVideoDom.querySelector('video')?.pause();
         baselayout.playingVideoDom = null;
         baselayout.playingVideoPos = -1;
       }
     }
 
-    const playingAudioDom = baselayout.playingAudioDom;
-    if(playingAudioDom) {
+    const { playingAudioDom } = baselayout;
+    if (playingAudioDom) {
       // const playingAudioPos = baselayout.playingAudioPos;
       // if (playingAudioPos > 0 && (playingAudioPos < scrollTop ||
       //   playingAudioPos > window.innerHeight + scrollTop)) {
@@ -94,7 +94,7 @@ const BaseLayoutControl = (props) => {
       // }
     }
 
-    onScroll({ scrollTop: scrollTop });
+    onScroll({ scrollTop });
   };
 
   const handleScroll = quickScroll ? quickScrolling : throttle(quickScrolling, 50);

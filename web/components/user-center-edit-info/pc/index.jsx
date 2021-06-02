@@ -47,11 +47,21 @@ class index extends Component {
             />
           ),
           onSave: async () => {
-            await this.props.user.updateEditedUserNickname();
-            Toast.success({
-              content: '更新昵称成功',
-              duration: 1000,
-            });
+            try {
+              await this.props.user.updateEditedUserNickname();
+              Toast.success({
+                content: '更新昵称成功',
+                duration: 1000,
+              });
+            } catch (e) {
+              console.error(e);
+              if (e.Code) {
+                Toast.error({
+                  content: e.Msg,
+                  duration: 1000,
+                });
+              }
+            }
             this.closeInputEditor('昵称');
           },
           onCancel: () => {
@@ -83,11 +93,21 @@ class index extends Component {
             />
           ),
           onSave: async () => {
-            await this.props.user.updateUsername();
-            Toast.success({
-              content: '更新用户名成功',
-              duration: 1000,
-            });
+            try {
+              await this.props.user.updateUsername();
+              Toast.success({
+                content: '更新用户名成功',
+                duration: 1000,
+              });
+            } catch (e) {
+              console.error(e);
+              if (e.Code) {
+                Toast.error({
+                  content: e.Msg,
+                  duration: 1000,
+                });
+              }
+            }
             this.closeInputEditor('用户名');
           },
           onCancel: () => {
@@ -114,11 +134,21 @@ class index extends Component {
             />
           ),
           onSave: async () => {
-            await this.props.user.updateEditedUserSignature();
-            Toast.success({
-              content: '更新个性签名成功',
-              duration: 1000,
-            });
+            try {
+              await this.props.user.updateEditedUserSignature();
+              Toast.success({
+                content: '更新个性签名成功',
+                duration: 1000,
+              });
+            } catch (e) {
+              console.error(e);
+              if (e.Code) {
+                Toast.error({
+                  content: e.Msg,
+                  duration: 1000,
+                });
+              }
+            }
             this.closeInputEditor('个性签名');
           },
           onCancel: () => {
@@ -130,7 +160,32 @@ class index extends Component {
           display: 'show',
           render: () => this.props.user.mobile,
           condition: () => this.props.site?.isSmsOpen,
-          operation: () => <p className={styles.pcEditNicknameCallMsodify}>修改</p>,
+          operation: () => {
+            if (!this.props.user.mobile) {
+              return (
+                <p
+                  onClick={() => {
+                    Router.push({ url: '/user/bind-phone' });
+                  }}
+                  className={styles.pcEditNicknameCallMsodify}
+                >
+                  去绑定
+                </p>
+              );
+            }
+            return (
+              <p
+                onClick={() => {
+                  this.setState({
+                    mobileEditorVisible: true,
+                  });
+                }}
+                className={styles.pcEditNicknameCallMsodify}
+              >
+                修改
+              </p>
+            );
+          },
           inputEditor: () => null,
         },
         {

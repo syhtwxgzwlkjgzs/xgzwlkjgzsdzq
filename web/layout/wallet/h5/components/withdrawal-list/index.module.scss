@@ -3,6 +3,7 @@
 .container {
     padding: rem($padding-4n) rem($padding-4n) 0;
     background: var(--color-white);
+    font-size: $font-size-middle;
 }
 
 .content {
