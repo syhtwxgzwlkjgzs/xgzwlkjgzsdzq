@@ -267,6 +267,7 @@ class IndexH5Page extends React.Component {
         pageName='home'
         preload={1000}
         requestError={this.props.isError}
+        errorText={this.props.errorText}
       >
         <HomeHeader ref={this.headerRef} />
 
