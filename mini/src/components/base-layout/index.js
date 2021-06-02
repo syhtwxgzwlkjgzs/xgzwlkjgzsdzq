@@ -54,6 +54,31 @@ const BaseLayout = (props) => {
   //   }
 
   // }, [])
+
+  const handleScroll = ({ detail }) => {
+    const { baselayout } = props;
+    const playingVideoDom = baselayout.playingVideoDom;
+
+    wx.getSystemInfo({
+      success(res) {
+
+        if (playingVideoDom) {
+          wx.createSelectorQuery()
+          .select(`#${playingVideoDom}`)
+          .boundingClientRect((rect) => { 
+            if(rect.top > res.windowHeight || rect.bottom < 0) {
+              wx.createVideoContext(playingVideoDom)?.pause();
+              baselayout.playingVideoDom = "";
+            }
+          }).exec();
+        }
+
+      }
+    });
+    
+
+  }
+
   return (
     <View className={styles.container}>
         {showHeader && <Header />}
@@ -61,13 +86,13 @@ const BaseLayout = (props) => {
           showPullDown ? (
             <View className={styles.list} ref={pullDownWrapper}>
               {/* <PullDownRefresh onRefresh={onPullDown} isFinished={isFinished} height={height}> */}
-                  <List {...props} className={styles.listHeight} ref={listRef} hasOnScrollToLower={index.hasOnScrollToLower}>
+                  <List {...props} className={styles.listHeight} ref={listRef} hasOnScrollToLower={index.hasOnScrollToLower} onScroll={handleScroll}>
                       {typeof(children) === 'function' ? children({ ...props }) : children}
                   </List>
               {/* </PullDownRefresh> */}
             </View>
           ) : (
-            <List {...props} className={styles.list} ref={listRef} hasOnScrollToLower={index.hasOnScrollToLower}>
+            <List {...props} className={styles.list} ref={listRef} hasOnScrollToLower={index.hasOnScrollToLower} onScroll={handleScroll}>
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>
           )
