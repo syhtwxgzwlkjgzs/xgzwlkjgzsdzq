@@ -27,7 +27,9 @@
   ::-webkit-scrollbar {
     display: none; /* Chrome Safari */
   }
-  &.col-1{}
+  &.col-1{
+    max-width: rem(1100);
+  }
   &.col-2{
     max-width: rem(1100);
   }
@@ -36,7 +38,11 @@
   }
   @include media('xl-pc') {
     padding-top: rem($padding-5n);
-    &.col-1{}
+    &.col-1{
+      .center {
+        width: rem(1100);
+      }
+    }
     &.col-2{
       .center {
         width: rem(731);
@@ -62,7 +68,11 @@
   }
   @include media('l-pc') {
     padding-top: rem($padding-5n);
-    &.col-1{}
+    &.col-1{
+      .center {
+        width: 100%;
+      }
+    }
     &.col-2{
       .center {
         width: 66%;
@@ -88,7 +98,11 @@
   }
   @include media('s-pc'){
     padding-top: rem($padding-4n);
-    &.col-1{}
+    &.col-1{
+      .center {
+        width: 100%;
+      }
+    }
     &.col-2{
       .center {
         width: 66%;
