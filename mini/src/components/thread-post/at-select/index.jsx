@@ -205,6 +205,7 @@ class AtSelect extends Component {
             height={'calc(100vh - 120px)'}
             noMore={finish}
             onRefresh={this.onScrollBottom}
+            hasOnScrollToLower={true}
           >
             {this.renderItem()}
           </List>

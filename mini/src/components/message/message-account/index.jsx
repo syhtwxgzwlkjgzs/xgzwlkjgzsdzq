@@ -79,11 +79,11 @@ const Index = ({ message, subPage }) => {
     <View className={styles.container}>
       <Notice
         noMore={currentPage >= totalPage}
-        topCard={
-          type === 'accountMsgList'
-            ? <Card items={items} onClick={(url) => Taro.navigateTo({ url })} />
-            : null
-        }
+        // topCard={
+        //   type === 'accountMsgList'
+        //     ? <Card items={items} onClick={(url) => Taro.navigateTo({ url })} />
+        //     : null
+        // }
         list={handleRenderList(list)}
         type='account'
         onPullDown={() => fetchMessageData(1)}

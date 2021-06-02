@@ -8,7 +8,7 @@ import Notice from '@components/message/notice';
 import Card from '@components/message/message-card';
 import BottomNavBar from '@components/bottom-nav-bar';
 
-const Index = ({ message }) => {
+const Index = ({ message, user }) => {
   const { readDialogList, dialogList, threadUnread, financialUnread, accountUnread } = message;
   const { currentPage, totalPage, list } = dialogList;
   console.log('message :>> ', message);
@@ -46,16 +46,22 @@ const Index = ({ message }) => {
   const formatChatDialogList = (data = []) => {
     const newList = [];
     data.forEach((item) => {
-      const { dialogMessage, sender } = item;
+      const { id, dialogMessage, sender, recipient, unreadCount } = item;
+      let chatPerson = null;
+      if (sender?.id === user.id) {
+        chatPerson = recipient;
+      } else {
+        chatPerson = sender;
+      }
       newList.push({
-        id: item.id,
+        id: id,
         createdAt: dialogMessage?.createdAt,
         dialogId: dialogMessage?.dialogId,
-        content: dialogMessage?.summary,
-        avatar: sender?.avatar,
-        userId: sender?.userId,
-        username: sender?.username,
-        unreadCount: item.unreadCount,
+        content: dialogMessage?.imageUrl ? '[图片]' : dialogMessage?.messageTextHtml,
+        avatar: chatPerson?.avatar,
+        userId: chatPerson?.id,
+        username: chatPerson?.username,
+        unreadCount: unreadCount,
       });
     });
 
@@ -79,19 +85,20 @@ const Index = ({ message }) => {
 
   return (
     <View className={styles.container}>
-      <Notice
-        type='chat'
-        withBottomBar={true}
-        noMore={currentPage >= totalPage}
-        topCard={<Card items={items} onClick={toOtherMessage} />}
-        list={formatChatDialogList(list)}
-        onPullDown={onPullDown}
-        onScrollBottom={handleScrollBottom}
-        onBtnClick={() => deleteDialog(item.id)}
-      />
-      <BottomNavBar curr={'message'} />
+      <View className={styles['container__inner']}>
+        <Notice
+          noMore={currentPage >= totalPage}
+          topCard={<Card items={items} onClick={toOtherMessage} />}
+          list={formatChatDialogList(list)}
+          type='chat'
+          onPullDown={onPullDown}
+          onScrollBottom={handleScrollBottom}
+          onBtnClick={() => deleteDialog(item.id)}
+        />
+      </View>
+      <BottomNavBar fixed={false} curr={'message'} />
     </View>
   )
 }
 
-export default inject('message')(observer(Index));
+export default inject('message', 'user')(observer(Index));
