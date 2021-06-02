@@ -13,7 +13,9 @@ import layout from './layout.module.scss';
 import { INCOME_DETAIL_CONSTANTS, EXPAND_DETAIL_CONSTANTS, CASH_DETAIL_CONSTANTS } from '@common/constants/wallet';
 import { typeFilter } from './adapter';
 import { formatDate } from '@common/utils/format-date.js';
-
+import DatePicker from 'react-datepicker';
+import List from '@components/list';
+import 'react-datepicker/dist/react-datepicker.css';
 @inject('site')
 @inject('wallet')
 @observer
@@ -26,6 +28,7 @@ class ThreadPCPage extends React.Component {
       page: 1,
       totalPage: 1,
       selectType: 'all', // 筛选类型
+      consumptionTime: new Date("2021-05"),
     };
   }
 
@@ -52,6 +55,9 @@ class ThreadPCPage extends React.Component {
             break;
           case 'withdrawal':
             this.fetchCashDetail();
+            break;
+          case "frozen":
+            this.fetchFreezeDetail();
             break;
         }
       },
@@ -118,6 +124,19 @@ class ThreadPCPage extends React.Component {
     this.setState(pageState);
   };
 
+  fetchFreezeDetail = async () => {
+    const freezeRes = await this.props.wallet.getFreezeDetail();
+    const { totalCount, totalPage } = freezeRes;
+    const pageData = {
+      totalCount,
+      totalPage,
+    };
+    if (this.state.page <= totalPage) {
+      pageData.page = this.state.page + 1;
+    }
+    this.setState(pageData);
+  };
+
   // 切换选项卡
   handleTriggerSelectedTypes = (val) => {
     this.setState({
@@ -147,6 +166,11 @@ class ThreadPCPage extends React.Component {
     this.setState({ showWithdrawalPopup: false });
   }
 
+  listRenderFreezeDataFilter = () => {
+    if (Object.values(this.props.wallet.freezeDetail).length === 0) return [];
+    return Object.values(this.props.wallet.freezeDetail).reduce((fullData, pageData) => [...fullData, ...pageData]);
+  };
+
   listRenderDataFilter = (data) => {
     const targetTypeData = typeFilter(data, this.state.selectType);
     const targetDateData = typeFilter(targetTypeData, formatDate(this.state.consumptionTime, 'yyyy-MM'));
@@ -160,12 +184,15 @@ class ThreadPCPage extends React.Component {
     const incomeData = this.listRenderDataFilter(incomeDetail) || []
     const expandData = this.listRenderDataFilter(expandDetail) || []
     const cashData = this.listRenderDataFilter(cashDetail) || []
+    const frozenData = this.listRenderFreezeDataFilter() || []
     if (this.state.activeType === 'income') { // 收入
       return incomeData
     } else if (this.state.activeType === 'pay') {
       return expandData
     } else if (this.state.activeType === 'withdrawal') {
       return cashData
+    } else if (this.state.activeType === 'frozen') {
+      return frozenData
     }
   }
 
@@ -260,8 +287,12 @@ class ThreadPCPage extends React.Component {
       income: '收入明细',
       pay: '支出明细',
       withdrawal: '提现记录',
+      frozen: '冻结金额'
     };
     const { walletInfo } = this.props.wallet;
+    const { activeType } = this.state
+    const now = new Date().getTime() + (25 * 3600 * 1000);
+    const times = formatDate(now, 'yyyy/MM/dd hh:mm')
     return (
       <div className={layout.container}>
         <div className={layout.header}>
@@ -272,31 +303,50 @@ class ThreadPCPage extends React.Component {
           <div className={layout.bodyLeft}>
             <div className={layout.header}>
               {
-                this.state.activeType === 'income' ? <Icon name='TicklerOutlined' size='18' color='#3ac15f'></Icon> : ''
+                activeType === 'income' ? <Icon name='TicklerOutlined' size='18' color='#3ac15f'></Icon> : ''
               }
               {
-                this.state.activeType === 'pay' ? <Icon name='WallOutlined' size='18' color='#2469f6'></Icon> : ''
+                activeType === 'pay' ? <Icon name='WallOutlined' size='18' color='#2469f6'></Icon> : ''
               }
               {
-                this.state.activeType === 'withdrawal' ? <Icon name='TransferOutOutlined' size='18' color='#e02433'></Icon> : ''
+                activeType === 'withdrawal' ? <Icon name='TransferOutOutlined' size='18' color='#e02433'></Icon> : ''
               }
-              <div className={layout.title}>{recordType[this.state.activeType]}</div>
+              <div className={layout.title}>{recordType[activeType]}</div>
             </div>
             <div className={layout.choice}>
               <div className={layout.choiceLeft}>
-                <div className={layout.choiceType}>2020年10月</div>
-                <div className={layout.choiceType}>
-                  <Dropdown onChange={this.handleChangeSelectedType} placement="right" trigger="click" menu={this.renderDropdownMenu()} >
-                    <div>
-                      {this.renderSelectedType()}
-                    </div>
-                  </Dropdown>
-                </div>
+                {
+                  !(activeType === 'frozen') && (
+                    <>
+                      <div className={layout.choiceType}>
+                        {/* <DatePicker
+                              // selected={new Date(times)}
+                              minDate={new Date()}
+                              // onChange={date => setTimes(formatDate(date, 'yyyy/MM/dd hh:mm'))}
+                              showTimeSelect
+                              dateFormat="yyyy/MM/dd HH:mm:ss"
+                              locale="zh"
+                            /> */}
+                      </div>
+                      <div className={layout.choiceType}>
+                        <Dropdown onChange={this.handleChangeSelectedType} placement="right" trigger="click" menu={this.renderDropdownMenu()} >
+                          <div>
+                            {this.renderSelectedType()}
+                          </div>
+                        </Dropdown>
+                      </div>
+                    </>
+                  )
+                }
               </div>
-              <div className={layout.recordNumber}>共有{16}条记录</div>
+              <div className={layout.recordNumber}>共有{this.getRecordData().length}条记录</div>
             </div>
             <div className={layout.recordList}>
-              <RecordList data={this.getRecordData()} activeType={this.state.activeType}></RecordList>
+              <List 
+                onRefresh={this.initStateAndFetch}
+                noMore={this.state.page > this.state.totalPage}>
+                <RecordList data={this.getRecordData()} activeType={this.state.activeType}></RecordList>
+              </List>
               {/* <NoMore></NoMore> */}
             </div>
           </div>
@@ -313,7 +363,7 @@ class ThreadPCPage extends React.Component {
               </WalletInfo>
             </div>
             <div className={layout.tabs}>
-              <Tabs  
+              <Tabs
                 activeType={this.state.activeType}
                 handleTriggerSelectedTypes={this.handleTriggerSelectedTypes}
               />

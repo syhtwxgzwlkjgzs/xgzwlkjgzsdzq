@@ -42,7 +42,7 @@ function RenderList({ columns = [], data = [], className = '' }) {
             key={title}
             className={'listTitle'}
             style={{
-              width: `${100 / data.length}%`,
+              width: `${100 / columns.length}%`,
             }}
           >
             {title}
@@ -63,7 +63,7 @@ function RenderList({ columns = [], data = [], className = '' }) {
                 className={'listColumn'}
                 key={`${column.key} + ${idx}`}
                 style={{
-                  width: `${100 / data.length}%`,
+                  width: `${100 / columns.length}%`,
                 }}
               >
                 {column.render(item)}
