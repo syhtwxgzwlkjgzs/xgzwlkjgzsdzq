@@ -194,6 +194,12 @@ class Index extends Component {
       operationType: item.type
     });
 
+    if (item.type !== 'emoji') {
+      this.setState({
+        showEmoji: false
+      });
+    }
+
     let nextRoute;
     switch (item.type) {
       // 根据类型分发具体操作
@@ -243,7 +249,7 @@ class Index extends Component {
         break;
       case 'emoji':
         this.setState({
-          showEmoji: true
+          showEmoji: !this.state.showEmoji
         });
         break;
     }
@@ -571,6 +577,11 @@ class Index extends Component {
               show={isShowTitle}
               onChange={this.onTitleChange}
               onBlur={this.hideKeyboard}
+              onFocus={() => {
+                this.setState({
+                  showEmoji: false
+                });
+              }}
             />
             <Content
               value={postData.contentText}
@@ -654,7 +665,12 @@ class Index extends Component {
               clickCb={(item) => {
                 this.handlePluginClick(item);
               }}
-              onCategoryClick={() => this.setState({ showClassifyPopup: true })}
+              onCategoryClick={() => {
+                this.setState({
+                  showClassifyPopup: true,
+                  showEmoji: false
+                });
+              }}
             />
             <DefaultToolbar
               permissions={permissions}
