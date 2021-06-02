@@ -26,8 +26,8 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "7.7.7",
-    "@discuzq/design": "0.0.1-alpha.93",
-    "@discuzq/sdk": "0.0.1-alpha.93",
+    "@discuzq/design": "0.0.1-alpha.92",
+    "@discuzq/sdk": "0.0.1-alpha.92",
     "@tarojs/components": "3.2.2",
     "@tarojs/react": "3.2.2",
     "@tarojs/runtime": "3.2.2",
