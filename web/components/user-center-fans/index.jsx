@@ -29,6 +29,7 @@ class UserCenterFans extends React.Component {
     hasMorePage: false,
     className: '',
     styles: {},
+    itemStyle: {},
   };
 
   constructor(props) {
@@ -232,6 +233,7 @@ class UserCenterFans extends React.Component {
                 userName={user.userName}
                 userGroup={user.groupName}
                 followHandler={this.followUser}
+                itemStyle={this.props.itemStyle}
                 unFollowHandler={this.unFollowUser}
               />
               {this.props.splitElement}

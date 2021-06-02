@@ -65,6 +65,10 @@ class PCMyPage extends React.Component {
     }
   };
 
+  componentWillUnmount() {
+    this.props.user.removeTargetUserInfo();
+  }
+
   fetchTargetUserThreads = async () => {
     const { query } = this.props.router;
     if (query.id) {
@@ -120,8 +124,8 @@ class PCMyPage extends React.Component {
           noData={!this.formatUserThreadsData(targetUserThreads)?.length}
         >
           {this.formatUserThreadsData(targetUserThreads)
-              && this.formatUserThreadsData(targetUserThreads).length > 0 && (
-                <UserCenterThreads data={this.formatUserThreadsData(targetUserThreads)} />
+            && this.formatUserThreadsData(targetUserThreads).length > 0 && (
+              <UserCenterThreads data={this.formatUserThreadsData(targetUserThreads)} />
           )}
         </SidebarPanel>
       </div>

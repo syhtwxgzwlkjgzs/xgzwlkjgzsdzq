@@ -16,7 +16,7 @@ import NoData from '@components/no-data';
 import UserCenterFansPc from '@components/user-center/fans-pc';
 import UserCenterFollowsPc from '../../../components/user-center/follows-pc';
 import Thread from '@components/thread';
-import SectionTitle from '@components/section-title'
+import SectionTitle from '@components/section-title';
 
 
 @inject('site')
@@ -114,7 +114,7 @@ class PCMyPage extends React.Component {
     const { user } = this.props;
     const { userThreads, userThreadsTotalCount } = user;
     const formattedUserThreads = this.formatUserThreadsData(userThreads);
-   
+
     return (
       <div className={styles.userContent}>
         <div className={styles.section}>
@@ -124,8 +124,8 @@ class PCMyPage extends React.Component {
           <UserCenterAction />
         </div>
 
-        <SidebarPanel 
-          title="主题" 
+        <SidebarPanel
+          title="主题"
           type='normal'
           isShowMore={false}
           noData={!formattedUserThreads?.length}
@@ -133,23 +133,21 @@ class PCMyPage extends React.Component {
           leftNum={`${userThreadsTotalCount}个主题`}
           mold='plane'
         >
-          {formattedUserThreads?.map(
-              (item, index) => <Thread data={item} key={index} className={index === 0 && styles.threadStyle} />
-          )}
+          {formattedUserThreads?.map((item, index) => <Thread data={item} key={index} className={index === 0 && styles.threadStyle} />)}
         </SidebarPanel>
       </div>
     );
   };
 
   render() {
-    const { user } = this.props
+    const { user } = this.props;
     const { userThreadsPage, userThreadsTotalPage, getUserThreads, userThreads } = user;
     const formattedUserThreads = this.formatUserThreadsData(userThreads);
 
     // store中，userThreadsPage会比真实页数多1
-    let currentPageNum = userThreadsPage
+    let currentPageNum = userThreadsPage;
     if (userThreadsTotalPage > 1) {
-      currentPageNum -= 1
+      currentPageNum -= 1;
     }
 
     return (
