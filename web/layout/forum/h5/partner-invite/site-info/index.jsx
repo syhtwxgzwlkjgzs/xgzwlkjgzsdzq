@@ -17,7 +17,7 @@ class SiteInfo extends Component {
     const siteIntroduction = get(site, 'webConfig.setSite.siteIntroduction', '');
     return (
       <div className={`${layout.site} ${platform === 'pc' && layout.pc_site}`}>
-        <SectionTitle className={platform === 'pc' && layout.pc_site_title} isShowMore={false} icon={{ color: '#2469F6', name: 'IntroduceOutlined' }} title="站点介绍" onShowMore={this.redirectToSearchResultUser} />
+        <SectionTitle titleStyle={platform === 'pc' && { padding: '24px 0' }} isShowMore={false} icon={{ color: '#2469F6', name: 'IntroduceOutlined' }} title="站点介绍" onShowMore={this.redirectToSearchResultUser} />
         <div className={layout.site_introduce}>
           {siteIntroduction}
         </div>

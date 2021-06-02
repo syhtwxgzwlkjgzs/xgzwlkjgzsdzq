@@ -4,13 +4,9 @@ import { withRouter } from 'next/router';
 import { Icon, Toast, Avatar } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
-import { get } from '@common/utils/get';
-import List from '@components/list';
 import BaseLayout from '@components/base-layout';
-import TrendingTopic from '@layout/search/pc/components/trending-topics';
 import UserCenterFansPc from '@components/user-center/fans-pc';
 import UserCenterFriendPc from '@components/user-center/friend-pc';
-import SidebarPanel from '@components/sidebar-panel';
 import Copyright from '@components/copyright';
 
 @inject('site')
@@ -70,8 +66,8 @@ class InvitePCPage extends React.Component {
           </div>
           <div className={layout.user_card_button}>邀请朋友</div>
         </div>
-        <UserCenterFriendPc />
-        <UserCenterFansPc />
+        <UserCenterFriendPc className={layout.user_center_wrap}/>
+        <UserCenterFansPc  className={layout.user_center_wrap}/>
         <Copyright/>
       </>
     );
@@ -86,7 +82,7 @@ class InvitePCPage extends React.Component {
           <div className={layout.invite_list}>
             <div className={layout.invite_list_title}>
               <Icon size={16} name='IncomeOutlined' color='#FFC300'/>
-              <span className={layout.title_text}>站点信息</span>
+              <span className={layout.title_text}>邀请列表</span>
             </div>
             <div className={layout.invite_list_label}>
               <div className={layout.list_label_nickname}>成员昵称</div>

@@ -88,12 +88,25 @@
     }
     .user_value_name {
       padding-left: $padding-4n;
+      font-weight: normal;
+      font-size: $font-size-base;
+      line-height: 18px;
+      color: $text-color-primary;
     }
     .list_main_money {
       @include list_money;
+      font-weight: 600;
+      font-size: $font-size-middle;
+      line-height: 18px;
+      color: $error-color;
     }
     .list_main_timer {
       @include list_timer;
+      font-weight: normal;
+      font-size: $font-size-base;
+      line-height: $font-line-height-small;
+      text-align: left;
+      color: $text-color-secondary;
     }
   }
 }
@@ -101,7 +114,6 @@
 // 右侧卡片内容 start
 .user_card_wrap {
   width: 340px;
-  height: 376px;
   border-radius: $border-radius-small;
   background: $primary-color;
   box-shadow: $border-shadow-color;
@@ -110,7 +122,6 @@
   margin-bottom: $margin-5n;
   .user_card_main {
     width: 292px;
-    height: 213px;
     border-radius: $border-radius-small;
     background: $white;
     margin: 0 auto;
@@ -151,13 +162,14 @@
       font-size: $font-size-small;
       line-height: $font-line-height-small;
       color: $text-color-secondary;
+      padding-top: $padding-1n;
     }
     .user_info_invite {
-      width: 260px;
+      width: 100%;
       height: 78px;
       border-radius: $border-radius-small;
       background: $comment-bg-color;
-      margin: auto;
+      margin: $margin-2n auto 0;
     }
     @mixin userInfoInvite {
       width: 130px;
@@ -202,4 +214,8 @@
     justify-content: center;
     @include cursor-on-pc;
   }
+}
+.user_center_wrap {
+  padding-left: $padding-4n !important;
+  padding-right: $padding-4n !important;
 }

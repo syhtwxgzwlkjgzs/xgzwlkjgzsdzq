@@ -46,7 +46,7 @@ class PartnerInviteUser extends React.Component {
     }
     return (
       <div className={layout.pc_users}>
-      <SectionTitle className={platform === 'pc' && layout.pc_users_title} isShowMore={false} icon={{ type: 2, name: 'MemberOutlined' }} title="活跃用户" />
+      <SectionTitle titleStyle={platform === 'pc' && { padding: '24px 0' }} isShowMore={false} icon={{ type: 2, name: 'MemberOutlined' }} title="活跃用户" />
         {
           !isLoading && usersPageData?.length
             ? <ActiveUsersMore data={usersPageData} onItemClick={this.onUserClick} noOperation/>

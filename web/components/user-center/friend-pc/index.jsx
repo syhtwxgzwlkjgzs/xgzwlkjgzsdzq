@@ -20,7 +20,6 @@ class UserCenterFriendPc extends React.Component {
     limit: 5,
     hasMorePage: false,
     className: '',
-    style: {},
   };
 
   constructor(props) {
@@ -96,15 +95,16 @@ class UserCenterFriendPc extends React.Component {
           title="好友"
           leftNum={followCount}
           onShowMore={this.moreFriend}
+          className={this.props.className}
         >
           {Number(followCount) !== 0 && (
             <div
-              className={`${styles.friendWrap} ${this.props.className}`}
+              className={styles.friendWrap}
             >
             {followerAdapter(this.state.follows).map((user, index) => {
               if (index + 1 > this.props.limit) return null;
               return (
-                <div key={user.id} className={`${styles.friendItem} ${this.props.className}`}>
+                <div key={user.id} className={styles.friendItem}>
                   <div className={styles.friendAvatar}>
                     <Avatar
                       image={user.avatar}

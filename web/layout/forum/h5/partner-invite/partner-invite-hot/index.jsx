@@ -48,7 +48,7 @@ class PartnerInviteHot extends React.Component {
     return (
       <div className={layout.pc_hot}>
         <div className={layout.pc_hot_title}>
-          <SectionTitle className={layout.hot_title} isShowMore={false} icon={{ type: 3, name: 'HotOutlined' }} title="热门内容预览" onShowMore={this.redirectToSearchResultPost} />
+          <SectionTitle titleStyle={{padding: '24px 0'}} isShowMore={false} icon={{ type: 3, name: 'HotOutlined' }} title="热门内容预览" onShowMore={this.redirectToSearchResultPost} />
         </div>
         {
           threadsPageData?.length
