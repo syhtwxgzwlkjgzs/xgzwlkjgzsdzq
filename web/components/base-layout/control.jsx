@@ -69,24 +69,30 @@ const BaseLayoutControl = (props) => {
     }
 
     const playingVideoDom = baselayout.playingVideoDom;
-    const playingVideoPos = baselayout.playingVideoPos;
-    
-    if (playingVideoPos > 0 && (playingVideoPos < scrollTop ||
-      playingVideoPos > window.screen.availHeight + scrollTop)) {
-      playingVideoDom?.querySelector("video").pause();
-      baselayout.playingVideoDom = null;
-      baselayout.playingVideoPos = -1;
+
+    if(playingVideoDom) {
+      const playingVideoTop = baselayout.playingVideoPos;
+      const playingVideoBottom = playingVideoDom?.offsetHeight + playingVideoTop;
+
+      if(playingVideoTop > 0 &&
+        (playingVideoBottom < scrollTop || // 视频在视窗下面
+          playingVideoTop > window.innerHeight + scrollTop )) { // 视频在视窗上面
+        playingVideoDom.querySelector("video")?.pause();
+        baselayout.playingVideoDom = null;
+        baselayout.playingVideoPos = -1;
+      }
     }
 
     const playingAudioDom = baselayout.playingAudioDom;
-    const playingAudioPos = baselayout.playingAudioPos;
-    if (playingAudioPos > 0 && (playingAudioPos < scrollTop ||
-      playingAudioPos > window.screen.availHeight + scrollTop)) {
-      playingAudioDom?.querySelector("video").pause();
-      baselayout.playingAudioDom = null;
-      baselayout.playingAudioPos = -1;
+    if(playingAudioDom) {
+      // const playingAudioPos = baselayout.playingAudioPos;
+      // if (playingAudioPos > 0 && (playingAudioPos < scrollTop ||
+      //   playingAudioPos > window.innerHeight + scrollTop)) {
+      //   playingAudioDom?.querySelector("video")?.pause();
+      //   baselayout.playingAudioDom = null;
+      //   baselayout.playingAudioPos = -1;
+      // }
     }
-    
 
     onScroll({ scrollTop: scrollTop });
   };

@@ -25,7 +25,7 @@ const Index = ({
   money = 0,
   status = 0,
   onPay = noop,
-  baselayout,
+  baselayout = {},
 }) => {
   let player = null;
   const ref = useRef();
@@ -36,13 +36,10 @@ const Index = ({
   };
 
   const onPlay = (e) => {
-
-    if(baselayout.playingVideoDom) {
-      baselayout.playingVideoDom.querySelector("video").pause();
-      baselayout.playingAudioDom.onPause();
+    if(baselayout) {
+      baselayout.playingVideoDom = e.target;
+      baselayout.playingVideoPos = e.target.parentNode.parentNode.parentNode.offsetTop;
     }
-    baselayout.playingVideoDom = e.target;
-    baselayout.playingVideoPos = e.target.parentNode.parentNode.parentNode.offsetTop;
   }
 
 

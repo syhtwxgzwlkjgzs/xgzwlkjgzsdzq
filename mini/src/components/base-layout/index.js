@@ -58,7 +58,6 @@ const BaseLayout = (props) => {
   const handleScroll = ({ detail }) => {
     const { baselayout } = props;
     const playingVideoDom = baselayout.playingVideoDom;
-    const playingVideoPos = baselayout.playingVideoPos;
 
     wx.getSystemInfo({
       success(res) {
@@ -67,11 +66,9 @@ const BaseLayout = (props) => {
           wx.createSelectorQuery()
           .select(`#${playingVideoDom}`)
           .boundingClientRect((rect) => { 
-            if(rect.top < 0 || rect.top > res.windowHeight) {
-              console.log("out ")
-              wx.createVideoContext(playingVideoDom).pause();
-              baselayout.playingVideoDom = null;
-              baselayout.playingVideoPos = -1;
+            if(rect.top > res.windowHeight || rect.bottom < 0) {
+              wx.createVideoContext(playingVideoDom)?.pause();
+              baselayout.playingVideoDom = "";
             }
           }).exec();
         }

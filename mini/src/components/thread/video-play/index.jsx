@@ -28,7 +28,7 @@ const Index = ({
   money = 0,
   status = 0,
   onPay = noop,
-  baselayout,
+  baselayout = {},
 }) => {
   let player = null;
   const videoId = useRef(`video${randomStr()}`);
@@ -39,17 +39,18 @@ const Index = ({
   };
 
   const onPlay = (e) => {
-    if(baselayout.playingVideoDom) {
-      baselayout.playingVideoDom.querySelector("video").pause();
-      baselayout.playingAudioDom.onPause();
+    if(baselayout) {
+      if(baselayout.playingVideoDom) {
+        wx.createVideoContext(baselayout.playingVideoDom)?.pause(); // 暂停之前正在播放的音频
+      }
+  
+      wx.createSelectorQuery()
+        .select(`#${e.target.id}`)
+        .boundingClientRect((rect) => { 
+          baselayout.playingVideoDom = e.target.id;
+          baselayout.playingVideoPos = rect.top;
+        }).exec();
     }
-
-    wx.createSelectorQuery()
-      .select(`#${e.target.id}`)
-      .boundingClientRect((rect) => { 
-        baselayout.playingVideoDom = e.target.id;
-        baselayout.playingVideoPos = rect.top;
-      }).exec();
   }
 
   useEffect(() => {
