@@ -1,44 +1,40 @@
 import React from 'react';
 import SidebarPanel from '@components/sidebar-panel';
-import UserCenterFans from '@components/user-center-fans';
-import UserCenterFansPopup from '@components/user-center-fans-popup';
+import UserCenterUsers from '@components/user-center-users';
+import UserCenterUsersPopup from '@components/user-center-users-popup';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import styles from './index.module.scss';
 import { withRouter } from 'next/router';
 
-@inject('user')
+@inject('forum')
 @observer
-class UserCenterFansPc extends React.Component {
-  static defaultProps = {
-    className: '',
-  };
+class UserCenterUsersPc extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showFansPopup: false,
+      showUsersPopup: false,
     };
   }
 
-  // 点击粉丝更多
-  moreFans = () => {
-    this.setState({ showFansPopup: true });
+  // 点击成员更多
+  moreUser = () => {
+    this.setState({ showUsersPopup: true });
   };
 
   render() {
-    const fansCount = this.props.userId ? this.props.user.targetUserFansCount : this.props.user.followCount;
+    const usersCount = this.props.forum.userTotal;
     return (
       <>
         <SidebarPanel
           type="normal"
-          noData={Number(fansCount) === 0}
-          title="粉丝"
-          leftNum={fansCount}
-          onShowMore={this.moreFans}
-          className={this.props.className}
+          noData={Number(usersCount) === 0}
+          title="成员"
+          leftNum={usersCount}
+          onShowMore={this.moreUser}
         >
-          {Number(fansCount) !== 0 && (
-            <UserCenterFans
+          {Number(usersCount) !== 0 && (
+            <UserCenterUsers
               style={{
                 overflow: 'hidden',
               }}
@@ -61,9 +57,9 @@ class UserCenterFansPc extends React.Component {
           )}
         </SidebarPanel>
 
-        <UserCenterFansPopup
+        <UserCenterUsersPopup
           id={this.props.userId}
-          visible={this.state.showFansPopup}
+          visible={this.state.showUsersPopup}
           onContainerClick={({ id }) => {
             this.props.router.push({
               pathname: '/user/[id]',
@@ -72,11 +68,11 @@ class UserCenterFansPc extends React.Component {
               },
             });
           }}
-          onClose={() => this.setState({ showFansPopup: false })}
+          onClose={() => this.setState({ showUsersPopup: false })}
         />
       </>
     );
   }
 }
 
-export default withRouter(UserCenterFansPc);
+export default withRouter(UserCenterUsersPc);
