@@ -74,7 +74,7 @@ const Index = ({
   useEffect(() => {
     const lengthInLine = parseInt(contentWrapperRef.current.offsetWidth / 16);
     const length = fuzzyCalcContentLength(filterContent, lengthInLine);
-    if (length < 262) {
+    if (length < lengthInLine * 6) { // 显示6行内容
       setHiddenMore(true);
     } else {
       setHiddenMore(false);
