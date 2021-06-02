@@ -153,6 +153,14 @@ class UserCenterFans extends React.Component {
     this.containerRef.current.addEventListener('scroll', this.loadMore);
   }
 
+  async componentDidUpdate(prevProps) {
+    if (prevProps.userId !== this.props.userId) {
+      this.page = 1;
+      this.totalPage = 1;
+      await this.loadMore();
+    }
+  }
+
   // 清理，防止内存泄露
   componentWillUnmount() {
     if (!this.containerRef.current) return;
