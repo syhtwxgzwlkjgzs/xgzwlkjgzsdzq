@@ -205,6 +205,8 @@ class ThreadPCPage extends React.Component {
   handleChangeSelectedType = (value) => {
     this.setState({
       selectType: value
+    }, () => {
+      this.initStateAndFetch()
     })
   }
 
@@ -347,7 +349,6 @@ class ThreadPCPage extends React.Component {
                 noMore={this.state.page > this.state.totalPage}>
                 <RecordList data={this.getRecordData()} activeType={this.state.activeType}></RecordList>
               </List>
-              {/* <NoMore></NoMore> */}
             </div>
           </div>
 
