@@ -17,6 +17,8 @@ import {
   smsRebind,
   smsVerify,
   readUsersDeny,
+  wechatRebindQrCodeGen,
+  getWechatRebindStatus,
 } from '@server';
 import { get } from '../../utils/get';
 import set from '../../utils/set';
@@ -476,7 +478,7 @@ class UserAction extends SiteStore {
     };
   }
 
-   @action
+  @action
   async updateEditedUserNickname() {
     const updateUserInfoRes = await updateUsersUpdate({
       data: {
@@ -497,23 +499,23 @@ class UserAction extends SiteStore {
 
 
   @action
-   async updateEditedUserSignature() {
-     const updateUserInfoRes = await updateUsersUpdate({
-       data: {
-         signature: this.editSignature,
-       },
-     });
+  async updateEditedUserSignature() {
+    const updateUserInfoRes = await updateUsersUpdate({
+      data: {
+        signature: this.editSignature,
+      },
+    });
 
-     if (updateUserInfoRes.code === 0) {
-       this.userInfo.signature = this.editSignature;
-       return updateUserInfoRes.data;
-     }
+    if (updateUserInfoRes.code === 0) {
+      this.userInfo.signature = this.editSignature;
+      return updateUserInfoRes.data;
+    }
 
-     throw {
-       Code: updateUserInfoRes.code,
-       Message: updateUserInfoRes.msg,
-     };
-   }
+    throw {
+      Code: updateUserInfoRes.code,
+      Message: updateUserInfoRes.msg,
+    };
+  }
 
   /**
    * 初次设置用户密码
@@ -887,6 +889,73 @@ class UserAction extends SiteStore {
     }
 
     return threadArr;
+  }
+
+  // 生成微信换绑二维码，仅在 PC 使用
+  @action
+  genRebindQrCode = async (scanSuccess = () => { }, scanFail = () => {}) => {
+    clearInterval(this.rebindTimer);
+    const qrCodeRes = await wechatRebindQrCodeGen();
+
+    if (qrCodeRes.code === 0) {
+      this.rebindQRCode = get(qrCodeRes, 'data.base64Img');
+      const sessionToken = get(qrCodeRes, 'data.sessionToken');
+
+      this.rebindTimer = setInterval(() => {
+        this.wechatRebindStatusPoll({
+          sessionToken,
+          scanSuccess,
+          scanFail,
+        });
+      }, 2000);
+
+      // 5min，二维码失效
+      setTimeout(() => {
+        clearInterval(this.rebindTimer);
+      }, 5 * 60 * 1000);
+
+      return qrCodeRes.data;
+    }
+
+    throw {
+      Code: qrCodeRes.code,
+      Msg: qrCodeRes.msg,
+    };
+  }
+
+  // 轮询重新绑定结果
+  @action
+  wechatRebindStatusPoll = async ({
+    sessionToken,
+    scanSuccess,
+    scanFail,
+  }) => {
+    const scanStatus = await getWechatRebindStatus({
+      params: {
+        sessionToken,
+      },
+    });
+
+    if (scanStatus.code === 0) {
+      if (scanSuccess) {
+        scanSuccess();
+      }
+    }
+
+    if (scanStatus.code !== 0) {
+      if (scanStatus.msg !== '扫码中') {
+        if (scanFail) {
+          scanFail();
+        }
+      }
+    }
+  }
+
+  // 清空换绑二维码和interval
+  @action
+  clearWechatRebindTimer = () => {
+    clearInterval(this.rebindTimer);
+    this.rebindQRCode = null;
   }
 }
 
