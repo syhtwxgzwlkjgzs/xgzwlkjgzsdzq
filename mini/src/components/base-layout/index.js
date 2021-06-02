@@ -5,6 +5,7 @@ import Header from '../header';
 import List from '../list'
 import BottomNavBar from '../bottom-nav-bar'
 import { useDidShow } from '@tarojs/taro'
+import Taro from '@tarojs/taro';
 
 import styles from './index.module.scss';
 
@@ -54,6 +55,31 @@ const BaseLayout = (props) => {
   //   }
 
   // }, [])
+
+  const handleScroll = ({ detail }) => {
+    const { baselayout } = props;
+    const playingVideoDom = baselayout.playingVideoDom;
+
+    Taro.getSystemInfo({
+      success(res) {
+
+        if (playingVideoDom) {
+          Taro.createSelectorQuery()
+          .select(`#${playingVideoDom}`)
+          .boundingClientRect((rect) => { 
+            if(rect.top > res.windowHeight || rect.bottom < 0) {
+              Taro.createVideoContext(playingVideoDom)?.pause();
+              baselayout.playingVideoDom = "";
+            }
+          }).exec();
+        }
+
+      }
+    });
+    
+
+  }
+
   return (
     <View className={styles.container}>
         {showHeader && <Header />}
@@ -61,13 +87,13 @@ const BaseLayout = (props) => {
           showPullDown ? (
             <View className={styles.list} ref={pullDownWrapper}>
               {/* <PullDownRefresh onRefresh={onPullDown} isFinished={isFinished} height={height}> */}
-                  <List {...props} className={styles.listHeight} ref={listRef} hasOnScrollToLower={index.hasOnScrollToLower}>
+                  <List {...props} className={styles.listHeight} ref={listRef} hasOnScrollToLower={index.hasOnScrollToLower} onScroll={handleScroll}>
                       {typeof(children) === 'function' ? children({ ...props }) : children}
                   </List>
               {/* </PullDownRefresh> */}
             </View>
           ) : (
-            <List {...props} className={styles.list} ref={listRef} hasOnScrollToLower={index.hasOnScrollToLower}>
+            <List {...props} className={styles.list} ref={listRef} hasOnScrollToLower={index.hasOnScrollToLower} onScroll={handleScroll}>
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>
           )

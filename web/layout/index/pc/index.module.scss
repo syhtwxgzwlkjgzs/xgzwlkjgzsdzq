@@ -46,6 +46,7 @@
   top: 60px;
   left: 50%;
   transform: translateX(-50%);
+  -moz-transform: translateX(calc(-50% - 11px));
   margin-left: rem(-15);
   padding-top: rem(20);
   display: flex;
