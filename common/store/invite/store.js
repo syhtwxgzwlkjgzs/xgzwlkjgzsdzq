@@ -7,21 +7,19 @@ export default class InviteStore {
 
   @action getInviteCode(router) {
     let inviteCode;
-    if (isWeiXin()) {
-      inviteCode = wx.getStorage('inviteCode');
-    } else {
-      inviteCode = window?.sessionStorage?.getItem('inviteCode') || router?.query?.inviteCode || '';
+    if (typeof wx === 'object') {
+      wx.getStorage && (inviteCode = wx?.getStorage('inviteCode'));
     }
-
+    if (typeof window === 'object') {
+      inviteCode = inviteCode || window?.sessionStorage?.getItem('inviteCode') || router?.query?.inviteCode || '';
+    }
     return inviteCode || this.inviteCode;
   }
 
   @action setInviteCode(code) {
     this.inviteCode = code;
-    if (isWeiXin()) {
-      wx.setStorage('inviteCode', code);
-    } else {
-      window?.sessionStorage?.setItem('inviteCode', code);
+      typeof wx === 'object' && wx.getStorage && wx.setStorage('inviteCode', code);
+      typeof window === 'object' && window.sessionStorage?.setItem('inviteCode', code);
     }
   }
 
