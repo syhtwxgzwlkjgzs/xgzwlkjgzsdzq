@@ -28,6 +28,13 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
   
   const [dataSource, setDataSource] = useState(deepClone(newFilterData));
 
+  const onClickSubmenu = (subIndex, index) => {
+    // 点击二级菜单的头部，清空所有选项
+    newDataSource.map(item => {
+      item.isActive = false
+    })
+  }
+
   // 点击筛选项，获取目标值
   const onClick = (subIndex, index) => {
     const newDataSource = deepClone(newFilterData);
@@ -106,6 +113,7 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
                   index={index} 
                   title={title(item.label)} 
                   style={{ padding: '3px 0' }}
+                  onClick={onClickSubmenu}
                 >
                   {
                     item.children.map((secondItem, secondIndex) => {

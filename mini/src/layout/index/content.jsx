@@ -93,6 +93,7 @@ class IndexH5Page extends React.Component {
     }
 
     this.props.baselayout.setJumpingToTop();
+    this.props.index.setHiddenTabBar(false)
 
     const newFilter = { ...this.state.filter, categoryids: newCategoryIds, sequence: id === 'default' ? 1 : 0, }
 

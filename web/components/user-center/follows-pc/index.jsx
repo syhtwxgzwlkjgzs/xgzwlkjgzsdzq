@@ -47,6 +47,10 @@ class UserCenterFollowsPc extends React.Component {
                   },
                 });
               }}
+              itemStyle={{
+                paddingLeft: 0,
+                paddingRight: 0,
+              }}
               className={styles.friendsWrapper}
               limit={5}
             />

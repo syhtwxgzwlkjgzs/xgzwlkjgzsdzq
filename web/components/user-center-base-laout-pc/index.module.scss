@@ -6,6 +6,8 @@
   display: flex;
   flex-direction: column;
   background: $body-bg-color;
+  height: 100vh;
+
 }
 
 .headerbox {
@@ -14,10 +16,17 @@
 }
 
 .wrapper {
+  width: rem(1100);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+.content {
   position: relative;
   display: flex;
   justify-content: center;
-  overflow: hidden;
   width: rem(1100);
 }
 
