@@ -87,3 +87,14 @@ export const CASH_DETAIL_CONSTANTS = {
     code: 6,
   },
 };
+
+export const PAY_STATUS_MAP = {
+  0: '待付款',
+  1: '已付款',
+  2: '取消订单',
+  3: '支付失败',
+  4: '订单已过期',
+  5: '部分退款',
+  10: '全额退款',
+  11: '异常订单',
+};
