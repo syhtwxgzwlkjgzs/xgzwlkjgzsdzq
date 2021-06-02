@@ -22,7 +22,6 @@ const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = tru
     }
   }
   const clearInput = () => {
-    console.log(111)
     setValue('');
     setIsShow(false)
   }

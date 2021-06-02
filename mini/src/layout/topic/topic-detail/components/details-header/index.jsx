@@ -17,6 +17,12 @@ const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop }) => 
   const goList = () => {
     Router.push({url: '/subPages/search/result-topic/index'});
   }
+  const topicTitle = topic.topicDetail?.pageData[0]?.content || ''
+  const topicId = topic.topicDetail?.pageData[0]?.topicId || ''
+  const shareData = {
+    title: topicTitle,
+    path: `/subPages/topic/topic-detail/index?id=${topicId}`
+  }
   return (
     <View className={styles.contain}>
       <Image src={TopicHeaderImg}></Image>
@@ -33,7 +39,7 @@ const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop }) => 
               <Text className={styles.content}>{contentNum}</Text>
             </View>
             <View className={styles.hr}></View>
-            <Button plain='true' openType='share' data-from='topicHead'>
+            <Button plain='true' openType='share' data-shareData={shareData}>
               <Icon className={styles.shareIcon}name="ShareAltOutlined" size={14} />
               <Text className={styles.text}>分享</Text>
             </Button>
