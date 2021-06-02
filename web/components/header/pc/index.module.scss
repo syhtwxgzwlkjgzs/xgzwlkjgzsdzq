@@ -7,6 +7,12 @@
     display: flex;
     justify-content: center;
     padding: rem($padding-2n);
+    @include media('l-pc') {
+      padding: rem($padding-2n) 1.5%;
+    }
+    @include media('s-pc') {
+      padding: rem($padding-2n) 2%;
+    }
     box-sizing: border-box;
     background: var(--color-white);
     position: fixed;
@@ -69,10 +75,25 @@
             div{
               color: var(--color-text-secondary);
             }
-            p{
+            .iconText{
               font-size: rem($font-size-primary);
               margin-left: rem($margin-2n);
               color: var(--color-text-regular);
+            }
+            @include media('xl-pc') {
+              .iconText{
+                display: block;
+              }
+            }
+            @include media('l-pc') {
+              .iconText{
+                display: block;
+              }
+            }
+            @include media('s-pc') {
+              .iconText{
+                display: none;
+              }
             }
           }
         }

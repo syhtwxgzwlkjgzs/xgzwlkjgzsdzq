@@ -105,7 +105,7 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
                   key={index} 
                   index={index} 
                   title={title(item.label)} 
-                  style={{ padding: '0 2%' }}
+                  style={{ padding: '0 2%', height: '55px' }}
                 >
                   {
                     item.children.map((secondItem, secondIndex) => {

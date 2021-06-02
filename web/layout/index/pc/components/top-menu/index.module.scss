@@ -1,6 +1,7 @@
 @import '@common/styles/index.scss';
 .container {
   flex: 1;
+  width: 100%;
   .activeItem {
     color: $primary-color !important;
     position: relative;
@@ -8,6 +9,12 @@
   }
 
   :global {
+    .dzq-menu{
+      
+      @include media('s-pc') {
+        justify-content: space-between;
+      }
+    }
     .dzq-menu-item:first-child{
       padding-left: 0!important;
     }

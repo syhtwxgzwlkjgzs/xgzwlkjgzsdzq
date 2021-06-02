@@ -60,20 +60,21 @@ class DzqApp extends App {
   }
 
   updateSize() {
-    const current = window.innerWidth;
-    console.log(this.appStore)
+    const currentWidth = window.innerWidth;
+    const currentHeight = window.innerHeight;
+    if (currentWidth < 800) {
+      window.resizeTo(800,   currentHeight);
+    }
     if ( this.appStore.site ) {
-
-      if ( this.appStore.site.platform === 'pc' && current < 800 ) {
+      if ( this.appStore.site.platform === 'pc' && currentWidth < 800 ) {
         this.appStore.site.setPlatform('h5');
         return;
       }
 
-      if ( this.appStore.site.platform === 'h5' && current >= 800 ) {
+      if ( this.appStore.site.platform === 'h5' && currentWidth >= 800 ) {
         this.appStore.site.setPlatform('pc');
         return;
       }
-
     }
   }
 

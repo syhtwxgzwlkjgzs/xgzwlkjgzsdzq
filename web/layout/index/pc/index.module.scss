@@ -11,6 +11,12 @@
   width: 100%;
   .indexRightCon {
     margin-top: rem($margin-5n);
+    @include media('l-pc') {
+      margin-top: rem($margin-10);
+    }
+    @include media('s-pc') {
+      margin-top: rem($margin-10);
+    }
     border-radius: rem($border-radius-small);
     overflow: hidden;
   }
@@ -24,7 +30,8 @@
     width: 100%;
     background: var(--color-white);
     box-sizing: border-box;
-    border-radius: rem(5);
+    border-bottom-left-radius: rem(5);
+    border-bottom-right-radius: rem(5);
   }
 }
 .publishBtn {
@@ -40,7 +47,8 @@
   display: flex;
   z-index: 1000;
   background: $body-bg-color;
-  border-radius: rem(5);
+  border-top-left-radius: rem(5);
+  border-top-right-radius: rem(5);
 
   &:after {
     content: '';
@@ -56,15 +64,22 @@
     position: relative;
     width: 100%;
     padding: rem(6.5) rem(24);
+    @include media('l-pc') {
+      padding: rem(6.5) rem($padding-4n);
+    }
+    @include media('s-pc') {
+      padding: rem(6.5) rem($padding-4n) rem(16);
+    }
     display: flex;
     align-items: center;
     background: var(--color-white);
-    border-radius: rem(5);
+    border-top-left-radius: rem(5);
+    border-top-right-radius: rem(5);
     flex-wrap: wrap;
     justify-content: center;
 
    
-    @media only screen and (min-width: 800px) and (max-width: 990px) {
+    @include media('s-pc') {
       align-items: flex-start;
       flex-direction: column;
       .PostTheme {
@@ -86,6 +101,12 @@
 .TopNewsBox {
   padding: rem($padding-2n) 0;
   margin: 0 rem($margin-6n);
+  @include media('l-pc') {
+    margin: 0 rem($padding-4n);
+  }
+  @include media('s-pc') {
+    margin: 0 rem($padding-4n);
+  }
   border-bottom: 1px solid var(--border-line-color);
 }
 .noBorder {
@@ -94,11 +115,18 @@
 .topNewContent {
   padding: rem($padding-10) 0;
   margin: 0 rem($margin-6n);
-  border-radius: rem(5);
+  border-bottom-left-radius: rem(5);
+  border-bottom-right-radius: rem(5);
 }
 .themeBox {
   overflow: hidden;
-  margin-top: rem($margin-5n);
+  margin-top: rem($margin-10);
+  @include media('l-pc') {
+    margin-top: rem($margin-10);
+  }
+  @include media('s-pc') {
+    margin-top: rem($margin-10);
+  }
   .themeItem {
     margin-bottom: rem($margin-10);
   }

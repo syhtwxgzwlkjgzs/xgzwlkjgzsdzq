@@ -70,11 +70,7 @@ export default function UserInfo(props) {
       </div>
 
       <div className={styles.tags}>
-        {props.isEssence && (
-          <div className={classNames('dzq-tag', styles.categoryEssence)}>
-            <span className="dzq-tag-text">{tagsNumber > 2 && !isPc ? '精' : '精华'}</span>
-          </div>
-        )}
+        {props.isEssence && <Tag type="orange">{tagsNumber > 2 && !isPc ? '精' : '精华'}</Tag>}
         {/* {props.isEssence && <Tag type="primary">精华</Tag>} */}
         {props.isReward && <Tag type="warning">{tagsNumber > 2 && !isPc ? '悬' : '悬赏'}</Tag>}
         {props.isRed && <Tag type="danger">{tagsNumber > 2 && !isPc ? '红' : '红包'}</Tag>}
