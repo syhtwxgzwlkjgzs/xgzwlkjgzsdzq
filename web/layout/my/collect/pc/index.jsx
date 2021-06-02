@@ -8,7 +8,8 @@ import ThreadContent from '@components/thread';
 import Copyright from '@components/copyright';
 import PopTopic from '@components/pop-topic';
 import UserCenterFansPc from '@components/user-center/fans-pc';
-// import data from './data';
+import SidebarPanel from '@components/sidebar-panel';
+
 
 @inject('site')
 @inject('index')
@@ -36,38 +37,31 @@ class CollectPCPage extends React.Component {
     </div>
   );
 
-  // 中间 -- 我的收藏
-  renderContent = (data) => {
-    const { threads } = data;
-    const { pageData } = threads || {};
-    return (
-      <div className={styles.content}>
-        <div className={styles.title}>
-          <SectionTitle
-            title="我的收藏"
-            icon={{ type: 3, name: 'CollectOutlined' }}
-            isShowMore={false}
-            rightText={`共有${this.props.totalCount}条收藏`}
-          />
-        </div>
-        {pageData?.map((item, index) => (
-          <ThreadContent className={styles.threadContent} data={item} key={index} />
-        ))}
-      </div>
-    );
-  };
-
   render() {
-    const { index, page, totalPage } = this.props;
+    const { index } = this.props;
+    const { pageData, currentPage, totalPage  } = index.threads || {}
     return (
       <div className={styles.container}>
         <BaseLayout
           showRefresh={false}
-          noMore={page > totalPage}
+          noMore={currentPage >= totalPage}
           onRefresh={this.fetchMoreData}
           right={this.renderRight}
         >
-          {this.renderContent(index)}
+          <SidebarPanel 
+            title="我的收藏" 
+            type='normal'
+            isShowMore={false}
+            noData={!pageData?.length}
+            isLoading={!pageData}
+            icon={{ type: 3, name: 'CollectOutlined' }}
+            rightText={`共有${this.props.totalCount}条收藏`}
+            mold='plane'
+          >
+            {pageData?.map((item, index) => (
+              <ThreadContent className={index === 0 && styles.threadStyle} data={item} key={index} />
+            ))}
+          </SidebarPanel>
         </BaseLayout>
       </div>
     );

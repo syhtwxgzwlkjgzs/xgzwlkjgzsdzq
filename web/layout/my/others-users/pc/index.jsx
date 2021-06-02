@@ -141,7 +141,7 @@ class PCMyPage extends React.Component {
           showRefresh={false}
           onSearch={this.onSearch}
           right={this.renderRight}
-          immediateCheck={false}
+          immediateCheck={true}
           showLayoutRefresh={!!this.formatUserThreadsData(targetUserThreads)?.length}
         >
           {this.renderContent()}

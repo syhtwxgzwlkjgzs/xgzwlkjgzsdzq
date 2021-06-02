@@ -15,11 +15,9 @@
     width: rem(286);
     overflow: hidden;
   }
-  .threadContent {
-    border-radius: rem($border-radius-small);
-    padding: 0 rem($padding-6n);
-    margin-bottom: rem($margin-10);
-    overflow: hidden;
+  .threadStyle {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
   }
 }
 
