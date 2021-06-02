@@ -14,6 +14,7 @@ const Index = (props) => {
     visible = false,
     onClose = noop,
     isOtherFans = false,
+    title = '关注',
     id,
   } = props;
   const onContainerClick = ({ id }) => {
@@ -28,7 +29,7 @@ const Index = (props) => {
       <div className={styles.contaner}>
         <div className={styles.popupWrapper}>
           <div className={styles.title}>
-            关注
+            {title}
             <Icon
               name="CloseOutlined"
               className={styles.closeIcon}

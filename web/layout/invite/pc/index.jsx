@@ -9,6 +9,7 @@ import List from '@components/list';
 import BaseLayout from '@components/base-layout';
 import TrendingTopic from '@layout/search/pc/components/trending-topics';
 import UserCenterFansPc from '@components/user-center/fans-pc';
+import UserCenterFriendPc from '@components/user-center/friend-pc';
 import SidebarPanel from '@components/sidebar-panel';
 import Copyright from '@components/copyright';
 
@@ -69,15 +70,7 @@ class InvitePCPage extends React.Component {
           </div>
           <div className={layout.user_card_button}>邀请朋友</div>
         </div>
-        <SidebarPanel
-          title="好友"
-          leftNum="18"
-          noData={true}
-          isLoading={false}
-          onShowMore={this.redirectToSearchResultTopic}
-        >
-          <TrendingTopic data={pageData} onItemClick={this.onTopicClick}/>
-        </SidebarPanel>
+        <UserCenterFriendPc />
         <UserCenterFansPc />
         <Copyright/>
       </>
