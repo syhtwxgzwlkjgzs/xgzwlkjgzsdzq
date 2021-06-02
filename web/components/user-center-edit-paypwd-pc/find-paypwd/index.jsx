@@ -24,11 +24,7 @@ export default class index extends Component {
     }
   }
 
-  componentDidMount() {
-  }
-
   updatePwd = (set_num, type) => {
-    console.log('进来了');
     const { list = [] } = this.state;
     if (type == 'add') {
       let list_ = [...list];
@@ -101,13 +97,12 @@ export default class index extends Component {
     const { newPayPwd, newPayPwdRepeat, list = [], isBlur, initTimeValue, initTimeText } = this.state
     let isSubmit = !newPayPwd || !newPayPwdRepeat
     const mobile = this.props.user?.mobile
-    console.log(mobile,'ss_01');
     return (
       <div className={styles.userMobileWrapper}>
         <div className={styles.userMobileContent}>
           <div className={styles.title}>
             <span className={styles.titleValue}>找回支付密码</span>
-            <Icon onClick={this.handleClose} name="CloseOutlined" />
+            <Icon onClick={this.handleClose} name="CloseOutlined" onClick={this.props.onClose} />
           </div>
           <div className={styles.inputItem}>
             <Input value={mobile} />
