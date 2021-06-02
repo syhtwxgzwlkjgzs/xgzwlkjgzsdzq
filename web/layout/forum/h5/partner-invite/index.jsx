@@ -40,7 +40,7 @@ class PartnerInviteH5Page extends React.Component {
     try {
       const { forum, router, search, invite, site } = this.props;
       const { platform } = site;
-      const perPage = platform === 'pc' ? 5 : 20
+      const perPage = platform === 'pc' ? 5 : 20;
 
       const inviteCode = invite.getInviteCode(router);
       if (inviteCode) invite.setInviteCode(inviteCode);
