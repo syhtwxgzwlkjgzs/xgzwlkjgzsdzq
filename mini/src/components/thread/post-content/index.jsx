@@ -78,7 +78,7 @@ const Index = ({
 
   const getCutContentForDisplay = (maxContentLength) => {
     const ctn = filterContent;
-    let ctnSubstring = ctn.substring(0, maxContentLength); // 根绝长度截断
+    let ctnSubstring = ctn.substring(0, maxContentLength); // 根据长度截断
 
     const cutPoint = (ctnSubstring.lastIndexOf("<img") > 0) ?
                       ctnSubstring.lastIndexOf("<img") : ctnSubstring.length;
@@ -93,13 +93,12 @@ const Index = ({
     const maxContentLength = lengthInLine * 6; // 如果默认长度是704，一共可容纳264个字符
 
     if (length < maxContentLength && length <= 1200) { // 显示6行内容
-      if(useShowMore) getCutContentForDisplay(maxContentLength);
       setHiddenMore(true);
     } else {
       setHiddenMore(false);
     }
     if (length > 1200) {
-      if(useShowMore) getCutContentForDisplay(maxContentLength);
+      if(useShowMore) getCutContentForDisplay(1200);
       setContentTooLong(true)
     } else {
       setContentTooLong(false)
@@ -114,7 +113,7 @@ const Index = ({
         onClick={!showMore ? onShowMore : handleClick}
       >
         <View className={styles.content}>
-          <RichText content={useShowMore ? cutContentForDisplay : filterContent} onClick={handleClick} />
+          <RichText content={(useShowMore && cutContentForDisplay) ? cutContentForDisplay : filterContent} onClick={handleClick} />
         </View>
       </View>
       {!loading && useShowMore && !showMore && (
