@@ -35,7 +35,8 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
   const [errorMsg, setErrorMsg] = useState("");
 
   const getFileType = (filepath) => {
-    return filepath.substr(filepath.lastIndexOf('.') + 1);
+    const absoluteUrl = filepath.split('?')[0];
+    return absoluteUrl.substr(absoluteUrl.lastIndexOf('.') + 1);
   }
 
   const onDownLoad = (url, index) => {
