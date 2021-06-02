@@ -51,14 +51,6 @@ class ForumPCPage extends React.Component {
     console.log(usersPageData);
     return (
       <>
-        {/* <SidebarPanel
-          title="成员"
-          leftNum="2880"
-          noData={isNoMore}
-          onShowMore={() => {console.log('onShowMore')}}
-        >
-          <TrendingTopic data={usersPageData} onItemClick={() => {console.log('onItemClick')}}/>
-        </SidebarPanel> */}
         <UserCenterUsersPc/>
         <Copyright/>
       </>
@@ -151,6 +143,51 @@ class ForumPCPage extends React.Component {
             <div className={layout.mode_title}>我的权限</div>
             {/* 权限板块 start */}
             <div className={layout.my_permission_plate}>
+              {/* <div className={layout.plate_left_label}> */}
+              <table className={layout.plate_left_label}>
+                {
+                  PERMISSION_PLATE?.map((item, index) => (
+                    <>
+                      {
+                        index === 0
+                          ? <tr className={layout.plate_th}>
+                              <td className={layout.plate_td}>版权模块</td>
+                              <td className={layout.plate_td}>我是分类</td>
+                              <td className={layout.plate_td}>我是分类/我是二级分类</td>
+                              <td className={layout.plate_td}>我是分类</td>
+                              <td className={layout.plate_td}>我是分类/我是二级分类</td>
+                              <td className={layout.plate_td}>我是分类</td>
+                              <td className={layout.plate_td}>我是分类/我是二级分类</td>
+                            </tr>
+                          : <></>
+                      }
+                      <tr className={layout.plate_tr} key={index}>
+                        <td className={layout.plate_td}>{item}</td>
+                        <td className={layout.plate_td}>
+                          <Icon size={16} color='#2469F6' name='CheckOutlined'/>
+                        </td>
+                        <td className={layout.plate_td}>
+                          <Icon size={16} color='#2469F6' name='CheckOutlined'/>
+                        </td>
+                        <td className={layout.plate_td}>
+                          <Icon size={16} color='#2469F6' name='CheckOutlined'/>
+                        </td>
+                        <td className={layout.plate_td}>
+                          <Icon size={16} color='#2469F6' name='CheckOutlined'/>
+                        </td>
+                        <td className={layout.plate_td}>
+                          <Icon size={16} color='#2469F6' name='CheckOutlined'/>
+                        </td>
+                        <td className={layout.plate_td}>
+                          <Icon size={16} color='#2469F6' name='CheckOutlined'/>
+                        </td>
+                      </tr>
+                      {/* <div className={layout.left_label_item} key={index}>{item}</div> */}
+                    </>
+                  ))
+                }
+              </table>
+              {/* </div> */}
             </div>
             {/* 权限板块 start */}
             {/* 通用权限 start */}
@@ -165,30 +202,19 @@ class ForumPCPage extends React.Component {
                   }
                 </div>
                 <div className={layout.permission_common_value}>
-                    <div className={layout.common_value_item}>
-                      <Icon size={16} color='#2469F6' name='CheckOutlined'/>
-                    </div>
-                    <div className={layout.common_value_item}>
-                      <Icon size={16} color='#2469F6' name='CloseOutlined'/>
-                    </div>
-                    <div className={layout.common_value_item}>
-                      <Icon size={16} color='#2469F6' name='CheckOutlined'/>
-                    </div>
-                    <div className={layout.common_value_item}>
-                      <Icon size={16} color='#2469F6' name='CloseOutlined'/>
-                    </div>
-                    <div className={layout.common_value_item}>
-                      <Icon size={16} color='#2469F6' name='CheckOutlined'/>
-                    </div>
-                    <div className={layout.common_value_item}>
-                      <Icon size={16} color='#2469F6' name='CloseOutlined'/>
-                    </div>
-                    <div className={layout.common_value_item}>
-                      <Icon size={16} color='#2469F6' name='CheckOutlined'/>
-                    </div>
+                  {
+                    COMMON_PERMISSION?.map((item, index) => (
+                      <div className={layout.common_value_item} key={index}>
+                        <Icon size={16} color='#2469F6' name='CheckOutlined'/>
+                      </div>
+                      // <div className={layout.common_value_item}>
+                      //   <Icon size={16} color='#2469F6' name='CheckOutlined'/>
+                      // </div>
+                    ))
+                  }
                 </div>
-                <div className={layout.permission_common_scroll}>
-                </div>
+                {/* <div className={layout.permission_common_scroll}>
+                </div> */}
               </div>
             </div>
             {/* 通用权限 end */}
