@@ -18,10 +18,10 @@ export default class InviteStore {
 
   @action setInviteCode(code) {
     this.inviteCode = code;
-      typeof wx === 'object' && wx.getStorage && wx.setStorage('inviteCode', code);
-      typeof window === 'object' && window.sessionStorage?.setItem('inviteCode', code);
-    }
+    typeof wx === 'object' && wx.getStorage && wx.setStorage('inviteCode', code);
+    typeof window === 'object' && window.sessionStorage?.setItem('inviteCode', code);
   }
+
 
   @action
   async getInviteUsersList() {
