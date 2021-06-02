@@ -16,23 +16,8 @@ import { View, Text } from '@tarojs/components';
 @observer
 class TopicH5Page extends React.Component {
 
-  // 分享
-  onShare = (e) => {
-    e.stopPropagation();
-
-    // 对没有登录的先登录
-    if (!this.props.user.isLogin()) {
-      Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/user/login' });
-      return;
-    }
-
-    Toast.info({ content: '复制链接成功' });
-
-    const { content = '', topicId = '' } = this.props.topic?.topicDetail?.pageData[0] || {};
-    h5Share({ title: content, path: `/topic/topic-detail/index?id=${topicId}` });
-  }
-
+  
+  
   renderItem = ({ content = '', threadCount = 0, viewCount = 0, threads = [] }, index) => {
     return (
       <View key={index}>
