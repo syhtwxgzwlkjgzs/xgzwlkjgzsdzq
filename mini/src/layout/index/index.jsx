@@ -19,11 +19,20 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
-    const { site } = this.props;
+    const { index } = this.props
+    const { essence = 0, sequence = 0, attention = 0, sort = 1 } = index.filter;
+
+    let newTypes = this.handleString2Arr(index.filter, 'types');
+
+    let categoryIds = this.handleString2Arr(index.filter, 'categoryids');
+    
     this.props.index.getReadCategories();
     this.props.index.getRreadStickList();
     try {
-      await this.props.index.getReadThreadList({sequence: this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0});
+      await this.props.index.getReadThreadList({
+        sequence, 
+        filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
+      });
     } catch (error) {
       this.setState({ isError: true })
     }

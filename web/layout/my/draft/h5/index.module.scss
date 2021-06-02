@@ -18,6 +18,9 @@
   padding: rem($padding-4n) 0;
   width: calc(100vw - 0.08rem * 2);
   border-bottom: $border-solid-1;
+  &.border-none {
+    border: none;
+  }
   &-delete {
     height: 100%;
     width: 25%;

@@ -33,7 +33,7 @@ const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop }) => 
               <Text className={styles.content}>{contentNum}</Text>
             </View>
             <View className={styles.hr}></View>
-            <Button plain='true' openType='share' data-from='head'>
+            <Button plain='true' openType='share' data-from='topicHead'>
               <Icon className={styles.shareIcon}name="ShareAltOutlined" size={14} />
               <Text className={styles.text}>分享</Text>
             </Button>

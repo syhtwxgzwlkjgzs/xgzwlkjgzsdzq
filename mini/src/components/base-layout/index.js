@@ -4,6 +4,7 @@ import { View } from '@tarojs/components';
 import Header from '../header';
 import List from '../list'
 import BottomNavBar from '../bottom-nav-bar'
+import { useDidShow } from '@tarojs/taro'
 
 import styles from './index.module.scss';
 
@@ -24,8 +25,14 @@ import styles from './index.module.scss';
 const baseLayoutWhiteList = ['home'];
 
 const BaseLayout = (props) => {
-  const { showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr } = props;
+  const { index, showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr } = props;
   const [height, setHeight] = useState(600);
+
+  // 避免小程序通过手势返回上一页时，无法重置参数
+  useDidShow(() => {
+    index.setHiddenTabBar(false)
+    index.setHasOnScrollToLower(true)
+  })
 
   const debounce = (fn, wait) => {
     let timer = null;
@@ -47,7 +54,6 @@ const BaseLayout = (props) => {
   //   }
 
   // }, [])
-
   return (
     <View className={styles.container}>
         {showHeader && <Header />}
@@ -55,13 +61,13 @@ const BaseLayout = (props) => {
           showPullDown ? (
             <View className={styles.list} ref={pullDownWrapper}>
               {/* <PullDownRefresh onRefresh={onPullDown} isFinished={isFinished} height={height}> */}
-                  <List {...props} className={styles.listHeight} ref={listRef}>
+                  <List {...props} className={styles.listHeight} ref={listRef} hasOnScrollToLower={index.hasOnScrollToLower}>
                       {typeof(children) === 'function' ? children({ ...props }) : children}
                   </List>
               {/* </PullDownRefresh> */}
             </View>
           ) : (
-            <List {...props} className={styles.list} ref={listRef}>
+            <List {...props} className={styles.list} ref={listRef} hasOnScrollToLower={index.hasOnScrollToLower}>
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>
           )
@@ -72,4 +78,4 @@ const BaseLayout = (props) => {
   );
 };
 
-export default inject('baselayout')(observer(BaseLayout));
+export default inject('baselayout', 'index')(observer(BaseLayout));

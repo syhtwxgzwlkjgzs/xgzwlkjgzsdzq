@@ -197,6 +197,7 @@ class Index extends Component {
             noMore={noMore}
             onScroll={throttle(this.onScroll, 10)}
             onRefresh={onScrollBottom}
+            immediateCheck={false}
           >
             {/* 导航条 */}
             {showHeader && <Header />}

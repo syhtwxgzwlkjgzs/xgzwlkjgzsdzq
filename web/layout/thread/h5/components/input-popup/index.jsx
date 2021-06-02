@@ -177,7 +177,7 @@ const InputPop = (props) => {
               placeholder={inputText}
               disabled={loading}
               forwardedRef={textareaRef}
-              autofocus={true}
+              autoFocus={true}
             ></Textarea>
           </div>
 

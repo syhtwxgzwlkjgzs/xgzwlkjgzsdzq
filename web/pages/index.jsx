@@ -9,6 +9,7 @@ import HOCFetchSiteData from '../middleware/HOCFetchSiteData';
 @inject('site')
 @inject('index')
 @inject('user')
+@inject('baselayout')
 @observer
 class Index extends React.Component {
 
@@ -21,13 +22,12 @@ class Index extends React.Component {
   static async getInitialProps(ctx, { user, site }) {
     const categories = await readCategories({}, ctx);
     const sticks = await readStickList({}, ctx);
-    const sequence = site && site.webConfig && site.webConfig.setSite ? site.webConfig.setSite.siteOpenSort : 0;
 
     const threads = await readThreadList({ params: { filter: {
       sort: 1,
       attention: 0,
       essence: 0
-    }, sequence, perPage: 10, page: 1 } }, ctx);
+    }, sequence: 0, perPage: 10, page: 1 } }, ctx);
 
     return {
       serverIndex: {
@@ -70,7 +70,7 @@ class Index extends React.Component {
     if (!hasThreadsData) {
       try {
         await this.props.index.getReadThreadList({
-          sequence: sequence || (this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0), 
+          sequence, 
           filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
         });
       } catch (error) {
@@ -102,7 +102,7 @@ class Index extends React.Component {
   }
 
   dispatch = async (type, data = {}) => {
-    const { index } = this.props;
+    const { index, baselayout } = this.props;
     const { essence, sequence, attention, sort, page } = data;
 
     let newTypes = this.handleString2Arr(data, 'types');
@@ -110,9 +110,9 @@ class Index extends React.Component {
     let categoryIds = this.handleString2Arr(data, 'categoryids');
 
     if (type === 'click-filter') { // 点击tab
-      
       this.page = 1;
       await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
+      this.props.baselayout.setJumpingToTop();
     } else if (type === 'moreData') {
       this.page += 1;
       return await index.getReadThreadList({

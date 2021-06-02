@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import { usernameLogin } from '@server';
 import { get } from '../../utils/get';
 import setAccessToken from '../../utils/set-access-token';
@@ -12,6 +12,11 @@ export default class UserLoginStore {
   @observable username = '';
   @observable password = '';
   @observable sessionToken = '';
+
+  // 是否信息填写完毕
+  @computed get isInfoComplete() {
+    return this.username && this.password;
+  }
 
   @action
   login = async () => {

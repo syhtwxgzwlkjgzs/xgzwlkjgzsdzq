@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 // import Carousel from 'react-multi-carousel';
 // import 'react-multi-carousel/lib/styles.css';
 import styles from './index.module.scss';
@@ -9,7 +9,7 @@ import styles from './index.module.scss';
 // const onePageCount = 35;
 
 export default function Emoji(props) {
-  const { emojis = [], onClick, show, pc } = props;
+  const { emojis = [], onClick, show, pc, onEmojiBlur = () => {} } = props;
   const [visible, setVisible] = useState(false);
   // const [page, setPage] = useState([]);
   // const pageCount = [...Array(onePageCount).keys()];
@@ -17,12 +17,27 @@ export default function Emoji(props) {
   //   const onePage = Math.ceil(emojis.length / onePageCount);
   //   setPage([...Array(onePage).keys()]);
   // }, [emojis]);
+  const emojiRef = useRef();
+
+  const computeIsBlur = (e) => {
+    if (emojiRef.current.show && !emojiRef.current.contains(e.currentTarget)) {
+      onEmojiBlur();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', computeIsBlur);
+    return () => {
+      document.removeEventListener('click', computeIsBlur);
+    };
+  }, []);
 
   useEffect(() => {
     setVisible(show);
+    emojiRef.current.show = show;
   }, [show]);
 
-  if (!visible) return null;
+  // if (!visible) return null;
 
   // const responsive = { mobile: {
   //   breakpoint: { max: 464, min: 0 },
@@ -32,7 +47,7 @@ export default function Emoji(props) {
   // };
   const cls = pc ? styles.pc : styles.h5;
   return (
-    <div id="dzq-toolbar-emoji" className={`${styles['dzq-emoji']} ${cls} dzq-toolbar-emoji`}>
+    <div ref={emojiRef} id="dzq-toolbar-emoji" className={`${styles['dzq-emoji']} ${cls} dzq-toolbar-emoji`} style={{ display: visible ? 'block' : 'none' }}>
       {emojis.map(item => <img className={styles['dzq-emoji__icon']}
         key={item.code}
         src={item.url}

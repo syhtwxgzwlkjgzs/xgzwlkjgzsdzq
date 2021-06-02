@@ -8,6 +8,7 @@ import Upload from '@discuzq/design/dist/components/upload/index';
 import Button from '@discuzq/design/dist/components/button/index';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import '@discuzq/design/dist/styles/index.scss';
+import Page from '@components/page';
 import layout from './index.module.scss';
 
 
@@ -117,35 +118,37 @@ class SupplementaryPage extends React.Component {
     );
 
     return (
-      <View className={layout.container}>
-        <View className={layout.content}>
-          {/* 输入框 start */}
-            <InputItem/>
-          {/* 输入框 end */}
-          {/* 多行输入框 start */}
-            <TextareaItem/>
-          {/* 多行输入框 end */}
-          {/* 单选 start */}
-            <CheckboxItem/>
-          {/* 单选 end */}
-          {/* 多选 start */}
-            <RadioItem/>
-          {/* 多选 end */}
-          {/* 图片上传 start */}
-            <ImgUploadItem/>
-          {/* 图片上传 end */}
-          {/* 附件上传 start */}
-            <AttachmentsUploadItem/>
-          {/* 附件上传 ennd */}
-          {/* 提交 start */}
-          <Button className={layout.button} type="primary" onClick={() => {
-            console.log('注册');
-          }}>
-            提交
-          </Button>
-          {/* 提交 end */}
+      <Page>
+        <View className={layout.container}>
+          <View className={layout.content}>
+            {/* 输入框 start */}
+              <InputItem/>
+            {/* 输入框 end */}
+            {/* 多行输入框 start */}
+              <TextareaItem/>
+            {/* 多行输入框 end */}
+            {/* 单选 start */}
+              <CheckboxItem/>
+            {/* 单选 end */}
+            {/* 多选 start */}
+              <RadioItem/>
+            {/* 多选 end */}
+            {/* 图片上传 start */}
+              <ImgUploadItem/>
+            {/* 图片上传 end */}
+            {/* 附件上传 start */}
+              <AttachmentsUploadItem/>
+            {/* 附件上传 ennd */}
+            {/* 提交 start */}
+            <Button className={layout.button} type="primary" onClick={() => {
+              console.log('注册');
+            }}>
+              提交
+            </Button>
+            {/* 提交 end */}
+          </View>
         </View>
-      </View>
+      </Page>
     );
   }
 }

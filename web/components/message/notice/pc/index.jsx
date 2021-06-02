@@ -14,6 +14,7 @@ const Index = ({ infoIdx, totalCount, list, noMore, topCard, onScrollBottom, ...
         wrapperClass={styles['list__inner']}
         noMore={noMore}
         onRefresh={onScrollBottom}
+        immediateCheck={false}
       >
         <MessageHeader info={sidebarData[infoIdx]} totalCount={totalCount} />
         {topCard}

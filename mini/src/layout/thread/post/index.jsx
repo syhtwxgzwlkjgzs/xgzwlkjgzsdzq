@@ -45,6 +45,7 @@ class Index extends Component {
   componentWillMount() { }
 
   async componentDidMount() {
+    this.getNavHeight();
     // 监听键盘高度变化
     Taro.onKeyboardHeightChange(res => {
       this.setState({ bottomHeight: res?.height || 0 });
@@ -78,6 +79,14 @@ class Index extends Component {
     Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault);
     // Taro.offKeyboardHeightChange(() => {});
     this.props.thread.reset();
+  }
+
+  getNavHeight() {
+    const { statusBarHeight } = Taro.getSystemInfoSync();
+    const menubtnRect = Taro.getMenuButtonBoundingClientRect();
+    const { top = 0, height = 0, width = 0 } = menubtnRect || {};
+    const navHeight = (top - statusBarHeight) * 2 + height;
+    this.props.threadPost.setNavInfo({ statusBarHeight, navHeight, menubtnWidth: width })
   }
 
   componentDidShow() { }
@@ -525,7 +534,7 @@ class Index extends Component {
   render() {
     const { permissions } = this.props.user;
     const { categories } = this.props.index;
-    const { postData, setPostData, setCursorPosition } = this.props.threadPost;
+    const { postData, setPostData, setCursorPosition, navInfo } = this.props.threadPost;
     const { rewardQa, redpacket, video, product, position } = postData;
     const {
       isShowTitle,
@@ -537,18 +546,26 @@ class Index extends Component {
       showDraftOption,
       bottomHeight,
     } = this.state;
+    const navStyle = {
+      height: `${navInfo.navHeight}px`,
+      marginTop: `${navInfo.statusBarHeight}px`,
+    }
+    const contentStyle = {
+      marginTop: navInfo.statusBarHeight > 30 ? `${navInfo.navHeight / 2}px` : '0px',
+    }
     return (
       <>
         <View className={styles['container']}>
           {/* 自定义顶部导航条 */}
-          <View className={styles.topBar}>
-            <View className={styles['btn-back']} onClick={() => this.handlePageJump(false)}>
-              <Icon name="RightOutlined" />发帖
+          <View className={styles.topBar} style={navStyle}>
+            <Icon name="RightOutlined" onClick={() => this.handlePageJump(false)} />
+            <View className={styles['topBar-title']}>
+              发帖
             </View>
           </View>
 
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
-          <View className={styles['content']}>
+          <View className={styles['content']} style={contentStyle}>
             <Title
               value={postData.title}
               show={isShowTitle}
@@ -632,6 +649,7 @@ class Index extends Component {
             style={{ transform: `translateY(-${bottomHeight}px)`, bottom: bottomHeight ? 0 : '' }}
           >
             <PluginToolbar
+              isOpenQcloudVod={this.props.site.isOpenQcloudVod}
               permissions={permissions}
               clickCb={(item) => {
                 this.handlePluginClick(item);
@@ -645,7 +663,8 @@ class Index extends Component {
               }}
               onSubmit={() => this.handleSubmit()}
             />
-            <Emoji show={showEmoji} onHide={() => {
+            {/* 通过键盘改变的高度一起来控制表情的显示和隐藏，直接通过 showEmoji 来进行数据的改变，渲染慢 */}
+            <Emoji show={bottomHeight === 0 && showEmoji} onHide={() => {
               this.setState({
                 showEmoji: false
               });

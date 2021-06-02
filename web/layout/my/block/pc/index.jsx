@@ -2,16 +2,18 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import styles from './index.module.scss';
-import SectionTitle from '@components/section-title'
+import SectionTitle from '@components/section-title';
 import BaseLayout from '@components/base-layout';
 import Users from '@layout/search/h5/components/active-users';
 import Copyright from '@components/copyright';
-import ShieldList from './components/shield-list'
+import ShieldList from './components/shield-list';
+import UserCenterFansPc from '@components/user-center/fans-pc';
+import UserCenterFollowsPc from '@components/user-center/follows-pc';
 
 @inject('site')
 @inject('search')
 @observer
-class LikePCPage extends React.Component {
+class BlockPcPage extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -23,25 +25,20 @@ class LikePCPage extends React.Component {
   // 右侧 - 潮流话题 粉丝 版权信息
   renderRight = () => {
     const { search } = this.props;
-    const { pageData = [], currentPage, totalPage } = search.users;
+    const { pageData = [], currentPage, totalPage } = search.users || {};
     return (
       <div className={styles.right}>
-        <div className={styles.section}>
-          <SectionTitle
-            title="用户"
-            isShowMore={false}
-          />
-          <Users data={pageData?.slice(0, 5)}/>
-        </div>
+        <UserCenterFansPc />
+        <UserCenterFollowsPc />
         <Copyright/>
       </div>
-    )
+    );
   }
   // 中间 -- 我的屏蔽
   renderContent = (data) => {
     const num = 8;
     const { search } = this.props;
-    const { pageData = [], currentPage, totalPage } = search.users;
+    const { pageData = [], currentPage, totalPage } = search.users || {};
     return (
       <div className={styles.content}>
         <div className={styles.section}>
@@ -54,7 +51,7 @@ class LikePCPage extends React.Component {
           <ShieldList data={pageData}/>
         </div>
       </div>
-    )
+    );
   }
   render() {
     const { index, site } = this.props;
@@ -70,4 +67,4 @@ class LikePCPage extends React.Component {
   }
 }
 
-export default withRouter(LikePCPage);
+export default withRouter(BlockPcPage);

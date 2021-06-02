@@ -128,7 +128,7 @@ class SearchPCPage extends React.Component {
   }
   handleScroll = ({ scrollTop } = {}) => {
     const HEADER_HEIGHT = 57;
-    const STEPPER_PADDING = 24;
+    const STEPPER_PADDING = 28;
 
     const activeUsersPos = this.activeUsersRef.current.offsetTop,
           activeUsersScrollTo = activeUsersPos + parseInt(HEADER_HEIGHT / 2) - STEPPER_PADDING;

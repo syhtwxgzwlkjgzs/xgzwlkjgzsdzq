@@ -48,6 +48,11 @@ const isExtFieldsOpen = (site) => {
   return openExtFields === '0' ;
 };
 
+
+/**
+ * 检查用户是否处于需要绑定昵称
+ * @param {*} resp
+ */
 const checkCompleteUserInfo = (resp) => {
   const isMissNickname = get(resp, 'data.isMissNickname', false);
   const isMissRequireInfo = get(resp, 'data.userStatus') === 10;
@@ -70,6 +75,7 @@ const checkCompleteUserInfo = (resp) => {
  * @param {*} resp
  */
 const checkUserStatus = (resp) => {
+  checkCompleteUserInfo(resp);
   if (resp.code === 0 || resp.code === BANNED_USER || resp.code === REVIEW_REJECT) {
     let { code } = resp;
 

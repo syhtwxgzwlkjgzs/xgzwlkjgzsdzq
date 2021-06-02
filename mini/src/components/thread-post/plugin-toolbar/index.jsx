@@ -9,6 +9,7 @@ import styles from './index.module.scss';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import { attachIcon } from '@common/constants/const';
 import { Units } from '@components/common';
+import { THREAD_TYPE } from '@common/constants/thread-post';
 
 const Index = inject('user', 'threadPost')(observer((props) => {
   const { threadPost, clickCb, onCategoryClick, user } = props;
@@ -31,7 +32,10 @@ const Index = inject('user', 'threadPost')(observer((props) => {
   const plug = useMemo(() => {
     const plugs = attachIcon.map((item, index) => {
       // 是否有权限
-      const canInsert = tep[item.type];
+      let canInsert = tep[item.type];
+      if (item.type === THREAD_TYPE.video || item.type === THREAD_TYPE.voice) {
+        canInsert = tep[item.type] && props?.isOpenQcloudVod;
+      }
       return canInsert ? (
         <Icon
           key={index}

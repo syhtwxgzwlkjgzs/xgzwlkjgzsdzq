@@ -42,7 +42,7 @@ class AuthorInfo extends React.Component {
             </div>
             <div className={styles.information}>
               <div className={styles.name}>{this.user.nickname || ''}</div>
-              <div className={styles.dynamic}>活跃在 {diffDate(new Date(this.user.updatedAt))}</div>
+              <div className={styles.dynamic}>活跃在 {diffDate(this.user.updatedAt)}</div>
             </div>
           </div>
           <div className={styles.theme}>

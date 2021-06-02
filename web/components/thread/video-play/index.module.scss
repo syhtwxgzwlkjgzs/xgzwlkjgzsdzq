@@ -5,9 +5,12 @@
   cursor: pointer;
   width: 100%;
   height: 100%;
-  border-radius: rem(5);
+  border-radius: rem($border-radius-small);
   .videoBox {
-    border-radius: rem(5);
+    border-radius: rem($border-radius-small);
+  }
+  :global(.vjs-poster) {
+    border-radius: rem($border-radius-small);
   }
   .payBox {
     position: absolute;

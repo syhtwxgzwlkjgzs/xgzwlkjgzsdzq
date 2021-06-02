@@ -6,7 +6,7 @@
   position: absolute;
   right: 0;
   left: 0;
-  top: rem(90);
+  top: rem(60);
   bottom: 0;
   background-color: $body-bg-color;
   z-index: -1;
@@ -28,16 +28,24 @@
   color: $text-color-regular;
   padding: 0 rem($padding-4n);
   line-height: rem(53);
-  margin-bottom: rem(10);
 }
+
 .list {
   flex: 1;
   background-color: $body-bg-color;
+  -webkit-overflow-scrolling:touch
 }
+
 .listItem {
-  margin-bottom: rem(10);
   position: relative;
 }
+
+.buySplitLine {
+  width: 100%;
+  height: rem(10);
+  background-color: $body-bg-color;
+}
+
 .listItemBox {
   width: rem(20);
   height: rem(20);

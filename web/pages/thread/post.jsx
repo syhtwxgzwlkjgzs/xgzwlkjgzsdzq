@@ -52,6 +52,11 @@ class PostPage extends React.Component {
     this.ticket = ''; // 腾讯云验证码返回票据
     this.randstr = ''; // 腾讯云验证码返回随机字符串
     this.vditor = null;
+    // 语音、视频、图片、附件是否上传完成。默认没有上传所以是上传完成的
+    this.isAudioUploadDone = true;
+    this.isVideoUploadDone = true;
+    this.imageList = [];
+    this.fileList = [];
   }
 
   componentDidMount() {
@@ -131,6 +136,8 @@ class PostPage extends React.Component {
 
   // 处理录音完毕后的音频上传
   handleAudioUpload = async (blob) => {
+    // 开始语音的上传
+    this.isAudioUploadDone = false;
     blob.name = `${new Date().getTime()}.mp3`;
     tencentVodUpload({
       file: blob,
@@ -147,6 +154,10 @@ class PostPage extends React.Component {
         Toast.error({ content: err.message });
       },
     });
+  };
+
+  handleVideoUpload = () => {
+    this.isVideoUploadDone = false;
   };
 
   // 通过云点播上传成功之后处理：主要是针对语音和视频
@@ -169,8 +180,10 @@ class PostPage extends React.Component {
             type: file.type,
           },
         });
+        this.isVideoUploadDone = true;
         this.scrollIntoView('#dzq-post-video');
       } else if (type === THREAD_TYPE.voice) {
+        // 语音上传并保存完成
         this.setPostData({
           audio: {
             id: data?.id,
@@ -179,8 +192,11 @@ class PostPage extends React.Component {
           },
           audioSrc: video.url,
         });
+        this.isAudioUploadDone = true;
       }
     } else {
+      this.isVideoUploadDone = true;
+      this.isAudioUploadDone = true;
       Toast.error({ content: result.msg });
     }
   };
@@ -327,6 +343,7 @@ class PostPage extends React.Component {
         Toast.info({ content: `仅支持0 ~ ${supportMaxSize}MB的附件` });
         return false;
       }
+      this.fileList = [...cloneList];
     } else if (type === THREAD_TYPE.image) {
       // 剔除超出数量9的多余图片
       const remainLength = 9 - showFileList.length; // 剩余可传数量
@@ -347,7 +364,7 @@ class PostPage extends React.Component {
         }
       }
       !isAllLegal && Toast.info({ content: `仅支持${supportImgExt}类型的图片` });
-
+      this.imageList = [...cloneList];
       return true;
     }
 
@@ -374,6 +391,8 @@ class PostPage extends React.Component {
 
   // 附件和图片上传完成之后的处理
   handleUploadComplete = (ret, file, type) => {
+    this.imageList = this.imageList.filter(item => item.uid !== file.uid);
+    this.fileList = this.fileList.filter(item => item.uid !== file.uid);
     if (ret.code !== 0) {
       Toast.error({ content: `${ret.msg} 上传失败` });
       return false;
@@ -382,8 +401,12 @@ class PostPage extends React.Component {
     const { data } = ret;
     const { postData } = this.props.threadPost;
     const { images, files } = postData;
-    if (type === THREAD_TYPE.image) images[uid] = data;
-    if (type === THREAD_TYPE.file) files[uid] = data;
+    if (type === THREAD_TYPE.image) {
+      images[uid] = data;
+    }
+    if (type === THREAD_TYPE.file) {
+      files[uid] = data;
+    }
     this.setPostData({ images, files });
   };
 
@@ -449,6 +472,22 @@ class PostPage extends React.Component {
     const { postData, setPostData } = this.props.threadPost;
     if (!this.props.user.threadExtendPermissions.createThread) {
       Toast.info({ content: '您没有发帖权限' });
+      return;
+    }
+    if (!this.isAudioUploadDone) {
+      Toast.info({ content: '请等待语音上传完成在发布' });
+      return;
+    }
+    if (!this.isVideoUploadDone) {
+      Toast.info({ content: '请等待视频上传完成再发布' });
+      return;
+    }
+    if (this.imageList.length > 0) {
+      Toast.info({ content: '请等待图片上传完成再发布' });
+      return;
+    }
+    if (this.fileList.length > 0) {
+      Toast.info({ content: '请等待文件上传完成再发布' });
       return;
     }
     if (!isDraft && !postData.contentText) {
@@ -614,6 +653,7 @@ class PostPage extends React.Component {
           setPostData={data => this.setPostData(data)}
           handleAttachClick={this.handleAttachClick}
           handleDefaultIconClick={this.handleDefaultIconClick}
+          handleVideoUpload={this.handleVideoUpload}
           handleVideoUploadComplete={this.handleVodUploadComplete}
           beforeUpload={this.beforeUpload}
           handleUploadChange={this.handleUploadChange}
@@ -637,6 +677,7 @@ class PostPage extends React.Component {
         setPostData={data => this.setPostData(data)}
         handleAttachClick={this.handleAttachClick}
         handleDefaultIconClick={this.handleDefaultIconClick}
+        handleVideoUpload={this.handleVideoUpload}
         handleVideoUploadComplete={this.handleVodUploadComplete}
         beforeUpload={this.beforeUpload}
         handleUploadChange={this.handleUploadChange}

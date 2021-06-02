@@ -28,7 +28,7 @@
         line-height: $font-line-height-middle;
 
         .content {
-          display: inline;
+          display: inline !important;
           font-weight: normal;
           font-size: $font-size-middle;
           line-height: 26px;

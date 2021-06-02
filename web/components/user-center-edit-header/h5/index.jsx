@@ -17,8 +17,10 @@ export default class index extends Component {
       isClickSignature: false, // 是否点击签名
       isUploadAvatarUrl: false, // 是否上传头像
       isUploadBackgroundUrl: false, // 是否上传背景图片
-    };
+      inputWidth: '100%'
+    }
     this.user = this.props.user || {};
+    this.hiddenElement = React.createRef(null);
   }
 
   componentDidMount() {
@@ -112,13 +114,17 @@ export default class index extends Component {
   handleClickSignature = () => {
     this.setState({
       isClickSignature: !this.state.isClickSignature,
-    });
-  };
+      inputWidth: this.hiddenElement.current?.offsetWidth
+    })
+  }
 
   // 签名change事件
   handleChangeSignature = (e) => {
     this.props.user.editSignature = e.target.value;
-  };
+    this.setState({
+      inputWidth: this.hiddenElement.current?.offsetWidth
+    })
+  }
 
   handleBlurSignature = (e) => {
     this.props.user.editSignature = e.target.value;
@@ -128,7 +134,7 @@ export default class index extends Component {
   };
 
   render() {
-    const { isUploadAvatarUrl, isUploadBackgroundUrl } = this.state;
+    const { isUploadAvatarUrl, isUploadBackgroundUrl, inputWidth } = this.state
     return (
       <>
         <div className={styles.userCenterEditHeader}>
@@ -173,22 +179,23 @@ export default class index extends Component {
           </div>
           {/* 编辑修改说明 */}
           <div className={styles.userCenterEditDec}>
-            <div onClick={this.handleClickSignature} className={styles.userCenterEditDecItem}>
-              <Icon name="CompileOutlined" />
-              {this.state.isClickSignature ? (
-                // true ? (
-                <Input
-                  className={styles.userSignatureInput}
-                  maxLength={50}
-                  focus={true}
-                  onChange={this.handleChangeSignature}
-                  onBlur={this.handleBlurSignature}
-                  value={this.user.editSignature}
-                  placeholder="这个人很懒，什么也没留下~"
-                />
-              ) : (
-                <span className={styles.text}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</span>
-              )}
+            <div className={styles.userCenterEditDecItem}>
+              <Icon className={styles.compileIcon} onClick={this.handleClickSignature} name="CompileOutlined" />
+              {
+                this.state.isClickSignature ? (
+                  // true ? (
+                  <div 
+                    style={{width: inputWidth + 10, minWidth: !this.user.editSignature && '180px'}}
+                  
+                  >
+                    <Input trim className={styles.userSignatureInput} maxLength={50} focus={true} onChange={this.handleChangeSignature} onBlur={this.handleBlurSignature} value={this.user.editSignature} placeholder="这个人很懒，什么也没留下~" />
+                  </div>
+                ) : (
+                  <div style={{ minWidth: !this.user.editSignature && '180px'}} className={styles.text}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</div>
+                )
+              }
+              {/* 隐藏span--获取该内容宽度--赋值给input */}
+              <div style={{maxWidth: '80%'}} ref={this.hiddenElement} className={styles.hiddenElement}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</div>
             </div>
           </div>
         </div>

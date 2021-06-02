@@ -2,7 +2,7 @@
 
 $im-pagebed-padding: rem($padding-4n);
 $im-profile-icon-size: rem(38);
-$im-gap-btw-icon-and-msg: rem($margin-2n);
+$im-gap-btw-icon-and-msg: rem(16);
 $im-msg-space-aside: $im-pagebed-padding + $im-profile-icon-size + $im-gap-btw-icon-and-msg;
 
 @mixin im-pagebed {
@@ -16,8 +16,8 @@ $im-msg-space-aside: $im-pagebed-padding + $im-profile-icon-size + $im-gap-btw-i
   $color: $white
 ) {
   font-family: 'PingFang SC';
-  font-size: $font-size;
-  font-weight: $font-weight;
-  line-height: $line-height;
+  font-size: rem(16);
+  font-weight: normal;
+  line-height: rem(26);
   color: $color;
 }

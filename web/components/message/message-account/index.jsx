@@ -21,13 +21,13 @@ class Index extends React.Component {
           totalCount: 0,
         },
         {
-          iconName: 'MessageOutlined',
+          iconName: 'DiscussOutlined',
           title: '回复我的',
           link: '/message?page=account&subPage=reply',
           totalCount: 0,
         },
         {
-          iconName: 'LikeOutlined',
+          iconName: 'PraiseOutlined',
           title: '点赞我的',
           link: '/message?page=account&subPage=like',
           totalCount: 0,
@@ -108,8 +108,7 @@ class Index extends React.Component {
         id: item.id,
         createdAt: item.createdAt,
         threadId: item.threadId,
-        content: item.postContent,
-        title: item.threadTitle,
+        content: item.isFirst ? (item.threadTitle || item.postContent) : item.postContent,
         type: item.type,
         avatar: item.userAvatar,
         userId: item.userId,
@@ -146,7 +145,8 @@ class Index extends React.Component {
           totalCount={totalCount}
           noMore={currentPage >= totalPage}
           showHeader={!isPC}
-          topCard={(isPC || type === 'accountMsgList') ? card : null}
+          // topCard={(isPC || type === 'accountMsgList') ? card : null}
+          topCard={isPC ? card : null}
           list={renderList}
           type='account'
           onPullDown={() => this.fetchMessageData(1)}

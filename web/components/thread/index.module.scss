@@ -4,73 +4,73 @@
   padding: 0 rem($padding-4n);
   padding-bottom: 0;
   background: var(--color-white);
+}
+// &:hover {
+//   background: rgba(229, 242, 255, 0.3);
+// }
+.title {
+  @include cursor-on-pc;
+  display: inline-flex;
+  font-size: rem($font-size-middle);
+  font-weight: bold;
+  line-height: rem(22);
+  color: var(--color-text-primary);
+  margin-bottom: rem($margin-4n);
+  width: 100%;
+}
 
-  // &:hover {
-  //   background: rgba(229, 242, 255, 0.3);
-  // }
-  .title {
-    @include cursor-on-pc;
-    display: inline-flex;
-    font-size: rem($font-size-middle);
-    font-weight: bold;
-    line-height: rem(22);
-    color: var(--color-text-primary);
-    margin-bottom: rem($margin-4n);
-    width: 100%;
+.header {
+  padding: rem($padding-4n) 0;
+}
+.content {
+  position: relative;
+  >* {
+    margin-top: rem($margin-4n);
   }
 
-  .header {
-    padding: rem($padding-4n) 0;
-  }
-  .content {
-    position: relative;
-    >* {
-      margin-top: rem($margin-4n);
-    }
-
-    .cover {
-      position: absolute;
-      right: 0;
-      left: 0;
-      top: rem(-16);
-      bottom: 0;
-      background-color: rgba($color: #000, $alpha: 0.5);
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-    }
-  }
-  .payContent {
-    min-height: rem(40);
-  }
-  .bottom {
-    height: rem(52);
+  .cover {
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: rem(-16);
+    bottom: 0;
+    background-color: rgba($color: #000, $alpha: 0.5);
+    z-index: 10;
     display: flex;
     align-items: center;
-    border-top: var(--border-line-color) solid rem(1);
-    margin-top: rem(12);
-  }
-  .pay {
-    margin: rem(16) rem(50) 0 rem(50);
-  }
-  .button {
-    width: 100%;
-    height: rem(36);
-    font-size: rem($font-size-middle);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    .payIcon {
-      margin-right: rem($margin-2n);
-      margin-top: rem(1);
-    }
-    .payText{
-      margin-top: rem(1);
-    }
+    cursor: pointer;
   }
 }
+.payContent {
+  min-height: rem(40);
+}
+.bottom {
+  height: rem(52);
+  display: flex;
+  align-items: center;
+  border-top: var(--border-line-color) solid rem(1);
+  margin-top: rem(12);
+}
+.pay {
+  margin: rem(16) rem(50) 0 rem(50);
+}
+.button {
+  width: 100%;
+  height: rem(36);
+  font-size: rem($font-size-middle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  .payIcon {
+    margin-right: rem($margin-2n);
+    margin-top: rem(1);
+  }
+  .payText{
+    margin-top: rem(1);
+  }
+}
+
 
 .containerBottom {
   margin-bottom: rem(10);

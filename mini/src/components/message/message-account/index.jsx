@@ -67,7 +67,7 @@ const Index = ({ message, subPage }) => {
         totalCount: replyUnread || 0,
       },
       {
-        iconName: 'LikeOutlined',
+        iconName: 'PraiseOutlined',
         title: '点赞我的',
         link: '/subPages/message/index?page=account&subPage=like',
         totalCount: likeUnread || 0,

@@ -6,13 +6,16 @@ import UserCenterPost from '@components/user-center-post-pc';
 import UserCenterAction from '@components/user-center-action-pc';
 import UserBaseLaout from '@components/user-center-base-laout-pc';
 import SidebarPanel from '@components/sidebar-panel';
-import ThreadContent from '@components/thread';
+import Avatar from '@components/avatar';
 import Copyright from '@components/copyright';
-import UserCenterFans from '@components/user-center-fans';
-import UserCenterFollow from '@components/user-center-follow';
+import List from '@components/list';
 import Router from '@discuzq/sdk/dist/router';
-import UserCenterFansPopup from '@components/user-center-fans-popup';
 import UserCenterFollowPopup from '@components/user-center-follow-popup';
+import UserCenterThreads from '@components/user-center-threads';
+import NoData from '@components/no-data';
+import UserCenterFansPc from '@components/user-center/fans-pc';
+import UserCenterFollowsPc from '../../../components/user-center/follows-pc';
+
 @inject('site')
 @inject('user')
 @observer
@@ -24,8 +27,8 @@ class PCMyPage extends React.Component {
       showFollowPopup: false, // 是否弹出关注框
     };
   }
-  componentDidMount() {
-    this.props.user.getUserThreads();
+  async componentDidMount() {
+    await this.props.user.getUserThreads();
   }
 
   loginOut() {
@@ -45,29 +48,45 @@ class PCMyPage extends React.Component {
   onSearch = (value) => {
     this.props.router.replace(`/search?keyword=${value}`);
   };
+
   onContainerClick = ({ id }) => {
     Router.push({ url: `/my/others?isOtherPerson=${true}&otherId=${id}` });
   };
-  renderRight = () => (
+
+  formatUserThreadsData = (userThreads) => {
+    if (Object.keys(userThreads).length === 0) return [];
+    return Object.values(userThreads).reduce((fullData, pageData) => [...fullData, ...pageData]);
+  };
+
+  renderRight = () => {
+    // 条件都满足时才显示微信
+    const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.props.user.wxNickname;
+    return (
       <>
         <SidebarPanel
           type="normal"
           title="个人资料"
           isShowMore={true}
+          noData={false}
           moreText={'编辑资料'}
           onShowMore={() => {
             Router.push({ url: '/my/edit' });
           }}
-      >
+        >
           <div className={styles.userInfoWrapper}>
             <div className={styles.userInfoKey}>手机号码</div>
             <div className={styles.userInfoValue}>{this.props.user.mobile}</div>
           </div>
 
-          <div className={styles.userInfoWrapper}>
-            <div className={styles.userInfoKey}>微信</div>
-            <div className={styles.userInfoValue}>{this.props.user.nickname}</div>
-          </div>
+          {IS_WECHAT_ACCESSABLE && (
+            <div className={styles.userInfoWrapper}>
+              <div className={styles.userInfoKey}>微信</div>
+              <div className={styles.userInfoValue}>
+                <Avatar size="small" image={this.props.user.wxHeadImgUrl} name={this.props.user.wxNickname} />
+                <span className={styles.wecahtNickname}>{this.props.user.wxNickname}</span>
+              </div>
+            </div>
+          )}
 
           <div className={styles.userInfoWrapper}>
             <div className={styles.userInfoKey}>实名认证</div>
@@ -80,47 +99,20 @@ class PCMyPage extends React.Component {
           </div>
         </SidebarPanel>
         <div className={styles.hr}></div>
-        <SidebarPanel
-          type="normal"
-          isNoData={Number(this.props.user.fansCount) === 0}
-          title="粉丝"
-          leftNum={this.props.user.fansCount}
-          onShowMore={this.moreFans}
-        >
-          {Number(this.props.user.fansCount) !== 0 && (
-            <UserCenterFans
-              style={{
-                overflow: 'hidden',
-              }}
-              className={styles.friendsWrapper}
-              limit={5}
-            />
-          )}
-        </SidebarPanel>
+        <UserCenterFansPc />
         <div className={styles.hr}></div>
-        <SidebarPanel
-          type="normal"
-          isNoData={Number(this.props.user.followCount) === 0}
-          title="关注"
-          leftNum={this.props.user.followCount}
-          onShowMore={this.moreFollow}
-        >
-          {Number(this.props.user.followCount) !== 0 && (
-            <UserCenterFollow
-              style={{
-                overflow: 'hidden',
-              }}
-              className={styles.friendsWrapper}
-              limit={5}
-            />
-          )}
-        </SidebarPanel>
+        <UserCenterFollowsPc />
         <Copyright />
       </>
-  );
+    );
+  };
+
   renderContent = () => {
     const { user } = this.props;
     const { userThreads, userThreadsTotalCount } = user;
+    const { userThreadsPage, userThreadsTotalPage } = user;
+    const formattedUserThreads = this.formatUserThreadsData(userThreads);
+
     return (
       <div className={styles.userContent}>
         <div className={styles.section}>
@@ -134,16 +126,18 @@ class PCMyPage extends React.Component {
           type="normal"
           bigSize={true}
           isShowMore={!userThreads}
+          showRefresh={false}
           leftNum={`${userThreadsTotalCount}个主题`}
-          noData={!userThreads?.length}
+          noData={!formattedUserThreads?.length}
         >
           {/* FIXME: PC 切换至新逻辑 */}
-          {/* {userThreads?.map((item, index) => (
-            <div key={index}>
-              <ThreadContent className={styles.wrapper} showBottom={false} data={item} key={index} />
-              <div className={styles.threadHr}></div>
-            </div>
-          ))} */}
+          <List immediateCheck={false} noMore={userThreadsTotalPage <= userThreadsPage} onRefresh={user.getUserThreads}>
+            {formattedUserThreads && formattedUserThreads.length > 0 ? (
+              <UserCenterThreads data={formattedUserThreads} />
+            ) : (
+              <NoData />
+            )}
+          </List>
         </SidebarPanel>
       </div>
     );
@@ -156,15 +150,13 @@ class PCMyPage extends React.Component {
           {this.renderContent()}
         </UserBaseLaout>
 
-        <UserCenterFansPopup
-          visible={this.state.showFansPopup}
-          onClose={() => this.setState({ showFansPopup: false })}
-        />
-
-        <UserCenterFollowPopup
-          visible={this.state.showFollowPopup}
-          onClose={() => this.setState({ showFollowPopup: false })}
-        />
+        {/* 两个粉丝 popup */}
+        <>
+          <UserCenterFollowPopup
+            visible={this.state.showFollowPopup}
+            onClose={() => this.setState({ showFollowPopup: false })}
+          />
+        </>
       </>
     );
   }

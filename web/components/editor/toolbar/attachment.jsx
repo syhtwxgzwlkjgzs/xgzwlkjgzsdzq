@@ -53,6 +53,7 @@ function AttachmentToolbar(props) {
   const [showAll, setShowAll] = useState(false);
   const [currentAction, setCurrentAction] = useState('');
   const inputRef = React.createRef(null);
+  const { onVideoUpload = () => { } } = props;
 
   function handleAttachClick(e, item) {
     let action = item.type;
@@ -79,6 +80,7 @@ function AttachmentToolbar(props) {
     const { onUploadComplete } = props;
     if (item.type === THREAD_TYPE.video) {
       file = files[0];
+      onVideoUpload();
       tencentVodUpload({
         file,
         onUploading: () => {
@@ -161,8 +163,12 @@ function AttachmentToolbar(props) {
     const { permission } = props;
     if (props.pc && item.type === THREAD_TYPE.voice) return null;
     const clsName = getIconCls(item);
+    let isShow = permission[item.type];
+    if (item.type === THREAD_TYPE.video || item.type === THREAD_TYPE.voice) {
+      isShow = permission[item.type] && props?.isOpenQcloudVod;
+    }
     if (!item.isUpload) {
-      return permission[item.type] ? (
+      return isShow ? (
         <Icon
           key={item.name}
           onClick={e => handleAttachClick(e, item)}
@@ -172,7 +178,7 @@ function AttachmentToolbar(props) {
         />
       ) : null;
     }
-    return permission[item.type] ? (
+    return isShow ? (
       <div
         key={item.name}
         onClick={trggerInput}

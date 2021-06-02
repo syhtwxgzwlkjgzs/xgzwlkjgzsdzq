@@ -64,7 +64,7 @@ class Index extends Component {
   };
 
   filterTag(html) {
-    return html?.replace(/<(\/)?(p|r|br)[^>]*>|[\r\n]/g, '');
+    return html?.replace(/<(\/)?([b-z]|br)[^>]*>|[\r\n]/gi, '');
   }
 
   // parse content

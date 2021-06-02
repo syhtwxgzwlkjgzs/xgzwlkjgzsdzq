@@ -103,7 +103,7 @@ const Index = ({ data, confirm, cancel, pc, visible }) => {
   };
 
   const content = (
-    <div className={styles['redpacket-box']}>
+    <div className={styles['redpacket-box']} onClick={e => e.stopPropagation()}>
       {/* 发放规则 */}
       <div className={styles['line-box']}>
         <div className={styles.label}>发放规则</div>

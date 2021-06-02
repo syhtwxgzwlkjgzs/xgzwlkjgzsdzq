@@ -10,6 +10,7 @@ import clearLoginStatus from '@common/utils/clear-login-status';
 import { Spin, Icon } from '@discuzq/design';
 import typeofFn from '@common/utils/typeof';
 import styles from './HOCFetchSiteData.module.scss';
+import { WEB_SITE_JOIN_WHITE_LIST } from '@common/constants/site';
 
 // 获取全站数据
 export default function HOCFetchSiteData(Component) {
@@ -51,7 +52,7 @@ export default function HOCFetchSiteData(Component) {
             userPermissions = (userPermissions && userPermissions.code === 0) ? userPermissions.data : null;
           }
 
-          console.log(Component.getInitialProps)
+          console.log(Component.getInitialProps);
           // 传入组件的私有数据
           if (siteConfig && siteConfig.code === 0 && Component.getInitialProps) {
             __props = await Component.getInitialProps(ctx, { user: userData, site: serverSite });
@@ -79,7 +80,8 @@ export default function HOCFetchSiteData(Component) {
 
     constructor(props) {
       super(props);
-      let isNoSiteData = true;
+      let isNoSiteData;
+      const isPass = true;
       const { serverUser, serverSite, user, site } = props;
 
       serverSite && serverSite.platform && site.setPlatform(serverSite.platform);
@@ -104,6 +106,7 @@ export default function HOCFetchSiteData(Component) {
       }
       this.state = {
         isNoSiteData,
+        isPass,
       };
     }
 
@@ -150,7 +153,7 @@ export default function HOCFetchSiteData(Component) {
         loginStatus = false;
       }
       user.updateLoginStatus(loginStatus);
-      this.isPass();
+      this.setState({ isPass: this.isPass() });
     }
 
     setAppCommonStatus(result) {
@@ -180,15 +183,9 @@ export default function HOCFetchSiteData(Component) {
         // 关闭站点
         if (router.asPath !== '/close' && site.closeSiteConfig) {
           Router.redirect({ url: '/close' });
+          return false;
         }
-        // 付费加入: 付费状态下，未登录的用户、登录了但是没有付费的用户
-        // if (
-        //   (router.asPath !== '/forum/partner-invite' && site.webConfig.setSite && site.webConfig.setSite.siteMode === 'pay')
-        //   && (!user.isLogin() || (user.isLogin() && !user.paid))
-        // ) {
-        //   Router.redirect({ url: '/forum/partner-invite' });
-        // }
-        // TODO: 方案待定
+
         // 前置: 用户已登录
         if (user.isLogin()) {
           // TODO: 需要在微信绑定页获取设置uid的缓存才能开启强制跳转绑定微信
@@ -205,6 +202,7 @@ export default function HOCFetchSiteData(Component) {
             // 绑定手机: 开启短信，没有绑定手机号
             if (router.asPath !== '/user/bind-phone' && site.isSmsOpen && !user.mobile) {
               Router.redirect({ url: '/user/bind-phone' });
+              return false;
             }
           }
           // 绑定昵称：没有昵称
@@ -213,9 +211,23 @@ export default function HOCFetchSiteData(Component) {
             && !user.nickname
           ) {
             Router.redirect({ url: '/user/bind-nickname' });
+            return false;
+          }
+        }
+        if (site?.webConfig?.setSite?.siteMode === 'pay' && !WEB_SITE_JOIN_WHITE_LIST.includes(router.asPath)) {
+          // 付费加入: 付费状态下，未登录的用户、登录了但是没有付费的用户，访问不是白名单的页面会跳入到付费加入
+
+          // if (!user?.isLogin()) {
+          //   Router.redirect({ url: '/user/login' });
+          //   return false;
+          // }
+          if (!user?.paid) {
+            Router.redirect({ url: '/forum/partner-invite' });
+            return false;
           }
         }
       }
+      return true;
     }
 
     // 过滤多余参数
@@ -231,11 +243,11 @@ export default function HOCFetchSiteData(Component) {
     }
 
     render() {
-      const { isNoSiteData } = this.state;
+      const { isNoSiteData, isPass } = this.state;
       const { site } = this.props;
       // CSR不渲染任何内容
       if (site.platform === 'static') return null;
-      if (isNoSiteData) {
+      if (isNoSiteData || !isPass) {
         return (
           <div className={styles.loadingBox}>
             <Icon className={styles.loading} name="LoadingOutlined" size="large" />

@@ -83,6 +83,11 @@ class SiteStore {
 
     return WECHAT_ENV_MAP.NONE;
   }
+
+  // 是否开通的云点播
+  @computed get isOpenQcloudVod() {
+    return get(this.webConfig, 'qcloud.qcloudVod', false);
+  }
 }
 
 export default SiteStore;
