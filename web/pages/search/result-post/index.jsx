@@ -60,6 +60,8 @@ class Index extends React.Component {
       this.page += 1;
     }
 
+    search.setThreads(null);
+
     await search.getThreadList({ search: data, perPage: this.perPage, page: this.page });
     return;
   }
