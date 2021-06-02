@@ -72,7 +72,7 @@ export const PERMISSION_PLATE = [
   '删除回复',
   '编辑自己的主题',
   '删除自己的主题或回复',
-]
+];
 
 export const COMMON_PERMISSION = [
   '置顶',
@@ -86,5 +86,5 @@ export const COMMON_PERMISSION = [
   '发布帖子时需要绑定手机',
   '申请提现',
   '创建订单',
-  '支付订单'
-]
+  '支付订单',
+];
