@@ -36,7 +36,7 @@ class PartnerInviteH5Page extends React.Component {
     try {
       const { forum, router, search, invite } = this.props;
 
-      const { inviteCode } = invite.getInviteCode(router);
+      const inviteCode = invite.getInviteCode(router);
       if (inviteCode) invite.setInviteCode(inviteCode);
 
       const usersList = await simpleRequest('readUsersList', {
