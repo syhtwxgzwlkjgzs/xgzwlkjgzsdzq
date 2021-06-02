@@ -98,7 +98,7 @@ class index extends Component {
           name: '个性签名',
           display: 'show',
           condition: () => true,
-          render: () => this.props.user.signature,
+          render: () => this.props.user.signature || '这个人很懒，什么也没留下~',
           operation: () => (
             <p onClick={() => this.openInputEditor('个性签名')} className={styles.pcEditNicknameCallMsodify}>
               修改
@@ -184,7 +184,11 @@ class index extends Component {
         {
           name: '微信',
           display: 'show',
-          condition: () => true,
+          condition: () => {
+            // 条件都满足时才显示微信
+            const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
+            return IS_WECHAT_ACCESSABLE;
+          },
           render: () => (
             <div className={styles.pcEditNicknameImgs}>
               <Avatar className={styles.pcEditNicknameImg} image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />
