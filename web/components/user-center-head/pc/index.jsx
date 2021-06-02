@@ -6,6 +6,8 @@ import { Button, Icon, Toast } from '@discuzq/design';
 import { ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
+import { fixImageOrientation } from '@common/utils/exif';
+
 @inject('user')
 @observer
 class index extends Component {
@@ -23,25 +25,27 @@ class index extends Component {
   handleAvatarUpload = () => {
     this.avatarUploaderRef.current.click();
   };
-  onAvatarChange = (fileList) => {
-    this.props.user.updateAvatar(fileList.target.files[0]);
+  onAvatarChange = async (fileList) => {
+    const fixedImg = await fixImageOrientation(fileList.target.files[0]);
+    this.props.user.updateAvatar(fixedImg);
   };
-  handleBackgroundUpload = () => {
+  handleBackgroundUpload = async () => {
     this.backgroundUploaderRef.current.click();
   };
-  onBackgroundChange = (fileList) => {
-    this.props.user.updateBackground(fileList.target.files[0]);
+  onBackgroundChange = async (fileList) => {
+    const fixedImg = await fixImageOrientation(fileList.target.files[0]);
+    this.props.user.updateBackground(fixedImg);
   };
   // 点击关注
   handleChangeAttention = async (follow) => {
     const { query } = this.props.router;
-    if (query.otherId) {
+    if (query.id) {
       if (follow !== 0) {
-        await this.props.user.cancelFollow({ id: query.otherId, type: 1 });
-        await this.props.user.getTargetUserInfo(query.otherId);
+        await this.props.user.cancelFollow({ id: query.id, type: 1 });
+        await this.props.user.getTargetUserInfo(query.id);
       } else {
-        await this.props.user.postFollow(query.otherId);
-        await this.props.user.getTargetUserInfo(query.otherId);
+        await this.props.user.postFollow(query.id);
+        await this.props.user.getTargetUserInfo(query.id);
       }
     }
   };
@@ -71,7 +75,7 @@ class index extends Component {
   handleChangeShield = (isDeny) => {
     const { query } = this.props.router;
     if (isDeny) {
-      this.props.user.undenyUser(query.otherId);
+      this.props.user.undenyUser(query.id);
       this.props.user.setTargetUserNotBeDenied();
       Toast.success({
         content: '解除屏蔽成功',
@@ -79,7 +83,7 @@ class index extends Component {
         duration: 1000,
       });
     } else {
-      this.props.user.denyUser(query.otherId);
+      this.props.user.denyUser(query.id);
       this.props.user.setTargetUserDenied();
       Toast.success({
         content: '屏蔽成功',
@@ -90,19 +94,19 @@ class index extends Component {
   };
   // 点击发送私信
   handleMessage = () => {
-    const { username } = this.props.user;
+    const { username } = this.props.user.targetUser;
     Router.push({ url: `/message?page=chat&username=${username}` });
   };
   render() {
     const { targetUser } = this.props.user;
-    const user = this.props.isOtherPerson ? targetUser || {} : this.props.user;
+    const user = this.props.router.query?.id ? targetUser || {} : this.props.user;
     return (
       <div className={styles.box}>
         <div className={styles.boxTop}>
           <div className={styles.headImgBox}>
             <Avatar image={user.avatarUrl} size="big" name={user.username} />
             {/* 相机图标 */}
-            {!this.props.isOtherPerson && (
+            {!this.props.router.query?.id && (
               <div className={styles.userCenterEditCameraIcon} onClick={this.handleAvatarUpload}>
                 <Icon name="CameraOutlined" />
                 <input
@@ -123,7 +127,7 @@ class index extends Component {
               <div className={styles.groupName}>{user.group?.groupName}</div>
               <p className={styles.text}>{user.signature || '这个人很懒，什么也没留下~'}</p>
             </div>
-            {this.props.isOtherPerson ? (
+            {this.props.router.query?.id ? (
               <div className={styles.otherUserBtn}>
                 <div
                   onClick={() => {

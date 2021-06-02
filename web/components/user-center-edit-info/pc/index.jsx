@@ -11,6 +11,7 @@ import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData';
 import UserCenterEditAccountPwd from '../../user-center-edit-account-pwd-pc';
 import UserCenterEditMobile from '../../user-center-edit-mobile-pc';
 import UserCenterEditPaypwd from '../../user-center-edit-paypwd-pc';
+import WechatRebindDialog from '../../user-center/rebind-wechat';
 
 @inject('site')
 @inject('user')
@@ -24,6 +25,7 @@ class index extends Component {
       accountEditorVisible: false,
       payPwdEditorVisible: false,
       mobileEditorVisible: false,
+      wechatRebindEditorVisible: false,
       editorConfig: [
         {
           name: '昵称',
@@ -96,7 +98,7 @@ class index extends Component {
           name: '个性签名',
           display: 'show',
           condition: () => true,
-          render: () => this.props.user.signature,
+          render: () => this.props.user.signature || '这个人很懒，什么也没留下~',
           operation: () => (
             <p onClick={() => this.openInputEditor('个性签名')} className={styles.pcEditNicknameCallMsodify}>
               修改
@@ -182,14 +184,29 @@ class index extends Component {
         {
           name: '微信',
           display: 'show',
-          condition: () => true,
+          condition: () => {
+            // 条件都满足时才显示微信
+            const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
+            return IS_WECHAT_ACCESSABLE;
+          },
           render: () => (
             <div className={styles.pcEditNicknameImgs}>
               <Avatar className={styles.pcEditNicknameImg} image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />
               <p className={styles.pcEditWeiName}>{this.user.wxNickname}</p>
             </div>
           ),
-          operation: () => <p className={styles.pcEditNicknameCallMsodify}>换绑</p>,
+          operation: () => (
+            <p
+              onClick={() => {
+                this.setState({
+                  wechatRebindEditorVisible: true,
+                });
+              }}
+              className={styles.pcEditNicknameCallMsodify}
+            >
+              换绑
+            </p>
+          ),
           inputEditor: () => null,
         },
       ],
@@ -296,6 +313,14 @@ class index extends Component {
             onClose={() => {
               this.setState({
                 payPwdEditorVisible: false,
+              });
+            }}
+          />
+          <WechatRebindDialog
+            visible={this.state.wechatRebindEditorVisible}
+            onClose={() => {
+              this.setState({
+                wechatRebindEditorVisible: false,
               });
             }}
           />

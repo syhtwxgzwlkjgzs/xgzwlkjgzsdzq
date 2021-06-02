@@ -186,6 +186,12 @@ class Index extends Component {
     setCategorySelected({ parent, child });
   }
 
+  resetOperationType() {
+    this.setState({
+      operationType: ''
+    });
+  }
+
   // 点击发帖插件时回调，如上传图片、视频、附件或艾特、话题等
   handlePluginClick(item) {
     const { postType } = this.state;
@@ -193,6 +199,12 @@ class Index extends Component {
     this.setState({
       operationType: item.type
     });
+
+    if (item.type !== 'emoji') {
+      this.setState({
+        showEmoji: false
+      });
+    }
 
     let nextRoute;
     switch (item.type) {
@@ -202,18 +214,22 @@ class Index extends Component {
           return this.postToast('再编辑时不可操作悬赏');
         }
         nextRoute = '/subPages/thread/selectReward/index';
+        this.resetOperationType();
         break;
       case THREAD_TYPE.goods:
         nextRoute = '/subPages/thread/selectProduct/index';
+        this.resetOperationType();
         break;
       case THREAD_TYPE.redPacket:
         if (postType === 'isEdit') {
           return this.postToast('再编辑时不可操作红包');
         }
         nextRoute = '/subPages/thread/selectRedpacket/index';
+        this.resetOperationType();
         break;
       case THREAD_TYPE.paid:
         this.setState({ showPaidOption: true });
+        this.resetOperationType();
         break;
       case THREAD_TYPE.paidPost:
         nextRoute = `/subPages/thread/selectPayment/index?paidType=${THREAD_TYPE.paidPost}`;
@@ -243,7 +259,7 @@ class Index extends Component {
         break;
       case 'emoji':
         this.setState({
-          showEmoji: true
+          showEmoji: !this.state.showEmoji
         });
         break;
     }
@@ -319,6 +335,7 @@ class Index extends Component {
               audioSrc: mediaUrl,
             });
           }
+          this.resetOperationType();
         } else {
           Taro.showToast({
             title: res.msg,
@@ -571,6 +588,11 @@ class Index extends Component {
               show={isShowTitle}
               onChange={this.onTitleChange}
               onBlur={this.hideKeyboard}
+              onFocus={() => {
+                this.setState({
+                  showEmoji: false
+                });
+              }}
             />
             <Content
               value={postData.contentText}
@@ -590,7 +612,21 @@ class Index extends Component {
 
               {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => setPostData({ product: {} })} />}
 
-              {video.thumbUrl && <Units type='video' deleteShow src={video.thumbUrl} onDelete={() => setPostData({ video: {} })} />}
+              {video.thumbUrl && (
+                <Units
+                  type='video'
+                  deleteShow
+                  src={video.thumbUrl}
+                  onDelete={() => setPostData({ video: {} })}
+                  onVideoLoaded={() => {
+                    Taro.pageScrollTo({
+                      scrollTop: 3000,
+                      // selector: '#thread-post-video',
+                      complete: (a,b,c) => {console.log(a,b,c)}
+                    });
+                  }}
+                />
+              )}
 
             </View>
           </View>
@@ -649,14 +685,21 @@ class Index extends Component {
             style={{ transform: `translateY(-${bottomHeight}px)`, bottom: bottomHeight ? 0 : '' }}
           >
             <PluginToolbar
+              operationType={operationType}
               isOpenQcloudVod={this.props.site.isOpenQcloudVod}
               permissions={permissions}
               clickCb={(item) => {
                 this.handlePluginClick(item);
               }}
-              onCategoryClick={() => this.setState({ showClassifyPopup: true })}
+              onCategoryClick={() => {
+                this.setState({
+                  showClassifyPopup: true,
+                  showEmoji: false
+                });
+              }}
             />
             <DefaultToolbar
+              operationType={operationType}
               permissions={permissions}
               onPluginClick={(item) => {
                 this.handlePluginClick(item);

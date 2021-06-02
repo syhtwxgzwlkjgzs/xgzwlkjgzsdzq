@@ -76,7 +76,7 @@
 .img {
   @include img;
   justify-content: space-between;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   position: relative;
   overflow: hidden;
 
@@ -144,11 +144,11 @@
 
 .video-box {
   position: relative;
-  margin: $margin-4n auto;
+  margin: 0 auto;
 
   .video-delete {
     position: absolute;
-    top: 8px;
+    top: 0;
     left: 0;
     height: 40px;
     width: 100%;
@@ -171,7 +171,7 @@
 }
 
 .video {
-  margin-top: 8px;
+  // margin-top: 8px;
   width: 100%;
   border-radius: 5px;
 }

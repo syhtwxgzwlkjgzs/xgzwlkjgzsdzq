@@ -1,4 +1,6 @@
 @import "@common/styles/index.scss";
 .container {
+  height: 100vh;
   background: $body-bg-color;
+  @include ios-safe-area-inset-bottom();
 }
