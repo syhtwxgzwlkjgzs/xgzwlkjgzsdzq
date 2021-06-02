@@ -55,7 +55,9 @@
   text-overflow: ellipsis;
   line-height: rem(20);
 }
-
+.groupNameText {
+  max-width: rem(62.5);
+}
 .meta {
   margin-top: rem(1);
   color: var(--color-text-secondary);

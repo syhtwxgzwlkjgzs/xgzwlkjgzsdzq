@@ -1,12 +1,10 @@
-import React,  { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { inject, observer } from 'mobx-react';
+import React,  { useCallback, useEffect, useImperativeHandle, useRef, useState, forwardRef } from 'react';
 import { Flex } from '@discuzq/design';
 import Header from '@components/header';
 import List from '@components/list'
 import RefreshView from '@components/list/RefreshView';
 import ErrorView from '@components/list/ErrorView';
 import { noop } from '@components/thread/utils'
-import { throttle } from '@common/utils/throttle-debounce.js'
 
 import styles from './index.module.scss';
 
@@ -29,7 +27,7 @@ import styles from './index.module.scss';
 
 const baseLayoutWhiteList = ['home', 'search'];
 
-const BaseLayout = (props) => {
+const BaseLayout = forwardRef((props, ref) => {
   const {
     header = null,
     left = null,
@@ -40,10 +38,7 @@ const BaseLayout = (props) => {
     noMore = false,
     onRefresh,
     pageName = '',
-    jumpTo = -1,
     onScroll = noop,
-    baselayout,
-    quickScroll = false,
     immediateCheck=false
   } = props;
 
@@ -62,6 +57,13 @@ const BaseLayout = (props) => {
       timer = setTimeout(fn, wait);
     }
   }
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      listRef
+    }),
+  );
 
   const updateSize = debounce(() => {
     if (window) {
@@ -83,16 +85,7 @@ const BaseLayout = (props) => {
     //       window.removeEventListener('resize', updateSize);
     //   };
     // }
-    if (listRef?.current && pageName) {
-      if(jumpTo > 0) {
-        baselayout[pageName] = jumpTo;
-        listRef.current.jumpToScrollTop(jumpTo);
-      } else if (baselayout[pageName] > 0 &&
-          baseLayoutWhiteList.indexOf(pageName) !== -1) {
-        listRef.current.jumpToScrollTop(baselayout[pageName]);
-      }
-    }
-  }, [jumpTo]);
+  }, []);
 
   useEffect(() => {
     size.current = calcSize(window.innerWidth);
@@ -133,28 +126,11 @@ const BaseLayout = (props) => {
     setIsError(true)
   }
 
-  const quickScrolling = ({ scrollTop = 0 } = {}) => {
-    if (!listRef?.current?.currentScrollTop) {
-      onScroll();
-      return;
-    }
-
-    if(baselayout.isJumpingToTop) {
-      baselayout.removeJumpingToTop();
-      listRef.current.onBackTop();
-    } else {
-      if(scrollTop && pageName) baselayout[pageName] = scrollTop;
-    }
-    onScroll({ scrollTop: scrollTop });
-  }
-
-  const handleScroll = quickScroll ? quickScrolling : throttle(quickScrolling, 50);
-
   return (
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
 
-        <List {...props} immediateCheck={immediateCheck} className={styles.list} wrapperClass={styles.wrapper} ref={listRef} onError={onError} onScroll={handleScroll}>
+        <List {...props} immediateCheck={immediateCheck} className={styles.list} wrapperClass={styles.wrapper} ref={listRef} onError={onError} onScroll={onScroll}>
           {
             (pageName === 'home' || showLeft) && (
               <div className={styles.left}>
@@ -181,6 +157,6 @@ const BaseLayout = (props) => {
       {typeof(footer) === 'function' ? footer({ ...props }) : footer}
     </div>
   );
-};
+});
 
-export default inject('baselayout')(observer(BaseLayout));
+export default BaseLayout;

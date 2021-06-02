@@ -29,6 +29,7 @@ class UserCenterFollows extends React.Component {
     hasMorePage: false,
     className: '',
     style: {},
+    itemStyle: {},
   };
 
   constructor(props) {
@@ -159,6 +160,11 @@ class UserCenterFollows extends React.Component {
     this.containerRef.current.removeEventListener('scroll', this.loadMore);
   }
 
+  // TODO: 增加这里对于 ID 的处理，感应 ID 变化时发生及时更新
+  componentDidUpdate() {
+
+  }
+
   // 检查是否满足触底加载更多的条件
   checkLoadCondition() {
     const hasMorePage = this.totalPage >= this.page;
@@ -198,7 +204,6 @@ class UserCenterFollows extends React.Component {
   };
 
   render() {
-    const isNoData = followerAdapter(this.state.follows).length === 0 && !this.state.loading;
     return (
       <div
         className={this.props.className}
@@ -223,12 +228,13 @@ class UserCenterFollows extends React.Component {
                 userGroup={user.groupName}
                 followHandler={this.followUser}
                 unFollowHandler={this.unFollowUser}
+                itemStyle={this.props.itemStyle}
               />
               {this.props.splitElement}
             </div>
           );
         })}
-        {isNoData && <NoData />}
+        {followerAdapter(this.state.follows).length === 0 && !this.state.loading && <NoData />}
         <div className={styles.loadMoreContainer}>{this.state.loading && <Spin type={'spinner'}>加载中 ...</Spin>}</div>
       </div>
     );

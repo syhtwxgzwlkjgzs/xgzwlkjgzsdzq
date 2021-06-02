@@ -5,6 +5,8 @@ import styles from './index.module.scss';
 import { View, Text, Button, Image } from '@tarojs/components';
 import TopicHeaderImg from '../../../../../../../web/public/dzq-img/topic-header.png';
 import Router from '@discuzq/sdk/dist/router';
+import { inject, observer } from 'mobx-react';
+
 
 /**
  * 用户组件
@@ -13,9 +15,15 @@ import Router from '@discuzq/sdk/dist/router';
  * @prop {number} contentNum 内容数
  * @prop {function} onClick 全部话题点击事件
  */
-const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop }) => {
+const TopicHeader = ({ topic, title, viewNum = 0, contentNum = 0, onShare = noop }) => {
   const goList = () => {
     Router.push({url: '/subPages/search/result-topic/index'});
+  }
+  const topicTitle = topic.topicDetail?.pageData[0]?.content || ''
+  const topicId = topic.topicDetail?.pageData[0]?.topicId || ''
+  const shareData = {
+    title: topicTitle,
+    path: `/subPages/topic/topic-detail/index?id=${topicId}`
   }
   return (
     <View className={styles.contain}>
@@ -33,7 +41,7 @@ const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop }) => 
               <Text className={styles.content}>{contentNum}</Text>
             </View>
             <View className={styles.hr}></View>
-            <Button plain='true' openType='share' data-from='topicHead'>
+            <Button plain='true' openType='share' data-shareData={shareData}>
               <Icon className={styles.shareIcon}name="ShareAltOutlined" size={14} />
               <Text className={styles.text}>分享</Text>
             </Button>
@@ -48,4 +56,4 @@ const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop }) => 
   );
 };
 
-export default React.memo(TopicHeader);
+export default inject('topic')(observer(TopicHeader));

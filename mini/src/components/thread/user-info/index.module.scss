@@ -48,6 +48,10 @@
   text-overflow: ellipsis;
 }
 
+.groupNameText {
+  max-width: 62.5px;
+}
+
 .meta {
   margin-top: 1px;
   color: var(--color-text-secondary);
