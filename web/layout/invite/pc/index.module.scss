@@ -200,5 +200,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    @include cursor-on-pc;
   }
 }

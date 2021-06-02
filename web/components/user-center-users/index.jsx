@@ -25,6 +25,7 @@ class UserCenterUsers extends React.Component {
     hasMorePage: false,
     className: '',
     styles: {},
+    itemStyle: {},
   };
 
   constructor(props) {
@@ -211,6 +212,7 @@ class UserCenterUsers extends React.Component {
                 userName={user.username}
                 userGroup={user.groupName}
                 followHandler={this.followUser}
+                itemStyle={this.props.itemStyle}
                 unFollowHandler={this.unFollowUser}
               />
               {this.props.splitElement}
@@ -218,7 +220,12 @@ class UserCenterUsers extends React.Component {
           );
         })}
         {isNoData && <NoData />}
-        <div className={styles.loadMoreContainer}>{this.state.loading && <Spin type={'spinner'}>加载中 ...</Spin>}</div>
+        <div className={styles.loadMoreContainer}>
+          {this.state.loading
+            && <div className={styles.spinner}>
+                  <Spin type={'spinner'}>加载中 ...</Spin>
+              </div>
+          }</div>
       </div>
     );
   }
