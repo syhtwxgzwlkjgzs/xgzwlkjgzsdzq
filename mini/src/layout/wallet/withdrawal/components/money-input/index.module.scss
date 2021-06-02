@@ -1,15 +1,14 @@
-
 @import '@common/styles/index.scss';
 
 .container {
   // width: 100%;
-  padding: 24px;
+  padding: $padding-6n;
 }
 
 .header {
   font-family: 'PingFangSC-Regular';
   font-weight: normal;
-  font-size: 14px;
+  font-size: $font-size-primary;
   text-align: left;
   color: $text-color-regular;
 }
@@ -17,11 +16,12 @@
 .input {
   display: flex;
   align-items: center;
-  padding: 18px 0;
+  padding: $padding-4n 0;
   border-bottom: var(--border-border);
+
   :global {
     .dzq-input__inner {
-      height: 42px;
+      height: 44px;
       border: none;
       font-family: 'PingFang SC';
       font-weight: 600;
@@ -30,20 +30,42 @@
       color: #c5c6ca;
     }
   }
+
   .moneyIcon {
     font-family: 'PingFang SC';
     font-weight: 600;
     font-size: 30px;
     text-align: left;
-    color: var(--color-text-primary);
+    color: $text-color-primary;
+  }
+
+  .moneyIcon-Red {
+    font-family: 'PingFang SC';
+    font-weight: 600;
+    font-size: 30px;
+    text-align: left;
+    color: $error-color;
+  }
+
+  .InputColor > input {
+    color: $text-color-primary;
+  }
+
+  .InputRedColor > input {
+    color: $error-color;
   }
 }
 
+.leasterr {
+  color: $error-color;
+  padding-bottom: 8px;
+}
+
 .leastMoney {
-  font-family: 'PingFangSC-Regular';
+  font-family: PingFangSC-Regular;
   font-weight: normal;
-  font-size: 12px;
+  font-size: $font-size-label;
   text-align: left;
   color: var(--color-text-secondary);
-  padding: 24px 0;
+  padding: $padding-4n 0;
 }
