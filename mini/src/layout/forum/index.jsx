@@ -89,7 +89,7 @@ class ForumH5Page extends React.Component {
                 ) : (
                   <></>
                 )}
-                <span className={layout.forum_agent_name}>{siteAuthor.username}</span>
+                <View className={layout.forum_agent_name}>{siteAuthor.username}</View>
               </View>
             </View>
           </View>
