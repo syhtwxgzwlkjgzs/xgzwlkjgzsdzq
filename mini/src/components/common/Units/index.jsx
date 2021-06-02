@@ -10,7 +10,7 @@
  import Icon from '@discuzq/design/dist/components/icon/index';
 
 const Index = (props) => {
-  const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, onTagRemoveClick, onTagClick, tagContent, deleteShow = false } = props;
+  const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, onTagRemoveClick, onTagClick, tagContent, deleteShow = false, onVideoLoaded = () => {} } = props;
 
   // 标签展示
   const tag = (
@@ -40,12 +40,12 @@ const Index = (props) => {
 
   // 视频展示
   const video = (
-    <View className={deleteShow && styles['video-box']}>
+    <View className={deleteShow && styles['video-box']} id='thread-post-video'>
       {deleteShow &&
         <View className={styles['video-delete']} onClick={onDelete}>
           <Icon name="DeleteOutlined" />
         </View>}
-      <Video src={src} className={styles['video']} />
+      <Video src={src} className={styles['video']} onLoadedMetaData={onVideoLoaded} />
     </View>
   );
 

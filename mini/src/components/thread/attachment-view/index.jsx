@@ -59,7 +59,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
           success(res) {
           },
           fail(error) {
-            setErrorMsg("微信小程序暂不支持此文件类型下载");
+            setErrorMsg("小程序暂不支持下载此类文件");
             setTimeout(() => {
               setErrorMsg("");
             }, 3000);

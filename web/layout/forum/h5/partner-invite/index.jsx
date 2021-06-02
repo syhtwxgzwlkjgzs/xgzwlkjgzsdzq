@@ -42,7 +42,7 @@ class PartnerInviteH5Page extends React.Component {
       const { platform } = site;
       const perPage = platform === 'pc' ? 5 : 20
 
-      const { inviteCode } = invite.getInviteCode(router);
+      const inviteCode = invite.getInviteCode(router);
       if (inviteCode) invite.setInviteCode(inviteCode);
 
       const usersList = await simpleRequest('readUsersList', {

@@ -8,6 +8,14 @@ class IndexStore {
 
   @observable isJumpingToTop = false;
 
+  @observable playingVideoPos = -1;
+
+  @observable playingVideoDom = "";
+
+  @observable playingAudioPos = -1;
+
+  @observable playingAudioDom = "";
+
 }
 
 export default IndexStore;

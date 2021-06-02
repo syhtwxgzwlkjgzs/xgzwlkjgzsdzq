@@ -1,4 +1,5 @@
 import { get } from '../../utils/get';
+import setAccessToken from '../../utils/set-access-token';
 
 export const COMMON_LOGIN_STORE_ERRORS = {
   NEED_BIND_USERNAME: {
@@ -56,6 +57,10 @@ const isExtFieldsOpen = (site) => {
 const checkCompleteUserInfo = (resp) => {
   const isMissNickname = get(resp, 'data.isMissNickname', false);
   const isMissRequireInfo = get(resp, 'data.userStatus') === 10;
+  const accessToken = get(resp, 'data.accessToken', '');
+  setAccessToken({
+    accessToken,
+  });
 
   if (isMissRequireInfo && isMissNickname) {
     throw COMMON_LOGIN_STORE_ERRORS.NEED_ALL_INFO;
