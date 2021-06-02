@@ -9,9 +9,8 @@
   .userInfoBox{
     position: absolute;
 
-    z-index: var(--zindex-backtotop);
-    transform: translateY(100%);
-    bottom: 0;
+    z-index: $zindex-backtotop;
+    top: rem(38);
 
     .userInfoContent{
       margin-top: rem(16);

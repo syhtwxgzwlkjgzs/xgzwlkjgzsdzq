@@ -2,7 +2,7 @@
 /**
  * 发帖页底部分类、图片等工具栏
  */
-import React, { useState, useMemo, memo, useCallback } from 'react';
+import React, { useState, useMemo, memo, useCallback, useEffect } from 'react';
 import { observer, inject } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
@@ -12,7 +12,7 @@ import { Units } from '@components/common';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 
 const Index = inject('user', 'threadPost')(observer((props) => {
-  const { threadPost, clickCb, onCategoryClick, user } = props;
+  const { threadPost, clickCb, onCategoryClick, user, operationType } = props;
 
   // 控制插件icon的显示/隐藏
   const [plugShow, setplugShow] = useState(false);
@@ -31,6 +31,9 @@ const Index = inject('user', 'threadPost')(observer((props) => {
   const { threadExtendPermissions: tep } = user;
   const plug = useMemo(() => {
     const plugs = attachIcon.map((item, index) => {
+      if (item.type === operationType) {
+        setCurrentplug(item);
+      }
       // 是否有权限
       let canInsert = tep[item.type];
       if (item.type === THREAD_TYPE.video || item.type === THREAD_TYPE.voice) {
@@ -42,11 +45,11 @@ const Index = inject('user', 'threadPost')(observer((props) => {
           className={styles['plug-icon']}
           onClick={() => {
             setplugShow(false);
-            setCurrentplug(item);
+            // setCurrentplug(item);
             clickCb(item);
           }}
           name={item.name}
-          color={item.name === currentplug.name && item.active}
+          color={item.type === operationType && item.active}
           size='20'
         />
       ) : null;
@@ -62,7 +65,18 @@ const Index = inject('user', 'threadPost')(observer((props) => {
         </View>
       </View>
     );
-  }, [tep, currentplug])
+  }, [tep, currentplug, operationType])
+
+  useEffect(() => {
+    if (!operationType) {
+      setCurrentplug({});
+    }
+    attachIcon.forEach((item) => {
+      if (item.type === operationType) {
+        setCurrentplug(item);
+      }
+    });
+  }, [operationType]);
 
   // 分类元素
   const category = (
