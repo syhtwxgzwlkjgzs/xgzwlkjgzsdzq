@@ -107,6 +107,10 @@
       height: 42px;
       font-size: rem($font-size-middle);
       border-radius: 5px;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 }
