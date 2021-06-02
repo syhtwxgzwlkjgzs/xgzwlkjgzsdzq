@@ -87,10 +87,10 @@ const RenderThreadContent = inject('user')(
       setClipboardData({
         data: url,
         success: () => {
-          hideToast();
-          Toast.info({
-            content: '商品地址已复制，请在浏览器上黏贴访问',
-          });
+          // hideToast();
+          // Toast.info({
+          //   content: '商品地址已复制，请在浏览器上黏贴访问',
+          // });
         },
       });
     };

@@ -1,6 +1,5 @@
 @import '@common/styles/index.scss';
 
-
 .site{
   padding: rem($padding-4n);
   padding-top: 0;
@@ -22,13 +21,14 @@
     line-height: rem($font-line-height-primary);
     text-align: left;
     color: var(--color-text-primary);
-    border-bottom: rem(1) solid var(--border-line-color);
   }
   .site_status{
+    border-top: rem(1) solid var(--border-line-color);
     padding-top: rem($padding-4n);
     display: flex;
     .site_status_list{
       flex: 1;
+      display: flex;
       float: left;
       text-align: center;
       font-size: rem($font-size-primary);
@@ -59,4 +59,11 @@
   .site_status_list:nth-child(1) .site_status_label{
     margin-left: rem($margin-2n);
   }
+}
+.pc_site {
+  background-color: $white;
+  border-radius: $border-radius-small;
+  margin-bottom: $margin-10;
+  padding: 0 $padding-6n 0;
+  border: none;
 }

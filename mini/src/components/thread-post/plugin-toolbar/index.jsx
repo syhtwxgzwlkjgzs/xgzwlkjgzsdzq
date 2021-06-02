@@ -19,6 +19,8 @@ const Index = inject('user', 'threadPost')(observer((props) => {
   // 设置当前选中的插件
   const [currentplug, setCurrentplug] = useState({});
 
+  const [canInsertplugsin, setCanInsertplugsin] = useState({});
+
   const content = useCallback(
     () => {
       const { parent, child } = threadPost.categorySelected;
@@ -30,16 +32,19 @@ const Index = inject('user', 'threadPost')(observer((props) => {
   // 插件icon元素
   const { threadExtendPermissions: tep } = user;
   const plug = useMemo(() => {
-    const plugs = attachIcon.map((item, index) => {
-      if (item.type === operationType) {
-        setCurrentplug(item);
-      }
-      // 是否有权限
+    // 筛选出有权限的插件
+    const canInsert = attachIcon.filter((item) => {
       let canInsert = tep[item.type];
       if (item.type === THREAD_TYPE.video || item.type === THREAD_TYPE.voice) {
         canInsert = tep[item.type] && props?.isOpenQcloudVod;
       }
-      return canInsert ? (
+      return canInsert;
+    });
+    setCanInsertplugsin(canInsert);
+
+    // 根据筛选后的插件渲染图标
+    const plugs = canInsert.map((item, index) => {
+      return (
         <Icon
           key={index}
           className={styles['plug-icon']}
@@ -52,7 +57,7 @@ const Index = inject('user', 'threadPost')(observer((props) => {
           color={item.type === operationType && item.active}
           size='20'
         />
-      ) : null;
+      );
     });
 
     return (
@@ -97,7 +102,7 @@ const Index = inject('user', 'threadPost')(observer((props) => {
         { plugShow ? plug : category }
       </View>
       <View onClick={() => {setplugShow(!plugShow);}}>
-        { (!plugShow) && (<Icon className={styles['icon-color']} name={currentplug.name || 'PictureOutlinedBig'} size='20' />) }
+        { (!plugShow) && (<Icon className={styles['icon-color']} name={currentplug.name || canInsertplugsin[0]?.name} size='20' />) }
         <Icon name="MoreBOutlined" size='20' />
       </View>
     </View>
