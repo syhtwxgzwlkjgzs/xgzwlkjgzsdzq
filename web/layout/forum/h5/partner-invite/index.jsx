@@ -129,7 +129,8 @@ class PartnerInviteH5Page extends React.Component {
     const { inviteData } = this.props.invite;
     const { site: { platform, webConfig }, forum } = this.props;
     const { invitorName, invitorAvatar } = this.state;
-    const { setSite: { siteMode, sitePrice, siteMasterScale } = {} } = webConfig;
+    const { setSite: { siteMode, sitePrice, siteMasterScale, siteExpire } = {} } = webConfig;
+    const siteAuthor = get(webConfig, 'setSite.siteAuthor.username', '');
     const { threadTotal, updataTime } = forum;
     const layout = platform === 'h5' ? mlayout : pclayout;
     const { inviteCode } = this.props.router.query;
@@ -149,7 +150,7 @@ class PartnerInviteH5Page extends React.Component {
               />
             </div>
             <div className={layout.user_card_info}>
-              <div className={layout.user_info_name}>奶罩</div>
+              <div className={layout.user_info_name}>{siteAuthor}</div>
               <div className={layout.user_info_tag}>站长</div>
               <div className={layout.site_info}>
                 <div className={layout.site_status_list}>
@@ -182,8 +183,8 @@ class PartnerInviteH5Page extends React.Component {
               </div>
               : <></>
           }
-          <div className={layout.user_card_button}>¥1266 立即加入</div>
-          <div className={layout.bottom_title}>有效期：<span>200天</span></div>
+          <div className={layout.user_card_button} onClick={this.handleJoinSite}>{siteMode === 'pay' ? `¥ ${siteAuthor}` : ''} 立即加入</div>
+          {siteMode === 'pay' ? <div className={layout.bottom_title}>有效期：<span>{siteExpire}天</span></div> : <></>}
         </div>
         <Copyright/>
       </>
@@ -191,7 +192,7 @@ class PartnerInviteH5Page extends React.Component {
   }
 
   render() {
-    const { site: { platform, webConfig }, forum: { threadTotal, updataTime} } = this.props;
+    const { site: { platform, webConfig }, forum: { threadTotal, updataTime } } = this.props;
     const { inviteCode } = this.props.router.query;
     const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
     const { invitorName, invitorAvatar } = this.state;
