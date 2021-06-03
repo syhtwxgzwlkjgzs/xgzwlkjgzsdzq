@@ -16,7 +16,8 @@ class Index extends React.Component {
   page = 1;
   perPage = 10;
   $getShareData (data) {
-    const { topic } = this.props 
+    console.log(data);
+    const { topic } = this.props
     const topicId = topic.topicDetail?.pageData[0]?.topicId || ''
     const defalutTitle = topic.topicDetail?.pageData[0]?.content || ''
     const defalutPath = `/subPages/topic/topic-detail/index?id=${topicId}`
@@ -61,7 +62,7 @@ class Index extends React.Component {
 
       // this.toastInstance?.destroy();
     // }
-    
+
   }
   render() {
     return <Page><IndexPage dispatch={this.dispatch} /></Page>;
