@@ -7,7 +7,7 @@
   overflow-y: auto;
   @include scrollbar();
   &::-webkit-scrollbar {
-    display: block;
+    display: block !important;
     width: 8px;
   }
 
