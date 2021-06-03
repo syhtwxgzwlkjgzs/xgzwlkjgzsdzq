@@ -54,16 +54,17 @@ class index extends Component {
                 content: '更新昵称成功',
                 duration: 1000,
               });
+              this.closeInputEditor('昵称');
             } catch (e) {
               console.error(e);
               if (e.Code) {
                 Toast.error({
-                  content: e.Msg,
+                  content: e.Message,
                   duration: 1000,
                 });
+                this.props.user.editNickName = '';
               }
             }
-            this.closeInputEditor('昵称');
           },
           onCancel: () => {
             this.closeInputEditor('昵称');
@@ -100,6 +101,7 @@ class index extends Component {
                 content: '更新用户名成功',
                 duration: 1000,
               });
+              this.closeInputEditor('用户名');
             } catch (e) {
               console.error(e);
               if (e.Code) {
@@ -108,8 +110,8 @@ class index extends Component {
                   duration: 1000,
                 });
               }
+              this.props.user.editUserName = '';
             }
-            this.closeInputEditor('用户名');
           },
           onCancel: () => {
             this.closeInputEditor('用户名');
@@ -141,16 +143,17 @@ class index extends Component {
                 content: '更新个性签名成功',
                 duration: 1000,
               });
+              this.closeInputEditor('个性签名');
             } catch (e) {
               console.error(e);
               if (e.Code) {
                 Toast.error({
-                  content: e.Msg,
+                  content: e.Message,
                   duration: 1000,
                 });
+                this.props.user.editSignature = '';
               }
             }
-            this.closeInputEditor('个性签名');
           },
           onCancel: () => {
             this.closeInputEditor('个性签名');
@@ -344,7 +347,7 @@ class index extends Component {
             ))}
           </div>
           <div className={styles.bottomText}>
-          <Copyright center line/>
+            <Copyright center line/>
           </div>
         </div>
 

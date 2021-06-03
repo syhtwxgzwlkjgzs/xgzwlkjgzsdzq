@@ -119,7 +119,7 @@ class InvitePCPage extends React.Component {
                           size='small'
                           text={item?.nickname?.substring(0, 1)}
                         />
-                        <div className={layout.user_value_name}>{item.nickname}</div>
+                        <div className={layout.user_value_name}>{item.nickname || '匿名'}</div>
                       </div>
                       <div className={layout.list_main_money}>+{item.bounty}</div>
                       <div className={layout.list_main_timer}>{item.joinedAt || '--'}</div>
