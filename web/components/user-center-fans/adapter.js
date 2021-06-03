@@ -1,5 +1,4 @@
 export const followerAdapter = (data) => {
-  console.log(data);
   const followers = [];
   Object.keys(data).forEach((key) => {
     const users = data[key];
