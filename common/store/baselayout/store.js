@@ -14,7 +14,7 @@ class IndexStore {
 
   @observable playingAudioPos = -1;
 
-  @observable playingAudioDom = "";
+  @observable playingAudioDom = null;
 
 }
 
