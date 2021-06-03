@@ -138,6 +138,14 @@
         vertical-align: middle;
         margin-left: rem($margin-2n);
       }
+      .userFriendsBtn {
+        background: $warn-color;
+        border-color: $warn-color;
+      }
+      .userFollowedBtn {
+        background: $button-primary-disabled-bg-color;
+        border-color: $button-primary-disabled-bg-color;
+      }
     }
 }
 
