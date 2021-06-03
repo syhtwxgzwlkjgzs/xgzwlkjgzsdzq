@@ -6,7 +6,11 @@ import Head from 'next/head';
 @inject('site')
 @observer
 class DocumentHead extends React.Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
+    const { title } = this.props;
     return (
       <Head>
         <meta
@@ -15,7 +19,7 @@ class DocumentHead extends React.Component {
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover"
         />
         <meta name="keywords" content={get(this.props.site, 'webConfig.setSite.siteKeywords', 'Discuz!Q')} />
-        <title>{get(this.props.site, 'webConfig.setSite.siteName', 'Discuz!Q')}</title>
+        <title>{title || get(this.props.site, 'webConfig.setSite.siteName', 'Discuz!Q')}</title>
       </Head>
     );
   }
