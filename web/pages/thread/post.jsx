@@ -597,10 +597,9 @@ class PostPage extends React.Component {
           this.props.index.updateAssignThreadAllData(threadId, data);
           // 添加帖子到首页数据
         } else {
-          const { categoryids = [] } = this.props.index?.filter || {}
-          const { categoryId = '' } = data
+          const { categoryId = '' } = data;
           // 首页如果是全部或者是当前分类，则执行数据添加操作
-          if (!categoryids.length || categoryids.indexOf(categoryId) !== -1) {
+          if (this.props.index.isNeedAddThread(categoryId)) {
             this.props.index.addThread(data);
           }
         }
