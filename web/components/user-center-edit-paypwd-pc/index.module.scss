@@ -21,6 +21,11 @@
       height: rem(423);
       border-radius: rem(var(--border-radius-small));
       background: $white;
+      box-sizing: border-box;
+      padding: rem($padding-6n);
+    }
+    .dzq-modal__body {
+      padding: 0;
     }
   }
 }
@@ -31,11 +36,6 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: rem($margin-6n);
-    :global {
-      .dzq-icon {
-        font-size: $font-size-base !important;
-      }
-    }
   }
   .titleValue {
     flex: 1;

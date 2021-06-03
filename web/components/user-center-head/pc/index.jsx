@@ -204,13 +204,13 @@ class index extends Component {
                       this.handleChangeAttention(user.follow);
                     }}
                     type="primary"
-                    className={user.follow === 2 && styles.userFriendsBtn}
+                    className={`${user.follow === 2 && styles.userFriendsBtn} ${user.follow === 1 && styles.userFollowedBtn}`}
                   >
-                    <Icon name={this.renderFollowedStatus(user.follow || 0).icon} />
+                    <Icon name={this.renderFollowedStatus(user.follow || 0).icon} size={12} />
                     <span className={styles.userBtnText}>{this.renderFollowedStatus(user.follow || 0).text}</span>
                   </Button>
                   <Button onClick={this.handleMessage}>
-                    <Icon name="NewsOutlined" />
+                    <Icon name="NewsOutlined" size={12} />
                     <span className={styles.userBtnText}>发私信</span>
                   </Button>
                 </div>
@@ -224,9 +224,11 @@ class index extends Component {
                     type="file"
                     style={{ display: 'none' }}
                   />
-                  <Icon name="UploadingOutlined" size={12} className={styles.uploadIcon} />
-                上传封面图
-              </div>
+                  <div className={styles.uploadText}>
+                    <Icon name="UploadingOutlined" size={12} className={styles.uploadIcon} />
+                    上传封面图
+                  </div>
+                </div>
               </>
             )}
           </div>

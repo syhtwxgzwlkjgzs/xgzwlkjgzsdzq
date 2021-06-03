@@ -13,28 +13,14 @@
   padding-right: $padding-2n;
 }
 
-.userMobileWrapper {
-  :global {
-    .dzq-modal__container {
-      width: rem(409);
-      height: rem(423);
-      border-radius: rem(var(--border-radius-small));
-      background: $white;
-    }
-  }
-}
-
 .userMobileContent {
   .title {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: rem($margin-6n);
-    :global {
-      .dzq-icon {
-        font-size: $font-size-base !important;
-      }
-    }
+    height: rem(22);
+    line-height: rem(22);
   }
   .titleValue {
     flex: 1;
@@ -49,6 +35,8 @@
     .labelName {
       font-size: rem($font-size-base);
       color: $text-color-regular;
+      height: rem(20);
+      line-height: rem(20);
     }
     .labelValue {
       position: relative;
@@ -62,18 +50,22 @@
       .dzq-input__inner {
         width: 100%;
         height: rem(44);
+        padding: rem($padding-3n) rem($padding-4n);
       }
       .dzq-icon {
         line-height: rem(44);
       }
     }
   }
+  .inputMiddle {
+    margin-bottom: rem($margin-4n);
+  }
   .mobileItem {
     position: relative;
     .verifyCode {
       position: absolute;
       top: rem(4);
-      right: 0;
+      right: rem(4);
     }
   }
   .sendCaptcha {
@@ -84,9 +76,6 @@
     }
   }
   .bottom {
-    position: absolute;
-    bottom: rem(24);
-    width: 90%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -104,4 +93,10 @@
       @include button-primary()
     }
   }
+}
+
+.btnStyle {
+  border: none;
+  color: $text-color-secondary;
+  font-size: rem($font-size-primary);
 }
