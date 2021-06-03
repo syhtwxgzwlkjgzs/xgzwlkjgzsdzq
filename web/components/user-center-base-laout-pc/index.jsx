@@ -36,7 +36,7 @@ const Index = (props) => {
     noMore = false,
     onRefresh,
     isOtherPerson = false,
-    showLayoutRefresh = true
+    showLayoutRefresh = true,
   } = props;
 
   const size = useRef('xl');
@@ -86,11 +86,11 @@ const Index = (props) => {
 
   const showRight = useMemo(() => right && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg'), [size.current]);
 
-  const [isUploadBackgroundUrl, setBackgroundUrl] = useState(false)
+  const [isUploadBackgroundUrl, setBackgroundUrl] = useState(false);
 
   const handleSetBgLoadingStatus = (bol) => {
-    setBackgroundUrl(bol)
-  }
+    setBackgroundUrl(bol);
+  };
 
   return (
     <div className={styles.container}>

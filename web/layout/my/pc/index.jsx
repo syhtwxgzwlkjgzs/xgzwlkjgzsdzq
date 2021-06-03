@@ -17,6 +17,7 @@ import UserCenterFansPc from '@components/user-center/fans-pc';
 import UserCenterFollowsPc from '../../../components/user-center/follows-pc';
 import Thread from '@components/thread';
 import SectionTitle from '@components/section-title';
+import BaseLayout from '../../../components/user-center-base-laout-pc';
 
 
 @inject('site')
@@ -151,7 +152,7 @@ class PCMyPage extends React.Component {
 
     return (
       <>
-        <UserBaseLaout
+        <BaseLayout
           showRefresh={false}
           onSearch={this.onSearch}
           right={this.renderRight}
@@ -160,15 +161,7 @@ class PCMyPage extends React.Component {
           onRefresh={getUserThreads}
         >
           {this.renderContent()}
-        </UserBaseLaout>
-
-        {/* 两个粉丝 popup */}
-        <>
-          <UserCenterFollowPopup
-            visible={this.state.showFollowPopup}
-            onClose={() => this.setState({ showFollowPopup: false })}
-          />
-        </>
+        </BaseLayout>
       </>
     );
   }

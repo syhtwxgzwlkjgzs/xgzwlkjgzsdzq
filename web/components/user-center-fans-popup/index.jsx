@@ -4,6 +4,7 @@ import { Icon, Popup, Divider, Dialog } from '@discuzq/design';
 import UserCenterFans from '@components/user-center-fans';
 import { noop } from '@components/thread/utils';
 import Router from '@discuzq/sdk/dist/router';
+import ReactDOM from 'react-dom';
 
 /**
  * 粉丝弹框
@@ -12,6 +13,7 @@ import Router from '@discuzq/sdk/dist/router';
  */
 const Index = (props) => {
   const { visible = false, onClose = noop, isOtherFans = false, id } = props;
+
   const onContainerClick = ({ id }) => {
     Router.push({ url: `/user/${id}` });
   };
@@ -25,7 +27,7 @@ const Index = (props) => {
     [],
   );
 
-  return (
+  const dialogElement = (
     <Dialog position="center" visible={visible} onClose={onClose}>
       <div className={styles.contaner}>
         <div className={styles.popupWrapper}>
@@ -35,14 +37,33 @@ const Index = (props) => {
           </div>
           <div className={styles.titleHr}></div>
           {!id ? (
-            <UserCenterFans onContainerClick={onContainerClick} splitElement={splitElement} />
+            <UserCenterFans
+              styles={{
+                height: `calc(100% - ${60}px)`,
+              }}
+              onContainerClick={onContainerClick}
+              splitElement={splitElement}
+            />
           ) : (
-            <UserCenterFans userId={id} onContainerClick={onContainerClick} splitElement={splitElement} />
+            <UserCenterFans
+              styles={{
+                height: `calc(100% - ${60}px)`,
+              }}
+              userId={id}
+              onContainerClick={onContainerClick}
+              splitElement={splitElement}
+            />
           )}
         </div>
       </div>
     </Dialog>
   );
+
+  if (typeof window === 'undefined') {
+    return dialogElement;
+  }
+
+  return ReactDOM.createPortal(dialogElement, document.getElementsByTagName('body')[0]);
 };
 
 export default React.memo(Index);
