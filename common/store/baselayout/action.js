@@ -25,6 +25,18 @@ class IndexAction extends IndexStore {
   }
 
   /**
+   * 重置播放器属性
+   */
+  @action
+  resetPlayersInfo() {
+    this.playingVideoPos = -1;
+    this.playingVideoDom = "";
+    this.playingAudioPos = -1;
+    this.playingAudioDom = null;
+    this.playingAudioWrapperId = "";
+  }
+
+  /**
    * 停止在播放的视频
    */
   @action
