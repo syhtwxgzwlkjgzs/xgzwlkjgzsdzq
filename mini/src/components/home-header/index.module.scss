@@ -24,10 +24,19 @@
       align-items: center;
       flex-direction: row;
       :global(.dzq-icon){
-        font-size: $font-size-middle-extra !important;
+        font-size: $font-size-base !important;
         margin-right: $margin-2n;
-        margin-left: -$margin-2n;
-        margin-top: -$margin-2n;
+      }
+    }
+    .customCapsule{
+      font-size: $font-size-middle;
+      line-height: $font-line-height-base;
+      color: $white;
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      :global(.dzq-icon){
+        font-size: $font-size-middle-extra !important;
         font-weight: bold;
       }
     }
