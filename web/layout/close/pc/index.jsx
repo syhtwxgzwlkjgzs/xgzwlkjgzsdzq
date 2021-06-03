@@ -11,6 +11,13 @@ import Copyright from '@components/copyright';
 @inject('site')
 @observer
 class PCCloseSite extends React.Component {
+  constructor(props) {
+    super(props);
+    this.goBackClickHandle = this.goBackClickHandle.bind(this);
+  }
+  goBackClickHandle() {
+      window.history.length <= 1 ? Router.redirect({ url: '/' }) : Router.back();
+  }
   render() {
     const { site } = this.props;
     const { closeSiteConfig } = site;
