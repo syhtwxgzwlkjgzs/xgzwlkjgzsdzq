@@ -133,7 +133,7 @@ class Index extends Component {
       this.setCategory(categoryId);
       const { content: { text } } = ret.data;
       // 小程序编辑帖子，要把内容中的img标签去掉。/todo: 防止把其他有效的img标签也去掉
-      const realText = text.replace(/<img.*?alt="(\w+)".*?>/g, `:$1:`);
+      const realText = text.replace(/<img.*?alt="(\w+)".*?>/g, `:$1:`).replace(/<span.*?>(.*?)<\/span>/g, `$1`);
       ret.data.content.text = realText;
       threadPost.formatThreadDetailToPostData(ret.data);
       this.setState({ postType: isDraft === 1 ? 'isDraft' : 'isEdit' });
