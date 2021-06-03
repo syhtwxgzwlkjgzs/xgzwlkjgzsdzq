@@ -61,10 +61,7 @@ class DzqApp extends App {
 
   updateSize() {
     const currentWidth = window.innerWidth;
-    const currentHeight = window.innerHeight;
-    if (currentWidth < 800) {
-      window.resizeTo(800,   currentHeight);
-    }
+    
     if ( this.appStore.site ) {
       if ( this.appStore.site.platform === 'pc' && currentWidth < 800 ) {
         this.appStore.site.setPlatform('h5');

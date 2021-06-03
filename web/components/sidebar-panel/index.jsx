@@ -13,6 +13,11 @@ import styles from './index.module.scss';
  */
 
 const Index = (props) => {
+  const { mold = 'wrapper' } = props
+  return mold === 'wrapper' ? <WrapperContent {...props} /> : <PlaneContent {...props} />;
+};
+
+const WrapperContent = (props) => {
   const {
     noData = true,
     isLoading = false,
@@ -22,8 +27,7 @@ const Index = (props) => {
     type = 'small',
     className = '',
     platform = 'pc',
-    isNeedBottom = true,
-    mold='wrapper'
+    isNeedBottom = true
   } = props;
 
   const isNoData = useMemo(() => !children || !!noData, [noData, children]);
@@ -35,51 +39,58 @@ const Index = (props) => {
     }
     return styles.containerH5;
   }, [platform, type]);
-
-  const wrapperContent = () => {
-    return (
-      <div className={`${styles.container} ${pcStyle} ${className} ${isNeedBottom && styles.bottom}`}>
-        {header || <SectionTitle {...props} />}
-        {
-          isLoading ? (
-            <div className={styles.spinner}>
-              <Spin type="spinner" />
-            </div>
-          ) : (
-            isNoData ? <NoData /> : children
-          )
-        }
-        {footer}
-      </div>
-    )
-  }
-
-  const planeContent = () => {
-    return (
-      <div className={className}>
-        <div className={`${pcStyle} ${styles.containerPlane}`}>
-          {header || <SectionTitle {...props} />}
-        </div>
-        {
-          isLoading ? (
-            <div className={styles.spinner}>
-              <Spin type="spinner" />
-            </div>
-          ) : (
-            isNoData ? <NoData className={styles.container} /> : children
-          )
-        }
-      </div>
-    )
-  }
-
   return (
-    <>
+    <div className={`${styles.container} ${pcStyle} ${className} ${isNeedBottom && styles.bottom}`}>
+      {header || <SectionTitle {...props} />}
       {
-        mold === 'wrapper' ? wrapperContent() : planeContent()
+        isLoading ? (
+          <div className={styles.spinner}>
+            <Spin type="spinner" />
+          </div>
+        ) : (
+          isNoData ? <NoData /> : children
+        )
       }
-    </>
-  );
-};
+      {footer}
+    </div>
+  )
+}
+
+const PlaneContent = (props) => {
+  const {
+    noData = true,
+    isLoading = false,
+    children,
+    header = null,
+    type = 'small',
+    className = '',
+    platform = 'pc',
+  } = props;
+  const isNoData = useMemo(() => !children || !!noData, [noData, children]);
+
+  const pcStyle = useMemo(() => {
+    if (platform === 'pc') {
+      const width = type === 'small' ? styles.small : styles.normal;
+      return `${styles.containerPC} ${width}`;
+    }
+    return styles.containerH5;
+  }, [platform, type]);
+  return (
+    <div className={className}>
+      <div className={`${pcStyle} ${styles.containerPlane}`}>
+        {header || <SectionTitle {...props} />}
+      </div>
+      {
+        isLoading ? (
+          <div className={styles.spinner}>
+            <Spin type="spinner" />
+          </div>
+        ) : (
+          isNoData ? <NoData className={styles.container} /> : children
+        )
+      }
+    </div>
+  )
+}
 
 export default React.memo(Index);

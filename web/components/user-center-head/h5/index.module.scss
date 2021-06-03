@@ -113,6 +113,10 @@
       background: $warn-color;
       border-color: $warn-color;
     }
+    .userFollowedBtn {
+      background: $button-primary-disabled-bg-color;
+      border-color: $button-primary-disabled-bg-color;
+    }
     .shieldBtn {
       position: absolute;
       top: rem(-26);

@@ -55,6 +55,17 @@
       .right{
         display: flex;
         align-items: center;
+
+        :global{
+          .dzq-dropdown-menu{
+            top: rem(45);
+          }
+          .dzq-dropdown-menu__item{
+            padding: rem($padding-10) 0;
+            line-height: rem(26);
+          }
+        }
+
         .iconList{
           display: flex;
           align-items: center;
