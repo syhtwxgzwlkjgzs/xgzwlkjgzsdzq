@@ -25,6 +25,7 @@ class PCMyPage extends React.Component {
     this.state = {
       showFansPopup: false, // 是否弹出粉丝框
       showFollowPopup: false, // 是否弹出关注框
+      fetchUserInfoLoading: true,
     };
   }
 
@@ -119,7 +120,7 @@ class PCMyPage extends React.Component {
           type="normal"
           bigSize={true}
           isShowMore={false}
-          isLoading={!targetUserThreads}
+          isLoading={this.state.fetchUserInfoLoading}
           leftNum={`${targetUserThreadsTotalCount}个主题`}
           noData={!this.formatUserThreadsData(targetUserThreads)?.length}
         >
