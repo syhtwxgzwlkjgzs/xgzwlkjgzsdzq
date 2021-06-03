@@ -248,7 +248,11 @@ class UserCenterFans extends React.Component {
           );
         })}
         {isNoData && <NoData />}
-        <div className={classnames(styles.loadMoreContainer, this.props.loadingElementClass)}>{this.state.loading && <Spin type={'spinner'}>加载中 ...</Spin>}</div>
+        {this.state.loading && (
+          <div className={classnames(styles.loadMoreContainer, this.props.loadingElementClass)}>
+            <Spin type={'spinner'}>加载中 ...</Spin>
+          </div>
+        )}
       </div>
     );
   }

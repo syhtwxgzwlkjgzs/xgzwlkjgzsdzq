@@ -13,7 +13,6 @@ import HOCTencentCaptcha from '@middleware/HOCTencentCaptcha';
 @inject('payBox')
 @observer
 class index extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -22,7 +21,7 @@ class index extends Component {
       isBlur: true, // 表示是否失焦
       initTimeValue: null,
       payPassword: null,
-      payPasswordConfirmation: null
+      payPasswordConfirmation: null,
     };
   }
 
@@ -33,12 +32,12 @@ class index extends Component {
       isBlur: true, // 表示是否失焦
       initTimeValue: null,
       payPassword: null,
-      payPasswordConfirmation: null
-    })
+      payPasswordConfirmation: null,
+    });
   }
 
   componentWillUnmount() {
-    this.initState()
+    this.initState();
   }
 
   updatePwd = (set_num, type) => {
@@ -67,41 +66,42 @@ class index extends Component {
 
   // 点击下一步
   handleStepBtn = () => {
-    if (this.getDisabledWithButton()) return
-    const { list = [], payPassword, payPasswordConfirmation } = this.state
+    if (this.getDisabledWithButton()) return;
+    const { list = [], payPassword, payPasswordConfirmation } = this.state;
     if (payPassword !== payPasswordConfirmation) {
       Toast.error({
         content: '两次密码输入有误',
         hasMask: false,
         duration: 1000,
       });
-      this.initState()
-      return
+      this.initState();
+      return;
     }
     const mobile = this.props?.user.originalMobile;
-    const code = list.join("")
+    const code = list.join('');
     this.props.payBox.forgetPayPwd({
       mobile,
       code,
       payPassword,
-      payPasswordConfirmation
-    }).then(res => {
+      payPasswordConfirmation,
+    }).then((res) => {
       Toast.success({
-        content: "重置密码成功",
+        content: '重置密码成功',
         hasMask: false,
         duration: 1000,
-      })
-      this.initState()
-      this.props.onClose()
-    }).catch((err) => {
-      Toast.error({
-        content: err.Msg || "重置密码失败",
-        hasMask: false,
-        duration: 1000,
-      })
+      });
       this.initState();
-      this.props.onClose()
+      this.handleClose();
     })
+      .catch((err) => {
+        Toast.error({
+          content: err.Msg || '重置密码失败',
+          hasMask: false,
+          duration: 1000,
+        });
+        this.initState();
+        this.handleClose();
+      });
   }
 
   handleInputChange = (e) => {
@@ -145,26 +145,27 @@ class index extends Component {
   }
 
   getVerifyCode = throttle(async ({ calback }) => {
-    let { captchaRandStr, captchaTicket } = await this.props.showCaptcha()
+    const { captchaRandStr, captchaTicket } = await this.props.showCaptcha();
     const mobile = this.props?.user.originalMobile;
-    this.props.payBox.sendSmsVerifyCode({ mobile, captchaRandStr, captchaTicket }).then(res => {
+    this.props.payBox.sendSmsVerifyCode({ mobile, captchaRandStr, captchaTicket }).then((res) => {
       this.setState({
         initTimeValue: res.interval,
       }, () => {
         if (calback && typeof calback === 'function') calback();
       });
-    }).catch((err) => {
-      Toast.error({
-        content: err.Message || '获取验证码失败',
-        hasMask: false,
-        duration: 1000,
-      })
-      this.setState({
-        list: [],
-        initTimeValue: null
-      });
-      if (calback && typeof calback === 'function') calback(err);
     })
+      .catch((err) => {
+        Toast.error({
+          content: err.Message || '获取验证码失败',
+          hasMask: false,
+          duration: 1000,
+        });
+        this.setState({
+          list: [],
+          initTimeValue: null,
+        });
+        if (calback && typeof calback === 'function') calback(err);
+      });
   }, 300)
 
   /**
@@ -173,17 +174,17 @@ class index extends Component {
  */
   getDisabledWithButton = () => {
     const { list = [], payPassword, payPasswordConfirmation } = this.state;
-    let disabled = false
-    disabled = !payPassword || !payPasswordConfirmation || list.length !== 6
-    return disabled
+    let disabled = false;
+    disabled = !payPassword || !payPasswordConfirmation || list.length !== 6;
+    return disabled;
   }
 
   handleClose = () => {
-    this.initState()
+    this.initState();
     this.props.onClose();
   }
 
-  render () {
+  render() {
     const { currentStep, list = [], isBlur, isKeyBoardVisible, initTimeValue, payPassword, payPasswordConfirmation } = this.state;
     const mobile = this.props?.user.mobile;
     return (
@@ -216,8 +217,8 @@ class index extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default HOCTencentCaptcha(index)
+export default HOCTencentCaptcha(index);

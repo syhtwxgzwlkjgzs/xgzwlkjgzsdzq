@@ -95,6 +95,7 @@ export default class index extends Component {
           });
           this.props.onClose && this.props.onClose();
           this.props.user.clearUserAccountPassword();
+          this.props.user.userInfo.hasPassword = true;
         })
         .catch((err) => {
           Toast.error({
