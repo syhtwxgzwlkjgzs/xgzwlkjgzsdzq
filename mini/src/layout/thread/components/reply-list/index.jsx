@@ -6,8 +6,11 @@ import { diffDate } from '@common/utils/diff-date';
 import { observer } from 'mobx-react';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import ImageDisplay from '@components/thread/image-display';
+import RichText from '@discuzq/design/dist/components/rich-text/index';
+import { handleLink } from '@components/thread/utils';
+import Router from '@discuzq/sdk/dist/router';
 
 @observer
 export default class ReplyList extends React.Component {
@@ -39,6 +42,16 @@ export default class ReplyList extends React.Component {
     newContent = xss(newContent);
 
     return newContent;
+  }
+
+  handleClick(e, node) {
+    e && e.stopPropagation();
+    const url = handleLink(node);
+    if (url) {
+      Router.push({ url });
+    } else {
+      this.toCommentDetail();
+    }
   }
 
   render() {
@@ -80,10 +93,11 @@ export default class ReplyList extends React.Component {
                 ''
               )}
               {/* 回复内容 */}
-              <View
-                className={classnames(styles.content, this.props.isShowOne && styles.isShowOne)}
-                dangerouslySetInnerHTML={{ __html: this.filterContent() }}
-              ></View>
+              <RichText
+                className={classNames(styles.commentListText, this.props.isShowOne && styles.isShowOne)}
+                content={this.filterContent()}
+                onClick={this.handleClick.bind(this)}
+              />
 
               {/* 图片展示 */}
               {(this.props.data?.images || this.props.data?.attachments) && (

@@ -80,7 +80,7 @@ export class MessageIndex extends Component {
         avatar: chatPerson?.avatar,
         userId: chatPerson?.id,
         username: chatPerson?.username,
-        unreadCount: unreadCount,
+        unreadCount: dialogMessage?.unreadCount,
       });
     });
 
