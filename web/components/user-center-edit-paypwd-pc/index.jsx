@@ -13,8 +13,6 @@ class index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      payPassword: null, // 支付密码
-      oldPayPwd: null, // 旧密码
       step: 'set_password', // 步骤 set_password| reset_password | find_password
       isSubmit: false,
     };
@@ -22,8 +20,6 @@ class index extends Component {
 
   initState = () => {
     this.setState({
-      payPassword: null, // 支付密码
-      oldPayPwd: null, // 旧密码
       step: 'set_password', // 步骤 set_password| reset_password | find_password
       isSubmit: false,
     });
@@ -31,10 +27,12 @@ class index extends Component {
 
   componentDidMount () {
     this.initState();
+    this.props.payBox.clearPayPassword();
   }
 
   componentWillUnmount () {
     this.initState();
+    this.props.payBox.clearPayPassword();
   }
 
   // 点击去到下一步
@@ -143,6 +141,7 @@ class index extends Component {
   }
 
   handleClose = () => {
+    this.initState()
     this.props.onClose();
   }
 
@@ -160,7 +159,7 @@ class index extends Component {
           }
           <div className={styles.bottom}>
             {
-              this.props.user?.canWalletPay ? <Button disabled={this.getDisabledWithButton()} onClick={this.goToResetPayPwd} type={'primary'} className={styles.btn}>下一步</Button> : <Button disabled={!payPassword} onClick={this.handleSubmit} type={'primary'} className={styles.btn}>提交</Button>
+              this.props.user?.canWalletPay ? <Button disabled={this.getDisabledWithButton()} onClick={this.goToResetPayPwd} type={'primary'} className={styles.btn}>下一步</Button> : <Button disabled={this.getDisabledWithButton()} onClick={this.handleSubmit} type={'primary'} className={styles.btn}>提交</Button>
             }
           </div>
         </div>
@@ -172,7 +171,7 @@ class index extends Component {
             <span className={styles.titleValue}>设置新密码</span>
             <Icon onClick={this.handleClose} name="CloseOutlined" />
           </div>
-          <ResetPassword />
+          <ResetPassword onClose={this.props.onClose}/>
         </div>
       );
     } if (step === 'find_password') {

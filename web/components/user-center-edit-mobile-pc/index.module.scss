@@ -53,6 +53,16 @@
     .labelValue {
       position: relative;
     }
+    .verifyCodeBtn {
+      position: absolute;
+      right: rem(4);
+      top: rem(4);
+    }
+    .codeBtn {
+      .btn {
+        border: none;
+      }
+    }
     :global {
       .dzq-input {
         width: 100%;
@@ -64,6 +74,9 @@
         height: rem(44);
       }
     }
+  }
+  .mobileItem {
+    position: relative;
   }
   .sendCaptcha {
     @include captchaBtn;

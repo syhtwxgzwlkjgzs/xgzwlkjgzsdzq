@@ -178,6 +178,11 @@ class index extends Component {
     return disabled
   }
 
+  handleClose = () => {
+    this.initState()
+    this.props.onClose();
+  }
+
   render () {
     const { currentStep, list = [], isBlur, isKeyBoardVisible, initTimeValue, payPassword, payPasswordConfirmation } = this.state;
     const mobile = this.props?.user.mobile;
@@ -186,7 +191,7 @@ class index extends Component {
         <div className={styles.userMobileContent}>
           <div className={styles.title}>
             <span className={styles.titleValue}>找回支付密码</span>
-            <Icon onClick={this.handleClose} name="CloseOutlined" onClick={this.props.onClose} />
+            <Icon onClick={this.handleClose} name="CloseOutlined" />
           </div>
           <div className={`${styles.inputItem} ${styles.mobileItem}`}>
             <Input value={mobile} />
