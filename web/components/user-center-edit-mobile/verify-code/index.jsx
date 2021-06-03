@@ -70,7 +70,7 @@ export default class VerificationCode extends React.Component {
     )
   }
   render() {
-    const { value_pass_check } = this.props
+    const { value_pass_check, btnType, className } = this.props
     const { buttonDisabled } = this.state
     return (
       <div
@@ -79,8 +79,8 @@ export default class VerificationCode extends React.Component {
         })}
       >
         <Button
-          className={styles.btn}
-          type={!buttonDisabled ? 'primary' : 'text'}
+          className={`${styles.btn} ${className}`}
+          type={btnType ? 'text' : !buttonDisabled ? 'primary' : 'text'}
           disabled={buttonDisabled || !value_pass_check}
           onClick={this.buttonClickAction.bind(this)}
         >

@@ -17,6 +17,7 @@ import UserCenterFansPc from '@components/user-center/fans-pc';
 import UserCenterFollowsPc from '../../../components/user-center/follows-pc';
 import Thread from '@components/thread';
 import SectionTitle from '@components/section-title';
+import BaseLayout from '../../../components/user-center-base-laout-pc';
 
 
 @inject('site')
@@ -91,10 +92,10 @@ class PCMyPage extends React.Component {
             </div>
           )}
 
-          <div className={styles.userInfoWrapper}>
+          {/* <div className={styles.userInfoWrapper}>
             <div className={styles.userInfoKey}>实名认证</div>
             <div className={styles.userInfoValue}>去认证</div>
-          </div>
+          </div> */}
 
           <div className={styles.userInfoWrapper}>
             <div className={styles.userInfoKey}>签名</div>
@@ -102,9 +103,9 @@ class PCMyPage extends React.Component {
           </div>
         </SidebarPanel>
 
-        <UserCenterFansPc />
+        <UserCenterFansPc id={this.props.user.id} />
 
-        <UserCenterFollowsPc />
+        <UserCenterFollowsPc id={this.props.user.id} />
         <Copyright />
       </>
     );
@@ -151,7 +152,7 @@ class PCMyPage extends React.Component {
 
     return (
       <>
-        <UserBaseLaout
+        <BaseLayout
           showRefresh={false}
           onSearch={this.onSearch}
           right={this.renderRight}
@@ -160,15 +161,7 @@ class PCMyPage extends React.Component {
           onRefresh={getUserThreads}
         >
           {this.renderContent()}
-        </UserBaseLaout>
-
-        {/* 两个粉丝 popup */}
-        <>
-          <UserCenterFollowPopup
-            visible={this.state.showFollowPopup}
-            onClose={() => this.setState({ showFollowPopup: false })}
-          />
-        </>
+        </BaseLayout>
       </>
     );
   }
