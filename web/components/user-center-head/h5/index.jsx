@@ -168,7 +168,7 @@ class index extends Component {
                   this.handleChangeAttention(user.follow);
                 }}
                 type="primary"
-                className={`${styles.btn} ${user.follow === 2 && styles.userFriendsBtn}`}
+                className={`${styles.btn} ${user.follow === 2 && styles.userFriendsBtn} ${user.follow === 1 && styles.userFollowedBtn}`}
                 full
               >
                 <Icon name={this.renderFollowedStatus(user.follow).icon} />

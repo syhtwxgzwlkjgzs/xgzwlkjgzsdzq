@@ -93,6 +93,10 @@
       .uploadIcon {
         margin-right: rem(6);
       }
+      .uploadText {
+        display: flex;
+        align-items: center;
+      }
       padding-top: rem(48);
       font-size: rem($font-size-small);
       line-height: rem(22);
@@ -121,7 +125,7 @@
       button {
         width: rem(113);
         height: rem(36);
-        font-size: rem($font-size-middle);
+        font-size: rem($font-size-primary);
         display: inline-block;
         :global {
           .dzq-icon {
@@ -137,6 +141,14 @@
       .userBtnText {
         vertical-align: middle;
         margin-left: rem($margin-2n);
+      }
+      .userFriendsBtn {
+        background: $warn-color;
+        border-color: $warn-color;
+      }
+      .userFollowedBtn {
+        background: $button-primary-disabled-bg-color;
+        border-color: $button-primary-disabled-bg-color;
       }
     }
 }

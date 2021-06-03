@@ -232,7 +232,7 @@ class index extends Component {
           <div className={styles.userMobileContent}>
             <div className={styles.title}>
               <span className={styles.titleValue}>修改手机号</span>
-              <Icon onClick={this.handleClose} name="CloseOutlined" />
+              <Icon onClick={this.handleClose} name="CloseOutlined" size={12} color={'#8490A8'} />
             </div>
             <div className={`${styles.inputItem}`}>
               <div className={styles.labelName}>{currentStep === 'first' ? '验证旧手机' : '设置新手机'}</div>
