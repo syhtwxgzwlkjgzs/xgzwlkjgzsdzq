@@ -13,6 +13,25 @@ class IndexStore {
   @computed get categoriesNoAll() {
     return (this.categories || []).filter(item => item.name !== '全部');
   }
+
+  @computed get categoriesNames () {
+    const categoriesNoAll = (this.categories || []).filter(item => item.name !== '全部');
+    const nameArr = [];
+    console.log(categoriesNoAll);
+    categoriesNoAll.forEach((item) => {
+      nameArr.push({
+        pid: item.pid,
+        name: item.name
+      })
+      item.children.forEach((child) => {
+        nameArr.push({
+          pid: child.pid,
+          name: `${item.name}/${child.name}`
+        })
+      });
+    });
+    return nameArr;
+  }
   @observable recommends = null;
   @observable recommendsStatus = 'none'
 

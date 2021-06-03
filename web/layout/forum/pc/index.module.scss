@@ -14,7 +14,11 @@
   padding-top: $padding-2n;
   padding-bottom: $padding-4n;
   font-size: $font-size-base;
+  line-height: $font-line-height-small;
   border-bottom: $border-solid-1;
+  span {
+    color: $error-color;
+  }
 }
 // 用户信息标签一栏
 .user_info_label {
@@ -33,6 +37,7 @@
     font-size: $font-size-base;
     line-height: 18px;
     color: $text-color-regular;
+    @include text-ellipsis;
   }
 }
 // 用户信息内容一栏
@@ -50,6 +55,7 @@
     flex: 1;
     line-height: $font-line-height-base;
     color: $text-color-primary;
+    @include text-ellipsis;
     .user_value_avatar {
       border-radius: $border-radius-circle;
       width: 38px;
@@ -58,6 +64,7 @@
     }
     .user_value_name {
       padding-left: $padding-4n;
+      @include text-ellipsis;
     }
   }
 }
