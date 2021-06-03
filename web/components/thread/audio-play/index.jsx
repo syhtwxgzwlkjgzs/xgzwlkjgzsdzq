@@ -14,17 +14,25 @@ import { noop } from '../utils';
 
 const Index = ({ isPay = false, url, onPay = noop, baselayout }) => {
 
-  const ref = useRef();
+  const audioRef = useRef();
+  const audioWrapperRef = useRef();
 
-  const onPlay = (e) => {
-    // if(baselayout.playingAudioDom) {
-    //   baselayout.playingVideoDom.querySelector("video").pause();
-    //   baselayout.playingAudioDom.current?.props?.onPause();
-    // }
-    // ref.current.props.disabled = true;
-    // baselayout.playingAudioDom = ref;
-    // baselayout.playingAudioPos = e.target.parentNode.parentNode.parentNode.offsetTop;
-    // console.log(`baselayout`, baselayout)
+  const onPlay = () => {
+    const audioContext = audioRef?.current?.getState()?.audioCtx;
+    if(audioContext && baselayout && audioRef && audioWrapperRef) {
+      // 音频在帖子中间，要找到音频相对于BaseLayout的具体地址
+      const positionInThread = audioWrapperRef?.current?.parentNode?.offsetTop || 0;
+      const threadTextHeight = audioWrapperRef?.current?.parentNode?.parentNode?.previousElementSibling?.offsetHeight || 0;
+      const userInfoHeight = audioWrapperRef?.current?.parentNode?.parentNode?.parentNode?.previousElementSibling?.offsetHeight || 0;
+      const threadPosition = audioWrapperRef?.current?.parentNode?.parentNode?.parentNode?.parentNode?.offsetTop || 0;
+      const position = positionInThread + threadTextHeight + threadPosition + userInfoHeight;
+
+      // 暂停之前正在播放的音视频
+      baselayout.pauseWebAllPlayers();
+      baselayout.playingAudioPos = position > 0 ? position : -1;
+      baselayout.playingAudioDom = audioContext;
+    }
+
   };
 
   return (
@@ -34,7 +42,7 @@ const Index = ({ isPay = false, url, onPay = noop, baselayout }) => {
           <div className={styles.wrapper}>
             <img src='/dzq-img/pay-audio.png' className={styles.payBox} onClick={onPay}></img>
           </div>
-        ) : <Audio src={url} onPlay={onPlay} disabled={!url} ref={ref}/>
+        ) : <div ref={audioWrapperRef}><Audio src={url} onPlay={onPlay} disabled={!url} ref={audioRef}/></div>
       }
     </div>
   );
