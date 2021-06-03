@@ -1,14 +1,15 @@
 @import '@common/styles/index.scss';
+.top_bg {
+  height: rem(144);
+  background-color: $primary-color;
+  .top_bg_image {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
 .content{
   height: 100%;
-  // 头部
-  .header{
-    height: rem(144);
-    background-color: $primary-color;
-    background-image: url('/dzq-img/invite-banner-bg.png');
-    background-size: auto 100%;
-    background-repeat: no-repeat;
-  }
   // 用户信息 start
   .user_info{
     height: rem(165);
