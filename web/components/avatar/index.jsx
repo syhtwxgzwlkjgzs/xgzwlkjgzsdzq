@@ -148,10 +148,10 @@ function avatar(props) {
         <div className={styles.userInfoContent}>
           <div className={styles.header}>
             <div className={styles.left}>
-              <Avatar className={styles.customAvatar} circle={true} image={userInfo.avatarUrl} siz='primary'></Avatar>
+              <Avatar className={styles.customAvatar} circle={true} image={userInfo.avatarUrl} siz='primary' onClick={onClick}></Avatar>
             </div>
             <div className={styles.right}>
-              <p className={styles.name}>{userInfo.username}</p>
+              <p className={styles.name}>{userInfo.nickname}</p>
               <p className={styles.text}>{userInfo.signature && userInfo.signature !== '' ? userInfo.signature : '暂无签名'}</p>
             </div>
           </div>
@@ -195,16 +195,18 @@ function avatar(props) {
               <Button 
                 onClick={blocking ? () => {} : blockingHandler}
                 loading={blocking}
-                className={[styles.btn, styles.block]}
-                className={`${styles.btn} ${userInfo.isDeny ? styles.blocked : styles.unblocked}`}
+                className={`${styles.btn} ${styles.blocked}`}
                 type='primary'
               >
                 {
-                  !blocking && userInfo.isDeny && (
-                    <Icon className={styles.icon} name="ShieldOutlined" size={12}/>
+                  !blocking &&
+                  (
+                    <>
+                      <Icon className={styles.icon} name="ShieldOutlined" size={12}/>
+                      {userInfo.isDeny ? (<span>屏蔽</span>) : (<span>已屏蔽</span>)}
+                    </>
                   )
                 }
-                屏蔽
               </Button>
             </div>
           }
@@ -216,16 +218,16 @@ function avatar(props) {
 
   if (image && image !== '') {
     return (
-      <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler} onClick={onClick}>
-        <Avatar className={className} circle={circle} image={image} size={size}></Avatar>
+      <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler} >
+        <Avatar className={className} circle={circle} image={image} size={size} onClick={onClick}></Avatar>
         {isShow && userInfoBox}
       </div>
     );
   }
 
   return (
-    <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler} onClick={onClick}>
-      <Avatar className={className} circle={circle} text={userName} size={size}></Avatar>
+    <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
+      <Avatar className={className} circle={circle} text={userName} size={size} onClick={onClick}></Avatar>
       {isShow && userInfoBox}
     </div>
   );

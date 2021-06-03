@@ -177,6 +177,7 @@
         }
         &.is-checked {
           .dzq-checkbox {
+            border: none;
             background-color: $checkbox-checked-bg-color;
           }
           .dzq-icon {
@@ -220,8 +221,6 @@
 }
 
 .pc {
-  height: 500px;
-  min-height: 50vh;
 
   .wrapper {
     height: 500px;

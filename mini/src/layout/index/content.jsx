@@ -10,7 +10,6 @@ import BaseLayout from '../../components/base-layout';
 import TopNew from './components/top-news';
 import NavBar from './components/nav-bar';
 import Taro from '@tarojs/taro';
-
 import styles from './index.module.scss';
 @inject('site')
 @inject('user')
@@ -94,6 +93,7 @@ class IndexH5Page extends React.Component {
     }
 
     this.props.baselayout.setJumpingToTop();
+    this.props.index.setHiddenTabBar(false)
 
     const newFilter = { ...this.state.filter, categoryids: newCategoryIds, sequence: id === 'default' ? 1 : 0, }
 
@@ -110,6 +110,8 @@ class IndexH5Page extends React.Component {
   onClickFilter = ({ categoryids, types, essence, sequence }) => {
     const { dispatch = () => {} } = this.props;
     const requestCategoryids = categoryids.slice();
+
+    this.props.index.setHiddenTabBar(false)
     
     const newFilter = { ...this.state.filter, categoryids: requestCategoryids, types, essence, sequence }
     dispatch('click-filter', newFilter);
@@ -153,17 +155,17 @@ class IndexH5Page extends React.Component {
   };
 
   handleScroll = (e) => {
-    const { scrollTop = 0 } = e?.detail || {};
-    const { height = 165 } = this.headerRef.current?.state || {};
-    const { fixedTab } = this.state;
-
-    // 只需要滚到临界点触发setState，而不是每一次滚动都触发
-    if(!fixedTab && scrollTop >= height) {
-      this.setState({ fixedTab: true })
-    } else if(fixedTab && scrollTop < height) {
-      this.setState({ fixedTab: false })
+      const { scrollTop = 0 } = e?.detail || {};
+      const { height = 121 } = this.headerRef.current?.state || {};
+      const { fixedTab } = this.state;
+      
+      // 只需要滚到临界点触发setState，而不是每一次滚动都触发
+      if(!fixedTab && scrollTop >= height) {
+        this.setState({ fixedTab: true })
+      } else if(fixedTab && scrollTop < height) {
+        this.setState({ fixedTab: false })
+      }
     }
-  }
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
   handleCategories = () => {
@@ -267,6 +269,7 @@ class IndexH5Page extends React.Component {
         pageName='home'
         preload={1000}
         requestError={this.props.isError}
+        errorText={this.props.errorText}
       >
         <HomeHeader ref={this.headerRef} />
 

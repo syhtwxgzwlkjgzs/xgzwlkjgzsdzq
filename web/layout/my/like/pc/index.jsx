@@ -47,6 +47,7 @@ class LikePCPage extends React.Component {
         noMore={currentPage >= totalPage}
         showRefresh={false}
         onRefresh={this.fetchMoreData}
+        rightClass={styles.rightSide}
       >
         <SidebarPanel
           title="我的点赞"
@@ -56,6 +57,7 @@ class LikePCPage extends React.Component {
           icon={{ type: 3, name: 'LikeOutlined' }}
           rightText={`共有${totalCount}条点赞`}
           className={styles.container}
+          mold='plane'
         >
           {
             pageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)

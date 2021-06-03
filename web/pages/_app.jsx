@@ -3,7 +3,6 @@ import { Provider } from 'mobx-react';
 import { hideInstance } from '@discuzq/design/dist/components/image-previewer/layouts/web';
 import App from 'next/app';
 import initializeStore from '@common/store';
-import Head from 'next/head';
 import PayBoxProvider from '../components/payBox/payBoxProvider';
 import isServer from '@common/utils/is-server';
 import '@discuzq/design/dist/styles/index.scss';
@@ -11,8 +10,9 @@ import csrRouterRedirect from '@common/utils/csr-router-redirect';
 import Router from '@discuzq/sdk/dist/router';
 import sentry from '@common/utils/sentry';
 import '../styles/index.scss';
+import DocumentHead from '../components/documentHead';
 
-if ( !isServer() ) {
+if (!isServer()) {
   sentry();
 }
 
@@ -56,7 +56,7 @@ class DzqApp extends App {
 
   // 出错捕获
   componentDidCatch(error, info) {
-    Router.replace({url: '/render-error'});
+    Router.replace({ url: '/render-error' });
   }
 
   updateSize() {
@@ -80,18 +80,10 @@ class DzqApp extends App {
 
   render() {
     const { Component, pageProps } = this.props;
-    const { site } = this.appStore;
     return (
       <div data-dzq-theme="light">
-        <Head>
-          <meta
-            key="viewport"
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover"
-          />
-          <title>{(site.envConfig && site.envConfig.TITLE) || 'Discuz!Q'}</title>
-        </Head>
         <Provider {...this.appStore}>
+          <DocumentHead />
           <PayBoxProvider>
             <Component {...pageProps} />
           </PayBoxProvider>

@@ -111,7 +111,7 @@ class AtSelect extends Component {
   formatData = (item) => {
     const isFollow = this.state.keywords === '';
     const avatar = isFollow ? item?.user?.avatar : item.avatar;
-    const username = isFollow ? item?.user?.userName : item.nickname;
+    const username = isFollow ? item?.user?.userName : item.username;
     const groupName = isFollow ? item?.group?.groupName : item.groupName;
     const userId = isFollow ? item.user?.pid : item.userId;
     return { avatar, username, groupName, userId };
@@ -155,7 +155,7 @@ class AtSelect extends Component {
     const { keywords, checkUser, finish } = this.state;
 
     const content = (
-      <div className={styles.wrapper}>
+      <div className={styles.wrapper} onClick={e => e.stopPropagation()}>
 
         {/* top */}
         <div className={styles.header}>

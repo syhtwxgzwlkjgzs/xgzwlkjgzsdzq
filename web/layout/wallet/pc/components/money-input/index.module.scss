@@ -24,7 +24,6 @@
       font-weight: 600;
       font-size: rem(30);
       text-align: left;
-      color: #c5c6ca;
     }
   }
   .moneyIcon {
@@ -34,6 +33,27 @@
     text-align: left;
     color: var(--color-text-primary);
   }
+
+  .moneyIcon-Red {
+    font-family: 'PingFang SC';
+    font-weight: 600;
+    font-size: rem(30);
+    text-align: left;
+    color: $error-color;
+  }
+
+  .InputColor>input {
+    color: $text-color-primary;
+  }
+
+  .InputRedColor>input {
+    color: $error-color;
+  }
+}
+
+.leasterr {
+  color: $error-color;
+  padding-bottom: rem(8);
 }
 
 .leastMoney {
@@ -42,5 +62,5 @@
   font-size: rem($font-size-label);
   text-align: left;
   color: var(--color-text-secondary);
-  padding: rem($padding-6n) 0;
+  padding: rem($padding-4n) 0;
 }

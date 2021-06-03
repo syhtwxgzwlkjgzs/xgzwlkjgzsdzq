@@ -35,12 +35,13 @@
 
 .line {
   width: rem(2);
-  height: rem(119);
+  height: rem(116);
   background: var(--border-line-color);
 }
 
 .detailed {
   position: relative;
+  cursor: pointer;
   .left {
     position: absolute;
     left: rem(2);

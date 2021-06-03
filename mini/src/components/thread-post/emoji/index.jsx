@@ -1,7 +1,7 @@
 /**
  * 表情组件
  */
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 import { observer, inject } from 'mobx-react';
 import { View, Image } from '@tarojs/components';
 
@@ -23,7 +23,6 @@ const Index = inject('threadPost')(observer(({ threadPost, show = false, onHide 
           contentText: contentText.slice(0, cursorPosition) + item.code + contentText.slice(cursorPosition)
         });
         setCursorPosition(cursorPosition + item.code.length);
-        onHide();
       }} />)}
     </View>
   );

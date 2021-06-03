@@ -18,6 +18,7 @@ const NEED_BIND_PHONE_FLAG = -8001;
 @inject('site')
 @inject('user')
 @inject('commonLogin')
+@inject('invite')
 @observer
 class WXSelect extends Component {
   componentWillMount() { }
@@ -31,14 +32,16 @@ class WXSelect extends Component {
   componentDidHide() { }
 
   handleAutobindCallback = async () => {
-    const { sessionToken } = getCurrentInstance().router.params;
+    const { sessionToken, inviteCodeFromParams } = getCurrentInstance().router.params;
 
     try {
+      const inviteCode = inviteCodeFromParams || this.props.invite.getInviteCode()
       const res = await usernameAutoBind({
         timeout: 10000,
         params: {
           sessionToken,
           type: 0, // 公众号0 (默认)， 小程序1，临时方案，测试环境的公众号/小程序没有关联起来
+          inviteCode
         },
       });
       checkUserStatus(res);

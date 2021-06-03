@@ -45,6 +45,7 @@ class Index extends Component {
   componentWillMount() { }
 
   async componentDidMount() {
+    this.getNavHeight();
     // 监听键盘高度变化
     Taro.onKeyboardHeightChange(res => {
       this.setState({ bottomHeight: res?.height || 0 });
@@ -78,6 +79,14 @@ class Index extends Component {
     Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault);
     // Taro.offKeyboardHeightChange(() => {});
     this.props.thread.reset();
+  }
+
+  getNavHeight() {
+    const { statusBarHeight } = Taro.getSystemInfoSync();
+    const menubtnRect = Taro.getMenuButtonBoundingClientRect();
+    const { top = 0, height = 0, width = 0 } = menubtnRect || {};
+    const navHeight = (top - statusBarHeight) * 2 + height;
+    this.props.threadPost.setNavInfo({ statusBarHeight, navHeight, menubtnWidth: width })
   }
 
   componentDidShow() { }
@@ -177,6 +186,12 @@ class Index extends Component {
     setCategorySelected({ parent, child });
   }
 
+  resetOperationType() {
+    this.setState({
+      operationType: ''
+    });
+  }
+
   // 点击发帖插件时回调，如上传图片、视频、附件或艾特、话题等
   handlePluginClick(item) {
     const { postType } = this.state;
@@ -184,6 +199,12 @@ class Index extends Component {
     this.setState({
       operationType: item.type
     });
+
+    if (item.type !== 'emoji') {
+      this.setState({
+        showEmoji: false
+      });
+    }
 
     let nextRoute;
     switch (item.type) {
@@ -193,18 +214,22 @@ class Index extends Component {
           return this.postToast('再编辑时不可操作悬赏');
         }
         nextRoute = '/subPages/thread/selectReward/index';
+        this.resetOperationType();
         break;
       case THREAD_TYPE.goods:
         nextRoute = '/subPages/thread/selectProduct/index';
+        this.resetOperationType();
         break;
       case THREAD_TYPE.redPacket:
         if (postType === 'isEdit') {
           return this.postToast('再编辑时不可操作红包');
         }
         nextRoute = '/subPages/thread/selectRedpacket/index';
+        this.resetOperationType();
         break;
       case THREAD_TYPE.paid:
         this.setState({ showPaidOption: true });
+        this.resetOperationType();
         break;
       case THREAD_TYPE.paidPost:
         nextRoute = `/subPages/thread/selectPayment/index?paidType=${THREAD_TYPE.paidPost}`;
@@ -234,7 +259,7 @@ class Index extends Component {
         break;
       case 'emoji':
         this.setState({
-          showEmoji: true
+          showEmoji: !this.state.showEmoji
         });
         break;
     }
@@ -310,6 +335,7 @@ class Index extends Component {
               audioSrc: mediaUrl,
             });
           }
+          this.resetOperationType();
         } else {
           Taro.showToast({
             title: res.msg,
@@ -442,10 +468,9 @@ class Index extends Component {
           this.props.index.updateAssignThreadAllData(threadId, data);
         // 添加帖子到首页数据
         } else {
-          const { categoryids = [] } = this.props.index?.filter || {}
           const { categoryId = '' } = data
           // 首页如果是全部或者是当前分类，则执行数据添加操作
-          if (!categoryids.length || categoryids.indexOf(categoryId) !== -1) {
+          if (this.props.index.isNeedAddThread(categoryId)) {
             this.props.index.addThread(data);
           }
         }
@@ -525,7 +550,7 @@ class Index extends Component {
   render() {
     const { permissions } = this.props.user;
     const { categories } = this.props.index;
-    const { postData, setPostData, setCursorPosition } = this.props.threadPost;
+    const { postData, setPostData, setCursorPosition, navInfo } = this.props.threadPost;
     const { rewardQa, redpacket, video, product, position } = postData;
     const {
       isShowTitle,
@@ -537,23 +562,36 @@ class Index extends Component {
       showDraftOption,
       bottomHeight,
     } = this.state;
+    const navStyle = {
+      height: `${navInfo.navHeight}px`,
+      marginTop: `${navInfo.statusBarHeight}px`,
+    }
+    const contentStyle = {
+      marginTop: navInfo.statusBarHeight > 30 ? `${navInfo.navHeight / 2}px` : '0px',
+    }
     return (
       <>
         <View className={styles['container']}>
           {/* 自定义顶部导航条 */}
-          <View className={styles.topBar}>
-            <View className={styles['btn-back']} onClick={() => this.handlePageJump(false)}>
-              <Icon name="RightOutlined" />发帖
+          <View className={styles.topBar} style={navStyle}>
+            <Icon name="RightOutlined" onClick={() => this.handlePageJump(false)} />
+            <View className={styles['topBar-title']}>
+              发帖
             </View>
           </View>
 
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
-          <View className={styles['content']}>
+          <View className={styles['content']} style={contentStyle}>
             <Title
               value={postData.title}
               show={isShowTitle}
               onChange={this.onTitleChange}
               onBlur={this.hideKeyboard}
+              onFocus={() => {
+                this.setState({
+                  showEmoji: false
+                });
+              }}
             />
             <Content
               value={postData.contentText}
@@ -573,7 +611,21 @@ class Index extends Component {
 
               {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => setPostData({ product: {} })} />}
 
-              {video.thumbUrl && <Units type='video' deleteShow src={video.thumbUrl} onDelete={() => setPostData({ video: {} })} />}
+              {video.thumbUrl && (
+                <Units
+                  type='video'
+                  deleteShow
+                  src={video.thumbUrl}
+                  onDelete={() => setPostData({ video: {} })}
+                  onVideoLoaded={() => {
+                    Taro.pageScrollTo({
+                      scrollTop: 3000,
+                      // selector: '#thread-post-video',
+                      complete: (a,b,c) => {console.log(a,b,c)}
+                    });
+                  }}
+                />
+              )}
 
             </View>
           </View>
@@ -632,14 +684,21 @@ class Index extends Component {
             style={{ transform: `translateY(-${bottomHeight}px)`, bottom: bottomHeight ? 0 : '' }}
           >
             <PluginToolbar
+              operationType={operationType}
               isOpenQcloudVod={this.props.site.isOpenQcloudVod}
               permissions={permissions}
               clickCb={(item) => {
                 this.handlePluginClick(item);
               }}
-              onCategoryClick={() => this.setState({ showClassifyPopup: true })}
+              onCategoryClick={() => {
+                this.setState({
+                  showClassifyPopup: true,
+                  showEmoji: false
+                });
+              }}
             />
             <DefaultToolbar
+              operationType={operationType}
               permissions={permissions}
               onPluginClick={(item) => {
                 this.handlePluginClick(item);

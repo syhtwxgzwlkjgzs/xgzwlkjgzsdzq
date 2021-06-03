@@ -5,7 +5,8 @@ import styles from './index.module.scss';
 import Header from '@components/header';
 import InstantMessaging from '../instant-messaging';
 
-const Index = ({ dialogId, message, user, username }) => {
+const Index = ({ dialogId, site, message, user, username }) => {
+  const { isPC } = site;
   // const { readDialogMsgList, dialogMsgList, createDialogMsg } = message;
 
   // let timeoutId = null;
@@ -34,14 +35,20 @@ const Index = ({ dialogId, message, user, username }) => {
   //   ownedBy: user.id === item.userId ? 'myself' : 'itself',
   // })).reverse(), [dialogMsgList]);
 
-
+  const messageHeader = (
+    <div className={styles['pc-header']}>
+      <div className={styles['pc-header__inner']}>
+        {username}
+      </div>
+    </div>
+  );
 
   return (
     <div className={styles.wrapper}>
-      <Header />
+      {isPC ? messageHeader : <Header />}
       <InstantMessaging dialogId={dialogId} username={username} />
     </div>
   );
 };
 
-export default inject('message', 'user')(observer(Index));
+export default inject('message', 'user', 'site')(observer(Index));

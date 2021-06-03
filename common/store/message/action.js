@@ -10,10 +10,10 @@ class MessageAction extends MessageStore {
     const { code, data } = ret;
     if (code === 0) {
       const { unreadNotifications, typeUnreadNotifications } = data;
-      const { questioned = 0, receiveredpacket = 0, related = 0, replied = 0, system = 0, withdrawal = 0, liked = 0, rewarded = 0, threadrewarded = 0 } = typeUnreadNotifications;
+      const { threadrewardedexpired = 0, receiveredpacket = 0, related = 0, replied = 0, system = 0, withdrawal = 0, liked = 0, rewarded = 0, threadrewarded = 0 } = typeUnreadNotifications;
       this.totalUnread = unreadNotifications;
       this.threadUnread = system;
-      this.financialUnread = questioned + receiveredpacket + withdrawal + rewarded + threadrewarded;
+      this.financialUnread = threadrewardedexpired + receiveredpacket + withdrawal + rewarded + threadrewarded;
       this.accountUnread = related + replied + liked;
       this.atUnread = related;
       this.replyUnread = replied;
@@ -87,7 +87,7 @@ class MessageAction extends MessageStore {
   // 获取财务消息
   @action.bound
   async readFinancialMsgList(page = 1) {
-    const ret = await readMsgList(this.assemblyParams(page, 'rewarded,questioned,threadrewarded,receiveredpacket,withdrawal'));
+    const ret = await readMsgList(this.assemblyParams(page, 'rewarded,threadrewardedexpired,threadrewarded,receiveredpacket,withdrawal'));
     this.setMsgList(page, 'financialMsgList', ret);
   }
   // 获取帖子通知

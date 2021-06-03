@@ -17,15 +17,18 @@
       font-size: $font-size-middle-extra !important;
     }
     .left{
-      font-size: $font-size-base;
+      font-size: $font-size-middle;
       line-height: $font-line-height-base;
       color: $white;
       display: flex;
       align-items: center;
       flex-direction: row;
       :global(.dzq-icon){
-        font-size: $font-size-base !important;
+        font-size: $font-size-middle-extra !important;
         margin-right: $margin-2n;
+        margin-left: -$margin-2n;
+        margin-top: -$margin-2n;
+        font-weight: bold;
       }
     }
     .goback{
@@ -34,12 +37,16 @@
   }
   .logoBox {
     margin-top: 58px;
-    max-height: 40px;
+    max-height: 50px;
     overflow: hidden;
     .logo {
       display: block;
       max-height: 40px;
       margin: 0 auto;
+    }
+    .join-logo {
+      max-height: 45px;
+      transform: scale(1.65);
     }
   }
   .digest{
@@ -100,6 +107,12 @@
       box-sizing: border-box;
     }
   }
+  .joinInfo {
+    justify-content: center;
+    .item {
+      padding: 0 $padding-2n;
+    }
+  }
 }
 .container_mode_login {
   height: 128px;
@@ -110,4 +123,7 @@
 
 .topBarForMini {
   height: 44px;
+}
+.hide_logo {
+  height: 40px;
 }

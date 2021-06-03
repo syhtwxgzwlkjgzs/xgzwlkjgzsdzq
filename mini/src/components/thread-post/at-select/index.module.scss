@@ -16,6 +16,7 @@
   align-items: stretch;
   height: 100vh;
   background: $body-bg-color;
+  width: 100%;
 
   .header {
     @include flex();
@@ -80,6 +81,9 @@
   .check-box {
     flex: 1;
     overflow: hidden;
+    .list {
+      height: 100%;
+    }
   }
 
   .at-item {

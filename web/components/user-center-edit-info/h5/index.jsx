@@ -6,6 +6,7 @@ import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import throttle from '@common/utils/thottle.js';
+
 @inject('site')
 @inject('user')
 @observer
@@ -101,6 +102,10 @@ class index extends Component {
   }, 300);
 
   handleGoToEditMobile = () => {
+    if (!this.user.mobile) {
+      Router.push({ url: '/user/bind-phone' });
+      return;
+    }
     Router.push({ url: '/my/edit/mobile' });
   };
 
@@ -154,7 +159,7 @@ class index extends Component {
                 <label>手机号码</label>
               </div>
               <div className={styles.userCenterEditValue} onClick={this.handleGoToEditMobile}>
-                <div className={styles.ucText}>{this.user.mobile}</div>
+                <div className={styles.ucText}>{this.user.mobile || '去绑定'}</div>
                 <Icon name="RightOutlined" />
               </div>
             </div>

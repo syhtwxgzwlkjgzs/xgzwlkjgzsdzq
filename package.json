@@ -23,6 +23,7 @@
   "author": "Discuz-FE",
   "license": "MIT",
   "dependencies": {
+    "date-fns": "^2.22.1",
     "eventemitter3": "^4.0.7"
   },
   "devDependencies": {

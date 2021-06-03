@@ -92,6 +92,10 @@ class AtSelect extends Component {
 
   // 取消选择
   handleCancel = () => {
+    if (typeof this.props.onCancel === 'function') {
+      this.props.onCancel();
+      return;
+    }
     Taro.navigateBack();
   };
 
@@ -100,6 +104,11 @@ class AtSelect extends Component {
     const { checkUser } = this.state;
     // 未选@人，不操作
     if (checkUser.length === 0) return;
+
+    // 外部选择事件
+    if (typeof this.props.getAtList === 'function') {
+      this.props.getAtList(checkUser);
+    }
 
     // 处理已选@ren，更新store
     const { postData: { contentText: text }, setPostData, cursorPosition, setCursorPosition } = this.props.threadPost;
@@ -121,7 +130,7 @@ class AtSelect extends Component {
   formatData = (item) => {
     const isFollow = this.state.keywords === '';
     const avatar = isFollow ? item?.user?.avatar : item.avatar;
-    const username = isFollow ? item?.user?.userName : item.nickname;
+    const username = isFollow ? item?.user?.userName : item.username;
     const groupName = isFollow ? item?.group?.groupName : item.groupName;
     const userId = isFollow ? item.user?.pid : item.userId;
     return { avatar, username, groupName, userId };
@@ -193,9 +202,10 @@ class AtSelect extends Component {
           onChange={val => this.setState({ checkUser: val })}
         >
           <List
-            height={'calc(100vh - 120px)'}
+            className={styles.list}
             noMore={finish}
             onRefresh={this.onScrollBottom}
+            hasOnScrollToLower={true}
           >
             {this.renderItem()}
           </List>

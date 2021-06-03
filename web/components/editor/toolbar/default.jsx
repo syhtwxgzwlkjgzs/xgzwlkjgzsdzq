@@ -35,7 +35,7 @@ export default function DefaultToolbar(props) {
   const getIconCls = (item) => {
     const cls = styles['dvditor-toolbar__item'];
     const activeCls = `${styles['dvditor-toolbar__item']} ${styles.active}`;
-    if (item.type === currentAction) return activeCls;
+    if (item.type === currentAction || item.id === currentAction) return activeCls;
     const { postData } = props;
     if (item.type === THREAD_TYPE.file && Object.values(postData?.files || []).length > 0) return activeCls;
     if (item.type === THREAD_TYPE.redPacket && postData?.redpacket?.price) return activeCls;

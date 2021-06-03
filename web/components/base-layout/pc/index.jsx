@@ -1,12 +1,10 @@
-import React,  { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { inject, observer } from 'mobx-react';
+import React,  { useCallback, useEffect, useImperativeHandle, useRef, useState, forwardRef } from 'react';
 import { Flex } from '@discuzq/design';
 import Header from '@components/header';
-import List from '@components/list'
+import List from '@components/list';
 import RefreshView from '@components/list/RefreshView';
 import ErrorView from '@components/list/ErrorView';
-import { noop } from '@components/thread/utils'
-import { throttle } from '@common/utils/throttle-debounce.js'
+import { noop } from '@components/thread/utils';
 
 import styles from './index.module.scss';
 /**
@@ -17,7 +15,7 @@ import styles from './index.module.scss';
 * @prop {function} right 内容区域右部视图组件
 * @prop {function} footer 底部视图组件
 * @prop other List Props // List组件所有的属性
-* @example 
+* @example
 *     <BaseLayout
         left={(props) => <div>左边</div>}
         right={(props) => <div>右边</div>}
@@ -28,7 +26,7 @@ import styles from './index.module.scss';
 
 const baseLayoutWhiteList = ['home', 'search'];
 
-const BaseLayout = (props) => {
+const BaseLayout = forwardRef((props, ref) => {
   const {
     header = null,
     left = null,
@@ -39,25 +37,32 @@ const BaseLayout = (props) => {
     noMore = false,
     onRefresh,
     pageName = '',
-    jumpTo = -1,
     onScroll = noop,
-    baselayout,
-    quickScroll = false,
-    immediateCheck=false
+    immediateCheck=false,
+    requestError=false,
+    errorText='',
+    rightClass = '',
   } = props;
 
   const listRef = useRef(null);
-  const [isError, setIsError] = useState(false)
+  const [isError, setIsError] = useState(false);
 
   const debounce = (fn, wait) => {
     let timer = null;
     return () => {
-      if(timer !== null){
+      if (timer !== null) {
         clearTimeout(timer);
       }
       timer = setTimeout(fn, wait);
-    }
-  }
+    };
+  };
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      listRef,
+    }),
+  );
 
   // const updateSize = debounce(() => {
   //   if (window) {
@@ -73,38 +78,12 @@ const BaseLayout = (props) => {
     //       window.removeEventListener('resize', updateSize);
     //   };
     // }
-    if (listRef?.current && pageName) {
-      if(jumpTo > 0) {
-        baselayout[pageName] = jumpTo;
-        listRef.current.jumpToScrollTop(jumpTo);
-      } else if (baselayout[pageName] > 0 &&
-          baseLayoutWhiteList.indexOf(pageName) !== -1) {
-        listRef.current.jumpToScrollTop(baselayout[pageName]);
-      }
-    }
-  }, [jumpTo]);
+  }, []);
 
   // list组件，接口请求出错回调
   const onError = () => {
-    setIsError(true)
-  }
-
-  const quickScrolling = ({ scrollTop = 0 } = {}) => {
-    if (!listRef?.current?.currentScrollTop) {
-      onScroll();
-      return;
-    }
-
-    if(baselayout.isJumpingToTop) {
-      baselayout.removeJumpingToTop();
-      listRef.current.onBackTop();
-    } else {
-      if(scrollTop && pageName) baselayout[pageName] = scrollTop;
-    }
-    onScroll({ scrollTop: scrollTop });
-  }
-
-  const handleScroll = quickScroll ? quickScrolling : throttle(quickScrolling, 50);
+    setIsError(true);
+  };
 
   let cls = styles['col-1'];
   if (left || right) {
@@ -152,6 +131,6 @@ const BaseLayout = (props) => {
       {typeof(footer) === 'function' ? footer({ ...props }) : footer}
     </div>
   );
-};
+});
 
-export default inject('baselayout')(observer(BaseLayout));
+export default BaseLayout;

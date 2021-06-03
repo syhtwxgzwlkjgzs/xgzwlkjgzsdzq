@@ -89,8 +89,6 @@ class IndexH5Page extends React.Component {
       })
     }
 
-    this.props.baselayout.setJumpingToTop();
-
     const newFilter = { ...this.state.filter, categoryids: newCategoryIds, sequence: id === 'default' ? 1 : 0, }
 
     dispatch('click-filter', newFilter);
@@ -254,6 +252,7 @@ class IndexH5Page extends React.Component {
         preload={1000}
         onClickTabBar={this.onClickTabBar}
         requestError={this.props.isError}
+        errorText={this.props.errorText}
       >
         <HomeHeader ref={this.headerRef} />
 
