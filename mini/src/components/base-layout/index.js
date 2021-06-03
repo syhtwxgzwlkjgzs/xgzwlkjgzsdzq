@@ -62,6 +62,7 @@ const BaseLayout = (props) => {
 
     const { baselayout } = props;
     const playingVideoDom = baselayout.playingVideoDom;
+    const playingAudioDom = baselayout.playingAudioDom;
 
     Taro.getSystemInfo({
       success(res) {
@@ -77,9 +78,19 @@ const BaseLayout = (props) => {
           }).exec();
         }
 
+        if(playingAudioDom) {
+          Taro.createSelectorQuery()
+            .select(`#${baselayout?.playingAudioWrapperId}`)
+            .boundingClientRect((rect) => {
+            if(rect.top > res.windowHeight || rect.bottom < 0) {
+              baselayout.playingAudioDom.pause();
+              baselayout.playingAudioDom = null;
+            }
+          }).exec();
+        }
+
       }
     });
-    
 
   }
 

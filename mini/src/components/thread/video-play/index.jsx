@@ -42,16 +42,23 @@ const Index = ({
 
   const onPlay = (e) => {
     if(baselayout) {
+
+      // 暂停之前正在播放的视频
       if(baselayout.playingVideoDom) {
-        Taro.createVideoContext(baselayout.playingVideoDom)?.pause(); // 暂停之前正在播放的音频
+        Taro.createVideoContext(baselayout.playingVideoDom)?.pause();
       }
-  
-      Taro.createSelectorQuery()
-        .select(`#${e.target.id}`)
-        .boundingClientRect((rect) => { 
-          baselayout.playingVideoDom = e.target.id;
-          baselayout.playingVideoPos = rect.top;
-        }).exec();
+
+       // 暂停之前正在播放的音频
+      if (baselayout.playingAudioDom) {
+        baselayout.playingAudioDom.pause();
+      }
+
+      if (baselayout.playingAudioDom) {
+        baselayout.playingAudioDom.pause();
+      }
+
+      baselayout.playingVideoDom = e.target.id;
+
     }
   }
 

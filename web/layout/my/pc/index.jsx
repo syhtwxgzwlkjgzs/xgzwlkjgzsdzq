@@ -106,9 +106,9 @@ class PCMyPage extends React.Component {
           </div>
         </SidebarPanel>
 
-        <UserCenterFansPc id={this.props.user.id} />
+        <UserCenterFansPc userId={this.props.user.id} />
 
-        <UserCenterFollowsPc id={this.props.user.id} />
+        <UserCenterFollowsPc userId={this.props.user.id} />
         <Copyright />
       </>
     );

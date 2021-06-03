@@ -33,15 +33,14 @@ class SearchResultPostH5Page extends React.Component {
         title="热门内容" 
         type='normal'
         isShowMore={false}
+        isLoading={!pageData}
         noData={!pageData?.length}
         icon={{ type: 3, name: 'HotOutlined' }}
+        mold='plane'
       >
         {
           pageData?.map((item, index) => (
-            <div>
-                <ThreadContent className={styles.wrapper} showBottom={false} data={item} key={index} />
-                <div className={styles.hr}></div>
-            </div>
+            <ThreadContent className={index ===0 && styles.borderRadius} showBottom={false} data={item} key={index} />
           ))
         }
       </SidebarPanel>
@@ -68,6 +67,7 @@ class SearchResultPostH5Page extends React.Component {
         noMore={currentPage >= totalPage}
         onRefresh={this.fetchMoreData}
         showRefresh={false}
+        isShowLayoutRefresh={!!pageData?.length}
       >
         { this.renderContent(pageData) }
       </BaseLayout>
