@@ -2,7 +2,7 @@ import { observable, action, computed } from 'mobx';
 import { smsSend, smsLogin } from '@server';
 import { get } from '../../utils/get';
 import setAccessToken from '../../utils/set-access-token';
-import { checkUserStatus, toTCaptcha } from '@common/store/login/util';
+import { checkUserStatus } from '@common/store/login/util';
 
 export const MOBILE_LOGIN_STORE_ERRORS = {
   MOBILE_VERIFY_ERROR: {

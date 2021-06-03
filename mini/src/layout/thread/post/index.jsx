@@ -89,10 +89,6 @@ class Index extends Component {
     this.props.threadPost.setNavInfo({ statusBarHeight, navHeight, menubtnWidth: width })
   }
 
-  componentDidShow() { }
-
-  componentDidHide() { }
-
   // handle
   postToast = (title, icon = 'none', duration = 2000) => { // toast
     Taro.showToast({ title, icon, duration });
@@ -133,7 +129,7 @@ class Index extends Component {
       this.setCategory(categoryId);
       const { content: { text } } = ret.data;
       // 小程序编辑帖子，要把内容中的img标签去掉。/todo: 防止把其他有效的img标签也去掉
-      const realText = text.replace(/<img.*?alt="(\w+)".*?>/g, `:$1:`);
+      const realText = text.replace(/<img.*?alt="(\w+)".*?>/g, `:$1:`).replace(/<span.*?>(.*?)<\/span>/g, `$1`);
       ret.data.content.text = realText;
       threadPost.formatThreadDetailToPostData(ret.data);
       this.setState({ postType: isDraft === 1 ? 'isDraft' : 'isEdit' });
@@ -468,10 +464,9 @@ class Index extends Component {
           this.props.index.updateAssignThreadAllData(threadId, data);
         // 添加帖子到首页数据
         } else {
-          const { categoryids = [] } = this.props.index?.filter || {}
           const { categoryId = '' } = data
           // 首页如果是全部或者是当前分类，则执行数据添加操作
-          if (!categoryids.length || categoryids.indexOf(categoryId) !== -1) {
+          if (this.props.index.isNeedAddThread(categoryId)) {
             this.props.index.addThread(data);
           }
         }
