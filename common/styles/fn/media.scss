@@ -1,0 +1,21 @@
+$s-pc: 800px;
+$l-pc: 1080px;
+$xl-pc: 1420px;
+
+@mixin media($devices){
+    @if $devices == s-pc{
+        @media only screen and (min-width: $s-pc) and (max-width: $l-pc){
+            @content;
+        }
+    }
+    @else if $devices == l-pc{
+        @media only screen and (min-width: $l-pc) and (max-width: $xl-pc){
+            @content;
+        }
+    }
+    @else if $devices == xl-pc{
+        @media only screen and (min-width: $xl-pc){
+            @content;
+        }
+    }
+}
