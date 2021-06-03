@@ -1,6 +1,7 @@
 @import '@common/styles/index.scss';
 .container {
   width: 100vw;
+  height: 100vh;
   background-color: $comment-bg-color;
   overflow: hidden;
   display: flex;
@@ -16,15 +17,28 @@
   }
 }
 
-.body {
+.bodyPaddingTop20 {
   padding-top: rem(20);
+}
+
+.bodyPadding20 {
+  padding-top: rem(20);
+  padding-bottom: rem(20);
+}
+
+.body {
+  box-sizing: border-box;
+  // padding: rem(20) 0;
   width: 100%;
   flex: 1;
   display: flex;
   justify-content: center;
-  overflow-y: scroll;
+  overflow-y: hidden;
 
   .bodyLeft {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     box-sizing: border-box;
     width: rem(750);
     margin-right: rem($margin-5n);
@@ -32,20 +46,19 @@
     background: var(--color-white);
 
     .header {
-      font-family: "PingFang SC";
+      height: rem(70);
       font-weight: 600;
       font-size: rem($font-size-primary);
       text-align: left;
       color: var(--color-text-primary);
-      padding: rem($padding-5n) 0;
       border-bottom: var(--border-border);
     }
 
     .choice {
+      height: rem(76);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: rem($padding-4n) 0 rem($padding-6n);
       .choiceLeft {
         display: flex;
         justify-content: start;
@@ -79,11 +92,14 @@
       }
 
       .recordNumber {
-        font-family: 'PingFang SC';
         font-weight: normal;
         font-size: rem($font-size-label);
         color: #4f5a70;
       }
+    }
+
+    .recordList {
+      flex: 1;
     }
   }
 

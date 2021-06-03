@@ -30,7 +30,7 @@ class Index extends React.Component {
     const { list, currentPage, totalPage, totalCount } = threadMsgList;
 
     return (
-      <div className={`${styles.wrapper} ${isPC ? styles.pc : ""}`}>
+      <div className={`${styles.wrapper} ${isPC ? styles.pc : styles.mobile}`}>
         <Notice
           infoIdx={1}
           totalCount={totalCount}

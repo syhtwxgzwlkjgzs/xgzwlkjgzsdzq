@@ -25,6 +25,7 @@ class PCMyPage extends React.Component {
     this.state = {
       showFansPopup: false, // 是否弹出粉丝框
       showFollowPopup: false, // 是否弹出关注框
+      fetchUserInfoLoading: true
     };
   }
 
@@ -56,6 +57,9 @@ class PCMyPage extends React.Component {
     if (String(this.targetUserId) === String(query.id)) return;
     this.targetUserId = query.id;
     if (query.id) {
+      this.setState({
+        fetchUserInfoLoading: true,
+      });
       this.props.user.removeTargetUserInfo();
       await this.props.user.getTargetUserInfo(query.id);
       await this.fetchTargetUserThreads();
@@ -110,6 +114,7 @@ class PCMyPage extends React.Component {
   };
 
   renderContent = () => {
+    const { fetchUserInfoLoading } = this.state
     const { user } = this.props;
     const { targetUserThreads, targetUserThreadsTotalCount, targetUserThreadsPage, targetUserThreadsTotalPage } = user;
     return (
@@ -119,7 +124,7 @@ class PCMyPage extends React.Component {
           type="normal"
           bigSize={true}
           isShowMore={false}
-          isLoading={!targetUserThreads}
+          isLoading={fetchUserInfoLoading}
           leftNum={`${targetUserThreadsTotalCount}个主题`}
           noData={!this.formatUserThreadsData(targetUserThreads)?.length}
         >
@@ -133,6 +138,7 @@ class PCMyPage extends React.Component {
   };
 
   render() {
+    const { fetchUserInfoLoading } = this.state
     const { user } = this.props;
     const { targetUserThreadsPage, targetUserThreadsTotalPage, targetUserThreads } = user;
     return (
@@ -146,7 +152,7 @@ class PCMyPage extends React.Component {
           onSearch={this.onSearch}
           right={this.renderRight}
           immediateCheck={true}
-          showLayoutRefresh={!!this.formatUserThreadsData(targetUserThreads)?.length}
+          showLayoutRefresh={!!this.formatUserThreadsData(targetUserThreads)?.length && !fetchUserInfoLoading}
         >
           {this.renderContent()}
         </UserBaseLaout>
