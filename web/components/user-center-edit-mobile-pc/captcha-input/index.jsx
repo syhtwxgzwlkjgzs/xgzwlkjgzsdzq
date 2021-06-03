@@ -8,6 +8,10 @@ class CaptchaInput extends Component {
     };
   }
 
+  static defaultProps = {
+    visible: true
+  }
+
   validateTel = value => (/^[1][3-9]\d{9}$/.test(value))
 
   componentDidMount() {

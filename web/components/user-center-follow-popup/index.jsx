@@ -12,7 +12,19 @@ import ReactDOM from 'react-dom';
  * @prop {function} onClose 弹框关闭事件
  */
 const Index = (props) => {
-  const { visible = false, onClose = noop, isOtherFans = false, id, title = '关注' } = props;
+  const {
+    visible = false,
+    onClose = noop,
+    isOtherFans = false,
+    id,
+    title = '关注',
+    dataSource,
+    setDataSource,
+    sourcePage,
+    updateSourcePage,
+    sourceTotalPage,
+    updateSourceTotalPage,
+  } = props;
   const onContainerClick = ({ id }) => {
     Router.push({ url: `/user/${id}` });
   };
@@ -40,6 +52,12 @@ const Index = (props) => {
               style={{
                 height: 'calc(100% - 60px)',
               }}
+              dataSource={dataSource}
+              setDataSource={setDataSource}
+              sourcePage={sourcePage}
+              updateSourcePage={updateSourcePage}
+              sourceTotalPage={sourceTotalPage}
+              updateSourceTotalPage={updateSourceTotalPage}
               onContainerClick={onContainerClick}
               splitElement={splitElement}
             />
@@ -49,6 +67,12 @@ const Index = (props) => {
                 height: 'calc(100% - 60px)',
               }}
               userId={id}
+              dataSource={dataSource}
+              setDataSource={setDataSource}
+              sourcePage={sourcePage}
+              updateSourcePage={updateSourcePage}
+              sourceTotalPage={sourceTotalPage}
+              updateSourceTotalPage={updateSourceTotalPage}
               onContainerClick={onContainerClick}
               splitElement={splitElement}
             />

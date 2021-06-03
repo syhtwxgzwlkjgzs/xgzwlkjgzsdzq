@@ -29,10 +29,13 @@ class PCMyPage extends React.Component {
     this.state = {
       showFansPopup: false, // 是否弹出粉丝框
       showFollowPopup: false, // 是否弹出关注框
+      isLoading: true
     };
   }
   async componentDidMount() {
     await this.props.user.getUserThreads();
+
+    this.setState({ isLoading: false })
   }
 
   loginOut() {
@@ -112,6 +115,7 @@ class PCMyPage extends React.Component {
   };
 
   renderContent = () => {
+    const { isLoading } = this.state
     const { user } = this.props;
     const { userThreads, userThreadsTotalCount } = user;
     const formattedUserThreads = this.formatUserThreadsData(userThreads);
@@ -130,7 +134,7 @@ class PCMyPage extends React.Component {
           type='normal'
           isShowMore={false}
           noData={!formattedUserThreads?.length}
-          isLoading={!formattedUserThreads}
+          isLoading={isLoading}
           leftNum={`${userThreadsTotalCount}个主题`}
           mold='plane'
         >
@@ -141,8 +145,10 @@ class PCMyPage extends React.Component {
   };
 
   render() {
+    const { isLoading } = this.state
     const { user } = this.props;
     const { userThreadsPage, userThreadsTotalPage, getUserThreads, userThreads } = user;
+    const formattedUserThreads = this.formatUserThreadsData(userThreads);
 
     // store中，userThreadsPage会比真实页数多1
     let currentPageNum = userThreadsPage;
@@ -159,6 +165,7 @@ class PCMyPage extends React.Component {
           immediateCheck={false}
           noMore={userThreadsTotalPage <= currentPageNum}
           onRefresh={getUserThreads}
+          showLayoutRefresh={!isLoading && !!formattedUserThreads?.length}
         >
           {this.renderContent()}
         </BaseLayout>

@@ -81,9 +81,7 @@ class UserCenterFans extends React.Component {
     newFans[this.page] = pageData;
 
     if (this.props.setDataSource) {
-      this.props.setDataSource({
-        fans: newFans,
-      });
+      this.props.setDataSource(newFans);
     }
     this.setState({
       fans: newFans,
@@ -98,7 +96,7 @@ class UserCenterFans extends React.Component {
   };
 
   setFansBeFollowed({ id, isMutual }) {
-    const targetFans = deepClone(this.state.fans);
+    const targetFans = deepClone(this.props.dataSource || this.state.fans);
     Object.keys(targetFans).forEach((key) => {
       targetFans[key].forEach((user) => {
         if (get(user, 'user.pid') !== id) return;
@@ -107,9 +105,7 @@ class UserCenterFans extends React.Component {
       });
     });
     if (this.props.setDataSource) {
-      this.props.setDataSource({
-        fans: targetFans,
-      });
+      this.props.setDataSource(targetFans);
     }
     this.setState({
       fans: targetFans,
@@ -117,7 +113,7 @@ class UserCenterFans extends React.Component {
   }
 
   setFansBeUnFollowed(id) {
-    const targetFans = deepClone(this.state.fans);
+    const targetFans = deepClone(this.props.dataSource || this.state.fans);
     Object.keys(targetFans).forEach((key) => {
       targetFans[key].forEach((user) => {
         if (get(user, 'user.pid') !== id) return;
@@ -125,9 +121,7 @@ class UserCenterFans extends React.Component {
       });
     });
     if (this.props.setDataSource) {
-      this.props.setDataSource({
-        fans: targetFans,
-      });
+      this.props.setDataSource(targetFans);
     }
     this.setState({
       fans: targetFans,
@@ -186,6 +180,9 @@ class UserCenterFans extends React.Component {
     if (prevProps.userId !== this.props.userId) {
       this.page = 1;
       this.totalPage = 1;
+      if (this.props.setDataSource) {
+        this.props.setDataSource({});
+      }
       this.setState({
         fans: {},
       });
@@ -242,7 +239,8 @@ class UserCenterFans extends React.Component {
   };
 
   render() {
-    const isNoData = followerAdapter((this.props.dataSource && this.props.dataSource.fans) || this.state.fans).length === 0
+
+    const isNoData = followerAdapter((this.props.dataSource) || this.state.fans).length === 0
       && !this.state.loading;
 
     return (
@@ -255,7 +253,7 @@ class UserCenterFans extends React.Component {
           ...this.props.styles,
         }}
       >
-        {followerAdapter((this.props.dataSource && this.props.dataSource.fans) || this.state.fans).map((user, index) => {
+        {followerAdapter((this.props.dataSource) || this.state.fans).map((user, index) => {
           if (index + 1 > this.props.limit) return null;
           return (
               <div key={user.id}>

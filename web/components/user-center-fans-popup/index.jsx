@@ -12,11 +12,18 @@ import ReactDOM from 'react-dom';
  * @prop {function} onClose 弹框关闭事件
  */
 const Index = (props) => {
-  const { visible = false, onClose = noop, isOtherFans = false, id } = props;
-
-  const [dataSource, setDataSource] = React.useState({});
-  const [sourcePage, updateSourcePage] = React.useState(1);
-  const [sourceTotalPage, updateSourceTotalPage] = React.useState(1);
+  const {
+    visible = false,
+    onClose = noop,
+    isOtherFans = false,
+    id,
+    dataSource,
+    setDataSource,
+    sourcePage,
+    updateSourcePage,
+    sourceTotalPage,
+    updateSourceTotalPage,
+  } = props;
 
   const onContainerClick = ({ id }) => {
     Router.push({ url: `/user/${id}` });
