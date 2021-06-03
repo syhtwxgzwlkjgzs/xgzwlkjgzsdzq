@@ -57,6 +57,9 @@ class PCMyPage extends React.Component {
     if (String(this.targetUserId) === String(query.id)) return;
     this.targetUserId = query.id;
     if (query.id) {
+      this.setState({
+        fetchUserInfoLoading: true,
+      });
       this.props.user.removeTargetUserInfo();
       await this.props.user.getTargetUserInfo(query.id);
       await this.fetchTargetUserThreads();
