@@ -7,6 +7,7 @@ import CommentPCPage from '@layout/thread/comment/pc';
 import ErrorPCPage from '@layout/error/pc';
 import ErrorH5Page from '@layout/error/h5';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import Router from '@discuzq/sdk/dist/router';
 
 @inject('site')
 @inject('comment')
@@ -38,6 +39,7 @@ class CommentDetail extends React.Component {
 
     this.state = {
       isServerError: false,
+      serverErrorMsg: '',
     };
   }
 
@@ -57,7 +59,21 @@ class CommentDetail extends React.Component {
 
     if (!this.props.serverData && id) {
       const res = await this.props.comment.fetchCommentDetail(id);
+      console.log(res);
+      // 异常处理
       if (res.code !== 0) {
+        // 404
+        if (res.code === -4004) {
+          Router.replace({ url: '/404' });
+          return;
+        }
+
+        if (res.code > -5000 && res.code < -4000) {
+          this.setState({
+            serverErrorMsg: res.msg,
+          });
+        }
+
         this.setState({
           isServerError: true,
         });
@@ -78,7 +94,11 @@ class CommentDetail extends React.Component {
     const { site } = this.props;
     const { platform } = site;
     if (this.state.isServerError) {
-      return platform === 'h5' ? <ErrorH5Page /> : <ErrorPCPage />;
+      return platform === 'h5' ? (
+        <ErrorH5Page text={this.state.serverErrorMsg} />
+      ) : (
+        <ErrorPCPage text={this.state.serverErrorMsg} />
+      );
     }
     return platform === 'h5' ? <CommentH5Page /> : <CommentPCPage />;
   }

@@ -12,8 +12,8 @@
       border: none;
       border-radius: rem($border-radius-small) rem($border-radius-small) 0 0;
       .dzq-textarea__inner {
-        padding: rem($padding-4n) rem($padding-4n) rem($padding-4n) rem($padding-4n);
-        font-size: rem($font-size-primary);
+        padding: rem($padding-3n) rem($padding-4n);
+        font-size: rem($font-size-middle);
         background-color: $comment-bg-color;
         resize: none;
       }
@@ -58,7 +58,7 @@
     color: #8a95ac;
     .btnIcon {
       line-height: rem(52);
-      padding: 0 rem($padding-2n);
+      padding-right: rem($padding-6n);
     }
   }
 
@@ -71,7 +71,30 @@
   }
 }
 
-
 .actived {
   color: $primary-color;
+}
+
+.divider {
+  margin: 0;
+}
+
+.imageUpload {
+  padding: rem($padding-4n) rem($padding-4n) rem($padding-3n);
+  
+  :global {
+    .dzq-upload.is-card {
+      padding: 0;
+    }
+    .dzq-upload__area,
+    .dzq-upload-list-card__item {
+      width: rem(109) !important;
+      height: rem(109) !important;
+      margin: 0 rem(8) rem(8) 0;
+    }
+  }
+}
+
+.disabled {
+  color: $disabled-color;
 }
