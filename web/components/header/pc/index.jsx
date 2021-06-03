@@ -102,9 +102,9 @@ class Header extends React.Component {
               </Dropdown.Item>
             </Dropdown.Menu>
           }
-          placement="left"
+          placement="right"
           hideOnClick={true}
-          trigger="hover"
+          trigger="click"
           onChange={this.dropdownActionImpl}
         >
           <div className={styles.userInfo}>
@@ -152,7 +152,6 @@ class Header extends React.Component {
               <div className={styles.inputBox}>
                 <Input
                   placeholder="搜索"
-                  style={{ width: '580px' }}
                   icon="SearchOutlined"
                   value={this.state.value}
                   onEnter={this.handleSearch}
@@ -171,7 +170,7 @@ class Header extends React.Component {
                     name="HomeOutlined"
                     size={15}
                   />
-                  <p>首页</p>
+                  <p className={styles.iconText}>首页</p>
                 </div>
                 <div className={styles.iconItem} onClick={() => this.handleRouter('/message')}>
                   <Icon
@@ -181,7 +180,7 @@ class Header extends React.Component {
                     name="MailOutlined"
                     size={17}
                   />
-                  <p>消息</p>
+                  <p className={styles.iconText}>消息</p>
                 </div>
                 <div className={styles.iconItem} onClick={() => this.handleRouter('/search')}>
                   <Icon
@@ -191,7 +190,7 @@ class Header extends React.Component {
                     name="FindOutlined"
                     size={17}
                   />
-                  <p>发现</p>
+                  <p className={styles.iconText}>发现</p>
                 </div>
               </div>
               <div className={styles.border}></div>

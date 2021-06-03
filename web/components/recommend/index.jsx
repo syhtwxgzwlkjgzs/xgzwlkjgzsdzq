@@ -51,19 +51,31 @@ class Index extends React.Component {
                     <div className={style.browseCategory}>
                       {
                         item.displayTag?.isPrice
-                        && (<p className={style.categoryText}>付费</p>)
+                        && [
+                          <Tag key={`success-lg`} className={style.lg} type="success">付费</Tag>,
+                          <Tag key={`success-sm`} className={style.sm} type="success">付</Tag>
+                        ]
                       }
                       {
                         item.displayTag?.isEssence
-                        && (<p className={style.categoryEssence}>精华</p>)
+                        && [
+                          <Tag key={`orange-lg`} className={style.lg} type="orange">精华</Tag>,
+                          <Tag key={`orange-sm`} className={style.sm} type="orange">精</Tag>
+                        ]
                       }
                       {
                         item.displayTag?.isRedPack
-                        && (<p className={style.categoryRed}>红包</p>)
+                        && [
+                          <Tag key={`danger-lg`} className={style.lg} type="danger">红包</Tag>,
+                          <Tag key={`danger-sm`} className={style.sm} type="danger">红</Tag>
+                        ]
                       }
                       {
                         item.displayTag?.isReward
-                        && (<p className={style.categoryReward}>悬赏</p>)
+                        && [
+                          <Tag key={`warning-lg`} className={style.lg} type="warning">悬赏</Tag>,
+                          <Tag key={`warning-sm`} className={style.sm} type="warning">悬</Tag>
+                        ]
                       }
                     </div>
                   </div>
