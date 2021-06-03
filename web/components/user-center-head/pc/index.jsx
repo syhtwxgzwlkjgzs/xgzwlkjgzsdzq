@@ -35,7 +35,7 @@ class index extends Component {
     this.props.user
       .updateAvatar(fixedImg)
       .then((res) => {
-        const id = this.user.id;
+        const id = this.props.user.id;
         if (id === res.id && res.avatarUrl) {
           // this.user.editAvatarUrl = res.avatarUrl;
           Toast.success({
