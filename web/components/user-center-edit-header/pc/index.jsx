@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import UserCenterHeaderImage from '@components/user-center-header-images';
-import { Icon, Input } from '@discuzq/design';
+import { Icon, Input, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import { ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post';
 import { fixImageOrientation } from '@common/utils/exif';
@@ -15,6 +15,8 @@ export default class index extends Component {
     super(props);
     this.state = {
       isClickSignature: false,
+      isUploadAvatarUrl: false, // 是否上传头像
+      isUploadBackgroundUrl: false, // 是否上传背景图片
     };
     this.user = this.props.user || {};
   }
@@ -31,13 +33,70 @@ export default class index extends Component {
   };
 
   onAvatarChange = async (fileList) => {
+    this.setState({
+      isUploadAvatarUrl: true,
+    });
     let fixedImg = await fixImageOrientation(fileList.target.files[0]);
-    this.props.user.updateAvatar(fixedImg);
+    this.props.user
+      .updateAvatar(fixedImg)
+      .then((res) => {
+        const id = this.user.id;
+        if (id === res.id && res.avatarUrl) {
+          // this.user.editAvatarUrl = res.avatarUrl;
+          Toast.success({
+            content: '上传头像成功',
+            hasMask: false,
+            duration: 1000,
+          });
+          this.setState({
+            isUploadAvatarUrl: false,
+          });
+        }
+      })
+      .catch((err) => {
+        Toast.error({
+          content: err.Msg || '上传头像失败',
+          hasMask: false,
+          duration: 1000,
+        });
+        this.setState({
+          isUploadAvatarUrl: false,
+        });
+        // 上传失败 应该取之前用户的头像
+        // this.user.editAvatarUrl = this.user.avatarUrl;
+      });
   };
 
   onBackgroundChange = async (fileList) => {
+    this.setState({
+      isUploadBackgroundUrl: true,
+    });
     let fixedImg = await fixImageOrientation(fileList.target.files[0]);
-    this.props.user.updateBackground(fixedImg);
+    this.props.user
+      .updateBackground(fixedImg)
+      .then((res) => {
+        const id = this.user.id;
+        if (id === res.id && res.backgroundUrl) {
+          Toast.success({
+            content: '上传成功',
+            hasMask: false,
+            duration: 1000,
+          });
+          this.setState({
+            isUploadBackgroundUrl: false,
+          });
+        }
+      })
+      .catch((err) => {
+        Toast.error({
+          content: err.Msg || '上传背景图失败',
+          hasMask: false,
+          duration: 1000,
+        });
+        this.setState({
+          isUploadBackgroundUrl: false,
+        });
+      });
   };
 
   // 点击编辑签名
@@ -60,16 +119,28 @@ export default class index extends Component {
   };
 
   render() {
+    const { isUploadAvatarUrl, isUploadBackgroundUrl } = this.state
     return (
       <>
         <div className={styles.userCenterEditHeader}>
-          <UserCenterHeaderImage className={styles.userCenterEditHeaderImg} onClick={this.handleBackgroundUpload} />
-          <input
-            onChange={this.onBackgroundChange}
-            ref={this.backgroundUploaderRef}
-            type="file"
-            style={{ display: 'none' }}
-          />
+          <div className={styles.bgContent}>
+            <UserCenterHeaderImage className={styles.userCenterEditHeaderImg} onClick={this.handleBackgroundUpload} />
+            <input
+              onChange={this.onBackgroundChange}
+              ref={this.backgroundUploaderRef}
+              type="file"
+              style={{ display: 'none' }}
+            />
+            {/* 背景图加载状态 */}
+            {isUploadBackgroundUrl && (
+              <div className={styles.uploadBgUrl}>
+                <div className={styles.uploadCon}>
+                  <Icon name="UploadingOutlined" size={12} />
+                  <span className={styles.uploadText}>上传中...</span>
+                </div>
+              </div>
+            )}
+          </div>
           <div className={styles.headImgBox}>
             <Avatar image={this.user.avatarUrl} size="big" name={this.user.username} />
             {/* 相机图标 */}
@@ -84,6 +155,12 @@ export default class index extends Component {
                 accept={ACCEPT_IMAGE_TYPES.join(',')}
               />
             </div>
+            {isUploadAvatarUrl && (
+              <div className={styles.uploadAvatar}>
+                <Icon name="UploadingOutlined" size={12} />
+                <span className={styles.uploadText}>上传中...</span>
+              </div>
+            )}
           </div>
           {/* 上传封面图 */}
           <div className={styles.userCenterupload} onClick={this.handleBackgroundUpload}>
