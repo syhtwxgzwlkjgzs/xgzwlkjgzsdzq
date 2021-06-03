@@ -57,6 +57,7 @@ class Detail extends React.Component {
 
     this.state = {
       isServerError: false,
+      serverErrorMsg: '',
     };
 
     const { thread, serverThread } = this.props;
@@ -89,8 +90,19 @@ class Detail extends React.Component {
       this.props.thread.reset();
 
       const res = await this.props.thread.fetchThreadDetail(id);
-
       if (res.code !== 0) {
+        // 404
+        if (res.code === -4004) {
+          Router.replace({ url: '/404' });
+          return;
+        }
+
+        if (res.code > -5000 && res.code < -4000) {
+          this.setState({
+            serverErrorMsg: res.msg,
+          });
+        }
+
         this.setState({
           isServerError: true,
         });
@@ -142,7 +154,11 @@ class Detail extends React.Component {
     const { platform } = site;
 
     if (this.state.isServerError) {
-      return platform === 'h5' ? <ErrorH5Page /> : <ErrorPCPage />;
+      return platform === 'h5' ? (
+        <ErrorH5Page text={this.state.serverErrorMsg} />
+      ) : (
+        <ErrorPCPage text={this.state.serverErrorMsg} />
+      );
     }
 
     return platform === 'h5' ? <ThreadH5Page /> : <ThreadPCPage />;

@@ -299,19 +299,16 @@ class ThreadPCPage extends React.Component {
   };
 
   fetcher = () => {
-    switch (this.state.activeType) {
-      case 'income':
-        this.fetchIncomeDetail();
-        break;
-      case 'pay':
-        this.fetchExpendDetail();
-        break;
-      case 'withdrawal':
-        this.fetchCashDetail();
-        break;
-      case 'frozen':
-        this.fetchFreezeDetail();
-        break;
+    if (this.state.activeType === 'income') {
+      return this.fetchIncomeDetail();
+    } else if (this.state.activeType === 'pay') {
+      return this.fetchExpendDetail();
+    } else if (this.state.activeType === 'withdrawal') {
+      return this.fetchCashDetail();
+    } else if (this.state.activeType === 'frozen') {
+      return this.fetchFreezeDetail();
+    } else {
+      return Promise.reject('没有找到此类型')
     }
   };
 
@@ -323,13 +320,14 @@ class ThreadPCPage extends React.Component {
       frozen: '冻结金额',
     };
     const { walletInfo } = this.props.wallet;
-    const { activeType } = this.state;
+    const { activeType, totalPage } = this.state;
+
     return (
       <div className={layout.container}>
         <div className={layout.header}>
           <Header></Header>
         </div>
-        <div className={layout.body}>
+        <div className={`${layout.body} ${totalPage !== 1 ? layout.bodyPaddingTop20 : layout.bodyPadding20}`}>
           {/* 左边内容 */}
           <div className={layout.bodyLeft}>
             <div className={layout.header}>
@@ -378,14 +376,14 @@ class ThreadPCPage extends React.Component {
                 <div className={layout.recordNumber}>共有{this.state.totalCount}条记录</div>
               )}
             </div>
-            <div className={layout.recordList}>
-              <List
-                onRefresh={this.fetcher}
-                noMore={this.state.page > this.state.totalPage}
-              >
-                <RecordList data={this.getRecordData()} activeType={this.state.activeType}></RecordList>
-              </List>
-            </div>
+
+            <List
+              className={layout.recordList}
+              onRefresh={this.fetcher}
+              noMore={this.state.page > this.state.totalPage}
+            >
+              <RecordList data={this.getRecordData()} activeType={this.state.activeType}></RecordList>
+            </List>
           </div>
 
           {/* 右边信息 */}

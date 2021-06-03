@@ -1,6 +1,6 @@
 import React from 'react';
-import { getCurrentInstance } from '@tarojs/taro';
-import Taro from '@tarojs/taro';
+import Taro, { getCurrentInstance } from '@tarojs/taro';
+import Router from '@discuzq/sdk/dist/router';
 import Page from '@components/page';
 import { inject } from 'mobx-react';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
@@ -19,14 +19,8 @@ class Detail extends React.Component {
 
     this.state = {
       isServerError: false,
+      serverErrorMsg: '',
     };
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.router?.query?.id && this.props.router.query.id !== prevProps.router.query.id) {
-      this.props.thread.reset();
-      this.getPageDate(this.props.router.query.id);
-    }
   }
 
   async componentDidShow() {
@@ -48,6 +42,18 @@ class Detail extends React.Component {
       const res = await this.props.thread.fetchThreadDetail(id);
 
       if (res.code !== 0) {
+        // 404
+        if (res.code === -4004) {
+          Router.replace({ url: '/subPages/404/index' });
+          return;
+        }
+
+        if (res.code > -5000 && res.code < -4000) {
+          this.setState({
+            serverErrorMsg: res.msg,
+          });
+        }
+
         this.setState({
           isServerError: true,
         });
@@ -78,7 +84,7 @@ class Detail extends React.Component {
 
   render() {
     return this.state.isServerError ? (
-      <ErrorMiniPage />
+      <ErrorMiniPage text={this.state.serverErrorMsg}/>
     ) : (
       <Page>
         <MemoToastProvider>

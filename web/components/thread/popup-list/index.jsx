@@ -110,6 +110,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
   };
 
   const onUserClick = (userId = '') => {
+    onClose();
     router.push(`/user/${userId}`);
   };
 

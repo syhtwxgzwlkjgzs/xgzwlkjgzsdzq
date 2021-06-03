@@ -136,7 +136,7 @@ class Index extends Component {
     return (
       <div className={styles.wrapper} onClick={(e) => this.toDetailOrChat(e, item)}>
         {/* 默认block */}
-        <div className={styles.block}>
+        <div className={isPC ? styles['block-pc'] : styles.block}>
           {/* 头像 */}
           <div className={styles.avatar} onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}>
             <Badge

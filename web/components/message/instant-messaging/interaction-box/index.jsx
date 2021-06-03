@@ -11,7 +11,7 @@ import styles from './index.module.scss';
 
 const InteractionBox = (props) => {
   const { onSubmit, dialogBoxRef, platform, dialogId, threadPost, showEmoji, setShowEmoji, username } = props;
-  const { readDialogMsgList, dialogMsgList, createDialogMsg, createDialog } = props.message;
+  const { readDialogMsgList, dialogMsgList, createDialogMsg, createDialog, readDialogIdByUsername } = props.message;
 
   const [lastTimestamp, setLastTimestamp] = useState(0);
   const [typingValue, setTypingValue] = useState('');
@@ -34,6 +34,20 @@ const InteractionBox = (props) => {
   //     return true;
   //   }
   // };
+  const replaceRouteWidthDialogId = (dialogId) => {
+    Router.replace({ url: `/message?page=chat&dialogId=${dialogId}` });
+  };
+
+
+  useEffect(async () => {
+    if (username && !dialogId) {
+      const res = await readDialogIdByUsername(username);
+      const { code, data: { dialogId } } = res;
+      if (code === 0 && dialogId) {
+        replaceRouteWidthDialogId(dialogId);
+      }
+    }
+  }, []);
 
 
   useEffect(() => {
@@ -69,7 +83,7 @@ const InteractionBox = (props) => {
       });
       if (ret.code === 0) {
         setTypingValue('');
-        Router.replace({ url: `/message?page=chat&dialogId=${ret.data.dialogId}` });
+        replaceRouteWidthDialogId(ret.data.dialogId);
       } else {
         Toast.error({ content: ret.msg });
       }

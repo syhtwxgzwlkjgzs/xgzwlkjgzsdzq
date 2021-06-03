@@ -38,6 +38,8 @@ const InputPop = (props) => {
         const success = await onSubmit(value, imageList);
         if (success) {
           setValue('');
+          setShowPicture(false);
+          setImageList([]);
         }
       } catch (error) {
         console.log(error);
