@@ -1,17 +1,14 @@
-import React, { Component } from 'react'
-import styles from './index.module.scss'
+import React, { Component } from 'react';
+import styles from './index.module.scss';
 
 class CaptchaInput extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-    }
+    };
   }
 
-  validateTel = (value) => {
-    return (/^[1][3-9]\d{9}$/.test(value))
-  }
+  validateTel = value => (/^[1][3-9]\d{9}$/.test(value))
 
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
@@ -24,15 +21,15 @@ class CaptchaInput extends Component {
   // 点击显示数字键盘
   handleClickPwdItem = () => {
     this.setState({
-      isKeyBoardVisible: true
-    })
+      isKeyBoardVisible: true,
+    });
   }
 
   // 点击取消
   handleCancel = () => {
     this.setState({
-      isKeyBoardVisible: false
-    })
+      isKeyBoardVisible: false,
+    });
   }
 
   // 匹配输入的数字
@@ -87,12 +84,12 @@ class CaptchaInput extends Component {
 
   // 监听键盘事件
   handleKeyDown = (e) => {
-    const { isBlur, currentStep } = this.props
+    const { isBlur, currentStep } = this.props;
     // 只有当input失去焦点的时候才能进行更新
-    if (currentStep === 'second' && !isBlur) return
+    if (currentStep === 'second' && !isBlur) return;
     if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
       // 表示输入数字
-      let set_num = this.toMarryNumber(e.keyCode);
+      const set_num = this.toMarryNumber(e.keyCode);
       this.props.updatePwd && this.props.updatePwd(set_num, 'add');
     } else if (e.keyCode == 13) {
       // 表示输入回车
@@ -131,8 +128,8 @@ class CaptchaInput extends Component {
       <div className={styles.payList} onClick={this.handleClickPwdItem}>
         {this.renderPwdItem()}
       </div>
-    )
+    );
   }
 }
 
-export default CaptchaInput
+export default CaptchaInput;

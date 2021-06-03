@@ -91,10 +91,10 @@ class PCMyPage extends React.Component {
             </div>
           )}
 
-          <div className={styles.userInfoWrapper}>
+          {/* <div className={styles.userInfoWrapper}>
             <div className={styles.userInfoKey}>实名认证</div>
             <div className={styles.userInfoValue}>去认证</div>
-          </div>
+          </div> */}
 
           <div className={styles.userInfoWrapper}>
             <div className={styles.userInfoKey}>签名</div>

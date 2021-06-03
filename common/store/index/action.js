@@ -10,6 +10,17 @@ class IndexAction extends IndexStore {
   }
 
   /**
+   * 发帖时是否需要添加帖子到首页数据中
+   * @param {number|string} cid 发帖时选中的种类id
+   * @returns {boolean}
+   */
+  @action
+  isNeedAddThread(cid) {
+    const { categoryids = [] } = this.filter || {};
+    return this.isCurrentAllCategory || categoryids.indexOf(cid) !== -1;
+  }
+
+  /**
    * 设置过滤项
    */
    @action

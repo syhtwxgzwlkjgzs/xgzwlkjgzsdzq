@@ -11,7 +11,6 @@ import throttle from '@common/utils/thottle.js';
 @inject('user')
 @observer
 class index extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -34,7 +33,7 @@ class index extends Component {
   }
 
   componentWillUnmount() {
-    this.initState()
+    this.initState();
   }
 
   // 点击切换弹出键盘事件
@@ -218,14 +217,14 @@ class index extends Component {
   }
 
   render() {
-    const mobile = this.props.user?.mobile
-    const { currentStep, list = [], isBlur, bindMobile, initTimeValue, initTimeText } = this.state
-    let value_pass_check = currentStep === 'second' ? this.validateTel(bindMobile) : true
-    let isSubmit = false
+    const mobile = this.props.user?.mobile;
+    const { currentStep, list = [], isBlur, bindMobile, initTimeValue, initTimeText } = this.state;
+    const valuePassCheck = currentStep === 'second' ? this.validateTel(bindMobile) : true;
+    let isSubmit = false;
     if (currentStep === 'first') {
-      isSubmit = list.length !== 6
+      isSubmit = list.length !== 6;
     } else if (currentStep === 'second') {
-      isSubmit = (list.length !== 6 || !this.validateTel(bindMobile))
+      isSubmit = (list.length !== 6 || !this.validateTel(bindMobile));
     }
     return (
       <div className={styles.userMobileWrapper}>
@@ -246,7 +245,7 @@ class index extends Component {
                   )
                 }
                 <div className={`${styles.labelValue} ${styles.verifyCodeBtn}`}>
-                  <VerifyCode initTimeValue={this.state.initTimeValue} value_pass_check={value_pass_check} key={currentStep} text={'发送验证码'} getVerifyCode={this.getVerifyCode} />
+                  <VerifyCode initTimeValue={this.state.initTimeValue} value_pass_check={valuePassCheck} key={currentStep} text={'发送验证码'} getVerifyCode={this.getVerifyCode} />
                 </div>
               </div>
             </div>
@@ -255,13 +254,13 @@ class index extends Component {
               <CaptchaInput currentStep={currentStep} updatePwd={this.updatePwd} list={list} isBlur={isBlur} />
             </div>
             <div className={styles.bottom}>
-              <Button disabled={this.getDisabledWithButton()} onClick={this.handleStepBtn} type={"primary"} className={styles.btn}>{this.state.currentStep === 'first' ? "下一步" : '提交'}</Button>
+              <Button disabled={this.getDisabledWithButton()} onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>{this.state.currentStep === 'first' ? '下一步' : '提交'}</Button>
             </div>
           </div>
         </Dialog>
       </div>
-    )
+    );
   }
 }
 
-export default HOCTencentCaptcha(index)
+export default HOCTencentCaptcha(index);

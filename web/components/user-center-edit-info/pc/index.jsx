@@ -158,7 +158,7 @@ class index extends Component {
         {
           name: '手机号码',
           display: 'show',
-          render: () => this.props.user.mobile,
+          render: () => this.props.user.mobile || '未设置',
           condition: () => this.props.site?.isSmsOpen,
           operation: () => {
             if (!this.props.user.mobile) {
@@ -236,34 +236,34 @@ class index extends Component {
           ),
           inputEditor: () => null,
         },
-        {
-          name: '微信',
-          display: 'show',
-          condition: () => {
-            // 条件都满足时才显示微信
-            const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
-            return IS_WECHAT_ACCESSABLE;
-          },
-          render: () => (
-            <div className={styles.pcEditNicknameImgs}>
-              <Avatar className={styles.pcEditNicknameImg} image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />
-              <p className={styles.pcEditWeiName}>{this.user.wxNickname}</p>
-            </div>
-          ),
-          operation: () => (
-            <p
-              onClick={() => {
-                this.setState({
-                  wechatRebindEditorVisible: true,
-                });
-              }}
-              className={styles.pcEditNicknameCallMsodify}
-            >
-              换绑
-            </p>
-          ),
-          inputEditor: () => null,
-        },
+        // {
+        //   name: '微信',
+        //   display: 'show',
+        //   condition: () => {
+        //     // 条件都满足时才显示微信
+        //     const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
+        //     return IS_WECHAT_ACCESSABLE;
+        //   },
+        //   render: () => (
+        //     <div className={styles.pcEditNicknameImgs}>
+        //       <Avatar className={styles.pcEditNicknameImg} image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />
+        //       <p className={styles.pcEditWeiName}>{this.user.wxNickname}</p>
+        //     </div>
+        //   ),
+        //   operation: () => (
+        //     <p
+        //       onClick={() => {
+        //         this.setState({
+        //           wechatRebindEditorVisible: true,
+        //         });
+        //       }}
+        //       className={styles.pcEditNicknameCallMsodify}
+        //     >
+        //       换绑
+        //     </p>
+        //   ),
+        //   inputEditor: () => null,
+        // },
       ],
     };
     this.user = this.props.user || {};
@@ -371,14 +371,14 @@ class index extends Component {
               });
             }}
           />
-          <WechatRebindDialog
+          {/* <WechatRebindDialog
             visible={this.state.wechatRebindEditorVisible}
             onClose={() => {
               this.setState({
                 wechatRebindEditorVisible: false,
               });
             }}
-          />
+          /> */}
         </>
       </div>
     );
