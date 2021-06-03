@@ -31,13 +31,13 @@ const Index = (props) => {
       <div className={styles.contaner}>
         <div className={styles.popupWrapper}>
           <div className={styles.title}>
-            {title}
+            <span>{title}</span>
             <Icon name="CloseOutlined" className={styles.closeIcon} size={12} onClick={onClose} />
           </div>
           <div className={styles.titleHr}></div>
           {!id ? (
             <UserCenterFllows
-              styles={{
+              style={{
                 height: 'calc(100% - 60px)',
               }}
               onContainerClick={onContainerClick}
@@ -45,7 +45,7 @@ const Index = (props) => {
             />
           ) : (
             <UserCenterFllows
-              styles={{
+              style={{
                 height: 'calc(100% - 60px)',
               }}
               userId={id}

@@ -14,6 +14,10 @@ import ReactDOM from 'react-dom';
 const Index = (props) => {
   const { visible = false, onClose = noop, isOtherFans = false, id } = props;
 
+  const [dataSource, setDataSource] = React.useState({});
+  const [sourcePage, updateSourcePage] = React.useState(1);
+  const [sourceTotalPage, updateSourceTotalPage] = React.useState(1);
+
   const onContainerClick = ({ id }) => {
     Router.push({ url: `/user/${id}` });
   };
@@ -39,16 +43,28 @@ const Index = (props) => {
           {!id ? (
             <UserCenterFans
               styles={{
-                height: `calc(100% - ${60}px)`,
+                height: 'calc(100% - 60px)',
               }}
+              dataSource={dataSource}
+              setDataSource={setDataSource}
+              sourcePage={sourcePage}
+              updateSourcePage={updateSourcePage}
+              sourceTotalPage={sourceTotalPage}
+              updateSourceTotalPage={updateSourceTotalPage}
               onContainerClick={onContainerClick}
               splitElement={splitElement}
             />
           ) : (
             <UserCenterFans
               styles={{
-                height: `calc(100% - ${60}px)`,
+                height: 'calc(100% - 60px)',
               }}
+              dataSource={dataSource}
+              setDataSource={setDataSource}
+              sourcePage={sourcePage}
+              updateSourcePage={updateSourcePage}
+              sourceTotalPage={sourceTotalPage}
+              updateSourceTotalPage={updateSourceTotalPage}
               userId={id}
               onContainerClick={onContainerClick}
               splitElement={splitElement}

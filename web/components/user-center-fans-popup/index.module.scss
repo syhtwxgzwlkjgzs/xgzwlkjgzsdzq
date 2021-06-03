@@ -19,10 +19,12 @@
     color: $text-color-primary;
     position: relative;
   }
+
   .closeIcon {
     position: absolute;
-    top: rem($padding-6n);
-    right: rem($padding-6n);
+    right: rem(24);
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
   .titleHr {
     height: rem(1);
@@ -39,3 +41,14 @@
     }
   } 
  }
+
+
+:global {
+  .dzq-modal__container {
+    padding: 0;
+  }
+
+  .dzq-modal__body {
+    padding: 0;
+  }
+}
