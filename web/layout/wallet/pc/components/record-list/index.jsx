@@ -38,7 +38,7 @@ class WalletInfo extends React.Component {
         key: 'detail',
         render: item => (
           <span title={item.title} className={styles.normalText}>
-            {item.title || ''}
+            {item.title || '暂无内容'}
           </span>
         ),
       },
@@ -47,7 +47,7 @@ class WalletInfo extends React.Component {
         key: 'type',
         render: item => (
           <span title={item.changeDesc} className={styles.normalText}>
-            {item.changeDesc}
+            {item.changeDesc || '暂无内容'}
           </span>
         ),
       },
@@ -90,7 +90,7 @@ class WalletInfo extends React.Component {
         key: 'type',
         render: item => (
           <span title={item.changeDesc} className={styles.normalText}>
-            {item.changeDesc}
+            {item.changeDesc || '暂无内容'}
           </span>
         ),
       },
@@ -107,7 +107,7 @@ class WalletInfo extends React.Component {
                     [styles.remited]: item.status === 1,
                   })}
                 >
-                  {PAY_STATUS_MAP[key] || ''}
+                  {PAY_STATUS_MAP[key] || '暂无内容'}
                 </span>
               );
             }
@@ -136,12 +136,12 @@ class WalletInfo extends React.Component {
       {
         title: 'ID',
         key: 'ID',
-        render: item => <span className={styles.normalText}>{item.title || item.id || ''}</span>,
+        render: item => <span className={styles.normalText}>{item.id || '暂无内容'}</span>,
       },
       {
         title: '记录描述',
         key: 'type',
-        render: item => <span className={styles.normalText}>{item.changeDesc}</span>,
+        render: item => <span className={styles.normalText}>{item.changeDesc || '暂无内容'}</span>,
       },
       {
         title: '冻结金额',
@@ -170,12 +170,12 @@ class WalletInfo extends React.Component {
       {
         title: '流水号:',
         key: 'type',
-        render: item => <span className={styles.normalText}>{item.tradeNo || '暂无'}</span>,
+        render: item => <span className={styles.normalText}>{item.tradeNo || '暂无内容'}</span>,
       },
       {
         title: '状态',
         key: 'status',
-        render: item => <span className={styles.normalText}>{STATUS_MAP[item.cashStatus]}</span>,
+        render: item => <span className={styles.normalText}>{STATUS_MAP[item.cashStatus] || '暂无内容'}</span>,
       },
       {
         title: '时间',

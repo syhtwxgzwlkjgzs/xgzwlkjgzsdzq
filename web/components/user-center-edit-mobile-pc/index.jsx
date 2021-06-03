@@ -111,6 +111,7 @@ class index extends Component {
         });
         setTimeout(() => {
           this.props.onClose();
+          this.props.updateUserInfo(this.props.user.id)
           this.initState();
         }, 1000);
       })

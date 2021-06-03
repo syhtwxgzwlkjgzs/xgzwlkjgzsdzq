@@ -4,6 +4,7 @@ import InviteH5Page from '@layout/invite/h5';
 import { inject } from 'mobx-react';
 
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import HOCWithLogin from '@middleware/HOCWithLogin';
 
 @inject('site')
 class Invite extends React.Component {
@@ -19,4 +20,4 @@ class Invite extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(Invite);
+export default HOCFetchSiteData(HOCWithLogin(Invite));
