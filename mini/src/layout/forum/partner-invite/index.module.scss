@@ -50,7 +50,7 @@
     font-size: rem($font-size-label);
     color: var(--color-text-secondary);
     margin-bottom: rem($margin-2n);
-    span {
+    view {
       color: var(--color-primary);
     }
   }

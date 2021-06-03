@@ -199,22 +199,22 @@ class PartnerInviteH5Page extends React.Component {
                   className={layout.bottom_tips_img}
                   image={invitorAvatar}
                 />
-                <span className={layout.bottom_tips_text}>
-                  <span>{invitorName} 邀请您加入站点</span>
+                <View className={layout.bottom_tips_text}>
+                  <View>{invitorName} 邀请您加入站点</View>
                   {siteMode === 'pay' ? (
-                    <span>，可获得返现 ¥{(((10 - siteMasterScale) * sitePrice) / 10).toFixed(2)}</span>
+                    <View>，可获得返现 ¥{(((10 - siteMasterScale) * sitePrice) / 10).toFixed(2)}</View>
                   ) : (
                     ''
                   )}
-                </span>
-                <span className={layout.bottom_tips_arrows}></span>
+                </View>
+                <View className={layout.bottom_tips_arrows}></View>
               </View>
             ) : (
               <></>
             )}
             {siteMode === 'pay' ? (
               <View className={layout.bottom_title}>
-                有效期：<span>{siteExpire}天</span>
+                有效期：<View>{siteExpire}天</View>
               </View>
             ) : (
               <></>
