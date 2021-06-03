@@ -12,15 +12,18 @@ export default function fuzzyCalcContentLength(content, lengthInLine = 50) {
     let newContent = content.replace(/<img.*?class="(.*?)(qq-emotion)(.*?)".*?\/?>/g,"[图片]") 
     newContent = newContent.replace(/<[^>]*>|<\/[^>]*>/gm,"");
 
-    const countReturns = (newContent.match(/\n/g) || []).length;
+    const countReturns = (newContent.match(/\n/g) || []).length; // 匹配回车符
     let totalCount = newContent.length +
         EMOJ_SIZE * countEmojs + // 表情大小
         IMG_SIZE * (countImgs - countEmojs > 0 ? countImgs - countEmojs : 0); // 加上图片大小
 
     for(let i = 0; i < countReturns; i++) {
-        const restInLine = (lengthInLine - newContent.indexOf('\\n') + 1)
-        totalCount += restInLine;
-        newContent.replace(newContent.indexOf('\\n'), '');
+        if(newContent.indexOf('\n') > 0) {
+            const restInLine = lengthInLine - newContent.indexOf('\n') > 0 ? // 防止长文章最后一个字是回车
+                                lengthInLine - newContent.indexOf('\n') : 0;
+            totalCount += restInLine;
+            newContent = newContent.replace(newContent.indexOf('\n'), '');
+        }
     }
     return totalCount;
 }
