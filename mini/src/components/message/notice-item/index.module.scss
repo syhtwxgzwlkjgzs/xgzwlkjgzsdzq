@@ -20,7 +20,7 @@
     width: 100%;
     padding-top: $margin-4n;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     transition: all 0.5s;
   }
 
@@ -38,6 +38,9 @@
         .dzq-badge__circle {
           top: rem(10px);
           right: rem(2px);
+        }
+        .dzq-badge__info {
+          display: none;
         }
       }
       .dzq-avatar {
@@ -75,8 +78,7 @@
   }
 
   .detail {
-    width: calc(100vw - 86px);
-    overflow: hidden;
+    flex: 1;
     padding-bottom: $padding-4n;
     margin-right: $margin-4n;
     font-size: $font-size-middle;
