@@ -25,10 +25,9 @@ class InviteH5Page extends React.Component {
 
   createInviteLink = async () => {
     try {
-      const { site: { setSite: { siteTitle } = {} } = {}, invite } = this.props;
+      const { invite } = this.props;
       await this.props.invite.createInviteLink();
       copyToClipboard(`${window.location.origin}/forum/partner-invite?inviteCode=${invite.inviteCode}`);
-      h5Share({ title: `邀请您加入${siteTitle || ''}`, path: `/forum/partner-invite?inviteCode=${invite.inviteCode}` });
       Toast.success({
         content: '创建邀请链接成功',
         duration: 1000,

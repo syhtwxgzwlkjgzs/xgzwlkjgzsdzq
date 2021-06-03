@@ -4,6 +4,7 @@ import { withRouter } from 'next/router';
 import { Icon, Toast, Avatar } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
+import NoData from '@components/no-data';
 import BaseLayout from '@components/base-layout';
 import UserCenterFansPc from '@components/user-center/fans-pc';
 import UserCenterFriendPc from '@components/user-center/friend-pc';
@@ -125,6 +126,7 @@ class InvitePCPage extends React.Component {
                   </div>
                 ))
               }
+              <NoData className={layout.invite_list_nodata} text='没有更多内容了'/>
             </div>
           </div>
         </div>
