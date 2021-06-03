@@ -489,8 +489,17 @@ class PostPage extends React.Component {
     const { threadPost } = this.props;
 
     // 2 验证码
-    const { captchaTicket, captchaRandStr } = await this.props.showCaptcha();
-    if (!captchaTicket && !captchaRandStr) return false;
+    const { webConfig } = this.props.site;
+    if (webConfig) {
+      const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
+      const createThreadWithCaptcha = webConfig?.other?.createThreadWithCaptcha;
+      // 开启了腾讯云验证码验证时，进行验证，通过后再进行实际的发布请求
+      if (qcloudCaptcha && createThreadWithCaptcha) {
+        // 验证码票据，验证码字符串不全时，弹出滑块验证码
+        const { captchaTicket, captchaRandStr } = await this.props.showCaptcha();
+        if (!captchaTicket && !captchaRandStr) return false;
+      }
+    }
 
     const threadId = this.props.router.query?.id || '';
 
