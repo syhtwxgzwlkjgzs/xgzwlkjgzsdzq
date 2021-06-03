@@ -12,6 +12,7 @@ import UserCenterEditAccountPwd from '../../user-center-edit-account-pwd-pc';
 import UserCenterEditMobile from '../../user-center-edit-mobile-pc';
 import UserCenterEditPaypwd from '../../user-center-edit-paypwd-pc';
 import WechatRebindDialog from '../../user-center/rebind-wechat';
+import Copyright from '@components/copyright';
 
 @inject('site')
 @inject('user')
@@ -342,7 +343,9 @@ class index extends Component {
               <div key={index}>{this.editorialpresentation(item, item.type, index)}</div>
             ))}
           </div>
-          <div className={styles.bottomText}>Powered By Discuz! Q © 2021 粤ICP备20008502号-1</div>
+          <div className={styles.bottomText}>
+          <Copyright center line/>
+          </div>
         </div>
 
         {/* Popups */}
