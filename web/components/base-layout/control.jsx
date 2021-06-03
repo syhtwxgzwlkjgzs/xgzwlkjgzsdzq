@@ -56,11 +56,13 @@ const BaseLayoutControl = (props) => {
   }, [jumpTo, listRef, baselayout]);
 
 
-  const quickScrolling = ({ scrollTop = 0 } = {}) => {
-    if (!hasListChild || !listRef?.current?.currentScrollTop) {
+  const quickScrolling = (e) => {
+
+    if (!e || !e.scrollTop || !hasListChild || !listRef?.current?.currentScrollTop) {
       onScroll();
       return;
     }
+    const { scrollTop } = e;
     if (baselayout.isJumpingToTop) {
       baselayout.removeJumpingToTop();
       listRef.current.onBackTop();
