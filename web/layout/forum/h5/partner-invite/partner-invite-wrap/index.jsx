@@ -14,7 +14,6 @@ import layout from './index.module.scss';
 @inject('invite')
 @observer
 class PartnerInviteWrap extends React.Component {
-
   render() {
     const { site, children, renderRight } = this.props;
     const { platform } = site;
@@ -24,7 +23,7 @@ class PartnerInviteWrap extends React.Component {
           <HomeHeader hideInfo mode='join'/>
           { children }
         </List>
-      )
+      );
     }
     return (
     <BaseLayout
