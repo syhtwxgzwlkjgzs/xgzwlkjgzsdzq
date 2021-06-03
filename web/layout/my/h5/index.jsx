@@ -44,8 +44,9 @@ class H5MyPage extends React.Component {
         curr={'my'}
         showHeader={false}
         showTabBar={true}
-        onRefresh={userThreads && userThreads.length > 0 ? user.getUserThreads : null}
+        onRefresh={user.getUserThreads}
         noMore={userThreadsTotalPage <= userThreadsPage}
+        showRefresh={!this.state.firstLoading}
       >
         <div className={styles.mobileLayout}>
           <UserCenterHeaderImage />
@@ -72,10 +73,8 @@ class H5MyPage extends React.Component {
                   <Spin type="spinner">加载中...</Spin>
                 </div>
               )}
-              {formattedUserThreads && formattedUserThreads.length > 0 ? (
+              {formattedUserThreads?.length > 0 && (
                 <UserCenterThreads data={formattedUserThreads} />
-              ) : (
-                <NoData />
               )}
             </div>
           </div>
