@@ -19,6 +19,8 @@ const api = apiIns({
   validateStatus(status) {
     return status >= 200 && status <= 504;
   },
+  // 控制全局的 toast，默认都显示，如果不需要显示的 api，需要在对应的 api 请求参数中带上这个参数并设置为 false
+  isShowToast: true,
 });
 
 const { http } = api;
@@ -85,6 +87,7 @@ http.interceptors.response.use((res) => {
     msg: statusText,
   });
 }, (err) => {
+  const { isShowToast = true } = err?.config;
   if (window) {
     console.error('response', err.stack);
     console.error('response', err.message);
@@ -92,7 +95,7 @@ http.interceptors.response.use((res) => {
       globalToast.hide();
       globalToast = null;
     }
-    globalToast = Toast.error({
+    globalToast = isShowToast && Toast.error({
       title: '接口错误',
       content: err.message || '未知错误',
     });

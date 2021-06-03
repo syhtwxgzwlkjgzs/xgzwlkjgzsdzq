@@ -62,8 +62,10 @@ class UserCenterUsers extends React.Component {
 
     this.totalPage = totalPage;
 
+    const newUsers = this.state?.users?.concat(pageData);
+
     this.setState({
-      users: pageData,
+      users: newUsers,
     });
 
     if (this.page <= this.totalPage) {

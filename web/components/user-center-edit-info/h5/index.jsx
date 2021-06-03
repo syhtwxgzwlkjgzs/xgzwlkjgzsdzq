@@ -104,6 +104,7 @@ class index extends Component {
   handleGoToEditMobile = () => {
     if (!this.user.mobile) {
       Router.push({ url: '/user/bind-phone' });
+      return;
     }
     Router.push({ url: '/my/edit/mobile' });
   };
