@@ -63,8 +63,7 @@ const ClassifyPopup = (props) => {
   }, []);
 
   useEffect(() => {
-    if (!props?.threadPost?.postData?.categoryId
-      || props?.threadPost?.postData?.categoryId === selected.pid
+    if (props?.threadPost?.postData?.categoryId === selected.pid
       || props?.threadPost?.postData?.categoryId === selectedChild.pid) return;
     setSeletedCategory(props?.threadPost?.postData?.categoryId);
   }, [props?.threadPost?.postData?.categoryId]);
