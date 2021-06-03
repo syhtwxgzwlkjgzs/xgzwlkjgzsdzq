@@ -163,8 +163,8 @@ class ForumPCPage extends React.Component {
                   image={myGroup?.avatar}
                 />
               </div>
-              <div className={layout.user_value_item}>{myGroup?.nickname}</div>
-              <div className={layout.user_value_item}>{myGroup?.groupName}</div>
+              <div className={layout.user_value_item}>{myGroup?.nickname || '--'}</div>
+              <div className={layout.user_value_item}>{myGroup?.groupName || '--'}</div>
               <div className={layout.user_value_item}>{myGroup ? Time.formatDate(myGroup?.createdAt, 'YYYY-MM-DD') : '--'}</div>
             </div>
           </div>
@@ -192,7 +192,7 @@ class ForumPCPage extends React.Component {
                           {
                             categoriesNames?.map(per => (
                               <td className={layout.plate_td} key={per.pid}>
-                                <Icon size={16} color='#2469F6' name={myPermissons[item.type][per.pid] ? 'CheckOutlined' : 'CloseOutlined'}/>
+                                <Icon size={16} color='#2469F6' name={myPermissons && myPermissons[item.type][per.pid] ? 'CheckOutlined' : 'CloseOutlined'}/>
                               </td>
                             ))
                           }
