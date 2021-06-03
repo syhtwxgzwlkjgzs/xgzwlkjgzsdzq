@@ -136,6 +136,8 @@ class PartnerInviteH5Page extends React.Component {
     if (platform === 'h5') {
       return <></>;
     }
+    const username = get(webConfig, 'setSite.siteAuthor.username', '');
+    const avatar = get(webConfig, 'setSite.siteAuthor.avatar', '');
     // 站点介绍
     return (
       <>
@@ -144,12 +146,12 @@ class PartnerInviteH5Page extends React.Component {
             <div className={layout.user_card_avatar}>
               <Avatar
                 size={'big'}
-                image={inviteData.avatar}
-                text={inviteData.nickname && inviteData.nickname.substring(0, 1)}
+                image={avatar}
+                text={username && username.substring(0, 1)}
               />
             </div>
             <div className={layout.user_card_info}>
-              <div className={layout.user_info_name}>奶罩</div>
+              <div className={layout.user_info_name}>{username}</div>
               <div className={layout.user_info_tag}>站长</div>
               <div className={layout.site_info}>
                 <div className={layout.site_status_list}>
