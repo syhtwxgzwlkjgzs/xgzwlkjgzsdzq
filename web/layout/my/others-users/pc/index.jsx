@@ -111,6 +111,7 @@ class PCMyPage extends React.Component {
   };
 
   renderContent = () => {
+    const { fetchUserInfoLoading } = this.state
     const { user } = this.props;
     const { targetUserThreads, targetUserThreadsTotalCount, targetUserThreadsPage, targetUserThreadsTotalPage } = user;
     return (
@@ -134,6 +135,7 @@ class PCMyPage extends React.Component {
   };
 
   render() {
+    const { fetchUserInfoLoading } = this.state
     const { user } = this.props;
     const { targetUserThreadsPage, targetUserThreadsTotalPage, targetUserThreads } = user;
     return (
