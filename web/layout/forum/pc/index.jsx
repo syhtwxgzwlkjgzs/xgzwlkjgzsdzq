@@ -8,6 +8,7 @@ import BaseLayout from '@components/base-layout';
 import Copyright from '@components/copyright';
 import TrendingTopic from '@layout/search/pc/components/trending-topics';
 import SidebarPanel from '@components/sidebar-panel';
+import Time from '@discuzq/sdk/dist/time';
 import UserCenterUsersPc from '@components/user-center/users-pc';
 import { COMMON_PERMISSION, PERMISSION_PLATE } from '@common/constants/site';
 import { simpleRequest } from '@common/utils/simple-request';
@@ -16,6 +17,7 @@ import { get } from '@common/utils/get';
 @inject('site')
 @inject('forum')
 @inject('search')
+@inject('user')
 @observer
 class ForumPCPage extends React.Component {
   async componentDidMount() {
@@ -45,20 +47,16 @@ class ForumPCPage extends React.Component {
     this.props.router.push(`/user/${id}`);
   };
   // 右侧 - 潮流话题 粉丝 版权信息
-  renderRight = () => {
-    const { forum } = this.props;
-    const { usersPageData = [], isNoMore } = forum;
-    console.log(usersPageData);
-    return (
+  renderRight = () => (
       <>
         <UserCenterUsersPc/>
         <Copyright/>
       </>
-    );
-  }
+  );
   render() {
-    const { site, forum } = this.props;
+    const { site, forum, user } = this.props;
     const { platform } = site;
+    const usersCount = forum.userTotal;
     // 站点介绍
     const siteIntroduction = get(site, 'webConfig.setSite.siteIntroduction', '');
     // 创建时间
@@ -67,6 +65,7 @@ class ForumPCPage extends React.Component {
     const siteMode = get(site, 'webConfig.setSite.siteMode', '');
     // 站长信息
     const siteAuthor = get(site, 'webConfig.setSite.siteAuthor', '');
+    console.log(user);
     return (
       <BaseLayout
         right={ this.renderRight }
@@ -88,30 +87,39 @@ class ForumPCPage extends React.Component {
             </div>
             <div className={layout.user_info_value}>
               <div className={layout.user_value_item}>
-                <Avatar
-                  size='small'
-                  text='1'
-                  className={layout.user_value_avatar}
-                  // image={item.avatar}
-                />
-                <div className={layout.user_value_name}>admin</div>
+                {
+                  siteAuthor.avatar
+                    ? <Avatar
+                        size='small'
+                        className={layout.user_value_avatar}
+                        image={siteAuthor.avatar}
+                      />
+                    : <></>
+                }
+                <div className={layout.user_value_name}>{siteAuthor.username}</div>
               </div>
-              <div className={layout.user_value_item}>1460</div>
+              <div className={layout.user_value_item}>{usersCount}</div>
               <div className={layout.user_value_item}>5778</div>
-              <div className={layout.user_value_item}>2020-12-7</div>
+              <div className={layout.user_value_item}>{Time.formatDate(siteInstall, 'YYYY-MM-DD')}</div>
             </div>
           </div>
           {/* 站长 end */}
           {/* 站点介绍 start */}
           <div className={layout.site_introduction}>
             <div className={layout.mode_title}>站点介绍</div>
-            <div className={layout.mode_text}>Discuz!Q官方支持论坛</div>
+            <div className={layout.mode_text}>{siteIntroduction}</div>
           </div>
           {/* 站点介绍 end */}
           {/* 站点模式 start */}
           <div className={layout.site_mode}>
             <div className={layout.mode_title}>站点模式 \ 费用</div>
-            <div className={layout.mode_text}>公开模式 \ 免费</div>
+            <div className={layout.mode_text}>
+                {
+                  siteMode === 'public'
+                    ? '公开模式 \\ 免费'
+                    : '付费模式 \\ 付费'
+                }
+              </div>
           </div>
           {/* 站点模式 end */}
           {/* 我的角色 start */}
@@ -145,50 +153,50 @@ class ForumPCPage extends React.Component {
             <div className={layout.my_permission_plate}>
               {/* <div className={layout.plate_left_label}> */}
               <table className={layout.plate_left_label}>
-                {
-                  PERMISSION_PLATE?.map((item, index) => (
-                    <>
-                      {
-                        index === 0
-                          ? <tr className={layout.plate_th}>
-                              <td className={layout.plate_td}>版权模块</td>
-                              <td className={layout.plate_td}>我是分类</td>
-                              <td className={layout.plate_td}>我是分类/我是二级分类</td>
-                              <td className={layout.plate_td}>我是分类</td>
-                              <td className={layout.plate_td}>我是分类/我是二级分类</td>
-                              <td className={layout.plate_td}>我是分类</td>
-                              <td className={layout.plate_td}>我是分类/我是二级分类</td>
-                            </tr>
-                          : <></>
-                      }
-                      <tr className={layout.plate_tr} key={index}>
-                        <td className={layout.plate_td}>{item}</td>
-                        <td className={layout.plate_td}>
-                          <Icon size={16} color='#2469F6' name='CheckOutlined'/>
-                        </td>
-                        <td className={layout.plate_td}>
-                          <Icon size={16} color='#2469F6' name='CheckOutlined'/>
-                        </td>
-                        <td className={layout.plate_td}>
-                          <Icon size={16} color='#2469F6' name='CheckOutlined'/>
-                        </td>
-                        <td className={layout.plate_td}>
-                          <Icon size={16} color='#2469F6' name='CheckOutlined'/>
-                        </td>
-                        <td className={layout.plate_td}>
-                          <Icon size={16} color='#2469F6' name='CheckOutlined'/>
-                        </td>
-                        <td className={layout.plate_td}>
-                          <Icon size={16} color='#2469F6' name='CheckOutlined'/>
-                        </td>
-                      </tr>
-                      {/* <div className={layout.left_label_item} key={index}>{item}</div> */}
-                    </>
-                  ))
-                }
+                <thead>
+                  <tr className={layout.plate_th}>
+                    <td className={layout.plate_td}>版权模块</td>
+                    <td className={layout.plate_td}>我是分类</td>
+                    <td className={layout.plate_td}>我是分类/我是二级分类</td>
+                    <td className={layout.plate_td}>我是分类</td>
+                    <td className={layout.plate_td}>我是分类/我是二级分类</td>
+                    <td className={layout.plate_td}>我是分类</td>
+                    <td className={layout.plate_td}>我是分类/我是二级分类</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    PERMISSION_PLATE?.map((item, index) => (
+                        <tr className={layout.plate_tr} key={index}>
+                          <td className={layout.plate_td}>{item}</td>
+                          <td className={layout.plate_td}>
+                            <Icon size={16} color='#2469F6' name='CheckOutlined'/>
+                          </td>
+                          <td className={layout.plate_td}>
+                            <Icon size={16} color='#2469F6' name='CheckOutlined'/>
+                          </td>
+                          <td className={layout.plate_td}>
+                            <Icon size={16} color='#2469F6' name='CheckOutlined'/>
+                          </td>
+                          <td className={layout.plate_td}>
+                            <Icon size={16} color='#2469F6' name='CheckOutlined'/>
+                          </td>
+                          <td className={layout.plate_td}>
+                            <Icon size={16} color='#2469F6' name='CheckOutlined'/>
+                          </td>
+                          <td className={layout.plate_td}>
+                            <Icon size={16} color='#2469F6' name='CheckOutlined'/>
+                          </td>
+                        </tr>
+                    ))
+                  }
+                </tbody>
               </table>
               {/* </div> */}
             </div>
+            <div className={layout.plate_right_scroll}></div>
+            <div className={layout.plate_left_scroll}></div>
+            <div className={layout.common_right_scroll}></div>
             {/* 权限板块 start */}
             {/* 通用权限 start */}
             <div className={layout.my_permission_common}>
@@ -207,9 +215,6 @@ class ForumPCPage extends React.Component {
                       <div className={layout.common_value_item} key={index}>
                         <Icon size={16} color='#2469F6' name='CheckOutlined'/>
                       </div>
-                      // <div className={layout.common_value_item}>
-                      //   <Icon size={16} color='#2469F6' name='CheckOutlined'/>
-                      // </div>
                     ))
                   }
                 </div>
