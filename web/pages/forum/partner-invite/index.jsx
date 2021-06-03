@@ -3,6 +3,7 @@ import ParnerInviteH5Page from '@layout/forum/h5/partner-invite';
 import { inject } from 'mobx-react';
 
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import HOCWithLogin from '@middleware/HOCWithLogin';
 
 @inject('site')
 class ParnerInvite extends React.Component {
@@ -12,4 +13,4 @@ class ParnerInvite extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(ParnerInvite);
+export default HOCFetchSiteData(HOCWithLogin(ParnerInvite));
