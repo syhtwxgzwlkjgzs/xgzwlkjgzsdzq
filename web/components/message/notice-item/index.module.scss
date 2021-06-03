@@ -19,6 +19,15 @@
     transition: all 0.5s;
   }
 
+  .block-pc {
+    // flex: 1 0 100%;
+    width: 100%;
+    padding: $margin-4n $margin-2n 0 $margin-2n;
+    display: flex;
+    justify-content: flex-start;
+    transition: all 0.5s;
+  }
+
   .avatar {
     flex: 0 0 rem(38);
     height: rem(38);
@@ -132,7 +141,7 @@
     .time {
       font-weight: normal;
       font-size: $font-size-small;
-      line-height: rem(20);
+      line-height: rem(22);
       text-align: left;
       color: $text-color-secondary;
     }
