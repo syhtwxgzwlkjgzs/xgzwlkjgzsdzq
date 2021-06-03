@@ -96,6 +96,9 @@
         line-height: rem(16.8);
         padding: rem(14) 0;
     }
+    .frozenAmount {
+        cursor: pointer;
+    }
 }
 .amountStatusH5 {
     width: 100%;

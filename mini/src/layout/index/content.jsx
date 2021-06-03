@@ -110,6 +110,8 @@ class IndexH5Page extends React.Component {
   onClickFilter = ({ categoryids, types, essence, sequence }) => {
     const { dispatch = () => {} } = this.props;
     const requestCategoryids = categoryids.slice();
+
+    this.props.index.setHiddenTabBar(false)
     
     const newFilter = { ...this.state.filter, categoryids: requestCategoryids, types, essence, sequence }
     dispatch('click-filter', newFilter);

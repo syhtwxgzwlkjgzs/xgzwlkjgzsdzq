@@ -268,6 +268,7 @@ class WalletH5Page extends React.Component {
       case 'withdrawal':
         arr = CASH_DETAIL_CONSTANTS;
     }
+
     for (const key in arr) {
       if (arr[key].code === this.state.selectType) {
         return arr[key].text || '';
@@ -318,9 +319,10 @@ class WalletH5Page extends React.Component {
       ],
     ];
     const { walletInfo, incomeDetail = {}, expandDetail, cashDetail } = this.props.wallet;
-    const incomeData = this.listRenderDataFilter(incomeDetail) || []
-    const expandData = this.listRenderDataFilter(expandDetail) || []
-    const cashData = this.listRenderDataFilter(cashDetail) || []
+
+    const incomeData = this.listRenderDataFilter(incomeDetail) || [];
+    const expandData = this.listRenderDataFilter(expandDetail) || [];
+    const cashData = this.listRenderDataFilter(cashDetail) || [];
     return (
       <div className={layout.container}>
         <Header></Header>
@@ -356,7 +358,7 @@ class WalletH5Page extends React.Component {
                       noMore={this.state.page > this.state.totalPage}
                       onRefresh={this.fetchIncomeDetail}
                     >
-                      {incomeData.map((value,index) => (
+                      {incomeData.map((value, index) => (
                         <IncomeList key={value.id} incomeVal={value} itemKey={index} dataLength={incomeData.length} />
                       ))}
                     </List>
@@ -367,7 +369,7 @@ class WalletH5Page extends React.Component {
                       noMore={this.state.page > this.state.totalPage}
                       onRefresh={this.fetchExpendDetail}
                     >
-                      {expandData.map((value,index) => (
+                      {expandData.map((value, index) => (
                         <PayList key={value.id} payVal={value} itemKey={index} dataLength={expandData.length}  />
                       ))}
                     </List>
@@ -378,12 +380,12 @@ class WalletH5Page extends React.Component {
                       noMore={this.state.page > this.state.totalPage}
                       onRefresh={this.fetchCashDetail}
                     >
-                      {cashData.map((value,index) => (
-                        <WithdrawalList 
-                        key={value.id} 
+                      {cashData.map((value, index) => (
+                        <WithdrawalList
+                        key={value.id}
                         withdrawalVal={value}
                         itemKey={index}
-                        dataLength={cashData.length} 
+                        dataLength={cashData.length}
                         />
                       ))}
                     </List>

@@ -52,6 +52,9 @@ const config = {
         'my/edit/paypwd/index',
         'my/edit/reset/paypwd/index',
         'my/edit/find/paypwd/index',
+        'forum/index',
+        'forum/partner-invite/index',
+        'invite/index'
       ]
     }
   ],

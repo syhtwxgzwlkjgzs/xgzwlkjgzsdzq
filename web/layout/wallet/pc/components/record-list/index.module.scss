@@ -109,3 +109,92 @@
         }
     }
 }
+
+.tabelList {
+	:global {
+		.listTitleWrapper {
+			display: flex;
+			justify-content: space-between;
+			height: rem(36);
+			padding: 0 rem($padding-4n);
+			border-radius: rem(5) rem(5) 0 0;
+			background-color: $body-bg-color;
+			font-size: rem($font-size-primary);
+			text-align: left;
+			line-height: rem(36);
+			color: $text-color-regular;
+		}
+    .listItem {
+      display: flex;
+      justify-content: space-between;
+      height: rem(36);
+      padding: rem($padding-2n) rem($padding-4n);
+      font-weight: normal;
+      font-size: rem($font-size-primary);
+      text-align: left;
+      line-height: rem(36);
+      border-bottom: var(--border-border);
+    }
+    .listColumn {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+	}
+}
+
+.normalText {
+  font-size: rem($font-size-primary);
+  color: $text-color-primary;
+}
+
+.payStatus {
+  font-size: rem($font-size-primary);
+  color: $text-color-regular;
+}
+
+.incomeAmount {
+  color: $error-color;
+  font-size: rem($font-size-middle);
+  font-weight: 600;
+}
+
+.timer {
+  font-size: rem($font-size-primary);
+  color: $text-color-secondary;
+}
+
+.withdrawalAmount, .payAmount, .frozenAmount {
+  color: $text-color-primary;
+  font-size: rem($font-size-middle);
+  font-weight: 600;
+}
+
+// 待审核
+.wait {
+  color: $primary-color;
+}
+// 通过
+.pass {
+  color: $success-color;
+}
+
+// 不通过
+.overrule {
+  color: $error-color;
+}
+
+// 待打款
+.remiting {
+  color: $success-color;
+}
+
+// 已打款
+.remited {
+  color: $text-color-regular;
+}
+
+// 打款失败
+.remitedFailed {
+  color: $error-color;
+}
