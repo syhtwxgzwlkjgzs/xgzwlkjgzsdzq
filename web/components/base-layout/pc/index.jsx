@@ -101,7 +101,7 @@ const BaseLayout = forwardRef((props, ref) => {
         <div className={`${styles.body} ${cls}`}>
 
 
-          <List {...props} immediateCheck={immediateCheck} className={styles.list} wrapperClass={styles.wrapper} ref={listRef} onError={onError} onScroll={handleScroll}>
+          <List {...props} immediateCheck={immediateCheck} className={styles.list} wrapperClass={styles.wrapper} ref={listRef} onError={onError} onScroll={onScroll}>
             {
               (pageName === 'home' || left) && (
                 <div className={styles.left}>

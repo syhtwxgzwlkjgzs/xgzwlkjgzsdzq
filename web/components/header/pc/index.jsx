@@ -102,9 +102,9 @@ class Header extends React.Component {
               </Dropdown.Item>
             </Dropdown.Menu>
           }
-          placement="left"
+          placement="right"
           hideOnClick={true}
-          trigger="hover"
+          trigger="click"
           onChange={this.dropdownActionImpl}
         >
           <div className={styles.userInfo}>

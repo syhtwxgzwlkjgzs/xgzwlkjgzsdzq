@@ -104,7 +104,7 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
   return (
     <div className={styles.container}>
       {/* 菜单 */}
-      <Menu mode="horizontal" menuTrigger="click" defaultActives={['0']}>
+      <Menu mode="horizontal" menuTrigger="hover" defaultActives={['0']}>
         {
           dataSource?.map((item, index) => (
             item.children ? (
@@ -130,7 +130,7 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
                   }
                 </Menu.SubMenu>
             ) : (
-                <Menu.Item onClick={onClick} key={index} index={`${index}`} style={{ padding: '0 2%' }}>
+                <Menu.Item onClick={onClick} key={index} index={`${index}`} style={index === 0 ? {padding: '0 2% 0 0'} : { padding: '0 2%' }}>
                   <div className={styles.label}>
                     { item.label }
                     { item.isActive && <div className={styles.line}></div> }
