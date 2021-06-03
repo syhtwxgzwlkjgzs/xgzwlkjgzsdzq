@@ -10,6 +10,9 @@ import { withRouter } from 'next/router';
 @inject('user')
 @observer
 class UserCenterFansPc extends React.Component {
+  static defaultProps = {
+    className: '',
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -32,6 +35,7 @@ class UserCenterFansPc extends React.Component {
           title="粉丝"
           leftNum={fansCount}
           onShowMore={this.moreFans}
+          className={this.props.className}
         >
           {Number(fansCount) !== 0 && (
             <UserCenterFans

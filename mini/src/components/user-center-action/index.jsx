@@ -13,17 +13,21 @@ class UserCenterAction extends React.Component {
 
   // 点击我的钱包
   handleMyWallet = () => {
-    Router.push({ url: '/wallet' });
+    Router.push({ url: '/subPages/wallet/index' });
+  }
+
+  // 草稿箱
+  handleMyDraft = () => {
   }
 
   // 点击站点信息
   handleMySiteInfo = () => {
-    Router.push({ url: '/forum' });
+    Router.push({ url: '/subPages/forum/index' });
   }
 
   // 点击推广信息
   handleMyInvite = () => {
-    Router.push({ url: 'invite' });
+    Router.push({ url: '/subPages/invite/index' });
   }
 
   render() {
@@ -86,7 +90,7 @@ class UserCenterAction extends React.Component {
           </View>
 
           <View className={styles.userCenterActionItemContainer}>
-            <View className={styles.userCenterActionItem}>
+            <View onClick={this.handleMyDraft} className={styles.userCenterActionItem}>
               <View className={styles.userCenterActionItemIcon}>
                 <Badge>
                   <Icon name={'RecycleBinOutlined'} color={'#4F5A70'} size={20} />

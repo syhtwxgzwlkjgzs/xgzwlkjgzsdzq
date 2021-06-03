@@ -149,7 +149,7 @@ class ThreadH5Page extends React.Component {
     this.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -214,7 +214,7 @@ class ThreadH5Page extends React.Component {
     this.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -235,7 +235,7 @@ class ThreadH5Page extends React.Component {
   onOperClick = (type) => {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -491,7 +491,7 @@ class ThreadH5Page extends React.Component {
   async onLikeClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -533,7 +533,7 @@ class ThreadH5Page extends React.Component {
   async onPayClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -552,7 +552,7 @@ class ThreadH5Page extends React.Component {
   onRewardClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 

@@ -1,14 +1,14 @@
 import React from 'react';
-import { inject } from 'mobx-react';
-import { readCommentDetail } from '@server';
-import { getCurrentInstance } from '@tarojs/taro';
-import Frozen from '../../../layout/wallet/frozen/index';
-
+import Frozen from '@layout/wallet/frozen/index';
+import Page from '@components/page';
 
 class FrozenPage extends React.Component {
-
   render() {
-    return <Frozen></Frozen>
+    return (
+      <Page>
+        <Frozen></Frozen>
+      </Page>
+    );
   }
 }
 

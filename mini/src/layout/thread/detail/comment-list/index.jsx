@@ -63,7 +63,7 @@ class RenderCommentList extends React.Component {
   async likeClick(data) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -102,7 +102,7 @@ class RenderCommentList extends React.Component {
   async replyLikeClick(reply, comment) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -175,7 +175,7 @@ class RenderCommentList extends React.Component {
     this.props.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -193,7 +193,7 @@ class RenderCommentList extends React.Component {
     this.props.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -273,7 +273,7 @@ class RenderCommentList extends React.Component {
   onAboptClick(data) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
