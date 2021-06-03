@@ -89,10 +89,6 @@ class Index extends Component {
     this.props.threadPost.setNavInfo({ statusBarHeight, navHeight, menubtnWidth: width })
   }
 
-  componentDidShow() { }
-
-  componentDidHide() { }
-
   // handle
   postToast = (title, icon = 'none', duration = 2000) => { // toast
     Taro.showToast({ title, icon, duration });
