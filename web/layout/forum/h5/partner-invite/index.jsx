@@ -130,13 +130,14 @@ class PartnerInviteH5Page extends React.Component {
     const { site: { platform, webConfig }, forum } = this.props;
     const { invitorName, invitorAvatar } = this.state;
     const { setSite: { siteMode, sitePrice, siteMasterScale, siteExpire } = {} } = webConfig;
-    const siteAuthor = get(webConfig, 'setSite.siteAuthor.username', '');
     const { threadTotal, updataTime } = forum;
     const layout = platform === 'h5' ? mlayout : pclayout;
     const { inviteCode } = this.props.router.query;
     if (platform === 'h5') {
       return <></>;
     }
+    const username = get(webConfig, 'setSite.siteAuthor.username', '');
+    const avatar = get(webConfig, 'setSite.siteAuthor.avatar', '');
     // 站点介绍
     return (
       <>
@@ -145,12 +146,12 @@ class PartnerInviteH5Page extends React.Component {
             <div className={layout.user_card_avatar}>
               <Avatar
                 size={'big'}
-                image={inviteData.avatar}
-                text={inviteData.nickname && inviteData.nickname.substring(0, 1)}
+                image={avatar}
+                text={username && username.substring(0, 1)}
               />
             </div>
             <div className={layout.user_card_info}>
-              <div className={layout.user_info_name}>{siteAuthor}</div>
+              <div className={layout.user_info_name}>{username}</div>
               <div className={layout.user_info_tag}>站长</div>
               <div className={layout.site_info}>
                 <div className={layout.site_status_list}>
@@ -183,7 +184,7 @@ class PartnerInviteH5Page extends React.Component {
               </div>
               : <></>
           }
-          <div className={layout.user_card_button} onClick={this.handleJoinSite}>{siteMode === 'pay' ? `¥ ${siteAuthor}` : ''} 立即加入</div>
+          <div className={layout.user_card_button} onClick={this.handleJoinSite}>{siteMode === 'pay' ? `¥ ${username}` : ''} 立即加入</div>
           {siteMode === 'pay' ? <div className={layout.bottom_title}>有效期：<span>{siteExpire}天</span></div> : <></>}
         </div>
         <Copyright/>
