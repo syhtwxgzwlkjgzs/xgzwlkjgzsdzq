@@ -48,7 +48,6 @@ const BaseLayout = forwardRef((props, ref) => {
     }),
   );
 
-
   return (
     <div className={styles.container}>
         {showHeader && <Header />}

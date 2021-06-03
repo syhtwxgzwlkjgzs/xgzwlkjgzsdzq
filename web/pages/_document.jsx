@@ -32,13 +32,6 @@ class MyDocument extends Document {
           <Main />
           <NextScript/>
         </body>
-        <script  dangerouslySetInnerHTML={{__html: `
-            window.moveTo(0, 0);//移动窗口   
-            window.resizeTo(800, 600);//改变大小   
-            window.onresize=new Function("window.resizeTo(800,   600);") 
-        `}}>   
-  
-</script>
         <script dangerouslySetInnerHTML={{__html: `
             // 微信设置字体最大，布局乱的补丁
             function is_weixn() {

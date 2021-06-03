@@ -84,6 +84,8 @@ class CaptchaInput extends Component {
 
   // 监听键盘事件
   handleKeyDown = (e) => {
+    // 不显示的时候不响应输入
+    if (!this.props.visible) return;
     const { isBlur, currentStep } = this.props;
     // 只有当input失去焦点的时候才能进行更新
     if (currentStep === 'second' && !isBlur) return;

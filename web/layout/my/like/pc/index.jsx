@@ -40,7 +40,7 @@ class LikePCPage extends React.Component {
   render() {
     const { index, site } = this.props;
     const { threads } = index;
-    const { pageData, currentPage, totalPage, totalCount } = threads || {};
+    const { pageData, currentPage, totalPage, totalCount = 0 } = threads || {};
     return (
       <BaseLayout
         right={ this.renderRight }

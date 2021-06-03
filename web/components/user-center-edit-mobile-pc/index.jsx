@@ -251,7 +251,7 @@ class index extends Component {
             </div>
             <div className={styles.inputItem}>
               <div className={styles.labelName}>请输入短信验证码</div>
-              <CaptchaInput currentStep={currentStep} updatePwd={this.updatePwd} list={list} isBlur={isBlur} />
+              <CaptchaInput currentStep={currentStep} updatePwd={this.updatePwd} list={list} isBlur={isBlur} visible={this.props.visible} />
             </div>
             <div className={styles.bottom}>
               <Button disabled={this.getDisabledWithButton()} onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>{this.state.currentStep === 'first' ? '下一步' : '提交'}</Button>
