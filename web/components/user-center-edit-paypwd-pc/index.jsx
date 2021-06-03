@@ -152,7 +152,7 @@ class index extends Component {
         <div className={styles.userMobileContent}>
           <div className={styles.title}>
             <span className={styles.titleValue}>{this.props.user?.canWalletPay ? '修改密码' : '设置密码'}</span>
-            <Icon onClick={this.handleClose} name="CloseOutlined" />
+            <Icon onClick={this.handleClose} name="CloseOutlined" size={12} />
           </div>
           {
             this.props.user?.canWalletPay ? this.renderCanPayPwd() : this.renderSetPayPwd()

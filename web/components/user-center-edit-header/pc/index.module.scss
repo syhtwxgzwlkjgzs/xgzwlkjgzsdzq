@@ -45,6 +45,9 @@
     display: flex;
     align-items: center;
     cursor: pointer;
+    .userCenteruploadIcon {
+      margin-right: rem($margin-1n);
+    }
     .uploadIcon {
       margin-right: rem(6);
     }

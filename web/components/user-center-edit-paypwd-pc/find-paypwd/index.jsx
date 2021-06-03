@@ -191,19 +191,25 @@ class index extends Component {
         <div className={styles.userMobileContent}>
           <div className={styles.title}>
             <span className={styles.titleValue}>找回支付密码</span>
-            <Icon onClick={this.handleClose} name="CloseOutlined" />
+            <Icon onClick={this.handleClose} name="CloseOutlined" size={12} color="#8490A8" />
           </div>
           <div className={`${styles.inputItem} ${styles.mobileItem}`}>
             <Input value={mobile} />
             <div className={styles.verifyCode}>
-              <VerifyCode key={initTimeValue} initTimeValue={initTimeValue} key={currentStep} text={'发送验证码'} getVerifyCode={this.getVerifyCode} />
+              <VerifyCode 
+                key={`${initTimeValue}-${currentStep}`} 
+                btnType={"text"} 
+                className={styles.btnStyle}
+                initTimeValue={initTimeValue} 
+                text={'发送验证码'} 
+                getVerifyCode={this.getVerifyCode} />
             </div>
           </div>
           <div className={styles.inputItem}>
             <div className={styles.labelName}>请输入短信验证码</div>
             <CaptchaInput currentStep={currentStep} updatePwd={this.updatePwd} list={list} isBlur={isBlur} />
           </div>
-          <div className={styles.inputItem}>
+          <div className={`${styles.inputItem} ${styles.inputMiddle}`}>
             <Input tirm value={payPassword} onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur} mode="password" placeholder="请输入新支付密码" maxLength={6} type="number" />
           </div>
           <div className={styles.inputItem}>
@@ -212,7 +218,7 @@ class index extends Component {
           <div className={classNames(styles.bottom, {
             [styles.bgBtnColor]: !this.getDisabledWithButton(),
           })}>
-            <Button disabled={this.getDisabledWithButton()} full onClick={this.handleStepBtn} type="primary" className={styles.btn}>提交</Button>
+            <Button disabled={this.getDisabledWithButton()} full onClick={this.handleStepBtn} type="primary" className={styles.btn}>设置新支付密码</Button>
           </div>
         </div>
       </div>
