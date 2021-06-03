@@ -224,9 +224,11 @@ class index extends Component {
                     type="file"
                     style={{ display: 'none' }}
                   />
-                  <Icon name="UploadingOutlined" size={12} className={styles.uploadIcon} />
-                上传封面图
-              </div>
+                  <div className={styles.uploadText}>
+                    <Icon name="UploadingOutlined" size={12} className={styles.uploadIcon} />
+                    上传封面图
+                  </div>
+                </div>
               </>
             )}
           </div>

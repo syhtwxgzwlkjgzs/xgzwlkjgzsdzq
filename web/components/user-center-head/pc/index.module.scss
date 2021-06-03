@@ -93,6 +93,10 @@
       .uploadIcon {
         margin-right: rem(6);
       }
+      .uploadText {
+        display: flex;
+        align-items: center;
+      }
       padding-top: rem(48);
       font-size: rem($font-size-small);
       line-height: rem(22);
