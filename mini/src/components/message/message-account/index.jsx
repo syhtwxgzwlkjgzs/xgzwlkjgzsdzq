@@ -37,10 +37,10 @@ const Index = ({ message, subPage }) => {
     data.forEach(item => {
       list.push({
         id: item.id,
+        isFirst: item.isFirst || true, // 标识消息主题来源于主题或评论，默认true-主题
         createdAt: item.createdAt,
         threadId: item.threadId,
-        content: item.postContent,
-        title: item.threadTitle,
+        content: item.isFirst ? (item.threadTitle || item.postContent) : item.replyPostContent,
         type: item.type,
         avatar: item.userAvatar,
         userId: item.userId,
