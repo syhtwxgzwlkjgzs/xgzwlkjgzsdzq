@@ -41,6 +41,7 @@ class BuyPCPage extends React.Component {
         onRefresh={this.props.dispatch}
         showRefresh={false}
         rightClass={styles.rightSide}
+        isShowLayoutRefresh={!!pageData?.length}
       >
         <SidebarPanel
           title="我的购买"

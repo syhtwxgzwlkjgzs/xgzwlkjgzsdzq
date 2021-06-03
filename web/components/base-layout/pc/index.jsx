@@ -42,6 +42,7 @@ const BaseLayout = forwardRef((props, ref) => {
     requestError=false,
     errorText='',
     rightClass = '',
+    isShowLayoutRefresh = true
   } = props;
 
   const listRef = useRef(null);
@@ -112,7 +113,7 @@ const BaseLayout = forwardRef((props, ref) => {
 
             <div className={styles.center}>
               {typeof(children) === 'function' ? children({ ...props }) : children}
-              {!isError && onRefresh && <RefreshView noMore={noMore} />}
+              {!isError && isShowLayoutRefresh && onRefresh && <RefreshView noMore={noMore} />}
               {isError && <ErrorView />}
             </div>
 
