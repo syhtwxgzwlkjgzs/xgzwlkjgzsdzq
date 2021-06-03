@@ -206,11 +206,11 @@ class index extends Component {
                     type="primary"
                     className={`${user.follow === 2 && styles.userFriendsBtn} ${user.follow === 1 && styles.userFollowedBtn}`}
                   >
-                    <Icon name={this.renderFollowedStatus(user.follow || 0).icon} />
+                    <Icon name={this.renderFollowedStatus(user.follow || 0).icon} size={12} />
                     <span className={styles.userBtnText}>{this.renderFollowedStatus(user.follow || 0).text}</span>
                   </Button>
                   <Button onClick={this.handleMessage}>
-                    <Icon name="NewsOutlined" />
+                    <Icon name="NewsOutlined" size={12} />
                     <span className={styles.userBtnText}>发私信</span>
                   </Button>
                 </div>
