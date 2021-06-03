@@ -7,6 +7,7 @@ import { createFollow, deleteFollow, getUserFans } from '@server';
 import { get } from '@common/utils/get';
 import deepClone from '@common/utils/deep-clone';
 import NoData from '@components/no-data';
+import classnames from 'classnames';
 
 class UserCenterFans extends React.Component {
   firstLoaded = false;
@@ -30,6 +31,7 @@ class UserCenterFans extends React.Component {
     className: '',
     styles: {},
     itemStyle: {},
+    loadingElementClass: '',
   };
 
   constructor(props) {
@@ -168,7 +170,9 @@ class UserCenterFans extends React.Component {
   // 清理，防止内存泄露
   componentWillUnmount() {
     if (!this.containerRef.current) return;
-    this.containerRef && this.containerRef.current && this.containerRef.current.removeEventListener('scroll', this.loadMore);
+    this.containerRef
+      && this.containerRef.current
+      && this.containerRef.current.removeEventListener('scroll', this.loadMore);
   }
 
   // 检查是否满足触底加载更多的条件
@@ -244,7 +248,7 @@ class UserCenterFans extends React.Component {
           );
         })}
         {isNoData && <NoData />}
-        <div className={styles.loadMoreContainer}>{this.state.loading && <Spin type={'spinner'}>加载中 ...</Spin>}</div>
+        <div className={classnames(styles.loadMoreContainer, this.props.loadingElementClass)}>{this.state.loading && <Spin type={'spinner'}>加载中 ...</Spin>}</div>
       </div>
     );
   }
