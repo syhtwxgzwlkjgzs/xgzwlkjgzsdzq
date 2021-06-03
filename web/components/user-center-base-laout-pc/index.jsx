@@ -1,5 +1,5 @@
-import React,  { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Flex } from '@discuzq/design';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Flex, Icon } from '@discuzq/design';
 import Header from '@components/header';
 import List from '@components/list';
 import RefreshView from '@components/list/RefreshView';
@@ -26,15 +26,15 @@ import styles from './index.module.scss';
 */
 
 const Index = (props) => {
-  const { 
-    header = null, 
-    left = null, 
-    children = null, 
-    right = null, 
-    footer = null, 
-    onSearch, 
-    noMore = false, 
-    onRefresh, 
+  const {
+    header = null,
+    left = null,
+    children = null,
+    right = null,
+    footer = null,
+    onSearch,
+    noMore = false,
+    onRefresh,
     isOtherPerson = false,
     showLayoutRefresh = true
   } = props;
@@ -86,44 +86,59 @@ const Index = (props) => {
 
   const showRight = useMemo(() => right && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg'), [size.current]);
 
+  const [isUploadBackgroundUrl, setBackgroundUrl] = useState(false)
+
+  const handleSetBgLoadingStatus = (bol) => {
+    setBackgroundUrl(bol)
+  }
+
   return (
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
-        <List {...props} className={styles.list} wrapperClass={styles.wrapper}>
-          <div className={styles.headerbox}>
-            <div className={styles.userHeader}>
-              <div className={styles.headImgWrapper}>
-                <UserCenterHeaderImage isOtherPerson={isOtherPerson}/>
+      <List {...props} className={styles.list} wrapperClass={styles.wrapper}>
+        <div className={styles.headerbox}>
+          <div className={styles.userHeader}>
+            <div className={styles.headImgWrapper}>
+              <UserCenterHeaderImage isOtherPerson={isOtherPerson} />
+              {/* 背景图加载状态 */}
+              {isUploadBackgroundUrl && (
+                <div className={styles.uploadBgUrl}>
+                  <div className={styles.uploadCon}>
+                    <Icon name="UploadingOutlined" size={12} />
+                    <span className={styles.uploadText}>上传中...</span>
+                  </div>
+                </div>
+              )}
+            </div>
+            <UserCenterHead handleSetBgLoadingStatus={handleSetBgLoadingStatus} platform='pc' isOtherPerson={isOtherPerson} />
+          </div>
+        </div>
+
+        <div className={styles.content}>
+          {
+            showLeft && (
+              <div className={styles.left}>
+                {typeof (left) === 'function' ? useCallback(left({ ...props }), []) : left}
               </div>
-              <UserCenterHead platform='pc'isOtherPerson={isOtherPerson}/>
-            </div>
+            )
+          }
+
+          <div className={styles.center}>
+            {typeof (children) === 'function' ? children({ ...props }) : children}
+            {onRefresh && showLayoutRefresh && <RefreshView noMore={noMore} />}
           </div>
 
-          <div className={styles.content}>
-            {
-              showLeft && (
-                <div className={styles.left}>
-                  {typeof(left) === 'function' ? useCallback(left({ ...props }), []) : left}
-                </div>
-              )
-            }
+          {
+            showRight && (
+              <div className={styles.right}>
+                {typeof (right) === 'function' ? right({ ...props }) : right}
+              </div>
+            )
+          }
+        </div>
+      </List>
 
-            <div className={styles.center}>
-              {typeof(children) === 'function' ? children({ ...props }) : children}
-              {onRefresh && showLayoutRefresh && <RefreshView noMore={noMore} />}
-            </div>
-
-            {
-              showRight && (
-                <div className={styles.right}>
-                  {typeof(right) === 'function' ? right({ ...props }) : right}
-                </div>
-              )
-            }
-          </div>
-        </List>
-
-      {typeof(footer) === 'function' ? footer({ ...props }) : footer}
+      {typeof (footer) === 'function' ? footer({ ...props }) : footer}
     </div>
   );
 };

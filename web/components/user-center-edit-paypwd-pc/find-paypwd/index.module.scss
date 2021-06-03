@@ -68,6 +68,14 @@
       }
     }
   }
+  .mobileItem {
+    position: relative;
+    .verifyCode {
+      position: absolute;
+      top: rem(4);
+      right: 0;
+    }
+  }
   .sendCaptcha {
     @include captchaBtn;
     color: $primary-color;
@@ -86,5 +94,14 @@
   .btn {
     width: rem(248);
     height: rem(36);
+    border-radius: rem(5);
   }
-} 
+}
+
+.bgBtnColor {
+  :global {
+    .dzq-button--primary.is-mouseenter {
+      @include button-primary()
+    }
+  }
+}

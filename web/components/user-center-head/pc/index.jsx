@@ -13,7 +13,9 @@ import { fixImageOrientation } from '@common/utils/exif';
 class index extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isUploadAvatarUrl: false, // 是否上传头像
+    };
   }
 
   static defaultProps = {
@@ -26,15 +28,66 @@ class index extends Component {
     this.avatarUploaderRef.current.click();
   };
   onAvatarChange = async (fileList) => {
+    this.setState({
+      isUploadAvatarUrl: true,
+    });
     const fixedImg = await fixImageOrientation(fileList.target.files[0]);
-    this.props.user.updateAvatar(fixedImg);
+    this.props.user
+      .updateAvatar(fixedImg)
+      .then((res) => {
+        const id = this.props.user.id;
+        if (id === res.id && res.avatarUrl) {
+          // this.user.editAvatarUrl = res.avatarUrl;
+          Toast.success({
+            content: '上传头像成功',
+            hasMask: false,
+            duration: 1000,
+          });
+          this.setState({
+            isUploadAvatarUrl: false,
+          });
+        }
+      })
+      .catch((err) => {
+        Toast.error({
+          content: err.Msg || '上传头像失败',
+          hasMask: false,
+          duration: 1000,
+        });
+        this.setState({
+          isUploadAvatarUrl: false,
+        });
+        // 上传失败 应该取之前用户的头像
+        // this.user.editAvatarUrl = this.user.avatarUrl;
+      });
   };
   handleBackgroundUpload = async () => {
     this.backgroundUploaderRef.current.click();
   };
   onBackgroundChange = async (fileList) => {
+    this.props.handleSetBgLoadingStatus(true)
     const fixedImg = await fixImageOrientation(fileList.target.files[0]);
-    this.props.user.updateBackground(fixedImg);
+    this.props.user
+      .updateBackground(fixedImg)
+      .then((res) => {
+        const id = this.props.user.id;
+        if (id === res.id && res.backgroundUrl) {
+          Toast.success({
+            content: '上传成功',
+            hasMask: false,
+            duration: 1000,
+          });
+          this.props.handleSetBgLoadingStatus(false)
+        }
+      })
+      .catch((err) => {
+        Toast.error({
+          content: err.Msg || '上传背景图失败',
+          hasMask: false,
+          duration: 1000,
+        });
+        this.props.handleSetBgLoadingStatus(false)
+      });
   };
   // 点击关注
   handleChangeAttention = async (follow) => {
@@ -100,6 +153,7 @@ class index extends Component {
   render() {
     const { targetUser } = this.props.user;
     const user = this.props.router.query?.id ? targetUser || {} : this.props.user;
+    const { isUploadAvatarUrl } = this.state
     return (
       <div className={styles.box}>
         <div className={styles.boxTop}>
@@ -117,6 +171,12 @@ class index extends Component {
                   multiple={false}
                   accept={ACCEPT_IMAGE_TYPES.join(',')}
                 />
+              </div>
+            )}
+            {isUploadAvatarUrl && (
+              <div className={styles.uploadAvatar}>
+                <Icon name="UploadingOutlined" size={12} />
+                <span className={styles.uploadText}>上传中...</span>
               </div>
             )}
           </div>
@@ -156,16 +216,18 @@ class index extends Component {
                 </div>
               </div>
             ) : (
-              <div className={styles.upload} onClick={this.handleBackgroundUpload}>
-                <input
-                  onChange={this.onBackgroundChange}
-                  ref={this.backgroundUploaderRef}
-                  type="file"
-                  style={{ display: 'none' }}
-                />
-                <Icon name="UploadingOutlined" size={12} className={styles.uploadIcon} />
+              <>
+                <div className={styles.upload} onClick={this.handleBackgroundUpload}>
+                  <input
+                    onChange={this.onBackgroundChange}
+                    ref={this.backgroundUploaderRef}
+                    type="file"
+                    style={{ display: 'none' }}
+                  />
+                  <Icon name="UploadingOutlined" size={12} className={styles.uploadIcon} />
                 上传封面图
               </div>
+              </>
             )}
           </div>
         </div>
