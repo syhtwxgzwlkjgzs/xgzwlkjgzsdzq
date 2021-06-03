@@ -138,7 +138,7 @@ export default class index extends Component {
     return (
       <>
         <div className={styles.userCenterEditHeader}>
-          <div className={styles.bgContent} style={{ position: 'relative' }}>
+          <div className={styles.bgContent}>
             <UserCenterHeaderImage onClick={this.handleBackgroundUpload} />
             <input
               onChange={this.onBackgroundChange}
