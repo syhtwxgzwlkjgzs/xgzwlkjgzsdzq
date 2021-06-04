@@ -116,7 +116,7 @@ class Header extends React.Component {
               image={user.userInfo?.avatarUrl}
               onClick={() => {}}
             ></Avatar>
-            <p className={styles.userName}>{user.userInfo.nickname || ''}</p>
+            <p title={user.userInfo.nickname || ''} className={styles.userName}>{user.userInfo.nickname || ''}</p>
           </div>
         </Dropdown>
       );
