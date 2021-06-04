@@ -5,6 +5,11 @@
   margin-bottom: 10px;
   z-index: $zindex-backtotop;
   border-bottom: 1px solid $border-color;
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    color: transparent;
+  }
 }
 .fixed {
   width: 100%;
@@ -17,7 +22,13 @@
   padding: 0 $padding-4n;
   background: $white;
   margin-bottom: 10px;
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    color: transparent;
+  }
 }
+
 .tabsBox {
   height: 52px;
   :global {
