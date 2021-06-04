@@ -29,13 +29,13 @@ module.exports = {
     miniCssExtractPluginOption: {
       ignoreOrder: true
     },
-    addChunkPages (pages) {
-      const subPages = miniConfig.subPackages[0].pages;
-      subPages.map(page => {
-        pages.set(`subPages/${page}`, ['subPages/common']);
-      });
+    // addChunkPages (pages) {
+    //   const subPages = miniConfig.subPackages[0].pages;
+    //   subPages.map(page => {
+    //     pages.set(`subPages/${page}`, ['subPages/common']);
+    //   });
 
-    },
+    // },
     webpackChain (chain, webpack) {
       // chain.plugin('analyzer').use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin, []);
       chain.plugin().use(webpack.DefinePlugin, [{
