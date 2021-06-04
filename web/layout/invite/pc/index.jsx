@@ -86,7 +86,7 @@ class InvitePCPage extends React.Component {
           </div>
           <div className={layout.user_card_button} onClick={this.createInviteLink}>邀请朋友</div>
         </div>
-        {/* <UserCenterFriendPc className={layout.user_center_wrap}/> */}
+        <UserCenterFriendPc className={layout.user_center_wrap}/>
         <UserCenterFansPc  className={layout.user_center_wrap}/>
         <Copyright/>
       </>
