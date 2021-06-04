@@ -103,10 +103,10 @@ const BaseLayoutControl = (props) => {
   const handleScroll = quickScroll ? quickScrolling : throttle(quickScrolling, 50);
 
   if (site.platform === 'pc') {
-    return <PCBaseLayout onScroll={handleScroll} pageName={pageName} {...others} ref={layoutRef} />;
+    return <PCBaseLayout onScroll={handleScroll} pageName={pageName} platform={site.platform} {...others} ref={layoutRef} />;
   }
 
-  return <H5BaseLayout onScroll={handleScroll} pageName={pageName} {...others} ref={layoutRef} />;
+  return <H5BaseLayout onScroll={handleScroll} pageName={pageName} platform={site.platform} {...others} ref={layoutRef} />;
 };
 
 export default inject('site', 'baselayout')(observer(BaseLayoutControl));
