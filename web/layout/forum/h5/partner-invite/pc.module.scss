@@ -1,5 +1,6 @@
 @import '@common/styles/index.scss';
 .content{
+  position: relative;
 }
 
 // 右侧卡片内容 start
@@ -134,4 +135,13 @@
     }
   }
 }
+.maskLayer{
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  z-index: $zindex-popup;
+  pointer-events: auto;
+}
+
 
