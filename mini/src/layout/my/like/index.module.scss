@@ -1,9 +1,11 @@
 
-
-.list {
-  flex: 1;
-  background-color: var(--background-color);
-}
-.listItem {
+.titleBox {
+  width: 100%;
+  height: 53px;
+  background-color: var(--color-white);
+  font-size: 14px;
+  color: var( --pc-user-info-title);
+  padding: 0 16px;
+  line-height: 53px;
   margin-bottom: 10px;
 }
