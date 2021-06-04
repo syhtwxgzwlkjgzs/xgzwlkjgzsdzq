@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import { Icon, Toast, Avatar } from '@discuzq/design';
+import { Icon, Toast, Avatar, Spin } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import NoData from '@components/no-data';
@@ -18,15 +18,45 @@ import { copyToClipboard } from '@common/utils/copyToClipboard';
 @inject('invite')
 @observer
 class InvitePCPage extends React.Component {
+  containerRef = React.createRef(null);
+
   async componentDidMount() {
     try {
-      await this.props.invite.getInviteUsersList();
+      const { invite } = this.props;
+      await invite.getInviteUsersList();
+      if (!this.containerRef.current) return;
+      this.containerRef.current.addEventListener('scroll', this.loadMore);
     } catch (e) {
       Toast.error({
         content: e.Message,
       });
     }
   }
+
+  // 清理，防止内存泄露
+  componentWillUnmount() {
+    if (!this.containerRef.current) return;
+    this.containerRef.current.removeEventListener('scroll', this.loadMore);
+  }
+
+  // 检查是否满足触底加载更多的条件
+  checkLoadCondition() {
+    const { invite } = this.props;
+    const hasMorePage = invite.totalPage >= (invite.currentPage + 1);
+    if (invite.inviteLoading) return false;
+    if (!hasMorePage) return false;
+    return true;
+  }
+
+  // 加载更多函数
+  loadMore = async () => {
+    const { invite } = this.props;
+    const scrollDom = this.containerRef.current;
+    if (scrollDom.clientHeight + scrollDom.scrollTop === scrollDom.scrollHeight) {
+      if (!this.checkLoadCondition()) return;
+      return await invite.getInviteUsersList(invite.currentPage + 1);
+    }
+  };
 
   createInviteLink = async () => {
     try {
@@ -79,7 +109,7 @@ class InvitePCPage extends React.Component {
                 </div>
                 <div className={layout.invite_money}>
                   <div className={layout.invite_num_title}>赚得赏金</div>
-                  <div className={layout.invite_num_content} title={inviteData.totalInviteBounties}>{inviteData.totalInviteBounties}</div>
+                  <div className={layout.invite_num_content} title={inviteData.totalInviteBounties}>{inviteData.totalInviteBounties || 0}</div>
                 </div>
               </div>
             </div>
@@ -93,12 +123,21 @@ class InvitePCPage extends React.Component {
     );
   }
   render() {
-    const { inviteData } = this.props.invite;
+    const { inviteUsersList, inviteLoading, isNoData, currentPage, totalPage } = this.props.invite;
     return (
       <BaseLayout
+        // noMore={currentPage >= totalPage}
         right={ this.renderRight }
+        // onRefresh={this.loadMore}
+        // showRefresh={false}
       >
-        <div className={layout.container}>
+        <div
+          className={layout.container}
+          ref={this.containerRef}
+          // style={{
+          //   overflow: 'scroll',
+          // }}
+        >
           <div className={layout.invite_list}>
             <div className={layout.invite_list_title}>
               <Icon size={16} name='IncomeOutlined' color='#FFC300'/>
@@ -111,8 +150,8 @@ class InvitePCPage extends React.Component {
             </div>
             <div className={layout.invite_list_main}>
               {
-                inviteData?.inviteUsersList?.map((item, index) => (
-                  <div key={index} className={layout.list_main_wrap}>
+                inviteUsersList?.map((item) => (
+                  <div key={item.toUserId} className={layout.list_main_wrap}>
                       <div className={layout.list_main_nickname}>
                         <Avatar
                           className={layout.user_value_avatar}
@@ -127,7 +166,8 @@ class InvitePCPage extends React.Component {
                   </div>
                 ))
               }
-              <NoData className={layout.invite_list_nodata} text='没有更多内容了'/>
+              {isNoData && <NoData className={layout.invite_list_nodata} text='没有更多内容了'/>}
+              {inviteLoading && <div className={layout.loadMoreContainer}><Spin type={'spinner'}>加载中 ...</Spin></div>}
             </div>
           </div>
         </div>
