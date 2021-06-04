@@ -7,11 +7,14 @@ import { withRouter } from 'next/router';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import Router from '@discuzq/sdk/dist/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
+import UnreadRedDot from '@components/unread-red-dot';
 
 @inject('site')
 @inject('user')
+@inject('message')
 @observer
 class Header extends React.Component {
+  timeoutId = null;
   constructor(props) {
     super(props);
 
@@ -24,6 +27,26 @@ class Header extends React.Component {
   // state = {
   //   value: ''
   // }
+
+  // 每20秒更新一次未读消息
+  updateUnreadMessage() {
+    const { message: { readUnreadCount } } = this.props;
+    this.timeoutId = setTimeout(() => {
+      readUnreadCount();
+      this.updateUnreadMessage();
+    }, 20000);
+  }
+
+  componentDidMount() {
+    const { message: { readUnreadCount } } = this.props;
+    readUnreadCount();
+    this.updateUnreadMessage();
+  }
+
+  // 卸载时去除定时器
+  componentWillUnmount() {
+    clearTimeout(this.timeoutId);
+  }
 
   onChangeInput = (e) => {
     this.setState({
@@ -141,7 +164,7 @@ class Header extends React.Component {
   }
 
   render() {
-    const { site, user } = this.props;
+    const { site, user, message: { totalUnread,  } } = this.props;
 
     return (
       <div className={styles.header}>
@@ -180,7 +203,9 @@ class Header extends React.Component {
                     name="MailOutlined"
                     size={17}
                   />
-                  <p className={styles.iconText}>消息</p>
+                  <UnreadRedDot unreadCount={totalUnread}>
+                    <p className={styles.iconText}>消息</p>
+                  </UnreadRedDot>
                 </div>
                 <div className={styles.iconItem} onClick={() => this.handleRouter('/search')}>
                   <Icon
