@@ -1,5 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { Image } from '@tarojs/components';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
@@ -7,6 +8,7 @@ import { View, Button } from '@tarojs/components';
 import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import layout from './index.module.scss';
+import bgImage from './../../../../web/public/dzq-img/invite-banner-bg.png';
 
 @inject('site')
 @inject('user')
@@ -32,11 +34,13 @@ class InviteH5Page extends React.Component {
 
     return (
       <>
+        {/* 头部全屏的背景图片 */}
+        <View className={layout.top_bg}>
+          <Image src={bgImage} className={layout.top_bg_image} />
+        </View>
+        {/* 头部全屏的背景图片 end */}
         <HomeHeader hideInfo hideLogo showToolbar />
         <View className={layout.content}>
-          {/* 头部 start */}
-          <View className={layout.header}></View>
-          {/* 头部 end */}
           {/* 用户信息 start */}
           <View className={layout.user_info}>
             <View className={layout.user_info_author}>
