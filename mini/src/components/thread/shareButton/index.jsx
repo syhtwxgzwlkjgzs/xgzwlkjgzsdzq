@@ -25,6 +25,7 @@ const Index = ({
         path: `/subPages/thread/index?id=${threadId}`
     }
     return (
+
     <Button className={styles.fabulous} openType='share' plain='true' data-shareData={shareData} style={styles}>
         {children || (
             <>
@@ -42,7 +43,7 @@ const Index = ({
         )}
     </Button>
     )
-    
+
 }
 
 export default React.memo(Index)

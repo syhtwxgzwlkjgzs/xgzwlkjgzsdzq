@@ -94,7 +94,7 @@ export default class ReplyList extends React.Component {
               )}
               {/* 回复内容 */}
               <RichText
-                className={classNames(styles.commentListText, this.props.isShowOne && styles.isShowOne)}
+                className={classNames(styles.content, this.props.isShowOne && styles.isShowOne)}
                 content={this.filterContent()}
                 onClick={this.handleClick.bind(this)}
               />
