@@ -94,7 +94,7 @@ class Index extends React.Component {
   }
 
   handleForgetPayPwd = () => {
-    Router.push({ url: '/my/edit/find-paypwd' });
+    Router.push({ url: '/my/edit/find-paypwd?type=payBox' });
   }
 
   async submitPwa() {
@@ -115,7 +115,7 @@ class Index extends React.Component {
         }, 500);
       } catch (error) {
         Toast.error({
-          content: '支付失败，请重新输入',
+          content: error.Message || '支付失败，请重新输入',
           hasMask: false,
           duration: 1000,
         });
