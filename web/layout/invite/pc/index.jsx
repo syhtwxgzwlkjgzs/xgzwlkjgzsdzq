@@ -24,19 +24,11 @@ class InvitePCPage extends React.Component {
     try {
       const { invite } = this.props;
       await invite.getInviteUsersList();
-      if (!this.containerRef.current) return;
-      this.containerRef.current.addEventListener('scroll', this.loadMore);
     } catch (e) {
       Toast.error({
         content: e.Message,
       });
     }
-  }
-
-  // 清理，防止内存泄露
-  componentWillUnmount() {
-    if (!this.containerRef.current) return;
-    this.containerRef.current.removeEventListener('scroll', this.loadMore);
   }
 
   // 检查是否满足触底加载更多的条件
@@ -69,16 +61,6 @@ class InvitePCPage extends React.Component {
         content: e.Message,
       });
     }
-  }
-
-
-  nextUsersPage = async () => {
-    const { forum } = this.props;
-    return await this.setUsersPageData(forum.userPage + 1);
-  }
-
-  setUsersPageData = async (page = 1) => {
-    await this.props.invite.getInviteUsersList();
   }
 
   // 右侧 - 潮流话题 粉丝 版权信息

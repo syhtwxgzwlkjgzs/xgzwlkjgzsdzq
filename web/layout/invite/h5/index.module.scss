@@ -1,6 +1,7 @@
 @import '@common/styles/index.scss';
 .content{
   height: 100%;
+  background: $white;
   // 头部
   .header{
     height: rem(164);
@@ -83,7 +84,7 @@
       line-height: $font-line-height-base;
       color: $text-color-regular;
       opacity: 1;
-      padding-top: $padding-4n;
+      padding-top: rem($padding-4n);
     }
     .invite_num_content{
       @include text-ellipsis;
@@ -104,28 +105,28 @@
 
   // 邀请列表 start
   .invite_list{
-    margin-bottom: rem(59);
+    background: $white;
     min-height: rem(285);
     box-sizing: border-box;
-    padding: rem(16);
-    padding-bottom: 0;
+    padding: rem($padding-4n);
+    padding-bottom: rem(59);
   }
   .invite_list_title{
-    font-size: rem(16);
+    font-size: rem($font-size-middle);
     vertical-align: middle;
     height: rem(24);
-    padding-bottom: $padding-4n;
+    padding-bottom: rem($padding-4n);
   }
   .invite_list_titleIcon{
-    line-height: rem(24);
+    line-height: rem($font-line-height-base);
     float: left;
   }
   .invite_list_titleText{
-    line-height: rem(24);
+    line-height: rem($font-line-height-base);
     float: left;
     font-weight: 600;
     color: var(--color-text-primary);
-    padding-left: rem(8);
+    padding-left: rem($padding-2n);
   }
   .invite_list_header{
     height: rem(36);
@@ -257,6 +258,18 @@
     justify-content: center;
     font-size: rem($font-size-primary);
     color: var(--color-text-placeholder);
+  }
+  .loadMoreContainer {
+    flex: 1;
+    padding: rem($padding-4n);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: $text-color-placeholder;
+  }
+  .bottom_tips_wrap {
+    height: rem(46);
   }
 
 }

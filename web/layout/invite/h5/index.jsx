@@ -1,13 +1,13 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import { Icon, Button, Toast, Avatar } from '@discuzq/design';
+import { Icon, Button, Toast, Avatar, Spin } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
-import Header from '@components/header';
+import NoData from '@components/no-data';
 import { copyToClipboard } from '@common/utils/copyToClipboard';
 import layout from './index.module.scss';
 import { numberFormat } from '@common/utils/number-format';
-import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
+import BaseLayout from '@components/base-layout';
 
 @inject('site')
 @inject('user')
@@ -40,11 +40,33 @@ class InviteH5Page extends React.Component {
     }
   }
 
+  // 检查是否满足触底加载更多的条件
+  checkLoadCondition() {
+    const { invite } = this.props;
+    const hasMorePage = invite.totalPage >= (invite.currentPage + 1);
+    if (invite.inviteLoading) return false;
+    if (!hasMorePage) return false;
+    return true;
+  }
+
+  // 加载更多函数
+  loadMore = async () => {
+    console.log('?');
+    const { invite } = this.props;
+    if (!this.checkLoadCondition()) return;
+    return await invite.getInviteUsersList(invite.currentPage + 1);
+  };
+
   render() {
-    const { inviteData } = this.props.invite;
+    const { inviteData, inviteUsersList, isNoData, inviteLoading } = this.props.invite;
     return (
       <>
-        <Header />
+        <BaseLayout
+          right={ this.renderRight }
+          onRefresh={this.loadMore}
+          showRefresh={false}
+          isShowLayoutRefresh={false}
+        >
         <div className={layout.content}>
           {/* 头部 start */}
           <div className={layout.header}></div>
@@ -92,7 +114,7 @@ class InviteH5Page extends React.Component {
             </div>
             <div className={layout.invite_list_content}>
               {
-                inviteData?.inviteUsersList?.map((item, index) => (
+                inviteUsersList?.map((item, index) => (
                   <div key={index} className={layout.invite_list_item}>
                       <div className={layout.invite_list_itemName} title={item.nickname || '--'}>
                         <Avatar
@@ -105,16 +127,14 @@ class InviteH5Page extends React.Component {
                       </div>
                       <span className={layout.invite_list_itemMoney} title={`+${item.bounty}`}>+{item.bounty}</span>
                       <span className={layout.invite_list_itemTime} title={item.joinedAt || '--'}>{item.joinedAt || '--'}</span>
+                      <div className={layout.invite_list_itemLine}></div>
                   </div>
                 ))
               }
-              {
-                inviteData?.inviteUsersList?.length
-                  ? <></>
-                  : <div className={layout.refreshView}>
-                      <span>暂无信息</span>
-                    </div>
-              }
+              <div className={layout.bottom_tips_wrap}>
+                {isNoData && <NoData className={layout.invite_list_nodata} text='没有更多内容了'/>}
+                {inviteLoading && <div className={layout.loadMoreContainer}><Spin type={'spinner'}>加载中 ...</Spin></div>}
+              </div>
             </div>
           </div>
           {/* 邀请列表 end */}
@@ -129,6 +149,7 @@ class InviteH5Page extends React.Component {
           </div>
           {/* 邀请朋友 end */}
         </div>
+        </BaseLayout>
       </>
     );
   }
