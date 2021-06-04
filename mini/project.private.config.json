@@ -1,0 +1,30 @@
+{
+  "setting": {},
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "name": "subPages/thread/index",
+          "pathName": "subPages/thread/index",
+          "query": "id=49111",
+          "scene": null
+        },
+        {
+          "name": "subPages/thread/index",
+          "pathName": "subPages/thread/index",
+          "query": "id=49111",
+          "scene": null
+        }
+      ]
+    }
+  }
+}
