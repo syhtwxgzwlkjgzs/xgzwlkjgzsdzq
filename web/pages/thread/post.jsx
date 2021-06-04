@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/thread/post/h5';
 import IndexPCPage from '@layout/thread/post/pc';
 
+import HOCTencentCaptcha from '@middleware/HOCTencentCaptcha';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import HOCWithLogin from '@middleware/HOCWithLogin';
 import * as localData from '@layout/thread/post/common';
@@ -48,9 +49,6 @@ class PostPage extends React.Component {
       isTitleShow: true,
       jumpLink: '', // 退出页面时的跳转路径,默认返回上一页
     };
-    this.captcha = ''; // 腾讯云验证码实例
-    this.ticket = ''; // 腾讯云验证码返回票据
-    this.randstr = ''; // 腾讯云验证码返回随机字符串
     this.vditor = null;
     // 语音、视频、图片、附件是否上传完成。默认没有上传所以是上传完成的
     this.isAudioUploadDone = true;
@@ -60,6 +58,7 @@ class PostPage extends React.Component {
   }
 
   componentDidMount() {
+    this.props.router.events.on('routeChangeStart', this.handleRouteChange);
     this.fetchPermissions();
     // 如果本地缓存有数据，这个目前主要用于定位跳出的情况
     // const postData = this.getPostDataFromLocal();
@@ -73,12 +72,20 @@ class PostPage extends React.Component {
     // } else {
     const { fetchEmoji, emojis } = this.props.threadPost;
     if (emojis.length === 0) fetchEmoji();
-    this.fetchCategories();
+    this.fetchDetail();
     // }
   }
 
   componentWillUnmount() {
     this.captcha = '';
+    this.props.router.events.off('routeChangeStart', this.handleRouteChange);
+  }
+
+  handleRouteChange = (url) => {
+    // 如果不是修改支付密码的页面则重置发帖信息
+    if ((url || '').indexOf('/my/edit/paypwd') === -1) {
+      this.props.threadPost.resetPostData();
+    }
   }
 
   saveDataLocal = () => {
@@ -99,12 +106,8 @@ class PostPage extends React.Component {
     if (!user.permissions) user.updateUserInfo();
   }
 
-  async fetchCategories() {
-    const { index, thread, threadPost } = this.props;
-    let { categories } = index;
-    if (!categories || (categories && categories.length === 0)) {
-      categories = await index.getReadCategories();
-    }
+  async fetchDetail() {
+    const { thread, threadPost } = this.props;
     // 如果是编辑操作，需要获取链接中的帖子id，通过帖子id获取帖子详情信息
     const { query } = this.props.router;
     if (query && query.id) {
@@ -115,18 +118,11 @@ class PostPage extends React.Component {
         ret.code = 0;
       } else ret = await thread.fetchThreadDetail(id);
       if (ret.code === 0) {
-        const { categoryId } = ret.data;
-        this.setCategory(categoryId);
         threadPost.formatThreadDetailToPostData(ret.data);
       } else {
         Toast.error({ content: ret.msg });
       }
     }
-  }
-
-  setCategory(categoryId) {
-    const categorySelected = this.props.index.getCategorySelectById(categoryId);
-    this.props.threadPost.setCategorySelected(categorySelected);
   }
 
   setPostData(data) {
@@ -447,26 +443,6 @@ class PostPage extends React.Component {
     this.setState({ atList });
   };
 
-  toTCaptcha = async (qcloudCaptchaAppId) => {
-    // 验证码实例为空，则创建实例
-    if (!this.captcha) {
-      const TencentCaptcha = (await import('@common/utils/tcaptcha')).default;
-      this.captcha = new TencentCaptcha(qcloudCaptchaAppId, (res) => {
-        if (res.ret === 0) {
-          // 验证通过后发布
-          this.ticket = res.ticket;
-          this.randstr = res.randstr;
-          this.handleSubmit(this.props.threadPost.postData.draft);
-        }
-        if (res.ret === 2) {
-          console.log('验证关闭');
-        }
-      });
-    }
-    // 显示验证码
-    this.captcha.show();
-  };
-
   // 发布提交
   handleSubmit = async (isDraft) => {
     const { postData, setPostData } = this.props.threadPost;
@@ -514,26 +490,13 @@ class PostPage extends React.Component {
     const { webConfig } = this.props.site;
     if (webConfig) {
       const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
-      const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
       const createThreadWithCaptcha = webConfig?.other?.createThreadWithCaptcha;
       // 开启了腾讯云验证码验证时，进行验证，通过后再进行实际的发布请求
       if (qcloudCaptcha && createThreadWithCaptcha) {
         // 验证码票据，验证码字符串不全时，弹出滑块验证码
-        if (!this.ticket || !this.randstr) {
-          this.toTCaptcha(qcloudCaptchaAppId); // 传递appId
-          return false; // 验证通过后会重新调用发布函数
-        }
+        const { captchaTicket, captchaRandStr } = await this.props.showCaptcha();
+        if (!captchaTicket && !captchaRandStr) return false;
       }
-    }
-
-    // 将验证信息更新到发布store
-    if (this.ticket && this.randstr) {
-      setPostData({
-        ticket: this.ticket,
-        randstr: this.randstr,
-      });
-      this.ticket = '';
-      this.randstr = '';
     }
 
     const threadId = this.props.router.query?.id || '';
@@ -589,7 +552,6 @@ class PostPage extends React.Component {
       this.toastInstance?.destroy();
       // 防止被清除
       const _isDraft = isDraft;
-      this.props.threadPost.resetPostData();
 
       if (!_isDraft) {
         // 更新帖子到首页列表
@@ -616,7 +578,7 @@ class PostPage extends React.Component {
 
   // 保存草稿
   handleDraft = (val) => {
-    const { site: { isPC }, threadPost: { resetPostData } } = this.props;
+    const { site: { isPC } } = this.props;
     this.setState({ draftShow: false });
 
     if (isPC) {
@@ -630,7 +592,6 @@ class PostPage extends React.Component {
       this.handleSubmit(true);
     }
     if (val === '不保存草稿') {
-      resetPostData();
       const { jumpLink } = this.state;
       jumpLink ? Router.push({ url: jumpLink }) : Router.back();
     }
@@ -700,4 +661,4 @@ class PostPage extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(HOCWithLogin(withRouter(PostPage)));
+export default HOCTencentCaptcha(HOCFetchSiteData(HOCWithLogin(withRouter(PostPage))));

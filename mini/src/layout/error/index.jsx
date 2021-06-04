@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@discuzq/design/dist/components/button';
 import { View, Text, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 import error from '../../public/dzq-img/error.png';
 
-export default function ErrorPage() {
+export default function ErrorPage(props) {
+  const [text] = useState(props.text || '服务器错误 SERVER ERROR');
+
   const onReflush = () => {
     Taro.navigateBack({
       delta: 1,
@@ -18,7 +20,7 @@ export default function ErrorPage() {
 
       <View className={styles.body}>
         <Image className={styles.icon} src={error} />
-        <Text className={styles.text}>服务器错误 SERVER ERROR</Text>
+        <Text className={styles.text}>{text}</Text>
       </View>
 
       <View className={styles.footer}>

@@ -140,6 +140,7 @@ class UserCenterUsers extends React.Component {
     this.setState({
       loading: false,
     });
+    if (!this.containerRef.current) return;
     this.containerRef.current.addEventListener('scroll', this.loadMore);
   }
 

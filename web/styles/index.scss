@@ -24,6 +24,12 @@
   vertical-align: baseline;
 }
 
+.dzq-tag {
+  &:after {
+    display: none;
+  }
+}
+
 * {
   font-family: $font-family;
 }

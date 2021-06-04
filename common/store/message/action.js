@@ -1,8 +1,20 @@
 import { action } from 'mobx';
 import MessageStore from './store';
-import { readDialogList, readMsgList, createDialog, deleteMsg, deleteDialog, readDialogMsgList, createDialogMsg, readUnreadCount } from '@server';
+import { readDialogList, readMsgList, createDialog, deleteMsg, deleteDialog, readDialogMsgList, createDialogMsg, readUnreadCount, readDialogIdByUsername, updateDialog } from '@server';
 
 class MessageAction extends MessageStore {
+  // 根据username获取dialogId
+  @action.bound
+  async readDialogIdByUsername(username) {
+    return readDialogIdByUsername({ params: { username } });
+  }
+
+  // 把对话消息设置为已读
+  @action.bound
+  async updateDialog(dialogId) {
+    updateDialog({ data: { dialogId } });
+  }
+
   // 获取未读消息数量
   @action.bound
   async readUnreadCount() {
@@ -38,6 +50,7 @@ class MessageAction extends MessageStore {
       },
     };
   }
+
   // 设置消息列表数据
   @action
   setMsgList(currentPage, key, ret) {
@@ -60,42 +73,49 @@ class MessageAction extends MessageStore {
       }
     }
   }
+
   // 获取账号消息
   @action.bound
   async readAccountMsgList(page = 1) {
     const ret = await readMsgList(this.assemblyParams(page, 'related,replied,liked'));
     this.setMsgList(page, 'accountMsgList', ret);
   }
+
   // 获取@我的消息
   @action.bound
   async readAtMsgList(page = 1) {
     const ret = await readMsgList(this.assemblyParams(page, 'related'));
     this.setMsgList(page, 'atMsgList', ret);
   }
+
   // 获取回复我的消息
   @action.bound
   async readReplyMsgList(page = 1) {
     const ret = await readMsgList(this.assemblyParams(page, 'replied'));
     this.setMsgList(page, 'replyMsgList', ret);
   }
+
   // 获取点赞我的消息
   @action.bound
   async readLikeMsgList(page = 1) {
     const ret = await readMsgList(this.assemblyParams(page, 'liked'));
     this.setMsgList(page, 'likeMsgList', ret);
   }
+
   // 获取财务消息
   @action.bound
   async readFinancialMsgList(page = 1) {
     const ret = await readMsgList(this.assemblyParams(page, 'rewarded,threadrewardedexpired,threadrewarded,receiveredpacket,withdrawal'));
     this.setMsgList(page, 'financialMsgList', ret);
   }
+
   // 获取帖子通知
   @action.bound
   async readThreadMsgList(page = 1) {
     const ret = await readMsgList(this.assemblyParams(page, 'system'));
     this.setMsgList(page, 'threadMsgList', ret);
   }
+
   // 获取对话列表
   @action.bound
   async readDialogList(page = 1) {
@@ -116,8 +136,8 @@ class MessageAction extends MessageStore {
         perPage: 200,
         page,
         filter: {
-          dialogId
-        }
+          dialogId,
+        },
       },
     });
     this.setMsgList(page, 'dialogMsgList', ret);

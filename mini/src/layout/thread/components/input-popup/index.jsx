@@ -251,7 +251,7 @@ const InputPop = (props) => {
 
       {showAt && (
         <View className={styles.atSelect}>
-          <AtSelect visible={showAt} disabledBack={true} getAtList={onAtListChange} onCancel={onAtIconClick} />
+          <AtSelect visible={showAt} stateLess={true} getAtList={onAtListChange} onCancel={onAtIconClick} />
         </View>
       )}
 

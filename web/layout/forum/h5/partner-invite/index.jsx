@@ -130,9 +130,11 @@ class PartnerInviteH5Page extends React.Component {
     const { site: { platform, webConfig }, forum } = this.props;
     const { invitorName, invitorAvatar } = this.state;
     const { setSite: { siteMode, sitePrice, siteMasterScale, siteExpire } = {} } = webConfig;
-    const { threadTotal, updataTime } = forum;
+    const { updataTime } = forum;
     const layout = platform === 'h5' ? mlayout : pclayout;
     const { inviteCode } = this.props.router.query;
+    // 内容数
+    const countThreads = get(webConfig, 'other.countThreads', '');
     if (platform === 'h5') {
       return <></>;
     }
@@ -164,7 +166,7 @@ class PartnerInviteH5Page extends React.Component {
                 </div>
                 <div className={layout.site_status_list}>
                     <span className={layout.site_status_label}>主题</span>
-                    <span className={layout.site_status_item}>{numberFormat(threadTotal)}</span>
+                    <span className={layout.site_status_item}>{numberFormat(countThreads)}</span>
                 </div>
               </div>
             </div>
@@ -193,16 +195,18 @@ class PartnerInviteH5Page extends React.Component {
   }
 
   render() {
-    const { site: { platform, webConfig }, forum: { threadTotal, updataTime } } = this.props;
+    const { site: { platform, webConfig }, forum: { updataTime } } = this.props;
     const { inviteCode } = this.props.router.query;
     const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
     const { invitorName, invitorAvatar } = this.state;
     const layout = platform === 'h5' ? mlayout : pclayout;
+    // 内容数
+    const countThreads = get(webConfig, 'other.countThreads', '');
     return (
       <PartnerInviteWrap renderRight={this.renderRight}>
         <div className={layout.content}>
           {/* 站点信息 start */}
-          <SiteInfo threadTotal={threadTotal} updataTime={ updataTime }/>
+          <SiteInfo threadTotal={countThreads} updataTime={ updataTime }/>
           {/* 站点信息 end */}
           {/* 站点用户 start */}
           <PartnerInviteUser/>

@@ -15,7 +15,8 @@ const SearchUsers = ({ data = [], onItemClick }) => (
       <UserItem 
         key={index} 
         imgSrc={item.avatar} 
-        needPadding={false} 
+        needPadding={true}
+        needBottomLine={true}
         title={item.nickname} 
         userId={item.userId} 
         label={item.groupName} 
