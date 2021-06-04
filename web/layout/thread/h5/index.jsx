@@ -73,7 +73,6 @@ class ThreadH5Page extends React.Component {
 
   // 滚动事件
   handleOnScroll() {
-    console.log('滚动')
     // 加载评论列表
     const scrollDistance = this.threadBodyRef?.current?.scrollTop;
     const offsetHeight = this.threadBodyRef?.current?.offsetHeight;

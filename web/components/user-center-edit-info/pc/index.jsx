@@ -12,6 +12,7 @@ import UserCenterEditAccountPwd from '../../user-center-edit-account-pwd-pc';
 import UserCenterEditMobile from '../../user-center-edit-mobile-pc';
 import UserCenterEditPaypwd from '../../user-center-edit-paypwd-pc';
 import WechatRebindDialog from '../../user-center/rebind-wechat';
+import Copyright from '@components/copyright';
 
 @inject('site')
 @inject('user')
@@ -53,16 +54,17 @@ class index extends Component {
                 content: '更新昵称成功',
                 duration: 1000,
               });
+              this.closeInputEditor('昵称');
             } catch (e) {
               console.error(e);
               if (e.Code) {
                 Toast.error({
-                  content: e.Msg,
+                  content: e.Message,
                   duration: 1000,
                 });
+                this.props.user.editNickName = '';
               }
             }
-            this.closeInputEditor('昵称');
           },
           onCancel: () => {
             this.closeInputEditor('昵称');
@@ -99,6 +101,7 @@ class index extends Component {
                 content: '更新用户名成功',
                 duration: 1000,
               });
+              this.closeInputEditor('用户名');
             } catch (e) {
               console.error(e);
               if (e.Code) {
@@ -107,8 +110,8 @@ class index extends Component {
                   duration: 1000,
                 });
               }
+              this.props.user.editUserName = '';
             }
-            this.closeInputEditor('用户名');
           },
           onCancel: () => {
             this.closeInputEditor('用户名');
@@ -140,16 +143,17 @@ class index extends Component {
                 content: '更新个性签名成功',
                 duration: 1000,
               });
+              this.closeInputEditor('个性签名');
             } catch (e) {
               console.error(e);
               if (e.Code) {
                 Toast.error({
-                  content: e.Msg,
+                  content: e.Message,
                   duration: 1000,
                 });
+                this.props.user.editSignature = '';
               }
             }
-            this.closeInputEditor('个性签名');
           },
           onCancel: () => {
             this.closeInputEditor('个性签名');
@@ -158,7 +162,7 @@ class index extends Component {
         {
           name: '手机号码',
           display: 'show',
-          render: () => this.props.user.mobile,
+          render: () => this.props.user.mobile || '未设置',
           condition: () => this.props.site?.isSmsOpen,
           operation: () => {
             if (!this.props.user.mobile) {
@@ -236,34 +240,34 @@ class index extends Component {
           ),
           inputEditor: () => null,
         },
-        {
-          name: '微信',
-          display: 'show',
-          condition: () => {
-            // 条件都满足时才显示微信
-            const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
-            return IS_WECHAT_ACCESSABLE;
-          },
-          render: () => (
-            <div className={styles.pcEditNicknameImgs}>
-              <Avatar className={styles.pcEditNicknameImg} image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />
-              <p className={styles.pcEditWeiName}>{this.user.wxNickname}</p>
-            </div>
-          ),
-          operation: () => (
-            <p
-              onClick={() => {
-                this.setState({
-                  wechatRebindEditorVisible: true,
-                });
-              }}
-              className={styles.pcEditNicknameCallMsodify}
-            >
-              换绑
-            </p>
-          ),
-          inputEditor: () => null,
-        },
+        // {
+        //   name: '微信',
+        //   display: 'show',
+        //   condition: () => {
+        //     // 条件都满足时才显示微信
+        //     const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
+        //     return IS_WECHAT_ACCESSABLE;
+        //   },
+        //   render: () => (
+        //     <div className={styles.pcEditNicknameImgs}>
+        //       <Avatar className={styles.pcEditNicknameImg} image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />
+        //       <p className={styles.pcEditWeiName}>{this.user.wxNickname}</p>
+        //     </div>
+        //   ),
+        //   operation: () => (
+        //     <p
+        //       onClick={() => {
+        //         this.setState({
+        //           wechatRebindEditorVisible: true,
+        //         });
+        //       }}
+        //       className={styles.pcEditNicknameCallMsodify}
+        //     >
+        //       换绑
+        //     </p>
+        //   ),
+        //   inputEditor: () => null,
+        // },
       ],
     };
     this.user = this.props.user || {};
@@ -342,7 +346,9 @@ class index extends Component {
               <div key={index}>{this.editorialpresentation(item, item.type, index)}</div>
             ))}
           </div>
-          <div className={styles.bottomText}>Powered By Discuz! Q © 2021 粤ICP备20008502号-1</div>
+          <div className={styles.bottomText}>
+            <Copyright center line/>
+          </div>
         </div>
 
         {/* Popups */}
@@ -371,14 +377,14 @@ class index extends Component {
               });
             }}
           />
-          <WechatRebindDialog
+          {/* <WechatRebindDialog
             visible={this.state.wechatRebindEditorVisible}
             onClose={() => {
               this.setState({
                 wechatRebindEditorVisible: false,
               });
             }}
-          />
+          /> */}
         </>
       </div>
     );

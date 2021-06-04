@@ -106,9 +106,10 @@ class Index extends React.Component {
     data.forEach(item => {
       list.push({
         id: item.id,
+        isFirst: item.isFirst || true, // 标识消息主题来源于主题或评论，默认true-主题
         createdAt: item.createdAt,
         threadId: item.threadId,
-        content: item.isFirst ? (item.threadTitle || item.postContent) : item.postContent,
+        content: item.isFirst ? (item.threadTitle || item.postContent) : item.replyPostContent,
         type: item.type,
         avatar: item.userAvatar,
         userId: item.userId,
@@ -139,7 +140,7 @@ class Index extends React.Component {
     const card = <Card type={subPage} cardItems={items} onClick={this.toOtherMessage} />;
 
     return (
-      <div className={`${styles.wrapper} ${isPC ? styles.pc : ""}`}>
+      <div className={`${styles.wrapper} ${isPC ? styles.pc : styles.mobile}`}>
         <Notice
           infoIdx={3}
           totalCount={totalCount}

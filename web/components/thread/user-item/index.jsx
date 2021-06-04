@@ -17,7 +17,7 @@ import { ThreadCommonContext } from '../utils'
  * @prop {string}  isShowBottomLine 是否显示分割线
  */
 // TODO 点击穿透问题之后想办法解决
-const Index = ({ imgSrc, title = '', type = 0, subTitle, label, index, onClick = noop, userId, platform, isShowBottomLine = true, needPadding = true }) => {
+const Index = ({ imgSrc, title = '', type = 0, subTitle, label, index, onClick = noop, userId, platform, isShowBottomLine = true, needPadding = true, needPaddingWithoutLine = false }) => {
   const handleClick = (e) => {
     e.stopPropagation();
     onClick(userId);
@@ -31,7 +31,7 @@ const Index = ({ imgSrc, title = '', type = 0, subTitle, label, index, onClick =
                             (type === 3) ? styles.heart : "";
 
   return (
-    <div className={`${styles.listItem} ${platform === 'pc' ? styles.pcItem : styles.h5Item} ${isShowBottomLine && styles.bottomLine} ${needPadding && styles.sidebarPadding}`} key={index} onClick={handleClick}>
+    <div className={`${styles.listItem} ${platform === 'pc' ? styles.pcItem : styles.h5Item} ${isShowBottomLine && styles.bottomLine} ${needPadding && styles.sidebarPadding} ${needPaddingWithoutLine && styles.horizontalPadding}`} key={index} onClick={handleClick}>
       <div className={styles.wrapper}>
           <div className={styles.header}>
               <Avatar 

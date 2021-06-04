@@ -1,15 +1,15 @@
-// import {readCategories} from '@discuzq/sdk/dist/api/content/read-categories';
+// import {createOrdersCreate} from '@discuzq/sdk/dist/api/pay/create-orderscreate';
 import api from '../api';
 
-/** 当前用户所拥有的权限
- * @param {object} params
- * @returns object
+/**
+ * 根据username获取到dialogid
+ * TODO: 待更新到sdk
  */
-export default async function groupPermissionList(opts = {}, ctx = null) {
+export default async function _readDialogIdByUsername(opts, ctx = null) {
   try {
     const { params = {}, data = {}, ...others } = opts;
     const options = {
-      url: '/apiv3/group.permission.list', // 请求地址
+      url: '/apiv3/dialog.record',
       method: 'GET',
       params,
       data,
@@ -22,3 +22,4 @@ export default async function groupPermissionList(opts = {}, ctx = null) {
     return error;
   }
 }
+

@@ -71,7 +71,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
         setErrorMsg(["下载失败"]);
         setTimeout(() => {
           errorMsg = "";
-          setErrorMsg([""]);
+          setErrorMsg("");
         }, 3000);
         console.error(error.errMsg)
       }).finally(() => {

@@ -12,7 +12,7 @@ import styles from './index.module.scss';
 @observer
 class InstantMessaging extends React.Component {
   state = {
-    showEmoji: false
+    showEmoji: false,
   };
 
   componentWillUnmount() {
@@ -28,7 +28,7 @@ class InstantMessaging extends React.Component {
         <DialogBox platform={platform} dialogId={dialogId} showEmoji={showEmoji} />
         <InteractionBox username={username} platform={platform} dialogId={dialogId} showEmoji={showEmoji} setShowEmoji={(show) => {
           this.setState({
-            showEmoji: show
+            showEmoji: show,
           });
         }} />
       </div>

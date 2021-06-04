@@ -7,12 +7,12 @@
   overflow-y: auto;
   @include scrollbar();
   &::-webkit-scrollbar {
-    display: block;
+    display: block !important;
     width: 8px;
   }
 
   .box__inner{
-    padding: 0 $padding-4n;
+    padding: $padding-2n;
 
     .itself {
       .msgContent {
