@@ -53,12 +53,16 @@ function avatar(props) {
       if (res.success) {
         userInfo.follow = res.data.isMutual ? 2 : 1;
         userInfo.fansCount = userInfo.fansCount + 1;
+      } else {
+        Toast.info({ content: res.msg });
       }
     } else {
       const res = await myself.cancelFollow({ id: userId, type: 1 });
       if (res.success) {
         userInfo.follow = 0;
         userInfo.fansCount = userInfo.fansCount - 1;
+      } else {
+        Toast.info({ content: res.msg });
       }
     }
     changeFollowStatus(false);
