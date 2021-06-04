@@ -378,6 +378,8 @@ class PostPage extends React.Component {
       if (tmp) {
         if (item.id) changeData[item.id] = tmp;
         else changeData[item.uid] = tmp;
+      } else {
+        changeData[item.uid] = item;
       }
       return item;
     });
