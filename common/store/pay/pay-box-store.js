@@ -34,6 +34,9 @@ class PayBoxStore {
     this.onCompleted(this.orderInfo);
   };
 
+  // 创建定点回调
+  onOrderCreated = noop;
+
   qrCodeCheckTimer = null;
 
   // 订单 options
@@ -153,6 +156,9 @@ class PayBoxStore {
       });
       if (get(createRes, 'code') === 0) {
         this.orderInfo = get(createRes, 'data', {});
+        if (this.onOrderCreated) {
+          this.onOrderCreated(this.orderInfo);
+        }
         this.step = STEP_MAP.PAYWAY;
         return createRes;
       }
@@ -536,6 +542,22 @@ class PayBoxStore {
       Code: forgetPayPwdRes.code,
       Msg: forgetPayPwdRes.msg,
     };
+  }
+
+  /**
+   * 展示支付框
+   */
+  @action
+  show = () => {
+    this.visible = true;
+  }
+
+  /**
+   * 隐藏支付框
+   */
+  @action
+  hide = () => {
+    this.visible = false;
   }
 
   /**
