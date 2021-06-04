@@ -1,9 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { observer, inject } from 'mobx-react';
 import styles from './index.module.scss';
 import { Icon, Toast } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
 import { withRouter } from 'next/router';
+import UnreadRedDot from '@components/unread-red-dot';
 
 /**
  * BottomNavBar组件
@@ -11,8 +12,8 @@ import { withRouter } from 'next/router';
  * @prop {boolean} curr 常亮icon
  */
 
-const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 'home', onClick = noop }) => {
-
+const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 'home', onClick = noop, message }) => {
+  const { totalUnread, readUnreadCount } = message;
   const checkCurrActiveTab = useCallback((curr, target) => {
     return curr === target;
   }, [curr])
@@ -24,6 +25,21 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
     { icon: 'MailOutlined', text: '消息', active: checkCurrActiveTab(curr, 'message'), router: '/message' },
     { icon: 'ProfessionOutlined', text: '我的', active: checkCurrActiveTab(curr, 'my'), router: '/my' },
   ]);
+
+  // 每20秒更新一次未读消息
+  const timeoutRef = useRef();
+  const updateUnreadMessage = () => {
+    timeoutRef.current = setTimeout(() => {
+      readUnreadCount();
+      updateUnreadMessage();
+    }, 20000);
+  }
+
+  useEffect(() => {
+    readUnreadCount();
+    updateUnreadMessage();
+    return () => clearTimeout(timeoutRef.current);
+  }, []);
 
   const handleClick = (i, idx) => {
     if (i.router === '/thread/post') {
@@ -46,27 +62,35 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
 
   return (
     <>
-    <div className={styles.footer} style={{ position: fixed ? 'fixed' : '' }}>
-      {tabs.map((i, idx) => (i.text ? (
-          <div key={idx} className={styles.item + (i.active ? ` ${styles.active}` : '')} onClick={() => handleClick(i, idx)}>
-            <Icon name={i.icon} size={i.icon === 'MailOutlined' ? 22 : 20} />
-            <div className={styles.text}>{i.text}</div>
-          </div>
-      ) : (
-          <div key={idx} style={{ flex: 1, textAlign: 'center' }} onClick={() => handleClick(i, idx)}>
-            <div className={styles.addIcon}>
-              <Icon name={i.icon} size={28} color="#fff" />
+      <div className={styles.footer} style={{ position: fixed ? 'fixed' : '' }}>
+        {tabs.map((i, idx) => (i.text ? (
+            <div key={idx} className={styles.item + (i.active ? ` ${styles.active}` : '')} onClick={() => handleClick(i, idx)}>
+              {
+                i.icon === 'MailOutlined' ? (
+                  <UnreadRedDot unreadCount={totalUnread}>
+                    <Icon name={i.icon} size={22} />
+                  </UnreadRedDot>
+                ) : (
+                  <Icon name={i.icon} size={20} />
+                )
+              }
+              <div className={styles.text}>{i.text}</div>
             </div>
-          </div>
-      )))}
-    </div>
-    {
-      fixed && placeholder && (
-        <div className={styles.placeholder} />
-      )
-    }
+        ) : (
+            <div key={idx} style={{ flex: 1, textAlign: 'center' }} onClick={() => handleClick(i, idx)}>
+              <div className={styles.addIcon}>
+                <Icon name={i.icon} size={28} color="#fff" />
+              </div>
+            </div>
+        )))}
+      </div>
+      {
+        fixed && placeholder && (
+          <div className={styles.placeholder} />
+        )
+      }
     </>
   );
 };
 
-export default inject('user')(observer(withRouter(BottomNavBar)));
+export default inject('user', 'message')(observer(withRouter(BottomNavBar)));

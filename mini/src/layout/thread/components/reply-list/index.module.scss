@@ -35,16 +35,7 @@
           text-align: left;
           color: $text-color-primary;
           vertical-align: text-bottom;
-
-          :global {
-            .qq-emotion {
-              width: 22px;
-              height: 22px;
-              position: relative;
-              top: 6px;
-              display: inline-block;
-            }
-          }
+          word-break: break-all;
 
           View {
             display: inline;
@@ -52,13 +43,23 @@
           .p {
             display: inline;
           }
+
+          &.isShowOne {
+            // @include lamp-clamp(3);
+  
+            // p {
+            //   @include lamp-clamp(3);
+            // }
+          }
         }
 
-        .isShowOne {
-          @include lamp-clamp(3);
-
-          p {
-            @include lamp-clamp(3);
+        :global {
+          .qq-emotion {
+            width: 22px;
+            height: 22px;
+            position: relative;
+            top: 6px;
+            display: inline-block;
           }
         }
 
