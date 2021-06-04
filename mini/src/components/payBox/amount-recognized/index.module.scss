@@ -86,6 +86,12 @@
     flex-wrap: nowrap;
     @include text-ellipsis();
   }
+  .elipsisText {
+    display: flex;
+  }
+  .acExplainTitle {
+    display: block;
+  }
   .acExplainNum {
     color: var(--color-error);
     font-size: $font-size-middle;
@@ -95,7 +101,11 @@
     margin: $margin-2n 0;
   }
   .ampuntLineWrap {
-    margin: 0 -$margin-4n;
+    // margin: 0 -$margin-4n;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: -$margin-4n;
+    margin-right: -$margin-4n;
   }
   .ampuntLine {
     width: 100%;
