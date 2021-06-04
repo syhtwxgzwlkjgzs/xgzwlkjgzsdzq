@@ -11,6 +11,7 @@ import LoadingBox from '@components/loading-box';
 import { emojiVditorCompatibilityDisplay } from '@common/utils/emoji-regexp';
 import './index.scss';
 import '@discuzq/vditor/src/assets/scss/index.scss';
+import { Toast } from '@discuzq/design';
 
 export default function DVditor(props) {
   const { pc, emoji = {}, atList = [], topic, value,
@@ -217,10 +218,12 @@ export default function DVditor(props) {
           enable: false,
         },
         counter: {
-          enable: false,
-          // after(count) {
-          //   setContentCount(count);
-          // },
+          enable: true,
+          after(count) {
+            if (count >= MAX_COUNT) {
+              Toast.info({ content: '最多输入50000字' });
+            }
+          },
           type: 'markdown',
           max: MAX_COUNT,
         },
