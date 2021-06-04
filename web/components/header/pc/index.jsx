@@ -77,7 +77,7 @@ class Header extends React.Component {
   dropdownUserLogoutActionImpl = () => {
     clearLoginStatus();
     window.location.replace('/');
-  }
+  };
 
   dropdownActionImpl = (action) => {
     if (action === 'userCenter') {
@@ -85,7 +85,7 @@ class Header extends React.Component {
     } else if (action === 'logout') {
       this.dropdownUserLogoutActionImpl();
     }
-  }
+  };
 
   renderUserInfo() {
     // todo 跳转
@@ -96,8 +96,16 @@ class Header extends React.Component {
           style={{ display: 'inline-block' }}
           menu={
             <Dropdown.Menu>
-              <Dropdown.Item id="userCenter">个人中心</Dropdown.Item>
+              <Dropdown.Item id="userCenter">
+                <span className={styles.headerDropMenuIcon}>
+                  <Icon name="PersonalOutlined" size={15} />
+                </span>
+                个人中心
+              </Dropdown.Item>
               <Dropdown.Item id="logout">
+                <span className={styles.headerDropMenuIcon}>
+                  <Icon name="SignOutOutlined" size={15} />
+                </span>
                 退出登录
               </Dropdown.Item>
             </Dropdown.Menu>
@@ -155,7 +163,7 @@ class Header extends React.Component {
                   icon="SearchOutlined"
                   value={this.state.value}
                   onEnter={this.handleSearch}
-                  onChange={e => this.onChangeInput(e.target.value)}
+                  onChange={(e) => this.onChangeInput(e.target.value)}
                   onIconClick={this.handleIconClick}
                 />
               </div>

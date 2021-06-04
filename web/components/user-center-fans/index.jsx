@@ -54,7 +54,7 @@ class UserCenterFans extends React.Component {
   fetchFans = async () => {
     const opts = {
       params: {
-        page: this.props.sourcePage || this.page,
+        page: this.page,
         perPage: 20,
         filter: {
           userId: this.props.userId,
@@ -206,7 +206,12 @@ class UserCenterFans extends React.Component {
 
   // 检查是否满足触底加载更多的条件
   checkLoadCondition() {
-    const hasMorePage = this.totalPage >= this.page;
+    let hasMorePage = null;
+    if (this.dataSource) {
+      hasMorePage = this.sourceTotalPage >= this.sourcePage;
+    } else {
+      hasMorePage = this.totalPage >= this.page;
+    }
     if (this.state.loading) return false;
     if (!this.props.loadMorePage) {
       return false;
