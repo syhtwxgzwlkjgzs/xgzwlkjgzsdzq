@@ -68,6 +68,8 @@ class SearchResultUserH5Page extends React.Component {
               label={item.groupName}
               userId={item.userId}
               onClick={this.onUserClick}
+              needPadding={true}
+              needBottomLine={true}
             />
           ))
         }
