@@ -383,7 +383,6 @@ class PostPage extends React.Component {
       }
       return item;
     });
-    console.log(changeData, fileList, 'change');
     if (type === THREAD_TYPE.image) this.setPostData({ images: changeData });
     if (type === THREAD_TYPE.file) this.setPostData({ files: changeData });
   };
@@ -396,7 +395,6 @@ class PostPage extends React.Component {
       Toast.error({ content: `${ret.msg} 上传失败` });
       return false;
     }
-    console.log(file, 'complete');
     const { uid } = file;
     const { data } = ret;
     const { postData } = this.props.threadPost;
