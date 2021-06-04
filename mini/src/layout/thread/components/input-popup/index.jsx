@@ -189,6 +189,9 @@ const InputPop = (props) => {
               rows={4}
               showLimit={false}
               value={value}
+              onBlur={(e) => {
+                onChange(e);
+              }}
               onChange={(e) => {
                 onChange(e);
                 setValue(e.target.value);

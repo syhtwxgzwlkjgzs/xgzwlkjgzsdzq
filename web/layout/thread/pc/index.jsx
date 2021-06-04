@@ -81,7 +81,7 @@ class ThreadPCPage extends React.Component {
     const { isCommentReady, isNoMore } = this.props.thread;
     // 记录当前的滚动位置
     this.props.thread.setScrollDistance(scrollDistance);
-    if (scrollDistance + offsetHeight >= scrollHeight && !this.state.isCommentLoading && isCommentReady && !isNoMore) {
+    if (scrollDistance + offsetHeight >= scrollHeight - 20 && !this.state.isCommentLoading && isCommentReady && !isNoMore) {
       this.page = this.page + 1;
       this.loadCommentList();
     }
