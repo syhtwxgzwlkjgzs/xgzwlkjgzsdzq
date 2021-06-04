@@ -233,7 +233,6 @@ class PartnerInviteH5Page extends React.Component {
             platform === 'h5'
               ? (
                 <>
-                <div className={layout.maskLayer}></div>
                 <div className={layout.bottom}>
                   {
                     inviteCode
@@ -261,6 +260,7 @@ class PartnerInviteH5Page extends React.Component {
               )
               : <></>
           }
+        <div className={layout.maskLayer}></div>
         </div>
       </PartnerInviteWrap>
     );
