@@ -8,21 +8,57 @@ import UserCenterHead from '@components/user-center-head';
 import UserCenterAction from '@components/user-center-action';
 import UserCenterThreads from '@components/user-center-threads';
 import NoData from '@components/no-data';
-import BottomNavBar from '@components/bottom-nav-bar';
+import BaseLayout from '@components/base-layout'
 
 @inject('user')
 @observer
 export default class index extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true
+    };
+  }
 
   componentDidMount = async () => {
     await this.props.user.getUserThreads();
+    this.setState({ isLoading: false })
   };
 
+  // 处理页面栈退出后，数据没有重置
+  componentWillUnmount() {
+    this.props.user.clearUserThreadsInfo()
+  }
+
+  formatUserThreadsData = (userThreads) => {
+    if (Object.keys(userThreads).length === 0) return [];
+    return Object.values(userThreads).reduce((fullData, pageData) => [...fullData, ...pageData]);
+  };
+
+  onRefresh = () => {
+    const { isLoading } = this.state
+
+    // 避免第一次进入页面时，触发了上拉加载
+    if (!isLoading) {
+      return user.getUserThreads
+    }
+    return Promise.resolve()
+  }
+
   render() {
+    const { isLoading } = this.state
     const { user } = this.props;
-    const { userThreads, userThreadsTotalCount } = user;
+    const { userThreads, userThreadsTotalCount, userThreadsPage, userThreadsTotalPage } = user;
+    const formattedUserThreads = this.formatUserThreadsData(userThreads);
+
     return (
-      <View>
+      <BaseLayout
+        showHeader={false}
+        showTabBar
+        noMore={!isLoading && userThreadsPage >= userThreadsTotalPage}
+        onRefresh={this.onRefresh}
+        curr='my'
+      >
         <View className={styles.mobileLayout}>
           <UserCenterHeaderImage />
           <UserCenterHead />
@@ -40,12 +76,11 @@ export default class index extends Component {
             </View>
 
             <View className={styles.threadItemContainer}>
-              {userThreads && userThreads.length > 0 ? <UserCenterThreads data={userThreads} /> : <NoData />}
+              {!isLoading && formattedUserThreads?.length > 0 && <UserCenterThreads data={formattedUserThreads} />}
             </View>
           </View>
         </View>
-        <BottomNavBar curr='my' />
-      </View>
+      </BaseLayout>
     )
   }
 }

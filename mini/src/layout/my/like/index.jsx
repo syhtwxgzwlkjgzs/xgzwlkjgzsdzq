@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import ThreadContent from '@components/thread';
 import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout'
-import { View } from '@tarojs/components'
 
 @inject('site')
 @inject('index')
