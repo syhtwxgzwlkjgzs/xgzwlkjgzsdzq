@@ -7,7 +7,6 @@ import UserCenterHeaderImage from '@components/user-center-header-images';
 import UserCenterHead from '@components/user-center-head';
 import UserCenterAction from '@components/user-center-action';
 import UserCenterThreads from '@components/user-center-threads';
-import NoData from '@components/no-data';
 import BaseLayout from '@components/base-layout'
 
 @inject('user')

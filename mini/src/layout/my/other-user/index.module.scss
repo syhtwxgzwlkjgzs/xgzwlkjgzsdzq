@@ -1,0 +1,58 @@
+@import '@common/styles/fn/rem.scss';
+@import '@common/styles/_variable.scss';
+
+.mobileLayout {
+    background: $white;
+}
+
+.unit {
+    &::before {
+        content: '';
+        display: block;
+        height: 10px;
+        // 目前没有定义这个颜色变量
+        background: #F4F6F7;
+    }
+}
+
+.dividerContainer {
+    padding-left: $padding-4n;
+    padding-right: $padding-4n;
+
+    :global {
+        .dzq-divider {
+            margin: 0;
+        }
+    }
+}
+
+.divider {
+    margin: $margin-2n 0;
+}
+
+.threadUnit {
+    padding: $padding-4n;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .threadTitle {
+        font-weight: 600;
+        font-size: $font-size-middle;
+        color: $text-color-primary;
+        margin-right: 12px;
+    }
+
+    .threadCount {
+        font-size: $font-size-small;
+        // 这个目前也没有定义
+        color: var(--color-text-secondary);
+    }
+}
+
+.loadingSpin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 380px;
+}
