@@ -21,6 +21,7 @@ const SearchUsers = ({ data = [], onItemClick }) => (
         userId={item.userId} 
         label={item.groupName} 
         onClick={onItemClick} 
+        itemStyle={{padding: '16px 0 16px 0'}}
       />
     ))}
   </div>
