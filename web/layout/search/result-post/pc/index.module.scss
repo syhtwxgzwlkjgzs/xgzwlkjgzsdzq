@@ -1,10 +1,6 @@
 @import '@common/styles/index.scss';
 
-.wrapper {
-  padding: 0;
-}
-.hr {
-  height: rem(10);
-  background-color: $body-bg-color;
-  margin: 0 rem(-30);
+.borderRadius {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
