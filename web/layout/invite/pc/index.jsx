@@ -8,6 +8,7 @@ import NoData from '@components/no-data';
 import BaseLayout from '@components/base-layout';
 import UserCenterFansPc from '@components/user-center/fans-pc';
 import UserCenterFriendPc from '@components/user-center/friend-pc';
+import { numberFormat } from '@common/utils/number-format';
 import Copyright from '@components/copyright';
 import { copyToClipboard } from '@common/utils/copyToClipboard';
 
@@ -69,16 +70,16 @@ class InvitePCPage extends React.Component {
               />
             </div>
             <div className={layout.user_card_info}>
-              <div className={layout.user_info_name}>{inviteData.nickname}</div>
+              <div className={layout.user_info_name} title={inviteData.nickname}>{inviteData.nickname}</div>
               <div className={layout.user_info_tag}>{inviteData.groupName}</div>
               <div className={layout.user_info_invite}>
                 <div className={layout.invite_num}>
                   <div className={layout.invite_num_title}>已邀人数</div>
-                  <div className={layout.invite_num_content}>{inviteData.totalInviteUsers}</div>
+                  <div className={layout.invite_num_content} title={numberFormat(inviteData.totalInviteUsers)}>{numberFormat(inviteData.totalInviteUsers)}</div>
                 </div>
                 <div className={layout.invite_money}>
                   <div className={layout.invite_num_title}>赚得赏金</div>
-                  <div className={layout.invite_num_content}>{inviteData.totalInviteBounties}</div>
+                  <div className={layout.invite_num_content} title={inviteData.totalInviteBounties}>{inviteData.totalInviteBounties}</div>
                 </div>
               </div>
             </div>
@@ -119,10 +120,10 @@ class InvitePCPage extends React.Component {
                           size='small'
                           text={item?.nickname?.substring(0, 1)}
                         />
-                        <div className={layout.user_value_name}>{item.nickname || '匿名'}</div>
+                        <div className={layout.user_value_name} title={item.nickname}>{item.nickname || '匿名'}</div>
                       </div>
-                      <div className={layout.list_main_money}>+{item.bounty}</div>
-                      <div className={layout.list_main_timer}>{item.joinedAt || '--'}</div>
+                      <div className={layout.list_main_money} title={`+${item.bounty}`}><span>+{item.bounty}</span></div>
+                      <div className={layout.list_main_timer} title={item.joinedAt}><span>{item.joinedAt || '--'}</span></div>
                   </div>
                 ))
               }
