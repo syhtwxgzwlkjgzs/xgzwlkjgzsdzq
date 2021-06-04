@@ -28,9 +28,19 @@ const Index = ({ isPay = false, url, onPay = noop, baselayout }) => {
       const position = positionInThread + threadTextHeight + threadPosition + userInfoHeight;
 
       // 暂停之前正在播放的音视频
-      baselayout.pauseWebAllPlayers();
+      if(baselayout.playingVideoDom) {
+        // 暂停之前正在播放的视频
+        baselayout.pauseWebPlayingVideo();
+      }
+
+      if(baselayout.playingAudioDom) {
+        // 暂停之前正在播放的音频
+        baselayout.pauseWebPlayingAudio(url);
+      }
+
       baselayout.playingAudioPos = position > 0 ? position : -1;
       baselayout.playingAudioDom = audioContext;
+      baselayout.playingAudioWrapperId = url;
     }
 
   };
