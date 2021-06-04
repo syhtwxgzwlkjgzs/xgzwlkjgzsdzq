@@ -35,7 +35,8 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
   const [errorMsg, setErrorMsg] = useState("");
 
   const getFileType = (filepath) => {
-    return filepath.substr(filepath.lastIndexOf('.') + 1);
+    const absoluteUrl = filepath.split('?')[0];
+    return absoluteUrl.substr(absoluteUrl.lastIndexOf('.') + 1);
   }
 
   const onDownLoad = (url, index) => {
@@ -59,7 +60,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
           success(res) {
           },
           fail(error) {
-            setErrorMsg("微信小程序暂不支持此文件类型下载");
+            setErrorMsg("小程序暂不支持下载此类文件");
             setTimeout(() => {
               setErrorMsg("");
             }, 3000);
@@ -70,7 +71,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
         setErrorMsg(["下载失败"]);
         setTimeout(() => {
           errorMsg = "";
-          setErrorMsg([""]);
+          setErrorMsg("");
         }, 3000);
         console.error(error.errMsg)
       }).finally(() => {

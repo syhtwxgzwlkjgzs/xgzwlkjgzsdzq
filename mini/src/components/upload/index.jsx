@@ -39,15 +39,15 @@ export default function DzqUpload(props) {
     });
 
     if (ret.code === 0) {
-      onSuccess(ret, file);
-      onComplete(ret, file);
       file.status = 'success';
       updater(list);
+      onSuccess(ret, file);
+      onComplete(ret, file, list);
     } else {
-      onFail(ret, file);
-      onComplete(ret, file);
       file.status = 'error';
       updater(list);
+      onFail(ret, file);
+      onComplete(ret, file, list);
       return false;
     }
     return ret;
@@ -59,7 +59,7 @@ export default function DzqUpload(props) {
       const tempFilePath = file.path || file.tempFilePath;
       const token = locals.get(constants.ACCESS_TOKEN_NAME);
       const uploadTask = Taro.uploadFile({
-        url: `https://discuzv3-dev.dnspod.dev//apiv3/attachments`,
+        url: `https://discuzv3-dev.dnspod.dev/apiv3/attachments`,
         filePath: tempFilePath,
         name: 'file',
         header: {

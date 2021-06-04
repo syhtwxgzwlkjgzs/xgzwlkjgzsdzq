@@ -29,20 +29,22 @@ class BuyPCPage extends React.Component {
       <Copyright />
     </div>
   );
- 
+
   render() {
     const { index } = this.props;
     const { pageData, currentPage, totalPage   } = index.threads || {};
 
     return (
-      <BaseLayout 
-        right={this.renderRight} 
-        noMore={currentPage >= totalPage} 
-        onRefresh={this.props.dispatch} 
+      <BaseLayout
+        right={this.renderRight}
+        noMore={currentPage >= totalPage}
+        onRefresh={this.props.dispatch}
         showRefresh={false}
+        rightClass={styles.rightSide}
+        isShowLayoutRefresh={!!pageData?.length}
       >
-        <SidebarPanel 
-          title="我的购买" 
+        <SidebarPanel
+          title="我的购买"
           type='normal'
           isShowMore={false}
           noData={!pageData?.length}

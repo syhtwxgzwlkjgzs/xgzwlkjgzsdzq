@@ -65,11 +65,18 @@
   .itemPC {
     cursor: pointer;
     height: rem(38);
+    border-radius: rem(5);
     
     .prefix {
       font-size: rem($font-size-middle);
       line-height: rem($font-line-height-small);
-      margin-right: rem(12);
+      margin-right: rem($margin-3n);
+      @include media('l-pc') {
+        margin-right: rem($margin-10);
+      }
+      @include media('s-pc') {
+        margin-right: rem($margin-10);
+      }
     }
     .title {
       font-size: rem($font-size-middle);

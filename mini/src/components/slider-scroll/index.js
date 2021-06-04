@@ -142,7 +142,7 @@ class Index extends Component {
     const _isTop = scrollTop === 0;
     isTop !== _isTop && this.setState({
       isTop: _isTop,
-      damping: _isTop ? 100 : 0,
+      damping: _isTop ? 80 : 0,
     });
   }
 
@@ -158,8 +158,6 @@ class Index extends Component {
     const {
       list,
       noMore,
-      height,
-      withBottomBar,
       topCard,
       onPullDown,
       onScrollBottom,
@@ -168,10 +166,7 @@ class Index extends Component {
     const { isFinished, damping, currentId } = this.state;
 
     return (
-      <View className={classNames(styles.wrapper, {
-        [styles['not-bottom']]: !withBottomBar,
-        [styles['with-bottom']]: withBottomBar,
-      })}>
+      <View className={classNames(styles.wrapper)}>
         <PullDownRefresh
           onRefresh={this.onPullDownRefresh}
           isFinished={isFinished}
@@ -183,6 +178,7 @@ class Index extends Component {
             noMore={noMore}
             onScroll={throttle(this.onScroll, 10)}
             onRefresh={onScrollBottom}
+            hasOnScrollToLower={true}
           >
             {/* 顶部导航卡片 */}
             {topCard}
@@ -208,7 +204,6 @@ class Index extends Component {
 }
 
 Index.propsTypes = {
-  height: PropTypes.string,
   noMore: PropTypes.bool,
   withBottomBar: PropTypes.bool,
   topCard: PropTypes.object,
@@ -218,7 +213,6 @@ Index.propsTypes = {
 }
 
 Index.defaultProps = {
-  height: '100vh',
   noMore: false,
   withBottomBar: false,
   topCard: null,

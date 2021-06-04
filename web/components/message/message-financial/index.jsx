@@ -46,7 +46,7 @@ const Index = ({ site, message }) => {
   }, [list])
 
   return (
-    <div className={`${styles.wrapper} ${site.isPC ? styles.pc : ""}`}>
+    <div className={`${styles.wrapper} ${site.isPC ? styles.pc : styles.mobile}`}>
       <Notice
         infoIdx={2}
         totalCount={totalCount}

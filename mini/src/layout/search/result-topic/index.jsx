@@ -8,6 +8,7 @@ import { View, Text, Image } from '@tarojs/components'
 import Taro, { getCurrentInstance } from '@tarojs/taro';
 
 @inject('search')
+@inject('topic')
 @observer
 class SearchResultTopicH5Page extends React.Component {
   constructor(props) {
@@ -46,6 +47,7 @@ class SearchResultTopicH5Page extends React.Component {
   };
 
   onTopicClick = data => {
+    this.props.topic?.setTopicDetail(null);
     Taro.navigateTo({
       url: `/subPages/topic/topic-detail/index?id=${data.topicId || ''}`
     })

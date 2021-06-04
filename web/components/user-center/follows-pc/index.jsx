@@ -14,6 +14,9 @@ class UserCenterFollowsPc extends React.Component {
     super(props);
     this.state = {
       showFollowsPopup: false,
+      dataSource: {},
+      sourcePage: 1,
+      sourceTotalPage: 1,
     };
   }
 
@@ -22,8 +25,35 @@ class UserCenterFollowsPc extends React.Component {
     this.setState({ showFollowsPopup: true });
   };
 
+  setDataSource = (targetData) => {
+    this.setState({
+      dataSource: targetData,
+    });
+  };
+
+  updateSourcePage = (newPage) => {
+    this.setState({
+      sourcePage: newPage,
+    });
+  };
+
+  updateSourceTotalPage = (newTotalPage) => {
+    this.setState({
+      sourceTotalPage: newTotalPage,
+    });
+  };
+
   render() {
-    const followCount = this.props.userId ? this.props.user.targetUserFollowCount : this.props.user.followCount;
+    let followCount = 0;
+    if (this.props.userId) {
+      if (this.props.userId === this.props.user?.id) {
+        followCount = this.props.user.followCount
+      } else {
+        followCount = this.props.user.targetUserFollowCount
+      }
+    } else {
+      followCount = this.props.user.followCount
+    }
     return (
       <>
         <SidebarPanel
@@ -38,6 +68,12 @@ class UserCenterFollowsPc extends React.Component {
               style={{
                 overflow: 'hidden',
               }}
+              dataSource={this.state.dataSource}
+              setDataSource={this.setDataSource}
+              sourcePage={this.state.sourcePage}
+              updateSourcePage={this.updateSourcePage}
+              sourceTotalPage={this.state.sourceTotalPage}
+              updateSourceTotalPage={this.updateSourceTotalPage}
               userId={this.props.userId}
               onContainerClick={({ id }) => {
                 this.props.router.push({
@@ -60,6 +96,12 @@ class UserCenterFollowsPc extends React.Component {
         <UserCenterFollowPopup
           id={this.props.userId}
           visible={this.state.showFollowsPopup}
+          dataSource={this.state.dataSource}
+          setDataSource={this.setDataSource}
+          sourcePage={this.state.sourcePage}
+          updateSourcePage={this.updateSourcePage}
+          sourceTotalPage={this.state.sourceTotalPage}
+          updateSourceTotalPage={this.updateSourceTotalPage}
           onContainerClick={({ id }) => {
             this.props.router.push({
               pathname: '/user/[id]',

@@ -14,7 +14,8 @@ import HOCFetchSiteData from '../middleware/HOCFetchSiteData';
 class Index extends React.Component {
 
   state = {
-    isError: false
+    isError: false,
+    errorText: ''
   }
 
   page = 1;
@@ -74,7 +75,7 @@ class Index extends React.Component {
           filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
         });
       } catch (error) {
-        this.setState({ isError: true })
+        this.setState({ isError: true, errorText: error })
       }
     } else {
       // 如果store中有值，则需要获取之前的分页数
@@ -111,7 +112,11 @@ class Index extends React.Component {
 
     if (type === 'click-filter') { // 点击tab
       this.page = 1;
-      await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
+      try {
+        await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
+      } catch (error) {
+        this.setState({ isError: true, errorText: error })
+      }
       this.props.baselayout.setJumpingToTop();
     } else if (type === 'moreData') {
       this.page += 1;
@@ -135,9 +140,9 @@ class Index extends React.Component {
     const { site } = this.props;
     const { platform } = site;
     if (platform === 'pc') {
-      return <IndexPCPage dispatch={this.dispatch} />;
+      return <IndexPCPage dispatch={this.dispatch} isError={this.state.isError} errorText={this.state.errorText} />;
     }
-    return <IndexH5Page dispatch={this.dispatch} isError={this.state.isError} />;
+    return <IndexH5Page dispatch={this.dispatch} isError={this.state.isError} errorText={this.state.errorText} />;
   }
 }
 

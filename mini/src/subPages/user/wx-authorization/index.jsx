@@ -21,10 +21,13 @@ const NEED_BIND_OR_REGISTER_USER = -7016;
 @observer
 class WXAuthorization extends Component {
 
+  async componentDidMount() {
+    await getParamCode(this.props.commonLogin)
+  }
+
   authorization = async (params) => {
     const { sessionToken, inviteCode } = getCurrentInstance().router.params;
     try {
-      await getParamCode(this.props.commonLogin);
       // 小程序登录
       const res = await miniLogin({
         timeout: 10000,
@@ -59,11 +62,6 @@ class WXAuthorization extends Component {
       Toast.error({
         content: error.Message,
       });
-      throw {
-        Code: 'ulg_9999',
-        Message: '网络错误',
-        error,
-      };
     }
   }
 

@@ -77,7 +77,7 @@ class Header extends React.Component {
   dropdownUserLogoutActionImpl = () => {
     clearLoginStatus();
     window.location.replace('/');
-  }
+  };
 
   dropdownActionImpl = (action) => {
     if (action === 'userCenter') {
@@ -85,7 +85,7 @@ class Header extends React.Component {
     } else if (action === 'logout') {
       this.dropdownUserLogoutActionImpl();
     }
-  }
+  };
 
   renderUserInfo() {
     // todo 跳转
@@ -96,13 +96,21 @@ class Header extends React.Component {
           style={{ display: 'inline-block' }}
           menu={
             <Dropdown.Menu>
-              <Dropdown.Item id="userCenter">个人中心</Dropdown.Item>
+              <Dropdown.Item id="userCenter">
+                <span className={styles.headerDropMenuIcon}>
+                  <Icon name="PersonalOutlined" size={15} />
+                </span>
+                个人中心
+              </Dropdown.Item>
               <Dropdown.Item id="logout">
+                <span className={styles.headerDropMenuIcon}>
+                  <Icon name="SignOutOutlined" size={15} />
+                </span>
                 退出登录
               </Dropdown.Item>
             </Dropdown.Menu>
           }
-          placement="left"
+          placement="right"
           hideOnClick={true}
           trigger="hover"
           onChange={this.dropdownActionImpl}
@@ -116,7 +124,7 @@ class Header extends React.Component {
               image={user.userInfo?.avatarUrl}
               onClick={() => {}}
             ></Avatar>
-            <p className={styles.userName}>{user.userInfo.username || ''}</p>
+            <p className={styles.userName}>{user.userInfo.nickname || ''}</p>
           </div>
         </Dropdown>
       );
@@ -152,11 +160,10 @@ class Header extends React.Component {
               <div className={styles.inputBox}>
                 <Input
                   placeholder="搜索"
-                  style={{ width: '580px' }}
                   icon="SearchOutlined"
                   value={this.state.value}
                   onEnter={this.handleSearch}
-                  onChange={e => this.onChangeInput(e.target.value)}
+                  onChange={(e) => this.onChangeInput(e.target.value)}
                   onIconClick={this.handleIconClick}
                 />
               </div>
@@ -171,7 +178,7 @@ class Header extends React.Component {
                     name="HomeOutlined"
                     size={15}
                   />
-                  <p>首页</p>
+                  <p className={styles.iconText}>首页</p>
                 </div>
                 <div className={styles.iconItem} onClick={() => this.handleRouter('/message')}>
                   <Icon
@@ -181,7 +188,7 @@ class Header extends React.Component {
                     name="MailOutlined"
                     size={17}
                   />
-                  <p>消息</p>
+                  <p className={styles.iconText}>消息</p>
                 </div>
                 <div className={styles.iconItem} onClick={() => this.handleRouter('/search')}>
                   <Icon
@@ -191,7 +198,7 @@ class Header extends React.Component {
                     name="FindOutlined"
                     size={17}
                   />
-                  <p>发现</p>
+                  <p className={styles.iconText}>发现</p>
                 </div>
               </div>
               <div className={styles.border}></div>

@@ -18,10 +18,16 @@ import SidebarPanel from '@components/sidebar-panel';
 class BlockPcPage extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      isLoading: true
+    };
   }
 
   async componentDidMount() {
     await this.props.user.getUserShieldList();
+
+    this.setState({ isLoading: false })
   }
 
   componentWillUnmount() {
@@ -48,6 +54,7 @@ class BlockPcPage extends React.Component {
   );
 
   render() {
+    const { isLoading } = this.state
     const { user } = this.props;
     const { userShieldPage, userShieldTotalPage, userShield, userShieldTotalCount } = user;
 
@@ -58,13 +65,15 @@ class BlockPcPage extends React.Component {
         onRefresh={this.loadMore}
         showRefresh={false}
         noMore={userShieldTotalPage < userShieldPage}
+        rightClass={styles.rightSide}
+        isShowLayoutRefresh={!!userShield?.length && !isLoading}
       >
         <SidebarPanel
           title="我的屏蔽"
           type='normal'
           isShowMore={false}
           noData={!userShield?.length}
-          isLoading={!userShield}
+          isLoading={isLoading}
           icon={{ type: 3, name: 'ScreenOutlined' }}
           rightText={`共有${userShieldTotalCount}位用户`}
         >

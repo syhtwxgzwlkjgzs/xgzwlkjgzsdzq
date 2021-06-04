@@ -63,7 +63,7 @@ class RenderCommentList extends React.Component {
   async likeClick(data) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -102,7 +102,7 @@ class RenderCommentList extends React.Component {
   async replyLikeClick(reply, comment) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -144,6 +144,7 @@ class RenderCommentList extends React.Component {
 
   // 点击评论的删除
   async deleteClick(data) {
+    this.props.keepCurrentPosition();
     this.commentData = data;
     this.setState({
       showDeletePopup: true,
@@ -171,9 +172,10 @@ class RenderCommentList extends React.Component {
 
   // 点击评论的回复
   replyClick(comment) {
+    this.props.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -188,9 +190,10 @@ class RenderCommentList extends React.Component {
 
   // 点击回复的回复
   replyReplyClick(reply, comment) {
+    this.props.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -270,7 +273,7 @@ class RenderCommentList extends React.Component {
   onAboptClick(data) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 

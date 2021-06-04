@@ -19,6 +19,20 @@ class UserCenterAction extends React.Component {
   // 草稿箱
   handleMyDraft = () => {};
 
+  // 点击我的购买
+  handleMyBuy = () => {
+    Router.push({ url: '/subPages/my/buy/index' });
+  }
+
+  // 点击我的收藏
+  handleMyCollect = () => {
+    Router.push({ url: '/subPages/my/collect/index' });
+  }
+
+  // 草稿箱
+  handleMyDraft = () => {
+  }
+
   // 点击站点信息
   handleMySiteInfo = () => {
     Router.push({ url: '/subPages/forum/index' });
@@ -60,7 +74,7 @@ class UserCenterAction extends React.Component {
           </View>
 
           <View className={styles.userCenterActionItemContainer}>
-            <View className={styles.userCenterActionItem}>
+            <View onClick={this.handleMyCollect} className={styles.userCenterActionItem}>
               <View className={styles.userCenterActionItemIcon}>
                 <Badge>
                   <Icon name={'CollectOutlinedBig'} color={'#4F5A70'} size={20} />
@@ -82,7 +96,7 @@ class UserCenterAction extends React.Component {
           </View>
         </View>
         <View className={styles.userCenterAction}>
-          <View className={styles.userCenterActionItemContainer}>
+          <View onClick={this.handleMyBuy} className={styles.userCenterActionItemContainer}>
             <View className={styles.userCenterActionItem}>
               <View className={styles.userCenterActionItemIcon}>
                 <Badge>
@@ -94,7 +108,7 @@ class UserCenterAction extends React.Component {
           </View>
 
           <View className={styles.userCenterActionItemContainer}>
-            <View className={styles.userCenterActionItem}>
+            <View onClick={this.handleMyDraft} className={styles.userCenterActionItem}>
               <View className={styles.userCenterActionItemIcon}>
                 <Badge>
                   <Icon name={'RecycleBinOutlined'} color={'#4F5A70'} size={20} />

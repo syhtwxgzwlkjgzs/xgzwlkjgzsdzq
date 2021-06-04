@@ -354,7 +354,6 @@ class UserAction extends SiteStore {
     return this.userThreads;
   }
 
-
   /**
    * 获取指定用户发的主题列表
    * @param {*} id
@@ -729,6 +728,17 @@ class UserAction extends SiteStore {
       };
     }
     return this.userShield;
+  }
+
+  /**
+   * 重置帖子相关的数据
+   */
+  @action
+  clearUserThreadsInfo() {
+    this.userThreads = {};
+    this.userThreadsPage = 1;
+    this.userThreadsTotalCount = 0;
+    this.userThreadsTotalPage = 1;
   }
 
   /**

@@ -20,7 +20,7 @@
     width: 100%;
     padding-top: $margin-4n;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     transition: all 0.5s;
   }
 
@@ -35,9 +35,12 @@
         width: 100%;
         height: 100%;
 
-        .dzq-badge__circle{
+        .dzq-badge__circle {
           top: rem(10px);
           right: rem(2px);
+        }
+        .dzq-badge__info {
+          display: none;
         }
       }
       .dzq-avatar {
@@ -63,9 +66,9 @@
       }
     }
 
-    .badge{
-      :global{
-        .dzq-badge__circle{
+    .badge {
+      :global {
+        .dzq-badge__circle {
           padding: 0 rem(6px);
           width: auto;
           border-radius: $border-radius-8;
@@ -75,8 +78,7 @@
   }
 
   .detail {
-    width: calc(100vw - 86px);
-    overflow: hidden;
+    flex: 1;
     padding-bottom: $padding-4n;
     margin-right: $margin-4n;
     font-size: $font-size-middle;
@@ -115,8 +117,8 @@
 
       :global {
         .qq-emotion {
-          width: 14px;
-          height: 14px;
+          width: 20px;
+          height: 20px;
           vertical-align: top;
         }
 
@@ -152,6 +154,13 @@
     /*财务详情*/
     &.detail-financial {
       top: 0;
+      .middle {
+        .content-html {
+          .financial-content {
+            height: 20px;
+          }
+        }
+      }
     }
     /*账号详情*/
     &.detail-account {

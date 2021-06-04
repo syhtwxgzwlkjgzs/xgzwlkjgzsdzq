@@ -39,7 +39,7 @@ class CollectPCPage extends React.Component {
 
   render() {
     const { index } = this.props;
-    const { pageData, currentPage, totalPage  } = index.threads || {}
+    const { pageData, currentPage, totalPage  } = index.threads || {};
     return (
       <div className={styles.container}>
         <BaseLayout
@@ -47,9 +47,11 @@ class CollectPCPage extends React.Component {
           noMore={currentPage >= totalPage}
           onRefresh={this.fetchMoreData}
           right={this.renderRight}
+          rightClass={styles.rightSide}
+          isShowLayoutRefresh={!!pageData?.length}
         >
-          <SidebarPanel 
-            title="我的收藏" 
+          <SidebarPanel
+            title="我的收藏"
             type='normal'
             isShowMore={false}
             noData={!pageData?.length}

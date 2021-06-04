@@ -129,9 +129,9 @@ class TopicSelect extends Component {
         {/* list */}
         <List
           className={styles.list}
-          height={'calc(100vh - 60px)'}
           noMore={finish}
           onRefresh={() => this.fetchTopics()}
+          hasOnScrollToLower={true}
         >
           {keywords && this.renderItem({ content: keywords, newTopic: '新话题' })}
           {topics.map(item => (

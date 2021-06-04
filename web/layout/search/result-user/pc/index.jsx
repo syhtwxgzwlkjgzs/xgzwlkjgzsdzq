@@ -96,11 +96,13 @@ class SearchResultUserPcPage extends React.Component {
         noMore={currentPage >= totalPage} 
         showRefresh={false}
         onRefresh={this.fetchMoreData}
+        isShowLayoutRefresh={!!pageData?.length}
       >
         <SidebarPanel 
           title="活跃用户" 
           type='normal'
           isShowMore={false}
+          isLoading={!pageData}
           noData={!pageData?.length}
           icon={{ type: 2, name: 'MemberOutlined' }}
         >

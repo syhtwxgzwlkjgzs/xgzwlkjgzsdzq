@@ -46,6 +46,9 @@ const config = {
         'wallet/withdrawal/index',
         'message/index',
         'my/index',
+        'my/buy/index',
+        'my/collect/index',
+        'my/like/index',
         'my/edit/index',
         'my/edit/mobile/index',
         'my/edit/pwd/index',
@@ -55,9 +58,10 @@ const config = {
         'my/fans/index',
         'my/follows/index',
         'my/block/index',
-        // 'forum/index',
-        // 'forum/partner-invite/index',
-        // 'invite/index'
+        'forum/index',
+        'forum/partner-invite/index',
+        'invite/index',
+        'user/index'
       ]
     }
   ],

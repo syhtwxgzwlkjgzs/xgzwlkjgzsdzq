@@ -35,14 +35,16 @@
 
 .line {
   width: rem(2);
-  height: rem(119);
+  height: rem(116);
   background: var(--border-line-color);
 }
 
 .detailed {
   position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
   .left {
-    position: absolute;
     left: rem(2);
     top: rem(2);
     .linePosition {
@@ -52,7 +54,7 @@
   }
 
   .rigth {
-    padding-left: rem(38);
+    padding-left: rem($padding-4n);
     display: flex;
     justify-content: flex-start;
     align-items: center;
