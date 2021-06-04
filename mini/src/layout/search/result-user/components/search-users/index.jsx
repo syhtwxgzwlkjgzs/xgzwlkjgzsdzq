@@ -23,6 +23,8 @@ const SearchUsers = ({ data = [], refreshing, onRefresh, onFetchMore, onItemClic
         imgSrc={item.avatar}
         label={item.groupName}
         onClick={onItemClick}
+        needPadding={true}
+        needBottomLine={true}
       />
       );
     },

@@ -198,9 +198,8 @@ import { View, Text } from '@tarojs/components'
                           platform={platform}
                           onClick={onUserClick}
                           type={item.type}
-                          isShowBottomLine={false}
-                          needPaddingWithoutLine={true}
-                          needPadding={false}
+                          needPadding={true}
+                          needBottomLine={false}
                         />
                     ))
                   }
