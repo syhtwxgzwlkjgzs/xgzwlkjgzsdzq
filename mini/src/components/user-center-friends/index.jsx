@@ -1,5 +1,4 @@
 import React from 'react';
-// import { Input, Icon, Button, Viewider } from '@discuzq/design';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Button from '@discuzq/design/dist/components/button/index';
 import { View } from '@tarojs/components';
