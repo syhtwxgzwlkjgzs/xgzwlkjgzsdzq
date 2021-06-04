@@ -127,6 +127,7 @@ class PCMyPage extends React.Component {
           isLoading={fetchUserInfoLoading}
           leftNum={`${targetUserThreadsTotalCount}个主题`}
           noData={!this.formatUserThreadsData(targetUserThreads)?.length}
+          mold='plane'
         >
           {this.formatUserThreadsData(targetUserThreads)
             && this.formatUserThreadsData(targetUserThreads).length > 0 && (
