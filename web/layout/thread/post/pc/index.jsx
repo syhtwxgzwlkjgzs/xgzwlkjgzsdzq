@@ -35,7 +35,6 @@ class ThreadPCPage extends React.Component {
   render() {
     const {
       threadPost,
-      index,
       user,
       site,
       emoji,
@@ -178,15 +177,7 @@ class ThreadPCPage extends React.Component {
                 )}
               </div>
             </div>
-            <ClassifyPopup
-              pc
-              category={index.categoriesNoAll}
-              categorySelected={threadPost.categorySelected}
-              onChange={(parent, child) => {
-                this.props.setPostData({ categoryId: child.pid || parent.pid });
-                threadPost.setCategorySelected({ parent, child });
-              }}
-            />
+            <ClassifyPopup pc />
             <div className={styles.footer}>
               <Button type="info" onClick={() => this.props.handleSubmit(true)}>保存至草稿箱</Button>
               <Button type="primary" onClick={() => this.props.handleSubmit()}>发布</Button>

@@ -138,7 +138,7 @@ export default class ReplyList extends React.Component {
             <div className={styles.commentInput}>
               <CommentInput
                 height="label"
-                onSubmit={(value) => this.props.onSubmit(value)}
+                onSubmit={(value, imageList) => this.props.onSubmit(value, imageList)}
                 placeholder={this.state.placeholder}
               ></CommentInput>
             </div>

@@ -1,4 +1,5 @@
 import { get } from '../../utils/get';
+import setAccessToken from '../../utils/set-access-token';
 
 export const COMMON_LOGIN_STORE_ERRORS = {
   NEED_BIND_USERNAME: {
@@ -56,6 +57,10 @@ const isExtFieldsOpen = (site) => {
 const checkCompleteUserInfo = (resp) => {
   const isMissNickname = get(resp, 'data.isMissNickname', false);
   const isMissRequireInfo = get(resp, 'data.userStatus') === 10;
+  const accessToken = get(resp, 'data.accessToken', '');
+  setAccessToken({
+    accessToken,
+  });
 
   if (isMissRequireInfo && isMissNickname) {
     throw COMMON_LOGIN_STORE_ERRORS.NEED_ALL_INFO;
@@ -94,32 +99,5 @@ const checkUserStatus = (resp) => {
   }
 };
 
-/**
- * TODO 已废弃、待删除
- * 防水墙设置
- * @param {*} param0
- */
-const toTCaptcha = async ({ registerCaptcha, appid, resCallback = () => {}, quitCallback = () => {} }) => {
-  console.log(registerCaptcha);
-  if (!registerCaptcha) {
-    resCallback();
-    return;
-  }
-  // 验证码实例为空，则创建实例
-  if (!captcha) {
-    const TencentCaptcha = (await import('@common/utils/tcaptcha')).default;
-    captcha = new TencentCaptcha(appid, (res) => {
-      if (res.ret === 0) {
-        // 验证通过后发布
-        resCallback();
-      }
-      if (res.ret === 2) {
-        quitCallback();
-      };
-    });
-  };
-  // 显示验证码
-  captcha.show();
-};
 
-export { throwFormattedError, networkRequestCatcher, checkCompleteUserInfo, checkUserStatus, toTCaptcha, isExtFieldsOpen };
+export { throwFormattedError, networkRequestCatcher, checkCompleteUserInfo, checkUserStatus, isExtFieldsOpen };

@@ -22,6 +22,8 @@
 
 .loadMore {
   font-size: $font-size-label;
+  margin-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
+  margin-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
 
   view {
     color: $loading-text-color;

@@ -15,6 +15,7 @@ import { diffDate } from '@common/utils/diff-date';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import PropTypes from 'prop-types';
+import defaultFavicon from '../../../public/dzq-img/default-favicon.png';
 
 @inject('site')
 @observer
@@ -24,7 +25,7 @@ class Index extends Component {
     const { type, site } = this.props;
     const url = site?.webConfig?.setSite?.siteFavicon;
     if (type === 'thread') {
-      return url || "/favicon.ico";
+      return url || defaultFavicon;
     }
     return avatar;
   }
@@ -43,13 +44,13 @@ class Index extends Component {
   // 针对财务消息，获取后缀提示语
   getFinancialTips = (item) => {
     if (item.type === 'rewarded') {
-      return '支付了你';
-    }
-    if (item.type === 'questioned') {
-      return '悬赏了你';
+      return '打赏了你';
     }
     if (item.type === 'receiveredpacket') {
       return '获取红包';
+    }
+    if (item.type === 'threadrewarded') {
+      return '悬赏了你';
     }
     if (item.type === 'withdrawal') {
       return '获取提现';
@@ -173,7 +174,7 @@ class Index extends Component {
                 >
                   在帖子"
                   <View
-                    className={styles['single-line']}
+                    className={`${styles['financial-content']} ${styles['single-line']}`}
                     style={{
                       maxWidth: `90px`,
                       display: 'inline-block',

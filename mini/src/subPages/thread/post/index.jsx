@@ -3,7 +3,7 @@ import ThreadPost from '@layout/thread/post';
 import Page from '@components/page';
 
 const Index = () => (
-  <Page>
+  <Page withLogin>
     <ThreadPost />
   </Page>
 );

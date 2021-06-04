@@ -7,6 +7,7 @@ import { createFollow, deleteFollow, getUserFans } from '@server';
 import { get } from '@common/utils/get';
 import deepClone from '@common/utils/deep-clone';
 import NoData from '@components/no-data';
+import classnames from 'classnames';
 
 class UserCenterFans extends React.Component {
   firstLoaded = false;
@@ -22,6 +23,12 @@ class UserCenterFans extends React.Component {
     splitElement: <div></div>,
     friends: [],
     isPc: false,
+    dataSource: null,
+    setDataSource: null,
+    sourcePage: null,
+    sourceTotalPage: null,
+    updateSourcePage: null,
+    updateSourceTotalPage: null,
     loadMoreAction: async () => {},
     followHandler: async () => {},
     unFollowHandler: async () => {},
@@ -30,6 +37,7 @@ class UserCenterFans extends React.Component {
     className: '',
     styles: {},
     itemStyle: {},
+    loadingElementClass: '',
   };
 
   constructor(props) {
@@ -46,7 +54,7 @@ class UserCenterFans extends React.Component {
   fetchFans = async () => {
     const opts = {
       params: {
-        page: this.page,
+        page: this.props.sourcePage || this.page,
         perPage: 20,
         filter: {
           userId: this.props.userId,
@@ -63,24 +71,32 @@ class UserCenterFans extends React.Component {
 
     const pageData = get(fansRes, 'data.pageData', []);
     const totalPage = get(fansRes, 'data.totalPage', 1);
-
+    if (this.props.updateSourceTotalPage) {
+      this.props.updateSourceTotalPage(totalPage);
+    }
     this.totalPage = totalPage;
 
-    const newFans = Object.assign({}, this.state.fans);
+    const newFans = Object.assign({}, this.props.dataSource || this.state.fans);
 
     newFans[this.page] = pageData;
 
+    if (this.props.setDataSource) {
+      this.props.setDataSource(newFans);
+    }
     this.setState({
       fans: newFans,
     });
 
     if (this.page <= this.totalPage) {
+      if (this.props.updateSourcePage) {
+        this.props.updateSourcePage(this.props.sourcePage + 1);
+      }
       this.page += 1;
     }
   };
 
   setFansBeFollowed({ id, isMutual }) {
-    const targetFans = deepClone(this.state.fans);
+    const targetFans = deepClone(this.props.dataSource || this.state.fans);
     Object.keys(targetFans).forEach((key) => {
       targetFans[key].forEach((user) => {
         if (get(user, 'user.pid') !== id) return;
@@ -88,19 +104,25 @@ class UserCenterFans extends React.Component {
         user.userFollow.isFollow = true;
       });
     });
+    if (this.props.setDataSource) {
+      this.props.setDataSource(targetFans);
+    }
     this.setState({
       fans: targetFans,
     });
   }
 
   setFansBeUnFollowed(id) {
-    const targetFans = deepClone(this.state.fans);
+    const targetFans = deepClone(this.props.dataSource || this.state.fans);
     Object.keys(targetFans).forEach((key) => {
       targetFans[key].forEach((user) => {
         if (get(user, 'user.pid') !== id) return;
         user.userFollow.isFollow = false;
       });
     });
+    if (this.props.setDataSource) {
+      this.props.setDataSource(targetFans);
+    }
     this.setState({
       fans: targetFans,
     });
@@ -158,6 +180,12 @@ class UserCenterFans extends React.Component {
     if (prevProps.userId !== this.props.userId) {
       this.page = 1;
       this.totalPage = 1;
+      if (this.props.setDataSource) {
+        this.props.setDataSource({});
+      }
+      this.setState({
+        fans: {},
+      });
       await this.loadMore();
     }
   }
@@ -165,7 +193,9 @@ class UserCenterFans extends React.Component {
   // 清理，防止内存泄露
   componentWillUnmount() {
     if (!this.containerRef.current) return;
-    this.containerRef && this.containerRef.current && this.containerRef.current.removeEventListener('scroll', this.loadMore);
+    this.containerRef
+      && this.containerRef.current
+      && this.containerRef.current.removeEventListener('scroll', this.loadMore);
   }
 
   // 检查是否满足触底加载更多的条件
@@ -209,7 +239,10 @@ class UserCenterFans extends React.Component {
   };
 
   render() {
-    const isNoData = followerAdapter(this.state.fans).length === 0 && !this.state.loading;
+
+    const isNoData = followerAdapter((this.props.dataSource) || this.state.fans).length === 0
+      && !this.state.loading;
+
     return (
       <div
         className={this.props.className}
@@ -220,28 +253,32 @@ class UserCenterFans extends React.Component {
           ...this.props.styles,
         }}
       >
-        {followerAdapter(this.state.fans).map((user, index) => {
+        {followerAdapter((this.props.dataSource) || this.state.fans).map((user, index) => {
           if (index + 1 > this.props.limit) return null;
           return (
-            <div key={user.id}>
-              <UserCenterFriends
-                id={user.id}
-                type={this.judgeFollowsStatus(user)}
-                imgUrl={user.avatar}
-                withHeaderUserInfo={this.props.isPc}
-                onContainerClick={this.props.onContainerClick}
-                userName={user.userName}
-                userGroup={user.groupName}
-                followHandler={this.followUser}
-                itemStyle={this.props.itemStyle}
-                unFollowHandler={this.unFollowUser}
-              />
-              {this.props.splitElement}
-            </div>
+              <div key={user.id}>
+                <UserCenterFriends
+                  id={user.id}
+                  type={this.judgeFollowsStatus(user)}
+                  imgUrl={user.avatar}
+                  withHeaderUserInfo={this.props.isPc}
+                  onContainerClick={this.props.onContainerClick}
+                  userName={user.userName}
+                  userGroup={user.groupName}
+                  followHandler={this.followUser}
+                  itemStyle={this.props.itemStyle}
+                  unFollowHandler={this.unFollowUser}
+                />
+                {this.props.splitElement}
+              </div>
           );
         })}
         {isNoData && <NoData />}
-        <div className={styles.loadMoreContainer}>{this.state.loading && <Spin type={'spinner'}>加载中 ...</Spin>}</div>
+        {this.state.loading && (
+          <div className={classnames(styles.loadMoreContainer, this.props.loadingElementClass)}>
+            <Spin type={'spinner'}>加载中 ...</Spin>
+          </div>
+        )}
       </div>
     );
   }

@@ -1,9 +1,10 @@
 import React from 'react';
 import styles from './index.module.scss';
-import { Icon, Popup, Divider } from '@discuzq/design';
+import { Icon, Popup, Divider, Dialog } from '@discuzq/design';
 import UserCenterFans from '@components/user-center-fans';
 import { noop } from '@components/thread/utils';
 import Router from '@discuzq/sdk/dist/router';
+import ReactDOM from 'react-dom';
 
 /**
  * 粉丝弹框
@@ -11,7 +12,19 @@ import Router from '@discuzq/sdk/dist/router';
  * @prop {function} onClose 弹框关闭事件
  */
 const Index = (props) => {
-  const { visible = false, onClose = noop, isOtherFans = false, id } = props;
+  const {
+    visible = false,
+    onClose = noop,
+    isOtherFans = false,
+    id,
+    dataSource,
+    setDataSource,
+    sourcePage,
+    updateSourcePage,
+    sourceTotalPage,
+    updateSourceTotalPage,
+  } = props;
+
   const onContainerClick = ({ id }) => {
     Router.push({ url: `/user/${id}` });
   };
@@ -25,8 +38,8 @@ const Index = (props) => {
     [],
   );
 
-  return (
-    <Popup position="center" visible={visible} onClose={onClose}>
+  const dialogElement = (
+    <Dialog position="center" visible={visible} onClose={onClose}>
       <div className={styles.contaner}>
         <div className={styles.popupWrapper}>
           <div className={styles.title}>
@@ -35,14 +48,45 @@ const Index = (props) => {
           </div>
           <div className={styles.titleHr}></div>
           {!id ? (
-            <UserCenterFans onContainerClick={onContainerClick} splitElement={splitElement} />
+            <UserCenterFans
+              styles={{
+                height: 'calc(100% - 60px)',
+              }}
+              dataSource={dataSource}
+              setDataSource={setDataSource}
+              sourcePage={sourcePage}
+              updateSourcePage={updateSourcePage}
+              sourceTotalPage={sourceTotalPage}
+              updateSourceTotalPage={updateSourceTotalPage}
+              onContainerClick={onContainerClick}
+              splitElement={splitElement}
+            />
           ) : (
-            <UserCenterFans userId={id} onContainerClick={onContainerClick} splitElement={splitElement} />
+            <UserCenterFans
+              styles={{
+                height: 'calc(100% - 60px)',
+              }}
+              dataSource={dataSource}
+              setDataSource={setDataSource}
+              sourcePage={sourcePage}
+              updateSourcePage={updateSourcePage}
+              sourceTotalPage={sourceTotalPage}
+              updateSourceTotalPage={updateSourceTotalPage}
+              userId={id}
+              onContainerClick={onContainerClick}
+              splitElement={splitElement}
+            />
           )}
         </div>
       </div>
-    </Popup>
+    </Dialog>
   );
+
+  if (typeof window === 'undefined') {
+    return dialogElement;
+  }
+
+  return ReactDOM.createPortal(dialogElement, document.getElementsByTagName('body')[0]);
 };
 
 export default React.memo(Index);

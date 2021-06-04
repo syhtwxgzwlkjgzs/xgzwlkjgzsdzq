@@ -31,12 +31,14 @@ const List = forwardRef(({
   onError = noop,
   enableError = false,
   immediateCheck = true,
-  requestError = false
+  requestError = false,
+  errorText='加载失败'
 }, ref) => {
   const listWrapper = useRef(null);
   const currentScrollTop = useRef(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [errText, setErrText] = useState(errorText);
 
   useEffect(() => {
     if (noMore) {
@@ -56,6 +58,10 @@ const List = forwardRef(({
   useEffect(() => {
     setIsError(requestError)
   }, [requestError])
+
+  useEffect(() => {
+    setErrText(errorText)
+  }, [errorText])
 
   useImperativeHandle(
     ref,
@@ -131,9 +137,10 @@ const List = forwardRef(({
               }
             }, 0);
           })
-          .catch(() => {
+          .catch((err) => {
             setIsLoading(true);
             setIsError(true);
+            setErrText(err || '加载失败')
             onError();
           });
       } else {
@@ -159,7 +166,7 @@ const List = forwardRef(({
       >
         {children}
         {onRefresh && showRefresh && !isError && <RefreshView noMore={noMore} />}
-        {showRefresh && isError && <ErrorView onClick={handleError} />}
+        {showRefresh && isError && <ErrorView text={errText} onClick={handleError} />}
       </div>
     </div>
   );

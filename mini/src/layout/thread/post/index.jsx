@@ -89,10 +89,6 @@ class Index extends Component {
     this.props.threadPost.setNavInfo({ statusBarHeight, navHeight, menubtnWidth: width })
   }
 
-  componentDidShow() { }
-
-  componentDidHide() { }
-
   // handle
   postToast = (title, icon = 'none', duration = 2000) => { // toast
     Taro.showToast({ title, icon, duration });
@@ -133,7 +129,7 @@ class Index extends Component {
       this.setCategory(categoryId);
       const { content: { text } } = ret.data;
       // 小程序编辑帖子，要把内容中的img标签去掉。/todo: 防止把其他有效的img标签也去掉
-      const realText = text.replace(/<img.*?alt="(\w+)".*?>/g, `:$1:`);
+      const realText = text.replace(/<img.*?alt="(\w+)".*?>/g, `:$1:`).replace(/<span.*?>(.*?)<\/span>/g, `$1`);
       ret.data.content.text = realText;
       threadPost.formatThreadDetailToPostData(ret.data);
       this.setState({ postType: isDraft === 1 ? 'isDraft' : 'isEdit' });
@@ -198,6 +194,10 @@ class Index extends Component {
     // 匹配附件、图片、语音上传
     this.setState({
       operationType: item.type
+    }, () => {
+      // if (item.type === THREAD_TYPE.file || item.type === THREAD_TYPE.image || item.type === THREAD_TYPE.voice) {
+      //   this.scrollerIntoView();
+      // }
     });
 
     if (item.type !== 'emoji') {
@@ -263,7 +263,6 @@ class Index extends Component {
         });
         break;
     }
-
     if (nextRoute) Taro.navigateTo({ url: nextRoute });
 
   }
@@ -342,6 +341,7 @@ class Index extends Component {
             duration: 2000
           });
         }
+        // this.scrollerIntoView();
       },
       // 上传错误回调，处理异常
       error: function (result) {
@@ -468,10 +468,9 @@ class Index extends Component {
           this.props.index.updateAssignThreadAllData(threadId, data);
         // 添加帖子到首页数据
         } else {
-          const { categoryids = [] } = this.props.index?.filter || {}
           const { categoryId = '' } = data
           // 首页如果是全部或者是当前分类，则执行数据添加操作
-          if (!categoryids.length || categoryids.indexOf(categoryId) !== -1) {
+          if (this.props.index.isNeedAddThread(categoryId)) {
             this.props.index.addThread(data);
           }
         }
@@ -548,6 +547,25 @@ class Index extends Component {
     url ? Taro.redirectTo({ url }) : Taro.navigateBack();
   }
 
+  // scrollerIntoView() {
+  //   const contentId = '#thread-post-content';
+  //   const query = Taro.createSelectorQuery();
+  //   query.select(contentId).boundingClientRect();
+  //   query.selectViewport().scrollOffset()
+  //   query.exec((res) => {
+  //     const { bottom } = res[0] || {};
+  //     const scrollTop = bottom + 200;
+  //     Taro.pageScrollTo({
+  //       scrollTop,
+  //       selector: contentId,
+  //       duration: 300,
+  //       complete: (a, b, c) => {
+  //         console.log(a,b,c)
+  //       }
+  //     });
+  //   })
+  // }
+
   render() {
     const { permissions } = this.props.user;
     const { categories } = this.props.index;
@@ -583,6 +601,7 @@ class Index extends Component {
 
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
           <View className={styles['content']} style={contentStyle}>
+            {/* <View id="thread-post-content"> */}
             <Title
               value={postData.title}
               show={isShowTitle}
@@ -629,6 +648,7 @@ class Index extends Component {
               )}
 
             </View>
+            {/* </View> */}
           </View>
 
           {/* 插入内容tag展示区 */}
@@ -702,6 +722,7 @@ class Index extends Component {
               operationType={operationType}
               permissions={permissions}
               onPluginClick={(item) => {
+                console.log(item);
                 this.handlePluginClick(item);
               }}
               onSubmit={() => this.handleSubmit()}

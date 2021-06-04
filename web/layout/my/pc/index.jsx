@@ -17,6 +17,7 @@ import UserCenterFansPc from '@components/user-center/fans-pc';
 import UserCenterFollowsPc from '../../../components/user-center/follows-pc';
 import Thread from '@components/thread';
 import SectionTitle from '@components/section-title';
+import BaseLayout from '../../../components/user-center-base-laout-pc';
 
 
 @inject('site')
@@ -28,10 +29,13 @@ class PCMyPage extends React.Component {
     this.state = {
       showFansPopup: false, // 是否弹出粉丝框
       showFollowPopup: false, // 是否弹出关注框
+      isLoading: true
     };
   }
   async componentDidMount() {
     await this.props.user.getUserThreads();
+
+    this.setState({ isLoading: false })
   }
 
   loginOut() {
@@ -91,10 +95,10 @@ class PCMyPage extends React.Component {
             </div>
           )}
 
-          <div className={styles.userInfoWrapper}>
+          {/* <div className={styles.userInfoWrapper}>
             <div className={styles.userInfoKey}>实名认证</div>
             <div className={styles.userInfoValue}>去认证</div>
-          </div>
+          </div> */}
 
           <div className={styles.userInfoWrapper}>
             <div className={styles.userInfoKey}>签名</div>
@@ -102,15 +106,16 @@ class PCMyPage extends React.Component {
           </div>
         </SidebarPanel>
 
-        <UserCenterFansPc />
+        <UserCenterFansPc userId={this.props.user.id} />
 
-        <UserCenterFollowsPc />
+        <UserCenterFollowsPc userId={this.props.user.id} />
         <Copyright />
       </>
     );
   };
 
   renderContent = () => {
+    const { isLoading } = this.state
     const { user } = this.props;
     const { userThreads, userThreadsTotalCount } = user;
     const formattedUserThreads = this.formatUserThreadsData(userThreads);
@@ -129,7 +134,7 @@ class PCMyPage extends React.Component {
           type='normal'
           isShowMore={false}
           noData={!formattedUserThreads?.length}
-          isLoading={!formattedUserThreads}
+          isLoading={isLoading}
           leftNum={`${userThreadsTotalCount}个主题`}
           mold='plane'
         >
@@ -140,6 +145,7 @@ class PCMyPage extends React.Component {
   };
 
   render() {
+    const { isLoading } = this.state
     const { user } = this.props;
     const { userThreadsPage, userThreadsTotalPage, getUserThreads, userThreads } = user;
     const formattedUserThreads = this.formatUserThreadsData(userThreads);
@@ -152,24 +158,17 @@ class PCMyPage extends React.Component {
 
     return (
       <>
-        <UserBaseLaout
+        <BaseLayout
           showRefresh={false}
           onSearch={this.onSearch}
           right={this.renderRight}
           immediateCheck={false}
           noMore={userThreadsTotalPage <= currentPageNum}
           onRefresh={getUserThreads}
+          showLayoutRefresh={!isLoading && !!formattedUserThreads?.length}
         >
           {this.renderContent()}
-        </UserBaseLaout>
-
-        {/* 两个粉丝 popup */}
-        <>
-          <UserCenterFollowPopup
-            visible={this.state.showFollowPopup}
-            onClose={() => this.setState({ showFollowPopup: false })}
-          />
-        </>
+        </BaseLayout>
       </>
     );
   }

@@ -110,12 +110,19 @@ class AtSelect extends Component {
       this.props.getAtList(checkUser);
     }
 
-    // 处理已选@ren，更新store
-    const { postData: { contentText: text }, setPostData, cursorPosition, setCursorPosition } = this.props.threadPost;
-    const at = checkUser.map(item => `@${item} `).join(" ");
-    const contentText = text.slice(0, cursorPosition) + at + text.slice(cursorPosition);
-    setPostData({ contentText });
-    setCursorPosition(cursorPosition + at.length);
+    if (!this.props.stateLess) {
+      // 处理已选@ren，更新store
+      const {
+        postData: { contentText: text },
+        setPostData,
+        cursorPosition,
+        setCursorPosition,
+      } = this.props.threadPost;
+      const at = checkUser.map((item) => `@${item} `).join(' ');
+      const contentText = text.slice(0, cursorPosition) + at + text.slice(cursorPosition);
+      setPostData({ contentText });
+      setCursorPosition(cursorPosition + at.length);
+    }
 
     // 返回发帖页
     this.handleCancel();
@@ -202,7 +209,7 @@ class AtSelect extends Component {
           onChange={val => this.setState({ checkUser: val })}
         >
           <List
-            height={'calc(100vh - 120px)'}
+            className={styles.list}
             noMore={finish}
             onRefresh={this.onScrollBottom}
             hasOnScrollToLower={true}

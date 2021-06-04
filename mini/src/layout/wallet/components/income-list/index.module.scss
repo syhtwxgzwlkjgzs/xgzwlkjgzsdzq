@@ -1,8 +1,7 @@
 @import '@common/styles/index.scss';
 
-
 .container {
-    padding: 16px 16px 0;
+    padding: $padding-4n $padding-4n 0;
     background: var(--color-white);
 }
 
@@ -10,17 +9,17 @@
     display: flex;
     justify-content: space-between;
     font-weight: normal;
-    padding-bottom: 16px;
+    padding-bottom: $padding-4n;
     .text {
         font-family: 'PingFang SC';
-        font-size: 14px;
+        font-size: $font-size-primary;
         text-align: left;
         color: var(--color-text-primary);
         line-height: 16px;
     }
     .money {
         font-family: 'PingFangSC-Semibold';
-        font-size: 16px;
+        font-size: $font-size-middle;
         text-align: left;
         color: var(--color-error);
     }
@@ -29,10 +28,9 @@
 .time {
     font-family: 'PingFangSC-Regular';
     font-weight: normal;
-    font-size: 12px;
+    font-size: $font-size-label;
     text-align: left;
     color: var(--color-text-secondary);
-    padding-bottom: 16px;
-    border-bottom: var(--border-border);
-
+    padding-bottom: $padding-4n;
+    border-bottom: solid 1px var(--border-line-color);
 }

@@ -1,11 +1,12 @@
 import React from 'react';
 import { inject } from 'mobx-react';
+import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+import Page from '@components/page';
+import Router from '@discuzq/sdk/dist/router';
 import { readCommentDetail } from '@server';
 import { getCurrentInstance } from '@tarojs/taro';
 import CommentMiniPage from '../../../layout/thread/comment/index';
 import ErrorMiniPage from '../../../layout/error/index';
-import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
-import Page from '@components/page';
 
 @inject('site')
 @inject('comment')
@@ -14,6 +15,7 @@ class CommentDetail extends React.Component {
     super(props);
     this.state = {
       isServerError: false,
+      serverErrorMsg: '',
     };
   }
 
@@ -32,6 +34,18 @@ class CommentDetail extends React.Component {
       const res = await readCommentDetail({ params: { pid: Number(id) } });
 
       if (res.code !== 0) {
+        // 404
+        if (res.code === -4004) {
+          Router.replace({ url: '/subPages/404/index' });
+          return;
+        }
+
+        if (res.code > -5000 && res.code < -4000) {
+          this.setState({
+            serverErrorMsg: res.msg,
+          });
+        }
+
         this.setState({
           isServerError: true,
         });
@@ -44,7 +58,7 @@ class CommentDetail extends React.Component {
 
   render() {
     return this.state.isServerError ? (
-      <ErrorMiniPage />
+      <ErrorMiniPage text={this.state.serverErrorMsg}/>
     ) : (
       <Page>
         <ToastProvider>

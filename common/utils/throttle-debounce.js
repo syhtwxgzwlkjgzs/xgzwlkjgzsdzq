@@ -38,10 +38,9 @@ const debounce = (callback, delay) => {
 
   if( (!callback && typeof callback !== "function") ||
       typeof delay !== "number") {
-      console.error("The argument has the types in error.");
-      return;
+    console.error("The argument has the types in error.");
+    return;
   }
-
   let timeoutID = null;
   return function (...args) {
     if(timeoutID !== null) {

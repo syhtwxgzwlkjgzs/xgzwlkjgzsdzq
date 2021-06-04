@@ -15,7 +15,8 @@ class Index extends React.Component {
   prePage = 10;
 
   state = {
-    isError: false
+    isError: false,
+    errorText: '加载失败'
   }
 
   async componentDidMount() {
@@ -34,7 +35,7 @@ class Index extends React.Component {
         filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
       });
     } catch (error) {
-      this.setState({ isError: true })
+      this.setState({ isError: true, errorText: error })
     }
   }
 
@@ -67,7 +68,11 @@ class Index extends React.Component {
 
     if (type === 'click-filter') { // 点击tab
       this.page = 1;
-      await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
+      try {
+        await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
+      } catch (error) {
+        this.setState({ isError: true, errorText: error })
+      }
     } else if (type === 'moreData') {
       this.page += 1;
       return await index.getReadThreadList({
@@ -90,7 +95,7 @@ class Index extends React.Component {
     return (
       <View>
         <MemoToastProvider>
-          <IndexPageContent dispatch={this.dispatch} isError={this.state.isError} />
+          <IndexPageContent dispatch={this.dispatch} isError={this.state.isError} errorText={this.state.errorText} />
         </MemoToastProvider>
       </View>
     );

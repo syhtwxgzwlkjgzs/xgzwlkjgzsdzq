@@ -46,7 +46,7 @@ class Index extends React.Component {
         isLoading={!pageData}
         noData={!pageData?.length}
       >
-        <ActiveUsers data={pageData} onItemClick={this.onUserClick}/>
+        <ActiveUsers data={pageData} direction='left' onItemClick={this.onUserClick}/>
       </SidebarPanel>
     );
   }

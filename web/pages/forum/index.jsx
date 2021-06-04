@@ -5,6 +5,7 @@ import { withRouter } from 'next/router';
 import { inject } from 'mobx-react';
 
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import HOCWithLogin from '@middleware/HOCWithLogin';
 
 @inject('site')
 class Forum extends React.Component {
@@ -20,4 +21,4 @@ class Forum extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(withRouter(Forum));
+export default HOCFetchSiteData(HOCWithLogin(withRouter(Forum)));

@@ -39,7 +39,7 @@ class Index extends Component {
     const { type, site } = this.props;
     const url = site?.webConfig?.setSite?.siteFavicon;
     if (type === 'thread') {
-      return url || '/favicon.ico';
+      return url || '/dzq-img/default-favicon.png';
     }
     return avatar;
   };
@@ -136,7 +136,7 @@ class Index extends Component {
     return (
       <div className={styles.wrapper} onClick={(e) => this.toDetailOrChat(e, item)}>
         {/* 默认block */}
-        <div className={styles.block}>
+        <div className={isPC ? styles['block-pc'] : styles.block}>
           {/* 头像 */}
           <div className={styles.avatar} onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}>
             <Badge
@@ -193,7 +193,7 @@ class Index extends Component {
                 <p className={styles['content-html']} style={isPC ? { paddingRight: '20px' } : {}}>
                   在帖子"
                   <span
-                    className={styles['single-line']}
+                    className={`${styles['financial-content']} ${styles['single-line']}`}
                     style={{
                       maxWidth: `${isPC ? '400px' : '90px'}`,
                       display: 'inline-block',
