@@ -71,7 +71,7 @@ class PostPage extends React.Component {
     // } else {
     const { fetchEmoji, emojis } = this.props.threadPost;
     if (emojis.length === 0) fetchEmoji();
-    this.fetchCategories();
+    this.fetchDetail();
     // }
   }
 
@@ -97,12 +97,8 @@ class PostPage extends React.Component {
     if (!user.permissions) user.updateUserInfo();
   }
 
-  async fetchCategories() {
-    const { index, thread, threadPost } = this.props;
-    let { categories } = index;
-    if (!categories || (categories && categories.length === 0)) {
-      categories = await index.getReadCategories();
-    }
+  async fetchDetail() {
+    const { thread, threadPost } = this.props;
     // 如果是编辑操作，需要获取链接中的帖子id，通过帖子id获取帖子详情信息
     const { query } = this.props.router;
     if (query && query.id) {
@@ -113,18 +109,11 @@ class PostPage extends React.Component {
         ret.code = 0;
       } else ret = await thread.fetchThreadDetail(id);
       if (ret.code === 0) {
-        const { categoryId } = ret.data;
-        this.setCategory(categoryId);
         threadPost.formatThreadDetailToPostData(ret.data);
       } else {
         Toast.error({ content: ret.msg });
       }
     }
-  }
-
-  setCategory(categoryId) {
-    const categorySelected = this.props.index.getCategorySelectById(categoryId);
-    this.props.threadPost.setCategorySelected(categorySelected);
   }
 
   setPostData(data) {

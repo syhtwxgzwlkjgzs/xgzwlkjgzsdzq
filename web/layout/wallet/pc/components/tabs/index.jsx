@@ -18,7 +18,7 @@ export default class index extends Component {
           title: "支出明细",
           icon: "WallOutlined",
           type: "pay",
-          iconColor: "#2469f6",
+          iconColor: "#FFC300",
         },
         {
           title: "提现记录",
@@ -65,7 +65,7 @@ export default class index extends Component {
                   }
                 </div>
                 <div className={styles.rigth}>
-                  <Icon name={item.icon} size='14' color={item.iconColor}></Icon>
+                  <Icon name={item.icon} size='14' color={activeType === item.type ? '#2469F6' : item.iconColor}></Icon>
                   <span
                     className={classNames(styles.text,{
                       [styles.textColor]: activeType === item.type

@@ -56,11 +56,13 @@ const BaseLayoutControl = (props) => {
   }, [jumpTo, listRef, baselayout]);
 
 
-  const quickScrolling = ({ scrollTop = 0 } = {}) => {
-    if (!hasListChild || !listRef?.current?.currentScrollTop) {
+  const quickScrolling = (e) => {
+
+    if (!e || !e.scrollTop || !hasListChild || !listRef?.current?.currentScrollTop) {
       onScroll();
       return;
     }
+    const { scrollTop } = e;
     if (baselayout.isJumpingToTop) {
       baselayout.removeJumpingToTop();
       listRef.current.onBackTop();
@@ -72,26 +74,27 @@ const BaseLayoutControl = (props) => {
 
     if (playingVideoDom) {
       const playingVideoTop = baselayout.playingVideoPos;
-      const playingVideoBottom = playingVideoDom?.offsetHeight + playingVideoTop;
+      const playingVideoBottom = playingVideoDom.offsetHeight + playingVideoTop;
 
       if (playingVideoTop > 0
         && (playingVideoBottom < scrollTop // 视频在视窗下面
           || playingVideoTop > window.innerHeight + scrollTop)) { // 视频在视窗上面
-        playingVideoDom.querySelector('video')?.pause();
-        baselayout.playingVideoDom = null;
-        baselayout.playingVideoPos = -1;
+        baselayout.pauseWebPlayingVideo();
       }
     }
 
     const { playingAudioDom } = baselayout;
     if (playingAudioDom) {
-      // const playingAudioPos = baselayout.playingAudioPos;
-      // if (playingAudioPos > 0 && (playingAudioPos < scrollTop ||
-      //   playingAudioPos > window.innerHeight + scrollTop)) {
-      //   playingAudioDom?.querySelector("video")?.pause();
-      //   baselayout.playingAudioDom = null;
-      //   baselayout.playingAudioPos = -1;
-      // }
+      const playingAudioTop = baselayout.playingAudioPos;
+      const playingAudioHeight = 56;
+      const playingAudioBottom = playingAudioHeight + playingAudioTop;
+
+      if (playingAudioTop > 0
+        && (playingAudioBottom < scrollTop // 视频在视窗下面
+          || playingAudioTop > window.innerHeight + scrollTop)) { // 视频在视窗上面
+
+        baselayout.pauseWebPlayingAudio();
+      }
     }
 
     onScroll({ scrollTop });
