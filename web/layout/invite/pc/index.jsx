@@ -51,11 +51,8 @@ class InvitePCPage extends React.Component {
   // 加载更多函数
   loadMore = async () => {
     const { invite } = this.props;
-    const scrollDom = this.containerRef.current;
-    if (scrollDom.clientHeight + scrollDom.scrollTop === scrollDom.scrollHeight) {
-      if (!this.checkLoadCondition()) return;
-      return await invite.getInviteUsersList(invite.currentPage + 1);
-    }
+    if (!this.checkLoadCondition()) return;
+    return await invite.getInviteUsersList(invite.currentPage + 1);
   };
 
   createInviteLink = async () => {
@@ -126,17 +123,13 @@ class InvitePCPage extends React.Component {
     const { inviteUsersList, inviteLoading, isNoData, currentPage, totalPage } = this.props.invite;
     return (
       <BaseLayout
-        // noMore={currentPage >= totalPage}
         right={ this.renderRight }
-        // onRefresh={this.loadMore}
-        // showRefresh={false}
+        onRefresh={this.loadMore}
+        showRefresh={false}
+        isShowLayoutRefresh={false}
       >
         <div
           className={layout.container}
-          ref={this.containerRef}
-          // style={{
-          //   overflow: 'scroll',
-          // }}
         >
           <div className={layout.invite_list}>
             <div className={layout.invite_list_title}>
