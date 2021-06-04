@@ -25,6 +25,7 @@ const Title = ({ title, placeholder, isDisplay, onChange,  onFocus, onBlur, ...p
         onChange={e => onChange(e.target.value)}
         onFocus={onFocus}
         onBlur={onBlur}
+        maxLength={100}
         focus
         {...props}
       />
