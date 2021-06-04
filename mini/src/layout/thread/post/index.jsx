@@ -436,7 +436,9 @@ class Index extends Component {
           success: async (orderInfo) => {
             const { orderSn } = orderInfo;
             setPostData({ orderSn });
-            resolve();
+            setTimeout(() => {
+              resolve();
+            }, 1200)
           },
         });
       });
