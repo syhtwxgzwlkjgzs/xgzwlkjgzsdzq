@@ -183,7 +183,7 @@ class ThreadCreate extends React.Component {
 
   // 顶部导航栏点击后拦截回调
   handlePageJump = (link = '') => {
-    const { postData: { contentText }, resetPostData } = this.props.threadPost;
+    const { postData: { contentText } } = this.props.threadPost;
 
     if (contentText !== '') {
       this.props.handleSetState({ draftShow: true, jumpLink: link });
@@ -191,7 +191,6 @@ class ThreadCreate extends React.Component {
     }
 
     if (link) {
-      resetPostData();
       Router.push({ url: link });
     } else {
       window.history.length <= 1 ? Router.redirect({ url: '/' }) : Router.back();
@@ -199,14 +198,12 @@ class ThreadCreate extends React.Component {
   }
 
   render() {
-    const { threadPost, index, user, site } = this.props;
+    const { threadPost, user, site } = this.props;
     const { threadExtendPermissions, permissions } = user;
     const { webConfig = {} } = site;
     const { postData } = threadPost;
 
     const { emoji, topic, atList, currentDefaultOperation, currentAttachOperation, categoryChooseShow } = this.props;
-    const category = ((index.categories && index.categories.slice()) || []).filter(item => item.name !== '全部');
-
 
     return (
       <div className={styles['dzq-post-body']}>
@@ -369,13 +366,7 @@ class ThreadCreate extends React.Component {
         {/* 选择帖子类别 */}
         <ClassifyPopup
           show={categoryChooseShow}
-          category={category}
-          categorySelected={threadPost.categorySelected}
           onVisibleChange={val => this.props.handleSetState({ categoryChooseShow: val })}
-          onChange={(parent, child) => {
-            this.props.setPostData({ categoryId: child.pid || parent.pid });
-            threadPost.setCategorySelected({ parent, child });
-          }}
         />
         {/* 插入 at 关注的人 */}
         {currentDefaultOperation === defaultOperation.at && (
