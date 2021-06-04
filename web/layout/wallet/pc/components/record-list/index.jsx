@@ -168,7 +168,7 @@ class WalletInfo extends React.Component {
         render: item => <span  className={`${styles.frozenAmount}`}>{item.cashApplyAmount}</span>,
       },
       {
-        title: '流水号:',
+        title: '流水号',
         key: 'type',
         render: item => <span className={styles.normalText}>{item.tradeNo || '暂无内容'}</span>,
       },
