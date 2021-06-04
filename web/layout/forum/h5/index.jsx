@@ -150,6 +150,7 @@ class ForumH5Page extends React.Component {
                     label={user.groupName}
                     userId={user.userId}
                     onClick={this.onUserClick}
+                    needPadding={true}
                   />
                   // <UserCenterFriends
                   //   id={user.userId}

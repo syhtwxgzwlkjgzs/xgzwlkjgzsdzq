@@ -69,6 +69,8 @@ class SearchResultUserH5Page extends React.Component {
               imgSrc={item.avatar}
               label={item.groupName}
               onClick={this.onUserClick}
+              needPadding={true}
+              needBottomLine={true}
             />
           ))
         }
