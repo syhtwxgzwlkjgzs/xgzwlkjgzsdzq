@@ -81,10 +81,6 @@ class PartnerInviteH5Page extends React.Component {
     }
   }
 
-  onPostClick = data => console.log('post click', data);
-
-  onUserClick = data => console.log('user click', data);
-
   handleJoinSite = () => {
     const { user, site } = this.props;
     if (!user?.isLogin()) {
@@ -92,7 +88,7 @@ class PartnerInviteH5Page extends React.Component {
       return;
     }
     const { setSite: { siteMode, sitePrice, siteName } = {} } = site.webConfig;
-    if (siteMode === 'pay' && user.paid === true) {
+    if (siteMode === 'pay' && user.paid === false) {
       PayBox.createPayBox({
         data: {      // data 中传递后台参数
           amount: sitePrice,
@@ -105,10 +101,10 @@ class PartnerInviteH5Page extends React.Component {
             content: `订单 ${orderInfo.orderSn} 支付成功, 即将进入站点`,
             hasMask: false,
             duration: 3000,
+            onClose() {
+              window.location.href = '/';
+            },
           });
-          setTimeout(() => {
-            window.location.href = '/';
-          }, 3100);
         }, // 支付成功回调
         failed: (orderInfo) => {
           Toast.error({
