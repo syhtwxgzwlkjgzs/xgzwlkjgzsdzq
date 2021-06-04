@@ -192,9 +192,8 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
                           platform={platform}
                           onClick={onUserClick}
                           type={item.type}
-                          isShowBottomLine={tipData?.platform === 'pc'}
-                          needPaddingWithoutLine={tipData?.platform === 'h5'}
-                          needPadding={false}
+                          needPadding={true}
+                          needBottomLine={tipData?.platform === 'pc'}
                         />
                     ))
                   }
