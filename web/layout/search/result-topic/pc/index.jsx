@@ -67,6 +67,7 @@ class SearchResultTopicPCPage extends React.Component {
         type='normal'
         isShowMore={false}
         noData={!pageData?.length}
+        isLoading={!pageData}
         icon={{ type: 1, name: 'StrongSharpOutlined' }}
       >
         <div className={styles.topic}>
@@ -86,6 +87,7 @@ class SearchResultTopicPCPage extends React.Component {
         noMore={currentPage >= totalPage} 
         onRefresh={this.fetchMoreData} 
         showRefresh={false}
+        isShowLayoutRefresh={!!pageData?.length}
         onSearch={this.onSearch}
         right={ this.renderRight }
       >
