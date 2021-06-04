@@ -47,7 +47,17 @@ class UserCenterFansPc extends React.Component {
   };
 
   render() {
-    const fansCount = this.props.userId ? this.props.user.targetUserFansCount : this.props.user.followCount;
+    let fansCount = 0;
+    if (this.props.userId) {
+      if (this.props.userId === this.props.user?.id) {
+        fansCount = this.props.user.fansCount
+      } else {
+        fansCount = this.props.user.targetUserFansCount
+      }
+    } else {
+      fansCount = this.props.user.fansCount
+    }
+
     return (
       <>
         <SidebarPanel

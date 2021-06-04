@@ -24,7 +24,7 @@ const ClassifyPopup = (props) => {
   };
   const handleChildClick = (item) => {
     setSelectedChild(item);
-    props?.threadPost.setPostData({ categoryId: selectedChild.pid || selected.pid });
+    props?.threadPost.setPostData({ categoryId: selected.pid || selectedChild.pid });
     handleClose();
   };
 
@@ -36,7 +36,7 @@ const ClassifyPopup = (props) => {
       setCategoryChildren([]);
       setSelectedChild({});
     }
-    const categoryId = selectedChild.pid || selected.pid;
+    const categoryId = selected.pid || selectedChild.pid;
     if (!categoryId) return;
     props?.threadPost.setPostData({ categoryId });
   };
@@ -63,8 +63,6 @@ const ClassifyPopup = (props) => {
   }, []);
 
   useEffect(() => {
-    if (props?.threadPost?.postData?.categoryId === selected.pid
-      || props?.threadPost?.postData?.categoryId === selectedChild.pid) return;
     setSeletedCategory(props?.threadPost?.postData?.categoryId);
   }, [props?.threadPost?.postData?.categoryId]);
 
