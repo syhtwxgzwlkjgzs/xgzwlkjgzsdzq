@@ -184,7 +184,7 @@ class PartnerInviteH5Page extends React.Component {
               </div>
               : <></>
           }
-          <div className={layout.user_card_button} onClick={this.handleJoinSite}>{siteMode === 'pay' ? `¥ ${username}` : ''} 立即加入</div>
+          <div className={layout.user_card_button} onClick={this.handleJoinSite}>{siteMode === 'pay' ? `¥ ${sitePrice}` : ''} 立即加入</div>
           {siteMode === 'pay' ? <div className={layout.bottom_title}>有效期：<span>{siteExpire}天</span></div> : <></>}
         </div>
         <Copyright/>
