@@ -9,7 +9,6 @@ import PayBoxProvider from '@components/payBox/payBoxProvider';
 import withShare from '@common/utils/withShare/withShare';
 import ErrorMiniPage from '../../layout/error/index';
 
-
 const MemoToastProvider = React.memo(ToastProvider);
 @inject('site')
 @inject('thread')
@@ -36,7 +35,7 @@ class Detail extends React.Component {
 
   // 页面分享
   $getShareData(data) {
-    const { title, path, comeFrom, threadId } = data;
+    const { title, threadId } = this.props.thread.threadData;
     const defalutTitle = title;
     const defalutPath = `/subPages/thread/index?id=${threadId}`;
     if (data.from === 'timeLine') {
@@ -50,12 +49,11 @@ class Detail extends React.Component {
         path: defalutPath,
       };
     }
-    if (comeFrom && comeFrom === 'thread') {
-      this.props.thread.shareThread(threadId, this.props.index, this.props.search, this.props.topic);
-    }
+    this.props.thread.shareThread(threadId, this.props.index, this.props.search, this.props.topic);
+    
     return {
-      title,
-      path,
+      title: defalutTitle,
+      path: defalutPath,
     };
   }
 
@@ -120,7 +118,7 @@ class Detail extends React.Component {
 
   render() {
     return this.state.isServerError ? (
-      <ErrorMiniPage text={this.state.serverErrorMsg}/>
+      <ErrorMiniPage text={this.state.serverErrorMsg} />
     ) : (
       <Page>
         <MemoToastProvider>
