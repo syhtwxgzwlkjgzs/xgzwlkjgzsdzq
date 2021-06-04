@@ -6,13 +6,10 @@ import Icon from '@discuzq/design/dist/components/icon/index';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
 import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
-import List from '@components/list';
-import UserItem from '@components/thread/user-item';
+import UserCenterUsers from '@components/user-center-users';
 import { get } from '@common/utils/get';
 import layout from './index.module.scss';
-// import UserCenterFriends from '@components/user-center-friends';
 import { simpleRequest } from '@common/utils/simple-request';
-// import Router from '@discuzq/sdk/dist/router';
 
 @inject('site')
 @inject('forum')
@@ -108,7 +105,7 @@ class ForumH5Page extends React.Component {
                     image={item.avatar}
                   />
                 ))}
-                <Icon site={10} color="#8590A6" name="RightOutlined" />
+                <Icon color="#8590A6" name="RightOutlined" className={layout.icon} />
               </View>
             </View>
           </View>
@@ -133,27 +130,7 @@ class ForumH5Page extends React.Component {
           onClose={() => forum.setIsPopup(false)}
           containerClassName={layout.forum_users_popup}
         >
-          <List
-            className={layout.forum_users_list}
-            onRefresh={this.nextUsersPage}
-            noMore={isNoMore}
-            immediateCheck={false}
-          >
-            {usersPageData?.map((user, index) => {
-              if (index + 1 > this.props.limit) return null;
-              return (
-                <UserItem
-                  key={index}
-                  title={user.nickname}
-                  imgSrc={user.avatar}
-                  label={user.groupName}
-                  userId={user.userId}
-                  onClick={this.onUserClick}
-                  needPadding={true}
-                />
-              );
-            })}
-          </List>
+          <UserCenterUsers />
         </Popup>
       </>
     );
