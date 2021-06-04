@@ -66,15 +66,15 @@ const Index = (props) => {
               styles={{
                 height: 'calc(100% - 60px)',
               }}
+              userId={id}
               dataSource={dataSource}
               setDataSource={setDataSource}
               sourcePage={sourcePage}
               updateSourcePage={updateSourcePage}
               sourceTotalPage={sourceTotalPage}
               updateSourceTotalPage={updateSourceTotalPage}
-              userId={id}
               onContainerClick={onContainerClick}
-              splitElement={splitElement}
+              splitElement={splitElement}           
             />
           )}
         </div>

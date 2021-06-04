@@ -178,7 +178,9 @@ class UserCenterFollows extends React.Component {
   // 清理，防止内存泄露
   componentWillUnmount() {
     if (!this.containerRef.current) return;
-    this.containerRef.current.removeEventListener('scroll', this.loadMore);
+    this.containerRef
+      && this.containerRef.current
+      && this.containerRef.current.removeEventListener('scroll', this.loadMore);
   }
 
   // TODO: 增加这里对于 ID 的处理，感应 ID 变化时发生及时更新
@@ -204,7 +206,12 @@ class UserCenterFollows extends React.Component {
 
   // 检查是否满足触底加载更多的条件
   checkLoadCondition() {
-    const hasMorePage = this.totalPage >= this.page;
+    let hasMorePage = null;
+    if (this.dataSource) {
+      hasMorePage = this.sourceTotalPage >= this.sourcePage;
+    } else {
+      hasMorePage = this.totalPage >= this.page;
+    }
     if (this.state.loading) return false;
     if (!this.props.loadMorePage) {
       return false;

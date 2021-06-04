@@ -2,7 +2,9 @@ import React from 'react';
 import { Icon, Badge } from '@discuzq/design';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
-
+import { observer, inject } from 'mobx-react';
+@inject('message')
+@observer
 class UserCenterAction extends React.Component {
   // 点击我的消息
   handleMyMessage = () => {
@@ -49,13 +51,21 @@ class UserCenterAction extends React.Component {
   }
 
   render() {
+    const { message } = this.props;
+    const { totalUnread } = message;
     return (
       <div className={styles.userCenterAction}>
         <div className={styles.userCenterActionItem}>
           <div onClick={this.handleMyMessage} className={styles.userCenterActionItemIcon}>
-            <Badge info={12}>
-              <Icon name={'MailOutlined'} size={20} />
-            </Badge>
+            <div className={styles.userMessage}>
+              {totalUnread ? (
+                <Badge info={totalUnread} circle>
+                  <Icon name={'MailOutlined'} color={'#4F5A70'} size={20} />
+                </Badge>
+              ) : (
+                <Icon name={'MailOutlined'} color={'#4F5A70'} size={20} />
+              )}
+            </div>
           </div>
           <div className={styles.userCenterActionItemDesc}>我的消息</div>
         </div>
@@ -123,15 +133,15 @@ class UserCenterAction extends React.Component {
           <div className={styles.userCenterActionItemDesc}>站点信息</div>
         </div>
 
-          <div onClick={this.handleMyInvite} className={styles.userCenterActionItem}>
-            <div className={styles.userCenterActionItemIcon}>
-              <Badge>
-                <Icon name={'NotbookOutlined'} size={20} />
-              </Badge>
-            </div>
-            <div className={styles.userCenterActionItemDesc}>推广邀请</div>
+        <div onClick={this.handleMyInvite} className={styles.userCenterActionItem}>
+          <div className={styles.userCenterActionItemIcon}>
+            <Badge>
+              <Icon name={'NotbookOutlined'} size={20} />
+            </Badge>
           </div>
+          <div className={styles.userCenterActionItemDesc}>推广邀请</div>
         </div>
+      </div>
     );
   }
 }
