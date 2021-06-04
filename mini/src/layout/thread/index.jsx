@@ -9,11 +9,11 @@ import footer from './footer.module.scss';
 
 import NoMore from './components/no-more';
 import LoadingTips from './components/loading-tips';
-
 import styleVar from '@common/styles/theme/default.scss.json';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Input from '@discuzq/design/dist/components/input/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
+import Button from '@discuzq/design/dist/components/button/index';
 import Header from '@components/header';
 import goToLoginPage from '@common/utils/go-to-login-page';
 
@@ -25,14 +25,12 @@ import InputPopup from './components/input-popup';
 import throttle from '@common/utils/thottle';
 import xss from '@common/utils/xss';
 
-import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import threadPay from '@common/pay-bussiness/thread-pay';
 import RewardPopup from './components/reward-popup';
-
 import RenderThreadContent from './detail/content';
 import RenderCommentList from './detail/comment-list';
 import classNames from 'classnames';
-
+import { debounce } from '../../components/thread/utils';
 @inject('site')
 @inject('user')
 @inject('thread')
@@ -44,7 +42,6 @@ import classNames from 'classnames';
 class ThreadH5Page extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       showReportPopup: false, // 是否弹出举报弹框
       showDeletePopup: false, // 是否弹出删除弹框
@@ -82,7 +79,6 @@ class ThreadH5Page extends React.Component {
     this.reportContent = ['广告垃圾', '违规内容', '恶意灌水', '重复发帖'];
     this.inputText = '其他理由...';
   }
-
   // 滚动事件
   handleOnScroll = (e) => {
     // 加载评论列表
@@ -121,6 +117,17 @@ class ThreadH5Page extends React.Component {
     // 当内容加载完成后，获取评论区所在的位置
     if (this.props.thread.isReady) {
       // this.position = this.commentDataRef?.current?.offsetTop - 50;
+
+      const { threadId, title } = this.props?.thread?.threadData;
+      if (threadId && title) {
+        // 分享相关数据
+        this.shareData = {
+          comeFrom: 'thread',
+          threadId,
+          title,
+          path: `/subPages/thread/index?id=${threadId}`,
+        };
+      }
     }
   }
 
@@ -487,6 +494,16 @@ class ThreadH5Page extends React.Component {
     });
   }
 
+  /*   btnClick() {
+    const shareData = {
+      comeFrom: 'thread',
+      threadId: this.props.thread?.threadData?.id,
+      title: '',
+      path: `/subPages/thread/index?id=${this.props.thread?.threadData?.id}`
+    }
+    this.setState({shareData:shareData});
+  }*/
+
   // 点击编辑评论
   onEditClick(comment) {
     this.comment = comment;
@@ -626,25 +643,6 @@ class ThreadH5Page extends React.Component {
     }
   }
 
-  // 分享
-  async onShareClick() {
-    this.keepCurrentPosition();
-    Toast.info({ content: '复制链接成功' });
-
-    const { title = '' } = this.props.thread?.threadData || {};
-    h5Share({ title, path: `thread/${this.props.thread?.threadData?.threadId}` });
-
-    const id = this.props.thread?.threadData?.id;
-
-    const { success, msg } = await this.props.thread.shareThread(id);
-
-    if (!success) {
-      Toast.error({
-        content: msg,
-      });
-    }
-  }
-
   // 付费支付
   async onPayClick() {
     if (!this.props.user.isLogin()) {
@@ -730,6 +728,7 @@ class ThreadH5Page extends React.Component {
       canShare: this.props.user.isLogin(),
       canCollect: this.props.user.isLogin(),
     };
+
     // 更多弹窗界面
     const moreStatuses = {
       isEssence: threadStore?.threadData?.displayTag?.isEssence,
@@ -772,7 +771,7 @@ class ThreadH5Page extends React.Component {
                 onLikeClick={() => this.onLikeClick()}
                 onOperClick={(type) => this.onOperClick(type)}
                 onCollectionClick={() => this.onCollectionClick()}
-                onShareClick={() => this.onShareClick()}
+                // onShareClick={() => this.onShareClick()}
                 onReportClick={() => this.onReportClick()}
                 onContentClick={() => this.onContentClick()}
                 onRewardClick={() => this.onRewardClick()}
@@ -845,12 +844,15 @@ class ThreadH5Page extends React.Component {
                   size="20"
                   name="CollectOutlinedBig"
                 ></Icon>
-                <Icon
-                  onClick={() => this.onShareClick()}
-                  className={footer.icon}
-                  size="20"
-                  name="ShareAltOutlined"
-                ></Icon>
+
+                {/* 分享button */}
+                <Button
+                  className={classNames(footer.share, footer.icon)}
+                  openType="share"
+                  data-shareData={this.shareData}
+                >
+                  <Icon className={footer.icon} size="20" name="ShareAltOutlined"></Icon>
+                </Button>
               </View>
             </View>
           </View>
