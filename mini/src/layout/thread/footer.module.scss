@@ -63,3 +63,15 @@
 .isCricle {
   width: 16px;
 }
+
+.operate {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.share {
+  padding: 0;
+  border: none !important;
+  overflow: initial;
+}

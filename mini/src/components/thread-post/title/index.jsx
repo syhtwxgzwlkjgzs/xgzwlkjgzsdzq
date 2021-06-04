@@ -23,6 +23,7 @@ const Index = ({ value, show, placeholder, onChange, onBlur, onFocus }) => {
         onChange={e => onChange(e.target.value)}
         onBlur={onBlur}
         onFocus={onFocus}
+        maxLength={100}
       />
     </View>
   );

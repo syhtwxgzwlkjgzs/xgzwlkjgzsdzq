@@ -155,22 +155,23 @@ class AtSelect extends Component {
       return (
         <View className={styles['at-item']} key={userId}>
           <View className={styles['at-item__inner']} >
-            <View className={styles.avatar}>
-              {avatar
-                ? <Avatar image={avatar} />
-                : <Avatar
-                  text={username}
-                  style={{
-                    backgroundColor: `#${this.getBackgroundColor(username)}`
-                  }}
-                />
-              }
-            </View>
-            <View className={styles.info}>
-              <View className={styles.username}>{username}</View>
-              <View className={styles.group}>{groupName}</View>
-            </View>
-            <Checkbox name={username}></Checkbox>
+            <Checkbox name={username}>
+              <View className={styles.avatar}>
+                {avatar
+                  ? <Avatar image={avatar} />
+                  : <Avatar
+                    text={username}
+                    style={{
+                      backgroundColor: `#${this.getBackgroundColor(username)}`
+                    }}
+                  />
+                }
+              </View>
+              <View className={styles.info}>
+                <View className={styles.username}>{username}</View>
+                <View className={styles.group}>{groupName}</View>
+              </View>
+            </Checkbox>
           </View>
         </View>
       )

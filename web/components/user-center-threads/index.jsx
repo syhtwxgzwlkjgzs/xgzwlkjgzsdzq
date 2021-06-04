@@ -7,9 +7,7 @@ class UserCenterThreads extends React.Component {
     return (
       <div>
         {this.props.data.map((itemInfo, index) => (
-          <div key={index} className={index === 0 ? styles.threadFirstItem : styles.threadItem}>
-            <Thread data={itemInfo} />
-          </div>
+          <Thread data={itemInfo} className={index === 0 ? styles.threadBorder : ''} />
         ))}
       </div>
     );
