@@ -118,14 +118,14 @@ class ThreadH5Page extends React.Component {
     if (this.props.thread.isReady) {
       // this.position = this.commentDataRef?.current?.offsetTop - 50;
 
-      const { threadId, title } = this.props?.thread?.threadData;
-      if (threadId && title) {
+      const { id, title } = this.props?.thread?.threadData;
+      if (id) {
         // 分享相关数据
         this.shareData = {
           comeFrom: 'thread',
-          threadId,
+          threadId: id,
           title,
-          path: `/subPages/thread/index?id=${threadId}`,
+          path: `/subPages/thread/index?id=${id}`,
         };
       }
     }
