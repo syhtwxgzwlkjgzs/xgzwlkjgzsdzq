@@ -24,7 +24,6 @@ export default function DzqUpload(props) {
     className,
   } = props;
   const multiple = limit > 1;
-
   const post = async (file, list, updater) => { // file, list, updater
     const formData = new FormData();
     formData.append('file', file.originFileObj);
@@ -42,8 +41,8 @@ export default function DzqUpload(props) {
     if (ret.code === 0) {
       file.status = 'success';
       updater(list);
-      onSuccess(ret, file);
-      onComplete(ret, file, list);
+      onSuccess({ ...ret, type: file.type }, file);
+      onComplete({ ...ret, type: file.type }, file, list);
     } else {
       file.status = 'error';
       updater(list);
@@ -51,7 +50,7 @@ export default function DzqUpload(props) {
       onComplete(ret, file, list);
       return false;
     }
-    return ret;
+    return { ...ret, type: file.type };
   };
 
   // TODO: 因为上传组件不支持传class和style，所以在外面增加了一层dom
