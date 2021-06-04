@@ -1,6 +1,6 @@
 import React from 'react';
 import UserCenterFriends from '../user-center-friends';
-import { Spin } from '@discuzq/design';
+import { Spin, Toast } from '@discuzq/design';
 import { followerAdapter } from './adapter';
 import styles from './index.module.scss';
 import { createFollow, deleteFollow, getUserFans } from '@server';
@@ -66,6 +66,10 @@ class UserCenterFans extends React.Component {
 
     if (fansRes.code !== 0) {
       console.error(fansRes);
+      Toast.error({
+        content: fansRes.msg,
+        duration: 1000,
+      });
       return;
     }
 

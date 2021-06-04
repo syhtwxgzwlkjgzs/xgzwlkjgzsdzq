@@ -480,7 +480,7 @@ class PayBoxStore {
 
     throw {
       Code: resetPayPwdRes.code,
-      Msg: resetPayPwdRes.msg,
+      Msg: resetPayPwdRes.message,
     };
   }
 
@@ -511,7 +511,7 @@ class PayBoxStore {
 
     throw {
       Code: smsResp.code,
-      Message: smsResp.msg,
+      Message: smsResp.message,
     };
   }
 
@@ -540,7 +540,7 @@ class PayBoxStore {
 
     throw {
       Code: forgetPayPwdRes.code,
-      Msg: forgetPayPwdRes.msg,
+      Msg: forgetPayPwdRes.message,
     };
   }
 
