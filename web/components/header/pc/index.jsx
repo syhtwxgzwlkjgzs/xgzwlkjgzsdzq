@@ -7,11 +7,14 @@ import { withRouter } from 'next/router';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import Router from '@discuzq/sdk/dist/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
+import UnreadRedDot from '@components/unread-red-dot';
 
 @inject('site')
 @inject('user')
+@inject('message')
 @observer
 class Header extends React.Component {
+  timeoutId = null;
   constructor(props) {
     super(props);
 
@@ -24,6 +27,26 @@ class Header extends React.Component {
   // state = {
   //   value: ''
   // }
+
+  // 每20秒更新一次未读消息
+  updateUnreadMessage() {
+    const { message: { readUnreadCount } } = this.props;
+    this.timeoutId = setTimeout(() => {
+      readUnreadCount();
+      this.updateUnreadMessage();
+    }, 20000);
+  }
+
+  componentDidMount() {
+    const { message: { readUnreadCount } } = this.props;
+    readUnreadCount();
+    this.updateUnreadMessage();
+  }
+
+  // 卸载时去除定时器
+  componentWillUnmount() {
+    clearTimeout(this.timeoutId);
+  }
 
   onChangeInput = (e) => {
     this.setState({
@@ -77,7 +100,7 @@ class Header extends React.Component {
   dropdownUserLogoutActionImpl = () => {
     clearLoginStatus();
     window.location.replace('/');
-  }
+  };
 
   dropdownActionImpl = (action) => {
     if (action === 'userCenter') {
@@ -85,7 +108,7 @@ class Header extends React.Component {
     } else if (action === 'logout') {
       this.dropdownUserLogoutActionImpl();
     }
-  }
+  };
 
   renderUserInfo() {
     // todo 跳转
@@ -96,8 +119,16 @@ class Header extends React.Component {
           style={{ display: 'inline-block' }}
           menu={
             <Dropdown.Menu>
-              <Dropdown.Item id="userCenter">个人中心</Dropdown.Item>
+              <Dropdown.Item id="userCenter">
+                <span className={styles.headerDropMenuIcon}>
+                  <Icon name="PersonalOutlined" size={15} />
+                </span>
+                个人中心
+              </Dropdown.Item>
               <Dropdown.Item id="logout">
+                <span className={styles.headerDropMenuIcon}>
+                  <Icon name="SignOutOutlined" size={15} />
+                </span>
                 退出登录
               </Dropdown.Item>
             </Dropdown.Menu>
@@ -116,7 +147,7 @@ class Header extends React.Component {
               image={user.userInfo?.avatarUrl}
               onClick={() => {}}
             ></Avatar>
-            <p className={styles.userName}>{user.userInfo.nickname || ''}</p>
+            <p title={user.userInfo.nickname || ''} className={styles.userName}>{user.userInfo.nickname || ''}</p>
           </div>
         </Dropdown>
       );
@@ -141,7 +172,7 @@ class Header extends React.Component {
   }
 
   render() {
-    const { site, user } = this.props;
+    const { site, user, message: { totalUnread,  } } = this.props;
 
     return (
       <div className={styles.header}>
@@ -155,7 +186,7 @@ class Header extends React.Component {
                   icon="SearchOutlined"
                   value={this.state.value}
                   onEnter={this.handleSearch}
-                  onChange={e => this.onChangeInput(e.target.value)}
+                  onChange={(e) => this.onChangeInput(e.target.value)}
                   onIconClick={this.handleIconClick}
                 />
               </div>
@@ -180,7 +211,9 @@ class Header extends React.Component {
                     name="MailOutlined"
                     size={17}
                   />
-                  <p className={styles.iconText}>消息</p>
+                  <UnreadRedDot unreadCount={totalUnread}>
+                    <p className={styles.iconText}>消息</p>
+                  </UnreadRedDot>
                 </div>
                 <div className={styles.iconItem} onClick={() => this.handleRouter('/search')}>
                   <Icon

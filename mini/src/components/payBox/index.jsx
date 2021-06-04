@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { Component } from 'react';
 // @ts-ignore
 import styles from './index.module.scss';
