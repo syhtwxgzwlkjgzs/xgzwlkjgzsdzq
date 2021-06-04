@@ -1,8 +1,9 @@
 import React from 'react';
-import { Icon, Badge } from '@discuzq/design';
+import { Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 import { observer, inject } from 'mobx-react';
+import UnreadRedDot from '@components/unread-red-dot';
 @inject('message')
 @observer
 class UserCenterAction extends React.Component {
@@ -58,13 +59,9 @@ class UserCenterAction extends React.Component {
         <div className={styles.userCenterActionItem}>
           <div onClick={this.handleMyMessage} className={styles.userCenterActionItemIcon}>
             <div className={styles.userMessage}>
-              {totalUnread ? (
-                <Badge info={totalUnread} circle>
-                  <Icon name={'MailOutlined'} color={'#4F5A70'} size={20} />
-                </Badge>
-              ) : (
-                <Icon name={'MailOutlined'} color={'#4F5A70'} size={20} />
-              )}
+              <UnreadRedDot unreadCount={totalUnread}>
+                <Icon name={'MailOutlined'} size={20} />
+              </UnreadRedDot>
             </div>
           </div>
           <div className={styles.userCenterActionItemDesc}>我的消息</div>
@@ -72,72 +69,56 @@ class UserCenterAction extends React.Component {
 
         <div onClick={this.handleMyWallet} className={styles.userCenterActionItem}>
           <div className={styles.userCenterActionItemIcon}>
-            <Badge>
-              <Icon name={'PayOutlined'} size={20} />
-            </Badge>
+            <Icon name={'PayOutlined'} size={20} />
           </div>
           <div className={styles.userCenterActionItemDesc}>我的钱包</div>
         </div>
 
         <div onClick={this.handleMyCollect} className={styles.userCenterActionItem}>
           <div className={styles.userCenterActionItemIcon}>
-            <Badge>
-              <Icon name={'CollectOutlinedBig'} size={20} />
-            </Badge>
+            <Icon name={'CollectOutlinedBig'} size={20} />
           </div>
           <div className={styles.userCenterActionItemDesc}>我的收藏</div>
         </div>
 
         <div onClick={this.handleMyLike} className={styles.userCenterActionItem}>
           <div className={styles.userCenterActionItemIcon}>
-            <Badge>
-              <Icon name={'LikeOutlined'} size={20} />
-            </Badge>
+            <Icon name={'LikeOutlined'} size={20} />
           </div>
           <div className={styles.userCenterActionItemDesc}>我的点赞</div>
         </div>
 
         <div onClick={this.handleMyBan} className={styles.userCenterActionItem}>
           <div className={styles.userCenterActionItemIcon}>
-            <Badge>
-              <Icon name={'ShieldOutlined'} size={20} />
-            </Badge>
+            <Icon name={'ShieldOutlined'} size={20} />
           </div>
           <div className={styles.userCenterActionItemDesc}>我的屏蔽</div>
         </div>
 
         <div onClick={this.handleMyBuy} className={styles.userCenterActionItem}>
           <div className={styles.userCenterActionItemIcon}>
-            <Badge>
-              <Icon name={'ShoppingCartOutlined'} size={20} />
-            </Badge>
+            <Icon name={'ShoppingCartOutlined'} size={20} />
           </div>
           <div className={styles.userCenterActionItemDesc}>我的购买</div>
         </div>
 
         <div onClick={this.handleMyDraft} className={styles.userCenterActionItem}>
           <div className={styles.userCenterActionItemIcon}>
-            <Badge>
-              <Icon name={'RetrieveOutlined'} size={20} />
-            </Badge>
+            <Icon name={'RetrieveOutlined'} size={20} />
           </div>
           <div className={styles.userCenterActionItemDesc}>我的草稿箱</div>
         </div>
 
         <div onClick={this.handleMySiteInfo} className={styles.userCenterActionItem}>
           <div className={styles.userCenterActionItemIcon}>
-            <Badge>
-              <Icon name={'NotepadOutlined'} size={20} />
-            </Badge>
+            <Icon name={'NotepadOutlined'} size={20} />
           </div>
           <div className={styles.userCenterActionItemDesc}>站点信息</div>
         </div>
 
         <div onClick={this.handleMyInvite} className={styles.userCenterActionItem}>
           <div className={styles.userCenterActionItemIcon}>
-            <Badge>
-              <Icon name={'NotbookOutlined'} size={20} />
-            </Badge>
+            <Icon name={'NotbookOutlined'} size={20} />
           </div>
           <div className={styles.userCenterActionItemDesc}>推广邀请</div>
         </div>
