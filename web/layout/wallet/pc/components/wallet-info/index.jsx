@@ -51,7 +51,7 @@ class WalletInfo extends React.Component {
                         <span>冻结金额</span>
                         {
                             this.props.webPageType === 'PC'
-                              ? <Icon name={'RightOutlined'} size='10' className={styles.icon}></Icon> : ''
+                              ? <Icon name={'RightOutlined'} size={12} className={styles.icon}></Icon> : ''
                         }
                     </div>
                     <div className={styles.statusNum}>{this.props.walletData?.freezeAmount}</div>
