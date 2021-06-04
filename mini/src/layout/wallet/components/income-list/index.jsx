@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { time } from '@discuzq/sdk/dist/index';
+import time from '@discuzq/sdk/dist/time';
 import { diffDate } from '@common/utils/diff-date';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';

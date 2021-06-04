@@ -79,13 +79,16 @@ class SearchPCPage extends React.Component {
     if (type === '1') {
       this.props.search.postFollow(id).then(result => {
         if (result) {
-          this.props.search.updateActiveUserInfo(id, { isFollow: true })
+          const { isMutual = 0 } = result
+          this.props.search.updateActiveUserInfo(id, { isFollow: true, isMutual: !!isMutual })
         }
+      }).catch(err => {
+        Toast.info({ content: err });
       })
     } else {
       this.props.search.cancelFollow({ id, type: 1 }).then(result => {
         if (result) {
-          this.props.search.updateActiveUserInfo(id, { isFollow: false })
+          this.props.search.updateActiveUserInfo(id, { isFollow: false, isMutual: false })
         }
       })
     }

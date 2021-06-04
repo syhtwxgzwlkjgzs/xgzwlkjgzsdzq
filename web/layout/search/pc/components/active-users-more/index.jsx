@@ -56,7 +56,7 @@ const User = ({ data, onClick, onFollow, userId, noOperation }) => {
       return { text: '已关注', icon: 'CheckOutlined', className: styles.isFollow }
     }
     return { text: '关注', icon: 'PlusOutlined', className: styles.follow }
-  }, [data.isFollow])
+  }, [data.isFollow, data.isMutualFollow])
 
   return (
     <div className={styles.item} onClick={click}>

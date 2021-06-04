@@ -1,40 +1,31 @@
 import React from 'react';
 import UserCenterFriends from '../user-center-friends';
-import { Spin } from '@discuzq/design';
-import { followerAdapter } from './adapter';
+import Spin from '@discuzq/design/dist/components/spin/index';
+import { View } from '@tarojs/components';
 import styles from './index.module.scss';
-import { createFollow, deleteFollow, getUserFollow } from '@server';
+import { createFollow, deleteFollow, getUserFans, readUsersList } from '@server';
 import { get } from '@common/utils/get';
 import deepClone from '@common/utils/deep-clone';
 import NoData from '@components/no-data';
 
-class UserCenterFollows extends React.Component {
+class UserCenterUsers extends React.Component {
   firstLoaded = false;
   containerRef = React.createRef(null);
 
   static defaultProps = {
-    // 用户id，如果不传，认为是自己的粉丝
+    // 用户id，如果不传，则判断是未登录
     userId: null,
     // 加载数量限制
     limit: 1000,
     // 加载更多页面
     loadMorePage: true,
-    splitElement: <div></div>,
-    isPc: false,
-    dataSource: null,
-    setDataSource: null,
-    sourcePage: null,
-    sourceTotalPage: null,
-    updateSourcePage: null,
-    updateSourceTotalPage: null,
+    splitElement: <View></View>,
     friends: [],
-    loadMoreAction: async () => {},
-    followHandler: async () => {},
-    unFollowHandler: async () => {},
+    isPc: false,
     onContainerClick: async ({ id }) => {},
     hasMorePage: false,
     className: '',
-    style: {},
+    styles: {},
     itemStyle: {},
   };
 
@@ -42,88 +33,67 @@ class UserCenterFollows extends React.Component {
     super(props);
     this.state = {
       loading: true,
-      follows: {},
+      users: [],
     };
   }
 
   page = 1;
   totalPage = 1;
 
-  fetchFollows = async () => {
+  fetchUsers = async () => {
     const opts = {
       params: {
         page: this.page,
         perPage: 20,
         filter: {
-          userId: this.props.userId,
+          hot: 0,
         },
       },
     };
 
-    const followRes = await getUserFollow(opts);
+    const usersRes = await readUsersList(opts);
 
-    if (followRes.code !== 0) {
-      console.error(followRes);
+    if (usersRes.code !== 0) {
+      console.error(usersRes);
       return;
     }
 
-    const pageData = get(followRes, 'data.pageData', []);
-    const totalPage = get(followRes, 'data.totalPage', 1);
+    const pageData = get(usersRes, 'data.pageData', []);
+    const totalPage = get(usersRes, 'data.totalPage', 1);
 
-    if (this.props.updateSourceTotalPage) {
-      this.props.updateSourceTotalPage(totalPage);
-    }
     this.totalPage = totalPage;
 
-    const newFollows = Object.assign({}, this.props.dataSource || this.state.follows);
+    const newUsers = this.state?.users?.concat(pageData);
 
-    newFollows[this.page] = pageData;
-
-    if (this.props.setDataSource) {
-      this.props.setDataSource(newFollows);
-    }
     this.setState({
-      follows: newFollows,
+      users: newUsers,
     });
 
     if (this.page <= this.totalPage) {
-      if (this.props.updateSourcePage) {
-        this.props.updateSourcePage(this.props.sourcePage + 1);
-      }
       this.page += 1;
     }
   };
 
   setFansBeFollowed({ id, isMutual }) {
-    const targetFollows = deepClone(this.props.dataSource || this.state.follows);
-    Object.keys(targetFollows).forEach((key) => {
-      targetFollows[key].forEach((user) => {
-        if (get(user, 'user.pid') !== id) return;
-        user.userFollow.isMutual = isMutual;
-        user.userFollow.isFollow = true;
-      });
+    const targetUsers = deepClone(this.state.users);
+    targetUsers.forEach((user) => {
+      if (user?.userId !== id) return;
+      user.isMutual = isMutual;
+      user.isFollow = !user.isFollow;
     });
-    if (this.props.setDataSource) {
-      this.props.setDataSource(targetFollows);
-    }
     this.setState({
-      follows: targetFollows,
+      users: targetUsers,
     });
   }
 
   setFansBeUnFollowed(id) {
-    const targetFollows = deepClone(this.props.dataSource || this.state.follows);
-    Object.keys(targetFollows).forEach((key) => {
-      targetFollows[key].forEach((user) => {
-        if (get(user, 'user.pid') !== id) return;
-        user.userFollow.isFollow = false;
-      });
+    const targetUsers = deepClone(this.state.users);
+    targetUsers.forEach((user) => {
+      if (user?.userId !== id) return;
+      user.isFollow = !user.isFollow;
     });
-    if (this.props.setDataSource) {
-      this.props.setDataSource(targetFollows);
-    }
     this.setState({
-      follows: targetFollows,
+      users: targetUsers,
     });
   }
 
@@ -147,10 +117,10 @@ class UserCenterFollows extends React.Component {
     };
   };
 
-  unFollowUser = async ({ id }) => {
-    const res = await deleteFollow({ data: { id, type: 1 } });
+  unFollowUser = async ({ id: userId }) => {
+    const res = await deleteFollow({ data: { id: userId, type: 1 } });
     if (res.code === 0 && res.data) {
-      this.setFansBeUnFollowed(id);
+      this.setFansBeUnFollowed(userId);
       return {
         msg: '操作成功',
         data: res.data,
@@ -166,7 +136,7 @@ class UserCenterFollows extends React.Component {
 
   async componentDidMount() {
     // 第一次加载完后，才允许加载更多页面
-    await this.fetchFollows();
+    await this.fetchUsers();
     this.firstLoaded = true;
     this.setState({
       loading: false,
@@ -179,27 +149,6 @@ class UserCenterFollows extends React.Component {
   componentWillUnmount() {
     if (!this.containerRef.current) return;
     this.containerRef.current.removeEventListener('scroll', this.loadMore);
-  }
-
-  // TODO: 增加这里对于 ID 的处理，感应 ID 变化时发生及时更新
-  async componentDidUpdate(prevProps) {
-    if (prevProps.userId !== this.props.userId) {
-      this.page = 1;
-      this.totalPage = 1;
-      if (this.props.updateSourcePage) {
-        this.props.updateSourcePage(1);
-      }
-      if (this.props.updateSourceTotalPage) {
-        this.props.updateSourceTotalPage(1);
-      }
-      if (this.props.setDataSource) {
-        this.props.setDataSource({});
-      }
-      this.setState({
-        follows: {},
-      });
-      await this.loadMore();
-    }
   }
 
   // 检查是否满足触底加载更多的条件
@@ -222,7 +171,7 @@ class UserCenterFollows extends React.Component {
       this.setState({
         loading: true,
       });
-      await this.fetchFollows();
+      await this.fetchUsers();
       this.setState({
         loading: false,
       });
@@ -243,45 +192,47 @@ class UserCenterFollows extends React.Component {
   };
 
   render() {
+    const isNoData = this.state?.users?.length === 0 && !this.state.loading;
     return (
-      <div
+      <View
         className={this.props.className}
         ref={this.containerRef}
         style={{
           height: '100%',
           overflow: 'scroll',
-          ...this.props.style,
+          ...this.props.styles,
         }}
       >
-        {followerAdapter(this.props.dataSource || this.state.follows).map((user, index) => {
+        {this.state?.users?.map((user, index) => {
           if (index + 1 > this.props.limit) return null;
           return (
-            <div key={user.id}>
+            <View key={user.userId}>
               <UserCenterFriends
-                id={user.id}
+                id={user.userId}
                 type={this.judgeFollowsStatus(user)}
                 imgUrl={user.avatar}
                 withHeaderUserInfo={this.props.isPc}
                 onContainerClick={this.props.onContainerClick}
-                userName={user.userName}
+                userName={user.username}
                 userGroup={user.groupName}
                 followHandler={this.followUser}
-                unFollowHandler={this.unFollowUser}
                 itemStyle={this.props.itemStyle}
+                unFollowHandler={this.unFollowUser}
               />
               {this.props.splitElement}
-            </div>
+            </View>
           );
         })}
-        {followerAdapter(this.props.dataSource || this.state.follows).length === 0 && !this.state.loading && <NoData />}
-        {this.state.loading && (
-          <div className={styles.loadMoreContainer}>
-            <Spin type={'spinner'}>加载中 ...</Spin>
-          </div>
-        )}
-      </div>
+        {isNoData && <NoData />}
+        <View className={styles.loadMoreContainer}>
+          {this.state.loading
+            && <View className={styles.spinner}>
+                  <Spin type={'spinner'}>加载中 ...</Spin>
+              </View>
+          }</View>
+      </View>
     );
   }
 }
 
-export default UserCenterFollows;
+export default UserCenterUsers;

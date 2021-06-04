@@ -24,10 +24,19 @@
       align-items: center;
       flex-direction: row;
       :global(.dzq-icon){
-        font-size: $font-size-middle-extra !important;
+        font-size: $font-size-base !important;
         margin-right: $margin-2n;
-        margin-left: -$margin-2n;
-        margin-top: -$margin-2n;
+      }
+    }
+    .customCapsule{
+      font-size: $font-size-middle;
+      line-height: $font-line-height-base;
+      color: $white;
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      :global(.dzq-icon){
+        font-size: $font-size-middle-extra !important;
         font-weight: bold;
       }
     }
@@ -36,17 +45,22 @@
     }
   }
   .logoBox {
-    margin-top: 58px;
     max-height: 50px;
+    margin-top: 58px;
     overflow: hidden;
     .logo {
       display: block;
       max-height: 40px;
       margin: 0 auto;
     }
-    .join-logo {
-      max-height: 45px;
-      transform: scale(1.65);
+  }
+  .join-logo {
+    margin-top: 0;
+    padding-top: 50px;
+    max-height: 100%;
+    .logo {
+      transform: scale(1.5) translate(0, -5px);
+      max-height: 50px;
     }
   }
   .digest{

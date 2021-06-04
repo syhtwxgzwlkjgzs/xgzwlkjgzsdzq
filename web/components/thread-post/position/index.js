@@ -54,7 +54,7 @@ const Index = (props) => {
   }
 
   return (
-    <div>
+    <div className={styles.position}>
       <Tag
         type="primary"
         closeable={position.location}
