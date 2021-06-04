@@ -1,6 +1,5 @@
 import { observable, action, computed } from 'mobx';
 import { smsResetPwd, smsSend } from '@server';
-import { toTCaptcha } from '@common/store/login/util';
 
 export const RESET_PASSWORD_STORE_ERRORS = {
   NETWORK_ERROR: {

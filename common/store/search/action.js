@@ -207,7 +207,8 @@ class SearchAction extends SearchStore {
    if (result.code === 0 && result.data) {
      return result.data;
    }
-   return null;
+
+   return Promise.reject(result?.msg || '接口请求失败');
  };
 
  /**
@@ -281,6 +282,12 @@ class SearchAction extends SearchStore {
     const { isFollow } = obj;
     if (!typeofFn.isUndefined(isFollow) && !typeofFn.isNull(isFollow)) {
       data.isFollow = isFollow;
+    }
+
+    // 更新点赞
+    const { isMutual } = obj;
+    if (!typeofFn.isUndefined(isMutual) && !typeofFn.isNull(isMutual)) {
+      data.isMutualFollow = isMutual;
     }
 
     if (store?.pageData) {

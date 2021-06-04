@@ -188,7 +188,7 @@ class RenderCommentList extends React.Component {
   }
 
   // 创建回复评论+回复回复接口
-  async createReply(val) {
+  async createReply(val, imageList) {
     if (!val) {
       Toast.info({ content: '请输入内容!' });
       return;
@@ -214,6 +214,18 @@ class RenderCommentList extends React.Component {
       params.replyId = this.commentData.id;
       params.isComment = true;
       params.commentId = this.commentData.id;
+    }
+
+    if (imageList?.length) {
+      params.attachments = imageList
+        .filter((item) => item.status === 'success' && item.response)
+        .map((item) => {
+          const { id } = item.response;
+          return {
+            id,
+            type: 'attachments',
+          };
+        });
     }
 
     const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
@@ -339,19 +351,11 @@ class RenderCommentList extends React.Component {
         <div className={comment.input}>
           <CommentInput
             height="middle"
-            onSubmit={(value) => this.props.onPublishClick(value)}
+            onSubmit={(value, imageList) => this.props.onPublishClick(value, imageList)}
             initValue={this.state.inputValue}
             placeholder={this.state.placeholder}
           ></CommentInput>
         </div>
-
-        {/* 评论弹层 */}
-        {/* <InputPopup
-            visible={this.state.showCommentInput}
-            onClose={() => this.onClose()}
-            initValue={this.state.inputValue}
-            onSubmit={value => this.onPublishClick(value)}
-          ></InputPopup> */}
 
         <div className={comment.body}>
           {commentList.map((val, index) => (
@@ -367,7 +371,7 @@ class RenderCommentList extends React.Component {
                 replyReplyClick={(reploy) => this.replyReplyClick(reploy, val)}
                 reportClick={() => this.reportClick(val)}
                 onCommentClick={() => this.onCommentClick(val)}
-                onSubmit={(val) => this.createReply(val)}
+                onSubmit={(val, imageList) => this.createReply(val, imageList)}
                 isShowOne={true}
                 isShowInput={this.state.commentId === val.id}
                 onAboptClick={() => this.onAboptClick(val)}

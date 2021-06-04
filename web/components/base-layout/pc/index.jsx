@@ -7,7 +7,6 @@ import ErrorView from '@components/list/ErrorView';
 import { noop } from '@components/thread/utils';
 
 import styles from './index.module.scss';
-
 /**
 * PC端集成布局组件
 * @prop {function} header 头部视图组件
@@ -43,11 +42,9 @@ const BaseLayout = forwardRef((props, ref) => {
     requestError=false,
     errorText='',
     rightClass = '',
+    isShowLayoutRefresh = true
   } = props;
 
-  const [showLeft, setShowLeft] = useState(false);
-  const [showRight, setShowRight] = useState(false);
-  const size = useRef('xl');
   const listRef = useRef(null);
   const [isError, setIsError] = useState(false);
 
@@ -68,18 +65,12 @@ const BaseLayout = forwardRef((props, ref) => {
     }),
   );
 
-  const updateSize = debounce(() => {
-    if (window) {
-      size.current = calcSize(window.innerWidth);
-      if (pageName !== 'home') {
-        setShowLeft(left && (size.current === 'xl' || size.current === 'xxl'));
-        setShowRight(right && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg'));
-      } else {
-        setShowRight(right && (size.current === 'xl' || size.current === 'xxl'));
-        setShowLeft(left && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg'));
-      }
-    }
-  }, 50);
+  // const updateSize = debounce(() => {
+  //   if (window) {
+  //     const current = window.innerWidth;
+  //     console.log(current);
+  //   }
+  // }, 50);
 
   useEffect(() => {
     // if (window) {
@@ -90,72 +81,53 @@ const BaseLayout = forwardRef((props, ref) => {
     // }
   }, []);
 
-  useEffect(() => {
-    size.current = calcSize(window.innerWidth);
-    updateSize();
-  }, [size.current]);
-
-  const calcSize = (width = 1600) => {
-    const size = 'xl';
-
-    // if (width < 992) {
-    //     size = 'sm';
-    // }
-    // else if (width >= 992 && width < 1100) {
-    //     size = 'md';
-    // }
-    // else if (width >= 1100 && width < 1400) {
-    //     size = 'lg';
-    // }
-    // else if (width >= 1440 && width < 1880) {
-    //     size = 'xl';
-    // }
-    // else {
-    //     size = 'xxl';
-    // }
-    return size;
-  };
-
-  // const showLeft = useMemo(() => {
-  //   return left && (size.current === 'xl' || size.current === 'xxl')
-  // }, [size.current])
-
-  // const showRight = useMemo(() => {
-  //   return right && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg')
-  // }, [size.current])
-
   // list组件，接口请求出错回调
   const onError = () => {
     setIsError(true);
   };
 
+  let cls = styles['col-1'];
+  if (left || right) {
+    cls = styles['col-2'];
+  }
+  if (left && right) {
+    cls = styles['col-3'];
+  }
   return (
     <div className={styles.container}>
-      {(header && header({ ...props })) || <Header onSearch={onSearch} />}
+        {(header && header({ ...props })) || <Header onSearch={onSearch} />}
 
-        <List {...props} immediateCheck={immediateCheck} className={styles.list} wrapperClass={styles.wrapper} ref={listRef} onError={onError} onScroll={onScroll}>
-          {
-            (pageName === 'home' || showLeft) && (
-              <div className={styles.left}>
-                {typeof(left) === 'function' ? useCallback(left({ ...props }), []) : left}
-              </div>
-            )
-          }
 
-          <div className={styles.center}>
-            {typeof(children) === 'function' ? children({ ...props }) : children}
-            {!isError && !requestError && onRefresh && <RefreshView noMore={noMore} />}
-            {(isError || requestError) && <ErrorView text={errorText || '加载失败'} />}
-          </div>
 
-          {
-            (pageName === 'home' || showRight) && (
-              <div className={`${styles.right} ${(pageName === 'home') ? styles['home-right'] : ''} ${rightClass}`}>
-                {typeof(right) === 'function' ? right({ ...props }) : right}
-              </div>
-            )
-          }
-        </List>
+        <div className={`${styles.body} ${cls}`}>
+
+
+          <List {...props} immediateCheck={immediateCheck} className={styles.list} wrapperClass={styles.wrapper} ref={listRef} onError={onError} onScroll={onScroll}>
+            {
+              (pageName === 'home' || left) && (
+                <div className={styles.left}>
+                  {typeof(left) === 'function' ? useCallback(left({ ...props }), []) : left}
+                </div>
+              )
+            }
+
+            <div className={styles.center}>
+              {typeof(children) === 'function' ? children({ ...props }) : children}
+              {!isError && isShowLayoutRefresh && onRefresh && <RefreshView noMore={noMore} />}
+              {isError && <ErrorView />}
+            </div>
+
+            {
+              (pageName === 'home' || right) && (
+                <div className={`${styles.right} ${(pageName === "home") ? styles["home-right"] : ""}`}>
+                  {typeof(right) === 'function' ? right({ ...props }) : right}
+                </div>
+              )
+            }
+          </List>
+
+        </div>
+        
 
       {typeof(footer) === 'function' ? footer({ ...props }) : footer}
     </div>

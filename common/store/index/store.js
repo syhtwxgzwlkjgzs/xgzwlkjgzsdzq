@@ -17,12 +17,19 @@ class IndexStore {
   @observable recommendsStatus = 'none'
 
   @observable filter = {
-    categoryids: ['all'],
+    categoryids: ['all'], // 这里的逻辑如果更改，记得需要更改下面的计算属性：isCurrentAllCategory
     sequence: 0,
     sort: 1,
     attention: 0,
     types: 'all',
     essence: 0
+  }
+
+  // 首页当前分类是否是全部分类，这里会涉及到 action：isNeedAddThread 的判断，会涉及到发帖之后是否添加数据到首页的逻辑
+  @computed
+  get isCurrentAllCategory() {
+    const { categoryids = [] } = this.filter || {};
+    return categoryids.indexOf('all') !== -1;
   }
 
   // 解决小程序popup被tabBar遮挡的问题
