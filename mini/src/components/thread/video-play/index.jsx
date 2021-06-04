@@ -45,7 +45,9 @@ const Index = ({
 
       // 暂停之前正在播放的视频
       if(baselayout.playingVideoDom) {
-        Taro.createVideoContext(baselayout.playingVideoDom)?.pause();
+        if(baselayout.playingVideoDom !== e.target.id) {
+          Taro.createVideoContext(baselayout.playingVideoDom)?.pause();
+        }
       }
 
        // 暂停之前正在播放的音频
@@ -54,7 +56,9 @@ const Index = ({
       }
 
       if (baselayout.playingAudioDom) {
-        baselayout.playingAudioDom.pause();
+        if(baselayout.playingAudioDom !== e.target.id) {
+          baselayout.playingAudioDom.pause();
+        }
       }
 
       baselayout.playingVideoDom = e.target.id;

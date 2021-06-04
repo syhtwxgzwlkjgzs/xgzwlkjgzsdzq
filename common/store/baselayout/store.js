@@ -16,7 +16,7 @@ class IndexStore {
 
   @observable playingAudioDom = null; // 来自组件Audio的context
 
-  @observable playingAudioWrapperId = ""; // 只在mini中使用，用于定位
+  @observable playingAudioWrapperId = ""; // 小程序用于定位，web用于记录当前播放的音频
 
 }
 
