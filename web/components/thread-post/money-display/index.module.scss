@@ -5,7 +5,9 @@
     .dzq-tag {
       @include tag-default;
       margin-right: rem($margin-4n);
-
+      &:after {
+        display: none;
+      }
       &:last-child {
         margin-right: 0;
       }

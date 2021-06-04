@@ -3,6 +3,11 @@
   @include tag-default;
 
   :global {
+    .dzq-tag {
+      &:after {
+        display: none;
+      }
+    }
     .dzq-icon-PositionOutlined {
       margin-right: rem($margin-1n);
     }
