@@ -31,8 +31,8 @@ class WXLoginH5Page extends React.Component {
 
       let inviteCode = invite.getInviteCode(router);
       if (inviteCode) inviteCode = `&inviteCode=${inviteCode}`;
-      const URL= `https://discuzv3-dev.dnspod.dev`
-      const redirectUri = `${encodeURIComponent(`${URL}/user/wx-authorization?type=${platform}${inviteCode}`)}`;
+
+      const redirectUri = `${encodeURIComponent(`${window.location.origin}/user/wx-authorization?type=${platform}${inviteCode}`)}`;
       let params;
       // if (platform === 'h5' && site?.isMiniProgramOpen) {
       //   // 在h5 浏览器中 且小程序设置打开 通过小程序schema跳转
