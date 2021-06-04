@@ -156,9 +156,9 @@ class HomeHeader extends React.Component {
             </View>
           )}
           {!hideLogo && (
-            <View className={styles.logoBox}>
+            <View className={`${styles.logoBox} ${mode === 'join' ? styles['join-logo'] : ''}`}>
               <Image
-                className={`${styles.logo} ${mode === 'join' ? styles['join-logo'] : ''}`}
+                className={styles.logo}
                 mode="aspectFit"
                 src={this.getLogo()}
               />

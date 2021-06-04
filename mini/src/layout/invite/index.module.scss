@@ -26,7 +26,7 @@
     top: rem(-120);
     border-radius: 50%;
     background: var(--color-white);
-    border: rem(1) solid var(--color-white);
+    border: rem(2) solid var(--color-white);
     overflow: hidden;
     z-index: 3;
     :global(.dzq-avatar__img),:global(.dzq-avatar__text) {
@@ -59,7 +59,8 @@
   .user_info_tag{
     font-weight: normal;
     font-size: rem(12);
-    line-height: rem(22);
+    line-height: rem(28);
+    height: rem(30);
     color: var(--color-text-secondary);
   }
   .user_info_invite{
@@ -223,7 +224,7 @@
     box-sizing: border-box;
     position: fixed;
     bottom: 0;
-    padding: rem(8) rem(16);
+    padding: rem(8) rem(16) rem(16);
     background: var(--color-white);
     border-top: rem(1) solid var(--border-line-color);
     .invite_bottom_button{
@@ -234,6 +235,7 @@
       text-align: center;
       color: var(--color-white);
       font-size: rem(16);
+      border: none;
     }
   }
   // 邀请朋友 end

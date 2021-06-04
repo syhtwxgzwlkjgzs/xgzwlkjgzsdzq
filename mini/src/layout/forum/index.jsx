@@ -108,7 +108,7 @@ class ForumH5Page extends React.Component {
                     image={item.avatar}
                   />
                 ))}
-                <Icon site={10} color="#8590A6" name="RightOutlined" />
+                <Icon color="#8590A6" name="RightOutlined" className={layout.icon} />
               </View>
             </View>
           </View>
