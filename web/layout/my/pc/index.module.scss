@@ -35,13 +35,16 @@
   .userInfoKey {
     color: $text-color-regular;
     font-size: rem($font-size-primary);
+    flex-shrink: 0;
   }
 
   .userInfoValue {
     color: $text-color-primary;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    margin-left: rem($margin-1n);
+    @include text-ellipsis();
   }
 
   .wecahtNickname {

@@ -47,12 +47,12 @@ class UserCenterFollowsPc extends React.Component {
     let followCount = 0;
     if (this.props.userId) {
       if (this.props.userId === this.props.user?.id) {
-        followCount = this.props.user.followCount
+        followCount = this.props.user.followCount;
       } else {
-        followCount = this.props.user.targetUserFollowCount
+        followCount = this.props.user.targetUserFollowCount;
       }
     } else {
-      followCount = this.props.user.followCount
+      followCount = this.props.user.followCount;
     }
     return (
       <>
@@ -63,34 +63,38 @@ class UserCenterFollowsPc extends React.Component {
           leftNum={followCount}
           onShowMore={this.moreFollow}
         >
-          {Number(followCount) !== 0 && (
-            <UserCenterFollows
-              style={{
-                overflow: 'hidden',
-              }}
-              dataSource={this.state.dataSource}
-              setDataSource={this.setDataSource}
-              sourcePage={this.state.sourcePage}
-              updateSourcePage={this.updateSourcePage}
-              sourceTotalPage={this.state.sourceTotalPage}
-              updateSourceTotalPage={this.updateSourceTotalPage}
-              userId={this.props.userId}
-              onContainerClick={({ id }) => {
-                this.props.router.push({
-                  pathname: '/user/[id]',
-                  query: {
-                    id,
-                  },
-                });
-              }}
-              itemStyle={{
-                paddingLeft: 0,
-                paddingRight: 0,
-              }}
-              className={styles.friendsWrapper}
-              limit={5}
-            />
-          )}
+          <div className={styles.followsWrapper}>
+            {Number(followCount) !== 0 && (
+              <UserCenterFollows
+                style={{
+                  overflow: 'hidden',
+                }}
+                dataSource={this.state.dataSource}
+                setDataSource={this.setDataSource}
+                sourcePage={this.state.sourcePage}
+                updateSourcePage={this.updateSourcePage}
+                sourceTotalPage={this.state.sourceTotalPage}
+                updateSourceTotalPage={this.updateSourceTotalPage}
+                userId={this.props.userId}
+                onContainerClick={({ id }) => {
+                  this.props.router.push({
+                    pathname: '/user/[id]',
+                    query: {
+                      id,
+                    },
+                  });
+                }}
+                itemStyle={{
+                  paddingLeft: 0,
+                  paddingRight: 0,
+                  paddingTop: 8,
+                  paddingBottom: 8,
+                }}
+                className={styles.friendsWrapper}
+                limit={5}
+              />
+            )}
+          </div>
         </SidebarPanel>
 
         <UserCenterFollowPopup

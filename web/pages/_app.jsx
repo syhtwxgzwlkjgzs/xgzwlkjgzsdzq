@@ -13,7 +13,7 @@ import '../styles/index.scss';
 import DocumentHead from '../components/documentHead';
 
 if (!isServer()) {
-  sentry();
+  process.env.NODE_ENV === 'production' && sentry();
 }
 
 class DzqApp extends App {

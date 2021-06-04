@@ -81,7 +81,7 @@ class UserCenterPost extends React.Component {
           )}
           {this.props.user.threadExtendPermissions[defaultOperation.pay] && (
             <div className={styles.userCenterPostListItem}>
-              <Icon color={'#8590A6'} size={20} name={'DollarLOutlined'} />
+              <Icon color={'#8590A6'} size={20} name={'GoldCoinOutlined'} />
             </div>
           )}
         </div>
