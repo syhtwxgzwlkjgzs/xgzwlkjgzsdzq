@@ -1,0 +1,17 @@
+@import '@common/styles/index.scss';
+@import '@common/styles/_variable.scss';
+
+.loadMoreContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding-top: rem(16);
+    padding-bottom: rem(16);
+
+    :global {
+        .dzq-spin--spinner {
+            color: $text-color-placeholder;
+        }
+    }
+}
