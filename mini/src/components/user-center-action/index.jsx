@@ -9,22 +9,30 @@ class UserCenterAction extends React.Component {
   // 点击我的消息
   handleMyMessage = () => {
     Router.push({ url: '/message' });
-  }
+  };
 
   // 点击我的钱包
   handleMyWallet = () => {
     Router.push({ url: '/subPages/wallet/index' });
-  }
+  };
+
+  // 草稿箱
+  handleMyDraft = () => {};
 
   // 点击站点信息
   handleMySiteInfo = () => {
-    Router.push({ url: '/forum' });
-  }
+    Router.push({ url: '/subPages/forum/index' });
+  };
 
   // 点击推广信息
   handleMyInvite = () => {
-    Router.push({ url: 'invite' });
-  }
+    Router.push({ url: '/subPages/invite/index' });
+  };
+
+  // 点击我的屏蔽
+  handleMyBlock = () => {
+    Router.push({ url: '/subPages/my/block/index' });
+  };
 
   render() {
     return (
@@ -63,7 +71,7 @@ class UserCenterAction extends React.Component {
           </View>
 
           <View className={styles.userCenterActionItemContainer}>
-            <View className={styles.userCenterActionItem}>
+            <View onClick={this.handleMyBlock} className={styles.userCenterActionItem}>
               <View className={styles.userCenterActionItemIcon}>
                 <Badge>
                   <Icon name={'ShieldOutlined'} color={'#4F5A70'} size={20} />
