@@ -16,7 +16,8 @@
   .btnBox{
     margin-top: rem($margin-2n);
     box-sizing: border-box;
-    @include ios-safe-area-inset-bottom;
+    padding-bottom: constant(safe-area-inset-bottom);  ///兼容 IOS<11.2/
+    padding-bottom: env(safe-area-inset-bottom);  ///兼容 IOS>11.2/
 
     &::before {
       content: '';
@@ -31,7 +32,8 @@
 
     .btn{
       height: rem(42);
-      font-size: rem($font-size-middle);
+      font-size: rem($font-size-base);
+      line-height: rem($font-line-height-base);
       border-radius: 5px;
     }
   }

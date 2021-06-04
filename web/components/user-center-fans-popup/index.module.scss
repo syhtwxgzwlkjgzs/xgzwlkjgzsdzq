@@ -19,14 +19,41 @@
     color: $text-color-primary;
     position: relative;
   }
+
   .closeIcon {
     position: absolute;
-    top: rem($padding-6n);
-    right: rem($padding-6n);
+    right: rem(24);
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
   .titleHr {
     height: rem(1);
     width: 100%;
     background: $border-color;
+  }
+}
+
+.splitEmelent {
+  padding: 0 rem($padding-4n);
+  :global {
+    .dzq-divider {
+      margin: 0;
+    }
+  } 
+ }
+
+
+:global {
+  .dzq-modal__container {
+    padding: {
+      left: rem(8);
+      right: rem(8);
+      top: 0;
+      bottom: 0;
+    }
+  }
+
+  .dzq-modal__body {
+    padding: 0;
   }
 }

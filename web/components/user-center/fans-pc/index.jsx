@@ -10,11 +10,35 @@ import { withRouter } from 'next/router';
 @inject('user')
 @observer
 class UserCenterFansPc extends React.Component {
+  static defaultProps = {
+    className: '',
+  };
   constructor(props) {
     super(props);
     this.state = {
       showFansPopup: false,
+      dataSource: {},
+      sourcePage: 1,
+      sourceTotalPage: 1
     };
+  }
+
+  setDataSource = (targetData) => {
+    this.setState({
+      dataSource: targetData
+    })
+  }
+
+  updateSourcePage = (newPage) => {
+    this.setState({
+      sourcePage: newPage
+    })
+  }
+
+  updateSourceTotalPage = (newTotalPage) => {
+    this.setState({
+      sourceTotalPage: newTotalPage
+    })
   }
 
   // 点击粉丝更多
@@ -32,12 +56,19 @@ class UserCenterFansPc extends React.Component {
           title="粉丝"
           leftNum={fansCount}
           onShowMore={this.moreFans}
+          className={this.props.className}
         >
           {Number(fansCount) !== 0 && (
             <UserCenterFans
               style={{
                 overflow: 'hidden',
               }}
+              dataSource={this.state.dataSource}
+              setDataSource={this.setDataSource}
+              sourcePage={this.state.sourcePage}
+              updateSourcePage={this.updateSourcePage}
+              sourceTotalPage={this.state.sourceTotalPage}
+              updateSourceTotalPage={this.updateSourceTotalPage}
               userId={this.props.userId}
               onContainerClick={({ id }) => {
                 this.props.router.push({
@@ -46,6 +77,10 @@ class UserCenterFansPc extends React.Component {
                     id,
                   },
                 });
+              }}
+              itemStyle={{
+                paddingLeft: 0,
+                paddingRight: 0,
               }}
               className={styles.friendsWrapper}
               limit={5}
@@ -56,6 +91,12 @@ class UserCenterFansPc extends React.Component {
         <UserCenterFansPopup
           id={this.props.userId}
           visible={this.state.showFansPopup}
+          dataSource={this.state.dataSource}
+          setDataSource={this.setDataSource}
+          sourcePage={this.state.sourcePage}
+          updateSourcePage={this.updateSourcePage}
+          sourceTotalPage={this.state.sourceTotalPage}
+          updateSourceTotalPage={this.updateSourceTotalPage}
           onContainerClick={({ id }) => {
             this.props.router.push({
               pathname: '/user/[id]',

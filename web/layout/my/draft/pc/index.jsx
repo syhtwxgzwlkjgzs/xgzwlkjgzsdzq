@@ -45,7 +45,7 @@ class PC extends React.Component {
           {list.map((item, index) => (
             <div className={styles.item} key={index}>
               <div className={styles['item-left']}>
-                <ThreadCenterView data={item} />
+                <ThreadCenterView data={item} onClick={() => this.props.onEdit(item)}/>
                 <div className={styles['item-time']}>编辑于&nbsp;{item.updatedAt}</div>
               </div>
               <div className={styles['item-right']}>

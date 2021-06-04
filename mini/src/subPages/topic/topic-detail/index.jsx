@@ -56,7 +56,7 @@ class Index extends React.Component {
     //     content: '加载中...',
     //     duration: 0,
     //   });
-
+      topic.setTopicDetail(null)
       this.page = 1;
       await topic.getTopicsDetail({ topicId: id });
 

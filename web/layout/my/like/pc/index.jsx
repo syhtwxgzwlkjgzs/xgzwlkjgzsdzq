@@ -40,22 +40,26 @@ class LikePCPage extends React.Component {
   render() {
     const { index, site } = this.props;
     const { threads } = index;
-    const { pageData, currentPage, totalPage, totalCount } = threads || {};
+    const { pageData, currentPage, totalPage, totalCount = 0 } = threads || {};
     return (
       <BaseLayout
         right={ this.renderRight }
         noMore={currentPage >= totalPage}
         showRefresh={false}
         onRefresh={this.fetchMoreData}
+        rightClass={styles.rightSide}
+        isShowLayoutRefresh={!!pageData?.length}
       >
         <SidebarPanel
           title="我的点赞"
           type='normal'
           isShowMore={false}
           noData={!pageData?.length}
+          isLoading={!pageData}
           icon={{ type: 3, name: 'LikeOutlined' }}
           rightText={`共有${totalCount}条点赞`}
           className={styles.container}
+          mold='plane'
         >
           {
             pageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)

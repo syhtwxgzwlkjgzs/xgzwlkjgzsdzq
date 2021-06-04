@@ -13,11 +13,11 @@ class UserCenterHead extends React.Component {
     }
 
     render() {
-        const { platform, isOtherPerson } = this.props;
+        const { platform, isOtherPerson,handleSetBgLoadingStatus } = this.props;
         if (platform === 'h5') {
             return <H5HeadetContent isOtherPerson={isOtherPerson} />;
         } else {
-            return <PCHeadetContent isOtherPerson={isOtherPerson}/>;
+            return <PCHeadetContent handleSetBgLoadingStatus={handleSetBgLoadingStatus} isOtherPerson={isOtherPerson}/>;
         }
     }
 

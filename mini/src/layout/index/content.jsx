@@ -93,6 +93,7 @@ class IndexH5Page extends React.Component {
     }
 
     this.props.baselayout.setJumpingToTop();
+    this.props.index.setHiddenTabBar(false)
 
     const newFilter = { ...this.state.filter, categoryids: newCategoryIds, sequence: id === 'default' ? 1 : 0, }
 
@@ -109,6 +110,8 @@ class IndexH5Page extends React.Component {
   onClickFilter = ({ categoryids, types, essence, sequence }) => {
     const { dispatch = () => {} } = this.props;
     const requestCategoryids = categoryids.slice();
+
+    this.props.index.setHiddenTabBar(false)
     
     const newFilter = { ...this.state.filter, categoryids: requestCategoryids, types, essence, sequence }
     dispatch('click-filter', newFilter);
@@ -266,6 +269,7 @@ class IndexH5Page extends React.Component {
         pageName='home'
         preload={1000}
         requestError={this.props.isError}
+        errorText={this.props.errorText}
       >
         <HomeHeader ref={this.headerRef} />
 

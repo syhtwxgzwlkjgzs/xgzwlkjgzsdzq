@@ -328,6 +328,7 @@ class ThreadPostAction extends ThreadPostStore {
         value: contentindexes[index].body.money || '',
       };
     });
+
     this.setPostData({
       // 标题去掉富文本
       title: title.replace(/<[^<>]+>/g, ''),

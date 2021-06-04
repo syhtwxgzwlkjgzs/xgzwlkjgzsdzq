@@ -15,6 +15,10 @@ import UserCenterThreads from '@components/user-center-threads';
 import NoData from '@components/no-data';
 import UserCenterFansPc from '@components/user-center/fans-pc';
 import UserCenterFollowsPc from '../../../components/user-center/follows-pc';
+import Thread from '@components/thread';
+import SectionTitle from '@components/section-title';
+import BaseLayout from '../../../components/user-center-base-laout-pc';
+
 
 @inject('site')
 @inject('user')
@@ -25,10 +29,13 @@ class PCMyPage extends React.Component {
     this.state = {
       showFansPopup: false, // 是否弹出粉丝框
       showFollowPopup: false, // 是否弹出关注框
+      isLoading: true
     };
   }
   async componentDidMount() {
     await this.props.user.getUserThreads();
+
+    this.setState({ isLoading: false })
   }
 
   loginOut() {
@@ -50,7 +57,7 @@ class PCMyPage extends React.Component {
   };
 
   onContainerClick = ({ id }) => {
-    Router.push({ url: `/my/others?isOtherPerson=${true}&otherId=${id}` });
+    Router.push({ url: `/user/${id}` });
   };
 
   formatUserThreadsData = (userThreads) => {
@@ -88,29 +95,29 @@ class PCMyPage extends React.Component {
             </div>
           )}
 
-          <div className={styles.userInfoWrapper}>
+          {/* <div className={styles.userInfoWrapper}>
             <div className={styles.userInfoKey}>实名认证</div>
             <div className={styles.userInfoValue}>去认证</div>
-          </div>
+          </div> */}
 
           <div className={styles.userInfoWrapper}>
             <div className={styles.userInfoKey}>签名</div>
-            <div className={styles.userInfoValue}>{this.props.user.signature}</div>
+            <div className={styles.userInfoValue}>{this.props.user.signature || '这个人很懒，什么也没留下~'}</div>
           </div>
         </SidebarPanel>
-        <div className={styles.hr}></div>
-        <UserCenterFansPc />
-        <div className={styles.hr}></div>
-        <UserCenterFollowsPc />
+
+        <UserCenterFansPc userId={this.props.user.id} />
+
+        <UserCenterFollowsPc userId={this.props.user.id} />
         <Copyright />
       </>
     );
   };
 
   renderContent = () => {
+    const { isLoading } = this.state
     const { user } = this.props;
     const { userThreads, userThreadsTotalCount } = user;
-    const { userThreadsPage, userThreadsTotalPage } = user;
     const formattedUserThreads = this.formatUserThreadsData(userThreads);
 
     return (
@@ -121,42 +128,47 @@ class PCMyPage extends React.Component {
         <div className={styles.section}>
           <UserCenterAction />
         </div>
+
         <SidebarPanel
           title="主题"
-          type="normal"
-          bigSize={true}
-          isShowMore={!userThreads}
-          showRefresh={false}
-          leftNum={`${userThreadsTotalCount}个主题`}
+          type='normal'
+          isShowMore={false}
           noData={!formattedUserThreads?.length}
+          isLoading={isLoading}
+          leftNum={`${userThreadsTotalCount}个主题`}
+          mold='plane'
         >
-          {/* FIXME: PC 切换至新逻辑 */}
-          <List immediateCheck={false} noMore={userThreadsTotalPage <= userThreadsPage} onRefresh={user.getUserThreads}>
-            {formattedUserThreads && formattedUserThreads.length > 0 ? (
-              <UserCenterThreads data={formattedUserThreads} />
-            ) : (
-              <NoData />
-            )}
-          </List>
+          {formattedUserThreads?.map((item, index) => <Thread data={item} key={index} className={index === 0 && styles.threadStyle} />)}
         </SidebarPanel>
       </div>
     );
   };
 
   render() {
+    const { isLoading } = this.state
+    const { user } = this.props;
+    const { userThreadsPage, userThreadsTotalPage, getUserThreads, userThreads } = user;
+    const formattedUserThreads = this.formatUserThreadsData(userThreads);
+
+    // store中，userThreadsPage会比真实页数多1
+    let currentPageNum = userThreadsPage;
+    if (userThreadsTotalPage > 1) {
+      currentPageNum -= 1;
+    }
+
     return (
       <>
-        <UserBaseLaout allowRefresh={false} onSearch={this.onSearch} right={this.renderRight}>
+        <BaseLayout
+          showRefresh={false}
+          onSearch={this.onSearch}
+          right={this.renderRight}
+          immediateCheck={false}
+          noMore={userThreadsTotalPage <= currentPageNum}
+          onRefresh={getUserThreads}
+          showLayoutRefresh={!isLoading && !!formattedUserThreads?.length}
+        >
           {this.renderContent()}
-        </UserBaseLaout>
-
-        {/* 两个粉丝 popup */}
-        <>
-          <UserCenterFollowPopup
-            visible={this.state.showFollowPopup}
-            onClose={() => this.setState({ showFollowPopup: false })}
-          />
-        </>
+        </BaseLayout>
       </>
     );
   }

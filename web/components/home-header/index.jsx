@@ -23,7 +23,7 @@ class HomeHeader extends React.Component {
   state = {
     visible: false,
     height: 180,
-    loadWeiXin: false
+    loadWeiXin: false,
   }
 
   domRef = React.createRef(null)
@@ -59,12 +59,12 @@ class HomeHeader extends React.Component {
       countUsers: 0,
       countThreads: 0,
       siteAuthor: '',
-      createDays: 0
+      createDays: 0,
     };
     if (webConfig && webConfig.other) {
       siteInfo.countUsers = webConfig.other.countUsers;
       siteInfo.countThreads = webConfig.other.countThreads;
-    };
+    }
     const siteAuthor = get(webConfig, 'setSite.siteAuthor.username', '');
     const siteInstall = get(webConfig, 'setSite.siteInstall', '');
     // 兼容ios
@@ -101,7 +101,7 @@ class HomeHeader extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({ loadWeiXin: isWeiXin() })
+    this.setState({ loadWeiXin: isWeiXin() });
     if (this.domRef.current) {
       this.setState({ height: this.domRef.current.clientHeight });
     }

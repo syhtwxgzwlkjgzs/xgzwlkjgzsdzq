@@ -80,7 +80,7 @@ export class MessageIndex extends Component {
         avatar: chatPerson?.avatar,
         userId: chatPerson?.id,
         username: chatPerson?.username,
-        unreadCount: unreadCount,
+        unreadCount: dialogMessage?.unreadCount,
       });
     });
 
@@ -104,7 +104,7 @@ export class MessageIndex extends Component {
     const card = <Card cardItems={items} onClick={this.toOtherMessage} />;
 
     return (
-      <div className={`${styles.wrapper} ${isPC ? styles.pc : ""}`}>
+      <div className={`${styles.wrapper} ${isPC ? styles.pc : styles.mobile}`}>
         <Notice
           infoIdx={0}
           totalCount={totalCount}

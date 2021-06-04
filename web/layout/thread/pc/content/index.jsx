@@ -176,7 +176,7 @@ export default inject('user')(
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={topic.payButton} type="primary" size="large">
                   <div className={topic.pay}>
-                    <Icon className={topic.payIcon} name="DollarLOutlined" size={18}></Icon>
+                    <Icon className={topic.payIcon} name="GoldCoinOutlined" size={18}></Icon>
                     支付{attachmentPrice}元查看附件
                   </div>
                 </Button>
@@ -273,7 +273,7 @@ export default inject('user')(
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={topic.payButton} type="primary" size="large">
                   <div className={topic.pay}>
-                    <Icon className={topic.payIcon} name="DollarLOutlined" size={18}></Icon>
+                    <Icon className={topic.payIcon} name="GoldCoinOutlined" size={18}></Icon>
                     支付{threadPrice}元查看剩余内容
                   </div>
                 </Button>

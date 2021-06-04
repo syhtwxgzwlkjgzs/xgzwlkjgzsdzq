@@ -1,8 +1,7 @@
 import React from 'react';
-import { inject, observer } from 'mobx-react';
+import { inject, observer, Observer, useStore } from 'mobx-react';
 import IndexH5Page from '@layout/my/block/h5';
 import IndexPCPage from '@layout/my/block/pc';
-import { readTopicsList, readUsersList } from '@server';
 import { Toast } from '@discuzq/design';
 
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';

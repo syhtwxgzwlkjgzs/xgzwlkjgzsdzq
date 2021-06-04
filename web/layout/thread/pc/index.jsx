@@ -330,7 +330,7 @@ class ThreadPCPage extends React.Component {
   }
 
   // 点击发布按钮
-  async onPublishClick(val) {
+  async onPublishClick(val, imageList) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
       goToLoginPage({ url: '/user/login' });
@@ -341,11 +341,11 @@ class ThreadPCPage extends React.Component {
       Toast.info({ content: '请输入内容' });
       return;
     }
-    return this.comment ? await this.updateComment(val) : await this.createComment(val);
+    return this.comment ? await this.updateComment(val, imageList) : await this.createComment(val, imageList);
   }
 
   // 创建评论
-  async createComment(val) {
+  async createComment(val, imageList) {
     const id = this.props.thread?.threadData?.id;
 
     const params = {
@@ -356,6 +356,18 @@ class ThreadPCPage extends React.Component {
       isNoMore: this.props?.thread?.isNoMore,
       attachments: [],
     };
+
+    if (imageList?.length) {
+      params.attachments = imageList
+        .filter((item) => item.status === 'success' && item.response)
+        .map((item) => {
+          const { id } = item.response;
+          return {
+            id,
+            type: 'attachments',
+          };
+        });
+    }
 
     const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
@@ -388,7 +400,7 @@ class ThreadPCPage extends React.Component {
   }
 
   // 更新评论
-  async updateComment(val) {
+  async updateComment(val, imageList) {
     if (!this.comment) return;
 
     const id = this.props.thread?.threadData?.id;
@@ -398,6 +410,19 @@ class ThreadPCPage extends React.Component {
       content: val,
       attachments: [],
     };
+
+    if (imageList?.length) {
+      params.attachments = imageList
+        .filter((item) => item.status === 'success' && item.response)
+        .map((item) => {
+          const { id } = item.response;
+          return {
+            id,
+            type: 'attachments',
+          };
+        });
+    }
+
     const { success, msg } = await this.props.comment.updateComment(params, this.props.thread);
     if (success) {
       Toast.success({
@@ -644,7 +669,7 @@ class ThreadPCPage extends React.Component {
                     router={this.props.router}
                     sort={(flag) => this.onSortChange(flag)}
                     onEditClick={(comment) => this.onEditClick(comment)}
-                    onPublishClick={(value) => this.onPublishClick(value)}
+                    onPublishClick={(value, imageList) => this.onPublishClick(value, imageList)}
                     onReportClick={(comment) => this.onReportClick(comment)}
                   ></RenderCommentList>
                   {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
@@ -657,7 +682,7 @@ class ThreadPCPage extends React.Component {
           </div>
 
           {/* 右边信息 */}
-          <div className={layout.bodyRigth}>
+          <div className={`${layout.bodyRigth} ${isSelf ? layout.positionSticky : ''}`}>
             <div className={layout.authorInfo}>
               {threadStore?.authorInfo ? (
                 <AuthorInfo

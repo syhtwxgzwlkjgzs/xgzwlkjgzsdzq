@@ -14,12 +14,33 @@ class UserCenterFollowsPc extends React.Component {
     super(props);
     this.state = {
       showFollowsPopup: false,
+      dataSource: {},
+      sourcePage: 1,
+      sourceTotalPage: 1,
     };
   }
 
   // 点击粉丝更多
   moreFollow = () => {
     this.setState({ showFollowsPopup: true });
+  };
+
+  setDataSource = (targetData) => {
+    this.setState({
+      dataSource: targetData,
+    });
+  };
+
+  updateSourcePage = (newPage) => {
+    this.setState({
+      sourcePage: newPage,
+    });
+  };
+
+  updateSourceTotalPage = (newTotalPage) => {
+    this.setState({
+      sourceTotalPage: newTotalPage,
+    });
   };
 
   render() {
@@ -38,6 +59,12 @@ class UserCenterFollowsPc extends React.Component {
               style={{
                 overflow: 'hidden',
               }}
+              dataSource={this.state.dataSource}
+              setDataSource={this.setDataSource}
+              sourcePage={this.state.sourcePage}
+              updateSourcePage={this.updateSourcePage}
+              sourceTotalPage={this.state.sourceTotalPage}
+              updateSourceTotalPage={this.updateSourceTotalPage}
               userId={this.props.userId}
               onContainerClick={({ id }) => {
                 this.props.router.push({
@@ -47,6 +74,10 @@ class UserCenterFollowsPc extends React.Component {
                   },
                 });
               }}
+              itemStyle={{
+                paddingLeft: 0,
+                paddingRight: 0,
+              }}
               className={styles.friendsWrapper}
               limit={5}
             />
@@ -54,6 +85,12 @@ class UserCenterFollowsPc extends React.Component {
         </SidebarPanel>
 
         <UserCenterFollowPopup
+          dataSource={this.state.dataSource}
+          setDataSource={this.setDataSource}
+          sourcePage={this.state.sourcePage}
+          updateSourcePage={this.updateSourcePage}
+          sourceTotalPage={this.state.sourceTotalPage}
+          updateSourceTotalPage={this.updateSourceTotalPage}
           id={this.props.userId}
           visible={this.state.showFollowsPopup}
           onContainerClick={({ id }) => {

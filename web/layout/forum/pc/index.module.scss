@@ -1,48 +1,258 @@
 @import '@common/styles/index.scss';
-@mixin img {
-  width: rem(18);
-  height: rem(18);
-  border-radius: 50%;
-  border: rem(1) solid var(--color-white);
+@mixin titlePaddingTop {
+  padding-top: $padding-4n;
 }
 
-.content{
-  padding: 0 rem(16);
-  .list{
-    border-bottom: rem(1) solid var(--border-line-color);
-    height: rem(52);
-    line-height: rem(52);
-    font-size: rem(14);
+// 模块标题
+.mode_title {
+  font-size: $font-size-base;
+  line-height: 18px;
+  color: $text-color-secondary;
+}
+// 模块文本
+.mode_text {
+  padding-top: $padding-2n;
+  padding-bottom: $padding-4n;
+  font-size: $font-size-base;
+  line-height: $font-line-height-small;
+  border-bottom: $border-solid-1;
+  span {
+    color: $error-color;
+  }
+}
+// 用户信息标签一栏
+.user_info_label {
+  width: 100%;
+  border-radius: $border-radius-small $border-radius-small 0 0;
+  height: 36px;
+  background: $body-bg-color;
+  box-sizing: border-box;
+  padding: $padding-2n $padding-4n;
+  display: flex;
+  .user_label_item{
+    display: flex;
+    align-items: center;
+    flex: 1;
+    text-align: center;
+    font-size: $font-size-base;
+    line-height: 18px;
+    color: $text-color-regular;
+    @include text-ellipsis;
+  }
+}
+// 用户信息内容一栏
+.user_info_value {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: 54px;
+  box-sizing: border-box;
+  padding: $padding-2n $padding-4n;
+  border-bottom: $border-solid-1;
+  .user_value_item {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    line-height: $font-line-height-base;
+    color: $text-color-primary;
+    @include text-ellipsis;
+    .user_value_avatar {
+      border-radius: $border-radius-circle;
+      width: 38px;
+      height: 38px;
+      line-height: 38px;
+    }
+    .user_value_name {
+      padding-left: $padding-4n;
+      @include text-ellipsis;
+    }
+  }
+}
+
+.container {
+  width: 100%;
+  background-color: var(--color-white);
+  box-sizing: border-box;
+  padding: $padding-6n;
+  margin-bottom: $margin-4n;
+  .title {
+    padding-bottom: $padding-6n;
+    display: flex;
+    align-items: center;
+    font-size: $font-size-middle;
+    line-height: $font-line-height-base;
+    font-weight: 600;
+    color: $text-color-primary;
+    .title_text {
+      padding-left: $padding-2n;
+    }
+  }
+  .forum_agent {
+  }
+  .site_introduction,.site_mode,.my_role,.my_permission {
+    @include titlePaddingTop;
+  }
+  .site_mode {
+  }
+  .my_role {
+    .user_info_label {
+      margin-top: $margin-4n;
+    }
+  }
+}
+.my_permission {
+  position: relative;
+  @mixin item {
+    padding: $padding-2n 14px;
+  }
+  @mixin scrollbar_forum {
+    &::-webkit-scrollbar {
+      display: block;
+      width: 8px;
+      height: 8px;
+      border-radius: $border-radius-small;
+    }
+    &::-webkit-scrollbar-track {
+      background: $border-color;
+    }
+    &::-webkit-scrollbar-corner {
+      background: $border-color;
+    }
+    &::-webkit-scrollbar-button {
+      width: 8px;
+      height: 8px;
+      background: $border-color;
+    }
+
+  }
+  .my_permission_plate {
+    @include scrollbar;
+    @include scrollbar_forum;
+    width: 100%;
+    height: 543px;
+    border-radius: $border-radius-small;
+    margin-top: $margin-4n;
+    overflow: scroll;
+    border-right: 5px solid $border-color;
+    border-bottom: 5px solid $border-color;
+    box-sizing: border-box;
+  }
+  .plate_left_label {
+    width: max-content;
+    border-right: $border-solid-1;
+    border-bottom: $border-solid-1;
+  }
+  .plate_td {
+    @include item;
     font-weight: normal;
-    .label{
-      float: left;
-      color: #4f5a70;
-    }
-    .right{
-      float: right;
+    font-size: $font-size-base;
+    line-height: 18px;
+    text-align: center;
+    color: $text-color-regular;
+    border: $border-solid-1;
+    border-right: none;
+    border-bottom: none;
+  }
+  .plate_th {
+    background: $body-bg-color;
+    height: 36px;
+  }
+  .plate_tr {
+    height: 48px;
+    .plate_td {
+      padding: 14px;;
     }
   }
-  .forum_agent{
-    .forum_agent_img{
-      @include img;
+  .my_permission_common {
+    width: 100%;
+    height: 343px;
+    box-sizing: border-box;
+    border-right: 5px solid $border-color;
+    margin-top: $margin-4n;
+    display: flex;
+    border-bottom: $border-solid-1;
+    border-radius: $border-radius-small;
+  }
+  .permission_common_left {
+    background: $body-bg-color;
+    display: flex;
+    width: 84px;
+    justify-content: center;
+    align-items: center;
+    border-top: $border-solid-1;
+    border-left: $border-solid-1;
+  }
+  .permission_common_right {
+    @include scrollbar;
+    @include scrollbar_forum;
+    width: 100%;
+    display: flex;
+    overflow: scroll;
+    &::-webkit-scrollbar {
+      height: 0;
     }
-    .forum_agent_name{
-      padding-left: rem(8);
+    &::-webkit-scrollbar-button {
+      height: 4px;
     }
   }
-  .forum_member{
-    .forum_member_img{
-      @include img;
-    }
-    .forum_member_img:nth-child(2){
-      position: relative;
-      left: rem(-4);
-      z-index: 2;
-    }
-    .forum_member_img:nth-child(3){
-      position: relative;
-      left: rem(-8);
-      z-index: 3;
-    }
+  .common_label_item {
+    width: 420px;
+    height: 48px;
+    padding: $font-size-base;
+    line-height: $font-line-height-middle;
+    text-align: left;
+    box-sizing: border-box;
+    display: flex;
+    color: $text-color-primary;
+    align-items: center;
+    border: $border-solid-1;
+    border-right: none;
+    border-bottom: none;
+  }
+  .permission_common_value {
+    flex: 1;
+  }
+  .common_value_item {
+    width: 100%;
+    height: 48px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: $border-solid-1;
+    // border-right: none;
+    border-bottom: none;
+  }
+  .permission_common_scroll {
+    width: 18px;
+    background: $body-bg-color;
+    border-radius: 0 $border-radius-small $border-radius-small 0;
+    border: $border-solid-1;
+    border-bottom: none;
+  }
+  @mixin scroll_border {
+    position: absolute;
+    background: $border-color;
+  }
+  .plate_right_scroll {
+    width: 5px;
+    height: 543px;
+    right: 13px;
+    top: 50px;
+    @include scroll_border;
+  }
+  .plate_left_scroll {
+    width: 100%;
+    height: 5px;
+    left: 0;
+    bottom: 372px;
+    @include scroll_border;
+  }
+  .common_right_scroll {
+    width: 5px;
+    height: 343px;
+    right: 13px;
+    bottom: 0;
+    @include scroll_border;
   }
 }

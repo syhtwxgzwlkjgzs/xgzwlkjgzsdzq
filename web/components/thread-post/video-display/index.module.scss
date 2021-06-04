@@ -5,9 +5,12 @@
 
   :global {
     .dzq-video {
-      width: 100%;
+      width: 100%!important;
       height: rem(176);
       border-radius: $border-radius-small;
+      .video-js{
+        width: 100%;
+      }
     }
 
     div[data-vjs-player=true] {

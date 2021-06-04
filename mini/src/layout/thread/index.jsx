@@ -52,7 +52,9 @@ class ThreadH5Page extends React.Component {
       setTop: false, // 置顶
       showContent: '',
       // inputValue: '', // 评论内容
-      toView: '', // 接收元素id用来滚动定位，
+      inputText: '请输入内容', // 默认回复框placeholder内容
+      toView: '', // 接收元素id用来滚动定位
+      position: 0,
     };
 
     this.perPage = 5;
@@ -62,12 +64,16 @@ class ThreadH5Page extends React.Component {
     // 滚动定位相关属性
     this.threadBodyRef = React.createRef();
     this.commentDataRef = React.createRef();
-    this.position = 0;
     this.nextPosition = 0;
     this.flag = true;
+    this.currentPosition = 0;
 
     // 修改评论数据
     this.comment = null;
+
+    this.commentData = null;
+    this.replyData = null;
+    this.commentType = null;
 
     // 举报内容选项
     this.reportContent = ['广告垃圾', '违规内容', '恶意灌水', '重复发帖'];
@@ -83,6 +89,7 @@ class ThreadH5Page extends React.Component {
     if (this.flag) {
       this.nextPosition = e.detail?.scrollTop || 0;
     }
+    this.currentPosition = e.detail?.scrollTop || 0;
   };
 
   // 触底事件
@@ -98,12 +105,12 @@ class ThreadH5Page extends React.Component {
     // 当内容加载完成后，获取评论区所在的位置
     //this.position = this.commentDataRef?.current?.offsetTop - 50;
     // 是否定位到评论位置
-    // if (this.props?.thread?.isPositionToComment) {
-    //   // TODO:需要监听帖子内容加载完成事件
-    //   setTimeout(() => {
-    //     this.threadBodyRef.current.scrollTo(0, this.position);
-    //   }, 1000);
-    // }
+    if (this.props?.thread?.isPositionToComment) {
+      // TODO:需要监听帖子内容加载完成事件
+      setTimeout(() => {
+        this.onMessageClick();
+      }, 1200);
+    }
   }
 
   componentDidUpdate() {
@@ -135,20 +142,26 @@ class ThreadH5Page extends React.Component {
     if (this.flag) {
       this.flag = !this.flag;
     } else {
-      if (this.position <= 0) {
-        this.position = this.nextPosition + 1;
+      if (this.state.position <= 0) {
+        this.setState({ position: this.nextPosition + 1});
       } else {
-        this.position = this.nextPosition - 1;
+        this.setState({ position: this.nextPosition - 1});
       }
       this.flag = !this.flag;
     }
   }
 
+  // 保持当前位置
+  keepCurrentPosition = () => {
+    this.setState({ position: this.currentPosition });
+  }
+
   // 点击收藏icon
   async onCollectionClick() {
+    this.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -210,19 +223,23 @@ class ThreadH5Page extends React.Component {
 
   // 点击评论
   onInputClick() {
+    this.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
+    this.commentType = 'comment';
 
     this.setState({
       showCommentInput: true,
+      inputText: '请输入内容',
     });
   }
 
   // 点击更多icon
   onMoreClick = () => {
+    this.keepCurrentPosition();
     // this.setState({
     //   text: !this.state.text,
     // });
@@ -232,7 +249,7 @@ class ThreadH5Page extends React.Component {
   onOperClick = (type) => {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -395,6 +412,16 @@ class ThreadH5Page extends React.Component {
   }
 
   // 点击发布按钮
+  async publishClick (val, imageList) {
+    if (this.commentType === 'comment') {
+      return await this.onPublishClick(val, imageList);
+    }
+    if (this.commentType === 'reply') {
+      return await this.createReply(val, imageList);
+    }
+  }
+  
+  // 发布评论
   async onPublishClick(val, imageList) {
     if (!val) {
       Toast.info({ content: '请输入内容!' });
@@ -486,6 +513,105 @@ class ThreadH5Page extends React.Component {
     });
   }
 
+  // 点击评论的回复
+  replyClick(comment) {
+    this.keepCurrentPosition();
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+      return;
+    }
+    this.commentType = 'reply';
+
+    this.commentData = comment;
+    this.replyData = null;
+    const userName = comment?.user?.nickname || comment?.user?.userName;
+    this.setState({
+      showCommentInput: true,
+      inputText: userName ? `回复${userName}` : '请输入内容',
+    });
+  }
+
+   // 点击回复的回复
+   replyReplyClick(reply, comment) {
+    this.keepCurrentPosition();
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+      return;
+    }
+    this.commentType = 'reply';
+
+    this.commentData = null;
+    this.replyData = reply;
+    this.replyData.commentId = comment.id;
+    const userName = reply?.user?.nickname || reply?.user?.userName;
+
+    this.setState({
+      showCommentInput: true,
+      inputText: userName ? `回复${userName}` : '请输入内容',
+    });
+  }
+
+  // 创建回复评论+回复回复接口
+  async createReply(val, imageList) {
+    if (!val) {
+      Toast.info({ content: '请输入内容!' });
+      return;
+    }
+
+    const id = this.props.thread?.threadData?.id;
+    if (!id) return;
+
+    const params = {
+      id,
+      content: val,
+    };
+
+    // 楼中楼回复
+    if (this.replyData) {
+      params.replyId = this.replyData.id;
+      params.isComment = true;
+      params.commentId = this.replyData.commentId;
+      params.commentPostId = this.replyData.id;
+    }
+    // 回复评论
+    if (this.commentData) {
+      params.replyId = this.commentData.id;
+      params.isComment = true;
+      params.commentId = this.commentData.id;
+    }
+
+    if (imageList?.length) {
+      params.attachments = imageList
+        .filter((item) => item.status === 'success' && item.response)
+        .map((item) => {
+          const { id } = item.response;
+          return {
+            id,
+            type: 'attachments',
+          };
+        });
+    }
+
+    const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
+
+    if (success) {
+      this.setState({
+        showCommentInput: false,
+        inputValue: '',
+      });
+      Toast.success({
+        content: '回复成功',
+      });
+      return true;
+    }
+
+    Toast.error({
+      content: msg,
+    });
+  }
+
   // 弹出框关闭
   onClose() {
     this.setState({
@@ -498,7 +624,7 @@ class ThreadH5Page extends React.Component {
   async onLikeClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -521,7 +647,7 @@ class ThreadH5Page extends React.Component {
   async onPayClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -540,7 +666,7 @@ class ThreadH5Page extends React.Component {
   onRewardClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -629,7 +755,7 @@ class ThreadH5Page extends React.Component {
           ref={this.hreadBodyRef}
           id="hreadBodyId"
           scrollY
-          scrollTop={this.position}
+          scrollTop={this.state.position}
           lowerThreshold={50}
           onScrollToLower={() => this.scrollToLower()}
           scrollIntoView={this.state.toView}
@@ -665,6 +791,9 @@ class ThreadH5Page extends React.Component {
                       router={this.props.router}
                       sort={(flag) => this.onSortChange(flag)}
                       onEditClick={(comment) => this.onEditClick(comment)}
+                      keepCurrentPosition={() => this.keepCurrentPosition()}
+                      replyReplyClick={(reply, comment) => this.replyReplyClick(reply, comment)}
+                      replyClick={(comment) => this.replyClick(comment)}
                     ></RenderCommentList>
                     {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
                     {isNoMore && (
@@ -733,10 +862,11 @@ class ThreadH5Page extends React.Component {
           <Fragment>
             {/* 评论弹层 */}
             <InputPopup
+              inputText={this.state.inputText}
               visible={this.state.showCommentInput}
               onClose={() => this.onClose()}
               initValue={this.state.inputValue}
-              onSubmit={(value, imgList) => this.onPublishClick(value, imgList)}
+              onSubmit={(value, imgList) => this.publishClick(value, imgList)}
               site={this.props.site}
             ></InputPopup>
 

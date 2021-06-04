@@ -13,6 +13,7 @@ const Index = inject('user')(observer(({
   user,
   onPluginClick,
   onSubmit,
+  operationType,
 }) => {
   const [currentTool, setCurrentTool] = useState({});
 
@@ -31,12 +32,12 @@ const Index = inject('user')(observer(({
             onPluginClick(item);
           }}
           name={item.name}
-          color={item.id === currentTool.id && item.active}
+          color={item.type === operationType && item.active}
           size='20'
         />
       ) : null;
     });
-  }, [tep, currentTool])
+  }, [tep, currentTool, operationType])
 
   return (
     <View className={styles['container']}>

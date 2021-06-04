@@ -110,6 +110,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
   };
 
   const onUserClick = (userId = '') => {
+    onClose();
     router.push(`/user/${userId}`);
   };
 
@@ -192,6 +193,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
                           onClick={onUserClick}
                           type={item.type}
                           isShowBottomLine={tipData?.platform === 'pc'}
+                          needPaddingWithoutLine={tipData?.platform === 'h5'}
                           needPadding={false}
                         />
                     ))

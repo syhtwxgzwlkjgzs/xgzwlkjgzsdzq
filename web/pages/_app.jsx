@@ -3,7 +3,6 @@ import { Provider } from 'mobx-react';
 import { hideInstance } from '@discuzq/design/dist/components/image-previewer/layouts/web';
 import App from 'next/app';
 import initializeStore from '@common/store';
-import Head from 'next/head';
 import PayBoxProvider from '../components/payBox/payBoxProvider';
 import isServer from '@common/utils/is-server';
 import '@discuzq/design/dist/styles/index.scss';
@@ -11,8 +10,9 @@ import csrRouterRedirect from '@common/utils/csr-router-redirect';
 import Router from '@discuzq/sdk/dist/router';
 import sentry from '@common/utils/sentry';
 import '../styles/index.scss';
+import DocumentHead from '../components/documentHead';
 
-if ( !isServer() ) {
+if (!isServer()) {
   sentry();
 }
 
@@ -20,6 +20,7 @@ class DzqApp extends App {
   constructor(props) {
     super(props);
     this.appStore = initializeStore();
+    this.updateSize = this.updateSize.bind(this);
   }
 
   // 路由跳转时，需要清理图片预览器
@@ -41,35 +42,45 @@ class DzqApp extends App {
   }
 
   componentDidMount() {
+    window.addEventListener('resize', this.updateSize);
     csrRouterRedirect();
     this.listenRouterChangeAndClean();
   }
 
   componentWillUnmount() {
     if (!isServer()) {
+      window.removeEventListener('resize', this.updateSize);
       window.removeEventListener('popstate', this.cleanImgViewer);
     }
   }
 
   // 出错捕获
   componentDidCatch(error, info) {
-    Router.replace({url: '/render-error'});
+    Router.replace({ url: '/render-error' });
+  }
+
+  updateSize() {
+    const currentWidth = window.innerWidth;
+    
+    if ( this.appStore.site ) {
+      if ( this.appStore.site.platform === 'pc' && currentWidth < 800 ) {
+        this.appStore.site.setPlatform('h5');
+        return;
+      }
+
+      if ( this.appStore.site.platform === 'h5' && currentWidth >= 800 ) {
+        this.appStore.site.setPlatform('pc');
+        return;
+      }
+    }
   }
 
   render() {
     const { Component, pageProps } = this.props;
-    const { site } = this.appStore;
     return (
       <div data-dzq-theme="light">
-        <Head>
-          <meta
-            key="viewport"
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover"
-          />
-          <title>{(site.envConfig && site.envConfig.TITLE) || 'Discuz!Q'}</title>
-        </Head>
         <Provider {...this.appStore}>
+          <DocumentHead />
           <PayBoxProvider>
             <Component {...pageProps} />
           </PayBoxProvider>
