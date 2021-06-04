@@ -6,8 +6,10 @@ import { inject } from 'mobx-react';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import ThreadMiniPage from '@layout/thread/index';
 import PayBoxProvider from '@components/payBox/payBoxProvider';
+import withShare from '@common/utils/withShare/withShare';
 import ErrorMiniPage from '../../layout/error/index';
-import withShare from '@common/utils/withShare/withShare'
+
+
 const MemoToastProvider = React.memo(ToastProvider);
 @inject('site')
 @inject('thread')
@@ -17,37 +19,6 @@ const MemoToastProvider = React.memo(ToastProvider);
 @inject('topic')
 @withShare()
 class Detail extends React.Component {
-  $getShareData (data) {
-    const { title, path, comeFrom, threadId } = data
-    const defalutTitle = title;
-    const defalutPath = `/subPages/thread/index?id=${threadId}`
-    if(data.from === 'timeLine') {
-      return {
-        title:defalutTitle
-      }
-    }
-    if (data.from === 'menu') {
-      return {
-        title:defalutTitle,
-        path:defalutPath
-      }
-    }
-    if(comeFrom && comeFrom === 'thread') {
-      const { user } = this.props
-      this.props.index.updateThreadShare({ threadId }).then(result => {
-        if (result.code === 0) {
-          this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-          this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-          this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-        }
-      });
-    }
-    return {
-      title,
-      path
-    }
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -60,6 +31,31 @@ class Detail extends React.Component {
       this.props.thread.reset();
       this.getPageDate(this.props.router.query.id);
     }
+  }
+
+  // 页面分享
+  $getShareData(data) {
+    const { title, path, comeFrom, threadId } = data;
+    const defalutTitle = title;
+    const defalutPath = `/subPages/thread/index?id=${threadId}`;
+    if (data.from === 'timeLine') {
+      return {
+        title: defalutTitle,
+      };
+    }
+    if (data.from === 'menu') {
+      return {
+        title: defalutTitle,
+        path: defalutPath,
+      };
+    }
+    if (comeFrom && comeFrom === 'thread') {
+      this.props.thread.shareThread(threadId, this.props.index, this.props.search, this.props.topic);
+    }
+    return {
+      title,
+      path,
+    };
   }
 
   async componentDidShow() {

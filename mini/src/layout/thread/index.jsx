@@ -13,6 +13,7 @@ import styleVar from '@common/styles/theme/default.scss.json';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Input from '@discuzq/design/dist/components/input/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
+import Button from '@discuzq/design/dist/components/button/index';
 import Header from '@components/header';
 import goToLoginPage from '@common/utils/go-to-login-page';
 
@@ -24,15 +25,12 @@ import InputPopup from './components/input-popup';
 import throttle from '@common/utils/thottle';
 import xss from '@common/utils/xss';
 
-import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import threadPay from '@common/pay-bussiness/thread-pay';
 import RewardPopup from './components/reward-popup';
 import RenderThreadContent from './detail/content';
 import RenderCommentList from './detail/comment-list';
 import classNames from 'classnames';
-import {debounce} from "../../components/thread/utils";
-import styles from "../../components/thread/shareButton/index.module.scss";
-import { getCurrentInstance } from '@tarojs/taro';
+import { debounce } from '../../components/thread/utils';
 @inject('site')
 @inject('user')
 @inject('thread')
@@ -56,22 +54,7 @@ class ThreadH5Page extends React.Component {
       // inputValue: '', // 评论内容
       toView: '', // 接收元素id用来滚动定位，
     };
-    const {pageData} = this.props.index.threads;
-    this.item = {
-        icon: 'ShareAltOutlined',
-        name: '分享',
-        type: 'share'
-    }
-    this.threadId = parseInt(getCurrentInstance().router.params.id);
-    this.thread = pageData.map((v) => {
-      if (v.threadId === this.threadId){
-        this.shareData = {
-          comeFrom:'thread',
-          threadId: this.threadId,
-          title: v.title,
-          path: `/subPages/thread/index?id=${this.threadId}`
-        }
-      }})
+
     this.perPage = 5;
     this.page = 1; // 页码
     this.commentDataSort = true;
@@ -127,8 +110,18 @@ class ThreadH5Page extends React.Component {
     // 当内容加载完成后，获取评论区所在的位置
     if (this.props.thread.isReady) {
       // this.position = this.commentDataRef?.current?.offsetTop - 50;
-    }
 
+      const { threadId, title } = this.props?.thread?.threadData;
+      if (threadId && title) {
+        // 分享相关数据
+        this.shareData = {
+          comeFrom: 'thread',
+          threadId,
+          title,
+          path: `/subPages/thread/index?id=${threadId}`,
+        };
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -474,7 +467,7 @@ class ThreadH5Page extends React.Component {
     });
   }
 
-/*   btnClick() {
+  /*   btnClick() {
     const shareData = {
       comeFrom: 'thread',
       threadId: this.props.thread?.threadData?.id,
@@ -593,14 +586,12 @@ class ThreadH5Page extends React.Component {
     });
   }
 
-
   render() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError } = threadStore;
     const fun = {
       moreClick: this.onMoreClick,
     };
-
 
     // 更多弹窗权限
     const morePermissions = {
@@ -611,9 +602,6 @@ class ThreadH5Page extends React.Component {
       canShare: this.props.user.isLogin(),
       canCollect: this.props.user.isLogin(),
     };
-
-
-
 
     // 更多弹窗界面
     const moreStatuses = {
@@ -727,15 +715,15 @@ class ThreadH5Page extends React.Component {
                   size="20"
                   name="CollectOutlinedBig"
                 ></Icon>
-                 {/*<button className={footer.icon} openType='share' plain='true'  data-shareData={this.shareData} >*/}
-                <button className={styles.fabulous2} openType='share' plain='true'  data-shareData={this.shareData} >
-                <Icon
-                     className={footer.icon}
-                     size="20"
-                     name="ShareAltOutlined"
-                   ></Icon>
-                   {/*</View>*/}
-                 </button>
+
+                {/* 分享button */}
+                <Button
+                  className={classNames(footer.share, footer.icon)}
+                  openType="share"
+                  data-shareData={this.shareData}
+                >
+                  <Icon className={footer.icon} size="20" name="ShareAltOutlined"></Icon>
+                </Button>
               </View>
             </View>
           </View>
