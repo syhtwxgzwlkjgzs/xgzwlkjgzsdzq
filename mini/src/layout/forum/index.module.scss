@@ -15,6 +15,7 @@
 
 .content{
   padding: 0 rem(16);
+  background-color: $white;
   .list{
     border-bottom: rem(1) solid var(--border-line-color);
     height: rem(52);
@@ -27,6 +28,7 @@
     }
     .right{
       float: right;
+      color: #0b0b37;
       @include lineHeight52;
     }
   }
