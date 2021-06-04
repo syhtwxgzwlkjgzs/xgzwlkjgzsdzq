@@ -12,7 +12,15 @@ import styles from './index.module.scss';
 const SearchUsers = ({ data = [], onItemClick }) => (
   <View className={styles.list}>
     {data.map((item, index) => (
-      <UserItem key={index} imgSrc={item.avatar} title={item.nickname} needPadding={false} label={item.groupName} onClick={onItemClick} />
+      <UserItem 
+        key={index}
+        imgSrc={item.avatar}
+        title={item.nickname}
+        needPadding={true}
+        needBottomLine={true}
+        label={item.groupName}
+        onClick={onItemClick}
+      />
     ))}
   </View>
 );

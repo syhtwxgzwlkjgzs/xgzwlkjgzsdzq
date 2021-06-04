@@ -180,6 +180,12 @@ class UserCenterFans extends React.Component {
     if (prevProps.userId !== this.props.userId) {
       this.page = 1;
       this.totalPage = 1;
+      if (this.props.updateSourcePage) {
+        this.props.updateSourcePage(1);
+      }
+      if (this.props.updateSourceTotalPage) {
+        this.props.updateSourceTotalPage(1);
+      }
       if (this.props.setDataSource) {
         this.props.setDataSource({});
       }
