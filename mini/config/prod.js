@@ -41,25 +41,25 @@ module.exports = {
       chain.plugin().use(webpack.DefinePlugin, [{
         'process.env.DISCUZ_ENV': JSON.stringify('mini')
       }]);
-      chain.merge({
-        optimization: {
-          splitChunks: {
-            cacheGroups: {
-              subPagesCommon: {
-                name: 'subPages/common',
-                minChunks: 2,
-                test: (module, chunks) => {
-                  const isNoOnlySubpackRequired = chunks.find(chunk => !(/\bsubPages\b/.test(chunk.name)))
-                  return !isNoOnlySubpackRequired
-                },
-                priority: 200
-              }
-              // common: false,
-              // vendors: false
-            }
-          }
-        }
-      })
+      // chain.merge({
+      //   optimization: {
+      //     splitChunks: {
+      //       cacheGroups: {
+      //         subPagesCommon: {
+      //           name: 'subPages/common',
+      //           minChunks: 2,
+      //           test: (module, chunks) => {
+      //             const isNoOnlySubpackRequired = chunks.find(chunk => !(/\bsubPages\b/.test(chunk.name)))
+      //             return !isNoOnlySubpackRequired
+      //           },
+      //           priority: 200
+      //         }
+      //         // common: false,
+      //         // vendors: false
+      //       }
+      //     }
+      //   }
+      // })
     }
     // TODO: 小程序的分包打包的优化
     // 分包优化的打包需要结合 webpackChain 和 addChunkPages
