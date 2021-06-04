@@ -85,13 +85,13 @@ class UserCenterFollowsPc extends React.Component {
         </SidebarPanel>
 
         <UserCenterFollowPopup
+          id={this.props.userId}
           dataSource={this.state.dataSource}
           setDataSource={this.setDataSource}
           sourcePage={this.state.sourcePage}
           updateSourcePage={this.updateSourcePage}
           sourceTotalPage={this.state.sourceTotalPage}
           updateSourceTotalPage={this.updateSourceTotalPage}
-          id={this.props.userId}
           visible={this.state.showFollowsPopup}
           onContainerClick={({ id }) => {
             this.props.router.push({
