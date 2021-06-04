@@ -44,7 +44,16 @@ class UserCenterFollowsPc extends React.Component {
   };
 
   render() {
-    const followCount = this.props.userId ? this.props.user.targetUserFollowCount : this.props.user.followCount;
+    let followCount = 0;
+    if (this.props.userId) {
+      if (this.props.userId === this.props.user?.id) {
+        followCount = this.props.user.followCount
+      } else {
+        followCount = this.props.user.targetUserFollowCount
+      }
+    } else {
+      followCount = this.props.user.followCount
+    }
     return (
       <>
         <SidebarPanel

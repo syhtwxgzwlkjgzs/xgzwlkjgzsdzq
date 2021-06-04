@@ -226,7 +226,7 @@ class index extends Component {
                   />
                   <div className={styles.uploadText}>
                     <Icon name="UploadingOutlined" size={12} className={styles.uploadIcon} />
-                    上传封面图
+                    上传封面图片
                   </div>
                 </div>
               </>
