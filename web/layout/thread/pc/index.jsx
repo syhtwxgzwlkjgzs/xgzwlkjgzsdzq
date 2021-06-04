@@ -682,7 +682,7 @@ class ThreadPCPage extends React.Component {
           </div>
 
           {/* 右边信息 */}
-          <div className={layout.bodyRigth}>
+          <div className={`${layout.bodyRigth} ${isSelf ? layout.positionSticky : ''}`}>
             <div className={layout.authorInfo}>
               {threadStore?.authorInfo ? (
                 <AuthorInfo
