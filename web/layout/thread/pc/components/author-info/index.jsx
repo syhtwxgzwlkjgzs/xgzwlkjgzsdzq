@@ -21,7 +21,9 @@ class AuthorInfo extends React.Component {
   }
 
   // 点击私信
-  onprivateLetter() {}
+  onprivateLetter() {
+    typeof this.props.onprivateLetter === 'function' && this.props.onprivateLetter();
+  }
 
   render() {
     return (
