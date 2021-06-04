@@ -14,6 +14,7 @@ const config = {
         '404/index',
         '500/index',
         'close/index',
+        'create-card/index',
         'join/index',
         'thread/index',
         'thread/comment/index',

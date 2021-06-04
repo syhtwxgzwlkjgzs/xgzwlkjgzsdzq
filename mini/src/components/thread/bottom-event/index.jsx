@@ -1,9 +1,9 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import styles from './index.module.scss';
 import Tip from '../tip';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import { View, Text } from '@tarojs/components'
-import ShareButton from '../shareButton'
+import ShareButton from '../share-button'
 /**
  * 帖子底部内容
  * @prop {array}    userImgs 点赞分享用户信息
@@ -49,12 +49,17 @@ const Index = ({
       type: 'share'
     }];
   }, [isLiked]);
-  const needHeight = useMemo(() => {
-    return userImgs.length !== 0 || comment > 0 || sharing > 0
-  }, [userImgs, comment, sharing])
+  const [ show, setShow ] = useState(false)
+  const handleClickShare = () => {
+    setShow(true)
+  }
+  const needHeight = useMemo(() => userImgs.length !== 0 || comment > 0 || sharing > 0, [userImgs, comment, sharing])
   const thread = index
   return (
     <View>
+      {
+        show && <ShareButton setShow={setShow} tipData={tipData} index={thread}></ShareButton>
+      }
       <View className={needHeight ? styles.user : styles.users}>
         {userImgs.length !== 0 ? <View className={styles.userImg}>
           <View className={styles.portrait}>
@@ -74,14 +79,23 @@ const Index = ({
           {sharing > 0 && <Text className={styles.commentNum}>{`${sharing}次分享`}</Text>}
         </View>
       </View>
-
+          
       <View className={needHeight ? styles.operation : styles.operations}>
         {
           postList.map((item, index) => (
               item.name === '分享'?(
-                <ShareButton  tipData={tipData} key={index} index={thread} item={item}>
-                  
-                </ShareButton>
+                <View key={index} className={styles.fabulous} onClick={handleClickShare}>
+                 <View className={styles.fabulousIcon}>
+                    <Icon
+                    className={`${styles.icon} ${item.type}`} 
+                    name={item.icon}
+                    size={16}>
+                  </Icon>
+                </View>
+                <Text className={styles.fabulousPost}>
+                  {item.name}
+                </Text>
+              </View>
               ):
               (<View key={index} className={styles.fabulous} onClick={item.event}>
                  <View className={styles.fabulousIcon}>
