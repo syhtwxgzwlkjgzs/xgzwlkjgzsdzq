@@ -116,13 +116,13 @@ class ForumPCPage extends React.Component {
                 className={layout.user_value_item}
                 title={numberFormat(countThreads)}
               >
-                  {numberFormat(countThreads)}
+                <span>{numberFormat(countThreads)}</span>
               </div>
               <div
                 className={layout.user_value_item}
                 title={Time.formatDate(siteInstall, 'YYYY-MM-DD')}
               >
-                {Time.formatDate(siteInstall, 'YYYY-MM-DD')}
+                <span>{Time.formatDate(siteInstall, 'YYYY-MM-DD')}</span>
               </div>
             </div>
           </div>
@@ -163,9 +163,11 @@ class ForumPCPage extends React.Component {
                   image={myGroup?.avatar}
                 />
               </div>
-              <div className={layout.user_value_item}>{myGroup?.nickname || '--'}</div>
-              <div className={layout.user_value_item}>{myGroup?.groupName || '--'}</div>
-              <div className={layout.user_value_item}>{myGroup ? Time.formatDate(myGroup?.createdAt, 'YYYY-MM-DD') : '--'}</div>
+              <div className={layout.user_value_item} title={ myGroup?.nickname || '--' }><span>{myGroup?.nickname || '--'}</span></div>
+              <div className={layout.user_value_item} title={myGroup?.groupName || '--'}><span>{myGroup?.groupName || '--'}</span></div>
+              <div className={layout.user_value_item} title={myGroup ? Time.formatDate(myGroup?.createdAt, 'YYYY-MM-DD') : '--'}>
+                <span>{myGroup ? Time.formatDate(myGroup?.createdAt, 'YYYY-MM-DD') : '--'}</span>
+              </div>
             </div>
           </div>
           {/* 我的角色 end */}

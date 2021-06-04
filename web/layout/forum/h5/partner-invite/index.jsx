@@ -158,15 +158,30 @@ class PartnerInviteH5Page extends React.Component {
               <div className={layout.site_info}>
                 <div className={layout.site_status_list}>
                     <span className={layout.site_status_label}>更新</span>
-                    <span className={layout.site_status_item}>{updataTime && getSiteUpdateTime(updataTime)}</span>
+                    <span
+                      className={layout.site_status_item}
+                      title={(updataTime && getSiteUpdateTime(updataTime)) || '--'}
+                    >
+                      {(updataTime && getSiteUpdateTime(updataTime)) || '--'}
+                    </span>
                 </div>
                 <div className={layout.site_status_list}>
                     <span className={layout.site_status_label}>成员</span>
-                    <span className={layout.site_status_item}>{numberFormat(webConfig?.other?.countUsers)}</span>
+                    <span
+                      className={layout.site_status_item}
+                      title={numberFormat(webConfig?.other?.countUsers) || '--'}
+                    >
+                      {numberFormat(webConfig?.other?.countUsers) || '--'}
+                    </span>
                 </div>
                 <div className={layout.site_status_list}>
                     <span className={layout.site_status_label}>主题</span>
-                    <span className={layout.site_status_item}>{numberFormat(countThreads)}</span>
+                    <span
+                      className={layout.site_status_item}
+                      title={numberFormat(countThreads) || '--'}
+                    >
+                      {numberFormat(countThreads) || '--'}
+                    </span>
                 </div>
               </div>
             </div>
