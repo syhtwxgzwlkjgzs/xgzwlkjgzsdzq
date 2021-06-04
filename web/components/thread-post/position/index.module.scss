@@ -1,27 +1,31 @@
 @import '@common/styles/index.scss';
-.tag {
-  @include tag-default;
+.position {
+  .tag {
+    @include tag-default;
 
-  :global {
-    .dzq-tag {
-      &:after {
-        display: none;
+    &:after {
+      display: none;
+    }
+
+    :global {
+      .dzq-icon-PositionOutlined {
+        margin-right: rem($margin-1n);
+      }
+
+      .dzq-icon-CloseOutlined {
+        margin-left: $margin-2n !important;
+        font-size: 8px !important;
+      }
+
+      .dzq-tag-text {
+        display: inline-flex;
+        align-items: center;
       }
     }
-    .dzq-icon-PositionOutlined {
-      margin-right: rem($margin-1n);
-    }
-    .dzq-icon-CloseOutlined {
-      margin-left: $margin-2n !important;
-      font-size: 8px !important;
-    }
-    .dzq-tag-text {
-      display: inline-flex;
-      align-items: center;
-    }
+  }
+
+  .checked {
+    @include tag-checked;
   }
 }
 
-.checked {
-  @include tag-checked;
-}
