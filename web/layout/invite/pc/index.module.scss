@@ -213,7 +213,7 @@
     .invite_money{
       @include userInfoInvite;
       width: calc(50% - 1px);
-      border-left: rem(1) solid var(--color-white);
+      border-left: 1px solid var(--color-white);
     }
   }
   .user_card_button {

@@ -6,6 +6,7 @@ import '@discuzq/design/dist/styles/index.scss';
 import Header from '@components/header';
 import { copyToClipboard } from '@common/utils/copyToClipboard';
 import layout from './index.module.scss';
+import { numberFormat } from '@common/utils/number-format';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 
 @inject('site')
@@ -58,16 +59,21 @@ class InviteH5Page extends React.Component {
               />
             </div>
             <div className={layout.user_info_content}>
-              <div className={layout.user_info_name}>{inviteData.nickname}</div>
+              <div className={layout.user_info_name} title={inviteData.nickname}>{inviteData.nickname}</div>
               <div className={layout.user_info_tag}>{inviteData.groupName}</div>
               <div className={layout.user_info_invite}>
                 <div className={layout.invite_num}>
                   <div className={layout.invite_num_title}>已邀人数</div>
-                  <div className={layout.invite_num_content}>{inviteData.totalInviteUsers}</div>
+                  <div
+                    className={layout.invite_num_content}
+                    title={numberFormat(inviteData.totalInviteUsers)}
+                  >
+                    {numberFormat(inviteData.totalInviteUsers) || '--'}
+                  </div>
                 </div>
                 <div className={layout.invite_money}>
                   <div className={layout.invite_num_title}>赚得赏金</div>
-                  <div className={layout.invite_num_content}>{inviteData.totalInviteBounties}</div>
+                  <div className={layout.invite_num_content} title={inviteData.totalInviteBounties}>{inviteData.totalInviteBounties || 0}</div>
                 </div>
               </div>
             </div>
@@ -88,17 +94,17 @@ class InviteH5Page extends React.Component {
               {
                 inviteData?.inviteUsersList?.map((item, index) => (
                   <div key={index} className={layout.invite_list_item}>
-                      <div className={layout.invite_list_itemName}>
+                      <div className={layout.invite_list_itemName} title={item.nickname || '--'}>
                         <Avatar
                           className={layout.invite_list_itemAvatar}
                           image={item.avatar}
                           size='small'
                           text={item?.nickname?.substring(0, 1)}
                         />
-                        <span>{item.nickname}</span>
+                        <span>{item.nickname || '--'}</span>
                       </div>
-                      <span className={layout.invite_list_itemMoney}>+{item.bounty}</span>
-                      <span className={layout.invite_list_itemTime}>{item.joinedAt}</span>
+                      <span className={layout.invite_list_itemMoney} title={`+${item.bounty}`}>+{item.bounty}</span>
+                      <span className={layout.invite_list_itemTime} title={item.joinedAt || '--'}>{item.joinedAt || '--'}</span>
                   </div>
                 ))
               }
