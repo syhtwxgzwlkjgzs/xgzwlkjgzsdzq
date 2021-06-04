@@ -95,13 +95,13 @@ class UserCenterFollowsPc extends React.Component {
 
         <UserCenterFollowPopup
           id={this.props.userId}
+          visible={this.state.showFollowsPopup}
           dataSource={this.state.dataSource}
           setDataSource={this.setDataSource}
           sourcePage={this.state.sourcePage}
           updateSourcePage={this.updateSourcePage}
           sourceTotalPage={this.state.sourceTotalPage}
           updateSourceTotalPage={this.updateSourceTotalPage}
-          visible={this.state.showFollowsPopup}
           onContainerClick={({ id }) => {
             this.props.router.push({
               pathname: '/user/[id]',
