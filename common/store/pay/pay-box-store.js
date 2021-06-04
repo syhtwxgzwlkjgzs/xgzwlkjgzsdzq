@@ -418,6 +418,7 @@ class PayBoxStore {
 
       this.resErrorFactory(setPayPwdRes);
     } catch (error) {
+      console.log(error)
       if (error.Code) {
         throw error;
       }
