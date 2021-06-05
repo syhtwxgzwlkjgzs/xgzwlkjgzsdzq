@@ -4,16 +4,45 @@ import { Icon, Tag  } from '@discuzq/design';
 import { withRouter } from 'next/router';
 import { inject, observer } from 'mobx-react';
 import LoadingBox from '@components/loading-box';
+import isServer from '@common/utils/is-server';
+import { debounce } from '@common/utils/throttle-debounce';
 
 @inject('index')
 @observer
 class Index extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      windowSize: null,
+    };
   }
 
+  // 监听浏览器窗口变化
+  getWindowSize = () => {
+    if (!isServer()) {
+      return {
+        innerHeight: !isServer() ? window.innerHeight : null,
+      }
+    }
+  };
+
+  handleResize = debounce(() => {
+    this.setState({ windowSize: this.getWindowSize() });
+  }, 50);
+
   componentDidMount() {
-    this.loadData()
+    this.loadData();
+    if (!isServer()) {
+      // window.addEventListener("load", this.handleResize);
+      window.addEventListener("resize", this.handleResize);
+    }
+  }
+
+  componentWillUnmount() {
+    if (!isServer()) {
+      // window.removeEventListener("load", this.handleResize);
+      window.removeEventListener("resize", this.handleResize);
+    }
   }
 
   changeBatch = () => {
@@ -33,15 +62,19 @@ class Index extends React.Component {
     const { recommends, recommendsStatus } = this.props.index || [];
     const { filterCount = 5 } = this.props
     return (
-      <div className={style.recommend}>
+      <div className={style.recommend} style={{maxHeight: (this.state.windowSize?.innerHeight - 80) || '600px'}}>
         <div className={style.recommendContent}>推荐内容</div>
         { recommendsStatus === 'loading' && <LoadingBox/> }
         {
-          recommendsStatus === 'none' && recommends?.filter((_, index) => index < filterCount).map((item, index) => (
+          recommendsStatus === 'none' && recommends?.filter((_, index) => index < filterCount).map((item, index) => {
+            let titleString = item.title;
+            titleString = titleString.replaceAll(/<img[\s]+[^<>]*class=([^<>]+qq\-emotion)(?:\"|\')[^<>]*>/g, '[表情]');
+            titleString = titleString.replaceAll(/<img[\s]+[^<>]*>|<img[\s]+[^<>]*/g, "[图片]");
+            return (
               <div key={index} className={style.recommendBox} onClick={() => {this.recommendDetails(item)}}>
                 <div className={style.recommendTitle}>
                   <p className={`${style.recommendSort} ${style[`itemIndex${index+1}`]}`}>{index + 1}</p>
-                  <p className={style.recommenText}>{item.title}</p>
+                  <p className={style.recommenText}>{`${titleString}`}</p>
                 </div>
                 <div className={style.browse}>
                   <div className={style.browseBox}>
@@ -82,7 +115,7 @@ class Index extends React.Component {
                   </div>
                 </div>
               </div>
-          ))
+          )})
         }
         {recommendsStatus === 'none' && <div className={style.recommendSwitch}>
           <div className={style.switchBox} onClick={this.changeBatch}>
