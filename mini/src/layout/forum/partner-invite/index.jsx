@@ -135,6 +135,7 @@ class PartnerInviteH5Page extends React.Component {
     const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
     const { usersPageData = [], threadsPageData = [], isLoading } = forum;
     const { invitorName, invitorAvatar } = this.state;
+
     return (
       <List className={layout.page} allowRefresh={false}>
         <HomeHeader hideInfo hideMinibar mode="join" />
