@@ -142,7 +142,7 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
     <>
       {Object.values(files).map((item, index) => {
         return (
-          <Units key={index} type='atta' filename={item.name} size={`${Math.ceil(item.size / 1024)}KB`} onDelete={() => {
+          <Units key={index} type='atta' filename={item.name} size={item.size ? `${Math.ceil(item.size / 1024)}KB` : ''} onDelete={() => {
             delete files[item.id];
             setPostData({ files });
           }} />
