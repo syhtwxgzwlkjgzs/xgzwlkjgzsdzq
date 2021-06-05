@@ -6,6 +6,7 @@
   padding: rem($padding-6n);
   background: var(--color-white);
   border-radius: rem($border-radius-small);
+  box-sizing: border-box;
   .stepsItem {
     display: flex;
     padding-bottom: rem(40);
