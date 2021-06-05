@@ -70,40 +70,39 @@
       padding-right: 0;
     }
 
-    :global {
-      .dzq-tabs__panel {
-        height: 0;
-      }
+    .dzq-tabs__panel {
+      height: 0;
+    }
 
-      .dzq-tabs__list {
-        display: flex;
-      }
+    .dzq-tabs__list {
+      display: flex;
+    }
 
-      .dzq-tabs__content {
-        padding-top: rem(1);
-        padding-left: 0;
-        padding-right: 0;
-      }
+    .dzq-tabs__content {
+      padding-top: rem(1);
+      padding-left: 0;
+      padding-right: 0;
+    }
 
-      .dzq-tabs__label {
-        padding-bottom: rem(10) !important;
-        font-family: 'PingFang SC';
-        font-weight: 600;
-        font-size: rem($font-size-primary);
-      }
+    .dzq-tabs__label {
+      padding-bottom: rem(10) !important;
+      font-family: 'PingFang SC';
+      font-weight: 600;
+      font-size: rem($font-size-primary);
+    }
 
     .dzq-tabs__item {
       height: rem(50);
       box-sizing: border-box;
       flex: 1;
 
-        &:after {
-          width: rem(82);
-          margin: auto;
-        }
+      &:after {
+        width: rem(82);
+        margin: auto;
       }
     }
   }
+
 }
 
 .tag {
