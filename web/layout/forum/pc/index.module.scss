@@ -6,7 +6,7 @@
 // 模块标题
 .mode_title {
   font-size: $font-size-base;
-  line-height: 17.8px;
+  line-height: 18px;
   color: $text-color-secondary;
 }
 // 模块文本
@@ -14,12 +14,16 @@
   padding-top: $padding-2n;
   padding-bottom: $padding-4n;
   font-size: $font-size-base;
+  line-height: $font-line-height-small;
   border-bottom: $border-solid-1;
+  span {
+    color: $error-color;
+  }
 }
 // 用户信息标签一栏
 .user_info_label {
   width: 100%;
-  border-radius: 5px 5px 0 0;
+  border-radius: $border-radius-small $border-radius-small 0 0;
   height: 36px;
   background: $body-bg-color;
   box-sizing: border-box;
@@ -33,6 +37,7 @@
     font-size: $font-size-base;
     line-height: 18px;
     color: $text-color-regular;
+    @include text-ellipsis;
   }
 }
 // 用户信息内容一栏
@@ -50,14 +55,20 @@
     flex: 1;
     line-height: $font-line-height-base;
     color: $text-color-primary;
+    @include text-ellipsis;
+    span {
+      @include text-ellipsis;
+    }
     .user_value_avatar {
       border-radius: $border-radius-circle;
       width: 38px;
       height: 38px;
       line-height: 38px;
+      flex-shrink: 0;
     }
     .user_value_name {
       padding-left: $padding-4n;
+      @include text-ellipsis;
     }
   }
 }
@@ -94,38 +105,41 @@
   }
 }
 .my_permission {
+  position: relative;
   @mixin item {
     padding: $padding-2n 14px;
   }
   @mixin scrollbar_forum {
     &::-webkit-scrollbar {
       display: block;
-      margin-right: -8px;
       width: 8px;
       height: 8px;
       border-radius: $border-radius-small;
     }
     &::-webkit-scrollbar-track {
-      background: #eee;
+      background: $border-color;
     }
     &::-webkit-scrollbar-corner {
-      background: #eee;
+      background: $border-color;
     }
     &::-webkit-scrollbar-button {
       width: 8px;
       height: 8px;
-      background: #eee;
+      background: $border-color;
     }
 
   }
   .my_permission_plate {
+    @include scrollbar;
+    @include scrollbar_forum;
     width: 100%;
     height: 543px;
     border-radius: $border-radius-small;
     margin-top: $margin-4n;
     overflow: scroll;
-    @include scrollbar;
-    @include scrollbar_forum;
+    border-right: 5px solid $border-color;
+    border-bottom: 5px solid $border-color;
+    box-sizing: border-box;
   }
   .plate_left_label {
     width: max-content;
@@ -133,6 +147,7 @@
     border-bottom: $border-solid-1;
   }
   .plate_td {
+    @include item;
     font-weight: normal;
     font-size: $font-size-base;
     line-height: 18px;
@@ -141,7 +156,6 @@
     border: $border-solid-1;
     border-right: none;
     border-bottom: none;
-    @include item;
   }
   .plate_th {
     background: $body-bg-color;
@@ -156,9 +170,12 @@
   .my_permission_common {
     width: 100%;
     height: 343px;
+    box-sizing: border-box;
+    border-right: 5px solid $border-color;
     margin-top: $margin-4n;
     display: flex;
     border-bottom: $border-solid-1;
+    border-radius: $border-radius-small;
   }
   .permission_common_left {
     background: $body-bg-color;
@@ -170,13 +187,16 @@
     border-left: $border-solid-1;
   }
   .permission_common_right {
+    @include scrollbar;
+    @include scrollbar_forum;
     width: 100%;
     display: flex;
     overflow: scroll;
-    @include scrollbar;
-    @include scrollbar_forum;
-    &::-webkit-scrollbar-track {
+    &::-webkit-scrollbar {
       height: 0;
+    }
+    &::-webkit-scrollbar-button {
+      height: 4px;
     }
   }
   .common_label_item {
@@ -213,5 +233,30 @@
     border-radius: 0 $border-radius-small $border-radius-small 0;
     border: $border-solid-1;
     border-bottom: none;
+  }
+  @mixin scroll_border {
+    position: absolute;
+    background: $border-color;
+  }
+  .plate_right_scroll {
+    width: 5px;
+    height: 543px;
+    right: 13px;
+    top: 50px;
+    @include scroll_border;
+  }
+  .plate_left_scroll {
+    width: 100%;
+    height: 5px;
+    left: 0;
+    bottom: 372px;
+    @include scroll_border;
+  }
+  .common_right_scroll {
+    width: 5px;
+    height: 343px;
+    right: 13px;
+    bottom: 0;
+    @include scroll_border;
   }
 }

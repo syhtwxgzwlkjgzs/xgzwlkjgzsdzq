@@ -90,9 +90,7 @@
     background: $white;
 
     .at-item__inner {
-      @include flex();
-      height: 60px;
-      padding: $padding-4n 0;
+      height: 70px;
       margin: 0 $margin-4n;
       border-top: $border-solid-1;
     }
@@ -147,10 +145,15 @@
 
     :global {
       .dzq-checkbox-wrap {
+        @include flex();
+        width: 100%;
         margin: 0;
-        padding: $padding-3n 0;
+        padding: $padding-4n 0;
         -webkit-tap-highlight-color: transparent;
+
         .dzq-checkbox {
+          order: 2;
+          flex: 0 0 20px;
           width: 20px;
           height: 20px;
           border-radius: $border-radius-small;
@@ -168,6 +171,13 @@
             font-size: $font-size-small !important;
             color: $primary-color;
           }
+        }
+
+        .dzq-checkbox__label {
+          order: 1;
+          flex: 1;
+          margin-left: 0;
+          @include flex();
         }
       }
     }

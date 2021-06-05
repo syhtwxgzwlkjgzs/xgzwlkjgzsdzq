@@ -1,0 +1,28 @@
+@import "@common/styles/index.scss";
+
+:global {
+  .normal-badge {
+    .dzq-badge__circle{
+      color: $white !important;
+    }
+  }
+
+  .avatar-badge {
+    .dzq-badge__circle{
+      top: rem(8px);
+      right: rem(2px);
+    }
+  }
+
+  .special-badge {
+    .dzq-badge__circle{
+      padding: 0 rem(6px);
+      width: auto;
+      border-radius: $border-radius-8;
+    }
+  }
+}
+
+
+
+

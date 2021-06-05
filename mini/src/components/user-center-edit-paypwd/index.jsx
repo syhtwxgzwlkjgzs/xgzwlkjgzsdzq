@@ -8,7 +8,6 @@ import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 import { View, Text } from '@tarojs/components';
 
-
 @inject('user')
 @inject('payBox')
 @observer
@@ -40,7 +39,6 @@ class index extends Component {
   // 点击去到下一步
   goToResetPayPwd = () => {
     const { oldPayPwd } = this.state;
-    console.log(oldPayPwd);
     this.props.payBox.oldPayPwd = oldPayPwd;
     this.props.payBox
       .getPayPwdResetToken()
@@ -65,14 +63,14 @@ class index extends Component {
   // 初次设置密码
   handleSetPwd = (e) => {
     this.setState({
-      payPassword: e.target.value,
+      payPassword: e.target.value.replace(/\D/g, ''),
     });
   };
 
   // 点击修改旧密码
   handleChangeOldPwd = (e) => {
     this.setState({
-      oldPayPwd: e.target.value,
+      oldPayPwd: e.target.value.replace(/\D/g, ''),
     });
   };
 
@@ -116,6 +114,7 @@ class index extends Component {
         <Text className={styles.setTtile}>设置支付密码</Text>
         <View className={styles.paypwdInput}>
           <Input
+            miniType="number"
             maxLength={6}
             value={payPassword}
             onChange={this.handleSetPwd}
@@ -135,7 +134,13 @@ class index extends Component {
         <Text className={styles.setTtile}>修改密码</Text>
         <View className={styles.labelInfo}>
           <View className={styles.labelValue}>
-            <Input value={oldPayPwd} mode="password" placeholder="请输入旧密码" onChange={this.handleChangeOldPwd} />
+            <Input
+              miniType="number"
+              value={oldPayPwd}
+              mode="password"
+              placeholder="请输入旧密码"
+              onChange={this.handleChangeOldPwd}
+            />
           </View>
           <View onClick={this.handleGoToFindPayPwd} className={styles.tips}>
             忘记旧密码？

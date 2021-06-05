@@ -123,13 +123,13 @@
 
 .forgetPasswordContainer {
   width: 100%;
-  margin-top: rem($margin-4n);
-  margin-bottom: rem($margin-2n);
+  margin: rem($margin-4n) rem($margin-4n) rem($margin-6n) 0;
   display: flex;
   justify-content: flex-end;
   align-items: center;
 
   span {
     color: $text-color-regular;
+    font-size: rem($font-size-small);
   }
 }

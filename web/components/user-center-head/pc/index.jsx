@@ -65,7 +65,7 @@ class index extends Component {
     this.backgroundUploaderRef.current.click();
   };
   onBackgroundChange = async (fileList) => {
-    this.props.handleSetBgLoadingStatus(true)
+    this.props.handleSetBgLoadingStatus(true);
     const fixedImg = await fixImageOrientation(fileList.target.files[0]);
     this.props.user
       .updateBackground(fixedImg)
@@ -77,7 +77,7 @@ class index extends Component {
             hasMask: false,
             duration: 1000,
           });
-          this.props.handleSetBgLoadingStatus(false)
+          this.props.handleSetBgLoadingStatus(false);
         }
       })
       .catch((err) => {
@@ -86,7 +86,7 @@ class index extends Component {
           hasMask: false,
           duration: 1000,
         });
-        this.props.handleSetBgLoadingStatus(false)
+        this.props.handleSetBgLoadingStatus(false);
       });
   };
   // 点击关注
@@ -125,24 +125,35 @@ class index extends Component {
     return { icon, text };
   };
   // 点击屏蔽
-  handleChangeShield = (isDeny) => {
+  handleChangeShield = async (isDeny) => {
     const { query } = this.props.router;
-    if (isDeny) {
-      this.props.user.undenyUser(query.id);
-      this.props.user.setTargetUserNotBeDenied();
-      Toast.success({
-        content: '解除屏蔽成功',
-        hasMask: false,
-        duration: 1000,
-      });
-    } else {
-      this.props.user.denyUser(query.id);
-      this.props.user.setTargetUserDenied();
-      Toast.success({
-        content: '屏蔽成功',
-        hasMask: false,
-        duration: 1000,
-      });
+    try {
+      if (isDeny) {
+        await this.props.user.undenyUser(query.id);
+        this.props.user.setTargetUserNotBeDenied();
+        Toast.success({
+          content: '解除屏蔽成功',
+          hasMask: false,
+          duration: 1000,
+        });
+      } else {
+        await this.props.user.denyUser(query.id);
+        this.props.user.setTargetUserDenied();
+        Toast.success({
+          content: '屏蔽成功',
+          hasMask: false,
+          duration: 1000,
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      if (err.Code) {
+        Toast.error({
+          content: err.Msg,
+          duration: 1000,
+          hasMask: false,
+        });
+      }
     }
   };
   // 点击发送私信
@@ -153,12 +164,12 @@ class index extends Component {
   render() {
     const { targetUser } = this.props.user;
     const user = this.props.router.query?.id ? targetUser || {} : this.props.user;
-    const { isUploadAvatarUrl } = this.state
+    const { isUploadAvatarUrl } = this.state;
     return (
       <div className={styles.box}>
         <div className={styles.boxTop}>
           <div className={styles.headImgBox}>
-            <Avatar image={user.avatarUrl} size="big" name={user.username} />
+            <Avatar image={user.avatarUrl} size="big" name={user.nickname} />
             {/* 相机图标 */}
             {!this.props.router.query?.id && (
               <div className={styles.userCenterEditCameraIcon} onClick={this.handleAvatarUpload}>
@@ -183,7 +194,7 @@ class index extends Component {
           <div className={styles.contentBox}>
             {/* 用户昵称和他所在的用户组名称 */}
             <div className={styles.userNameOrTeam}>
-              <div className={styles.username}>{user.username}</div>
+              <div className={styles.username}>{user.nickname}</div>
               <div className={styles.groupName}>{user.group?.groupName}</div>
               <p className={styles.text}>{user.signature || '这个人很懒，什么也没留下~'}</p>
             </div>
@@ -204,7 +215,9 @@ class index extends Component {
                       this.handleChangeAttention(user.follow);
                     }}
                     type="primary"
-                    className={`${user.follow === 2 && styles.userFriendsBtn} ${user.follow === 1 && styles.userFollowedBtn}`}
+                    className={`${user.follow === 2 && styles.userFriendsBtn} ${
+                      user.follow === 1 && styles.userFollowedBtn
+                    }`}
                   >
                     <Icon name={this.renderFollowedStatus(user.follow || 0).icon} size={12} />
                     <span className={styles.userBtnText}>{this.renderFollowedStatus(user.follow || 0).text}</span>
@@ -226,7 +239,7 @@ class index extends Component {
                   />
                   <div className={styles.uploadText}>
                     <Icon name="UploadingOutlined" size={12} className={styles.uploadIcon} />
-                    上传封面图
+                    上传封面图片
                   </div>
                 </div>
               </>

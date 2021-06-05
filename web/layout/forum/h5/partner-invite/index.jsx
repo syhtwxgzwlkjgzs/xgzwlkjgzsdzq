@@ -81,10 +81,6 @@ class PartnerInviteH5Page extends React.Component {
     }
   }
 
-  onPostClick = data => console.log('post click', data);
-
-  onUserClick = data => console.log('user click', data);
-
   handleJoinSite = () => {
     const { user, site } = this.props;
     if (!user?.isLogin()) {
@@ -92,7 +88,7 @@ class PartnerInviteH5Page extends React.Component {
       return;
     }
     const { setSite: { siteMode, sitePrice, siteName } = {} } = site.webConfig;
-    if (siteMode === 'pay' && user.paid === true) {
+    if (siteMode === 'pay' && user.paid === false) {
       PayBox.createPayBox({
         data: {      // data 中传递后台参数
           amount: sitePrice,
@@ -105,10 +101,10 @@ class PartnerInviteH5Page extends React.Component {
             content: `订单 ${orderInfo.orderSn} 支付成功, 即将进入站点`,
             hasMask: false,
             duration: 3000,
+            onClose() {
+              window.location.href = '/';
+            },
           });
-          setTimeout(() => {
-            window.location.href = '/';
-          }, 3100);
         }, // 支付成功回调
         failed: (orderInfo) => {
           Toast.error({
@@ -130,9 +126,11 @@ class PartnerInviteH5Page extends React.Component {
     const { site: { platform, webConfig }, forum } = this.props;
     const { invitorName, invitorAvatar } = this.state;
     const { setSite: { siteMode, sitePrice, siteMasterScale, siteExpire } = {} } = webConfig;
-    const { threadTotal, updataTime } = forum;
+    const { updataTime } = forum;
     const layout = platform === 'h5' ? mlayout : pclayout;
     const { inviteCode } = this.props.router.query;
+    // 内容数
+    const countThreads = get(webConfig, 'other.countThreads', '');
     if (platform === 'h5') {
       return <></>;
     }
@@ -156,15 +154,30 @@ class PartnerInviteH5Page extends React.Component {
               <div className={layout.site_info}>
                 <div className={layout.site_status_list}>
                     <span className={layout.site_status_label}>更新</span>
-                    <span className={layout.site_status_item}>{updataTime && getSiteUpdateTime(updataTime)}</span>
+                    <span
+                      className={layout.site_status_item}
+                      title={(updataTime && getSiteUpdateTime(updataTime)) || '--'}
+                    >
+                      {(updataTime && getSiteUpdateTime(updataTime)) || '--'}
+                    </span>
                 </div>
                 <div className={layout.site_status_list}>
                     <span className={layout.site_status_label}>成员</span>
-                    <span className={layout.site_status_item}>{numberFormat(webConfig?.other?.countUsers)}</span>
+                    <span
+                      className={layout.site_status_item}
+                      title={numberFormat(webConfig?.other?.countUsers) || '--'}
+                    >
+                      {numberFormat(webConfig?.other?.countUsers) || '--'}
+                    </span>
                 </div>
                 <div className={layout.site_status_list}>
                     <span className={layout.site_status_label}>主题</span>
-                    <span className={layout.site_status_item}>{numberFormat(threadTotal)}</span>
+                    <span
+                      className={layout.site_status_item}
+                      title={numberFormat(countThreads) || '--'}
+                    >
+                      {numberFormat(countThreads) || '--'}
+                    </span>
                 </div>
               </div>
             </div>
@@ -184,7 +197,7 @@ class PartnerInviteH5Page extends React.Component {
               </div>
               : <></>
           }
-          <div className={layout.user_card_button} onClick={this.handleJoinSite}>{siteMode === 'pay' ? `¥ ${username}` : ''} 立即加入</div>
+          <div className={layout.user_card_button} onClick={this.handleJoinSite}>{siteMode === 'pay' ? `¥ ${sitePrice}` : ''} 立即加入</div>
           {siteMode === 'pay' ? <div className={layout.bottom_title}>有效期：<span>{siteExpire}天</span></div> : <></>}
         </div>
         <Copyright/>
@@ -193,16 +206,18 @@ class PartnerInviteH5Page extends React.Component {
   }
 
   render() {
-    const { site: { platform, webConfig }, forum: { threadTotal, updataTime } } = this.props;
+    const { site: { platform, webConfig }, forum: { updataTime } } = this.props;
     const { inviteCode } = this.props.router.query;
     const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
     const { invitorName, invitorAvatar } = this.state;
     const layout = platform === 'h5' ? mlayout : pclayout;
+    // 内容数
+    const countThreads = get(webConfig, 'other.countThreads', '');
     return (
       <PartnerInviteWrap renderRight={this.renderRight}>
         <div className={layout.content}>
           {/* 站点信息 start */}
-          <SiteInfo threadTotal={threadTotal} updataTime={ updataTime }/>
+          <SiteInfo threadTotal={countThreads} updataTime={ updataTime }/>
           {/* 站点信息 end */}
           {/* 站点用户 start */}
           <PartnerInviteUser/>
@@ -214,7 +229,6 @@ class PartnerInviteH5Page extends React.Component {
             platform === 'h5'
               ? (
                 <>
-                <div className={layout.maskLayer}></div>
                 <div className={layout.bottom}>
                   {
                     inviteCode
@@ -242,6 +256,7 @@ class PartnerInviteH5Page extends React.Component {
               )
               : <></>
           }
+        <div className={layout.maskLayer}></div>
         </div>
       </PartnerInviteWrap>
     );

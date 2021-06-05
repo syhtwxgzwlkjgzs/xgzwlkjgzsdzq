@@ -33,7 +33,7 @@ export default class index extends Component {
   // 初次设置密码
   handleSetPwd = (e) => {
     this.setState({
-      payPassword: e.target.value,
+      payPassword: e.target.value.replace(/\D/g,''),
     });
   };
 

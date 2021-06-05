@@ -5,7 +5,7 @@ import api from '../api';
  * @param {object} params
  * @returns object
  */
-export default async function groupPermissionList(opts, ctx = null) {
+export default async function groupPermissionList(opts = {}, ctx = null) {
   try {
     const { params = {}, data = {}, ...others } = opts;
     const options = {

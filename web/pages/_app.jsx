@@ -10,10 +10,12 @@ import csrRouterRedirect from '@common/utils/csr-router-redirect';
 import Router from '@discuzq/sdk/dist/router';
 import sentry from '@common/utils/sentry';
 import '../styles/index.scss';
-import DocumentHead from '../components/documentHead';
+import CustomHead from '@components/custom-head';
+import Head from 'next/head';
+
 
 if (!isServer()) {
-  sentry();
+  process.env.NODE_ENV === 'production' && sentry();
 }
 
 class DzqApp extends App {
@@ -80,7 +82,14 @@ class DzqApp extends App {
     return (
       <div data-dzq-theme="light">
         <Provider {...this.appStore}>
-          <DocumentHead />
+          <Head>
+            <meta
+              key="viewport"
+              name="viewport"
+              content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover"
+            />
+          </Head>
+          <CustomHead />
           <PayBoxProvider>
             <Component {...pageProps} />
           </PayBoxProvider>

@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react';
 import styles from './index.module.scss';
-import { Icon, Badge } from '@discuzq/design';
+import { Icon } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
 import datas from './data';
+import UnreadRedDot from '@components/unread-red-dot';
 /**
  * 潮流话题
  * @prop {string[]} data 步骤数据
@@ -58,7 +59,7 @@ return (
     {/* 渲染未读消息红点 */}
     {!!data.unreadCount && (
       <div className={styles.badgeMargin}>
-        <Badge circle info={data.unreadCount > 99 ? '99+' : data.unreadCount} className={data.unreadCount > 9 ? styles.badge : ''} />
+        <UnreadRedDot unreadCount={data.unreadCount}></UnreadRedDot>
       </div>
     )}
 

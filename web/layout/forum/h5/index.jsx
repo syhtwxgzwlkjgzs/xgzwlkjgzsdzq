@@ -7,6 +7,7 @@ import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import List from '@components/list';
 import UserItem from '@components/thread/user-item';
+import UserCenterUsers from '@components/user-center-users';
 import { get } from '@common/utils/get';
 import layout from './index.module.scss';
 // import UserCenterFriends from '@components/user-center-friends';
@@ -134,35 +135,7 @@ class ForumH5Page extends React.Component {
           onClose={() => forum.setIsPopup(false)}
           containerClassName={layout.forum_users_popup}
         >
-          <List
-            className={layout.forum_users_list}
-            onRefresh={this.nextUsersPage}
-            noMore={isNoMore}
-            immediateCheck={false}
-          >
-            {usersPageData?.map((user, index) => {
-              if (index + 1 > this.props.limit) return null;
-              return (
-                  <UserItem
-                    key={index}
-                    title={user.nickname}
-                    imgSrc={user.avatar}
-                    label={user.groupName}
-                    userId={user.userId}
-                    onClick={this.onUserClick}
-                    needPadding={true}
-                  />
-                  // <UserCenterFriends
-                  //   id={user.userId}
-                  //   type='follow'
-                  //   imgUrl={user.avatar}
-                  //   withHeaderUserInfo={true}
-                  //   userName={user.nickname}
-                  //   followHandler={this.followUser}
-                  // />
-              );
-            })}
-          </List>
+          <UserCenterUsers/>
         </Popup>
       </>
     );

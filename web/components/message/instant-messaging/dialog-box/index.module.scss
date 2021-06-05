@@ -1,17 +1,18 @@
-@import '../vars.scss';
+@import "../vars.scss";
 
 .pcDialogBox {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  height: 60vh;
   overflow-y: auto;
   @include scrollbar();
   &::-webkit-scrollbar {
-    display: block;
+    display: block !important;
     width: 8px;
   }
 
-  .box__inner{
+  .box__inner {
+    height: 100%;
     padding: $padding-2n;
 
     .itself {
@@ -25,8 +26,6 @@
   }
 }
 
-
-
 .h5DialogBox {
   display: flex;
   flex-direction: column;
@@ -39,10 +38,9 @@
   flex-direction: column;
   height: calc(100vh - 314px);
   overflow-y: auto;
-
 }
 
-.box__inner{
+.box__inner {
   padding: 0 $padding-4n;
 
   .itself {
@@ -54,8 +52,6 @@
     }
   }
 }
-
-
 
 .msgTime {
   // @include text-font($color: $text-color-secondary);
@@ -85,7 +81,6 @@
   // background-color: $primary-color;
 }
 
-
 .msgImgContent {
   padding: 8px !important;
 }
@@ -111,7 +106,7 @@
   }
 
   &:before {
-    content: '';
+    content: "";
     border: 12px solid;
     border-color: transparent;
     position: absolute;
@@ -146,7 +141,3 @@
     }
   }
 }
-
-
-
-

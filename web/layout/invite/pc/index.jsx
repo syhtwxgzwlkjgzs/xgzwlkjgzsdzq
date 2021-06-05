@@ -1,13 +1,14 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import { Icon, Toast, Avatar } from '@discuzq/design';
+import { Icon, Toast, Avatar, Spin } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import NoData from '@components/no-data';
 import BaseLayout from '@components/base-layout';
 import UserCenterFansPc from '@components/user-center/fans-pc';
 import UserCenterFriendPc from '@components/user-center/friend-pc';
+import { numberFormat } from '@common/utils/number-format';
 import Copyright from '@components/copyright';
 import { copyToClipboard } from '@common/utils/copyToClipboard';
 
@@ -17,15 +18,34 @@ import { copyToClipboard } from '@common/utils/copyToClipboard';
 @inject('invite')
 @observer
 class InvitePCPage extends React.Component {
+  containerRef = React.createRef(null);
+
   async componentDidMount() {
     try {
-      await this.props.invite.getInviteUsersList();
+      const { invite } = this.props;
+      await invite.getInviteUsersList();
     } catch (e) {
       Toast.error({
         content: e.Message,
       });
     }
   }
+
+  // 检查是否满足触底加载更多的条件
+  checkLoadCondition() {
+    const { invite } = this.props;
+    const hasMorePage = invite.totalPage >= (invite.currentPage + 1);
+    if (invite.inviteLoading) return false;
+    if (!hasMorePage) return false;
+    return true;
+  }
+
+  // 加载更多函数
+  loadMore = async () => {
+    const { invite } = this.props;
+    if (!this.checkLoadCondition()) return;
+    return await invite.getInviteUsersList(invite.currentPage + 1);
+  };
 
   createInviteLink = async () => {
     try {
@@ -41,16 +61,6 @@ class InvitePCPage extends React.Component {
         content: e.Message,
       });
     }
-  }
-
-
-  nextUsersPage = async () => {
-    const { forum } = this.props;
-    return await this.setUsersPageData(forum.userPage + 1);
-  }
-
-  setUsersPageData = async (page = 1) => {
-    await this.props.invite.getInviteUsersList();
   }
 
   // 右侧 - 潮流话题 粉丝 版权信息
@@ -69,16 +79,16 @@ class InvitePCPage extends React.Component {
               />
             </div>
             <div className={layout.user_card_info}>
-              <div className={layout.user_info_name}>{inviteData.nickname}</div>
+              <div className={layout.user_info_name} title={inviteData.nickname}>{inviteData.nickname}</div>
               <div className={layout.user_info_tag}>{inviteData.groupName}</div>
               <div className={layout.user_info_invite}>
                 <div className={layout.invite_num}>
                   <div className={layout.invite_num_title}>已邀人数</div>
-                  <div className={layout.invite_num_content}>{inviteData.totalInviteUsers}</div>
+                  <div className={layout.invite_num_content} title={numberFormat(inviteData.totalInviteUsers)}>{numberFormat(inviteData.totalInviteUsers)}</div>
                 </div>
                 <div className={layout.invite_money}>
                   <div className={layout.invite_num_title}>赚得赏金</div>
-                  <div className={layout.invite_num_content}>{inviteData.totalInviteBounties}</div>
+                  <div className={layout.invite_num_content} title={inviteData.totalInviteBounties}>{inviteData.totalInviteBounties || 0}</div>
                 </div>
               </div>
             </div>
@@ -92,12 +102,17 @@ class InvitePCPage extends React.Component {
     );
   }
   render() {
-    const { inviteData } = this.props.invite;
+    const { inviteUsersList, inviteLoading, isNoData, currentPage, totalPage } = this.props.invite;
     return (
       <BaseLayout
         right={ this.renderRight }
+        onRefresh={this.loadMore}
+        showRefresh={false}
+        isShowLayoutRefresh={false}
       >
-        <div className={layout.container}>
+        <div
+          className={layout.container}
+        >
           <div className={layout.invite_list}>
             <div className={layout.invite_list_title}>
               <Icon size={16} name='IncomeOutlined' color='#FFC300'/>
@@ -110,8 +125,8 @@ class InvitePCPage extends React.Component {
             </div>
             <div className={layout.invite_list_main}>
               {
-                inviteData?.inviteUsersList?.map((item, index) => (
-                  <div key={index} className={layout.list_main_wrap}>
+                inviteUsersList?.map((item) => (
+                  <div key={item.toUserId} className={layout.list_main_wrap}>
                       <div className={layout.list_main_nickname}>
                         <Avatar
                           className={layout.user_value_avatar}
@@ -119,14 +134,15 @@ class InvitePCPage extends React.Component {
                           size='small'
                           text={item?.nickname?.substring(0, 1)}
                         />
-                        <div className={layout.user_value_name}>{item.nickname}</div>
+                        <div className={layout.user_value_name} title={item.nickname}>{item.nickname || '匿名'}</div>
                       </div>
-                      <div className={layout.list_main_money}>+{item.bounty}</div>
-                      <div className={layout.list_main_timer}>{item.joinedAt || '--'}</div>
+                      <div className={layout.list_main_money} title={`+${item.bounty}`}><span>+{item.bounty}</span></div>
+                      <div className={layout.list_main_timer} title={item.joinedAt}><span>{item.joinedAt || '--'}</span></div>
                   </div>
                 ))
               }
-              <NoData className={layout.invite_list_nodata} text='没有更多内容了'/>
+              {isNoData && <NoData className={layout.invite_list_nodata} text='没有更多内容了'/>}
+              {inviteLoading && <div className={layout.loadMoreContainer}><Spin type={'spinner'}>加载中 ...</Spin></div>}
             </div>
           </div>
         </div>

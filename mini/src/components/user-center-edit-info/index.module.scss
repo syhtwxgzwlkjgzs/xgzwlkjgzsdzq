@@ -4,9 +4,9 @@
 .userCenterEditMiddle {
   padding: $padding-4n;
   padding-bottom: 0;
-  h3 {
+  .title {
     font-size: $font-size-middle;
-    // margin-bottom: 16;
+    font-weight: 600;
   }
   .userCenterEditItem {
     display: flex;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
+import Router from '@discuzq/sdk/dist/router';
 import styles from './index.module.scss';
 import AuthorInfo from '../../pc/components/author-info/index';
 import CommentList from '../../pc/components/comment-list/index';
@@ -242,6 +243,13 @@ class CommentPCPage extends React.Component {
     });
   }
 
+  // 点击发送私信
+  onPrivateLetter() {
+    const { username } = this.props.thread?.authorInfo;
+    if (!username) return;
+    Router.push({ url: `/message?page=chat&username=${username}` });
+  }
+
   render() {
     const { commentDetail: commentData, isReady, isAuthorInfoError } = this.props.comment;
     const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === commentData?.userId;
@@ -313,6 +321,7 @@ class CommentPCPage extends React.Component {
                   user={this.props.comment?.authorInfo}
                   onFollowClick={() => this.onFollowClick()}
                   isShowBtn={!isSelf}
+                  onPrivateLetter={() => this.onPrivateLetter()}
                 ></AuthorInfo>
               ) : (
                 <LoadingTips isError={isAuthorInfoError} type="init"></LoadingTips>

@@ -6,20 +6,54 @@ import { inject } from 'mobx-react';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import ThreadMiniPage from '@layout/thread/index';
 import PayBoxProvider from '@components/payBox/payBoxProvider';
+import withShare from '@common/utils/withShare/withShare';
 import ErrorMiniPage from '../../layout/error/index';
 
 const MemoToastProvider = React.memo(ToastProvider);
-
 @inject('site')
 @inject('thread')
 @inject('user')
+@inject('index')
+@inject('search')
+@inject('topic')
+@withShare()
 class Detail extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       isServerError: false,
       serverErrorMsg: '',
+    };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.router?.query?.id && this.props.router.query.id !== prevProps.router.query.id) {
+      this.props.thread.reset();
+      this.getPageDate(this.props.router.query.id);
+    }
+  }
+
+  // 页面分享
+  $getShareData(data) {
+    const { title, threadId } = this.props.thread.threadData;
+    const defalutTitle = title;
+    const defalutPath = `/subPages/thread/index?id=${threadId}`;
+    if (data.from === 'timeLine') {
+      return {
+        title: defalutTitle,
+      };
+    }
+    if (data.from === 'menu') {
+      return {
+        title: defalutTitle,
+        path: defalutPath,
+      };
+    }
+    this.props.thread.shareThread(threadId, this.props.index, this.props.search, this.props.topic);
+    
+    return {
+      title: defalutTitle,
+      path: defalutPath,
     };
   }
 
@@ -84,7 +118,7 @@ class Detail extends React.Component {
 
   render() {
     return this.state.isServerError ? (
-      <ErrorMiniPage text={this.state.serverErrorMsg}/>
+      <ErrorMiniPage text={this.state.serverErrorMsg} />
     ) : (
       <Page>
         <MemoToastProvider>

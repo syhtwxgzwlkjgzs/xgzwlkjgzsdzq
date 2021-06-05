@@ -1,18 +1,20 @@
 /**
  * 分类弹出层
  */
-import React, { memo, useState, useEffect } from 'react'; // 性能优化的
+import React, { useState, useEffect } from 'react'; // 性能优化的
 import { Popup, Button, Icon } from '@discuzq/design'; // 原来就有的封装
 import styles from './index.module.scss'; // 私有样式
 import PropTypes from 'prop-types'; // 类型拦截
 import typeofFn from '@common/utils/typeof';
 import classNames from 'classnames';
+import { inject, observer } from 'mobx-react';
 
 const ClassifyPopup = (props) => {
-  const { pc, show, onVisibleChange, category = [], onChange, categorySelected } = props;
+  const { pc, show, onVisibleChange } = props;
   const [categoryChildren, setCategoryChildren] = useState([]);
   const [selected, setSelected] = useState({});
   const [selectedChild, setSelectedChild] = useState({});
+
   const handleClose = () => {
     onVisibleChange(false);
   };
@@ -22,43 +24,55 @@ const ClassifyPopup = (props) => {
   };
   const handleChildClick = (item) => {
     setSelectedChild(item);
+    props?.threadPost.setPostData({ categoryId: selected.pid || selectedChild.pid });
     handleClose();
   };
 
   const setChildren = (item) => {
     if (item.children && typeofFn.isArray(item.children.slice()) && item.children.length > 0) {
       setCategoryChildren(item.children);
-      if (categorySelected?.child?.pid) {
-        setSelectedChild(categorySelected.child);
-      } else setSelectedChild(item.children[0]);
+      if (!selectedChild?.pid) setSelectedChild(item.children[0]);
     } else {
       setCategoryChildren([]);
       setSelectedChild({});
     }
+    const categoryId = selected.pid || selectedChild.pid;
+    if (!categoryId) return;
+    props?.threadPost.setPostData({ categoryId });
+  };
+
+  const setSeletedCategory = () => {
+    const id = props?.threadPost?.postData?.categoryId || '';
+    const categorySelected = props?.index?.getCategorySelectById(id);
+    const { parent, child } = categorySelected;
+    if (!parent?.pid) return;
+    props?.threadPost?.setCategorySelected(categorySelected);
+    setSelected(parent);
+    setSelectedChild(child);
   };
 
   useEffect(() => {
-    if (!category || (category && category.length === 0) || selected.pid) return;
-    const item = category[0] || {};
-    setSelected(item);
-  }, [category]);
-
-  useEffect(() => {
-    if (selected.pid && categorySelected?.parent && categorySelected.parent?.pid === selected.pid) return;
-    if (categorySelected.parent && categorySelected.parent.pid && categorySelected.parent.pid !== selected.pid) {
-      setSelected(categorySelected.parent);
+    const { index } = props;
+    const { categories } = index;
+    if (!categories || (categories && categories.length === 0)) {
+      (async function () {
+        await index.getReadCategories();
+        setSeletedCategory();
+      }());
     }
-  }, [categorySelected]);
+  }, []);
 
   useEffect(() => {
-    onChange(selected, selectedChild);
-  }, [selected, selectedChild]);
+    setSeletedCategory(props?.threadPost?.postData?.categoryId);
+  }, [props?.threadPost?.postData?.categoryId]);
 
   useEffect(() => {
     setChildren(selected);
   }, [selected]);
 
   const clsWrapper = pc ? classNames(styles.pc, styles.wrapper) : styles.wrapper;
+
+  const category = props.index?.categoriesNoAll || [];
 
   const content = (
     <div className={clsWrapper}>
@@ -150,4 +164,4 @@ ClassifyPopup.defaultProps = {
   onChange: () => {},
 };
 
-export default memo(ClassifyPopup);
+export default inject('index', 'threadPost')(observer(ClassifyPopup));

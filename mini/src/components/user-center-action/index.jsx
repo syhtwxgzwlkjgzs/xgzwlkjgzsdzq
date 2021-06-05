@@ -9,11 +9,24 @@ class UserCenterAction extends React.Component {
   // 点击我的消息
   handleMyMessage = () => {
     Router.push({ url: '/message' });
-  }
+  };
 
   // 点击我的钱包
   handleMyWallet = () => {
     Router.push({ url: '/subPages/wallet/index' });
+  };
+
+  // 草稿箱
+  handleMyDraft = () => {};
+
+  // 点击我的购买
+  handleMyBuy = () => {
+    Router.push({ url: '/subPages/my/buy/index' });
+  }
+
+  // 点击我的收藏
+  handleMyCollect = () => {
+    Router.push({ url: '/subPages/my/collect/index' });
   }
 
   // 草稿箱
@@ -23,12 +36,17 @@ class UserCenterAction extends React.Component {
   // 点击站点信息
   handleMySiteInfo = () => {
     Router.push({ url: '/subPages/forum/index' });
-  }
+  };
 
   // 点击推广信息
   handleMyInvite = () => {
     Router.push({ url: '/subPages/invite/index' });
-  }
+  };
+
+  // 点击我的屏蔽
+  handleMyBlock = () => {
+    Router.push({ url: '/subPages/my/block/index' });
+  };
 
   render() {
     return (
@@ -56,7 +74,7 @@ class UserCenterAction extends React.Component {
           </View>
 
           <View className={styles.userCenterActionItemContainer}>
-            <View className={styles.userCenterActionItem}>
+            <View onClick={this.handleMyCollect} className={styles.userCenterActionItem}>
               <View className={styles.userCenterActionItemIcon}>
                 <Badge>
                   <Icon name={'CollectOutlinedBig'} color={'#4F5A70'} size={20} />
@@ -67,7 +85,7 @@ class UserCenterAction extends React.Component {
           </View>
 
           <View className={styles.userCenterActionItemContainer}>
-            <View className={styles.userCenterActionItem}>
+            <View onClick={this.handleMyBlock} className={styles.userCenterActionItem}>
               <View className={styles.userCenterActionItemIcon}>
                 <Badge>
                   <Icon name={'ShieldOutlined'} color={'#4F5A70'} size={20} />
@@ -78,7 +96,7 @@ class UserCenterAction extends React.Component {
           </View>
         </View>
         <View className={styles.userCenterAction}>
-          <View className={styles.userCenterActionItemContainer}>
+          <View onClick={this.handleMyBuy} className={styles.userCenterActionItemContainer}>
             <View className={styles.userCenterActionItem}>
               <View className={styles.userCenterActionItemIcon}>
                 <Badge>
