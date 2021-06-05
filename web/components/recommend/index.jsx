@@ -31,12 +31,13 @@ class Index extends React.Component {
 
   render () {
     const { recommends, recommendsStatus } = this.props.index || [];
+    const { filterCount = 5 } = this.props
     return (
       <div className={style.recommend}>
         <div className={style.recommendContent}>推荐内容</div>
         { recommendsStatus === 'loading' && <LoadingBox/> }
         {
-          recommendsStatus === 'none' && recommends?.filter((_, index) => index < 5).map((item, index) => (
+          recommendsStatus === 'none' && recommends?.filter((_, index) => index < filterCount).map((item, index) => (
               <div key={index} className={style.recommendBox} onClick={() => {this.recommendDetails(item)}}>
                 <div className={style.recommendTitle}>
                   <p className={`${style.recommendSort} ${style[`itemIndex${index+1}`]}`}>{index + 1}</p>

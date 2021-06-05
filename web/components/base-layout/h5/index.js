@@ -34,7 +34,7 @@ const BaseLayout = forwardRef((props, ref) => {
     onScroll = noop,
     onClickTabBar = noop,
     immediateCheck = false,
-    footer = null,
+    platform = 'h5',
   } = props;
 
   const [height, setHeight] = useState(600);
@@ -61,6 +61,7 @@ const BaseLayout = forwardRef((props, ref) => {
                     className={styles.listHeight}
                     ref={listRef}
                     onScroll={onScroll}
+                    platform={platform}
                   >
                       {typeof(children) === 'function' ? children({ ...props }) : children}
                   </List>
@@ -73,6 +74,7 @@ const BaseLayout = forwardRef((props, ref) => {
               className={styles.list}
               ref={listRef}
               onScroll={onScroll}
+              platform={platform}
             >
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>

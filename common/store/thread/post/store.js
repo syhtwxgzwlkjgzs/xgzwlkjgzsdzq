@@ -46,7 +46,7 @@ class ThreadPostStore {
     draft: 0, // 非草稿：1 - 草稿。如果是 0 的时候不传
     price: 0, // 帖子价格 - 全贴付费。如果是 0 的时候不传
     attachmentPrice: 0, // 附件价格 - 帖子免费，附件收费。如果是 0 的时候不传
-    freeWords: 1, // 百分比 0 - 1 之间；
+    freeWords: 0, // 百分比 0 - 1 之间；
     position: {}, // 定位信息。longtitude，latitude，address，location
     contentText: '', // 文本内容
     audio: {}, // 语音

@@ -1,5 +1,6 @@
 @import '@common/styles/index.scss';
 .content{
+  position: relative;
 }
 
 // 右侧卡片内容 start
@@ -57,7 +58,6 @@
     }
     .site_info {
       width: 100%;
-      height: 78px;
       border-radius: $border-radius-small;
       background: $comment-bg-color;
       margin: auto;
@@ -69,6 +69,7 @@
       display: flex;
       flex-direction: column;
       padding: $padding-4n 0;
+      @include text-ellipsis;
     }
     .site_status_label {
       font-weight: normal;
@@ -84,6 +85,7 @@
       line-height: $font-line-height-middle;
       color: $primary-color;
       padding-top: $padding-1n;
+      @include text-ellipsis;
     }
 
   }
@@ -133,4 +135,13 @@
     }
   }
 }
+.maskLayer{
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  z-index: $zindex-popup;
+  pointer-events: auto;
+}
+
 

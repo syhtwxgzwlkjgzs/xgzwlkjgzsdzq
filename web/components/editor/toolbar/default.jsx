@@ -15,10 +15,10 @@ export default function DefaultToolbar(props) {
 
   const emojiId = 'dzq-toolbar-emoji';
   function handleClick(e) {
-    const emojiDom = document.querySelector(`.${emojiId}`);
+    const emojiDom = document.querySelector(`#${emojiId}`);
 
     if (emojiDom
-      && (e.target.id !== emojiId || emojiId.indexOf(e.target.className) < 0)) {
+      && emojiDom?.style?.display !== 'none') {
       setCurrentAction('');
       onClick({ id: '' });
     }

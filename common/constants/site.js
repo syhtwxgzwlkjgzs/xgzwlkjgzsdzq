@@ -14,6 +14,7 @@ export const APP_THEME = {
 
 // web端站点加入路由白名单
 export const WEB_SITE_JOIN_WHITE_LIST = [
+  '/user/agreement', // 网站协议
   '/user/login', // 登录中转
   '/user/wx-auth', // 登录中转
   '/user/phone-login', // 手机登录

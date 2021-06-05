@@ -143,9 +143,9 @@ class ThreadH5Page extends React.Component {
       this.flag = !this.flag;
     } else {
       if (this.state.position <= 0) {
-        this.setState({ position: this.nextPosition + 1});
+        this.setState({ position: this.nextPosition + 1 });
       } else {
-        this.setState({ position: this.nextPosition - 1});
+        this.setState({ position: this.nextPosition - 1 });
       }
       this.flag = !this.flag;
     }
@@ -154,7 +154,7 @@ class ThreadH5Page extends React.Component {
   // 保持当前位置
   keepCurrentPosition = () => {
     this.setState({ position: this.currentPosition });
-  }
+  };
 
   // 点击收藏icon
   async onCollectionClick() {
@@ -412,7 +412,7 @@ class ThreadH5Page extends React.Component {
   }
 
   // 点击发布按钮
-  async publishClick (val, imageList) {
+  async publishClick(val, imageList) {
     if (this.commentType === 'comment') {
       return await this.onPublishClick(val, imageList);
     }
@@ -420,7 +420,7 @@ class ThreadH5Page extends React.Component {
       return await this.createReply(val, imageList);
     }
   }
-  
+
   // 发布评论
   async onPublishClick(val, imageList) {
     if (!val) {
@@ -455,6 +455,19 @@ class ThreadH5Page extends React.Component {
 
     const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
+      // 更新帖子中的评论数据
+      this.props.thread.updatePostCount(this.props.thread.totalCount);
+      // 更新列表store数据
+      this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
+
+      // 是否红包帖
+      const isRedPack = this.props.thread?.threadData?.displayTag?.isRedPack;
+      // TODO:可以进一步细化判断条件，是否还有红包
+      if (isRedPack) {
+        // 评论获得红包帖，更新帖子数据
+        this.props.thread.fetchThreadDetail(id);
+      }
+
       Toast.success({
         content: '评论成功',
       });
@@ -532,8 +545,8 @@ class ThreadH5Page extends React.Component {
     });
   }
 
-   // 点击回复的回复
-   replyReplyClick(reply, comment) {
+  // 点击回复的回复
+  replyReplyClick(reply, comment) {
     this.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
