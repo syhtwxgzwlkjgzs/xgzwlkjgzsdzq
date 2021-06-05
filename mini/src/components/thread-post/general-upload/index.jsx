@@ -176,7 +176,7 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
   );
 
   // 录音音频
-  const audioPlayer = (audio.id) && (
+  const audioPlayer = (audio?.mediaUrl) && (
     <Audio src={audio.mediaUrl} onDelete={() => { setPostData({ audio: {} }); }} />
   );
 

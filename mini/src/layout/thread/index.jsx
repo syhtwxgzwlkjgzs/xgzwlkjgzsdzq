@@ -273,7 +273,7 @@ class ThreadH5Page extends React.Component {
     // 编辑
     if (type === 'edit') {
       if (!this.props.thread?.threadData?.id) return;
-      Taro.navigateTo({
+      Taro.redirectTo({
         url: `/subPages/thread/post/index?id=${this.props.thread?.threadData?.id}}`,
       });
     }

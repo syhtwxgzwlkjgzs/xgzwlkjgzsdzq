@@ -35,6 +35,7 @@ const BaseLayout = forwardRef((props, ref) => {
     onClickTabBar = noop,
     immediateCheck = false,
     platform = 'h5',
+    footer,
   } = props;
 
   const [height, setHeight] = useState(600);
@@ -80,7 +81,7 @@ const BaseLayout = forwardRef((props, ref) => {
             </List>
           )
         }
-
+        {footer}
         {showTabBar && <BottomNavBar onClick={onClickTabBar} placeholder curr={curr} />}
     </div>
   );
