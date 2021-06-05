@@ -98,8 +98,9 @@ const InputPop = (props) => {
     const insertPosition = cursorPos || 0;
     const newValue = value.substr(0, insertPosition) + (emoji.code || '') + value.substr(insertPosition);
     setValue(newValue);
+    setCursorPos(cursorPos + emoji.code.length);
 
-    setShowEmojis(false);
+    // setShowEmojis(false);
   };
 
   // 完成@人员选择
@@ -193,6 +194,7 @@ const InputPop = (props) => {
                 onChange(e);
                 setValue(e.target.value);
               }}
+              onFocus={() => setShowEmojis(false)}
               placeholder={inputText}
               disabled={loading}
               placeholderClass={styles.placeholder}
@@ -247,6 +249,11 @@ const InputPop = (props) => {
             </View>
           </View>
         </View>
+        {showEmojis && (
+          <View className={styles.emojis}>
+            <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />
+          </View>
+        )}
       </Popup>
 
       {showAt && (
@@ -255,11 +262,6 @@ const InputPop = (props) => {
         </View>
       )}
 
-      {showEmojis && (
-        <View className={styles.emojis}>
-          <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />
-        </View>
-      )}
     </View>
   );
 };
