@@ -56,11 +56,15 @@
     line-height: $font-line-height-base;
     color: $text-color-primary;
     @include text-ellipsis;
+    span {
+      @include text-ellipsis;
+    }
     .user_value_avatar {
       border-radius: $border-radius-circle;
       width: 38px;
       height: 38px;
       line-height: 38px;
+      flex-shrink: 0;
     }
     .user_value_name {
       padding-left: $padding-4n;

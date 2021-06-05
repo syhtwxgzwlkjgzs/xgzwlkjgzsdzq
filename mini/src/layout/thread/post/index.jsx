@@ -269,10 +269,17 @@ class Index extends Component {
 
   // 执行上传视频
   handleVideoUpload = () => {
-    const { setPostData } = this.props.threadPost;
+    const { postData } = this.props.threadPost;
+    if (postData.video?.id) {
+      this.postToast('只能上传一个视频');
+      return;
+    }
     Taro.chooseVideo({
       success: (file) => {
         this.yundianboUpload('video', file);
+      },
+      fail: (res) => {
+        this.postToast(res.errMsg);
       }
     });
   }
@@ -436,7 +443,9 @@ class Index extends Component {
           success: async (orderInfo) => {
             const { orderSn } = orderInfo;
             setPostData({ orderSn });
-            resolve();
+            setTimeout(() => {
+              resolve();
+            }, 1200)
           },
         });
       });
@@ -601,7 +610,7 @@ class Index extends Component {
 
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
           <View className={styles['content']} style={contentStyle}>
-            {/* <View id="thread-post-content"> */}
+            <View id="thread-post-content">
             <Title
               value={postData.title}
               show={isShowTitle}
@@ -648,7 +657,7 @@ class Index extends Component {
               )}
 
             </View>
-            {/* </View> */}
+            </View>
           </View>
 
           {/* 插入内容tag展示区 */}

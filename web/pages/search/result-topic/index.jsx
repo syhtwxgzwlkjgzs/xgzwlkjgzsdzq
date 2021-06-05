@@ -4,7 +4,7 @@ import IndexH5Page from '@layout/search/result-topic/h5';
 import IndexPCPage from '@layout/search/result-topic/pc';
 import { readTopicsList, readUsersList } from '@server';
 import { Toast } from '@discuzq/design';
-
+import ViewAdapter from '@components/view-adapter';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 @inject('site')
@@ -72,14 +72,13 @@ class Index extends React.Component {
   }
 
   render() {
-    const { site } = this.props;
-    const { platform } = site;
-
-    if (platform === 'pc') {
-      return <IndexPCPage dispatch={this.dispatch} />;
-    }
-
-    return <IndexH5Page dispatch={this.dispatch} />;
+    return (
+      <ViewAdapter
+        h5={<IndexH5Page dispatch={this.dispatch} />}
+        pc={<IndexPCPage dispatch={this.dispatch} />}
+        title='潮流话题'
+      />
+    );
   }
 }
 

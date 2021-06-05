@@ -31,7 +31,7 @@
       }
       .icon {
         color: $text-color-secondary;
-        
+
         &.likedColor {
           color: $primary-color;
         }
@@ -39,4 +39,12 @@
           color: $text-color-secondary;
         }
       }
+}
+
+.fabulous2{
+  margin: 0px;
+  padding: 0px;
+  display: inline-block;
+  color: var(--color-text-secondary);
+  border: 0px !important;
 }

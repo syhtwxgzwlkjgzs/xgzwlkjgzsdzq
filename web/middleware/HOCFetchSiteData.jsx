@@ -214,17 +214,29 @@ export default function HOCFetchSiteData(Component) {
             return false;
           }
         }
-        if (site?.webConfig?.setSite?.siteMode === 'pay' && !WEB_SITE_JOIN_WHITE_LIST.includes(router.asPath)) {
-          // 付费加入: 付费状态下，未登录的用户、登录了但是没有付费的用户，访问不是白名单的页面会跳入到付费加入
+        console.log(router.asPath);
+        console.log(router.pathname);
 
-          // if (!user?.isLogin()) {
-          //   Router.redirect({ url: '/user/login' });
-          //   return false;
-          // }
-          if (!user?.paid) {
-            Router.redirect({ url: '/forum/partner-invite' });
-            return false;
-          }
+
+        if (site?.webConfig?.setSite?.siteMode !== 'pay') {
+          return true;
+        }
+
+        // 以下为付费模式相关判断
+        // 付费加入: 付费状态下，未登录的用户、登录了但是没有付费的用户，访问不是白名单的页面会跳入到付费加入
+        if (WEB_SITE_JOIN_WHITE_LIST.some(path => router.asPath.match(path))) {
+          return true;
+        }
+
+        // if (!user?.isLogin()) {
+        //   Router.redirect({ url: '/user/login' });
+        //   return false;
+        // }
+        const code = router.query.inviteCode;
+        const query = code ? `?inviteCode=${code}` : '';
+        if (!user?.paid) {
+          Router.redirect({ url: `/forum/partner-invite${query}` });
+          return false;
         }
       }
       return true;

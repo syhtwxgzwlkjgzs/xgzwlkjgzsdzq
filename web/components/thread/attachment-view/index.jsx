@@ -24,7 +24,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
 
   const onDownLoad = (url) => {
     if (!isPay) {
-      window.open(url, '_self');
+      window.open(url);
     } else {
       onPay();
     }
@@ -32,7 +32,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
 
   const onPreviewer = (url) => {
     if (!isPay) {
-      window.open(url, '_self');
+      window.open(url);
     } else {
       onPay();
     }

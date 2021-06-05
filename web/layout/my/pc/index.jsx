@@ -80,15 +80,19 @@ class PCMyPage extends React.Component {
             Router.push({ url: '/my/edit' });
           }}
         >
-          <div className={styles.userInfoWrapper}>
-            <div className={styles.userInfoKey}>手机号码</div>
-            <div className={styles.userInfoValue}>{this.props.user.mobile}</div>
-          </div>
+          {
+            this.props.site?.isSmsOpen && (
+              <div className={styles.userInfoWrapper}>
+                <div className={styles.userInfoKey}>手机号码</div>
+                <div className={styles.userInfoValue}>{this.props.user.mobile}</div>
+              </div>
+            )
+          }
 
           {IS_WECHAT_ACCESSABLE && (
             <div className={styles.userInfoWrapper}>
               <div className={styles.userInfoKey}>微信</div>
-              <div className={styles.userInfoValue}>
+              <div className={`${styles.userInfoValue} ${styles.wxContent}`}>
                 <Avatar size="small" image={this.props.user.wxHeadImgUrl} name={this.props.user.wxNickname} />
                 <span className={styles.wecahtNickname}>{this.props.user.wxNickname}</span>
               </div>

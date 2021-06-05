@@ -1,17 +1,22 @@
 @import '@common/styles/index.scss';
 
 .threadFirstItem {
-    &::before {
-        content: '';
-        display: none;
-    }
+  &:before {
+    content: '';
+    display: none;
+  }
 }
 
 .threadItem {
-    &::before {
-        content: '';
-        display: block;
-        height: rem(10);
-        background: #F4F6F7;
-    }
+  &:before {
+    content: '';
+    display: block;
+    height: rem(10);
+    background: #f4f6f7;
+  }
+}
+
+.threadBorder {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }

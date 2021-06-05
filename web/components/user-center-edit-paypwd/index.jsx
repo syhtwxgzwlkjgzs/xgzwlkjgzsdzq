@@ -47,7 +47,7 @@ class index extends Component {
 
   // 点击忘记密码
   handleGoToFindPayPwd = () => {
-    Router.push({ url: '/my/edit/find-paypwd' });
+    Router.push({ url: '/my/edit/find-paypwd?ref=payBox' });
   };
 
   // 初次设置密码 password

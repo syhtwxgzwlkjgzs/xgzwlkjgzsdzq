@@ -45,6 +45,8 @@ const Index = ({
           onBlur={onBlur}
           cursorSpacing={200}
           onInput={e => onChange(e.target.value, maxLength)}
+          // 键盘弹起时，不自动上推页面。此属性解决键盘弹起页面上推导致工具栏以及header显示异常
+          adjustPosition={false}
         />
       </View>
     </View>

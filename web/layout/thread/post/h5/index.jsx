@@ -446,6 +446,7 @@ class ThreadCreate extends React.Component {
             (data) => {
               this.props.handleSetState({ currentAttachOperation: false });
               this.props.setPostData({ product: data });
+              this.clearBottomFixed();
             }}
             cancel={() => this.props.handleSetState({ currentAttachOperation: false })}
           />
