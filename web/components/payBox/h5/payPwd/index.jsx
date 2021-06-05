@@ -95,6 +95,8 @@ class Index extends React.Component {
 
   handleForgetPayPwd = () => {
     Router.push({ url: '/my/edit/find-paypwd?type=payBox' });
+    this.initState()
+    this.props.payBox.visible = false;
   }
 
   async submitPwa() {
@@ -173,11 +175,11 @@ class Index extends React.Component {
   };
 
   render() {
-    const { list = [] } = this.state;
+    const { list = [], isShow } = this.state;
     return (
       <div style={{ position: 'relative', zIndex: 1400 }}>
         {this.renderDialogPayment()}
-        <div className={styles.keyboard} onClick={this.keyboardClickHander}>
+        <div style={{display:!isShow && 'none'}} className={styles.keyboard} onClick={this.keyboardClickHander}>
           <div className={styles.line}>
             <div data-key="1" className={styles.column}>
               1
