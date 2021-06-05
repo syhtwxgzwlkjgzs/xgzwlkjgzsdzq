@@ -1,11 +1,11 @@
 @import '@common/styles/index.scss';
 
 .content{
-  background-color: var(--color-white);
+  background-color: $white;
   padding-bottom: rem(63);
 }
 .hot,.users{
-  padding: rem($padding-4n);
+  padding: $padding-4n;
   padding-top: 0;
   &.popularContents{
     padding-bottom: 0;
@@ -38,30 +38,30 @@
   margin: 0 auto;
   width: 100%;
   // height: rem(92);
-  background-color: var(--color-white);
-  border-top: rem(1) solid var(--border-line-color);
+  background-color: $white;
+  border-top: $border-solid-1;
   box-sizing: border-box;
-  padding: rem($padding-2n) rem($padding-4n) rem($padding-4n);
+  padding: $padding-2n $padding-4n $padding-4n;
   text-align: center;
   z-index: 3;
   .bottom_title{
     font-weight: normal;
-    font-size: rem($font-size-label);
-    color: var(--color-text-secondary);
-    margin-bottom: rem($margin-2n);
+    font-size: $font-size-label;
+    color: $text-color-secondary;
+    margin-bottom: $margin-2n;
     view {
-      color: var(--color-primary);
+      color: $primary-color;
       display: inline;
     }
   }
   .bottom_button{
     width: 100%;
     height: rem(42);
-    border-color: var(--color-primary);
-    background-color: var(--color-primary);
-    border-radius: rem($border-radius-small);
-    font-size: rem($font-size-middle);
-    color: var(--color-white);
+    border-color: $primary-color;
+    background-color: $primary-color;
+    border-radius: $border-radius-small;
+    font-size: $font-size-middle;
+    color: $white;
   }
   .bottom_tips{
     display: flex;
@@ -69,14 +69,14 @@
     align-items: center;
     position: absolute;
     top: rem(-46);
-    padding: rem($padding-2n) 0;
+    padding: $padding-2n 0;
     text-align: center;
-    font-size: rem($font-size-label);
-    color: var(--color-white);
+    font-size: $font-size-label;
+    color: $white;
     width: calc(100vw - 32px);
     height: rem(34);
     box-sizing: border-box;
-    border-radius: rem($border-radius-small);
+    border-radius: $border-radius-small;
     background: $text-color-regular;
     .bottom_tips_img{
       width: rem(18);
@@ -85,7 +85,7 @@
       line-height: rem(18);
     }
     .bottom_tips_text{
-      padding-left: rem($padding-2n);
+      padding-left: $padding-2n;
       view {
         display: inline;
       }
@@ -96,8 +96,8 @@
       display: inline-block;
       width: 0;
       height: 0;
-      border: rem(8) solid transparent;
-      border-top: rem(8) solid $text-color-regular;
+      border: $border-radius-8 solid transparent;
+      border-top: $border-radius-8 solid $text-color-regular;
     }
   }
 }

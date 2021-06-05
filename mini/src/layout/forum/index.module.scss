@@ -4,8 +4,7 @@
   width: rem(18);
   height: rem(18);
   border-radius: 50%;
-  border: rem(1) solid var(--color-white);
-  background: var(--color-text-secondary);
+  border: rem(1) solid $white;
   display: inline-block;
 }
 
@@ -14,21 +13,21 @@
 }
 
 .content{
-  padding: 0 rem(16);
+  padding: 0 $padding-4n;
   background-color: $white;
   .list{
-    border-bottom: rem(1) solid var(--border-line-color);
+    border-bottom: $border-solid-1;
     height: rem(52);
-    font-size: rem(14);
+    font-size: $font-size-base;
     font-weight: normal;
     .label{
       float: left;
-      color: #4f5a70;
+      color: $text-color-regular;
       @include lineHeight52;
     }
     .right{
       float: right;
-      color: #0b0b37;
+      color: $text-color-primary;
       @include lineHeight52;
     }
   }
@@ -41,7 +40,7 @@
       @include img;
     }
     .forum_agent_name{
-      padding-left: rem(8);
+      padding-left: $padding-2n;
     }
   }
   .forum_member{
@@ -60,18 +59,7 @@
     .forum_member_img:nth-child(3){
       position: relative;
       left: rem(-8);
-      z-index: 3;
-    }
-    .forum_member_char{
-      width: rem(20);
-      height: rem(20);
-      display: inline-block;
-      text-align: center;
-      line-height: rem(20);
-      border: none;
-      color: var(--color-white);
-      font-size: rem($font-size-label);
-      background: var(--color-text-secondary);
+      z-index: $zindex-backtotop;
     }
     .icon{
       font-size: rem(10) !important;
@@ -85,5 +73,5 @@
 .forum_users_popup {
   height: 60%;
   overflow-y: scroll;
-  background: var(--color-white);
+  background: $white;
 }
