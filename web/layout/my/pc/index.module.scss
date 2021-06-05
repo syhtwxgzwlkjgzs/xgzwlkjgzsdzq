@@ -47,8 +47,14 @@
     @include text-ellipsis();
   }
 
+  .wxContent {
+    display: flex;
+    align-items: center;
+  }
+
   .wecahtNickname {
     margin-left: rem(8);
+    @include text-ellipsis();
   }
 }
 

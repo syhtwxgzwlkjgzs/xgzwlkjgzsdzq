@@ -94,7 +94,7 @@ class PayPassword extends React.Component {
         }, 500)
       } catch (error) {
         Toast.error({
-          content: '支付失败，请重新输入',
+          content: error.Message || '支付失败，请重新输入',
           hasMask: false,
           duration: 1000,
         });
