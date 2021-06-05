@@ -193,7 +193,7 @@ class index extends Component {
                 type={'primary'}
                 className={styles.btn}
               >
-                提交
+                设置支付密码
               </Button>
             )}
           </div>
@@ -219,7 +219,7 @@ class index extends Component {
 
   render() {
     return (
-      <div className={styles.userMobileWrapper}>
+      <div className={`${styles.userMobileWrapper} ${!this.props.user?.canWalletPay && styles.setUserWrapper}`}>
         <Dialog visible={this.props.visible} onClose={this.handleClose}>
           {this.renderContent()}
         </Dialog>
