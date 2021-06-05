@@ -8,7 +8,7 @@ import styles from './index.module.scss';
 
 const DialogBox = (props) => {
   const { platform, message, user, dialogId, showEmoji } = props;
-  const { readDialogMsgList, dialogMsgList, dialogMsgListLength, readDialogUpdate } = message;
+  const { readDialogMsgList, dialogMsgList, dialogMsgListLength, updateDialog } = message;
 
   const [previewerVisibled, setPreviewerVisibled] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
@@ -50,7 +50,7 @@ const DialogBox = (props) => {
     setTimeout(() => {
       scrollEnd();
       // 把消息状态更新为已读
-      readDialogUpdate(dialogId);
+      updateDialog(dialogId);
     }, 100);
     return dialogMsgList.list.map(item => ({
       timestamp: item.createdAt,

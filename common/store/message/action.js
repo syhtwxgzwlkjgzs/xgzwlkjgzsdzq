@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import MessageStore from './store';
-import { readDialogList, readMsgList, createDialog, deleteMsg, deleteDialog, readDialogMsgList, createDialogMsg, readUnreadCount, readDialogIdByUsername, readDialogUpdate } from '@server';
+import { readDialogList, readMsgList, createDialog, deleteMsg, deleteDialog, readDialogMsgList, createDialogMsg, readUnreadCount, readDialogIdByUsername, updateDialog } from '@server';
 
 class MessageAction extends MessageStore {
   // 根据username获取dialogId
@@ -11,8 +11,8 @@ class MessageAction extends MessageStore {
 
   // 把对话消息设置为已读
   @action.bound
-  async readDialogUpdate(dialogId) {
-    readDialogUpdate({ params: { dialogId } });
+  async updateDialog(dialogId) {
+    updateDialog({ data: { dialogId } });
   }
 
   // 获取未读消息数量
@@ -186,7 +186,8 @@ class MessageAction extends MessageStore {
           list.splice(index, 1);
           this[key] = {
             ...data,
-            list
+            list,
+            totalCount: data.totalCount - 1,
           }
           throw 'break';
         }

@@ -80,13 +80,12 @@ const Index = ({
           postList.map((item, index) => (
               item.name === '分享'?(
                 <ShareButton  tipData={tipData} key={index} index={thread} item={item}>
-                  
                 </ShareButton>
               ):
               (<View key={index} className={styles.fabulous} onClick={item.event}>
                  <View className={styles.fabulousIcon}>
                     <Icon
-                    className={`${styles.icon} ${item.type} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`} 
+                    className={`${styles.icon} ${item.type} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`}
                     name={item.icon}
                     size={16}>
                   </Icon>
