@@ -325,6 +325,11 @@ class IndexAction extends IndexStore {
       data.likeReward.shareCount = data.likeReward.shareCount + 1;
     }
 
+    // 更新分享
+    if (updateType === 'viewCount') {
+      data.viewCount = data.viewCount + 1;
+    }
+
     if (this.threads?.pageData) {
       this.threads.pageData[index] = data;
     }
