@@ -273,7 +273,7 @@ class ThreadH5Page extends React.Component {
     // 编辑
     if (type === 'edit') {
       if (!this.props.thread?.threadData?.id) return;
-      Taro.navigateTo({
+      Taro.redirectTo({
         url: `/subPages/thread/post/index?id=${this.props.thread?.threadData?.id}}`,
       });
     }
@@ -420,7 +420,7 @@ class ThreadH5Page extends React.Component {
       return await this.createReply(val, imageList);
     }
   }
-  
+
   // 发布评论
   async onPublishClick(val, imageList) {
     if (!val) {
