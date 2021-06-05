@@ -6,7 +6,11 @@
   background: var(--color-white);
   // height: 240px;
   font-size: rem($font-size-large);
-  padding: rem($padding-4n);
+  padding: {
+    left: rem($padding-4n);
+    right: rem($padding-4n);
+    top: rem($padding-4n);
+  }
   // overflow-y: auto;
   overflow-y: auto;
   min-height: 337px;

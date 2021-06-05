@@ -165,7 +165,7 @@ export default class PayBox extends React.Component {
               return (
                 <View key={key} className={styles.listItem}>
                   <View className={styles.left}>
-                    <Icon className={styles.icon} name={item.icon} color={item.color} size={16} />
+                    <Icon className={styles.icon} name={item.icon} color={item.color} size={20} />
                     <Text className={styles.text}>{item.name}</Text>
                   </View>
                   <View className={styles.right}>

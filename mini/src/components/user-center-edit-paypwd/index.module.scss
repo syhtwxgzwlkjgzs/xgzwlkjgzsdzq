@@ -46,6 +46,9 @@
     border-radius: $border-radius-small;
     padding: 0;
     line-height: 42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 
