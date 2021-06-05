@@ -610,7 +610,7 @@ class Index extends Component {
 
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
           <View className={styles['content']} style={contentStyle}>
-            {/* <View id="thread-post-content"> */}
+            <View id="thread-post-content">
             <Title
               value={postData.title}
               show={isShowTitle}
@@ -657,7 +657,7 @@ class Index extends Component {
               )}
 
             </View>
-            {/* </View> */}
+            </View>
           </View>
 
           {/* 插入内容tag展示区 */}
