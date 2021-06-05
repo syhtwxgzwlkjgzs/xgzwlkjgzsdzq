@@ -282,7 +282,7 @@ class ThreadPostAction extends ThreadPostStore {
 
   @action
   formatThreadDetailToPostData(detail) {
-    const { title, categoryId, content, freeWords = 1 } = detail || {};
+    const { title, categoryId, content, freewords = 1 } = detail || {};
     const price = Number(detail.price);
     const attachmentPrice = Number(detail.attachmentPrice);
     let position = {};
@@ -328,7 +328,6 @@ class ThreadPostAction extends ThreadPostStore {
         value: contentindexes[index].body.money || '',
       };
     });
-
     this.setPostData({
       // 标题去掉富文本
       title: title.replace(/<[^<>]+>/g, ''),
@@ -344,7 +343,7 @@ class ThreadPostAction extends ThreadPostStore {
       video,
       images,
       files,
-      freeWords,
+      freeWords: freewords,
     });
   }
 
