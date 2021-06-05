@@ -205,7 +205,7 @@ class UserAction extends SiteStore {
 
     throw {
       Code: deleteDenyRes.code,
-      Msg: deleteDenyRes.message,
+      Msg: deleteDenyRes.msg,
     };
   }
 
@@ -227,7 +227,7 @@ class UserAction extends SiteStore {
 
     throw {
       Code: denyUserRes.code,
-      Msg: denyUserRes.message,
+      Msg: denyUserRes.msg,
     };
   }
 

@@ -80,7 +80,7 @@ const BaseLayout = forwardRef((props, ref) => {
             </List>
           )
         }
-
+        {footer}
         {showTabBar && <BottomNavBar onClick={onClickTabBar} placeholder curr={curr} />}
     </div>
   );
