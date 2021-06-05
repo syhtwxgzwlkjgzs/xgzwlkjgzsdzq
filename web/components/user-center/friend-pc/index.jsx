@@ -14,7 +14,7 @@ import { followerAdapter } from './adapter';
 @observer
 class UserCenterFriendPc extends React.Component {
   static defaultProps = {
-    // 用户id，如果不传，认为是自己的粉丝
+    // 用户id，如果不传，认为是自己的关注
     userId: null,
     // 加载数量限制
     limit: 5,
@@ -79,7 +79,7 @@ class UserCenterFriendPc extends React.Component {
     });
   }
 
-  // 点击好友更多
+  // 点击关注更多
   moreFriend = () => {
     this.setState({ showFriendPopup: true });
   };
@@ -92,7 +92,7 @@ class UserCenterFriendPc extends React.Component {
         <SidebarPanel
           type="normal"
           noData={Number(followCount) === 0}
-          title="好友"
+          title="关注"
           leftNum={followCount}
           onShowMore={this.moreFriend}
           className={this.props.className}
@@ -120,14 +120,14 @@ class UserCenterFriendPc extends React.Component {
               );
             })}
             {isNoData && <NoData />}
-            <div className={styles.loadMoreContainer}>{this.state.loading && <Spin type={'spinner'}>加载中 ...</Spin>}</div>
+            {this.state.loading && <div className={styles.loadMoreContainer}><Spin type={'spinner'}>加载中 ...</Spin></div>}
           </div>
           )}
         </SidebarPanel>
 
         <UserCenterFollowPopup
           id={this.props.userId}
-          title='好友'
+          title='关注'
           visible={this.state.showFriendPopup}
           onContainerClick={({ id }) => {
             this.props.router.push({

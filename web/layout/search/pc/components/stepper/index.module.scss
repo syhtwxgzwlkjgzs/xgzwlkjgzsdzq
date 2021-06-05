@@ -19,7 +19,7 @@
       background: var(--border-line-color);
       position: absolute;
       top: rem($font-line-height-small);
-      left: rem($padding-2n);
+      left: rem($padding-2n + 1px);
     }
     &:last-child {
       padding-bottom: 0;

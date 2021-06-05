@@ -6,6 +6,7 @@ import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import styles from './index.module.scss';
 import { withRouter } from 'next/router';
+import classnames from 'classnames';
 
 @inject('user')
 @observer
@@ -19,27 +20,27 @@ class UserCenterFansPc extends React.Component {
       showFansPopup: false,
       dataSource: {},
       sourcePage: 1,
-      sourceTotalPage: 1
+      sourceTotalPage: 1,
     };
   }
 
   setDataSource = (targetData) => {
     this.setState({
-      dataSource: targetData
-    })
-  }
+      dataSource: targetData,
+    });
+  };
 
   updateSourcePage = (newPage) => {
     this.setState({
-      sourcePage: newPage
-    })
-  }
+      sourcePage: newPage,
+    });
+  };
 
   updateSourceTotalPage = (newTotalPage) => {
     this.setState({
-      sourceTotalPage: newTotalPage
-    })
-  }
+      sourceTotalPage: newTotalPage,
+    });
+  };
 
   // 点击粉丝更多
   moreFans = () => {
@@ -50,12 +51,12 @@ class UserCenterFansPc extends React.Component {
     let fansCount = 0;
     if (this.props.userId) {
       if (this.props.userId === this.props.user?.id) {
-        fansCount = this.props.user.fansCount
+        fansCount = this.props.user.fansCount;
       } else {
-        fansCount = this.props.user.targetUserFansCount
+        fansCount = this.props.user.targetUserFansCount;
       }
     } else {
-      fansCount = this.props.user.fansCount
+      fansCount = this.props.user.fansCount;
     }
 
     return (
@@ -68,34 +69,38 @@ class UserCenterFansPc extends React.Component {
           onShowMore={this.moreFans}
           className={this.props.className}
         >
-          {Number(fansCount) !== 0 && (
-            <UserCenterFans
-              style={{
-                overflow: 'hidden',
-              }}
-              dataSource={this.state.dataSource}
-              setDataSource={this.setDataSource}
-              sourcePage={this.state.sourcePage}
-              updateSourcePage={this.updateSourcePage}
-              sourceTotalPage={this.state.sourceTotalPage}
-              updateSourceTotalPage={this.updateSourceTotalPage}
-              userId={this.props.userId}
-              onContainerClick={({ id }) => {
-                this.props.router.push({
-                  pathname: '/user/[id]',
-                  query: {
-                    id,
-                  },
-                });
-              }}
-              itemStyle={{
-                paddingLeft: 0,
-                paddingRight: 0,
-              }}
-              className={styles.friendsWrapper}
-              limit={5}
-            />
-          )}
+          <div>
+            {Number(fansCount) !== 0 && (
+              <UserCenterFans
+                style={{
+                  overflow: 'hidden',
+                }}
+                dataSource={this.state.dataSource}
+                setDataSource={this.setDataSource}
+                sourcePage={this.state.sourcePage}
+                updateSourcePage={this.updateSourcePage}
+                sourceTotalPage={this.state.sourceTotalPage}
+                updateSourceTotalPage={this.updateSourceTotalPage}
+                userId={this.props.userId}
+                onContainerClick={({ id }) => {
+                  this.props.router.push({
+                    pathname: '/user/[id]',
+                    query: {
+                      id,
+                    },
+                  });
+                }}
+                itemStyle={{
+                  paddingLeft: 0,
+                  paddingRight: 0,
+                  paddingTop: 8,
+                  paddingBottom: 8,
+                }}
+                className={classnames(styles.friendsWrapper, styles.fansWrapper)}
+                limit={5}
+              />
+            )}
+          </div>
         </SidebarPanel>
 
         <UserCenterFansPopup

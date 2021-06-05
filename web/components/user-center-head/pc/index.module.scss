@@ -86,6 +86,9 @@
         font-size: rem($font-size-primary);
         line-height: rem($font-line-height-small);
         color: $text-color-primary;
+        left: rem(210);
+        right: 0;
+        @include text-ellipsis();
       }
     }
     .upload {

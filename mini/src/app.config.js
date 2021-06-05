@@ -14,6 +14,7 @@ const config = {
         '404/index',
         '500/index',
         'close/index',
+        'create-card/index',
         'join/index',
         'thread/index',
         'thread/comment/index',
@@ -46,15 +47,22 @@ const config = {
         'wallet/withdrawal/index',
         'message/index',
         'my/index',
+        'my/buy/index',
+        'my/collect/index',
+        'my/like/index',
         'my/edit/index',
         'my/edit/mobile/index',
         'my/edit/pwd/index',
         'my/edit/paypwd/index',
         'my/edit/reset/paypwd/index',
         'my/edit/find/paypwd/index',
+        'my/fans/index',
+        'my/follows/index',
+        'my/block/index',
         'forum/index',
         'forum/partner-invite/index',
-        'invite/index'
+        'invite/index',
+        'user/index'
       ]
     }
   ],

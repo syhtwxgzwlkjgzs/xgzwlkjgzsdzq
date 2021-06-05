@@ -70,6 +70,7 @@ class SearchResultUserH5Page extends React.Component {
               onClick={this.onUserClick}
               needPadding={true}
               needBottomLine={true}
+              itemStyle={{paddingTop: '16px', paddingBottom: '16px'}}
             />
           ))
         }

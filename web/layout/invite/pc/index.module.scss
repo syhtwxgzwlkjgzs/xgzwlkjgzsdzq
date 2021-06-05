@@ -5,6 +5,7 @@
   box-sizing: border-box;
   padding: $padding-6n;
   margin-bottom: $margin-4n;
+  border-radius: $border-radius-small;
 }
 // 左侧列表内容 start
 .invite_list {
@@ -21,15 +22,24 @@
     }
   }
   @mixin list_nickname {
-    width: 424px;
+    width: 61%;
     padding-left: $padding-4n;
     box-sizing: border-box;
+    span {
+      @include text-ellipsis;
+    }
   }
   @mixin list_money {
-    width: 131px;
+    width: 19%;
+    span {
+      @include text-ellipsis;
+    }
   }
   @mixin list_timer {
     flex: 1;
+    span {
+      @include text-ellipsis;
+    }
   }
   .invite_list_label {
     width: 100%;
@@ -85,6 +95,7 @@
       width: 38px;
       height: 38px;
       line-height: 38px;
+      flex-shrink: 0;
     }
     .user_value_name {
       padding-left: $padding-4n;
@@ -92,6 +103,7 @@
       font-size: $font-size-base;
       line-height: 18px;
       color: $text-color-primary;
+      @include text-ellipsis;
     }
     .list_main_money {
       @include list_money;
@@ -107,6 +119,7 @@
       line-height: $font-line-height-small;
       text-align: left;
       color: $text-color-secondary;
+      @include text-ellipsis;
     }
   }
 }
@@ -115,7 +128,10 @@
 .user_card_wrap {
   width: 100%;
   border-radius: $border-radius-small;
-  background: $primary-color;
+  background-color: $primary-color;
+  background-image: url('/dzq-img/invite-card-bg.png');
+  background-size: auto 100%;
+  background-repeat: no-repeat;
   box-shadow: $border-shadow-color;
   box-sizing: border-box;
   padding: 84px $padding-6n $padding-6n;
@@ -157,6 +173,7 @@
       line-height: $font-line-height-base;
       color: $text-color-primary;
       opacity: 1;
+      @include text-ellipsis;
     }
     .user_info_tag {
       font-size: $font-size-small;
@@ -188,6 +205,7 @@
         font-size: $font-size-middle;
         line-height: $font-line-height-middle;
         color: $text-color-primary;
+        @include text-ellipsis;
       }
     }
     .invite_num{
@@ -196,7 +214,7 @@
     .invite_money{
       @include userInfoInvite;
       width: calc(50% - 1px);
-      border-left: rem(1) solid var(--color-white);
+      border-left: 1px solid var(--color-white);
     }
   }
   .user_card_button {
@@ -221,4 +239,13 @@
 }
 .invite_list_nodata {
   padding-top: $padding-2n;
+}
+.loadMoreContainer {
+  flex: 1;
+  padding: $padding-4n;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: $text-color-placeholder;
 }

@@ -99,7 +99,6 @@
     margin-top: rem($margin-2n);
     height: rem(60);
     box-sizing: border-box;
-    width: calc(100% - 32px);
     padding-left: rem($padding-4n);
     padding-right: rem($padding-4n);
     padding-bottom: constant(safe-area-inset-bottom);  ///兼容 IOS<11.2/

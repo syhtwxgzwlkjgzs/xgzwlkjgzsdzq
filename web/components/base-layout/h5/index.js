@@ -33,7 +33,9 @@ const BaseLayout = forwardRef((props, ref) => {
     curr,
     onScroll = noop,
     onClickTabBar = noop,
-    immediateCheck = false
+    immediateCheck = false,
+    platform = 'h5',
+    footer,
   } = props;
 
   const [height, setHeight] = useState(600);
@@ -60,6 +62,7 @@ const BaseLayout = forwardRef((props, ref) => {
                     className={styles.listHeight}
                     ref={listRef}
                     onScroll={onScroll}
+                    platform={platform}
                   >
                       {typeof(children) === 'function' ? children({ ...props }) : children}
                   </List>
@@ -72,12 +75,13 @@ const BaseLayout = forwardRef((props, ref) => {
               className={styles.list}
               ref={listRef}
               onScroll={onScroll}
+              platform={platform}
             >
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>
           )
         }
-
+        {footer}
         {showTabBar && <BottomNavBar onClick={onClickTabBar} placeholder curr={curr} />}
     </div>
   );
