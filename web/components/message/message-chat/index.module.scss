@@ -1,6 +1,8 @@
 @import "@common/styles/index.scss";
 .wrapper {
-  background: $white;
+  height: 100%;
+  overflow: hidden;
+  background: $body-bg-color;
 
   .pc-header {
     background: $white;
