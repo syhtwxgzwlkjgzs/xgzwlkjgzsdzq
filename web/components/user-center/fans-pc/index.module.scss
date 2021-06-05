@@ -1,9 +1,10 @@
+@import '@common/styles/index.scss';
 .friendsWrapper {
   overflow: hidden !important;
   margin: 0 rem(-16);
 }
 
 .fansWrapper {
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: rem(8);
+  padding-bottom: rem(8);
 }
