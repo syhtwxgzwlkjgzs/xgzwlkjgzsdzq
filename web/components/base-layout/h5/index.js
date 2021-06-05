@@ -33,7 +33,8 @@ const BaseLayout = forwardRef((props, ref) => {
     curr,
     onScroll = noop,
     onClickTabBar = noop,
-    immediateCheck = false
+    immediateCheck = false,
+    footer = null,
   } = props;
 
   const [height, setHeight] = useState(600);
@@ -77,7 +78,7 @@ const BaseLayout = forwardRef((props, ref) => {
             </List>
           )
         }
-
+        {footer}
         {showTabBar && <BottomNavBar onClick={onClickTabBar} placeholder curr={curr} />}
     </div>
   );
