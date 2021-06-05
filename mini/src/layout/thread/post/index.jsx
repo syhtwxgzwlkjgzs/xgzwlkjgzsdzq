@@ -175,13 +175,6 @@ class Index extends Component {
     // });
   }
 
-  // 设置当前选中分类、分类id
-  onClassifyChange = ({ parent, child }) => {
-    const { setPostData, setCategorySelected } = this.props.threadPost;
-    setPostData({ categoryId: child.pid || parent.pid });
-    setCategorySelected({ parent, child });
-  }
-
   resetOperationType() {
     this.setState({
       operationType: ''
@@ -744,7 +737,6 @@ class Index extends Component {
           show={showClassifyPopup}
           category={categories}
           onHide={() => this.setState({ showClassifyPopup: false })}
-          onChange={this.onClassifyChange}
         />
         {/* 主题付费选项弹框 */}
         <OptionPopup
