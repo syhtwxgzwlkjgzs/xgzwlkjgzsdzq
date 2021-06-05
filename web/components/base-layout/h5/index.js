@@ -35,6 +35,7 @@ const BaseLayout = forwardRef((props, ref) => {
     onClickTabBar = noop,
     immediateCheck = false,
     platform = 'h5',
+    footer,
   } = props;
 
   const [height, setHeight] = useState(600);
