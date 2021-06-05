@@ -43,7 +43,7 @@
   box-sizing: border-box;
   padding: $padding-2n $padding-4n $padding-4n;
   text-align: center;
-  z-index: 3;
+  z-index: $zindex-backtotop;
   .bottom_title{
     font-weight: normal;
     font-size: $font-size-label;
