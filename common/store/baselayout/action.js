@@ -40,44 +40,33 @@ class IndexAction extends IndexStore {
    * 停止在播放的视频
    */
   @action
-  pauseWebPlayingVideo() {
-    if(this.playingVideoDom) {
-      this.playingVideoDom.querySelector('video')?.pause();
-      this.playingVideoDom = "";
+  pauseWebPlayingVideo(currentDom) {
+    if(!this.playingVideoDom) return;
+    if(currentDom) {
+      if(currentDom.id === this.playingVideoDom.id) {
+        return;
+      }
     }
-    if(this.playingVideoPos >= 0) {
-      this.playingVideoPos = -1;
-    }
+    this.playingVideoDom?.querySelector('video')?.pause();
+    this.playingVideoDom = "";
+    this.playingVideoPos = -1;
   }
 
   /**
    * 停止在播放的视频
    */
   @action
-  pauseWebPlayingAudio() {
-    if(this.playingAudioDom) {
-      this.playingAudioDom.pause();
-      this.playingAudioDom = null;
+  pauseWebPlayingAudio(playingUrl) {
+    if(!this.playingAudioDom) return;
+    if(playingUrl) {
+      if(this.playingAudioWrapperId === playingUrl) {
+        return;
+      }
     }
-    if(this.playingAudioPos >= 0) {
-      this.playingAudioPos = -1;
-    }
-  }
-
-  /**
-   * 停止在播放的视频
-   */
-  @action
-  pauseWebAllPlayers() {
-    if(this.playingVideoDom) {
-      // 暂停之前正在播放的视频
-      this.pauseWebPlayingVideo();
-    }
-
-    if(this.playingAudioDom) {
-      // 暂停之前正在播放的音频
-      this.pauseWebPlayingAudio();
-    }
+    this.playingAudioDom?.pause();
+    this.playingAudioDom = null;
+    this.playingAudioPos = -1;
+    this.playingAudioWrapperId = "";
   }
 
 }

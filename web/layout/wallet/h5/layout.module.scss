@@ -76,7 +76,7 @@
 
       .dzq-tabs__label {
         padding-bottom: rem(10) !important;
-        font-family: "PingFang SC";
+        font-family: 'PingFang SC';
         font-weight: 600;
         font-size: rem($font-size-primary);
       }
@@ -86,7 +86,7 @@
         box-sizing: border-box;
         flex: 1;
 
-        &::after {
+        &:after {
           width: rem(82);
           margin: auto;
         }
@@ -117,7 +117,7 @@
   width: 100%;
   height: rem(69);
   box-sizing: border-box;
-  padding: $padding-2n $padding-4n 0px;
+  padding: $padding-2n $padding-4n 0;
   background: var(--color-white);
 
   .button {

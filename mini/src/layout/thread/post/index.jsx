@@ -269,10 +269,17 @@ class Index extends Component {
 
   // 执行上传视频
   handleVideoUpload = () => {
-    const { setPostData } = this.props.threadPost;
+    const { postData } = this.props.threadPost;
+    if (postData.video?.id) {
+      this.postToast('只能上传一个视频');
+      return;
+    }
     Taro.chooseVideo({
       success: (file) => {
         this.yundianboUpload('video', file);
+      },
+      fail: (res) => {
+        this.postToast(res.errMsg);
       }
     });
   }
