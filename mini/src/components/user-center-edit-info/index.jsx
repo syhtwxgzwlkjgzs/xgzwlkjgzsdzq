@@ -95,7 +95,7 @@ class index extends Component {
         <View><UserCenterEditHeader /></View>
         {/* middle */}
         <View className={styles.userCenterEditMiddle}>
-          <h3>个人信息</h3>
+          <View className={styles.title}>个人信息</View>
           <View onClick={this.handleClickNickName} className={styles.userCenterEditItem}>
             {this.renderInputNickName()}
           </View>
