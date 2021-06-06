@@ -187,7 +187,9 @@ class CommentPCPage extends React.Component {
       return;
     }
 
-    if (!val) {
+    const valuestr = val.replace(/\s/g, '');
+    // 如果内部为空，且只包含空格或空行
+    if (!valuestr) {
       Toast.info({ content: '请输入内容' });
       return;
     }
