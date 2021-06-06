@@ -1,4 +1,4 @@
-import React, { useState }from 'react';
+import React, { useState, useEffect }from 'react';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import Icon from '@discuzq/design/dist/components/icon/index';
@@ -34,12 +34,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
         useState(Array.from({length: attachments.length}, () => false));
   const [errorMsg, setErrorMsg] = useState("");
 
-  const getFileType = (filepath) => {
-    const absoluteUrl = filepath.split('?')[0];
-    return absoluteUrl.substr(absoluteUrl.lastIndexOf('.') + 1);
-  }
-
-  const onDownLoad = (url, index) => {
+  const onDownLoad = (item, index) => {
     // 下载中
     if(downloading?.length && downloading[index]) return;
 
@@ -53,27 +48,29 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
     if (!isPay) {
       downloading[index] = true;
       setDownloading([...downloading]);
+
+      if(!item?.url) return;
+      const url = item.url;
+      const extension = item?.extension;
+
       downloader?.download(url, true).then((path) => {
         wx.openDocument({
           filePath: path,
-          fileType: getFileType(url), // 微信支持下载文件类型：doc, docx, xls, xlsx, ppt, pptx, pdf
+          fileType: extension, // 微信支持下载文件类型：doc, docx, xls, xlsx, ppt, pptx, pdf
           success(res) {
           },
           fail(error) {
             setErrorMsg("小程序暂不支持下载此类文件");
-            setTimeout(() => {
-              setErrorMsg("");
-            }, 3000);
             console.error(error.errMsg);
           },
         });
       }).catch((error) => {
         setErrorMsg(["下载失败"]);
+        console.error(error.errMsg)
+      }).finally(() => {
         setTimeout(() => {
           setErrorMsg("");
         }, 3000);
-        console.error(error.errMsg)
-      }).finally(() => {
         downloading[index] = false;
         setDownloading([...downloading]);
       });
@@ -105,6 +102,14 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
     return 'DOCOutlined';
   };
 
+  useEffect(() => {
+    if(errorMsg !== '') {
+      setTimeout(() => {
+        setErrorMsg("");
+      }, 3000);
+    }
+  }, [errorMsg])
+
   const Normal = ({ item, index, type }) => {
     const iconName = handleIcon(type);
     return (
@@ -122,7 +127,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
             {/* <Text className={styles.Text} onClick={() => onPreviewer(item.url)}>浏览</Text> */}
             { downloading[index] ?
               <Spin type="spinner" /> :
-              <Text onClick={() => onDownLoad(item.url, index)}>下载</Text>
+              <Text onClick={() => onDownLoad(item, index)}>下载</Text>
             }
           </View>
         </View>
@@ -152,7 +157,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
         {
           attachments.map((item, index) => {
             // 获取文件类型
-            const extension = item.fileName.split('.')[item.fileName.split('.').length - 1];
+            const extension = item?.extension || '';
             const type = extensionList.indexOf(extension.toUpperCase()) > 0
               ? extension.toUpperCase()
               : 'UNKNOWN';
