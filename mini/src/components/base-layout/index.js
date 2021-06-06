@@ -26,7 +26,7 @@ import styles from './index.module.scss';
 const baseLayoutWhiteList = ['home'];
 
 const BaseLayout = (props) => {
-  const { index, showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr, onScroll = () => {} } = props;
+  const { index, showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr, onScroll = () => {}, baselayout } = props;
   const [height, setHeight] = useState(600);
 
   // 避免小程序通过手势返回上一页时，无法重置参数
@@ -67,16 +67,16 @@ const BaseLayout = (props) => {
     Taro.getSystemInfo({
       success(res) {
 
-        if (playingVideoDom) {
-          Taro.createSelectorQuery()
-          .select(`#${playingVideoDom}`)
-          .boundingClientRect((rect) => { 
-            if(rect.top > res.windowHeight || rect.bottom < 0) {
-              Taro.createVideoContext(playingVideoDom)?.pause();
-              baselayout.playingVideoDom = "";
-            }
-          }).exec();
-        }
+        // if (playingVideoDom) {
+        //   Taro.createSelectorQuery()
+        //   .select(`#${playingVideoDom}`)
+        //   .boundingClientRect((rect) => { 
+        //     if(rect.top > res.windowHeight || rect.bottom < 0) {
+        //       Taro.createVideoContext(playingVideoDom)?.pause();
+        //       baselayout.playingVideoDom = "";
+        //     }
+        //   }).exec();
+        // }
 
         if(playingAudioDom) {
           Taro.createSelectorQuery()
@@ -101,13 +101,13 @@ const BaseLayout = (props) => {
           showPullDown ? (
             <View className={styles.list} ref={pullDownWrapper}>
               {/* <PullDownRefresh onRefresh={onPullDown} isFinished={isFinished} height={height}> */}
-                  <List {...props} className={styles.listHeight} ref={listRef} hasOnScrollToLower={index.hasOnScrollToLower} onScroll={handleScroll}>
+                  <List {...props} className={styles.listHeight} ref={listRef} hasOnScrollToLower={index.hasOnScrollToLower} onScroll={handleScroll} scrollY={!baselayout.isOnVideoFullScreen}>
                       {typeof(children) === 'function' ? children({ ...props }) : children}
                   </List>
               {/* </PullDownRefresh> */}
             </View>
           ) : (
-            <List {...props} className={styles.list} ref={listRef} hasOnScrollToLower={index.hasOnScrollToLower} onScroll={handleScroll}>
+            <List {...props} className={styles.list} ref={listRef} hasOnScrollToLower={index.hasOnScrollToLower} onScroll={handleScroll} scrollY={!baselayout.isOnVideoFullScreen}>
                 {typeof(children) === 'function' ? children({ ...props }) : children}
             </List>
           )

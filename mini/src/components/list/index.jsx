@@ -25,7 +25,8 @@ const List = forwardRef(({
   showRefresh = true,
   preload = 30,
   requestError = false,
-  errorText = '加载失败'
+  errorText = '加载失败',
+  scrollY = true,
 }, ref) => {
   const listWrapper = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -118,7 +119,7 @@ const List = forwardRef(({
 
   return (
     <ScrollView
-      scrollY
+      scrollY={scrollY}
       className={`${styles.container} ${className}`}
       style={{ height }}
       onScrollToLower={hasOnScrollToLower ? onTouchMove : null}

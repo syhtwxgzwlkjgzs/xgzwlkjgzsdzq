@@ -66,6 +66,26 @@ const Index = ({
     }
   }
 
+  const onFullscreenChange = (e) => {
+    e && e.stopPropagation();
+    console.log(`e`, e)
+    if(!baselayout.isOnVideoFullScreen) {
+      baselayout.isOnVideoFullScreen = true;
+      console.log(`isOnVideoFullScreen should be true`, baselayout.isOnVideoFullScreen)
+      Taro.getSystemInfo({
+        success(res) {
+          console.log(`res`, res)
+        }
+      });
+    } else {
+      setTimeout(() => {
+        baselayout.isOnVideoFullScreen = false;
+        console.log(`isOnVideoFullScreen should be false`, baselayout.isOnVideoFullScreen)
+      }, 3000);
+    }
+    
+  }
+
   useEffect(() => {
     getElementRect(videoId.current).then(res => {
       setWidth(res?.width || 378);
@@ -80,6 +100,7 @@ const Index = ({
             className={styles.videoBox}
             onReady={onReady}
             onPlay={onPlay}
+            onFullscreenChange={onFullscreenChange}
             src={url}
             width={width}
             height={9 * (width) / 16 || '224'}
