@@ -197,7 +197,7 @@ class PartnerInviteH5Page extends React.Component {
             ) : (
               <></>
             )}
-            {siteMode === 'pay' ? (
+            {(siteMode === 'pay' && siteExpire) ? (
               <View className={layout.bottom_title}>
                 有效期：<View>{siteExpire}天</View>
               </View>
