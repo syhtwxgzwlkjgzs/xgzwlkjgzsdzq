@@ -13,6 +13,7 @@ import { genMiniScheme } from '@server';
 import Protocol from '../components/protocol';
 import browser from '../../../../../common/utils/browser';
 import PcBodyWrap from '../components/pc-body-wrap';
+import goToLoginPage from '../../../../../common/utils/go-to-login-page';
 
 @inject('site')
 @inject('user')
@@ -80,6 +81,8 @@ class UsernameH5Login extends React.Component {
 
   handleLoginButtonClick = async () => {
     try {
+      goToLoginPage({ url: '/user/register' });
+      this.props.router.push({  url:'/register',query: { test: 111 } });
       const resp = await this.props.userLogin.login();
       const uid = get(resp, 'uid', '');
       this.props.user.updateUserInfo(uid);
