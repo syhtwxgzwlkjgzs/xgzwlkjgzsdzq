@@ -195,9 +195,9 @@ class CommentList extends React.Component {
                         <span>回复</span>
                       </div>
                       {this.props.isShowAdopt ? (
-                        <div className={styles.commentAdopt}>
+                        <div className={styles.commentAdopt} onClick={() => this.props.onAboptClick()}>
                           <Icon className={styles.icon} name="ExactnessOutlined"></Icon>
-                          <span onClick={() => this.props.onAboptClick()}>采纳</span>
+                          <span>采纳</span>
                         </div>
                       ) : (
                         ''
