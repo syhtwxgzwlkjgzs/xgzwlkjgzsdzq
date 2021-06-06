@@ -63,6 +63,7 @@ class UserCenterFansPc extends React.Component {
       <>
         <SidebarPanel
           type="normal"
+          platform={'h5'}
           titleWrapper={styles.titleWrapper}
           noData={Number(fansCount) === 0}
           title="粉丝"
