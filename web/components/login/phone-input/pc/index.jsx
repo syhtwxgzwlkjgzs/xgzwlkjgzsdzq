@@ -16,7 +16,7 @@ class PhoneInputPC extends React.Component {
   };
 
   render() {
-    const { phoneNum, captcha, codeTimeout, sendCodeCallback = () => {} } = this.props;
+    const { phoneNum, captcha, codeTimeout, sendCodeCallback = () => {}, enterCallback = () => {} } = this.props;
     return (
       <div className={layout.pc_phone_input}>
         {/* 手机号输入 start */}
@@ -42,6 +42,7 @@ class PhoneInputPC extends React.Component {
             value={captcha}
             placeholder="请输入手机验证码"
             onChange={this.setCaptcha}
+            onEnter={this.enterCallback}
             maxLength={6}
           />
           {codeTimeout ? (

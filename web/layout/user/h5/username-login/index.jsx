@@ -132,6 +132,7 @@ class UsernameH5Login extends React.Component {
             value={this.props.userLogin.password}
             placeholder="输入您的登录密码"
             onChange={this.handlePasswordChange}
+            onEnter={this.handleLoginButtonClick}
           />
           {/* 输入框 end */}
           {/* 登录按钮 start */}
