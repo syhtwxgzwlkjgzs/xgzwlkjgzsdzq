@@ -143,7 +143,7 @@ class CommentList extends React.Component {
                 onClick={() => this.toCommentDetail()}
               ></div>
               {/* 图片展示 */}
-              {this.props.data?.images && (
+              {this.props.data?.images.length > 0 && (
                 <div className={styles.imageDisplay}>
                   <ImageDisplay platform="h5" imgData={this.props.data?.images} />
                 </div>

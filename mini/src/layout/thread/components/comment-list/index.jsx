@@ -161,10 +161,12 @@ class CommentList extends React.Component {
                 onClick={this.handleClick.bind(this)}
               />
               {/* 图片展示 */}
-              {this.props.data?.images && (
+              {this.props.data?.images ? (
                 <View className={styles.imageDisplay}>
                   <ImageDisplay platform="h5" imgData={this.props.data?.images} />
                 </View>
+              ) : (
+                ''
               )}
             </View>
             {/* 底部操作栏 */}

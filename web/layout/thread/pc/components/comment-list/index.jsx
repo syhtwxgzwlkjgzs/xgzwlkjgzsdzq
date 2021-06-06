@@ -159,10 +159,12 @@ class CommentList extends React.Component {
                 dangerouslySetInnerHTML={{ __html: this.filterContent() }}
               ></div>
               {/* 图片展示 */}
-              {this.props.data?.images && (
+              {this.props.data?.images ? (
                 <div className={styles.imageDisplay}>
                   <ImageDisplay platform="pc" imgData={this.props.data?.images} />
                 </div>
+              ) : (
+                ''
               )}
             </div>
 

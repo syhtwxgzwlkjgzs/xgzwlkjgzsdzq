@@ -56,9 +56,9 @@
           &.isShowOne {
             @include lamp-clamp(2);
 
-            p {
-              @include lamp-clamp(2);
-            }
+            // p {
+            //   @include lamp-clamp(2);
+            // }
           }
         }
         .imageDisplay {
