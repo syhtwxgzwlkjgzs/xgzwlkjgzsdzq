@@ -124,7 +124,7 @@ class IndexH5Page extends React.Component {
     let newCurrentIndex = id
     const newId = this.resetCategoryids(id)
     if (newId) {
-      const { categories = [] } = this.props.index
+      const { categories = [] } = this.props.index || {}
       categories.forEach(item => {
         if (item.children?.length) {
           const tmp = item.children.filter(children => children.pid === newId)
