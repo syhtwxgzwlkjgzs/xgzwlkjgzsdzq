@@ -9,7 +9,6 @@ export default class MiniBindStore {
   async mobilebrowserBind(data) {
     try {
       const res = await miniBind({
-        timeout: 3000,
         data,
       });
       if (res.code === 0) {

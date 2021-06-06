@@ -90,7 +90,7 @@ const InputPop = (props) => {
     const newValue = value.substr(0, insertPosition) + (emoji.code || '') + value.substr(insertPosition);
     setValue(newValue);
 
-    setShowEmojis(false);
+    // setShowEmojis(false);
   };
 
   // 完成@人员选择
@@ -185,6 +185,7 @@ const InputPop = (props) => {
               disabled={loading}
               forwardedRef={textareaRef}
               autoFocus={true}
+              onFocus={() => setShowEmojis(false)}
             ></Textarea>
           </div>
 
@@ -233,15 +234,15 @@ const InputPop = (props) => {
             </div>
           </div>
         </div>
+        {showEmojis && (
+          <div className={styles.emojis}>
+            <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />
+          </div>
+        )}
       </Popup>
 
       {showAt && <AtSelect visible={showAt} getAtList={onAtListChange} onCancel={onAtIconClick} />}
 
-      {showEmojis && (
-        <div className={styles.emojis}>
-          <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />
-        </div>
-      )}
     </div>
   );
 };

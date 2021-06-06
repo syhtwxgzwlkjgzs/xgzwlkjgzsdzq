@@ -81,8 +81,8 @@ class PartnerInviteH5Page extends React.Component {
     }
   }
 
-  handleJoinSite = () => {
-    const { user, site } = this.props;
+  handleJoinSite = async () => {
+    const { user, site, router } = this.props;
     if (!user?.isLogin()) {
       goToLoginPage({ url: '/user/login' });
       return;
@@ -96,24 +96,13 @@ class PartnerInviteH5Page extends React.Component {
           type: 1, // 站点付费注册
         },
         isAnonymous: false, // 是否匿名
-        success: (orderInfo) => {
-          Toast.success({
-            content: `订单 ${orderInfo.orderSn} 支付成功, 即将进入站点`,
-            hasMask: false,
-            duration: 3000,
-            onClose() {
-              window.location.href = '/';
-            },
-          });
+        success: async () => {
+          await user.updateUserInfo(user.id);
+          await site.getSiteInfo();
+          router.replace('/');
         }, // 支付成功回调
-        failed: (orderInfo) => {
-          Toast.error({
-            content: `订单 ${orderInfo.orderSn} 支付失败`,
-            hasMask: false,
-            duration: 2000,
-          });
-        }, // 支付失败回调
-        completed: (orderInfo) => {}, // 支付完成回调(成功或失败)
+        completed: (orderInfo) => {
+        }, // 支付完成回调(成功或失败)
       });
       return;
     }
@@ -198,7 +187,7 @@ class PartnerInviteH5Page extends React.Component {
               : <></>
           }
           <div className={layout.user_card_button} onClick={this.handleJoinSite}>{siteMode === 'pay' ? `¥ ${sitePrice}` : ''} 立即加入</div>
-          {siteMode === 'pay' ? <div className={layout.bottom_title}>有效期：<span>{siteExpire}天</span></div> : <></>}
+          {(siteMode === 'pay' && siteExpire) ? <div className={layout.bottom_title}>有效期：<span>{siteExpire}天</span></div> : <></>}
         </div>
         <Copyright/>
       </>
@@ -247,7 +236,7 @@ class PartnerInviteH5Page extends React.Component {
                       </div>
                       : <></>
                   }
-                  {siteMode === 'pay' ? <div className={layout.bottom_title}>有效期：<span>{siteExpire}天</span></div> : <></>}
+                  {(siteMode === 'pay' && siteExpire) ? <div className={layout.bottom_title}>有效期：<span>{siteExpire}天</span></div> : <></>}
                   <Button className={layout.bottom_button} onClick={this.handleJoinSite}>
                     {siteMode === 'pay' ? `¥${sitePrice}` : ''} 立即加入
                   </Button>

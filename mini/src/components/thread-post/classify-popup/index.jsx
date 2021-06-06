@@ -3,9 +3,9 @@
  * @prop {boolean} show 输入弹框是否显示
  * @prop {array} category 输入分类列表
  * @prop {function} onHide 监听弹框切换显示隐藏
- * @prop {function} onChange 监听分类选中
  */
-import React, { memo, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { inject, observer } from 'mobx-react';
 import { View } from '@tarojs/components';
 import Popup from '@discuzq/design/dist/components/popup/index';
 import Button from '@discuzq/design/dist/components/button/index';
@@ -16,22 +16,30 @@ import typeofFn from '@common/utils/typeof';
 
 const ClassifyPopup = (props) => {
   // props
-  const { show, category, onHide, onChange } = props;
+  const { threadPost, show, category, onHide } = props;
+  const { setPostData, categorySelected, setCategorySelected } = threadPost;
   // state
   const [parent, setParent] = useState({}); // 父类
   const [child, setChild] = useState({}); // 子类
   const [subcategory, setSubCategory] = useState([]); // 子类列表
 
   const handleParentClick = (item) => { // 父类点击
+    if (item.pid === parent.pid) return;
     setParent(item);
+    setChild({});
     if (item?.children?.length > 0) {
-      return
+      setChildrenList(item?.children?.slice());
+      return;
     }
+    setPostData({ categoryId: item.pid });
+    setCategorySelected({ parent: item, child: {} });
     onHide();
   };
 
   const handleChildClick = (item) => { // 子类点击
     setChild(item);
+    setPostData({ categoryId: item.pid });
+    setCategorySelected({ parent, child: item });
     onHide();
   };
 
@@ -46,17 +54,24 @@ const ClassifyPopup = (props) => {
   };
 
   // hook
-  useEffect(() => { // 监听分类
-    category?.length > 0 && setParent(category[0]);
-  }, [category])
+  useEffect(() => { // 初始化
+    if (category?.length > 0) {
+      setParent(category[0]);
+      setPostData({ categoryId: category[0].pid });
+      setCategorySelected({ parent: category[0], child: {} });
+    }
+  }, []);
 
-  useEffect(() => { // 根据当前父级，设置子级
-    setChildrenList(parent?.children?.slice());
-  }, [parent]);
-
-  useEffect(() => { // 监听点击分类的操作，输出选中值
-    onChange({ parent, child });
-  }, [parent, child]);
+  useEffect(() => { // 回显分类
+    const { parent: storeParent, child: storeChild } = categorySelected;
+    if (storeParent.pid && storeParent.pid !== parent.pid) {
+      setParent(storeParent);
+      setChildrenList(storeParent?.children?.slice());
+    }
+    if (storeChild.pid && storeChild.pid !== child.pid) {
+      setChild(storeChild);
+    }
+  }, [categorySelected]);
 
   return (
     <Popup
@@ -106,7 +121,6 @@ ClassifyPopup.propTypes = {
   show: PropTypes.bool.isRequired,
   category: PropTypes.array.isRequired,
   onHide: PropTypes.func.isRequired,
-  onChange: PropTypes.func,
 };
 
 // 设置props默认类型
@@ -114,7 +128,7 @@ ClassifyPopup.defaultProps = {
   show: false,
   category: [],
   onHide: () => { },
-  onChange: () => { },
 };
 
-export default memo(ClassifyPopup);
+export default inject('threadPost')(observer(ClassifyPopup));
+

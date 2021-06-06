@@ -20,7 +20,7 @@ export default function Emoji(props) {
   const emojiRef = useRef();
 
   const computeIsBlur = (e) => {
-    if (emojiRef.current.show && !emojiRef.current.contains(e.currentTarget)) {
+    if (emojiRef.current?.show && !emojiRef.current.contains(e.currentTarget)) {
       onEmojiBlur();
     }
   };

@@ -22,13 +22,13 @@
     box-sizing: border-box;
     position: absolute;
     left: 50%;
-    margin-left: -60px;
+    margin-left: rem(-60);
     top: rem(-120);
-    border-radius: 50%;
-    background: var(--color-white);
-    border: rem(2) solid var(--color-white);
+    border-radius: $border-radius-circle;
+    background: $white;
+    border: rem(2) solid $white;
     overflow: hidden;
-    z-index: 3;
+    z-index: $zindex-backtotop;
     :global(.dzq-avatar__img),:global(.dzq-avatar__text) {
       width: rem(118);
       height: rem(118);
@@ -39,35 +39,35 @@
     width: rem(343);
     height: rem(213);
     position: absolute;
-    margin-left: -171.5px;
+    margin-left: rem(-171.5);
     left: 50%;
     top: rem(-60);
-    background: var(--color-white);
-    border-radius: rem(5);
+    background: $white;
+    border-radius: $border-radius-small;
     text-align: center;
-    padding: 0 rem(16);
+    padding: 0 $padding-4n;
     box-sizing: border-box;
   }
   .user_info_name{
     font-weight: 600;
-    font-size: rem(16);
-    line-height: rem(24);
-    color: var(--color-text-primary);
+    font-size: $font-size-middle;
+    line-height: $font-line-height-base;
+    color: $text-color-primary;
     opacity: 1;
     margin-top: rem(68);
   }
   .user_info_tag{
     font-weight: normal;
-    font-size: rem(12);
-    line-height: rem(28);
+    font-size: $font-size-small;
+    line-height: $font-line-height-large;
     height: rem(30);
-    color: var(--color-text-secondary);
+    color: $text-color-secondary;
   }
   .user_info_invite{
     width: rem(311);
     height: rem(78);
-    border-radius: rem(5);
-    background: $comment-bg-color;
+    border-radius: $border-radius-small;
+    background: $body-bg-color;
   }
   @mixin userInfoInvite {
     width: rem(154);
@@ -76,17 +76,17 @@
     text-align: center;
     .invite_num_title{
       font-weight: normal;
-      font-size: rem(14);
-      line-height: rem(24);
-      color: #4f5a70;
+      font-size: $font-size-base;
+      line-height: $font-line-height-base;
+      color: $text-color-regular;
       opacity: 1;
-      padding-top: rem(16);
+      padding-top: $padding-4n;
     }
     .invite_num_content{
       font-weight: 600;
-      font-size: rem(16);
-      line-height: rem(26);
-      color: #0b0b37;
+      font-size: $font-size-middle;
+      line-height: $font-line-height-base;
+      color: $text-color-primary;
     }
   }
   .invite_num{
@@ -94,7 +94,7 @@
   }
   .invite_money{
     @include userInfoInvite;
-    border-left: rem(1) solid var(--color-white);
+    border-left: rem(1) solid $white;
   }
   // 用户信息 end
 
@@ -103,35 +103,35 @@
     margin-bottom: rem(59);
     min-height: rem(285);
     box-sizing: border-box;
-    padding: rem(16);
+    padding: $padding-4n;
     padding-bottom: 0;
-    background-color: var(--color-white);
+    background-color: $white;
   }
   .invite_list_title{
-    font-size: rem(16);
+    font-size: $font-size-middle;
     vertical-align: middle;
     height: rem(24);
     margin-bottom: $margin-2n;
   }
   .invite_list_titleIcon{
-    line-height: rem(24);
+    line-height: $font-line-height-base;
     float: left;
   }
   .invite_list_titleText{
-    line-height: rem(24);
+    line-height: $font-line-height-base;
     float: left;
     font-weight: 600;
-    color: var(--color-text-primary);
-    padding-left: rem(8);
+    color: $text-color-primary;
+    padding-left: $padding-2n;
   }
   .invite_list_header{
     height: rem(36);
-    padding: 0 rem(8);
+    padding: 0 $padding-2n;
     box-sizing: border-box;
-    border-radius: rem(5) rem(5) 0 0;
+    border-radius: $border-radius-small $border-radius-small 0 0;
     background: $comment-bg-color;
     font-weight: normal;
-    font-size: rem(14);
+    font-size: $font-size-base;
     text-align: left;
     color: $text-color-regular;
   }
@@ -167,14 +167,14 @@
     display: flex;
     height: rem(54);
     line-height: rem(54);
-    padding: 0 rem(8);
+    padding: 0 $padding-2n;
     box-sizing: border-box;
-    font-size: rem(14);
+    font-size: $font-size-base;
   }
   .invite_list_itemName{
     @include inviteListName;
     box-sizing: border-box;
-    padding-right: rem(14);
+    padding-right: $padding-4n;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -186,32 +186,32 @@
       border-radius: $border-radius-circle;
       line-height: rem(18);
     }
-    span{
+    view{
       font-weight: normal;
-      padding-left: rem(8);
-      color: var(--color-text-primary);
+      padding-left: $padding-2n;
+      color: $text-color-primary;
     }
   }
   .invite_list_itemMoney{
     @include inviteListMoney;
     box-sizing: border-box;
-    padding-right: rem(14);
+    padding-right: $padding-4n;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
     font-weight: normal;
-    font-size: rem(16);
-    color: var(--color-error);
+    font-size: $font-size-middle;
+    color: $error-color;
   }
   .invite_list_itemTime{
     @include inviteListTime;
     @include text-ellipsis;
-    color: var(--color-text-secondary);
+    color: $text-color-secondary;
   }
   .invite_list_itemLine{
     height: rem(1);
     width: calc(100vw - 64px);
-    background: var(--border-line-color);
+    background: $border-color;
     position: absolute;
     left: rem(16);
     bottom: 0;
@@ -224,17 +224,17 @@
     box-sizing: border-box;
     position: fixed;
     bottom: 0;
-    padding: rem(8) rem(16) rem(16);
-    background: var(--color-white);
-    border-top: rem(1) solid var(--border-line-color);
+    padding: $padding-2n $padding-4n $padding-4n ;
+    background: $white;
+    border-top: rem(1) solid $border-color;
     .invite_bottom_button{
       width: 100%;
       height: rem(42);
-      background: var(--color-primary);
+      background: $primary-color;
       font-weight: normal;
       text-align: center;
-      color: var(--color-white);
-      font-size: rem(16);
+      color: $white;
+      font-size: $font-size-middle;
       border: none;
     }
   }
@@ -244,7 +244,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: rem($font-size-primary);
-    color: var(--color-text-placeholder);
+    font-size: $font-size-primary;
+    color: $text-color-placeholder;
   }
 }

@@ -79,10 +79,6 @@ class PartnerInviteH5Page extends React.Component {
     }
   }
 
-  onPostClick = (data) => console.log('post click', data);
-
-  onUserClick = (data) => console.log('user click', data);
-
   gotoIndex = () => {
     Router.push({ url: '/pages/index/index' });
   };
@@ -93,8 +89,8 @@ class PartnerInviteH5Page extends React.Component {
       goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
+
     const { setSite: { siteMode, sitePrice, siteName } = {} } = site.webConfig;
-    
     if (siteMode === 'pay' && user.paid === false) {
       PayBox.createPayBox({
         data: {
@@ -104,23 +100,11 @@ class PartnerInviteH5Page extends React.Component {
           type: 1, // 站点付费注册
         },
         isAnonymous: false, // 是否匿名
-        success: (orderInfo) => {
-          Toast.success({
-            content: `订单 ${orderInfo.orderSn} 支付成功, 即将进入站点`,
-            hasMask: false,
-            duration: 3000,
-          });
-          setTimeout(() => {
-            this.gotoIndex();
-          }, 3100);
-        }, // 支付成功回调
-        failed: (orderInfo) => {
-          Toast.error({
-            content: `订单 ${orderInfo.orderSn} 支付失败`,
-            hasMask: false,
-            duration: 2000,
-          });
-        }, // 支付失败回调
+        success: async () => {
+        await user.updateUserInfo(user.id);
+        await site.getSiteInfo();
+        this.gotoIndex();
+      }, // 支付成功回调
         completed: (orderInfo) => {}, // 支付完成回调(成功或失败)
       });
       return;
@@ -131,10 +115,11 @@ class PartnerInviteH5Page extends React.Component {
   render() {
     const { site, forum, invite } = this.props;
     const { inviteCode } = invite;
-    const { platform, webConfig } = site;
+    const { webConfig } = site;
     const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
     const { usersPageData = [], threadsPageData = [], isLoading } = forum;
     const { invitorName, invitorAvatar } = this.state;
+
     return (
       <List className={layout.page} allowRefresh={false}>
         <HomeHeader hideInfo hideMinibar mode="join" />

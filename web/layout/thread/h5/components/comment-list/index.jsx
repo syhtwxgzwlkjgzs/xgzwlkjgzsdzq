@@ -133,16 +133,17 @@ class CommentList extends React.Component {
           </div>
 
           <div className={styles.commentListContent}>
-            <div className={styles.commentListContentText} onClick={() => this.toCommentDetail()}>
+            <div className={styles.commentListContentText}>
               <div className={styles.commentListName}>
                 {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
               </div>
               <div
                 className={classNames(styles.commentListText, this.props.isShowOne && styles.isShowOne)}
                 dangerouslySetInnerHTML={{ __html: this.filterContent() }}
+                onClick={() => this.toCommentDetail()}
               ></div>
               {/* 图片展示 */}
-              {this.props.data?.images && (
+              {this.props.data?.images.length > 0 && (
                 <div className={styles.imageDisplay}>
                   <ImageDisplay platform="h5" imgData={this.props.data?.images} />
                 </div>

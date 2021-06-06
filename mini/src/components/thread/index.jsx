@@ -115,6 +115,10 @@ class Index extends React.Component {
 
       if (threadId !== '') {
         Router.push({url: `/subPages/thread/index?id=${threadId}`})
+
+        this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
+        this.props.search.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
+        this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
       } else {
         console.log('帖子不存在');
       }

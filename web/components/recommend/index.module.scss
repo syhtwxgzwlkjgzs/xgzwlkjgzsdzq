@@ -6,6 +6,7 @@
   padding: 0 rem($padding-4n);
   padding-bottom: 0;
   border-radius: rem($border-radius-small);
+  overflow-y: auto;
   .recommendContent {
     font-weight: 600;
     font-size: rem(18);
