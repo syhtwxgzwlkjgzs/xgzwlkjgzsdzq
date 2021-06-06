@@ -74,21 +74,28 @@
           word-break: break-all;
           color: var(--color-text-primary);
 
-          p {
-            line-height: rem(24);
-          }
-
-          img {
-            height: rem(22);
-          }
-
-          &.isShowOne {
-            @include lamp-clamp(3);
-
-            p {
-              @include lamp-clamp(3);
+          :global {
+            .qq-emotion {
+              width: 22px;
+              height: 22px;
             }
           }
+
+          // p {
+          //   line-height: rem(24);
+          // }
+
+          // img {
+          //   height: rem(22);
+          // }
+
+          // &.isShowOne {
+          //   @include lamp-clamp(3);
+
+          //   p {
+          //     @include lamp-clamp(3);
+          //   }
+          // }
         }
 
         .imageDisplay {
