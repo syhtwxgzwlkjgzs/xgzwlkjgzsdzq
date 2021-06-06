@@ -389,12 +389,12 @@ class ThreadH5Page extends React.Component {
 
     if (success) {
       Toast.success({
-        content: '删除成功，即将跳转至首页',
+        content: '删除成功，即将跳转至上一页',
       });
 
       setTimeout(() => {
-        Taro.redirectTo({
-          url: '/pages/index/index',
+        Taro.navigateBack({
+          delta: 1,
         });
       }, 1000);
 
