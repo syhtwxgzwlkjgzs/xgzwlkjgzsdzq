@@ -79,10 +79,6 @@ class PartnerInviteH5Page extends React.Component {
     }
   }
 
-  onPostClick = (data) => console.log('post click', data);
-
-  onUserClick = (data) => console.log('user click', data);
-
   gotoIndex = () => {
     Router.push({ url: '/pages/index/index' });
   };
@@ -94,7 +90,7 @@ class PartnerInviteH5Page extends React.Component {
       return;
     }
     const { setSite: { siteMode, sitePrice, siteName } = {} } = site.webConfig;
-    
+
     if (siteMode === 'pay' && user.paid === false) {
       PayBox.createPayBox({
         data: {
@@ -213,7 +209,7 @@ class PartnerInviteH5Page extends React.Component {
             ) : (
               <></>
             )}
-            {siteMode === 'pay' ? (
+            {(siteMode === 'pay' && siteExpire) ? (
               <View className={layout.bottom_title}>
                 有效期：<View>{siteExpire}天</View>
               </View>
