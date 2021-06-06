@@ -8,7 +8,7 @@ import DeletePopup from '@components/thread-detail-pc/delete-popup';
 import { Icon, Toast } from '@discuzq/design';
 import classnames from 'classnames';
 import goToLoginPage from '@common/utils/go-to-login-page';
-
+import { debounce } from '@common/utils/throttle-debounce.js'
 const typeMap = {
   101: 'IMAGE',
   102: 'VOICE',
@@ -363,12 +363,12 @@ class RenderCommentList extends React.Component {
               <CommentList
                 data={val}
                 key={val.id}
-                likeClick={() => this.likeClick(val)}
+                likeClick={debounce(() => this.likeClick(val),300)}
                 replyClick={() => this.replyClick(val)}
                 deleteClick={() => this.deleteClick(val)}
                 editClick={() => this.editClick(val)}
-                replyLikeClick={(reploy) => this.replyLikeClick(reploy, val)}
-                replyReplyClick={(reploy) => this.replyReplyClick(reploy, val)}
+                replyLikeClick={debounce((reply) => this.replyLikeClick(reply, val),300)}
+                replyReplyClick={(reply) => this.replyReplyClick(reply, val)}
                 reportClick={() => this.reportClick(val)}
                 onCommentClick={() => this.onCommentClick(val)}
                 onSubmit={(val, imageList) => this.createReply(val, imageList)}

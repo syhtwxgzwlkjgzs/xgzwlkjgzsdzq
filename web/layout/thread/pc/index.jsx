@@ -558,6 +558,17 @@ class ThreadPCPage extends React.Component {
     }
   }
 
+  // 点击发送私信
+  onprivateLetter() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+    const {username} = this.props.thread.authorInfo;
+    this.props.router.push(`/message?page=chat&username=${username}`);
+
+  }
   // 付费支付
   async onPayClick() {
     if (!this.props.user.isLogin()) {
@@ -689,6 +700,7 @@ class ThreadPCPage extends React.Component {
                   user={threadStore.authorInfo}
                   onFollowClick={() => this.onFollowClick()}
                   isShowBtn={!isSelf}
+                  onprivateLetter={() => this.onprivateLetter()}
                 ></AuthorInfo>
               ) : (
                 <LoadingTips type="init" isError={isAuthorInfoError}></LoadingTips>

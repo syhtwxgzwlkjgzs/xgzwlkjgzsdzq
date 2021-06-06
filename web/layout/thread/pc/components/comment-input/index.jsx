@@ -69,6 +69,19 @@ const CommentInput = inject('site')((props) => {
     }
   };
 
+  // 点击其他地方emoji输入框收起
+  useEffect(() => {
+    document.addEventListener('click',(e)=> {
+      e && e.stopPropagation();
+      if (e.target.id === 'emojiBtn') {
+        setShowEmojis(true);
+        console.log(e);
+      }else if (showEmojis === true) {
+        setShowEmojis(false);
+      }
+    })
+  })
+
   const onAtIconClick = () => {
     setShowAt(!showAt);
     setShowEmojis(false);
@@ -208,6 +221,7 @@ const CommentInput = inject('site')((props) => {
             size="20"
             className={classnames(styles.btnIcon, showEmojis && styles.actived)}
             onClick={onEmojiIconClick}
+            id="emojiBtn"
           ></Icon>
           <Icon
             name="AtOutlined"

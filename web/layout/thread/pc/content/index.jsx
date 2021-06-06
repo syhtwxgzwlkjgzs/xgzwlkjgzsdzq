@@ -169,7 +169,7 @@ export default inject('user')(
             {threadStore?.threadData?.title && <div className={topic.title}>{threadStore?.threadData?.title}</div>}
 
             {/* 文字 */}
-            {text && <PostContent useShowMore={false} content={text || ''} />}
+            {text && <PostContent useShowMore={false} content={text || ''} usePointer={false} />}
 
             {/* 付费附件：不能免费查看付费帖 && 需要付费 && 不是作者 && 没有付费 */}
             {!canFreeViewPost && isAttachmentPay && !isSelf && !isPayed && (

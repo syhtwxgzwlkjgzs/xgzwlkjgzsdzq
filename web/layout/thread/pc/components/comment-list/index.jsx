@@ -13,6 +13,7 @@ import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import ImageDisplay from '@components/thread/image-display';
 import classNames from 'classnames';
+import { debounce } from '@common/utils/throttle-debounce.js'
 
 @observer
 class CommentList extends React.Component {
