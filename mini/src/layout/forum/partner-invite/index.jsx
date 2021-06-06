@@ -50,11 +50,14 @@ class PartnerInviteH5Page extends React.Component {
       const threadList = await search.getThreadList();
 
       // 获取url上的inviteCode
+      const { params } = getCurrentInstance().router;
+      const { inviteCode } = params;
 
+      if (inviteCode) invite.setInviteCode(inviteCode);
 
       const inviteResp = await inviteDetail({
         params: {
-          code: invite.inviteCode,
+          code: inviteCode,
         },
       });
       const nickname = get(inviteResp, 'data.user.nickname', '');

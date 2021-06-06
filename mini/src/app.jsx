@@ -30,7 +30,7 @@ class App extends Component {
    * 注意：options 参数的字段在不同小程序中可能存在差异。所以具体使用的时候请看相关小程序的文档
    */
   async onLaunch(options) {
-    this.initSiteData(options);
+    this.initSiteData();
     const { site } = this.store;
     const { envConfig } = site;
     const { TITLE } = envConfig;
@@ -70,12 +70,9 @@ class App extends Component {
   }
 
   // 初始化站点数据
-  async initSiteData(lauchOptions) {
+  async initSiteData() {
 
-    const { site, user, invite } = this.store;
-    if(lauchOptions.query.inviteCode){
-      invite.inviteCode = lauchOptions.query.inviteCode
-    }
+    const { site, user} = this.store;
 
     let loginStatus = false;
 
