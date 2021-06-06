@@ -22,7 +22,9 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
     return `${fileSize} B`;
   };
 
-  const onDownLoad = (url) => {
+  const onDownLoad = (item) => {
+    if(!item?.url) return;
+    const url = item.url;
     if (!isPay) {
       window.open(url);
     } else {
@@ -68,7 +70,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
 
           <div className={styles.right}>
             {/* <span className={styles.span} onClick={() => onPreviewer(item.url)}>浏览</span> */}
-            <span className={styles.span} onClick={() => onDownLoad(item.url)}>下载</span>
+            <span className={styles.span} onClick={() => onDownLoad(item)}>下载</span>
           </div>
         </div>
       </div>
@@ -90,7 +92,7 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
         {
           attachments.map((item, index) => {
             // 获取文件类型
-            const extension = item?.fileName?.split('.')[item.fileName.split('.').length - 1] || '';
+            const extension = item?.extension || '';
             const type = extensionList.indexOf(extension.toUpperCase()) > 0
               ? extension.toUpperCase()
               : 'UNKNOWN';

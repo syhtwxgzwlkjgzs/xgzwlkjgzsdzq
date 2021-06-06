@@ -39,7 +39,6 @@ export default class InviteStore {
       params: {
         page,
       },
-      timeout: 3000,
     });
     this.inviteData = res.pageData;
     this.totalPage = res.totalPage;
@@ -52,7 +51,7 @@ export default class InviteStore {
   @action
   async createInviteLink() {
     const res = await simpleRequest('createInviteLink', {
-      timeout: 3000,
+
     });
     this.inviteCode = res.code;
   }

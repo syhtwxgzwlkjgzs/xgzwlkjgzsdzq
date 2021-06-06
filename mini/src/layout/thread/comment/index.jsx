@@ -228,8 +228,10 @@ class CommentH5Page extends React.Component {
 
   // 创建回复评论+回复回复接口
   async createReply(val, imageList) {
-    if (!val) {
-      Toast.info({ content: '请输入内容!' });
+    const valuestr = val.replace(/\s/g, '');
+    // 如果内部为空，且只包含空格或空行
+    if (!valuestr) {
+      Toast.info({ content: '请输入内容' });
       return;
     }
 
@@ -329,47 +331,48 @@ class CommentH5Page extends React.Component {
     };
 
     return (
-      <View className={styles.index}>
-        {/* <Header></Header> */}
-        {/* <View className={styles.header}>
-          <View className={styles.show}>
-            {
-              this.state.isShowReward
-                ? <View className={styles.showGet}>
-                  <View className={styles.icon}>悬赏图标</View>
-                  <View className={styles.showMoneyNum}>
-                    获得<span className={styles.moneyNumber}>5.20</span>元悬赏金
-                    </View>
-                </View> : ''
-            }
-            {
-              this.state.isShowRedPacket
-                ? <View className={styles.showGet}>
-                  <View className={styles.icon}>红包图标</View>
-                  <View className={styles.showMoneyNum}>
-                    获得<span className={styles.moneyNumber}>5.20</span>元红包
-                    </View>
-                </View> : ''
-            }
+      <View>
+        <View className={styles.index}>
+          {/* <Header></Header> */}
+          {/* <View className={styles.header}>
+            <View className={styles.show}>
+              {
+                this.state.isShowReward
+                  ? <View className={styles.showGet}>
+                    <View className={styles.icon}>悬赏图标</View>
+                    <View className={styles.showMoneyNum}>
+                      获得<span className={styles.moneyNumber}>5.20</span>元悬赏金
+                      </View>
+                  </View> : ''
+              }
+              {
+                this.state.isShowRedPacket
+                  ? <View className={styles.showGet}>
+                    <View className={styles.icon}>红包图标</View>
+                    <View className={styles.showMoneyNum}>
+                      获得<span className={styles.moneyNumber}>5.20</span>元红包
+                      </View>
+                  </View> : ''
+              }
+            </View>
+          </View> */}
+
+          {/* 内容 */}
+          <View className={styles.content}>
+            {isReady && (
+              <CommentList
+                data={commentData}
+                likeClick={() => this.likeClick(commentData)}
+                replyClick={() => this.replyClick(commentData)}
+                deleteClick={() => this.deleteClick(commentData)}
+                replyLikeClick={(reploy) => this.replyLikeClick(reploy, commentData)}
+                replyReplyClick={(reploy) => this.replyReplyClick(reploy, commentData)}
+                onMoreClick={() => this.onMoreClick()}
+                isHideEdit={true}
+              ></CommentList>
+            )}
           </View>
-        </View> */}
-
-        {/* 内容 */}
-        <View className={styles.content}>
-          {isReady && (
-            <CommentList
-              data={commentData}
-              likeClick={() => this.likeClick(commentData)}
-              replyClick={() => this.replyClick(commentData)}
-              deleteClick={() => this.deleteClick(commentData)}
-              replyLikeClick={(reploy) => this.replyLikeClick(reploy, commentData)}
-              replyReplyClick={(reploy) => this.replyReplyClick(reploy, commentData)}
-              onMoreClick={() => this.onMoreClick()}
-              isHideEdit={true}
-            ></CommentList>
-          )}
         </View>
-
         <View className={styles.footer}>
           {/* 评论弹层 */}
           <InputPopup

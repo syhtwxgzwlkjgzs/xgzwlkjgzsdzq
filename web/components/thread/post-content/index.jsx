@@ -29,6 +29,8 @@ const Index = ({
   onPay,
   onRedirectToDetail = noop,
   loading,
+  usePointer = true,
+  customHoverBg = false,
   ...props
 }) => {
   // 内容是否超出屏幕高度
@@ -36,7 +38,6 @@ const Index = ({
   const [cutContentForDisplay, setCutContentForDisplay] = useState("");
   const [showMore, setHiddenMore] = useState(!useShowMore);
   const contentWrapperRef = useRef(null);
-
   const texts = {
     showMore: '查看更多',
     hidePercent: `剩余${hidePercent}%内容已隐藏`,
@@ -102,10 +103,11 @@ const Index = ({
   }, [filterContent]);
 
   return (
-    <div className={styles.container} {...props}>
+    // <div className={styles.container} {...props}>
+      <div className={`${styles.container} ${usePointer ? styles.usePointer : ''}`} {...props}>
       <div
         ref={contentWrapperRef}
-        className={`${styles.contentWrapper} ${showHideCover ? styles.hideCover : ''}`}
+        className={`${styles.contentWrapper} ${showHideCover ? styles.hideCover : ''} ${customHoverBg? styles.bg : ''}`}
         onClick={!showMore ? onShowMore : handleClick}
       >
         <div className={styles.content}>

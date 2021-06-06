@@ -51,7 +51,7 @@ export default class AmountRecognized extends Component {
         value = '悬赏';
         break;
       case ORDER_TRADE_TYPE.REGEISTER_SITE:
-        value = '表示付费加入';
+        value = '付费加入';
         break;
       case ORDER_TRADE_TYPE.PUT_PROBLEM: // 付费提问
         value = '付费提问'

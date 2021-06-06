@@ -24,7 +24,6 @@ export default class nicknameBindStore {
 
     try {
       const setResp = await setNickname({
-        timeout: 3000,
         data: {
           nickname: this.nickname,
         },

@@ -18,7 +18,7 @@ class SiteAction extends SiteStore {
   @action
   async getSiteInfo() {
     const siteResult = await readForum({});
-    siteResult.data && site.setSiteConfig(siteResult.data);
+    siteResult.data && this.setSiteConfig(siteResult.data);
   }
 
   @action

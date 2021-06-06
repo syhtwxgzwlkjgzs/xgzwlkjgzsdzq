@@ -187,7 +187,9 @@ class CommentPCPage extends React.Component {
       return;
     }
 
-    if (!val) {
+    const valuestr = val.replace(/\s/g, '');
+    // 如果内部为空，且只包含空格或空行
+    if (!valuestr) {
       Toast.info({ content: '请输入内容' });
       return;
     }
@@ -245,7 +247,13 @@ class CommentPCPage extends React.Component {
 
   // 点击发送私信
   onPrivateLetter() {
-    const { username } = this.props.thread?.authorInfo;
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
+    const { username } = this.props.comment?.authorInfo;
     if (!username) return;
     Router.push({ url: `/message?page=chat&username=${username}` });
   }
