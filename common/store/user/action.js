@@ -205,7 +205,7 @@ class UserAction extends SiteStore {
 
     throw {
       Code: deleteDenyRes.code,
-      Msg: deleteDenyRes.message,
+      Msg: deleteDenyRes.msg,
     };
   }
 
@@ -227,7 +227,7 @@ class UserAction extends SiteStore {
 
     throw {
       Code: denyUserRes.code,
-      Msg: denyUserRes.message,
+      Msg: denyUserRes.msg,
     };
   }
 
@@ -353,7 +353,6 @@ class UserAction extends SiteStore {
 
     return this.userThreads;
   }
-
 
   /**
    * 获取指定用户发的主题列表
@@ -729,6 +728,17 @@ class UserAction extends SiteStore {
       };
     }
     return this.userShield;
+  }
+
+  /**
+   * 重置帖子相关的数据
+   */
+  @action
+  clearUserThreadsInfo() {
+    this.userThreads = {};
+    this.userThreadsPage = 1;
+    this.userThreadsTotalCount = 0;
+    this.userThreadsTotalPage = 1;
   }
 
   /**

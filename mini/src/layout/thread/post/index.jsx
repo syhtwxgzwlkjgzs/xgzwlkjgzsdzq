@@ -4,6 +4,7 @@ import { View } from '@tarojs/components';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import { observer, inject } from 'mobx-react';
 import { PluginToolbar, DefaultToolbar, GeneralUpload, Title, Content, ClassifyPopup, OptionPopup, Position, Emoji } from '@components/thread-post';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import { Units } from '@components/common';
 import styles from './index.module.scss';
 import { THREAD_TYPE } from '@common/constants/thread-post';
@@ -175,13 +176,6 @@ class Index extends Component {
     // });
   }
 
-  // 设置当前选中分类、分类id
-  onClassifyChange = ({ parent, child }) => {
-    const { setPostData, setCategorySelected } = this.props.threadPost;
-    setPostData({ categoryId: child.pid || parent.pid });
-    setCategorySelected({ parent, child });
-  }
-
   resetOperationType() {
     this.setState({
       operationType: ''
@@ -191,6 +185,7 @@ class Index extends Component {
   // 点击发帖插件时回调，如上传图片、视频、附件或艾特、话题等
   handlePluginClick(item) {
     const { postType } = this.state;
+    const { postData } = this.props.threadPost;
     // 匹配附件、图片、语音上传
     this.setState({
       operationType: item.type
@@ -269,10 +264,17 @@ class Index extends Component {
 
   // 执行上传视频
   handleVideoUpload = () => {
-    const { setPostData } = this.props.threadPost;
+    const { postData } = this.props.threadPost;
+    if (postData.video?.id) {
+      this.postToast('只能上传一个视频');
+      return;
+    }
     Taro.chooseVideo({
       success: (file) => {
         this.yundianboUpload('video', file);
+      },
+      fail: (res) => {
+        this.postToast(res.errMsg);
       }
     });
   }
@@ -436,7 +438,9 @@ class Index extends Component {
           success: async (orderInfo) => {
             const { orderSn } = orderInfo;
             setPostData({ orderSn });
-            resolve();
+            setTimeout(() => {
+              resolve();
+            }, 1200)
           },
         });
       });
@@ -601,7 +605,7 @@ class Index extends Component {
 
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
           <View className={styles['content']} style={contentStyle}>
-            {/* <View id="thread-post-content"> */}
+            <View id="thread-post-content">
             <Title
               value={postData.title}
               show={isShowTitle}
@@ -648,7 +652,7 @@ class Index extends Component {
               )}
 
             </View>
-            {/* </View> */}
+            </View>
           </View>
 
           {/* 插入内容tag展示区 */}
@@ -668,7 +672,13 @@ class Index extends Component {
                   <Units
                     type='tag'
                     tagContent={`付费总额${postData.price + postData.attachmentPrice}元`}
-                    onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.paid })}
+                    onTagClick={() => {
+                      if (postData.price) {
+                        this.handlePluginClick({ type: THREAD_TYPE.paidPost })
+                      } else if (postData.attachmentPrice) {
+                        this.handlePluginClick({ type: THREAD_TYPE.paidAttachment })
+                      }
+                    }}
                     onTagRemoveClick={() => {
                       setPostData({
                         price: 0,
@@ -742,13 +752,20 @@ class Index extends Component {
           show={showClassifyPopup}
           category={categories}
           onHide={() => this.setState({ showClassifyPopup: false })}
-          onChange={this.onClassifyChange}
         />
         {/* 主题付费选项弹框 */}
         <OptionPopup
           show={showPaidOption}
           list={paidOption}
-          onClick={(item) => this.handlePluginClick(item)}
+          onClick={(item) => {
+            if ((item.type === THREAD_TYPE.paidPost && postData.attachmentPrice) || (item.type === THREAD_TYPE.paidAttachment && postData.price)) {
+              Toast.error({
+                content: '帖子付费和附件付费不能同时设置',
+              });
+            } else {
+              this.handlePluginClick(item);
+            }
+          }}
           onHide={() => this.setState({ showPaidOption: false })}
         />
         {/* 主题草稿选项弹框 */}

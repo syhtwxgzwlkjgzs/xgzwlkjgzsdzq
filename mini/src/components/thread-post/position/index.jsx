@@ -10,19 +10,20 @@ import classNames from 'classnames';
 import Taro from '@tarojs/taro';
 
 const Index = (props) => {
-  const { currentPosition = {}, positionChange = () => {} } = props;
+  const { currentPosition = {}, positionChange = () => { } } = props;
 
   // 是否已经选择定位
   const [isChose, setIsChose] = useState(false);
   // 当前定位
-  const [positon, setPosition] = useState({});
+  const [position, setPosition] = useState({});
 
 
   useEffect(() => {
-    if (currentPosition.name) {
+    if (currentPosition.latitude && currentPosition.latitude !== position.latitude) {
       setPosition(currentPosition);
+      setIsChose(true);
     }
-  }, []);
+  }, [currentPosition]);
 
   // 选择定位
   const chooseLocation = () => {
@@ -31,11 +32,15 @@ const Index = (props) => {
       success: function () {
         // 用户已经同意小程序使用定位功能，后续调用 Taro.chooseLocation 接口不会弹窗询问
         Taro.chooseLocation({
-          ...positon,
+          ...position,
           success(ret) {
-            setPosition(ret);
+            const _position = {
+              ...ret,
+              location: ret.name,
+            }
+            setPosition(_position);
             setIsChose(true);
-            positionChange(positon);
+            positionChange(_position);
           }
         });
       }
@@ -46,16 +51,16 @@ const Index = (props) => {
   const removeLocation = () => {
     setPosition({});
     setIsChose(false);
-    positionChange(positon);
+    positionChange(position);
   };
 
 
   return (
-    <View onClick={chooseLocation} className={classNames(styles['positon'], {
+    <View onClick={chooseLocation} className={classNames(styles['position'], {
       [styles['chose']]: isChose,
     })}>
       <Icon name='PositionOutlined' size={10} />
-      <Text className={styles['text']}>{positon.name || '你在哪里？'}</Text>
+      <Text className={styles['text']}>{position.location || '你在哪里？'}</Text>
       {isChose && <Icon className={styles['remove-icon']} name='CloseOutlined' size={10} onClick={(e) => {
         removeLocation();
         e.stopPropagation();
@@ -69,9 +74,9 @@ Index.propTypes = {
   /**
    * 位置变化的回调
    */
-   positionChange: PropTypes.func,
+  positionChange: PropTypes.func,
 
-   currentPosition: PropTypes.object,
+  currentPosition: PropTypes.object,
 };
 
 

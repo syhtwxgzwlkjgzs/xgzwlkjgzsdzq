@@ -23,6 +23,18 @@ const setWalletInfoPageData = (data, obj, {
 
 class WalletAction extends WalletStore {
     @action
+    resetInfo = () => {
+      // 收入明细
+      this.incomeDetail = {}
+      // 支出明细
+      this.expandDetail = {}
+      // 冻结明细
+      this.freezeDetail = {}
+      // 提现明细
+      this.cashDetail = {}
+    }
+
+    @action
     getUserWalletInfo = async () => {
       const walletInfoRes = await readWalletUser();
       if (walletInfoRes.code === 0) {

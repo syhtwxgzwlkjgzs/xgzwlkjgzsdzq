@@ -6,7 +6,11 @@
   background: var(--color-white);
   // height: 240px;
   font-size: rem($font-size-large);
-  padding: rem($padding-4n);
+  padding: {
+    left: rem($padding-4n);
+    right: rem($padding-4n);
+    top: rem($padding-4n);
+  }
   // overflow-y: auto;
   overflow-y: auto;
   min-height: 337px;
@@ -32,8 +36,7 @@
 
     .btn{
       height: 42px;
-      font-size: $font-size-base;
-      line-height: $font-line-height-base;
+      font-size: $font-size-middle;
       border-radius: 5px;
       padding: 0;
       display: flex;
@@ -86,6 +89,12 @@
     flex-wrap: nowrap;
     @include text-ellipsis();
   }
+  .elipsisText {
+    display: flex;
+  }
+  .acExplainTitle {
+    display: block;
+  }
   .acExplainNum {
     color: var(--color-error);
     font-size: $font-size-middle;
@@ -95,7 +104,11 @@
     margin: $margin-2n 0;
   }
   .ampuntLineWrap {
-    margin: 0 -$margin-4n;
+    // margin: 0 -$margin-4n;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: -$margin-4n;
+    margin-right: -$margin-4n;
   }
   .ampuntLine {
     width: 100%;

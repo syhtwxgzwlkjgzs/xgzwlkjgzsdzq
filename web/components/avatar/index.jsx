@@ -8,7 +8,19 @@ import goToLoginPage from '@common/utils/go-to-login-page';
 import styles from './index.module.scss';
 
 function avatar(props) {
-  const { direction = 'right', image = '', name = '匿', onClick = () => {}, className = '', circle = true, size = 'primary', isShowUserInfo = false, userId = null, user: myself } = props;
+  const {
+    direction = 'right',
+    image = '',
+    name = '匿',
+    onClick = () => {},
+    className = '',
+    circle = true,
+    size = 'primary',
+    isShowUserInfo = false,
+    userId = null,
+    user: myself,
+    search,
+  } = props;
 
   const userName = useMemo(() => {
     const newName = (name || '').toLocaleUpperCase()[0];
@@ -51,14 +63,21 @@ function avatar(props) {
     if (userInfo.follow === 0) {
       const res = await myself.postFollow(userId);
       if (res.success) {
-        userInfo.follow = res.data.isMutual ? 2 : 1;
+        const { isMutual = 0 } = res;
+        userInfo.follow = isMutual ? 2 : 1;
         userInfo.fansCount = userInfo.fansCount + 1;
+        search?.updateActiveUserInfo(userId, { isFollow: true, isMutual: !!isMutual })
+      } else {
+        Toast.info({ content: res.msg });
       }
     } else {
       const res = await myself.cancelFollow({ id: userId, type: 1 });
       if (res.success) {
         userInfo.follow = 0;
         userInfo.fansCount = userInfo.fansCount - 1;
+        search?.updateActiveUserInfo(userId, { isFollow: false, isMutual: false })
+      } else {
+        Toast.info({ content: res.msg });
       }
     }
     changeFollowStatus(false);
@@ -233,4 +252,4 @@ function avatar(props) {
     </div>
   );
 }
-export default inject('user')(withRouter(avatar));
+export default inject('user', 'search')(withRouter(avatar));

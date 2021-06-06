@@ -31,7 +31,10 @@ const Index = ({ isPay = false, url, onPay = noop, baselayout }) => {
 
        // 暂停之前正在播放的音频
       if (baselayout.playingAudioDom) {
-        baselayout.playingAudioDom.pause();
+        if(baselayout.playingAudioWrapperId !== audioWrapperRef.current.uid) {
+          baselayout.playingAudioDom?.pause();
+          baselayout.playingAudioWrapperId = audioWrapperRef.current.uid;
+        }
       }
 
       baselayout.playingAudioDom = audioContext;

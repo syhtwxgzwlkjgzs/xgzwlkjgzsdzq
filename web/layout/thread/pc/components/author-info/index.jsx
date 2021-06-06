@@ -21,8 +21,8 @@ class AuthorInfo extends React.Component {
   }
 
   // 点击私信
-  onprivateLetter() {
-    typeof this.props.onprivateLetter === 'function' && this.props.onprivateLetter();
+  onPrivateLetter() {
+    typeof this.props.onPrivateLetter === 'function' && this.props.onPrivateLetter();
   }
 
   render() {
@@ -106,7 +106,7 @@ class AuthorInfo extends React.Component {
               </Button>
             )}
 
-            <Button className={styles.privateLetter} onClick={() => this.onprivateLetter()}>
+            <Button className={styles.privateLetter} onClick={() => this.onPrivateLetter()}>
               <div className={styles.btnItem}>
                 <Icon name="CommentOutlined" size="14" className={styles.btnIcon}></Icon>
                 <span>发私信</span>

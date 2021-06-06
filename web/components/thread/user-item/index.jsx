@@ -29,6 +29,7 @@ const Index = ({
   platform,
   needPadding = false,
   needBottomLine = false,
+  itemStyle = {},
 }) => {
   const handleClick = (e) => {
     e.stopPropagation();
@@ -49,7 +50,7 @@ const Index = ({
   `;
 
   return (
-    <div className={classString.trim()} key={index} onClick={handleClick}>
+    <div className={classString.trim()} key={index} onClick={handleClick} style={itemStyle}>
       <div className={styles.wrapper}>
           <div className={styles.header}>
               <Avatar 

@@ -18,7 +18,7 @@
  *
  */
 import React, { Component } from 'react';
-import { Avatar, Badge, Icon } from '@discuzq/design';
+import { Avatar, Icon } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import classNames from 'classnames';
 import styles from './index.module.scss';
@@ -30,6 +30,7 @@ import { diffDate } from '@common/utils/diff-date';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import PropTypes from 'prop-types';
+import UnreadRedDot from '@components/unread-red-dot';
 
 @inject('site')
 @observer
@@ -50,10 +51,7 @@ class Index extends Component {
     return stringToColor(character);
   };
 
-  // 未读消息数
-  getUnReadCount = (count) => {
-    return count > 99 ? '99+' : (count || null);
-  };
+
 
   // 针对财务消息，获取后缀提示语
   getFinancialTips = (item) => {
@@ -84,6 +82,7 @@ class Index extends Component {
   };
 
   filterTag(html) {
+    if (typeof html !== 'string') return ''; // 兜底后端返回空数组的错误数据
     return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '');
   }
 
@@ -139,25 +138,24 @@ class Index extends Component {
         <div className={isPC ? styles['block-pc'] : styles.block}>
           {/* 头像 */}
           <div className={styles.avatar} onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}>
-            <Badge
-              className={classNames({
-                [styles.badge]: type === 'chat' && item.unreadCount > 9
-              })}
-              circle
-              info={type === 'chat' && this.getUnReadCount(item.unreadCount)}
-            >
-              {avatarUrl ? (
-                <Avatar image={avatarUrl} circle={true} />
-              ) : (
-                <Avatar
-                  text={item.username}
-                  circle={true}
-                  style={{
-                    backgroundColor: `#${this.getBackgroundColor(item.username)}`,
-                  }}
-                />
-              )}
-            </Badge>
+
+            {/* 未读消息红点 */}
+            <UnreadRedDot type='avatar' unreadCount={item.unreadCount}>
+              {
+                avatarUrl ? (
+                  <Avatar image={avatarUrl} circle={true} />
+                ) : (
+                  <Avatar
+                    text={item.username}
+                    circle={true}
+                    style={{
+                      backgroundColor: `#${this.getBackgroundColor(item.username)}`,
+                    }}
+                  />
+                )
+              }
+            </UnreadRedDot>
+
           </div>
           {/* 详情 */}
           <div

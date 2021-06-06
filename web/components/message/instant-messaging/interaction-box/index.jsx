@@ -193,7 +193,8 @@ const InteractionBox = (props) => {
               />
               <div className={styles.tools}>
                 <div>
-                  <Icon name="SmilingFaceOutlined" size={20} onClick={() => {
+                  <Icon name="SmilingFaceOutlined" size={20} onClick={(e) => {
+                    e.stopPropagation();
                     setShowEmoji(!showEmoji);
                   }} />
                 </div>
@@ -231,7 +232,8 @@ const InteractionBox = (props) => {
               onClick={insertEmoji}
             />
             <div className={styles.emoj}>
-              <Icon name="SmilingFaceOutlined" size={20} onClick={() => {
+              <Icon name="SmilingFaceOutlined" size={20} onClick={(e) => {
+                e.stopPropagation();
                 setShowEmoji(!showEmoji);
               }} />
             </div>

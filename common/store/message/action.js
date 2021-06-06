@@ -186,7 +186,8 @@ class MessageAction extends MessageStore {
           list.splice(index, 1);
           this[key] = {
             ...data,
-            list
+            list,
+            totalCount: data.totalCount - 1,
           }
           throw 'break';
         }

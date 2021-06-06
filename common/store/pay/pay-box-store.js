@@ -34,6 +34,9 @@ class PayBoxStore {
     this.onCompleted(this.orderInfo);
   };
 
+  // 创建定点回调
+  onOrderCreated = noop;
+
   qrCodeCheckTimer = null;
 
   // 订单 options
@@ -153,6 +156,9 @@ class PayBoxStore {
       });
       if (get(createRes, 'code') === 0) {
         this.orderInfo = get(createRes, 'data', {});
+        if (this.onOrderCreated) {
+          this.onOrderCreated(this.orderInfo);
+        }
         this.step = STEP_MAP.PAYWAY;
         return createRes;
       }
@@ -418,6 +424,7 @@ class PayBoxStore {
 
       this.resErrorFactory(setPayPwdRes);
     } catch (error) {
+      console.log(error)
       if (error.Code) {
         throw error;
       }
@@ -473,7 +480,7 @@ class PayBoxStore {
 
     throw {
       Code: resetPayPwdRes.code,
-      Msg: resetPayPwdRes.msg,
+      Msg: resetPayPwdRes.message,
     };
   }
 
@@ -504,7 +511,7 @@ class PayBoxStore {
 
     throw {
       Code: smsResp.code,
-      Message: smsResp.msg,
+      Message: smsResp.message,
     };
   }
 
@@ -533,8 +540,24 @@ class PayBoxStore {
 
     throw {
       Code: forgetPayPwdRes.code,
-      Msg: forgetPayPwdRes.msg,
+      Msg: forgetPayPwdRes.message,
     };
+  }
+
+  /**
+   * 展示支付框
+   */
+  @action
+  show = () => {
+    this.visible = true;
+  }
+
+  /**
+   * 隐藏支付框
+   */
+  @action
+  hide = () => {
+    this.visible = false;
   }
 
   /**
