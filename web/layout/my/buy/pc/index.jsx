@@ -25,7 +25,6 @@ class BuyPCPage extends React.Component {
   renderRight = () => (
     <div className={styles.right}>
       <PopTopic />
-      <UserCenterFansPc />
       <Copyright />
     </div>
   );
