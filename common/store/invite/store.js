@@ -20,9 +20,6 @@ export default class InviteStore {
 
   @action getInviteCode(router) {
     let inviteCode;
-    if (typeof wx === 'object') {
-      wx.getStorage && (inviteCode = wx?.getStorage('inviteCode'));
-    }
     if (typeof window === 'object') {
       inviteCode = inviteCode || window?.sessionStorage?.getItem('inviteCode') || router?.query?.inviteCode || '';
     }
@@ -31,7 +28,6 @@ export default class InviteStore {
 
   @action setInviteCode(code) {
     this.inviteCode = code;
-    typeof wx === 'object' && wx.getStorage && wx.setStorage('inviteCode', code);
     typeof window === 'object' && window.sessionStorage?.setItem('inviteCode', code);
   }
 
@@ -43,7 +39,6 @@ export default class InviteStore {
       params: {
         page,
       },
-      timeout: 3000,
     });
     this.inviteData = res.pageData;
     this.totalPage = res.totalPage;
@@ -56,7 +51,7 @@ export default class InviteStore {
   @action
   async createInviteLink() {
     const res = await simpleRequest('createInviteLink', {
-      timeout: 3000,
+
     });
     this.inviteCode = res.code;
   }

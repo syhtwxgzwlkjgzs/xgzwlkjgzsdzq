@@ -8,7 +8,9 @@ export default function ProgressRender(props) {
   const [percent, setPercent] = useState(file.percent || 0);
 
   useEffect(() => {
-    setPercent(file.percent);
+    setTimeout(()=>{
+      setPercent(file.percent);
+    },0)
   }, [file.percent]);
 
   return (

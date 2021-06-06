@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Icon, Popup, Button, Input, Slider } from '@discuzq/design';
-import throttle from '@common/utils/thottle';
+import { debounce } from '@common/utils/throttle-debounce';
 import styles from './index.module.scss';
 
 const InputPop = (props) => {
@@ -10,7 +10,6 @@ const InputPop = (props) => {
   const [moneyNum, setMoneyNum] = useState('');
 
   const onInputChange = (val) => {
-    console.log(val);
     setValue(val);
     setMoneyNum((Number(val) * 0.01 * rewardAmount).toFixed(2));
   };
@@ -49,7 +48,7 @@ const InputPop = (props) => {
                   max={100}
                   min={0}
                   step={1}
-                  onChange={throttle((val) => onInputChange(val), 500)}
+                  onChange={debounce((val) => onInputChange(val), 200)}
                 />
                 <div className={styles.perCent}>%</div>
               </div>

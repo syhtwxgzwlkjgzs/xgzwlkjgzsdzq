@@ -65,6 +65,7 @@ const PlaneContent = (props) => {
     type = 'small',
     className = '',
     platform = 'pc',
+    titleWrapper = ''
   } = props;
   const isNoData = useMemo(() => !children || !!noData, [noData, children]);
 
@@ -77,7 +78,7 @@ const PlaneContent = (props) => {
   }, [platform, type]);
   return (
     <div className={className}>
-      <div className={`${pcStyle} ${styles.containerPlane}`}>
+      <div className={`${pcStyle} ${styles.containerPlane} ${titleWrapper}`}>
         {header || <SectionTitle {...props} />}
       </div>
       {

@@ -71,6 +71,7 @@ class PCMyPage extends React.Component {
     return (
       <>
         <SidebarPanel
+          platform="h5"
           type="normal"
           title="个人资料"
           isShowMore={true}

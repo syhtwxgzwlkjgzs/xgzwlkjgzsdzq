@@ -258,13 +258,15 @@
     }
     .react-datepicker__input-container {
       input {
-        margin-right: 2px;
-        max-width: rem(220px);
+        margin-right: rem(2);
+        margin-left: rem(16);
+        max-width: rem(140);
+        width: 100%;
         border: 0;
         color: $text-color-primary;
         font-size: $font-size-base;
         cursor: pointer;
-        text-align: center;
+        text-align: left;
         background: transparent;
       }
     }

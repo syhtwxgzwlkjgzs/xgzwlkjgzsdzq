@@ -57,9 +57,11 @@ class UserCenterFollowsPc extends React.Component {
     return (
       <>
         <SidebarPanel
+          platform={'h5'}
           type="normal"
           noData={Number(followCount) === 0}
           title="关注"
+          mold={'wrapper'}
           leftNum={followCount}
           onShowMore={this.moreFollow}
         >

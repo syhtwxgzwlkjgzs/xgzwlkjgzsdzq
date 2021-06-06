@@ -39,7 +39,6 @@ export default class UserLoginStore {
         data.sessionToken = this.sessionToken;
       }
       const loginResp = await usernameLogin({
-        timeout: 3000,
         data,
       });
       checkUserStatus(loginResp);

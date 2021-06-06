@@ -8,7 +8,7 @@ import { parseContentData } from '../../utils';
 import InputPopup from '../components/input-popup';
 import DeletePopup from '@components/thread-detail-pc/delete-popup';
 import goToLoginPage from '@common/utils/go-to-login-page';
-
+import { debounce } from '@common/utils/throttle-debounce.js';
 // 评论列表
 @inject('thread')
 @inject('comment')
@@ -59,6 +59,7 @@ class RenderCommentList extends React.Component {
 
   // 点击评论的赞
   async likeClick(data) {
+    console.log('1111');
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
       goToLoginPage({ url: '/user/login' });
@@ -200,8 +201,10 @@ class RenderCommentList extends React.Component {
 
   // 创建回复评论+回复回复接口
   async createReply(val, imageList) {
-    if (!val) {
-      Toast.info({ content: '请输入内容!' });
+    const valuestr = val.replace(/\s/g, '');
+    // 如果内部为空，且只包含空格或空行
+    if (!valuestr) {
+      Toast.info({ content: '请输入内容' });
       return;
     }
 
@@ -346,7 +349,7 @@ class RenderCommentList extends React.Component {
               <CommentList
                 data={val}
                 key={val.id}
-                likeClick={() => this.likeClick(val)}
+                lickClick={debounce(() => this.likeClick(val), 1000)}
                 replyClick={() => this.replyClick(val)}
                 deleteClick={() => this.deleteClick(val)}
                 editClick={() => this.editClick(val)}

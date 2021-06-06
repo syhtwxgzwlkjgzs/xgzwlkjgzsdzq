@@ -74,21 +74,32 @@
           word-break: break-all;
           color: var(--color-text-primary);
 
-          p {
-            line-height: rem(24);
-          }
+          :global {
+            .qq-emotion {
+              width: rem(22);
+              height: rem(22);
+            }
 
-          img {
-            height: rem(22);
-          }
-
-          &.isShowOne {
-            @include lamp-clamp(3);
-
-            p {
-              @include lamp-clamp(3);
+            .dzq-p  {
+              margin-bottom: 0;
             }
           }
+
+          // p {
+          //   line-height: rem(24);
+          // }
+
+          // img {
+          //   height: rem(22);
+          // }
+
+          // &.isShowOne {
+          //   @include lamp-clamp(3);
+
+          //   p {
+          //     @include lamp-clamp(3);
+          //   }
+          // }
         }
 
         .imageDisplay {

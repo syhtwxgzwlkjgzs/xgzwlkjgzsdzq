@@ -6,7 +6,7 @@ import Router from '@discuzq/sdk/dist/router';
 import { View } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 import clearLoginStatus from '@common/utils/clear-login-status';
-
+import setTitle from '@common/utils/setTitle';
 import './app.scss';
 
 class App extends Component {
@@ -30,7 +30,13 @@ class App extends Component {
    * 注意：options 参数的字段在不同小程序中可能存在差异。所以具体使用的时候请看相关小程序的文档
    */
   async onLaunch(options) {
-    this.initSiteData();
+    this.initSiteData(options);
+    const { site } = this.store;
+    const { envConfig } = site;
+    const { TITLE } = envConfig;
+    if (TITLE && TITLE !== '') {
+      setTitle(TITLE);
+    }
   }
 
   /**
@@ -64,8 +70,12 @@ class App extends Component {
   }
 
   // 初始化站点数据
-  async initSiteData() {
-    const { site, user } = this.store;
+  async initSiteData(lauchOptions) {
+
+    const { site, user, invite } = this.store;
+    if(lauchOptions.query.inviteCode){
+      invite.inviteCode = lauchOptions.query.inviteCode
+    }
 
     let loginStatus = false;
 
