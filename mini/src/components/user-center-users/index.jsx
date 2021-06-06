@@ -199,7 +199,7 @@ class UserCenterUsers extends React.Component {
         ref={this.containerRef}
         style={{
           height: '100%',
-          overflow: 'scroll',
+          // overflow: 'scroll',
           ...this.props.styles,
         }}
       >

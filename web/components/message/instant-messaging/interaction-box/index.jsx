@@ -18,6 +18,8 @@ const InteractionBox = (props) => {
   const [cursorPosition, setCursorPosition] = useState(0);
   // const [showEmoji, setShowEmoji] = useState(false);
 
+  const [isSubmiting, setIsSubmiting] = useState(false);
+
   let toastInstance = null;
 
 
@@ -61,12 +63,15 @@ const InteractionBox = (props) => {
 
 
   const submit = async (data) => {
+    if (isSubmiting) return;
     let ret = {};
     if (dialogId) {
+      setIsSubmiting(true);
       ret = await createDialogMsg({
         dialogId,
         ...data,
       });
+      setIsSubmiting(false);
       toastInstance?.destroy();
       if (ret.code === 0) {
         setTypingValue('');
@@ -77,10 +82,12 @@ const InteractionBox = (props) => {
     }
 
     if (!dialogId && username) {
+      setIsSubmiting(true);
       ret = await createDialog({
         recipientUsername: username,
         ...data,
       });
+      setIsSubmiting(false);
       if (ret.code === 0) {
         setTypingValue('');
         replaceRouteWidthDialogId(ret.data.dialogId);
