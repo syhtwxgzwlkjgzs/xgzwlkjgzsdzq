@@ -150,7 +150,7 @@ class CommentList extends React.Component {
             ></Avatar>
           </View>
           <View className={styles.commentListContent}>
-            <View className={styles.commentListContentText} onClick={() => this.toCommentDetail()}>
+            <View className={styles.commentListContentText}>
               <View className={styles.commentListName}>
                 {this.props.data?.user?.nickname || this.props.data?.user?.userName || '未知用户'}
               </View>
@@ -161,10 +161,12 @@ class CommentList extends React.Component {
                 onClick={this.handleClick.bind(this)}
               />
               {/* 图片展示 */}
-              {this.props.data?.images && (
+              {this.props.data?.images ? (
                 <View className={styles.imageDisplay}>
                   <ImageDisplay platform="h5" imgData={this.props.data?.images} />
                 </View>
+              ) : (
+                ''
               )}
             </View>
             {/* 底部操作栏 */}

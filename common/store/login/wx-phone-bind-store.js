@@ -105,7 +105,6 @@ export default class wxPhoneBindStore {
     sendCode = async ({captchaRandStr, captchaTicket}) => {
       try {
         const smsResp = await smsSend({
-          timeout: 3000,
           data: {
             mobile: this.mobile,
             type: 'login',
@@ -187,7 +186,7 @@ export default class wxPhoneBindStore {
       try {
         const smsLoginResp = await transitionSmsBind({
           url: 'apiv3/users/wechat/transition/sms.bind',
-          timeout: 3000,
+
           data: {
             mobile: this.mobile,
             code: this.code,

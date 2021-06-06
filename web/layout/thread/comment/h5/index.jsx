@@ -229,8 +229,10 @@ class CommentH5Page extends React.Component {
 
   // 创建回复评论+回复回复接口
   async createReply(val, imageList) {
-    if (!val) {
-      Toast.info({ content: '请输入内容!' });
+    const valuestr = val.replace(/\s/g, '');
+    // 如果内部为空，且只包含空格或空行
+    if (!valuestr) {
+      Toast.info({ content: '请输入内容' });
       return;
     }
 

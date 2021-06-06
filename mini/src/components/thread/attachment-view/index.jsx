@@ -70,7 +70,6 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
       }).catch((error) => {
         setErrorMsg(["下载失败"]);
         setTimeout(() => {
-          errorMsg = "";
           setErrorMsg("");
         }, 3000);
         console.error(error.errMsg)

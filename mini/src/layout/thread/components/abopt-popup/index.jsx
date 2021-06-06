@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Popup from '@discuzq/design/dist/components/popup/index';
 import Button from '@discuzq/design/dist/components/button/index';
 import Slider from '@discuzq/design/dist/components/slider/index';
-import throttle from '@common/utils/thottle';
+import { debounce } from '@common/utils/throttle-debounce';
 import { View } from '@tarojs/components';
 import styles from './index.module.scss';
 
@@ -56,7 +56,7 @@ const InputPop = (props) => {
                   max={100}
                   min={0}
                   step={1}
-                  onChange={throttle((val) => onInputChange(val), 500)}
+                  onChange={debounce((val) => onInputChange(val), 200)}
                 />
                 <View className={styles.perCent}>%</View>
               </View>

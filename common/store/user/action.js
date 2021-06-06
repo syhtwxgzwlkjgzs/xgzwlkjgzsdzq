@@ -586,7 +586,6 @@ class UserAction extends SiteStore {
     captchaRandStr,
   }) {
     const smsResp = await smsSend({
-      timeout: 3000,
       data: {
         mobile,
         type: 'rebind',
@@ -613,7 +612,7 @@ class UserAction extends SiteStore {
     captchaRandStr,
   }) {
     const smsResp = await smsSend({
-      timeout: 3000,
+
       data: {
         mobile,
         type: 'verify',
