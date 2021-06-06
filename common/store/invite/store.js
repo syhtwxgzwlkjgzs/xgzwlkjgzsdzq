@@ -20,9 +20,6 @@ export default class InviteStore {
 
   @action getInviteCode(router) {
     let inviteCode;
-    if (typeof wx === 'object') {
-      wx.getStorageSync && (inviteCode = wx?.getStorageSync('inviteCode'));
-    }
     if (typeof window === 'object') {
       inviteCode = inviteCode || window?.sessionStorage?.getItem('inviteCode') || router?.query?.inviteCode || '';
     }
@@ -31,7 +28,6 @@ export default class InviteStore {
 
   @action setInviteCode(code) {
     this.inviteCode = code;
-    typeof wx === 'object' && wx.setStorageSync && wx.setStorageSync('inviteCode', code);
     typeof window === 'object' && window.sessionStorage?.setItem('inviteCode', code);
   }
 
