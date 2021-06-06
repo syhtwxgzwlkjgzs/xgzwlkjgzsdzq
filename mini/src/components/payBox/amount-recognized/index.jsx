@@ -150,7 +150,7 @@ export default class AmountRecognized extends Component {
                   {
                     type === ORDER_TRADE_TYPE.REGEISTER_SITE &&
                     (
-                      <View className={`${styles.acExplain} ${platform === 'h5' && styles.acExplainH5}`}>
+                      <View className={`${styles.acExplain} ${styles.acExplainH5}`}>
                         <Checkbox checked={this.props.payBox.isAnonymous} onChange={this.handleChangeIsAnonymous} /> 隐藏我的付费信息
                       </View>
                     )}

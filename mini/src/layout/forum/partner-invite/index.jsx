@@ -93,8 +93,8 @@ class PartnerInviteH5Page extends React.Component {
       goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
-    const { setSite: { siteMode, sitePrice, siteName } = {} } = site.webConfig;
     
+    const { setSite: { siteMode, sitePrice, siteName } = {} } = site.webConfig;
     if (siteMode === 'pay' && user.paid === false) {
       PayBox.createPayBox({
         data: {
