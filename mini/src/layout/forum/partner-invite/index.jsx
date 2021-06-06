@@ -50,13 +50,11 @@ class PartnerInviteH5Page extends React.Component {
       const threadList = await search.getThreadList();
 
       // 获取url上的inviteCode
-      const { params } = getCurrentInstance().router;
-      const { inviteCode } = params;
 
-      if (inviteCode) invite.setInviteCode(inviteCode);
+
       const inviteResp = await inviteDetail({
         params: {
-          code: inviteCode,
+          code: invite.inviteCode,
         },
       });
       const nickname = get(inviteResp, 'data.user.nickname', '');
@@ -175,7 +173,7 @@ class PartnerInviteH5Page extends React.Component {
           {/* 热门内容预览 end */}
           <View className={layout.maskLayer}></View>
           <View className={layout.bottom}>
-            {inviteCode ? (
+            {invitorName ? (
               <View className={layout.bottom_tips}>
                 {/* <img className={layout.bottom_tips_img} src={ invitorAvatar } alt=""/> */}
                 <Avatar
