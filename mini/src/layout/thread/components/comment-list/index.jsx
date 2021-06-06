@@ -150,7 +150,7 @@ class CommentList extends React.Component {
             ></Avatar>
           </View>
           <View className={styles.commentListContent}>
-            <View className={styles.commentListContentText} onClick={() => this.toCommentDetail()}>
+            <View className={styles.commentListContentText}>
               <View className={styles.commentListName}>
                 {this.props.data?.user?.nickname || this.props.data?.user?.userName || '未知用户'}
               </View>
