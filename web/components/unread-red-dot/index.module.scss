@@ -2,6 +2,9 @@
 
 :global {
   .normal-badge {
+    width: 100%;
+    height: 100%;
+
     .dzq-badge__circle{
       color: $white !important;
     }
