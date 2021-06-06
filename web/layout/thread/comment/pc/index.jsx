@@ -245,7 +245,13 @@ class CommentPCPage extends React.Component {
 
   // 点击发送私信
   onPrivateLetter() {
-    const { username } = this.props.thread?.authorInfo;
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
+    const { username } = this.props.comment?.authorInfo;
     if (!username) return;
     Router.push({ url: `/message?page=chat&username=${username}` });
   }

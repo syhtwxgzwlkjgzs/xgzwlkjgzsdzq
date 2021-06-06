@@ -82,7 +82,12 @@ class ThreadPCPage extends React.Component {
     const { isCommentReady, isNoMore } = this.props.thread;
     // 记录当前的滚动位置
     this.props.thread.setScrollDistance(scrollDistance);
-    if (scrollDistance + offsetHeight >= scrollHeight - 20 && !this.state.isCommentLoading && isCommentReady && !isNoMore) {
+    if (
+      scrollDistance + offsetHeight >= scrollHeight - 20 &&
+      !this.state.isCommentLoading &&
+      isCommentReady &&
+      !isNoMore
+    ) {
       this.page = this.page + 1;
       this.loadCommentList();
     }
@@ -187,7 +192,6 @@ class ThreadPCPage extends React.Component {
 
     // 举报
     if (type === 'report') {
-      console.log('举报');
       this.setState({ showReportPopup: true });
     }
   }
@@ -448,7 +452,6 @@ class ThreadPCPage extends React.Component {
     }
 
     this.comment = comment;
-    console.log(this.comment);
     this.setState({
       inputValue: comment.content,
       showCommentInput: true,
@@ -559,17 +562,6 @@ class ThreadPCPage extends React.Component {
     }
   }
 
-  // 点击发送私信
-  onprivateLetter() {
-    if (!this.props.user.isLogin()) {
-      Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/user/login' });
-      return;
-    }
-    const {username} = this.props.thread.authorInfo;
-    this.props.router.push(`/message?page=chat&username=${username}`);
-
-  }
   // 付费支付
   async onPayClick() {
     if (!this.props.user.isLogin()) {
@@ -639,7 +631,13 @@ class ThreadPCPage extends React.Component {
 
   // 点击发送私信
   onPrivateLetter() {
-    const { username } = this.props.comment?.authorInfo;
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
+    const { username } = this.props.thread?.authorInfo;
     if (!username) return;
     Router.push({ url: `/message?page=chat&username=${username}` });
   }
@@ -709,7 +707,6 @@ class ThreadPCPage extends React.Component {
                   onFollowClick={() => this.onFollowClick()}
                   onPrivateLetter={() => this.onPrivateLetter()}
                   isShowBtn={!isSelf}
-                  onprivateLetter={() => this.onprivateLetter()}
                 ></AuthorInfo>
               ) : (
                 <LoadingTips type="init" isError={isAuthorInfoError}></LoadingTips>

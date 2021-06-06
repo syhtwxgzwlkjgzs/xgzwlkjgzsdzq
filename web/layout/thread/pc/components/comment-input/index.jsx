@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useState, Fragment } from 'react';
+import React, { createRef, useEffect, useState, Fragment, useCallback } from 'react';
 import { Textarea, Toast, Divider, Button, Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 import { readEmoji } from '@common/server';
@@ -37,6 +37,24 @@ const CommentInput = inject('site')((props) => {
     setValue(initValue);
   }, [initValue]);
 
+  // 点击其他地方emoji输入框收起
+  useEffect(() => {
+    showEmojis ? window.addEventListener('click', onEventClick) : window.removeEventListener('click', onEventClick);
+
+    return () => {
+      window.removeEventListener('click', onEventClick);
+    };
+  }, [showEmojis]);
+
+  const onEventClick = useCallback((e) => {
+    e && e.stopPropagation();
+    if (e.target.id === 'emojiBtn') {
+      setShowEmojis(!showEmojis);
+      return;
+    }
+    setShowEmojis(false);
+  }, []);
+
   const onSubmitClick = async () => {
     if (typeof onSubmit === 'function') {
       try {
@@ -68,19 +86,6 @@ const CommentInput = inject('site')((props) => {
       }
     }
   };
-
-  // 点击其他地方emoji输入框收起
-  useEffect(() => {
-    document.addEventListener('click',(e)=> {
-      e && e.stopPropagation();
-      if (e.target.id === 'emojiBtn') {
-        setShowEmojis(true);
-        console.log(e);
-      }else if (showEmojis === true) {
-        setShowEmojis(false);
-      }
-    })
-  })
 
   const onAtIconClick = () => {
     setShowAt(!showAt);
