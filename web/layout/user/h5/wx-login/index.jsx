@@ -34,14 +34,21 @@ class WXLoginH5Page extends React.Component {
 
       const redirectUri = `${encodeURIComponent(`${window.location.origin}/user/wx-authorization?type=${platform}${inviteCode}`)}`;
       let params;
-      // if (platform === 'h5' && site?.isMiniProgramOpen) {
-      //   // 在h5 浏览器中 且小程序设置打开 通过小程序schema跳转
-      //   const resp = await genMiniScheme();
-      //   if (resp.code === 0) {
-      //     window.location.href = `${get(resp, 'data.openLink', '')}?${inviteCode.substr(1)}`;
-      //     return;
-      //   }
-      // }
+      if (platform === 'h5' && site?.isMiniProgramOpen) {
+        // TODO：小程序还未过审核，暂时无法进行小程序微信登录，先注释代码，并做出提示
+        // 在h5 浏览器中 且小程序设置打开 通过小程序schema跳转
+        // const resp = await genMiniScheme();
+        // if (resp.code === 0) {
+        //   window.location.href = `${get(resp, 'data.openLink', '')}?${inviteCode.substr(1)}`;
+        //   return;
+        // }
+        Toast.error({
+          content: '当前小程序不可使用，请联系管理人员切换成公众号模式',
+          hasMask: false,
+          duration: 3000,
+        });
+        return;
+      }
 
       // 在h5浏览器中，且公众号设置打开
       params = {
