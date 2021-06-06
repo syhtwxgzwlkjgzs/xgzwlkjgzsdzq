@@ -20,7 +20,6 @@ export default class H5Qrcode {
       const { type } = opts.params;
       const req = (type.indexOf('mini') > -1) ? genMiniQrcode : genH5Qrcode;
       const res = await req({
-        timeout: 3000,
         ...opts,
       });
       if (res.code === 0) {
@@ -49,7 +48,7 @@ export default class H5Qrcode {
       const { type } = opts;
       const req = (type.indexOf('mini') > -1) ? miniQrcodeLogin : h5QrcodeLogin;
       const res = await req({
-        timeout: 3000,
+
         ...opts,
       });
       checkUserStatus(res);
@@ -82,7 +81,7 @@ export default class H5Qrcode {
       const { type } = opts;
       const req = (type.indexOf('mini') > -1) ? miniQrcodeBind : h5QrcodeBind;
       const res = await req({
-        timeout: 3000,
+
         ...opts,
       });
       checkUserStatus(res);
