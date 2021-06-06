@@ -82,6 +82,7 @@ class Index extends Component {
   };
 
   filterTag(html) {
+    if (typeof html !== 'string') return ''; // 兜底后端返回空数组的错误数据
     return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '');
   }
 

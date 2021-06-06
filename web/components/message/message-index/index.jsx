@@ -108,7 +108,7 @@ export class MessageIndex extends Component {
         <Notice
           infoIdx={0}
           totalCount={totalCount}
-          withBottomBar={true}
+          withBottomBar={!isPC}
           noMore={currentPage >= totalPage}
           showHeader={!isPC}
           topCard={isPC ? null : card}

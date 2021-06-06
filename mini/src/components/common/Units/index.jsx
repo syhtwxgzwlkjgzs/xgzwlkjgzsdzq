@@ -78,7 +78,7 @@ const Index = (props) => {
   // 附件添加
   const attaUpload = (
     <View className={styles['upload-atta']} onClick={onUpload}>
-      <Icon name='PlusOutlined' size={16} className={styles['text']} />
+      <Icon name='PlusOutlined' size={14} className={styles['text']} />
       <Text className={styles['text']}>添加附件</Text>
     </View>
   );
