@@ -32,7 +32,6 @@ class LikePCPage extends React.Component {
     return (
       <>
         <PopTopic />
-        <UserCenterFansPc />
         <Copyright/>
       </>
     );
