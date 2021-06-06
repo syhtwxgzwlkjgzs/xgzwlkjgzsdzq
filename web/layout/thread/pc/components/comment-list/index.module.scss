@@ -47,26 +47,30 @@
 
           :global {
             .qq-emotion {
-              width: 22px;
-              height: 22px;
+              width: rem(22);
+              height: rem(22);
+            }
+
+            .dzq-p  {
+              margin-bottom: 0;
             }
           }
 
-          p {
-            line-height: rem(24);
-          }
+          // p {
+          //   line-height: rem(24);
+          // }
 
-          img {
-            height: rem(22);
-          }
+          // img {
+          //   height: rem(22);
+          // }
 
-          &.isShowOne {
-            @include lamp-clamp(2);
+          // &.isShowOne {
+          //   @include lamp-clamp(2);
 
-            // p {
-            //   @include lamp-clamp(2);
-            // }
-          }
+          //   // p {
+          //   //   @include lamp-clamp(2);
+          //   // }
+          // }
         }
         .imageDisplay {
           margin-top: rem($margin-2n);
