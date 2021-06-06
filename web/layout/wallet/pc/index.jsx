@@ -18,6 +18,7 @@ import List from '@components/list';
 // react-datepicker 中文化使用，参考：https://stackoverflow.com/questions/54399084/change-locale-in-react-datepicker
 import zhCN from 'date-fns/locale/zh-CN';
 import 'react-datepicker/dist/react-datepicker.css';
+import classnames from 'classnames';
 
 @inject('site')
 @inject('wallet')
@@ -359,12 +360,15 @@ class ThreadPCPage extends React.Component {
                         }}
                         dateFormat="yyyy年MM月"
                       />
+                      <Icon name={'RightOutlined'} size={12} className={
+                        classnames(layout.datePickerIcon)
+                      }/>
                     </div>
                     <div className={layout.choiceType}>
                       <Dropdown
                         onChange={this.handleChangeSelectedType}
                         placement="right"
-                        // trigger="click"
+                        trigger="click"
                         menu={this.renderDropdownMenu()}
                       >
                         <div>{this.renderSelectedType()}</div>

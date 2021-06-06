@@ -33,7 +33,9 @@ class UserCenterPost extends React.Component {
                 <Input
                   style={{
                     width: '100%',
+                    cursor: 'pointer'
                   }}
+                  className={styles.postInput}
                   disabled
                   placeholder={'分享新鲜事'}
                 />
