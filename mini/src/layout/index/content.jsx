@@ -185,7 +185,7 @@ class IndexH5Page extends React.Component {
   };
 
   renderTabs = () => {
-    const { index } = this.props;
+    const { index, site } = this.props;
     const { currentIndex, fixedTab, navBarHeight } = this.state;
     const { categories = [] } = index;
     const newCategories = this.handleCategories(categories);
@@ -218,7 +218,7 @@ class IndexH5Page extends React.Component {
           </View>
           {fixedTab &&  (
             <>
-             <NavBar isShow={fixedTab} />
+             <NavBar title={site?.webConfig?.setSite?.siteName || ''} isShow={fixedTab} />
              <View className={styles.tabPlaceholder}></View>
             </>
           )}
