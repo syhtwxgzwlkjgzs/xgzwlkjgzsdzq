@@ -16,7 +16,14 @@ const DialogBox = (props) => {
   // const dialogId = router.query.dialogId;
   const dialogBoxRef = useRef();
   const timeoutId = useRef();
-  useEffect(() => () => clearTimeout(timeoutId.current), []);
+  useEffect(() => {
+    document.addEventListener('focusin', () => {
+      setTimeout(() => {
+        scrollEnd();
+      }, 100);
+    });
+    return () => clearTimeout(timeoutId.current);
+  }, []);
 
   useEffect(() => {
     if (dialogId) {

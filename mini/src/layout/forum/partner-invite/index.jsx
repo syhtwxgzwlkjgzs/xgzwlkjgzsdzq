@@ -54,6 +54,7 @@ class PartnerInviteH5Page extends React.Component {
       const { inviteCode } = params;
 
       if (inviteCode) invite.setInviteCode(inviteCode);
+
       const inviteResp = await inviteDetail({
         params: {
           code: inviteCode,
@@ -197,7 +198,7 @@ class PartnerInviteH5Page extends React.Component {
             ) : (
               <></>
             )}
-            {siteMode === 'pay' ? (
+            {(siteMode === 'pay' && siteExpire) ? (
               <View className={layout.bottom_title}>
                 有效期：<View>{siteExpire}天</View>
               </View>

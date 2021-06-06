@@ -60,6 +60,12 @@
       height: rem(165);
       background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
     }
+
+    &.bg {
+      &:after {
+        background: linear-gradient(rgba(255, 255, 255, 0), $body-bg-color);
+      }
+    }
   }
   .showMore {
     @include cursor-on-pc;
