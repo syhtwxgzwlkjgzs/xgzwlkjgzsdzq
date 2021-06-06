@@ -12,8 +12,6 @@ import RedPacketDisplay from '@components/thread-detail-pc/red-packet-display';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import ImageDisplay from '@components/thread/image-display';
-import classNames from 'classnames';
-import { debounce } from '@common/utils/throttle-debounce.js'
 
 @observer
 class CommentList extends React.Component {
@@ -151,15 +149,13 @@ class CommentList extends React.Component {
           </div>
           <div className={styles.commentListContent}>
             {/* 评论内容 */}
-            <div
-              className={classnames(styles.commentListContentText, this.props.isShowOne && styles.hover)}
-              onClick={() => this.toCommentDetail()}
-            >
+            <div className={classnames(styles.commentListContentText, this.props.isShowOne && styles.hover)}>
               <div className={styles.commentListName}>
                 {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
               </div>
               <div
-                className={classNames(styles.commentListText, this.props.isShowOne && styles.isShowOne)}
+                onClick={() => this.toCommentDetail()}
+                className={classnames(styles.commentListText, this.props.isShowOne && styles.isShowOne)}
                 dangerouslySetInnerHTML={{ __html: this.filterContent() }}
               ></div>
               {/* 图片展示 */}
