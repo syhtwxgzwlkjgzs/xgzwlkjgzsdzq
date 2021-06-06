@@ -364,7 +364,7 @@ class ThreadPCPage extends React.Component {
                       <Dropdown
                         onChange={this.handleChangeSelectedType}
                         placement="right"
-                        // trigger="click"
+                        trigger="click"
                         menu={this.renderDropdownMenu()}
                       >
                         <div>{this.renderSelectedType()}</div>
