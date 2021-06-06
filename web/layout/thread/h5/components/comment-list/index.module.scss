@@ -76,8 +76,12 @@
 
           :global {
             .qq-emotion {
-              width: 22px;
-              height: 22px;
+              width: rem(22);
+              height: rem(22);
+            }
+
+            .dzq-p  {
+              margin-bottom: 0;
             }
           }
 
