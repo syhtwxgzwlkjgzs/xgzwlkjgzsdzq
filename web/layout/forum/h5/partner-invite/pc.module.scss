@@ -1,10 +1,11 @@
 @import '@common/styles/index.scss';
 .content{
+  position: relative;
 }
 
 // 右侧卡片内容 start
 .user_card_wrap {
-  width: 340px;
+  width: 100%;
   border-radius: $border-radius-small;
   box-shadow: $border-shadow-color;
   background: $white;
@@ -12,7 +13,7 @@
   padding: 84px $padding-6n $padding-4n;
   margin-bottom: $margin-5n;
   .user_card_main {
-    width: 292px;
+    width: 100%;
     border-radius: $border-radius-small;
     background: $primary-color;
     margin: 0 auto;
@@ -56,8 +57,7 @@
       padding-top: $padding-1n;
     }
     .site_info {
-      width: 260px;
-      height: 78px;
+      width: 100%;
       border-radius: $border-radius-small;
       background: $comment-bg-color;
       margin: auto;
@@ -69,6 +69,7 @@
       display: flex;
       flex-direction: column;
       padding: $padding-4n 0;
+      @include text-ellipsis;
     }
     .site_status_label {
       font-weight: normal;
@@ -84,6 +85,7 @@
       line-height: $font-line-height-middle;
       color: $primary-color;
       padding-top: $padding-1n;
+      @include text-ellipsis;
     }
 
   }
@@ -108,7 +110,7 @@
     }
   }
   .user_card_button {
-    width: 292px;
+    width: 100%;
     height: 36px;
     border-radius: $border-radius-small;
     background: $primary-color;
@@ -133,4 +135,13 @@
     }
   }
 }
+.maskLayer{
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  z-index: $zindex-popup;
+  pointer-events: auto;
+}
+
 

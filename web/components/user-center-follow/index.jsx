@@ -1,6 +1,6 @@
 import React from 'react';
 import UserCenterFriends from '../user-center-friends';
-import { Spin } from '@discuzq/design';
+import { Spin, Toast } from '@discuzq/design';
 import { followerAdapter } from './adapter';
 import styles from './index.module.scss';
 import { createFollow, deleteFollow, getUserFollow } from '@server';
@@ -50,47 +50,61 @@ class UserCenterFollows extends React.Component {
   totalPage = 1;
 
   fetchFollows = async () => {
-    const opts = {
-      params: {
-        page: this.page,
-        perPage: 20,
-        filter: {
-          userId: this.props.userId,
+    try {
+      const opts = {
+        params: {
+          page: this.page,
+          perPage: 20,
+          filter: {
+            userId: this.props.userId,
+          },
         },
-      },
-    };
+      };
 
-    const followRes = await getUserFollow(opts);
+      const followRes = await getUserFollow(opts);
 
-    if (followRes.code !== 0) {
-      console.error(followRes);
-      return;
-    }
-
-    const pageData = get(followRes, 'data.pageData', []);
-    const totalPage = get(followRes, 'data.totalPage', 1);
-
-    if (this.props.updateSourceTotalPage) {
-      this.props.updateSourceTotalPage(totalPage);
-    }
-    this.totalPage = totalPage;
-
-    const newFollows = Object.assign({}, this.props.dataSource || this.state.follows);
-
-    newFollows[this.page] = pageData;
-
-    if (this.props.setDataSource) {
-      this.props.setDataSource(newFollows);
-    }
-    this.setState({
-      follows: newFollows,
-    });
-
-    if (this.page <= this.totalPage) {
-      if (this.props.updateSourcePage) {
-        this.props.updateSourcePage(this.props.sourcePage + 1);
+      if (followRes.code !== 0) {
+        console.error(followRes);
+        Toast.error({
+          content: followRes.msg,
+          duration: 1000,
+        });
+        return;
       }
-      this.page += 1;
+
+      const pageData = get(followRes, 'data.pageData', []);
+      const totalPage = get(followRes, 'data.totalPage', 1);
+
+      if (this.props.updateSourceTotalPage) {
+        this.props.updateSourceTotalPage(totalPage);
+      }
+      this.totalPage = totalPage;
+
+      const newFollows = Object.assign({}, this.props.dataSource || this.state.follows);
+
+      newFollows[this.page] = pageData;
+
+      if (this.props.setDataSource) {
+        this.props.setDataSource(newFollows);
+      }
+      this.setState({
+        follows: newFollows,
+      });
+
+      if (this.page <= this.totalPage) {
+        if (this.props.updateSourcePage) {
+          this.props.updateSourcePage(this.props.sourcePage + 1);
+        }
+        this.page += 1;
+      }
+    } catch (error) {
+      console.error(error);
+      if (error.code) {
+        Toast.error({
+          content: error.msg,
+          duration: 1000,
+        });
+      }
     }
   };
 
@@ -140,6 +154,12 @@ class UserCenterFollows extends React.Component {
         success: true,
       };
     }
+
+    Toast.error({
+      content: res.msg,
+      duration: 1000
+    })
+
     return {
       msg: res.msg,
       data: null,
@@ -157,6 +177,12 @@ class UserCenterFollows extends React.Component {
         success: true,
       };
     }
+
+    Toast.error({
+      content: res.msg,
+      duration: 1000
+    })
+
     return {
       msg: res.msg,
       data: null,
@@ -178,7 +204,9 @@ class UserCenterFollows extends React.Component {
   // 清理，防止内存泄露
   componentWillUnmount() {
     if (!this.containerRef.current) return;
-    this.containerRef.current.removeEventListener('scroll', this.loadMore);
+    this.containerRef &&
+      this.containerRef.current &&
+      this.containerRef.current.removeEventListener('scroll', this.loadMore);
   }
 
   // TODO: 增加这里对于 ID 的处理，感应 ID 变化时发生及时更新
@@ -186,6 +214,12 @@ class UserCenterFollows extends React.Component {
     if (prevProps.userId !== this.props.userId) {
       this.page = 1;
       this.totalPage = 1;
+      if (this.props.updateSourcePage) {
+        this.props.updateSourcePage(1);
+      }
+      if (this.props.updateSourceTotalPage) {
+        this.props.updateSourceTotalPage(1);
+      }
       if (this.props.setDataSource) {
         this.props.setDataSource({});
       }
@@ -198,7 +232,12 @@ class UserCenterFollows extends React.Component {
 
   // 检查是否满足触底加载更多的条件
   checkLoadCondition() {
-    const hasMorePage = this.totalPage >= this.page;
+    let hasMorePage = null;
+    if (this.dataSource) {
+      hasMorePage = this.sourceTotalPage >= this.sourcePage;
+    } else {
+      hasMorePage = this.totalPage >= this.page;
+    }
     if (this.state.loading) return false;
     if (!this.props.loadMorePage) {
       return false;

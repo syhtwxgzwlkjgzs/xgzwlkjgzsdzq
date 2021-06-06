@@ -7,8 +7,7 @@ import styles from './index.module.scss';
 import TopNew from './components/top-news';
 import FilterView from './components/filter-view';
 import BaseLayout from '@components/base-layout';
-import initJSSdk from '@common/utils/initJSSdk.js';
-import wxAuthorization from '../../user/h5/wx-authorization';
+
 
 @inject('site')
 @inject('user')
@@ -31,50 +30,20 @@ class IndexH5Page extends React.Component {
     this.renderItem = this.renderItem.bind(this);
   }
 
-  async componentDidMount() {
-    await initJSSdk(['updateAppMessageShareData', 'updateTimelineShareData', 'checkJsApi']);
-    wx.ready(() => {
-      console.log(111);
-      alert('ready');
-    });
-    const { site } = this.props;
-    const title = site.webConfig.setSite.siteName || 'Discuz! Q';
-    const desc = site.webConfig.setSite.siteIntroduction || 'Discuz! Q官方论坛';
-    const imgUrl = site.webConfig.setSite.siteLogo;
-    const link = site.webConfig.setSite.siteUrl;
-    console.log({
-      title, desc, imgUrl,
-    });
-    wx.ready(() => {   // 需在用户可能点击分享按钮前就先调用
-      wx.updateAppMessageShareData({
-        title, // 分享标题
-        desc, // 分享描述
-        link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl, // 分享图标
-      });
-    });
+  componentDidMount() {
+    const { filter = {} } = this.props.index
 
-    wx.ready(() => {      // 需在用户可能点击分享按钮前就先调用
-      wx.updateTimelineShareData({
-        title, // 分享标题
-        link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl, // 分享图标
-      });
-    });
-
-    const { filter = {} } = this.props.index;
-
-    const newFilter = { ...this.state.filter, ...filter };
-    const { categoryids = [] } = newFilter;
-
-    const currentIndex = this.resetCurrentIndex(categoryids[0] || 'all');
-
-    this.setState({ filter: newFilter, currentIndex });
+    const newFilter = { ...this.state.filter, ...filter }
+    const { categoryids = [] } = newFilter
+ 
+    const currentIndex = this.resetCurrentIndex(categoryids[0] || 'all')
+    
+    this.setState({ filter: newFilter, currentIndex })
   }
 
   componentWillUnmount() {
-    const { filter } = this.state;
-    this.props.index.setFilter(filter);
+    const { filter } = this.state
+    this.props.index.setFilter(filter)
   }
 
   checkIsOpenDefaultTab() {
@@ -97,7 +66,7 @@ class IndexH5Page extends React.Component {
   // 点击底部tabBar
   onClickTabBar = (data, index) => {
     if (index !== 0) {
-      return;
+      return
     }
     const { dispatch = () => {} } = this.props;
     const { filter } = this.state;
@@ -108,19 +77,19 @@ class IndexH5Page extends React.Component {
   onClickTab = (id = '') => {
     const { dispatch = () => {} } = this.props;
     const currentIndex = this.resetCurrentIndex(id);
-    const { categories = [] } = this.props.index;
+    const { categories = [] } = this.props.index
 
     // 若选中的一级标签，存在二级标签，则将一级id和所有二级id全都传给后台
-    let newCategoryIds = [currentIndex];
-    const tmp = categories.filter(item => item.pid === currentIndex);
+    let newCategoryIds = [currentIndex]
+    const tmp = categories.filter(item => item.pid === currentIndex)
     if (tmp.length && tmp[0]?.children?.length) {
-      newCategoryIds = [currentIndex];
-      tmp[0]?.children?.forEach((item) => {
-        newCategoryIds.push(item.pid);
-      });
+      newCategoryIds = [currentIndex]
+      tmp[0]?.children?.forEach(item => {
+        newCategoryIds.push(item.pid)
+      })
     }
 
-    const newFilter = { ...this.state.filter, categoryids: newCategoryIds, sequence: id === 'default' ? 1 : 0 };
+    const newFilter = { ...this.state.filter, categoryids: newCategoryIds, sequence: id === 'default' ? 1 : 0, }
 
     dispatch('click-filter', newFilter);
 
@@ -135,11 +104,11 @@ class IndexH5Page extends React.Component {
   onClickFilter = ({ categoryids, types, essence, sequence }) => {
     const { dispatch = () => {} } = this.props;
     const requestCategoryids = categoryids.slice();
-
-    const newFilter = { ...this.state.filter, categoryids: requestCategoryids, types, essence, sequence };
+    
+    const newFilter = { ...this.state.filter, categoryids: requestCategoryids, types, essence, sequence }
     dispatch('click-filter', newFilter);
 
-    const newCurrentIndex = this.resetCurrentIndex(categoryids[0]);
+    let newCurrentIndex = this.resetCurrentIndex(categoryids[0])
     this.setState({
       filter: newFilter,
       currentIndex: newCurrentIndex,
@@ -152,21 +121,21 @@ class IndexH5Page extends React.Component {
   }
 
   resetCurrentIndex = (id) => {
-    let newCurrentIndex = id;
-    const newId = this.resetCategoryids(id);
+    let newCurrentIndex = id
+    const newId = this.resetCategoryids(id)
     if (newId) {
-      const { categories = [] } = this.props.index;
-      categories.forEach((item) => {
+      const { categories = [] } = this.props.index || {}
+      categories.forEach(item => {
         if (item.children?.length) {
-          const tmp = item.children.filter(children => children.pid === newId);
+          const tmp = item.children.filter(children => children.pid === newId)
           // TODO H5首页暂时不显示二级标题
           if (tmp.length) {
-            newCurrentIndex = item.pid;
+            newCurrentIndex = item.pid
           }
         }
-      });
+      })
     }
-    return newCurrentIndex;
+    return newCurrentIndex
   }
 
   // 上拉加载更多
@@ -178,13 +147,13 @@ class IndexH5Page extends React.Component {
   };
 
   handleScroll = ({ scrollTop = 0 } = {}) => {
-    const { height = 180 } = this.headerRef.current?.state || {};
+    const { height = 180 } = this.headerRef.current?.state || {}
     const { fixedTab } = this.state;
     // 只需要滚到临界点触发setState，而不是每一次滚动都触发
-    if (!fixedTab && scrollTop >= height) {
-      this.setState({ fixedTab: true });
-    } else if (fixedTab && scrollTop < height) {
-      this.setState({ fixedTab: false });
+    if(!fixedTab && scrollTop >= height) {
+      this.setState({ fixedTab: true })
+    } else if(fixedTab && scrollTop < height) {
+      this.setState({ fixedTab: false })
     }
   }
 
@@ -196,7 +165,7 @@ class IndexH5Page extends React.Component {
       return categories;
     }
 
-    const tmpCategories = [{ name: '全部', pid: 'all', children: [] }];
+    let tmpCategories = [{ name: '全部', pid: 'all', children: [] }]
 
     if (this.checkIsOpenDefaultTab()) {
       tmpCategories.push({ name: '推荐', pid: 'default', children: [] });
@@ -261,6 +230,7 @@ class IndexH5Page extends React.Component {
       <ThreadContent data={data[index]} className={styles.listItem} />
     </div>
   );
+
   render() {
     const { index } = this.props;
     const { filter, isFinished } = this.state;
@@ -284,7 +254,7 @@ class IndexH5Page extends React.Component {
         requestError={this.props.isError}
         errorText={this.props.errorText}
       >
-        <HomeHeader ref={this.headerRef}/>
+        <HomeHeader ref={this.headerRef} />
 
         {this.renderTabs()}
 
@@ -292,11 +262,11 @@ class IndexH5Page extends React.Component {
 
         {pageData?.length > 0
           && pageData.map((item, index) => (
-            <ThreadContent
-              key={index}
-              showBottomStyle={index !== pageData.length - 1}
-              data={item}
-              className={styles.listItem}
+            <ThreadContent 
+              key={index} 
+              showBottomStyle={index !== pageData.length - 1} 
+              data={item} 
+              className={styles.listItem} 
             />
           ))}
 

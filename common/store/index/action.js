@@ -200,16 +200,18 @@ class IndexAction extends IndexStore {
   getCategorySelectById(id) {
     let parent = {};
     let child = {};
-    if (this.categories && this.categories.length && id) {
-      this.categories.forEach((item) => {
+    let currentId = id;
+    if (!id && this.categoriesNoAll && this.categoriesNoAll.length) currentId = this.categoriesNoAll[0].pid;
+    if (this.categoriesNoAll && this.categoriesNoAll.length && currentId) {
+      this.categoriesNoAll.forEach((item) => {
         const { children } = item;
-        if (item.pid === id) {
+        if (item.pid === currentId) {
           parent = item;
           if (children && children.length > 0) [child] = children;
         } else {
           if (children && children.length > 0) {
             children.forEach((elem) => {
-              if (elem.pid === id) {
+              if (elem.pid === currentId) {
                 child = elem;
                 parent = item;
               }
@@ -321,6 +323,11 @@ class IndexAction extends IndexStore {
     // 更新分享
     if (updateType === 'share') {
       data.likeReward.shareCount = data.likeReward.shareCount + 1;
+    }
+
+    // 更新分享
+    if (updateType === 'viewCount') {
+      data.viewCount = data.viewCount + 1;
     }
 
     if (this.threads?.pageData) {

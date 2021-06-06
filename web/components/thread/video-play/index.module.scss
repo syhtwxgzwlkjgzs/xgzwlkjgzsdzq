@@ -9,8 +9,13 @@
   .videoBox {
     border-radius: rem($border-radius-small);
   }
-  :global(.vjs-poster) {
-    border-radius: rem($border-radius-small);
+  :global {
+    .vjs-poster {
+      border-radius: rem($border-radius-small);
+    }
+    .video-js {
+      width: 100%;
+    }
   }
   .payBox {
     position: absolute;

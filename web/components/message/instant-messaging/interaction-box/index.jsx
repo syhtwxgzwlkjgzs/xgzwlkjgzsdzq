@@ -35,7 +35,7 @@ const InteractionBox = (props) => {
   //   }
   // };
   const replaceRouteWidthDialogId = (dialogId) => {
-    Router.replace({ url: `/message?page=chat&dialogId=${dialogId}` });
+    Router.replace({ url: `/message?page=chat&username=${username}&dialogId=${dialogId}` });
   };
 
 
@@ -72,7 +72,7 @@ const InteractionBox = (props) => {
         setTypingValue('');
         readDialogMsgList(dialogId);
       } else {
-        Toast.error({ content: ret.message });
+        Toast.error({ content: ret.msg });
       }
     }
 
@@ -130,7 +130,7 @@ const InteractionBox = (props) => {
     }
 
     return true;
-  }
+  };
 
   const onImgChange = async (e) => {
     const files = e.target.files;
@@ -193,7 +193,8 @@ const InteractionBox = (props) => {
               />
               <div className={styles.tools}>
                 <div>
-                  <Icon name="SmilingFaceOutlined" size={20} onClick={() => {
+                  <Icon name="SmilingFaceOutlined" size={20} onClick={(e) => {
+                    e.stopPropagation();
                     setShowEmoji(!showEmoji);
                   }} />
                 </div>
@@ -231,7 +232,8 @@ const InteractionBox = (props) => {
               onClick={insertEmoji}
             />
             <div className={styles.emoj}>
-              <Icon name="SmilingFaceOutlined" size={20} onClick={() => {
+              <Icon name="SmilingFaceOutlined" size={20} onClick={(e) => {
+                e.stopPropagation();
                 setShowEmoji(!showEmoji);
               }} />
             </div>

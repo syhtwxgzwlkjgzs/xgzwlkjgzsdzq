@@ -23,10 +23,10 @@ const Index = ({ site, message }) => {
   const formatFinancialList = (list = []) => {
     const newList = [];
     list.forEach(({
-      amount, content, createdAt, id, threadId, threadTitle, type, userAvatar, userId, username
+      amount, cashActualAmount, content, createdAt, id, threadId, threadTitle, type, userAvatar, userId, username
     }) => {
       newList.push({
-        amount,
+        amount: amount || cashActualAmount || 0,
         content: threadTitle || content,
         createdAt,
         id,
@@ -46,7 +46,7 @@ const Index = ({ site, message }) => {
   }, [list])
 
   return (
-    <div className={`${styles.wrapper} ${site.isPC ? styles.pc : ""}`}>
+    <div className={`${styles.wrapper} ${site.isPC ? styles.pc : styles.mobile}`}>
       <Notice
         infoIdx={2}
         totalCount={totalCount}

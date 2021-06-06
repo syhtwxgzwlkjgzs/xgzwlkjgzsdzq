@@ -36,9 +36,18 @@ const Index = ({
   };
 
   const onPlay = (e) => {
-    if(e && baselayout) {
+    if(player && e && baselayout) {
       // 暂停之前正在播放的音视频
-      baselayout.pauseWebAllPlayers();
+      if(baselayout.playingVideoDom) {
+        // 暂停之前正在播放的视频
+        baselayout.pauseWebPlayingVideo(e.target);
+      }
+  
+      if(baselayout.playingAudioDom) {
+        // 暂停之前正在播放的音频
+        baselayout.pauseWebPlayingAudio();
+      }
+
       baselayout.playingVideoDom = e.target;
       baselayout.playingVideoPos = e.target?.parentNode?.parentNode?.parentNode?.offsetTop || -1;
     }

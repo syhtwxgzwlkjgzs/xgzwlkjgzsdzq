@@ -6,11 +6,11 @@
   padding: 0 rem($padding-4n);
   padding-bottom: 0;
   border-radius: rem($border-radius-small);
+  overflow-y: auto;
   .recommendContent {
     font-weight: 600;
     font-size: rem(18);
-    height: rem(57);
-    line-height: rem(57);
+    padding: rem(16) 0;
     color: var(--color-text-primary);
   }
 }

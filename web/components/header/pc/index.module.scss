@@ -124,6 +124,8 @@
             margin-left: rem(8);
             color: $text-color-regular;
             font-size: rem($font-size-primary);
+            max-width: rem(200);
+            @include text-ellipsis();
           }
           .userBtn{
             margin-right: rem(16);
@@ -141,5 +143,9 @@
       }
 
     }
+  }
+
+  .headerDropMenuIcon {
+    margin-right: rem(4);
   }
 }

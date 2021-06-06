@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx';
 import { get } from '@common/utils/get';
+import { groupPermissionList } from '../../server';
 
 class ForumStore {
   constructor() {}
@@ -12,6 +13,8 @@ class ForumStore {
   @observable threadsPageData = null;
   @observable threadTotal = 0;
   @observable updataTime = null;
+  @observable myGroup = null;
+  @observable myPermissons = null;
 
   @action
   setUserPage(page) {
@@ -26,6 +29,17 @@ class ForumStore {
   @action
   setIsLoading(is) {
     this.isLoading = is;
+  }
+
+  @action
+  async setGroupPermissionList() {
+    try {
+      const resp = await groupPermissionList();
+      this.myGroup = get(resp, 'data.myGroup', {});
+      this.myPermissons = get(resp, 'data.myPermissons', {});
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   @action

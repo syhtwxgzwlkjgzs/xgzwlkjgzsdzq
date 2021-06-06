@@ -104,11 +104,11 @@ export class MessageIndex extends Component {
     const card = <Card cardItems={items} onClick={this.toOtherMessage} />;
 
     return (
-      <div className={`${styles.wrapper} ${isPC ? styles.pc : ""}`}>
+      <div className={`${styles.wrapper} ${isPC ? styles.pc : styles.mobile}`}>
         <Notice
           infoIdx={0}
           totalCount={totalCount}
-          withBottomBar={true}
+          withBottomBar={!isPC}
           noMore={currentPage >= totalPage}
           showHeader={!isPC}
           topCard={isPC ? null : card}

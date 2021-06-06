@@ -321,20 +321,21 @@ class ThreadPCPage extends React.Component {
     };
     const { walletInfo } = this.props.wallet;
     const { activeType, totalPage } = this.state;
-
     return (
       <div className={layout.container}>
         <div className={layout.header}>
-          <Header></Header>
+          <Header />
         </div>
         <div className={`${layout.body} ${totalPage !== 1 ? layout.bodyPaddingTop20 : layout.bodyPadding20}`}>
           {/* 左边内容 */}
           <div className={layout.bodyLeft}>
             <div className={layout.header}>
-              {activeType === 'income' ? <Icon name="TicklerOutlined" size="18" color="#3ac15f"></Icon> : ''}
-              {activeType === 'pay' ? <Icon name="WallOutlined" size="18" color="#2469f6"></Icon> : ''}
-              {activeType === 'withdrawal' ? <Icon name="TransferOutOutlined" size="18" color="#e02433"></Icon> : ''}
-              <div className={layout.title}>{recordType[activeType]}</div>
+              <div className={layout.headerTitle}>
+                {activeType === 'income' ? <Icon name="TicklerOutlined" size="18" color="#3ac15f"></Icon> : ''}
+                {activeType === 'pay' ? <Icon name="WallOutlined" size="18" color="#2469f6"></Icon> : ''}
+                {activeType === 'withdrawal' ? <Icon name="TransferOutOutlined" size="18" color="#e02433"></Icon> : ''}
+                <div className={layout.title}>{recordType[activeType]}</div>
+              </div>
             </div>
             <div className={layout.choice}>
               <div className={layout.choiceLeft}>
@@ -363,7 +364,7 @@ class ThreadPCPage extends React.Component {
                       <Dropdown
                         onChange={this.handleChangeSelectedType}
                         placement="right"
-                        trigger="click"
+                        // trigger="click"
                         menu={this.renderDropdownMenu()}
                       >
                         <div>{this.renderSelectedType()}</div>
@@ -371,6 +372,14 @@ class ThreadPCPage extends React.Component {
                     </div>
                   </>
                 )}
+                {
+                  activeType === 'frozen' && (
+                    <div className={layout.frozenText}>
+                      <span>涉及金额</span>
+                      <span className={layout.frozenAmount}>{walletInfo.freezeAmount} 元</span>
+                    </div>
+                  )
+                }
               </div>
               {this.state.totalCount !== null && (
                 <div className={layout.recordNumber}>共有{this.state.totalCount}条记录</div>

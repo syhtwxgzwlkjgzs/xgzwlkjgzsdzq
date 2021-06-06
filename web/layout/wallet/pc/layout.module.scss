@@ -42,23 +42,30 @@
     box-sizing: border-box;
     width: rem(750);
     margin-right: rem($margin-5n);
-    padding: 0 rem($padding-5n);
     background: var(--color-white);
+    padding: rem($padding-6n);
+    border-radius: rem(5);
 
     .header {
-      height: rem(70);
-      font-weight: 600;
-      font-size: rem($font-size-primary);
-      text-align: left;
       color: var(--color-text-primary);
       border-bottom: var(--border-border);
+      padding-bottom: rem($margin-6n);
+      .headerTitle {
+        display: flex;
+        align-items: center;
+        height: rem(22);
+        line-height: rem($font-line-height-small);
+        font-weight: 600;
+        font-size: rem($font-size-primary);
+        text-align: left;
+      }
     }
 
     .choice {
-      height: rem(76);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin: rem($margin-4n) 0 rem($margin-6n);
       .choiceLeft {
         display: flex;
         justify-content: start;
@@ -89,12 +96,22 @@
             }
           }
         }
+        .frozenText {
+          height: rem(20);
+          line-height: rem(20);
+          color: $text-color-regular;
+          font-size: rem($font-size-primary);
+          .frozenAmount {
+            font-weight: 600;
+            margin-left: rem($margin-2n);
+          }
+        }
       }
 
       .recordNumber {
         font-weight: normal;
         font-size: rem($font-size-label);
-        color: #4f5a70;
+        color: $text-color-regular;
       }
     }
 

@@ -10,6 +10,9 @@ import { withRouter } from 'next/router';
 @inject('forum')
 @observer
 class UserCenterUsersPc extends React.Component {
+  static defaultProps = {
+    limit: 10,
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -52,7 +55,7 @@ class UserCenterUsersPc extends React.Component {
                 paddingRight: 0,
               }}
               className={styles.friendsWrapper}
-              limit={5}
+              limit={this.props.limit}
             />
           )}
         </SidebarPanel>
