@@ -173,7 +173,7 @@ class PartnerInviteH5Page extends React.Component {
           {/* 热门内容预览 end */}
           <View className={layout.maskLayer}></View>
           <View className={layout.bottom}>
-            {invitorName ? (
+            {inviteCode ? (
               <View className={layout.bottom_tips}>
                 {/* <img className={layout.bottom_tips_img} src={ invitorAvatar } alt=""/> */}
                 <Avatar
