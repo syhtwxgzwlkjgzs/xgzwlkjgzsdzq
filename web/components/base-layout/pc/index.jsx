@@ -7,29 +7,32 @@ import { noop } from '@components/thread/utils';
 
 import styles from './index.module.scss';
 /**
-* PC端集成布局组件
+* PC端集成布局组件，支持List组件所有属性，会将props透传到List组件
 * @prop {function} header 头部视图组件
 * @prop {function} left 内容区域左部视图组件
 * @prop {function} children 内容区域中间视图组件
 * @prop {function} right 内容区域右部视图组件
 * @prop {function} footer 底部视图组件
-* @prop other List Props // List组件所有的属性
+* @prop {function} onSearch 顶部 Header 搜索回调
+* @prop {boolean} isShowLayoutRefresh 是否显示自定义加载视图
+* @prop {boolean} requestError 是否接口请求报错
+* @prop {string} errorText 报错文案
 * @example
 *     <BaseLayout
-        left={(props) => <div>左边</div>}
-        right={(props) => <div>右边</div>}
+        left={<div>左边</div>}
+        right={<div>右边</div>}
       >
-        {(props) => <div>中间</div>}
+        <div>中间</div>
       </BaseLayout>
 */
 
 const baseLayoutWhiteList = ['home', 'search'];
 
 const BaseLayout = forwardRef((props, ref) => {
-    // UI设置相关
+    // UI设置相关 left-children-right 对应三列布局
     const { header = null, left = null, children = null, right = null, footer = null, rightClass = '' } = props
 
-    // List组件相关
+    // List组件相关，参考List组件props注释
     const { noMore = false, onRefresh, onScroll = noop, immediateCheck = false } = props
   
     // Header组件相关
@@ -91,7 +94,7 @@ const BaseLayout = forwardRef((props, ref) => {
             {
               (pageName === 'home' || left) && (
                 <div className={styles.left}>
-                  {typeof(left) === 'function' ? useCallback(left({ ...props }), []) : left}
+                  {typeof(left) === 'function' ? left({ ...props }) : left}
                 </div>
               )
             }
