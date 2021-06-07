@@ -90,7 +90,7 @@ class InviteH5Page extends React.Component {
                     className={layout.invite_num_content}
                     title={numberFormat(inviteData.totalInviteUsers)}
                   >
-                    {numberFormat(inviteData.totalInviteUsers) || '--'}
+                    {numberFormat(inviteData.totalInviteUsers)}
                   </div>
                 </div>
                 <div className={layout.invite_money}>
