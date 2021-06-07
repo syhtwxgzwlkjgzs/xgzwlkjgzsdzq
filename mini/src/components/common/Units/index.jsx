@@ -10,7 +10,11 @@
  import Icon from '@discuzq/design/dist/components/icon/index';
 
 const Index = (props) => {
-  const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, onTagRemoveClick, isCloseShow = true, onTagClick, tagContent, deleteShow = false, onVideoLoaded = () => { }, style = {} } = props;
+<<<<<<< Updated upstream
+  const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, onTagRemoveClick, isCloseShow = true, onTagClick, tagContent, deleteShow = false, onVideoLoaded = () => { }, style = {}, icon, label } = props;
+=======
+  const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, onTagRemoveClick, onTagClick, tagContent, deleteShow = false, onVideoLoaded = () => {}, icon, label } = props;
+>>>>>>> Stashed changes
 
   // 标签展示
   const tag = (
@@ -77,17 +81,17 @@ const Index = (props) => {
 
   // 附件添加
   const attaUpload = (
-    <View className={styles['upload-atta']} onClick={onUpload}>
-      <Icon name='PlusOutlined' size={14} className={styles['text']} />
-      <Text className={styles['text']}>添加附件</Text>
+    <View className={`${styles['upload-atta']} upload-atta-custom`} onClick={onUpload}>
+      <Icon name={icon || 'PlusOutlined'} size={16} className={styles['text']} />
+      <Text className={styles['text']}>{ label || '添加附件' }</Text>
     </View>
   );
 
   // 图片添加
   const imgUpload = (
-    <View className={styles['upload-img']} onClick={onUpload}>
-      <Icon name='PlusOutlined' size={16} className={styles['text']} />
-      <Text className={styles['text']}>上传图片</Text>
+    <View className={`${styles['upload-img']} upload-img-custom`} onClick={onUpload}>
+      <Icon name={icon || 'PlusOutlined'} size={16} className={styles['text']} />
+      <Text className={styles['text']}>{ label || '上传图片'}</Text>
     </View>
   );
 
