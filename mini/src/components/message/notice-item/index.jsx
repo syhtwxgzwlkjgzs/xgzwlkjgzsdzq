@@ -4,8 +4,8 @@
 import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
-import Badge from '@discuzq/design/dist/components/badge/index';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
+import UnreadRedDot from '@components/unread-red-dot';
 import { inject, observer } from 'mobx-react';
 import classNames from 'classnames';
 import styles from './index.module.scss';
@@ -119,13 +119,7 @@ class Index extends Component {
             className={styles.avatar}
             onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
           >
-            <Badge
-              className={classNames({
-                [styles.badge]: type === 'chat' && item.unreadCount > 9
-              })}
-              circle
-              info={type === 'chat' && this.getUnReadCount(item.unreadCount)}
-            >
+            <UnreadRedDot type='avatar' unreadCount={item.unreadCount}>
               {avatarUrl
                 ? <Avatar image={avatarUrl} circle={true} />
                 : <Avatar
@@ -136,7 +130,7 @@ class Index extends Component {
                   }}
                 />
               }
-            </Badge>
+            </UnreadRedDot>
           </View>
           {/* 详情 */}
           <View className={classNames(styles.detail, {

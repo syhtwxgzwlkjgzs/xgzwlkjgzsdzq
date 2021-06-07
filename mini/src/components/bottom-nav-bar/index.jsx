@@ -6,6 +6,7 @@ import { View } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
+import UnreadRedDot from '@components/unread-red-dot';
 
 
 /**
@@ -22,13 +23,18 @@ const routes = [
   'subPages/my/index'
 ]
 
- @inject('index')
- @inject('user')
- @observer
- class BottomNavBar extends React.Component {
+@inject('index')
+@inject('user')
+@inject('message')
+@observer
+class BottomNavBar extends React.Component {
 
-  state = {
-    tabs: []
+  constructor(props) {
+    super(props);
+    this.state = {
+      tabs: []
+    }
+    this.timeoutRef = React.createRef();
   }
 
   componentDidMount() {
@@ -42,6 +48,13 @@ const routes = [
     ]
 
     this.setState({ tabs })
+
+    this.props.message.readUnreadCount();
+    this.updateUnreadMessage();
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timeoutRef.current);
   }
 
   checkCurrActiveTab = (curr, target) => {
@@ -86,9 +99,17 @@ const routes = [
     //
   };
 
+  // 每20秒更新一次未读消息
+  updateUnreadMessage = () => {
+    this.timeoutRef.current = setTimeout(() => {
+      this.props.message.readUnreadCount();
+      this.updateUnreadMessage();
+    }, 20000);
+  }
 
   render() {
     const { fixed = true, placeholder = false, } = this.props
+    const { totalUnread } = this.props.message
     const { hiddenTabBar } = this.props.index
     const { tabs } = this.state
 
@@ -97,7 +118,15 @@ const routes = [
       <View className={styles.footer} style={{ position: fixed ? 'fixed' : '', zIndex: `${hiddenTabBar ? '-1' : '1000'}` }}>
         {tabs.map((i, idx) => (i.text ? (
             <View key={idx} className={styles.item + (i.active ? ` ${styles.active}` : '')} onClick={() => this.handleClick(i, idx)}>
-              <Icon name={i.icon} size={i.icon === 'MailOutlined' ? 22 : 20} />
+              {
+                i.icon === 'MailOutlined' ? (
+                  <UnreadRedDot unreadCount={totalUnread}>
+                    <Icon name={i.icon} size={22} />
+                  </UnreadRedDot>
+                ) : (
+                  <Icon name={i.icon} size={20} />
+                )
+              }
               <View className={styles.text}>{i.text}</View>
             </View>
         ) : (
