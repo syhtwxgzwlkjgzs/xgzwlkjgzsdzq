@@ -247,7 +247,7 @@ class UserCenterFollows extends React.Component {
   render() {
     return (
       <View
-        className={this.props.className}
+        className={`${this.props.className} ${styles.userCenterFriends}`}
         ref={this.containerRef}
         style={{
           height: '100%',
