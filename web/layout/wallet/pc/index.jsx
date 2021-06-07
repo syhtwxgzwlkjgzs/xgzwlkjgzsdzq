@@ -333,9 +333,9 @@ class ThreadPCPage extends React.Component {
           <div className={layout.bodyLeft}>
             <div className={layout.header}>
               <div className={layout.headerTitle}>
-                {activeType === 'income' ? <Icon name="TicklerOutlined" size="18" color="#3ac15f"></Icon> : ''}
-                {activeType === 'pay' ? <Icon name="WallOutlined" size="18" color="#2469f6"></Icon> : ''}
-                {activeType === 'withdrawal' ? <Icon name="TransferOutOutlined" size="18" color="#e02433"></Icon> : ''}
+                {activeType === 'income' ? <Icon name="TicklerOutlined" size="20" color="#3ac15f"></Icon> : ''}
+                {activeType === 'pay' ? <Icon name="WallOutlined" size="20" color="#2469f6"></Icon> : ''}
+                {activeType === 'withdrawal' ? <Icon name="TransferOutOutlined" size="20" color="#e02433"></Icon> : ''}
                 <div className={activeType === 'frozen' ? '' : layout.title}>{recordType[activeType]}</div>
               </div>
             </div>
