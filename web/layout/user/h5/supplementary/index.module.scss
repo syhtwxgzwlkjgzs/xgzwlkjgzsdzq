@@ -74,7 +74,7 @@
       display: inline-block;
       font-size: rem($font-size-base);
       line-height: rem($font-line-height-base);
-      color: var(--color-text-primary);
+      color: $text-color-primary;
       float: right;
       :global(.dzq-upload) {
         padding: 0;

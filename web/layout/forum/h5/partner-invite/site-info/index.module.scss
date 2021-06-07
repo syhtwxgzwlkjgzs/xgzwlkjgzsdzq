@@ -12,7 +12,7 @@
     border-bottom: rem(1) solid var(--border-line-color);
     font-size: rem($padding-4n);
     line-height: rem($font-line-height-primary);
-    color: var(--color-text-primary);
+    color: $text-color-primary;
   }
   .site_introduce{
     padding: rem($padding-4n) 0;
@@ -20,7 +20,7 @@
     font-weight: normal;
     line-height: rem($font-line-height-primary);
     text-align: left;
-    color: var(--color-text-primary);
+    color: $text-color-primary;
   }
   .site_status{
     border-top: rem(1) solid var(--border-line-color);

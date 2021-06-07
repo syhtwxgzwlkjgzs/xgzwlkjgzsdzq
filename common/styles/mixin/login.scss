@@ -11,7 +11,7 @@
   font-size: rem($font-size-large);
   line-height: rem($font-line-height-large);
   text-align: left;
-  color: var(--color-text-primary);
+  color: $text-color-primary;
   place-self: flex-start;
 }
 @mixin input {
@@ -113,7 +113,7 @@
   margin: rem(32) 0;
   line-height: rem($font-line-height-large);
   text-align: left;
-  color: var(--color-text-primary);
+  color: $text-color-primary;
   display: flex;
   flex-direction: column;
   img {
@@ -238,7 +238,7 @@
   font-size: $font-size-middle;
   line-height: $font-line-height-large;
   text-align: left;
-  color: var(--color-text-primary);
+  color: $text-color-primary;
   img {
     width: 30px;
     height: 30px;
@@ -274,7 +274,7 @@
   font-size: $font-size-large;
   line-height: $font-line-height-large;
   text-align: left;
-  color: var(--color-text-primary);
+  color: $text-color-primary;
 }
 @mixin mini_functionalRegion {
   text-align: center;

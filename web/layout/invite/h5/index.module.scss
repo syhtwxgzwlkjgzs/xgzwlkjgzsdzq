@@ -53,7 +53,7 @@
     font-weight: 600;
     font-size: rem(16);
     line-height: rem(24);
-    color: var(--color-text-primary);
+    color: $text-color-primary;
     opacity: 1;
     margin-top: rem(68);
   }
@@ -125,7 +125,7 @@
     line-height: rem($font-line-height-base);
     float: left;
     font-weight: 600;
-    color: var(--color-text-primary);
+    color: $text-color-primary;
     padding-left: rem($padding-2n);
   }
   .invite_list_header{
@@ -199,7 +199,7 @@
     span{
       font-weight: normal;
       padding-left: rem(8);
-      color: var(--color-text-primary);
+      color: $text-color-primary;
       @include text-ellipsis;
     }
   }
