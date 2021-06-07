@@ -10,11 +10,7 @@
  import Icon from '@discuzq/design/dist/components/icon/index';
 
 const Index = (props) => {
-<<<<<<< Updated upstream
   const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, onTagRemoveClick, isCloseShow = true, onTagClick, tagContent, deleteShow = false, onVideoLoaded = () => { }, style = {}, icon, label } = props;
-=======
-  const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, onTagRemoveClick, onTagClick, tagContent, deleteShow = false, onVideoLoaded = () => {}, icon, label } = props;
->>>>>>> Stashed changes
 
   // 标签展示
   const tag = (
