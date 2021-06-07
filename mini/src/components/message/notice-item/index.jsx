@@ -70,21 +70,20 @@ class Index extends Component {
   };
 
   filterTag(html) {
-    if (typeof html !== 'string') return ''; // 兜底后端返回空数组的错误数据
     return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '');
   }
 
   // parse content
   parseHTML = () => {
     const { type, item } = this.props;
-    let _content = item.content;
+    let _content = typeof item.content === 'string' ? item.content : '';
 
     if (type === 'account') {
       const tip = `<span class=\"${styles.tip}\">${this.getAccountTips(item)}</span>`;
-      _content = tip + item.content;
+      _content = tip + _content;
     }
 
-    return this.filterTag(xss(s9e.parse(this.filterTag(_content))));
+    return xss(s9e.parse(this.filterTag(_content)));
   }
 
   // 跳转用户中心
