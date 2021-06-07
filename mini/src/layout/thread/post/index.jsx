@@ -379,6 +379,7 @@ class Index extends Component {
 
   handleSubmit = async (isDraft) => {
     // 1 校验
+    const { threadId } = this.state;
     const { threadPost, site } = this.props;
     const { postData, redpacketTotalAmount } = threadPost;
     if (!isDraft && !postData.contentText) {
@@ -410,9 +411,13 @@ class Index extends Component {
     }
 
     // 4 支付流程
-    const { rewardQa } = postData;
-    const rewardAmount = (Number(rewardQa.value) || 0);
-    const redAmount = (Number(redpacketTotalAmount) || 0);
+    const { rewardQa, redpacket } = postData;
+
+    // 如果是编辑的悬赏帖子，则不用再次支付
+    const rewardAmount = (threadId && rewardQa.id) ? 0 : (Number(rewardQa.value) || 0);
+    // 如果是编辑的红包帖子，则不用再次支付
+    const redAmount = (threadId && redpacket.id) ? 0 : (Number(redpacketTotalAmount) || 0);
+
     const amount = rewardAmount + redAmount;
     const options = { amount };
     if (!isDraft && amount) {
@@ -452,7 +457,6 @@ class Index extends Component {
     });
     // 6 根据是否存在主题id，选择更新主题、新建主题
     let ret = {};
-    const { threadId } = this.state;
     if (threadId) {
       ret = await threadPost.updateThread(threadId);
     } else {
