@@ -110,7 +110,7 @@ class ForumH5Page extends React.Component {
                       <Avatar size='small' key={item.userId} text={item.nickname.substring(0, 1)} className={layout.forum_member_img} image={item.avatar}/>
                     ))
                 }
-                <Icon site={10} color='#8590A6' name='RightOutlined'/>
+                <Icon size={10} color='#8590A6' name='RightOutlined'/>
               </div>
             </div>
           </div>
