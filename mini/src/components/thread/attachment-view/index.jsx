@@ -6,7 +6,8 @@ import Toast from '@discuzq/design/dist/components/toast/index';
 import Spin from '@discuzq/design/dist/components/spin/index';
 import { extensionList, isPromise, noop } from '../utils';
 import goToLoginPage from '@common/utils/go-to-login-page';
-import { View, Text } from '@tarojs/components'
+import { View, Text } from '@tarojs/components';
+import Taro from '@tarojs/taro';
 import Downloader from './downloader';
 
 
@@ -16,7 +17,16 @@ import Downloader from './downloader';
  * @prop {Boolean} isHidden 是否隐藏删除按钮
  */
 
-const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noop, onPay = noop, user }) => {
+const Index = ({
+  attachments = [],
+  isHidden = true,
+  isPay = false,
+  onClick = noop,
+  onPay = noop,
+  user = null,
+  threadId = null,
+  thread = null,
+}) => {
   // 处理文件大小的显示
   const handleFileSize = (fileSize) => {
     if (fileSize > 1000000) {
@@ -33,10 +43,12 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
   const [downloading, setDownloading] =
         useState(Array.from({length: attachments.length}, () => false));
   const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
 
   const onDownLoad = (item, index) => {
     // 下载中
     if(downloading?.length && downloading[index]) return;
+    if(!item || !threadId) return;
 
     // 对没有登录的先登录
     if (!user?.isLogin()) {
@@ -49,39 +61,83 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
       downloading[index] = true;
       setDownloading([...downloading]);
 
-      if(!item?.url) return;
-      const url = item.url;
-      const extension = item?.extension;
-
-      downloader?.download(url, true).then((path) => {
-        wx.openDocument({
-          filePath: path,
-          fileType: extension, // 微信支持下载文件类型：doc, docx, xls, xlsx, ppt, pptx, pdf
-          success(res) {
-          },
-          fail(error) {
-            setErrorMsg("小程序暂不支持下载此类文件");
-            console.error(error.errMsg);
-          },
-        });
-      }).catch((error) => {
-        setErrorMsg(["下载失败"]);
-        console.error(error.errMsg)
-      }).finally(() => {
+      if(!item?.url) {
+        setErrorMsg("获取下载链接失败");
         setTimeout(() => {
           setErrorMsg("");
         }, 3000);
         downloading[index] = false;
         setDownloading([...downloading]);
-      });
+        return;
+      }
+
+      Taro.downloadFile({
+        url: item.url,
+        success: function (res) {
+          Taro.openDocument({
+            filePath: res.tempFilePath,
+            success: function (res) {
+              setSuccessMsg("下载成功");
+            },
+            fail: function (error) {
+              setErrorMsg("小程序暂不支持下载此类文件\n请点击“链接”获取下载链接");
+              console.error(error.errMsg)
+            },
+            complete: function () {
+            }
+          })
+        },
+        fail: function (error) {
+          setErrorMsg("下载链接无效");
+          console.error(error.errMsg)
+        },
+        complete: function () {
+          setTimeout(() => {
+            setErrorMsg("");
+            setSuccessMsg("");
+          }, 3000);
+          downloading[index] = false;
+          setDownloading([...downloading]);
+        }
+      })
+
+
     } else {
       onPay();
     }
   };
 
-  const onPreviewer = (url) => {
+  const onLinkShare = (item, index) => {
     if (!isPay) {
-      window.open(url, '_self');
+      const attachmentId = item.id;
+      thread.fetchThreadAttachmentUrl(threadId, attachmentId).then((res) => {
+        if(res?.code === 0 && res?.data) {
+          const { url } = res.data;
+          Taro.setClipboardData({
+            data: url,
+            success: function (res) {
+              Taro.getClipboardData({
+                success: function (res) {
+                  // setSuccessMsg("下载链接已复制到剪贴板");
+                }
+              })
+            }
+          })
+        } else {
+          setErrorMsg(res?.msg);
+          console.error(res);
+        }
+      }).catch((error) => {
+        setErrorMsg(error.errMsg);
+        console.error(error);
+        return;
+      }).finally(() => {
+        setTimeout(() => {
+          setErrorMsg("");
+          setSuccessMsg("");
+        }, 3000);
+      });
+
     } else {
       onPay();
     }
@@ -103,9 +159,10 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
   };
 
   useEffect(() => {
-    if(errorMsg !== '') {
+    if(errorMsg !== '' || successMsg !== '') {
       setTimeout(() => {
         setErrorMsg("");
+        setSuccessMsg("");
       }, 3000);
     }
   }, [errorMsg])
@@ -124,11 +181,13 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
           </View>
 
           <View className={styles.right}>
-            {/* <Text className={styles.Text} onClick={() => onPreviewer(item.url)}>浏览</Text> */}
-            { downloading[index] ?
-              <Spin type="spinner" /> :
-              <Text onClick={() => onDownLoad(item, index)}>下载</Text>
-            }
+            <Text onClick={() => onLinkShare(item, index)}>链接</Text>
+            <View className={styles.label}>
+              { downloading[index] ?
+                <Spin className={styles.spinner} type="spinner" /> :
+                <Text onClick={() => onDownLoad(item, index)}>下载</Text>
+              }
+            </View>
           </View>
         </View>
       </View>
@@ -147,12 +206,17 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
 
   return (
     <View>
-        { errorMsg !== "" && (
-            <View className={styles.errorMsgWrapper}>
-              <Icon className={styles.tipsIcon} size={20} name={'WrongOutlined'}></Icon>
-              <Text className={styles.errorMessage}>{errorMsg}</Text> 
-            </View>
-          )
+        { errorMsg !== "" && 
+          <View className={[styles.msgWrapper, styles.errorMsgWrapper]}>
+            <Icon className={styles.tipsIcon} size={20} name={'WrongOutlined'}></Icon>
+            <Text className={styles.errorMessage}>{errorMsg}</Text>
+          </View>
+        }
+        { successMsg !== "" && 
+          <View className={[styles.msgWrapper, styles.successMsgWrapper]}>
+            <Icon className={styles.tipsIcon} size={20} name={'CheckOutlined'}></Icon>
+            <Text className={styles.successMessage}>{successMsg}</Text>
+          </View>
         }
         {
           attachments.map((item, index) => {
@@ -174,4 +238,4 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
   );
 };
 
-export default inject('user')(observer(Index));
+export default inject('user', 'thread')(observer(Index));
