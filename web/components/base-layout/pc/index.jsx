@@ -40,7 +40,7 @@ const BaseLayout = forwardRef((props, ref) => {
     onScroll = noop,
     immediateCheck=false,
     requestError=false,
-    errorText='',
+    errorText='加载失败',
     rightClass = '',
     isShowLayoutRefresh = true
   } = props;
@@ -64,6 +64,10 @@ const BaseLayout = forwardRef((props, ref) => {
       listRef,
     }),
   );
+
+  useEffect(() => {
+    setIsError(requestError);
+  }, [requestError])
 
   // const updateSize = debounce(() => {
   //   if (window) {
@@ -93,6 +97,7 @@ const BaseLayout = forwardRef((props, ref) => {
   if (left && right) {
     cls = styles['col-3'];
   }
+  console.log(isError, errorText);
   return (
     <div className={styles.container}>
         {(header && header({ ...props })) || <Header onSearch={onSearch} />}
@@ -114,7 +119,7 @@ const BaseLayout = forwardRef((props, ref) => {
             <div className={styles.center}>
               {typeof(children) === 'function' ? children({ ...props }) : children}
               {!isError && isShowLayoutRefresh && onRefresh && <RefreshView noMore={noMore} />}
-              {isError && <ErrorView />}
+              {isError && <ErrorView text={errorText} />}
             </div>
 
             {

@@ -219,7 +219,6 @@ class IndexPCPage extends React.Component {
   renderLeft = (countThreads = 0) => {
     const { categories = [] } = this.props.index;
     const newCategories = this.handleCategories(categories);
-
     return (
       <div className={styles.indexLeft}>
         <div className={styles.indexLeftBox}>
@@ -228,7 +227,10 @@ class IndexPCPage extends React.Component {
             defaultFisrtIndex={this.defaultCategoryIds[0]} 
             defaultSecondIndex={this.defaultCategoryIds[1]} 
             totalThreads={countThreads} 
-            onNavigationClick={this.onNavigationClick} />
+            onNavigationClick={this.onNavigationClick} 
+            isError={this.props.categoryError}
+            errorText={this.props.categoryErrorText}
+          />
         </div>
       </div>
     );
