@@ -12,8 +12,7 @@ import RedPacketDisplay from '@components/thread-detail-pc/red-packet-display';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import ImageDisplay from '@components/thread/image-display';
-import classNames from 'classnames';
-import { debounce } from '@common/utils/throttle-debounce.js'
+import PostContent from '@components/thread/post-content';
 
 @observer
 class CommentList extends React.Component {
@@ -90,6 +89,14 @@ class CommentList extends React.Component {
     typeof this.props.replyReplyClick === 'function' && this.props.replyReplyClick(data);
   }
 
+  // 点击回复删除
+  replyDeleteClick(data) {
+    this.setState({
+      replyId: data?.id,
+    });
+    typeof this.props.replyDeleteClick === 'function' && this.props.replyDeleteClick(data);
+  }
+
   reployAvatarClick(data) {
     typeof this.props.reployAvatarClick === 'function' && this.props.reployAvatarClick(data);
   }
@@ -151,22 +158,30 @@ class CommentList extends React.Component {
           </div>
           <div className={styles.commentListContent}>
             {/* 评论内容 */}
-            <div
-              className={classnames(styles.commentListContentText, this.props.isShowOne && styles.hover)}
-              onClick={() => this.toCommentDetail()}
-            >
+            <div className={classnames(styles.commentListContentText, this.props.isShowOne && styles.hover)}>
               <div className={styles.commentListName}>
                 {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
               </div>
-              <div
-                className={classNames(styles.commentListText, this.props.isShowOne && styles.isShowOne)}
+              <div className={classnames(styles.commentListText)}>
+                <PostContent
+                  onRedirectToDetail={() => this.toCommentDetail()}
+                  useShowMore={!!this.state.isShowOne}
+                  content={this.props?.data?.content}
+                  customHoverBg={true}
+                ></PostContent>
+              </div>
+              {/* <div
+                onClick={() => this.toCommentDetail()}
+                className={classnames(styles.commentListText, this.props.isShowOne && styles.isShowOne)}
                 dangerouslySetInnerHTML={{ __html: this.filterContent() }}
-              ></div>
+              ></div> */}
               {/* 图片展示 */}
-              {this.props.data?.images && (
+              {this.props.data?.images ? (
                 <div className={styles.imageDisplay}>
                   <ImageDisplay platform="pc" imgData={this.props.data?.images} />
                 </div>
+              ) : (
+                ''
               )}
             </div>
 
@@ -253,6 +268,7 @@ class CommentList extends React.Component {
                         avatarClick={() => this.reployAvatarClick(this.needReply[0])}
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
+                        deleteClick={() => this.replyDeleteClick(this.needReply[0])}
                         toCommentDetail={() => this.toCommentDetail()}
                         onSubmit={(value, imageList) => this.onSubmit(value, imageList)}
                         isShowInput={this.state.replyId && this.state.replyId === this.needReply[0].id}
@@ -265,6 +281,7 @@ class CommentList extends React.Component {
                           avatarClick={() => this.reployAvatarClick(val)}
                           likeClick={() => this.replyLikeClick(val)}
                           replyClick={() => this.replyReplyClick(val)}
+                          deleteClick={() => this.replyDeleteClick(val)}
                           toCommentDetail={() => this.toCommentDetail()}
                           onSubmit={(value, imageList) => this.onSubmit(value, imageList)}
                           isShowInput={this.state.replyId && this.state.replyId === val.id}

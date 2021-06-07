@@ -88,7 +88,6 @@ export default class mobileBindStore {
     sendCode = async ({captchaRandStr, captchaTicket}) => {
       try {
         const smsResp = await smsSend({
-          timeout: 3000,
           data: {
             mobile: this.mobile,
             type: 'bind',
@@ -131,7 +130,7 @@ export default class mobileBindStore {
 
       try {
         const smsLoginResp = await smsBind({
-          timeout: 3000,
+
           data: {
             mobile: this.mobile,
             code: this.code,

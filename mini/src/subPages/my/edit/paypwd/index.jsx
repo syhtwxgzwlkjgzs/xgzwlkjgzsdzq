@@ -1,14 +1,17 @@
-import React from 'react'
-import UserCenterEditPayPwd from '../../../../components/user-center-edit-paypwd/index'
+import React from 'react';
 import { View } from '@tarojs/components';
-import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+// import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+import Page from '@components/page';
+import UserCenterEditPayPwd from '../../../../components/user-center-edit-paypwd/index';
 
 export default function index() {
   return (
-    <ToastProvider>
+    // <ToastProvider>
+    <Page>
       <View>
         <UserCenterEditPayPwd />
       </View>
-    </ToastProvider>
-  )
+    </Page>
+    // </ToastProvider>
+  );
 }

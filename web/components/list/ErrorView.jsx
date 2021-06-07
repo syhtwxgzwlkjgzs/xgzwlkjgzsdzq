@@ -7,7 +7,7 @@ const ErrorView = ({ text = '加载失败', onClick = noop }) => {
     return (
         <div className={styles.refreshView} onClick={onClick}>
             {/* <Icon name="RenovateOutlined" className={styles.spin} size={14}/> */}
-            {text}
+            {text || '加载失败'}
         </div>
     )
 }

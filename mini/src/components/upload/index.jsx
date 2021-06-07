@@ -6,10 +6,11 @@ import Icon from '@discuzq/design/dist/components/icon/index';
 import locals from '@common/utils/local-bridge';
 import constants from '@common/constants';
 import classNames from 'classnames';
+import { inject, observer } from 'mobx-react';
 import ProgressRender from './progress-render';
 import styles from './index.module.scss';
 
-export default function DzqUpload(props) {
+function DzqUpload(props) {
   const {
     listType,
     fileList,
@@ -32,9 +33,10 @@ export default function DzqUpload(props) {
   const post = async (file, list, updater) => {
     const ret = await createAttachment(file, (progressEvent) => {
       const { progress } = progressEvent;
+      console.log(progress);
       // progressEvent
       file.status = 'uploading';
-      file.percent = progress;
+      file.percent = progress === 100 ? 99 : progress;
       updater(list);
     });
 
@@ -58,8 +60,9 @@ export default function DzqUpload(props) {
     return new Promise((resolve, reject) => {
       const tempFilePath = file.path || file.tempFilePath;
       const token = locals.get(constants.ACCESS_TOKEN_NAME);
+      const { COMMOM_BASE_URL = '' } = props?.site?.envConfig;
       const uploadTask = Taro.uploadFile({
-        url: `https://discuzv3-dev.dnspod.dev/apiv3/attachments`,
+        url: `${COMMOM_BASE_URL}/apiv3/attachments`,
         filePath: tempFilePath,
         name: 'file',
         header: {
@@ -151,3 +154,5 @@ DzqUpload.defaultProps = {
   onFail: () => {},
   onComplete: () => {},
 };
+
+export default inject('site')(observer(DzqUpload));

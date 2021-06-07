@@ -7,7 +7,7 @@ export const followerAdapter = (data) => {
       id: user.user.pid,
       groupName: user.group.groupName,
       avatar: user.user.avatar,
-      userName: user.user.userName,
+      userName: user.user.nickname || user.user.userName,
       isMutual: user.userFollow.isMutual,
       isFollow: user.userFollow.isFollow,
     }));

@@ -1,4 +1,5 @@
 @import '@common/styles/index.scss';
+
 .userCenterPost {
     padding: rem(24);
     cursor: pointer;
@@ -34,6 +35,14 @@
 
         .userCenterPostListItem {
             margin-right: rem(24);
+        }
+    }
+
+    .postInput {
+        :global {
+            .dzq-input__inner {
+                cursor: pointer;
+            }
         }
     }
 }

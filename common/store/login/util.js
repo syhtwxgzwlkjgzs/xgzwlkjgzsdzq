@@ -46,7 +46,7 @@ const networkRequestCatcher = async () => {
 
 const isExtFieldsOpen = (site) => {
   const { setSite: { openExtFields } = {} } = site.webConfig;
-  return openExtFields === '0' ;
+  return openExtFields === '1' ;
 };
 
 
