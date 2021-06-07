@@ -102,14 +102,15 @@ class Index extends React.Component {
 
   // 处理、过滤数据
   handleRenderList = (data = []) => {
-    let list = [];
+    const list = [];
     data.forEach(item => {
+      const content = item.isFirst ? (item.threadTitle || item.replyPostContent) : item.postContent;
       list.push({
         id: item.id,
         isFirst: item.isFirst, // 标识消息主题来源于主题或评论
         createdAt: item.createdAt,
         threadId: item.threadId,
-        content: item.isFirst ? (item.threadTitle || item.replyPostContent) : item.postContent,
+        content: (typeof content === 'string') ? content : '',
         type: item.type,
         avatar: item.userAvatar,
         userId: item.userId,
