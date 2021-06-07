@@ -5,7 +5,7 @@ import {
   operateThread,
   readCommentList,
   readThreadDetail,
-  readThreadAttachmentUrls,
+  readThreadAttachmentUrl,
   shareThread,
   readUser,
   createReports,
@@ -86,9 +86,9 @@ class ThreadAction extends ThreadStore {
    * @returns 附件url
    */
   @action
-  async fetchThreadAttachmentUrls(threadId, attachmentsId) {
+  async fetchThreadAttachmentUrl(threadId, attachmentsId) {
     const params = { threadId, attachmentsId };
-    return await readThreadAttachmentUrls({ params });
+    return await readThreadAttachmentUrl({ params });
   }
 
   @action

@@ -40,7 +40,7 @@ const Index = ({
       });
 
       const attachmentId = item.id;
-      thread.fetchThreadAttachmentUrls(threadId, attachmentId).then((res) => {
+      thread.fetchThreadAttachmentUrl(threadId, attachmentId).then((res) => {
 
         if(res?.code === 0 && res?.data) {
           const { url } = res.data;

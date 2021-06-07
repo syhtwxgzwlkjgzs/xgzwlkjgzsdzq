@@ -1,6 +1,6 @@
 import api from '../api';
 
-export default async function _readThreadAttachmentUrls(opts, ctx = null) {
+export default async function _readThreadAttachmentUrl(opts, ctx = null) {
   try {
     const { params = {}, data = {}, ...others } = opts;
     const options = {

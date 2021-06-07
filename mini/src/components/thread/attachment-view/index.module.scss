@@ -100,7 +100,6 @@
 
 .errorMsgWrapper {
   background-color: var(--color-error9);
-  transition: all 0.2s ease-out;
   .tipsIcon {
     color: $error-color;
   }
@@ -114,7 +113,6 @@
 
 .successMsgWrapper {
   background-color: var(--color-success9);
-  transition: all 0.2s ease-out;
   .tipsIcon {
     color: $success-color;
   }
