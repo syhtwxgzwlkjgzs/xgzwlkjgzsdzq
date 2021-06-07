@@ -60,7 +60,7 @@ class SearchResultUserH5Page extends React.Component {
         noMore={currentPage >= totalPage}
         showHeader={false}
       >
-        <SearchInput onSearch={this.onSearch} onCancel={this.onSearch} defaultValue={keyword} />
+        <SearchInput onSearch={this.onSearch} onCancel={this.onSearch} defaultValue={keyword} searchWhileTyping/>
         {
           pageData?.map((item, index) => (
             <UserItem
@@ -71,6 +71,7 @@ class SearchResultUserH5Page extends React.Component {
               onClick={this.onUserClick}
               needPadding={true}
               needBottomLine={true}
+              itemStyle={{paddingTop: '16px', paddingBottom: '16px'}}
             />
           ))
         }
