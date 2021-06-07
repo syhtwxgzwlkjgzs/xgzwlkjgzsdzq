@@ -17,7 +17,7 @@
   :global {
     .dzq-modal__container {
       width: rem(409);
-      height: rem(423);
+      height: rem(297);
       border-radius: rem(var(--border-radius-small));
       background: $white;
       box-sizing: border-box;
@@ -43,12 +43,16 @@
     color: $text-color-primary;
     font-weight: var(--font-weight-regular);
     letter-spacing: 1px;
+    height: rem(22);
+    line-height: rem($font-line-height-small);
   }
   .inputItem {
     margin-bottom: rem($margin-6n);
     .labelName {
       font-size: rem($font-size-base);
       color: $text-color-regular;
+      height: rem(20);
+      line-height: rem(20);
     }
     .labelValue {
       position: relative;
@@ -86,9 +90,6 @@
     }
   }
   .bottom {
-    position: absolute;
-    bottom: rem(24);
-    width: 90%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -97,4 +98,12 @@
     width: rem(248);
     height: rem(36);
   }
-} 
+}
+
+.btnColor {
+  border: none;
+  color: $text-color-secondary;
+  &:hover {
+    color: $primary-color;
+  }
+}

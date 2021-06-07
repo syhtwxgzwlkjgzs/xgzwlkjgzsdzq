@@ -10,11 +10,11 @@
  import Icon from '@discuzq/design/dist/components/icon/index';
 
 const Index = (props) => {
-  const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, onTagRemoveClick, isCloseShow = true, onTagClick, tagContent, deleteShow = false, onVideoLoaded = () => { } } = props;
+  const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, onTagRemoveClick, isCloseShow = true, onTagClick, tagContent, deleteShow = false, onVideoLoaded = () => { }, style = {} } = props;
 
   // 标签展示
   const tag = (
-    <View className={styles['tag']}>
+    <View className={styles['tag']} style={style}>
       <Text onClick={() => {onTagClick();}}>{tagContent}</Text>
       {onTagRemoveClick && isCloseShow && (
         <Icon className={styles.remove} name='CloseOutlined' size={10} onClick={onTagRemoveClick} />

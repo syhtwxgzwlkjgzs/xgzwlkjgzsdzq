@@ -7,14 +7,14 @@ import Input from '@discuzq/design/dist/components/input/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
 import { toTCaptcha } from '@common/utils/to-tcaptcha'
-import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+// import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 import PhoneInput from '@components/login/phone-input'
 import layout from './index.module.scss';
 
-const MemoToastProvider = React.memo(ToastProvider)
+// const MemoToastProvider = React.memo(ToastProvider)
 
 @inject('site')
 @inject('user')
@@ -127,7 +127,7 @@ class Index extends Component {
 
     return (
       <Page>
-        <MemoToastProvider>
+        {/* <MemoToastProvider> */}
         <View className={layout.container}>
           <View className={layout.content}>
             <View className={layout.title}>手机号登陆，并绑定微信账号</View>
@@ -151,7 +151,7 @@ class Index extends Component {
             {/* 登录按钮 end */}
           </View>
         </View>
-        </MemoToastProvider>
+        {/* </MemoToastProvider> */}
       </Page>
     );
   }
