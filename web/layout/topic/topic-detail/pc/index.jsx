@@ -86,6 +86,7 @@ class IndexPCPage extends React.Component {
         <BaseLayout
           onSearch={this.onSearch}
           right={ this.renderRight }
+          showRefresh={false}
         >
           { 
             pageData?.map((item, index) => this.renderItem(item, index)) || <NoData />
