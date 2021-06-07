@@ -3,13 +3,14 @@
 .site{
   padding: rem($padding-4n);
   padding-top: 0;
-  border-bottom: rem(10) solid var(--comment-content-bg-color);
+  margin-bottom: $margin-10;
+  background-color: $white;
   &.popularContents{
     padding-bottom: 0;
   }
   .site_title{
     padding-bottom: rem($padding-4n);
-    border-bottom: rem(1) solid var(--border-line-color);
+    border-bottom: $border-solid-1;
     font-size: rem($padding-4n);
     line-height: rem($font-line-height-primary);
     color: $text-color-primary;
@@ -23,7 +24,7 @@
     color: $text-color-primary;
   }
   .site_status{
-    border-top: rem(1) solid var(--border-line-color);
+    border-top: $border-solid-1;
     padding-top: rem($padding-4n);
     display: flex;
     .site_status_list{
