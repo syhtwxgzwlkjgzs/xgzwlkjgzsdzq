@@ -2,15 +2,8 @@
 
 .contain{
     display: flex;
-    position: fixed;
     flex-direction: column;
     justify-content: flex-end;
-    top: 0px;
-    left: 0px;
-    height: 100%;
-    width: 100%;
-    background: rgba(#000,0.3);
-    z-index:9999;
     .choice {
         height: 125px;
         width: 100%;
