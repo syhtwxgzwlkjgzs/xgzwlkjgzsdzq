@@ -7,7 +7,7 @@
   overflow: hidden;
   .contentWrapper{
     .content {
-      @include cursor-on-pc;
+      //@include cursor-on-pc;
       width: 100%;
       position: relative;
       display: inline-block;
@@ -60,6 +60,12 @@
       height: rem(165);
       background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
     }
+
+    &.bg {
+      &:after {
+        background: linear-gradient(rgba(255, 255, 255, 0), $body-bg-color);
+      }
+    }
   }
   .showMore {
     @include cursor-on-pc;
@@ -98,4 +104,8 @@
       background-color: var(--color-white);
     }
   }
+}
+
+.usePointer{
+  @include cursor-on-pc;
 }

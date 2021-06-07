@@ -205,7 +205,7 @@ class UserAction extends SiteStore {
 
     throw {
       Code: deleteDenyRes.code,
-      Msg: deleteDenyRes.message,
+      Msg: deleteDenyRes.msg,
     };
   }
 
@@ -227,7 +227,7 @@ class UserAction extends SiteStore {
 
     throw {
       Code: denyUserRes.code,
-      Msg: denyUserRes.message,
+      Msg: denyUserRes.msg,
     };
   }
 
@@ -586,7 +586,6 @@ class UserAction extends SiteStore {
     captchaRandStr,
   }) {
     const smsResp = await smsSend({
-      timeout: 3000,
       data: {
         mobile,
         type: 'rebind',
@@ -613,7 +612,7 @@ class UserAction extends SiteStore {
     captchaRandStr,
   }) {
     const smsResp = await smsSend({
-      timeout: 3000,
+
       data: {
         mobile,
         type: 'verify',

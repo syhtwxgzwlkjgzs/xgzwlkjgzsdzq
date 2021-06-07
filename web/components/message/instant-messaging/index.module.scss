@@ -1,9 +1,13 @@
 @import './vars.scss';
 
 .pcPage {
-  @include im-pagebed;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 100px);
   max-width: 750px;
+  padding: 0 $padding-4n;
+  background: $white;
+  position: relative;
 }
 
 .h5Page {

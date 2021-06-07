@@ -58,6 +58,13 @@ class index extends Component {
 
   // 点击忘记密码
   handleGoToFindPayPwd = () => {
+    if (!this.props.user.mobile) {
+      Toast.error({
+        content: '需要首先绑定手机号才能进行此操作',
+        duration: 2000
+      });
+      return;
+    }
     this.setState({
       step: 'find_password',
     });
@@ -193,7 +200,7 @@ class index extends Component {
                 type={'primary'}
                 className={styles.btn}
               >
-                提交
+                设置支付密码
               </Button>
             )}
           </div>
@@ -219,7 +226,7 @@ class index extends Component {
 
   render() {
     return (
-      <div className={styles.userMobileWrapper}>
+      <div className={`${styles.userMobileWrapper} ${!this.props.user?.canWalletPay && styles.setUserWrapper}`}>
         <Dialog visible={this.props.visible} onClose={this.handleClose}>
           {this.renderContent()}
         </Dialog>

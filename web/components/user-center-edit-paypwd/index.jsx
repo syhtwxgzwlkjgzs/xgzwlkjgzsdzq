@@ -47,7 +47,14 @@ class index extends Component {
 
   // 点击忘记密码
   handleGoToFindPayPwd = () => {
-    Router.push({ url: '/my/edit/find-paypwd' });
+    if (!this.props.user.mobile) {
+      Toast.error({
+        content: '需要首先绑定手机号才能进行此操作',
+        duration: 2000
+      });
+      return;
+    }
+    Router.push({ url: '/my/edit/find-paypwd?ref=payBox' });
   };
 
   // 初次设置密码 password

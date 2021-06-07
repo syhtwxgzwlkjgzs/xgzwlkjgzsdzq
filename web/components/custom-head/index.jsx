@@ -15,7 +15,7 @@ class CustomHead extends React.Component {
 
   formatTitle() {
     const { site, title } = this.props;
-    const base = get(site, 'webConfig.setSite.siteName', 'Discuz!Q');
+    const base = get(site, 'webConfig.setSite.siteName', '欢迎您');
     let renderTitle = base;
     if ( title && title !== '' ) {
       renderTitle = `${title} - ${renderTitle}`
@@ -25,7 +25,7 @@ class CustomHead extends React.Component {
 
   formatKeywords() {
     const { site, keywords } = this.props;
-    const base = get(site, 'webConfig.setSite.siteKeywords', 'Discuz!Q');
+    const base = get(site, 'webConfig.setSite.siteKeywords', '欢迎您');
     let renderKeywords = base;
     if ( keywords && keywords !== '' ) {
       renderKeywords = `${title} - ${renderTitle}`

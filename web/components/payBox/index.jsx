@@ -6,6 +6,7 @@ import { get } from '@common/utils/get';
 import H5PayBox from './h5';
 import PCPayBox from './pc';
 import { Toast } from '@discuzq/design';
+import Router from '@discuzq/sdk/dist/router';
 
 class PayBoxEmitter extends EventEmitter {}
 
@@ -29,6 +30,15 @@ export default class PayBox extends Component {
   ) => {
     // 每次新的付费创建，需要清空前一次的付费信息
     this.props.payBox.clear();
+    // 如果没有用户登录态
+    if (!this.props.user.id) {
+      Toast.error({
+        content: '需要登录后才可以进行支付',
+        duration: 2000,
+      });
+      Router.push({ url: '/user/login' });
+      return;
+    }
     if (Number(get(options, 'data.amount', 0)) < 0.1) {
       Toast.error({
         content: '最小支付金额必须大于 0.1 元',

@@ -71,6 +71,7 @@ class PCMyPage extends React.Component {
     return (
       <>
         <SidebarPanel
+          platform="h5"
           type="normal"
           title="个人资料"
           isShowMore={true}
@@ -92,7 +93,7 @@ class PCMyPage extends React.Component {
           {IS_WECHAT_ACCESSABLE && (
             <div className={styles.userInfoWrapper}>
               <div className={styles.userInfoKey}>微信</div>
-              <div className={styles.userInfoValue}>
+              <div className={`${styles.userInfoValue} ${styles.wxContent}`}>
                 <Avatar size="small" image={this.props.user.wxHeadImgUrl} name={this.props.user.wxNickname} />
                 <span className={styles.wecahtNickname}>{this.props.user.wxNickname}</span>
               </div>

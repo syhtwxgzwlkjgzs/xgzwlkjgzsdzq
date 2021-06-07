@@ -40,7 +40,9 @@ export const handleAttachmentData = (data) => {
   const newData = { text: data?.text || '' };
   const values = Object.values(data?.indexes || {});
   values.forEach((item) => {
-    const { tomId } = item;
+    let { tomId } = item;
+    // 防止后台返回的字段类型不对
+    tomId = `${tomId}`
     if (tomId === '101') { // 图片
       newData.imageData = item.body;
     } else if (tomId === '102') { // 音频

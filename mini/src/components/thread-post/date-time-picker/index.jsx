@@ -42,10 +42,14 @@ class DateTimePicker extends Component {
     this.setState({ dtpInitValue });
   }
 
-  openModal = () => {  // 根据当前时间初始化时间列表数据
+  openModal = (time) => {  // 根据当前时间初始化时间列表数据
     const { current, dtpInitValue } = this.state;
+
+    const showTime = time ? getDate(time) : dtpInitValue;
+    if (time) this.setState({ dtpInitValue: showTime });
+
     const { yearList, monthList, dayList, hourList, minuteList } = getPickerViewList();
-    const arr = getArrWithTime(current || dtpInitValue || getDate());
+    const arr = getArrWithTime(current || showTime || getDate());
     const [year, month, day, hour, minute] = arr;
     const selectIndexList = [];
 

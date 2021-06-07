@@ -28,12 +28,12 @@ class WalletInfo extends React.Component {
                   ? <div className={styles.header}>
                     <Avatar
                       image={this.props.user?.avatarUrl}
-                      name={this.props.user?.username}
+                      name={this.props.user?.nickname}
                       circle={true}
                       size={'large'}
                       className={styles.avatar}>
                     </Avatar>
-                    <div className={styles.name}>{this.props.user?.username}</div>
+                    <div className={styles.name}>{this.props.user?.nickname}</div>
                 </div> : ''
             }
             <div className={`${this.props.webPageType === 'h5' ? styles.totalAmountH5 : styles.totalAmountPC}`}>
@@ -47,14 +47,15 @@ class WalletInfo extends React.Component {
             </div>
             <div className={`${this.props.webPageType === 'h5' ? styles.amountStatusH5 : styles.amountStatusPC}`}>
                 <div className={styles.frozenAmount} onClick={this.props.onFrozenAmountClick}>
-                    <div className={styles.statusTitle}>
+                    <div className={styles.statusTitleFreeze}>
                         <span>冻结金额</span>
-                        {
-                            this.props.webPageType === 'PC'
-                              ? <Icon name={'RightOutlined'} size={12} className={styles.icon}></Icon> : ''
-                        }
+                        <div className={styles.statusNum}>{this.props.walletData?.freezeAmount}</div>
                     </div>
-                    <div className={styles.statusNum}>{this.props.walletData?.freezeAmount}</div>
+                    <div className={styles.frozenIcon}>
+                      {
+                        this.props.webPageType === 'PC' ? <Icon name={'RightOutlined'} size={12} className={styles.icon}></Icon> : ''
+                      }
+                    </div>
                 </div>
                 <div className={styles.withdrawalAmount}>
                     <div className={styles.statusTitle}>可提现金额</div>

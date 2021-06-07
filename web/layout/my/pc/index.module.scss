@@ -43,12 +43,19 @@
     // display: flex;
     // justify-content: center;
     // align-items: center;
+    font-size: rem($font-size-primary);
     margin-left: rem($margin-1n);
     @include text-ellipsis();
   }
 
+  .wxContent {
+    display: flex;
+    align-items: center;
+  }
+
   .wecahtNickname {
     margin-left: rem(8);
+    @include text-ellipsis();
   }
 }
 

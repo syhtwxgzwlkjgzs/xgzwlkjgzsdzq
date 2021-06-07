@@ -63,10 +63,13 @@ class UserCenterFansPc extends React.Component {
       <>
         <SidebarPanel
           type="normal"
+          platform={'h5'}
+          titleWrapper={styles.titleWrapper}
           noData={Number(fansCount) === 0}
           title="粉丝"
           leftNum={fansCount}
           onShowMore={this.moreFans}
+          mold={'wrapper'}
           className={this.props.className}
         >
           <div>

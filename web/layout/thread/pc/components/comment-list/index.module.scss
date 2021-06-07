@@ -20,11 +20,14 @@
     .commentListContent {
       width: 100%;
       .commentListContentText {
-        padding: rem($padding-4n);
+        //padding: rem($padding-2n) rem($padding-3n);
         border-radius: rem($border-radius-small);
         background-color: $body-bg-color;
         
         .commentListName {
+          padding-top: rem($padding-2n);
+          padding-left: rem($padding-3n);
+          padding-right: rem($padding-3n);
           font-weight: var(--font-weight-regular);
           font-size: rem($font-size-primary);
           line-height: rem(20);
@@ -32,6 +35,9 @@
           color: var(--color-text-primary);
         }
         .commentListText {
+          padding-bottom: rem($padding-2n);
+          padding-left: rem($padding-3n);
+          padding-right: rem($padding-3n);
           margin-top: rem(4);
           font-size: rem($font-size-middle);
           line-height: rem(22);
@@ -39,21 +45,32 @@
           color: var(--color-text-primary);
           word-break: break-word;
 
-          p {
-            line-height: rem(24);
-          }
+          :global {
+            .qq-emotion {
+              width: rem(22);
+              height: rem(22);
+            }
 
-          img {
-            height: rem(22);
-          }
-
-          &.isShowOne {
-            @include lamp-clamp(2);
-
-            p {
-              @include lamp-clamp(2);
+            .dzq-p  {
+              margin-bottom: 0;
             }
           }
+
+          // p {
+          //   line-height: rem(24);
+          // }
+
+          // img {
+          //   height: rem(22);
+          // }
+
+          // &.isShowOne {
+          //   @include lamp-clamp(2);
+
+          //   // p {
+          //   //   @include lamp-clamp(2);
+          //   // }
+          // }
         }
         .imageDisplay {
           margin-top: rem($margin-2n);

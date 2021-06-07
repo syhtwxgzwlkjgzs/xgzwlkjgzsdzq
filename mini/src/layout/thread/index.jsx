@@ -273,7 +273,7 @@ class ThreadH5Page extends React.Component {
     // 编辑
     if (type === 'edit') {
       if (!this.props.thread?.threadData?.id) return;
-      Taro.navigateTo({
+      Taro.redirectTo({
         url: `/subPages/thread/post/index?id=${this.props.thread?.threadData?.id}}`,
       });
     }
@@ -389,12 +389,12 @@ class ThreadH5Page extends React.Component {
 
     if (success) {
       Toast.success({
-        content: '删除成功，即将跳转至首页',
+        content: '删除成功，即将跳转至上一页',
       });
 
       setTimeout(() => {
-        Taro.redirectTo({
-          url: '/pages/index/index',
+        Taro.navigateBack({
+          delta: 1,
         });
       }, 1000);
 
@@ -413,6 +413,13 @@ class ThreadH5Page extends React.Component {
 
   // 点击发布按钮
   async publishClick(val, imageList) {
+    const valuestr = val.replace(/\s/g, '');
+    // 如果内部为空，且只包含空格或空行
+    if (!valuestr) {
+      Toast.info({ content: '请输入内容' });
+      return;
+    }
+
     if (this.commentType === 'comment') {
       return await this.onPublishClick(val, imageList);
     }
@@ -423,10 +430,6 @@ class ThreadH5Page extends React.Component {
 
   // 发布评论
   async onPublishClick(val, imageList) {
-    if (!val) {
-      Toast.info({ content: '请输入内容!' });
-      return;
-    }
     return this.comment ? await this.updateComment(val, imageList) : await this.createComment(val, imageList);
   }
 
