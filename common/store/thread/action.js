@@ -5,6 +5,7 @@ import {
   operateThread,
   readCommentList,
   readThreadDetail,
+  readThreadAttachmentUrls,
   shareThread,
   readUser,
   createReports,
@@ -76,6 +77,18 @@ class ThreadAction extends ThreadStore {
     const { code, data } = ret;
     if (code === 0) this.setThreadData(data);
     return ret;
+  }
+
+  /**
+   * 获取帖子内的附件url
+   * @param {number} id 帖子id
+   * @param {number} 帖子中的附件id
+   * @returns 附件url
+   */
+  @action
+  async fetchThreadAttachmentUrls(threadId, attachmentsId) {
+    const params = { threadId, attachmentsId };
+    return await readThreadAttachmentUrls({ params });
   }
 
   @action
