@@ -16,7 +16,16 @@ import Downloader from './downloader';
  * @prop {Boolean} isHidden 是否隐藏删除按钮
  */
 
-const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noop, onPay = noop, user }) => {
+const Index = ({
+  attachments = [],
+  isHidden = true,
+  isPay = false,
+  onClick = noop,
+  onPay = noop,
+  user = null,
+  threadId = null,
+  thread = null,
+}) => {
   // 处理文件大小的显示
   const handleFileSize = (fileSize) => {
     if (fileSize > 1000000) {
@@ -33,10 +42,12 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
   const [downloading, setDownloading] =
         useState(Array.from({length: attachments.length}, () => false));
   const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
 
   const onDownLoad = (item, index) => {
     // 下载中
     if(downloading?.length && downloading[index]) return;
+    if(!item || !threadId) return;
 
     // 对没有登录的先登录
     if (!user?.isLogin()) {
@@ -49,31 +60,45 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
       downloading[index] = true;
       setDownloading([...downloading]);
 
-      if(!item?.url) return;
-      const url = item.url;
-      const extension = item?.extension;
+      const attachmentId = item.id;
+      thread.fetchThreadAttachmentUrls(threadId, attachmentId).then((res) => {
+        if(res?.code === 0 && res?.data) {
+          const { url } = res.data;
+          const extension = item?.extension;
 
-      downloader?.download(url, true).then((path) => {
-        wx.openDocument({
-          filePath: path,
-          fileType: extension, // 微信支持下载文件类型：doc, docx, xls, xlsx, ppt, pptx, pdf
-          success(res) {
-          },
-          fail(error) {
-            setErrorMsg("小程序暂不支持下载此类文件");
-            console.error(error.errMsg);
-          },
-        });
+          downloader?.download(url, true).then((path) => {
+            wx.openDocument({
+              filePath: path,
+              fileType: extension, // 微信支持下载文件类型：doc, docx, xls, xlsx, ppt, pptx, pdf
+              success(res) {
+                setSuccessMsg("下载成功");
+              },
+              fail(error) {
+                setErrorMsg("小程序暂不支持下载此类文件");
+                console.error(error.errMsg);
+              },
+            });
+          }).catch((error) => {
+            setErrorMsg(["下载失败"]);
+            console.error(error.errMsg)
+          });
+        } else {
+          setErrorMsg(res?.msg);
+          console.error(res);
+        }
       }).catch((error) => {
-        setErrorMsg(["下载失败"]);
-        console.error(error.errMsg)
+        setErrorMsg(error.errMsg);
+        console.error(error);
+        return;
       }).finally(() => {
         setTimeout(() => {
           setErrorMsg("");
+          setSuccessMsg("");
         }, 3000);
         downloading[index] = false;
         setDownloading([...downloading]);
       });
+
     } else {
       onPay();
     }
@@ -103,9 +128,10 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
   };
 
   useEffect(() => {
-    if(errorMsg !== '') {
+    if(errorMsg !== '' || successMsg !== '') {
       setTimeout(() => {
         setErrorMsg("");
+        setSuccessMsg("");
       }, 3000);
     }
   }, [errorMsg])
@@ -147,12 +173,17 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
 
   return (
     <View>
-        { errorMsg !== "" && (
-            <View className={styles.errorMsgWrapper}>
-              <Icon className={styles.tipsIcon} size={20} name={'WrongOutlined'}></Icon>
-              <Text className={styles.errorMessage}>{errorMsg}</Text> 
-            </View>
-          )
+        { errorMsg !== "" && 
+          <View className={[styles.msgWrapper, styles.errorMsgWrapper]}>
+            <Icon className={styles.tipsIcon} size={20} name={'WrongOutlined'}></Icon>
+            <Text className={styles.errorMessage}>{errorMsg}</Text>
+          </View>
+        }
+        { successMsg !== "" && 
+          <View className={[styles.msgWrapper, styles.successMsgWrapper]}>
+            <Icon className={styles.tipsIcon} size={20} name={'CheckOutlined'}></Icon>
+            <Text className={styles.successMessage}>{successMsg}</Text>
+          </View>
         }
         {
           attachments.map((item, index) => {
@@ -174,4 +205,4 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
   );
 };
 
-export default inject('user')(observer(Index));
+export default inject('user', 'thread')(observer(Index));

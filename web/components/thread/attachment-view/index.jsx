@@ -17,7 +17,7 @@ const Index = ({
   onClick = noop,
   onPay = noop,
   threadId = null,
-  thread = null
+  thread = null,
 }) => {
   // 处理文件大小的显示
   const handleFileSize = (fileSize) => {
@@ -32,24 +32,20 @@ const Index = ({
   };
 
   const onDownLoad = (item) => {
-    if(!item) return;
+    if(!item || !threadId) return;
 
     if (!isPay) {
       let toastInstance = Toast.loading({
         duration: 0,
       });
 
-      const url = item?.url;
-      if(url) {
-        window.open(url);
-        return;
-      }
-      const attachmentsId = item.id;
-      thread.fetchThreadAttachmentUrls(threadId, attachmentsId).then((res) => {
+      const attachmentId = item.id;
+      thread.fetchThreadAttachmentUrls(threadId, attachmentId).then((res) => {
 
         if(res?.code === 0 && res?.data) {
           const { url } = res.data;
           if(url) window.open(url);
+          Toast.info({ content: '下载成功' });
         } else {
           Toast.info({ content: res?.msg });
         }

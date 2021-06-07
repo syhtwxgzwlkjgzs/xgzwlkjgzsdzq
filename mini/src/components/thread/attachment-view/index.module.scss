@@ -84,7 +84,7 @@
   }
 }
 
-.errorMsgWrapper {
+.msgWrapper {
   width: 100%;
   height: 44px;
   display: flex;
@@ -95,13 +95,31 @@
   margin-top: constant(safe-area-inset-top);  ///兼容 IOS<11.2/
   margin-top: env(safe-area-inset-top);  ///兼容 IOS>11.2/
   left: 0;
-  background: var(--color-error9);
   z-index: $zindex-toast;
+}
+
+.errorMsgWrapper {
+  background-color: var(--color-error9);
+  transition: all 0.2s ease-out;
   .tipsIcon {
     color: $error-color;
   }
   .errorMessage {
     color: $error-color;
+    font-size: $font-size-base;
+    line-height: $font-line-height-base;
+    margin-left: $margin-2n;
+  }
+}
+
+.successMsgWrapper {
+  background-color: var(--color-success9);
+  transition: all 0.2s ease-out;
+  .tipsIcon {
+    color: $success-color;
+  }
+  .successMessage {
+    color: $success-color;
     font-size: $font-size-base;
     line-height: $font-line-height-base;
     margin-left: $margin-2n;
