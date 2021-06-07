@@ -30,6 +30,7 @@ const Index = ({
   onRedirectToDetail = noop,
   loading,
   usePointer = true,
+  customHoverBg = false,
   ...props
 }) => {
   // 内容是否超出屏幕高度
@@ -106,7 +107,7 @@ const Index = ({
       <div className={`${styles.container} ${usePointer ? styles.usePointer : ''}`} {...props}>
       <div
         ref={contentWrapperRef}
-        className={`${styles.contentWrapper} ${showHideCover ? styles.hideCover : ''}`}
+        className={`${styles.contentWrapper} ${showHideCover ? styles.hideCover : ''} ${customHoverBg? styles.bg : ''}`}
         onClick={!showMore ? onShowMore : handleClick}
       >
         <div className={styles.content}>

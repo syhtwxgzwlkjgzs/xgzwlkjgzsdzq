@@ -151,7 +151,6 @@ class AtSelect extends Component {
     if (data.length === 0) return null;
     return data.map(item => {
       const { avatar, username, groupName, userId } = this.formatData(item);
-
       return (
         <View className={styles['at-item']} key={userId}>
           <View className={styles['at-item__inner']} >

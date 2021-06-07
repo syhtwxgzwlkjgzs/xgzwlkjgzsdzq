@@ -7,7 +7,11 @@ import { createFollow, deleteFollow, getUserFollow } from '@server';
 import { get } from '@common/utils/get';
 import deepClone from '@common/utils/deep-clone';
 import NoData from '@components/no-data';
+import { inject, observer } from 'mobx-react';
 
+
+@inject('user')
+@observer
 class UserCenterFollows extends React.Component {
   firstLoaded = false;
   containerRef = React.createRef(null);
@@ -120,6 +124,8 @@ class UserCenterFollows extends React.Component {
     if (this.props.setDataSource) {
       this.props.setDataSource(targetFollows);
     }
+
+    this.props.user.userInfo.followCount += 1;
     this.setState({
       follows: targetFollows,
     });
@@ -136,6 +142,7 @@ class UserCenterFollows extends React.Component {
     if (this.props.setDataSource) {
       this.props.setDataSource(targetFollows);
     }
+    this.props.user.userInfo.followCount -= 1;
     this.setState({
       follows: targetFollows,
     });

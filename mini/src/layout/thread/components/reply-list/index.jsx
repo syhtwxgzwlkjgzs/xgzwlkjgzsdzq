@@ -103,10 +103,12 @@ export default class ReplyList extends React.Component {
               />
 
               {/* 图片展示 */}
-              {(this.props.data?.images || this.props.data?.attachments) && (
+              {this.props.data?.images || this.props.data?.attachments ? (
                 <View className={styles.imageDisplay}>
                   <ImageDisplay platform="h5" imgData={this.props.data.images || this.props.data.attachments} />
                 </View>
+              ) : (
+                ''
               )}
             </View>
           </View>

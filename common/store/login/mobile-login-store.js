@@ -120,7 +120,6 @@ export default class mobileLoginStore {
     sendCode = async ({ captchaRandStr, captchaTicket }) => {
       try {
         const smsResp = await smsSend({
-          timeout: 3000,
           data: {
             mobile: this.mobile,
             type: 'login',
@@ -186,7 +185,7 @@ export default class mobileLoginStore {
 
       try {
         const smsLoginResp = await smsLogin({
-          timeout: 3000,
+
           data: {
             mobile: this.mobile,
             code: this.code,

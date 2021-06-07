@@ -1,4 +1,5 @@
 @import '@common/styles/index.scss';
+
 .container {
   width: 100vw;
   height: 100vh;
@@ -12,6 +13,7 @@
 .header {
   display: flex;
   align-items: center;
+
   .title {
     padding-left: rem($padding-2n);
   }
@@ -50,6 +52,7 @@
       color: var(--color-text-primary);
       border-bottom: var(--border-border);
       padding-bottom: rem($margin-6n);
+
       .headerTitle {
         display: flex;
         align-items: center;
@@ -66,6 +69,7 @@
       justify-content: space-between;
       align-items: center;
       margin: rem($margin-4n) 0 rem($margin-6n);
+
       .choiceLeft {
         display: flex;
         justify-content: start;
@@ -87,20 +91,24 @@
           display: flex;
           align-items: center;
           justify-content: space-around;
+
           :global {
             .dzq-dropdown {
               width: 100%;
             }
+
             .dzq-dropdown__trigger {
               justify-content: space-around;
             }
           }
         }
+
         .frozenText {
           height: rem(20);
           line-height: rem(20);
           color: $text-color-regular;
           font-size: rem($font-size-primary);
+
           .frozenAmount {
             font-weight: 600;
             margin-left: rem($margin-2n);
@@ -156,7 +164,7 @@
       font-size: $font-size-middle;
       border-radius: $border-radius-small;
       overflow: hidden;
-  
+
       &__header,
       &-time__header {
         padding-top: 16px;
@@ -165,34 +173,42 @@
         border: $border-solid-1;
         background: $white;
       }
+
       &-date__header {
         padding-top: 0;
       }
+
       &__date-container {
         border-left: $border-solid-1;
       }
+
       &__current-month,
       &__day-name {
         font-size: $font-size-middle;
         color: $text-color-primary;
       }
+
       &__time-container,
       &__month-text {
         width: 90px !important;
       }
+
       &__time-list {
         @include scrollbar();
       }
+
       &__day--weekend,
       &__time-list-item,
       &__day {
         font-size: $font-size-base;
         color: $text-color-regular;
       }
+
       &__day--disabled {
         font-size: $font-size-base;
         color: $text-color-placeholder;
       }
+
       &__day--selected {
         color: $white;
         background-color: $primary-color;
@@ -210,10 +226,12 @@
         background-color: $primary-color6;
         border-radius: $border-radius-small;
       }
+
       &__month {
         margin: $margin-4n;
       }
     }
+
     .react-datepicker__day-name,
     .react-datepicker__day,
     .react-datepicker__time-name {
@@ -223,7 +241,7 @@
       margin-left: 10px !important;
       margin-bottom: 8px !important;
     }
-  
+
     .react-datepicker__day:hover,
     .react-datepicker__month-text:hover,
     .react-datepicker__quarter-text:hover,
@@ -233,41 +251,65 @@
       border-radius: $border-radius-small;
       color: $white;
     }
+
     .react-datepicker__day--disabled:hover {
       background-color: $white;
       color: $text-color-placeholder;
     }
+
     .react-datepicker__time-list-item {
       height: 20px;
       display: flex;
       align-items: center;
     }
+
     .react-datepicker__time-list-item--selected {
       height: 20px;
       background-color: $primary-color !important;
     }
-  
+
     .react-datepicker__navigation {
       border: $border-radius-big solid transparent;
+
       &--previous {
         border-right-color: $border-color;
       }
+
       &--next {
         border-left-color: $border-color;
       }
     }
+
     .react-datepicker__input-container {
       input {
-        margin-right: 2px;
-        max-width: rem(220px);
+        margin-right: rem(2);
+        margin-left: rem(16);
+        max-width: rem(140);
+        width: 100%;
         border: 0;
         color: $text-color-primary;
         font-size: $font-size-base;
         cursor: pointer;
-        text-align: center;
+        text-align: left;
         background: transparent;
       }
     }
   }
-  
+
+}
+
+.datePickerIcon {
+  margin-right: rem(16);
+  margin-left: var(--margin-1n);
+  -webkit-transform: rotateZ(90deg);
+  transform: rotateZ(90deg);
+  will-change: transform;
+  -webkit-transition: -webkit-transform 0.3s;
+  transition: -webkit-transform 0.3s;
+  transition: transform 0.3s;
+  transition: transform 0.3s, -webkit-transform 0.3s;
+}
+
+.pickerIconIsActive {
+  color: $text-color-primary-color;
 }

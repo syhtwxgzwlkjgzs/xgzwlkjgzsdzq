@@ -80,7 +80,7 @@ export const defaultIcon = [
     type: THREAD_TYPE.redPacket,
   },
   {
-    name: 'DollarLOutlined', // 付费
+    name: 'GoldCoinOutlined', // 付费
     active: activeColor,
     id: defaultOperation.pay,
     menu: [

@@ -40,7 +40,6 @@ export default class UserRegisterStore {
   register = async () => {
     try {
       const registerResp = await usernameRegister({
-        timeout: 3000,
         data: {
           username: this.username,
           password: this.password,

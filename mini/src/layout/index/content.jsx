@@ -132,7 +132,7 @@ class IndexH5Page extends React.Component {
     let newCurrentIndex = id
     const newId = this.resetCategoryids(id)
     if (newId) {
-      const { categories = [] } = this.props.index
+      const { categories = [] } = this.props.index || {}
       categories.forEach(item => {
         if (item.children?.length) {
           const tmp = item.children.filter(children => children.pid === newId)
@@ -185,7 +185,7 @@ class IndexH5Page extends React.Component {
   };
 
   renderTabs = () => {
-    const { index } = this.props;
+    const { index, site } = this.props;
     const { currentIndex, fixedTab, navBarHeight } = this.state;
     const { categories = [] } = index;
     const newCategories = this.handleCategories(categories);
@@ -218,7 +218,7 @@ class IndexH5Page extends React.Component {
           </View>
           {fixedTab &&  (
             <>
-             <NavBar isShow={fixedTab} />
+             <NavBar title={site?.webConfig?.setSite?.siteName || ''} isShow={fixedTab} />
              <View className={styles.tabPlaceholder}></View>
             </>
           )}
