@@ -73,14 +73,28 @@ http.interceptors.response.use((res) => {
   // if (data.Code === -4002) {
   //   Router.redirect({url: '/user/login'});
   // }
-  // 200 状态码
-  if (status === 200) {
-    return Promise.resolve({
-      code: data.Code,
-      data: reasetData(data.Data),
-      msg: data.Message,
-    });
+  switch(data.Code) {
+    case -4004: 
+      let url;
+      if ( process.env.DISCUZ_ENV === 'web' ) {
+        url = '/404';
+      } else {
+        url = '/subPages/404'
+      }
+      Router.replace({
+        url
+      });
+      break;
+    default:  // 200 状态码
+    if (status === 200) {
+      return Promise.resolve({
+        code: data.Code,
+        data: reasetData(data.Data),
+        msg: data.Message,
+      });
+    }
   }
+
   return Promise.resolve({
     code: status,
     data: null,
