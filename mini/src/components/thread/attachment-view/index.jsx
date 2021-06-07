@@ -70,7 +70,7 @@ const Index = ({
         setDownloading([...downloading]);
         return;
       }
-      console.log(`item.url`, item.url)
+
       Taro.downloadFile({
         url: item.url,
         success: function (res) {
