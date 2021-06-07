@@ -262,7 +262,7 @@ class PostPage extends React.Component {
     const { router, threadPost } = this.props;
     const { query } = router;
     const { postData } = threadPost;
-    if (query && query.id) {
+    if (query && query.id) { // TODO:  目前后端接口对于草稿文章也不能编辑 !postData.isDraft
       if (item.type === THREAD_TYPE.reward && postData.rewardQa.money > 0) {
         Toast.info({ content: '悬赏内容不能再次编辑' });
         return false;
@@ -301,7 +301,8 @@ class PostPage extends React.Component {
     const { router, threadPost } = this.props;
     const { query } = router;
     const { postData } = threadPost;
-    if (query && query.id) {
+
+    if (query && query.id) { // TODO:  目前后端接口对于草稿文章也不能编辑 !postData.isDraft
       if (item.type === THREAD_TYPE.redPacket && postData.redpacket.money > 0) {
         Toast.info({ content: '红包内容不能再次编辑' });
         return false;

@@ -59,6 +59,7 @@ class ThreadPostStore {
     orderSn: '', // 支付订单号
     ticket: '', // 腾讯云验证码返回票据
     randstr: '', // 腾讯云验证码返回随机字符串
+    isDraft: false, // 是否是编辑的草稿
   }
 
   @computed get payTotalMoney() {
