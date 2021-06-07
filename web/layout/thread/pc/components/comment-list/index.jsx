@@ -89,6 +89,14 @@ class CommentList extends React.Component {
     typeof this.props.replyReplyClick === 'function' && this.props.replyReplyClick(data);
   }
 
+  // 点击回复删除
+  replyDeleteClick(data) {
+    this.setState({
+      replyId: data?.id,
+    });
+    typeof this.props.replyDeleteClick === 'function' && this.props.replyDeleteClick(data);
+  }
+
   reployAvatarClick(data) {
     typeof this.props.reployAvatarClick === 'function' && this.props.reployAvatarClick(data);
   }
@@ -252,6 +260,7 @@ class CommentList extends React.Component {
                         avatarClick={() => this.reployAvatarClick(this.needReply[0])}
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
+                        deleteClick={() => this.replyDeleteClick(this.needReply[0])}
                         toCommentDetail={() => this.toCommentDetail()}
                         onSubmit={(value) => this.onSubmit(value)}
                         isShowInput={this.state.replyId && this.state.replyId === this.needReply[0].id}
@@ -264,6 +273,7 @@ class CommentList extends React.Component {
                           avatarClick={() => this.reployAvatarClick(val)}
                           likeClick={() => this.replyLikeClick(val)}
                           replyClick={() => this.replyReplyClick(val)}
+                          deleteClick={() => this.replyDeleteClick(val)}
                           toCommentDetail={() => this.toCommentDetail()}
                           onSubmit={(value) => this.onSubmit(value)}
                           isShowInput={this.state.replyId && this.state.replyId === val.id}
