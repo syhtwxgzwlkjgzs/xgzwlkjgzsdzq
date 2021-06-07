@@ -11,6 +11,7 @@ import UserInfo from '@components/thread/user-info';
 import Header from '@components/header';
 import NoMore from './components/no-more';
 import RewardPopup from './components/reward-popup';
+import BaseLayout from '@components/base-layout';
 
 import layout from './layout.module.scss';
 
@@ -75,6 +76,7 @@ class ThreadPCPage extends React.Component {
 
   // 滚动事件
   handleOnScroll() {
+    console.log(this.threadBodyRef.current);
     // 加载评论列表
     const scrollDistance = this.threadBodyRef?.current?.scrollTop;
     const offsetHeight = this.threadBodyRef?.current?.offsetHeight;
@@ -95,6 +97,7 @@ class ThreadPCPage extends React.Component {
 
   // 使用了H5页面的页面加载跳转逻辑
   componentDidMount() {
+    console.log(this.commentDataRef);
     // 当内容加载完成后，获取评论区所在的位置
     this.position = this.commentDataRef?.current?.offsetTop - 50;
 
@@ -102,13 +105,13 @@ class ThreadPCPage extends React.Component {
     if (this.props?.thread?.isPositionToComment) {
       // TODO:需要监听帖子内容加载完成事件
       setTimeout(() => {
-        this.threadBodyRef.current.scrollTo(0, this.position);
+        // this.threadBodyRef?.current?.scrollTo(0, this.position);
       }, 1000);
       return;
     }
 
     // 滚动到记录的指定位置
-    this.threadBodyRef.current.scrollTo(0, this.props.thread.scrollDistance);
+    // this.threadBodyRef?.current?.scrollTo(0, this.props.thread.scrollDistance);
   }
 
   componentDidUpdate() {
@@ -644,87 +647,98 @@ class ThreadPCPage extends React.Component {
     Router.push({ url: `/message?page=chat&username=${username}` });
   }
 
-  render() {
+  renderContent() {
     const { thread: threadStore } = this.props;
-    const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError, isAuthorInfoError } = threadStore;
+    const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError } = threadStore;
+    return (
+      <div className={layout.bodyLeft}>
+        {/* 帖子内容 */}
+        {isReady ? (
+          <RenderThreadContent
+            store={threadStore}
+            onOperClick={(type) => this.onOperClick(type)}
+            onLikeClick={() => this.onLikeClick()}
+            onCollectionClick={() => this.onCollectionClick()}
+            onShareClick={() => this.onShareClick()}
+            onRewardClick={() => this.onRewardClick()}
+            onTagClick={() => this.onTagClick()}
+            onPayClick={() => this.onPayClick()}
+          ></RenderThreadContent>
+        ) : (
+          <LoadingTips type="init"></LoadingTips>
+        )}
+
+        {/* 回复详情内容 */}
+        <div className={`${layout.bottom}`} ref={this.commentDataRef}>
+          {isCommentReady ? (
+            <Fragment>
+              <RenderCommentList
+                router={this.props.router}
+                sort={(flag) => this.onSortChange(flag)}
+                onEditClick={(comment) => this.onEditClick(comment)}
+                onPublishClick={(value, imageList) => this.onPublishClick(value, imageList)}
+                onReportClick={(comment) => this.onReportClick(comment)}
+              ></RenderCommentList>
+              {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
+            </Fragment>
+          ) : (
+            <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
+          )}
+        </div>
+        {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
+      </div>
+    );
+  }
+
+  renderRight() {
+    const { thread: threadStore } = this.props;
+    const { isAuthorInfoError } = threadStore;
     // 是否作者自己
     const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === threadStore?.threadData?.userId;
 
     return (
+      <div className={`${layout.bodyRigth} ${isSelf ? layout.positionSticky : ''}`}>
+        <div className={layout.authorInfo}>
+          {threadStore?.authorInfo ? (
+            <AuthorInfo
+              user={threadStore.authorInfo}
+              onFollowClick={() => this.onFollowClick()}
+              onPrivateLetter={() => this.onPrivateLetter()}
+              isShowBtn={!isSelf}
+            ></AuthorInfo>
+          ) : (
+            <LoadingTips type="init" isError={isAuthorInfoError}></LoadingTips>
+          )}
+        </div>
+        <div className={layout.recommend}>
+          <Recommend></Recommend>
+        </div>
+        <div className={layout.qrcode}>
+          <QcCode></QcCode>
+        </div>
+        <div className={layout.copyright}>
+          <Copyright></Copyright>
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+    return (
       <div className={layout.container}>
         <ShowTop showContent={this.props.thread?.threadData?.isStick} setTop={this.state.setTop}></ShowTop>
-        <div className={layout.header}>
+        {/* <div className={layout.header}>
           <Header></Header>
-        </div>
+        </div> */}
 
-        <div
-          className={layout.body}
+        <BaseLayout
           ref={this.threadBodyRef}
-          onScrollCapture={() => throttle(this.handleOnScroll(), 500)}
+          onScroll={() => throttle(this.handleOnScroll(), 500)}
+          right={this.renderRight()}
+          pageName="detail"
         >
-          {/* 左边内容和评论 */}
-          <div className={layout.bodyLeft}>
-            {/* 帖子内容 */}
-            {isReady ? (
-              <RenderThreadContent
-                store={threadStore}
-                onOperClick={(type) => this.onOperClick(type)}
-                onLikeClick={() => this.onLikeClick()}
-                onCollectionClick={() => this.onCollectionClick()}
-                onShareClick={() => this.onShareClick()}
-                onRewardClick={() => this.onRewardClick()}
-                onTagClick={() => this.onTagClick()}
-                onPayClick={() => this.onPayClick()}
-              ></RenderThreadContent>
-            ) : (
-              <LoadingTips type="init"></LoadingTips>
-            )}
-
-            {/* 回复详情内容 */}
-            <div className={`${layout.bottom}`} ref={this.commentDataRef}>
-              {isCommentReady ? (
-                <Fragment>
-                  <RenderCommentList
-                    router={this.props.router}
-                    sort={(flag) => this.onSortChange(flag)}
-                    onEditClick={(comment) => this.onEditClick(comment)}
-                    onPublishClick={(value, imageList) => this.onPublishClick(value, imageList)}
-                    onReportClick={(comment) => this.onReportClick(comment)}
-                  ></RenderCommentList>
-                  {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
-                </Fragment>
-              ) : (
-                <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
-              )}
-            </div>
-            {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
-          </div>
-
-          {/* 右边信息 */}
-          <div className={`${layout.bodyRigth} ${isSelf ? layout.positionSticky : ''}`}>
-            <div className={layout.authorInfo}>
-              {threadStore?.authorInfo ? (
-                <AuthorInfo
-                  user={threadStore.authorInfo}
-                  onFollowClick={() => this.onFollowClick()}
-                  onPrivateLetter={() => this.onPrivateLetter()}
-                  isShowBtn={!isSelf}
-                ></AuthorInfo>
-              ) : (
-                <LoadingTips type="init" isError={isAuthorInfoError}></LoadingTips>
-              )}
-            </div>
-            <div className={layout.recommend}>
-              <Recommend></Recommend>
-            </div>
-            <div className={layout.qrcode}>
-              <QcCode></QcCode>
-            </div>
-            <div className={layout.copyright}>
-              <Copyright></Copyright>
-            </div>
-          </div>
-        </div>
+          {this.renderContent()}
+        </BaseLayout>
 
         {/* 编辑弹窗 */}
         <Popup position="center" visible={this.state.showCommentInput} onClose={() => this.onClose()}>
