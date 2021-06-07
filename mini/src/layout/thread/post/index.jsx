@@ -597,6 +597,7 @@ class Index extends Component {
     const contentStyle = {
       marginTop: navInfo.statusBarHeight > 30 ? `${navInfo.navHeight / 2}px` : '0px',
     }
+
     return (
       <>
         <View className={styles['container']}>
@@ -692,6 +693,7 @@ class Index extends Component {
                     type='tag'
                     tagContent={this.redpacketContent()}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
+                    isCloseShow={this.state.postType !== 'isEdit'}
                     onTagRemoveClick={() => { setPostData({ redpacket: {} }) }}
                   />
                 }
@@ -701,6 +703,7 @@ class Index extends Component {
                     type='tag'
                     tagContent={`悬赏金额${rewardQa.value}元\\结束时间${rewardQa.times}`}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
+                    isCloseShow={this.state.postType !== 'isEdit'}
                     onTagRemoveClick={() => { setPostData({ rewardQa: {} }) }}
                   />
                 }
