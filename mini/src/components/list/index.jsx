@@ -26,12 +26,11 @@ const List = forwardRef(({
   preload = 30,
   requestError = false,
   errorText = '加载失败',
-  scrollY = true,
 }, ref) => {
-  const listWrapper = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errText, setErrText] = useState(errorText);
+  const [scrollTop, setScrollTop] = useState(-1);
 
   useEffect(() => {
       setIsLoading(noMore);
@@ -45,32 +44,17 @@ const List = forwardRef(({
     setErrText(errorText)
   }, [errorText])
 
-  // useEffect(() => {
-  //   onTouchMove();
-  // }, []);
-
   useImperativeHandle(
     ref,
     () => ({
-      onBackTop,
-      isLoading,
+      jumpToScrollTop,
     }),
   );
 
-  const throttle = (fn, delay) => {
-    return args => {
-        if (fn.id) return
-        fn.id = setTimeout(() => {
-            fn.call(this, args)
-            clearTimeout(fn.id)
-            fn.id = null
-        }, delay)
-    }
-  }
 
-  const onBackTop = () => {
-    if(!listWrapper) {
-      listWrapper.current.scrollTop = 0;
+  const jumpToScrollTop = (scrollTop) => {
+    if (scrollTop && scrollTop > 0) {
+      setScrollTop(scrollTop);
     }
   };
 
@@ -119,12 +103,13 @@ const List = forwardRef(({
 
   return (
     <ScrollView
-      scrollY={scrollY}
+      scrollY
       className={`${styles.container} ${className}`}
       style={{ height }}
       onScrollToLower={hasOnScrollToLower ? onTouchMove : null}
       lowerThreshold={80}
       onScroll={handleScroll}
+      scrollTop={scrollTop}
     >
       {children}
       {onRefresh && showRefresh && !isError && <RefreshView noMore={noMore} />}

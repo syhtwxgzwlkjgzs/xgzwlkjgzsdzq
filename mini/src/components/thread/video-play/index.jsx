@@ -66,24 +66,13 @@ const Index = ({
     }
   }
 
-  const onFullscreenChange = (e) => {
+  const onFullscreenChange = (e) => { // 该函数在进出全屏的时候各被调用一次
     e && e.stopPropagation();
-    console.log(`e`, e)
-    if(!baselayout.isOnVideoFullScreen) {
-      baselayout.isOnVideoFullScreen = true;
-      console.log(`isOnVideoFullScreen should be true`, baselayout.isOnVideoFullScreen)
-      Taro.getSystemInfo({
-        success(res) {
-          console.log(`res`, res)
-        }
-      });
-    } else {
-      setTimeout(() => {
-        baselayout.isOnVideoFullScreen = false;
-        console.log(`isOnVideoFullScreen should be false`, baselayout.isOnVideoFullScreen)
-      }, 3000);
+    if(baselayout.videoFullScreenStatus === "") { // 第一次调用
+      baselayout.videoFullScreenStatus = "inFullScreen";
+    } else if(baselayout.videoFullScreenStatus === "inFullScreen") { //第二次调用
+      baselayout.videoFullScreenStatus = "offFullScreen";
     }
-    
   }
 
   useEffect(() => {
