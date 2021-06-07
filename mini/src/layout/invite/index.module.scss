@@ -174,7 +174,7 @@
   .invite_list_itemName{
     @include inviteListName;
     box-sizing: border-box;
-    padding-right: $padding-4n;
+    margin-right: $margin-2n;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -185,17 +185,23 @@
       height: rem(18);
       border-radius: $border-radius-circle;
       line-height: rem(18);
+      margin-right: $margin-2n;
+    }
+    .invite_list_username {
+      width: calc(100% - 34px);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
     view{
       font-weight: normal;
-      padding-left: $padding-2n;
       color: $text-color-primary;
     }
   }
   .invite_list_itemMoney{
     @include inviteListMoney;
     box-sizing: border-box;
-    padding-right: $padding-4n;
+    margin-right: $margin-2n;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
