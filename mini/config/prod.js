@@ -34,7 +34,6 @@ module.exports = {
       subPages.map(page => {
         pages.set(`subPages/${page}`, ['subPages/common']);
       });
-
     },
     webpackChain (chain, webpack) {
       // chain.plugin('analyzer').use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin, []);
