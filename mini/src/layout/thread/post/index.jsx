@@ -252,6 +252,10 @@ class Index extends Component {
       case THREAD_TYPE.video:
         this.handleVideoUpload();
         break;
+      case THREAD_TYPE.anonymity:
+        if (postData.anonymous) this.props.threadPost.setPostData({ anonymous: 0 });
+        else this.props.threadPost.setPostData({ anonymous: 1 });
+        break;
       case 'emoji':
         this.setState({
           showEmoji: !this.state.showEmoji

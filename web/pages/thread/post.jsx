@@ -268,6 +268,10 @@ class PostPage extends React.Component {
         return false;
       }
     }
+    if (item.type === THREAD_TYPE.anonymity) {
+      if (postData.anonymous) this.setPostData({ anonymous: 0 });
+      else this.setPostData({ anonymous: 1 });
+    }
     if (data) {
       this.setPostData(data);
       return false;
