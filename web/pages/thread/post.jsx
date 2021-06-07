@@ -457,9 +457,21 @@ class PostPage extends React.Component {
     this.setState({ atList });
   };
 
+  checkAttachPrice = () => {
+    const { postData } = this.props.threadPost;
+    // 附件付费设置了需要判断是否进行了附件的上传
+    if (postData.attachmentPrice) {
+      if (!(postData.audio.id || postData.video.id
+        || Object.keys(postData.images)?.length
+        || Object.keys(postData.files)?.length)) return false;
+      return true;
+    }
+    return true;
+  }
+
   // 发布提交
   handleSubmit = async (isDraft) => {
-    const { postData, setPostData } = this.props.threadPost;
+    const { postData } = this.props.threadPost;
     if (!this.props.user.threadExtendPermissions.createThread) {
       Toast.info({ content: '您没有发帖权限' });
       return;
@@ -482,6 +494,10 @@ class PostPage extends React.Component {
     }
     if (!isDraft && !postData.contentText) {
       Toast.info({ content: '请填写您要发布的内容' });
+      return;
+    }
+    if (!this.checkAttachPrice()) {
+      Toast.info({ content: '请先上传附件、图片、视频或者语音' });
       return;
     }
     // if (!isDraft && this.state.count > MAX_COUNT) {

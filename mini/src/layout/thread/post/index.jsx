@@ -381,6 +381,18 @@ class Index extends Component {
     Taro.hideLoading();
   }
 
+  checkAttachPrice = () => {
+    const { postData } = this.props.threadPost;
+    // 附件付费设置了需要判断是否进行了附件的上传
+    if (postData.attachmentPrice) {
+      if (!(postData.audio.id || postData.video.id
+        || Object.keys(postData.images)?.length
+        || Object.keys(postData.files)?.length)) return false;
+      return true;
+    }
+    return true;
+  }
+
   handleSubmit = async (isDraft) => {
     // 1 校验
     const { threadId } = this.state;
@@ -388,6 +400,10 @@ class Index extends Component {
     const { postData, redpacketTotalAmount } = threadPost;
     if (!isDraft && !postData.contentText) {
       this.postToast('请填写您要发布的内容');
+      return;
+    }
+    if (!this.checkAttachPrice()) {
+      this.postToast('请先上传附件、图片、视频或者语音');
       return;
     }
     // 2 验证码
