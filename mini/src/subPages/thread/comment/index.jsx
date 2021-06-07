@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject } from 'mobx-react';
-import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+// import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
 import Router from '@discuzq/sdk/dist/router';
 import { readCommentDetail } from '@server';
@@ -61,9 +61,9 @@ class CommentDetail extends React.Component {
       <ErrorMiniPage text={this.state.serverErrorMsg}/>
     ) : (
       <Page>
-        <ToastProvider>
+        {/* <ToastProvider> */}
           <CommentMiniPage />
-        </ToastProvider>
+        {/* </ToastProvider> */}
       </Page>
     );
   }

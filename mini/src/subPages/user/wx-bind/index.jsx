@@ -4,13 +4,13 @@ import { View, Navigator } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import Button from '@discuzq/design/dist/components/button/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
-import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+// import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
 import layout from './index.module.scss';
 import { getParamCode, getUserProfile } from '../common/utils'
 
-const MemoToastProvider = React.memo(ToastProvider);
+// const MemoToastProvider = React.memo(ToastProvider);
 
 @inject('site')
 @inject('miniBind')
@@ -68,7 +68,7 @@ class WXBind extends Component {
 
     return (
       <Page>
-        <MemoToastProvider>
+        {/* <MemoToastProvider> */}
           <View className={layout.container}>
             <View className={layout.content}>
               <View className={layout.title}>绑定小程序</View>
@@ -96,7 +96,7 @@ class WXBind extends Component {
               </View>
             </View>
           </View>
-        </MemoToastProvider>
+        {/* </MemoToastProvider> */}
       </Page>
     );
   }
