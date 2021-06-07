@@ -74,7 +74,6 @@ class WeixinBindH5Page extends React.Component {
       const res = await h5WechatCodeBind({
         url: '/apiv3/users/wechat/h5.bind',
         method: 'GET',
-        timeout: 3000,
         ...opts,
       });
       bindLoading = false;

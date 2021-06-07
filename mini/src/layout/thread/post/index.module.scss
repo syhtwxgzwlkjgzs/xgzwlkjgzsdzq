@@ -86,6 +86,8 @@ page {
       }
 
       .tag-toolbar {
+        display: flex;
+        flex-wrap: wrap;
         padding: 0 $padding-4n;
         // display: flex;
         // align-items: center;

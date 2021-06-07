@@ -15,6 +15,7 @@ const NEED_BIND_OR_REGISTER_USER = -7016;
 @inject('site')
 @inject('user')
 @inject('commonLogin')
+@inject('invite')
 class MiniAuth extends React.Component {
   constructor(props){
     super(props);
@@ -34,10 +35,11 @@ class MiniAuth extends React.Component {
   }
 
   getUserProfileCallback = async (params) => {
-    const { inviteCode = '' } = getCurrentInstance().router.params;
-    const { commonLogin } = this.props;
+    let { inviteCode } = getCurrentInstance().router.params;
+    inviteCode = inviteCode || this.props.invite.getInviteCode()
     const avatarUrl = params?.userInfo?.avatarUrl;
     const nickName = params?.userInfo?.nickName;
+    const { commonLogin } = this.props;
     commonLogin.setAvatarUrl(avatarUrl);
     commonLogin.setNickname(nickName);
     try {

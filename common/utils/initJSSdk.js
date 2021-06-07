@@ -16,7 +16,6 @@
  */
 export default async function initJSSdk(jsApiList = []) {
   const allPromise = [];
-
   if (!(window.wx && wx.config)) {
     const scriptPromise = new Promise((resolve) => {
       const script = document.createElement('script');
@@ -27,7 +26,7 @@ export default async function initJSSdk(jsApiList = []) {
     allPromise.push(scriptPromise);
   }
 
-
+  // https://discuzv3-dev.dnspod.dev/apiv3/offiaccount/jssdk?url=https%3A%2F%2Fdiscuzv3-dev.dnspod.dev%2F
   const ajaxPromise = new Promise((resolve) => {
     const ajax = new XMLHttpRequest();
     ajax.open('GET', `${window.location.origin}/apiv3/offiaccount/jssdk?url=${encodeURIComponent(location.href)}`, true);
@@ -40,8 +39,8 @@ export default async function initJSSdk(jsApiList = []) {
       }
     };
   });
-
-  const [_ret, ret] = (await Promise.all([scriptPromise, ajaxPromise]));
+  allPromise.push(ajaxPromise);
+  const [_ret, ret] = (await Promise.all(allPromise));
   if (ret.Code === 0) {
     const params = (({ appId, timestamp, nonceStr, signature }) => ({ appId, timestamp, nonceStr, signature }))(ret.Data);
     wx.config({

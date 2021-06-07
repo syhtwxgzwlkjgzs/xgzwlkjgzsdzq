@@ -58,6 +58,7 @@ class PostPage extends React.Component {
   }
 
   componentDidMount() {
+    this.redirectToHome();
     this.props.router.events.on('routeChangeStart', this.handleRouteChange);
     this.fetchPermissions();
     // 如果本地缓存有数据，这个目前主要用于定位跳出的情况
@@ -79,6 +80,20 @@ class PostPage extends React.Component {
   componentWillUnmount() {
     this.captcha = '';
     this.props.router.events.off('routeChangeStart', this.handleRouteChange);
+  }
+
+  componentDidUpdate() {
+    this.redirectToHome();
+  }
+
+  redirectToHome() {
+    if (!this.props.user.threadExtendPermissions.createThread) {
+      Toast.info({ content: '您没有发帖权限，即将回到首页' });
+      const timer = setTimeout(() => {
+        clearTimeout(timer);
+        this.props.router.replace('/');
+      }, 1000);
+    }
   }
 
   handleRouteChange = (url) => {
@@ -247,7 +262,7 @@ class PostPage extends React.Component {
     const { router, threadPost } = this.props;
     const { query } = router;
     const { postData } = threadPost;
-    if (query && query.id) {
+    if (query && query.id) { // TODO:  目前后端接口对于草稿文章也不能编辑 !postData.isDraft
       if (item.type === THREAD_TYPE.reward && postData.rewardQa.money > 0) {
         Toast.info({ content: '悬赏内容不能再次编辑' });
         return false;
@@ -286,7 +301,8 @@ class PostPage extends React.Component {
     const { router, threadPost } = this.props;
     const { query } = router;
     const { postData } = threadPost;
-    if (query && query.id) {
+
+    if (query && query.id) { // TODO:  目前后端接口对于草稿文章也不能编辑 !postData.isDraft
       if (item.type === THREAD_TYPE.redPacket && postData.redpacket.money > 0) {
         Toast.info({ content: '红包内容不能再次编辑' });
         return false;
@@ -445,7 +461,7 @@ class PostPage extends React.Component {
       return;
     }
     if (!this.isAudioUploadDone) {
-      Toast.info({ content: '请等待语音上传完成在发布' });
+      Toast.info({ content: '请等待语音上传完成再发布' });
       return;
     }
     if (!this.isVideoUploadDone) {

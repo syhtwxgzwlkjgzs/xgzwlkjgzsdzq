@@ -3,7 +3,7 @@ function padZero(num) {
 }
 
 export const formatDate = (year, month, day, hour, minute) => {
-  return `${year}-${padZero(month)}-${padZero(day)} ${padZero(hour)}:${padZero(minute)}`;
+  return `${year}/${padZero(month)}/${padZero(day)} ${padZero(hour)}:${padZero(minute)}`;
 };
 
 // 获取当前时间

@@ -72,6 +72,7 @@
     margin-right: $margin-4n;
     font-size: $font-size-middle;
     border-bottom: $border-solid-1;
+    overflow: hidden;
     &.border-none {
       border: none;
     }

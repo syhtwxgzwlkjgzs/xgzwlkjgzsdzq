@@ -9,7 +9,7 @@
   width: 100%;
   position: fixed;
   top: 0;
-  z-index: $zindex-popup;
+  z-index: $zindex-tooltip;
   pointer-events: auto;
 }
 .bottom{
@@ -25,7 +25,7 @@
   box-sizing: border-box;
   padding: rem($padding-2n) rem($padding-4n);
   text-align: center;
-  z-index: $zindex-dialog;
+  z-index: $zindex-popup;
   .bottom_title{
     font-weight: normal;
     font-size: rem($font-size-label);
